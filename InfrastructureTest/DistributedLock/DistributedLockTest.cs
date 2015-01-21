@@ -2,6 +2,7 @@
 using System.Configuration;
 using System.Threading;
 using Autofac;
+using Autofac.Extras.DynamicProxy2;
 using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Infrastructure.DistributedLock;
@@ -18,6 +19,7 @@ namespace Teleopti.Ccc.InfrastructureTest.DistributedLock
 	{
 		public IDistributedLockAcquirer Target;
 		public FakeConfigReader ConfigReader;
+		public Lock1 Lock1Proxy;
 
 		public void RegisterInContainer(ContainerBuilder builder, IIocConfiguration configuration)
 		{
@@ -30,6 +32,11 @@ namespace Teleopti.Ccc.InfrastructureTest.DistributedLock
 					}
 				})
 				.As<IConfigReader>().AsSelf().SingleInstance();
+
+			builder.RegisterType<Lock1>()
+				.AsSelf()
+				.EnableClassInterceptors()
+				;
 		}
 
 		[Test]
@@ -42,6 +49,35 @@ namespace Teleopti.Ccc.InfrastructureTest.DistributedLock
 			var one = onAnotherThread(() =>
 			{
 				using (Target.LockForTypeOf(new Lock1()))
+				{
+					oneRunning.Set();
+					twoRanWhileOneWasRunning = twoRunning.WaitOne(TimeSpan.FromMilliseconds(500));
+				}
+			});
+			var two = onAnotherThread(() =>
+			{
+				oneRunning.WaitOne(TimeSpan.FromSeconds(1));
+				using (Target.LockForTypeOf(new Lock1()))
+				{
+					twoRunning.Set();
+				}
+			});
+			one.Join();
+			two.Join();
+
+			twoRanWhileOneWasRunning.Should().Be.False();
+		}
+
+		[Test]
+		public void ShouldNotRunInParallelWhenLockedOnProxy()
+		{
+			var oneRunning = new ManualResetEvent(false);
+			var twoRunning = new ManualResetEvent(false);
+			var twoRanWhileOneWasRunning = true;
+
+			var one = onAnotherThread(() =>
+			{
+				using (Target.LockForTypeOf(Lock1Proxy))
 				{
 					oneRunning.Set();
 					twoRanWhileOneWasRunning = twoRunning.WaitOne(TimeSpan.FromMilliseconds(500));
@@ -154,11 +190,11 @@ namespace Teleopti.Ccc.InfrastructureTest.DistributedLock
 			exception.Should().Be.OfType<DistributedLockException>();
 		}
 
-		private class Lock1
+		public class Lock1
 		{
 		}
 
-		private class Lock2
+		public class Lock2
 		{
 		}
 

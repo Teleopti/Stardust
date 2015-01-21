@@ -1,5 +1,6 @@
 using System;
 using System.Data.SqlClient;
+using Castle.DynamicProxy;
 using Teleopti.Ccc.Domain;
 using Teleopti.Interfaces.Infrastructure;
 
@@ -18,7 +19,7 @@ namespace Teleopti.Ccc.Infrastructure.DistributedLock
 		{
 			var connection = new SqlConnection(_configReader.ConnectionStrings["RtaApplication"].ConnectionString);
 			connection.Open();
-			var @lock = new SqlServerDistributedLock(lockObject.GetType().ToString(), timeout(), connection);
+			var @lock = new SqlServerDistributedLock(ProxyUtil.GetUnproxiedType(lockObject).Name, timeout(), connection);
 			return new GenericDisposable(() =>
 			{
 				@lock.Dispose();

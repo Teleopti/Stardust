@@ -111,6 +111,8 @@
     <Compile Include="BitArrayHelper.cs" />
     <Compile Include="CatalanCulture.cs" />
     <Compile Include="ConnectionStringHelper.cs" />
+    <Compile Include="Exceptions.cs" />
+    <Compile Include="Execute.cs" />
     <Compile Include="Extensions.cs" />
     <Compile Include="FakeAdherenceDetailsReadModelPersister.cs" />
     <Compile Include="FakeAdherencePercentageReadModelPersister.cs" />

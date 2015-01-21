@@ -1,11 +1,15 @@
+using System;
+using System.Threading;
 using Autofac;
 using MbCache.Core;
+using Teleopti.Ccc.Domain;
 using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Domain.Rta;
+using Teleopti.Ccc.Infrastructure.DistributedLock;
 using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.IoC;
@@ -28,6 +32,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta
 			registerFakeDatabase(builder, new FakeRtaDatabase());
 
 			builder.RegisterInstance(new FakeReadModelUnitOfWorkAspect()).As<IReadModelUnitOfWorkAspect>();
+			builder.RegisterInstance(new FakeDistributedLockAcquirer()).As<IDistributedLockAcquirer>();
 
 			builder.RegisterInstance(new FakeTeamOutOfAdherenceReadModelPersister()).As<ITeamOutOfAdherenceReadModelPersister>().AsSelf();
 			builder.RegisterInstance(new FakeSiteOutOfAdherenceReadModelPersister()).As<ISiteOutOfAdherenceReadModelPersister>().AsSelf();
@@ -63,5 +68,15 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta
 			builder.RegisterInstance(publisher).As<IEventPublisher>().AsSelf();
 		}
 
+	}
+
+	public class FakeDistributedLockAcquirer : IDistributedLockAcquirer
+	{
+		public IDisposable LockForTypeOf(object lockObject)
+		{
+			var type = lockObject.GetType();
+			Monitor.Enter(type);
+			return new GenericDisposable(() => Monitor.Exit(type));
+		}
 	}
 }

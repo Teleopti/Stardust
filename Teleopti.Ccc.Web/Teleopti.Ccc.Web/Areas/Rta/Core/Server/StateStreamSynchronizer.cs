@@ -6,6 +6,7 @@ using Teleopti.Ccc.Domain.ApplicationLayer.Rta;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Rta;
 using Teleopti.Ccc.Infrastructure.ApplicationLayer;
+using Teleopti.Ccc.Infrastructure.DistributedLock;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Web.Areas.Rta.Core.Server
@@ -26,6 +27,7 @@ namespace Teleopti.Ccc.Web.Areas.Rta.Core.Server
 		private readonly IEventPublisherScope _eventPublisherScope;
 		private readonly IEnumerable<IInitializeble> _initializebles;
 		private readonly IEnumerable<IRecreatable> _recreatables;
+		private readonly IDistributedLockAcquirer _distributedLockAcquirer;
 
 		public StateStreamSynchronizer(
 			INow now,
@@ -35,7 +37,8 @@ namespace Teleopti.Ccc.Web.Areas.Rta.Core.Server
 			AgentStateAssembler agentStateAssembler,
 			IEventPublisherScope eventPublisherScope,
 			IEnumerable<IInitializeble> initializebles,
-			IEnumerable<IRecreatable> recreatables
+			IEnumerable<IRecreatable> recreatables,
+			IDistributedLockAcquirer distributedLockAcquirer
 			)
 		{
 			_now = now;
@@ -46,6 +49,7 @@ namespace Teleopti.Ccc.Web.Areas.Rta.Core.Server
 			_eventPublisherScope = eventPublisherScope;
 			_initializebles = initializebles;
 			_recreatables = recreatables;
+			_distributedLockAcquirer = distributedLockAcquirer;
 		}
 
 		public void Sync()
@@ -71,7 +75,8 @@ namespace Teleopti.Ccc.Web.Areas.Rta.Core.Server
 		}
 
 		private void processStatesTo(object handler, IEnumerable<AgentStateReadModel> states, DateTime currentTime)
-		{
+		{	
+			using (_distributedLockAcquirer.LockForTypeOf(handler))
 			using (_eventPublisherScope.OnThisThreadPublishTo(new SyncPublishToSingleHandler(handler)))
 			{
 				states.ForEach(s =>

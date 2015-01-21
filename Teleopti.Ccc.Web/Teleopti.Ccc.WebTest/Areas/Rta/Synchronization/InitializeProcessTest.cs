@@ -3,7 +3,6 @@ using System.Linq;
 using System.Threading.Tasks;
 using NUnit.Framework;
 using SharpTestsEx;
-using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Infrastructure.ApplicationLayer;
@@ -29,6 +28,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta.Synchronization
 		public FakeMessageSender MessageSender;
 		public FakeEventPublisher EventPublisher;
 		public ICurrentEventPublisher CurrentEventPublisher;
+
 
 		[Test]
 		public void ShouldNotSendAnyMessages()
@@ -104,9 +104,12 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta.Synchronization
 			EventPublisher.PublishedEvents.OfType<TestEvent>().Should().Have.Count.EqualTo(100000);
 		}
 
+		
+
 		public class TestEvent : IEvent
 		{
 		}
-	}
 
+
+	}
 }
