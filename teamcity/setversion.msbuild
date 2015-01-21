@@ -2,19 +2,22 @@
 
 <Project DefaultTargets="SetVersion" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="12.0">
 	<PropertyGroup>
-		<MajorFile>$(WorkingDirectory)\ActiveMajorVersion.txt</MajorFile>
-		<MinorFile>$(WorkingDirectory)\ActiveBranchVersion.txt</MinorFile>
+		<MajorFile>$(WorkingDirectory)\version.txt</MajorFile>
 	</PropertyGroup>
 
 	<Target Name="SetVersion">
 		<ReadLinesFromFile File="$(MajorFile)" >
-			<Output TaskParameter="Lines" PropertyName="majorVersion" />
+			<Output TaskParameter="Lines" PropertyName="FullVersion" />
 		</ReadLinesFromFile>
-		<ReadLinesFromFile File="$(MinorFile)" >
-			<Output TaskParameter="Lines" PropertyName="minorVersion" />
-		</ReadLinesFromFile>
-
-		<Message Text="##teamcity[setParameter name='MajorVersion' value='$(majorVersion)']" />
-		<Message Text="##teamcity[setParameter name='MinorVersion' value='$(minorVersion)']" />
+		
+		<PropertyGroup>
+			<MajorVersion>$(FullVersion.Split('.')[0].Trim())</MajorVersion>
+			<MinorVersion>$(FullVersion.Split('.')[1].Trim())</MinorVersion>
+			<BuildVersion>$(FullVersion.Split('.')[2].Trim())</BuildVersion>
+		</PropertyGroup>
+		
+		<Message Text="##teamcity[setParameter name='MajorVersion' value='$(MajorVersion)']" />
+		<Message Text="##teamcity[setParameter name='MinorVersion' value='$(MinorVersion)']" />
+		<Message Text="##teamcity[setParameter name='BuildVersion' value='$(BuildVersion)']" />
 	</Target>
 </Project>
