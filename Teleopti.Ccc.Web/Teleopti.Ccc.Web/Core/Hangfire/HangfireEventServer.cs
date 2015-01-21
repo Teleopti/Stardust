@@ -15,7 +15,6 @@ namespace Teleopti.Ccc.Web.Core.Hangfire
 
 		[DisplayName("{0}")]
 		[AutomaticRetry(Attempts = 0)]
-		[DisableConcurrentExecution(timeoutInSeconds: 20)]
 		public void Process(string displayName, string eventType, string serializedEvent, string handlerType)
 		{
 			_processor.Process(displayName, eventType, serializedEvent, handlerType);

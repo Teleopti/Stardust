@@ -109,11 +109,4 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta.Synchronization
 		}
 	}
 
-	public static class Extensions
-	{
-		public static void Times(this int times, Action<int> action)
-		{
-			Enumerable.Range(0, times).ForEach(action);
-		}
-	}
 }

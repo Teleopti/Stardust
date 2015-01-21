@@ -1,5 +1,9 @@
+using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
 using Autofac;
 using Autofac.Extras.DynamicProxy2;
 using NUnit.Framework;
@@ -7,8 +11,10 @@ using SharpTestsEx;
 using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Infrastructure.ApplicationLayer;
 using Teleopti.Ccc.IocCommon;
+using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.IoC;
 using Teleopti.Interfaces.Domain;
+using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.InfrastructureTest.ApplicationLayer
 {
@@ -26,6 +32,15 @@ namespace Teleopti.Ccc.InfrastructureTest.ApplicationLayer
 			builder.RegisterInstance(new AHandler()).AsSelf().As<IHandleEvent<AnEvent>>().SingleInstance();
 			builder.RegisterInstance(new AnotherHandler()).AsSelf().As<IHandleEvent<AnEvent>>().SingleInstance();
 			builder.RegisterType<InterceptedHandler>().AsSelf().As<IHandleEvent<AnEvent>>().EnableClassInterceptors().SingleInstance();
+			builder.RegisterInstance(new NonConcurrenctSafeHandler()).AsSelf().As<IHandleEvent<AnEvent>>().SingleInstance();
+
+			builder.RegisterInstance(new FakeConfigReader
+			{
+				ConnectionStrings = new ConnectionStringSettingsCollection
+				{
+					new ConnectionStringSettings("RtaApplication", ConnectionStringHelper.ConnectionStringUsedInTests)
+				}
+			}).As<IConfigReader>().AsSelf().SingleInstance();
 		}
 
 		[Test]
@@ -59,6 +74,36 @@ namespace Teleopti.Ccc.InfrastructureTest.ApplicationLayer
 			Target.Process(null, typeof(AnEvent).AssemblyQualifiedName, "{}", typeof(InterceptedHandler).AssemblyQualifiedName);
 
 			Intercepted.HandledEvents.Single().Should().Be.OfType<AnEvent>();
+		}
+
+		[Test]
+		public void ShouldNotPublishToSameHandlerInParallel()
+		{
+			Action job = () =>
+			{
+				10.Times(() =>
+				{
+					Target.Process(null, typeof (AnEvent).AssemblyQualifiedName, "{}", typeof (NonConcurrenctSafeHandler).AssemblyQualifiedName);
+				});
+			};
+			var worker1 = Task.Factory.StartNew(job);
+			var worker2 = Task.Factory.StartNew(job);
+
+			IgnoreExceptions(() => Task.WaitAll(worker1, worker2));
+
+			worker1.Exception.Should().Be.Null();
+			worker2.Exception.Should().Be.Null();
+		}
+
+		private void IgnoreExceptions(Action action)
+		{
+			try
+			{
+				action.Invoke();
+			}
+			catch (Exception)
+			{
+			}
 		}
 
 		public class AnEvent : Event
@@ -95,5 +140,20 @@ namespace Teleopti.Ccc.InfrastructureTest.ApplicationLayer
 				HandledEvents.Add(@event);
 			}
 		}
+
+		public class NonConcurrenctSafeHandler : IHandleEvent<AnEvent>
+		{
+			private bool _isHandling = false;
+
+			public void Handle(AnEvent @event)
+			{
+				if (_isHandling)
+					throw new Exception("Please dont execute me in parallel! >:-[");
+				_isHandling = true;
+				Thread.Sleep(10); // do some work
+				_isHandling = false;
+			}
+		}
+
 	}
 }

@@ -298,11 +298,6 @@ namespace Teleopti.Ccc.InfrastructureTest.LiteUnitOfWork
 
 	public static class Extensions
 	{
-		public static void Times(this int times, Action<int> action)
-		{
-			Enumerable.Range(0, times).ForEach(action);
-		}
-
 		public static void DoesUpdate(this TheService instance, string query)
 		{
 			instance.Does(uow => uow.CreateSqlQuery(query).ExecuteUpdate());
