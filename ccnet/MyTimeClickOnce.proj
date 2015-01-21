@@ -38,7 +38,6 @@
       <IconFile Include="$(CCNetWorkingDirectory)\BuildArtifacts\ccc_Menu.ico"/>
 
       <MyTimeClickOnceInstallationFiles Include="$(SolutionName).application"/>
-      <MyTimeClickOnceInstallationFiles Include="setup.exe"/>
       <MyTimeClickOnceInstallationFiles Include="default.htm"/>
 
       <MyTimeManifestFile Include="$(SolutionName).exe.manifest"/>
@@ -47,11 +46,7 @@
       <MyTimeClickOnceLandingPage Include="$(CCNetWorkingDirectory)\BuildArtifacts\ClickOnceLandingPageMyTime.htm"/>
       <ClickOncePageFilesMyTime Include="$(CCNetWorkingDirectory)\BuildArtifacts\images\*.*"/>
 
-      <!--
-      <MyTimeBootstrapperFile Include="Microsoft.Net.Framework.2.0">
-        <ProductName>.NET Framework 2.0</ProductName>
-      </MyTimeBootstrapperFile>
--->
+
       <MyTimeClickOnceSourceFiles	Include="$(CCNetWorkingDirectory)\AgentPortal\Teleopti.Ccc.AgentPortal\bin\Release\**\*.*"
       Exclude="$(CCNetWorkingDirectory)\AgentPortal\Teleopti.Ccc.AgentPortal\bin\Release\app.config;
 					 $(CCNetWorkingDirectory)\AgentPortal\Teleopti.Ccc.AgentPortal\bin\Release\*.application;
@@ -132,22 +127,7 @@
 
     <GetFrameworkSdkPath>
       <Output TaskParameter="Path" PropertyName="SdkPath" />
-    </GetFrameworkSdkPath>
-
-	<GenerateBootstrapper
-	  ApplicationFile="$(SolutionName).application"
-	  ApplicationName="$(ClickOnceAppTitle)"
-	  ApplicationUrl="$(ClickOnceUrl)"
-	  BootstrapperItems="@(MyTimeBootstrapperFile)"
-	  Culture="en"
-	  FallbackCulture="en-US"
-	  ComponentsLocation="HomeSite"
-	  CopyComponents="true"
-	  Validate="false"
-	  SupportUrl="http://www.microsoft.com/downloads/details.aspx?FamilyID=333325FD-AE52-4E35-B531-508D977D32A6"
-	  Path="C:\Program Files (x86)\Microsoft SDKs\Windows\v7.0A\Bootstrapper"
-	  OutputPath="." />
-	  
+    </GetFrameworkSdkPath>  
   </Target>
 
   <Target Name="MyTimeDeleteRootFiles">
