@@ -48,23 +48,15 @@ define([
 			self.PollingPerSecond(configuration.PollingPerSecond);
 			self.TeamId(configuration.TeamId);
 			var iterations = [];
-			for (var s = 0; s < configuration.States.length; s++) {
-				for (var p = 0; p < configuration.Persons.length; p++) {
+			for (var p = 0; p < configuration.Persons.length; p++) {
 
-					iterations.push(new Iteration({
-						PlatformTypeId: configuration.PlatformTypeId,
-						SourceId: configuration.SourceId,
-						Person: configuration.Persons[p],
-						StateCode: configuration.States[s],
-						IsEndingIteration: s === configuration.States.length - 1,
-						Timestamp: configuration.Timestamp
-					}));
-
-					if (iterations.length > 2000)
-						return undefined;
-				}
+				iterations.push(new Iteration({
+					PlatformTypeId: configuration.PlatformTypeId,
+					SourceId: configuration.SourceId,
+					Person: configuration.Persons[p],
+					StateCode: configuration.States[p],
+				}));
 			}
-
 			return iterations;
 
 		});
@@ -93,8 +85,7 @@ define([
 			SourceId: 1,
 			Persons: [
 				{
-					ExternalLogOn: "2001",
-					PersonId: "B46A2588-8861-42E3-AB03-9B5E015B257C",
+					ExternalLogOn: "2001"
 				}
 			],
 			States: ["Ready", "OFF"],
@@ -106,29 +97,27 @@ define([
 			result = new ResultViewModel();
 
 			$.ajax({
-				url: "performancetool/application/adherencetest?limit=" + self.IterationsExpected(),
+				url: "performancetool/application/resetperformancecounter?iterationCount=" + self.IterationsExpected(),
 				success: function () {
 					self.runIterations();
 				}
 			});
 			$.ajax({
 				url: "Anywhere/BusinessUnit/Current",
-				success: function (bu) {
-					setInterval(self.Poll(bu.Id), 1000);
+				success: function(bu) {
+					setInterval(function () {
+						for (var i = 0; i < self.PollingPerSecond() ; i++) {
+							$.ajax({
+								headers: { 'X-Business-Unit-Filter': bu },
+								url: "Anywhere/Agents/GetStates?teamId=" + self.TeamId(),
+							});
+						}
+					}, 1000);
 				}
 			});
 			return result;
 		};
-
-		self.Poll = function(buId) {
-			for (var i = 0; i < self.PollingPerSecond(); i++) {
-				$.ajax({
-					headers: { 'X-Business-Unit-Filter': buId },
-					url: "Anywhere/Agents/GetStates?teamId=" + self.TeamId(),
-				});
-			}
-		}
-
+		
 		self.runIterations = function() {
 			var iterations = self.Iterations();
 			startPromise.done(function() {

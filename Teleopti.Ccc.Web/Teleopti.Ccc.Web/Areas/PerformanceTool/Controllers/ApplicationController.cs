@@ -2,6 +2,7 @@ using System.Web.Mvc;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta.Performance;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Infrastructure.PerformanceTool;
+using Teleopti.Ccc.Web.Filters;
 
 namespace Teleopti.Ccc.Web.Areas.PerformanceTool.Controllers
 {
@@ -31,19 +32,22 @@ namespace Teleopti.Ccc.Web.Areas.PerformanceTool.Controllers
 			return new ViewResult();
 		}
 
-		public JsonResult AdherenceTest(int limit)
-		{
-			return Json("Ok", JsonRequestBehavior.AllowGet);
-		}
-
-
-		public JsonResult ManageAdherenceLoadTest(int iterationCount)
+		[UnitOfWorkAction, HttpGet]
+		public JsonResult ResetPerformanceCounter(int iterationCount)
 		{
 			_performanceCounter.Limit = iterationCount;
 			_performanceCounter.BusinessUnitId = _businessUnit.Current().Id.GetValueOrDefault();
 			_performanceCounter.DataSource = _currentDataSource.CurrentName();
 			_performanceCounter.ResetCount();
-			return null;
+			return Json("ok", JsonRequestBehavior.AllowGet);
+		}
+
+		[UnitOfWorkAction, HttpGet]
+		public JsonResult ManageAdherenceLoadTest(int iterationCount)
+		{
+			var personData = _personGenerator.Generate(iterationCount);
+			var stateCodes = _stateGenerator.Generate(iterationCount);
+			return Json(new {personData.Persons, States = stateCodes, personData.TeamId}, JsonRequestBehavior.AllowGet);
 		}
 	}
 }

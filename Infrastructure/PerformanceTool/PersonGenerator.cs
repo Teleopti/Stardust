@@ -1,8 +1,8 @@
 using System;
+using System.Collections.Generic;
 using Teleopti.Ccc.Domain.AgentInfo;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Repositories;
-using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
 
@@ -10,8 +10,20 @@ namespace Teleopti.Ccc.Infrastructure.PerformanceTool
 {
 	public interface IPersonGenerator
 	{
-		void Generate(int count);
+		PersonDataForLoadTest Generate(int count);
 	}
+
+	public class PersonDataForLoadTest
+	{
+		public IEnumerable<PersonWithExternalLogon> Persons { get; set; }
+		public Guid TeamId { get; set; }
+	}
+
+	public class PersonWithExternalLogon
+	{
+		public string ExternalLogOn { get; set; }
+	}
+
 	public class PersonGenerator : IPersonGenerator
 	{
 		private readonly ICurrentUnitOfWork _unitOfWork;
@@ -21,7 +33,7 @@ namespace Teleopti.Ccc.Infrastructure.PerformanceTool
 		private readonly IPartTimePercentageRepository _partTimePercentageRepository;
 		private readonly IContractRepository _contractRepository;
 		private readonly IContractScheduleRepository _contractScheduleRepository;
-		private readonly ExternalLogOnRepository _externalLogOnRepository;
+		private readonly IExternalLogOnRepository _externalLogOnRepository;
 
 		public PersonGenerator(ICurrentUnitOfWork unitOfWork, 
 			IPersonRepository personRepository,
@@ -30,7 +42,7 @@ namespace Teleopti.Ccc.Infrastructure.PerformanceTool
 			IPartTimePercentageRepository partTimePercentageRepository,
 			IContractRepository contractRepository,
 			IContractScheduleRepository contractScheduleRepository,
-			ExternalLogOnRepository externalLogOnRepository)
+			IExternalLogOnRepository externalLogOnRepository)
 		{
 			_unitOfWork = unitOfWork;
 			_personRepository = personRepository;
@@ -42,7 +54,7 @@ namespace Teleopti.Ccc.Infrastructure.PerformanceTool
 			_externalLogOnRepository = externalLogOnRepository;
 		}
 
-		public void Generate(int count)
+		public PersonDataForLoadTest Generate(int count)
 		{
 			var site = new Site("site");
 			_siteRepository.Add(site);
@@ -54,10 +66,10 @@ namespace Teleopti.Ccc.Infrastructure.PerformanceTool
 			_partTimePercentageRepository.Add(partTimePercentage);
 			var contractSchedule = new ContractSchedule("cs");
 			_contractScheduleRepository.Add(contractSchedule);
-
+			var generatedPersonData = new List<PersonWithExternalLogon>();
 			for (var i = 0; i < count; i++)
 			{
-				var externalLogOn = new ExternalLogOn(i, i, Convert.ToString(i), Convert.ToString(i), true);
+				var externalLogOn = new ExternalLogOn(i, i, Convert.ToString(i), Convert.ToString(i), true) {DataSourceId = 6};
 				_externalLogOnRepository.Add(externalLogOn);
 				var person = new Person();
 				person.PermissionInformation.SetDefaultTimeZone(TimeZoneInfo.FindSystemTimeZoneById("UTC"));
@@ -66,9 +78,13 @@ namespace Teleopti.Ccc.Infrastructure.PerformanceTool
 				personPeriod.AddExternalLogOn(externalLogOn);
 				person.AddPersonPeriod(personPeriod);
 				_personRepository.Add(person);
-
 				_unitOfWork.Current().PersistAll();
+				generatedPersonData.Add(new PersonWithExternalLogon
+				{
+					ExternalLogOn = externalLogOn.AcdLogOnName
+				});
 			}
+			return new PersonDataForLoadTest { Persons = generatedPersonData, TeamId = team.Id.GetValueOrDefault() };
 		}
 	}
 }

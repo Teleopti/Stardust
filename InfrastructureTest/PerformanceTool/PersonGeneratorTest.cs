@@ -58,6 +58,42 @@ namespace Teleopti.Ccc.InfrastructureTest.PerformanceTool
 			personPeriod2.ExternalLogOnCollection.Single().AcdLogOnName.Should().Be("1");
 		}
 
+		[Test]
+		public void ShouldReturnAllGeneratedPersonData()
+		{
+			var unitOfWork = new CurrentUnitOfWork(new CurrentUnitOfWorkFactory(new CurrentTeleoptiPrincipal()));
+			var personRepository = new PersonRepository(unitOfWork);
+			var siteRepository = new SiteRepository(unitOfWork);
+			var teamRepository = new TeamRepository(unitOfWork);
+			var partTimePercentageRepository = new PartTimePercentageRepository(unitOfWork);
+			var contractRepository = new ContractRepository(unitOfWork);
+			var contractScheduleRepository = new ContractScheduleRepository(unitOfWork);
+			var externalLogOnRepository = new ExternalLogOnRepository(unitOfWork);
+			var target = new PersonGenerator(unitOfWork, personRepository, siteRepository, teamRepository,
+				partTimePercentageRepository, contractRepository, contractScheduleRepository, externalLogOnRepository);
+			var personData = target.Generate(1);
+			var persons = personRepository.LoadAll();
+			personData.Persons.Single().ExternalLogOn.Should().Be("0");
+		}
+
+		[Test]
+		public void ShouldReturnTeamId()
+		{
+			var unitOfWork = new CurrentUnitOfWork(new CurrentUnitOfWorkFactory(new CurrentTeleoptiPrincipal()));
+			var personRepository = new PersonRepository(unitOfWork);
+			var siteRepository = new SiteRepository(unitOfWork);
+			var teamRepository = new TeamRepository(unitOfWork);
+			var partTimePercentageRepository = new PartTimePercentageRepository(unitOfWork);
+			var contractRepository = new ContractRepository(unitOfWork);
+			var contractScheduleRepository = new ContractScheduleRepository(unitOfWork);
+			var externalLogOnRepository = new ExternalLogOnRepository(unitOfWork);
+			var target = new PersonGenerator(unitOfWork, personRepository, siteRepository, teamRepository,
+				partTimePercentageRepository, contractRepository, contractScheduleRepository, externalLogOnRepository);
+			var personData = target.Generate(1);
+			personData.TeamId.Should().Not.Be.Null();
+		}
+
+
 		protected override void TeardownForRepositoryTest()
 		{
 			using (var uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())

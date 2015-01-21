@@ -10,7 +10,6 @@ using Teleopti.Ccc.Web.Areas.Anywhere.Core;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Portal.DataProvider;
 using Teleopti.Ccc.Web.Filters;
 using Teleopti.Interfaces.Domain;
-using Teleopti.Interfaces.Messages.Rta;
 
 namespace Teleopti.Ccc.Web.Areas.Anywhere.Controllers
 {
