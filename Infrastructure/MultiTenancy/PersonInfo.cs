@@ -8,6 +8,7 @@ namespace Teleopti.Ccc.Infrastructure.MultiTenancy
 		private DateOnly? terminalDate;
 		private bool isDeleted;
 		private string applicationLogonName;
+		private string identity;
 
 		public virtual Guid Id { get; set; }
 		public virtual string Password { get; set; }

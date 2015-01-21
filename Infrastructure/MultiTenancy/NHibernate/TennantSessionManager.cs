@@ -34,11 +34,13 @@ namespace Teleopti.Ccc.Infrastructure.MultiTenancy.NHibernate
 				
 				});
 			cfg.SetProperty(Environment.CurrentSessionContextClass, sessionContext);
+			cfg.AddClass(typeof (PersonInfo));
+			cfg.AddClass(typeof (PasswordPolicyForUser));
 		
-			var mapper = new ModelMapper();
-			mapper.AddMappings(Assembly.GetExecutingAssembly().GetExportedTypes());
-			var mapping = mapper.CompileMappingForAllExplicitlyAddedEntities();
-			cfg.AddMapping(mapping);
+			//var mapper = new ModelMapper();
+			//mapper.AddMappings(Assembly.GetExecutingAssembly().GetExportedTypes());
+			//var mapping = mapper.CompileMappingForAllExplicitlyAddedEntities();
+			//cfg.AddMapping(mapping);
 
 			var ret = new TennantSessionManager {_sessionFactory = cfg.BuildSessionFactory()};
 			return ret;

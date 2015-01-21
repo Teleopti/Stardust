@@ -7,16 +7,6 @@ namespace Teleopti.Ccc.Infrastructure.MultiTenancy
 	{
 		private readonly Func<ICurrentTennantSession> _currentTennantSession;
 
-		private const string hqlPersonInfo = @"
-select pi from PersonInfo pi
-where pi.applicationLogonName=:userName
-and (pi.terminalDate is null or pi.terminalDate>getdate())
-";
-		private const string hqlPasswordPolicy = @"
-select pp from PasswordPolicyForUser pp
-where personInfo=:personInfo
-";
-
 		//remove "func" when we later move away from list of datasources
 		public ApplicationUserQuery(Func<ICurrentTennantSession> currentTennantSession)
 		{
@@ -26,14 +16,14 @@ where personInfo=:personInfo
 		public ApplicationUserQueryResult FindUserData(string userName)
 		{
 			var session = _currentTennantSession().Session();
-			var readPersonInfo = session.CreateQuery(hqlPersonInfo)
+			var readPersonInfo = session.GetNamedQuery("applicationUserQuery")
 				.SetString("userName", userName)
 				.UniqueResult<PersonInfo>();
 			if (readPersonInfo == null)
 			{
 				return null;
 			}
-			var readPasswordPolicy = session.CreateQuery(hqlPasswordPolicy)
+			var readPasswordPolicy = session.GetNamedQuery("passwordPolicyForUser")
 				.SetEntity("personInfo", readPersonInfo)
 				.UniqueResult<PasswordPolicyForUser>();
 			var ret = new ApplicationUserQueryResult

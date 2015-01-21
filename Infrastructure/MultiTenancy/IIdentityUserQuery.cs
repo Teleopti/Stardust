@@ -2,6 +2,6 @@
 {
 	public interface IIdentityUserQuery
 	{
-		ApplicationUserQueryResult FindUserData(string userName);
+		PersonInfo FindUserData(string identity);
 	}
 }

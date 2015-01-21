@@ -3,7 +3,7 @@ using Teleopti.Ccc.UserTexts;
 
 namespace Teleopti.Ccc.Web.Areas.Tennant.Core
 {
-	class IdentityAuthentication : IIdentityAuthentication
+	public class IdentityAuthentication : IIdentityAuthentication
 	{
 		private readonly IIdentityUserQuery _identityUserQuery;
 
@@ -15,13 +15,13 @@ namespace Teleopti.Ccc.Web.Areas.Tennant.Core
 		public ApplicationAuthenticationResult Logon(string identity)
 		{
 			var foundUser = _identityUserQuery.FindUserData(identity);
-			if (!foundUser.Success)
+			if (foundUser==null)
 				return createFailingResult(string.Format(Resources.LogOnFailedIdentityNotFound, identity));
 
 			return new ApplicationAuthenticationResult
 			{
 				Success = true,
-				PersonId = foundUser.PersonId,
+				PersonId = foundUser.Id,
 				Tennant = foundUser.Tennant
 			};
 		}

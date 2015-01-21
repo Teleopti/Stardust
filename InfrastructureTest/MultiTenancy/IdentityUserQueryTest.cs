@@ -2,12 +2,13 @@
 using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.Common;
-using Teleopti.Ccc.Domain.Security;
 using Teleopti.Ccc.Infrastructure.MultiTenancy;
+using Teleopti.Ccc.Infrastructure.MultiTenancy.NHibernate;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.InfrastructureTest.Helper;
 using Teleopti.Ccc.InfrastructureTest.UnitOfWork;
+using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Interfaces.Domain;
 
@@ -18,19 +19,13 @@ namespace Teleopti.Ccc.InfrastructureTest.MultiTenancy
 		private Guid personId;
 		private string correctIdentity;
 		private IIdentityUserQuery target;
-
-		[Test]
-		public void ShouldSucceed()
-		{
-			var result = target.FindUserData(correctIdentity);
-			result.Success.Should().Be.True();
-		}
+		private TennantSessionManager tennantSessionManager;
 
 		[Test]
 		public void ShouldFindPersonId()
 		{
 			var result = target.FindUserData(correctIdentity);
-			result.PersonId.Should().Be.EqualTo(personId);
+			result.Id.Should().Be.EqualTo(personId);
 		}
 
 		[Test]
@@ -46,7 +41,7 @@ namespace Teleopti.Ccc.InfrastructureTest.MultiTenancy
 		public void NonExistingUserShouldFail()
 		{
 			var result = target.FindUserData("incorrectUserName");
-			result.Success.Should().Be.False();
+			result.Should().Be.Null();
 		}
 
 		[Test]
@@ -57,7 +52,7 @@ namespace Teleopti.Ccc.InfrastructureTest.MultiTenancy
 			PersistAndRemoveFromUnitOfWork(personInDatabase);
 
 			target.FindUserData(correctIdentity)
-				.Success.Should().Be.False();
+				.Should().Be.Null();
 		}
 
 		[Test]
@@ -68,7 +63,7 @@ namespace Teleopti.Ccc.InfrastructureTest.MultiTenancy
 			PersistAndRemoveFromUnitOfWork(personInDatabase);
 
 			target.FindUserData(correctIdentity)
-				.Success.Should().Be.False();
+				.Should().Be.Null();
 		}
 
 		[SetUp]
@@ -82,12 +77,15 @@ namespace Teleopti.Ccc.InfrastructureTest.MultiTenancy
 				uow.PersistAll();
 				personId = personInDatabase.Id.Value;
 			}
-			target= new IdentityUserQuery(() => new TennantDatabaseConnectionFactory(UnitOfWorkFactory.Current.ConnectionString));
+			tennantSessionManager = TennantSessionManager.CreateInstanceForTest(ConnectionStringHelper.ConnectionStringUsedInTests);
+			target = new IdentityUserQuery(() => tennantSessionManager);
+			tennantSessionManager.StartTransaction();
 		}
 
 		[TearDown]
 		public void Teardown_WillBeChangedWhenMovedAwayFromUnitOfWork()
 		{
+			tennantSessionManager.EndTransaction();
 			using (var uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
 			{
 				var rep = new PersonRepository(uow);

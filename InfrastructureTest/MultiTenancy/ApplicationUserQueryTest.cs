@@ -42,6 +42,7 @@ namespace Teleopti.Ccc.InfrastructureTest.MultiTenancy
 		{
 			var result = target.FindUserData(correctUserName);
 			result.PersonInfo.Password.Should().Not.Be.Null();
+			result.PersonInfo.Password.Should().Not.Be.Null();
 		}
 
 		[Test]
@@ -105,7 +106,7 @@ namespace Teleopti.Ccc.InfrastructureTest.MultiTenancy
 				personId = personInDatabase.Id.Value;
 			}
 			tennantSessionManager = TennantSessionManager.CreateInstanceForTest(ConnectionStringHelper.ConnectionStringUsedInTests);
-			target = new ApplicationUserQuery(tennantSessionManager);
+			target = new ApplicationUserQuery(() =>tennantSessionManager);
 			tennantSessionManager.StartTransaction();
 		}
 

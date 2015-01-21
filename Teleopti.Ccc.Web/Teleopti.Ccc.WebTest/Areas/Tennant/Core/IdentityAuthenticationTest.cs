@@ -13,15 +13,8 @@ namespace Teleopti.Ccc.WebTest.Areas.Tennant.Core
 		[Test]
 		public void NonExistingUserShouldFail()
 		{
-			var queryResult = new ApplicationUserQueryResult
-			{
-				Success = false,
-				PersonId = Guid.Empty,
-				Tennant = ""
-			};
-
 			var identityUserQuery = MockRepository.GenerateMock<IIdentityUserQuery>();
-			identityUserQuery.Stub(x => x.FindUserData("nonExisting")).Return(queryResult);
+			identityUserQuery.Stub(x => x.FindUserData("nonExisting")).Return(null);
 			var target = new IdentityAuthentication(identityUserQuery);
 			var res = target.Logon("nonExisting");
 			
@@ -34,13 +27,8 @@ namespace Teleopti.Ccc.WebTest.Areas.Tennant.Core
 		public void ShouldSucceedIfValidCredentials()
 		{
 			const string identity = "validUser";
-			
-			var queryResult = new ApplicationUserQueryResult
-			{
-				Success = true,
-				PersonId = Guid.NewGuid(),
-				Tennant = "Teleopti"
-			};
+
+			var queryResult = new PersonInfo {Id = Guid.NewGuid()};
 			var findIdentityQuery = MockRepository.GenerateMock<IIdentityUserQuery>();
 			findIdentityQuery.Expect(x => x.FindUserData(identity)).Return(queryResult);
 
@@ -49,7 +37,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Tennant.Core
 
 			res.Success.Should().Be.True();
 			res.Tennant.Should().Be.EqualTo(queryResult.Tennant);
-			res.PersonId.Should().Be.EqualTo(queryResult.PersonId);
+			res.PersonId.Should().Be.EqualTo(queryResult.Id);
 		}
 	}
 }
