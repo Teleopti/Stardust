@@ -42,7 +42,7 @@ namespace ClickOnceSign
                 mage = cd + "\\mage.exe";
                 UpdateManifest(manifest);
                 SignFile(manifest, certFile, password);
-                UpdateProvider(application, appUrl, providerUrl);
+                UpdateProvider(application, appUrl);
                 UpdateAppManifestRef(application, manifest);
                 SignFile(application, certFile, password);
                 ReinstallApplication(appDir, tempDir, application, manifest);
@@ -85,7 +85,6 @@ namespace ClickOnceSign
             {
                 File.Copy(Path.Combine(tempDir, application), Path.Combine(appDir, application), true);
                 File.Copy(Path.Combine(tempDir, manifest), Path.Combine(appDir, manifest), true);
-                File.Copy(Path.Combine(tempDir, "setup.exe"), Path.Combine(appDir, "setup.exe"), true);
             }
             catch (Exception)
             {
@@ -109,10 +108,9 @@ namespace ClickOnceSign
                 , "Failed to update application '" + application + "' with new manifest ref");
         }
 
-        private static void UpdateProvider(String application, String appUrl, String providerUrl)
+        private static void UpdateProvider(String application, String appUrl)
         {
             RunExe(mage, "-u " + application + " -ProviderUrl " + appUrl, "Failed to update provider url in file '" + application + "'");
-            RunExe(".\\setup.exe", "-url=" + providerUrl, "Failed to update setup.exe with url");
         }
 
         private static void RunExe(String exe, String arg, String errorMessage)

@@ -55,15 +55,6 @@
       <SourceFiles 	Include="$(CCNetWorkingDirectory)\Teleopti.Ccc.SmartParts\bin\$(Configuration)\Teleopti.Ccc.SmartParts.dll"/>
       <SourceFiles	Include="$(CCNetWorkingDirectory)\SyncFusion\*.dll" />
       <SourceFiles	Include="$(CCNetWorkingDirectory)\BuildArtifacts\licensecontext.slf"/>
-
-      <!--
-      <BootstrapperFile Include="Microsoft.Net.Framework.3.5.SP1">
-        <ProductName>.NET Framework 3.5 SP1</ProductName>
-      </BootstrapperFile>
-      <BootstrapperFile Include="Microsoft.Windows.Installer.3.1">
-        <ProductName>Windows Installer 3.1</ProductName>
-      </BootstrapperFile>
--->
     </ItemGroup>
 
   </Target>
@@ -146,20 +137,6 @@
     <GetFrameworkSdkPath>
       <Output TaskParameter="Path" PropertyName="SdkPath" />
     </GetFrameworkSdkPath>
-	
-	<GenerateBootstrapper
-	  ApplicationFile="$(SolutionName).application"
-	  ApplicationName="$(ClickOnceAppTitle)"
-	  ApplicationUrl="$(ClickOnceUrl)"
-	  BootstrapperItems="@(BootstrapperFile)"
-	  Culture="en"
-	  FallbackCulture="en-US"
-	  ComponentsLocation="HomeSite"
-	  CopyComponents="false"
-	  Validate="false"
-	  SupportUrl="http://www.microsoft.com/downloads/details.aspx?FamilyID=333325FD-AE52-4E35-B531-508D977D32A6"
-	  Path="C:\Program Files (x86)\Microsoft SDKs\Windows\v7.0A\Bootstrapper"
-	  OutputPath="." />
 
   </Target>
 
