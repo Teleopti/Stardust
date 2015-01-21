@@ -1,5 +1,7 @@
 ﻿using Autofac;
+using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Infrastructure.Foundation;
+using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.Web.Areas.Start.Core.Authentication.DataProvider;
 using Teleopti.Ccc.Web.Areas.Start.Core.Authentication.Services;
 using Teleopti.Ccc.Web.Areas.Start.Core.Authentication.ViewModelFactory;
@@ -14,11 +16,26 @@ namespace Teleopti.Ccc.Web.Areas.Start.Core.IoC
 {
 	public class StartAreaModule : Module
 	{
+		private readonly IIocConfiguration _configuration;
+
+		public StartAreaModule(IIocConfiguration configuration)
+		{
+			_configuration = configuration;
+		}
+
 		protected override void Load(ContainerBuilder builder)
 		{
 			builder.RegisterType<WebLogOn>().As<IWebLogOn>();
 			builder.RegisterType<DataSourcesProvider>().As<IDataSourcesProvider>().SingleInstance();
-			builder.RegisterType<Authenticator>().As<IAuthenticator>().SingleInstance();
+			if (_configuration.Toggle(Toggles.MultiTenancy_WebLogon_17461))
+			{
+				builder.RegisterType<MultiTennantAuthenticator>().As<IAuthenticator>().SingleInstance();
+			}
+			else
+			{
+				builder.RegisterType<Authenticator>().As<IAuthenticator>().SingleInstance();
+			}
+			
 			builder.RegisterType<BusinessUnitProvider>().As<IBusinessUnitProvider>();
 			builder.RegisterType<TokenIdentityProvider>().As<ITokenIdentityProvider>().SingleInstance();
 			builder.RegisterType<LayoutBaseViewModelFactory>().As<ILayoutBaseViewModelFactory>();
