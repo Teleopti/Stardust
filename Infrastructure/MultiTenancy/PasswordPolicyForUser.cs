@@ -9,6 +9,14 @@ namespace Teleopti.Ccc.Infrastructure.MultiTenancy
 		private PersonInfo personInfo;
 #pragma warning restore 169
 
+		public PasswordPolicyForUser(PersonInfo personInfo)
+		{
+			this.personInfo = personInfo;
+			LastPasswordChange=DateTime.UtcNow;
+			InvalidAttemptsSequenceStart = DateTime.UtcNow;
+		}
+		protected PasswordPolicyForUser() { }
+
 		public virtual DateTime LastPasswordChange { get; protected set; }
 		public virtual DateTime InvalidAttemptsSequenceStart { get; protected set; }
 		public virtual int InvalidAttempts { get; protected set; }

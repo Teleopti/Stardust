@@ -1,10 +1,8 @@
 ﻿using System;
-using System.Reflection;
 using NHibernate;
 using NHibernate.Cfg;
 using NHibernate.Context;
 using NHibernate.Dialect;
-using NHibernate.Mapping.ByCode;
 using Teleopti.Ccc.Domain;
 using Environment = NHibernate.Cfg.Environment;
 

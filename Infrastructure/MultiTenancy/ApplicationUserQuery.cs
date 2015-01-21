@@ -20,18 +20,21 @@ namespace Teleopti.Ccc.Infrastructure.MultiTenancy
 				.SetString("userName", userName)
 				.UniqueResult<PersonInfo>();
 			if (readPersonInfo == null)
-			{
 				return null;
-			}
+
 			var readPasswordPolicy = session.GetNamedQuery("passwordPolicyForUser")
 				.SetEntity("personInfo", readPersonInfo)
 				.UniqueResult<PasswordPolicyForUser>();
-			var ret = new ApplicationUserQueryResult
+			if (readPasswordPolicy == null)
+			{
+				readPasswordPolicy = new PasswordPolicyForUser(readPersonInfo);
+				session.Save(readPasswordPolicy);
+			}
+			return new ApplicationUserQueryResult
 			{
 				PersonInfo = readPersonInfo,
 				PasswordPolicy = readPasswordPolicy
 			};
-			return ret;
 		}
 	}
 }

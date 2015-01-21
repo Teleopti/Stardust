@@ -94,6 +94,17 @@ namespace Teleopti.Ccc.InfrastructureTest.MultiTenancy
 				.Should().Be.Null();
 		}
 
+
+		[Test]
+		public void ShouldPersistPasswordPolicyIfNonExistingButUserExist()
+		{
+			var session = tennantSessionManager.Session();
+			session.GetNamedQuery("passwordPolicyForUser").SetEntity("personInfo", session.Get<PersonInfo>(personId)).UniqueResult().Should().Be.Null();
+			target.FindUserData(correctUserName);
+			session.GetNamedQuery("passwordPolicyForUser").SetEntity("personInfo", session.Get<PersonInfo>(personId)).UniqueResult().Should().Not.Be.Null();
+		}
+
+
 		[SetUp]
 		public void Setup_WillBeChangedWhenMovedAwayFromUnitOfWork()
 		{
