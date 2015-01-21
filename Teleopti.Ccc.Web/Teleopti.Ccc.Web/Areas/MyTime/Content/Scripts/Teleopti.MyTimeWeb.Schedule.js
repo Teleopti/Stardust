@@ -217,13 +217,13 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 		var addOvertimeModel = { model: new Teleopti.MyTimeWeb.Schedule.OvertimeAvailabilityViewModel(ajax, displayOvertimeAvailability), type: function () { return 'overtime'; }, CancelAddingNewRequest: self.CancelAddingNewRequest };
 		var innerRequestModel = createRequestViewModel();
 		var addRequestModel = { model: innerRequestModel, type: innerRequestModel.TypeEnum, CancelAddingNewRequest: self.CancelAddingNewRequest };
-		var addShiftOfferModel = { model: new Teleopti.MyTimeWeb.Schedule.ShiftExchangeOfferViewModelFactory(ajax, _displayRequest).Create(defaultDateTimes), type: function () { return 'shiftOffer'; }, CancelAddingNewRequest: self.CancelAddingNewRequest };
 		var addAbsenceReportModel = { model: new Teleopti.MyTimeWeb.Schedule.AbsenceReportViewModel(ajax, reloadSchedule), type: function () { return 'absenceReport'; }, CancelAddingNewRequest: self.CancelAddingNewRequest };
 
 		self.showAddShiftExchangeOfferForm = function(data) {
 			if (!self.shiftExchangePermission()) {
 				return;
 			}
+			var addShiftOfferModel = { model: new Teleopti.MyTimeWeb.Schedule.ShiftExchangeOfferViewModelFactory(ajax, _displayRequest).Create(defaultDateTimes), type: function () { return 'shiftOffer'; }, CancelAddingNewRequest: self.CancelAddingNewRequest };
 			self.requestViewModel(addShiftOfferModel);
 			_fillFormData(data);
 		}
