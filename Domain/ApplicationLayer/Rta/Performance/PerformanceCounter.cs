@@ -9,5 +9,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Performance
 		Guid BusinessUnitId { get; set; }
 		string DataSource { get; set; }
 		void Count();
+		void ResetCount();
 	}
 }

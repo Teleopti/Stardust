@@ -216,6 +216,8 @@
     <Compile Include="MultiTenancy\PasswordPolicyForUser.cs" />
     <Compile Include="MultiTenancy\NHibernate\TennantSessionManager.cs" />
     <Compile Include="NHibernateConfiguration\SecondLevelCache.cs" />
+    <Compile Include="PerformanceTool\PersonGenerator.cs" />
+    <Compile Include="PerformanceTool\StateGenerator.cs" />
     <Compile Include="Persisters\WorkflowControlSetPublishDatePersister.cs" />
     <Compile Include="Repositories\AdherenceDetailsReadModelPersister.cs" />
     <Compile Include="Repositories\AdherencePercentageReadModelPersister.cs" />

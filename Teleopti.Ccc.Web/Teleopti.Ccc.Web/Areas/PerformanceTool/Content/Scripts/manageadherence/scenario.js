@@ -30,6 +30,8 @@ define([
 		this.Text = text;
 
 		this.Configuration = ko.observable();
+		this.PollingPerSecond = ko.observable();
+		this.TeamId = ko.observable();
 
 		this.ConfigurationObject = ko.computed(function () {
 			try {
@@ -43,7 +45,8 @@ define([
 			var configuration = self.ConfigurationObject();
 			if (!configuration)
 				return undefined;
-
+			self.PollingPerSecond(configuration.PollingPerSecond);
+			self.TeamId(configuration.TeamId);
 			var iterations = [];
 			for (var s = 0; s < configuration.States.length; s++) {
 				for (var p = 0; p < configuration.Persons.length; p++) {
@@ -118,10 +121,10 @@ define([
 		};
 
 		self.Poll = function(buId) {
-			for (var i = 0; i < self.PollingPerSecond; i++) {
+			for (var i = 0; i < self.PollingPerSecond(); i++) {
 				$.ajax({
 					headers: { 'X-Business-Unit-Filter': buId },
-					url: "Anywhere/Agents/GetStates?teamId=" + self.TeamId,
+					url: "Anywhere/Agents/GetStates?teamId=" + self.TeamId(),
 				});
 			}
 		}

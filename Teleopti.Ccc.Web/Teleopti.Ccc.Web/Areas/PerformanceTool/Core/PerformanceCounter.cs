@@ -42,8 +42,12 @@ namespace Teleopti.Ccc.Web.Areas.PerformanceTool.Core
 					BusinessUnitId = BusinessUnitId.ToString(),
 					DataSource = DataSource
 				});
-				_count = 0;
 			}
+		}
+
+		public void ResetCount()
+		{
+			_count = 0;
 		}
 	}
 }
