@@ -1,22 +1,18 @@
-﻿using System;
-using Teleopti.Ccc.Domain.Security;
+﻿using Teleopti.Ccc.Domain.Security;
+using Teleopti.Ccc.Infrastructure.MultiTenancy;
 
 namespace Teleopti.Ccc.Web.Areas.Tennant.Core
 {
 	public class ConvertDataToOldUserDetailDomain : IConvertDataToOldUserDetailDomain
 	{
-		public UserDetail Convert(int invalidAttempts, DateTime? invalidAttemptsSequenceStart, DateTime? lastPasswordChange)
+		public UserDetail Convert(PasswordPolicyForUser passwordPolicyForUser)
 		{
-			if (invalidAttemptsSequenceStart.HasValue)
+			return new UserDetail(null)
 			{
-				return new UserDetail(null)
-				{
-					InvalidAttempts = invalidAttempts,
-					InvalidAttemptsSequenceStart = invalidAttemptsSequenceStart.Value,
-					LastPasswordChange = lastPasswordChange.Value
-				};
-			}
-			return new UserDetail(null);
+				InvalidAttempts = passwordPolicyForUser.InvalidAttempts,
+				InvalidAttemptsSequenceStart = passwordPolicyForUser.InvalidAttemptsSequenceStart,
+				LastPasswordChange = passwordPolicyForUser.LastPasswordChange
+			};
 		}
 	}
 }

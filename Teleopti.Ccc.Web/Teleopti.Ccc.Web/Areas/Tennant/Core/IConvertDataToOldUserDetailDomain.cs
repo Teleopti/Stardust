@@ -1,11 +1,11 @@
-﻿using System;
-using Teleopti.Ccc.Domain.Security;
+﻿using Teleopti.Ccc.Domain.Security;
+using Teleopti.Ccc.Infrastructure.MultiTenancy;
 
 namespace Teleopti.Ccc.Web.Areas.Tennant.Core
 {
 	//will be deleted later
 	public interface IConvertDataToOldUserDetailDomain
 	{
-		UserDetail Convert(int invalidAttempts, DateTime? invalidAttemptsSequenceStart, DateTime? lastPasswordChange);
+		UserDetail Convert(PasswordPolicyForUser passwordPolicyForUser);
 	}
 }

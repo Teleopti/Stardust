@@ -1,5 +1,6 @@
 ﻿using System;
 using Teleopti.Ccc.Domain.Security.Authentication;
+using Teleopti.Ccc.Infrastructure.MultiTenancy;
 
 namespace Teleopti.Ccc.Web.Areas.Tennant.Core
 {
@@ -14,9 +15,9 @@ namespace Teleopti.Ccc.Web.Areas.Tennant.Core
 			_checkPasswordChange = checkPasswordChange;
 		}
 
-		public bool Verify(int invalidAttempts, DateTime? invalidAttemptsSequenceStart, DateTime? lastPasswordChange, out string passwordPolicyFailureReason)
+		public bool Verify(PasswordPolicyForUser passwordPolicyForUser, out string passwordPolicyFailureReason)
 		{
-			var userDetail = _convertDataToOldUserDetailDomain.Convert(invalidAttempts, invalidAttemptsSequenceStart, lastPasswordChange);
+			var userDetail = _convertDataToOldUserDetailDomain.Convert(passwordPolicyForUser);
 			var res = _checkPasswordChange.Check(userDetail);
 			passwordPolicyFailureReason = res.Message;
 			return res.Successful;

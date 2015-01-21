@@ -29,7 +29,7 @@ namespace Teleopti.Ccc.Web.Areas.Tennant.Core
 				return createFailingResult(Resources.LogOnFailedAccountIsLocked);
 
 			string passwordPolicyFailureReason;
-			if (!_passwordPolicyCheck.Verify(foundUser.PasswordPolicy.InvalidAttempts, foundUser.PasswordPolicy.InvalidAttemptsSequenceStart, foundUser.PasswordPolicy.LastPasswordChange, out passwordPolicyFailureReason))
+			if (!_passwordPolicyCheck.Verify(foundUser.PasswordPolicy, out passwordPolicyFailureReason))
 				return createFailingResult(passwordPolicyFailureReason);
 	
 
