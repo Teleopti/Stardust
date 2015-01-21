@@ -33,7 +33,6 @@
     <ItemGroup>
       <ManifestFile Include="$(SolutionName).exe.manifest"/>
       <ClickOnceInstallationFiles Include="$(SolutionName).application"/>
-      <ClickOnceInstallationFiles Include="setup.exe"/>
       <ClickOnceInstallationFiles Include="default.htm"/>
       <ClickOncePageFiles Include="$(CCNetWorkingDirectory)\BuildArtifacts\images\*.*"/>
       <ClickOncehowToMultiSDK Include="$(CCNetWorkingDirectory)\Teleopti.Ccc.SmartClientPortal\Teleopti.Ccc.SmartClientPortal.Shell\HowToMultiSDK\*.*" />
