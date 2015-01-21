@@ -96,6 +96,31 @@ namespace Teleopti.Analytics.Etl.TransformerInfrastructure
 			}
 		}
 
+		public int ExecuteNonQueryMaintenance()
+		{
+			using (var conn = grabConnection())
+			{
+				using (var command = SetCommandMaintenance(conn))
+				{
+					setParams(command);
+					var number = command.ExecuteNonQuery();
+					return number;
+				}
+			}
+		}
+
+		protected virtual SqlCommand SetCommandMaintenance(SqlConnection conn)
+		{
+			const string timeout = "21600";
+			return new SqlCommand
+				{
+					CommandText = _commandText,
+					Connection = conn,
+					CommandType = _commandType,
+					CommandTimeout = int.Parse(timeout, CultureInfo.InvariantCulture)
+				};
+		}
+
 		protected virtual SqlCommand SetCommand(SqlTransaction transaction)
 		{
 			var timeout = "60";

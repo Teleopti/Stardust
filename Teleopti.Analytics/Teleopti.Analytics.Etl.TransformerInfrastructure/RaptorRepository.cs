@@ -1779,24 +1779,35 @@ namespace Teleopti.Analytics.Etl.TransformerInfrastructure
 				_dataMartConnectionString);
 		}
 
-		public int PerformIndexMaintenance()
+		public int PerformIndexMaintenance(string database)
 		{
-			var appConnectionString = UnitOfWorkFactory.Current.ConnectionString;
+			string connectionString = null;
 
-			var initCatString = "Initial Catalog=";
-			var appNameString = ";Application Name";
+			switch (database)
+			{
+				case "Analytics":
+					connectionString = _dataMartConnectionString;
+					break;
+				case "App":
+					connectionString = UnitOfWorkFactory.Current.ConnectionString;
+					break;
+				case "Agg":
+				{
+					const string initCatString = "Initial Catalog=";
+					const string appNameString = ";Application Name";
 
-			var firstIndex = _dataMartConnectionString.IndexOf(initCatString) + initCatString.Length;
-			var lastIndex = _dataMartConnectionString.IndexOf(appNameString);
+					var firstIndex = _dataMartConnectionString.IndexOf(initCatString) + initCatString.Length;
+					var lastIndex = _dataMartConnectionString.IndexOf(appNameString);
 
-			var aggName = getAggName();
+					var aggName = getAggName();
 
-			string aggConnectionString = _dataMartConnectionString.Substring(0, firstIndex) + aggName +
-			                             _dataMartConnectionString.Substring(lastIndex);
+					connectionString = _dataMartConnectionString.Substring(0, firstIndex) + aggName +
+					                   _dataMartConnectionString.Substring(lastIndex);
+				}
+					break;
+			}
 
-			HelperFunctions.ExecuteNonQuery(CommandType.StoredProcedure, "dbo.IndexMaintenance", null, _dataMartConnectionString);
-			HelperFunctions.ExecuteNonQuery(CommandType.StoredProcedure, "dbo.IndexMaintenance", null, appConnectionString);
-			HelperFunctions.ExecuteNonQuery(CommandType.StoredProcedure, "dbo.IndexMaintenance", null, aggConnectionString);
+			HelperFunctions.ExecuteNonQueryMaintenance(CommandType.StoredProcedure, "dbo.IndexMaintenance", null, connectionString);
 
 			return 0;
 		}

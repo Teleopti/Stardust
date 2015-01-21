@@ -114,7 +114,9 @@ namespace Teleopti.Analytics.Etl.Transformer.Job.Jobs
 			Add(new PurgeJobStep(jobParameters));     // BU independent
 			if (jobParameters.EtlToggleManager.IsEnabled("RunIndexMaintenance"))
 	        {
-		        Add(new IndexMaintenanceJobStep(jobParameters)); // BU independent
+		        Add(new AnalyticsIndexMaintenanceJobStep(jobParameters)); // BU independent
+		        Add(new AppIndexMaintenanceJobStep(jobParameters)); // BU independent
+		        Add(new AggIndexMaintenanceJobStep(jobParameters)); // BU independent
 	        }
         }
     }

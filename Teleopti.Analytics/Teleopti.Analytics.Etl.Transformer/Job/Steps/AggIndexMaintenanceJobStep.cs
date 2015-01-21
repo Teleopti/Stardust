@@ -4,17 +4,17 @@ using IJobResult = Teleopti.Analytics.Etl.Interfaces.Transformer.IJobResult;
 
 namespace Teleopti.Analytics.Etl.Transformer.Job.Steps
 {
-	public class IndexMaintenanceJobStep : JobStepBase
+	public class AggIndexMaintenanceJobStep : JobStepBase
 	{
-		public IndexMaintenanceJobStep(IJobParameters jobParameters)
+		public AggIndexMaintenanceJobStep(IJobParameters jobParameters)
             : base(jobParameters)
 		{
-		    Name = "IndexMaintenance";
+		    Name = "AggIndexMaintenance";
 		}
 
 		protected override int RunStep(IList<IJobResult> jobResultCollection, bool isLastBusinessUnit)
 		{
-			return isLastBusinessUnit ? _jobParameters.Helper.Repository.PerformIndexMaintenance() : 0;
+			return isLastBusinessUnit ? _jobParameters.Helper.Repository.PerformIndexMaintenance("Agg") : 0;
 		}
 	}
 }

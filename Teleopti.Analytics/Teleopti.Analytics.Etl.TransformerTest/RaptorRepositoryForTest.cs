@@ -800,7 +800,7 @@ namespace Teleopti.Analytics.Etl.TransformerTest
 			throw new NotImplementedException();
 		}
 
-		public int PerformIndexMaintenance()
+		public int PerformIndexMaintenance(string database)
 		{
 			throw new NotImplementedException();
 		}

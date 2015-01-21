@@ -243,6 +243,6 @@ namespace Teleopti.Analytics.Etl.Interfaces.Transformer
 		 int FillIntradayFactQueueDataMart(DateTimePeriod period, int dataSourceId, TimeZoneInfo defaultTimeZone, IBusinessUnit businessUnit);
 		 int FillIntradayFactAgentDataMart(DateTimePeriod period, int dataSourceId, TimeZoneInfo defaultTimeZone, IBusinessUnit businessUnit);
 		 int FillIntradayFactAgentQueueDataMart(DateTimePeriod period, int dataSourceId, TimeZoneInfo defaultTimeZone, IBusinessUnit businessUnit);
-	    int PerformIndexMaintenance();
+	    int PerformIndexMaintenance(string database);
     }
 }
