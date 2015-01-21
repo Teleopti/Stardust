@@ -20,27 +20,15 @@ namespace Teleopti.Ccc.Web.Areas.Tennant
 		public virtual JsonResult ApplicationLogon(string userName, string password)
 		{
 			var res = _applicationAuthentication.Logon(userName, password);
-			// for now we don't use the statuscode
-			//if (!res.Success)
-			//{
-			//	Response.TrySkipIisCustomErrors = true;
-			//	Response.StatusCode = 401;
-			//}
-
 			return Json(res, JsonRequestBehavior.AllowGet);
 		}
 
 		[HttpGet]
+		[TennantUnitOfWork]
 		public JsonResult IdentityLogon(string identity)
 		{
 			var res = _identityAuthentication.Logon(identity);
-			// for now we don't use the statuscode
-			//if (!res.Success)
-			//{
-			//	Response.TrySkipIisCustomErrors = true;
-			//	Response.StatusCode = 401;
-			//}
-		
+	
 			return Json(res, JsonRequestBehavior.AllowGet);
 		}
 	}

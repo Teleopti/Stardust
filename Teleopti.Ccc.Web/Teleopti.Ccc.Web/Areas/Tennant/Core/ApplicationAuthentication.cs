@@ -1,5 +1,4 @@
 ﻿using Teleopti.Ccc.Infrastructure.MultiTenancy;
-using Teleopti.Ccc.Infrastructure.MultiTenancy.NHibernate;
 using Teleopti.Ccc.UserTexts;
 
 namespace Teleopti.Ccc.Web.Areas.Tennant.Core
