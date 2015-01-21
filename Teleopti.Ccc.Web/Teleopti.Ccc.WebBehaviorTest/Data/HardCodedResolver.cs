@@ -42,6 +42,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data
 		public object Resolve(Type type)
 		{
 			// use autofac soon?
+			var eventPublisher = new SyncEventPublisher(new ResolveEventHandlers(this));
 			if (type == typeof(IEnumerable<IHandleEvent<ScheduledResourcesChangedEvent>>))
 			{
 				var utcTheTime = CurrentTime.Value() == DateTime.MinValue ? DateTime.UtcNow : CurrentTime.Value();
@@ -50,7 +51,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data
 					{
 						new ScheduleProjectionReadOnlyUpdater(
 							new ScheduleProjectionReadOnlyRepository(CurrentUnitOfWork.Make()),
-							new EventPopulatingPublisher(new SyncEventPublisher(this), EventContextPopulator.Make()),
+							new EventPopulatingPublisher(eventPublisher, EventContextPopulator.Make()),
 							new ThisIsNow(utcTheTime)
 							)
 					};
@@ -58,18 +59,18 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data
 			if (type == typeof(IEnumerable<IHandleEvent<ScheduleChangedEvent>>))
 				return new[]
 					{
-						makeProjectionChangedEventPublisher(),
+						makeProjectionChangedEventPublisher(eventPublisher),
 						new ScheduleChangedNotifier(messageBroker())
 					};
 			if (type == typeof(IEnumerable<IHandleEvent<PersonAbsenceAddedEvent>>))
 				return new[]
 					{
-						new ScheduleChangedEventPublisher(new EventPopulatingPublisher(new SyncEventPublisher(this), EventContextPopulator.Make()))
+						new ScheduleChangedEventPublisher(new EventPopulatingPublisher(eventPublisher, EventContextPopulator.Make()))
 					};
 			if (type == typeof(IEnumerable<IHandleEvent<FullDayAbsenceAddedEvent>>))
 				return new[]
 					{
-						new ScheduleChangedEventPublisher(new EventPopulatingPublisher(new SyncEventPublisher(this), EventContextPopulator.Make()))
+						new ScheduleChangedEventPublisher(new EventPopulatingPublisher(eventPublisher, EventContextPopulator.Make()))
 					};
 			if (type == typeof(IEnumerable<IHandleEvent<ProjectionChangedEvent>>))
 				return new IHandleEvent<ProjectionChangedEvent>[]
@@ -95,16 +96,16 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data
 								messageBroker(),
 								new UnitOfWorkTransactionEventSyncronization(CurrentUnitOfWork.Make())),
 							new PersonSkillProvider(),
-							new EventPopulatingPublisher(new SyncEventPublisher(this), EventContextPopulator.Make()))
+							new EventPopulatingPublisher(eventPublisher, EventContextPopulator.Make()))
 					};
 			Console.WriteLine("Cannot resolve type {0}! Add it manually or consider using autofac!", type);
 			return null;
 		}
 
-		private object makeProjectionChangedEventPublisher()
+		private object makeProjectionChangedEventPublisher(ICurrentEventPublisher eventPublisher)
 		{
 			return new ProjectionChangedEventPublisher(
-					 new EventPopulatingPublisher(new SyncEventPublisher(this), EventContextPopulator.Make()),
+					 new EventPopulatingPublisher(eventPublisher, EventContextPopulator.Make()),
 					 new ScenarioRepository(CurrentUnitOfWork.Make()),
 					 new PersonRepository(CurrentUnitOfWork.Make()),
 					 new ScheduleRepository(CurrentUnitOfWork.Make()),

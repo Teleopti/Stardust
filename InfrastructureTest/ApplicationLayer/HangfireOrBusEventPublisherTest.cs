@@ -5,6 +5,7 @@ using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Infrastructure.ApplicationLayer;
 using Teleopti.Ccc.Infrastructure.Foundation;
+using Teleopti.Ccc.TestCommon;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.InfrastructureTest.ApplicationLayer
@@ -16,7 +17,7 @@ namespace Teleopti.Ccc.InfrastructureTest.ApplicationLayer
 		public void ShouldPublishHangfireEventsToHangfire()
 		{
 			var hangfire = new FakeHangfireEventClient();
-			var target = new HangfireOrBusEventPublisher(new HangfireEventPublisher(hangfire, new NewtonsoftJsonSerializer()), null);
+			var target = new HangfireOrBusEventPublisher(new HangfireEventPublisher(hangfire, new NewtonsoftJsonSerializer(), null), null);
 
 			target.Publish(new HangfireEvent());
 
@@ -39,7 +40,7 @@ namespace Teleopti.Ccc.InfrastructureTest.ApplicationLayer
 		public void ShouldPublishRtaEventsToHangfire()
 		{
 			var hangfire = new FakeHangfireEventClient();
-			var target = new HangfireOrBusEventPublisher(new HangfireEventPublisher(hangfire, new NewtonsoftJsonSerializer()), null);
+			var target = new HangfireOrBusEventPublisher(new HangfireEventPublisher(hangfire, new NewtonsoftJsonSerializer(), null), null);
 
 			target.Publish(new PersonShiftStartEvent());
 			target.Publish(new PersonShiftEndEvent());

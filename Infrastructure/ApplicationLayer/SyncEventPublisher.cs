@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections;
-using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Runtime.Serialization;
@@ -11,18 +9,16 @@ namespace Teleopti.Ccc.Infrastructure.ApplicationLayer
 {
 	public class SyncEventPublisher : ISyncEventPublisher, ICurrentEventPublisher
 	{
-		private readonly IResolve _resolver;
+		private readonly IResolveEventHandlers _resolver;
 
-		public SyncEventPublisher(IResolve resolver)
+		public SyncEventPublisher(IResolveEventHandlers resolver)
 		{
 			_resolver = resolver;
 		}
 
 		public void Publish(IEvent @event)
 		{
-			var handlerType = typeof(IHandleEvent<>).MakeGenericType(@event.GetType());
-			var enumerableHandlerType = typeof(IEnumerable<>).MakeGenericType(handlerType);
-			var handlers = _resolver.Resolve(enumerableHandlerType) as IEnumerable;
+			var handlers = _resolver.ResolveHandlersForEvent(@event);
 			if (handlers == null) return;
 
 			foreach (var handler in handlers)

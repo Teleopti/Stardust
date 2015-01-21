@@ -14,9 +14,9 @@ namespace Teleopti.Ccc.Web.Core.Hangfire
 			_jobClient = jobClient;
 		}
 
-		public void Enqueue(string displayName, string eventType, string serializedEvent)
+		public void Enqueue(string displayName, string eventType, string serializedEvent, string handlerType)
 		{
-			_jobClient.Value.Enqueue<HangfireEventServer>(x => x.Process(displayName, eventType, serializedEvent));
+			_jobClient.Value.Enqueue<HangfireEventServer>(x => x.Process(displayName, eventType, serializedEvent, handlerType));
 		}
 	}
 }

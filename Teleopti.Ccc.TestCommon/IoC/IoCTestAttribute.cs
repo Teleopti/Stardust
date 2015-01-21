@@ -18,6 +18,11 @@ namespace Teleopti.Ccc.TestCommon.IoC
 		void Reset(Action<ContainerBuilder> registerInContainer);
 	};
 
+	public interface IRegisterInContainer
+	{
+		void RegisterInContainer(ContainerBuilder builder, IIocConfiguration configuration);
+	};
+
 	[AttributeUsage(AttributeTargets.Class | AttributeTargets.Interface, AllowMultiple = false)]
 	public class IoCTestAttribute : Attribute, ITestAction, IIoCTestContext
 	{
@@ -78,6 +83,8 @@ namespace Teleopti.Ccc.TestCommon.IoC
 			builder.RegisterInstance(new MutableNow("2014-12-18 13:31")).As<INow>().AsSelf();
 			builder.RegisterInstance(this).As<IIoCTestContext>();
 			RegisterInContainer(builder, configuration);
+			if (_fixture is IRegisterInContainer)
+				(_fixture as IRegisterInContainer).RegisterInContainer(builder, configuration);
 			registerInContainer(builder);
 			_container = builder.Build();
 		}

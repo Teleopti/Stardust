@@ -18,7 +18,9 @@ namespace Teleopti.Ccc.Infrastructure.ApplicationLayer
 
 		public void Publish(IEvent @event)
 		{
-			var method = _handler.GetType().GetMethods()
+			var method = _handler
+				.GetType()
+				.GetMethods()
 				.FirstOrDefault(m => m.Name == "Handle" && m.GetParameters().Single().ParameterType == @event.GetType());
 			if (method == null)
 				return;

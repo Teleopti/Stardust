@@ -17,13 +17,16 @@ using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Infrastructure.Aop;
 using Teleopti.Ccc.Infrastructure.LiteUnitOfWork;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
+using Teleopti.Ccc.Infrastructure.Web;
 using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.TestCommon;
+using Teleopti.Ccc.TestCommon.IoC;
 using Teleopti.Ccc.TestCommon.Web;
+using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.InfrastructureTest.LiteUnitOfWork
 {
-	public class ReadModelUnitOfWorkTestAttribute : InfrastructureIoCTestAttribute
+	public class ReadModelUnitOfWorkTestAttribute : IoCTestAttribute
 	{
 		protected override void RegisterInContainer(ContainerBuilder builder, IIocConfiguration configuration)
 		{
@@ -33,6 +36,9 @@ namespace Teleopti.Ccc.InfrastructureTest.LiteUnitOfWork
 			builder.RegisterType<NestedService>().AsSelf().As<NestedBase>().SingleInstance();
 			builder.RegisterType<NestedService2>().AsSelf().As<NestedBase>().SingleInstance();
 
+			builder.RegisterInstance(new MutableFakeCurrentHttpContext()).AsSelf().As<ICurrentHttpContext>().SingleInstance();
+			builder.RegisterInstance(new MutableFakeCurrentTeleoptiPrincipal()).AsSelf().As<ICurrentTeleoptiPrincipal>().SingleInstance();
+
 			builder.Register(c =>
 			{
 				var dataSourcesProvider = new FakeDataSourcesProvider();
@@ -40,6 +46,15 @@ namespace Teleopti.Ccc.InfrastructureTest.LiteUnitOfWork
 				dataSourcesProvider.SetAvailableDataSources(new[] { dataSource });
 				return dataSourcesProvider;
 			}).AsSelf().As<IAvailableDataSourcesProvider>().SingleInstance();
+
+			builder.RegisterInstance(new FakeConfigReader
+			{
+				ConnectionStrings = new ConnectionStringSettingsCollection
+				{
+					new ConnectionStringSettings("RtaApplication", ConnectionStringHelper.ConnectionStringUsedInTests)
+				}
+			}).As<IConfigReader>().AsSelf().SingleInstance();
+
 		}
 	}
 

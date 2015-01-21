@@ -116,6 +116,7 @@
     <Compile Include="FakeDataSourcesProvider.cs" />
     <Compile Include="FakeData\FakeCurrentIdentity.cs" />
     <Compile Include="FakeEventPublisher.cs" />
+    <Compile Include="FakeHangfireEventClient.cs" />
     <Compile Include="FakeReadModelUnitOfWorkAspect.cs" />
     <Compile Include="FakeSiteOutOfAdherenceReadModelPersister.cs" />
     <Compile Include="FakeTeamOutOfAdherenceReadModelPersister.cs" />

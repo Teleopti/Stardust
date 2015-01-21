@@ -1,18 +1,36 @@
 ﻿using System;
+using System.Configuration;
 using System.Threading;
+using Autofac;
 using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Infrastructure.DistributedLock;
+using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.TestCommon;
+using Teleopti.Ccc.TestCommon.IoC;
+using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.InfrastructureTest.DistributedLock
 {
 	[TestFixture]
-	[InfrastructureIoCTest]
-	public class DistributedLockTest
+	[IoCTest]
+	public class DistributedLockTest : IRegisterInContainer
 	{
 		public IDistributedLockAcquirer Target;
 		public FakeConfigReader ConfigReader;
+
+		public void RegisterInContainer(ContainerBuilder builder, IIocConfiguration configuration)
+		{
+			builder.RegisterInstance(
+				new FakeConfigReader
+				{
+					ConnectionStrings = new ConnectionStringSettingsCollection
+					{
+						new ConnectionStringSettings("RtaApplication", ConnectionStringHelper.ConnectionStringUsedInTests)
+					}
+				})
+				.As<IConfigReader>().AsSelf().SingleInstance();
+		}
 
 		[Test]
 		public void ShouldNotRunInParallelWhenLocked()
@@ -150,6 +168,7 @@ namespace Teleopti.Ccc.InfrastructureTest.DistributedLock
 			thread.Start();
 			return thread;
 		}
+
 	}
 
 }

@@ -12,14 +12,13 @@ using Teleopti.Ccc.TestCommon;
 namespace Teleopti.Ccc.InfrastructureTest.ApplicationLayer
 {
 	[TestFixture]
-	public class EventPublisherTest
+	public class SyncEventPublisherTest
 	{
-
-		public IResolve ResolverWith(Type type, object instance)
+		public IResolveEventHandlers ResolverWith(Type type, object instance)
 		{
 			var builder = new ContainerBuilder();
 			builder.RegisterInstance(instance).As(type);
-			return new AutofacResolve(builder.Build());
+			return new ResolveEventHandlers(new AutofacResolve(builder.Build()));
 		}
 
 		[Test]
@@ -42,7 +41,7 @@ namespace Teleopti.Ccc.InfrastructureTest.ApplicationLayer
 			var builder = new ContainerBuilder();
 			builder.RegisterInstance(handler1).As<IHandleEvent<TestEvent>>();
 			builder.RegisterInstance(handler2).As<IHandleEvent<TestEvent>>();
-			var target = new SyncEventPublisher(new AutofacResolve(builder.Build()));
+			var target = new SyncEventPublisher(new ResolveEventHandlers(new AutofacResolve(builder.Build())));
 			var @event = new TestEvent();
 
 			target.Publish(@event);

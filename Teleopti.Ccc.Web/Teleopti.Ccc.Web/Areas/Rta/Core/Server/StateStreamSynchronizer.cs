@@ -23,7 +23,7 @@ namespace Teleopti.Ccc.Web.Areas.Rta.Core.Server
 		private readonly IPersonOrganizationProvider _personOrganizationProvider;
 		private readonly IDatabaseReader _databaseReader;
 		private readonly AgentStateAssembler _agentStateAssembler;
-		private readonly ICurrentEventPublisherScope _eventPublisherScope;
+		private readonly IEventPublisherScope _eventPublisherScope;
 		private readonly IEnumerable<IInitializeble> _initializebles;
 		private readonly IEnumerable<IRecreatable> _recreatables;
 
@@ -33,7 +33,7 @@ namespace Teleopti.Ccc.Web.Areas.Rta.Core.Server
 			IPersonOrganizationProvider personOrganizationProvider,
 			IDatabaseReader databaseReader,
 			AgentStateAssembler agentStateAssembler,
-			ICurrentEventPublisherScope eventPublisherScope,
+			IEventPublisherScope eventPublisherScope,
 			IEnumerable<IInitializeble> initializebles,
 			IEnumerable<IRecreatable> recreatables
 			)
@@ -72,7 +72,7 @@ namespace Teleopti.Ccc.Web.Areas.Rta.Core.Server
 
 		private void processStatesTo(object handler, IEnumerable<AgentStateReadModel> states, DateTime currentTime)
 		{
-			using (_eventPublisherScope.PublishTo(new SyncPublishToSingleHandler(handler)))
+			using (_eventPublisherScope.OnThisThreadPublishTo(new SyncPublishToSingleHandler(handler)))
 			{
 				states.ForEach(s =>
 				{

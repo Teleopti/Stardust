@@ -1,3 +1,4 @@
+using System;
 using Autofac;
 using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers;
@@ -28,6 +29,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<SyncEventPublisher>().As<ISyncEventPublisher>().SingleInstance();
 			builder.RegisterType<HangfireEventPublisher>().As<IHangfireEventPublisher>().SingleInstance();
 			builder.RegisterType<ServiceBusEventPublisher>().As<IServiceBusEventPublisher>().SingleInstance();
+			builder.RegisterType<ResolveEventHandlers>().As<IResolveEventHandlers>().SingleInstance();
 
 			if (_configuration.Toggle(Toggles.RTA_HangfireEventProcessing_31237))
 			{
@@ -40,7 +42,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 
 			builder.RegisterType<CurrentEventPublisher>()
 				.As<ICurrentEventPublisher>()
-				.As<ICurrentEventPublisherScope>()
+				.As<IEventPublisherScope>()
 				.SingleInstance();
 
 			builder.RegisterType<CannotPublishToHangfire>().As<IHangfireEventClient>();

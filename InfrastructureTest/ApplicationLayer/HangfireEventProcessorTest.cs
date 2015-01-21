@@ -1,53 +1,99 @@
+using System.Collections.Generic;
 using System.Linq;
+using Autofac;
+using Autofac.Extras.DynamicProxy2;
 using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Infrastructure.ApplicationLayer;
-using Teleopti.Ccc.Infrastructure.Foundation;
-using Teleopti.Ccc.TestCommon;
+using Teleopti.Ccc.IocCommon;
+using Teleopti.Ccc.TestCommon.IoC;
+using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.InfrastructureTest.ApplicationLayer
 {
 	[TestFixture]
-	public class HangfireEventProcessorTest
+	[IoCTestAttribute]
+	public class HangfireEventProcessorTest : IRegisterInContainer
 	{
-		[Test]
-		public void ShouldPublish()
+		public AHandler Handler;
+		public AnotherHandler Another;
+		public InterceptedHandler Intercepted;
+		public IHangfireEventProcessor Target;
+
+		public void RegisterInContainer(ContainerBuilder builder, IIocConfiguration configuration)
 		{
-			var publisher = new FakeEventPublisher();
-			var deserializer = new NewtonsoftJsonDeserializer();
-			var target = new HangfireEventProcessor(publisher, deserializer);
-
-			target.Process(null, typeof (Event).AssemblyQualifiedName, "{}");
-
-			publisher.PublishedEvents.Single().Should().Be.OfType<Event>();
+			builder.RegisterInstance(new AHandler()).AsSelf().As<IHandleEvent<AnEvent>>().SingleInstance();
+			builder.RegisterInstance(new AnotherHandler()).AsSelf().As<IHandleEvent<AnEvent>>().SingleInstance();
+			builder.RegisterType<InterceptedHandler>().AsSelf().As<IHandleEvent<AnEvent>>().EnableClassInterceptors().SingleInstance();
 		}
 
 		[Test]
-		public void ShouldPublishGivenEventType()
+		public void ShouldPublish()
 		{
-			var publisher = new FakeEventPublisher();
-			var target = new HangfireEventProcessor(publisher, new NewtonsoftJsonDeserializer());
+			Target.Process(null, typeof(AnEvent).AssemblyQualifiedName, "{}", typeof(AHandler).AssemblyQualifiedName);
 
-			target.Process(null, typeof(AnEvent).AssemblyQualifiedName, "{}");
-
-			publisher.PublishedEvents.Single().Should().Be.OfType<AnEvent>();
+			Handler.HandledEvents.Single().Should().Be.OfType<AnEvent>();
 		}
 
 		[Test]
 		public void ShouldDeserialize()
 		{
-			var publisher = new FakeEventPublisher();
-			var target = new HangfireEventProcessor(publisher, new NewtonsoftJsonDeserializer());
+			Target.Process(null, typeof(AnEvent).AssemblyQualifiedName, "{ Data: 'Hello' }", typeof(AHandler).AssemblyQualifiedName);
 
-			target.Process(null, typeof(AnEvent).AssemblyQualifiedName, "{ Data: 'Hello' }");
+			Handler.HandledEvents.OfType<AnEvent>().Single().Data.Should().Be("Hello");
+		}
 
-			publisher.PublishedEvents.OfType<AnEvent>().Single().Data.Should().Be("Hello");
+		[Test]
+		public void ShouldPublishToSpecifiedHandlerOnly()
+		{
+			Target.Process(null, typeof(AnEvent).AssemblyQualifiedName, "{}", typeof(AnotherHandler).AssemblyQualifiedName);
+
+			Handler.HandledEvents.Should().Have.Count.EqualTo(0);
+			Another.HandledEvents.Single().Should().Be.OfType<AnEvent>();
+		}
+
+		[Test]
+		public void ShouldPublishToInterceptedHandler()
+		{
+			Target.Process(null, typeof(AnEvent).AssemblyQualifiedName, "{}", typeof(InterceptedHandler).AssemblyQualifiedName);
+
+			Intercepted.HandledEvents.Single().Should().Be.OfType<AnEvent>();
 		}
 
 		public class AnEvent : Event
 		{
 			public string Data { get; set; }
+		}
+
+		public class AHandler : IHandleEvent<AnEvent>
+		{
+			public List<IEvent> HandledEvents = new List<IEvent>();
+
+			public void Handle(AnEvent @event)
+			{
+				HandledEvents.Add(@event);
+			}
+		}
+
+		public class AnotherHandler : IHandleEvent<AnEvent>
+		{
+			public List<IEvent> HandledEvents = new List<IEvent>();
+
+			public void Handle(AnEvent @event)
+			{
+				HandledEvents.Add(@event);
+			}
+		}
+
+		public class InterceptedHandler : IHandleEvent<AnEvent>
+		{
+			public List<IEvent> HandledEvents = new List<IEvent>();
+
+			public void Handle(AnEvent @event)
+			{
+				HandledEvents.Add(@event);
+			}
 		}
 	}
 }

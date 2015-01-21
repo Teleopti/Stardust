@@ -24,7 +24,6 @@ namespace Teleopti.Ccc.Web.Core.Hangfire
 				builder.RegisterType<SqlStorageConfiguration>().As<IHangfireServerStorageConfiguration>().SingleInstance();
 
 			builder.RegisterType<HangfireEventServer>().SingleInstance();
-			builder.RegisterType<HangfireEventProcessor>().As<IHangfireEventProcessor>().SingleInstance();
 
 			builder.RegisterType<HangfireEventClient>().As<IHangfireEventClient>().SingleInstance();
 			builder.RegisterType<BackgroundJobClient>().As<IBackgroundJobClient>().SingleInstance();

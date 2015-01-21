@@ -1,7 +1,6 @@
 ﻿using System;
 using Teleopti.Ccc.Domain;
 using Teleopti.Ccc.Domain.ApplicationLayer;
-using Teleopti.Ccc.Infrastructure.Repositories;
 
 namespace Teleopti.Ccc.Infrastructure.ApplicationLayer
 {
@@ -10,12 +9,12 @@ namespace Teleopti.Ccc.Infrastructure.ApplicationLayer
 		IEventPublisher Current();
 	}
 
-	public interface ICurrentEventPublisherScope
+	public interface IEventPublisherScope
 	{
-		IDisposable PublishTo(IEventPublisher eventPublisher);
+		IDisposable OnThisThreadPublishTo(IEventPublisher eventPublisher);
 	}
 
-	public class CurrentEventPublisher : ICurrentEventPublisher, ICurrentEventPublisherScope
+	public class CurrentEventPublisher : ICurrentEventPublisher, IEventPublisherScope
 	{
 		[ThreadStatic]
 		private static IEventPublisher _threadEventPublisher;
@@ -26,7 +25,7 @@ namespace Teleopti.Ccc.Infrastructure.ApplicationLayer
 			_eventPublisher = eventPublisher;
 		}
 
-		public IDisposable PublishTo(IEventPublisher eventPublisher)
+		public IDisposable OnThisThreadPublishTo(IEventPublisher eventPublisher)
 		{
 			_threadEventPublisher = eventPublisher;
 			return new GenericDisposable(() =>

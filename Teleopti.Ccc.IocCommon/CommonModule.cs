@@ -2,6 +2,7 @@ using System;
 using Autofac;
 using Castle.Core.Internal;
 using Teleopti.Ccc.Domain.Common;
+using Teleopti.Ccc.Infrastructure.ApplicationLayer;
 using Teleopti.Ccc.Infrastructure.NHibernateConfiguration;
 using Teleopti.Ccc.Infrastructure.Toggle;
 using Teleopti.Ccc.IocCommon.Configuration;
@@ -60,6 +61,9 @@ namespace Teleopti.Ccc.IocCommon
 			builder.RegisterModule(new InitializeModule(_configuration));
 			builder.RegisterModule(new TennantClientModule(_configuration));
 			builder.RegisterModule<DistributedLockModule>();
+
+			// move into HangfireModule when that module can be moved to IoCCommon
+			builder.RegisterType<HangfireEventProcessor>().As<IHangfireEventProcessor>().SingleInstance();
 		}
 
 		public static IToggleManager ToggleManagerForIoc()

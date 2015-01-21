@@ -177,13 +177,12 @@
     <Compile Include="Bugs\BugShiftExchangeInvalidUpdate.cs" />
     <Compile Include="DistributedLock\DistributedLockTest.cs" />
     <Compile Include="Foundation\CouldNotCreateTransactionExceptionTest.cs" />
-    <Compile Include="InfrastructureIoCTestAttribute.cs" />
     <Compile Include="MultiTenancy\IdentityUserQueryTest.cs" />
     <Compile Include="MultiTenancy\ApplicationUserQueryTest.cs" />
     <Compile Include="MultiTenancy\TennantDatabaseConnectionStringTest.cs" />
     <Compile Include="Repositories\AdherenceDetailsReadModelPersisterTest.cs" />
     <Compile Include="Aop\AspectsTest.cs" />
-    <Compile Include="ApplicationLayer\EventPublisherTest.cs" />
+    <Compile Include="ApplicationLayer\SyncEventPublisherTest.cs" />
     <Compile Include="ApplicationLayer\SyncCommandDispatcherTest.cs" />
     <Compile Include="Bugs\Bug11558.cs" />
     <Compile Include="Bugs\Bug22329.cs" />
