@@ -33,6 +33,7 @@ $(URL)|http://localhost:52858/
 $(ETL_SERVICE_nhibConfPath)|c:\nhib
 $(ETL_TOOL_nhibConfPath)|c:\nhib
 $(AGENTPORTALWEB_nhibConfPath)|c:\nhib
+$(CONFIGURATION_FILES_PATH)|c:\nhib
 <compilation debug="false"|<compilation debug="true"
 <compilation targetFramework="4.0"|<compilation debug="true" targetFramework="4.0"
 <compilation targetFramework="4.5"|<compilation debug="true" targetFramework="4.5"

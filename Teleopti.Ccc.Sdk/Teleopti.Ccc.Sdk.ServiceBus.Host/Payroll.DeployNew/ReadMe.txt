@@ -14,5 +14,5 @@ Payrolls in folder "Acme" will only be available for clients having data source 
 
 *)
 Below is an example of a nhib file with data soruce name set to "Acme"
-see hnib file: C:\Program Files (x86)\Teleopti\Datasources\TeleoptiCCC7.nhib.xml
+see nhib file: C:\Program Files (x86)\Teleopti\ConfigurationFiles\TeleoptiCCC7.nhib.xml
 <session-factory name=" Acme ">

@@ -17,6 +17,7 @@
 ..\..\..\Teleopti.Analytics\WebPortal\Teleopti.Analytics.Portal\Teleopti.Analytics.Portal.AnalyzerProxy\app.config,BuildArtifacts\Teleopti.Analytics.Portal.AnalyzerProxy.App.config
 ..\..\..\Teleopti.Runtime.Environment\Teleopti.Runtime.Environment\App.config,BuildArtifacts\Runtime.Environment.config
 c:\nhib\FixMyConfig.nhib.xml,BuildArtifacts\TeleoptiCCC7.nhib.xml
+c:\nhib\NotificationConfig.xml.notinuse,BuildArtifacts\NotificationConfig.xml.notinuse
 ..\..\..\Teleopti.Analytics.Etl.ServiceConsoleHost\bin\Release\TeleoptiCCC7.nhib.xml,BuildArtifacts\TeleoptiCCC7.nhib.xml
 ..\..\..\Teleopti.Analytics.Etl.ServiceConsoleHost\bin\Release\Teleopti.Analytics.Etl.ServiceConsoleHost.exe.config,BuildArtifacts\AppETLService.config
 ..\..\..\Teleopti.Analytics.Etl.ServiceConsoleHost\bin\Debug\TeleoptiCCC7.nhib.xml,BuildArtifacts\TeleoptiCCC7.nhib.xml

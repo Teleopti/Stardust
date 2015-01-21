@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Configuration;
 using System.IO;
 using System.Xml;
 using System.Xml.XPath;
@@ -12,7 +13,7 @@ namespace Teleopti.Ccc.Domain.Notification
 		private XmlDocument _configXml;
 
 		public NotificationConfigReader()
-			: this("../ServiceBus/NotificationConfig.xml")
+			: this(ConfigurationManager.AppSettings["ConfigurationFilesPath"] + "/NotificationConfig.xml")
 		{ }
 
 		public NotificationConfigReader(string configFile)

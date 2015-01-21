@@ -1,5 +1,6 @@
 ﻿..\ApplicationConfiguration\CccAppConfig.exe.config,BuildArtifacts\CccAppConfig.config
-..\Datasources\TeleoptiCCC7.nhib.xml,BuildArtifacts\TeleoptiCCC7.nhib.xml
+..\ConfigurationFiles\TeleoptiCCC7.nhib.xml,BuildArtifacts\TeleoptiCCC7.nhib.xml
+..\ConfigurationFiles\NotificationConfig.xml.notinuse,BuildArtifacts\NotificationConfig.xml.notinuse
 ..\TeleoptiCCC\Analytics\web.config,BuildArtifacts\AnalyticsWeb.config
 ..\TeleoptiCCC\Broker.Backplane\Web.config,BuildArtifacts\BrokerBackplaneWeb.config
 ..\TeleoptiCCC\Broker\web.config,BuildArtifacts\BrokerWeb.config
