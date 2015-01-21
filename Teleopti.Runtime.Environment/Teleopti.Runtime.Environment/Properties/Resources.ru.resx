@@ -123,4 +123,7 @@
   <data name="AlwaysOnTop" xml:space="preserve">
     <value>Показывать всегда поверх</value>
   </data>
+  <data name="Refresh" xml:space="preserve">
+    <value>Обновить</value>
+  </data>
 </root>

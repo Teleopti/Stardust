@@ -9572,7 +9572,7 @@ Teleopti R&amp;D</value>
     <value>Показать допущение</value>
   </data>
   <data name="TeamSchedule" xml:space="preserve">
-    <value>Планирование по группе</value>
+    <value>Расписание группы</value>
   </data>
   <data name="XRequests" xml:space="preserve">
     <value>{0} Запрос(-ы)</value>
@@ -11369,5 +11369,140 @@ Teleopti R&amp;D</value>
   </data>
   <data name="PublishAnnouncementNoAbsence" xml:space="preserve">
     <value>Невозможно опубликовать сообщение о смене на день отсутствия!</value>
+  </data>
+  <data name="Invalid" xml:space="preserve">
+    <value>Неверный</value>
+  </data>
+  <data name="CalculateBadgeWithRank" xml:space="preserve">
+    <value>Рассчитать уровень по приоритету</value>
+  </data>
+  <data name="UseBadgeForAnsweredCalls" xml:space="preserve">
+    <value>Использовать уровень для отвеченных звонков</value>
+  </data>
+  <data name="UseBadgeforAHT" xml:space="preserve">
+    <value>Использовать уровень для AHT</value>
+  </data>
+  <data name="UseBadgeforAdherence" xml:space="preserve">
+    <value>Использовать уровень для соблюдения графика</value>
+  </data>
+  <data name="SetBadgeBronzeThresholdForAnsweredCalls" xml:space="preserve">
+    <value>Порог для бронзового уровня:</value>
+  </data>
+  <data name="SetBadgeSilverThresholdForAnsweredCalls" xml:space="preserve">
+    <value>Порог для серебряного уровня:</value>
+  </data>
+  <data name="SetBadgeGoldThresholdForAnsweredCalls" xml:space="preserve">
+    <value>Порог для золотого уровня:</value>
+  </data>
+  <data name="SetBadgeBronzeThresholdForAHT" xml:space="preserve">
+    <value>Порог для бронзового уровня (ЧЧ:мм:сс):</value>
+  </data>
+  <data name="SetBadgeSilverThresholdForAHT" xml:space="preserve">
+    <value>Порог для серебряного уровня (ЧЧ:мм:сс):</value>
+  </data>
+  <data name="SetBadgeGoldThresholdForAHT" xml:space="preserve">
+    <value>Порог для золотого уровня (ЧЧ:мм:сс):</value>
+  </data>
+  <data name="SetBadgeBronzeThresholdForAdherence" xml:space="preserve">
+    <value>Порог для бронзового уровня (%):</value>
+  </data>
+  <data name="SetBadgeSilverThresholdForAdherence" xml:space="preserve">
+    <value>Порог для серебряного уровня (%):</value>
+  </data>
+  <data name="SetBadgeGoldThresholdForAdherence" xml:space="preserve">
+    <value>Порог для золотого уровня (%):</value>
+  </data>
+  <data name="AnsweredCallsBronzeThresholdShouldLessThanSilverThreshold" xml:space="preserve">
+    <value>Порог по отвеченным звонкам для бронзового уровня должен быть меньше, чем порог для серебряного уровня.</value>
+  </data>
+  <data name="AnsweredCallsSilverThresholdShouldLessThanGoldThreshold" xml:space="preserve">
+    <value>Порог по отвеченным звонкам для серебряного уровня должен быть меньше, чем порог для золотого уровня.</value>
+  </data>
+  <data name="AHTBronzeThresholdShouldLessThanSilverThreshold" xml:space="preserve">
+    <value>Порог по AHT для бронзового уровня должен быть меньше, чем порог для серебряного уровня.</value>
+  </data>
+  <data name="AHTSilverThresholdShouldLessThanGoldThreshold" xml:space="preserve">
+    <value>Порог по AHT для серебряного уровня должен быть меньше, чем порог для золотого уровня.</value>
+  </data>
+  <data name="AdherenceBronzeThresholdShouldGreaterThanSilverThreshold" xml:space="preserve">
+    <value>Порог по соблюдению графика для бронзового уровня должен быть меньше, чем порог для серебряного уровня.</value>
+  </data>
+  <data name="AdherenceSilverThresholdShouldGreaterThanGoldThreshold" xml:space="preserve">
+    <value>Порог по соблюдению графика для серебряного уровня должен быть меньше, чем порог для золотого уровня.</value>
+  </data>
+  <data name="AllTeamMembersMustBeLoaded" xml:space="preserve">
+    <value>Все члены группы должны быть перезагружены</value>
+  </data>
+  <data name="AnnouncementInvalid" xml:space="preserve">
+    <value>Сообщение об обмене смены недействительно</value>
+  </data>
+  <data name="AnnouncementInvalidMessage" xml:space="preserve">
+    <value>Сообщение об обмене смены {0} недействительно, потому что ваша смена была изменена.</value>
+  </data>
+  <data name="HasNonMainShiftActivityErrorMessage" xml:space="preserve">
+    <value>Сотрудник {0} имеет персональную активность, сверхурочное время или мероприятие в смене на {1}.</value>
+  </data>
+  <data name="NotifyAgent" xml:space="preserve">
+    <value>Уведомить оператора</value>
+  </data>
+  <data name="Everyone" xml:space="preserve">
+    <value>Все</value>
+  </data>
+  <data name="Announcement" xml:space="preserve">
+    <value>Сообщение об обмене сменой</value>
+  </data>
+  <data name="AreYouSureYouWantToDeleteGamificationSetting" xml:space="preserve">
+    <value>Удалить настройку геймификации '{0}'?</value>
+  </data>
+  <data name="DeleteAgentBadgeSetting" xml:space="preserve">
+    <value>Удалить настройку уровня оператора</value>
+  </data>
+  <data name="Gamification" xml:space="preserve">
+    <value>Геймификация</value>
+  </data>
+  <data name="NewGamificationSetting" xml:space="preserve">
+    <value>Новая настройка геймификации</value>
+  </data>
+  <data name="NewBadgeSetting" xml:space="preserve">
+    <value>Новая настройка уровня</value>
+  </data>
+  <data name="ConfirmDeleteRequest" xml:space="preserve">
+    <value>Уверены, что хотите удалить данный запрос?</value>
+  </data>
+  <data name="ShiftExchangeAnnouncement" xml:space="preserve">
+    <value>Сообщение об обмене сменой</value>
+  </data>
+  <data name="ChooseGamificationSettingToChange" xml:space="preserve">
+    <value>Выберите настройку геймификации для изменения</value>
+  </data>
+  <data name="EnterGamificationSettingDetails" xml:space="preserve">
+    <value>Укажите подробности настройки геймификации</value>
+  </data>
+  <data name="GamificationSettingColon" xml:space="preserve">
+    <value>Настройка геймификации:</value>
+  </data>
+  <data name="GamificationSettingRuleSetsColon" xml:space="preserve">
+    <value>Набор правил настроек геймификации:</value>
+  </data>
+  <data name="ManageGamificationSettings" xml:space="preserve">
+    <value>Управление настройками геймификации</value>
+  </data>
+  <data name="Completed" xml:space="preserve">
+    <value>Завершено</value>
+  </data>
+  <data name="Expired" xml:space="preserve">
+    <value>Истекло</value>
+  </data>
+  <data name="OptionDayOff" xml:space="preserve">
+    <value>Выходной день</value>
+  </data>
+  <data name="OptionDayOffOrEmptyDay" xml:space="preserve">
+    <value>Выходной или пустой день</value>
+  </data>
+  <data name="OptionEmptyDay" xml:space="preserve">
+    <value>Пустой день</value>
+  </data>
+  <data name="OptionWorkingDay" xml:space="preserve">
+    <value>Рабочий день</value>
   </data>
 </root>
