@@ -4,8 +4,10 @@ namespace Teleopti.Ccc.Infrastructure.MultiTenancy
 {
 	public class PasswordPolicyForUser
 	{
+#pragma warning disable 169
 		private Guid id;
 		private PersonInfo personInfo;
+#pragma warning restore 169
 
 		public virtual DateTime LastPasswordChange { get; protected set; }
 		public virtual DateTime InvalidAttemptsSequenceStart { get; protected set; }

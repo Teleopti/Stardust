@@ -28,7 +28,6 @@ namespace Teleopti.Ccc.Web.Areas.Tennant
 		public JsonResult IdentityLogon(string identity)
 		{
 			var res = _identityAuthentication.Logon(identity);
-	
 			return Json(res, JsonRequestBehavior.AllowGet);
 		}
 	}
