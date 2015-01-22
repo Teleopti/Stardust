@@ -289,9 +289,7 @@ Teleopti.MyTimeWeb.Request.List = (function ($) {
 			self.isCreatedByUser(data.IsCreatedByUser);
 			self.isReferred(data.IsReferred);
 			self.IsSelected(false);
-			if (data.TypeEnum == 2) {
-				self.CanDelete(data.IsCreatedByUser);
-			}
+			if (data.TypeEnum == 2 && !data.IsCreatedByUser) self.CanDelete(false);
 		}
 	});
 
