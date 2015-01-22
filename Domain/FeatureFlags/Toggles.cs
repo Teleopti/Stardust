@@ -42,6 +42,7 @@
 		RTA_HangfireEventProcessing_31237,
 		RTA_HangfireEventProcessinUsingMsmq_31237,
 		RTA_NoBroker_31237,
+		RTA_EventStreamInitialization_31237,
 
 		MyTeam_MoveActivity_25206,
 		MyTeam_StaffingMetrics_25562,
@@ -70,6 +71,6 @@
 		Gamification_NewBadgeCalculation_31185,
 		Portal_DifferentiateBadgeSettingForAgents_31318,
 		MultiTenancy_Logon_17461,
-		MultiTenancy_WebLogon_17461
+		MultiTenancy_WebLogon_17461,
 	}
 }

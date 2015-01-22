@@ -15,6 +15,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta.Synchronization
 	[Toggle(Toggles.RTA_SeeAdherenceDetailsForOneAgent_31285)]
 	[Toggle(Toggles.RTA_SeePercentageAdherenceForOneAgent_30783)]
 	[Toggle(Toggles.RTA_NoBroker_31237)]
+	[Toggle(Toggles.RTA_EventStreamInitialization_31237)]
 	[TestFixture]
 	public class SiteAdherenceTest
 	{

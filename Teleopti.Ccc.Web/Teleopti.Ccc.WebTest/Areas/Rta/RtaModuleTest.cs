@@ -106,6 +106,15 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta
 			}
 		}
 
+		[Test]
+		public void ShouldNotResolveStateStreamSynchronizer()
+		{
+			using (var container = BuildContainerWithToggle(Toggles.RTA_EventStreamInitialization_31237, false))
+			{
+				container.Resolve<IStateStreamSynchronizer>().Should().Be.OfType<NoStateStreamSynchronizer>();
+			}
+		}
+
 		private IContainer BuildContainer()
 		{
 			var builder = new ContainerBuilder();

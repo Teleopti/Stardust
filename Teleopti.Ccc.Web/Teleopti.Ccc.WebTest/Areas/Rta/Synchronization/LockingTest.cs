@@ -1,5 +1,4 @@
 using System;
-using System.Diagnostics;
 using System.Threading;
 using System.Threading.Tasks;
 using Autofac;
@@ -23,6 +22,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta.Synchronization
 	[RtaTest]
 	[Toggle(Toggles.RTA_SeeAdherenceDetailsForOneAgent_31285)]
 	[Toggle(Toggles.RTA_SeePercentageAdherenceForOneAgent_30783)]
+	[Toggle(Toggles.RTA_EventStreamInitialization_31237)]
 	[TestFixture]
 	public class LockingTest : IRegisterInContainer
 	{
@@ -57,7 +57,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta.Synchronization
 			});
 
 			var initialize = Execute.OnAnotherThread(() => Target.Initialize());
-			Handler.InHandler.WaitOne();
+			Handler.InHandler.WaitOne(TimeSpan.FromSeconds(1));
 			var systemTask = Task.Factory.StartNew(() =>
 			{
 				using (DistributedLock.LockForTypeOf(Handler))

@@ -86,7 +86,10 @@ namespace Teleopti.Ccc.Web.Areas.Rta.Core.Server
 
 			builder.RegisterType<OrganizationForPerson>().SingleInstance().As<IOrganizationForPerson>();
 
-			builder.RegisterType<StateStreamSynchronizer>().As<IStateStreamSynchronizer>().SingleInstance();
+			if (_config.Toggle(Toggles.RTA_EventStreamInitialization_31237))
+				builder.RegisterType<StateStreamSynchronizer>().As<IStateStreamSynchronizer>().SingleInstance();
+			else
+				builder.RegisterType<NoStateStreamSynchronizer>().As<IStateStreamSynchronizer>().SingleInstance();
 
 			_config.Args().CacheBuilder
 				.For<PersonOrganizationProvider>()

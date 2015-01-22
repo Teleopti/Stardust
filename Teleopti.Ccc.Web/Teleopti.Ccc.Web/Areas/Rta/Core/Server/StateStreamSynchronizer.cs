@@ -1,7 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
-using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Rta;
@@ -15,6 +13,17 @@ namespace Teleopti.Ccc.Web.Areas.Rta.Core.Server
 	{
 		void Sync();
 		void Initialize();
+	}
+
+	public class NoStateStreamSynchronizer : IStateStreamSynchronizer
+	{
+		public void Sync()
+		{
+		}
+
+		public void Initialize()
+		{
+		}
 	}
 
 	public class StateStreamSynchronizer : IStateStreamSynchronizer
