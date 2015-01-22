@@ -7,17 +7,11 @@ using SharpTestsEx;
 using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta;
-using Teleopti.Ccc.Domain.FeatureFlags;
-using Teleopti.Ccc.Domain.Rta;
 using Teleopti.Ccc.Infrastructure.NHibernateConfiguration;
-using Teleopti.Ccc.Infrastructure.Rta;
-using Teleopti.Ccc.Infrastructure.Toggle;
 using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.IocCommon.Configuration;
 using Teleopti.Ccc.Web.Areas.Rta;
 using Teleopti.Ccc.Web.Areas.Rta.Core.Server;
-using Teleopti.Ccc.Web.Areas.Rta.Core.Server.Adherence;
-using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.WebTest.Areas.Rta
 {
@@ -60,61 +54,6 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta
 			}
 		}
 
-		[Test]
-		public void ShouldResolvePercentageFeatureEventHandlers()
-		{
-			using (var container = BuildContainerWithToggle(Toggles.RTA_SeePercentageAdherenceForOneAgent_30783, true))
-			{
-				container.Resolve<IShiftEventPublisher>().Should().Be.OfType<ShiftEventPublisher>();
-				container.Resolve<IAdherenceEventPublisher>().Should().Be.OfType<AdherenceEventPublisher>();
-				container.Resolve<IStateEventPublisher>().Should().Be.OfType<StateEventPublisher>();
-				container.Resolve<IActivityEventPublisher>().Should().Be.OfType<ActivityEventPublisher>();
-			}
-		}
-
-		[Test]
-		public void ShouldNotResolvePercentageFeatureEventHandlers()
-		{
-			using (var container = BuildContainerWithToggle(Toggles.RTA_SeePercentageAdherenceForOneAgent_30783, false))
-			{
-				container.Resolve<IShiftEventPublisher>().Should().Be.OfType<NoEvents>();
-				container.Resolve<IAdherenceEventPublisher>().Should().Be.OfType<NoEvents>();
-			}
-		}
-
-		[Test]
-		public void ShouldResolveAdherenceDetailsFeatureEventHandlers()
-		{
-			using (var container = BuildContainerWithToggle(Toggles.RTA_SeeAdherenceDetailsForOneAgent_31285, true))
-			{
-				container.Resolve<IShiftEventPublisher>().Should().Be.OfType<ShiftEventPublisher>();
-				container.Resolve<IAdherenceEventPublisher>().Should().Be.OfType<AdherenceEventPublisher>();
-				container.Resolve<IStateEventPublisher>().Should().Be.OfType<StateEventPublisher>();
-				container.Resolve<IActivityEventPublisher>().Should().Be.OfType<ActivityEventPublisher>();
-			}
-		}
-
-		[Test]
-		public void ShouldNotResolveAdherenceDetailsFeatureEventHandlers()
-		{
-			using (var container = BuildContainerWithToggle(Toggles.RTA_SeeAdherenceDetailsForOneAgent_31285, false))
-			{
-				container.Resolve<IShiftEventPublisher>().Should().Be.OfType<NoEvents>();
-				container.Resolve<IAdherenceEventPublisher>().Should().Be.OfType<NoEvents>();
-				container.Resolve<IStateEventPublisher>().Should().Be.OfType<NoEvents>();
-				container.Resolve<IActivityEventPublisher>().Should().Be.OfType<NoEvents>();
-			}
-		}
-
-		[Test]
-		public void ShouldNotResolveStateStreamSynchronizer()
-		{
-			using (var container = BuildContainerWithToggle(Toggles.RTA_EventStreamInitialization_31237, false))
-			{
-				container.Resolve<IStateStreamSynchronizer>().Should().Be.OfType<NoStateStreamSynchronizer>();
-			}
-		}
-
 		private IContainer BuildContainer()
 		{
 			var builder = new ContainerBuilder();
@@ -123,25 +62,6 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta
 			builder.RegisterModule(new SyncEventsPublisherModule());
 			builder.RegisterModule(new RtaModule(config));
 			return builder.Build();
-		}
-
-		private static IContainer BuildContainerWithToggle(Toggles toggle, bool value)
-		{
-			var builder = new ContainerBuilder();
-			var applicationData = MockRepository.GenerateMock<IApplicationData>();
-			var config = new IocConfiguration(new IocArgs { DataSourceConfigurationSetter = DataSourceConfigurationSetter.ForTest() }, ToggleManager(toggle, value));
-			builder.RegisterModule(new CommonModule(config));
-			builder.RegisterModule(new SyncEventsPublisherModule());
-			builder.RegisterModule(new RtaModule(config));
-			builder.RegisterInstance(applicationData);
-			return builder.Build();
-		}
-
-		private static IToggleManager ToggleManager(Toggles toggle, bool value)
-		{
-			var toggleManager = MockRepository.GenerateStub<IToggleManager>();
-			toggleManager.Stub(x => x.IsEnabled(toggle)).Return(value);
-			return toggleManager;
 		}
 
 	}
