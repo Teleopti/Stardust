@@ -1,7 +1,8 @@
-﻿using System;
+﻿using DDay.iCal;
+using System;
 using System.Collections.Generic;
 using System.Linq;
-using DDay.iCal;
+using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider
@@ -82,10 +83,12 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider
 			{
 				if (isDayOff)
 				{
-					filter = new TimeFilterInfo();
-					filter.StartTimes = convertStringToUtcTimes(selectedDate, filterStartTimes, false);
-					filter.EndTimes = convertStringToUtcTimes(selectedDate, filterEndTimes, false);
-					filter.IsDayOff = isDayOff;
+					filter = new TimeFilterInfo
+					{
+						StartTimes = convertStringToUtcTimes(selectedDate, filterStartTimes, false),
+						EndTimes = convertStringToUtcTimes(selectedDate, filterEndTimes, false),
+						IsDayOff = isDayOff
+					};
 				}
 				else
 				{
@@ -94,10 +97,12 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider
 			}
 			else
 			{
-				filter = new TimeFilterInfo();
-				filter.StartTimes = convertStringToUtcTimes(selectedDate, filterStartTimes, true);
-				filter.EndTimes = convertStringToUtcTimes(selectedDate, filterEndTimes, true, true);
-				filter.IsDayOff = isDayOff;
+				filter = new TimeFilterInfo
+				{
+					StartTimes = convertStringToUtcTimes(selectedDate, filterStartTimes, true),
+					EndTimes = convertStringToUtcTimes(selectedDate, filterEndTimes, true, true),
+					IsDayOff = isDayOff
+				};
 			}
 			return filter;
 		}

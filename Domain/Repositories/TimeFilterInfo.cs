@@ -1,9 +1,12 @@
 ﻿using System.Collections.Generic;
 using Teleopti.Interfaces.Domain;
 
-public class TimeFilterInfo
+namespace Teleopti.Ccc.Domain.Repositories
 {
-	public IEnumerable<DateTimePeriod> StartTimes { get; set; }
-	public IEnumerable<DateTimePeriod> EndTimes { get; set; } 
-	public bool IsDayOff { get; set; }
+	public class TimeFilterInfo
+	{
+		public IEnumerable<DateTimePeriod> StartTimes { get; set; }
+		public IEnumerable<DateTimePeriod> EndTimes { get; set; } 
+		public bool IsDayOff { get; set; }
+	}
 }
