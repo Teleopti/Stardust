@@ -57,12 +57,11 @@ Scenario: Measure manage adherence by rta states
 	| Team           | Team1    |
 	| Start Date     | 2014-01-01   |
 	| External Logon | Pierre Baldi |
-	And there are 1000 rta state codes and state code groups
+	And there are 1 rta state codes and state code groups
 	When I am viewing the performance view for 'Manage Adherence Load Test'
-	And I input a configuration for Pierre Baldi with 1000 states and 200 poll per second on datasource 6
+	And I input a configuration for Pierre Baldi of 'Team1' with 1 states and 1 poll per second on datasource 6
 	And I click 'run'
 	Then I should see that the test run has finished
-	And I should see a count of 1 messages received for 'Successful Read Model Updates'
 	And I should see total run time
 	And I should see total time to send commands
 	And I should see scenarios per second

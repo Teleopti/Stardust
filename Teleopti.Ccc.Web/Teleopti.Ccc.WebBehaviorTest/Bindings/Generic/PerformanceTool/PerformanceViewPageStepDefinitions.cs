@@ -67,10 +67,9 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.PerformanceTool
 			Browser.Interactions.TypeTextIntoInputTextUsingJQuery(".scenario-configuration", value);
 		}
 
-		[When(@"I input a configuration for (.*) with (.*) states and (.*) poll per second on datasource (.*)")]
-		public void WhenIInputAConfigurationForStatesAndPollPerSecondOnDatasource(string personName, int stateCount, int pollingRequests, int datasource)
+		[When(@"I input a configuration for (.*) of (.*) with (.*) states and (.*) poll per second on datasource (.*)")]
+		public void WhenIInputAConfigurationForStatesAndPollPerSecondOnDatasource(string personName, string teamName, int stateCount, int pollingRequests, int datasource)
 		{
-			var personId = DataMaker.Person(personName).Person.Id.Value;
 			var configuration = new
 			{
 				PlatformTypeId = Guid.Empty,
@@ -79,12 +78,11 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.PerformanceTool
 				{
 					new
 					{
-						ExternalLogOn = personName,
-						PersonId = personId
+						ExternalLogOn = personName
 					}
 				},
 				States = new List<object>(),
-				TeamId = DataMaker.Data().Data().Data<TeamConfigurable>().Team.Id.ToString(),
+				TeamId = DataMaker.Data().UserData<TeamConfigurable>().Team.Id.ToString(),
 				PollingPerSecond = pollingRequests
 			};
 
