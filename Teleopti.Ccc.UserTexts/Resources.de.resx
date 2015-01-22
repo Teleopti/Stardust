@@ -4837,7 +4837,7 @@ Periods</comment>
     <comment>Required meeting</comment>
   </data>
   <data name="RequiresSkill" xml:space="preserve">
-    <value>Erforderliche Skills</value>
+    <value>Erfordert Skill(s)</value>
     <comment>Requires Skiil column header in activity setting page</comment>
   </data>
   <data name="Reset" xml:space="preserve">
@@ -7568,16 +7568,16 @@ Teleopti R&amp;D</value>
     <value>Vom Supervisor bewilligt</value>
   </data>
   <data name="WaitingForOtherPart" xml:space="preserve">
-    <value>Warte auf den anderen Part</value>
+    <value>Warte auf Tauschpartner</value>
   </data>
   <data name="WaitingForReApproval" xml:space="preserve">
     <value>Warte auf erneute Genehmigung</value>
   </data>
   <data name="WaitingForSupervisorApproval" xml:space="preserve">
-    <value>Warte auf Genehmigung vom Supervisor</value>
+    <value>Warte auf Teamleiter</value>
   </data>
   <data name="WaitingForYourApproval" xml:space="preserve">
-    <value>Warte auf Genehmigung</value>
+    <value>Warte auf Ihre Genehmigung</value>
   </data>
   <data name="DefaultIntradaySetting" xml:space="preserve">
     <value>Standard- Ansicht</value>
@@ -7833,9 +7833,6 @@ Teleopti R&amp;D</value>
   </data>
   <data name="ToThreeDots" xml:space="preserve">
     <value>An...</value>
-  </data>
-  <data name="InfoTextConflict" xml:space="preserve">
-    <value>Ein anderer User hat diese Angaben geändert. Sie müssen entscheiden wie Sie fortsetzen. Wählen Sie OK um die Änderungen des anderen Users zu akzeptieren. Bitte notieren Sie, dass Ihre entsprechenden Änderungen verloren gehen. Wählen Sie Cancel um ohne Speicherung fortzusetzen. Wählen Sie Save müssen Sie nochmals zu diesem Konflikt Stellung nehmen. Wählen Sie Overwrite um Ihre Änderungen zu speichern und die des anderen Users zu überschreiben.</value>
   </data>
   <data name="PleaseSaveAgainWhenYouHaveReviewedTheAppliedChanges" xml:space="preserve">
     <value>Bitte nach Überprüfung der Änderungen nochmals speichern.</value>
@@ -8312,7 +8309,7 @@ Periode: {3}</value>
     <value>autom. Genehmigung aktivieren</value>
   </data>
   <data name="Basic" xml:space="preserve">
-    <value>Grundlegend</value>
+    <value>Allgemein</value>
   </data>
   <data name="ToleranceForMatchingContractTime" xml:space="preserve">
     <value>Toleranz für passende Vertragszeit</value>
@@ -9546,10 +9543,10 @@ Sollte dieser Validierungs-Fehler dennoch auftreten, überprüfen Sie bitte dass
     <value>Datumsformat</value>
   </data>
   <data name="ConsecutiveDaysOff" xml:space="preserve">
-    <value>Zusammenhängende freie Tage</value>
+    <value>Freie Tage nacheinander</value>
   </data>
   <data name="ConsecutiveWorkDays" xml:space="preserve">
-    <value>Zusammenhängende Arbeitstage</value>
+    <value>Arbeitstage nacheinander</value>
   </data>
   <data name="DaysOffFromFlexibleWorkTime" xml:space="preserve">
     <value>Toleranz freier Tage lt. Vertrag nutzen</value>
@@ -10244,9 +10241,6 @@ Sollte dieser Validierungs-Fehler dennoch auftreten, überprüfen Sie bitte dass
   <data name="TheQuickForecatWillStartInBackgroundMessage" xml:space="preserve">
     <value>Der Quick-Forecast wird als Job im Hintergrund gestartet, sobald der Quick-Forecast-Assistent geschlossen wird. Der Status wird in der Job Historie angezeigt.</value>
   </data>
-  <data name="CannotDisplayScheduleWhenShiftTradeStatusIsNew" xml:space="preserve">
-    <value>Dienstplan kann nicht dargestellt werden, wenn der Status des Schichttausches neu ist.</value>
-  </data>
   <data name="NewTemplateName" xml:space="preserve">
     <value>Name für neue Vorlage</value>
   </data>
@@ -10272,7 +10266,7 @@ Sollte dieser Validierungs-Fehler dennoch auftreten, überprüfen Sie bitte dass
     <value>Verfügbarkeitsperiode</value>
   </data>
   <data name="OpenStudentAvailability" xml:space="preserve">
-    <value>Öffne Stundenverfügbarkeit</value>
+    <value>Stundenverfügbarkeit öffnen</value>
   </data>
   <data name="LockStudentAvailability" xml:space="preserve">
     <value>Sperre Stundenverfügbarkeit</value>
@@ -10950,10 +10944,10 @@ Sollte dieser Validierungs-Fehler dennoch auftreten, überprüfen Sie bitte dass
     <value>Schwellenwert beantwortete Anrufe:</value>
   </data>
   <data name="SetBadgeThresholdForAHT" xml:space="preserve">
-    <value>Schwellenwert durchschnittliche Bearbeitungszeit (AHT; in HH:mm:ss):</value>
+    <value>Schwellenwert durchschn.Bearbeitungszeit (AHT; in HH:mm:ss):</value>
   </data>
   <data name="SetBadgeThresholdForAdherence" xml:space="preserve">
-    <value>Schwellenwert Planeinhaltung (%);</value>
+    <value>Schwellenwert Planeinhaltung (%):</value>
   </data>
   <data name="OneSilverBadgeEqualsBronzeBadgeCount" xml:space="preserve">
     <value>Anzahl der Bronzesterne, die einem Silberstern entsprechen:</value>
@@ -11167,5 +11161,204 @@ Sollte dieser Validierungs-Fehler dennoch auftreten, überprüfen Sie bitte dass
   </data>
   <data name="AbsenceReport" xml:space="preserve">
     <value>Bericht Abwesenheiten</value>
+  </data>
+  <data name="ApplyProductActivationKey" xml:space="preserve">
+    <value>Eingabe Product Activation Key</value>
+  </data>
+  <data name="ApplyProductActivationKeyInstructions" xml:space="preserve">
+    <value>Anleitung:
+* Kaufen Sie eine Lizenz (Kontaktdetails auf www.teleopti.com)
+* Sie erhalten den Product Activation Key (z.B. via Email)
+* Speichern Sie den Product Activation Key
+* Sofern Sie Änderungen vorgenommen haben, die Sie gern speichern möchten, speichern Sie diese bitte VOR der Eingabe des Product Activation Keys
+* Wählen Sie den gespeicherten Product Activation Key aus
+* Fügen Sie den ausgewählten Product Activation Key hinzu
+* Teleopti WFM wird beendet
+* Starten Sie MyTime erneut, um alle neu lizensierten Optionen zu erhalten
+* Starten Sie Teleopti WFM erneut</value>
+  </data>
+  <data name="CannotReadProductActivationKeyFile" xml:space="preserve">
+    <value>Product Activation Key "{0}" kann nicht gelesen werden.
+Details:
+{1}</value>
+  </data>
+  <data name="DatabaseProblem" xml:space="preserve">
+    <value>Es ist ein Problem aufgetreten beim Speichern des Product Activation Keys in der Datenbank.
+Details:
+{0} </value>
+  </data>
+  <data name="EnterValidFile" xml:space="preserve">
+    <value>Geben Sie einen gültigen Namen und Pfad ein.</value>
+  </data>
+  <data name="ProductActivationKeyApplicationSuccess" xml:space="preserve">
+    <value>Glückwunsch, Sie haben den Product Activation Key erfolgreich hinzugefügt!
+Sie sind nun ein lizensierter Nutzer unserer ausgezeichneten Workforce Management Lösung. Teleopti WFM wird nun beendet.
+
+Wichtig: Um alle Services und Web-Anwendungen voll funktionsfähig und einsatzbereit zu haben sowie alle neu lizensierten Optionen zu erhalten, bitten Sie ihre IT um die Ausführung der Datei "Restart Teleopti WFM" im Teleopti Ordner auf dem Server. </value>
+  </data>
+  <data name="ProductActivationKeyHasExpiredPleaseApplyANewOne" xml:space="preserve">
+    <value>Ihr Product Activation Key ist abgelaufen. Bitte fügen Sie einen neuen gültigen Product Activation Key hinzu. </value>
+  </data>
+  <data name="ProductActivationKeyIsInvalidPerhapsForgedPleaseApplyANewOne" xml:space="preserve">
+    <value>Ihr Product Activation Key ist nicht gültig und möglicherweise geändert worden. Bitte fügen Sie einen neuen gültigen Product Activation Key hinzu. </value>
+  </data>
+  <data name="NewProductActivationKeyAlreadyExpired" xml:space="preserve">
+    <value>Der Product Activation Key "{0}" ist nicht mehr gültig, bitte fügen sie einen neuen hinzu.</value>
+  </data>
+  <data name="NewProductActivationKeyCorrupted" xml:space="preserve">
+    <value>Der Product Activation Key "{0}" hat keine gültige Signatur.</value>
+  </data>
+  <data name="NewProductActivationKeyNotValidFile" xml:space="preserve">
+    <value>
+Der Product Activation Key "{0}" ist nicht in einem gültigen (XML) Format.
+Details:
+{1}</value>
+  </data>
+  <data name="NoProductActivationKeyPleaseApplyANewOne" xml:space="preserve">
+    <value>Sie haben noch keinen gültigen Product Activation Key hinzugefügt.</value>
+  </data>
+  <data name="UploadingNewProductActivationKeyFailed" xml:space="preserve">
+    <value>Hinzufügen des Product Application Keys ist fehlgeschlagen.</value>
+  </data>
+  <data name="YourProductActivationKeyWillExpireDoNotForgetToRenewItInTime" xml:space="preserve">
+    <value>Ihr Product Activation Key ist nur noch bis {0} gültig. Fügen Sie rechtzeitig einen Neuen hinzu.</value>
+  </data>
+  <data name="OpenProductActivationKeyFile" xml:space="preserve">
+    <value>Wählen Sie einen Product Activation Key</value>
+  </data>
+  <data name="ProductActivationKey" xml:space="preserve">
+    <value>Das System ist lizensiert von "{0}" entsprechend den AGB's und Lizenzvereinbarungen. Der Product Activation Key ist bis {1} gültig.
+
+Der Product Activation Key lizensiert maximal {2} aktive Agenten.
+
+Das Product Activation Key Schema ist: "{3}".
+Folgende Optionen und Module sind aktiviert:
+{4}</value>
+  </data>
+  <data name="YouHaveAlmostTooManyActiveAgents" xml:space="preserve">
+    <value>Sie haben {0} aktive Agenten, jedoch eine Lizenz für nur {1} Agenten. Bitte erweitern Sie ihre Lizenz rechtzeitig.</value>
+  </data>
+  <data name="YouHaveTooManyActiveAgents" xml:space="preserve">
+    <value>Sie haben {0} aktive Agenten, jedoch eine Lizenz für nur {1} Agenten. Sie müssen ihre Lizenz erweitern, bevor Sie fortfahren können.</value>
+  </data>
+  <data name="NewProductActivationKeyDoesNotCoverEnoughActiveAgents" xml:space="preserve">
+    <value>Sie haben {0} aktive Agenten, jedoch eine Lizenz für nur {1} Agenten. Sie müssen einen Product Activation Key erhalten, der ausreichend aktive Agenten ermöglicht.</value>
+  </data>
+  <data name="InfoTextConflict" xml:space="preserve">
+    <value>Ein anderer Nutzer hat bereits Änderungen vorgenommen. Bitte entscheiden Sie bevor Sie fortfahren. Wenn Sie "OK" klicken, akzeptieren Sie die Änderungen des anderen Nutzers. Beachten Sie bitte hierbei, dass Ihre entsprechenden Änderungen verloren gehen. Wählen Sie "Überschreiben" um Ihre Änderungen zu speichern und die des anderen Nutzers zu löschen. </value>
+  </data>
+  <data name="Invalid" xml:space="preserve">
+    <value>Ungültig</value>
+  </data>
+  <data name="NewProductActivationKeyDoesNotCoverEnoughSeats" xml:space="preserve">
+    <value>Ihr Product Activation Key hat ein Limit von {0} Plätzen. Bitte nutzen Sie einen Product Activation Key, der ausreichend Plätze erlaubt.</value>
+  </data>
+  <data name="SeatProductActivationKey" xml:space="preserve">
+    <value>Das System ist lizensiert von "{0}" entsprechend den AGB's und Lizenzvereinbarungen. Der Product Activation Key ist bis {1} gültig.
+
+Der Product Activation Key lizensiert maximal {2} Plätze.
+
+Das Product Activation Key Schema ist: "{3}".
+Folgende Optionen und Module sind aktiviert:
+{4}</value>
+  </data>
+  <data name="YouHaveAlmostTooManySeats" xml:space="preserve">
+    <value>Sie haben Ihr lizensiertes Limit von {0} Plätzen erreicht. Bitte erweitern Sie ihre Lizenz rechtzeitig.</value>
+  </data>
+  <data name="YouHaveTooManySeats" xml:space="preserve">
+    <value>Sie nutzen zuviele Plätze, Ihre Lizenz ist nur für {0} Plätze. Sie müssen ihre Lizenz erweitern, bevor Sie fortfahren können.</value>
+  </data>
+  <data name="TooManyAgentsIsUsedWarning" xml:space="preserve">
+    <value>Sie nutzen mehr Agenten ({0}) als Sie lizensiert haben ({1}). Sie haben {2} Tage um die Agenten zu reduzieren oder einen neuen Product Activation Key mit ausreichend viel lizensierten Agenten hinzuzufügen.</value>
+  </data>
+  <data name="CannotDisplayScheduleWhenShiftTradeStatusIsNew" xml:space="preserve">
+    <value>Dienstplan wird nur angezeigt, wenn der Status des Schichttausches "schwebend" oder "Warte auf Ihre Genehmigung" ist. </value>
+  </data>
+  <data name="UseBadgeForAnsweredCalls" xml:space="preserve">
+    <value>Nutze Badge für beantwortete Anrufe</value>
+  </data>
+  <data name="UseBadgeforAHT" xml:space="preserve">
+    <value>Nutze Badge für AHT</value>
+  </data>
+  <data name="UseBadgeforAdherence" xml:space="preserve">
+    <value>Nutze Badge für Planeinhaltung</value>
+  </data>
+  <data name="SetBadgeBronzeThresholdForAnsweredCalls" xml:space="preserve">
+    <value>Schwellenwert für Bronze:</value>
+  </data>
+  <data name="SetBadgeSilverThresholdForAnsweredCalls" xml:space="preserve">
+    <value>Schwellenwert für Silber:</value>
+  </data>
+  <data name="SetBadgeGoldThresholdForAnsweredCalls" xml:space="preserve">
+    <value>Schwellenwert für Gold:</value>
+  </data>
+  <data name="SetBadgeBronzeThresholdForAHT" xml:space="preserve">
+    <value>Schwellenwert für Bronze (HH:mm:ss):</value>
+  </data>
+  <data name="SetBadgeSilverThresholdForAHT" xml:space="preserve">
+    <value>Schwellenwert für Silber (HH:mm:ss):</value>
+  </data>
+  <data name="SetBadgeGoldThresholdForAHT" xml:space="preserve">
+    <value>Schwellenwert für Gold (HH:mm:ss):</value>
+  </data>
+  <data name="SetBadgeBronzeThresholdForAdherence" xml:space="preserve">
+    <value>Schwellenwert für Bronze (%):</value>
+  </data>
+  <data name="SetBadgeSilverThresholdForAdherence" xml:space="preserve">
+    <value>Schwellenwert für Silber (%):</value>
+  </data>
+  <data name="SetBadgeGoldThresholdForAdherence" xml:space="preserve">
+    <value>Schwellenwert für Gold (%):</value>
+  </data>
+  <data name="AnsweredCallsBronzeThresholdShouldLessThanSilverThreshold" xml:space="preserve">
+    <value>Der Schwellenwert Bronze für beantwortete Anrufe sollte geringer sein als für Silber. </value>
+  </data>
+  <data name="AnsweredCallsSilverThresholdShouldLessThanGoldThreshold" xml:space="preserve">
+    <value>Der Schwellenwert Silber für beantwortete Anrufe sollte geringer sein als für Gold. </value>
+  </data>
+  <data name="AHTBronzeThresholdShouldLessThanSilverThreshold" xml:space="preserve">
+    <value>Der Schwellenwert Bronze für AHT sollte geringer sein als für Silber. </value>
+  </data>
+  <data name="AHTSilverThresholdShouldLessThanGoldThreshold" xml:space="preserve">
+    <value>Der Schwellenwert Silber für AHT sollte geringer sein als für Gold. </value>
+  </data>
+  <data name="AdherenceBronzeThresholdShouldGreaterThanSilverThreshold" xml:space="preserve">
+    <value>Der Schwellenwert Bronze für Planeinhaltung sollte geringer sein als für Silber. </value>
+  </data>
+  <data name="AdherenceSilverThresholdShouldGreaterThanGoldThreshold" xml:space="preserve">
+    <value>Der Schwellenwert Silber für Planeinhaltung sollte geringer sein als für Gold. </value>
+  </data>
+  <data name="AbsencesAvailableForReport" xml:space="preserve">
+    <value>Für Berichte erlaubte Abwesenheiten.</value>
+  </data>
+  <data name="AbsenceCanNotBeReported" xml:space="preserve">
+    <value>Abwesenheit darf nicht in Bericht verwendet werden.</value>
+  </data>
+  <data name="ShiftTradeBulletinBoard" xml:space="preserve">
+    <value>Pinnwand</value>
+  </data>
+  <data name="GamificationSettingColon" xml:space="preserve">
+    <value>Gamification Einstellungen:</value>
+  </data>
+  <data name="ManageGamificationSettings" xml:space="preserve">
+    <value>Gamification Einstellungen verwalten</value>
+  </data>
+  <data name="Completed" xml:space="preserve">
+    <value>Beendet</value>
+  </data>
+  <data name="Expired" xml:space="preserve">
+    <value>Abgelaufen</value>
+  </data>
+  <data name="OptionDayOff" xml:space="preserve">
+    <value>Freier Tag</value>
+  </data>
+  <data name="OptionDayOffOrEmptyDay" xml:space="preserve">
+    <value>Freier Tag oder ungeplanter Tag</value>
+  </data>
+  <data name="OptionEmptyDay" xml:space="preserve">
+    <value>ungeplanter Tag</value>
+  </data>
+  <data name="OptionWorkingDay" xml:space="preserve">
+    <value>Arbeitstag</value>
   </data>
 </root>
