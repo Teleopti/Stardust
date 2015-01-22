@@ -22,7 +22,7 @@ SET /a argc=0
 :_exitargcLoop
 
 ::Check if we have a user or if its CCnet calling us
-IF %argc%==4 (
+IF %argc%==5 (
 SET Silent=1
 GOTO StartProcess
 )
