@@ -13,7 +13,7 @@
 		<ProductName>Teleopti CCC</ProductName>
 		<TfsLibraryLocation>C:\Program Files (x86)\Microsoft Visual Studio 10.0\Common7\IDE\ReferenceAssemblies\v2.0</TfsLibraryLocation>
 		<SDKDocProj>$(CCNetWorkingDirectory)\docSdkx64.shfbproj</SDKDocProj>
-		<SDKDocOutput>$(CCNetWorkingDirectory)\Documentation.chm</SDKDocOutput>
+		<SDKDocOutput>$(CCNetWorkingDirectory)\help\Documentation.chm</SDKDocOutput>
 		<Configuration>Release</Configuration>
 		<ClientProperties>$(CCNetWorkingDirectory)\Teleopti.Ccc.SmartClientPortal\Teleopti.Ccc.SmartClientPortal.Shell\Properties</ClientProperties>
 		<MyTimeProperties>$(CCNetWorkingDirectory)\AgentPortal\Teleopti.Ccc.AgentPortal\Properties</MyTimeProperties>
