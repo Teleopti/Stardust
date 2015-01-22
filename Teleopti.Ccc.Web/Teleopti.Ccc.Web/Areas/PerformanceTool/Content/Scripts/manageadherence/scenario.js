@@ -16,6 +16,7 @@ define([
 		var startPromise = messagebroker.start();
 		var manageAdherenceSubscription;
 		var result;
+		var intervalFunc;
 
 		this.Name = "Manage Adherence Load Test";
 		this.GenerateForm =
@@ -40,6 +41,7 @@ define([
 		this.Configuration = ko.observable();
 		this.PollingPerSecond = ko.observable();
 		this.TeamId = ko.observable();
+		this.ClearAgentState = ko.observable(false);
 
 		this.ConfigurationObject = ko.computed(function () {
 			try {
@@ -55,6 +57,7 @@ define([
 				return undefined;
 			self.PollingPerSecond(configuration.PollingPerSecond);
 			self.TeamId(configuration.TeamId);
+			self.ClearAgentState(configuration.ClearAgentState);
 			var iterations = [];
 			for (var p = 0; p < configuration.Persons.length; p++) {
 
@@ -68,6 +71,24 @@ define([
 			return iterations;
 
 		});
+		
+		this.ClearIterations = ko.computed(function() {
+			var configuration = self.ConfigurationObject();
+			if (!configuration)
+				return undefined;
+			var iterations = [];
+			for (var p = 0; p < configuration.Persons.length; p++) {
+
+				iterations.push(new Iteration({
+					PlatformTypeId: configuration.PlatformTypeId,
+					SourceId: configuration.SourceId,
+					Person: configuration.Persons[p],
+					StateCode: configuration.ClearAgentStateCode,
+				}));
+			}
+			return iterations;
+		});
+
 
 		self.IterationsExpected = ko.computed(function () {
 			var iterations = self.Iterations();
@@ -98,22 +119,18 @@ define([
 			],
 			States: ["Ready", "OFF"],
 			TeamId: "34590A63-6331-4921-BC9F-9B5E015AB495",
-			PollingPerSecond: 1
+			PollingPerSecond: 1,
+			ClearAgentState: true,
+			ClearAgentStateCode: "OFF"
 		}, null, 4));
 
 		this.Run = function () {
 			result = new ResultViewModel();
 
 			$.ajax({
-				url: "performancetool/application/resetperformancecounter?iterationCount=" + self.IterationsExpected(),
-				success: function () {
-					self.runIterations();
-				}
-			});
-			$.ajax({
 				url: "Anywhere/BusinessUnit/Current",
-				success: function(bu) {
-					setInterval(function () {
+				success: function (bu) {
+					intervalFunc = setInterval(function () {
 						for (var i = 0; i < self.PollingPerSecond() ; i++) {
 							$.ajax({
 								headers: { 'X-Business-Unit-Filter': bu },
@@ -121,6 +138,12 @@ define([
 							});
 						}
 					}, 1000);
+				}
+			});
+			$.ajax({
+				url: "performancetool/application/resetperformancecounter?iterationCount=" + self.IterationsExpected(),
+				success: function () {
+					self.runIterations();
 				}
 			});
 			return result;
@@ -131,11 +154,16 @@ define([
 			startPromise.done(function() {
 				manageAdherenceSubscription = messagebroker.subscribe({
 					domainType: 'PerformanceCountDone',
-					callback: function(notification) {
+					callback: function (notification) {
+						clearInterval(intervalFunc);
+
 						result.RunDone(true);
 						result.IterationsDone(self.IterationsExpected());
 						var data = JSON.parse(notification.BinaryData);
 						result.EndTime(moment(data.EndTime));
+
+						if (self.ClearAgentState())
+							self.runClearIterations();
 					}
 				});
 
@@ -151,6 +179,12 @@ define([
 						result.CommandsDone(true);
 					});
 				});
+			});
+		};
+
+		self.runClearIterations = function() {
+			$.each(self.ClearIterations(), function(i, e) {
+				e.Start();
 			});
 		};
 
