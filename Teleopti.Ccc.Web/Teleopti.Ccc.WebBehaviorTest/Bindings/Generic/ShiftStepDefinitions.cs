@@ -1,3 +1,4 @@
+using System.Threading;
 using TechTalk.SpecFlow;
 using TechTalk.SpecFlow.Assist;
 using Teleopti.Ccc.TestCommon.TestData.Setups.Configurable;
@@ -28,6 +29,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
 		[When(@"I change the shift trade post value with")]
 		public void WhenIChangeTheShiftTradePostValueWith(Table table)
 		{
+			Thread.Sleep(300);//wait for last step loading
 			var exchangeOffer = table.CreateInstance<ShiftExchangeOfferFields>();
 
 			Browser.Interactions.Javascript(string.Format("$('.shift-exchange-offer-start-time').timepicker('setTime', '{0}');", exchangeOffer.StartTime));

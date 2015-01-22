@@ -8,10 +8,7 @@ $(document).ready(function() {
 
 		var ajax = {
 			Ajax: function (options) {
-				if (options.url === "ShiftExchange/GetAbsence") {
-					options.success( "" );
-				};
-				if (options.url === "ShiftExchange/NewOffer") ajaxPostData = options.data;
+				ajaxPostData = options.data;
 			}
 		};
 

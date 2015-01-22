@@ -120,7 +120,7 @@ Teleopti.MyTimeWeb.Schedule.ShiftExchangeOfferViewModel = function ShiftExchange
 		},
 		write: function (date) {
 			self.DateTo(date);
-			self.Absence(null);
+			self.getAbsence(date.format(self.DateFormat()));
 			if (!self.IsUpdating() || (self.IsUpdating() && self.OfferValidTo() >= (moment(date)))) {
 				self.OfferValidTo(moment(date).add('days', -1));
 			}
@@ -166,21 +166,6 @@ Teleopti.MyTimeWeb.Schedule.ShiftExchangeOfferViewModel = function ShiftExchange
 	});
 
 	self.SaveShiftExchangeOffer = function () {
-		ajax.Ajax({
-			url: "ShiftExchange/GetAbsence",
-			dataType: "json",
-			type: 'GET',
-			data: {
-				Date: self.DateTo().format(self.DateFormat())
-			},
-			success: function (data, textStatus, jqXHR) {
-				self.Absence(data.PersonAbsences);
-				if (self.IsNotAbsence()) self.saveOfferData();
-			}
-		});
-	};
-
-	self.saveOfferData = function() {
 		var wishShiftTypeId = self.Toggle31317Enabled()
 			? self.WishShiftTypeOption().Id
 			: self.AllShiftTypes()[0].Id;
@@ -224,6 +209,21 @@ Teleopti.MyTimeWeb.Schedule.ShiftExchangeOfferViewModel = function ShiftExchange
 					self.OpenPeriodRelativeEnd(data.OpenPeriodRelativeEnd);
 				}
 				self.missingWorkflowControlSet(!data.HasWorkflowControlSet);
+			}
+		});
+	};
+
+	self.getAbsence = function(date) {
+		ajax.Ajax({
+			url: "ShiftExchange/GetAbsence",
+			dataType: "json",
+			type: 'GET',
+			data: {
+				Date: date
+			},
+			success: function(data, textStatus, jqXHR) {
+				self.Absence(null);
+				self.Absence(data.PersonAbsences);
 			}
 		});
 	};
