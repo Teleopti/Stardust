@@ -18,15 +18,23 @@ define([
 		var result;
 
 		this.Name = "Manage Adherence Load Test";
-
+		this.GenerateForm =
+			"<form action='" + document.URL + "/application/ManageAdherenceLoadTest" + "' method='get' target='_blank' class='navbar-form navbar-left'>\
+					<div class='form-group'>\
+						<input type='number' class='form-control' name='iterationCount' value='1000'>\
+					</div>\
+					<button class='btn btn-primary'>Generate</button>\
+				</form>";
 		var text =
-		"\
+			"\
 		Before running this scenario make sure that:<br /> \
 		- All external logons exists in the system as persons.<br /> \
 		- No agent is currently in expected state group.<br /> \
 		- Too few agents or states. <br/> \
-		Default is only to show you how to set it up, not an actual test<br />\
-		";
+		Default is only to show you how to set it up, not an actual test<br /><br />\
+		You can generate a number of persons and states as below \
+		" +self.GenerateForm+
+		"";
 		this.Text = text;
 
 		this.Configuration = ko.observable();
