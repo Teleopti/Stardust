@@ -85,8 +85,8 @@
 
 	<Target Name="CreateMSI">
 		<Message Text="Building MSI..." Importance="high" />
-		<Message Text="&quot;$(DeployShare)\$(CCCVersion)\WISE\CompileAll.bat&quot; $(CCCVersion) $(ProductsToBuild) $(MSIShare) $(DeployShare)"/>
-		<Exec Command="&quot;$(DeployShare)\$(CCCVersion)\WISE\CompileAll.bat&quot; $(CCCVersion) $(ProductsToBuild) $(MSIShare) $(DeployShare)"/>
+		<Message Text="&quot;$(DeployShare)\$(CCCVersion)\WISE\CompileAll.bat&quot; $(CCCVersion) $(ProductsToBuild) $(MSIShare) $(DeployShare) $(CCNetWorkingDirectory)\temp"/>
+		<Exec Command="&quot;$(DeployShare)\$(CCCVersion)\WISE\CompileAll.bat&quot; $(CCCVersion) $(ProductsToBuild) $(MSIShare) $(DeployShare) $(CCNetWorkingDirectory)\temp"/>
 		<Message Text="Building MSI. Done!" Importance="high" />
 	</Target>
 	

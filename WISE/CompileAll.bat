@@ -9,6 +9,7 @@ SET Version=%1
 SET ProductId=%2
 SET OUTDIR=%3
 SET DEPLOYSHARE=%4
+set WORKINGDIR=%5
 
 ::Get the number of input params
 SET /a argc=0
@@ -51,7 +52,6 @@ SET SRCDIR=%WISEDIR:~0,-5%
 SET HISTORYDIR=%DEPLOYSHARE%\%Version%
 
 ::This must be before the drive mapping below
-SET WORKINGDIR=C:\WiseWORKINGDIR
 IF NOT EXIST "%WORKINGDIR%" MKDIR "%WORKINGDIR%"
 
 ::Hardcoded drive letter used inside WISE project.
