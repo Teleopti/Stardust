@@ -54,8 +54,9 @@ SET ServiceBusPath=%SDKPath%\..\ServiceBus
 SET PermissionStyle=""
 SET WinXP=501
 SET Win2003=502
-SET IIS6=6
+SET IIS8=8
 SET IIS7=7
+SET IIS6=6
 SET IIS7PoolUser=IIS APPPOOL\Teleopti SDK
 SET IIS6PoolUser=NT AUTHORITY\Network Service
 SET IIS5PoolUser=IUSR_%COMPUTERNAME%
@@ -68,6 +69,7 @@ SET IISPoolUser=%IIS6PoolUser%
 
 ::If iis 7 update PoolUser
 IF %IISVersion% GEQ %IIS7% SET IISPoolUser=%IIS7PoolUser%
+IF %IISVersion% GEQ %IIS8% SET IISPoolUser=%IIS7PoolUser%
 
 ::But, if User choosed Windows Authetication during CCC installation
 IF NOT "%SVCLOGIN%"=="" (

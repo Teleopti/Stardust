@@ -9,8 +9,9 @@
 ::Statics
 SET /A WinXP=501
 SET /A Win2003=502
-SET IIS6=6
+SET IIS8=8
 SET IIS7=7
+SET IIS6=6
 SET IIS5=5
 SET IIS7PoolUser40=IIS APPPOOL\Teleopti WFM
 SET IIS7PoolUser40Web=IIS APPPOOL\Teleopti Web
@@ -19,6 +20,8 @@ SET IIS7PoolUser40RTA=IIS APPPOOL\Teleopti RTA
 SET IIS7PoolUser40SDK=IIS APPPOOL\Teleopti SDK
 SET IIS6PoolUser=NT AUTHORITY\Network Service
 SET IIS5PoolUser=IUSR_%COMPUTERNAME%
+SET TargetFolder=%~5
+
 
 ::create the TargetFolder if missing
 IF NOT EXIST "%TargetFolder%" (
@@ -28,6 +31,14 @@ SET /A localError=%errorlevel%
 )
 
 ::IIS Log permissions
+IF %IISVersion% EQU %IIS8% (
+Call:SetPermissions "%IIS7PoolUser40%" %localError% localError
+Call:SetPermissions "%IIS7PoolUser40Web%" %localError% localError
+Call:SetPermissions "%IIS7PoolUser40Broker%" %localError% localError
+Call:SetPermissions "%IIS7PoolUser40RTA%" %localError% localError
+Call:SetPermissions "%IIS7PoolUser40SDK%" %localError% localError
+)
+
 IF %IISVersion% EQU %IIS7% (
 Call:SetPermissions "%IIS7PoolUser40%" %localError% localError
 Call:SetPermissions "%IIS7PoolUser40Web%" %localError% localError
@@ -45,10 +56,10 @@ Call:SetPermissions "%IIS5PoolUser%" %localError% localError
 )
 
 ::ETL Win Service Log permissions
-Call:SetPermissions "%WinETLLogin%" %localError% localError
+IF NOT "%WinETLLogin%"=="" Call:SetPermissions "%WinETLLogin%" %localError% localError
 
 ::Other Win Service Log permissions
-Call:SetPermissions "%WinSvcLogin%" %localError% localError
+IF NOT "%WinSvcLogin%"=="" Call:SetPermissions "%WinSvcLogin%" %localError% localError
 
 Echo done
 exit /b %localError%
