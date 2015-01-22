@@ -253,7 +253,7 @@
     </Reference>
     <Reference Include="Rhino.ServiceBus.SqlQueues, Version=1.0.1.10, Culture=neutral, PublicKeyToken=345d633c75812f60, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\packages\Rhino.ServiceBus.SqlQueues.1.0.1.10\lib\net40\Rhino.ServiceBus.SqlQueues.dll</HintPath>
+      <HintPath>..\..\packages\Rhino.ServiceBus.SqlQueues.1.0.1.12\lib\net40\Rhino.ServiceBus.SqlQueues.dll</HintPath>
     </Reference>
     <Reference Include="System.Data" />
     <Reference Include="System.IdentityModel" />
