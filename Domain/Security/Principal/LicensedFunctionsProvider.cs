@@ -1,6 +1,7 @@
 ﻿using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
+using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.Security.AuthorizationEntities;
 using Teleopti.Interfaces.Domain;
@@ -34,7 +35,7 @@ namespace Teleopti.Ccc.Domain.Security.Principal
 			foreach (var enabledLicenseOption in LicenseSchema.GetActiveLicenseSchema(dataSource).EnabledLicenseOptions)
 			{
 				enabledLicenseOption.EnableApplicationFunctions(applicationFunctions);
-				applicationFunctions.ForEach(f => licensedFunctions.Add(f));
+				enabledLicenseOption.EnabledApplicationFunctions.ForEach(f => licensedFunctions.Add(f));
 			}
 			return licensedFunctions;
     	}
