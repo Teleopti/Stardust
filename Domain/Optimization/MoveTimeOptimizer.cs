@@ -29,7 +29,7 @@ namespace Teleopti.Ccc.Domain.Optimization
     	private readonly IResourceOptimizationHelper _resourceOptimizationHelper;
         private readonly IEffectiveRestrictionCreator _effectiveRestrictionCreator;
         private readonly IScheduleMatrixOriginalStateContainer _workShiftOriginalStateContainer;
-        private readonly IOptimizationOverLimitByRestrictionDecider _optimizationOverLimitDecider;
+	    private readonly IOptimizationLimits _optimizationLimits;
         private readonly ISchedulingOptionsCreator _schedulingOptionsCreator;
     	private readonly IMainShiftOptimizeActivitySpecificationSetter _mainShiftOptimizeActivitySpecificationSetter;
 
@@ -45,7 +45,7 @@ namespace Teleopti.Ccc.Domain.Optimization
             IResourceOptimizationHelper resourceOptimizationHelper,
             IEffectiveRestrictionCreator effectiveRestrictionCreator,
             IScheduleMatrixOriginalStateContainer workShiftOriginalStateContainer,
-            IOptimizationOverLimitByRestrictionDecider optimizationOverLimitDecider, 
+			IOptimizationLimits optimizationLimits,
             ISchedulingOptionsCreator schedulingOptionsCreator,
 			IMainShiftOptimizeActivitySpecificationSetter mainShiftOptimizeActivitySpecificationSetter)
         {
@@ -60,7 +60,8 @@ namespace Teleopti.Ccc.Domain.Optimization
     		_resourceOptimizationHelper = resourceOptimizationHelper;
             _effectiveRestrictionCreator = effectiveRestrictionCreator;
             _workShiftOriginalStateContainer = workShiftOriginalStateContainer;
-            _optimizationOverLimitDecider = optimizationOverLimitDecider;
+		    _optimizationLimits = optimizationLimits;
+
             _schedulingOptionsCreator = schedulingOptionsCreator;
         	_mainShiftOptimizeActivitySpecificationSetter = mainShiftOptimizeActivitySpecificationSetter;
         }
@@ -71,8 +72,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 
             var schedulingOptions = _schedulingOptionsCreator.CreateSchedulingOptions(_optimizerPreferences);
 			schedulingOptions.UseCustomTargetTime = _workShiftOriginalStateContainer.OriginalWorkTime();
-
-			var lastOverLimitCount = _optimizationOverLimitDecider.OverLimitsCounts();
+			var lastOverLimitCount = _optimizationLimits.OverLimitsCounts(Matrix);
             if (daysOverMax())
                 return false;
 
@@ -152,12 +152,21 @@ namespace Teleopti.Ccc.Domain.Optimization
                 return false;
             }
 
-			if (_optimizationOverLimitDecider.HasOverLimitIncreased(lastOverLimitCount))
-            {
-                rollbackLockAndCalculate(firstDayDate, secondDayDate, originalFirstScheduleDay, originalSecondScheduleDay, resourceCalculateDelayer);
+			if (_optimizationLimits.HasOverLimitIncreased(lastOverLimitCount, Matrix))
+			{
+				rollbackLockAndCalculate(firstDayDate, secondDayDate, originalFirstScheduleDay, originalSecondScheduleDay, resourceCalculateDelayer);
 				lockDays(firstDayDate, secondDayDate);
-                return true;
-            }
+				return true;	
+			}
+
+			var minWorkTimePerWeekOk = _optimizationLimits.ValidateMinWorkTimePerWeek(_matrixConverter.SourceMatrix);
+
+			if (!minWorkTimePerWeekOk)
+			{
+				rollbackLockAndCalculate(firstDayDate, secondDayDate, originalFirstScheduleDay, originalSecondScheduleDay, resourceCalculateDelayer);
+				lockDays(firstDayDate, secondDayDate);
+				return true;
+			}
             
             return true;
         }
@@ -182,7 +191,8 @@ namespace Teleopti.Ccc.Domain.Optimization
 
         private bool daysOverMax()
         {
-            return _optimizationOverLimitDecider.MoveMaxDaysOverLimit();
+            //return _optimizationOverLimitDecider.MoveMaxDaysOverLimit();
+	        return _optimizationLimits.MoveMaxDaysOverLimit();
         }
 
         public IPerson ContainerOwner

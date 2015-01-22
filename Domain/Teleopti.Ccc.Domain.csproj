@@ -487,6 +487,7 @@
     <Compile Include="Optimization\IntraIntervalOptimization\SkillDayIntraIntervalIssueExtractor.cs" />
     <Compile Include="Optimization\IntraIntervalOptimization\SkillStaffPeriodEvaluator.cs" />
     <Compile Include="Optimization\IntraIntervalOptimization\SkillStaffPeriodIntraIntervalPeriodFinder.cs" />
+    <Compile Include="Optimization\OptimizationLimits.cs" />
     <Compile Include="Optimization\TeamBlock\MoveTimeOptimization\ValidateFoundMovedDaysSpecification.cs" />
     <Compile Include="DayOffPlanning\WeeklyDayOffValidator.cs" />
     <Compile Include="DayOffPlanning\WorkShiftBackToLegalStateBitArrayCreator.cs" />

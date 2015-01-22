@@ -28,7 +28,7 @@ namespace Teleopti.Ccc.Domain.Optimization
         private readonly ISchedulePartModifyAndRollbackService _rollbackService;
         private readonly IResourceOptimizationHelper _resourceOptimizationHelper;
         private readonly IEffectiveRestrictionCreator _effectiveRestrictionCreator;
-        private readonly IOptimizationOverLimitByRestrictionDecider _optimizationOverLimitDecider;
+	    private readonly IOptimizationLimits _optimizationLimits;
         private readonly IScheduleMatrixOriginalStateContainer _workShiftOriginalStateContainer;
         private readonly ISchedulingOptionsCreator _schedulingOptionsCreator;
     	private readonly IMainShiftOptimizeActivitySpecificationSetter _mainShiftOptimizeActivitySpecificationSetter;
@@ -45,7 +45,7 @@ namespace Teleopti.Ccc.Domain.Optimization
             ISchedulePartModifyAndRollbackService rollbackService,
             IResourceOptimizationHelper resourceOptimizationHelper,
             IEffectiveRestrictionCreator effectiveRestrictionCreator,
-            IOptimizationOverLimitByRestrictionDecider optimizationOverLimitDecider, 
+ 			IOptimizationLimits optimizationLimits,
             IScheduleMatrixOriginalStateContainer workShiftOriginalStateContainer, 
             ISchedulingOptionsCreator schedulingOptionsCreator,
 			IMainShiftOptimizeActivitySpecificationSetter mainShiftOptimizeActivitySpecificationSetter,
@@ -61,7 +61,7 @@ namespace Teleopti.Ccc.Domain.Optimization
             _rollbackService = rollbackService;
             _resourceOptimizationHelper = resourceOptimizationHelper;
             _effectiveRestrictionCreator = effectiveRestrictionCreator;
-            _optimizationOverLimitDecider = optimizationOverLimitDecider;
+	        _optimizationLimits = optimizationLimits;
             _workShiftOriginalStateContainer = workShiftOriginalStateContainer;
             _schedulingOptionsCreator = schedulingOptionsCreator;
         	_mainShiftOptimizeActivitySpecificationSetter = mainShiftOptimizeActivitySpecificationSetter;
@@ -71,7 +71,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 
         public bool Execute()
         {
-	        var lastOverLimitCounts = _optimizationOverLimitDecider.OverLimitsCounts();
+	        var lastOverLimitCounts = _optimizationLimits.OverLimitsCounts(_matrixConverter.SourceMatrix);
             if (daysOverMax())
                 return false;
 
@@ -124,13 +124,13 @@ namespace Teleopti.Ccc.Domain.Optimization
                 return true;
             }
 
-			if (_optimizationOverLimitDecider.HasOverLimitIncreased(lastOverLimitCounts) || daysOverMax())
-            {
-                _rollbackService.Rollback();
-                _resourceCalculateDelayer.CalculateIfNeeded(dateToBeRemoved, null);
-                lockDay(dateToBeRemoved);
-                return false;
-            }
+	        if (_optimizationLimits.HasOverLimitIncreased(lastOverLimitCounts, _matrixConverter.SourceMatrix) || daysOverMax())
+	        {
+				_rollbackService.Rollback();
+				_resourceCalculateDelayer.CalculateIfNeeded(dateToBeRemoved, null);
+				lockDay(dateToBeRemoved);
+				return false;   
+	        }
 
             // Always lock days we moved
 			lockDay(dateToBeRemoved);
@@ -140,7 +140,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 
         private bool daysOverMax()
         {
-            return _optimizationOverLimitDecider.MoveMaxDaysOverLimit();
+	        return _optimizationLimits.MoveMaxDaysOverLimit();
         }
 
         public IPerson ContainerOwner

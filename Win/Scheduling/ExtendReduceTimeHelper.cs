@@ -10,6 +10,7 @@ using Teleopti.Ccc.Domain.Optimization.MatrixLockers;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Scheduling.Restrictions;
+using Teleopti.Ccc.Domain.Scheduling.Rules;
 using Teleopti.Ccc.Win.Commands;
 using Teleopti.Ccc.WinCode.Scheduling;
 using Teleopti.Interfaces.Domain;
@@ -108,9 +109,11 @@ namespace Teleopti.Ccc.Win.Scheduling
                 IScheduleMatrixLockableBitArrayConverter bitArrayConverter = new ScheduleMatrixLockableBitArrayConverter(scheduleMatrixPro, scheduleMatrixLockableBitArrayConverterEx);
 
                 ICheckerRestriction restrictionChecker = new RestrictionChecker();
-                IOptimizationOverLimitByRestrictionDecider optimizerOverLimitDecider = new OptimizationOverLimitByRestrictionDecider(scheduleMatrixPro, restrictionChecker, optimizerPreferences, originalStateListForScheduleTag[i]);
+                IOptimizationOverLimitByRestrictionDecider optimizerOverLimitDecider = new OptimizationOverLimitByRestrictionDecider(restrictionChecker, optimizerPreferences, originalStateListForScheduleTag[i]);
 
-                ISchedulingOptionsCreator schedulingOptionsCreator = new SchedulingOptionsCreator();
+                IOptimizationLimits optimizationLimits = new OptimizationLimits(optimizerOverLimitDecider, _container.Resolve<IMinWeekWorkTimeRule>());
+				
+				ISchedulingOptionsCreator schedulingOptionsCreator = new SchedulingOptionsCreator();
                 ISchedulingOptions schedulingOptions = schedulingOptionsCreator.CreateSchedulingOptions(optimizerPreferences);
 				IMainShiftOptimizeActivitySpecificationSetter mainShiftOptimizeActivitySpecificationSetter = new MainShiftOptimizeActivitySpecificationSetter();
                 var resourceCalculateDelayer = new ResourceCalculateDelayer(resourceOptimizationHelper, 1, true, schedulingOptions.ConsiderShortBreaks);
@@ -128,7 +131,7 @@ namespace Teleopti.Ccc.Win.Scheduling
                     effectiveRestrictionCreator,
                     resourceCalculateDaysDecider, 
                     originalStateListForScheduleTag[i],
-                    optimizerOverLimitDecider,
+					optimizationLimits,
                     schedulingOptions,
 					mainShiftOptimizeActivitySpecificationSetter
                     );

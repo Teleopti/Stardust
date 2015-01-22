@@ -146,7 +146,10 @@ namespace Teleopti.Ccc.Win.Scheduling
 
                 ISchedulingOptionsCreator schedulingOptionsCreator = new SchedulingOptionsCreator();
                 ICheckerRestriction checkerRestriction = new RestrictionChecker();
-                IOptimizationOverLimitByRestrictionDecider optimizationOverLimitDecider = new OptimizationOverLimitByRestrictionDecider(scheduleMatrixPro, checkerRestriction, optimizerPreferences, originalStateListForScheduleTag[i]);
+                IOptimizationOverLimitByRestrictionDecider optimizationOverLimitDecider = new OptimizationOverLimitByRestrictionDecider(checkerRestriction, optimizerPreferences, originalStateListForScheduleTag[i]);
+				
+				IOptimizationLimits optimizationLimits = new OptimizationLimits(optimizationOverLimitDecider, _container.Resolve<IMinWeekWorkTimeRule>());
+				
 				IMainShiftOptimizeActivitySpecificationSetter mainShiftOptimizeActivitySpecificationSetter = new MainShiftOptimizeActivitySpecificationSetter();
                 
                 IExtendReduceDaysOffOptimizer optimizer = new ExtendReduceDaysOffOptimizer(
@@ -168,7 +171,7 @@ namespace Teleopti.Ccc.Win.Scheduling
                     displayList[0], 
                     conflictHandler, 
                     dayOffOptimizerValidator,
-                    optimizationOverLimitDecider,
+					optimizationLimits,
                     schedulingOptionsCreator,
 					mainShiftOptimizeActivitySpecificationSetter);
 

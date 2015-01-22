@@ -25,39 +25,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
             _target = new DayOffOptimizationService(_periodValueCalculator);
         }
 
-        [Test]
-        public void ContainerShouldBeRemovedIfPeriodValueSameOrHigher()
-        {
-            _optimizers = new List<IDayOffOptimizerContainer> { _container1 };
-            IPerson owner = PersonFactory.CreatePerson();
-            
-            using (_mocks.Record())
-            {
-				// first round first executes
-				Expect.Call(_periodValueCalculator.PeriodValue(IterationOperationOption.DayOffOptimization))
-					.Return(10);
-                Expect.Call(_container1.Execute())
-                    .Return(true);
-				Expect.Call(_periodValueCalculator.PeriodValue(IterationOperationOption.DayOffOptimization))
-				  .Return(9);
-				// second executes
-				Expect.Call(_periodValueCalculator.PeriodValue(IterationOperationOption.DayOffOptimization))
-				  .Return(9);
-                Expect.Call(_container1.Execute())
-                    .Return(true);
-				Expect.Call(_periodValueCalculator.PeriodValue(IterationOperationOption.DayOffOptimization))
-				  .Return(9);
-
-                Expect.Call(_container1.Owner)
-                    .Return(owner).Repeat.AtLeastOnce();
-               
-            }
-
-            using (_mocks.Playback())
-            {
-                _target.Execute(_optimizers);
-            }
-        }
+       
 
 		[Test]
 		public void ContainerShouldBeRemovedIfFailed()

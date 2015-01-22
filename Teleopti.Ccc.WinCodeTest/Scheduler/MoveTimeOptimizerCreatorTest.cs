@@ -4,6 +4,7 @@ using Rhino.Mocks;
 using Teleopti.Ccc.Domain.Optimization;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.ResourceCalculation.IntraIntervalAnalyze;
+using Teleopti.Ccc.Domain.Scheduling.Rules;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.WinCode.Scheduling;
 using Teleopti.Interfaces.Domain;
@@ -32,6 +33,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 		private IPersonSkillProvider _personSkillProvider;
 		private IEffectiveRestrictionCreator _effectiveRestrictionCreator;
 		private IIntraIntervalFinderService _intraIntervalFinderService;
+		private IMinWeekWorkTimeRule _minWeekWorkTimeRule;
 
 
 		[SetUp]
@@ -55,6 +57,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 			_personSkillProvider = new PersonSkillProvider();
 			_effectiveRestrictionCreator = _mocks.StrictMock<IEffectiveRestrictionCreator>();
 			_intraIntervalFinderService = _mocks.StrictMock<IIntraIntervalFinderService>();
+			_minWeekWorkTimeRule = _mocks.StrictMock<IMinWeekWorkTimeRule>();
 			_target = new MoveTimeOptimizerCreator(_scheduleMatrixOriginalStateContainerList,
 												   _workShiftOriginalStateContainerList,
 												   _decisionMaker,
@@ -66,7 +69,8 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 												   new CurrentTeleoptiPrincipal(),
 												   new ScheduleMatrixLockableBitArrayConverterEx(),
 												   _effectiveRestrictionCreator,
-												   _intraIntervalFinderService);
+												   _intraIntervalFinderService,
+												   _minWeekWorkTimeRule);
 		}
 
 		[Test]

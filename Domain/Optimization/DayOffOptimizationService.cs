@@ -90,8 +90,6 @@ namespace Teleopti.Ccc.Domain.Optimization
 					retList.Add(optimizer);
 
 				double newPeriodValue = _periodValueCalculatorForAllSkills.PeriodValue(IterationOperationOption.DayOffOptimization);
-				if (lastPeriodValue <= newPeriodValue)
-					retList.Add(optimizer);
 
             	string progress = Resources.OptimizingDaysOff + Resources.Colon + "(" + activeOptimizers.Count + ")" +
             	                  executes + " ";

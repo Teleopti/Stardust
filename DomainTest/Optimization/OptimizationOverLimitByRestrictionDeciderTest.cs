@@ -57,7 +57,6 @@ namespace Teleopti.Ccc.DomainTest.Optimization
         public void VerifyInstantiate()
         {
             _target = new OptimizationOverLimitByRestrictionDecider(
-                _matrix,
                 _restrictionChecker,
                 _optimizationPreferences,
                 _originalStateContainer);
@@ -79,11 +78,10 @@ namespace Teleopti.Ccc.DomainTest.Optimization
             using (_mocks.Playback())
             {
                 _target = new OptimizationOverLimitByRestrictionDecider(
-                    _matrix,
                     _restrictionChecker,
                     _optimizationPreferences,
                     _originalStateContainer);
-                var result = _target.OverLimitsCounts();
+                var result = _target.OverLimitsCounts(_matrix);
                 Assert.IsTrue(result.PreferencesOverLimit == 0);
             }
         }
@@ -101,11 +99,10 @@ namespace Teleopti.Ccc.DomainTest.Optimization
             using (_mocks.Playback())
             {
                 _target = new OptimizationOverLimitByRestrictionDecider(
-                    _matrix,
                     _restrictionChecker,
                     _optimizationPreferences,
                     _originalStateContainer);
-                var result = _target.OverLimitsCounts();
+                var result = _target.OverLimitsCounts(_matrix);
                 Assert.IsTrue(result.PreferencesOverLimit == 0);
 
             }
@@ -124,11 +121,10 @@ namespace Teleopti.Ccc.DomainTest.Optimization
             using (_mocks.Playback())
             {
                 _target = new OptimizationOverLimitByRestrictionDecider(
-                    _matrix,
                     _restrictionChecker,
                     _optimizationPreferences,
                     _originalStateContainer);
-                var result = _target.OverLimitsCounts();
+                var result = _target.OverLimitsCounts(_matrix);
 				Assert.IsFalse(result.PreferencesOverLimit == 0);
             }
         }
@@ -140,11 +136,10 @@ namespace Teleopti.Ccc.DomainTest.Optimization
             _optimizationPreferences.General.PreferencesValue = 0.4d;
 
             _target = new OptimizationOverLimitByRestrictionDecider(
-                _matrix,
                 _restrictionChecker,
                 _optimizationPreferences,
                 _originalStateContainer);
-            var result = _target.OverLimitsCounts();
+            var result = _target.OverLimitsCounts(_matrix);
 			Assert.IsTrue(result.PreferencesOverLimit == 0);
         }
 
@@ -167,11 +162,10 @@ namespace Teleopti.Ccc.DomainTest.Optimization
             using (_mocks.Playback())
             {
                 _target = new OptimizationOverLimitByRestrictionDecider(
-                    _matrix,
                     _restrictionChecker,
                     _optimizationPreferences,
                     _originalStateContainer);
-                var result = _target.OverLimitsCounts();
+                var result = _target.OverLimitsCounts(_matrix);
 				Assert.IsTrue(result.PreferencesOverLimit == 0);
             }
         }
@@ -199,11 +193,10 @@ namespace Teleopti.Ccc.DomainTest.Optimization
             using (_mocks.Playback())
             {
                 _target = new OptimizationOverLimitByRestrictionDecider(
-                    _matrix,
                     _restrictionChecker,
                     _optimizationPreferences,
                     _originalStateContainer);
-                var result = _target.OverLimitsCounts();
+                var result = _target.OverLimitsCounts(_matrix);
                 Assert.IsTrue(result.MustHavesOverLimit == 0);
             }
         }
@@ -221,11 +214,10 @@ namespace Teleopti.Ccc.DomainTest.Optimization
             using (_mocks.Playback())
             {
                 _target = new OptimizationOverLimitByRestrictionDecider(
-                    _matrix,
                     _restrictionChecker,
                     _optimizationPreferences,
                     _originalStateContainer);
-                var result = _target.OverLimitsCounts();
+                var result = _target.OverLimitsCounts(_matrix);
 				Assert.IsTrue(result.MustHavesOverLimit == 0);
             }
         }
@@ -243,11 +235,10 @@ namespace Teleopti.Ccc.DomainTest.Optimization
             using (_mocks.Playback())
             {
                 _target = new OptimizationOverLimitByRestrictionDecider(
-                    _matrix,
                     _restrictionChecker,
                     _optimizationPreferences,
                     _originalStateContainer);
-                var result = _target.OverLimitsCounts();
+                var result = _target.OverLimitsCounts(_matrix);
 				Assert.IsFalse(result.MustHavesOverLimit == 0);
             }
         }
@@ -259,11 +250,10 @@ namespace Teleopti.Ccc.DomainTest.Optimization
             _optimizationPreferences.General.MustHavesValue = 0.4d;
 
             _target = new OptimizationOverLimitByRestrictionDecider(
-                _matrix,
                 _restrictionChecker,
                 _optimizationPreferences,
                 _originalStateContainer);
-            var result = _target.OverLimitsCounts();
+            var result = _target.OverLimitsCounts(_matrix);
 			Assert.IsTrue(result.MustHavesOverLimit == 0);
         }
 
@@ -286,11 +276,10 @@ namespace Teleopti.Ccc.DomainTest.Optimization
             using (_mocks.Playback())
             {
                 _target = new OptimizationOverLimitByRestrictionDecider(
-                    _matrix,
                     _restrictionChecker,
                     _optimizationPreferences,
                     _originalStateContainer);
-                var result = _target.OverLimitsCounts();
+                var result = _target.OverLimitsCounts(_matrix);
 				Assert.IsTrue(result.MustHavesOverLimit == 0);
             }
         }
@@ -318,11 +307,10 @@ namespace Teleopti.Ccc.DomainTest.Optimization
             using (_mocks.Playback())
             {
                 _target = new OptimizationOverLimitByRestrictionDecider(
-                    _matrix,
                     _restrictionChecker,
                     _optimizationPreferences,
                     _originalStateContainer);
-                var result = _target.OverLimitsCounts();
+                var result = _target.OverLimitsCounts(_matrix);
                 Assert.IsTrue(result.RotationsOverLimit == 0);
             }
         }
@@ -340,11 +328,10 @@ namespace Teleopti.Ccc.DomainTest.Optimization
             using (_mocks.Playback())
             {
                 _target = new OptimizationOverLimitByRestrictionDecider(
-                    _matrix,
                     _restrictionChecker,
                     _optimizationPreferences,
                     _originalStateContainer);
-                var result = _target.OverLimitsCounts();
+                var result = _target.OverLimitsCounts(_matrix);
 				Assert.IsTrue(result.RotationsOverLimit == 0);
             }
         }
@@ -362,11 +349,10 @@ namespace Teleopti.Ccc.DomainTest.Optimization
             using (_mocks.Playback())
             {
                 _target = new OptimizationOverLimitByRestrictionDecider(
-                    _matrix,
                     _restrictionChecker,
                     _optimizationPreferences,
                     _originalStateContainer);
-                var result = _target.OverLimitsCounts();
+                var result = _target.OverLimitsCounts(_matrix);
 				Assert.IsFalse(result.RotationsOverLimit == 0);
             }
         }
@@ -383,11 +369,10 @@ namespace Teleopti.Ccc.DomainTest.Optimization
             using (_mocks.Playback())
             {
                 _target = new OptimizationOverLimitByRestrictionDecider(
-                    _matrix,
                     _restrictionChecker,
                     _optimizationPreferences,
                     _originalStateContainer);
-                var result = _target.OverLimitsCounts();
+                var result = _target.OverLimitsCounts(_matrix);
 				Assert.IsTrue(result.RotationsOverLimit == 0);
             }
         }
@@ -411,11 +396,10 @@ namespace Teleopti.Ccc.DomainTest.Optimization
             using (_mocks.Playback())
             {
                 _target = new OptimizationOverLimitByRestrictionDecider(
-                    _matrix,
                     _restrictionChecker,
                     _optimizationPreferences,
                     _originalStateContainer);
-                var result = _target.OverLimitsCounts();
+                var result = _target.OverLimitsCounts(_matrix);
 				Assert.IsTrue(result.RotationsOverLimit == 0);
             }
         }
@@ -442,11 +426,10 @@ namespace Teleopti.Ccc.DomainTest.Optimization
             using (_mocks.Playback())
             {
                 _target = new OptimizationOverLimitByRestrictionDecider(
-                    _matrix,
                     _restrictionChecker,
                     _optimizationPreferences,
                     _originalStateContainer);
-                var result = _target.OverLimitsCounts();
+                var result = _target.OverLimitsCounts(_matrix);
                 Assert.IsTrue(result.AvailabilitiesOverLimit == 0);
             }
         }
@@ -464,11 +447,10 @@ namespace Teleopti.Ccc.DomainTest.Optimization
             using (_mocks.Playback())
             {
                 _target = new OptimizationOverLimitByRestrictionDecider(
-                    _matrix,
                     _restrictionChecker,
                     _optimizationPreferences,
                     _originalStateContainer);
-                var result = _target.OverLimitsCounts();
+                var result = _target.OverLimitsCounts(_matrix);
 				Assert.IsTrue(result.AvailabilitiesOverLimit == 0);
             }
         }
@@ -486,11 +468,10 @@ namespace Teleopti.Ccc.DomainTest.Optimization
             using (_mocks.Playback())
             {
                 _target = new OptimizationOverLimitByRestrictionDecider(
-                    _matrix,
                     _restrictionChecker,
                     _optimizationPreferences,
                     _originalStateContainer);
-                var result = _target.OverLimitsCounts();
+                var result = _target.OverLimitsCounts(_matrix);
 				Assert.IsFalse(result.AvailabilitiesOverLimit == 0);
             }
         }
@@ -507,11 +488,10 @@ namespace Teleopti.Ccc.DomainTest.Optimization
             using (_mocks.Playback())
             {
                 _target = new OptimizationOverLimitByRestrictionDecider(
-                    _matrix,
                     _restrictionChecker,
                     _optimizationPreferences,
                     _originalStateContainer);
-                var result = _target.OverLimitsCounts();
+                var result = _target.OverLimitsCounts(_matrix);
 				Assert.IsTrue(result.AvailabilitiesOverLimit == 0);
             }
         }
@@ -535,11 +515,10 @@ namespace Teleopti.Ccc.DomainTest.Optimization
             using (_mocks.Playback())
             {
                 _target = new OptimizationOverLimitByRestrictionDecider(
-                    _matrix,
                     _restrictionChecker,
                     _optimizationPreferences,
                     _originalStateContainer);
-                var result = _target.OverLimitsCounts();
+                var result = _target.OverLimitsCounts(_matrix);
 				Assert.IsTrue(result.AvailabilitiesOverLimit == 0);
             }
         }
@@ -566,11 +545,10 @@ namespace Teleopti.Ccc.DomainTest.Optimization
             using (_mocks.Playback())
             {
                 _target = new OptimizationOverLimitByRestrictionDecider(
-                    _matrix,
                     _restrictionChecker,
                     _optimizationPreferences,
                     _originalStateContainer);
-                var result = _target.OverLimitsCounts();
+                var result = _target.OverLimitsCounts(_matrix);
                 Assert.IsTrue(result.StudentAvailabilitiesOverLimit == 0);
             }
         }
@@ -588,11 +566,10 @@ namespace Teleopti.Ccc.DomainTest.Optimization
             using (_mocks.Playback())
             {
                 _target = new OptimizationOverLimitByRestrictionDecider(
-                    _matrix,
                     _restrictionChecker,
                     _optimizationPreferences,
                     _originalStateContainer);
-                var result = _target.OverLimitsCounts();
+                var result = _target.OverLimitsCounts(_matrix);
 				Assert.IsTrue(result.StudentAvailabilitiesOverLimit == 0);
             }
         }
@@ -610,11 +587,10 @@ namespace Teleopti.Ccc.DomainTest.Optimization
             using (_mocks.Playback())
             {
                 _target = new OptimizationOverLimitByRestrictionDecider(
-                    _matrix,
                     _restrictionChecker,
                     _optimizationPreferences,
                     _originalStateContainer);
-                var result = _target.OverLimitsCounts();
+                var result = _target.OverLimitsCounts(_matrix);
 				Assert.IsFalse(result.StudentAvailabilitiesOverLimit == 0);
             }
         }
@@ -631,11 +607,10 @@ namespace Teleopti.Ccc.DomainTest.Optimization
             using (_mocks.Playback())
             {
                 _target = new OptimizationOverLimitByRestrictionDecider(
-                    _matrix,
                     _restrictionChecker,
                     _optimizationPreferences,
                     _originalStateContainer);
-                var result = _target.OverLimitsCounts();
+                var result = _target.OverLimitsCounts(_matrix);
 				Assert.IsTrue(result.StudentAvailabilitiesOverLimit == 0);
             }
         }
@@ -658,11 +633,10 @@ namespace Teleopti.Ccc.DomainTest.Optimization
             using (_mocks.Playback())
             {
                 _target = new OptimizationOverLimitByRestrictionDecider(
-                    _matrix,
                     _restrictionChecker,
                     _optimizationPreferences,
                     _originalStateContainer);
-                var result = _target.OverLimitsCounts();
+                var result = _target.OverLimitsCounts(_matrix);
 				Assert.IsTrue(result.StudentAvailabilitiesOverLimit == 0);
             }
         }
@@ -693,7 +667,6 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 			using (_mocks.Playback())
 			{
 				_target = new OptimizationOverLimitByRestrictionDecider(
-					_matrix,
 					_restrictionChecker,
 					_optimizationPreferences,
 					_originalStateContainer);
@@ -720,7 +693,6 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 			using (_mocks.Playback())
 			{
 				_target = new OptimizationOverLimitByRestrictionDecider(
-					_matrix,
 					_restrictionChecker,
 					_optimizationPreferences,
 					_originalStateContainer);
@@ -747,7 +719,6 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 			using (_mocks.Playback())
 			{
 				_target = new OptimizationOverLimitByRestrictionDecider(
-					_matrix,
 					_restrictionChecker,
 					_optimizationPreferences,
 					_originalStateContainer);
@@ -782,13 +753,12 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 			using (_mocks.Playback())
 			{
 				_target = new OptimizationOverLimitByRestrictionDecider(
-					_matrix,
 					_restrictionChecker,
 					_optimizationPreferences,
 					_originalStateContainer);
 
 				var last = new OverLimitResults(1, 2, 3, 4, 0);
-				ret = _target.HasOverLimitIncreased(last);
+				ret = _target.HasOverLimitIncreased(last, _matrix);
 				Assert.IsFalse(ret);
 			}
 	    }
@@ -818,13 +788,12 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 			using (_mocks.Playback())
 			{
 				_target = new OptimizationOverLimitByRestrictionDecider(
-					_matrix,
 					_restrictionChecker,
 					_optimizationPreferences,
 					_originalStateContainer);
 
 				var last = new OverLimitResults(0, 1, 2, 3, 0);
-				ret = _target.HasOverLimitIncreased(last);
+				ret = _target.HasOverLimitIncreased(last, _matrix);
 				Assert.IsTrue(ret);
 			}
 		}
@@ -852,12 +821,11 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 			using (_mocks.Playback())
 			{
 				_target = new OptimizationOverLimitByRestrictionDecider(
-					_matrix,
 					_restrictionChecker,
 					_optimizationPreferences,
 					_originalStateContainer);
 
-				ret = _target.OverLimitsCounts();
+				ret = _target.OverLimitsCounts(_matrix);
 			}
 
 			Assert.AreEqual(1, ret.PreferencesOverLimit);

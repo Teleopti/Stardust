@@ -45,7 +45,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
         private DateOnlyAsDateTimePeriod _dateOnlyAsDateTimePeriod;
         private ISchedulingOptionsCreator _schedulingOptionsCreator;
         private ISchedulingOptions _schedulingOptions;
-        private IOptimizationOverLimitByRestrictionDecider _optimizationOverLimitDecider;
+	    private IOptimizationLimits _optimizationLimits;
 		private IResourceCalculateDelayer _resourceCalculateDelayer;
     	private IMainShiftOptimizeActivitySpecificationSetter _mainShiftOptimizeActivitySpecificationSetter;
         private IProjectionService _projectionService;
@@ -76,7 +76,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
             _dayOffOptimizerValidator = _mocks.StrictMock<IDayOffOptimizerValidator>();
             _schedulingOptionsCreator = _mocks.StrictMock<ISchedulingOptionsCreator>();
             _schedulingOptions = new SchedulingOptions();
-            _optimizationOverLimitDecider = _mocks.StrictMock<IOptimizationOverLimitByRestrictionDecider>();
+		    _optimizationLimits = _mocks.StrictMock<IOptimizationLimits>();
         	_mainShiftOptimizeActivitySpecificationSetter =
         		_mocks.StrictMock<IMainShiftOptimizeActivitySpecificationSetter>();
             _projectionService = _mocks.StrictMock<IProjectionService>();
@@ -92,7 +92,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
                                                        _dayOffsInPeriodCalculator, _dayOffTemplate,
                                                        _dayOffOptimizerConflictHandler, 
                                                        _dayOffOptimizerValidator,
-                                                       _optimizationOverLimitDecider,
+													   _optimizationLimits,
                                                        _schedulingOptionsCreator,
 													   _mainShiftOptimizeActivitySpecificationSetter);
 
@@ -123,9 +123,11 @@ namespace Teleopti.Ccc.DomainTest.Optimization
                 commonMocks();
                 int x;
 				IList<IScheduleDay> y;
-	            Expect.Call(_optimizationOverLimitDecider.OverLimitsCounts()).Return(_overLimitCount);
-                Expect.Call(_optimizationOverLimitDecider.MoveMaxDaysOverLimit())
-                    .Return(false).Repeat.AtLeastOnce();
+				
+	            Expect.Call(_optimizationLimits.OverLimitsCounts(_matrix)).Return(_overLimitCount);
+	            Expect.Call(_optimizationLimits.MoveMaxDaysOverLimit()).Return(false).Repeat.AtLeastOnce();
+
+
                 Expect.Call(_dayOffsInPeriodCalculator.HasCorrectNumberOfDaysOff(_schedulePeriod, out x, out y))
                     .Return(true).OutRef(1, y);
                 Expect.Call(_decisionMaker.Execute(_matrixConverter, _personalScheduleResultDataExtractor,
@@ -164,7 +166,8 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 				Expect.Call(_workTimeBackToLegalStateService.Execute(_matrix, _schedulingOptions, _rollbackService)).Return(true);
                 Expect.Call(_workTimeBackToLegalStateService.RemovedDays).Return(new List<DateOnly> { DateOnly.MinValue });
 				Expect.Call(() => _matrix.LockPeriod(new DateOnlyPeriod())).IgnoreArguments().Repeat.AtLeastOnce();
-				Expect.Call(_optimizationOverLimitDecider.HasOverLimitIncreased(_overLimitCount)).Return(false);
+	            Expect.Call(_optimizationLimits.HasOverLimitIncreased(_overLimitCount, _matrix)).Return(false);
+	            Expect.Call(_optimizationLimits.ValidateMinWorkTimePerWeek(_matrix)).Return(true);
             }
 
             bool ret;
@@ -192,9 +195,10 @@ namespace Teleopti.Ccc.DomainTest.Optimization
                 commonMocks();
                 int x;
 				IList<IScheduleDay> y;
-				Expect.Call(_optimizationOverLimitDecider.OverLimitsCounts()).Return(_overLimitCount);
-                Expect.Call(_optimizationOverLimitDecider.MoveMaxDaysOverLimit())
-                    .Return(false).Repeat.AtLeastOnce();
+		
+	            Expect.Call(_optimizationLimits.OverLimitsCounts(_matrix)).Return(_overLimitCount);
+	            Expect.Call(_optimizationLimits.MoveMaxDaysOverLimit()).Return(false).Repeat.AtLeastOnce();
+
                 Expect.Call(_dayOffsInPeriodCalculator.HasCorrectNumberOfDaysOff(_schedulePeriod, out x, out y)).Return(true).OutRef(1, y);
                 Expect.Call(_decisionMaker.Execute(_matrixConverter, _personalScheduleResultDataExtractor,
                                                    _validatorList)).Return(_extendReduceTimeDecisionMakerResult);
@@ -226,7 +230,8 @@ namespace Teleopti.Ccc.DomainTest.Optimization
                     new ReadOnlyCollection<IScheduleDay>(new List<IScheduleDay> { _scheduleDay }));
                 Expect.Call(() => _rollbackService.Rollback());
             	Expect.Call(() => _matrix.LockPeriod(new DateOnlyPeriod())).IgnoreArguments();
-	            Expect.Call(_optimizationOverLimitDecider.HasOverLimitIncreased(_overLimitCount)).Return(false);
+	            Expect.Call(_optimizationLimits.HasOverLimitIncreased(_overLimitCount, _matrix)).Return(false);
+	            Expect.Call(_optimizationLimits.ValidateMinWorkTimePerWeek(_matrix)).Return(true);
             }
 
             bool ret;
@@ -254,9 +259,9 @@ namespace Teleopti.Ccc.DomainTest.Optimization
                 commonMocks();
                 int x;
 				IList<IScheduleDay> y;
-				Expect.Call(_optimizationOverLimitDecider.OverLimitsCounts()).Return(_overLimitCount);
-                Expect.Call(_optimizationOverLimitDecider.MoveMaxDaysOverLimit())
-                    .Return(false).Repeat.AtLeastOnce();
+	            Expect.Call(_optimizationLimits.OverLimitsCounts(_matrix)).Return(_overLimitCount);
+	            Expect.Call(_optimizationLimits.MoveMaxDaysOverLimit()).Return(false).Repeat.AtLeastOnce();
+
                 Expect.Call(_dayOffsInPeriodCalculator.HasCorrectNumberOfDaysOff(_schedulePeriod, out x, out y)).Return(true).OutRef(1, y);
                 Expect.Call(_decisionMaker.Execute(_matrixConverter, _personalScheduleResultDataExtractor,
                                                    _validatorList)).Return(_extendReduceTimeDecisionMakerResult);
@@ -341,11 +346,62 @@ namespace Teleopti.Ccc.DomainTest.Optimization
         {
             using (_mocks.Record())
             {
-				Expect.Call(_optimizationOverLimitDecider.OverLimitsCounts()).Return(_overLimitCount);
-	            Expect.Call(_optimizationOverLimitDecider.MoveMaxDaysOverLimit()).Return(true);
+				Expect.Call(_matrixConverter.SourceMatrix).Return(_matrix);
+	            Expect.Call(_optimizationLimits.OverLimitsCounts(_matrix)).Return(_overLimitCount);
+	            Expect.Call(_optimizationLimits.MoveMaxDaysOverLimit()).Return(true);
             }
             Assert.IsFalse(_target.Execute());
         }
+
+		[Test]
+		public void ShouldRollbackAndReturnTrueIValidateMinWorktimePerWeekFails()
+		{
+			_extendReduceTimeDecisionMakerResult.DayToLengthen = DateOnly.MaxValue;
+			_extendReduceTimeDecisionMakerResult.DayToShorten = DateOnly.MinValue;
+			_effectiveRestriction = new EffectiveRestriction(new StartTimeLimitation(), new EndTimeLimitation(),new WorkTimeLimitation(), null, null, null,new List<IActivityRestriction>());
+			_dateOnlyAsDateTimePeriod = new DateOnlyAsDateTimePeriod(DateOnly.MinValue, (TimeZoneInfo.Utc));
+			var useCategory = new PossibleStartEndCategory { ShiftCategory = _personAssignment.ShiftCategory };
+			
+			using (_mocks.Record())
+			{
+				commonMocks();
+				int x;
+				IList<IScheduleDay> y;
+				Expect.Call(_optimizationLimits.OverLimitsCounts(_matrix)).Return(_overLimitCount);
+				Expect.Call(_optimizationLimits.MoveMaxDaysOverLimit()).Return(false).Repeat.AtLeastOnce();
+
+				Expect.Call(_dayOffsInPeriodCalculator.HasCorrectNumberOfDaysOff(_schedulePeriod, out x, out y)).Return(true).OutRef(1, y);
+				Expect.Call(_decisionMaker.Execute(_matrixConverter, _personalScheduleResultDataExtractor,_validatorList)).Return(_extendReduceTimeDecisionMakerResult);
+				Expect.Call(_personalSkillPeriodValueCalculator.PeriodValue(IterationOperationOption.DayOffOptimization)).Return(10);
+				Expect.Call(_dayOffsInPeriodCalculator.OutsideOrAtMinimumTargetDaysOff(_schedulePeriod)).Return(false);
+				Expect.Call(() => _scheduleDay.DeleteDayOff());
+				Expect.Call(() => _rollbackService.Modify(_scheduleDay));
+				Expect.Call(_workTimeBackToLegalStateService.Execute(_matrix, _schedulingOptions, _rollbackService)).Return(true);
+				Expect.Call(_workTimeBackToLegalStateService.RemovedDays).Return(new List<DateOnly> { DateOnly.MinValue });
+				Expect.Call(_scheduleDay.DateOnlyAsPeriod).Return(_dateOnlyAsDateTimePeriod);
+				Expect.Call(_scheduleDay.ProjectionService()).Return(_projectionService).Repeat.AtLeastOnce();
+				Expect.Call(_projectionService.CreateProjection()).Return(_visualLayerCollection).Repeat.AtLeastOnce();
+				Expect.Call(_visualLayerCollection.Period()).Return(new DateTimePeriod()).Repeat.AtLeastOnce();
+				Expect.Call(_resourceCalculateDelayer.CalculateIfNeeded(new DateOnly(), null)).IgnoreArguments().Return(true).Repeat.AtLeastOnce();
+				Expect.Call(_originalStateContainerForTagChange.OldPeriodDaysState).Return(new Dictionary<DateOnly, IScheduleDay>{{_extendReduceTimeDecisionMakerResult.DayToLengthen.Value, _scheduleDay},{_extendReduceTimeDecisionMakerResult.DayToShorten.Value, _scheduleDay}}).Repeat.AtLeastOnce();
+				Expect.Call(_scheduleServiceForFlexibleAgents.SchedulePersonOnDay(_scheduleDay, _schedulingOptions, null, _resourceCalculateDelayer, useCategory, _rollbackService)).IgnoreArguments().Return(true).Repeat.AtLeastOnce();
+				Expect.Call(_dayOffsInPeriodCalculator.OutsideOrAtMaximumTargetDaysOff(_schedulePeriod)).Return(true);
+				Expect.Call(_rollbackService.ModificationCollection).Return(new ReadOnlyCollection<IScheduleDay>(new List<IScheduleDay> { _scheduleDay }));
+				Expect.Call(() => _rollbackService.Rollback());
+				Expect.Call(() => _matrix.LockPeriod(new DateOnlyPeriod())).IgnoreArguments();
+				Expect.Call(_optimizationLimits.HasOverLimitIncreased(_overLimitCount, _matrix)).Return(false);
+				Expect.Call(_optimizationLimits.ValidateMinWorkTimePerWeek(_matrix)).Return(false);
+			}
+
+			bool ret;
+
+			using (_mocks.Playback())
+			{
+				ret = _target.Execute();
+			}
+
+			Assert.IsTrue(ret);
+		}
         
     }
 }

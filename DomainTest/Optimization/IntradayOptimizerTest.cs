@@ -33,7 +33,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
         private IEffectiveRestrictionCreator _effectiveRestrictionCreator;
         private IEffectiveRestriction _effectiveRestriction;
         private IScheduleMatrixOriginalStateContainer _workShiftOriginalStateContainer;
-        private IOptimizationOverLimitByRestrictionDecider _optimizationOverLimitDecider;
+	    private IOptimizationLimits _optimizationLimits;
         private ISchedulingOptionsCreator _schedulingOptionsCreator;
         private IResourceCalculateDelayer _resourceCalculateDelayer;
     	private IMainShiftOptimizeActivitySpecificationSetter _mainShiftOptimizeActivitySpecificationSetter;
@@ -62,7 +62,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
             _effectiveRestrictionCreator = _mockRepository.StrictMock<IEffectiveRestrictionCreator>();
             _effectiveRestriction = _mockRepository.StrictMock<IEffectiveRestriction>();
             _workShiftOriginalStateContainer = _mockRepository.StrictMock<IScheduleMatrixOriginalStateContainer>();
-            _optimizationOverLimitDecider = _mockRepository.StrictMock<IOptimizationOverLimitByRestrictionDecider>();
+		    _optimizationLimits = _mockRepository.StrictMock<IOptimizationLimits>();
             _schedulingOptionsCreator = _mockRepository.StrictMock<ISchedulingOptionsCreator>();
             _mainShiftOptimizeActivitySpecificationSetter =
         		_mockRepository.StrictMock<IMainShiftOptimizeActivitySpecificationSetter>();
@@ -81,7 +81,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
                 _rollbackService,
                 _resourceOptimizationHelper,
                 _effectiveRestrictionCreator,
-                _optimizationOverLimitDecider,
+                _optimizationLimits,
                 _workShiftOriginalStateContainer,
                 _schedulingOptionsCreator,
                 _mainShiftOptimizeActivitySpecificationSetter,
@@ -120,9 +120,10 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 				_mainShiftOptimizeActivitySpecificationSetter.SetSpecification(_schedulingOptions, _optimizerPreferences,
 																			   null, _removedDate)).IgnoreArguments();
 
-	        Expect.Call(_optimizationOverLimitDecider.OverLimitsCounts()).Return(_overLimitCounts);
-            Expect.Call(_optimizationOverLimitDecider.MoveMaxDaysOverLimit())
-                    .Return(false).Repeat.AtLeastOnce();
+	        Expect.Call(_optimizationLimits.OverLimitsCounts(_scheduleMatrix)).Return(_overLimitCounts);
+	        Expect.Call(_optimizationLimits.MoveMaxDaysOverLimit()).Return(false).Repeat.AtLeastOnce();
+
+
             Expect.Call(_bitArrayConverter.SourceMatrix)
                 .Return(_scheduleMatrix).Repeat.Any();
 
@@ -148,7 +149,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
             _scheduleMatrix.LockPeriod(new DateOnlyPeriod(_removedDate, _removedDate));
             // NO rollback
             _rollbackService.ClearModificationCollection();
-	        Expect.Call(_optimizationOverLimitDecider.HasOverLimitIncreased(_overLimitCounts)).Return(false);
+	        Expect.Call(_optimizationLimits.HasOverLimitIncreased(_overLimitCounts, _scheduleMatrix)).Return(false);
         }
 
         private void makePeriodBetter()
@@ -162,6 +163,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
         {
             using (_mockRepository.Record())
             {
+				Expect.Call(_bitArrayConverter.SourceMatrix).Return(_scheduleMatrix);
                 makeDecisionMakerFailure();
             }
 
@@ -174,9 +176,9 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 
         private void makeDecisionMakerFailure()
         {
-			Expect.Call(_optimizationOverLimitDecider.OverLimitsCounts()).Return(_overLimitCounts);
-            Expect.Call(_optimizationOverLimitDecider.MoveMaxDaysOverLimit())
-                    .Return(false).Repeat.AtLeastOnce();
+	        Expect.Call(_optimizationLimits.OverLimitsCounts(_scheduleMatrix)).Return(_overLimitCounts);
+	        Expect.Call(_optimizationLimits.MoveMaxDaysOverLimit()).Return(false).Repeat.AtLeastOnce();
+
             Expect.Call(_decisionMaker.Execute(_bitArrayConverter, _personalSkillsDataExtractor))
                 .IgnoreArguments()
                 .Return(null);
@@ -198,9 +200,9 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 					_mainShiftOptimizeActivitySpecificationSetter.SetSpecification(_schedulingOptions, _optimizerPreferences,
 																				   null, _removedDate)).IgnoreArguments();
 
-				Expect.Call(_optimizationOverLimitDecider.OverLimitsCounts()).Return(_overLimitCounts);
-                Expect.Call(_optimizationOverLimitDecider.MoveMaxDaysOverLimit())
-                    .Return(false).Repeat.AtLeastOnce();
+	            Expect.Call(_optimizationLimits.OverLimitsCounts(_scheduleMatrix)).Return(_overLimitCounts);
+	            Expect.Call(_optimizationLimits.MoveMaxDaysOverLimit()).Return(false).Repeat.AtLeastOnce();
+
                 Expect.Call(_bitArrayConverter.SourceMatrix)
                     .Return(_scheduleMatrix).Repeat.AtLeastOnce();
 
@@ -249,13 +251,16 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 		{
 			using (_mockRepository.Record())
 			{
+				Expect.Call(_bitArrayConverter.SourceMatrix).Return(_scheduleMatrix);
 				Expect.Call(_schedulingOptionsCreator.CreateSchedulingOptions(_optimizerPreferences))
 					.Return(_schedulingOptions);
 				Expect.Call(_workShiftOriginalStateContainer.OriginalWorkTime()).Return(new TimeSpan());
 				Expect.Call(() => _schedulingOptions.UseCustomTargetTime = new TimeSpan());
 				Expect.Call(_workShiftOriginalStateContainer.OldPeriodDaysState[_removedDate].GetEditorShift()).Return(null);
-				Expect.Call(_optimizationOverLimitDecider.OverLimitsCounts()).Return(_overLimitCounts);
-				Expect.Call(_optimizationOverLimitDecider.MoveMaxDaysOverLimit()).Return(false);
+				Expect.Call(_optimizationLimits.OverLimitsCounts(_scheduleMatrix)).Return(_overLimitCounts);
+				Expect.Call(_optimizationLimits.MoveMaxDaysOverLimit()).Return(false);
+
+
 				Expect.Call(_decisionMaker.Execute(_bitArrayConverter, _personalSkillsDataExtractor))
 				 .IgnoreArguments()
 				 .Return(_removedDate);
@@ -273,13 +278,16 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 		{
 			using (_mockRepository.Record())
 			{
+				Expect.Call(_bitArrayConverter.SourceMatrix).Return(_scheduleMatrix);
 				Expect.Call(_schedulingOptionsCreator.CreateSchedulingOptions(_optimizerPreferences))
 					.Return(_schedulingOptions);
 				Expect.Call(_workShiftOriginalStateContainer.OriginalWorkTime()).Return(new TimeSpan());
 				Expect.Call(() => _schedulingOptions.UseCustomTargetTime = new TimeSpan());
 				Expect.Call(_workShiftOriginalStateContainer.OldPeriodDaysState[_removedDate].GetEditorShift()).Return(null);
-				Expect.Call(_optimizationOverLimitDecider.OverLimitsCounts()).Return(_overLimitCounts);
-				Expect.Call(_optimizationOverLimitDecider.MoveMaxDaysOverLimit()).Return(false);
+
+				Expect.Call(_optimizationLimits.OverLimitsCounts(_scheduleMatrix)).Return(_overLimitCounts);
+				Expect.Call(_optimizationLimits.MoveMaxDaysOverLimit()).Return(false);
+
 				Expect.Call(_decisionMaker.Execute(_bitArrayConverter, _personalSkillsDataExtractor))
 				 .IgnoreArguments()
 				 .Return(_removedDate);
@@ -309,9 +317,9 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 					_mainShiftOptimizeActivitySpecificationSetter.SetSpecification(_schedulingOptions, _optimizerPreferences,
 																				   null, _removedDate)).IgnoreArguments();
 
-	            Expect.Call(_optimizationOverLimitDecider.OverLimitsCounts()).Return(_overLimitCounts);
-                Expect.Call(_optimizationOverLimitDecider.MoveMaxDaysOverLimit())
-                    .Return(false).Repeat.AtLeastOnce();
+	            Expect.Call(_optimizationLimits.OverLimitsCounts(_scheduleMatrix)).Return(_overLimitCounts);
+	            Expect.Call(_optimizationLimits.MoveMaxDaysOverLimit()).Return(false).Repeat.AtLeastOnce();
+
                 Expect.Call(_bitArrayConverter.SourceMatrix)
                     .Return(_scheduleMatrix).Repeat.AtLeastOnce();
 
@@ -341,7 +349,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
                 // NO rollback
                 _rollbackService.ClearModificationCollection();
                 _scheduleMatrix.LockPeriod(new DateOnlyPeriod(_removedDate, _removedDate));
-	            Expect.Call(_optimizationOverLimitDecider.HasOverLimitIncreased(_overLimitCounts)).Return(false);
+	            Expect.Call(_optimizationLimits.HasOverLimitIncreased(_overLimitCounts, _scheduleMatrix)).Return(false);
             }
 
             using (_mockRepository.Playback())
@@ -381,9 +389,10 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 					_mainShiftOptimizeActivitySpecificationSetter.SetSpecification(_schedulingOptions, _optimizerPreferences,
 																				   null, _removedDate)).IgnoreArguments();
 
-				Expect.Call(_optimizationOverLimitDecider.OverLimitsCounts()).Return(_overLimitCounts);
-                Expect.Call(_optimizationOverLimitDecider.MoveMaxDaysOverLimit())
-                    .Return(false).Repeat.AtLeastOnce();
+	            Expect.Call(_optimizationLimits.OverLimitsCounts(_scheduleMatrix)).Return(_overLimitCounts);
+	            Expect.Call(_optimizationLimits.MoveMaxDaysOverLimit()).Return(false).Repeat.AtLeastOnce();
+
+
                 Expect.Call(_removedScheduleDay.DaySchedulePart())
                     .Return(_removedSchedulePart).Repeat.Once();
                 Expect.Call(_scheduleMatrix.GetScheduleDayByKey(_removedDate))
@@ -435,9 +444,11 @@ namespace Teleopti.Ccc.DomainTest.Optimization
         {
             using (_mockRepository.Record())
             {
-	            Expect.Call(_optimizationOverLimitDecider.OverLimitsCounts()).Return(_overLimitCounts);
-                Expect.Call(_optimizationOverLimitDecider.MoveMaxDaysOverLimit())
-                    .Return(false).Repeat.AtLeastOnce();
+				Expect.Call(_bitArrayConverter.SourceMatrix).Return(_scheduleMatrix);
+	            Expect.Call(_optimizationLimits.OverLimitsCounts(_scheduleMatrix)).Return(_overLimitCounts);
+	            Expect.Call(_optimizationLimits.MoveMaxDaysOverLimit()).Return(false).Repeat.AtLeastOnce();
+
+
                 Expect.Call(_decisionMaker.Execute(_bitArrayConverter, _personalSkillsDataExtractor))
                     .Return(_removedDate);
                 Expect.Call(_dailyValueCalculator.DayValue(_removedDate))

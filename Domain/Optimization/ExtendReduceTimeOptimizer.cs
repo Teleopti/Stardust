@@ -28,7 +28,7 @@ namespace Teleopti.Ccc.Domain.Optimization
         private readonly IEffectiveRestrictionCreator _effectiveRestrictionCreator;
         private readonly IResourceCalculateDaysDecider _decider;
         private readonly IScheduleMatrixOriginalStateContainer _originalStateContainerForTagChange;
-        private readonly IOptimizationOverLimitByRestrictionDecider _optimizationOverLimitDecider;
+	    private readonly IOptimizationLimits _optimizationLimits;
         private readonly ISchedulingOptions _schedulingOptions;
     	private readonly IMainShiftOptimizeActivitySpecificationSetter _mainShiftOptimizeActivitySpecificationSetter;
 
@@ -45,7 +45,7 @@ namespace Teleopti.Ccc.Domain.Optimization
             IEffectiveRestrictionCreator effectiveRestrictionCreator,
             IResourceCalculateDaysDecider decider,
             IScheduleMatrixOriginalStateContainer originalStateContainerForTagChange,
-            IOptimizationOverLimitByRestrictionDecider optimizationOverLimitDecider, 
+ 			IOptimizationLimits optimizationLimits,
             ISchedulingOptions schedulingOptions,
 			IMainShiftOptimizeActivitySpecificationSetter mainShiftOptimizeActivitySpecificationSetter)
         {
@@ -61,14 +61,15 @@ namespace Teleopti.Ccc.Domain.Optimization
     	    _effectiveRestrictionCreator = effectiveRestrictionCreator;
             _decider = decider;
             _originalStateContainerForTagChange = originalStateContainerForTagChange;
-            _optimizationOverLimitDecider = optimizationOverLimitDecider;
+    		_optimizationLimits = optimizationLimits;
             _schedulingOptions = schedulingOptions;
         	_mainShiftOptimizeActivitySpecificationSetter = mainShiftOptimizeActivitySpecificationSetter;
         }
 
         public bool Execute()
         {
-	        var lastOverLimitCount = _optimizationOverLimitDecider.OverLimitsCounts();
+	        var lastOverLimitCount = _optimizationLimits.OverLimitsCounts(_matrixConverter.SourceMatrix);
+
             if (daysOverMax())
                 return false;
 
@@ -137,11 +138,20 @@ namespace Teleopti.Ccc.Domain.Optimization
                 return false;
             }
 
-            if (_optimizationOverLimitDecider.HasOverLimitIncreased(lastOverLimitResults))
-            {
-                rollbackAndResourceCalculate(dateOnly);
-                return true;
-            }
+	        if (_optimizationLimits.HasOverLimitIncreased(lastOverLimitResults, _matrixConverter.SourceMatrix))
+	        {
+				rollbackAndResourceCalculate(dateOnly);
+				return true;   
+	        }
+
+			var minWorkTimePerWeekOk = _optimizationLimits.ValidateMinWorkTimePerWeek(_matrixConverter.SourceMatrix);
+
+			if (!minWorkTimePerWeekOk)
+			{
+				rollbackAndResourceCalculate(dateOnly);
+				return true;
+			}
+
 
             double newPeriodValue = _periodValueCalculator.PeriodValue(IterationOperationOption.WorkShiftOptimization);
             if (newPeriodValue > oldPeriodValue)
@@ -203,7 +213,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 
         private bool daysOverMax()
         {
-            return _optimizationOverLimitDecider.MoveMaxDaysOverLimit();
+	        return _optimizationLimits.MoveMaxDaysOverLimit();
         }
     }
 }

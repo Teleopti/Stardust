@@ -3,7 +3,8 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Scheduling.Rules
 {
-	public class MinWeekWorkTimeRuleToggle31992Off : INewBusinessRule 
+
+	public class MinWeekWorkTimeRuleToggle31992Off : IMinWeekWorkTimeRule
 	{
 		public bool HaltModify { get; set; }
 		public bool ForDelete { get; set; }

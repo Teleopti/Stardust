@@ -4,6 +4,7 @@ using Rhino.Mocks;
 using Teleopti.Ccc.Domain.Optimization;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.ResourceCalculation.IntraIntervalAnalyze;
+using Teleopti.Ccc.Domain.Scheduling.Rules;
 using Teleopti.Ccc.Domain.Scheduling.TeamBlock;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.WinCode.Scheduling;
@@ -37,6 +38,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 		private IScheduleMatrixLockableBitArrayConverterEx _scheduleMatrixLockableBitArrayConverterEx;
 		private IEffectiveRestrictionCreator _effectiveRestrictionCreator;
 		private IIntraIntervalFinderService _intraIntervalFinderService;
+		private IMinWeekWorkTimeRule _minWeekWorkTimeRule;
 
 		[SetUp]
 		public void Setup()
@@ -63,6 +65,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 			_scheduleMatrixLockableBitArrayConverterEx = _mocks.StrictMock<IScheduleMatrixLockableBitArrayConverterEx>();
 			_effectiveRestrictionCreator = _mocks.StrictMock<IEffectiveRestrictionCreator>();
 			_intraIntervalFinderService = _mocks.StrictMock<IIntraIntervalFinderService>();
+			_minWeekWorkTimeRule = _mocks.StrictMock<IMinWeekWorkTimeRule>();
 
 			_target = new IntradayOptimizer2Creator(_scheduleMatrixContainerList,
 			                                        _workShiftContainerList,
@@ -77,7 +80,8 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 												   _skillIntervalDataDivider,
 												   _skillIntervalDataAggregator,
 												   _effectiveRestrictionCreator,
-												   _intraIntervalFinderService);
+												   _intraIntervalFinderService,
+												   _minWeekWorkTimeRule);
 		}
 
 		[Test]

@@ -38,7 +38,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
         private IEffectiveRestriction _effectiveRestriction;
         private IEffectiveRestrictionCreator _effectiveRestrictionCreator;
         private IScheduleMatrixOriginalStateContainer _workShiftOriginalStateContainer;
-        private IOptimizationOverLimitByRestrictionDecider _optimizationOverLimitDecider;
+	    private IOptimizationLimits _optimizationLimits;
         private ISchedulingOptionsCreator _schedulingOptionsCreator;
 		private IResourceCalculateDelayer _resourceCalculateDelayer;
     	private IProjectionService _projectionService;
@@ -74,7 +74,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
             _effectiveRestrictionCreator = _mockRepository.StrictMock<IEffectiveRestrictionCreator>();
             _effectiveRestriction = new EffectiveRestriction(new StartTimeLimitation(), new EndTimeLimitation(), new WorkTimeLimitation(), null, null, null, new List<IActivityRestriction>());
             _workShiftOriginalStateContainer = _mockRepository.StrictMock<IScheduleMatrixOriginalStateContainer>();
-            _optimizationOverLimitDecider = _mockRepository.StrictMock<IOptimizationOverLimitByRestrictionDecider>();
+		    _optimizationLimits = _mockRepository.StrictMock<IOptimizationLimits>();
             _schedulingOptionsCreator = _mockRepository.StrictMock<ISchedulingOptionsCreator>();
         	_projectionService = _mockRepository.StrictMock<IProjectionService>();
         	_visualLayerCollection = _mockRepository.StrictMock<IVisualLayerCollection>();
@@ -97,7 +97,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
         		_resourceOptimizationHelper,
         		_effectiveRestrictionCreator,
         		_workShiftOriginalStateContainer,
-        		_optimizationOverLimitDecider,
+				_optimizationLimits,
         		_schedulingOptionsCreator,
         		_mainShiftOptimizeActivitySpecificationSetter
         		);
@@ -128,7 +128,9 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 				tryScheduleFirstDate(true, false);
 				tryScheduleSecondDate(true);
 				Expect.Call(_periodValueCalculator.PeriodValue(IterationOperationOption.WorkShiftOptimization)).Return(1);
-	            Expect.Call(_optimizationOverLimitDecider.HasOverLimitIncreased(_overLimitCounts)).Return(false);
+	           
+	            Expect.Call(_optimizationLimits.HasOverLimitIncreased(_overLimitCounts, _scheduleMatrix)).Return(false);
+				Expect.Call(_optimizationLimits.ValidateMinWorkTimePerWeek(_scheduleMatrix)).Return(true);
             }
 
             using (_mockRepository.Playback())
@@ -143,6 +145,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
         {
             using (_mockRepository.Record())
             {
+	            Expect.Call(_bitArrayConverter.SourceMatrix).Return(_scheduleMatrix);
                 Expect.Call(_periodValueCalculator.PeriodValue(IterationOperationOption.WorkShiftOptimization)).Return(2);
 
                 makeDecisionMakerFailure();
@@ -161,9 +164,11 @@ namespace Teleopti.Ccc.DomainTest.Optimization
                 .Return(_schedulingOptions);
         	Expect.Call(_workShiftOriginalStateContainer.OriginalWorkTime()).Return(new TimeSpan());
 			Expect.Call(() => _schedulingOptions.UseCustomTargetTime = new TimeSpan());
-			Expect.Call(_optimizationOverLimitDecider.OverLimitsCounts()).Return(_overLimitCounts);
-            Expect.Call(_optimizationOverLimitDecider.MoveMaxDaysOverLimit())
-                    .Return(false).Repeat.AtLeastOnce();
+
+	        Expect.Call(_optimizationLimits.OverLimitsCounts(_scheduleMatrix)).Return(_overLimitCounts);
+	        Expect.Call(_optimizationLimits.MoveMaxDaysOverLimit()).Return(false).Repeat.AtLeastOnce();
+
+
             Expect.Call(_decisionMaker.Execute(_bitArrayConverter, _personalSkillsDataExtractor))
                 .IgnoreArguments()
                 .Return(new List<DateOnly>());
@@ -283,15 +288,50 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 			}
 		}
 
+		[Test]
+		public void ShouldRollbackIfMinWorktimePerWeekValidatefails()
+		{
+			using (_mockRepository.Record())
+			{
+				setupForScheduling();
+				tryScheduleFirstDate(true, false);
+				tryScheduleSecondDate(true);
+				Expect.Call(_periodValueCalculator.PeriodValue(IterationOperationOption.WorkShiftOptimization)).Return(1);
+				
+
+				Expect.Call(_optimizationLimits.HasOverLimitIncreased(_overLimitCounts, _scheduleMatrix)).Return(false);
+				Expect.Call(_optimizationLimits.ValidateMinWorkTimePerWeek(_scheduleMatrix)).Return(false);
+
+				Expect.Call(() => _rollbackService.Rollback());
+				resourceCalculation();
+				Expect.Call(_mostUnderStaffSchedulePart.ProjectionService()).Return(_projectionService);
+				Expect.Call(_mostOverStaffSchedulePart.ProjectionService()).Return(_projectionService);
+				Expect.Call(_projectionService.CreateProjection()).Return(_visualLayerCollection).Repeat.Twice();
+				Expect.Call(_visualLayerCollection.Period()).Return(new DateTimePeriod()).Repeat.Twice();
+				_scheduleMatrix.LockPeriod(new DateOnlyPeriod(_mostUnderStaffDate, _mostUnderStaffDate));
+				_scheduleMatrix.LockPeriod(new DateOnlyPeriod(_mostOverStaffDate, _mostOverStaffDate));
+			}
+
+			using (_mockRepository.Playback())
+			{
+				var result = _target.Execute();
+				Assert.IsTrue(result);
+			}
+		}
+
 		private void setupForScheduling()
 		{
 			Expect.Call(_schedulingOptionsCreator.CreateSchedulingOptions(_optimizerPreferences))
 					.Return(_schedulingOptions);
 		    Expect.Call(_workShiftOriginalStateContainer.OriginalWorkTime()).Return(new TimeSpan());
 			Expect.Call(() => _schedulingOptions.UseCustomTargetTime = new TimeSpan());
-			Expect.Call(_optimizationOverLimitDecider.OverLimitsCounts()).Return(_overLimitCounts);
-			Expect.Call(_optimizationOverLimitDecider.MoveMaxDaysOverLimit())
-				.Return(false).Repeat.AtLeastOnce();
+			//Expect.Call(_optimizationOverLimitDecider.OverLimitsCounts()).Return(_overLimitCounts);
+			//Expect.Call(_optimizationOverLimitDecider.MoveMaxDaysOverLimit()).Return(false).Repeat.AtLeastOnce();
+
+			Expect.Call(_optimizationLimits.OverLimitsCounts(_scheduleMatrix)).Return(_overLimitCounts);
+			Expect.Call(_optimizationLimits.MoveMaxDaysOverLimit()).Return(false).Repeat.AtLeastOnce();
+			
+
 			Expect.Call(_bitArrayConverter.SourceMatrix)
 				.Return(_scheduleMatrix).Repeat.AtLeastOnce();
 			Expect.Call(_periodValueCalculator.PeriodValue(IterationOperationOption.WorkShiftOptimization))

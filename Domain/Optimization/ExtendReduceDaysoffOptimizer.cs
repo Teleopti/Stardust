@@ -32,7 +32,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 		private readonly IDayOffTemplate _dayOffTemplate;
 		private readonly IDayOffOptimizerConflictHandler _dayOffOptimizerConflictHandler;
 		private readonly IDayOffOptimizerValidator _dayOffOptimizerValidator;
-		private readonly IOptimizationOverLimitByRestrictionDecider _optimizationOverLimitDecider;
+		private readonly IOptimizationLimits _optimizationLimits;
 		private readonly ISchedulingOptionsCreator _schedulingOptionsCreator;
 		private readonly IMainShiftOptimizeActivitySpecificationSetter _mainShiftOptimizeActivitySpecificationSetter;
 
@@ -55,7 +55,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 			IDayOffTemplate dayOffTemplate,
 			IDayOffOptimizerConflictHandler dayOffOptimizerConflictHandler,
 			IDayOffOptimizerValidator dayOffOptimizerValidator,
-			IOptimizationOverLimitByRestrictionDecider optimizationOverLimitDecider,
+			IOptimizationLimits optimizationLimits,
 			ISchedulingOptionsCreator schedulingOptionsCreator,
 			IMainShiftOptimizeActivitySpecificationSetter mainShiftOptimizeActivitySpecificationSetter
 			)
@@ -78,14 +78,15 @@ namespace Teleopti.Ccc.Domain.Optimization
 			_dayOffTemplate = dayOffTemplate;
 			_dayOffOptimizerConflictHandler = dayOffOptimizerConflictHandler;
 			_dayOffOptimizerValidator = dayOffOptimizerValidator;
-			_optimizationOverLimitDecider = optimizationOverLimitDecider;
+			_optimizationLimits = optimizationLimits;
 			_schedulingOptionsCreator = schedulingOptionsCreator;
 			_mainShiftOptimizeActivitySpecificationSetter = mainShiftOptimizeActivitySpecificationSetter;
 		}
 
 		public bool Execute()
 		{
-			var lastOverLimitCount = _optimizationOverLimitDecider.OverLimitsCounts();
+			var sourceMatrix = _matrixConverter.SourceMatrix;
+			var lastOverLimitCount = _optimizationLimits.OverLimitsCounts(sourceMatrix);
 			if (daysOverMax())
 				return false;
 
@@ -106,7 +107,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 				return false;
 
 			var oldPeriodValue = _periodValueCalculator.PeriodValue(IterationOperationOption.DayOffOptimization);
-			var sourceMatrix = _matrixConverter.SourceMatrix;
+			
 			var schedulingOptions = _schedulingOptionsCreator.CreateSchedulingOptions(_optimizerPreferences);
 
 			if (daysToBeRescheduled.DayToLengthen.HasValue && !_dayOffsInPeriodCalculator.OutsideOrAtMinimumTargetDaysOff(schedulePeriod))
@@ -147,11 +148,20 @@ namespace Teleopti.Ccc.Domain.Optimization
 					return false;
 				}
 
-				if (_optimizationOverLimitDecider.HasOverLimitIncreased(lastOverLimitCount))
+				if (_optimizationLimits.HasOverLimitIncreased(lastOverLimitCount, sourceMatrix))
+				{
+					rollbackAndResourceCalculate();
+					return true;	
+				}
+
+				var minWorkTimePerWeekOk = _optimizationLimits.ValidateMinWorkTimePerWeek(sourceMatrix);
+
+				if (!minWorkTimePerWeekOk)
 				{
 					rollbackAndResourceCalculate();
 					return true;
 				}
+
 
 				var currentPeriodValue = _periodValueCalculator.PeriodValue(IterationOperationOption.DayOffOptimization);
 				if (currentPeriodValue > oldPeriodValue)
@@ -303,7 +313,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 
 		private bool daysOverMax()
 		{
-			return _optimizationOverLimitDecider.MoveMaxDaysOverLimit();
+			return _optimizationLimits.MoveMaxDaysOverLimit();
 		}
 
 		private class changedDay

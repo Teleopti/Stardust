@@ -5,6 +5,7 @@ using Teleopti.Ccc.Domain.ResourceCalculation.IntraIntervalAnalyze;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Scheduling.NonBlendSkill;
 using Teleopti.Ccc.Domain.Scheduling.Restrictions;
+using Teleopti.Ccc.Domain.Scheduling.Rules;
 using Teleopti.Ccc.Domain.Scheduling.SeatLimitation;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Interfaces.Domain;
@@ -25,6 +26,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 		private readonly IScheduleMatrixLockableBitArrayConverterEx _scheduleMatrixLockableBitArrayConverterEx;
 		private readonly IEffectiveRestrictionCreator _effectiveRestrictionCreator;
 		private readonly IIntraIntervalFinderService _intraIntervalFinderService;
+		private readonly IMinWeekWorkTimeRule _minWeekWorkTimeRule;
 
 		public MoveTimeOptimizerCreator(
 			IList<IScheduleMatrixOriginalStateContainer> scheduleMatrixContainerList,
@@ -38,7 +40,8 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 			ICurrentTeleoptiPrincipal currentTeleoptiPrincipal,
 			IScheduleMatrixLockableBitArrayConverterEx scheduleMatrixLockableBitArrayConverterEx,
 			IEffectiveRestrictionCreator effectiveRestrictionCreator,
-			IIntraIntervalFinderService intraIntervalFinderService )
+			IIntraIntervalFinderService intraIntervalFinderService,
+			IMinWeekWorkTimeRule minWeekWorkTimeRule)
 		{
 			_scheduleMatrixContainerList = scheduleMatrixContainerList;
 			_workShiftContainerList = workShiftContainerList;
@@ -52,6 +55,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 			_scheduleMatrixLockableBitArrayConverterEx = scheduleMatrixLockableBitArrayConverterEx;
 			_effectiveRestrictionCreator = effectiveRestrictionCreator;
 			_intraIntervalFinderService = intraIntervalFinderService;
+			_minWeekWorkTimeRule = minWeekWorkTimeRule;
 		}
 
 		/// <summary>
@@ -95,7 +99,8 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 				IScheduleMatrixOriginalStateContainer workShiftContainer = _workShiftContainerList[index];
 
 				var restrictionChecker = new RestrictionChecker();
-				var optimizerOverLimitDecider = new OptimizationOverLimitByRestrictionDecider(scheduleMatrixPro, restrictionChecker, _optimizerPreferences, scheduleMatrixContainer);
+				var optimizerOverLimitDecider = new OptimizationOverLimitByRestrictionDecider(restrictionChecker, _optimizerPreferences, scheduleMatrixContainer);
+				var optimizationLimits = new OptimizationLimits(optimizerOverLimitDecider, _minWeekWorkTimeRule);
 
 				var schedulingOptionsCreator = new SchedulingOptionsCreator();
 				IMainShiftOptimizeActivitySpecificationSetter mainShiftOptimizeActivitySpecificationSetter = new MainShiftOptimizeActivitySpecificationSetter();
@@ -115,7 +120,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 						resourceOptimizationHelper,
 						_effectiveRestrictionCreator,
 						workShiftContainer,
-						optimizerOverLimitDecider,
+						optimizationLimits,
 						schedulingOptionsCreator,
 						mainShiftOptimizeActivitySpecificationSetter);
 

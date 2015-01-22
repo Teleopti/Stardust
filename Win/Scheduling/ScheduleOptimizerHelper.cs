@@ -16,6 +16,7 @@ using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Scheduling.DayOffScheduling;
 using Teleopti.Ccc.Domain.Scheduling.Restrictions;
+using Teleopti.Ccc.Domain.Scheduling.Rules;
 using Teleopti.Ccc.Domain.Scheduling.ScheduleTagging;
 using Teleopti.Ccc.Domain.Scheduling.TeamBlock;
 using Teleopti.Ccc.Domain.Security.Principal;
@@ -100,7 +101,8 @@ namespace Teleopti.Ccc.Win.Scheduling
 				_container.Resolve<ISkillIntervalDataDivider>(),
 				_container.Resolve<ISkillIntervalDataAggregator>(),
 				_container.Resolve<IEffectiveRestrictionCreator>(),
-				_container.Resolve<IIntraIntervalFinderService>());
+				_container.Resolve<IIntraIntervalFinderService>(),
+				_container.Resolve<IMinWeekWorkTimeRule>());
 
 			IList<IIntradayOptimizer2> optimizers = creator.Create();
 			IScheduleOptimizationService service = new IntradayOptimizerContainer(optimizers);
@@ -145,7 +147,8 @@ namespace Teleopti.Ccc.Win.Scheduling
 											 new CurrentTeleoptiPrincipal(),
 											 scheduleMatrixLockableBitArrayConverterEx,
 											 _container.Resolve<IEffectiveRestrictionCreator>(),
-											 _container.Resolve<IIntraIntervalFinderService>());
+											 _container.Resolve<IIntraIntervalFinderService>(),
+											 _container.Resolve<IMinWeekWorkTimeRule>());
 
 			IList<IMoveTimeOptimizer> optimizers = creator.Create();
 			IScheduleOptimizationService service = new MoveTimeOptimizerContainer(optimizers, periodValueCalculator);
@@ -564,15 +567,16 @@ namespace Teleopti.Ccc.Win.Scheduling
 						var restrictionChecker = new RestrictionChecker();
 						var matrix = backToLegalStateSolverContainer.MatrixOriginalStateContainer.ScheduleMatrix;
 						var originalStateContainer = backToLegalStateSolverContainer.MatrixOriginalStateContainer;
-						var optimizationOverLimitByRestrictionDecider = new OptimizationOverLimitByRestrictionDecider(matrix,
-						                                                                                              restrictionChecker,
-						                                                                                              optimizerPreferences,
-						                                                                                              originalStateContainer);
-						var overLimitCounts = optimizationOverLimitByRestrictionDecider.OverLimitsCounts();
+						var optimizationOverLimitByRestrictionDecider = new OptimizationOverLimitByRestrictionDecider(restrictionChecker, optimizerPreferences, originalStateContainer);
+
+						var optimizationLimits = new OptimizationLimits(optimizationOverLimitByRestrictionDecider, _container.Resolve<IMinWeekWorkTimeRule>());
+						var overLimitCounts = optimizationLimits.OverLimitsCounts(matrix);
+
+
 						if (overLimitCounts.AvailabilitiesOverLimit > 0 || overLimitCounts.MustHavesOverLimit > 0 ||
 						    overLimitCounts.PreferencesOverLimit > 0 || overLimitCounts.RotationsOverLimit > 0 ||
 						    overLimitCounts.StudentAvailabilitiesOverLimit > 0 ||
-						    optimizationOverLimitByRestrictionDecider.MoveMaxDaysOverLimit())
+							optimizationLimits.MoveMaxDaysOverLimit())
 						{
 							var rollbackService = new SchedulePartModifyAndRollbackService(_stateHolder, _scheduleDayChangeCallback,
 								new ScheduleTagSetter(
@@ -1053,7 +1057,9 @@ namespace Teleopti.Ccc.Win.Scheduling
 
             var restrictionChecker = new RestrictionChecker();
             var optimizationUserPreferences = _container.Resolve<IOptimizationPreferences>();
-            var optimizerOverLimitDecider = new OptimizationOverLimitByRestrictionDecider(scheduleMatrix, restrictionChecker, optimizationUserPreferences, originalStateContainer);
+            var optimizerOverLimitDecider = new OptimizationOverLimitByRestrictionDecider(restrictionChecker, optimizationUserPreferences, originalStateContainer);
+
+	        var optimizationLimits = new OptimizationLimits(optimizerOverLimitDecider, _container.Resolve<IMinWeekWorkTimeRule>());
 
 			var resourceOptimizationHelper = _container.Resolve<IResourceOptimizationHelper>();
 			IDeleteAndResourceCalculateService deleteAndResourceCalculateService =
@@ -1083,7 +1089,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 												  _container.Resolve<IDayOffOptimizerValidator>(),
                                                   dayOffOptimizerConflictHandler,
                                                   originalStateContainer,
-                                                  optimizerOverLimitDecider,
+                                                  optimizationLimits,
                                                   nightRestWhiteSpotSolverService,
 												  _container.Resolve<ISchedulingOptionsCreator>(),
 												  mainShiftOptimizeActivitySpecificationSetter,
