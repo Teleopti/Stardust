@@ -37,7 +37,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Host
 			new Thread(o =>
 			{
 				Thread.Sleep(1000);
-				PreserveStack.ForInnerOf(exception);
+				PreserveStack.For(exception);
 				throw exception;
 			}).Start();
 		}
