@@ -35,7 +35,11 @@ namespace Teleopti.Ccc.Domain.Security.Principal
 			foreach (var enabledLicenseOption in LicenseSchema.GetActiveLicenseSchema(dataSource).EnabledLicenseOptions)
 			{
 				enabledLicenseOption.EnableApplicationFunctions(applicationFunctions);
-				enabledLicenseOption.EnabledApplicationFunctions.ForEach(f => licensedFunctions.Add(f));
+				//Don't change this foreach to linq, please!
+				foreach (var function in enabledLicenseOption.EnabledApplicationFunctions)
+				{
+					licensedFunctions.Add(function);
+				}
 			}
 			return licensedFunctions;
     	}
