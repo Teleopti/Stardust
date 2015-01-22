@@ -13,28 +13,21 @@
 		<ProductName>Teleopti CCC</ProductName>
 		<TfsLibraryLocation>C:\Program Files (x86)\Microsoft Visual Studio 10.0\Common7\IDE\ReferenceAssemblies\v2.0</TfsLibraryLocation>
 		<SDKDocProj>$(CCNetWorkingDirectory)\docSdkx64.shfbproj</SDKDocProj>
-		<SDKDocOutput>C:\Help\Documentation.chm</SDKDocOutput>
+		<SDKDocOutput>$(CCNetWorkingDirectory)\Documentation.chm</SDKDocOutput>
 		<Configuration>Release</Configuration>
 		<ClientProperties>$(CCNetWorkingDirectory)\Teleopti.Ccc.SmartClientPortal\Teleopti.Ccc.SmartClientPortal.Shell\Properties</ClientProperties>
 		<MyTimeProperties>$(CCNetWorkingDirectory)\AgentPortal\Teleopti.Ccc.AgentPortal\Properties</MyTimeProperties>
 		<SupportToolProperties>$(CCNetWorkingDirectory)\Teleopti.Support.Tool\Properties</SupportToolProperties>
-		<DeployShare>D:\Installation\PreviousBuilds</DeployShare>
+		<DeployShare>$(CCNetWorkingDirectory)\DeployShare</DeployShare>
 		<DocSrcPath>\\integration\Documentation</DocSrcPath>
-		<MSIShare>D:\Installation\msi</MSIShare>
+		<MSIShare>$(CCNetWorkingDirectory)\MsiShare</MSIShare>
 		<Dependencies>\\a380\T-Files\RnD\MSI_Dependencies</Dependencies>
 		<ObfuscateCmd>$(CCNetWorkingDirectory)\ccnet\Obfuscate\RunObfuscation.cmd</ObfuscateCmd>
 		<CreatedDBReleaseCmd>$(CCNetWorkingDirectory)\Database\Tools\VersionBuild.bat</CreatedDBReleaseCmd>
-		<SharedMSIWorkingFolder>c:\Temp</SharedMSIWorkingFolder>
 		<FetchContextHelp>$(CCNetWorkingDirectory)\ccnet\httpGet\GetSDKFilesFromDMZ.bat</FetchContextHelp>
 		<FullBuild>Yes</FullBuild>
 		<ProductsToBuild>0</ProductsToBuild> <!-- saying all 5 different MSI -->
 		<ServerRepo>$(HgServer)/$(Repo)</ServerRepo>
-	</PropertyGroup>
-	
-	<PropertyGroup Condition="'$(CCNetProject.Substring(0, 3))' == 'PBI'" > <!-- Buildning PBI/Feature msi -->
-		<FullBuild>No</FullBuild>
-		<ProductsToBuild>1</ProductsToBuild> <!-- only Server MSI -->
-		<MSIShare>D:\Installation\PBImsi</MSIShare>
 	</PropertyGroup>
 
 	<PropertyGroup Condition="'$(CCNetProject)' == 'BuildMSI-root'" >
@@ -131,25 +124,8 @@
 	<Exec Command="del &quot;$(MSIShare)\$(CCCVersion)\$(CCNetProject).zip&quot;"/>
 	<Exec Command="rename &quot;$(MSIShare)\$(CCCVersion)\Teleopti CCC $(CCCVersion).zip&quot; $(CCNetProject).zip"/>
   </Target>
-  
-  <Target Name="MoveToKanbox">
-	<PropertyGroup Condition="'$(FullBuild)' == 'No'">
-		<ZIPName>$(CCNetProject)</ZIPName>
-		<KanboxShare>$(MSIShare)</KanboxShare>
-	</PropertyGroup>
-	
-	<PropertyGroup Condition="'$(FullBuild)' == 'Yes'">
-		<ZIPName>Teleopti CCC $(CCCVersion)</ZIPName>
-		<KanboxShare>D:\Installation\PBImsi</KanboxShare>
-	</PropertyGroup>
-	
-	<Exec Command="rd &quot;$(KanboxShare)\Kanbox\$(CCNetProject)&quot; /Q /S"/>
-	<Exec Command="md &quot;$(KanboxShare)\Kanbox\$(CCNetProject)&quot;" />
 
-	<Exec Command="copy &quot;$(MSIShare)\$(CCCVersion)\$(ZIPName).zip&quot; &quot;$(KanboxShare)\Kanbox\$(CCNetProject)\$(ZIPName).zip&quot;"/>
-  </Target>
-
-  <Target Name="UploadFTP" DependsOnTargets="ZipServerInstall;RenameZip;MoveToKanbox;UploadRoot;UploadNew">
+  <Target Name="UploadFTP" DependsOnTargets="ZipServerInstall;RenameZip;UploadRoot;UploadNew">
     <Message Text="Calling upload target"/>
   </Target>
   
