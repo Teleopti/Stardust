@@ -1,10 +1,10 @@
 ﻿using System.Collections.ObjectModel;
 using System.Configuration;
 using System.Globalization;
+using Teleopti.Analytics.Etl.Interfaces.Common;
 using Teleopti.Analytics.Etl.Interfaces.Transformer;
 using Teleopti.Analytics.Etl.Transformer.Job;
 using Teleopti.Analytics.Etl.Transformer.Job.Jobs;
-using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Analytics.Etl.ConfigTool.Transformer
 {
@@ -21,12 +21,14 @@ namespace Teleopti.Analytics.Etl.ConfigTool.Transformer
 		{
 			get
 			{
-				var jobParameters = new JobParameters(null, 1,
-												  _baseConfiguration.TimeZoneCode,
-												  _baseConfiguration.IntervalLength.Value,
-												  ConfigurationManager.AppSettings["cube"],
-												  ConfigurationManager.AppSettings["pmInstallation"],
-												  CultureInfo.CurrentCulture, _baseConfiguration.EtlToggleManager);
+				var jobParameters = new JobParameters(
+					null, 1,
+					_baseConfiguration.TimeZoneCode,
+					_baseConfiguration.IntervalLength.Value,
+					ConfigurationManager.AppSettings["cube"],
+					ConfigurationManager.AppSettings["pmInstallation"],
+					CultureInfo.CurrentCulture, _baseConfiguration.ToggleManager
+					);
 
 				jobParameters.Helper = new JobHelper();
 

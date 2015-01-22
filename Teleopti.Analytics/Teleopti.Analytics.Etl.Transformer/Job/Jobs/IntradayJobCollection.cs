@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using Teleopti.Analytics.Etl.Interfaces.Transformer;
 using Teleopti.Analytics.Etl.Transformer.Job.Steps;
+using Teleopti.Ccc.Domain.FeatureFlags;
 
 namespace Teleopti.Analytics.Etl.Transformer.Job.Jobs
 {
@@ -25,7 +26,7 @@ namespace Teleopti.Analytics.Etl.Transformer.Job.Jobs
 			Add(new StageAbsenceJobStep(jobParameters));
 			Add(new StageScenarioJobStep(jobParameters));
 			Add(new StageShiftCategoryJobStep(jobParameters));
-			if (!jobParameters.EtlToggleManager.IsEnabled("ETL_SpeedUpETL_30791"))
+			if (!jobParameters.ToggleManager.IsEnabled(Toggles.ETL_SpeedUpETL_30791))
 			{
 				Add(new IntradayStageScheduleJobStep(jobParameters));
 				Add(new IntradayStageScheduleDayOffCountJobStep(jobParameters));
@@ -71,14 +72,14 @@ namespace Teleopti.Analytics.Etl.Transformer.Job.Jobs
 			Add(new BridgeGroupPagePersonJobStep(jobParameters));
 
 			// FACT TABLES
-			if (!jobParameters.EtlToggleManager.IsEnabled("ETL_SpeedUpETL_30791"))
+			if (!jobParameters.ToggleManager.IsEnabled(Toggles.ETL_SpeedUpETL_30791))
 			{
 				Add(new FactScheduleJobStep(jobParameters, true));
 				Add(new FactScheduleDayCountJobStep(jobParameters, true));
 			}
 			Add(new FactSchedulePreferenceJobStep(jobParameters, true));
 			Add(new FactAvailabilityJobStep(jobParameters, true));
-			var agentQueueIntradayEnabled = jobParameters.EtlToggleManager.IsEnabled("PBI30787OnlyLatestQueueAgentStatistics");
+			var agentQueueIntradayEnabled = jobParameters.ToggleManager.IsEnabled(Toggles.ETL_OnlyLatestQueueAgentStatistics_30787);
 			if (agentQueueIntradayEnabled)
 			{
 				Add(new IntradayFactQueueJobStep(jobParameters));

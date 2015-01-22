@@ -1,4 +1,5 @@
 ﻿using System.Windows.Controls;
+using Teleopti.Analytics.Etl.Interfaces.Common;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Analytics.Etl.ConfigTool.Gui.View

@@ -141,7 +141,6 @@
     <Compile Include="Domain\IAgentBadgeWithRankTransactionRepository.cs" />
     <Compile Include="Domain\IAgentBadgeWithRankRepository.cs" />
     <Compile Include="Domain\IGamificationSetting.cs" />
-    <Compile Include="Domain\IEtlToggleManager.cs" />
     <Compile Include="Domain\INotificationClient.cs" />
     <Compile Include="Domain\INotificationConfigReader.cs" />
     <Compile Include="Domain\INotificationMessage.cs" />
@@ -195,7 +194,6 @@
     <Compile Include="Domain\IAuditSettingRepository.cs" />
     <Compile Include="Domain\IAuthorizeOrganisationDetail.cs" />
     <Compile Include="Domain\IAutoPositionedActivityExtender.cs" />
-    <Compile Include="Domain\IBaseConfiguration.cs" />
     <Compile Include="Domain\IBudgetPermissionService.cs" />
     <Compile Include="Domain\IBudgetGroupAllowanceSpecification.cs" />
     <Compile Include="Domain\ICanExecute.cs" />

@@ -57,12 +57,17 @@ namespace Teleopti.Analytics.Etl.ConfigTool.Gui
 		private void fillJobCombo()
 		{
 			var jobCollection =
-				 new JobCollection(new JobParameters(null, 1,
-																 _baseConfiguration.TimeZoneCode,
-												_baseConfiguration.IntervalLength.Value,
-																 ConfigurationManager.AppSettings["cube"],
-																 ConfigurationManager.AppSettings["pmInstallation"],
-												CultureInfo.CurrentCulture, _baseConfiguration.EtlToggleManager));
+				 new JobCollection(
+					new JobParameters(
+						null, 1,
+						_baseConfiguration.TimeZoneCode,
+						_baseConfiguration.IntervalLength.Value,
+						ConfigurationManager.AppSettings["cube"],
+						ConfigurationManager.AppSettings["pmInstallation"],
+						CultureInfo.CurrentCulture,
+						_baseConfiguration.ToggleManager
+						)
+					);
 			comboBoxJob.DataSource = jobCollection;
 			comboBoxJob.DisplayMember = "Name";
 			comboBoxJob.ValueMember = "Name";
@@ -404,8 +409,8 @@ namespace Teleopti.Analytics.Etl.ConfigTool.Gui
 			MessageBox.Show(this, message, caption, MessageBoxButtons.OK, MessageBoxIcon.Warning,
 								 MessageBoxDefaultButton.Button1,
 								 (RightToLeft == RightToLeft.Yes)
-									  ? MessageBoxOptions.RtlReading | MessageBoxOptions.RightAlign
-									  : 0);
+										? MessageBoxOptions.RtlReading | MessageBoxOptions.RightAlign
+										: 0);
 		}
 
 		private void prepareSchedule()
@@ -419,24 +424,24 @@ namespace Teleopti.Analytics.Etl.ConfigTool.Gui
 			if (radioButtonOccursOnce.Checked)
 			{
 				_etlJobSchedule = new Common.JobSchedule.EtlJobSchedule(_isNewSchedule ? -1 : _etlJobSchedule.ScheduleId, textBoxScheduleName.Text,
-													  checkBoxEnabled.Checked,
-													  (int)dateTimePickerOccursOnce.Value.TimeOfDay.TotalMinutes,
-													  (string)comboBoxJob.SelectedValue,
-													  radioButtonRelativePeriodTodayInitial.Checked ? 0 : (int)numericUpDownRelativePeriodStartInitial.Value,
-													  radioButtonRelativePeriodTodayInitial.Checked ? 0 : (int)numericUpDownRelativePeriodEndInitial.Value,
-													  logDataSource, labelDescription.Text, null, getRelativePeriodCollection());
+														checkBoxEnabled.Checked,
+														(int)dateTimePickerOccursOnce.Value.TimeOfDay.TotalMinutes,
+														(string)comboBoxJob.SelectedValue,
+														radioButtonRelativePeriodTodayInitial.Checked ? 0 : (int)numericUpDownRelativePeriodStartInitial.Value,
+														radioButtonRelativePeriodTodayInitial.Checked ? 0 : (int)numericUpDownRelativePeriodEndInitial.Value,
+														logDataSource, labelDescription.Text, null, getRelativePeriodCollection());
 			}
 			else
 			{
 				_etlJobSchedule = new Common.JobSchedule.EtlJobSchedule(_isNewSchedule ? -1 : _etlJobSchedule.ScheduleId, textBoxScheduleName.Text,
-													  checkBoxEnabled.Checked,
-													  (int)numericUpDownOccursEveryMinute.Value,
-													  (int)dateTimePickerStartingAt.Value.TimeOfDay.TotalMinutes,
-													  (int)dateTimePickerEndingAt.Value.TimeOfDay.TotalMinutes,
-													  (string)comboBoxJob.SelectedValue,
-													  radioButtonRelativePeriodTodayInitial.Checked ? 0 : (int)numericUpDownRelativePeriodStartInitial.Value,
-													  radioButtonRelativePeriodTodayInitial.Checked ? 0 : (int)numericUpDownRelativePeriodEndInitial.Value,
-													  logDataSource, labelDescription.Text, null, DateTime.Now, getRelativePeriodCollection());
+														checkBoxEnabled.Checked,
+														(int)numericUpDownOccursEveryMinute.Value,
+														(int)dateTimePickerStartingAt.Value.TimeOfDay.TotalMinutes,
+														(int)dateTimePickerEndingAt.Value.TimeOfDay.TotalMinutes,
+														(string)comboBoxJob.SelectedValue,
+														radioButtonRelativePeriodTodayInitial.Checked ? 0 : (int)numericUpDownRelativePeriodStartInitial.Value,
+														radioButtonRelativePeriodTodayInitial.Checked ? 0 : (int)numericUpDownRelativePeriodEndInitial.Value,
+														logDataSource, labelDescription.Text, null, DateTime.Now, getRelativePeriodCollection());
 			}
 		}
 
@@ -537,8 +542,8 @@ namespace Teleopti.Analytics.Etl.ConfigTool.Gui
 			else
 			{
 				description = "Occurs every day every " + numericUpDownOccursEveryMinute.Value + " minute(s) between " +
-								  dateTimePickerStartingAt.Value.ToShortTimeString() + " and " +
-								  dateTimePickerEndingAt.Value.ToShortTimeString() + ".";
+									dateTimePickerStartingAt.Value.ToShortTimeString() + " and " +
+									dateTimePickerEndingAt.Value.ToShortTimeString() + ".";
 			}
 
 			if (_selectedJob != null)

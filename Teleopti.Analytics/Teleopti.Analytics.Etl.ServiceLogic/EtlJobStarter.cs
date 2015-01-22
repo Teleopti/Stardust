@@ -83,14 +83,14 @@ namespace Teleopti.Analytics.Etl.ServiceLogic
 				IEtlJobScheduleCollection etlJobScheduleCollection = new EtlJobScheduleCollection(rep, etlJobLogCollection, _serviceStartTime);
 				var schedulePriority = new SchedulePriority();
 				var scheduleToRun = schedulePriority.GetTopPriority(etlJobScheduleCollection, DateTime.Now, _serviceStartTime);
-				if (scheduleToRun != null)
-				{
-					IJob jobToRun = JobExtractor.ExtractJobFromSchedule(scheduleToRun, _jobHelper,
-																		configHandler.BaseConfiguration.TimeZoneCode,
-																		configHandler.BaseConfiguration.IntervalLength.Value, _cube,
-																		_pmInstallation, configHandler.BaseConfiguration.EtlToggleManager);
-					isStopping = !RunJob(jobToRun, scheduleToRun.ScheduleId, rep, _jobHelper.BusinessUnitCollection);
-				}
+				if (scheduleToRun == null) return;
+
+				IJob jobToRun = JobExtractor.ExtractJobFromSchedule(
+					scheduleToRun, _jobHelper, configHandler.BaseConfiguration.TimeZoneCode,
+					configHandler.BaseConfiguration.IntervalLength.Value, _cube,
+					_pmInstallation, configHandler.BaseConfiguration.ToggleManager
+					);
+				isStopping = !RunJob(jobToRun, scheduleToRun.ScheduleId, rep, _jobHelper.BusinessUnitCollection);
 			}
 			catch (Exception ex)
 			{

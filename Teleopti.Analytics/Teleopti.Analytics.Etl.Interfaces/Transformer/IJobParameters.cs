@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Globalization;
-using Teleopti.Interfaces.Domain;
+using Teleopti.Ccc.Infrastructure.Toggle;
 
 namespace Teleopti.Analytics.Etl.Interfaces.Transformer
 {
@@ -19,7 +19,7 @@ namespace Teleopti.Analytics.Etl.Interfaces.Transformer
         IList<TimeZoneInfo> TimeZonesUsedByDataSources { get; set; }
         bool IsPmInstalled { get; }
 		CultureInfo CurrentCulture { get; }
-		IEtlToggleManager EtlToggleManager { get; }
+		IToggleManager ToggleManager { get; }
 		DateTime? NowForTestPurpose { get; set; }
     }
 }

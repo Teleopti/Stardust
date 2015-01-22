@@ -2,6 +2,7 @@ using System;
 using System.Globalization;
 using System.Linq;
 using Common.Logging;
+using Teleopti.Analytics.Etl.Interfaces.Common;
 using Teleopti.Ccc.Domain.Analytics;
 using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Interfaces.Domain;
@@ -107,9 +108,7 @@ namespace Teleopti.Analytics.Etl.ConfigToolCode.Gui.StartupConfiguration
 
 		public void Save(int cultureId, int intervalLengthMinutes, string timeZoneId)
 		{
-			var etlToggleManager = new EtlToggleManager();
-
-			ConfigurationToSave = new BaseConfiguration(cultureId, intervalLengthMinutes, timeZoneId, etlToggleManager);
+			ConfigurationToSave = new BaseConfiguration(cultureId, intervalLengthMinutes, timeZoneId, null);
 			_model.SaveConfiguration(ConfigurationToSave);
 		}
 	}

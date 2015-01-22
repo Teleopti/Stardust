@@ -3,6 +3,7 @@ using System.Threading;
 using System.Windows.Controls;
 using Teleopti.Analytics.Etl.Common.Entity;
 using Teleopti.Analytics.Etl.ConfigTool.Gui.ViewModel;
+using Teleopti.Analytics.Etl.Interfaces.Common;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Analytics.Etl.ConfigTool.Gui.View

@@ -6,6 +6,7 @@ using Teleopti.Analytics.Etl.Interfaces.Transformer;
 using Teleopti.Analytics.Etl.Transformer.Job;
 using Teleopti.Analytics.Etl.Transformer.Job.Jobs;
 using Teleopti.Analytics.Etl.Transformer.Job.MultipleDate;
+using Teleopti.Ccc.Infrastructure.Toggle;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Analytics.Etl.ServiceLogic
@@ -13,7 +14,10 @@ namespace Teleopti.Analytics.Etl.ServiceLogic
 	internal static class JobExtractor
 	{
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2201:DoNotRaiseReservedExceptionTypes")]
-		public static IJob ExtractJobFromSchedule(IEtlJobSchedule etlJobScheduleToRun, JobHelper jobHelper, string timeZoneId, int intervalLengthMinutes, string cube, string pmInstallation, IEtlToggleManager toggleManager)
+		public static IJob ExtractJobFromSchedule(
+			IEtlJobSchedule etlJobScheduleToRun, JobHelper jobHelper, 
+			string timeZoneId, int intervalLengthMinutes, string cube, 
+			string pmInstallation, IToggleManager toggleManager)
 		{
 			var log = LogManager.GetLogger(typeof(JobExtractor));
 			log.InfoFormat(CultureInfo.InvariantCulture, "Getting job to run from schedule '{0}'.", etlJobScheduleToRun.ScheduleName);

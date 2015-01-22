@@ -2,7 +2,6 @@ using System;
 using System.Globalization;
 using Teleopti.Analytics.Etl.Interfaces.Common;
 using Teleopti.Analytics.Etl.Interfaces.Transformer;
-using Teleopti.Interfaces.Domain;
 using log4net;
 
 namespace Teleopti.Analytics.Etl.Transformer
@@ -22,12 +21,12 @@ namespace Teleopti.Analytics.Etl.Transformer
 		{
 			get
 			{
-				if (!IsCultureValid(BaseConfiguration.CultureId))
+				if (!isCultureValid(BaseConfiguration.CultureId))
 					return false;
-				if (!IsIntervalLengthValid(BaseConfiguration.IntervalLength))
+				if (!isIntervalLengthValid(BaseConfiguration.IntervalLength))
 					return false;
 
-				return IsTimeZoneValid(BaseConfiguration.TimeZoneCode);
+				return isTimeZoneValid(BaseConfiguration.TimeZoneCode);
 			}
 		}
 
@@ -50,7 +49,7 @@ namespace Teleopti.Analytics.Etl.Transformer
 			_baseConfiguration = configuration;
 		}
 
-		private bool IsCultureValid(int? uiCultureId)
+		private bool isCultureValid(int? uiCultureId)
 		{
 			if (!uiCultureId.HasValue)
 			{
@@ -74,7 +73,7 @@ namespace Teleopti.Analytics.Etl.Transformer
 			return true;
 		}
 
-		private bool IsIntervalLengthValid(int? intervalLength)
+		private bool isIntervalLengthValid(int? intervalLength)
 		{
 			if (!intervalLength.HasValue)
 			{
@@ -91,7 +90,7 @@ namespace Teleopti.Analytics.Etl.Transformer
 			return true;
 		}
 
-		private bool IsTimeZoneValid(string timeZone)
+		private bool isTimeZoneValid(string timeZone)
 		{
 			if (string.IsNullOrEmpty(timeZone))
 			{

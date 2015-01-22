@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using NUnit.Framework;
 using SharpTestsEx;
+using Teleopti.Analytics.Etl.Interfaces.Common;
 using Teleopti.Analytics.Etl.Interfaces.Transformer;
 using Teleopti.Analytics.Etl.Transformer;
 using Teleopti.Analytics.Etl.TransformerInfrastructure;
@@ -119,11 +120,12 @@ namespace Teleopti.Analytics.Etl.TransformerTest
 		[Test]
 		public void ShouldLoadBaseConfigurationsCorrectly()
 		{
-			_generalInfrastructure.Expect(x => x.LoadBaseConfiguration()).Return(new BaseConfiguration(1053, 15, "UTC", new EtlToggleManager()));
+			var baseConfig = new BaseConfiguration(1053, 15, "UTC", null);
+			_generalInfrastructure.Expect(x => x.LoadBaseConfiguration()).Return(baseConfig);
 
 			var baseConfiguration = _target.LoadBaseConfiguration();
 
-			baseConfiguration.Should().Not.Be.Null();
+			baseConfiguration.Should().Be.SameInstanceAs(baseConfig);
 		}
 
 		[Test]
@@ -132,7 +134,7 @@ namespace Teleopti.Analytics.Etl.TransformerTest
 			_generalInfrastructure = MockRepository.GenerateMock<IGeneralInfrastructure>();
 			_target = new GeneralFunctions(_generalInfrastructure, "sdfsd");
 
-			IBaseConfiguration config = new BaseConfiguration(1053, 60, "UTC", new EtlToggleManager());
+			IBaseConfiguration config = new BaseConfiguration(1053, 60, "UTC", null);
 			_target.SaveBaseConfiguration(config);
 
 			_generalInfrastructure.AssertWasCalled(x => x.SaveBaseConfiguration(config));

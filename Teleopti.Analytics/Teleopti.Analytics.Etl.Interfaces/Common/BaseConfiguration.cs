@@ -1,12 +1,12 @@
-using Teleopti.Interfaces.Domain;
+using Teleopti.Ccc.Infrastructure.Toggle;
 
-namespace Teleopti.Ccc.Domain.Analytics
+namespace Teleopti.Analytics.Etl.Interfaces.Common
 {
 	public class BaseConfiguration : IBaseConfiguration
 	{
-		public BaseConfiguration(int? cultureId, int? intervalLength, string timeZoneCode,IEtlToggleManager etlToggleManager)
+		public BaseConfiguration(int? cultureId, int? intervalLength, string timeZoneCode, IToggleManager toggleManager)
 		{
-			EtlToggleManager = etlToggleManager;
+			ToggleManager = toggleManager;
 			CultureId = cultureId;
 			IntervalLength = intervalLength;
 			TimeZoneCode = timeZoneCode;
@@ -16,6 +16,6 @@ namespace Teleopti.Ccc.Domain.Analytics
 		public int? CultureId { get; private set; }
 		public int? IntervalLength { get; private set; }
 		public string TimeZoneCode { get; private set; }
-		public IEtlToggleManager EtlToggleManager { get; private set; }
+		public IToggleManager ToggleManager { get; private set; }
 	}
 }
