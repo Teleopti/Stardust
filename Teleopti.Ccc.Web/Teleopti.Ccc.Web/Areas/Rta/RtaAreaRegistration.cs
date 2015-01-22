@@ -19,7 +19,7 @@ namespace Teleopti.Ccc.Web.Areas.Rta
 			context.MapRoute(
 				"Rta-default",
 				"Rta/{controller}/{action}",
-				new { controller = "Service", action = "SaveExternalUserState" });
+				new { controller = "Home", action = "Index" });
 
 			context.Routes.Add(new ServiceRoute("Rta/TeleoptiRtaService.svc", new AutofacServiceHostFactory(), typeof(TeleoptiRtaService)));
 			context.Routes.Add(new ServiceRoute("TeleoptiRtaService.svc", new AutofacServiceHostFactory(), typeof(TeleoptiRtaService)));
