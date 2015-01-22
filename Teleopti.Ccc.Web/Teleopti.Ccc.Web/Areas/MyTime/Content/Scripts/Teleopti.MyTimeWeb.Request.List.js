@@ -116,7 +116,7 @@ Teleopti.MyTimeWeb.Request.List = (function ($) {
 				var vm = new RequestItemViewModel(self);
 				vm.Initialize(item, false);
 				self.Requests.push(vm);
-			});
+			}); 
 		};
 
 		self.ColumnRequests = ko.computed(function () {
@@ -291,12 +291,7 @@ Teleopti.MyTimeWeb.Request.List = (function ($) {
 			self.IsSelected(false);
 			if (data.TypeEnum == 2) {
 				self.CanDelete(data.IsCreatedByUser);
-			} else {
-				// can load non-shift trade requests detail here, as we already have the data.
-				self.DetailItem = Teleopti.MyTimeWeb.Request.RequestDetail.ShowRequest(data);
-				self.DetailItem.AddRequestCallback = self.successUpdatingRequest;
 			}
-
 		}
 	});
 
