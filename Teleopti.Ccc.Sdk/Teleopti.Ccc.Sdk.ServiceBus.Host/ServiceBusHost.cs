@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Diagnostics;
-using System.Runtime.Serialization;
 using System.ServiceProcess;
 using System.Threading;
+using Teleopti.Ccc.Domain;
 
 namespace Teleopti.Ccc.Sdk.ServiceBus.Host
 {
@@ -37,23 +37,9 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Host
 			new Thread(o =>
 			{
 				Thread.Sleep(1000);
-				preserveStackTrace(exception);
+				PreserveStack.ForInnerOf(exception);
 				throw exception;
 			}).Start();
-		}
-
-		// http://stackoverflow.com/questions/57383/in-c-how-can-i-rethrow-innerexception-without-losing-stack-trace
-		private static void preserveStackTrace(Exception e)
-		{
-			var ctx = new StreamingContext(StreamingContextStates.CrossAppDomain);
-			var mgr = new ObjectManager(null, ctx);
-			var si = new SerializationInfo(e.GetType(), new FormatterConverter());
-
-			e.GetObjectData(si, ctx);
-			mgr.RegisterObject(e, 1, si); // prepare for SetObjectData
-			mgr.DoFixups(); // ObjectManager calls SetObjectData
-
-			// voila, e is unmodified save for _remoteStackTraceString
 		}
 
 		protected override void OnStop()

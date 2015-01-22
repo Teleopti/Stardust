@@ -4,6 +4,7 @@ using System.Web;
 using System.Web.Hosting;
 using System.Web.Mvc;
 using Microsoft.Web.Infrastructure.DynamicModuleHelper;
+using Teleopti.Ccc.Domain;
 using Teleopti.Ccc.Web.Broker;
 using Teleopti.Ccc.Web.Core.RequestContext.Initialize;
 using Teleopti.Ccc.Web.Core.Startup;
@@ -56,7 +57,9 @@ namespace Teleopti.Ccc.Web.Core.Startup
 		{
 			if (HasStartupError)
 			{
-				throw ErrorAtStartup;
+				var startupException = new ApplicationException("Failure on start up", ErrorAtStartup);
+				PreserveStack.ForInnerOf(startupException);
+				throw startupException;
 			}
 		}
 	}

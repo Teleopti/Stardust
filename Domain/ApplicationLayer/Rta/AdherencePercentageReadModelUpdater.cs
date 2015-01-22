@@ -72,7 +72,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta
 			model.LastTimestamp = time;
 		}
 
-		public bool Initialized()
+		[ReadModelUnitOfWork]
+		public virtual bool Initialized()
 		{
 			return _persister.HasData();
 		}

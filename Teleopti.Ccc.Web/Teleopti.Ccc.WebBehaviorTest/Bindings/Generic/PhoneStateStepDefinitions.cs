@@ -62,8 +62,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
 				var data = new CheckForActivityChangeWebModel
 				{
 					PersonId = p.Person.Id.ToString(),
-					BusinessUnitId = DefaultBusinessUnit.BusinessUnitFromFakeState.Id.ToString(),
-					Timestamp = CurrentTime.Value().ToString("yyyy-MM-dd HH:mm:ss")
+					BusinessUnitId = DefaultBusinessUnit.BusinessUnitFromFakeState.Id.ToString()
 				};
 				postAsJson(uri, data);
 			});

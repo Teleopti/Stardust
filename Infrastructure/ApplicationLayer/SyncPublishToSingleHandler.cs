@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Reflection;
 using System.Runtime.Serialization;
+using Teleopti.Ccc.Domain;
 using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Interfaces.Domain;
 
@@ -30,22 +31,10 @@ namespace Teleopti.Ccc.Infrastructure.ApplicationLayer
 			}
 			catch (TargetInvocationException e)
 			{
-				preserveStackTrace(e.InnerException);
+				PreserveStack.ForInnerOf(e);
 				throw e;
 			}
 		}
 		
-		private static void preserveStackTrace(Exception e)
-		{
-			var ctx = new StreamingContext(StreamingContextStates.CrossAppDomain);
-			var mgr = new ObjectManager(null, ctx);
-			var si = new SerializationInfo(e.GetType(), new FormatterConverter());
-
-			e.GetObjectData(si, ctx);
-			mgr.RegisterObject(e, 1, si); // prepare for SetObjectData
-			mgr.DoFixups(); // ObjectManager calls SetObjectData
-
-			// voila, e is unmodified save for _remoteStackTraceString
-		}
 	}
 }

@@ -44,12 +44,14 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta
 			_persister.Persist(model);
 		}
 
-		public bool Initialized()
+		[ReadModelUnitOfWork]
+		public virtual bool Initialized()
 		{
 			return _persister.HasData();
 		}
 
-		public void DeleteAll()
+		[ReadModelUnitOfWork]
+		public virtual void DeleteAll()
 		{
 			_persister.Clear();
 		}

@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Rta;
@@ -60,7 +61,7 @@ namespace Teleopti.Ccc.Web.Areas.Rta.Core.Server
 			_recreatables = recreatables;
 			_distributedLockAcquirer = distributedLockAcquirer;
 		}
-
+		
 		public void Sync()
 		{
 			var currentTime = _now.UtcDateTime();
@@ -72,7 +73,7 @@ namespace Teleopti.Ccc.Web.Areas.Rta.Core.Server
 			});
 		}
 
-		public void Initialize()
+		public virtual void Initialize()
 		{
 			var currentTime = _now.UtcDateTime();
 			var states = _databaseReader.GetActualAgentStates();

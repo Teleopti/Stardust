@@ -194,7 +194,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta
 				detailModel.TimeOutOfAdherence += timeToAdd.Value;
 		}
 
-		public bool Initialized()
+		[ReadModelUnitOfWork]
+		public virtual bool Initialized()
 		{
 			return _persister.HasData();
 		}
