@@ -26,7 +26,10 @@ ECHO $(DATASOURCE_NAME)^|Sikuli>>"%MySettings%"
 SET configFilesFolder=%ROOTDIR%\Teleopti.Support.Tool\bin\%configuration%\ConfigFiles
 SET buildServerConfigFiles="%configFilesFolder%\BuildServerConfigFiles.txt"
 IF NOT EXIST "%configFilesFolder%" MKDIR "%configFilesFolder%"
-ECHO ..\..\..\Teleopti.Ccc.SmartClientPortal\Teleopti.Ccc.SmartClientPortal.Shell\bin\%configuration%\Teleopti.Ccc.SmartClientPortal.Shell.exe.config,BuildArtifacts\AppRaptor.config>%buildServerConfigFiles%
+
+SET configPath=%ROOTDIR%\Teleopti.Ccc.SmartClientPortal\Teleopti.Ccc.SmartClientPortal.Shell\bin\%configuration%\Teleopti.Ccc.SmartClientPortal.Shell.exe.config
+
+ECHO %configPath%,BuildArtifacts\AppRaptor.config>%buildServerConfigFiles%
 ECHO %ROOTDIR%\nhib\FixMyConfig.nhib.xml,BuildArtifacts\TeleoptiCCC7.nhib.xml>>%buildServerConfigFiles%
 
 ::Run supportTool to replace all config
@@ -34,8 +37,9 @@ ECHO %ROOTDIR%\nhib\FixMyConfig.nhib.xml,BuildArtifacts\TeleoptiCCC7.nhib.xml>>%
 ECHO RC>"c:\nhib\Toggles.txt"
 
 ::final changes
-SET configPath=%ROOTDIR%\Teleopti.Ccc.SmartClientPortal\Teleopti.Ccc.SmartClientPortal.Shell\bin\%configuration%\Teleopti.Ccc.SmartClientPortal.Shell.exe.config
+
 SET commonFolder=%ROOTDIR%\.debug-setup\common
+COPY "c:\XmlSetAttribute.exe" %commonFolder%\XmlSetAttribute.exe
 
 SET nodePath=configuration/appSettings/add[@key='GetConfigFromWebService']
 SET attributeName=value
