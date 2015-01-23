@@ -26,6 +26,7 @@ namespace Teleopti.Ccc.Win.Sikuli.Validators
 				return result;
 			}
 			result.Details.AppendLine("Scheduled hours = 0 : OK");
+			result.Details.AppendLine("Explanation: All scheduled hours must be 0.");
 			return result;
 		}
 	}

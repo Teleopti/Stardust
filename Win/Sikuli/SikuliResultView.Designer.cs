@@ -68,7 +68,7 @@
 			this.labelResult.Name = "labelResult";
 			this.labelResult.Size = new System.Drawing.Size(399, 42);
 			this.labelResult.TabIndex = 33;
-			this.labelResult.Text = "Label text";
+			this.labelResult.Text = "Result";
 			this.labelResult.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
 			// 
 			// labelTestInfoHeader
@@ -80,7 +80,7 @@
 			this.labelTestInfoHeader.Name = "labelTestInfoHeader";
 			this.labelTestInfoHeader.Size = new System.Drawing.Size(399, 42);
 			this.labelTestInfoHeader.TabIndex = 0;
-			this.labelTestInfoHeader.Text = "Label text";
+			this.labelTestInfoHeader.Text = "Header";
 			this.labelTestInfoHeader.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
 			// 
 			// tableLayoutPanel2

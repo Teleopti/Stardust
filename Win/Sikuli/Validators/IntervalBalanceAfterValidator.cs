@@ -43,6 +43,7 @@ namespace Teleopti.Ccc.Win.Sikuli.Validators
 			if (ruleBreaks > maxRuleBreaks)
 				result.Result = SikuliValidationResult.ResultValue.Fail;
 			result.Details.AppendLine(string.Format("Lowest intra interval balance: {0}", result.Result));
+			result.Details.AppendLine("Explanation: Only one lowest intra interval balance value can be under 0,8.");
 		}
 
 		private int checkInternalBalanceRuleBreaks(IEnumerable<double?> intervalBalances)
