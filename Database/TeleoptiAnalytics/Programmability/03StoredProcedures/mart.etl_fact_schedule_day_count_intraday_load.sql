@@ -165,14 +165,28 @@ SELECT
 	day_count				= COUNT(DISTINCT f.shift_category_id) , 
 	business_unit_id		= f.business_unit_id, 
 	datasource_id			= f.datasource_id, 
-	datasource_update_date	= MAX(datasource_update_date)
-FROM
-	mart.fact_schedule f
-INNER JOIN #stg_schedule_changed stg
-	ON f.shift_startdate_id = stg.shift_startdate_id
-	AND f.person_id = stg.person_id
-	AND f.scenario_id = @scenario_id 
-WHERE shift_category_id<>-1
+	datasource_update_date	= MAX(f.datasource_update_date)
+from mart.fact_schedule f
+inner join mart.dim_person p
+	on p.person_id = f.person_id
+inner join mart.bridge_time_zone btz
+	on f.shift_startdate_id = btz.date_id
+	and f.shift_startinterval_id = btz.interval_id
+	and p.time_zone_id = btz.time_zone_id
+inner join mart.dim_date dd
+	on dd.date_id = btz.local_date_id
+inner join stage.stg_schedule_changed ch
+	on ch.person_code = p.person_code
+	and ch.schedule_date = dd.date_date
+		AND --trim
+		(
+				(ch.schedule_date	>= p.valid_from_date_local)
+
+			AND
+				(ch.schedule_date <= p.valid_to_date_local)
+		)
+WHERE f.scenario_id=@scenario_id
+AND f.shift_category_id<>-1
 AND NOT EXISTS (select 1 from mart.fact_schedule_day_count sdc where sdc.date_id = f.shift_startdate_id and sdc.person_id = f.person_id and sdc.scenario_id = f.scenario_id and sdc.start_interval_id = f.shift_startinterval_id)
 GROUP BY f.shift_startdate_id,f.shift_startinterval_id,f.person_id,f.scenario_id,f.business_unit_id,f.datasource_id
 
