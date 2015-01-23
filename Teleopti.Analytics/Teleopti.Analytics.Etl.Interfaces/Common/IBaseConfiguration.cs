@@ -8,5 +8,6 @@ namespace Teleopti.Analytics.Etl.Interfaces.Common
 		int? IntervalLength { get; }
 		string TimeZoneCode { get; }
 		IToggleManager ToggleManager { get; }
+		bool RunIndexMaintenance { get; }
 	}
 }

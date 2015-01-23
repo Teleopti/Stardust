@@ -81,7 +81,7 @@ namespace Teleopti.Analytics.Etl.TransformerTest
 		[Test]
 		public void ShouldLoadBaseConfigurationsCorrectly()
 		{
-			var baseConfig = new BaseConfiguration(1053, 15, "UTC", null);
+			var baseConfig = new BaseConfiguration(1053, 15, "UTC", null, false);
 			_generalInfrastructure.Stub(x => x.LoadBaseConfiguration()).Return(baseConfig);
 
 			var baseConfiguration = _target.LoadBaseConfiguration();
@@ -92,7 +92,7 @@ namespace Teleopti.Analytics.Etl.TransformerTest
 		[Test]
 		public void ShouldSaveBaseConfiguration()
 		{
-			IBaseConfiguration config = new BaseConfiguration(1053, 60, "UTC", null);
+			IBaseConfiguration config = new BaseConfiguration(1053, 60, "UTC", null, false);
 			_target.SaveBaseConfiguration(config);
 
 			_generalInfrastructure.AssertWasCalled(x => x.SaveBaseConfiguration(config));

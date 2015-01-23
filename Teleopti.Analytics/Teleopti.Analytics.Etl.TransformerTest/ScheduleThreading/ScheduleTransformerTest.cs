@@ -8,7 +8,6 @@ using Teleopti.Analytics.Etl.Transformer.Job;
 using Teleopti.Analytics.Etl.Transformer.ScheduleThreading;
 using Teleopti.Analytics.Etl.TransformerInfrastructure;
 using Teleopti.Analytics.Etl.TransformerTest.FakeData;
-using Teleopti.Ccc.Domain.Analytics;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Analytics.Etl.TransformerTest.ScheduleThreading
@@ -24,11 +23,14 @@ namespace Teleopti.Analytics.Etl.TransformerTest.ScheduleThreading
 			const int intervalsPerDay = 288;
 			const int minutesPerInterval = 1440 / intervalsPerDay;
 
-			IJobParameters jobParameters = new JobParameters(JobMultipleDateFactory.CreateJobMultipleDate(), 1,
-															 "W. Europe Standard Time",
-															 minutesPerInterval,
-															 "Data Source=SSAS_Server;Initial Catalog=SSAS_DB", "false",
-															 CultureInfo.CurrentCulture, null);
+			IJobParameters jobParameters = new JobParameters(
+				JobMultipleDateFactory.CreateJobMultipleDate(), 1,
+				"W. Europe Standard Time",
+				minutesPerInterval,
+				"Data Source=SSAS_Server;Initial Catalog=SSAS_DB", "false",
+				CultureInfo.CurrentCulture, 
+				null,
+				false);
 
 			jobParameters.Helper = new JobHelper(new RaptorRepositoryForTest(), null, null, null);
 			

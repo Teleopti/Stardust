@@ -27,7 +27,9 @@ namespace Teleopti.Analytics.Etl.ConfigTool.Transformer
 					_baseConfiguration.IntervalLength.Value,
 					ConfigurationManager.AppSettings["cube"],
 					ConfigurationManager.AppSettings["pmInstallation"],
-					CultureInfo.CurrentCulture, _baseConfiguration.ToggleManager
+					CultureInfo.CurrentCulture, 
+					_baseConfiguration.ToggleManager,
+					_baseConfiguration.RunIndexMaintenance
 					);
 
 				jobParameters.Helper = new JobHelper();

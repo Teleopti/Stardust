@@ -57,7 +57,11 @@ namespace Teleopti.Analytics.Etl.IntegrationTest
 
 			var dateList = new JobMultipleDate(TimeZoneInfoFactory.StockholmTimeZoneInfo());
 			dateList.Add(testDate.AddDays(-3), testDate.AddDays(3), JobCategoryType.Schedule);
-			var jobParameters = new JobParameters(dateList, 1, "UTC",15,"","False",CultureInfo.CurrentCulture, new FakeToggleManager())
+			var jobParameters = new JobParameters(
+				dateList, 1, "UTC", 15, "", "False",
+				CultureInfo.CurrentCulture,
+				new FakeToggleManager(), false
+				)
 				{
 					Helper =
 						new JobHelper(new RaptorRepository(ConnectionStringHelper.ConnectionStringUsedInTestsMatrix, ""), null, null, null)
@@ -81,7 +85,11 @@ namespace Teleopti.Analytics.Etl.IntegrationTest
 			personFactory.Apply(leavingDateForUser);
 
 			//run nightly
-			jobParameters = new JobParameters(dateList, 1, "UTC", 15, "", "False", CultureInfo.CurrentCulture, new FakeToggleManager())
+			jobParameters = new JobParameters(
+				dateList, 1, "UTC", 15, "", "False",
+				CultureInfo.CurrentCulture,
+				new FakeToggleManager(), false
+				)
 			{
 				Helper =
 					new JobHelper(new RaptorRepository(ConnectionStringHelper.ConnectionStringUsedInTestsMatrix, ""), null, null, null)
@@ -119,7 +127,11 @@ namespace Teleopti.Analytics.Etl.IntegrationTest
 
 			var dateList = new JobMultipleDate(TimeZoneInfoFactory.StockholmTimeZoneInfo());
 			dateList.Add(testDate.AddDays(-3), testDate.AddDays(3), JobCategoryType.Schedule);
-			var jobParameters = new JobParameters(dateList, 1, "UTC", 15, "", "False", CultureInfo.CurrentCulture, new FakeToggleManager())
+			var jobParameters = new JobParameters(
+				dateList, 1, "UTC", 15, "", "False",
+				CultureInfo.CurrentCulture,
+				new FakeToggleManager(), false
+				)
 			{
 				Helper =
 					new JobHelper(new RaptorRepository(ConnectionStringHelper.ConnectionStringUsedInTestsMatrix, ""), null, null, null)
@@ -143,7 +155,11 @@ namespace Teleopti.Analytics.Etl.IntegrationTest
 			personFactory.Apply(leavingDateForUser);
 
 			//run nightly
-			jobParameters = new JobParameters(dateList, 1, "UTC", 15, "", "False", CultureInfo.CurrentCulture, new FakeToggleManager())
+			jobParameters = new JobParameters(
+				dateList, 1, "UTC", 15, "", "False",
+				CultureInfo.CurrentCulture,
+				new FakeToggleManager(), false
+				)
 			{
 				Helper =
 					new JobHelper(new RaptorRepository(ConnectionStringHelper.ConnectionStringUsedInTestsMatrix, ""), null, null, null)

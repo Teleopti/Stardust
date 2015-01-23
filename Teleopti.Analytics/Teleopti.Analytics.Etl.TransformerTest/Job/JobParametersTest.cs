@@ -27,7 +27,13 @@ namespace Teleopti.Analytics.Etl.TransformerTest.Job
 			_olapDatabase= "SSASDatabase";
 			string cubeConnectionString = string.Concat("Data Source=", _olapServer, ";", "Initial Catalog=",
 														_olapDatabase);
-			_target = new JobParameters(_jobMultipleDate, 1, "W. Europe Standard Time", 5, cubeConnectionString, "true", CultureInfo.CurrentCulture, null);
+			_target = new JobParameters(
+				_jobMultipleDate, 1, "W. Europe Standard Time", 5, 
+				cubeConnectionString, "true", 
+				CultureInfo.CurrentCulture, 
+				null,
+				false
+			);
 		}
 
 		#endregion
@@ -74,17 +80,20 @@ namespace Teleopti.Analytics.Etl.TransformerTest.Job
 		}
 
 		[Test]
-		public void VerifyIsPMInstalled()
+		public void VerifyIsPmInstalled()
 		{
 			Assert.IsTrue(_target.IsPmInstalled);
 
-			_target = new JobParameters(_jobMultipleDate, 1, "W. Europe Standard Time", 5, "", "false", CultureInfo.CurrentCulture, null);
+			_target = new JobParameters(
+				_jobMultipleDate, 1, "W. Europe Standard Time", 5, "", "false", CultureInfo.CurrentCulture, null, false);
 			Assert.IsFalse(_target.IsPmInstalled);
 
-			_target = new JobParameters(_jobMultipleDate, 1, "W. Europe Standard Time", 5, "", "True", CultureInfo.CurrentCulture, null);
+			_target = new JobParameters(
+				_jobMultipleDate, 1, "W. Europe Standard Time", 5, "", "True", CultureInfo.CurrentCulture, null, false);
 			Assert.IsTrue(_target.IsPmInstalled);
 
-			_target = new JobParameters(_jobMultipleDate, 1, "W. Europe Standard Time", 5, "", "", CultureInfo.CurrentCulture, null);
+			_target = new JobParameters(
+				_jobMultipleDate, 1, "W. Europe Standard Time", 5, "", "", CultureInfo.CurrentCulture, null, false);
 			Assert.IsFalse(_target.IsPmInstalled);
 		}
 	}

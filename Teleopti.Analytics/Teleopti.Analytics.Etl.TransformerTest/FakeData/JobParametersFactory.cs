@@ -9,10 +9,14 @@ namespace Teleopti.Analytics.Etl.TransformerTest.FakeData
 	{
 		public static IJobParameters SimpleParameters(bool isPmInstalled)
 		{
-			var jobParameters = new JobParameters(JobMultipleDateFactory.CreateJobMultipleDate(), 1, "W. Europe Standard Time", 5,
-									 "Data Source=SSAS_Server;Initial Catalog=SSAS_DB",
-									 isPmInstalled.ToString(CultureInfo.InvariantCulture),
-									 CultureInfo.CurrentCulture, new FakeToggleManager());
+			var jobParameters = new JobParameters(
+				JobMultipleDateFactory.CreateJobMultipleDate(), 1, "W. Europe Standard Time", 5,
+				"Data Source=SSAS_Server;Initial Catalog=SSAS_DB",
+				isPmInstalled.ToString(CultureInfo.InvariantCulture),
+				CultureInfo.CurrentCulture, 
+				new FakeToggleManager(),
+				false
+			);
 
 			jobParameters.Helper = new JobHelper(new RaptorRepositoryForTest(), null, null, null);
 

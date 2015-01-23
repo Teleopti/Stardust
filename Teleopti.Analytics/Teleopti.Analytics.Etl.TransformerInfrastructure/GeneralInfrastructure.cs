@@ -129,14 +129,13 @@ namespace Teleopti.Analytics.Etl.TransformerInfrastructure
 		public IBaseConfiguration LoadBaseConfiguration()
 		{
 			var dataSet = HelperFunctions.ExecuteDataSet(CommandType.StoredProcedure, "mart.sys_configuration_get", null, _dataMartConnectionString);
-			var togglePath = ConfigurationManager.AppSettings["FeatureToggle"];
-			var toggleManager = ToggleManagerCreator.Create(togglePath);
 			if (dataSet == null || dataSet.Tables.Count != 1)
-				return new BaseConfiguration(null, null, null, toggleManager);
+				return new BaseConfiguration(null, null, null, null, false);
 
 			int? culture = null;
 			int? intervalLength = null;
 			string timeZone = null;
+			bool runIndexMaintenance = false;
 
 			foreach (DataRow row in dataSet.Tables[0].Rows)
 			{
@@ -154,7 +153,7 @@ namespace Teleopti.Analytics.Etl.TransformerInfrastructure
 						timeZone = value;
 						break;
 					case "RunIndexMaintenance":
-						etlToggleManager.AddToggle(key, bool.Parse(value));
+						runIndexMaintenance = bool.Parse(value);
 						break;
 					default:
 						_logger.InfoFormat(CultureInfo.InvariantCulture, "Trying to load un unknown configuration key named: '{0}'.", key);
@@ -162,7 +161,10 @@ namespace Teleopti.Analytics.Etl.TransformerInfrastructure
 				}
 			}
 
-			return new BaseConfiguration(culture, intervalLength, timeZone, toggleManager);
+			var togglePath = ConfigurationManager.AppSettings["FeatureToggle"];
+			var toggleManager = ToggleManagerCreator.Create(togglePath);
+
+			return new BaseConfiguration(culture, intervalLength, timeZone, toggleManager, runIndexMaintenance);
 		}
 
 		public void SaveBaseConfiguration(IBaseConfiguration configuration)

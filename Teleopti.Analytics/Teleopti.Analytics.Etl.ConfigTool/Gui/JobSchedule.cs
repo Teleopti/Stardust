@@ -65,7 +65,8 @@ namespace Teleopti.Analytics.Etl.ConfigTool.Gui
 						ConfigurationManager.AppSettings["cube"],
 						ConfigurationManager.AppSettings["pmInstallation"],
 						CultureInfo.CurrentCulture,
-						_baseConfiguration.ToggleManager
+						_baseConfiguration.ToggleManager,
+						_baseConfiguration.RunIndexMaintenance
 						)
 					);
 			comboBoxJob.DataSource = jobCollection;

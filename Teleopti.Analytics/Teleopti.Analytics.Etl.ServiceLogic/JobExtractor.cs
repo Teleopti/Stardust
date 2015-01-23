@@ -23,12 +23,15 @@ namespace Teleopti.Analytics.Etl.ServiceLogic
 			log.InfoFormat(CultureInfo.InvariantCulture, "Getting job to run from schedule '{0}'.", etlJobScheduleToRun.ScheduleName);
 
 			var jobParameters =
-				new JobParameters(GetJobCategoryDatePeriods(etlJobScheduleToRun, timeZoneId),
-								  etlJobScheduleToRun.DataSourceId, timeZoneId,
-								  intervalLengthMinutes,
-								  cube,
-								  pmInstallation,
-								  CultureInfo.CurrentCulture, toggleManager)
+				new JobParameters(
+					GetJobCategoryDatePeriods(etlJobScheduleToRun, timeZoneId),
+					etlJobScheduleToRun.DataSourceId, timeZoneId,
+					intervalLengthMinutes,
+					cube,
+					pmInstallation,
+					CultureInfo.CurrentCulture, 
+					toggleManager,
+					false)
 					{
 						Helper = jobHelper
 					};

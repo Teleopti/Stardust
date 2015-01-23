@@ -59,7 +59,10 @@ namespace Teleopti.Analytics.Etl.IntegrationTest
 			
 			var dateList = new JobMultipleDate(TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time"));
 			dateList.Add(testDate.AddDays(-3), testDate.AddDays(3), JobCategoryType.Schedule);
-			var jobParameters = new JobParameters(dateList, 1, "UTC", 15, "", "False", CultureInfo.CurrentCulture, new FakeToggleManager())
+			var jobParameters = new JobParameters(
+				dateList, 1, "UTC", 15, "", "False", 
+				CultureInfo.CurrentCulture,
+				new FakeToggleManager(), false)
 				{
 					Helper =
 						new JobHelper(new RaptorRepository(ConnectionStringHelper.ConnectionStringUsedInTestsMatrix, ""), null, null, null)

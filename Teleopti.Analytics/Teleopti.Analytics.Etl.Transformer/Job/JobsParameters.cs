@@ -12,7 +12,8 @@ namespace Teleopti.Analytics.Etl.Transformer.Job
 		public JobParameters(
 			IJobMultipleDate jobCategoryDates, int dataSource, string timeZone,
 			int intervalLengthMinutes, string cubeConnectionString,
-			string pmInstall, CultureInfo currentCulture, IToggleManager toggleManager
+			string pmInstall, CultureInfo currentCulture,
+			IToggleManager toggleManager, bool runIndexMaintenance
 			)
 		{
 			DataSource = dataSource;
@@ -24,6 +25,7 @@ namespace Teleopti.Analytics.Etl.Transformer.Job
 			setOlapServerAndDatabase(cubeConnectionString);
 			IsPmInstalled = checkPmInstall(pmInstall);
 			ToggleManager = toggleManager;
+			RunIndexMaintenance = runIndexMaintenance;
 		}
 
 		public int DataSource { get; set; }
@@ -52,6 +54,8 @@ namespace Teleopti.Analytics.Etl.Transformer.Job
 		public CultureInfo CurrentCulture { get; private set; }
 
 		public IToggleManager ToggleManager { get; private set; }
+
+		public bool RunIndexMaintenance { get; set; }
 
 		private void setOlapServerAndDatabase(string cubeConnectionsString)
 		{
