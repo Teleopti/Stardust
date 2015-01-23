@@ -6,7 +6,7 @@ SET masterSettings=%ROOTDIR%\config\settings.txt
 SET CCC7DB=%1
 SET AnalyticsDB=%2
 SET Configuration=%3
-set MSBUILD="%windir%\Microsoft.NET\Framework\v4.0.30319\MSBuild.exe"
+SET MSBUILD="%windir%\Microsoft.NET\Framework\v4.0.30319\MSBuild.exe"
 SET MySettings=%ROOTDIR%\..\Teleopti.Support.Code\settings.txt
 
 SET validationKey=754534E815EF6164CE788E521F845BA4953509FA45E321715FDF5B92C5BD30759C1669B4F0DABA17AC7BBF729749CE3E3203606AB49F20C19D342A078A3903D1
