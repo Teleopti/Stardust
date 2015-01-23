@@ -18,26 +18,26 @@ namespace Teleopti.Ccc.Web.Areas.Tennant.Core
 
 		public ApplicationAuthenticationResult Logon(string userName, string password)
 		{
-			var foundUser = _applicationUserQuery.FindUserData(userName);
-			if (foundUser == null)
+			var passwordPolicyForUser = _applicationUserQuery.FindUserData(userName);
+			if (passwordPolicyForUser == null)
 				return createFailingResult(Resources.LogOnFailedInvalidUserNameOrPassword);
 
-			if (!_passwordVerifier.Check(password, foundUser.PasswordPolicy))
+			if (!_passwordVerifier.Check(password, passwordPolicyForUser))
 				return createFailingResult(Resources.LogOnFailedInvalidUserNameOrPassword);
 
-			if (foundUser.PasswordPolicy.IsLocked)
+			if (passwordPolicyForUser.IsLocked)
 				return createFailingResult(Resources.LogOnFailedAccountIsLocked);
 
 			string passwordPolicyFailureReason;
-			if (!_passwordPolicyCheck.Verify(foundUser.PasswordPolicy, out passwordPolicyFailureReason))
+			if (!_passwordPolicyCheck.Verify(passwordPolicyForUser, out passwordPolicyFailureReason))
 				return createFailingResult(passwordPolicyFailureReason);
 	
 
 			return new ApplicationAuthenticationResult
 			{
 				Success = true,
-				PersonId = foundUser.PersonInfo.Id,
-				Tennant = foundUser.PersonInfo.Tennant
+				PersonId = passwordPolicyForUser.PersonInfo.Id,
+				Tennant = passwordPolicyForUser.PersonInfo.Tennant
 			};
 		}
 

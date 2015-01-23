@@ -203,7 +203,6 @@
     <Compile Include="LiteUnitOfWork\ReadModelUnitOfWorkState.cs" />
     <Compile Include="MultiTenancy\IIdentityUserQuery.cs" />
     <Compile Include="MultiTenancy\IdentityUserQuery.cs" />
-    <Compile Include="MultiTenancy\ApplicationUserQueryResult.cs" />
     <Compile Include="MultiTenancy\ApplicationUserQuery.cs" />
     <Compile Include="MultiTenancy\AuthenticationQuerier.cs" />
     <Compile Include="MultiTenancy\IApplicationUserQuery.cs" />

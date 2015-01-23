@@ -29,11 +29,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Tennant.Core
 
 			var findApplicationQuery = MockRepository.GenerateMock<IApplicationUserQuery>();
 			var personInfo = new PersonInfo {Password = "thePassword"};
-			findApplicationQuery.Expect(x => x.FindUserData(userName)).Return(new ApplicationUserQueryResult
-			{
-				PersonInfo = personInfo,
-				PasswordPolicy = new PasswordPolicyForUser(personInfo)
-			});
+			findApplicationQuery.Expect(x => x.FindUserData(userName)).Return(new PasswordPolicyForUser(personInfo));
 
 			var target = new ApplicationAuthentication(findApplicationQuery, new PasswordVerifier(new OneWayEncryption()), new successfulPasswordPolicy());
 			var res = target.Logon(userName, "invalidPassword");
@@ -49,17 +45,13 @@ namespace Teleopti.Ccc.WebTest.Areas.Tennant.Core
 			const string userName = "validUserName";
 			const string password = "somePassword";
 			var personInfo = new PersonInfo {Id = Guid.NewGuid(), Password = encryptPasswordToDbFormat(password)};
-			var queryResult = new ApplicationUserQueryResult
-			{
-				PersonInfo = personInfo,
-				PasswordPolicy = new PasswordPolicyForUser(personInfo)
-			};
+			var passwordPolicyForUser = new PasswordPolicyForUser(personInfo);
 			var theUserDetail = new UserDetail(null);
 			var findApplicationQuery = MockRepository.GenerateMock<IApplicationUserQuery>();
-			findApplicationQuery.Expect(x => x.FindUserData(userName)).Return(queryResult);
+			findApplicationQuery.Expect(x => x.FindUserData(userName)).Return(passwordPolicyForUser);
 			var convertDataToOldUserDetailDomain = MockRepository.GenerateMock<IConvertDataToOldUserDetailDomain>();
 			convertDataToOldUserDetailDomain.Expect(
-				x => x.Convert(queryResult.PasswordPolicy)).Return(theUserDetail);
+				x => x.Convert(passwordPolicyForUser)).Return(theUserDetail);
 			var checkPasswordChange = MockRepository.GenerateMock<ICheckPasswordChange>();
 			checkPasswordChange.Expect(x => x.Check(theUserDetail))
 				.Return(new AuthenticationResult {HasMessage = true, Message = "THEMESSAGE", Successful = false});
@@ -81,11 +73,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Tennant.Core
 			var personInfo = new PersonInfo {Password = encryptPasswordToDbFormat(password)};
 			var passwordPolicy = new PasswordPolicyForUser(personInfo);
 			passwordPolicy.Lock();
-			findApplicationQuery.Expect(x => x.FindUserData(userName)).Return(new ApplicationUserQueryResult
-			{
-				PersonInfo = personInfo,
-				PasswordPolicy = passwordPolicy
-			});
+			findApplicationQuery.Expect(x => x.FindUserData(userName)).Return(passwordPolicy);
 
 			var target = new ApplicationAuthentication(findApplicationQuery, new PasswordVerifier(new OneWayEncryption()), new successfulPasswordPolicy());
 			var res = target.Logon(userName, password);
@@ -100,20 +88,15 @@ namespace Teleopti.Ccc.WebTest.Areas.Tennant.Core
 			const string userName = "validUserName";
 			const string password = "somePassword";
 			var personInfo = new PersonInfo {Password = encryptPasswordToDbFormat(password), Id = Guid.NewGuid()};
-			var queryResult = new ApplicationUserQueryResult
-			{
-				PersonInfo = personInfo,
-				PasswordPolicy = new PasswordPolicyForUser(personInfo)
-			};
 			var findApplicationQuery = MockRepository.GenerateMock<IApplicationUserQuery>();
-			findApplicationQuery.Expect(x => x.FindUserData(userName)).Return(queryResult);
+			findApplicationQuery.Expect(x => x.FindUserData(userName)).Return(new PasswordPolicyForUser(personInfo));
 
 			var target = new ApplicationAuthentication(findApplicationQuery, new PasswordVerifier(new OneWayEncryption()), new successfulPasswordPolicy());
 			var res = target.Logon(userName, password);
 
 			res.Success.Should().Be.True();
-			res.Tennant.Should().Be.EqualTo(queryResult.PersonInfo.Tennant);
-			res.PersonId.Should().Be.EqualTo(queryResult.PersonInfo.Id);
+			res.Tennant.Should().Be.EqualTo(personInfo.Tennant);
+			res.PersonId.Should().Be.EqualTo(personInfo.Id);
 		}
 
 

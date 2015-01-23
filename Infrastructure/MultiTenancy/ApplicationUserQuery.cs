@@ -13,7 +13,7 @@ namespace Teleopti.Ccc.Infrastructure.MultiTenancy
 			_currentTennantSession = currentTennantSession;
 		}
 
-		public ApplicationUserQueryResult FindUserData(string userName)
+		public PasswordPolicyForUser FindUserData(string userName)
 		{
 			var session = _currentTennantSession().Session();
 			var readPersonInfo = session.GetNamedQuery("applicationUserQuery")
@@ -30,11 +30,7 @@ namespace Teleopti.Ccc.Infrastructure.MultiTenancy
 				readPasswordPolicy = new PasswordPolicyForUser(readPersonInfo);
 				session.Save(readPasswordPolicy);
 			}
-			return new ApplicationUserQueryResult
-			{
-				PersonInfo = readPersonInfo,
-				PasswordPolicy = readPasswordPolicy
-			};
+			return readPasswordPolicy;
 		}
 	}
 }
