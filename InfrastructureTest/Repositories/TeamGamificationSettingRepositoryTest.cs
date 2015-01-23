@@ -69,6 +69,19 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			Assert.AreEqual(1, loadedGamificationSettings.Count());
 		}
 
+		[Test]
+		public void VerifyCanRemoveTeamGamificationSettings()
+		{
+			_teamGamificationSetting = new TeamGamificationSetting { Team = _team, GamificationSetting = _gamificationSetting };
+			PersistAndRemoveFromUnitOfWork(_teamGamificationSetting);
+			var teamGamificationSettingRepository = new TeamGamificationSettingRepository(UnitOfWork);
+			teamGamificationSettingRepository.Remove(_teamGamificationSetting);
+			UnitOfWork.PersistAll();
+			IEnumerable<ITeamGamificationSetting> loadedGamificationSettings =
+				teamGamificationSettingRepository.FindAllTeamGamificationSettingsSortedByTeam();
+			Assert.AreEqual(0, loadedGamificationSettings.Count());
+		}
+
 		/// <summary>
 		/// Verifies the aggregate graph properties.
 		/// </summary>
