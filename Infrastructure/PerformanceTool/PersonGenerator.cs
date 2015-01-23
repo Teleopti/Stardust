@@ -34,6 +34,7 @@ namespace Teleopti.Ccc.Infrastructure.PerformanceTool
 		private readonly IContractRepository _contractRepository;
 		private readonly IContractScheduleRepository _contractScheduleRepository;
 		private readonly IExternalLogOnRepository _externalLogOnRepository;
+		private readonly IScheduleGenerator _scheduleGenerator;
 
 		public PersonGenerator(ICurrentUnitOfWork unitOfWork, 
 			IPersonRepository personRepository,
@@ -42,7 +43,8 @@ namespace Teleopti.Ccc.Infrastructure.PerformanceTool
 			IPartTimePercentageRepository partTimePercentageRepository,
 			IContractRepository contractRepository,
 			IContractScheduleRepository contractScheduleRepository,
-			IExternalLogOnRepository externalLogOnRepository)
+			IExternalLogOnRepository externalLogOnRepository,
+			IScheduleGenerator scheduleGenerator)
 		{
 			_unitOfWork = unitOfWork;
 			_personRepository = personRepository;
@@ -52,10 +54,12 @@ namespace Teleopti.Ccc.Infrastructure.PerformanceTool
 			_contractRepository = contractRepository;
 			_contractScheduleRepository = contractScheduleRepository;
 			_externalLogOnRepository = externalLogOnRepository;
+			_scheduleGenerator = scheduleGenerator;
 		}
 
 		public PersonDataForLoadTest Generate(int count)
 		{
+			var date = new DateOnly(2014, 1, 1);
 			var site = new Site("site");
 			_siteRepository.Add(site);
 			var team = new Team {Site = site, Description = new Description("team")};
@@ -73,12 +77,14 @@ namespace Teleopti.Ccc.Infrastructure.PerformanceTool
 				_externalLogOnRepository.Add(externalLogOn);
 				var person = new Person();
 				person.PermissionInformation.SetDefaultTimeZone(TimeZoneInfo.FindSystemTimeZoneById("UTC"));
-				var personPeriod = new PersonPeriod(new DateOnly(2014, 1, 1),
+				var personPeriod = new PersonPeriod(date,
 					new PersonContract(contract, partTimePercentage, contractSchedule), team);
 				personPeriod.AddExternalLogOn(externalLogOn);
 				person.AddPersonPeriod(personPeriod);
 				_personRepository.Add(person);
 				_unitOfWork.Current().PersistAll();
+				_scheduleGenerator.Generate(person.Id.GetValueOrDefault(), date);
+
 				generatedPersonData.Add(new PersonWithExternalLogon
 				{
 					ExternalLogOn = externalLogOn.AcdLogOnName

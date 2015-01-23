@@ -1,5 +1,6 @@
 ﻿using System.Linq;
 using NUnit.Framework;
+using Rhino.Mocks;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Security.Principal;
@@ -25,8 +26,10 @@ namespace Teleopti.Ccc.InfrastructureTest.PerformanceTool
 			var contractRepository = new ContractRepository(unitOfWork);
 			var contractScheduleRepository = new ContractScheduleRepository(unitOfWork);
 			var externalLogOnRepository = new ExternalLogOnRepository(unitOfWork);
+			var scheduleGenerator = MockRepository.GenerateMock<IScheduleGenerator>();
 			var target = new PersonGenerator(unitOfWork, personRepository, siteRepository, teamRepository,
-				partTimePercentageRepository, contractRepository, contractScheduleRepository, externalLogOnRepository);
+				partTimePercentageRepository, contractRepository, contractScheduleRepository, externalLogOnRepository,
+				scheduleGenerator);
 			target.Generate(1);
 			var persons = personRepository.LoadAll();
 			persons.Count.Should().Be(1);
@@ -46,8 +49,10 @@ namespace Teleopti.Ccc.InfrastructureTest.PerformanceTool
 			var contractRepository = new ContractRepository(unitOfWork);
 			var contractScheduleRepository = new ContractScheduleRepository(unitOfWork);
 			var externalLogOnRepository = new ExternalLogOnRepository(unitOfWork);
+			var scheduleGenerator = MockRepository.GenerateMock<IScheduleGenerator>();
 			var target = new PersonGenerator(unitOfWork, personRepository, siteRepository, teamRepository,
-				partTimePercentageRepository, contractRepository, contractScheduleRepository, externalLogOnRepository);
+				partTimePercentageRepository, contractRepository, contractScheduleRepository, externalLogOnRepository,
+				scheduleGenerator);
 			target.Generate(2);
 			var persons = personRepository.LoadAll();
 			persons.Count.Should().Be(2);
@@ -69,10 +74,11 @@ namespace Teleopti.Ccc.InfrastructureTest.PerformanceTool
 			var contractRepository = new ContractRepository(unitOfWork);
 			var contractScheduleRepository = new ContractScheduleRepository(unitOfWork);
 			var externalLogOnRepository = new ExternalLogOnRepository(unitOfWork);
+			var scheduleGenerator = MockRepository.GenerateMock<IScheduleGenerator>();
 			var target = new PersonGenerator(unitOfWork, personRepository, siteRepository, teamRepository,
-				partTimePercentageRepository, contractRepository, contractScheduleRepository, externalLogOnRepository);
+				partTimePercentageRepository, contractRepository, contractScheduleRepository, externalLogOnRepository,
+				scheduleGenerator);
 			var personData = target.Generate(1);
-			var persons = personRepository.LoadAll();
 			personData.Persons.Single().ExternalLogOn.Should().Be("0");
 		}
 
@@ -87,12 +93,13 @@ namespace Teleopti.Ccc.InfrastructureTest.PerformanceTool
 			var contractRepository = new ContractRepository(unitOfWork);
 			var contractScheduleRepository = new ContractScheduleRepository(unitOfWork);
 			var externalLogOnRepository = new ExternalLogOnRepository(unitOfWork);
+			var scheduleGenerator = MockRepository.GenerateMock<IScheduleGenerator>();
 			var target = new PersonGenerator(unitOfWork, personRepository, siteRepository, teamRepository,
-				partTimePercentageRepository, contractRepository, contractScheduleRepository, externalLogOnRepository);
+				partTimePercentageRepository, contractRepository, contractScheduleRepository, externalLogOnRepository,
+				scheduleGenerator);
 			var personData = target.Generate(1);
 			personData.TeamId.Should().Not.Be.Null();
 		}
-
 
 		protected override void TeardownForRepositoryTest()
 		{
