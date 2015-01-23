@@ -10,7 +10,7 @@ namespace Teleopti.Ccc.Web.Areas.Tennant.Core
 		string GetConfigForName(string dataSourceName);
 	}
 
-	public class NHibernateConfigurationsHandler
+	public class NHibernateConfigurationsHandler : INHibernateConfigurationsHandler
 	{
 		readonly IList<IDataSourceHolder> _dataSources = new List<IDataSourceHolder>();
 		private string nhibConf = @"<datasource>
