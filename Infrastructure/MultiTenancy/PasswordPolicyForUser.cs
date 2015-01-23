@@ -30,11 +30,21 @@ namespace Teleopti.Ccc.Infrastructure.MultiTenancy
 		public virtual bool IsValidPassword(string encryptedPassword)
 		{
 			var isValid = PersonInfo.Password.Equals(encryptedPassword);
-			if (!isValid)
+			if (isValid)
+			{
+				ClearInvalidAttempts();
+			}
+			else
 			{
 				InvalidAttempts++;
 			}
 			return isValid;
+		}
+
+		public void ClearInvalidAttempts()
+		{
+			InvalidAttemptsSequenceStart = DateTime.UtcNow;
+			InvalidAttempts = 0;
 		}
 	}
 }

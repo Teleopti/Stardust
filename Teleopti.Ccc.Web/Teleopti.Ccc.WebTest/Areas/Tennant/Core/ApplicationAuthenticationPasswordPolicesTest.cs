@@ -7,6 +7,7 @@ using Teleopti.Ccc.Domain.Security.Authentication;
 using Teleopti.Ccc.Infrastructure.MultiTenancy;
 using Teleopti.Ccc.UserTexts;
 using Teleopti.Ccc.Web.Areas.Tennant.Core;
+using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.WebTest.Areas.Tennant.Core
 {
@@ -21,12 +22,80 @@ namespace Teleopti.Ccc.WebTest.Areas.Tennant.Core
 			var passwordPolicyForUser = new PasswordPolicyForUser(new PersonInfo { Password = "thePassword" });
 			findApplicationQuery.Expect(x => x.FindUserData(userName)).Return(passwordPolicyForUser);
 
-			var target = new ApplicationAuthentication(findApplicationQuery, new PasswordVerifier(new OneWayEncryption()),
+			var target = new ApplicationAuthentication(findApplicationQuery, new PasswordVerifier(new OneWayEncryption(), () => new DummyPasswordPolicy(), new Now()),
 				new SuccessfulPasswordPolicy(), MockRepository.GenerateMock<INHibernateConfigurationsHandler>());
 			target.Logon(userName, "invalidPassword");
 			target.Logon(userName, "invalidPassword");
 
 			passwordPolicyForUser.InvalidAttempts.Should().Be.EqualTo(2);
+		}
+
+		[Test]
+		public void TooManyInvalidAttemptsShouldLockUser()
+		{
+			const string userName = "validUserName";
+
+			var findApplicationQuery = MockRepository.GenerateMock<IApplicationUserQuery>();
+			var passwordPolicyForUser = new PasswordPolicyForUser(new PersonInfo { Password = "thePassword" });
+			findApplicationQuery.Expect(x => x.FindUserData(userName)).Return(passwordPolicyForUser);
+			var pwPolicy = MockRepository.GenerateStub<IPasswordPolicy>();
+			pwPolicy.Expect(x => x.MaxAttemptCount).Return(1);
+
+			var target = new ApplicationAuthentication(findApplicationQuery, new PasswordVerifier(new OneWayEncryption(), () => pwPolicy, new Now()),
+				new SuccessfulPasswordPolicy(), MockRepository.GenerateMock<INHibernateConfigurationsHandler>());
+			target.Logon(userName, "invalidPassword");
+			passwordPolicyForUser.IsLocked.Should().Be.False();
+			target.Logon(userName, "invalidPassword");
+			passwordPolicyForUser.IsLocked.Should().Be.True();
+		}
+
+		[Test]
+		public void SuccessfulLogonShouldStartNewSequence()
+		{
+			const string userName = "validUserName";
+			const string password = "adsfasdf";
+
+			var findApplicationQuery = MockRepository.GenerateMock<IApplicationUserQuery>();
+			var passwordPolicyForUser = new PasswordPolicyForUser(new PersonInfo { Password = EncryptPassword.ToDbFormat(password) });
+			findApplicationQuery.Expect(x => x.FindUserData(userName)).Return(passwordPolicyForUser);
+			var pwPolicy = MockRepository.GenerateStub<IPasswordPolicy>();
+			pwPolicy.Expect(x => x.MaxAttemptCount).Return(1);
+
+			var target = new ApplicationAuthentication(findApplicationQuery, new PasswordVerifier(new OneWayEncryption(), () => pwPolicy, new Now()),
+				new SuccessfulPasswordPolicy(), MockRepository.GenerateMock<INHibernateConfigurationsHandler>());
+			target.Logon(userName, "invalidPassword");
+			passwordPolicyForUser.InvalidAttempts.Should().Be.EqualTo(1);
+			target.Logon(userName, password);
+			passwordPolicyForUser.InvalidAttempts.Should().Be.EqualTo(0);
+		}
+
+
+		[Test]
+		public void WhenTimePassedShouldStartNewSequence()
+		{
+			const string userName = "validUserName";
+			const string password = "adsfasdf";
+
+			var findApplicationQuery = MockRepository.GenerateMock<IApplicationUserQuery>();
+			var passwordPolicyForUser = new PasswordPolicyForUser(new PersonInfo { Password = EncryptPassword.ToDbFormat(password) });
+			findApplicationQuery.Expect(x => x.FindUserData(userName)).Return(passwordPolicyForUser);
+			var pwPolicy = MockRepository.GenerateStub<IPasswordPolicy>();
+			pwPolicy.Expect(x => x.MaxAttemptCount).Return(100);
+			pwPolicy.Expect(x => x.InvalidAttemptWindow).Return(TimeSpan.FromHours(1));
+
+			var target = new ApplicationAuthentication(findApplicationQuery, new PasswordVerifier(new OneWayEncryption(), () => pwPolicy, new Now()),
+				new SuccessfulPasswordPolicy(), MockRepository.GenerateMock<INHibernateConfigurationsHandler>());
+			target.Logon(userName, "invalidPassword");
+			target.Logon(userName, "invalidPassword");
+			passwordPolicyForUser.InvalidAttempts.Should().Be.EqualTo(2);
+
+			//logon two hours later
+			var inTwoHours = MockRepository.GenerateMock<INow>();
+			inTwoHours.Expect(x => inTwoHours.UtcDateTime()).Return(DateTime.Now.AddHours(2));
+			var target2 = new ApplicationAuthentication(findApplicationQuery, new PasswordVerifier(new OneWayEncryption(), () => pwPolicy, inTwoHours),
+				new SuccessfulPasswordPolicy(), MockRepository.GenerateMock<INHibernateConfigurationsHandler>());
+			target2.Logon(userName, "invalidPassword");
+			passwordPolicyForUser.InvalidAttempts.Should().Be.EqualTo(1);
 		}
 
 		[Test]
@@ -41,7 +110,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Tennant.Core
 			passwordPolicy.Lock();
 			findApplicationQuery.Expect(x => x.FindUserData(userName)).Return(passwordPolicy);
 
-			var target = new ApplicationAuthentication(findApplicationQuery, new PasswordVerifier(new OneWayEncryption()),
+			var target = new ApplicationAuthentication(findApplicationQuery, new PasswordVerifier(new OneWayEncryption(), () => new DummyPasswordPolicy(), new Now()),
 				new SuccessfulPasswordPolicy(), MockRepository.GenerateMock<INHibernateConfigurationsHandler>());
 			var res = target.Logon(userName, password);
 
@@ -68,7 +137,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Tennant.Core
 			checkPasswordChange.Expect(x => x.Check(theUserDetail))
 				.Return(new AuthenticationResult { HasMessage = true, Message = "THEMESSAGE", Successful = false });
 
-			var target = new ApplicationAuthentication(findApplicationQuery, new PasswordVerifier(new OneWayEncryption()),
+			var target = new ApplicationAuthentication(findApplicationQuery, new PasswordVerifier(new OneWayEncryption(), () => new DummyPasswordPolicy(), new Now()),
 				new PasswordPolicyCheck(convertDataToOldUserDetailDomain, checkPasswordChange),
 					MockRepository.GenerateMock<INHibernateConfigurationsHandler>());
 
