@@ -8,11 +8,7 @@ namespace Teleopti.Ccc.Infrastructure.MultiTenancy.NHibernate
 		public PasswordPolicyForUserMapping()
 		{
 			Id("id", mapper => mapper.Generator(new GuidCombGeneratorDef()));
-			ManyToOne<PersonInfo>("personInfo", mapper =>
-			{
-				mapper.Access(Accessor.Field);
-				mapper.Column("Person");
-			});
+			ManyToOne(x => x.PersonInfo, mapper => mapper.Column("Person"));
 			Property(x=>x.LastPasswordChange);
 			Property(x=>x.InvalidAttemptsSequenceStart);
 			Property(x=>x.InvalidAttempts);

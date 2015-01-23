@@ -22,7 +22,7 @@ namespace Teleopti.Ccc.Web.Areas.Tennant.Core
 			if (foundUser == null)
 				return createFailingResult(Resources.LogOnFailedInvalidUserNameOrPassword);
 
-			if (!_passwordVerifier.Check(password, foundUser.PersonInfo.Password))
+			if (!_passwordVerifier.Check(password, foundUser.PasswordPolicy))
 				return createFailingResult(Resources.LogOnFailedInvalidUserNameOrPassword);
 
 			if (foundUser.PasswordPolicy.IsLocked)

@@ -1,4 +1,5 @@
 ﻿using Teleopti.Ccc.Domain.Security;
+using Teleopti.Ccc.Infrastructure.MultiTenancy;
 
 namespace Teleopti.Ccc.Web.Areas.Tennant.Core
 {
@@ -11,9 +12,9 @@ namespace Teleopti.Ccc.Web.Areas.Tennant.Core
 			_oneWayEncryption = oneWayEncryption;
 		}
 
-		public bool Check(string userPassword, string existingPasswordInDb)
+		public bool Check(string userPassword, PasswordPolicyForUser passwordPolicyForUser)
 		{
-			return _oneWayEncryption.EncryptString(userPassword).Equals(existingPasswordInDb);
+			return passwordPolicyForUser.ValidPassword(_oneWayEncryption.EncryptString(userPassword));
 		}
 	}
 }

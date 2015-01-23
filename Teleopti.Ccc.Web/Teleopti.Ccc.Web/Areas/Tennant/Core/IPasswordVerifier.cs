@@ -1,7 +1,9 @@
-﻿namespace Teleopti.Ccc.Web.Areas.Tennant.Core
+﻿using Teleopti.Ccc.Infrastructure.MultiTenancy;
+
+namespace Teleopti.Ccc.Web.Areas.Tennant.Core
 {
 	public interface IPasswordVerifier
 	{
-		bool Check(string userPassword, string existingPasswordInDb);
+		bool Check(string userPassword, PasswordPolicyForUser passwordPolicyForUser);
 	}
 }
