@@ -11,6 +11,7 @@ using Teleopti.Ccc.Domain.ApplicationLayer.Rta;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Rta;
+using Teleopti.Ccc.Infrastructure.MultiTenancy.NHibernate;
 using Teleopti.Ccc.Infrastructure.Toggle;
 using Teleopti.Ccc.Infrastructure.Web;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.MessageBroker;
@@ -98,7 +99,8 @@ namespace Teleopti.Ccc.Web.Areas.Start.Controllers
 		    return new EmptyResult();
 	    }
 
-	    public ViewResult Logon(string dataSourceName, string businessUnitName, string userName, string password)
+			[TennantUnitOfWork]
+	    public virtual ViewResult Logon(string dataSourceName, string businessUnitName, string userName, string password)
 		{
 			var result = _authenticator.AuthenticateApplicationUser(dataSourceName, userName, password);
 			var businessUnits = _businessUnitProvider.RetrieveBusinessUnitsForPerson(result.DataSource, result.Person);

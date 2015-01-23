@@ -7,7 +7,9 @@
 		<id name="Id" type="guid" access="property">
 			<generator class="guid.comb" />
 		</id>
-		<property name="terminalDate" />
+		<property name="terminalDate" 
+				type="Teleopti.Ccc.Infrastructure.NHibernateConfiguration.DateOnlyMappingType, Teleopti.Ccc.Infrastructure"
+				not-null="false"/>
 		<property name="isDeleted" />
 		<join table="AuthenticationInfo" fetch="join" optional="true">
 			<key column="Person" />

@@ -2,6 +2,7 @@
 using System.Web.Mvc;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Infrastructure.Foundation;
+using Teleopti.Ccc.Infrastructure.MultiTenancy.NHibernate;
 using Teleopti.Ccc.UserTexts;
 using Teleopti.Ccc.Web.Areas.MyTime.Core;
 using Teleopti.Ccc.Web.Areas.Start.Core.Authentication.DataProvider;
@@ -30,7 +31,8 @@ namespace Teleopti.Ccc.Web.Areas.SSO.Controllers
 		}
 
 		[HttpGet]
-		public JsonResult CheckPassword(ApplicationAuthenticationModel model)
+		[TennantUnitOfWork]
+		public virtual JsonResult CheckPassword(ApplicationAuthenticationModel model)
 		{
 			var result = model.AuthenticateUser();
 			if (!result.Successful)
