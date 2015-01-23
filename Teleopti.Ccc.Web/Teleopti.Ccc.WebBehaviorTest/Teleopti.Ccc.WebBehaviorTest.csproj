@@ -186,7 +186,18 @@
     <Compile Include="Core\BrowserDriver\BrowserInteractionsUrlExtensions.cs" />
     <Compile Include="Core\BrowserDriver\NoBrowserActivator.cs" />
     <Compile Include="Core\BrowserDriver\NoBrowserInteractions.cs" />
+    <Compile Include="Core\Navigation\FakeClientTimeForAllJsDateObjectsCreatedAsUtcSoTheActualTimeFromGetTimeVaryDependengingOnBrowserTimeZone.cs" />
+    <Compile Include="Core\Navigation\FakeClientTimeUsingSinonProvenWay.cs" />
+    <Compile Include="Core\Navigation\FakeTimeUsingMyTimeMethod.cs" />
     <Compile Include="Core\Http.cs" />
+    <Compile Include="Core\Navigation\ApplicationStartupTimeout.cs" />
+    <Compile Include="Core\Navigation\BustCache.cs" />
+    <Compile Include="Core\Navigation\GotoArgs.cs" />
+    <Compile Include="Core\Navigation\IFakeClientTimeMethod.cs" />
+    <Compile Include="Core\Navigation\INavigationInterceptor.cs" />
+    <Compile Include="Core\Navigation\WaitUntilCompletelyLoaded.cs" />
+    <Compile Include="Core\Navigation\WaitUntilReadyForInteraction.cs" />
+    <Compile Include="Core\Navigation\WaitUntilSubscriptionIsCompleted.cs" />
     <Compile Include="Data\Setups\Default\DefaultData.cs" />
     <Compile Include="Data\Setups\Default\DefaultLicense.cs" />
     <Compile Include="Data\Setups\Default\DefaultPersonThatCreatesDbData.cs" />
@@ -752,7 +763,7 @@
     <Compile Include="Data\TestSiteConfigurationSetup.cs" />
     <Compile Include="Core\Browser.cs" />
     <Compile Include="Core\Extensions\FuncExtensions.cs" />
-    <Compile Include="Core\Navigation.cs" />
+    <Compile Include="Core\Navigation\Navigation.cs" />
     <Compile Include="Core\BrowserDriver\TimeoutScope.cs" />
     <Compile Include="Data\DataMaker.cs" />
     <Compile Include="Bindings\DoNotUse\UserStepDefinitions.cs" />

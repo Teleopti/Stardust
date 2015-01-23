@@ -4,6 +4,7 @@ using System.Linq;
 using TechTalk.SpecFlow;
 using Teleopti.Ccc.TestCommon.TestData.Setups.Configurable;
 using Teleopti.Ccc.WebBehaviorTest.Core.BrowserDriver;
+using Teleopti.Ccc.WebBehaviorTest.Core.Navigation;
 using Teleopti.Ccc.WebBehaviorTest.Data;
 using Teleopti.Ccc.WebBehaviorTest.Data.Setups.Default;
 
@@ -34,7 +35,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core
 		private static void navigateOrRequest(string url)
 		{
 			if (Browser.Interactions.UrlContains("/Test/"))
-				Navigation.GoToOtherPage(url, new ApplicationStartupTimeout());
+				Navigation.Navigation.GoToPage(url, new ApplicationStartupTimeout());
 			else
 				Http.Get(url);
 		}
@@ -50,7 +51,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core
 			var usePolicy = FeatureContext.Current.FeatureInfo.Tags.Contains("PasswordPolicy");
 
 			// use a scenario tag here for enableMyTimeMessageBroker if required
-			Navigation.GoToOtherPage(string.Format(CultureInfo.InvariantCulture,
+			Navigation.Navigation.GoToPage(string.Format(CultureInfo.InvariantCulture,
 				"Test/BeforeScenario?enableMyTimeMessageBroker={0}&defaultProvider={1}&usePasswordPolicy={2}", useBroker, defaultProvider, usePolicy));
 		}
 
@@ -89,7 +90,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core
 			const string dataSourceName = "TestData";
 			var businessUnitName = DataMaker.Data().MePerson.PermissionInformation.ApplicationRoleCollection.Single().BusinessUnit.Name;
 			var queryString = string.Format("?dataSourceName={0}&businessUnitName={1}&userName={2}&password={3}", dataSourceName, businessUnitName, userName, password);
-			Navigation.GoToOtherPage("Test/Logon" + queryString, new ApplicationStartupTimeout());
+			Navigation.Navigation.GoToPage("Test/Logon" + queryString, new ApplicationStartupTimeout());
 		}
 
 		public static void ExpireMyCookieInsidePortal()

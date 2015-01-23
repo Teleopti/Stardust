@@ -1,5 +1,6 @@
 ﻿using TechTalk.SpecFlow;
 using Teleopti.Ccc.WebBehaviorTest.Core;
+using Teleopti.Ccc.WebBehaviorTest.Core.Navigation;
 
 namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 {
@@ -9,7 +10,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 		[When(@"I navigate to unit test url (.*)")]
 		public void WhenINavigateTo(string url)
 		{
-			Navigation.GoToOtherPage(url, new BustCache());
+			Navigation.GoToPage(url, new BustCache());
 		}
 
 		[Then(@"I should see all tests pass")]
