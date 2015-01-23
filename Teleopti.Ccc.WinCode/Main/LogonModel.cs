@@ -6,6 +6,10 @@ namespace Teleopti.Ccc.WinCode.Main
 {
 	public class LogonModel : ILogonModel
 	{
+		public LogonModel()
+		{
+			AuthenticationType = AuthenticationTypeOption.Windows;
+		}
 		public bool GetConfigFromWebService { get; set; }
 		public IList<IDataSourceContainer> DataSourceContainers { get; set; }
 		public IDataSourceContainer SelectedDataSourceContainer { get; set; }

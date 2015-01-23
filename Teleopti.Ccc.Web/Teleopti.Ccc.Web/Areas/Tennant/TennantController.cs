@@ -25,7 +25,7 @@ namespace Teleopti.Ccc.Web.Areas.Tennant
 
 		[HttpGet]
 		[TennantUnitOfWork]
-		public JsonResult IdentityLogon(string identity)
+		public virtual JsonResult IdentityLogon(string identity)
 		{
 			var res = _identityAuthentication.Logon(identity);
 			return Json(res, JsonRequestBehavior.AllowGet);

@@ -6,6 +6,7 @@ using System.Xml.Linq;
 using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Infrastructure;
+using Teleopti.Ccc.Domain.Security.Authentication;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Infrastructure.ApplicationLayer;
 using Teleopti.Ccc.Infrastructure.NHibernateConfiguration;
@@ -129,5 +130,78 @@ namespace Teleopti.Ccc.WinCode.Main
 
             return true;
         }
+
+		public static bool InitWithoutDataSource(ILogonModel model, IMessageBrokerComposite messageBroker)
+		{
+			//should get the nhib from logon later
+			//ICollection<string> encryptedNHibConfigs;
+			IDictionary<string, string> encryptedAppSettings;
+			string passwordPolicyString;
+			using (var proxy = Proxy.GetProxy(model.SelectedSdk))
+			{
+				using (PerformanceOutput.ForOperation("Getting config from web service"))
+				{
+					try
+					{
+						//encryptedNHibConfigs = proxy.GetHibernateConfigurationInternal();
+						encryptedAppSettings = proxy.GetAppSettingsInternal();
+						passwordPolicyString = proxy.GetPasswordPolicy();
+					}
+					catch (TimeoutException timeoutException)
+					{
+						Logger.Error("Configuration could not be retrieved from due to a timeout.", timeoutException);
+						ErrorMessage = timeoutException.Message;
+						return false;
+					}
+					catch (CommunicationException exception)
+					{
+						Logger.Error("Configuration could not be retrieved from server.", exception);
+						ErrorMessage = exception.Message;
+						return false;
+					}
+				}
+			}
+
+			var passwordPolicyDocument = XDocument.Parse(passwordPolicyString);
+			var passwordPolicyService = new LoadPasswordPolicyService(passwordPolicyDocument);
+
+			encryptedAppSettings.DecryptDictionary(Interfaces.Infrastructure.EncryptionConstants.Image1, Interfaces.Infrastructure.EncryptionConstants.Image2);
+			encryptedAppSettings.Add("Sdk", model.SelectedSdk);
+
+			bool messageBrokerDisabled = false;
+			string messageBrokerDisabledString;
+			if (!encryptedAppSettings.TryGetValue("MessageBroker", out messageBrokerDisabledString) ||
+				 string.IsNullOrEmpty(messageBrokerDisabledString))
+			{
+				messageBrokerDisabled = true;
+			}
+
+			var sendToServiceBus = new ServiceBusSender();
+			var populator = EventContextPopulator.Make();
+			var messageSender = new MessagePopulatingServiceBusSender(sendToServiceBus, populator);
+			var eventPublisher = new EventPopulatingPublisher(new ServiceBusEventPublisher(sendToServiceBus), populator);
+			var initializer =
+				new InitializeApplication(
+					new DataSourcesFactory(new EnversConfiguration(),
+												  new List<IMessageSender>
+												      {
+														  new ScheduleMessageSender(eventPublisher, new ClearEvents()), 
+                                                          new EventsMessageSender(new SyncEventsPublisher(eventPublisher)),
+												          new MeetingMessageSender(eventPublisher),
+                                                          new GroupPageChangedMessageSender(messageSender),
+                                                          new TeamOrSiteChangedMessageSender(messageSender),
+                                                          new PersonChangedMessageSender(messageSender),
+                                                          new PersonPeriodChangedMessageSender(messageSender)
+												      }, DataSourceConfigurationSetter.ForDesktop(), new CurrentHttpContext()),
+					messageBroker)
+				{
+					MessageBrokerDisabled = messageBrokerDisabled
+				};
+
+			initializer.Start(new StateManager(), encryptedAppSettings, passwordPolicyService);
+
+
+			return true;
+		}
     }
 }

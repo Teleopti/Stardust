@@ -1228,6 +1228,7 @@
     <Compile Include="Security\Matrix\PersonRoleResolverTest.cs" />
     <Compile Include="Security\Matrix\TeamResolverTest.cs" />
     <Compile Include="Security\ModifyPasswordTest.cs" />
+    <Compile Include="Security\MultiTenancyAuthentication\MultiTenancyIdentityLogonTest.cs" />
     <Compile Include="Security\MultiTenancyAuthentication\MultiTenancyApplicationLogonTest.cs" />
     <Compile Include="Security\PasswordPolicyTest.cs" />
     <Compile Include="Security\PasswordStrengthRuleTest.cs" />

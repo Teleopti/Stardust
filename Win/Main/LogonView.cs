@@ -83,6 +83,14 @@ namespace Teleopti.Ccc.Win.Main
 			// ReSharper restore LocalizableElement
 		}
 
+		public bool InitStateHolderWithoutDataSource(IMessageBrokerComposite messageBroker)
+		{
+			if (!LogonInitializeStateHolder.InitWithoutDataSource(_model, messageBroker))
+				return showError();
+
+			return true;
+		}
+
 		private bool showError()
 		{
 			// ReSharper disable LocalizableElement

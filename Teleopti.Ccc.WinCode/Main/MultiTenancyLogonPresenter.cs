@@ -5,7 +5,6 @@ using System.Globalization;
 using System.Linq;
 using System.Windows.Forms;
 using Teleopti.Ccc.Domain.Infrastructure;
-using Teleopti.Ccc.Domain.Security;
 using Teleopti.Ccc.Domain.Security.Authentication;
 using Teleopti.Ccc.Domain.Security.MultiTenancyAuthentication;
 using Teleopti.Ccc.UserTexts;
@@ -19,17 +18,15 @@ namespace Teleopti.Ccc.WinCode.Main
 		private readonly ILogonView _view;
 		private readonly ILogonModel _model;
 		private readonly ILoginInitializer _initializer;
-		//private readonly ILogonLogger _logonLogger;
 		private readonly ILogOnOff _logOnOff;
 		private readonly IServerEndpointSelector _serverEndpointSelector;
 		private readonly IMessageBrokerComposite _messageBroker;
 		private readonly IMultiTenancyApplicationLogon _applicationLogon;
 		private readonly IMultiTenancyWindowsLogon _multiTenancyWindowsLogon;
-		private readonly IDataSourceHandler _dataSourceHandler;
+
 
 		public MultiTenancyLogonPresenter(ILogonView view, LogonModel model,
-			IDataSourceHandler dataSourceHandler, ILoginInitializer initializer,
-			//ILogonLogger logonLogger, 
+			ILoginInitializer initializer,
 			ILogOnOff logOnOff,
 			IServerEndpointSelector serverEndpointSelector,
 			IMessageBrokerComposite messageBroker,
@@ -39,9 +36,7 @@ namespace Teleopti.Ccc.WinCode.Main
 		{
 			_view = view;
 			_model = model;
-			_dataSourceHandler = dataSourceHandler;
 			_initializer = initializer;
-			//_logonLogger = logonLogger;
 			_logOnOff = logOnOff;
 			_serverEndpointSelector = serverEndpointSelector;
 			_messageBroker = messageBroker;
@@ -95,25 +90,6 @@ namespace Teleopti.Ccc.WinCode.Main
 
 		private bool checkAndReportDataSources()
 		{
-			var notAvailableDataSources =
-				_dataSourceHandler.AvailableDataSourcesProvider()
-				                  .UnavailableDataSources()
-				                  .Select(d => d.Application.Name)
-				                  .ToList();
-			if (notAvailableDataSources.Any())
-			{
-				var message = notAvailableDataSources.Aggregate("The following data source(s) is currently not available:",
-				                                                (current, source) => current + ("\n\t- " + source)) +
-				              "\nThe data source server is probably down or the connection string is invalid.";
-				_view.ShowWarningMessage(message, Resources.LogOn);
-				return false;
-			}
-			if (!_model.DataSourceContainers.Any())
-			{
-				_view.ShowErrorMessage(Resources.NoAvailableDataSourcesHasBeenFound, Resources.LogOn);
-				return false;
-			}
-
 			return true;
 		}
 
@@ -121,7 +97,7 @@ namespace Teleopti.Ccc.WinCode.Main
 		{
 			CurrentStep--;
 			if (CurrentStep == LoginStep.Login &&
-			    _model.SelectedDataSourceContainer.AuthenticationTypeOption == AuthenticationTypeOption.Windows)
+				 _model.SelectedDataSourceContainer.AuthenticationTypeOption == AuthenticationTypeOption.Windows)
 				CurrentStep--;
 
 			GetDataForCurrentStep(true);
@@ -132,7 +108,7 @@ namespace Teleopti.Ccc.WinCode.Main
 			switch (CurrentStep)
 			{
 				case LoginStep.SelectSdk:
-					if(!goingBack) 
+					if (!goingBack)
 						getSdks();
 					break;
 				case LoginStep.SelectDatasource:
@@ -161,25 +137,18 @@ namespace Teleopti.Ccc.WinCode.Main
 				CurrentStep++;
 				getDataSources();
 			}
-			
-			
+
+
 			_view.ShowStep(false);
 		}
 
 		private void getDataSources()
 		{
-			if (_model.DataSourceContainers == null)
-			{
-				_view.ClearForm(Resources.SearchingForDataSourcesTreeDots);
-				_view.InitializeAndCheckStateHolder(_model.SelectedSdk, _messageBroker);
-				var logonableDataSources = new List<IDataSourceContainer>();
-				foreach (var dataSourceProvider in _dataSourceHandler.DataSourceProviders())
-				{
-					logonableDataSources.AddRange(dataSourceProvider.DataSourceList());
-				}
-				_model.DataSourceContainers = logonableDataSources;
-			}
-			
+			if (!_view.InitStateHolderWithoutDataSource(_messageBroker))
+				CurrentStep --; //?
+
+			_model.DataSourceContainers = new List<IDataSourceContainer>();
+	
 			_view.ShowStep(false); //once a sdk is loaded it is not changeable
 		}
 
@@ -187,7 +156,7 @@ namespace Teleopti.Ccc.WinCode.Main
 		{
 			if (_model.AuthenticationType == AuthenticationTypeOption.Application)
 			{
-				if(!login())
+				if (!login())
 				{
 					CurrentStep--;
 					return;
@@ -221,7 +190,7 @@ namespace Teleopti.Ccc.WinCode.Main
 
 		private bool login()
 		{
-			var authenticationResult = _applicationLogon.Logon(_model);
+			var authenticationResult = _applicationLogon.Logon(_model, StateHolderReader.Instance.StateReader.ApplicationScopeData);
 			var choosenDataSource = _model.SelectedDataSourceContainer;
 
 			if (authenticationResult.HasMessage)
@@ -239,8 +208,8 @@ namespace Teleopti.Ccc.WinCode.Main
 
 		private bool winLogin()
 		{
-			var authenticationResult = _multiTenancyWindowsLogon.Logon(_model);
-			
+			var authenticationResult = _multiTenancyWindowsLogon.Logon(_model, StateHolderReader.Instance.StateReader.ApplicationScopeData);
+
 			if (authenticationResult.HasMessage)
 				_view.ShowErrorMessage(string.Concat(authenticationResult.Message, "  "), Resources.ErrorMessage);
 
@@ -272,32 +241,8 @@ namespace Teleopti.Ccc.WinCode.Main
 
 			_logOnOff.LogOn(_model.SelectedDataSourceContainer.DataSource, _model.SelectedDataSourceContainer.User, businessUnit);
 
-			//var model = new LoginAttemptModel
-			//	{
-			//		ClientIp = ipAdress(),
-			//		Client = "WIN",
-			//		UserCredentials = _model.UserName,
-			//		Provider = _model.AuthenticationType.ToString(),
-			//		Result = "LogonSuccess"
-			//	};
-			//if (_model.SelectedDataSourceContainer.User != null) model.PersonId = _model.SelectedDataSourceContainer.User.Id;
-
-			//_logonLogger.SaveLogonAttempt(model, _model.SelectedDataSourceContainer.DataSource.Application);
-
 			StateHolderReader.Instance.StateReader.SessionScopeData.AuthenticationTypeOption =
 				_model.SelectedDataSourceContainer.AuthenticationTypeOption;
 		}
-
-		//private static string ipAdress()
-		//{
-		//	var ips = Dns.GetHostEntry(Dns.GetHostName());
-		//	var ip = "";
-		//	foreach (var adress in ips.AddressList.Where(adress => adress.AddressFamily == AddressFamily.InterNetwork))
-		//		ip = adress.ToString();
-		//	return ip;
-		//}
 	}
-
-	
-
 }

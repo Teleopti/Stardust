@@ -50,5 +50,7 @@ namespace Teleopti.Interfaces.Domain
 		/// </summary>
 		/// <param name="dataSource"></param>
 		void DisposeAllDataSourcesExcept(IDataSource dataSource);
+
+		IDataSource CreateAndAddDataSource(string nhibContent);
 	}
 }

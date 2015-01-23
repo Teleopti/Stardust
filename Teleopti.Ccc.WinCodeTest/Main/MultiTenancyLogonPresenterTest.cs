@@ -7,6 +7,7 @@ using Teleopti.Ccc.Domain.Infrastructure;
 using Teleopti.Ccc.Domain.Security;
 using Teleopti.Ccc.Domain.Security.Authentication;
 using Teleopti.Ccc.Domain.Security.MultiTenancyAuthentication;
+using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.UserTexts;
 using Teleopti.Ccc.WinCode.Main;
 using Rhino.Mocks;
@@ -21,26 +22,26 @@ namespace Teleopti.Ccc.WinCodeTest.Main
 	{
 		private ILogonView _view;
 		private LogonModel _model;
-		private IDataSourceHandler _dataSourceHandler;
 		private ILoginInitializer _initializer;
 		private ILogOnOff _logOnOff;
 		private MultiTenancyLogonPresenter _target;
 		private IServerEndpointSelector _endPointSelector;
 		private IMultiTenancyApplicationLogon _appLogon;
 		private IMultiTenancyWindowsLogon _winLogon;
+		private IApplicationData _appData;
 
 		[SetUp]
 		public void Setup()
 		{
 			_view = MockRepository.GenerateMock<ILogonView>();
 			_model = new LogonModel();
-			_dataSourceHandler = MockRepository.GenerateMock<IDataSourceHandler>();
 			_initializer = MockRepository.GenerateMock<ILoginInitializer>();
 			_logOnOff = MockRepository.GenerateMock<ILogOnOff>();
 			_endPointSelector = MockRepository.GenerateMock<IServerEndpointSelector>();
 			_appLogon = MockRepository.GenerateMock<IMultiTenancyApplicationLogon>();
 			_winLogon = MockRepository.GenerateMock<IMultiTenancyWindowsLogon>();
-			_target = new MultiTenancyLogonPresenter(_view, _model, _dataSourceHandler, _initializer,  _logOnOff,
+			_appData = MockRepository.GenerateMock<IApplicationData>();
+			_target = new MultiTenancyLogonPresenter(_view, _model, _initializer,  _logOnOff,
 				_endPointSelector, MockRepository.GenerateMock<IMessageBrokerComposite>(), _appLogon, _winLogon);
 			_model.AuthenticationType = AuthenticationTypeOption.Application;
 		}
@@ -67,7 +68,6 @@ namespace Teleopti.Ccc.WinCodeTest.Main
 		{
 			_view.Stub(x => x.ClearForm("")).IgnoreArguments();
 			_endPointSelector.Stub(x => x.GetEndpointNames()).Return(new List<string> { "local" });
-			_dataSourceHandler.Stub(x => x.DataSourceProviders()).Return(new List<IDataSourceProvider>());
 			_view.Stub(x => x.ShowStep(false));
 			_target.CurrentStep = LoginStep.SelectSdk;
 			_target.Initialize();
@@ -81,7 +81,6 @@ namespace Teleopti.Ccc.WinCodeTest.Main
 			_model.Sdks = new List<string> { "sdk1", "sdk2" };
 			_model.SelectedSdk = "sdk1";
 			_view.Stub(x => x.ClearForm("")).IgnoreArguments();
-			_dataSourceHandler.Stub(x => x.DataSourceProviders()).Return(new List<IDataSourceProvider> { dataSorceProvider });
 			dataSorceProvider.Stub(x => x.DataSourceList()).Return(new List<DataSourceContainer> { dataSourceContainer });
 			_view.Stub(x => x.ShowStep(false));
 			_target.CurrentStep = LoginStep.SelectSdk;
@@ -134,7 +133,7 @@ namespace Teleopti.Ccc.WinCodeTest.Main
 			_model.Password = "PASS";
 
 			dataSourceContainer.Stub(x => x.AuthenticationTypeOption).Return(AuthenticationTypeOption.Application);
-			_appLogon.Stub(x => x.Logon(_model)).Return(new AuthenticationResult { Successful = true });
+			_appLogon.Stub(x => x.Logon(_model, _appData)).Return(new AuthenticationResult { Successful = true }).IgnoreArguments();
 
 			dataSourceContainer.Stub(x => x.User).Return(person);
 			person.Stub(x => x.ApplicationAuthenticationInfo).Return(appAuthInfo);
@@ -164,7 +163,7 @@ namespace Teleopti.Ccc.WinCodeTest.Main
 			dataSourceContainer.Stub(x => x.AuthenticationTypeOption).Return(AuthenticationTypeOption.Application);
 			dataSourceContainer.Stub(x => x.DataSource).Return(dataSource);
 			dataSource.Stub(x => x.Application).Return(uowFact);
-			_appLogon.Stub(x => x.Logon(_model)).Return(new AuthenticationResult { Successful = true });
+			_appLogon.Stub(x => x.Logon(_model, null)).Return(new AuthenticationResult { Successful = true }).IgnoreArguments();
 			dataSourceContainer.Stub(x => x.User).Return(person);
 			person.Stub(x => x.ApplicationAuthenticationInfo).Return(appAuthInfo);
 			appAuthInfo.Stub(x => x.Password = "PASS");
@@ -183,7 +182,6 @@ namespace Teleopti.Ccc.WinCodeTest.Main
 			_model.SelectedDataSourceContainer = dataSourceContainer;
 			_model.DataSourceContainers = new List<IDataSourceContainer> { dataSourceContainer };
 
-			_dataSourceHandler.Stub(x => x.AvailableDataSourcesProvider()).Return(availableDataSourcesProvider);
 			availableDataSourcesProvider.Stub(x => x.UnavailableDataSources())
 				  .Return(new List<IDataSource>());
 			_view.Stub(x => x.ShowStep(false));
@@ -255,9 +253,8 @@ namespace Teleopti.Ccc.WinCodeTest.Main
 			_model.SelectedDataSourceContainer = dataSourceContainer;
 			_model.DataSourceContainers = new List<IDataSourceContainer> { dataSourceContainer };
 
-			_dataSourceHandler.Stub(x => x.AvailableDataSourcesProvider()).Return(availableDataSourcesProvider);
 			availableDataSourcesProvider.Stub(x => x.UnavailableDataSources()).Return(new List<IDataSource>());
-			_winLogon.Stub(x => x.Logon(_model)).Return(new AuthenticationResult {Successful = true});
+			_winLogon.Stub(x => x.Logon(_model, _appData)).Return(new AuthenticationResult { Successful = true }).IgnoreArguments();
 			dataSourceContainer.Stub(x => x.AvailableBusinessUnitProvider).Return(buProvider);
 			buProvider.Stub(x => x.AvailableBusinessUnits()).Return(new List<IBusinessUnit> { bu, bu2 });
 			_view.Stub(x => x.ShowStep(true));
@@ -273,9 +270,8 @@ namespace Teleopti.Ccc.WinCodeTest.Main
 			var availableDataSourcesProvider = MockRepository.GenerateMock<IAvailableDataSourcesProvider>();
 			_model.AuthenticationType = AuthenticationTypeOption.Windows;
 			_model.DataSourceContainers = new List<IDataSourceContainer>{ dataSourceContainer };
-			_dataSourceHandler.Stub(x => x.AvailableDataSourcesProvider()).Return(availableDataSourcesProvider);
 			availableDataSourcesProvider.Stub(x => x.UnavailableDataSources()).Return(new List<IDataSource>());
-			_winLogon.Stub(x => x.Logon(_model)).Return(new AuthenticationResult { Successful = false });
+			_winLogon.Stub(x => x.Logon(_model, _appData)).Return(new AuthenticationResult { Successful = false }).IgnoreArguments();
 			_view.Stub(x => x.ShowStep(true));
 
 			_target.CurrentStep = LoginStep.SelectDatasource;

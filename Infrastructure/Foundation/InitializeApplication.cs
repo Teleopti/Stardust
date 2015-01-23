@@ -42,14 +42,6 @@ namespace Teleopti.Ccc.Infrastructure.Foundation
 	        get { return _unavailableDataSources; }
 	    }
 
-	    /// <summary>
-		/// Setup the application. Should be run once per application.
-		/// Is _not_ thread safe. It's the client's responsibility.
-		/// </summary>
-		/// <param name="clientCache">The client cache.</param>
-		/// <param name="appSettings">The application settings</param>
-		/// <param name="hibernateConfigurations">The nhibernate configurations.</param>
-		/// <param name="loadPasswordPolicyService">The password policy loading service</param>
 		public void Start(IState clientCache, IDictionary<string, string> appSettings,
 						  IEnumerable<string> hibernateConfigurations,
 						  ILoadPasswordPolicyService loadPasswordPolicyService)
@@ -85,6 +77,17 @@ namespace Teleopti.Ccc.Infrastructure.Foundation
 	    		                    loadPasswordPolicyService));
 	    }
 
+		public void Start(IState clientCache, IDictionary<string, string> appSettings,
+						  ILoadPasswordPolicyService loadPasswordPolicyService)
+		{
+			StateHolder.Initialize(clientCache);
+			
+			StartMessageBroker(appSettings);
+			StateHolder.Instance.State.SetApplicationData(
+				new ApplicationData(appSettings, MessageBroker,
+										  loadPasswordPolicyService,DataSourcesFactory));
+		}
+
 		private static string extractName(XElement element)
 	    {
 	        var navigator = element.CreateNavigator();
@@ -96,16 +99,6 @@ namespace Teleopti.Ccc.Infrastructure.Foundation
 	        return string.Empty;
 	    }
 
-		/// <summary>
-		/// Setup the application. Should be run once per application.
-		/// Is _not_ thread safe. It's the client's responsibility.
-		/// </summary>
-		/// <param name="clientCache">The client cache.</param>
-		/// <param name="xmlDirectory">The directory to nhibernate's conf file(s)</param>
-		/// <param name="loadPasswordPolicyService">The password policy loading service</param>
-		/// <param name="configurationWrapper">The configuration wrapper.</param>
-		/// <param name="startMessageBroker"></param>
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Reliability", "CA2000:Dispose objects before losing scope"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "3")]
 		public void Start(IState clientCache, string xmlDirectory, ILoadPasswordPolicyService loadPasswordPolicyService, IConfigurationWrapper configurationWrapper, bool startMessageBroker)
 		{
 			StateHolder.Initialize(clientCache);
@@ -133,16 +126,6 @@ namespace Teleopti.Ccc.Infrastructure.Foundation
 				new ApplicationData(appSettings, new ReadOnlyCollection<IDataSource>(dataSources), MessageBroker, loadPasswordPolicyService));
 		}
 
-		/// <summary>
-		/// This overload is mainly used by the DatabaseConverter.
-		/// Setup the application. Should be run once per application.
-		/// Is _not_ thread safe. It's the client's responsibility.
-		/// </summary>
-		/// <param name="clientCache">The client cache.</param>
-		/// <param name="settings">The settings.</param>
-		/// <param name="statisticConnectionString">The statistic connectionstring.</param>
-		/// <param name="configurationWrapper">The configuration wrapper.</param>
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "3"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Reliability", "CA2000:Dispose objects before losing scope")]
 		public void Start(IState clientCache,
 						  IDictionary<string, string> settings,
 						  string statisticConnectionString,

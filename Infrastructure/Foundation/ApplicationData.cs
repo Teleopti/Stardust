@@ -3,6 +3,9 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Globalization;
 using System.Linq;
+using System.Xml.Linq;
+using System.Xml.XPath;
+using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
 using Teleopti.Interfaces.MessageBroker.Client.Composite;
@@ -17,6 +20,7 @@ namespace Teleopti.Ccc.Infrastructure.Foundation
 		private readonly IList<IDataSource> _registeredDataSourceCollection;
 		private readonly IMessageBrokerComposite _messageBroker;
 		private readonly ILoadPasswordPolicyService _loadPasswordPolicyService;
+		private readonly IDataSourcesFactory _dataSourcesFactory;
 		private bool disposed;
 
 		public ApplicationData(IDictionary<string, string> appSettings, IEnumerable<IDataSource> registeredDataSources, IMessageBrokerComposite messageBroker, ILoadPasswordPolicyService loadPasswordPolicyService)
@@ -41,6 +45,18 @@ namespace Teleopti.Ccc.Infrastructure.Foundation
 			IList<IDataSource> sources = new List<IDataSource> { registeredDataSources };
 			_registeredDataSourceCollection = new ReadOnlyCollection<IDataSource>(sources);
 			_messageBroker = messageBroker;
+		}
+
+		//factory so we can add datasources later
+		public ApplicationData(IDictionary<string, string> appSettings, IMessageBrokerComposite messageBroker,
+			ILoadPasswordPolicyService loadPasswordPolicyService, IDataSourcesFactory dataSourcesFactory)
+		{
+			InParameter.NotNull("appSettings", appSettings);
+			AppSettings = appSettings;
+			_registeredDataSourceCollection = new List<IDataSource>();
+			_messageBroker = messageBroker;
+			_loadPasswordPolicyService = loadPasswordPolicyService;
+			_dataSourcesFactory = dataSourcesFactory;
 		}
 
 		public ILoadPasswordPolicyService LoadPasswordPolicyService
@@ -122,6 +138,25 @@ namespace Teleopti.Ccc.Infrastructure.Foundation
 					ds.Dispose();
 				}
 			}
+		}
+
+		public IDataSource CreateAndAddDataSource(string nhibConfig)
+		{
+			var element = XElement.Parse(nhibConfig);
+			IDataSource dataSource;
+			var success = _dataSourcesFactory.TryCreate(element, out dataSource);
+			if (success)
+			{
+				var children = element.CreateNavigator().Select("authenticationType");
+				foreach (XPathItem child in children)
+				{
+					dataSource.AuthenticationTypeOption |=
+						(AuthenticationTypeOption)Enum.Parse(typeof(AuthenticationTypeOption), child.Value);
+				}
+				_registeredDataSourceCollection.Add(dataSource);
+			}
+
+			return dataSource;
 		}
 	}
 }
