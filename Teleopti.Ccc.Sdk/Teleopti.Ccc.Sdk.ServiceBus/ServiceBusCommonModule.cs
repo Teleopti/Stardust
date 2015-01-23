@@ -40,26 +40,6 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
 			builder.RegisterType<RepositoryFactory>().As<IRepositoryFactory>().SingleInstance();
 			builder.RegisterType<InternalServiceBusSender>().As<IServiceBusSender>().SingleInstance();
 			builder.RegisterType<GroupingReadOnlyRepository>().As<IGroupingReadOnlyRepository>().SingleInstance();
-
-			var useNewResourceCalculationConfiguration = ConfigurationManager.AppSettings["EnableNewResourceCalculation"];
-			if (useNewResourceCalculationConfiguration != null && bool.Parse(useNewResourceCalculationConfiguration))
-			{
-				builder.RegisterType<ScheduledResourcesReadModelStorage>()
-					   .As<IScheduledResourcesReadModelPersister>()
-					   .As<IScheduledResourcesReadModelReader>()
-					   .SingleInstance();
-				builder.RegisterType<ScheduledResourcesReadModelUpdater>()
-					.As<IScheduledResourcesReadModelUpdater>().SingleInstance();
-			}
-			else
-			{
-				builder.RegisterType<DisabledScheduledResourcesReadModelStorage>()
-					   .As<IScheduledResourcesReadModelPersister>()
-					   .As<IScheduledResourcesReadModelReader>()
-					   .SingleInstance();
-				builder.RegisterType<DisabledScheduledResourcesReadModelUpdater>()
-					.As<IScheduledResourcesReadModelUpdater>().SingleInstance();
-			}
 		}
 
 		private static IJobResultFeedback getThreadJobResultFeedback(IComponentContext componentContext)

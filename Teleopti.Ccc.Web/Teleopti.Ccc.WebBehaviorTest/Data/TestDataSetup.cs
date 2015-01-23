@@ -1,10 +1,12 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Text;
 using System.Threading;
+using Autofac;
 using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common;
@@ -13,11 +15,16 @@ using Teleopti.Ccc.Infrastructure.ApplicationLayer;
 using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
+using Teleopti.Ccc.IocCommon;
+using Teleopti.Ccc.IocCommon.Configuration;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.WebBehaviorTest.Core;
 using Teleopti.Ccc.WebBehaviorTest.Data.Setups.Default;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
+using Teleopti.Interfaces.MessageBroker.Client;
+using Teleopti.Interfaces.MessageBroker.Client.Composite;
+using IMessageSender = Teleopti.Ccc.Infrastructure.UnitOfWork.IMessageSender;
 
 namespace Teleopti.Ccc.WebBehaviorTest.Data
 {
@@ -28,21 +35,20 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data
 
 		public static void CreateDataSourceAndStartWebApp()
 		{
+			var builder = new ContainerBuilder();
+			builder.RegisterModule(CommonModule.ForTest());
+			builder.RegisterType<EventsMessageSender>().As<IMessageSender>().SingleInstance();
+			builder.RegisterModule<SyncEventsPublisherModule>();
+			var container = builder.Build();
+
+			container.Resolve<IMessageBrokerUrl>().Configure(TestSiteConfigurationSetup.URL.ToString());
+			container.Resolve<ISignalRClient>().StartBrokerService();
+
+			var messageSenders = container.Resolve<IEnumerable<IMessageSender>>();
+
 			if (!DataSourceHelper.Ccc7BackupExists(globalData.HashValue))
 			{
-				datasource = DataSourceHelper.CreateDataSourceNoBackup(new[]
-				{
-					new EventsMessageSender(
-						new SyncEventsPublisher(
-							new EventPopulatingPublisher(
-									new SyncEventPublisher(
-										new ResolveEventHandlers(
-											new HardCodedResolver()
-											)
-											),
-									EventContextPopulator.Make())))
-
-				}, true);
+				datasource = DataSourceHelper.CreateDataSourceNoBackup(messageSenders, true);
 				startWebAppAsnyncAsEarlyAsPossibleForPerformanceReasons();
 				setupFakeState();
 				createGlobalDbData();
@@ -51,32 +57,13 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data
 			else
 			{
 				startWebAppAsnyncAsEarlyAsPossibleForPerformanceReasons();
-				datasource = DataSourceHelper.CreateDataSourceNoBackup(new[]
-				{
-					new EventsMessageSender(
-						new SyncEventsPublisher(
-							new EventPopulatingPublisher(
-								new SyncEventPublisher(
-									new ResolveEventHandlers(
-									new HardCodedResolver()
-									)
-									),
-							EventContextPopulator.Make())))
-
-				}, false);
+				datasource = DataSourceHelper.CreateDataSourceNoBackup(messageSenders, false);
 			}
 		}
 
 		private static void startWebAppAsnyncAsEarlyAsPossibleForPerformanceReasons()
 		{
-			using (var handler = new HttpClientHandler())
-			{
-				handler.AllowAutoRedirect = false;
-				using (var client = new HttpClient(handler))
-				{
-					client.GetAsync(TestSiteConfigurationSetup.URL);
-				}
-			}
+			Http.GetAsync("");
 		}
 
 		private static void createGlobalDbData()

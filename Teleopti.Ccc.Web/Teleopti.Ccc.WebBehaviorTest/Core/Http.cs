@@ -53,5 +53,19 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core
 				}
 			}
 		}
+
+		public static void GetAsync(string url)
+		{
+			var uri = new Uri(TestSiteConfigurationSetup.URL, url);
+
+			using (var handler = new HttpClientHandler())
+			{
+				handler.AllowAutoRedirect = false;
+				using (var client = new HttpClient(handler))
+				{
+					client.GetAsync(uri);
+				}
+			}
+		}
 	}
 }

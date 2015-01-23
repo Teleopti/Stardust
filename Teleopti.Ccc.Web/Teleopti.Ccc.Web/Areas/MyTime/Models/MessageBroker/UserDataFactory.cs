@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Specialized;
+using Teleopti.Ccc.Domain;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Web.Core;
 using Teleopti.Interfaces.Domain;

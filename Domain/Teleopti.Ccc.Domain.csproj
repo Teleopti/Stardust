@@ -389,6 +389,7 @@
     <Compile Include="Common\PersonsInOrganizationProvider.cs" />
     <Compile Include="ApplicationLayer\ICommandDispatcher.cs" />
     <Compile Include="ApplicationLayer\IHandleCommand.cs" />
+    <Compile Include="ConfigurationExtensions.cs" />
     <Compile Include="CurrentApplicationData.cs" />
     <Compile Include="DayOffPlanning\CMSBCaseSolver.cs" />
     <Compile Include="DayOffPlanning\CMSBOneFreeWeekendMax5WorkingDaysDecisionMaker.cs" />

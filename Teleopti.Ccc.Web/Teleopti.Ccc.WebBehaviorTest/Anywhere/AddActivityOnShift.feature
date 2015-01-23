@@ -1,4 +1,4 @@
-﻿Feature: Add activity
+﻿Feature: Add activity on shift
 	In order to assign work to a working agent
 	As a team leader
 	I want to add activity to an existing shift

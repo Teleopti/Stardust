@@ -8,6 +8,7 @@ using System.Text;
 using System.Web;
 using Microsoft.IdentityModel.Protocols.WSFederation;
 using Microsoft.IdentityModel.Web;
+using Teleopti.Ccc.Domain;
 using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.Web.Filters;
 

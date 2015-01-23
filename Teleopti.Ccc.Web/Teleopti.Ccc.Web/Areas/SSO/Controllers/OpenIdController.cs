@@ -7,13 +7,13 @@ using DotNetOpenAuth.OpenId;
 using DotNetOpenAuth.OpenId.Provider;
 using DotNetOpenAuth.Messaging;
 using DotNetOpenAuth.OpenId.Provider.Behaviors;
+using Teleopti.Ccc.Domain;
 using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Infrastructure.Util;
 using Teleopti.Ccc.Infrastructure.Web;
 using Teleopti.Ccc.Web.Areas.SSO.Core;
 using Teleopti.Ccc.Web.Areas.Start.Core.Shared;
 using Teleopti.Ccc.Web.Core;
-using Teleopti.Ccc.Web.Core.RequestContext;
 using log4net;
 
 namespace Teleopti.Ccc.Web.Areas.SSO.Controllers

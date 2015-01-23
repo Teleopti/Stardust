@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Specialized;
 
-namespace Teleopti.Ccc.Web.Core
+namespace Teleopti.Ccc.Domain
 {
 	public static class ConfigurationExtensions
 	{

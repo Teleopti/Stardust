@@ -102,27 +102,6 @@ namespace Teleopti.Ccc.Web.Core.IoC
 			builder.RegisterType<TeamAdherenceAggregator>().As<ITeamAdherenceAggregator>().SingleInstance();
 			builder.RegisterType<AgentStatesReader>().As<IAgentStateReader>().SingleInstance();
 
-			// ErikS: Bug 25359
-			if (ConfigurationManager.AppSettings.GetBoolSetting("EnableNewResourceCalculation"))
-			{
-				builder.RegisterType<ScheduledResourcesReadModelStorage>()
-					.As<IScheduledResourcesReadModelPersister>()
-					.As<IScheduledResourcesReadModelReader>()
-					.SingleInstance();
-				builder.RegisterType<ScheduledResourcesReadModelUpdater>()
-					.As<IScheduledResourcesReadModelUpdater>().SingleInstance();
-			}
-			else
-			{
-				builder.RegisterType<DisabledScheduledResourcesReadModelStorage>()
-					.As<IScheduledResourcesReadModelPersister>()
-					.As<IScheduledResourcesReadModelReader>()
-					.SingleInstance();
-				builder.RegisterType<DisabledScheduledResourcesReadModelUpdater>()
-					.As<IScheduledResourcesReadModelUpdater>().SingleInstance();
-			}
-
-
 			builder.RegisterModule(new ConfigurationSettingsReader());
 			builder.RegisterModule<TennantModule>();
 		}

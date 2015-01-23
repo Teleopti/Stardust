@@ -1,14 +1,18 @@
-﻿using System.Linq;
+﻿using System.Configuration;
+using System.Linq;
 using Autofac;
 using Autofac.Extras.DynamicProxy2;
+using Teleopti.Ccc.Domain;
 using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta;
 using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers;
 using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Analytics;
 using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.PersonScheduleDayReadModel;
+using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Resources;
 using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.ScheduleDayReadModel;
 using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.ScheduleProjection;
 using Teleopti.Ccc.Domain.Common;
+using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Infrastructure.Aop;
 using Teleopti.Ccc.Infrastructure.ApplicationLayer;
 using Teleopti.Ccc.Infrastructure.Repositories;
@@ -87,6 +91,28 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 				.CacheMethod(x => x.Overtimes())
 				.As<IAnalyticsScheduleRepository>();
 			builder.RegisterMbCacheComponent<AnalyticsScheduleRepository, IAnalyticsScheduleRepository>();
+
+			// ErikS: Bug 25359
+			if (ConfigurationManager.AppSettings.GetBoolSetting("EnableNewResourceCalculation"))
+			{
+				builder.RegisterType<ScheduledResourcesReadModelStorage>()
+					.As<IScheduledResourcesReadModelPersister>()
+					.As<IScheduledResourcesReadModelReader>()
+					.SingleInstance();
+				builder.RegisterType<ScheduledResourcesReadModelUpdater>()
+					.As<IScheduledResourcesReadModelUpdater>().SingleInstance();
+			}
+			else
+			{
+				builder.RegisterType<DisabledScheduledResourcesReadModelStorage>()
+					.As<IScheduledResourcesReadModelPersister>()
+					.As<IScheduledResourcesReadModelReader>()
+					.SingleInstance();
+				builder.RegisterType<DisabledScheduledResourcesReadModelUpdater>()
+					.As<IScheduledResourcesReadModelUpdater>().SingleInstance();
+			}
+
+
 		}
 	}
 }

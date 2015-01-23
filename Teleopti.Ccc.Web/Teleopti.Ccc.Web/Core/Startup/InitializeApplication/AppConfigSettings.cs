@@ -1,4 +1,5 @@
 ﻿using System.Configuration;
+using Teleopti.Ccc.Domain;
 
 namespace Teleopti.Ccc.Web.Core.Startup.InitializeApplication
 {

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Transactions;
+using Teleopti.Ccc.Domain;
 using Teleopti.Ccc.Domain.Common.Messaging;
 using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Infrastructure.Repositories;
@@ -173,6 +174,7 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 			catch (Exception ex)
 			{
 				persistExceptionHandler(ex);
+				PreserveStack.ForInnerOf(ex);
 				throw new DataSourceException("Cannot commit transaction! ", ex);
 			}
 			finally
