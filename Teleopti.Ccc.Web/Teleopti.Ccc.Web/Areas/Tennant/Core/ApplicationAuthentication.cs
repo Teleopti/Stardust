@@ -1,5 +1,7 @@
-﻿using Teleopti.Ccc.Infrastructure.MultiTenancy;
+﻿using Teleopti.Ccc.Domain.Security;
+using Teleopti.Ccc.Infrastructure.MultiTenancy;
 using Teleopti.Ccc.UserTexts;
+using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.Web.Areas.Tennant.Core
 {
@@ -8,12 +10,15 @@ namespace Teleopti.Ccc.Web.Areas.Tennant.Core
 		private readonly IApplicationUserQuery _applicationUserQuery;
 		private readonly IPasswordVerifier _passwordVerifier;
 		private readonly IPasswordPolicyCheck _passwordPolicyCheck;
-
-		public ApplicationAuthentication(IApplicationUserQuery applicationUserQuery, IPasswordVerifier passwordVerifier, IPasswordPolicyCheck passwordPolicyCheck)
+		private readonly INHibernateConfigurationsHandler _nHibernateConfigurationsHandler;
+		
+		public ApplicationAuthentication(IApplicationUserQuery applicationUserQuery, IPasswordVerifier passwordVerifier,
+			IPasswordPolicyCheck passwordPolicyCheck, INHibernateConfigurationsHandler nHibernateConfigurationsHandler)
 		{
 			_applicationUserQuery = applicationUserQuery;
 			_passwordVerifier = passwordVerifier;
 			_passwordPolicyCheck = passwordPolicyCheck;
+			_nHibernateConfigurationsHandler = nHibernateConfigurationsHandler;
 		}
 
 		public ApplicationAuthenticationResult Logon(string userName, string password)
@@ -31,13 +36,17 @@ namespace Teleopti.Ccc.Web.Areas.Tennant.Core
 			string passwordPolicyFailureReason;
 			if (!_passwordPolicyCheck.Verify(passwordPolicyForUser, out passwordPolicyFailureReason))
 				return createFailingResult(passwordPolicyFailureReason);
-	
+
+			string encryptedString = _nHibernateConfigurationsHandler.GetConfigForName(foundUser.PersonInfo.Tennant);
+			if(string.IsNullOrEmpty(encryptedString))
+				return createFailingResult(Resources.NoDatasource);
 
 			return new ApplicationAuthenticationResult
 			{
 				Success = true,
 				PersonId = passwordPolicyForUser.PersonInfo.Id,
-				Tennant = passwordPolicyForUser.PersonInfo.Tennant
+				Tennant = passwordPolicyForUser.PersonInfo.Tennant,
+				DataSourceEncrypted = encryptedString
 			};
 		}
 

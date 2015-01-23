@@ -405,6 +405,7 @@
     <Compile Include="Areas\Tennant\Core\IdentityAuthentication.cs" />
     <Compile Include="Areas\Tennant\Core\IPasswordPolicyCheck.cs" />
     <Compile Include="Areas\Tennant\Core\IPasswordVerifier.cs" />
+    <Compile Include="Areas\Tennant\Core\NHibernateConfigurationsHandler.cs" />
     <Compile Include="Areas\Tennant\Core\PasswordPolicyCheck.cs" />
     <Compile Include="Areas\Tennant\Core\PasswordVerifier.cs" />
     <Compile Include="Areas\Tennant\Core\TennantModule.cs" />

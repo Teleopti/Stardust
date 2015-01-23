@@ -1,5 +1,6 @@
 ﻿using System.Web.Mvc;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.NHibernate;
+using Teleopti.Ccc.Infrastructure.NHibernateConfiguration;
 using Teleopti.Ccc.Web.Areas.Tennant.Core;
 
 namespace Teleopti.Ccc.Web.Areas.Tennant
@@ -8,7 +9,8 @@ namespace Teleopti.Ccc.Web.Areas.Tennant
 	{
 		private readonly IApplicationAuthentication _applicationAuthentication;
 		private readonly IIdentityAuthentication _identityAuthentication;
-
+		
+		
 		public TennantController(IApplicationAuthentication applicationAuthentication, IIdentityAuthentication identityAuthentication)
 		{
 			_applicationAuthentication = applicationAuthentication;
