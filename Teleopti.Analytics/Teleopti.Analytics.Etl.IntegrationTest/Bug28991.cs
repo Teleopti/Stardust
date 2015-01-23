@@ -7,8 +7,7 @@ using Teleopti.Analytics.Etl.Interfaces.Transformer;
 using Teleopti.Analytics.Etl.Transformer.Job;
 using Teleopti.Analytics.Etl.Transformer.Job.MultipleDate;
 using Teleopti.Analytics.Etl.TransformerInfrastructure;
-using Teleopti.Ccc.Domain.Analytics;
-using Teleopti.Ccc.Domain.Common;
+using Teleopti.Ccc.IocCommon.Toggle;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.TestData.Core;
@@ -36,13 +35,13 @@ namespace Teleopti.Analytics.Etl.IntegrationTest
 		[Test]
 		public void ShouldWorkForBrazilTimeZone()
 		{
-			DateTime testDate = new DateTime(2013, 06, 15);
+			var testDate = new DateTime(2013, 06, 15);
 
 			AnalyticsRunner.RunAnalyticsBaseData(new List<IAnalyticsDataSetup>(), testDate);
 
 			IPerson person;
 			BasicShiftSetup.SetupBasicForShifts();
-			var personName = "Ola H";
+			const string personName = "Ola H";
 			BasicShiftSetup.AddPerson(out person, personName, "", testDate);
 
 			var cat = new ShiftCategoryConfigurable { Name = "Kattegat", Color = "Green" };
@@ -58,7 +57,7 @@ namespace Teleopti.Analytics.Etl.IntegrationTest
 
 			var dateList = new JobMultipleDate(TimeZoneInfoFactory.StockholmTimeZoneInfo());
 			dateList.Add(testDate.AddDays(-3), testDate.AddDays(3), JobCategoryType.Schedule);
-			var jobParameters = new JobParameters(dateList, 1, "UTC",15,"","False",CultureInfo.CurrentCulture, new EtlToggleManager())
+			var jobParameters = new JobParameters(dateList, 1, "UTC",15,"","False",CultureInfo.CurrentCulture, new FakeToggleManager())
 				{
 					Helper =
 						new JobHelper(new RaptorRepository(ConnectionStringHelper.ConnectionStringUsedInTestsMatrix, ""), null, null, null)
@@ -82,8 +81,7 @@ namespace Teleopti.Analytics.Etl.IntegrationTest
 			personFactory.Apply(leavingDateForUser);
 
 			//run nightly
-			jobParameters = null;
-			jobParameters = new JobParameters(dateList, 1, "UTC", 15, "", "False", CultureInfo.CurrentCulture, new EtlToggleManager())
+			jobParameters = new JobParameters(dateList, 1, "UTC", 15, "", "False", CultureInfo.CurrentCulture, new FakeToggleManager())
 			{
 				Helper =
 					new JobHelper(new RaptorRepository(ConnectionStringHelper.ConnectionStringUsedInTestsMatrix, ""), null, null, null)
@@ -99,13 +97,13 @@ namespace Teleopti.Analytics.Etl.IntegrationTest
 		[Test]
 		public void ShouldWorkForAustralianTimeZone()
 		{
-			DateTime testDate = new DateTime(2013, 06, 15);
+			var testDate = new DateTime(2013, 06, 15);
 
 			AnalyticsRunner.RunAnalyticsBaseData(new List<IAnalyticsDataSetup>(), testDate);
 
 			IPerson person;
 			BasicShiftSetup.SetupBasicForShifts();
-			var personName = "Ola H";
+			const string personName = "Ola H";
 			
 			BasicShiftSetup.AddPerson(out person, personName, "", testDate);
 
@@ -121,7 +119,7 @@ namespace Teleopti.Analytics.Etl.IntegrationTest
 
 			var dateList = new JobMultipleDate(TimeZoneInfoFactory.StockholmTimeZoneInfo());
 			dateList.Add(testDate.AddDays(-3), testDate.AddDays(3), JobCategoryType.Schedule);
-			var jobParameters = new JobParameters(dateList, 1, "UTC", 15, "", "False", CultureInfo.CurrentCulture, new EtlToggleManager())
+			var jobParameters = new JobParameters(dateList, 1, "UTC", 15, "", "False", CultureInfo.CurrentCulture, new FakeToggleManager())
 			{
 				Helper =
 					new JobHelper(new RaptorRepository(ConnectionStringHelper.ConnectionStringUsedInTestsMatrix, ""), null, null, null)
@@ -145,8 +143,7 @@ namespace Teleopti.Analytics.Etl.IntegrationTest
 			personFactory.Apply(leavingDateForUser);
 
 			//run nightly
-			jobParameters = null;
-			jobParameters = new JobParameters(dateList, 1, "UTC", 15, "", "False", CultureInfo.CurrentCulture, new EtlToggleManager())
+			jobParameters = new JobParameters(dateList, 1, "UTC", 15, "", "False", CultureInfo.CurrentCulture, new FakeToggleManager())
 			{
 				Helper =
 					new JobHelper(new RaptorRepository(ConnectionStringHelper.ConnectionStringUsedInTestsMatrix, ""), null, null, null)

@@ -28,7 +28,7 @@ namespace Teleopti.Analytics.Etl.ConfigToolCodeTest.Gui.DataSourceConfiguration
 			_view = MockRepository.GenerateMock<IDataSourceConfigurationView>();
 			_generalFunctions = MockRepository.GenerateMock<IGeneralFunctions>();
 
-			_model = new DataSourceConfigurationModel(_generalFunctions, new BaseConfiguration(null, 15, "W. Europe Standard Time", new EtlToggleManager()));
+			_model = new DataSourceConfigurationModel(_generalFunctions, new BaseConfiguration(null, 15, "W. Europe Standard Time", null));
 			_target = new DataSourceConfigurationPresenter(_view, _model);
 		}
 

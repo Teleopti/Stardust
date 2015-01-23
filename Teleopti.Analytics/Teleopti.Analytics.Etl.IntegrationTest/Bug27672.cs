@@ -1,18 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Globalization;
-using System.Linq;
 using NUnit.Framework;
 using Teleopti.Analytics.Etl.IntegrationTest.TestData;
 using Teleopti.Analytics.Etl.Interfaces.Transformer;
 using Teleopti.Analytics.Etl.Transformer.Job;
 using Teleopti.Analytics.Etl.Transformer.Job.MultipleDate;
-using Teleopti.Analytics.Etl.Transformer.Job.Steps;
 using Teleopti.Analytics.Etl.TransformerInfrastructure;
-using Teleopti.Ccc.Domain.Analytics;
-using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.ScheduleDayReadModel;
+using Teleopti.Ccc.IocCommon.Toggle;
 using Teleopti.Ccc.TestCommon;
-using Teleopti.Ccc.TestCommon.TestData.Analytics;
 using Teleopti.Ccc.TestCommon.TestData.Core;
 using Teleopti.Ccc.TestCommon.TestData.Setups.Configurable;
 using Teleopti.Ccc.TestCommon.TestData.Setups.Specific;
@@ -34,11 +30,11 @@ namespace Teleopti.Analytics.Etl.IntegrationTest
 		{
 			SetupFixtureForAssembly.EndTest();
 		}
-		 
+
 		[Test]
 		public void ShouldWorkForStockholm()
 		{
-			DateTime testDate = new DateTime(2013, 06, 15);
+			var testDate = new DateTime(2013, 06, 15);
 
 			// run this to get a date and time in mart.LastUpdatedPerStep
 			var etlUpdateDate = new EtlReadModelSetup { BusinessUnit = TestState.BusinessUnit, StepName = "Schedules" };
@@ -59,41 +55,43 @@ namespace Teleopti.Analytics.Etl.IntegrationTest
 			BasicShiftSetup.SetupBasicForShifts();
 			BasicShiftSetup.AddPerson(out person, "Ola H", "", testDate);
 			BasicShiftSetup.AddThreeShifts("Ola H", cat.ShiftCategory, activityLunch.Activity, activityPhone.Activity, testDate);
-			
+
 			var dateList = new JobMultipleDate(TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time"));
 			dateList.Add(testDate.AddDays(-3), testDate.AddDays(3), JobCategoryType.Schedule);
-			var jobParameters = new JobParameters(dateList, 1, "UTC", 15, "", "False", CultureInfo.CurrentCulture, new EtlToggleManager())
+			var jobParameters = new JobParameters(dateList, 1, "UTC", 15, "", "False", CultureInfo.CurrentCulture, new FakeToggleManager())
 				{
 					Helper =
 						new JobHelper(new RaptorRepository(ConnectionStringHelper.ConnectionStringUsedInTestsMatrix, ""), null, null, null)
 				};
 
 			//transfer site, team contract etc from app to analytics
-			var result = StepRunner.RunNightly(jobParameters);
+			StepRunner.RunNightly(jobParameters);
 
-			
+
 			var factSchedules = SqlCommands.RowsInFactSchedule();
 			Assert.That(factSchedules, Is.EqualTo(96));
-            
-            //run again now with fewer days
-            dateList.Clear();
+
+			//run again now with fewer days
+			dateList.Clear();
 			dateList.Add(testDate.AddDays(0), testDate.AddDays(0), JobCategoryType.Schedule);
-			jobParameters = new JobParameters(dateList, 1, "UTC", 15, "", "False", CultureInfo.CurrentCulture, new EtlToggleManager())
-            {
-                Helper =
-					new JobHelper(new RaptorRepository(ConnectionStringHelper.ConnectionStringUsedInTestsMatrix, ""), null, null, null)
-            };
-            
-            result = StepRunner.RunNightly(jobParameters);
+			jobParameters = new JobParameters(dateList, 1, "UTC", 15, "", "False", CultureInfo.CurrentCulture, new FakeToggleManager())
+						{
+							Helper = new JobHelper(
+								new RaptorRepository(ConnectionStringHelper.ConnectionStringUsedInTestsMatrix, ""), 
+								null, null, null
+								)
+						};
+
+			StepRunner.RunNightly(jobParameters);
 
 			factSchedules = SqlCommands.RowsInFactSchedule();
 			Assert.That(factSchedules, Is.EqualTo(96));
 
 		}
-        [Test]
-        public void ShouldWorkForCanberra()
-        {
-			DateTime testDate = new DateTime(2013, 06, 15);
+		[Test]
+		public void ShouldWorkForCanberra()
+		{
+			var testDate = new DateTime(2013, 06, 15);
 
 			// run this to get a date and time in mart.LastUpdatedPerStep
 			var etlUpdateDate = new EtlReadModelSetup { BusinessUnit = TestState.BusinessUnit, StepName = "Schedules" };
@@ -110,41 +108,41 @@ namespace Teleopti.Analytics.Etl.IntegrationTest
 			Data.Apply(activityPhone);
 			Data.Apply(activityLunch);
 
-            IPerson person;
-            BasicShiftSetup.SetupBasicForShifts();
+			IPerson person;
+			BasicShiftSetup.SetupBasicForShifts();
 			BasicShiftSetup.AddPerson(out person, "Ola H", "", testDate);
 			Data.Person("Ola H").Apply(new AustralianTimeZone());
 			BasicShiftSetup.AddThreeShifts("Ola H", cat.ShiftCategory, activityLunch.Activity, activityPhone.Activity, testDate);
-           
-            var dateList = new JobMultipleDate(TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time"));
+
+			var dateList = new JobMultipleDate(TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time"));
 			dateList.Add(testDate.AddDays(-3), testDate.AddDays(3), JobCategoryType.Schedule);
-			var jobParameters = new JobParameters(dateList, 1, "UTC", 15, "", "False", CultureInfo.CurrentCulture, new EtlToggleManager())
-            {
-                Helper =
-					new JobHelper(new RaptorRepository(ConnectionStringHelper.ConnectionStringUsedInTestsMatrix, ""), null, null, null)
-            };
+			var jobParameters = new JobParameters(dateList, 1, "UTC", 15, "", "False", CultureInfo.CurrentCulture, new FakeToggleManager())
+						{
+							Helper =
+				new JobHelper(new RaptorRepository(ConnectionStringHelper.ConnectionStringUsedInTestsMatrix, ""), null, null, null)
+						};
 
-            //transfer site, team contract etc from app to analytics
-            var result = StepRunner.RunNightly(jobParameters);
+			//transfer site, team contract etc from app to analytics
+			StepRunner.RunNightly(jobParameters);
 
-            // now it should have data on all three dates on 96 interval
+			// now it should have data on all three dates on 96 interval
 			var factSchedules = SqlCommands.RowsInFactSchedule();
 			Assert.That(factSchedules, Is.EqualTo(96));
 
-            //run again now with fewer days
-            dateList.Clear();
+			//run again now with fewer days
+			dateList.Clear();
 			dateList.Add(testDate.AddDays(0), testDate.AddDays(0), JobCategoryType.Schedule);
-			jobParameters = new JobParameters(dateList, 1, "UTC", 15, "", "False", CultureInfo.CurrentCulture, new EtlToggleManager())
-            {
-                Helper =
-					new JobHelper(new RaptorRepository(ConnectionStringHelper.ConnectionStringUsedInTestsMatrix, ""), null, null, null)
-            };
+			jobParameters = new JobParameters(dateList, 1, "UTC", 15, "", "False", CultureInfo.CurrentCulture, new FakeToggleManager())
+						{
+							Helper =
+				new JobHelper(new RaptorRepository(ConnectionStringHelper.ConnectionStringUsedInTestsMatrix, ""), null, null, null)
+						};
 
-            result = StepRunner.RunNightly(jobParameters);
+			StepRunner.RunNightly(jobParameters);
 
 			factSchedules = SqlCommands.RowsInFactSchedule();
 			Assert.That(factSchedules, Is.EqualTo(96));
 
-        }
+		}
 	}
 }

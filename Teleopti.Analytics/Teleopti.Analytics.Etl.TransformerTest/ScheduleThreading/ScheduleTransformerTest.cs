@@ -28,7 +28,7 @@ namespace Teleopti.Analytics.Etl.TransformerTest.ScheduleThreading
 															 "W. Europe Standard Time",
 															 minutesPerInterval,
 															 "Data Source=SSAS_Server;Initial Catalog=SSAS_DB", "false",
-															 CultureInfo.CurrentCulture, new EtlToggleManager());
+															 CultureInfo.CurrentCulture, null);
 
 			jobParameters.Helper = new JobHelper(new RaptorRepositoryForTest(), null, null, null);
 			

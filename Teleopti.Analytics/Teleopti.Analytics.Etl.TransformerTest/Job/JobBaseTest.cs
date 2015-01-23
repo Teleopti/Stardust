@@ -107,7 +107,7 @@ namespace Teleopti.Analytics.Etl.TransformerTest.Job
 								JobCategoryType.Forecast);
 
 			var jobParameters = new JobParameters(jobMultipleDate, 1, _timeZone.Id, 15,
-												  "Data Source=SSAS_Server;Initial Catalog=SSAS_DB", "false", CultureInfo.CurrentCulture, new EtlToggleManager());
+												  "Data Source=SSAS_Server;Initial Catalog=SSAS_DB", "false", CultureInfo.CurrentCulture, null);
 			IList<IJobStep> jobStepList = new List<IJobStep>();
 			jobStepList.Add(new StageScheduleJobStep(jobParameters));
 			jobStepList.Add(new StageForecastWorkloadJobStep(jobParameters));
