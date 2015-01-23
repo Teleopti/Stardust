@@ -41,7 +41,7 @@ namespace Teleopti.Ccc.Infrastructure.MultiTenancy
 			return isValid;
 		}
 
-		public void ClearInvalidAttempts()
+		public virtual void ClearInvalidAttempts()
 		{
 			InvalidAttemptsSequenceStart = DateTime.UtcNow;
 			InvalidAttempts = 0;
