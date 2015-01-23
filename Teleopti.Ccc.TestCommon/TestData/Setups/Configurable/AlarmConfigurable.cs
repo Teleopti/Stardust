@@ -3,7 +3,6 @@ using System.Drawing;
 using System.Linq;
 using Teleopti.Ccc.Domain.RealTimeAdherence;
 using Teleopti.Ccc.Infrastructure.Repositories;
-using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.TestCommon.TestData.Core;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
@@ -24,8 +23,6 @@ namespace Teleopti.Ccc.TestCommon.TestData.Setups.Configurable
 			var color = string.IsNullOrEmpty(AlarmColor) ? Color.Red : Color.FromName(AlarmColor);
 			var alarmType = new AlarmType(new Description(Name), color, TimeSpan.Zero, AlarmTypeMode.UserDefined, StaffingEffect);
 
-			if (!string.IsNullOrEmpty(BusinessUnit))
-				uow.DisableFilter(QueryFilter.BusinessUnit);
 			var activityRepository = new ActivityRepository(uow);
 
 			var stateGroup = new RtaStateGroup(PhoneState, false, true);

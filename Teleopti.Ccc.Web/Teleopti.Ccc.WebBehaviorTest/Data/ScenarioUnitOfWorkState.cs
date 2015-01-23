@@ -15,7 +15,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data
 				if (_unitOfWork == null)
 				{
 					_unitOfWork = GlobalUnitOfWorkState.CurrentUnitOfWorkFactory.LoggedOnUnitOfWorkFactory().CreateAndOpenUnitOfWork();
-					// might be required for some scenarios, but not right now.
 					_unitOfWork.DisableFilter(QueryFilter.BusinessUnit);
 				}
 				return _unitOfWork;
