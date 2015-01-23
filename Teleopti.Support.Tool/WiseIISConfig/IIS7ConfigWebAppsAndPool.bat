@@ -186,7 +186,10 @@ if EXIST "%WebConfigPath%" (SetMachineKeys.exe "%WebConfigPath%")
 ::Different authentication based on "SDKCREDPROT"
 ::-----
 SET authentication=anonymousAuthentication
-for /f "tokens=1,2 delims=;" %%g in (%SDKCREDPROT%\%authentication%.txt) do CALL:IISSecuritySet "%%g" "%authentication%" "%%h"
+for /f "tokens=1,2 delims=;" %%g in (%SDKCREDPROT%\%authentication%.txt) do (
+CALL:IISSecuritySet "%%g" "%authentication%" "%%h" 
+CALL:IISAppPoolIdentitySet "%%g" "%authentication%" "%%h"
+)
 SET authentication=basicAuthentication
 for /f "tokens=1,2 delims=;" %%g in (%SDKCREDPROT%\%authentication%.txt) do CALL:IISSecuritySet "%%g" "%authentication%" "%%h"
 SET authentication=windowsAuthentication
@@ -220,6 +223,13 @@ exit /B
 if "%SubSiteName%"=="%~1" (
 ECHO "%appcmd%" set config "%DefaultSite%/%SitePath%" -section:system.webServer/security/authentication/%~2 /enabled:"%~3" /commit:apphost
 "%appcmd%" set config "%DefaultSite%/%SitePath%" -section:system.webServer/security/authentication/%~2 /enabled:"%~3" /commit:apphost
+)
+exit /B
+
+:IISAppPoolIdentitySet
+if "%SubSiteName%"=="%~1" (
+ECHO "%appcmd%" set config "%DefaultSite%/%SitePath%" -section:anonymousAuthentication /username:"" --password /commit:apphost
+"%appcmd%" set config "%DefaultSite%/%SitePath%" -section:anonymousAuthentication /username:"" --password /commit:apphost
 )
 exit /B
 
