@@ -34,32 +34,33 @@ ECHO %ROOTDIR%\nhib\FixMyConfig.nhib.xml,BuildArtifacts\TeleoptiCCC7.nhib.xml>>%
 ECHO RC>"c:\nhib\Toggles.txt"
 
 ::final changes
-SET configPath=..\..\..\Teleopti.Ccc.SmartClientPortal\Teleopti.Ccc.SmartClientPortal.Shell\bin\%configuration%\Teleopti.Ccc.SmartClientPortal.Shell.exe.config
+SET configPath=%ROOTDIR%\Teleopti.Ccc.SmartClientPortal\Teleopti.Ccc.SmartClientPortal.Shell\bin\%configuration%\Teleopti.Ccc.SmartClientPortal.Shell.exe.config
+SET commonFolder=%ROOTDIR%\.debug-setup\common
 
 SET nodePath=configuration/appSettings/add[@key='GetConfigFromWebService']
 SET attributeName=value
 SET value=false
-%ROOTDIR%\XmlSetAttribute.exe %configPath% %nodePath% %attributeName% %value%
+%commonFolder%\XmlSetAttribute.exe %configPath% %nodePath% %attributeName% %value%
 
 SET nodePath=configuration/appSettings/add[@key='nhibconfpath']
 SET attributeName=value
-SET value=%ROOTDIR%\Domain\FeatureFlags\toggles.txt
-%ROOTDIR%\XmlSetAttribute.exe %configPath% %nodePath% %attributeName% %value%
+SET value=%ROOTDIR%\nhib
+%commonFolder%\XmlSetAttribute.exe %configPath% %nodePath% %attributeName% %value%
 
 SET nodePath=configuration/appSettings/add[@key='FeatureToggle']
 SET attributeName=value
-SET value=%ROOTDIR%\nhib
-%ROOTDIR%\XmlSetAttribute.exe %configPath% %nodePath% %attributeName% %value%
+SET value=%ROOTDIR%\Domain\FeatureFlags\toggles.txt
+%commonFolder%\XmlSetAttribute.exe %configPath% %nodePath% %attributeName% %value%
 
 SET nodePath=configuration/system.serviceModel/bindings/basicHttpBinding/binding/security
 SET attributeName=mode
 SET value=TransportCredentialOnly
-%ROOTDIR%\XmlSetAttribute.exe %configPath% %nodePath% %attributeName% %value%
+%commonFolder%\XmlSetAttribute.exe %configPath% %nodePath% %attributeName% %value%
 
 SET nodePath=configuration/system.serviceModel/bindings/basicHttpBinding/binding/security/transport
 SET attributeName=clientCredentialType
 SET value=Ntlm
-%ROOTDIR%\XmlSetAttribute.exe %configPath% %nodePath% %attributeName% %value%
+%commonFolder%\XmlSetAttribute.exe %configPath% %nodePath% %attributeName% %value%
 
 ENDLOCAL
 GOTO:EOF
