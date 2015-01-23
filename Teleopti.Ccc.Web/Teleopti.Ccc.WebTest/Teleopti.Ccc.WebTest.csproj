@@ -227,8 +227,11 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Areas\Rta\Synchronization\LockingTest.cs" />
+    <Compile Include="Areas\Tennant\Core\ApplicationAuthenticationPasswordPolicesTest.cs" />
+    <Compile Include="Areas\Tennant\Core\EncryptPassword.cs" />
     <Compile Include="Areas\Tennant\Core\IdentityAuthenticationTest.cs" />
     <Compile Include="Areas\Tennant\Core\IoCTest.cs" />
+    <Compile Include="Areas\Tennant\Core\SuccessfulPasswordPolicy.cs" />
     <Compile Include="Areas\Tennant\TennantControllerTest.cs" />
     <Compile Include="Areas\Tennant\Core\ApplicationAuthenticationTest.cs" />
     <Compile Include="Areas\Messages\MessagesAreaRegistrationTest.cs" />
