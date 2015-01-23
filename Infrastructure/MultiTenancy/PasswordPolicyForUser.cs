@@ -27,9 +27,14 @@ namespace Teleopti.Ccc.Infrastructure.MultiTenancy
 			IsLocked = true;
 		}
 
-		public virtual bool ValidPassword(string encryptedPassword)
+		public virtual bool IsValidPassword(string encryptedPassword)
 		{
-			return PersonInfo.Password.Equals(encryptedPassword);
+			var isValid = PersonInfo.Password.Equals(encryptedPassword);
+			if (!isValid)
+			{
+				InvalidAttempts++;
+			}
+			return isValid;
 		}
 	}
 }

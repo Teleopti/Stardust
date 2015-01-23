@@ -14,7 +14,7 @@ namespace Teleopti.Ccc.Web.Areas.Tennant.Core
 
 		public bool Check(string userPassword, PasswordPolicyForUser passwordPolicyForUser)
 		{
-			return passwordPolicyForUser.ValidPassword(_oneWayEncryption.EncryptString(userPassword));
+			return passwordPolicyForUser.IsValidPassword(_oneWayEncryption.EncryptString(userPassword));
 		}
 	}
 }

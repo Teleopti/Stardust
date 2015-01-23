@@ -40,6 +40,23 @@ namespace Teleopti.Ccc.WebTest.Areas.Tennant.Core
 			res.FailReason.Should().Be.EqualTo(Resources.LogOnFailedInvalidUserNameOrPassword);
 		}
 
+		[Test]
+		public void IncorrectPasswordShouldIncreaseInvalidAttempts()
+		{
+			const string userName = "validUserName";
+
+			var findApplicationQuery = MockRepository.GenerateMock<IApplicationUserQuery>();
+			var passwordPolicyForUser = new PasswordPolicyForUser(new PersonInfo {Password = "thePassword"});
+			findApplicationQuery.Expect(x => x.FindUserData(userName)).Return(passwordPolicyForUser);
+
+			var target = new ApplicationAuthentication(findApplicationQuery, new PasswordVerifier(new OneWayEncryption()),
+				new successfulPasswordPolicy(), MockRepository.GenerateMock<INHibernateConfigurationsHandler>());
+			target.Logon(userName, "invalidPassword");
+			target.Logon(userName, "invalidPassword");
+
+			passwordPolicyForUser.InvalidAttempts.Should().Be.EqualTo(2);
+		}
+
 		//remove this and replace with real tests when old password policy is converted!
 		[Test]
 		public void PasswordPolicyShouldBeChecked()
