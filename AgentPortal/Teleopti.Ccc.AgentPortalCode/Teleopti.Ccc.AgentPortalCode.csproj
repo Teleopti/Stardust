@@ -110,8 +110,8 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Syncfusion.Compression.Base">
-      <HintPath>..\..\packages\Syncfusion.Pdf.12.1.0.43\lib\4.0\Syncfusion.Compression.Base.dll</HintPath>
-      <Private>True</Private>
+      <HintPath>..\..\packages\Syncfusion.Pdf.12.1.0.44\lib\4.0\Syncfusion.Compression.Base.dll</HintPath>
+	  <Private>True</Private>
     </Reference>
     <Reference Include="Syncfusion.Core">
       <HintPath>..\..\packages\Syncfusion.Core.12.1.0.43\lib\4.0\Syncfusion.Core.dll</HintPath>
@@ -123,7 +123,7 @@
       <HintPath>..\..\packages\Syncfusion.Grid.Win.12.1.0.43\lib\4.0\Syncfusion.Grid.Windows.dll</HintPath>
     </Reference>
     <Reference Include="Syncfusion.Pdf.Base">
-      <HintPath>..\..\packages\Syncfusion.Pdf.12.1.0.43\lib\4.0\Syncfusion.Pdf.Base.dll</HintPath>
+      <HintPath>..\..\packages\Syncfusion.Pdf.12.1.0.44\lib\4.0\Syncfusion.Pdf.Base.dll</HintPath>
     </Reference>
     <Reference Include="Syncfusion.Schedule.Base, Version=12.1400.0.43, Culture=neutral, PublicKeyToken=3d67ed1f87d44c89, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
