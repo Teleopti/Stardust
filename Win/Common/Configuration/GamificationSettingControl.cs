@@ -7,7 +7,6 @@ using Syncfusion.Windows.Forms.Tools;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.FeatureFlags;
-using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.Infrastructure.Repositories;
@@ -28,11 +27,11 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 		private const short firstItemIndex = 0;
 	    private const short itemDiffernce = 1;
 		private readonly List<GamificationSettingView> _gamificationSettingList = new List<GamificationSettingView>();
+		private readonly List<GamificationSettingView> _gamificationSettingListToBeDeleted;
 		private readonly IDictionary<GamificationSettingRuleSet, string> _gamificationSettingRuleSetList = new Dictionary<GamificationSettingRuleSet, string>();
 		private readonly IToggleManager _toggleManager;
 		private readonly Lazy<GamificationSettingRuleWithDifferentThresholdControl> gamificationSettingRuleWithDifferentThresholdControl;
 		private readonly Lazy<GamificationSettingRuleWithRatioConvertorControl> gamificationSettingRuleWithRatioConvertorControl;
-		private readonly List<GamificationSettingView> _gamificationSettingListToBeDeleted;
 
 		public IUnitOfWork UnitOfWork { get; private set; }
 
@@ -165,7 +164,6 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 
 		private void buttonNewClick(object sender, EventArgs e)
 		{
-			if (SelectedGamificationSetting == null) return;
 			Cursor.Current = Cursors.WaitCursor;
 			addNewGamificationSetting();
 			Cursor.Current = Cursors.Default;
@@ -259,8 +257,10 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 
 		private void changeGamificationSettingDescription()
 		{
+			if (SelectedGamificationSetting == null) return;
+			_gamificationSettingList[comboBoxAdvGamificationSettings.SelectedIndex].Description = new Description(textBoxDescription.Text);
 			SelectedGamificationSetting.Description = new Description(textBoxDescription.Text);
-			loadGamificationSettings();
+			bindSettingListToComboBox();
 		}
 
 		private void validateGamificationSettingDescription()
@@ -365,6 +365,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 		{
 			var newBadgeSetting = createGamificationSetting();
 			_gamificationSettingList.Add(newBadgeSetting);
+			//loadGamificationSettings();
 			bindSettingListToComboBox();
 			comboBoxAdvGamificationSettings.SelectedIndex = LastItemIndex;
 		}
@@ -384,7 +385,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 			using (var myUow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
 			{
 				var gamificationSettingRepo = new GamificationSettingRepository(myUow);
-				var gamificationSettings = gamificationSettingRepo.FindAllGamificationSettingsSortedByDescription();
+				var gamificationSettings = gamificationSettingRepo.FindAllGamificationSettingsSortedByDescription().ToList();
 
 				foreach (var setting in gamificationSettings)
 				{
@@ -402,7 +403,6 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 			{
 				selected = firstItemIndex;
 			}
-
 			// Rebinds list to comboBox.
 			bindSettingListToComboBox();
 

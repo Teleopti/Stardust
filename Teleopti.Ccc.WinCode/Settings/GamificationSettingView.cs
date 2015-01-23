@@ -7,7 +7,7 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.WinCode.Settings
 {
-	public class GamificationSettingView: EntityContainer<IGamificationSetting>
+	public class GamificationSettingView : EntityContainer<IGamificationSetting>
 	{
 
 		public Description Description
