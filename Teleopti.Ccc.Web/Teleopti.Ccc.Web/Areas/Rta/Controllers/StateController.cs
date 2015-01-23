@@ -15,7 +15,7 @@ namespace Teleopti.Ccc.Web.Areas.Rta.Controllers
 		}
 
 		[HttpPost]
-		public JsonResult Change(ExternalUserStateWebModel input)
+		public void Change(ExternalUserStateWebModel input)
 		{
 			DateTime batchId;
 			DateTime.TryParse(input.BatchId, out batchId);
@@ -35,8 +35,8 @@ namespace Teleopti.Ccc.Web.Areas.Rta.Controllers
 				});
 
 			// apparently 1 = input accepted, 0 = something was missing, anything else == error
-			if (result == 1 || result == 0)
-				return Json(result);
+			if (result == 1)
+				return;
 			throw new HttpException("Result from TeleoptiRtaService was " + result);
 		}
 	}
