@@ -76,7 +76,7 @@ Scenario: Current activity changes
 	Given I have the role 'Full access to mytime'
 	And the time is '2030-01-01 11:59'
 	When I view ASM
-	And current browser time has changed to '2030-01-01 12:00'
+	And the time is '2030-01-01 12:00'
 	Then I should see Phone as current activity
 
 Scenario: Upcoming activity time period should be displayed
@@ -110,7 +110,7 @@ Scenario: Asm should be automatically reloaded when time passes
 	And the time is '2030-01-01 23:59'
 	When I view ASM
 	Then Now indicator should be at hour '47'
-	When current browser time has changed to '2030-01-02 00:01'
+	When the time is '2030-01-02 00:01'
 	Then Now indicator should be at hour '24'
 
 Scenario: Asm should not indicate unread messages if no messages

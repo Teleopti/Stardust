@@ -277,7 +277,6 @@
     </Compile>
     <Compile Include="MyTime\TeamScheduleForGroupsStepDefinition.cs" />
     <Compile Include="MyTime\22851_FindShiftTradePageFromTeamScheduleStepDefinition.cs" />
-    <Compile Include="MyTime\TimeStepDefinitions.cs" />
     <Compile Include="MyTime\WeekScheduleOnMobileStepDefinitions.cs" />
     <Compile Include="MyTime\WeekScheduleOnMobile.feature.cs">
       <DependentUpon>WeekScheduleOnMobile.feature</DependentUpon>

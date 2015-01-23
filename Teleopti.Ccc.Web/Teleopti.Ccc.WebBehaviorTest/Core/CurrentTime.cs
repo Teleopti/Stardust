@@ -38,8 +38,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core
 		private static void fakeServerTime()
 		{
 			TestControllerMethods.SetCurrentTime(Value());
-			//if (FeatureContext.Current.FeatureInfo.Title.StartsWith("Real time adherence"))
-			//	PhoneStateStepDefinitions.CheckForActivityChange();
 		}
 
 		private static void fakeClientTime()
@@ -48,8 +46,10 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core
 				new FakeClientTimeForAllJsDateObjectsCreatedAsUtcSoTheActualTimeFromGetTimeVaryDependengingOnBrowserTimeZone().Fake(Value());
 			else if (Browser.Interactions.UrlContains("/Anywhere#"))
 				new FakeClientTimeUsingSinonKnownWorkableWay().Fake(Value());
-			else if (Browser.Interactions.UrlContains("/MyTime"))
-				new FakeTimeUsingMyTimeAsmMethod().Fake(Value());
+			else if (Browser.Interactions.UrlContains("/MyTime/Asm"))
+				new FakeTimeUsingMyTimeMethod().Fake(Value());
+			else if (Browser.Interactions.UrlContains("/MyTime#Schedule/Week"))
+				new FakeTimeUsingMyTimeMethod().Fake(Value());
 		}
 	}
 
@@ -78,7 +78,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core
 		}
 	}
 
-	public class FakeTimeUsingMyTimeAsmMethod
+	public class FakeTimeUsingMyTimeMethod
 	{
 		public void Fake(DateTime time)
 		{

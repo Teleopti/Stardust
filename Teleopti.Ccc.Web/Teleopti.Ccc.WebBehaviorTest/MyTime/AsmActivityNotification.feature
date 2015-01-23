@@ -70,7 +70,7 @@ Scenario: Alert agent before first activity starts
 	And the time is '2030-01-01 07:56:59'
 	And Alert Time setting is '180' seconds                      
 	When I am viewing week schedule
-	And current browser time has changed to '2030-01-01 07:57:00'
+	And the time is '2030-01-01 07:57:00'
 	Then I should see a notify message contains text Phone
 	And I should see a notify message contains text start
 	And I should see a notify message contains text 8:00 AM
@@ -80,7 +80,7 @@ Scenario: Alert agent before next activity starts
 	And the time is '2030-01-01 10:55:59'
 	And Alert Time setting is '240' seconds    
 	When I am viewing week schedule
-	And current browser time has changed to '2030-01-01 10:56:00'
+	And the time is '2030-01-01 10:56:00'
 	Then I should see a notify message contains text Lunch
 	And I should see a notify message contains text start
 	And I should see a notify message contains text 11:00 AM
@@ -90,7 +90,7 @@ Scenario: Alert agent before last activity ends
 	And the time is '2030-01-01 16:58:59'
 	And Alert Time setting is '60' seconds                      
 	When I am viewing week schedule
-	And current browser time has changed to '2030-01-01 16:59:00'
+	And the time is '2030-01-01 16:59:00'
 	Then I should see a notify message contains text Current shift will end
 	And I should see a notify message contains text 5:00 PM
 
@@ -99,7 +99,7 @@ Scenario: Do not alert agent Before Alert Time
 	And the time is '2030-01-01 10:55:00'
 	And Alert Time setting is '120' seconds                      
 	When I am viewing week schedule
-	And current browser time has changed to '2030-01-01 10:57:00'
+	And the time is '2030-01-01 10:57:00'
 	Then I should not see any notify
 
 Scenario: Do not alert agent After Alert Time 
@@ -107,7 +107,7 @@ Scenario: Do not alert agent After Alert Time
 	And the time is '2030-01-01 11:45:00'
 	And Alert Time setting is '60' seconds                      
 	When I am viewing week schedule
-	And current browser time has changed to '2030-01-01 11:45:01'
+	And the time is '2030-01-01 11:45:01'
 	Then I should not see any notify
 
 Scenario: Do not alert agent without permission for ASM
@@ -115,7 +115,7 @@ Scenario: Do not alert agent without permission for ASM
 	And the time is '2030-01-01 10:57:59'
 	And Alert Time setting is '120' seconds                      
 	When I am viewing week schedule
-	And current browser time has changed to '2030-01-01 10:58:00'
+	And the time is '2030-01-01 10:58:00'
 	Then I should not see any notify
 
 Scenario: Automatical close pop up notify message
@@ -123,10 +123,10 @@ Scenario: Automatical close pop up notify message
 	And the time is '2030-01-01 10:57:59'
 	And Alert Time setting is '120' seconds                      
 	When I am viewing week schedule
-	And current browser time has changed to '2030-01-01 10:58:00'
+	And the time is '2030-01-01 10:58:00'
 	Then I should see a notify message contains text Lunch
 	And I should see a notify message contains text start
-	When current browser time has changed to '2030-01-01 10:58:30'
+	When the time is '2030-01-01 10:58:30'
 	Then I should not see pop up notify message
 
 Scenario: Should alert agent when now is between 2 shift
@@ -134,7 +134,7 @@ Scenario: Should alert agent when now is between 2 shift
 	And the time is '2030-01-03 14:56:59'
 	And Alert Time setting is '180' seconds                      
 	When I am viewing week schedule
-	And current browser time has changed to '2030-01-01 14:57:00'
+	And the time is '2030-01-01 14:57:00'
 	Then I should see a notify message contains text Phone
 	And I should see a notify message contains text start
 	And I should see a notify message contains text 3:00 PM
@@ -144,6 +144,6 @@ Scenario: Should alert agent latest activity when now is at latest activity of 2
 	And the time is '2030-01-03 06:56:59'
 	And Alert Time setting is '180' seconds                      
 	When I am viewing week schedule
-	And current browser time has changed to '2030-01-03 06:57:00'
+	And the time is '2030-01-03 06:57:00'
 	Then I should see a notify message contains text Current shift will end
 	And I should see a notify message contains text 7:00 AM

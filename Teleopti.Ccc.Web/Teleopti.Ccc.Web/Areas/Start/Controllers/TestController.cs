@@ -40,9 +40,8 @@ namespace Teleopti.Ccc.Web.Areas.Start.Controllers
 	    private readonly ILoadPasswordPolicyService _loadPasswordPolicyService;
 	    private readonly ISettings _settings;
 	    private readonly IPhysicalApplicationPath _physicalApplicationPath;
-	    private readonly IRta _rta;
 
-	    public TestController(IMutateNow mutateNow, IMbCacheFactory cacheFactory, ISessionSpecificDataProvider sessionSpecificDataProvider, IAuthenticator authenticator, IWebLogOn logon, IBusinessUnitProvider businessUnitProvider, ICurrentHttpContext httpContext, IFormsAuthentication formsAuthentication, IToggleManager toggleManager, IIdentityProviderProvider identityProviderProvider, ILoadPasswordPolicyService loadPasswordPolicyService, ISettings settings, IPhysicalApplicationPath physicalApplicationPath, IRta rta)
+	    public TestController(IMutateNow mutateNow, IMbCacheFactory cacheFactory, ISessionSpecificDataProvider sessionSpecificDataProvider, IAuthenticator authenticator, IWebLogOn logon, IBusinessUnitProvider businessUnitProvider, ICurrentHttpContext httpContext, IFormsAuthentication formsAuthentication, IToggleManager toggleManager, IIdentityProviderProvider identityProviderProvider, ILoadPasswordPolicyService loadPasswordPolicyService, ISettings settings, IPhysicalApplicationPath physicalApplicationPath)
 		{
 			_mutateNow = mutateNow;
 	        _cacheFactory = cacheFactory;
@@ -57,7 +56,6 @@ namespace Teleopti.Ccc.Web.Areas.Start.Controllers
 	        _loadPasswordPolicyService = loadPasswordPolicyService;
 		    _settings = settings;
 			_physicalApplicationPath = physicalApplicationPath;
-		    _rta = rta;
 		}
 
         public ViewResult BeforeScenario(bool enableMyTimeMessageBroker, string defaultProvider = null, bool usePasswordPolicy = false)
