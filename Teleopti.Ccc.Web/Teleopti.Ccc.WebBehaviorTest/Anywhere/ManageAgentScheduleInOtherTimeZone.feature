@@ -75,7 +75,7 @@ Scenario: Timeline for agent in the same time zone
 Scenario: Add activity default times for agent in other time zone
 	Given I have the role 'Anywhere Team Green'
 	And I am located in Stockholm
-	And the current time is '2013-11-18 12:05'
+	And the time is '2013-11-18 12:05'
 	And 'John King' is located in 'Istanbul'
 	And 'John King' has a shift with
 	| Field          | Value            |
@@ -129,7 +129,7 @@ Scenario: Add activity times not displayed in other time zone
 Scenario: Add intraday absence default times for agent in other time zone
 	Given I have the role 'Anywhere Team Green'
 	And I am located in Stockholm
-	And the current time is '2013-11-17 12:00'
+	And the time is '2013-11-17 12:00'
 	And 'John King' is located in 'Istanbul'
 	And 'John King' has a shift with
 	| Field          | Value            |
@@ -138,7 +138,6 @@ Scenario: Add intraday absence default times for agent in other time zone
 	| Start time     | 2013-11-18 08:00 |
 	| End time       | 2013-11-18 17:00 |
 	When I view person schedules add intraday absence form for 'John King' in 'Team green' on '2013-11-18'
-	And the browser time is '2013-11-17 12:00:00'
 	Then I should see add intraday absence times in other time zone with
 	| Field      | Value |
 	| Start time | 08:00 |
@@ -183,7 +182,7 @@ Scenario: Add intraday absence times not displayed in other time zone
 Scenario: Move activity default time for agent in other time zone
 	Given I have the role 'Anywhere Team Green'
 	And I am located in Stockholm
-	And the current time is '2013-11-18 12:05'
+	And the time is '2013-11-18 12:05'
 	And 'John King' is located in 'Istanbul'
 	And 'John King' has a shift with
 	| Field            | Value            |

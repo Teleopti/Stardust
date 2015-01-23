@@ -10,7 +10,7 @@ Scenario: Team schedule tab
 
 Scenario: View team schedule
 	Given I am an agent in a team
-	And the current time is '2014-05-02 20:00'
+	And the time is '2014-05-02 20:00'
 	And I have an assigned shift with
 	| Field      | Value      |
 	| Date | 2014-05-02 |

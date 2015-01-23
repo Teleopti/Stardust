@@ -15,8 +15,7 @@ Scenario: Should not be able to see agents if not permitted
 
 @OnlyRunIfEnabled('RTA_DrilldownToAllAgentsInOneTeam_25234')
 Scenario: Should be able to see current states of all agents
-	Given  the current time is '2014-01-21 12:30:00'
-	And there is an activity named 'Phone'
+	Given there is an activity named 'Phone'
 	And there is an activity named 'Lunch'
 	And there is a site named 'Paris'
 	And there is a team named 'Red' on site 'Paris'
@@ -69,10 +68,11 @@ Scenario: Should be able to see current states of all agents
 	| Alarm Color           | Red	|
 	| Name            | Not adhering |
 	| Staffing effect | -1           |
+	And the time is '2014-01-21 12:30:00'
 	And 'Pierre Baldi' sets his phone state to 'Pause' on datasource 6
 	And 'Ashley Andeen' sets his phone state to 'Ready' on datasource 6
 	When I view real time adherence for team 'Red'
-	And the browser time is '2014-01-21 12:45:00'
+	And the time is '2014-01-21 12:45:00'
 	Then I should see real time agent details for 'Pierre Baldi'
 		| Name                     |                  |
 		| Name                     | Pierre Baldi     |
@@ -96,8 +96,7 @@ Scenario: Should be able to see current states of all agents
 
 @OnlyRunIfEnabled('RTA_DrilldownToAllAgentsInOneTeam_25234')
 Scenario: Should be able to see state updates of all agents
-	Given  the current time is '2014-01-21 12:30:00'
-	And there is an activity named 'Phone'
+	Given there is an activity named 'Phone'
 	And there is an activity named 'Lunch'
 	And there is a site named 'Paris'
 	And there is a team named 'Red' on site 'Paris'
@@ -151,9 +150,10 @@ Scenario: Should be able to see state updates of all agents
 	| Name            | Not adhering |
 	| Staffing effect | -1           |
 	When I view real time adherence for team 'Red'
-	And the browser time is '2014-01-21 12:45:00'
+	And the time is '2014-01-21 12:30:00'
 	And 'Pierre Baldi' sets his phone state to 'Pause' on datasource 6
 	And 'Ashley Andeen' sets his phone state to 'Ready' on datasource 6
+	And the time is '2014-01-21 12:45:00'
 	Then I should see real time agent details for 'Pierre Baldi'
 		| Name                     |              |
 		| Name                     | Pierre Baldi |
@@ -177,8 +177,7 @@ Scenario: Should be able to see state updates of all agents
 
 @OnlyRunIfEnabled('RTA_DrilldownToAllAgentsInOneTeam_25234')
 Scenario: Should be able to see all agents of the team with or without state updates
-	Given  the current time is '2014-01-21 12:30:00'
-	And there is an activity named 'Phone'
+	Given there is an activity named 'Phone'
 	And there is an activity named 'Lunch'
 	And there is a site named 'Paris'
 	And there is a team named 'Red' on site 'Paris'
@@ -243,10 +242,11 @@ Scenario: Should be able to see all agents of the team with or without state upd
 	| Alarm Color     | Red          |
 	| Name            | Not adhering |
 	| Staffing effect | -1           |
+	And the time is '2014-01-21 12:30:00'
 	When I view real time adherence for team 'Red'
-	And the browser time is '2014-01-21 12:45:00'
 	And 'Pierre Baldi' sets his phone state to 'Pause' on datasource 6
 	And 'Ashley Andeen' sets his phone state to 'Ready' on datasource 6
+	And the time is '2014-01-21 12:45:00'
 	Then I should see real time agent details for 'Pierre Baldi'
 		| Name                     |                  |
 		| Name                     | Pierre Baldi     |

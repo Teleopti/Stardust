@@ -45,14 +45,12 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data
 			var eventPublisher = new SyncEventPublisher(new ResolveEventHandlers(this));
 			if (type == typeof(IEnumerable<IHandleEvent<ScheduledResourcesChangedEvent>>))
 			{
-				var utcTheTime = CurrentTime.Value() == DateTime.MinValue ? DateTime.UtcNow : CurrentTime.Value();
-
 				return new[]
 					{
 						new ScheduleProjectionReadOnlyUpdater(
 							new ScheduleProjectionReadOnlyRepository(CurrentUnitOfWork.Make()),
 							new EventPopulatingPublisher(eventPublisher, EventContextPopulator.Make()),
-							new ThisIsNow(utcTheTime)
+							new ThisIsNow(CurrentTime.Value())
 							)
 					};
 			}

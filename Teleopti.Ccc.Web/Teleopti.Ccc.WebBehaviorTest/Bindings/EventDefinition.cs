@@ -39,6 +39,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 			ToggleStepDefinition.CheckIfRunTestDueToToggleFlags();
 
 			addExtraDataSource();
+			CurrentTime.Reset();
 			TestControllerMethods.BeforeScenario();
 			
 			TestDataSetup.RestoreCcc7Data();
@@ -74,7 +75,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 		{
 			log.Debug("Cleaning up after scenario " + ScenarioContext.Current.ScenarioInfo.Title);
             
-            Browser.Interactions.GoToWaitForUrlAssert("about:blank", "about:blank");
+            Browser.Interactions.GoTo("about:blank");
             
 			ScenarioUnitOfWorkState.TryDisposeUnitOfWork();
 			handleScenarioException();

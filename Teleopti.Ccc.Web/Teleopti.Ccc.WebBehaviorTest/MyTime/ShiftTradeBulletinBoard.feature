@@ -40,7 +40,7 @@ Background:
 Scenario: Shift trade in Bulletin board should start from tomorrow
 	Given I have the role 'Full access to mytime'
 	And I have the workflow control set 'Trade from tomorrow until 30 days forward'
-	And the current time is '2029-10-18'
+	And the time is '2029-10-18'
 	And I am viewing requests
 	When I click to shift trade bulletin board
 	Then I cannot navigate to the bulletin previous date	
@@ -65,7 +65,7 @@ Scenario: Should show my shift and other shift in bulletin board
 	| Valid To  | 2029-12-31       |
 	| StartTime | 2030-01-01 09:00 |
 	| EndTime   | 2030-01-01 17:00 |
-	And the current time is '2029-12-27'
+	And the time is '2029-12-27'
 	When I view Shift Trade Bulletin Board for date '2030-01-01'
 	Then I should see my schedule with
 	| Field			| Value |
@@ -93,7 +93,7 @@ Scenario: Should possible make shift trade in Bulletin board
 	| Valid To  | 2029-12-31       |
 	| StartTime | 2030-01-01 09:00 |
 	| EndTime   | 2030-01-01 17:00 |
-	And the current time is '2029-12-27'
+	And the time is '2029-12-27'
 	When I view Shift Trade Bulletin Board for date '2030-01-01'
 	And I click agent 'OtherAgent'
 	And I enter subject 'A nice subject'

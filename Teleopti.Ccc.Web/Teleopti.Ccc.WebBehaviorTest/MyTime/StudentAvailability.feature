@@ -5,13 +5,13 @@
 
 Scenario: View student availability
 	Given I am a student agent
-	And the current time is '2014-05-02 08:00'
+	And the time is '2014-05-02 08:00'
 	When I view student availability
 	Then I should see the virtual schedule period from '2014-04-21' to '2014-05-04'
 	
 Scenario: See student availability
 	Given I am a student agent
-	And the current time is '2014-05-02 08:00'
+	And the time is '2014-05-02 08:00'
 	And I have a student availability with
 	| Field      | Value      |
 	| Date       | 2014-05-03 |
@@ -65,7 +65,7 @@ Scenario: Can not edit student availability without workflow control set
 
 Scenario: Display student availability period information
 	Given I am a student agent
-	And the current time is '2014-05-02 08:00'
+	And the time is '2014-05-02 08:00'
 	And I have a workflow control set
 	When I view student availability
 	Then I should see the student availability period information with period '1900-04-30' to '2077-11-16', and input period '1900-04-30' to '2077-11-16'
@@ -78,14 +78,14 @@ Scenario: Can not edit student availability in closed period
 
 Scenario: Can edit student availability in open period
 	Given I am a student agent
-	And the current time is '2014-05-02 08:00'
+	And the time is '2014-05-02 08:00'
 	And I have a workflow control set with open availability periods
 	When I view student availability
 	Then the student availabilty calendar should be editable
 
 Scenario: Default to first virtual schedule period overlapping open student availability period
 	Given I am a student agent
-	And the current time is '2014-05-02 08:00'
+	And the time is '2014-05-02 08:00'
 	And I have a workflow control set with student availability periods open from '2014-06-01' to '2014-06-30'
 	When I view student availability
 	Then I should see the first virtual schedule period overlapping open student availability period starting at '2014-06-01'
@@ -93,7 +93,7 @@ Scenario: Default to first virtual schedule period overlapping open student avai
 @OnlyRunIfEnabled('MyTimeWeb_AvailabilityVerifyHours_31654')
 Scenario: Should indicate days not available
 	Given I am a student agent
-	And the current time is '2014-05-02 08:00'
+	And the time is '2014-05-02 08:00'
 	When I view student availability
 	Then I should see I am not available for '2014-05-02'
 
@@ -101,7 +101,7 @@ Scenario: Should indicate days not available
 Scenario: Should indicate days have no valid shift for availability setting
 	Given I am a student agent
 	And I have a shift bag with start times 8 to 9 and end times 12 to 22
-	And the current time is '2014-05-02 08:00'
+	And the time is '2014-05-02 08:00'
 	And I have a student availability with
 	| Field      | Value      |
 	| Date       | 2014-05-03 |
@@ -114,7 +114,7 @@ Scenario: Should indicate days have no valid shift for availability setting
 Scenario: Should show valid shift for days with availability setting
 	Given I am a student agent
 	And I have a shift bag with start times 8 to 9 and end times 12 to 22
-	And the current time is '2014-05-02 08:00'
+	And the time is '2014-05-02 08:00'
 	And I have a student availability with
 	| Field      | Value      |
 	| Date       | 2014-05-03 |
@@ -126,6 +126,6 @@ Scenario: Should show valid shift for days with availability setting
 @OnlyRunIfEnabled('MyTimeWeb_AvailabilityVerifyHours_31654')
 Scenario:  Should display period feedback 
 	Given I am a student agent
-	And the current time is '2014-05-02 08:00'
+	And the time is '2014-05-02 08:00'
 	When I view student availability
 	Then I should see the period feedback

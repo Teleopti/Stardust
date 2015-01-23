@@ -47,7 +47,7 @@ Scenario: Measure ScheduledResourcesReadModel by adding full day absences
 
 @ignore
 Scenario: Measure manage adherence by rta states
-	Given the current time is '2015-01-14 12:00'
+	Given the time is '2015-01-14 12:00'
 	And there is a datasouce with id 6
 	And there is a site named 'Paris'
 	And there is a team named 'Team1' on site 'Paris'

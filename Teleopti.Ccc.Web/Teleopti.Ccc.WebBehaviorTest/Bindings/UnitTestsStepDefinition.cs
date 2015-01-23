@@ -9,7 +9,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 		[When(@"I navigate to unit test url (.*)")]
 		public void WhenINavigateTo(string url)
 		{
-			Navigation.GoToWaitForCompleted(url, new BustCache());
+			Navigation.GoToOtherPage(url, new BustCache());
 		}
 
 		[Then(@"I should see all tests pass")]

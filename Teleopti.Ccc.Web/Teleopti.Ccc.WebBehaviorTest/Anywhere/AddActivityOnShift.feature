@@ -109,10 +109,9 @@ Scenario: Prevent creation of second shift
 
 Scenario: Default to next hour for today
 	Given I have the role 'Anywhere Team Green'
-	And the current time is '2013-11-18 13:20'
+	And the time is '2013-11-18 13:20'
 	When I view schedules for 'Team green' on '2013-11-18'
 	And I click person name 'Pierre Baldi'
-	And the current browser time is '2013-11-18 13:20'
 	And I click 'add activity' in schedule menu
 	Then I should see the add activity form with
 	| Field      | Value |

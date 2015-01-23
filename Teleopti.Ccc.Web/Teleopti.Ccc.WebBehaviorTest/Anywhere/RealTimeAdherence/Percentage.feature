@@ -39,11 +39,11 @@ Scenario: Should be able to see adherence percentage from agent state overview
 	| Name            | Adhering |
 	| Alarm Color     | Green    |
 	| Staffing effect | 0        |
-	When the current time is '2014-10-06 08:00:00'
+	When the time is '2014-10-06 08:00:00'
 	And 'Pierre Baldi' sets his phone state to 'Ready' on datasource 6
-	And the current time is '2014-10-06 09:00:00'
+	And the time is '2014-10-06 09:00:00'
 	And 'Pierre Baldi' sets his phone state to 'Pause' on datasource 6
-	And the current time is '2014-10-06 12:00:00'
+	And the time is '2014-10-06 12:00:00'
 	And I view real time adherence view for team 'Red'
 	And I click on an agent state
 	Then I should see historical adherence for 'Pierre Baldi' with adherence of 50%

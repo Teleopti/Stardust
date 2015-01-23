@@ -5,7 +5,7 @@
 	
 @OnlyRunIfEnabled('RTA_ChangeScheduleInAgentStateView_29934')
 Scenario: Should be able to change schedule from agent state overview
-	Given  the current time is '2014-09-09 12:30:00'
+	Given  the time is '2014-09-09 12:30:00'
 	And there is an activity named 'Phone'
 	And there is a site named 'Paris'
 	And there is a team named 'Red' on site 'Paris'
@@ -34,7 +34,7 @@ Scenario: Should be able to change schedule from agent state overview
 	| Start time     | 2014-09-09 08:00 |
 	| End time       | 2014-09-09 17:00 |
 	When I view real time adherence view for team 'Red'
-	And the browser time is '2014-09-09 12:45:00'
+	And the time is '2014-09-09 12:45:00'
 	And I click agent state of 'Pierre Baldi'
 	And I click 'change schedule' in agent menu
 	Then I should see schedule for 'Pierre Baldi'
@@ -43,7 +43,7 @@ Scenario: Should be able to change schedule from agent state overview
 @OnlyRunIfEnabled('RTA_ChangeScheduleInAgentStateView_29934')
 @ignore
 Scenario: Should be able to change schedule for multiple business units
-	Given the current time is '2014-09-09 12:30:00'
+	Given the time is '2014-09-09 12:30:00'
 	And I have a role with
 	| Field              | Value             |
 	| Name               | Real time analyst |

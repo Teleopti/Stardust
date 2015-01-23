@@ -32,7 +32,7 @@ Feature: Absence Report On Desktop Week Schedule
 
 Scenario: Open add absence report form from day summary only for today and tomorrow
 	Given I have the role 'Full access to mytime'
-	And the current time is '2020-10-05 08:00:00'
+	And the time is '2020-10-05 08:00:00'
 	And I view my week schedule for date '2020-10-05'
 	When I click on the day summary for date '2020-10-05'
 	And I click to add a new absence report
@@ -45,7 +45,7 @@ Scenario: Open add absence report form from day summary only for today and tomor
 
 Scenario: Cancel a draft absence report
 	Given I have the role 'Full access to mytime'
-	And the current time is '2020-10-05'
+	And the time is '2020-10-05'
 	And I view my week schedule for date '2020-10-05'
 	When I click on the day summary for date '2020-10-05'
 	And I click to add a new absence report
@@ -54,7 +54,7 @@ Scenario: Cancel a draft absence report
 
 Scenario: Save an absence report
 	Given I have the role 'Full access to mytime'
-	And the current time is '2020-10-05'
+	And the time is '2020-10-05'
 	And I view my week schedule for date '2020-10-05'
 	When I click on the day summary for date '2020-10-05'
 	And I click to add a new absence report

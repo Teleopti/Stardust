@@ -42,12 +42,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core.BrowserDriver.CoypuImpl
 			return retryJavascript(javascript);
 		}
 
-		public void GoToWaitForCompleted(string uri)
-		{
-			_browser.Visit(uri);
-		}
-
-		public void GoToWaitForUrlAssert(string uri, string assertUrlContains)
+		public void GoTo(string uri)
 		{
 			_browser.Visit(uri);
 		}

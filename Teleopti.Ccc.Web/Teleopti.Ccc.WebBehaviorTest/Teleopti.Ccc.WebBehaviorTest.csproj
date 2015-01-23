@@ -103,33 +103,33 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>ModifyAbsence.feature</DependentUpon>
     </Compile>
-    <Compile Include="Anywhere\RealTimeAdherenceAgentsMultiTeams.feature.cs">
-      <DependentUpon>RealTimeAdherenceAgentsMultiTeams.feature</DependentUpon>
+    <Compile Include="Anywhere\RealTimeAdherence\AgentsMultiTeams.feature.cs">
+      <DependentUpon>AgentsMultiTeams.feature</DependentUpon>
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
     </Compile>
-    <Compile Include="Anywhere\RealTimeAdherenceAgents.feature.cs">
-      <DependentUpon>RealTimeAdherenceAgents.feature</DependentUpon>
+    <Compile Include="Anywhere\RealTimeAdherence\Agents.feature.cs">
+      <DependentUpon>Agents.feature</DependentUpon>
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
     </Compile>
-    <Compile Include="Anywhere\RealTimeAdherenceMultiBusinessUnits.feature.cs">
-      <DependentUpon>RealTimeAdherenceMultiBusinessUnits.feature</DependentUpon>
+    <Compile Include="Anywhere\RealTimeAdherence\MultiBusinessUnits.feature.cs">
+      <DependentUpon>MultiBusinessUnits.feature</DependentUpon>
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
     </Compile>
-    <Compile Include="Anywhere\RealTimeAdherenceChangeSchedule.feature.cs">
-      <DependentUpon>RealTimeAdherenceChangeSchedule.feature</DependentUpon>
+    <Compile Include="Anywhere\RealTimeAdherence\ChangeSchedule.feature.cs">
+      <DependentUpon>ChangeSchedule.feature</DependentUpon>
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
     </Compile>
-    <Compile Include="Anywhere\RealTimeAdherencePercentage.feature.cs">
-      <DependentUpon>RealTimeAdherencePercentage.feature</DependentUpon>
+    <Compile Include="Anywhere\RealTimeAdherence\Percentage.feature.cs">
+      <DependentUpon>Percentage.feature</DependentUpon>
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
     </Compile>
-    <Compile Include="Anywhere\RealTimeAdherenceDetails.feature.cs">
-      <DependentUpon>RealTimeAdherenceDetails.feature</DependentUpon>
+    <Compile Include="Anywhere\RealTimeAdherence\Details.feature.cs">
+      <DependentUpon>Details.feature</DependentUpon>
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
     </Compile>
@@ -158,10 +158,10 @@
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
     </Compile>
-    <Compile Include="Anywhere\RealTimeAdherenceOverview.feature.cs">
+    <Compile Include="Anywhere\RealTimeAdherence\Overview.feature.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
-      <DependentUpon>RealTimeAdherenceOverview.feature</DependentUpon>
+      <DependentUpon>Overview.feature</DependentUpon>
     </Compile>
     <Compile Include="Anywhere\ViewScheduleActivityDetails.feature.cs">
       <DependentUpon>ViewScheduleActivityDetails.feature</DependentUpon>
@@ -183,8 +183,10 @@
     <Compile Include="Bindings\Generic\ShiftExchangeOfferFields.cs" />
     <Compile Include="Bindings\Generic\StateGroupStepDefinitions.cs" />
     <Compile Include="Bindings\Generic\WorkloadStepDefinitions.cs" />
+    <Compile Include="Core\BrowserDriver\BrowserInteractionsUrlExtensions.cs" />
     <Compile Include="Core\BrowserDriver\NoBrowserActivator.cs" />
     <Compile Include="Core\BrowserDriver\NoBrowserInteractions.cs" />
+    <Compile Include="Core\Http.cs" />
     <Compile Include="Data\Setups\Default\DefaultData.cs" />
     <Compile Include="Data\Setups\Default\DefaultLicense.cs" />
     <Compile Include="Data\Setups\Default\DefaultPersonThatCreatesDbData.cs" />
@@ -275,6 +277,7 @@
     </Compile>
     <Compile Include="MyTime\TeamScheduleForGroupsStepDefinition.cs" />
     <Compile Include="MyTime\22851_FindShiftTradePageFromTeamScheduleStepDefinition.cs" />
+    <Compile Include="MyTime\TimeStepDefinitions.cs" />
     <Compile Include="MyTime\WeekScheduleOnMobileStepDefinitions.cs" />
     <Compile Include="MyTime\WeekScheduleOnMobile.feature.cs">
       <DependentUpon>WeekScheduleOnMobile.feature</DependentUpon>
@@ -792,29 +795,29 @@
       <Generator>SpecFlowSingleFileGenerator</Generator>
       <LastGenOutput>ModifyAbsence.feature.cs</LastGenOutput>
     </None>
-    <None Include="Anywhere\RealTimeAdherenceAgentsMultiTeams.feature">
+    <None Include="Anywhere\RealTimeAdherence\AgentsMultiTeams.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>
-      <LastGenOutput>RealTimeAdherenceAgentsMultiTeams.feature.cs</LastGenOutput>
+      <LastGenOutput>AgentsMultiTeams.feature.cs</LastGenOutput>
     </None>
-    <None Include="Anywhere\RealTimeAdherenceAgents.feature">
+    <None Include="Anywhere\RealTimeAdherence\Agents.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>
-      <LastGenOutput>RealTimeAdherenceAgents.feature.cs</LastGenOutput>
+      <LastGenOutput>Agents.feature.cs</LastGenOutput>
     </None>
-    <None Include="Anywhere\RealTimeAdherenceMultiBusinessUnits.feature">
+    <None Include="Anywhere\RealTimeAdherence\MultiBusinessUnits.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>
-      <LastGenOutput>RealTimeAdherenceMultiBusinessUnits.feature.cs</LastGenOutput>
+      <LastGenOutput>MultiBusinessUnits.feature.cs</LastGenOutput>
     </None>
-    <None Include="Anywhere\RealTimeAdherenceChangeSchedule.feature">
+    <None Include="Anywhere\RealTimeAdherence\ChangeSchedule.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>
-      <LastGenOutput>RealTimeAdherenceChangeSchedule.feature.cs</LastGenOutput>
+      <LastGenOutput>ChangeSchedule.feature.cs</LastGenOutput>
     </None>
-    <None Include="Anywhere\RealTimeAdherencePercentage.feature">
+    <None Include="Anywhere\RealTimeAdherence\Percentage.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>
-      <LastGenOutput>RealTimeAdherencePercentage.feature.cs</LastGenOutput>
+      <LastGenOutput>Percentage.feature.cs</LastGenOutput>
     </None>
-    <None Include="Anywhere\RealTimeAdherenceDetails.feature">
+    <None Include="Anywhere\RealTimeAdherence\Details.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>
-      <LastGenOutput>RealTimeAdherenceDetails.feature.cs</LastGenOutput>
+      <LastGenOutput>Details.feature.cs</LastGenOutput>
     </None>
     <None Include="Anywhere\ScheduleChangePermissionControl.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>
@@ -836,9 +839,9 @@
       <Generator>SpecFlowSingleFileGenerator</Generator>
       <LastGenOutput>BusterTests.feature.cs</LastGenOutput>
     </None>
-    <None Include="Anywhere\RealTimeAdherenceOverview.feature">
+    <None Include="Anywhere\RealTimeAdherence\Overview.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>
-      <LastGenOutput>RealTimeAdherenceOverview.feature.cs</LastGenOutput>
+      <LastGenOutput>Overview.feature.cs</LastGenOutput>
     </None>
     <None Include="Anywhere\ViewScheduleActivityDetails.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>

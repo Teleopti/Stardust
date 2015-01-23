@@ -11,11 +11,11 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core.BrowserDriver
 			throw new NotSupportedException(notAllowedAction);
 		}
 
-		public void GoToWaitForCompleted(string uri)
+		public void GoTo(string uri)
 		{
 		}
 
-		public void GoToWaitForUrlAssert(string uri, string assertUrlContains)
+		public void GoTo(string uri, string assertUrlContains)
 		{
 		}
 

@@ -14,13 +14,11 @@ using Teleopti.Ccc.Domain.Rta;
 using Teleopti.Ccc.Infrastructure.Toggle;
 using Teleopti.Ccc.Infrastructure.Web;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.MessageBroker;
-using Teleopti.Ccc.Web.Areas.Rta.Core.Server;
-using Teleopti.Ccc.Web.Areas.Rta.Core.Server.Adherence;
+using Teleopti.Ccc.Web.Areas.Rta;
 using Teleopti.Ccc.Web.Areas.Start.Core.Authentication.DataProvider;
 using Teleopti.Ccc.Web.Areas.Start.Core.Authentication.Services;
 using Teleopti.Ccc.Web.Areas.Start.Models.Test;
 using Teleopti.Ccc.Web.Core;
-using Teleopti.Ccc.Web.Core.RequestContext;
 using Teleopti.Ccc.Web.Core.RequestContext.Cookie;
 using Teleopti.Ccc.Web.Core.Startup.InitializeApplication;
 using Teleopti.Interfaces.Infrastructure;
@@ -42,8 +40,9 @@ namespace Teleopti.Ccc.Web.Areas.Start.Controllers
 	    private readonly ILoadPasswordPolicyService _loadPasswordPolicyService;
 	    private readonly ISettings _settings;
 	    private readonly IPhysicalApplicationPath _physicalApplicationPath;
+	    private readonly IRta _rta;
 
-	    public TestController(IMutateNow mutateNow, IMbCacheFactory cacheFactory, ISessionSpecificDataProvider sessionSpecificDataProvider, IAuthenticator authenticator, IWebLogOn logon, IBusinessUnitProvider businessUnitProvider, ICurrentHttpContext httpContext, IFormsAuthentication formsAuthentication, IToggleManager toggleManager, IIdentityProviderProvider identityProviderProvider, ILoadPasswordPolicyService loadPasswordPolicyService, ISettings settings, IPhysicalApplicationPath physicalApplicationPath)
+	    public TestController(IMutateNow mutateNow, IMbCacheFactory cacheFactory, ISessionSpecificDataProvider sessionSpecificDataProvider, IAuthenticator authenticator, IWebLogOn logon, IBusinessUnitProvider businessUnitProvider, ICurrentHttpContext httpContext, IFormsAuthentication formsAuthentication, IToggleManager toggleManager, IIdentityProviderProvider identityProviderProvider, ILoadPasswordPolicyService loadPasswordPolicyService, ISettings settings, IPhysicalApplicationPath physicalApplicationPath, IRta rta)
 		{
 			_mutateNow = mutateNow;
 	        _cacheFactory = cacheFactory;
@@ -58,15 +57,12 @@ namespace Teleopti.Ccc.Web.Areas.Start.Controllers
 	        _loadPasswordPolicyService = loadPasswordPolicyService;
 		    _settings = settings;
 			_physicalApplicationPath = physicalApplicationPath;
+		    _rta = rta;
 		}
 
         public ViewResult BeforeScenario(bool enableMyTimeMessageBroker, string defaultProvider = null, bool usePasswordPolicy = false)
         {
-	        if (_cacheFactory != null)
-			{
-				_cacheFactory.Invalidate<IDatabaseReader>();
-				_cacheFactory.Invalidate<IPersonOrganizationProvider>();
-	        }
+	        invalidateRtaCache();
 
 			_sessionSpecificDataProvider.RemoveCookie();
 			_formsAuthentication.SignOut();
@@ -164,6 +160,8 @@ namespace Teleopti.Ccc.Web.Areas.Start.Controllers
 
 		public ViewResult SetCurrentTime(long ticks)
 		{
+			invalidateRtaCache();
+
 			var dateSet = new DateTime(ticks);
 			updateIocNow(dateSet);
 
@@ -216,5 +214,15 @@ namespace Teleopti.Ccc.Web.Areas.Start.Controllers
 		{
 			_mutateNow.Is(dateTimeSet);
 		}
+
+		private void invalidateRtaCache()
+		{
+			if (_cacheFactory != null)
+			{
+				_cacheFactory.Invalidate<IDatabaseReader>();
+				_cacheFactory.Invalidate<IPersonOrganizationProvider>();
+			}
+		}
+
 	}
 }

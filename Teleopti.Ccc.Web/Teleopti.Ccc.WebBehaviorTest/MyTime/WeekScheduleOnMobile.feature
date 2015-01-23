@@ -56,13 +56,13 @@ Scenario: No access to schedule page
 
 Scenario: View current week
 	Given I have the role 'Full access to mytime'
-	And the current time is '2030-10-03 12:00'
+	And the time is '2030-10-03 12:00'
 	When I view my mobile week schedule
 	Then I should see my mobile week schedule for date '2030-10-03'
 
 Scenario: View when you are working
 	Given I have the role 'Full access to mytime'
-	And the current time is '2014-04-21 12:00'
+	And the time is '2014-04-21 12:00'
 	And I have the workflow control set 'Published schedule'
 	And I have a shift with
 	| Field          | Value            |
@@ -78,7 +78,7 @@ Scenario: View when you are working
 
 Scenario: View when you have a day off
 	Given I have the role 'Full access to mytime'
-	And the current time is '2014-04-22 12:00'
+	And the time is '2014-04-22 12:00'
 	And I have the workflow control set 'Published schedule'
 	And I have a day off with
 	| Field | Value      |

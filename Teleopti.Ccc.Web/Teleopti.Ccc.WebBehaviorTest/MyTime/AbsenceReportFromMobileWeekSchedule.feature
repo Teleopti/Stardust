@@ -31,7 +31,7 @@ Feature: Absence Report On Mobile Week Schedule
 	
 Scenario: Open add absence report form from day summary only for today and tomorrow
 	Given I have the role 'Full access to mytime'
-	And the current time is '2020-10-05'
+	And the time is '2020-10-05'
     When I view my mobile week schedule for date '2020-10-05'
 	Then I should see add absence report button for '2020-10-05'
 	And I should see add absence report button for '2020-10-06'
@@ -41,7 +41,7 @@ Scenario: Open add absence report form from day summary only for today and tomor
 
 Scenario: Cancel a draft absence report
 	Given I have the role 'Full access to mytime'
-	And the current time is '2020-10-05'
+	And the time is '2020-10-05'
     When I view my mobile week schedule for date '2020-10-05'
 	And I click on add absence report button for '2020-10-05'
 	And I cancel the current absence report draft
@@ -49,7 +49,7 @@ Scenario: Cancel a draft absence report
 
 Scenario: Save a draft absence report
 	Given I have the role 'Full access to mytime'
-	And the current time is '2020-10-05'
+	And the time is '2020-10-05'
     When I view my mobile week schedule for date '2020-10-05'
 	And I click on add absence report button for '2020-10-05'
 	And I save the current absence report draft
@@ -62,7 +62,7 @@ Scenario: Can not add absence report if no permission
 
 Scenario: Switch between today and tomorrow
 	Given I have the role 'Full access to mytime'
-	And the current time is '2020-10-05'
+	And the time is '2020-10-05'
     When I view my mobile week schedule for date '2020-10-05'
 	And I click on add absence report button for '2020-10-05'
 	Then I should see the add absence report form for '2020-10-05'

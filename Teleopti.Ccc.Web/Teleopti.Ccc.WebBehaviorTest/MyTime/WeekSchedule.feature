@@ -61,7 +61,7 @@ Scenario: No access to schedule page
 
 Scenario: View current week
 	Given I have the role 'Full access to mytime'
-	And the current time is '2030-10-03 12:00'
+	And the time is '2030-10-03 12:00'
 	When I view my week schedule for date '2030-10-03'
 	Then I should see the start and end dates of current week for date '2030-10-03'
 
@@ -157,7 +157,7 @@ Scenario: Navigate to request page by clicking request symbol
 
 Scenario: Navigate to current week
 	Given I have the role 'Full access to mytime'
-	And the current time is '2030-01-01 07:00'
+	And the time is '2030-01-01 07:00'
 	And I view my week schedule for date '2029-12-01'
 	When I click the current week button
 	Then I should see the start and end dates of current week for date '2030-01-01'

@@ -104,7 +104,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data
 
 		public static void RestoreCcc7Data()
 		{
-			DataSourceHelper.RestoreCcc7Database(globalData.HashValue, () => Navigation.GoToWaitForUrlAssert("Test/ClearConnections", new ApplicationStartupTimeout()));
+			DataSourceHelper.RestoreCcc7Database(globalData.HashValue, TestControllerMethods.ClearConnections);
 			//hack!
 			using (var uow = ((NHibernateUnitOfWorkFactory)datasource.Application).CreateAndOpenUnitOfWork(null, TransactionIsolationLevel.Default, null))
 			{

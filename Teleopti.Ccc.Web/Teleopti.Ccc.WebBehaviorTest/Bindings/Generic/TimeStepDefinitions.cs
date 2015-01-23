@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using NUnit.Framework;
 using TechTalk.SpecFlow;
 using Teleopti.Ccc.WebBehaviorTest.Core;
@@ -10,41 +9,31 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
 	[Binding]
 	public class TimeStepDefinitions
 	{
-		[Given(@"the current time is '(.*)'")]
 		[Given(@"the time is '(.*)'")]
-		[When(@"the current time is '(.*)'")]
 		[When(@"the time is '(.*)'")]
 		[SetCulture("sv-SE")]
 		public void GivenCurrentTimeIs(DateTime time)
 		{
 			CurrentTime.Set(time);
-			var featuresCheckActivityChanges = new List<string> { "Real time adherence percentage", "Real time adherence details" };
-			if (featuresCheckActivityChanges.Contains(FeatureContext.Current.FeatureInfo.Title))
-				PhoneStateStepDefinitions.CheckForActivityChange();
 		}
 
-		[Given(@"the current browser time is '(.*)'")]
-		[When(@"the current browser time is '(.*)'")]
-		public void GivenTheCurrentBrowserTimeIs(DateTime time)
+		private static void fakeTimeBlackMagicMethod(DateTime time)
 		{
-			const string fakeTime = @"window.fakeTime({0}, {1}, {2}, {3}, {4}, {5});";
-			var fakeTimeScript = string.Format(fakeTime, time.Year, time.Month - 1, time.Day, time.Hour, time.Minute, time.Second);
-			Browser.Interactions.Javascript(fakeTimeScript);
-		}
-
-		[When(@"current browser time has changed to '(.*)'")]
-		public void WhenCurrentBrowserTimeHasChangedTo(DateTime time)
-		{
+			var localTimeZone = TimeZoneInfo.Local.BaseUtcOffset.Hours;
+			var utcTimeZone = TimeZoneInfo.Utc.BaseUtcOffset.Hours;
+			var convertTime = time.AddHours(utcTimeZone - localTimeZone);
 			const string setJsDateTemplate =
-				@"Date.prototype.getTeleoptiTime = function () {{ return new Date({0}, {1}, {2}, {3}, {4}, {5}).getTime(); }};";
-			var setJsDate = string.Format(setJsDateTemplate, time.Year, time.Month - 1, time.Day, time.Hour, time.Minute, time.Second);
-
+				@"Date.prototype.getTime = function () {{ return new Date(Date.UTC({0}, {1}, {2}, {3}, {4}, {5})); }};";
+			var setJsDate = string.Format(setJsDateTemplate, convertTime.Year, convertTime.Month - 1, convertTime.Day,
+				convertTime.Hour, convertTime.Minute, convertTime.Second);
 			Browser.Interactions.Javascript(setJsDate);
-
-			var setJsTimeIndicatorMovement =
-				string.Format(@"Teleopti.MyTimeWeb.Schedule.SetTimeIndicator(new Date({0}, {1}, {2}, {3}, {4}, {5}));",
-							  time.Year, time.Month - 1, time.Day, time.Hour, time.Minute, time.Second);
-			Browser.Interactions.Javascript(setJsTimeIndicatorMovement);
 		}
+
+		[When(@"the browser local time is '(.*)'")]
+		public void WhenTheBrowserLocalTimeIs(DateTime time)
+		{
+			fakeTimeBlackMagicMethod(time);
+		}
+
 	}
 }

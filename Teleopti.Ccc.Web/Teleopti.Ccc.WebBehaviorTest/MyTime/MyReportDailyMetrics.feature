@@ -15,7 +15,7 @@ Scenario: No permission to my report module when navigating with URL
 Scenario: Open my report shows yesterdays figures
 	Given I am an agent
 	And I have my report data for '2013-10-02'
-	And the current time is '2013-10-03'
+	And the time is '2013-10-03'
 	When I navigate to my report
 	Then I should see my report with data for '2013-10-02'
 	

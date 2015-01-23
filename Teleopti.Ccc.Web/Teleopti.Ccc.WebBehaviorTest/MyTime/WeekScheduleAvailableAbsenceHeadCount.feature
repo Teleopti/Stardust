@@ -62,7 +62,7 @@ Background:
 	| BudgetGroup| TheBudgetGroup |
 
 Scenario: Show the user a green indication at head count staffing check when allowance exceeds used absence
-	Given the current time is '2023-05-25 20:00'
+	Given the time is '2023-05-25 20:00'
 	And there is a budgetday
 	| Field						| Value					|
 	| BudgetGroup				| TheBudgetGroup		|
@@ -80,7 +80,7 @@ Scenario: Show the user a green indication at head count staffing check when all
 	Then I should see an 'green' indication for chance of absence request on '2023-05-28'
 
 Scenario: Show the user a yellow indication at head count staffing check when one allowance is left
-	Given the current time is '2023-05-25 20:00'
+	Given the time is '2023-05-25 20:00'
 	And there is a budgetday
 	| Field						| Value					|
 	| BudgetGroup				| TheBudgetGroup		|
@@ -104,7 +104,7 @@ Scenario: Show the user a yellow indication at head count staffing check when on
 	Then I should see an 'yellow' indication for chance of absence request on '2023-05-28'
 
 Scenario: Show the user a red indication at head count staffing check when the allowance is used up
-	Given the current time is '2023-05-25 20:00'
+	Given the time is '2023-05-25 20:00'
 	And there is a budgetday
 	| Field						| Value					|
 	| BudgetGroup				| TheBudgetGroup		|
@@ -134,7 +134,7 @@ Scenario: Show the user a red indication at head count staffing check when the a
 	Then I should see an 'red' indication for chance of absence request on '2023-05-28'
 	
 Scenario: Show the user a yellow indication at mixed staffing check when the head count is half way to total allowance 
-	Given the current time is '2023-05-25 20:00'
+	Given the time is '2023-05-25 20:00'
 	And there is a budgetday
 	| Field						| Value					|
 	| BudgetGroup				| TheBudgetGroup		|

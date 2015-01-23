@@ -40,8 +40,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
 		[Given(@"'(.*)' sets (?:his|her) phone state to '(.*)' on datasource (.*)")]
 		public void WhenSetsHisPhoneStateToOnDatasource(string personName, string stateCode, int datasource)
 		{
-			var uri = new Uri(TestSiteConfigurationSetup.URL, "Rta/State/Change");
-			postAsJson(uri, new ExternalUserStateWebModel
+			Http.PostJson("Rta/State/Change", new ExternalUserStateWebModel
 			{
 				AuthenticationKey = "!#¤atAbgT%",
 				UserCode = personName,
@@ -56,7 +55,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
 
 		public static void CheckForActivityChange()
 		{
-			var uri = new Uri(TestSiteConfigurationSetup.URL, "Rta/ActivityChange/CheckFor");
 			DataMaker.Data().AllPersons().ForEach(p =>
 			{
 				var data = new CheckForActivityChangeWebModel
@@ -64,30 +62,8 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
 					PersonId = p.Person.Id.ToString(),
 					BusinessUnitId = DefaultBusinessUnit.BusinessUnitFromFakeState.Id.ToString()
 				};
-				postAsJson(uri, data);
+				Http.PostJson( "Rta/ActivityChange/CheckFor", data);
 			});
-		}
-
-		private static void postAsJson(Uri uri, object data)
-		{
-			var json = JsonConvert.SerializeObject(data);
-
-			using (var handler = new HttpClientHandler())
-			{
-				handler.AllowAutoRedirect = false;
-				using (var client = new HttpClient(handler))
-				{
-					client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-					var requestContent = new StringContent(json, Encoding.UTF8, "application/json");
-					var post = client.PostAsync(uri, requestContent);
-					var response = post.Result;
-					if (response.StatusCode != HttpStatusCode.OK)
-					{
-						var responseContent = response.Content.ReadAsStringAsync().Result;
-						throw new Exception("Posting rta state returned http code " + response.StatusCode + ", Content: " + responseContent);
-					}
-				}
-			}
 		}
 
 		[Given(@"there is a datasouce with id (.*)")]

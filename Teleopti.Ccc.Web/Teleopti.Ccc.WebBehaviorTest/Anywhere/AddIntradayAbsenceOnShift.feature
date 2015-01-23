@@ -46,7 +46,7 @@ Scenario: View form
 
 Scenario: Default times today
 	Given I have the role 'Anywhere Team Green'
-	And the current time is '2013-11-15 13:20'
+	And the time is '2013-11-15 13:20'
 	And 'Pierre Baldi' has a shift with
 	| Field          | Value            |
 	| Shift category | Day              |
@@ -61,7 +61,7 @@ Scenario: Default times today
 
 Scenario: Default times tomorrow
 	Given I have the role 'Anywhere Team Green'
-	And the current time is '2013-11-14 08:00'
+	And the time is '2013-11-14 08:00'
 	And 'Pierre Baldi' has a shift with
 	| Field          | Value            |
 	| Shift category | Day              |

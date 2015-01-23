@@ -5,7 +5,7 @@
 
 @OnlyRunIfDisabled('RTA_RtaLastStatesOverview_27789')
 Scenario: Show site
-	Given the current time is '2014-01-21 13:00'
+	Given the time is '2014-01-21 13:00'
 	And I have a role with
 	| Field                                  | Value             |
 	| Name                                   | Real time analyst |
@@ -22,7 +22,7 @@ Scenario: Show site
 
 @OnlyRunIfEnabled('RTA_RtaLastStatesOverview_27789')
 Scenario: Show site without always loading status
-	Given the current time is '2014-01-21 13:00'
+	Given the time is '2014-01-21 13:00'
 	And I have a role with
 	| Field                                  | Value             |
 	| Name                                   | Real time analyst |
@@ -38,7 +38,7 @@ Scenario: Show site without always loading status
 
 @OnlyRunIfDisabled('RTA_RtaLastStatesOverview_27789')
 Scenario: Show team
-	Given the current time is '2014-01-21 13:00'
+	Given the time is '2014-01-21 13:00'
 	And I have a role with
 	| Field                                  | Value             |
 	| Name                                   | Real time analyst |
@@ -55,7 +55,7 @@ Scenario: Show team
 
 @OnlyRunIfEnabled('RTA_RtaLastStatesOverview_27789')
 Scenario: Show team without always loading status
-	Given the current time is '2014-01-21 13:00'
+	Given the time is '2014-01-21 13:00'
 	And I have a role with
 	| Field                                  | Value             |
 	| Name                                   | Real time analyst |
@@ -70,8 +70,7 @@ Scenario: Show team without always loading status
 	Then I should see the team 'Red'
 
 Scenario: View updates of sum of employees not adhering to schedule for each site
-	Given the current time is '2014-01-21 13:00'
-	And I have a role with
+	Given I have a role with
 	| Field                                  | Value             |
 	| Name                                   | Real time analyst |
 	| Access to real time adherence overview | True              |
@@ -115,6 +114,7 @@ Scenario: View updates of sum of employees not adhering to schedule for each sit
 	| Phone state     | Pause        |
 	| Name            | Not adhering |
 	| Staffing effect | -1           |
+	And the time is '2014-01-21 13:00'
 	 When I view Real time adherence overview
 	 And 'Pierre Baldi' sets his phone state to 'Pause' on datasource 6
 	 And 'Ashley Andeen' sets her phone state to 'Ready' on datasource 6
@@ -122,8 +122,7 @@ Scenario: View updates of sum of employees not adhering to schedule for each sit
 	 And I should see site 'London' with 0 of 1 employees out of adherence
 
 Scenario: View updates of sum of employees not adhering to schedule for each team within a site
-	Given the current time is '2014-01-21 13:00'
-	And I have a role with
+	Given I have a role with
 	| Field                                  | Value             |
 	| Name                                   | Real time analyst |
 	| Access to real time adherence overview | True              |
@@ -166,6 +165,7 @@ Scenario: View updates of sum of employees not adhering to schedule for each tea
 	| Phone state     | Pause        |
 	| Name            | Not adhering |
 	| Staffing effect | -1           |
+	And the time is '2014-01-21 13:00'
 	 When I view Real time adherence for site 'Paris'
 	 And 'Pierre Baldi' sets his phone state to 'Pause' on datasource 6
 	 And 'Ashley Andeen' sets her phone state to 'Ready' on datasource 6
@@ -198,8 +198,7 @@ Scenario: Should be able to go to Real time adherence overview
 
 @OnlyRunIfEnabled('RTA_RtaLastStatesOverview_27789')
 Scenario: View current state of sum of employees not adhering to schedule for each site
-	Given the current time is '2014-01-21 13:00'
-	And I have a role with
+	Given I have a role with
 	| Field                                  | Value             |
 	| Name                                   | Real time analyst |
 	| Access to real time adherence overview | True              |
@@ -243,6 +242,7 @@ Scenario: View current state of sum of employees not adhering to schedule for ea
 	| Phone state     | Pause        |
 	| Name            | Not adhering |
 	| Staffing effect | -1           |
+	And the time is '2014-01-21 13:00'
 	And 'Pierre Baldi' sets his phone state to 'Pause' on datasource 6
 	And 'Ashley Andeen' sets her phone state to 'Ready' on datasource 6
 	When I view Real time adherence overview
@@ -251,8 +251,7 @@ Scenario: View current state of sum of employees not adhering to schedule for ea
 
 @OnlyRunIfEnabled('RTA_RtaLastStatesOverview_27789')
 Scenario: View current state of sum of employees not adhering to schedule for each team within a site
-	Given the current time is '2014-01-21 13:00'
-	And I have a role with
+	Given I have a role with
 	| Field                                  | Value             |
 	| Name                                   | Real time analyst |
 	| Access to real time adherence overview | True              |
@@ -295,6 +294,7 @@ Scenario: View current state of sum of employees not adhering to schedule for ea
 	| Phone state     | Pause        |
 	| Name            | Not adhering |
 	| Staffing effect | -1           |
+	And the time is '2014-01-21 13:00'
 	 And 'Pierre Baldi' sets his phone state to 'Pause' on datasource 6
 	 And 'Ashley Andeen' sets her phone state to 'Ready' on datasource 6
 	 When I view Real time adherence for site 'Paris'

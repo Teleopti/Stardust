@@ -6,8 +6,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core.BrowserDriver
 	{
 		string Javascript(string javascript);
 
-		void GoToWaitForCompleted(string uri);
-		void GoToWaitForUrlAssert(string uri, string assertUrlContains);
+		void GoTo(string uri);
 
 		void Click(string selector);
 		void ClickContaining(string selector, string text);
