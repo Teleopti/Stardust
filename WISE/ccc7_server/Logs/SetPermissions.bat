@@ -25,6 +25,7 @@ for %%a in (%DRIVELETTER%) do set DRIVELETTER=%%~da
 for %%a in (%mySystemDrive%) do set mySystemDrive=%%~da
 
 SET /A localError=0
+SET BatchPath=%TargetFolder%
 
 ::Switch to drive letter
 %DRIVELETTER%
@@ -32,8 +33,8 @@ SET /A localError=0
 ECHO ============== >> "%BatchLogFile%"
 date /t >> "%BatchLogFile%"
 time /t >> "%BatchLogFile%"
-ECHO "%TargetFolder%\SetPermissionsSub.bat" "%WindowsNT%" "%SPLevel%" "%WinSvcLogin%" "%WinEtlLogin%" "%TargetFolder%" >> "%BatchLogFile%"
-CALL "%TargetFolder%\SetPermissionsSub.bat" "%WindowsNT%" "%SPLevel%" "%WinSvcLogin%" "%WinEtlLogin%" "%TargetFolder%" >> "%BatchLogFile%"
+ECHO "%BatchPath%\SetPermissionsSub.bat" "%WindowsNT%" "%SPLevel%" "%WinSvcLogin%" "%WinEtlLogin%" "%BatchPath%" >> "%BatchLogFile%"
+CALL "%BatchPath%\SetPermissionsSub.bat" "%WindowsNT%" "%SPLevel%" "%WinSvcLogin%" "%WinEtlLogin%" "%BatchPath%" >> "%BatchLogFile%"
 ECHO The errorcode from SetPermissionsSub is: %localError% >> "%BatchLogFile%"
 ECHO ============== >> "%BatchLogFile%"
 
@@ -63,8 +64,8 @@ ping 127.0.0.1 -n 2 >NUL
 ECHO ============== >> "%BatchLogFile%"
 date /t >> "%BatchLogFile%"
 time /t >> "%BatchLogFile%"
-ECHO "%TargetFolder%\SetPermissionsSub.bat" "%WindowsNT%" "%SPLevel%" "%WinSvcLogin%" "%WinEtlLogin%" "%TargetFolder%\..\ConfigurationFiles" >> "%BatchLogFile%"
-CALL "%TargetFolder%\SetPermissionsSub.bat" "%WindowsNT%" "%SPLevel%" "%WinSvcLogin%" "%WinEtlLogin%" "%TargetFolder%\..\ConfigurationFiles" >> "%BatchLogFile%"
+ECHO "%BatchPath%\SetPermissionsSub.bat" "%WindowsNT%" "%SPLevel%" "%WinSvcLogin%" "%WinEtlLogin%" "%BatchPath%\..\ConfigurationFiles" >> "%BatchLogFile%"
+CALL "%BatchPath%\SetPermissionsSub.bat" "%WindowsNT%" "%SPLevel%" "%WinSvcLogin%" "%WinEtlLogin%" "%BatchPath%\..\ConfigurationFiles" >> "%BatchLogFile%"
 ECHO The errorcode from SetPermissionsSub is: %localError% >> "%BatchLogFile%"
 ECHO ============== >> "%BatchLogFile%"
 
@@ -74,7 +75,26 @@ ECHO Check this file and try to understand what went wrong: "%BatchLogFile%"
 ECHO Possible cause is UAC ^(User Access Control^) or some local security policy
 ping 127.0.0.1 -n 6 >NUL
 ) ELSE (
-ECHO Permission on ConfigurationFiles folder OK: "%TargetFolder%"
+ECHO Permission on ConfigurationFiles folder OK: "%BatchPath%\..\ConfigurationFiles%"
+ping 127.0.0.1 -n 2 >NUL
+)
+
+::Set folder permissions for TeleoptiCCC
+ECHO ============== >> "%BatchLogFile%"
+date /t >> "%BatchLogFile%"
+time /t >> "%BatchLogFile%"
+ECHO "%BatchPath%\SetPermissionsSubForIISIUSRS.bat" "%WindowsNT%" "%SPLevel%" "%BatchPath%\..\TeleoptiCCC" >> "%BatchLogFile%"
+CALL "%BatchPath%\SetPermissionsSubForIISIUSRS.bat" "%WindowsNT%" "%SPLevel%" "%BatchPath%\..\TeleoptiCCC" >> "%BatchLogFile%"
+ECHO The errorcode from SetPermissionsSub is: %localError% >> "%BatchLogFile%"
+ECHO ============== >> "%BatchLogFile%"
+
+IF %errorlevel% NEQ 0 (
+ECHO The errorcode from Log file permission is: %errorlevel%
+ECHO Check this file and try to understand what went wrong: "%BatchLogFile%"
+ECHO Possible cause is UAC ^(User Access Control^) or some local security policy
+ping 127.0.0.1 -n 6 >NUL
+) ELSE (
+ECHO Permission on TeleoptiCCC folder OK: "%BatchPath%\..\TeleoptiCCC%"
 ping 127.0.0.1 -n 2 >NUL
 )
 
