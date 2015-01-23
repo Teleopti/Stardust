@@ -16,6 +16,8 @@ namespace Teleopti.Ccc.WebTest.Areas.Tennant.Core
 			{
 				container.Resolve<IApplicationAuthentication>()
 					.Should().Not.Be.Null();
+				container.Resolve<IIdentityAuthentication>()
+					.Should().Not.Be.Null();
 			}
 		}
 

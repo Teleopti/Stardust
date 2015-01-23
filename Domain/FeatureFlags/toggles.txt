@@ -79,5 +79,5 @@ MyTeam_AbsenceBackToWork_31478 = RC
 Gamification_NewBadgeCalculation_31185 = RC
 MyTimeWeb_OrganisationalBasedLeaderboard_31184 = RC
 MyTimeWeb_TradeWithDayOffAndEmptyDay_31317 = false
-MultiTenancy_Logon_17461 = true
+MultiTenancy_Logon_17461 = false
 MultiTenancy_WebLogon_17461 = false
