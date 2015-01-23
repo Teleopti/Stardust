@@ -305,8 +305,8 @@
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
     </Compile>
-    <Compile Include="SessionAnywhere.feature.cs">
-      <DependentUpon>SessionAnywhere.feature</DependentUpon>
+    <Compile Include="Anywhere\Session.feature.cs">
+      <DependentUpon>Session.feature</DependentUpon>
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
     </Compile>
@@ -945,9 +945,9 @@
       <Generator>SpecFlowSingleFileGenerator</Generator>
       <LastGenOutput>RtaTool.feature.cs</LastGenOutput>
     </None>
-    <None Include="SessionAnywhere.feature">
+    <None Include="Anywhere\Session.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>
-      <LastGenOutput>SessionAnywhere.feature.cs</LastGenOutput>
+      <LastGenOutput>Session.feature.cs</LastGenOutput>
     </None>
     <None Include="SignOut.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>

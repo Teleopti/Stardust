@@ -21,7 +21,9 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core.Navigation
 			_interceptors.Add(u => u == "", new BustCache());
 			_interceptors.Add(u => u == "MyTime#Requests/Index", new BustCache());
 			_interceptors.Add(u => u.Contains("/Anywhere#realtimeadherenceagents"), new FakeClientTimeForAllJsDateObjectsCreatedAsUtcSoTheActualTimeFromGetTimeVaryDependengingOnBrowserTimeZone());
-			_interceptors.Add(u => u.Contains("/Anywhere"), new FakeClientTimeUsingSinonProvenWay());
+			_interceptors.Add(u => u.Contains("/Anywhere#teamschedule"), new FakeClientTimeUsingSinonProvenWay());
+			_interceptors.Add(u => u.Contains("/Anywhere#personschedule"), new FakeClientTimeUsingSinonProvenWay());
+			_interceptors.Add(u => u.Contains("/Anywhere#realtimeadherence"), new FakeClientTimeUsingSinonProvenWay());
 			_interceptors.Add(u => u.Contains("/MyTime/Asm"), new FakeTimeUsingMyTimeMethod());
 			_interceptors.Add(u => u.Contains("/MyTime#Schedule/Week"), new FakeTimeUsingMyTimeMethod());
 		}

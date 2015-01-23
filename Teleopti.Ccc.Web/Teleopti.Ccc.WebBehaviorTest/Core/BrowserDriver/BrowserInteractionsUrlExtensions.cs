@@ -2,8 +2,8 @@
 {
 	public static class BrowserInteractionsUrlExtensions
 	{
-		// might not be safe...
-		public static bool UrlContains(this IBrowserInteractions interactions, string match)
+		// known to not work on all drivers/browsers
+		public static bool TryCheckIfUrlContains(this IBrowserInteractions interactions, string match)
 		{
 			var currentUrl = "";
 			interactions.DumpUrl(u => currentUrl = u);
