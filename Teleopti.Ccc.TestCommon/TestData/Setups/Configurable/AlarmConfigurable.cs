@@ -21,24 +21,28 @@ namespace Teleopti.Ccc.TestCommon.TestData.Setups.Configurable
 
 		public void Apply(IUnitOfWork uow)
 		{
+			var color = string.IsNullOrEmpty(AlarmColor) ? Color.Red : Color.FromName(AlarmColor);
+			var alarmType = new AlarmType(new Description(Name), color, TimeSpan.Zero, AlarmTypeMode.UserDefined, StaffingEffect);
 
-			var alarmType = new AlarmType(new Description(Name),
-				string.IsNullOrEmpty(AlarmColor) ? Color.Red : Color.FromName(AlarmColor), TimeSpan.Zero, AlarmTypeMode.UserDefined,
-				StaffingEffect);
 			if (!string.IsNullOrEmpty(BusinessUnit))
 				uow.DisableFilter(QueryFilter.BusinessUnit);
 			var activityRepository = new ActivityRepository(uow);
-			var activity = activityRepository.LoadAll().First(a => a.Name == Activity);
 
 			var stateGroup = new RtaStateGroup(PhoneState, false, true);
-			var alarmSituation = new StateGroupActivityAlarm(stateGroup, activity) {AlarmType = alarmType};
+
+			IActivity activity = null;
+			if (Activity != null)
+				activity = activityRepository.LoadAll().First(a => a.Name == Activity);
+
+			var stateGroupActivityAlarm = new StateGroupActivityAlarm(stateGroup, activity) { AlarmType = alarmType };
+
 			stateGroup.AddState(PhoneState, PhoneState, Guid.Empty);
 
 			if (!string.IsNullOrEmpty(BusinessUnit))
 			{
 				var businessUnit = new BusinessUnitRepository(uow).LoadAll().Single(b => b.Name == BusinessUnit);
 				stateGroup.SetBusinessUnit(businessUnit);
-				alarmSituation.SetBusinessUnit(businessUnit);
+				stateGroupActivityAlarm.SetBusinessUnit(businessUnit);
 			}
 
 			var stateGroupRepository = new RtaStateGroupRepository(uow);
@@ -48,7 +52,7 @@ namespace Teleopti.Ccc.TestCommon.TestData.Setups.Configurable
 			alarmTypeRepository.Add(alarmType);
 
 			var alarmRepository = new StateGroupActivityAlarmRepository(uow);
-			alarmRepository.Add(alarmSituation);
+			alarmRepository.Add(stateGroupActivityAlarm);
 		}
 	}
 }

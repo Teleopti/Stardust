@@ -146,18 +146,25 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Anywhere
 
 		private static void assertRealTimeAgentDetails(string name, RealTimeAdherenceAgentStateInfo stateInfo)
 		{
-			const string selector = ".agent-name:contains('{0}') ~ td:contains('{1}')";
+			const string selector = ".agent-name:contains('{0}') ~ :contains('{1}')";
 
 			Browser.Interactions.AssertExistsUsingJQuery(selector, name, stateInfo.State);
-			Browser.Interactions.AssertExistsUsingJQuery(selector, name, stateInfo.Activity);
-			Browser.Interactions.AssertExistsUsingJQuery(selector, name, stateInfo.NextActivity);
-			Browser.Interactions.AssertExistsUsingJQuery(selector, name, stateInfo.NextActivityStartTimeFormatted());
-			Browser.Interactions.AssertExistsUsingJQuery(selector, name, stateInfo.Alarm);
-			Browser.Interactions.AssertExistsUsingJQuery(selector, name, stateInfo.AlarmTimeFormatted());
+			if (stateInfo.Activity != null)	
+				Browser.Interactions.AssertExistsUsingJQuery(selector, name, stateInfo.Activity);
+			if (stateInfo.NextActivity != null)
+				Browser.Interactions.AssertExistsUsingJQuery(selector, name, stateInfo.NextActivity);
+			if (stateInfo.NextActivityStartTimeFormatted() != null )
+				Browser.Interactions.AssertExistsUsingJQuery(selector, name, stateInfo.NextActivityStartTimeFormatted());
+			if (stateInfo.Alarm != null)
+				Browser.Interactions.AssertExistsUsingJQuery(selector, name, stateInfo.Alarm);
+			if (stateInfo.AlarmTimeFormatted() != null)
+				Browser.Interactions.AssertExistsUsingJQuery(selector, name, stateInfo.AlarmTimeFormatted());
 
-			const string colorSelector = "tr[style*='background-color: {0}'] .agent-name:contains('{1}')";
-			Browser.Interactions.AssertExistsUsingJQuery(colorSelector, toRGBA(stateInfo.AlarmColor, "0.6"), name);
-
+			if (stateInfo.AlarmColor != null)
+			{
+				const string colorSelector = "tr[style*='background-color: {0}'] .agent-name:contains('{1}')";
+				Browser.Interactions.AssertExistsUsingJQuery(colorSelector, toRGBA(stateInfo.AlarmColor, "0.6"), name);
+			}
 		}
 
 		private static void assertRealTimeAgentName(string name)
@@ -188,12 +195,12 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Anywhere
 
 		public string NextActivityStartTimeFormatted()
 		{
-			return DateTime.Parse(NextActivityStartTime).ToString(@"HH\:mm");
+			return NextActivityStartTime == null ? null : DateTime.Parse(NextActivityStartTime).ToString(@"HH\:mm");
 		}
 
 		public string AlarmTimeFormatted()
 		{
-			return TimeSpan.Parse(AlarmTime).ToString(@"h\:mm\:ss");
+			return AlarmTime == null ? null : TimeSpan.Parse(AlarmTime).ToString(@"h\:mm\:ss");
 		}
 
 		public string TimeInStateFormatted()

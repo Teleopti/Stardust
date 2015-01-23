@@ -21,11 +21,14 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data
 		private static IISExpress _server;
 		private static IDisposable _portsConfiguration;
 
+		private const bool useIisExpressStartedByVisualStudio = false;
+
 		public static void Setup()
 		{
 			_portsConfiguration = RandomPortsAndUrls();
 			WriteWebConfigs();
-			StartIISExpress();
+			if (!useIisExpressStartedByVisualStudio)
+				StartIISExpress();
 			GenerateAndWriteTestDataNHibFileFromTemplate();
 		}
 
@@ -35,11 +38,14 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data
 			var originalAuthenticationBridgePort = PortAuthenticationBridge;
 			var originalWindowsIdentityProviderPort = PortWindowsIdentityProvider;
 
-			Port = new Random().Next(57000, 57999);
+			if (!useIisExpressStartedByVisualStudio)
+			{
+				Port = new Random().Next(57000, 57999);
+				PortAuthenticationBridge = Port - new Random().Next(1, 100);
+				PortWindowsIdentityProvider = Port + new Random().Next(1, 100);
+			}
 			URL = new Uri(string.Format("http://localhost:{0}/", Port));
-			PortAuthenticationBridge = Port - new Random().Next(1, 100);
 			UrlAuthenticationBridge = new Uri(string.Format("http://localhost:{0}/", PortAuthenticationBridge));
-			PortWindowsIdentityProvider = Port + new Random().Next(1, 100);
 			WindowsClaimProvider = string.Format("<add identifier=\"urn:Windows\" displayName=\"Windows\" url=\"http://localhost:{0}/\" protocolHandler=\"OpenIdHandler\" />", PortWindowsIdentityProvider);
 			TeleoptiClaimProvider = string.Format("<add identifier=\"urn:Teleopti\" displayName=\"Teleopti\" url=\"http://localhost:{0}/sso/\" protocolHandler=\"OpenIdHandler\" />", Port);
 

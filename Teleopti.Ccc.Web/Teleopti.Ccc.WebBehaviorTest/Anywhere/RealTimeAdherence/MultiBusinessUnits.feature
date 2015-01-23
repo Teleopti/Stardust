@@ -43,66 +43,26 @@ Scenario: Should be able to see all agents state updates of a team within a spec
 	And there is a business unit with
 	| Field | Value           |
 	| Name  | Business Unit 1 |
-	And there is a business unit with
-	| Field | Value           |
-	| Name  | Business Unit 2 |
 	And there is a site 'Paris' on business unit 'Business Unit 1'
-	And there is a site 'London' on business unit 'Business Unit 2'
 	And there is a team named 'Red' on site 'Paris'
-	And there is an activity with
-	| Field         | Value           |
-	| Name          | Phone           |
-	| Business Unit | Business Unit 1 |
-	And there is an activity with
-	| Field         | Value           |
-	| Name          | Lunch           |
-	| Business Unit | Business Unit 1 |
 	And there is a datasouce with id 6
-	And I am located in 'London'
 	And there is an external logon named 'Pierre Baldi' with datasource 6
 	And Pierre Baldi has a person period with
 	 | Field          | Value        |
 	 | Team           | Red          |
 	 | Start Date     | 2014-01-21   |
 	 | External Logon | Pierre Baldi |
-	And Pierre Baldi has a shift with
-	| Field                    | Value            |
-	| Start time               | 2014-01-21 12:00 |
-	| End time                 | 2014-01-21 13:00 |
-	| Activity                 | Phone            |
-	| Next activity            | Lunch            |
-	| Next activity start time | 2014-01-21 13:00 |
-	| Next activity end time   | 2014-01-21 13:30 |
 	And there is an alarm with 
-	| Field           | Value    |
-	| Business Unit   | Business Unit 1    |
-	| Activity        | Phone    |
-	| Phone state     | Ready    |
-	| Name            | Adhering |
-	| Alarm Color     | Green    |
-	| Staffing effect | 0        |
-	And there is an alarm with 
-	| Field           | Value        |
-	| Business Unit   | Business Unit 1    |
-	| Activity        | Phone        |
-	| Phone state     | Pause        |
-	| Alarm Color     | Red          |
-	| Name            | Not adhering |
-	| Staffing effect | -1           |
+	| Field         | Value           |
+	| Name          | Positive        |
+	| Business Unit | Business Unit 1 |
+	| Phone state   | Ready           |
 	And the time is '2014-01-21 12:30:00'
 	When I view Real time adherence overview
-	And 'Pierre Baldi' sets his phone state to 'Pause' on datasource 6
 	And I choose business unit 'Business Unit 1'
-	And I click the site 'Paris'
 	And I view real time adherence for team 'Red'
-	And the time is '2014-01-21 12:45:00'
+	And 'Pierre Baldi' sets his phone state to 'Ready' on datasource 6
 	Then I should see real time agent details for 'Pierre Baldi'
 		| Name                     |                  |
 		| Name                     | Pierre Baldi     |
-		| State                    | Pause            |
-		| Activity                 | Phone            |
-		| Next activity            | Lunch            |
-		| Next activity start time | 2014-01-21 13:00 |
-		| Alarm                    | Not adhering     |
-		| Alarm Time               | 0:15:00          |
-		| Alarm Color              | Red              |
+		| State                    | Ready            |
