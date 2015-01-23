@@ -411,5 +411,19 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
             mocks.ReplayAll();
             Assert.IsNotNull(new RepositoryFactory().CreateAgentDayScheduleTagRepository(uow));
         }
+
+		[Test]
+		public void VerifyCreateGamificationSettingRepository()
+		{
+			mocks.ReplayAll();
+			Assert.IsNotNull(new RepositoryFactory().CreateGamificationSettingRepository(uow));
+		}
+
+		[Test]
+		public void VerifyCreateTeamGamificationSettingRepository()
+		{
+			mocks.ReplayAll();
+			Assert.IsNotNull(new RepositoryFactory().CreateTeamGamificationSettingRepository(uow));
+		}
     }
 }

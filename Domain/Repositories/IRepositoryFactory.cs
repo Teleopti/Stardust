@@ -456,5 +456,7 @@ namespace Teleopti.Ccc.Domain.Repositories
 		/// Created date: 2014-08-01
 		/// </remarks>
 		IAgentBadgeSettingsRepository CreateAgentBadgeSettingsRepository(IUnitOfWork unitOfWork);
+		IGamificationSettingRepository CreateGamificationSettingRepository(IUnitOfWork unitOfWork);
+		ITeamGamificationSettingRepository CreateTeamGamificationSettingRepository(IUnitOfWork unitOfWork);
     }
 }
