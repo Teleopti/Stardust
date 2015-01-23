@@ -80,7 +80,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 		{
 			_presenter = new SetScorecardPresenter(this, _unitOfWork, StateHolderReader.Instance.StateReader.ApplicationScopeData.Messaging,
 												   new ScorecardProvider(new ScorecardRepository(_unitOfWork), true),
-												   new SiteProvider(new SiteRepository(_unitOfWork), true),
+												   new SiteProvider(new SiteRepository(_unitOfWork)),
 												   new TeamProvider(new TeamRepository(_unitOfWork)));
 
 			_presenter.Initialize();

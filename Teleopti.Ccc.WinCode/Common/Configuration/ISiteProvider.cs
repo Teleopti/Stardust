@@ -7,7 +7,8 @@ namespace Teleopti.Ccc.WinCode.Common.Configuration
 {
     public interface ISiteProvider
     {
-        IList<ISite> GetSites();
+        IList<ISite> GetSitesAllSitesItemIncluded();
+		IList<ISite> GetSitesAllSitesItemNotIncluded();
         ISite AllSitesItem { get; }
         void HandleMessageBrokerEvent(Guid domainObjectId, DomainUpdateType domainUpdateType);
     }

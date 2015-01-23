@@ -55,7 +55,7 @@ namespace Teleopti.Ccc.WinCodeTest.Configuration
             using (_mocks.Record())
             {
                 Expect.Call(_scorecardProvider.GetScorecards()).Return(scorecards);
-                Expect.Call(_siteProvider.GetSites()).Return(sites);
+                Expect.Call(_siteProvider.GetSitesAllSitesItemIncluded()).Return(sites);
                 Expect.Call(() => _view.SetSites(sites));
                 Expect.Call(() => _view.SetScorecards(scorecards));
                 Expect.Call(() => _view.SetSelectedSite(site));
@@ -171,7 +171,7 @@ namespace Teleopti.Ccc.WinCodeTest.Configuration
                 message = CreateMessage(false);
                 Expect.Call(_view.InvokeRequired).Return(false);
                 Expect.Call(() => _siteProvider.HandleMessageBrokerEvent(Guid.Empty, DomainUpdateType.Insert));
-                Expect.Call(_siteProvider.GetSites()).Return(sites);
+                Expect.Call(_siteProvider.GetSitesAllSitesItemIncluded()).Return(sites);
                 Expect.Call(() => _view.SetSites(sites));
                 Expect.Call(() => _view.SetSelectedSite(site));
             }
@@ -191,7 +191,7 @@ namespace Teleopti.Ccc.WinCodeTest.Configuration
                 message = CreateMessage(false);
                 Expect.Call(_view.InvokeRequired).Return(false);
                 Expect.Call(() => _teamProvider.HandleMessageBrokerEvent(Guid.Empty, DomainUpdateType.Insert));
-                Expect.Call(_siteProvider.GetSites()).Return(new List<ISite> {site});
+                Expect.Call(_siteProvider.GetSitesAllSitesItemIncluded()).Return(new List<ISite> {site});
                 Expect.Call(() => _view.SetSelectedSite(site));
             }
             using (_mocks.Playback())

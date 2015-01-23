@@ -11,29 +11,33 @@ namespace Teleopti.Ccc.WinCode.Common.Configuration
     public class SiteProvider : ISiteProvider
     {
         private readonly ISiteRepository _siteRepository;
-        private readonly bool _includeAllSitesItem;
         private IList<ISite> _siteCollection;
         private static readonly ISite _allSitesItem = new Site(UserTexts.Resources.AllSelection);
         private static readonly object LockObject = new object();
 
-        public SiteProvider(ISiteRepository siteRepository, bool includeAllSitesItem)
+        public SiteProvider(ISiteRepository siteRepository)
         {
             _siteRepository = siteRepository;
-            _includeAllSitesItem = includeAllSitesItem;
         }
 
-        public IList<ISite> GetSites()
+        public IList<ISite> GetSitesAllSitesItemIncluded()
         {
-            EnsureInitialized();
+			EnsureInitialized(isAllSitesItemIncluded: true);
             return _siteCollection;
         }
 
-        private void EnsureInitialized()
+		public IList<ISite> GetSitesAllSitesItemNotIncluded()
+        {
+			EnsureInitialized(isAllSitesItemIncluded: false);
+            return _siteCollection;
+        }
+
+        private void EnsureInitialized(bool isAllSitesItemIncluded)
         {
             if (_siteCollection == null)
             {
                 var sites = _siteRepository.LoadAll().OrderBy(s => s.Description.Name).ToList();
-                if (_includeAllSitesItem)
+                if (isAllSitesItemIncluded)
                     sites.Insert(0, _allSitesItem);
                 _siteCollection = sites;
             }
@@ -48,7 +52,7 @@ namespace Teleopti.Ccc.WinCode.Common.Configuration
         {
             lock (LockObject)
             {
-                EnsureInitialized();
+				EnsureInitialized(isAllSitesItemIncluded: false);
                 if (domainUpdateType == DomainUpdateType.Delete ||
                     domainUpdateType == DomainUpdateType.Update)
                 {

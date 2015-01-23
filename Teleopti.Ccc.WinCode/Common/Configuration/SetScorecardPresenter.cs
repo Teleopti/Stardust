@@ -45,7 +45,7 @@ namespace Teleopti.Ccc.WinCode.Common.Configuration
         {
             RefreshScorecards();
             
-            var sites = _siteProvider.GetSites();
+            var sites = _siteProvider.GetSitesAllSitesItemIncluded();
             _view.SetSites(sites);
             _view.SetSelectedSite(sites[0]);
 
@@ -139,7 +139,7 @@ namespace Teleopti.Ccc.WinCode.Common.Configuration
             else
             {
                 _siteProvider.HandleMessageBrokerEvent(e.Message.DomainObjectId, e.Message.DomainUpdateType);
-                var sites = _siteProvider.GetSites();
+                var sites = _siteProvider.GetSitesAllSitesItemIncluded();
                 _view.SetSites(sites);
                 SelectedSameSiteAgainIfPossible(sites);
             }
@@ -155,7 +155,7 @@ namespace Teleopti.Ccc.WinCode.Common.Configuration
             else
             {
                 _teamProvider.HandleMessageBrokerEvent(e.Message.DomainObjectId, e.Message.DomainUpdateType);
-                var sites = _siteProvider.GetSites();
+                var sites = _siteProvider.GetSitesAllSitesItemIncluded();
                 SelectedSameSiteAgainIfPossible(sites);
             }
         }

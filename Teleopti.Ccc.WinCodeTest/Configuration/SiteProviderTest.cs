@@ -21,7 +21,7 @@ namespace Teleopti.Ccc.WinCodeTest.Configuration
         {
             _mocks = new MockRepository();
             _siteRepository = _mocks.StrictMock<ISiteRepository>();
-            _target = new SiteProvider(_siteRepository, false);
+            _target = new SiteProvider(_siteRepository);
         }
 
         [Test]
@@ -41,14 +41,14 @@ namespace Teleopti.Ccc.WinCodeTest.Configuration
             }
             using (_mocks.Playback())
             {
-                Assert.AreEqual(result, _target.GetSites());
+                Assert.AreEqual(result, _target.GetSitesAllSitesItemNotIncluded());
             }
         }
 
         [Test]
         public void VerifyCanGetAllSitesWithAllSitesItemIncluded()
         {
-            _target = new SiteProvider(_siteRepository,true);
+            _target = new SiteProvider(_siteRepository);
             var result = new List<ISite> { _mocks.StrictMock<ISite>() };
             using (_mocks.Record())
             {
@@ -57,7 +57,7 @@ namespace Teleopti.Ccc.WinCodeTest.Configuration
             }
             using (_mocks.Playback())
             {
-                Assert.IsTrue(_target.GetSites().Contains(_target.AllSitesItem));
+                Assert.IsTrue(_target.GetSitesAllSitesItemIncluded().Contains(_target.AllSitesItem));
             }
         }
 
@@ -79,8 +79,8 @@ namespace Teleopti.Ccc.WinCodeTest.Configuration
             using (_mocks.Playback())
             {
                 _target.HandleMessageBrokerEvent(siteId,DomainUpdateType.Update);
-                Assert.AreEqual(1,_target.GetSites().Count);
-                Assert.IsTrue(_target.GetSites().Contains(newSite));
+                Assert.AreEqual(1,_target.GetSitesAllSitesItemNotIncluded().Count);
+                Assert.IsTrue(_target.GetSitesAllSitesItemNotIncluded().Contains(newSite));
             }
         }
 
@@ -99,8 +99,8 @@ namespace Teleopti.Ccc.WinCodeTest.Configuration
             using (_mocks.Playback())
             {
                 _target.HandleMessageBrokerEvent(siteId, DomainUpdateType.Delete);
-                Assert.AreEqual(0, _target.GetSites().Count);
-                Assert.IsFalse(_target.GetSites().Contains(oldSite));
+                Assert.AreEqual(0, _target.GetSitesAllSitesItemNotIncluded().Count);
+                Assert.IsFalse(_target.GetSitesAllSitesItemNotIncluded().Contains(oldSite));
             }
         }
 
@@ -120,8 +120,8 @@ namespace Teleopti.Ccc.WinCodeTest.Configuration
             using (_mocks.Playback())
             {
                 _target.HandleMessageBrokerEvent(siteId, DomainUpdateType.Insert);
-                Assert.AreEqual(1, _target.GetSites().Count);
-                Assert.IsTrue(_target.GetSites().Contains(newSite));
+				Assert.AreEqual(1, _target.GetSitesAllSitesItemNotIncluded().Count);
+				Assert.IsTrue(_target.GetSitesAllSitesItemNotIncluded().Contains(newSite));
             }
         }
     }
