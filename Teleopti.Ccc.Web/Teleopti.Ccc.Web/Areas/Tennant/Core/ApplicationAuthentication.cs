@@ -37,7 +37,7 @@ namespace Teleopti.Ccc.Web.Areas.Tennant.Core
 			if (!_passwordPolicyCheck.Verify(passwordPolicyForUser, out passwordPolicyFailureReason))
 				return createFailingResult(passwordPolicyFailureReason);
 
-			string encryptedString = _nHibernateConfigurationsHandler.GetConfigForName(foundUser.PersonInfo.Tennant);
+			string encryptedString = _nHibernateConfigurationsHandler.GetConfigForName(passwordPolicyForUser.PersonInfo.Tennant);
 			if(string.IsNullOrEmpty(encryptedString))
 				return createFailingResult(Resources.NoDatasource);
 
