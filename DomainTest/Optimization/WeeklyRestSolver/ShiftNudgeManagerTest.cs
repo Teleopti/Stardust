@@ -2,11 +2,13 @@
 using System.Collections.Generic;
 using NUnit.Framework;
 using Rhino.Mocks;
+using Teleopti.Ccc.Domain.GroupPageCreator;
 using Teleopti.Ccc.Domain.Optimization;
 using Teleopti.Ccc.Domain.Optimization.TeamBlock;
 using Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.EqualNumberOfCategory;
 using Teleopti.Ccc.Domain.Optimization.WeeklyRestSolver;
 using Teleopti.Ccc.Domain.ResourceCalculation;
+using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Scheduling.Rules;
 using Teleopti.Ccc.Domain.Scheduling.TeamBlock;
 using Teleopti.Ccc.TestCommon.FakeData;
@@ -18,7 +20,6 @@ namespace Teleopti.Ccc.DomainTest.Optimization.WeeklyRestSolver
 	[TestFixture]
 	public class ShiftNudgeManagerTest
 	{
-		private MockRepository _mocks;
 		private IShiftNudgeManager _target;
 		private IShiftNudgeEarlier _shiftNudgeEarlier;
 		private IShiftNudgeLater _shiftNudgeLater;
@@ -33,229 +34,172 @@ namespace Teleopti.Ccc.DomainTest.Optimization.WeeklyRestSolver
 		private ISchedulePartModifyAndRollbackService _rollbackService;
 		private IResourceCalculateDelayer _resourceCalculateDelayer;
 		private ISchedulingResultStateHolder _schedulingResultStateHolder;
-		private List<IScheduleMatrixPro> _allPersonMatrixList;
-		private DateOnlyPeriod _selectedPeriod;
+		private readonly DateOnlyPeriod _selectedPeriod = new DateOnlyPeriod(2014, 03, 24, 2014, 03, 31);
 		private List<IPerson> _selectedPersons;
 		private IList<ITeamBlockInfo> _leftTeamBlockInfoList;
 		private ITeamBlockInfo _leftTeamBlockInfo;
 		private ITeamBlockInfo _rightTeamBlockInfo;
 		private List<ITeamBlockInfo> _rightTeamBlockInfoList;
-		private ITeamInfo _leftTeamInfo;
 		private IScheduleMatrixPro _matrix;
 		private IScheduleRange _range;
 		private IScheduleDay _leftScheduleDay;
 		private IScheduleDay _rightScheduleDay;
-		private IDateOnlyAsDateTimePeriod _dateOnlyAsPeriod;
-		private ITeamBlockRestrictionOverLimitValidator _teamBlockRestrictionOverLimitValidator;
+		private ITeamBlockOptimizationLimits _teamBlockOptimizationLimits;
 		private IOptimizationPreferences _optimizationPreferences;
 		private ISchedulingOptionsCreator _schedulingOptionsCreator;
-		private IBlockInfo _leftBlockInfo;
-		private IBlockInfo _rightBlockInfo;
-		private ITeamInfo _rightTeamInfo;
+		private List<IScheduleMatrixPro> _allPersonMatrixList;
 
 		[SetUp]
 		public void Setup()
 		{
-			_mocks = new MockRepository();
-			_shiftNudgeEarlier = _mocks.StrictMock<IShiftNudgeEarlier>();
-			_shiftNudgeLater = _mocks.StrictMock<IShiftNudgeLater>();
-			_ensureWeeklyRestRule = _mocks.StrictMock<IEnsureWeeklyRestRule>();
+			_shiftNudgeEarlier = MockRepository.GenerateMock<IShiftNudgeEarlier>();
+			_shiftNudgeLater = MockRepository.GenerateMock<IShiftNudgeLater>();
+			_ensureWeeklyRestRule = MockRepository.GenerateMock<IEnsureWeeklyRestRule>();
 			_contractWeeklyRestForPersonWeek = new ContractWeeklyRestForPersonWeek();
-			_teamBlockScheduleCloner = _mocks.StrictMock<ITeamBlockScheduleCloner>();
-			_filterForTeamBlockInSelection = _mocks.StrictMock<IFilterForTeamBlockInSelection>();
-			_teamBlockRestrictionOverLimitValidator = _mocks.StrictMock<ITeamBlockRestrictionOverLimitValidator>();
-			_schedulingOptionsCreator = _mocks.StrictMock<ISchedulingOptionsCreator>();
-			_target = new ShiftNudgeManager(_shiftNudgeEarlier, _shiftNudgeLater, _ensureWeeklyRestRule,
-				_contractWeeklyRestForPersonWeek, _teamBlockScheduleCloner, _filterForTeamBlockInSelection,
-				_teamBlockRestrictionOverLimitValidator, _schedulingOptionsCreator);
+			_teamBlockScheduleCloner = MockRepository.GenerateMock<ITeamBlockScheduleCloner>();
+			_filterForTeamBlockInSelection = MockRepository.GenerateMock<IFilterForTeamBlockInSelection>();
+			_schedulingOptionsCreator = MockRepository.GenerateMock<ISchedulingOptionsCreator>();
+			_teamBlockOptimizationLimits = MockRepository.GenerateMock<ITeamBlockOptimizationLimits>();
+			_target = new ShiftNudgeManager(_shiftNudgeEarlier, _shiftNudgeLater, _ensureWeeklyRestRule, _contractWeeklyRestForPersonWeek, _teamBlockScheduleCloner, _filterForTeamBlockInSelection, _teamBlockOptimizationLimits, _schedulingOptionsCreator);
 			_person = PersonFactory.CreatePersonWithPersonPeriod(DateOnly.MinValue);
+			_person.AddSchedulePeriod(new SchedulePeriod(_selectedPeriod.StartDate, SchedulePeriodType.Month, 1));
 			_person.Period(DateOnly.MinValue).PersonContract.Contract.WorkTimeDirective = new WorkTimeDirective(TimeSpan.Zero, TimeSpan.FromHours(48), TimeSpan.FromHours(11), TimeSpan.FromHours(36));
-			_personWeek = new PersonWeek(_person, new DateOnlyPeriod(2014, 03, 24, 2014, 03, 31));
-			_teamBlockGenerator = _mocks.StrictMock<ITeamBlockGenerator>();
+			_personWeek = new PersonWeek(_person, _selectedPeriod);
+			_teamBlockGenerator = MockRepository.GenerateMock<ITeamBlockGenerator>();
 			_schedulingOptions = new SchedulingOptions();
-			_rollbackService = _mocks.StrictMock<ISchedulePartModifyAndRollbackService>();
-			_resourceCalculateDelayer = _mocks.StrictMock<IResourceCalculateDelayer>();
-			_schedulingResultStateHolder = _mocks.StrictMock<ISchedulingResultStateHolder>();
+			_rollbackService = MockRepository.GenerateMock<ISchedulePartModifyAndRollbackService>();
+			_resourceCalculateDelayer = MockRepository.GenerateMock<IResourceCalculateDelayer>();
+			_schedulingResultStateHolder = MockRepository.GenerateMock<ISchedulingResultStateHolder>();
 			_allPersonMatrixList = new List<IScheduleMatrixPro>();
-			_selectedPeriod = new DateOnlyPeriod(2014, 03, 24, 2014, 03, 31);
-			_selectedPersons = new List<IPerson> {_person};
-			_leftTeamBlockInfo = _mocks.StrictMock<ITeamBlockInfo>();
-			_leftTeamBlockInfoList = new List<ITeamBlockInfo> {_leftTeamBlockInfo};
-			_rightTeamBlockInfo = _mocks.StrictMock<ITeamBlockInfo>();
-			_rightTeamBlockInfoList = new List<ITeamBlockInfo> { _rightTeamBlockInfo };
-			_leftTeamInfo = _mocks.StrictMock<ITeamInfo>();
-			_rightTeamInfo = _mocks.StrictMock<ITeamInfo>();
-			_matrix = _mocks.StrictMock<IScheduleMatrixPro>();
-			_range = _mocks.StrictMock<IScheduleRange>();
-			_leftScheduleDay = _mocks.StrictMock<IScheduleDay>();
-			_rightScheduleDay = _mocks.StrictMock<IScheduleDay>();
-			_dateOnlyAsPeriod = _mocks.StrictMock<IDateOnlyAsDateTimePeriod>();
-			_optimizationPreferences = new OptimizationPreferences();
-			_leftBlockInfo = _mocks.StrictMock<IBlockInfo>();
-			_rightBlockInfo = _mocks.StrictMock<IBlockInfo>();
 
+			_selectedPersons = new List<IPerson> {_person};
+			_leftTeamBlockInfo = new TeamBlockInfo(new TeamInfo(new Group(new List<IPerson> {_person}, ""), new List<IList<IScheduleMatrixPro>> {_allPersonMatrixList}), new BlockInfo(new DateOnlyPeriod(2014, 3, 29, 2014, 3, 29)));
+			_leftTeamBlockInfoList = new List<ITeamBlockInfo> {_leftTeamBlockInfo};
+			_rightTeamBlockInfo = new TeamBlockInfo(new TeamInfo(new Group(new List<IPerson> {_person}, ""), new List<IList<IScheduleMatrixPro>> {_allPersonMatrixList}), new BlockInfo(new DateOnlyPeriod(2014, 3, 31, 2014, 3, 31)));
+			_rightTeamBlockInfoList = new List<ITeamBlockInfo> {_rightTeamBlockInfo};
+			_matrix = MockRepository.GenerateMock<IScheduleMatrixPro>();
+			_range = MockRepository.GenerateMock<IScheduleRange>();
+			_leftScheduleDay = ScheduleDayFactory.Create(_selectedPeriod.StartDate, _person);
+			_rightScheduleDay = ScheduleDayFactory.Create(_selectedPeriod.StartDate, _person);
+			_optimizationPreferences = new OptimizationPreferences();
 		}
 
 		[Test]
 		public void ShouldReturnTrueIfSuccessful()
 		{
+			_teamBlockGenerator.Stub(x => x.Generate(_allPersonMatrixList, new DateOnlyPeriod(2014, 3, 29, 2014, 3, 29), new List<IPerson> {_person}, _schedulingOptions)).Return(_leftTeamBlockInfoList);
+			_teamBlockGenerator.Stub(x => x.Generate(_allPersonMatrixList, new DateOnlyPeriod(2014, 3, 31, 2014, 3, 31), new List<IPerson> {_person}, _schedulingOptions)).Return(_rightTeamBlockInfoList);
+			_filterForTeamBlockInSelection.Stub(x => x.Filter(new List<ITeamBlockInfo> {_leftTeamBlockInfo, _rightTeamBlockInfo}, _selectedPersons, _selectedPeriod)).Return(new List<ITeamBlockInfo> {_leftTeamBlockInfo, _rightTeamBlockInfo});
 
-			using (_mocks.Record())
-			{
-				initialMocks(false);
-				Expect.Call(_filterForTeamBlockInSelection.Filter(
-					new List<ITeamBlockInfo> {_leftTeamBlockInfo, _rightTeamBlockInfo}, _selectedPersons, _selectedPeriod))
-					.Return(new List<ITeamBlockInfo> {_leftTeamBlockInfo, _rightTeamBlockInfo});
-				middleMocks();
+			_teamBlockScheduleCloner.Stub(x => x.CloneSchedules(_leftTeamBlockInfo)).Return(new List<IScheduleDay> {_leftScheduleDay});
+			_teamBlockScheduleCloner.Stub(x => x.CloneSchedules(_rightTeamBlockInfo)).Return(new List<IScheduleDay> {_rightScheduleDay});
+			_allPersonMatrixList.Add(_matrix);
+			_matrix.Stub(x => x.Person).Return(_person);
+			_matrix.Stub(x => x.SchedulePeriod).Return(new VirtualSchedulePeriod(_person, new DateOnly(2014, 3, 29), new VirtualSchedulePeriodSplitChecker(_person)));
+			_matrix.Stub(x => x.ActiveScheduleRange).Return(_range);
+			_range.Stub(x => x.ScheduledDay(new DateOnly(2014, 3, 29))).Return(_leftScheduleDay);
+			_range.Stub(x => x.ScheduledDay(new DateOnly(2014, 3, 31))).Return(_rightScheduleDay);
 
-				Expect.Call(_ensureWeeklyRestRule.HasMinWeeklyRest(_personWeek, _range, TimeSpan.FromHours(36))).Return(false);
-				Expect.Call(_shiftNudgeEarlier.Nudge(_leftScheduleDay, _rollbackService, _schedulingOptions,
-					_resourceCalculateDelayer, _leftTeamBlockInfo, _schedulingResultStateHolder))
-					.Return(true);
-				Expect.Call(_ensureWeeklyRestRule.HasMinWeeklyRest(_personWeek, _range, TimeSpan.FromHours(36))).Return(false);
-				Expect.Call(_shiftNudgeLater.Nudge(_rightScheduleDay, _rollbackService, _schedulingOptions,
-					_resourceCalculateDelayer, _rightTeamBlockInfo, _schedulingResultStateHolder))
-					.Return(true);
-				Expect.Call(_ensureWeeklyRestRule.HasMinWeeklyRest(_personWeek, _range, TimeSpan.FromHours(36))).Return(true);
+			_ensureWeeklyRestRule.Stub(x => x.HasMinWeeklyRest(_personWeek, _range, TimeSpan.FromHours(36))).Return(false).Repeat.Once();
+			_shiftNudgeEarlier.Stub(x => x.Nudge(_leftScheduleDay, _rollbackService, _schedulingOptions, _resourceCalculateDelayer, _leftTeamBlockInfo, _schedulingResultStateHolder)).Return(true);
+			_ensureWeeklyRestRule.Stub(x => x.HasMinWeeklyRest(_personWeek, _range, TimeSpan.FromHours(36))).Return(false).Repeat.Once();
+			_shiftNudgeLater.Stub(x => x.Nudge(_rightScheduleDay, _rollbackService, _schedulingOptions, _resourceCalculateDelayer, _rightTeamBlockInfo, _schedulingResultStateHolder)).Return(true);
+			_ensureWeeklyRestRule.Stub(x => x.HasMinWeeklyRest(_personWeek, _range, TimeSpan.FromHours(36))).Return(true).Repeat.Once();
+			_ensureWeeklyRestRule.Stub(x => x.HasMinWeeklyRest(_personWeek, _range, TimeSpan.FromHours(36))).Return(true).Repeat.Once();
+			_teamBlockOptimizationLimits.Stub(x => x.ValidateMinWorkTimePerWeek(_leftTeamBlockInfo)).Return(true);
+			_teamBlockOptimizationLimits.Stub(x => x.ValidateMinWorkTimePerWeek(_rightTeamBlockInfo)).Return(true);
 
-				Expect.Call(_ensureWeeklyRestRule.HasMinWeeklyRest(_personWeek, _range, TimeSpan.FromHours(36))).Return(true);
-			}
-
-			using (_mocks.Playback())
-			{
-				bool result = _target.TrySolveForDayOff(_personWeek, new DateOnly(2014, 03, 30), _teamBlockGenerator,
-					_allPersonMatrixList, _rollbackService, _resourceCalculateDelayer,
-					_schedulingResultStateHolder, _selectedPeriod, _selectedPersons, null,_schedulingOptions );
-				Assert.IsTrue(result);
-			}
+			var result = _target.TrySolveForDayOff(_personWeek, new DateOnly(2014, 03, 30), _teamBlockGenerator, _allPersonMatrixList, _rollbackService, _resourceCalculateDelayer, _schedulingResultStateHolder, _selectedPeriod, _selectedPersons, null, _schedulingOptions);
+			Assert.IsTrue(result);
 		}
 
 		[Test]
 		public void ShouldReturnFalseIfNudginFails()
 		{
-			using (_mocks.Record())
-			{
-				initialMocks(false);
-				Expect.Call(_filterForTeamBlockInSelection.Filter(
-					new List<ITeamBlockInfo> { _leftTeamBlockInfo, _rightTeamBlockInfo }, _selectedPersons, _selectedPeriod))
-					.Return(new List<ITeamBlockInfo> { _leftTeamBlockInfo, _rightTeamBlockInfo });
-				middleMocks();
+			_teamBlockGenerator.Stub(x => x.Generate(_allPersonMatrixList, new DateOnlyPeriod(2014, 3, 29, 2014, 3, 29), new List<IPerson> {_person}, _schedulingOptions)).Return(_leftTeamBlockInfoList);
+			_teamBlockGenerator.Stub(x => x.Generate(_allPersonMatrixList, new DateOnlyPeriod(2014, 3, 31, 2014, 3, 31), new List<IPerson> {_person}, _schedulingOptions)).Return(_rightTeamBlockInfoList);
+			_filterForTeamBlockInSelection.Stub(x => x.Filter(new List<ITeamBlockInfo> {_leftTeamBlockInfo, _rightTeamBlockInfo}, _selectedPersons, _selectedPeriod)).Return(new List<ITeamBlockInfo> {_leftTeamBlockInfo, _rightTeamBlockInfo});
 
-				Expect.Call(_ensureWeeklyRestRule.HasMinWeeklyRest(_personWeek, _range, TimeSpan.FromHours(36))).Return(false);
-				Expect.Call(_shiftNudgeEarlier.Nudge(_leftScheduleDay, _rollbackService, _schedulingOptions,
-					_resourceCalculateDelayer, _leftTeamBlockInfo, _schedulingResultStateHolder))
-					.Return(false);
-				Expect.Call(_ensureWeeklyRestRule.HasMinWeeklyRest(_personWeek, _range, TimeSpan.FromHours(36))).Return(false);
-				Expect.Call(_shiftNudgeLater.Nudge(_rightScheduleDay, _rollbackService, _schedulingOptions,
-					_resourceCalculateDelayer, _rightTeamBlockInfo, _schedulingResultStateHolder))
-					.Return(false);
-				Expect.Call(_ensureWeeklyRestRule.HasMinWeeklyRest(_personWeek, _range, TimeSpan.FromHours(36))).Return(false);
+			_teamBlockScheduleCloner.Stub(x => x.CloneSchedules(_leftTeamBlockInfo)).Return(new List<IScheduleDay> {_leftScheduleDay});
+			_teamBlockScheduleCloner.Stub(x => x.CloneSchedules(_rightTeamBlockInfo)).Return(new List<IScheduleDay> {_rightScheduleDay});
+			_allPersonMatrixList.Add(_matrix);
+			_matrix.Stub(x => x.Person).Return(_person);
+			_matrix.Stub(x => x.SchedulePeriod).Return(new VirtualSchedulePeriod(_person, new DateOnly(2014, 3, 29), new VirtualSchedulePeriodSplitChecker(_person)));
+			_matrix.Stub(x => x.ActiveScheduleRange).Return(_range);
+			_range.Stub(x => x.ScheduledDay(new DateOnly(2014, 3, 29))).Return(_leftScheduleDay);
+			_range.Stub(x => x.ScheduledDay(new DateOnly(2014, 3, 31))).Return(_rightScheduleDay);
 
-				Expect.Call(_ensureWeeklyRestRule.HasMinWeeklyRest(_personWeek, _range, TimeSpan.FromHours(36))).Return(false);
+			_ensureWeeklyRestRule.Stub(x => x.HasMinWeeklyRest(_personWeek, _range, TimeSpan.FromHours(36))).Return(false).Repeat.Once();
+			_shiftNudgeEarlier.Stub(x => x.Nudge(_leftScheduleDay, _rollbackService, _schedulingOptions, _resourceCalculateDelayer, _leftTeamBlockInfo, _schedulingResultStateHolder)).Return(false);
+			_ensureWeeklyRestRule.Stub(x => x.HasMinWeeklyRest(_personWeek, _range, TimeSpan.FromHours(36))).Return(false).Repeat.Once();
+			_shiftNudgeLater.Stub(x => x.Nudge(_rightScheduleDay, _rollbackService, _schedulingOptions, _resourceCalculateDelayer, _rightTeamBlockInfo, _schedulingResultStateHolder)).Return(false);
+			_ensureWeeklyRestRule.Stub(x => x.HasMinWeeklyRest(_personWeek, _range, TimeSpan.FromHours(36))).Return(false).Repeat.Once();
+			_ensureWeeklyRestRule.Stub(x => x.HasMinWeeklyRest(_personWeek, _range, TimeSpan.FromHours(36))).Return(false).Repeat.Once();
 
-				rollBackMocks();
-			}
+			_resourceCalculateDelayer.Stub(x => x.CalculateIfNeeded(new DateOnly(2014, 3, 29), null)).Return(true);
+			_resourceCalculateDelayer.Stub(x => x.CalculateIfNeeded(new DateOnly(2014, 3, 30), null)).Return(true);
 
-			using (_mocks.Playback())
-			{
-				bool result = _target.TrySolveForDayOff(_personWeek, new DateOnly(2014, 03, 30), _teamBlockGenerator,
-					_allPersonMatrixList, _rollbackService, _resourceCalculateDelayer,
-					_schedulingResultStateHolder, _selectedPeriod, _selectedPersons, null,_schedulingOptions );
-				Assert.IsFalse(result);
-			}
+			var result = _target.TrySolveForDayOff(_personWeek, new DateOnly(2014, 03, 30), _teamBlockGenerator, _allPersonMatrixList, _rollbackService, _resourceCalculateDelayer, _schedulingResultStateHolder, _selectedPeriod, _selectedPersons, null, _schedulingOptions);
+			Assert.IsFalse(result);
+			_rollbackService.AssertWasCalled(x => x.ModifyParts(new List<IScheduleDay> {_leftScheduleDay, _rightScheduleDay}));
 		}
 
 		[Test]
 		public void ShouldReturnFalseIfNotAllInSelection()
 		{
-			using (_mocks.Record())
-			{
-				initialMocks(false);
-				Expect.Call(_filterForTeamBlockInSelection.Filter(
-					new List<ITeamBlockInfo> { _leftTeamBlockInfo, _rightTeamBlockInfo }, _selectedPersons, _selectedPeriod))
-					.Return(new List<ITeamBlockInfo> { _leftTeamBlockInfo });
-				
-			}
+			_teamBlockGenerator.Stub(x => x.Generate(_allPersonMatrixList, new DateOnlyPeriod(2014, 3, 29, 2014, 3, 29), new List<IPerson> {_person}, _schedulingOptions)).Return(_leftTeamBlockInfoList);
+			_teamBlockGenerator.Stub(x => x.Generate(_allPersonMatrixList, new DateOnlyPeriod(2014, 3, 31, 2014, 3, 31), new List<IPerson> {_person}, _schedulingOptions)).Return(_rightTeamBlockInfoList);
 
-			using (_mocks.Playback())
-			{
-				bool result = _target.TrySolveForDayOff(_personWeek, new DateOnly(2014, 03, 30), _teamBlockGenerator,
-					_allPersonMatrixList, _rollbackService, _resourceCalculateDelayer,
-					_schedulingResultStateHolder, _selectedPeriod, _selectedPersons, null,_schedulingOptions );
-				Assert.IsFalse(result);
-			}
+			_filterForTeamBlockInSelection.Stub(x => x.Filter(new List<ITeamBlockInfo> {_leftTeamBlockInfo, _rightTeamBlockInfo}, _selectedPersons, _selectedPeriod)).Return(new List<ITeamBlockInfo> {_leftTeamBlockInfo});
+			var result = _target.TrySolveForDayOff(_personWeek, new DateOnly(2014, 03, 30), _teamBlockGenerator, _allPersonMatrixList, _rollbackService, _resourceCalculateDelayer, _schedulingResultStateHolder, _selectedPeriod, _selectedPersons, null, _schedulingOptions);
+			Assert.IsFalse(result);
 		}
 
 		[Test]
 		public void ShouldReturnFalseIfRestrictionValidatorFails()
 		{
+			_schedulingOptionsCreator.Stub(x => x.CreateSchedulingOptions(_optimizationPreferences)).Return(_schedulingOptions);
 
-			using (_mocks.Record())
-			{
-				initialMocks(true);
-				Expect.Call(_filterForTeamBlockInSelection.Filter(
-					new List<ITeamBlockInfo> { _leftTeamBlockInfo, _rightTeamBlockInfo }, _selectedPersons, _selectedPeriod))
-					.Return(new List<ITeamBlockInfo> { _leftTeamBlockInfo, _rightTeamBlockInfo });
-				middleMocks();
+			_teamBlockGenerator.Stub(x => x.Generate(_allPersonMatrixList, new DateOnlyPeriod(2014, 3, 29, 2014, 3, 29), new List<IPerson> {_person}, _schedulingOptions)).Return(_leftTeamBlockInfoList);
+			_teamBlockGenerator.Stub(x => x.Generate(_allPersonMatrixList, new DateOnlyPeriod(2014, 3, 31, 2014, 3, 31), new List<IPerson> {_person}, _schedulingOptions)).Return(_rightTeamBlockInfoList);
+			_filterForTeamBlockInSelection.Stub(x => x.Filter(new List<ITeamBlockInfo> {_leftTeamBlockInfo, _rightTeamBlockInfo}, _selectedPersons, _selectedPeriod)).Return(new List<ITeamBlockInfo> {_leftTeamBlockInfo, _rightTeamBlockInfo});
 
-				Expect.Call(_ensureWeeklyRestRule.HasMinWeeklyRest(_personWeek, _range, TimeSpan.FromHours(36))).Return(false);
-				Expect.Call(_shiftNudgeEarlier.Nudge(_leftScheduleDay, _rollbackService, _schedulingOptions,
-					_resourceCalculateDelayer, _leftTeamBlockInfo, _schedulingResultStateHolder))
-					.Return(true);
-				Expect.Call(_ensureWeeklyRestRule.HasMinWeeklyRest(_personWeek, _range, TimeSpan.FromHours(36))).Return(false);
-				Expect.Call(_shiftNudgeLater.Nudge(_rightScheduleDay, _rollbackService, _schedulingOptions,
-					_resourceCalculateDelayer, _rightTeamBlockInfo, _schedulingResultStateHolder))
-					.Return(true);
-				Expect.Call(_ensureWeeklyRestRule.HasMinWeeklyRest(_personWeek, _range, TimeSpan.FromHours(36))).Return(true);
+			_teamBlockScheduleCloner.Stub(x => x.CloneSchedules(_leftTeamBlockInfo)).Return(new List<IScheduleDay> {_leftScheduleDay});
+			_teamBlockScheduleCloner.Stub(x => x.CloneSchedules(_rightTeamBlockInfo)).Return(new List<IScheduleDay> {_rightScheduleDay});
+			_allPersonMatrixList.Add(_matrix);
+			_matrix.Stub(x => x.Person).Return(_person);
+			_matrix.Stub(x => x.SchedulePeriod).Return(new VirtualSchedulePeriod(_person, new DateOnly(2014, 3, 29), new VirtualSchedulePeriodSplitChecker(_person)));
+			_matrix.Stub(x => x.ActiveScheduleRange).Return(_range);
+			_range.Stub(x => x.ScheduledDay(new DateOnly(2014, 3, 29))).Return(_leftScheduleDay);
+			_range.Stub(x => x.ScheduledDay(new DateOnly(2014, 3, 31))).Return(_rightScheduleDay);
 
-				Expect.Call(_ensureWeeklyRestRule.HasMinWeeklyRest(_personWeek, _range, TimeSpan.FromHours(36))).Return(true);
+			_ensureWeeklyRestRule.Stub(x => x.HasMinWeeklyRest(_personWeek, _range, TimeSpan.FromHours(36))).Return(false).Repeat.Once();
+			_shiftNudgeEarlier.Stub(x => x.Nudge(_leftScheduleDay, _rollbackService, _schedulingOptions, _resourceCalculateDelayer, _leftTeamBlockInfo, _schedulingResultStateHolder)).Return(true);
+			_ensureWeeklyRestRule.Stub(x => x.HasMinWeeklyRest(_personWeek, _range, TimeSpan.FromHours(36))).Return(false).Repeat.Once();
+			_shiftNudgeLater.Stub(x => x.Nudge(_rightScheduleDay, _rollbackService, _schedulingOptions, _resourceCalculateDelayer, _rightTeamBlockInfo, _schedulingResultStateHolder)).Return(true);
+			_ensureWeeklyRestRule.Stub(x => x.HasMinWeeklyRest(_personWeek, _range, TimeSpan.FromHours(36))).Return(true).Repeat.Once();
+			_ensureWeeklyRestRule.Stub(x => x.HasMinWeeklyRest(_personWeek, _range, TimeSpan.FromHours(36))).Return(true).Repeat.Once();
+			_teamBlockOptimizationLimits.Stub(x => x.Validate(_leftTeamBlockInfo, _optimizationPreferences)).Return(false);
+			_teamBlockOptimizationLimits.Stub(x => x.Validate(_rightTeamBlockInfo, _optimizationPreferences)).Return(false);
 
-				Expect.Call(_teamBlockRestrictionOverLimitValidator.Validate(_leftTeamBlockInfo, _optimizationPreferences))
-					.Return(false);
-				Expect.Call(_teamBlockRestrictionOverLimitValidator.Validate(_rightTeamBlockInfo, _optimizationPreferences))
-					.Return(false);
 
-				rollBackMocks();
-			}
+			_resourceCalculateDelayer.Stub(x => x.CalculateIfNeeded(new DateOnly(2014, 3, 29), null)).Return(true);
+			_resourceCalculateDelayer.Stub(x => x.CalculateIfNeeded(new DateOnly(2014, 3, 30), null)).Return(true);
 
-			using (_mocks.Playback())
-			{
-				bool result = _target.TrySolveForDayOff(_personWeek, new DateOnly(2014, 03, 30), _teamBlockGenerator,
-					_allPersonMatrixList, _rollbackService, _resourceCalculateDelayer,
-                    _schedulingResultStateHolder, _selectedPeriod, _selectedPersons, _optimizationPreferences, null);
-				Assert.IsFalse(result);
-			}
+			var result = _target.TrySolveForDayOff(_personWeek, new DateOnly(2014, 03, 30), _teamBlockGenerator, _allPersonMatrixList, _rollbackService, _resourceCalculateDelayer, _schedulingResultStateHolder, _selectedPeriod, _selectedPersons, _optimizationPreferences, null);
+			Assert.IsFalse(result);
+			_rollbackService.AssertWasCalled(x => x.ModifyParts(new List<IScheduleDay> {_leftScheduleDay, _rightScheduleDay}));
 		}
 
 		[Test]
 		public void ShouldReturnFalseIfOneOfTheteamBlockIsNull()
 		{
+			_schedulingOptionsCreator.Stub(x => x.CreateSchedulingOptions(_optimizationPreferences)).Return(_schedulingOptions);
+			_teamBlockGenerator.Stub(x => x.Generate(_allPersonMatrixList, new DateOnlyPeriod(2014, 3, 29, 2014, 3, 29), new List<IPerson> {_person}, _schedulingOptions)).Return(_leftTeamBlockInfoList);
+			_teamBlockGenerator.Stub(x => x.Generate(_allPersonMatrixList, new DateOnlyPeriod(2014, 3, 31, 2014, 3, 31), new List<IPerson> {_person}, _schedulingOptions)).Return(new List<ITeamBlockInfo>());
 
-			using (_mocks.Record())
-			{
-				Expect.Call(_schedulingOptionsCreator.CreateSchedulingOptions(_optimizationPreferences)).Return(_schedulingOptions);
-				Expect.Call(_teamBlockGenerator.Generate(_allPersonMatrixList, new DateOnlyPeriod(2014, 3, 29, 2014, 3, 29),
-				new List<IPerson> { _person }, _schedulingOptions))
-				.Return(_leftTeamBlockInfoList);
-				Expect.Call(_leftTeamBlockInfo.BlockInfo).Return(_leftBlockInfo);
-				Expect.Call(() => _leftBlockInfo.ClearLocks());
-				Expect.Call(_leftTeamBlockInfo.TeamInfo).Return(_leftTeamInfo);
-				Expect.Call(() => _leftTeamInfo.ClearLocks());
-				Expect.Call(_leftBlockInfo.BlockPeriod).Return(new DateOnlyPeriod(2014, 3, 29, 2014, 3, 29));
-				Expect.Call(_leftTeamInfo.GroupMembers).Return(new List<IPerson> { _person });
-
-				Expect.Call(_teamBlockGenerator.Generate(_allPersonMatrixList, new DateOnlyPeriod(2014, 3, 31, 2014, 3, 31),
-					new List<IPerson> { _person }, _schedulingOptions))
-					.Return(new List<ITeamBlockInfo>( ));
-			}
-
-			using (_mocks.Playback())
-			{
-				bool result = _target.TrySolveForDayOff(_personWeek, new DateOnly(2014, 03, 30), _teamBlockGenerator,
-					_allPersonMatrixList, _rollbackService, _resourceCalculateDelayer,
-						  _schedulingResultStateHolder, _selectedPeriod, _selectedPersons, _optimizationPreferences, null);
-				Assert.IsFalse(result);
-			}
+			var result = _target.TrySolveForDayOff(_personWeek, new DateOnly(2014, 03, 30), _teamBlockGenerator, _allPersonMatrixList, _rollbackService, _resourceCalculateDelayer, _schedulingResultStateHolder, _selectedPeriod, _selectedPersons, _optimizationPreferences, null);
+			Assert.IsFalse(result);
 		}
 
 		[Test]
@@ -264,64 +208,43 @@ namespace Teleopti.Ccc.DomainTest.Optimization.WeeklyRestSolver
 			_schedulingOptions.BlockFinderTypeForAdvanceScheduling = BlockFinderType.SchedulePeriod;
 			_schedulingOptions.UseBlock = true;
 
-			bool result = _target.TrySolveForDayOff(_personWeek, new DateOnly(2014, 03, 30), _teamBlockGenerator,
-					_allPersonMatrixList, _rollbackService, _resourceCalculateDelayer,
-                    _schedulingResultStateHolder, _selectedPeriod, _selectedPersons, null, _schedulingOptions);
+			bool result = _target.TrySolveForDayOff(_personWeek, new DateOnly(2014, 03, 30), _teamBlockGenerator, _allPersonMatrixList, _rollbackService, _resourceCalculateDelayer, _schedulingResultStateHolder, _selectedPeriod, _selectedPersons, null, _schedulingOptions);
 			Assert.IsFalse(result);
 		}
 
-		private void rollBackMocks()
+		[Test]
+		public void ShouldReturnFalseIfMinWorkTimePerWeekValidationFails()
 		{
-			Expect.Call(() => _rollbackService.ModifyParts(new List<IScheduleDay>{_leftScheduleDay, _rightScheduleDay}));
-			Expect.Call(() => _rollbackService.ClearModificationCollection());
-			Expect.Call(_leftScheduleDay.DateOnlyAsPeriod).Return(_dateOnlyAsPeriod);
-			Expect.Call(_dateOnlyAsPeriod.DateOnly).Return(new DateOnly(2014, 3, 29));
-			Expect.Call(_rightScheduleDay.DateOnlyAsPeriod).Return(_dateOnlyAsPeriod);
-			Expect.Call(_dateOnlyAsPeriod.DateOnly).Return(new DateOnly(2014, 3, 29));
-			Expect.Call(_resourceCalculateDelayer.CalculateIfNeeded(new DateOnly(2014, 3, 29), null)).Return(true);
-			Expect.Call(_resourceCalculateDelayer.CalculateIfNeeded(new DateOnly(2014, 3, 30), null)).Return(true);
-		}
+			_schedulingOptionsCreator.Stub(x => x.CreateSchedulingOptions(_optimizationPreferences)).Return(_schedulingOptions);
+			_teamBlockGenerator.Stub(x => x.Generate(_allPersonMatrixList, new DateOnlyPeriod(2014, 3, 29, 2014, 3, 29), new List<IPerson> {_person}, _schedulingOptions)).Return(_leftTeamBlockInfoList);
+			_teamBlockGenerator.Stub(x => x.Generate(_allPersonMatrixList, new DateOnlyPeriod(2014, 3, 31, 2014, 3, 31), new List<IPerson> {_person}, _schedulingOptions)).Return(_rightTeamBlockInfoList);
+			_filterForTeamBlockInSelection.Stub(x => x.Filter(new List<ITeamBlockInfo> {_leftTeamBlockInfo, _rightTeamBlockInfo}, _selectedPersons, _selectedPeriod)).Return(new List<ITeamBlockInfo> {_leftTeamBlockInfo, _rightTeamBlockInfo});
 
-		private void initialMocks(bool useOptimizationPreferences)
-		{
-			if (useOptimizationPreferences)
-			{
-				Expect.Call(_schedulingOptionsCreator.CreateSchedulingOptions(_optimizationPreferences)).Return(_schedulingOptions);
-				
-			}
-			//else
-			//{
-				Expect.Call(_teamBlockGenerator.Generate(_allPersonMatrixList, new DateOnlyPeriod(2014, 3, 29, 2014, 3, 29),
-				new List<IPerson> { _person }, _schedulingOptions))
-				.Return(_leftTeamBlockInfoList);
-				Expect.Call(_leftTeamBlockInfo.BlockInfo).Return(_leftBlockInfo);
-				Expect.Call(() => _leftBlockInfo.ClearLocks());
-				Expect.Call(_leftTeamBlockInfo.TeamInfo).Return(_leftTeamInfo);
-				Expect.Call(() => _leftTeamInfo.ClearLocks());
-				Expect.Call(_leftBlockInfo.BlockPeriod).Return(new DateOnlyPeriod(2014, 3, 29, 2014, 3, 29));
-				Expect.Call(_leftTeamInfo.GroupMembers).Return(new List<IPerson> {_person});
+			_teamBlockScheduleCloner.Stub(x => x.CloneSchedules(_leftTeamBlockInfo)).Return(new List<IScheduleDay> {_leftScheduleDay});
+			_teamBlockScheduleCloner.Stub(x => x.CloneSchedules(_rightTeamBlockInfo)).Return(new List<IScheduleDay> {_rightScheduleDay});
+			_allPersonMatrixList.Add(_matrix);
+			_matrix.Stub(x => x.Person).Return(_person);
+			_matrix.Stub(x => x.SchedulePeriod).Return(new VirtualSchedulePeriod(_person, new DateOnly(2014, 3, 29), new VirtualSchedulePeriodSplitChecker(_person)));
+			_matrix.Stub(x => x.ActiveScheduleRange).Return(_range);
+			_range.Stub(x => x.ScheduledDay(new DateOnly(2014, 3, 29))).Return(_leftScheduleDay);
+			_range.Stub(x => x.ScheduledDay(new DateOnly(2014, 3, 31))).Return(_rightScheduleDay);
 
-				Expect.Call(_teamBlockGenerator.Generate(_allPersonMatrixList, new DateOnlyPeriod(2014, 3, 31, 2014, 3, 31),
-					new List<IPerson> { _person }, _schedulingOptions))
-					.Return(_rightTeamBlockInfoList);
-				Expect.Call(_rightTeamBlockInfo.BlockInfo).Return(_rightBlockInfo);
-				Expect.Call(() => _rightBlockInfo.ClearLocks());
-				Expect.Call(_rightTeamBlockInfo.TeamInfo).Return(_rightTeamInfo);
-				Expect.Call(() => _rightTeamInfo.ClearLocks());
-				Expect.Call(_rightBlockInfo.BlockPeriod).Return(new DateOnlyPeriod(2014, 3, 31, 2014, 3, 31));
-				Expect.Call(_rightTeamInfo.GroupMembers).Return(new List<IPerson> { _person });
-			//}
-		}
+			_ensureWeeklyRestRule.Stub(x => x.HasMinWeeklyRest(_personWeek, _range, TimeSpan.FromHours(36))).Return(false).Repeat.Twice();
+			_shiftNudgeEarlier.Stub(x => x.Nudge(_leftScheduleDay, _rollbackService, _schedulingOptions, _resourceCalculateDelayer, _leftTeamBlockInfo, _schedulingResultStateHolder)).Return(true);
+			_shiftNudgeLater.Stub(x => x.Nudge(_rightScheduleDay, _rollbackService, _schedulingOptions, _resourceCalculateDelayer, _rightTeamBlockInfo, _schedulingResultStateHolder)).Return(true);
+			_ensureWeeklyRestRule.Stub(x => x.HasMinWeeklyRest(_personWeek, _range, TimeSpan.FromHours(36))).Return(true).Repeat.Twice();
+			_teamBlockOptimizationLimits.Stub(x => x.Validate(_leftTeamBlockInfo, _optimizationPreferences)).Return(true);
+			_teamBlockOptimizationLimits.Stub(x => x.Validate(_rightTeamBlockInfo, _optimizationPreferences)).Return(true);
 
-		private void middleMocks()
-		{
-			Expect.Call(_teamBlockScheduleCloner.CloneSchedules(_leftTeamBlockInfo)).Return(new List<IScheduleDay>{_leftScheduleDay});
-			Expect.Call(_teamBlockScheduleCloner.CloneSchedules(_rightTeamBlockInfo)).Return(new List<IScheduleDay>{_rightScheduleDay});
-			Expect.Call(_leftTeamBlockInfo.TeamInfo).Return(_leftTeamInfo);
-			Expect.Call(_leftTeamInfo.MatrixForMemberAndDate(_person, new DateOnly(2014, 3, 29))).Return(_matrix);
-			Expect.Call(_matrix.ActiveScheduleRange).Return(_range);
-			Expect.Call(_range.ScheduledDay(new DateOnly(2014, 3, 29))).Return(_leftScheduleDay);
-			Expect.Call(_range.ScheduledDay(new DateOnly(2014, 3, 31))).Return(_rightScheduleDay);
+			_teamBlockOptimizationLimits.Stub(x => x.ValidateMinWorkTimePerWeek(_leftTeamBlockInfo)).Return(false);
+			_teamBlockOptimizationLimits.Stub(x => x.ValidateMinWorkTimePerWeek(_rightTeamBlockInfo)).Return(false);
+
+			_resourceCalculateDelayer.Stub(x => x.CalculateIfNeeded(new DateOnly(2014, 3, 29), null)).Return(true);
+			_resourceCalculateDelayer.Stub(x => x.CalculateIfNeeded(new DateOnly(2014, 3, 30), null)).Return(true);
+
+			var result = _target.TrySolveForDayOff(_personWeek, new DateOnly(2014, 03, 30), _teamBlockGenerator, _allPersonMatrixList, _rollbackService, _resourceCalculateDelayer, _schedulingResultStateHolder, _selectedPeriod, _selectedPersons, _optimizationPreferences, null);
+			Assert.IsFalse(result);
+			_rollbackService.AssertWasCalled(x => x.ModifyParts(new List<IScheduleDay> {_leftScheduleDay, _rightScheduleDay}));
 		}
 	}
 }

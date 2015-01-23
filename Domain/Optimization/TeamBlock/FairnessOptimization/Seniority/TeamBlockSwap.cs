@@ -15,17 +15,17 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.Senior
 		private readonly ITeamBlockSwapDayValidator _teamBlockSwapDayValidator;
 		private readonly ISwapServiceNew _swapServiceNew;
 		private readonly ITeamBlockSwapValidator _teamBlockSwapValidator;
-		private readonly ITeamBlockRestrictionOverLimitValidator _teamBlockRestrictionOverLimitValidator;
+		private readonly ITeamBlockOptimizationLimits _teamBlockOptimizationLimits;
 		private readonly ITeamBlockShiftCategoryLimitationValidator _teamBlockShiftCategoryLimitationValidator;
 
 		public TeamBlockSwap(ISwapServiceNew swapServiceNew, ITeamBlockSwapValidator teamBlockSwapValidator, ITeamBlockSwapDayValidator teamBlockSwapDayValidator, 
-													ITeamBlockRestrictionOverLimitValidator teamBlockRestrictionOverLimitValidator,
+													ITeamBlockOptimizationLimits teamBlockOptimizationLimits,
 													ITeamBlockShiftCategoryLimitationValidator teamBlockShiftCategoryLimitationValidator)
 		{
 			_teamBlockSwapDayValidator = teamBlockSwapDayValidator;
 			_swapServiceNew = swapServiceNew;
 			_teamBlockSwapValidator = teamBlockSwapValidator;
-			_teamBlockRestrictionOverLimitValidator = teamBlockRestrictionOverLimitValidator;
+			_teamBlockOptimizationLimits = teamBlockOptimizationLimits;
 			_teamBlockShiftCategoryLimitationValidator = teamBlockShiftCategoryLimitationValidator;
 		}
 
@@ -62,8 +62,18 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.Senior
 				return false;
 			}
 
-			var firstBlockOk = _teamBlockRestrictionOverLimitValidator.Validate(teamBlockInfo1, optimizationPreferences);
-			var secondBlockOk = _teamBlockRestrictionOverLimitValidator.Validate(teamBlockInfo2, optimizationPreferences);
+			var firstBlockOk = _teamBlockOptimizationLimits.Validate(teamBlockInfo1, optimizationPreferences);
+			var secondBlockOk = _teamBlockOptimizationLimits.Validate(teamBlockInfo2, optimizationPreferences);
+
+			if (!(firstBlockOk && secondBlockOk))
+			{
+				rollbackService.Rollback();
+				return false;
+			}
+
+			firstBlockOk = _teamBlockOptimizationLimits.ValidateMinWorkTimePerWeek(teamBlockInfo1);
+			secondBlockOk = _teamBlockOptimizationLimits.ValidateMinWorkTimePerWeek(teamBlockInfo2);
+
 			if (!(firstBlockOk && secondBlockOk))
 			{
 				rollbackService.Rollback();

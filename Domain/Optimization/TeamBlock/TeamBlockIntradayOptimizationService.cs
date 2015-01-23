@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.Optimization.WeeklyRestSolver;
 using Teleopti.Ccc.Domain.Scheduling.TeamBlock;
@@ -32,7 +31,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 		private readonly ITeamBlockClearer _teamBlockClearer;
 		private readonly ITeamBlockMaxSeatChecker _teamBlockMaxSeatChecker;
 		private readonly ITeamBlockGenerator _teamBlockGenerator;
-		private readonly ITeamBlockRestrictionOverLimitValidator _restrictionOverLimitValidator;
+		private readonly ITeamBlockOptimizationLimits _teamBlockOptimizationLimits;
 		private readonly IDailyTargetValueCalculatorForTeamBlock _dailyTargetValueCalculatorForTeamBlock;
 		private readonly ITeamBlockSteadyStateValidator _teamTeamBlockSteadyStateValidator;
 		private readonly bool _isMaxSeatToggleEnabled;
@@ -44,7 +43,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 			ISchedulingOptionsCreator schedulingOptionsCreator,
 			ISafeRollbackAndResourceCalculation safeRollbackAndResourceCalculation,
 			ITeamBlockIntradayDecisionMaker teamBlockIntradayDecisionMaker,
-			ITeamBlockRestrictionOverLimitValidator restrictionOverLimitValidator,
+			ITeamBlockOptimizationLimits teamBlockOptimizationLimits,
 			ITeamBlockClearer teamBlockClearer,
 			ITeamBlockMaxSeatChecker teamBlockMaxSeatChecker,
 			IDailyTargetValueCalculatorForTeamBlock dailyTargetValueCalculatorForTeamBlock,
@@ -62,7 +61,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 			_teamTeamBlockSteadyStateValidator = teamTeamBlockSteadyStateValidator;
 			_isMaxSeatToggleEnabled = isMaxSeatToggleEnabled;
 			_teamBlockGenerator = teamBlockGenerator;
-			_restrictionOverLimitValidator = restrictionOverLimitValidator;
+			_teamBlockOptimizationLimits = teamBlockOptimizationLimits;
 		}
 
 		public event EventHandler<ResourceOptimizerProgressEventArgs> ReportProgress;
@@ -171,11 +170,18 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 					continue;
 				}
 
-				if (!_teamBlockMaxSeatChecker.CheckMaxSeat(datePoint, schedulingOptions) ||
-				    !_restrictionOverLimitValidator.Validate(teamBlockInfo, optimizationPreferences))
+				//if (!_teamBlockMaxSeatChecker.CheckMaxSeat(datePoint, schedulingOptions) || !_restrictionOverLimitValidator.Validate(teamBlockInfo, optimizationPreferences))
+				//{
+				//	OnReportProgress(Resources.OptimizingIntraday + Resources.Colon + Resources.RollingBackSchedulesFor + " " +
+				//					 teamBlockInfo.BlockInfo.BlockPeriod.DateString + " " + teamName);
+				//	teamBlockToRemove.Add(teamBlockInfo);
+				//	_safeRollbackAndResourceCalculation.Execute(schedulePartModifyAndRollbackService, schedulingOptions);
+				//	continue;
+				//}
+
+				if (!_teamBlockMaxSeatChecker.CheckMaxSeat(datePoint, schedulingOptions) || !_teamBlockOptimizationLimits.Validate(teamBlockInfo, optimizationPreferences))
 				{
-					OnReportProgress(Resources.OptimizingIntraday + Resources.Colon + Resources.RollingBackSchedulesFor + " " +
-					                 teamBlockInfo.BlockInfo.BlockPeriod.DateString + " " + teamName);
+					OnReportProgress(Resources.OptimizingIntraday + Resources.Colon + Resources.RollingBackSchedulesFor + " " + teamBlockInfo.BlockInfo.BlockPeriod.DateString + " " + teamName);
 					teamBlockToRemove.Add(teamBlockInfo);
 					_safeRollbackAndResourceCalculation.Execute(schedulePartModifyAndRollbackService, schedulingOptions);
 					continue;

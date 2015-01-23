@@ -20,7 +20,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock
 		private ISafeRollbackAndResourceCalculation _safeRollbackAndResourceCalculation;
 		private ITeamBlockIntradayDecisionMaker _teamBlockIntradayDecisionMaker;
 		private ITeamBlockClearer _teamBlockClearer;
-		private ITeamBlockRestrictionOverLimitValidator _restrictionOverLimitValidator;
+		private ITeamBlockOptimizationLimits _teamBlockOptimizationLimits;
 		private MockRepository _mocks;
 		private ITeamBlockIntradayOptimizationService _target;
 		private ITeamBlockGenerator _teamBlockGenerator;
@@ -42,7 +42,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock
 			_safeRollbackAndResourceCalculation = _mocks.StrictMock<ISafeRollbackAndResourceCalculation>();
 			_teamBlockIntradayDecisionMaker = _mocks.StrictMock<ITeamBlockIntradayDecisionMaker>();
 			_teamBlockClearer = _mocks.StrictMock<ITeamBlockClearer>();
-			_restrictionOverLimitValidator = _mocks.StrictMock<ITeamBlockRestrictionOverLimitValidator>();
+			_teamBlockOptimizationLimits = _mocks.StrictMock<ITeamBlockOptimizationLimits>();
 			_schedulePartModifyAndRollbackService = _mocks.StrictMock<ISchedulePartModifyAndRollbackService>();
 			_teamBlockMaxSeatChecker = _mocks.StrictMock<ITeamBlockMaxSeatChecker>();
 			_dailyTargetValueCalculatorForTeamBlock = _mocks.StrictMock<IDailyTargetValueCalculatorForTeamBlock>();
@@ -51,7 +51,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock
 			_target = new TeamBlockIntradayOptimizationService(_teamBlockGenerator, _teamBlockScheduler,
 				_schedulingOptionsCreator,
 				_safeRollbackAndResourceCalculation,
-				_teamBlockIntradayDecisionMaker, _restrictionOverLimitValidator,
+				_teamBlockIntradayDecisionMaker, _teamBlockOptimizationLimits,
 				_teamBlockClearer, _teamBlockMaxSeatChecker, _dailyTargetValueCalculatorForTeamBlock, _teamBlockSteadyStateValidator,
 				//seems to miss tests when this is true?
 				false);
@@ -94,8 +94,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock
 					.IgnoreArguments()
 					.Return(true);
 				Expect.Call(_teamBlockMaxSeatChecker.CheckMaxSeat(dateOnly, schedulingOptions)).Return(true);
-				Expect.Call(_restrictionOverLimitValidator.Validate(teamBlockInfo, optimizationPreferences))
-					.Return(true);
+				Expect.Call(_teamBlockOptimizationLimits.Validate(teamBlockInfo, optimizationPreferences)).Return(true);
 				Expect.Call(_dailyTargetValueCalculatorForTeamBlock.TargetValue(teamBlockInfo, optimizationPreferences.Advanced,
 					false))
 					.Return(0.5).Repeat.Twice();
@@ -227,8 +226,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock
 					new ShiftNudgeDirective()))
 					.IgnoreArguments()
 					.Return(true);
-				Expect.Call(_restrictionOverLimitValidator.Validate(teamBlockInfo, optimizationPreferences))
-					.Return(false);
+				Expect.Call(_teamBlockOptimizationLimits.Validate(teamBlockInfo, optimizationPreferences)).Return(false);
 				Expect.Call(_dailyTargetValueCalculatorForTeamBlock.TargetValue(teamBlockInfo, optimizationPreferences.Advanced,
 					false))
 					.Return(5.0);
@@ -341,7 +339,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock
 				Expect.Call(_teamBlockScheduler.ScheduleTeamBlockDay(teamBlockInfo, dateOnly, schedulingOptions,
 					_schedulePartModifyAndRollbackService, _resourceCalculateDelayer, _schedulingResultStateHolder,
 					new ShiftNudgeDirective())).IgnoreArguments().Return(true);
-				Expect.Call(_restrictionOverLimitValidator.Validate(teamBlockInfo, optimizationPreferences)).Return(false);
+				Expect.Call(_teamBlockOptimizationLimits.Validate(teamBlockInfo, optimizationPreferences)).Return(false);
 				Expect.Call(_dailyTargetValueCalculatorForTeamBlock.TargetValue(teamBlockInfo, optimizationPreferences.Advanced,
 					false)).Return(5.0);
 				Expect.Call(_teamBlockMaxSeatChecker.CheckMaxSeat(dateOnly, schedulingOptions)).Return(true);

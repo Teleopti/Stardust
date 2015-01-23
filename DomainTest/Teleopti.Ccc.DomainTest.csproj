@@ -490,6 +490,7 @@
     <Compile Include="Optimization\TeamBlock\TeamBlockGeneratorTest.cs" />
     <Compile Include="Optimization\TeamBlock\TeamBlockIntradayDecisionMakerTest.cs" />
     <Compile Include="Optimization\TeamBlock\TeamBlockIntradayOptimizationServiceTest.cs" />
+    <Compile Include="Optimization\TeamBlock\TeamBlockOptimizationLimitsTests.cs" />
     <Compile Include="Optimization\TeamBlock\TeamBlockRestrictionOverLimitValidatorTest.cs" />
     <Compile Include="Optimization\TeamBlock\TeamBlockScheduleClonerTest.cs" />
     <Compile Include="Optimization\TeleoptiPeriodValueCalculatorTest.cs" />

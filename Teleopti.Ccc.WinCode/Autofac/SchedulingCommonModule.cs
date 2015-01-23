@@ -276,6 +276,7 @@ namespace Teleopti.Ccc.WinCode.Autofac
 			builder.RegisterType<EditableShiftMapper>().As<IEditableShiftMapper>();
 			builder.RegisterType<MaxMovedDaysOverLimitValidator>().As<IMaxMovedDaysOverLimitValidator>();
 			builder.RegisterType<TeamBlockRestrictionOverLimitValidator>().As<ITeamBlockRestrictionOverLimitValidator>();
+			builder.RegisterType<TeamBlockOptimizationLimits>().As<ITeamBlockOptimizationLimits>();
 
 			//ITeamBlockRestrictionOverLimitValidator
 			builder.RegisterType<BestSpotForAddingDayOffFinder>().As<IBestSpotForAddingDayOffFinder>().

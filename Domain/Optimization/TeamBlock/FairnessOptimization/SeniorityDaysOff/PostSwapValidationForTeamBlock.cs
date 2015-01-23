@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using Teleopti.Ccc.Domain.Scheduling.TeamBlock;
+﻿using Teleopti.Ccc.Domain.Scheduling.TeamBlock;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.SeniorityDaysOff
@@ -15,12 +11,12 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.Senior
     public class PostSwapValidationForTeamBlock : IPostSwapValidationForTeamBlock
     {
         private readonly ISeniorityTeamBlockSwapValidator _seniorityTeamBlockSwapValidator;
-        private readonly ITeamBlockRestrictionOverLimitValidator _teamBlockRestrictionOverLimitValidator;
+	    private readonly ITeamBlockOptimizationLimits _teamBlockOptimizationLimits;
 
-        public PostSwapValidationForTeamBlock(ISeniorityTeamBlockSwapValidator seniorityTeamBlockSwapValidator, ITeamBlockRestrictionOverLimitValidator teamBlockRestrictionOverLimitValidator)
+        public PostSwapValidationForTeamBlock(ISeniorityTeamBlockSwapValidator seniorityTeamBlockSwapValidator, ITeamBlockOptimizationLimits teamBlockOptimizationLimits)
         {
             _seniorityTeamBlockSwapValidator = seniorityTeamBlockSwapValidator;
-            _teamBlockRestrictionOverLimitValidator = teamBlockRestrictionOverLimitValidator;
+			_teamBlockOptimizationLimits = teamBlockOptimizationLimits;
         }
 
         public bool Validate(ITeamBlockInfo teamBlockInfo, IOptimizationPreferences optimizationPreferences)
@@ -28,8 +24,11 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.Senior
             if (!_seniorityTeamBlockSwapValidator.Validate(teamBlockInfo, optimizationPreferences))
                 return false;
 
-            if (!_teamBlockRestrictionOverLimitValidator.Validate(teamBlockInfo, optimizationPreferences))
-                return false;
+	        if (!_teamBlockOptimizationLimits.Validate(teamBlockInfo, optimizationPreferences))
+		        return false;
+
+	        if (!_teamBlockOptimizationLimits.ValidateMinWorkTimePerWeek(teamBlockInfo))
+		        return false;
 
             return true;
         }

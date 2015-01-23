@@ -23,14 +23,11 @@ namespace Teleopti.Ccc.Domain.Optimization.WeeklyRestSolver
 		private readonly IContractWeeklyRestForPersonWeek _contractWeeklyRestForPersonWeek;
 		private readonly ITeamBlockScheduleCloner _teamBlockScheduleCloner;
 		private readonly IFilterForTeamBlockInSelection _filterForTeamBlockInSelection;
-		private readonly ITeamBlockRestrictionOverLimitValidator _teamBlockRestrictionOverLimitValidator;
+		private readonly ITeamBlockOptimizationLimits _teamBlockOptimizationLimits;
 		private readonly ISchedulingOptionsCreator _schedulingOptionsCreator;
-	        private IList<IScheduleDay> _clonedSchedules;
+	    private IList<IScheduleDay> _clonedSchedules;
 
-	    public ShiftNudgeManager(IShiftNudgeEarlier shiftNudgeEarlier, IShiftNudgeLater shiftNudgeLater,
-			IEnsureWeeklyRestRule ensureWeeklyRestRule, IContractWeeklyRestForPersonWeek contractWeeklyRestForPersonWeek,
-			ITeamBlockScheduleCloner teamBlockScheduleCloner, IFilterForTeamBlockInSelection filterForTeamBlockInSelection,
-			ITeamBlockRestrictionOverLimitValidator teamBlockRestrictionOverLimitValidator, ISchedulingOptionsCreator schedulingOptionsCreator)
+	    public ShiftNudgeManager(IShiftNudgeEarlier shiftNudgeEarlier, IShiftNudgeLater shiftNudgeLater, IEnsureWeeklyRestRule ensureWeeklyRestRule, IContractWeeklyRestForPersonWeek contractWeeklyRestForPersonWeek, ITeamBlockScheduleCloner teamBlockScheduleCloner, IFilterForTeamBlockInSelection filterForTeamBlockInSelection, ITeamBlockOptimizationLimits teamBlockOptimizationLimits, ISchedulingOptionsCreator schedulingOptionsCreator)
 		{
 			_shiftNudgeEarlier = shiftNudgeEarlier;
 			_shiftNudgeLater = shiftNudgeLater;
@@ -38,8 +35,8 @@ namespace Teleopti.Ccc.Domain.Optimization.WeeklyRestSolver
 			_contractWeeklyRestForPersonWeek = contractWeeklyRestForPersonWeek;
 			_teamBlockScheduleCloner = teamBlockScheduleCloner;
 			_filterForTeamBlockInSelection = filterForTeamBlockInSelection;
-			_teamBlockRestrictionOverLimitValidator = teamBlockRestrictionOverLimitValidator;
-			_schedulingOptionsCreator = schedulingOptionsCreator;
+		    _teamBlockOptimizationLimits = teamBlockOptimizationLimits;
+		    _schedulingOptionsCreator = schedulingOptionsCreator;
 		}
 
 		public bool TrySolveForDayOff(PersonWeek personWeek, DateOnly dayOffDateToWorkWith,
@@ -69,7 +66,6 @@ namespace Teleopti.Ccc.Domain.Optimization.WeeklyRestSolver
 				leftTeamBlock = possibleLeftTeamBlocks.First();
 				lockUnSelectedInTeamBlock(leftTeamBlock, selectedPersons, selectedPeriod);
 			}
-
 
 			var possibleRightTeamBlocks = teamBlockGenerator.Generate(allPersonMatrixList,
 				new DateOnlyPeriod(rightDate, rightDate),
@@ -130,9 +126,18 @@ namespace Teleopti.Ccc.Domain.Optimization.WeeklyRestSolver
 			bool rightOk = true;
 			if (optimizationPreferences != null)
 			{
-				leftOk = _teamBlockRestrictionOverLimitValidator.Validate(leftTeamBlock, optimizationPreferences);
-				rightOk = _teamBlockRestrictionOverLimitValidator.Validate(rightTeamBlock, optimizationPreferences);
+				leftOk = _teamBlockOptimizationLimits.Validate(leftTeamBlock, optimizationPreferences);
+				rightOk = _teamBlockOptimizationLimits.Validate(rightTeamBlock, optimizationPreferences);
 			}
+			if (!(leftOk && rightOk))
+			{
+				rollBackAndResourceCalculate(rollbackService, resourceCalculateDelayer, _clonedSchedules);
+				return false;
+			}
+
+			leftOk = _teamBlockOptimizationLimits.ValidateMinWorkTimePerWeek(leftTeamBlock);
+			rightOk = _teamBlockOptimizationLimits.ValidateMinWorkTimePerWeek(rightTeamBlock);
+
 			if (!(leftOk && rightOk))
 			{
 				rollBackAndResourceCalculate(rollbackService, resourceCalculateDelayer, _clonedSchedules);

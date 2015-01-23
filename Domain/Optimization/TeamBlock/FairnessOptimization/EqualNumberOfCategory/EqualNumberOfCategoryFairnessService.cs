@@ -28,7 +28,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.EqualN
 		private readonly IFilterForFullyScheduledBlocks _filterForFullyScheduledBlocks;
 		private readonly IEqualCategoryDistributionValue _equalCategoryDistributionValue;
 		private readonly IFilterForNoneLockedTeamBlocks _filterForNoneLockedTeamBlocks;
-		private readonly ITeamBlockRestrictionOverLimitValidator _teamBlockRestrictionOverLimitValidator;
+		private readonly ITeamBlockOptimizationLimits _teamBlockOptimizationLimits;
 		private readonly ITeamBlockShiftCategoryLimitationValidator _teamBlockShiftCategoryLimitationValidator;
 		private bool _cancelMe;
 		private ResourceOptimizerProgressEventArgs _progressEvent;
@@ -48,7 +48,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.EqualN
 													IFilterForFullyScheduledBlocks filterForFullyScheduledBlocks,
 													IEqualCategoryDistributionValue equalCategoryDistributionValue,
 													IFilterForNoneLockedTeamBlocks filterForNoneLockedTeamBlocks,
-													ITeamBlockRestrictionOverLimitValidator teamBlockRestrictionOverLimitValidator,
+													ITeamBlockOptimizationLimits teamBlockOptimizationLimits,
 													ITeamBlockShiftCategoryLimitationValidator teamBlockShiftCategoryLimitationValidator)
 		{
 			_constructTeamBlock = constructTeamBlock;
@@ -63,7 +63,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.EqualN
 			_filterForFullyScheduledBlocks = filterForFullyScheduledBlocks;
 			_equalCategoryDistributionValue = equalCategoryDistributionValue;
 			_filterForNoneLockedTeamBlocks = filterForNoneLockedTeamBlocks;
-			_teamBlockRestrictionOverLimitValidator = teamBlockRestrictionOverLimitValidator;
+			_teamBlockOptimizationLimits = teamBlockOptimizationLimits;
 			_teamBlockShiftCategoryLimitationValidator = teamBlockShiftCategoryLimitationValidator;
 		}
 
@@ -98,15 +98,14 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.EqualN
 			while (moveFound)
 			{
 				var workingBlocks = new List<ITeamBlockInfo>(originalBlocks);
-				moveFound = runOneLoop(scheduleDictionary, rollbackService, _teamBlockRestrictionOverLimitValidator,
-				                       optimizationPreferences, workingBlocks, totalDistribution, totalBlockCount);
+				moveFound = runOneLoop(scheduleDictionary, rollbackService, _teamBlockOptimizationLimits, optimizationPreferences, workingBlocks, totalDistribution, totalBlockCount);
 			}
 		}
 
 		
 
 		private bool runOneLoop(IScheduleDictionary scheduleDictionary, ISchedulePartModifyAndRollbackService rollbackService,
-		                        ITeamBlockRestrictionOverLimitValidator teamBlockRestrictionOverLimitValidator,
+		                        ITeamBlockOptimizationLimits teamBlockOptimizationLimits,
 		                        IOptimizationPreferences optimizationPreferences, IList<ITeamBlockInfo> blocksToWorkWith,
 		                        IDistributionSummary totalDistribution, double totalBlockCount)
 		{
@@ -146,8 +145,9 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.EqualN
 				                                         scheduleDictionary);
 				if (success)
 				{
-					var firstBlockOk = teamBlockRestrictionOverLimitValidator.Validate(teamBlockToWorkWith, optimizationPreferences);
-					var secondBlockOk = teamBlockRestrictionOverLimitValidator.Validate(selectedTeamBlock, optimizationPreferences);
+					var firstBlockOk = teamBlockOptimizationLimits.Validate(teamBlockToWorkWith, optimizationPreferences);
+					var secondBlockOk = teamBlockOptimizationLimits.Validate(selectedTeamBlock, optimizationPreferences);
+
 					if (!(firstBlockOk && secondBlockOk))
 					{
 						rollbackService.Rollback();
@@ -161,6 +161,19 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.EqualN
 					{
 						rollbackService.Rollback();
 						success = false;
+					}
+				}
+
+
+				if (success)
+				{
+					var firstBlockOk = _teamBlockOptimizationLimits.ValidateMinWorkTimePerWeek(teamBlockToWorkWith);
+					var secondBlockOk = _teamBlockOptimizationLimits.ValidateMinWorkTimePerWeek(selectedTeamBlock);
+
+					if (!(firstBlockOk && secondBlockOk))
+					{
+						rollbackService.Rollback();
+						success = false;	
 					}
 				}
 

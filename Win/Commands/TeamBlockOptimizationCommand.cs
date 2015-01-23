@@ -9,13 +9,9 @@ using Teleopti.Ccc.Domain.Optimization.TeamBlock;
 using Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.EqualNumberOfCategory;
 using Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.Seniority;
 using Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.SeniorityDaysOff;
-using Teleopti.Ccc.Domain.Optimization.WeeklyRestSolver;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.TeamBlock;
-using Teleopti.Ccc.Domain.Security.AuthorizationData;
-using Teleopti.Ccc.Domain.Security.Principal;
-using Teleopti.Ccc.Domain.Specification;
 using Teleopti.Ccc.Infrastructure.Toggle;
 using Teleopti.Ccc.Secrets.DayOffPlanning;
 using Teleopti.Ccc.Win.Scheduling;
@@ -60,7 +56,7 @@ namespace Teleopti.Ccc.Win.Commands
 		private readonly IDailyTargetValueCalculatorForTeamBlock _dailyTargetValueCalculatorForTeamBlock;
 		private readonly IEqualNumberOfCategoryFairnessService _equalNumberOfCategoryFairness;
 		private readonly ITeamBlockSeniorityFairnessOptimizationService _teamBlockSeniorityFairnessOptimizationService;
-		private readonly ITeamBlockRestrictionOverLimitValidator _teamBlockRestrictionOverLimitValidator;
+		private readonly ITeamBlockOptimizationLimits _teamBlockOptimizationLimits;
 		private readonly ITeamBlockDayOffFairnessOptimizationServiceFacade _teamBlockDayOffFairnessOptimizationService;
 		private readonly ITeamBlockScheduler _teamBlockScheduler;
 		private readonly IWeeklyRestSolverCommand _weeklyRestSolverCommand;
@@ -91,7 +87,7 @@ namespace Teleopti.Ccc.Win.Commands
 			IDailyTargetValueCalculatorForTeamBlock dailyTargetValueCalculatorForTeamBlock,
 			IEqualNumberOfCategoryFairnessService equalNumberOfCategoryFairness,
 			ITeamBlockSeniorityFairnessOptimizationService teamBlockSeniorityFairnessOptimizationService,
-			ITeamBlockRestrictionOverLimitValidator teamBlockRestrictionOverLimitValidator,
+			ITeamBlockOptimizationLimits teamBlockOptimizationLimits,
 			ITeamBlockDayOffFairnessOptimizationServiceFacade teamBlockDayOffFairnessOptimizationService,
 			ITeamBlockScheduler teamBlockScheduler, IWeeklyRestSolverCommand weeklyRestSolverCommand,
 			IAllTeamMembersInSelectionSpecification allTeamMembersInSelectionSpecification,
@@ -121,7 +117,7 @@ namespace Teleopti.Ccc.Win.Commands
 			_dailyTargetValueCalculatorForTeamBlock = dailyTargetValueCalculatorForTeamBlock;
 			_equalNumberOfCategoryFairness = equalNumberOfCategoryFairness;
 			_teamBlockSeniorityFairnessOptimizationService = teamBlockSeniorityFairnessOptimizationService;
-			_teamBlockRestrictionOverLimitValidator = teamBlockRestrictionOverLimitValidator;
+			_teamBlockOptimizationLimits = teamBlockOptimizationLimits;
 			_teamBlockDayOffFairnessOptimizationService = teamBlockDayOffFairnessOptimizationService;
 			_teamBlockScheduler = teamBlockScheduler;
 			_weeklyRestSolverCommand = weeklyRestSolverCommand;
@@ -280,7 +276,7 @@ namespace Teleopti.Ccc.Win.Commands
 					_teamDayOffModifier,
 					_teamBlockSteadyStateValidator,
 					_teamBlockCleaner,
-					_teamBlockRestrictionOverLimitValidator,
+					_teamBlockOptimizationLimits,
 					_teamBlockMaxSeatChecker,
 					teamBlockDaysOffMoveFinder,
 					_teamBlockScheudlingOptions, _allTeamMembersInSelectionSpecification
@@ -323,7 +319,7 @@ namespace Teleopti.Ccc.Win.Commands
 					_schedulingOptionsCreator,
 					_safeRollbackAndResourceCalculation,
 					_teamBlockIntradayDecisionMaker,
-					_teamBlockRestrictionOverLimitValidator,
+					_teamBlockOptimizationLimits,
 					_teamBlockCleaner,
 					_teamBlockMaxSeatChecker,
 					_dailyTargetValueCalculatorForTeamBlock,
