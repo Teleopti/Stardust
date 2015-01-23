@@ -314,6 +314,8 @@
     <Compile Include="Common\Configuration\ChangePasswordModel.cs" />
     <Compile Include="Common\Configuration\ChangePasswordPresenter.cs" />
     <Compile Include="Common\Configuration\IChangePasswordView.cs" />
+    <Compile Include="Common\Configuration\IGamificationSettingProvider.cs" />
+    <Compile Include="Common\Configuration\ISetGamificationSettingView.cs" />
     <Compile Include="Common\Configuration\ISiteProvider.cs" />
     <Compile Include="Common\Configuration\ISiteView.cs" />
     <Compile Include="Common\Configuration\MasterActivity\ActivityModel.cs" />
@@ -324,6 +326,8 @@
     <Compile Include="Common\Configuration\MasterActivity\MasterActivityModel.cs" />
     <Compile Include="Common\Configuration\MasterActivity\MasterActivityPresenter.cs" />
     <Compile Include="Common\Configuration\MasterActivity\MasterActivityViewModel.cs" />
+    <Compile Include="Common\Configuration\GamificationSettingProvider.cs" />
+    <Compile Include="Common\Configuration\SetGamificationSettingPresenter.cs" />
     <Compile Include="Common\Configuration\SitePresenter.cs" />
     <Compile Include="Common\Configuration\SiteProvider.cs" />
     <Compile Include="Common\Configuration\IScorecardProvider.cs" />
@@ -333,6 +337,7 @@
     <Compile Include="Common\Configuration\IWorkflowControlSetView.cs" />
     <Compile Include="Common\Configuration\ScorecardProvider.cs" />
     <Compile Include="Common\Configuration\SetScorecardPresenter.cs" />
+    <Compile Include="Common\Configuration\TeamGamificationSettingModel.cs" />
     <Compile Include="Common\Configuration\TeamProvider.cs" />
     <Compile Include="Common\Configuration\TeamScorecardModel.cs" />
     <Compile Include="Common\Configuration\WorkflowControlSetModel.cs" />

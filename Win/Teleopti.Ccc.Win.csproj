@@ -413,6 +413,12 @@
     <Compile Include="Common\BaseUserControlWithMessageBrokerHandler.cs">
       <SubType>UserControl</SubType>
     </Compile>
+    <Compile Include="Common\Configuration\SetGamificationSettingTargetsControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Common\Configuration\SetGamificationSettingTargetsControl.Designer.cs">
+      <DependentUpon>SetGamificationSettingTargetsControl.cs</DependentUpon>
+    </Compile>
     <Compile Include="Common\Configuration\Columns\ColumnCollectionExtensions.cs" />
     <Compile Include="Common\Configuration\Columns\ActivityUpdatedReadOnlyTextColumn.cs" />
     <Compile Include="Common\Configuration\BadgeSettings.cs">
@@ -2578,6 +2584,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Common\BaseRibbonForm.resx">
       <DependentUpon>BaseRibbonForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Common\Configuration\SetGamificationSettingTargetsControl.resx">
+      <DependentUpon>SetGamificationSettingTargetsControl.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Common\Configuration\AuditingPage.resx">
       <DependentUpon>AuditingPage.cs</DependentUpon>

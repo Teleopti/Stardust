@@ -345,6 +345,8 @@
     <Compile Include="Configuration\ChangePasswordPresenterTest.cs" />
     <Compile Include="Configuration\MasterActivityPresenterTest.cs" />
     <Compile Include="Configuration\MasterActivityModelTest.cs" />
+    <Compile Include="Configuration\GamificationSettingProviderTest.cs" />
+    <Compile Include="Configuration\SetGamificationSettingPresenterTest.cs" />
     <Compile Include="Configuration\SitePresenterTest.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -352,6 +354,7 @@
     <Compile Include="Configuration\ScorecardProviderTest.cs" />
     <Compile Include="Configuration\SetScorecardPresenterTest.cs" />
     <Compile Include="Configuration\TeamProviderTest.cs" />
+    <Compile Include="Configuration\TeamGamificationSettingModelTest.cs" />
     <Compile Include="Configuration\TeamScorecardModelTest.cs" />
     <Compile Include="Configuration\WorkflowControlSetModelMockedDomainTest.cs" />
     <Compile Include="Configuration\WorkflowControlSetModelTest.cs" />
