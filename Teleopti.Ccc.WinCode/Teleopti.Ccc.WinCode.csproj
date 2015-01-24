@@ -229,6 +229,9 @@
     <Compile Include="Autofac\ScheduleOvertimeModule.cs" />
     <Compile Include="Autofac\SchedulingCommonModule.cs" />
     <Compile Include="Autofac\WeeklyRestSolverModule.cs" />
+    <Compile Include="Backlog\BacklogModel.cs" />
+    <Compile Include="Backlog\BacklogTask.cs" />
+    <Compile Include="Backlog\BacklogTaskForecastedTimePerDateCalculator.cs" />
     <Compile Include="Budgeting\BudgetGroupMonthFilter.cs" />
     <Compile Include="Budgeting\BudgetGroupWeekFilter.cs" />
     <Compile Include="Budgeting\BudgetNavigatorDataService.cs" />
