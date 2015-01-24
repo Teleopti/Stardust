@@ -46,6 +46,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data
 
 			var messageSenders = container.Resolve<IEnumerable<IMessageSender>>();
 
+
 			if (!DataSourceHelper.Ccc7BackupExists(globalData.HashValue))
 			{
 				datasource = DataSourceHelper.CreateDataSourceNoBackup(messageSenders, true);
