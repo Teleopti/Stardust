@@ -5,8 +5,9 @@ SET ROOTDIR=%ROOTDIR:~0,-14%
 SET masterSettings=%ROOTDIR%\.debug-setup\config\settingsSikuliTest.txt
 SET CCC7DB=%~1
 SET AnalyticsDB=%~2
-set configuration=%3
-set MSBUILD="%windir%\Microsoft.NET\Framework\v4.0.30319\MSBuild.exe"
+SET configuration=%3
+SET MSBUILD="%windir%\Microsoft.NET\Framework\v4.0.30319\MSBuild.exe"
+SET logFile=%ROOTDIR%\.debug-setup\SikuliConfig.log
 
 SET MySettings=%ROOTDIR%\Teleopti.Support.Tool\bin\%configuration%\settings.txt
 
@@ -24,8 +25,8 @@ ECHO $(AS_DATABASE)^|%AnalyticsDB%>>"%MySettings%"
 ECHO $(DATASOURCE_NAME)^|Sikuli>>"%MySettings%"
 
 ::telling what config to modify
-set configFilesFolder=%ROOTDIR%\Teleopti.Support.Tool\bin\%configuration%\ConfigFiles
-set buildServerConfigFiles="%configFilesFolder%\BuildServerConfigFiles.txt"
+SET configFilesFolder=%ROOTDIR%\Teleopti.Support.Tool\bin\%configuration%\ConfigFiles
+SET buildServerConfigFiles="%configFilesFolder%\BuildServerConfigFiles.txt"
 if not exist "%configFilesFolder%" mkdir "%configFilesFolder%"
 echo ..\..\..\Teleopti.Ccc.SmartClientPortal\Teleopti.Ccc.SmartClientPortal.Shell\bin\%configuration%\Teleopti.Ccc.SmartClientPortal.Shell.exe.config,BuildArtifacts\AppRaptor.config>%buildServerConfigFiles%
 echo %ROOTDIR%\nhib\FixMyConfig.nhib.xml,BuildArtifacts\TeleoptiCCC7.nhib.xml>>%buildServerConfigFiles%
@@ -34,7 +35,8 @@ echo %ROOTDIR%\nhib\FixMyConfig.nhib.xml,BuildArtifacts\TeleoptiCCC7.nhib.xml>>%
 "%ROOTDIR%\Teleopti.Support.Tool\bin\%configuration%\Teleopti.Support.Tool.exe" -MOTest
 ECHO RC>"c:\nhib\Toggles.txt"
 
-CALL SikulitestConfigFix.bat
+ECHO %ROOTDIR%\.debug-setup\SikulitestConfigFix.bat >>%logFile%
+CALL %ROOTDIR%\.debug-setup\SikulitestConfigFix.bat
 
 ENDLOCAL
 GOTO:EOF

@@ -3,12 +3,13 @@ SETLOCAL
 SET ROOTDIR=%~dp0
 SET ROOTDIR=%ROOTDIR:~0,-14%
 SET configuration=Release
+SET logFile=SikuliConfig.log
 
 ::final changes
 SET configPath=%ROOTDIR%\Teleopti.Ccc.SmartClientPortal\Teleopti.Ccc.SmartClientPortal.Shell\bin\%configuration%\Teleopti.Ccc.SmartClientPortal.Shell.exe.config
 SET commonFolder=%ROOTDIR%\.debug-setup\common
-ECHO %configPath%
-ECHO %commonFolder%
+ECHO %configPath% >>%logFile%
+ECHO %commonFolder% >>%logFile%
 
 
 COPY "c:\XmlSetAttribute.exe" %commonFolder%\XmlSetAttribute.exe
