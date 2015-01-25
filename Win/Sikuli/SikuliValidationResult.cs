@@ -28,7 +28,7 @@ namespace Teleopti.Ccc.Win.Sikuli
 			get { return _stringBuilder; }
 		}
 
-		public void AppendLimitValueLine(string name, string limit, string value)
+		public void AppendLimitValueLineToDetails(string name, string limit, string value)
 		{
 			var line = String.Format("{0} : Limit = {1}; Value = {2}", name, limit, value);
 			Details.AppendLine(line);

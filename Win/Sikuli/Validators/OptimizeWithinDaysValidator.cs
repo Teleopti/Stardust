@@ -52,9 +52,11 @@ namespace Teleopti.Ccc.Win.Sikuli.Validators
 				SikuliValidationResult.ResultValue.Pass :
 				SikuliValidationResult.ResultValue.Fail;
 				
-			result.AppendLimitValueLine("Daily StdDev sum", "4.6", std.ToString());
+			result.AppendLimitValueLineToDetails("Daily StdDev sum", "4.6", std.ToString());
 			result.Details.AppendLine(contractTimeResult ? "Contract time : OK" : "Contract time : FAIL");
 			result.Details.AppendLine(daysOffResult ? "Day offs : OK" : "Contract time : FAIL");
+			result.Details.AppendLine("Explanation: The daily standard deviation must be under the limit, the number of current day offs and" +
+			                          "current contract times must be equal to the target.");
 
 			return result;
 		}
