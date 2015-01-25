@@ -10,11 +10,10 @@ SET commonFolder=%ROOTDIR%\.debug-setup\common
 ECHO %configPath%
 ECHO %commonFolder%
 
-PAUSE
 
 COPY "c:\XmlSetAttribute.exe" %commonFolder%\XmlSetAttribute.exe
 
-PAUSE
+SLEEP 3
 
 SET nodePath=configuration/appSettings/add[@key='GetConfigFromWebService']
 SET attributeName=value
@@ -42,7 +41,5 @@ SET value=Ntlm
 %commonFolder%\XmlSetAttribute.exe %configPath% %nodePath% %attributeName% %value%
 
 ENDLOCAL
-
-PAUSE
 
 GOTO:EOF

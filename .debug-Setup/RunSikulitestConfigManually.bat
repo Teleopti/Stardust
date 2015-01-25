@@ -1,5 +1,5 @@
 @ECHO off
 
-SikuliConfig.bat Test_SGISikuli_TeleoptiCCC7 Test_SGISikuli__TeleoptiAnalytics Release
+SikulitestConfig.bat Test_SGISikuli_TeleoptiCCC7 Test_SGISikuli_TeleoptiAnalytics Release
 
-GOTO:EOF
+PAUSE

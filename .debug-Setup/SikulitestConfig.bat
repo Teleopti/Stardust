@@ -27,12 +27,14 @@ ECHO $(DATASOURCE_NAME)^|Sikuli>>"%MySettings%"
 set configFilesFolder=%ROOTDIR%\Teleopti.Support.Tool\bin\%configuration%\ConfigFiles
 set buildServerConfigFiles="%configFilesFolder%\BuildServerConfigFiles.txt"
 if not exist "%configFilesFolder%" mkdir "%configFilesFolder%"
-echo ..\..\..\Teleopti.Ccc.SmartClientPortal\Teleopti.Ccc.SmartClientPortal.Shell\bin\%configuration%\Teleopti.Ccc.SmartClientPortal.Shell.exe.config,BuildArtifacts\Teleopti.Ccc.SmartClientPortal.Shell.Sikuli.config>%buildServerConfigFiles%
+echo ..\..\..\Teleopti.Ccc.SmartClientPortal\Teleopti.Ccc.SmartClientPortal.Shell\bin\%configuration%\Teleopti.Ccc.SmartClientPortal.Shell.exe.config,BuildArtifacts\AppRaptor.config>%buildServerConfigFiles%
 echo %ROOTDIR%\nhib\FixMyConfig.nhib.xml,BuildArtifacts\TeleoptiCCC7.nhib.xml>>%buildServerConfigFiles%
 
 ::Run supportTool to replace all config
 "%ROOTDIR%\Teleopti.Support.Tool\bin\%configuration%\Teleopti.Support.Tool.exe" -MOTest
 ECHO RC>"c:\nhib\Toggles.txt"
 
+CALL SikulitestConfigFix.bat
+
 ENDLOCAL
-goto:eof
+GOTO:EOF
