@@ -40,12 +40,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data
 			builder.RegisterType<EventsMessageSender>().As<IMessageSender>().SingleInstance();
 			builder.RegisterModule<SyncEventsPublisherModule>();
 			var container = builder.Build();
-
-			container.Resolve<IMessageBrokerUrl>().Configure(TestSiteConfigurationSetup.URL.ToString());
-			container.Resolve<ISignalRClient>().StartBrokerService();
-
 			var messageSenders = container.Resolve<IEnumerable<IMessageSender>>();
-
 
 			if (!DataSourceHelper.Ccc7BackupExists(globalData.HashValue))
 			{
@@ -60,6 +55,9 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data
 				startWebAppAsnyncAsEarlyAsPossibleForPerformanceReasons();
 				datasource = DataSourceHelper.CreateDataSourceNoBackup(messageSenders, false);
 			}
+
+			container.Resolve<IMessageBrokerUrl>().Configure(TestSiteConfigurationSetup.URL.ToString());
+			container.Resolve<ISignalRClient>().StartBrokerService();
 		}
 
 		private static void startWebAppAsnyncAsEarlyAsPossibleForPerformanceReasons()
