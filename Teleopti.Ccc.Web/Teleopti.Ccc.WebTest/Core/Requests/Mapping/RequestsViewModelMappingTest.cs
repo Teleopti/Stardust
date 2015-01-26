@@ -470,22 +470,24 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 		[Test]
 		public void ShouldMapShiftExchangeOfferStatusInPending()
 		{
-			var requestViewModel = createRequestViewModelWithShiftExchangeOffer(ShiftExchangeOfferStatus.Pending);
+			var shiftExchangeOffer = createShiftExchangeOffer(ShiftExchangeOfferStatus.Pending, false);
+			var requestViewModel = createRequestViewModelWithShiftExchangeOffer(shiftExchangeOffer);
 			requestViewModel.Status.Should().Contain(Resources.Pending);
 		}
 
 		[Test]
 		public void ShouldMapShiftExchangeOfferStatusCompleted()
 		{
-			var requestViewModel = createRequestViewModelWithShiftExchangeOffer(ShiftExchangeOfferStatus.Completed);
+			var shiftExchangeOffer = createShiftExchangeOffer(ShiftExchangeOfferStatus.Completed, false);
+			var requestViewModel = createRequestViewModelWithShiftExchangeOffer(shiftExchangeOffer);
 			requestViewModel.Status.Should().Contain(Resources.Completed);
 		}
 
 		[Test]
 		public void ShouldMapShiftExchangeOfferStatusInvalid()
 		{
-
-			var requestViewModel = createRequestViewModelWithShiftExchangeOffer(ShiftExchangeOfferStatus.Invalid);
+			var shiftExchangeOffer = createShiftExchangeOffer(ShiftExchangeOfferStatus.Invalid, false);
+			var requestViewModel = createRequestViewModelWithShiftExchangeOffer(shiftExchangeOffer);
 			requestViewModel.Status.Should().Contain(Resources.Invalid);
 		}
 
@@ -498,6 +500,28 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 			var result = Mapper.Map<IPersonRequest, RequestViewModel>(personRequest);
 
 			result.Status.Should().Contain(Resources.Expired);
+		}
+
+		[Test]
+		public void ShouldMapShiftExchangeOfferNextDayTrue()
+		{
+			var period = new DateTimePeriod(2015, 1, 30, 8, 2015, 1, 30, 23);
+			var shiftExchangeOffer = createShiftExchangeOffer(period);
+
+			var requestViewModel = createRequestViewModelWithShiftExchangeOffer(shiftExchangeOffer);
+
+			requestViewModel.IsNextDay.Should().Be.True();
+		}		
+		
+		[Test]
+		public void ShouldMapShiftExchangeOfferNextDayFalse()
+		{
+			var period = new DateTimePeriod(2015, 1, 30, 8, 2015, 1, 30, 10);
+			var shiftExchangeOffer = createShiftExchangeOffer(period);
+
+			var requestViewModel = createRequestViewModelWithShiftExchangeOffer(shiftExchangeOffer);
+
+			requestViewModel.IsNextDay.Should().Be.False();
 		}
 
 		[Test]
@@ -698,9 +722,8 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 			return personRequest;
 		}
 
-		private RequestViewModel  createRequestViewModelWithShiftExchangeOffer (ShiftExchangeOfferStatus status)
+		private RequestViewModel createRequestViewModelWithShiftExchangeOffer(ShiftExchangeOffer shiftExchangeOffer)
 		{
-			var shiftExchangeOffer = createShiftExchangeOffer(status, false);
 			var personRequest = new PersonRequest(_loggedOnPerson, shiftExchangeOffer);
 			var result = Mapper.Map<IPersonRequest, RequestViewModel>(personRequest);
 			return result;
@@ -712,6 +735,14 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 			var currentShift = ScheduleDayFactory.Create( isExpired? DateOnly.Today : DateOnly.Today.AddDays (1));
 			var str = new ShiftExchangeOffer(currentShift, new ShiftExchangeCriteria(), status );	
 			return str;
+		}
+
+		private ShiftExchangeOffer createShiftExchangeOffer(DateTimePeriod period)
+		{
+			var scheduleDayFilterCriteria = new ScheduleDayFilterCriteria(ShiftExchangeLookingForDay.WorkingShift, period);
+			var shiftExchagneCriteria = new ShiftExchangeCriteria(new DateOnly(period.StartDateTime.Year, period.StartDateTime.Month, period.StartDateTime.Day-1), scheduleDayFilterCriteria);
+			var currentShift = ScheduleDayFactory.Create(new DateOnly(period.StartDateTime.Year, period.StartDateTime.Month, period.StartDateTime.Day-2));
+			return new ShiftExchangeOffer(currentShift, shiftExchagneCriteria, ShiftExchangeOfferStatus.Pending);
 		}
 	}
 }
