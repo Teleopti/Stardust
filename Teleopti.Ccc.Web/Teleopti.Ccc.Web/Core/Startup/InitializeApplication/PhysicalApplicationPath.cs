@@ -6,7 +6,6 @@ namespace Teleopti.Ccc.Web.Core.Startup.InitializeApplication
 	{
 		public string Get()
 		{
-			//return HttpContext.Current.Request.PhysicalApplicationPath;
 			return HttpRuntime.AppDomainAppPath;
 		}
 	}

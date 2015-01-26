@@ -17,7 +17,7 @@ namespace Teleopti.Ccc.Web.Areas.Tennant.Core
 	{
 		private readonly ISettings _settings;
 		private readonly IPhysicalApplicationPath _physicalApplicationPath;
-		private readonly IList<IDataSourceHolder> _dataSources = new List<IDataSourceHolder>();
+		private readonly IList<DataSourceHolder> _dataSources = new List<DataSourceHolder>();
 
 		public NHibernateConfigurationsHandler(ISettings settings, IPhysicalApplicationPath physicalApplicationPath)
 		{
@@ -33,7 +33,7 @@ namespace Teleopti.Ccc.Web.Areas.Tennant.Core
 			{
 				return dataSourceHolder.DataSourceConfig;
 			}
-			return "";
+			return string.Empty;
 		}
 
 		private void loadDataSources()
@@ -58,13 +58,7 @@ namespace Teleopti.Ccc.Web.Areas.Tennant.Core
 		}
 	}
 
-	interface IDataSourceHolder
-	{
-		string DataSourceName { get; set; }
-		string DataSourceConfig { get; set; }
-	}
-
-	public class DataSourceHolder : IDataSourceHolder
+	public class DataSourceHolder
 	{
 		public string DataSourceName { get; set; }
 		public string DataSourceConfig { get; set; }

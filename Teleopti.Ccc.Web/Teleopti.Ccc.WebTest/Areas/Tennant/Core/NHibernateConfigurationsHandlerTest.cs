@@ -33,31 +33,37 @@ namespace Teleopti.Ccc.WebTest.Areas.Tennant.Core
 			</authentication>
 		</datasource>";
 
-		private INHibernateConfigurationsHandler _target;
-		private ISettings _settings;
-
-		[SetUp]
-		public void SetUp()
-		{
-			_settings = MockRepository.GenerateMock<ISettings>();
-		}
-
 		[Test]
 		public void ShouldLoadDataSources()
 		{
-			
+			var settings = MockRepository.GenerateMock<ISettings>();
 			var path = Path.GetTempPath();
 			var filename = Guid.NewGuid() + ".nhib.xml";
 			var writer = new StreamWriter(path + filename);
 
 			writer.Write(nhibConf);
 			writer.Close();
-			_settings.Stub(x => x.nhibConfPath()).Return(path);
+			settings.Stub(x => x.nhibConfPath()).Return(path);
 
-			_target = new NHibernateConfigurationsHandler(_settings);
-			var result = _target.GetConfigForName("Teleopti WFM");
-			result.Should().Not.Be.EqualTo("");
+			var target = new NHibernateConfigurationsHandler(settings, new physicalApplicationPathStub(path));
+			var result = target.GetConfigForName("Teleopti WFM");
+			result.Should().Not.Be.Empty();
 			File.Delete(path + filename);
+		}
+
+		private class physicalApplicationPathStub : IPhysicalApplicationPath
+		{
+			private readonly string _path;
+
+			public physicalApplicationPathStub(string path)
+			{
+				_path = path;
+			}
+
+			public string Get()
+			{
+				return _path;
+			}
 		}
 	}
 }
