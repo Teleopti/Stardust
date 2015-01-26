@@ -231,6 +231,7 @@
     <Compile Include="Areas\Tennant\Core\EncryptPassword.cs" />
     <Compile Include="Areas\Tennant\Core\IdentityAuthenticationTest.cs" />
     <Compile Include="Areas\Tennant\Core\IoCTest.cs" />
+    <Compile Include="Areas\Tennant\Core\NHibernateConfigurationsHandlerTest.cs" />
     <Compile Include="Areas\Tennant\Core\SuccessfulPasswordPolicy.cs" />
     <Compile Include="Areas\Tennant\TennantControllerTest.cs" />
     <Compile Include="Areas\Tennant\Core\ApplicationAuthenticationTest.cs" />
