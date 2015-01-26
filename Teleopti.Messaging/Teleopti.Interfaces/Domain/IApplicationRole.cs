@@ -5,7 +5,7 @@ namespace Teleopti.Interfaces.Domain
     /// <summary>
     /// An application role, eg Person or TeamLeader
     /// </summary>
-    public interface IApplicationRole : IAggregateRoot, IAuthorizationEntity, IBelongsToBusinessUnit
+    public interface IApplicationRole : IAggregateRoot, IBelongsToBusinessUnit
     {
         /// <summary>
         /// Sets the business unit.

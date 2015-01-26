@@ -10,26 +10,6 @@ namespace Teleopti.Interfaces.Domain
     public interface IAvailableData : IAggregateRoot
     {
         /// <summary>
-        /// Convert to Permitted Site Collection
-        /// </summary>
-        /// <returns></returns>
-        IList<ISite> ConvertToPermittedSiteCollection();
-
-        /// <summary>
-        /// Convert to Permitted Person Collection
-        /// </summary>
-        /// <param name="candidates"></param>
-        /// <param name="period"></param>
-        /// <returns></returns>
-        IList<IPerson> ConvertToPermittedPersonCollection(IList<IPerson> candidates, DateOnlyPeriod period);
-
-        /// <summary>
-        /// Converts to available data entry collection.
-        /// </summary>
-        /// <returns></returns>
-        IList<IAvailableDataEntry> ConvertToPermittedDataEntryCollection();
-
-        /// <summary>
         /// Gets or sets the application role.
         /// </summary>
         /// <value>The application role.</value>

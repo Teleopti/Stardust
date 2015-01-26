@@ -1077,7 +1077,6 @@
     <Compile Include="Security\Authentication\WindowsDataSourceProviderTest.cs" />
     <Compile Include="Security\Authentication\AuthenticationSettingsTest.cs" />
     <Compile Include="Security\AuthorizationData\DefinedLicenseDataFactoryTest.cs" />
-    <Compile Include="Security\AuthorizationEntities\AuthorizationEntityTest.cs" />
     <Compile Include="Security\AuthorizationEntities\AllLicenseOptionTest.cs" />
     <Compile Include="Security\IsPasswordEncryptedSpecificationTest.cs" />
     <Compile Include="Security\LicenseOptions\TeleoptiCccCalendarLinkLicenseOptionTest.cs" />
@@ -1105,7 +1104,6 @@
     <Compile Include="Security\LicenseOptions\TeleoptiCccBaseLicenseOptionTest.cs" />
     <Compile Include="Security\AuthorizationEntities\LicenseOptionTest.cs" />
     <Compile Include="Security\AuthorizationEntities\LicenseSchemaTest.cs" />
-    <Compile Include="Security\AuthorizationEntities\AvailableDataEntryTest.cs" />
     <Compile Include="Collection\ExtensionsTest.cs" />
     <Compile Include="Collection\LayerCollectionTest.cs" />
     <Compile Include="Collection\ReadOnlyDictionaryTest.cs" />
@@ -1216,7 +1214,6 @@
     <Compile Include="Scheduling\ShiftCreator\WorkShiftTemplateGeneratorTest.cs" />
     <Compile Include="Scheduling\PersonAbsenceSorterTest.cs" />
     <Compile Include="Security\AuthorizationEntities\AvailableDataTest.cs" />
-    <Compile Include="Security\AuthorizationEntities\BusinessUnitAuthorizationEntityConverterTest.cs" />
     <Compile Include="Security\EncryptionTest.cs" />
     <Compile Include="Security\AuthorizationEntities\LicenseActivatorTest.cs" />
     <Compile Include="Security\LicenseOptions\TeleoptiCccSmsLinkLicenseOptionTest.cs" />
@@ -1255,9 +1252,6 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Security\PermissionExceptionTest.cs" />
-    <Compile Include="Security\AuthorizationEntities\PersonAuthorizationEntityConverterTest.cs" />
-    <Compile Include="Security\AuthorizationEntities\TeamAuthorizationEntityConverterTest.cs" />
-    <Compile Include="Security\AuthorizationEntities\SiteAuthorizationEntityConverterTest.cs" />
     <Compile Include="Security\AuthorizationEntities\MatrixReportInfoTest.cs" />
     <Compile Include="Security\Matrix\ExternalApplicationFunctionSpecificationTest.cs" />
     <Compile Include="Security\AuthorizationEntities\SystemRoleTest.cs" />

@@ -439,7 +439,7 @@ namespace Teleopti.Ccc.DomainTest.Security.AuthorizationEntities
             string expNameValue = "Root/Function";
 
             // call get method
-            getNameValue = ((IAuthorizationEntity)_target).AuthorizationKey;
+            getNameValue = _target.AuthorizationKey;
 
 
             // Assert result
@@ -455,7 +455,7 @@ namespace Teleopti.Ccc.DomainTest.Security.AuthorizationEntities
             string expNameValue = "Root/Function";
 
             // call get method
-            getNameValue = ((IAuthorizationEntity)_target).AuthorizationName;
+            getNameValue = _target.AuthorizationName;
 
 
             // Assert result
@@ -476,7 +476,7 @@ namespace Teleopti.Ccc.DomainTest.Security.AuthorizationEntities
             string getDescriptionValue;
 
             // call get method
-            getDescriptionValue = ((IAuthorizationEntity) _target).AuthorizationDescription;
+            getDescriptionValue = _target.AuthorizationDescription;
 
             // Assert result
             Assert.AreEqual(setFunctionDescription, getDescriptionValue);

@@ -7,23 +7,16 @@ namespace Teleopti.Ccc.Domain.Security.AuthorizationEntities
     /// <summary>
     /// Represents a licence option that has a collection of enabled functions.
     /// </summary>
-    public class LicenseOption : Entity, IAuthorizationEntity
+    public class LicenseOption : Entity
     {
-
-        #region Variables
-
-        private readonly string _optionPath;
+	    private readonly string _optionPath;
         private string _optionCode;
         private string _schemaCode;
         private readonly string _optionName;
         private readonly IList<IApplicationFunction> _enabledApplicationFunctions;
         private bool _enabled;
 
-        #endregion
-
-        #region Interface
-
-        /// <summary>
+	    /// <summary>
         /// Finds the license option by path.
         /// </summary>
         /// <param name="licenseOptions">The license options.</param>
@@ -135,9 +128,7 @@ namespace Teleopti.Ccc.Domain.Security.AuthorizationEntities
             set { _enabled = value; }
         }
 
-        #region IAuthorizationEntity Members
-
-        /// <summary>
+	    /// <summary>
         /// Gets the authorization unique key. This must be unique and that is used for any
         /// comparisons within the authorization related stuff.
         /// </summary>
@@ -185,9 +176,5 @@ namespace Teleopti.Ccc.Domain.Security.AuthorizationEntities
         {
             get { return _optionName; }
         }
-
-        #endregion
-
-        #endregion
     }
 }

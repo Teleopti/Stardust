@@ -522,12 +522,8 @@
     <Compile Include="Domain\IApplicationFunction.cs" />
     <Compile Include="Domain\IApplicationRole.cs" />
     <Compile Include="Domain\IAuthenticationSettings.cs" />
-    <Compile Include="Domain\IAuthorizationEntity.cs">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="Domain\IAuthorizationSettings.cs" />
     <Compile Include="Domain\IAvailableData.cs" />
-    <Compile Include="Domain\IAvailableDataEntry.cs" />
     <Compile Include="Domain\IBusinessRuleResponse.cs" />
     <Compile Include="Domain\IBusinessUnit.cs" />
     <Compile Include="Domain\IBusinessUnitHierarchyEntity.cs" />

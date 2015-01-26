@@ -1693,15 +1693,11 @@
     <Compile Include="Security\AuthorizationEntities\LicenseSchema.cs" />
     <Compile Include="Security\AuthorizationEntities\LicenseOption.cs" />
     <Compile Include="Security\AuthorizationData\DefinedLicenseDataFactory.cs" />
-    <Compile Include="Security\AuthorizationEntities\AuthorizationEntity.cs" />
-    <Compile Include="Security\AuthorizationEntities\AvailableDataEntry.cs" />
     <Compile Include="Security\AuthorizationEntities\AvailableData.cs" />
     <Compile Include="Security\AuthorizationEntities\ILicenseActivator.cs" />
     <Compile Include="Security\AuthorizationEntities\LicenseActivator.cs" />
     <Compile Include="Security\RaptorApplicationFunctionsSynchronizer.cs" />
     <Compile Include="Security\PermissionException.cs" />
-    <Compile Include="Security\AuthorizationEntities\PersonAuthorizationEntityConverter.cs" />
-    <Compile Include="Security\AuthorizationEntities\TeamAuthorizationEntityConverter.cs" />
     <Compile Include="Security\Matrix\MatrixReportsSynchronizer.cs" />
     <Compile Include="Security\AuthorizationEntities\MatrixReportInfo.cs" />
     <Compile Include="Security\AuthorizationEntities\SystemRole.cs" />
@@ -1723,10 +1719,6 @@
     <Compile Include="Scheduling\Activity.cs" />
     <Compile Include="Scheduling\Assignment\PersonAssignment.cs" />
     <Compile Include="Scheduling\Assignment\ActivityLayer.cs" />
-    <Compile Include="Security\AuthorizationEntities\SiteAuthorizationEntityConverter.cs" />
-    <Compile Include="Security\AuthorizationEntities\BusinessUnitAuthorizationEntityConverter.cs">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="Specification\AndNotSpecification.cs" />
     <Compile Include="Specification\AndSpecification.cs" />
     <Compile Include="Specification\CompositeSpecification.cs" />

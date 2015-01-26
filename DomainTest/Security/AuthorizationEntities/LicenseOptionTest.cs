@@ -1,5 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using NUnit.Framework;
 using Teleopti.Ccc.Domain.Security.AuthorizationEntities;
 using Teleopti.Interfaces.Domain;
@@ -129,7 +128,7 @@ namespace Teleopti.Ccc.DomainTest.Security.AuthorizationEntities
             string expNameValue = _target.LicenseOptionPath;
 
             // call get method
-            getNameValue = ((IAuthorizationEntity)_target).AuthorizationKey;
+            getNameValue = _target.AuthorizationKey;
 
             // Assert result
             Assert.AreEqual(expNameValue, getNameValue);
@@ -144,7 +143,7 @@ namespace Teleopti.Ccc.DomainTest.Security.AuthorizationEntities
             string expNameValue = _target.LicenseOptionCode;
 
             // call get method
-            getNameValue = ((IAuthorizationEntity)_target).AuthorizationName;
+            getNameValue = _target.AuthorizationName;
 
 
             // Assert result
@@ -160,7 +159,7 @@ namespace Teleopti.Ccc.DomainTest.Security.AuthorizationEntities
             string expNameValue = _target.ToString();
 
             // call get method
-            getNameValue = ((IAuthorizationEntity)_target).AuthorizationDescription;
+            getNameValue = _target.AuthorizationDescription;
 
 
             // Assert result
@@ -176,7 +175,7 @@ namespace Teleopti.Ccc.DomainTest.Security.AuthorizationEntities
             string expNameValue = string.Empty;
 
             // call get method
-            getNameValue = ((IAuthorizationEntity)_target).AuthorizationValue;
+            getNameValue = _target.AuthorizationValue;
 
 
             // Assert result

@@ -7,7 +7,6 @@ namespace Teleopti.Interfaces.Domain
     /// Defines a Teleopti application function
     /// </summary>
     public interface IApplicationFunction : IAggregateRoot, 
-                                                IAuthorizationEntity, 
                                                 IParentChildEntity,
                                                 ICloneable
     {

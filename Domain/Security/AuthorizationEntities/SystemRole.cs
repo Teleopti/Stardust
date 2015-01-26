@@ -1,5 +1,4 @@
 ﻿using Teleopti.Ccc.Domain.Common.EntityBaseTypes;
-using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.Domain.Security.AuthorizationEntities
@@ -11,7 +10,7 @@ namespace Teleopti.Ccc.Domain.Security.AuthorizationEntities
     /// Created by: tamasb
     /// Created date: 2008-01-15
     /// </remarks>
-    public class SystemRole : VersionedAggregateRoot, IAuthorizationEntity, IDeleteTag
+    public class SystemRole : VersionedAggregateRoot, IDeleteTag
     {
         private string _name;
         private string _descriptionText;
@@ -37,9 +36,7 @@ namespace Teleopti.Ccc.Domain.Security.AuthorizationEntities
             set { _descriptionText = value; }
         }
 
-        #region IAuthorizationEntity Members
-
-        /// <summary>
+	    /// <summary>
         /// Gets the authorization unique key. This must be unique and that is used for any
         /// comparisons within the authorization related stuff.
         /// </summary>
@@ -97,12 +94,9 @@ namespace Teleopti.Ccc.Domain.Security.AuthorizationEntities
             get { return _isDeleted; }
         }
 
-        #endregion
-
-        public virtual void SetDeleted()
+	    public virtual void SetDeleted()
         {
             _isDeleted = true;
         }
     }
-
 }

@@ -9,9 +9,7 @@ namespace Teleopti.Ccc.Domain.Security.AuthorizationEntities
 {
     public class AvailableData : VersionedAggregateRoot, IAvailableData, IDeleteTag
     {
-        #region Variables
-
-        private IApplicationRole _applicationRole;
+	    private IApplicationRole _applicationRole;
         private readonly ICollection<IBusinessUnit> _availableBusinessUnits;
         private readonly ICollection<ISite> _availableSites;
         private readonly ICollection<ITeam> _availableTeams;
@@ -20,11 +18,7 @@ namespace Teleopti.Ccc.Domain.Security.AuthorizationEntities
         private bool? _permissionToPersonNotPartOfOrganization;
         private bool _isDeleted;
 
-        #endregion
-
-        #region Constructor
-
-        /// <summary>               
+	    /// <summary>               
         /// Initializes a new instance of the <see cref="AvailableData"/> class.
         /// </summary>
         public AvailableData()
@@ -35,13 +29,7 @@ namespace Teleopti.Ccc.Domain.Security.AuthorizationEntities
             _availableBusinessUnits = new List<IBusinessUnit>();
         }
 
-        #endregion
-
-        #region Interface
-
-        #region Static
-
-        /// <summary>
+	    /// <summary>
         /// Finds the available data in the available data list by the contained application role.
         /// </summary>
         /// <param name="availableDataList">The available data list.</param>
@@ -57,185 +45,7 @@ namespace Teleopti.Ccc.Domain.Security.AuthorizationEntities
             return null;
         }
 
-        /// <summary>
-        /// Combines the available datas in the list and returns the combined list.
-        /// </summary>
-        /// <param name="collection">The list.</param>
-        /// <returns></returns>
-        public static IAvailableData CombineAvailableData(IEnumerable<IAvailableData> collection)
-        {
-            InParameter.NotNull("collection", collection);
-            List<IAvailableData> availableDataWorkingList = new List<IAvailableData>(collection);
-            IAvailableData result = new AvailableData();
-            if (availableDataWorkingList.Count == 0)
-            {
-                return result;
-            }
-            for (int counter = 0; counter < availableDataWorkingList.Count; counter++)
-            {
-                IAvailableData currentAvailableDataItem = availableDataWorkingList[counter];
-                foreach (IBusinessUnit unit in currentAvailableDataItem.AvailableBusinessUnits)
-                {
-                    result.AddAvailableBusinessUnit(unit);
-                }
-                foreach (ISite site in currentAvailableDataItem.AvailableSites)
-                {
-                    result.AddAvailableSite(site);
-                }
-                foreach (ITeam team in currentAvailableDataItem.AvailableTeams)
-                {
-                    result.AddAvailableTeam(team);
-                }
-                foreach (IPerson person in currentAvailableDataItem.AvailablePersons)
-                {
-                    result.AddAvailablePerson(person);
-                }
-                if (currentAvailableDataItem.PermissionToPersonNotPartOfOrganization.HasValue || result.PermissionToPersonNotPartOfOrganization.HasValue)
-                {
-                    result.PermissionToPersonNotPartOfOrganization =
-                        (result.PermissionToPersonNotPartOfOrganization ?? false) || (currentAvailableDataItem.PermissionToPersonNotPartOfOrganization ?? false);
-                }
-                result.AvailableDataRange = (AvailableDataRangeOption)Math.Max((int)result.AvailableDataRange, (int)currentAvailableDataItem.AvailableDataRange);
-            }
-            return result;
-        }
-
-        #endregion
-
-        /// <summary>
-        /// Converts the permitted data lists (AvailableBusinessUnit, AvailableSites, AvailableTeams) to team collection.
-        /// </summary>
-        /// <returns></returns>
-        public virtual IList<ITeam> ConvertToPermittedTeamCollection()
-        {
-            IList<ITeam> returnList = new List<ITeam>();
-
-            foreach (IBusinessUnit businessUnit in AvailableBusinessUnits)
-            {
-                foreach (ISite site in businessUnit.SiteCollection)
-                {
-                    foreach (ITeam team in site.TeamCollection)
-                    {
-                        //if(!returnList.Contains(team))
-                            returnList.Add(team);
-                    }
-                }
-            }
-            foreach (ISite site in AvailableSites)
-            {
-                foreach (ITeam team in site.TeamCollection)
-                {
-                    //if (!returnList.Contains(team))
-                        returnList.Add(team);
-                }
-            }
-            foreach (ITeam team in AvailableTeams)
-            {
-                //if (!returnList.Contains(team))
-                    returnList.Add(team);
-            }
-            return returnList;
-        }
-
-        /// <summary>
-        /// Converts the permitted data lists (AvailableBusinessUnit, AvailableSites) to site collection.
-        /// </summary>
-        /// <returns></returns>
-        public virtual IList<ISite> ConvertToPermittedSiteCollection()
-        {
-            IList<ISite> returnList = new List<ISite>();
-
-            foreach (IBusinessUnit businessUnit in AvailableBusinessUnits)
-            {
-                foreach (ISite site in businessUnit.SiteCollection)
-                {
-                    returnList.Add(site);
-                }
-            }
-            foreach (ISite site in AvailableSites)
-            {
-                    returnList.Add(site);
-            }
-            return returnList;
-        }
-
-        /// <summary>
-        /// Converts the available data to permitted person collection.
-        /// </summary>
-        /// <param name="candidates">The candidates.</param>
-        /// <param name="period">The period.</param>
-        /// <returns></returns>
-        public virtual IList<IPerson> ConvertToPermittedPersonCollection(IList<IPerson> candidates, DateOnlyPeriod period)
-        {
-            IList<IPerson> returnList = new List<IPerson>();
-
-            foreach (IBusinessUnit businessUnit in AvailableBusinessUnits)
-            {
-                foreach (IPerson person in businessUnit.PersonsInHierarchy(candidates, period))
-                {
-                    returnList.Add(person);
-                }
-            }
-            foreach (ISite site in AvailableSites)
-            {
-                foreach (IPerson person in site.PersonsInHierarchy(candidates, period))
-                {
-                    returnList.Add(person);
-                }
-            }
-            foreach (ITeam team in AvailableTeams)
-            {
-                foreach (IPerson person in team.PersonsInHierarchy(candidates, period))
-                {
-                    returnList.Add(person);
-                }
-            }
-            foreach (IPerson person in AvailablePersons)
-            {
-                 returnList.Add(person);
-            }
-            return returnList;
-        }
-
-        /// <summary>
-        /// Converts the available data to permitted data entry collection.
-        /// </summary>
-        /// <returns></returns>
-        public virtual IList<IAvailableDataEntry> ConvertToPermittedDataEntryCollection()
-        {
-            IList<IAvailableDataEntry> returnList = new List<IAvailableDataEntry>();
-
-            foreach (IBusinessUnit businessUnit in AvailableBusinessUnits)
-            {
-                BusinessUnitAuthorizationEntityConverter holder = new BusinessUnitAuthorizationEntityConverter(businessUnit, ApplicationRole);
-                AvailableDataEntry newEntry = new AvailableDataEntry(holder);
-                returnList.Add(newEntry);
-            }
-            foreach (ISite site in AvailableSites)
-            {
-                SiteAuthorizationEntityConverter holder = new SiteAuthorizationEntityConverter(site, ApplicationRole);
-
-                AvailableDataEntry newEntry = new AvailableDataEntry(holder);
-                returnList.Add(newEntry);
-            }
-            foreach (ITeam team in AvailableTeams)
-            {
-                TeamAuthorizationEntityConverter holder = new TeamAuthorizationEntityConverter(team, ApplicationRole);
-
-                AvailableDataEntry newEntry = new AvailableDataEntry(holder);
-                returnList.Add(newEntry);
-            }
-            foreach (IPerson person in AvailablePersons)
-            {
-                PersonAuthorizationEntityConverter holder = new PersonAuthorizationEntityConverter(person, ApplicationRole);
-
-                AvailableDataEntry newEntry = new AvailableDataEntry(holder);
-                returnList.Add(newEntry);
-            }
-            return returnList;
-        }
-
-        /// <summary>
+	    /// <summary>
         /// Gets or sets the application role.
         /// </summary>
         /// <value>The application role.</value>
@@ -464,8 +274,5 @@ namespace Teleopti.Ccc.Domain.Security.AuthorizationEntities
         {
             _isDeleted = true;
         }
-
-        #endregion
-
     }
 }
