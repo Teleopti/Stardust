@@ -32,13 +32,6 @@ namespace Teleopti.Ccc.WinCodeTest.Configuration
         {
 			Assert.AreEqual(GamificationSettingProvider.NullGamificationSetting,_target.GamificationSetting);
         }
-
-		[Test]
-        public void VerifySettingStatusEmpty()
-		{
-			_target.GamificationSetting = GamificationSettingProvider.NullGamificationSetting;
-			Assert.AreEqual(" ",_target.SettingStatus);
-        }
 		
         [Test]
         public void VerifyCanGetSiteAndTeam()
