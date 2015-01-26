@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 using System.Web.Http;
 using Teleopti.Ccc.Domain.AgentInfo;
 using Teleopti.Ccc.Domain.Collection;
@@ -31,11 +30,10 @@ namespace Teleopti.Ccc.Web.Areas.Permissions.Controllers
 			_currentBusinessUnit = currentBusinessUnit;
 		}
 
-		[UnitOfWork]
-		[Route("api/Permissions/Roles"), HttpPost]
+		[UnitOfWork, Route("api/Permissions/Roles"), HttpPost]
 		public IHttpActionResult Post([FromBody] NewRoleInput model)
 		{
-			if (descriptionIsInvalid(model.Description)) return BadRequest("The description was invalid. It can contain at most 255 characters.");
+			if (descriptionIsInvalid(model.Description)) return BadRequest("The given description is invalid. It can contain at most 255 characters.");
 			var role = createNewRole(model.Description);
 
 			return Created(Request.RequestUri + role.Id.ToString(), new { role.Name, role.Id, role.DescriptionText });
