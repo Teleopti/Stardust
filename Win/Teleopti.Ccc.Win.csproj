@@ -265,6 +265,7 @@
     <Reference Include="System.Web" />
     <Reference Include="System.Web.Services" />
     <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Windows.Forms.DataVisualization" />
     <Reference Include="System.Xaml" />
     <Reference Include="System.Xml" />
     <Reference Include="System.Xml.Linq" />
@@ -288,6 +289,18 @@
   <ItemGroup>
     <Compile Include="..\GlobalAssemblyInfo.cs">
       <Link>GlobalAssemblyInfo.cs</Link>
+    </Compile>
+    <Compile Include="Backlog\BacklogView.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Backlog\BacklogView.Designer.cs">
+      <DependentUpon>BacklogView.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Backlog\ManualEntryDialog.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Backlog\ManualEntryDialog.Designer.cs">
+      <DependentUpon>ManualEntryDialog.cs</DependentUpon>
     </Compile>
     <Compile Include="Budgeting\AddShrinkageForm.cs">
       <SubType>Form</SubType>
@@ -2570,6 +2583,12 @@
     <Compile Include="Sikuli\Validators\TestValidators\FailValidator.cs" />
     <Compile Include="Sikuli\Validators\TestValidators\PassValidator.cs" />
     <Compile Include="Sikuli\Validators\ValidatorHelper.cs" />
+    <EmbeddedResource Include="Backlog\BacklogView.resx">
+      <DependentUpon>BacklogView.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Backlog\ManualEntryDialog.resx">
+      <DependentUpon>ManualEntryDialog.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Budgeting\AddShrinkageForm.resx">
       <DependentUpon>AddShrinkageForm.cs</DependentUpon>
       <SubType>Designer</SubType>
