@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2013
-VisualStudioVersion = 12.0.31101.0
+VisualStudioVersion = 12.0.30501.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{7E63604E-871F-4E51-B27A-3501614F25F9}"
 	ProjectSection(SolutionItems) = preProject
@@ -42,8 +42,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Teleopti.Common.UI.SmartPar
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Teleopti.Ccc.SmartClientPortal.Shell", "Teleopti.Ccc.SmartClientPortal\Teleopti.Ccc.SmartClientPortal.Shell\Teleopti.Ccc.SmartClientPortal.Shell.csproj", "{38E1AC89-30E7-4C85-B521-3DA9D73BA2FA}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Teleopti.Ccc.AgentPortal", "AgentPortal\Teleopti.Ccc.AgentPortal\Teleopti.Ccc.AgentPortal.csproj", "{C7CAB3B2-ED5E-42F6-B3D1-B034F435E1B5}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Teleopti.Ccc.WpfControls", "Teleopti.Ccc.WpfControls\Teleopti.Ccc.WpfControls.csproj", "{737F96C2-0301-4519-8A52-6C46AD25325D}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Teleopti.Messaging", "Teleopti.Messaging\Teleopti.Messaging\Teleopti.Messaging.csproj", "{4F4DF171-4A56-4E0D-90CB-CB2AFDEA4411}"
@@ -83,8 +81,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Teleopti.Ccc.DbConverter", 
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Teleopti.Ccc.Sdk.ClientProxies", "Teleopti.Ccc.Sdk\Teleopti.Ccc.Sdk.ClientProxies\Teleopti.Ccc.Sdk.ClientProxies.csproj", "{6116FC80-2475-447E-A90A-14B4DB59E2A7}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Teleopti.Ccc.AgentPortalCode", "AgentPortal\Teleopti.Ccc.AgentPortalCode\Teleopti.Ccc.AgentPortalCode.csproj", "{B960FB2F-5AF0-4254-83D0-99D1E0465C5D}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Teleopti.Analytics.Etl.PerformanceManagerProxy", "Teleopti.Analytics\Teleopti.Analytics.Etl.PerformanceManagerProxy\Teleopti.Analytics.Etl.PerformanceManagerProxy.csproj", "{AE2DE329-7681-40C4-BE16-7382280E2BC6}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Teleopti.Ccc.PayrollFormatter", "Teleopti.Ccc.Payroll\Teleopti.Ccc.PayrollFormatter\Teleopti.Ccc.PayrollFormatter.csproj", "{D3A96039-45CD-42CA-BCEC-1AE495651082}"
@@ -106,8 +102,6 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Teleopti.Ccc.Sdk.Logic", "Teleopti.Ccc.Sdk\Teleopti.Ccc.Sdk.Logic\Teleopti.Ccc.Sdk.Logic.csproj", "{1277112D-B11A-4358-AF9A-8C9C7A5E701E}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Teleopti.Ccc.Sdk.LogicTest", "Teleopti.Ccc.Sdk\Teleopti.Ccc.Sdk.LogicTest\Teleopti.Ccc.Sdk.LogicTest.csproj", "{07769CA8-5306-4BAF-888C-BA64CCB6C82D}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Teleopti.Ccc.AgentPortalCodeTest", "AgentPortal\Teleopti.Ccc.AgentPortalCodeTest\Teleopti.Ccc.AgentPortalCodeTest.csproj", "{AB7E8C99-805C-4100-9F9D-9F8DDF842478}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Teleopti.Analytics.Etl.ConfigToolCode", "Teleopti.Analytics\Teleopti.Analytics.Etl.ConfigToolCode\Teleopti.Analytics.Etl.ConfigToolCode.csproj", "{A48E1E01-AA52-44F6-8FC2-44E686A8A391}"
 EndProject
@@ -374,20 +368,6 @@ Global
 		{38E1AC89-30E7-4C85-B521-3DA9D73BA2FA}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{38E1AC89-30E7-4C85-B521-3DA9D73BA2FA}.Release|x86.ActiveCfg = Release|x86
 		{38E1AC89-30E7-4C85-B521-3DA9D73BA2FA}.Release|x86.Build.0 = Release|x86
-		{C7CAB3B2-ED5E-42F6-B3D1-B034F435E1B5}.Debug|.NET.ActiveCfg = Debug|Any CPU
-		{C7CAB3B2-ED5E-42F6-B3D1-B034F435E1B5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{C7CAB3B2-ED5E-42F6-B3D1-B034F435E1B5}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{C7CAB3B2-ED5E-42F6-B3D1-B034F435E1B5}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
-		{C7CAB3B2-ED5E-42F6-B3D1-B034F435E1B5}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
-		{C7CAB3B2-ED5E-42F6-B3D1-B034F435E1B5}.Debug|x86.ActiveCfg = Debug|x86
-		{C7CAB3B2-ED5E-42F6-B3D1-B034F435E1B5}.Debug|x86.Build.0 = Debug|x86
-		{C7CAB3B2-ED5E-42F6-B3D1-B034F435E1B5}.Release|.NET.ActiveCfg = Release|Any CPU
-		{C7CAB3B2-ED5E-42F6-B3D1-B034F435E1B5}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{C7CAB3B2-ED5E-42F6-B3D1-B034F435E1B5}.Release|Any CPU.Build.0 = Release|Any CPU
-		{C7CAB3B2-ED5E-42F6-B3D1-B034F435E1B5}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
-		{C7CAB3B2-ED5E-42F6-B3D1-B034F435E1B5}.Release|Mixed Platforms.Build.0 = Release|Any CPU
-		{C7CAB3B2-ED5E-42F6-B3D1-B034F435E1B5}.Release|x86.ActiveCfg = Release|x86
-		{C7CAB3B2-ED5E-42F6-B3D1-B034F435E1B5}.Release|x86.Build.0 = Release|x86
 		{737F96C2-0301-4519-8A52-6C46AD25325D}.Debug|.NET.ActiveCfg = Debug|Any CPU
 		{737F96C2-0301-4519-8A52-6C46AD25325D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{737F96C2-0301-4519-8A52-6C46AD25325D}.Debug|Any CPU.Build.0 = Debug|Any CPU
@@ -610,20 +590,6 @@ Global
 		{6116FC80-2475-447E-A90A-14B4DB59E2A7}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
 		{6116FC80-2475-447E-A90A-14B4DB59E2A7}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{6116FC80-2475-447E-A90A-14B4DB59E2A7}.Release|x86.ActiveCfg = Release|Any CPU
-		{B960FB2F-5AF0-4254-83D0-99D1E0465C5D}.Debug|.NET.ActiveCfg = Debug|Any CPU
-		{B960FB2F-5AF0-4254-83D0-99D1E0465C5D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{B960FB2F-5AF0-4254-83D0-99D1E0465C5D}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{B960FB2F-5AF0-4254-83D0-99D1E0465C5D}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
-		{B960FB2F-5AF0-4254-83D0-99D1E0465C5D}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
-		{B960FB2F-5AF0-4254-83D0-99D1E0465C5D}.Debug|x86.ActiveCfg = Debug|x86
-		{B960FB2F-5AF0-4254-83D0-99D1E0465C5D}.Debug|x86.Build.0 = Debug|x86
-		{B960FB2F-5AF0-4254-83D0-99D1E0465C5D}.Release|.NET.ActiveCfg = Release|Any CPU
-		{B960FB2F-5AF0-4254-83D0-99D1E0465C5D}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{B960FB2F-5AF0-4254-83D0-99D1E0465C5D}.Release|Any CPU.Build.0 = Release|Any CPU
-		{B960FB2F-5AF0-4254-83D0-99D1E0465C5D}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
-		{B960FB2F-5AF0-4254-83D0-99D1E0465C5D}.Release|Mixed Platforms.Build.0 = Release|Any CPU
-		{B960FB2F-5AF0-4254-83D0-99D1E0465C5D}.Release|x86.ActiveCfg = Release|x86
-		{B960FB2F-5AF0-4254-83D0-99D1E0465C5D}.Release|x86.Build.0 = Release|x86
 		{AE2DE329-7681-40C4-BE16-7382280E2BC6}.Debug|.NET.ActiveCfg = Debug|Any CPU
 		{AE2DE329-7681-40C4-BE16-7382280E2BC6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{AE2DE329-7681-40C4-BE16-7382280E2BC6}.Debug|Any CPU.Build.0 = Debug|Any CPU
@@ -762,20 +728,6 @@ Global
 		{07769CA8-5306-4BAF-888C-BA64CCB6C82D}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{07769CA8-5306-4BAF-888C-BA64CCB6C82D}.Release|x86.ActiveCfg = Release|x86
 		{07769CA8-5306-4BAF-888C-BA64CCB6C82D}.Release|x86.Build.0 = Release|x86
-		{AB7E8C99-805C-4100-9F9D-9F8DDF842478}.Debug|.NET.ActiveCfg = Debug|Any CPU
-		{AB7E8C99-805C-4100-9F9D-9F8DDF842478}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{AB7E8C99-805C-4100-9F9D-9F8DDF842478}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{AB7E8C99-805C-4100-9F9D-9F8DDF842478}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
-		{AB7E8C99-805C-4100-9F9D-9F8DDF842478}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
-		{AB7E8C99-805C-4100-9F9D-9F8DDF842478}.Debug|x86.ActiveCfg = Debug|x86
-		{AB7E8C99-805C-4100-9F9D-9F8DDF842478}.Debug|x86.Build.0 = Debug|x86
-		{AB7E8C99-805C-4100-9F9D-9F8DDF842478}.Release|.NET.ActiveCfg = Release|Any CPU
-		{AB7E8C99-805C-4100-9F9D-9F8DDF842478}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{AB7E8C99-805C-4100-9F9D-9F8DDF842478}.Release|Any CPU.Build.0 = Release|Any CPU
-		{AB7E8C99-805C-4100-9F9D-9F8DDF842478}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
-		{AB7E8C99-805C-4100-9F9D-9F8DDF842478}.Release|Mixed Platforms.Build.0 = Release|Any CPU
-		{AB7E8C99-805C-4100-9F9D-9F8DDF842478}.Release|x86.ActiveCfg = Release|x86
-		{AB7E8C99-805C-4100-9F9D-9F8DDF842478}.Release|x86.Build.0 = Release|x86
 		{A48E1E01-AA52-44F6-8FC2-44E686A8A391}.Debug|.NET.ActiveCfg = Debug|Any CPU
 		{A48E1E01-AA52-44F6-8FC2-44E686A8A391}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{A48E1E01-AA52-44F6-8FC2-44E686A8A391}.Debug|Any CPU.Build.0 = Debug|Any CPU
