@@ -44,6 +44,7 @@ namespace Teleopti.Ccc.WinCode.Backlog
 				}
 				_stateHolder.SetRequestedScenario(scenarioRepository.LoadDefaultScenario());
 				loadSkillDays(uow, _stateHolder, dateOnlyPeriodAsDateTimePeriod.Period());
+				loadSchedules(uow,_stateHolder);
 			}
 			createBacklogTasks(period);
 			setClosedDates(period);
@@ -327,6 +328,25 @@ namespace Teleopti.Ccc.WinCode.Backlog
 
 					}
 				}
+			}
+		}
+
+		private void loadSchedules(IUnitOfWork uow, ISchedulerStateHolder stateHolder)
+		{
+			var period = new ScheduleDateTimePeriod(stateHolder.RequestedPeriod.Period(), stateHolder.SchedulingResultState.PersonsInOrganization);
+			using (PerformanceOutput.ForOperation("Loading schedules " + period.LoadedPeriod()))
+			{
+				stateHolder.SchedulingResultState.PersonsInOrganization = new PersonRepository(uow).FindPeopleInOrganization(Period(), false);
+				IPersonProvider personsInOrganizationProvider = new PersonsInOrganizationProvider(stateHolder.SchedulingResultState.PersonsInOrganization);
+				// If the people in organization is filtered out to 70% or less of all people then flag 
+				// so that a criteria for that is used later when loading schedules.
+				//var loaderSpecification = new LoadScheduleByPersonSpecification();
+				//personsInOrganizationProvider.DoLoadByPerson = loaderSpecification.IsSatisfiedBy(decider);
+				IScheduleDictionaryLoadOptions scheduleDictionaryLoadOptions = new ScheduleDictionaryLoadOptions(false, false)
+				{
+					LoadDaysAfterLeft = true
+				};
+				stateHolder.LoadSchedules(new ScheduleRepository(uow), personsInOrganizationProvider, scheduleDictionaryLoadOptions, period);
 			}
 		}
 	}
