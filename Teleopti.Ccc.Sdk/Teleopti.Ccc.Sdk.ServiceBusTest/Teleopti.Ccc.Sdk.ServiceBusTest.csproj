@@ -134,6 +134,7 @@
     <Compile Include="AgentBadge\AgentBadgeWithRankCalculatorTest.cs" />
     <Compile Include="AgentBadge\AgentBadgeCalculatorTest.cs" />
     <Compile Include="AgentBadge\BadgeCalculationInitConsumerTest.cs" />
+    <Compile Include="AgentBadge\CalculateOrganizationalSettingBasedBadgeConsumerTest.cs" />
     <Compile Include="AgentBadge\CalculateBadgeConsumerTest.cs" />
     <Compile Include="AgentBadge\CalculateTimeZoneConsumerTest.cs" />
     <Compile Include="BudgetGroupAllowanceSpecificationTest.cs" />

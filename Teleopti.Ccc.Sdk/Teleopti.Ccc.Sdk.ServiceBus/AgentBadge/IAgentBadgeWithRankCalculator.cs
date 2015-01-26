@@ -15,5 +15,15 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.AgentBadge
 
 		IEnumerable<IAgentBadgeWithRankTransaction> CalculateAnsweredCallsBadges(IEnumerable<IPerson> allPersons,
 			string timezoneCode, DateOnly date, IAgentBadgeSettings setting);
+
+		IEnumerable<IAgentBadgeWithRankTransaction> CalculateAdherenceBadges(IEnumerable<IPerson> allPersons,
+			string timezoneCode, DateOnly date, AdherenceReportSettingCalculationMethod adherenceCalculationMethod,
+			IGamificationSetting setting);
+
+		IEnumerable<IAgentBadgeWithRankTransaction> CalculateAHTBadges(IEnumerable<IPerson> allPersons, string timezoneCode,
+			DateOnly date, IGamificationSetting setting);
+
+		IEnumerable<IAgentBadgeWithRankTransaction> CalculateAnsweredCallsBadges(IEnumerable<IPerson> allPersons,
+			string timezoneCode, DateOnly date, IGamificationSetting setting);
 	}
 }
