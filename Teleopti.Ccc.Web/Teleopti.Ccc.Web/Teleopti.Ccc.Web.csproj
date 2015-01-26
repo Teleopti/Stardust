@@ -399,7 +399,7 @@
     <Compile Include="Areas\Anywhere\Core\AgentViewModel.cs" />
     <Compile Include="Areas\Anywhere\Core\TeamViewModel.cs" />
     <Compile Include="Areas\Permissions\Controllers\FunctionsForRoleInput.cs" />
-    <Compile Include="Areas\Permissions\Controllers\RenameRoleInput.cs" />
+    <Compile Include="Areas\Permissions\Controllers\RoleNameInput.cs" />
     <Compile Include="Areas\Permissions\PermissionsAreaRegistration.cs" />
     <Compile Include="Areas\Permissions\Controllers\RolesController.cs" />
     <Compile Include="Areas\Permissions\Controllers\NewRoleInput.cs" />

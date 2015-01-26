@@ -5,6 +5,7 @@ using System.Net.Http;
 using NUnit.Framework;
 using Rhino.Mocks;
 using SharpTestsEx;
+using Teleopti.Ccc.Domain.AgentInfo;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
@@ -89,7 +90,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Permissions
 
 			roleRepository.Stub(x => x.Get(roleId)).Return(agentRole);
 			
-			target.RenameRole(roleId,new RenameRoleInput{NewName = "Self service agent"});
+			target.RenameRole(roleId,new RoleNameInput{NewName = "Self service agent"});
 
 			agentRole.Name.Should().Be.EqualTo("Self service agent");
 		}
@@ -106,7 +107,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Permissions
 
 			roleRepository.Stub(x => x.Get(roleId)).Return(agentRole);
 
-			target.RenameRole(roleId, new RenameRoleInput { NewName = "Self service agent" });
+			target.RenameRole(roleId, new RoleNameInput { NewName = "Self service agent" });
 
 			agentRole.Name.Should().Be.EqualTo("Agent");
 		}
@@ -123,7 +124,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Permissions
 
 			roleRepository.Stub(x => x.Get(roleId)).Return(agentRole);
 
-			target.RenameRole(roleId, new RenameRoleInput { NewName = "" });
+			target.RenameRole(roleId, new RoleNameInput { NewName = "" });
 
 			agentRole.Name.Should().Be.EqualTo("Agent");
 		}
@@ -191,6 +192,45 @@ namespace Teleopti.Ccc.WebTest.Areas.Permissions
 			target.RemoveFunctions(roleId, new FunctionsForRoleInput { Functions = new Collection<Guid> { functionOneId } });
 
 			agentRole.ApplicationFunctionCollection.Should().Contain(functionOne);
+		}
+
+		[Test]
+		public void ShouldCopyExistingRole()
+		{
+			var roleRepository = MockRepository.GenerateMock<IApplicationRoleRepository>();
+			var functionRepository = MockRepository.GenerateMock<IApplicationFunctionRepository>();
+			var availableDataRepository = MockRepository.GenerateMock<IAvailableDataRepository>();
+			var target = new RolesController(roleRepository, functionRepository, availableDataRepository, new CurrentBusinessUnit(new FakeCurrentIdentity("Pelle")));
+			var team = TeamFactory.CreateTeam("Team 1", "Paris");
+
+			var roleId = Guid.NewGuid();
+
+			var functionOne = new ApplicationFunction("FunctionOne");
+			var agentRole = new ApplicationRole { Name = "Agent", BuiltIn = true, AvailableData = new AvailableData()};
+			agentRole.AddApplicationFunction(functionOne);
+			agentRole.AvailableData.AvailableDataRange = AvailableDataRangeOption.MySite;
+			agentRole.AvailableData.AddAvailableBusinessUnit(BusinessUnitFactory.BusinessUnitUsedInTest);
+			agentRole.AvailableData.AddAvailableSite(team.Site);
+			agentRole.AvailableData.AddAvailableTeam(team);
+			agentRole.AvailableData.AddAvailablePerson(PersonFactory.CreatePersonWithGuid("Anna","Andersson"));
+
+			roleRepository.Stub(x => x.Get(roleId)).Return(agentRole);
+			IApplicationRole addedRole = null;
+			roleRepository.Stub(x => x.Add(null)).IgnoreArguments().Callback<IApplicationRole>(item =>
+			{
+				addedRole = item;
+				return true;
+			});
+			
+			target.CopyExistingRole(roleId, new RoleNameInput{NewName = "Agent self service"});
+
+			addedRole.Name.Should().Be.EqualTo("Agent self service");
+			addedRole.ApplicationFunctionCollection.Should().Have.Count.EqualTo(1);
+			addedRole.AvailableData.AvailableBusinessUnits.Should().Have.Count.EqualTo(1);
+			addedRole.AvailableData.AvailableSites.Should().Have.Count.EqualTo(1);
+			addedRole.AvailableData.AvailableTeams.Should().Have.Count.EqualTo(1);
+			addedRole.AvailableData.AvailablePersons.Should().Have.Count.EqualTo(1);
+			addedRole.AvailableData.AvailableDataRange.Should().Be.EqualTo(AvailableDataRangeOption.MySite);
 		}
 
 		[Test]

@@ -2,11 +2,13 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Web.Http;
+using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.Security.AuthorizationEntities;
 using Teleopti.Ccc.Web.Filters;
+using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Web.Areas.Permissions.Controllers
 {
@@ -30,14 +32,23 @@ namespace Teleopti.Ccc.Web.Areas.Permissions.Controllers
 		[Route("api/Permissions/Roles"), HttpPost]
 		public IHttpActionResult Post([FromBody] NewRoleInput model)
 		{
-			var role = new ApplicationRole { Name = model.Name };
+			var role = createNewRole(model.Name);
+
+			return Created(Request.RequestUri + role.Id.ToString(), new { role.Name, role.Id });
+		}
+
+		private IApplicationRole createNewRole(string name)
+		{
+			var role = new ApplicationRole {Name = name};
 			role.SetBusinessUnit(_currentBusinessUnit.Current());
 			_roleRepository.Add(role);
 
-			var availableData = new AvailableData { ApplicationRole = role };
+			var availableData = new AvailableData {ApplicationRole = role};
 			_availableDataRepository.Add(availableData);
 
-			return Created(Request.RequestUri + role.Id.ToString(), new { role.Name, role.Id });
+			role.AvailableData = availableData;
+
+			return role;
 		}
 
 		[UnitOfWorkApiAction]
@@ -103,8 +114,8 @@ namespace Teleopti.Ccc.Web.Areas.Permissions.Controllers
 		}
 
 		[UnitOfWorkApiAction]
-		[Route("api/Permissions/Roles/{roleId}"), HttpPut]
-		public void RenameRole(Guid roleId, RenameRoleInput model)
+		[Route("api/Permissions/Roles/{roleId}"),HttpPut]
+		public void RenameRole(Guid roleId, [FromBody]RoleNameInput model)
 		{
 			var role = _roleRepository.Get(roleId);
 			if (role.BuiltIn) return;
@@ -115,7 +126,22 @@ namespace Teleopti.Ccc.Web.Areas.Permissions.Controllers
 
 		private bool nameIsInvalid(string newName)
 		{
-			return false;
+			return string.IsNullOrEmpty(newName);
+		}
+
+		[UnitOfWorkApiAction]
+		[Route("api/Permissions/Roles/{roleId}/Copy"),HttpPost]
+		public void CopyExistingRole(Guid roleId, [FromBody]RoleNameInput model)
+		{
+			var newRole = createNewRole(model.NewName);
+
+			var roleToCopy = _roleRepository.Get(roleId);
+			roleToCopy.ApplicationFunctionCollection.ForEach(newRole.AddApplicationFunction);
+			roleToCopy.AvailableData.AvailableBusinessUnits.ForEach(newRole.AvailableData.AddAvailableBusinessUnit);
+			roleToCopy.AvailableData.AvailableSites.ForEach(newRole.AvailableData.AddAvailableSite);
+			roleToCopy.AvailableData.AvailableTeams.ForEach(newRole.AvailableData.AddAvailableTeam);
+			roleToCopy.AvailableData.AvailablePersons.ForEach(newRole.AvailableData.AddAvailablePerson);
+			newRole.AvailableData.AvailableDataRange = roleToCopy.AvailableData.AvailableDataRange;
 		}
 	}
 }
