@@ -28,7 +28,6 @@
 		public const string OpenBudgets = "0050";
 		public const string AccessToPerformanceManager = "0040";
 		public const string PayrollIntegration = "0044";
-		public const string OpenAgentPortal = "0019";
 
 		// Global
 		public const string ModifyPersonAssignment = "0014";
@@ -75,20 +74,6 @@
 
 		// Budget
 		public const string RequestAllowances = "0075";
-
-		// Agent Portal
-		public const string OpenAsm = "0020";
-		public const string ModifyShiftCategoryPreferences = "0026";
-		public const string OpenMyReport = "0027";
-		public const string CreateTextRequest = "0028";
-		public const string CreateShiftTradeRequest = "0029";
-		public const string CreateAbsenceRequest = "0030";
-		public const string OpenScorecard = "0031";
-		public const string CreateStudentAvailability = "0036";
-		public const string ModifyExtendedPreferences = "0051";
-		public const string ViewSchedulePeriodCalculation = "0060";
-		public const string SetPlanningTimeBank = "0063";
-		public const string ViewCustomTeamSchedule = "0069";
 
 		// Intraday
 		public const string IntradayRealTimeAdherence = "0034";

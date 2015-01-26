@@ -296,19 +296,6 @@ namespace Teleopti.Ccc.Sdk.WcfService
 			dto.ModifyPersonAssignment = DefinedRaptorApplicationFunctionPaths.ModifyPersonAssignment;
 			dto.ViewUnpublishedSchedules = DefinedRaptorApplicationFunctionPaths.ViewUnpublishedSchedules;
 			dto.AccessToReports = DefinedRaptorApplicationFunctionPaths.AccessToReports;
-			dto.OpenAgentPortal = DefinedRaptorApplicationFunctionPaths.OpenAgentPortal;
-			dto.OpenAsm = DefinedRaptorApplicationFunctionPaths.OpenAsm;
-			dto.ModifyShiftCategoryPreferences = DefinedRaptorApplicationFunctionPaths.ModifyShiftCategoryPreferences;
-			dto.ModifyExtendedPreferences = DefinedRaptorApplicationFunctionPaths.ModifyExtendedPreferences;
-			dto.OpenMyReport = DefinedRaptorApplicationFunctionPaths.OpenMyReport;
-			dto.CreateTextRequest = DefinedRaptorApplicationFunctionPaths.CreateTextRequest;
-			dto.CreateShiftTradeRequest = DefinedRaptorApplicationFunctionPaths.CreateShiftTradeRequest;
-			dto.CreateAbsenceRequest = DefinedRaptorApplicationFunctionPaths.CreateAbsenceRequest;
-			dto.OpenScorecard = DefinedRaptorApplicationFunctionPaths.OpenScorecard;
-			dto.CreateStudentAvailability = DefinedRaptorApplicationFunctionPaths.CreateStudentAvailability;
-		    dto.ViewSchedulePeriodCalculation = DefinedRaptorApplicationFunctionPaths.ViewSchedulePeriodCalculation;
-            dto.SetPlanningTimeBank = DefinedRaptorApplicationFunctionPaths.SetPlanningTimeBank;
-            dto.ViewCustomTeamSchedule = DefinedRaptorApplicationFunctionPaths.ViewCustomTeamSchedule;
 
 			return dto;
 		}
@@ -1163,10 +1150,6 @@ namespace Teleopti.Ccc.Sdk.WcfService
 
 		public void SaveExtendedPreferenceTemplate(ExtendedPreferenceTemplateDto extendedPreferenceTemplateDto)
 		{
-			if (!PrincipalAuthorization.Instance().IsPermitted(DefinedRaptorApplicationFunctionPaths.ModifyExtendedPreferences))
-			{
-				throw new FaultException("The current user is not allowed to modify extended preferences.");
-			}
 			var repositoryFactory = new RepositoryFactory();
 			using (IUnitOfWork uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
 			{
@@ -1207,10 +1190,6 @@ namespace Teleopti.Ccc.Sdk.WcfService
 
 		public ICollection<ExtendedPreferenceTemplateDto> GetExtendedPreferenceTemplates(PersonDto personDto)
 		{
-            if (!PrincipalAuthorization.Instance().IsPermitted(DefinedRaptorApplicationFunctionPaths.ModifyExtendedPreferences))
-			{
-				throw new FaultException("The current user is not allowed to modify extended preferences.");
-			}
 			var repositoryFactory = new RepositoryFactory();
 			var dtoTemplates = new List<ExtendedPreferenceTemplateDto>();
 			using (IUnitOfWork uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())

@@ -92,7 +92,6 @@ namespace Teleopti.Ccc.Domain.Security.AuthorizationData
             licenseOptions.Add(new TeleoptiCccPilotCustomersForecastsLicenseOption());
             licenseOptions.Add(new TeleoptiCccPilotCustomersShiftsLicenseOption());
             licenseOptions.Add(new TeleoptiCccPilotCustomersPeopleLicenseOption());
-            licenseOptions.Add(new TeleoptiCccPilotCustomersAgentPortalLicenseOption());
             licenseOptions.Add(new TeleoptiCccPilotCustomersOptionsLicenseOption());
             licenseOptions.Add(new TeleoptiCccPilotCustomersSchedulerLicenseOption());
             licenseOptions.Add(new TeleoptiCccPilotCustomersIntradayLicenseOption());

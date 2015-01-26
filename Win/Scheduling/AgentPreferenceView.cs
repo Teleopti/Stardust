@@ -176,24 +176,8 @@ namespace Teleopti.Ccc.Win.Scheduling
 			tabControlAgentInfo.SelectedIndex = 1;
 			tabControlAgentInfo.SelectedIndex = 0;
 
-			if (!hasExtended())
-			{
-				tabControlAgentInfo.TabPages[2].Hide();
-				tabControlAgentInfo.TabPages[1].Hide();
-			}
-
 			_presenter.UpdateView();
 			_isInitialized = true;
-		}
-
-		private static bool hasExtended()
-		{
-			var licensedFunctions = (from o in LicenseSchema.GetActiveLicenseSchema(UnitOfWorkFactory.Current.Name).LicenseOptions
-									from f in o.EnabledApplicationFunctions
-									where (o.Enabled && f.FunctionPath == DefinedRaptorApplicationFunctionPaths.ModifyExtendedPreferences)
-									select f).ToList();
-
-			return licensedFunctions.Count != 0;
 		}
 
 		public void PopulateShiftCategories()

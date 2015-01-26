@@ -69,7 +69,6 @@ namespace Teleopti.Ccc.Domain.Security.AuthorizationData
 			CreateAndAddApplicationFunction(applicationFunctionList, DefinedRaptorApplicationFunctionPaths.OpenBudgets, "xxBudgets", DefinedRaptorApplicationFunctionForeignIds.OpenBudgets, 70);
 			CreateAndAddApplicationFunction(applicationFunctionList, DefinedRaptorApplicationFunctionPaths.AccessToPerformanceManager, "xxPerformanceManager", DefinedRaptorApplicationFunctionForeignIds.AccessToPerformanceManager, 80);
 			CreateAndAddApplicationFunction(applicationFunctionList, DefinedRaptorApplicationFunctionPaths.PayrollIntegration, "xxPayrollIntegration", DefinedRaptorApplicationFunctionForeignIds.PayrollIntegration, 200);
-			CreateAndAddApplicationFunction(applicationFunctionList, DefinedRaptorApplicationFunctionPaths.OpenAgentPortal, "xxAgentPortal", DefinedRaptorApplicationFunctionForeignIds.OpenAgentPortal, null);
 
 			// Global
 			CreateAndAddApplicationFunction(applicationFunctionList, DefinedRaptorApplicationFunctionPaths.ModifySchedule, "xxModifySchedule", DefinedRaptorApplicationFunctionForeignIds.ModifySchedule, null);
@@ -126,19 +125,6 @@ namespace Teleopti.Ccc.Domain.Security.AuthorizationData
 																			DefinedRaptorApplicationFunctionPaths.RequestAllowances,
 																						"xxRequestAllowances",
 																						DefinedRaptorApplicationFunctionForeignIds.RequestAllowances, null);
-			// Agent Portal
-			CreateAndAddApplicationFunction(applicationFunctionList, DefinedRaptorApplicationFunctionPaths.OpenAsm, "xxASM", DefinedRaptorApplicationFunctionForeignIds.OpenAsm, null);
-			CreateAndAddApplicationFunction(applicationFunctionList, DefinedRaptorApplicationFunctionPaths.ModifyShiftCategoryPreferences, "xxModifyShiftCategoryPreferences", DefinedRaptorApplicationFunctionForeignIds.ModifyShiftCategoryPreferences, null);
-			CreateAndAddApplicationFunction(applicationFunctionList, DefinedRaptorApplicationFunctionPaths.ModifyExtendedPreferences, "xxExtendedPreferences", DefinedRaptorApplicationFunctionForeignIds.ModifyExtendedPreferences, null);
-			CreateAndAddApplicationFunction(applicationFunctionList, DefinedRaptorApplicationFunctionPaths.OpenMyReport, "xxOpenMyReport", DefinedRaptorApplicationFunctionForeignIds.OpenMyReport, null);
-			CreateAndAddApplicationFunction(applicationFunctionList, DefinedRaptorApplicationFunctionPaths.CreateTextRequest, "xxCreateTextRequest", DefinedRaptorApplicationFunctionForeignIds.CreateTextRequest, null);
-			CreateAndAddApplicationFunction(applicationFunctionList, DefinedRaptorApplicationFunctionPaths.CreateShiftTradeRequest, "xxCreateShiftTradeRequest", DefinedRaptorApplicationFunctionForeignIds.CreateShiftTradeRequest, null);
-			CreateAndAddApplicationFunction(applicationFunctionList, DefinedRaptorApplicationFunctionPaths.CreateAbsenceRequest, "xxCreateAbsenceRequest", DefinedRaptorApplicationFunctionForeignIds.CreateAbsenceRequest, null);
-			CreateAndAddApplicationFunction(applicationFunctionList, DefinedRaptorApplicationFunctionPaths.OpenScorecard, "xxOpenScorecard", DefinedRaptorApplicationFunctionForeignIds.OpenScorecard, null);
-			CreateAndAddApplicationFunction(applicationFunctionList, DefinedRaptorApplicationFunctionPaths.CreateStudentAvailability, "xxCreateStudentAvailability", DefinedRaptorApplicationFunctionForeignIds.CreateStudentAvailability, null);
-			CreateAndAddApplicationFunction(applicationFunctionList, DefinedRaptorApplicationFunctionPaths.ViewSchedulePeriodCalculation, "xxViewSchedulePeriodCalculation", DefinedRaptorApplicationFunctionForeignIds.ViewSchedulePeriodCalculation, null);
-			CreateAndAddApplicationFunction(applicationFunctionList, DefinedRaptorApplicationFunctionPaths.SetPlanningTimeBank, "xxSetPlanningTimeBank", DefinedRaptorApplicationFunctionForeignIds.SetPlanningTimeBank, null);
-			CreateAndAddApplicationFunction(applicationFunctionList, DefinedRaptorApplicationFunctionPaths.ViewCustomTeamSchedule, "xxViewCustomTeamSchedule", DefinedRaptorApplicationFunctionForeignIds.ViewCustomTeamSchedule, null);
 
 			// Intraday
 			CreateAndAddApplicationFunction(applicationFunctionList, DefinedRaptorApplicationFunctionPaths.IntradayRealTimeAdherence, "xxRealTimeAdherence", DefinedRaptorApplicationFunctionForeignIds.IntradayRealTimeAdherence, null);

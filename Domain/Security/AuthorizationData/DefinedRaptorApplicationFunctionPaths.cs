@@ -23,7 +23,6 @@
 		public const string OpenBudgets = "Raptor/Budgets";
 		public const string AccessToPerformanceManager = "Raptor/PerformanceManager";
 		public const string PayrollIntegration = "Raptor/PayrollIntegration";
-		public const string OpenAgentPortal = "Raptor/AgentPortal";
 		public const string MyTimeWeb = "Raptor/MyTimeWeb";
 		public const string Anywhere = "Raptor/Anywhere";
 
@@ -72,20 +71,6 @@
 
 		// Budget
 		public const string RequestAllowances = "Raptor/Budgets/RequestAllowances";
-
-		// Agent Portal
-		public const string OpenAsm = "Raptor/AgentPortal/ASM";
-		public const string ModifyShiftCategoryPreferences = "Raptor/AgentPortal/ShiftCategoryPreferences";
-		public const string ModifyExtendedPreferences = "Raptor/AgentPortal/ExtendedPreferences";
-		public const string OpenMyReport = "Raptor/AgentPortal/MyReport";
-		public const string CreateTextRequest = "Raptor/AgentPortal/TextRequests";
-		public const string CreateShiftTradeRequest = "Raptor/AgentPortal/ShiftTradeRequests";
-		public const string CreateAbsenceRequest = "Raptor/AgentPortal/AbsenceRequests";
-		public const string OpenScorecard = "Raptor/AgentPortal/Scorecard";
-		public const string CreateStudentAvailability = "Raptor/AgentPortal/StudentAvailability";
-		public const string ViewSchedulePeriodCalculation = "Raptor/AgentPortal/ViewSchedulePeriodCalculation";
-		public const string SetPlanningTimeBank = "Raptor/AgentPortal/SetPlanningTimeBank";
-		public const string ViewCustomTeamSchedule = "Raptor/AgentPortal/ViewCustomTeamSchedule";
 
 		// Intraday
 		public const string IntradayRealTimeAdherence = "Raptor/Intraday/RTA";

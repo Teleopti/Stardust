@@ -38,39 +38,6 @@ namespace Teleopti.Ccc.Sdk.LogicTest.OldTests
 
             _target.AccessToReports = DefinedRaptorApplicationFunctionPaths.AccessToReports;
             Assert.AreEqual(_target.AccessToReports, DefinedRaptorApplicationFunctionPaths.AccessToReports);
-
-            _target.OpenAgentPortal = DefinedRaptorApplicationFunctionPaths.OpenAgentPortal;
-            Assert.AreEqual(_target.OpenAgentPortal, DefinedRaptorApplicationFunctionPaths.OpenAgentPortal);
-
-            _target.OpenAsm = DefinedRaptorApplicationFunctionPaths.OpenAsm;
-            Assert.AreEqual(_target.OpenAsm, DefinedRaptorApplicationFunctionPaths.OpenAsm);
-
-            _target.ModifyShiftCategoryPreferences = DefinedRaptorApplicationFunctionPaths.ModifyShiftCategoryPreferences;
-            Assert.AreEqual(_target.ModifyShiftCategoryPreferences, DefinedRaptorApplicationFunctionPaths.ModifyShiftCategoryPreferences);
-
-            _target.ModifyExtendedPreferences = DefinedRaptorApplicationFunctionPaths.ModifyExtendedPreferences;
-            Assert.AreEqual(_target.ModifyExtendedPreferences, DefinedRaptorApplicationFunctionPaths.ModifyExtendedPreferences);
-
-            _target.OpenMyReport = DefinedRaptorApplicationFunctionPaths.OpenMyReport;
-            Assert.AreEqual(_target.OpenMyReport, DefinedRaptorApplicationFunctionPaths.OpenMyReport);
-
-            _target.CreateTextRequest = DefinedRaptorApplicationFunctionPaths.CreateTextRequest;
-            Assert.AreEqual(_target.CreateTextRequest, DefinedRaptorApplicationFunctionPaths.CreateTextRequest);
-
-            _target.CreateShiftTradeRequest = DefinedRaptorApplicationFunctionPaths.CreateShiftTradeRequest;
-            Assert.AreEqual(_target.CreateShiftTradeRequest, DefinedRaptorApplicationFunctionPaths.CreateShiftTradeRequest);
-
-            _target.CreateAbsenceRequest = DefinedRaptorApplicationFunctionPaths.CreateAbsenceRequest;
-            Assert.AreEqual(_target.CreateAbsenceRequest, DefinedRaptorApplicationFunctionPaths.CreateAbsenceRequest);
-
-            _target.OpenScorecard = DefinedRaptorApplicationFunctionPaths.OpenScorecard;
-            Assert.AreEqual(_target.OpenScorecard, DefinedRaptorApplicationFunctionPaths.OpenScorecard);
-
-            _target.CreateStudentAvailability = DefinedRaptorApplicationFunctionPaths.CreateStudentAvailability;
-            Assert.AreEqual(_target.CreateStudentAvailability, DefinedRaptorApplicationFunctionPaths.CreateStudentAvailability);
-            
-            _target.ViewCustomTeamSchedule = DefinedRaptorApplicationFunctionPaths.ViewCustomTeamSchedule;
-            Assert.AreEqual(_target.ViewCustomTeamSchedule, DefinedRaptorApplicationFunctionPaths.ViewCustomTeamSchedule);
         }
     }
 }

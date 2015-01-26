@@ -1089,7 +1089,6 @@
     <Compile Include="Security\LicenseOptions\TeleoptiCccPilotCustomersIntradayLicenseOptionTest.cs" />
     <Compile Include="Security\LicenseOptions\TeleoptiCccPilotCustomersSchedulerLicenseOptionTest.cs" />
     <Compile Include="Security\LicenseOptions\TeleoptiCccPilotCustomersOptionsLicenseOptionTest.cs" />
-    <Compile Include="Security\LicenseOptions\TeleoptiCccPilotCustomersAgentPortalLicenseOptionTest.cs" />
     <Compile Include="Security\LicenseOptions\TeleoptiCccPilotCustomersPeopleLicenseOptionTest.cs" />
     <Compile Include="Security\LicenseOptions\TeleoptiCccPilotCustomersShiftsLicenseOptionTest.cs" />
     <Compile Include="Security\LicenseOptions\TeleoptiCccPayrollIntegrationLicenseOptionTest.cs" />
