@@ -45,18 +45,6 @@ namespace Teleopti.Ccc.WinCode.Common.Configuration
 			set { ContainedEntity.Team = value; }
 		}
 
-		public string SettingStatus
-		{
-			get
-			{
-				if (ContainedEntity.GamificationSetting != null && ContainedEntity.GamificationSetting.Description.Name != "")
-				{
-					return ContainedEntity.GamificationSetting.IsDeleted ? Resources.Deleted : Resources.Active;
-				}
-				return " ";
-			}
-		}
-
 		private void setContainedEntity(ITeamGamificationSetting teamSetting)
         {
 			ContainedEntity = teamSetting.EntityClone();

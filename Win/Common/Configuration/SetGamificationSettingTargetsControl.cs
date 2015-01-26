@@ -94,8 +94,6 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 																			  typeof(IGamificationSetting));
 			gridColumns.Add(gamificationSettingDropdownColumn);
 
-			gridColumns.Add(new SFGridDescriptionNameColumn<TeamGamificationSettingModel>("SettingStatus", Resources.Status));
-			
 			gridControlSelectSettingForTeams.RowCount = gridRowCount();
 			gridControlSelectSettingForTeams.ColCount = gridColumns.Count - 1;  //col index starts on 0
 			return new ReadOnlyCollection<SFGridColumnBase<TeamGamificationSettingModel>>(gridColumns);
