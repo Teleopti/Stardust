@@ -34,6 +34,7 @@ define([
 		this.Today = moment.tz(timezoneCurrent.IanaTimeZone()).startOf('day');
 		this.StartDate = ko.observable(moment.tz(timezoneCurrent.IanaTimeZone()).startOf('day'));
 		this.EndDate = ko.observable(moment.tz(timezoneCurrent.IanaTimeZone()).startOf('day').add(1, 'day'));
+		this.ApplyingSeatPlanning = ko.observable(false);
 
 		//Temporary for initial prototype...load locations from json string.
 		this.RootLocation = locations.call().getLocations()[0];
@@ -125,6 +126,14 @@ define([
 			return self.StartDate() < self.Today;
 		});
 
+		this.NoLocationSelected = function () {
+			return (self.LocationTreeListViewModel.getSelectedLeafNodes() == 0);
+		};
+
+		this.NoTeamSelected = function () {
+			return (self.TeamsTreeListViewModel.getSelectedLeafNodes() == 0);
+		};
+
 		this.ErrorMessages = ko.computed(function () {
 			var result = [];
 			if (self.StartDateGreaterThanEndDate()) {
@@ -132,6 +141,15 @@ define([
 			}
 			if (self.StartDateLessThanToday()) {
 				result.push({ error: resources.StartDateMustBeGreaterThanToday });
+			}
+
+			if (self.ApplyingSeatPlanning()) {
+				if (self.NoLocationSelected()) {
+					result.push({ error: resources.AnyLocationShouldBeSelected });
+				}
+				if (self.NoTeamSelected()) {
+					result.push({ error: resources.AnyTeamShouldBeSelected });
+				}
 			}
 			return result;
 		});
@@ -144,7 +162,13 @@ define([
 			var selectedLocations = this.LocationTreeListViewModel.getSelectedLeafNodes();
 			var selectedTeams = this.TeamsTreeListViewModel.getSelectedLeafNodes();
 
+			self.ApplyingSeatPlanning(true);
+
 			//Robtodo: Validation routines will be called from here.
+
+			if (selectedLocations.length == 0 || selectedTeams.length == 0) {
+				return;
+			}
 
 			var addSeatPlanMgr = new addSeatPlan();
 

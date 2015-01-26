@@ -84,6 +84,8 @@ namespace Teleopti.Ccc.Web.Areas.SeatPlanner.Controllers
 					UserTexts.Resources.ServerUnavailable,
 					UserTexts.Resources.StartDateMustBeSmallerThanEndDate,
 					UserTexts.Resources.StartDateMustBeGreaterThanToday,
+					UserTexts.Resources.AnyLocationShouldBeSelected,
+					UserTexts.Resources.AnyTeamShouldBeSelected,
 					UserTexts.Resources.Start,
 					UserTexts.Resources.Send,
 					UserTexts.Resources.Save,

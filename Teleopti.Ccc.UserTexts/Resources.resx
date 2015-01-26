@@ -12769,4 +12769,10 @@ Reduce the complexity to use these shifts.</value>
   <data name="StartDateMustBeGreaterThanToday" xml:space="preserve">
     <value>Start date must be greater than today</value>
   </data>
+  <data name="AnyLocationShouldBeSelected" xml:space="preserve">
+    <value>Any location should be selected</value>
+  </data>
+  <data name="AnyTeamShouldBeSelected" xml:space="preserve">
+    <value>Any team should be selected</value>
+  </data>
 </root>

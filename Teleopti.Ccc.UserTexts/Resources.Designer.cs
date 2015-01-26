@@ -2294,6 +2294,24 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Any location should be selected.
+        /// </summary>
+        public static string AnyLocationShouldBeSelected {
+            get {
+                return ResourceManager.GetString("AnyLocationShouldBeSelected", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Any team should be selected.
+        /// </summary>
+        public static string AnyTeamShouldBeSelected {
+            get {
+                return ResourceManager.GetString("AnyTeamShouldBeSelected", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Anywhere.
         /// </summary>
         public static string Anywhere {

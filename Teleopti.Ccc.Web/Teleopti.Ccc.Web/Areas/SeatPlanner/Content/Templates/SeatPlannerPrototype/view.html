@@ -4,9 +4,9 @@
 	<div><span data-bind="text: Resources.LoadingThreeDots"></span></div>
 	<!-- /ko -->
 	<!-- ko ifnot: Loading -->
-	<!--<div class="alert alert-success" role="alert">
+	<div class="alert alert-success" role="alert">
 		Welcome to Seat Planner, take a chair and relax!
-	</div>-->
+	</div>
 
 	<div class="alert alert-danger" data-bind="visible:HasErrors" role="alert">
 		<div data-bind="foreach:ErrorMessages">
@@ -62,7 +62,7 @@
 			<div class="panel panel-default treelist">
 				<div class="panel-heading">Choose Locations to Allocate Seating:</div>
 				<div class="panel-body">
-					<ul class="treeViewList" data-bind="template: {name: 'tree-node', data: GetTreeNodesForLocations}"></ul>
+					<ul class="treeViewList" data-bind="template: {name: 'tree-node', if: GetTreeNodesForLocations, data: GetTreeNodesForLocations}"></ul>
 
 				</div>
 
