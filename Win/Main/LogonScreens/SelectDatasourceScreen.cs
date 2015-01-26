@@ -44,11 +44,18 @@ namespace Teleopti.Ccc.Win.Main.LogonScreens
 				comboBoxAdvDataSource.DataSource = _availableApplicationDataSources;
 			}
 
+			setCorrectList();
 			comboBoxAdvDataSource.Select();
-			radioButtonAdvWindows.Checked = _model.AuthenticationType == AuthenticationTypeOption.Windows;
-			radioButtonAdvApplication.Checked = _model.AuthenticationType == AuthenticationTypeOption.Application;
+			
 			comboBoxAdvDataSource.Visible = _showDataSourceSelection;
 			//labelChooseDataSource.Visible = _showDataSourceSelection;
+		}
+
+		private void setCorrectList()
+		{
+			radioButtonAdvWindows.Checked = _model.AuthenticationType == AuthenticationTypeOption.Windows;
+			radioButtonAdvApplication.Checked = _model.AuthenticationType == AuthenticationTypeOption.Application;
+			comboBoxAdvDataSource.DataSource = radioButtonAdvWindows.Checked ? _logonableWindowsDataSources : _availableApplicationDataSources;
 		}
 
 		public void GetData()
