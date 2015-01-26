@@ -599,6 +599,9 @@ namespace Teleopti.Ccc.WebTest.Core.IoC
 			                .Should().Not.Be.Null();
 			requestContainer.Resolve<IHandleCommand<RemovePersonAbsenceCommand>>()
 							.Should().Not.Be.Null();
+			requestContainer.Resolve<IHandleCommand<AddSeatPlanCommand>>()
+							.Should().Not.Be.Null();
+
 		}
 
 		[Test]

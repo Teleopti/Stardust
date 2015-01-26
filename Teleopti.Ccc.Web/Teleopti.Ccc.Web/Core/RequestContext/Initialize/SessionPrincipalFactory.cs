@@ -46,8 +46,7 @@ namespace Teleopti.Ccc.Web.Core.RequestContext.Initialize
 				var person = personRepository.Load(sessionData.PersonId);
 
 				var businessUnitRepository = _repositoryFactory.CreateBusinessUnitRepository(uow);
-				var businessUnit = businessUnitRepository.Load(sessionData.BusinessUnitId);
-
+				var businessUnit = businessUnitRepository.Get (sessionData.BusinessUnitId);
 				principal = makePrincipalAndHandleThatPersonMightNotExist(dataSource.Application, personRepository, dataSource, businessUnit, person);
 			}
 

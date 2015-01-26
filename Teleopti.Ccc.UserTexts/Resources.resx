@@ -12762,4 +12762,11 @@ Reduce the complexity to use these shifts.</value>
   <data name="Setting" xml:space="preserve">
     <value>Setting</value>
   </data>
+   <data name="SeatPlanner" xml:space="preserve">
+    <value>Seat Planner</value>
+    <comment>The title of the Seat Planner Application</comment>
+  </data>
+  <data name="StartDateMustBeGreaterThanToday" xml:space="preserve">
+    <value>Start date must be greater than today</value>
+  </data>
 </root>

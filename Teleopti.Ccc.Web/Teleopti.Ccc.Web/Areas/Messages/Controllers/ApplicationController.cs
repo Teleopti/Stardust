@@ -9,6 +9,7 @@ using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Web.Areas.Messages.Models;
+using Teleopti.Ccc.Web.Areas.Start.Core.Menu;
 using Teleopti.Ccc.Web.Filters;
 using Teleopti.Interfaces.Domain;
 
@@ -79,6 +80,7 @@ namespace Teleopti.Ccc.Web.Areas.Messages.Controllers
 				PersonId = ((IUnsafePerson)principal).Person.Id,
 				IsMyTimeAvailable = _principalAuthorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.MyTimeWeb),
 				IsAnywhereAvailable = _principalAuthorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.Anywhere),
+				IsSeatPlannerAvailable = _principalAuthorization.IsPermitted (DefinedRaptorApplicationFunctionPaths.SeatPlanner)
 			}, JsonRequestBehavior.AllowGet);
 		}
 

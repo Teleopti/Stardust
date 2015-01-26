@@ -5,6 +5,6 @@ namespace Teleopti.Ccc.Web.Areas.Start.Core.Menu
 {
 	public interface IMenuViewModelFactory
 	{
-		IEnumerable<ApplicationViewModel> CreateMenyViewModel();
+		IEnumerable<ApplicationViewModel> CreateMenuViewModel();
 	}
 }

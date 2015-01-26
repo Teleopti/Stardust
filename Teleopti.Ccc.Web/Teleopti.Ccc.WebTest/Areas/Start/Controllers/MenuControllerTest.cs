@@ -20,7 +20,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Start.Controllers
 			using (var target = new MenuController(menuViewModelFactory))
 			{
 				var applicationViewModel = new ApplicationViewModel();
-				menuViewModelFactory.Stub(x => x.CreateMenyViewModel()).Return(new[] { applicationViewModel });
+				menuViewModelFactory.Stub(x => x.CreateMenuViewModel()).Return(new[] { applicationViewModel });
 
 				var result = target.Applications();
 

@@ -157,6 +157,7 @@
     <Compile Include="AgentInfo\Requests\ShiftTradeRequestIsAfterLoadedPeriodSpecificationTest.cs" />
     <Compile Include="ApplicationLayer\AddActivityCommandHandlerTest.cs" />
     <Compile Include="ApplicationLayer\AddIntradayAbsenceCommandHandlerTest.cs" />
+    <Compile Include="ApplicationLayer\AddSeatPlanCommandHandlerTest.cs" />
     <Compile Include="ApplicationLayer\FakePersonAbsenceWriteSideRepository.cs" />
     <Compile Include="ApplicationLayer\ModifyPersonAbsenceCommandHandlerTest.cs" />
     <Compile Include="ApplicationLayer\Commands\AddIntradayAbsenceCommandTest.cs" />

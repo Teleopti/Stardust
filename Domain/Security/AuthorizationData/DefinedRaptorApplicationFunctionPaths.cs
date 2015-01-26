@@ -25,6 +25,7 @@
 		public const string PayrollIntegration = "Raptor/PayrollIntegration";
 		public const string MyTimeWeb = "Raptor/MyTimeWeb";
 		public const string Anywhere = "Raptor/Anywhere";
+		public const string SeatPlanner = "Raptor/SeatPlanner";
 
 
 		// Global

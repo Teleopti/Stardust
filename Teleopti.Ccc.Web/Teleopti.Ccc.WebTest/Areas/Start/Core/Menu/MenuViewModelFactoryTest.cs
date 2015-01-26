@@ -18,7 +18,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Start.Core.Menu
 		{
 			var target = new MenuViewModelFactory(new FakePermissionProvider());
 
-			var result = target.CreateMenyViewModel();
+			var result = target.CreateMenuViewModel();
 
 			result.Count().Should().Be.EqualTo(DefinedApplicationAreas.ApplicationAreas.Count());
 		}
@@ -30,7 +30,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Start.Core.Menu
 			permissionProvider.Stub(x => x.HasApplicationFunctionPermission(DefinedRaptorApplicationFunctionPaths.MyTimeWeb)).Return(true);
 			var target = new MenuViewModelFactory(permissionProvider);
 
-			var result = target.CreateMenyViewModel();
+			var result = target.CreateMenuViewModel();
 
 			result.Single().Area.Should().Be.EqualTo("MyTime");
 			result.Single().Name.Should().Be.EqualTo(Resources.MyTime);
@@ -43,11 +43,27 @@ namespace Teleopti.Ccc.WebTest.Areas.Start.Core.Menu
 			permissionProvider.Stub(x => x.HasApplicationFunctionPermission(DefinedRaptorApplicationFunctionPaths.Anywhere)).Return(true);
 			var target = new MenuViewModelFactory(permissionProvider);
 
-			var result = target.CreateMenyViewModel();
+			var result = target.CreateMenuViewModel();
 
 			result.Single().Area.Should().Be.EqualTo("Anywhere");
 			result.Single().Name.Should().Be.EqualTo(getMenuText(DefinedRaptorApplicationFunctionPaths.Anywhere));
 		}
+
+
+		[Test]
+		public void ShouldCreateModelForUserWithAccessOnlyToSeatPlanner()
+		{
+			var permissionProvider = MockRepository.GenerateMock<IPermissionProvider>();
+			permissionProvider.Stub(x => x.HasApplicationFunctionPermission(DefinedRaptorApplicationFunctionPaths.SeatPlanner)).Return(true);
+			var target = new MenuViewModelFactory(permissionProvider);
+
+			var result = target.CreateMenuViewModel();
+
+			result.Single().Area.Should().Be.EqualTo("SeatPlanner");
+			result.Single().Name.Should().Be.EqualTo(getMenuText(DefinedRaptorApplicationFunctionPaths.SeatPlanner));
+			
+		}
+
 
 		private string getMenuText(string applicationFunctionPath)
 		{

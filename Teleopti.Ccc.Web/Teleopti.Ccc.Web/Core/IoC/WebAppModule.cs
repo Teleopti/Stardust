@@ -24,6 +24,7 @@ using Teleopti.Ccc.Web.Areas.Messages.Core.Ioc;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.IoC;
 using Teleopti.Ccc.Web.Areas.PerformanceTool.Core.IoC;
 using Teleopti.Ccc.Web.Areas.Rta.Core.IoC;
+using Teleopti.Ccc.Web.Areas.SeatPlanner.Core.IOC;
 using Teleopti.Ccc.Web.Areas.SSO.Core.IoC;
 using Teleopti.Ccc.Web.Areas.Start.Core.IoC;
 using Teleopti.Ccc.Web.Areas.Tennant.Core;
@@ -72,6 +73,7 @@ namespace Teleopti.Ccc.Web.Core.IoC
 			builder.RegisterModule<SSOAreaModule>();
 			builder.RegisterModule(new StartAreaModule(_configuration));
 			builder.RegisterModule<AnywhereAreaModule>();
+			
 			builder.RegisterModule<PerformanceToolAreaModule>();
 			builder.RegisterModule<ForecastingAreaModule>();
 
@@ -104,6 +106,7 @@ namespace Teleopti.Ccc.Web.Core.IoC
 
 			builder.RegisterModule(new ConfigurationSettingsReader());
 			builder.RegisterModule<TennantModule>();
+			builder.RegisterModule<SeatPlannerAreaModule>();
 		}
 	}
 }

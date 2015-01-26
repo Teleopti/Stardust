@@ -15,7 +15,7 @@ namespace Teleopti.Ccc.Web.Areas.Start.Controllers
 		[HttpGet]
 		public JsonResult Applications()
 		{
-			return Json(_menuViewModelFactory.CreateMenyViewModel(), JsonRequestBehavior.AllowGet);
+			return Json(_menuViewModelFactory.CreateMenuViewModel(), JsonRequestBehavior.AllowGet);
 		}
     }
 }

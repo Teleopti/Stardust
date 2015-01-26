@@ -144,6 +144,8 @@
     <Compile Include="ApplicationLayer\Commands\AddActivityCommandHandler.cs" />
     <Compile Include="ApplicationLayer\Commands\AddIntradayAbsenceCommand.cs" />
     <Compile Include="ApplicationLayer\Commands\AddIntradayAbsenceCommandHandler.cs" />
+    <Compile Include="ApplicationLayer\Commands\AddSeatPlanCommand.cs" />
+    <Compile Include="ApplicationLayer\Commands\AddSeatPlanCommandHandler.cs" />
     <Compile Include="ApplicationLayer\Commands\ModifyPersonAbsenceCommandHandler.cs" />
     <Compile Include="ApplicationLayer\Commands\ITrackableCommand.cs" />
     <Compile Include="ApplicationLayer\Commands\ModifyPersonAbsenceCommand.cs" />
@@ -178,6 +180,7 @@
     <Compile Include="ApplicationLayer\Events\PersonTerminatedEvent.cs" />
     <Compile Include="ApplicationLayer\AdherencePercentageReadModelUpdatedMessage.cs" />
     <Compile Include="ApplicationLayer\Events\ScheduledResourcesChangedEvent.cs" />
+    <Compile Include="ApplicationLayer\Events\SeatPlanAddedEvent.cs" />
     <Compile Include="ApplicationLayer\IEventPopulatingPublisher.cs" />
     <Compile Include="ApplicationLayer\IEventPublisher.cs" />
     <Compile Include="ApplicationLayer\IEventsPublisher.cs" />
@@ -1366,6 +1369,7 @@
     <Compile Include="Scheduling\WorkShiftWorkTime.cs" />
     <Compile Include="Scheduling\WorkTimeMinMax.cs" />
     <Compile Include="Scheduling\WorkTimeMinMaxCalculator.cs" />
+    <Compile Include="SeatPlanning\SeatPlan.cs" />
     <Compile Include="Security\AuthorizationEntities\AllFunctions.cs" />
     <Compile Include="Security\AuthorizationEntities\ApplicationFunctionsProvider.cs" />
     <Compile Include="Security\AuthorizationEntities\IApplicationFunctionsProvider.cs" />

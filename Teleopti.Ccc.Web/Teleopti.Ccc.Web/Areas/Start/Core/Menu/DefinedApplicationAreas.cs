@@ -27,6 +27,14 @@ namespace Teleopti.Ccc.Web.Areas.Start.Core.Menu
 		                                                                            					.Anywhere,
 		                                                                            				Area = "Anywhere",
 		                                                                            				Name = GetMenuText(DefinedRaptorApplicationFunctionPaths.Anywhere)
+		                                                                            			},
+																								new ApplicationArea
+		                                                                            			{
+		                                                                            				ApplicationFunctionPath =
+		                                                                            					DefinedRaptorApplicationFunctionPaths
+		                                                                            					.SeatPlanner,
+		                                                                            				Area = "SeatPlanner",
+		                                                                            				Name = GetMenuText(DefinedRaptorApplicationFunctionPaths.SeatPlanner)
 		                                                                            			}
 		                                                                            	};
 

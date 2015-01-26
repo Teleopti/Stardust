@@ -14,7 +14,7 @@ namespace Teleopti.Ccc.Web.Areas.Start.Core.Menu
 			_permissionProvider = permissionProvider;
 		}
 
-		public IEnumerable<ApplicationViewModel> CreateMenyViewModel()
+		public IEnumerable<ApplicationViewModel> CreateMenuViewModel()
 		{
 			return
 				DefinedApplicationAreas.ApplicationAreas.Where(

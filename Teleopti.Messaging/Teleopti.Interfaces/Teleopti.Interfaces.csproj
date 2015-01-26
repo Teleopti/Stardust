@@ -146,6 +146,7 @@
     <Compile Include="Domain\INotificationMessage.cs" />
     <Compile Include="Domain\INotificationSender.cs" />
     <Compile Include="Domain\IQueueStatsModel.cs" />
+    <Compile Include="Domain\ISeatPlan.cs" />
     <Compile Include="Domain\IShiftExchangeOffer.cs" />
     <Compile Include="Domain\IStaffingCalculatorServiceFacade.cs" />
     <Compile Include="Domain\ITeamGamificationSetting.cs" />

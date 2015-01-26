@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.Collection;
+using Teleopti.Ccc.Domain.SeatPlanning;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.Security.AuthorizationEntities;
 using Teleopti.Ccc.Infrastructure.Repositories;
@@ -36,6 +37,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Configurable
 		public bool AccessToExtendedPreferences { get; set; }
 		public bool AccessToMytimeWeb { get; set; }
 		public bool AccessToAnywhere { get; set; }
+		public bool AccessToSeatPlanner { get; set; }
 		public bool AccessToAsm { get; set; }
 		public bool AccessToTextRequests { get; set; }
 		public bool AccessToAbsenceRequests { get; set; }
@@ -81,6 +83,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Configurable
 			AccessToShiftTradeRequests = true;
 			AccessToShiftTradeBulletinBoard = true;
 			AccessToAnywhere = false;
+			AccessToSeatPlanner = false;
 			AccessToViewAllGroupPages = false;
 			AccessToCalendarLink = false;
 			AccessToOvertimeAvailability = false;
@@ -273,6 +276,11 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Configurable
 				applicationFunctions = from f in applicationFunctions
 															 where f.FunctionPath != DefinedRaptorApplicationFunctionPaths.OpenForecasterPage
 															 select f;
+
+			if (!AccessToSeatPlanner)
+				applicationFunctions = from f in applicationFunctions
+									   where f.FunctionPath != DefinedRaptorApplicationFunctionPaths.SeatPlanner
+									   select f;
 
 			return applicationFunctions;
 		}

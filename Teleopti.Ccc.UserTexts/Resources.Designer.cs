@@ -22046,6 +22046,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Seat Planner.
+        /// </summary>
+        public static string SeatPlanner {
+            get {
+                return ResourceManager.GetString("SeatPlanner", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to This system is licensed to &quot;{0}&quot; according to the terms and conditions of the license agreement and the product activation key will expire {1}.
         ///
         ///The product activation key covers a maximum of {2} seats.
@@ -24553,6 +24562,15 @@ namespace Teleopti.Ccc.UserTexts {
         public static string StartDate {
             get {
                 return ResourceManager.GetString("StartDate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Start date must be greater than today.
+        /// </summary>
+        public static string StartDateMustBeGreaterThanToday {
+            get {
+                return ResourceManager.GetString("StartDateMustBeGreaterThanToday", resourceCulture);
             }
         }
         
