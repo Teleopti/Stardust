@@ -398,6 +398,11 @@
     <Compile Include="Areas\Anywhere\Core\GroupScheduleViewModelMapper.cs" />
     <Compile Include="Areas\Anywhere\Core\AgentViewModel.cs" />
     <Compile Include="Areas\Anywhere\Core\TeamViewModel.cs" />
+    <Compile Include="Areas\Permissions\Controllers\FunctionsForRoleInput.cs" />
+    <Compile Include="Areas\Permissions\Controllers\RenameRoleInput.cs" />
+    <Compile Include="Areas\Permissions\PermissionsAreaRegistration.cs" />
+    <Compile Include="Areas\Permissions\Controllers\RolesController.cs" />
+    <Compile Include="Areas\Permissions\Controllers\NewRoleInput.cs" />
     <Compile Include="Areas\Rta\Controllers\SyncController.cs" />
     <Compile Include="Areas\Start\Core\Authentication\Services\MultiTennantAuthenticator.cs" />
     <Compile Include="Areas\Tennant\Core\ConvertDataToOldUserDetailDomain.cs" />

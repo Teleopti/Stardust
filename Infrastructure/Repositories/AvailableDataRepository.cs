@@ -1,6 +1,4 @@
-﻿#region
-
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using NHibernate;
 using NHibernate.Transform;
@@ -10,32 +8,19 @@ using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
 
-#endregion
-
 namespace Teleopti.Ccc.Infrastructure.Repositories
 {
-    /// <summary>
-    /// Repository for SiteRepository
-    /// </summary>
     public class AvailableDataRepository : Repository<IAvailableData>,IAvailableDataRepository
     {
-        /// <summary>
-        /// Initializes a new instance of the <see cref="AvailableDataRepository"/> class.
-        /// </summary>
-        /// <param name="unitOfWork">The unitofwork</param>
         public AvailableDataRepository(IUnitOfWork unitOfWork)
             : base(unitOfWork)
         {
         }
 
-        /// <summary>
-        /// Reads all available data
-        /// </summary>
-        /// <returns>The AvailableData list.</returns>
-        /// <remarks>
-        /// Created by: Dinesh Ranasinghe
-        /// Created date: 2008-05-01
-        /// </remarks>
+	    public AvailableDataRepository(ICurrentUnitOfWork currentUnitOfWork) : base(currentUnitOfWork)
+	    {
+	    }
+
         public virtual IList<IAvailableData> LoadAllAvailableData()
         {
             var q1 = Session.CreateCriteria(typeof(AvailableData))
@@ -61,15 +46,6 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
             return new List<IAvailableData>(CollectionHelper.ToDistinctGenericCollection<IAvailableData>(res[0]));
         }
 
-        /// <summary>
-        /// Loads all collections in available data.
-        /// </summary>
-        /// <param name="availableData">The available data.</param>
-        /// <returns></returns>
-        /// <remarks>
-        /// Created by: Muhamad Risath
-        /// Created date: 11/14/2008
-        /// </remarks>
         public IAvailableData LoadAllCollectionsInAvailableData(IAvailableData availableData)
         {
             if (!UnitOfWork.Contains(availableData))
@@ -82,7 +58,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
             if (!LazyLoadingManager.IsInitialized(availableData.AvailableTeams))
                 LazyLoadingManager.Initialize(availableData.AvailableTeams);
 
-            BusinessUnitRepository businessUnitRepository = new BusinessUnitRepository(UnitOfWork);
+            var businessUnitRepository = new BusinessUnitRepository(UnitOfWork);
             foreach (IBusinessUnit businessUnit in availableData.AvailableBusinessUnits)
             {
                 if (!base.UnitOfWork.Contains(businessUnit))
@@ -100,6 +76,5 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 
             return availableData;
         }
-
     }
 }
