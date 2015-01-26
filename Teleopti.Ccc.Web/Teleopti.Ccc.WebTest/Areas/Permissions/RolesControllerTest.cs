@@ -5,7 +5,6 @@ using System.Net.Http;
 using NUnit.Framework;
 using Rhino.Mocks;
 using SharpTestsEx;
-using Teleopti.Ccc.Domain.AgentInfo;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
@@ -26,17 +25,30 @@ namespace Teleopti.Ccc.WebTest.Areas.Permissions
 			var target = new RolesController(roleRepository, null, dataRepository, new CurrentBusinessUnit(new FakeCurrentIdentity("Pelle")));
 			target.Request = new HttpRequestMessage();
 
-			bool itemAdded = false;
+			IApplicationRole addedItem = null;
 			roleRepository.Stub(x => x.Add(null)).IgnoreArguments().Callback<IApplicationRole>(item =>
 			{
-				item.SetId(Guid.NewGuid());
-				itemAdded = true;
+				addedItem = item;
 				return true;
 			});
 
-			target.Post(new NewRoleInput { Name = "Admin" });
+			target.Post(new NewRoleInput { Description = "Site Administrator" });
 
-			itemAdded.Should().Be.True();
+			addedItem.Name.Should().Be.EqualTo("SiteAdministrator");
+			addedItem.DescriptionText.Should().Be.EqualTo("Site Administrator");
+		}
+
+		[Test]
+		public void ShouldNotCreateNewRoleWhenGivenNameTooLong()
+		{
+			var roleRepository = MockRepository.GenerateMock<IApplicationRoleRepository>();
+			var dataRepository = MockRepository.GenerateMock<IAvailableDataRepository>();
+			var target = new RolesController(roleRepository, null, dataRepository, new CurrentBusinessUnit(new FakeCurrentIdentity("Pelle")));
+			target.Request = new HttpRequestMessage();
+
+			target.Post(new NewRoleInput { Description = "Admin".PadRight(256,'a') });
+
+			roleRepository.AssertWasNotCalled(x => x.Add(null), o => o.IgnoreArguments());
 		}
 
 		[Test]
@@ -79,6 +91,102 @@ namespace Teleopti.Ccc.WebTest.Areas.Permissions
 		}
 
 		[Test]
+		public void ShouldAddNewAvailableDataToRole()
+		{
+			var roleRepository = MockRepository.GenerateMock<IApplicationRoleRepository>();
+			var dataRepository = MockRepository.GenerateMock<IAvailableDataRepository>();
+			var target = new RolesController(roleRepository, null, dataRepository, new CurrentBusinessUnit(new FakeCurrentIdentity("Pelle")));
+
+			var roleId = Guid.NewGuid();
+			var businessUnitId = Guid.NewGuid();
+			var siteId = Guid.NewGuid();
+			var teamId = Guid.NewGuid();
+			var personId = Guid.NewGuid();
+
+			var agentRole = new ApplicationRole { Name = "Agent", AvailableData = new AvailableData()};
+			
+			roleRepository.Stub(x => x.Get(roleId)).Return(agentRole);
+
+			target.AddAvailableData(roleId,
+				new AvailableDataForRoleInput
+				{
+					BusinessUnits = new Collection<Guid> {businessUnitId},
+					Sites = new Collection<Guid> {siteId},
+					Teams = new Collection<Guid> {teamId},
+					People = new Collection<Guid> {personId},
+					RangeOption = AvailableDataRangeOption.MyBusinessUnit
+				});
+
+			agentRole.AvailableData.AvailableBusinessUnits.Should().Have.Count.EqualTo(1);
+			agentRole.AvailableData.AvailableSites.Should().Have.Count.EqualTo(1);
+			agentRole.AvailableData.AvailableTeams.Should().Have.Count.EqualTo(1);
+			agentRole.AvailableData.AvailablePersons.Should().Have.Count.EqualTo(1);
+			agentRole.AvailableData.AvailableDataRange.Should().Be.EqualTo(AvailableDataRangeOption.MyBusinessUnit);
+		}
+
+		[Test]
+		public void ShouldRemoveAvailableDataFromRole()
+		{
+			var roleRepository = MockRepository.GenerateMock<IApplicationRoleRepository>();
+			var dataRepository = MockRepository.GenerateMock<IAvailableDataRepository>();
+			var target = new RolesController(roleRepository, null, dataRepository, new CurrentBusinessUnit(new FakeCurrentIdentity("Pelle")));
+
+			var roleId = Guid.NewGuid();
+			var businessUnit = BusinessUnitFactory.CreateWithId("Bu 2");
+			var site = SiteFactory.CreateSimpleSite();
+			site.SetId(Guid.NewGuid());
+			var team = TeamFactory.CreateSimpleTeam();
+			team.SetId(Guid.NewGuid());
+			var person = PersonFactory.CreatePersonWithId();
+
+			var agentRole = new ApplicationRole { Name = "Agent", AvailableData = new AvailableData() };
+			agentRole.AvailableData.AddAvailableBusinessUnit(businessUnit);
+			agentRole.AvailableData.AddAvailableSite(site);
+			agentRole.AvailableData.AddAvailableTeam(team);
+			agentRole.AvailableData.AddAvailablePerson(person);
+
+			roleRepository.Stub(x => x.Get(roleId)).Return(agentRole);
+
+			target.RemoveAvailableData(roleId,
+				new AvailableDataForRoleInput
+				{
+					BusinessUnits = new Collection<Guid> { businessUnit.Id.GetValueOrDefault() },
+					Sites = new Collection<Guid> { site.Id.GetValueOrDefault() },
+					Teams = new Collection<Guid> { team.Id.GetValueOrDefault() },
+					People = new Collection<Guid> { person.Id.GetValueOrDefault() }
+				});
+
+			agentRole.AvailableData.AvailableBusinessUnits.Should().Have.Count.EqualTo(0);
+			agentRole.AvailableData.AvailableSites.Should().Have.Count.EqualTo(0);
+			agentRole.AvailableData.AvailableTeams.Should().Have.Count.EqualTo(0);
+			agentRole.AvailableData.AvailablePersons.Should().Have.Count.EqualTo(0);
+		}
+
+		[Test]
+		public void ShouldNotAddNewAvailableDataToBuiltInRole()
+		{
+			var roleRepository = MockRepository.GenerateMock<IApplicationRoleRepository>();
+			var dataRepository = MockRepository.GenerateMock<IAvailableDataRepository>();
+			var target = new RolesController(roleRepository, null, dataRepository,
+				new CurrentBusinessUnit(new FakeCurrentIdentity("Pelle")));
+
+			var roleId = Guid.NewGuid();
+			var businessUnitId = Guid.NewGuid();
+
+			var agentRole = new ApplicationRole {Name = "Agent", BuiltIn = true, AvailableData = new AvailableData()};
+
+			roleRepository.Stub(x => x.Get(roleId)).Return(agentRole);
+
+			target.AddAvailableData(roleId,
+				new AvailableDataForRoleInput
+				{
+					BusinessUnits = new Collection<Guid> {businessUnitId}
+				});
+
+			agentRole.AvailableData.AvailableBusinessUnits.Should().Have.Count.EqualTo(0);
+		}
+
+		[Test]
 		public void ShouldRenameRole()
 		{
 			var roleRepository = MockRepository.GenerateMock<IApplicationRoleRepository>();
@@ -86,13 +194,14 @@ namespace Teleopti.Ccc.WebTest.Areas.Permissions
 
 			var roleId = Guid.NewGuid();
 
-			var agentRole = new ApplicationRole { Name = "Agent" };
+			var agentRole = new ApplicationRole { Name = "Agent",DescriptionText = "Agent"};
 
 			roleRepository.Stub(x => x.Get(roleId)).Return(agentRole);
 			
-			target.RenameRole(roleId,new RoleNameInput{NewName = "Self service agent"});
+			target.RenameRole(roleId,new RoleNameInput{NewDescription = "Self service agent"});
 
-			agentRole.Name.Should().Be.EqualTo("Self service agent");
+			agentRole.DescriptionText.Should().Be.EqualTo("Self service agent");
+			agentRole.Name.Should().Be.EqualTo("Selfserviceagent");
 		}
 
 		[Test]
@@ -107,7 +216,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Permissions
 
 			roleRepository.Stub(x => x.Get(roleId)).Return(agentRole);
 
-			target.RenameRole(roleId, new RoleNameInput { NewName = "Self service agent" });
+			target.RenameRole(roleId, new RoleNameInput { NewDescription = "Self service agent" });
 
 			agentRole.Name.Should().Be.EqualTo("Agent");
 		}
@@ -124,7 +233,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Permissions
 
 			roleRepository.Stub(x => x.Get(roleId)).Return(agentRole);
 
-			target.RenameRole(roleId, new RoleNameInput { NewName = "" });
+			target.RenameRole(roleId, new RoleNameInput { NewDescription = "" });
 
 			agentRole.Name.Should().Be.EqualTo("Agent");
 		}
@@ -222,9 +331,10 @@ namespace Teleopti.Ccc.WebTest.Areas.Permissions
 				return true;
 			});
 			
-			target.CopyExistingRole(roleId, new RoleNameInput{NewName = "Agent self service"});
+			target.CopyExistingRole(roleId, new RoleNameInput{NewDescription = "Agent self service"});
 
-			addedRole.Name.Should().Be.EqualTo("Agent self service");
+			addedRole.DescriptionText.Should().Be.EqualTo("Agent self service");
+			addedRole.Name.Should().Be.EqualTo("Agentselfservice");
 			addedRole.ApplicationFunctionCollection.Should().Have.Count.EqualTo(1);
 			addedRole.AvailableData.AvailableBusinessUnits.Should().Have.Count.EqualTo(1);
 			addedRole.AvailableData.AvailableSites.Should().Have.Count.EqualTo(1);

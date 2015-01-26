@@ -563,7 +563,6 @@
     <Compile Include="Filters\AjaxHandleErrorAttributeCustomErrorEnabledAjaxTest.cs" />
     <Compile Include="Filters\AjaxHandleErrorAttributeCustomErrorEnabledNonAjaxTest.cs" />
     <Compile Include="Filters\AjaxHandleErrorAttributeCustomErrorEnabledAjaxJsonTest.cs" />
-    <Compile Include="Filters\AjaxJavaScriptRedirectAttributeTest.cs" />
     <Compile Include="Filters\ApplicationFunctionAttributeTest.cs" />
     <Compile Include="Areas\MyTime\Filters\EnsureInPortalAttributeTest.cs" />
     <Compile Include="Filters\FilterTester.cs" />

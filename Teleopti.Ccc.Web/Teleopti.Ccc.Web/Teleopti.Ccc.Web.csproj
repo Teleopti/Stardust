@@ -398,6 +398,7 @@
     <Compile Include="Areas\Anywhere\Core\GroupScheduleViewModelMapper.cs" />
     <Compile Include="Areas\Anywhere\Core\AgentViewModel.cs" />
     <Compile Include="Areas\Anywhere\Core\TeamViewModel.cs" />
+    <Compile Include="Areas\Permissions\Controllers\AvailableDataForRoleInput.cs" />
     <Compile Include="Areas\Permissions\Controllers\FunctionsForRoleInput.cs" />
     <Compile Include="Areas\Permissions\Controllers\RoleNameInput.cs" />
     <Compile Include="Areas\Permissions\PermissionsAreaRegistration.cs" />
@@ -862,7 +863,6 @@
     <Compile Include="Filters\ISessionAuthenticationModule.cs" />
     <Compile Include="Filters\KeyBasedAuthenticationAttribute.cs" />
     <Compile Include="Filters\SessionAuthenticationModule.cs" />
-    <Compile Include="Filters\UnitOfWorkApiActionAttribute.cs" />
     <Compile Include="Models\Shared\Link.cs" />
     <Compile Include="Areas\Start\Controllers\MenuController.cs" />
     <Compile Include="Areas\Start\Core\HtmlHelperExtension.cs" />
@@ -917,7 +917,6 @@
     <Compile Include="Core\Startup\InitializeApplication\WebState.cs" />
     <Compile Include="Core\Startup\VerifyLicense\VerifyLicenseModule.cs" />
     <Compile Include="Core\Startup\VerifyLicense\VerifyLicenseTask.cs" />
-    <Compile Include="Filters\AjaxJavaScriptRedirectAttribute.cs" />
     <Compile Include="Areas\MyTime\Models\LayoutBase\CultureSpecificViewModel.cs" />
     <Compile Include="Areas\MyTime\Models\Shared\DatePickerGlobalizationViewModel.cs" />
     <Compile Include="Areas\MyTime\Models\Shared\DateTimePeriodForm.cs" />
