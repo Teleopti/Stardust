@@ -22,7 +22,7 @@ namespace Teleopti.Ccc.Win.Backlog
 		private void populateTabControl()
 		{
 			var first = true;
-			foreach (var skill in _model.GetSkillList())
+			foreach (var skill in _model.GetTabSkillList())
 			{
 				if(!first)
 				{
@@ -80,6 +80,10 @@ namespace Teleopti.Ccc.Win.Backlog
 				else
 				{
 					TimeSpan time;
+					var skill = (ISkill) tabControlSkills.SelectedTab.Tag;
+					if (skill == null)
+						return;
+
 					switch (e.RowIndex)
 					{
 						case 1:
@@ -119,18 +123,19 @@ namespace Teleopti.Ccc.Win.Backlog
 				e.Style.BackColor = Color.Khaki;
 		}
 
-		private void BacklogView_Load(object sender, EventArgs e)
+		private void backlogViewLoad(object sender, EventArgs e)
 		{
 			_model.Load();
 			populateTabControl();
 			gridControl1.ControllerOptions = GridControllerOptions.All & (~GridControllerOptions.OleDataSource);
 			gridControl1.ResetVolatileData();
+			gridControl1.BeginUpdate();
 			gridControl1.CellModels.Add("TimeSpanLongHourMinutesStatic", new TimeSpanDurationStaticCellModel(gridControl1.Model) { DisplaySeconds = false });
 			//gridControl1.CellModels.Add("Ignore", new IgnoreCellModel(gridControl1.Model));
 			gridControl1.ColWidths.SetSize(0, 120);
 			gridControl1.RowHeights.SetSize(0, 30);
 			
-
+			gridControl1.EndUpdate(true);
 		}
 
 		private void tabControlSkills_SelectedIndexChanged(object sender, EventArgs e)
@@ -146,6 +151,11 @@ namespace Teleopti.Ccc.Win.Backlog
 				dialog.ShowDialog(this);
 			}
 			gridControl1.Invalidate();
+		}
+
+		private void toolStripButtonSave_Click(object sender, EventArgs e)
+		{
+			_model.TransferSkillDays((ISkill)tabControlSkills.SelectedTab.Tag);
 		}
 	}
 }

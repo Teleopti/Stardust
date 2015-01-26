@@ -9,6 +9,7 @@ using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Security.Principal;
+using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.WinCode.Common;
@@ -38,7 +39,7 @@ namespace Teleopti.Ccc.WinCode.Backlog
 				var skills = _stateHolder.SchedulingResultState.Skills.ToList();
 				foreach (var skill in skills)
 				{
-					if (skill.SkillType.ForecastSource != ForecastSource.Email)
+					if (!(skill.SkillType.ForecastSource == ForecastSource.Email || skill.SkillType.ForecastSource == ForecastSource.Backoffice))
 						_stateHolder.SchedulingResultState.Skills.Remove(skill);
 				}
 				_stateHolder.SetRequestedScenario(scenarioRepository.LoadDefaultScenario());
@@ -53,15 +54,18 @@ namespace Teleopti.Ccc.WinCode.Backlog
 			return _stateHolder.RequestedPeriod.DateOnlyPeriod;
 		}
 
-		public IEnumerable<ISkill> GetSkillList()
+		public IEnumerable<ISkill> GetTabSkillList()
 		{
-			return _stateHolder.SchedulingResultState.Skills;
+			return _stateHolder.SchedulingResultState.Skills.Where(s => s.SkillType.ForecastSource == ForecastSource.Email).ToList();
 		}
 
 		private void createBacklogTasks(DateOnlyPeriod period)
 		{			
 			foreach (var skill in _stateHolder.SchedulingResultState.Skills)
 			{
+				if (skill.SkillType.ForecastSource == ForecastSource.Backoffice)
+					continue;
+
 				if(!_taskDic.ContainsKey(skill))
 					_taskDic.Add(skill, new Dictionary<DateOnly, BacklogTask>());
 			}
@@ -69,6 +73,9 @@ namespace Teleopti.Ccc.WinCode.Backlog
 			{
 				foreach (var skillDay in _stateHolder.SchedulingResultState.SkillDaysOnDateOnly(new List<DateOnly>{date}))
 				{
+					if (!_taskDic.ContainsKey(skillDay.Skill))
+						continue;
+
 					TimeSpan serviceLevel;
 					TimeSpan.TryParse(skillDay.Skill.Description, out serviceLevel);
 					if (serviceLevel < TimeSpan.FromDays(1))
@@ -86,6 +93,9 @@ namespace Teleopti.Ccc.WinCode.Backlog
 				foreach (var skillDay in _stateHolder.SchedulingResultState.SkillDaysOnDateOnly(new List<DateOnly> {date}))
 				{
 					if (skillDay.OpenForWork.IsOpen)
+						continue;
+
+					if(!_taskDic.ContainsKey(skillDay.Skill))
 						continue;
 
 					foreach (var task in _taskDic[skillDay.Skill].Values)
@@ -271,6 +281,53 @@ namespace Teleopti.Ccc.WinCode.Backlog
 			}
 
 			return incomingTime.Subtract(time);
+		}
+
+		public void TransferSkillDays(ISkill skill)
+		{
+			var targetSkill = _stateHolder.SchedulingResultState.Skills.First(s => s.SkillType.ForecastSource == ForecastSource.Backoffice);
+			var dirtySkillDays = new List<ISkillDay>();
+			foreach (var keyValuePair in _taskDic[skill])
+			{
+				var skilldays = _stateHolder.SchedulingResultState.SkillDaysOnDateOnly(new List<DateOnly> {keyValuePair.Key});
+				ISkillDay targetSkillDay = null;
+				foreach (var skillday in skilldays)
+				{
+					if(skillday.Skill == targetSkill)
+					targetSkillDay = skillday;
+				}
+
+				targetSkillDay.WorkloadDayCollection.First().Tasks = _backlogTaskForecastedTimePerDateCalculator.CalculateForDate(keyValuePair.Key, _taskDic[skill]).TotalHours; 
+				dirtySkillDays.Add(targetSkillDay);
+			}
+
+			saveSkillDays(dirtySkillDays);
+		}
+
+		private void saveSkillDays(IEnumerable<ISkillDay> dirtyList)
+		{
+			var dirtySkillDays = new List<ISkillDay>();
+			dirtySkillDays.AddRange(dirtyList);
+			foreach (var skillDay in dirtySkillDays)
+			{
+				using (var uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
+				{
+					try
+					{
+						var skillDayRepository = new SkillDayRepository(uow);
+						skillDayRepository.Add(skillDay);
+						uow.PersistAll();
+					}
+					catch (OptimisticLockException)
+					{
+
+					}
+					catch (ConstraintViolationException)
+					{
+
+					}
+				}
+			}
 		}
 	}
 }
