@@ -119,69 +119,6 @@ namespace Teleopti.Ccc.DomainTest.Security.AuthorizationEntities
             Assert.AreEqual(2, _target.EnabledApplicationFunctions.Count);
         }
 
-        [Test]
-        public void VerifyAuthorizationKey()
-        {
-
-            // Declare return variable to hold property get method
-            string getNameValue;
-            string expNameValue = _target.LicenseOptionPath;
-
-            // call get method
-            getNameValue = _target.AuthorizationKey;
-
-            // Assert result
-            Assert.AreEqual(expNameValue, getNameValue);
-        }
-
-        [Test]
-        public void VerifyAuthorizationName()
-        {
-
-            // Declare return variable to hold property get method
-            string getNameValue;
-            string expNameValue = _target.LicenseOptionCode;
-
-            // call get method
-            getNameValue = _target.AuthorizationName;
-
-
-            // Assert result
-            Assert.AreEqual(expNameValue, getNameValue);
-        }
-
-        [Test]
-        public void VerifyAuthorizationDescription()
-        {
-
-            // Declare return variable to hold property get method
-            string getNameValue;
-            string expNameValue = _target.ToString();
-
-            // call get method
-            getNameValue = _target.AuthorizationDescription;
-
-
-            // Assert result
-            Assert.AreEqual(expNameValue, getNameValue);
-        }
-
-        [Test]
-        public void VerifyAuthorizationValue()
-        {
-
-            // Declare return variable to hold property get method
-            string getNameValue;
-            string expNameValue = string.Empty;
-
-            // call get method
-            getNameValue = _target.AuthorizationValue;
-
-
-            // Assert result
-            Assert.AreEqual(expNameValue, getNameValue);
-        }
-
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1822:MarkMembersAsStatic"), 
         System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1702:CompoundWordsShouldBeCasedCorrectly", MessageId = "ByPath")]
         [Test]

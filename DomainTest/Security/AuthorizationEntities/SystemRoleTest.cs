@@ -8,9 +8,6 @@ namespace Teleopti.Ccc.DomainTest.Security.AuthorizationEntities
     {
         private SystemRole _target;
 
-        /// <summary>
-        /// Runs once per test
-        /// </summary>
         [SetUp]
         public void Setup()
         {
@@ -34,11 +31,7 @@ namespace Teleopti.Ccc.DomainTest.Security.AuthorizationEntities
             _target.Name = name;
             _target.DescriptionText = description;
             Assert.AreEqual(name, _target.Name);
-            Assert.AreEqual(name, _target.AuthorizationName);
             Assert.AreEqual(description, _target.DescriptionText);
-            Assert.AreEqual(description, _target.AuthorizationDescription);
-            Assert.AreEqual(string.Empty, _target.AuthorizationValue);
-            Assert.AreEqual(description, _target.AuthorizationKey);
 
             // check null value
             _target = new SystemRole();

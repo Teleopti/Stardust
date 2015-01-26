@@ -43,16 +43,6 @@ namespace Teleopti.Ccc.Domain.Security.AuthorizationEntities
             }
         }
 
-        public override string AuthorizationValue
-        {
-            get
-            {
-                if (BuiltIn) 
-                    return "xxBuiltIn";
-                return string.Empty;
-            }
-        }
-
         public virtual IAvailableData AvailableData
         {
             get { return _availableData; }

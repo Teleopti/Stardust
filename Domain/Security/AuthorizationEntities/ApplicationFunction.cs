@@ -353,59 +353,6 @@ namespace Teleopti.Ccc.Domain.Security.AuthorizationEntities
         }
 
         /// <summary>
-        /// Gets the authorization unique key. This must be unique and that is used for any
-        /// comparisons within the authorization related stuff.
-        /// </summary>
-        /// <value>The authorization key.</value>
-        public virtual string AuthorizationKey
-        {
-            get { return FunctionPath; }
-        }
-
-        /// <summary>
-        /// Gets the Name value. Usually this is the key.
-        /// </summary>
-        /// <value>The name field.</value>
-        public virtual string AuthorizationName
-        {
-            get
-            {
-                return FunctionPath;
-            }
-        }
-
-        /// <summary>
-        /// Gets the description or additional info value. Usually that is
-        /// a longer description about the authorization entity.
-        /// </summary>
-        /// <value>The description field.</value>
-        /// <remarks>
-        /// Usually this value goes to the tooltip to the control.
-        /// </remarks>
-        public virtual string AuthorizationDescription
-        {
-            get
-            {
-                return FunctionDescription;
-            }
-        }
-
-        /// <summary>
-        /// Gets any additional value connected to the authorization
-        /// </summary>
-        /// <value>The value field.</value>
-        /// <remarks>
-        /// Usually this value holds some numeric data.
-        /// </remarks>
-        public virtual string AuthorizationValue
-        {
-            get
-            {
-                return ForeignSource;
-            }
-        }
-
-        /// <summary>
         /// Gets the sorting order. Used for setting the order of the Aaplication Function in the function lists.
         /// </summary>
         /// <value>The order.</value>

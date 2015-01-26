@@ -13,19 +13,9 @@ namespace Teleopti.Ccc.DomainTest.Security.AuthorizationEntities
     [TestFixture]
     public class ApplicationFunctionTest
     {
-
-        #region Variables 
-
-        private ApplicationFunction _target;
+	    private ApplicationFunction _target;
         private IApplicationFunction _parent;
 
-        #endregion
-
-        #region Setup
-
-        /// <summary>
-        /// Runs once per test
-        /// </summary>
         [SetUp]
         public void Setup()
         {
@@ -33,11 +23,7 @@ namespace Teleopti.Ccc.DomainTest.Security.AuthorizationEntities
             _target = new ApplicationFunction("Function", _parent);
         }
 
-        #endregion
-
-        #region Constructor tests
-
-        [Test]
+	    [Test]
         public void VerifyConstructor()
         {
             Assert.IsNotNull(_target);
@@ -79,11 +65,7 @@ namespace Teleopti.Ccc.DomainTest.Security.AuthorizationEntities
             _target = new ApplicationFunction("Function", null);
         }
 
-        #endregion
-
-        #region Method tests
-
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1822:MarkMembersAsStatic")]
+	    [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1822:MarkMembersAsStatic")]
         [Test]
         public void VerifyFindByForeignId()
         {
@@ -215,7 +197,7 @@ namespace Teleopti.Ccc.DomainTest.Security.AuthorizationEntities
         [Test]
         public void VerifyClone()
         {
-            ApplicationFunction clonedEntity = (ApplicationFunction)_target.Clone();
+            var clonedEntity = (ApplicationFunction)_target.Clone();
             clonedEntity.FunctionCode += "Cloned";
             Assert.AreNotEqual(clonedEntity, _target);
             Assert.AreNotSame(clonedEntity, _target);
@@ -227,81 +209,44 @@ namespace Teleopti.Ccc.DomainTest.Security.AuthorizationEntities
             Assert.AreEqual(_target.FunctionPath.GetHashCode(), _target.GetHashCode());
         }
 
-        #endregion
-
-        #region Property tests
-
-        [Test]
+	    [Test]
         public void VerifyParent()
         {
+            var setParent = new ApplicationFunction("NEWPARENT");
 
-            // Declare variable to hold property set method
-            ApplicationFunction setParent = new ApplicationFunction("NEWPARENT");
-
-            // call set method
             _target.Parent = setParent;
 
-            // Declare return variable to hold property get method
-            ApplicationFunction getParent;
+		    var getParent = _target.Parent as ApplicationFunction;
 
-            // call get method
-            getParent = _target.Parent as ApplicationFunction;
-
-            // Assert result
-            // if property is reference type
             Assert.AreSame(setParent, getParent);
 
-            // get children
-
-            // Declare return variable to hold property get method
-            IList<ApplicationFunction> getChildCollection;
-            
-            // call get method
-            getChildCollection = new List<ApplicationFunction>(getParent.ChildCollection.OfType<ApplicationFunction>());
+            IList<ApplicationFunction> getChildCollection = new List<ApplicationFunction>(getParent.ChildCollection.OfType<ApplicationFunction>());
             Assert.AreSame(_target, getChildCollection[0]);
         }
 
         [Test]
         public void VerifyChildCollection()
         {
+	        IList<ApplicationFunction> getChildCollection = new List<ApplicationFunction>(_parent.ChildCollection.OfType<ApplicationFunction>());
 
-            // Declare return variable to hold property get method
-            IList<ApplicationFunction> getChildCollection;
-
-            // call get method
-            getChildCollection = new List<ApplicationFunction>(_parent.ChildCollection.OfType<ApplicationFunction>());
-
-            // Assert result
-            // if property is reference type
-            Assert.AreSame(_target, getChildCollection[0]);
+	        Assert.AreSame(_target, getChildCollection[0]);
         }
 
-        [Test]
+	    [Test]
         public void VerifyFunctionCode()
         {
-
-            // Declare variable to hold property set method
-            // TODO: define a set value instead of the null
             string setFunctionCode = "TestCode";
 
-            // call set method
             _target.FunctionCode = setFunctionCode;
 
-            // Declare return variable to hold property get method
-            string getFunctionCode;
+            string getFunctionCode = _target.FunctionCode;
 
-            // call get method
-            getFunctionCode = _target.FunctionCode;
-
-            // Assert result
             Assert.AreEqual(setFunctionCode, getFunctionCode);
         }
 
         [Test]
         public void VerifyOrder()
         {
-
-            // Declare variable to hold property set method
             int? orderValue = null;
 
             _target.SortOrder = orderValue;
@@ -317,8 +262,6 @@ namespace Teleopti.Ccc.DomainTest.Security.AuthorizationEntities
         [Test]
         public void VerifyIsPermitted()
         {
-
-            // Declare variable to hold property set method
             bool? isPermitted = null;
 
             _target.IsPermitted = isPermitted;
@@ -345,11 +288,9 @@ namespace Teleopti.Ccc.DomainTest.Security.AuthorizationEntities
         [Test]
         public void VerifyLevel()
         {
-            // Test get method
             int getValue = _target.Level;
             Assert.AreEqual(getValue, 1);
 
-            // Test get method
             getValue = _parent.Level;
             Assert.AreEqual(getValue, 0);
         }
@@ -357,34 +298,22 @@ namespace Teleopti.Ccc.DomainTest.Security.AuthorizationEntities
         [Test]
         public void VerifyFunctionPath()
         {
-            // Declare return variable to hold property get method
-            string getFunctionPath;
-            string expFunctionPath = "Root/Function";
+	        string expFunctionPath = "Root/Function";
 
-            // call get method
-            getFunctionPath = _target.FunctionPath;
+            string getFunctionPath = _target.FunctionPath;
 
-            // Assert result
             Assert.AreEqual(expFunctionPath, getFunctionPath);
         }
 
         [Test]
         public void VerifyFunctionDescription()
         {
-
-            // Declare variable to hold property set method
             string setFunctionDescription = "DESC";
 
-            // call set method
             _target.FunctionDescription = setFunctionDescription;
 
-            // Declare return variable to hold property get method
-            string getFunctionDescription;
+            string getFunctionDescription = _target.FunctionDescription;
 
-            // call get method
-            getFunctionDescription = _target.FunctionDescription;
-
-            // Assert result
             Assert.AreEqual(setFunctionDescription, getFunctionDescription);
         }
 
@@ -428,95 +357,25 @@ namespace Teleopti.Ccc.DomainTest.Security.AuthorizationEntities
             Assert.AreEqual(setFunctionDescription, getFunctionDescription);
         }
 
-        #region IAuthorizationEntity Members test
-
-        [Test]
-        public void VerifyAuthorizationKey()
-        {
-
-            // Declare return variable to hold property get method
-            string getNameValue;
-            string expNameValue = "Root/Function";
-
-            // call get method
-            getNameValue = _target.AuthorizationKey;
-
-
-            // Assert result
-            Assert.AreEqual(expNameValue, getNameValue);
-        }
-
-        [Test]
-        public void VerifyAuthorizationName()
-        {
-
-            // Declare return variable to hold property get method
-            string getNameValue;
-            string expNameValue = "Root/Function";
-
-            // call get method
-            getNameValue = _target.AuthorizationName;
-
-
-            // Assert result
-            Assert.AreEqual(expNameValue, getNameValue);
-        }
-
-        [Test]
-        public void VerifyAuthorizationDescription()
-        {
-
-            // Declare variable to hold property set method
-            string setFunctionDescription = "DESC";
-
-            // call set method
-            _target.FunctionDescription = setFunctionDescription;
-
-            // Declare return variable to hold property get method
-            string getDescriptionValue;
-
-            // call get method
-            getDescriptionValue = _target.AuthorizationDescription;
-
-            // Assert result
-            Assert.AreEqual(setFunctionDescription, getDescriptionValue);
-        }
-
-        [Test]
-        public void VerifyAuthorizationValue()
-        {
-            string setAuthorizationValue = "Value";
-            _target.ForeignSource = setAuthorizationValue;
-            string getAuthorizationValue = _target.AuthorizationValue;
-            Assert.AreEqual(setAuthorizationValue, getAuthorizationValue);
-        }
-
-        #endregion 
-
-        #region IEntity overriden tests
-
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1822:MarkMembersAsStatic"), Test]
+	    [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1822:MarkMembersAsStatic"), Test]
         public void VerifyEqual()
         {
-            ApplicationFunction root = new ApplicationFunction("Root");
-            ApplicationFunction child1 = new ApplicationFunction("ChildOfRoot", root);
-            ApplicationFunction child2 = new ApplicationFunction("ChildOfRoot", root);
+            var root = new ApplicationFunction("Root");
+            var child1 = new ApplicationFunction("ChildOfRoot", root);
+            var child2 = new ApplicationFunction("ChildOfRoot", root);
 
             Assert.IsFalse(child1.Equals(null));
             Assert.IsFalse(child1.Equals(new object()));
             Assert.IsTrue(child1.Equals(child2));
         }
 
-
-        #endregion
-
-        [Test]
+	    [Test]
         public void VerifyDeleted()
         {
-            bool isDeleted = ((ApplicationFunction)_target).IsDeleted;
+            bool isDeleted = _target.IsDeleted;
             Assert.IsFalse(isDeleted);
-            ((ApplicationFunction)_target).SetDeleted();
-            isDeleted = ((ApplicationFunction)_target).IsDeleted;
+            _target.SetDeleted();
+            isDeleted = _target.IsDeleted;
             Assert.IsTrue(isDeleted);
         }
 
@@ -526,11 +385,6 @@ namespace Teleopti.Ccc.DomainTest.Security.AuthorizationEntities
             IUserTextTranslator userTextTranslator = new UserTextTranslator();
             _target.UserTextTranslator = userTextTranslator;
             Assert.AreEqual(userTextTranslator, _target.UserTextTranslator);
-
-
         }
-
-        #endregion
-
     }
 }

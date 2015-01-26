@@ -128,50 +128,6 @@ namespace Teleopti.Ccc.Domain.Security.AuthorizationEntities
             set { _enabled = value; }
         }
 
-	    /// <summary>
-        /// Gets the authorization unique key. This must be unique and that is used for any
-        /// comparisons within the authorization related stuff.
-        /// </summary>
-        /// <value>The authorization key.</value>
-        public string AuthorizationKey
-        {
-            get { return LicenseOptionPath; }
-        }
-
-        /// <summary>
-        /// Gets the Name value.
-        /// </summary>
-        /// <value>The name field.</value>
-        public string AuthorizationName
-        {
-            get { return LicenseOptionCode; }
-        }
-
-        /// <summary>
-        /// Gets the description or additional info value. Usually that is
-        /// a longer description about the authorization entity.
-        /// </summary>
-        /// <value>The description field.</value>
-        /// <remarks>
-        /// Usually this value goes to the tooltip to the control.
-        /// </remarks>
-        public string AuthorizationDescription
-        {
-            get { return ToString() ; }
-        }
-
-        /// <summary>
-        /// Gets any additional value connected to the authorization
-        /// </summary>
-        /// <value>The value field.</value>
-        /// <remarks>
-        /// Usually this value holds some numeric data.
-        /// </remarks>
-        public string AuthorizationValue
-        {
-            get { return string.Empty; }
-        }
-
         public string OptionName
         {
             get { return _optionName; }

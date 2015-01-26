@@ -12,9 +12,6 @@ namespace Teleopti.Ccc.DomainTest.Security.AuthorizationEntities
     {
         private ApplicationRole _target;
 
-        /// <summary>
-        /// Runs once per test
-        /// </summary>
         [SetUp]
         public void Setup()
         {
@@ -70,28 +67,7 @@ namespace Teleopti.Ccc.DomainTest.Security.AuthorizationEntities
             Assert.AreEqual(setValue, getValue);
         }
 
-        [Test]
-        public void VerifyAuthorizationValueProperty()
-        {
-            bool setValue = true;
-            _target.BuiltIn = setValue;
-            string getValue = _target.AuthorizationValue;
-
-            Assert.IsFalse(string.IsNullOrEmpty(getValue));
-
-            setValue = false;
-            _target.BuiltIn = setValue;
-            getValue = _target.AuthorizationValue;
-
-            Assert.IsTrue(string.IsNullOrEmpty(getValue));
-        }
-
-        /// <summary>
-        /// Verifies the set business unit.
-        /// </summary>
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1822:MarkMembersAsStatic"), 
-        Test, 
-        Explicit("Tamas! Have a look at this one!")]
+        [Test, Explicit("Tamas! Have a look at this one!")]
         public void VerifyBusinessUnitCanBeSet()
         {
             Assert.IsNull(_target.BusinessUnit);
