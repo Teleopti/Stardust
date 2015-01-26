@@ -89,7 +89,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 
 			gridColumns.Add(new SFGridDescriptionNameColumn<TeamGamificationSettingModel>("SiteAndTeam", Resources.Team));
 
-			var gamificationSettingDropdownColumn  = new SFGridDropDownColumn<TeamGamificationSettingModel, IGamificationSetting>("GamificationSetting", Resources.Settings,
+			var gamificationSettingDropdownColumn  = new SFGridDropDownColumn<TeamGamificationSettingModel, IGamificationSetting>("GamificationSetting", Resources.Setting,
 																			  _settings, "Description",
 																			  typeof(IGamificationSetting));
 			gridColumns.Add(gamificationSettingDropdownColumn);

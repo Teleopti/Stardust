@@ -251,7 +251,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 		protected override void SetCommonTexts()
 		{
 			base.SetCommonTexts();
-			toolTip1.SetToolTip(buttonDeleteGamificationSetting, Resources.DeleteAgentBadgeSetting);
+			toolTip1.SetToolTip(buttonDeleteGamificationSetting, Resources.DeleteGamificationSetting);
 			toolTip1.SetToolTip(buttonNew, Resources.NewGamificationSetting);
 		}
 

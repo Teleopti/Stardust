@@ -6772,15 +6772,6 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Delete agent badge setting.
-        /// </summary>
-        public static string DeleteAgentBadgeSetting {
-            get {
-                return ResourceManager.GetString("DeleteAgentBadgeSetting", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Delete availability.
         /// </summary>
         public static string DeleteAvailability {
@@ -6858,6 +6849,15 @@ namespace Teleopti.Ccc.UserTexts {
         public static string DeleteEfficiencyShrinkageRow {
             get {
                 return ResourceManager.GetString("DeleteEfficiencyShrinkageRow", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Delete gamification setting.
+        /// </summary>
+        public static string DeleteGamificationSetting {
+            get {
+                return ResourceManager.GetString("DeleteGamificationSetting", resourceCulture);
             }
         }
         
@@ -10085,7 +10085,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Gamification Setting Rule Sets:.
+        ///   Looks up a localized string similar to Rule:.
         /// </summary>
         public static string GamificationSettingRuleSetsColon {
             get {
@@ -21145,7 +21145,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Badge awarded rule with different thresholds.
+        ///   Looks up a localized string similar to Use different thresholds.
         /// </summary>
         public static string RuleWithDifferentThreshold {
             get {
@@ -21154,7 +21154,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Badge awarded rule with ratio convetor.
+        ///   Looks up a localized string similar to Use ratio conversion.
         /// </summary>
         public static string RuleWithRatioConvertor {
             get {
@@ -22799,7 +22799,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Threshold for Bronze Badge (%): .
+        ///   Looks up a localized string similar to Threshold for bronze (%): .
         /// </summary>
         public static string SetBadgeBronzeThresholdForAdherence {
             get {
@@ -22808,7 +22808,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Threshold for Bronze Badge (HH:mm:ss): .
+        ///   Looks up a localized string similar to Threshold for bronze (HH:mm:ss): .
         /// </summary>
         public static string SetBadgeBronzeThresholdForAHT {
             get {
@@ -22817,7 +22817,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Threshold for Bronze Badge:.
+        ///   Looks up a localized string similar to Threshold for bronze:.
         /// </summary>
         public static string SetBadgeBronzeThresholdForAnsweredCalls {
             get {
@@ -22826,7 +22826,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Threshold for Gold Badge (%): .
+        ///   Looks up a localized string similar to Threshold for gold (%): .
         /// </summary>
         public static string SetBadgeGoldThresholdForAdherence {
             get {
@@ -22835,7 +22835,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Threshold for Gold Badge (HH:mm:ss): .
+        ///   Looks up a localized string similar to Threshold for gold (HH:mm:ss): .
         /// </summary>
         public static string SetBadgeGoldThresholdForAHT {
             get {
@@ -22844,7 +22844,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Threshold for Gold Badge:.
+        ///   Looks up a localized string similar to Threshold for gold:.
         /// </summary>
         public static string SetBadgeGoldThresholdForAnsweredCalls {
             get {
@@ -22853,7 +22853,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Threshold for Silver Badge (%): .
+        ///   Looks up a localized string similar to Threshold for silver (%): .
         /// </summary>
         public static string SetBadgeSilverThresholdForAdherence {
             get {
@@ -22862,7 +22862,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Threshold for Silver Badge (HH:mm:ss): .
+        ///   Looks up a localized string similar to Threshold for silver (HH:mm:ss): .
         /// </summary>
         public static string SetBadgeSilverThresholdForAHT {
             get {
@@ -22871,7 +22871,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Threshold for Silver Badge:.
+        ///   Looks up a localized string similar to Threshold for silver:.
         /// </summary>
         public static string SetBadgeSilverThresholdForAnsweredCalls {
             get {
@@ -22984,6 +22984,15 @@ namespace Teleopti.Ccc.UserTexts {
         public static string SetSettingTargets {
             get {
                 return ResourceManager.GetString("SetSettingTargets", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Setting.
+        /// </summary>
+        public static string Setting {
+            get {
+                return ResourceManager.GetString("Setting", resourceCulture);
             }
         }
         
@@ -26908,7 +26917,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Use Badge for Adherence.
+        ///   Looks up a localized string similar to Use badge for Adherence.
         /// </summary>
         public static string UseBadgeforAdherence {
             get {
@@ -26917,7 +26926,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Use Badge for AHT.
+        ///   Looks up a localized string similar to Use badge for AHT.
         /// </summary>
         public static string UseBadgeforAHT {
             get {
@@ -26926,7 +26935,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Use Badge for Answered Calls.
+        ///   Looks up a localized string similar to Use badge for Answered Calls.
         /// </summary>
         public static string UseBadgeForAnsweredCalls {
             get {

@@ -12145,15 +12145,15 @@ Reduce the complexity to use these shifts.</value>
     <comment>Text for checkbox of enable different level badges calculation</comment>
   </data>
   <data name="UseBadgeForAnsweredCalls" xml:space="preserve">
-    <value>Use Badge for Answered Calls</value>
+    <value>Use badge for Answered Calls</value>
     <comment>Text for checkbox of enable Badge for Answered Calls</comment>
   </data>
   <data name="UseBadgeforAHT" xml:space="preserve">
-    <value>Use Badge for AHT</value>
+    <value>Use badge for AHT</value>
     <comment>Text for checkbox of enable Badge for AHT</comment>
   </data>
   <data name="UseBadgeforAdherence" xml:space="preserve">
-    <value>Use Badge for Adherence</value>
+    <value>Use badge for Adherence</value>
     <comment>Text for checkbox of enable Badge for Adherence</comment>
   </data>
   <data name="SetBadgeThresholdForAnsweredCalls" xml:space="preserve">
@@ -12161,15 +12161,15 @@ Reduce the complexity to use these shifts.</value>
     <comment>Label for Badge Threshold for Answered Calls setting</comment>
   </data>
   <data name="SetBadgeBronzeThresholdForAnsweredCalls" xml:space="preserve">
-    <value>Threshold for Bronze Badge:</value>
+    <value>Threshold for bronze:</value>
     <comment>Label for Badge bronze threshold for Answered Calls setting</comment>
   </data>
   <data name="SetBadgeSilverThresholdForAnsweredCalls" xml:space="preserve">
-    <value>Threshold for Silver Badge:</value>
+    <value>Threshold for silver:</value>
     <comment>Label for Badge silver threshold for Answered Calls setting</comment>
   </data>
   <data name="SetBadgeGoldThresholdForAnsweredCalls" xml:space="preserve">
-    <value>Threshold for Gold Badge:</value>
+    <value>Threshold for gold:</value>
     <comment>Label for Badge gold threshold for Answered Calls setting</comment>
   </data>
   <data name="SetBadgeThresholdForAHT" xml:space="preserve">
@@ -12177,15 +12177,15 @@ Reduce the complexity to use these shifts.</value>
     <comment>Label for Badge Threshold for AHT setting</comment>
   </data>
   <data name="SetBadgeBronzeThresholdForAHT" xml:space="preserve">
-    <value>Threshold for Bronze Badge (HH:mm:ss): </value>
+    <value>Threshold for bronze (HH:mm:ss): </value>
     <comment>Label for Badge bronze threshold for AHT setting</comment>
   </data>
   <data name="SetBadgeSilverThresholdForAHT" xml:space="preserve">
-    <value>Threshold for Silver Badge (HH:mm:ss): </value>
+    <value>Threshold for silver (HH:mm:ss): </value>
     <comment>Label for Badge silver threshold for AHT setting</comment>
   </data>
   <data name="SetBadgeGoldThresholdForAHT" xml:space="preserve">
-    <value>Threshold for Gold Badge (HH:mm:ss): </value>
+    <value>Threshold for gold (HH:mm:ss): </value>
     <comment>Label for Badge gold threshold for AHT setting</comment>
   </data>
   <data name="SetBadgeThresholdForAdherence" xml:space="preserve">
@@ -12193,15 +12193,15 @@ Reduce the complexity to use these shifts.</value>
     <comment>Label for Badge Threshold for Adherence setting</comment>
   </data>
   <data name="SetBadgeBronzeThresholdForAdherence" xml:space="preserve">
-    <value>Threshold for Bronze Badge (%): </value>
+    <value>Threshold for bronze (%): </value>
     <comment>Label for Badge bronze threshold for Adherence setting</comment>
   </data>
   <data name="SetBadgeSilverThresholdForAdherence" xml:space="preserve">
-    <value>Threshold for Silver Badge (%): </value>
+    <value>Threshold for silver (%): </value>
     <comment>Label for Badge silver threshold for Adherence setting</comment>
   </data>
   <data name="SetBadgeGoldThresholdForAdherence" xml:space="preserve">
-    <value>Threshold for Gold Badge (%): </value>
+    <value>Threshold for gold (%): </value>
     <comment>Label for Badge gold threshold for Adherence setting</comment>
   </data>
   <data name="OneSilverBadgeEqualsBronzeBadgeCount" xml:space="preserve">
@@ -12667,9 +12667,9 @@ Reduce the complexity to use these shifts.</value>
     <value>Are you sure to delete '{0}' gamification setting ?</value>
     <comment>confirmation text when deleting one gamification setting in option</comment>
   </data>
-  <data name="DeleteAgentBadgeSetting" xml:space="preserve">
-    <value>Delete agent badge setting</value>
-    <comment>tooltip notification for button delete in badge setting tab in option</comment>
+  <data name="DeleteGamificationSetting" xml:space="preserve">
+    <value>Delete gamification setting</value>
+    <comment>tooltip notification for button delete in gamification setting tab in option</comment>
   </data>
   <data name="Gamification" xml:space="preserve">
     <value>Gamification</value>
@@ -12684,11 +12684,11 @@ Reduce the complexity to use these shifts.</value>
     <comment>default description for newly created badge setting</comment>
   </data>
   <data name="RuleWithDifferentThreshold" xml:space="preserve">
-    <value>Badge awarded rule with different thresholds</value>
+    <value>Use different thresholds</value>
     <comment>Badge awarded rule with different thresholds</comment>
   </data>
   <data name="RuleWithRatioConvertor" xml:space="preserve">
-    <value>Badge awarded rule with ratio convetor</value>
+    <value>Use ratio conversion</value>
     <comment>Badge awarded rule with ratio convetor</comment>
   </data>
   <data name="ConfirmDeleteRequest" xml:space="preserve">
@@ -12712,7 +12712,7 @@ Reduce the complexity to use these shifts.</value>
     <comment>Gamification setting:</comment>
   </data>
   <data name="GamificationSettingRuleSetsColon" xml:space="preserve">
-    <value>Gamification Setting Rule Sets:</value>
+    <value>Rule:</value>
     <comment>Gamification Setting Rule Sets:</comment>
   </data>
   <data name="ManageGamificationSettings" xml:space="preserve">
@@ -12758,5 +12758,8 @@ Reduce the complexity to use these shifts.</value>
   <data name="SelectSettingForTeams" xml:space="preserve">
     <value>Select setting to use for teams</value>
     <comment>Select setting to use for teams in gamification option</comment>
+  </data>
+  <data name="Setting" xml:space="preserve">
+    <value>Setting</value>
   </data>
 </root>
