@@ -29,7 +29,7 @@ define([
 
 	var loadSitesAndTeams = function (callback) {
 		ajax.ajax({
-			url: "SeatPlanner/Team/GetTeamHierarchy",
+			url: "SeatPlanner/TeamHierarchy/Get",
 			success: callback
 
 		});
