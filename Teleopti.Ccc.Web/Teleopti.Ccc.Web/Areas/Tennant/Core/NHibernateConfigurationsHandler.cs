@@ -16,11 +16,13 @@ namespace Teleopti.Ccc.Web.Areas.Tennant.Core
 	public class NHibernateConfigurationsHandler : INHibernateConfigurationsHandler
 	{
 		private readonly ISettings _settings;
-		readonly IList<IDataSourceHolder> _dataSources = new List<IDataSourceHolder>();
+		private readonly IPhysicalApplicationPath _physicalApplicationPath;
+		private readonly IList<IDataSourceHolder> _dataSources = new List<IDataSourceHolder>();
 
-		public NHibernateConfigurationsHandler(ISettings settings)
+		public NHibernateConfigurationsHandler(ISettings settings, IPhysicalApplicationPath physicalApplicationPath)
 		{
 			_settings = settings;
+			_physicalApplicationPath = physicalApplicationPath;
 		}
 
 		public string GetConfigForName(string dataSourceName)
@@ -37,10 +39,11 @@ namespace Teleopti.Ccc.Web.Areas.Tennant.Core
 		private void loadDataSources()
 		{
 			var nhibPath = _settings.nhibConfPath();
+			var fullPathToNhibFolder = Path.Combine(_physicalApplicationPath.Get(), nhibPath);
 
-			foreach (string file in Directory.GetFiles(nhibPath, "*.nhib.xml"))
+			foreach (var file in Directory.GetFiles(fullPathToNhibFolder, "*.nhib.xml"))
 			{
-				XElement element = XElement.Load(file);
+				var element = XElement.Load(file);
 				if (element.Name != "datasource")
 					continue;
 
@@ -61,7 +64,7 @@ namespace Teleopti.Ccc.Web.Areas.Tennant.Core
 		string DataSourceConfig { get; set; }
 	}
 
-	class DataSourceHolder : IDataSourceHolder
+	public class DataSourceHolder : IDataSourceHolder
 	{
 		public string DataSourceName { get; set; }
 		public string DataSourceConfig { get; set; }
