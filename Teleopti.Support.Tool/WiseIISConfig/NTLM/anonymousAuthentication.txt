@@ -6,7 +6,6 @@ RTA;True
 SDK;False
 Web;True
 Client;False
-MyTime;False
 TeleoptiWFM;True
 AuthenticationBridge;True
 WindowsIdentityProvider;True

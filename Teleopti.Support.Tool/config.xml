@@ -43,9 +43,6 @@
 		<Schema type="appDB" elementName="default_schema" parentElement="property" ></Schema>
 	</File>
 
-	<!-- This is the Mytime if pilla we need to resign Nothing To Change in \MyTime\Teleopti.Ccc.AgentPortal.exe.config.deploy -->
-	<File ipath="\TeleoptiCCC\MyTime\Teleopti.Ccc.AgentPortal.exe.config.deploy" dpath="\AgentPortal\Teleopti.Ccc.AgentPortal\app.config"></File>
-
 	<!-- Nothing To Change in \PMService\web.config -->
 	<File ipath="\TeleoptiCCC\PMService\web.config" dpath="\Teleopti.Analytics\WebPortal\Teleopti.Analytics.Pm\Teleopti.Analytics.Pm.PmServiceHost\Web.config"></File>
 
