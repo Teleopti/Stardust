@@ -258,7 +258,6 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 		private void changeGamificationSettingDescription()
 		{
 			if (SelectedGamificationSetting == null) return;
-			_gamificationSettingList[comboBoxAdvGamificationSettings.SelectedIndex].Description = new Description(textBoxDescription.Text);
 			SelectedGamificationSetting.Description = new Description(textBoxDescription.Text);
 			bindSettingListToComboBox();
 		}
@@ -317,49 +316,55 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 		{
 			if (SelectedGamificationSetting == null) return;
 			textBoxDescription.Text = SelectedGamificationSetting.Description.ToString();
-			comboBoxAdvBadgeSettingRuleSets.SelectedValue =  SelectedGamificationSetting.GamificationSettingRuleSet;
+			comboBoxAdvBadgeSettingRuleSets.SelectedValue = SelectedGamificationSetting.GamificationSettingRuleSet;
+
+			var selectedRuleSettingWithRatioConvertorSetting = new RuleSettingWithRatioConvertor()
+			{
+				AnsweredCallsBadgeEnabled = false,
+				AHTBadgeEnabled = false,
+				AdherenceBadgeEnabled = false,
+
+				AnsweredCallsThreshold = SelectedGamificationSetting.AnsweredCallsThreshold,
+				AHTThreshold = SelectedGamificationSetting.AHTThreshold,
+				AdherenceThreshold = SelectedGamificationSetting.AdherenceThreshold,
+
+				GoldToSilverBadgeRate = SelectedGamificationSetting.GoldToSilverBadgeRate,
+				SilverToBronzeBadgeRate = SelectedGamificationSetting.SilverToBronzeBadgeRate
+			};
+			var selectedRuleSettingWithDifferentThresholdSetting = new RuleSettingWithDifferentThreshold()
+			{
+				AnsweredCallsBadgeEnabled = false,
+				AHTBadgeEnabled = false,
+				AdherenceBadgeEnabled = false,
+
+				AnsweredCallsBronzeThreshold = SelectedGamificationSetting.AnsweredCallsBronzeThreshold,
+				AnsweredCallsSilverThreshold = SelectedGamificationSetting.AnsweredCallsSilverThreshold,
+				AnsweredCallsGoldThreshold = SelectedGamificationSetting.AnsweredCallsGoldThreshold,
+
+				AHTBronzeThreshold = SelectedGamificationSetting.AHTBronzeThreshold,
+				AHTSilverThreshold = SelectedGamificationSetting.AHTSilverThreshold,
+				AHTGoldThreshold = SelectedGamificationSetting.AHTGoldThreshold,
+
+				AdherenceBronzeThreshold = SelectedGamificationSetting.AdherenceBronzeThreshold,
+				AdherenceSilverThreshold = SelectedGamificationSetting.AdherenceSilverThreshold,
+				AdherenceGoldThreshold = SelectedGamificationSetting.AdherenceGoldThreshold
+			};
 			if (SelectedGamificationSetting.GamificationSettingRuleSet == GamificationSettingRuleSet.RuleWithRatioConvertor)
 			{
-				var selectedSetting = new RuleSettingWithRatioConvertor()
-				{
-					AnsweredCallsBadgeEnabled = SelectedGamificationSetting.AnsweredCallsBadgeEnabled,
-					AHTBadgeEnabled = SelectedGamificationSetting.AHTBadgeEnabled,
-					AdherenceBadgeEnabled = SelectedGamificationSetting.AdherenceBadgeEnabled,
-
-					AnsweredCallsThreshold = SelectedGamificationSetting.AnsweredCallsThreshold,
-
-					AHTThreshold = SelectedGamificationSetting.AHTThreshold,
-
-					AdherenceThreshold = SelectedGamificationSetting.AdherenceThreshold,
-
-					GoldToSilverBadgeRate = SelectedGamificationSetting.GoldToSilverBadgeRate,
-					SilverToBronzeBadgeRate = SelectedGamificationSetting.SilverToBronzeBadgeRate
-				};
-				gamificationSettingRuleWithRatioConvertorControl.Value.CurrentSetting = selectedSetting;
+				selectedRuleSettingWithRatioConvertorSetting.AnsweredCallsBadgeEnabled = SelectedGamificationSetting.AnsweredCallsBadgeEnabled;
+				selectedRuleSettingWithRatioConvertorSetting.AHTBadgeEnabled = SelectedGamificationSetting.AHTBadgeEnabled;
+				selectedRuleSettingWithRatioConvertorSetting.AdherenceBadgeEnabled = SelectedGamificationSetting.AdherenceBadgeEnabled;
 			}
 			else
 			{
-				var selectedSetting = new RuleSettingWithDifferentThreshold()
-				{
-					AnsweredCallsBadgeEnabled = SelectedGamificationSetting.AnsweredCallsBadgeEnabled,
-					AHTBadgeEnabled = SelectedGamificationSetting.AHTBadgeEnabled,
-					AdherenceBadgeEnabled = SelectedGamificationSetting.AdherenceBadgeEnabled,
-
-					AnsweredCallsBronzeThreshold = SelectedGamificationSetting.AnsweredCallsBronzeThreshold,
-					AnsweredCallsSilverThreshold = SelectedGamificationSetting.AnsweredCallsSilverThreshold,
-					AnsweredCallsGoldThreshold = SelectedGamificationSetting.AnsweredCallsGoldThreshold,
-
-					AHTBronzeThreshold = SelectedGamificationSetting.AHTBronzeThreshold,
-					AHTSilverThreshold = SelectedGamificationSetting.AHTSilverThreshold,
-					AHTGoldThreshold = SelectedGamificationSetting.AHTGoldThreshold,
-
-					AdherenceBronzeThreshold = SelectedGamificationSetting.AdherenceBronzeThreshold,
-					AdherenceSilverThreshold = SelectedGamificationSetting.AdherenceSilverThreshold,
-					AdherenceGoldThreshold = SelectedGamificationSetting.AdherenceGoldThreshold
-				};
-				gamificationSettingRuleWithDifferentThresholdControl.Value.CurrentSetting = selectedSetting;
+				selectedRuleSettingWithDifferentThresholdSetting.AnsweredCallsBadgeEnabled = SelectedGamificationSetting.AnsweredCallsBadgeEnabled;
+				selectedRuleSettingWithDifferentThresholdSetting.AHTBadgeEnabled = SelectedGamificationSetting.AHTBadgeEnabled;
+				selectedRuleSettingWithDifferentThresholdSetting.AdherenceBadgeEnabled = SelectedGamificationSetting.AdherenceBadgeEnabled;
 			}
-		}
+
+			gamificationSettingRuleWithRatioConvertorControl.Value.CurrentSetting = selectedRuleSettingWithRatioConvertorSetting;
+			gamificationSettingRuleWithDifferentThresholdControl.Value.CurrentSetting = selectedRuleSettingWithDifferentThresholdSetting;
+		}	
 
 		private void addNewGamificationSetting()
 		{
@@ -450,7 +455,31 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 			tableLayoutPanel6.SetColumnSpan(tableLayoutPanel6.GetControlFromPosition(0, 2), 2);
 
 			if(SelectedGamificationSetting == null) return;
+
 			SelectedGamificationSetting.GamificationSettingRuleSet = SelectedGamificationSettingRuleSet;
+			updateSelectedBadgeTypes(SelectedGamificationSettingRuleSet);
+		}
+
+		private void updateSelectedBadgeTypes(GamificationSettingRuleSet selectedGamificationSettingRuleSet)
+		{
+			if (selectedGamificationSettingRuleSet == GamificationSettingRuleSet.RuleWithRatioConvertor)
+			{
+				SelectedGamificationSetting.AHTBadgeEnabled =
+					gamificationSettingRuleWithRatioConvertorControl.Value.CurrentSetting.AHTBadgeEnabled;
+				SelectedGamificationSetting.AdherenceBadgeEnabled =
+					gamificationSettingRuleWithRatioConvertorControl.Value.CurrentSetting.AdherenceBadgeEnabled;
+				SelectedGamificationSetting.AnsweredCallsBadgeEnabled =
+					gamificationSettingRuleWithRatioConvertorControl.Value.CurrentSetting.AnsweredCallsBadgeEnabled;
+			}
+			else
+			{
+				SelectedGamificationSetting.AHTBadgeEnabled =
+						gamificationSettingRuleWithDifferentThresholdControl.Value.CurrentSetting.AHTBadgeEnabled;
+				SelectedGamificationSetting.AdherenceBadgeEnabled =
+					gamificationSettingRuleWithDifferentThresholdControl.Value.CurrentSetting.AdherenceBadgeEnabled;
+				SelectedGamificationSetting.AnsweredCallsBadgeEnabled =
+					gamificationSettingRuleWithDifferentThresholdControl.Value.CurrentSetting.AnsweredCallsBadgeEnabled;
+			}
 		}
 
 		private void reset_Click(object sender, EventArgs e)
