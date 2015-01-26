@@ -22,8 +22,14 @@ namespace Teleopti.Ccc.WinCode.Intraday
 			_timer.Interval = millisecondsInterval;
 			_timer.Elapsed += (s, e) =>
 			{
-				action();
-				_timer.Enabled = true;
+				try
+				{
+					action();
+				}
+				finally
+				{
+					_timer.Enabled = true;
+				}
 			};
 			_timer.AutoReset = false;
 			_timer.Enabled = true;
