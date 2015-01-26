@@ -8,8 +8,6 @@
 ..\TeleoptiCCC\Client\Teleopti.Ccc.SmartClientPortal.Shell.exe.config.deploy,BuildArtifacts\AppRaptor.config
 ..\TeleoptiCCC\ETL\Service\Teleopti.Analytics.Etl.ServiceHost.exe.config,BuildArtifacts\AppETLService.config
 ..\TeleoptiCCC\ETL\Tools\Teleopti.Analytics.Etl.ConfigTool.exe.config,BuildArtifacts\AppETLTool.config
-..\TeleoptiCCC\MyTime\ClickOnce\Teleopti.Ccc.AgentPortal.exe.config.deploy,BuildArtifacts\AppMytime.config
-..\TeleoptiCCC\MyTime\Teleopti.Ccc.AgentPortal.exe.config.deploy,BuildArtifacts\AppMytime.config
 ..\TeleoptiCCC\PMService\web.config,BuildArtifacts\PMWeb.config
 ..\TeleoptiCCC\RTATools\Testapplication\Web\Teleopti.Ccc.Rta.TestApplication.exe.config,BuildArtifacts\AppRTATestApplication.config
 ..\TeleoptiCCC\SDK\LegalNotice.txt,BuildArtifacts\LegalNotice.txt
