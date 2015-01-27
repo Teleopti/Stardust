@@ -10,6 +10,7 @@ Generates BCP statements for export and import of data. Enter corresponding Sour
 :SETVAR DESTSERVER "tcp:s8v4m110k9.database.windows.net"
 :SETVAR DESTUSER "forecast@s8v4m110k9"
 :SETVAR DESTPWD "teleopti2012"
+:SETVAR ISAGG "1"
 */
 SET NOCOUNT ON
 
@@ -28,10 +29,12 @@ DECLARE @DestServer NVARCHAR(100)
 DECLARE @DestDB NVARCHAR(100)
 DECLARE @DestUser NVARCHAR(100)
 DECLARE @DestPwd NVARCHAR(100)
+DECLARE @IsAgg NVARCHAR(5)
 SELECT @DestServer = '$(DESTSERVER)'
 SELECT @DestDB = '$(DESTDB)'
 SELECT @DestUser = '$(DESTUSER)'
 SELECT @DestPwd = '$(DESTPWD)'
+SELECT @IsAgg = '$(ISAGG)'
 
 DECLARE @Path NVARCHAR(1000)
 SELECT @Path = '$(WORKINGDIR)' + '\' + @SourceDB
@@ -116,6 +119,30 @@ left outer join sys.foreign_keys fk2
 ON fk2.referenced_object_id = ot.table_id;
 
 ----
+
+IF @IsAgg = '1'
+BEGIN
+	DELETE FROM #TableList
+	
+	INSERT INTO #TableList
+	SELECT 'dbo', 'acd_type', 0, 0
+	INSERT INTO #TableList
+	SELECT 'dbo', 'acd_type_detail', 0, 0
+	INSERT INTO #TableList
+	SELECT 'dbo', 'agent_info', 0, 0
+	INSERT INTO #TableList
+	SELECT 'dbo', 'agent_logg', 0, 0
+	INSERT INTO #TableList
+	SELECT 'dbo', 'log_object', 0, 0
+	INSERT INTO #TableList
+	SELECT 'dbo', 'log_object_detail', 0, 0
+	INSERT INTO #TableList
+	SELECT 'dbo', 'queue_logg', 0, 0
+	INSERT INTO #TableList
+	SELECT 'dbo', 'queues', 0, 0
+
+END
+
 
 CREATE TABLE #BCPOut(id INT IDENTITY(1,1), ExportBCPStatements NVARCHAR(1000))
 INSERT INTO #BCPOut

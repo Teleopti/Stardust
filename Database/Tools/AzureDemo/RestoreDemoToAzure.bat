@@ -80,8 +80,9 @@ IF %ERRORLEVEL% NEQ 0 SET /A ERRORLEV=2 & GOTO :Error
 ECHO.
 ECHO Patching source databases ...
 ECHO.
-"%DBMANAGER%" -S%DESTSERVER% -D%DESTCCC% -OTeleoptiCCC7 -E -T 
-"%DBMANAGER%" -S%DESTSERVER% -D%DESTANALYTICS% -OTeleoptiAnalytics -E -T 
+"%DBMANAGER%" -S%DESTSERVER% -D%SRCCCC7% -OTeleoptiCCC7 -E -T 
+"%DBMANAGER%" -S%DESTSERVER% -D%SRCANALYTICS% -OTeleoptiAnalytics -E -T 
+"%DBMANAGER%" -S%DESTSERVER% -D%SRCAGG% -OTeleoptiAnalytics -E -T 
 "%SECURITY%"  -DS. -DD%SRCCCC7% -EE 
 "%SECURITY%"  -DS. -DD%SRCANALYTICS% -CD%SRCAGG% -EE 
 
@@ -89,22 +90,30 @@ ECHO.
 ECHO Patching source databases ... Done!
 ECHO.
 
+SET ISAGG=0
+
 ::Generate BCP in+out batch files
 ::CCC7
 SQLCMD -S. -E -b -d%SRCCCC7% -i"%ROOTDIR_LOCAL%\DropCircularFKs.sql"
 IF %ERRORLEVEL% NEQ 0 SET /A ERRORLEV=13 & GOTO :error
-SQLCMD -S. -E -b -d%SRCCCC7% -i"%ROOTDIR_LOCAL%\GenerateBCPStatements.sql" -v DESTDB = "%DESTCCC%" WORKINGDIR = "%workingdir%" SOURCEUSER = "%SOURCEUSER%" SOURCEPWD = "%SOURCEPWD%" DESTSERVER = "tcp:%DESTSERVER%" DESTUSER = "%AZUREADMINUSER%" DESTPWD = "%AZUREADMINPWD%"
+SQLCMD -S. -E -b -d%SRCCCC7% -i"%ROOTDIR_LOCAL%\GenerateBCPStatements.sql" -v DESTDB = "%DESTCCC%" WORKINGDIR = "%workingdir%" SOURCEUSER = "%SOURCEUSER%" SOURCEPWD = "%SOURCEPWD%" DESTSERVER = "tcp:%DESTSERVER%" DESTUSER = "%AZUREADMINUSER%" DESTPWD = "%AZUREADMINPWD%" ISAGG = "%ISAGG%"
 IF %ERRORLEVEL% NEQ 0 SET /A ERRORLEV=14 & GOTO :error
 SQLCMD -S. -E -b -d%SRCCCC7% -i"%ROOTDIR_LOCAL%\CreateCircularFKs.sql"
 IF %ERRORLEVEL% NEQ 0 SET /A ERRORLEV=15 & GOTO :error
 ::Analytics
-SQLCMD -S. -E -b -d%SRCANALYTICS% -i"%ROOTDIR_LOCAL%\GenerateBCPStatements.sql" -v DESTDB = "%DESTANALYTICS%" WORKINGDIR = "%workingdir%" SOURCEUSER = "%SOURCEUSER%" SOURCEPWD = "%SOURCEPWD%" DESTSERVER = "tcp:%DESTSERVER%" DESTUSER = "%AZUREADMINUSER%" DESTPWD = "%AZUREADMINPWD%"
+SQLCMD -S. -E -b -d%SRCANALYTICS% -i"%ROOTDIR_LOCAL%\GenerateBCPStatements.sql" -v DESTDB = "%DESTANALYTICS%" WORKINGDIR = "%workingdir%" SOURCEUSER = "%SOURCEUSER%" SOURCEPWD = "%SOURCEPWD%" DESTSERVER = "tcp:%DESTSERVER%" DESTUSER = "%AZUREADMINUSER%" DESTPWD = "%AZUREADMINPWD%" ISAGG = "%ISAGG%"
+IF %ERRORLEVEL% NEQ 0 SET /A ERRORLEV=16 & GOTO :error
+::Agg
+SET ISAGG=1
+SQLCMD -S. -E -b -d%SRCAGG% -i"%ROOTDIR_LOCAL%\GenerateBCPStatements.sql" -v DESTDB = "%DESTANALYTICS%" WORKINGDIR = "%workingdir%" SOURCEUSER = "%SOURCEUSER%" SOURCEPWD = "%SOURCEPWD%" DESTSERVER = "tcp:%DESTSERVER%" DESTUSER = "%AZUREADMINUSER%" DESTPWD = "%AZUREADMINPWD%" ISAGG = "%ISAGG%"
 IF %ERRORLEVEL% NEQ 0 SET /A ERRORLEV=16 & GOTO :error
 
 ::Execute bcp export from local databases
 CMD /C "%workingdir%\%SRCANALYTICS%\Out.bat"
 IF %ERRORLEVEL% NEQ 0 SET /A ERRORLEV=17 & GOTO :error
 CMD /C "%workingdir%\%SRCCCC7%\Out.bat"
+IF %ERRORLEVEL% NEQ 0 SET /A ERRORLEV=18 & GOTO :error
+CMD /C "%workingdir%\%SRCAGG%\Out.bat"
 IF %ERRORLEVEL% NEQ 0 SET /A ERRORLEV=18 & GOTO :error
 
 ::--------
@@ -139,10 +148,16 @@ ECHO Dropping Circular FKs, Delete All Azure data. Done!
 ::Import To Azure Demo
 SQLCMD -Stcp:%DESTSERVER% -U%DESTSERVERADMINUSER% -P%AZUREADMINPWD% -b -d%DESTANALYTICS% -i"%ROOTDIR_LOCAL%\AzureAnalyticsPreBcp.sql"
 IF %ERRORLEVEL% NEQ 0 SET /A ERRORLEV=31 & GOTO :error
+
 ECHO Running BcpIn on Azure Analytics ....
 CMD /C "%workingdir%\%SRCANALYTICS%\In.bat"
 if exist "%workingdir%\%SRCANALYTICS%\Logs\*.log" SET /A ERRORLEV=27 & GOTO :error
+
+ECHO Running BcpIn on Azure Analytics from agg....
+CMD /C "%workingdir%\%SRCAGG%\In.bat"
+if exist "%workingdir%\%SRCAGG%\Logs\*.log" SET /A ERRORLEV=27 & GOTO :error
 ECHO Running BcpIn on Azure Analytics. Done!
+
 SQLCMD -Stcp:%DESTSERVER% -U%DESTSERVERADMINUSER% -P%AZUREADMINPWD% -b -d%DESTANALYTICS% -i"%ROOTDIR_LOCAL%\AzureAnalyticsPostBcp.sql"
 IF %ERRORLEVEL% NEQ 0 SET /A ERRORLEV=32 & GOTO :error
 
