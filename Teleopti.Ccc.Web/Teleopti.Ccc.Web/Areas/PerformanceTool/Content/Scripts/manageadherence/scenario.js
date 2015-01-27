@@ -160,6 +160,7 @@ define([
 						result.RunDone(true);
 						result.IterationsDone(self.IterationsExpected());
 						var data = JSON.parse(notification.BinaryData);
+						result.StartTime(moment(data.StartTime));
 						result.EndTime(moment(data.EndTime));
 
 						if (self.ClearAgentState())
