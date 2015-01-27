@@ -16,7 +16,7 @@ SET MySettings=%ROOTDIR%\..\Teleopti.Support.Tool\bin\%Configuration%\settings.t
 SET DATASOURCE_NAME=ETLTest
 SET PM_INSTALL=False
 SET WEB_BROKER=http://localhost:54903/
-SET URL=http://localhost:52858/
+SET URL=%ROOTDIR%\..\Domain\FeatureFlags\toggles.txt
 SET PM_SERVICE=http://localhost:53396/PMService.svc
 SET ETLPM_BINDING_NAME=Etl_Pm_Http_Binding
 
