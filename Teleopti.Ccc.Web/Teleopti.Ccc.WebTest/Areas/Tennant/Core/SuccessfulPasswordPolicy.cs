@@ -5,11 +5,9 @@ namespace Teleopti.Ccc.WebTest.Areas.Tennant.Core
 {
 	public class SuccessfulPasswordPolicy : IPasswordPolicyCheck
 	{
-		public bool Verify(PasswordPolicyForUser passwordPolicyForUser, out string passwordPolicyFailureReason, out bool passwordExpired)
+		public ApplicationAuthenticationResult Verify(PasswordPolicyForUser passwordPolicyForUser)
 		{
-			passwordPolicyFailureReason = null;
-			passwordExpired = false;
-			return true;
+			return null;
 		}
 	}
 }

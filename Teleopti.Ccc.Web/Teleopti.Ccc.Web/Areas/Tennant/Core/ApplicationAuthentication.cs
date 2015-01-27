@@ -31,10 +31,9 @@ namespace Teleopti.Ccc.Web.Areas.Tennant.Core
 			if (passwordPolicyForUser.IsLocked)
 				return createFailingResult(Resources.LogOnFailedAccountIsLocked);
 
-			string passwordPolicyFailureReason;
-			bool passwordExpired;
-			if (!_passwordPolicyCheck.Verify(passwordPolicyForUser, out passwordPolicyFailureReason, out passwordExpired))
-				return createFailingResult(passwordPolicyFailureReason, passwordExpired);
+			var passwordCheck = _passwordPolicyCheck.Verify(passwordPolicyForUser);
+			if (passwordCheck != null)
+				return passwordCheck;
 
 			var encryptedString = _nHibernateConfigurationsHandler.GetConfigForName(passwordPolicyForUser.PersonInfo.Tennant);
 			if(string.IsNullOrEmpty(encryptedString))
@@ -49,13 +48,12 @@ namespace Teleopti.Ccc.Web.Areas.Tennant.Core
 			};
 		}
 
-		private static ApplicationAuthenticationResult createFailingResult(string failReason, bool passwordExpired=false)
+		private static ApplicationAuthenticationResult createFailingResult(string failReason)
 		{
 			return new ApplicationAuthenticationResult
 			{
 				Success = false,
-				FailReason = failReason,
-				PasswordExpired = passwordExpired
+				FailReason = failReason
 			};
 		}
 	}

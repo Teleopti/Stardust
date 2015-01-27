@@ -121,6 +121,33 @@ namespace Teleopti.Ccc.WebTest.Areas.Tennant.Core
 
 		//rewrite this and replace with real tests when old password policy is converted!
 		[Test]
+		public void PasswordThatWillExpireSoonShouldSuccedButHaveFailReasonSet()
+		{
+			const string userName = "validUserName";
+			const string password = "somePassword";
+			var personInfo = new PersonInfo { Id = Guid.NewGuid(), Password = EncryptPassword.ToDbFormat(password) };
+			var passwordPolicyForUser = new PasswordPolicyForUser(personInfo);
+			var theUserDetail = new UserDetail(null);
+			var findApplicationQuery = MockRepository.GenerateMock<IApplicationUserQuery>();
+			findApplicationQuery.Expect(x => x.FindUserData(userName)).Return(passwordPolicyForUser);
+			var convertDataToOldUserDetailDomain = MockRepository.GenerateMock<IConvertDataToOldUserDetailDomain>();
+			convertDataToOldUserDetailDomain.Expect(
+				x => x.Convert(passwordPolicyForUser)).Return(theUserDetail);
+			var checkPasswordChange = MockRepository.GenerateMock<ICheckPasswordChange>();
+			checkPasswordChange.Expect(x => x.Check(theUserDetail))
+				.Return(new AuthenticationResult { HasMessage = true, Message = "THEMESSAGE", Successful = true, PasswordExpired = false });
+
+			var target = new ApplicationAuthentication(findApplicationQuery, new PasswordVerifier(new OneWayEncryption(), () => new DummyPasswordPolicy(), new Now()),
+				new PasswordPolicyCheck(convertDataToOldUserDetailDomain, checkPasswordChange),
+					MockRepository.GenerateMock<INHibernateConfigurationsHandler>());
+
+			var res = target.Logon(userName, password);
+			res.Success.Should().Be.True();
+			res.FailReason.Should().Be.EqualTo("THEMESSAGE");
+		}
+
+		//rewrite this and replace with real tests when old password policy is converted!
+		[Test]
 		public void ExpiredUserShouldSetPropertyOnResult()
 		{
 			const string userName = "validUserName";

@@ -14,13 +14,20 @@ namespace Teleopti.Ccc.Web.Areas.Tennant.Core
 			_checkPasswordChange = checkPasswordChange;
 		}
 
-		public bool Verify(PasswordPolicyForUser passwordPolicyForUser, out string passwordPolicyFailureReason, out bool passwordExpired)
+		public ApplicationAuthenticationResult Verify(PasswordPolicyForUser passwordPolicyForUser)
 		{
 			var userDetail = _convertDataToOldUserDetailDomain.Convert(passwordPolicyForUser);
 			var res = _checkPasswordChange.Check(userDetail);
-			passwordPolicyFailureReason = res.Message;
-			passwordExpired = res.PasswordExpired;
-			return res.Successful;
+			if (res.Successful && res.Message == null)
+			{
+				return null;
+			}
+			return new ApplicationAuthenticationResult
+			{
+				FailReason = res.Message,
+				PasswordExpired = res.PasswordExpired,
+				Success = res.Successful
+			};
 		}
 	}
 }
