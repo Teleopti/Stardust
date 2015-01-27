@@ -4,7 +4,6 @@ using Newtonsoft.Json;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.Security.Principal;
-//using Teleopti.Ccc.Web.Areas.Anywhere.Core;
 using Teleopti.Ccc.Web.Areas.SeatPlanner.Core.Utilities;
 using Teleopti.Ccc.Web.Core;
 using Teleopti.Ccc.Web.Filters;
@@ -31,7 +30,15 @@ namespace Teleopti.Ccc.Web.Areas.SeatPlanner.Controllers
         // GET: SeatPlanner/Application
         public ActionResult Index()
         {
-            return View();
+			//Robtodo: Review - perhaps add error page?
+	        if (_principalAuthorization.IsPermitted (DefinedRaptorApplicationFunctionPaths.SeatPlanner))
+	        {
+
+		        return View();
+	        }
+
+			return null;
+	        
         }
 
 		[UnitOfWorkAction, HttpGet, OutputCache(NoStore = true, Duration = 0)]

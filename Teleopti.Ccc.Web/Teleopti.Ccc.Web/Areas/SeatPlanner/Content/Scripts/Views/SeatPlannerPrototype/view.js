@@ -60,7 +60,8 @@ define([
 
 			//Robtodo: loaded locations defer/resolve
 
-			return $.when(loadedTeamsDeferred)
+			
+			return $.when(loadedTeamsDeferred) // && Robtodo: loadedLocationsDeferred???? works???)
 					.done(function () {
 						viewModel.Loading(false);
 						//resize.notify();

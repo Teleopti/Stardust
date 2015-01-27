@@ -306,6 +306,10 @@ namespace Teleopti.Ccc.Win.Permissions
 		private void addFunctionsToAllFunctionsCollection(IEnumerable<SystemFunction> functions)
 		{
 			foreach (var systemFunction in functions)
+			if (applicationFunction.ForeignId == "0107")
+			{
+				return (!_toggleManager.IsEnabled (Toggles.SeatPlanner_32003));
+			} 
 			{
 				_allFunctionsCollection.Add(systemFunction.Function);
 				addFunctionsToAllFunctionsCollection(systemFunction.ChildFunctions);
