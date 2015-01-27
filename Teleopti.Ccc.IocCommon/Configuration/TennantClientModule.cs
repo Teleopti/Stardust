@@ -15,9 +15,34 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 
 		protected override void Load(ContainerBuilder builder)
 		{
-			builder.Register(c => new AuthenticationQuerier(_configuration.Args().TennantServer))
+
+			var tennantServer = _configuration.Args().TennantServer;
+
+			if (string.IsNullOrEmpty(tennantServer))
+			{
+
+				builder.Register(c => new AuthenticationQuerier(_configuration.Args().TennantServer))
 				.As<IAuthenticationQuerier>()
 				.SingleInstance();
+			}
+			else if(tennantPathIsAnUrl())
+			{
+				builder.Register(c => new AuthenticationQuerier(_configuration.Args().TennantServer))
+				.As<IAuthenticationQuerier>()
+				.SingleInstance();
+			}
+			else
+			{
+				builder.Register(c => new AuthenticationFromFileQuerier(_configuration.Args().TennantServer))
+				.As<IAuthenticationQuerier>()
+				.SingleInstance();
+			}
+		}
+
+		private bool tennantPathIsAnUrl()
+		{
+			var tennantServer = _configuration.Args().TennantServer;
+			return tennantServer.StartsWith("http://") || tennantServer.StartsWith("https://");
 		}
 	}
 }

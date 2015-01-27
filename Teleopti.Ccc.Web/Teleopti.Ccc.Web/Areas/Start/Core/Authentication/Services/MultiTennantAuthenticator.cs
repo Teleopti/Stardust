@@ -1,7 +1,9 @@
 ﻿using Teleopti.Ccc.Domain.Repositories;
+using Teleopti.Ccc.Domain.Security;
 using Teleopti.Ccc.Web.Areas.Start.Core.Authentication.DataProvider;
 using Teleopti.Ccc.Web.Areas.Tennant.Core;
 using Teleopti.Interfaces.Domain;
+using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.Web.Areas.Start.Core.Authentication.Services
 {
@@ -65,10 +67,14 @@ namespace Teleopti.Ccc.Web.Areas.Start.Core.Authentication.Services
 		public AuthenticateResult AuthenticateApplicationUser(string dataSourceName, string userName, string password)
 		{
 			var result = _applicationAuthentication.Logon(userName, password);
-			
+
 			if (result.Success)
 			{
-				IDataSource dataSource = _dataSourceProvider.RetrieveDataSourceByName(dataSourceName);
+				var nhibConfig = Encryption.DecryptStringFromBase64(result.DataSourceEncrypted, EncryptionConstants.Image1, EncryptionConstants.Image2);
+				var applicationData = StateHolderReader.Instance.StateReader.ApplicationScopeData;
+				var dataSource = applicationData.CreateAndAddDataSource(nhibConfig);
+
+				//IDataSource dataSource = _dataSourceProvider.RetrieveDataSourceByName(dataSourceName);
 				using (var uow = dataSource.Application.CreateAndOpenUnitOfWork())
 				{
 					var person = _repositoryFactory.CreatePersonRepository(uow).LoadOne(result.PersonId);

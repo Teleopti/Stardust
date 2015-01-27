@@ -1,17 +1,15 @@
 ﻿using System;
 using System.IO;
 using NUnit.Framework;
-using Rhino.Mocks;
 using SharpTestsEx;
-using Teleopti.Ccc.Web.Areas.Tennant.Core;
-using Teleopti.Ccc.Web.Core.Startup.InitializeApplication;
+using Teleopti.Ccc.Infrastructure.MultiTenancy;
 
-namespace Teleopti.Ccc.WebTest.Areas.Tennant.Core
+namespace Teleopti.Ccc.WinCodeTest.Main
 {
-	public class NHibernateConfigurationsHandlerTest
+	[TestFixture]
+	public class AuthenticationFromFileQuerierTest
 	{
-		private const string nhibConf = @"<?xml version='1.0' encoding='utf-8'?>
-		<datasource>
+		private string json = @"{""Success"":true,""FailReason"":null,""PersonId"":""10957ad5-5489-48e0-959a-9b5e015b2b5c"",""Tennant"":""Teleopti WFM"",""DataSource"":""<datasource>
 			<hibernate-configuration xmlns='urn:nhibernate-configuration-2.2'>
 				<session-factory name='Teleopti WFM'>
 					<property name='connection.connection_string'>
@@ -31,38 +29,22 @@ namespace Teleopti.Ccc.WebTest.Areas.Tennant.Core
 				<logonMode>mix</logonMode>
 				<!--  win or mix -->
 			</authentication>
-		</datasource>";
+		</datasource>""}";
 
 		[Test]
-		public void ShouldLoadDataSources()
+		public void ShouldReadJsonFromFile()
 		{
 			var path = Path.GetTempPath();
-			var filename = Guid.NewGuid() + ".nhib.xml";
+			var filename = "Authentication.json";
 			var writer = new StreamWriter(path + filename);
 
-			writer.Write(nhibConf);
+			writer.Write(json);
 			writer.Close();
-			settings.Stub(x => x.nhibConfPath()).Return(path);
 
-			var target = new NHibernateConfigurationsHandler(settings, new physicalApplicationPathStub(path));
-			var result = target.GetConfigForName("Teleopti WFM");
-			result.Should().Not.Be.Empty();
+			var target = new AuthenticationFromFileQuerier(path);
+
+			target.TryIdentityLogon("").Success.Should().Be.True();
 			File.Delete(path + filename);
-		}
-
-		private class physicalApplicationPathStub : IPhysicalApplicationPath
-		{
-			private readonly string _path;
-
-			public physicalApplicationPathStub(string path)
-			{
-				_path = path;
-			}
-
-			public string Get()
-			{
-				return _path;
-			}
 		}
 	}
 }

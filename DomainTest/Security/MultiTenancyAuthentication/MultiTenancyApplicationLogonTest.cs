@@ -23,6 +23,29 @@ namespace Teleopti.Ccc.DomainTest.Security.MultiTenancyAuthentication
 		private ILogonModel _model;
 		private IApplicationData _appData;
 
+		const string nhibConf = @"<?xml version='1.0' encoding='utf-8'?>
+		<datasource>
+			<hibernate-configuration xmlns='urn:nhibernate-configuration-2.2'>
+				<session-factory name='Teleopti WFM'>
+					<property name='connection.connection_string'>
+				
+		        Data Source=.;Integrated Security=SSPI;Initial Catalog=main_clone_DemoSales_TeleoptiCCC7;Current Language=us_english
+		      </property>
+					<property name='command_timeout'>60</property>
+				</session-factory>
+			</hibernate-configuration>
+			<matrix name='MatrixDatamartDemo'>
+				<connectionString>
+				<!--WISEMETA: default='[SQL_AUTH_STRING];Initial Catalog=[DB_ANALYTICS];Current Language=us_english'-->
+				Data Source=.;Integrated Security=SSPI;Initial Catalog=main_clone_DemoSales_TeleoptiAnalytics;Current Language=us_english
+		    </connectionString>
+			</matrix>
+			<authentication>
+				<logonMode>mix</logonMode>
+				<!--  win or mix -->
+			</authentication>
+		</datasource>";
+
 		[SetUp]
 		public void Setup()
 		{
@@ -60,6 +83,28 @@ zjynBDpennBSNqkqCiW3EQRWBLLUsTvYDVTukgp553hrec5dBRnZbAJDPZ1C9vxaL41gULCDALIUiNUt
 			result.Successful.Should().Be.True();
 			_model.SelectedDataSourceContainer.User.Should().Be.EqualTo(person);
 			
+		}
+
+		[Test]
+		public void ShouldReturnSuccessOnSuccessFromFile()
+		{
+			var uowFactory = MockRepository.GenerateMock<IUnitOfWorkFactory>();
+			var uow = MockRepository.GenerateMock<IUnitOfWork>();
+			var personId = Guid.NewGuid();
+			var person = new Person();
+			var personRepository = MockRepository.GenerateMock<IPersonRepository>();
+			_authenticationQuerier.Stub(x => x.TryLogon("kalle", "kula"))
+				.Return(new AuthenticationQueryResult { PersonId = personId, Success = true, Tennant = "Teleopti WFM", DataSource = nhibConf });
+			_appData.Stub(x => x.CreateAndAddDataSource("")).Return(_dataSource).IgnoreArguments();
+			_dataSource.Stub(x => x.Application).Return(uowFactory);
+			uowFactory.Stub(x => x.CreateAndOpenUnitOfWork()).Return(uow);
+			_repositoryFactory.Stub(x => x.CreatePersonRepository(uow)).Return(personRepository);
+			personRepository.Stub(x => x.LoadOne(personId)).Return(person);
+			var result = _target.Logon(_model, _appData);
+
+			result.Successful.Should().Be.True();
+			_model.SelectedDataSourceContainer.User.Should().Be.EqualTo(person);
+
 		}
 
 		[Test]

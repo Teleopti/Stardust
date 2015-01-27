@@ -143,7 +143,10 @@ namespace Teleopti.Ccc.Infrastructure.Foundation
 		public IDataSource CreateAndAddDataSource(string nhibConfig)
 		{
 			var element = XElement.Parse(nhibConfig);
-			IDataSource dataSource;
+			var dataSourceName = element.Descendants().ElementAt(1).Attribute("name").Value;
+			var dataSource = existingDataSource(dataSourceName);
+			if (dataSource != null)
+				return dataSource;
 			var success = _dataSourcesFactory.TryCreate(element, out dataSource);
 			if (success)
 			{
@@ -157,6 +160,11 @@ namespace Teleopti.Ccc.Infrastructure.Foundation
 			}
 
 			return dataSource;
+		}
+
+		private IDataSource existingDataSource(string datasourceName)
+		{
+			return _registeredDataSourceCollection.FirstOrDefault(dataSource => dataSource.DataSourceName.Equals(datasourceName));
 		}
 	}
 }
