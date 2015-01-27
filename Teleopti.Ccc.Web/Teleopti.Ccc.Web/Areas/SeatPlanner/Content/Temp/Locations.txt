@@ -1,0 +1,59 @@
+﻿{  
+	"name":"China",
+	"childLocations":[  
+	   {  
+	   	"name":"Shenzhen",
+	   	"childLocations":[  
+		   {  
+		   	"name":"Nan Shan",
+		   	"seats":[  
+			   {  
+			   	"name":"Nan Shan Seat 1"
+			   },
+			   {  
+			   	"name":"Nan Shan Seat 2"
+			   },
+			   {  
+			   	"name":"Nan Shan Seat 3"
+			   }
+		   	]
+		   },
+		   {  
+		   	"name":"Futian",
+		   	"seats":[  
+			   {  
+			   	"name":"Nan Shan Seat 1"
+			   },
+			   {  
+			   	"name":"Nan Shan Seat 2"
+			   },
+			   {  
+			   	"name":"Nan Shan Seat 3"
+			   }
+		   	]
+		   }
+	   	]
+	   },
+	   {  
+	   	"name":"Chongqing",
+	   	"childLocations":[  
+		   {  
+		   	"name":"Guanyinqiao",
+		   	"seats":[  
+			   {  
+			   	"name":"Guanyinqiao Seat 1"
+			   },
+			   {  
+			   	"name":"Guanyinqiao Seat 2"
+			   }
+		   	]
+		   }
+	   	],
+	   	"seats":[  
+		   {  
+		   	"name":"Chongqing Seat 1"
+		   }
+	   	]
+	   }
+	]
+}

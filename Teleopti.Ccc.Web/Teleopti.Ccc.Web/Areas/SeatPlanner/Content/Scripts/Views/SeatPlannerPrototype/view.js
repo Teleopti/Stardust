@@ -36,7 +36,8 @@ define([
 
 	var loadLocations = function(callback) {
 		ajax.ajax({
-			url: "SeatPlanner/LocationHierarchy/Get"
+			url: "SeatPlanner/LocationHierarchy/Get",
+			success : callback
 		});
 	}
 
@@ -58,10 +59,14 @@ define([
 				loadedTeamsDeferred.resolve();
 			});
 
-			//Robtodo: loaded locations defer/resolve
+			var loadedLocationsDeferred = $.Deferred();
+			loadLocations(function (data) {
+				viewModel.LoadLocations(data);
+				loadedLocationsDeferred.resolve();
+			});
 
 			
-			return $.when(loadedTeamsDeferred) // && Robtodo: loadedLocationsDeferred???? works???)
+			return $.when(loadedTeamsDeferred && loadedLocationsDeferred)
 					.done(function () {
 						viewModel.Loading(false);
 						//resize.notify();

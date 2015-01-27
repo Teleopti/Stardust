@@ -406,9 +406,14 @@
     <Compile Include="Areas\Permissions\Controllers\RolesController.cs" />
     <Compile Include="Areas\Permissions\Controllers\NewRoleInput.cs" />
     <Compile Include="Areas\Rta\Controllers\SyncController.cs" />
+    <Compile Include="Areas\SeatPlanner\Controllers\LocationHierarchyController.cs" />
     <Compile Include="Areas\SeatPlanner\Controllers\SeatPlanCommandController.cs" />
+    <Compile Include="Areas\SeatPlanner\Core\Providers\ILocationHierarchyProvider.cs" />
+    <Compile Include="Areas\SeatPlanner\Core\Providers\LocationHierarchyProvider.cs" />
     <Compile Include="Areas\SeatPlanner\Core\ViewModels\BusinessUnitViewModel.cs" />
     <Compile Include="Areas\SeatPlanner\Core\ViewModels\BusinessUnitWithSitesViewModel.cs" />
+    <Compile Include="Areas\SeatPlanner\Core\ViewModels\LocationViewModel.cs" />
+    <Compile Include="Areas\SeatPlanner\Core\ViewModels\SeatViewModel.cs" />
     <Compile Include="Areas\Start\Core\Authentication\Services\MultiTennantAuthenticator.cs" />
     <Compile Include="Areas\SeatPlanner\Controllers\ApplicationController.cs" />
     <Compile Include="Areas\SeatPlanner\Controllers\TeamHierarchyController.cs" />
@@ -1183,6 +1188,7 @@
     <Content Include="Areas\SeatPlanner\Content\Templates\layout.html" />
     <Content Include="Areas\SeatPlanner\Content\Templates\menu.html" />
     <Content Include="Areas\SeatPlanner\Content\Templates\notification.html" />
+    <Content Include="Areas\SeatPlanner\Content\Temp\Locations.txt" />
     <Content Include="Areas\SeatPlanner\Content\Translation\TranslationTemplate.txt" />
     <Content Include="Areas\SeatPlanner\Views\Application\index.aspx" />
     <Content Include="Areas\Tennant\these_files_will_probably_be_moved.txt" />
@@ -1827,6 +1833,7 @@
     <Folder Include="Areas\Mart\Views\Shared\" />
     <Folder Include="Areas\MyTime\Core\BadgeLeaderBoardReport\DataProvider\" />
     <Folder Include="Areas\PerformanceTool\Content\Templates\" />
+    <Folder Include="Areas\SeatPlanner\Views\LocationHierarchy\" />
     <Folder Include="Areas\SSO\Views\Authentication\" />
   </ItemGroup>
   <ItemGroup>

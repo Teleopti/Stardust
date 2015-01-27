@@ -25,7 +25,7 @@ namespace Teleopti.Ccc.Web.Areas.SeatPlanner.Core.IOC
 		{
 			builder.RegisterType<ExceptionHandlerPipelineModule>().As<IHubPipelineModule>();
 			builder.RegisterType<TeamsProvider>().As<ITeamsProvider>().InstancePerLifetimeScope();
-
+			builder.RegisterType<LocationHierarchyProvider>().As<ILocationHierarchyProvider>().InstancePerLifetimeScope();
 		}
 	}
 }

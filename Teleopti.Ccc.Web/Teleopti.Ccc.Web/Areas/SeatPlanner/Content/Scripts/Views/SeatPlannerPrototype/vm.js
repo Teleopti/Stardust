@@ -35,38 +35,52 @@ define([
 		this.StartDate = ko.observable(moment.tz(timezoneCurrent.IanaTimeZone()).startOf('day'));
 		this.EndDate = ko.observable(moment.tz(timezoneCurrent.IanaTimeZone()).startOf('day').add(1, 'day'));
 		this.ApplyingSeatPlanning = ko.observable(false);
-
-		//Temporary for initial prototype...load locations from json string.
-		this.RootLocation = locations.call().getLocations()[0];
 		this.TeamHierarchy = ko.observable();
-		this.MapLocationsToTreeNodes = function () {
-			return this.MapLocationToTreeNode(self.RootLocation);
-		};
+		this.LocationHierarchy = ko.observable();
+		this.TeamHierarchyNodes = [];
+		this.LocationHierarchyNodes = [];
 
 		this.MapLocationToTreeNode = function (location) {
-			var childLocations = location.childLocations;
+
+			if (!location) return null;
+
+			var childLocations = location.Children;
 			var childNodes = [];
-			if (childLocations !== undefined) {
+			if (childLocations !== null) {
 				for (var i = 0, len = childLocations.length; i < len; i++) {
 					childNodes.push(self.MapLocationToTreeNode(childLocations[i]));
 				}
 			}
-			var locationName = location.name;
-			if (location.seats !== undefined) {
-				locationName += " ( Seats: " + location.seats.length + ")";
+			var locationName = location.Name;
+			if (location.Seats !== null) {
+				locationName += " ( Seats: " + location.Seats.length + ")";
 			}
-			var treeNode = { id: location.id, name: locationName, children: childNodes, payload: location };
+			var treeNode = { id: location.Id, name: locationName, children: childNodes, payload: location };
 			return treeNode;
 		};
 
-		this.GetTreeNodesForLocations = this.LocationTreeListViewModel.createNodeFromJson(this.MapLocationsToTreeNodes());
+		this.GetTreeNodesForLocations = ko.computed({
+			read: function () {
+				var locationHierarchy = self.LocationHierarchy();
+				if (locationHierarchy !== undefined) {
+					//RobTodo: review: fix this better so binding doesnt reload this list.
+					if (self.LocationHierarchyNodes.length == 0) {
+						self.LocationHierarchyNodes = self.LocationTreeListViewModel.createNodeFromJson(self.MapLocationToTreeNode(locationHierarchy));
+					}
+					return self.LocationHierarchyNodes;
+				} else {
+					return null;
+				}
+			},
+			deferEvaluation: true
+		});
 
-		this.MapTeamsToTreeNode = function(site) {
-			
+		this.MapTeamsToTreeNode = function (site) {
+
 			var teams = [];
 			for (var i = 0, len = site.Teams.length; i < len; i++) {
 				var team = site.Teams[i];
-				var teamTreeNode = { id: team.Id, name: team.Name + " (Agents: "+team.NumberOfAgents+")", children: [], payload: team };
+				var teamTreeNode = { id: team.Id, name: team.Name + " (Agents: " + team.NumberOfAgents + ")", children: [], payload: team };
 				teams.push(teamTreeNode);
 			}
 			return teams;
@@ -83,14 +97,12 @@ define([
 			return siteNodes;
 		};
 
-		this.MapTeamHierarchyToTreeNodes = function(teamHierarchy) {
+		this.MapTeamHierarchyToTreeNodes = function (teamHierarchy) {
 			var businessUnit = teamHierarchy;
 			var siteNodes = self.MapSitesToTreeNodes(businessUnit.Sites);
 			var businessUnitTreeNode = { id: businessUnit.Id, name: businessUnit.Name, children: siteNodes, payload: null };
 			return businessUnitTreeNode;
 		}
-
-		this.TeamHierarchyNodes = [];
 
 		this.GetTreeNodesForBusinessHierarchy = ko.computed({
 			read: function () {
@@ -99,7 +111,7 @@ define([
 					//RobTodo: review: fix this better so binding doesnt reload this list.
 					if (self.TeamHierarchyNodes.length == 0) {
 						self.TeamHierarchyNodes = self.TeamsTreeListViewModel.createNodeFromJson(self.MapTeamHierarchyToTreeNodes(teamHierarchy));
-						
+
 					}
 					return self.TeamHierarchyNodes;
 				} else {
@@ -184,6 +196,11 @@ define([
 
 		this.LoadTeams = function (data) {
 			this.TeamHierarchy(data);
+		};
+
+		this.LoadLocations = function (data) {
+			
+			self.LocationHierarchy(data);
 		};
 
 		this.SetViewOptions = function (options) {

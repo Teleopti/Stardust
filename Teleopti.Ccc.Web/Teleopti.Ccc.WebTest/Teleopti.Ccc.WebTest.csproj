@@ -229,6 +229,7 @@
     <Compile Include="Areas\Permissions\ApplicationFunctionsControllerTest.cs" />
     <Compile Include="Areas\Permissions\RolesControllerTest.cs" />
     <Compile Include="Areas\Rta\Synchronization\LockingTest.cs" />
+    <Compile Include="Areas\SeatPlanner\Controllers\LocationHierarchyControllerTest.cs" />
     <Compile Include="Areas\Tennant\Core\ApplicationAuthenticationPasswordPolicesTest.cs" />
     <Compile Include="Areas\Tennant\Core\EncryptPassword.cs" />
     <Compile Include="Areas\Tennant\Core\IdentityAuthenticationTest.cs" />
