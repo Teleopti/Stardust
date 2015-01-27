@@ -1,7 +1,5 @@
 using System;
 using Autofac;
-using Castle.Core.Internal;
-using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Infrastructure.ApplicationLayer;
 using Teleopti.Ccc.Infrastructure.NHibernateConfiguration;
 using Teleopti.Ccc.Infrastructure.Toggle;

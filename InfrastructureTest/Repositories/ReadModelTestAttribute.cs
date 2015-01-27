@@ -1,5 +1,4 @@
 ﻿using Teleopti.Ccc.Domain.Aop;
-using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.IoC;
 
 namespace Teleopti.Ccc.InfrastructureTest.Repositories
