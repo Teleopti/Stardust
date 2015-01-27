@@ -37,7 +37,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 				")")
 				.SetGuid("PersonId", model.PersonId)
 				.SetDateTime("BelongsToDate", model.BelongsToDate)
-				.SetParameter("Model", _jsonSerializer.SerializeObject(model.Model))
+				.SetParameter("Model", _jsonSerializer.SerializeObject(model.Model), NHibernateUtil.StringClob)
 				.ExecuteUpdate();
 		}
 
@@ -51,7 +51,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 				"	BelongsToDate =:Date")
 				.SetGuid("PersonId", model.PersonId)
 				.SetDateTime("Date", model.BelongsToDate)
-				.SetParameter("Model", _jsonSerializer.SerializeObject(model.Model))
+				.SetParameter("Model", _jsonSerializer.SerializeObject(model.Model), NHibernateUtil.StringClob)
 				.ExecuteUpdate();
 		}
 

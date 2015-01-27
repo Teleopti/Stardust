@@ -69,7 +69,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 				.CreateSqlQuery("UPDATE ReadModel.SiteOutOfAdherence SET Count = :Count, BusinessUnitId = :BusinessUnitId, PersonIds = :PersonIds WHERE SiteId = :SiteId")
 				.SetParameter("SiteId", model.SiteId)
 				.SetParameter("Count", model.Count)
-				.SetParameter("PersonIds", model.PersonIds )
+				.SetParameter("PersonIds", model.PersonIds, NHibernateUtil.StringClob)
 				.SetParameter("BusinessUnitId", model.BusinessUnitId)
 				.ExecuteUpdate();
 		}
@@ -81,7 +81,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 				.SetParameter("BusinessUnitId", model.BusinessUnitId)
 				.SetParameter("SiteId", model.SiteId)
 				.SetParameter("Count", model.Count)
-				.SetParameter("PersonIds", model.PersonIds )
+				.SetParameter("PersonIds", model.PersonIds, NHibernateUtil.StringClob)
 				.ExecuteUpdate();
 		}
 	}

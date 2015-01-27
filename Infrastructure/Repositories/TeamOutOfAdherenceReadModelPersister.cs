@@ -1,4 +1,5 @@
-﻿using NHibernate.Transform;
+﻿using NHibernate;
+using NHibernate.Transform;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -67,7 +68,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 				"UPDATE ReadModel.TeamOutOfAdherence SET Count = :Count, PersonIds = :PersonIds, SiteId = :SiteId WHERE TeamId = :TeamId")
 				.SetParameter("TeamId", model.TeamId)
 				.SetParameter("SiteId", model.SiteId)
-				.SetParameter("PersonIds", model.PersonIds)
+				.SetParameter("PersonIds", model.PersonIds, NHibernateUtil.StringClob)
 				.SetParameter("Count", model.Count)
 				.ExecuteUpdate();
 		}
@@ -78,7 +79,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 				"INSERT INTO ReadModel.TeamOutOfAdherence (SiteId, TeamId, Count, PersonIds) VALUES (:SiteId, :TeamId, :Count, :PersonIds)")
 				.SetParameter("SiteId", model.SiteId)
 				.SetParameter("TeamId", model.TeamId)
-				.SetParameter("PersonIds", model.PersonIds)
+				.SetParameter("PersonIds", model.PersonIds, NHibernateUtil.StringClob)
 				.SetParameter("Count", model.Count)
 				.ExecuteUpdate();
 		}
