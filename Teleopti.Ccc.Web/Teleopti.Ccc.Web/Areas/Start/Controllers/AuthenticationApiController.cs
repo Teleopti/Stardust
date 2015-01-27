@@ -1,6 +1,7 @@
 using System;
 using System.Web.Mvc;
 using Teleopti.Ccc.Domain.Security;
+using Teleopti.Ccc.Infrastructure.MultiTenancy.NHibernate;
 using Teleopti.Ccc.Secrets.Licensing;
 using Teleopti.Ccc.UserTexts;
 using Teleopti.Ccc.Web.Areas.Start.Core.Authentication.Services;
@@ -31,7 +32,8 @@ namespace Teleopti.Ccc.Web.Areas.Start.Controllers
 		}
 
 		[HttpGet]
-		public JsonResult BusinessUnits(IAuthenticationModel model)
+		[TennantUnitOfWork]
+		public virtual JsonResult BusinessUnits(IAuthenticationModel model)
 		{
 			var result = model.AuthenticateUser();
 			if (!result.Successful)
@@ -41,7 +43,8 @@ namespace Teleopti.Ccc.Web.Areas.Start.Controllers
 		}
 
 		[HttpPost]
-		public JsonResult Logon(IAuthenticationModel model, Guid businessUnitId)
+		[TennantUnitOfWork]
+		public virtual JsonResult Logon(IAuthenticationModel model, Guid businessUnitId)
 		{
 			try
 			{
