@@ -1,9 +1,7 @@
 ﻿using Teleopti.Ccc.Domain.Repositories;
-using Teleopti.Ccc.Domain.Security;
 using Teleopti.Ccc.Web.Areas.Start.Core.Authentication.DataProvider;
 using Teleopti.Ccc.Web.Areas.Tennant.Core;
 using Teleopti.Interfaces.Domain;
-using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.Web.Areas.Start.Core.Authentication.Services
 {
@@ -70,11 +68,7 @@ namespace Teleopti.Ccc.Web.Areas.Start.Core.Authentication.Services
 
 			if (result.Success)
 			{
-				var nhibConfig = Encryption.DecryptStringFromBase64(result.DataSourceEncrypted, EncryptionConstants.Image1, EncryptionConstants.Image2);
-				var applicationData = StateHolderReader.Instance.StateReader.ApplicationScopeData;
-				var dataSource = applicationData.CreateAndAddDataSource(nhibConfig);
-
-				//IDataSource dataSource = _dataSourceProvider.RetrieveDataSourceByName(dataSourceName);
+				var dataSource = _dataSourceProvider.RetrieveDataSourceByName(dataSourceName);
 				using (var uow = dataSource.Application.CreateAndOpenUnitOfWork())
 				{
 					var person = _repositoryFactory.CreatePersonRepository(uow).LoadOne(result.PersonId);
@@ -82,7 +76,7 @@ namespace Teleopti.Ccc.Web.Areas.Start.Core.Authentication.Services
 				}
 			}
 
-			return new AuthenticateResult { DataSource = null, Person = null, Successful = false, HasMessage = !string.IsNullOrEmpty(result.FailReason), Message = result.FailReason, PasswordExpired = false };
+			return new AuthenticateResult { DataSource = null, Person = null, Successful = false, HasMessage = !string.IsNullOrEmpty(result.FailReason), Message = result.FailReason, PasswordExpired = result.PasswordExpired };
 		}
 
 		public void SaveAuthenticateResult(string userName, AuthenticateResult result)

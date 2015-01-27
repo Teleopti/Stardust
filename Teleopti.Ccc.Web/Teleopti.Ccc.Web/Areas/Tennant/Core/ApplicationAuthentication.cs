@@ -1,7 +1,5 @@
-﻿using Teleopti.Ccc.Domain.Security;
-using Teleopti.Ccc.Infrastructure.MultiTenancy;
+﻿using Teleopti.Ccc.Infrastructure.MultiTenancy;
 using Teleopti.Ccc.UserTexts;
-using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.Web.Areas.Tennant.Core
 {
@@ -34,10 +32,11 @@ namespace Teleopti.Ccc.Web.Areas.Tennant.Core
 				return createFailingResult(Resources.LogOnFailedAccountIsLocked);
 
 			string passwordPolicyFailureReason;
-			if (!_passwordPolicyCheck.Verify(passwordPolicyForUser, out passwordPolicyFailureReason))
-				return createFailingResult(passwordPolicyFailureReason);
+			bool passwordExpired;
+			if (!_passwordPolicyCheck.Verify(passwordPolicyForUser, out passwordPolicyFailureReason, out passwordExpired))
+				return createFailingResult(passwordPolicyFailureReason, passwordExpired);
 
-			string encryptedString = _nHibernateConfigurationsHandler.GetConfigForName(passwordPolicyForUser.PersonInfo.Tennant);
+			var encryptedString = _nHibernateConfigurationsHandler.GetConfigForName(passwordPolicyForUser.PersonInfo.Tennant);
 			if(string.IsNullOrEmpty(encryptedString))
 				return createFailingResult(Resources.NoDatasource);
 
@@ -50,12 +49,13 @@ namespace Teleopti.Ccc.Web.Areas.Tennant.Core
 			};
 		}
 
-		private static ApplicationAuthenticationResult createFailingResult(string failReason)
+		private static ApplicationAuthenticationResult createFailingResult(string failReason, bool passwordExpired=false)
 		{
 			return new ApplicationAuthenticationResult
 			{
 				Success = false,
-				FailReason = failReason
+				FailReason = failReason,
+				PasswordExpired = passwordExpired
 			};
 		}
 	}

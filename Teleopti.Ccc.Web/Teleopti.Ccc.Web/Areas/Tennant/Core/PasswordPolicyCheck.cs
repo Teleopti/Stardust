@@ -1,5 +1,4 @@
-﻿using System;
-using Teleopti.Ccc.Domain.Security.Authentication;
+﻿using Teleopti.Ccc.Domain.Security.Authentication;
 using Teleopti.Ccc.Infrastructure.MultiTenancy;
 
 namespace Teleopti.Ccc.Web.Areas.Tennant.Core
@@ -15,11 +14,12 @@ namespace Teleopti.Ccc.Web.Areas.Tennant.Core
 			_checkPasswordChange = checkPasswordChange;
 		}
 
-		public bool Verify(PasswordPolicyForUser passwordPolicyForUser, out string passwordPolicyFailureReason)
+		public bool Verify(PasswordPolicyForUser passwordPolicyForUser, out string passwordPolicyFailureReason, out bool passwordExpired)
 		{
 			var userDetail = _convertDataToOldUserDetailDomain.Convert(passwordPolicyForUser);
 			var res = _checkPasswordChange.Check(userDetail);
 			passwordPolicyFailureReason = res.Message;
+			passwordExpired = res.PasswordExpired;
 			return res.Successful;
 		}
 	}

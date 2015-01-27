@@ -9,5 +9,6 @@ namespace Teleopti.Ccc.Web.Areas.Tennant.Core
 		public Guid PersonId { get; set; }
 		public string Tennant { get; set; }
 		public string DataSourceEncrypted { get; set; }
+		public bool PasswordExpired { get; set; }
 	}
 }
