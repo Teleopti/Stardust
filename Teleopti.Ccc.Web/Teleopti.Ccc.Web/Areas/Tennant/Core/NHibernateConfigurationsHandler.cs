@@ -29,6 +29,8 @@ namespace Teleopti.Ccc.Web.Areas.Tennant.Core
 		{
 			if (!_dataSources.Any())
 				loadDataSources();
+			if (_dataSources.First().DataSourceName.Equals("TestData"))
+				return _dataSources.First().DataSourceConfig;
 			foreach (var dataSourceHolder in _dataSources.Where(dataSourceHolder => dataSourceHolder.DataSourceName.Equals(dataSourceName)))
 			{
 				return dataSourceHolder.DataSourceConfig;
