@@ -326,6 +326,7 @@ namespace Teleopti.Ccc.WinCode.Intraday
 
         private void loadExternalAgentStates()
         {
+			if (ExternalAgentStateReceived != null) ExternalAgentStateReceived.Invoke(this, EventArgs.Empty);
 			var statisticRepository = _repositoryFactory.CreateRtaRepository();
             using (PerformanceOutput.ForOperation("Read and collect agent states"))
             {
