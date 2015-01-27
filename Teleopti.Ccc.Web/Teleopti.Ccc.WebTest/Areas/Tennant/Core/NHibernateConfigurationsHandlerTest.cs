@@ -36,6 +36,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Tennant.Core
 		[Test]
 		public void ShouldLoadDataSources()
 		{
+			var settings = MockRepository.GenerateMock<ISettings>();
 			var path = Path.GetTempPath();
 			var filename = Guid.NewGuid() + ".nhib.xml";
 			var writer = new StreamWriter(path + filename);
