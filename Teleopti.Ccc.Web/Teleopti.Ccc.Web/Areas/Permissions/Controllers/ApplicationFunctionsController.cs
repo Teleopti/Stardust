@@ -1,59 +1,50 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Linq;
 using System.Web.Http;
 using Teleopti.Ccc.Domain.Collection;
-using Teleopti.Ccc.Domain.Common;
-using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
-using Teleopti.Ccc.Domain.Security.Principal;
+using Teleopti.Ccc.Domain.Security.AuthorizationEntities;
+using Teleopti.Ccc.Infrastructure.Toggle;
 using Teleopti.Ccc.Web.Core.Aop.Aspects;
 using Teleopti.Ccc.Web.Filters;
-using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Web.Areas.Permissions.Controllers
 {
 	[ApplicationFunctionApi(DefinedRaptorApplicationFunctionPaths.OpenPermissionPage)]
 	public class ApplicationFunctionsController : ApiController
 	{
-		private readonly IApplicationFunctionRepository _applicationFunctionRepository;
-		private readonly ILicensedFunctionsProvider _licensedFunctionsProvider;
-		private readonly ICurrentDataSource _currentDataSource;
-
-		public ApplicationFunctionsController(IApplicationFunctionRepository applicationFunctionRepository, ILicensedFunctionsProvider licensedFunctionsProvider, ICurrentDataSource currentDataSource)
+		private readonly IApplicationFunctionsToggleFilter _applicationFunctionsToggleFilter;
+		
+		public ApplicationFunctionsController(IApplicationFunctionsToggleFilter applicationFunctionsToggleFilter)
 		{
-			_applicationFunctionRepository = applicationFunctionRepository;
-			_licensedFunctionsProvider = licensedFunctionsProvider;
-			_currentDataSource = currentDataSource;
+			_applicationFunctionsToggleFilter = applicationFunctionsToggleFilter;
 		}
 
 		[UnitOfWork, HttpGet, Route("api/Permissions/ApplicationFunctions")]
-		public virtual object GetAllFunctions()
+		public virtual ICollection<ApplicationFunctionViewModel> GetAllFunctions()
 		{
-			var allFunctions = _applicationFunctionRepository.GetAllApplicationFunctionSortedByCode();
-			var licensedFunctions = _licensedFunctionsProvider.LicensedFunctions(_currentDataSource.CurrentName()).ToArray();
-			var isLicensed = new Func<IApplicationFunction, bool>(licensedFunctions.Contains);
-			var parentFunctions = allFunctions.Where(f => f.Parent == null).ToArray();
-			
-			return new {Functions = createAllFunctionsHierarchy(parentFunctions,isLicensed)};
+			var functions = _applicationFunctionsToggleFilter.FilteredFunctions();
+			return createAllFunctionsHierarchy(functions.Functions);
 		}
 
-		private ICollection<ApplicationFunctionViewModel> createAllFunctionsHierarchy(IApplicationFunction[] parentFunctions, Func<IApplicationFunction,bool> checkLicensed)
+		private ICollection<ApplicationFunctionViewModel> createAllFunctionsHierarchy(ICollection<SystemFunction> functions)
 		{
 			var result = new Collection<ApplicationFunctionViewModel>();
-			foreach (var applicationFunction in parentFunctions)
+			foreach (var applicationFunction in functions)
 			{
+				if (applicationFunction.Hidden) continue;
+
 				var function = new ApplicationFunctionViewModel
 				{
-					FunctionCode = applicationFunction.FunctionCode,
-					FunctionDescription = applicationFunction.FunctionDescription,
-					LocalizedFunctionDescription = applicationFunction.LocalizedFunctionDescription,
-					FunctionId = applicationFunction.Id.GetValueOrDefault(),
-					IsDisabled = !checkLicensed(applicationFunction)
+					FunctionCode = applicationFunction.Function.FunctionCode,
+					FunctionDescription = applicationFunction.Function.FunctionDescription,
+					LocalizedFunctionDescription = applicationFunction.Function.LocalizedFunctionDescription,
+					FunctionId = applicationFunction.Function.Id.GetValueOrDefault(),
+					IsDisabled = !applicationFunction.IsLicensed,
 				};
 				var childFunctions =
-					createAllFunctionsHierarchy(applicationFunction.ChildCollection.OfType<IApplicationFunction>().ToArray(), checkLicensed);
+					createAllFunctionsHierarchy(applicationFunction.ChildFunctions);
 				childFunctions.ForEach(function.ChildFunctions.Add);
 				result.Add(function);
 			}

@@ -8,7 +8,6 @@ using Autofac;
 using Syncfusion.Windows.Forms;
 using Syncfusion.Windows.Forms.Tools;
 using Teleopti.Ccc.Domain.Common;
-using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
@@ -44,17 +43,14 @@ namespace Teleopti.Ccc.Win.Permissions
 		private readonly Dictionary<int, IList<IApplicationFunction>> _functionsDic = new Dictionary<int, IList<IApplicationFunction>>();
 		private const int firstElement = 0;
 		private ClipboardControl _clipboardControl;
-		private static IList<IApplicationFunction> _licensedFunctions;
 		private Control _lastInFocus;
 		private const string space = @" ";
 		private readonly IGracefulDataSourceExceptionHandler _dataSourceExceptionHandler = new GracefulDataSourceExceptionHandler();
 		private IPermissionViewerRolesPresenter _permissionsViewerPresenter;
-		private readonly IToggleManager _toggleManager;
-
+		
 		public PermissionsExplorer(IComponentContext container)
 		{
 			_container = container;
-			_toggleManager = _container.Resolve<IToggleManager>();
 			
 			InitializeComponent();
 			instantiateClipboardControl();
@@ -260,95 +256,60 @@ namespace Teleopti.Ccc.Win.Permissions
 			}
 		}
 
-		private void recursivelyAddChildNodes(TreeNodeAdv treeNode, IList<IApplicationFunction> functions)
+		private void recursivelyAddChildNodes(TreeNodeAdv treeNode, ICollection<SystemFunction> childFunctions)
 		{
-			if (functions == null) return;
-			var parentApplicationFunction = treeNode.TagObject as IApplicationFunction;
-			if (parentApplicationFunction == null) return;
-
-			foreach (
-				IApplicationFunction applicationFunction in
-					functions.Where(f => parentApplicationFunction.Equals(f.Parent)))
+			foreach (var systemFunction in childFunctions)
 			{
-				if (shouldHideFunction(applicationFunction))
-					continue;
-				if (applicationFunction.IsPreliminary)
+				if (systemFunction.Hidden)
 					continue;
 
-				var rootNode = new TreeNodeAdv(applicationFunction.LocalizedFunctionDescription)
+				var rootNode = new TreeNodeAdv(systemFunction.Function.LocalizedFunctionDescription)
 								{
-									TagObject = applicationFunction,
+									TagObject = systemFunction.Function,
 									Tag = 1,
-									CheckState = CheckState.Unchecked
+									CheckState = CheckState.Unchecked,
+									Enabled = systemFunction.IsLicensed
 								};
 
-				disableFunctionsNotLicensed(applicationFunction, rootNode);
-
-				
 				treeNode.Nodes.Add(rootNode);
-				recursivelyAddChildNodes(rootNode, functions);
+				recursivelyAddChildNodes(rootNode, systemFunction.ChildFunctions);
 			}
 		}
 
-		private void loadAllApplicationFunctions(IList<IApplicationFunction> functions)
+		private void loadAllApplicationFunctions(AllFunctions functions)
 		{
 			if (functions == null) return;
-			foreach (IApplicationFunction function in functions)
-			{
-				// Add functions guids to the allFunctionsCollection also 
-				_allFunctionsCollection.Add(function);
-			}
 
-			// Get the root functions from the list
-			IEnumerable<IApplicationFunction> rootApplicationFunctions = functions.Where(af => af.Parent == null);
+			addFunctionsToAllFunctionsCollection(functions.Functions);
 
 			treeViewFunctions.BeginUpdate();
 
-			foreach (IApplicationFunction applicationFunction in rootApplicationFunctions)
+			foreach (var systemFunction in functions.Functions)
 			{
-				var rootNode = new TreeNodeAdv(applicationFunction.LocalizedFunctionDescription)
+				if (systemFunction.Hidden) continue;
+
+				var rootNode = new TreeNodeAdv(systemFunction.Function.LocalizedFunctionDescription)
 								{
-									TagObject = applicationFunction,
+									TagObject = systemFunction.Function,
 									Tag = 1,
-									CheckState = CheckState.Unchecked
+									CheckState = CheckState.Unchecked,
+									Enabled = systemFunction.IsLicensed
 								};
 
-				disableFunctionsNotLicensed(applicationFunction, rootNode);
-				disableFunctionsNotLicensed(applicationFunction, rootNode);
-
-				recursivelyAddChildNodes(rootNode, functions);
+				recursivelyAddChildNodes(rootNode, systemFunction.ChildFunctions);
 				treeViewFunctions.Nodes.Add(rootNode);
 			}
 
 			treeViewFunctions.EndUpdate();
 		}
 
-		private static void disableFunctionsNotLicensed(IApplicationFunction applicationFunction, TreeNodeAdv rootNode)
+		private void addFunctionsToAllFunctionsCollection(IEnumerable<SystemFunction> functions)
 		{
-			if (applicationFunction.FunctionPath == "All") return;
-
-			if (_licensedFunctions == null)
+			foreach (var systemFunction in functions)
 			{
-				_licensedFunctions = (from o in LicenseSchema.GetActiveLicenseSchema(UnitOfWorkFactory.Current.Name).LicenseOptions
-									  from f in o.EnabledApplicationFunctions
-									  where (o.Enabled)
-									  select f).ToList();
+				_allFunctionsCollection.Add(systemFunction.Function);
+				addFunctionsToAllFunctionsCollection(systemFunction.ChildFunctions);
 			}
-			if (applicationFunction.ForeignSource == "Raptor" &&
-				!_licensedFunctions.Contains(applicationFunction))
-			{
-				rootNode.Enabled = false;
-			}
-		}
-
-		private  bool shouldHideFunction(IApplicationFunction applicationFunction)
-		{
-			if (applicationFunction.FunctionPath == "All") return false;
-			if (applicationFunction.ForeignId == "0095" && !_toggleManager.IsEnabled(Toggles.MyReport_AgentQueueMetrics_22254))
-			{
-				return true;
-			}
-			return false;
 		}
 
 		private void changeCheckStateOfFunctionTree()
@@ -1913,7 +1874,6 @@ namespace Teleopti.Ccc.Win.Permissions
 								if (!_dataSourceExceptionHandler.AttemptDatabaseConnectionDependentAction(()=> removeFunctionsFromSelectedRoles(functions)))
 								{
 									FormKill();
-									return;
 								}
 							}
 						}
@@ -1924,7 +1884,6 @@ namespace Teleopti.Ccc.Win.Permissions
 							if (!_dataSourceExceptionHandler.AttemptDatabaseConnectionDependentAction(()=> removeFunctionFromSelectedRoles(function)))
 							{
 								FormKill();
-								return;
 							}
 						}
 					}
@@ -2093,9 +2052,15 @@ namespace Teleopti.Ccc.Win.Permissions
 
 		public void LoadDatabaseData()
 		{
-			bindThisList(PermissionsExplorerHelper.LoadAllApplicationRoles().ToList());
-			loadAllApplicationFunctions(PermissionsExplorerHelper.LoadAllApplicationFunctions().ToList());
-			_availableDataCollection = PermissionsExplorerHelper.GetAllAvailableDataForOneBusinessUnit().ToList();
+			var unitOfWorkFactory = UnitOfWorkFactory.Current;
+			using (unitOfWorkFactory.CreateAndOpenUnitOfWork())
+			{
+				var helper = _container.Resolve<PermissionsExplorerHelper>();
+				var applicationRoles = helper.LoadAllApplicationRoles().ToList();
+				bindThisList(applicationRoles);
+				loadAllApplicationFunctions(helper.LoadAllApplicationFunctions());
+				_availableDataCollection = applicationRoles.Select(x => x.AvailableData).ToList();
+			}
 		}
 
 		private IList<IEnumerable<IBusinessUnit>> loadAvailableData(ICollection<IAvailableData> dataCollection, out IList<IEnumerable<ISite>> siteAll, out IList<IEnumerable<ITeam>> teamAll, out IList<IEnumerable<AvailableDataRangeOption>> dataRangeOptionAll)
@@ -2205,7 +2170,7 @@ namespace Teleopti.Ccc.Win.Permissions
 			var peopleCollection = permissionsExplorerStateHolder.GetPersonInPermissionsDataDictionary(selectedRole);
 			if (peopleCollection == null)
 			{
-				peopleCollection = PermissionsExplorerHelper.LoadPeopleByApplicationRole(selectedRole).ToList();
+				peopleCollection = _container.Resolve<PermissionsExplorerHelper>().LoadPeopleByApplicationRole(selectedRole).ToList();
 			}
 			bindPeople(peopleCollection);
 
@@ -2237,7 +2202,7 @@ namespace Teleopti.Ccc.Win.Permissions
 						foreach (ExtentListItem rItem in listViewRoles.SelectedItems)
 						{
 							var role = rItem.TagObject as IApplicationRole;
-							var tempPersons = PermissionsExplorerHelper.LoadPeopleNotInApplicationRole(role,
+							var tempPersons = _container.Resolve<PermissionsExplorerHelper>().LoadPeopleNotInApplicationRole(role,
 																									   SelectedPersonsToAddToRole);
 							foreach (var id in SelectedPersonsToAddToRole)
 							{

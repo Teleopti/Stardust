@@ -9,14 +9,14 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 {
     public class ApplicationRolePersonRepository : IApplicationRolePersonRepository
     {
-        private readonly IStatelessUnitOfWork _unitOfWork;
+	    private readonly IStatelessUnitOfWork _unitOfWork;
 
         public ApplicationRolePersonRepository(IStatelessUnitOfWork unitOfWork)
         {
             _unitOfWork = unitOfWork;
         }
 
-        public IList<IPersonInRole> GetPersonsInRole(Guid roleId)
+	    public IList<IPersonInRole> GetPersonsInRole(Guid roleId)
         {
             var onDate = DateTime.Today.Date;
             const string query = @"SELECT p.Id, FirstName, LastName , ISNULL(t.Name, '') Team

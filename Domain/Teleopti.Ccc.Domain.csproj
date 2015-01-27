@@ -1366,6 +1366,10 @@
     <Compile Include="Scheduling\WorkShiftWorkTime.cs" />
     <Compile Include="Scheduling\WorkTimeMinMax.cs" />
     <Compile Include="Scheduling\WorkTimeMinMaxCalculator.cs" />
+    <Compile Include="Security\AuthorizationEntities\AllFunctions.cs" />
+    <Compile Include="Security\AuthorizationEntities\ApplicationFunctionsProvider.cs" />
+    <Compile Include="Security\AuthorizationEntities\IApplicationFunctionsProvider.cs" />
+    <Compile Include="Security\AuthorizationEntities\SystemFunction.cs" />
     <Compile Include="Security\MultiTenancyAuthentication\IMultiTenancyApplicationLogon.cs" />
     <Compile Include="Security\Authentication\ApplicationDataSourceProvider.cs" />
     <Compile Include="Security\Authentication\AuthenticationResult.cs" />

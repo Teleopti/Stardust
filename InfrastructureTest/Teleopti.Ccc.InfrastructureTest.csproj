@@ -218,6 +218,7 @@
     <Compile Include="Repositories\BusinessUnitFilterOverriderTest.cs" />
     <Compile Include="Rta\RtaRepositoryTest.cs" />
     <Compile Include="Rta\StateGroupTest.cs" />
+    <Compile Include="Toggle\ApplicationFunctionFeatureFlagTest.cs" />
     <Compile Include="Toggle\TogglesActiveTest.cs" />
     <Compile Include="Licensing\CheckLicenseExistsTest.cs" />
     <Compile Include="Licensing\LicenseActivatorProviderTest.cs" />

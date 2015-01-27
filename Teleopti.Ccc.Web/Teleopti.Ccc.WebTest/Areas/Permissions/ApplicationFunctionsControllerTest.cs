@@ -1,14 +1,11 @@
-using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using NUnit.Framework;
 using Rhino.Mocks;
 using SharpTestsEx;
-using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Security.AuthorizationEntities;
-using Teleopti.Ccc.Domain.Security.Principal;
-using Teleopti.Ccc.TestCommon;
+using Teleopti.Ccc.Infrastructure.Toggle;
 using Teleopti.Ccc.Web.Areas.Permissions.Controllers;
-using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.WebTest.Areas.Permissions
 {
@@ -17,24 +14,23 @@ namespace Teleopti.Ccc.WebTest.Areas.Permissions
 		[Test]
 		public void ShouldGetFunctionHierarchy()
 		{
-			var functionRepository = MockRepository.GenerateMock<IApplicationFunctionRepository>();
-			var licensedFunctionsProvider = MockRepository.GenerateMock<ILicensedFunctionsProvider>();
+			var functionRepository = MockRepository.GenerateMock<IApplicationFunctionsToggleFilter>();
+			
+			var functionOne = new ApplicationFunction("Code1"){ FunctionDescription = "Test 1"};
+			var functionTwo = new ApplicationFunction("Code2") { FunctionDescription = "Hello"};
+			functionTwo.Parent = functionOne;
 
-			licensedFunctionsProvider.Stub(x => x.LicensedFunctions("datasource"))
-				.Return(new [] {new ApplicationFunction("Code1"), new ApplicationFunction("Code1/Code2")});
+			functionRepository.Stub(x => x.FilteredFunctions())
+				.Return(
+					new AllFunctions(new Collection<SystemFunction>
+					{
+						new SystemFunction(functionOne, _ => true),
+					}));
 
-			var functionOne = new ApplicationFunction("Code1"){Parent = null,FunctionDescription = "Test 1"};
-			functionRepository.Stub(x => x.GetAllApplicationFunctionSortedByCode())
-				.Return(new List<IApplicationFunction>
-				{
-					functionOne,
-					new ApplicationFunction("Code2") {Parent = functionOne, FunctionDescription = "Hello"}
-				});
+			var target = new ApplicationFunctionsController(functionRepository);
+			var result = target.GetAllFunctions();
 
-			var target = new ApplicationFunctionsController(functionRepository, licensedFunctionsProvider, new FakeCurrentDatasource("datasource"));
-			dynamic result = target.GetAllFunctions();
-
-			var resultFunctions = ((ICollection<ApplicationFunctionViewModel>)result.Functions).Single();
+			var resultFunctions = result.Single();
 			resultFunctions.LocalizedFunctionDescription.Should().Be.EqualTo("Test 1");
 			resultFunctions.ChildFunctions.Single().LocalizedFunctionDescription.Should().Be.EqualTo("Hello");
 		}
@@ -42,39 +38,50 @@ namespace Teleopti.Ccc.WebTest.Areas.Permissions
 		[Test]
 		public void ShouldMarkNonLicensedFunctionsDifferently()
 		{
-			var functionRepository = MockRepository.GenerateMock<IApplicationFunctionRepository>();
-			var licensedFunctionsProvider = MockRepository.GenerateMock<ILicensedFunctionsProvider>();
-
+			var functionRepository = MockRepository.GenerateMock<IApplicationFunctionsToggleFilter>();
+			
 			var functionOne = new ApplicationFunction("Code1") { Parent = null, FunctionDescription = "Test 1" };
-			functionRepository.Stub(x => x.GetAllApplicationFunctionSortedByCode())
-				.Return(new List<IApplicationFunction> {functionOne});
+			functionRepository.Stub(x => x.FilteredFunctions())
+				.Return(new AllFunctions(new Collection<SystemFunction>{new SystemFunction(functionOne, _ => false)}));
 
-			licensedFunctionsProvider.Stub(x => x.LicensedFunctions("datasource")).Return(new IApplicationFunction[] {});
+			var target = new ApplicationFunctionsController(functionRepository);
+			var result = target.GetAllFunctions();
 
-			var target = new ApplicationFunctionsController(functionRepository, licensedFunctionsProvider, new FakeCurrentDatasource("datasource"));
-			dynamic result = target.GetAllFunctions();
-
-			var resultFunctions = ((ICollection<ApplicationFunctionViewModel>)result.Functions).Single();
+			var resultFunctions = result.Single();
 			resultFunctions.IsDisabled.Should().Be.True();
 		}
 
 		[Test]
 		public void ShouldMarkLicensedFunctionsEnabled()
 		{
-			var functionRepository = MockRepository.GenerateMock<IApplicationFunctionRepository>();
-			var licensedFunctionsProvider = MockRepository.GenerateMock<ILicensedFunctionsProvider>();
+			var functionRepository = MockRepository.GenerateMock<IApplicationFunctionsToggleFilter>();
+			
+			var functionOne = new ApplicationFunction("Code1") { Parent = null, FunctionDescription = "Test 1" };
+			functionRepository.Stub(x => x.FilteredFunctions())
+				.Return(new AllFunctions(new Collection<SystemFunction>{new SystemFunction(functionOne,_ => true)}));
+
+			var target = new ApplicationFunctionsController(functionRepository);
+			var result = target.GetAllFunctions();
+
+			var resultFunctions = result.Single();
+			resultFunctions.IsDisabled.Should().Be.False();
+		}
+
+		[Test]
+		public void ShouldIgnoreHiddenFunctions()
+		{
+			var functionRepository = MockRepository.GenerateMock<IApplicationFunctionsToggleFilter>();
 
 			var functionOne = new ApplicationFunction("Code1") { Parent = null, FunctionDescription = "Test 1" };
-			functionRepository.Stub(x => x.GetAllApplicationFunctionSortedByCode())
-				.Return(new List<IApplicationFunction> { functionOne });
+			var systemFunction = new SystemFunction(functionOne, _ => true);
+			systemFunction.SetHidden();
+			functionRepository.Stub(x => x.FilteredFunctions())
+				.Return(new AllFunctions(new Collection<SystemFunction> { systemFunction }));
 
-			licensedFunctionsProvider.Stub(x => x.LicensedFunctions("datasource")).Return(new [] { new ApplicationFunction("Code1")  });
+			var target = new ApplicationFunctionsController(functionRepository);
+			var result = target.GetAllFunctions();
 
-			var target = new ApplicationFunctionsController(functionRepository, licensedFunctionsProvider, new FakeCurrentDatasource("datasource"));
-			dynamic result = target.GetAllFunctions();
-
-			var resultFunctions = ((ICollection<ApplicationFunctionViewModel>)result.Functions).Single();
-			resultFunctions.IsDisabled.Should().Be.False();
+			result.Should().Be.Empty();
 		}
 	}
 }

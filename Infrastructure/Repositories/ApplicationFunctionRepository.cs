@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using NHibernate.Criterion;
 using Teleopti.Ccc.Domain.Repositories;
-using Teleopti.Ccc.Domain.Security;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.Security.AuthorizationEntities;
 using Teleopti.Interfaces.Domain;
@@ -9,23 +8,8 @@ using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.Infrastructure.Repositories
 {
-	/// <summary>
-	/// Repository for application function 
-	/// </summary>
-	/// <remarks>
-	/// Created by: rogerkr
-	/// Created date: 2007-11-12
-	/// </remarks>
 	public class ApplicationFunctionRepository : Repository<IApplicationFunction>, IApplicationFunctionRepository
 	{
-		/// <summary>
-		/// Initializes a new instance of the <see cref="ApplicationFunctionRepository"/> class.
-		/// </summary>
-		/// <param name="unitOfWork">The UnitOfWork.</param>
-		/// <remarks>
-		/// Created by: rogerkr
-		/// Created date: 2007-11-12
-		/// </remarks>
 		public ApplicationFunctionRepository(IUnitOfWork unitOfWork)
 			: base(unitOfWork)
 		{
@@ -35,14 +19,11 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 		{
 		}
 
-		/// <summary>
-		/// Finds all application functions sorted by name.
-		/// </summary>
-		/// <returns></returns>
-		/// <remarks>
-		/// Created by: rogerkr
-		/// Created date: 2007-12-07
-		/// </remarks>
+		public ApplicationFunctionRepository(IUnitOfWorkFactory unitOfWorkFactory)
+			: base(unitOfWorkFactory)
+		{
+		}
+
 		public IList<IApplicationFunction> GetAllApplicationFunctionSortedByCode()
 		{
 			IList<IApplicationFunction> functions = Session.CreateCriteria(typeof(ApplicationFunction))
@@ -70,10 +51,6 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 			}
 		}
 
-		/// <summary>
-		/// Synchronizes the specified application function .
-		/// </summary>
-		/// <param name="applicationFunction">The application function.</param>
 		protected static void SynchronizeRaptorApplicationFunctions(IApplicationFunction applicationFunction)
 		{
 			if (applicationFunction.ForeignSource == DefinedForeignSourceNames.SourceRaptor)
@@ -95,10 +72,6 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 			}
 		}
 
-		/// <summary>
-		/// Synchronizes the specified application functions.
-		/// </summary>
-		/// <param name="applicationFunctions">The application functions.</param>
 		protected static void SynchronizeApplicationFunctions(IEnumerable<IApplicationFunction> applicationFunctions)
 		{
 			foreach (IApplicationFunction applicationFunction in applicationFunctions)

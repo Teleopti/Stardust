@@ -250,6 +250,8 @@
     <Compile Include="Rta\IDatabaseConnectionFactory.cs" />
     <Compile Include="Rta\IDatabaseConnectionStringHandler.cs" />
     <Compile Include="Rta\RtaRepository.cs" />
+    <Compile Include="Toggle\ApplicationFunctionsToggleFilter.cs" />
+    <Compile Include="Toggle\IApplicationFunctionsToggleFilter.cs" />
     <Compile Include="Toggle\IToggleFiller.cs" />
     <Compile Include="Toggle\IToggleManager.cs" />
     <Compile Include="Toggle\ToggleEnabledResult.cs" />

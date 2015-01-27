@@ -7,7 +7,7 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.DomainTest.Security.AuthorizationEntities
 {
-    [TestFixture]
+	[TestFixture]
     public class ApplicationRoleTest
     {
         private ApplicationRole _target;
@@ -21,7 +21,7 @@ namespace Teleopti.Ccc.DomainTest.Security.AuthorizationEntities
         [Test]
         public void VerifyAddRemoveApplicationFunction()
         {
-            ApplicationFunction fkn = new ApplicationFunction("heja gnaget!");
+            var fkn = new ApplicationFunction("heja gnaget!");
             Assert.AreEqual(0, _target.ApplicationFunctionCollection.Count);
             _target.AddApplicationFunction(fkn);
             Assert.AreEqual(1, _target.ApplicationFunctionCollection.Count);
@@ -34,7 +34,7 @@ namespace Teleopti.Ccc.DomainTest.Security.AuthorizationEntities
         [Test]
         public void VerifyDoesNotAddApplicationFunctionTwice()
         {
-            ApplicationFunction fkn = new ApplicationFunction("heja gnaget!");
+            var fkn = new ApplicationFunction("heja gnaget!");
             Assert.AreEqual(0, _target.ApplicationFunctionCollection.Count);
             _target.AddApplicationFunction(fkn);
             _target.AddApplicationFunction(fkn);
@@ -107,7 +107,7 @@ namespace Teleopti.Ccc.DomainTest.Security.AuthorizationEntities
         [Test]
         public void VerifyClone()
         {
-            ApplicationRole clonedEntity = (ApplicationRole)_target.Clone();
+            var clonedEntity = (ApplicationRole)_target.Clone();
             Assert.AreNotEqual(clonedEntity, _target);
             Assert.AreNotSame(clonedEntity, _target);
         }
@@ -115,7 +115,7 @@ namespace Teleopti.Ccc.DomainTest.Security.AuthorizationEntities
         [Test]
         public void VerifyUserTextTranslator()
         {
-            UserTextTranslator explicitUserTextTranslator = new UserTextTranslator();
+            var explicitUserTextTranslator = new UserTextTranslator();
             _target.UserTextTranslator = explicitUserTextTranslator;
             Assert.AreSame(explicitUserTextTranslator, _target.UserTextTranslator);
         }
