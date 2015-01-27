@@ -399,6 +399,8 @@
     <Compile Include="Areas\Anywhere\Core\AgentViewModel.cs" />
     <Compile Include="Areas\Anywhere\Core\TeamViewModel.cs" />
     <Compile Include="Areas\Permissions\Controllers\ApplicationFunctionsController.cs" />
+    <Compile Include="Areas\MyTime\Core\Common\DataProvider\ILeaderboardSettingBasedBadgeProvider.cs" />
+    <Compile Include="Areas\MyTime\Core\Common\DataProvider\LeaderboardSettingBasedBadgeProvider.cs" />
     <Compile Include="Areas\Permissions\Controllers\AvailableDataForRoleInput.cs" />
     <Compile Include="Areas\Permissions\Controllers\FunctionsForRoleInput.cs" />
     <Compile Include="Areas\Permissions\Controllers\RoleNameInput.cs" />

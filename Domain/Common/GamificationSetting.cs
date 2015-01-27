@@ -32,7 +32,7 @@ namespace Teleopti.Ccc.Domain.Common
 		private Percent _adherenceSilverThreshold = new Percent(0.80);
 		private Percent _adherenceGoldThreshold = new Percent(0.85);
 
-		private int _silverToBronzeBadgeRate = 2;
+		private int _silverToBronzeBadgeRate = 5;
 		private int _goldToSilverBadgeRate = 5;
 		private bool _isDeleted;
 

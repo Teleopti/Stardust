@@ -5,6 +5,7 @@ using NUnit.Framework;
 using Rhino.Mocks;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
+using Teleopti.Ccc.Infrastructure.Toggle;
 using Teleopti.Ccc.Web.Areas.MyTime.Controllers;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.BadgeLeaderBoardReport.ViewModelFactory;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider;
@@ -20,7 +21,10 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.BadgeLeaderBoard.ViewModelFacto
 		public void ShouldReturnBadgeLeaderBoardViewModel()
 		{
 			var badgesProvider = MockRepository.GenerateMock<ILeaderboardAgentBadgeProvider>();
-			var target = new BadgeLeaderBoardReportViewModelFactory(badgesProvider);
+			var toggleManager = MockRepository.GenerateMock<IToggleManager>();
+			var leaderboardSettingBasedBadgeProvider =MockRepository.GenerateMock<ILeaderboardSettingBasedBadgeProvider>();
+
+			var target = new BadgeLeaderBoardReportViewModelFactory(badgesProvider,toggleManager,leaderboardSettingBasedBadgeProvider);
 			var list = new List<AgentBadgeOverview>();
 			var option = new LeaderboardQuery
 			{
@@ -41,7 +45,10 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.BadgeLeaderBoard.ViewModelFacto
 		public void ShouldReturnSortedAgents()
 		{
 			var badgesProvider = MockRepository.GenerateMock<ILeaderboardAgentBadgeProvider>();
-			var target = new BadgeLeaderBoardReportViewModelFactory(badgesProvider);
+			var toggleManager = MockRepository.GenerateMock<IToggleManager>();
+			var leaderboardSettingBasedBadgeProvider = MockRepository.GenerateMock<ILeaderboardSettingBasedBadgeProvider>();
+
+			var target = new BadgeLeaderBoardReportViewModelFactory(badgesProvider, toggleManager, leaderboardSettingBasedBadgeProvider);
 			var overview_original = new[]
 			{
 				new AgentBadgeOverview
