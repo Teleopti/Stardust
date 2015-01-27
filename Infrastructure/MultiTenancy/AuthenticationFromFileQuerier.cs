@@ -6,11 +6,11 @@ namespace Teleopti.Ccc.Infrastructure.MultiTenancy
 {
 	public class AuthenticationFromFileQuerier : IAuthenticationQuerier
 	{
-		private readonly string _pathToFile;
+		private readonly string _fullPathToFile;
 
-		public AuthenticationFromFileQuerier(string pathToFile)
+		public AuthenticationFromFileQuerier(string fullPathToFile)
 		{
-			_pathToFile = pathToFile;
+			_fullPathToFile = fullPathToFile;
 		}
 
 		public AuthenticationQueryResult TryLogon(string userName, string password)
@@ -25,11 +25,10 @@ namespace Teleopti.Ccc.Infrastructure.MultiTenancy
 
 		private AuthenticationQueryResult readFile()
 		{
-			var file = _pathToFile + "Authentication.json";
-			if (!File.Exists(file))
-				return new AuthenticationQueryResult { DataSource = "", DataSourceEncrypted = "", FailReason = string.Format("No file with name {0}", file), Success = false };
+			if (!File.Exists(_fullPathToFile))
+				return new AuthenticationQueryResult { DataSource = "", DataSourceEncrypted = "", FailReason = string.Format("No file with name {0}", _fullPathToFile), Success = false };
 
-			string json = File.ReadAllText(file);
+			string json = File.ReadAllText(_fullPathToFile);
 			return JsonConvert.DeserializeObject<AuthenticationQueryResult>(json);
 		}
 	}

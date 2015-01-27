@@ -9,7 +9,7 @@ namespace Teleopti.Ccc.WinCodeTest.Main
 	[TestFixture]
 	public class AuthenticationFromFileQuerierTest
 	{
-		private string json = @"{""Success"":true,""FailReason"":null,""PersonId"":""10957ad5-5489-48e0-959a-9b5e015b2b5c"",""Tennant"":""Teleopti WFM"",""DataSource"":""<datasource>
+		private const string json = @"{""Success"":true,""FailReason"":null,""PersonId"":""10957ad5-5489-48e0-959a-9b5e015b2b5c"",""Tennant"":""Teleopti WFM"",""DataSource"":""<datasource>
 			<hibernate-configuration xmlns='urn:nhibernate-configuration-2.2'>
 				<session-factory name='Teleopti WFM'>
 					<property name='connection.connection_string'>
@@ -35,16 +35,17 @@ namespace Teleopti.Ccc.WinCodeTest.Main
 		public void ShouldReadJsonFromFile()
 		{
 			var path = Path.GetTempPath();
-			var filename = "Authentication.json";
-			var writer = new StreamWriter(path + filename);
+			var filename = Guid.NewGuid() + ".json";
+			var fullPath = path + filename;
+			var writer = new StreamWriter(fullPath);
 
 			writer.Write(json);
 			writer.Close();
 
-			var target = new AuthenticationFromFileQuerier(path);
+			var target = new AuthenticationFromFileQuerier(fullPath);
 
 			target.TryIdentityLogon("").Success.Should().Be.True();
-			File.Delete(path + filename);
+			File.Delete(fullPath);
 		}
 	}
 }
