@@ -1499,9 +1499,7 @@
     <Compile Include="Scheduling\PermissionClipboardRestrictionControl.cs" />
     <Compile Include="Scheduling\PermissionEditControl.cs" />
     <Compile Include="Scheduling\PermissionEditRestrictionControl.cs" />
-    <Compile Include="Scheduling\PropertyPanel\PerShiftCategoryChart.cs">
-      <SubType>Component</SubType>
-    </Compile>
+    <Compile Include="Scheduling\PropertyPanel\PerShiftCategoryChart.cs" />
     <Compile Include="Scheduling\PropertyPanel\PerShiftCategoryChartControl.cs">
       <SubType>UserControl</SubType>
     </Compile>

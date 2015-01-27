@@ -73,3 +73,12 @@
 .fail {
     color: red;
 }
+
+.btn-wrapper {
+	height: 50px;
+}
+
+.roles-details-wrapper {
+	border-left: 1px solid grey;
+	bottom: 0;
+}

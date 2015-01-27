@@ -6,15 +6,7 @@
     position:relative;
     margin-bottom:45px;
 }
-input 				{
-    font-size:18px;
-    padding:10px 10px 10px 5px;
-    display:block;
-    width:300px;
-    border:none;
-    border-bottom:1px solid #738ffe;
-}
-input:focus 		{ outline:none; }
+
 
 /* LABEL ======================================= */
 label 				 {
@@ -57,39 +49,3 @@ input:focus ~ label, input:valid ~ label 		{
     right:50%;
 }
 
-/* active state */
-input:focus ~ .bar:before, input:focus ~ .bar:after {
-    width:50%;
-}
-
-/* HIGHLIGHTER ================================== */
-.highlight {
-    position:absolute;
-    height:60%;
-    width:100px;
-    top:25%;
-    left:0;
-    pointer-events:none;
-    opacity:0.5;
-}
-
-/* active state */
-input:focus ~ .highlight {
-    -webkit-animation:inputHighlighter 0.3s ease;
-    -moz-animation:inputHighlighter 0.3s ease;
-    animation:inputHighlighter 0.3s ease;
-}
-
-/* ANIMATIONS ================ */
-@-webkit-keyframes inputHighlighter {
-    from { background:#738ffe; }
-    to 	{ width:0; background:transparent; }
-}
-@-moz-keyframes inputHighlighter {
-    from { background:#738ffe; }
-    to 	{ width:0; background:transparent; }
-}
-@keyframes inputHighlighter {
-    from { background:#738ffe; }
-    to 	{ width:0; background:transparent; }
-}

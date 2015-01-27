@@ -3,6 +3,7 @@
 var wfm = angular.module('wfm', [
     'ui.router',
     'ui.bootstrap',
+	'ui.tree',
     'ngMaterial',
     'angularMoment',
     'wfmCtrls'
@@ -21,6 +22,10 @@ wfm.config(['$stateProvider', '$urlRouterProvider',function ($stateProvider, $ur
         params:{period: {}},
         templateUrl: 'html/forecasting-run.html',
         controller: 'ForecastingRunCtrl'
+    }).state('permissions', {
+    	url: '/permissions',
+    	templateUrl: 'html/permissions.html',
+    	controller: 'PermissionsCtrl'
     });
 }]).run(['$rootScope', '$http', '$state', function ($rootScope, $http, $state) {
     var timeout = Date.now() + 10000;

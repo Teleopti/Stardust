@@ -1,0 +1,51 @@
+﻿<div class="row">
+	<div class="role-nav col-md-4">
+		<div class="align-center">
+			<h3>Roles</h3>
+			<input type="text" name="filterRole" placeholder="filter ..." />
+		</div>
+		<div>
+			<button type="button" class="btn btn-default btn-md btn-block">NEW</button>
+			<button type="button" class="btn btn-default btn-md btn-block" ng-repeat="role in roles">{{role.DescriptionText}}</button>
+
+		</div>
+	</div>
+
+	<div class="roles-details-wrapper col-md-8">
+		<div class="btn-wrapper">
+			<div class="btn-group">
+				<label class="btn btn-primary" ng-model="roleDetails" btn-radio="'data'">data</label>
+				<label class="btn btn-primary" ng-model="roleDetails" btn-radio="'function'">function</label>
+			</div>
+			
+			
+			<div>
+				<button class="pull-right">Copy Role</button>
+			</div>
+		</div>
+		<div>
+			<input type="text" name="filterDetails" placeholder="filter ..." />
+			<div class="tree">
+				<div ui-tree data-drag-enabled="false">
+					<ol ui-tree-nodes="" ng-model="data" id="tree-root">
+						<li ng-repeat="node in data" ui-tree-node ng-include="'nodes_renderer.html'"></li>
+					</ol>
+				</div>
+			</div>
+		</div>
+		
+	</div>
+	
+</div>
+
+
+<!-- Nested node template -->
+<script type="text/ng-template" id="nodes_renderer.html">
+	<div ui-tree-handle>
+		{{node.title}}
+	</div>
+	<ol ui-tree-nodes="" ng-model="node.nodes">
+		<li ng-repeat="node in node.nodes" ui-tree-node ng-include="'nodes_renderer.html'">
+		</li>
+	</ol>
+</script>
