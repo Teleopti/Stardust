@@ -18,20 +18,7 @@ namespace Teleopti.Ccc.Infrastructure.Rta
         public IList<AgentStateReadModel> LoadActualAgentState(IEnumerable<IPerson> persons)
         {
             var guids = persons.Select(person => person.Id.GetValueOrDefault()).ToList();
-            using (var uow = StatisticUnitOfWorkFactory().CreateAndOpenStatelessUnitOfWork())
-            {
-                var ret = new List<AgentStateReadModel>();
-                foreach (var personList in guids.Batch(400))
-                {
-                    ret.AddRange(((NHibernateStatelessUnitOfWork)uow).Session.CreateSQLQuery(
-                        "SELECT * FROM RTA.ActualAgentState WHERE PersonId IN(:persons)")
-                        .SetParameterList("persons", personList)
-                        .SetResultTransformer(Transformers.AliasToBean(typeof(AgentStateReadModel)))
-                        .SetReadOnly(true)
-                        .List<AgentStateReadModel>());
-                }
-                return ret;
-            }
+	        return LoadLastAgentState(guids);
         }
 
         public IList<AgentStateReadModel> LoadLastAgentState(IEnumerable<Guid> personGuids)
@@ -42,11 +29,11 @@ namespace Teleopti.Ccc.Infrastructure.Rta
 				foreach (var personList in personGuids.Batch(400))
 				{
 					ret.AddRange(((NHibernateStatelessUnitOfWork) uow).Session.CreateSQLQuery(
-						"SELECT * FROM RTA.ActualAgentState WHERE PersonId IN(:persons)")
+						"SELECT * FROM RTA.ActualAgentState WITH (NOLOCK) WHERE PersonId IN(:persons)")
 						.SetParameterList("persons", personList)
 						.SetResultTransformer(Transformers.AliasToBean(typeof (AgentStateReadModel)))
 						.SetReadOnly(true)
-						.List<AgentStateReadModel>().GroupBy(x => x.PersonId, (key, group) => group.First()));
+						.List<AgentStateReadModel>());
 				}
                 return ret;
             }
