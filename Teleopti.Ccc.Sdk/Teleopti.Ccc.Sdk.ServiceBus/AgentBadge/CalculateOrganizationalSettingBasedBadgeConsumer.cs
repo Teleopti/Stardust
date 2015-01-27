@@ -21,7 +21,6 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.AgentBadge
 	public class CalculateOrganizationalSettingBasedBadgeConsumer : ConsumerOf<CalculateBadgeMessage>
 	{
 		private readonly IServiceBus _serviceBus;
-		private readonly IGamificationSettingRepository _settingRepository;
 		private readonly ITeamGamificationSettingRepository _teamSettingsRepository;
 		private readonly IPushMessagePersister _msgPersister;
 		private readonly ICurrentUnitOfWorkFactory _unitOfWorkFactory;
@@ -36,7 +35,6 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.AgentBadge
 		private readonly IPersonRepository _personRepository;
 
 		public CalculateOrganizationalSettingBasedBadgeConsumer(IServiceBus serviceBus, 
-																IGamificationSettingRepository settingRepository, 
 																ITeamGamificationSettingRepository teamSettingsRepository,
 																IPushMessagePersister msgRepository, 
 																ICurrentUnitOfWorkFactory unitOfWorkFactory, 
@@ -51,7 +49,6 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.AgentBadge
 																)
 		{
 			_serviceBus = serviceBus;
-			_settingRepository = settingRepository;
 			_teamSettingsRepository = teamSettingsRepository;
 			_msgPersister = msgRepository;
 			_unitOfWorkFactory = unitOfWorkFactory;

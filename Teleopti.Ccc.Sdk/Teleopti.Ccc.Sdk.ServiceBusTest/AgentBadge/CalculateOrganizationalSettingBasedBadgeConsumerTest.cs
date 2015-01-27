@@ -25,7 +25,6 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.AgentBadge
 		private ICurrentUnitOfWorkFactory unitOfWorkFactory;
 		private IServiceBus serviceBus;
 		private ITeamGamificationSettingRepository teamSettingsRepository;
-		private IGamificationSettingRepository settingRepository;
 		private IAgentBadgeRepository badgeRepository;
 		private IAgentBadgeWithRankRepository badgeWithRankRepository;
 		private IPersonRepository personRepository;
@@ -49,7 +48,6 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.AgentBadge
 			loggedOnUnitOfWorkFactory.Stub(x => x.CreateAndOpenUnitOfWork()).Return(unitOfWork);
 			serviceBus = MockRepository.GenerateMock<IServiceBus>();
 			teamSettingsRepository = MockRepository.GenerateMock<ITeamGamificationSettingRepository>();
-			settingRepository = MockRepository.GenerateMock<IGamificationSettingRepository>();
 
 			badgeRepository = MockRepository.GenerateMock<IAgentBadgeRepository>();
 			badgeWithRankRepository = MockRepository.GenerateMock<IAgentBadgeWithRankRepository>();
@@ -82,7 +80,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.AgentBadge
 			// Mock badge with rank calculator
 			badgeWithRankCalculator = MockRepository.GenerateMock<IAgentBadgeWithRankCalculator>();
 
-			target = new CalculateOrganizationalSettingBasedBadgeConsumer(serviceBus, settingRepository, teamSettingsRepository, 
+			target = new CalculateOrganizationalSettingBasedBadgeConsumer(serviceBus, teamSettingsRepository, 
 				msgRepository, unitOfWorkFactory, calculator, badgeWithRankCalculator, badgeRepository, badgeWithRankRepository, now, toggleManager, globalSettingRep,personRepository);
 
 		}
@@ -104,7 +102,6 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.AgentBadge
 				AHTBadgeEnabled = false,
 				AnsweredCallsBadgeEnabled = true
 			};
-			settingRepository.Stub(x => x.FindAllGamificationSettingsSortedByDescription()).Return(new List<IGamificationSetting>{newSetting});
 
 			var team = TeamFactory.CreateSimpleTeam("team");
 			team.SetId(Guid.NewGuid());
@@ -169,7 +166,6 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.AgentBadge
 				AnsweredCallsBadgeEnabled = true
 			};
 			deletedSetting.SetDeleted();
-			settingRepository.Stub(x => x.FindAllGamificationSettingsSortedByDescription()).Return(new List<IGamificationSetting>{deletedSetting});
 
 			var team = TeamFactory.CreateSimpleTeam("team");
 			team.SetId(Guid.NewGuid());
@@ -232,7 +228,6 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.AgentBadge
 				AHTBadgeEnabled = false,
 				AnsweredCallsBadgeEnabled = false
 			};
-			settingRepository.Stub(x => x.FindAllGamificationSettingsSortedByDescription()).Return(new List<IGamificationSetting> { newSetting });
 
 			var calculationDate = TimeZoneInfo.ConvertTime(now.LocalDateOnly().AddDays(-1), TimeZoneInfo.Local, timezone);
 			var message = new CalculateBadgeMessage
@@ -284,7 +279,6 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.AgentBadge
 				AHTBadgeEnabled = false,
 				AnsweredCallsBadgeEnabled = false
 			};
-			settingRepository.Stub(x => x.FindAllGamificationSettingsSortedByDescription()).Return(new List<IGamificationSetting> { newSetting });
 
 			var team = TeamFactory.CreateSimpleTeam("team");
 			team.SetId(Guid.NewGuid());
