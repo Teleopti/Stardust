@@ -29,13 +29,16 @@ namespace Teleopti.Ccc.Web.Areas.Tennant.Core
 		{
 			if (!_dataSources.Any())
 				loadDataSources();
-			if (_dataSources.First().DataSourceName.Equals("TestData"))
+			// for now only return the first, no real support yet for more tn one
+			//if (_dataSources.First().DataSourceName.Equals("TestData"))
+			if (!_dataSources.Any())
+				return string.Empty;
 				return _dataSources.First().DataSourceConfig;
-			foreach (var dataSourceHolder in _dataSources.Where(dataSourceHolder => dataSourceHolder.DataSourceName.Equals(dataSourceName)))
-			{
-				return dataSourceHolder.DataSourceConfig;
-			}
-			return string.Empty;
+			//foreach (var dataSourceHolder in _dataSources.Where(dataSourceHolder => dataSourceHolder.DataSourceName.Equals(dataSourceName)))
+			//{
+			//	return dataSourceHolder.DataSourceConfig;
+			//}
+			//return string.Empty;
 		}
 
 		private void loadDataSources()
