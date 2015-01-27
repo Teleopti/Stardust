@@ -71,8 +71,8 @@ define([
 			}
 			return teams;
 		}
-		this.MapSitesToTreeNodes = function (sites) {
 
+		this.MapSitesToTreeNodes = function (sites) {
 			var siteNodes = [];
 			for (var i = 0, len = sites.length; i < len; i++) {
 				var site = sites[i];
@@ -81,7 +81,6 @@ define([
 				siteNodes.push(siteNode);
 			}
 			return siteNodes;
-
 		};
 
 		this.MapTeamHierarchyToTreeNodes = function(teamHierarchy) {
@@ -164,8 +163,6 @@ define([
 
 			self.ApplyingSeatPlanning(true);
 
-			//Robtodo: Validation routines will be called from here.
-
 			if (selectedLocations.length == 0 || selectedTeams.length == 0) {
 				return;
 			}
@@ -190,18 +187,7 @@ define([
 		};
 
 		this.SetViewOptions = function (options) {
-
 			businessUnitId = options.buid;
-
-			//self.Date(function() {
-			//	var date = options.date;++
-			//	if (date == undefined) {
-			//		return moment.tz(timezoneCurrent.IanaTimeZone()).startOf('day');
-			//	} else {
-			//		return moment.tz(moment(date, 'YYYYMMDD').format('YYYY-MM-DD'), timezoneCurrent.IanaTimeZone());
-			//	}
-			//}());
-
 		};
 
 

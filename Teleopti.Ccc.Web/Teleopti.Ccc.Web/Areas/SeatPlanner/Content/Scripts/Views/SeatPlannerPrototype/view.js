@@ -18,12 +18,11 @@ define([
 		momentX,
 		viewModel,
 		view,
-
 		//currentState,
 		ajax
-	//toggleQuerier,
-	//select2, // not a direct dependency, but still a view dependency
-	//permissions
+		//toggleQuerier,
+		//select2, // not a direct dependency, but still a view dependency
+		//permissions
 	) {
 
 
@@ -31,13 +30,18 @@ define([
 		ajax.ajax({
 			url: "SeatPlanner/TeamHierarchy/Get",
 			success: callback
-
 		});
 	};
 
+
+	var loadLocations = function(callback) {
+		ajax.ajax({
+			url: "SeatPlanner/LocationHierarchy/Get"
+		});
+	}
+
 	return {
 		initialize: function (options) {
-
 			options.renderHtml(view);
 			viewModel = new viewModel();
 			viewModel.SetViewOptions(options);
@@ -54,6 +58,7 @@ define([
 				loadedTeamsDeferred.resolve();
 			});
 
+			//Robtodo: loaded locations defer/resolve
 
 			return $.when(loadedTeamsDeferred)
 					.done(function () {
@@ -64,19 +69,9 @@ define([
 		},
 
 
-		/*			permissions.get().done(function (data) {
-						viewModel.permissionAddFullDayAbsence(data.IsAddFullDayAbsenceAvailable);
-						viewModel.permissionAddIntradayAbsence(data.IsAddIntradayAbsenceAvailable);
-						viewModel.permissionRemoveAbsence(data.IsRemoveAbsenceAvailable);
-						viewModel.permissionAddActivity(data.IsAddActivityAvailable);
-						viewModel.permissionMoveActivity(data.IsMoveActivityAvailable);
+		/*	permissions.get().done(function (data) {
+					viewModel.permissionAddFullDayAbsence(data.IsAddFullDayAbsenceAvailable);
 					});*/
-
-		//return $.when(groupPagesDeferred, groupScheduleDeferred, skillsDeferred)
-		//		.done(function () {
-		//			viewModel.Loading(false);
-		//			resize.notify();
-		//		});
 
 		dispose: function (options) {
 		},
