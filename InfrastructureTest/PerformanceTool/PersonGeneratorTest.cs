@@ -102,6 +102,32 @@ namespace Teleopti.Ccc.InfrastructureTest.PerformanceTool
 			personData.TeamId.Should().Not.Be.Null();
 		}
 
+		[Test]
+		public void ShouldClearGeneratedData()
+		{
+			var unitOfWork = new CurrentUnitOfWork(new CurrentUnitOfWorkFactory(new CurrentTeleoptiPrincipal()));
+			var personRepository = new PersonRepository(unitOfWork);
+			var siteRepository = new SiteRepository(unitOfWork);
+			var teamRepository = new TeamRepository(unitOfWork);
+			var partTimePercentageRepository = new PartTimePercentageRepository(unitOfWork);
+			var contractRepository = new ContractRepository(unitOfWork);
+			var contractScheduleRepository = new ContractScheduleRepository(unitOfWork);
+			var externalLogOnRepository = new ExternalLogOnRepository(unitOfWork);
+			var scheduleGenerator = MockRepository.GenerateMock<IScheduleGenerator>();
+			var target = new PersonGenerator(unitOfWork, personRepository, siteRepository, teamRepository,
+				partTimePercentageRepository, contractRepository, contractScheduleRepository, externalLogOnRepository,
+				scheduleGenerator, new Now());
+			target.Generate(1);
+			target.Clear(1);
+			personRepository.LoadAll().Any().Should().Be(false);
+			siteRepository.LoadAll().Any().Should().Be(false);
+			teamRepository.LoadAll().Any().Should().Be(false);
+			partTimePercentageRepository.LoadAll().Any().Should().Be(false);
+			contractRepository.LoadAll().Any().Should().Be(false);
+			contractScheduleRepository.LoadAll().Any().Should().Be(false);
+			externalLogOnRepository.LoadAll().Any().Should().Be(false);
+		}
+
 		protected override void TeardownForRepositoryTest()
 		{
 			using (var uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())

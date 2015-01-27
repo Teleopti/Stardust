@@ -26,6 +26,13 @@ define([
 					</div>\
 					<button class='btn btn-primary'>Generate</button>\
 				</form>";
+		this.ClearForm =
+			"<form action='" + document.URL + "/application/ClearManageAdherenceLoadTest" + "' method='get' target='_blank' class='navbar-form navbar-left'>\
+					<div class='form-group'>\
+						<input type='number' class='form-control' name='iterationCount' value='1000'>\
+					</div>\
+					<button class='btn btn-primary'>clear</button>\
+				</form>";
 		var text =
 			"\
 		Before running this scenario make sure that:<br /> \
@@ -33,9 +40,9 @@ define([
 		- No agent is currently in expected state group.<br /> \
 		- Too few agents or states. <br/> \
 		Default is only to show you how to set it up, not an actual test<br /><br />\
-		You can generate a number of persons and states as below \
-		" +self.GenerateForm+
-		"";
+		You can generate/clear a number of persons and states as below \
+		" + self.GenerateForm + self.ClearForm +
+				"";
 		this.Text = text;
 
 		this.Configuration = ko.observable();
@@ -119,7 +126,7 @@ define([
 			],
 			States: ["Ready", "OFF"],
 			TeamId: "34590A63-6331-4921-BC9F-9B5E015AB495",
-			PollingPerSecond: 1,
+			PollingPerSecond: 0,
 			ClearAgentState: true,
 			ClearAgentStateCode: "OFF"
 		}, null, 4));

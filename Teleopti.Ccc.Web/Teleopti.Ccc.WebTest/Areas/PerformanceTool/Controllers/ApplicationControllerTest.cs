@@ -67,6 +67,17 @@ namespace Teleopti.Ccc.WebTest.Areas.PerformanceTool.Controllers
 			Assert.That(result.States[0], Is.EqualTo(stateCode));
 			Assert.That(result.TeamId, Is.EqualTo(teamId));
 		}
+
+
+		[Test]
+		public void ShouldClearGeneratedPersonData()
+		{
+			var personGenerator = MockRepository.GenerateStub<IPersonGenerator>();
+			var target = new ApplicationController(null, null,null, personGenerator, null);
+			target.ClearManageAdherenceLoadTest(1);
+			personGenerator.AssertWasCalled(x => x.Clear(1));
+		}
+
 	}
 
 }

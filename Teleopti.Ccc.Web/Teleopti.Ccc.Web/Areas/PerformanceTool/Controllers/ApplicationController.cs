@@ -49,5 +49,12 @@ namespace Teleopti.Ccc.Web.Areas.PerformanceTool.Controllers
 			var stateCodes = _stateGenerator.Generate(iterationCount);
 			return Json(new {personData.Persons, States = stateCodes, personData.TeamId}, JsonRequestBehavior.AllowGet);
 		}
+
+		[UnitOfWorkAction, HttpGet]
+		public JsonResult ClearManageAdherenceLoadTest(int iterationCount)
+		{
+			_personGenerator.Clear(iterationCount);
+			return Json("ok", JsonRequestBehavior.AllowGet);
+		}
 	}
 }

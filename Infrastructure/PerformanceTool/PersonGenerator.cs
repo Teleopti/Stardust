@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using Teleopti.Ccc.Domain.AgentInfo;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Repositories;
@@ -11,6 +12,7 @@ namespace Teleopti.Ccc.Infrastructure.PerformanceTool
 	public interface IPersonGenerator
 	{
 		PersonDataForLoadTest Generate(int count);
+		void Clear(int count);
 	}
 
 	public class PersonDataForLoadTest
@@ -93,6 +95,27 @@ namespace Teleopti.Ccc.Infrastructure.PerformanceTool
 				});
 			}
 			return new PersonDataForLoadTest { Persons = generatedPersonData, TeamId = team.Id.GetValueOrDefault() };
+		}
+
+		public void Clear(int count)
+		{
+			var personToRemove = _personRepository.LoadAll().OrderByDescending(x => x.UpdatedOn).Take(count).ToList();
+			var singlePerson = personToRemove.First();
+			var team = singlePerson.MyTeam(new DateOnly(_now.UtcDateTime()));
+			_siteRepository.Remove(team.Site);
+			_teamRepository.Remove(team);
+			var personPeriodTemplate = singlePerson.PersonPeriodCollection.Single();
+			_contractRepository.Remove(personPeriodTemplate.PersonContract.Contract);
+			_partTimePercentageRepository.Remove(personPeriodTemplate.PersonContract.PartTimePercentage);
+			_contractScheduleRepository.Remove(personPeriodTemplate.PersonContract.ContractSchedule);
+			foreach (var person in personToRemove)
+			{
+				var personPeriod = person.PersonPeriodCollection.Single();
+				_externalLogOnRepository.Remove(personPeriod.ExternalLogOnCollection.Single());
+				person.DeletePersonPeriod(personPeriod);
+				_personRepository.Remove(person);
+			}
+			_unitOfWork.Current().PersistAll();
 		}
 	}
 }
