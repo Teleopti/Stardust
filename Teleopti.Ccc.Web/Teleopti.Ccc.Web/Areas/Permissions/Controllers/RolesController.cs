@@ -17,6 +17,9 @@ namespace Teleopti.Ccc.Web.Areas.Permissions.Controllers
 	[ApplicationFunctionApi(DefinedRaptorApplicationFunctionPaths.OpenPermissionPage)]
 	public class RolesController : ApiController
 	{
+		private const string GivenDescriptionIsInvalidErrorMessage = "The given description is invalid. It can contain at most 255 characters.";
+		private const string CannotModifyBuiltInRoleErrorMessage = "Roles that are built in cannot be changed.";
+
 		private readonly IApplicationRoleRepository _roleRepository;
 		private readonly IApplicationFunctionRepository _applicationFunctionRepository;
 		private readonly IAvailableDataRepository _availableDataRepository;
@@ -33,10 +36,10 @@ namespace Teleopti.Ccc.Web.Areas.Permissions.Controllers
 		[UnitOfWork, Route("api/Permissions/Roles"), HttpPost]
 		public virtual IHttpActionResult Post([FromBody] NewRoleInput model)
 		{
-			if (descriptionIsInvalid(model.Description)) return BadRequest("The given description is invalid. It can contain at most 255 characters.");
+			if (descriptionIsInvalid(model.Description)) return BadRequest(GivenDescriptionIsInvalidErrorMessage);
 			var role = createNewRole(model.Description);
 
-			return Created(Request.RequestUri + role.Id.ToString(), new { role.Name, role.Id, role.DescriptionText });
+			return Created(Request.RequestUri + "/" + role.Id, new { role.Name, role.Id, role.DescriptionText });
 		}
 
 		private IApplicationRole createNewRole(string description)
@@ -87,47 +90,52 @@ namespace Teleopti.Ccc.Web.Areas.Permissions.Controllers
 		}
 
 		[UnitOfWork, Route("api/Permissions/Roles/{roleId}/Functions"),HttpPost]
-		public virtual void AddFunctions(Guid roleId, [FromBody]FunctionsForRoleInput model)
+		public virtual IHttpActionResult AddFunctions(Guid roleId, [FromBody]FunctionsForRoleInput model)
 		{
 			var role = _roleRepository.Get(roleId);
-			if (role.BuiltIn) return;
+			if (role.BuiltIn) return BadRequest(CannotModifyBuiltInRoleErrorMessage);
 			foreach (var function in model.Functions)
 			{
 				role.AddApplicationFunction(_applicationFunctionRepository.Load(function));
 			}
+			return Ok();
 		}
 
 		[UnitOfWork, Route("api/Permissions/Roles/{roleId}"), HttpDelete]
-		public virtual void Delete(Guid roleId)
+		public virtual IHttpActionResult Delete(Guid roleId)
 		{
 			var role = _roleRepository.Load(roleId);
-			if (!role.BuiltIn)
-			{
-				_roleRepository.Remove(role);
-			}
+			if (role.BuiltIn) return BadRequest(CannotModifyBuiltInRoleErrorMessage);
+			
+			_roleRepository.Remove(role);
+			return Ok();
 		}
 
 		[UnitOfWork, Route("api/Permissions/Roles/{roleId}/Functions"), HttpDelete]
-		public virtual void RemoveFunctions(Guid roleId, [FromBody]FunctionsForRoleInput model)
+		public virtual IHttpActionResult RemoveFunctions(Guid roleId, [FromBody]FunctionsForRoleInput model)
 		{
 			var role = _roleRepository.Get(roleId);
-			if (role.BuiltIn) return;
+			if (role.BuiltIn) return BadRequest(CannotModifyBuiltInRoleErrorMessage);
+
 			foreach (var function in model.Functions)
 			{
 				role.RemoveApplicationFunction(_applicationFunctionRepository.Load(function));
 			}
+			return Ok();
 		}
 
 		[UnitOfWork, Route("api/Permissions/Roles/{roleId}"),HttpPut]
-		public virtual void RenameRole(Guid roleId, [FromBody]RoleNameInput model)
+		public virtual IHttpActionResult RenameRole(Guid roleId, [FromBody]RoleNameInput model)
 		{
-			if (descriptionIsInvalid(model.NewDescription)) return;
+			if (descriptionIsInvalid(model.NewDescription)) return BadRequest(GivenDescriptionIsInvalidErrorMessage);
 
 			var role = _roleRepository.Get(roleId);
-			if (role.BuiltIn) return;
+			if (role.BuiltIn) return BadRequest(CannotModifyBuiltInRoleErrorMessage);
 
 			role.DescriptionText = model.NewDescription;
 			role.Name = descriptionToName(model.NewDescription);
+
+			return Ok();
 		}
 
 		private bool descriptionIsInvalid(string newDescription)
@@ -136,9 +144,9 @@ namespace Teleopti.Ccc.Web.Areas.Permissions.Controllers
 		}
 
 		[UnitOfWork, Route("api/Permissions/Roles/{roleId}/Copy"),HttpPost]
-		public virtual void CopyExistingRole(Guid roleId, [FromBody]RoleNameInput model)
+		public virtual IHttpActionResult CopyExistingRole(Guid roleId, [FromBody]RoleNameInput model)
 		{
-			if (descriptionIsInvalid(model.NewDescription)) return;
+			if (descriptionIsInvalid(model.NewDescription)) return BadRequest(GivenDescriptionIsInvalidErrorMessage);
 
 			var newRole = createNewRole(model.NewDescription);
 
@@ -149,13 +157,15 @@ namespace Teleopti.Ccc.Web.Areas.Permissions.Controllers
 			roleToCopy.AvailableData.AvailableTeams.ForEach(newRole.AvailableData.AddAvailableTeam);
 			roleToCopy.AvailableData.AvailablePersons.ForEach(newRole.AvailableData.AddAvailablePerson);
 			newRole.AvailableData.AvailableDataRange = roleToCopy.AvailableData.AvailableDataRange;
+
+			return Created(Request.RequestUri + "/" + newRole.Id, new { newRole.Name, newRole.Id, newRole.DescriptionText });
 		}
 
 		[UnitOfWork, Route("api/Permissions/Roles/{roleId}/AvailableData"), HttpPost]
-		public virtual void AddAvailableData(Guid roleId, [FromBody]AvailableDataForRoleInput model)
+		public virtual IHttpActionResult AddAvailableData(Guid roleId, [FromBody]AvailableDataForRoleInput model)
 		{
 			var role = _roleRepository.Get(roleId);
-			if (role.BuiltIn) return;
+			if (role.BuiltIn) return BadRequest(CannotModifyBuiltInRoleErrorMessage);
 
 			model.BusinessUnits.ForEach(x =>
 			{
@@ -182,13 +192,15 @@ namespace Teleopti.Ccc.Web.Areas.Permissions.Controllers
 				role.AvailableData.AddAvailablePerson(person);
 			});
 			role.AvailableData.AvailableDataRange = model.RangeOption.GetValueOrDefault(role.AvailableData.AvailableDataRange);
+
+			return Ok();
 		}
 
 		[UnitOfWork, Route("api/Permissions/Roles/{roleId}/AvailableData"), HttpDelete]
-		public virtual void RemoveAvailableData(Guid roleId, [FromBody]AvailableDataForRoleInput model)
+		public virtual IHttpActionResult RemoveAvailableData(Guid roleId, [FromBody]AvailableDataForRoleInput model)
 		{
 			var role = _roleRepository.Get(roleId);
-			if (role.BuiltIn) return;
+			if (role.BuiltIn) return BadRequest(CannotModifyBuiltInRoleErrorMessage);
 
 			var businessUnits =
 				role.AvailableData.AvailableBusinessUnits.Where(b => model.BusinessUnits.Contains(b.Id.GetValueOrDefault())).ToArray();
@@ -202,6 +214,8 @@ namespace Teleopti.Ccc.Web.Areas.Permissions.Controllers
 			var people =
 				role.AvailableData.AvailablePersons.Where(p => model.People.Contains(p.Id.GetValueOrDefault())).ToArray();
 			people.ForEach(role.AvailableData.DeleteAvailablePerson);
+
+			return Ok();
 		}
 	}
 }

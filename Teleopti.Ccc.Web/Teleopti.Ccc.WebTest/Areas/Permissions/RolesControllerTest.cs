@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Net.Http;
+using System.Web.Http.Results;
 using NUnit.Framework;
 using Rhino.Mocks;
 using SharpTestsEx;
@@ -46,9 +47,10 @@ namespace Teleopti.Ccc.WebTest.Areas.Permissions
 			var target = new RolesController(roleRepository, null, dataRepository, new CurrentBusinessUnit(new FakeCurrentIdentity("Pelle")));
 			target.Request = new HttpRequestMessage();
 
-			target.Post(new NewRoleInput { Description = "Admin".PadRight(256,'a') });
+			var result = target.Post(new NewRoleInput { Description = "Admin".PadRight(256,'a') });
 
 			roleRepository.AssertWasNotCalled(x => x.Add(null), o => o.IgnoreArguments());
+			result.Should().Be.OfType<BadRequestErrorMessageResult>();
 		}
 
 		[Test]
@@ -198,10 +200,11 @@ namespace Teleopti.Ccc.WebTest.Areas.Permissions
 
 			roleRepository.Stub(x => x.Get(roleId)).Return(agentRole);
 			
-			target.RenameRole(roleId,new RoleNameInput{NewDescription = "Self service agent"});
+			var result = target.RenameRole(roleId,new RoleNameInput{NewDescription = "Self service agent"});
 
 			agentRole.DescriptionText.Should().Be.EqualTo("Self service agent");
 			agentRole.Name.Should().Be.EqualTo("Selfserviceagent");
+			result.Should().Be.OfType<OkResult>();
 		}
 
 		[Test]
@@ -216,9 +219,10 @@ namespace Teleopti.Ccc.WebTest.Areas.Permissions
 
 			roleRepository.Stub(x => x.Get(roleId)).Return(agentRole);
 
-			target.RenameRole(roleId, new RoleNameInput { NewDescription = "Self service agent" });
+			var response = target.RenameRole(roleId, new RoleNameInput { NewDescription = "Self service agent" });
 
 			agentRole.Name.Should().Be.EqualTo("Agent");
+			response.Should().Be.OfType<BadRequestErrorMessageResult>();
 		}
 
 		[Test]
@@ -233,9 +237,10 @@ namespace Teleopti.Ccc.WebTest.Areas.Permissions
 
 			roleRepository.Stub(x => x.Get(roleId)).Return(agentRole);
 
-			target.RenameRole(roleId, new RoleNameInput { NewDescription = "" });
+			var response = target.RenameRole(roleId, new RoleNameInput { NewDescription = "" });
 
 			agentRole.Name.Should().Be.EqualTo("Agent");
+			response.Should().Be.OfType<BadRequestErrorMessageResult>();
 		}
 
 		[Test]
@@ -310,6 +315,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Permissions
 			var functionRepository = MockRepository.GenerateMock<IApplicationFunctionRepository>();
 			var availableDataRepository = MockRepository.GenerateMock<IAvailableDataRepository>();
 			var target = new RolesController(roleRepository, functionRepository, availableDataRepository, new CurrentBusinessUnit(new FakeCurrentIdentity("Pelle")));
+			target.Request = new HttpRequestMessage();
 			var team = TeamFactory.CreateTeam("Team 1", "Paris");
 
 			var roleId = Guid.NewGuid();
