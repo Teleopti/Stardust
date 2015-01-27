@@ -46,6 +46,7 @@ IF "%DefaultSite%"=="" SET DefaultSite=Default Web Site
 ::for /f "tokens=2,3,4,5 delims=;" %%g in ('FINDSTR /C:"Level2;" Apps\ApplicationsInAppPool.txt') do CALL:DeleteApp "%DefaultSite%/%MainSiteName%" "%%g" "%%j" >> %logfile%
 ::for /f "tokens=2,3,4,5 delims=;" %%g in ('FINDSTR /C:"Level1;%MainSiteName%;" Apps\ApplicationsInAppPool.txt') do CALL:DeleteApp "%DefaultSite%" "%%g" "%%j" >> %logfile%
 %appcmd% list app /apppool.name:"$=*Teleopti*" /xml | %appcmd% delete app /in
+%appcmd% DELETE vdir "%DefaultSite%/%MainSiteName%/Client"
 %appcmd% list apppool /name:"$=*Teleopti*" /xml | %appcmd% delete apppool /in
 
 ::remove web site
