@@ -37,8 +37,8 @@ namespace Teleopti.Ccc.Web.Areas.SeatPlanner.Controllers
 		        return View();
 	        }
 
-			return null;
-	        
+	        return null;
+
         }
 
 		[UnitOfWorkAction, HttpGet, OutputCache(NoStore = true, Duration = 0)]

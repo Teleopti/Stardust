@@ -6,7 +6,6 @@ define([
 	'moment',
 	'momentTimezoneData',
 	'shared/timezone-current',
-	'locations',
 	'Views/TreeList/vm',
 	'Views/SeatPlannerPrototype/addSeatPlan'
 ], function (
@@ -17,20 +16,16 @@ define([
 	moment,
 	momentTimezoneData,
 	timezoneCurrent,
-	locations,
 	treeListVm,
 	addSeatPlan
 	) {
 
 	return function () {
-
 		var self = this;
 		var businessUnitId;
 		this.LocationTreeListViewModel = new treeListVm();
 		this.TeamsTreeListViewModel = new treeListVm();
 		this.Loading = ko.observable(false);
-		this.Resources = resources;
-		this.ShowMessage = ko.observable(true);
 		this.Today = moment.tz(timezoneCurrent.IanaTimeZone()).startOf('day');
 		this.StartDate = ko.observable(moment.tz(timezoneCurrent.IanaTimeZone()).startOf('day'));
 		this.EndDate = ko.observable(moment.tz(timezoneCurrent.IanaTimeZone()).startOf('day').add(1, 'day'));

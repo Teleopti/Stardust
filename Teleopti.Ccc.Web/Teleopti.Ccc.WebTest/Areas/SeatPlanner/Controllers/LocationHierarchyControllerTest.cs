@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -40,9 +41,11 @@ namespace Teleopti.Ccc.WebTest.Areas.SeatPlanner.Controllers
 				Path.GetFullPath(@"..\..\..\Teleopti.Ccc.Web\Areas\SeatPlanner\Content\Temp\Locations.txt"));
 
 			var result = target.Get() as dynamic;
-
-//			result.ContentType.Should().Be("text/javascript");
-			//result.Content.Should().Not.Be.Null();
+			var locationViewModel = result.Data as LocationViewModel;
+			locationViewModel.Should().Not.Be.Null();
+			locationViewModel.Name.Should().Be ("China");
+			locationViewModel.Children.Should().Not.Be.Empty();
+			
 		}
 
 		[TearDown]
