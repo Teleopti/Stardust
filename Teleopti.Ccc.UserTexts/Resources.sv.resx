@@ -11996,4 +11996,22 @@ Minska komplexiteten för att kunna använda dessa skift.</value>
   <data name="OptionWorkingDay" xml:space="preserve">
     <value>Arbetsdag</value>
   </data>
+  <data name="DeleteGamificationSetting" xml:space="preserve">
+    <value>Ta bort spelifieringsinställning</value>
+  </data>
+  <data name="RuleWithDifferentThreshold" xml:space="preserve">
+    <value>Använd olika tröskelvärden</value>
+  </data>
+  <data name="LogOnFailedIdentityNotFound" xml:space="preserve">
+    <value>Inloggning misslyckades! Inget konto kopplat till {0}.</value>
+  </data>
+  <data name="CannotFindDataSourceWithName" xml:space="preserve">
+    <value>Kan inte hitta någon datakälla med namnet: {0}</value>
+  </data>
+  <data name="SelectSettingForTeams" xml:space="preserve">
+    <value>Välj inställning att använda för teamen</value>
+  </data>
+  <data name="Setting" xml:space="preserve">
+    <value>Inställning</value>
+  </data>
 </root>
