@@ -7834,6 +7834,9 @@ Teleopti R&amp;D</value>
   <data name="ToThreeDots" xml:space="preserve">
     <value>An...</value>
   </data>
+  <data name="InfoTextConflict" xml:space="preserve">
+    <value>Ein anderer Nutzer hat bereits Änderungen vorgenommen. Bitte entscheiden Sie bevor Sie fortfahren. Wenn Sie "OK" klicken, akzeptieren Sie die Änderungen des anderen Nutzers. Beachten Sie bitte hierbei, dass Ihre entsprechenden Änderungen verloren gehen. Wählen Sie "Überschreiben" um Ihre Änderungen zu speichern und die des anderen Nutzers zu löschen.</value>
+  </data>
   <data name="PleaseSaveAgainWhenYouHaveReviewedTheAppliedChanges" xml:space="preserve">
     <value>Bitte nach Überprüfung der Änderungen nochmals speichern.</value>
   </data>
@@ -10240,6 +10243,9 @@ Sollte dieser Validierungs-Fehler dennoch auftreten, überprüfen Sie bitte dass
   </data>
   <data name="TheQuickForecatWillStartInBackgroundMessage" xml:space="preserve">
     <value>Der Quick-Forecast wird als Job im Hintergrund gestartet, sobald der Quick-Forecast-Assistent geschlossen wird. Der Status wird in der Job Historie angezeigt.</value>
+  </data>
+  <data name="CannotDisplayScheduleWhenShiftTradeStatusIsNew" xml:space="preserve">
+    <value>Dienstplan wird nur angezeigt, wenn der Status des Schichttausches "schwebend" oder "Warte auf Ihre Genehmigung" ist. </value>
   </data>
   <data name="NewTemplateName" xml:space="preserve">
     <value>Name für neue Vorlage</value>
