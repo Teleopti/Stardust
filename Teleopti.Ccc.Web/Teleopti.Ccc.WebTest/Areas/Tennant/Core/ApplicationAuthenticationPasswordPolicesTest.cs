@@ -30,7 +30,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Tennant.Core
 			passwordPolicyForUser.InvalidAttempts.Should().Be.EqualTo(2);
 		}
 
-		[Test, Ignore("Roger is looking at this one")]
+		[Test]
 		public void TooManyInvalidAttemptsShouldLockUser()
 		{
 			const string userName = "validUserName";
@@ -40,6 +40,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Tennant.Core
 			findApplicationQuery.Expect(x => x.FindUserData(userName)).Return(passwordPolicyForUser);
 			var pwPolicy = MockRepository.GenerateStub<IPasswordPolicy>();
 			pwPolicy.Expect(x => x.MaxAttemptCount).Return(1);
+			pwPolicy.Expect(x => x.InvalidAttemptWindow).Return(TimeSpan.FromHours(1));
 
 			var target = new ApplicationAuthentication(findApplicationQuery, new PasswordVerifier(new OneWayEncryption(), () => pwPolicy, new Now()),
 				new SuccessfulPasswordPolicy(), MockRepository.GenerateMock<INHibernateConfigurationsHandler>());

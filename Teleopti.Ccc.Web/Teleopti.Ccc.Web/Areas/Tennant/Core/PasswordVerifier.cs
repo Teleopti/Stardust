@@ -21,7 +21,8 @@ namespace Teleopti.Ccc.Web.Areas.Tennant.Core
 		public bool Check(string userPassword, PasswordPolicyForUser passwordPolicyForUser)
 		{
 			var passwordPolicy = _passwordPolicy();
-			if (_now.UtcDateTime() > passwordPolicyForUser.InvalidAttemptsSequenceStart.Add(passwordPolicy.InvalidAttemptWindow))
+			var utcNow = _now.UtcDateTime();
+			if (utcNow > passwordPolicyForUser.InvalidAttemptsSequenceStart.Add(passwordPolicy.InvalidAttemptWindow))
 			{
 				passwordPolicyForUser.ClearInvalidAttempts();
 			}
