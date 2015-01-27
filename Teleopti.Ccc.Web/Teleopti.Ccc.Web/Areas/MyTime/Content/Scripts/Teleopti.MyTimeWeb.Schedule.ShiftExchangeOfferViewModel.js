@@ -97,15 +97,41 @@ Teleopti.MyTimeWeb.Schedule.ShiftExchangeOfferViewModel = function ShiftExchange
 		}
 	};
 
+	self.convert12To24Hour = function (time) {
+		time = time.toUpperCase();
+		var hours = Number(time.match(/^(\d+)/)[1]);
+		var minutes = Number(time.match(/:(\d+)/)[1]);
+		var AMPM = time.match(/\s(.*)$/)[1];
+		if (AMPM == "PM" && hours < 12) hours = hours + 12;
+		if (AMPM == "AM" && hours == 12) hours = hours - 12;
+		var sHours = hours.toString();
+		var sMinutes = minutes.toString();
+		if (hours < 10) sHours = "0" + sHours;
+		if (minutes < 10) sMinutes = "0" + sMinutes;
+		return sHours + ":" + sMinutes;
+	};
+
 	self.IsEditable = ko.observable(true);
 	self.EndTimeNextDay = ko.observable(false);
+	self.startTimeInternal = ko.observable();
+	self.endTimeInternal = ko.observable();
 	self.IsTimeLegal = ko.computed(function () {
-		var startMoment = moment('1900-01-01 ' + self.StartTime());
-		var endMoment = moment('1900-01-01 ' + self.EndTime());
-		if (self.EndTimeNextDay()) {
-			endMoment.add(1, 'days');
+		if (self.StartTime() !== undefined && self.EndTime() !== undefined) {
+			if (self.StartTime().indexOf("am") > -1 || self.StartTime().indexOf("AM") > -1
+				|| self.StartTime().indexOf("pm") > -1 || self.StartTime().indexOf("PM") > -1) {
+				var start = self.convert12To24Hour(self.StartTime());
+				self.startTimeInternal(start);
+			}
+
+			if (self.EndTime().indexOf("am") > -1 || self.EndTime().indexOf("AM") > -1
+				|| self.EndTime().indexOf("pm") > -1 || self.EndTime().indexOf("PM") > -1) {
+				var end = self.convert12To24Hour(self.EndTime());
+				self.endTimeInternal(end);
+			}
 		}
-		return startMoment.isBefore(endMoment);
+
+		if (self.endTimeInternal() < self.startTimeInternal() && !self.EndTimeNextDay()) return false;
+		return true;
 	});
 
 	self.ShowMeridian = ($('div[data-culture-show-meridian]').attr('data-culture-show-meridian') == 'true');
@@ -176,8 +202,8 @@ Teleopti.MyTimeWeb.Schedule.ShiftExchangeOfferViewModel = function ShiftExchange
 			data: {
 				Date: self.DateTo().format(self.DateFormat()),
 				OfferValidTo: self.OfferValidTo().format(self.DateFormat()),
-				StartTime: moment('1900-01-01 ' + self.StartTime()).format('HH:mm'),
-				EndTime: moment('1900-01-01 ' + self.EndTime()).format('HH:mm'),
+				StartTime:self.startTimeInternal(),
+				EndTime: self.endTimeInternal(),
 				EndTimeNextDay: self.EndTimeNextDay(),
 				Id: self.Id(),
 				WishShiftType: wishShiftTypeId
