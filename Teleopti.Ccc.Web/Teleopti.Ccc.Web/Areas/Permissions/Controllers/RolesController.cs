@@ -31,7 +31,7 @@ namespace Teleopti.Ccc.Web.Areas.Permissions.Controllers
 		}
 
 		[UnitOfWork, Route("api/Permissions/Roles"), HttpPost]
-		public IHttpActionResult Post([FromBody] NewRoleInput model)
+		public virtual IHttpActionResult Post([FromBody] NewRoleInput model)
 		{
 			if (descriptionIsInvalid(model.Description)) return BadRequest("The given description is invalid. It can contain at most 255 characters.");
 			var role = createNewRole(model.Description);
@@ -80,8 +80,9 @@ namespace Teleopti.Ccc.Web.Areas.Permissions.Controllers
 					role.AvailableData.AvailableDataRange,
 					AvailableBusinessUnits = role.AvailableData.AvailableBusinessUnits.Select(b => new { b.Name, b.Id }).ToArray(),
 					AvailableSites = role.AvailableData.AvailableSites.Select(s => new { s.Description.Name, s.Id }).ToArray(),
-					AvailableTeams = role.AvailableData.AvailableTeams.Select(s => new { s.Description.Name, s.Id }).ToArray(),
-					AvailablePeople = role.AvailableData.AvailablePersons.Select(s => new { s.Name, s.Id }).ToArray(),
+					AvailableTeams = role.AvailableData.AvailableTeams.Select(t => new { t.Description.Name, t.Id }).ToArray(),
+					AvailablePeople = role.AvailableData.AvailablePersons.Select(p => new { p.Name, p.Id }).ToArray(),
+					AvailableFunctions = role.ApplicationFunctionCollection.Select(f => new { f.Id, f.FunctionCode, f.FunctionPath, f.LocalizedFunctionDescription }).ToArray()
 				};
 		}
 

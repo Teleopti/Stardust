@@ -401,6 +401,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Permissions
 			((ICollection<object>)result.AvailableSites).Count.Should().Be.EqualTo(1);
 			((ICollection<object>)result.AvailableBusinessUnits).Count.Should().Be.EqualTo(1);
 			((ICollection<object>)result.AvailablePeople).Count.Should().Be.EqualTo(1);
+			((ICollection<object>)result.AvailableFunctions).Count.Should().Be.EqualTo(1);
 		}
 	}
 }
