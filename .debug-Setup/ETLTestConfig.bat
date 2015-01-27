@@ -16,6 +16,7 @@ SET MySettings=%ROOTDIR%\..\Teleopti.Support.Tool\bin\%Configuration%\settings.t
 SET DATASOURCE_NAME=ETLTest
 SET PM_INSTALL=False
 SET WEB_BROKER=http://localhost:54903/
+SET URL=http://localhost:52858/
 SET PM_SERVICE=http://localhost:53396/PMService.svc
 SET ETLPM_BINDING_NAME=Etl_Pm_Http_Binding
 
@@ -31,6 +32,7 @@ ECHO $^(PM_INSTALL^)^|%PM_INSTALL%>>"%MySettings%"
 ECHO $^(WEB_BROKER^)^|%WEB_BROKER%>>"%MySettings%"
 ECHO $^(PM_SERVICE^)^|%PM_SERVICE%>>"%MySettings%"
 ECHO $^(ETLPM_BINDING_NAME^)^|%ETLPM_BINDING_NAME%>>"%MySettings%"
+ECHO $^(URL^)^|%URL%>>"%MySettings%"
 
 IF NOT EXIST "%ROOTDIR%\..\Teleopti.Support.Tool\bin\%Configuration%\Teleopti.Support.Tool.exe" (
 	::Build Teleopti.Support.Tool.exe
