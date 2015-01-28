@@ -180,6 +180,7 @@ namespace Teleopti.Ccc.Win.Optimization
 				if (!extraPreferencesPanel1.ValidateTeamBlockCombination())
 				{
 					MessageBox.Show(this, UserTexts.Resources.IllegalTeamBlockCombination, UserTexts.Resources.OptimizationOptionMessageBox, MessageBoxButtons.OK, MessageBoxIcon.Warning);
+					return;
 				}
 
 				if (!validateOptimizationSteps())
