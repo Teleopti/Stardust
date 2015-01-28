@@ -64,12 +64,13 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider
 								UseHeadCount = false
 							};
 
+					var budgetDays =
+						budgetGroupPeriods.SelectMany(x => _budgetDayRepository.Find(defaultScenario, x.Item2, x.Item1)).ToList();
 					foreach (var thePeriod in validOpenPeriods)
 					{
 						var openPeriod = thePeriod;
 						var allowanceFromBudgetDays =
-							from budgetGroupPeriod in budgetGroupPeriods
-							from budgetDay in _budgetDayRepository.Find(defaultScenario, budgetGroupPeriod.Item2, budgetGroupPeriod.Item1)
+							from budgetDay in budgetDays
 							where openPeriod.GetPeriod(_now.LocalDateOnly()).Contains(budgetDay.Day)
 							where openPeriod.OpenForRequestsPeriod.Contains(_now.LocalDateOnly())
 							where openPeriod.AbsenceRequestProcess.GetType() != typeof (DenyAbsenceRequest)
@@ -96,8 +97,5 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider
 						  (g.Key, TimeSpan.FromTicks(g.Last(o => o.Date == g.Key).Time.Ticks), TimeSpan.FromTicks(g.Last().Heads.Ticks), g.Last(o => o.Date == g.Key).AllowanceHeads,
 					g.Last(o => o.Date == g.Key).Availability, g.Last(o => o.Date == g.Key).UseHeadCount);
 		}
-
-		
-
 	}
 }
