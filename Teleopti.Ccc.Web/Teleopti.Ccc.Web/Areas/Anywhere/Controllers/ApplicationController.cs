@@ -1,9 +1,13 @@
+using System;
+using System.Dynamic;
 using System.Globalization;
 using System.Web.Mvc;
 using Newtonsoft.Json;
+using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.Security.Principal;
+using Teleopti.Ccc.Infrastructure.Toggle;
 using Teleopti.Ccc.Web.Areas.Anywhere.Core;
 using Teleopti.Ccc.Web.Core;
 using Teleopti.Ccc.Web.Filters;
@@ -16,13 +20,15 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Controllers
 		private readonly ICurrentTeleoptiPrincipal _currentTeleoptiPrincipal;
 		private readonly IPersonRepository _personRepository;
 		private readonly IIanaTimeZoneProvider _ianaTimeZoneProvider;
+		private readonly IToggleManager _toggles;
 
-		public ApplicationController(IPrincipalAuthorization principalAuthorization, ICurrentTeleoptiPrincipal currentTeleoptiPrincipal, IPersonRepository personRepository, IIanaTimeZoneProvider ianaTimeZoneProvider)
+		public ApplicationController(IPrincipalAuthorization principalAuthorization, ICurrentTeleoptiPrincipal currentTeleoptiPrincipal, IPersonRepository personRepository, IIanaTimeZoneProvider ianaTimeZoneProvider, IToggleManager toggles)
 		{
 			_principalAuthorization = principalAuthorization;
 			_currentTeleoptiPrincipal = currentTeleoptiPrincipal;
 			_personRepository = personRepository;
 			_ianaTimeZoneProvider = ianaTimeZoneProvider;
+			_toggles = toggles;
 		}
 
 		public ViewResult Index()
@@ -59,10 +65,10 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Controllers
 			}, JsonRequestBehavior.AllowGet);
 		}
 
-		[HttpGet,OutputCache(Duration = 0,NoStore = true)]
+		[HttpGet, OutputCache(Duration = 0, NoStore = true)]
 		public ActionResult Resources()
 		{
-            var path = Request.MapPath("~/Areas/Anywhere/Content/Translation/TranslationTemplate.txt");
+			var path = Request.MapPath("~/Areas/Anywhere/Content/Translation/TranslationTemplate.txt");
 			var template = System.IO.File.ReadAllText(path);
 
 			var userTexts = JsonConvert.SerializeObject(new
@@ -109,14 +115,14 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Controllers
 					UserTexts.Resources.Alarm,
 					UserTexts.Resources.TimeInAlarm,
 					UserTexts.Resources.MoveActivity,
-          UserTexts.Resources.FunctionNotAvailable,
-          UserTexts.Resources.AddingIntradayAbsenceFor,
+					UserTexts.Resources.FunctionNotAvailable,
+					UserTexts.Resources.AddingIntradayAbsenceFor,
 					UserTexts.Resources.AddingFulldayAbsenceFor,
 					UserTexts.Resources.AddingActivityFor,
 					UserTexts.Resources.MovingActivityFor,
 					UserTexts.Resources.RemovingAbsenceFor,
 					UserTexts.Resources.SuccessWithExclamation,
-          UserTexts.Resources.FailedWithExclamation,
+					UserTexts.Resources.FailedWithExclamation,
 					UserTexts.Resources.PleaseTryAgainWithExclamation,
 					UserTexts.Resources.PleaseRefreshThePageWithExclamation,
 					UserTexts.Resources.ServerUnavailable,
@@ -135,7 +141,6 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Controllers
 					UserTexts.Resources.DateFromGreaterThanDateTo,
 					UserTexts.Resources.BackToWorkCannotBeGreaterThanAbsenceEnd,
 					UserTexts.Resources.BackToWorkTextPrompt,
-					
 
 					DateAndTimeFormatExtensions.FixedDateFormat,
 					DateAndTimeFormatExtensions.FixedDateTimeFormat,
@@ -154,13 +159,20 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Controllers
 					TimeFormatForMoment = DateAndTimeFormatExtensions.TimeFormatForMoment(),
 
 					LanguageCode = CultureInfo.CurrentCulture.IetfLanguageTag,
-					FirstDayOfWeek = (int) CultureInfo.CurrentCulture.DateTimeFormat.FirstDayOfWeek,
-					ShowMeridian = CultureInfo.CurrentCulture.DateTimeFormat.ShortTimePattern.Contains("t")
+					FirstDayOfWeek = (int)CultureInfo.CurrentCulture.DateTimeFormat.FirstDayOfWeek,
+					ShowMeridian = CultureInfo.CurrentCulture.DateTimeFormat.ShortTimePattern.Contains("t"),
+
+					RTA_ChangeScheduleInAgentStateView_29934 = _toggles.IsEnabled(Toggles.RTA_ChangeScheduleInAgentStateView_29934),
+					RTA_SeePercentageAdherenceForOneAgent_30783 = _toggles.IsEnabled(Toggles.RTA_SeePercentageAdherenceForOneAgent_30783),
+					RTA_SeeAdherenceDetailsForOneAgent_31285 = _toggles.IsEnabled(Toggles.RTA_SeeAdherenceDetailsForOneAgent_31285),
+					RTA_NotifyViaSMS_31567 = _toggles.IsEnabled(Toggles.RTA_NotifyViaSMS_31567),
+					RTA_NoBroker_31237 = _toggles.IsEnabled(Toggles.RTA_NoBroker_31237),
+
 				}, Formatting.Indented);
 
 			template = string.Format(template, userTexts);
 
-			return new ContentResult {Content = template, ContentType = "text/javascript"};
+			return new ContentResult { Content = template, ContentType = "text/javascript" };
 		}
 	}
 }

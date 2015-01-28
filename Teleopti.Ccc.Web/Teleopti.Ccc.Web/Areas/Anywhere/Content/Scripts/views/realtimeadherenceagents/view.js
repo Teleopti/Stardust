@@ -30,12 +30,9 @@
 	var viewModel;
 
 	var toggledStateGetter = function () {
-		var subscription;
-		syncToggleQuerier('RTA_NoBroker_31237', {
-			enabled: function () { subscription = poller; },
-			disabled: function () { subscription = broker; }
-		});
-		return subscription;
+		if (resources.RTA_NoBroker_31237)
+			return poller;
+		return broker;
 	}
 
 	return {
@@ -129,29 +126,10 @@
 				viewModel.permissionAddActivity(data.IsAddActivityAvailable);
 			});
 
-			toggleQuerier('RTA_ChangeScheduleInAgentStateView_29934', {
-				enabled: function () {
-					viewModel.changeScheduleAvailable(true);
-				}
-			});
-
-			toggleQuerier('RTA_SeePercentageAdherenceForOneAgent_30783', {
-				enabled: function () {
-					viewModel.agentAdherenceEnabled(true);
-				}
-			});
-
-			toggleQuerier('RTA_SeeAdherenceDetailsForOneAgent_31285', {
-				enabled: function () {
-					viewModel.agentAdherenceDetailsEnabled(true);
-				}
-			});
-
-			toggleQuerier('RTA_NotifyViaSMS_31567', {
-				enabled: function () {
-					viewModel.notifyViaSMSEnabled(true);
-				}
-			});
+			viewModel.changeScheduleAvailable(resources.RTA_ChangeScheduleInAgentStateView_29934);
+			viewModel.agentAdherenceEnabled(resources.RTA_SeePercentageAdherenceForOneAgent_30783);
+			viewModel.agentAdherenceDetailsEnabled(resources.RTA_SeeAdherenceDetailsForOneAgent_31285);
+			viewModel.notifyViaSMSEnabled(resources.RTA_NotifyViaSMS_31567);
 
 		},
 		dispose: function (options) {
