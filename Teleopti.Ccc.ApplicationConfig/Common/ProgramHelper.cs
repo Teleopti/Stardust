@@ -93,8 +93,13 @@ namespace Teleopti.Ccc.ApplicationConfig.Common
 			DataSourceContainer dataSourceContainer = applicationDataSourceProvider.DataSourceList().First();
 
 			var logOnOff = new LogOnOff(new WindowsAppDomainPrincipalContext(new TeleoptiPrincipalFactory()));
-			dataSourceContainer.LogOn(SuperUser.UserName, SuperUser.Password);
-
+			using (var unitOfWork = dataSourceContainer.DataSource.Application.CreateAndOpenUnitOfWork())
+			{
+				var systemId = new Guid("3f0886ab-7b25-4e95-856a-0d726edc2a67");
+				var personRep = repositoryFactory.CreatePersonRepository(unitOfWork);
+				dataSourceContainer.SetUser(personRep.LoadOne(systemId));
+			}
+			
 			logOnOff.LogOn(dataSourceContainer.DataSource, dataSourceContainer.User, businessUnit);
 
 			var unitOfWorkFactory = dataSourceContainer.DataSource.Application;

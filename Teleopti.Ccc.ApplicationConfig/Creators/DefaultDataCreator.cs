@@ -171,7 +171,7 @@ namespace Teleopti.Ccc.ApplicationConfig.Creators
 			//		Password = SuperUser.Password
 			//	};
 
-			_person = _personCreator.Create(null, null, SuperUser.UserName, null, null, null);
+			_person = _personCreator.GetTheSystemUser();
 			//_person.PermissionInformation.SetCulture(_cultureInfo);
 			//_person.PermissionInformation.SetUICulture(_cultureInfo);
 			//_person.PermissionInformation.SetDefaultTimeZone(_timeZone);

@@ -10,39 +10,43 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.ApplicationConfig.Creators
 {
-    /// <summary>
-    /// 
-    /// </summary>
-    /// <remarks>
-    /// Created by: peterwe
-    /// Created date: 2008-10-24
-    /// </remarks>
-    public class PersonCreator
-    {
+	/// <summary>
+	/// 
+	/// </summary>
+	/// <remarks>
+	/// Created by: peterwe
+	/// Created date: 2008-10-24
+	/// </remarks>
+	public class PersonCreator
+	{
 		private readonly ISessionFactory _sessionFactory;
 		private readonly SetChangeInfoCommand _setChangeInfoCommand = new SetChangeInfoCommand();
 
-        public PersonCreator(ISessionFactory sessionFactory)
-        {
-            _sessionFactory = sessionFactory;
-        }
+		public PersonCreator(ISessionFactory sessionFactory)
+		{
+			_sessionFactory = sessionFactory;
+		}
 
-        /// <summary>
-        /// Creates the specified first name.
-        /// </summary>
-        /// <param name="firstName">The first name.</param>
-        /// <param name="lastName">The last name.</param>
-        /// <param name="logOnName">Name of the LogOn.</param>
-        /// <param name="password">The password.</param>
-        /// <param name="cultureInfo">The culture info.</param>
-        /// <param name="timeZone">The time zone.</param>
-        /// <returns></returns>
-        /// <remarks>
-        /// Created by: peterwe
-        /// Created date: 2008-10-24
-        /// </remarks>
-        public IPerson Create(string firstName, string lastName, string logOnName, string password, CultureInfo cultureInfo, TimeZoneInfo timeZone)
-        {
+		public IPerson GetTheSystemUser()
+		{
+			var systemId = new Guid("3f0886ab-7b25-4e95-856a-0d726edc2a67");
+			
+			 ISession session = _sessionFactory.OpenSession();
+			 var person = session.CreateCriteria<IPerson>()
+					  .Add(Restrictions.Eq("Id", systemId))
+					  .SetFetchMode("PermissionInformation.PersonInApplicationRole", FetchMode.Join)
+					  .UniqueResult<IPerson>();
+			 foreach (var applicationRole in person.PermissionInformation.ApplicationRoleCollection)
+			 {
+				 Debug.Write(applicationRole.Name);
+			 }
+			session.Close();
+
+				return person;
+			
+		}
+		public IPerson Create(string firstName, string lastName, string logOnName, string password, CultureInfo cultureInfo, TimeZoneInfo timeZone)
+		{
 			ISession session = _sessionFactory.OpenSession();
 
 			var person = session.CreateCriteria<IPerson>()
@@ -51,68 +55,68 @@ namespace Teleopti.Ccc.ApplicationConfig.Creators
 						.UniqueResult<IPerson>();
 			if (person == null)
 			{
-				person = new Person {Name = new Name(firstName, lastName)};
+				person = new Person { Name = new Name(firstName, lastName) };
 
 				person.PermissionInformation.SetDefaultTimeZone(timeZone);
 				person.PermissionInformation.SetCulture(cultureInfo);
 				person.PermissionInformation.SetUICulture(cultureInfo);
 				person.ApplicationAuthenticationInfo = new ApplicationAuthenticationInfo
-				                                       	{
-				                                       		ApplicationLogOnName = logOnName,
-				                                       		Password = password
-				                                       	};
+																		{
+																			ApplicationLogOnName = logOnName,
+																			Password = password
+																		};
 
 
-				_setChangeInfoCommand.Execute((AggregateRoot) person, person);
+				_setChangeInfoCommand.Execute((AggregateRoot)person, person);
 				_setChangeInfoCommand.Execute((PersonWriteProtectionInfo)person.PersonWriteProtection, person);
 			}
-			
+
 			foreach (var applicationRole in person.PermissionInformation.ApplicationRoleCollection)
 			{
 				Debug.Write(applicationRole.Name);
 			}
 
-        	session.Close();
+			session.Close();
 
-        	return person;
-        }
+			return person;
+		}
 
-        /// <summary>
-        /// Saves the specified person.
-        /// </summary>
-        /// <param name="person">The person.</param>
-        /// <remarks>
-        /// Created by: peterwe
-        /// Created date: 2008-10-24
-        /// </remarks>
-        public void Save(IPerson person)
-        {
-            if (personNotSavedBefore(person))
-            {
+		/// <summary>
+		/// Saves the specified person.
+		/// </summary>
+		/// <param name="person">The person.</param>
+		/// <remarks>
+		/// Created by: peterwe
+		/// Created date: 2008-10-24
+		/// </remarks>
+		public void Save(IPerson person)
+		{
+			if (personNotSavedBefore(person))
+			{
 				ISession session = _sessionFactory.OpenSession();
-                session.Save(person);
+				session.Save(person);
 				session.Flush();
 				session.Close();
-            }
-        }
+			}
+		}
 
-    	private static bool personNotSavedBefore(IPerson person)
-    	{
-    		return !person.Id.HasValue;
-    	}
+		private static bool personNotSavedBefore(IPerson person)
+		{
+			return !person.Id.HasValue;
+		}
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
 		public bool WindowsUserExists(IAuthenticationInfo windowsAuthInfo)
-    	{
+		{
 			ISession session = _sessionFactory.OpenSession();
 
 			var person = session.CreateCriteria<IPerson>()
 						.Add(Restrictions.Eq("AuthenticationInfo.Identity", windowsAuthInfo.Identity))
 						.UniqueResult<IPerson>();
 
-    		session.Close();
+			session.Close();
 
-    		return person != null;
-    	}
-    }
+			return person != null;
+		}
+	}
 }
