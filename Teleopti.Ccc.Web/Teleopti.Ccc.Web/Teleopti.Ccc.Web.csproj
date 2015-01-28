@@ -1442,6 +1442,7 @@
     <Content Include="Areas\WFM\html\forecasting.html" />
     <Content Include="Areas\WFM\html\main.html" />
     <Content Include="Areas\WFM\html\nav.html" />
+    <Content Include="Areas\WFM\html\permissions.html" />
     <Content Include="Areas\WFM\index.html" />
     <Content Include="Areas\WFM\js\ABmetrics.min.js" />
     <Content Include="Areas\WFM\js\app.js" />

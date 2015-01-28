@@ -35,12 +35,13 @@ wfmCtrls.controller('ForecastingRunCtrl', [ '$scope', '$stateParams','$http',
         }]
 );
 
-wfmCtrls.controller('PermissionsCtrl', ['$scope', '$stateParams', '$http',
-        function ($scope, $stateParams, $http) {
+wfmCtrls.controller('PermissionsCtrl', ['$scope', '$stateParams', '$http', 'filterFilter',
+        function ($scope, $stateParams, $http, filterFilter) {
         	$scope.roles = [];
         	$scope.list = [];
-        	$scope.data = brut;
         	$scope.roleDetails = 'function';
+        	$scope.functions = [];
+	        $scope.functionsDisplayed = [];
 
 	        $http.get('../../api/Permissions/Roles').
 				success(function (data, status, headers, config) {
@@ -49,42 +50,40 @@ wfmCtrls.controller('PermissionsCtrl', ['$scope', '$stateParams', '$http',
 				error(function (data, status, headers, config) {
 					$scope.error = { success: false, message: 'Something has failed. Please try again later' };
 				});
-        	
+
+        	$http.get('../../api/Permissions/ApplicationFunctions').
+				success(function (data, status, headers, config) {
+					$scope.functions = data.Functions;
+					$scope.functionsDisplayed = data.Functions;
+		        }).
+				error(function (data, status, headers, config) {
+					$scope.error = { success: false, message: 'Something has failed. Please try again later' };
+				});
+
+        	$scope.showRole = function (roleId) {
+        		$http.get('../../api/Permissions/Roles/e7f360d3-c4b6-41fc-9b2d-9b5e015aae64').
+								success(function (data, status, headers, config) {
+									var permsFunc = data.AvailableFunctions;
+									var flat = flatten(permsFunc);
+									$scope.functionsDisplayed.forEach(function (item) {
+										var contain = filterFilter(flat, item);
+										
+										if (contain.length!=0)
+											item.selected = true;
+									});
+
+								}).
+								error(function (data, status, headers, config) {
+									$scope.error = { success: false, message: 'Something has failed. Please try again later' };
+								});
+        	};
+
+        	var flatten = function (arr) {
+		        var tab = [];
+				arr.forEach(function (item) {
+			        return tab.push(item.Id);
+        		});
+		        return tab;
+	        }
         }]
 );
-
-var brut = [
-	{
-		"id": 1,
-		"title": "node1",
-		"nodes": [
-			{
-				"id": 11,
-				"title": "node1.1",
-				"nodes": [
-					{
-						"id": 110,
-						"title": "node1.1.1",
-						"nodes": []
-					}
-				]
-			}
-		]
-	},
-	{
-		"id": 2,
-		"title": "node2",
-		"nodes": [
-			{
-				"id": 21,
-				"title": "node2.1",
-				"nodes": []
-			},
-			{
-				"id": 22,
-				"title": "node2.2",
-				"nodes": []
-			}
-		]
-	}
-];

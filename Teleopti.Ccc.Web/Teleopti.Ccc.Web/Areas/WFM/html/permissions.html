@@ -6,7 +6,7 @@
 		</div>
 		<div>
 			<button type="button" class="btn btn-default btn-md btn-block">NEW</button>
-			<button type="button" class="btn btn-default btn-md btn-block" ng-repeat="role in roles">{{role.DescriptionText}}</button>
+			<button type="button" class="btn btn-default btn-md btn-block" ng-repeat="role in roles" ng-click="showRole(role.Id)">{{role.DescriptionText}}</button>
 
 		</div>
 	</div>
@@ -27,8 +27,8 @@
 			<input type="text" name="filterDetails" placeholder="filter ..." />
 			<div class="tree">
 				<div ui-tree data-drag-enabled="false">
-					<ol ui-tree-nodes="" ng-model="data" id="tree-root">
-						<li ng-repeat="node in data" ui-tree-node ng-include="'nodes_renderer.html'"></li>
+					<ol ui-tree-nodes="" ng-model="functionsDisplayed" id="tree-root">
+						<li ng-repeat="node in functionsDisplayed" ui-tree-node ng-include="'nodes_renderer.html'"></li>
 					</ol>
 				</div>
 			</div>
@@ -42,10 +42,10 @@
 <!-- Nested node template -->
 <script type="text/ng-template" id="nodes_renderer.html">
 	<div ui-tree-handle>
-		{{node.title}}
+		{{node.FunctionDescription}} is {{node.selected}}
 	</div>
-	<ol ui-tree-nodes="" ng-model="node.nodes">
-		<li ng-repeat="node in node.nodes" ui-tree-node ng-include="'nodes_renderer.html'">
+	<ol ui-tree-nodes="" ng-model="node.ChildFunctions">
+		<li ng-repeat="node in node.ChildFunctions" ui-tree-node ng-include="'nodes_renderer.html'">
 		</li>
 	</ol>
 </script>
