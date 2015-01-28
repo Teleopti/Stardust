@@ -9,5 +9,6 @@ namespace Teleopti.Ccc.Domain.Repositories
 	public interface ITeamGamificationSettingRepository:IRepository<ITeamGamificationSetting>
 	{
 		IEnumerable<ITeamGamificationSetting> FindAllTeamGamificationSettingsSortedByTeam();
+		ITeamGamificationSetting FindTeamGamificationSettingsByTeam(ITeam myTeam);
 	}
 }

@@ -68,6 +68,15 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 				new TeamGamificationSettingRepository(UnitOfWork).FindAllTeamGamificationSettingsSortedByTeam();
 			Assert.AreEqual(1, loadedGamificationSettings.Count());
 		}
+		[Test]
+		public void VerifyCanLoadMyTeamGamificationSetting()
+		{
+			_teamGamificationSetting = new TeamGamificationSetting { Team = _team, GamificationSetting = _gamificationSetting };
+			PersistAndRemoveFromUnitOfWork(_teamGamificationSetting);
+			ITeamGamificationSetting loadedMyGamificationSetting =
+				new TeamGamificationSettingRepository(UnitOfWork).FindTeamGamificationSettingsByTeam(_team);
+			Assert.AreEqual("team" , loadedMyGamificationSetting.Team.Description.Name);
+		}
 
 		[Test]
 		public void VerifyCanRemoveTeamGamificationSettings()

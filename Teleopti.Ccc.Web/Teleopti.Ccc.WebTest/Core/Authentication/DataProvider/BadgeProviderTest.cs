@@ -2,6 +2,7 @@
 using Rhino.Mocks;
 using System;
 using System.Linq;
+using Teleopti.Ccc.Domain.AgentInfo;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Repositories;
@@ -23,6 +24,7 @@ namespace Teleopti.Ccc.WebTest.Core.Authentication.DataProvider
 		private IToggleManager toggleManager;
 
 		private readonly Guid currentUserId = Guid.NewGuid();
+		private ITeamGamificationSettingRepository teamSettingRepository;
 
 		[SetUp]
 		public void Setup()
@@ -39,8 +41,8 @@ namespace Teleopti.Ccc.WebTest.Core.Authentication.DataProvider
 			mockAgentBadgeWithRankRepository(currentUser);
 
 			settingRepository = MockRepository.GenerateMock<IAgentBadgeSettingsRepository>();
+			teamSettingRepository = MockRepository.GenerateMock<ITeamGamificationSettingRepository>();
 			toggleManager = MockRepository.GenerateMock<IToggleManager>();
-			toggleManager.Stub(x => x.IsEnabled(Toggles.Gamification_NewBadgeCalculation_31185)).Return(true);
 		}
 
 		#region Mock badge repositories
@@ -104,7 +106,7 @@ namespace Teleopti.Ccc.WebTest.Core.Authentication.DataProvider
 		#endregion
 
 		[Test]
-		public void ShouldReturnBadgesWithoutRankIfNotCalculateBadgeWithRank()
+		public void ShouldReturnBadgesWithoutRankIfCalculateBadgeWithRankToggleIsNotEnable()
 		{
 			settingRepository.Stub(x => x.GetSettings()).Return(new AgentBadgeSettings
 			{
@@ -117,7 +119,8 @@ namespace Teleopti.Ccc.WebTest.Core.Authentication.DataProvider
 				GoldToSilverBadgeRate = 2
 			});
 
-			target = new BadgeProvider(loggedOnUser, badgeRepository, badgeWithRankRepository, settingRepository, toggleManager);
+			target = new BadgeProvider(loggedOnUser, badgeRepository, badgeWithRankRepository, settingRepository, teamSettingRepository, toggleManager);
+			toggleManager.Stub(x => x.IsEnabled(Toggles.Gamification_NewBadgeCalculation_31185)).Return(false);
 			var result = target.GetBadges().ToList();
 
 			var adherenceBadge = result.Single(x => (x.BadgeType == BadgeType.Adherence));
@@ -137,7 +140,7 @@ namespace Teleopti.Ccc.WebTest.Core.Authentication.DataProvider
 		}
 
 		[Test]
-		public void ShouldGetTotalBadgesIfCalculateBadgeWithRank()
+		public void ShouldGetTotalBadgesIfCalculateBadgeWithRankToggleIsEnable()
 		{
 			settingRepository.Stub(x => x.GetSettings()).Return(new AgentBadgeSettings
 			{
@@ -150,13 +153,93 @@ namespace Teleopti.Ccc.WebTest.Core.Authentication.DataProvider
 				GoldToSilverBadgeRate = 2
 			});
 
-			target = new BadgeProvider(loggedOnUser, badgeRepository, badgeWithRankRepository, settingRepository, toggleManager);
+			target = new BadgeProvider(loggedOnUser, badgeRepository, badgeWithRankRepository, settingRepository, teamSettingRepository, toggleManager);
+			toggleManager.Stub(x => x.IsEnabled(Toggles.Gamification_NewBadgeCalculation_31185)).Return(true);
 
 			var result = target.GetBadges().ToList();
 
 			var adherenceBadge = result.Single(x => (x.BadgeType == BadgeType.Adherence));
 			Assert.AreEqual(adherenceBadge.GoldBadge, 4);
 			Assert.AreEqual(adherenceBadge.SilverBadge, 1);
+			Assert.AreEqual(adherenceBadge.BronzeBadge, 9);
+
+			var answeredCallBadge = result.Single(x => (x.BadgeType == BadgeType.AnsweredCalls));
+			Assert.AreEqual(answeredCallBadge.GoldBadge, 1);
+			Assert.AreEqual(answeredCallBadge.SilverBadge, 1);
+			Assert.AreEqual(answeredCallBadge.BronzeBadge, 4);
+
+			var ahtBadge = result.Single(x => (x.BadgeType == BadgeType.AverageHandlingTime));
+			Assert.AreEqual(ahtBadge.GoldBadge, 2);
+			Assert.AreEqual(ahtBadge.SilverBadge, 2);
+			Assert.AreEqual(ahtBadge.BronzeBadge, 5);
+		}
+		
+		[Test]
+		public void ShouldReturnBadgesWithoutRankIfCalculateBadgeWithRankToggleIsNotEnableWhenUsingTeamGamification()
+		{
+			var myTeam = loggedOnUser.CurrentUser().MyTeam(DateOnly.Today);
+			teamSettingRepository.Stub(x => x.FindTeamGamificationSettingsByTeam(myTeam)).Return(new TeamGamificationSetting
+			{
+				Team = myTeam,
+				GamificationSetting = new GamificationSetting("setting")
+				{
+					AdherenceBadgeEnabled = true,
+					AnsweredCallsBadgeEnabled = true,
+					AHTBadgeEnabled = true,
+					SilverToBronzeBadgeRate = 5,
+					GoldToSilverBadgeRate = 2
+				}
+			});
+
+			target = new BadgeProvider(loggedOnUser, badgeRepository, badgeWithRankRepository, settingRepository, teamSettingRepository, toggleManager);
+			toggleManager.Stub(x => x.IsEnabled(Toggles.Gamification_NewBadgeCalculation_31185)).Return(false);
+			toggleManager.Stub(x => x.IsEnabled(Toggles.Portal_DifferentiateBadgeSettingForAgents_31318)).Return(true);
+			
+			var result = target.GetBadges().ToList();
+
+			var adherenceBadge = result.Single(x => (x.BadgeType == BadgeType.Adherence));
+			Assert.AreEqual(adherenceBadge.GoldBadge, 1);
+			Assert.AreEqual(adherenceBadge.SilverBadge, 0);
+			Assert.AreEqual(adherenceBadge.BronzeBadge, 2);
+
+			var answeredCallBadge = result.Single(x => (x.BadgeType == BadgeType.AnsweredCalls));
+			Assert.AreEqual(answeredCallBadge.GoldBadge, 0);
+			Assert.AreEqual(answeredCallBadge.SilverBadge, 1);
+			Assert.AreEqual(answeredCallBadge.BronzeBadge, 1);
+
+			var ahtBadge = result.Single(x => (x.BadgeType == BadgeType.AverageHandlingTime));
+			Assert.AreEqual(ahtBadge.GoldBadge, 0);
+			Assert.AreEqual(ahtBadge.SilverBadge, 1);
+			Assert.AreEqual(ahtBadge.BronzeBadge, 2);
+		}
+
+		[Test]
+		public void ShouldGetTotalBadgesIfCalculateBadgeWithRankToggleIsEnableWhenUsingTeamGamification()
+		{
+			var myTeam = loggedOnUser.CurrentUser().MyTeam(DateOnly.Today);
+			teamSettingRepository.Stub(x => x.FindTeamGamificationSettingsByTeam(myTeam)).Return(new TeamGamificationSetting
+			{
+				Team = myTeam,
+				GamificationSetting = new GamificationSetting("setting")
+				{
+					AdherenceBadgeEnabled = true,
+					AnsweredCallsBadgeEnabled = true,
+					AHTBadgeEnabled = true,
+					SilverToBronzeBadgeRate = 5,
+					GoldToSilverBadgeRate = 2,
+					GamificationSettingRuleSet = GamificationSettingRuleSet.RuleWithDifferentThreshold
+				}
+			});
+
+			target = new BadgeProvider(loggedOnUser, badgeRepository, badgeWithRankRepository, settingRepository, teamSettingRepository, toggleManager);
+			toggleManager.Stub(x => x.IsEnabled(Toggles.Gamification_NewBadgeCalculation_31185)).Return(true);
+			toggleManager.Stub(x => x.IsEnabled(Toggles.Portal_DifferentiateBadgeSettingForAgents_31318)).Return(true);
+
+			var result = target.GetBadges().ToList();
+
+			var adherenceBadge = result.Single(x => (x.BadgeType == BadgeType.Adherence));
+			Assert.AreEqual(adherenceBadge.GoldBadge, 3);
+			Assert.AreEqual(adherenceBadge.SilverBadge, 3);
 			Assert.AreEqual(adherenceBadge.BronzeBadge, 9);
 
 			var answeredCallBadge = result.Single(x => (x.BadgeType == BadgeType.AnsweredCalls));

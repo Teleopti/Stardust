@@ -6,6 +6,7 @@ using NHibernate.Criterion;
 using NHibernate.Transform;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Repositories;
+using Teleopti.Ccc.Domain.Specification;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
 
@@ -35,6 +36,13 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 				.SetResultTransformer(Transformers.DistinctRootEntity)
 				.List<ITeamGamificationSetting>();
 			return retList;
+		}
+
+		public ITeamGamificationSetting FindTeamGamificationSettingsByTeam(ITeam myTeam)
+		{
+			var allTeamSettingList = FindAllTeamGamificationSettingsSortedByTeam();
+			var myTeamSetting = allTeamSettingList.Single(x => x.Team.Id == myTeam.Id);
+			return myTeamSetting;
 		}
 	}
 

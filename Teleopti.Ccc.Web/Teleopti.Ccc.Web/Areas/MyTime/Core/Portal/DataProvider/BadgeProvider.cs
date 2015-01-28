@@ -1,5 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using Teleopti.Ccc.Domain.AgentInfo;
+using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Infrastructure.Toggle;
@@ -16,9 +18,12 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Portal.DataProvider
 		private readonly IAgentBadgeSettingsRepository _settingsRepository;
 		private readonly IToggleManager _toggleManager;
 		private IAgentBadgeSettings _settings;
+		private ITeamGamificationSetting _teamGamificationSetting;
+		private readonly ITeamGamificationSettingRepository _teamGamificationSettingRepo;
 
 		public BadgeProvider(ILoggedOnUser loggedOnUser, IAgentBadgeRepository badgeRepository,
 			IAgentBadgeWithRankRepository badgeWithRankRepository, IAgentBadgeSettingsRepository settingsRepository,
+			ITeamGamificationSettingRepository teamGamificationSettingRepo,
 			IToggleManager toggleManager)
 		{
 			_loggedOnUser = loggedOnUser;
@@ -26,19 +31,21 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Portal.DataProvider
 			_badgeWithRankRepository = badgeWithRankRepository;
 			_settingsRepository = settingsRepository;
 			_toggleManager = toggleManager;
+			_teamGamificationSettingRepo = teamGamificationSettingRepo;
 		}
 
 		public IEnumerable<BadgeViewModel> GetBadges()
-		{
-			_settings = _settingsRepository.GetSettings();
+		{	
 			var badgeVmList = new List<BadgeViewModel>();
 			var currentUser = _loggedOnUser.CurrentUser();
 			if (currentUser == null) return badgeVmList;
-
+			_settings = _settingsRepository.GetSettings();
+			_teamGamificationSetting =
+				_teamGamificationSettingRepo.FindTeamGamificationSettingsByTeam(currentUser.MyTeam(DateOnly.Today));
 			var toggleEnabled = _toggleManager.IsEnabled(Toggles.Gamification_NewBadgeCalculation_31185);
 
 			var allBadges = getBadgesWithoutRank(currentUser);
-			var allBadgesWithRank = (toggleEnabled && _settings.CalculateBadgeWithRank)
+			var allBadgesWithRank = (toggleEnabled)
 				? getBadgesWithRank(currentUser)
 				: new List<BadgeViewModel>();
 
@@ -53,20 +60,42 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Portal.DataProvider
 			}
 
 			var badges = new List<IAgentBadgeWithRank>();
-			if (_settings.AdherenceBadgeEnabled)
+			if (_toggleManager.IsEnabled(Toggles.Portal_DifferentiateBadgeSettingForAgents_31318))
 			{
-				retrieveBadgeWithRank(person, BadgeType.Adherence, badges);
-			}
+				var setting = _teamGamificationSetting.GamificationSetting;
+				if (setting.AdherenceBadgeEnabled)
+				{
+					retrieveBadgeWithRank(person, BadgeType.Adherence, badges);
+				}
 
-			if (_settings.AHTBadgeEnabled)
-			{
-				retrieveBadgeWithRank(person, BadgeType.AverageHandlingTime, badges);
-			}
+				if (setting.AHTBadgeEnabled)
+				{
+					retrieveBadgeWithRank(person, BadgeType.AverageHandlingTime, badges);
+				}
 
-			if (_settings.AnsweredCallsBadgeEnabled)
-			{
-				retrieveBadgeWithRank(person, BadgeType.AnsweredCalls, badges);
+				if (setting.AnsweredCallsBadgeEnabled)
+				{
+					retrieveBadgeWithRank(person, BadgeType.AnsweredCalls, badges);
+				}
 			}
+			else
+			{
+				if (_settings.AdherenceBadgeEnabled)
+				{
+					retrieveBadgeWithRank(person, BadgeType.Adherence, badges);
+				}
+
+				if (_settings.AHTBadgeEnabled)
+				{
+					retrieveBadgeWithRank(person, BadgeType.AverageHandlingTime, badges);
+				}
+
+				if (_settings.AnsweredCallsBadgeEnabled)
+				{
+					retrieveBadgeWithRank(person, BadgeType.AnsweredCalls, badges);
+				}
+			}
+			
 
 			var badgeVmList = badges.Select(x => new BadgeViewModel
 			{
@@ -84,25 +113,55 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Portal.DataProvider
 			{
 				return new List<BadgeViewModel>();
 			}
-
 			var badges = new List<IAgentBadge>();
-			if (_settings.AdherenceBadgeEnabled)
-			{
-				retrieveBadgeWithoutRank(person, BadgeType.Adherence, badges);
-			}
+			int silverToBronzeBadgeRate;
+			int goldToSilverBadgeRate;
 
-			if (_settings.AHTBadgeEnabled)
+			if (_toggleManager.IsEnabled(Toggles.Portal_DifferentiateBadgeSettingForAgents_31318))
 			{
-				retrieveBadgeWithoutRank(person, BadgeType.AverageHandlingTime, badges);
-			}
+				var setting = _teamGamificationSetting.GamificationSetting;
 
-			if (_settings.AnsweredCallsBadgeEnabled)
+				if (setting.AdherenceBadgeEnabled)
+				{
+					retrieveBadgeWithoutRank(person, BadgeType.Adherence, badges);
+				}
+
+				if (setting.AHTBadgeEnabled)
+				{
+					retrieveBadgeWithoutRank(person, BadgeType.AverageHandlingTime, badges);
+				}
+
+				if (setting.AnsweredCallsBadgeEnabled)
+				{
+					retrieveBadgeWithoutRank(person, BadgeType.AnsweredCalls, badges);
+				}
+				silverToBronzeBadgeRate = setting.GamificationSettingRuleSet == GamificationSettingRuleSet.RuleWithRatioConvertor
+					? setting.SilverToBronzeBadgeRate
+					: new GamificationSetting("").SilverToBronzeBadgeRate;
+				goldToSilverBadgeRate = setting.GamificationSettingRuleSet == GamificationSettingRuleSet.RuleWithRatioConvertor
+					? setting.GoldToSilverBadgeRate
+					: new GamificationSetting("").GoldToSilverBadgeRate;
+			}
+			else
 			{
-				retrieveBadgeWithoutRank(person, BadgeType.AnsweredCalls, badges);
-			}
+				if (_settings.AdherenceBadgeEnabled)
+				{
+					retrieveBadgeWithoutRank(person, BadgeType.Adherence, badges);
+				}
 
-			var silverToBronzeBadgeRate = _settings.SilverToBronzeBadgeRate;
-			var goldToSilverBadgeRate = _settings.GoldToSilverBadgeRate;
+				if (_settings.AHTBadgeEnabled)
+				{
+					retrieveBadgeWithoutRank(person, BadgeType.AverageHandlingTime, badges);
+				}
+
+				if (_settings.AnsweredCallsBadgeEnabled)
+				{
+					retrieveBadgeWithoutRank(person, BadgeType.AnsweredCalls, badges);
+				}
+				silverToBronzeBadgeRate = _settings.SilverToBronzeBadgeRate;
+				goldToSilverBadgeRate = _settings.GoldToSilverBadgeRate;
+			}
+			
 
 			var badgeVmList = badges.Select(x => new BadgeViewModel
 			{
