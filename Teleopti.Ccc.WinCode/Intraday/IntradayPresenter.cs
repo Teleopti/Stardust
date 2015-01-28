@@ -312,7 +312,7 @@ namespace Teleopti.Ccc.WinCode.Intraday
             _eventAggregator.GetEvent<IntradayLoadProgress>().Publish(UserTexts.Resources.RegisteringWithMessageBrokerThreeDots);
             listenForMessageBroker();
             _eventAggregator.GetEvent<IntradayLoadProgress>().Publish(UserTexts.Resources.LoadingInitialStatesThreeDots);
-	        if (!_realTimeAdherenceEnabled) return;
+			if (!_realTimeAdherenceEnabled || HistoryOnly) return;
 	        if (PollingEnabled.Equals(true))
 		    {
 		        string pollingInterval;
