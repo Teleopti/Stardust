@@ -245,13 +245,11 @@
     <Compile Include="Payroll\FormatLoader\SearchPath.cs" />
     <Compile Include="Payroll\IChannelCreator.cs" />
     <Compile Include="Payroll\IInitializePayrollFormats.cs" />
-    <Compile Include="Payroll\ILogOnSdkForPayrollExport.cs" />
     <Compile Include="Payroll\InitializePayrollFormats.cs" />
     <Compile Include="Payroll\IPayrollDataExtractor.cs" />
     <Compile Include="Payroll\IPayrollPeopleLoader.cs" />
     <Compile Include="Payroll\IPersonBusAssembler.cs" />
     <Compile Include="Payroll\IServiceBusPayrollExportFeedback.cs" />
-    <Compile Include="Payroll\LogOnSdkForPayrollExport.cs" />
     <Compile Include="Payroll\PayrollDataExtractor.cs" />
     <Compile Include="Payroll\PayrollExportConsumer.cs" />
     <Compile Include="Payroll\FormatLoader\PluginLoader.cs" />

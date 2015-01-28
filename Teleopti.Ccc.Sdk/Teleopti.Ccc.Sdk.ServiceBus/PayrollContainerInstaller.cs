@@ -15,7 +15,6 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
 			builder.RegisterType<InitializePayrollFormats>().As<IInitializePayrollFormats>().SingleInstance();
 			builder.RegisterType<ConfigFromWebServiceSpecification>().SingleInstance();
 			builder.RegisterType<ChannelCreator>().As<IChannelCreator>();
-			builder.RegisterType<LogOnSdkForPayrollExport>().As<ILogOnSdkForPayrollExport>();
 			builder.RegisterType<PayrollDataExtractor>().As<IPayrollDataExtractor>();
 			builder.RegisterType<PersonBusAssembler>().As<IPersonBusAssembler>();
 			builder.RegisterType<PayrollExportFeedback>().As<IServiceBusPayrollExportFeedback>();
