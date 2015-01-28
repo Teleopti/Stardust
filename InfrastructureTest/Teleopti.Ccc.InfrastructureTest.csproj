@@ -179,6 +179,7 @@
     <Compile Include="Foundation\CouldNotCreateTransactionExceptionTest.cs" />
     <Compile Include="MultiTenancy\IdentityUserQueryTest.cs" />
     <Compile Include="MultiTenancy\ApplicationUserQueryTest.cs" />
+    <Compile Include="MultiTenancy\PersistLogonAttemptTest.cs" />
     <Compile Include="MultiTenancy\TenantUnitOfWorkManagerTest.cs" />
     <Compile Include="PerformanceTool\PersonGeneratorTest.cs" />
     <Compile Include="PerformanceTool\ScheduleGeneratorTest.cs" />

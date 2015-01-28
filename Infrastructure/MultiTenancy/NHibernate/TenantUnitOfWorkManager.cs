@@ -1,4 +1,5 @@
-﻿using NHibernate;
+﻿using System;
+using NHibernate;
 using NHibernate.Cfg;
 using NHibernate.Context;
 using NHibernate.Dialect;
@@ -6,7 +7,7 @@ using Environment = NHibernate.Cfg.Environment;
 
 namespace Teleopti.Ccc.Infrastructure.MultiTenancy.NHibernate
 {
-	public class TenantUnitOfWorkManager : ITenantUnitOfWorkManager, ICurrentTenantSession
+	public class TenantUnitOfWorkManager : ITenantUnitOfWorkManager, ICurrentTenantSession, IDisposable
 	{
 		private ISessionFactory _sessionFactory;
 
@@ -72,6 +73,12 @@ namespace Teleopti.Ccc.Infrastructure.MultiTenancy.NHibernate
 			
 			session.Transaction.Commit();
 			session.Dispose();
+		}
+
+		public void Dispose()
+		{
+			//to end just current transaction doesn't make sense in real code, but makes testing easier
+			CancelCurrent();
 		}
 	}
 }
