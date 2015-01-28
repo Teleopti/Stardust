@@ -62,7 +62,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Portal.DataProvider
 			var badges = new List<IAgentBadgeWithRank>();
 			if (_toggleManager.IsEnabled(Toggles.Portal_DifferentiateBadgeSettingForAgents_31318))
 			{
-				var setting = _teamGamificationSetting.GamificationSetting;
+				IGamificationSetting setting = _teamGamificationSetting.GamificationSetting;
 				if (setting.AdherenceBadgeEnabled)
 				{
 					retrieveBadgeWithRank(person, BadgeType.Adherence, badges);
@@ -119,7 +119,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Portal.DataProvider
 
 			if (_toggleManager.IsEnabled(Toggles.Portal_DifferentiateBadgeSettingForAgents_31318))
 			{
-				var setting = _teamGamificationSetting.GamificationSetting;
+				IGamificationSetting setting = _teamGamificationSetting.GamificationSetting;
 
 				if (setting.AdherenceBadgeEnabled)
 				{
@@ -137,10 +137,10 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Portal.DataProvider
 				}
 				silverToBronzeBadgeRate = setting.GamificationSettingRuleSet == GamificationSettingRuleSet.RuleWithRatioConvertor
 					? setting.SilverToBronzeBadgeRate
-					: new GamificationSetting("").SilverToBronzeBadgeRate;
+					: new GamificationSetting(" ").SilverToBronzeBadgeRate;
 				goldToSilverBadgeRate = setting.GamificationSettingRuleSet == GamificationSettingRuleSet.RuleWithRatioConvertor
 					? setting.GoldToSilverBadgeRate
-					: new GamificationSetting("").GoldToSilverBadgeRate;
+					: new GamificationSetting(" ").GoldToSilverBadgeRate;
 			}
 			else
 			{

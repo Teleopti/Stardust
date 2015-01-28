@@ -198,8 +198,8 @@ namespace Teleopti.Ccc.WebTest.Core.Authentication.DataProvider
 			var result = target.GetBadges().ToList();
 
 			var adherenceBadge = result.Single(x => (x.BadgeType == BadgeType.Adherence));
-			Assert.AreEqual(adherenceBadge.GoldBadge, 1);
-			Assert.AreEqual(adherenceBadge.SilverBadge, 0);
+			Assert.AreEqual(adherenceBadge.GoldBadge, 0);
+			Assert.AreEqual(adherenceBadge.SilverBadge, 2);
 			Assert.AreEqual(adherenceBadge.BronzeBadge, 2);
 
 			var answeredCallBadge = result.Single(x => (x.BadgeType == BadgeType.AnsweredCalls));

@@ -2,9 +2,11 @@
 using System.Globalization;
 using System.Linq;
 using Teleopti.Ccc.Domain.FeatureFlags;
+using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.Security.AuthorizationEntities;
 using Teleopti.Ccc.Domain.SystemSetting.GlobalSetting;
+using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.Infrastructure.Toggle;
 using Teleopti.Ccc.UserTexts;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Message.DataProvider;
@@ -27,13 +29,15 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Portal.ViewModelFactory
 		private readonly IToggleManager _toggleManager;
 		private readonly IBadgeSettingProvider _badgeSettingProvider;
 		private readonly IPersonNameProvider _personNameProvider;
+		private readonly ITeamGamificationSettingRepository _teamGamificationSettingRepo;
 
 		public PortalViewModelFactory(IPermissionProvider permissionProvider,
 			ILicenseActivatorProvider licenseActivatorProviderProvider,
 			IPushMessageProvider pushMessageProvider, ILoggedOnUser loggedOnUser,
 			IReportsNavigationProvider reportsNavigationProvider,
 			IBadgeProvider badgeProvider, IBadgeSettingProvider badgeSettingProvider,
-			IToggleManager toggleManager, IPersonNameProvider personNameProvider)
+			IToggleManager toggleManager, IPersonNameProvider personNameProvider,
+			ITeamGamificationSettingRepository teamGamificationSettingReop)
 		{
 			_permissionProvider = permissionProvider;
 			_licenseActivatorProvider = licenseActivatorProviderProvider;
@@ -44,6 +48,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Portal.ViewModelFactory
 			_toggleManager = toggleManager;
 			_personNameProvider = personNameProvider;
 			_badgeSettingProvider = badgeSettingProvider;
+			_teamGamificationSettingRepo = teamGamificationSettingReop;
 		}
 
 		public PortalViewModel CreatePortalViewModel()
@@ -86,8 +91,19 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Portal.ViewModelFactory
 			var badgeToggleEnabled = _toggleManager.IsEnabled(Toggles.MyTimeWeb_AgentBadge_28913);
 			var hasBadgePermission =
 				_permissionProvider.HasApplicationFunctionPermission(DefinedRaptorApplicationFunctionPaths.ViewBadge);
-			var badgeSettings = _badgeSettingProvider.GetBadgeSettings() ?? new AgentBadgeSettings();
-			var badgeFeatureEnabled = badgeSettings.BadgeEnabled;
+
+			bool badgeFeatureEnabled;
+			if (_toggleManager.IsEnabled(Toggles.Portal_DifferentiateBadgeSettingForAgents_31318))
+			{
+				var teamSetting = _teamGamificationSettingRepo.FindTeamGamificationSettingsByTeam(_loggedOnUser.CurrentUser().MyTeam( DateOnly.Today ));
+				badgeFeatureEnabled = (teamSetting.Team != null);
+			}
+			else
+			{
+				var badgeSettings = _badgeSettingProvider.GetBadgeSettings() ?? new AgentBadgeSettings();
+				badgeFeatureEnabled = badgeSettings.BadgeEnabled;
+			}
+			
 
 			var showBadge = badgeToggleEnabled && badgeFeatureEnabled && hasBadgePermission;
 
@@ -101,7 +117,9 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Portal.ViewModelFactory
 				HasAsmPermission =
 					_permissionProvider.HasApplicationFunctionPermission(DefinedRaptorApplicationFunctionPaths.AgentScheduleMessenger),
 				ShowMeridian = CultureInfo.CurrentCulture.DateTimeFormat.ShortTimePattern.Contains("t"),
+				
 				Badges = showBadge ? _badgeProvider.GetBadges() : null,
+				
 				ShowBadge = showBadge
 			};
 		}

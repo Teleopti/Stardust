@@ -41,7 +41,12 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 		public ITeamGamificationSetting FindTeamGamificationSettingsByTeam(ITeam myTeam)
 		{
 			var allTeamSettingList = FindAllTeamGamificationSettingsSortedByTeam();
-			var myTeamSetting = allTeamSettingList.Single(x => x.Team.Id == myTeam.Id);
+			ITeamGamificationSetting myTeamSetting = new TeamGamificationSetting();
+			foreach (var teamGamificationSetting in allTeamSettingList)
+			{
+				if (teamGamificationSetting.Team.Id == myTeam.Id)
+					myTeamSetting = teamGamificationSetting;
+			}
 			return myTeamSetting;
 		}
 	}

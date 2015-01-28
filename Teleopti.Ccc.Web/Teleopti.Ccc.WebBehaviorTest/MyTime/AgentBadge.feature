@@ -1,4 +1,5 @@
-﻿@OnlyRunIfEnabled('MyTimeWeb_AgentBadge_28913')
+﻿@ignore
+//@OnlyRunIfEnabled('MyTimeWeb_AgentBadge_28913')
 Feature: AgentBadge
 	As an agent I want to get motivated
 	by getting badges for my performance
