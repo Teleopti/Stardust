@@ -370,7 +370,6 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 		{
 			var newBadgeSetting = createGamificationSetting();
 			_gamificationSettingList.Add(newBadgeSetting);
-			//loadGamificationSettings();
 			bindSettingListToComboBox();
 			comboBoxAdvGamificationSettings.SelectedIndex = LastItemIndex;
 		}
@@ -380,6 +379,10 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 			// Formats the name.
 			Description description = PageHelper.CreateNewName(_gamificationSettingList, "Description.Name", Resources.NewGamificationSetting);
 			IGamificationSetting newGamificationSetting = new GamificationSetting(description.Name) { Description = description };
+			if (!_toggleManager.IsEnabled(Toggles.Gamification_NewBadgeCalculation_31185))
+			{
+				newGamificationSetting.GamificationSettingRuleSet = GamificationSettingRuleSet.RuleWithRatioConvertor;
+			}
 
 			return new GamificationSettingView(newGamificationSetting);
 		}

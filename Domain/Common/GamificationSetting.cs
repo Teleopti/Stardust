@@ -42,7 +42,7 @@ namespace Teleopti.Ccc.Domain.Common
 		/// <param name="name">Name of badge setting</param>
         public GamificationSetting(string name) : this()
         {
-			_gamificationSettingRuleSet = GamificationSettingRuleSet.RuleWithRatioConvertor;
+			_gamificationSettingRuleSet = GamificationSettingRuleSet.RuleWithDifferentThreshold;
             _description = new Description(name);
         }
 
