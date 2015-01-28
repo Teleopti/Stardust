@@ -22,6 +22,7 @@ var requireconfiguration = {
 		buster: '../../../../Content/busterjs/buster-test',
 		amplify: '../../../../Content/amplify/amplify.min',
 		momentTimezoneData: '../../../../Content/moment-timezone/moment-timezone-with-data',
+		xregexp: '../../../../Content/xregexp/xregexp-all-min',
 
 		//depends on eve, hardcoded in  justgage.20130410.js
 		justgage: '../../../../Content/justgage/justgage.20130410',
@@ -32,7 +33,6 @@ var requireconfiguration = {
 		noext: '../../../../Content/require/noext',
 		signalrrr: 'require/signalrrr',
 		resourcesr: 'require/resourcesr',
-		xregexp: 'require/xregexp-all-min',
 
 		templates: '../templates',
 
