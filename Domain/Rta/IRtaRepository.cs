@@ -8,5 +8,6 @@ namespace Teleopti.Ccc.Domain.Rta
     {
         IList<AgentStateReadModel> LoadActualAgentState(IEnumerable<IPerson> persons);
         IList<AgentStateReadModel> LoadLastAgentState(IEnumerable<Guid> personGuids);
+	    IList<AgentStateReadModel> LoadTeamAgentStates(Guid teamId);
     }
 }
