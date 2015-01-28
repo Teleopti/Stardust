@@ -403,6 +403,7 @@
     <Compile Include="Areas\MyTime\Core\Common\DataProvider\LeaderboardSettingBasedBadgeProvider.cs" />
     <Compile Include="Areas\Permissions\Controllers\AvailableDataForRoleInput.cs" />
     <Compile Include="Areas\Permissions\Controllers\FunctionsForRoleInput.cs" />
+    <Compile Include="Areas\Permissions\Controllers\OrganizationSelectionController.cs" />
     <Compile Include="Areas\Permissions\Controllers\RoleNameInput.cs" />
     <Compile Include="Areas\Permissions\PermissionsAreaRegistration.cs" />
     <Compile Include="Areas\Permissions\Controllers\RolesController.cs" />
