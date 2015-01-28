@@ -57,12 +57,14 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider
 			_groupingRepository = groupingRepository;
 			_teamSettingRepository = teamSettingRepository;
 			_personRepo = personRepo;
-			teamSettings = _teamSettingRepository.FindAllTeamGamificationSettingsSortedByTeam();
+			
 			toggleEnabled = _toggleManager.IsEnabled(Toggles.Gamification_NewBadgeCalculation_31185);
 		}
 
 		public IEnumerable<AgentBadgeOverview> PermittedAgentBadgeOverviewsForEveryoneOrMyOwn(string functionPath, LeaderboardQuery query)
 		{
+			teamSettings = _teamSettingRepository.FindAllTeamGamificationSettingsSortedByTeam();
+			toggleEnabled = _toggleManager.IsEnabled(Toggles.Gamification_NewBadgeCalculation_31185);
 			var queryDate = query.Date;
 			
 			var detailsForPage = _groupingRepository.AvailableGroups(new ReadOnlyGroupPage { PageId = PageMain }, queryDate);
@@ -77,6 +79,8 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider
 
 		public IEnumerable<AgentBadgeOverview> PermittedAgentBadgeOverviewsForSite(string functionPath, LeaderboardQuery query)
 		{
+			teamSettings = _teamSettingRepository.FindAllTeamGamificationSettingsSortedByTeam();
+			toggleEnabled = _toggleManager.IsEnabled(Toggles.Gamification_NewBadgeCalculation_31185);
 			var queryDate = query.Date;
 
 			var site = _siteRepository.Get(query.SelectedId);
@@ -92,6 +96,8 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider
 
 		public IEnumerable<AgentBadgeOverview> PermittedAgentBadgeOverviewsForTeam(string functionPath, LeaderboardQuery query)
 		{
+			teamSettings = _teamSettingRepository.FindAllTeamGamificationSettingsSortedByTeam();
+			toggleEnabled = _toggleManager.IsEnabled(Toggles.Gamification_NewBadgeCalculation_31185);
 			var queryDate = query.Date;
 
 			var team = _teamRepository.Get(query.SelectedId);

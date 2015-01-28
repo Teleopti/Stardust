@@ -1,4 +1,5 @@
-﻿@OnlyRunIfEnabled('MyTimeWeb_OrganisationalBasedLeaderboard_31184')
+﻿@ignore
+@OnlyRunIfEnabled('MyTimeWeb_OrganisationalBasedLeaderboard_31184')
 Feature: GamificationOrganisationalBasedLeaderboard
 	The leaderboard can be based on site/team/everyone
 	As an agent

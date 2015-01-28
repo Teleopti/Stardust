@@ -236,6 +236,8 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.IoC
 		{
 			builder.RegisterType<BadgeLeaderBoardReportViewModelFactory>().As<IBadgeLeaderBoardReportViewModelFactory>();
 			builder.RegisterType<BadgeLeaderBoardReportOptionFactory>().As<IBadgeLeaderBoardReportOptionFactory>();
+			builder.RegisterType<LeaderboardAgentBadgeProvider>().As<ILeaderboardAgentBadgeProvider>();
+			builder.RegisterType<LeaderboardSettingBasedBadgeProvider>().As<ILeaderboardSettingBasedBadgeProvider>();
 		}
 
 		private static void registerCommonTypes(ContainerBuilder builder)
@@ -256,8 +258,6 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.IoC
 			builder.RegisterType<AbsenceRequestProbabilityProvider>().As<IAbsenceRequestProbabilityProvider>();
 			builder.RegisterType<TeamViewModelFactory>().As<ITeamViewModelFactory>();
 			builder.RegisterType<PersonNameProvider>().As<IPersonNameProvider>().SingleInstance();
-			builder.RegisterType<LeaderboardAgentBadgeProvider>().As<ILeaderboardAgentBadgeProvider>();
-			builder.RegisterType<LeaderboardSettingBasedBadgeProvider>().As<ILeaderboardSettingBasedBadgeProvider>();
 			builder.RegisterType<TimeFilterHelper>().As<ITimeFilterHelper>().SingleInstance();			
 		}
 	}
