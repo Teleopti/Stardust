@@ -94,9 +94,9 @@ BEGIN
 	FROM (
 		--Persons getting changed Role
 		SELECT MAX(pr.InsertedOn) as LastUpdate
-		FROM dbo.AvailablePersonsInApplicationRole pr
+		FROM dbo.PersonInApplicationRole pr
 		INNER JOIN #persons p
-			ON p.PersonId = pr.AvailablePerson
+			ON p.PersonId = pr.Person
 		UNION ALL
 
 		--Role getting changed ApplicationFunction

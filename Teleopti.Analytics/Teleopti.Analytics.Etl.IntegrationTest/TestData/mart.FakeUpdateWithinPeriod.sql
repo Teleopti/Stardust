@@ -111,7 +111,7 @@ set UpdatedOn = @LastUpdated
 update dbo.PersonRequest
 set UpdatedOn = @LastUpdated
 
-update dbo.AvailablePersonsInApplicationRole
+update dbo.PersonInApplicationRole
 set InsertedOn = @LastUpdated
 
 update dbo.ApplicationFunctionInRole
