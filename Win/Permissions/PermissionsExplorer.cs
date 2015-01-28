@@ -8,6 +8,7 @@ using Autofac;
 using Syncfusion.Windows.Forms;
 using Syncfusion.Windows.Forms.Tools;
 using Teleopti.Ccc.Domain.Common;
+using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
@@ -305,12 +306,7 @@ namespace Teleopti.Ccc.Win.Permissions
 
 		private void addFunctionsToAllFunctionsCollection(IEnumerable<SystemFunction> functions)
 		{
-			foreach (var systemFunction in functions)
-			if (applicationFunction.ForeignId == "0107")
-			{
-				return (!_toggleManager.IsEnabled (Toggles.SeatPlanner_32003));
-			} 
-			{
+			foreach (var systemFunction in functions){
 				_allFunctionsCollection.Add(systemFunction.Function);
 				addFunctionsToAllFunctionsCollection(systemFunction.ChildFunctions);
 			}
