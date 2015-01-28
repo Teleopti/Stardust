@@ -27,19 +27,20 @@ namespace Teleopti.Analytics.Etl.TransformerInfrastructure
 		private IList<DataSourceContainer> _foundDataBases = new List<DataSourceContainer>();
 		private LogOnService _logonService;
 		private string _nhibConfPath;
-		private readonly string _password;
-		private readonly string _userName;
+		//private readonly string _password;
+		//private readonly string _userName;
 		private IList<IBusinessUnit> _buList;
 		private ILogOnOff _logOnOff;
 		private IRepositoryFactory _repositoryFactory;
 
 		private LogOnHelper() { }
 
-		public LogOnHelper(string userName, string password, string hibernateConfPath)
+		public LogOnHelper(string hibernateConfPath)
 			: this()
 		{
-			_userName = userName;
-			_password = password;
+			//after we added a logon screen so we can decide database in multitenant environment we probably need these again
+			//_userName = userName;
+			//_password = password;
 			_nhibConfPath = hibernateConfPath;
 
 			InitializeStateHolder();
@@ -121,18 +122,22 @@ namespace Teleopti.Analytics.Etl.TransformerInfrastructure
 			_foundDataBases = _logonService.CreateAvailableDataSourcesListForApplicationUser().ToList();
 			if (_foundDataBases.IsEmpty())
 			{
-				Trace.WriteLine("Login Failed! User '" + _userName +
-								"' could not be found in any database with the given password.");
+				Trace.WriteLine("Login Failed! could not be found in any database configuration.");
 				_choosenDb = null;
 			}
 			else
 			{
 				// If multiple databases we use the first in the list, since it is decided that the ETL Tool not should support multi db
 				_choosenDb = _foundDataBases.First();
-				var result = _choosenDb.LogOn(_userName, _password);
-				if (!result.Successful)
+				using (var unitOfWork = _choosenDb.DataSource.Application.CreateAndOpenUnitOfWork())
 				{
-					Trace.WriteLine(result.Message);
+					var systemId = new Guid("3f0886ab-7b25-4e95-856a-0d726edc2a67");
+					_choosenDb.SetUser(_repositoryFactory.CreatePersonRepository(unitOfWork).LoadOne(systemId));
+				}
+				
+				if(_choosenDb.User == null)
+				{
+					Trace.WriteLine("Error on logon!");
 					_choosenDb = null;
 				}
 				

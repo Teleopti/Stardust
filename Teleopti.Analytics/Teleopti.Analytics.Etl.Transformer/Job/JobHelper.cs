@@ -21,7 +21,8 @@ namespace Teleopti.Analytics.Etl.Transformer.Job
 
         public JobHelper()
         {
-			_logHelp = new LogOnHelper(SuperUser.UserName, SuperUser.Password, ConfigurationManager.AppSettings["nhibConfPath"]);
+			  //insert username, password from logonscreen later, or winlogon?
+			_logHelp = new LogOnHelper(ConfigurationManager.AppSettings["nhibConfPath"]);
 	        MessageBrokerContainerDontUse.Configure(
 		        ConfigurationManager.AppSettings["MessageBroker"],
 		        new IConnectionKeepAliveStrategy[] {},
