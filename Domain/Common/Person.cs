@@ -35,6 +35,8 @@ namespace Teleopti.Ccc.Domain.Common
         private IApplicationAuthenticationInfo _applicationAuthenticationInfo;
 		private readonly IList<IOptionalColumnValue> _optionalColumnValueCollection = new List<IOptionalColumnValue>();
 		private IAuthenticationInfo _authenticationInfo;
+		public static readonly DateOnly DefaultTerminalDate = new DateOnly(2059, 12, 31);
+
 
 	    public Person()
         {
@@ -80,12 +82,14 @@ namespace Teleopti.Ccc.Domain.Common
             get { return _terminalDate; }
             protected set
             {
-	            if (_terminalDate != value)
+	            DateOnly? valueToSet = null;
+	            if (value != null)
+		            valueToSet = value.Value > DefaultTerminalDate ? DefaultTerminalDate : value;
+	            if (_terminalDate != valueToSet)
 	            {
-					
 		            var valueBefore = _terminalDate.HasValue ? _terminalDate.Value.Date : (DateTime?) null;
 		            var personPeriodsBefore = gatherPersonPeriodDetails();
-		            _terminalDate = value;
+		            _terminalDate = valueToSet;
 					var valueAfter = _terminalDate.HasValue ? _terminalDate.Value.Date : (DateTime?)null;
 
 					if (valueBefore.HasValue && !valueAfter.HasValue)

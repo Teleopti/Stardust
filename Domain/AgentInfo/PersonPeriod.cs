@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Common.EntityBaseTypes;
 using Teleopti.Interfaces.Domain;
 
@@ -50,7 +51,7 @@ namespace Teleopti.Ccc.Domain.AgentInfo
 			IPersonPeriod nextPeriod = person.NextPeriod(this);
 			if (nextPeriod == null)
 			{
-				return person.TerminalDate.GetValueOrDefault(new DateOnly(2059, 12, 31));
+				return person.TerminalDate.GetValueOrDefault(Person.DefaultTerminalDate);
 			}
 			return nextPeriod.StartDate.AddDays(-1);
 		}
