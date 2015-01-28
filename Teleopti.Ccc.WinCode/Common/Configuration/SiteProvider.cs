@@ -11,36 +11,24 @@ namespace Teleopti.Ccc.WinCode.Common.Configuration
     public class SiteProvider : ISiteProvider
     {
         private readonly ISiteRepository _siteRepository;
-        private IList<ISite> _siteCollection;
+        private readonly Lazy<IList<ISite>> _siteCollection;
         private static readonly ISite _allSitesItem = new Site(UserTexts.Resources.AllSelection);
         private static readonly object LockObject = new object();
 
         public SiteProvider(ISiteRepository siteRepository)
         {
             _siteRepository = siteRepository;
+	        _siteCollection = new Lazy<IList<ISite>>(() =>
+	        {
+		        var sites = _siteRepository.LoadAll().OrderBy(s => s.Description.Name).ToList();
+		        sites.Insert(0, _allSitesItem);
+		        return sites;
+	        });
         }
 
         public IList<ISite> GetSitesAllSitesItemIncluded()
         {
-			EnsureInitialized(isAllSitesItemIncluded: true);
-            return _siteCollection;
-        }
-
-		public IList<ISite> GetSitesAllSitesItemNotIncluded()
-        {
-			EnsureInitialized(isAllSitesItemIncluded: false);
-            return _siteCollection;
-        }
-
-        private void EnsureInitialized(bool isAllSitesItemIncluded)
-        {
-            if (_siteCollection == null)
-            {
-                var sites = _siteRepository.LoadAll().OrderBy(s => s.Description.Name).ToList();
-                if (isAllSitesItemIncluded)
-                    sites.Insert(0, _allSitesItem);
-                _siteCollection = sites;
-            }
+		    return _siteCollection.Value;
         }
 
         public ISite AllSitesItem
@@ -52,19 +40,17 @@ namespace Teleopti.Ccc.WinCode.Common.Configuration
         {
             lock (LockObject)
             {
-				EnsureInitialized(isAllSitesItemIncluded: false);
                 if (domainUpdateType == DomainUpdateType.Delete ||
                     domainUpdateType == DomainUpdateType.Update)
                 {
-                    var currentSite = _siteCollection.FirstOrDefault(s => s.Id == domainObjectId);
-                    _siteCollection.Remove(currentSite);
+                    var currentSite = _siteCollection.Value.FirstOrDefault(s => s.Id == domainObjectId);
+                    _siteCollection.Value.Remove(currentSite);
                 }
                 if (domainUpdateType == DomainUpdateType.Insert ||
                     domainUpdateType == DomainUpdateType.Update)
                 {
                     var newSite = _siteRepository.Get(domainObjectId);
-                    _siteCollection.Add(newSite);
-                    _siteCollection = _siteCollection.OrderBy(s => s.Description.Name).ToList();
+                    _siteCollection.Value.Add(newSite);
                 }
             }
         }

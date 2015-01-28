@@ -50,7 +50,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider
 							 orderby p.StaffingThresholdValidatorList.IndexOf(p.StaffingThresholdValidator)
 							 select p).ToList();
 
-				if (validOpenPeriods.Count != 0)
+				if (validOpenPeriods.Count > 0)
 				{
 					allowanceList =
 						from d in period.DayCollection()
@@ -94,7 +94,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider
 				group p by p.Date into g
 				orderby g.Key
 				select new Tuple<DateOnly, TimeSpan, TimeSpan, double, bool, bool>
-						  (g.Key, TimeSpan.FromTicks(g.Last(o => o.Date == g.Key).Time.Ticks), TimeSpan.FromTicks(g.Last().Heads.Ticks), g.Last(o => o.Date == g.Key).AllowanceHeads,
+						  (g.Key, g.Last(o => o.Date == g.Key).Time, g.Last().Heads, g.Last(o => o.Date == g.Key).AllowanceHeads,
 					g.Last(o => o.Date == g.Key).Availability, g.Last(o => o.Date == g.Key).UseHeadCount);
 		}
 	}

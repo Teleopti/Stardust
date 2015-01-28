@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using NUnit.Framework;
 using Rhino.Mocks;
 using Teleopti.Ccc.Domain.Repositories;
+using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.WinCode.Common.Configuration;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.MessageBroker.Events;
@@ -12,117 +13,76 @@ namespace Teleopti.Ccc.WinCodeTest.Configuration
     [TestFixture]
     public class SiteProviderTest
     {
-        private MockRepository _mocks;
-        private ISiteProvider _target;
-        private ISiteRepository _siteRepository;
-
-        [SetUp]
-        public void Setup()
-        {
-            _mocks = new MockRepository();
-            _siteRepository = _mocks.StrictMock<ISiteRepository>();
-            _target = new SiteProvider(_siteRepository);
-        }
-
         [Test]
         public void VerifyAllSitesItemIsAvailable()
-        {
-            Assert.AreEqual(UserTexts.Resources.AllSelection,_target.AllSitesItem.Description.Name);
-        }
-
-        [Test]
-        public void VerifyCanGetAllSites()
-        {
-            var result = new List<ISite> { _mocks.StrictMock<ISite>() };
-            using (_mocks.Record())
-            {
-                Expect.Call(_siteRepository.LoadAll()).Return(result);
-                Expect.Call(result[0].Description).Return(new Description("a"));
-            }
-            using (_mocks.Playback())
-            {
-                Assert.AreEqual(result, _target.GetSitesAllSitesItemNotIncluded());
-            }
+		{
+			var siteRepository = MockRepository.GenerateMock<ISiteRepository>();
+			var target = new SiteProvider(siteRepository);
+            Assert.AreEqual(UserTexts.Resources.AllSelection,target.AllSitesItem.Description.Name);
         }
 
         [Test]
         public void VerifyCanGetAllSitesWithAllSitesItemIncluded()
-        {
-            _target = new SiteProvider(_siteRepository);
-            var result = new List<ISite> { _mocks.StrictMock<ISite>() };
-            using (_mocks.Record())
-            {
-                Expect.Call(_siteRepository.LoadAll()).Return(result);
-                Expect.Call(result[0].Description).Return(new Description("a"));
-            }
-            using (_mocks.Playback())
-            {
-                Assert.IsTrue(_target.GetSitesAllSitesItemIncluded().Contains(_target.AllSitesItem));
-            }
-        }
+		{
+			var siteRepository = MockRepository.GenerateMock<ISiteRepository>();
+	        var target = new SiteProvider(siteRepository);
+            var result = new List<ISite> { SiteFactory.CreateSimpleSite("a") };
+            
+			siteRepository.Stub(x => x.LoadAll()).Return(result);
 
-        [Test]
-        public void VerifyUpdate()
-        {
-            var oldSite = _mocks.StrictMock<ISite>();
-            var newSite = _mocks.StrictMock<ISite>();
-            var siteList = new List<ISite> {oldSite};
-            var siteId = Guid.NewGuid();
-            using (_mocks.Record())
-            {
-                Expect.Call(_siteRepository.LoadAll()).Return(siteList);
-                Expect.Call(_siteRepository.Get(siteId)).Return(newSite);
-                Expect.Call(oldSite.Id).Return(siteId);
-                Expect.Call(oldSite.Description).Return(new Description("a"));
-                Expect.Call(newSite.Description).Return(new Description("a1"));
-            }
-            using (_mocks.Playback())
-            {
-                _target.HandleMessageBrokerEvent(siteId,DomainUpdateType.Update);
-                Assert.AreEqual(1,_target.GetSitesAllSitesItemNotIncluded().Count);
-                Assert.IsTrue(_target.GetSitesAllSitesItemNotIncluded().Contains(newSite));
-            }
-        }
+	        Assert.IsTrue(target.GetSitesAllSitesItemIncluded().Contains(target.AllSitesItem));
+		}
 
-        [Test]
-        public void VerifyDelete()
-        {
-            var oldSite = _mocks.StrictMock<ISite>();
-            var siteList = new List<ISite> { oldSite };
-            var siteId = Guid.NewGuid();
-            using (_mocks.Record())
-            {
-                Expect.Call(_siteRepository.LoadAll()).Return(siteList);
-                Expect.Call(oldSite.Id).Return(siteId);
-                Expect.Call(oldSite.Description).Return(new Description("a"));
-            }
-            using (_mocks.Playback())
-            {
-                _target.HandleMessageBrokerEvent(siteId, DomainUpdateType.Delete);
-                Assert.AreEqual(0, _target.GetSitesAllSitesItemNotIncluded().Count);
-                Assert.IsFalse(_target.GetSitesAllSitesItemNotIncluded().Contains(oldSite));
-            }
-        }
+	    [Test]
+	    public void VerifyUpdate()
+	    {
+		    var siteRepository = MockRepository.GenerateMock<ISiteRepository>();
+		    var target = new SiteProvider(siteRepository);
 
+		    var oldSite = SiteFactory.CreateSimpleSite("a");
+		    oldSite.SetId(Guid.NewGuid());
+		    var updatedSite = SiteFactory.CreateSimpleSite("a1");
+		    updatedSite.SetId(oldSite.Id.GetValueOrDefault());
 
-        [Test]
-        public void VerifyInsert()
-        {
-            var newSite = _mocks.StrictMock<ISite>();
-            var siteList = new List<ISite>();
-            var siteId = Guid.NewGuid();
-            using (_mocks.Record())
-            {
-                Expect.Call(_siteRepository.LoadAll()).Return(siteList);
-                Expect.Call(_siteRepository.Get(siteId)).Return(newSite);
-                Expect.Call(newSite.Description).Return(new Description("a1"));
-            }
-            using (_mocks.Playback())
-            {
-                _target.HandleMessageBrokerEvent(siteId, DomainUpdateType.Insert);
-				Assert.AreEqual(1, _target.GetSitesAllSitesItemNotIncluded().Count);
-				Assert.IsTrue(_target.GetSitesAllSitesItemNotIncluded().Contains(newSite));
-            }
-        }
+			siteRepository.Stub(x => x.LoadAll()).Return(new List<ISite> { oldSite });
+		    siteRepository.Stub(x => x.Get(updatedSite.Id.GetValueOrDefault())).Return(updatedSite);
+
+		    target.HandleMessageBrokerEvent(updatedSite.Id.GetValueOrDefault(), DomainUpdateType.Update);
+		    Assert.AreEqual(2, target.GetSitesAllSitesItemIncluded().Count);
+		    Assert.IsTrue(target.GetSitesAllSitesItemIncluded().Contains(updatedSite));
+	    }
+
+	    [Test]
+	    public void VerifyDelete()
+	    {
+		    var siteRepository = MockRepository.GenerateMock<ISiteRepository>();
+		    var target = new SiteProvider(siteRepository);
+
+		    var oldSite = SiteFactory.CreateSimpleSite("a");
+		    oldSite.SetId(Guid.NewGuid());
+
+		    siteRepository.Stub(x => x.LoadAll()).Return(new List<ISite> {oldSite});
+
+		    target.HandleMessageBrokerEvent(oldSite.Id.GetValueOrDefault(), DomainUpdateType.Delete);
+		    Assert.AreEqual(1, target.GetSitesAllSitesItemIncluded().Count);
+		    Assert.IsFalse(target.GetSitesAllSitesItemIncluded().Contains(oldSite));
+	    }
+
+	    [Test]
+	    public void VerifyInsert()
+	    {
+		    var siteRepository = MockRepository.GenerateMock<ISiteRepository>();
+		    var target = new SiteProvider(siteRepository);
+
+		    var newSite = SiteFactory.CreateSimpleSite("a1");
+		    newSite.SetId(Guid.NewGuid());
+
+		    siteRepository.Stub(x => x.LoadAll()).Return(new List<ISite>());
+		    siteRepository.Stub(x => x.Get(newSite.Id.GetValueOrDefault())).Return(newSite);
+
+		    target.HandleMessageBrokerEvent(newSite.Id.GetValueOrDefault(), DomainUpdateType.Insert);
+		    Assert.AreEqual(2, target.GetSitesAllSitesItemIncluded().Count);
+		    Assert.IsTrue(target.GetSitesAllSitesItemIncluded().Contains(newSite));
+	    }
     }
 }

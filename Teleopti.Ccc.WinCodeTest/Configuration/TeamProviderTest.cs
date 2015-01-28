@@ -4,6 +4,7 @@ using System.Linq;
 using NUnit.Framework;
 using Rhino.Mocks;
 using Teleopti.Ccc.Domain.Repositories;
+using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.WinCode.Common.Configuration;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.MessageBroker.Events;
@@ -13,87 +14,65 @@ namespace Teleopti.Ccc.WinCodeTest.Configuration
     [TestFixture]
     public class TeamProviderTest
     {
-        private MockRepository _mocks;
-        private ITeamProvider _target;
-        private ITeamRepository _teamRepository;
+	    [Test]
+	    public void VerifyCanGetAllTeams()
+	    {
+		    var teamRepository = MockRepository.GenerateMock<ITeamRepository>();
+		    var target = new TeamProvider(teamRepository);
+		    var result = new List<ITeam> {TeamFactory.CreateSimpleTeam()};
 
-        [SetUp]
-        public void Setup()
-        {
-            _mocks = new MockRepository();
-            _teamRepository = _mocks.StrictMock<ITeamRepository>();
-            _target = new TeamProvider(_teamRepository);
-        }
+		    teamRepository.Stub(x => x.LoadAll()).Return(result);
 
-        [Test]
-        public void VerifyCanGetAllTeams()
-        {
-            var result = new List<ITeam> { _mocks.StrictMock<ITeam>() };
-            using (_mocks.Record())
-            {
-                Expect.Call(_teamRepository.LoadAll()).Return(result);
-            }
-            Assert.AreEqual(result, _target.GetTeams());
-        }
+		    Assert.AreEqual(result, target.GetTeams());
+	    }
 
-
-        [Test]
+	    [Test]
         public void VerifyUpdate()
-        {
-            var oldTeam = _mocks.StrictMock<ITeam>();
-            var newTeam = _mocks.StrictMock<ITeam>();
-            var teamList = new List<ITeam> { oldTeam };
-            var teamId = Guid.NewGuid();
-            using (_mocks.Record())
-            {
-                Expect.Call(_teamRepository.LoadAll()).Return(teamList);
-                Expect.Call(_teamRepository.Get(teamId)).Return(newTeam);
-                Expect.Call(oldTeam.Id).Return(teamId);
-            }
-            using (_mocks.Playback())
-            {
-                _target.HandleMessageBrokerEvent(teamId, DomainUpdateType.Update);
-                Assert.AreEqual(1, _target.GetTeams().Count());
-                Assert.IsTrue(_target.GetTeams().Contains(newTeam));
-            }
+		{
+			var teamRepository = MockRepository.GenerateMock<ITeamRepository>();
+			var target = new TeamProvider(teamRepository);
+            var oldTeam = TeamFactory.CreateSimpleTeam();
+			oldTeam.SetId(Guid.NewGuid());
+            var updatedTeam = TeamFactory.CreateSimpleTeam();
+            updatedTeam.SetId(oldTeam.Id.GetValueOrDefault());
+            
+                teamRepository.Stub(x => x.LoadAll()).Return(new List<ITeam> { oldTeam });
+                teamRepository.Stub(x => x.Get(updatedTeam.Id.GetValueOrDefault())).Return(updatedTeam);
+            
+                target.HandleMessageBrokerEvent(updatedTeam.Id.GetValueOrDefault(), DomainUpdateType.Update);
+                Assert.AreEqual(1, target.GetTeams().Count());
+                Assert.IsTrue(target.GetTeams().Contains(updatedTeam));
         }
 
-        [Test]
-        public void VerifyDelete()
-        {
-            var oldTeam = _mocks.StrictMock<ITeam>();
-            var teamList = new List<ITeam> { oldTeam };
-            var teamId = Guid.NewGuid();
-            using (_mocks.Record())
-            {
-                Expect.Call(_teamRepository.LoadAll()).Return(teamList);
-                Expect.Call(oldTeam.Id).Return(teamId);
-            }
-            using (_mocks.Playback())
-            {
-                _target.HandleMessageBrokerEvent(teamId, DomainUpdateType.Delete);
-                Assert.AreEqual(0, _target.GetTeams().Count());
-                Assert.IsFalse(_target.GetTeams().Contains(oldTeam));
-            }
-        }
+	    [Test]
+	    public void VerifyDelete()
+	    {
+		    var teamRepository = MockRepository.GenerateMock<ITeamRepository>();
+		    var target = new TeamProvider(teamRepository);
+		    var oldTeam = TeamFactory.CreateSimpleTeam();
+		    oldTeam.SetId(Guid.NewGuid());
 
-        [Test]
-        public void VerifyInsert()
-        {
-            var newTeam = _mocks.StrictMock<ITeam>();
-            var teamList = new List<ITeam>();
-            var teamId = Guid.NewGuid();
-            using (_mocks.Record())
-            {
-                Expect.Call(_teamRepository.LoadAll()).Return(teamList);
-                Expect.Call(_teamRepository.Get(teamId)).Return(newTeam);
-            }
-            using (_mocks.Playback())
-            {
-                _target.HandleMessageBrokerEvent(teamId, DomainUpdateType.Insert);
-                Assert.AreEqual(1, _target.GetTeams().Count());
-                Assert.IsTrue(_target.GetTeams().Contains(newTeam));
-            }
-        }
+		    teamRepository.Stub(x => x.LoadAll()).Return(new List<ITeam> {oldTeam});
+
+		    target.HandleMessageBrokerEvent(oldTeam.Id.GetValueOrDefault(), DomainUpdateType.Delete);
+		    Assert.AreEqual(0, target.GetTeams().Count());
+		    Assert.IsFalse(target.GetTeams().Contains(oldTeam));
+	    }
+
+	    [Test]
+	    public void VerifyInsert()
+	    {
+		    var teamRepository = MockRepository.GenerateMock<ITeamRepository>();
+		    var target = new TeamProvider(teamRepository);
+		    var newTeam = TeamFactory.CreateSimpleTeam();
+		    newTeam.SetId(Guid.NewGuid());
+
+		    teamRepository.Stub(x => x.LoadAll()).Return(new List<ITeam>());
+		    teamRepository.Stub(x => x.Get(newTeam.Id.GetValueOrDefault())).Return(newTeam);
+
+		    target.HandleMessageBrokerEvent(newTeam.Id.GetValueOrDefault(), DomainUpdateType.Insert);
+		    Assert.AreEqual(1, target.GetTeams().Count());
+		    Assert.IsTrue(target.GetTeams().Contains(newTeam));
+	    }
     }
 }
