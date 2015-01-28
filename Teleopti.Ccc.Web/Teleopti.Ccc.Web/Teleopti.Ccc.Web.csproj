@@ -1068,12 +1068,13 @@
     <Content Include="Areas\Anywhere\Content\Scripts\notifications.js" />
     <Content Include="Areas\Anywhere\Content\Scripts\helpers_test.js" />
     <Content Include="Areas\Anywhere\Content\Scripts\knockout.justgagebinding.js" />
-    <Content Include="Areas\Anywhere\Content\Scripts\polling\adherencetagents.js" />
+    <Content Include="Areas\Anywhere\Content\Scripts\views\realtimeadherenceagents\subscriptions.adherenceagents.poller.js" />
     <Content Include="Areas\Anywhere\Content\Scripts\polling\adherenceteams.js" />
     <Content Include="Areas\Anywhere\Content\Scripts\require\raphaelloader.js" />
     <Content Include="Areas\Anywhere\Content\Scripts\shared\timezone-current.js" />
     <Content Include="Areas\Anywhere\Content\Scripts\shared\timezone-display.js" />
-    <Content Include="Areas\Anywhere\Content\Scripts\subscriptions.adherenceagents.js" />
+    <Content Include="Areas\Anywhere\Content\Scripts\views\realtimeadherenceagents\subscriptions.adherenceagents.broker.js" />
+    <Content Include="Areas\Anywhere\Content\Scripts\views\realtimeadherenceagents\subscriptions.adherenceagents.js" />
     <Content Include="Areas\Anywhere\Content\Scripts\subscriptions.adherenceteams.js" />
     <Content Include="Areas\Anywhere\Content\Scripts\subscriptions.trackingmessages.js" />
     <Content Include="Areas\Anywhere\Content\Scripts\subscriptions.staffingmetrics.js" />

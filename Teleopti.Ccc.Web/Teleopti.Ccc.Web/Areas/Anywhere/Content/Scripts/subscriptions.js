@@ -5,7 +5,7 @@ define([
 		'subscriptions.staffingmetrics',
 		'subscriptions.adherenceteams',
 		'subscriptions.adherencesites',
-		'subscriptions.adherenceagents',
+		'views/realtimeadherenceagents/subscriptions.adherenceagents',
 		'subscriptions.trackingmessages'
 	], function(
 		$,

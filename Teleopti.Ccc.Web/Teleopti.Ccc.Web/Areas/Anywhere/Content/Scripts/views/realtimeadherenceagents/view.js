@@ -2,38 +2,26 @@
 	'knockout',
 	'text!templates/realtimeadherenceagents/view.html',
 	'views/realtimeadherenceagents/vm',
-	'subscriptions.adherenceagents',
+	'views/realtimeadherenceagents/subscriptions.adherenceagents',
 	'errorview',
 	'ajax',
 	'resources',
 	'amplify',
 	'toggleQuerier',
-	'permissions',
-	'knockoutBindings',
-	'syncToggleQuerier',
-	'polling/adherencetagents'
+	'permissions'
 ], function (
 	ko,
 	view,
 	realTimeAdherenceViewModel,
-	broker,
+	subscriptions,
 	errorview,
 	ajax,
 	resources,
 	amplify,
 	toggleQuerier,
-	permissions,
-	knockoutBindings,
-	syncToggleQuerier,
-	poller
+	permissions
 ) {
 	var viewModel;
-
-	var toggledStateGetter = function () {
-		if (resources.RTA_NoBroker_31237)
-			return poller;
-		return broker;
-	}
 
 	return {
 		initialize: function (options) {
@@ -42,7 +30,6 @@
 		},
 
 		display: function (options) {
-			var subscriptions = toggledStateGetter();
 			viewModel = realTimeAdherenceViewModel();
 			viewModel.SetViewOptions(options);
 			ko.cleanNode(options.bindingElement);
@@ -133,7 +120,7 @@
 
 		},
 		dispose: function (options) {
-			toggledStateGetter().unsubscribeAdherence();
+			subscriptions.unsubscribeAdherence();
 		}
 	};
 });
