@@ -35,14 +35,14 @@ wfmCtrls.controller('ForecastingRunCtrl', [ '$scope', '$stateParams','$http',
         }]
 );
 
-wfmCtrls.controller('PermissionsCtrl', ['$scope', '$stateParams', '$http', 'filterFilter',
-        function ($scope, $stateParams, $http, filterFilter) {
+wfmCtrls.controller('PermissionsCtrl', ['$scope', '$stateParams', '$http', '$filter',
+        function ($scope, $stateParams, $http, $filter) {
         	$scope.roles = [];
         	$scope.list = [];
         	$scope.roleDetails = 'function';
         	$scope.functions = [];
 	        $scope.functionsDisplayed = [];
-
+			
 	        $http.get('../../api/Permissions/Roles').
 				success(function (data, status, headers, config) {
 			        $scope.roles = data;
@@ -54,36 +54,37 @@ wfmCtrls.controller('PermissionsCtrl', ['$scope', '$stateParams', '$http', 'filt
         	$http.get('../../api/Permissions/ApplicationFunctions').
 				success(function (data, status, headers, config) {
 					$scope.functions = data.Functions;
-					$scope.functionsDisplayed = data.Functions;
+					$scope.functionsDisplayed = data;
+					$scope.functionsFlat = [];
+					
+					var flatFunctions = function(functionTab) { 
+						functionTab.forEach(function(item) {
+							$scope.functionsFlat.push(item);
+							if (item.ChildFunctions.length != 0) {
+								flatFunctions(item.ChildFunctions);
+							}
+						});
+					}
+
+			        flatFunctions($scope.functionsDisplayed);
+
 		        }).
 				error(function (data, status, headers, config) {
 					$scope.error = { success: false, message: 'Something has failed. Please try again later' };
 				});
 
         	$scope.showRole = function (roleId) {
-        		$http.get('../../api/Permissions/Roles/e7f360d3-c4b6-41fc-9b2d-9b5e015aae64').
+        		$http.get('../../api/Permissions/Roles/'+roleId).
 								success(function (data, status, headers, config) {
 									var permsFunc = data.AvailableFunctions;
-									var flat = flatten(permsFunc);
-									$scope.functionsDisplayed.forEach(function (item) {
-										var contain = filterFilter(flat, item);
-										
-										if (contain.length!=0)
-											item.selected = true;
-									});
-
-								}).
-								error(function (data, status, headers, config) {
+				        $scope.functionsFlat.forEach(function(item) {
+					        var availableFunctions = $filter('filter')(permsFunc, { Id: item.FunctionId });
+					        console.log(item, availableFunctions.length);
+					        item.selected = availableFunctions.length != 0 ? true : false;
+				        });
+			        }).error(function (data, status, headers, config) {
 									$scope.error = { success: false, message: 'Something has failed. Please try again later' };
 								});
         	};
-
-        	var flatten = function (arr) {
-		        var tab = [];
-				arr.forEach(function (item) {
-			        return tab.push(item.Id);
-        		});
-		        return tab;
-	        }
         }]
 );

@@ -82,3 +82,7 @@
 	border-left: 1px solid grey;
 	bottom: 0;
 }
+
+.selected {
+	background-color: #5677fc;
+}
