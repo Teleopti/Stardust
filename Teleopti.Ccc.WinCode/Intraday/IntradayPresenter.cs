@@ -271,13 +271,12 @@ namespace Teleopti.Ccc.WinCode.Intraday
             _eventAggregator.GetEvent<IntradayLoadProgress>().Publish(UserTexts.Resources.RegisteringWithMessageBrokerThreeDots);
             listenForMessageBroker();
             _eventAggregator.GetEvent<IntradayLoadProgress>().Publish(UserTexts.Resources.LoadingInitialStatesThreeDots);
-	        if (_realTimeAdherenceEnabled)
-	        {
-		        string pollingInterval;
-		        if (!StateHolder.Instance.StateReader.ApplicationScopeData.AppSettings.TryGetValue("RtaPollingInterval", out pollingInterval))
-			        pollingInterval = "5000";
-				 _poller.Poll(Convert.ToInt32(pollingInterval),loadExternalAgentStates);
-	        }
+			if (!_realTimeAdherenceEnabled || HistoryOnly) return;
+
+	        string pollingInterval;
+	        if (!StateHolder.Instance.StateReader.ApplicationScopeData.AppSettings.TryGetValue("RtaPollingInterval", out pollingInterval))
+		        pollingInterval = "5000";
+	        _poller.Poll(Convert.ToInt32(pollingInterval),loadExternalAgentStates);
         }
 
         private void loadExternalAgentStates()
