@@ -5,13 +5,15 @@ namespace Teleopti.Ccc.Web.Areas.Start.Models.Authentication
 	public class ApplicationAuthenticationModel
 	{
 		private readonly IAuthenticator _authenticator;
+		private readonly ILogLogonAttempt _logLogonAttempt;
 		public string DataSourceName { get; set; }
 		public string UserName { get; set; }
 		public string Password { get; set; }
 
-		public ApplicationAuthenticationModel(IAuthenticator authenticator)
+		public ApplicationAuthenticationModel(IAuthenticator authenticator, ILogLogonAttempt logLogonAttempt)
 		{
 			_authenticator = authenticator;
+			_logLogonAttempt = logLogonAttempt;
 		}
 
 		public AuthenticateResult AuthenticateUser()
@@ -21,7 +23,7 @@ namespace Teleopti.Ccc.Web.Areas.Start.Models.Authentication
 
 		public void SaveAuthenticateResult(AuthenticateResult result)
 		{
-			_authenticator.SaveAuthenticateResult(UserName,result);
+			_logLogonAttempt.SaveAuthenticateResult(UserName, result);
 		}
 	}
 }

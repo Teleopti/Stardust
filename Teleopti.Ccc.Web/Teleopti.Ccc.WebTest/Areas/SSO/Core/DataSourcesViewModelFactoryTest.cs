@@ -14,7 +14,7 @@ namespace Teleopti.Ccc.WebTest.Areas.SSO.Core
 	{
 		private static ApplicationDataSourcesViewModelFactory Target(IDataSourcesProvider dataSourcesProvider)
 		{
-			return new ApplicationDataSourcesViewModelFactory(new ApplicationAuthenticationType(null, new Lazy<IDataSourcesProvider>(() => dataSourcesProvider)));
+			return new ApplicationDataSourcesViewModelFactory(new ApplicationAuthenticationType(null, new Lazy<IDataSourcesProvider>(() => dataSourcesProvider), null));
 		}
 
 		[Test]

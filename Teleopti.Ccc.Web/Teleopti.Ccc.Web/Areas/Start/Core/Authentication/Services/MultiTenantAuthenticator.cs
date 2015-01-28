@@ -78,35 +78,5 @@ namespace Teleopti.Ccc.Web.Areas.Start.Core.Authentication.Services
 
 			return new AuthenticateResult { DataSource = null, Person = null, Successful = false, HasMessage = !string.IsNullOrEmpty(result.FailReason), Message = result.FailReason, PasswordExpired = result.PasswordExpired };
 		}
-
-		public void SaveAuthenticateResult(string userName, AuthenticateResult result)
-		{
-			//dont do anything here it will happen in the new service
-
-			//var provider = "Application";
-			//if (string.IsNullOrEmpty(userName))
-			//{
-			//	var winAccount = _tokenIdentityProvider.RetrieveToken();
-			//	userName = winAccount.UserIdentifier;
-			//	provider = "Windows";
-			//}
-			//using (var uow = result.DataSource.Application.CreateAndOpenUnitOfWork())
-			//{
-			//	var model = new LoginAttemptModel
-			//	{
-			//		ClientIp = _ipAddressResolver.GetIpAddress(),
-			//		Provider = provider,
-			//		Client = "WEB",
-			//		UserCredentials = userName,
-			//		Result = result.Successful ? "LogonSuccess" : "LogonFailed"
-			//	};
-			//	if (result.Person != null) model.PersonId = result.Person.Id;
-
-			//	_repositoryFactory.CreatePersonRepository(uow).SaveLoginAttempt(model);
-			//	uow.PersistAll();
-			//}
-		}
-
-		
 	}
 }

@@ -11,11 +11,13 @@ namespace Teleopti.Ccc.Web.Areas.Start.Models.Authentication
 	{
 		private readonly Lazy<IAuthenticator> _authenticator;
 		private readonly Lazy<IDataSourcesProvider> _dataSourcesProvider;
+		private readonly Lazy<ILogLogonAttempt> _logLogonAttempt;
 
-		public ApplicationIdentityProviderAuthenticationType(Lazy<IAuthenticator> authenticator, Lazy<IDataSourcesProvider> dataSourcesProvider)
+		public ApplicationIdentityProviderAuthenticationType(Lazy<IAuthenticator> authenticator, Lazy<IDataSourcesProvider> dataSourcesProvider, Lazy<ILogLogonAttempt> logLogonAttempt)
 		{
 			_authenticator = authenticator;
 			_dataSourcesProvider = dataSourcesProvider;
+			_logLogonAttempt = logLogonAttempt;
 		}
 
 		public string TypeString { get { return "application_token"; } }
@@ -27,7 +29,7 @@ namespace Teleopti.Ccc.Web.Areas.Start.Models.Authentication
 
 		public IAuthenticationModel BindModel(ModelBindingContext bindingContext)
 		{
-			return new ApplicationIdentityAuthenticationModel(_authenticator.Value)
+			return new ApplicationIdentityAuthenticationModel(_authenticator.Value, _logLogonAttempt.Value)
 			{
 				DataSourceName = bindingContext.ValueProvider.GetValue("datasource").AttemptedValue
 			};

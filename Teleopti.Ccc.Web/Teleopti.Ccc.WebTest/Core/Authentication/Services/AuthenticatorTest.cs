@@ -1,13 +1,11 @@
 ﻿using NUnit.Framework;
 using Rhino.Mocks;
 using SharpTestsEx;
-using Teleopti.Ccc.Domain.Auditing;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Security.Authentication;
 using Teleopti.Ccc.Web.Areas.Start.Core.Authentication.DataProvider;
 using Teleopti.Ccc.Web.Areas.Start.Core.Authentication.Services;
-using Teleopti.Ccc.Web.Areas.Start.Models.Authentication;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
 
@@ -21,7 +19,6 @@ namespace Teleopti.Ccc.WebTest.Core.Authentication.Services
 		private IAuthenticator target;
 		private ITokenIdentityProvider tokenIdentityProvider;
 		private IFindApplicationUser findApplicationUser;
-		private IIpAddressResolver ipFinder;
 		const string dataSourceName = "Gurkmajonääääs";
 
 		[SetUp]
@@ -31,8 +28,7 @@ namespace Teleopti.Ccc.WebTest.Core.Authentication.Services
 			repositoryFactory = MockRepository.GenerateMock<IRepositoryFactory>();
 			tokenIdentityProvider = MockRepository.GenerateMock<ITokenIdentityProvider>();
 			findApplicationUser = MockRepository.GenerateMock<IFindApplicationUser>();
-			ipFinder = MockRepository.GenerateMock<IIpAddressResolver>();
-			target = new Authenticator(dataSourcesProvider, tokenIdentityProvider, repositoryFactory, findApplicationUser, ipFinder);
+			target = new Authenticator(dataSourcesProvider, tokenIdentityProvider, repositoryFactory, findApplicationUser);
 		}
 
 		[Test]
@@ -119,32 +115,6 @@ namespace Teleopti.Ccc.WebTest.Core.Authentication.Services
 			result.Person = domainAuthResult.Person;
 			result.PasswordExpired = domainAuthResult.PasswordExpired;
 			result.Successful = domainAuthResult.Successful;
-		}
-
-		[Test]
-		public void ShouldSaveAuthenticateResult()
-		{
-			var dataSource = MockRepository.GenerateMock<IDataSource>();
-			var unitOfWorkFactory = MockRepository.GenerateMock<IUnitOfWorkFactory>();
-			var personRep = MockRepository.GenerateMock<IPersonRepository>();
-			var uow = MockRepository.GenerateMock<IUnitOfWork>();
-			var result = new AuthenticateResult { Successful = false,DataSource = dataSource};
-
-			var model = new LoginAttemptModel
-				{
-					ClientIp ="",
-					Provider = "Application",
-					UserCredentials = "hej",
-					Result = "LogonSuccess"
-				};
-			
-			dataSource.Stub(x => x.Application).Return(unitOfWorkFactory);
-			unitOfWorkFactory.Stub(x => x.CreateAndOpenUnitOfWork()).Return(uow);
-			ipFinder.Stub(x => x.GetIpAddress()).IgnoreArguments().Return("");
-			repositoryFactory.Stub(x => x.CreatePersonRepository(uow)).Return(personRep);
-			personRep.Stub(x => x.SaveLoginAttempt(model)).IgnoreArguments().Return(1);
-			
-			target.SaveAuthenticateResult("hej", result);
 		}
 	}
 }

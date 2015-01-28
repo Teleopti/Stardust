@@ -15,7 +15,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Start.Controllers
 			var authenticator = MockRepository.GenerateMock<IAuthenticator>();
 			var expectedResult = new AuthenticateResult();
 			authenticator.Stub(x => x.AuthenticateApplicationUser("mydata", "username", "password")).Return(expectedResult);
-			var target = new ApplicationAuthenticationModel(authenticator)
+			var target = new ApplicationAuthenticationModel(authenticator, null)
 				{
 					DataSourceName = "mydata",
 					Password = "password",
@@ -30,17 +30,18 @@ namespace Teleopti.Ccc.WebTest.Areas.Start.Controllers
 		[Test]
 		public void ShouldSaveResult()
 		{
-			var authenticator = MockRepository.GenerateMock<IAuthenticator>();
 			var expectedResult = new AuthenticateResult();
-			
-			var target = new ApplicationAuthenticationModel(authenticator)
+			const string userName = "sdfsdfsd";
+			var logLogResult = MockRepository.GenerateMock<ILogLogonAttempt>();
+			logLogResult.Expect(x => x.SaveAuthenticateResult(userName, expectedResult));
+
+			var target = new ApplicationAuthenticationModel(null, logLogResult)
 			{
 				DataSourceName = "mydata",
 				Password = "password",
-				UserName = "username"
+				UserName = userName
 			};
-			authenticator.Stub(x => x.SaveAuthenticateResult("username", expectedResult));
-
+			
 			target.SaveAuthenticateResult(expectedResult);
 		}
 	}

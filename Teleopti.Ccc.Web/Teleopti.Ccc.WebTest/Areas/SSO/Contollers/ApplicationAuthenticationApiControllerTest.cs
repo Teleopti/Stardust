@@ -55,19 +55,19 @@ namespace Teleopti.Ccc.WebTest.Areas.SSO.Contollers
 			currentPrincipalContext = MockRepository.GenerateMock<ICurrentPrincipalContext>();
 		}
 
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Reliability", "CA2000:Dispose objects before losing scope"), Test]
+		[Test]
 		public void ShouldAuthenticateUser()
 		{
 			var formsAuthentication = MockRepository.GenerateMock<IFormsAuthentication>();
 			var target = new ApplicationAuthenticationApiController(null, null, null, null, formsAuthentication);
 			var authenticator = MockRepository.GenerateMock<IAuthenticator>();
-			var authenticationModel = new ApplicationAuthenticationModel(authenticator)
+			var result = new AuthenticateResult { Successful = true };
+			var authenticationModel = new ApplicationAuthenticationModel(authenticator, shouldBeLogged("user", result))
 			{
 				DataSourceName = "data source",
 				UserName = "user",
 				Password = "pwd"
 			};
-			var result = new AuthenticateResult {Successful = true};
 			authenticator.Stub(
 				x => x.AuthenticateApplicationUser(authenticationModel.DataSourceName, authenticationModel.UserName,
 					authenticationModel.Password)).Return(result);
@@ -83,10 +83,11 @@ namespace Teleopti.Ccc.WebTest.Areas.SSO.Contollers
 			var target = new StubbingControllerBuilder().CreateController<ApplicationAuthenticationApiController>(null, null, null, null, null);
 			const string message = "test";
 			var authenticator = MockRepository.GenerateMock<IAuthenticator>();
-			var authenticationModel = new ApplicationAuthenticationModel(authenticator);
+			var authResult = new AuthenticateResult {Successful = false, Message = message};
+			var authenticationModel = new ApplicationAuthenticationModel(authenticator, shouldBeLogged(null, authResult));
 			authenticator.Stub(
 				x => x.AuthenticateApplicationUser(authenticationModel.DataSourceName, authenticationModel.UserName,
-					authenticationModel.Password)).Return(new AuthenticateResult { Successful = false, Message = message });
+					authenticationModel.Password)).Return(authResult);
 
 			var result = target.CheckPassword(authenticationModel);
 
@@ -96,13 +97,13 @@ namespace Teleopti.Ccc.WebTest.Areas.SSO.Contollers
 			(result.Data as ModelStateResult).Errors.Single().Should().Be(message);
 		}
 
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Reliability", "CA2000:Dispose objects before losing scope"), Test]
+		[Test]
 		public void ShouldReturnWarningIfPasswordExpired()
 		{
 			var target = new ApplicationAuthenticationApiController(null, null, null, null, null);
 			const string message = "test";
 			var authenticator = MockRepository.GenerateMock<IAuthenticator>();
-			var authenticationModel = new ApplicationAuthenticationModel(authenticator);
+			var authenticationModel = new ApplicationAuthenticationModel(authenticator, shouldNotBeLogged());
 			authenticator.Stub(
 				x => x.AuthenticateApplicationUser(authenticationModel.DataSourceName, authenticationModel.UserName,
 					authenticationModel.Password)).Return(new AuthenticateResult { Successful = false, Message = message, PasswordExpired = true });
@@ -114,16 +115,17 @@ namespace Teleopti.Ccc.WebTest.Areas.SSO.Contollers
 			warning.WillExpireSoon.Should().Be.False();
 		}
 
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Reliability", "CA2000:Dispose objects before losing scope"), Test]
+		[Test]
 		public void ShouldReturnWarningIfPasswordWillExpire()
 		{
 			var target = new ApplicationAuthenticationApiController(null, null, null, null, MockRepository.GenerateMock<IFormsAuthentication>());
 			var authenticator = MockRepository.GenerateMock<IAuthenticator>();
 			const string message = "test";
-			var authenticationModel = new ApplicationAuthenticationModel(authenticator);
+			var authResult = new AuthenticateResult {Successful = true, HasMessage = true, Message = message};
+			var authenticationModel = new ApplicationAuthenticationModel(authenticator, shouldBeLogged(null, authResult));
 			authenticator.Stub(
 				x => x.AuthenticateApplicationUser(authenticationModel.DataSourceName, authenticationModel.UserName,
-					authenticationModel.Password)).Return(new AuthenticateResult { Successful = true, HasMessage = true, Message = message });
+					authenticationModel.Password)).Return(authResult);
 
 			var result = target.CheckPassword(authenticationModel);
 
@@ -132,13 +134,13 @@ namespace Teleopti.Ccc.WebTest.Areas.SSO.Contollers
 			warning.AlreadyExpired.Should().Be.False();
 		}
 
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Reliability", "CA2000:Dispose objects before losing scope"), Test]
+		[Test]
 		public void ShouldReturnWarningIfPasswordAlreadyExpire()
 		{
 			var target = new ApplicationAuthenticationApiController(null, null, null, null, null);
 			var authenticator = MockRepository.GenerateMock<IAuthenticator>();
 			const string message = "test";
-			var authenticationModel = new ApplicationAuthenticationModel(authenticator);
+			var authenticationModel = new ApplicationAuthenticationModel(authenticator, shouldNotBeLogged());
 			authenticator.Stub(
 				x => x.AuthenticateApplicationUser(authenticationModel.DataSourceName, authenticationModel.UserName,
 					authenticationModel.Password)).Return(new AuthenticateResult { Successful = false, HasMessage = true, Message = message, PasswordExpired = true });
@@ -149,15 +151,16 @@ namespace Teleopti.Ccc.WebTest.Areas.SSO.Contollers
 			warning.AlreadyExpired.Should().Be.True();
 		}
 
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Reliability", "CA2000:Dispose objects before losing scope"), Test]
+		[Test]
 		public void ShouldNotReturnWarningIfPasswordWillNotExpire()
 		{
 			var target = new ApplicationAuthenticationApiController(null, null, null, null, MockRepository.GenerateMock<IFormsAuthentication>());
 			var authenticator = MockRepository.GenerateMock<IAuthenticator>();
-			var authenticationModel = new ApplicationAuthenticationModel(authenticator);
+			var authResult = new AuthenticateResult {Successful = true, HasMessage = false};
+			var authenticationModel = new ApplicationAuthenticationModel(authenticator, shouldBeLogged(null, authResult));
 			authenticator.Stub(
 				x => x.AuthenticateApplicationUser(authenticationModel.DataSourceName, authenticationModel.UserName,
-					authenticationModel.Password)).Return(new AuthenticateResult { Successful = true, HasMessage = false });
+					authenticationModel.Password)).Return(authResult);
 
 			var result = target.CheckPassword(authenticationModel);
 
@@ -235,6 +238,18 @@ namespace Teleopti.Ccc.WebTest.Areas.SSO.Contollers
 			target.Response.TrySkipIisCustomErrors.Should().Be.True();
 			target.ModelState.Values.Single().Errors.Single().ErrorMessage.Should().Be.EqualTo(Resources.InvalidUserNameOrPassword);
 			(result.Data as ModelStateResult).Errors.Single().Should().Be(Resources.InvalidUserNameOrPassword);
+		}
+
+		private ILogLogonAttempt shouldNotBeLogged()
+		{
+			return null;
+		}
+
+		private ILogLogonAttempt shouldBeLogged(string userName, AuthenticateResult result)
+		{
+			var mock = MockRepository.GenerateMock<ILogLogonAttempt>();
+			mock.Expect(x => x.SaveAuthenticateResult(userName, result));
+			return mock;
 		}
 	}
 }

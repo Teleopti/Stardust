@@ -417,6 +417,8 @@
     <Compile Include="Areas\SeatPlanner\Core\ViewModels\BusinessUnitWithSitesViewModel.cs" />
     <Compile Include="Areas\SeatPlanner\Core\ViewModels\LocationViewModel.cs" />
     <Compile Include="Areas\SeatPlanner\Core\ViewModels\SeatViewModel.cs" />
+    <Compile Include="Areas\Start\Core\Authentication\Services\ILogLogonAttempt.cs" />
+    <Compile Include="Areas\Start\Core\Authentication\Services\LogLogonAttempt.cs" />
     <Compile Include="Areas\Start\Core\Authentication\Services\MultiTenantAuthenticator.cs" />
     <Compile Include="Areas\SeatPlanner\Controllers\ApplicationController.cs" />
     <Compile Include="Areas\SeatPlanner\Controllers\TeamHierarchyController.cs" />
@@ -433,6 +435,7 @@
     <Compile Include="Areas\Tenant\Core\IdentityAuthentication.cs" />
     <Compile Include="Areas\Tenant\Core\IPasswordPolicyCheck.cs" />
     <Compile Include="Areas\Tenant\Core\IPasswordVerifier.cs" />
+    <Compile Include="Areas\Tenant\Core\LogTenancyLogonAttempt.cs" />
     <Compile Include="Areas\Tenant\Core\NHibernateConfigurationsHandler.cs" />
     <Compile Include="Areas\Tenant\Core\PasswordPolicyCheck.cs" />
     <Compile Include="Areas\Tenant\Core\PasswordVerifier.cs" />

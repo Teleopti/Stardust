@@ -1,8 +1,6 @@
-﻿using Teleopti.Ccc.Domain.Auditing;
-using Teleopti.Ccc.Domain.Repositories;
+﻿using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Security.Authentication;
 using Teleopti.Ccc.Web.Areas.Start.Core.Authentication.DataProvider;
-using Teleopti.Ccc.Web.Areas.Start.Models.Authentication;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Web.Areas.Start.Core.Authentication.Services
@@ -13,19 +11,16 @@ namespace Teleopti.Ccc.Web.Areas.Start.Core.Authentication.Services
 		private readonly ITokenIdentityProvider _tokenIdentityProvider;
 		private readonly IRepositoryFactory _repositoryFactory;
 		private readonly IFindApplicationUser _findApplicationUser;
-		private readonly IIpAddressResolver _ipAddressResolver;
 
 		public Authenticator(IDataSourcesProvider dataSourceProvider,
 									ITokenIdentityProvider tokenIdentityProvider,
 									IRepositoryFactory repositoryFactory,
-									IFindApplicationUser findApplicationUser,
-									IIpAddressResolver ipAddressResolver)
+									IFindApplicationUser findApplicationUser)
 		{
 			_dataSourceProvider = dataSourceProvider;
 			_tokenIdentityProvider = tokenIdentityProvider;
 			_repositoryFactory = repositoryFactory;
 			_findApplicationUser = findApplicationUser;
-			_ipAddressResolver = ipAddressResolver;
 		}
 
 		public AuthenticateResult AuthenticateWindowsUser(string dataSourceName)
@@ -39,7 +34,7 @@ namespace Teleopti.Ccc.Web.Areas.Start.Core.Authentication.Services
 				if (_repositoryFactory.CreatePersonRepository(uow).TryFindIdentityAuthenticatedPerson(winAccount.UserIdentifier,
 					out foundUser))
 				{
-					return new AuthenticateResult {Successful = true, Person = foundUser, DataSource = dataSource};
+					return new AuthenticateResult { Successful = true, Person = foundUser, DataSource = dataSource };
 				}
 			}
 
@@ -71,36 +66,8 @@ namespace Teleopti.Ccc.Web.Areas.Start.Core.Authentication.Services
 			{
 				var authResult = _findApplicationUser.CheckLogOn(uow, userName, password);
 				uow.PersistAll();
-				return new AuthenticateResult {DataSource = dataSource, Person = authResult.Person, Successful = authResult.Successful, HasMessage = authResult.HasMessage, Message = authResult.Message, PasswordExpired = authResult.PasswordExpired};
+				return new AuthenticateResult { DataSource = dataSource, Person = authResult.Person, Successful = authResult.Successful, HasMessage = authResult.HasMessage, Message = authResult.Message, PasswordExpired = authResult.PasswordExpired };
 			}
 		}
-
-		public void SaveAuthenticateResult(string userName, AuthenticateResult result)
-		{
-			var provider = "Application";
-			if (string.IsNullOrEmpty(userName))
-			{
-				var winAccount = _tokenIdentityProvider.RetrieveToken();
-				userName = winAccount.UserIdentifier;
-				provider = "Windows";
-			}
-			using (var uow = result.DataSource.Application.CreateAndOpenUnitOfWork())
-			{
-				var model = new LoginAttemptModel
-				{
-					ClientIp = _ipAddressResolver.GetIpAddress(),
-					Provider = provider,
-					Client = "WEB",
-					UserCredentials = userName,
-					Result = result.Successful ? "LogonSuccess" : "LogonFailed"
-				};
-				if (result.Person != null) model.PersonId = result.Person.Id;
-
-				_repositoryFactory.CreatePersonRepository(uow).SaveLoginAttempt(model);
-				uow.PersistAll();
-			}
-		}
-
-		
 	}
 }

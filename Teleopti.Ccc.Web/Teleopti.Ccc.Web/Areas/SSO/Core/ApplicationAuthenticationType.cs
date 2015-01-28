@@ -19,11 +19,13 @@ namespace Teleopti.Ccc.Web.Areas.SSO.Core
 	{
 		private readonly Lazy<IAuthenticator> _authenticator;
 		private readonly Lazy<IDataSourcesProvider> _dataSourcesProvider;
+		private readonly Lazy<ILogLogonAttempt> _logLogonAttempt;
 
-		public ApplicationAuthenticationType(Lazy<IAuthenticator> authenticator, Lazy<IDataSourcesProvider> dataSourcesProvider)
+		public ApplicationAuthenticationType(Lazy<IAuthenticator> authenticator, Lazy<IDataSourcesProvider> dataSourcesProvider, Lazy<ILogLogonAttempt> logLogonAttempt)
 		{
 			_authenticator = authenticator;
 			_dataSourcesProvider = dataSourcesProvider;
+			_logLogonAttempt = logLogonAttempt;
 		}
 
 		public string TypeString { get { return "application"; } }
@@ -35,7 +37,7 @@ namespace Teleopti.Ccc.Web.Areas.SSO.Core
 
 		public ApplicationAuthenticationModel BindModel(ModelBindingContext bindingContext)
 		{
-			return new ApplicationAuthenticationModel(_authenticator.Value)
+			return new ApplicationAuthenticationModel(_authenticator.Value, _logLogonAttempt.Value)
 				{
 					UserName = bindingContext.ValueProvider.GetValue("username").AttemptedValue,
 					Password = bindingContext.ValueProvider.GetValue("password").AttemptedValue,

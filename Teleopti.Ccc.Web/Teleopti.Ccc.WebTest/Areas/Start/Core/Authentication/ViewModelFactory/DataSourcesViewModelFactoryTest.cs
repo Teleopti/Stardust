@@ -18,12 +18,12 @@ namespace Teleopti.Ccc.WebTest.Areas.Start.Core.Authentication.ViewModelFactory
 			return new DataSourcesViewModelFactory(
 				new IAuthenticationType[]
 					{
-						new ApplicationIdentityProviderAuthenticationType(null, new Lazy<IDataSourcesProvider>(() => dataSourcesProvider)), 
-						new WindowsAuthenticationType(null, new Lazy<IDataSourcesProvider>(() => dataSourcesProvider))
+						new ApplicationIdentityProviderAuthenticationType(null, new Lazy<IDataSourcesProvider>(() => dataSourcesProvider), null), 
+						new WindowsAuthenticationType(null, new Lazy<IDataSourcesProvider>(() => dataSourcesProvider), null)
 					});
 		}
 
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Reliability", "CA2000:Dispose objects before losing scope"), Test]
+		[Test]
 		public void ShouldRetrieveApplicationDataSourcesFromIdentityToken()
 		{
 			var dataSourcesProvider = MockRepository.GenerateMock<IDataSourcesProvider>();
