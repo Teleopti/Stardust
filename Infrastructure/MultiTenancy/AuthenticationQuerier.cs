@@ -17,7 +17,7 @@ namespace Teleopti.Ccc.Infrastructure.MultiTenancy
 
 		public AuthenticationQueryResult TryLogon(string userName, string password)
 		{
-			var uriBuilder = new UriBuilder(_pathToTennantServer + "Tennant/ApplicationLogon");
+			var uriBuilder = new UriBuilder(_pathToTennantServer + "Tenant/ApplicationLogon");
 			var query = HttpUtility.ParseQueryString(uriBuilder.Query);
 			query["username"] = userName;
 			query["password"] = password;
@@ -27,7 +27,7 @@ namespace Teleopti.Ccc.Infrastructure.MultiTenancy
 
 		public AuthenticationQueryResult TryIdentityLogon(string identity)
 		{
-			var uriBuilder = new UriBuilder(_pathToTennantServer + "Tennant/IdentityLogon");
+			var uriBuilder = new UriBuilder(_pathToTennantServer + "Tenant/IdentityLogon");
 			var query = HttpUtility.ParseQueryString(uriBuilder.Query);
 			query["identity"] = identity;
 			uriBuilder.Query = query.ToString();

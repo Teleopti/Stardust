@@ -2,12 +2,12 @@
 using NUnit.Framework;
 using Rhino.Mocks;
 using SharpTestsEx;
-using Teleopti.Ccc.Web.Areas.Tennant;
-using Teleopti.Ccc.Web.Areas.Tennant.Core;
+using Teleopti.Ccc.Web.Areas.Tenant;
+using Teleopti.Ccc.Web.Areas.Tenant.Core;
 
-namespace Teleopti.Ccc.WebTest.Areas.Tennant
+namespace Teleopti.Ccc.WebTest.Areas.Tenant
 {
-	public class TennantControllerTest
+	public class TenantControllerTest
 	{
 		[Test]
 		public void SuccessfulApplicationLogon()
@@ -22,7 +22,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Tennant
 			};
 			var appAuthentication = MockRepository.GenerateMock<IApplicationAuthentication>();
 			var identityAuthentication = MockRepository.GenerateMock<IIdentityAuthentication>();
-			var target = new TennantController(appAuthentication, identityAuthentication);
+			var target = new TenantController(appAuthentication, identityAuthentication);
 			appAuthentication.Expect(x => x.Logon(userName, password)).Return(serviceResult);
 
 			var webCall = target.ApplicationLogon(userName, password);
@@ -42,7 +42,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Tennant
 			};
 			var appAuthentication = MockRepository.GenerateMock<IApplicationAuthentication>();
 			var identityAuthentication = MockRepository.GenerateMock<IIdentityAuthentication>();
-			var target = new StubbingControllerBuilder().CreateController<TennantController>(appAuthentication, identityAuthentication);
+			var target = new StubbingControllerBuilder().CreateController<TenantController>(appAuthentication, identityAuthentication);
 			appAuthentication.Expect(x => x.Logon(userName, password)).Return(serviceResult);
 
 			var result = ((ApplicationAuthenticationResult)target.ApplicationLogon(userName, password).Data);
@@ -63,7 +63,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Tennant
 			};
 			var appAuthentication = MockRepository.GenerateMock<IApplicationAuthentication>();
 			var identityAuthentication = MockRepository.GenerateMock<IIdentityAuthentication>();
-			var target = new TennantController(appAuthentication, identityAuthentication);
+			var target = new TenantController(appAuthentication, identityAuthentication);
 			identityAuthentication.Expect(x => x.Logon(identity)).Return(serviceResult);
 
 			var webCall = target.IdentityLogon(identity);
@@ -82,7 +82,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Tennant
 			};
 			var appAuthentication = MockRepository.GenerateMock<IApplicationAuthentication>();
 			var identityAuthentication = MockRepository.GenerateMock<IIdentityAuthentication>();
-			var target = new StubbingControllerBuilder().CreateController<TennantController>(appAuthentication, identityAuthentication);
+			var target = new StubbingControllerBuilder().CreateController<TenantController>(appAuthentication, identityAuthentication);
 			identityAuthentication.Expect(x => x.Logon(identity)).Return(serviceResult);
 
 			var result = ((ApplicationAuthenticationResult)target.IdentityLogon(identity).Data);

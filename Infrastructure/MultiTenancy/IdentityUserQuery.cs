@@ -5,10 +5,10 @@ namespace Teleopti.Ccc.Infrastructure.MultiTenancy
 {
 	public class IdentityUserQuery : IIdentityUserQuery
 	{
-		private readonly Func<ICurrentTennantSession> _currentTennantSession;
+		private readonly Func<ICurrentTenantSession> _currentTennantSession;
 
 		//remove "func" when we later move away from list of datasources
-		public IdentityUserQuery(Func<ICurrentTennantSession> currentTennantSession)
+		public IdentityUserQuery(Func<ICurrentTenantSession> currentTennantSession)
 		{
 			_currentTennantSession = currentTennantSession;
 		}

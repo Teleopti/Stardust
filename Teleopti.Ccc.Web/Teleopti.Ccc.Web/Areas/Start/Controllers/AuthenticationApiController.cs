@@ -32,7 +32,7 @@ namespace Teleopti.Ccc.Web.Areas.Start.Controllers
 		}
 
 		[HttpGet]
-		[TennantUnitOfWork]
+		[TenantUnitOfWork]
 		public virtual JsonResult BusinessUnits(IAuthenticationModel model)
 		{
 			var result = model.AuthenticateUser();
@@ -43,7 +43,7 @@ namespace Teleopti.Ccc.Web.Areas.Start.Controllers
 		}
 
 		[HttpPost]
-		[TennantUnitOfWork]
+		[TenantUnitOfWork]
 		public virtual JsonResult Logon(IAuthenticationModel model, Guid businessUnitId)
 		{
 			try

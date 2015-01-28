@@ -29,7 +29,7 @@ namespace Teleopti.Ccc.Web.Areas.Start.Core.IoC
 			builder.RegisterType<DataSourcesProvider>().As<IDataSourcesProvider>().SingleInstance();
 			if (_configuration.Toggle(Toggles.MultiTenancy_WebLogon_17461))
 			{
-				builder.RegisterType<MultiTennantAuthenticator>().As<IAuthenticator>().SingleInstance();
+				builder.RegisterType<MultiTenantAuthenticator>().As<IAuthenticator>().SingleInstance();
 			}
 			else
 			{

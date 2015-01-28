@@ -208,10 +208,10 @@
     <Compile Include="MultiTenancy\ApplicationUserQuery.cs" />
     <Compile Include="MultiTenancy\AuthenticationQuerier.cs" />
     <Compile Include="MultiTenancy\IApplicationUserQuery.cs" />
-    <Compile Include="MultiTenancy\NHibernate\TennantUnitOfWorkAspect.cs" />
-    <Compile Include="MultiTenancy\NHibernate\TennantUnitOfWorkAttribute.cs" />
+    <Compile Include="MultiTenancy\NHibernate\TenantUnitOfWorkAspect.cs" />
+    <Compile Include="MultiTenancy\NHibernate\TenantUnitOfWorkAttribute.cs" />
     <Compile Include="MultiTenancy\PersonInfo.cs" />
-    <Compile Include="MultiTenancy\NHibernate\ICurrentTennantSession.cs" />
+    <Compile Include="MultiTenancy\NHibernate\ICurrentTenantSession.cs" />
     <Compile Include="MultiTenancy\NHibernate\ITenantUnitOfWorkManager.cs" />
     <Compile Include="MultiTenancy\NHibernate\PasswordPolicyForUserMapping.cs" />
     <Compile Include="MultiTenancy\PasswordPolicyForUser.cs" />

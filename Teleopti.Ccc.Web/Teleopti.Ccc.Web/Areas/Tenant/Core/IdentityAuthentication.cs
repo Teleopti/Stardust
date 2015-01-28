@@ -1,9 +1,7 @@
-﻿using Teleopti.Ccc.Domain.Security;
-using Teleopti.Ccc.Infrastructure.MultiTenancy;
+﻿using Teleopti.Ccc.Infrastructure.MultiTenancy;
 using Teleopti.Ccc.UserTexts;
-using Teleopti.Interfaces.Infrastructure;
 
-namespace Teleopti.Ccc.Web.Areas.Tennant.Core
+namespace Teleopti.Ccc.Web.Areas.Tenant.Core
 {
 	public class IdentityAuthentication : IIdentityAuthentication
 	{

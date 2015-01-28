@@ -3,7 +3,7 @@ using Teleopti.Ccc.Domain.Security;
 using Teleopti.Ccc.Infrastructure.MultiTenancy;
 using Teleopti.Interfaces.Domain;
 
-namespace Teleopti.Ccc.Web.Areas.Tennant.Core
+namespace Teleopti.Ccc.Web.Areas.Tenant.Core
 {
 	public class PasswordVerifier : IPasswordVerifier
 	{

@@ -49,7 +49,7 @@ using Teleopti.Ccc.Web.Areas.Start.Core.Authentication.Services;
 using Teleopti.Ccc.Web.Areas.Start.Core.Authentication.ViewModelFactory;
 using Teleopti.Ccc.Web.Areas.Start.Core.LayoutBase;
 using Teleopti.Ccc.Web.Areas.Start.Core.Menu;
-using Teleopti.Ccc.Web.Areas.Tennant;
+using Teleopti.Ccc.Web.Areas.Tenant;
 using Teleopti.Ccc.Web.Areas.Toggle;
 using Teleopti.Ccc.Web.Core;
 using Teleopti.Ccc.Web.Core.Hangfire;
@@ -151,7 +151,7 @@ namespace Teleopti.Ccc.WebTest.Core.IoC
 		[Test]
 		public void ShouldRegisterTennantController()
 		{
-			requestContainer.Resolve<TennantController>()
+			requestContainer.Resolve<TenantController>()
 				.Should().Not.Be.Null();
 		}
 

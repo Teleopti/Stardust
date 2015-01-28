@@ -1,11 +1,11 @@
 ﻿using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Web.Areas.Start.Core.Authentication.DataProvider;
-using Teleopti.Ccc.Web.Areas.Tennant.Core;
+using Teleopti.Ccc.Web.Areas.Tenant.Core;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Web.Areas.Start.Core.Authentication.Services
 {
-	public class MultiTennantAuthenticator : IAuthenticator
+	public class MultiTenantAuthenticator : IAuthenticator
 	{
 		private readonly IDataSourcesProvider _dataSourceProvider;
 		private readonly ITokenIdentityProvider _tokenIdentityProvider;
@@ -13,7 +13,7 @@ namespace Teleopti.Ccc.Web.Areas.Start.Core.Authentication.Services
 		private readonly IApplicationAuthentication _applicationAuthentication;
 		private readonly IIdentityAuthentication _identityAuthentication;
 
-		public MultiTennantAuthenticator(IDataSourcesProvider dataSourceProvider,
+		public MultiTenantAuthenticator(IDataSourcesProvider dataSourceProvider,
 			ITokenIdentityProvider tokenIdentityProvider,
 			IRepositoryFactory repositoryFactory,
 			IApplicationAuthentication applicationAuthentication,

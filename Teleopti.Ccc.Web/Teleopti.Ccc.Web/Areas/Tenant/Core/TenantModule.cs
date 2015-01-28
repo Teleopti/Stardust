@@ -4,10 +4,10 @@ using Teleopti.Ccc.Domain.Security.Authentication;
 using Teleopti.Ccc.Infrastructure.MultiTenancy;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.NHibernate;
 
-namespace Teleopti.Ccc.Web.Areas.Tennant.Core
+namespace Teleopti.Ccc.Web.Areas.Tenant.Core
 {
 	//To be moved out to seperate application
-	public class TennantModule : Module
+	public class TenantModule : Module
 	{
 		protected override void Load(ContainerBuilder builder)
 		{
@@ -27,7 +27,7 @@ namespace Teleopti.Ccc.Web.Areas.Tennant.Core
 			})
 				.AsImplementedInterfaces()
 				.SingleInstance();
-			builder.RegisterType<TennantUnitOfWorkAspect>().SingleInstance();
+			builder.RegisterType<TenantUnitOfWorkAspect>().SingleInstance();
 		}
 	}
 }

@@ -99,7 +99,7 @@ namespace Teleopti.Ccc.Web.Areas.Start.Controllers
 		    return new EmptyResult();
 	    }
 
-			[TennantUnitOfWork]
+			[TenantUnitOfWork]
 	    public virtual ViewResult Logon(string dataSourceName, string businessUnitName, string userName, string password)
 		{
 			var result = _authenticator.AuthenticateApplicationUser(dataSourceName, userName, password);

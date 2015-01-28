@@ -31,7 +31,7 @@ namespace Teleopti.Ccc.Web.Areas.SSO.Controllers
 		}
 
 		[HttpGet]
-		[TennantUnitOfWork]
+		[TenantUnitOfWork]
 		public virtual JsonResult CheckPassword(ApplicationAuthenticationModel model)
 		{
 			var result = model.AuthenticateUser();

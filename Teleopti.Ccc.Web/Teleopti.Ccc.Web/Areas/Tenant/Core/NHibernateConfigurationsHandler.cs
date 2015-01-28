@@ -6,7 +6,7 @@ using Teleopti.Ccc.Domain.Security;
 using Teleopti.Ccc.Web.Core.Startup.InitializeApplication;
 using Teleopti.Interfaces.Infrastructure;
 
-namespace Teleopti.Ccc.Web.Areas.Tennant.Core
+namespace Teleopti.Ccc.Web.Areas.Tenant.Core
 {
 	public interface INHibernateConfigurationsHandler
 	{

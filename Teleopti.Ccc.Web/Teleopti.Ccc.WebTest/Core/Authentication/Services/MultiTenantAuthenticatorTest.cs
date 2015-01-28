@@ -3,12 +3,12 @@ using Rhino.Mocks;
 using SharpTestsEx;
 using Teleopti.Ccc.Web.Areas.Start.Core.Authentication.DataProvider;
 using Teleopti.Ccc.Web.Areas.Start.Core.Authentication.Services;
-using Teleopti.Ccc.Web.Areas.Tennant.Core;
+using Teleopti.Ccc.Web.Areas.Tenant.Core;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.WebTest.Core.Authentication.Services
 {
-	public class MultiTennantAuthenticatorTest
+	public class MultiTenantAuthenticatorTest
 	{
 		[Test]
 		public void ShouldIncludePasswordExpiredInApplicationLogonResult()
@@ -20,7 +20,7 @@ namespace Teleopti.Ccc.WebTest.Core.Authentication.Services
 			var applicationAuthentication = MockRepository.GenerateMock<IApplicationAuthentication>();
 			var datasourcesProvider = MockRepository.GenerateMock<IDataSourcesProvider>();
 			var datasource = MockRepository.GenerateMock<IDataSource>();
-			var target = new MultiTennantAuthenticator(datasourcesProvider, null, null, applicationAuthentication, null);
+			var target = new MultiTenantAuthenticator(datasourcesProvider, null, null, applicationAuthentication, null);
 			applicationAuthentication.Stub(x => x.Logon(userName, password)).Return(new ApplicationAuthenticationResult
 			{
 				PasswordExpired = true

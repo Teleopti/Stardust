@@ -6,7 +6,7 @@ using Environment = NHibernate.Cfg.Environment;
 
 namespace Teleopti.Ccc.Infrastructure.MultiTenancy.NHibernate
 {
-	public class TenantUnitOfWorkManager : ITenantUnitOfWorkManager, ICurrentTennantSession
+	public class TenantUnitOfWorkManager : ITenantUnitOfWorkManager, ICurrentTenantSession
 	{
 		private ISessionFactory _sessionFactory;
 

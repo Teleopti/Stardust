@@ -3,10 +3,10 @@ using System.IO;
 using NUnit.Framework;
 using Rhino.Mocks;
 using SharpTestsEx;
-using Teleopti.Ccc.Web.Areas.Tennant.Core;
+using Teleopti.Ccc.Web.Areas.Tenant.Core;
 using Teleopti.Ccc.Web.Core.Startup.InitializeApplication;
 
-namespace Teleopti.Ccc.WebTest.Areas.Tennant.Core
+namespace Teleopti.Ccc.WebTest.Areas.Tenant.Core
 {
 	public class NHibernateConfigurationsHandlerTest
 	{

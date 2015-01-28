@@ -5,10 +5,10 @@ using SharpTestsEx;
 using Teleopti.Ccc.Domain.Security;
 using Teleopti.Ccc.Infrastructure.MultiTenancy;
 using Teleopti.Ccc.UserTexts;
-using Teleopti.Ccc.Web.Areas.Tennant.Core;
+using Teleopti.Ccc.Web.Areas.Tenant.Core;
 using Teleopti.Interfaces.Domain;
 
-namespace Teleopti.Ccc.WebTest.Areas.Tennant.Core
+namespace Teleopti.Ccc.WebTest.Areas.Tenant.Core
 {
 	public class ApplicationAuthenticationTest
 	{
