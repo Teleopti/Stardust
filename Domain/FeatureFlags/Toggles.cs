@@ -75,6 +75,6 @@
 		MultiTenancy_Logon_17461,
 		MultiTenancy_WebLogon_17461,
 
-		SeatPlanner_32003,
+		SeatPlanner_Logon_32003,
 	}
 }

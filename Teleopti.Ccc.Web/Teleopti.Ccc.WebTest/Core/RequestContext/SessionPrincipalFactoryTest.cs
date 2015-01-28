@@ -68,7 +68,7 @@ namespace Teleopti.Ccc.WebTest.Core.RequestContext
 				Expect.Call(repositoryFactory.CreatePersonRepository(uow)).Return(personRepository);
 				Expect.Call(personRepository.Load(sessData.PersonId)).Return(person);
 				Expect.Call(repositoryFactory.CreateBusinessUnitRepository(uow)).Return(businessUnitRepository);
-				Expect.Call(businessUnitRepository.Load(sessData.BusinessUnitId)).Return(businessUnit);
+				Expect.Call(businessUnitRepository.Get(sessData.BusinessUnitId)).Return(businessUnit);
 			}
 			using (mocks.Playback())
 			{

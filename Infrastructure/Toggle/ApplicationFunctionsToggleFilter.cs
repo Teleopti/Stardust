@@ -22,7 +22,7 @@ namespace Teleopti.Ccc.Infrastructure.Toggle
 			{
 				hideMyReportQueueMetrics(functions);
 			}
-			if (!_toggleManager.IsEnabled (Toggles.SeatPlanner_32003))
+			if (!_toggleManager.IsEnabled (Toggles.SeatPlanner_Logon_32003))
 			{
 				hideSeatPlanner (functions);
 			}
