@@ -34,12 +34,6 @@ namespace Teleopti.Interfaces.Domain
         ReadOnlyCollection<ITeam> AvailableTeams { get; }
 
         /// <summary>
-        /// Gets the available agents.
-        /// </summary>
-        /// <value>The available agents.</value>
-        ReadOnlyCollection<IPerson> AvailablePersons { get; }
-
-        /// <summary>
         /// Gets or sets the available data range.
         /// </summary>
         /// <value>The available data range.</value>
@@ -70,18 +64,6 @@ namespace Teleopti.Interfaces.Domain
         /// </summary>
         /// <param name="team">The team.</param>
         void AddAvailableTeam(ITeam team);
-
-        /// <summary>
-        /// Adds an available person.
-        /// </summary>
-        /// <param name="person">The person.</param>
-        void AddAvailablePerson(IPerson person);
-
-        /// <summary>
-        /// Deletes an available person.
-        /// </summary>
-        /// <param name="person">The person.</param>
-        void DeleteAvailablePerson(IPerson person);
 
         /// <summary>
         /// Deletes the availableteam.

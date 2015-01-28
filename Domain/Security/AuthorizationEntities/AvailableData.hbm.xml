@@ -57,36 +57,9 @@
                     foreign-key="FK_AvailableSitesInApplicationRole_Site" />
     </bag>
 
-    <bag name="AvailablePersons"
-         table="AvailablePersonsInApplicationRole">
-		 <cache usage ="read-write"/>		 <!--Use readonly cache instead?-->
-      <key column="AvailableData"
-           foreign-key="FK_AvailablePersonsInApplicationRole_AvailableData" />
-      <many-to-many class="Teleopti.Ccc.Domain.Common.Person"
-                    column="AvailablePerson"
-                    foreign-key="FK_AvailablePersonsInApplicationRole_Person" />
-    </bag>
-
-
     <!--
     Rollback this when we've upgraded nh and http://nhjira.koah.net/browse/NH-1959 is fixed
     
-    <idbag name="AvailablePersons"
-		table ="AvailablePersonsInApplicationRole"
-		cascade="none">
-		  <collection-id column="collection_id" type="guid">
-			  <generator class="guid.comb"/>
-		  </collection-id>
-			<key foreign-key="FK_AvailablePersonsInApplicationRole_AvailableData">
-				<column name="AvailableData" 
-					not-null="true" />
-		  </key>
-		<many-to-many class="Teleopti.Ccc.Domain.Common.Person" foreign-key="FK_AvailablePersonsInApplicationRole_Person">
-			<column name="AvailablePerson"
-					not-null="false" />
-		</many-to-many>
-	</idbag>
-
 	  <idbag name="AvailableTeams"
 		table ="AvailableTeamsInApplicationRole"
 		cascade="none">

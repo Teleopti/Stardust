@@ -84,7 +84,6 @@ namespace Teleopti.Ccc.Web.Areas.Permissions.Controllers
 					AvailableBusinessUnits = role.AvailableData.AvailableBusinessUnits.Select(b => new { b.Name, b.Id }).ToArray(),
 					AvailableSites = role.AvailableData.AvailableSites.Select(s => new { s.Description.Name, s.Id }).ToArray(),
 					AvailableTeams = role.AvailableData.AvailableTeams.Select(t => new { t.Description.Name, t.Id }).ToArray(),
-					AvailablePeople = role.AvailableData.AvailablePersons.Select(p => new { p.Name, p.Id }).ToArray(),
 					AvailableFunctions = role.ApplicationFunctionCollection.Select(f => new { f.Id, f.FunctionCode, f.FunctionPath, f.LocalizedFunctionDescription }).ToArray()
 				};
 		}
@@ -155,7 +154,6 @@ namespace Teleopti.Ccc.Web.Areas.Permissions.Controllers
 			roleToCopy.AvailableData.AvailableBusinessUnits.ForEach(newRole.AvailableData.AddAvailableBusinessUnit);
 			roleToCopy.AvailableData.AvailableSites.ForEach(newRole.AvailableData.AddAvailableSite);
 			roleToCopy.AvailableData.AvailableTeams.ForEach(newRole.AvailableData.AddAvailableTeam);
-			roleToCopy.AvailableData.AvailablePersons.ForEach(newRole.AvailableData.AddAvailablePerson);
 			newRole.AvailableData.AvailableDataRange = roleToCopy.AvailableData.AvailableDataRange;
 
 			return Created(Request.RequestUri + "/" + newRole.Id, new { newRole.Name, newRole.Id, newRole.DescriptionText });
@@ -185,12 +183,6 @@ namespace Teleopti.Ccc.Web.Areas.Permissions.Controllers
 				team.SetId(x);
 				role.AvailableData.AddAvailableTeam(team);
 			});
-			model.People.ForEach(x =>
-			{
-				var person = new Person();
-				person.SetId(x);
-				role.AvailableData.AddAvailablePerson(person);
-			});
 			role.AvailableData.AvailableDataRange = model.RangeOption.GetValueOrDefault(role.AvailableData.AvailableDataRange);
 
 			return Ok();
@@ -211,9 +203,6 @@ namespace Teleopti.Ccc.Web.Areas.Permissions.Controllers
 			var teams =
 				role.AvailableData.AvailableTeams.Where(t => model.Teams.Contains(t.Id.GetValueOrDefault())).ToArray();
 			teams.ForEach(role.AvailableData.DeleteAvailableTeam);
-			var people =
-				role.AvailableData.AvailablePersons.Where(p => model.People.Contains(p.Id.GetValueOrDefault())).ToArray();
-			people.ForEach(role.AvailableData.DeleteAvailablePerson);
 
 			return Ok();
 		}

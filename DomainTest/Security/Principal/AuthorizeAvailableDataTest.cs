@@ -24,18 +24,6 @@ namespace Teleopti.Ccc.DomainTest.Security.Principal
         }
 
         [Test]
-        public void ShouldAuthorizePersonInAvailableData()
-        {
-            IPerson personToCheck = PersonFactory.CreatePerson();
-            availableData.AddAvailablePerson(personToCheck);
-
-            queryingPersonMembership.AddFromPerson(queryingPerson);
-
-            target = new AuthorizeExternalAvailableData(availableData);
-            target.Check(queryingPersonMembership, DateOnly.Today, personToCheck).Should().Be.True();
-        }
-
-        [Test]
         public void ShouldNotAuthorizePersonNotInAvailableData()
         {
             IPerson personToCheck = PersonFactory.CreatePerson();

@@ -78,20 +78,6 @@ namespace Teleopti.Ccc.InfrastructureTest.NHibernateConfiguration.Cache
 			sessionFactory.Statistics.CollectionLoadCount.Should().Be.EqualTo(0);
 		}
 
-		[Test]
-		public void AvailablePersonsShouldBeCached()
-		{
-			var sessionFactory = ((NHibernateUnitOfWorkFactory)dataSource.Application).SessionFactory;
-			using (var uow = dataSource.Application.CreateAndOpenUnitOfWork())
-			{
-				var aData = new AvailableDataRepository(uow).Get(availableData.Id.Value);
-				sessionFactory.Statistics.Clear();
-				LazyLoadingManager.Initialize(aData.AvailablePersons);
-			}
-			//sessionFactory.Statistics.EntityLoadCount.Should().Be.EqualTo(0); fix later
-			sessionFactory.Statistics.CollectionLoadCount.Should().Be.EqualTo(0);
-		}
-
 		[SetUp]
 		public void Setup()
 		{
@@ -105,7 +91,6 @@ namespace Teleopti.Ccc.InfrastructureTest.NHibernateConfiguration.Cache
 			site.AddTeam(team);
 			businessUnit.AddSite(site);
 
-			availableData.AddAvailablePerson(SetupFixtureForAssembly.loggedOnPerson);
 			availableData.AddAvailableBusinessUnit(businessUnit);
 			availableData.AddAvailableSite(site);
 			availableData.AddAvailableTeam(team);
@@ -129,7 +114,6 @@ namespace Teleopti.Ccc.InfrastructureTest.NHibernateConfiguration.Cache
 			{
 				var avD = new AvailableDataRepository(uow).Get(availableData.Id.Value);
 				LazyLoadingManager.Initialize(avD.AvailableBusinessUnits);
-				LazyLoadingManager.Initialize(avD.AvailablePersons);
 				LazyLoadingManager.Initialize(avD.AvailableTeams);
 				LazyLoadingManager.Initialize(avD.AvailableSites);
 			}

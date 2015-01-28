@@ -53,50 +53,6 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
         }
 
         [Test]
-        public void VerifyAvailablePersons()
-        {
-            IAvailableData availableData = CreatePersistableAvailableData();
-
-            IPerson person1 = PersonFactory.CreatePerson("Person1");
-            IPerson person2 = PersonFactory.CreatePerson("Person2");
-            IPerson person3 = PersonFactory.CreatePerson("Person3");
-
-            PersistAndRemoveFromUnitOfWork(person1);
-            PersistAndRemoveFromUnitOfWork(person2);
-            PersistAndRemoveFromUnitOfWork(person3);
-
-            availableData.AddAvailablePerson(person1);
-            availableData.AddAvailablePerson(person2);
-            availableData.AddAvailablePerson(person3);
-
-            ISite site = new Site("Site");
-
-            PersistAndRemoveFromUnitOfWork(site);
-
-            ITeam team1 = TeamFactory.CreateSimpleTeam("Team1");
-            ITeam team2 = TeamFactory.CreateSimpleTeam("Team2");
-            ITeam team3 = TeamFactory.CreateSimpleTeam("Team3");
-
-            site.AddTeam(team1);
-            site.AddTeam(team2);
-            site.AddTeam(team3);
-
-            PersistAndRemoveFromUnitOfWork(team1);
-            PersistAndRemoveFromUnitOfWork(team2);
-            PersistAndRemoveFromUnitOfWork(team3);
-
-            availableData.AddAvailableTeam(team1);
-            availableData.AddAvailableTeam(team2);
-            availableData.AddAvailableTeam(team3);
-
-            PersistAndRemoveFromUnitOfWork(availableData);
-            _target = new AvailableDataRepository(UnitOfWork);
-            IAvailableData loadedAvailableData = _target.Load(availableData.Id.Value);
-            Assert.AreEqual(availableData.AvailablePersons.Count, loadedAvailableData.AvailablePersons.Count);
-
-        }
-
-        [Test]
         public void VerifyAvailableTeams()
         {
 
@@ -187,13 +143,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
         [Test]
         public void VerifyDifferentTypesOfAvailableObject()
         {
-            IPerson person1 = PersonFactory.CreatePerson("Person1");
-
-            PersistAndRemoveFromUnitOfWork(person1);
-
             IAvailableData availableData = CreatePersistableAvailableData();
-
-            availableData.AddAvailablePerson(person1);
 
             ISite site1 = SiteFactory.CreateSimpleSite("Site");
 
@@ -221,7 +171,6 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 
             IAvailableData loadedAvailableData = _target.Load(availableData.Id.Value);
 
-            Assert.AreEqual(availableData.AvailablePersons.Count, loadedAvailableData.AvailablePersons.Count);
             Assert.AreEqual(availableData.AvailableTeams.Count, loadedAvailableData.AvailableTeams.Count);
             Assert.AreEqual(availableData.AvailableSites.Count, loadedAvailableData.AvailableSites.Count);
             Assert.AreEqual(availableData.AvailableBusinessUnits.Count, loadedAvailableData.AvailableBusinessUnits.Count);
@@ -230,14 +179,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
         [Test]
         public void VerifyDifferentTypesOfAvailableObjectWith()
         {
-
-            IPerson person1 = PersonFactory.CreatePerson("Person1");
-
-            PersistAndRemoveFromUnitOfWork(person1);
-
             IAvailableData availableData = CreatePersistableAvailableData();
-
-            availableData.AddAvailablePerson(person1);
 
             ISite site1 = SiteFactory.CreateSimpleSite("Site");
 
@@ -266,69 +208,14 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 
             IAvailableData loadedAvailableData = _target.LoadAllCollectionsInAvailableData(availableData);
 
-            Assert.AreEqual(availableData.AvailablePersons.Count, loadedAvailableData.AvailablePersons.Count);
             Assert.AreEqual(availableData.AvailableTeams.Count, loadedAvailableData.AvailableTeams.Count);
             Assert.AreEqual(availableData.AvailableSites.Count, loadedAvailableData.AvailableSites.Count);
             Assert.AreEqual(availableData.AvailableBusinessUnits.Count, loadedAvailableData.AvailableBusinessUnits.Count);
         }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", MessageId = "SCUD"), Test]
-        public void VerifySimpleSCUD()
-        {
-
-            IPerson person1 = PersonFactory.CreatePerson("Person1");
-            IPerson person2 = PersonFactory.CreatePerson("Person2");
-            IPerson person3 = PersonFactory.CreatePerson("Person3");
-
-            PersistAndRemoveFromUnitOfWork(person1);
-            PersistAndRemoveFromUnitOfWork(person2);
-            PersistAndRemoveFromUnitOfWork(person3);
-
-            IAvailableData availableData = CreatePersistableAvailableData();
-
-            availableData.AddAvailablePerson(person1);
-            availableData.AddAvailablePerson(person2);
-
-            PersistAndRemoveFromUnitOfWork(availableData);
-
-            _target = new AvailableDataRepository(UnitOfWork);
-
-            IAvailableData loadedAvailableData = _target.Load(availableData.Id.Value);
-
-            // Select
-            Assert.AreEqual(2, loadedAvailableData.AvailablePersons.Count);
-
-            // Update
-            loadedAvailableData.AddAvailablePerson(person3);
-
-            PersistAndRemoveFromUnitOfWork(loadedAvailableData);
-            _target = new AvailableDataRepository(UnitOfWork);
-            loadedAvailableData = _target.Load(availableData.Id.Value);
-
-            Assert.AreEqual(3, loadedAvailableData.AvailablePersons.Count);
-
-            // Delete
-            loadedAvailableData.DeleteAvailablePerson(person1);
-            loadedAvailableData.DeleteAvailablePerson(person3);
-
-            PersistAndRemoveFromUnitOfWork(loadedAvailableData);
-            _target = new AvailableDataRepository(UnitOfWork);
-            loadedAvailableData = _target.Load(availableData.Id.Value);
-
-            Assert.AreEqual(1, loadedAvailableData.AvailablePersons.Count);
-        }
-
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", MessageId = "SCUD"), Test]
         public void VerifyMultipleSCUD()
         {
-            IPerson person1 = PersonFactory.CreatePerson("Person1");
-            IPerson person2 = PersonFactory.CreatePerson("Person2");
-            IPerson person3 = PersonFactory.CreatePerson("Person3");
-
-            PersistAndRemoveFromUnitOfWork(person1);
-            PersistAndRemoveFromUnitOfWork(person2);
-            PersistAndRemoveFromUnitOfWork(person3);
-
             ISite site1 = SiteFactory.CreateSimpleSite("Site1");
             ISite site2 = SiteFactory.CreateSimpleSite("Site2");
 
@@ -345,9 +232,6 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 
             IAvailableData availableData = CreatePersistableAvailableData();
 
-            availableData.AddAvailablePerson(person1);
-            availableData.AddAvailablePerson(person2);
-
             availableData.AddAvailableTeam(team1);
             availableData.AddAvailableSite(site1);
 
@@ -358,12 +242,10 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
             IAvailableData loadedAvailableData = _target.Load(availableData.Id.Value);
 
             // Select
-            Assert.AreEqual(2, loadedAvailableData.AvailablePersons.Count);
             Assert.AreEqual(1, loadedAvailableData.AvailableTeams.Count);
             Assert.AreEqual(1, loadedAvailableData.AvailableSites.Count);
 
             // Update
-            loadedAvailableData.AddAvailablePerson(person3);
             loadedAvailableData.AddAvailableTeam(team2);
             loadedAvailableData.AddAvailableSite(site2);
 
@@ -371,14 +253,9 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
             _target = new AvailableDataRepository(UnitOfWork);
             loadedAvailableData = _target.Load(availableData.Id.Value);
 
-            Assert.AreEqual(3, loadedAvailableData.AvailablePersons.Count);
             Assert.AreEqual(2, loadedAvailableData.AvailableTeams.Count);
             Assert.AreEqual(2, loadedAvailableData.AvailableSites.Count);
 
-
-            // Delete
-            loadedAvailableData.DeleteAvailablePerson(person1);
-            loadedAvailableData.DeleteAvailablePerson(person3);
             loadedAvailableData.DeleteAvailableTeam(team2);
             loadedAvailableData.DeleteAvailableSite(site2);
 
@@ -386,19 +263,12 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
             _target = new AvailableDataRepository(UnitOfWork);
             loadedAvailableData = _target.Load(availableData.Id.Value);
 
-            Assert.AreEqual(1, loadedAvailableData.AvailablePersons.Count);
             Assert.AreEqual(1, loadedAvailableData.AvailableTeams.Count);
             Assert.AreEqual(1, loadedAvailableData.AvailableSites.Count);
 
         }
 
         [Test]
-        /// <summary>
-        /// Verifies LoadAll method.
-        /// </summary>
-        /// <remarks>
-        /// Creates two AvailableData instances, persist, reload and assert.
-        /// </remarks>
         public void VerifyLoadAll()
         {
             IAvailableData availableData1 = CreatePersistableAvailableData();

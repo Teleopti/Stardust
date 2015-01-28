@@ -32,7 +32,6 @@ namespace Teleopti.Ccc.DomainTest.Security.AuthorizationEntities
 		{
 			Assert.IsNotNull(_target);
             Assert.IsNotNull(_target.AvailableBusinessUnits);
-            Assert.IsNotNull(_target.AvailablePersons);
             Assert.IsNotNull(_target.AvailableSites);
             Assert.IsNotNull(_target.AvailableTeams);
 		}
@@ -175,38 +174,6 @@ namespace Teleopti.Ccc.DomainTest.Security.AuthorizationEntities
             Assert.AreEqual(1, getValue.Count);
         }
 
-	    [Test]
-		public void VerifyAvailableAgents()
-		{
-			// Test set method
-			_target.AddAvailablePerson(new Person());
-
-			// Declare return variable to hold property get method
-
-		    // Test get method
-			ICollection<IPerson> getValue = _target.AvailablePersons;
-			
-			// Perform Assert Tests
-			Assert.AreEqual(1, getValue.Count);
-		}
-
-        [Test]
-        public void VerifyAddAvailablePersonsWithSamePerson()
-        {
-            IPerson person = new Person();
-
-            _target.AddAvailablePerson(person);
-            _target.AddAvailablePerson(person);
-
-            // Declare return variable to hold property get method
-
-	        // Test get method
-            ICollection<IPerson> getValue = _target.AvailablePersons;
-
-            // Perform Assert Tests
-            Assert.AreEqual(1, getValue.Count);
-        }
-
         [Test]
         public void VerifyAvailableDataRange()
         {
@@ -217,21 +184,6 @@ namespace Teleopti.Ccc.DomainTest.Security.AuthorizationEntities
 	        AvailableDataRangeOption getValue = _target.AvailableDataRange;
 
             Assert.AreEqual(setValue, getValue);
-        }
-
-        [Test]
-        public void VerifyDeleteAvailablePerson()
-        {
-            Person person = new Person();
-           
-            _target.AddAvailablePerson(person);
-            Assert.AreEqual(1, _target.AvailablePersons.Count);
-            Assert.IsTrue(_target.AvailablePersons.Contains(person));
-
-
-            _target.DeleteAvailablePerson(person);
-            Assert.AreEqual(0, _target.AvailablePersons.Count);
-            Assert.IsFalse(_target.AvailablePersons.Contains(person));
         }
 
         [Test]

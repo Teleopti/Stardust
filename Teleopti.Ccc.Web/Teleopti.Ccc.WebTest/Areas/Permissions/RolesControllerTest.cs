@@ -103,7 +103,6 @@ namespace Teleopti.Ccc.WebTest.Areas.Permissions
 			var businessUnitId = Guid.NewGuid();
 			var siteId = Guid.NewGuid();
 			var teamId = Guid.NewGuid();
-			var personId = Guid.NewGuid();
 
 			var agentRole = new ApplicationRole { Name = "Agent", AvailableData = new AvailableData()};
 			
@@ -115,14 +114,12 @@ namespace Teleopti.Ccc.WebTest.Areas.Permissions
 					BusinessUnits = new Collection<Guid> {businessUnitId},
 					Sites = new Collection<Guid> {siteId},
 					Teams = new Collection<Guid> {teamId},
-					People = new Collection<Guid> {personId},
 					RangeOption = AvailableDataRangeOption.MyBusinessUnit
 				});
 
 			agentRole.AvailableData.AvailableBusinessUnits.Should().Have.Count.EqualTo(1);
 			agentRole.AvailableData.AvailableSites.Should().Have.Count.EqualTo(1);
 			agentRole.AvailableData.AvailableTeams.Should().Have.Count.EqualTo(1);
-			agentRole.AvailableData.AvailablePersons.Should().Have.Count.EqualTo(1);
 			agentRole.AvailableData.AvailableDataRange.Should().Be.EqualTo(AvailableDataRangeOption.MyBusinessUnit);
 		}
 
@@ -139,13 +136,11 @@ namespace Teleopti.Ccc.WebTest.Areas.Permissions
 			site.SetId(Guid.NewGuid());
 			var team = TeamFactory.CreateSimpleTeam();
 			team.SetId(Guid.NewGuid());
-			var person = PersonFactory.CreatePersonWithId();
 
 			var agentRole = new ApplicationRole { Name = "Agent", AvailableData = new AvailableData() };
 			agentRole.AvailableData.AddAvailableBusinessUnit(businessUnit);
 			agentRole.AvailableData.AddAvailableSite(site);
 			agentRole.AvailableData.AddAvailableTeam(team);
-			agentRole.AvailableData.AddAvailablePerson(person);
 
 			roleRepository.Stub(x => x.Get(roleId)).Return(agentRole);
 
@@ -155,13 +150,11 @@ namespace Teleopti.Ccc.WebTest.Areas.Permissions
 					BusinessUnits = new Collection<Guid> { businessUnit.Id.GetValueOrDefault() },
 					Sites = new Collection<Guid> { site.Id.GetValueOrDefault() },
 					Teams = new Collection<Guid> { team.Id.GetValueOrDefault() },
-					People = new Collection<Guid> { person.Id.GetValueOrDefault() }
 				});
 
 			agentRole.AvailableData.AvailableBusinessUnits.Should().Have.Count.EqualTo(0);
 			agentRole.AvailableData.AvailableSites.Should().Have.Count.EqualTo(0);
 			agentRole.AvailableData.AvailableTeams.Should().Have.Count.EqualTo(0);
-			agentRole.AvailableData.AvailablePersons.Should().Have.Count.EqualTo(0);
 		}
 
 		[Test]
@@ -327,7 +320,6 @@ namespace Teleopti.Ccc.WebTest.Areas.Permissions
 			agentRole.AvailableData.AddAvailableBusinessUnit(BusinessUnitFactory.BusinessUnitUsedInTest);
 			agentRole.AvailableData.AddAvailableSite(team.Site);
 			agentRole.AvailableData.AddAvailableTeam(team);
-			agentRole.AvailableData.AddAvailablePerson(PersonFactory.CreatePersonWithGuid("Anna","Andersson"));
 
 			roleRepository.Stub(x => x.Get(roleId)).Return(agentRole);
 			IApplicationRole addedRole = null;
@@ -345,7 +337,6 @@ namespace Teleopti.Ccc.WebTest.Areas.Permissions
 			addedRole.AvailableData.AvailableBusinessUnits.Should().Have.Count.EqualTo(1);
 			addedRole.AvailableData.AvailableSites.Should().Have.Count.EqualTo(1);
 			addedRole.AvailableData.AvailableTeams.Should().Have.Count.EqualTo(1);
-			addedRole.AvailableData.AvailablePersons.Should().Have.Count.EqualTo(1);
 			addedRole.AvailableData.AvailableDataRange.Should().Be.EqualTo(AvailableDataRangeOption.MySite);
 		}
 
@@ -395,8 +386,6 @@ namespace Teleopti.Ccc.WebTest.Areas.Permissions
 			agentRole.AvailableData.AddAvailableTeam(simpleTeam);
 			agentRole.AvailableData.AddAvailableSite(simpleTeam.Site);
 			agentRole.AvailableData.AddAvailableBusinessUnit(BusinessUnitFactory.BusinessUnitUsedInTest);
-			agentRole.AvailableData.AddAvailablePerson(
-				PersonFactory.CreatePersonWithPersonPeriodFromTeam(new DateOnly(2015, 1, 1), simpleTeam));
 			roleRepository.Stub(x => x.Get(agentRole.Id.GetValueOrDefault())).Return(agentRole);
 
 			dynamic result = target.Get(agentRole.Id.GetValueOrDefault());
@@ -406,7 +395,6 @@ namespace Teleopti.Ccc.WebTest.Areas.Permissions
 			((ICollection<object>)result.AvailableTeams).Count.Should().Be.EqualTo(1);
 			((ICollection<object>)result.AvailableSites).Count.Should().Be.EqualTo(1);
 			((ICollection<object>)result.AvailableBusinessUnits).Count.Should().Be.EqualTo(1);
-			((ICollection<object>)result.AvailablePeople).Count.Should().Be.EqualTo(1);
 			((ICollection<object>)result.AvailableFunctions).Count.Should().Be.EqualTo(1);
 		}
 	}

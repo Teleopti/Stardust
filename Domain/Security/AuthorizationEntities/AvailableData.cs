@@ -149,48 +149,6 @@ namespace Teleopti.Ccc.Domain.Security.AuthorizationEntities
         }
 
         /// <summary>
-        /// Gets the available agents.
-        /// </summary>
-        /// <value>The available agents.</value>
-        public virtual ReadOnlyCollection<IPerson> AvailablePersons
-        {
-            get
-            {
-                IList<IPerson> returnList = new List<IPerson>();
-                foreach (IPerson person in _availablePersons)
-                {
-                    if (person != null && !returnList.Contains(person))
-                    {
-                        returnList.Add(person);
-                    }
-                }
-                return new ReadOnlyCollection<IPerson>(returnList);
-            }
-        }
-
-        /// <summary>
-        /// Adds an available person.
-        /// </summary>
-        /// <param name="person">The person.</param>
-        public virtual void AddAvailablePerson(IPerson person)
-        {
-            InParameter.NotNull("person", person);
-            if (!_availablePersons.Contains(person))
-                _availablePersons.Add(person);
-        }
-
-        /// <summary>
-        /// Deletes an available person.
-        /// </summary>
-        /// <param name="person">The person.</param>
-        public virtual void DeleteAvailablePerson(IPerson person)
-        {
-            InParameter.NotNull("person", person);
-            if (_availablePersons.Contains(person))
-                _availablePersons.Remove(person);
-        }
-
-        /// <summary>
         /// Deletes the availableteam.
         /// </summary>
         /// <param name="team">The team.</param>
