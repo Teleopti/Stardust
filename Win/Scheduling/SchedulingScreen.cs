@@ -3855,12 +3855,14 @@ namespace Teleopti.Ccc.Win.Scheduling
 				updateRequestCommandsAvailability();
 				toolStripTabItem1.Checked = true;
 				toolStripTabItem1.Text = requests;
+				toolStripTabItem1.Visible = true;
 				toolStripTabItemHome.Text = string.Empty;
 			}
 			else
 			{
 				toolStripTabItemHome.Text = home;
 				toolStripTabItem1.Text = string.Empty;
+				toolStripTabItem1.Visible = false;
 				toolStripExHandleRequests.Enabled = false;
 			}
 		}
