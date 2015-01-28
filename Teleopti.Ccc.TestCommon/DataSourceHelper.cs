@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Data.SqlClient;
 using System.Globalization;
 using System.IO;
 using Newtonsoft.Json;
@@ -17,157 +16,24 @@ namespace Teleopti.Ccc.TestCommon
 	{
 		public static IDataSource CreateDataSource(IEnumerable<IMessageSender> messageSenders, string name)
 		{
-			var dataSourceFactory = new DataSourcesFactory(new EnversConfiguration(), messageSenders, DataSourceConfigurationSetter.ForTest(), new CurrentHttpContext());
-			var ccc7 = new DatabaseHelper(ConnectionStringHelper.ConnectionStringUsedInTests, DatabaseType.TeleoptiCCC7);
-			if (!tryRestoreDatabase(ccc7))
-			{
-				createCcc7(ccc7);
-				backupDatabase(ccc7, 0);
-			}
+			setupCcc7();
 			setupAnalytics();
-			return CreateDataSource(dataSourceFactory, name);
-		}
-
-		public static IDataSource CreateDataSourceNoBackup(IEnumerable<IMessageSender> messageSenders, bool createCcc7Database)
-		{
-			var dataSourceFactory = new DataSourcesFactory(new EnversConfiguration(), messageSenders, DataSourceConfigurationSetter.ForTest(), new CurrentHttpContext());
-			if (createCcc7Database)
-			{
-				var ccc7 = new DatabaseHelper(ConnectionStringHelper.ConnectionStringUsedInTests, DatabaseType.TeleoptiCCC7);
-				createCcc7(ccc7);
-			}
-			setupAnalytics();
-			return CreateDataSource(dataSourceFactory, "TestData");
-		}
-
-		private static void createCcc7(DatabaseHelper ccc7)
-		{
-			createDatabase(ccc7);
-			createUniqueIndexOnPersonAssignmentBecauseDbManagerIsntRunFromTests();
-			PersistAuditSetting();
-		}
-
-		private static void createUniqueIndexOnPersonAssignmentBecauseDbManagerIsntRunFromTests()
-		{
-			//would be better if dbmanager was called, but don't have the time right now....
-			exceptionToConsole(
-				() =>
-				{
-					using (var conn = new SqlConnection(ConnectionStringHelper.ConnectionStringUsedInTests))
-					{
-						SqlConnection.ClearPool(conn);
-						conn.Open();
-						using (var cmd = new SqlCommand("exec [dbo].[MergePersonAssignments]", conn))
-							cmd.ExecuteNonQuery();
-					}
-				},
-				"Failed to create unique index on personassignment in database {0}!", ConnectionStringHelper.ConnectionStringUsedInTests
-				);
-		}
-
-		private static void setupAnalytics()
-		{
-			var analytics = new DatabaseHelper(ConnectionStringHelper.ConnectionStringUsedInTestsMatrix, DatabaseType.TeleoptiAnalytics);
-			if (tryRestoreDatabase(analytics))
-				return;
-
-			createDatabase(analytics);
-			backupDatabase(analytics, 0);
-		}
-
-		private static void createDatabase(DatabaseHelper database)
-		{
-			exceptionToConsole(
-				database.CreateByDbManager,
-				"Failed to prepare database {0}!", database.ConnectionString
-				);
-			exceptionToConsole(
-				database.CreateSchemaByDbManager,
-				"Failed to create database schema {0}!", database.ConnectionString
-				);
-		}
-
-		private static bool tryRestoreDatabase(DatabaseHelper database)
-		{
-			return exceptionToConsole(
-				() =>
-				{
-					// maybe it would be possible to attach it if a file exists but the database doesnt. but wth..
-					if (!database.Exists())
-						return false;
-
-					var backupName = DataSourceHelper.backupName(database.DatabaseType, database.SchemaVersion(), database.OtherScriptFilesHash(), database.DatabaseName, 0);
-					var fileName = backupName + ".backup";
-					if (!File.Exists(fileName))
-						return false;
-
-					var backup = JsonConvert.DeserializeObject<DatabaseHelper.Backup>(File.ReadAllText(fileName));
-					database.RestoreByFileCopy(backup);
-					return true;
-				},
-				"Failed to backup database {0}!", database.ConnectionString
-				);
+			return makeDataSource(messageSenders, name);
 		}
 
 		public static void RestoreCcc7Database(int dataHash)
 		{
-			RestoreCcc7Database(dataHash, null);
-		}
-
-		public static void RestoreCcc7Database(int dataHash, Action beforeRestore)
-		{
-			var ccc7 = new DatabaseHelper(ConnectionStringHelper.ConnectionStringUsedInTests, DatabaseType.TeleoptiCCC7);
-			var backupName = DataSourceHelper.backupName(ccc7.DatabaseType, ccc7.SchemaVersion(), ccc7.OtherScriptFilesHash(), ccc7.DatabaseName, dataHash);
-			var fileName = backupName + ".backup";
-			var backup = JsonConvert.DeserializeObject<DatabaseHelper.Backup>(File.ReadAllText(fileName));
-			if(beforeRestore!=null)
-				beforeRestore();
-			ccc7.RestoreByFileCopy(backup);
+			restoreDatabase(ccc7(), dataHash);
 		}
 
 		public static void BackupCcc7Database(int dataHash)
 		{
-			var ccc7 = new DatabaseHelper(ConnectionStringHelper.ConnectionStringUsedInTests, DatabaseType.TeleoptiCCC7);
-			backupDatabase(ccc7, dataHash);
+			backupDatabase(ccc7(), dataHash);
 		}
 
-		public static bool Ccc7BackupExists(int dataHash)
+		public static void ClearAnalyticsData()
 		{
-			var ccc7 = new DatabaseHelper(ConnectionStringHelper.ConnectionStringUsedInTests, DatabaseType.TeleoptiCCC7);
-			var backupName = DataSourceHelper.backupName(ccc7.DatabaseType, ccc7.SchemaVersion(), ccc7.OtherScriptFilesHash(), ccc7.DatabaseName, dataHash);
-			var fileName = backupName + ".backup";
-			return File.Exists(fileName);
-		}
-
-		private static void backupDatabase(DatabaseHelper database, int dataHash)
-		{
-			exceptionToConsole(
-				() =>
-				{
-					var backupName = DataSourceHelper.backupName(database.DatabaseType, database.DatabaseVersion(), database.OtherScriptFilesHash(), database.DatabaseName, dataHash);
-					var backup = database.BackupByFileCopy(backupName);
-					var fileName = backupName + ".backup";
-					File.WriteAllText(fileName, JsonConvert.SerializeObject(backup, Formatting.Indented));
-				},
-				"Failed to backup database {0}!", database.ConnectionString
-				);
-		}
-
-		private static string backupName(DatabaseType databaseType, int databaseVersion, int otherScriptFilesHash, string databaseName, int dataHash)
-		{
-			return databaseType + "." + databaseName + "." + databaseVersion + "." + otherScriptFilesHash + "." + dataHash;
-		}
-
-		private static IDataSource CreateDataSource(DataSourcesFactory dataSourceFactory, string name)
-		{
-			return exceptionToConsole(
-				() =>
-				{
-					var dataSourceSettings = CreateDataSourceSettings(ConnectionStringHelper.ConnectionStringUsedInTests, null, name);
-					return dataSourceFactory.Create(dataSourceSettings, ConnectionStringHelper.ConnectionStringUsedInTestsMatrix);
-				},
-				"Failed to create datasource {0}!", ConnectionStringHelper.ConnectionStringUsedInTests
-				);
+			analytics().CleanByAnalyticsProcedure();
 		}
 
 		public static void PersistAuditSetting()
@@ -175,15 +41,8 @@ namespace Teleopti.Ccc.TestCommon
 			exceptionToConsole(
 				() =>
 				{
-					using (var conn = new SqlConnection(ConnectionStringHelper.ConnectionStringUsedInTests))
-					{
-						SqlConnection.ClearPool(conn);
-						conn.Open();
-						using (var cmd = new SqlCommand("delete from auditing.Auditsetting", conn))
-							cmd.ExecuteNonQuery();
-						using (var cmd = new SqlCommand("insert into auditing.Auditsetting (id, IsScheduleEnabled) values (" + AuditSetting.TheId + ",0)", conn))
-							cmd.ExecuteNonQuery();
-					}
+					ccc7().ExecuteSql("delete from auditing.Auditsetting");
+					ccc7().ExecuteSql("insert into auditing.Auditsetting (id, IsScheduleEnabled) values (" + AuditSetting.TheId + ", 0)");
 				},
 				"Failed to persistn audit setting in database {0}!", ConnectionStringHelper.ConnectionStringUsedInTests
 				);
@@ -205,22 +64,110 @@ namespace Teleopti.Ccc.TestCommon
 			return dictionary;
 		}
 
-		public static void ClearAnalyticsData()
+		private static void setupCcc7()
 		{
-			var analytics = new DatabaseHelper(ConnectionStringHelper.ConnectionStringUsedInTestsMatrix, DatabaseType.TeleoptiAnalytics);
-			analytics.CleanByAnalyticsProcedure();
+			if (tryRestoreDatabase(ccc7(), 0))
+				return;
+			createDatabase(ccc7());
+			createUniqueIndexOnPersonAssignmentBecauseDbManagerIsntRunFromTests();
+			PersistAuditSetting();
+			backupDatabase(ccc7(), 0);
 		}
 
-		public static DatabaseHelper.Backup BackupCcc7DataByFileCopy(string name)
+		private static void setupAnalytics()
 		{
-			var ccc7 = new DatabaseHelper(ConnectionStringHelper.ConnectionStringUsedInTests, DatabaseType.TeleoptiCCC7);
-			return ccc7.BackupByFileCopy(name);
+			if (tryRestoreDatabase(analytics(), 0))
+				return;
+			createDatabase(analytics());
+			backupDatabase(analytics(), 0);
 		}
 
-		public static void RestoreCcc7DataByFileCopy(DatabaseHelper.Backup backup)
+		private static void createDatabase(DatabaseHelper database)
 		{
-			var ccc7 = new DatabaseHelper(ConnectionStringHelper.ConnectionStringUsedInTests, DatabaseType.TeleoptiCCC7);
-			ccc7.RestoreByFileCopy(backup);
+			exceptionToConsole(
+				database.CreateByDbManager,
+				"Failed to prepare database {0}!", database.ConnectionString
+				);
+			exceptionToConsole(
+				database.CreateSchemaByDbManager,
+				"Failed to create database schema {0}!", database.ConnectionString
+				);
+		}
+
+		private static void backupDatabase(DatabaseHelper database, int dataHash)
+		{
+			exceptionToConsole(
+				() =>
+				{
+					var name = backupName(database.DatabaseType, database.DatabaseVersion(), database.OtherScriptFilesHash(), database.DatabaseName, dataHash);
+					var backup = database.BackupByFileCopy(name);
+					File.WriteAllText(name, JsonConvert.SerializeObject(backup, Formatting.Indented));
+				},
+				"Failed to backup database {0}!", database.ConnectionString
+				);
+		}
+
+		private static bool tryRestoreDatabase(DatabaseHelper database, int dataHash)
+		{
+			return exceptionToConsole(
+				() =>
+				{
+					// maybe it would be possible to attach it if a file exists but the database doesnt. but wth..
+					if (!database.Exists())
+						return false;
+
+					var name = backupName(database.DatabaseType, database.SchemaVersion(), database.OtherScriptFilesHash(), database.DatabaseName, dataHash);
+					if (!File.Exists(name))
+						return false;
+
+					var backup = JsonConvert.DeserializeObject<DatabaseHelper.Backup>(File.ReadAllText(name));
+					return database.TryRestoreByFileCopy(backup);
+				},
+				"Failed to restore database {0}!", database.ConnectionString
+				);
+		}
+
+		private static void restoreDatabase(DatabaseHelper database, int dataHash)
+		{
+			exceptionToConsole(
+				() =>
+				{
+					var name = backupName(database.DatabaseType, database.SchemaVersion(), database.OtherScriptFilesHash(), database.DatabaseName, dataHash);
+					var backup = JsonConvert.DeserializeObject<DatabaseHelper.Backup>(File.ReadAllText(name));
+					var result = database.TryRestoreByFileCopy(backup);
+					if (!result)
+						throw new Exception("Restore failed!");
+				},
+				"Failed to restore database {0}!", database.ConnectionString
+				);
+		}
+
+		private static string backupName(DatabaseType databaseType, int databaseVersion, int otherScriptFilesHash, string databaseName, int dataHash)
+		{
+			return databaseType + "." + databaseName + "." + databaseVersion + "." + otherScriptFilesHash + "." + dataHash + ".backup";
+		}
+
+		private static DatabaseHelper ccc7()
+		{
+			return new DatabaseHelper(ConnectionStringHelper.ConnectionStringUsedInTests, DatabaseType.TeleoptiCCC7);
+		}
+
+		private static DatabaseHelper analytics()
+		{
+			return new DatabaseHelper(ConnectionStringHelper.ConnectionStringUsedInTestsMatrix, DatabaseType.TeleoptiAnalytics);
+		}
+
+		private static IDataSource makeDataSource(IEnumerable<IMessageSender> messageSenders, string name)
+		{
+			return exceptionToConsole(
+				() =>
+				{
+					var dataSourceFactory = new DataSourcesFactory(new EnversConfiguration(), messageSenders, DataSourceConfigurationSetter.ForTest(), new CurrentHttpContext());
+					var dataSourceSettings = CreateDataSourceSettings(ConnectionStringHelper.ConnectionStringUsedInTests, null, name);
+					return dataSourceFactory.Create(dataSourceSettings, ConnectionStringHelper.ConnectionStringUsedInTestsMatrix);
+				},
+				"Failed to create datasource {0}!", ConnectionStringHelper.ConnectionStringUsedInTests
+				);
 		}
 
 		private static void exceptionToConsole(Action action, string exceptionMessage, params object[] args)
@@ -250,5 +197,16 @@ namespace Teleopti.Ccc.TestCommon
 				throw;
 			}
 		}
+
+		private static void createUniqueIndexOnPersonAssignmentBecauseDbManagerIsntRunFromTests()
+		{
+			//would be better if dbmanager was called, but don't have the time right now....
+			exceptionToConsole(
+				() => ccc7().ExecuteSql("exec [dbo].[MergePersonAssignments]"),
+				"Failed to create unique index on personassignment in database {0}!", ConnectionStringHelper.ConnectionStringUsedInTests
+				);
+		}
+
+
 	}
 }

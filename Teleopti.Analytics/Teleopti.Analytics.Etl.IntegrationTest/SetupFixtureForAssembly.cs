@@ -5,7 +5,6 @@ using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.TestData.Core;
-using Teleopti.Ccc.TestCommon.TestData.Setups;
 using Teleopti.Ccc.TestCommon.TestData.Setups.Specific;
 using Teleopti.Interfaces.Infrastructure;
 
@@ -38,7 +37,7 @@ namespace Teleopti.Analytics.Etl.IntegrationTest
 				testDataFactory.Apply(new BusinessUnitFromFakeState(TestState.BusinessUnit));
 			}
 
-			TestState.Ccc7DataBackup = DataSourceHelper.BackupCcc7DataByFileCopy("Teleopti.Analytics.Etl.IntegrationTest");
+			DataSourceHelper.BackupCcc7Database(123);
 		}
 
 		private static void DisposeUnitOfWork()
@@ -61,7 +60,7 @@ namespace Teleopti.Analytics.Etl.IntegrationTest
 		public static void BeginTest()
 		{
 			TestState.TestDataFactory = new TestDataFactory(UnitOfWorkAction);
-			DataSourceHelper.RestoreCcc7DataByFileCopy(TestState.Ccc7DataBackup);
+			DataSourceHelper.RestoreCcc7Database(123);
             DataSourceHelper.ClearAnalyticsData();
 			OpenUnitOfWork();
 		}

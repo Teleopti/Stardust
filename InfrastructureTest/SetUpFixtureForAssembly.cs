@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Configuration;
+using System.Diagnostics;
 using System.Linq;
 using Teleopti.Ccc.InfrastructureTest.UnitOfWork;
 using Teleopti.Ccc.Domain.Infrastructure;
@@ -24,19 +25,14 @@ namespace Teleopti.Ccc.InfrastructureTest
 	[SetUpFixture]
 	public class SetupFixtureForAssembly
 	{
-		private MockRepository mocks;
-		private IState stateMock;
 		internal static IPerson loggedOnPerson;
 		internal static IApplicationData ApplicationData;
 		private static ISessionData sessionData;
 		internal static IDataSource DataSource;
 
 		[SetUp]
-		public void RunBeforeAnyTest()
+		public void BeforeTestSuite()
 		{
-			mocks = new MockRepository();
-			stateMock = mocks.StrictMock<IState>();
-
 			IDictionary<string, string> appSettings = new Dictionary<string, string>();
 			ConfigurationManager.AppSettings.AllKeys.ToList().ForEach(
 				 name => appSettings.Add(name, ConfigurationManager.AppSettings[name]));
@@ -49,18 +45,68 @@ namespace Teleopti.Ccc.InfrastructureTest
 			ApplicationData = new ApplicationData(appSettings,
 									new ReadOnlyCollection<IDataSource>(new List<IDataSource> { DataSource }),
 									MessageBrokerContainerDontUse.CompositeClient(), null);
+
+			BusinessUnitFactory.BusinessUnitUsedInTest = BusinessUnitFactory.CreateSimpleBusinessUnit("Business unit used in test");
 			sessionData = StateHolderProxyHelper.CreateSessionData(loggedOnPerson, ApplicationData, BusinessUnitFactory.BusinessUnitUsedInTest);
 
-			StateHolderProxyHelper.SetStateReaderExpectations(stateMock, ApplicationData, sessionData);
-			StateHolderProxyHelper.ClearAndSetStateHolder(stateMock);
+			StateHolderProxyHelper.ClearAndSetStateHolder(
+				new FakeState
+				{
+					IsLoggedIn = true, 
+					ApplicationScopeData = ApplicationData, 
+					SessionScopeData = sessionData
+				});
 
-			mocks.ReplayAll();
+			persistLoggedOnPerson();
+			persistBusinessUnit();
+			deleteAllAggregates();
 
-			deleteEverythingInDb();
+			DataSourceHelper.BackupCcc7Database(123);
+		}
+
+		public static void RestoreCcc7Database()
+		{
+			DataSourceHelper.RestoreCcc7Database(123);
+		}
+
+		private static void persistLoggedOnPerson()
+		{
+			using (var uow = DataSource.Application.CreateAndOpenUnitOfWork())
+			{
+				new PersonRepository(uow).Add(loggedOnPerson);
+				uow.PersistAll();
+			}
+		}
+
+		private static void persistBusinessUnit()
+		{
+			using (var uow = DataSource.Application.CreateAndOpenUnitOfWork())
+			{
+				new BusinessUnitRepository(uow).Add(BusinessUnitFactory.BusinessUnitUsedInTest);
+				uow.PersistAll();
+			}
+		}
+
+		private static void deleteAllAggregates()
+		{
+			using (var uow = DataSource.Application.CreateAndOpenUnitOfWork())
+			{
+				uow.Reassociate(loggedOnPerson);
+
+				var allDbRoots = uow.FetchSession()
+					.CreateCriteria(typeof(IAggregateRoot))
+					.List<IAggregateRoot>();
+				foreach (var aggregateRoot in allDbRoots)
+				{
+					if (!(aggregateRoot is IPersonWriteProtectionInfo))
+						new Repository(uow).Remove(aggregateRoot);
+				}
+				uow.PersistAll();
+			}
 		}
 
 		[TearDown]
-		public void RunAfterTestSuite()
+		public void AfterTestSuite()
 		{
 			using (var uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
 			{
@@ -132,49 +178,6 @@ in what infrastructuretest this has happened - it is unknown for me.";
 																  BusinessUnitFactory.BusinessUnitUsedInTest,
 																  ApplicationData,
 																  stateMock);
-		}
-
-		private static void deleteEverythingInDb()
-		{
-			//needed if db isn't created by nh but by script:s that also have inserts
-			//IPerson per = fakeLogon();
-
-			using (var uow = DataSource.Application.CreateAndOpenUnitOfWork())
-			{
-
-				var session = uow.FetchSession();
-
-				IRepository rep = new Repository(uow);
-
-				rep.Add(loggedOnPerson);
-
-				//force a insert
-				BusinessUnitFactory.BusinessUnitUsedInTest.SetId(null);
-				session.Save(BusinessUnitFactory.BusinessUnitUsedInTest, Guid.NewGuid());
-				uow.PersistAll();
-
-				var allDbRoots = session.CreateCriteria(typeof(IAggregateRoot))
-					 .List<IAggregateRoot>();
-				foreach (var aggregateRoot in allDbRoots)
-				{
-					if (!(aggregateRoot is IPersonWriteProtectionInfo))
-						rep.Remove(aggregateRoot);
-				}
-
-				uow.PersistAll();
-			}
-
-			BackupCcc7Database();
-		}
-
-		public static void BackupCcc7Database()
-		{
-			DataSourceHelper.BackupCcc7Database(123);
-		}
-
-		public static void RestoreCcc7Database()
-		{
-			DataSourceHelper.RestoreCcc7Database(123);
 		}
 
 		internal static IDictionary<string, string> Sql2005conf(string connString, int? timeout)

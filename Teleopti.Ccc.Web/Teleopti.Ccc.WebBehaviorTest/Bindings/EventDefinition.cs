@@ -70,19 +70,19 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 			
 			TestDataSetup.RestoreCcc7Data();
 			TestDataSetup.ClearAnalyticsData();
-			shouldBeDeleted();
+			//shouldBeDeleted();
 
 			GlobalPrincipalState.EnsureThreadPrincipal();
 
 			log.Debug("Starting scenario " + ScenarioContext.Current.ScenarioInfo.Title);
 		}
 
-		private static void shouldBeDeleted()
-		{
-			//hack to reset global #¤%#¤% scenario state to db state.
-			//"DefaultScenario" should be deleted!
-			GlobalUnitOfWorkState.UnitOfWorkAction(uow => DefaultScenario.Scenario = new ScenarioRepository(uow).LoadDefaultScenario());
-		}
+		//private static void shouldBeDeleted()
+		//{
+		//	//hack to reset global #¤%#¤% scenario state to db state.
+		//	//"DefaultScenario" should be deleted!
+		//	GlobalUnitOfWorkState.UnitOfWorkAction(uow => DefaultScenario.Scenario = new ScenarioRepository(uow).LoadDefaultScenario());
+		//}
 
 		private static readonly string targetTestDataNHibFile = Path.Combine(Paths.WebBinPath(), "TestData2.nhib.xml");
 

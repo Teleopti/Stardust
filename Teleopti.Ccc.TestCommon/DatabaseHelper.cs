@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
-using System.IO;
 using System.Linq;
 using Teleopti.Ccc.DBManager.Library;
 using Teleopti.Ccc.Domain;
@@ -74,8 +73,8 @@ namespace Teleopti.Ccc.TestCommon
 					using (var reader = command.ExecuteReader())
 					{
 						backup.Files = (from r in reader.Cast<IDataRecord>()
-														let file = r.GetString(r.GetOrdinal("filename"))
-														select new BackupFile { Source = file })
+							let file = r.GetString(r.GetOrdinal("filename"))
+							select new BackupFile {Source = file})
 							.ToArray();
 					}
 				}
@@ -83,19 +82,27 @@ namespace Teleopti.Ccc.TestCommon
 			using (offlineScope())
 			{
 				backup.Files.ForEach(f =>
-															{
-																f.Backup = Path.GetFileName(f.Source) + "." + name;
-																File.Copy(f.Source, f.Backup, true);
-															});
+				{
+					f.Backup = f.Source + "." + name;
+					var command = string.Format(@"COPY ""{0}"" ""{1}""", f.Source, f.Backup);
+					var result = executeShellCommandOnServer(command);
+					if (!result.Contains("1 file(s) copied."))
+						throw new Exception();
+				});
 			}
 			return backup;
 		}
 
-		public void RestoreByFileCopy(Backup backup)
+		public bool TryRestoreByFileCopy(Backup backup)
 		{
 			using (offlineScope())
 			{
-				backup.Files.ForEach(f => File.Copy(f.Backup, f.Source, true));
+				return backup.Files.All(f =>
+				{
+					var command = string.Format(@"COPY ""{0}"" ""{1}""", f.Backup, f.Source);
+					var result = executeShellCommandOnServer(command);
+					return result.Contains("1 file(s) copied.");
+				});
 			}
 		}
 
@@ -108,6 +115,11 @@ namespace Teleopti.Ccc.TestCommon
 		{
 			public string Source { get; set; }
 			public string Backup { get; set; }
+		}
+
+		public void ExecuteSql(string sql)
+		{
+			executeNonQuery(sql);
 		}
 
 		public int DatabaseVersion()
@@ -147,6 +159,43 @@ namespace Teleopti.Ccc.TestCommon
 
 			executeNonQueryOnMaster("ALTER DATABASE [{0}] SET SINGLE_USER WITH ROLLBACK IMMEDIATE;", DatabaseName);
 			executeNonQueryOnMaster("DROP DATABASE [{0}]", DatabaseName);
+		}
+
+		private string executeShellCommandOnServer(string command)
+		{
+			using (var conn = openConnection(true))
+			{
+				using (var cmd = conn.CreateCommand())
+				{
+					cmd.CommandText = "EXEC sp_configure 'show advanced options', 1";
+					cmd.ExecuteNonQuery();
+				}
+				using (var cmd = conn.CreateCommand())
+				{
+					cmd.CommandText = "RECONFIGURE";
+					cmd.ExecuteNonQuery();
+				}
+				using (var cmd = conn.CreateCommand())
+				{
+					cmd.CommandText = "EXEC sp_configure 'xp_cmdshell', 1";
+					cmd.ExecuteNonQuery();
+				}
+				using (var cmd = conn.CreateCommand())
+				{
+					cmd.CommandText = "RECONFIGURE";
+					cmd.ExecuteNonQuery();
+				}
+
+				using (var cmd = conn.CreateCommand())
+				{
+					cmd.CommandText = "xp_cmdshell '" + command + "'";
+					using (var reader = cmd.ExecuteReader())
+					{
+						reader.Read();
+						return reader.GetString(0);
+					}
+				}
+			}
 		}
 
 		private void executeNonQuery(string sql, params object[] args)

@@ -8,7 +8,7 @@ namespace Teleopti.Analytics.Etl.IntegrationTest
     public static class TestState
     {
 		public static TestDataFactory TestDataFactory;
-		public static DatabaseHelper.Backup Ccc7DataBackup;
+		//public static DatabaseHelper.Backup Ccc7DataBackup;
 	    public static IUnitOfWork UnitOfWork;
 
 	    public static IBusinessUnit BusinessUnit;

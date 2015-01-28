@@ -21,6 +21,7 @@ namespace Teleopti.Ccc.TestCommon.FakeData
 
                 return _businessUnitUsedInTest;
             }
+	        set { _businessUnitUsedInTest = value; }
         }
 
         public static void SetBusinessUnitUsedInTestToNull()

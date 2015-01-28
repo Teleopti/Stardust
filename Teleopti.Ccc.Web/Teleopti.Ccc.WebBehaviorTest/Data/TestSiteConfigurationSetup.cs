@@ -3,6 +3,7 @@ using System.IO;
 using IISExpressAutomation;
 using Teleopti.Ccc.Domain;
 using Teleopti.Ccc.TestCommon;
+using Teleopti.Ccc.WebBehaviorTest.Core;
 
 namespace Teleopti.Ccc.WebBehaviorTest.Data
 {
@@ -123,6 +124,11 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data
 				targetFile,
 				tags
 				);
+		}
+
+		public static void StartApplicationAsync()
+		{
+			Http.GetAsync("");
 		}
 
 		public static void RecycleApplication()

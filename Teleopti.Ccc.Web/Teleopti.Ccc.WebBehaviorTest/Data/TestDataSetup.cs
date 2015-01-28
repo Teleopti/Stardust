@@ -1,11 +1,9 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
 using System.Threading;
 using Autofac;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Infrastructure.Foundation;
-using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.IocCommon.Configuration;
@@ -13,7 +11,6 @@ using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.WebBehaviorTest.Core;
 using Teleopti.Ccc.WebBehaviorTest.Data.Setups.Default;
 using Teleopti.Interfaces.Domain;
-using Teleopti.Interfaces.Infrastructure;
 using Teleopti.Interfaces.MessageBroker.Client;
 using IMessageSender = Teleopti.Ccc.Infrastructure.UnitOfWork.IMessageSender;
 
@@ -31,42 +28,19 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data
 			builder.RegisterType<EventsMessageSender>().As<IMessageSender>().SingleInstance();
 			builder.RegisterModule<SyncEventsPublisherModule>();
 			var container = builder.Build();
-			var messageSenders = container.Resolve<IEnumerable<IMessageSender>>();
 
-			if (!DataSourceHelper.Ccc7BackupExists(globalData.HashValue))
-			{
-				datasource = DataSourceHelper.CreateDataSourceNoBackup(messageSenders, true);
-				startWebAppAsnyncAsEarlyAsPossibleForPerformanceReasons();
-				setupFakeState();
-				createGlobalDbData();
-				backupCcc7Data();
-			}
-			else
-			{
-				startWebAppAsnyncAsEarlyAsPossibleForPerformanceReasons();
-				datasource = DataSourceHelper.CreateDataSourceNoBackup(messageSenders, false);
-			}
+			datasource = DataSourceHelper.CreateDataSource(container.Resolve<IEnumerable<IMessageSender>>(), "TestData");
+			TestSiteConfigurationSetup.StartApplicationAsync();
+
+			StateHolderProxyHelper.SetupFakeState(datasource, DefaultPersonThatCreatesDbData.PersonThatCreatesDbData, DefaultBusinessUnit.BusinessUnitFromFakeState, new ThreadPrincipalContext(new TeleoptiPrincipalFactory()));
+			GlobalPrincipalState.Principal = Thread.CurrentPrincipal as TeleoptiPrincipal;
+			GlobalUnitOfWorkState.CurrentUnitOfWorkFactory = UnitOfWorkFactory.CurrentUnitOfWorkFactory();
+
+			globalData.ForEach(dataSetup => GlobalDataMaker.Data().Apply(dataSetup));
+			DataSourceHelper.BackupCcc7Database(globalData.HashValue);
 
 			container.Resolve<IMessageBrokerUrl>().Configure(TestSiteConfigurationSetup.URL.ToString());
 			container.Resolve<ISignalRClient>().StartBrokerService();
-		}
-
-		private static void startWebAppAsnyncAsEarlyAsPossibleForPerformanceReasons()
-		{
-			Http.GetAsync("");
-		}
-
-		private static void createGlobalDbData()
-		{
-			globalData.ForEach(dataSetup => GlobalDataMaker.Data().Apply(dataSetup));
-		}
-
-		private static void setupFakeState()
-		{
-			StateHolderProxyHelper.SetupFakeState(datasource, DefaultPersonThatCreatesDbData.PersonThatCreatesDbData, DefaultBusinessUnit.BusinessUnitFromFakeState, new ThreadPrincipalContext(new TeleoptiPrincipalFactory()));
-
-			GlobalPrincipalState.Principal = Thread.CurrentPrincipal as TeleoptiPrincipal;
-			GlobalUnitOfWorkState.CurrentUnitOfWorkFactory = UnitOfWorkFactory.CurrentUnitOfWorkFactory();
 		}
 
 		public static void ClearAnalyticsData()
@@ -74,21 +48,11 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data
 			DataSourceHelper.ClearAnalyticsData();
 		}
 
-		private static void backupCcc7Data()
-		{
-			DataSourceHelper.BackupCcc7Database(globalData.HashValue);
-		}
-
 		public static void RestoreCcc7Data()
 		{
-			DataSourceHelper.RestoreCcc7Database(globalData.HashValue, TestControllerMethods.ClearConnections);
-			//hack!
-			using (var uow = ((NHibernateUnitOfWorkFactory)datasource.Application).CreateAndOpenUnitOfWork(null, TransactionIsolationLevel.Default, null))
-			{
-				DefaultPersonThatCreatesDbData.PersonThatCreatesDbData = new PersonRepository(uow).LoadAll().Single(x => x.Name == DefaultPersonThatCreatesDbData.PersonThatCreatesDbData.Name);
-				DefaultBusinessUnit.BusinessUnitFromFakeState = new BusinessUnitRepository(uow).LoadAll().Single(x => x.Name == DefaultBusinessUnit.BusinessUnitFromFakeState.Name);
-				setupFakeState();
-			}
+			TestControllerMethods.ClearConnections();
+			DataSourceHelper.RestoreCcc7Database(globalData.HashValue);
 		}
+
 	}
 }
