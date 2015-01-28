@@ -23,6 +23,7 @@ define([
 	return function () {
 		var self = this;
 		var businessUnitId;
+		this.Resources = resources;
 		this.LocationTreeListViewModel = new treeListVm();
 		this.TeamsTreeListViewModel = new treeListVm();
 		this.Loading = ko.observable(false);
