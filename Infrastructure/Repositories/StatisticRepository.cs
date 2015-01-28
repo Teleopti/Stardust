@@ -290,7 +290,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
                 foreach (var personList in guids.Batch(400))
                 {
                     ret.AddRange(((NHibernateStatelessUnitOfWork)uow).Session.CreateSQLQuery(
-                        "SELECT * FROM RTA.ActualAgentState WHERE PersonId IN(:persons)")
+						"SELECT * FROM RTA.ActualAgentState WITH (NOLOCK) WHERE PersonId IN(:persons)")
                         .SetParameterList("persons", personList)
                         .SetResultTransformer(Transformers.AliasToBean(typeof(ActualAgentState)))
                         .SetReadOnly(true)
