@@ -5,7 +5,7 @@ namespace Teleopti.Ccc.Infrastructure.Rta
 {
 	public class DatabaseConnectionFactory : IDatabaseConnectionFactory
 	{
-		public IDbConnection CreateConnection(string connectionString)
+		public SqlConnection CreateConnection(string connectionString)
 		{
 			return new SqlConnection(connectionString);
 		}

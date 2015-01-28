@@ -97,6 +97,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta
 				BatchId = agentState.BatchId,
 				AlarmStart = currentTime.AddTicks(alarm.ThresholdTime),
 				BusinessUnitId = person.BusinessUnitId,
+				SiteId = person.SiteId,
+				TeamId = person.TeamId,
 				Color = alarm.DisplayColor,
 				NextStart = agentState.NextActivityStartTime,
 				OriginalDataSourceId = agentState.SourceId,

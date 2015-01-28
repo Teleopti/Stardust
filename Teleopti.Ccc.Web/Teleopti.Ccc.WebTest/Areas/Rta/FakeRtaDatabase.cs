@@ -239,13 +239,13 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta
 			return getOrAddState(stateCode, null, false, platformTypeId);
 		}
 
-		public void PersistActualAgentState(AgentStateReadModel agentStateReadModel)
+		public void PersistActualAgentReadModel(AgentStateReadModel model)
 		{
-			var previousState = (from s in _actualAgentStates where s.PersonId == agentStateReadModel.PersonId select s).FirstOrDefault();
+			var previousState = (from s in _actualAgentStates where s.PersonId == model.PersonId select s).FirstOrDefault();
 			if (previousState != null)
 				_actualAgentStates.Remove(previousState);
-			_actualAgentStates.Add(agentStateReadModel);
-			PersistedAgentStateReadModel = agentStateReadModel;
+			_actualAgentStates.Add(model);
+			PersistedAgentStateReadModel = model;
 		}
 
 		public IEnumerable<PersonOrganizationData> PersonOrganizationData()

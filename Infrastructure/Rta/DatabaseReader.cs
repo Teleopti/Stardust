@@ -125,7 +125,9 @@ namespace Teleopti.Ccc.Infrastructure.Rta
 							OriginalDataSourceId = reader.String("OriginalDataSourceId"),
 							AlarmStart = reader.NullableDateTime("AlarmStart"),
 							PersonId = reader.Guid("PersonId"),
-							StaffingEffect = reader.NullableDouble("StaffingEffect")
+							StaffingEffect = reader.NullableDouble("StaffingEffect"),
+							TeamId = reader.NullableGuid("TeamId"),
+							SiteId = reader.NullableGuid("SiteId")
 						};
 					}
 				}

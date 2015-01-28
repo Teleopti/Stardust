@@ -12,6 +12,7 @@ using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.IocCommon.Configuration;
 using Teleopti.Ccc.Web.Areas.Rta;
 using Teleopti.Ccc.Web.Areas.Rta.Core.Server;
+using RtaModule = Teleopti.Ccc.Web.Areas.Rta.Core.Server.RtaModule;
 
 namespace Teleopti.Ccc.WebTest.Areas.Rta
 {

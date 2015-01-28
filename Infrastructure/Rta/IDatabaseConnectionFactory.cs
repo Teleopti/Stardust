@@ -1,9 +1,9 @@
-using System.Data;
+using System.Data.SqlClient;
 
 namespace Teleopti.Ccc.Infrastructure.Rta
 {
     public interface IDatabaseConnectionFactory
     {
-        IDbConnection CreateConnection(string connectionString);
+        SqlConnection CreateConnection(string connectionString);
     }
 }

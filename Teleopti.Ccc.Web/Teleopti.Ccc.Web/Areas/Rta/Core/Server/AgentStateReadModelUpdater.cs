@@ -16,7 +16,7 @@ namespace Teleopti.Ccc.Web.Areas.Rta.Core.Server
 		public void Update(StateInfo info)
 		{
 			var state = info.MakeActualAgentState();
-			_databaseWriter.PersistActualAgentState(state);
+			_databaseWriter.PersistActualAgentReadModel(state);
 		}
 	}
 }

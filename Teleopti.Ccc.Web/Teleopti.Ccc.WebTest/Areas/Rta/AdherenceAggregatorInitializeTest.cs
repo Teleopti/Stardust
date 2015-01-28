@@ -32,7 +32,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta
 				.WithSchedule(person2, phone, "2014-10-20 8:00", "2014-10-20 10:00")
 				.WithAlarm("loggedoff", phone, -1)
 				.Make();
-			database.PersistActualAgentState(new AgentStateReadModel
+			database.PersistActualAgentReadModel(new AgentStateReadModel
 			{
 				PersonId = person1,
 				StaffingEffect = -1
@@ -63,7 +63,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta
 				.WithSchedule(person1, phone, "2014-10-20 8:00", "2014-10-20 10:00")
 				.WithAlarm("statecode", phone, -1)
 				.Make();
-			database.PersistActualAgentState(new AgentStateReadModel
+			database.PersistActualAgentReadModel(new AgentStateReadModel
 			{
 				PersonId = person1,
 				StaffingEffect = -1
@@ -79,7 +79,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta
 		public void ShouldNotSendMessageWhenSomeoneHasLeftTheOrganization()
 		{
 			var database = new FakeRtaDatabase();
-			database.PersistActualAgentState(new AgentStateReadModel {PersonId = Guid.NewGuid()});
+			database.PersistActualAgentReadModel(new AgentStateReadModel {PersonId = Guid.NewGuid()});
 			var sender = new FakeMessageSender();
 			var service = new RtaForTest(database, new Now(), sender);
 
