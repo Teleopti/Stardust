@@ -447,10 +447,13 @@ namespace Teleopti.Ccc.WinCodeTest.Intraday
 	    {
 		    _toggleManger.Stub(x => x.IsEnabled(Toggles.RTA_NoBroker_31237)).Return(true);
 		    var poller = MockRepository.GenerateMock<IPoller>();
+			_schedulerStateHolder.RequestedPeriod =
+				new DateOnlyPeriodAsDateTimePeriod(new DateOnlyPeriod(DateOnly.Today.AddDays(-2), DateOnly.Today.AddDays(2)), TimeZoneInfo.Utc);
 		    _target = new IntradayPresenter(_view, _schedulingResultLoader, _messageBroker, _rtaStateHolder,
 			    _eventAggregator, null, _unitOfWorkFactory, _repositoryFactory, _differenceService,
 			    _statisticCommand, _forecastCommand, _scheduleCommand, _meetingCommand, _loadStatisticCommand, poller,
 			    _toggleManger);
+		    
 		    _target.Initialize();
 
 		    poller.AssertWasCalled(x => x.Poll(1, null), o => o.IgnoreArguments());
