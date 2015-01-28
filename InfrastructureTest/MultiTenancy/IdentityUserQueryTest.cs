@@ -19,7 +19,7 @@ namespace Teleopti.Ccc.InfrastructureTest.MultiTenancy
 		private Guid personId;
 		private string correctIdentity;
 		private IIdentityUserQuery target;
-		private TennantSessionManager tennantSessionManager;
+		private TenantUnitOfWorkManager _tenantUnitOfWorkManager;
 
 		[Test]
 		public void ShouldFindPersonId()
@@ -77,15 +77,14 @@ namespace Teleopti.Ccc.InfrastructureTest.MultiTenancy
 				uow.PersistAll();
 				personId = personInDatabase.Id.Value;
 			}
-			tennantSessionManager = TennantSessionManager.CreateInstanceForTest(ConnectionStringHelper.ConnectionStringUsedInTests);
-			target = new IdentityUserQuery(() => tennantSessionManager);
-			tennantSessionManager.StartTransaction();
+			_tenantUnitOfWorkManager = TenantUnitOfWorkManager.CreateInstanceForTest(ConnectionStringHelper.ConnectionStringUsedInTests);
+			target = new IdentityUserQuery(() => _tenantUnitOfWorkManager);
 		}
 
 		[TearDown]
 		public void Teardown_WillBeChangedWhenMovedAwayFromUnitOfWork()
 		{
-			tennantSessionManager.EndTransaction();
+			_tenantUnitOfWorkManager.CancelCurrent();
 			using (var uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
 			{
 				var rep = new PersonRepository(uow);

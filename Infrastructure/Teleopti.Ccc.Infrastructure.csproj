@@ -212,10 +212,10 @@
     <Compile Include="MultiTenancy\NHibernate\TennantUnitOfWorkAttribute.cs" />
     <Compile Include="MultiTenancy\PersonInfo.cs" />
     <Compile Include="MultiTenancy\NHibernate\ICurrentTennantSession.cs" />
-    <Compile Include="MultiTenancy\NHibernate\ITennantSessionFactory.cs" />
+    <Compile Include="MultiTenancy\NHibernate\ITenantUnitOfWorkManager.cs" />
     <Compile Include="MultiTenancy\NHibernate\PasswordPolicyForUserMapping.cs" />
     <Compile Include="MultiTenancy\PasswordPolicyForUser.cs" />
-    <Compile Include="MultiTenancy\NHibernate\TennantSessionManager.cs" />
+    <Compile Include="MultiTenancy\NHibernate\TenantUnitOfWorkManager.cs" />
     <Compile Include="NHibernateConfiguration\SecondLevelCache.cs" />
     <Compile Include="PerformanceTool\PersonGenerator.cs" />
     <Compile Include="PerformanceTool\ScheduleGenerator.cs" />

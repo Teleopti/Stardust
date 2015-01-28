@@ -23,7 +23,7 @@ namespace Teleopti.Ccc.Web.Areas.Tennant.Core
 			builder.Register(c =>
 			{
 				var allDataSources = c.Resolve<IAvailableDataSourcesProvider>().AvailableDataSources();
-				return TennantSessionManager.CreateInstanceForWeb(allDataSources.First().Application.ConnectionString);
+				return TenantUnitOfWorkManager.CreateInstanceForWeb(allDataSources.First().Application.ConnectionString);
 			})
 				.AsImplementedInterfaces()
 				.SingleInstance();

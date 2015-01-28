@@ -20,7 +20,7 @@ namespace Teleopti.Ccc.InfrastructureTest.MultiTenancy
 		private Guid personId;
 		private string correctUserName;
 		private IApplicationUserQuery target;
-		private TennantSessionManager tennantSessionManager;
+		private TenantUnitOfWorkManager _tenantUnitOfWorkManager;
 
 		[Test]
 		public void ShouldFindPersonId()
@@ -98,7 +98,7 @@ namespace Teleopti.Ccc.InfrastructureTest.MultiTenancy
 		[Test]
 		public void ShouldPersistPasswordPolicyIfNonExistingButUserExist()
 		{
-			var session = tennantSessionManager.Session();
+			var session = _tenantUnitOfWorkManager.CurrentSession();
 			session.GetNamedQuery("passwordPolicyForUser").SetEntity("personInfo", session.Get<PersonInfo>(personId)).UniqueResult().Should().Be.Null();
 			target.FindUserData(correctUserName);
 			session.GetNamedQuery("passwordPolicyForUser").SetEntity("personInfo", session.Get<PersonInfo>(personId)).UniqueResult().Should().Not.Be.Null();
@@ -116,15 +116,14 @@ namespace Teleopti.Ccc.InfrastructureTest.MultiTenancy
 				uow.PersistAll();
 				personId = personInDatabase.Id.Value;
 			}
-			tennantSessionManager = TennantSessionManager.CreateInstanceForTest(ConnectionStringHelper.ConnectionStringUsedInTests);
-			target = new ApplicationUserQuery(() =>tennantSessionManager);
-			tennantSessionManager.StartTransaction();
+			_tenantUnitOfWorkManager = TenantUnitOfWorkManager.CreateInstanceForTest(ConnectionStringHelper.ConnectionStringUsedInTests);
+			target = new ApplicationUserQuery(() =>_tenantUnitOfWorkManager);
 		}
 
 		[TearDown]
 		public void Teardown_WillBeChangedWhenMovedAwayFromUnitOfWork()
 		{
-			tennantSessionManager.EndTransaction();
+			_tenantUnitOfWorkManager.CancelCurrent();
 			using (var uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
 			{
 				var rep = new PersonRepository(uow);

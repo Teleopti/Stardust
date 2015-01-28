@@ -5,29 +5,27 @@ namespace Teleopti.Ccc.Infrastructure.MultiTenancy.NHibernate
 {
 	public class TennantUnitOfWorkAspect : IAspect
 	{
-		private readonly ITennantSessionFactory _tennantSessionFactory;
-		private readonly ICurrentTennantSession _currentTennantSession;
+		private readonly ITenantUnitOfWorkManager _tenantUnitOfWorkManager;
 
-		public TennantUnitOfWorkAspect(ITennantSessionFactory tennantSessionFactory, ICurrentTennantSession currentTennantSession)
+		public TennantUnitOfWorkAspect(ITenantUnitOfWorkManager tenantUnitOfWorkManager)
 		{
-			_tennantSessionFactory = tennantSessionFactory;
-			_currentTennantSession = currentTennantSession;
+			_tenantUnitOfWorkManager = tenantUnitOfWorkManager;
 		}
 
 		public void OnBeforeInvokation()
 		{
-			_tennantSessionFactory.StartTransaction();
 		}
 
 		public void OnAfterInvokation(Exception exception)
 		{
-			var session = _currentTennantSession.Session();
 			if (exception == null)
 			{
-				session.Transaction.Commit();
+				_tenantUnitOfWorkManager.CommitCurrent();
 			}
-			session.Dispose();
-			_tennantSessionFactory.EndTransaction();
+			else
+			{
+				_tenantUnitOfWorkManager.CancelCurrent();
+			}
 		}
 	}
 }
