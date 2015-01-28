@@ -40,12 +40,16 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.AgentBadge
 			}
 
 			var viewBadgeFunc =
-				_appFunctionFactory.ApplicationFunctionList.Single(
+				_appFunctionFactory.ApplicationFunctionList.SingleOrDefault(
 					x => x.ForeignId == DefinedRaptorApplicationFunctionForeignIds.ViewBadge);
+			if (viewBadgeFunc == null)
+			{
+				return newAwardedBadges;
+			}
 
 			foreach (
 				var person in
-					agentsListShouldGetBadge.Select(agent => allPersons.Single(x => x.Id != null && x.Id.Value == agent))
+					agentsListShouldGetBadge.Select(agent => allPersons.SingleOrDefault(x => x.Id != null && x.Id.Value == agent))
 						.Where(a => a != null))
 			{
 				var hasBadgePermission = person.PermissionInformation.ApplicationRoleCollection.Any(
