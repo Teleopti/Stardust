@@ -78,11 +78,11 @@ IF %ERRORLEVEL% NEQ 0 SET /A ERRORLEV=2 & GOTO :Error
 
 ::Patch source databases
 ECHO.
-ECHO Patching source databases ...
+ECHO Patching source (local) databases ...
 ECHO.
-"%DBMANAGER%" -S%DESTSERVER% -D%SRCCCC7% -OTeleoptiCCC7 -E -T 
-"%DBMANAGER%" -S%DESTSERVER% -D%SRCANALYTICS% -OTeleoptiAnalytics -E -T 
-"%DBMANAGER%" -S%DESTSERVER% -D%SRCAGG% -OTeleoptiAnalytics -E -T 
+"%DBMANAGER%" -S. -D%SRCCCC7% -OTeleoptiCCC7 -E -T 
+"%DBMANAGER%" -S. -D%SRCANALYTICS% -OTeleoptiAnalytics -E -T 
+"%DBMANAGER%" -S. -D%SRCAGG% -OTeleoptiAnalytics -E -T 
 "%SECURITY%"  -DS. -DD%SRCCCC7% -EE 
 "%SECURITY%"  -DS. -DD%SRCANALYTICS% -CD%SRCAGG% -EE 
 
