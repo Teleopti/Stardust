@@ -7,7 +7,8 @@
 	'ajax',
 	'resources',
 	'amplify',
-	'permissions'
+	'permissions',
+	'knockoutBindings'
 ], function (
 	ko,
 	view,
@@ -17,7 +18,8 @@
 	ajax,
 	resources,
 	amplify,
-	permissions
+	permissions,
+	knockoutBindings // view dependency
 ) {
 	var viewModel;
 
