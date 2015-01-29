@@ -10,7 +10,7 @@ namespace Teleopti.Ccc.DomainTest.Security.Authentication
     public class CheckNullUserTest
     {
         private MockRepository mocks;
-        private ICheckSuperUser checkSuperUser;
+        private IFindUserDetail findUserDetail;
         private ICheckNullUser target;
         private IUnitOfWork unitOfWork;
         
@@ -18,9 +18,9 @@ namespace Teleopti.Ccc.DomainTest.Security.Authentication
         public void Setup()
         {
             mocks = new MockRepository();
-            checkSuperUser = mocks.StrictMock<ICheckSuperUser>();
+            findUserDetail = mocks.StrictMock<IFindUserDetail>();
             unitOfWork = mocks.StrictMock<IUnitOfWork>();
-            target = new CheckNullUser(checkSuperUser);
+            target = new CheckNullUser(findUserDetail);
         }
 
         [Test]
@@ -42,7 +42,7 @@ namespace Teleopti.Ccc.DomainTest.Security.Authentication
             var authenticationResult = new AuthenticationResult();
             using (mocks.Record())
             {
-                Expect.Call(checkSuperUser.CheckLogOn(unitOfWork, person, password)).Return(authenticationResult);
+                Expect.Call(findUserDetail.CheckLogOn(unitOfWork, person, password)).Return(authenticationResult);
             }
             using (mocks.Playback())
             {

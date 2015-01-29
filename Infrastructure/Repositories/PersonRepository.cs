@@ -15,7 +15,6 @@ using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Scheduling.ShiftCreator;
-using Teleopti.Ccc.Domain.Security;
 using Teleopti.Ccc.Domain.Security.AuthorizationEntities;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Infrastructure.Foundation;
@@ -59,10 +58,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
         {
             using (PerformanceOutput.ForOperation("Trying to find basic auth person in db"))
             {
-                IPerson foundPerson = isSuperUser(logOnName) ?
-                    createSuperUserCriteria().UniqueResult<Person>() :
-                    createApplicationLogonNameCriteria(logOnName).UniqueResult<Person>();
-
+                IPerson foundPerson = createApplicationLogonNameCriteria(logOnName).UniqueResult<Person>();
                 if (foundPerson != null)
                 {
                     foundPerson = loadPermissionData(foundPerson);
@@ -90,18 +86,6 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
             }
         }
 
-        /// <summary>
-        /// Determines whether the username and password belongs to the super user.
-        /// </summary>
-        /// <param name="logOnName">Name of the user.</param>
-        /// <returns>
-        /// 	<c>true</c> if super user; otherwise, <c>false</c>.
-        /// </returns>
-        private static bool isSuperUser(string logOnName)
-        {
-            return (logOnName == SuperUser.UserName);
-        }
-
         private ICriteria createApplicationLogonNameCriteria(string logOnName)
         {
             return Session.CreateCriteria(typeof(Person), "person")
@@ -110,16 +94,6 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
                 .Add(Restrictions.Disjunction()
                          .Add(Restrictions.IsNull("TerminalDate"))
                          .Add(Restrictions.Ge("TerminalDate", DateOnly.Today)));
-        }
-
-        private ICriteria createSuperUserCriteria()
-        {
-
-            //todo
-            //should be case sensitive in password but not on user name
-            //what if sql server instance is case insensitive - should the username still be incasesensitive?
-            return Session.CreateCriteria(typeof(Person), "person")
-                .Add(Restrictions.Eq("Id", new Guid(SuperUser.Id)));
         }
 
         /// <summary>
@@ -576,7 +550,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 			{
 				foreach (IPersonPeriod personPeriod in person.PersonPeriodCollection)
 				{
-					foreach (PersonSkill pSkill in personPeriod.PersonSkillCollection)
+					foreach (var pSkill in personPeriod.PersonSkillCollection)
 					{
                         if (pSkill.Skill.SkillType.Description.Name == "xyyyxxxyyyyx")
                             throw new InvalidDataException("lazy load elände");

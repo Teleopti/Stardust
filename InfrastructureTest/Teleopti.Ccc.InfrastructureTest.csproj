@@ -291,11 +291,9 @@
     <Compile Include="Foundation\WindowsAppDomainPrincipalContextTest.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Foundation\SystemUserPasswordSpecificationTest.cs" />
     <Compile Include="Foundation\GeneralPersistTest.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Foundation\SystemUserSpecificationTest.cs" />
     <Compile Include="Helper\AnalyticsDatabaseTest.cs" />
     <Compile Include="Licensing\AgreementProviderTest.cs" />
     <Compile Include="Licensing\LicenseStatusRepositoriesTest.cs" />

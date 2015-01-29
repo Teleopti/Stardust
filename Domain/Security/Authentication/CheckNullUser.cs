@@ -5,14 +5,14 @@ namespace Teleopti.Ccc.Domain.Security.Authentication
 {
     public class CheckNullUser : ICheckNullUser
     {
-        private readonly ICheckSuperUser _checkSuperUser;
+	    private readonly IFindUserDetail _findUserDetail;
 
-        public CheckNullUser(ICheckSuperUser checkSuperUser)
+        public CheckNullUser(IFindUserDetail findUserDetail)
         {
-            _checkSuperUser = checkSuperUser;
+	        _findUserDetail = findUserDetail;
         }
 
-        public AuthenticationResult CheckLogOn(IUnitOfWork unitOfWork, IPerson person, string password)
+	    public AuthenticationResult CheckLogOn(IUnitOfWork unitOfWork, IPerson person, string password)
         {
             if (person==null)
             {
@@ -23,7 +23,7 @@ namespace Teleopti.Ccc.Domain.Security.Authentication
                                Successful = false
                            };
             }
-            return _checkSuperUser.CheckLogOn(unitOfWork,person,password);
+            return _findUserDetail.CheckLogOn(unitOfWork,person,password);
         }
     }
 }

@@ -51,9 +51,6 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<CheckPassword>()
 				.As<ICheckPassword>()
 				.SingleInstance();
-			builder.RegisterType<CheckSuperUser>()
-				.As<ICheckSuperUser>()
-				.SingleInstance();
 			builder.RegisterType<CheckUserDetail>()
 				.As<ICheckUserDetail>()
 				.SingleInstance();
@@ -71,12 +68,6 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 							})
 			.As<IPasswordPolicy>()
 			.SingleInstance();
-			builder.RegisterType<SystemUserSpecification>()
-				.As<ISystemUserSpecification>()
-				.SingleInstance();
-			builder.RegisterType<SystemUserPasswordSpecification>()
-				.As<ISystemUserPasswordSpecification>()
-				.SingleInstance();
 			builder.RegisterType<RoleToPrincipalCommand>().As<IRoleToPrincipalCommand>().InstancePerDependency();
 			builder.RegisterType<FunctionsForRoleProvider>().As<IFunctionsForRoleProvider>().InstancePerDependency();
 			builder.RegisterType<LicensedFunctionsProvider>().As<ILicensedFunctionsProvider>().SingleInstance();

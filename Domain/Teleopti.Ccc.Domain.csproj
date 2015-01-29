@@ -1384,7 +1384,6 @@
     <Compile Include="Security\Authentication\CheckNullUser.cs" />
     <Compile Include="Security\Authentication\CheckPassword.cs" />
     <Compile Include="Security\Authentication\CheckPasswordChange.cs" />
-    <Compile Include="Security\Authentication\CheckSuperUser.cs" />
     <Compile Include="Security\Authentication\CheckUserDetail.cs" />
     <Compile Include="Security\Authentication\DataSourceContainer.cs" />
     <Compile Include="Security\Authentication\DummyPasswordPolicy.cs" />

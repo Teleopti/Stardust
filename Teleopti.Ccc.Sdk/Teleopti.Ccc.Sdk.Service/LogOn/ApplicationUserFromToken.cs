@@ -1,6 +1,8 @@
-﻿using System.Globalization;
+﻿using System;
+using System.Globalization;
 using System.ServiceModel;
 using Teleopti.Ccc.Domain.Security.Authentication;
+using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.Sdk.Common.WcfExtensions;
 
 namespace Teleopti.Ccc.Sdk.WcfService.LogOn
@@ -11,14 +13,13 @@ namespace Teleopti.Ccc.Sdk.WcfService.LogOn
         private readonly PersonCache _personCache = new PersonCache();
         private CustomUserNameSecurityToken _customUserNameSecurityToken;
         private IDataSourceContainer _dataSourceContainer;
+	    private readonly Guid CustomPersonId = new Guid("3f0886ab-7b25-4e95-856a-0d726edc2a67");
 
-        private bool TryGetPersonFromStore()
+        private bool tryGetPersonFromStore()
         {
-            //Genomför inloggning. Kasta exception vid fel.
-            var result = _dataSourceContainer.LogOn(_customUserNameSecurityToken.UserName, _customUserNameSecurityToken.Password);
+            var result = logOnSystem();
             if (result.Successful)
             {
-                //Spara person till cache.
                 _personContainer = new PersonContainer(result.Person)
                                        {
                                            DataSource = _customUserNameSecurityToken.DataSource,
@@ -31,9 +32,27 @@ namespace Teleopti.Ccc.Sdk.WcfService.LogOn
             return false;
         }
 
-        private bool TryGetPersonFromCache()
+	    private AuthenticationResult logOnSystem()
+	    {
+		    if (attemptSuperUserLogOn()) return new AuthenticationResult {Successful = true, Person = _dataSourceContainer.User};
+
+		    return _dataSourceContainer.LogOn(_customUserNameSecurityToken.UserName, _customUserNameSecurityToken.Password);
+	    }
+
+	    private bool attemptSuperUserLogOn()
+	    {
+		    Guid systemUser;
+		    if (!Guid.TryParse(_customUserNameSecurityToken.UserName, out systemUser) || systemUser != CustomPersonId) return false;
+		    using (var unitOfWork = _dataSourceContainer.DataSource.Application.CreateAndOpenUnitOfWork())
+		    {
+			    var personRep = new PersonRepository(unitOfWork);
+			    _dataSourceContainer.SetUser(personRep.LoadOne(CustomPersonId));
+		    }
+		    return true;
+	    }
+
+	    private bool tryGetPersonFromCache()
         {
-            //Hämta person from cache
             _personContainer = _personCache.Get(_customUserNameSecurityToken.DataSource, _customUserNameSecurityToken.UserName, _customUserNameSecurityToken.Password);
             return _personContainer != null;
         }
@@ -42,11 +61,11 @@ namespace Teleopti.Ccc.Sdk.WcfService.LogOn
         {
             _customUserNameSecurityToken = customUserNameSecurityToken;
             _dataSourceContainer = dataSourceContainer;
-            if (TryGetPersonFromCache())
+            if (tryGetPersonFromCache())
             {
                 return;
             }
-            if (TryGetPersonFromStore())
+            if (tryGetPersonFromStore())
             {
                 return;
             }

@@ -25,13 +25,12 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
                                                               dataSource));
             }
 
-				using (var uow = dataSourceContainer.DataSource.Application.CreateAndOpenUnitOfWork())
+	        using (var uow = dataSourceContainer.DataSource.Application.CreateAndOpenUnitOfWork())
 	        {
-				  var systemId = new Guid("3f0886ab-7b25-4e95-856a-0d726edc2a67");
-				  dataSourceContainer.SetUser(repositoryFactory.CreatePersonRepository(uow).LoadOne(systemId));
+		        var systemId = new Guid("3f0886ab-7b25-4e95-856a-0d726edc2a67");
+		        dataSourceContainer.SetUser(repositoryFactory.CreatePersonRepository(uow).LoadOne(systemId));
 	        }
-            //dataSourceContainer.LogOn(SuperUser.UserName, SuperUser.Password);
-            return dataSourceContainer;
+	        return dataSourceContainer;
         }
     }
 }

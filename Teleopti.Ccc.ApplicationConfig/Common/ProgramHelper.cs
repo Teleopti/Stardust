@@ -73,23 +73,21 @@ namespace Teleopti.Ccc.ApplicationConfig.Common
 
 		public void LogOn(ICommandLineArgument argument, DatabaseHandler databaseHandler, IBusinessUnit businessUnit)
 		{
-			InitializeApplication initializeApplication = new InitializeApplication(new DataSourcesFactory(new EnversConfiguration(), new List<IMessageSender>(), DataSourceConfigurationSetter.ForApplicationConfig(), new CurrentHttpContext()), null);
+			var initializeApplication = new InitializeApplication(new DataSourcesFactory(new EnversConfiguration(), new List<IMessageSender>(), DataSourceConfigurationSetter.ForApplicationConfig(), new CurrentHttpContext()), null);
 			initializeApplication.Start(new StateNewVersion(), databaseHandler.DataSourceSettings(), "", new ConfigurationManagerWrapper());
 
-			AvailableDataSourcesProvider availableDataSourcesProvider =
+			var availableDataSourcesProvider =
 				new AvailableDataSourcesProvider(new ThisApplicationData(StateHolderReader.Instance.StateReader.ApplicationScopeData));
 			var repositoryFactory = new RepositoryFactory();
 			var passwordPolicy = new DummyPasswordPolicy();
-			ApplicationDataSourceProvider applicationDataSourceProvider =
+			var applicationDataSourceProvider =
 			    new ApplicationDataSourceProvider(availableDataSourcesProvider, repositoryFactory,
 							      new FindApplicationUser(
 								  new CheckNullUser(
-								      new CheckSuperUser(
 									  new FindUserDetail(
 									      new CheckUserDetail(
 										  new CheckPassword(new OneWayEncryption(), new CheckBruteForce(passwordPolicy), new CheckPasswordChange(() => passwordPolicy))),
-									      repositoryFactory), new SystemUserSpecification(),
-									  new SystemUserPasswordSpecification())), repositoryFactory));
+									      repositoryFactory)), repositoryFactory));
 			DataSourceContainer dataSourceContainer = applicationDataSourceProvider.DataSourceList().First();
 
 			var logOnOff = new LogOnOff(new WindowsAppDomainPrincipalContext(new TeleoptiPrincipalFactory()));

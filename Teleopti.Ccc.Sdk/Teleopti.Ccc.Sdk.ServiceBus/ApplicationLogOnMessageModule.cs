@@ -111,12 +111,8 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
 
 				AuthenticationMessageHeader.BusinessUnit = businessUnitId;
 				AuthenticationMessageHeader.DataSource = dataSource.Application.Name;
-				if (dataSourceContainer.User.ApplicationAuthenticationInfo != null)
-				{
-					AuthenticationMessageHeader.UserName = dataSourceContainer.User.ApplicationAuthenticationInfo.ApplicationLogOnName;
-					AuthenticationMessageHeader.Password = SuperUser.Password;
-				}
-
+				AuthenticationMessageHeader.UserName = "3f0886ab-7b25-4e95-856a-0d726edc2a67";
+				AuthenticationMessageHeader.Password = "custom";
 				AuthenticationMessageHeader.UseWindowsIdentity = false;
 				_logOnOff.LogOn(dataSource, dataSourceContainer.User, businessUnit);
 

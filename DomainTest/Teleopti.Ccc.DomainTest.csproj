@@ -1062,7 +1062,6 @@
     <Compile Include="Security\Authentication\AvailableBusinessUnitsProviderTest.cs" />
     <Compile Include="Security\Authentication\AvailableDataSourcesProviderTest.cs" />
     <Compile Include="Security\Authentication\CheckNullUserTest.cs" />
-    <Compile Include="Security\Authentication\CheckSuperUserTest.cs" />
     <Compile Include="Security\Authentication\CheckUserDetailTest.cs" />
     <Compile Include="Security\Authentication\CheckPasswordTest.cs" />
     <Compile Include="Security\Authentication\CheckBruteForceTest.cs" />

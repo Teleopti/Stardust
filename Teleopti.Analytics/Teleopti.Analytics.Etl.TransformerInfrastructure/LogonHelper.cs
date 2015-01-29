@@ -104,17 +104,14 @@ namespace Teleopti.Analytics.Etl.TransformerInfrastructure
 			_logonService =
 				new LogOnService(
 					new ApplicationDataSourceProvider(
-						new AvailableDataSourcesProvider(new ThisApplicationData(StateHolderReader.Instance.StateReader.ApplicationScopeData)),
+						new AvailableDataSourcesProvider(
+							new ThisApplicationData(StateHolderReader.Instance.StateReader.ApplicationScopeData)),
 						_repositoryFactory,
 						new FindApplicationUser(
 							new CheckNullUser(
-								new CheckSuperUser(
-									new FindUserDetail(
-										new CheckUserDetail(new CheckPassword(new OneWayEncryption(),
-																			  new CheckBruteForce(passwordPolicy),
-																			  new CheckPasswordChange(() => passwordPolicy))),
-										_repositoryFactory), new SystemUserSpecification(),
-									new SystemUserPasswordSpecification())), _repositoryFactory)), _logOnOff);
+								new FindUserDetail(
+									new CheckUserDetail(new CheckPassword(new OneWayEncryption(), new CheckBruteForce(passwordPolicy),
+										new CheckPasswordChange(() => passwordPolicy))), _repositoryFactory)), _repositoryFactory)),_logOnOff);
 		}
 
 		private void SetDatabase()

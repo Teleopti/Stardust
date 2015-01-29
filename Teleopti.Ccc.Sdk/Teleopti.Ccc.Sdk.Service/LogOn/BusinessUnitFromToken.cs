@@ -38,11 +38,10 @@ namespace Teleopti.Ccc.Sdk.WcfService.LogOn
 
         private bool TryGetBusinessUnitFromStore()
         {
-            //Genomför inloggning. Kasta exception vid fel.
             using (var uow = _dataSourceContainer.DataSource.Application.CreateAndOpenUnitOfWork())
             {
                 _businessUnit =
-                    new BusinessUnitRepository(uow).LoadAll().FirstOrDefault(b => b.Id == _tokenWithBusinessUnit.BusinessUnit);
+                    new BusinessUnitRepository(uow).Get(_tokenWithBusinessUnit.BusinessUnit);
                 return _businessUnit != null;
             }
         }

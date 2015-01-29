@@ -286,8 +286,6 @@
     <Compile Include="Foundation\IRoleToPrincipalCommand.cs" />
     <Compile Include="Foundation\WindowsAppDomainPrincipalContext.cs" />
     <Compile Include="Foundation\RoleToPrincipalCommand.cs" />
-    <Compile Include="Foundation\SystemUserPasswordSpecification.cs" />
-    <Compile Include="Foundation\SystemUserSpecification.cs" />
     <Compile Include="Licensing\ILicenseFeedback.cs" />
     <Compile Include="Licensing\ILicenseVerifier.cs" />
     <Compile Include="Licensing\ILicenseVerifierFactory.cs" />
