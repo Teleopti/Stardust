@@ -22,6 +22,7 @@ namespace Teleopti.Ccc.DomainTest.Security.MultiTenancyAuthentication
 		private DataSourceContainer _dataSourceCont;
 		private ILogonModel _model;
 		private IApplicationData _appData;
+		private const string userAgent = "something";
 
 		const string nhibConf = @"<?xml version='1.0' encoding='utf-8'?>
 		<datasource>
@@ -71,14 +72,14 @@ zjynBDpennBSNqkqCiW3EQRWBLLUsTvYDVTukgp553hrec5dBRnZbAJDPZ1C9vxaL41gULCDALIUiNUt
 			var personId = Guid.NewGuid();
 			var person = new Person();
 			var personRepository = MockRepository.GenerateMock<IPersonRepository>();
-			_authenticationQuerier.Stub(x => x.TryLogon("kalle", "kula"))
+			_authenticationQuerier.Stub(x => x.TryLogon("kalle", "kula", userAgent))
 				.Return(new AuthenticationQueryResult { PersonId = personId, Success = true, Tennant = "Teleopti WFM", DataSourceEncrypted = encrypted });
 			_appData.Stub(x => x.CreateAndAddDataSource("")).Return(_dataSource).IgnoreArguments();
 			_dataSource.Stub(x => x.Application).Return(uowFactory);
 			uowFactory.Stub(x => x.CreateAndOpenUnitOfWork()).Return(uow);
 			_repositoryFactory.Stub(x => x.CreatePersonRepository(uow)).Return(personRepository);
 			personRepository.Stub(x => x.LoadOne(personId)).Return(person);
-			var result = _target.Logon(_model, _appData);
+			var result = _target.Logon(_model, _appData, userAgent);
 
 			result.Successful.Should().Be.True();
 			_model.SelectedDataSourceContainer.User.Should().Be.EqualTo(person);
@@ -93,14 +94,14 @@ zjynBDpennBSNqkqCiW3EQRWBLLUsTvYDVTukgp553hrec5dBRnZbAJDPZ1C9vxaL41gULCDALIUiNUt
 			var personId = Guid.NewGuid();
 			var person = new Person();
 			var personRepository = MockRepository.GenerateMock<IPersonRepository>();
-			_authenticationQuerier.Stub(x => x.TryLogon("kalle", "kula"))
+			_authenticationQuerier.Stub(x => x.TryLogon("kalle", "kula", userAgent))
 				.Return(new AuthenticationQueryResult { PersonId = personId, Success = true, Tennant = "Teleopti WFM", DataSource = nhibConf });
 			_appData.Stub(x => x.CreateAndAddDataSource("")).Return(_dataSource).IgnoreArguments();
 			_dataSource.Stub(x => x.Application).Return(uowFactory);
 			uowFactory.Stub(x => x.CreateAndOpenUnitOfWork()).Return(uow);
 			_repositoryFactory.Stub(x => x.CreatePersonRepository(uow)).Return(personRepository);
 			personRepository.Stub(x => x.LoadOne(personId)).Return(person);
-			var result = _target.Logon(_model, _appData);
+			var result = _target.Logon(_model, _appData, userAgent);
 
 			result.Successful.Should().Be.True();
 			_model.SelectedDataSourceContainer.User.Should().Be.EqualTo(person);
@@ -110,10 +111,10 @@ zjynBDpennBSNqkqCiW3EQRWBLLUsTvYDVTukgp553hrec5dBRnZbAJDPZ1C9vxaL41gULCDALIUiNUt
 		[Test]
 		public void ShouldReturnFailureOnNoSuccess()
 		{
-			_authenticationQuerier.Stub(x => x.TryLogon("kalle", "kula"))
+			_authenticationQuerier.Stub(x => x.TryLogon("kalle", "kula", userAgent))
 				.Return(new AuthenticationQueryResult { Success = false });
 
-			var result = _target.Logon(_model, _appData);
+			var result = _target.Logon(_model, _appData, userAgent);
 
 			result.Successful.Should().Be.False();
 			_model.SelectedDataSourceContainer.Should().Be.Null();

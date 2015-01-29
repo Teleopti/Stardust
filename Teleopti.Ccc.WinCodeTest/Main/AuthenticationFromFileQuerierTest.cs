@@ -44,7 +44,7 @@ namespace Teleopti.Ccc.WinCodeTest.Main
 
 			var target = new AuthenticationFromFileQuerier(fullPath);
 
-			target.TryIdentityLogon("").Success.Should().Be.True();
+			target.TryIdentityLogon("", null).Success.Should().Be.True();
 			File.Delete(fullPath);
 		}
 	}

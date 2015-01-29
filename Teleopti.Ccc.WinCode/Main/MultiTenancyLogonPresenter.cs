@@ -23,6 +23,7 @@ namespace Teleopti.Ccc.WinCode.Main
 		private readonly IMessageBrokerComposite _messageBroker;
 		private readonly IMultiTenancyApplicationLogon _applicationLogon;
 		private readonly IMultiTenancyWindowsLogon _multiTenancyWindowsLogon;
+		public const string UserAgent = "WIN";
 
 
 		public MultiTenancyLogonPresenter(ILogonView view, LogonModel model,
@@ -190,7 +191,7 @@ namespace Teleopti.Ccc.WinCode.Main
 
 		private bool login()
 		{
-			var authenticationResult = _applicationLogon.Logon(_model, StateHolderReader.Instance.StateReader.ApplicationScopeData);
+			var authenticationResult = _applicationLogon.Logon(_model, StateHolderReader.Instance.StateReader.ApplicationScopeData, UserAgent);
 			var choosenDataSource = _model.SelectedDataSourceContainer;
 
 			if (authenticationResult.HasMessage)
@@ -208,7 +209,7 @@ namespace Teleopti.Ccc.WinCode.Main
 
 		private bool winLogin()
 		{
-			var authenticationResult = _multiTenancyWindowsLogon.Logon(_model, StateHolderReader.Instance.StateReader.ApplicationScopeData);
+			var authenticationResult = _multiTenancyWindowsLogon.Logon(_model, StateHolderReader.Instance.StateReader.ApplicationScopeData, UserAgent);
 
 			if (authenticationResult.HasMessage)
 				_view.ShowErrorMessage(string.Concat(authenticationResult.Message, "  "), Resources.ErrorMessage);

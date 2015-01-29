@@ -2,7 +2,7 @@
 {
 	public interface IAuthenticationQuerier
 	{
-		AuthenticationQueryResult TryLogon(string userName, string password);
-		AuthenticationQueryResult TryIdentityLogon(string identity);
+		AuthenticationQueryResult TryLogon(string userName, string password, string userAgent);
+		AuthenticationQueryResult TryIdentityLogon(string identity, string userAgent);
 	}
 }

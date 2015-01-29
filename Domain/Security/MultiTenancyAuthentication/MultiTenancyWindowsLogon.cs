@@ -8,7 +8,7 @@ namespace Teleopti.Ccc.Domain.Security.MultiTenancyAuthentication
 {
 	public interface IMultiTenancyWindowsLogon
 	{
-		AuthenticationResult Logon(ILogonModel logonModel, IApplicationData applicationData);
+		AuthenticationResult Logon(ILogonModel logonModel, IApplicationData applicationData, string userAgent);
 	}
 
 	public class MultiTenancyWindowsLogon : IMultiTenancyWindowsLogon
@@ -25,12 +25,12 @@ namespace Teleopti.Ccc.Domain.Security.MultiTenancyAuthentication
 			_windowsUserProvider = windowsUserProvider;
 		}
 
-		public AuthenticationResult Logon(ILogonModel logonModel, IApplicationData applicationData)
+		public AuthenticationResult Logon(ILogonModel logonModel, IApplicationData applicationData, string userAgent)
 		{
 			var userId = _windowsUserProvider.UserName;
 			var domain = _windowsUserProvider.DomainName;
 			logonModel.UserName = domain + "\\" + userId;
-			var result = _authenticationQuerier.TryIdentityLogon(logonModel.UserName);
+			var result = _authenticationQuerier.TryIdentityLogon(logonModel.UserName, userAgent);
 			if (!result.Success)
 				return new AuthenticationResult
 				{

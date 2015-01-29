@@ -5,6 +5,6 @@ namespace Teleopti.Ccc.Domain.Security.MultiTenancyAuthentication
 {
 	public interface IMultiTenancyApplicationLogon
 	{
-		AuthenticationResult Logon(ILogonModel logonModel, IApplicationData applicationData);
+		AuthenticationResult Logon(ILogonModel logonModel, IApplicationData applicationData, string userAgent);
 	}
 }

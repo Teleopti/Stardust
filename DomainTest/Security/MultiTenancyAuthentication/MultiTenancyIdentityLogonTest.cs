@@ -23,6 +23,7 @@ namespace Teleopti.Ccc.DomainTest.Security.MultiTenancyAuthentication
 		private ILogonModel _model;
 		private IApplicationData _appData;
 		private IWindowsUserProvider _windowsUserProvider;
+		private const string userAgent = "something";
 
 		[SetUp]
 		public void Setup()
@@ -52,14 +53,14 @@ zjynBDpennBSNqkqCiW3EQRWBLLUsTvYDVTukgp553hrec5dBRnZbAJDPZ1C9vxaL41gULCDALIUiNUt
 			var personRepository = MockRepository.GenerateMock<IPersonRepository>();
 			_windowsUserProvider.Stub(x => x.DomainName).Return("TOPTINET");
 			_windowsUserProvider.Stub(x => x.UserName).Return("KULA");
-			_authenticationQuerier.Stub(x => x.TryIdentityLogon("TOPTINET\\KULA"))
+			_authenticationQuerier.Stub(x => x.TryIdentityLogon("TOPTINET\\KULA", userAgent))
 				.Return(new AuthenticationQueryResult { PersonId = personId, Success = true, Tennant = "Teleopti WFM", DataSourceEncrypted = encrypted});
 			_appData.Stub(x => x.CreateAndAddDataSource("")).Return(_dataSource).IgnoreArguments();
 			_dataSource.Stub(x => x.Application).Return(uowFactory);
 			uowFactory.Stub(x => x.CreateAndOpenUnitOfWork()).Return(uow);
 			_repositoryFactory.Stub(x => x.CreatePersonRepository(uow)).Return(personRepository);
 			personRepository.Stub(x => x.LoadOne(personId)).Return(person);
-			var result = _target.Logon(_model, _appData);
+			var result = _target.Logon(_model, _appData, userAgent);
 
 			result.Successful.Should().Be.True();
 			_model.SelectedDataSourceContainer.User.Should().Be.EqualTo(person);
@@ -71,9 +72,9 @@ zjynBDpennBSNqkqCiW3EQRWBLLUsTvYDVTukgp553hrec5dBRnZbAJDPZ1C9vxaL41gULCDALIUiNUt
 		{
 			_windowsUserProvider.Stub(x => x.DomainName).Return("TOPTINET");
 			_windowsUserProvider.Stub(x => x.UserName).Return("KULA");
-			_authenticationQuerier.Stub(x => x.TryIdentityLogon("TOPTINET\\KULA")).Return(new AuthenticationQueryResult { Success = false });
+			_authenticationQuerier.Stub(x => x.TryIdentityLogon("TOPTINET\\KULA", userAgent)).Return(new AuthenticationQueryResult { Success = false });
 
-			var result = _target.Logon(_model, _appData);
+			var result = _target.Logon(_model, _appData, userAgent);
 
 			result.Successful.Should().Be.False();
 			_model.SelectedDataSourceContainer.Should().Be.Null();

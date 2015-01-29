@@ -4,10 +4,8 @@ using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Infrastructure;
-using Teleopti.Ccc.Domain.Security;
 using Teleopti.Ccc.Domain.Security.Authentication;
 using Teleopti.Ccc.Domain.Security.MultiTenancyAuthentication;
-using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.UserTexts;
 using Teleopti.Ccc.WinCode.Main;
 using Rhino.Mocks;
@@ -133,7 +131,7 @@ namespace Teleopti.Ccc.WinCodeTest.Main
 			_model.Password = "PASS";
 
 			dataSourceContainer.Stub(x => x.AuthenticationTypeOption).Return(AuthenticationTypeOption.Application);
-			_appLogon.Stub(x => x.Logon(_model, _appData)).Return(new AuthenticationResult { Successful = true }).IgnoreArguments();
+			_appLogon.Stub(x => x.Logon(_model, _appData, MultiTenancyLogonPresenter.UserAgent)).Return(new AuthenticationResult { Successful = true }).IgnoreArguments();
 
 			dataSourceContainer.Stub(x => x.User).Return(person);
 			person.Stub(x => x.ApplicationAuthenticationInfo).Return(appAuthInfo);
@@ -163,7 +161,7 @@ namespace Teleopti.Ccc.WinCodeTest.Main
 			dataSourceContainer.Stub(x => x.AuthenticationTypeOption).Return(AuthenticationTypeOption.Application);
 			dataSourceContainer.Stub(x => x.DataSource).Return(dataSource);
 			dataSource.Stub(x => x.Application).Return(uowFact);
-			_appLogon.Stub(x => x.Logon(_model, null)).Return(new AuthenticationResult { Successful = true }).IgnoreArguments();
+			_appLogon.Stub(x => x.Logon(_model, null, MultiTenancyLogonPresenter.UserAgent)).Return(new AuthenticationResult { Successful = true }).IgnoreArguments();
 			dataSourceContainer.Stub(x => x.User).Return(person);
 			person.Stub(x => x.ApplicationAuthenticationInfo).Return(appAuthInfo);
 			appAuthInfo.Stub(x => x.Password = "PASS");
@@ -254,7 +252,7 @@ namespace Teleopti.Ccc.WinCodeTest.Main
 			_model.DataSourceContainers = new List<IDataSourceContainer> { dataSourceContainer };
 
 			availableDataSourcesProvider.Stub(x => x.UnavailableDataSources()).Return(new List<IDataSource>());
-			_winLogon.Stub(x => x.Logon(_model, _appData)).Return(new AuthenticationResult { Successful = true }).IgnoreArguments();
+			_winLogon.Stub(x => x.Logon(_model, _appData, MultiTenancyLogonPresenter.UserAgent)).Return(new AuthenticationResult { Successful = true }).IgnoreArguments();
 			dataSourceContainer.Stub(x => x.AvailableBusinessUnitProvider).Return(buProvider);
 			buProvider.Stub(x => x.AvailableBusinessUnits()).Return(new List<IBusinessUnit> { bu, bu2 });
 			_view.Stub(x => x.ShowStep(true));
@@ -271,7 +269,7 @@ namespace Teleopti.Ccc.WinCodeTest.Main
 			_model.AuthenticationType = AuthenticationTypeOption.Windows;
 			_model.DataSourceContainers = new List<IDataSourceContainer>{ dataSourceContainer };
 			availableDataSourcesProvider.Stub(x => x.UnavailableDataSources()).Return(new List<IDataSource>());
-			_winLogon.Stub(x => x.Logon(_model, _appData)).Return(new AuthenticationResult { Successful = false }).IgnoreArguments();
+			_winLogon.Stub(x => x.Logon(_model, _appData, MultiTenancyLogonPresenter.UserAgent)).Return(new AuthenticationResult { Successful = false }).IgnoreArguments();
 			_view.Stub(x => x.ShowStep(true));
 
 			_target.CurrentStep = LoginStep.SelectDatasource;

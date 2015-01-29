@@ -15,9 +15,8 @@ namespace Teleopti.Ccc.Infrastructure.Foundation
 			return responseToJson<T>(request);
 		}
 
-		public static T PostRequest<T>(this UriBuilder uriBuilder, string post)
+		public static T PostRequest<T>(this HttpWebRequest request, string post)
 		{
-			var request = (HttpWebRequest)WebRequest.Create(uriBuilder.Uri);
 			request.AllowAutoRedirect = false;
 			request.Method = "POST";
 			request.ContentType = "application/x-www-form-urlencoded";
