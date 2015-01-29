@@ -6,7 +6,7 @@ using Teleopti.Ccc.Web.Areas.Start.Core.Authentication.DataProvider;
 using Teleopti.Ccc.Web.Areas.Start.Models.Authentication;
 using Teleopti.Ccc.Web.Areas.Tenant.Core;
 
-namespace Teleopti.Ccc.WebTest.Areas.Tenant
+namespace Teleopti.Ccc.WebTest.Areas.Tenant.Core
 {
 	public class LoginAttemptModelFactoryForWebTest
 	{
