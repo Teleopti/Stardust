@@ -145,8 +145,12 @@ namespace Teleopti.Ccc.WinCode.Main
 
 		private void getDataSources()
 		{
-			if (!_view.InitStateHolderWithoutDataSource(_messageBroker))
-				CurrentStep --; //?
+			if (_model.DataSourceContainers == null)
+			{
+				if (!_view.InitStateHolderWithoutDataSource(_messageBroker))
+					CurrentStep--; //?
+			}
+			
 
 			_model.DataSourceContainers = new List<IDataSourceContainer>();
 	
