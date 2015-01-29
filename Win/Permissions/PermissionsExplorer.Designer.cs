@@ -680,7 +680,7 @@ namespace Teleopti.Ccc.Win.Permissions
 			this.ExplorerRibbon.MenuButtonEnabled = true;
 			this.ExplorerRibbon.MenuButtonFont = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
 			this.ExplorerRibbon.MenuButtonText = "xxFile";
-			this.ExplorerRibbon.MenuButtonWidth = 56;
+			this.ExplorerRibbon.MenuButtonWidth = 70;
 			this.ExplorerRibbon.MenuColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(153)))), ((int)(((byte)(255)))));
 			this.ExplorerRibbon.MinimizeToolTip = "Minimize Ribbon";
 			this.ExplorerRibbon.Name = "ExplorerRibbon";
