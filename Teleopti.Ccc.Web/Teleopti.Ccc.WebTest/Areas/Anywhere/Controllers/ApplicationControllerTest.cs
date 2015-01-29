@@ -5,15 +5,14 @@ using System.Web.Routing;
 using NUnit.Framework;
 using Rhino.Mocks;
 using SharpTestsEx;
-using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.Security.Principal;
+using Teleopti.Ccc.IocCommon.Toggle;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.Web;
 using Teleopti.Ccc.Web.Areas.Anywhere.Controllers;
 using Teleopti.Ccc.Web.Core;
-using Teleopti.Ccc.WebTest.TestHelper;
 
 namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Controllers
 {
@@ -32,7 +31,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Controllers
 			currentTeleoptiPrincipal = MockRepository.GenerateMock<ICurrentTeleoptiPrincipal>();
 			_personRepository = MockRepository.GenerateMock<IPersonRepository>();
 			ianaTimeZoneProvider = MockRepository.GenerateMock<IIanaTimeZoneProvider>();
-			target = new ApplicationController(authorization, currentTeleoptiPrincipal, _personRepository, ianaTimeZoneProvider);
+			target = new ApplicationController(authorization, currentTeleoptiPrincipal, _personRepository, ianaTimeZoneProvider, new FakeToggleManager());
 		}
 
 		[TearDown]
