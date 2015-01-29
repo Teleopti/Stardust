@@ -2,6 +2,7 @@
 using NUnit.Framework;
 using Rhino.Mocks;
 using SharpTestsEx;
+using Teleopti.Ccc.Web.Areas.Start.Core.Authentication.Services;
 using Teleopti.Ccc.Web.Areas.Tenant;
 using Teleopti.Ccc.Web.Areas.Tenant.Core;
 
@@ -21,8 +22,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Tenant
 				Tennant = Guid.NewGuid().ToString()
 			};
 			var appAuthentication = MockRepository.GenerateMock<IApplicationAuthentication>();
-			var identityAuthentication = MockRepository.GenerateMock<IIdentityAuthentication>();
-			var target = new TenantController(appAuthentication, identityAuthentication);
+			var target = new TenantController(appAuthentication, null, MockRepository.GenerateMock<ILogLogonAttempt>());
 			appAuthentication.Expect(x => x.Logon(userName, password)).Return(serviceResult);
 
 			var webCall = target.ApplicationLogon(userName, password);
@@ -41,8 +41,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Tenant
 				FailReason = "nåt fel"
 			};
 			var appAuthentication = MockRepository.GenerateMock<IApplicationAuthentication>();
-			var identityAuthentication = MockRepository.GenerateMock<IIdentityAuthentication>();
-			var target = new StubbingControllerBuilder().CreateController<TenantController>(appAuthentication, identityAuthentication);
+			var target = new StubbingControllerBuilder().CreateController<TenantController>(appAuthentication, null, MockRepository.GenerateMock<ILogLogonAttempt>());
 			appAuthentication.Expect(x => x.Logon(userName, password)).Return(serviceResult);
 
 			var result = ((ApplicationAuthenticationResult)target.ApplicationLogon(userName, password).Data);
@@ -61,9 +60,8 @@ namespace Teleopti.Ccc.WebTest.Areas.Tenant
 				PersonId = Guid.NewGuid(),
 				Tennant = Guid.NewGuid().ToString()
 			};
-			var appAuthentication = MockRepository.GenerateMock<IApplicationAuthentication>();
 			var identityAuthentication = MockRepository.GenerateMock<IIdentityAuthentication>();
-			var target = new TenantController(appAuthentication, identityAuthentication);
+			var target = new TenantController(null, identityAuthentication, MockRepository.GenerateMock<ILogLogonAttempt>());
 			identityAuthentication.Expect(x => x.Logon(identity)).Return(serviceResult);
 
 			var webCall = target.IdentityLogon(identity);
@@ -80,14 +78,46 @@ namespace Teleopti.Ccc.WebTest.Areas.Tenant
 				Success = false,
 				FailReason = "nåt fel"
 			};
-			var appAuthentication = MockRepository.GenerateMock<IApplicationAuthentication>();
 			var identityAuthentication = MockRepository.GenerateMock<IIdentityAuthentication>();
-			var target = new StubbingControllerBuilder().CreateController<TenantController>(appAuthentication, identityAuthentication);
+			var target = new StubbingControllerBuilder().CreateController<TenantController>(null, identityAuthentication, MockRepository.GenerateMock<ILogLogonAttempt>());
 			identityAuthentication.Expect(x => x.Logon(identity)).Return(serviceResult);
 
 			var result = ((ApplicationAuthenticationResult)target.IdentityLogon(identity).Data);
 			result.Should().Be.SameInstanceAs(serviceResult);
 			//target.Response.StatusCode.Should().Be.EqualTo(401);
+		}
+
+		[Test]
+		public void ShouldLogApplicationLogon()
+		{
+			const string userName = "sadfasdf";
+			const string password = " löaksdf";
+			var serviceResult = new ApplicationAuthenticationResult();
+			var appAuthentication = MockRepository.GenerateMock<IApplicationAuthentication>();
+			var logger = MockRepository.GenerateMock<ILogLogonAttempt>();
+			var target = new StubbingControllerBuilder().CreateController<TenantController>(appAuthentication, null, logger);
+			appAuthentication.Expect(x => x.Logon(userName, password)).Return(serviceResult);
+
+			target.ApplicationLogon(userName, password);
+
+			//ignore AuthenticateResult arg due to hack for now
+			logger.AssertWasCalled(x => x.SaveAuthenticateResult(Arg<string>.Is.Equal(userName), Arg<AuthenticateResult>.Is.Anything));
+		}
+
+		[Test]
+		public void ShouldLogIdentityLogon()
+		{
+			const string identity = "sadfasdf asdf";
+			var serviceResult = new ApplicationAuthenticationResult();
+			var idAuthentication = MockRepository.GenerateMock<IIdentityAuthentication>();
+			var logger = MockRepository.GenerateMock<ILogLogonAttempt>();
+			var target = new StubbingControllerBuilder().CreateController<TenantController>(null, idAuthentication, logger);
+			idAuthentication.Expect(x => x.Logon(identity)).Return(serviceResult);
+
+			target.IdentityLogon(identity);
+
+			//ignore AuthenticateResult arg due to hack for now
+			logger.AssertWasCalled(x => x.SaveAuthenticateResult(Arg<string>.Is.Equal(identity), Arg<AuthenticateResult>.Is.Anything));
 		}
 	}
 }
