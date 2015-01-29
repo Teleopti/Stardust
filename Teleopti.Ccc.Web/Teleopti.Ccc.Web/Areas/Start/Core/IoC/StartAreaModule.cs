@@ -38,6 +38,7 @@ namespace Teleopti.Ccc.Web.Areas.Start.Core.IoC
 				builder.RegisterType<Authenticator>().As<IAuthenticator>().SingleInstance();
 				builder.RegisterType<LogLogonAttempt>().As<ILogLogonAttempt>().SingleInstance();
 			}
+			builder.RegisterType<LoginAttemptModelFactoryForWeb>().As<ILoginAttemptModelFactory>();
 			
 			builder.RegisterType<BusinessUnitProvider>().As<IBusinessUnitProvider>();
 			builder.RegisterType<TokenIdentityProvider>().As<ITokenIdentityProvider>().SingleInstance();
