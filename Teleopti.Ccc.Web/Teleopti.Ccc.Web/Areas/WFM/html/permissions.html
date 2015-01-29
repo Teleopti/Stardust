@@ -23,18 +23,16 @@
 		</div>
 		<div>
 			<button type="button" class="btn btn-default btn-md btn-block">NEW</button>
-			<button type="button" class="btn btn-default btn-md btn-block" ng-repeat="role in roles" ng-click="showRole(role.Id)">{{role.DescriptionText}}</button>
-
+			<button type="button" class="btn btn-default btn-md btn-block role" ng-repeat="role in roles" ng-click="showRole(role.Id)">{{role.DescriptionText}} <a class="role-duplicate pull-right">Duplicate</a></button>
 		</div>
 	</div>
 
 	<div class="roles-details-wrapper col-md-8 material-depth-1">
 
-		<button class="pull-right fab">Copy</button>
 
 		<div>
 			<input type="text" name="filterDetails" placeholder="Permissions filter ..." />
-		<div>
+		</div>
 		<div ng-show="roleDetails=='functionsAvailable'">
 			<div class="tree">
 				<div ui-tree data-drag-enabled="false">

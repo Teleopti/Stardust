@@ -106,40 +106,6 @@ input {
 	border-bottom:1px solid #ddd !important
 }
 
-.fab {
-	position: fixed;
-	border: none;
-	margin-left: 48%;
-	margin-top: -50px;
-	z-index: 99999;
-    width: 56px;
-    height: 56px;
-    border-radius: 50%;
-    border-radius: 50%;
-    overflow: hidden;
-    -webkit-transform: translate3d(0, 0, 0);
-    transform: translate3d(0, 0, 0);
-    transition: 0.2s linear;
-    transition-property: -webkit-transform, box-shadow;
-    transition-property: transform, box-shadow;
-	box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.26);
-}
-
-
-@media (max-width:1400px) {
-	.fab{
-		right: 24px;
-		bottom: 24px;
-	}
-}
-
-@media (min-width:1400px) {
-	.fab{
-		margin-left: 55%;
-		margin-top: -49px;
-	}
-}
-
 .container > hr {
 	margin-top: 10px !important;
 }
@@ -147,5 +113,14 @@ input {
 .tree {
 	max-height: 900px;
 	overflow-y: auto;
+	padding-bottom: 5px;
 }
 
+.role-duplicate {
+	font-size: 0px;
+	transition: all 0.5s ease;
+}
+
+.role:hover > .role-duplicate {
+	font-size: 12px!important;
+}
