@@ -22,11 +22,13 @@ Write-Output "Cloud Service: $service"
 Write-Output "Deployment Label: $deploymentLabel"
 Write-Output ""
 
-# Wait for input before closing.
-Write-Host "Press any key to continue..."
-$x = $Host.UI.RawUI.ReadKey("NoEcho,IncludeKeyUp")
- 
-Import-AzurePublishSettingsFile $publishSettingsFile
+
+$sub=Get-AzureSubscription -SubscriptionName '$subscription'
+if($sub.count -le 0) {
+    Write-Output "Importing Azure subscription"   
+    Import-AzurePublishSettingsFile $publishSettingsFile
+    Set-AzureSubscription -CurrentStorageAccount $storageAccount -SubscriptionName $subscription
+}
  
 function Publish(){
 	$deployment = Get-AzureDeployment -ServiceName $service -Slot $slot -ErrorVariable a -ErrorAction silentlycontinue 
@@ -61,7 +63,3 @@ function CreateNewDeployment()
 }
 
 Publish
-
-# Wait for input before closing.
-Write-Host "Press any key to continue..."
-$x = $Host.UI.RawUI.ReadKey("NoEcho,IncludeKeyUp")
