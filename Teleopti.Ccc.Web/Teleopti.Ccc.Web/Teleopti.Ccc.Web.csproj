@@ -1083,8 +1083,6 @@
     <Content Include="Areas\Anywhere\Content\Scripts\subscriptions.adherencesites.js" />
     <Content Include="Areas\Anywhere\Content\Scripts\resources.js" />
     <Content Include="Areas\Anywhere\Content\Scripts\permissions.js" />
-    <Content Include="Areas\Anywhere\Content\Scripts\syncToggleQuerier.js" />
-    <Content Include="Areas\Anywhere\Content\Scripts\toggleQuerier.js" />
     <Content Include="Areas\Anywhere\Content\Scripts\views\diagnosis\view.js" />
     <Content Include="Areas\Anywhere\Content\Scripts\views\diagnosis\vm.js" />
     <Content Include="Areas\Anywhere\Content\Scripts\views\diagnosis\vm_test.js" />

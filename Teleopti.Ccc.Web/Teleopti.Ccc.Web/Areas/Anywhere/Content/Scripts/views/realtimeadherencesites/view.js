@@ -7,7 +7,6 @@
 		'errorview',
 		'ajax',
 		'resources',
-		'syncToggleQuerier',
 		'polling/adherencesites'
 ], function (
 		ko,
@@ -18,18 +17,15 @@
 		errorview,
 		ajax,
 		resources,
-		syncToggleQuerier,
 		poller
 	) {
 
 	var viewModel;
-	var toggledStateGetter = function() {
-		var subscription;
-		syncToggleQuerier('RTA_NoBroker_31237', {
-			enabled: function () { subscription = poller; },
-			disabled: function () { subscription = subscriptions; }
-		});
-		return subscription;
+
+	var toggledStateGetter = function () {
+		if (resources.RTA_NoBroker_31237)
+			return poller;
+		return subscriptions;
 	}
 	return {
 		initialize: function(options) {

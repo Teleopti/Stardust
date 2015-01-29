@@ -7,7 +7,6 @@
 	'ajax',
 	'resources',
 	'amplify',
-	'toggleQuerier',
 	'permissions'
 ], function (
 	ko,
@@ -18,7 +17,6 @@
 	ajax,
 	resources,
 	amplify,
-	toggleQuerier,
 	permissions
 ) {
 	var viewModel;
@@ -80,31 +78,27 @@
 
 			if (options.id === 'MultipleTeams') {
 				subscriptions.unsubscribeAdherence();
-				toggleQuerier('RTA_ViewAgentsForMultipleTeams_28967', {
-					enabled: function () {
-						var teams = amplify.store('MultipleTeams');
-						for (var i = 0; i < teams.length; i++) {
-							populateViewModel(teams[i]);
-						}
+				if (resources.RTA_ViewAgentsForMultipleTeams_28967) {
+					var teams = amplify.store('MultipleTeams');
+					for (var i = 0; i < teams.length; i++) {
+						populateViewModel(teams[i]);
 					}
-				});
+				}
 			} else if (options.id === 'MultipleSites') {
-				toggleQuerier('RTA_ViewAgentsForMultipleTeams_28967', {
-					enabled: function () {
-						var sites = amplify.store('MultipleSites');
-						for (var site = 0; site < sites.length; site++) {
-							ajax.ajax({
-								url: "Teams/ForSite?siteId=" + sites[site],
-								success: function (data) {
-									for (var teamInSite = 0; teamInSite < data.length; teamInSite++) {
-										populateViewModel(data[teamInSite].Id);
-									}
+				if (resources.RTA_ViewAgentsForMultipleTeams_28967) {
+					var sites = amplify.store('MultipleSites');
+					for (var site = 0; site < sites.length; site++) {
+						ajax.ajax({
+							url: "Teams/ForSite?siteId=" + sites[site],
+							success: function (data) {
+								for (var teamInSite = 0; teamInSite < data.length; teamInSite++) {
+									populateViewModel(data[teamInSite].Id);
 								}
-							});
-						}
-
+							}
+						});
 					}
-				});
+
+				}
 			} else {
 				populateViewModel(options.id);
 			}

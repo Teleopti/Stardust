@@ -5,9 +5,8 @@
 		'views/realtimeadherenceteams/vm',
 		'subscriptions.adherenceteams',
 		'ajax',
-		'toggleQuerier',
-		'syncToggleQuerier',
-		'polling/adherenceteams'
+		'polling/adherenceteams',
+		'resources'
 ], function (
 		ko,
 		justGageBinding,
@@ -15,19 +14,15 @@
 		realTimeAdherenceViewModel,
 		broker,
 		ajax,
-		toggleQuerier,
-		syncToggleQuerier,
-		poller
+		poller,
+		resources
 	) {
 	var viewModel;
 
-	var toggledStateGetter = function() {
-		var subscription;
-		syncToggleQuerier('RTA_NoBroker_31237', {
-			enabled: function() { subscription = poller; },
-			disabled: function() { subscription = broker; }
-		});
-		return subscription;
+	var toggledStateGetter = function () {
+		if (resources.RTA_NoBroker_31237)
+			return poller;
+		return broker;
 	}
 
 	return {
@@ -73,25 +68,27 @@
 				}
 			});
 
-			var checkFeature = function() {
-				toggleQuerier('RTA_RtaLastStatesOverview_27789', { enabled: loadLastStates('Teams/GetOutOfAdherence') });
-				toggleQuerier('RTA_NoBroker_31237', { enabled: loadLastStates('Teams/GetOutOfAdherenceLite') });
+			var checkFeature = function () {
+				if (resources.RTA_RtaLastStatesOverview_27789)
+					loadLastStates('Teams/GetOutOfAdherence');
+				if (resources.RTA_NoBroker_31237)
+					loadLastStates('Teams/GetOutOfAdherenceLite');
 			}
 			
 			var checkDetailFeature = function () {
-				toggleQuerier('RTA_DrilldownToAllAgentsInOneTeam_25234', {
-					enabled: function() {
-						for (var i = 0; i < viewModel.teams().length; i++) {
-							(function(team) {
-								team.canOpenTeam(true);
-							})(viewModel.teams()[i]);
-						}
+				if (resources.RTA_DrilldownToAllAgentsInOneTeam_25234) {
+					for (var i = 0; i < viewModel.teams().length; i++) {
+						(function(team) {
+							team.canOpenTeam(true);
+						})(viewModel.teams()[i]);
 					}
-				});
+				}
 			};
 
 			var checkAgentsForMultipleTeamsFeature = function () {
-				toggleQuerier('RTA_ViewAgentsForMultipleTeams_28967', { enabled: function () { viewModel.agentStatesForMultipleTeams(true); } });
+				if (resources.RTA_ViewAgentsForMultipleTeams_28967) {
+					viewModel.agentStatesForMultipleTeams(true);
+				}
 			}
 
 			var loadLastStates = function (url) {

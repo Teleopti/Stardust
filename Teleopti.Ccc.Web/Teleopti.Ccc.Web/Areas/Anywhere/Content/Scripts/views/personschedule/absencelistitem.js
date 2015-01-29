@@ -6,8 +6,7 @@ define([
 		'ajax',
 		'guidgenerator',
 		'shared/timezone-current',
-		'notifications',
-		'toggleQuerier'
+		'notifications'
 	], function(
 		ko,
 		moment,
@@ -16,8 +15,7 @@ define([
 		ajax,
 		guidgenerator,
 		timezoneCurrent,
-		notificationsViewModel,
-		toggleQuerier
+		notificationsViewModel
 	) {
 
 		return function(data) {
@@ -46,9 +44,7 @@ define([
 			this.Removing = ko.observable(false);
 
 			this.IsBackToWorkFormVisible = ko.observable(false);
-			this.IsBackToWorkFormFeatureEnabled = ko.observable(false);
-
-			toggleQuerier('MyTeam_AbsenceBackToWork_31478', { enabled: function () { self.IsBackToWorkFormFeatureEnabled(true); } });
+			this.IsBackToWorkFormFeatureEnabled = ko.observable(resources.MyTeam_AbsenceBackToWork_31478);
 
 			this.ScheduleDate = ko.observable(moment(data.StartTime).startOf('day'));
 			this.ianaTimeZoneOther = ko.observable(data.IanaTimeZoneOther);

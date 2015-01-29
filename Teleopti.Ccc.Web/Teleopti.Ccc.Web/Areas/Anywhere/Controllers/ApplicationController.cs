@@ -162,6 +162,16 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Controllers
 					FirstDayOfWeek = (int)CultureInfo.CurrentCulture.DateTimeFormat.FirstDayOfWeek,
 					ShowMeridian = CultureInfo.CurrentCulture.DateTimeFormat.ShortTimePattern.Contains("t"),
 
+					MyTeam_Reports_31070 = _toggles.IsEnabled(Toggles.MyTeam_Reports_31070),
+					MyTeam_AbsenceBackToWork_31478 = _toggles.IsEnabled(Toggles.MyTeam_AbsenceBackToWork_31478),
+					MyTeam_MoveActivity_25206 = _toggles.IsEnabled(Toggles.MyTeam_MoveActivity_25206),
+					MyTeam_StaffingMetrics_25562 = _toggles.IsEnabled(Toggles.MyTeam_StaffingMetrics_25562),
+
+					RTA_ViewAgentsForMultipleTeams_28967 = _toggles.IsEnabled(Toggles.RTA_ViewAgentsForMultipleTeams_28967),
+					RTA_RtaLastStatesOverview_27789 = _toggles.IsEnabled(Toggles.RTA_RtaLastStatesOverview_27789),
+					RTA_MonitorMultipleBusinessUnits_28348 = _toggles.IsEnabled(Toggles.RTA_MonitorMultipleBusinessUnits_28348),
+					RTA_DrilldownToAllAgentsInOneTeam_25234 = _toggles.IsEnabled(Toggles.RTA_DrilldownToAllAgentsInOneTeam_25234),
+
 					RTA_ChangeScheduleInAgentStateView_29934 = _toggles.IsEnabled(Toggles.RTA_ChangeScheduleInAgentStateView_29934),
 					RTA_SeePercentageAdherenceForOneAgent_30783 = _toggles.IsEnabled(Toggles.RTA_SeePercentageAdherenceForOneAgent_30783),
 					RTA_SeeAdherenceDetailsForOneAgent_31285 = _toggles.IsEnabled(Toggles.RTA_SeeAdherenceDetailsForOneAgent_31285),

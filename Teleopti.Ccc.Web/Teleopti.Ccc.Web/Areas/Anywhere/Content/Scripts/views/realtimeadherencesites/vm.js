@@ -6,7 +6,6 @@
 		'amplify',
 		'navigation',
 		'ajax',
-		'toggleQuerier',
 		'subscriptions.adherencesites'
 ],
 	function (
@@ -17,7 +16,6 @@
 		amplify,
 		navigation,
 		ajax,
-		toggleQuerier,
 		subscriptions
 	) {
 		return function (toggledSubscription) {
@@ -101,10 +99,10 @@
 			};
 
 
-			var checkFeature = function() {
-				toggleQuerier('RTA_RtaLastStatesOverview_27789', { enabled: loadLastStates });
+			var checkFeature = function () {
+				if (resources.RTA_RtaLastStatesOverview_27789)
+					loadLastStates();
 			};
-
 
 			var loadLastStates = function () {
 				for (var i = 0; i < that.sites().length; i++) {
@@ -119,12 +117,14 @@
 				}
 			};
 
-			var checkAgentsForMultipleTeamsFeature = function() {
-				toggleQuerier('RTA_ViewAgentsForMultipleTeams_28967', { enabled: function() { that.agentStatesForMultipleSites(true); } });
+			var checkAgentsForMultipleTeamsFeature = function () {
+				if (resources.RTA_ViewAgentsForMultipleTeams_28967)
+					that.agentStatesForMultipleSites(true);
 			};
 
 			var checkBusinessUnitsFeature = function () {
-				toggleQuerier('RTA_MonitorMultipleBusinessUnits_28348', {enabled: function () { that.monitorMultipleBusinessUnits(true); }});
+				if (resources.RTA_MonitorMultipleBusinessUnits_28348)
+					that.monitorMultipleBusinessUnits(true);
 			};
 
 			return that;
