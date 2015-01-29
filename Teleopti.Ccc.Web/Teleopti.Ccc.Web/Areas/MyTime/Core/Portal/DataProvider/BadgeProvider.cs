@@ -62,21 +62,9 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Portal.DataProvider
 			var badges = new List<IAgentBadgeWithRank>();
 			if (_toggleManager.IsEnabled(Toggles.Portal_DifferentiateBadgeSettingForAgents_31318))
 			{
-				IGamificationSetting setting = _teamGamificationSetting.GamificationSetting;
-				if (setting.AdherenceBadgeEnabled)
-				{
-					retrieveBadgeWithRank(person, BadgeType.Adherence, badges);
-				}
-
-				if (setting.AHTBadgeEnabled)
-				{
-					retrieveBadgeWithRank(person, BadgeType.AverageHandlingTime, badges);
-				}
-
-				if (setting.AnsweredCallsBadgeEnabled)
-				{
-					retrieveBadgeWithRank(person, BadgeType.AnsweredCalls, badges);
-				}
+				retrieveBadgeWithRank(person, BadgeType.Adherence, badges);
+				retrieveBadgeWithRank(person, BadgeType.AverageHandlingTime, badges);
+				retrieveBadgeWithRank(person, BadgeType.AnsweredCalls, badges);
 			}
 			else
 			{
@@ -95,7 +83,6 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Portal.DataProvider
 					retrieveBadgeWithRank(person, BadgeType.AnsweredCalls, badges);
 				}
 			}
-			
 
 			var badgeVmList = badges.Select(x => new BadgeViewModel
 			{
@@ -117,30 +104,14 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Portal.DataProvider
 			int silverToBronzeBadgeRate;
 			int goldToSilverBadgeRate;
 
-			if (_toggleManager.IsEnabled(Toggles.Portal_DifferentiateBadgeSettingForAgents_31318))
+			if (_toggleManager.IsEnabled(Toggles.Portal_DifferentiateBadgeSettingForAgents_31318) && _teamGamificationSetting != null)
 			{
 				IGamificationSetting setting = _teamGamificationSetting.GamificationSetting;
-
-				if (setting.AdherenceBadgeEnabled)
-				{
-					retrieveBadgeWithoutRank(person, BadgeType.Adherence, badges);
-				}
-
-				if (setting.AHTBadgeEnabled)
-				{
-					retrieveBadgeWithoutRank(person, BadgeType.AverageHandlingTime, badges);
-				}
-
-				if (setting.AnsweredCallsBadgeEnabled)
-				{
-					retrieveBadgeWithoutRank(person, BadgeType.AnsweredCalls, badges);
-				}
-				silverToBronzeBadgeRate = setting.GamificationSettingRuleSet == GamificationSettingRuleSet.RuleWithRatioConvertor
-					? setting.SilverToBronzeBadgeRate
-					: new GamificationSetting(" ").SilverToBronzeBadgeRate;
-				goldToSilverBadgeRate = setting.GamificationSettingRuleSet == GamificationSettingRuleSet.RuleWithRatioConvertor
-					? setting.GoldToSilverBadgeRate
-					: new GamificationSetting(" ").GoldToSilverBadgeRate;
+				retrieveBadgeWithoutRank(person, BadgeType.Adherence, badges);
+				retrieveBadgeWithoutRank(person, BadgeType.AverageHandlingTime, badges);
+				retrieveBadgeWithoutRank(person, BadgeType.AnsweredCalls, badges);
+				silverToBronzeBadgeRate = setting.SilverToBronzeBadgeRate;
+				goldToSilverBadgeRate = setting.GoldToSilverBadgeRate;
 			}
 			else
 			{
@@ -161,7 +132,6 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Portal.DataProvider
 				silverToBronzeBadgeRate = _settings.SilverToBronzeBadgeRate;
 				goldToSilverBadgeRate = _settings.GoldToSilverBadgeRate;
 			}
-			
 
 			var badgeVmList = badges.Select(x => new BadgeViewModel
 			{

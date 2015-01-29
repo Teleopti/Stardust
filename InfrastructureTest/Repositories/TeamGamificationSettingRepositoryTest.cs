@@ -69,7 +69,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			Assert.AreEqual(1, loadedGamificationSettings.Count());
 		}
 		[Test]
-		public void VerifyCanLoadMyTeamGamificationSetting()
+		public void VerifyCanLoadTeamGamificationSettingByTeam()
 		{
 			_teamGamificationSetting = new TeamGamificationSetting { Team = _team, GamificationSetting = _gamificationSetting };
 			PersistAndRemoveFromUnitOfWork(_teamGamificationSetting);

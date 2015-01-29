@@ -88,15 +88,19 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Portal.ViewModelFactory
 			var licenseActivator = _licenseActivatorProvider.Current();
 			var customerName = licenseActivator == null ? string.Empty : licenseActivator.CustomerName;
 
-			var badgeToggleEnabled = _toggleManager.IsEnabled(Toggles.MyTimeWeb_AgentBadge_28913);
+			var badgeToggleEnabled = _toggleManager.IsEnabled(Toggles.MyTimeWeb_AgentBadge_28913)||_toggleManager.IsEnabled(Toggles.Portal_DifferentiateBadgeSettingForAgents_31318);
 			var hasBadgePermission =
 				_permissionProvider.HasApplicationFunctionPermission(DefinedRaptorApplicationFunctionPaths.ViewBadge);
 
 			bool badgeFeatureEnabled;
 			if (_toggleManager.IsEnabled(Toggles.Portal_DifferentiateBadgeSettingForAgents_31318))
 			{
-				var teamSetting = _teamGamificationSettingRepo.FindTeamGamificationSettingsByTeam(_loggedOnUser.CurrentUser().MyTeam( DateOnly.Today ));
-				badgeFeatureEnabled = (teamSetting.Team != null);
+				ITeamGamificationSetting teamSetting = null;
+				if (_loggedOnUser.CurrentUser().MyTeam(DateOnly.Today) != null)
+				{
+					teamSetting = _teamGamificationSettingRepo.FindTeamGamificationSettingsByTeam(_loggedOnUser.CurrentUser().MyTeam(DateOnly.Today));
+				}
+				badgeFeatureEnabled = (teamSetting != null);
 			}
 			else
 			{

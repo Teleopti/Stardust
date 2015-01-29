@@ -183,11 +183,8 @@ namespace Teleopti.Ccc.WebTest.Core.Authentication.DataProvider
 				Team = myTeam,
 				GamificationSetting = new GamificationSetting("setting")
 				{
-					AdherenceBadgeEnabled = true,
-					AnsweredCallsBadgeEnabled = true,
-					AHTBadgeEnabled = true,
 					SilverToBronzeBadgeRate = 5,
-					GoldToSilverBadgeRate = 2
+					GoldToSilverBadgeRate = 5
 				}
 			});
 
@@ -222,12 +219,8 @@ namespace Teleopti.Ccc.WebTest.Core.Authentication.DataProvider
 				Team = myTeam,
 				GamificationSetting = new GamificationSetting("setting")
 				{
-					AdherenceBadgeEnabled = true,
-					AnsweredCallsBadgeEnabled = true,
-					AHTBadgeEnabled = true,
 					SilverToBronzeBadgeRate = 5,
-					GoldToSilverBadgeRate = 2,
-					GamificationSettingRuleSet = GamificationSettingRuleSet.RuleWithDifferentThreshold
+					GoldToSilverBadgeRate = 5,
 				}
 			});
 
