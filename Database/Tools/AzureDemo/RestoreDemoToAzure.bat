@@ -82,7 +82,7 @@ ECHO Patching source (local) databases ...
 ECHO.
 "%DBMANAGER%" -S. -D%SRCCCC7% -OTeleoptiCCC7 -E -T 
 "%DBMANAGER%" -S. -D%SRCANALYTICS% -OTeleoptiAnalytics -E -T 
-"%DBMANAGER%" -S. -D%SRCAGG% -OTeleoptiAnalytics -E -T 
+"%DBMANAGER%" -S. -D%SRCAGG% -OTeleoptiCCCAgg -E -T 
 "%SECURITY%"  -DS. -DD%SRCCCC7% -EE 
 "%SECURITY%"  -DS. -DD%SRCANALYTICS% -CD%SRCAGG% -EE 
 
