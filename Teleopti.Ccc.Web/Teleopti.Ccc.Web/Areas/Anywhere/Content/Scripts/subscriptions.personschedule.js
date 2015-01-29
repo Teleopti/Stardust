@@ -1,18 +1,16 @@
 define([
 				'jquery',
 				'messagebroker',
-				'signalrhubs',
+				'signalrhubs.started',
 				'helpers',
 				'errorview'
 ], function (
 			$,
 			messagebroker,
-			signalRHubs,
+			started,
 			helpers,
 			errorview
 	) {
-
-	var startPromise;
 
 	// why is signalr eating my exceptions?
 	var logException = function (func) {
@@ -36,11 +34,9 @@ define([
 	var unsubscribePersonSchedule = function () {
 		if (!personScheduleSubscription)
 			return;
-		startPromise.done(function () {
-			incomingPersonSchedule = null;
-			messagebroker.unsubscribe(personScheduleSubscription);
-			personScheduleSubscription = null;
-		});
+		incomingPersonSchedule = null;
+		messagebroker.unsubscribe(personScheduleSubscription);
+		personScheduleSubscription = null;
 	};
 
 	var isMatchingDates = function (date, notificationStartDate, notificationEndDate) {
@@ -54,15 +50,10 @@ define([
 	};
 
 	return {
-		start: function () {
-			startPromise = messagebroker.start();
-			return startPromise;
-		},
-
 		subscribePersonSchedule: function (buId, personId, date, callback) {
 			unsubscribePersonSchedule();
 			incomingPersonSchedule = callback;
-			startPromise.done(function () {
+			started.done(function () {
 				personScheduleHub.connection.qs = { "BusinessUnitId": buId };
 				personScheduleHub.server.personSchedule(personId, date);
 

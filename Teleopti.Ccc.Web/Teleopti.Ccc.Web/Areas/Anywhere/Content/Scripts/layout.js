@@ -10,14 +10,14 @@ define([
 		'moment',
 		'momentDatepickerKo',
 		'menu',
-		'subscriptions',
 		'ajax',
 		'errorview',
 		'resources',
 		'subscriptions.trackingmessages',
 		'notifications',
-		'shared/timezone-current'
-], function (
+		'shared/timezone-current',
+		'signalrhubs'
+],	function (
 		layoutTemplate,
 		menuTemplate,
 		errorTemplate,
@@ -28,13 +28,13 @@ define([
 		moment,
 		datepicker,
 		menuViewModel,
-		subscriptions,
 		ajax,
 		errorview,
 		resources,
 		trackingmessages,
 		notificationsViewModel,
-		timezoneCurrent) {
+		timezoneCurrent,
+		signalrhubs) {
 
 	var currentView;
 	var defaultView = 'teamschedule';
@@ -245,10 +245,11 @@ define([
 	}
 	
 	function _initSignalR() {
-		var promise = subscriptions.start();
-		promise.fail(function () {
-			_displayError("SignalR failed to start");
-		});
+		signalrhubs
+			.start()
+			.fail(function() {
+				_displayError("SignalR failed to start");
+			});
 	}
 
 	var initAll = function() {

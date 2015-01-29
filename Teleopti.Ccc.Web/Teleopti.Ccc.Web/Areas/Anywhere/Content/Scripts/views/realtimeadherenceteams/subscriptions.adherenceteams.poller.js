@@ -21,10 +21,6 @@ define([
 	}
 
 	return {
-		start: function () {
-			return $.Deferred().resolve();
-		},
-
 		subscribeAdherence: function (callback, businessUnitId, siteId, subscriptionDone) {
 			unsubscribeAdherence();
 

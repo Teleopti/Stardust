@@ -29,10 +29,6 @@ define([
 	}
 
 	return {
-		start: function () {
-			return $.Deferred().resolve();
-		},
-
 		subscribeAdherence: function (callback, businessUnitId, teamId, subscriptionDone) {
 			var agentPoller = setInterval(function () {
 				ajax.ajax({

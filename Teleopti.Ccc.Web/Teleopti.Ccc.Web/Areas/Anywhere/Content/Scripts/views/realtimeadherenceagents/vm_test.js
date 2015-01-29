@@ -554,7 +554,6 @@
 					vm.fillAgents([{ PersonId: "guid1" }]);
 
 					vm.SelectAgent("guid1");
-					console.log(vm.getSelectedAgentState());
 					refute(vm.getSelectedAgentState()[0].DisplayAdherencePercentage());
 				},
 

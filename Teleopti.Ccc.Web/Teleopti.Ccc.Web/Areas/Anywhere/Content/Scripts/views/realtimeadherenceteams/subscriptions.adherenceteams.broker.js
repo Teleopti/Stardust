@@ -6,28 +6,19 @@ define([
 			messagebroker
 	) {
 
-	var startPromise;
-
 	var teamAdherenceSubscription = null;
 
 	var unsubscribeAdherence = function () {
 		if (!teamAdherenceSubscription)
 			return;
-		startPromise.done(function () {
-			messagebroker.unsubscribe(teamAdherenceSubscription);
-			teamAdherenceSubscription = null;
-		});
+		messagebroker.unsubscribe(teamAdherenceSubscription);
+		teamAdherenceSubscription = null;
 	};
 
 	return {
-		start: function () {
-			startPromise = messagebroker.start();
-			return startPromise;
-		},
-
 		subscribeAdherence: function (callback, businessUnitId, siteId, subscriptionDone) {
 			unsubscribeAdherence();
-			startPromise.done(function () {
+			messagebroker.started.done(function () {
 				teamAdherenceSubscription = messagebroker.subscribe({
 					domainType: 'TeamAdherenceMessage',
 					businessUnitId: businessUnitId,

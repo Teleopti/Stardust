@@ -1,12 +1,10 @@
 define([
 	'jquery',
-	'signalrhubs'
+	'signalrhubs.started'
 ], function (
 	$,
-	signalrHubs
+	started
 	) {
-
-	var startPromise;
 
 	var subscriptions = [];
 	var hub = $.connection.MessageBrokerHub;
@@ -18,11 +16,6 @@ define([
 				value.callback(notification);
 			}
 		});
-	};
-
-	var start = function () {
-		startPromise = signalrHubs.start();
-		return startPromise;
 	};
 
 	var subscribe = function (options) {
@@ -40,7 +33,7 @@ define([
 		subscription.callback = options.callback;
 		subscription.promise = deferred.promise();
 
-		startPromise.done(function () {
+		started.done(function () {
 			hub.server
 		            .addSubscription(subscription)
 		            .done(function (route) {
@@ -62,7 +55,7 @@ define([
 	};
 
 	return {
-		start: start,
+		started: started,
 		subscribe: subscribe,
 		unsubscribe: unsubscribe
 	};

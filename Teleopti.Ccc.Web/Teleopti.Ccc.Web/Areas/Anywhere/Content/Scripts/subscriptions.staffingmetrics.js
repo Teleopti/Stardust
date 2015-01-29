@@ -1,27 +1,21 @@
 define([
 				'jquery',
 				'messagebroker',
-				'signalrhubs',
 				'helpers',
 				'errorview'
 ], function (
 			$,
 			messagebroker,
-			signalRHubs,
 			helpers
 	) {
-
-	var startPromise;
 
 	var dailyStaffingMetricsSubscription = null;
 
 	var unsubscribeDailyStaffingMetrics = function () {
 		if (!dailyStaffingMetricsSubscription)
 			return;
-		startPromise.done(function () {
-			messagebroker.unsubscribe(dailyStaffingMetricsSubscription);
-			dailyStaffingMetricsSubscription = null;
-		});
+		messagebroker.unsubscribe(dailyStaffingMetricsSubscription);
+		dailyStaffingMetricsSubscription = null;
 	};
 
 	var loadDailyStaffingMetrics = function (buid, date, skillId, callback) {
@@ -51,14 +45,9 @@ define([
 	};
 
 	return {
-		start: function () {
-			startPromise = messagebroker.start();
-			return startPromise;
-		},
-
 		subscribeDailyStaffingMetrics: function (buid, date, skillId, callback) {
 			unsubscribeDailyStaffingMetrics();
-			startPromise.done(function () {
+			messagebroker.started.done(function () {
 				loadDailyStaffingMetrics(buid, date, skillId, callback);
 
 				dailyStaffingMetricsSubscription = messagebroker.subscribe({

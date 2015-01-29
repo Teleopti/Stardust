@@ -1,13 +1,24 @@
 define(
     [
-        'signalrrr!r',
 		'text!templates/error.html',
-        'errorview'
+        'errorview',
+        'signalrhubs.started',
+
+		'messagebroker',
+		'subscriptions.groupschedule',
+		'subscriptions.personschedule',
+		//'subscriptions.staffingmetrics',
+		//'views/realtimeadherenceteams/subscriptions.adherenceteams',
+		//'views/realtimeadherencesites/subscriptions.adherencesites',
+		//'views/realtimeadherenceagents/subscriptions.adherenceagents',
+		//'subscriptions.trackingmessages'
+
     ], function (
-        signalRHubs,
         errorTemplate,
-        errorview
+        errorview,
+		started
     ) {
+
     	var hubErrorHandler = function (message) {
     		if (message.status === 403)
     			window.location.href = "";
@@ -15,12 +26,17 @@ define(
     			errorview.display(message);
     		}
     	};
+
     	return {
     		start: function () {
     			$.connection.hub.url = 'signalr';
     			$.connection.hub.error(hubErrorHandler);
-    			return $.connection.hub.start();
-    		}
+			    var promise = $.connection.hub.start();
+			    promise.done(function () {
+				    started.resolve();
+			    });
+			    return promise;
+		    }
     	};
 
     });
