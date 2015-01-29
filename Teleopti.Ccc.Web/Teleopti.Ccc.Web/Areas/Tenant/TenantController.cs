@@ -16,20 +16,20 @@ namespace Teleopti.Ccc.Web.Areas.Tenant
 			_identityAuthentication = identityAuthentication;
 		}
 
-		[HttpGet]
+		[HttpPost]
 		[TenantUnitOfWork]
 		public virtual JsonResult ApplicationLogon(string userName, string password)
 		{
 			var res = _applicationAuthentication.Logon(userName, password);
-			return Json(res, JsonRequestBehavior.AllowGet);
+			return Json(res);
 		}
 
-		[HttpGet]
+		[HttpPost]
 		[TenantUnitOfWork]
 		public virtual JsonResult IdentityLogon(string identity)
 		{
 			var res = _identityAuthentication.Logon(identity);
-			return Json(res, JsonRequestBehavior.AllowGet);
+			return Json(res);
 		}
 	}
 }

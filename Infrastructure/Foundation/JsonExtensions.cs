@@ -9,8 +9,30 @@ namespace Teleopti.Ccc.Infrastructure.Foundation
 	{
 		public static T ExecuteJsonRequest<T>(this UriBuilder uriBuilder)
 		{
-			var request = (HttpWebRequest)HttpWebRequest.Create(uriBuilder.ToString());
+			var request = (HttpWebRequest)HttpWebRequest.Create(uriBuilder.Uri);
 			request.AllowAutoRedirect = false;
+
+			return responseToJson<T>(request);
+		}
+
+		public static T PostRequest<T>(this UriBuilder uriBuilder, string post)
+		{
+			var request = (HttpWebRequest)WebRequest.Create(uriBuilder.Uri);
+			request.AllowAutoRedirect = false;
+			request.Method = "POST";
+			request.ContentType = "application/x-www-form-urlencoded";
+			request.ContentLength = post.Length;
+
+			using (var requestWriter = new StreamWriter(request.GetRequestStream()))
+			{
+				requestWriter.Write(post);
+			}
+
+			return responseToJson<T>(request);
+		}
+
+		private static T responseToJson<T>(WebRequest request)
+		{
 			using (var response = request.GetResponse())
 			{
 				using (var reader = new StreamReader(response.GetResponseStream()))

@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Web;
 using Teleopti.Ccc.Domain.Security.MultiTenancyAuthentication;
 using Teleopti.Ccc.Infrastructure.Foundation;
 
@@ -18,20 +17,17 @@ namespace Teleopti.Ccc.Infrastructure.MultiTenancy
 		public AuthenticationQueryResult TryLogon(string userName, string password)
 		{
 			var uriBuilder = new UriBuilder(_pathToTennantServer + "Tenant/ApplicationLogon");
-			var query = HttpUtility.ParseQueryString(uriBuilder.Query);
-			query["username"] = userName;
-			query["password"] = password;
-			uriBuilder.Query = query.ToString();
-			return uriBuilder.ExecuteJsonRequest<AuthenticationQueryResult>();
+			var post = string.Format("userName={0}&password={1}", userName, password);
+
+			return uriBuilder.PostRequest<AuthenticationQueryResult>(post);
 		}
 
 		public AuthenticationQueryResult TryIdentityLogon(string identity)
 		{
 			var uriBuilder = new UriBuilder(_pathToTennantServer + "Tenant/IdentityLogon");
-			var query = HttpUtility.ParseQueryString(uriBuilder.Query);
-			query["identity"] = identity;
-			uriBuilder.Query = query.ToString();
-			return uriBuilder.ExecuteJsonRequest<AuthenticationQueryResult>();
+			var post = string.Format("identity={0}", identity);
+
+			return uriBuilder.PostRequest<AuthenticationQueryResult>(post);
 		}
 	}
 }
