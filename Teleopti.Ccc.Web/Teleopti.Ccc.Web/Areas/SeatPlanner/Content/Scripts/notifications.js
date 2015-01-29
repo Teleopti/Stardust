@@ -57,10 +57,16 @@ define(
 			msg = match.OriginalMessage + " " + resources.PleaseRefreshThePageWithExclamation;
 			cssClazz = "alert alert-success alert-dismissible";
 		}
+		if (status === 6) {
+			msg = match.OriginalMessage + " " + resources.Completed;
+			cssClazz = "alert alert-success alert-dismissible";
+			setTimeout(function () {
+				removeNotification(trackId);
+			}, 4000);
+		}
 		match.Message(msg);
 		match.Css(cssClazz);
 	};
-
 
 	return {
 		UpdateNotification: updateNotification,
@@ -70,6 +76,10 @@ define(
 			setTimeout(function () {
 				updateNotification(trackId, 4);
 			}, 10000);
+		},
+
+		AddSimpleNotification: function (trackId, message) {
+			self.Notifications.push(new notificationViewModel(trackId, message));
 		},
 
 		RemoveNotification: removeNotification

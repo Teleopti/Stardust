@@ -55,19 +55,14 @@
 				data: requestData,
 				success: function (data, textStatus, jqXHR) {
 					//navigation.GoToTeamSchedule(businessUnitId, groupId, self.StartDate());
-					//Robtodo: Some kind of feedback for the user....
-
-
+					notificationsViewModel.UpdateNotification(trackId, 6);
 				},
 				statusCode500: function (jqXHR, textStatus, errorThrown) {
 					notificationsViewModel.UpdateNotification(trackId, 3);
 				}
-			}
-			);
+			});
+			notificationsViewModel.AddSimpleNotification(trackId, "Adding New Seat Plan...");
 
-			//RobTodo: String resources...
-			notificationsViewModel.AddNotification(trackId, "Adding New Seat Plan For Processing ....");
 		};
-
 	};
 });

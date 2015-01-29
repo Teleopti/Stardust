@@ -10,14 +10,14 @@ define([
 		'moment',
 		'momentDatepickerKo',
 		'menu',
-//		'subscriptions',
+		//'subscriptions',
 		'ajax',
 		'errorview',
 		'resources',
-	//	'subscriptions.trackingmessages',
-		//'notifications',
+		//'subscriptions.trackingmessages',
+		'notifications',
 		'shared/timezone-current',
-		'toggleQuerier'
+		//'toggleQuerier'
 ], function (
 		layoutTemplate,
 		menuTemplate,
@@ -34,9 +34,9 @@ define([
 		errorview,
 		resources,
 		//trackingmessages,
-		//notificationsViewModel,
-		timezoneCurrent,
-		toggleQuerier
+		notificationsViewModel,
+		timezoneCurrent
+		//toggleQuerier
 		) {
 
 	var currentView;
@@ -228,19 +228,19 @@ define([
 	//	}
 	//}
 
-	//function bindNotificationViewModel() {
-	//	ko.cleanNode($('#notification-container')[0]);
-	//	ko.applyBindings(notificationsViewModel, $('#notification-container')[0]);
-	//}
+	function bindNotificationViewModel() {
+		ko.cleanNode($('#notification-container')[0]);
+		ko.applyBindings(notificationsViewModel, $('#notification-container')[0]);
+	}
 
-	//function trackNotification(personId) {
-	//	trackingmessages.unsubscribeTrackingMessage();
-	//	trackingmessages.subscribeTrackingMessage(menu.CurrentBusinessUnitId(), personId, function (notification) {
-	//		var data = JSON.parse(notification.BinaryData);
-	//		notificationsViewModel.UpdateNotification(notification.DomainId, data.Status);
-	//	}, function () {
-	//	});
-	//}
+	function trackNotification(personId) {
+		trackingmessages.unsubscribeTrackingMessage();
+		trackingmessages.subscribeTrackingMessage(menu.CurrentBusinessUnitId(), personId, function (notification) {
+			var data = JSON.parse(notification.BinaryData);
+			notificationsViewModel.UpdateNotification(notification.DomainId, data.Status);
+		}, function () {
+		});
+	}
 
 	function _bindMenu() {
 		ko.cleanNode($('nav')[0]);
@@ -314,9 +314,9 @@ define([
 
 		menu.TeamScheduleVisible(responseData.IsTeamScheduleAvailable === true);
 
-		//if (!responseData.IsTeamScheduleAvailable && responseData.IsRealTimeAdherenceAvailable) {
-		//	defaultView = 'realtimeadherencesites';
-		//}
+		if (!responseData.IsTeamScheduleAvailable && responseData.IsRealTimeAdherenceAvailable) {
+			defaultView = 'realtimeadherencesites';
+		}
 
 		menu.UserName(responseData.UserName);
 		timezoneCurrent.SetIanaTimeZone(responseData.IanaTimeZone);
@@ -327,7 +327,7 @@ define([
 
 	$.when(businessUnitsDataLoadDeffered, navigationDataLoadDeferred).done(function () {
 		initAll();
-		//bindNotificationViewModel();
+		bindNotificationViewModel();
 		//trackNotification(trackingPersonId);
 	});
 

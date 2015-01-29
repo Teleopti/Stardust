@@ -54,24 +54,21 @@
 	</script>
 
 	<div class="row">
-		<div class="col-xs-12 col-sm-6">
-			<div class="panel panel-default treelist">
-				<div class="panel-heading">Choose Locations to Allocate Seating:</div>
-				<div class="panel-body">
-					<ul class="treeViewList" data-bind="template: {name: 'tree-node', if: GetTreeNodesForLocations, data: GetTreeNodesForLocations}"></ul>
-
-				</div>
-			</div>
-		</div>
-
-		<div class="col-xs-12 col-sm-6">
+		<div class="col-xs-12 col-sm-6 pull-left">
 			<div class="panel panel-default treelist">
 				<div class="panel-heading">Choose Teams to Seat:</div>
 				<div class="panel-body">
 					<ul class="treeViewList" data-bind="template: {name: 'tree-node', if: GetTreeNodesForBusinessHierarchy,  data: GetTreeNodesForBusinessHierarchy}"></ul>
-
 				</div>
-
+			</div>
+		</div>
+		
+		<div class="col-xs-12 col-sm-6 pull-right">
+			<div class="panel panel-default treelist">
+				<div class="panel-heading">Choose Locations to Allocate Seating:</div>
+				<div class="panel-body">
+					<ul class="treeViewList" data-bind="template: {name: 'tree-node', if: GetTreeNodesForLocations, data: GetTreeNodesForLocations}"></ul>
+				</div>
 			</div>
 		</div>
 	</div>

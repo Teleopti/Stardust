@@ -80,6 +80,7 @@ namespace Teleopti.Ccc.Web.Areas.SeatPlanner.Controllers
 					UserTexts.Resources.Cancel,
 					UserTexts.Resources.InvalidEndDate,
 					UserTexts.Resources.Remove,
+					UserTexts.Resources.Completed,
 					UserTexts.Resources.ConfirmRemoval,
 					UserTexts.Resources.Show,
 					UserTexts.Resources.WaitingThreeDots,
