@@ -51,7 +51,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Tenant.Core
 		}
 
 		[Test]
-		public void SuccessfulWindowsLogon()
+		public void SuccessfulIdentityLogon()
 		{
 			const string winUser= "userName";
 			Guid? personId = Guid.NewGuid();
@@ -63,18 +63,18 @@ namespace Teleopti.Ccc.WebTest.Areas.Tenant.Core
 			identityProvider.Expect(x => x.RetrieveToken()).Return(tokenIdentity);
 			var userAgent = Guid.NewGuid().ToString();
 
-			var target = new LoginAttemptModelFactoryForWeb(null, ipAdress, new HttpRequestUserAgentFake(userAgent));
+			var target = new LoginAttemptModelFactoryForWeb(identityProvider, ipAdress, new HttpRequestUserAgentFake(userAgent));
 			var result = target.Create(null, personId, true);
 			result.Client.Should().Be.EqualTo(userAgent);
 			result.ClientIp.Should().Be.EqualTo(ipadress);
 			result.PersonId.Should().Be.EqualTo(personId);
-			result.Provider.Should().Be.EqualTo(LoginAttemptModelFactoryForWeb.WindowsProvider);
+			result.Provider.Should().Be.EqualTo(LoginAttemptModelFactoryForWeb.IdentityProvider);
 			result.Result.Should().Be.EqualTo(LoginAttemptModelFactoryForWeb.SuccessfulLogon);
 			result.UserCredentials.Should().Be.EqualTo(winUser);
 		}
 
 		[Test]
-		public void FailedWindowsLogon()
+		public void FailedIdentityLogon()
 		{
 			const string winUser = "user Name";
 			Guid? personId = Guid.NewGuid();
@@ -86,12 +86,12 @@ namespace Teleopti.Ccc.WebTest.Areas.Tenant.Core
 			identityProvider.Expect(x => x.RetrieveToken()).Return(tokenIdentity);
 			var userAgent = Guid.NewGuid().ToString();
 
-			var target = new LoginAttemptModelFactoryForWeb(null, ipAdress, new HttpRequestUserAgentFake(userAgent));
+			var target = new LoginAttemptModelFactoryForWeb(identityProvider, ipAdress, new HttpRequestUserAgentFake(userAgent));
 			var result = target.Create(null, personId, false);
 			result.Client.Should().Be.EqualTo(userAgent);
 			result.ClientIp.Should().Be.EqualTo(ipadress);
 			result.PersonId.Should().Be.EqualTo(personId);
-			result.Provider.Should().Be.EqualTo(LoginAttemptModelFactoryForWeb.WindowsProvider);
+			result.Provider.Should().Be.EqualTo(LoginAttemptModelFactoryForWeb.IdentityProvider);
 			result.Result.Should().Be.EqualTo(LoginAttemptModelFactoryForWeb.FailedLogon);
 			result.UserCredentials.Should().Be.EqualTo(winUser);
 		}

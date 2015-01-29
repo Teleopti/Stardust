@@ -12,7 +12,7 @@ namespace Teleopti.Ccc.Web.Areas.Tenant.Core
 		private readonly IHttpRequestUserAgent _httpRequestUserAgent;
 
 		public const string ApplicationProvider = "Application";
-		public const string WindowsProvider = "Windows";
+		public const string IdentityProvider = "Identity";
 		public const string SuccessfulLogon = "LogonSuccess";
 		public const string FailedLogon = "LogonFailed";
 
@@ -32,7 +32,7 @@ namespace Teleopti.Ccc.Web.Areas.Tenant.Core
 			{
 				var winAccount = _tokenIdentityProvider.RetrieveToken();
 				userName = winAccount.UserIdentifier;
-				provider = WindowsProvider;
+				provider = IdentityProvider;
 			}
 			return new LoginAttemptModel
 			{
