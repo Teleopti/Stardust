@@ -1,5 +1,6 @@
 ﻿@OnlyRunIfEnabled('MyTimeWeb_OrganisationalBasedLeaderboard_31184')
-Feature: GamificationOrganisationalBasedLeaderboard
+@OnlyRunIfEnabled('Portal_DifferentiateBadgeSettingForAgents_31318')
+Feature: GamificationOrganisationalBasedLeaderboardWhen31318Enabled
 	The leaderboard can be based on site/team/everyone
 	As an agent
 	I want to view the leaderboard based on my data hierarchy
@@ -21,20 +22,25 @@ Background:
 		| Field      | Value      |
 		| Team       | Team green |
 		| Start Date | 2014-01-06 |
-	And  There is an agent badge settings with
-		| Field                 | Value |
-		| BadgeEnabled          | True  |
-		| AnsweredCallsUsed     | True  |
-		| AHTUsed               | True  |
-		| AdherenceUsed         | True  |
-		| Silver to bronze rate | 5     |
-		| Gold to silver rate   | 2     |
-	And I have badges with
+	And There is a gamification setting with
+		| Field                 | Value   |
+		| Description           | setting |
+		| AnsweredCallsUsed     | True    |
+		| AHTUsed               | True    |
+		| AdherenceUsed         | True    |
+		| Silver to bronze rate | 5       |
+		| Gold to silver rate   | 5       |
+	And There are teams applied with settings with
+		| Team        | GamificationSetting |
+		| Team red    | setting             |
+		| Team orange | setting             |
+		| Team green  | setting             |
+	And I have badges based on the specific setting with
 		| Badge type          | Bronze | Silver | Gold | LastCalculatedDate |
 		| AnsweredCalls       | 4      | 1      | 2    | 2014-08-11         |
 		| AverageHandlingTime | 2      | 1      | 1    | 2014-08-11         |
 		| Adherence           | 3      | 0      | 3    | 2014-08-11         |
-	And Pierre Baldi has badges with
+	And Pierre Baldi has badges based on the specific setting with
 		| Badge type          | Bronze | Silver | Gold | LastCalculatedDate |
 		| AnsweredCalls       | 4      | 1      | 2    | 2014-08-11         |
 		| AverageHandlingTime | 2      | 1      | 1    | 2014-08-11         |
@@ -89,7 +95,7 @@ Scenario: The rank is the same when the Gold/Silver/Bronze badge are totally the
 		| Field                 | Value |
 		| Access to Leaderboard | true  |
 		| Access to my site     | true  |
-	And Ashley Andeen has badges with
+	And Ashley Andeen has badges based on the specific setting with
 		| Badge type          | Bronze | Silver | Gold | LastCalculatedDate |
 		| AnsweredCalls       | 4      | 1      | 2    | 2014-08-11         |
 		| AverageHandlingTime | 2      | 1      | 1    | 2014-08-11         |

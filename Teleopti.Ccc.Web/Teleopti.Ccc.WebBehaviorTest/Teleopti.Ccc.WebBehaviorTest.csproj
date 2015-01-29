@@ -202,6 +202,9 @@
     <Compile Include="Core\Navigation\WaitUntilCompletelyLoaded.cs" />
     <Compile Include="Core\Navigation\WaitUntilReadyForInteraction.cs" />
     <Compile Include="Core\Navigation\WaitUntilSubscriptionIsCompleted.cs" />
+    <Compile Include="Data\Setups\Configurable\BadgeBasedOnSettingConfigurable.cs" />
+    <Compile Include="Data\Setups\Configurable\GamificationSettingConfigurable.cs" />
+    <Compile Include="Data\Setups\Configurable\TeamGamificationSettingConfigurable.cs" />
     <Compile Include="Data\Setups\Default\DefaultData.cs" />
     <Compile Include="Data\Setups\Default\DefaultLicense.cs" />
     <Compile Include="Data\Setups\Default\DefaultPersonThatCreatesDbData.cs" />
@@ -227,6 +230,11 @@
     </Compile>
     <Compile Include="Messages\NotifyAgents.feature.cs">
       <DependentUpon>NotifyAgents.feature</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="MyTime\GamificationOrganisationalBasedLeaderboardWhen31318Enabled.feature.cs">
+      <DependentUpon>GamificationOrganisationalBasedLeaderboardWhen31318Enabled.feature</DependentUpon>
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
     </Compile>
@@ -895,6 +903,10 @@
     <None Include="Messages\NotifyAgents.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>
       <LastGenOutput>NotifyAgents.feature.cs</LastGenOutput>
+    </None>
+    <None Include="MyTime\GamificationOrganisationalBasedLeaderboardWhen31318Enabled.feature">
+      <Generator>SpecFlowSingleFileGenerator</Generator>
+      <LastGenOutput>GamificationOrganisationalBasedLeaderboardWhen31318Enabled.feature.cs</LastGenOutput>
     </None>
     <None Include="MyTime\ShiftExchangeOfferForNonWorkingDaysFromWeekSchedule.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>

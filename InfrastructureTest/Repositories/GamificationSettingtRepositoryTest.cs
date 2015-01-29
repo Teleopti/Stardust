@@ -71,6 +71,16 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			Assert.AreEqual(1, loadedGamificationSettings.Count());
 		}
 
+		[Test]
+		public void ShouldFindGamificationSettingByName()
+		{
+			const string settingName = "MyGamificationSetting";
+			_gamificationSetting = new GamificationSetting(settingName);
+			PersistAndRemoveFromUnitOfWork(_gamificationSetting);
+			IList<IGamificationSetting> loadedGamificationSettings = new GamificationSettingRepository(UnitOfWork).FindSettingByDescriptionName(settingName).ToList();
+			Assert.AreEqual(settingName, loadedGamificationSettings.First().Description.Name);
+		}
+
 		/// <summary>
 		/// Verifies the aggregate graph properties.
 		/// </summary>

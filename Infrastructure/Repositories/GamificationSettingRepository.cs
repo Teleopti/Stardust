@@ -32,5 +32,14 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 
 			return retList;
 		}
+
+		public ICollection<IGamificationSetting> FindSettingByDescriptionName(string name)
+		{
+			ICollection<IGamificationSetting> retList = Session.CreateCriteria<GamificationSetting>()
+					   .Add(Restrictions.Eq("Description.Name", name))
+					  .SetResultTransformer(Transformers.DistinctRootEntity)
+					  .List<IGamificationSetting>();
+			return retList;
+		}
 	}
 }

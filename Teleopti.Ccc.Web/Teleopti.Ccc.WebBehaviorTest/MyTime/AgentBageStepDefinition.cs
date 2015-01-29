@@ -2,6 +2,7 @@
 using TechTalk.SpecFlow;
 using TechTalk.SpecFlow.Assist;
 using Teleopti.Ccc.Domain.Collection;
+using Teleopti.Ccc.TestCommon.TestData.Core;
 using Teleopti.Ccc.UserTexts;
 using Teleopti.Ccc.WebBehaviorTest.Core.BrowserDriver;
 using Teleopti.Ccc.WebBehaviorTest.Data;
@@ -25,6 +26,13 @@ namespace Teleopti.Ccc.WebBehaviorTest.MyTime
 		public void GivenHasBadgesWith(string userName, string hasHave, Table table)
 		{
 			var agentBadges = table.CreateSet<BadgeConfigurable>();
+			agentBadges.ForEach(a => DataMaker.Person(userName).Apply(a));
+		}
+
+		[Given(@"(.*) (has|have) badges based on the specific setting with")]
+		public void GivenHasBadgesBasedOnSettingWith(string userName, string hasHave, Table table)
+		{
+			var agentBadges = table.CreateSet<BadgeBasedOnSettingConfigurable>();
 			agentBadges.ForEach(a => DataMaker.Person(userName).Apply(a));
 		}
 
@@ -78,5 +86,22 @@ namespace Teleopti.Ccc.WebBehaviorTest.MyTime
 		{
 			Browser.Interactions.AssertNotExists(".user-name-link", "#BadgePanel");
 		}
+
+		[Given(@"There is a gamification setting with")]
+		public void GivenThereIsAGamificationSettingWith(Table table)
+		{
+			var gamificationSetting = table.CreateInstance<GamificationSettingConfigurable>();
+			DataMaker.Data().Apply(gamificationSetting);
+		}
+
+		[Given(@"There are teams applied with settings with")]
+		public void GivenThereAreTeamsAppliedWithSettingsWith(Table table)
+		{
+			var teamSettings = table.CreateSet<TeamGamificationSettingConfigurable>();
+			teamSettings.ForEach(ts => DataMaker.Data().Apply(ts));
+		}
+
 	}
+
+
 }
