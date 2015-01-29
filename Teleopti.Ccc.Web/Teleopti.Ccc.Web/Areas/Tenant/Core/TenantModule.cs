@@ -28,6 +28,7 @@ namespace Teleopti.Ccc.Web.Areas.Tenant.Core
 				.AsImplementedInterfaces()
 				.SingleInstance();
 			builder.RegisterType<TenantUnitOfWorkAspect>().SingleInstance();
+			builder.RegisterType<PersistLogonAttempt>().As<IPersistLogonAttempt>().SingleInstance();
 		}
 	}
 }

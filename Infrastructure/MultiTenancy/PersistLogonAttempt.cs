@@ -4,7 +4,7 @@ using Teleopti.Ccc.Infrastructure.MultiTenancy.NHibernate;
 
 namespace Teleopti.Ccc.Infrastructure.MultiTenancy
 {
-	public class PersistLogonAttempt
+	public class PersistLogonAttempt : IPersistLogonAttempt
 	{
 		private readonly ICurrentTenantSession _currentTenantSession;
 
@@ -13,9 +13,9 @@ namespace Teleopti.Ccc.Infrastructure.MultiTenancy
 			_currentTenantSession = currentTenantSession;
 		}
 
-		public int SaveLoginAttempt(LoginAttemptModel model)
+		public void SaveLoginAttempt(LoginAttemptModel model)
 		{
-			return _currentTenantSession.CurrentSession().CreateSQLQuery(
+			_currentTenantSession.CurrentSession().CreateSQLQuery(
 					"INSERT INTO [Auditing].[Security] (Result, UserCredentials, Provider, Client, ClientIp, PersonId) VALUES (:Result, :UserCredentials, :Provider, :Client, :ClientIp, :PersonId)")
 					.SetString("Result", model.Result)
 					.SetString("UserCredentials", model.UserCredentials)
