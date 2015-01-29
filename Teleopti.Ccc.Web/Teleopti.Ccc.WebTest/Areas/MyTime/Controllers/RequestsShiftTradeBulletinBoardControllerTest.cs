@@ -49,7 +49,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 	
 			var target = new RequestsShiftTradeBulletinBoardController(modelFactory, _timeFilterHelper);
 
-			var result = target.BulletinSchedulesWithTimeFilter(DateOnly.Today, Guid.NewGuid().ToString(), "", "", isDayOff, new Paging());
+			var result = target.BulletinSchedulesWithTimeFilter(DateOnly.Today, Guid.NewGuid().ToString(), "", "", isDayOff, false, new Paging());
 			result.Data.Should().Be.SameInstanceAs(model);
 		}
 	}

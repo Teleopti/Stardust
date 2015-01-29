@@ -42,7 +42,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 		[UnitOfWorkAction]
 		[HttpGet]
 		public JsonResult BulletinSchedulesWithTimeFilter(DateOnly selectedDate, string teamIds, string filteredStartTimes,
-			string filteredEndTimes, bool isDayOff, Paging paging)
+			string filteredEndTimes, bool isDayOff, bool isEmptyDay, Paging paging)
 		{
 			var allTeamIds = teamIds.Split(',').Select(teamId => new Guid(teamId)).ToList();
 			var data = new ShiftTradeScheduleViewModelDataForAllTeams
@@ -50,7 +50,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 				ShiftTradeDate = selectedDate,
 				TeamIds = allTeamIds,
 				Paging = paging,
-				TimeFilter = _timeFilterHelper.GetFilter(selectedDate, filteredStartTimes, filteredEndTimes, isDayOff)
+				TimeFilter = _timeFilterHelper.GetFilter(selectedDate, filteredStartTimes, filteredEndTimes, isDayOff, isEmptyDay)
 			};
 			return Json(_requestsShiftTradebulletinViewModelFactory.CreateShiftTradeBulletinViewModel(data),
 				JsonRequestBehavior.AllowGet);

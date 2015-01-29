@@ -345,7 +345,7 @@ Teleopti.MyTimeWeb.Request.PersonScheduleEditShiftTradeViewModel = function(laye
     };
 };
 
-Teleopti.MyTimeWeb.Request.PersonScheduleAddShiftTradeViewModel = function (layers, scheduleStartTime, scheduleEndTime, agentName, personId, isDayOff, offerId) {
+Teleopti.MyTimeWeb.Request.PersonScheduleAddShiftTradeViewModel = function (layers, scheduleStartTime, scheduleEndTime, agentName, personId, isDayOff, isEmptyDay, offerId) {
 	var self = this;
 
 	self.scheduleStartTime = ko.observable(scheduleStartTime);
@@ -355,6 +355,7 @@ Teleopti.MyTimeWeb.Request.PersonScheduleAddShiftTradeViewModel = function (laye
 	self.agentName = agentName;
 	self.layers = layers;
 	self.isDayOff = isDayOff;
+	self.isEmptyDay = isEmptyDay;
 	self.ShiftExchangeOfferId = offerId;
 };
 
@@ -509,13 +510,14 @@ Teleopti.MyTimeWeb.Request.PageView = function(pageIndex) {
 	self.isSelected = ko.observable(false);
 };
 
-Teleopti.MyTimeWeb.Request.FilterStartTimeView = function(text, start, end, checked, isDayOff) {
+Teleopti.MyTimeWeb.Request.FilterStartTimeView = function(text, start, end, checked, isDayOff, isEmptyDay) {
 	var self = this;
 	self.text = text;
 	self.start = start;
 	self.end = end;
 	self.isChecked = ko.observable(checked || false);
 	self.isDayOff = ko.observable(isDayOff || false);
+	self.isEmptyDay = ko.observable(isEmptyDay || false);
 };
 
 Teleopti.MyTimeWeb.Request.FilterEndTimeView = function (text, start, end, checked) {

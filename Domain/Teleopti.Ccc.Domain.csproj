@@ -2179,7 +2179,9 @@
     <EmbeddedResource Include="Budgeting\CustomShrinkage.hbm.xml" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Budgeting\BudgetDay.hbm.xml" />
+    <EmbeddedResource Include="Budgeting\BudgetDay.hbm.xml">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Budgeting\CustomEfficiencyShrinkage.hbm.xml" />

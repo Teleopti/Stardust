@@ -50,23 +50,10 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.DataProvider
 			return _scheduleDayReadModelFinder.ForPersons(date, personIdList, paging);
 		}
 
-		public IEnumerable<IPersonScheduleDayReadModel> RetrieveBulletinTradeSchedules(DateOnly date,
-			IEnumerable<IPerson> possibleShiftTradePersons, DateTimePeriod mySchedulePeriod, Paging paging)
-		{
-			IEnumerable<Guid> personIdList = (from person in possibleShiftTradePersons
-				select person.Id.Value).ToList();
-
-			return _scheduleDayReadModelFinder.ForBulletinPersons(date, personIdList, mySchedulePeriod, paging);
-		}
-		
-		public IEnumerable<IPersonScheduleDayReadModel> RetrieveBulletinTradeSchedulesWithTimeFilter(DateOnly date,
-			IEnumerable<IPerson> possibleShiftTradePersons, DateTimePeriod mySchedulePeriod, Paging paging, TimeFilterInfo filter)
-		{
-			IEnumerable<Guid> personIdList = (from person in possibleShiftTradePersons
-				select person.Id.Value).ToList();
-
-			return _scheduleDayReadModelFinder.ForBulletinPersonsWithTimeFilter(date, personIdList, mySchedulePeriod, paging, filter);
-		}
+		public IEnumerable<IPersonScheduleDayReadModel> RetrieveBulletinTradeSchedules(IEnumerable<string> shiftExchangeOfferIds , Paging paging)
+		{			
+			return _scheduleDayReadModelFinder.ForBulletinPersons(shiftExchangeOfferIds, paging);
+		}		
 
 		public IEnumerable<IPersonScheduleDayReadModel> RetrievePossibleTradeSchedulesWithFilteredTimes(DateOnly date, IEnumerable<IPerson> possibleShiftTradePersons, Paging paging,
 																						TimeFilterInfo filterInfo)

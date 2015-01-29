@@ -6,5 +6,6 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Models.Requests
 	{
 		public IEnumerable<string> DayOffShortNames { get; set; }
 		public IEnumerable<string> HourTexts { get; set; }
+		public string EmptyDayText { get; set; }
 	}
 }

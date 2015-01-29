@@ -5,8 +5,8 @@ namespace Teleopti.Ccc.Domain.AgentInfo.Requests
 {
 	public struct ScheduleDayFilterCriteria
 	{
-		private readonly ShiftExchangeLookingForDay _dayType;
-		private readonly DateTimePeriod? _shiftWithin;
+		private ShiftExchangeLookingForDay _dayType;
+		private DateTimePeriod? _shiftWithin;
 
 		public ScheduleDayFilterCriteria(ShiftExchangeLookingForDay dayType, DateTimePeriod? shiftWithin)
 		{
@@ -32,15 +32,18 @@ namespace Teleopti.Ccc.Domain.AgentInfo.Requests
 					throw new ArgumentException("Invalid day type.");
 			}
 		}
+		
 
 		public DateTimePeriod? ShiftWithin
 		{
 			get { return _shiftWithin; }
+			set { _shiftWithin = value; }
 		}
 
 		public ShiftExchangeLookingForDay DayType
 		{
 			get { return _dayType; }
+			set { _dayType = value; }
 		}
 	}
 }

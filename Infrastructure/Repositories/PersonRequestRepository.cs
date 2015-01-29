@@ -473,5 +473,16 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 				throw new DataSourceException("Cannot delete person request " + entity + ". It has already been approved.");
 			base.Remove(entity);
 		}
+
+		public IEnumerable<IShiftExchangeOffer> FindShiftExchangeOffersForBulletin(IEnumerable<IPerson> personList,
+			DateOnly shiftTradeDate)
+		{
+			return Session.CreateCriteria(typeof (IShiftExchangeOffer))
+				.Add(Restrictions.Eq("Date", shiftTradeDate))
+				.Add(Restrictions.In("Person", personList.ToList()))
+				.Add(Restrictions.Ge("Criteria.ValidTo", new DateOnly(DateTime.UtcNow.Date)))
+				.Add(Restrictions.Eq("Status", ShiftExchangeOfferStatus.Pending))				
+				.List<ShiftExchangeOffer>();
+		}
 	}
 }

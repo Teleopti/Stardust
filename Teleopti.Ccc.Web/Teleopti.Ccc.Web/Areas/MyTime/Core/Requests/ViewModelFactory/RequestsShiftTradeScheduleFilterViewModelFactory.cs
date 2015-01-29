@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.Repositories;
+using Teleopti.Ccc.UserTexts;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Common.Mapping;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.Requests;
 using Teleopti.Interfaces.Domain;
@@ -35,7 +36,8 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.ViewModelFactory
 					from dayoff in _dayOffTemplateRepository.FindAllDayOffsSortByDescription()
 					select dayoff.Description.ShortName,
 				HourTexts = from hour in hours
-								select _createHourText.CreateText(hour)
+								select _createHourText.CreateText(hour),
+				EmptyDayText = Resources.OptionEmptyDay
 			};
 
 			return ret;

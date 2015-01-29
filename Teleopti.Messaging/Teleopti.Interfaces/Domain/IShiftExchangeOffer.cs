@@ -9,13 +9,13 @@ namespace Teleopti.Interfaces.Domain
 	/// </remarks>
 	public interface IShiftExchangeOffer : IRequest
 	{
-		DateOnly Date { get; }
+		DateOnly Date { get; set; }
 
-		DateOnly ValidTo { get; }
+		DateOnly ValidTo { get; set; }
 
-		DateTimePeriod? MyShiftPeriod { get; }
+		DateTimePeriod? MyShiftPeriod { get; set; }
 
-		long Checksum { get; }
+		long Checksum { get; set; }
 
 		ShiftExchangeOfferStatus Status { get; set; }
 
@@ -27,6 +27,8 @@ namespace Teleopti.Interfaces.Domain
 
 		bool IsExpired();
 
-		ShiftExchangeLookingForDay DayType { get; }
+		string ShiftExchangeOfferId { get; set; }
+		ShiftExchangeLookingForDay DayType { get; set; }
+		IShiftExchangeCriteria Criteria { get; set; }
 	}
 }

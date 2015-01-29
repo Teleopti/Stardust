@@ -49,6 +49,7 @@ namespace Teleopti.Interfaces.Domain
 		/// </summary>
 		Guid? ShiftExchangeOffer { get; set; }
 
+		bool IsDayOff { get; set; }
 		DateTime? MinStart { get; set; }
 		bool IsLastPage { get; set; }
 		int Total { get; set; }

@@ -26,7 +26,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Common.DataProvider
 		[Test]
 		public void ShouldGetFilterOnlyWithDayoff()
 		{
-			var result = _filterHelper.GetFilter(DateOnly.Today, null, null, true);
+			var result = _filterHelper.GetFilter(DateOnly.Today, null, null, true, false);
 
 			result.IsDayOff.Should().Be.EqualTo(true);
 		}		
@@ -34,7 +34,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Common.DataProvider
 		[Test]
 		public void ShouldGetFilterWithNothing()
 		{
-			var result = _filterHelper.GetFilter(DateOnly.Today, null, null, false);
+			var result = _filterHelper.GetFilter(DateOnly.Today, null, null, false, false);
 
 			result.Should().Be.Null();
 		}		
@@ -43,7 +43,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Common.DataProvider
 		public void ShouldGetFilterWithStartTimeAsUtc()
 		{
 			string startTime = "8:00-10:00";
-			var result = _filterHelper.GetFilter(DateOnly.Today, startTime, null, false);
+			var result = _filterHelper.GetFilter(DateOnly.Today, startTime, null, false, false);
 
 			var start = DateTime.Today.Add(TimeSpan.FromHours(7));
 			var end = DateTime.Today.Add(TimeSpan.FromHours(9));
@@ -56,7 +56,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Common.DataProvider
 		public void ShouldGetFilterWithEndTimeAsUtc()
 		{
 			string endTime = "8:00-10:00";
-			var result = _filterHelper.GetFilter(DateOnly.Today, null, endTime, false);
+			var result = _filterHelper.GetFilter(DateOnly.Today, null, endTime, false, false);
 
 			var start = DateTime.Today.Add(TimeSpan.FromHours(7));
 			var end = DateTime.Today.Add(TimeSpan.FromHours(9));
@@ -72,7 +72,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Common.DataProvider
 			var startTime = "8:00-10:00";
 			var endTime = "16:00-18:00";
 			var isDayOff = true;
-			var result = _filterHelper.GetFilter(DateOnly.Today, startTime, endTime, isDayOff);
+			var result = _filterHelper.GetFilter(DateOnly.Today, startTime, endTime, isDayOff, false);
 
 			var startTimeStart = DateTime.Today.Add(TimeSpan.FromHours(7));
 			var startTimesEnd = DateTime.Today.Add(TimeSpan.FromHours(9));
@@ -90,7 +90,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Common.DataProvider
 		public void ShouldGetFilterForNightShift()
 		{
 			var endTime = "06:00-08:00";
-			var result = _filterHelper.GetFilter(DateOnly.Today, "", endTime, false);
+			var result = _filterHelper.GetFilter(DateOnly.Today, "", endTime, false, false);
 
 			var endTimeStart = DateTime.Today.Add(TimeSpan.FromHours(5));
 			var endTimesEnd = DateTime.Today.Add(TimeSpan.FromHours(7));			
@@ -107,7 +107,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Common.DataProvider
 		public void ShouldForGetFilterWithPlusEndTime()
 		{
 			var startTime = "06:00-08:00";
-			var result = _filterHelper.GetFilter(DateOnly.Today, startTime, "", false);
+			var result = _filterHelper.GetFilter(DateOnly.Today, startTime, "", false, false);
 
 			var endTimeStart = DateTime.Today.Add(TimeSpan.FromHours(-1));
 			var endTimesEnd = DateTime.Today.Add(TimeSpan.FromDays(1).Add(TimeSpan.FromHours(23)));

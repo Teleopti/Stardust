@@ -15,11 +15,20 @@
 				 not-null="true"
 				 foreign-key="FK_ShiftExchangeOffer_Person"/>
 
+		<property name="ShiftExchangeOfferId"
+							type ="string"
+							insert="false" 
+							update="false"
+			>
+			<column name="Request" />		
+		</property>
+
+			
 	<property name="MyShiftPeriod"
 			  type="Teleopti.Ccc.Infrastructure.NHibernateConfiguration.NullableDateTimePeriodCompositeUserType, Teleopti.Ccc.Infrastructure">
 	  <column name="MyShiftStartDateTime" />
 	  <column name="MyShiftEndDateTime" />
-	</property>
+	</property>				
 
 	<property name="Date"
 			  not-null="true"
@@ -28,26 +37,27 @@
 	<property name="Checksum"
 			  not-null="true"
 			  type="long"/>
-
-	<component access="field"
-			   name="_criteria"
+		
+	
+	<component
+			   name="Criteria"
 			   class="Teleopti.Ccc.Domain.AgentInfo.Requests.ShiftExchangeCriteria, Teleopti.Ccc.Domain">
-	  <property name="_validTo"
-				access="field"
+	  <property name="ValidTo"
+			
 				column="ValidTo"
 				not-null="true"
 				type="Teleopti.Ccc.Infrastructure.NHibernateConfiguration.DateOnlyMappingType, Teleopti.Ccc.Infrastructure"/>
 
-	  <component name="_criteria"
-				 access="field"
+	  <component name="Criteria"
+				
 				 class="Teleopti.Ccc.Domain.AgentInfo.Requests.ScheduleDayFilterCriteria, Teleopti.Ccc.Domain">
-		<property name="_dayType"
-				  access="field"
+		<property name="DayType"
+				
 				  column="WishShiftType"
 				  not-null="true"
 					  />
-		<property name="_shiftWithin"
-				  access="field"
+		<property name="ShiftWithin"
+				
 				  type="Teleopti.Ccc.Infrastructure.NHibernateConfiguration.NullableDateTimePeriodCompositeUserType, Teleopti.Ccc.Infrastructure">
 		  <column name="ShiftWithinStartDateTime" />
 		  <column name="ShiftWithinEndDateTime" />

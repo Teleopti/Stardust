@@ -116,17 +116,13 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 				.List<PersonScheduleDayReadModel>();
 		}
 
-		public IEnumerable<PersonScheduleDayReadModel> ForBulletinPersons(DateOnly shiftTradeDate,
-			IEnumerable<Guid> personIdList, DateTimePeriod mySchedulePeriod, Paging paging)
+		public IEnumerable<PersonScheduleDayReadModel> ForBulletinPersons(IEnumerable<string> shiftExchangeOfferIdList, Paging paging)
 		{
 			const string sql
-				= @"EXEC [ReadModel].[LoadShiftTradeBulletinSchedules] @shiftTradeDate=:shiftTradeDate,"
-				  + "@personList=:personIdList, "
-				  + "@currentScheduleStart=:myScheduleStart, "
-				  + "@currentScheduleEnd=:myScheduleEnd, "
+				= @"EXEC [ReadModel].[LoadShiftTradeBulletinSchedules] @shiftExchangeOfferIdList =:shiftExchangeOfferIdList,"
 				  + "@skip=:skip, "
 				  + "@take=:take";
-			var idlist = string.Join(",", personIdList);
+			var idlist = string.Join(",", shiftExchangeOfferIdList);
 			return _unitOfWork.Session().CreateSQLQuery(sql)
 				.AddScalar("PersonId", NHibernateUtil.Guid)
 				.AddScalar("TeamId", NHibernateUtil.Guid)
@@ -140,59 +136,14 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 				.AddScalar("MinStart", NHibernateUtil.DateTime)
 				.AddScalar("Total", NHibernateUtil.Int16)
 				.AddScalar("IsLastPage", NHibernateUtil.Boolean)
-				.SetDateTime("shiftTradeDate", shiftTradeDate)
-				.SetParameter("personIdList", idlist, NHibernateUtil.StringClob)
-				.SetParameter("myScheduleStart", mySchedulePeriod.StartDateTime)
-				.SetParameter("myScheduleEnd", mySchedulePeriod.EndDateTime)
+				.SetParameter("shiftExchangeOfferIdList", idlist, NHibernateUtil.StringClob)
 				.SetParameter("skip", paging.Skip)
 				.SetParameter("take", paging.Take)
 				.SetResultTransformer(Transformers.AliasToBean(typeof (PersonScheduleDayReadModel)))
 				.SetReadOnly(true)
 				.List<PersonScheduleDayReadModel>();
 		}
-
-		public IEnumerable<PersonScheduleDayReadModel> ForBulletinPersonsWithTimeFilter(DateOnly shiftTradeDate,
-			IEnumerable<Guid> personIdList, DateTimePeriod mySchedulePeriod, Paging paging, TimeFilterInfo filter)
-		{
-			const string sql =
-				@"EXEC  [ReadModel].[LoadShiftTradeBulletinSchedulesWithTimeFilter] "
-				+ "@shiftTradeDate=:shiftTradeDate, @personList=:personIdList, "
-				+ "@currentScheduleStart=:myScheduleStart, "
-				+ "@currentScheduleEnd=:myScheduleEnd, "
-				+ "@filterStartTimes=:filterStartTimes, "
-				+ "@filterEndTimes=:filterEndTimes, "
-				+ "@isDayOff=:isDayOff, "
-				+ "@skip=:skip, "
-				+ "@take=:take";
-			var idlist = string.Join(",", personIdList);
-			var filterString = getTimeFilterString(filter);
-			return _unitOfWork.Session().CreateSQLQuery(sql)
-				.AddScalar("PersonId", NHibernateUtil.Guid)
-				.AddScalar("TeamId", NHibernateUtil.Guid)
-				.AddScalar("SiteId", NHibernateUtil.Guid)
-				.AddScalar("BusinessUnitId", NHibernateUtil.Guid)
-				.AddScalar("Date", NHibernateUtil.DateTime)
-				.AddScalar("Start", NHibernateUtil.DateTime)
-				.AddScalar("End", NHibernateUtil.DateTime)
-				.AddScalar("Model", NHibernateUtil.Custom(typeof (CompressedString)))
-				.AddScalar("MinStart", NHibernateUtil.DateTime)
-				.AddScalar("Total", NHibernateUtil.Int16)
-				.AddScalar("IsLastPage", NHibernateUtil.Boolean)
-				.SetDateTime("shiftTradeDate", shiftTradeDate)
-				.SetParameter("personIdList", idlist, NHibernateUtil.StringClob)
-				.SetParameter("myScheduleStart", mySchedulePeriod.StartDateTime)
-				.SetParameter("myScheduleEnd", mySchedulePeriod.EndDateTime)
-				.SetParameter("filterStartTimes", filterString.startTimes, NHibernateUtil.StringClob)
-				.SetParameter("filterEndTimes", filterString.endTimes, NHibernateUtil.StringClob)
-				.SetParameter("isDayOff", filter.IsDayOff, NHibernateUtil.Boolean)
-				.SetParameter("skip", paging.Skip)
-				.SetParameter("take", paging.Take)
-				.SetResultTransformer(Transformers.AliasToBean(typeof (PersonScheduleDayReadModel)))
-				.SetReadOnly(true)
-				.List<PersonScheduleDayReadModel>();
-		}
-
-
+	
 		public IEnumerable<PersonScheduleDayReadModel> ForPersonsIncludeEmptyDays(DateOnly shiftTradeDate,
 			IEnumerable<Guid> personIdList, Paging paging)
 		{

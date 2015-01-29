@@ -96,5 +96,8 @@ namespace Teleopti.Ccc.Domain.Repositories
 		IPersonRequest FindPersonRequestByRequestId(Guid value);
 		IList<IPersonRequest> FindAllRequestsExceptOffer(IPerson person, Paging paging);
 		IList<IShiftExchangeOffer> FindOfferByStatus(IPerson person, DateOnly date, ShiftExchangeOfferStatus status);
+
+		IEnumerable<IShiftExchangeOffer> FindShiftExchangeOffersForBulletin(IEnumerable<IPerson> personList,
+			DateOnly shiftTradeDate);
 	}
 }

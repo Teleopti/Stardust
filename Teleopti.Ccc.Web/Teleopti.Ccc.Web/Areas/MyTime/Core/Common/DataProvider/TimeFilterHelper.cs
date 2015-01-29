@@ -76,18 +76,19 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider
 			return utcTimes;
 		}
 
-		public TimeFilterInfo GetFilter(DateOnly selectedDate, string filterStartTimes, string filterEndTimes, bool isDayOff)
+		public TimeFilterInfo GetFilter(DateOnly selectedDate, string filterStartTimes, string filterEndTimes, bool isDayOff, bool isEmptyDay)
 		{
 			TimeFilterInfo filter;
 			if (string.IsNullOrEmpty(filterStartTimes) && string.IsNullOrEmpty(filterEndTimes))
 			{
-				if (isDayOff)
+				if (isDayOff || isEmptyDay)
 				{
 					filter = new TimeFilterInfo
 					{
 						StartTimes = convertStringToUtcTimes(selectedDate, filterStartTimes, false),
 						EndTimes = convertStringToUtcTimes(selectedDate, filterEndTimes, false),
-						IsDayOff = isDayOff
+						IsDayOff = isDayOff,
+						IsEmptyDay =  isEmptyDay
 					};
 				}
 				else
@@ -101,7 +102,8 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider
 				{
 					StartTimes = convertStringToUtcTimes(selectedDate, filterStartTimes, true),
 					EndTimes = convertStringToUtcTimes(selectedDate, filterEndTimes, true, true),
-					IsDayOff = isDayOff
+					IsDayOff = isDayOff,
+					IsEmptyDay = isEmptyDay
 				};
 			}
 			return filter;

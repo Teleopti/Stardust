@@ -9,13 +9,14 @@ namespace Teleopti.Ccc.Domain.AgentInfo.Requests
 {
 	public class ShiftExchangeOffer : Request, IShiftExchangeOffer
 	{
-		private readonly ShiftExchangeCriteria _criteria;
+		private IShiftExchangeCriteria _criteria;
 		private DateOnly _date;
 		private DateTimePeriod? _myShiftPeriod;
 		private IPerson _person;
 		private long _checksum;
 		private ShiftExchangeOfferStatus _status;
 		private string _typeDescription;
+		private string _shiftExchangeOfferId;
 
 		public ShiftExchangeOffer(IScheduleDay scheduleDay, ShiftExchangeCriteria criteria, ShiftExchangeOfferStatus status)
 			: this()
@@ -39,21 +40,31 @@ namespace Teleopti.Ccc.Domain.AgentInfo.Requests
 		public virtual DateOnly Date
 		{
 			get { return _date; }
+			set { _date = value; }
+		}
+
+		public virtual IShiftExchangeCriteria Criteria
+		{
+			get { return _criteria; }
+			set { _criteria = value; }
 		}
 
 		public virtual DateOnly ValidTo
 		{
 			get { return _criteria.ValidTo; }
+			set { _criteria.ValidTo = value; }
 		}
 
 		public virtual ShiftExchangeLookingForDay DayType
 		{
 			get { return _criteria.DayType; }
+			set { _criteria.DayType = value; }
 		}
 
 		public virtual DateTimePeriod? MyShiftPeriod
 		{
 			get { return _myShiftPeriod; }
+			set { _myShiftPeriod = value; }
 		}
 
 		protected internal override IEnumerable<IBusinessRuleResponse> Approve(IRequestApprovalService approvalService)
@@ -101,6 +112,13 @@ namespace Teleopti.Ccc.Domain.AgentInfo.Requests
 		public virtual long Checksum
 		{
 			get { return _checksum; }
+			set { _checksum = value; }
+		}
+
+		public virtual string ShiftExchangeOfferId
+		{
+			get { return _shiftExchangeOfferId; }
+			set { _shiftExchangeOfferId = value; }
 		}
 
 		public virtual ShiftExchangeOfferStatus Status
@@ -124,9 +142,9 @@ namespace Teleopti.Ccc.Domain.AgentInfo.Requests
 		}		
 
 		public virtual bool IsWantedSchedule(IScheduleDay scheduleToCheck)
-		{
-			var period = scheduleToCheck.ProjectionService().CreateProjection().Period();
-			return _criteria.IsValid(period, scheduleToCheck.HasDayOff());
+		{			
+			var period = scheduleToCheck.ProjectionService().CreateProjection().Period();		
+			return _criteria.IsValid(period.HasValue ? (DateTimePeriod?)period.Value : null, scheduleToCheck.HasDayOff());
 		}
 
 		public virtual IPersonRequest MakeShiftTradeRequest(IScheduleDay scheduleToTrade)
@@ -144,6 +162,6 @@ namespace Teleopti.Ccc.Domain.AgentInfo.Requests
 		public virtual bool IsExpired()
 		{
 			return Date <= DateOnly.Today;
-		}
+		}				
 	}
 }
