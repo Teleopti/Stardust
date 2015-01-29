@@ -214,7 +214,7 @@ namespace Teleopti.Ccc.Domain.Forecasting
         {
             get
             {
-                return new DeviationStatisticData(FStaff, CalculatedResource).RelativeDeviationForDisplayOnly;
+                return new DeviationStatisticData(FStaff, CalculatedResource).RelativeDeviationForDisplay;
             }
         }
 

@@ -76,19 +76,26 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
             Assert.AreEqual(99d, _target.RelativeDeviation);
 
             _target = new DeviationStatisticData(0.5, 10);
-            Assert.AreEqual(9.99d, _target.RelativeDeviation);
+            Assert.AreEqual(19.0d, _target.RelativeDeviation);
+
+			_target = new DeviationStatisticData(0.5, 10);
+			Assert.AreEqual(double.NaN, _target.RelativeDeviationForDisplay);
 
             _target = new DeviationStatisticData(0.5, 11);
             Assert.Less(0.5, 1);
-            Assert.AreEqual(9.99d, _target.RelativeDeviation);
+            Assert.AreEqual(21.0d, _target.RelativeDeviation);
 
             _target = new DeviationStatisticData(0.5, 12);
             Assert.Less(0.5, 1);
-            Assert.AreEqual(9.99d, _target.RelativeDeviation);
+            Assert.AreEqual(23.0d, _target.RelativeDeviation);
 
             _target = new DeviationStatisticData(0.5, 100);
             Assert.Less(0.5, 1);
-            Assert.AreEqual(9.99d, _target.RelativeDeviation);
+            Assert.AreEqual(99.9d, _target.RelativeDeviation);
+
+			_target = new DeviationStatisticData(0.5, 200);
+			Assert.Less(0.5, 1);
+			Assert.AreEqual(99.9d, _target.RelativeDeviation);
 
         }
 
@@ -96,53 +103,53 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
         public void VerifyRelativeDeviationForDisplay()
         {
             _target = new DeviationStatisticData(100, 50);
-            Assert.AreEqual(-0.5d, _target.RelativeDeviationForDisplayOnly);
+            Assert.AreEqual(-0.5d, _target.RelativeDeviationForDisplay);
 
             _target = new DeviationStatisticData(50, 100);
-            Assert.AreEqual(1d, _target.RelativeDeviationForDisplayOnly);
+            Assert.AreEqual(1d, _target.RelativeDeviationForDisplay);
 
             _target = new DeviationStatisticData(0.5d, 2d);
-            Assert.AreEqual(3d, _target.RelativeDeviationForDisplayOnly);
+            Assert.AreEqual(3d, _target.RelativeDeviationForDisplay);
 
             _target = new DeviationStatisticData(0.5d, 0.6d);
-            Assert.AreEqual(0.2d, _target.RelativeDeviationForDisplayOnly, 0.01);
+            Assert.AreEqual(0.2d, _target.RelativeDeviationForDisplay, 0.01);
 
             _target = new DeviationStatisticData(3d, 5d);
-            Assert.AreEqual((5d - 3d) / 3d, _target.RelativeDeviationForDisplayOnly);
+            Assert.AreEqual((5d - 3d) / 3d, _target.RelativeDeviationForDisplay);
 
             _target = new DeviationStatisticData(0, 0);
-            Assert.AreEqual(0d, _target.RelativeDeviationForDisplayOnly);
+            Assert.AreEqual(0d, _target.RelativeDeviationForDisplay);
 
             _target = new DeviationStatisticData(10, 0);
-            Assert.AreEqual(-1d, _target.RelativeDeviationForDisplayOnly);
+            Assert.AreEqual(-1d, _target.RelativeDeviationForDisplay);
 
             _target = new DeviationStatisticData(0.5, 0);
-            Assert.AreEqual(-1d, _target.RelativeDeviationForDisplayOnly);
+            Assert.AreEqual(-1d, _target.RelativeDeviationForDisplay);
 
             _target = new DeviationStatisticData(0, 0.5);
-            Assert.AreEqual(double.NaN, _target.RelativeDeviationForDisplayOnly);
+            Assert.AreEqual(double.NaN, _target.RelativeDeviationForDisplay);
 
             _target = new DeviationStatisticData(0, 10);
-            Assert.AreEqual(double.NaN, _target.RelativeDeviationForDisplayOnly);
+            Assert.AreEqual(double.NaN, _target.RelativeDeviationForDisplay);
 
             _target = new DeviationStatisticData(0.5, 0.5);
-            Assert.AreEqual(0d, _target.RelativeDeviationForDisplayOnly);
+            Assert.AreEqual(0d, _target.RelativeDeviationForDisplay);
 
             _target = new DeviationStatisticData(50, 50);
-            Assert.AreEqual(0d, _target.RelativeDeviationForDisplayOnly);
+            Assert.AreEqual(0d, _target.RelativeDeviationForDisplay);
 
             // Max 9.99 tests 
 
             _target = new DeviationStatisticData(0.5, 5.4);
             Assert.AreEqual(9.8, _target.RelativeDeviation, 0.01);
-            Assert.AreEqual(9.8, _target.RelativeDeviationForDisplayOnly, 0.01);
+            Assert.AreEqual(9.8, _target.RelativeDeviationForDisplay, 0.01);
 
             _target = new DeviationStatisticData(0.5, 5.5);
             Assert.AreEqual(9.99, _target.RelativeDeviation, 0.01);
-            Assert.AreEqual(double.NaN, _target.RelativeDeviationForDisplayOnly, 0.01);
+            Assert.AreEqual(double.NaN, _target.RelativeDeviationForDisplay, 0.01);
 
             _target = new DeviationStatisticData(2, 22);
-            Assert.AreEqual(double.NaN, _target.RelativeDeviationForDisplayOnly);
+            Assert.AreEqual(double.NaN, _target.RelativeDeviationForDisplay);
 
         }
     }

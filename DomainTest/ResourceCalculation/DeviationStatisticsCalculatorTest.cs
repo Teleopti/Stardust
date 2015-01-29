@@ -53,7 +53,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
             expected = new double[] { 11.4d, 17.3d, 21.3d, 25.9d, 40.1d, 0.1d };
             real = new double[] { 13.4d, 18.3d, 20.5d, 25d, 32.1d, 5.0d};
 
-            Assert.AreEqual(4.07d, new DeviationStatisticsCalculator(expected, real).RelativeRootMeanSquare, 0.01d);
+            Assert.AreEqual(20d, new DeviationStatisticsCalculator(expected, real).RelativeRootMeanSquare, 0.01d);
         }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1822:MarkMembersAsStatic")]
