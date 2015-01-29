@@ -33,23 +33,21 @@ namespace Teleopti.Interfaces.Domain
 			verifyTimes(startTime, endTime);
 		  }
 
-		 private static readonly TimeSpan verifyLimit = new TimeSpan(23, 59, 59);
+	    private static readonly TimeSpan VerifyLimit = new TimeSpan(36, 0, 0);
 		private static void verifyTimes(TimeSpan? startTime, TimeSpan? endTime)
 		{
 			if (startTime.HasValue)
 			{
-				if (startTime.Value > verifyLimit)
-					throw new ArgumentOutOfRangeException("startTime", startTime, "Start Time can't be bigger than 23:59:59");
+				if (startTime.Value > VerifyLimit)
+					throw new ArgumentOutOfRangeException("startTime", startTime, "Min Time can't be bigger than 36 hours");
 
 				if (endTime.HasValue && startTime > endTime.Value)
-					throw new ArgumentOutOfRangeException("startTime", startTime, "Start Time can't be greater than End Time");
+					throw new ArgumentOutOfRangeException("startTime", startTime, "Start time can't be greater than end time");
 			}
 
-			if (endTime.HasValue)
-			{
-				if (endTime.Value > verifyLimit)
-					throw new ArgumentOutOfRangeException("endTime", endTime, "End Time can't be bigger than 23:59:59");
-			}
+			if (!endTime.HasValue) return;
+			if (endTime.Value > VerifyLimit)
+				throw new ArgumentOutOfRangeException("endTime", endTime, "End time can't be bigger than 36 hours");
 		}
         /// <summary>
         /// Gets or sets the start time.
