@@ -66,20 +66,29 @@ namespace Teleopti.Ccc.DomainTest.Helper
 			Assert.AreEqual("5:00", target.StartTimeString);
 		}
 
+		[Test, ExpectedException(typeof(ArgumentOutOfRangeException))]
+	    public void MinShouldNotBeGreaterThan36Hours()
+		{
+			target = new WorkTimeLimitation(TimeSpan.FromHours(37), null);
+		}
+
+		[Test, ExpectedException(typeof(ArgumentOutOfRangeException))]
+		public void MaxShouldNotBeGreaterThan36Hours()
+		{
+			target = new WorkTimeLimitation(null, TimeSpan.FromHours(37));
+		}
+
 		[Test]
-        [ExpectedException(typeof(ArgumentOutOfRangeException))]
-        public void VerifyStartToBig()
-        {
-			  target = new WorkTimeLimitation(TimeSpan.FromDays(1), null);
-        }
+	    public void MinShouldBeOkWith36Hours()
+	    {
+			target = new WorkTimeLimitation(TimeSpan.FromHours(36), null);    
+	    }
 
-
-        [Test]
-        [ExpectedException(typeof(ArgumentOutOfRangeException))]
-        public void VerifyEndToBig()
-        {
-			  target = new WorkTimeLimitation(TimeSpan.FromHours(2), new TimeSpan(1, 0, 0, 0));
-        }
+		[Test]
+		public void MaxShouldBeOkWith36Hours()
+		{
+			target = new WorkTimeLimitation(null, TimeSpan.FromHours(36));
+		}
 
         [Test]
         public void VerifyEndCannotBeBiggerThanStart()
