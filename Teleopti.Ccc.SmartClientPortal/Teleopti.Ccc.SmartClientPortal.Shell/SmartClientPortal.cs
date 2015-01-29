@@ -14,6 +14,7 @@ using EO.WebBrowser;
 using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Infrastructure.Toggle;
 using Teleopti.Ccc.SmartClientPortal.Shell.Controls;
+using Teleopti.Ccc.Win.Backlog;
 using Teleopti.Ccc.Win.Common.Controls.OutlookControls.Workspaces;
 using log4net;
 using Syncfusion.Windows.Forms.Tools;
@@ -279,6 +280,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 			}
 			if (_toggleManager.IsEnabled(Toggles.Portal_NewLandingpage_29415)) 
 				backStage1.Controls.Remove(backStageButtonSignCustomerWeb);
+
 		}
 
 		private void showMem()
@@ -472,7 +474,16 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 				});
 			}
 
-			outlookBar1.AddItems(modulePanelItems.ToArray());
+			if (_toggleManager.IsEnabled(Toggles.Backlog_Module_23980))
+				modulePanelItems.Add(new ModulePanelItem
+				{
+					ItemImage = Resources.help_32,
+					ItemText = "Backlog",
+					ItemEnabled = true,
+					Tag = "Raptor/PersonAdmin"
+				});
+
+			outlookBar1.AddItems(modulePanelItems.ToArray());			
 		}
 
 		private void InitializeSmartPartInvoker()
@@ -593,7 +604,13 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 		{
 			if (modulePanelItem == null)
 				return;
-			
+
+			if (modulePanelItem.ItemText == "Backlog")
+			{
+				var blView = new BacklogView(_container);
+				blView.Show(this);
+			}
+
 			_portalSettings.LastModule = modulePanelItem.Tag.ToString();
 			SmartPartInvoker.ClearAllSmartParts();
 			var uc = _outlookPanelContentWorker.GetOutlookPanelContent(_portalSettings.LastModule);

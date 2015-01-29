@@ -67,6 +67,8 @@
 
 		Messaging_HttpSender_29205,
 
+		Backlog_Module_23980,
+
 		ETL_SpeedUpETL_30791,
 		ETL_OnlyLatestQueueAgentStatistics_30787,
 
