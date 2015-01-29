@@ -11,12 +11,8 @@
     box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.19);
 }
 
-.container{
-    padding: 0;
-}
-
 .material-header {
-    background-color: #5677fc;
+    background-color: #1976D2;
     position: absolute;
     min-height: 130px;
     width: 100%;
@@ -48,7 +44,7 @@
 
 .navbar {
     background-image: none;
-    background-color: #5677fc;
+    background-color: #1976D2;
     border :none;
 
 }
@@ -79,10 +75,77 @@
 }
 
 .roles-details-wrapper {
-	border-left: 1px solid grey;
 	bottom: 0;
 }
 
 .selected {
-	background-color: #5677fc;
+	background-color: #1976D2;
+	color: white;
+	padding: 0 5px;
+	transition: all 0.5s ease;
 }
+
+#tree-root > li:nth-child(2) > ol > li > ol {
+	background: #f4f4f4;
+}
+
+#tree-root > li > ol> li {
+	margin-top: 15px;
+}
+
+ol {
+	margin-top: 5px;
+}
+
+/*Material bootlegs*/
+input {
+	width: 100%;
+	margin: 5px 0;
+	padding: 5px;
+	border: none;
+	border-bottom:1px solid #ddd !important
+}
+
+.fab {
+	position: fixed;
+	border: none;
+	margin-left: 48%;
+	margin-top: -50px;
+	z-index: 99999;
+    width: 56px;
+    height: 56px;
+    border-radius: 50%;
+    border-radius: 50%;
+    overflow: hidden;
+    -webkit-transform: translate3d(0, 0, 0);
+    transform: translate3d(0, 0, 0);
+    transition: 0.2s linear;
+    transition-property: -webkit-transform, box-shadow;
+    transition-property: transform, box-shadow;
+	box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.26);
+}
+
+
+@media (max-width:1400px) {
+	.fab{
+		right: 24px;
+		bottom: 24px;
+	}
+}
+
+@media (min-width:1400px) {
+	.fab{
+		margin-left: 55%;
+		margin-top: -49px;
+	}
+}
+
+.container > hr {
+	margin-top: 10px !important;
+}
+
+.tree {
+	max-height: 900px;
+	overflow-y: auto;
+}
+

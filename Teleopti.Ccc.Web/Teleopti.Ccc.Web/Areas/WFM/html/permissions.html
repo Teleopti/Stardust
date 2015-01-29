@@ -1,8 +1,25 @@
 ﻿<div class="row">
-	<div class="role-nav col-md-4">
+
+	<div class="container">
+		<div class="navbar-header"><a class="navbar-brand">Roles</a></div>
+		<div class="collapse navbar-collapse">
+			<ul class="nav navbar-nav">
+				<li>
+					<div class="btn-wrapper">
+					<div class="btn-group">
+						<label class="btn btn-primary" ng-model="roleDetails" btn-radio="'dataAvailable'">data</label>
+						<label class="btn btn-primary" ng-model="roleDetails" btn-radio="'functionsAvailable'">function</label>
+					</div>
+					</div>
+				</li>
+			</ul>
+		</div>
+		<hr/>
+	</div>
+
+	<div class="role-nav col-md-4 ">
 		<div class="align-center">
-			<h3>Roles</h3>
-			<input type="text" name="filterRole" placeholder="filter ..." />
+			<input type="text" name="filterRole" placeholder="Role filter ..." />
 		</div>
 		<div>
 			<button type="button" class="btn btn-default btn-md btn-block">NEW</button>
@@ -11,20 +28,14 @@
 		</div>
 	</div>
 
-	<div class="roles-details-wrapper col-md-8">
-		<div class="btn-wrapper">
-			<div class="btn-group">
-				<label class="btn btn-primary" ng-model="roleDetails" btn-radio="'dataAvailable'">data</label>
-				<label class="btn btn-primary" ng-model="roleDetails" btn-radio="'functionsAvailable'">function</label>
-			</div>
-			
-			<div>
-				<button class="pull-right">Copy Role</button>
-			</div>
-		</div>
-		<!-- Todo ng-switch instead of ng-show -->
+	<div class="roles-details-wrapper col-md-8 material-depth-1">
+
+		<button class="pull-right fab">Copy</button>
+
+		<div>
+			<input type="text" name="filterDetails" placeholder="Permissions filter ..." />
+		<div>
 		<div ng-show="roleDetails=='functionsAvailable'">
-			<input type="text" name="filterDetails" placeholder="filter ..." />
 			<div class="tree">
 				<div ui-tree data-drag-enabled="false">
 					<ol ui-tree-nodes="" ng-model="functionsDisplayed" id="tree-root">
@@ -33,7 +44,7 @@
 				</div>
 			</div>
 		</div>
-		
+
 
 		<div ng-show="roleDetails=='dataAvailable'">
 			<input type="text" name="filterDetails" placeholder="filter ..." />
@@ -78,6 +89,8 @@
 	</div>
 	
 </div>
+
+
 
 
 <!-- Nested node template -->
