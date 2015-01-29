@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.WinCode.Backlog
@@ -12,6 +13,7 @@ namespace Teleopti.Ccc.WinCode.Backlog
 		private TimeSpan _serviceLevel;
 		private readonly IList<DateOnly> _closedDays = new List<DateOnly>();
 		private IDictionary<DateOnly, TimeSpan> _manualEntries = new Dictionary<DateOnly, TimeSpan>();
+		private IDictionary<DateOnly, TimeSpan> _scheduledTimes = new Dictionary<DateOnly, TimeSpan>();
 
 		public BacklogTask(TimeSpan incomingDemand, DateOnly startDate, TimeSpan serviceLevel)
 		{
@@ -62,6 +64,44 @@ namespace Teleopti.Ccc.WinCode.Backlog
 			_manualEntries.Remove(date);
 		}
 
+		public void SetScheduledTime(DateOnly date, TimeSpan time)
+		{
+			if (!SpanningDateOnlyPeriod().Contains(date))
+				return;
+
+			if (!_scheduledTimes.ContainsKey(date))
+				_scheduledTimes.Add(date, TimeSpan.Zero);
+
+			_scheduledTimes[date] = time;
+		}
+
+		public TimeSpan ScheduledTimeOnDate(DateOnly date)
+		{
+			if (_scheduledTimes.ContainsKey(date))
+				return _scheduledTimes[date];
+
+			return TimeSpan.Zero;
+		}
+
+		public TimeSpan ScheduledTimeOnTask()
+		{
+			return new TimeSpan(_scheduledTimes.Values.Sum(t => t.Ticks));
+		}
+
+		public TimeSpan ScheduledBacklogOnTask()
+		{
+			return TotalIncoming().Subtract(ScheduledTimeOnTask());
+		}
+
+		public Percent ScheduledServiceLevelOnTask()
+		{
+			var ticks = 0d;
+			if (TotalIncoming().Ticks > 0)
+				ticks =	ScheduledTimeOnTask().Ticks/(double)TotalIncoming().Ticks;
+
+			return new Percent(ticks);
+		}
+
 		public DateOnlyPeriod SpanningDateOnlyPeriod()
 		{
 			var endDate = new DateOnly(StartDate.Date.AddTicks(_serviceLevel.Ticks).Date).AddDays(-1);
@@ -108,6 +148,24 @@ namespace Teleopti.Ccc.WinCode.Backlog
 					break;
 				if(!_closedDays.Contains(dateOnly))
 					backlog = backlog.Subtract(ForecastedTimeOnDate(dateOnly));
+			}
+
+			return backlog;
+		}
+
+		public TimeSpan ScheduledBackLogOnDate(DateOnly date)
+		{
+			if (!SpanningDateOnlyPeriod().Contains(date))
+				return TimeSpan.Zero;
+
+			var backlog = TotalIncoming();
+			foreach (var dateOnly in SpanningDateOnlyPeriod().DayCollection())
+			{
+				if (dateOnly > date)
+					break;
+
+				if (_scheduledTimes.ContainsKey(dateOnly))
+					backlog = backlog.Subtract(_scheduledTimes[dateOnly]);
 			}
 
 			return backlog;

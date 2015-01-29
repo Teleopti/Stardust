@@ -39,8 +39,12 @@
 			Syncfusion.Windows.Forms.Grid.GridRangeStyle gridRangeStyle6 = new Syncfusion.Windows.Forms.Grid.GridRangeStyle();
 			Syncfusion.Windows.Forms.Grid.GridRangeStyle gridRangeStyle7 = new Syncfusion.Windows.Forms.Grid.GridRangeStyle();
 			Syncfusion.Windows.Forms.Grid.GridRangeStyle gridRangeStyle8 = new Syncfusion.Windows.Forms.Grid.GridRangeStyle();
+			Syncfusion.Windows.Forms.Grid.GridRangeStyle gridRangeStyle9 = new Syncfusion.Windows.Forms.Grid.GridRangeStyle();
+			Syncfusion.Windows.Forms.Grid.GridRangeStyle gridRangeStyle10 = new Syncfusion.Windows.Forms.Grid.GridRangeStyle();
 			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(BacklogView));
 			this.toolStripContainer1 = new System.Windows.Forms.ToolStripContainer();
+			this.statusStrip1 = new System.Windows.Forms.StatusStrip();
+			this.toolStripStatusLabel1 = new System.Windows.Forms.ToolStripStatusLabel();
 			this.tabControlSkills = new System.Windows.Forms.TabControl();
 			this.tabPage1 = new System.Windows.Forms.TabPage();
 			this.splitContainer1 = new System.Windows.Forms.SplitContainer();
@@ -50,9 +54,13 @@
 			this.buttonLoad = new System.Windows.Forms.ToolStripButton();
 			this.toolStripButtonManualEntries = new System.Windows.Forms.ToolStripButton();
 			this.toolStripButtonSave = new System.Windows.Forms.ToolStripButton();
+			this.backgroundWorker1 = new System.ComponentModel.BackgroundWorker();
+			this.toolStripButtonSkillMapper = new System.Windows.Forms.ToolStripButton();
+			this.toolStripContainer1.BottomToolStripPanel.SuspendLayout();
 			this.toolStripContainer1.ContentPanel.SuspendLayout();
 			this.toolStripContainer1.TopToolStripPanel.SuspendLayout();
 			this.toolStripContainer1.SuspendLayout();
+			this.statusStrip1.SuspendLayout();
 			this.tabControlSkills.SuspendLayout();
 			this.tabPage1.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
@@ -66,12 +74,15 @@
 			// 
 			// toolStripContainer1
 			// 
-			this.toolStripContainer1.BottomToolStripPanelVisible = false;
+			// 
+			// toolStripContainer1.BottomToolStripPanel
+			// 
+			this.toolStripContainer1.BottomToolStripPanel.Controls.Add(this.statusStrip1);
 			// 
 			// toolStripContainer1.ContentPanel
 			// 
 			this.toolStripContainer1.ContentPanel.Controls.Add(this.tabControlSkills);
-			this.toolStripContainer1.ContentPanel.Size = new System.Drawing.Size(919, 544);
+			this.toolStripContainer1.ContentPanel.Size = new System.Drawing.Size(919, 522);
 			this.toolStripContainer1.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.toolStripContainer1.LeftToolStripPanelVisible = false;
 			this.toolStripContainer1.Location = new System.Drawing.Point(0, 0);
@@ -85,6 +96,22 @@
 			// 
 			this.toolStripContainer1.TopToolStripPanel.Controls.Add(this.toolStrip1);
 			// 
+			// statusStrip1
+			// 
+			this.statusStrip1.Dock = System.Windows.Forms.DockStyle.None;
+			this.statusStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.toolStripStatusLabel1});
+			this.statusStrip1.Location = new System.Drawing.Point(0, 0);
+			this.statusStrip1.Name = "statusStrip1";
+			this.statusStrip1.Size = new System.Drawing.Size(919, 22);
+			this.statusStrip1.TabIndex = 1;
+			this.statusStrip1.Text = "statusStrip1";
+			// 
+			// toolStripStatusLabel1
+			// 
+			this.toolStripStatusLabel1.Name = "toolStripStatusLabel1";
+			this.toolStripStatusLabel1.Size = new System.Drawing.Size(0, 17);
+			// 
 			// tabControlSkills
 			// 
 			this.tabControlSkills.Controls.Add(this.tabPage1);
@@ -92,7 +119,7 @@
 			this.tabControlSkills.Location = new System.Drawing.Point(0, 0);
 			this.tabControlSkills.Name = "tabControlSkills";
 			this.tabControlSkills.SelectedIndex = 0;
-			this.tabControlSkills.Size = new System.Drawing.Size(919, 544);
+			this.tabControlSkills.Size = new System.Drawing.Size(919, 522);
 			this.tabControlSkills.TabIndex = 0;
 			this.tabControlSkills.SelectedIndexChanged += new System.EventHandler(this.tabControlSkills_SelectedIndexChanged);
 			// 
@@ -102,7 +129,7 @@
 			this.tabPage1.Location = new System.Drawing.Point(4, 22);
 			this.tabPage1.Name = "tabPage1";
 			this.tabPage1.Padding = new System.Windows.Forms.Padding(3);
-			this.tabPage1.Size = new System.Drawing.Size(911, 518);
+			this.tabPage1.Size = new System.Drawing.Size(911, 496);
 			this.tabPage1.TabIndex = 0;
 			this.tabPage1.Text = "tabPage1";
 			this.tabPage1.UseVisualStyleBackColor = true;
@@ -122,8 +149,8 @@
 			// splitContainer1.Panel2
 			// 
 			this.splitContainer1.Panel2.Controls.Add(this.gridControl1);
-			this.splitContainer1.Size = new System.Drawing.Size(905, 512);
-			this.splitContainer1.SplitterDistance = 244;
+			this.splitContainer1.Size = new System.Drawing.Size(905, 490);
+			this.splitContainer1.SplitterDistance = 233;
 			this.splitContainer1.TabIndex = 0;
 			// 
 			// chart1
@@ -139,7 +166,7 @@
 			series1.Legend = "Legend1";
 			series1.Name = "Series1";
 			this.chart1.Series.Add(series1);
-			this.chart1.Size = new System.Drawing.Size(905, 244);
+			this.chart1.Size = new System.Drawing.Size(905, 233);
 			this.chart1.TabIndex = 0;
 			this.chart1.Text = "chart1";
 			// 
@@ -214,6 +241,22 @@
 			gridRangeStyle8.StyleInfo.Font.Strikeout = false;
 			gridRangeStyle8.StyleInfo.Font.Underline = false;
 			gridRangeStyle8.StyleInfo.Font.Unit = System.Drawing.GraphicsUnit.Point;
+			gridRangeStyle9.Range = Syncfusion.Windows.Forms.Grid.GridRangeInfo.Table();
+			gridRangeStyle9.StyleInfo.Font.Bold = false;
+			gridRangeStyle9.StyleInfo.Font.Facename = "Segoe UI";
+			gridRangeStyle9.StyleInfo.Font.Italic = false;
+			gridRangeStyle9.StyleInfo.Font.Size = 8.25F;
+			gridRangeStyle9.StyleInfo.Font.Strikeout = false;
+			gridRangeStyle9.StyleInfo.Font.Underline = false;
+			gridRangeStyle9.StyleInfo.Font.Unit = System.Drawing.GraphicsUnit.Point;
+			gridRangeStyle10.Range = Syncfusion.Windows.Forms.Grid.GridRangeInfo.Table();
+			gridRangeStyle10.StyleInfo.Font.Bold = false;
+			gridRangeStyle10.StyleInfo.Font.Facename = "Segoe UI";
+			gridRangeStyle10.StyleInfo.Font.Italic = false;
+			gridRangeStyle10.StyleInfo.Font.Size = 8.25F;
+			gridRangeStyle10.StyleInfo.Font.Strikeout = false;
+			gridRangeStyle10.StyleInfo.Font.Underline = false;
+			gridRangeStyle10.StyleInfo.Font.Unit = System.Drawing.GraphicsUnit.Point;
 			this.gridControl1.RangeStyles.AddRange(new Syncfusion.Windows.Forms.Grid.GridRangeStyle[] {
             gridRangeStyle1,
             gridRangeStyle2,
@@ -222,9 +265,11 @@
             gridRangeStyle5,
             gridRangeStyle6,
             gridRangeStyle7,
-            gridRangeStyle8});
+            gridRangeStyle8,
+            gridRangeStyle9,
+            gridRangeStyle10});
 			this.gridControl1.SerializeCellsBehavior = Syncfusion.Windows.Forms.Grid.GridSerializeCellsBehavior.SerializeAsRangeStylesIntoCode;
-			this.gridControl1.Size = new System.Drawing.Size(905, 264);
+			this.gridControl1.Size = new System.Drawing.Size(905, 253);
 			this.gridControl1.SmartSizeBox = false;
 			this.gridControl1.TabIndex = 0;
 			this.gridControl1.Text = "gridControl1";
@@ -239,10 +284,11 @@
 			this.toolStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.buttonLoad,
             this.toolStripButtonManualEntries,
-            this.toolStripButtonSave});
+            this.toolStripButtonSave,
+            this.toolStripButtonSkillMapper});
 			this.toolStrip1.Location = new System.Drawing.Point(3, 0);
 			this.toolStrip1.Name = "toolStrip1";
-			this.toolStrip1.Size = new System.Drawing.Size(183, 25);
+			this.toolStrip1.Size = new System.Drawing.Size(311, 25);
 			this.toolStrip1.TabIndex = 0;
 			// 
 			// buttonLoad
@@ -274,6 +320,23 @@
 			this.toolStripButtonSave.Text = "Save";
 			this.toolStripButtonSave.Click += new System.EventHandler(this.toolStripButtonSave_Click);
 			// 
+			// backgroundWorker1
+			// 
+			this.backgroundWorker1.WorkerReportsProgress = true;
+			this.backgroundWorker1.DoWork += new System.ComponentModel.DoWorkEventHandler(this.backgroundWorker1_DoWork);
+			this.backgroundWorker1.ProgressChanged += new System.ComponentModel.ProgressChangedEventHandler(this.backgroundWorker1_ProgressChanged);
+			this.backgroundWorker1.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.backgroundWorker1_RunWorkerCompleted);
+			// 
+			// toolStripButtonSkillMapper
+			// 
+			this.toolStripButtonSkillMapper.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
+			this.toolStripButtonSkillMapper.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButtonSkillMapper.Image")));
+			this.toolStripButtonSkillMapper.ImageTransparentColor = System.Drawing.Color.Magenta;
+			this.toolStripButtonSkillMapper.Name = "toolStripButtonSkillMapper";
+			this.toolStripButtonSkillMapper.Size = new System.Drawing.Size(97, 22);
+			this.toolStripButtonSkillMapper.Text = "Skill Mappings...";
+			this.toolStripButtonSkillMapper.Click += new System.EventHandler(this.toolStripButtonSkillMapper_Click);
+			// 
 			// BacklogView
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -285,11 +348,15 @@
 			this.Text = "BacklogView";
 			this.WindowState = System.Windows.Forms.FormWindowState.Maximized;
 			this.Load += new System.EventHandler(this.backlogViewLoad);
+			this.toolStripContainer1.BottomToolStripPanel.ResumeLayout(false);
+			this.toolStripContainer1.BottomToolStripPanel.PerformLayout();
 			this.toolStripContainer1.ContentPanel.ResumeLayout(false);
 			this.toolStripContainer1.TopToolStripPanel.ResumeLayout(false);
 			this.toolStripContainer1.TopToolStripPanel.PerformLayout();
 			this.toolStripContainer1.ResumeLayout(false);
 			this.toolStripContainer1.PerformLayout();
+			this.statusStrip1.ResumeLayout(false);
+			this.statusStrip1.PerformLayout();
 			this.tabControlSkills.ResumeLayout(false);
 			this.tabPage1.ResumeLayout(false);
 			this.splitContainer1.Panel1.ResumeLayout(false);
@@ -316,5 +383,9 @@
 		private System.Windows.Forms.ToolStripButton buttonLoad;
 		private System.Windows.Forms.ToolStripButton toolStripButtonManualEntries;
 		private System.Windows.Forms.ToolStripButton toolStripButtonSave;
+		private System.Windows.Forms.StatusStrip statusStrip1;
+		private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabel1;
+		private System.ComponentModel.BackgroundWorker backgroundWorker1;
+		private System.Windows.Forms.ToolStripButton toolStripButtonSkillMapper;
 	}
 }

@@ -607,7 +607,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 
 			if (modulePanelItem.ItemText == "Backlog")
 			{
-				var blView = new BacklogView();
+				var blView = new BacklogView(_container);
 				blView.Show(this);
 			}
 

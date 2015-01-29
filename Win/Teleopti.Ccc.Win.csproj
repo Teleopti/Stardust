@@ -302,6 +302,12 @@
     <Compile Include="Backlog\ManualEntryDialog.Designer.cs">
       <DependentUpon>ManualEntryDialog.cs</DependentUpon>
     </Compile>
+    <Compile Include="Backlog\SkillMapperDialog.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Backlog\SkillMapperDialog.Designer.cs">
+      <DependentUpon>SkillMapperDialog.cs</DependentUpon>
+    </Compile>
     <Compile Include="Budgeting\AddShrinkageForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -2588,6 +2594,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Backlog\ManualEntryDialog.resx">
       <DependentUpon>ManualEntryDialog.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Backlog\SkillMapperDialog.resx">
+      <DependentUpon>SkillMapperDialog.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Budgeting\AddShrinkageForm.resx">
       <DependentUpon>AddShrinkageForm.cs</DependentUpon>

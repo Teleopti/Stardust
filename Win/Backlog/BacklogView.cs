@@ -1,9 +1,17 @@
 ﻿using System;
+using System.Diagnostics.Eventing.Reader;
 using System.Drawing;
+using System.Linq;
 using System.Windows.Forms;
+using Autofac;
 using Syncfusion.Windows.Forms.Grid;
+using Teleopti.Ccc.Domain.ResourceCalculation;
+using Teleopti.Ccc.Domain.ResourceCalculation.IntraIntervalAnalyze;
 using Teleopti.Ccc.Win.Common.Controls.Cells;
+using Teleopti.Ccc.Win.Scheduling;
+using Teleopti.Ccc.Win.Scheduling.AgentRestrictions;
 using Teleopti.Ccc.WinCode.Backlog;
+using Teleopti.Ccc.WinCode.Common;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Win.Backlog
@@ -11,11 +19,14 @@ namespace Teleopti.Ccc.Win.Backlog
 	public partial class BacklogView : Form
 	{
 		private BacklogModel _model;
+		private const int fixedRows = 8;
 
-		public BacklogView()
+		public BacklogView(IComponentContext _container)
 		{
 			InitializeComponent();
-			_model = new BacklogModel();
+			var stateholder = _container.Resolve<ISchedulerStateHolder>();
+			var optimizationHelperWin = new ResourceOptimizationHelperWin(stateholder, _container.Resolve<IPersonSkillProvider>(), _container.Resolve<IIntraIntervalFinderService>());
+			_model = new BacklogModel(_container, optimizationHelperWin, stateholder);
 			
 		}
 
@@ -44,7 +55,7 @@ namespace Teleopti.Ccc.Win.Backlog
 
 		private void gridControl1_QueryRowCount(object sender, GridRowColCountEventArgs e)
 		{
-			e.Count = 5;
+			e.Count = fixedRows + _model.GetIncomingCount((ISkill)tabControlSkills.SelectedTab.Tag);
 			e.Handled = true;
 		}
 
@@ -69,6 +80,19 @@ namespace Teleopti.Ccc.Win.Backlog
 					case 4:
 						e.Style.CellValue = "Manual Entries";
 						break;
+					case 5:
+						e.Style.CellValue = "Scheduled on skill";
+						break;
+					case 6:
+						e.Style.CellValue = "Scheduled on incoming";
+						break;
+					case 7:
+						e.Style.CellValue = "Backlog on incoming";
+						break;
+					case 8:
+						e.Style.CellValue = "SL on incoming";
+						break;
+
 				}
 			}
 			else
@@ -105,6 +129,40 @@ namespace Teleopti.Ccc.Win.Backlog
 							e.Style.CellValue = _model.GetManualEntryOnIndex(e.ColIndex, (ISkill)tabControlSkills.SelectedTab.Tag);
 							e.Style.Borders.Bottom = new GridBorder(GridBorderStyle.Solid, Color.Black, GridBorderWeight.ExtraExtraThick);
 							break;
+						case 5:
+							e.Style.CellType = "TimeSpanLongHourMinutesStatic";
+							e.Style.CellValue = _model.GetScheduledOnIndex(e.ColIndex, (ISkill)tabControlSkills.SelectedTab.Tag);
+							break;
+						case 6:
+							e.Style.CellType = "TimeSpanLongHourMinutesStatic";
+							time = _model.GetScheduledOnIncomingIndex(e.ColIndex, (ISkill)tabControlSkills.SelectedTab.Tag);
+							setValue(e, time);
+							break;
+						case 7:
+							e.Style.CellType = "TimeSpanLongHourMinutesStatic";
+							time = _model.GetScheduledBacklogOnIncomingIndex(e.ColIndex, (ISkill)tabControlSkills.SelectedTab.Tag);
+							setValue(e, time);
+							break;
+						case 8:
+							e.Style.CellType = "PercentReadOnlyCellModel";
+							e.Style.CellValue = _model.GetScheduledServiceLevelOnIncomingIndex(e.ColIndex, (ISkill)tabControlSkills.SelectedTab.Tag);
+							e.Style.Borders.Bottom = new GridBorder(GridBorderStyle.Solid, Color.Black, GridBorderWeight.ExtraExtraThick);
+							break;
+						default :
+							TimeSpan? t = _model.GetScheduledTimeOnTaskForDate(e.ColIndex, e.RowIndex, fixedRows,
+								(ISkill) tabControlSkills.SelectedTab.Tag);
+							if(!t.HasValue)
+							{
+								e.Style.CellType = "Ignore";
+								e.Style.CellValue = null;
+							}
+							else
+							{
+								e.Style.CellType = "TimeSpanLongHourMinutesStatic";
+								e.Style.CellValue = t.Value;
+							}
+							break;
+
 					}
 					setBackColor(e);
 				}
@@ -125,23 +183,16 @@ namespace Teleopti.Ccc.Win.Backlog
 
 		private void backlogViewLoad(object sender, EventArgs e)
 		{
-			_model.Load();
-			populateTabControl();
-			gridControl1.ControllerOptions = GridControllerOptions.All & (~GridControllerOptions.OleDataSource);
-			gridControl1.ResetVolatileData();
-			gridControl1.BeginUpdate();
-			gridControl1.CellModels.Add("TimeSpanLongHourMinutesStatic", new TimeSpanDurationStaticCellModel(gridControl1.Model) { DisplaySeconds = false });
-			//gridControl1.CellModels.Add("Ignore", new IgnoreCellModel(gridControl1.Model));
-			gridControl1.ColWidths.SetSize(0, 120);
-			gridControl1.RowHeights.SetSize(0, 30);
-			
-			gridControl1.EndUpdate(true);
+			toolStripStatusLabel1.Text = "Loading...";
+			backgroundWorker1.RunWorkerAsync();
+			//no code below this row
 		}
 
 		private void tabControlSkills_SelectedIndexChanged(object sender, EventArgs e)
 		{
 			tabControlSkills.SelectedTab.Controls.Add(splitContainer1);
 			splitContainer1.Dock = DockStyle.Fill;
+			gridControl1.ResetVolatileData();
 		}
 
 		private void toolStripButtonManualEntries_Click(object sender, EventArgs e)
@@ -156,6 +207,42 @@ namespace Teleopti.Ccc.Win.Backlog
 		private void toolStripButtonSave_Click(object sender, EventArgs e)
 		{
 			_model.TransferSkillDays((ISkill)tabControlSkills.SelectedTab.Tag);
+		}
+
+		private void backgroundWorker1_DoWork(object sender, System.ComponentModel.DoWorkEventArgs e)
+		{
+			_model.Load(backgroundWorker1);
+		}
+
+		private void backgroundWorker1_ProgressChanged(object sender, System.ComponentModel.ProgressChangedEventArgs e)
+		{
+			var text = e.UserState as string;
+			if(text != null)
+				toolStripStatusLabel1.Text = text;
+		}
+
+		private void backgroundWorker1_RunWorkerCompleted(object sender, System.ComponentModel.RunWorkerCompletedEventArgs e)
+		{
+			populateTabControl();
+			gridControl1.ControllerOptions = GridControllerOptions.All & (~GridControllerOptions.OleDataSource);
+			gridControl1.ResetVolatileData();
+			gridControl1.BeginUpdate();
+			gridControl1.CellModels.Add("TimeSpanLongHourMinutesStatic", new TimeSpanDurationStaticCellModel(gridControl1.Model) { DisplaySeconds = false });
+			gridControl1.CellModels.Add("PercentReadOnlyCellModel", new PercentReadOnlyCellModel(gridControl1.Model));
+			gridControl1.CellModels.Add("Ignore", new IgnoreCellModel(gridControl1.Model));
+			gridControl1.ColWidths.SetSize(0, 120);
+			gridControl1.RowHeights.SetSize(0, 30);
+
+			gridControl1.EndUpdate(true);
+			toolStripStatusLabel1.Text = string.Empty;
+		}
+
+		private void toolStripButtonSkillMapper_Click(object sender, EventArgs e)
+		{
+			using (var dialog = new SkillMapperDialog(_model.SkillPairs))
+			{
+				dialog.ShowDialog(this);
+			}
 		}
 	}
 }
