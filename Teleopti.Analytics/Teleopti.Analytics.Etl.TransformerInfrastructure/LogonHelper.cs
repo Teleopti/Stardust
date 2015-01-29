@@ -5,14 +5,14 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Security.Authentication;
+using log4net;
 using Teleopti.Ccc.Domain;
 using Teleopti.Ccc.Domain.Collection;
-using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Infrastructure;
 using Teleopti.Ccc.Domain.Repositories;
-using Teleopti.Ccc.Domain.Security;
 using Teleopti.Ccc.Domain.Security.Authentication;
 using Teleopti.Ccc.Infrastructure.Foundation;
+using Teleopti.Ccc.Infrastructure.Licensing;
 using Teleopti.Ccc.Infrastructure.NHibernateConfiguration;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
@@ -21,17 +21,17 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Analytics.Etl.TransformerInfrastructure
 {
-	public class LogOnHelper : ILogOnHelper
+	public class LogOnHelper : ILogOnHelper, ILicenseFeedback
 	{
 		private DataSourceContainer _choosenDb;
 		private IList<DataSourceContainer> _foundDataBases = new List<DataSourceContainer>();
-		private LogOnService _logonService;
 		private string _nhibConfPath;
 		//private readonly string _password;
 		//private readonly string _userName;
 		private IList<IBusinessUnit> _buList;
 		private ILogOnOff _logOnOff;
 		private IRepositoryFactory _repositoryFactory;
+		private readonly ILog _logger = LogManager.GetLogger(typeof(LogOnHelper));
 
 		private LogOnHelper() { }
 
@@ -44,7 +44,7 @@ namespace Teleopti.Analytics.Etl.TransformerInfrastructure
 			_nhibConfPath = hibernateConfPath;
 
 			InitializeStateHolder();
-			SetDatabase();
+			setDatabase();
 		}
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1024:UsePropertiesWhereAppropriate")]
@@ -67,56 +67,49 @@ namespace Teleopti.Analytics.Etl.TransformerInfrastructure
 
 		public bool LogOn(IBusinessUnit businessUnit)
 		{
-			_logonService.LogOff();
 			if (_choosenDb != null)
 			{
-				if (_logonService.LogOn(_choosenDb, businessUnit))
-				{
-					LicenseActivator.ProvideLicenseActivator();
-					return true;
-				}
+				var licenseVerifier = new LicenseVerifier(this, _choosenDb.DataSource.Application, new LicenseRepository(_choosenDb.DataSource.Application));
+				var licenseService = licenseVerifier.LoadAndVerifyLicense();
+				if (licenseService == null)
+					return false;
+
+				_logOnOff.LogOff();
+				_logOnOff.LogOn(_choosenDb.DataSource, _choosenDb.User, businessUnit);
+				LicenseActivator.ProvideLicenseActivator();
+				return true;
 			}
+
 			return false;
 		}
 
-		/// <summary>
-		/// Initializes the state holder components.
-		/// </summary>
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling")]
 		private void InitializeStateHolder()
 		{
 			// Code that runs on application startup
 			if (string.IsNullOrEmpty(_nhibConfPath))
-                _nhibConfPath = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
+				_nhibConfPath = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
 			var application =
 				new InitializeApplication(
 					new DataSourcesFactory(new EnversConfiguration(), new List<IMessageSender>(),
-					                       DataSourceConfigurationSetter.ForEtl(), new CurrentHttpContext()), null);
-			application.MessageBrokerDisabled = true;
+												  DataSourceConfigurationSetter.ForEtl(), new CurrentHttpContext()), null) {MessageBrokerDisabled = true};
 
-			if (!StateHolder.IsInitialized)
+			if (!StateHolderReader.IsInitialized)
 				application.Start(new StateManager(), _nhibConfPath, null, new ConfigurationManagerWrapper(), true);
 
 			//This one would benefit from some Autofac maybe?
 			_logOnOff = new LogOnOff(new WindowsAppDomainPrincipalContext(new TeleoptiPrincipalFactory()));
+
 			_repositoryFactory = new RepositoryFactory();
-			var passwordPolicy = new DummyPasswordPolicy();
-			_logonService =
-				new LogOnService(
-					new ApplicationDataSourceProvider(
-						new AvailableDataSourcesProvider(
-							new ThisApplicationData(StateHolderReader.Instance.StateReader.ApplicationScopeData)),
-						_repositoryFactory,
-						new FindApplicationUser(
-							new CheckNullUser(
-								new FindUserDetail(
-									new CheckUserDetail(new CheckPassword(new OneWayEncryption(), new CheckBruteForce(passwordPolicy),
-										new CheckPasswordChange(() => passwordPolicy))), _repositoryFactory)), _repositoryFactory)),_logOnOff);
+			
 		}
 
-		private void SetDatabase()
+		private void setDatabase()
 		{
-			_foundDataBases = _logonService.CreateAvailableDataSourcesListForApplicationUser().ToList();
+			var dataSourceProvider =
+				new AvailableDataSourcesProvider(new ThisApplicationData(StateHolderReader.Instance.StateReader.ApplicationScopeData));
+			var datasourceprovider = new ApplicationDataSourceProvider(dataSourceProvider,new RepositoryFactory(), null);
+			_foundDataBases = datasourceprovider.DataSourceList().ToList();
+
 			if (_foundDataBases.IsEmpty())
 			{
 				Trace.WriteLine("Login Failed! could not be found in any database configuration.");
@@ -131,13 +124,13 @@ namespace Teleopti.Analytics.Etl.TransformerInfrastructure
 					var systemId = new Guid("3f0886ab-7b25-4e95-856a-0d726edc2a67");
 					_choosenDb.SetUser(_repositoryFactory.CreatePersonRepository(unitOfWork).LoadOne(systemId));
 				}
-				
-				if(_choosenDb.User == null)
+
+				if (_choosenDb.User == null)
 				{
 					Trace.WriteLine("Error on logon!");
 					_choosenDb = null;
 				}
-				
+
 			}
 		}
 
@@ -163,17 +156,17 @@ namespace Teleopti.Analytics.Etl.TransformerInfrastructure
 
 		protected virtual void ReleaseManagedResources()
 		{
-			if (_logonService != null)
+			if (_logOnOff != null)
 			{
-				_logonService.LogOff();
-				_logonService = null;
+				_logOnOff.LogOff();
+				_logOnOff = null;
 			}
-			if (_buList!=null)
+			if (_buList != null)
 			{
 				_buList.Clear();
 				_buList = null;
 			}
-			if (_foundDataBases!=null)
+			if (_foundDataBases != null)
 			{
 				_foundDataBases.Clear();
 				_foundDataBases = null;
@@ -182,12 +175,27 @@ namespace Teleopti.Analytics.Etl.TransformerInfrastructure
 
 		public void LogOff()
 		{
-			_logonService.LogOff();
+			_logOnOff.LogOff();
 		}
 
 		public DataSourceContainer ChoosenDataSource
 		{
 			get { return _choosenDb; }
+		}
+
+		public void Warning(string warning)
+		{
+			Warning(warning, "");
+		}
+
+		public void Warning(string warning, string caption)
+		{
+			_logger.Warn(warning);
+		}
+
+		public void Error(string error)
+		{
+			_logger.Error(error);
 		}
 	}
 }
