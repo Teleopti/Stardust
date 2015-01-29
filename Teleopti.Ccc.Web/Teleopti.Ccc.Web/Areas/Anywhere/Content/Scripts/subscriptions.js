@@ -3,8 +3,8 @@ define([
 		'subscriptions.groupschedule',
 		'subscriptions.personschedule',
 		'subscriptions.staffingmetrics',
-		'subscriptions.adherenceteams',
-		'subscriptions.adherencesites',
+		'views/realtimeadherenceteams/subscriptions.adherenceteams',
+		'views/realtimeadherencesites/subscriptions.adherencesites',
 		'views/realtimeadherenceagents/subscriptions.adherenceagents',
 		'subscriptions.trackingmessages'
 	], function(

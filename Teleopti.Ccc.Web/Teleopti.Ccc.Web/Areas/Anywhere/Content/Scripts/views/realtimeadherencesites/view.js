@@ -3,11 +3,10 @@
 		'knockout.justgagebinding',
 		'text!templates/realtimeadherencesites/view.html',
 		'views/realtimeadherencesites/vm',
-		'subscriptions.adherencesites',
+		'views/realtimeadherencesites/subscriptions.adherencesites',
 		'errorview',
 		'ajax',
-		'resources',
-		'polling/adherencesites'
+		'resources'
 ], function (
 		ko,
 		justGageBinding,
@@ -16,17 +15,11 @@
 		subscriptions,
 		errorview,
 		ajax,
-		resources,
-		poller
+		resources
 	) {
 
 	var viewModel;
 
-	var toggledStateGetter = function () {
-		if (resources.RTA_NoBroker_31237)
-			return poller;
-		return subscriptions;
-	}
 	return {
 		initialize: function(options) {
 			errorview.remove();
@@ -41,7 +34,7 @@
 		},
 
 		display: function(options) {
-			viewModel = realTimeAdherenceViewModel(toggledStateGetter());
+			viewModel = realTimeAdherenceViewModel();
 			viewModel.BusinessUnitId(options.buid);
 			ko.cleanNode(options.bindingElement);
 			ko.applyBindings(viewModel, options.bindingElement);
@@ -49,7 +42,7 @@
 			viewModel.load();
 		},
 		dispose: function (options) {
-			toggledStateGetter().unsubscribeAdherence();
+			subscriptions.unsubscribeAdherence();
 		}
 	};
 });

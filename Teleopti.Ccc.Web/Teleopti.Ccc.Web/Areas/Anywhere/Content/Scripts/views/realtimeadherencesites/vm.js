@@ -6,7 +6,7 @@
 		'amplify',
 		'navigation',
 		'ajax',
-		'subscriptions.adherencesites'
+		'views/realtimeadherencesites/subscriptions.adherencesites'
 ],
 	function (
 		ko,
@@ -18,11 +18,9 @@
 		ajax,
 		subscriptions
 	) {
-		return function (toggledSubscription) {
+		return function () {
 
 			var that = {};
-
-			subscriptions = toggledSubscription || subscriptions;
 
 			that.resources = resources;
 			that.sites = ko.observableArray();

@@ -1072,18 +1072,20 @@
     <Content Include="Areas\Anywhere\Content\Scripts\helpers_test.js" />
     <Content Include="Areas\Anywhere\Content\Scripts\knockout.justgagebinding.js" />
     <Content Include="Areas\Anywhere\Content\Scripts\views\realtimeadherenceagents\subscriptions.adherenceagents.poller.js" />
-    <Content Include="Areas\Anywhere\Content\Scripts\polling\adherenceteams.js" />
+    <Content Include="Areas\Anywhere\Content\Scripts\views\realtimeadherenceteams\subscriptions.adherenceteams.poller.js" />
     <Content Include="Areas\Anywhere\Content\Scripts\require\raphaelloader.js" />
     <Content Include="Areas\Anywhere\Content\Scripts\shared\timezone-current.js" />
     <Content Include="Areas\Anywhere\Content\Scripts\shared\timezone-display.js" />
     <Content Include="Areas\Anywhere\Content\Scripts\views\realtimeadherenceagents\subscriptions.adherenceagents.broker.js" />
     <Content Include="Areas\Anywhere\Content\Scripts\views\realtimeadherenceagents\subscriptions.adherenceagents.js" />
-    <Content Include="Areas\Anywhere\Content\Scripts\subscriptions.adherenceteams.js" />
+    <Content Include="Areas\Anywhere\Content\Scripts\views\realtimeadherencesites\subscriptions.adherencesites.broker.js" />
+    <Content Include="Areas\Anywhere\Content\Scripts\views\realtimeadherenceteams\subscriptions.adherenceteams.broker.js" />
+    <Content Include="Areas\Anywhere\Content\Scripts\views\realtimeadherenceteams\subscriptions.adherenceteams.js" />
     <Content Include="Areas\Anywhere\Content\Scripts\subscriptions.trackingmessages.js" />
     <Content Include="Areas\Anywhere\Content\Scripts\subscriptions.staffingmetrics.js" />
     <Content Include="Areas\Anywhere\Content\Scripts\subscriptions.personschedule.js" />
     <Content Include="Areas\Anywhere\Content\Scripts\subscriptions.groupschedule.js" />
-    <Content Include="Areas\Anywhere\Content\Scripts\subscriptions.adherencesites.js" />
+    <Content Include="Areas\Anywhere\Content\Scripts\views\realtimeadherencesites\subscriptions.adherencesites.js" />
     <Content Include="Areas\Anywhere\Content\Scripts\resources.js" />
     <Content Include="Areas\Anywhere\Content\Scripts\permissions.js" />
     <Content Include="Areas\Anywhere\Content\Scripts\views\diagnosis\view.js" />
@@ -1097,7 +1099,7 @@
     <Content Include="Areas\Anywhere\Content\Scripts\views\personschedule\absencelistitem_test.js" />
     <Content Include="Areas\Anywhere\Content\Scripts\views\personschedule\moveactivityform.js" />
     <Content Include="Areas\Anywhere\Content\Scripts\views\personschedule\vm_test.js" />
-    <Content Include="Areas\Anywhere\Content\Scripts\polling\adherencesites.js" />
+    <Content Include="Areas\Anywhere\Content\Scripts\views\realtimeadherencesites\subscriptions.adherencesites.poller.js" />
     <Content Include="Areas\Anywhere\Content\Scripts\views\realtimeadherenceagents\filter.js" />
     <Content Include="Areas\Anywhere\Content\Scripts\views\realtimeadherenceagents\agent.js" />
     <Content Include="Areas\Anywhere\Content\Scripts\views\realtimeadherenceagents\agentstate.js" />
@@ -1845,6 +1847,7 @@
     <Content Include="Areas\MyTime\Views\_ViewStart.cshtml" />
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="Areas\Anywhere\Content\Scripts\polling\" />
     <Folder Include="Areas\Anywhere\Views\SeatPlan\" />
     <Folder Include="Areas\Mart\Views\Shared\" />
     <Folder Include="Areas\MyTime\Core\BadgeLeaderBoardReport\DataProvider\" />
