@@ -1,10 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Globalization;
 using System.Linq;
 using System.Threading;
 using System.Windows.Forms;
 using Microsoft.Practices.Composite.Events;
+using Syncfusion.Drawing;
+using Syncfusion.Grouping;
 using Syncfusion.Windows.Forms.Tools;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.UserTexts;
@@ -27,6 +30,7 @@ namespace Teleopti.Ccc.Win.Grouping
 		private readonly IGroupPageHelper _groupPageHelper;
 		private readonly IEventAggregator _globalEventAggregator;
 		private DateOnlyPeriod? _selectedPeriod;
+		private readonly Brush _intermediateBrush = Brushes.LightGray;
 
 		public event EventHandler DoFilter;
 
@@ -48,6 +52,13 @@ namespace Teleopti.Ccc.Win.Grouping
 			treeViewAdvMainTabTree.Root.SortType = TreeNodeAdvSortType.Text;
 			treeViewAdvMainTabTree.Root.SortOrder = SortOrder.Ascending;
 	        treeViewAdvMainTabTree.AllowKeyboardSearch = true;
+		}
+
+
+		private void treeViewAdvMainTabTreeNodeBackgroundPaint(object sender, TreeNodeAdvPaintBackgroundEventArgs e)
+		{
+			if (e.Node.CheckState != CheckState.Indeterminate) return;
+			e.Node.IntermediateCheckBoxBackGround = _intermediateBrush;
 		}
 
 		private void makeSureDropdownButtonWorksInRightToLeftCultures()
@@ -485,6 +496,6 @@ namespace Teleopti.Ccc.Win.Grouping
 				treeViewAdvMainTabTreeKeyDown(this, e);
 			}
 		}
-	}
 
+	}
 }

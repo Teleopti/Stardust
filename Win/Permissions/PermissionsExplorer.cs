@@ -48,6 +48,7 @@ namespace Teleopti.Ccc.Win.Permissions
 		private const string space = @" ";
 		private readonly IGracefulDataSourceExceptionHandler _dataSourceExceptionHandler = new GracefulDataSourceExceptionHandler();
 		private IPermissionViewerRolesPresenter _permissionsViewerPresenter;
+		private readonly Brush _intermediateBrush = Brushes.LightGray;
 		
 		public PermissionsExplorer(IComponentContext container)
 		{
@@ -2315,6 +2316,18 @@ namespace Teleopti.Ccc.Win.Permissions
 		private void backStageButton4VisibleChanged(object sender, EventArgs e)
 		{
 			backStageButton4.Location = new Point(0, 154);
+		}
+
+		private void treeViewFunctionsNodeBackgroundPaint(object sender, TreeNodeAdvPaintBackgroundEventArgs e)
+		{
+			if (e.Node.CheckState != CheckState.Indeterminate) return;
+			e.Node.IntermediateCheckBoxBackGround = _intermediateBrush;
+		}
+
+		private void treeViewDataNodeBackgroundPaint(object sender, TreeNodeAdvPaintBackgroundEventArgs e)
+		{
+			if (e.Node.CheckState != CheckState.Indeterminate) return;
+			e.Node.IntermediateCheckBoxBackGround = _intermediateBrush;
 		}
 	}
 }

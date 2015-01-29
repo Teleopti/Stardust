@@ -213,7 +213,7 @@ namespace Teleopti.Ccc.Win.Permissions
 			this.treeViewFunctions.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.treeViewFunctions.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
 			this.treeViewFunctions.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
-			this.treeViewFunctions.GridOfficeScrollBars = Syncfusion.Windows.Forms.OfficeScrollBars.Metro;
+			this.treeViewFunctions.GridOfficeScrollBars = Syncfusion.Windows.Forms.OfficeScrollBars.Office2010;
 			// 
 			// 
 			// 
@@ -228,6 +228,7 @@ namespace Teleopti.Ccc.Win.Permissions
 			this.treeViewFunctions.MetroScrollBars = true;
 			this.treeViewFunctions.Name = "treeViewFunctions";
 			this.treeViewFunctions.Office2010ScrollBarsColorScheme = Syncfusion.Windows.Forms.Office2010ColorScheme.Silver;
+			this.treeViewFunctions.OwnerDrawNodesBackground = true;
 			this.treeViewFunctions.SelectedNodeBackground = new Syncfusion.Drawing.BrushInfo(System.Drawing.Color.FromArgb(((int)(((byte)(22)))), ((int)(((byte)(165)))), ((int)(((byte)(220))))));
 			this.treeViewFunctions.SelectionMode = Syncfusion.Windows.Forms.Tools.TreeSelectionMode.MultiSelectSameLevel;
 			this.treeViewFunctions.ShowCheckBoxes = true;
@@ -245,6 +246,7 @@ namespace Teleopti.Ccc.Win.Permissions
 			this.treeViewFunctions.ToolTipControl.Size = new System.Drawing.Size(55, 15);
 			this.treeViewFunctions.ToolTipControl.TabIndex = 1;
 			this.treeViewFunctions.ToolTipControl.Text = "xxToolTip";
+			this.treeViewFunctions.NodeBackgroundPaint += new Syncfusion.Windows.Forms.Tools.TreeNodeAdvPaintBackgroundEventHandler(this.treeViewFunctionsNodeBackgroundPaint);
 			// 
 			// treeViewData
 			// 
@@ -259,7 +261,7 @@ namespace Teleopti.Ccc.Win.Permissions
 			this.treeViewData.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.treeViewData.Font = new System.Drawing.Font("Segoe UI", 9.75F);
 			this.treeViewData.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
-			this.treeViewData.GridOfficeScrollBars = Syncfusion.Windows.Forms.OfficeScrollBars.Metro;
+			this.treeViewData.GridOfficeScrollBars = Syncfusion.Windows.Forms.OfficeScrollBars.Office2010;
 			// 
 			// 
 			// 
@@ -275,6 +277,7 @@ namespace Teleopti.Ccc.Win.Permissions
 			this.treeViewData.MetroScrollBars = true;
 			this.treeViewData.Name = "treeViewData";
 			this.treeViewData.Office2010ScrollBarsColorScheme = Syncfusion.Windows.Forms.Office2010ColorScheme.Silver;
+			this.treeViewData.OwnerDrawNodesBackground = true;
 			this.treeViewData.SelectedNodeBackground = new Syncfusion.Drawing.BrushInfo(System.Drawing.Color.FromArgb(((int)(((byte)(22)))), ((int)(((byte)(165)))), ((int)(((byte)(220))))));
 			this.treeViewData.SelectionMode = Syncfusion.Windows.Forms.Tools.TreeSelectionMode.MultiSelectSameLevel;
 			this.treeViewData.ShowCheckBoxes = true;
@@ -292,6 +295,7 @@ namespace Teleopti.Ccc.Win.Permissions
 			this.treeViewData.ToolTipControl.Size = new System.Drawing.Size(55, 15);
 			this.treeViewData.ToolTipControl.TabIndex = 1;
 			this.treeViewData.ToolTipControl.Text = "xxToolTip";
+			this.treeViewData.NodeBackgroundPaint += new Syncfusion.Windows.Forms.Tools.TreeNodeAdvPaintBackgroundEventHandler(this.treeViewDataNodeBackgroundPaint);
 			// 
 			// toolStripTabItem5
 			// 

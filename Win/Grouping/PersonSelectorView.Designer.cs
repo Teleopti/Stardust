@@ -93,7 +93,8 @@
 			this.treeViewAdvMainTabTree.MetroColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(153)))), ((int)(((byte)(255)))));
 			this.treeViewAdvMainTabTree.MetroScrollBars = true;
 			this.treeViewAdvMainTabTree.Name = "treeViewAdvMainTabTree";
-			this.treeViewAdvMainTabTree.SelectedNodeBackground = new Syncfusion.Drawing.BrushInfo(System.Drawing.Color.FromArgb(((int)(((byte)(22)))), ((int)(((byte)(165)))), ((int)(((byte)(220))))));
+			this.treeViewAdvMainTabTree.OwnerDrawNodesBackground = true;
+			this.treeViewAdvMainTabTree.SelectedNodeBackground = new Syncfusion.Drawing.BrushInfo(System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(153)))), ((int)(((byte)(255))))));
 			this.treeViewAdvMainTabTree.SelectionMode = Syncfusion.Windows.Forms.Tools.TreeSelectionMode.MultiSelectAll;
 			this.treeViewAdvMainTabTree.ShowFocusRect = false;
 			this.treeViewAdvMainTabTree.Size = new System.Drawing.Size(380, 446);
@@ -111,6 +112,7 @@
 			this.treeViewAdvMainTabTree.ToolTipControl.Size = new System.Drawing.Size(41, 15);
 			this.treeViewAdvMainTabTree.ToolTipControl.TabIndex = 1;
 			this.treeViewAdvMainTabTree.ToolTipControl.Text = "toolTip";
+			this.treeViewAdvMainTabTree.NodeBackgroundPaint += new Syncfusion.Windows.Forms.Tools.TreeNodeAdvPaintBackgroundEventHandler(this.treeViewAdvMainTabTreeNodeBackgroundPaint);
 			this.treeViewAdvMainTabTree.AfterSelect += new System.EventHandler(this.treeViewAdvMainTabTreeAfterSelect);
 			this.treeViewAdvMainTabTree.AfterCheck += new Syncfusion.Windows.Forms.Tools.TreeNodeAdvEventHandler(this.treeViewAdvMainTabTreeAfterCheck);
 			this.treeViewAdvMainTabTree.KeyDown += new System.Windows.Forms.KeyEventHandler(this.treeViewAdvMainTabTreeKeyDown);
