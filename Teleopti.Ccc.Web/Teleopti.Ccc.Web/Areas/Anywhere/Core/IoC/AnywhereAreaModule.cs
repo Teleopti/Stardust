@@ -21,7 +21,9 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Core.IoC
 			builder.RegisterType<GroupScheduleViewModelFactory>().As<IGroupScheduleViewModelFactory>().SingleInstance();
 			builder.RegisterType<GroupScheduleViewModelMapper>().As<IGroupScheduleViewModelMapper>().SingleInstance();
 			builder.RegisterType<PersonScheduleViewModelFactory>().As<IPersonScheduleViewModelFactory>().SingleInstance();
+			builder.RegisterType<PersonScheduleDayViewModelFactory>().As<IPersonScheduleDayViewModelFactory>().SingleInstance();
 			builder.RegisterType<PersonScheduleViewModelMapper>().As<IPersonScheduleViewModelMapper>().SingleInstance();
+			builder.RegisterType<PersonScheduleDayViewModelMapper>().As<IPersonScheduleDayViewModelMapper>().SingleInstance();
 			builder.RegisterType<DailyStaffingMetricsViewModelFactory>().As<IDailyStaffingMetricsViewModelFactory>().InstancePerLifetimeScope();
 			builder.RegisterType<ReportItemsProvider>().As<IReportItemsProvider>().SingleInstance();
 			builder.RegisterType<ReportUrl>().As<IReportUrl>().SingleInstance();

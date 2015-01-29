@@ -23,6 +23,13 @@ define([
 			var self = this;
 		
 			var personName = data.PersonName;
+			self.personId = data.PersonId;
+			self.CurrentDateMoment = ko.observable(moment(data.Date));
+			self.CurrentDate = ko.observable(data.Date.format('YYYY-MM-DD'));
+			self.EndTimeForAbsenceModify = ko.observable(moment(data.Date));
+			self.Schedules = ko.observableArray();
+			self.StartDateOnly = moment(data.StartTime, "YYYY-MM-DD");
+			self.EndDateOnly = moment(data.EndTime, "YYYY-MM-DD");
 
 			this.StartDateTimeMoment = moment(data.StartTime);
 			this.EndDateTimeMoment = moment(data.EndTime);
@@ -32,8 +39,10 @@ define([
 			this.EndDate = ko.observable(self.EndDateTimeMoment.format('YYYY-MM-DD'));
 			this.EndTime = ko.observable(self.EndDateTimeMoment.format(resources.TimeFormatForMoment));
 
-			this.UpdatedEndDateTime = ko.computed(function () {
-				return moment(self.EndDate() +' '+ self.EndTime(), 'YYYY-MM-DD' +' '+ resources.TimeFormatForMoment);
+			this.PreviousDate = ko.computed(function () {
+				self.CurrentDateMoment(moment(self.CurrentDate()));
+				self.EndTimeForAbsenceModify(moment(self.CurrentDate()));
+				return moment(self.CurrentDate()).add('day', -1);
 			});
 
 			
@@ -81,14 +90,14 @@ define([
 			});
 			
 			this.ModifiedEndTimeOtherTimeZone = ko.computed(function () {
-				return self.convertTimeToOtherTimeZone(self.UpdatedEndDateTime().format("YYYY-MM-DD HH:mm"));
+				return self.convertTimeToOtherTimeZone(self.EndTimeForAbsenceModify().format("YYYY-MM-DD HH:mm"));
 			});
 
 			this.ValidateEndTimeIsAfterStartTime = function () {
-				return !(self.UpdatedEndDateTime().isBefore(self.StartDateTimeMoment));
+				return !(moment(self.CurrentDateMoment(), "YYYY-MM-DD").isBefore(self.StartDateOnly));
 			}
 			this.ValidateEndTimeIsBeforeOriginalEndTime = function() {
-				return !(self.UpdatedEndDateTime().isAfter(self.EndDateTimeMoment));
+				return !(moment(self.CurrentDateMoment(), "YYYY-MM-DD").isAfter(self.EndDateOnly));
 			}
 
 			this.ErrorMessage = ko.computed(function () {
@@ -109,7 +118,40 @@ define([
 				self.AboutToRemove(true);
 			};
 
+			this.LoadAbsenceTimeForEmptyDay = function() {
+
+			};
+
 			this.Save = function () {
+				var trackId = guidgenerator.newGuid();
+				ajax.ajax({
+					url: 'PersonScheduleCommand/GetPersonSchedule',
+					dataType: "json",
+					type: 'GET',
+					data: { personId: self.personId, date: self.PreviousDate().format("YYYY-MM-DD") },
+					success: function (schedule) {
+						var endTime = self.CurrentDateMoment();
+						if (schedule.EndTime != null) {
+							endTime = moment(schedule.EndTime);
+						}
+						else if (schedule.IsDayOff) {
+							endTime = self.CurrentDateMoment();
+						}
+
+						if (self.CurrentDate() == self.StartDateOnly.format("YYYY-MM-DD")) {
+							self.ConfirmRemoval();
+						} else {
+							self.EndTimeForAbsenceModify(endTime);
+							self.UpdateAbsence();
+						}
+					},
+					statusCode500: function (jqXHR, textStatus, errorThrown) {
+						notificationsViewModel.UpdateNotification(trackId, 3);
+					}
+				});
+			};
+
+			this.UpdateAbsence = function () {
 
 				if (!self.IsAbsenceValid()) {
 					return;
@@ -118,7 +160,7 @@ define([
 				var trackId = guidgenerator.newGuid();
 				var requestData = JSON.stringify({
 					StartTime: self.StartDateTime,
-					EndTime: self.UpdatedEndDateTime(),
+					EndTime: self.EndTimeForAbsenceModify().format('YYYY-MM-DD' + ' ' + resources.TimeFormatForMoment),
 					PersonAbsenceId: data.Id,
 					PersonId: data.PersonId,
 					TrackedCommandInfo: { TrackId: trackId }

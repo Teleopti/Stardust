@@ -5,6 +5,8 @@ using System.Web;
 using System.Web.Mvc;
 using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.ApplicationLayer.Commands;
+using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.PersonScheduleDayReadModel;
+using Teleopti.Ccc.Web.Areas.Anywhere.Core;
 using Teleopti.Ccc.Web.Core;
 using Teleopti.Ccc.Web.Core.Aop.Aspects;
 using Teleopti.Ccc.Web.Filters;
@@ -16,11 +18,13 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Controllers
 	{
 		private readonly ICommandDispatcher _commandDispatcher;
 		private readonly ILoggedOnUser _loggedOnUser;
+		private readonly IPersonScheduleDayViewModelFactory _personScheduleDayViewModelFactory;
 
-		public PersonScheduleCommandController(ICommandDispatcher commandDispatcher, ILoggedOnUser loggedOnUser)
+		public PersonScheduleCommandController(ICommandDispatcher commandDispatcher, ILoggedOnUser loggedOnUser, IPersonScheduleDayViewModelFactory personScheduleDayViewModelFactory)
 		{
 			_commandDispatcher = commandDispatcher;
 			_loggedOnUser = loggedOnUser;
+			_personScheduleDayViewModelFactory = personScheduleDayViewModelFactory;
 		}
 
 		[HttpPost]
@@ -114,6 +118,12 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Controllers
 					throw new HttpException(501, e.InnerException.Message);
 			}
 			return Json(new object(), JsonRequestBehavior.DenyGet);
+		}
+
+		[UnitOfWorkAction, HttpGet]
+		public virtual JsonResult GetPersonSchedule(Guid personId, DateTime date)
+		{
+			return Json(_personScheduleDayViewModelFactory.CreateViewModel(personId, date), JsonRequestBehavior.AllowGet);
 		}
 	}
 }
