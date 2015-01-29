@@ -210,7 +210,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 
             if (forecastedMinutes == 0 && scheduledMinutes == 0)
                 return null;
-            return new DeviationStatisticData(forecastedMinutes, scheduledMinutes).RelativeDeviationForDisplayOnly;
+            return new DeviationStatisticData(forecastedMinutes, scheduledMinutes).RelativeDeviationForDisplay;
         }
 
         /// <summary>
