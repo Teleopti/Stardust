@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Interfaces.Domain;
+using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.Domain.Security.AuthorizationEntities
 {
@@ -14,7 +15,7 @@ namespace Teleopti.Ccc.Domain.Security.AuthorizationEntities
 			_function = function;
 
 			IsLicensed = isLicensed(function);
-			Hidden = function.IsPreliminary;
+			Hidden = function.IsPreliminary || ((IDeleteTag) function).IsDeleted;
 			ChildFunctions = function.ChildCollection.OfType<IApplicationFunction>().Select(f => new SystemFunction(f, isLicensed)).ToArray();
 		}
 

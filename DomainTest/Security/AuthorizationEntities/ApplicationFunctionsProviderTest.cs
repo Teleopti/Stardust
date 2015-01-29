@@ -116,5 +116,24 @@ namespace Teleopti.Ccc.DomainTest.Security.AuthorizationEntities
 			result.FindByFunctionPath("Code1/Code2").IsLicensed.Should().Be.True();
 			result.FindByFunctionPath("Code1/Code2/Code3").IsLicensed.Should().Be.False();
 		}
+
+		[Test]
+		public void ShouldHideDeletedFunction()
+		{
+			var applicationFunction = new ApplicationFunction("Code1") {ForeignSource = DefinedForeignSourceNames.SourceRaptor};
+			applicationFunction.SetDeleted();
+
+			var licensedFunctionsProvider = MockRepository.GenerateMock<ILicensedFunctionsProvider>();
+			var currentDataSource = new FakeCurrentDatasource(myDatasource);
+			var applicationFunctionRepository = MockRepository.GenerateMock<IApplicationFunctionRepository>();
+
+			licensedFunctionsProvider.Stub(x => x.LicensedFunctions(myDatasource)).Return(new List<IApplicationFunction>());
+			applicationFunctionRepository.Stub(x => x.GetAllApplicationFunctionSortedByCode()).Return(new List<IApplicationFunction> {applicationFunction});
+
+			var target = new ApplicationFunctionsProvider(applicationFunctionRepository, licensedFunctionsProvider, currentDataSource);
+
+			var result = target.AllFunctions();
+			result.FindByFunctionPath("Code1").Hidden.Should().Be.True();
+		}
 	}
 }
