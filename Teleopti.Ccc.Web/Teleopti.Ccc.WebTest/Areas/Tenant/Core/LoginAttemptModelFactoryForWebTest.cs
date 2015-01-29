@@ -18,10 +18,11 @@ namespace Teleopti.Ccc.WebTest.Areas.Tenant.Core
 			const string ipadress = "1.2.3.4";
 			var ipAdress = MockRepository.GenerateStub<IIpAddressResolver>();
 			ipAdress.Expect(x => x.GetIpAddress()).Return(ipadress);
+			var userAgent = Guid.NewGuid().ToString();
 
-			var target = new LoginAttemptModelFactoryForWeb(null, ipAdress);
+			var target = new LoginAttemptModelFactoryForWeb(null, ipAdress, new HttpRequestUserAgentFake(userAgent));
 			var result = target.Create(userName, personId, true);
-			result.Client.Should().Be.EqualTo(LoginAttemptModelFactoryForWeb.Client);
+			result.Client.Should().Be.EqualTo(userAgent);
 			result.ClientIp.Should().Be.EqualTo(ipadress);
 			result.PersonId.Should().Be.EqualTo(personId);
 			result.Provider.Should().Be.EqualTo(LoginAttemptModelFactoryForWeb.ApplicationProvider);
@@ -37,10 +38,11 @@ namespace Teleopti.Ccc.WebTest.Areas.Tenant.Core
 			const string ipadress = "4.2.3.4";
 			var ipAdress = MockRepository.GenerateStub<IIpAddressResolver>();
 			ipAdress.Expect(x => x.GetIpAddress()).Return(ipadress);
+			var userAgent = Guid.NewGuid().ToString();
 
-			var target = new LoginAttemptModelFactoryForWeb(null, ipAdress);
+			var target = new LoginAttemptModelFactoryForWeb(null, ipAdress, new HttpRequestUserAgentFake(userAgent));
 			var result = target.Create(userName, personId, false);
-			result.Client.Should().Be.EqualTo(LoginAttemptModelFactoryForWeb.Client);
+			result.Client.Should().Be.EqualTo(userAgent);
 			result.ClientIp.Should().Be.EqualTo(ipadress);
 			result.PersonId.Should().Be.EqualTo(personId);
 			result.Provider.Should().Be.EqualTo(LoginAttemptModelFactoryForWeb.ApplicationProvider);
@@ -59,10 +61,11 @@ namespace Teleopti.Ccc.WebTest.Areas.Tenant.Core
 			var identityProvider = MockRepository.GenerateStub<ITokenIdentityProvider>();
 			var tokenIdentity = new TokenIdentity {UserIdentifier = winUser};
 			identityProvider.Expect(x => x.RetrieveToken()).Return(tokenIdentity);
+			var userAgent = Guid.NewGuid().ToString();
 
-			var target = new LoginAttemptModelFactoryForWeb(identityProvider, ipAdress);
+			var target = new LoginAttemptModelFactoryForWeb(null, ipAdress, new HttpRequestUserAgentFake(userAgent));
 			var result = target.Create(null, personId, true);
-			result.Client.Should().Be.EqualTo(LoginAttemptModelFactoryForWeb.Client);
+			result.Client.Should().Be.EqualTo(userAgent);
 			result.ClientIp.Should().Be.EqualTo(ipadress);
 			result.PersonId.Should().Be.EqualTo(personId);
 			result.Provider.Should().Be.EqualTo(LoginAttemptModelFactoryForWeb.WindowsProvider);
@@ -81,10 +84,11 @@ namespace Teleopti.Ccc.WebTest.Areas.Tenant.Core
 			var identityProvider = MockRepository.GenerateStub<ITokenIdentityProvider>();
 			var tokenIdentity = new TokenIdentity { UserIdentifier = winUser };
 			identityProvider.Expect(x => x.RetrieveToken()).Return(tokenIdentity);
+			var userAgent = Guid.NewGuid().ToString();
 
-			var target = new LoginAttemptModelFactoryForWeb(identityProvider, ipAdress);
+			var target = new LoginAttemptModelFactoryForWeb(null, ipAdress, new HttpRequestUserAgentFake(userAgent));
 			var result = target.Create(null, personId, false);
-			result.Client.Should().Be.EqualTo(LoginAttemptModelFactoryForWeb.Client);
+			result.Client.Should().Be.EqualTo(userAgent);
 			result.ClientIp.Should().Be.EqualTo(ipadress);
 			result.PersonId.Should().Be.EqualTo(personId);
 			result.Provider.Should().Be.EqualTo(LoginAttemptModelFactoryForWeb.WindowsProvider);
