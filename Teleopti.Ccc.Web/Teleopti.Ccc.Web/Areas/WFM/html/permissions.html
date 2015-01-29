@@ -14,16 +14,16 @@
 	<div class="roles-details-wrapper col-md-8">
 		<div class="btn-wrapper">
 			<div class="btn-group">
-				<label class="btn btn-primary" ng-model="roleDetails" btn-radio="'data'">data</label>
-				<label class="btn btn-primary" ng-model="roleDetails" btn-radio="'function'">function</label>
+				<label class="btn btn-primary" ng-model="roleDetails" btn-radio="'dataAvailable'">data</label>
+				<label class="btn btn-primary" ng-model="roleDetails" btn-radio="'functionsAvailable'">function</label>
 			</div>
-			
 			
 			<div>
 				<button class="pull-right">Copy Role</button>
 			</div>
 		</div>
-		<div>
+		<!-- Todo ng-switch instead of ng-show -->
+		<div ng-show="roleDetails=='functionsAvailable'">
 			<input type="text" name="filterDetails" placeholder="filter ..." />
 			<div class="tree">
 				<div ui-tree data-drag-enabled="false">
@@ -34,6 +34,47 @@
 			</div>
 		</div>
 		
+
+		<div ng-show="roleDetails=='dataAvailable'">
+			<input type="text" name="filterDetails" placeholder="filter ..." />
+			<div class="tree">
+				<div ui-tree data-drag-enabled="false">
+					<ol ui-tree-nodes="" ng-model="organization" id="tree-root">
+						<li ui-tree-node>
+							<div ui-tree-handle >
+								Dynamic options
+							</div>
+							<ol ui-tree-nodes="" ng-model="organization.DynamicOptions">
+								<li ng-repeat="dynamic in organization.DynamicOptions" ui-tree-node>
+									<div ui-tree-handle >
+										{{dynamic.Name}}
+									</div>
+								</li>
+							</ol>
+						</li>
+						<li ui-tree-node>
+							<div ui-tree-handle>
+								{{organization.BusinessUnit.Name}}
+							</div>
+							<ol ui-tree-nodes="" ng-model="organization.BusinessUnit.Sites">
+								<li ng-repeat="site in organization.BusinessUnit.Sites" ui-tree-node>
+									<div ui-tree-handle >
+										{{site.Name}}
+									</div>
+									<ol ui-tree-nodes="" ng-model="site.Teams">
+										<li ng-repeat="team in site.Teams" ui-tree-node>
+											<div ui-tree-handle >
+												{{team.Name}}
+											</div>
+										</li>
+									</ol>
+								</li>
+							</ol>
+						</li>
+					</ol>
+				</div>
+			</div>
+		</div>
 	</div>
 	
 </div>
