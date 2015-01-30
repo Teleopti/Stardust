@@ -195,14 +195,14 @@ delete [Auditing].[Security]
 where  [DateTimeUtc] < @SecurityAuditKeepUntil
 
 --Requests
-delete top (50000) ShiftTradeSwapDetail
+--AF: Need to remove top (50000) as this caused corrupt data...
+delete ShiftTradeSwapDetail
 from ShiftTradeSwapDetail a
 inner join ShiftTradeRequest st on st.Request = a.Parent
 inner join Request r on r.id = st.Request
 where r.EndDateTime < @RequestsKeepUntil
 
-
-delete top (50000) ShiftTradeRequest
+delete ShiftTradeRequest
 from ShiftTradeRequest a
 inner join Request r on r.id = a.Request
 where r.EndDateTime < @RequestsKeepUntil
@@ -210,30 +210,19 @@ and not exists (
 	select 1 from ShiftTradeSwapDetail stsd
 	where stsd.Parent = a.Request)
 
-delete top (50000) AbsenceRequest
+delete AbsenceRequest
 from AbsenceRequest a
 inner join Request r on r.id = a.Request
 where r.EndDateTime < @RequestsKeepUntil
 
-delete top (50000) TextRequest
+delete TextRequest
 from TextRequest a
 inner join Request r on r.id = a.Request
 where r.EndDateTime < @RequestsKeepUntil
 
-
-delete top (50000) Request
+delete Request
 from Request r
 where r.EndDateTime < @RequestsKeepUntil
-and not exists (
-	select 1 from AbsenceRequest a
-	where a.Request = r.Id)
-and not exists (
-	select 1 from ShiftTradeRequest b
-	where b.Request = r.Id)
-and not exists (
-	select 1 from TextRequest c
-	where c.Request = r.Id)
-
 
 delete PersonRequest
 from PersonRequest pr
