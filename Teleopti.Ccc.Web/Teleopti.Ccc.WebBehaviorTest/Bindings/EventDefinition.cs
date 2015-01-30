@@ -1,10 +1,12 @@
 ﻿using System;
 using System.IO;
 using System.Linq;
+using NUnit.Framework;
 using TechTalk.SpecFlow;
 using Teleopti.Ccc.Domain;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.WebBehaviorTest.Core;
+using Teleopti.Ccc.WebBehaviorTest.Core.Navigation;
 using Teleopti.Ccc.WebBehaviorTest.Data;
 using log4net;
 using Teleopti.Ccc.WebBehaviorTest.Data.Setups.Default;
@@ -67,22 +69,14 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 			addExtraDataSource();
 			CurrentTime.Reset();
 			TestControllerMethods.BeforeScenario();
-			
+
 			TestDataSetup.RestoreCcc7Data();
 			TestDataSetup.ClearAnalyticsData();
-			//shouldBeDeleted();
 
 			GlobalPrincipalState.EnsureThreadPrincipal();
 
 			log.Debug("Starting scenario " + ScenarioContext.Current.ScenarioInfo.Title);
 		}
-
-		//private static void shouldBeDeleted()
-		//{
-		//	//hack to reset global #¤%#¤% scenario state to db state.
-		//	//"DefaultScenario" should be deleted!
-		//	GlobalUnitOfWorkState.UnitOfWorkAction(uow => DefaultScenario.Scenario = new ScenarioRepository(uow).LoadDefaultScenario());
-		//}
 
 		private static readonly string targetTestDataNHibFile = Path.Combine(Paths.WebBinPath(), "TestData2.nhib.xml");
 

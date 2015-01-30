@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using Teleopti.Ccc.Infrastructure.ApplicationLayer;
 
-namespace Teleopti.Ccc.InfrastructureTest.ApplicationLayer
+namespace Teleopti.Ccc.TestCommon
 {
 	public class FakeServiceBusSender : IServiceBusSender
 	{

@@ -1,7 +1,10 @@
 ﻿using System;
 using System.IO;
+using Autofac;
 using IISExpressAutomation;
 using Teleopti.Ccc.Domain;
+using Teleopti.Ccc.Domain.ApplicationLayer;
+using Teleopti.Ccc.Infrastructure.ApplicationLayer;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.WebBehaviorTest.Core;
 
@@ -113,9 +116,9 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data
 			var targetFile = Path.Combine(o.TargetFolder, "web.config");
 
 			var tags = new AllTags();
-			const string module = @"<module type=""Teleopti.Ccc.IocCommon.Configuration.SyncEventsPublisherModule, Teleopti.Ccc.IocCommon""/>";
+			const string module = @"<module type=""Teleopti.Ccc.IocCommon.Configuration.HangfireOrSyncEventsPublisherModule, Teleopti.Ccc.IocCommon""/>";
 				tags.Add(
-					"SyncEventsPublisherModule",
+					"EventsPublisherModule",
 					module
 					);
 
@@ -148,4 +151,5 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data
 		}
 
 	}
+
 }

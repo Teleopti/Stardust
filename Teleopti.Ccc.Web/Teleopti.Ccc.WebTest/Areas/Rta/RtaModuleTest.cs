@@ -9,9 +9,7 @@ using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta;
 using Teleopti.Ccc.Infrastructure.NHibernateConfiguration;
 using Teleopti.Ccc.IocCommon;
-using Teleopti.Ccc.IocCommon.Configuration;
 using Teleopti.Ccc.Web.Areas.Rta;
-using Teleopti.Ccc.Web.Areas.Rta.Core.Server;
 using RtaModule = Teleopti.Ccc.Web.Areas.Rta.Core.Server.RtaModule;
 
 namespace Teleopti.Ccc.WebTest.Areas.Rta
@@ -60,7 +58,6 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta
 			var builder = new ContainerBuilder();
 			var config = new IocConfiguration(new IocArgs { DataSourceConfigurationSetter = DataSourceConfigurationSetter.ForTest() }, null);
 			builder.RegisterModule(new CommonModule(config));
-			builder.RegisterModule(new SyncEventsPublisherModule());
 			builder.RegisterModule(new RtaModule(config));
 			return builder.Build();
 		}

@@ -8,6 +8,7 @@ using Teleopti.Ccc.Infrastructure.ApplicationLayer;
 using Teleopti.Ccc.Infrastructure.Toggle;
 using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.IocCommon.Configuration;
+using Teleopti.Ccc.TestCommon;
 
 namespace Teleopti.Ccc.IocCommonTest.Configuration
 {
@@ -54,7 +55,7 @@ namespace Teleopti.Ccc.IocCommonTest.Configuration
 		{
 			var builder = new ContainerBuilder();
 			builder.RegisterModule(CommonModule.ForTest());
-			builder.RegisterModule<SyncEventsPublisherModule>();
+			builder.RegisterType<FakeServiceBusSender>().As<IServiceBusSender>().SingleInstance();
 			var container = builder.Build();
 
 			container.Resolve<IEventPopulatingPublisher>().Should().Not.Be.Null();

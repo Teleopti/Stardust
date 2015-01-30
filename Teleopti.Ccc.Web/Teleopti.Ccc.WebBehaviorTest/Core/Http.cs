@@ -54,6 +54,27 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core
 			}
 		}
 
+		public static T GetJson<T>(string url)
+		{
+			var uri = new Uri(TestSiteConfigurationSetup.URL, url);
+
+			using (var handler = new HttpClientHandler())
+			{
+				handler.AllowAutoRedirect = false;
+				using (var client = new HttpClient(handler))
+				{
+					var post = client.GetAsync(uri);
+					var response = post.Result;
+					var responseContent = response.Content.ReadAsStringAsync().Result;
+					if (response.StatusCode != HttpStatusCode.OK)
+					{
+						throw new Exception("Get returned http code " + response.StatusCode + ", Content: " + responseContent);
+					}
+					return JsonConvert.DeserializeObject<T>(responseContent);
+				}
+			}
+		}
+
 		public static void GetAsync(string url)
 		{
 			var uri = new Uri(TestSiteConfigurationSetup.URL, url);

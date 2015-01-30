@@ -1,6 +1,7 @@
 using System;
 using System.Globalization;
 using System.Linq;
+using NUnit.Framework;
 using TechTalk.SpecFlow;
 using Teleopti.Ccc.TestCommon.TestData.Setups.Configurable;
 using Teleopti.Ccc.WebBehaviorTest.Core.BrowserDriver;
@@ -32,10 +33,15 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core
 			navigateOrRequest("Test/ClearConnections");
 		}
 
+		public static void WaitForHangfireQueue()
+		{
+			navigateOrRequest("Test/WaitForHangfireQueue");
+		}
+
 		private static void navigateOrRequest(string url)
 		{
 			if (Browser.Interactions.TryCheckIfUrlContains("/Test/"))
-				Navigation.Navigation.GoToPage(url, new ApplicationStartupTimeout());
+				Navigation.Navigation.GoToPage(url);
 			else
 				Http.Get(url);
 		}
@@ -90,7 +96,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core
 			const string dataSourceName = "TestData";
 			var businessUnitName = DataMaker.Data().MePerson.PermissionInformation.ApplicationRoleCollection.Single().BusinessUnit.Name;
 			var queryString = string.Format("?dataSourceName={0}&businessUnitName={1}&userName={2}&password={3}", dataSourceName, businessUnitName, userName, password);
-			Navigation.Navigation.GoToPage("Test/Logon" + queryString, new ApplicationStartupTimeout());
+			Navigation.Navigation.GoToPage("Test/Logon" + queryString);
 		}
 
 		public static void ExpireMyCookieInsidePortal()

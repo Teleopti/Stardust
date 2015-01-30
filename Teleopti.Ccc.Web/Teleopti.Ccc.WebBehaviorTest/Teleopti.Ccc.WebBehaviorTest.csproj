@@ -201,6 +201,7 @@
     <Compile Include="Core\Navigation\IFakeClientTimeMethod.cs" />
     <Compile Include="Core\Navigation\INavigationInterceptor.cs" />
     <Compile Include="Core\Navigation\WaitUntilCompletelyLoaded.cs" />
+    <Compile Include="Core\Navigation\WaitUntilHangfireQueueIsProcessed.cs" />
     <Compile Include="Core\Navigation\WaitUntilReadyForInteraction.cs" />
     <Compile Include="Core\Navigation\WaitUntilSubscriptionIsCompleted.cs" />
     <Compile Include="Data\Setups\Configurable\BadgeBasedOnSettingConfigurable.cs" />

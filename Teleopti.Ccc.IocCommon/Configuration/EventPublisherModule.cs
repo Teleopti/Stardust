@@ -1,4 +1,3 @@
-using System;
 using Autofac;
 using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers;

@@ -1,9 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Web;
 using log4net;
+using NUnit.Framework;
 using Teleopti.Ccc.Domain.Collection;
+using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.WebBehaviorTest.Data;
 
 namespace Teleopti.Ccc.WebBehaviorTest.Core.Navigation
@@ -13,8 +16,8 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core.Navigation
 		private static readonly ILog Log = LogManager.GetLogger(typeof(Navigation));
 
 		private static readonly Dictionary<Predicate<string>, INavigationInterceptor> _interceptors = new Dictionary<Predicate<string>, INavigationInterceptor>();
-		private static IEnumerable<INavigationInterceptor> _currentInterceptors = new INavigationInterceptor[] {};
- 
+		private static IEnumerable<INavigationInterceptor> _currentInterceptors = new INavigationInterceptor[] { };
+
 		static Navigation()
 		{
 			_interceptors.Add(u => true, new ApplicationStartupTimeout());
@@ -24,6 +27,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core.Navigation
 			_interceptors.Add(u => u.Contains("/Anywhere#teamschedule"), new FakeClientTimeUsingSinonProvenWay());
 			_interceptors.Add(u => u.Contains("/Anywhere#personschedule"), new FakeClientTimeUsingSinonProvenWay());
 			_interceptors.Add(u => u.Contains("/Anywhere#realtimeadherence"), new FakeClientTimeUsingSinonProvenWay());
+			_interceptors.Add(u => u.Contains("/Anywhere#manageadherence"), new WaitUntilHangfireQueueIsProcessed());
 			_interceptors.Add(u => u.Contains("/MyTime/Asm"), new FakeTimeUsingMyTimeMethod());
 			_interceptors.Add(u => u.Contains("/MyTime#Schedule/Week"), new FakeTimeUsingMyTimeMethod());
 		}
@@ -50,9 +54,19 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core.Navigation
 			InnerGoto(new Uri(url), interceptors);
 		}
 
+		private static bool _nested = false;
+
 		private static void InnerGoto(Uri url, params INavigationInterceptor[] interceptors)
 		{
 			var args = new GotoArgs { Uri = url };
+
+			if (_nested)
+			{
+				Browser.Interactions.GoTo(args.Uri.ToString());
+				return;
+			}
+
+			_nested = true;
 
 			BuildCurrentInterceptors(url, interceptors);
 
@@ -66,6 +80,8 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core.Navigation
 			_currentInterceptors.Reverse().ForEach(i => i.After(args));
 
 			Browser.Interactions.DumpUrl(s => Log.Info("Ended up in: " + s));
+			
+			_nested = false;
 		}
 
 		public static void GotoAsm()
@@ -155,14 +171,14 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core.Navigation
 
 		public static void GotoTeamSchedule()
 		{
-			GoToPage("MyTime#TeamSchedule/Index",  new WaitUntilReadyForInteraction());
+			GoToPage("MyTime#TeamSchedule/Index", new WaitUntilReadyForInteraction());
 		}
 
 		public static void GotoTeamSchedule(DateTime date)
 		{
 			GoToPage(string.Format("MyTime#TeamSchedule/Index/{0}/{1}/{2}",
 				date.Year.ToString("0000"), date.Month.ToString("00"), date.Day.ToString("00"))
-				,  new WaitUntilReadyForInteraction());
+				, new WaitUntilReadyForInteraction());
 		}
 
 		public static void GotoTheInternet()

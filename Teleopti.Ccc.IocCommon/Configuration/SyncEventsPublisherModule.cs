@@ -10,7 +10,18 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 		{
 			builder.Register(c => c.Resolve<IEventPopulatingPublisher>() as EventPopulatingPublisher).As<IPublishEventsFromEventHandlers>().SingleInstance();
 			builder.Register(c => c.Resolve<ISyncEventPublisher>()).As<IEventPublisher>().SingleInstance();
-			builder.RegisterType<IgnoreDelayedMessages>().As<ISendDelayedMessages>();
+			builder.RegisterType<IgnoreDelayedMessages>().As<ISendDelayedMessages>().SingleInstance();
 		}
 	}
+
+	public class HangfireOrSyncEventsPublisherModule : Module
+	{
+		protected override void Load(ContainerBuilder builder)
+		{
+			builder.Register(c => c.Resolve<IEventPopulatingPublisher>() as EventPopulatingPublisher).As<IPublishEventsFromEventHandlers>().SingleInstance();
+			builder.RegisterType<HangfireOrSyncEventPublisher>().As<IEventPublisher>().SingleInstance();
+			builder.RegisterType<IgnoreDelayedMessages>().As<ISendDelayedMessages>().SingleInstance();
+		}
+	}
+
 }

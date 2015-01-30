@@ -23,4 +23,25 @@ namespace Teleopti.Ccc.Infrastructure.ApplicationLayer
 				_serviceBusPublisher.Publish(@event);
 		}
 	}
+
+	public class HangfireOrSyncEventPublisher : IEventPublisher
+	{
+		private readonly IHangfireEventPublisher _hangfirePublisher;
+		private readonly ISyncEventPublisher _syncEventPublisher;
+
+		public HangfireOrSyncEventPublisher(IHangfireEventPublisher hangfirePublisher, ISyncEventPublisher syncEventPublisher)
+		{
+			_hangfirePublisher = hangfirePublisher;
+			_syncEventPublisher = syncEventPublisher;
+		}
+
+		public void Publish(IEvent @event)
+		{
+			if (@event is IGoToHangfire)
+				_hangfirePublisher.Publish(@event);
+			else
+				_syncEventPublisher.Publish(@event);
+		}
+	}
+
 }
