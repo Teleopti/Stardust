@@ -51,7 +51,6 @@ function ($scope, $stateParams, $http, $filter, Roles, ApplicationFunctions) {
 		        flatFunctions($scope.functionsDisplayed);
         	});
 
-		//add a role
         	$scope.createRole = function () {
         		var roleData = { DescriptionText: $scope.roleName };
         		$http.post('/', roleData)
@@ -62,11 +61,10 @@ function ($scope, $stateParams, $http, $filter, Roles, ApplicationFunctions) {
 					.error(function (data, status, headers, config) {
 						$scope.error = { success: false, message: 'Something has failed. Please try again later' };
 					});
-
         	};
-		//duplicate existing role
+
         	$scope.duplicateRole = function (roleId) {
-        		$http.get('../../api/Permissions/Roles/' + roleId).
+        		$http.get('../../api/Permissions/Roles/' + roleId ).
 								success(function (data, status, headers, config) {
 									var dupName = { DescriptionText: data.DescriptionText + " copy" };
 									$scope.roles.push(dupName);

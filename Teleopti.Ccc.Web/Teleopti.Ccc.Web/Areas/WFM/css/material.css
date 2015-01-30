@@ -85,9 +85,16 @@
 	transition: all 0.5s ease;
 }
 
-#tree-root > li:nth-child(2) > ol > li > ol {
-	background: #f4f4f4;
+#tree-root > li:nth-child(2) > ol > li {
+	
+	padding: 5px;
+	margin: 5px;
 }
+
+#tree-root > li:nth-child(2) > ol > li > ol {
+	border-left: 1px dotted #ddd;
+}
+
 
 #tree-root > li > ol> li {
 	margin-top: 15px;

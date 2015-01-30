@@ -11,16 +11,16 @@
 	<div class="role-nav col-md-4 ">
 		<div class="align-center">
 			
-			<input type="text" name="filterRole" placeholder="Role filter ..." />
+			<input type="text" name="filterRole" ng-model="searchRoles" placeholder="Role filter ..." />
 			
 			<form ng-submit="createRole()">
 				<input type="text" ng-model="roleName" placeholder="Enter new role name" required />
 				<!--input type="submit" class="btn btn-default btn-md btn-block role" value="Create" /-->
 			</form>
 		</div>
-		<div>
-			<button type="button" class="btn btn-default btn-md btn-block role" ng-repeat="role in roles" ng-click="showRole(role.Id)">
-				{{role.DescriptionText}} 
+		<div id="searchRoleResults">
+			<button type="button" class="btn btn-default btn-md btn-block role" ng-repeat="role in roles | filter:searchRoles" ng-click=" showrole(role.id)">
+				{{role.DescriptionText}}
 				<div class="role-duplicate">
 					<a class=" pull-right" ng-click="duplicateRole(role.Id)">Duplicate</a>
 				</div>
@@ -39,11 +39,11 @@
 	<div class="roles-details-wrapper col-md-8 material-depth-1">
 
 		<div ng-show="roleDetails=='functionsAvailable'">
-			<input type="text" name="filterDetails" placeholder="Permissions filter ..." />
+			<input type="text" name="filterDetails" ng-model="searchPermissions" placeholder="Permissions filter ..." />
 			<div class="tree">
 				<div ui-tree data-drag-enabled="false">
 					<ol ui-tree-nodes="" ng-model="functionsDisplayed" id="tree-root">
-						<li ng-repeat="node in functionsDisplayed" ui-tree-node ng-include="'nodes_renderer.html'"></li>
+						<li ng-repeat="node in functionsDisplayed | filter:searchPermissions" ui-tree-node ng-include="'nodes_renderer.html'"></li>
 					</ol>
 				</div>
 			</div>
@@ -51,7 +51,7 @@
 
 
 		<div ng-show="roleDetails=='dataAvailable'">
-			<input type="text" name="filterDetails" placeholder="filter ..." />
+			<input type="text" name="filterDetails" placeholder="Data filter ..." />
 			<div class="tree">
 				<div ui-tree data-drag-enabled="false">
 					<ol ui-tree-nodes="" ng-model="organization" id="tree-root">
