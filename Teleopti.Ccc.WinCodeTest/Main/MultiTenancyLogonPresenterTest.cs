@@ -287,7 +287,7 @@ namespace Teleopti.Ccc.WinCodeTest.Main
 			_model.AuthenticationType = AuthenticationTypeOption.Windows;
 			_model.DataSourceContainers = new List<IDataSourceContainer> { dataSourceContainer };
 			availableDataSourcesProvider.Stub(x => x.UnavailableDataSources()).Return(new List<IDataSource>());
-			_winLogon.Stub(x => x.Logon(_model, _appData)).Throw(new WebException("shit")).IgnoreArguments();
+			_winLogon.Stub(x => x.Logon(_model, _appData, MultiTenancyLogonPresenter.UserAgent)).Throw(new WebException("shit")).IgnoreArguments();
 			_view.Stub(x => x.ShowStep(false));
 
 			_target.CurrentStep = LoginStep.SelectDatasource;
