@@ -15,6 +15,11 @@ namespace Teleopti.Ccc.Win.Sikuli.Validators
 			_totalSkill = totalSkill;
 		}
 
+		public string Description
+		{
+			get { return "All scheduled hours must be 0."; }
+		}
+
 		public SikuliValidationResult Validate()
 		{
 			var result = new SikuliValidationResult(SikuliValidationResult.ResultValue.Pass);
@@ -26,7 +31,6 @@ namespace Teleopti.Ccc.Win.Sikuli.Validators
 				return result;
 			}
 			result.Details.AppendLine("Scheduled hours = 0 : OK");
-			result.Details.AppendLine("Explanation: All scheduled hours must be 0.");
 			return result;
 		}
 	}

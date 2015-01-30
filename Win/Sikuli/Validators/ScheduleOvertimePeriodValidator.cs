@@ -14,6 +14,11 @@ namespace Teleopti.Ccc.Win.Sikuli.Validators
 			_totalSkill = totalSkill;
 		}
 
+		public string Description
+		{
+			get { return "The period's standard deviation must be under the limit."; }
+		}
+
 		public SikuliValidationResult Validate()
 		{
 			var result = new SikuliValidationResult(SikuliValidationResult.ResultValue.Pass);
@@ -21,7 +26,6 @@ namespace Teleopti.Ccc.Win.Sikuli.Validators
 			result.AppendLimitValueLineToDetails("Period StdDev", "0,06", std.ToString());
 			if (!std.HasValue || std.Value > 0.06)
 				result.Result = SikuliValidationResult.ResultValue.Fail;
-			result.Details.AppendLine("Explanation: The period standard deviation must be under the limit.");
 			return result;
 		}
 	}

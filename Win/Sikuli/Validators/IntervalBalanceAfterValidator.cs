@@ -17,6 +17,11 @@ namespace Teleopti.Ccc.Win.Sikuli.Validators
 			_totalSkill = totalSkill;
 		}
 
+		public string Description
+		{
+			get { return "Only one 'lowest intra interval balance' value can be under 0.8."; }
+		}
+
 		public SikuliValidationResult Validate()
 		{
 			var result = new SikuliValidationResult(SikuliValidationResult.ResultValue.Pass);
@@ -43,7 +48,6 @@ namespace Teleopti.Ccc.Win.Sikuli.Validators
 			if (ruleBreaks > maxRuleBreaks)
 				result.Result = SikuliValidationResult.ResultValue.Fail;
 			result.Details.AppendLine(string.Format("Lowest intra interval balance: {0}", result.Result));
-			result.Details.AppendLine("Explanation: Only one lowest intra interval balance value can be under 0,8.");
 		}
 
 		private int checkInternalBalanceRuleBreaks(IEnumerable<double?> intervalBalances)
