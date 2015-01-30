@@ -7,7 +7,7 @@ SET AzurePackagePath=%~1
 IF "%AzurePackagePath%"=="" GOTO :NoAzurePackage
 
 PowerShell -NoProfile -ExecutionPolicy Bypass -Command "& '%PowerShellScriptPath%' '%ThisScriptsDirectory%' 'Teleopti CCC Azure' 'teleoptirnd' '%AzurePackagePath%' 'teleoptirnd.cscfg' 'production' 'AzureDemo.publishsettings'";
-GOTO :EOF
+EXIT %ERRORLEVEL%
 
 :NoAzurePackage
 ECHO Please give the azure package path

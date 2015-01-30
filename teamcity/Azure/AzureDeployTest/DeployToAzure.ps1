@@ -62,4 +62,12 @@ function CreateNewDeployment()
 	Write-Output "$(Get-Date -f $timeStampFormat) - Verify further progress in Azure Portal, https://manage.windowsazure.com"
 }
 
+Try
+{
 Publish
+}
+Catch [Exception]
+{
+    $ErrorMessage = $_.Exception.Message
+	Throw $ErrorMessage
+}
