@@ -84,3 +84,4 @@ Scheduler_DoNotBreakMinWeekWorkTimeOptimization_31992 = RC
 Portal_DifferentiateBadgeSettingForAgents_31318 = RC
 Backlog_Module_23980 = DEV
 MultiTenancy_WinLogon_17461 = RC
+MultiTenancy_WebLogon_17461 = RC
