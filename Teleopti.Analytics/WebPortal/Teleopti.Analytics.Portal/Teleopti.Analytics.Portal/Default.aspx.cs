@@ -7,7 +7,7 @@ namespace Teleopti.Analytics.Portal
     {
         protected void Page_Load(object sender, EventArgs e)
         {
-            if (ReportId == new Guid() | BusinessUnitCode == new Guid())
+            if (ReportId == Guid.Empty | BusinessUnitCode == Guid.Empty)
             {
                 labelInformation.Text = "xxNo report or no business unit given!";
                 Response.End();
@@ -15,15 +15,7 @@ namespace Teleopti.Analytics.Portal
             else
             {
                 var repUtil = new CommonReports(ConnectionString, ReportId);
-                //if (ReportId == 5 | ReportId == 6)
-                //{
-                //    Server.Transfer(repUtil.Url.ToString());
-                //}
-                //else
-                {
-                    Server.Transfer(repUtil.Url + "&buid=" + BusinessUnitCode);
-                }
-                
+                Server.Transfer(repUtil.Url + "&buid=" + BusinessUnitCode);
             }
         }
     }

@@ -155,7 +155,7 @@ namespace Teleopti.Analytics.Portal.Utils
 
         public Guid GetGroupPageComboBoxControlCollectionId()
         {
-            var returnValue = new Guid();
+            var returnValue = Guid.Empty;
             IList<SqlParameter> parameters = new List<SqlParameter> {new SqlParameter("@report_id", _reportId)};
 
             DataSet dataSet = ExecuteDataSet("mart.report_group_page_control_collection_get", parameters);

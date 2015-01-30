@@ -82,7 +82,7 @@ namespace Teleopti.Analytics.Portal
 			if (IsBrowseTargetPerformanceManager)
 				Response.Redirect(PerformanceManagerUrl, true);
 
-			if (ReportId != new Guid())
+			if (ReportId != Guid.Empty)
 				HiddenID.Value = ReportId.ToString();
 			else
 				Response.End();

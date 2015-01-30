@@ -359,25 +359,25 @@ namespace Teleopti.Analytics.Parameters
 
 					ParameterBase dep;
 
-					if ((Guid)row.ItemArray[5] != new Guid())
+					if ((Guid)row.ItemArray[5] != Guid.Empty)
 					{
 						dep = (ParameterBase)FindControl(row.ItemArray[5].ToString());
 						dependent.Add(dep);
 						dep.AddDependent(ctrl);
 					}
-					if ((Guid)row.ItemArray[6] != new Guid())
+					if ((Guid)row.ItemArray[6] != Guid.Empty)
 					{
 						dep = (ParameterBase)FindControl(row.ItemArray[6].ToString());
 						dependent.Add(dep);
 						dep.AddDependent(ctrl);
 					}
-					if ((Guid)row.ItemArray[7] != new Guid())
+					if ((Guid)row.ItemArray[7] != Guid.Empty)
 					{
 						dep = (ParameterBase)FindControl(row.ItemArray[7].ToString());
 						dependent.Add(dep);
 						dep.AddDependent(ctrl);
 					}
-					if ((Guid)row.ItemArray[8] != new Guid())
+					if ((Guid)row.ItemArray[8] != Guid.Empty)
 					{
 						dep = (ParameterBase)FindControl(row.ItemArray[8].ToString());
 						dependent.Add(dep);

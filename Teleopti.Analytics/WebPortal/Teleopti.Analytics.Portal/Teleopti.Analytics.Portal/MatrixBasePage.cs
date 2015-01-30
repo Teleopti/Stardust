@@ -33,7 +33,7 @@ namespace Teleopti.Analytics.Portal
 			}
 			if (!string.IsNullOrEmpty(Request.QueryString.Get("REPORTID")))
 			{
-				if (!TryParseGuid(Request.QueryString["REPORTID"], out _reportId))
+				if (!Guid.TryParse(Request.QueryString["REPORTID"], out _reportId))
 					return;
 
 				var commonReports = new CommonReports(ConnectionString, _reportId);
@@ -65,20 +65,6 @@ namespace Teleopti.Analytics.Portal
 			setCulture();
 		}
 
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
-		protected static bool TryParseGuid(string reportId, out Guid guid)
-		{
-			try
-			{
-				guid = new Guid(reportId);
-			}
-			catch (Exception)
-			{
-				guid = new Guid();
-				return false;
-			}
-			return true;
-		}
 		private void setCulture()
 		{
 			Thread.CurrentThread.CurrentUICulture = new CultureInfo(theUser.LangId, false).FixPersianCulture();

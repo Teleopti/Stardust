@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Configuration;
 using System.Globalization;
 using System.Linq;
-using System.Text.RegularExpressions;
 using log4net;
 
 namespace Teleopti.Ccc.Rta.TestApplication
@@ -38,7 +37,7 @@ namespace Teleopti.Ccc.Rta.TestApplication
 			foreach (var personId in ConfigurationManager.AppSettings["PersonIdsForScheduleUpdate"].Split(','))
 			{
 				Guid personGuid;
-				if (isValidGuid(personId, out personGuid))
+				if (Guid.TryParse(personId, out personGuid))
 					_personIdForScheduleUpdate.Add(personGuid);
 				else
 					_loggingSvc.WarnFormat(CultureInfo.CurrentCulture,
@@ -46,7 +45,7 @@ namespace Teleopti.Ccc.Rta.TestApplication
 			}
 
 			var strPlatformTypeId = (ConfigurationManager.AppSettings["PlatformTypeId"]);
-			if (!isValidGuid(strPlatformTypeId, out _platformId))
+			if (!Guid.TryParse(strPlatformTypeId, out _platformId))
 				_loggingSvc.WarnFormat(CultureInfo.CurrentCulture,
 				                       "Property PlatformTypeId was not read from configuration");
 
@@ -81,7 +80,7 @@ namespace Teleopti.Ccc.Rta.TestApplication
 				                       "Property IntervalForScheduleUpdate was not read from configuration.");
 
 			setting = ConfigurationManager.AppSettings["BusinessUnitId"];
-			if (!isValidGuid(setting, out _businessUnitId))
+			if (!Guid.TryParse(setting, out _businessUnitId))
 				_loggingSvc.WarnFormat(CultureInfo.CurrentCulture,
 				                       "Property BusinessUnitId was not read from configuration");
 
@@ -109,33 +108,6 @@ namespace Teleopti.Ccc.Rta.TestApplication
 				"Loaded test sequence with {0} calls using {1} different log on and {2} different state codes. The SourceId is {3}. Snapshot mode is {4}.",
 				_sendCount, _logOnCollection.Count, _stateCodeCollection.Count, _sourceId, _snapshotMode);
 			random = new Random();
-		}
-
-		private static bool isValidGuid(string guid, out Guid platformId)
-		{
-			var reg =
-				new Regex(
-					@"^(\{{0,1}([0-9a-fA-F]){8}-([0-9a-fA-F]){4}-([0-9a-fA-F]){4}-([0-9a-fA-F]){4}-([0-9a-fA-F]){12}\}{0,1})$");
-			if (string.IsNullOrEmpty(guid) || !reg.IsMatch(guid))
-			{
-				platformId = Guid.Empty;
-				return false;
-			}
-			try
-			{
-				platformId = new Guid(guid);
-				return true;
-			}
-			catch (FormatException)
-			{
-				platformId = Guid.Empty;
-				return false;
-			}
-			catch (OverflowException)
-			{
-				platformId = Guid.Empty;
-				return false;
-			}
 		}
 
 		public int RemainingCount
