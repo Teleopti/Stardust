@@ -19,6 +19,12 @@ namespace Teleopti.Ccc.Win.Sikuli.Validators
 			_totalSkill = totalSkill;
 		}
 
+		public string Description 
+		{ 
+			get { return "At least one 'lowest intra interval balance' value must be between 0 " +
+												 "and 0.8 to have a good start point for optimization."; } 
+		}
+
 		public SikuliValidationResult Validate()
 		{
 
@@ -34,8 +40,6 @@ namespace Teleopti.Ccc.Win.Sikuli.Validators
 			if (!checkResult)
 				result.Result = SikuliValidationResult.ResultValue.Fail;
 			result.Details.AppendLine(string.Format("Lowest intra interval balance: {0}", result.Result));
-			result.Details.AppendLine("Explanation: At least one lowest intra interval balance value must be between 0 " +
-			                          "and 0,8 to have a good start point for optimization.");
 			return result;
 		}
 	}

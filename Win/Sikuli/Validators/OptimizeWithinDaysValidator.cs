@@ -18,6 +18,12 @@ namespace Teleopti.Ccc.Win.Sikuli.Validators
 			_totalSkill = totalSkill;
 		}
 
+		public string Description 
+		{ 
+			get { return "The daily standard deviation must be under the limit, the number of current day offs and" +
+						 "current contract times must be equal to the target for each person."; } 
+		}
+
 		public SikuliValidationResult Validate()
 		{
 			bool stdDevSumResult;
@@ -55,9 +61,6 @@ namespace Teleopti.Ccc.Win.Sikuli.Validators
 			result.AppendLimitValueLineToDetails("Daily StdDev sum", "4.6", std.ToString());
 			result.Details.AppendLine(contractTimeResult ? "Contract time : OK" : "Contract time : FAIL");
 			result.Details.AppendLine(daysOffResult ? "Day offs : OK" : "Contract time : FAIL");
-			result.Details.AppendLine("Explanation: The daily standard deviation must be under the limit, the number of current day offs and" +
-			                          "current contract times must be equal to the target.");
-
 			return result;
 		}
 

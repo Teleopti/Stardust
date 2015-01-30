@@ -6,5 +6,7 @@
 		{
 			return new SikuliValidationResult(SikuliValidationResult.ResultValue.Fail);
 		}
+
+		public string Description { get { return "Sikuli selftest validator. Result must be FAIL."; } }
 	}
 }
