@@ -41,6 +41,8 @@
 			Syncfusion.Windows.Forms.Grid.GridRangeStyle gridRangeStyle8 = new Syncfusion.Windows.Forms.Grid.GridRangeStyle();
 			Syncfusion.Windows.Forms.Grid.GridRangeStyle gridRangeStyle9 = new Syncfusion.Windows.Forms.Grid.GridRangeStyle();
 			Syncfusion.Windows.Forms.Grid.GridRangeStyle gridRangeStyle10 = new Syncfusion.Windows.Forms.Grid.GridRangeStyle();
+			Syncfusion.Windows.Forms.Grid.GridRangeStyle gridRangeStyle11 = new Syncfusion.Windows.Forms.Grid.GridRangeStyle();
+			Syncfusion.Windows.Forms.Grid.GridRangeStyle gridRangeStyle12 = new Syncfusion.Windows.Forms.Grid.GridRangeStyle();
 			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(BacklogView));
 			this.toolStripContainer1 = new System.Windows.Forms.ToolStripContainer();
 			this.statusStrip1 = new System.Windows.Forms.StatusStrip();
@@ -54,8 +56,9 @@
 			this.buttonLoad = new System.Windows.Forms.ToolStripButton();
 			this.toolStripButtonManualEntries = new System.Windows.Forms.ToolStripButton();
 			this.toolStripButtonSave = new System.Windows.Forms.ToolStripButton();
-			this.backgroundWorker1 = new System.ComponentModel.BackgroundWorker();
 			this.toolStripButtonSkillMapper = new System.Windows.Forms.ToolStripButton();
+			this.toolStripButtonExpand = new System.Windows.Forms.ToolStripButton();
+			this.backgroundWorker1 = new System.ComponentModel.BackgroundWorker();
 			this.toolStripContainer1.BottomToolStripPanel.SuspendLayout();
 			this.toolStripContainer1.ContentPanel.SuspendLayout();
 			this.toolStripContainer1.TopToolStripPanel.SuspendLayout();
@@ -257,6 +260,22 @@
 			gridRangeStyle10.StyleInfo.Font.Strikeout = false;
 			gridRangeStyle10.StyleInfo.Font.Underline = false;
 			gridRangeStyle10.StyleInfo.Font.Unit = System.Drawing.GraphicsUnit.Point;
+			gridRangeStyle11.Range = Syncfusion.Windows.Forms.Grid.GridRangeInfo.Table();
+			gridRangeStyle11.StyleInfo.Font.Bold = false;
+			gridRangeStyle11.StyleInfo.Font.Facename = "Segoe UI";
+			gridRangeStyle11.StyleInfo.Font.Italic = false;
+			gridRangeStyle11.StyleInfo.Font.Size = 8.25F;
+			gridRangeStyle11.StyleInfo.Font.Strikeout = false;
+			gridRangeStyle11.StyleInfo.Font.Underline = false;
+			gridRangeStyle11.StyleInfo.Font.Unit = System.Drawing.GraphicsUnit.Point;
+			gridRangeStyle12.Range = Syncfusion.Windows.Forms.Grid.GridRangeInfo.Table();
+			gridRangeStyle12.StyleInfo.Font.Bold = false;
+			gridRangeStyle12.StyleInfo.Font.Facename = "Segoe UI";
+			gridRangeStyle12.StyleInfo.Font.Italic = false;
+			gridRangeStyle12.StyleInfo.Font.Size = 8.25F;
+			gridRangeStyle12.StyleInfo.Font.Strikeout = false;
+			gridRangeStyle12.StyleInfo.Font.Underline = false;
+			gridRangeStyle12.StyleInfo.Font.Unit = System.Drawing.GraphicsUnit.Point;
 			this.gridControl1.RangeStyles.AddRange(new Syncfusion.Windows.Forms.Grid.GridRangeStyle[] {
             gridRangeStyle1,
             gridRangeStyle2,
@@ -267,7 +286,9 @@
             gridRangeStyle7,
             gridRangeStyle8,
             gridRangeStyle9,
-            gridRangeStyle10});
+            gridRangeStyle10,
+            gridRangeStyle11,
+            gridRangeStyle12});
 			this.gridControl1.SerializeCellsBehavior = Syncfusion.Windows.Forms.Grid.GridSerializeCellsBehavior.SerializeAsRangeStylesIntoCode;
 			this.gridControl1.Size = new System.Drawing.Size(905, 253);
 			this.gridControl1.SmartSizeBox = false;
@@ -285,10 +306,11 @@
             this.buttonLoad,
             this.toolStripButtonManualEntries,
             this.toolStripButtonSave,
-            this.toolStripButtonSkillMapper});
+            this.toolStripButtonSkillMapper,
+            this.toolStripButtonExpand});
 			this.toolStrip1.Location = new System.Drawing.Point(3, 0);
 			this.toolStrip1.Name = "toolStrip1";
-			this.toolStrip1.Size = new System.Drawing.Size(311, 25);
+			this.toolStrip1.Size = new System.Drawing.Size(411, 25);
 			this.toolStrip1.TabIndex = 0;
 			// 
 			// buttonLoad
@@ -297,8 +319,9 @@
 			this.buttonLoad.Image = ((System.Drawing.Image)(resources.GetObject("buttonLoad.Image")));
 			this.buttonLoad.ImageTransparentColor = System.Drawing.Color.Magenta;
 			this.buttonLoad.Name = "buttonLoad";
-			this.buttonLoad.Size = new System.Drawing.Size(46, 22);
-			this.buttonLoad.Text = "Load...";
+			this.buttonLoad.Size = new System.Drawing.Size(56, 22);
+			this.buttonLoad.Text = "Reload...";
+			this.buttonLoad.Click += new System.EventHandler(this.buttonLoad_Click);
 			// 
 			// toolStripButtonManualEntries
 			// 
@@ -320,13 +343,6 @@
 			this.toolStripButtonSave.Text = "Save";
 			this.toolStripButtonSave.Click += new System.EventHandler(this.toolStripButtonSave_Click);
 			// 
-			// backgroundWorker1
-			// 
-			this.backgroundWorker1.WorkerReportsProgress = true;
-			this.backgroundWorker1.DoWork += new System.ComponentModel.DoWorkEventHandler(this.backgroundWorker1_DoWork);
-			this.backgroundWorker1.ProgressChanged += new System.ComponentModel.ProgressChangedEventHandler(this.backgroundWorker1_ProgressChanged);
-			this.backgroundWorker1.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.backgroundWorker1_RunWorkerCompleted);
-			// 
 			// toolStripButtonSkillMapper
 			// 
 			this.toolStripButtonSkillMapper.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
@@ -336,6 +352,23 @@
 			this.toolStripButtonSkillMapper.Size = new System.Drawing.Size(97, 22);
 			this.toolStripButtonSkillMapper.Text = "Skill Mappings...";
 			this.toolStripButtonSkillMapper.Click += new System.EventHandler(this.toolStripButtonSkillMapper_Click);
+			// 
+			// toolStripButtonExpand
+			// 
+			this.toolStripButtonExpand.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
+			this.toolStripButtonExpand.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButtonExpand.Image")));
+			this.toolStripButtonExpand.ImageTransparentColor = System.Drawing.Color.Magenta;
+			this.toolStripButtonExpand.Name = "toolStripButtonExpand";
+			this.toolStripButtonExpand.Size = new System.Drawing.Size(90, 22);
+			this.toolStripButtonExpand.Text = "Expanded View";
+			this.toolStripButtonExpand.Click += new System.EventHandler(this.toolStripButtonExpand_Click);
+			// 
+			// backgroundWorker1
+			// 
+			this.backgroundWorker1.WorkerReportsProgress = true;
+			this.backgroundWorker1.DoWork += new System.ComponentModel.DoWorkEventHandler(this.backgroundWorker1_DoWork);
+			this.backgroundWorker1.ProgressChanged += new System.ComponentModel.ProgressChangedEventHandler(this.backgroundWorker1_ProgressChanged);
+			this.backgroundWorker1.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.backgroundWorker1_RunWorkerCompleted);
 			// 
 			// BacklogView
 			// 
@@ -387,5 +420,6 @@
 		private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabel1;
 		private System.ComponentModel.BackgroundWorker backgroundWorker1;
 		private System.Windows.Forms.ToolStripButton toolStripButtonSkillMapper;
+		private System.Windows.Forms.ToolStripButton toolStripButtonExpand;
 	}
 }

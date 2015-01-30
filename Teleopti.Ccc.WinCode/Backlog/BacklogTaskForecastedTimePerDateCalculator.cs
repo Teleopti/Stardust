@@ -12,7 +12,7 @@ namespace Teleopti.Ccc.WinCode.Backlog
 			var time = TimeSpan.Zero;
 			foreach (var task in taskDic.Values)
 			{
-				time = time.Add(task.ForecastedTimeOnDate(date));
+				time = time.Add(task.BacklogProductPlanTask.ForecastedTimeOnDate(date));
 			}
 
 			return time;

@@ -1,15 +1,13 @@
 ﻿using System;
-using System.Diagnostics.Eventing.Reader;
 using System.Drawing;
-using System.Linq;
 using System.Windows.Forms;
+using System.Windows.Forms.DataVisualization.Charting;
 using Autofac;
 using Syncfusion.Windows.Forms.Grid;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.ResourceCalculation.IntraIntervalAnalyze;
 using Teleopti.Ccc.Win.Common.Controls.Cells;
 using Teleopti.Ccc.Win.Scheduling;
-using Teleopti.Ccc.Win.Scheduling.AgentRestrictions;
 using Teleopti.Ccc.WinCode.Backlog;
 using Teleopti.Ccc.WinCode.Common;
 using Teleopti.Interfaces.Domain;
@@ -18,20 +16,27 @@ namespace Teleopti.Ccc.Win.Backlog
 {
 	public partial class BacklogView : Form
 	{
+		private readonly IComponentContext _container;
 		private BacklogModel _model;
-		private const int fixedRows = 8;
+		private const int fixedRows = 9;
 
-		public BacklogView(IComponentContext _container)
+		public BacklogView(IComponentContext container)
 		{
+			_container = container;
 			InitializeComponent();
-			var stateholder = _container.Resolve<ISchedulerStateHolder>();
-			var optimizationHelperWin = new ResourceOptimizationHelperWin(stateholder, _container.Resolve<IPersonSkillProvider>(), _container.Resolve<IIntraIntervalFinderService>());
-			_model = new BacklogModel(_container, optimizationHelperWin, stateholder);
+			_model = new BacklogModel(container);
+			gridControl1.CellModels.Add("TimeSpanLongHourMinutesStatic", new TimeSpanDurationStaticCellModel(gridControl1.Model) { DisplaySeconds = false });
+			gridControl1.CellModels.Add("PercentReadOnlyCellModel", new PercentReadOnlyCellModel(gridControl1.Model));
+			gridControl1.CellModels.Add("Ignore", new IgnoreCellModel(gridControl1.Model));
 			
 		}
 
 		private void populateTabControl()
 		{
+			for (int i = tabControlSkills.TabPages.Count - 1; i >= 1; i--)
+			{
+				tabControlSkills.TabPages.RemoveAt(i);
+			}
 			var first = true;
 			foreach (var skill in _model.GetTabSkillList())
 			{
@@ -55,7 +60,12 @@ namespace Teleopti.Ccc.Win.Backlog
 
 		private void gridControl1_QueryRowCount(object sender, GridRowColCountEventArgs e)
 		{
-			e.Count = fixedRows + _model.GetIncomingCount((ISkill)tabControlSkills.SelectedTab.Tag);
+			if(toolStripButtonExpand.Checked)
+				e.Count = fixedRows + _model.GetIncomingCount((ISkill)tabControlSkills.SelectedTab.Tag);
+			else
+			{
+				e.Count = fixedRows;
+			}
 			e.Handled = true;
 		}
 
@@ -84,12 +94,15 @@ namespace Teleopti.Ccc.Win.Backlog
 						e.Style.CellValue = "Scheduled on skill";
 						break;
 					case 6:
-						e.Style.CellValue = "Scheduled on incoming";
+						e.Style.CellValue = "Scheduled backlog on skill";
 						break;
 					case 7:
-						e.Style.CellValue = "Backlog on incoming";
+						e.Style.CellValue = "Scheduled on incoming";
 						break;
 					case 8:
+						e.Style.CellValue = "Backlog on incoming";
+						break;
+					case 9:
 						e.Style.CellValue = "SL on incoming";
 						break;
 
@@ -135,15 +148,19 @@ namespace Teleopti.Ccc.Win.Backlog
 							break;
 						case 6:
 							e.Style.CellType = "TimeSpanLongHourMinutesStatic";
+							e.Style.CellValue = _model.GetScheduledBacklogOnIndex(e.ColIndex, (ISkill)tabControlSkills.SelectedTab.Tag);
+							break;
+						case 7:
+							e.Style.CellType = "TimeSpanLongHourMinutesStatic";
 							time = _model.GetScheduledOnIncomingIndex(e.ColIndex, (ISkill)tabControlSkills.SelectedTab.Tag);
 							setValue(e, time);
 							break;
-						case 7:
+						case 8:
 							e.Style.CellType = "TimeSpanLongHourMinutesStatic";
 							time = _model.GetScheduledBacklogOnIncomingIndex(e.ColIndex, (ISkill)tabControlSkills.SelectedTab.Tag);
 							setValue(e, time);
 							break;
-						case 8:
+						case 9:
 							e.Style.CellType = "PercentReadOnlyCellModel";
 							e.Style.CellValue = _model.GetScheduledServiceLevelOnIncomingIndex(e.ColIndex, (ISkill)tabControlSkills.SelectedTab.Tag);
 							e.Style.Borders.Bottom = new GridBorder(GridBorderStyle.Solid, Color.Black, GridBorderWeight.ExtraExtraThick);
@@ -193,6 +210,8 @@ namespace Teleopti.Ccc.Win.Backlog
 			tabControlSkills.SelectedTab.Controls.Add(splitContainer1);
 			splitContainer1.Dock = DockStyle.Fill;
 			gridControl1.ResetVolatileData();
+			gridControl1.Refresh();
+			updateChartChart();
 		}
 
 		private void toolStripButtonManualEntries_Click(object sender, EventArgs e)
@@ -227,13 +246,11 @@ namespace Teleopti.Ccc.Win.Backlog
 			gridControl1.ControllerOptions = GridControllerOptions.All & (~GridControllerOptions.OleDataSource);
 			gridControl1.ResetVolatileData();
 			gridControl1.BeginUpdate();
-			gridControl1.CellModels.Add("TimeSpanLongHourMinutesStatic", new TimeSpanDurationStaticCellModel(gridControl1.Model) { DisplaySeconds = false });
-			gridControl1.CellModels.Add("PercentReadOnlyCellModel", new PercentReadOnlyCellModel(gridControl1.Model));
-			gridControl1.CellModels.Add("Ignore", new IgnoreCellModel(gridControl1.Model));
-			gridControl1.ColWidths.SetSize(0, 120);
+			gridControl1.ColWidths.SetSize(0, 140);
 			gridControl1.RowHeights.SetSize(0, 30);
-
 			gridControl1.EndUpdate(true);
+			chart1.Palette = ChartColorPalette.SeaGreen;
+			updateChartChart();
 			toolStripStatusLabel1.Text = string.Empty;
 		}
 
@@ -244,5 +261,37 @@ namespace Teleopti.Ccc.Win.Backlog
 				dialog.ShowDialog(this);
 			}
 		}
+
+		private void updateChartChart()
+		{
+			chart1.Series.Clear();
+			var series1 = chart1.Series.Add("Scheduled on incoming");
+			var series2 = chart1.Series.Add("Backlog on incoming");
+			series1.ChartType = SeriesChartType.StackedColumn;
+			series2.ChartType = SeriesChartType.StackedColumn;
+			for (int i = 1; i < gridControl1.ColCount; i++)
+			{
+				var datapoint = new DataPoint(i,
+					_model.GetScheduledOnIncomingIndex(i, (ISkill) tabControlSkills.SelectedTab.Tag).TotalHours);
+				series1.Points.Add(datapoint);
+				datapoint = new DataPoint(i,
+					_model.GetScheduledBacklogOnIncomingIndex(i, (ISkill)tabControlSkills.SelectedTab.Tag).TotalHours);
+				series2.Points.Add(datapoint);
+			}
+		}
+
+		private void toolStripButtonExpand_Click(object sender, EventArgs e)
+		{
+			toolStripButtonExpand.Checked = !toolStripButtonExpand.Checked;
+			gridControl1.ResetVolatileData();
+			gridControl1.Refresh();
+		}
+
+		private void buttonLoad_Click(object sender, EventArgs e)
+		{
+			_model = new BacklogModel(_container);
+			backlogViewLoad(this, new EventArgs());
+		}
 	}
 }
+ 
