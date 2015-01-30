@@ -86,8 +86,7 @@ namespace Teleopti.Analytics.Etl.ConfigTool.Transformer
 				{
 					runController.StartEtlJobRunLock(job.Name, false, etlJobLock);
 					IJobRunner jobRunner = new JobRunner();
-					IList<IBusinessUnit> businessUnits = job.JobParameters.Helper.BusinessUnitCollection;
-					IList<IJobResult> jobResults = jobRunner.Run(job, businessUnits, jobResultCollection, jobStepsNotToRun);
+					IList<IJobResult> jobResults = jobRunner.Run(job, jobResultCollection, jobStepsNotToRun);
 					if (jobResults == null)
 					{
 						MessageBox.Show("Please apply a license from the main client before ETL job is run.", "Warning",

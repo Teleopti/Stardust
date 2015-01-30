@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Globalization;
 using System.Linq;
@@ -22,7 +24,10 @@ namespace Teleopti.Analytics.Etl.ConfigTool.Gui.Control
 		private IJobMultipleDate _jobMultipleDatePeriods;
 		private IJob _currentJob;
 		private IBaseConfiguration _baseConfiguration;
-
+		public class temp
+		{
+			public string DataSourceName { get; set; } 
+		}
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes")]
 		public ManualControl()
 		{
@@ -33,6 +38,7 @@ namespace Teleopti.Analytics.Etl.ConfigTool.Gui.Control
 			{
 				_dataSourceCollection = new DataSourceValidCollection(true);
 				ComboBoxLogDataSource.DataContext = _dataSourceCollection;
+				
 				UpdateControls(null);
 			}
 			catch (Exception ex)
@@ -52,6 +58,10 @@ namespace Teleopti.Analytics.Etl.ConfigTool.Gui.Control
 
 		}
 
+		public void SetTenantDataSource(ObservableCollection<TenantName> source)
+		{
+			ComboBoxDataSource.DataContext = source;
+		}
 		private static void changeForegroundColor(object sender)
 		{
 			var box = sender as GroupBox;
@@ -96,6 +106,17 @@ namespace Teleopti.Analytics.Etl.ConfigTool.Gui.Control
 					return (int)ComboBoxLogDataSource.SelectedValue;
 
 				return -1;
+			}
+		}
+
+		internal string DataSourceName
+		{
+			get
+			{
+				if (ComboBoxDataSource.SelectedIndex > -1)
+					return (string)ComboBoxDataSource.SelectedValue;
+
+				return "";
 			}
 		}
 

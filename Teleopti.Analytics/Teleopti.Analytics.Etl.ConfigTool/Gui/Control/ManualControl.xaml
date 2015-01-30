@@ -4,11 +4,19 @@ xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
 >
 
 	<StackPanel Orientation="Vertical" HorizontalAlignment="Stretch">
-		<StackPanel Name="StackPanelLogDataSource" Width="200" Margin="10" HorizontalAlignment="Left">
-			<Label>Log Data Source</Label>
-			<ComboBox Name="ComboBoxLogDataSource" ItemsSource="{Binding}"  DisplayMemberPath="DataSourceName" SelectedValuePath="DataSourceId" SelectedIndex="0"  >
-			</ComboBox>
+		<StackPanel Orientation="Horizontal">
+			<StackPanel Name="StackPanelLogDataSource" Width="200" Margin="10" HorizontalAlignment="Left">
+				<Label>Log Data Source</Label>
+				<ComboBox Name="ComboBoxLogDataSource" ItemsSource="{Binding}"  DisplayMemberPath="DataSourceName" SelectedValuePath="DataSourceId" SelectedIndex="0"  >
+				</ComboBox>
+			</StackPanel>
+			<StackPanel Name="StackPanelDataSource" Width="200" Margin="10" HorizontalAlignment="Center">
+				<Label>Tenant</Label>
+				<ComboBox Name="ComboBoxDataSource" ItemsSource="{Binding}"  DisplayMemberPath="DataSourceName" SelectedValuePath="DataSourceName" SelectedIndex="0"  >
+				</ComboBox>
+			</StackPanel>
 		</StackPanel>
+		
 		<StackPanel Orientation="Horizontal">
 			<StackPanel Orientation="Horizontal">
 				<GroupBox Name="GroupBoxInitial">

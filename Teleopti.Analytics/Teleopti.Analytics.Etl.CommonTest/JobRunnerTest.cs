@@ -25,7 +25,7 @@ namespace Teleopti.Analytics.Etl.CommonTest
 			var job = MockRepository.GenerateMock<IJob>();
 
 			IBusinessUnit businessUnit = new BusinessUnit("myBU");
-			IList<IBusinessUnit> businessUnitCollection = new List<IBusinessUnit> {businessUnit};
+			//IList<IBusinessUnit> businessUnitCollection = new List<IBusinessUnit> {businessUnit};
 			IList<IJobResult> jobResultCollection = new List<IJobResult>();
 			IList<IJobStep> jobStepsNotToRun = new List<IJobStep>();
 			IJobResult jobResult = new JobResult(businessUnit, jobResultCollection);
@@ -33,7 +33,7 @@ namespace Teleopti.Analytics.Etl.CommonTest
 			job.Stub(x => x.Run(businessUnit, new List<IJobStep>(), new List<IJobResult>(), true, true)).Return(jobResult);
 
 			_target = new JobRunner();
-			var expectedJobResultCollection = _target.Run(job, businessUnitCollection, jobResultCollection, jobStepsNotToRun);
+			var expectedJobResultCollection = _target.Run(job, jobResultCollection, jobStepsNotToRun);
 
 			expectedJobResultCollection.Count.Should().Be.EqualTo(1);
 			expectedJobResultCollection[0].Should().Be.SameInstanceAs(jobResult);
@@ -46,11 +46,11 @@ namespace Teleopti.Analytics.Etl.CommonTest
 
 			IBusinessUnit businessUnit1 = new BusinessUnit("myBU 1");
 			IBusinessUnit businessUnit2 = new BusinessUnit("myBU 2");
-			IList<IBusinessUnit> businessUnitCollection = new List<IBusinessUnit>
-			                                              	{
-			                                              		businessUnit1,
-																businessUnit2
-			                                              	};
+			//IList<IBusinessUnit> businessUnitCollection = new List<IBusinessUnit>
+			//																{
+			//																	businessUnit1,
+			//													businessUnit2
+			//																};
 			IList<IJobResult> jobResultCollection = new List<IJobResult>();
 			IList<IJobStep> jobStepsNotToRun = new List<IJobStep>();
 			IJobResult jobResult1 = new JobResult(businessUnit1, jobResultCollection);
@@ -60,7 +60,7 @@ namespace Teleopti.Analytics.Etl.CommonTest
 			job.Stub(x => x.Run(businessUnit2, jobStepsNotToRun, jobResultCollection, false, true)).Return(jobResult2);
 
 			_target = new JobRunner();
-			var expectedJobResultCollection = _target.Run(job, businessUnitCollection, jobResultCollection, jobStepsNotToRun);
+			var expectedJobResultCollection = _target.Run(job, jobResultCollection, jobStepsNotToRun);
 
 			expectedJobResultCollection.Count.Should().Be.EqualTo(2);
 			expectedJobResultCollection[0].Should().Be.SameInstanceAs(jobResult1);
@@ -127,7 +127,7 @@ namespace Teleopti.Analytics.Etl.CommonTest
 			job.Stub(x => x.Run(businessUnit, new List<IJobStep>(), new List<IJobResult>(), true, true)).Return(null);
 
 			_target = new JobRunner();
-			var expectedJobResultCollection = _target.Run(job, new List<IBusinessUnit> { businessUnit }, new List<IJobResult>(), new List<IJobStep>());
+			var expectedJobResultCollection = _target.Run(job, new List<IJobResult>(), new List<IJobStep>());
 
 			expectedJobResultCollection.Should().Be.Null();
 		}

@@ -19,5 +19,6 @@ namespace Teleopti.Analytics.Etl.Interfaces.Transformer
         bool Enabled { get; set; }
         event EventHandler<AlarmEventArgs> JobExecutionReady;
         void NotifyJobExecutionReady();
+		  IJobParameters JobParameters { get; }
     }
 }

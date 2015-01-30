@@ -90,7 +90,7 @@ namespace Teleopti.Analytics.Etl.ServiceLogic
 					configHandler.BaseConfiguration.IntervalLength.Value, _cube,
 					_pmInstallation, configHandler.BaseConfiguration.ToggleManager
 					);
-				isStopping = !RunJob(jobToRun, scheduleToRun.ScheduleId, rep, _jobHelper.BusinessUnitCollection);
+				isStopping = !RunJob(jobToRun, scheduleToRun.ScheduleId, rep);
 			}
 			catch (Exception ex)
 			{
@@ -103,7 +103,7 @@ namespace Teleopti.Analytics.Etl.ServiceLogic
 			}
 		}
 
-		private bool RunJob(IJob jobToRun, int scheduleId, IJobLogRepository repository, IList<IBusinessUnit> businessUnitCollection)
+		private bool RunJob(IJob jobToRun, int scheduleId, IJobLogRepository repository)
 		{
 			IList<IJobStep> jobStepsNotToRun = new List<IJobStep>();
 			IList<IJobResult> jobResultCollection = new List<IJobResult>();
@@ -115,17 +115,22 @@ namespace Teleopti.Analytics.Etl.ServiceLogic
 				{
 					Log.InfoFormat(CultureInfo.InvariantCulture, "Scheduled job '{0}' ready to start.", jobToRun.Name);
 					runController.StartEtlJobRunLock(jobToRun.Name, true, etlJobLock);
-					IJobRunner jobRunner = new JobRunner();
-					IList<IBusinessUnit> businessUnits = businessUnitCollection;
-					IList<IJobResult> jobResults = jobRunner.Run(jobToRun, businessUnits, jobResultCollection, jobStepsNotToRun);
-					if (jobResults == null)
+					var jobHelper = jobToRun.JobParameters.Helper;
+					var datasources = jobHelper.DataSourceContainers;
+					foreach (var dataSourceContainer in datasources)
 					{
-						// No license applied - stop service
-						LogInvalidLicense();
-						NeedToStopService(this, null);
-						return false;
+						jobHelper.SelectDataSourceContainer(dataSourceContainer.DataSourceName);
+						IJobRunner jobRunner = new JobRunner();
+						IList<IJobResult> jobResults = jobRunner.Run(jobToRun, jobResultCollection, jobStepsNotToRun);
+						if (jobResults == null)
+						{
+							// No license applied - stop service
+							LogInvalidLicense();
+							NeedToStopService(this, null);
+							return false;
+						}
+						jobRunner.SaveResult(jobResults, repository, scheduleId);
 					}
-					jobRunner.SaveResult(jobResults, repository, scheduleId);
 				}
 			}
 			else

@@ -4,6 +4,7 @@ using System.Configuration;
 using Teleopti.Analytics.Etl.Interfaces.Transformer;
 using Teleopti.Analytics.Etl.TransformerInfrastructure;
 using Teleopti.Ccc.Domain.Security;
+using Teleopti.Ccc.Domain.Security.Authentication;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.MessageBroker.Client;
 using Teleopti.Messaging.Client;
@@ -12,42 +13,47 @@ using IRaptorRepository = Teleopti.Analytics.Etl.Interfaces.Transformer.IRaptorR
 
 namespace Teleopti.Analytics.Etl.Transformer.Job
 {
-    public class JobHelper : IJobHelper
-    {
-        private IRaptorRepository _repository;
-        private ILogOnHelper _logHelp;
+	public class JobHelper : IJobHelper
+	{
+		private IRaptorRepository _repository;
+		private ILogOnHelper _logHelp;
 		private ISignalRClient _messageClient;
 		private IMessageSender _messageSender;
 
-        public JobHelper()
-        {
-			  //insert username, password from logonscreen later, or winlogon?
+		public JobHelper()
+		{
+			//insert username, password from logonscreen later, or winlogon?
 			_logHelp = new LogOnHelper(ConfigurationManager.AppSettings["nhibConfPath"]);
-	        MessageBrokerContainerDontUse.Configure(
-		        ConfigurationManager.AppSettings["MessageBroker"],
-		        new IConnectionKeepAliveStrategy[] {},
-		        null);
+			MessageBrokerContainerDontUse.Configure(
+				ConfigurationManager.AppSettings["MessageBroker"],
+				new IConnectionKeepAliveStrategy[] { },
+				null);
 			_messageSender = MessageBrokerContainerDontUse.Sender();
-	        _messageClient = MessageBrokerContainerDontUse.SignalRClient();
-        }
+			_messageClient = MessageBrokerContainerDontUse.SignalRClient();
+		}
 
-        public JobHelper(IRaptorRepository repository, ISignalRClient messageClient, IMessageSender messageSender, ILogOnHelper logOnHelper)
-        {
-            _repository = repository;
+		public JobHelper(IRaptorRepository repository, ISignalRClient messageClient, IMessageSender messageSender, ILogOnHelper logOnHelper)
+		{
+			_repository = repository;
 			_logHelp = logOnHelper;
 			_messageClient = messageClient;
 			_messageSender = messageSender;
 		}
 
-        public IList<IBusinessUnit> BusinessUnitCollection
-        {
-            get { return _logHelp.GetBusinessUnitCollection(); }
-        }
+		public IList<IBusinessUnit> BusinessUnitCollection
+		{
+			get { return _logHelp.GetBusinessUnitCollection(); }
+		}
 
-        public IRaptorRepository Repository
-        {
-            get { return _repository; }
-        }
+		public IList<DataSourceContainer> DataSourceContainers
+		{
+			get { return _logHelp.GetDataSourceCollection(); }
+		}
+
+		public IRaptorRepository Repository
+		{
+			get { return _repository; }
+		}
 
 		public ISignalRClient MessageClient
 		{
@@ -59,53 +65,58 @@ namespace Teleopti.Analytics.Etl.Transformer.Job
 			get { return _messageSender; }
 		}
 
-        public bool LogOnTeleoptiCccDomain(IBusinessUnit businessUnit)
-        {
-			if (!_logHelp.LogOn(businessUnit))
+		public bool SelectDataSourceContainer(string dataSourceName)
+		{
+			return _logHelp.SelectDataSourceContainer(dataSourceName);
+		}
+
+		public bool SetBusinessUnit(IBusinessUnit businessUnit)
+		{
+			if (!_logHelp.SetBusinessUnit(businessUnit))
 			{
 				return false;
 			}
 
-            //Create repository when logged in to raptor domain
-            _repository = new RaptorRepository(ConfigurationManager.AppSettings["datamartConnectionString"],
-                                               ConfigurationManager.AppSettings["isolationLevel"]);
-        	return true;
-        }
+			//Create repository when logged in to raptor domain
+			_repository = new RaptorRepository(_logHelp.SelectedDataSourceContainer.DataSource.Statistic.ConnectionString,
+														  ConfigurationManager.AppSettings["isolationLevel"]);
+			return true;
+		}
 
-        public void LogOffTeleoptiCccDomain()
-        {
-            _logHelp.LogOff();
-            _repository = null;
-        }
+		public void LogOffTeleoptiCccDomain()
+		{
+			_logHelp.LogOff();
+			_repository = null;
+		}
 
-        public void Dispose()
-        {
-            Dispose(true);
-            GC.SuppressFinalize(this);
-        }
+		public void Dispose()
+		{
+			Dispose(true);
+			GC.SuppressFinalize(this);
+		}
 
-        private void Dispose(bool disposing)
-        {
-            if (disposing)
-            {
-                ReleaseManagedResources();
-            }
-            ReleaseUnmanagedResources();
-        }
+		private void Dispose(bool disposing)
+		{
+			if (disposing)
+			{
+				ReleaseManagedResources();
+			}
+			ReleaseUnmanagedResources();
+		}
 
-        protected virtual void ReleaseUnmanagedResources()
-        {
-        }
+		protected virtual void ReleaseUnmanagedResources()
+		{
+		}
 
-        protected virtual void ReleaseManagedResources()
-        {
-            _repository = null;
-            if (_logHelp != null)
-                _logHelp.Dispose();
-            _logHelp = null;
-	        _messageClient = null;
-            _messageSender = null;
-        }
+		protected virtual void ReleaseManagedResources()
+		{
+			_repository = null;
+			if (_logHelp != null)
+				_logHelp.Dispose();
+			_logHelp = null;
+			_messageClient = null;
+			_messageSender = null;
+		}
 
-    }
+	}
 }

@@ -7,7 +7,7 @@ namespace Teleopti.Analytics.Etl.Interfaces.Common
 {
 	public interface IJobRunner
 	{
-		IList<IJobResult> Run(IJob job, IList<IBusinessUnit> businessUnitCollection, IList<IJobResult> jobResultCollection, IList<IJobStep> jobStepsNotToRun);
+		IList<IJobResult> Run(IJob job, IList<IJobResult> jobResultCollection, IList<IJobStep> jobStepsNotToRun);
 		void SaveResult(IList<IJobResult> jobResultCollection, IJobLogRepository jobLogRepository, int jobScheduleId);
 	}
 }

@@ -12,148 +12,165 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Analytics.Etl.ConfigTool.Gui.Control
 {
-    /// <summary>
-    /// Interaction logic for EtlControlTree.xaml
-    /// </summary>
-    public partial class EtlControlTree : UserControl, IDisposable
-    {
-        private readonly BackgroundWorker _logonWorker = new BackgroundWorker();
-        private JobCollectionFactory _jobCollectionFactory;
-        private ObservableCollection<IJob> _jobCollection;
+	/// <summary>
+	/// Interaction logic for EtlControlTree.xaml
+	/// </summary>
+	public partial class EtlControlTree : UserControl, IDisposable
+	{
+		private readonly BackgroundWorker _logonWorker = new BackgroundWorker();
+		private JobCollectionFactory _jobCollectionFactory;
+		private ObservableCollection<IJob> _jobCollection;
+		private readonly ObservableCollection<TenantName> _tenantCollection = new ObservableCollection<TenantName>();
 
-    	public event EventHandler<AlarmEventArgs> JobRun;
-        public event EventHandler<AlarmEventArgs> JobSelectionChanged;
-        public event EventHandler<AlarmEventArgs> InitialJobNowAvailable;
+		public event EventHandler<AlarmEventArgs> JobRun;
+		public event EventHandler<AlarmEventArgs> JobSelectionChanged;
+		public event EventHandler<AlarmEventArgs> InitialJobNowAvailable;
 
-        public EtlControlTree()
-        {
-            InitializeComponent();
+		public EtlControlTree()
+		{
+			InitializeComponent();
 
-            if (isInDesignMode) return;
+			if (isInDesignMode) return;
 
-            _logonWorker.DoWork += logonWorker_DoWork;
-            _logonWorker.RunWorkerCompleted += logonWorker_RunWorkerCompleted;
-        }
+			_logonWorker.DoWork += logonWorker_DoWork;
+			_logonWorker.RunWorkerCompleted += logonWorker_RunWorkerCompleted;
+		}
 
-        private static bool isInDesignMode
-        {
-            get
-            {
-                var prop = DesignerProperties.IsInDesignModeProperty;
-                return
-                    (bool)
-                    DependencyPropertyDescriptor.FromProperty(prop, typeof(FrameworkElement)).Metadata.DefaultValue;
+		private static bool isInDesignMode
+		{
+			get
+			{
+				var prop = DesignerProperties.IsInDesignModeProperty;
+				return
+					 (bool)
+					 DependencyPropertyDescriptor.FromProperty(prop, typeof(FrameworkElement)).Metadata.DefaultValue;
 
-            }
-        }
+			}
+		}
 
-        private void logonWorker_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
-        {
-            InitialJobNowAvailable(sender, new AlarmEventArgs(_jobCollection[0]));
-            SetEnableStateForJobCollection();
-            DataContext = _jobCollection;
-            tlv.SelectedItemChanged += tlv_SelectedItemChanged;
-            tlv.AddHandler(TreeViewItem.ExpandedEvent, new RoutedEventHandler(itemExpanded));
-        }
+		private void logonWorker_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
+		{
+			_tenantCollection.Clear();
+			foreach (var container in _jobCollection[0].JobParameters.Helper.DataSourceContainers)
+			{
+				_tenantCollection.Add(new TenantName { DataSourceName = container.DataSourceName });
+			}
+			InitialJobNowAvailable(sender, new AlarmEventArgs(_jobCollection[0]));
+			SetEnableStateForJobCollection();
+			DataContext = _jobCollection;
+			tlv.SelectedItemChanged += tlv_SelectedItemChanged;
+			tlv.AddHandler(TreeViewItem.ExpandedEvent, new RoutedEventHandler(itemExpanded));
 
-        internal void SetEnableStateForJobCollection()
-        {
-            var dataSourceCollection = new DataSourceValidCollection(true);
-            bool isJobEnabled = (dataSourceCollection.Count > 0);
+		}
 
-            foreach (IJob job in _jobCollection)
-            {
-                if (job.NeedsParameterDataSource)
-                {
-                    // Set enable state for depending of datasource existing or not
-                    job.Enabled = isJobEnabled;
-                }
-            }
-        }
+		internal void SetEnableStateForJobCollection()
+		{
+			var dataSourceCollection = new DataSourceValidCollection(true);
+			bool isJobEnabled = (dataSourceCollection.Count > 0);
 
-        private static void itemExpanded(object sender, RoutedEventArgs e)
-        {
-            var item = e.OriginalSource as TreeViewItem;
+			foreach (IJob job in _jobCollection)
+			{
+				if (job.NeedsParameterDataSource)
+				{
+					// Set enable state for depending of datasource existing or not
+					job.Enabled = isJobEnabled;
+				}
+			}
+		}
 
-            if (item != null)
-            {
-                item.IsSelected = true;
-            }
-        }
+		private static void itemExpanded(object sender, RoutedEventArgs e)
+		{
+			var item = e.OriginalSource as TreeViewItem;
 
-        void tlv_SelectedItemChanged(object sender, RoutedPropertyChangedEventArgs<object> e)
-        {
-            IJob selectedJob = getSelectedJob(tlv.SelectedItem);
-            if (selectedJob != null)
-            {
-                JobSelectionChanged(this, new AlarmEventArgs(selectedJob));
-            }
-        }
+			if (item != null)
+			{
+				item.IsSelected = true;
+			}
+		}
 
-        void logonWorker_DoWork(object sender, DoWorkEventArgs e)
-        {
-        	Thread.CurrentThread.CurrentCulture = (CultureInfo) e.Argument;
-            _jobCollection = _jobCollectionFactory.JobCollection;
-        }
+		void tlv_SelectedItemChanged(object sender, RoutedPropertyChangedEventArgs<object> e)
+		{
+			IJob selectedJob = getSelectedJob(tlv.SelectedItem);
+			if (selectedJob != null)
+			{
+				JobSelectionChanged(this, new AlarmEventArgs(selectedJob));
+			}
+		}
 
-        private void menuItemExecute_Click(object sender, RoutedEventArgs e)
-        {
-            if (JobRun != null)
-            {
-                var jobToRun = tlv.SelectedItem as IJob;
-                //ClearJobStepResult(jobToRun);
-                if (jobToRun != null)
-                {
-                    SetExecuteEnabledState(false);
-                    JobRun(this, new AlarmEventArgs(jobToRun));
-                }
-            }
+		void logonWorker_DoWork(object sender, DoWorkEventArgs e)
+		{
+			Thread.CurrentThread.CurrentCulture = (CultureInfo)e.Argument;
+			_jobCollection = _jobCollectionFactory.JobCollection;
+		}
 
-        }
+		private void menuItemExecute_Click(object sender, RoutedEventArgs e)
+		{
+			if (JobRun != null)
+			{
+				var jobToRun = tlv.SelectedItem as IJob;
+				//ClearJobStepResult(jobToRun);
+				if (jobToRun != null)
+				{
+					SetExecuteEnabledState(false);
+					JobRun(this, new AlarmEventArgs(jobToRun));
+				}
+			}
 
-        public void SetExecuteEnabledState(bool isEnabled)
-        {
-            menuItemExecute.IsEnabled = isEnabled;
-        }
+		}
 
-        private IJob getSelectedJob(object selectedItem)
-        {
-            var currentJob = selectedItem as IJob;
-            if (currentJob == null)
-            {
-                // If not IJob then it is IJobStep. Then we need to find the parent job
-                var jobStep = selectedItem as IJobStep;
+		public void SetExecuteEnabledState(bool isEnabled)
+		{
+			menuItemExecute.IsEnabled = isEnabled;
+		}
 
-                foreach (IJob job in _jobCollection)
-                {
-                    currentJob = job;
-                    if (job.StepList.Contains(jobStep))
-                    {
-                        //Parent job found - exit loop
-                        break;
-                    }
-                }
-            }
+		public ObservableCollection<TenantName> TenantCollection
+		{
+			get { return _tenantCollection; }
+		}
 
-            return currentJob;
-        }
+		private IJob getSelectedJob(object selectedItem)
+		{
+			var currentJob = selectedItem as IJob;
+			if (currentJob == null)
+			{
+				// If not IJob then it is IJobStep. Then we need to find the parent job
+				var jobStep = selectedItem as IJobStep;
 
-        public void Dispose()
-        {
-            Dispose(true);
-            GC.SuppressFinalize(this);
+				foreach (IJob job in _jobCollection)
+				{
+					currentJob = job;
+					if (job.StepList.Contains(jobStep))
+					{
+						//Parent job found - exit loop
+						break;
+					}
+				}
+			}
 
-        }
+			return currentJob;
+		}
 
-        protected virtual void Dispose(bool disposing)
-        {
-            _logonWorker.Dispose();
-        }
+		public void Dispose()
+		{
+			Dispose(true);
+			GC.SuppressFinalize(this);
 
-    	public void LoadJobTree(IBaseConfiguration baseConfiguration)
-    	{
+		}
+
+		protected virtual void Dispose(bool disposing)
+		{
+			_logonWorker.Dispose();
+		}
+
+		public void LoadJobTree(IBaseConfiguration baseConfiguration)
+		{
 			_jobCollectionFactory = new JobCollectionFactory(baseConfiguration);
 			_logonWorker.RunWorkerAsync(CultureInfo.CurrentCulture);
-    	}
-    }
+		}
+	}
+
+	public class TenantName
+	{
+		public string DataSourceName { get; set; }
+	}
 }

@@ -72,7 +72,7 @@ namespace Teleopti.Analytics.Etl.Transformer.Job.Steps
             if (JobParameters != null)
             {
                 //Log onto Raptor domain
-				if (!JobParameters.Helper.LogOnTeleoptiCccDomain(businessUnit))
+				if (!JobParameters.Helper.SetBusinessUnit(businessUnit))
 				{
 					Result.Status = string.Empty;
 					Result.Success = true;

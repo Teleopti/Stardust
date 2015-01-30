@@ -13,11 +13,13 @@ using Teleopti.Analytics.Etl.Transformer.Job.MultipleDate;
 using Teleopti.Analytics.Etl.Transformer.Job.Steps;
 using Teleopti.Analytics.Etl.TransformerInfrastructure;
 using Teleopti.Ccc.Domain.FeatureFlags;
+using Teleopti.Ccc.Domain.Security.Authentication;
 using Teleopti.Ccc.IocCommon.Toggle;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.TestData.Core;
 using Teleopti.Ccc.TestCommon.TestData.Setups.Configurable;
 using Teleopti.Interfaces.Domain;
+using Teleopti.Interfaces.MessageBroker.Client;
 using IJobResult = Teleopti.Analytics.Etl.Interfaces.Transformer.IJobResult;
 
 namespace Teleopti.Analytics.Etl.IntegrationTest
@@ -83,7 +85,7 @@ namespace Teleopti.Analytics.Etl.IntegrationTest
 				DataSource = SqlCommands.DataSourceIdGet(datasourceName)
 			};
 
-            jobParameters.StateHolder.SetLoadBridgeTimeZonePeriod(period, person.PermissionInformation.DefaultTimeZone().Id);
+				jobParameters.StateHolder.SetLoadBridgeTimeZonePeriod(period, person.PermissionInformation.DefaultTimeZone().Id);
 			StepRunner.RunNightly(jobParameters);
 
 			const string phone = "Phone";
@@ -151,7 +153,7 @@ namespace Teleopti.Analytics.Etl.IntegrationTest
 				DataSource = SqlCommands.DataSourceIdGet(datasourceName)
 			};
 
-            jobParameters.StateHolder.SetLoadBridgeTimeZonePeriod(period, person.PermissionInformation.DefaultTimeZone().Id);
+				jobParameters.StateHolder.SetLoadBridgeTimeZonePeriod(period, person.PermissionInformation.DefaultTimeZone().Id);
 			StepRunner.RunNightly(jobParameters);
 
 			// now it should have data on all three dates, 96 interval
@@ -220,7 +222,7 @@ namespace Teleopti.Analytics.Etl.IntegrationTest
 				DataSource = SqlCommands.DataSourceIdGet(datasourceName)
 			};
 
-            jobParameters.StateHolder.SetLoadBridgeTimeZonePeriod(period, person.PermissionInformation.DefaultTimeZone().Id);
+				jobParameters.StateHolder.SetLoadBridgeTimeZonePeriod(period, person.PermissionInformation.DefaultTimeZone().Id);
 
 			//Run ETL.Intraday first time just to set "LastUpdatedPerStep"
 			StepRunner.RunIntraday(jobParameters);
@@ -313,7 +315,7 @@ namespace Teleopti.Analytics.Etl.IntegrationTest
 			dateList.Add(testDate.AddDays(-3), testDate.AddDays(-3), JobCategoryType.Forecast);
 			dateList.Add(testDate.AddDays(-3), testDate.AddDays(-3), JobCategoryType.QueueStatistics);
 
-			var jobHelper = new JobHelper();
+			var jobHelper = new JobHelper(); 
 			var jobParameters = new JobParameters(
 				dateList, 1, "UTC", 15, "", "False", 
 				CultureInfo.CurrentCulture, 
@@ -324,13 +326,13 @@ namespace Teleopti.Analytics.Etl.IntegrationTest
 				Helper = jobHelper, 
 				DataSource = SqlCommands.DataSourceIdGet(datasourceName)
 			};
-            jobParameters.StateHolder.SetLoadBridgeTimeZonePeriod(period, person.PermissionInformation.DefaultTimeZone().Id);
-
+				jobParameters.StateHolder.SetLoadBridgeTimeZonePeriod(period, person.PermissionInformation.DefaultTimeZone().Id);
+			jobHelper.SelectDataSourceContainer(jobHelper.DataSourceContainers[0].DataSourceName);
 			var jobRunner = new JobRunner();
 			var nightlyJob = new JobBase(jobParameters, new NightlyJobCollection(jobParameters), "Nightly", true, true);
 			var jobResultCollection = new List<IJobResult>();
 
-			var jobListResult = jobRunner.Run(nightlyJob, new List<IBusinessUnit> {TestState.BusinessUnit}, jobResultCollection, new List<IJobStep>());
+			var jobListResult = jobRunner.Run(nightlyJob,  jobResultCollection, new List<IJobStep>());
 
 			Assert.That(jobListResult[0].HasError, Is.False);
 
@@ -344,7 +346,7 @@ namespace Teleopti.Analytics.Etl.IntegrationTest
 			var intradayJob = new JobBase(jobParameters, new IntradayJobCollection(jobParameters), "Intraday", true, true);
 			jobResultCollection = new List<IJobResult>(); //reset
 			
-			jobListResult = jobRunner.Run(intradayJob, new List<IBusinessUnit> { TestState.BusinessUnit }, jobResultCollection, new List<IJobStep>());
+			jobListResult = jobRunner.Run(intradayJob, jobResultCollection, new List<IJobStep>());
 			Assert.That(jobListResult[0].HasError, Is.False);
 			//check max interval value before (59)
 			Assert.That(SqlCommands.MaxIntervalLogObjectDetail(2, jobParameters.DataSource),  Is.EqualTo(59));
@@ -353,7 +355,7 @@ namespace Teleopti.Analytics.Etl.IntegrationTest
 			Assert.That(SqlCommands.MaxIntervalLogObjectDetail(2, jobParameters.DataSource), Is.EqualTo(60));
 			//run intraday and check that agg and mart is synced
 			jobResultCollection = new List<IJobResult>(); //reset
-			jobListResult = jobRunner.Run(intradayJob, new List<IBusinessUnit> { TestState.BusinessUnit }, jobResultCollection, new List<IJobStep>());
+			jobListResult = jobRunner.Run(intradayJob,  jobResultCollection, new List<IJobStep>());
 			Assert.That(jobListResult[0].HasError, Is.False);
 
 			Assert.That(SqlCommands.IntradayDetailSynced(1, jobParameters.DataSource), Is.True);
@@ -376,7 +378,7 @@ namespace Teleopti.Analytics.Etl.IntegrationTest
 
 			//run intraday and check that agg and mart is synced
 			jobResultCollection = new List<IJobResult>(); //reset
-			jobListResult = jobRunner.Run(intradayJob, new List<IBusinessUnit> { TestState.BusinessUnit }, jobResultCollection, new List<IJobStep>());
+			jobListResult = jobRunner.Run(intradayJob,  jobResultCollection, new List<IJobStep>());
 			Assert.That(jobListResult[0].HasError, Is.False);
 			//check deviation is loaded for today and that all sync dates/intervals are OK. Number of intervals in deviation is now 36
 			Assert.That(SqlCommands.SumFactScheduleDeviation(person, testDate.AddDays(0), "deviation_schedule_s"), Is.EqualTo(16080));
@@ -392,7 +394,7 @@ namespace Teleopti.Analytics.Etl.IntegrationTest
 			//move @now ahead and run intraday again and verfiy agg and mart is synced, Number of intervals in deviation is now 37
 			jobParameters.NowForTestPurpose = testDate.AddDays(0).AddHours(20);
 			jobResultCollection = new List<IJobResult>(); //reset
-			jobListResult = jobRunner.Run(intradayJob, new List<IBusinessUnit> { TestState.BusinessUnit }, jobResultCollection, new List<IJobStep>());
+			jobListResult = jobRunner.Run(intradayJob, jobResultCollection, new List<IJobStep>());
 			Assert.That(jobListResult[0].HasError, Is.False);
 			Assert.That(SqlCommands.IntradayDetailSynced(1, jobParameters.DataSource), Is.True);
 			Assert.That(SqlCommands.IntradayDetailSynced(2, jobParameters.DataSource), Is.True);
@@ -544,7 +546,5 @@ namespace Teleopti.Analytics.Etl.IntegrationTest
 
 			
 		}
-
-
 	}
 }

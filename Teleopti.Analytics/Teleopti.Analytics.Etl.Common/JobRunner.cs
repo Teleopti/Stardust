@@ -10,10 +10,10 @@ namespace Teleopti.Analytics.Etl.Common
 {
 	public class JobRunner : IJobRunner
 	{
-		public IList<IJobResult> Run(IJob job, IList<IBusinessUnit> businessUnitCollection, IList<IJobResult> jobResultCollection, IList<IJobStep> jobStepsNotToRun)
+		public IList<IJobResult> Run(IJob job, IList<IJobResult> jobResultCollection, IList<IJobStep> jobStepsNotToRun)
 		{
 			int counter = 0;
-
+			IList<IBusinessUnit> businessUnitCollection = job.JobParameters.Helper.BusinessUnitCollection;
 			foreach (var businessUnit in businessUnitCollection)
 			{
 				var startTime = DateTime.Now;
@@ -22,7 +22,7 @@ namespace Teleopti.Analytics.Etl.Common
 					return null;
 				jobResult.EndTime = DateTime.Now;
 				jobResult.StartTime = startTime;
-				
+
 				counter++;
 				jobResultCollection.Add(jobResult);
 			}

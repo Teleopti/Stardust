@@ -26,28 +26,21 @@ namespace Teleopti.Analytics.Etl.TransformerInfrastructure
 		private DataSourceContainer _choosenDb;
 		private IList<DataSourceContainer> _foundDataBases = new List<DataSourceContainer>();
 		private string _nhibConfPath;
-		//private readonly string _password;
-		//private readonly string _userName;
 		private IList<IBusinessUnit> _buList;
 		private ILogOnOff _logOnOff;
 		private IRepositoryFactory _repositoryFactory;
 		private readonly ILog _logger = LogManager.GetLogger(typeof(LogOnHelper));
+		private List<DataSourceContainer> _dataSources;
 
 		private LogOnHelper() { }
 
 		public LogOnHelper(string hibernateConfPath)
 			: this()
 		{
-			//after we added a logon screen so we can decide database in multitenant environment we probably need these again
-			//_userName = userName;
-			//_password = password;
 			_nhibConfPath = hibernateConfPath;
-
 			InitializeStateHolder();
-			setDatabase();
 		}
 
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1024:UsePropertiesWhereAppropriate")]
 		public IList<IBusinessUnit> GetBusinessUnitCollection()
 		{
 			if (_buList == null)
@@ -65,7 +58,28 @@ namespace Teleopti.Analytics.Etl.TransformerInfrastructure
 			return _buList;
 		}
 
-		public bool LogOn(IBusinessUnit businessUnit)
+		public IList<DataSourceContainer> GetDataSourceCollection()
+		{
+			if (_dataSources == null)
+			{
+				var dataSourceProvider =
+				new AvailableDataSourcesProvider(new ThisApplicationData(StateHolderReader.Instance.StateReader.ApplicationScopeData));
+				var datasourceprovider = new ApplicationDataSourceProvider(dataSourceProvider, new RepositoryFactory(), null);
+				_dataSources = datasourceprovider.DataSourceList().ToList();
+				
+			}
+
+			if (_dataSources == null || _dataSources.Count == 0)
+			{
+				throw new DataSourceException("No datasources found");
+			}
+
+			return _dataSources;
+		}
+
+		public IDataSourceContainer SelectedDataSourceContainer { get { return _choosenDb; }}
+
+		public bool SetBusinessUnit(IBusinessUnit businessUnit)
 		{
 			if (_choosenDb != null)
 			{
@@ -103,14 +117,10 @@ namespace Teleopti.Analytics.Etl.TransformerInfrastructure
 			
 		}
 
-		private void setDatabase()
+		public bool SelectDataSourceContainer(string dataSourceName)
 		{
-			var dataSourceProvider =
-				new AvailableDataSourcesProvider(new ThisApplicationData(StateHolderReader.Instance.StateReader.ApplicationScopeData));
-			var datasourceprovider = new ApplicationDataSourceProvider(dataSourceProvider,new RepositoryFactory(), null);
-			_foundDataBases = datasourceprovider.DataSourceList().ToList();
-
-			if (_foundDataBases.IsEmpty())
+			_buList = null;
+			if (GetDataSourceCollection().IsEmpty())
 			{
 				Trace.WriteLine("Login Failed! could not be found in any database configuration.");
 				_choosenDb = null;
@@ -118,20 +128,24 @@ namespace Teleopti.Analytics.Etl.TransformerInfrastructure
 			else
 			{
 				// If multiple databases we use the first in the list, since it is decided that the ETL Tool not should support multi db
-				_choosenDb = _foundDataBases.First();
-				using (var unitOfWork = _choosenDb.DataSource.Application.CreateAndOpenUnitOfWork())
+				_choosenDb = GetDataSourceCollection().FirstOrDefault(x => x.DataSourceName.Equals(dataSourceName));
+				if(_choosenDb == null)
+					Trace.WriteLine(string.Format("No datasource found with name {0}", dataSourceName));
+				else
 				{
-					var systemId = new Guid("3f0886ab-7b25-4e95-856a-0d726edc2a67");
-					_choosenDb.SetUser(_repositoryFactory.CreatePersonRepository(unitOfWork).LoadOne(systemId));
+					using (var unitOfWork = _choosenDb.DataSource.Application.CreateAndOpenUnitOfWork())
+					{
+						var systemId = new Guid("3f0886ab-7b25-4e95-856a-0d726edc2a67");
+						_choosenDb.SetUser(_repositoryFactory.CreatePersonRepository(unitOfWork).LoadOne(systemId));
+					}
+					if (_choosenDb.User == null)
+					{
+						Trace.WriteLine("Error on logon!");
+						_choosenDb = null;
+					}
 				}
-
-				if (_choosenDb.User == null)
-				{
-					Trace.WriteLine("Error on logon!");
-					_choosenDb = null;
-				}
-
 			}
+			return _choosenDb != null;
 		}
 
 		public void Dispose()

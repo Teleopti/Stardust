@@ -4,81 +4,68 @@ using NUnit.Framework;
 using Rhino.Mocks;
 using Teleopti.Analytics.Etl.Transformer.Job;
 using Teleopti.Analytics.Etl.TransformerInfrastructure;
+using Teleopti.Ccc.Domain.Forecasting;
+using Teleopti.Ccc.Domain.Security.Authentication;
 using Teleopti.Interfaces.Domain;
+using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Analytics.Etl.TransformerTest.Job
 {
 	[TestFixture]
 	public class JobHelperTest : IDisposable
 	{
-		private MockRepository _mocks;
 		private ILogOnHelper _logOnHelper;
 		private JobHelper _target;
 
 		[SetUp]
 		public void Setup()
 		{
-			_mocks = new MockRepository();
-			_logOnHelper = _mocks.StrictMock<ILogOnHelper>();
+			_logOnHelper = MockRepository.GenerateMock<ILogOnHelper>();
 			_target = new JobHelper(null, null, null, _logOnHelper);
 		}
 
 		[Test]
 		public void VerifyGetBusinessUnitCollection()
 		{
-			using(_mocks.Record())
-			{
-				Expect.Call(_logOnHelper.GetBusinessUnitCollection()).Return(new List<IBusinessUnit>());
-			}
-			using (_mocks.Playback())
-			{
-				Assert.AreEqual(0,_target.BusinessUnitCollection.Count);
-			}
+			_logOnHelper.Stub(x => x.GetBusinessUnitCollection()).Return(new List<IBusinessUnit>());
+			Assert.AreEqual(0,_target.BusinessUnitCollection.Count);
 		}
 
 		[Test]
 		public void VerifyLogOnRaptor()
 		{
-			using (_mocks.Record())
-			{
-				Expect.Call(_logOnHelper.LogOn(null)).Return(true);
-			}
-			using (_mocks.Playback())
-			{
-				Assert.IsNull(_target.Repository);
-				Assert.IsTrue(_target.LogOnTeleoptiCccDomain(null));
-				Assert.IsNotNull(_target.Repository);
-			}
+			var container = MockRepository.GenerateMock<IDataSourceContainer>();
+			var dataSource = MockRepository.GenerateMock<IDataSource>();
+			var uowFactory = MockRepository.GenerateMock<IUnitOfWorkFactory>();
+
+			_logOnHelper.Stub(x => x.SetBusinessUnit(null)).Return(true);
+			_logOnHelper.Stub(x => x.SelectedDataSourceContainer).Return(container);
+			container.Stub(x => x.DataSource).Return(dataSource);
+			dataSource.Stub(x => x.Statistic).Return(uowFactory);
+			uowFactory.Stub(x => x.ConnectionString).Return("asortofconnectionstring");
+			Assert.IsNull(_target.Repository);
+			Assert.IsTrue(_target.SetBusinessUnit(null));
+			Assert.IsNotNull(_target.Repository);
+			
 		}
 
 		[Test]
 		public void VerifyLogOnRaptorFailure()
 		{
-			using (_mocks.Record())
-			{
-				Expect.Call(_logOnHelper.LogOn(null)).Return(false);
-			}
-			using (_mocks.Playback())
-			{
-				Assert.IsNull(_target.Repository);
-				Assert.IsFalse(_target.LogOnTeleoptiCccDomain(null));
-				Assert.IsNull(_target.Repository);
-			}
+			_logOnHelper.Stub(x => x.SetBusinessUnit(null)).Return(false);
+			Assert.IsNull(_target.Repository);
+			Assert.IsFalse(_target.SetBusinessUnit(null));
+			Assert.IsNull(_target.Repository);
 		}
 
 		[Test]
 		public void VerifyLogOffRaptorAndDispose()
 		{
-			using (_mocks.Record())
-			{
-				_logOnHelper.LogOff();
-				_logOnHelper.Dispose();
-			}
-			using (_mocks.Playback())
-			{
-				_target.LogOffTeleoptiCccDomain();
-				_target.Dispose();
-			}
+			_logOnHelper.Stub(x => x.LogOff());
+			_logOnHelper.Stub(x => x.Dispose());
+			
+			_target.LogOffTeleoptiCccDomain();
+			_target.Dispose();
 		}
 
 		public void Dispose()
