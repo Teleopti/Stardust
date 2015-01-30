@@ -230,6 +230,8 @@
     <Compile Include="Autofac\SchedulingCommonModule.cs" />
     <Compile Include="Autofac\WeeklyRestSolverModule.cs" />
     <Compile Include="Backlog\BacklogModel.cs" />
+    <Compile Include="Backlog\BacklogProductPlanTask.cs" />
+    <Compile Include="Backlog\BacklogScheduledTask.cs" />
     <Compile Include="Backlog\BacklogTask.cs" />
     <Compile Include="Backlog\BacklogTaskForecastedTimePerDateCalculator.cs" />
     <Compile Include="Budgeting\BudgetGroupMonthFilter.cs" />
