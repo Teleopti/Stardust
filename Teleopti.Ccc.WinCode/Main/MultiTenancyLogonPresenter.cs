@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Configuration;
 using System.Globalization;
 using System.Linq;
+using System.Net;
 using System.Windows.Forms;
 using Teleopti.Ccc.Domain.Infrastructure;
 using Teleopti.Ccc.Domain.Security.Authentication;
@@ -159,23 +160,38 @@ namespace Teleopti.Ccc.WinCode.Main
 
 		private void getBusinessUnits()
 		{
-			if (_model.AuthenticationType == AuthenticationTypeOption.Application)
+			try
 			{
-				if (!login())
+				if (_model.AuthenticationType == AuthenticationTypeOption.Application)
 				{
-					CurrentStep--;
-					return;
+					if (!login())
+					{
+						CurrentStep--;
+						return;
+					}
+				}
+				if (_model.AuthenticationType == AuthenticationTypeOption.Windows)
+				{
+					if (!winLogin())
+					{
+						CurrentStep--;
+						_view.ShowStep(true);
+						return;
+					}
 				}
 			}
-			if (_model.AuthenticationType == AuthenticationTypeOption.Windows)
+			catch (WebException exception)
 			{
-				if (!winLogin())
-				{
-					CurrentStep--;
-					_view.ShowStep(true);
-					return;
-				}
+				var message = exception.Message;
+				if (exception.InnerException != null)
+					message = message + " " + exception.InnerException.Message;
+				_view.ShowErrorMessage(message,"Logon Error");
+				CurrentStep = LoginStep.SelectDatasource;
+				_view.ShowStep(false);
+				
+				return;
 			}
+			
 			var provider = _model.SelectedDataSourceContainer.AvailableBusinessUnitProvider;
 			_model.AvailableBus = provider.AvailableBusinessUnits().ToList();
 			if (_model.AvailableBus.Count == 0)

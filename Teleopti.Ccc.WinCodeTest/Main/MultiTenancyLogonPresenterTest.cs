@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Net;
 using System.Windows.Forms;
 using NUnit.Framework;
 using SharpTestsEx;
@@ -276,6 +277,22 @@ namespace Teleopti.Ccc.WinCodeTest.Main
 			_target.OkbuttonClicked();
 			_model.AuthenticationType.Should().Be.EqualTo(AuthenticationTypeOption.Application);
 			_target.CurrentStep.Should().Be.EqualTo(LoginStep.Login);
+		}
+
+		[Test]
+		public void ShouldGoToDatasourceStepIfWebException()
+		{
+			var dataSourceContainer = MockRepository.GenerateMock<IDataSourceContainer>();
+			var availableDataSourcesProvider = MockRepository.GenerateMock<IAvailableDataSourcesProvider>();
+			_model.AuthenticationType = AuthenticationTypeOption.Windows;
+			_model.DataSourceContainers = new List<IDataSourceContainer> { dataSourceContainer };
+			availableDataSourcesProvider.Stub(x => x.UnavailableDataSources()).Return(new List<IDataSource>());
+			_winLogon.Stub(x => x.Logon(_model, _appData)).Throw(new WebException("shit")).IgnoreArguments();
+			_view.Stub(x => x.ShowStep(false));
+
+			_target.CurrentStep = LoginStep.SelectDatasource;
+			_target.OkbuttonClicked();
+			_target.CurrentStep.Should().Be.EqualTo(LoginStep.SelectDatasource);
 		}
 	}
 
