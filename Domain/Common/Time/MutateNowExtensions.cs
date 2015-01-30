@@ -1,3 +1,5 @@
+using Teleopti.Ccc.Domain.Helper;
+
 namespace Teleopti.Ccc.Domain.Common.Time
 {
 	public static class MutateNowExtensions

@@ -156,7 +156,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.SeasonPages
 		        var position = accumulatedMonthPosition;
 		        accumulatedMonthPosition += numberOfDaysinMonth;
 		        addStripLines(numberOfDaysinMonth);
-		        xAxisLabels.SetValue(StringHelper.Capitalize(monthName), position + 1);
+		        xAxisLabels.SetValue(monthName.Capitalize(), position + 1);
 		        month++;
 	        }
         }

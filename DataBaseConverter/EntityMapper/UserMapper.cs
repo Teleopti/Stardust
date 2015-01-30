@@ -57,13 +57,16 @@ namespace Teleopti.Ccc.DatabaseConverter.EntityMapper
             if (oldEntity.Id == -1 || string.IsNullOrEmpty(oldEntity.LoginName))
                 return null;
 
-            newPerson =
-                    _existingPersons.FirstOrDefault(
-						p => ((p.AuthenticationInfo != null && p.AuthenticationInfo.Identity.ToUpperInvariant() == IdentityHelper.Merge(oldEntity.LoginDomain, oldEntity.LoginName).ToUpperInvariant())) 
-							||
-                             (p.ApplicationAuthenticationInfo != null && p.ApplicationAuthenticationInfo.ApplicationLogOnName.ToUpperInvariant() ==
-                              oldEntity.LoginName.ToUpperInvariant() &&
-                              string.IsNullOrEmpty(oldEntity.LoginDomain)));
+	        newPerson =
+		        _existingPersons.FirstOrDefault(
+			        p =>
+				        ((p.AuthenticationInfo != null &&
+				          p.AuthenticationInfo.Identity.Equals(IdentityHelper.Merge(oldEntity.LoginDomain, oldEntity.LoginName),StringComparison.InvariantCultureIgnoreCase)))
+				        ||
+				        (p.ApplicationAuthenticationInfo != null &&
+				         p.ApplicationAuthenticationInfo.ApplicationLogOnName.Equals(oldEntity.LoginName,
+					         StringComparison.InvariantCultureIgnoreCase) &&
+				         string.IsNullOrEmpty(oldEntity.LoginDomain)));
             if (newPerson == null)
             {
                 newPerson = MappedObjectPair.Agent.GetPaired(oldEntity.CccAgent);

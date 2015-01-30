@@ -161,10 +161,11 @@ namespace Teleopti.Ccc.Infrastructure.NHibernateConfiguration
 
 			IDictionary<string, int> result = new Dictionary<string, int>();
 
-			int index = listOfProperties.FindIndex(p => p.ToUpperInvariant() == createdByPropertyName);
+			int index =
+				listOfProperties.FindIndex(p => createdByPropertyName.Equals(p, StringComparison.InvariantCultureIgnoreCase));
 			if (index >= 0) result.Add(createdByPropertyName, index);
 
-			index = listOfProperties.FindIndex(p => p.ToUpperInvariant() == createdOnPropertyName);
+			index = listOfProperties.FindIndex(p => createdOnPropertyName.Equals(p, StringComparison.InvariantCultureIgnoreCase));
 			if (index >= 0) result.Add(createdOnPropertyName, index);
 
 			return result;
@@ -176,10 +177,11 @@ namespace Teleopti.Ccc.Infrastructure.NHibernateConfiguration
 
 			IDictionary<string, int> result = new Dictionary<string, int>();
 
-			int index = listOfProperties.FindIndex(p => p.ToUpperInvariant() == updatedByPropertyName);
+			int index =
+				listOfProperties.FindIndex(p => p.Equals(updatedByPropertyName, StringComparison.InvariantCultureIgnoreCase));
 			if (index >= 0) result.Add(updatedByPropertyName, index);
 
-			index = listOfProperties.FindIndex(p => p.ToUpperInvariant() == updatedOnPropertyName);
+			index = listOfProperties.FindIndex(p => p.Equals(updatedOnPropertyName, StringComparison.InvariantCultureIgnoreCase));
 			if (index >= 0) result.Add(updatedOnPropertyName, index);
 
 			return result;

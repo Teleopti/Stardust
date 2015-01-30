@@ -1,4 +1,5 @@
-﻿using System.Configuration;
+﻿using System;
+using System.Configuration;
 
 namespace Teleopti.Analytics.Portal.AnalyzerProxy
 {
@@ -32,11 +33,11 @@ namespace Teleopti.Analytics.Portal.AnalyzerProxy
                 foreach (string stringPart in splittedString1)
                 {
                     string[] splittedString2 = stringPart.Split("=".ToCharArray());
-                    if (splittedString2[0].ToUpperInvariant() == "DATA SOURCE")
+                    if (splittedString2[0].Equals("DATA SOURCE",StringComparison.InvariantCultureIgnoreCase))
                     {
                         _olapServer = splittedString2[1];
                     }
-                    if (splittedString2[0].ToUpperInvariant() == "INITIAL CATALOG")
+                    if (splittedString2[0].Equals("INITIAL CATALOG",StringComparison.InvariantCultureIgnoreCase))
                     {
                         _olapDatabase = splittedString2[1];
                     }

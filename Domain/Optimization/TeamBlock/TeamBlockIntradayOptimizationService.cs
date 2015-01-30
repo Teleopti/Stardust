@@ -149,7 +149,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 				if (_progressEvent != null && _progressEvent.UserCancel)
 					break;
 
-				string teamName = StringHelper.DisplayString(teamBlockInfo.TeamInfo.Name, 20);
+				string teamName = teamBlockInfo.TeamInfo.Name.DisplayString(20);
 				schedulePartModifyAndRollbackService.ClearModificationCollection();
 
 				var previousTargetValue = _dailyTargetValueCalculatorForTeamBlock.TargetValue(teamBlockInfo,

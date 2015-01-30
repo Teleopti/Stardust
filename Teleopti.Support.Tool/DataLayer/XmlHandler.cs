@@ -33,32 +33,7 @@ namespace Teleopti.Support.Tool.DataLayer
                 XmlNode xmlNode = xmlDocument.SelectSingleNode("//Nhib:property[@name='connection.connection_string']", manager);
                 string cccConnection = xmlNode.InnerText;
                 
-                // connection.connection_string
                 string analyticConnection = xmlDocument.SelectSingleNode("//connectionString").InnerText;
-                //string[] connectionProperties = cccConnection.Split(';');
-                //string analyticDatabase = null, CCCDatabase = null, cccDatasource = null, analyticDatasource=null,aggregationDatabase=null;
-
-                //foreach (var value in connectionProperties)
-                //{
-                //    if (value.ToUpper(CultureInfo.InvariantCulture).Contains("INITIAL CATALOG"))
-                //        CCCDatabase = value.Substring(value.IndexOf('=') + 1);
-                //    else if (value.ToUpper(CultureInfo.InvariantCulture).Contains("DATA SOURCE"))
-                //        cccDatasource = value.Substring(value.IndexOf('=') + 1);
-                //}
-
-                //connectionProperties = analyticConnection.Split(';');
-                //foreach (var value in connectionProperties)
-                //{
-                //    if (value.ToUpper(CultureInfo.InvariantCulture).Contains("INITIAL CATALOG"))
-                //        analyticDatabase = value.Substring(value.IndexOf('=') + 1);
-                //    else if (value.ToUpper(CultureInfo.InvariantCulture).Contains("DATA SOURCE"))
-                //        analyticDatasource = value.Substring(value.IndexOf('=') + 1);
-                //}
-
-                ////Get the agg database
-                //DBHelper analyticDBhelper = new DBHelper(analyticConnection);
-                //DBHelper cccDBhelper = new DBHelper(cccConnection);
-                //aggregationDatabase = analyticDBhelper.GetAggDatabaseName(analyticDatabase);
                 Nhib nhib = new Nhib(cccConnection, analyticConnection, string.Empty, sessionfactory, file);
                 nhibList.Add(nhib);
             }

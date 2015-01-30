@@ -4,7 +4,6 @@ using System.Text;
 using NUnit.Framework;
 using Teleopti.Ccc.ApplicationConfig.Common;
 using Teleopti.Ccc.Domain.Helper;
-using Teleopti.Ccc.Domain.Time;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.ApplicationConfigTest.Common
@@ -36,7 +35,7 @@ namespace Teleopti.Ccc.ApplicationConfigTest.Common
             stringBuilder.Append("-CUkn-IN,");                   // Culture.
             stringBuilder.Append("-DR15");                      // Force merge of Default Resolution to n.
             //stringBuilder.Append("-EE");                         // Use Integrated security
-            var arguments = StringHelper.Split(stringBuilder.ToString(), ",");
+            var arguments = stringBuilder.ToString().Split(",");
             _target = new CommandLineArgument(arguments);
         }
 
@@ -89,7 +88,7 @@ namespace Teleopti.Ccc.ApplicationConfigTest.Common
             stringBuilder.Append("-CUkn-IN,");                   // Culture.
             stringBuilder.Append("-DR15");                      // Force merge of Default Resolution to n.
             //stringBuilder.Append("-EE");                         // Use Integrated security
-            var arguments = StringHelper.Split(stringBuilder.ToString(), ",");
+            var arguments = stringBuilder.ToString().Split(",");
             _target = new CommandLineArgument(arguments);
                     
             Assert.AreEqual(@"TRG-TECH-SSOMAIR\TeleoptiForecast",_target.SourceServer);              
@@ -134,7 +133,7 @@ namespace Teleopti.Ccc.ApplicationConfigTest.Common
             stringBuilder.Append("-CUkn-IN,");                   // Culture.
             stringBuilder.Append("-DR15,");                      // Force merge of Default Resolution to n.
             stringBuilder.Append("-EE");                         // Use Integrated security
-            var arguments = StringHelper.Split(stringBuilder.ToString(), ",");
+			var arguments = stringBuilder.ToString().Split(",");
             ICommandLineArgument commandLineArgument = new CommandLineArgument(arguments);
 
             string connectionStringSource = "Data Source=PeterWe;Initial Catalog=TPS_REPORT;Integrated Security=True";

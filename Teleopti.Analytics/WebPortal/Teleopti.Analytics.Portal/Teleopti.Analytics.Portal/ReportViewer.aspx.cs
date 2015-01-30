@@ -30,7 +30,7 @@ namespace Teleopti.Analytics.Portal
 			{
 				if ((Request.QueryString.Get("Ready") != null))
 				{
-					if (Request.QueryString["Ready"].ToUpper(CultureInfo.CurrentCulture) == "YES")
+					if (Request.QueryString["Ready"].Equals("YES",StringComparison.CurrentCultureIgnoreCase))
 					{
 						fillViaQuery();
 					}

@@ -108,8 +108,9 @@ namespace ClickOnceSign
 
         private void btnSign_Click(object sender, EventArgs e)
         {
-            if (txtProviderUrl.Text.ToLower().StartsWith("http://localhost") ||
-                txtProviderUrl.Text.ToLower().StartsWith("http://*"))
+	        var url = txtProviderUrl.Text.ToLower();
+	        if (url.StartsWith("http://localhost") ||
+                url.StartsWith("http://*"))
             {
                 if (MessageBox.Show("Your provider url points to host 'localhost', are sure this is correct?", "URL Domain", MessageBoxButtons.YesNo) 
                     != DialogResult.Yes)

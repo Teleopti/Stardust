@@ -65,11 +65,11 @@ namespace Teleopti.Analytics.Etl.Transformer.Job
 				foreach (string stringPart in splittedString1)
 				{
 					string[] splittedString2 = stringPart.Split("=".ToCharArray());
-					if (splittedString2[0].ToUpperInvariant() == "DATA SOURCE")
+					if ("DATA SOURCE".Equals(splittedString2[0],StringComparison.InvariantCultureIgnoreCase) )
 					{
 						OlapServer = splittedString2[1];
 					}
-					if (splittedString2[0].ToUpperInvariant() == "INITIAL CATALOG")
+					if ("INITIAL CATALOG".Equals(splittedString2[0],StringComparison.InvariantCultureIgnoreCase))
 					{
 						OlapDatabase = splittedString2[1];
 					}
@@ -79,12 +79,7 @@ namespace Teleopti.Analytics.Etl.Transformer.Job
 
 		private static bool checkPmInstall(string flag)
 		{
-			if (string.IsNullOrEmpty(flag)) return false;
-
-			if (flag.ToUpper(CultureInfo.InvariantCulture) == "TRUE")
-				return true;
-
-			return false;
+			return !string.IsNullOrEmpty(flag) && "TRUE".Equals(flag,StringComparison.InvariantCultureIgnoreCase);
 		}
 	}
 }

@@ -364,15 +364,13 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.SeasonPages
 
             if(_volumeYear is DayOfWeeks)
             {
-                returnValue = StringHelper.Capitalize(
-                    CultureInfo.CurrentUICulture.DateTimeFormat.GetDayName((DayOfWeek) key-1));
+				returnValue = CultureInfo.CurrentUICulture.DateTimeFormat.GetDayName((DayOfWeek)key - 1).Capitalize();
             }else if(_volumeYear is WeekOfMonth)
             {
                 returnValue = string.Format(CultureInfo.CurrentUICulture, "{0} {1}", UserTexts.Resources.Week, key);
             }else if(_volumeYear is MonthOfYear)
             {
-                returnValue = StringHelper.Capitalize(
-                    CultureInfo.CurrentUICulture.DateTimeFormat.GetMonthName(key));
+				returnValue = CultureInfo.CurrentUICulture.DateTimeFormat.GetMonthName(key).Capitalize();
             }
         
             return returnValue;

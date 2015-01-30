@@ -93,7 +93,7 @@ namespace Teleopti.Analytics.Stats.TestApplication
 
 		private static bool checkExit(string info)
 		{
-			return info != null && info.ToUpper() == "EXIT";
+			return info != null && info.Equals("EXIT",StringComparison.CurrentCultureIgnoreCase);
 		}
 	}
 }

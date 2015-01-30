@@ -262,7 +262,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
                 this[cellCount, 1].CellType = "TimePeriodCell";
 
                 this[cellCount, 0].CellType = "Header";
-                this[cellCount, 0].Text = StringHelper.Capitalize(CultureInfo.CurrentUICulture.DateTimeFormat.GetDayName(weekDay));
+				this[cellCount, 0].Text = CultureInfo.CurrentUICulture.DateTimeFormat.GetDayName(weekDay).Capitalize();
                 this[cellCount, 0].ReadOnly = true;
                 cellCount++;
             }
@@ -273,25 +273,21 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
 
         private static bool isClosed(GridControl grid, int rowindex, int colIndex)
         {
-            bool isClosed = false;
-            if (((IList<TimePeriod>)grid[rowindex, colIndex].CellValue).Count == 0)
-                isClosed = true;
-            return isClosed;
+	        var isClosed = ((IList<TimePeriod>)grid[rowindex, colIndex].CellValue).Count == 0;
+	        return isClosed;
         }
 
         private static TimePeriod getPeriodToShow(GridStyleInfo gridStyleInfo)
         {
-            ICollection<TimePeriod> periods = gridStyleInfo.CellValue as ICollection<TimePeriod>;
-            TimePeriod period = new TimePeriod();
+            var periods = gridStyleInfo.CellValue as ICollection<TimePeriod>;
+            var period = new TimePeriod();
             if (periods == null) periods = gridStyleInfo.Tag as ICollection<TimePeriod>;
-            if (periods != null)
-            {
-                if (periods.Count > 0)
-                {
-                    period = periods.First();
-                }
-            }
-            return period;
+	        if (periods == null) return period;
+	        if (periods.Count > 0)
+	        {
+		        period = periods.First();
+	        }
+	        return period;
         }
     }
 }

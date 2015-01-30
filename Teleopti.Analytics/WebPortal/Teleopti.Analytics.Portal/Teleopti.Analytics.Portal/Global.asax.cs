@@ -30,7 +30,7 @@ namespace Teleopti.Analytics.Portal
 			if (HttpContext.Current.Request.Url.PathAndQuery.Contains("/Reserved.ReportViewerWebControl.axd") &&
 				!HttpContext.Current.Request.Url.ToString().ToUpperInvariant().Contains("ITERATIONID") &&
 				!String.IsNullOrEmpty(HttpContext.Current.Request.QueryString["ResourceStreamID"]) &&
-				HttpContext.Current.Request.QueryString["ResourceStreamID"].ToUpperInvariant().Equals("BLANK.GIF"))
+				HttpContext.Current.Request.QueryString["ResourceStreamID"].Equals("BLANK.GIF",StringComparison.InvariantCultureIgnoreCase))
 			{
 				Context.RewritePath(String.Concat(HttpContext.Current.Request.Url.PathAndQuery, "&IterationId=0"));
 			}

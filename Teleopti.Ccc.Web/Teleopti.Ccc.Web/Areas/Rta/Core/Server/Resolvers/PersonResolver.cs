@@ -16,7 +16,7 @@ namespace Teleopti.Ccc.Web.Areas.Rta.Core.Server.Resolvers
 
 		public bool TryResolveId(int dataSourceId, string logOn, out IEnumerable<ResolvedPerson> personId)
 		{
-			var lookupKey = string.Format(CultureInfo.InvariantCulture, "{0}|{1}", dataSourceId, logOn).ToUpper(CultureInfo.InvariantCulture);
+			var lookupKey = string.Format(CultureInfo.InvariantCulture, "{0}|{1}", dataSourceId, logOn).ToUpperInvariant();
 			if (string.IsNullOrEmpty(logOn))
 			{
 				lookupKey = string.Empty;

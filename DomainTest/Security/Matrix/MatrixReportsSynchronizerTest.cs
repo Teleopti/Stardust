@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Globalization;
 using NUnit.Framework;
 using Rhino.Mocks;
 using Teleopti.Ccc.Domain.Repositories;
@@ -149,7 +148,7 @@ namespace Teleopti.Ccc.DomainTest.Security.Matrix
 
         }
 
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Globalization", "CA1304:SpecifyCultureInfo", MessageId = "System.String.ToUpper"), Test]
+        [Test]
         public void VerifyCreateMatrixReportApplicationFunction()
         {
             string reportDescription = "xxViewAgents";
@@ -157,7 +156,7 @@ namespace Teleopti.Ccc.DomainTest.Security.Matrix
             IApplicationFunction app = _target.CreateMatrixReportApplicationFunction(_applicationFunctions,  info);
             Assert.AreEqual(app.FunctionDescription, reportDescription);
             Assert.AreEqual(DefinedForeignSourceNames.SourceMatrix, app.ForeignSource);
-            Assert.AreEqual(info.ReportId.ToString().ToUpper(), app.ForeignId);
+            Assert.AreEqual(info.ReportId, new Guid(app.ForeignId));
         }
 
         [Test]
@@ -204,13 +203,13 @@ namespace Teleopti.Ccc.DomainTest.Security.Matrix
             Assert.AreSame(resultList[0], _applicationFunctions[6]);
         }
 
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Globalization", "CA1304:SpecifyCultureInfo", MessageId = "System.String.ToUpper"), Test]
+        [Test]
         public void VerifyUpdateMatrixReports()
         {
             IList<IApplicationFunction> matrixApplicationFunctionList = _target.FilterExistingMatrixReportApplicationFunctions(_applicationFunctions);
             matrixApplicationFunctionList[0].FunctionDescription = "Agent";
 
-            Assert.AreEqual(_matrixReports[0].ReportId.ToString().ToUpper(), matrixApplicationFunctionList[0].ForeignId);
+            Assert.AreEqual(_matrixReports[0].ReportId, new Guid(matrixApplicationFunctionList[0].ForeignId));
             Assert.AreNotEqual(_matrixReports[0].ReportName, matrixApplicationFunctionList[0].FunctionDescription);
 
             _target.UpdateMatrixApplicationFunctions(matrixApplicationFunctionList, _matrixReports);

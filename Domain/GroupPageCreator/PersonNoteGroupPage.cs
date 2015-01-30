@@ -33,7 +33,7 @@ namespace Teleopti.Ccc.Domain.GroupPageCreator
                 string personGrpDesc = personGroup.Key.Length > 50 ? personGroup.Key.Substring(0, 48) + ".." : personGroup.Key;
                 IRootPersonGroup rootGroup = new RootPersonGroup(personGrpDesc);
 				if (!groupPage.IsUserDefined())
-					rootGroup.SetId(StringHelper.GenerateGuid(personGroup.Key));
+					rootGroup.SetId(personGroup.Key.GenerateGuid());
                 foreach (var p in personGroup)
                 {
                     rootGroup.AddPerson(p);

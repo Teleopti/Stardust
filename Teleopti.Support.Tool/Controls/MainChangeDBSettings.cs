@@ -78,7 +78,8 @@ namespace Teleopti.Support.Tool.Controls
             //We are in the domain TOPTINET and the app is running from path \Root\ConfigTool\ = We must be in a develop environment
             {
                 _fileKey = "dpath";
-                if (currentPath.ToUpperInvariant().Contains(@"\bin\debug".ToUpperInvariant()) || currentPath.ToUpperInvariant().Contains(@"\bin\release".ToUpperInvariant()))
+	            var upperPath = currentPath.ToUpperInvariant();
+	            if (upperPath.Contains(@"\BIN\DEBUG") || upperPath.Contains(@"\BIN\RELEASE"))
                 {
                     //We are in debug or release mode
                     currentPath += @"\..\..";

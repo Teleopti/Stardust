@@ -154,7 +154,7 @@ namespace Teleopti.Ccc.Domain.Security.Matrix
             newFunction.Parent = ApplicationFunction.FindByPath(applicationFunctions, DefinedRaptorApplicationFunctionPaths.AccessToReports);
             newFunction.FunctionCode = RemoveLeadingXFromDescription(info.ReportName);
             newFunction.FunctionDescription = info.ReportName;
-            newFunction.ForeignId = info.ReportId.ToString().ToUpper();
+            newFunction.ForeignId = info.ReportId.ToString();
             newFunction.ForeignSource = DefinedForeignSourceNames.SourceMatrix;
             return newFunction;
         }
@@ -222,10 +222,11 @@ namespace Teleopti.Ccc.Domain.Security.Matrix
             {
                 foreach (IApplicationFunction function in reportFunctions)
                 {
-                    if (!string.IsNullOrEmpty(function.ForeignId) && isGuid(function.ForeignId))
+	                Guid guid;
+	                if (!string.IsNullOrEmpty(function.ForeignId) && Guid.TryParse(function.ForeignId, out guid))
                     {
                         MatrixReportInfo foundReport =
-                            MatrixReportInfo.FindByReportId(matrixReports, new Guid(function.ForeignId.ToUpper()));
+                            MatrixReportInfo.FindByReportId(matrixReports, guid);
                         if (foundReport == null)
                         {
                             yield return function;
@@ -240,19 +241,6 @@ namespace Teleopti.Ccc.Domain.Security.Matrix
             }
         }
 
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA1806:DoNotIgnoreMethodResults", MessageId = "System.Guid"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes")]
-        private static bool isGuid(string hopefullyGuid)
-        {
-            try
-            {
-                var guid = new Guid(hopefullyGuid);
-            }
-            catch (Exception)
-            {
-                return false;
-            }
-            return true;
-        }
         /// <summary>
         /// Filters to the existing matrix application functions.
         /// </summary>
@@ -263,7 +251,6 @@ namespace Teleopti.Ccc.Domain.Security.Matrix
             return new List<IApplicationFunction>(applicationFunctions)
                 .FindAll(new ExternalApplicationFunctionSpecification(DefinedForeignSourceNames.SourceMatrix).IsSatisfiedBy);
         }
-
 
         /// <summary>
         /// Adds the application function to the application repository.
@@ -307,10 +294,10 @@ namespace Teleopti.Ccc.Domain.Security.Matrix
         {
             foreach (IApplicationFunction function in functions)
             {
-                if(!isGuid(function.ForeignId)) continue;
+	            Guid guid;
+	            if(!Guid.TryParse(function.ForeignId, out guid)) continue;
 
-                MatrixReportInfo report =
-                    MatrixReportInfo.FindByReportId(matrixReports, new Guid(function.ForeignId));
+                MatrixReportInfo report = MatrixReportInfo.FindByReportId(matrixReports, guid);
                 if (report != null)
                 {
                     function.FunctionCode = report.Version + RemoveLeadingXFromDescription(report.ReportName);

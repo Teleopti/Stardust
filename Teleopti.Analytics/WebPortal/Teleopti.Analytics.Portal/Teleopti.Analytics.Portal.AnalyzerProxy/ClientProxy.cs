@@ -318,7 +318,7 @@ namespace Teleopti.Analytics.Portal.AnalyzerProxy
                         {
                             if (dataSource.Success
                             && dataSource.ItemType == CatalogItemType.DataSource
-                            && dataSource.Name.Trim().ToUpperInvariant() == _olapServer.ToUpperInvariant())
+                            && dataSource.Name.Trim().Equals(_olapServer,StringComparison.InvariantCultureIgnoreCase))
                             {
                                 // DataSource found
                                 _analyzerDataSource = dataSource;

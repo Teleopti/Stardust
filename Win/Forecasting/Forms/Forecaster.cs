@@ -7,7 +7,6 @@ using System.Linq;
 using System.Reflection;
 using System.Windows.Forms;
 using Teleopti.Ccc.Domain.Collection;
-using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Infrastructure.Toggle;
 using Teleopti.Interfaces.MessageBroker.Events;
 using log4net;
@@ -2022,7 +2021,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
 		{
 			return
 				((WorkloadDetailView) getCurrentWorkloadDetailView()).Workload.TemplateWeekCollection.All(
-					t => t.Value.Name.ToUpperInvariant() != newName.ToUpperInvariant());
+					t => !t.Value.Name.Equals(newName,StringComparison.InvariantCultureIgnoreCase));
 		}
 
 		private class renameTemplateTag

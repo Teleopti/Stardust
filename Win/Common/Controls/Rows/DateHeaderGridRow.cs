@@ -35,9 +35,6 @@ namespace Teleopti.Ccc.Win.Common.Controls.Rows
             return dateTimeToReturn;
         }
 
-        #region IGridRow Members
-
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Globalization", "CA1305:SpecifyIFormatProvider", MessageId = "System.Int32.ToString(System.IFormatProvider)")]
         public void QueryCellInfo(CellInfo cellInfo)
         {
             if (cellInfo.Style.GetGridModel() == null)
@@ -53,11 +50,11 @@ namespace Teleopti.Ccc.Win.Common.Controls.Rows
                     cellInfo.Style.CellValue = dateTime.ToShortDateString();
                     break;
                 case DateHeaderType.MonthName:
-                    cellInfo.Style.CellValue = StringHelper.Capitalize(DateHelper.GetMonthName(dateTime, CultureInfo.CurrentUICulture));
+					cellInfo.Style.CellValue = DateHelper.GetMonthName(dateTime, CultureInfo.CurrentUICulture).Capitalize();
                     break;
                 case DateHeaderType.MonthNameYear:
                     cellInfo.Style.CellValue = string.Concat(
-                        StringHelper.Capitalize(DateHelper.GetMonthName(dateTime, CultureInfo.CurrentUICulture)), " ",
+						DateHelper.GetMonthName(dateTime, CultureInfo.CurrentUICulture).Capitalize(), " ",
                         CultureInfo.CurrentCulture.Calendar.GetYear(dateTime).ToString(CultureInfo.CurrentUICulture));
                     break;
                 case DateHeaderType.WeekDates:
@@ -68,11 +65,11 @@ namespace Teleopti.Ccc.Win.Common.Controls.Rows
                                                       " ", dateTime.ToShortDateString());
                     break;
                 case DateHeaderType.WeekdayName:
-                    cellInfo.Style.CellValue = StringHelper.Capitalize(CultureInfo.CurrentUICulture.DateTimeFormat.GetDayName(dateTime.DayOfWeek));
+					cellInfo.Style.CellValue = CultureInfo.CurrentUICulture.DateTimeFormat.GetDayName(dateTime.DayOfWeek).Capitalize();
                     break;
                 case DateHeaderType.MonthDayNumber:
                     cellInfo.Style.CellValue = CultureInfo.CurrentCulture.Calendar.GetDayOfMonth(dateTime);
-                    cellInfo.Style.CellTipText = StringHelper.Capitalize(CultureInfo.CurrentUICulture.DateTimeFormat.GetDayName(dateTime.DayOfWeek)) +
+					cellInfo.Style.CellTipText = CultureInfo.CurrentUICulture.DateTimeFormat.GetDayName(dateTime.DayOfWeek).Capitalize() +
                                           " " + Environment.NewLine + " " + dateTime.ToShortDateString();
                     cellInfo.Style.Tag = dateTime;
                     break;
@@ -96,7 +93,5 @@ namespace Teleopti.Ccc.Win.Common.Controls.Rows
         public void OnSelectionChanged(GridSelectionChangedEventArgs e, int rowHeaders)
         {
         }
-
-        #endregion
     }
 }

@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Interfaces.Domain;
@@ -45,8 +46,8 @@ namespace Teleopti.Ccc.WinCode.PeopleAdmin
                         if (conflicts.Contains(conflictPerson))
                             continue;
                         var conflictIdentity = conflictPerson.AuthenticationInfo == null ? "" : conflictPerson.AuthenticationInfo.Identity;
-                        var conflictAppLogOnName = conflictPerson.ApplicationAuthenticationInfo == null ? "" : conflictPerson.ApplicationAuthenticationInfo.ApplicationLogOnName.ToUpperInvariant();
-                        if (!string.IsNullOrEmpty(appLogOnName) && appLogOnName.ToUpperInvariant().Equals(conflictAppLogOnName))
+                        var conflictAppLogOnName = conflictPerson.ApplicationAuthenticationInfo == null ? "" : conflictPerson.ApplicationAuthenticationInfo.ApplicationLogOnName;
+                        if (!string.IsNullOrEmpty(appLogOnName) && appLogOnName.Equals(conflictAppLogOnName,StringComparison.InvariantCultureIgnoreCase))
                         {
                             retList.Add(new SameUserCredentialOnOther(person, conflictPerson));
                             conflicts.Add(person);
@@ -56,12 +57,11 @@ namespace Teleopti.Ccc.WinCode.PeopleAdmin
 						
                         if(!string.IsNullOrEmpty(identity))
                         {
-                            if (identity.ToUpperInvariant().Equals(conflictIdentity.ToUpperInvariant()))
+                            if (identity.Equals(conflictIdentity,StringComparison.InvariantCultureIgnoreCase))
                             {
                                 retList.Add(new SameUserCredentialOnOther(person, conflictPerson));
                                 conflicts.Add(person);
                                 conflicts.Add(conflictPerson);
-                                continue;
                             }
                         }
                     }

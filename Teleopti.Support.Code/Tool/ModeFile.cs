@@ -17,11 +17,11 @@ namespace Teleopti.Support.Code.Tool
 		public string[] FileContents()
 		{
 			var file = "ConfigFiles.txt";
-			if (Type.ToUpper(CultureInfo.InvariantCulture).Equals("DEPLOY"))
+			if (Type.Equals("DEPLOY",StringComparison.InvariantCultureIgnoreCase))
 				file = "DeployConfigFiles.txt";
-			if (Type.ToUpper(CultureInfo.InvariantCulture).Equals("TEST"))
+			if (Type.Equals("TEST",StringComparison.InvariantCultureIgnoreCase))
 				file = "BuildServerConfigFiles.txt";
-			if (Type.ToUpper(CultureInfo.InvariantCulture).Equals("AZURE"))
+			if (Type.Equals("AZURE",StringComparison.InvariantCultureIgnoreCase))
 				file = "AzureConfigFiles.txt";
 
 			return File.ReadAllLines(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"ConfigFiles\" + file));

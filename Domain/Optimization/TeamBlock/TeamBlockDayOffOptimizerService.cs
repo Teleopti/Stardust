@@ -304,7 +304,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 
 			OnReportProgress(Resources.OptimizingDaysOff + Resources.Colon + "(" + totalLiveTeamInfos.ToString("####") + ")(" +
 			                 currentTeamInfoCounter.ToString("####") + ") " +
-			                 StringHelper.DisplayString(teamInfo.Name, 20) + " (" + currentPeriodValue +
+							 teamInfo.Name.DisplayString(20) + " (" + currentPeriodValue +
 			                 ")");
 
 			return !failed;
