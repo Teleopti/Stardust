@@ -51,6 +51,9 @@ namespace Teleopti.Ccc.Domain.Optimization.WeeklyRestSolver
 			var effectiveRestriction = _teamBlockRestrictionAggregator.Aggregate(shiftDate, personAssignment.Person, teamBlockInfo,
 				schedulingOptions);
 
+			if (effectiveRestriction == null)
+				return false;
+
 			if (effectiveRestriction.StartTimeLimitation.EndTime.HasValue && effectiveRestriction.StartTimeLimitation.EndTime.Value < earliestStartTime)
 				return false;
 
