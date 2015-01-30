@@ -21,7 +21,6 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Controllers
 		private ApplicationController target;
 		private IPrincipalAuthorization authorization;
 		private ICurrentTeleoptiPrincipal currentTeleoptiPrincipal;
-		private IPersonRepository _personRepository;
 		private IIanaTimeZoneProvider ianaTimeZoneProvider;
 
 		[SetUp]
@@ -29,9 +28,8 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Controllers
 		{
 			authorization = MockRepository.GenerateMock<IPrincipalAuthorization>();
 			currentTeleoptiPrincipal = MockRepository.GenerateMock<ICurrentTeleoptiPrincipal>();
-			_personRepository = MockRepository.GenerateMock<IPersonRepository>();
 			ianaTimeZoneProvider = MockRepository.GenerateMock<IIanaTimeZoneProvider>();
-			target = new ApplicationController(authorization, currentTeleoptiPrincipal, _personRepository, ianaTimeZoneProvider, new FakeToggleManager());
+			target = new ApplicationController(authorization, currentTeleoptiPrincipal, ianaTimeZoneProvider, new FakeToggleManager());
 		}
 
 		[TearDown]

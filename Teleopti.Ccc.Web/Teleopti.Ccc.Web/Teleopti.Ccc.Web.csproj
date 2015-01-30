@@ -1066,6 +1066,7 @@
     <Content Include=".node\Gruntfile.js" />
     <Content Include="Areas\Anywhere\Content\feature.js" />
     <Content Include="Areas\Anywhere\Content\Scripts\ajax.js" />
+    <Content Include="Areas\Anywhere\Content\Scripts\fulldayabsencetimesetting.js" />
     <Content Include="Areas\Anywhere\Content\Scripts\guidgenerator.js" />
     <Content Include="Areas\Anywhere\Content\Scripts\navigation_test.js" />
     <Content Include="Areas\Anywhere\Content\Scripts\knockout-3.2.0.debug.js" />

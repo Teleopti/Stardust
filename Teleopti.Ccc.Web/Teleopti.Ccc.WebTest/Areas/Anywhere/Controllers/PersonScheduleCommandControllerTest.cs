@@ -22,7 +22,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Controllers
 		public void ShouldDispatchAddFullDayAbsenceCommand()
 		{
 			var commandDispatcher = MockRepository.GenerateMock<ICommandDispatcher>();
-			var target = new PersonScheduleCommandController(commandDispatcher, MockRepository.GenerateMock<ILoggedOnUser>());
+			var target = new PersonScheduleCommandController(commandDispatcher, MockRepository.GenerateMock<ILoggedOnUser>(), null);
 
 			var command = new AddFullDayAbsenceCommand();
 
@@ -38,7 +38,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Controllers
 			var loggedOnUser = MockRepository.GenerateMock<ILoggedOnUser>();
 			var personWithId = PersonFactory.CreatePersonWithId();
 			loggedOnUser.Stub(x => x.CurrentUser()).Return(personWithId);
-			var target = new PersonScheduleCommandController(commandDispatcher, loggedOnUser);
+			var target = new PersonScheduleCommandController(commandDispatcher, loggedOnUser, null);
 
 			var command = new AddFullDayAbsenceCommand
 			{
@@ -60,7 +60,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Controllers
 		public void ShouldDispatchAddIntradayAbsenceCommand()
 		{
 			var commandDispatcher = MockRepository.GenerateMock<ICommandDispatcher>();
-			var target = new PersonScheduleCommandController(commandDispatcher, MockRepository.GenerateMock<ILoggedOnUser>());
+			var target = new PersonScheduleCommandController(commandDispatcher, MockRepository.GenerateMock<ILoggedOnUser>(), null);
 
 			var command = new AddIntradayAbsenceCommand();
 
@@ -76,7 +76,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Controllers
 			var loggedOnUser = MockRepository.GenerateMock<ILoggedOnUser>();
 			var personWithId = PersonFactory.CreatePersonWithId();
 			loggedOnUser.Stub(x => x.CurrentUser()).Return(personWithId);
-			var target = new PersonScheduleCommandController(commandDispatcher, loggedOnUser);
+			var target = new PersonScheduleCommandController(commandDispatcher, loggedOnUser, null);
 
 			var command = new AddIntradayAbsenceCommand
 			{
@@ -99,7 +99,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Controllers
 		{
 			var response = MockRepository.GenerateStub<FakeHttpResponse>();
 			var commandDispatcher = MockRepository.GenerateMock<ICommandDispatcher>();
-			var target = new PersonScheduleCommandController(commandDispatcher, MockRepository.GenerateMock<ILoggedOnUser>());
+			var target = new PersonScheduleCommandController(commandDispatcher, MockRepository.GenerateMock<ILoggedOnUser>(), null);
 			var context = new FakeHttpContext("/");
 			context.SetResponse(response);
 			target.ControllerContext = new ControllerContext(context, new RouteData(), target);
@@ -119,7 +119,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Controllers
 		public void ShouldDispatchRemoveAbsenceCommand()
 		{
 			var commandDispatcher = MockRepository.GenerateMock<ICommandDispatcher>();
-			var target = new PersonScheduleCommandController(commandDispatcher, MockRepository.GenerateMock<ILoggedOnUser>());
+			var target = new PersonScheduleCommandController(commandDispatcher, MockRepository.GenerateMock<ILoggedOnUser>(), null);
 
 			var command = new RemovePersonAbsenceCommand();
 
@@ -135,7 +135,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Controllers
 			var loggedOnUser = MockRepository.GenerateMock<ILoggedOnUser>();
 			var personWithId = PersonFactory.CreatePersonWithId();
 			loggedOnUser.Stub(x => x.CurrentUser()).Return(personWithId);
-			var target = new PersonScheduleCommandController(commandDispatcher, loggedOnUser);
+			var target = new PersonScheduleCommandController(commandDispatcher, loggedOnUser, null);
 
 			var command = new RemovePersonAbsenceCommand
 			{
@@ -157,7 +157,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Controllers
 		public void ShouldDispatchAddActivity()
 		{
 			var commandDispatcher = MockRepository.GenerateMock<ICommandDispatcher>();
-			var target = new PersonScheduleCommandController(commandDispatcher, MockRepository.GenerateMock<ILoggedOnUser>());
+			var target = new PersonScheduleCommandController(commandDispatcher, MockRepository.GenerateMock<ILoggedOnUser>(), null);
 
 			var command = new AddActivityCommand();
 
@@ -173,7 +173,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Controllers
 			var loggedOnUser = MockRepository.GenerateMock<ILoggedOnUser>();
 			var personWithId = PersonFactory.CreatePersonWithId();
 			loggedOnUser.Stub(x => x.CurrentUser()).Return(personWithId);
-			var target = new PersonScheduleCommandController(commandDispatcher, loggedOnUser);
+			var target = new PersonScheduleCommandController(commandDispatcher, loggedOnUser, null);
 
 			var command = new AddActivityCommand
 			{
@@ -195,7 +195,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Controllers
 		public void ShouldDispatchMoveActivity()
 		{
 			var dispatcher = MockRepository.GenerateMock<ICommandDispatcher>();
-			var target = new PersonScheduleCommandController(dispatcher, MockRepository.GenerateMock<ILoggedOnUser>());
+			var target = new PersonScheduleCommandController(dispatcher, MockRepository.GenerateMock<ILoggedOnUser>(), null);
 			var command = new MoveActivityCommand();
 			target.MoveActivity(command);
 			dispatcher.AssertWasCalled(x=>x.Execute(command));
@@ -208,7 +208,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Controllers
 			var loggedOnUser = MockRepository.GenerateMock<ILoggedOnUser>();
 			var personWithId = PersonFactory.CreatePersonWithId();
 			loggedOnUser.Stub(x => x.CurrentUser()).Return(personWithId);
-			var target = new PersonScheduleCommandController(commandDispatcher, loggedOnUser);
+			var target = new PersonScheduleCommandController(commandDispatcher, loggedOnUser, null);
 
 			var command = new MoveActivityCommand
 			{

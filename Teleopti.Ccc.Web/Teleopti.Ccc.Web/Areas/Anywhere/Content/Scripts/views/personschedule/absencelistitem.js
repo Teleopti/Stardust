@@ -6,7 +6,8 @@ define([
 		'ajax',
 		'guidgenerator',
 		'shared/timezone-current',
-		'notifications'
+		'notifications',
+		'fulldayabsencetimesetting'
 	], function(
 		ko,
 		moment,
@@ -15,7 +16,8 @@ define([
 		ajax,
 		guidgenerator,
 		timezoneCurrent,
-		notificationsViewModel
+		notificationsViewModel,
+		fullDayAbsenceTimeSetting
 	) {
 
 		return function(data) {
@@ -24,12 +26,20 @@ define([
 		
 			var personName = data.PersonName;
 			self.personId = data.PersonId;
-			self.CurrentDateMoment = ko.observable(moment(data.Date));
-			self.CurrentDate = ko.observable(data.Date.format('YYYY-MM-DD'));
+			self.CurrentDateMoment = ko.observable(moment(moment(data.Date).format("YYYY-MM-DD")));
 			self.EndTimeForAbsenceModify = ko.observable(moment(data.Date));
 			self.Schedules = ko.observableArray();
-			self.StartDateOnly = moment(data.StartTime, "YYYY-MM-DD");
-			self.EndDateOnly = moment(data.EndTime, "YYYY-MM-DD");
+			self.StartDateOnly = moment(moment(data.StartTime).format("YYYY-MM-DD"));
+			self.EndDateOnly = moment(moment(data.EndTime).format("YYYY-MM-DD"));
+			self.fullDayAbsenceEndTime = ko.observable();
+			fullDayAbsenceTimeSetting.get().done(function (settingData) {
+				var endTime = settingData.End.TimeSpanValue.Hours.toString() + ":" + settingData.End.TimeSpanValue.Minutes.toString();
+				self.fullDayAbsenceEndTime(endTime);
+			});
+
+			self.CurrentDate = ko.computed(function() {
+				return self.CurrentDateMoment().format(resources.DateFormatForMoment);
+			});
 
 			this.StartDateTimeMoment = moment(data.StartTime);
 			this.EndDateTimeMoment = moment(data.EndTime);
@@ -40,9 +50,8 @@ define([
 			this.EndTime = ko.observable(self.EndDateTimeMoment.format(resources.TimeFormatForMoment));
 
 			this.PreviousDate = ko.computed(function () {
-				self.CurrentDateMoment(moment(self.CurrentDate()));
-				self.EndTimeForAbsenceModify(moment(self.CurrentDate()));
-				return moment(self.CurrentDate()).add('day', -1);
+				self.EndTimeForAbsenceModify(self.CurrentDateMoment());
+				return self.CurrentDateMoment().clone().add('day', -1);
 			});
 
 			
@@ -118,10 +127,6 @@ define([
 				self.AboutToRemove(true);
 			};
 
-			this.LoadAbsenceTimeForEmptyDay = function() {
-
-			};
-
 			this.Save = function () {
 				var trackId = guidgenerator.newGuid();
 				ajax.ajax({
@@ -130,15 +135,12 @@ define([
 					type: 'GET',
 					data: { personId: self.personId, date: self.PreviousDate().format("YYYY-MM-DD") },
 					success: function (schedule) {
-						var endTime = self.CurrentDateMoment();
-						if (schedule.EndTime != null) {
+						var endTime = moment(self.PreviousDate().format("YYYY-MM-DD") + " " + self.fullDayAbsenceEndTime());
+						if (schedule.EndTime != null && !schedule.IsDayOff) {
 							endTime = moment(schedule.EndTime);
 						}
-						else if (schedule.IsDayOff) {
-							endTime = self.CurrentDateMoment();
-						}
 
-						if (self.CurrentDate() == self.StartDateOnly.format("YYYY-MM-DD")) {
+						if (self.CurrentDateMoment().format("YYYY-MM-DD") == self.StartDateOnly.format("YYYY-MM-DD")) {
 							self.ConfirmRemoval();
 						} else {
 							self.EndTimeForAbsenceModify(endTime);

@@ -1,5 +1,4 @@
 using System;
-using System.Dynamic;
 using System.Globalization;
 using System.Web.Mvc;
 using Newtonsoft.Json;
@@ -8,9 +7,13 @@ using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Infrastructure.Toggle;
+using Teleopti.Ccc.Domain.SystemSetting.GlobalSetting;
+using Teleopti.Ccc.Infrastructure.Repositories;
+using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.Web.Areas.Anywhere.Core;
 using Teleopti.Ccc.Web.Core;
 using Teleopti.Ccc.Web.Filters;
+using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.Web.Areas.Anywhere.Controllers
 {
@@ -18,15 +21,13 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Controllers
 	{
 		private readonly IPrincipalAuthorization _principalAuthorization;
 		private readonly ICurrentTeleoptiPrincipal _currentTeleoptiPrincipal;
-		private readonly IPersonRepository _personRepository;
 		private readonly IIanaTimeZoneProvider _ianaTimeZoneProvider;
 		private readonly IToggleManager _toggles;
 
-		public ApplicationController(IPrincipalAuthorization principalAuthorization, ICurrentTeleoptiPrincipal currentTeleoptiPrincipal, IPersonRepository personRepository, IIanaTimeZoneProvider ianaTimeZoneProvider, IToggleManager toggles)
+		public ApplicationController(IPrincipalAuthorization principalAuthorization, ICurrentTeleoptiPrincipal currentTeleoptiPrincipal, IIanaTimeZoneProvider ianaTimeZoneProvider, IToggleManager toggles)
 		{
 			_principalAuthorization = principalAuthorization;
 			_currentTeleoptiPrincipal = currentTeleoptiPrincipal;
-			_personRepository = personRepository;
 			_ianaTimeZoneProvider = ianaTimeZoneProvider;
 			_toggles = toggles;
 		}
@@ -183,6 +184,25 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Controllers
 			template = string.Format(template, userTexts);
 
 			return new ContentResult { Content = template, ContentType = "text/javascript" };
+		}
+
+		[HttpGet, OutputCache(Duration = 0, NoStore = true)]
+		public JsonResult FullDayAbsenceRequestTimeSetting()
+		{
+			TimeSpanSetting fullDayAbsenceRequestStartTimeSetting;
+			TimeSpanSetting fullDayAbsenceRequestEndTimeSetting;
+			using (IUnitOfWork uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
+			{
+				fullDayAbsenceRequestStartTimeSetting = new GlobalSettingDataRepository(uow).FindValueByKey("FullDayAbsenceRequestStartTime",
+					new TimeSpanSetting(new TimeSpan(0, 0, 0)));
+				fullDayAbsenceRequestEndTimeSetting = new GlobalSettingDataRepository(uow).FindValueByKey("FullDayAbsenceRequestEndTime",
+					new TimeSpanSetting(new TimeSpan(23, 59, 0)));
+			}
+			return Json(new
+			{
+				Start = fullDayAbsenceRequestStartTimeSetting,
+				End = fullDayAbsenceRequestEndTimeSetting
+			}, JsonRequestBehavior.AllowGet);
 		}
 	}
 }

@@ -410,24 +410,14 @@
 													<i class="glyphicon glyphicon-step-forward"></i>
 												</button>
 											</span>
-											<input type="text" class="input-sm end-date form-control" xreadonly="readonly" data-bind="value : CurrentDate" />
+											<input type="text" class="input-sm date-input form-control" readonly="readonly" data-bind="value : CurrentDate" />
 											<span class="input-group-btn">
-												<button class="btn btn-sm" data-bind="datepicker: CurrentDate, datepickerOptions: { format: $root.Resources.DateFormatForMoment, weekStart: $root.Resources.FirstDayOfWeek, autoclose: true }">
+												<button class="btn btn-sm" data-bind="datepicker: CurrentDateMoment, datepickerOptions: { format: $root.Resources.DateFormatForMoment, weekStart: $root.Resources.FirstDayOfWeek, autoclose: true }">
 													<i class="glyphicon glyphicon-calendar"></i>
 												</button>
 											</span>
 										</div>
 									</div>
-									<!--<div class="col-xs-3">
-										<div class="input-group bootstrap-timepicker">
-											<input type="text" class="input-sm end-time form-control" data-bind="value: EndTime" />
-											<span class="input-group-btn">
-												<button class="btn btn-sm" data-bind="timepicker: EndTime, timepickerOptions: { showMeridian: $root.Resources.ShowMeridian, allowEmpty: true }">
-													<i class=" glyphicon glyphicon-time"></i>
-												</button>
-											</span>
-										</div>
-									</div>-->
 								</div>
 								<div class="row form-group" data-bind="visible:IsOtherTimezone">
 									<div class="col-xs-4 timeZoneText">
