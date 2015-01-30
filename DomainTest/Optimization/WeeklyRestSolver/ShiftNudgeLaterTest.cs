@@ -170,7 +170,24 @@ namespace Teleopti.Ccc.DomainTest.Optimization.WeeklyRestSolver
 			}
 		}
 
-		private void commonMocks(EffectiveRestriction effectiveRestriction)
+		[Test]
+		public void ShouldReturnFalseIfEffectiveRestrictionNull()
+		{
+			IEffectiveRestriction effectiveRestriction = null;
+
+			using (_mocks.Record())
+			{
+				commonMocks(effectiveRestriction);
+			}
+
+			using (_mocks.Playback())
+			{
+				var result = _target.Nudge(_scheduleDay, _rollbackService, _schedulingOptions, _resourceCalculateDelayer, _teamBlockInfo, _schedulingResultStateHolder);
+				Assert.IsFalse(result);
+			}
+		}
+
+		private void commonMocks(IEffectiveRestriction effectiveRestriction)
 		{
 			Expect.Call(_scheduleDay.PersonAssignment()).Return(_personAssignment);
 			Expect.Call(_scheduleDay.TimeZone).Return(TimeZoneInfo.Utc);
