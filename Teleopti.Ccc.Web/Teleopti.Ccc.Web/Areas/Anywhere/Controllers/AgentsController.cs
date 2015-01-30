@@ -38,7 +38,7 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Controllers
 		[HttpGet]
 		public JsonResult GetStates(Guid teamId)
 		{
-			var states = _rtaRepository.LoadTeamAgentStates(teamId).Select(x => new AgentViewModel
+			var states = _rtaRepository.LoadTeamAgentStates(teamId).Select(x => new AgentStateViewModel
 			{
 				PersonId = x.PersonId,
 				State = x.State,

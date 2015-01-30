@@ -41,7 +41,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Controllers
 				AlarmStart = "2001-01-01 12:00".Utc(),
 				Color = Color.Red.ToArgb()
 			};
-			var expected = new AgentViewModel
+			var expected = new AgentStateViewModel
 			{
 				PersonId = personId,
 				State = "out of adherence",
@@ -54,10 +54,10 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Controllers
 				AlarmColor = "#FF0000"
 			};
 
-			var target = new AgentsController(new FakePermissionProvider(), null, null, null, null, null, new FakeRtaRepository(new[] { data }));
+			var target = new AgentsController(null, null, null, null, null, null, new FakeRtaRepository(new[] { data }));
 			new StubbingControllerBuilder().InitializeController(target);
 
-			var result = target.GetStates(teamId).Data as IEnumerable<AgentViewModel>;
+			var result = target.GetStates(teamId).Data as IEnumerable<AgentStateViewModel>;
 
 			result.Count().Should().Be(1);
 			Assert.That(result.First().PersonId, Is.EqualTo(expected.PersonId));
@@ -70,7 +70,6 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Controllers
 			Assert.That(result.First().AlarmStart, Is.EqualTo(expected.AlarmStart));
 			Assert.That(result.First().AlarmColor, Is.EqualTo(expected.AlarmColor));
 		}
-
 
 		[Test]
 		public void GetAgents_ShouldGetAllAgentsForOneTeam()
