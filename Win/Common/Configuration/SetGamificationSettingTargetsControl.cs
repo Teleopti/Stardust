@@ -78,8 +78,15 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 
 		public void Unload()
 		{
-			_source.Clear();
-			_settings.Clear();
+			if (_source != null)
+			{
+				_source.Clear();
+			}
+			if (_settings != null)
+			{
+				_settings.Clear();
+			}
+			
 		}
 
 		private ReadOnlyCollection<SFGridColumnBase<TeamGamificationSettingModel>> configureGrid()
