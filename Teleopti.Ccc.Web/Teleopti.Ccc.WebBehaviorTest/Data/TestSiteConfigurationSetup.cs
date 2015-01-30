@@ -69,7 +69,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data
 			FileConfigurator.ConfigureByTags("Data\\iisexpress.config", "Data\\iisexpress.running.config", new AllTags());
 			var parameters = new Parameters
 				{
-					Systray = true,
+					Systray = false,
 					Config = "Data\\iisexpress.running.config /apppool:\"Clr4IntegratedAppPool\""
 				};
 			_server = new IISExpress(parameters);
