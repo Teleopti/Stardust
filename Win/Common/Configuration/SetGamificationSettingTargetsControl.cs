@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Windows.Forms;
+using Syncfusion.Windows.Forms.Grid;
+using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
@@ -20,7 +22,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 		private readonly IList<TeamGamificationSettingModel> _source = new List<TeamGamificationSettingModel>();
 		private SFGridColumnGridHelper<TeamGamificationSettingModel> _columnGridHelper;
 		private SetGamificationSettingPresenter _presenter;
-		private IList<IGamificationSetting> _settings;
+		private IList<IGamificationSetting> _settings = new List<IGamificationSetting>();
 		
 
 		public SetGamificationSettingTargetsControl()
@@ -78,15 +80,6 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 
 		public void Unload()
 		{
-			if (_source != null)
-			{
-				_source.Clear();
-			}
-			if (_settings != null)
-			{
-				_settings.Clear();
-			}
-			
 		}
 
 		private ReadOnlyCollection<SFGridColumnBase<TeamGamificationSettingModel>> configureGrid()
@@ -103,10 +96,16 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 																			  _settings, "Description",
 																			  typeof(IGamificationSetting));
 			gridColumns.Add(gamificationSettingDropdownColumn);
+			gamificationSettingDropdownColumn.QueryComboItems += gamificationSettingDropdownColumnQueryComboItems;
 
 			gridControlSelectSettingForTeams.RowCount = gridRowCount();
 			gridControlSelectSettingForTeams.ColCount = gridColumns.Count - 1;  //col index starts on 0
 			return new ReadOnlyCollection<SFGridColumnBase<TeamGamificationSettingModel>>(gridColumns);
+		}
+
+		private void gamificationSettingDropdownColumnQueryComboItems(object sender, GridQueryCellInfoEventArgs e)
+		{
+			e.Style.DataSource = _settings;
 		}
 
 		private int gridRowCount()
@@ -174,7 +173,8 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 
 		public void SetGamificationSettings(IEnumerable<IGamificationSetting> gamificationSettings)
 		{
-			_settings = new List<IGamificationSetting>(gamificationSettings);
+			_settings.Clear();
+			gamificationSettings.ForEach(s => _settings.Add(s));
 		}
 
 		public void SetSelectedSite(ISite site)
