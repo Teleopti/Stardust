@@ -43,7 +43,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 			if (myTeam == null)
 				return null;
 			var ret = Session.CreateCriteria<TeamGamificationSetting>()
-					   .Add(Restrictions.Eq("Team.Id", myTeam.Id.GetValueOrDefault()))
+					   .Add(Restrictions.Eq("Team", myTeam))
 					   .UniqueResult<ITeamGamificationSetting>();
 
 			return ret;

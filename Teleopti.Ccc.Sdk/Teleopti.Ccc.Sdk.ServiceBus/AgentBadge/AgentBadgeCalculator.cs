@@ -33,7 +33,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.AgentBadge
 		{
 			var newAwardedBadges = new List<IAgentBadgeTransaction>();
 
-			var agentsListShouldGetBadge = agentsThatShouldGetBadge as IList<Guid> ?? agentsThatShouldGetBadge.ToList();
+			var agentsListShouldGetBadge = agentsThatShouldGetBadge as IList<Guid> ?? agentsThatShouldGetBadge.Where(a => a!=null).ToList();
 			if (!agentsListShouldGetBadge.Any())
 			{
 				return newAwardedBadges;
@@ -49,8 +49,8 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.AgentBadge
 
 			foreach (
 				var person in
-					agentsListShouldGetBadge.Select(agent => allPersons.SingleOrDefault(x => x.Id != null && x.Id.Value == agent))
-						.Where(a => a != null))
+					agentsListShouldGetBadge.Select(agent => allPersons.SingleOrDefault(x => agent.Equals(x.Id)))
+						)
 			{
 				var hasBadgePermission = person.PermissionInformation.ApplicationRoleCollection.Any(
 					role => role.ApplicationFunctionCollection.Contains(viewBadgeFunc));
