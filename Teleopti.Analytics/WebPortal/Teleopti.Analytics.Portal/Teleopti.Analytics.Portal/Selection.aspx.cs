@@ -11,7 +11,7 @@ namespace Teleopti.Analytics.Portal
 
 		protected void Selector_OnInit(object sender, EventArgs e)
 		{
-			if (!TryParseGuid(Request.QueryString["REPORTID"], out _reportId))
+			if (!Guid.TryParse(Request.QueryString["REPORTID"], out _reportId))
 				return;
 			if (!string.IsNullOrEmpty(Request.QueryString.Get("BUID")))
 			{
