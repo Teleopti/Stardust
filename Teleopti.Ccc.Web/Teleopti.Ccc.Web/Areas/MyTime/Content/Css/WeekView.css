@@ -121,3 +121,10 @@
 {
 	display: none;
 }
+#wish-list span {
+	margin-right: 10px;
+}
+#wish-list + .dropdown-backdrop + .dropdown-menu {
+	margin: 0 15px 0;
+}
+
