@@ -121,15 +121,18 @@ Teleopti.MyTimeWeb.Schedule.ShiftExchangeOfferViewModel = function ShiftExchange
 				|| self.StartTime().indexOf("pm") > -1 || self.StartTime().indexOf("PM") > -1) {
 				var start = self.convert12To24Hour(self.StartTime());
 				self.startTimeInternal(start);
+			} else {
+				self.startTimeInternal(self.StartTime());
 			}
 
 			if (self.EndTime().indexOf("am") > -1 || self.EndTime().indexOf("AM") > -1
 				|| self.EndTime().indexOf("pm") > -1 || self.EndTime().indexOf("PM") > -1) {
 				var end = self.convert12To24Hour(self.EndTime());
 				self.endTimeInternal(end);
+			} else {
+				self.endTimeInternal(self.EndTime());
 			}
-		}
-
+		}		
 		if (self.endTimeInternal() < self.startTimeInternal() && !self.EndTimeNextDay()) return false;
 		return true;
 	});
