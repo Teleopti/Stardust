@@ -259,7 +259,6 @@
     <Compile Include="Toggle\ToggleEnabledResult.cs" />
     <Compile Include="Toggle\ToggleQuerier.cs" />
     <Compile Include="Toggle\TogglesActive.cs" />
-    <Compile Include="IAgentStateReader.cs" />
     <Compile Include="Licensing\CheckLicenseExists.cs" />
     <Compile Include="Licensing\ICheckLicenseExists.cs" />
     <Compile Include="Licensing\LicenseActivatorProvider.cs" />
@@ -375,7 +374,6 @@
     <Compile Include="Repositories\OvertimeAvailabilityRepository.cs" />
     <Compile Include="Repositories\ResourceCalculationPrerequisitesLoader.cs" />
     <Compile Include="Repositories\ScheduledResourcesReadModelStorage.cs" />
-    <Compile Include="Rta\AgentStatesReader.cs" />
     <Compile Include="Rta\INumberOfAgentsInSiteReader.cs" />
     <Compile Include="Rta\ISiteAdherenceAggregator.cs" />
     <Compile Include="Rta\ITeamAdherenceAggregator.cs" />

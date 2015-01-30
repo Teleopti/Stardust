@@ -437,7 +437,6 @@
     <Compile Include="Repositories\TeamRepositoryTest.cs" />
     <Compile Include="Repositories\WorkflowControlSetRepositoryTest.cs" />
     <Compile Include="Repositories\WorkloadRepositoryTest.cs" />
-    <Compile Include="Rta\AgentStatesReaderTest.cs" />
     <Compile Include="Rta\NumberOfAgentsInTeamReaderTest.cs" />
     <Compile Include="Rta\NumberOfAgentsInSiteReaderTest.cs" />
     <Compile Include="Rta\PersonOrganizationReaderTest.cs" />

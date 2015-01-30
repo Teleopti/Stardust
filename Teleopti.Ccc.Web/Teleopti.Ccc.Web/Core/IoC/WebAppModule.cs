@@ -102,7 +102,6 @@ namespace Teleopti.Ccc.Web.Core.IoC
 			builder.RegisterType<NumberOfAgentsInTeamReader>().As<INumberOfAgentsInTeamReader>().SingleInstance();
 			builder.RegisterType<SiteAdherenceAggregator>().As<ISiteAdherenceAggregator>().SingleInstance();
 			builder.RegisterType<TeamAdherenceAggregator>().As<ITeamAdherenceAggregator>().SingleInstance();
-			builder.RegisterType<AgentStatesReader>().As<IAgentStateReader>().SingleInstance();
 
 			builder.RegisterModule(new ConfigurationSettingsReader());
 			builder.RegisterModule<TenantModule>();

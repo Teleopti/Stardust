@@ -8,6 +8,7 @@ namespace Teleopti.Ccc.Domain.Common
 	{
 		ICommonNameDescriptionSetting CommonAgentNameSettings { get; }
 	}
+
 	public class CommonAgentNameProvider : ICommonAgentNameProvider
 	{
 		private readonly IGlobalSettingDataRepository _settingDataRepository;

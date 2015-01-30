@@ -5,6 +5,7 @@ using NHibernate.Transform;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Rta;
 using Teleopti.Ccc.Domain.Security.Principal;
+using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
@@ -41,15 +42,12 @@ namespace Teleopti.Ccc.Infrastructure.Rta
 	    {
 			using (var uow = StatisticUnitOfWorkFactory().CreateAndOpenStatelessUnitOfWork())
 			{
-				var ret = new List<AgentStateReadModel>();
-				
-					ret.AddRange(((NHibernateStatelessUnitOfWork)uow).Session.CreateSQLQuery(
-						"SELECT * FROM RTA.ActualAgentState WITH (NOLOCK) WHERE TeamId = :teamId")
-						.SetParameter("teamId", teamId)
-						.SetResultTransformer(Transformers.AliasToBean(typeof(AgentStateReadModel)))
-						.SetReadOnly(true)
-						.List<AgentStateReadModel>());
-				return ret;
+				return uow.Session().CreateSQLQuery(
+					"SELECT * FROM RTA.ActualAgentState WITH (NOLOCK) WHERE TeamId = :teamId")
+					.SetParameter("teamId", teamId)
+					.SetResultTransformer(Transformers.AliasToBean(typeof (AgentStateReadModel)))
+					.SetReadOnly(true)
+					.List<AgentStateReadModel>();
 			}  
 	    }
 

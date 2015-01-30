@@ -1,11 +1,12 @@
 using System;
+using System.Drawing;
 using System.Linq;
 using System.Web.Mvc;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Domain.Repositories;
+using Teleopti.Ccc.Domain.Rta;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
-using Teleopti.Ccc.Infrastructure;
 using Teleopti.Ccc.Web.Areas.Anywhere.Core;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Portal.DataProvider;
 using Teleopti.Ccc.Web.Filters;
@@ -19,47 +20,38 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Controllers
 		private readonly ITeamRepository _teamRepository;
 		private readonly IPersonRepository _personRepository;
 		private readonly INow _date;
-		private readonly IAgentStateReader _agentStateReader;
 		private readonly IUserTimeZone _userTimeZone;
 	    private readonly ICommonAgentNameProvider _commonAgentNameProvider;
+		private readonly IRtaRepository _rtaRepository;
 
-	    public AgentsController(IPermissionProvider permissionProvider, ITeamRepository teamRepository, IPersonRepository personRepository, INow date, IAgentStateReader agentStateReader, IUserTimeZone userTimeZone, ICommonAgentNameProvider commonAgentNameProvider)
+		public AgentsController(IPermissionProvider permissionProvider, ITeamRepository teamRepository, IPersonRepository personRepository, INow date, IUserTimeZone userTimeZone, ICommonAgentNameProvider commonAgentNameProvider, IRtaRepository rtaRepository)
 		{
 			_permissionProvider = permissionProvider;
 			_teamRepository = teamRepository;
 			_personRepository = personRepository;
 			_date = date;
-			_agentStateReader = agentStateReader;
 			_userTimeZone = userTimeZone;
 		    _commonAgentNameProvider = commonAgentNameProvider;
+		    _rtaRepository = rtaRepository;
 		}
 
-		[UnitOfWorkAction, HttpGet]
+		[HttpGet]
 		public JsonResult GetStates(Guid teamId)
 		{
-			var team = _teamRepository.Get(teamId);
-			var isPermitted =
-				_permissionProvider.HasTeamPermission(DefinedRaptorApplicationFunctionPaths.RealTimeAdherenceOverview,
-					_date.LocalDateOnly(), team);
-			if (!isPermitted)
-			{
-				Response.StatusCode = 403;
-				return null;
-			}
-
-			return Json(_agentStateReader.GetLatestStatesForTeam(teamId).Select(x => new AgentViewModel
+			var states = _rtaRepository.LoadTeamAgentStates(teamId).Select(x => new AgentViewModel
 			{
 				PersonId = x.PersonId,
-				Name = _commonAgentNameProvider.CommonAgentNameSettings.BuildCommonNameDescription( _personRepository.Get(x.PersonId)),
 				State = x.State,
-				StateStart = getNullableUtcDatetime(x.StateStart ),
-				Activity = x.Activity,
-				NextActivity = x.NextActivity,
-				NextActivityStartTime = getNullableUtcDatetime(x.NextActivityStartTime),
-				Alarm = x.Alarm,
+				StateStart = getNullableUtcDatetime(x.StateStart),
+				Activity = x.Scheduled,
+				NextActivity = x.ScheduledNext,
+				NextActivityStartTime = getNullableUtcDatetime(x.NextStart),
+				Alarm = x.AlarmName,
 				AlarmStart = getNullableUtcDatetime(x.AlarmStart),
-				AlarmColor = x.AlarmColor
-			}), JsonRequestBehavior.AllowGet);
+				AlarmColor = ColorTranslator.ToHtml(Color.FromArgb(x.Color ?? 0))
+			}).ToArray();
+
+			return Json(states, JsonRequestBehavior.AllowGet);
 		}
 
 		private static DateTime? getNullableUtcDatetime(DateTime? dateTime)
