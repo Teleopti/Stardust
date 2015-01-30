@@ -60,3 +60,4 @@ Given There is an agent badge settings with
   | Adherence           | 3      | 0      | 0    | 2014-08-11         |
  When I am viewing week schedule
  Then There should display no badge information
+
