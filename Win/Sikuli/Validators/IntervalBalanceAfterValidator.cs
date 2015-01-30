@@ -52,7 +52,7 @@ namespace Teleopti.Ccc.Win.Sikuli.Validators
 
 		private int checkInternalBalanceRuleBreaks(IEnumerable<double?> intervalBalances)
 		{
-			const double limit = 0.8;
+			const double limit = 0.8d;
 			int numberOfRuleBreaks = intervalBalances.Count(intervalBalance => intervalBalance < limit);
 			return numberOfRuleBreaks;
 		}

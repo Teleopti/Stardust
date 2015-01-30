@@ -1,4 +1,5 @@
-﻿using Teleopti.Ccc.WinCode.Common;
+﻿using System.Globalization;
+using Teleopti.Ccc.WinCode.Common;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Win.Sikuli.Validators
@@ -23,8 +24,9 @@ namespace Teleopti.Ccc.Win.Sikuli.Validators
 		{
 			SikuliValidationResult result = new SikuliValidationResult(SikuliValidationResult.ResultValue.Pass);
 			var std = ValidatorHelper.GetStandardDeviationForPeriod(_schedulerState, _totalSkill);
-			result.AppendLimitValueLineToDetails("Period StdDev", "0.06", std.ToString());
-			if (!std.HasValue || std.Value > 0.06)
+			const double limit = 0.06d;
+			result.AppendLimitValueLineToDetails("Period StdDev", limit.ToString(CultureInfo.CurrentCulture), std.Value.ToString(CultureInfo.CurrentCulture));
+			if (std.Value > limit)
 				result.Result = SikuliValidationResult.ResultValue.Fail;
 			return result;
 		}
