@@ -81,4 +81,5 @@ MyTimeWeb_OrganisationalBasedLeaderboard_31184 = RC
 MyTimeWeb_TradeWithDayOffAndEmptyDay_31317 = false
 ETL_OnlyLatestQueueAgentStatistics_30787 = true
 Scheduler_DoNotBreakMinWeekWorkTimeOptimization_31992 = RC
+Portal_DifferentiateBadgeSettingForAgents_31318 = RC
 Backlog_Module_23980 = DEV
