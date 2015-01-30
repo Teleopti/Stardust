@@ -2,6 +2,7 @@
 # So they should not be true at the same time.
 # And Portal_DifferentiateBadgeSettingForAgents_31318 has higher priority, as long as it is enabled, code will always go with its flow.
 # To make it not impact the build, ignore the whole feature with old toggle.
+@ignore
 @OnlyRunIfEnabled('MyTimeWeb_AgentBadge_28913')
 Feature: AgentBadge
 	As an agent I want to get motivated
