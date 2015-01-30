@@ -48,6 +48,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.WeeklyRestSolver
 		private IOptimizationPreferences _optimizationPreferences;
 		private ISchedulingOptionsCreator _schedulingOptionsCreator;
 		private List<IScheduleMatrixPro> _allPersonMatrixList;
+		private ITeamBlockSteadyStateValidator _teamBlockSteadyStateValidator;
 
 		[SetUp]
 		public void Setup()
@@ -60,7 +61,8 @@ namespace Teleopti.Ccc.DomainTest.Optimization.WeeklyRestSolver
 			_filterForTeamBlockInSelection = MockRepository.GenerateMock<IFilterForTeamBlockInSelection>();
 			_schedulingOptionsCreator = MockRepository.GenerateMock<ISchedulingOptionsCreator>();
 			_teamBlockOptimizationLimits = MockRepository.GenerateMock<ITeamBlockOptimizationLimits>();
-			_target = new ShiftNudgeManager(_shiftNudgeEarlier, _shiftNudgeLater, _ensureWeeklyRestRule, _contractWeeklyRestForPersonWeek, _teamBlockScheduleCloner, _filterForTeamBlockInSelection, _teamBlockOptimizationLimits, _schedulingOptionsCreator);
+			_teamBlockSteadyStateValidator = MockRepository.GenerateMock<ITeamBlockSteadyStateValidator>();
+			_target = new ShiftNudgeManager(_shiftNudgeEarlier, _shiftNudgeLater, _ensureWeeklyRestRule, _contractWeeklyRestForPersonWeek, _teamBlockScheduleCloner, _filterForTeamBlockInSelection, _teamBlockOptimizationLimits, _schedulingOptionsCreator, _teamBlockSteadyStateValidator);
 			_person = PersonFactory.CreatePersonWithPersonPeriod(DateOnly.MinValue);
 			_person.AddSchedulePeriod(new SchedulePeriod(_selectedPeriod.StartDate, SchedulePeriodType.Month, 1));
 			_person.Period(DateOnly.MinValue).PersonContract.Contract.WorkTimeDirective = new WorkTimeDirective(TimeSpan.Zero, TimeSpan.FromHours(48), TimeSpan.FromHours(11), TimeSpan.FromHours(36));
@@ -108,6 +110,10 @@ namespace Teleopti.Ccc.DomainTest.Optimization.WeeklyRestSolver
 			_ensureWeeklyRestRule.Stub(x => x.HasMinWeeklyRest(_personWeek, _range, TimeSpan.FromHours(36))).Return(true).Repeat.Once();
 			_teamBlockOptimizationLimits.Stub(x => x.ValidateMinWorkTimePerWeek(_leftTeamBlockInfo)).Return(true);
 			_teamBlockOptimizationLimits.Stub(x => x.ValidateMinWorkTimePerWeek(_rightTeamBlockInfo)).Return(true);
+			_teamBlockSteadyStateValidator.Stub(x => x.IsTeamBlockInSteadyState(_leftTeamBlockInfo, _schedulingOptions))
+				.Return(true);
+			_teamBlockSteadyStateValidator.Stub(x => x.IsTeamBlockInSteadyState(_rightTeamBlockInfo, _schedulingOptions))
+				.Return(true);
 
 			var result = _target.TrySolveForDayOff(_personWeek, new DateOnly(2014, 03, 30), _teamBlockGenerator, _allPersonMatrixList, _rollbackService, _resourceCalculateDelayer, _schedulingResultStateHolder, _selectedPeriod, _selectedPersons, null, _schedulingOptions);
 			Assert.IsTrue(result);
@@ -138,6 +144,11 @@ namespace Teleopti.Ccc.DomainTest.Optimization.WeeklyRestSolver
 
 			_resourceCalculateDelayer.Stub(x => x.CalculateIfNeeded(new DateOnly(2014, 3, 29), null)).Return(true);
 			_resourceCalculateDelayer.Stub(x => x.CalculateIfNeeded(new DateOnly(2014, 3, 30), null)).Return(true);
+
+			_teamBlockSteadyStateValidator.Stub(x => x.IsTeamBlockInSteadyState(_leftTeamBlockInfo, _schedulingOptions))
+				.Return(true);
+			_teamBlockSteadyStateValidator.Stub(x => x.IsTeamBlockInSteadyState(_rightTeamBlockInfo, _schedulingOptions))
+				.Return(true);
 
 			var result = _target.TrySolveForDayOff(_personWeek, new DateOnly(2014, 03, 30), _teamBlockGenerator, _allPersonMatrixList, _rollbackService, _resourceCalculateDelayer, _schedulingResultStateHolder, _selectedPeriod, _selectedPersons, null, _schedulingOptions);
 			Assert.IsFalse(result);
@@ -182,9 +193,13 @@ namespace Teleopti.Ccc.DomainTest.Optimization.WeeklyRestSolver
 			_teamBlockOptimizationLimits.Stub(x => x.Validate(_leftTeamBlockInfo, _optimizationPreferences)).Return(false);
 			_teamBlockOptimizationLimits.Stub(x => x.Validate(_rightTeamBlockInfo, _optimizationPreferences)).Return(false);
 
-
 			_resourceCalculateDelayer.Stub(x => x.CalculateIfNeeded(new DateOnly(2014, 3, 29), null)).Return(true);
 			_resourceCalculateDelayer.Stub(x => x.CalculateIfNeeded(new DateOnly(2014, 3, 30), null)).Return(true);
+
+			_teamBlockSteadyStateValidator.Stub(x => x.IsTeamBlockInSteadyState(_leftTeamBlockInfo, _schedulingOptions))
+				.Return(true);
+			_teamBlockSteadyStateValidator.Stub(x => x.IsTeamBlockInSteadyState(_rightTeamBlockInfo, _schedulingOptions))
+				.Return(true);
 
 			var result = _target.TrySolveForDayOff(_personWeek, new DateOnly(2014, 03, 30), _teamBlockGenerator, _allPersonMatrixList, _rollbackService, _resourceCalculateDelayer, _schedulingResultStateHolder, _selectedPeriod, _selectedPersons, _optimizationPreferences, null);
 			Assert.IsFalse(result);
@@ -242,9 +257,49 @@ namespace Teleopti.Ccc.DomainTest.Optimization.WeeklyRestSolver
 			_resourceCalculateDelayer.Stub(x => x.CalculateIfNeeded(new DateOnly(2014, 3, 29), null)).Return(true);
 			_resourceCalculateDelayer.Stub(x => x.CalculateIfNeeded(new DateOnly(2014, 3, 30), null)).Return(true);
 
+			_teamBlockSteadyStateValidator.Stub(x => x.IsTeamBlockInSteadyState(_leftTeamBlockInfo, _schedulingOptions))
+				.Return(true);
+			_teamBlockSteadyStateValidator.Stub(x => x.IsTeamBlockInSteadyState(_rightTeamBlockInfo, _schedulingOptions))
+				.Return(true);
+
 			var result = _target.TrySolveForDayOff(_personWeek, new DateOnly(2014, 03, 30), _teamBlockGenerator, _allPersonMatrixList, _rollbackService, _resourceCalculateDelayer, _schedulingResultStateHolder, _selectedPeriod, _selectedPersons, _optimizationPreferences, null);
 			Assert.IsFalse(result);
 			_rollbackService.AssertWasCalled(x => x.ModifyParts(new List<IScheduleDay> {_leftScheduleDay, _rightScheduleDay}));
+		}
+
+		[Test]
+		public void ShouldReturnFalseIfTeamNotInSteadyStateWhenStart()
+		{
+			_teamBlockGenerator.Stub(x => x.Generate(_allPersonMatrixList, new DateOnlyPeriod(2014, 3, 29, 2014, 3, 29), new List<IPerson> { _person }, _schedulingOptions)).Return(_leftTeamBlockInfoList);
+			_teamBlockGenerator.Stub(x => x.Generate(_allPersonMatrixList, new DateOnlyPeriod(2014, 3, 31, 2014, 3, 31), new List<IPerson> { _person }, _schedulingOptions)).Return(_rightTeamBlockInfoList);
+			_filterForTeamBlockInSelection.Stub(x => x.Filter(new List<ITeamBlockInfo> { _leftTeamBlockInfo, _rightTeamBlockInfo }, _selectedPersons, _selectedPeriod)).Return(new List<ITeamBlockInfo> { _leftTeamBlockInfo, _rightTeamBlockInfo });
+
+			_teamBlockScheduleCloner.Stub(x => x.CloneSchedules(_leftTeamBlockInfo)).Return(new List<IScheduleDay> { _leftScheduleDay });
+			_teamBlockScheduleCloner.Stub(x => x.CloneSchedules(_rightTeamBlockInfo)).Return(new List<IScheduleDay> { _rightScheduleDay });
+			_allPersonMatrixList.Add(_matrix);
+			_matrix.Stub(x => x.Person).Return(_person);
+			_matrix.Stub(x => x.SchedulePeriod).Return(new VirtualSchedulePeriod(_person, new DateOnly(2014, 3, 29), new VirtualSchedulePeriodSplitChecker(_person)));
+			_matrix.Stub(x => x.ActiveScheduleRange).Return(_range);
+			_range.Stub(x => x.ScheduledDay(new DateOnly(2014, 3, 29))).Return(_leftScheduleDay);
+			_range.Stub(x => x.ScheduledDay(new DateOnly(2014, 3, 31))).Return(_rightScheduleDay);
+
+			_ensureWeeklyRestRule.Stub(x => x.HasMinWeeklyRest(_personWeek, _range, TimeSpan.FromHours(36))).Return(false).Repeat.Once();
+			_shiftNudgeEarlier.Stub(x => x.Nudge(_leftScheduleDay, _rollbackService, _schedulingOptions, _resourceCalculateDelayer, _leftTeamBlockInfo, _schedulingResultStateHolder)).Return(true);
+			_ensureWeeklyRestRule.Stub(x => x.HasMinWeeklyRest(_personWeek, _range, TimeSpan.FromHours(36))).Return(false).Repeat.Once();
+			_shiftNudgeLater.Stub(x => x.Nudge(_rightScheduleDay, _rollbackService, _schedulingOptions, _resourceCalculateDelayer, _rightTeamBlockInfo, _schedulingResultStateHolder)).Return(true);
+			_ensureWeeklyRestRule.Stub(x => x.HasMinWeeklyRest(_personWeek, _range, TimeSpan.FromHours(36))).Return(true).Repeat.Once();
+			_ensureWeeklyRestRule.Stub(x => x.HasMinWeeklyRest(_personWeek, _range, TimeSpan.FromHours(36))).Return(true).Repeat.Once();
+			_teamBlockOptimizationLimits.Stub(x => x.ValidateMinWorkTimePerWeek(_leftTeamBlockInfo)).Return(true);
+			_teamBlockOptimizationLimits.Stub(x => x.ValidateMinWorkTimePerWeek(_rightTeamBlockInfo)).Return(true);
+
+			// here check we steady state result
+			_teamBlockSteadyStateValidator.Stub(x => x.IsTeamBlockInSteadyState(_leftTeamBlockInfo, _schedulingOptions))
+				.Return(false);
+			_teamBlockSteadyStateValidator.Stub(x => x.IsTeamBlockInSteadyState(_rightTeamBlockInfo, _schedulingOptions))
+				.Return(false);
+
+			var result = _target.TrySolveForDayOff(_personWeek, new DateOnly(2014, 03, 30), _teamBlockGenerator, _allPersonMatrixList, _rollbackService, _resourceCalculateDelayer, _schedulingResultStateHolder, _selectedPeriod, _selectedPersons, null, _schedulingOptions);
+			Assert.IsFalse(result);
 		}
 	}
 }
