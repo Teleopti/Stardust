@@ -23,7 +23,7 @@ namespace Teleopti.Ccc.Web.Core.Hangfire
 			{
 				_storageConfiguration.ConfigureStorage(c);
 				c.UseAutofacActivator(_lifetimeScope);
-				c.UseServer(4);
+				c.UseServer(1);// cant have more than 1 yet even though we use distrubuted locks
 			});
 		}
 	}
