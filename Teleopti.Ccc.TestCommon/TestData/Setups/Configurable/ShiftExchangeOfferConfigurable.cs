@@ -15,14 +15,17 @@ namespace Teleopti.Ccc.TestCommon.TestData.Setups.Configurable
 		public DateTime ValidTo { get; set; }
 		public DateTime StartTime { get; set; }
 		public DateTime EndTime { get; set; }
+		public ShiftExchangeLookingForDay WishShiftType { get; set; }
 
 		public void Apply(IUnitOfWork uow, IPerson user, CultureInfo cultureInfo)
 		{
 			var timeZone = user.PermissionInformation.DefaultTimeZone();
 			var startTimeUtc = timeZone.SafeConvertTimeToUtc(StartTime);
 			var endTimeUtc = timeZone.SafeConvertTimeToUtc(EndTime);
-			var shiftWithin = new DateTimePeriod(startTimeUtc, endTimeUtc);
-			var criteria = new ScheduleDayFilterCriteria(ShiftExchangeLookingForDay.WorkingShift, shiftWithin);
+			 
+			var shiftWithin =  (WishShiftType != ShiftExchangeLookingForDay.WorkingShift)
+				? null : (DateTimePeriod?)new DateTimePeriod(startTimeUtc, endTimeUtc);
+			var criteria = new ScheduleDayFilterCriteria(WishShiftType, shiftWithin);
 			var shiftExchangeCrie = new ShiftExchangeCriteria(new DateOnly(ValidTo), criteria);
 
 			var date = new DateOnly(startTimeUtc.Year, startTimeUtc.Month, startTimeUtc.Day);

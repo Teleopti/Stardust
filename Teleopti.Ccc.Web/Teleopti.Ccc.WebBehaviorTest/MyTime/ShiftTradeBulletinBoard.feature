@@ -35,6 +35,8 @@ Background:
 	| Day   |
 	| Night |
 	| Late  |
+	And there is a dayoff named 'Day Off'
+	
 
 @OnlyRunIfEnabled('MyTimeWeb_ShiftTradeExchangeBulletin_31296')
 Scenario: Shift trade in Bulletin board should start from tomorrow
@@ -89,10 +91,11 @@ Scenario: Should possible make shift trade in Bulletin board
 	| EndTime        | 2030-01-01 18:00 |
 	| Shift category | Day              |
 	And OtherAgent has a shift exchange for bulletin
-	| Field     | Value            |
-	| Valid To  | 2029-12-31       |
-	| StartTime | 2030-01-01 09:00 |
-	| EndTime   | 2030-01-01 17:00 |
+	| Field         | Value            |
+	| Valid To      | 2029-12-31       |
+	| StartTime     | 2030-01-01 09:00 |
+	| EndTime       | 2030-01-01 17:00 |
+	| WishShiftType | WorkingShift     |
 	And the time is '2029-12-27'
 	When I view Shift Trade Bulletin Board for date '2030-01-01'
 	And I click agent 'OtherAgent'
@@ -101,6 +104,37 @@ Scenario: Should possible make shift trade in Bulletin board
 	And I click send button in bulletin board
 	Then Shift trade bulletin board view should not be visible
 	And I should see a shift trade request in the list with subject 'A nice subject'
+
+@OnlyRunIfEnabled('MyTimeWeb_ShiftTradeExchangeBulletin_31296')
+@OnlyRunIfEnabled('MyTimeWeb_TradeWithDayOffAndEmptyDay_31317')
+Scenario: Should possible make shift trade in Bulletin board with empty day
+	Given I have the role 'Full access to mytime'
+	And I have the workflow control set 'Trade from tomorrow until 30 days forward'
+	And OtherAgent have the workflow control set 'Trade from tomorrow until 30 days forward'
+	And I have a day off with
+	| Field | Value      |
+	| Name  | Day Off    |
+	| Date  | 2030-01-01 |
+	And OtherAgent has a shift with
+	| Field          | Value            |
+	| StartTime      | 2030-01-01 08:00 |
+	| EndTime        | 2030-01-01 18:00 |
+	| Shift category | Day              |
+	And OtherAgent has a shift exchange for bulletin
+	| Field         | Value            |
+	| Valid To      | 2029-12-31       |
+	| StartTime     | 2030-01-01 09:00 |
+	| EndTime       | 2030-01-01 17:00 |
+	| WishShiftType | Day Off          |
+	And the time is '2029-12-27'
+	When I view Shift Trade Bulletin Board for date '2030-01-01'
+	And I click agent 'OtherAgent'
+	And I enter subject 'A nice subject'
+	And I enter message 'A cute little message'
+	And I click send button in bulletin board
+	Then Shift trade bulletin board view should not be visible
+	And I should see a shift trade request in the list with subject 'A nice subject'
+
 	
 @OnlyRunIfEnabled('MyTimeWeb_SeeAnnouncedShifts_31639')
 Scenario: Should list announced shift

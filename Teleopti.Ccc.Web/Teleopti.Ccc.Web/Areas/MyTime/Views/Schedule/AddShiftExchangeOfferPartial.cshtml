@@ -11,80 +11,84 @@
 			</td>
 		</tr>
 		<tr>
-			<td class="row">
-				<div class="col-sm-6 announce-shift-matching-date" data-bind="css: ColumnSizings()">
-					<div class="input-group">
-						<input class="form-control" data-bind="enable: IsEditable(), datepicker: DateToForPublish, datepickerOptions: {autoHide: true, format: DateFormat() }" />
-						<span class="input-group-addon">
+		    <td>
+		        <div class="row">
+		            <div class="col-xs-5 announce-shift-matching-date">
+		                <div class="input-group">
+		                    <input class="form-control" data-bind="enable: IsEditable(), datepicker: DateToForPublish, datepickerOptions: {autoHide: true, format: DateFormat() }"/>
+		                    <span class="input-group-addon">
 							<button class="btn-datepicker" data-bind="datepicker: DateToForPublish, datepickerOptions: {autoHide: true, format: DateFormat()}, enable: IsEditable">
 								<i class="glyphicon glyphicon-calendar"></i>
 							</button>
 						</span>
-					</div>
-				</div>
-				
-				<!--ko if: Toggle31317Enabled-->
-				<div class="col-sm-6 btn-group">
-					<button id="wish-list" type="button" class="btn btn-info dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
-						<span data-bind="text: WishShiftType()"></span><span class="caret"></span>
-					</button>
-					<ul class="dropdown-menu" role="menu" data-bind="foreach: AllShiftTypes">
-						<li><a data-bind="attr:{id: Id}, click: $parent.ChangeShiftType, text: Description"></a></li>
-					</ul>
-				</div>
-				<!--/ko-->
-			</td>
+		                </div>
+		            </div>
+
+		            <!--ko if: Toggle31317Enabled-->
+		            <div class="col-xs-6 btn-group">
+		                <button id="wish-list" type="button" class="btn btn-info dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
+		                    <span data-bind="text: WishShiftType()"></span><span class="caret"></span>
+		                </button>
+		                <ul class="dropdown-menu" role="menu" data-bind="foreach: AllShiftTypes">
+		                    <li><a data-bind="attr:{id: Id}, click: $parent.ChangeShiftType, text: Description"></a></li>
+		                </ul>
+		            </div>
+		            <!--/ko-->
+		        </div>
+		    </td>
 		</tr>
-		<tr>
-			<td class="row">
-				<div data-bind="visible: RequireDetails">
-					<div class="announce-shift-matching-date" data-bind="css: ColumnSizings()">
-						<div class="bootstrap-timepicker">
-							<div class="input-group" title="@Resources.StartTime">
-								<input type="text" class="shift-exchange-offer-start-time form-control" data-bind="enable: IsEditable(), timepicker: StartTime, timepickerOptions: { showMeridian: ShowMeridian, allowEmpty: false }" />
-								<span class="input-group-addon">
+	    <tr>
+	        <td>
+	            <div class="row" data-bind="visible: RequireDetails">
+	                <div class="col-sm-5 announce-shift-matching-date">
+	                    <div class="bootstrap-timepicker">
+	                        <div class="input-group" title="@Resources.StartTime">
+	                            <input type="text" class="shift-exchange-offer-start-time form-control" data-bind="enable: IsEditable(), timepicker: StartTime, timepickerOptions: { showMeridian: ShowMeridian, allowEmpty: false }"/>
+	                            <span class="input-group-addon">
+                                <i class="glyphicon glyphicon-time"></i>
+                            </span>
+	                        </div>
+	                    </div>
+	                </div>
+
+	                <div class="col-sm-5 announce-shift-matching-date">
+	                    <div class="bootstrap-timepicker">
+	                        <div class="input-group" title="@Resources.EndTime">
+	                            <input type="text" class="shift-exchange-offer-end-time form-control" data-bind="enable: IsEditable(), timepicker: EndTime, timepickerOptions: { showMeridian: ShowMeridian, allowEmpty: false }"/>
+	                            <span class="input-group-addon">
 									<i class="glyphicon glyphicon-time"></i>
 								</span>
-							</div>
-						</div>
-					</div>
+	                        </div>
+	                    </div>
+	                </div>
 
-					<div class="announce-shift-matching-date" data-bind="css: ColumnSizings()">
-						<div class="bootstrap-timepicker">
-							<div class="input-group" title="@Resources.EndTime">
-								<input type="text" class="shift-exchange-offer-end-time form-control" data-bind="enable: IsEditable(), timepicker: EndTime, timepickerOptions: { showMeridian: ShowMeridian, allowEmpty: false }" />
-								<span class="input-group-addon">
-									<i class="glyphicon glyphicon-time"></i>
-								</span>
-							</div>
-						</div>
-					</div>
-
-					<div class="announce-shift-next-date" data-bind="css: ColumnSizings()">
-						<input type="checkbox" class="shift-exchange-offer-next-day" data-bind="checked: EndTimeNextDay, enable: IsEditable()" /> @Resources.NextDay
-					</div>
-				</div>
-			</td>
-		</tr>
+	                <div class="col-sm-2 announce-shift-next-date">
+	                    <input type="checkbox" class="shift-exchange-offer-next-day" data-bind="checked: EndTimeNextDay, enable: IsEditable()"/> @Resources.NextDay
+	                </div>
+	            </div>
+	        </td>
+	    </tr>
 		<tr>
 			<td>
 				<label>@Resources.ShiftExchangeOfferValidTo</label>
 			</td>
 		</tr>
-		<tr>
-			<td>
-				<div data-bind="css: ColumnSizings()">
-					<div class="input-group">
-						<input id="validto-datepicker" class="shift-exchange-offer-end-date form-control" data-bind="enable: IsEditable(), datepicker: OfferValidTo, datepickerOptions: {autoHide: true, format: DateFormat() }" />
-						<span class="input-group-addon">
-							<button class="btn-datepicker" data-bind="datepicker: OfferValidTo, datepickerOptions: {autoHide: true, format: DateFormat() }, enable: IsEditable">
-								<i class="glyphicon glyphicon-calendar"></i>
-							</button>
-						</span>
-					</div>
-				</div>
-			</td>
-		</tr>
+	    <tr>
+	        <td>
+	            <div class="row">
+	                <div class="col-sm-5">
+	                    <div class="input-group">
+	                        <input id="validto-datepicker" class="shift-exchange-offer-end-date form-control" data-bind="enable: IsEditable(), datepicker: OfferValidTo, datepickerOptions: {autoHide: true, format: DateFormat() }"/>
+	                        <span class="input-group-addon">
+							    <button class="btn-datepicker" data-bind="datepicker: OfferValidTo, datepickerOptions: {autoHide: true, format: DateFormat() }, enable: IsEditable">
+								    <i class="glyphicon glyphicon-calendar"></i>
+							    </button>
+						    </span>
+	                    </div>
+	                </div>
+	            </div>
+	        </td>
+	    </tr>
 	</table>
 	<div data-bind="if: ShowError">
 		<div class="shift-exchange-offer-error alert alert-danger" data-bind="html: ErrorMessage, visible: IsEditable" />
