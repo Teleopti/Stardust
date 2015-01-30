@@ -23,7 +23,7 @@ Write-Output "Deployment Label: $deploymentLabel"
 Write-Output ""
 
 
-$sub=Get-AzureSubscription -SubscriptionName '$subscription'
+$sub=Get-AzureSubscription -SubscriptionName $subscription
 if($sub.count -le 0) {
     Write-Output "Importing Azure subscription"   
     Import-AzurePublishSettingsFile $publishSettingsFile
