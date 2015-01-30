@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.Optimization.TeamBlock;
 using Teleopti.Ccc.Domain.Scheduling.Rules;
+using Teleopti.Ccc.Domain.Scheduling.TeamBlock;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Optimization.WeeklyRestSolver
@@ -38,7 +39,9 @@ namespace Teleopti.Ccc.Domain.Optimization.WeeklyRestSolver
 			IDayOffToTimeSpanExtractor dayOffToTimeSpanExtractor, IShiftNudgeManager shiftNudgeManager,
 			IdentifyDayOffWithHighestSpan identifyDayOffWithHighestSpan,
 			IDeleteScheduleDayFromUnsolvedPersonWeek deleteScheduleDayFromUnsolvedPersonWeek,
-			IAllTeamMembersInSelectionSpecification allTeamMembersInSelectionSpecification, IPersonWeekVoilatingWeeklyRestSpecification personWeekVoilatingWeeklyRestSpecification, IBrokenWeekCounterForAPerson brokenWeekCounterForAPerson)
+			IAllTeamMembersInSelectionSpecification allTeamMembersInSelectionSpecification, 
+			IPersonWeekVoilatingWeeklyRestSpecification personWeekVoilatingWeeklyRestSpecification, 
+			IBrokenWeekCounterForAPerson brokenWeekCounterForAPerson)
 		{
 			_weeksFromScheduleDaysExtractor = weeksFromScheduleDaysExtractor;
 			_ensureWeeklyRestRule = ensureWeeklyRestRule;
@@ -105,9 +108,9 @@ namespace Teleopti.Ccc.Domain.Optimization.WeeklyRestSolver
 							continue;
 						var possiblePositionsToFix = _dayOffToTimeSpanExtractor.GetDayOffWithTimeSpanAmongAWeek(personWeek.Week,
 							personScheduleRange);
-						var fisrtDayOfElement = DateOnly.MinValue;
+						var firstDayOfElement = DateOnly.MinValue;
 						if (possiblePositionsToFix.Count > 0)
-							fisrtDayOfElement = possiblePositionsToFix.FirstOrDefault().Key;
+							firstDayOfElement = possiblePositionsToFix.FirstOrDefault().Key;
 						bool success = true;
 						if (!possiblePositionsToFix.Any())
 						{
@@ -159,11 +162,11 @@ namespace Teleopti.Ccc.Domain.Optimization.WeeklyRestSolver
 
 								possiblePositionsToFix.Remove(highProbablePosition);
 							}
-							if (!success && fisrtDayOfElement != DateOnly.MinValue)
+							if (!success && firstDayOfElement != DateOnly.MinValue)
 							{
 								if (isFullTeamSelected(selectedPersons, personWeek.Person, teamBlockGenerator, schedulingOptions,
 									allPersonMatrixList, personWeek.Week))
-									_deleteScheduleDayFromUnsolvedPersonWeek.DeleteAppropiateScheduleDay(personScheduleRange, fisrtDayOfElement,
+									_deleteScheduleDayFromUnsolvedPersonWeek.DeleteAppropiateScheduleDay(personScheduleRange, firstDayOfElement,
 										rollbackService, selectedPeriod);
 							}
 						}
