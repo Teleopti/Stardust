@@ -39,6 +39,7 @@ wfmCtrls.controller('PermissionsCtrl', ['$scope', '$stateParams', '$http', '$fil
 function ($scope, $stateParams, $http, $filter, Roles, ApplicationFunctions) {
         	$scope.roles = [];
         	$scope.list = [];
+			$scope.roleName = null;
         	$scope.roleDetails = 'functionsAvailable';
         	$scope.functionsDisplayed = [];
         	$scope.functionsFlat = [];
@@ -48,7 +49,32 @@ function ($scope, $stateParams, $http, $filter, Roles, ApplicationFunctions) {
         	ApplicationFunctions.query().$promise.then(function (result) {
         		$scope.functionsDisplayed = result;
 		        flatFunctions($scope.functionsDisplayed);
-			});
+        	});
+
+		//add a role
+        	$scope.createRole = function () {
+        		var roleData = { DescriptionText: $scope.roleName };
+        		$http.post('/', roleData)
+					.success(function (data, status, headers, config) {
+							$scope.roles.push(roleData);
+							console.log("New role added");
+					})
+					.error(function (data, status, headers, config) {
+						$scope.error = { success: false, message: 'Something has failed. Please try again later' };
+					});
+
+        	};
+		//duplicate existing role
+        	$scope.duplicateRole = function (roleId) {
+        		$http.get('../../api/Permissions/Roles/' + roleId).
+								success(function (data, status, headers, config) {
+									var dupName = { DescriptionText: data.DescriptionText + " copy" };
+									$scope.roles.push(dupName);
+									console.log("Role duplicated");
+								}).error(function (data, status, headers, config) {
+									$scope.error = { success: false, message: 'Something has failed. Please try again later' };
+								});
+        	};
 
 			// TODO should be refator in a service
         	$http.get('../../api/Permissions/OrganizationSelection').
