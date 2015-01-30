@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using Teleopti.Ccc.WinCode.Common;
 using Teleopti.Interfaces.Domain;
@@ -57,8 +58,8 @@ namespace Teleopti.Ccc.Win.Sikuli.Validators
 			result.Result = (stdDevSumResult && contractTimeResult && daysOffResult) ?
 				SikuliValidationResult.ResultValue.Pass :
 				SikuliValidationResult.ResultValue.Fail;
-				
-			result.AppendLimitValueLineToDetails("Daily StdDev sum", "4.6", std.ToString());
+			const double limit = 4.6d;
+			result.AppendLimitValueLineToDetails("Daily StdDev sum", limit.ToString(CultureInfo.CurrentCulture), std.ToString(CultureInfo.CurrentCulture));
 			result.Details.AppendLine(contractTimeResult ? "Contract time : OK" : "Contract time : FAIL");
 			result.Details.AppendLine(daysOffResult ? "Day offs : OK" : "Contract time : FAIL");
 			return result;
