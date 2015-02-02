@@ -61,7 +61,7 @@ namespace Teleopti.Ccc.Domain.AgentInfo.Requests
 		private bool matchingWithEmptyDay(DateTimePeriod? targetShiftPeriod, bool targetDayOff)
 		{
 			return !(targetDayOff || targetShiftPeriod.HasValue) &&
-			       (_criteria.DayType == ShiftExchangeLookingForDay.EmtpyDay ||
+			       (_criteria.DayType == ShiftExchangeLookingForDay.EmptyDay ||
 			        _criteria.DayType == ShiftExchangeLookingForDay.DayOffOrEmptyDay);
 		}
 

@@ -46,7 +46,6 @@ namespace Teleopti.Ccc.TestCommon.TestData.Core
 
 
 		public IEnumerable<object> Applied { get { return _userSetups.Cast<object>().Union(_userDataSetups); } }
-
 		public string LogOnName { get { return Person.ApplicationAuthenticationInfo.ApplicationLogOnName; } }
 		public IPerson Person { get; private set; }
 		public CultureInfo Culture { get { return Person.PermissionInformation.Culture(); } }

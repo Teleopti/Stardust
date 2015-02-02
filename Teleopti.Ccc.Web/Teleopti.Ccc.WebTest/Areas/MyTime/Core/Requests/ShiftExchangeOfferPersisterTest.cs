@@ -81,7 +81,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Requests
 					{
 						OfferValidTo = new DateTime(2028, 12, 23),
 						Date = date,
-						WishShiftType = ShiftExchangeLookingForDay.EmtpyDay
+						WishShiftType = ShiftExchangeLookingForDay.EmptyDay
 					},
 					ShiftExchangeOfferStatus.Pending);
 

@@ -19,7 +19,7 @@ namespace Teleopti.Ccc.Domain.AgentInfo.Requests
 					_shiftWithin = shiftWithin;
 					_dayType = dayType;
 					break;
-				case ShiftExchangeLookingForDay.EmtpyDay:
+				case ShiftExchangeLookingForDay.EmptyDay:
 				case ShiftExchangeLookingForDay.DayOff:
 				case ShiftExchangeLookingForDay.DayOffOrEmptyDay:
 					if (shiftWithin.HasValue)

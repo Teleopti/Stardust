@@ -4,7 +4,7 @@ namespace Teleopti.Interfaces.Domain
 	{
 		WorkingShift,
 		DayOff,
-		EmtpyDay,
+		EmptyDay,
 		DayOffOrEmptyDay
 	}
 }

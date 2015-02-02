@@ -180,6 +180,7 @@
     <Compile Include="Bindings\Generic\AlarmStepDefinitions.cs" />
     <Compile Include="Bindings\Generic\Anywhere\DescriptionToggle.cs" />
     <Compile Include="Bindings\Generic\Diagnosis\DiagnosisViewPageStepDefinition.cs" />
+    <Compile Include="Bindings\Generic\EmptyDayStepDefinitions.cs" />
     <Compile Include="Bindings\Generic\LogonAsAnotherUserStepDefinitions.cs" />
     <Compile Include="Bindings\Generic\Messages\MessageStepDefinitions.cs" />
     <Compile Include="Bindings\Generic\PhoneStateStepDefinitions.cs" />
@@ -204,6 +205,7 @@
     <Compile Include="Core\Navigation\WaitUntilSubscriptionIsCompleted.cs" />
     <Compile Include="Data\Setups\Configurable\BadgeBasedOnSettingConfigurable.cs" />
     <Compile Include="Data\Setups\Configurable\GamificationSettingConfigurable.cs" />
+    <Compile Include="Data\Setups\Configurable\PersonEmptyDayConfigurable.cs" />
     <Compile Include="Data\Setups\Configurable\TeamGamificationSettingConfigurable.cs" />
     <Compile Include="Data\Setups\Default\DefaultData.cs" />
     <Compile Include="Data\Setups\Default\DefaultLicense.cs" />
