@@ -148,6 +148,7 @@ input {
 	display: inline-block;
 	border-left: 3px solid #dddddd;
 	transition: all 0.5s ease;
+	height: 18px;
 }
 
 .role-context-menu a {
