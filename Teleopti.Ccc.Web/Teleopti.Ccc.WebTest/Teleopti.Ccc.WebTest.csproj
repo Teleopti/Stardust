@@ -442,7 +442,6 @@
     <Compile Include="Areas\MyTime\Models\Portal\CultureSpecificViewModelFactoryTest.cs" />
     <Compile Include="Areas\Start\Controllers\MenuControllerTest.cs" />
     <Compile Include="Areas\MyTime\Controllers\SettingsControllerTest.cs" />
-    <Compile Include="Areas\Start\Controllers\TestControllerTest.cs" />
     <Compile Include="Areas\Start\Core\Menu\MenuViewModelFactoryTest.cs" />
     <Compile Include="Areas\MyTime\Controllers\TeamScheduleControllerTest.cs" />
     <Compile Include="Core\Aop\Aspects\UnitOfWorkAspectTest.cs" />
