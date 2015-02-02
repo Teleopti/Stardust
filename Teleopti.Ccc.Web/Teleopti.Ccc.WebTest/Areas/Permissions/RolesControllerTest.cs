@@ -314,7 +314,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Permissions
 			var roleId = Guid.NewGuid();
 
 			var functionOne = new ApplicationFunction("FunctionOne");
-			var agentRole = new ApplicationRole { Name = "Agent", BuiltIn = true, AvailableData = new AvailableData()};
+			var agentRole = new ApplicationRole { Name = "Agent", DescriptionText = "Agent", BuiltIn = true, AvailableData = new AvailableData()};
 			agentRole.AddApplicationFunction(functionOne);
 			agentRole.AvailableData.AvailableDataRange = AvailableDataRangeOption.MySite;
 			agentRole.AvailableData.AddAvailableBusinessUnit(BusinessUnitFactory.BusinessUnitUsedInTest);
@@ -329,10 +329,10 @@ namespace Teleopti.Ccc.WebTest.Areas.Permissions
 				return true;
 			});
 			
-			target.CopyExistingRole(roleId, new RoleNameInput{NewDescription = "Agent self service"});
+			target.CopyExistingRole(roleId);
 
-			addedRole.DescriptionText.Should().Be.EqualTo("Agent self service");
-			addedRole.Name.Should().Be.EqualTo("Agentselfservice");
+			addedRole.DescriptionText.Should().Be.EqualTo("Copy of "+agentRole.DescriptionText);
+			addedRole.Name.Should().Be.EqualTo("Copyof"+agentRole.Name);
 			addedRole.ApplicationFunctionCollection.Should().Have.Count.EqualTo(1);
 			addedRole.AvailableData.AvailableBusinessUnits.Should().Have.Count.EqualTo(1);
 			addedRole.AvailableData.AvailableSites.Should().Have.Count.EqualTo(1);
