@@ -3,17 +3,16 @@ using System.Windows.Forms;
 using Teleopti.Analytics.Etl.ConfigTool.Transformer;
 using Teleopti.Analytics.Etl.Interfaces.Common;
 using Teleopti.Analytics.Etl.Interfaces.Transformer;
-using Teleopti.Interfaces.Domain;
-using UserControl = System.Windows.Controls.UserControl;
 
 namespace Teleopti.Analytics.Etl.ConfigTool.Gui.Control
 {
 	/// <summary>
 	/// Interaction logic for ManualEtl.xaml
 	/// </summary>
-	public partial class ManualEtl : UserControl, IDisposable
+	public partial class ManualEtl : IDisposable
 	{
 		private readonly BackGroundJob _backGroundJob = new BackGroundJob();
+		private IBaseConfiguration _baseConfiguration;
 
 		public event EventHandler<AlarmEventArgs> InitialJobNowAvailable;
 		public event EventHandler<AlarmEventArgs> JobStartedRunning;
@@ -23,11 +22,11 @@ namespace Teleopti.Analytics.Etl.ConfigTool.Gui.Control
 		{
 			InitializeComponent();
 
-			myTree.JobRun += new EventHandler<AlarmEventArgs>(etlControlJobRun);
-			myTree.JobSelectionChanged += new EventHandler<AlarmEventArgs>(myTree_JobSelectionChanged);
-			myTree.InitialJobNowAvailable += new EventHandler<AlarmEventArgs>(myTree_InitialJobNowAvailable);
-			_backGroundJob.JobStartedRunning += new EventHandler<AlarmEventArgs>(_backGroundJob_JobStartedRunning);
-			_backGroundJob.JobStoppedRunning += new EventHandler<AlarmEventArgs>(_backGroundJob_JobStoppedRunning);
+			myTree.JobRun += etlControlJobRun;
+			myTree.JobSelectionChanged += myTree_JobSelectionChanged;
+			myTree.InitialJobNowAvailable += myTree_InitialJobNowAvailable;
+			_backGroundJob.JobStartedRunning += _backGroundJob_JobStartedRunning;
+			_backGroundJob.JobStoppedRunning += _backGroundJob_JobStoppedRunning;
 		}
 
 		private void _backGroundJob_JobStoppedRunning(object sender, AlarmEventArgs e)
@@ -55,7 +54,7 @@ namespace Teleopti.Analytics.Etl.ConfigTool.Gui.Control
 		private void etlControlJobRun(object sender, AlarmEventArgs e)
 		{
 			e.Job.StepList[0].JobParameters.DataSource = myControl.LogDataSource;
-			e.Job.JobParameters.Helper.SelectDataSourceContainer(myControl.TenantDataSource.DataSourceName);
+			_baseConfiguration.JobHelper.SelectDataSourceContainer(myControl.TenantDataSource.DataSourceName);
 			//Clear job periods before adding them again
 			e.Job.StepList[0].JobParameters.JobCategoryDates.Clear();
 
@@ -110,6 +109,7 @@ namespace Teleopti.Analytics.Etl.ConfigTool.Gui.Control
 
 		public void SetBaseConfiguration(IBaseConfiguration baseConfiguration)
 		{
+			_baseConfiguration = baseConfiguration;
 			myControl.SetBaseConfiguration(baseConfiguration);
 			myTree.LoadJobTree(baseConfiguration);
 		}

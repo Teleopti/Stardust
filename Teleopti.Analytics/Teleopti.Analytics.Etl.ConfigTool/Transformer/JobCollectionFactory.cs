@@ -17,8 +17,6 @@ namespace Teleopti.Analytics.Etl.ConfigTool.Transformer
 			_baseConfiguration = baseConfiguration;
 		}
 
-		public JobHelper JobHelper { get; set; }
-
 		public ObservableCollection<IJob> JobCollection
 		{
 			get
@@ -34,8 +32,8 @@ namespace Teleopti.Analytics.Etl.ConfigTool.Transformer
 					_baseConfiguration.RunIndexMaintenance
 					);
 
-				JobHelper = new JobHelper();
-				jobParameters.Helper = JobHelper;
+				_baseConfiguration.JobHelper = new JobHelper();
+				jobParameters.Helper = _baseConfiguration.JobHelper;
 
 				var jobCollection = new JobCollection(jobParameters);
 

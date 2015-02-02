@@ -12,7 +12,7 @@ namespace Teleopti.Analytics.Etl.ConfigTool.Gui.View
 		public JobHistoryMain()
 		{
 			InitializeComponent();
-			historySelection.JobHistorySelectionChanged += new System.EventHandler<ViewModel.JobHistorySelectionEventArgs>(historySelection_JobHistorySelectionChanged);
+			historySelection.JobHistorySelectionChanged += historySelection_JobHistorySelectionChanged;
 		}
 
 		void historySelection_JobHistorySelectionChanged(object sender, ViewModel.JobHistorySelectionEventArgs e)

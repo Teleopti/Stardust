@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Globalization;
 using System.Linq;
@@ -13,7 +12,6 @@ using Teleopti.Analytics.Etl.Interfaces.Transformer;
 using Teleopti.Analytics.Etl.Transformer.Job.MultipleDate;
 using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Security.Authentication;
-using Teleopti.Ccc.Infrastructure.UnitOfWork;
 
 namespace Teleopti.Analytics.Etl.ConfigTool.Gui.Control
 {
@@ -232,6 +230,7 @@ namespace Teleopti.Analytics.Etl.ConfigTool.Gui.Control
 		{
 			try
 			{
+				_baseConfiguration.JobHelper.SelectDataSourceContainer((string)ComboBoxDataSource.SelectedValue);
 				_dataSourceCollection = new DataSourceValidCollection(true, ((DataSourceContainer)ComboBoxDataSource.SelectedItem).DataSource.Statistic.ConnectionString);
 				ComboBoxLogDataSource.DataContext = _dataSourceCollection;
 

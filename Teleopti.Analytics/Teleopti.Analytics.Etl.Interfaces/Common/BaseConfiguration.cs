@@ -1,3 +1,4 @@
+using Teleopti.Analytics.Etl.Interfaces.Transformer;
 using Teleopti.Ccc.Infrastructure.Toggle;
 
 namespace Teleopti.Analytics.Etl.Interfaces.Common
@@ -19,5 +20,6 @@ namespace Teleopti.Analytics.Etl.Interfaces.Common
 		public string TimeZoneCode { get; private set; }
 		public IToggleManager ToggleManager { get; private set; }
 		public bool RunIndexMaintenance { get; private set; }
+		public IJobHelper JobHelper { get; set; }
 	}
 }

@@ -18,12 +18,13 @@ namespace Teleopti.Analytics.Etl.ConfigTool.Gui.Control
 	/// <summary>
 	/// Interaction logic for EtlControlTree.xaml
 	/// </summary>
-	public partial class EtlControlTree : UserControl, IDisposable
+	public partial class EtlControlTree : IDisposable
 	{
 		private readonly BackgroundWorker _logonWorker = new BackgroundWorker();
 		private JobCollectionFactory _jobCollectionFactory;
 		private ObservableCollection<IJob> _jobCollection;
 		private IList<DataSourceContainer> _tenantCollection = new List<DataSourceContainer>();
+		private IBaseConfiguration _baseConfiguration;
 
 		public event EventHandler<AlarmEventArgs> JobRun;
 		public event EventHandler<AlarmEventArgs> JobSelectionChanged;
@@ -65,7 +66,6 @@ namespace Teleopti.Analytics.Etl.ConfigTool.Gui.Control
 
 		internal void SetEnableStateForJobCollection()
 		{
-			//TODO get from tenant datasource
 			var dataSourceCollection = new DataSourceValidCollection(true, ConfigurationManager.AppSettings["datamartConnectionString"]);
 			bool isJobEnabled = (dataSourceCollection.Count > 0);
 
@@ -165,23 +165,9 @@ namespace Teleopti.Analytics.Etl.ConfigTool.Gui.Control
 
 		public void LoadJobTree(IBaseConfiguration baseConfiguration)
 		{
+			_baseConfiguration = baseConfiguration;
 			_jobCollectionFactory = new JobCollectionFactory(baseConfiguration);
 			_logonWorker.RunWorkerAsync(CultureInfo.CurrentCulture);
 		}
-
-		public IDataSource DataSourceFromName(string tenantName)
-		{
-			if (_jobCollectionFactory != null)
-			{
-				_jobCollectionFactory.JobHelper.SelectDataSourceContainer(tenantName);
-				return _jobCollectionFactory.JobHelper.SelectedDataSourceContainer.DataSource;
-			}
-			return null;
-		}
-	}
-
-	public class TenantName
-	{
-		public string DataSourceName { get; set; }
 	}
 }

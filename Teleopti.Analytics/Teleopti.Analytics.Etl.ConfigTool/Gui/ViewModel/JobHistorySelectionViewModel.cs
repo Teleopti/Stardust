@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Configuration;
 using System.Globalization;
 using System.Linq;
 using Teleopti.Analytics.Etl.Common.Entity;
@@ -17,9 +18,11 @@ namespace Teleopti.Analytics.Etl.ConfigTool.Gui.ViewModel
 		private BusinessUnitItem _selectedBusinessUnit;
 		private IList<BusinessUnitItem> _businessUnitCollection;
 		private bool _showOnlyErrors;
+		private readonly IBaseConfiguration _baseConfiguration;
 
 		public JobHistorySelectionViewModel(IBaseConfiguration baseConfiguration)
 		{
+			_baseConfiguration = baseConfiguration;
 			_culture = baseConfiguration.CultureId.HasValue
 									? CultureInfo.GetCultureInfo(baseConfiguration.CultureId.Value).FixPersianCulture()
 									: CultureInfo.GetCultureInfo("sv-SE");
@@ -35,9 +38,15 @@ namespace Teleopti.Analytics.Etl.ConfigTool.Gui.ViewModel
 
 		public void UpdateBusinessUnitCollection()
 		{
+			//default
+			var connectionString = ConfigurationManager.AppSettings["datamartConnectionString"];
+			if (_baseConfiguration.JobHelper != null)
+				connectionString = _baseConfiguration.JobHelper.SelectedDataSourceContainer.DataSource.Statistic.ConnectionString;
 			var previousSelectedItem = SelectedBusinessUnit;
-			BusinessUnitCollection = BusinessUnitItemMapper.Map();
+			BusinessUnitCollection = BusinessUnitItemMapper.Map(connectionString);
 			SelectedBusinessUnit = BusinessUnitCollection.FirstOrDefault(bu => previousSelectedItem != null && bu.Id == previousSelectedItem.Id);
+			if(SelectedBusinessUnit == null)
+				SetFirstBusinessUnitAsSelected();
 		}
 
 		private void SetFirstBusinessUnitAsSelected()

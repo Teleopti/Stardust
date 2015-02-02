@@ -16,5 +16,6 @@ namespace Teleopti.Analytics.Etl.Interfaces.Transformer
 		bool SelectDataSourceContainer(string dataSourceName);
 		bool SetBusinessUnit(IBusinessUnit businessUnit);
 		void LogOffTeleoptiCccDomain();
+		IDataSourceContainer SelectedDataSourceContainer { get; }
 	}
 }
