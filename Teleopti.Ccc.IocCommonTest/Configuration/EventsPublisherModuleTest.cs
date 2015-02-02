@@ -7,7 +7,7 @@ using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Infrastructure.ApplicationLayer;
 using Teleopti.Ccc.Infrastructure.Toggle;
 using Teleopti.Ccc.IocCommon;
-using Teleopti.Ccc.IocCommon.Configuration;
+using Teleopti.Ccc.IocCommon.Toggle;
 using Teleopti.Ccc.TestCommon;
 
 namespace Teleopti.Ccc.IocCommonTest.Configuration
@@ -30,8 +30,7 @@ namespace Teleopti.Ccc.IocCommonTest.Configuration
 		public void ShouldResolveSyncEventPublisher()
 		{
 			var builder = new ContainerBuilder();
-			builder.RegisterModule(CommonModule.ForTest());
-			builder.RegisterModule<SyncEventsPublisherModule>();
+			builder.RegisterModule(new CommonModule(new IocConfiguration(new IocArgs {PublishEventsToServiceBus = false}, new FalseToggleManager())));
 			var container = builder.Build();
 
 			container.Resolve<ISyncEventPublisher>().Should().Not.Be.Null();

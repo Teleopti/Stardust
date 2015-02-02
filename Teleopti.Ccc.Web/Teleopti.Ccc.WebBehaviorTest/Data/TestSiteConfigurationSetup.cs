@@ -115,12 +115,12 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data
 			var sourceFile = Path.Combine(Paths.FindProjectPath(@"BuildArtifacts\"), o.SourceFileName);
 			var targetFile = Path.Combine(o.TargetFolder, "web.config");
 
-			var tags = new AllTags();
-			const string module = @"<module type=""Teleopti.Ccc.IocCommon.Configuration.SyncEventsPublisherModule, Teleopti.Ccc.IocCommon""/>";
-				tags.Add(
-					"EventsPublisherModule",
-					module
-					);
+			var tags = new AllTags {{"PublishEventsToServiceBus", "false"}};
+			//const string module = @"<module type=""Teleopti.Ccc.IocCommon.Configuration.SyncEventsPublisherModule, Teleopti.Ccc.IocCommon""/>";
+			//	tags.Add(
+			//		"EventsPublisherModule",
+			//		module
+			//		);
 
 			FileConfigurator.ConfigureByTags(
 				sourceFile,

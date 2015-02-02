@@ -6,7 +6,7 @@ using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.IocCommon;
-using Teleopti.Ccc.IocCommon.Configuration;
+using Teleopti.Ccc.IocCommon.Toggle;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.WebBehaviorTest.Core;
 using Teleopti.Ccc.WebBehaviorTest.Data.Setups.Default;
@@ -24,9 +24,8 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data
 		public static void CreateDataSourceAndStartWebApp()
 		{
 			var builder = new ContainerBuilder();
-			builder.RegisterModule(CommonModule.ForTest());
+			builder.RegisterModule(new CommonModule(new IocConfiguration(new IocArgs { PublishEventsToServiceBus = false }, new FalseToggleManager())));
 			builder.RegisterType<EventsMessageSender>().As<IMessageSender>().SingleInstance();
-			builder.RegisterModule<SyncEventsPublisherModule>();
 			var container = builder.Build();
 
 			datasource = DataSourceHelper.CreateDataSource(container.Resolve<IEnumerable<IMessageSender>>(), "TestData");

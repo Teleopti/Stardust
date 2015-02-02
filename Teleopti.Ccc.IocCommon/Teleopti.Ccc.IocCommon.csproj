@@ -158,7 +158,6 @@
     <Compile Include="Configuration\AutofacMbCacheIntegration.cs" />
     <Compile Include="Configuration\PersonAccountModule.cs" />
     <Compile Include="Configuration\EventHandlersModule.cs" />
-    <Compile Include="Configuration\SyncEventsPublisherModule.cs" />
     <Compile Include="Configuration\RuleSetModule.cs" />
     <Compile Include="Configuration\DateAndTimeModule.cs" />
     <Compile Include="Configuration\EncryptionModule.cs" />
