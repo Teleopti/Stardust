@@ -55,12 +55,14 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider
 				}
 			}
 			else if (isEndFilter)
-			{//only do it for end time filter
+			{
+				//only do it for end time filter
 				IList<MinMax<DateTime>> oldCopy = new List<MinMax<DateTime>>();
 				oldCopy.AddRange(periodsList);
 
 				foreach (var t in oldCopy)
-				{// plus 24 hours to get night shifts which may end with tomorrow
+				{
+					// plus 24 hours to get night shifts which may end with tomorrow
 					var plus = new MinMax<DateTime>(t.Minimum.Add(TimeSpan.FromHours(24)), t.Maximum.Add(TimeSpan.FromHours(24)));
 					periodsList.Add(plus);
 				}
