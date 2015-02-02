@@ -65,7 +65,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 				},
 				new
 				{
-					Id = ShiftExchangeLookingForDay.EmtpyDay.ToString(),
+					Id = ShiftExchangeLookingForDay.EmptyDay.ToString(),
 					Description = Resources.OptionEmptyDay,
 					RequireDetails = false
 				},
