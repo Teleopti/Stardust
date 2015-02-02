@@ -57,7 +57,7 @@ namespace Teleopti.Ccc.WebTest.Areas.SeatPlanner.Controllers
 			target = new TeamHierarchyController(teamsProvider);
 			
 			var result = target.Get() as dynamic;
-			var businessUnitWithSitesViewModel = result.Data as BusinessUnitWithSitesViewModel;
+			var businessUnitWithSitesViewModel = result as BusinessUnitWithSitesViewModel;
 			businessUnitWithSitesViewModel.Should().Not.Be.Null();
 			var siteViewModel = businessUnitWithSitesViewModel.Sites.SingleOrDefault(x => x.Id == site.Id.ToString());
 			siteViewModel.Should().Not.Be.Null();
