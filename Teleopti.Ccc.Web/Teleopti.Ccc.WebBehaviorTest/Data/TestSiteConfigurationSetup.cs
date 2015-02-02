@@ -116,7 +116,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data
 			var targetFile = Path.Combine(o.TargetFolder, "web.config");
 
 			var tags = new AllTags();
-			const string module = @"<module type=""Teleopti.Ccc.IocCommon.Configuration.HangfireOrSyncEventsPublisherModule, Teleopti.Ccc.IocCommon""/>";
+			const string module = @"<module type=""Teleopti.Ccc.IocCommon.Configuration.SyncEventsPublisherModule, Teleopti.Ccc.IocCommon""/>";
 				tags.Add(
 					"EventsPublisherModule",
 					module
