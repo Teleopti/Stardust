@@ -1525,7 +1525,7 @@ End personal drop down menu
 }
 
 .submenu {
-	width: 100%;
+	width: auto;
 }
 
 @media (min-width: 768px) {

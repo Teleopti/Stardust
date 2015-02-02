@@ -56,3 +56,7 @@
 {
 	background-image: url(../Images/stripe.png);
 }
+
+.date-input-style {
+	padding: 10px 1px;
+}

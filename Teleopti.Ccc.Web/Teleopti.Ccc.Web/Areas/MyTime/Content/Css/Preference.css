@@ -271,3 +271,7 @@ color: #333333;
 .week-view-non-editable {
 	color:#c9c4c4
 }
+
+.date-input-style {
+	padding: 10px 1px;
+}

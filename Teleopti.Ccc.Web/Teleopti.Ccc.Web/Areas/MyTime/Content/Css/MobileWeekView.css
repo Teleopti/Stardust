@@ -20,9 +20,6 @@
 	background-image: url(../Images/stripe.png);
 }
 
-.weekview-mobile .shift {
-}
-
 .weekview-mobile .day .panel-body {
 	height: 40px;
 	padding: 0;
@@ -37,8 +34,8 @@
 	padding-top: 10px;
 }
 
-.weekview-mobile .datepicker-style{
-	padding-top: 7px;
+.date-input-style{
+	padding: 10px 1px;
 }
 
 .mobile-foot {
