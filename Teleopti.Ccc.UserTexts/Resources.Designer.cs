@@ -28105,6 +28105,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Week {0}.
+        /// </summary>
+        public static string WeekWithNumber {
+            get {
+                return ResourceManager.GetString("WeekWithNumber", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Welcome.
         /// </summary>
         public static string Welcome {

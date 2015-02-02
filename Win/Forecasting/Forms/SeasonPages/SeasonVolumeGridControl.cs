@@ -367,7 +367,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.SeasonPages
 				returnValue = CultureInfo.CurrentUICulture.DateTimeFormat.GetDayName((DayOfWeek)key - 1).Capitalize();
             }else if(_volumeYear is WeekOfMonth)
             {
-                returnValue = string.Format(CultureInfo.CurrentUICulture, "{0} {1}", UserTexts.Resources.Week, key);
+                returnValue = string.Format(CultureInfo.CurrentUICulture, Resources.WeekWithNumber, key);
             }else if(_volumeYear is MonthOfYear)
             {
 				returnValue = CultureInfo.CurrentUICulture.DateTimeFormat.GetMonthName(key).Capitalize();

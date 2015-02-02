@@ -2222,6 +2222,9 @@ Periods</comment>
     <value>Неделя</value>
     <comment>Week</comment>
   </data>
+  <data name="WeekWithNumber" xml:space="preserve">
+    <value>Неделя {0}</value>
+  </data>
   <data name="WeekDay" xml:space="preserve">
     <value>День недели</value>
     <comment>Weekday</comment>
