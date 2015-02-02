@@ -5,17 +5,13 @@ using System.Web.Routing;
 using NUnit.Framework;
 using Rhino.Mocks;
 using SharpTestsEx;
-using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.Security.Principal;
-using Teleopti.Ccc.Domain.SystemSetting.GlobalSetting;
-using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.IocCommon.Toggle;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.Web;
 using Teleopti.Ccc.Web.Areas.Anywhere.Controllers;
 using Teleopti.Ccc.Web.Core;
-using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Controllers
 {
@@ -114,30 +110,6 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Controllers
 			var result = target.Resources() as ContentResult;
 			result.ContentType.Should().Be("text/javascript");
 			result.Content.Should().Not.Be.Null();
-		}
-
-		[Test]
-		public void ShouldReturnFullDayAbsenceRequestTimeSetting()
-		{
-			var expectedStart = new TimeSpanSetting(new TimeSpan(9, 0, 0));
-			var expectedEnd = new TimeSpanSetting(new TimeSpan(17, 0, 0));
-			//UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork()
-			//	var uow = MockRepository.GenerateMock<IUnitOfWorkFactory>();
-			//uow.Stub(x => x.Curruent.CreateAndOpenUnitOfWork());
-			//ExpectedCall()
-			var globalSettingRepository = MockRepository.GenerateMock<IGlobalSettingDataRepository>();
-			globalSettingRepository.Stub(x => x.FindValueByKey("FullDayAbsenceRequestStartTime", new TimeSpanSetting(new TimeSpan(0, 0, 0))))
-				.IgnoreArguments()
-				.Return(expectedStart);
-			globalSettingRepository.Stub(x => x.FindValueByKey("FullDayAbsenceRequestEndTime", new TimeSpanSetting(new TimeSpan(0, 0, 0))))
-				.IgnoreArguments()
-				.Return(expectedEnd);
-
-			var result = target.FullDayAbsenceRequestTimeSetting();
-			dynamic content = result.Data;
-
-			((object)content.Start).Should().Be.EqualTo(expectedStart);
-			((object)content.End).Should().Be.EqualTo(expectedEnd);
 		}
 	}
 }
