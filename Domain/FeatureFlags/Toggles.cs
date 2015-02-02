@@ -61,6 +61,7 @@
 		MyTimeWeb_AbsenceReport_31011,
 		MyTimeWeb_ShiftTradeExchangeBulletin_31296,
 		MyTimeWeb_SeeAnnouncedShifts_31639,
+		MyTimeWeb_AnonymousTrades_31638,
 		MyTimeWeb_AvailabilityVerifyHours_31654,
 		MyTimeWeb_OrganisationalBasedLeaderboard_31184,
 		MyTimeWeb_TradeWithDayOffAndEmptyDay_31317,
