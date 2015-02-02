@@ -35,66 +35,73 @@ wfmCtrls.controller('ForecastingRunCtrl', ['$scope', '$stateParams', '$http',
         }]
 );
 
-wfmCtrls.controller('PermissionsCtrl', ['$scope', '$stateParams', '$http', '$filter', 'Roles', 'OrganizationSelections', 'ApplicationFunctions', 'AddRole', 'DuplicateRole', 'RolesFunctions', 'DeleteRole',
-function ($scope, $stateParams, $http, $filter, Roles, OrganizationSelections, ApplicationFunctions, AddRole, DuplicateRole, RolesFunctions, DeleteRole) {
-        	$scope.roles = [];
-        	$scope.list = [];
-			$scope.roleName = null;
-        	$scope.roleDetails = 'functionsAvailable';
-        	$scope.functionsDisplayed = [];
-        	$scope.functionsFlat = [];
-        	
-        	$scope.roles = Roles.query();
-        	$scope.organization = OrganizationSelections.query();
-        	
-        	ApplicationFunctions.query().$promise.then(function (result) {
-        		$scope.functionsDisplayed = result;
-		        flatFunctions($scope.functionsDisplayed);
-        	});
+wfmCtrls.controller('PermissionsCtrl', ['$scope', '$stateParams', '$http', '$filter', 'Roles', 'OrganizationSelections', 'ApplicationFunctions', 'DuplicateRole', 'RolesFunctions', 'ManageRole',
+function ($scope, $stateParams, $http, $filter, Roles, OrganizationSelections, ApplicationFunctions, DuplicateRole, RolesFunctions, ManageRole) {
+	$scope.roles = [];
+	$scope.list = [];
+	$scope.roleName = null;
+	$scope.roleDetails = 'functionsAvailable';
+	$scope.functionsDisplayed = [];
+	$scope.functionsFlat = [];
+
+	$scope.roles = Roles.get();
+	$scope.organization = OrganizationSelections.query();
+
+	ApplicationFunctions.query().$promise.then(function (result) {
+		$scope.functionsDisplayed = result;
+		flatFunctions($scope.functionsDisplayed);
+	});
 
 
-        	$scope.createRole = function () {
-        		var roleData = { Description: $scope.roleName };
-        		AddRole.query(JSON.stringify(roleData)).$promise.then(function (result) {
-        			roleData.Id = result.Id;
-			        roleData.DescriptionText = result.DescriptionText;
-        			$scope.roles.push(roleData);
-		        });
-        	};
+	$scope.createRole = function () {
+		var roleData = { Description: $scope.roleName };
+		Roles.post(JSON.stringify(roleData)).$promise.then(function (result) {
+			roleData.Id = result.Id;
+			roleData.DescriptionText = result.DescriptionText;
+			$scope.roles.push(roleData);
+		});
+	};
 
-        	$scope.copyRole = function (roleId) {
-		        var roleCopy = {};
-        		DuplicateRole.query({ Id: roleId }).$promise.then(function (result) {
-        			roleCopy.Id = result.Id;
-        			roleCopy.DescriptionText = result.DescriptionText;
-        			$scope.roles.push(roleCopy);
-        		});
-        	};
+	$scope.copyRole = function (roleId) {
+		var roleCopy = {};
+		DuplicateRole.query({ Id: roleId }).$promise.then(function (result) {
+			roleCopy.Id = result.Id;
+			roleCopy.DescriptionText = result.DescriptionText;
+			$scope.roles.push(roleCopy);
+		});
+	};
 
 
-        	$scope.removeRole = function (role, index) {
-        		DeleteRole.query({ Id: role.Id }).$promise.then(function (result) {
-        			$scope.roles.splice(index, 1);
-        		});
-        	};
+	$scope.removeRole = function (role, index) {
+		ManageRole.deleteRole({ Id: role.Id }).$promise.then(function (result) {
+			$scope.roles.splice(index, 1);
+		});
+	};
 
-        	$scope.showRole = function (roleId) {
-        		RolesFunctions.query({ Id: roleId }).$promise.then(function (result) {
-        			var permsFunc = result.AvailableFunctions;
-					$scope.functionsFlat.forEach(function (item) {
-						var availableFunctions = $filter('filter')(permsFunc, { Id: item.FunctionId });
-						item.selected = availableFunctions.length != 0  ? true : false;
-					});
-        		});
-        	};
+	$scope.updateRole = function (role) {
+		ManageRole.update({ Id: role.Id, NewDescription: JSON.stringify({ NewDescription: role.DescriptionText }) })
+			.$promise.then(function (result) {
+ // ?
+		});
+	};
 
-        	var flatFunctions = function (functionTab) {
-        		functionTab.forEach(function (item) {
-        			$scope.functionsFlat.push(item);
-        			if (item.ChildFunctions.length != 0) {
-        				flatFunctions(item.ChildFunctions);
-        			}
-        		});
-        	}
-        }]
+	$scope.showRole = function (roleId) {
+		RolesFunctions.query({ Id: roleId }).$promise.then(function (result) {
+			var permsFunc = result.AvailableFunctions;
+			$scope.functionsFlat.forEach(function (item) {
+				var availableFunctions = $filter('filter')(permsFunc, { Id: item.FunctionId });
+				item.selected = availableFunctions.length != 0 ? true : false;
+			});
+		});
+	};
+
+	var flatFunctions = function (functionTab) {
+		functionTab.forEach(function (item) {
+			$scope.functionsFlat.push(item);
+			if (item.ChildFunctions.length != 0) {
+				flatFunctions(item.ChildFunctions);
+			}
+		});
+	};
+}]
 );

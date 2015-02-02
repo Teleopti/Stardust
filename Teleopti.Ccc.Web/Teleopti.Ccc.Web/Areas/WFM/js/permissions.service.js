@@ -1,7 +1,8 @@
 ﻿var permissionsService = angular.module('permissionsService', ['ngResource']);
 permissionsService.factory('Roles', ['$resource', function ($resource) {
 	return $resource('../../api/Permissions/Roles', {}, {
-		query: { method: 'GET', params: { }, isArray: true }
+		get: { method: 'GET', params: {}, isArray: true },
+		post: { method: 'POST', params: name }
 	});
 }]);
 
@@ -29,15 +30,9 @@ permissionsService.factory('DuplicateRole', ['$resource', function ($resource) {
 	});
 }]);
 
-permissionsService.factory('DeleteRole', ['$resource', function ($resource) {
-	return $resource('../../api/Permissions/Roles/:Id', {}, {
-		query: { method: 'DELETE', params: {}, isArray: false }
+permissionsService.factory('ManageRole', ['$resource', function ($resource) {
+	return $resource('../../api/Permissions/Roles/:Id', {id: "@id"}, {
+		deleteRole: { method: 'DELETE', params: {}, isArray: false },
+		update: { method: 'PUT', params: { NewDescription: {} }, isArray: false }
 	});
 }]);
-
-permissionsService.factory('AddRole', ['$resource', function ($resource) {
-	return $resource('../../api/Permissions/Roles', {}, {
-		query: { method: 'POST', params: name, isArray: false }
-	});
-}]);
-
