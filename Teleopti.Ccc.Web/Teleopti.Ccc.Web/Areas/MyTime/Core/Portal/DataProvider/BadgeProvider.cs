@@ -113,6 +113,11 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Portal.DataProvider
 				silverToBronzeBadgeRate = setting.SilverToBronzeBadgeRate;
 				goldToSilverBadgeRate = setting.GoldToSilverBadgeRate;
 			}
+			else if (_toggleManager.IsEnabled(Toggles.Portal_DifferentiateBadgeSettingForAgents_31318) &&
+			         _teamGamificationSetting == null)
+			{
+				return new List<BadgeViewModel>();
+			}
 			else
 			{
 				if (_settings.AdherenceBadgeEnabled)
