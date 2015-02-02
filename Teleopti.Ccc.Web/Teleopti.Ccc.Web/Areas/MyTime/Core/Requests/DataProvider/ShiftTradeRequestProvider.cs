@@ -18,7 +18,10 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.DataProvider
 		private readonly IPermissionProvider _permissionProvider;
 		private readonly IToggleManager _toggleManager;
 
-		public ShiftTradeRequestProvider(ILoggedOnUser loggedOnUser, IPersonScheduleDayReadModelFinder scheduleDayReadModelFinder, IPermissionProvider permissionProvider, IToggleManager toggleManager)
+		public ShiftTradeRequestProvider(ILoggedOnUser loggedOnUser,
+			IPersonScheduleDayReadModelFinder scheduleDayReadModelFinder,
+			IPermissionProvider permissionProvider,
+			IToggleManager toggleManager)
 		{
 			_loggedOnUser = loggedOnUser;
 			_scheduleDayReadModelFinder = scheduleDayReadModelFinder;
@@ -34,40 +37,42 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.DataProvider
 		public IPersonScheduleDayReadModel RetrieveMySchedule(DateOnly date)
 		{
 			var person = _loggedOnUser.CurrentUser();
-			if (_permissionProvider.IsPersonSchedulePublished(date, person))
-				return _scheduleDayReadModelFinder.ForPerson(date, person.Id.Value);
-			return null;
+			return _permissionProvider.IsPersonSchedulePublished(date, person)
+				? _scheduleDayReadModelFinder.ForPerson(date, person.Id.Value)
+				: null;
 		}
 
 		public IEnumerable<IPersonScheduleDayReadModel> RetrievePossibleTradeSchedules(DateOnly date,
 			IEnumerable<IPerson> possibleShiftTradePersons, Paging paging)
 		{
-			IEnumerable<Guid> personIdList = (from person in possibleShiftTradePersons
-				select person.Id.Value).ToList();
-			if (_toggleManager.IsEnabled(Toggles.Request_ShiftTradeWithEmptyDays_28926))
-				return _scheduleDayReadModelFinder.ForPersonsIncludeEmptyDays(date, personIdList, paging);
-
-			return _scheduleDayReadModelFinder.ForPersons(date, personIdList, paging);
+			var personIdList = (from person in possibleShiftTradePersons select person.Id.Value).ToList();
+			return _toggleManager.IsEnabled(Toggles.Request_ShiftTradeWithEmptyDays_28926)
+				? _scheduleDayReadModelFinder.ForPersonsIncludeEmptyDays(date, personIdList, paging)
+				: _scheduleDayReadModelFinder.ForPersons(date, personIdList, paging);
 		}
 
-		public IEnumerable<IPersonScheduleDayReadModel> RetrieveBulletinTradeSchedules(IEnumerable<string> shiftExchangeOfferIds , Paging paging)
-		{			
-			return _scheduleDayReadModelFinder.ForBulletinPersons(shiftExchangeOfferIds, paging);
-		}		
-
-		public IEnumerable<IPersonScheduleDayReadModel> RetrievePossibleTradeSchedulesWithFilteredTimes(DateOnly date, IEnumerable<IPerson> possibleShiftTradePersons, Paging paging,
-																						TimeFilterInfo filterInfo)
+		public IEnumerable<IPersonScheduleDayReadModel> RetrieveBulletinTradeSchedules(
+			IEnumerable<string> shiftExchangeOfferIds, Paging paging)
 		{
-			IEnumerable<Guid> personIdList = (from person in possibleShiftTradePersons
-			                                 select person.Id.Value).ToList();
+			return _scheduleDayReadModelFinder.ForBulletinPersons(shiftExchangeOfferIds, paging);
+		}
+
+		public IEnumerable<IPersonScheduleDayReadModel> RetrievePossibleTradeSchedulesWithFilteredTimes(DateOnly date,
+			IEnumerable<IPerson> possibleShiftTradePersons, Paging paging,
+			TimeFilterInfo filterInfo)
+		{
+			var personIdList = (from person in possibleShiftTradePersons select person.Id.Value).ToList();
 			return _scheduleDayReadModelFinder.ForPersonsByFilteredTimes(date, personIdList, paging, filterInfo);
 		}
 
 		public Guid? RetrieveMyTeamId(DateOnly date)
 		{
 			var myTeam = _loggedOnUser.CurrentUser().MyTeam(date);
-			if (myTeam == null || !_permissionProvider.HasTeamPermission(DefinedRaptorApplicationFunctionPaths.ShiftTradeRequestsWeb, date, myTeam))
+			if (myTeam == null ||
+			    !_permissionProvider.HasTeamPermission(DefinedRaptorApplicationFunctionPaths.ShiftTradeRequestsWeb, date, myTeam))
+			{
 				return null;
+			}
 
 			return myTeam.Id;
 		}

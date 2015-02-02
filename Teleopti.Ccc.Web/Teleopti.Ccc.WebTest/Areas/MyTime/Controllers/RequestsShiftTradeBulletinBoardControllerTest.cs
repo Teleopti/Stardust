@@ -39,17 +39,19 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		[Test]
 		public void ShouldGetAllBulletinSchedulesWithFilters()
 		{
-			var isDayOff = true;
+			const bool isDayOff = true;
 
 			var modelFactory = MockRepository.GenerateMock<IRequestsShiftTradebulletinViewModelFactory>();
 			var model = new ShiftTradeScheduleViewModel();
 
-			modelFactory.Stub(x => x.CreateShiftTradeBulletinViewModel(Arg<ShiftTradeScheduleViewModelDataForAllTeams>.Is.Anything))
-							.Return(model);
-	
+			modelFactory.Stub(
+				x => x.CreateShiftTradeBulletinViewModel(Arg<ShiftTradeScheduleViewModelDataForAllTeams>.Is.Anything))
+				.Return(model);
+
 			var target = new RequestsShiftTradeBulletinBoardController(modelFactory, _timeFilterHelper);
 
-			var result = target.BulletinSchedulesWithTimeFilter(DateOnly.Today, Guid.NewGuid().ToString(), "", "", isDayOff, false, new Paging());
+			var result = target.BulletinSchedulesWithTimeFilter(DateOnly.Today, Guid.NewGuid().ToString(), "", "", isDayOff,
+				false, new Paging());
 			result.Data.Should().Be.SameInstanceAs(model);
 		}
 	}

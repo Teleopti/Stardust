@@ -13,10 +13,10 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping
 		private readonly IShiftTradeAddPersonScheduleViewModelMapper _shiftTradePersonScheduleViewModelMapper;
 		private readonly IShiftTradeTimeLineHoursViewModelMapper _shiftTradeTimeLineHoursViewModelMapper;
 
-		public ShiftTradeBulletinScheduleViewModelMapper(IShiftTradeRequestProvider shiftTradeRequestProvider, 
-													IPossibleShiftTradePersonsProvider possibleShiftTradePersonsProvider,
-													IShiftTradeAddPersonScheduleViewModelMapper shiftTradePersonScheduleViewModelMapper,
-													IShiftTradeTimeLineHoursViewModelMapper shiftTradeTimeLineHoursViewModelMapper)
+		public ShiftTradeBulletinScheduleViewModelMapper(IShiftTradeRequestProvider shiftTradeRequestProvider,
+			IPossibleShiftTradePersonsProvider possibleShiftTradePersonsProvider,
+			IShiftTradeAddPersonScheduleViewModelMapper shiftTradePersonScheduleViewModelMapper,
+			IShiftTradeTimeLineHoursViewModelMapper shiftTradeTimeLineHoursViewModelMapper)
 		{
 			_shiftTradeRequestProvider = shiftTradeRequestProvider;
 			_possibleShiftTradePersonsProvider = possibleShiftTradePersonsProvider;
@@ -33,23 +33,18 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping
 				return new ShiftTradeScheduleViewModel();
 			}
 
-			ShiftTradeAddPersonScheduleViewModel mySchedule = _shiftTradePersonScheduleViewModelMapper.Map(myScheduleDayReadModel, true);
-			List<ShiftTradeAddPersonScheduleViewModel> possibleTradeSchedule;
-			if (data.TimeFilter == null)
-			{
-				possibleTradeSchedule = getPossibleTradeSchedules(possibleTradePersons, data.Paging).ToList();
-			}
-			else
-			{
-				possibleTradeSchedule = getFilteredTimesPossibleTradeSchedules(possibleTradePersons, data.Paging, data.TimeFilter).ToList();
-			}
+			var mySchedule = _shiftTradePersonScheduleViewModelMapper.Map(myScheduleDayReadModel, true);
+			var possibleTradeSchedule = data.TimeFilter == null
+				? getPossibleTradeSchedules(possibleTradePersons, data.Paging).ToList()
+				: getFilteredTimesPossibleTradeSchedules(possibleTradePersons, data.Paging, data.TimeFilter).ToList();
 			var possibleTradeScheduleNum = possibleTradeSchedule.Any() ? possibleTradeSchedule.First().Total : 0;
-			var pageCount = possibleTradeScheduleNum % data.Paging.Take != 0 ? possibleTradeScheduleNum / data.Paging.Take + 1 : possibleTradeScheduleNum / data.Paging.Take;
+			var pageCount = possibleTradeScheduleNum%data.Paging.Take != 0
+				? possibleTradeScheduleNum/data.Paging.Take + 1
+				: possibleTradeScheduleNum/data.Paging.Take;
 
-			IEnumerable<ShiftTradeTimeLineHoursViewModel> timeLineHours = _shiftTradeTimeLineHoursViewModelMapper.Map(
-				mySchedule, possibleTradeSchedule, data.ShiftTradeDate);
+			var timeLineHours = _shiftTradeTimeLineHoursViewModelMapper.Map(mySchedule, possibleTradeSchedule,
+				data.ShiftTradeDate);
 
-					
 			return new ShiftTradeScheduleViewModel
 			{
 				MySchedule = mySchedule,
