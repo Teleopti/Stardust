@@ -11,7 +11,7 @@
 	<div class="role-nav col-md-4 ">
 		<div class="align-center">
 			
-			<input type="text" name="filterRole" ng-model="searchRoles" placeholder="Role filter ..." />
+			<input type="text" name="filterRole" ng-model="searchRoles.DescriptionText" placeholder="Role filter ..." />
 			
 			<form ng-submit="createRole()">
 				<input type="text" ng-model="roleName" placeholder="Enter new role name" required />
@@ -19,12 +19,23 @@
 			</form>
 		</div>
 		<div id="searchRoleResults">
-			<button type="button" class="btn btn-default btn-md btn-block role" ng-repeat="role in roles | filter:searchRoles" ng-click=" showrole(role.id)">
-				{{role.DescriptionText}}
-				<div class="role-duplicate">
-					<a class=" pull-right" ng-click="duplicateRole(role.Id)">Duplicate</a>
-				</div>
-			</button>
+			
+			<ul ng-repeat="role in roles | filter:searchRoles">
+				<li ng-click="showRole(role.Id)" ng-dblclick="editing = true" class="btn btn-default btn-md btn-block role">
+					<div class="role-duplicate">
+						<a class=" pull-right" ng-click="duplicateRole(role.Id)">Duplicate</a>
+					</div>
+					<span ng-hide="editing">{{role.DescriptionText}}</span>
+					<form ng-show="editing" ng-submit="editing = false">
+						<label>Editi role:</label>
+						<br >
+						<input type="text" ng-model="role.DescriptionText" placeholder="Name" ng-required />
+						<br />
+						<button class="btn btn-default" type="submit">Save</button>
+					</form>
+				</li>
+
+			</ul>
 		</div>
 	</div>
 	<ul class="nav navbar-nav">

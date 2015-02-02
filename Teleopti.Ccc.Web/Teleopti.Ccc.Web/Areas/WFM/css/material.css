@@ -86,7 +86,6 @@
 }
 
 #tree-root > li:nth-child(2) > ol > li {
-	
 	padding: 5px;
 	margin: 5px;
 }
@@ -134,5 +133,9 @@ input {
 
 .role:hover > .role-duplicate {
 	width: 90px!important;
+}
+
+#searchRoleResults > ul {
+	padding-left: 0px;
 }
 
