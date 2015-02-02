@@ -112,8 +112,13 @@ input {
 	border-bottom:1px solid #ddd !important
 }
 
+.tab-heads li {
+	display: inline-block;
+}
+
+
 .tab-heads {
-	
+	padding-left: 10px;
 }
 
 .inline-role-name {
@@ -167,7 +172,6 @@ md-tooltip {
 	padding-left: 0px;
 
 }
-
 
 /*tooltip - this should be removed */
 
