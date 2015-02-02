@@ -301,7 +301,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Anywhere
 		{
 			var absenceBackToWorkFormInfo = table.CreateInstance<AbsenceBackToWorkFormInfo>();
 			Browser.Interactions.AssertInputValueUsingJQuery(".back-to-work-form .date-input ", absenceBackToWorkFormInfo.EndTime.ToShortDateString(DataMaker.Me().Culture));
-			//Browser.Interactions.AssertInputValueUsingJQuery(".back-to-work-form .end-time ", absenceBackToWorkFormInfo.EndTime.ToShortTimeString(DataMaker.Me().Culture));
 		}
 
 		[When(@"I set back to work to '(.*)'")]
