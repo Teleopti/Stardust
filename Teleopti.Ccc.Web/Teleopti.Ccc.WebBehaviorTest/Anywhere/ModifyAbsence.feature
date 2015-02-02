@@ -37,6 +37,14 @@ Background:
 	
 Scenario: Agent returns to work one day earlier than planned absence
 	Given I have the role 'Anywhere Team Green'
+	And 'I' am located in 'Stockholm'
+	And 'Pierre Baldi' is located in 'Stockholm'
+	And 'Pierre Baldi' has a shift with
+	| Field          | Value            |
+	| Shift category | Day              |
+	| Activity       | Phone            |
+	| Start time     | 2013-05-05 09:00 |
+	| End time       | 2013-05-05 17:00 |
 	And 'Pierre Baldi' has a shift with
 	| Field          | Value            |
 	| Shift category | Day              |
@@ -66,7 +74,7 @@ Scenario: Agent returns to work one day earlier than planned absence
 	| Field      | Value            |
 	| Name       | Vacation         |
 	| Start time | 2013-05-01 00:00 |
-	| End time   | 2013-05-06 00:00 |
+	| End time   | 2013-05-05 17:00 |
 
 Scenario: Cancel return to work for an absence
 	Given I have the role 'Anywhere Team Green'
