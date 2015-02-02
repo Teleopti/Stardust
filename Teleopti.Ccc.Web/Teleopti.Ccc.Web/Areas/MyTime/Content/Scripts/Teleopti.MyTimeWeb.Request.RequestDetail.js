@@ -104,6 +104,8 @@ Teleopti.MyTimeWeb.Request.RequestDetail = (function ($) {
 			data: JSON.stringify(formData),
 			success: function (data, textStatus, jqXHR) {
 			    model.IsNewInProgress(false);
+				model.Subject("");
+				model.Message("");
 			    if (successCallback != undefined)
 			        successCallback(data);
 			},
