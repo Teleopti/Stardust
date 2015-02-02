@@ -143,13 +143,10 @@ namespace Teleopti.Ccc.Web.Areas.Permissions.Controllers
 		}
 
 		[UnitOfWork, Route("api/Permissions/Roles/{roleId}/Copy"),HttpPost]
-		public virtual IHttpActionResult CopyExistingRole(Guid roleId, [FromBody]RoleNameInput model)
+		public virtual IHttpActionResult CopyExistingRole(Guid roleId)
 		{
-			if (descriptionIsInvalid(model.NewDescription)) return BadRequest(GivenDescriptionIsInvalidErrorMessage);
-
-			var newRole = createNewRole(model.NewDescription);
-
 			var roleToCopy = _roleRepository.Get(roleId);
+			var newRole = createNewRole("Copy of " + roleToCopy.DescriptionText);
 			roleToCopy.ApplicationFunctionCollection.ForEach(newRole.AddApplicationFunction);
 			roleToCopy.AvailableData.AvailableBusinessUnits.ForEach(newRole.AvailableData.AddAvailableBusinessUnit);
 			roleToCopy.AvailableData.AvailableSites.ForEach(newRole.AvailableData.AddAvailableSite);

@@ -25,13 +25,13 @@ permissionsService.factory('OrganizationSelections', ['$resource', function ($re
 }]);
 
 permissionsService.factory('DuplicateRole', ['$resource', function ($resource) {
-	return $resource('../../api/Permissions/Roles/:Id/Copy', {}, {
+	return $resource('../../api/Permissions/Roles/:Id/Copy', { Id: "@Id" }, {
 		query: { method: 'POST', params: { }, isArray: false }
 	});
 }]);
 
 permissionsService.factory('ManageRole', ['$resource', function ($resource) {
-	return $resource('../../api/Permissions/Roles/:Id', {id: "@id"}, {
+	return $resource('../../api/Permissions/Roles/:Id', {Id: "@Id"}, {
 		deleteRole: { method: 'DELETE', params: {}, isArray: false },
 		update: { method: 'PUT', params: { NewDescription: {} }, isArray: false }
 	});
