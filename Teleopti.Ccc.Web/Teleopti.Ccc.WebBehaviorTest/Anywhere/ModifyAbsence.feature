@@ -35,7 +35,7 @@ Background:
 	| Name  | Illness |
 	| Color | Gray    |
 	
-Scenario: Agent returns to work half day earlier than planned absence
+Scenario: Agent returns to work one day earlier than planned absence
 	Given I have the role 'Anywhere Team Green'
 	And 'Pierre Baldi' has a shift with
 	| Field          | Value            |
@@ -56,17 +56,17 @@ Scenario: Agent returns to work half day earlier than planned absence
 	Then I should see the back to work form with
 	| Field      | Value |
 	| End time   | 2013-05-06 23:59 |
-	When I change the end time to '2013-05-06 12:00'
+	When I set back to work to '2013-05-06'
 	And I click 'save absence'
 	Then I should see 'Pierre Baldi' with the scheduled activity
 	| Start time | End time | Color  |
-	| 12:00      | 17:00    | Green  |	
-	When I view person schedule for 'Pierre Baldi' in 'Team green' on '2013-05-06'
+	| 09:00      | 17:00    | Green  |	
+	When I view person schedule for 'Pierre Baldi' in 'Team green' on '2013-05-05'
 	Then I should see an absence in the absence list with
 	| Field      | Value            |
 	| Name       | Vacation         |
 	| Start time | 2013-05-01 00:00 |
-	| End time   | 2013-05-06 12:00 |
+	| End time   | 2013-05-06 00:00 |
 
 Scenario: Cancel return to work for an absence
 	Given I have the role 'Anywhere Team Green'
@@ -82,7 +82,7 @@ Scenario: Cancel return to work for an absence
 	Then I should see the back to work form with
 	| Field      | Value |
 	| End time   | 2013-05-06 23:59 |
-	When I change the end time to '2013-05-06 12:00'
+	When I set back to work to '2013-05-06'
 	And I click 'cancel'
 	And I view person schedule for 'Pierre Baldi' in 'Team green' on '2013-05-06'
 	Then I should see an absence in the absence list with

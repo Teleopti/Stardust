@@ -1,7 +1,6 @@
 ﻿using System;
 using AutoMapper;
 using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.PersonScheduleDayReadModel;
-using Teleopti.Ccc.Domain.Common;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Web.Areas.Anywhere.Core
@@ -19,7 +18,7 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Core
 			CreateMap<PersonScheduleDayReadModel, PersonScheduleDayViewModel>()
 				.ForMember(x => x.Date, o => o.MapFrom(s => s.Date))
 				.ForMember(x => x.Person, o => o.MapFrom(s => s.PersonId))
-				.ForMember(x => x.StarTime, o => o.ResolveUsing(s =>
+				.ForMember(x => x.StartTime, o => o.ResolveUsing(s =>
 				{
 					var startTime = s.Start;
 					if (s.Start != null)
@@ -31,9 +30,9 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Core
 				.ForMember(x => x.EndTime, o => o.ResolveUsing(s =>
 				{
 					var endTime = s.End;
-					if (s.Start != null)
+					if (s.End != null)
 					{
-						endTime = TimeZoneHelper.ConvertFromUtc((DateTime)s.End, _userTimeZone.TimeZone());
+						endTime = TimeZoneHelper.ConvertFromUtc((DateTime) s.End, _userTimeZone.TimeZone());
 					}
 					return endTime;
 				}))

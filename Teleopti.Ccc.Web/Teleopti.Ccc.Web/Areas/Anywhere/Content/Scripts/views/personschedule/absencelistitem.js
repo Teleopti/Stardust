@@ -49,11 +49,30 @@ define([
 			this.EndDate = ko.observable(self.EndDateTimeMoment.format('YYYY-MM-DD'));
 			this.EndTime = ko.observable(self.EndDateTimeMoment.format(resources.TimeFormatForMoment));
 
-			this.PreviousDate = ko.computed(function () {
-				self.EndTimeForAbsenceModify(self.CurrentDateMoment());
-				return self.CurrentDateMoment().clone().add('day', -1);
-			});
+			this.setEndTimeForAbsenceModify = function (previousDate) {
+				var trackId = guidgenerator.newGuid();
+				ajax.ajax({
+					url: 'PersonScheduleCommand/GetPersonSchedule',
+					dataType: "json",
+					type: 'GET',
+					data: { personId: self.personId, date: previousDate.format("YYYY-MM-DD") },
+					success: function (schedule) {
+						var endTime = moment(previousDate.format("YYYY-MM-DD") + " " + self.fullDayAbsenceEndTime());
+						if (schedule.EndTime != null && !schedule.IsDayOff) {
+							endTime = moment(schedule.EndTime);
+						}
+						self.EndTimeForAbsenceModify(endTime);
+					},
+					statusCode500: function (jqXHR, textStatus, errorThrown) {
+						notificationsViewModel.UpdateNotification(trackId, 3);
+					}
+				});
+			};
 
+			this.updateEndTime = ko.computed(function () {
+				var previousDate = self.CurrentDateMoment().clone().add("day", -1);
+				self.setEndTimeForAbsenceModify(previousDate);
+			});
 			
 			this.Name = ko.observable(data.Name);
 			this.BackgroundColor = ko.observable(data.Color);
@@ -128,29 +147,11 @@ define([
 			};
 
 			this.Save = function () {
-				var trackId = guidgenerator.newGuid();
-				ajax.ajax({
-					url: 'PersonScheduleCommand/GetPersonSchedule',
-					dataType: "json",
-					type: 'GET',
-					data: { personId: self.personId, date: self.PreviousDate().format("YYYY-MM-DD") },
-					success: function (schedule) {
-						var endTime = moment(self.PreviousDate().format("YYYY-MM-DD") + " " + self.fullDayAbsenceEndTime());
-						if (schedule.EndTime != null && !schedule.IsDayOff) {
-							endTime = moment(schedule.EndTime);
-						}
-
-						if (self.CurrentDateMoment().format("YYYY-MM-DD") == self.StartDateOnly.format("YYYY-MM-DD")) {
-							self.ConfirmRemoval();
-						} else {
-							self.EndTimeForAbsenceModify(endTime);
-							self.UpdateAbsence();
-						}
-					},
-					statusCode500: function (jqXHR, textStatus, errorThrown) {
-						notificationsViewModel.UpdateNotification(trackId, 3);
-					}
-				});
+				if (self.CurrentDateMoment().format("YYYY-MM-DD") == self.StartDateOnly.format("YYYY-MM-DD")) {
+					self.ConfirmRemoval();
+				} else {
+					self.UpdateAbsence();
+				}
 			};
 
 			this.UpdateAbsence = function () {

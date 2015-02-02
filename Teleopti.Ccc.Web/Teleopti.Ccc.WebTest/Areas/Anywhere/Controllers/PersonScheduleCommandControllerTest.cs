@@ -10,7 +10,7 @@ using Teleopti.Ccc.Domain.ApplicationLayer.Commands;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.Web;
 using Teleopti.Ccc.Web.Areas.Anywhere.Controllers;
-using Teleopti.Ccc.WebTest.TestHelper;
+using Teleopti.Ccc.Web.Areas.Anywhere.Core;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Controllers
@@ -224,6 +224,21 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Controllers
 			var firstCall = arguments.Single();
 			var calledCommand = (MoveActivityCommand)firstCall.Single();
 			calledCommand.TrackedCommandInfo.OperatedPersonId.Should().Be(personWithId.Id);
+		}
+
+		[Test]
+		public void ShouldGetPersonScheduleDayViewModel()
+		{
+			var id = new Guid();
+			var date = new DateTime();
+			var model = new PersonScheduleDayViewModel();
+			var personScheduleDayViewModelFactory = MockRepository.GenerateMock<IPersonScheduleDayViewModelFactory>();
+			personScheduleDayViewModelFactory.Stub(x => x.CreateViewModel(id, date)).Return(model);
+
+			var target = new PersonScheduleCommandController(null, null, personScheduleDayViewModelFactory);
+
+			var result = target.GetPersonSchedule(id, date);
+			result.Data.Should().Be.SameInstanceAs(model);
 		}
 	}
 

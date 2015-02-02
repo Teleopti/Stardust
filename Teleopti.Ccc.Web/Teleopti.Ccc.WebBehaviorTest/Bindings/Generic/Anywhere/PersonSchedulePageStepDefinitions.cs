@@ -300,15 +300,14 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Anywhere
 		public void ThenIShouldSeeTheBackToWorkFormWith(Table table)
 		{
 			var absenceBackToWorkFormInfo = table.CreateInstance<AbsenceBackToWorkFormInfo>();
-			Browser.Interactions.AssertInputValueUsingJQuery(".back-to-work-form .end-date ", absenceBackToWorkFormInfo.EndTime.ToShortDateString(DataMaker.Me().Culture));
-			Browser.Interactions.AssertInputValueUsingJQuery(".back-to-work-form .end-time ", absenceBackToWorkFormInfo.EndTime.ToShortTimeString(DataMaker.Me().Culture));
+			Browser.Interactions.AssertInputValueUsingJQuery(".back-to-work-form .date-input ", absenceBackToWorkFormInfo.EndTime.ToShortDateString(DataMaker.Me().Culture));
+			//Browser.Interactions.AssertInputValueUsingJQuery(".back-to-work-form .end-time ", absenceBackToWorkFormInfo.EndTime.ToShortTimeString(DataMaker.Me().Culture));
 		}
 
-		[When(@"I change the end time to '(.*)'")]
-		public void WhenIChangeTheEndTimeTo(DateTime endTime)
+		[When(@"I set back to work to '(.*)'")]
+		public void WhenISetBackToWorkTo(DateTime endTime)
 		{
-			Browser.Interactions.TypeTextIntoInputTextUsingJQuery(".back-to-work-form .end-date", endTime.ToShortDateString(DataMaker.Me().Culture));
-			Browser.Interactions.TypeTextIntoInputTextUsingJQuery(".back-to-work-form .end-time", endTime.ToShortTimeString(DataMaker.Me().Culture));
+			Browser.Interactions.TypeTextIntoInputTextUsingJQuery(".back-to-work-form .date-input", endTime.ToShortDateString(DataMaker.Me().Culture));
 		}
 		
 		[When(@"I select the activity with")]

@@ -6,7 +6,7 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Core
 	{
 		public DateTime Date { get; set; }
 		public Guid Person { get; set; }
-		public DateTime? StarTime { get; set; }
+		public DateTime? StartTime { get; set; }
 		public DateTime? EndTime { get; set; }
 		public bool IsDayOff { get; set; }
 	}
