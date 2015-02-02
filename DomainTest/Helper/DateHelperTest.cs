@@ -20,6 +20,14 @@ namespace Teleopti.Ccc.DomainTest.Helper
         private readonly DateTime _maxSmallDateTime = DateHelper.MaxSmallDateTime; 
         private string _ok = string.Empty;
 
+		readonly DateTime _monday = new DateTime(2015, 1, 5);
+		readonly DateTime _tuesday = new DateTime(2015, 1, 6);
+		readonly DateTime _wendnesday = new DateTime(2015, 1, 7);
+		readonly DateTime _thursday = new DateTime(2015, 1, 8);
+		readonly DateTime _friday = new DateTime(2015, 1, 9);
+		readonly DateTime _saturday = new DateTime(2015, 1, 10);
+		readonly DateTime _sunday = new DateTime(2015, 1, 11);
+
 		[SetUp]
 		public void Setup()
 		{
@@ -233,5 +241,94 @@ namespace Teleopti.Ccc.DomainTest.Helper
             var tooSmallDate = _minSmallDateTime.AddDays(3).LimitMin();
             Assert.AreEqual(_minSmallDateTime.AddDays(3), tooSmallDate);
         }
+
+		[Test]
+		public void ShouldBeWeekendOnFridaySaturDay()
+		{
+			var weekendDays = new Weekend { Monday = false, Tuesday = false, Wendnesday = false, Thursday = false, Friday = true, Saturday = true, Sunday = false };
+
+			checkWeekend(CultureInfo.GetCultureInfo(15361), weekendDays);	// Bahrain
+			checkWeekend(CultureInfo.GetCultureInfo(2117), weekendDays);	// Bangladesh
+			checkWeekend(CultureInfo.GetCultureInfo(3073), weekendDays);	// Egypt
+			checkWeekend(CultureInfo.GetCultureInfo(2049), weekendDays);	// Iraq
+			checkWeekend(CultureInfo.GetCultureInfo(1037), weekendDays);	// Israel
+			checkWeekend(CultureInfo.GetCultureInfo(11265), weekendDays);	// Jordan
+			checkWeekend(CultureInfo.GetCultureInfo(13313), weekendDays);	// Kuwait
+			checkWeekend(CultureInfo.GetCultureInfo(4097), weekendDays);	// Libya
+			checkWeekend(CultureInfo.GetCultureInfo(1125), weekendDays);	// Maldives
+			checkWeekend(CultureInfo.GetCultureInfo(1086), weekendDays);	// Malaysia
+			checkWeekend(CultureInfo.GetCultureInfo(1121), weekendDays);	// Nepal
+			checkWeekend(CultureInfo.GetCultureInfo(8193), weekendDays);	// Oman
+			checkWeekend(CultureInfo.GetCultureInfo(16385), weekendDays);	// Qatar
+			checkWeekend(CultureInfo.GetCultureInfo(1025), weekendDays);	// SaudiArabia
+			checkWeekend(CultureInfo.GetCultureInfo(10241), weekendDays);	// Syria
+			checkWeekend(CultureInfo.GetCultureInfo(14337), weekendDays);	// Uae
+			checkWeekend(CultureInfo.GetCultureInfo(9217), weekendDays);	// Yemen
+		}
+
+		[Test]
+		public void ShouldBeWeekendOnFriday()
+		{
+			var weekendDays = new Weekend { Monday = false, Tuesday = false, Wendnesday = false, Thursday = false, Friday = true, Saturday = false, Sunday = false };
+
+			checkWeekend(CultureInfo.GetCultureInfo(1164), weekendDays);	// Afghanistan
+			checkWeekend(CultureInfo.GetCultureInfo(1065), weekendDays);	// Iran	
+		}
+
+		[Test]
+		public void ShouldBeWeekendOnFridaySunday()
+		{
+			var weekendDays = new Weekend { Monday = false, Tuesday = false, Wendnesday = false, Thursday = false, Friday = true, Saturday = false, Sunday = true };
+
+			checkWeekend(CultureInfo.GetCultureInfo(2110), weekendDays);	// Brunei Darussalam
+		}
+
+		[Test]
+		public void ShouldBeWeekendOnSunday()
+		{
+			var weekendDays = new Weekend { Monday = false, Tuesday = false, Wendnesday = false, Thursday = false, Friday = false, Saturday = false, Sunday = true };
+
+			checkWeekend(CultureInfo.GetCultureInfo(2058), weekendDays);	//Mexico
+			checkWeekend(CultureInfo.GetCultureInfo(1054), weekendDays);	//Thailand
+		}
+
+		[Test]
+		public void ShouldBeWeekendOnSaturdaySunday()
+		{
+			var weekendDays = new Weekend { Monday = false, Tuesday = false, Wendnesday = false, Thursday = false, Friday = false, Saturday = true, Sunday = true };
+
+			checkWeekend(CultureInfo.GetCultureInfo(1053), weekendDays);	//Sweden
+			checkWeekend(CultureInfo.GetCultureInfo(1044), weekendDays);	//Norway
+			checkWeekend(CultureInfo.GetCultureInfo(2057), weekendDays);	//United Kingdom
+			checkWeekend(CultureInfo.GetCultureInfo(1033), weekendDays);	//United States
+			checkWeekend(CultureInfo.GetCultureInfo(1049), weekendDays);	//Russia
+			checkWeekend(CultureInfo.GetCultureInfo(1030), weekendDays);	//Denmark
+			checkWeekend(CultureInfo.GetCultureInfo(1031), weekendDays);	//Germany
+			checkWeekend(CultureInfo.GetCultureInfo(1035), weekendDays);	//Finland
+			checkWeekend(CultureInfo.GetCultureInfo(3079), weekendDays);	//Austria
+		}
+
+
+		private void checkWeekend(CultureInfo culture, Weekend weekend)
+		{
+			Assert.AreEqual(DateHelper.IsWeekend(_monday, culture), weekend.Monday);
+			Assert.AreEqual(DateHelper.IsWeekend(_tuesday, culture), weekend.Tuesday);
+			Assert.AreEqual(DateHelper.IsWeekend(_wendnesday, culture), weekend.Wendnesday);
+			Assert.AreEqual(DateHelper.IsWeekend(_thursday, culture), weekend.Thursday);
+			Assert.AreEqual(DateHelper.IsWeekend(_friday, culture), weekend.Friday);
+			Assert.AreEqual(DateHelper.IsWeekend(_saturday, culture), weekend.Saturday);
+			Assert.AreEqual(DateHelper.IsWeekend(_sunday, culture), weekend.Sunday);
+		}
+
+		private struct Weekend
+		{
+			public bool Monday;
+			public bool Tuesday;
+			public bool Wendnesday;
+			public bool Thursday;
+			public bool Friday;
+			public bool Saturday;
+			public bool Sunday;
+		}
     }
 }

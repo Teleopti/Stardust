@@ -97,38 +97,47 @@ namespace Teleopti.Interfaces.Domain
         /// <returns></returns>
         public static bool IsWeekend(DateTime date, CultureInfo cult)
         {
-            bool ret;
-            if (cult.DateTimeFormat.FirstDayOfWeek == DayOfWeek.Sunday || cult.DateTimeFormat.FirstDayOfWeek == DayOfWeek.Monday)
-            {
-                switch (cult.Calendar.GetDayOfWeek(date))
-                {
-                    case DayOfWeek.Saturday:
-                    case DayOfWeek.Sunday:
-                        ret = true;
-                        break;
-                    default:
-                        ret = false;
-                        break;
-                }
-            }
-            else if (cult.DateTimeFormat.FirstDayOfWeek == DayOfWeek.Saturday)
-            {
-                switch (cult.Calendar.GetDayOfWeek(date))
-                {
-                    case DayOfWeek.Thursday:
-                    case DayOfWeek.Friday:
-                        ret = true;
-                        break;
-                    default:
-                        ret = false;
-                        break;
-                }
-            }
-            else
-            {
-                throw new ArgumentException("No weekend defined for this first day of week", "cult");
-            }
-            return ret;
+			//data collected from http://en.wikipedia.org/wiki/Workweek_and_weekend
+
+			var day = cult.Calendar.GetDayOfWeek(date);
+			switch (cult.LCID)
+			{
+				case 5121:	// Algeria
+				case 15361: // Bahrain
+				case 2117:	// Bangladesh
+				case 3073:	// Egypt
+				case 2049:	// Iraq
+				case 1037:	// Israel
+				case 11265: // Jordan
+				case 13313: // Kuwait
+				case 4097:	// Libya
+				case 1125:	// Maldives
+				case 1086:	// Malaysia
+				case 1121:	// Nepal
+				case 8193:	// Oman
+				case 16385: // Qatar
+				case 1025:	// Saudi Arabia
+				case 10241: // Syria
+				case 14337: // U.A.E.
+				case 9217:	// Yemen
+					return day == DayOfWeek.Friday || day == DayOfWeek.Saturday;
+
+
+				case 1164: // Afghanistan Thursday is half a day of work
+				case 1065: // Iran  Thursday is half a day of work for most public offices and schools, but for most jobs, Thursday is a working day.
+					return day == DayOfWeek.Friday;
+
+				case 2110: // Brunei Darussalam
+					return day == DayOfWeek.Friday || day == DayOfWeek.Sunday;
+
+
+				case 2058: // Mexico it is a custom in most industries and trades to work half day on Saturday
+				case 1054: // Thailand the working week is Monday to Saturday for a maximum of 44 to 48 hours per week (Saturday is usually a half or full day)
+					return day == DayOfWeek.Sunday;
+
+				default:
+					return day == DayOfWeek.Saturday || day == DayOfWeek.Sunday;
+			}
         }
 
         /// <summary>
