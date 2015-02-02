@@ -33,6 +33,6 @@ permissionsService.factory('DuplicateRole', ['$resource', function ($resource) {
 permissionsService.factory('ManageRole', ['$resource', function ($resource) {
 	return $resource('../../api/Permissions/Roles/:Id', {Id: "@Id"}, {
 		deleteRole: { method: 'DELETE', params: {}, isArray: false },
-		update: { method: 'PUT', params: { NewDescription: {} }, isArray: false }
+		update: { method: 'PUT', params: { newDescription: {} }, isArray: false }
 	});
 }]);

@@ -79,10 +79,7 @@ function ($scope, $stateParams, $http, $filter, Roles, OrganizationSelections, A
 	};
 
 	$scope.updateRole = function (role) {
-		ManageRole.update({ Id: role.Id, NewDescription: JSON.stringify({ NewDescription: role.DescriptionText }) })
-			.$promise.then(function (result) {
- // ?
-		});
+		ManageRole.update({ Id: role.Id, newDescription: role.DescriptionText });
 	};
 
 	$scope.showRole = function (roleId) {
