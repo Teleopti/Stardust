@@ -35,8 +35,8 @@ wfmCtrls.controller('ForecastingRunCtrl', ['$scope', '$stateParams', '$http',
         }]
 );
 
-wfmCtrls.controller('PermissionsCtrl', ['$scope', '$stateParams', '$http', '$filter', 'Roles', 'ApplicationFunctions',
-function ($scope, $stateParams, $http, $filter, Roles, ApplicationFunctions) {
+wfmCtrls.controller('PermissionsCtrl', ['$scope', '$stateParams', '$http', '$filter', 'Roles', 'OrganizationSelections', 'ApplicationFunctions', 'AddRole', 'DuplicateRole', 'RolesFunctions', 'DeleteRole',
+function ($scope, $stateParams, $http, $filter, Roles, OrganizationSelections, ApplicationFunctions, AddRole, DuplicateRole, RolesFunctions, DeleteRole) {
         	$scope.roles = [];
         	$scope.list = [];
 			$scope.roleName = null;
@@ -45,57 +45,47 @@ function ($scope, $stateParams, $http, $filter, Roles, ApplicationFunctions) {
         	$scope.functionsFlat = [];
         	
         	$scope.roles = Roles.query();
+        	$scope.organization = OrganizationSelections.query();
         	
         	ApplicationFunctions.query().$promise.then(function (result) {
         		$scope.functionsDisplayed = result;
 		        flatFunctions($scope.functionsDisplayed);
         	});
 
+
         	$scope.createRole = function () {
-        		var roleData = { DescriptionText: $scope.roleName };
-        		$http.post('/', roleData)
-					.success(function (data, status, headers, config) {
-							$scope.roles.push(roleData);
-							console.log("New role added");
-					})
-					.error(function (data, status, headers, config) {
-						$scope.error = { success: false, message: 'Something has failed. Please try again later' };
-					});
+        		var roleData = { Description: $scope.roleName };
+        		AddRole.query(JSON.stringify(roleData)).$promise.then(function (result) {
+        			roleData.Id = result.Id;
+			        roleData.DescriptionText = result.DescriptionText;
+        			$scope.roles.push(roleData);
+		        });
         	};
 
-        	$scope.duplicateRole = function (roleId) {
-        		$http.get('../../api/Permissions/Roles/' + roleId ).
-								success(function (data, status, headers, config) {
-									var dupName = { DescriptionText: data.DescriptionText + " copy" };
-									$scope.roles.push(dupName);
-									console.log("Role duplicated");
-								}).error(function (data, status, headers, config) {
-									$scope.error = { success: false, message: 'Something has failed. Please try again later' };
-								});
+        	$scope.copyRole = function (roleId) {
+		        var roleCopy = {};
+        		DuplicateRole.query({ Id: roleId }).$promise.then(function (result) {
+        			roleCopy.Id = result.Id;
+        			roleCopy.DescriptionText = result.DescriptionText;
+        			$scope.roles.push(roleCopy);
+        		});
         	};
 
-			// TODO should be refator in a service
-        	$http.get('../../api/Permissions/OrganizationSelection').
-							success(function (data, status, headers, config) {
-								$scope.organization = data;
-							}).
-							error(function (data, status, headers, config) {
-								$scope.error = { success: false, message: 'Something has failed. Please try again later' };
-							});
 
-
+        	$scope.removeRole = function (role, index) {
+        		DeleteRole.query({ Id: role.Id }).$promise.then(function (result) {
+        			$scope.roles.splice(index, 1);
+        		});
+        	};
 
         	$scope.showRole = function (roleId) {
-        		$http.get('../../api/Permissions/Roles/' + roleId).
-								success(function (data, status, headers, config) {
-									var permsFunc = data.AvailableFunctions;
-									$scope.functionsFlat.forEach(function (item) {
-										var availableFunctions = $filter('filter')(permsFunc, { Id: item.FunctionId });
-										item.selected = availableFunctions.length != 0  ? true : false;
-									});
-								}).error(function (data, status, headers, config) {
-									$scope.error = { success: false, message: 'Something has failed. Please try again later' };
-								});
+        		RolesFunctions.query({ Id: roleId }).$promise.then(function (result) {
+        			var permsFunc = result.AvailableFunctions;
+					$scope.functionsFlat.forEach(function (item) {
+						var availableFunctions = $filter('filter')(permsFunc, { Id: item.FunctionId });
+						item.selected = availableFunctions.length != 0  ? true : false;
+					});
+        		});
         	};
 
         	var flatFunctions = function (functionTab) {

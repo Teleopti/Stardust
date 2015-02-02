@@ -23,18 +23,18 @@
 			<ul ng-repeat="role in roles | filter:searchRoles">
 				<li ng-click="showRole(role.Id)" ng-dblclick="editing = true" class="btn btn-default btn-md btn-block role">
 					<div class="role-duplicate">
-						<a class=" pull-right" ng-click="duplicateRole(role.Id)">Duplicate</a>
+						<a class=" pull-right" ng-click="copyRole(role.Id)">Duplicate</a>
 					</div>
 					<span ng-hide="editing">{{role.DescriptionText}}</span>
 					<form ng-show="editing" ng-submit="editing = false">
-						<label>Editi role:</label>
+						<label>Edit role:</label>
 						<br >
 						<input type="text" ng-model="role.DescriptionText" placeholder="Name" ng-required />
 						<br />
 						<button class="btn btn-default" type="submit">Save</button>
+						<button class="btn btn-default" ng-click="removeRole(role, $index)" type="submit">Delete</button>
 					</form>
 				</li>
-
 			</ul>
 		</div>
 	</div>
