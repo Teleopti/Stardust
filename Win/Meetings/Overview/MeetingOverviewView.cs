@@ -315,6 +315,12 @@ namespace Teleopti.Ccc.Win.Meetings.Overview
 			var firstDayOfWeek = CultureInfo.CurrentCulture.DateTimeFormat.FirstDayOfWeek;
 			while (firstDay.DayOfWeek != firstDayOfWeek)
 				firstDay = firstDay.AddDays(-1);
+			if (scheduleControl1 == null)
+				MessageBox.Show("Opps. ScheduleControl is null");
+			if (scheduleControl1.Calendar == null)
+				MessageBox.Show("Opps. ScheduleControl's calendar is null");
+			if (scheduleControl1.Calendar.SelectedDates == null)
+				MessageBox.Show("Opps. Calendar has no selected dates");
 			scheduleControl1.Calendar.SelectedDates.BeginUpdate();
 			scheduleControl1.Calendar.SelectedDates.Clear();
 			var dates = new[]
