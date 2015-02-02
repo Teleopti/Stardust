@@ -5,6 +5,7 @@ using NHibernate;
 using NHibernate.Criterion;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Common.EntityBaseTypes;
+using Teleopti.Ccc.Domain.Security;
 using Teleopti.Ccc.Domain.Security.AuthorizationEntities;
 using Teleopti.Interfaces.Domain;
 
@@ -29,7 +30,7 @@ namespace Teleopti.Ccc.ApplicationConfig.Creators
 
 		public IPerson GetTheSystemUser()
 		{
-			var systemId = new Guid("3f0886ab-7b25-4e95-856a-0d726edc2a67");
+			var systemId = SuperUser.Id_AvoidUsing_This;
 			
 			 ISession session = _sessionFactory.OpenSession();
 			 var person = session.CreateCriteria<IPerson>()

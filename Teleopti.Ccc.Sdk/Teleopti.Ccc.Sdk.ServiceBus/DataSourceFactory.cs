@@ -3,6 +3,7 @@ using System.Globalization;
 using System.Linq;
 using log4net;
 using Teleopti.Ccc.Domain.Repositories;
+using Teleopti.Ccc.Domain.Security;
 using Teleopti.Ccc.Domain.Security.Authentication;
 
 namespace Teleopti.Ccc.Sdk.ServiceBus
@@ -27,7 +28,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
 
 	        using (var uow = dataSourceContainer.DataSource.Application.CreateAndOpenUnitOfWork())
 	        {
-		        var systemId = new Guid("3f0886ab-7b25-4e95-856a-0d726edc2a67");
+		        var systemId = SuperUser.Id_AvoidUsing_This;
 		        dataSourceContainer.SetUser(repositoryFactory.CreatePersonRepository(uow).LoadOne(systemId));
 	        }
 	        return dataSourceContainer;

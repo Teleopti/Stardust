@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Globalization;
 using System.ServiceModel;
+using Teleopti.Ccc.Domain.Security;
 using Teleopti.Ccc.Domain.Security.Authentication;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.Sdk.Common.WcfExtensions;
@@ -13,7 +14,7 @@ namespace Teleopti.Ccc.Sdk.WcfService.LogOn
         private readonly PersonCache _personCache = new PersonCache();
         private CustomUserNameSecurityToken _customUserNameSecurityToken;
         private IDataSourceContainer _dataSourceContainer;
-	    private readonly Guid CustomPersonId = new Guid("3f0886ab-7b25-4e95-856a-0d726edc2a67");
+	    private readonly Guid CustomPersonId = SuperUser.Id_AvoidUsing_This;
 
         private bool tryGetPersonFromStore()
         {
