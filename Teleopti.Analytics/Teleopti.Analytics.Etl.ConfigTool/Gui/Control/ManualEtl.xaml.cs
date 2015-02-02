@@ -55,7 +55,7 @@ namespace Teleopti.Analytics.Etl.ConfigTool.Gui.Control
 		private void etlControlJobRun(object sender, AlarmEventArgs e)
 		{
 			e.Job.StepList[0].JobParameters.DataSource = myControl.LogDataSource;
-			e.Job.JobParameters.Helper.SelectDataSourceContainer(myControl.DataSourceName);
+			e.Job.JobParameters.Helper.SelectDataSourceContainer(myControl.TenantDataSource.DataSourceName);
 			//Clear job periods before adding them again
 			e.Job.StepList[0].JobParameters.JobCategoryDates.Clear();
 

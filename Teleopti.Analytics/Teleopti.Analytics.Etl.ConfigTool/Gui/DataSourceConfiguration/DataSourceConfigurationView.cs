@@ -12,7 +12,8 @@ namespace Teleopti.Analytics.Etl.ConfigTool.Gui.DataSourceConfiguration
 {
     public partial class DataSourceConfigurationView : Form, IDataSourceConfigurationView
     {
-        private readonly DataSourceConfigurationPresenter _presenter;
+	    private readonly string _connectionString;
+	    private readonly DataSourceConfigurationPresenter _presenter;
         private bool _showForm;
         private bool _closeApplication;
         private IJob _initialJob;
@@ -21,10 +22,11 @@ namespace Teleopti.Analytics.Etl.ConfigTool.Gui.DataSourceConfiguration
 
         private DataSourceConfigurationView() { }
 
-        public DataSourceConfigurationView(DataSourceConfigurationModel model)
+		  public DataSourceConfigurationView(DataSourceConfigurationModel model, string connectionString)
             : this()
         {
-            InitializeComponent();
+			  _connectionString = connectionString;
+			  InitializeComponent();
             _presenter = new DataSourceConfigurationPresenter(this, model);
         }
 
@@ -258,7 +260,7 @@ namespace Teleopti.Analytics.Etl.ConfigTool.Gui.DataSourceConfiguration
         {
             get
             {
-                return ConfigurationManager.AppSettings["datamartConnectionString"];
+                return _connectionString;
             }
         }
 

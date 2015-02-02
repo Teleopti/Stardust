@@ -12,6 +12,8 @@ using Teleopti.Analytics.Etl.Interfaces.Common;
 using Teleopti.Analytics.Etl.Interfaces.Transformer;
 using Teleopti.Analytics.Etl.Transformer.Job.MultipleDate;
 using Teleopti.Ccc.Domain.FeatureFlags;
+using Teleopti.Ccc.Domain.Security.Authentication;
+using Teleopti.Ccc.Infrastructure.UnitOfWork;
 
 namespace Teleopti.Analytics.Etl.ConfigTool.Gui.Control
 {
@@ -24,44 +26,25 @@ namespace Teleopti.Analytics.Etl.ConfigTool.Gui.Control
 		private IJobMultipleDate _jobMultipleDatePeriods;
 		private IJob _currentJob;
 		private IBaseConfiguration _baseConfiguration;
-		public class temp
-		{
-			public string DataSourceName { get; set; } 
-		}
+
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes")]
 		public ManualControl()
 		{
 			InitializeComponent();
 			if (isInDesignMode) return;
 
-			try
-			{
-				_dataSourceCollection = new DataSourceValidCollection(true);
-				ComboBoxLogDataSource.DataContext = _dataSourceCollection;
-				
-				UpdateControls(null);
-			}
-			catch (Exception ex)
-			{
-				string msg = string.Format(CultureInfo.InvariantCulture,
-																	 "The ETL Tool cannot be started. Connection to the Analytics database failed. Check the settings in the config file. {0}{1}",
-																	 "\n\n", ex.Message);
-				showErrorMessage(msg);
-				Environment.Exit(0);
-			}
-
 			GroupBoxAgentStats.IsEnabledChanged += (o, s) => changeForegroundColor(o);
 			GroupBoxForecast.IsEnabledChanged += (o, s) => changeForegroundColor(o);
 			GroupBoxInitial.IsEnabledChanged += (o, s) => changeForegroundColor(o);
 			GroupBoxQueueStats.IsEnabledChanged += (o, s) => changeForegroundColor(o);
 			GroupBoxSchedule.IsEnabledChanged += (o, s) => changeForegroundColor(o);
-
 		}
 
-		public void SetTenantDataSource(ObservableCollection<TenantName> source)
+		public void SetTenantDataSource(IList<DataSourceContainer> source)
 		{
 			ComboBoxDataSource.DataContext = source;
 		}
+
 		private static void changeForegroundColor(object sender)
 		{
 			var box = sender as GroupBox;
@@ -109,14 +92,14 @@ namespace Teleopti.Analytics.Etl.ConfigTool.Gui.Control
 			}
 		}
 
-		internal string DataSourceName
+		internal DataSourceContainer TenantDataSource
 		{
 			get
 			{
 				if (ComboBoxDataSource.SelectedIndex > -1)
-					return (string)ComboBoxDataSource.SelectedValue;
+					return (DataSourceContainer)ComboBoxDataSource.SelectedItem;
 
-				return "";
+				return null;
 			}
 		}
 
@@ -237,12 +220,33 @@ namespace Teleopti.Analytics.Etl.ConfigTool.Gui.Control
 
 		internal void ReloadDataSourceComboBox()
 		{
-			ComboBoxLogDataSource.DataContext = _dataSourceCollection = new DataSourceValidCollection(true);
+			ComboBoxLogDataSource.DataContext = _dataSourceCollection = new DataSourceValidCollection(true, ((DataSourceContainer)ComboBoxDataSource.SelectedItem).DataSource.Statistic.ConnectionString);
 		}
 
 		public void SetBaseConfiguration(IBaseConfiguration baseConfiguration)
 		{
 			_baseConfiguration = baseConfiguration;
+		}
+
+		private void ComboBoxDataSource_OnSelectionChanged(object sender, SelectionChangedEventArgs e)
+		{
+			try
+			{
+				_dataSourceCollection = new DataSourceValidCollection(true, ((DataSourceContainer)ComboBoxDataSource.SelectedItem).DataSource.Statistic.ConnectionString);
+				ComboBoxLogDataSource.DataContext = _dataSourceCollection;
+
+				UpdateControls(null);
+				if (ComboBoxLogDataSource.Items.Count > 0)
+					ComboBoxLogDataSource.SelectedIndex = 0;
+			}
+			catch (Exception ex)
+			{
+				string msg = string.Format(CultureInfo.InvariantCulture,
+																	 "The ETL Tool cannot be started. Connection to the Analytics database failed. Check the settings in the config file. {0}{1}",
+																	 "\n\n", ex.Message);
+				showErrorMessage(msg);
+				Environment.Exit(0);
+			}
 		}
 	}
 }

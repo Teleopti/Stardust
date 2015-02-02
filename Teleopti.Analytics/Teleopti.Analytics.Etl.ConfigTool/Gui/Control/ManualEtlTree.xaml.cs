@@ -1,6 +1,8 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Configuration;
 using System.Globalization;
 using System.Threading;
 using System.Windows;
@@ -8,6 +10,7 @@ using System.Windows.Controls;
 using Teleopti.Analytics.Etl.ConfigTool.Transformer;
 using Teleopti.Analytics.Etl.Interfaces.Common;
 using Teleopti.Analytics.Etl.Interfaces.Transformer;
+using Teleopti.Ccc.Domain.Security.Authentication;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Analytics.Etl.ConfigTool.Gui.Control
@@ -20,7 +23,7 @@ namespace Teleopti.Analytics.Etl.ConfigTool.Gui.Control
 		private readonly BackgroundWorker _logonWorker = new BackgroundWorker();
 		private JobCollectionFactory _jobCollectionFactory;
 		private ObservableCollection<IJob> _jobCollection;
-		private readonly ObservableCollection<TenantName> _tenantCollection = new ObservableCollection<TenantName>();
+		private IList<DataSourceContainer> _tenantCollection = new List<DataSourceContainer>();
 
 		public event EventHandler<AlarmEventArgs> JobRun;
 		public event EventHandler<AlarmEventArgs> JobSelectionChanged;
@@ -50,11 +53,8 @@ namespace Teleopti.Analytics.Etl.ConfigTool.Gui.Control
 
 		private void logonWorker_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
 		{
-			_tenantCollection.Clear();
-			foreach (var container in _jobCollection[0].JobParameters.Helper.DataSourceContainers)
-			{
-				_tenantCollection.Add(new TenantName { DataSourceName = container.DataSourceName });
-			}
+			_tenantCollection = _jobCollection[0].JobParameters.Helper.DataSourceContainers;
+			
 			InitialJobNowAvailable(sender, new AlarmEventArgs(_jobCollection[0]));
 			SetEnableStateForJobCollection();
 			DataContext = _jobCollection;
@@ -65,7 +65,8 @@ namespace Teleopti.Analytics.Etl.ConfigTool.Gui.Control
 
 		internal void SetEnableStateForJobCollection()
 		{
-			var dataSourceCollection = new DataSourceValidCollection(true);
+			//TODO get from tenant datasource
+			var dataSourceCollection = new DataSourceValidCollection(true, ConfigurationManager.AppSettings["datamartConnectionString"]);
 			bool isJobEnabled = (dataSourceCollection.Count > 0);
 
 			foreach (IJob job in _jobCollection)
@@ -123,7 +124,7 @@ namespace Teleopti.Analytics.Etl.ConfigTool.Gui.Control
 			menuItemExecute.IsEnabled = isEnabled;
 		}
 
-		public ObservableCollection<TenantName> TenantCollection
+		public IList<DataSourceContainer> TenantCollection
 		{
 			get { return _tenantCollection; }
 		}
@@ -166,6 +167,16 @@ namespace Teleopti.Analytics.Etl.ConfigTool.Gui.Control
 		{
 			_jobCollectionFactory = new JobCollectionFactory(baseConfiguration);
 			_logonWorker.RunWorkerAsync(CultureInfo.CurrentCulture);
+		}
+
+		public IDataSource DataSourceFromName(string tenantName)
+		{
+			if (_jobCollectionFactory != null)
+			{
+				_jobCollectionFactory.JobHelper.SelectDataSourceContainer(tenantName);
+				return _jobCollectionFactory.JobHelper.SelectedDataSourceContainer.DataSource;
+			}
+			return null;
 		}
 	}
 

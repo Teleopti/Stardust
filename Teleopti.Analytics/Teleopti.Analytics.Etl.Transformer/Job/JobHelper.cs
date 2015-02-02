@@ -70,6 +70,8 @@ namespace Teleopti.Analytics.Etl.Transformer.Job
 			return _logHelp.SelectDataSourceContainer(dataSourceName);
 		}
 
+		public IDataSourceContainer SelectedDataSourceContainer{ get { return _logHelp.SelectedDataSourceContainer; }}
+		
 		public bool SetBusinessUnit(IBusinessUnit businessUnit)
 		{
 			if (!_logHelp.SetBusinessUnit(businessUnit))

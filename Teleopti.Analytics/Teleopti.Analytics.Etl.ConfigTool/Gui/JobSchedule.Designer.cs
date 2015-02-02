@@ -113,13 +113,18 @@ namespace Teleopti.Analytics.Etl.ConfigTool.Gui
 			// 
 			// buttonOk
 			// 
+			this.buttonOk.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(153)))), ((int)(((byte)(255)))));
 			this.buttonOk.DialogResult = System.Windows.Forms.DialogResult.OK;
+			this.buttonOk.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(153)))), ((int)(((byte)(255)))));
+			this.buttonOk.FlatAppearance.BorderSize = 0;
+			this.buttonOk.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+			this.buttonOk.ForeColor = System.Drawing.Color.White;
 			this.buttonOk.Location = new System.Drawing.Point(1076, 575);
 			this.buttonOk.Name = "buttonOk";
 			this.buttonOk.Size = new System.Drawing.Size(87, 27);
 			this.buttonOk.TabIndex = 12;
 			this.buttonOk.Text = "OK";
-			this.buttonOk.UseVisualStyleBackColor = true;
+			this.buttonOk.UseVisualStyleBackColor = false;
 			this.buttonOk.Click += new System.EventHandler(this.buttonOk_Click);
 			// 
 			// checkBoxEnabled
@@ -136,9 +141,7 @@ namespace Teleopti.Analytics.Etl.ConfigTool.Gui
 			// 
 			// comboBoxJob
 			// 
-			this.comboBoxJob.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-			this.comboBoxJob.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-			this.comboBoxJob.FormattingEnabled = true;
+			this.comboBoxJob.FlatStyle = System.Windows.Forms.FlatStyle.System;
 			this.comboBoxJob.Location = new System.Drawing.Point(128, 40);
 			this.comboBoxJob.Name = "comboBoxJob";
 			this.comboBoxJob.Size = new System.Drawing.Size(465, 23);
@@ -250,6 +253,7 @@ namespace Teleopti.Analytics.Etl.ConfigTool.Gui
 			this.dateTimePickerOccursOnce.CustomFormat = "HH:mm";
 			this.dateTimePickerOccursOnce.Format = System.Windows.Forms.DateTimePickerFormat.Custom;
 			this.dateTimePickerOccursOnce.Location = new System.Drawing.Point(159, 22);
+			this.dateTimePickerOccursOnce.Margin = new System.Windows.Forms.Padding(0);
 			this.dateTimePickerOccursOnce.Name = "dateTimePickerOccursOnce";
 			this.dateTimePickerOccursOnce.ShowUpDown = true;
 			this.dateTimePickerOccursOnce.Size = new System.Drawing.Size(76, 23);
@@ -281,13 +285,17 @@ namespace Teleopti.Analytics.Etl.ConfigTool.Gui
 			// 
 			// buttonCancel
 			// 
+			this.buttonCancel.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(153)))), ((int)(((byte)(255)))));
 			this.buttonCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
+			this.buttonCancel.FlatAppearance.BorderSize = 0;
+			this.buttonCancel.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+			this.buttonCancel.ForeColor = System.Drawing.Color.White;
 			this.buttonCancel.Location = new System.Drawing.Point(1170, 575);
 			this.buttonCancel.Name = "buttonCancel";
 			this.buttonCancel.Size = new System.Drawing.Size(87, 27);
 			this.buttonCancel.TabIndex = 13;
 			this.buttonCancel.Text = "Cancel";
-			this.buttonCancel.UseVisualStyleBackColor = true;
+			this.buttonCancel.UseVisualStyleBackColor = false;
 			this.buttonCancel.Click += new System.EventHandler(this.buttonCancel_Click);
 			// 
 			// label3
@@ -827,8 +835,7 @@ namespace Teleopti.Analytics.Etl.ConfigTool.Gui
 			// 
 			// comboBoxDataSource
 			// 
-			this.comboBoxDataSource.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-			this.comboBoxDataSource.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+			this.comboBoxDataSource.FlatStyle = System.Windows.Forms.FlatStyle.System;
 			this.comboBoxDataSource.FormattingEnabled = true;
 			this.comboBoxDataSource.Location = new System.Drawing.Point(157, 22);
 			this.comboBoxDataSource.Name = "comboBoxDataSource";

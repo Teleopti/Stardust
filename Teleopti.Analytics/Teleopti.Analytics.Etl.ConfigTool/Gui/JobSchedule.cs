@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Configuration;
 using System.Globalization;
+using System.Linq;
 using System.Windows.Forms;
 using Teleopti.Analytics.Etl.Common.Entity;
 using Teleopti.Analytics.Etl.Common.Infrastructure;
@@ -20,21 +21,24 @@ namespace Teleopti.Analytics.Etl.ConfigTool.Gui
 		private readonly bool _isNewSchedule;
 		private IEtlJobSchedule _etlJobSchedule;
 		private readonly IEtlJobSchedule _etlJobScheduleToEdit;
-		private readonly Interfaces.Common.IJobScheduleRepository _repository;
+		private readonly IJobScheduleRepository _repository;
 		private readonly string _connectionString;
 		private bool _isScheduleSettingsValid;
 		private bool _isOkButtonClicked;
 		private IJob _selectedJob;
 		private readonly ObservableCollection<IEtlJobSchedule> _observableCollection;
 		private readonly IBaseConfiguration _baseConfiguration;
+		private readonly bool _selectDataSourceIsPossible;
 
-		public JobSchedule(IEtlJobSchedule etlJobSchedule, ObservableCollection<IEtlJobSchedule> observableCollection, IBaseConfiguration baseConfiguration)
+		public JobSchedule(IEtlJobSchedule etlJobSchedule, ObservableCollection<IEtlJobSchedule> observableCollection,
+			IBaseConfiguration baseConfiguration, bool selectDataSourceIsPossible)
 		{
 			InitializeComponent();
 			_connectionString = ConfigurationManager.AppSettings["datamartConnectionString"];
 			_repository = new Repository(_connectionString);
 			_observableCollection = observableCollection;
 			_baseConfiguration = baseConfiguration;
+			_selectDataSourceIsPossible = selectDataSourceIsPossible;
 
 			if (etlJobSchedule == null)
 			{
@@ -76,7 +80,13 @@ namespace Teleopti.Analytics.Etl.ConfigTool.Gui
 
 		private void fillDataSourceCombo()
 		{
-			var dataSourceCollection = new DataSourceValidCollection(true);
+			var dataSourceCollection = (List<IDataSourceEtl>)new DataSourceValidCollection(true, ConfigurationManager.AppSettings["datamartConnectionString"]);
+			if (!_selectDataSourceIsPossible)
+			{
+				var temp = dataSourceCollection.First();
+				dataSourceCollection.Clear();
+				dataSourceCollection = new List<IDataSourceEtl> {temp};
+			}
 			comboBoxDataSource.DataSource = dataSourceCollection;
 			comboBoxDataSource.DisplayMember = "DataSourceName";
 			comboBoxDataSource.ValueMember = "DataSourceId";
