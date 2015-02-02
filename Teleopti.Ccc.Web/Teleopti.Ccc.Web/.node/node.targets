@@ -19,10 +19,10 @@
         <GruntBuild>"$(GruntCmd)" --verbose --no-color</GruntBuild>
         
         <!-- NPM install command -->
-        <NpmInstallCmd>"$(NpmCmd)" install</NpmInstallCmd>
+        <NpmInstallCmd>"$(NpmCmd)" update</NpmInstallCmd>
     
         <!-- Protractor install command -->
-        <NpmInstallProtractorCmd>"$(NpmCmd)" install -g protractor</NpmInstallProtractorCmd>
+        <NpmInstallProtractorCmd>"$(NpmCmd)" update -g protractor</NpmInstallProtractorCmd>
             
     </PropertyGroup>
 
