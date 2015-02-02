@@ -3,8 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Repositories;
-using Teleopti.Ccc.Domain.Scheduling;
-using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.SeatPlanning;
 using Teleopti.Interfaces.Domain;
 
@@ -14,24 +12,21 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Commands
 	{
 		//private readonly IWriteSideRepository<ISeatPlan> _seatPlanRepository;
 		private readonly ICurrentScenario _scenario;
-		//private readonly IProxyForId<IPerson> _personRepository;
+		
 		private readonly IScheduleRepository _scheduleRepository;
 		private readonly ITeamRepository _teamRepository;
 		private readonly IPersonRepository _personRepository;
 		private readonly IPublicNoteRepository _publicNoteRepository;
-		private readonly IBusinessUnitRepository _businessUnitRepository;
-
 
 		//RobTodo: When we need to store Seat Plans, we need to create a SeatPlanRepository, eg:
 		// public class SeatPlanRepository : Repository<ISeatPlan>, ISeatPlanRepository, IWriteSideRepository<ISeatPlan>, IProxyForId<ISeatPlan>
 		// then it can be added to the constructor ready for autofac injection
 		//public AddSeatPlanCommandHandler(IWriteSideRepository<ISeatPlan>seatPlanRepository, ICurrentScenario scenario)
-		public AddSeatPlanCommandHandler(IScheduleRepository scheduleRepository, ITeamRepository teamRepository, IPersonRepository personRepository, ICurrentScenario scenario, IPublicNoteRepository publicNoteRepository, IBusinessUnitRepository businessUnitRepository)
+		public AddSeatPlanCommandHandler(IScheduleRepository scheduleRepository, ITeamRepository teamRepository, IPersonRepository personRepository, ICurrentScenario scenario, IPublicNoteRepository publicNoteRepository)
 		{
 			//_seatPlanRepository = seatPlanRepository;
 			_scenario = scenario;
 			_publicNoteRepository = publicNoteRepository;
-			_businessUnitRepository = businessUnitRepository;
 			_scheduleRepository = scheduleRepository;
 			_teamRepository = teamRepository;
 			_personRepository = personRepository;
@@ -39,48 +34,87 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Commands
 
 		public void Handle(AddSeatPlanCommand command)
 		{
+
+			//Robtodo: temporary code to get locations - just throw away code for the prototype 
+			var rootLocation = getLocation (command.LocationsFromFile, command.Locations);
+			
 			var period = new DateOnlyPeriod(new DateOnly(command.StartDate), new DateOnly(command.EndDate));
-			var people = new List<IPerson>();
-			var currentScenario = _scenario.Current();
-			
-			
 			var teams = _teamRepository.FindTeams (command.Teams);
-			foreach (var team in teams)
-			{
-				//RobTodo: review: Try to use personscheduledayreadmodel to improve performance
-				people.AddRange(_personRepository.FindPeopleBelongTeamWithSchedulePeriod(team, period));
-			}
-			var schedulesForPeople = getScheduleDaysForPeriod (period, people, currentScenario);
 
-			foreach (var person in people)
-			{
-				var scheduleDays = schedulesForPeople[person].ScheduledDayCollection (period);
-				if (scheduleDays != null)
-				{
-					foreach (var scheduleDay in scheduleDays)
-					{
-						var publicNote = new PublicNote(person, scheduleDay.DateOnlyAsPeriod.DateOnly, currentScenario, "Hey");
-						_publicNoteRepository.Add (publicNote);
-					}
-				}
-			}
+			var seatPlan = new SeatPlan(_scenario.Current(), _publicNoteRepository, _personRepository, _scheduleRepository);
+			seatPlan.CreateSeatPlan(rootLocation, teams,period, command.TrackedCommandInfo);
 
-			//Robtodo: Create Seat Plan later..
-			//var seatPlan = new SeatPlan(_scenario.Current());
-			//seatPlan.CreateSeatPlan(period, command.TrackedCommandInfo);
+			//Robtodo: Persist Seat Plan record later..
 			//_seatPlanRepository.Add(seatPlan);
 
 		}
-		private IScheduleDictionary getScheduleDaysForPeriod(DateOnlyPeriod period, IEnumerable<IPerson> people, IScenario currentScenario)
-		{
-			var dictionary = _scheduleRepository.FindSchedulesForPersonsOnlyInGivenPeriod(
-				people,
-				new ScheduleDictionaryLoadOptions(false, false),
-				period,
-				currentScenario);
+		
 
-			return dictionary;
+		private static Location getLocation(dynamic location, IList<Guid> locations)
+		{
+			if (location == null)
+			{
+				return null;
+			}
+
+			var locationGuid = Guid.Parse (location.id);
+
+			var childLocations = getChildLocations(location, locations);
+			var seats = getSeats(location);
+			var isSelectedForSeatPlanning = locations.Any(l => l.Equals(locationGuid));
+
+			var loc = new Location()
+			{
+				Id = locationGuid,
+				Name = location.name,
+				IncludeInSeatPlan = isSelectedForSeatPlanning
+			};
+
+			
+			loc.AddChildren (childLocations);
+			loc.AddSeats (seats);
+
+
+			return loc;
 		}
+
+		private static IEnumerable<Location> getChildLocations(dynamic location, IList<Guid> locations)
+		{
+			if (location.childLocations != null)
+			{
+				var childLocations = new List<Location>();
+
+				foreach (var child in location.childLocations)
+				{
+					childLocations.Add(getLocation(child, locations));
+				}
+
+				return childLocations;
+			}
+
+			return null;
+		}
+
+		private static IEnumerable<Seat> getSeats(dynamic location)
+		{
+			if (location.seats != null)
+			{
+				var seats = new List<Seat>();
+				foreach (var seat in location.seats)
+				{
+					var agentSeat = new Seat(Guid.Parse(seat.id), seat.name);
+					seats.Add(agentSeat);
+				}
+				return seats;
+			}
+
+			return null;
+		}
+
+
+
+
+		
 
 	}
 }

@@ -1369,7 +1369,14 @@
     <Compile Include="Scheduling\WorkShiftWorkTime.cs" />
     <Compile Include="Scheduling\WorkTimeMinMax.cs" />
     <Compile Include="Scheduling\WorkTimeMinMaxCalculator.cs" />
+    <Compile Include="SeatPlanning\AgentShift.cs" />
+    <Compile Include="SeatPlanning\BookingPeriod.cs" />
+    <Compile Include="SeatPlanning\Location.cs" />
+    <Compile Include="SeatPlanning\Seat.cs" />
+    <Compile Include="SeatPlanning\SeatAllocator.cs" />
+    <Compile Include="SeatPlanning\SeatBookingRequest.cs" />
     <Compile Include="SeatPlanning\SeatPlan.cs" />
+    <Compile Include="SeatPlanning\TransientBooking.cs" />
     <Compile Include="Security\AuthorizationEntities\AllFunctions.cs" />
     <Compile Include="Security\AuthorizationEntities\ApplicationFunctionsProvider.cs" />
     <Compile Include="Security\AuthorizationEntities\IApplicationFunctionsProvider.cs" />

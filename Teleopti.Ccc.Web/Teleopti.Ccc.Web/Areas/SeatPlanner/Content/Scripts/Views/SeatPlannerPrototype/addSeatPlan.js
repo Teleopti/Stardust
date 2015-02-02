@@ -27,8 +27,8 @@
 		this.SetData = function (data) {
 			this.data =
 			{
-				StartDate: data.StartDate().format('YYYY-MM-DD HH:mm'),
-				EndDate: data.EndDate().format('YYYY-MM-DD HH:mm'),
+				StartDate: data.StartDate,
+				EndDate: data.EndDate,
 				Locations: self.getTreeNodeGuids(data.Locations),
 				Teams: self.getTreeNodeGuids(data.Teams),
 				TrackedCommandInfo: { TrackId: trackId }

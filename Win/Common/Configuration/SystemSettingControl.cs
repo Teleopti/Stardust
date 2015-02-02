@@ -214,19 +214,6 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 			e.Cancel = cancel;
 		}
 
-		
-
-		private void lblHiddenSettingsHotspotClick (object sender, EventArgs e)
-		{
-			if (_toggleManager.IsEnabled (Toggles.MyTimeWeb_FullDayAbsenceConfiguration_30552))
-			{
-				if (Control.ModifierKeys == (Keys.Control | Keys.Alt))
-				{
-                    fullDayAbsenceSettingVisibility(!tableLayoutPanelFullDayAbsenceSettings.Visible);
-				}
-			}
-		}
-	
 
 		private void fullDayAbsenceSettingVisibility(bool visible)
 		{

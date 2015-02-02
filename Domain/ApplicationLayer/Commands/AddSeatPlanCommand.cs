@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using Microsoft.SqlServer.Server;
 using Teleopti.Ccc.UserTexts;
 using Teleopti.Interfaces.Domain;
 
@@ -13,6 +14,9 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Commands
 		public DateTime EndDate { get; set; }
 		public TrackedCommandInfo TrackedCommandInfo { get; set; }
 		public IList<string> ValidationResult { get; set; }
+
+		// RobTodo: Remove this - throwaway, just for prototype
+		public dynamic LocationsFromFile { get; set; }
 
 		public bool IsValid()
 		{

@@ -1,13 +1,14 @@
-﻿
-using System;
-using System.Collections.Generic;
-using System.Web.Mvc;
+﻿using System.Web.Http;
+using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Web.Areas.SeatPlanner.Core.Providers;
+using Teleopti.Ccc.Web.Core.Aop.Aspects;
 using Teleopti.Ccc.Web.Filters;
 
 namespace Teleopti.Ccc.Web.Areas.SeatPlanner.Controllers
 {
-	public class TeamHierarchyController : Controller
+
+	[ApplicationFunctionApi(DefinedRaptorApplicationFunctionPaths.SeatPlanner)]
+	public class TeamHierarchyController : ApiController
 	{
 		private readonly ITeamsProvider _teamsProvider;
 
@@ -15,11 +16,11 @@ namespace Teleopti.Ccc.Web.Areas.SeatPlanner.Controllers
 		{
 			_teamsProvider = teamsProvider;
 		}
-
-		[UnitOfWorkAction, HttpGet]
-		public JsonResult Get()
+		
+		[UnitOfWork, Route("SeatPlanner/TeamHierarchy/Get"), HttpGet]
+		public virtual object Get()
 		{
-			return Json(_teamsProvider.GetTeamHierarchy(), JsonRequestBehavior.AllowGet);
+			return _teamsProvider.GetTeamHierarchy();
 
 		}
 

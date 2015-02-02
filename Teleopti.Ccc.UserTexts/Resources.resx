@@ -12762,7 +12762,7 @@ Reduce the complexity to use these shifts.</value>
   <data name="Setting" xml:space="preserve">
     <value>Setting</value>
   </data>
-   <data name="SeatPlanner" xml:space="preserve">
+  <data name="SeatPlanner" xml:space="preserve">
     <value>Seat Planner</value>
     <comment>The title of the Seat Planner Application</comment>
   </data>
@@ -12774,5 +12774,13 @@ Reduce the complexity to use these shifts.</value>
   </data>
   <data name="AnyTeamShouldBeSelected" xml:space="preserve">
     <value>Any team should be selected</value>
+  </data>
+  <data name="YouHaveBeenAllocatedSeat" xml:space="preserve">
+    <value>On {0} you have been allocated seat {1}.</value>
+    <comment>Used in Seat Planner to display the agents allocated seat for a given day</comment>
+  </data>
+  <data name="YouHaveNotBeenAllocatedSeat" xml:space="preserve">
+    <value>On {0} you have not been allocated a seat.</value>
+    <comment>Used in Seat Planner when an agent was not allocated a seat for a given day</comment>
   </data>
 </root>

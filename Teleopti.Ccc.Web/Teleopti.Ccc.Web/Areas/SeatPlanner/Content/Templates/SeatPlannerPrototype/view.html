@@ -1,10 +1,10 @@
 <div class="container">
-	
+
 	<!-- ko if: Loading -->
 	<div><span data-bind="text: Resources.LoadingThreeDots"></span></div>
 	<!-- /ko -->
 	<!-- ko ifnot: Loading -->
-	
+
 
 	<div class="alert alert-danger" data-bind="visible:HasErrors" role="alert">
 		<div data-bind="foreach:ErrorMessages">
@@ -54,25 +54,29 @@
 	</script>
 
 	<div class="row">
-		<div class="col-xs-12 col-sm-6 pull-left">
-			<div class="panel panel-default treelist">
+		<div class="col-xs-12 col-sm-6 pull-left treelistcontrol">
+			<div class="panel panel-default">
 				<div class="panel-heading">Choose Teams to Seat:</div>
-				<div class="panel-body">
-					<ul class="treeViewList" data-bind="template: {name: 'tree-node', if: GetTreeNodesForBusinessHierarchy,  data: GetTreeNodesForBusinessHierarchy}"></ul>
+				<div class="treelist">
+					<div class="panel-body">
+						<ul class="treeViewList" data-bind="template: {name: 'tree-node', if: GetTreeNodesForBusinessHierarchy,  data: GetTreeNodesForBusinessHierarchy}"></ul>
+					</div>
 				</div>
 			</div>
 		</div>
-		
-		<div class="col-xs-12 col-sm-6 pull-right">
-			<div class="panel panel-default treelist">
+
+		<div class="col-xs-12 col-sm-6 pull-right treelistcontrol">
+			<div class="panel panel-default">
 				<div class="panel-heading">Choose Locations to Allocate Seating:</div>
-				<div class="panel-body">
-					<ul class="treeViewList" data-bind="template: {name: 'tree-node', if: GetTreeNodesForLocations, data: GetTreeNodesForLocations}"></ul>
+				<div class="treelist">
+					<div class="panel-body">
+						<ul class="treeViewList" data-bind="template: {name: 'tree-node', if: GetTreeNodesForLocations, data: GetTreeNodesForLocations}"></ul>
+					</div>
 				</div>
 			</div>
 		</div>
 	</div>
-	
+
 	<div>
 		<button class="btn btn-primary pull-right" data-bind="click : PerformSeatPlanning, disable: HasErrors">Begin</button>
 	</div>

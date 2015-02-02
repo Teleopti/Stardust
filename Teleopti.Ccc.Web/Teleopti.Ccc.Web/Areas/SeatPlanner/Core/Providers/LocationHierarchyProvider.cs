@@ -1,10 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Web;
 using System.Web.Helpers;
-using Newtonsoft.Json;
-using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Web.Areas.SeatPlanner.Core.ViewModels;
 
 namespace Teleopti.Ccc.Web.Areas.SeatPlanner.Core.Providers
@@ -44,7 +40,7 @@ namespace Teleopti.Ccc.Web.Areas.SeatPlanner.Core.Providers
 
 			var locationViewModel = new LocationViewModel()
 			{
-				Id = Guid.NewGuid(),
+				Id = Guid.Parse (location.id),
 				Name = location.name,
 				Seats = seatViewModels,
 				Children = childViewModels
@@ -78,7 +74,7 @@ namespace Teleopti.Ccc.Web.Areas.SeatPlanner.Core.Providers
 				var seatViewModels = new List<SeatViewModel>();
 				foreach (var seat in location.seats)
 				{
-					var seatViewModel = new SeatViewModel() {Id = Guid.NewGuid(), Name = seat.name};
+					var seatViewModel = new SeatViewModel() {Id = Guid.Parse(seat.id), Name = seat.name};
 					seatViewModels.Add (seatViewModel);
 				}
 				return seatViewModels;

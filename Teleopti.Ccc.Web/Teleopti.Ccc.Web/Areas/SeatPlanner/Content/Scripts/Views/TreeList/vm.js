@@ -5,7 +5,7 @@ define([
 	ko
     ) {
 
-	return function () {
+	return function (cascadeSelections) {
 		//allow binding access to indeterminate property of checkbox.
 		ko.bindingHandlers['prop'] = {
 			update: function (element, valueAccessor, allBindingsAccessor) {
@@ -28,6 +28,7 @@ define([
 				}, self);
 			}
 			this.expanded = ko.observable(false);
+			this.cascadeSelections = true;
 			this.isInIndeterminateState = ko.observable(false);
 			this.selected = ko.observable(false);
 			this.collapsed = ko.computed(function () {
@@ -112,9 +113,12 @@ define([
 			};
 
 			this.select = function () {
-				self.cascadeSelectionState(self.selected());
-				if (self.parent !== undefined) {
-					self.parent.calculateStateFromChildren();
+				if (self.cascadeSelections) {
+					self.cascadeSelectionState(self.selected());
+
+					if (self.parent !== undefined) {
+						self.parent.calculateStateFromChildren();
+					}
 				}
 				//allow default check action to proceed 
 				return true;
@@ -128,6 +132,7 @@ define([
 
 		function createNode(options) {
 			var treeNode = new TreeNode(options.data);
+			treeNode.cascadeSelections = cascadeSelections;
 			self.treeNodes.push(treeNode);
 			treeNode.parent = options.parent; // set parent on tree node.
 			return treeNode;
@@ -137,6 +142,7 @@ define([
 
 		this.createNodeFromJson = function (values) {
 			var treeNode = new TreeNode(values);
+			treeNode.cascadeSelections = cascadeSelections;
 			self.treeNodes.push(treeNode);
 			return treeNode;
 		};
@@ -145,13 +151,20 @@ define([
 			var selectedLeafNodes = [];
 			for (var i = 0, len = self.treeNodes.length; i < len; i++) {
 				var node = self.treeNodes[i];
-
-				if (node.isLeaf() && node.selected()) {
-					selectedLeafNodes.push(node);
+				if (cascadeSelections) {
+					if (node.isLeaf() && node.selected()) {
+						selectedLeafNodes.push(node);
+					}
+				}
+				else if (node.selected())
+				{
+					selectedLeafNodes.push(node); 
 				}
 			}
 			return selectedLeafNodes;
 		};
+
+		
 
 	};
 });

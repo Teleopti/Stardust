@@ -1058,6 +1058,7 @@
     <Compile Include="Scheduling\WorkShiftWorkTimeTest.cs" />
     <Compile Include="Scheduling\WorkTimeMinMaxCalculatorTest.cs" />
     <Compile Include="Scheduling\WorkTimeMinMaxTest.cs" />
+    <Compile Include="SeatPlanning\SeatPlanAllocationTests.cs" />
     <Compile Include="Security\Authentication\ApplicationDataSourceProviderTest.cs" />
     <Compile Include="Security\Authentication\AvailableBusinessUnitsProviderTest.cs" />
     <Compile Include="Security\Authentication\AvailableDataSourcesProviderTest.cs" />

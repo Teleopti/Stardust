@@ -28801,6 +28801,24 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to On {0} you have been allocated seat {1}..
+        /// </summary>
+        public static string YouHaveBeenAllocatedSeat {
+            get {
+                return ResourceManager.GetString("YouHaveBeenAllocatedSeat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to On {0} you have not been allocated a seat..
+        /// </summary>
+        public static string YouHaveNotBeenAllocatedSeat {
+            get {
+                return ResourceManager.GetString("YouHaveNotBeenAllocatedSeat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to You have to have at least one activity and shift category before creating a rule set..
         /// </summary>
         public static string YouHaveToHaveAtLeastOnActivityAndShiftCategoryBeforeCreatingARuleset {

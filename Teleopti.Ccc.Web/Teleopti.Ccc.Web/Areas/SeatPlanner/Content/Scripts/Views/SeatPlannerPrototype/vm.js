@@ -5,7 +5,6 @@ define([
 	'resources',
 	'moment',
 	'momentTimezoneData',
-	'shared/timezone-current',
 	'Views/TreeList/vm',
 	'Views/SeatPlannerPrototype/addSeatPlan'
 ], function (
@@ -15,7 +14,6 @@ define([
 	resources,
 	moment,
 	momentTimezoneData,
-	timezoneCurrent,
 	treeListVm,
 	addSeatPlan
 	) {
@@ -24,12 +22,12 @@ define([
 		var self = this;
 		var businessUnitId;
 		this.Resources = resources;
-		this.LocationTreeListViewModel = new treeListVm();
-		this.TeamsTreeListViewModel = new treeListVm();
+		this.LocationTreeListViewModel = new treeListVm(false);
+		this.TeamsTreeListViewModel = new treeListVm(true);
 		this.Loading = ko.observable(false);
-		this.Today = moment.tz(timezoneCurrent.IanaTimeZone()).startOf('day');
-		this.StartDate = ko.observable(moment.tz(timezoneCurrent.IanaTimeZone()).startOf('day'));
-		this.EndDate = ko.observable(moment.tz(timezoneCurrent.IanaTimeZone()).startOf('day').add(1, 'day'));
+		this.Today = moment().startOf('day');
+		this.StartDate = ko.observable(moment().startOf('day'));
+		this.EndDate = ko.observable(moment().startOf('day'));
 		this.ApplyingSeatPlanning = ko.observable(false);
 		this.TeamHierarchy = ko.observable();
 		this.LocationHierarchy = ko.observable();
@@ -178,8 +176,8 @@ define([
 			var addSeatPlanMgr = new addSeatPlan();
 
 			var data = {
-				StartDate: self.StartDate,
-				EndDate: self.EndDate,
+				StartDate: self.StartDate().format('YYYY-MM-DD HH:mm'),
+				EndDate: self.EndDate().format('YYYY-MM-DD HH:mm'),
 				BusinessUnitId: businessUnitId,
 				Teams: selectedTeams,
 				Locations: selectedLocations
