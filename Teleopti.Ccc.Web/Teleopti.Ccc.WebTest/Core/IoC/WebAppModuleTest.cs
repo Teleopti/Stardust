@@ -199,7 +199,7 @@ namespace Teleopti.Ccc.WebTest.Core.IoC
 		[Test]
 		public void ShouldRegisterAuthenticationService()
 		{
-			requestContainer.Resolve<IAuthenticator>()
+			requestContainer.Resolve<IIdentityLogon>()
 				.Should().Not.Be.Null();
 		}
 

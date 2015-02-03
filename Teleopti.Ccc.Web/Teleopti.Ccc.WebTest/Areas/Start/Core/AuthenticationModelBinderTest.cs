@@ -19,8 +19,8 @@ namespace Teleopti.Ccc.WebTest.Areas.Start.Core
 			return new AuthenticationModelBinder(
 				new IAuthenticationType[]
 					{
-						new ApplicationIdentityProviderAuthenticationType(new Lazy<IAuthenticator>(() => null), null, new Lazy<ILogLogonAttempt>(() => null)),
-						new WindowsAuthenticationType(new Lazy<IAuthenticator>(() => null), null, new Lazy<ILogLogonAttempt>(() => null))
+						new ApplicationIdentityProviderAuthenticationType(new Lazy<IIdentityLogon>(() => null), null, new Lazy<ILogLogonAttempt>(() => null)),
+						new WindowsAuthenticationType(new Lazy<IIdentityLogon>(() => null), null, new Lazy<ILogLogonAttempt>(() => null))
 					}
 				);
 		}

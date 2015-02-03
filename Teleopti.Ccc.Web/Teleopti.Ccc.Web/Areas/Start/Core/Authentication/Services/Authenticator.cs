@@ -6,7 +6,7 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Web.Areas.Start.Core.Authentication.Services
 {
-	public class Authenticator : IAuthenticator, ISsoAuthenticator
+	public class Authenticator : IIdentityLogon, ISsoAuthenticator
 	{
 		private readonly IDataSourcesProvider _dataSourceProvider;
 		private readonly ITokenIdentityProvider _tokenIdentityProvider;
@@ -24,7 +24,7 @@ namespace Teleopti.Ccc.Web.Areas.Start.Core.Authentication.Services
 			_findApplicationUser = findApplicationUser;
 		}
 
-		public AuthenticateResult AuthenticateWindowsUser(string dataSourceName)
+		public AuthenticateResult LogonWindowsUser(string dataSourceName)
 		{
 			var dataSource = _dataSourceProvider.RetrieveDataSourceByName(dataSourceName);
 
@@ -42,7 +42,7 @@ namespace Teleopti.Ccc.Web.Areas.Start.Core.Authentication.Services
 			return null;
 		}
 
-		public AuthenticateResult AuthenticateApplicationIdentityUser(string dataSourceName)
+		public AuthenticateResult LogonApplicationIdentityUser(string dataSourceName)
 		{
 			var dataSource = _dataSourceProvider.RetrieveDataSourceByName(dataSourceName);
 

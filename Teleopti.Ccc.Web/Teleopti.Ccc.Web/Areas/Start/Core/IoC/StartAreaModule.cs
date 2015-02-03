@@ -42,7 +42,7 @@ namespace Teleopti.Ccc.Web.Areas.Start.Core.IoC
 				builder.RegisterType<LoginAttemptModelFactoryForWeb_OLD_JustKeepUntilOldStuffIsGone>().As<ILoginAttemptModelFactory>();
 			}
 
-			builder.RegisterType<Authenticator>().As<IAuthenticator>();
+			builder.RegisterType<Authenticator>().As<IIdentityLogon>();
 			builder.RegisterType<HttpRequestUserAgent>().As<IHttpRequestUserAgent>();
 			
 			builder.RegisterType<BusinessUnitProvider>().As<IBusinessUnitProvider>();

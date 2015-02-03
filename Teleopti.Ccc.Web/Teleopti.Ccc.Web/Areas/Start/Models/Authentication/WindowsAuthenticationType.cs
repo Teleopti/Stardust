@@ -9,11 +9,11 @@ namespace Teleopti.Ccc.Web.Areas.Start.Models.Authentication
 {
 	public class WindowsAuthenticationType : IAuthenticationType
 	{
-		private readonly Lazy<IAuthenticator> _authenticator;
+		private readonly Lazy<IIdentityLogon> _authenticator;
 		private readonly Lazy<IDataSourcesProvider> _dataSourcesProvider;
 		private readonly Lazy<ILogLogonAttempt> _logLogonAttempt;
 
-		public WindowsAuthenticationType(Lazy<IAuthenticator> authenticator, Lazy<IDataSourcesProvider> dataSourcesProvider, Lazy<ILogLogonAttempt> logLogonAttempt)
+		public WindowsAuthenticationType(Lazy<IIdentityLogon> authenticator, Lazy<IDataSourcesProvider> dataSourcesProvider, Lazy<ILogLogonAttempt> logLogonAttempt)
 		{
 			_authenticator = authenticator;
 			_dataSourcesProvider = dataSourcesProvider;

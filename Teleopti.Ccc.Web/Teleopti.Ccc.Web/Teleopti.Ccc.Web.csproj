@@ -913,7 +913,7 @@
     <Compile Include="Areas\Start\Core\Authentication\Services\AuthenticateResult.cs" />
     <Compile Include="Areas\Start\Core\Authentication\Services\Authenticator.cs" />
     <Compile Include="Core\FormsAuthenticationWrapper.cs" />
-    <Compile Include="Areas\Start\Core\Authentication\Services\IAuthenticator.cs" />
+    <Compile Include="Areas\Start\Core\Authentication\Services\IIdentityLogon.cs" />
     <Compile Include="Core\IFormsAuthentication.cs" />
     <Compile Include="Areas\Start\Core\Authentication\Services\IWebLogOn.cs" />
     <Compile Include="Areas\Start\Core\Authentication\Services\WebLogOn.cs" />

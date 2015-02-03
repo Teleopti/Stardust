@@ -4,19 +4,19 @@ namespace Teleopti.Ccc.Web.Areas.Start.Models.Authentication
 {
 	public class WindowsAuthenticationModel : IAuthenticationModel
 	{
-		private readonly IAuthenticator _authenticator;
+		private readonly IIdentityLogon _identityLogon;
 		private readonly ILogLogonAttempt _logLogonAttempt;
 		public string DataSourceName { get; set; }
 
-		public WindowsAuthenticationModel(IAuthenticator authenticator, ILogLogonAttempt logLogonAttempt)
+		public WindowsAuthenticationModel(IIdentityLogon identityLogon, ILogLogonAttempt logLogonAttempt)
 		{
-			_authenticator = authenticator;
+			_identityLogon = identityLogon;
 			_logLogonAttempt = logLogonAttempt;
 		}
 
 		public AuthenticateResult AuthenticateUser()
 		{
-			return _authenticator.AuthenticateWindowsUser(DataSourceName);
+			return _identityLogon.LogonWindowsUser(DataSourceName);
 		}
 
 		public void SaveAuthenticateResult(AuthenticateResult result)
