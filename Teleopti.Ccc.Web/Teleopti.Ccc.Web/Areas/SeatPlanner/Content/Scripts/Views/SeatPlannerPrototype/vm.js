@@ -142,10 +142,10 @@ define([
 		this.ErrorMessages = ko.computed(function () {
 			var result = [];
 			if (self.StartDateGreaterThanEndDate()) {
-				result.push({ error: resources.StartDateMustBeSmallerThanEndDate });
+				result.push({ error: resources.StartDateMustBeEndDateOrSmaller });
 			}
 			if (self.StartDateLessThanToday()) {
-				result.push({ error: resources.StartDateMustBeGreaterThanToday });
+				result.push({ error: resources.StartDateMustBeTodayOrGreater });
 			}
 
 			if (self.ApplyingSeatPlanning()) {

@@ -12787,4 +12787,10 @@ Reduce the complexity to use these shifts.</value>
     <value>On {0} you have not been allocated a seat.</value>
     <comment>Used in Seat Planner when an agent was not allocated a seat for a given day</comment>
   </data>
+   <data name="StartDateMustBeEndDateOrSmaller" xml:space="preserve">
+    <value>Start date must be end date or smaller</value>
+  </data>
+  <data name="StartDateMustBeTodayOrGreater" xml:space="preserve">
+    <value>Start date must be today or greater</value>
+  </data>
 </root>

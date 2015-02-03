@@ -87,10 +87,9 @@
 }
 .weekview-timeline-label {
 	font-size: 7pt;
-	width: 29px;
+	width: 30px;
 	height: 14px;
 	text-align: center;
-	overflow: hidden;
 	white-space: pre-wrap;
 }
 .weekview-day-time-indicator

@@ -523,18 +523,13 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 		self.minutes = ko.observable(timeline.Time.TotalMinutes);
 		var timeFromMinutes = moment().startOf('day').add('minutes', self.minutes());
 
-		self.time = ko.observable(timeFromMinutes.format('H:mm'));
-		if (timelineCulture == "en-US") {
-			self.time(timeFromMinutes.format('h A'));
-		}
-		self.timeText = self.time() + "\ntotalMinutes" + self.minutes();
+		self.timeText = timeline.TimeLineDisplay;
 
 		self.topPosition = ko.computed(function () {
 			return Math.round(scheduleHeight * self.positionPercentage()) + timeLineOffset + 'px';
 		});
 		self.evenHour = ko.computed(function () {
-			if (timeFromMinutes.format('mm') != 0) { return false; }
-			else { return true; }
+			return timeFromMinutes.format('mm') == 0;
 		});
 	};
 
@@ -578,14 +573,13 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 	function getMinutes(elementSelector, first) {
 		var parent = $(elementSelector);
 		var children = parent.children('.weekview-timeline-label');
-		var timeString;
-		if (first) {
-			timeString = children.first().text();
-		} else {
-			timeString = children.last().text();
+		var element = first ? children.first()[0] : children.last()[0];
+
+		if (element) {
+			var timeLineViewModel = ko.dataFor(element);
+			return timeLineViewModel.minutes();
 		}
-		var timeParts = timeString.split("totalMinutes");
-		return timeParts[1];
+		return null;
 	}
 
 	function _subscribeForChanges() {

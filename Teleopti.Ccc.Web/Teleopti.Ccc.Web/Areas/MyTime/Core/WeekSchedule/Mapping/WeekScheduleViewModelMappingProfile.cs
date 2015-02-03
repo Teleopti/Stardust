@@ -7,6 +7,7 @@ using Teleopti.Ccc.Domain.AgentInfo.Requests;
 using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Helper;
+using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Infrastructure.Toggle;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.ViewModelFactory;
@@ -66,10 +67,13 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.Mapping
 						;
 
 					var diff = endTime - startTime;
+					var culture = _loggedOnUser.Invoke().CurrentUser().PermissionInformation.Culture();
+					
 					return (from t in times
 							select new TimeLineViewModel
 									 {
 										 PositionPercentage = diff == TimeSpan.Zero ? 0 : (decimal)(t - startTime).Ticks / diff.Ticks,
+										 TimeLineDisplay = DateTime.Today.Add(t).ToString(culture.DateTimeFormat.ShortTimePattern),
 										 Time = t
 									 }).ToArray();
 				}))
@@ -199,15 +203,15 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.Mapping
 				.ForMember(d => d.Title, c => c.MapFrom(s => s.ScheduleDay.PersonAssignment(false).ShiftCategory.Description.Name))
 				.ForMember(d => d.Summary, c => c.MapFrom(s => TimeHelper.GetLongHourMinuteTimeString(s.Projection.ContractTime(), CultureInfo.CurrentUICulture)))
 				.ForMember(d => d.Meeting, c => c.Ignore())
-				.ForMember(d => d.TimeSpan, c => c.MapFrom(s => s.ScheduleDay.PersonAssignment(false).Period.TimePeriod(s.ScheduleDay.TimeZone).ToShortTimeString(CultureInfo.CurrentUICulture)))
+				.ForMember(d => d.TimeSpan, c => c.MapFrom(s => s.ScheduleDay.PersonAssignment(false).Period.TimePeriod(_loggedOnUser.Invoke().CurrentUser().PermissionInformation.DefaultTimeZone()).ToShortTimeString()))
 				.ForMember(d => d.StyleClassName, c => c.MapFrom(s => s.ScheduleDay.PersonAssignment(false).ShiftCategory.DisplayColor.ToStyleClass()))
 				.ForMember(d => d.StartPositionPercentage, c => c.Ignore())
 				.ForMember(d => d.EndPositionPercentage, c => c.Ignore())
 				.ForMember(d => d.Color, c => c.ResolveUsing(s =>
 					{
 						var personAssignment = s.ScheduleDay.PersonAssignment();
-					var isNullPersonAssignment = personAssignment == null;
-					var isNullShiftCategoryInfo = isNullPersonAssignment || personAssignment.ShiftCategory == null;
+						var isNullPersonAssignment = personAssignment == null;
+						var isNullShiftCategoryInfo = isNullPersonAssignment || personAssignment.ShiftCategory == null;
 						var color = isNullShiftCategoryInfo ? null : string.Format("rgb({0},{1},{2})", personAssignment.ShiftCategory.DisplayColor.R, personAssignment.ShiftCategory.DisplayColor.G, personAssignment.ShiftCategory.DisplayColor.B);
 						return color;
 					}))

@@ -24584,6 +24584,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Start date must be end date or smaller.
+        /// </summary>
+        public static string StartDateMustBeEndDateOrSmaller {
+            get {
+                return ResourceManager.GetString("StartDateMustBeEndDateOrSmaller", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Start date must be greater than today.
         /// </summary>
         public static string StartDateMustBeGreaterThanToday {
@@ -24598,6 +24607,15 @@ namespace Teleopti.Ccc.UserTexts {
         public static string StartDateMustBeSmallerThanEndDate {
             get {
                 return ResourceManager.GetString("StartDateMustBeSmallerThanEndDate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Start date must be today or greater.
+        /// </summary>
+        public static string StartDateMustBeTodayOrGreater {
+            get {
+                return ResourceManager.GetString("StartDateMustBeTodayOrGreater", resourceCulture);
             }
         }
         
