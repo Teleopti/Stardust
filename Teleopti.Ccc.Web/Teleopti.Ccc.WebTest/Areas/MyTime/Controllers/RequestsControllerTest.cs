@@ -234,6 +234,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			var model = new ShiftTradeRequestsPeriodViewModel
 			{
 				HasWorkflowControlSet = true,
+				AnonymousTrading = true,
 				OpenPeriodRelativeStart = 2,
 				OpenPeriodRelativeEnd = 30,
 				NowYear = 2013,
@@ -248,6 +249,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			var data = (ShiftTradeRequestsPeriodViewModel) result.Data;
 
 			data.HasWorkflowControlSet.Should().Be.EqualTo(model.HasWorkflowControlSet);
+			data.AnonymousTrading.Should().Be.EqualTo(model.AnonymousTrading);
 			data.OpenPeriodRelativeStart.Should().Be.EqualTo(model.OpenPeriodRelativeStart);
 			data.OpenPeriodRelativeEnd.Should().Be.EqualTo(model.OpenPeriodRelativeEnd);
 			data.NowYear = model.NowYear;

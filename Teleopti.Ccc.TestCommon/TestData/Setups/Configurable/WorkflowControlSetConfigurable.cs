@@ -33,6 +33,7 @@ namespace Teleopti.Ccc.TestCommon.TestData.Setups.Configurable
 		public string StaffingCheck { get; set; }
 		public string AutoGrant { get; set; }
 		public string BusinessUnit { get; set; }
+		public bool AnonymousTrading { get; set; }
 
 		public WorkflowControlSetConfigurable()
 		{
@@ -171,6 +172,8 @@ namespace Teleopti.Ccc.TestCommon.TestData.Setups.Configurable
 
 			if (!string.IsNullOrEmpty(BusinessUnit))
 				workflowControlSet.SetBusinessUnit(new BusinessUnitRepository(uow).LoadAll().Single(b => b.Name == BusinessUnit));
+
+			workflowControlSet.AnonymousTrading = AnonymousTrading;
 
 			var repository = new WorkflowControlSetRepository(uow);
 			repository.Add(workflowControlSet);

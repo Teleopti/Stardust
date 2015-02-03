@@ -47,6 +47,7 @@ Teleopti.MyTimeWeb.Request.ShiftTradeBulletinBoardViewModel = function(ajax) {
 	self.filteredEndTimesText = ko.observableArray();
 	self.Toggle31317Enabled = ko.observable(false);
 	self.preloadTimeFilterFinished = true;
+	self.isAnonymousTrading = ko.observable(false);
 
 	self.isDetailVisible = ko.computed(function () {
 		if (self.agentChoosed() === null) {
@@ -666,6 +667,7 @@ Teleopti.MyTimeWeb.Request.ShiftTradeBulletinBoardViewModel = function(ajax) {
 			type: 'GET',
 			success: function (data, textStatus, jqXHR) {
 				if (data.HasWorkflowControlSet) {
+					self.isAnonymousTrading(data.AnonymousTrading);
 					var now = moment(new Date(data.NowYear, data.NowMonth - 1, data.NowDay));
 					self.setDatePickerRange(now, data.OpenPeriodRelativeStart, data.OpenPeriodRelativeEnd);
 					var requestedDate = moment(now).add('days', data.OpenPeriodRelativeStart);

@@ -107,6 +107,12 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.MyTime
 			Browser.Interactions.AssertAnyContains(".shift-trade-agent-name", name);
 		}
 
+		[Then(@"I should not see agent name in the possible schedule trade list")]
+		public void ThenIShouldNotSeeThePossibleScheduleTradeWith()
+		{
+			Browser.Interactions.AssertExists(".shift-trade-anonymous-trading");
+		}
+
 		[Then(@"I should see '(.*)' first in the list")]
 		public void ThenIShouldSeeFirstInTheList(string agentName)
 		{

@@ -99,7 +99,12 @@
 				</tbody>
 				<tbody data-bind="foreach: possibleTradeSchedules">
 					<tr class="shift-trade-person-schedule-row agent" data-bind="visible: isVisible, click: $parent.chooseAgent, hoverToggle: 'hoverBorder', hoverIf: !$parent.isDetailVisible()">
+						<!--ko if:$parent.isAnonymousTrading()-->
+						<td class="shift-trade-anonymous-trading shift-trade-agent-name floatleft" xdata-bind="text: $data.agentName, visible: !$parent.isAnonymousTrading()"></td>
+						<!--/ko-->
+						<!--ko if:!$parent.isAnonymousTrading()-->
 						<td class="shift-trade-agent-name floatleft" data-bind="text: $data.agentName"></td>
+						<!--/ko-->
 						<td class="shift-trade-possible-trade-schedule">
 							<div data-bind="foreach: $data.layers">
 								<!--ko if:!$parent.isDayOff-->

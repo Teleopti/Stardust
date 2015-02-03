@@ -14,6 +14,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping
 			if (workflowControlSet != null)
 			{
 				vm.HasWorkflowControlSet = true;
+				vm.AnonymousTrading = workflowControlSet.AnonymousTrading;
 				vm.OpenPeriodRelativeStart = workflowControlSet.ShiftTradeOpenPeriodDaysForward.Minimum;
 				vm.OpenPeriodRelativeEnd = workflowControlSet.ShiftTradeOpenPeriodDaysForward.Maximum;
 			}

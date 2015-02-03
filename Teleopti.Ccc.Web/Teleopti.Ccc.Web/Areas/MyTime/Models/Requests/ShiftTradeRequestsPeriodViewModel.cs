@@ -6,6 +6,8 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Models.Requests
 	{
 		public bool HasWorkflowControlSet { get; set; }
 
+		public bool AnonymousTrading { get; set; }
+
 		public int OpenPeriodRelativeStart { get; set; }
 
 		public int OpenPeriodRelativeEnd { get; set; }
