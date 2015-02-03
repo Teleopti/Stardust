@@ -813,7 +813,7 @@
     <Compile Include="Core\RequestContext\Initialize\WebRequestPrincipalContext.cs" />
     <Compile Include="Areas\MyTime\Core\TimeSpanModelBinder.cs" />
     <Compile Include="Areas\Start\Core\AuthenticationModelBinder.cs" />
-    <Compile Include="Areas\Start\Models\Authentication\ApplicationAuthenticationModel.cs" />
+    <Compile Include="Areas\SSO\Models\ApplicationAuthenticationModel.cs" />
     <Compile Include="Areas\Start\Models\Authentication\IAuthenticationModel.cs" />
     <Compile Include="Areas\Start\Models\Authentication\IAuthenticationType.cs" />
     <Compile Include="Areas\Start\Models\Authentication\WindowsAuthenticationModel.cs" />
@@ -1913,10 +1913,10 @@ if not exist "$(TargetDir)FeatureFlags" mkdir "$(TargetDir)FeatureFlags"
 copy "$(ProjectDir)..\..\Domain\FeatureFlags\toggles.txt" "$(TargetDir)FeatureFlags\toggles.txt"
 </PreBuildEvent>
   </PropertyGroup>
-	<Import Project=".node\node.targets" Condition="Exists('.node\node.targets')" />
-	<Target Name="BeforeBuild">
-		<CallTarget Targets="RestoreNodePackageProtractor;RestoreNodePackages" />
-	</Target>
+  <Import Project=".node\node.targets" Condition="Exists('.node\node.targets')" />
+  <Target Name="BeforeBuild">
+    <CallTarget Targets="RestoreNodePackageProtractor;RestoreNodePackages" />
+  </Target>
   <!--  <Import Project="..\..\.nuget\Microsoft.Bcl.Build.targets" Condition="Exists('..\..\.nuget\Microsoft.Bcl.Build.targets')" />
   <Target Name="EnsureBclBuildImported" BeforeTargets="BeforeBuild" Condition="'$(BclBuildImported)' == ''">
     <Error Condition="!Exists('..\..\.nuget\Microsoft.Bcl.Build.targets')" Text="This project references NuGet package(s) that are missing on this computer. Enable NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=317567." HelpKeyword="BCLBUILD2001" />

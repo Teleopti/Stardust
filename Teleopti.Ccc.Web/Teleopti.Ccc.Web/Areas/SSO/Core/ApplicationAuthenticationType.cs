@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Web.Mvc;
+using Teleopti.Ccc.Web.Areas.SSO.Models;
 using Teleopti.Ccc.Web.Areas.Start.Core.Authentication.DataProvider;
 using Teleopti.Ccc.Web.Areas.Start.Core.Authentication.Services;
 using Teleopti.Ccc.Web.Areas.Start.Models.Authentication;

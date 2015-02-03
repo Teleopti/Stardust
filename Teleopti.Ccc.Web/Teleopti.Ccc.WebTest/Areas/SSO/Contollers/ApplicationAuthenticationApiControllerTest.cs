@@ -10,6 +10,7 @@ using Teleopti.Ccc.Domain.Security.Authentication;
 using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.UserTexts;
 using Teleopti.Ccc.Web.Areas.SSO.Controllers;
+using Teleopti.Ccc.Web.Areas.SSO.Models;
 using Teleopti.Ccc.Web.Areas.Start.Core.Authentication.DataProvider;
 using Teleopti.Ccc.Web.Areas.Start.Core.Authentication.Services;
 using Teleopti.Ccc.Web.Areas.Start.Models.Authentication;

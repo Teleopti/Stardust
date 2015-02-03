@@ -1,6 +1,6 @@
 using Teleopti.Ccc.Web.Areas.Start.Core.Authentication.Services;
 
-namespace Teleopti.Ccc.Web.Areas.Start.Models.Authentication
+namespace Teleopti.Ccc.Web.Areas.SSO.Models
 {
 	public class ApplicationAuthenticationModel
 	{

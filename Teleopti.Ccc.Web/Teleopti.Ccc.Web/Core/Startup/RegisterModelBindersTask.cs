@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using System.Web.Mvc;
 using Teleopti.Ccc.Web.Areas.MyTime.Core;
 using Teleopti.Ccc.Web.Areas.SSO.Core;
+using Teleopti.Ccc.Web.Areas.SSO.Models;
 using Teleopti.Ccc.Web.Areas.Start.Core;
 using Teleopti.Ccc.Web.Areas.Start.Models.Authentication;
 using Teleopti.Ccc.Web.Core.Startup.Booter;
