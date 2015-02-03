@@ -35,52 +35,71 @@ wfmCtrls.controller('ForecastingRunCtrl', ['$scope', '$stateParams', '$http',
         }]
 );
 
-wfmCtrls.controller('PermissionsCtrl', ['$scope', '$stateParams', '$http', '$filter', 'Roles', 'OrganizationSelections', 'ApplicationFunctions', 'DuplicateRole', 'RolesFunctions', 'ManageRole', 'AssignFunction',
-function ($scope, $stateParams, $http, $filter, Roles, OrganizationSelections, ApplicationFunctions, DuplicateRole, RolesFunctions, ManageRole, AssignFunction) {
-	$scope.roles = [];
-	$scope.list = [];
-	$scope.roleName = null;
-	$scope.roleDetails = 'functionsAvailable';
-	$scope.functionsDisplayed = [];
-	$scope.functionsFlat = [];
-	$scope.organization = { BusinessUnits: [{BusinessUnit: { Sites: [] } }], DynamicOptions: [] };
+wfmCtrls.controller('PermissionsCtrl', [
+	'$scope', '$stateParams', '$http', '$filter', 'Roles', 'OrganizationSelections', 'ApplicationFunctions', 'DuplicateRole', 'RolesPermissions', 'ManageRole', 'AssignFunction',
+	function ($scope, $stateParams, $http, $filter, Roles, OrganizationSelections, ApplicationFunctions, DuplicateRole, RolesPermissions, ManageRole, AssignFunction) {
+		$scope.roles = [];
+		$scope.list = [];
+		$scope.roleName = null;
+		$scope.roleDetails = 'functionsAvailable';
+		$scope.functionsDisplayed = [];
+		$scope.functionsFlat = [];
+		$scope.organization = { BusinessUnits: [{ BusinessUnit: { Sites: [] } }], DynamicOptions: [] };
 
-	$scope.roles = Roles.get();
-	OrganizationSelections.query().$promise.then(function (result) {
-		// could we have directly an array from server?
-		$scope.organization = { BusinessUnits: [result.BusinessUnit], DynamicOptions: result.DynamicOptions };
+		$scope.roles = Roles.get();
+		OrganizationSelections.query().$promise.then(function(result) {
+			// could we have directly an array from server?
+			$scope.organization = { BusinessUnits: [result.BusinessUnit], DynamicOptions: result.DynamicOptions };
 
-	});
-
-	ApplicationFunctions.query().$promise.then(function (result) {
-		$scope.functionsDisplayed = result;
-		flatFunctions($scope.functionsDisplayed);
-	});
-
-
-	$scope.createRole = function () {
-		var roleData = { Description: $scope.roleName };
-		Roles.post(JSON.stringify(roleData)).$promise.then(function (result) {
-			roleData.Id = result.Id;
-			roleData.DescriptionText = result.DescriptionText;
-			$scope.roles.unshift(roleData);
 		});
-	};
 
-	$scope.copyRole = function (roleId) {
-		var roleCopy = {};
-		DuplicateRole.query({ Id: roleId }).$promise.then(function (result) {
-			roleCopy.Id = result.Id;
-			roleCopy.DescriptionText = result.DescriptionText;
-			$scope.roles.unshift(roleCopy);
+		ApplicationFunctions.query().$promise.then(function(result) {
+			$scope.functionsDisplayed = result;
+			flatFunctions($scope.functionsDisplayed);
 		});
-	};
 
-	$scope.addFunctionToRole = function (functionNode) {
-		AssignFunction.query({ Id: $scope.selectedRole, Functions: [functionNode.FunctionId] }).$promise.then(function (result) {
-			functionNode.selected = true;
-		});
-	};
+
+		$scope.createRole = function() {
+			var roleData = { Description: $scope.roleName };
+			Roles.post(JSON.stringify(roleData)).$promise.then(function(result) {
+				roleData.Id = result.Id;
+				roleData.DescriptionText = result.DescriptionText;
+				$scope.roles.unshift(roleData);
+			});
+		};
+
+		$scope.copyRole = function(roleId) {
+			var roleCopy = {};
+			DuplicateRole.query({ Id: roleId }).$promise.then(function(result) {
+				roleCopy.Id = result.Id;
+				roleCopy.DescriptionText = result.DescriptionText;
+				$scope.roles.unshift(roleCopy);
+			});
+		};
+
+		$scope.toggleFunctionForRole = function (functionNode) {
+			if (functionNode.selected) {
+				AssignFunction.deleteFunctions({ Id: $scope.selectedRole, Functions: [functionNode.FunctionId] }).$promise.then(function (result) {
+					functionNode.selected = false;
+				});
+			} else {
+				AssignFunction.postFunctions({ Id: $scope.selectedRole, Functions: [functionNode.FunctionId] }).$promise.then(function (result) {
+					functionNode.selected = true;
+				});
+			}
+		};
+
+		/*$scope.addDynamicOption = function (dynamic) {
+			if (dynamic.selected) {
+				AssignData.deleteData({ Id: $scope.selectedRole, RangeOptions: [dynamic.Id] }).$promise.then(function (result) {
+					dynamic.selected = false;
+				});
+			} else {
+				AssignData.postData({ Id: $scope.selectedRole, RangeOptions: [dynamic.Id] }).$promise.then(function (result) {
+					functionNode.selected = true;
+				});
+			}
+		};*/
 
 	$scope.removeRole = function (role, index) {
 		ManageRole.deleteRole({ Id: role.Id }).$promise.then(function (result) {
@@ -94,8 +113,27 @@ function ($scope, $stateParams, $http, $filter, Roles, OrganizationSelections, A
 
 	$scope.showRole = function (roleId) {
 		$scope.selectedRole = roleId;
-		RolesFunctions.query({ Id: roleId }).$promise.then(function (result) {
+		RolesPermissions.query({ Id: roleId }).$promise.then(function(result) {
 			var permsFunc = result.AvailableFunctions;
+
+			//yeah, we know, it's amazing
+			$scope.organization.BusinessUnits.forEach(function(bu){
+				var availableBu = $filter('filter')(result.AvailableBusinessUnits, { Id: bu.Id });
+				bu.selected = availableBu.length != 0 ? true : false;
+				bu.Sites.forEach(function (site) {
+					var availableSite = $filter('filter')(result.AvailableSites, { Id: site.Id });
+					site.selected = availableSite.length != 0 ? true : false;
+					site.Teams.forEach(function (team) {
+						var availableTeam = $filter('filter')(result.AvailableTeams, { Id: team.Id });
+						team.selected = availableTeam.length != 0 ? true : false;
+					});
+				});
+			});
+
+			$scope.organization.DynamicOptions.forEach(function (dyna) {
+				dyna.selected = result.AvailableDataRange === dyna.RangeOption ? true : false;
+			});
+
 			$scope.functionsFlat.forEach(function (item) {
 				var availableFunctions = $filter('filter')(permsFunc, { Id: item.FunctionId });
 				item.selected = availableFunctions.length != 0 ? true : false;

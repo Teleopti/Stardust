@@ -6,11 +6,12 @@ permissionsService.factory('Roles', ['$resource', function ($resource) {
 	});
 }]);
 
-permissionsService.factory('RolesFunctions', ['$resource', function ($resource) {
+permissionsService.factory('RolesPermissions', ['$resource', function ($resource) {
 	return $resource('../../api/Permissions/Roles/:Id', {}, {
 		query: { method: 'GET', params: {}, isArray: false }
 	});
 }]);
+
 
 permissionsService.factory('ApplicationFunctions', ['$resource', function ($resource) {
 	return $resource('../../api/Permissions/ApplicationFunctions', {}, {
@@ -32,7 +33,15 @@ permissionsService.factory('DuplicateRole', ['$resource', function ($resource) {
 
 permissionsService.factory('AssignFunction', ['$resource', function ($resource) {
 	return $resource('../../api/Permissions/Roles/:Id/Functions', { Id: "@Id" }, {
-		query: { method: 'POST', params: {Functions: [] }, isArray: false }
+		postFunctions: { method: 'POST', params: { Functions: [] }, isArray: false },
+		deleteFunctions: { method: 'DELETE', params: { Functions: [] }, isArray: false }
+	});
+}]);
+
+permissionsService.factory('AssignData', ['$resource', function ($resource) {
+	return $resource('../../api/Permissions/Roles/:Id/AvailableData', { Id: "@Id" }, {
+		postData: { method: 'POST', params: { BusinessUnits: [], Sites: [], Teams: [], People: [], RangeOption: [] }, isArray: false },
+		deleteData: { method: 'DELETE', params: { BusinessUnits: [], Sites: [], Teams: [], People: [], RangeOption: [] }, isArray: false }
 	});
 }]);
 
