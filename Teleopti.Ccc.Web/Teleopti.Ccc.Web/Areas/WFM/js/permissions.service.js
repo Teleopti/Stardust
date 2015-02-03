@@ -38,7 +38,7 @@ permissionsService.factory('AssignFunction', ['$resource', function ($resource) 
 	});
 }]);
 
-permissionsService.factory('AssignData', ['$resource', function ($resource) {
+permissionsService.factory('AssignOrganizationSelection', ['$resource', function ($resource) {
 	return $resource('../../api/Permissions/Roles/:Id/AvailableData', { Id: "@Id" }, {
 		postData: { method: 'POST', params: { BusinessUnits: [], Sites: [], Teams: [], People: [], RangeOption: [] }, isArray: false },
 		deleteData: { method: 'DELETE', params: { BusinessUnits: [], Sites: [], Teams: [], People: [], RangeOption: [] }, isArray: false }

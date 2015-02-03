@@ -36,8 +36,8 @@ wfmCtrls.controller('ForecastingRunCtrl', ['$scope', '$stateParams', '$http',
 );
 
 wfmCtrls.controller('PermissionsCtrl', [
-	'$scope', '$stateParams', '$http', '$filter', 'Roles', 'OrganizationSelections', 'ApplicationFunctions', 'DuplicateRole', 'RolesPermissions', 'ManageRole', 'AssignFunction',
-	function ($scope, $stateParams, $http, $filter, Roles, OrganizationSelections, ApplicationFunctions, DuplicateRole, RolesPermissions, ManageRole, AssignFunction) {
+	'$scope', '$stateParams', '$http', '$filter', 'Roles', 'OrganizationSelections', 'ApplicationFunctions', 'DuplicateRole', 'RolesPermissions', 'ManageRole', 'AssignFunction', 'AssignOrganizationSelection',
+	function ($scope, $stateParams, $http, $filter, Roles, OrganizationSelections, ApplicationFunctions, DuplicateRole, RolesPermissions, ManageRole, AssignFunction, AssignOrganizationSelection) {
 		$scope.roles = [];
 		$scope.list = [];
 		$scope.roleName = null;
@@ -89,17 +89,21 @@ wfmCtrls.controller('PermissionsCtrl', [
 			}
 		};
 
-		/*$scope.addDynamicOption = function (dynamic) {
-			if (dynamic.selected) {
-				AssignData.deleteData({ Id: $scope.selectedRole, RangeOptions: [dynamic.Id] }).$promise.then(function (result) {
-					dynamic.selected = false;
+		$scope.toggleOrganizationSelection = function (node, typeOfNode) {
+			var data = {};
+			data.Id = $scope.selectedRole;
+			data[typeOfNode] = [node.Id];
+
+			if (node.selected) {
+				AssignOrganizationSelection.deleteData(data).$promise.then(function (result) {
+					node.selected = false;
 				});
 			} else {
-				AssignData.postData({ Id: $scope.selectedRole, RangeOptions: [dynamic.Id] }).$promise.then(function (result) {
-					functionNode.selected = true;
+				AssignOrganizationSelection.postData(data).$promise.then(function (result) {
+					node.selected = true;
 				});
 			}
-		};*/
+		};
 
 	$scope.removeRole = function (role, index) {
 		ManageRole.deleteRole({ Id: role.Id }).$promise.then(function (result) {
