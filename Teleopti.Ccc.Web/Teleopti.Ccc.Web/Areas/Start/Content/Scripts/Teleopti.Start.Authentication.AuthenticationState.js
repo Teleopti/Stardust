@@ -101,6 +101,21 @@ Teleopti.Start.Authentication.AuthenticationState = function (data) {
 		$.ajax(options);
 	};
 
+	var getCookie = function(cname) {
+		var name = cname + "=";
+		var ca = document.cookie.split(';');
+		for (var i = 0; i < ca.length; i++) {
+			var c = ca[i];
+			while (c.charAt(0) == ' ') c = c.substring(1);
+			if (c.indexOf(name) == 0) return c.substring(name.length, c.length);
+		}
+		return "";
+	};
+
+	var deleteCookie = function (name) {
+		document.cookie = name + '=; Path=/; Expires=Thu, 01 Jan 1970 00:00:01 GMT;';
+	};
+
 
 	this.TryToSignIn = function (options) {
 		authenticationModel = options.data;
@@ -143,34 +158,41 @@ Teleopti.Start.Authentication.AuthenticationState = function (data) {
 
 				$.extend(options, {
 					success: function (applicationsData, textState, jqXHR) {
-						var area;
-						var inApplication = ko.utils.arrayFirst(applicationsData, function (a) {
-							var url = "/" + a.Area + "/";
+
+						var areas = ["MyTime", "Anywhere", "SeatPlanner", "Messages"];
+						var areaToGo = ko.utils.arrayFirst(areas, function (a) {
+							var url = "/" + a + "/";
 							return window.location.href.indexOf(url) !== -1;
 						});
-						
 						var anywhereApplication = ko.utils.arrayFirst(applicationsData, function (a) {
 							return a.Area === "Anywhere";
 						});
+						var area;
+						if (areaToGo) {
+							area = areaToGo;
+							var returnHash = getCookie("returnHash");
+							if (returnHash) {
+								deleteCookie("returnHash");
+								window.location.href = data.baseUrl + area + returnHash;
+								return;
+							}
+						} else {
+							if(anywhereApplication)
+								area = anywhereApplication.Area;
+							else if (applicationsData.length == 1)
+								area = applicationsData[0].Area;
+							else {
+								if (applicationsData.length > 1) {
+									gotoMenuView();
+								} else {
+									errormessage("Obscure amount of applications found.");
+								}
+								return;
+							}
 
-						if (inApplication)
-							area = inApplication.Area;
-						else if (applicationsData.length == 1)
-							area = applicationsData[0].Area;
-						else if (anywhereApplication)
-							area = anywhereApplication.Area;
-
-						if (area) {
-							window.location.href = data.baseUrl + area;
-							return;
 						}
 
-						if (applicationsData.length > 1) {
-							gotoMenuView();
-							return;
-						}
-
-						errormessage("obscure amount of applications found");
+						window.location.href = data.baseUrl + area;
 					}
 				});
 

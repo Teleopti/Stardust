@@ -12,18 +12,6 @@ define([
     var vm = new viewmodel();
     ko.applyBindings(vm);
 
-    var getUrlParameter = function(sParam) {
-    	var sPageUrl = window.location.search.substring(1);
-    	var sUrlVariables = sPageUrl.split('&');
-    	for (var i = 0; i < sUrlVariables.length; i++) {
-    		var sParameterName = sUrlVariables[i].split('=');
-    		if (sParameterName[0] == sParam) {
-    			return sParameterName[1];
-    		}
-    	}
-	    return "";
-    };
-
 	var loadNavigationContent = function(callback) {
 		ajax.ajax({
 			url: 'Messages/Application/NavigationContent',
@@ -42,7 +30,7 @@ define([
     });
 
 	ajax.ajax({
-		url: 'Messages/Application/GetPersons?ids=' + getUrlParameter("ids"),
+		url: 'Messages/Application/GetPersons?ids=' + window.location.hash.substring(1),
 		success: function(data) {
 			vm.Receivers.removeAll();
 			ko.utils.arrayForEach(data.People, function(item) {
