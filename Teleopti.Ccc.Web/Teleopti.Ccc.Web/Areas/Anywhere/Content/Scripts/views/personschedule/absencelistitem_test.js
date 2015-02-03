@@ -68,33 +68,20 @@
 					assert(!vm.ValidateEndTimeIsAfterStartTime());
 				},
 
-				//"ensure back to work time is available in other timezone" : function() {
+				"ensure back to work time is available in other timezone" : function() {
 
-				//	var data = {
-				//		StartTime: "2014-12-03 08:30",
-				//		EndTime: "2014-11-01 08:30",
-				//		IanaTimeZoneOther: "Europe/Istanbul" //1 hours difference
-				//	}
+					var data = {
+						StartTime: "2014-12-01 08:30",
+						EndTime: "2014-12-03 08:30",
+						IanaTimeZoneOther: "Europe/Istanbul" //1 hours difference
+					}
 
-				//how to mock a ajax call here?
-				//	var ajax = {
-				//		Ajax: function (options) {
-				//			if (options.url == "PersonScheduleCommand/GetPersonSchedule") {
-				//				options.success(
-				//					{
-				//						IsDayOff: false,
-				//						EndTime: "2014-12-01 08:29"
-				//					}
-				//				);
-				//			}
-				//		}
-				//	};
-				//	var vm = new viewModel(data);
-				//	vm.CurrentDateMoment(moment("2014-12-02"));
+					var vm = new viewModel(data);
+					vm.EndTimeForAbsenceModify(moment("2014-12-02 8:29"));
 
-				//	//DateTimeFormatForMoment: "YYYY-MM-DD HH:mm"
-				//	assert(vm.ModifiedEndTimeOtherTimeZone()=="2014-12-01 09:29");
-				//}
+					//DateTimeFormatForMoment: "YYYY-MM-DD HH:mm"
+					assert(vm.ModifiedEndTimeOtherTimeZone()=="2014-12-02 09:29");
+				}
 
 				
 			});
