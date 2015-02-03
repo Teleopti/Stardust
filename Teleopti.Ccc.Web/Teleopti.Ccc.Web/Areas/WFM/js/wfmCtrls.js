@@ -44,9 +44,14 @@ function ($scope, $stateParams, $http, $filter, Roles, OrganizationSelections, A
 	$scope.roleDetails = 'functionsAvailable';
 	$scope.functionsDisplayed = [];
 	$scope.functionsFlat = [];
+	$scope.organization = { BusinessUnits: [{BusinessUnit: { Sites: [] } }], DynamicOptions: [] };
 
 	$scope.roles = Roles.get();
-	$scope.organization = OrganizationSelections.query();
+	OrganizationSelections.query().$promise.then(function (result) {
+		// could we have directly an array from server?
+		$scope.organization = { BusinessUnits: [result.BusinessUnit], DynamicOptions: result.DynamicOptions };
+
+	});
 
 	ApplicationFunctions.query().$promise.then(function (result) {
 		$scope.functionsDisplayed = result;
