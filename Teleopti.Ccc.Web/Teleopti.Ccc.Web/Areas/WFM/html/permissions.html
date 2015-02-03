@@ -20,7 +20,7 @@
 		</div>
 		<div id="searchRoleResults">
 			
-			<ul ng-repeat="role in roles | filter:searchRoles">
+			<ul ng-repeat="role in roles | filter:searchRoles ">
 				<li ng-click="showRole(role.Id)" ng-dblclick="editing = true" class="btn btn-default btn-md btn-block role">
 					<div class="role-duplicate">
 						<a class=" pull-right" ng-click="copyRole(role.Id)">Duplicate</a>
@@ -50,7 +50,7 @@
 	<div class="roles-details-wrapper col-md-8 material-depth-1">
 
 		<div ng-show="roleDetails=='functionsAvailable'">
-			<input type="text" name="filterDetails" ng-model="searchPermissions" placeholder="Permissions filter ..." />
+			<input type="text" name="filterDetails" ng-model="searchPermissions" placeholder="Permissions filter ..."  />
 			<div class="tree">
 				<div ui-tree data-drag-enabled="false">
 					<ol ui-tree-nodes="" ng-model="functionsDisplayed" id="tree-root">
@@ -107,7 +107,7 @@
 
 <!-- Nested node template -->
 <script type="text/ng-template" id="nodes_renderer.html">
-	<div ui-tree-handle ng-class="{selected: node.selected}">
+	<div ui-tree-handle ng-class="{selected: node.selected}" ng-click="addFunctionToRole(node)">
 		{{node.LocalizedFunctionDescription}}
 	</div>
 	<ol ui-tree-nodes="" ng-model="node.ChildFunctions">

@@ -30,6 +30,12 @@ permissionsService.factory('DuplicateRole', ['$resource', function ($resource) {
 	});
 }]);
 
+permissionsService.factory('AssignFunction', ['$resource', function ($resource) {
+	return $resource('../../api/Permissions/Roles/:Id/Functions', { Id: "@Id" }, {
+		query: { method: 'POST', params: {Functions: [] }, isArray: false }
+	});
+}]);
+
 permissionsService.factory('ManageRole', ['$resource', function ($resource) {
 	return $resource('../../api/Permissions/Roles/:Id', {Id: "@Id"}, {
 		deleteRole: { method: 'DELETE', params: {}, isArray: false },

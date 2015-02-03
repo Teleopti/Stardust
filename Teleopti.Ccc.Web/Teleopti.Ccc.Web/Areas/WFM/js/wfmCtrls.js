@@ -35,9 +35,8 @@ wfmCtrls.controller('ForecastingRunCtrl', ['$scope', '$stateParams', '$http',
         }]
 );
 
-
-wfmCtrls.controller('PermissionsCtrl', ['$scope', '$stateParams', '$http', '$filter', 'Roles', 'OrganizationSelections', 'ApplicationFunctions', 'DuplicateRole', 'RolesFunctions', 'ManageRole',
-function ($scope, $stateParams, $http, $filter, Roles, OrganizationSelections, ApplicationFunctions, DuplicateRole, RolesFunctions, ManageRole) {
+wfmCtrls.controller('PermissionsCtrl', ['$scope', '$stateParams', '$http', '$filter', 'Roles', 'OrganizationSelections', 'ApplicationFunctions', 'DuplicateRole', 'RolesFunctions', 'ManageRole', 'AssignFunction',
+function ($scope, $stateParams, $http, $filter, Roles, OrganizationSelections, ApplicationFunctions, DuplicateRole, RolesFunctions, ManageRole, AssignFunction) {
 	$scope.roles = [];
 	$scope.list = [];
 	$scope.roleName = null;
@@ -64,7 +63,7 @@ function ($scope, $stateParams, $http, $filter, Roles, OrganizationSelections, A
 		Roles.post(JSON.stringify(roleData)).$promise.then(function (result) {
 			roleData.Id = result.Id;
 			roleData.DescriptionText = result.DescriptionText;
-			$scope.roles.push(roleData);
+			$scope.roles.unshift(roleData);
 		});
 	};
 
@@ -73,10 +72,15 @@ function ($scope, $stateParams, $http, $filter, Roles, OrganizationSelections, A
 		DuplicateRole.query({ Id: roleId }).$promise.then(function (result) {
 			roleCopy.Id = result.Id;
 			roleCopy.DescriptionText = result.DescriptionText;
-			$scope.roles.push(roleCopy);
+			$scope.roles.unshift(roleCopy);
 		});
 	};
 
+	$scope.addFunctionToRole = function (functionNode) {
+		AssignFunction.query({ Id: $scope.selectedRole, Functions: [functionNode.FunctionId] }).$promise.then(function (result) {
+			functionNode.selected = true;
+		});
+	};
 
 	$scope.removeRole = function (role, index) {
 		ManageRole.deleteRole({ Id: role.Id }).$promise.then(function (result) {
@@ -89,6 +93,7 @@ function ($scope, $stateParams, $http, $filter, Roles, OrganizationSelections, A
 	};
 
 	$scope.showRole = function (roleId) {
+		$scope.selectedRole = roleId;
 		RolesFunctions.query({ Id: roleId }).$promise.then(function (result) {
 			var permsFunc = result.AvailableFunctions;
 			$scope.functionsFlat.forEach(function (item) {
@@ -106,5 +111,6 @@ function ($scope, $stateParams, $http, $filter, Roles, OrganizationSelections, A
 			}
 		});
 	};
+
 }]
 );
