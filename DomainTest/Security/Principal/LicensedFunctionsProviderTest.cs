@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using NUnit.Framework;
 using Rhino.Mocks;
 using SharpTestsEx;
@@ -30,8 +31,6 @@ namespace Teleopti.Ccc.DomainTest.Security.Principal
                 .Return(unitOfWorkFactory);
             unitOfWorkFactory.Stub(x => x.Name).Return("for test");
             target = new LicensedFunctionsProvider(functionFactory);
-			schema = LicenseDataFactory.CreateDefaultActiveLicenseSchemaForTest();
-            LicenseSchema.SetActiveLicenseSchema(_currentUnitOfWorkFactory.LoggedOnUnitOfWorkFactory().Name, schema);
         }
 
 		[TearDown]
@@ -42,9 +41,12 @@ namespace Teleopti.Ccc.DomainTest.Security.Principal
 
         [Test]
         public void ShouldReturnAllLicensedFunctions()
-        {
+		{
+			schema = LicenseDataFactory.CreateDefaultActiveLicenseSchemaForTest();
+			LicenseSchema.SetActiveLicenseSchema(_currentUnitOfWorkFactory.LoggedOnUnitOfWorkFactory().Name, schema);
+
         	// changes a bit the default schema
-            schema.LicenseOptions[0].Enabled = true;
+            schema.LicenseOptions[0].Enabled = false;
             schema.LicenseOptions[1].Enabled = false;
             schema.EnabledLicenseSchema = DefinedLicenseSchemaCodes.TeleoptiWFMSchema;
             
@@ -56,6 +58,8 @@ namespace Teleopti.Ccc.DomainTest.Security.Principal
 		[Test]
 		public void ShouldDoLicenseFunctionWorkOnceOnly()
 		{
+			schema = LicenseDataFactory.CreateDefaultActiveLicenseSchemaForTest();
+			LicenseSchema.SetActiveLicenseSchema(_currentUnitOfWorkFactory.LoggedOnUnitOfWorkFactory().Name, schema);
 			var mocks = new MockRepository();
 			var defRaptorAppFactory = mocks.DynamicMock<IDefinedRaptorApplicationFunctionFactory>();
 			target = new LicensedFunctionsProvider(defRaptorAppFactory);
@@ -70,6 +74,26 @@ namespace Teleopti.Ccc.DomainTest.Security.Principal
 				var res2 = target.LicensedFunctions("for test");
 				res1.Should().Be.SameInstanceAs(res2);
 			}
+		}
+
+		[Test]
+		public void ShouldOnlyReturnLicensedBaseFunctions()
+		{
+			schema = LicenseDataFactory.CreateBaseLicenseSchemaForTest();
+			LicenseSchema.SetActiveLicenseSchema(_currentUnitOfWorkFactory.LoggedOnUnitOfWorkFactory().Name, schema);
+
+			var result = target.LicensedFunctions("for test");
+
+			var baseLicensedApplicationFunctions = 0;
+			var applicationFunctions = functionFactory.ApplicationFunctionList.ToList();
+
+			foreach (var enabledLicenseOption in LicenseSchema.GetActiveLicenseSchema("for test").EnabledLicenseOptions)
+			{
+				enabledLicenseOption.EnableApplicationFunctions(applicationFunctions);
+				baseLicensedApplicationFunctions += enabledLicenseOption.EnabledApplicationFunctions.Count();
+			}
+
+			result.Count().Should().Be.EqualTo(baseLicensedApplicationFunctions);
 		}
     }
 }

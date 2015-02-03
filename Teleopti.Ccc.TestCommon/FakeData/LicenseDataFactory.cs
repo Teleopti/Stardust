@@ -1,4 +1,5 @@
 ﻿using System;
+using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.Security.AuthorizationEntities;
 using Teleopti.Ccc.Infrastructure.Licensing;
 using Teleopti.Ccc.Secrets.Licensing;
@@ -29,6 +30,18 @@ namespace Teleopti.Ccc.TestCommon.FakeData
         }
 
         /// <summary>
+        /// Creates the base license activator.
+        /// </summary>
+		/// <returns></returns>
+		public static ILicenseActivator CreateBaseLicenseActivatorForTest()
+        {
+            ILicenseActivator licenseActivator = new LicenseActivator(CustomerName, ExpirationDate, MaxActiveAgents, 100, LicenseType.Agent, MaxActiveAgentsGrace,
+								XmlLicenseService.IsThisAlmostTooManyActiveAgents, LicenseActivator.IsThisTooManyActiveAgents);
+			licenseActivator.EnabledLicenseOptionPaths.Add(DefinedLicenseOptionPaths.TeleoptiCccBase);
+            return licenseActivator;
+        }
+
+        /// <summary>
         /// Creates the default active license schema for test.
         /// </summary>
         /// <returns></returns>
@@ -36,6 +49,17 @@ namespace Teleopti.Ccc.TestCommon.FakeData
         {
             LicenseSchema activeLicenseSchema = new LicenseSchema();
             activeLicenseSchema.ActivateLicense(CreateDefaultLicenseActivatorForTest());
+            return activeLicenseSchema;
+        }
+
+        /// <summary>
+        /// Creates the base license schema for test.
+        /// </summary>
+        /// <returns></returns>
+        public static LicenseSchema CreateBaseLicenseSchemaForTest()
+        {
+            LicenseSchema activeLicenseSchema = new LicenseSchema();
+            activeLicenseSchema.ActivateLicense(CreateBaseLicenseActivatorForTest());
             return activeLicenseSchema;
         }
     }
