@@ -29,7 +29,6 @@ namespace Teleopti.Ccc.Win.Sikuli.Validators
 			if (!checkResult)
 				result.Result = SikuliValidationResult.ResultValue.Fail;
 			result.Details.AppendLine(string.Format("Scheduled hours pattern : {0}", result.Result));
-			result.Details.AppendLine("The scheduled hours must follow the pattern: 210 hours M-F, 0 hours Sa-Su.");
 			return result;
 		}
 
