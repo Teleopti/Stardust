@@ -1,11 +1,12 @@
 ﻿using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Security.Authentication;
+using Teleopti.Ccc.Web.Areas.SSO.Core;
 using Teleopti.Ccc.Web.Areas.Start.Core.Authentication.DataProvider;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Web.Areas.Start.Core.Authentication.Services
 {
-	public class Authenticator : IAuthenticator
+	public class Authenticator : IAuthenticator, ISsoAuthenticator
 	{
 		private readonly IDataSourcesProvider _dataSourceProvider;
 		private readonly ITokenIdentityProvider _tokenIdentityProvider;

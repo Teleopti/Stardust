@@ -20,6 +20,7 @@ using Teleopti.Ccc.Infrastructure.Toggle;
 using Teleopti.Ccc.Infrastructure.Web;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.MessageBroker;
 using Teleopti.Ccc.Web.Areas.Rta;
+using Teleopti.Ccc.Web.Areas.SSO.Core;
 using Teleopti.Ccc.Web.Areas.Start.Core.Authentication.DataProvider;
 using Teleopti.Ccc.Web.Areas.Start.Core.Authentication.Services;
 using Teleopti.Ccc.Web.Areas.Start.Models.Test;
@@ -35,7 +36,7 @@ namespace Teleopti.Ccc.Web.Areas.Start.Controllers
 		private readonly IMutateNow _mutateNow;
 		private readonly IMbCacheFactory _cacheFactory;
 		private readonly ISessionSpecificDataProvider _sessionSpecificDataProvider;
-		private readonly IAuthenticator _authenticator;
+		private readonly ISsoAuthenticator _authenticator;
 		private readonly IWebLogOn _logon;
 		private readonly IBusinessUnitProvider _businessUnitProvider;
 		private readonly ICurrentHttpContext _httpContext;
@@ -46,7 +47,7 @@ namespace Teleopti.Ccc.Web.Areas.Start.Controllers
 		private readonly ISettings _settings;
 		private readonly IPhysicalApplicationPath _physicalApplicationPath;
 
-		public TestController(IMutateNow mutateNow, IMbCacheFactory cacheFactory, ISessionSpecificDataProvider sessionSpecificDataProvider, IAuthenticator authenticator, IWebLogOn logon, IBusinessUnitProvider businessUnitProvider, ICurrentHttpContext httpContext, IFormsAuthentication formsAuthentication, IToggleManager toggleManager, IIdentityProviderProvider identityProviderProvider, ILoadPasswordPolicyService loadPasswordPolicyService, ISettings settings, IPhysicalApplicationPath physicalApplicationPath)
+		public TestController(IMutateNow mutateNow, IMbCacheFactory cacheFactory, ISessionSpecificDataProvider sessionSpecificDataProvider, ISsoAuthenticator authenticator, IWebLogOn logon, IBusinessUnitProvider businessUnitProvider, ICurrentHttpContext httpContext, IFormsAuthentication formsAuthentication, IToggleManager toggleManager, IIdentityProviderProvider identityProviderProvider, ILoadPasswordPolicyService loadPasswordPolicyService, ISettings settings, IPhysicalApplicationPath physicalApplicationPath)
 		{
 			_mutateNow = mutateNow;
 			_cacheFactory = cacheFactory;

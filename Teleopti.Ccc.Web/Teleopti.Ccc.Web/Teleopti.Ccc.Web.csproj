@@ -419,6 +419,7 @@
     <Compile Include="Areas\SeatPlanner\Core\ViewModels\BusinessUnitWithSitesViewModel.cs" />
     <Compile Include="Areas\SeatPlanner\Core\ViewModels\LocationViewModel.cs" />
     <Compile Include="Areas\SeatPlanner\Core\ViewModels\SeatViewModel.cs" />
+    <Compile Include="Areas\SSO\Core\ISsoAuthenticator.cs" />
     <Compile Include="Areas\Start\Core\Authentication\Services\ILogLogonAttempt.cs" />
     <Compile Include="Areas\Start\Core\Authentication\Services\LogLogonAttempt.cs" />
     <Compile Include="Areas\Start\Core\Authentication\Services\MultiTenantAuthenticator.cs" />

@@ -4,7 +4,6 @@ using System.Web.Mvc;
 using Teleopti.Ccc.Web.Areas.SSO.Models;
 using Teleopti.Ccc.Web.Areas.Start.Core.Authentication.DataProvider;
 using Teleopti.Ccc.Web.Areas.Start.Core.Authentication.Services;
-using Teleopti.Ccc.Web.Areas.Start.Models.Authentication;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Web.Areas.SSO.Core
@@ -18,11 +17,11 @@ namespace Teleopti.Ccc.Web.Areas.SSO.Core
 
 	public class ApplicationAuthenticationType : IApplicationAuthenticationType
 	{
-		private readonly Lazy<IAuthenticator> _authenticator;
+		private readonly Lazy<ISsoAuthenticator> _authenticator;
 		private readonly Lazy<IDataSourcesProvider> _dataSourcesProvider;
 		private readonly Lazy<ILogLogonAttempt> _logLogonAttempt;
 
-		public ApplicationAuthenticationType(Lazy<IAuthenticator> authenticator, Lazy<IDataSourcesProvider> dataSourcesProvider, Lazy<ILogLogonAttempt> logLogonAttempt)
+		public ApplicationAuthenticationType(Lazy<ISsoAuthenticator> authenticator, Lazy<IDataSourcesProvider> dataSourcesProvider, Lazy<ILogLogonAttempt> logLogonAttempt)
 		{
 			_authenticator = authenticator;
 			_dataSourcesProvider = dataSourcesProvider;

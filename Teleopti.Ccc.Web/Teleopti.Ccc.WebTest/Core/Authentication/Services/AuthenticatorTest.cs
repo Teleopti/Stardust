@@ -16,7 +16,7 @@ namespace Teleopti.Ccc.WebTest.Core.Authentication.Services
 	{
 		private IDataSourcesProvider dataSourcesProvider;
 		private IRepositoryFactory repositoryFactory;
-		private IAuthenticator target;
+		private Authenticator target;
 		private ITokenIdentityProvider tokenIdentityProvider;
 		private IFindApplicationUser findApplicationUser;
 		const string dataSourceName = "Gurkmajonääääs";

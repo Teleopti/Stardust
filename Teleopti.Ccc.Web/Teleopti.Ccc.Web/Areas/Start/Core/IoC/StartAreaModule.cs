@@ -2,6 +2,7 @@
 using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.IocCommon;
+using Teleopti.Ccc.Web.Areas.SSO.Core;
 using Teleopti.Ccc.Web.Areas.Start.Core.Authentication.DataProvider;
 using Teleopti.Ccc.Web.Areas.Start.Core.Authentication.Services;
 using Teleopti.Ccc.Web.Areas.Start.Core.Authentication.ViewModelFactory;
@@ -30,13 +31,13 @@ namespace Teleopti.Ccc.Web.Areas.Start.Core.IoC
 			builder.RegisterType<DataSourcesProvider>().As<IDataSourcesProvider>().SingleInstance();
 			if (_configuration.Toggle(Toggles.MultiTenancy_WebLogon_17461))
 			{
-				builder.RegisterType<MultiTenantAuthenticator>().As<IAuthenticator>().SingleInstance();
+				builder.RegisterType<MultiTenantAuthenticator>().As<IAuthenticator>().As<ISsoAuthenticator>().SingleInstance();
 				builder.RegisterType<LogTenancyLogonAttempt>().As<ILogLogonAttempt>().SingleInstance();
 				builder.RegisterType<LoginAttemptModelFactoryForWeb>().As<ILoginAttemptModelFactory>();
 			}
 			else
 			{
-				builder.RegisterType<Authenticator>().As<IAuthenticator>().SingleInstance();
+				builder.RegisterType<Authenticator>().As<IAuthenticator>().As<ISsoAuthenticator>().SingleInstance();
 				builder.RegisterType<LogLogonAttempt>().As<ILogLogonAttempt>().SingleInstance();
 				builder.RegisterType<LoginAttemptModelFactoryForWeb_OLD_JustKeepUntilOldStuffIsGone>().As<ILoginAttemptModelFactory>();
 			}

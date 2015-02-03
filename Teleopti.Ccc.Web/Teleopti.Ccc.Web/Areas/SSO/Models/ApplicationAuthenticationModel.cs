@@ -1,16 +1,17 @@
+using Teleopti.Ccc.Web.Areas.SSO.Core;
 using Teleopti.Ccc.Web.Areas.Start.Core.Authentication.Services;
 
 namespace Teleopti.Ccc.Web.Areas.SSO.Models
 {
 	public class ApplicationAuthenticationModel
 	{
-		private readonly IAuthenticator _authenticator;
+		private readonly ISsoAuthenticator _authenticator;
 		private readonly ILogLogonAttempt _logLogonAttempt;
 		public string DataSourceName { get; set; }
 		public string UserName { get; set; }
 		public string Password { get; set; }
 
-		public ApplicationAuthenticationModel(IAuthenticator authenticator, ILogLogonAttempt logLogonAttempt)
+		public ApplicationAuthenticationModel(ISsoAuthenticator authenticator, ILogLogonAttempt logLogonAttempt)
 		{
 			_authenticator = authenticator;
 			_logLogonAttempt = logLogonAttempt;
