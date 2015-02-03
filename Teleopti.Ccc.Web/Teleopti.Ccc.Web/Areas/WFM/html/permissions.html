@@ -22,17 +22,35 @@
 			
 			<ul ng-repeat="role in roles | filter:searchRoles ">
 				<li ng-click="showRole(role.Id)" ng-dblclick="editing = true" class="btn btn-default btn-md btn-block role">
-					<div class="role-duplicate">
-						<a class=" pull-right" ng-click="copyRole(role.Id)">Duplicate</a>
+					<div class="role-context-menu pull-right">
+						<a ng-click="copyRole(role.Id)">
+							<svg style="width:18px;height:18px" viewBox="0 0 24 24">
+								<path fill="#555555" d="M19,21H8V7H19M19,5H8A2,2 0 0,0 6,7V21A2,2 0 0,0 8,23H19A2,2 0 0,0 21,21V7A2,2 0 0,0 19,5M16,1H4A2,2 0 0,0 2,3V17H4V3H16V1Z" />
+							</svg>
+							<md-tooltip>
+								Duplicate
+							</md-tooltip>
+						</a>
+						<a ng-click="editing = true">
+							<svg style="width:18px;height:18px" viewBox="0 0 24 24">
+								<path fill="#555555" d="M20.71,7.04C21.1,6.65 21.1,6 20.71,5.63L18.37,3.29C18,2.9 17.35,2.9 16.96,3.29L15.12,5.12L18.87,8.87M3,17.25V21H6.75L17.81,9.93L14.06,6.18L3,17.25Z" />
+							</svg>
+							<md-tooltip>
+								Edit
+							</md-tooltip>
+						</a>
+						<a ng-click="removeRole(role, $index)">
+							<svg style="width:18px;height:18px" viewBox="0 0 24 24">
+								<path fill="#555555" d="M19,4H15.5L14.5,3H9.5L8.5,4H5V6H19M6,19A2,2 0 0,0 8,21H16A2,2 0 0,0 18,19V7H6V19Z" />
+							</svg>
+							<md-tooltip>
+								Delete
+							</md-tooltip>
+						</a>
 					</div>
 					<span ng-hide="editing">{{role.DescriptionText}}</span>
-					<form ng-show="editing" ng-submit="editing = false">
-						<label>Edit role:</label>
-						<br >
-						<input type="text" ng-model="role.DescriptionText" placeholder="Name" ng-required />
-						<br />
-						<button class="btn btn-default" ng-click="updateRole(role)" type="submit">Save</button>
-						<button class="btn btn-default" ng-click="removeRole(role, $index)" type="submit">Delete</button>
+					<form ng-show="editing" ng-submit="editing = false; updateRole(role)">
+						<input type="text" class="inline-role-name" ng-model="role.DescriptionText" placeholder="Name" ng-required />
 					</form>
 				</li>
 			</ul>
