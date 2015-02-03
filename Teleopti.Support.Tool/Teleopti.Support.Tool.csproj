@@ -384,9 +384,9 @@
   </PropertyGroup>
   <PropertyGroup>
     <PreBuildEvent>XCOPY "$(ProjectDir)..\BuildArtifacts" "$(ProjectDir)bin\$(Configuration)\BuildArtifacts" /S /Y /I
-XCOPY "$(ProjectDir)\SQLServerPerformance" "$(ProjectDir)bin\$(Configuration)\SQLServerPerformance" /S /Y /I
-XCOPY "$(ProjectDir)\StartStopSystem" "$(ProjectDir)bin\$(Configuration)\StartStopSystem" /S /Y /I
-XCOPY "$(ProjectDir)\WiseIISConfig" "$(ProjectDir)bin\$(Configuration)\WiseIISConfig" /S /Y /I
+XCOPY "$(ProjectDir)SQLServerPerformance" "$(ProjectDir)bin\$(Configuration)\SQLServerPerformance" /S /Y /I
+XCOPY "$(ProjectDir)StartStopSystem" "$(ProjectDir)bin\$(Configuration)\StartStopSystem" /S /Y /I
+XCOPY "$(ProjectDir)WiseIISConfig" "$(ProjectDir)bin\$(Configuration)\WiseIISConfig" /S /Y /I
 
 </PreBuildEvent>
   </PropertyGroup>
