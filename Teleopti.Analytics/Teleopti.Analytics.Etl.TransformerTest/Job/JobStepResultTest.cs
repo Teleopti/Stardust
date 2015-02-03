@@ -123,17 +123,6 @@ namespace Teleopti.Analytics.Etl.TransformerTest.Job
         }
 
         [Test]
-        public void VerifyPMUsersForCurrentBusinessUnit()
-        {
-            var user = new UserDto { AccessLevel = 1, UserName = "arne\\anka" };
-            IList<UserDto> userList = new List<UserDto> {user};
-
-            _target = new JobStepResult("jobnamen", 0, 0, null, null);
-            _target.SetPmUsersForCurrentBusinessUnit(userList);
-            Assert.AreEqual(1, _target.PmUsersForCurrentBusinessUnit.Count);
-        }
-
-        [Test]
         public void ShouldMakeADeepClone()
         {
             _target = new JobStepResult("Name", 99, 2500, _businessUnit, getJobResultCollection()) {Status = "Done"};
@@ -147,13 +136,11 @@ namespace Teleopti.Analytics.Etl.TransformerTest.Job
             Assert.AreEqual(_target.Status, clone.Status);
             Assert.AreEqual(_target.HasError, clone.HasError);
             Assert.AreSame(_target.JobStepException, clone.JobStepException);
-            Assert.AreEqual(_target.PmUsersForCurrentBusinessUnit, clone.PmUsersForCurrentBusinessUnit);
             Assert.AreEqual(_target.BusinessUnitStatus, clone.BusinessUnitStatus);
 
             IBusinessUnit otherBu = new BusinessUnit("other bu");
             _target = new JobStepResult("Other name", 44, 1300, otherBu, null);
             var user = new UserDto { AccessLevel = 1, UserName = "arne\\anka" };
-            _target.SetPmUsersForCurrentBusinessUnit(new List<UserDto> { user });
             _target.Status = "yoda";
 
             Assert.AreNotEqual(_target.Name, clone.Name);
@@ -163,7 +150,6 @@ namespace Teleopti.Analytics.Etl.TransformerTest.Job
             Assert.AreNotEqual(_target.Status, clone.Status);
             Assert.AreEqual(_target.HasError, clone.HasError);
             Assert.AreSame(_target.JobStepException, clone.JobStepException);
-            Assert.AreNotEqual(_target.PmUsersForCurrentBusinessUnit, clone.PmUsersForCurrentBusinessUnit);
             Assert.AreEqual(_target.BusinessUnitStatus, clone.BusinessUnitStatus);
         }
 
@@ -172,7 +158,6 @@ namespace Teleopti.Analytics.Etl.TransformerTest.Job
         {
             _target = new JobStepResult("Name", 2500, new NotImplementedException("eee"), _businessUnit, getJobResultCollection());
             var user = new UserDto { AccessLevel = 1, UserName = "arne\\anka" };
-            _target.SetPmUsersForCurrentBusinessUnit(new List<UserDto> { user });
             _target.Status = "Error";
 
             var clone = (JobStepResult)_target.Clone();
@@ -184,8 +169,6 @@ namespace Teleopti.Analytics.Etl.TransformerTest.Job
             Assert.AreEqual(_target.Status, clone.Status);
             Assert.AreEqual(_target.HasError, clone.HasError);
             Assert.AreSame(_target.JobStepException, clone.JobStepException);
-            Assert.AreEqual(_target.PmUsersForCurrentBusinessUnit, clone.PmUsersForCurrentBusinessUnit);
-            Assert.AreNotSame(_target.PmUsersForCurrentBusinessUnit, clone.PmUsersForCurrentBusinessUnit);
             Assert.AreEqual(_target.BusinessUnitStatus, clone.BusinessUnitStatus);
 
             IBusinessUnit otherBu = new BusinessUnit("other bu");
@@ -198,7 +181,6 @@ namespace Teleopti.Analytics.Etl.TransformerTest.Job
             Assert.AreNotEqual(_target.Status, clone.Status);
             Assert.AreEqual(_target.HasError, clone.HasError);
             Assert.AreNotSame(_target.JobStepException, clone.JobStepException);
-            Assert.AreNotEqual(_target.PmUsersForCurrentBusinessUnit, clone.PmUsersForCurrentBusinessUnit);
             Assert.AreNotEqual(_target.BusinessUnitStatus, clone.BusinessUnitStatus);
         }
     }

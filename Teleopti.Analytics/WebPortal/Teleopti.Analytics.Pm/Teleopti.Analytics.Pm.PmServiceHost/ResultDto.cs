@@ -50,6 +50,8 @@ namespace Teleopti.Analytics.PM.PMServiceHost
 		[DataMember]
 		public string ErrorType { get; set; }
 
+		[DataMember]
+		public bool IsWindowsAuthentication { get; set; }
 
 		public void AddUsersInserted(UserDto user)
 		{

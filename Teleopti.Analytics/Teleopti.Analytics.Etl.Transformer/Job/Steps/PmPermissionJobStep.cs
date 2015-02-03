@@ -7,6 +7,7 @@ using Teleopti.Analytics.PM.PMServiceHost;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Interfaces.Infrastructure;
+using IJobResult = Teleopti.Analytics.Etl.Interfaces.Transformer.IJobResult;
 
 namespace Teleopti.Analytics.Etl.Transformer.Job.Steps
 {
@@ -21,6 +22,7 @@ namespace Teleopti.Analytics.Etl.Transformer.Job.Steps
 			Name = "Performance Manager permissions";
 			Transformer = new PmPermissionTransformer(new PmProxyFactory());
 			PermissionExtractor = new PmPermissionExtractor(new LicensedFunctionsProvider(new DefinedRaptorApplicationFunctionFactory()));
+			PmWindowsUserSynchronizer = new PmWindowsUserSynchronizer();
 			PmUserInfrastructure.AddColumnsToDataTable(BulkInsertDataTable1);
 		}
 		
@@ -33,38 +35,32 @@ namespace Teleopti.Analytics.Etl.Transformer.Job.Steps
 
 		public IPmPermissionExtractor PermissionExtractor { get; set; }
 
+		public IPmWindowsUserSynchronizer PmWindowsUserSynchronizer { get; set; }
+
 		protected override int RunStep(IList<IJobResult> jobResultCollection, bool isLastBusinessUnit)
 		{
-			if (_checkIfNeeded)
-			{
-				if (!_jobParameters.StateHolder.PermissionsMustRun()) return 0;
-			}
-
-			var personList = _jobParameters.StateHolder.UserCollection;
-			List<UserDto> pmUserCheckList;
-
-			using (var uow = UnitOfWorkFactory.CreateAndOpenUnitOfWork())
-			{
-				uow.Reassociate(personList);
-				Result.SetPmUsersForCurrentBusinessUnit(Transformer.GetUsersWithPermissionsToPerformanceManager(personList, true, PermissionExtractor, UnitOfWorkFactory));
-				pmUserCheckList = (List<UserDto>)Transformer.GetUsersWithPermissionsToPerformanceManager(personList, false, PermissionExtractor, UnitOfWorkFactory);
-			}
-
 			if (!isLastBusinessUnit)
 				return 0;
 
-			// Do synchronization of permissions for PM (WCF Service through proxy object)
-			IList<UserDto> userDtoCollection = Transformer.GetPmUsersForAllBusinessUnits(Name, jobResultCollection, Result.PmUsersForCurrentBusinessUnit);
-			ResultDto result = Transformer.SynchronizeUserPermissions(userDtoCollection, _jobParameters.OlapServer, _jobParameters.OlapDatabase);
+			if (_checkIfNeeded && !_jobParameters.StateHolder.PermissionsMustRun())
+				return 0;
 
-			if (!result.Success)
-				throw new PmSynchronizeException(result.ErrorMessage); // Throw exception since PM sync was NOT successful
+			var personList = _jobParameters.StateHolder.UserCollection;
+			List<UserDto> applicationAuthUsers;
+			IEnumerable<UserDto> windowsAuthUsers;
+			
+			using (var uow = UnitOfWorkFactory.CreateAndOpenUnitOfWork())
+			{
+				uow.Reassociate(personList);
+				windowsAuthUsers = PmWindowsUserSynchronizer.Synchronize(personList, Transformer, PermissionExtractor,
+					UnitOfWorkFactory, _jobParameters.OlapServer, _jobParameters.OlapDatabase);
+				applicationAuthUsers = (List<UserDto>)Transformer.GetUsersWithPermissionsToPerformanceManager(personList, false, PermissionExtractor, UnitOfWorkFactory);
+			}
 
-			pmUserCheckList.AddRange(result.ValidAnalyzerUsers);
-			Transformer.Transform(pmUserCheckList, BulkInsertDataTable1);
-			var validAnalyzerUserCount = _jobParameters.Helper.Repository.PersistPmUser(BulkInsertDataTable1);
+			applicationAuthUsers.AddRange(windowsAuthUsers);
+			Transformer.Transform(applicationAuthUsers, BulkInsertDataTable1);
 
-			return result.AffectedUsersCount + validAnalyzerUserCount;
+			return _jobParameters.Helper.Repository.PersistPmUser(BulkInsertDataTable1);
 		}
 	}
 }

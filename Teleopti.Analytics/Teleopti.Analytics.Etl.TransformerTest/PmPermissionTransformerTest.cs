@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Data;
 using System.Linq;
 using System.Threading;
@@ -7,18 +6,13 @@ using NUnit.Framework;
 using Rhino.Mocks;
 using Teleopti.Analytics.Etl.Interfaces.Common;
 using Teleopti.Analytics.Etl.Interfaces.PerformanceManager;
-using Teleopti.Analytics.Etl.Interfaces.Transformer;
 using Teleopti.Analytics.Etl.PerformanceManagerProxy;
 using Teleopti.Analytics.Etl.Transformer;
-using Teleopti.Analytics.Etl.Transformer.Job;
 using Teleopti.Analytics.Etl.TransformerInfrastructure.DataTableDefinition;
 using Teleopti.Analytics.PM.PMServiceHost;
 using Teleopti.Ccc.Domain.Collection;
-using Teleopti.Ccc.Domain.Common;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
-using IJobResult = Teleopti.Analytics.Etl.Interfaces.Transformer.IJobResult;
-using JobResult = Teleopti.Analytics.Etl.Transformer.Job.JobResult;
 using PersonFactory = Teleopti.Analytics.Etl.TransformerTest.FakeData.PersonFactory;
 
 namespace Teleopti.Analytics.Etl.TransformerTest
@@ -28,13 +22,6 @@ namespace Teleopti.Analytics.Etl.TransformerTest
     {
         private PmPermissionTransformer _target;
         private IList<IPerson> _personCollection;
-        private const string JobStepName = "Performance Manager permissions";
-        private UserDto _userAb;
-        private UserDto _userAb2;
-        private UserDto _userCd;
-        private UserDto _userCd2;
-        private UserDto _userEf;
-        private UserDto _userEf2;
         private MockRepository _mocks;
         private IPmPermissionExtractor _permissionExtractor;
 	    private IUnitOfWorkFactory _unitOfWorkFactory;
@@ -205,26 +192,6 @@ namespace Teleopti.Analytics.Etl.TransformerTest
         }
 
         [Test]
-        public void VerifyGetPmUsersForAllBusinessUnits()
-        {
-            // Create user collection
-            _userAb = new UserDto { AccessLevel = 2, UserName = "a\\b" };   // pmUser=true
-            _userCd2 = new UserDto { AccessLevel = 2, UserName = "c\\d" };  // pmUser=false
-            _userEf2 = new UserDto { AccessLevel = 1, UserName = "e\\f" };  // pmUser=false
-            IList<UserDto> pmUserCurrentBuCollection = new List<UserDto> { _userAb, _userEf2, _userCd2 };
-
-            IList<UserDto> pmUsers = _target.GetPmUsersForAllBusinessUnits(JobStepName, createJobResultCollectionWithPmUsers(), pmUserCurrentBuCollection);
-
-            Assert.IsTrue(pmUsers.Contains(_userAb));
-            Assert.IsFalse(pmUsers.Contains(_userAb2));
-            Assert.IsTrue(pmUsers.Contains(_userCd));
-            Assert.IsFalse(pmUsers.Contains(_userCd2));
-            Assert.IsTrue(pmUsers.Contains(_userEf));
-            Assert.IsFalse(pmUsers.Contains(_userEf2));
-            Assert.AreEqual(3, pmUsers.Count);
-        }
-
-        [Test]
         public void ShouldSynchronizeUserPermissionForOneUser()
         {
             var mocks = new MockRepository();
@@ -330,46 +297,6 @@ namespace Teleopti.Analytics.Etl.TransformerTest
             {
                 _target.SynchronizeUserPermissions(userCollection, "olaServer", "olapDb");
             }
-        }
-
-        private IList<IJobResult> createJobResultCollectionWithPmUsers()
-        {
-            IList<IJobResult> returnCollection = new List<IJobResult>();
-
-            // Create BUs
-            IBusinessUnit bu1 = new BusinessUnit("bu1");
-            bu1.SetId(Guid.NewGuid());
-            IBusinessUnit bu2 = new BusinessUnit("bu2");
-            bu2.SetId(Guid.NewGuid());
-            IBusinessUnit bu3 = new BusinessUnit("bu3");
-            bu3.SetId(Guid.NewGuid());
-
-            // Create user collection
-            _userAb2 = new UserDto { AccessLevel = 1, UserName = "a\\b" };  // pmUser=false
-            _userCd = new UserDto { AccessLevel = 2, UserName = "c\\d" };   // pmUser=true
-            _userEf = new UserDto { AccessLevel = 2, UserName = "e\\f" };   // pmUser=true
-            IList<UserDto> pmUserCollection = new List<UserDto> { _userAb2, _userCd, _userEf };
-
-            // Create JobResults/JobStepResults with no PM users
-            IJobResult jobResult1 = new JobResult(bu1, returnCollection);
-            jobResult1.JobStepResultCollection.Add(new JobStepResult(JobStepName, 0, 0, bu1, returnCollection));
-            returnCollection.Add(jobResult1);
-
-            // Create JobResults/JobStepResults with two PM users
-            IJobStepResult jobStepResult2 = new JobStepResult(JobStepName, 0, 0, bu2, returnCollection);
-            jobStepResult2.SetPmUsersForCurrentBusinessUnit(pmUserCollection);
-            IJobResult jobResult2 = new JobResult(bu2, returnCollection);
-            jobResult2.JobStepResultCollection.Add(jobStepResult2);
-            returnCollection.Add(jobResult2);
-
-            // Create JobResults/JobStepResults with no PM users
-            IJobStepResult jobStepResult3 = new JobStepResult(JobStepName, 0, 0, bu3, returnCollection);
-            jobStepResult3.SetPmUsersForCurrentBusinessUnit(new List<UserDto>());
-            IJobResult jobResult3 = new JobResult(bu3, returnCollection);
-            jobResult3.JobStepResultCollection.Add(jobStepResult3);
-            returnCollection.Add(jobResult3);
-
-            return returnCollection;
         }
 
         [Test]

@@ -102,6 +102,7 @@
     <Compile Include="ConfigurationHandlerTest.cs" />
     <Compile Include="FakeData\StateGroupFactory.cs" />
     <Compile Include="Job\Steps\IndexMaintenanceJobsTest.cs" />
+    <Compile Include="PmWindowsUserSynchronizerTest.cs" />
     <Compile Include="StateGroupTransformerTest.cs" />
     <Compile Include="IntradayAvailabilityTransformerTest.cs" />
     <Compile Include="HourlyAvailabilityTransformerTest.cs" />

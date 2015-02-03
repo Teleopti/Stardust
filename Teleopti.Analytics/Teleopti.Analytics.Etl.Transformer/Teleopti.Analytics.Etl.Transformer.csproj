@@ -105,6 +105,7 @@
     <Compile Include="Job\Steps\IntradayFactAgentJobStep.cs" />
     <Compile Include="Job\Steps\IntradayFactQueueJobStep.cs" />
     <Compile Include="Job\Steps\NotificationFactory.cs" />
+    <Compile Include="PmWindowsUserSynchronizer.cs" />
     <Compile Include="StateGroupTransformer.cs" />
     <Compile Include="IntradayHourlyAvailabilityTransformer.cs" />
     <Compile Include="HourlyAvailabilityTransformer.cs" />

@@ -16,8 +16,6 @@ namespace Teleopti.Analytics.Etl.Interfaces.Transformer
         string BusinessUnitStatus { get; }
         IBusinessUnit CurrentBusinessUnit { get; }
         bool HasError { get; }
-        IList<UserDto> PmUsersForCurrentBusinessUnit { get; }
         void ClearResult();
-        void SetPmUsersForCurrentBusinessUnit(IList<UserDto> userDtoCollection);
     }
 }
