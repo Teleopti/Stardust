@@ -2,22 +2,15 @@
 using System.IO;
 using System.Linq;
 using System.Xml.Linq;
-using Teleopti.Ccc.Domain.Security;
 using Teleopti.Ccc.Web.Core.Startup.InitializeApplication;
-using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.Web.Areas.Tenant.Core
 {
-	public interface INHibernateConfigurationsHandler
-	{
-		string GetConfigForName(string dataSourceName);
-	}
-
 	public class NHibernateConfigurationsHandler : INHibernateConfigurationsHandler
 	{
 		private readonly ISettings _settings;
 		private readonly IPhysicalApplicationPath _physicalApplicationPath;
-		private readonly IList<DataSourceHolder> _dataSources = new List<DataSourceHolder>();
+		private readonly IList<dataSourceHolder> _dataSources = new List<dataSourceHolder>();
 
 		public NHibernateConfigurationsHandler(ISettings settings, IPhysicalApplicationPath physicalApplicationPath)
 		{
@@ -52,18 +45,18 @@ namespace Teleopti.Ccc.Web.Areas.Tenant.Core
 				if (element.Name != "datasource")
 					continue;
 
-				_dataSources.Add(new DataSourceHolder
+				_dataSources.Add(new dataSourceHolder
 				{
 					DataSourceName = element.Descendants().ElementAt(1).Attribute("name").Value,
 					DataSourceConfig = element.ToString()
 				});
 			}
 		}
-	}
 
-	public class DataSourceHolder
-	{
-		public string DataSourceName { get; set; }
-		public string DataSourceConfig { get; set; }
+		private class dataSourceHolder
+		{
+			public string DataSourceName { get; set; }
+			public string DataSourceConfig { get; set; }
+		}
 	}
 }
