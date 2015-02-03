@@ -26,7 +26,7 @@ namespace Teleopti.Ccc.Infrastructure.MultiTenancy
 		private AuthenticationQueryResult readFile()
 		{
 			if (!File.Exists(_fullPathToFile))
-				return new AuthenticationQueryResult { DataSource = "", DataSourceEncrypted = "", FailReason = string.Format("No file with name {0}", _fullPathToFile), Success = false };
+				return new AuthenticationQueryResult { DataSource = "", DataSourceConfig = "", FailReason = string.Format("No file with name {0}", _fullPathToFile), Success = false };
 
 			var json = File.ReadAllText(_fullPathToFile);
 			return JsonConvert.DeserializeObject<AuthenticationQueryResult>(json);

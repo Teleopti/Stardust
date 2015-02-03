@@ -10,7 +10,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Tenant.Core
 {
 	public class NHibernateConfigurationsHandlerTest
 	{
-		private const string nhibConf = @"<?xml version='1.0' encoding='utf-8'?>
+		private const string nhibConfContent = @"
 		<datasource>
 			<hibernate-configuration xmlns='urn:nhibernate-configuration-2.2'>
 				<session-factory name='Teleopti WFM'>
@@ -31,8 +31,12 @@ namespace Teleopti.Ccc.WebTest.Areas.Tenant.Core
 				<logonMode>mix</logonMode>
 				<!--  win or mix -->
 			</authentication>
-		</datasource>";
+		</datasource>
+";
 
+		private const string nhibConf = @"<?xml version='1.0' encoding='utf-8'?>" + nhibConfContent;
+
+	
 		[Test]
 		public void ShouldLoadDataSources()
 		{
@@ -47,7 +51,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Tenant.Core
 
 			var target = new NHibernateConfigurationsHandler(settings, new physicalApplicationPathStub(path));
 			var result = target.GetConfigForName("Teleopti WFM");
-			result.Should().Not.Be.Empty();
+			result.Should().Not.Be.EqualTo(nhibConfContent);
 			File.Delete(path + filename);
 		}
 

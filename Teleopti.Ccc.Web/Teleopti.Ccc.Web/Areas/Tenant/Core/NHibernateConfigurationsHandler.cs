@@ -55,9 +55,7 @@ namespace Teleopti.Ccc.Web.Areas.Tenant.Core
 				_dataSources.Add(new DataSourceHolder
 				{
 					DataSourceName = element.Descendants().ElementAt(1).Attribute("name").Value,
-					DataSourceConfig = Encryption.EncryptStringToBase64(element.ToString(),
-						EncryptionConstants.Image1,
-						EncryptionConstants.Image2)
+					DataSourceConfig = element.ToString()
 				});
 			}
 		}

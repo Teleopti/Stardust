@@ -58,7 +58,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Tenant.Core
 			res.Success.Should().Be.True();
 			res.Tennant.Should().Be.EqualTo(personInfo.Tennant);
 			res.PersonId.Should().Be.EqualTo(personInfo.Id);
-			res.DataSourceEncrypted.Should().Be.EqualTo("aencryptedconfig");
+			res.DataSourceConfig.Should().Be.EqualTo("aencryptedconfig");
 		}
 
 		[Test]

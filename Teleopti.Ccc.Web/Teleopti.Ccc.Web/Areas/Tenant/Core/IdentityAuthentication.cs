@@ -20,8 +20,8 @@ namespace Teleopti.Ccc.Web.Areas.Tenant.Core
 			if (foundUser==null)
 				return createFailingResult(string.Format(Resources.LogOnFailedIdentityNotFound, identity));
 
-			string encryptedString = _nHibernateConfigurationsHandler.GetConfigForName(foundUser.Tennant);
-			if (string.IsNullOrEmpty(encryptedString))
+			var nhibConfig = _nHibernateConfigurationsHandler.GetConfigForName(foundUser.Tennant);
+			if (string.IsNullOrEmpty(nhibConfig))
 				return createFailingResult(Resources.NoDatasource);
 			
 			return new ApplicationAuthenticationResult
@@ -29,7 +29,7 @@ namespace Teleopti.Ccc.Web.Areas.Tenant.Core
 				Success = true,
 				PersonId = foundUser.Id,
 				Tennant = foundUser.Tennant,
-				DataSourceEncrypted = encryptedString
+				DataSourceConfig = nhibConfig
 			};
 		}
 

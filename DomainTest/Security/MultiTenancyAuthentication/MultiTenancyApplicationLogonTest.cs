@@ -73,7 +73,7 @@ zjynBDpennBSNqkqCiW3EQRWBLLUsTvYDVTukgp553hrec5dBRnZbAJDPZ1C9vxaL41gULCDALIUiNUt
 			var person = new Person();
 			var personRepository = MockRepository.GenerateMock<IPersonRepository>();
 			_authenticationQuerier.Stub(x => x.TryLogon("kalle", "kula", userAgent))
-				.Return(new AuthenticationQueryResult { PersonId = personId, Success = true, Tennant = "Teleopti WFM", DataSourceEncrypted = encrypted });
+				.Return(new AuthenticationQueryResult { PersonId = personId, Success = true, Tennant = "Teleopti WFM", DataSourceConfig = encrypted });
 			_appData.Stub(x => x.CreateAndAddDataSource("")).Return(_dataSource).IgnoreArguments();
 			_dataSource.Stub(x => x.Application).Return(uowFactory);
 			uowFactory.Stub(x => x.CreateAndOpenUnitOfWork()).Return(uow);

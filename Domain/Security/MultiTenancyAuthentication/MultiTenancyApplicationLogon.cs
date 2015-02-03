@@ -31,8 +31,8 @@ namespace Teleopti.Ccc.Domain.Security.MultiTenancyAuthentication
 			var dataSourceName = result.Tennant;
 			var personId = result.PersonId;
 			var nhibConfig = result.DataSource;
-			if (!string.IsNullOrEmpty(result.DataSourceEncrypted))
-				nhibConfig = decryptNhib(result.DataSourceEncrypted);
+			if (!string.IsNullOrEmpty(result.DataSourceConfig))
+				nhibConfig = result.DataSourceConfig;
 
 			logonModel.SelectedDataSourceContainer = getDataSorce(nhibConfig, applicationData);
 			// if null error
@@ -56,11 +56,6 @@ namespace Teleopti.Ccc.Domain.Security.MultiTenancyAuthentication
 				Person = logonModel.SelectedDataSourceContainer.User,
 				Successful = true
 			};
-		}
-
-		private string decryptNhib(string encryptedNhib)
-		{
-			return Encryption.DecryptStringFromBase64(encryptedNhib, EncryptionConstants.Image1, EncryptionConstants.Image2);
 		}
 
 		IDataSourceContainer getDataSorce(string nhibConfig, IApplicationData applicationData)
