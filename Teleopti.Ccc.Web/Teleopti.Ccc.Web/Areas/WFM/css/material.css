@@ -46,8 +46,8 @@
     background-image: none;
     background-color: #1976D2;
     border :none;
-
 }
+
 .navbar a{
     color: white !important;
 }
@@ -85,17 +85,21 @@
 	transition: all 0.5s ease;
 }
 
-#tree-root > li:nth-child(2) > ol > li {
+.selected-role {
+	background-color: #1976D2!important;
+	color: white;
+}
+
+.tree-line > li:nth-child(2) > ol > li {
 	padding: 5px;
 	margin: 5px;
 }
 
-#tree-root > li:nth-child(2) > ol > li > ol {
+.tree-line > li:nth-child(2) > ol > li > ol {
 	border-left: 1px dotted #ddd;
 }
 
-
-#tree-root > li > ol> li {
+.tree-line > li > ol> li {
 	margin-top: 15px;
 }
 
@@ -116,7 +120,6 @@ input {
 	display: inline-block;
 }
 
-
 .tab-heads {
 	padding-left: 10px;
 }
@@ -125,10 +128,7 @@ input {
 	margin: 0;
 	padding: 0;
 	width: 50%;
-}
-
-.inline-role-name::before {
-	content: "Editing";
+	color: black;
 }
 
 .container > hr {
@@ -146,9 +146,16 @@ input {
 	float: right;
 	overflow: hidden;
 	display: inline-block;
-	border-left: 3px solid #dddddd;
 	transition: all 0.5s ease;
 	height: 18px;
+}
+
+.selected-role > .role-context-menu, .role:hover > .role-context-menu {
+	width: 90px;
+}
+
+.selected-role > .role-context-menu > a > svg > path {
+	fill: white!important;
 }
 
 .role-context-menu a {
@@ -159,17 +166,31 @@ md-tooltip {
 	z-index: 999;
 }
 
-.role:hover > .role-context-menu {
-	width: 90px!important;
+.role-btn {
+	padding: 10px;
+	cursor: pointer;
 }
 
-#searchRoleResults{
+.role-btn.active, .role-btn.focus, .role-btn:active, .role-btn:focus {
+	background-color: #1976D2!important;
+}
+
+.role-btn.active:hover, .role-btn.focus:hover, .role-btn:active:hover, .role-btn:focus:hover {
+	background-color: #1976D2!important;
+}
+
+.role-btn:hover {
+background-color: #BBDEFB;
+border:none;
+}
+
+.role-container{
 	max-height: 800px;
 	overflow-y: auto;
 	margin-bottom: 10px;
 }
 
-#searchRoleResults > ul {
+.role-container > ul {
 	padding-left: 0px;
 
 }

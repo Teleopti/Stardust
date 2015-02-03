@@ -44,6 +44,7 @@ wfmCtrls.controller('PermissionsCtrl', [
 		$scope.roleDetails = 'functionsAvailable';
 		$scope.functionsDisplayed = [];
 		$scope.functionsFlat = [];
+		$scope.selectedRole = {};
 		$scope.organization = { BusinessUnits: [{ BusinessUnit: { Sites: [] } }], DynamicOptions: [] };
 
 		$scope.roles = Roles.get();

@@ -15,13 +15,12 @@
 			
 			<form ng-submit="createRole()">
 				<input type="text" ng-model="roleName" placeholder="Enter new role name" />
-				<!--input type="submit" class="btn btn-default btn-md btn-block role" value="Create" /-->
 			</form>
 		</div>
-		<div id="searchRoleResults">
+		<div id="searchRoleResults" class="role-container">
 			
 			<ul ng-repeat="role in roles | filter:searchRoles ">
-				<li ng-click="showRole(role.Id)" ng-dblclick="editing = true" class="btn btn-default btn-md btn-block role">
+				<li ng-click="showRole(role.Id)" ng-dblclick="editing = true" ng-class="{'selected-role': role.Id==selectedRole}" class="role-btn material-depth-2 role">
 					<div class="role-context-menu pull-right">
 						<a ng-click="copyRole(role.Id)">
 							<svg style="width:18px;height:18px" viewBox="0 0 24 24">
@@ -71,7 +70,7 @@
 			<input type="text" name="filterDetails" ng-model="searchPermissions" placeholder="Permissions filter ..."  />
 			<div class="tree">
 				<div ui-tree data-drag-enabled="false">
-					<ol ui-tree-nodes="" ng-model="functionsDisplayed" id="tree-root">
+					<ol ui-tree-nodes="" ng-model="functionsDisplayed" id="tree-root" class="tree-line">
 						<li ng-repeat="node in functionsDisplayed | filter:searchPermissions" ui-tree-node ng-include="'nodes_renderer.html'"></li>
 					</ol>
 				</div>
