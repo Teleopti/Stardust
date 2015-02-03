@@ -1,4 +1,5 @@
-﻿@OnlyRunIfEnabled('MyTimeWeb_TradeWithDayOffAndEmptyDay_31317')
+﻿@ignore
+@OnlyRunIfEnabled('MyTimeWeb_TradeWithDayOffAndEmptyDay_31317')
 Feature: Publish shift exchange offer for non-working day
 	In order to trade for a non-working day 
 	As an agent 
