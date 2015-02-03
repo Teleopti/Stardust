@@ -25,7 +25,13 @@ namespace Teleopti.Analytics.Etl.CommonTest
 			var job = MockRepository.GenerateMock<IJob>();
 
 			IBusinessUnit businessUnit = new BusinessUnit("myBU");
-			//IList<IBusinessUnit> businessUnitCollection = new List<IBusinessUnit> {businessUnit};
+			var businessUnits = new List<IBusinessUnit> { businessUnit };
+			var parameters = MockRepository.GenerateMock<IJobParameters>();
+			var jobHelper = MockRepository.GenerateMock<IJobHelper>();
+
+			job.Stub(x => x.JobParameters).Return(parameters);
+			parameters.Stub(x => x.Helper).Return(jobHelper);
+			jobHelper.Stub(x => x.BusinessUnitCollection).Return(businessUnits);
 			IList<IJobResult> jobResultCollection = new List<IJobResult>();
 			IList<IJobStep> jobStepsNotToRun = new List<IJobStep>();
 			IJobResult jobResult = new JobResult(businessUnit, jobResultCollection);
@@ -46,11 +52,17 @@ namespace Teleopti.Analytics.Etl.CommonTest
 
 			IBusinessUnit businessUnit1 = new BusinessUnit("myBU 1");
 			IBusinessUnit businessUnit2 = new BusinessUnit("myBU 2");
-			//IList<IBusinessUnit> businessUnitCollection = new List<IBusinessUnit>
-			//																{
-			//																	businessUnit1,
-			//													businessUnit2
-			//																};
+			IList<IBusinessUnit> businessUnits = new List<IBusinessUnit>
+			{
+				businessUnit1,
+				businessUnit2
+			};
+			var parameters = MockRepository.GenerateMock<IJobParameters>();
+			var jobHelper = MockRepository.GenerateMock<IJobHelper>();
+
+			job.Stub(x => x.JobParameters).Return(parameters);
+			parameters.Stub(x => x.Helper).Return(jobHelper);
+			jobHelper.Stub(x => x.BusinessUnitCollection).Return(businessUnits);
 			IList<IJobResult> jobResultCollection = new List<IJobResult>();
 			IList<IJobStep> jobStepsNotToRun = new List<IJobStep>();
 			IJobResult jobResult1 = new JobResult(businessUnit1, jobResultCollection);
@@ -123,7 +135,13 @@ namespace Teleopti.Analytics.Etl.CommonTest
 		{
 			var job = MockRepository.GenerateMock<IJob>();
 			IBusinessUnit businessUnit = new BusinessUnit("myBU");
+			var businessUnits = new List<IBusinessUnit> { businessUnit };
+			var parameters = MockRepository.GenerateMock<IJobParameters>();
+			var jobHelper = MockRepository.GenerateMock<IJobHelper>();
 
+			job.Stub(x => x.JobParameters).Return(parameters);
+			parameters.Stub(x => x.Helper).Return(jobHelper);
+			jobHelper.Stub(x => x.BusinessUnitCollection).Return(businessUnits);
 			job.Stub(x => x.Run(businessUnit, new List<IJobStep>(), new List<IJobResult>(), true, true)).Return(null);
 
 			_target = new JobRunner();
