@@ -29,7 +29,7 @@ namespace Teleopti.Ccc.Web.Areas.Tenant.Core
 				var dataSource = _dataSourceProvider.RetrieveDataSourceByName(dataSourceName);
 				using (var uow = dataSource.Application.CreateAndOpenUnitOfWork())
 				{
-					var person = _repositoryFactory.CreatePersonRepository(uow).Get(result.PersonId);
+					var person = _repositoryFactory.CreatePersonRepository(uow).LoadOne(result.PersonId); //todo: don't load permissions here - just needed to get web scenarios to work
 					return new AuthenticateResult { DataSource = dataSource, Person = person, Successful = true, HasMessage = !string.IsNullOrEmpty(result.FailReason), Message = result.FailReason, PasswordExpired = false };
 				}
 			}
