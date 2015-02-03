@@ -83,6 +83,7 @@ namespace Teleopti.Ccc.WinCode.Common.Configuration
             _view.SetAllowedAbsencesForReport(_selectedModel);
             _view.SetShiftTradeTargetTimeFlexibility(_selectedModel.ShiftTradeTargetTimeFlexibility);
 	        _view.SetAutoGrant(_selectedModel.AutoGrantShiftTradeRequest);
+			_view.SetAnonymousTrading(_selectedModel.AnonymousTrading);
 			_view.SetFairnessType(_selectedModel.GetFairnessType(_toggleManager.IsEnabled(Toggles.Scheduler_HidePointsFairnessSystem_28317), _toggleManager.IsEnabled(Toggles.Scheduler_Seniority_11111)));
         }
 
@@ -568,5 +569,10 @@ namespace Teleopti.Ccc.WinCode.Common.Configuration
         {
             _selectedModel.StudentAvailabilityInputPeriod = studentAvailabilityInputPeriod;
         }
+
+	    public void SetAnonymousTrading(bool anonymousTrading)
+	    {
+			_selectedModel.AnonymousTrading = anonymousTrading;
+	    }
     }
 }

@@ -26,6 +26,7 @@ namespace Teleopti.Ccc.Domain.WorkflowControl
         private DateOnly studentAvailabilityInputFromDate;
         private DateOnly studentAvailabilityInputToDate;
         private bool _autoGrantShiftTradeRequest;
+        private bool _anonymousTrading;
         private DateTime? _schedulePublishedToDate;
         private int? _writeProtection;
         private TimeSpan _shiftTradeTargetTimeFlexibility;
@@ -307,7 +308,13 @@ namespace Teleopti.Ccc.Domain.WorkflowControl
             set { _autoGrantShiftTradeRequest = value; }
         }
 
-        public virtual IEnumerable<IAbsence> AllowedPreferenceAbsences
+		public virtual bool AnonymousTrading
+		{
+			get { return _anonymousTrading; }
+			set { _anonymousTrading = value; }
+		}
+
+	    public virtual IEnumerable<IAbsence> AllowedPreferenceAbsences
         {
             get { return _allowedPreferenceAbsences; }
 			set { _allowedPreferenceAbsences = new HashSet<IAbsence>(new List<IAbsence>(value)); }

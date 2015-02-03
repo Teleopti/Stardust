@@ -12793,4 +12793,12 @@ Reduce the complexity to use these shifts.</value>
   <data name="StartDateMustBeTodayOrGreater" xml:space="preserve">
     <value>Start date must be today or greater</value>
   </data>
+    <data name="AnonymousBulletinBoardTrading" xml:space="preserve">
+    <value>Anonymous Bulletin Board Trading</value>
+    <comment>used by the check box under shift trade request tab in admin client settings of work flow control set </comment>
+  </data>
+  <data name="Miscellaneous" xml:space="preserve">
+    <value>Miscellaneous</value>
+    <comment>the colleciton of shift trade related settings under shift trade request tab in admin client settings of work flow control set</comment>
+  </data>
 </root>

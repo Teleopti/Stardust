@@ -70,6 +70,11 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 				rowIndex = tableLayoutPanelBasic.GetRow(panel9);
 				tableLayoutPanelBasic.RowStyles[rowIndex].Height = 0;
 			}
+
+			if (!toggleManager.IsEnabled(Toggles.MyTimeWeb_AnonymousTrades_31638))
+			{
+				checkBoxAdvAnonymousTrading.Hide();
+			}
 		}
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling")]
@@ -694,6 +699,13 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 			checkBoxAdvAutoGrant.CheckStateChanged += checkBoxAdvAutoGrant_CheckStateChanged;
 		}
 
+		public void SetAnonymousTrading(bool anonymousTrading)
+		{
+			checkBoxAdvAnonymousTrading.CheckStateChanged -= checkBoxAdvAnonymousTrading_CheckStateChanged;
+			checkBoxAdvAnonymousTrading.Checked = anonymousTrading;
+			checkBoxAdvAnonymousTrading.CheckStateChanged += checkBoxAdvAnonymousTrading_CheckStateChanged;
+		}
+
 		public void DisableAllButAdd()
 		{
 			tabControlAdvArea.Enabled = false;
@@ -1056,6 +1068,11 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 		{
 			var studentAvailabilityInputPeriod = new DateOnlyPeriod(dateSelectionFromToIsOpenStudentAvailability.WorkPeriodStart, dateSelectionFromToIsOpenStudentAvailability.WorkPeriodEnd);
 			_presenter.SetStudentAvailabilityInputPeriod(studentAvailabilityInputPeriod);
+		}
+
+		private void checkBoxAdvAnonymousTrading_CheckStateChanged(object sender, EventArgs e)
+		{
+			_presenter.SetAnonymousTrading(checkBoxAdvAnonymousTrading.Checked);
 		}
 	}
 }

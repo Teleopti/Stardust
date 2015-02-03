@@ -226,7 +226,13 @@ namespace Teleopti.Interfaces.Domain
         /// Gets or sets a value indicating whether [auto grant] is enabled.
         /// </summary>
         /// <value><c>true</c> if [auto grant]; otherwise, <c>false</c>.</value>
-        bool AutoGrantShiftTradeRequest { get; set; }
+        bool AutoGrantShiftTradeRequest { get; set; }        
+		
+		/// <summary>
+        /// Gets or sets a value indicating whether [Anonymous Trading] is enabled.
+        /// </summary>
+		/// <value><c>true</c> if [Anonymous Trading]; otherwise, <c>false</c>.</value>
+        bool AnonymousTrading { get; set; }
 
         /// <summary>
         /// Gets or sets a value indicating whether use shift category fairness or fairness points.

@@ -2195,6 +2195,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Anonymous Bulletin Board Trading.
+        /// </summary>
+        public static string AnonymousBulletinBoardTrading {
+            get {
+                return ResourceManager.GetString("AnonymousBulletinBoardTrading", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Answered.
         /// </summary>
         public static string Answered {
@@ -13710,6 +13719,15 @@ namespace Teleopti.Ccc.UserTexts {
         public static string MinWorkTime {
             get {
                 return ResourceManager.GetString("MinWorkTime", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Miscellaneous.
+        /// </summary>
+        public static string Miscellaneous {
+            get {
+                return ResourceManager.GetString("Miscellaneous", resourceCulture);
             }
         }
         
