@@ -1531,7 +1531,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 					builder.Append(",");
 			}
 
-			var url = ConfigurationManager.AppSettings["FeatureToggle"] + "Messages?ids=" + builder;
+			var url = ConfigurationManager.AppSettings["FeatureToggle"] + "Messages#" + builder;
 			Process.Start(url);
 		}
 

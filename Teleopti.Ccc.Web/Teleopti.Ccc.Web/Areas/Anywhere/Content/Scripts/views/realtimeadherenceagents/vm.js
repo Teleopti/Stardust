@@ -96,7 +96,7 @@
 					}).map(function (e) {
 						return e.PersonId();
 					}).join(",");
-				window.open("Messages?ids=" + selectedAgentIds, '_blank');
+				window.open("Messages#" + selectedAgentIds, '_blank');
 			};
 
 			that.SendMessageEnabled = ko.computed(function() {

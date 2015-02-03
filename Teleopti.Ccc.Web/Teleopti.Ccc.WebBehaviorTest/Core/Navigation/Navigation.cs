@@ -399,7 +399,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core.Navigation
 
 		public static void GotoMessageTool(IEnumerable<Guid> ids)
 		{
-			GoToPage(string.Format("Messages?ids={0}",
+			GoToPage(string.Format("Messages#{0}",
 				String.Join(",", ids.Select(x => x.ToString()).ToArray())));
 		}
 
