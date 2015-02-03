@@ -31,16 +31,18 @@ namespace Teleopti.Ccc.Web.Areas.Start.Core.IoC
 			builder.RegisterType<DataSourcesProvider>().As<IDataSourcesProvider>().SingleInstance();
 			if (_configuration.Toggle(Toggles.MultiTenancy_WebLogon_17461))
 			{
-				builder.RegisterType<MultiTenantAuthenticator>().As<IAuthenticator>().As<ISsoAuthenticator>().SingleInstance();
+				builder.RegisterType<TenantSsoAuthenticator>().As<ISsoAuthenticator>().SingleInstance();
 				builder.RegisterType<LogTenancyLogonAttempt>().As<ILogLogonAttempt>().SingleInstance();
 				builder.RegisterType<LoginAttemptModelFactoryForWeb>().As<ILoginAttemptModelFactory>();
 			}
 			else
 			{
-				builder.RegisterType<Authenticator>().As<IAuthenticator>().As<ISsoAuthenticator>().SingleInstance();
+				builder.RegisterType<Authenticator>().As<ISsoAuthenticator>().SingleInstance();
 				builder.RegisterType<LogLogonAttempt>().As<ILogLogonAttempt>().SingleInstance();
 				builder.RegisterType<LoginAttemptModelFactoryForWeb_OLD_JustKeepUntilOldStuffIsGone>().As<ILoginAttemptModelFactory>();
 			}
+
+			builder.RegisterType<Authenticator>().As<IAuthenticator>();
 			builder.RegisterType<HttpRequestUserAgent>().As<IHttpRequestUserAgent>();
 			
 			builder.RegisterType<BusinessUnitProvider>().As<IBusinessUnitProvider>();
