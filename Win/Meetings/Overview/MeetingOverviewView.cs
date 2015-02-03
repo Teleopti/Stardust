@@ -315,6 +315,12 @@ namespace Teleopti.Ccc.Win.Meetings.Overview
 			var firstDayOfWeek = CultureInfo.CurrentCulture.DateTimeFormat.FirstDayOfWeek;
 			while (firstDay.DayOfWeek != firstDayOfWeek)
 				firstDay = firstDay.AddDays(-1);
+			if (scheduleControl1 == null)
+				MessageBox.Show("Opps! ScheduleControl is null");
+			if (scheduleControl1.Calendar == null)
+				MessageBox.Show("Opps! ScheduleControl's calendar is null");
+			if (scheduleControl1.Calendar.SelectedDates == null)
+				MessageBox.Show("Opps! Calendar has no selected dates");
 			scheduleControl1.Calendar.SelectedDates.BeginUpdate();
 			scheduleControl1.Calendar.SelectedDates.Clear();
 			var dates = new[]
@@ -326,10 +332,18 @@ namespace Teleopti.Ccc.Win.Meetings.Overview
 			scheduleControl1.Calendar.SelectedDates.EndUpdate();
 
 			scheduleControl1.Calendar.SetDateValue(selectedDate);
+			if (_calendarAndTextPanel == null)
+				MessageBox.Show("Opps! Calendar and text panel is null");
 			_calendarAndTextPanel.SelectDateRange(scheduleControl1.Calendar.SelectedDates);
 
 			DateTime dt = (scheduleControl1.Calendar.SelectedDates.Count > 0) ? scheduleControl1.Calendar.SelectedDates[0] : scheduleControl1.Calendar.DateValue;
+			if (scheduleControl1.HeaderLabel == null)
+				MessageBox.Show("Opps! ScheduleControl's Header Label is null");
 			scheduleControl1.HeaderLabel.Text = string.Concat(Resources.Starting, " ", dt.ToShortDateString());
+			if (_eventAggregator == null)
+				MessageBox.Show("Opps! EventAggregator is null");
+			if (_eventAggregator.GetEvent<AppointmentSelectionChanged>() == null)
+				MessageBox.Show("Opps! EventAggregator's AppointmentSelectionChanged event is null");
 			_eventAggregator.GetEvent<AppointmentSelectionChanged>().Publish(string.Empty);
 			Refresh();
 		}
