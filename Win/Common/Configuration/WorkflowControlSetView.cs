@@ -59,6 +59,13 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 				tableLayoutPanelBasic.RowStyles[rowIndex].Height = 0;
 			}
 
+			if (!toggleManager.IsEnabled(Toggles.Scheduler_Seniority_11111))
+			{
+				radioButtonAdvSeniority.Hide();
+				var rowIndex = tableLayoutPanelBasic.GetRow(radioButtonAdvSeniority);
+				tableLayoutPanelBasic.RowStyles[rowIndex].Height = 0;
+			}
+
 			if (!toggleManager.IsEnabled(Toggles.MyTimeWeb_AbsenceReport_31011))
 			{
 				twoListSelectorAbsencesForReport.Hide();
@@ -1023,6 +1030,11 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 			_presenter.OnRadioButtonAdvFairnessEqualCheckChanged(radioButtonAdvFairnessEqual.Checked);
 		}
 
+		private void radioButtonAdvSeniorityCheckChanged(object sender, EventArgs e)
+		{
+			_presenter.OnRadioButtonAdvSeniorityCheckedChanged(radioButtonAdvSeniority.Checked);
+		}
+
 		public void SetFairnessType(FairnessType value)
 		{
 			radioButtonAdvFairnessEqual.CheckChanged -= radioButtonAdvFairnessEqualCheckChanged;
@@ -1074,5 +1086,6 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 		{
 			_presenter.SetAnonymousTrading(checkBoxAdvAnonymousTrading.Checked);
 		}
+	
 	}
 }

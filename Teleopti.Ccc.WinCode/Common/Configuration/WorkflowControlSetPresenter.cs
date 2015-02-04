@@ -559,6 +559,12 @@ namespace Teleopti.Ccc.WinCode.Common.Configuration
 				_selectedModel.SetFairnessType(FairnessType.EqualNumberOfShiftCategory, _toggleManager.IsEnabled(Toggles.Scheduler_HidePointsFairnessSystem_28317), _toggleManager.IsEnabled(Toggles.Scheduler_Seniority_11111));
         }
 
+	    public void OnRadioButtonAdvSeniorityCheckedChanged(bool value)
+	    {
+			if (value)
+				_selectedModel.SetFairnessType(FairnessType.Seniority, _toggleManager.IsEnabled(Toggles.Scheduler_HidePointsFairnessSystem_28317), _toggleManager.IsEnabled(Toggles.Scheduler_Seniority_11111));    
+	    }
+
         public void SetStudentAvailabilityPeriod(DateOnlyPeriod studentAvailabilityPeriod)
         {
             _selectedModel.StudentAvailabilityPeriod = studentAvailabilityPeriod;
