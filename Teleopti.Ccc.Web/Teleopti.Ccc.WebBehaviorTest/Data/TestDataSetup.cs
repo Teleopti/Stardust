@@ -21,7 +21,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data
 		private static IDataSource datasource;
 		private static readonly DefaultData globalData = new DefaultData();
 
-		public static void CreateDataSourceAndStartWebApp()
+		public static void Setup()
 		{
 			var builder = new ContainerBuilder();
 			builder.RegisterModule(new CommonModule(new IocConfiguration(new IocArgs { PublishEventsToServiceBus = false }, new FalseToggleManager())));

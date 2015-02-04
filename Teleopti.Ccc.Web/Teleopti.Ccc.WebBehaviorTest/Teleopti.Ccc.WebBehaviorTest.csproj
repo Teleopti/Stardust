@@ -188,6 +188,7 @@
     <Compile Include="Bindings\Generic\ShiftExchangeOfferFields.cs" />
     <Compile Include="Bindings\Generic\StateGroupStepDefinitions.cs" />
     <Compile Include="Bindings\Generic\WorkloadStepDefinitions.cs" />
+    <Compile Include="Bindings\TestRun.cs" />
     <Compile Include="Core\BrowserDriver\BrowserInteractionsUrlExtensions.cs" />
     <Compile Include="Core\BrowserDriver\NoBrowserActivator.cs" />
     <Compile Include="Core\BrowserDriver\NoBrowserInteractions.cs" />
@@ -766,7 +767,7 @@
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
     </Compile>
-    <Compile Include="Bindings\EventDefinition.cs" />
+    <Compile Include="Bindings\EventBindings.cs" />
     <Compile Include="Security.feature.cs">
       <DependentUpon>Security.feature</DependentUpon>
       <AutoGen>True</AutoGen>
