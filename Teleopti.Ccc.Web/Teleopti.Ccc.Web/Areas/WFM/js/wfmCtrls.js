@@ -69,6 +69,11 @@ wfmCtrls.controller('PermissionsCtrl', [
 			});
 		};
 
+		$scope.reset = function () {
+			$scope.roleName = "";
+			$scope.form.$setPristine();
+		}
+
 		$scope.copyRole = function(roleId) {
 			var roleCopy = {};
 			DuplicateRole.query({ Id: roleId }).$promise.then(function(result) {

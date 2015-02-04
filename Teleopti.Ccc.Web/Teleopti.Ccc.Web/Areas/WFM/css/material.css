@@ -113,7 +113,13 @@ input {
 	margin: 5px 0;
 	padding: 5px;
 	border: none;
-	border-bottom:1px solid #ddd !important
+	border-bottom: 1px solid #ddd !important;
+}
+
+.filter-form svg {
+	margin-top: 8px;
+	right: 4%;
+	position: absolute;
 }
 
 .tab-heads li {
@@ -171,28 +177,39 @@ md-tooltip {
 	cursor: pointer;
 }
 
-.role-btn.active, .role-btn.focus, .role-btn:active, .role-btn:focus {
+.role-btn-success {
+	color: white;  
+	background-color: #E91E63;
+}
+
+.role-btn-default.active, 
+.role-btn-default.focus, 
+.role-btn-default:active, 
+.role-btn-default:focus,
+.role-btn-default.active:hover, 
+.role-btn-default.focus:hover, 
+.role-btn-default:active:hover, 
+.role-btn-default:focus:hover {
 	background-color: #1976D2!important;
 }
 
-.role-btn.active:hover, .role-btn.focus:hover, .role-btn:active:hover, .role-btn:focus:hover {
-	background-color: #1976D2!important;
-}
-
-.role-btn:hover {
-background-color: #BBDEFB;
-border:none;
+.role-btn-default:hover {
+	background-color: #BBDEFB;
+	border:none;
 }
 
 .role-container{
-	max-height: 800px;
-	overflow-y: auto;
-	margin-bottom: 10px;
+	max-height: 800px;	
 }
 
 .role-container > ul {
 	padding-left: 0px;
+	list-style: none;
+	margin-bottom: 10px;
+}
 
+.role-container > ul > li, .filter-form {
+	margin-bottom: 10px;
 }
 
 /*tooltip - this should be removed */
