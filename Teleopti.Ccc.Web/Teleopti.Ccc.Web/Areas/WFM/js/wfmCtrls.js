@@ -106,11 +106,13 @@ wfmCtrls.controller('PermissionsCtrl', [
 			}
 		};
 
-	$scope.removeRole = function (role, index) {
-		ManageRole.deleteRole({ Id: role.Id }).$promise.then(function (result) {
-			$scope.roles.splice(index, 1);
-		});
-	};
+		$scope.removeRole = function (role, index) {
+			if (confirm('Are you sure you want to delete this?')) {
+				ManageRole.deleteRole({ Id: role.Id }).$promise.then(function(result) {
+					$scope.roles.splice(index, 1);
+				});
+			}
+		};
 
 	$scope.updateRole = function (role) {
 		ManageRole.update({ Id: role.Id, newDescription: role.DescriptionText });
