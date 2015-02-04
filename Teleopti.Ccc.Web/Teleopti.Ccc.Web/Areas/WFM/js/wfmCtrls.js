@@ -36,8 +36,8 @@ wfmCtrls.controller('ForecastingRunCtrl', ['$scope', '$stateParams', '$http',
 );
 
 wfmCtrls.controller('PermissionsCtrl', [
-	'$scope', '$stateParams', '$http', '$filter', 'Roles', 'OrganizationSelections', 'ApplicationFunctions', 'DuplicateRole', 'RolesPermissions', 'ManageRole', 'AssignFunction', 'AssignOrganizationSelection',
-	function ($scope, $stateParams, $http, $filter, Roles, OrganizationSelections, ApplicationFunctions, DuplicateRole, RolesPermissions, ManageRole, AssignFunction, AssignOrganizationSelection) {
+	'$scope', '$stateParams', '$filter', 'Roles', 'OrganizationSelections', 'ApplicationFunctions', 'DuplicateRole', 'RolesPermissions', 'ManageRole', 'AssignFunction', 'AssignOrganizationSelection',
+	function ($scope, $stateParams, $filter, Roles, OrganizationSelections, ApplicationFunctions, DuplicateRole, RolesPermissions, ManageRole, AssignFunction, AssignOrganizationSelection) {
 		$scope.roles = [];
 		$scope.list = [];
 		$scope.roleName = null;

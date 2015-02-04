@@ -1118,6 +1118,8 @@
     <Content Include="Areas\Anywhere\Content\Scripts\views\realtimeadherenceagents\view.js" />
     <Content Include="Areas\Anywhere\Content\Scripts\views\realtimeadherenceagents\vm.js" />
     <Content Include="Areas\Anywhere\Content\Scripts\views\realtimeadherenceagents\vm_test.js" />
+    <Content Include="Areas\WFM\karma.conf.js" />
+    <Content Include="Areas\WFM\tests\permissions.controller.spec.js" />
     <Content Include="Content\xregexp\xregexp-all-min.js" />
     <Content Include="Areas\Anywhere\Content\Scripts\business_unit.js" />
     <Content Include="Areas\Anywhere\Content\Scripts\views\realtimeadherenceteams\team_test.js" />
@@ -1467,8 +1469,6 @@
     <Content Include="Areas\WFM\js\ABmetrics.min.js" />
     <Content Include="Areas\WFM\js\app.js" />
     <Content Include="Areas\WFM\js\wfmCtrls.js" />
-    <Content Include="Areas\WFM\tests\conf.js" />
-    <Content Include="Areas\WFM\tests\forecasting-spec.js" />
     <Content Include="Areas\WFM\vendor\angular-animate\angular-animate.js" />
     <Content Include="Areas\WFM\vendor\angular-animate\angular-animate.min.js" />
     <Content Include="Areas\WFM\vendor\angular-aria\angular-aria.js" />
