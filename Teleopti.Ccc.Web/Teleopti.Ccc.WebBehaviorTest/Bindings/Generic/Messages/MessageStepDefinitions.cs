@@ -48,6 +48,14 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Messages
 			ThenIShouldSeeReceiversAs(table);
 		}
 
+		[When(@"I \(without signed in\) send message for")]
+		public void WhenIWithoutSignedInSendMessageFor(Table table)
+		{
+			var persons = table.CreateSet<RealTimeAdherenceAgentStateInfo>();
+			var ids = persons.Select(x => DataMaker.Data().Person(x.Name).Person.Id.Value);
+
+			Navigation.GotoMessageTool(ids);
+		}
 
 		[Then(@"I should see send message succeeded")]
 		public void ThenIShouldSeeSendMessageSucceeded()
