@@ -149,14 +149,25 @@ namespace Teleopti.Ccc.TestCommon
 		private IDisposable offlineScope()
 		{
 			SqlConnection.ClearAllPools();
+			setOffline();
+			return new GenericDisposable(setOnline);
+		}
+
+		private void setOffline()
+		{
 			executeNonQueryOnMaster("ALTER DATABASE [{0}] SET OFFLINE WITH ROLLBACK IMMEDIATE", DatabaseName);
-			return new GenericDisposable(() => executeNonQueryOnMaster("ALTER DATABASE [{0}] SET ONLINE", DatabaseName));
+		}
+
+		private void setOnline()
+		{
+			executeNonQueryOnMaster("ALTER DATABASE [{0}] SET ONLINE", DatabaseName);
 		}
 
 		private void dropIfExists()
 		{
 			if (!Exists()) return;
 
+			setOnline(); // if dropping a database that is offline, the file on disk will remain!
 			executeNonQueryOnMaster("ALTER DATABASE [{0}] SET SINGLE_USER WITH ROLLBACK IMMEDIATE;", DatabaseName);
 			executeNonQueryOnMaster("DROP DATABASE [{0}]", DatabaseName);
 		}
