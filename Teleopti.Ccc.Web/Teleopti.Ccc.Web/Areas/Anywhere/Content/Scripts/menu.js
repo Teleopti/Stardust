@@ -61,6 +61,9 @@ define([
 			self.urlForTeamScheduleToday = function() {
 				return navigation.UrlForTeamScheduleToday(self.CurrentBusinessUnitId());
 			}
+			self.urlForTeamScheduleToday_31897 = function() {
+				return navigation.UrlForTeamScheduleToday_31897(self.CurrentBusinessUnitId());
+			}
 			self.urlForRealTimeAdherence = function() {
 				return navigation.UrlForRealTimeAdherence(self.CurrentBusinessUnitId());
 			};

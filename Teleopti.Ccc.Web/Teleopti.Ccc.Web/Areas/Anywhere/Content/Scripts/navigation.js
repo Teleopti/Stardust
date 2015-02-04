@@ -42,6 +42,9 @@ define([
 		UrlForTeamScheduleToday: function(buid) {
 			return window.baseLocation() + "#teamschedule/" + buid;
 		},
+		UrlForTeamScheduleToday_31897: function(buid) {
+			return window.baseLocation() + "#newteamschedule/" + buid;
+		},
 		UrlForChangingSchedule : function(buid,teamId,personId,date) {
 			return window.baseLocation() + "#teamschedule/" + buid + "/" + teamId + "/" + personId + "/" + toDateString(date);
 		},
