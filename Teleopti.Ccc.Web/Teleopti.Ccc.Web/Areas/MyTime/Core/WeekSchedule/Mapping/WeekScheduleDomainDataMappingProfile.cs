@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using AutoMapper;
@@ -51,7 +52,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.Mapping
 									var week = new DateOnlyPeriod(firstDayOfWeek, firstDayOfWeek.AddDays(6));
 									var weekWithPreviousDay = new DateOnlyPeriod(firstDayOfWeek.AddDays(-1), firstDayOfWeek.AddDays(6));
 
-									var scheduleDays = _scheduleProvider.GetScheduleForPeriod(weekWithPreviousDay) ?? new IScheduleDay[] { };
+									var scheduleDays = _scheduleProvider.GetScheduleForPeriod(weekWithPreviousDay).ToList();
 									var personRequests = _personRequestProvider.RetrieveRequests(week);
 									var requestProbability = _absenceRequestProbabilityProvider.GetAbsenceRequestProbabilityForPeriod(week);
 									var earliest =
@@ -172,9 +173,9 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.Mapping
 												let overtimeAvailability = scheduleDay == null || scheduleDay.OvertimeAvailablityCollection() == null ? null : scheduleDay.OvertimeAvailablityCollection().FirstOrDefault()
 												let overtimeAvailabilityYesterday = scheduleYesterday == null || scheduleYesterday.OvertimeAvailablityCollection() == null ? null : scheduleYesterday.OvertimeAvailablityCollection().FirstOrDefault()
 												let personRequestsForDay = personRequests == null ? null : (from i in personRequests where TimeZoneInfo.ConvertTimeFromUtc(i.Request.Period.StartDateTime, _userTimeZone.TimeZone()).Date == day select i).ToArray()
-												let availabilityForDay = requestProbability != null && requestProbability.First(a => a.Item1 == day).Item4
-												let probabilityClass = requestProbability == null ? "" : requestProbability.First(a => a.Item1 == day).Item2
-												let probabilityText = requestProbability == null ? "" : requestProbability.First(a => a.Item1 == day).Item3
+												let availabilityForDay = requestProbability != null && requestProbability.First(a => a.Date == day).Availability
+												let probabilityClass = requestProbability == null ? "" : requestProbability.First(a => a.Date == day).CssClass
+												let probabilityText = requestProbability == null ? "" : requestProbability.First(a => a.Date == day).Text
 												
 												select new WeekScheduleDayDomainData
 														{

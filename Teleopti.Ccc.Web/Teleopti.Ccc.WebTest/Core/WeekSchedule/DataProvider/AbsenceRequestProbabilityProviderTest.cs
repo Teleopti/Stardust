@@ -48,8 +48,8 @@ namespace Teleopti.Ccc.WebTest.Core.WeekSchedule.DataProvider
 				});
 
 			var ret = target.GetAbsenceRequestProbabilityForPeriod(weekButNoWeek);
-			Assert.That(ret.First().Item1, Is.EqualTo(weekButNoWeek.StartDate));
-			Assert.That(ret.First().Item2, Is.EqualTo("yellow"));
+			Assert.That(ret.First().Date, Is.EqualTo(weekButNoWeek.StartDate));
+			Assert.That(ret.First().CssClass, Is.EqualTo("yellow"));
 		}
 
 		[Test]
@@ -74,8 +74,8 @@ namespace Teleopti.Ccc.WebTest.Core.WeekSchedule.DataProvider
 				});
 
 			var ret = target.GetAbsenceRequestProbabilityForPeriod(weekButNoWeek);
-			Assert.That(ret.First().Item1, Is.EqualTo(weekButNoWeek.StartDate));
-			Assert.That(ret.First().Item2, Is.EqualTo("green"));
+			Assert.That(ret.First().Date, Is.EqualTo(weekButNoWeek.StartDate));
+			Assert.That(ret.First().CssClass, Is.EqualTo("green"));
 		}
 
 		[Test]
@@ -100,8 +100,8 @@ namespace Teleopti.Ccc.WebTest.Core.WeekSchedule.DataProvider
 				});
 
 			var ret = target.GetAbsenceRequestProbabilityForPeriod(weekButNoWeek);
-			Assert.That(ret.First().Item1, Is.EqualTo(weekButNoWeek.StartDate));
-			Assert.That(ret.First().Item2, Is.EqualTo("red"));
+			Assert.That(ret.First().Date, Is.EqualTo(weekButNoWeek.StartDate));
+			Assert.That(ret.First().CssClass, Is.EqualTo("red"));
 		}
 
 		[Test]
@@ -126,8 +126,8 @@ namespace Teleopti.Ccc.WebTest.Core.WeekSchedule.DataProvider
 				});
 
 			var ret = target.GetAbsenceRequestProbabilityForPeriod(weekButNoWeek);
-			Assert.That(ret.First().Item1, Is.EqualTo(weekButNoWeek.StartDate));
-			Assert.That(ret.First().Item2, Is.EqualTo("red"));
+			Assert.That(ret.First().Date, Is.EqualTo(weekButNoWeek.StartDate));
+			Assert.That(ret.First().CssClass, Is.EqualTo("red"));
 		}
 
 		[Test]
@@ -152,8 +152,8 @@ namespace Teleopti.Ccc.WebTest.Core.WeekSchedule.DataProvider
 				});
 
 			var ret = target.GetAbsenceRequestProbabilityForPeriod(weekButNoWeek);
-			Assert.That(ret.First().Item1, Is.EqualTo(weekButNoWeek.StartDate));
-			Assert.That(ret.First().Item2, Is.EqualTo("yellow"));
+			Assert.That(ret.First().Date, Is.EqualTo(weekButNoWeek.StartDate));
+			Assert.That(ret.First().CssClass, Is.EqualTo("yellow"));
 		}
 
 		[Test]
@@ -178,8 +178,8 @@ namespace Teleopti.Ccc.WebTest.Core.WeekSchedule.DataProvider
 				});
 
 			var ret = target.GetAbsenceRequestProbabilityForPeriod(weekButNoWeek);
-			Assert.That(ret.First().Item1, Is.EqualTo(weekButNoWeek.StartDate));
-			Assert.That(ret.First().Item2, Is.EqualTo("green"));
+			Assert.That(ret.First().Date, Is.EqualTo(weekButNoWeek.StartDate));
+			Assert.That(ret.First().CssClass, Is.EqualTo("green"));
 		}
 
 		[Test]
@@ -204,8 +204,8 @@ namespace Teleopti.Ccc.WebTest.Core.WeekSchedule.DataProvider
 				});
 
 			var ret = target.GetAbsenceRequestProbabilityForPeriod(weekButNoWeek);
-			Assert.That(ret.First().Item1, Is.EqualTo(weekButNoWeek.StartDate));
-			Assert.That(ret.First().Item2, Is.EqualTo("red"));
+			Assert.That(ret.First().Date, Is.EqualTo(weekButNoWeek.StartDate));
+			Assert.That(ret.First().CssClass, Is.EqualTo("red"));
 		}
 	}
 }

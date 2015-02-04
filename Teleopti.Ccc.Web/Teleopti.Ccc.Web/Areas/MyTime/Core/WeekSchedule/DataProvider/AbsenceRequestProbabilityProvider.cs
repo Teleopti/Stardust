@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider;
@@ -7,9 +6,17 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.DataProvider
 {
+	public class AbsenceRequestProbability : IAbsenceRequestProbability
+	{
+		public DateOnly Date { get; set; }
+		public string CssClass { get; set; }
+		public string Text { get; set; }
+		public bool Availability { get; set; }
+	}
+
 	public interface IAbsenceRequestProbabilityProvider
 	{
-		List<Tuple<DateOnly, string, string, bool>> GetAbsenceRequestProbabilityForPeriod(DateOnlyPeriod period);
+		List<IAbsenceRequestProbability> GetAbsenceRequestProbabilityForPeriod(DateOnlyPeriod period);
 	}
 
 	public class AbsenceRequestProbabilityProvider : IAbsenceRequestProbabilityProvider
@@ -28,7 +35,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.DataProvider
 			_now = now;
 		}
 
-		public List<Tuple<DateOnly, string, string, bool>> GetAbsenceRequestProbabilityForPeriod(DateOnlyPeriod period)
+		public List<IAbsenceRequestProbability> GetAbsenceRequestProbabilityForPeriod(DateOnlyPeriod period)
 		{
 			var cssClass = new[]
 			{
@@ -46,7 +53,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.DataProvider
 			var absenceTimeCollection = _absenceTimeProvider.GetAbsenceTimeForPeriod(period).ToList();
 			var allowanceCollection = _allowanceProvider.GetAllowanceForPeriod(period).ToList();
 
-			var ret = new List<Tuple<DateOnly, string, string, bool>>();
+			var ret = new List<IAbsenceRequestProbability>();
 
 			foreach (var dateOnly in period.DayCollection())
 			{
@@ -81,8 +88,13 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.DataProvider
 					probabilityIndex = 0;
 				}
 
-				ret.Add(new Tuple<DateOnly, string, string, bool>(dateOnly, cssClass[probabilityIndex], texts[probabilityIndex],
-					allowanceDay != null && allowanceDay.Availability));
+				ret.Add(new AbsenceRequestProbability
+				{
+					Date = dateOnly,
+					CssClass = cssClass[probabilityIndex],
+					Text = texts[probabilityIndex],
+					Availability = allowanceDay != null && allowanceDay.Availability
+				});
 			}
 
 			return ret;
