@@ -60,21 +60,22 @@
 							}
 						});
 					}
-				});
-
-				ajax.ajax({
-					url: "Teams/GetBusinessUnitId?teamId=" + teamId,
-					success: function (businessUnitId) {
-						subscriptions.subscribeAdherence(function (notification) {
-							viewModel.updateFromNotification(notification);
-						},
-							businessUnitId,
-							teamId,
-							function () {
-								$('.realtimeadherenceagents').attr("data-subscription-done", " ");
+				})
+				.done(function() {
+					ajax.ajax({
+						url: "Teams/GetBusinessUnitId?teamId=" + teamId,
+						success: function (businessUnitId) {
+							subscriptions.subscribeAdherence(function (notification) {
+								viewModel.updateFromNotification(notification);
 							},
-							true);
-					}
+								businessUnitId,
+								teamId,
+								function () {
+									$('.realtimeadherenceagents').attr("data-subscription-done", " ");
+								},
+								true);
+						}
+					});
 				});
 			}
 
