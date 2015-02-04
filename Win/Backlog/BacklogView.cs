@@ -1,15 +1,13 @@
 ﻿using System;
+using System.Collections;
+using System.Collections.Generic;
 using System.Drawing;
 using System.Windows.Forms;
 using System.Windows.Forms.DataVisualization.Charting;
 using Autofac;
 using Syncfusion.Windows.Forms.Grid;
-using Teleopti.Ccc.Domain.ResourceCalculation;
-using Teleopti.Ccc.Domain.ResourceCalculation.IntraIntervalAnalyze;
 using Teleopti.Ccc.Win.Common.Controls.Cells;
-using Teleopti.Ccc.Win.Scheduling;
 using Teleopti.Ccc.WinCode.Backlog;
-using Teleopti.Ccc.WinCode.Common;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Win.Backlog
@@ -17,18 +15,61 @@ namespace Teleopti.Ccc.Win.Backlog
 	public partial class BacklogView : Form
 	{
 		private readonly IComponentContext _container;
+		private readonly DateOnlyPeriod _period;
 		private BacklogModel _model;
-		private const int fixedRows = 9;
+		private int _fixedRows;
+		private const int plannedRows = 4;
+		private IList<IBacklogGridRow> _selectedGridRows = new List<IBacklogGridRow>();
+		private readonly IList<IBacklogGridRow> _allGridRows = new List<IBacklogGridRow>();
+		private IBacklogGridRow _expandedRow;
 
-		public BacklogView(IComponentContext container)
+		public BacklogView(IComponentContext container, DateOnlyPeriod period)
 		{
 			_container = container;
+			_period = period;
 			InitializeComponent();
-			_model = new BacklogModel(container);
-			gridControl1.CellModels.Add("TimeSpanLongHourMinutesStatic", new TimeSpanDurationStaticCellModel(gridControl1.Model) { DisplaySeconds = false });
-			gridControl1.CellModels.Add("PercentReadOnlyCellModel", new PercentReadOnlyCellModel(gridControl1.Model));
-			gridControl1.CellModels.Add("Ignore", new IgnoreCellModel(gridControl1.Model));
+			_model = new BacklogModel(container, period);
 			
+			dateTimePicker1.MinDate = _period.StartDate;
+			dateTimePicker1.MaxDate = _period.EndDate.AddDays(1);
+			dateTimePicker1.Value = _period.StartDate;
+			setupGrid();
+		}
+
+		private void setupGrid()
+		{
+			gridControl1.CellModels.Add("Time", new TimeSpanDurationCellModel(gridControl1.Model) { DisplaySeconds = false, AllowEmptyCell = true });
+			gridControl1.CellModels.Add("TimeS", new TimeSpanDurationStaticCellModel(gridControl1.Model) { DisplaySeconds = false });
+			gridControl1.CellModels.Add("Percent", new PercentReadOnlyCellModel(gridControl1.Model));
+			gridControl1.CellModels.Add("Ignore", new IgnoreCellModel(gridControl1.Model));
+
+			_allGridRows.Add(new BacklogGridHeaderRow(_model));
+			_allGridRows.Add(new BacklogGridRow(BacklogCategory.ProductionPlan, "TimeS", "Incoming Demand",
+				_model.GetIncomingForIndex));
+			_allGridRows.Add(new BacklogGridRow(BacklogCategory.ProductionPlan, "TimeS", "Planned Time on Incoming",
+				_model.GetProductPlanTimeOnIncoming));
+			_allGridRows.Add(new BacklogGridRow(BacklogCategory.ProductionPlan, "TimeS", "Planned Backlog on Incoming",
+				_model.GetProductPlanBacklogOnIncoming));
+			_allGridRows.Add(new BacklogGridRow(BacklogCategory.ProductionPlan, "Time", "Manual Production Plan",
+				_model.GetManualEntryOnIndex));
+			_allGridRows.Add(new BacklogGridRow(BacklogCategory.ProductionPlan, "TimeS", "Planned on skill",
+				_model.GetForecastedForIndex));
+
+			_allGridRows.Add(new BacklogGridRow(BacklogCategory.Scheduled, "TimeS", "Scheduled on skill",
+				_model.GetScheduledOnIndex));
+			_allGridRows.Add(new BacklogGridRow(BacklogCategory.Scheduled, "TimeS", "Scheduled backlog on skill",
+				_model.GetScheduledBacklogOnIndex));
+			_allGridRows.Add(new BacklogGridRow(BacklogCategory.Scheduled, "TimeS", "Scheduled on incoming",
+				_model.GetScheduledOnIncomingIndex));
+			_allGridRows.Add(new BacklogGridRow(BacklogCategory.Scheduled, "TimeS", "Backlog on incoming",
+				_model.GetScheduledBacklogOnIncomingIndex));
+			_allGridRows.Add(new BacklogGridPercentRow(BacklogCategory.Scheduled, "Percent", "SL on incoming",
+				_model.GetScheduledServiceLevelOnIncomingIndex));
+
+			_selectedGridRows = new List<IBacklogGridRow>(_allGridRows);
+			_fixedRows = _selectedGridRows.Count-1;
+
+			_expandedRow = new BacklogGridExpandedRow(_model, _fixedRows);
 		}
 
 		private void populateTabControl()
@@ -61,129 +102,33 @@ namespace Teleopti.Ccc.Win.Backlog
 		private void gridControl1_QueryRowCount(object sender, GridRowColCountEventArgs e)
 		{
 			if(toolStripButtonExpand.Checked)
-				e.Count = fixedRows + _model.GetIncomingCount((ISkill)tabControlSkills.SelectedTab.Tag);
+				e.Count = _fixedRows + _model.GetIncomingCount((ISkill)tabControlSkills.SelectedTab.Tag);
 			else
 			{
-				e.Count = fixedRows;
+				e.Count = _fixedRows;
 			}
 			e.Handled = true;
 		}
 
 		private void gridControl1_QueryCellInfo(object sender, GridQueryCellInfoEventArgs e)
 		{
-			if (e.ColIndex == -1 || e.RowIndex == -1)
+			var skill = (ISkill) tabControlSkills.SelectedTab.Tag;
+			if (skill == null)
 				return;
 
-			if (e.ColIndex == 0)
-			{
-				switch (e.RowIndex)
-				{
-					case 1:
-						e.Style.CellValue = "Incoming Demand";
-						break;
-					case 2:
-						e.Style.CellValue = "Forecasted Time";
-						break;
-					case 3:
-						e.Style.CellValue = "Forecasted Backlog";
-						break;
-					case 4:
-						e.Style.CellValue = "Manual Entries";
-						break;
-					case 5:
-						e.Style.CellValue = "Scheduled on skill";
-						break;
-					case 6:
-						e.Style.CellValue = "Scheduled backlog on skill";
-						break;
-					case 7:
-						e.Style.CellValue = "Scheduled on incoming";
-						break;
-					case 8:
-						e.Style.CellValue = "Backlog on incoming";
-						break;
-					case 9:
-						e.Style.CellValue = "SL on incoming";
-						break;
+			if (e.RowIndex == -1)
+				return;
 
-				}
+			if (e.RowIndex <= _fixedRows)
+			{
+				_selectedGridRows[e.RowIndex].SetCell(skill, e, new DateOnly(dateTimePicker1.Value));
 			}
 			else
 			{
-				if (e.RowIndex == 0)
-				{
-					e.Style.CellValue = _model.GetDateForIndex(e.ColIndex);
-				}
-				else
-				{
-					TimeSpan time;
-					var skill = (ISkill) tabControlSkills.SelectedTab.Tag;
-					if (skill == null)
-						return;
-
-					switch (e.RowIndex)
-					{
-						case 1:
-							e.Style.CellType = "TimeSpanLongHourMinutesStatic";
-							time = _model.GetIncomingForIndex(e.ColIndex, (ISkill)tabControlSkills.SelectedTab.Tag);
-							setValue(e, time);
-							break;
-						case 2:
-							e.Style.CellType = "TimeSpanLongHourMinutesStatic";
-							time  = _model.GetForecastedForIndex(e.ColIndex, (ISkill)tabControlSkills.SelectedTab.Tag);
-							setValue(e, time);
-							break;
-						case 3:
-							e.Style.CellType = "TimeSpanLongHourMinutesStatic";
-							e.Style.CellValue = _model.GetForecastedBacklogForIndex(e.ColIndex, (ISkill)tabControlSkills.SelectedTab.Tag);						
-							break;
-						case 4:
-							e.Style.CellType = "TimeSpanLongHourMinutesStatic";
-							e.Style.CellValue = _model.GetManualEntryOnIndex(e.ColIndex, (ISkill)tabControlSkills.SelectedTab.Tag);
-							e.Style.Borders.Bottom = new GridBorder(GridBorderStyle.Solid, Color.Black, GridBorderWeight.ExtraExtraThick);
-							break;
-						case 5:
-							e.Style.CellType = "TimeSpanLongHourMinutesStatic";
-							e.Style.CellValue = _model.GetScheduledOnIndex(e.ColIndex, (ISkill)tabControlSkills.SelectedTab.Tag);
-							break;
-						case 6:
-							e.Style.CellType = "TimeSpanLongHourMinutesStatic";
-							e.Style.CellValue = _model.GetScheduledBacklogOnIndex(e.ColIndex, (ISkill)tabControlSkills.SelectedTab.Tag);
-							break;
-						case 7:
-							e.Style.CellType = "TimeSpanLongHourMinutesStatic";
-							time = _model.GetScheduledOnIncomingIndex(e.ColIndex, (ISkill)tabControlSkills.SelectedTab.Tag);
-							setValue(e, time);
-							break;
-						case 8:
-							e.Style.CellType = "TimeSpanLongHourMinutesStatic";
-							time = _model.GetScheduledBacklogOnIncomingIndex(e.ColIndex, (ISkill)tabControlSkills.SelectedTab.Tag);
-							setValue(e, time);
-							break;
-						case 9:
-							e.Style.CellType = "PercentReadOnlyCellModel";
-							e.Style.CellValue = _model.GetScheduledServiceLevelOnIncomingIndex(e.ColIndex, (ISkill)tabControlSkills.SelectedTab.Tag);
-							e.Style.Borders.Bottom = new GridBorder(GridBorderStyle.Solid, Color.Black, GridBorderWeight.ExtraExtraThick);
-							break;
-						default :
-							TimeSpan? t = _model.GetScheduledTimeOnTaskForDate(e.ColIndex, e.RowIndex, fixedRows,
-								(ISkill) tabControlSkills.SelectedTab.Tag);
-							if(!t.HasValue)
-							{
-								e.Style.CellType = "Ignore";
-								e.Style.CellValue = null;
-							}
-							else
-							{
-								e.Style.CellType = "TimeSpanLongHourMinutesStatic";
-								e.Style.CellValue = t.Value;
-							}
-							break;
-
-					}
-					setBackColor(e);
-				}
+				_expandedRow.SetCell(skill, e, new DateOnly(dateTimePicker1.Value));
 			}
+
+			e.Handled = true;
 		}
 
 		private static void setValue(GridQueryCellInfoEventArgs e, TimeSpan time)
@@ -195,7 +140,21 @@ namespace Teleopti.Ccc.Win.Backlog
 		{
 			e.Style.BackColor = Color.White;
 			if (_model.IsClosedOnIndex(e.ColIndex, (ISkill) tabControlSkills.SelectedTab.Tag))
+			{
 				e.Style.BackColor = Color.Khaki;
+				return;
+			}
+			var dateForIndex = _model.GetDateOnIndex(e.ColIndex);
+			if (e.RowIndex > 0 && e.RowIndex <= plannedRows && dateForIndex < new DateOnly(dateTimePicker1.Value))
+			{
+				e.Style.BackColor = Color.LightGray;
+				return;
+			}
+
+			if (e.RowIndex > plannedRows && dateForIndex >= new DateOnly(dateTimePicker1.Value))
+			{
+				e.Style.BackColor = Color.LightGray;
+			}
 		}
 
 		private void backlogViewLoad(object sender, EventArgs e)
@@ -214,15 +173,6 @@ namespace Teleopti.Ccc.Win.Backlog
 			updateChartChart();
 		}
 
-		private void toolStripButtonManualEntries_Click(object sender, EventArgs e)
-		{
-			using (var dialog = new ManualEntryDialog(_model, (ISkill) tabControlSkills.SelectedTab.Tag))
-			{
-				dialog.ShowDialog(this);
-			}
-			gridControl1.Invalidate();
-		}
-
 		private void toolStripButtonSave_Click(object sender, EventArgs e)
 		{
 			_model.TransferSkillDays((ISkill)tabControlSkills.SelectedTab.Tag);
@@ -230,7 +180,7 @@ namespace Teleopti.Ccc.Win.Backlog
 
 		private void backgroundWorker1_DoWork(object sender, System.ComponentModel.DoWorkEventArgs e)
 		{
-			_model.Load(backgroundWorker1);
+			_model.Load(backgroundWorker1, new DateOnly(dateTimePicker1.Value));
 		}
 
 		private void backgroundWorker1_ProgressChanged(object sender, System.ComponentModel.ProgressChangedEventArgs e)
@@ -248,6 +198,7 @@ namespace Teleopti.Ccc.Win.Backlog
 			gridControl1.BeginUpdate();
 			gridControl1.ColWidths.SetSize(0, 140);
 			gridControl1.RowHeights.SetSize(0, 30);
+			gridControl1.Rows.FreezeRange(1, _fixedRows);
 			gridControl1.EndUpdate(true);
 			chart1.Palette = ChartColorPalette.SeaGreen;
 			updateChartChart();
@@ -256,7 +207,7 @@ namespace Teleopti.Ccc.Win.Backlog
 
 		private void toolStripButtonSkillMapper_Click(object sender, EventArgs e)
 		{
-			using (var dialog = new SkillMapperDialog(_model.SkillPairs))
+			using (var dialog = new SkillMapperDialog(_model.SkillPairsBackofficeEmail))
 			{
 				dialog.ShowDialog(this);
 			}
@@ -265,18 +216,39 @@ namespace Teleopti.Ccc.Win.Backlog
 		private void updateChartChart()
 		{
 			chart1.Series.Clear();
-			var series1 = chart1.Series.Add("Scheduled on incoming");
+			var series1 = chart1.Series.Add("Planned/Scheduled on incoming");
 			var series2 = chart1.Series.Add("Backlog on incoming");
+			var series3 = chart1.Series.Add("Overstaff");
+			series3.Color = Color.OrangeRed;
 			series1.ChartType = SeriesChartType.StackedColumn;
+			series1.XValueType = ChartValueType.Date;
 			series2.ChartType = SeriesChartType.StackedColumn;
+			series2.XValueType = ChartValueType.Date;
+			series3.ChartType = SeriesChartType.StackedColumn;
+			series3.XValueType = ChartValueType.Date;
 			for (int i = 1; i < gridControl1.ColCount; i++)
 			{
-				var datapoint = new DataPoint(i,
-					_model.GetScheduledOnIncomingIndex(i, (ISkill) tabControlSkills.SelectedTab.Tag).TotalHours);
-				series1.Points.Add(datapoint);
-				datapoint = new DataPoint(i,
-					_model.GetScheduledBacklogOnIncomingIndex(i, (ISkill)tabControlSkills.SelectedTab.Tag).TotalHours);
-				series2.Points.Add(datapoint);
+				var dateOnIndex = _model.GetDateOnIndex(i);
+				var skill = (ISkill) tabControlSkills.SelectedTab.Tag;
+				DataPoint datapoint;
+				if(dateOnIndex < dateTimePicker1.Value)
+				{
+					datapoint = new DataPoint(i, _model.GetScheduledOnIncomingIndex(i, skill).GetValueOrDefault(TimeSpan.Zero).TotalHours);
+					datapoint.AxisLabel = dateOnIndex.ToShortDateString();
+					series1.Points.Add(datapoint);
+					datapoint = new DataPoint(i, _model.GetScheduledBacklogOnIncomingIndex(i, skill).GetValueOrDefault(TimeSpan.Zero).TotalHours);
+					series2.Points.Add(datapoint);
+					datapoint = new DataPoint(i, _model.GetScheduledOverstaffOnIncomming(i, skill).TotalHours);
+					series3.Points.Add(datapoint);
+				}
+				else
+				{
+					datapoint = new DataPoint(i, _model.GetProductPlanTimeOnIncoming(i, skill).GetValueOrDefault(TimeSpan.Zero).TotalHours);
+					datapoint.AxisLabel = dateOnIndex.ToShortDateString();
+					series1.Points.Add(datapoint);
+					datapoint = new DataPoint(i, _model.GetProductPlanBacklogOnIncoming(i, skill).GetValueOrDefault(TimeSpan.Zero).TotalHours);
+					series2.Points.Add(datapoint);
+				}
 			}
 		}
 
@@ -289,8 +261,40 @@ namespace Teleopti.Ccc.Win.Backlog
 
 		private void buttonLoad_Click(object sender, EventArgs e)
 		{
-			_model = new BacklogModel(_container);
+			_model = new BacklogModel(_container, _period);
 			backlogViewLoad(this, new EventArgs());
+		}
+
+		private void gridControl1_SaveCellInfo(object sender, GridSaveCellInfoEventArgs e)
+		{
+			if (e.RowIndex != 4)
+				return;
+
+			if (e.Style.CellValue == null)
+			{
+				_model.ClearManualEntryOnIndex(e.ColIndex, (ISkill)tabControlSkills.SelectedTab.Tag, new DateOnly(dateTimePicker1.Value));
+			}
+			else
+			{
+				var value = (TimeSpan)e.Style.CellValue;
+				_model.SetManualEntryOnIndex(e.ColIndex, (ISkill)tabControlSkills.SelectedTab.Tag, value,
+					new DateOnly(dateTimePicker1.Value));
+			}
+			
+			updateChartChart();
+			gridControl1.Refresh();
+
+			e.Handled = true;
+		}
+
+		private void dateTimePicker1_ValueChanged(object sender, EventArgs e)
+		{
+			if(!_model.Loaded)
+				return;
+
+			_model.TransferBacklogs(new DateOnly(dateTimePicker1.Value));
+			updateChartChart();
+			gridControl1.Refresh();
 		}
 	}
 }

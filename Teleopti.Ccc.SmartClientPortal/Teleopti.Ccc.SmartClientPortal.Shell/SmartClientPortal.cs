@@ -605,10 +605,12 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 			if (modulePanelItem == null)
 				return;
 
-			if (modulePanelItem.ItemText == "Backlog")
+			if (modulePanelItem.ItemText == "Backlog" && _toggleManager.IsEnabled(Toggles.Backlog_Module_23980))
 			{
-				var blView = new BacklogView(_container);
-				blView.Show(this);
+				using (var backLogSelector = new BacklogSelector(_container))
+				{
+					backLogSelector.ShowDialog(this);
+				}
 			}
 
 			_portalSettings.LastModule = modulePanelItem.Tag.ToString();

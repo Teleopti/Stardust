@@ -9,6 +9,7 @@ namespace Teleopti.Ccc.WinCode.Backlog
 	{
 		private readonly BacklogTask _parent;
 		private TimeSpan _transferedBacklog;
+		private TimeSpan _overStaff;
 		private IDictionary<DateOnly, TimeSpan> _scheduledTimes = new Dictionary<DateOnly, TimeSpan>();
 
 		public BacklogScheduledTask(BacklogTask parent)
@@ -20,6 +21,12 @@ namespace Teleopti.Ccc.WinCode.Backlog
 		{
 			get { return _transferedBacklog; }
 			set { _transferedBacklog = value; }
+		}
+
+		public TimeSpan OverStaff
+		{
+			get { return _overStaff; }
+			set { _overStaff = value; }
 		}
 
 		public TimeSpan TotalIncoming()

@@ -86,5 +86,21 @@ namespace Teleopti.Ccc.WinCode.Backlog
 
 			return backlog;
 		}
+
+		public TimeSpan PlannedTimeOnTask()
+		{
+			TimeSpan planned = TimeSpan.Zero;
+			foreach (var dateOnly in _parent.SpanningDateOnlyPeriod().DayCollection())
+			{
+				planned = planned.Add(ForecastedTimeOnDate(dateOnly));
+			}
+
+			return planned;
+		}
+
+		public TimeSpan PlannedBacklogOnTask()
+		{
+			return TotalIncoming().Subtract(PlannedTimeOnTask());
+		}
 	}
 }
