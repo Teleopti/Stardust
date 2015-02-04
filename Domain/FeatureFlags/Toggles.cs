@@ -65,6 +65,7 @@
 		MyTimeWeb_AvailabilityVerifyHours_31654,
 		MyTimeWeb_OrganisationalBasedLeaderboard_31184,
 		MyTimeWeb_TradeWithDayOffAndEmptyDay_31317,
+		MyTimeWeb_SortSchedule_32092,
 
 		Messaging_HttpSender_29205,
 
