@@ -83,9 +83,9 @@ ping 127.0.0.1 -n 2 >NUL
 ECHO ============== >> "%BatchLogFile%"
 date /t >> "%BatchLogFile%"
 time /t >> "%BatchLogFile%"
-ECHO "%BatchPath%\SetPermissionsSubForIISIUSRS.bat" "%WindowsNT%" "%SPLevel%" "%BatchPath%\..\TeleoptiCCC" >> "%BatchLogFile%"
-CALL "%BatchPath%\SetPermissionsSubForIISIUSRS.bat" "%WindowsNT%" "%SPLevel%" "%BatchPath%\..\TeleoptiCCC" >> "%BatchLogFile%"
-ECHO The errorcode from SetPermissionsSub is: %localError% >> "%BatchLogFile%"
+ECHO "%BatchPath%\SetPermissionsSubForIISRoot.bat" "%WindowsNT%" "%SPLevel%" "%BatchPath%\..\TeleoptiCCC" >> "%BatchLogFile%"
+CALL "%BatchPath%\SetPermissionsSubForIISRoot.bat" "%WindowsNT%" "%SPLevel%" "%BatchPath%\..\TeleoptiCCC" >> "%BatchLogFile%"
+ECHO The errorcode from SetPermissionsSubForIISRoot is: %localError% >> "%BatchLogFile%"
 ECHO ============== >> "%BatchLogFile%"
 
 IF %errorlevel% NEQ 0 (

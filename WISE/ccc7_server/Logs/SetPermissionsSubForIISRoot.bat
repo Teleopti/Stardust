@@ -20,6 +20,7 @@ SET /A localError=%errorlevel%
 )
 
 Call:SetPermissions "IIS_IUSRS" %localError% localError
+Call:SetPermissions "IUSR" %localError% localError
 
 Echo done
 exit /b %localError%
