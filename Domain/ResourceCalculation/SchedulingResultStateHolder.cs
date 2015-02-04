@@ -129,6 +129,13 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
             return ret;
         }
 
+		public ISkillDay SkillDayOnSkillAndDateOnly(ISkill skill, DateOnly dateOnly)
+		{
+			var allSkillDaysOnDate = SkillDaysOnDateOnly(new List<DateOnly> {dateOnly});
+
+			return allSkillDaysOnDate.FirstOrDefault(skillday => skillday.Skill == skill);
+		}
+
         ///<summary>
         ///Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources.
         ///</summary>

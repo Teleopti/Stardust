@@ -149,19 +149,11 @@ namespace Teleopti.Ccc.WinCode.Backlog
 		public TimeSpan? GetScheduledOnIndex(int colIndex, ISkill skill)
 		{
 			var date = _stateHolder.RequestedPeriod.DateOnlyPeriod.DayCollection()[colIndex - 1];
-			foreach (var skillDay in _stateHolder.SchedulingResultState.SkillDaysOnDateOnly(new List<DateOnly> { date }))
-			{
-				if (!_skillPairsBackofficeEmail.ContainsKey(skillDay.Skill))
-					continue;
+			
+			var skillDay = _stateHolder.SchedulingResultState.SkillDayOnSkillAndDateOnly(_skillPairsEmailBackOffice[skill], date);
 
-				if (skillDay.Skill != _skillPairsEmailBackOffice[skill])
-					continue;
-
-				return
-					TimeSpan.FromHours(SkillStaffPeriodHelper.ScheduledHours(skillDay.SkillStaffPeriodCollection).GetValueOrDefault(0));
-			}
-
-			return TimeSpan.Zero;
+			return
+				TimeSpan.FromHours(SkillStaffPeriodHelper.ScheduledHours(skillDay.SkillStaffPeriodCollection).GetValueOrDefault(0));
 		}
 
 		public DateOnlyPeriod Period()
@@ -341,10 +333,17 @@ namespace Teleopti.Ccc.WinCode.Backlog
 		public bool IsClosedOnIndex(int colIndex, ISkill skill)
 		{
 			var date = _stateHolder.RequestedPeriod.DateOnlyPeriod.DayCollection()[colIndex - 1];
-			if (!_taskDic[skill].ContainsKey(date))
+			var affectedTasks = new SortedList<DateOnly, BacklogTask>();
+			foreach (var task in _taskDic[skill].Values)
+			{
+				if (task.SpanningDateOnlyPeriod().Contains(date))
+					affectedTasks.Add(task.StartDate, task);
+			}
+
+			if(!affectedTasks.Any())
 				return true;
 
-			return _taskDic[skill][date].ClosedDays.Contains(date);
+			return affectedTasks.First().Value.ClosedDays.Contains(date);
 		}
 
 		public TimeSpan GetScheduledBookedOnIndex(int colIndex, ISkill skill)
@@ -504,29 +503,29 @@ namespace Teleopti.Ccc.WinCode.Backlog
 
 		public void TransferSkillDays(ISkill skill)
 		{
-			ISkill targetSkill = null;
-			foreach (var skillPair in _skillPairsBackofficeEmail)
-			{
-				if (skillPair.Value == skill)
-					targetSkill = skillPair.Key;
-
-			}
+			ISkill targetSkill;
+			if (!_skillPairsEmailBackOffice.TryGetValue(skill, out targetSkill))
+				return;
 
 			var dirtySkillDays = new List<ISkillDay>();
-			foreach (var keyValuePair in _taskDic[skill])
+			foreach (var dateOnly in _stateHolder.RequestedPeriod.DateOnlyPeriod.DayCollection())
 			{
-				var skilldays = _stateHolder.SchedulingResultState.SkillDaysOnDateOnly(new List<DateOnly> {keyValuePair.Key});
+				var skilldays = _stateHolder.SchedulingResultState.SkillDaysOnDateOnly(new List<DateOnly> { dateOnly });
 				ISkillDay targetSkillDay = null;
 				foreach (var skillday in skilldays)
 				{
-					if(skillday.Skill == targetSkill)
-					targetSkillDay = skillday;
+					if (skillday.Skill == targetSkill)
+						targetSkillDay = skillday;
 				}
 
-				targetSkillDay.WorkloadDayCollection.First().Tasks = _backlogTaskForecastedTimePerDateCalculator.CalculateForDate(keyValuePair.Key, _taskDic[skill]).TotalHours; 
+				if(targetSkillDay == null)
+					continue;
+
+				targetSkillDay.WorkloadDayCollection.First().Tasks =
+					_backlogTaskForecastedTimePerDateCalculator.CalculateForDate(dateOnly, _taskDic[skill]).TotalHours;
 				dirtySkillDays.Add(targetSkillDay);
 			}
-
+			
 			saveSkillDays(dirtySkillDays);
 		}
 
@@ -581,7 +580,8 @@ namespace Teleopti.Ccc.WinCode.Backlog
 			if (!_taskDic[skill].ContainsKey(date))
 				return TimeSpan.Zero;
 
-			return _taskDic[skill][date].BacklogScheduledTask.ScheduledTimeOnTask();
+			var task = _taskDic[skill][date];
+			return task.BacklogScheduledTask.ScheduledTimeOnTask();
 		}
 
 		public TimeSpan? GetScheduledBacklogOnIncomingIndex(int colIndex, ISkill skill)

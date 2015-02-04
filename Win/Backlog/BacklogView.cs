@@ -18,7 +18,6 @@ namespace Teleopti.Ccc.Win.Backlog
 		private readonly DateOnlyPeriod _period;
 		private BacklogModel _model;
 		private int _fixedRows;
-		private const int plannedRows = 4;
 		private IList<IBacklogGridRow> _selectedGridRows = new List<IBacklogGridRow>();
 		private readonly IList<IBacklogGridRow> _allGridRows = new List<IBacklogGridRow>();
 		private IBacklogGridRow _expandedRow;
@@ -45,26 +44,26 @@ namespace Teleopti.Ccc.Win.Backlog
 
 			_allGridRows.Add(new BacklogGridHeaderRow(_model));
 			_allGridRows.Add(new BacklogGridRow(BacklogCategory.ProductionPlan, "TimeS", "Incoming Demand",
-				_model.GetIncomingForIndex));
+				_model.GetIncomingForIndex, _model));
 			_allGridRows.Add(new BacklogGridRow(BacklogCategory.ProductionPlan, "TimeS", "Planned Time on Incoming",
-				_model.GetProductPlanTimeOnIncoming));
+				_model.GetProductPlanTimeOnIncoming, _model));
 			_allGridRows.Add(new BacklogGridRow(BacklogCategory.ProductionPlan, "TimeS", "Planned Backlog on Incoming",
-				_model.GetProductPlanBacklogOnIncoming));
+				_model.GetProductPlanBacklogOnIncoming, _model));
 			_allGridRows.Add(new BacklogGridRow(BacklogCategory.ProductionPlan, "Time", "Manual Production Plan",
-				_model.GetManualEntryOnIndex));
+				_model.GetManualEntryOnIndex, _model));
 			_allGridRows.Add(new BacklogGridRow(BacklogCategory.ProductionPlan, "TimeS", "Planned on skill",
-				_model.GetForecastedForIndex));
+				_model.GetForecastedForIndex, _model));
 
 			_allGridRows.Add(new BacklogGridRow(BacklogCategory.Scheduled, "TimeS", "Scheduled on skill",
-				_model.GetScheduledOnIndex));
+				_model.GetScheduledOnIndex, _model));
 			_allGridRows.Add(new BacklogGridRow(BacklogCategory.Scheduled, "TimeS", "Scheduled backlog on skill",
-				_model.GetScheduledBacklogOnIndex));
+				_model.GetScheduledBacklogOnIndex, _model));
 			_allGridRows.Add(new BacklogGridRow(BacklogCategory.Scheduled, "TimeS", "Scheduled on incoming",
-				_model.GetScheduledOnIncomingIndex));
+				_model.GetScheduledOnIncomingIndex, _model));
 			_allGridRows.Add(new BacklogGridRow(BacklogCategory.Scheduled, "TimeS", "Backlog on incoming",
-				_model.GetScheduledBacklogOnIncomingIndex));
+				_model.GetScheduledBacklogOnIncomingIndex, _model));
 			_allGridRows.Add(new BacklogGridPercentRow(BacklogCategory.Scheduled, "Percent", "SL on incoming",
-				_model.GetScheduledServiceLevelOnIncomingIndex));
+				_model.GetScheduledServiceLevelOnIncomingIndex, _model));
 
 			_selectedGridRows = new List<IBacklogGridRow>(_allGridRows);
 			_fixedRows = _selectedGridRows.Count-1;
@@ -122,6 +121,8 @@ namespace Teleopti.Ccc.Win.Backlog
 			if (e.RowIndex <= _fixedRows)
 			{
 				_selectedGridRows[e.RowIndex].SetCell(skill, e, new DateOnly(dateTimePicker1.Value));
+				if(e.RowIndex > 1 && _selectedGridRows[e.RowIndex].Category != _selectedGridRows[e.RowIndex-1].Category)
+					e.Style.Borders.Top = new GridBorder(GridBorderStyle.Solid, Color.Black, GridBorderWeight.ExtraThick);
 			}
 			else
 			{
@@ -131,31 +132,31 @@ namespace Teleopti.Ccc.Win.Backlog
 			e.Handled = true;
 		}
 
-		private static void setValue(GridQueryCellInfoEventArgs e, TimeSpan time)
-		{
-			e.Style.CellValue = time > TimeSpan.Zero ? (object) time : string.Empty;
-		}
+		//private static void setValue(GridQueryCellInfoEventArgs e, TimeSpan time)
+		//{
+		//	e.Style.CellValue = time > TimeSpan.Zero ? (object) time : string.Empty;
+		//}
 
-		private void setBackColor(GridQueryCellInfoEventArgs e)
-		{
-			e.Style.BackColor = Color.White;
-			if (_model.IsClosedOnIndex(e.ColIndex, (ISkill) tabControlSkills.SelectedTab.Tag))
-			{
-				e.Style.BackColor = Color.Khaki;
-				return;
-			}
-			var dateForIndex = _model.GetDateOnIndex(e.ColIndex);
-			if (e.RowIndex > 0 && e.RowIndex <= plannedRows && dateForIndex < new DateOnly(dateTimePicker1.Value))
-			{
-				e.Style.BackColor = Color.LightGray;
-				return;
-			}
+		//private void setBackColor(GridQueryCellInfoEventArgs e)
+		//{
+		//	e.Style.BackColor = Color.White;
+		//	if (_model.IsClosedOnIndex(e.ColIndex, (ISkill) tabControlSkills.SelectedTab.Tag))
+		//	{
+		//		e.Style.BackColor = Color.Khaki;
+		//		return;
+		//	}
+		//	var dateForIndex = _model.GetDateOnIndex(e.ColIndex);
+		//	if (e.RowIndex > 0 && e.RowIndex <= plannedRows && dateForIndex < new DateOnly(dateTimePicker1.Value))
+		//	{
+		//		e.Style.BackColor = Color.LightGray;
+		//		return;
+		//	}
 
-			if (e.RowIndex > plannedRows && dateForIndex >= new DateOnly(dateTimePicker1.Value))
-			{
-				e.Style.BackColor = Color.LightGray;
-			}
-		}
+		//	if (e.RowIndex > plannedRows && dateForIndex >= new DateOnly(dateTimePicker1.Value))
+		//	{
+		//		e.Style.BackColor = Color.LightGray;
+		//	}
+		//}
 
 		private void backlogViewLoad(object sender, EventArgs e)
 		{
@@ -216,6 +217,8 @@ namespace Teleopti.Ccc.Win.Backlog
 		private void updateChartChart()
 		{
 			chart1.Series.Clear();
+			chart1.ChartAreas[0].AxisX.Interval = 7;
+			chart1.ChartAreas[0].AxisX.IntervalAutoMode = IntervalAutoMode.VariableCount;
 			var series1 = chart1.Series.Add("Planned/Scheduled on incoming");
 			var series2 = chart1.Series.Add("Backlog on incoming");
 			var series3 = chart1.Series.Add("Overstaff");

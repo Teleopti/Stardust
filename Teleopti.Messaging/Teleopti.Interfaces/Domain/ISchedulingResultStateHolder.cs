@@ -137,5 +137,7 @@ namespace Teleopti.Interfaces.Domain
         /// If rule for min week work time should be used
         /// </summary>
         bool UseMinWeekWorkTime { get; set; }
+
+	    ISkillDay SkillDayOnSkillAndDateOnly(ISkill skill, DateOnly dateOnly);
     }
 }
