@@ -595,11 +595,9 @@ namespace Teleopti.Ccc.WinCodeTest.Budgeting
 
 	    [Test,SetCulture("en-US")]
         public void ShouldShowWeekHeader()
-        {
-            var result = string.Format(CultureInfo.CurrentUICulture, "{0} {1} {2}",
-                                       UserTexts.Resources.WeekAbbreviationDot,
-                                       20,
-                                       budgetDays.First().BudgetDay.Day.ToShortDateString());
+	    {
+		    var result = string.Format(CultureInfo.CurrentUICulture, UserTexts.Resources.WeekAbbreviationDot, 20,
+			    budgetDays.First().BudgetDay.Day.ToShortDateString());
 
             //"w. 20 5/9/2010"
             target.Week.Should().Be.EqualTo(result);
@@ -608,8 +606,10 @@ namespace Teleopti.Ccc.WinCodeTest.Budgeting
         [Test]
         public void ShouldShowMonthYearHeader()
         {
-            var result = string.Format(CultureInfo.CurrentUICulture, "{0} {1}", CultureInfo.CurrentUICulture.DateTimeFormat.GetMonthName(
-                CultureInfo.CurrentUICulture.Calendar.GetMonth(budgetDays.First().BudgetDay.Day)), CultureInfo.CurrentUICulture.Calendar.GetYear(budgetDays.First().BudgetDay.Day));
+	        var result = string.Format(CultureInfo.CurrentUICulture, "{0} {1}",
+		        CultureInfo.CurrentUICulture.DateTimeFormat.GetMonthName(
+			        CultureInfo.CurrentUICulture.Calendar.GetMonth(budgetDays.First().BudgetDay.Day)),
+		        CultureInfo.CurrentUICulture.Calendar.GetYear(budgetDays.First().BudgetDay.Day));
 
             //"June 2010"
             target.MonthYear.Should().Be.EqualTo(result);

@@ -481,9 +481,14 @@ namespace Teleopti.Ccc.WinCode.Scheduling
                     {
                         e.Style.WrapText = false;
                         var period = ViewBaseHelper.WeekHeaderDates(week, SelectedPeriod.DateOnlyPeriod);
-                        e.Style.Tag = new DateOnly(SelectedPeriod.Period().StartDateTimeLocal(_schedulerState.TimeZoneInfo).Date.AddDays(e.ColIndex - (int)ColumnType.StartScheduleColumns).Date);
-                        e.Style.Text = string.Concat(Resources.WeekAbbreviationDot, " ", week.ToString(CultureInfo.CurrentCulture),
-                                                     " ", period.StartDate.ToShortDateString(CultureInfo.CurrentCulture));
+	                    e.Style.Tag =
+		                    new DateOnly(
+			                    SelectedPeriod.Period()
+				                    .StartDateTimeLocal(_schedulerState.TimeZoneInfo)
+				                    .Date.AddDays(e.ColIndex - (int) ColumnType.StartScheduleColumns)
+				                    .Date);
+	                    e.Style.Text = string.Format(CultureInfo.CurrentCulture, Resources.WeekAbbreviationDot,
+		                    week, period.StartDate.ToShortDateString());
 
                     }
                 }

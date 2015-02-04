@@ -2816,7 +2816,7 @@ Opcionales</value>
     <value>Opcional</value>
   </data>
   <data name="WeekAbbreviationDot" xml:space="preserve">
-    <value>s.</value>
+    <value>s. {0} {1}</value>
   </data>
   <data name="PrepareSkillThreeDots" xml:space="preserve">
     <value>Preparar Skill...</value>

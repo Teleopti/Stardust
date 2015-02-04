@@ -5540,7 +5540,7 @@ Se questo errore di validazione continua a verificarsi, controllare che la nuova
     <value>Opzionale</value>
   </data>
   <data name="WeekAbbreviationDot" xml:space="preserve">
-    <value>s.</value>
+    <value>s. {0} {1}</value>
   </data>
   <data name="PrepareSkillThreeDots" xml:space="preserve">
     <value>Prepara Skill...</value>

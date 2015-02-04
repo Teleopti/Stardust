@@ -249,7 +249,8 @@ namespace Teleopti.Ccc.WinCode.Scheduling.Requests
         private static string getWeekHeader(DateOnly date, DateOnlyPeriod week)
         {
             var weekNumber = DateHelper.WeekNumber(date, CultureInfo.CurrentCulture);
-            return string.Format(CultureInfo.CurrentCulture, "{0} {1} {2}", UserTexts.Resources.WeekAbbreviationDot, weekNumber, week.StartDate.ToShortDateString(CultureInfo.CurrentCulture));
+	        return string.Format(CultureInfo.CurrentCulture, UserTexts.Resources.WeekAbbreviationDot, weekNumber,
+		        week.StartDate.ToShortDateString());
         }
 
         public void MoveToPreviousWeek()
