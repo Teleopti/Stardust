@@ -116,11 +116,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data
 			var targetFile = Path.Combine(o.TargetFolder, "web.config");
 
 			var tags = new AllTags {{"PublishEventsToServiceBus", "false"}};
-			//const string module = @"<module type=""Teleopti.Ccc.IocCommon.Configuration.SyncEventsPublisherModule, Teleopti.Ccc.IocCommon""/>";
-			//	tags.Add(
-			//		"EventsPublisherModule",
-			//		module
-			//		);
 
 			FileConfigurator.ConfigureByTags(
 				sourceFile,
