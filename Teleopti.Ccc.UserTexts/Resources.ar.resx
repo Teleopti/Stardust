@@ -4917,6 +4917,9 @@
     <value>أسبوع</value>
     <comment>أسبوع</comment>
   </data>
+  <data name="WeekWithNumber" xml:space="preserve">
+    <value>أسبوع {0}</value>
+  </data>
   <data name="WeekAbbreviationDot" xml:space="preserve">
     <value>أ. {0} {1}</value>
     <comment>اختصار كلمة أسبوع</comment>

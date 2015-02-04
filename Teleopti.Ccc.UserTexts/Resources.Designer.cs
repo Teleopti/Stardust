@@ -26078,7 +26078,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to w..
+        ///   Looks up a localized string similar to w. {0} {1}.
         /// </summary>
         public static string WeekAbbreviationDot {
             get {
@@ -26245,6 +26245,15 @@ namespace Teleopti.Ccc.UserTexts {
         public static string WeekView {
             get {
                 return ResourceManager.GetString("WeekView", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Week {0}.
+        /// </summary>
+        public static string WeekWithNumber {
+            get {
+                return ResourceManager.GetString("WeekWithNumber", resourceCulture);
             }
         }
         

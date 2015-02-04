@@ -3122,6 +3122,9 @@ Datum</value>
   <data name="Week" xml:space="preserve">
     <value>Week</value>
   </data>
+  <data name="WeekWithNumber" xml:space="preserve">
+    <value>Week {0}</value>
+  </data>
   <data name="WeekOfMonth" xml:space="preserve">
     <value>Week van maand</value>
   </data>
