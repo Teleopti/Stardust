@@ -11,16 +11,16 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.DataProvider
 	{
 		List<Tuple<DateOnly, string, string, bool>> GetAbsenceRequestProbabilityForPeriod(DateOnlyPeriod period);
 	}
+
 	public class AbsenceRequestProbabilityProvider : IAbsenceRequestProbabilityProvider
 	{
 		private readonly IAllowanceProvider _allowanceProvider;
 		private readonly IAbsenceTimeProvider _absenceTimeProvider;
 		private readonly INow _now;
-		private string[] texts;
-		readonly string[] cssClass = {"red", "yellow", "green"};
 
-		public AbsenceRequestProbabilityProvider(IAllowanceProvider allowanceProvider,
-		                                         IAbsenceTimeProvider absenceTimeProvider,
+		public AbsenceRequestProbabilityProvider(
+			IAllowanceProvider allowanceProvider,
+			IAbsenceTimeProvider absenceTimeProvider,
 			INow now)
 		{
 			_allowanceProvider = allowanceProvider;
@@ -30,72 +30,103 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.DataProvider
 
 		public List<Tuple<DateOnly, string, string, bool>> GetAbsenceRequestProbabilityForPeriod(DateOnlyPeriod period)
 		{
-			texts = new[] { UserTexts.Resources.Poor, UserTexts.Resources.Fair, UserTexts.Resources.Good };
+			var cssClass = new[]
+			{
+				"red",
+				"yellow",
+				"green"
+			};
+			var texts = new[]
+			{
+				UserTexts.Resources.Poor,
+				UserTexts.Resources.Fair,
+				UserTexts.Resources.Good
+			};
 
-			var absenceTimeCollection = _absenceTimeProvider.GetAbsenceTimeForPeriod(period);
-			var allowanceCollection = _allowanceProvider.GetAllowanceForPeriod(period);
+			var absenceTimeCollection = _absenceTimeProvider.GetAbsenceTimeForPeriod(period).ToList();
+			var allowanceCollection = _allowanceProvider.GetAllowanceForPeriod(period).ToList();
 
 			var ret = new List<Tuple<DateOnly, string, string, bool>>();
 
 			foreach (var dateOnly in period.DayCollection())
 			{
-
-				var allowanceDay = allowanceCollection == null
-										  ? null
-										  : allowanceCollection.First(a => a.Item1 == dateOnly);
-
-				var absenceTimeForDay = absenceTimeCollection == null
-					                        ? 0
-					                        : absenceTimeCollection.First(a => a.Date == dateOnly).AbsenceTime;
-
-				var absenceHeadsForDay = absenceTimeCollection == null
-											? 0
-											: absenceTimeCollection.First(a => a.Date == dateOnly).HeadCounts;
-
-				var fulltimeEquivalentForDay = allowanceDay == null
-					                               ? 0
-												   : allowanceDay.Item3.TotalMinutes;
-
-				var allowanceMinutesForDay = allowanceDay == null
-					                      ? 0
-										  : allowanceDay.Item2.TotalMinutes;
-
-				var allowanceForDay = allowanceDay == null
-										  ? 0
-										  : allowanceDay.Item4;
-
-				var percent = 0d;
-				var index = 0;
-				//UseHeadCount
-				if (allowanceDay != null && allowanceDay.Item6.Equals(true))
+				var absenceTimeForDay = .0;
+				var absenceHeadsForDay = .0;
+				if (absenceTimeCollection.Any())
 				{
-					if (allowanceForDay > absenceHeadsForDay)
-						percent = 100 -( 100 * ( absenceHeadsForDay/ allowanceForDay));
-					
-					if (allowanceForDay - absenceHeadsForDay >= 1)
-						index = 1;
-
-					if (percent > 30 && allowanceForDay - absenceHeadsForDay >= 2)
-						index = 2;
-					
+					absenceTimeForDay = absenceTimeCollection.First(a => a.Date == dateOnly).AbsenceTime;
+					absenceHeadsForDay = absenceTimeCollection.First(a => a.Date == dateOnly).HeadCounts;
 				}
-				else
+
+				var allowanceDay = allowanceCollection.Any()
+					? allowanceCollection.First(a => a.Item1 == dateOnly)
+					: null;
+
+				var fulltimeEquivalentForDay = .0;
+				var allowanceMinutesForDay = .0;
+				var allowanceForDay = .0;
+				if (allowanceDay != null)
 				{
-					if (!Equals(allowanceMinutesForDay, .0))
-						percent = 100 * ((allowanceMinutesForDay - absenceTimeForDay) / allowanceMinutesForDay);
-
-
-
-					if (percent > 0 && (allowanceMinutesForDay - absenceTimeForDay) >= fulltimeEquivalentForDay)
-						index = percent > 30 && (allowanceMinutesForDay - absenceTimeForDay) >= 2 * fulltimeEquivalentForDay ? 2 : 1;
+					fulltimeEquivalentForDay = allowanceDay.Item3.TotalMinutes;
+					allowanceMinutesForDay = allowanceDay.Item2.TotalMinutes;
+					allowanceForDay = allowanceDay.Item4;
 				}
+
+				var probabilityIndex = allowanceDay != null && allowanceDay.Item6.Equals(true)
+					? getAllowanceIndexWithHeadCount(allowanceForDay, absenceHeadsForDay)
+					: getAllowanceIndex(allowanceMinutesForDay, absenceTimeForDay, fulltimeEquivalentForDay);
 
 				if (dateOnly < _now.LocalDateOnly())
-					index = 0;
-				ret.Add(new Tuple<DateOnly, string, string, bool>(dateOnly, cssClass[index], texts[index], allowanceDay.Item5));
+				{
+					probabilityIndex = 0;
+				}
+
+				ret.Add(new Tuple<DateOnly, string, string, bool>(dateOnly, cssClass[probabilityIndex], texts[probabilityIndex],
+					allowanceDay != null && allowanceDay.Item5));
 			}
 
 			return ret;
+		}
+
+		private static int getAllowanceIndex(double allowanceMinutesForDay, double absenceTimeForDay,
+			double fulltimeEquivalentForDay)
+		{
+			var probabilityIndex = 0;
+			var percent = .0;
+			var timeDiff = allowanceMinutesForDay - absenceTimeForDay;
+			if (!Equals(allowanceMinutesForDay, .0))
+			{
+				percent = 100*(timeDiff/allowanceMinutesForDay);
+			}
+
+			if (percent > 0 && timeDiff >= fulltimeEquivalentForDay)
+			{
+				probabilityIndex = percent > 30 && timeDiff >= 2*fulltimeEquivalentForDay ? 2 : 1;
+			}
+			return probabilityIndex;
+		}
+
+		private static int getAllowanceIndexWithHeadCount(double allowanceForDay, double absenceHeadsForDay)
+		{
+			var probabilityIndex = 0;
+			var percent = .0;
+			var allowanceDiff = allowanceForDay - absenceHeadsForDay;
+
+			if (allowanceDiff > 0)
+			{
+				percent = 100 - (100*(absenceHeadsForDay/allowanceForDay));
+			}
+
+			if (allowanceDiff >= 1)
+			{
+				probabilityIndex = 1;
+			}
+
+			if (percent > 30 && allowanceDiff >= 2)
+			{
+				probabilityIndex = 2;
+			}
+			return probabilityIndex;
 		}
 	}
 }
