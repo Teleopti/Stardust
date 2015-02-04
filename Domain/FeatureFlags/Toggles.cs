@@ -79,5 +79,6 @@
 		MultiTenancy_WebLogon_17461,
 
 		SeatPlanner_Logon_32003,
+		MyTeam_MakeTeamScheduleConsistent_31897,
 	}
 }

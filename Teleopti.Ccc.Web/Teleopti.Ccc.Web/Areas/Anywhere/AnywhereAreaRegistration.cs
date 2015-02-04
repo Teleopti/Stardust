@@ -6,7 +6,7 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere
 	{
 		public override string AreaName
 		{
-            get { return "Anywhere"; }
+			get { return "Anywhere"; }
 		}
 
 		public override void RegisterArea(AreaRegistrationContext context)
