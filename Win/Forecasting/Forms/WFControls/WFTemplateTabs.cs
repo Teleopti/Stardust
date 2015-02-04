@@ -75,14 +75,14 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.WFControls
 				if (view != null)
 				{
 					Presenter.ReloadFilteredWorkloadDayTemplates(e.FilteredDates, view.TemplateIndex);
+					ReloadTemplateView(view.TemplateIndex);
 				}
             }
             catch (DataSourceException dataSourceException)
             {
                 ShowDataSourceExcetionDialog(dataSourceException);
-                return;
             }
-            ReloadTemplateViews();
+
         }
 
         private void setSelectedDateFilter( object sender, IList<DateOnlyPeriod> selectedDates)
@@ -166,9 +166,9 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.WFControls
             }
         }
 
-        public void ReloadTemplateViews()
+        public void ReloadTemplateView(int templateIndex)
 		{
-			_detailViews.ForEach(dw =>dw.ReloadWorkloadDayTemplates());
+			_detailViews[templateIndex-1].ReloadWorkloadDayTemplates();
 		}
 
         protected override void OnLoad(EventArgs e)
