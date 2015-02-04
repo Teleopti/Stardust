@@ -1758,6 +1758,7 @@
     <Content Include=".node\node.targets" />
     <Content Include=".node\node.cmd" />
     <Content Include=".node\grunt.cmd" />
+    <Content Include="Areas\WFM\css\main.scss" />
     <None Include="PasswordPolicy.xml.notinuse">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
