@@ -6,7 +6,12 @@
 		<div>
 			<ul class="nav navbar-nav">
 				<!-- ko if: TeamScheduleVisible -->
-				<li data-bind="css: { active: ActiveView() == 'teamschedule' }"><a data-bind="attr: { href: urlForTeamScheduleToday()}">Schedules</a></li>
+				<li data-bind="css: { active: ActiveView() == 'teamschedule' }"><a data-bind="attr: { href: urlForTeamScheduleToday()}"><span data-bind="text:Resources.Schedules"></span></a></li>
+
+				<!-- ko if: IsNewTeamScheduleEnabled -->
+				<li data-bind="css: { active: ActiveView() == 'teamschedule' }"><a data-bind="attr: { href: urlForTeamScheduleToday()}"><span data-bind="text:Resources.Schedules"></span></a></li>
+				<!-- /ko -->
+
 				<!-- /ko -->
 				<!-- ko if: RealTimeAdherenceVisible -->
 				<li id="link-realtimeadherence" data-bind="css: { active: ActiveView() == 'realtimeadherencesites' }"><a data-bind="attr: { href: urlForRealTimeAdherence()}"><span data-bind="text: Resources.RealTimeAdherence"></span></a></li>
