@@ -59,7 +59,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.DataProvider
 				}
 
 				var allowanceDay = allowanceCollection.Any()
-					? allowanceCollection.First(a => a.Item1 == dateOnly)
+					? allowanceCollection.First(a => a.Date == dateOnly)
 					: null;
 
 				var fulltimeEquivalentForDay = .0;
@@ -67,12 +67,12 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.DataProvider
 				var allowanceForDay = .0;
 				if (allowanceDay != null)
 				{
-					fulltimeEquivalentForDay = allowanceDay.Item3.TotalMinutes;
-					allowanceMinutesForDay = allowanceDay.Item2.TotalMinutes;
-					allowanceForDay = allowanceDay.Item4;
+					fulltimeEquivalentForDay = allowanceDay.Heads.TotalMinutes;
+					allowanceMinutesForDay = allowanceDay.Time.TotalMinutes;
+					allowanceForDay = allowanceDay.AllowanceHeads;
 				}
 
-				var probabilityIndex = allowanceDay != null && allowanceDay.Item6.Equals(true)
+				var probabilityIndex = (allowanceDay != null && allowanceDay.UseHeadCount)
 					? getAllowanceIndexWithHeadCount(allowanceForDay, absenceHeadsForDay)
 					: getAllowanceIndex(allowanceMinutesForDay, absenceTimeForDay, fulltimeEquivalentForDay);
 
@@ -82,7 +82,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.DataProvider
 				}
 
 				ret.Add(new Tuple<DateOnly, string, string, bool>(dateOnly, cssClass[probabilityIndex], texts[probabilityIndex],
-					allowanceDay != null && allowanceDay.Item5));
+					allowanceDay != null && allowanceDay.Availability));
 			}
 
 			return ret;
