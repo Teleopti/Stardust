@@ -47,8 +47,6 @@ Teleopti.MyTimeWeb.Request.ShiftTradeBulletinBoardViewModel = function(ajax) {
 	self.filteredEndTimesText = ko.observableArray();
 	self.Toggle31317Enabled = ko.observable(false);
 	self.preloadTimeFilterFinished = true;
-	
-	
 
 	self.isDetailVisible = ko.computed(function () {
 		if (self.agentChoosed() === null) {
@@ -201,10 +199,10 @@ Teleopti.MyTimeWeb.Request.ShiftTradeBulletinBoardViewModel = function(ajax) {
 			//rk - don't really like to put DOM stuff here...
 			window.scrollTo(0, 0);
 			self.isSendEnabled(true);
-
 			self.cleanTimeFiler();
 		}
 		self.agentChoosed(agent);
+		self.keepSelectedAgentVisible();
 		self.errorMessage('');
 	};
 
