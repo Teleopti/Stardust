@@ -32,7 +32,6 @@
 		<AzureMasterConn>SQLCMD -Stcp:$(AzureServer) -U$(AzureMasterLogin) -P$(AzureMasterPwd) -dmaster</AzureMasterConn>
 		<DBManagerAzure>-S$(AzureServer) -U$(AzureMasterLogin) -P$(AzureMasterPwd) -T -C -L$(AzureDbLogin):$(AzureDbPwd)</DBManagerAzure>
 		<DatabasePath>"$(CCNetWorkingDirectory)\database"</DatabasePath>
-
 		
 		<NDependTransferDataPath>C:\NDepend\NDependXmlToDb\NDependXmlToDb.exe</NDependTransferDataPath>
 	</PropertyGroup>
@@ -104,33 +103,13 @@
 		<Message Importance="high" Text="Compile finished." />
 	</Target>
 	
-    <Target Name="BuildSSASXmla" Condition="Exists('$(ASCompile)') And Exists('$(AsDBDeploy)')">
-
-		<Message Text="Building dwproj-file with $(ASCompile)..." Importance="high" />
-		
-		<Exec Command="&quot;$(ASCompile)&quot; &quot;$(CCNetWorkingDirectory)\Cube\TeleoptiAnalytics\TeleoptiAnalytics.sln&quot; /rebuild CreateDatabase2005 /Log &quot;c:\Temp\devenv_log_$(CCNetProject)_$(CCNetLabel).txt&quot;" />
-		<Message Text="Building dwproj-file. Done!" Importance="high" />
-
-		<Message Text="Creating XMLA ..." Importance="high" />
-		<Exec Command="&quot;$(AsDBDeploy)&quot; &quot;$(CCNetWorkingDirectory)\Cube\TeleoptiAnalytics\bin\TeleoptiAnalytics.asdatabase&quot; /d /o:&quot;$(CCNetWorkingDirectory)\Cube\Xmla\CreateDatabase.xmla&quot;"/>	
-		<Message Text="Creating XMLA. Done!" Importance="high" />
-
-		<FileUpdate Files="$(CCNetWorkingDirectory)\Cube\Xmla\CreateDatabase.xmla"
-			Regex="&lt;ConnectionString&gt;.*&lt;/ConnectionString&gt;"
-			ReplacementText="&lt;ConnectionString&gt;#(SQL_CONN_STRING)&lt;/ConnectionString&gt;"/>
-			
-		<FileUpdate Files="$(CCNetWorkingDirectory)\Cube\Xmla\CreateDatabase.xmla"
-			Regex="&lt;DatabaseID&gt;.*&lt;/DatabaseID&gt;"
-			ReplacementText="&lt;DatabaseID&gt;#(SQL_DATABASE_NAME)&lt;/DatabaseID&gt;"/>			
-
-		<FileUpdate Files="$(CCNetWorkingDirectory)\Cube\Xmla\CreateDatabase.xmla"
-			Regex="(?m:^        )&lt;ID&gt;.*&lt;/ID&gt;"
-			ReplacementText="        &lt;ID&gt;#(SQL_DATABASE_NAME)&lt;/ID&gt;"/>
-
-		<FileUpdate Files="$(CCNetWorkingDirectory)\Cube\Xmla\CreateDatabase.xmla"
-			Regex="(?m:^        )&lt;Name&gt;.*&lt;/Name&gt;"
-			ReplacementText="        &lt;Name&gt;#(SQL_DATABASE_NAME)&lt;/Name&gt;"/>
-    </Target>
+    <Target Name="BuildSSASXmla">
+		<ItemGroup>
+			<XmlaFile Include="\\a380\t-files\RnD\MSI_Dependencies\390xmla\CreateDatabase.xmla"/>
+		</ItemGroup>
+		<Copy SourceFiles="@(XmlaFile)"
+			DestinationFiles="$(CCNetWorkingDirectory)\Cube\Xmla"/>
+	</Target>
 
 	<Target Name="AzurePreDropDatabase">
 		<Exec Command ="$(AzureMasterConn) -Q&quot;DROP DATABASE [$(DBNamePrefix)_analytics]&quot;"/>
