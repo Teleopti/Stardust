@@ -26,13 +26,15 @@ namespace Teleopti.Analytics.Parameters
 		private bool _isReportPermissionGranted;
 		private Guid _groupPageCode;
 		private readonly UserReportParams userReportParams = new UserReportParams();
-
-		internal static string ConnectionString = ConfigurationManager.ConnectionStrings["LocalSqlServer"].ConnectionString;
-
+		
 		internal static Unit _LabelWidth = new Unit("200");
 		internal static Unit _List1Width = new Unit("200");
 		internal static Unit _List2Width = new Unit("200");
 
+		public Selector()
+		{
+			userReportParams.ConnectionString = ConfigurationManager.ConnectionStrings["LocalSqlServer"].ConnectionString;
+		}
 
 		public static Guid BusinessHierarchyCode
 		{
@@ -42,6 +44,11 @@ namespace Teleopti.Analytics.Parameters
 			}
 		}
 
+		public string ConnectionString
+		{
+			get { return userReportParams.ConnectionString; }
+			set { userReportParams.ConnectionString = value; }
+		}
 
 		public static string ErrorMessageValText
 		{
@@ -306,8 +313,7 @@ namespace Teleopti.Analytics.Parameters
 				//Permission granted
 
 				int flag = 0;
-
-				_groupPageCode = (Guid)Context.Session["GroupPageCode"];
+				
 				DataSet repCtrlsData = DataReader.LoadReportControls(_reportId, _groupPageCode);
 
 				foreach (DataRow row in repCtrlsData.Tables[0].Rows)

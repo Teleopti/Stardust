@@ -1,0 +1,225 @@
+﻿/* Reset */
+.MyCalendar body, .MyCalendar div, .MyCalendar dl, .MyCalendar dt, .MyCalendar dd, .MyCalendar ul, .MyCalendar ol, .MyCalendar li, .MyCalendar h1, .MyCalendar h2, .MyCalendar h3, .MyCalendar h4, .MyCalendar h5, .MyCalendar h6, .MyCalendar pre, .MyCalendar form, .MyCalendar fieldset, .MyCalendar input, .MyCalendar textarea, .MyCalendar p, .MyCalendar blockquote,.MyCalendar tr, .MyCalendar th, .MyCalendar td { 
+	margin:0;
+	padding:0;
+	
+}
+.MyCalendar table {
+	border-collapse:collapse;
+	border-spacing:0;
+	font-weight:normal;
+}
+.MyCalendar fieldset, .MyCalendar img { 
+	border:0;
+}
+.MyCalendar address, .MyCalendar caption, .MyCalendar cite, .MyCalendar code, .MyCalendar dfn, .MyCalendar em, .MyCalendar strong, .MyCalendar th, .MyCalendar var {
+	font-style:normal;
+	font-weight:normal;
+	 
+}
+.MyCalendar ol, .MyCalendar ul {
+	list-style:none;
+}
+.MyCalendar caption, .MyCalendar th {
+	text-align:left;
+}
+.MyCalendar h1, .MyCalendar h2, .MyCalendar h3, .MyCalendar h4, .MyCalendar h5, .MyCalendar h6 {
+	font-size:100%;
+	font-weight:normal;
+}
+.MyCalendar q:before, .MyCalendar q:after {
+	content:'';
+}
+.MyCalendar abbr, .MyCalendar acronym { border:0;
+}
+.MyCalendar {
+    line-height:normal;
+}
+.MyCalendar table, .MyCalendar td, .MyCalendar th {
+    border-collapse: separate;
+    border-spacing: 0;
+    border-style:none;
+}
+/* The real style */
+.MyCalendar .ajax__calendar_container {   
+    background-color: White;
+    padding: 4px;
+    position: absolute;
+    cursor: default;
+    width: 170px;
+    font-size: 11px;
+    text-align: center;
+    font-family: Tahoma, verdana, helvetica;
+}
+.MyCalendar .ajax__calendar_body {
+    height: 139px;
+    width: 170px;
+    position: relative;
+    overflow: hidden;
+    margin: auto;
+    background-color: White;
+}
+.MyCalendar .ajax__calendar_days, .MyCalendar  .ajax__calendar_months, .MyCalendar  .ajax__calendar_years {
+    top: 0px;
+    left: 0px;
+    height: 139px;
+    width: 170px;
+    position: absolute;
+    text-align: center;
+    margin: auto;
+    background-color: White;
+}
+.MyCalendar .ajax__calendar_container TABLE {
+    font-size: 11px;
+    background-color: White;
+}
+.MyCalendar .ajax__calendar_container TD {
+    height: 17px;
+    font-size: 11px;
+    background-color: White;
+    padding: 0px 0px 0px 0px;
+    border: none;
+    background-image: none;
+}
+.MyCalendar .ajax__calendar_header {
+    height: 20px;
+    width: 100%;
+}
+.MyCalendar .ajax__calendar_prev {
+    cursor: pointer;
+    width: 15px;
+    height: 15px;
+    float: left;
+    background-repeat: no-repeat;
+    background-position: 50% 50%;
+    background-image:url(images/previous.gif);
+    /*background-image: url(../../WebResource.axd?d=h5orERdAXqJwNOs03yyPelp7bMUUMOtSL2yUIRd-eh2-cuX6WPyygZ3af2jYqwPfNQQAbG75SUCIun2YdKD8uQ2&t=633059379620000000);*/
+}
+.MyCalendar .ajax__calendar_next {
+    cursor: pointer;
+    width: 15px;
+    height: 15px;
+    float: right;
+    background-repeat: no-repeat;
+    background-position: 50% 50%;
+    background-image:url(images/next.gif);
+    /*background-image: url(../../WebResource.axd?d=h5orERdAXqJwNOs03yyPelp7bMUUMOtSL2yUIRd-eh2-cuX6WPyygZ3af2jYqwPf0GxIQ9SNZIrG5n9i8AgXUw2&t=633059379620000000);*/
+}
+.MyCalendar .ajax__calendar_title {
+    cursor: pointer;
+    font-weight: bold;
+}
+.MyCalendar .ajax__calendar_footer {
+    height: 15px;
+}
+.MyCalendar .ajax__calendar_today {
+    cursor: pointer;
+    padding-top: 3px;
+}
+.MyCalendar .ajax__calendar_dayname {
+    height: 17px;
+    width: 17px;
+    text-align: right;
+    padding: 0 2px;
+}
+.MyCalendar .ajax__calendar_day {
+    height: 17px;
+    width: 18px;
+    text-align: right;
+    padding: 0 2px;
+    cursor: pointer;
+}
+.MyCalendar .ajax__calendar_month {
+    color: Black;
+    height: 44px;
+    width: 40px;
+    text-align: center;
+    cursor: pointer;
+    overflow: hidden;
+}
+.MyCalendar .ajax__calendar_year {
+    height: 44px;
+    width: 40px;
+    text-align: center;
+    cursor: pointer;
+    overflow: hidden;
+}
+
+.MyCalendar .ajax__calendar_container {
+    border: 1px solid #646464;
+    background-color: #ffffff;
+    color: #000000;
+}
+.MyCalendar .ajax__calendar_footer {
+    border-top: 1px solid #f5f5f5;
+}
+.MyCalendar .ajax__calendar_dayname {
+    border-bottom: 1px solid #f5f5f5;
+}
+.MyCalendar .ajax__calendar_day {
+    border: 1px solid #ffffff;
+    height: 17px;
+}
+.MyCalendar .ajax__calendar_month {
+    color: Black;
+    border: 1px solid #ffffff;
+    height: 44px;
+}
+.MyCalendar .ajax__calendar_year {
+    border: 1px solid #ffffff;
+    height: 44px;
+}
+.MyCalendar .ajax__calendar_active .ajax__calendar_day {
+    background-color: #edf9ff;
+    border-color: #0066cc;
+    color: #0066cc;
+    height: 17px;
+}
+.MyCalendar .ajax__calendar_active .ajax__calendar_month {
+    background-color: #edf9ff;
+    border-color: #0066cc;
+    color: #0066cc;
+    height: 44px;
+}
+.MyCalendar .ajax__calendar_active .ajax__calendar_year {
+    background-color: #edf9ff;
+    border-color: #0066cc;
+    color: #0066cc;
+    height: 44px;
+}
+.MyCalendar .ajax__calendar_other .ajax__calendar_day {
+    background-color: #ffffff;
+    border-color: #ffffff;
+    color: #646464;
+    height: 17px;
+}
+.MyCalendar .ajax__calendar_other .ajax__calendar_year {
+    background-color: #ffffff;
+    border-color: #ffffff;
+    color: #646464;
+    height: 44px;
+}
+.MyCalendar .ajax__calendar_hover .ajax__calendar_day {
+    background-color: #edf9ff;
+    border-color: #daf2fc;
+    color: #0066cc;
+    height: 17px;
+}
+.MyCalendar .ajax__calendar_hover .ajax__calendar_month {
+    background-color: #edf9ff;
+    border-color: #daf2fc;
+    color: #0066cc;
+    height: 44px;
+}
+.MyCalendar .ajax__calendar_hover .ajax__calendar_year {
+    background-color: #edf9ff;
+    border-color: #daf2fc;
+    color: #0066cc;
+    height: 44px;
+}
+.MyCalendar .ajax__calendar_hover .ajax__calendar_title {
+    color: #0066cc;
+}
+.MyCalendar .ajax__calendar_hover .ajax__calendar_today {
+    color: #0066cc;
+}

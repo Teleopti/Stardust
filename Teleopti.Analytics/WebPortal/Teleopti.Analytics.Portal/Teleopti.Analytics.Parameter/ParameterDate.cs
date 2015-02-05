@@ -110,7 +110,7 @@ namespace Teleopti.Analytics.Parameters
 			_dateValidator.ErrorMessage = Selector.ErrorMessageValText + " '" + Text + "'";
 
 
-			_buttonDate = new Image { SkinID = "OpenCalSmall", ID = "ButtonDate" + Dbid };
+			_buttonDate = new Image { ImageUrl="images/Calendar_scheduleHS.png", ImageAlign=ImageAlign.AbsMiddle, ID = "ButtonDate" + Dbid };
 			_buttonDate.Attributes.Add("name", "Selector_" + _buttonDate.ID);
 			_buttonDate.Visible = System.Threading.Thread.CurrentThread.CurrentUICulture.IetfLanguageTag != "fa-IR";
 

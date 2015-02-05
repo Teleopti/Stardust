@@ -1,0 +1,55 @@
+﻿.Scorecard
+{
+}
+
+.ScorecardTitle
+{
+	font-size:14px;
+	font-weight:bold;
+}
+
+.ScorecardTable
+{
+	font-size:11px;
+	}	
+.ScorecardResultHeader 
+{
+	filter: progid:DXImageTransform.Microsoft.Gradient(GradientType=0,StartColorStr='#FF6699cc',EndColorStr='#FFFFFFFF');
+	border-bottom-style:solid;
+	border-bottom-width:thin;
+	border-bottom-color:Black;
+	
+	font-size:12px;
+	font-weight:bolder;
+	padding-left:5px;
+	}
+
+.ScorecardCell
+{
+ border-bottom-style:dashed;
+ border-bottom-width:thin;
+ border-bottom-color:Gray;
+ padding-left:5px; 
+	}
+
+	.ScorecardArrowCell
+{
+ 
+ border-bottom-style:dashed;
+ border-bottom-width:thin;
+ border-bottom-color:Gray;
+ padding-left:5px; 
+	}
+	
+.ScorecardTrafficLightCell
+{
+	background-image:url(images/transparent_circle32.png);
+	background-position:center;
+	background-repeat:no-repeat;
+	border-bottom-style:dashed;
+	border-bottom-width:thin;
+	border-bottom-color:Gray;
+	padding-left:0px;
+	padding-right:0px;
+	margin:0px;
+	}

@@ -227,6 +227,18 @@
     <Reference Include="Microsoft.Owin.Security">
       <HintPath>..\..\packages\Microsoft.Owin.Security.2.0.1\lib\net45\Microsoft.Owin.Security.dll</HintPath>
     </Reference>
+    <Reference Include="Microsoft.ReportViewer.Common, Version=11.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91, processorArchitecture=MSIL">
+      <Private>True</Private>
+      <HintPath>..\..\packages\MicrosoftReportViewerWebForms.11.0.0.0\lib\Microsoft.ReportViewer.Common.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.ReportViewer.ProcessingObjectModel, Version=11.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91, processorArchitecture=MSIL">
+      <Private>True</Private>
+      <HintPath>..\..\packages\MicrosoftReportViewerWebForms.11.0.0.0\lib\Microsoft.ReportViewer.ProcessingObjectModel.DLL</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.ReportViewer.WebForms, Version=11.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91, processorArchitecture=MSIL">
+      <Private>True</Private>
+      <HintPath>..\..\packages\MicrosoftReportViewerWebForms.11.0.0.0\lib\Microsoft.ReportViewer.WebForms.DLL</HintPath>
+    </Reference>
     <Reference Include="Microsoft.VisualBasic" />
     <Reference Include="Microsoft.Web.Infrastructure, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <Private>True</Private>
@@ -415,6 +427,16 @@
     <Compile Include="Areas\Permissions\PermissionsAreaRegistration.cs" />
     <Compile Include="Areas\Permissions\Controllers\RolesController.cs" />
     <Compile Include="Areas\Permissions\Controllers\NewRoleInput.cs" />
+    <Compile Include="Areas\Reporting\Controllers\SelectionController.cs" />
+    <Compile Include="Areas\Reporting\Core\CommonReports.cs" />
+    <Compile Include="Areas\Reporting\Core\DateTimeExtensions.cs" />
+    <Compile Include="Areas\Reporting\Models\ReportModel.cs" />
+    <Compile Include="Areas\Reporting\ReportingAreaRegistration.cs" />
+    <Compile Include="Areas\Reporting\Reports\CCC\ColorExtensions.cs" />
+    <Compile Include="Areas\Reporting\Reports\CCC\DataCellModel.cs" />
+    <Compile Include="Areas\Reporting\Reports\CCC\GroupingExtensions.cs" />
+    <Compile Include="Areas\Reporting\Reports\CCC\IntervalToolTip.cs" />
+    <Compile Include="Areas\Reporting\Reports\CCC\PersonModel.cs" />
     <Compile Include="Areas\Rta\Controllers\SyncController.cs" />
     <Compile Include="Areas\SeatPlanner\Controllers\LocationHierarchyController.cs" />
     <Compile Include="Areas\SeatPlanner\Controllers\SeatPlanCommandController.cs" />
@@ -1146,6 +1168,23 @@
     <Content Include="Areas\WFM\tests\permissions.controller.spec.js" />
     <Content Include="Areas\Anywhere\Content\Templates\personschedule_31897\view.html" />
     <Content Include="Areas\Anywhere\Content\Templates\teamschedule_31897\view.html" />
+    <Content Include="Areas\Reporting\Content\Scripts\persianDatepicker.min.js" />
+    <Content Include="Areas\Reporting\Content\Scripts\reportController.js" />
+    <Content Include="Areas\Reporting\Content\Styles\calendar.css" />
+    <Content Include="Areas\Reporting\Content\Styles\persianDatepicker-default.css" />
+    <Content Include="Areas\Reporting\Content\Styles\Scorecard.css" />
+    <Content Include="Areas\Reporting\Content\Styles\Styles.css" />
+    <Content Include="Areas\Reporting\images\Calendar_scheduleHS.png" />
+    <Content Include="Areas\Reporting\images\down.png" />
+    <Content Include="Areas\Reporting\images\excel.png" />
+    <Content Include="Areas\Reporting\images\filetype_pdf.png" />
+    <Content Include="Areas\Reporting\images\left_all_light.gif" />
+    <Content Include="Areas\Reporting\images\left_light.gif" />
+    <Content Include="Areas\Reporting\images\Question_16x16.png" />
+    <Content Include="Areas\Reporting\images\right_all_light.gif" />
+    <Content Include="Areas\Reporting\images\right_light.gif" />
+    <Content Include="Areas\Reporting\Index.aspx" />
+    <Content Include="Content\Site.css" />
     <Content Include="Content\xregexp\xregexp-all-min.js" />
     <Content Include="Areas\Anywhere\Content\Scripts\business_unit.js" />
     <Content Include="Areas\Anywhere\Content\Scripts\views\realtimeadherenceteams\team_test.js" />
@@ -1784,6 +1823,8 @@
     <Content Include=".node\node.targets" />
     <Content Include=".node\node.cmd" />
     <Content Include=".node\grunt.cmd" />
+    <Content Include="Areas\Reporting\Views\web.config" />
+    <Content Include="Areas\Reporting\Views\Selection\Report.cshtml" />
     <Content Include="Areas\WFM\css\main.scss" />
     <Content Include="Areas\WFM\css\_role.scss" />
     <Content Include="Areas\WFM\css\_tree.scss" />
@@ -1818,6 +1859,10 @@
     <ProjectReference Include="..\..\Teleopti.Analytics\WebPortal\Teleopti.Analytics.Portal\ReportTexts\Teleopti.Analytics.ReportTexts.csproj">
       <Project>{7c7067a8-c9ff-462e-8469-78e886c2e002}</Project>
       <Name>Teleopti.Analytics.ReportTexts</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Teleopti.Analytics\WebPortal\Teleopti.Analytics.Portal\Teleopti.Analytics.Parameter\Teleopti.Analytics.Parameters.csproj">
+      <Project>{8a8c2fc6-ad5a-4234-b887-21de7e8d75cd}</Project>
+      <Name>Teleopti.Analytics.Parameters</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\Teleopti.Ccc.IocCommon\Teleopti.Ccc.IocCommon.csproj">
       <Project>{DB42D973-9889-4D51-9FC5-BE66AA7F117C}</Project>
@@ -1886,6 +1931,10 @@
     <Folder Include="Areas\Mart\Views\Shared\" />
     <Folder Include="Areas\MyTime\Core\BadgeLeaderBoardReport\DataProvider\" />
     <Folder Include="Areas\PerformanceTool\Content\Templates\" />
+    <Folder Include="Areas\Reporting\Reports\Controllers\" />
+    <Folder Include="Areas\Reporting\Reports\Custom\" />
+    <Folder Include="Areas\Reporting\Reports\Models\" />
+    <Folder Include="Areas\Reporting\Reports\Views\Shared\" />
     <Folder Include="Areas\SeatPlanner\Views\LocationHierarchy\" />
     <Folder Include="Areas\SSO\Views\Authentication\" />
   </ItemGroup>
@@ -1897,6 +1946,41 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Areas\MyTime\Views\Settings\PasswordPartial.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Areas\Reporting\Reports\CCC\CCCV8_report_time_in_state_per_agent.rdlc" />
+    <EmbeddedResource Include="Areas\Reporting\Reports\CCC\report_absence_time_per_absence.rdlc" />
+    <EmbeddedResource Include="Areas\Reporting\Reports\CCC\report_absence_time_per_agent.rdlc" />
+    <EmbeddedResource Include="Areas\Reporting\Reports\CCC\report_activity_time_per_agent.rdlc" />
+    <EmbeddedResource Include="Areas\Reporting\Reports\CCC\report_agent_queue_metrics.rdlc" />
+    <EmbeddedResource Include="Areas\Reporting\Reports\CCC\report_agent_queue_stat_raw.rdlc" />
+    <EmbeddedResource Include="Areas\Reporting\Reports\CCC\report_agent_schedule_result.rdlc">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Areas\Reporting\Reports\CCC\report_agent_skills.rdlc" />
+    <EmbeddedResource Include="Areas\Reporting\Reports\CCC\report_agent_stat_raw.rdlc" />
+    <EmbeddedResource Include="Areas\Reporting\Reports\CCC\report_availability_per_agent.rdlc" />
+    <EmbeddedResource Include="Areas\Reporting\Reports\CCC\report_forecast_vs_actual_workload.rdlc" />
+    <EmbeddedResource Include="Areas\Reporting\Reports\CCC\report_forecast_vs_scheduled_hours.rdlc" />
+    <EmbeddedResource Include="Areas\Reporting\Reports\CCC\report_IMPROVE.rdlc" />
+    <EmbeddedResource Include="Areas\Reporting\Reports\CCC\report_queue_stat_abnd.rdlc">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Areas\Reporting\Reports\CCC\report_queue_stat_raw.rdlc" />
+    <EmbeddedResource Include="Areas\Reporting\Reports\CCC\report_requests_per_agent.rdlc" />
+    <EmbeddedResource Include="Areas\Reporting\Reports\CCC\report_scheduled_agents_per_activity.rdlc" />
+    <EmbeddedResource Include="Areas\Reporting\Reports\CCC\report_scheduled_agents_per_interval_and_team.rdlc" />
+    <EmbeddedResource Include="Areas\Reporting\Reports\CCC\report_scheduled_overtime_per_agent.rdlc" />
+    <EmbeddedResource Include="Areas\Reporting\Reports\CCC\report_scheduled_time_per_activity.rdlc" />
+    <EmbeddedResource Include="Areas\Reporting\Reports\CCC\report_scheduled_time_per_agent.rdlc" />
+    <EmbeddedResource Include="Areas\Reporting\Reports\CCC\report_schedule_preferences_per_agent.rdlc" />
+    <EmbeddedResource Include="Areas\Reporting\Reports\CCC\report_schedule_preferences_per_day.rdlc" />
+    <EmbeddedResource Include="Areas\Reporting\Reports\CCC\report_scheduling_metrics_per_period.rdlc" />
+    <EmbeddedResource Include="Areas\Reporting\Reports\CCC\report_service_level_agents_ready.rdlc" />
+    <EmbeddedResource Include="Areas\Reporting\Reports\CCC\report_shift_category_and_day_absences_per_agent.rdlc" />
+    <EmbeddedResource Include="Areas\Reporting\Reports\CCC\report_shift_category_and_day_absences_per_day.rdlc" />
+    <EmbeddedResource Include="Areas\Reporting\Reports\CCC\report_shift_category_per_day.rdlc" />
+    <EmbeddedResource Include="Areas\Reporting\Reports\CCC\report_team_metrics.rdlc" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

@@ -1,0 +1,244 @@
+﻿
+body
+{
+	font-family:Segoe UI, Tahoma, Verdana, Arial, Helvetica, Sans-Serif;
+}
+
+.Login 
+{
+	font-size: 14px;
+	vertical-align: middle;
+}
+.SignOut {
+	text-decoration: none;
+	color: black;
+	font-weight: bold;
+}
+
+.Panel
+{
+	font-size:11px;
+	font-weight:bold;
+	color:#545c60;	
+	font-weight: bold;
+	vertical-align: top;
+	/*background-color:#E5F0F6;*/
+	background-color:White;
+	/*border: solid 1px #6e92a4;
+	border-collapse: collapse; /*background-color:#FFF;*/*/
+	clear:both;
+	padding: 0;
+	margin: 0;
+}
+
+.Panel table {
+	border-spacing: 0;
+}
+.Panel TD
+{
+    padding: 2px 5px 2px 5px;
+    }
+    
+.Panel TD.NoPadding
+{
+    padding: 0px;
+    }
+
+.Panel a 
+{
+	color:#525987;
+	text-decoration:none;
+}
+
+.Panel a:hover 
+{
+	color:#7983C7;
+	text-decoration:underline;
+}
+.Panel input
+{
+	font-size: 0.95em;
+    }
+ 
+ .Caption
+{
+	font-size: 16px;
+	 width: 100%;
+	color: white;
+	background-color: #007fff;
+	/*border-color: #0066cc;*/
+	/*background-color:  #80bfea;*/
+	border-bottom: solid 1px #0066cc;
+	height: 50px;
+	 position: fixed;
+	 top: 0;
+}
+
+.ReportName {
+	margin-top: 10px;
+	padding-left: 10px;
+	text-align: center;
+}
+.DetailsView {
+	padding-left: 10px;
+	padding-top: 10px;
+}
+.DetailsView TD
+{
+	border-bottom: solid 1px #bed7e5;
+	color: #545a86;
+	font-size: 14px;
+	font-weight:bold;
+}
+
+.ReportBody
+{
+	color: rgb(105,105,105);
+	font-size: 10pt;
+}
+
+.ReportTitle
+{
+	font-size: 22pt;
+	border-bottom: solid 2pt #d3e5ef;
+	padding-bottom: 10px;
+}
+
+.ReportSelection
+{
+	font-size: 11pt;
+	margin-right: 10px;
+}
+
+.ReportSelectionLabel
+{
+	padding-right: 10px;
+}
+
+.ReportDateTime
+{
+	font-size: 8pt;
+	padding-bottom: 0px;
+	
+}
+
+.ReportSelectionBottom
+{
+	border-bottom: solid 1pt lightgrey;
+	vertical-align: top;
+	padding-bottom: 5px;
+}
+
+.ReportTable
+{
+	border-collapse: collapse;
+	padding: 1px 1px 1px 1px;
+}
+
+.ReportColumnHeaders
+{
+	font-weight: bold;
+	color: rgb(169,169,169);
+	height: 40px;
+}
+
+.ReportTimeLineIntervalCellOdd
+{
+	font-size: 8pt;
+	background-color: #F0F0F0;
+	width: 15px;
+}
+
+.ReportTimeLineIntervalCellEven
+{
+	font-size: 8pt;
+	width: 15px;
+}
+
+.ReportIntervalCell
+{
+	font-weight: bolder;
+	color: Black;
+	font-size: 10pt;
+	border: solid 1px white;
+	width: 15px;
+}
+
+.ReportIntervalCell.Bright
+{
+	color: White;
+}
+
+.ReportIntervalTotalAdherenceCell
+{
+	font-size: 7pt;
+	border: solid 1px white;
+	border-top: solid 1pt lightgrey;
+	width: 15px;
+}
+
+.ReportTotalDeviation
+{
+	font-weight: normal;
+	font-style: italic;
+	color: rgb(105,105,105);
+}
+
+.ReportIntervalTotalDeviationCell
+{
+	font-size: 7pt;
+	border: solid 1px white;
+}
+
+.ReportTotalAdherence
+{
+	font-weight: normal;
+	color: rgb(105,105,105);
+	font-style: italic;
+	border-top: solid 1pt lightgrey;
+}
+
+.ReportTotalsTop
+{
+	font-weight: bold;
+}
+
+.ReportTotalsBottom
+{
+	font-weight: bold;
+	border-top: solid 2pt lightgrey;
+}
+
+.ReportRowSpace
+{
+	height: 4px;
+}
+
+.ReportTimeLineHourVerticalLine
+{
+	border-right: solid 2px silver;
+}
+
+.ErrorLabel
+{
+	color: Red;
+	font-size: large;
+	font-weight: bold;
+}
+
+.TechnicalDetail
+{
+	font-size: small;
+}
+.TechnicalDetailHeader
+{
+	font-size: small;
+	font-weight: bold;
+	text-decoration:underline;
+}
+#ViewerFrame {
+	border: none;
+	height:680px; 
+	overflow:auto; 
+
+}

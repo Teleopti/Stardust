@@ -91,19 +91,19 @@ namespace Teleopti.Analytics.Parameters
 
 			//"Knappar" av imagetyp för att slippa att sidan skickas vid klick
 
-			_buttonMoveOne = new Image { ID = "ButtonOne" + Dbid, SkinID = "RightSmall" };
+			_buttonMoveOne = new Image { ID = "ButtonOne" + Dbid, ImageUrl = "images/right_light.gif", ImageAlign = ImageAlign.AbsMiddle };
 			_buttonMoveOne.Style.Add(HtmlTextWriterStyle.MarginLeft, "5px");
 			_buttonMoveOne.Style.Add(HtmlTextWriterStyle.MarginRight, "5px");
 
-			_buttonMoveAll = new Image { ID = "ButtonAll" + Dbid, SkinID = "RightAllSmall" };
+			_buttonMoveAll = new Image { ID = "ButtonAll" + Dbid, ImageUrl = "images/right_all_light.gif", ImageAlign = ImageAlign.AbsMiddle };
 			_buttonMoveAll.Style.Add(HtmlTextWriterStyle.MarginLeft, "5px");
 			_buttonMoveAll.Style.Add(HtmlTextWriterStyle.MarginRight, "5px");
 
-			_buttonMoveOneBack = new Image { ID = "ButtonOneBack" + Dbid, SkinID = "LeftSmall" };
+			_buttonMoveOneBack = new Image { ID = "ButtonOneBack" + Dbid, ImageUrl = "images/left_light.gif", ImageAlign = ImageAlign.AbsMiddle };
 			_buttonMoveOneBack.Style.Add(HtmlTextWriterStyle.MarginLeft, "5px");
 			_buttonMoveOneBack.Style.Add(HtmlTextWriterStyle.MarginRight, "5px");
 
-			_buttonMoveAllBack = new Image { ID = "ButtonAllBack" + Dbid, SkinID = "LeftAllSmall" };
+			_buttonMoveAllBack = new Image { ID = "ButtonAllBack" + Dbid, ImageUrl = "images/left_all_light.gif", ImageAlign = ImageAlign.AbsMiddle };
 			_buttonMoveAllBack.Style.Add(HtmlTextWriterStyle.MarginLeft, "5px");
 			_buttonMoveAllBack.Style.Add(HtmlTextWriterStyle.MarginRight, "5px");
 
