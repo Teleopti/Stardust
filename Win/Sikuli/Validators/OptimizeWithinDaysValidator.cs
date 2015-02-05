@@ -30,11 +30,12 @@ namespace Teleopti.Ccc.Win.Sikuli.Validators
 			bool stdDevSumResult;
 			bool contractTimeResult = true;
 			bool daysOffResult = true;
+			const double limit = 4.65d;
 
 			SikuliValidationResult result = new SikuliValidationResult(SikuliValidationResult.ResultValue.Pass);
 			var std = ValidatorHelper.GetDailySumOfStandardDeviationsFullPeriod(_schedulerState, _totalSkill);
-			
-			stdDevSumResult = std < 4.6d;
+
+			stdDevSumResult = std < limit;
 			
 			IList<IPerson> persons = _schedulerState.FilteredPersonDictionary.Values.ToList();
 			
@@ -58,7 +59,6 @@ namespace Teleopti.Ccc.Win.Sikuli.Validators
 			result.Result = (stdDevSumResult && contractTimeResult && daysOffResult) ?
 				SikuliValidationResult.ResultValue.Pass :
 				SikuliValidationResult.ResultValue.Fail;
-			const double limit = 4.6d;
 			result.AppendLimitValueLineToDetails("Daily StdDev sum", limit.ToString(CultureInfo.CurrentCulture), std.ToString(CultureInfo.CurrentCulture));
 			result.Details.AppendLine(contractTimeResult ? "Contract time : OK" : "Contract time : FAIL");
 			result.Details.AppendLine(daysOffResult ? "Day offs : OK" : "Contract time : FAIL");
