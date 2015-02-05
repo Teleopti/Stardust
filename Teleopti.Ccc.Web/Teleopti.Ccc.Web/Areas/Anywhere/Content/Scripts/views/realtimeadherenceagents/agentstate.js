@@ -45,7 +45,7 @@
                 that.State(data.State);
                 that.Activity(data.Activity);
                 that.NextActivity(data.NextActivity);
-                that.NextActivityStartTime(data.NextActivity && data.NextActivityStartTime ? that.getDateTimeFormat(moment.utc(data.NextActivityStartTime).add(data.TimeZoneOffset, 'minutes')) : '');
+                that.NextActivityStartTime(data.NextActivityStartTime ? that.getDateTimeFormat(moment.utc(data.NextActivityStartTime).add(data.TimeZoneOffset, 'minutes')) : '');
 				that.EnteredCurrentAlarm(data.StateStart);
                 that.refreshAlarmTime();
 

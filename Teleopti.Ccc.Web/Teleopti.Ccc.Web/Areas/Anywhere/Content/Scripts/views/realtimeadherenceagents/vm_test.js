@@ -1,4 +1,4 @@
-﻿define(['buster', 'views/realtimeadherenceagents/vm', 'window'], function (buster, viewModel, window) {
+﻿define(['buster', 'views/realtimeadherenceagents/vm', 'window','resources'], function (buster, viewModel, window, resources) {
 	return function () {
 
 		buster.testCase("real time adherence agents viewmodel", {
@@ -98,6 +98,26 @@
 				vm.fillAgents([{ PersonId: "guid" }]);
 
 				assert.equals(vm.agentStates()[0].PersonId(), "guid");
+			},
+
+			"should fill next activity start for last activity": function() {
+				var state = {
+					PersonId: 'guid1',
+					State: 'Ready',
+					StateStart: moment('2014-01-21 12:00').format(),
+					Activity: 'Phone',
+					NextActivityStartTime: moment('2014-01-21 13:00').format(),
+					Alarm: 'Adhering',
+					AlarmColor: '#333',
+					AlarmStart: moment('2014-01-21 12:15').format()
+				};
+				var vm = viewModel();
+				vm.fillAgents([
+					{ PersonId: "guid1", Name: "Bill", SiteId: "gui1", SiteName: "site", TeamId: "guid2", TeamName: "team", TimeZoneOffsetMinutes: -600 }
+				]);
+				vm.fillAgentsStates([state]);
+				var agentState = vm.getAgentState("guid1");
+				assert.equals(agentState.NextActivityStartTime(), moment.utc(state.NextActivityStartTime).add(-600, 'minutes').format(resources.TimeFormatForMoment));
 			},
 
 			"should update existing state data when filling state": function () {
