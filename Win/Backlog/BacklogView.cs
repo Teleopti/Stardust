@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Windows.Forms;
@@ -68,7 +67,7 @@ namespace Teleopti.Ccc.Win.Backlog
 			_selectedGridRows = new List<IBacklogGridRow>(_allGridRows);
 			_fixedRows = _selectedGridRows.Count-1;
 
-			_expandedRow = new BacklogGridExpandedRow(_model, _fixedRows);
+			_expandedRow = new BacklogGridExpandedRow("TimeS", _model, _fixedRows);
 		}
 
 		private void populateTabControl()
@@ -131,32 +130,6 @@ namespace Teleopti.Ccc.Win.Backlog
 
 			e.Handled = true;
 		}
-
-		//private static void setValue(GridQueryCellInfoEventArgs e, TimeSpan time)
-		//{
-		//	e.Style.CellValue = time > TimeSpan.Zero ? (object) time : string.Empty;
-		//}
-
-		//private void setBackColor(GridQueryCellInfoEventArgs e)
-		//{
-		//	e.Style.BackColor = Color.White;
-		//	if (_model.IsClosedOnIndex(e.ColIndex, (ISkill) tabControlSkills.SelectedTab.Tag))
-		//	{
-		//		e.Style.BackColor = Color.Khaki;
-		//		return;
-		//	}
-		//	var dateForIndex = _model.GetDateOnIndex(e.ColIndex);
-		//	if (e.RowIndex > 0 && e.RowIndex <= plannedRows && dateForIndex < new DateOnly(dateTimePicker1.Value))
-		//	{
-		//		e.Style.BackColor = Color.LightGray;
-		//		return;
-		//	}
-
-		//	if (e.RowIndex > plannedRows && dateForIndex >= new DateOnly(dateTimePicker1.Value))
-		//	{
-		//		e.Style.BackColor = Color.LightGray;
-		//	}
-		//}
 
 		private void backlogViewLoad(object sender, EventArgs e)
 		{

@@ -7,11 +7,13 @@ namespace Teleopti.Ccc.Win.Backlog
 {
 	public class BacklogGridExpandedRow : IBacklogGridRow
 	{
+		private readonly string _cellType;
 		private readonly BacklogModel _model;
 		private readonly int _fixedRows;
 
-		public BacklogGridExpandedRow(BacklogModel model, int fixedRows)
+		public BacklogGridExpandedRow(string cellType, BacklogModel model, int fixedRows)
 		{
+			_cellType = cellType;
 			_model = model;
 			_fixedRows = fixedRows;
 		}
@@ -45,7 +47,7 @@ namespace Teleopti.Ccc.Win.Backlog
 			}
 			else
 			{
-				cellInfo.Style.CellType = "TimeSpanLongHourMinutesStatic";
+				cellInfo.Style.CellType = _cellType;
 				cellInfo.Style.CellValue = t.Value;
 			}
 		}
