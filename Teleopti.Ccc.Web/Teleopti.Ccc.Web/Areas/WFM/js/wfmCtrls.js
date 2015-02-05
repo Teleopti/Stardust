@@ -36,8 +36,8 @@ wfmCtrls.controller('ForecastingRunCtrl', ['$scope', '$stateParams', '$http',
 );
 
 wfmCtrls.controller('PermissionsCtrl', [
-	'$scope', '$stateParams', '$filter', 'Permissions', 'OrganizationSelections', 'ApplicationFunctions', 'DuplicateRole', 'RolesPermissions', 'ManageRole', 'AssignFunction', 'AssignOrganizationSelection',
-	function ($scope, $stateParams, $filter, Permissions, OrganizationSelections, ApplicationFunctions, DuplicateRole, RolesPermissions, ManageRole, AssignFunction, AssignOrganizationSelection) {
+	'$scope', '$stateParams', '$filter', 'Permissions',
+	function ($scope, $stateParams, $filter, Permissions) {
 		$scope.roles = [];
 		$scope.list = [];
 		$scope.roleName = null;
@@ -48,13 +48,13 @@ wfmCtrls.controller('PermissionsCtrl', [
 		$scope.organization = { BusinessUnits: [{ BusinessUnit: { Sites: [] } }], DynamicOptions: [] };
 
 		$scope.roles = Permissions.roles.get();
-		OrganizationSelections.query().$promise.then(function(result) {
+		Permissions.organizationSelections.query().$promise.then(function (result) {
 			// could we have directly an array from server?
 			$scope.organization = { BusinessUnits: [result.BusinessUnit], DynamicOptions: result.DynamicOptions };
 
 		});
 
-		ApplicationFunctions.query().$promise.then(function(result) {
+		Permissions.applicationFunctions.query().$promise.then(function (result) {
 			$scope.functionsDisplayed = result;
 			flatFunctions($scope.functionsDisplayed);
 		});
@@ -76,7 +76,7 @@ wfmCtrls.controller('PermissionsCtrl', [
 
 		$scope.copyRole = function(roleId) {
 			var roleCopy = {};
-			DuplicateRole.query({ Id: roleId }).$promise.then(function(result) {
+			Permissions.duplicateRole.query({ Id: roleId }).$promise.then(function(result) {
 				roleCopy.Id = result.Id;
 				roleCopy.DescriptionText = result.DescriptionText;
 				$scope.roles.unshift(roleCopy);
@@ -85,11 +85,11 @@ wfmCtrls.controller('PermissionsCtrl', [
 
 		$scope.toggleFunctionForRole = function (functionNode) {
 			if (functionNode.selected) {
-				AssignFunction.deleteFunctions({ Id: $scope.selectedRole, Functions: [functionNode.FunctionId] }).$promise.then(function (result) {
+				Permissions.assignFunction.deleteFunctions({ Id: $scope.selectedRole, Functions: [functionNode.FunctionId] }).$promise.then(function (result) {
 					functionNode.selected = false;
 				});
 			} else {
-				AssignFunction.postFunctions({ Id: $scope.selectedRole, Functions: [functionNode.FunctionId] }).$promise.then(function (result) {
+				Permissions.assignFunction.postFunctions({ Id: $scope.selectedRole, Functions: [functionNode.FunctionId] }).$promise.then(function (result) {
 					functionNode.selected = true;
 				});
 			}
@@ -101,11 +101,11 @@ wfmCtrls.controller('PermissionsCtrl', [
 			data[typeOfNode] = [node.Id];
 
 			if (node.selected) {
-				AssignOrganizationSelection.deleteData(data).$promise.then(function (result) {
+				Permissions.assignOrganizationSelection.deleteData(data).$promise.then(function (result) {
 					node.selected = false;
 				});
 			} else {
-				AssignOrganizationSelection.postData(data).$promise.then(function (result) {
+				Permissions.assignOrganizationSelection.postData(data).$promise.then(function (result) {
 					node.selected = true;
 				});
 			}
@@ -113,19 +113,19 @@ wfmCtrls.controller('PermissionsCtrl', [
 
 		$scope.removeRole = function (role, index) {
 			if (confirm('Are you sure you want to delete this?')) {
-				ManageRole.deleteRole({ Id: role.Id }).$promise.then(function(result) {
+				Permissions.manageRole.deleteRole({ Id: role.Id }).$promise.then(function (result) {
 					$scope.roles.splice(index, 1);
 				});
 			}
 		};
 
 	$scope.updateRole = function (role) {
-		ManageRole.update({ Id: role.Id, newDescription: role.DescriptionText });
+		Permissions.manageRole.update({ Id: role.Id, newDescription: role.DescriptionText });
 	};
 
 	$scope.showRole = function (roleId) {
 		$scope.selectedRole = roleId;
-		RolesPermissions.query({ Id: roleId }).$promise.then(function(result) {
+		Permissions.rolesPermissions.query({ Id: roleId }).$promise.then(function (result) {
 			var permsFunc = result.AvailableFunctions;
 
 			//yeah, we know, it's amazing
