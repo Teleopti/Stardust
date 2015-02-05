@@ -2794,7 +2794,7 @@
     <value>Opsiyonel</value>
   </data>
   <data name="WeekAbbreviationDot" xml:space="preserve">
-    <value>w.</value>
+    <value>w. {0} {1}</value>
   </data>
   <data name="PrepareSkillThreeDots" xml:space="preserve">
     <value>Yetenek Hazırla...</value>

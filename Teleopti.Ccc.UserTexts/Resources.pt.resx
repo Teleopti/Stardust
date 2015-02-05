@@ -3238,7 +3238,7 @@
     <value>Opcional</value>
   </data>
   <data name="WeekAbbreviationDot" xml:space="preserve">
-    <value>s.</value>
+    <value>s. {0} {1}</value>
   </data>
   <data name="ApplicationLogon" xml:space="preserve">
     <value>Login Aplicação</value>

@@ -60,9 +60,9 @@ namespace Teleopti.Ccc.Win.Common.Controls.Rows
                 case DateHeaderType.WeekDates:
                     cellInfo.Style.WrapText = false;
                     dateTime = DateHelper.GetFirstDateInWeek(dateTime, CultureInfo.CurrentCulture);
-                    cellInfo.Style.CellValue = string.Concat(UserTexts.Resources.WeekAbbreviationDot, " ",
-                                                      DateHelper.WeekNumber(dateTime, CultureInfo.CurrentCulture),
-                                                      " ", dateTime.ToShortDateString());
+		            cellInfo.Style.CellValue = string.Format(UserTexts.Resources.WeekAbbreviationDot,
+			            DateHelper.WeekNumber(dateTime, CultureInfo.CurrentCulture),
+			            dateTime.ToShortDateString());
                     break;
                 case DateHeaderType.WeekdayName:
 					cellInfo.Style.CellValue = CultureInfo.CurrentUICulture.DateTimeFormat.GetDayName(dateTime.DayOfWeek).Capitalize();

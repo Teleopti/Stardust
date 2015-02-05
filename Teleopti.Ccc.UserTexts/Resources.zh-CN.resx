@@ -5299,7 +5299,7 @@ Periods</comment>
     <comment>Week with week number</comment>
   </data>
   <data name="WeekAbbreviationDot" xml:space="preserve">
-    <value>周</value>
+    <value>第 {0} 周 {1}</value>
     <comment>Abbreviation for week</comment>
   </data>
   <data name="WeekDay" xml:space="preserve">

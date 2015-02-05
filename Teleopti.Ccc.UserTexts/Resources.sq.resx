@@ -6355,7 +6355,7 @@
     <value>Week</value>
   </data>
   <data name="WeekWithNumber" xml:space="preserve">
-    <value>Week {0}</value>
+    <value>WeekWithNumber</value>
   </data>
   <data name="WeekAbbreviationDot" xml:space="preserve">
     <value>WeekAbbreviationDot</value>

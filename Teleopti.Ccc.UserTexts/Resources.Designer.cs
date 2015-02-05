@@ -27961,7 +27961,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to w..
+        ///   Looks up a localized string similar to w. {0} {1}.
         /// </summary>
         public static string WeekAbbreviationDot {
             get {

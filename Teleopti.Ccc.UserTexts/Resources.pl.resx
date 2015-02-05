@@ -2914,7 +2914,7 @@
     <value>Opcjonalne</value>
   </data>
   <data name="WeekAbbreviationDot" xml:space="preserve">
-    <value>tydz.</value>
+    <value>tydz. {0} {1}</value>
   </data>
   <data name="PrepareSkillThreeDots" xml:space="preserve">
     <value>Przygotuj umiejętność...</value>

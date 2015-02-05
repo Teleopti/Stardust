@@ -3757,7 +3757,7 @@ Columns</value>
     <comment>Optional</comment>
   </data>
   <data name="WeekAbbreviationDot" xml:space="preserve">
-    <value>w.</value>
+    <value>w. {0} {1}</value>
     <comment>Abbreviation for week</comment>
   </data>
   <data name="PrepareSkillThreeDots" xml:space="preserve">

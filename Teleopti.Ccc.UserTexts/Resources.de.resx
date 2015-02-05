@@ -6516,7 +6516,7 @@ Periods</comment>
     <value>Woche {0}</value>
   </data>
   <data name="WeekAbbreviationDot" xml:space="preserve">
-    <value>KW</value>
+    <value>KW {0} {1}</value>
     <comment>Abbreviation for week</comment>
   </data>
   <data name="WeekDay" xml:space="preserve">

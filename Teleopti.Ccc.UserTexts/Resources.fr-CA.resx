@@ -1699,7 +1699,7 @@
     <value>Optionnel</value>
   </data>
   <data name="WeekAbbreviationDot" xml:space="preserve">
-    <value>s.</value>
+    <value>s. {0} {1}</value>
   </data>
   <data name="LoadingDataTreeDots" xml:space="preserve">
     <value>Chargement des données</value>

@@ -3611,7 +3611,7 @@ Tidak Termasuk</value>
     <value>Teleopti WFM</value>
   </data>
   <data name="WeekAbbreviationDot" xml:space="preserve">
-    <value>m.</value>
+    <value>m. {0} {1}</value>
   </data>
   <data name="ApplicationLogon" xml:space="preserve">
     <value>Login aplikasi</value>

@@ -88,7 +88,8 @@ namespace Teleopti.Ccc.WinCode.Budgeting.Models
             {
                 var weekNumber = DateHelper.WeekNumber(_date, CultureInfo.CurrentCulture);
                 var week = DateHelper.GetWeekPeriod(_date, CultureInfo.CurrentCulture);
-                return UserTexts.Resources.WeekAbbreviationDot + " " + weekNumber + " " + week.StartDate.ToShortDateString();
+	            return string.Format(CultureInfo.CurrentCulture, UserTexts.Resources.WeekAbbreviationDot, weekNumber,
+		            week.StartDate.ToShortDateString());
             }
             set
             {

@@ -2858,7 +2858,7 @@ Dato</value>
     <value>Valgfri</value>
   </data>
   <data name="WeekAbbreviationDot" xml:space="preserve">
-    <value>u.</value>
+    <value>u. {0} {1}</value>
   </data>
   <data name="PrepareSkillThreeDots" xml:space="preserve">
     <value>Forbered ferdighet...</value>
