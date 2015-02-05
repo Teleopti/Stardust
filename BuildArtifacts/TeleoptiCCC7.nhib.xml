@@ -5,20 +5,16 @@
 		<session-factory name="$(DATASOURCE_NAME)">
 			<!-- properties -->
 			<property name="connection.connection_string">
-		<!--WISEMETA: default="[SQL_AUTH_STRING];initial Catalog=[DB_CCC7];Current Language=us_english"-->
-        $(SQL_AUTH_STRING);Initial Catalog=$(DB_CCC7);Current Language=us_english
-      </property>
+				<!--WISEMETA: default="[SQL_AUTH_STRING];initial Catalog=[DB_CCC7];Current Language=us_english"-->
+				$(SQL_AUTH_STRING);Initial Catalog=$(DB_CCC7);Current Language=us_english
+			</property>
 			<property name="command_timeout">60</property>
 		</session-factory>
 	</hibernate-configuration>
 	<matrix name="MatrixDatamartDemo">
 		<connectionString>
-		<!--WISEMETA: default="[SQL_AUTH_STRING];Initial Catalog=[DB_ANALYTICS];Current Language=us_english"-->
-		$(SQL_AUTH_STRING);Initial Catalog=$(DB_ANALYTICS);Current Language=us_english
-    </connectionString>
+			<!--WISEMETA: default="[SQL_AUTH_STRING];Initial Catalog=[DB_ANALYTICS];Current Language=us_english"-->
+			$(SQL_AUTH_STRING);Initial Catalog=$(DB_ANALYTICS);Current Language=us_english
+		</connectionString>
 	</matrix>
-	<authentication>
-		<logonMode>mix</logonMode>
-		<!--  win or mix -->
-	</authentication>
 </datasource>

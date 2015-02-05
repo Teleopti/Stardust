@@ -8,7 +8,6 @@ namespace Teleopti.Interfaces.Domain
 		IUnitOfWorkFactory Application { get; }
 		IUnitOfWorkFactory Statistic { get; }
 		IReadModelUnitOfWorkFactory ReadModel { get; }
-		IAuthenticationSettings AuthenticationSettings { get; }
     	string DataSourceName { get; }
         void ResetStatistic();
 		string OriginalFileName { get; set; }

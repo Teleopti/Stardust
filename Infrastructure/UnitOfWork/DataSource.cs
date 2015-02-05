@@ -5,18 +5,12 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 {
 	public sealed class DataSource : IDataSource
 	{
-		public DataSource(IUnitOfWorkFactory application, IUnitOfWorkFactory statistic, IAuthenticationSettings authenticationSettings)
-			: this(application, statistic, null, authenticationSettings)
-		{
-		}
-
-		public DataSource(IUnitOfWorkFactory application, IUnitOfWorkFactory statistic, IReadModelUnitOfWorkFactory readModel, IAuthenticationSettings authenticationSettings)
+		public DataSource(IUnitOfWorkFactory application, IUnitOfWorkFactory statistic, IReadModelUnitOfWorkFactory readModel)
 		{
 			InParameter.NotNull("application", application);
 			Application = application;
 			Statistic = statistic;
 			ReadModel = readModel;
-			AuthenticationSettings = authenticationSettings;
 		}
 
 		public string OriginalFileName { get; set; }
@@ -28,8 +22,6 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 		public IUnitOfWorkFactory Application { get; private set; }
 
 		public IReadModelUnitOfWorkFactory ReadModel { get; private set; }
-
-		public IAuthenticationSettings AuthenticationSettings { get; private set; }
 
 		public string DataSourceName
 		{

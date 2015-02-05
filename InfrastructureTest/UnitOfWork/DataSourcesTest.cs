@@ -15,7 +15,6 @@ namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork
 		private MockRepository mocks;
 		private IUnitOfWorkFactory application;
 		private IUnitOfWorkFactory statistics;
-		private AuthenticationSettings settings;
 
 		[SetUp]
 		public void Setup()
@@ -23,22 +22,20 @@ namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork
 			mocks = new MockRepository();
 			application = mocks.StrictMock<IUnitOfWorkFactory>();
 			statistics = mocks.StrictMock<IUnitOfWorkFactory>();
-			settings = mocks.StrictMock<AuthenticationSettings>();
 		}
 
 		[Test]
 		public void VerifyProperties()
 		{
-			DataSource target = new DataSource(application, statistics, settings);
+			DataSource target = new DataSource(application, statistics, null);
 			Assert.AreSame(application, target.Application);
 			Assert.AreSame(statistics, target.Statistic);
-			Assert.AreSame(settings, target.AuthenticationSettings);
 		}
 
 		[Test]
 		public void VerifyCanResetDataSource()
 		{
-			DataSource target = new DataSource(application, statistics, settings);
+			DataSource target = new DataSource(application, statistics, null);
 			target.ResetStatistic();
 			Assert.IsNull(target.Statistic);
 		}
@@ -47,13 +44,13 @@ namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork
 		[ExpectedException(typeof(ArgumentNullException))]
 		public void ApplicationMustNotBeNull()
 		{
-			new DataSource(null, statistics, settings);
+			new DataSource(null, statistics, null);
 		}
 
 		[Test]
 		public void ShouldDisposeBothSessionFactories()
 		{
-			var target = new DataSource(application, statistics, settings);
+			var target = new DataSource(application, statistics, null);
 			using (mocks.Record())
 			{
 				application.Dispose();
@@ -68,7 +65,7 @@ namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork
 		[Test]
 		public void ShouldDisposeApplicationSessionFactory()
 		{
-			var target = new DataSource(application, null, settings);
+			var target = new DataSource(application, null, null);
 			using (mocks.Record())
 			{
 				application.Dispose();
@@ -82,7 +79,7 @@ namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork
 		[Test]
 		public void DataSourceNameShouldBeSameAsApplicationName()
 		{
-			var target = new DataSource(application, statistics, settings);
+			var target = new DataSource(application, statistics, null);
 			var name = Guid.NewGuid().ToString();
 			using (mocks.Record())
 			{

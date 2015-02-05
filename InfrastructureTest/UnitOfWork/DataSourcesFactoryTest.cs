@@ -128,20 +128,6 @@ namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork
 			}
 		}
 
-		[Test]
-		public void VerifyAuthenticationSettingsFileBasedWithEntry()
-		{
-			const string authenticationSettings = @"<authentication><logonMode>win</logonMode> <!-- win or mix --></authentication>";
-			var xmlElement = xmlTextWithAuthenticationSettings(authenticationSettings);
-			IDataSource res;
-			bool success = target.TryCreate(xmlElement, out res);
-			wasSuccess(success);
-
-			Assert.IsInstanceOf<AuthenticationSettings>(res.AuthenticationSettings);
-			Assert.IsTrue(LogOnModeOption.Win == res.AuthenticationSettings.LogOnMode);
-		}
-
-
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Pekar"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Hib"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Galet"), Test]
 		public void VerifyNhibWithValidConnectionStringMenDenPekarGalet()
 		{
@@ -150,28 +136,6 @@ namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork
 			IDataSource res;
 			target.TryCreate(nonValidXmlTextWithAuthenticationSettings(authenticationSettings), out res)
 				.Should().Be.False();
-		}
-
-		[Test]
-		public void VerifyAuthenticationSettingsFileBasedWithoutEntry()
-		{
-			string authenticationSettings = string.Empty;
-
-			IDataSource res;
-			bool success = target.TryCreate(xmlTextWithAuthenticationSettings(authenticationSettings), out res);
-			wasSuccess(success);
-
-			Assert.IsInstanceOf<AuthenticationSettings>(res.AuthenticationSettings);
-			Assert.IsTrue(LogOnModeOption.Mix == res.AuthenticationSettings.LogOnMode);
-		}
-
-		[Test]
-		public void VerifyAuthenticationSettingsWithoutFile()
-		{
-			IDataSource res = target.Create(nHibSettings(), ConnectionStringHelper.ConnectionStringUsedInTestsMatrix);
-
-			Assert.IsInstanceOf<AuthenticationSettings>(res.AuthenticationSettings);
-			Assert.IsTrue(LogOnModeOption.Mix == res.AuthenticationSettings.LogOnMode);
 		}
 
 		private static IDictionary<string, string> nHibSettings()

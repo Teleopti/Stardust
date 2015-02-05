@@ -157,11 +157,6 @@ namespace Teleopti.Ccc.WebTest.Core.Authentication.DataProvider
 				get { throw new NotImplementedException(); }
 			}
 
-			public IAuthenticationSettings AuthenticationSettings
-			{
-				get { throw new NotImplementedException(); }
-			}
-
 			public string DataSourceName
 			{
 				get { return _name; }

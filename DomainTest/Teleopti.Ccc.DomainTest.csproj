@@ -1077,7 +1077,6 @@
     <Compile Include="Security\Authentication\LogonLoggerTest.cs" />
     <Compile Include="Security\Authentication\UserTimeZoneTest.cs" />
     <Compile Include="Security\Authentication\WindowsDataSourceProviderTest.cs" />
-    <Compile Include="Security\Authentication\AuthenticationSettingsTest.cs" />
     <Compile Include="Security\AuthorizationData\DefinedLicenseDataFactoryTest.cs" />
     <Compile Include="Security\AuthorizationEntities\AllLicenseOptionTest.cs" />
     <Compile Include="Security\AuthorizationEntities\ApplicationFunctionsProviderTest.cs" />

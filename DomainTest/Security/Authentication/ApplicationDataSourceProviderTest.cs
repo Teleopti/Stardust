@@ -31,12 +31,9 @@ namespace Teleopti.Ccc.DomainTest.Security.Authentication
         public void VerifyDataSourceContainerIsReturned()
         {
             IDataSource dataSource = mocks.StrictMock<IDataSource>();
-            IAuthenticationSettings authenticationSettings = mocks.StrictMock<IAuthenticationSettings>();
             using(mocks.Record())
             {
                 Expect.Call(availableDataSourcesProvider.AvailableDataSources()).Return(new List<IDataSource> {dataSource});
-                Expect.Call(authenticationSettings.LogOnMode).Return(LogOnModeOption.Mix);
-                Expect.Call(dataSource.AuthenticationSettings).Return(authenticationSettings);
             }
             using (mocks.Playback())
             {

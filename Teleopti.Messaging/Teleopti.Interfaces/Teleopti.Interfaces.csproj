@@ -521,7 +521,6 @@
     <Compile Include="Domain\IApplicationData.cs" />
     <Compile Include="Domain\IApplicationFunction.cs" />
     <Compile Include="Domain\IApplicationRole.cs" />
-    <Compile Include="Domain\IAuthenticationSettings.cs" />
     <Compile Include="Domain\IAuthorizationSettings.cs" />
     <Compile Include="Domain\IAvailableData.cs" />
     <Compile Include="Domain\IBusinessRuleResponse.cs" />
@@ -769,7 +768,6 @@
     <Compile Include="Domain\IWorkShiftTemplateGenerator.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Domain\LogOnModeOption.cs" />
     <Compile Include="Domain\MinMax.cs" />
     <Compile Include="Domain\Name.cs" />
     <Compile Include="Domain\NameOrderOption.cs" />

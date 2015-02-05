@@ -9,7 +9,6 @@ namespace Teleopti.Ccc.TestCommon.FakeData
 		public IUnitOfWorkFactory Application { get; set; }
 		public IUnitOfWorkFactory Statistic { get; set; }
 		public IReadModelUnitOfWorkFactory ReadModel { get; private set; }
-		public IAuthenticationSettings AuthenticationSettings { get; set; }
 		public string DataSourceName { get; set; }
 
 		public void ResetStatistic()

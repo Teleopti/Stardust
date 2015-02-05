@@ -67,12 +67,11 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 				var resultOfOnline = isSqlServerOnline(connectionString);
 				if (string.IsNullOrEmpty(resultOfOnline))
 				{
-					var authenticationSettings = createAuthenticationSettings(nhibernateConfiguration);
 					var matrixElement = nhibernateConfiguration.Elements("matrix").Single();
 					var matrixNameElement = matrixElement.Attribute("name");
 					var matrixName = matrixNameElement!=null ? matrixNameElement.Value : NoDataSourceName;
 					var matrixConnstring = matrixElement.Element("connectionString").Value;
-					dataSource = createDataSource(nhProperties, matrixConnstring,matrixName, authenticationSettings);
+					dataSource = createDataSource(nhProperties, matrixConnstring,matrixName);
 					return true;
 				}
 			}
@@ -93,17 +92,15 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 					applicationDataSourceName
 				}
 			};
-			var authenticationSettings = createDefaultAuthenticationSettings();
-			return createDataSource(settings, statisticConnectionString, NoDataSourceName, authenticationSettings);
+			return createDataSource(settings, statisticConnectionString, NoDataSourceName);
 		}
 
 		public IDataSource Create(IDictionary<string, string> settings, string statisticConnectionString)
 		{
-			var authenticationSettings = createDefaultAuthenticationSettings();
-			return createDataSource(settings, statisticConnectionString, NoDataSourceName, authenticationSettings);
+			return createDataSource(settings, statisticConnectionString, NoDataSourceName);
 		}
 
-		private IDataSource createDataSource(IDictionary<string, string> settings, string statisticConnectionString, string statisticName, IAuthenticationSettings authenticationSettings)
+		private IDataSource createDataSource(IDictionary<string, string> settings, string statisticConnectionString, string statisticName)
 		{
 			NHibernateUnitOfWorkMatrixFactory statFactory;
 			var appConfig = createApplicationConfiguration(settings);
@@ -123,7 +120,7 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 			var readModel = new ReadModelUnitOfWorkFactory(_httpContext, applicationConnectionString);
 			readModel.Configure();
 
-			return new DataSource(appFactory, statFactory, readModel, authenticationSettings);
+			return new DataSource(appFactory, statFactory, readModel);
 		}
 
 		private static ISessionFactory buildSessionFactory(Configuration nhConf)
@@ -151,34 +148,6 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 			var ret = sessionFactoryProperties.ToDictionary(p => p.Attribute("name").Value, p => p.Value);
 			ret[Environment.SessionFactoryName] = sessionFactory.Attribute("name").Value;
 			return ret;
-		}
-
-		private static AuthenticationSettings createAuthenticationSettings(XElement rootElement)
-		{
-			var authenticationSettings = new AuthenticationSettings();
-
-			int count = rootElement.Elements("authentication").Count();
-			if (count == 1)
-			{
-				XElement authenticationElement = rootElement.Element("authentication");
-				XElement logonMode = authenticationElement.Element("logonMode");
-				string logonModeStringValue = string.Empty;
-				if (logonMode == null || string.IsNullOrEmpty(logonMode.Value))
-					return createDefaultAuthenticationSettings();
-				logonModeStringValue = logonMode.Value;
-				var logonModeValue = (LogOnModeOption)Enum.Parse(typeof(LogOnModeOption), logonModeStringValue, true);
-				authenticationSettings.LogOnMode = logonModeValue;
-			}
-			else
-			{
-				return createDefaultAuthenticationSettings();
-			}
-			return authenticationSettings;
-		}
-
-		private static AuthenticationSettings createDefaultAuthenticationSettings()
-		{
-			return new AuthenticationSettings {LogOnMode = LogOnModeOption.Mix};
 		}
 
 		private Configuration createStatisticConfiguration(string connectionString, string matrixname)

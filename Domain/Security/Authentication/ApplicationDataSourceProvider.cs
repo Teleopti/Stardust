@@ -22,10 +22,7 @@ namespace Teleopti.Ccc.Domain.Security.Authentication
             IList<DataSourceContainer> dataSourceList = new List<DataSourceContainer>();
             foreach (IDataSource dataSource in _availableDataSourcesProvider.AvailableDataSources())
             {
-                if (dataSource.AuthenticationSettings.LogOnMode==LogOnModeOption.Mix)
-                {
                     dataSourceList.Add(new DataSourceContainer(dataSource,_repositoryFactory, _checkLogOn,AuthenticationTypeOption.Application));
-                }
             }
             return dataSourceList;
         }
