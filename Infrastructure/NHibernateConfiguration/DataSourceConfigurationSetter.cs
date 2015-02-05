@@ -41,7 +41,7 @@ namespace Teleopti.Ccc.Infrastructure.NHibernateConfiguration
 			return new DataSourceConfigurationSetter(false, false, "thread_static", "Teleopti.Ccc.SmartClientPortal.Shell", new ConfigReader());
 		}
 
-		private const string noDataSourceName = "[not set]";
+		public const string NoDataSourceName = "[not set]";
 
 		protected DataSourceConfigurationSetter(bool useSecondLevelCache,
 															bool useDistributedTransactionFactory,
@@ -92,7 +92,7 @@ namespace Teleopti.Ccc.Infrastructure.NHibernateConfiguration
 			if (!string.IsNullOrEmpty(SessionContext))
 				nhConfiguration.SetPropertyIfNotAlreadySet(Environment.CurrentSessionContextClass, SessionContext);
 
-			nhConfiguration.SetPropertyIfNotAlreadySet(Environment.SessionFactoryName, noDataSourceName);
+			nhConfiguration.SetPropertyIfNotAlreadySet(Environment.SessionFactoryName, NoDataSourceName);
 
 			AddApplicationNameToConnectionString(nhConfiguration);
 		}

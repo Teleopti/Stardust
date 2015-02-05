@@ -11,7 +11,7 @@
 			<property name="command_timeout">60</property>
 		</session-factory>
 	</hibernate-configuration>
-	<matrix name="MatrixDatamartDemo">
+	<matrix>
 		<connectionString>
 			<!--WISEMETA: default="[SQL_AUTH_STRING];Initial Catalog=[DB_ANALYTICS];Current Language=us_english"-->
 			$(SQL_AUTH_STRING);Initial Catalog=$(DB_ANALYTICS);Current Language=us_english

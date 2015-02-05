@@ -5,7 +5,7 @@
 			<property name="connection.connection_string">$(ConnectionString)</property>
 		</session-factory>
 	</hibernate-configuration>
-	<matrix name="MatrixDatamartDemo">
+	<matrix>
 		<connectionString>$(ConnectionStringMatrix)</connectionString>
 	</matrix>
 </datasource>

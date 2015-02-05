@@ -5,7 +5,6 @@ using NHibernate.Transaction;
 using NUnit.Framework;
 using Rhino.Mocks;
 using SharpTestsEx;
-using Teleopti.Ccc.Domain.Security.Authentication;
 using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.Infrastructure.NHibernateConfiguration;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
@@ -32,13 +31,12 @@ namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork
 		[Test]
 		public void VerifyFileBased()
 		{
-			string correctMatrix = @"<matrix name=""matrixName""><connectionString>" + ConnectionStringHelper.ConnectionStringUsedInTestsMatrix + @"</connectionString></matrix>";
+			string correctMatrix = @"<matrix><connectionString>" + ConnectionStringHelper.ConnectionStringUsedInTestsMatrix + @"</connectionString></matrix>";
 			var xElement = xmlText("test", correctMatrix);
 			IDataSource res;
 			bool success = target.TryCreate(xElement, out res);
 			wasSuccess(success);
 			Assert.AreEqual("test", res.Application.Name);
-			Assert.AreEqual("matrixName", res.Statistic.Name);
 
 			Assert.IsInstanceOf<NHibernateUnitOfWorkFactory>(res.Application);
 			Assert.IsInstanceOf<NHibernateUnitOfWorkMatrixFactory>(res.Statistic);
@@ -47,14 +45,13 @@ namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork
 		[Test]
 		public void VerifyXmlBased()
 		{
-			string correctMatrix = @"<matrix name=""matrixName""><connectionString>" +
+			string correctMatrix = @"<matrix><connectionString>" +
 			                       ConnectionStringHelper.ConnectionStringUsedInTestsMatrix + @"</connectionString></matrix>";
 
 			XElement nhibernateXmlConfiguration = xmlText("test", correctMatrix);
 			IDataSource res;
 			target.TryCreate(nhibernateXmlConfiguration, out res);
 			Assert.AreEqual("test", res.Application.Name);
-			Assert.AreEqual("matrixName", res.Statistic.Name);
 			Assert.IsNull(res.OriginalFileName);
 
 			Assert.IsInstanceOf<NHibernateUnitOfWorkFactory>(res.Application);
@@ -83,8 +80,8 @@ namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork
 			IDataSource res;
 			bool success = target.TryCreate(xmlText(string.Empty, matrix), out res);
 			wasSuccess(success);
-			Assert.AreEqual(DataSourcesFactory.NoDataSourceName, res.Application.Name);
-			Assert.AreEqual(DataSourcesFactory.NoDataSourceName, res.Statistic.Name);
+			Assert.AreEqual(DataSourceConfigurationSetter.NoDataSourceName, res.Application.Name);
+			Assert.AreEqual(DataSourcesFactory.AnalyticsDataSourceName, res.Statistic.Name);
 		}
 
 		[Test]
@@ -99,7 +96,7 @@ namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork
 		public void TestCreateWithDictionaryNoMatrix()
 		{
 			IDataSource res = target.Create(nHibSettings(), string.Empty);
-			Assert.AreEqual(DataSourcesFactory.NoDataSourceName, res.Application.Name);
+			Assert.AreEqual(DataSourceConfigurationSetter.NoDataSourceName, res.Application.Name);
 			Assert.IsNull(res.Statistic);
 			Assert.IsInstanceOf<NHibernateUnitOfWorkFactory>(res.Application);
 		}
@@ -108,8 +105,8 @@ namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork
 		public void TestCreateWithDictionaryWithMatrix()
 		{
 			IDataSource res = target.Create(nHibSettings(), ConnectionStringHelper.ConnectionStringUsedInTestsMatrix);
-			Assert.AreEqual(DataSourcesFactory.NoDataSourceName, res.Application.Name);
-			Assert.AreEqual(DataSourcesFactory.NoDataSourceName, res.Statistic.Name);
+			Assert.AreEqual(DataSourceConfigurationSetter.NoDataSourceName, res.Application.Name);
+			Assert.AreEqual(DataSourcesFactory.AnalyticsDataSourceName, res.Statistic.Name);
 			Assert.IsInstanceOf<NHibernateUnitOfWorkFactory>(res.Application);
 			Assert.IsInstanceOf<NHibernateUnitOfWorkMatrixFactory>(res.Statistic);
 		}

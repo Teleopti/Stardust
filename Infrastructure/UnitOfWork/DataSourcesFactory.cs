@@ -26,7 +26,7 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 		private readonly ICurrentHttpContext _httpContext;
 		private static readonly ILog Logger = LogManager.GetLogger(typeof(DataSourcesFactory));
 
-		public const string NoDataSourceName = "[not set]";
+		public const string AnalyticsDataSourceName = "AnalyticsDatasource";
 
 		public DataSourcesFactory(IEnversConfiguration enversConfiguration, IEnumerable<IMessageSender> messageSenders, IDataSourceConfigurationSetter dataSourceConfigurationSetter, ICurrentHttpContext httpContext)
 		{
@@ -68,10 +68,8 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 				if (string.IsNullOrEmpty(resultOfOnline))
 				{
 					var matrixElement = nhibernateConfiguration.Elements("matrix").Single();
-					var matrixNameElement = matrixElement.Attribute("name");
-					var matrixName = matrixNameElement!=null ? matrixNameElement.Value : NoDataSourceName;
 					var matrixConnstring = matrixElement.Element("connectionString").Value;
-					dataSource = createDataSource(nhProperties, matrixConnstring,matrixName);
+					dataSource = createDataSource(nhProperties, matrixConnstring);
 					return true;
 				}
 			}
@@ -92,15 +90,15 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 					applicationDataSourceName
 				}
 			};
-			return createDataSource(settings, statisticConnectionString, NoDataSourceName);
+			return createDataSource(settings, statisticConnectionString);
 		}
 
 		public IDataSource Create(IDictionary<string, string> settings, string statisticConnectionString)
 		{
-			return createDataSource(settings, statisticConnectionString, NoDataSourceName);
+			return createDataSource(settings, statisticConnectionString);
 		}
 
-		private IDataSource createDataSource(IDictionary<string, string> settings, string statisticConnectionString, string statisticName)
+		private IDataSource createDataSource(IDictionary<string, string> settings, string statisticConnectionString)
 		{
 			NHibernateUnitOfWorkMatrixFactory statFactory;
 			var appConfig = createApplicationConfiguration(settings);
@@ -109,7 +107,7 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 
 			if (!string.IsNullOrEmpty(statisticConnectionString))
 			{
-				var statConfiguration = createStatisticConfiguration(statisticConnectionString, statisticName);
+				var statConfiguration = createStatisticConfiguration(statisticConnectionString);
 				statFactory = new NHibernateUnitOfWorkMatrixFactory(buildSessionFactory(statConfiguration), statConfiguration.Properties[Environment.ConnectionString]);
 			}
 			else
@@ -150,7 +148,7 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 			return ret;
 		}
 
-		private Configuration createStatisticConfiguration(string connectionString, string matrixname)
+		private Configuration createStatisticConfiguration(string connectionString)
 		{
 			//REMOVE ME LATER!!!!!!!!!!!!!!!!/((
 			Log4NetConfiguration.SetConnectionString(connectionString);
@@ -163,8 +161,8 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 						 .SetProperty(Environment.ConnectionProvider, "NHibernate.Connection.DriverConnectionProvider")
 						 .SetProperty(Environment.ConnectionDriver, "NHibernate.Driver.SqlClientDriver")
 						 .SetProperty(Environment.Dialect, "NHibernate.Dialect.MsSql2005Dialect")
-						 .SetProperty(Environment.SqlExceptionConverter, typeof(SqlServerExceptionConverter).AssemblyQualifiedName)
-						 .SetProperty(Environment.SessionFactoryName, matrixname);
+						 .SetProperty(Environment.SessionFactoryName, AnalyticsDataSourceName)
+						 .SetProperty(Environment.SqlExceptionConverter, typeof(SqlServerExceptionConverter).AssemblyQualifiedName);
 				_dataSourceConfigurationSetter.AddApplicationNameToConnectionString(statCfg);
 				return statCfg;
 			}
