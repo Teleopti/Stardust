@@ -10,23 +10,23 @@ define([
 		var self = this;
 		
 		this.urlForAddFullDayAbsence = function() {
-			return navigation.UrlForPersonScheduleAddFullDayAbsence(self.BusinessUnitId, self.GroupId, self.PersonId, self.Date);
+			return navigation.UrlForNewPersonScheduleAddFullDayAbsence(self.BusinessUnitId, self.GroupId, self.PersonId, self.Date);
 		};
 
 		this.urlForAddIntradayAbsence = function() {
-			return navigation.UrlForPersonScheduleAddIntradayAbsence(self.BusinessUnitId, self.GroupId, self.PersonId, self.Date);
+			return navigation.UrlForNewPersonScheduleAddIntradayAbsence(self.BusinessUnitId, self.GroupId, self.PersonId, self.Date);
 		};
 
 		this.urlForAddActivity = function() {
-			return navigation.UrlForPersonScheduleAddActivity(self.BusinessUnitId, self.GroupId, self.PersonId, self.Date);
+			return navigation.UrlForNewPersonScheduleAddActivity(self.BusinessUnitId, self.GroupId, self.PersonId, self.Date);
 		};
 
 		this.urlForRemoveAbsence = function() {
-			return navigation.UrlForPersonSchedule(self.BusinessUnitId, self.GroupId, self.PersonId, self.Date);
+			return navigation.UrlForNewPersonSchedule(self.BusinessUnitId, self.GroupId, self.PersonId, self.Date);
 		};
 
 		this.urlForMoveActivity = function(layer) {
-			return navigation.UrlForPersonScheduleMoveActivity(self.BusinessUnitId, self.GroupId, self.PersonId, self.Date, layer.StartMinutes());
+			return navigation.UrlForNewPersonScheduleMoveActivity(self.BusinessUnitId, self.GroupId, self.PersonId, self.Date, layer.StartMinutes());
 		}
 		
 	};

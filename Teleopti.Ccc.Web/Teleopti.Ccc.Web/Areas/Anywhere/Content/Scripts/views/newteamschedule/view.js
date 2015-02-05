@@ -7,9 +7,9 @@ define([
 		'subscriptions.groupschedule',
 		'subscriptions.staffingmetrics',
 		'helpers',
-		'views/teamschedule/vm',
-		'views/teamschedule/person',
-		'text!templates/teamschedule/view.html',
+		'views/newteamschedule/vm',
+		'views/newteamschedule/person',
+		'text!templates/teamschedule_31897/view.html',
 		'resizeevent',
 		'shared/current-state',
 		'ajax',
@@ -71,19 +71,19 @@ define([
 			viewModel.GroupId.subscribe(function () {
 				if (viewModel.Loading())
 					return;
-				navigation.GoToTeamSchedule(viewModel.BusinessUnitId(), viewModel.GroupId(), viewModel.Date(), viewModel.SelectedSkill());
+				navigation.GoToTeamSchedule_31897(viewModel.BusinessUnitId(), viewModel.GroupId(), viewModel.Date(), viewModel.SelectedSkill());
 			});
 
 			viewModel.Date.subscribe(function () {
 				if (viewModel.Loading() || !viewModel.GroupId())
 					return;
-				navigation.GoToTeamSchedule(viewModel.BusinessUnitId(), viewModel.GroupId(), viewModel.Date(), viewModel.SelectedSkill());
+				navigation.GoToTeamSchedule_31897(viewModel.BusinessUnitId(), viewModel.GroupId(), viewModel.Date(), viewModel.SelectedSkill());
 			});
 
 			viewModel.SelectedSkill.subscribe(function () {
 				if (viewModel.Loading())
 					return;
-				navigation.GoToTeamSchedule(viewModel.BusinessUnitId(), viewModel.GroupId(), viewModel.Date(), viewModel.SelectedSkill());
+				navigation.GoToTeamSchedule_31897(viewModel.BusinessUnitId(), viewModel.GroupId(), viewModel.Date(), viewModel.SelectedSkill());
 			});
 			ko.cleanNode(options.bindingElement);
 			ko.applyBindings(viewModel, options.bindingElement);

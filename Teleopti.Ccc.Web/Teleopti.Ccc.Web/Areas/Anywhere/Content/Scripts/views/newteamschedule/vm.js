@@ -4,7 +4,7 @@ define([
 	'lazy',
 	'shared/timeline',
 	'shared/group-page',
-	'views/teamschedule/person',
+	'views/newteamschedule/person',
 	'resources',
 	'moment',
 	'momentTimezoneData',

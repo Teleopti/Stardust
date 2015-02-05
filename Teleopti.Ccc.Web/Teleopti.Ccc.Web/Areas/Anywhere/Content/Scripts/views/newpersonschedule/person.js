@@ -2,30 +2,27 @@ define([
 		'knockout',
 		'moment',
 		'lazy',
-		'views/newteamschedule/shift',
-		'views/newteamschedule/person-menu',
+		'views/newpersonschedule/shift',
 		'shared/dayoff'
 ], function (
 		ko,
 		moment,
 		lazy,
 		shift,
-		menu,
 		dayOff
 	) {
 
 	return function (data) {
 		var self = this;
-
 		this.Id = data.Id;
-		this.Name = ko.observable(data.FirstName ? data.FirstName + " " + data.LastName : "");
-		
+		this.Name = ko.observable(data.Name ? data.Name : "");
+
 		this.WorkTimeMinutes = ko.observable(0);
 		this.ContractTimeMinutes = ko.observable(0);
 
 		this.DayOffs = ko.observableArray();
 		this.Shifts = ko.observableArray();
-		
+
 		this.ContractTime = ko.computed(function () {
 			var time = moment().startOf('day').add('minutes', self.ContractTimeMinutes());
 			return time.format("H:mm");
@@ -36,13 +33,13 @@ define([
 			return time.format("H:mm");
 		});
 
-		this.ClearData = function () {
+		this.ClearData = function() {
 			self.Shifts([]);
 			self.DayOffs([]);
 			self.WorkTimeMinutes(0);
 			self.ContractTimeMinutes(0);
 		};
-
+		
 		this.AddData = function (data, timeline) {
 
 			if (data.Name)
@@ -51,27 +48,17 @@ define([
 			if (data.Projection && data.Projection.length > 0) {
 				var newShift = new shift(data, timeline);
 				newShift.AddLayers(data);
-
-				var newShiftLayers = newShift.Layers();
-				if (newShiftLayers[0].StartMinutes() <= 1440) {
-					self.Shifts.push(newShift);
-					if (newShiftLayers[0].StartMinutes() > 0) {
-						self.ContractTimeMinutes(self.ContractTimeMinutes() + data.ContractTimeMinutes);
-						self.WorkTimeMinutes(self.WorkTimeMinutes() + data.WorkTimeMinutes);
-					}
-				}
+				self.Shifts.push(newShift);
 			}
-
+			
 			if (data.DayOff) {
 				data.DayOff.Offset = data.Offset;
 				var newDayOff = new dayOff(timeline, data.DayOff);
 				self.DayOffs.push(newDayOff);
 			}
-
-			self.Menu.BusinessUnitId = data.BusinessUnitId;
-			self.Menu.GroupId = data.GroupId;
-			self.Menu.PersonId = self.Id;
-			self.Menu.Date = data.Offset;
+			
+			self.ContractTimeMinutes(self.ContractTimeMinutes() + data.ContractTimeMinutes);
+			self.WorkTimeMinutes(self.WorkTimeMinutes() + data.WorkTimeMinutes);
 		};
 
 		var layers = function () {
@@ -90,40 +77,21 @@ define([
 				.filter(function (x) { return x.OverlapsTimeLine(); });
 		};
 
-		this.SortValue = null;
-
 		this.OrderBy = function () {
-			if (self.SortValue != null)
-				return self.SortValue;
-			var visibleShiftLayers = visibleLayers().filter(function (x) {
-				return !x.IsFullDayAbsence;
-			});
 
-			if (visibleShiftLayers.some()) {
-				self.SortValue = visibleShiftLayers.map(function (x) { return x.StartMinutes(); }).min();
-				return self.SortValue;
-			}
-
+			var visibleShiftLayers = visibleLayers().filter(function (x) { return !x.IsFullDayAbsence; });
+			
+			if (visibleShiftLayers.some())
+				return visibleShiftLayers.map(function (x) { return x.StartMinutes(); }).min();
+			
 			var visibleFullDayAbsences = visibleLayers().filter(function (x) { return x.IsFullDayAbsence; });
-			if (visibleFullDayAbsences.some()) {
-				self.SortValue = 5000 + visibleFullDayAbsences.map(function (x) { return x.StartMinutes(); }).min();
-				return self.SortValue;
-			}
-
-			if (visibleDayOffs().some()) {
+			if (visibleFullDayAbsences.some())
+				return 5000 + visibleFullDayAbsences.map(function (x) { return x.StartMinutes(); }).min();
+			
+			if (visibleDayOffs().some())
 				return 10000;
-			}
+			
 			return 20000;
 		};
-		
-		this.Menu = new menu();
-
-		this.Selected = ko.observable(false);
-
-		this.IsPersonOrShiftSelected = ko.computed(function() {
-			return self.Selected() ||
-				layers().some(function(l) { return l.Selected(); });
-		});
-
 	};
 });

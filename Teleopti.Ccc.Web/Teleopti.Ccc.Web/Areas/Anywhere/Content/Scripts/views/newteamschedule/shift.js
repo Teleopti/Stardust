@@ -4,7 +4,7 @@ define([
 		'navigation',
 		'lazy',
 		'shared/layer',
-		'views/teamschedule/shift-menu'
+		'views/newteamschedule/shift-menu'
 ], function (
 	ko,
 	moment,

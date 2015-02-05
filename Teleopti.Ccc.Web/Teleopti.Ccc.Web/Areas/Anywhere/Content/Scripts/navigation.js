@@ -17,6 +17,9 @@ define([
 		GoToTeamSchedule: function (buid, id, date, skill) {
 			window.setLocationHash('teamschedule/' + buid + '/' + id + '/' + toDateString(date) + ((skill) ? '/' + skill.Id : ''));
 		},
+		GoToTeamSchedule_31897: function (buid, id, date, skill) {
+			window.setLocationHash('newteamschedule/' + buid + '/' + id + '/' + toDateString(date) + ((skill) ? '/' + skill.Id : ''));
+		},
 
 		GotoRealTimeAdherenceTeams: function (buid, siteId) {
 			window.setLocationHash('realtimeadherenceteams/' + buid + '/' + siteId);
@@ -71,6 +74,22 @@ define([
 		},
 		UrlForPersonScheduleMoveActivity: function (buid, groupid, personid, date, startTime) {
 			return window.baseLocation() + '#personschedule/' + buid + '/' + groupid + '/' + personid + '/' + toDateString(date) + '/moveactivity/' + startTime;
+		},
+		// For PBI #31897
+		UrlForNewPersonScheduleAddFullDayAbsence:function(buid,teamId,personId,date) {
+		return window.baseLocation() + '#newpersonschedule/' + buid + '/' + teamId + '/' + personId + '/' + toDateString(date) + '/addfulldayabsence';
+		},
+		UrlForNewPersonScheduleAddIntradayAbsence:function(buid,teamId,personId,date) {
+			return  window.baseLocation() + '#newpersonschedule/' + buid + '/' + teamId + '/' + personId + '/' + toDateString(date) + '/addintradayabsence';
+		},
+		UrlForNewPersonScheduleAddActivity: function (buid, groupid, personid, date) {
+			return window.baseLocation() + '#newpersonschedule/' + buid + '/' + groupid + '/' + personid + '/' + toDateString(date) + '/addactivity';
+		},
+		UrlForNewPersonSchedule: function (buid, groupid, personid, date) {
+			return window.baseLocation() + '#newpersonschedule/' + buid + '/' + groupid + '/' + personid + '/' + toDateString(date);
+		},
+		UrlForNewPersonScheduleMoveActivity: function (buid, groupid, personid, date, startTime) {
+			return window.baseLocation() + '#newpersonschedule/' + buid + '/' + groupid + '/' + personid + '/' + toDateString(date) + '/moveactivity/' + startTime;
 		}
 	};
 });
