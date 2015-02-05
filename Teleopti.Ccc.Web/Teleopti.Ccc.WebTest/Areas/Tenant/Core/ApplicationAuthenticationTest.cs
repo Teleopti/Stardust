@@ -49,14 +49,14 @@ namespace Teleopti.Ccc.WebTest.Areas.Tenant.Core
 			var findApplicationQuery = MockRepository.GenerateMock<IApplicationUserQuery>();
 			findApplicationQuery.Expect(x => x.FindUserData(userName)).Return(new PasswordPolicyForUser(personInfo));
 			var nhibHandler = MockRepository.GenerateMock<INHibernateConfigurationsHandler>();
-			nhibHandler.Stub(x => x.GetConfigForName(personInfo.Tennant)).Return("aencryptedconfig");
+			nhibHandler.Stub(x => x.GetConfigForName(personInfo.Tenant)).Return("aencryptedconfig");
 			var target = new ApplicationAuthentication(findApplicationQuery, new PasswordVerifier(new OneWayEncryption(), () => MockRepository.GenerateStub<IPasswordPolicy>(), new Now()),
 				new SuccessfulPasswordPolicy(), nhibHandler);
 			
 			var res = target.Logon(userName, password);
 
 			res.Success.Should().Be.True();
-			res.Tennant.Should().Be.EqualTo(personInfo.Tennant);
+			res.Tenant.Should().Be.EqualTo(personInfo.Tenant);
 			res.PersonId.Should().Be.EqualTo(personInfo.Id);
 			res.DataSourceConfig.Should().Be.EqualTo("aencryptedconfig");
 		}
@@ -72,7 +72,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Tenant.Core
 			var findApplicationQuery = MockRepository.GenerateMock<IApplicationUserQuery>();
 			findApplicationQuery.Expect(x => x.FindUserData(userName)).Return(queryResult);
 			var nhibHandler = MockRepository.GenerateMock<INHibernateConfigurationsHandler>();
-			nhibHandler.Stub(x => x.GetConfigForName(queryResult.PersonInfo.Tennant)).Return("");
+			nhibHandler.Stub(x => x.GetConfigForName(queryResult.PersonInfo.Tenant)).Return("");
 			var target = new ApplicationAuthentication(findApplicationQuery, new PasswordVerifier(new OneWayEncryption(), () => MockRepository.GenerateStub<IPasswordPolicy>(), new Now()),
 				new SuccessfulPasswordPolicy(), nhibHandler);
 

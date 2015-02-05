@@ -19,7 +19,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Tenant
 			{
 				Success = true,
 				PersonId = Guid.NewGuid(),
-				Tennant = Guid.NewGuid().ToString()
+				Tenant = Guid.NewGuid().ToString()
 			};
 			var appAuthentication = MockRepository.GenerateMock<IApplicationAuthentication>();
 			var target = new TenantController(appAuthentication, null, MockRepository.GenerateMock<ILogLogonAttempt>());
@@ -58,7 +58,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Tenant
 			{
 				Success = true,
 				PersonId = Guid.NewGuid(),
-				Tennant = Guid.NewGuid().ToString()
+				Tenant = Guid.NewGuid().ToString()
 			};
 			var identityAuthentication = MockRepository.GenerateMock<IIdentityAuthentication>();
 			var target = new TenantController(null, identityAuthentication, MockRepository.GenerateMock<ILogLogonAttempt>());

@@ -39,7 +39,7 @@ namespace Teleopti.Ccc.Domain.Security.MultiTenancyAuthentication
 					Message = result.FailReason			
 				};
 
-			var dataSourceName = result.Tennant;
+			var dataSourceName = result.Tenant;
 			var personId = result.PersonId;
 			var nhibConfig = result.DataSource;
 			if (!string.IsNullOrEmpty(result.DataSourceConfig))

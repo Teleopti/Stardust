@@ -31,14 +31,14 @@ namespace Teleopti.Ccc.WebTest.Areas.Tenant.Core
 			var queryResult = new PersonInfo {Id = Guid.NewGuid()};
 			var findIdentityQuery = MockRepository.GenerateMock<IIdentityUserQuery>();
 			var nhibHandler = MockRepository.GenerateMock<INHibernateConfigurationsHandler>();
-			nhibHandler.Stub(x => x.GetConfigForName(queryResult.Tennant)).Return("aencryptedconfig"); 
+			nhibHandler.Stub(x => x.GetConfigForName(queryResult.Tenant)).Return("aencryptedconfig"); 
 			findIdentityQuery.Expect(x => x.FindUserData(identity)).Return(queryResult);
 
 			var target = new IdentityAuthentication(findIdentityQuery,nhibHandler);
 			var res = target.Logon(identity);
 
 			res.Success.Should().Be.True();
-			res.Tennant.Should().Be.EqualTo(queryResult.Tennant);
+			res.Tenant.Should().Be.EqualTo(queryResult.Tenant);
 			res.PersonId.Should().Be.EqualTo(queryResult.Id);
 		}
 
@@ -50,7 +50,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Tenant.Core
 			var queryResult = new PersonInfo { Id = Guid.NewGuid() };
 			var findIdentityQuery = MockRepository.GenerateMock<IIdentityUserQuery>();
 			var nhibHandler = MockRepository.GenerateMock<INHibernateConfigurationsHandler>();
-			nhibHandler.Stub(x => x.GetConfigForName(queryResult.Tennant)).Return("");
+			nhibHandler.Stub(x => x.GetConfigForName(queryResult.Tenant)).Return("");
 			findIdentityQuery.Expect(x => x.FindUserData(identity)).Return(queryResult);
 
 			var target = new IdentityAuthentication(findIdentityQuery, nhibHandler);

@@ -15,7 +15,7 @@ namespace Teleopti.Ccc.Infrastructure.MultiTenancy
 		public virtual Guid Id { get; set; }
 		public virtual string Password { get; set; }
 
-		public virtual string Tennant
+		public virtual string Tenant
 		{
 			get { return "Teleopti WFM"; }
 		}

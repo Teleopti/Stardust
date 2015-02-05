@@ -149,7 +149,7 @@ namespace Teleopti.Ccc.WebTest.Core.IoC
 		}
 
 		[Test]
-		public void ShouldRegisterTennantController()
+		public void ShouldRegisterTenantController()
 		{
 			requestContainer.Resolve<TenantController>()
 				.Should().Not.Be.Null();

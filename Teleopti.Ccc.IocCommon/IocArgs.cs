@@ -11,7 +11,7 @@ namespace Teleopti.Ccc.IocCommon
 	{
 		public string FeatureToggle { get; set; }
 		public string ToggleMode { get; set; }
-		public string TennantServer { get; set; }
+		public string TenantServer { get; set; }
 		public bool PublishEventsToServiceBus { get; set; }
 
 		public bool MessageBrokerListeningEnabled { get; set; }
@@ -36,7 +36,7 @@ namespace Teleopti.Ccc.IocCommon
 		{
 			FeatureToggle = ConfigurationManager.AppSettings["FeatureToggle"];
 			ToggleMode = ConfigurationManager.AppSettings["ToggleMode"];
-			TennantServer = ConfigurationManager.AppSettings["TennantServer"];
+			TenantServer = ConfigurationManager.AppSettings["TenantServer"];
 			PublishEventsToServiceBus = readBoolAppSetting("PublishEventsToServiceBus", true);
 			DataSourceConfigurationSetter = Infrastructure.NHibernateConfiguration.DataSourceConfigurationSetter.ForWeb();
 		}

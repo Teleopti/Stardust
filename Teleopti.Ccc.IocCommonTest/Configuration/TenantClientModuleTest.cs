@@ -6,12 +6,12 @@ using Teleopti.Ccc.IocCommon;
 
 namespace Teleopti.Ccc.IocCommonTest.Configuration
 {
-	public class TennantClientModuleTest
+	public class TenantClientModuleTest
 	{
 		private ContainerBuilder builder;
 
 		[Test]
-		public void CanResolveTennantQuerier()
+		public void CanResolveTenantQuerier()
 		{
 			using (var container = builder.Build())
 			{

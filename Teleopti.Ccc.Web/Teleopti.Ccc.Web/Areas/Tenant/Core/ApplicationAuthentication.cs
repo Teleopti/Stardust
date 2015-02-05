@@ -35,7 +35,7 @@ namespace Teleopti.Ccc.Web.Areas.Tenant.Core
 			if (passwordCheck != null)
 				return passwordCheck;
 
-			var nhibConfig = _nHibernateConfigurationsHandler.GetConfigForName(passwordPolicyForUser.PersonInfo.Tennant);
+			var nhibConfig = _nHibernateConfigurationsHandler.GetConfigForName(passwordPolicyForUser.PersonInfo.Tenant);
 			if(string.IsNullOrEmpty(nhibConfig))
 				return createFailingResult(Resources.NoDatasource);
 
@@ -43,7 +43,7 @@ namespace Teleopti.Ccc.Web.Areas.Tenant.Core
 			{
 				Success = true,
 				PersonId = passwordPolicyForUser.PersonInfo.Id,
-				Tennant = passwordPolicyForUser.PersonInfo.Tennant,
+				Tenant = passwordPolicyForUser.PersonInfo.Tenant,
 				DataSourceConfig = nhibConfig
 			};
 		}

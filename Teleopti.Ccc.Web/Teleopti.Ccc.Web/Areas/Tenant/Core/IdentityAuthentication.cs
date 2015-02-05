@@ -20,7 +20,7 @@ namespace Teleopti.Ccc.Web.Areas.Tenant.Core
 			if (foundUser==null)
 				return createFailingResult(string.Format(Resources.LogOnFailedIdentityNotFound, identity));
 
-			var nhibConfig = _nHibernateConfigurationsHandler.GetConfigForName(foundUser.Tennant);
+			var nhibConfig = _nHibernateConfigurationsHandler.GetConfigForName(foundUser.Tenant);
 			if (string.IsNullOrEmpty(nhibConfig))
 				return createFailingResult(Resources.NoDatasource);
 			
@@ -28,7 +28,7 @@ namespace Teleopti.Ccc.Web.Areas.Tenant.Core
 			{
 				Success = true,
 				PersonId = foundUser.Id,
-				Tennant = foundUser.Tennant,
+				Tenant = foundUser.Tenant,
 				DataSourceConfig = nhibConfig
 			};
 		}

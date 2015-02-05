@@ -58,7 +58,7 @@ namespace Teleopti.Ccc.IocCommon
 			builder.RegisterModule<WebModule>();
 			builder.RegisterModule<ServiceBusModule>();
 			builder.RegisterModule(new InitializeModule(_configuration));
-			builder.RegisterModule(new TennantClientModule(_configuration));
+			builder.RegisterModule(new TenantClientModule(_configuration));
 			builder.RegisterModule<DistributedLockModule>();
 			builder.RegisterModule(new RtaModule(_configuration));
 
