@@ -93,10 +93,7 @@ namespace Teleopti.Analytics.Etl.TransformerInfrastructure
 			return false;
 		}
 
-		public bool SelectDataSourceContainer(string dataSourceName)
-		{
-			throw new NotImplementedException();
-		}
+		
 
 		/// <summary>
 		/// Initializes the state holder components.
@@ -133,9 +130,11 @@ namespace Teleopti.Analytics.Etl.TransformerInfrastructure
 										new CheckPasswordChange(() => passwordPolicy))), _repositoryFactory)), _repositoryFactory)),_logOnOff);
 		}
 
-		private void SetDatabase()
+
+		public bool SelectDataSourceContainer(string dataSourceName)
 		{
-			_foundDataBases = _logonService.CreateAvailableDataSourcesListForApplicationUser().ToList();
+			_buList = null;
+			if (GetDataSourceCollection().IsEmpty())
 			{
 				Trace.WriteLine("Login Failed! could not be found in any database configuration.");
 				_choosenDb = null;
@@ -144,7 +143,7 @@ namespace Teleopti.Analytics.Etl.TransformerInfrastructure
 			{
 				// If multiple databases we use the first in the list, since it is decided that the ETL Tool not should support multi db
 				_choosenDb = GetDataSourceCollection().FirstOrDefault(x => x.DataSourceName.Equals(dataSourceName));
-				if(_choosenDb == null)
+				if (_choosenDb == null)
 					Trace.WriteLine(string.Format("No datasource found with name {0}", dataSourceName));
 				else
 				{
@@ -153,13 +152,11 @@ namespace Teleopti.Analytics.Etl.TransformerInfrastructure
 						var systemId = new Guid("3f0886ab-7b25-4e95-856a-0d726edc2a67");
 						_choosenDb.SetUser(_repositoryFactory.CreatePersonRepository(unitOfWork).LoadOne(systemId));
 					}
-				
-				if(_choosenDb.User == null)
+					if (_choosenDb.User == null)
 					{
 						Trace.WriteLine("Error on logon!");
 						_choosenDb = null;
 					}
-				
 				}
 			}
 			return _choosenDb != null;
