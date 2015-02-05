@@ -7,7 +7,7 @@ var wfm = angular.module('wfm', [
     'ngMaterial',
     'angularMoment',
     'wfmCtrls',
-	'permissionsService'
+	'restService'
 ]);
 wfm.config(['$stateProvider', '$urlRouterProvider',function ($stateProvider, $urlRouterProvider) {
     $urlRouterProvider.otherwise("forecasting");

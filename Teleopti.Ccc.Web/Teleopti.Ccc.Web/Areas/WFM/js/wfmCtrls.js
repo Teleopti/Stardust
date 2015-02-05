@@ -36,8 +36,8 @@ wfmCtrls.controller('ForecastingRunCtrl', ['$scope', '$stateParams', '$http',
 );
 
 wfmCtrls.controller('PermissionsCtrl', [
-	'$scope', '$stateParams', '$filter', 'Roles', 'OrganizationSelections', 'ApplicationFunctions', 'DuplicateRole', 'RolesPermissions', 'ManageRole', 'AssignFunction', 'AssignOrganizationSelection',
-	function ($scope, $stateParams, $filter, Roles, OrganizationSelections, ApplicationFunctions, DuplicateRole, RolesPermissions, ManageRole, AssignFunction, AssignOrganizationSelection) {
+	'$scope', '$stateParams', '$filter', 'Permissions', 'OrganizationSelections', 'ApplicationFunctions', 'DuplicateRole', 'RolesPermissions', 'ManageRole', 'AssignFunction', 'AssignOrganizationSelection',
+	function ($scope, $stateParams, $filter, Permissions, OrganizationSelections, ApplicationFunctions, DuplicateRole, RolesPermissions, ManageRole, AssignFunction, AssignOrganizationSelection) {
 		$scope.roles = [];
 		$scope.list = [];
 		$scope.roleName = null;
@@ -47,7 +47,7 @@ wfmCtrls.controller('PermissionsCtrl', [
 		$scope.selectedRole = {};
 		$scope.organization = { BusinessUnits: [{ BusinessUnit: { Sites: [] } }], DynamicOptions: [] };
 
-		$scope.roles = Roles.get();
+		$scope.roles = Permissions.roles.get();
 		OrganizationSelections.query().$promise.then(function(result) {
 			// could we have directly an array from server?
 			$scope.organization = { BusinessUnits: [result.BusinessUnit], DynamicOptions: result.DynamicOptions };
@@ -62,7 +62,7 @@ wfmCtrls.controller('PermissionsCtrl', [
 
 		$scope.createRole = function() {
 			var roleData = { Description: $scope.roleName };
-			Roles.post(JSON.stringify(roleData)).$promise.then(function(result) {
+			Permissions.roles.post(JSON.stringify(roleData)).$promise.then(function(result) {
 				roleData.Id = result.Id;
 				roleData.DescriptionText = result.DescriptionText;
 				$scope.roles.unshift(roleData);

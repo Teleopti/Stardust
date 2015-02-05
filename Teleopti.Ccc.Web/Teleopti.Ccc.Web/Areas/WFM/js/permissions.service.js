@@ -1,9 +1,10 @@
-﻿var permissionsService = angular.module('permissionsService', ['ngResource']);
-permissionsService.factory('Roles', ['$resource', function ($resource) {
-	return $resource('../../api/Permissions/Roles', {}, {
+﻿var permissionsService = angular.module('restService', ['ngResource']);
+permissionsService.service('Permissions', ['$resource', function ($resource) {
+	this.roles = $resource('../../api/Permissions/Roles', {}, {
 		get: { method: 'GET', params: {}, isArray: true },
 		post: { method: 'POST', params: name }
 	});
+	
 }]);
 
 permissionsService.factory('RolesPermissions', ['$resource', function ($resource) {
