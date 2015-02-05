@@ -1,0 +1,81 @@
+﻿
+.roles-details-wrapper {
+	bottom: 0;
+}
+
+.inline-role-name {
+	margin: 0;
+	padding: 0;
+	width: 50%;
+	color: black;
+}
+
+.role-context-menu {
+	width: 0;
+	float: right;
+	overflow: hidden;
+	display: inline-block;
+	transition: $trasnition-timing;
+	height: 18px;
+}
+
+.selected-role {
+	background-color: $blue-500!important;
+	color: white;
+
+	.role-context-menu {
+		width: 90px;
+
+		a {
+			text-decoration: none;
+
+			svg > path {
+				fill: white!important;
+			}
+		}
+	} 
+}
+
+.role:hover > .role-context-menu {
+	width: 90px;
+}
+
+.role-btn {
+	padding: $full-padding;
+	cursor: pointer;
+}
+
+.role-btn-success {
+	color: white;  
+	background-color: $orange-400;
+}
+
+.role-btn-default.active, 
+.role-btn-default.focus, 
+.role-btn-default:active, 
+.role-btn-default:focus,
+.role-btn-default.active:hover, 
+.role-btn-default.focus:hover, 
+.role-btn-default:active:hover, 
+.role-btn-default:focus:hover {
+	background-color: $blue-500!important;
+}
+
+.role-btn-default:hover {
+	background-color: #BBDEFB;
+	border:none;
+}
+
+.role-container{
+	max-height: 800px;	
+
+	ul {
+		padding-left: 0px;
+		list-style: none;
+		margin-bottom: 10px;
+
+		li, .filter-form {
+			margin-bottom: 10px;
+		}
+	}
+}

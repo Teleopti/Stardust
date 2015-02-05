@@ -57,6 +57,7 @@
 			</ul>
 		</div>
 	</div>
+
 	<ul class="tab-heads">
 		<li>
 			<label class="btn" ng-model="roleDetails" btn-radio="'functionsAvailable'">function</label>
@@ -66,8 +67,8 @@
 			<label class="btn" ng-model="roleDetails" btn-radio="'dataAvailable'">data</label>
 		</li>
 	</ul>
-	<div class="roles-details-wrapper col-md-8 material-depth-1">
 
+	<div class="roles-details-wrapper col-md-8 material-depth-1">
 		<div ng-show="roleDetails=='functionsAvailable'">
 			<form class="filter-form">
 				<svg style="width: 18px; height: 18px;" viewBox="0 0 24 24">
@@ -95,7 +96,7 @@
 			
 			<div class="tree">
 				<div ui-tree data-drag-enabled="false">
-					<ol ui-tree-nodes="" ng-model="organization.DynamicOptions">
+					<ol ui-tree-nodes="" ng-model="organization.DynamicOptions" class="tree-line">
 						<li ng-repeat="dynamic in organization.DynamicOptions | filter:searchData" ui-tree-node>
 							<div ui-tree-handle ng-click="toggleOrganizationSelection(dynamic, 'RangeOption')" ng-class="{selected: dynamic.selected}">
 								{{dynamic.Name}}
@@ -103,20 +104,19 @@
 						</li>
 					</ol>
 				</div>
-			</div>
-			<div class="tree">
+
 				<div ui-tree data-drag-enabled="false">
-					<ol ui-tree-nodes="" ng-model="organization.BusinessUnits" id="tree-root">
+					<ol ui-tree-nodes="" ng-model="organization.BusinessUnits" id="tree-root" class="tree-line">
 						<li ng-repeat="bu in organization.BusinessUnits | filter:searchData" ui-tree-node>
 							<div ui-tree-handle ng-class="{selected: bu.selected}" ng-click="toggleOrganizationSelection(bu, 'BusinessUnits')">
 								{{bu.Name}}
 							</div>
-							<ol ui-tree-nodes="" ng-model="bu.Sites">
+							<ol ui-tree-nodes="" ng-model="bu.Sites" class="tree-line">
 								<li ng-repeat="site in bu.Sites | filter:searchData" ui-tree-node>
 									<div ui-tree-handle ng-class="{selected: site.selected}" ng-click="toggleOrganizationSelection(site, 'Sites')">
 										{{site.Name}}
 									</div>
-									<ol ui-tree-nodes="" ng-model="site.Teams">
+									<ol ui-tree-nodes="" ng-model="site.Teams" class=" tree-line">
 										<li ng-repeat="team in site.Teams | filter:searchData" ui-tree-node>
 											<div ui-tree-handle ng-class="{selected: team.selected}" ng-click="toggleOrganizationSelection(team, 'Teams')">
 												{{team.Name}}

@@ -1136,6 +1136,12 @@
     <Content Include="Areas\Anywhere\Content\Scripts\views\realtimeadherenceagents\view.js" />
     <Content Include="Areas\Anywhere\Content\Scripts\views\realtimeadherenceagents\vm.js" />
     <Content Include="Areas\Anywhere\Content\Scripts\views\realtimeadherenceagents\vm_test.js" />
+    <Content Include="Areas\WFM\css\main.css">
+      <DependentUpon>main.scss</DependentUpon>
+    </Content>
+    <Content Include="Areas\WFM\css\main.min.css">
+      <DependentUpon>main.css</DependentUpon>
+    </Content>
     <Content Include="Areas\WFM\karma.conf.js" />
     <Content Include="Areas\WFM\tests\permissions.controller.spec.js" />
     <Content Include="Areas\Anywhere\Content\Templates\personschedule_31897\view.html" />
@@ -1479,7 +1485,7 @@
     <Content Include="Areas\WFM\css\animation.css" />
     <Content Include="Areas\WFM\css\form.css" />
     <Content Include="Areas\WFM\css\material-spinner.css" />
-    <Content Include="Areas\WFM\css\material.css" />
+    <None Include="Areas\WFM\css\_material.scss" />
     <Content Include="Areas\WFM\html\forecasting-run.html" />
     <Content Include="Areas\WFM\html\forecasting.html" />
     <Content Include="Areas\WFM\html\main.html" />
@@ -1779,6 +1785,9 @@
     <Content Include=".node\node.cmd" />
     <Content Include=".node\grunt.cmd" />
     <Content Include="Areas\WFM\css\main.scss" />
+    <Content Include="Areas\WFM\css\_role.scss" />
+    <Content Include="Areas\WFM\css\_tree.scss" />
+    <Content Include="Areas\WFM\css\_variables.scss" />
     <None Include="PasswordPolicy.xml.notinuse">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
