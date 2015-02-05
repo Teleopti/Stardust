@@ -42,7 +42,6 @@ AS
 SET NOCOUNT ON
 IF @now_utc is null
 SET @now_utc = cast(getutcdate() as smalldatetime)
-
 --Execute one delayed jobs, if any
 if (@is_delayed_job=0 --only run once per ETL, dynamic SP will call using: @is_delayed_job=1
 	and @isIntraday=0 --only run if Nightly
@@ -327,7 +326,7 @@ BEGIN
 		select
 			@now_interval_id_utc=interval_id
 		from mart.dim_interval
-		where CONVERT(TIME, @now_utc) between CONVERT(TIME,interval_start) and CONVERT(TIME,interval_end)
+		where CONVERT(TIME, @now_utc) between CONVERT(TIME,interval_start) and CONVERT(TIME,dateadd(minute,-1,interval_end))
 
 		SELECT
 			@from_date_date_utc=target_date,
@@ -379,15 +378,13 @@ BEGIN
 		INNER JOIN mart.dim_person p
 			ON fs.person_id = p.person_id
 		WHERE shift_startdate_local_id between @from_date_id_utc-1 and @now_date_id_utc+1
-		AND	(
-			(schedule_date_id = @from_date_id_utc AND interval_id >= @from_interval_id_utc)
-			OR
-			(schedule_date_id between @from_date_id_utc+1 AND @now_date_id_utc-1)
-			OR
-			(schedule_date_id = @now_date_id_utc AND interval_id <= @now_interval_id_utc)
+		AND
+		(
+				(schedule_date_id = @from_date_id_utc AND interval_id >= @from_interval_id_utc)
+				OR (schedule_date_id between @from_date_id_utc+1 AND @now_date_id_utc-1)
+				OR (schedule_date_id = @now_date_id_utc AND schedule_date_id > @from_date_id_utc)
 		)
 		AND fs.scenario_id = @scenario_id
-
 		GROUP BY 
 			fs.shift_startdate_local_id,
 			fs.schedule_date_id, 
@@ -399,7 +396,10 @@ BEGIN
 			fs.person_id,
 			fs.business_unit_id,
 			p.person_code
-
+		
+		--remove intervals for today in the future
+		DELETE FROM #fact_schedule WHERE schedule_date_id = @now_date_id_utc AND interval_id > @now_interval_id_utc
+		
 		INSERT INTO #fact_schedule_deviation
 			(
 			date_id, 
