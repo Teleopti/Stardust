@@ -66,14 +66,15 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.MyTime
 		[When(@"I am looking for an empty day")]
 		public void WhenIAmLookingForAnEmptyDay()
 		{
-			Browser.Interactions.Click("#wish-list");
-			Browser.Interactions.Click("#EmptyDay");
+			Browser.Interactions.AssertNotExistsUsingJQuery("select#wish-list option:first", "#ELEMENT_NOT_EXISTS");
+			Browser.Interactions.Javascript("$('select#wish-list option:last').prop('selected', 'selected');");
+			Browser.Interactions.Javascript("$('select#wish-list').change();");						
 		}
 
 		[Then(@"no shift detail is needed")]
 		public void ThenNoShiftDetailIsNeeded()
 		{
-			Browser.Interactions.AssertNotVisibleUsingJQuery(".shift-exchange-offer-start-time");
+			Browser.Interactions.AssertNotVisibleUsingJQuery( ".shift-exchange-offer-start-time");
 		}
 
 		[When(@"I unchecked the full day checkbox")]
