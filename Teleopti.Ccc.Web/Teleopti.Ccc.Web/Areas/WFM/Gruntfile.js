@@ -12,7 +12,7 @@
 		watch: {
 			scripts: {
 				files: ['css/*.scss', 'js/*.js'],
-				tasks: ['sass', 'concat', 'uglify'], //
+				tasks: ['sass', 'concat', 'uglify'], 
 				options: {
 					spawn: false,
 				},

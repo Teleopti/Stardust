@@ -1164,6 +1164,11 @@
     <Content Include="Areas\WFM\css\main.min.css">
       <DependentUpon>main.css</DependentUpon>
     </Content>
+    <Content Include="Areas\WFM\css\material.css" />
+    <Content Include="Areas\WFM\dist\main.js" />
+    <Content Include="Areas\WFM\dist\main.min.js" />
+    <Content Include="Areas\WFM\Gruntfile.js" />
+    <Content Include="Areas\WFM\js\permissions.service.js" />
     <Content Include="Areas\WFM\karma.conf.js" />
     <Content Include="Areas\WFM\tests\permissions.controller.spec.js" />
     <Content Include="Areas\Anywhere\Content\Templates\personschedule_31897\view.html" />
