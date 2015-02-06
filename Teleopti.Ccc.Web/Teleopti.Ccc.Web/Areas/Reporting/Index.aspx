@@ -8,7 +8,6 @@
 <%@ Import Namespace="Teleopti.Analytics.ReportTexts" %>
 <%@ Import Namespace="Teleopti.Ccc.Domain.Security.Principal" %>
 <%@ Import Namespace="Teleopti.Ccc.Web.Areas.Reporting.Core" %>
-<%@ Import Namespace="Teleopti.Interfaces.Domain" %>
 <%@ Register TagPrefix="Analytics" Namespace="Teleopti.Analytics.Parameters" Assembly="Teleopti.Analytics.Parameters" %>
 
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
@@ -38,29 +37,12 @@
 			{
 				var commonReports = new CommonReports(ParameterSelector.ConnectionString, ParameterSelector.ReportId);
 				Guid groupPageComboBoxControlCollectionId = commonReports.GetGroupPageComboBoxControlCollectionId();
-				string groupPageComboBoxControlCollectionIdName = string.Format("Parameter$Drop{0}", groupPageComboBoxControlCollectionId);
+				string groupPageComboBoxControlCollectionIdName = string.Format("ParameterSelector$Drop{0}", groupPageComboBoxControlCollectionId);
 
 				GroupPageCode = string.IsNullOrEmpty(Request.Form.Get(groupPageComboBoxControlCollectionIdName))
 											? Selector.BusinessHierarchyCode
 											: new Guid(Request.Form.Get(groupPageComboBoxControlCollectionIdName));
 				ParameterSelector.GroupPageCode = GroupPageCode;
-				// User have permission on report
-				//DataTable tableProps = ParameterSelector.ReportProperties;
-				//if (tableProps.Rows.Count > 0)
-				//{
-				//	DataRow r = tableProps.Rows[0];
-				//	string resKey = r["report_name_resource_key"].ToString();
-				//	var caption = Resources.ResourceManager.GetString(resKey);
-				//	if (string.IsNullOrEmpty(caption))
-				//		caption = r["name"].ToString();
-				//	//labelRepCaption.Text = caption;
-					
-				//	//string url = HelpLinkBuilder.GetStandardReportHelpLink((string)r["help_key"]);
-
-				//	//ImageButtonHelp.OnClientClick = "javascript: window.open('" + url + "', 'HelpWindow', 'width=800, heigth=450, scrollbars=yes, resizable=yes') ; return false";
-				//	//Page.Title = labelRepCaption.Text;
-				//}
-
 			}
 			else
 			{
@@ -68,6 +50,7 @@
 				buttonShowExcel.Visible = false;
 				buttonShowPdf.Visible = false;
 				labelPermissionDenied.Visible = true;
+				ParameterSelector.Visible = false;
 				labelPermissionDenied.Text = Resources.ResPermissionDenied;
 				//labelRepCaption.Text = "";
 			}
@@ -76,20 +59,15 @@
 
 	protected void Selector_OnInit(object sender, EventArgs e)
 	{
-
-		var applicationData = StateHolderReader.Instance.StateReader.ApplicationScopeData;
-		var dataSource = applicationData.RegisteredDataSourceCollection.FirstOrDefault();
 		var princip = Thread.CurrentPrincipal;
 		var id = ((TeleoptiPrincipalCacheable)princip).Person.Id;
-		dataSource = ((TeleoptiIdentity)princip.Identity).DataSource;
+		var dataSource = ((TeleoptiIdentity)princip.Identity).DataSource;
 		var bu = ((TeleoptiIdentity)princip.Identity).BusinessUnit.Id;
 
-		ParameterSelector.ConnectionString = dataSource.Statistic.ConnectionString;// "Data Source=.;Integrated Security=SSPI;Initial Catalog=main_clone_DemoSales_TeleoptiAnalytics;Persist Security Info=False;Application Name=Teleopti.CCC.Analytics.WebPortal";
-		//ParameterSelector.ReportId = ReportId;// new Guid("e15400e7-892a-4ede-9377-ae693aa56829");
-		ParameterSelector.UserCode = id.GetValueOrDefault(); //new Guid("10957AD5-5489-48E0-959A-9B5E015B2B5C");
-		ParameterSelector.BusinessUnitCode = bu.GetValueOrDefault(); // new Guid("928dd0bc-bf40-412e-b970-9b5e015aadea");
+		ParameterSelector.ConnectionString = dataSource.Statistic.ConnectionString;
+		ParameterSelector.UserCode = id.GetValueOrDefault();
+		ParameterSelector.BusinessUnitCode = bu.GetValueOrDefault(); 
 		ParameterSelector.LanguageId = ((TeleoptiPrincipalCacheable)princip).Person.PermissionInformation.UICultureLCID().GetValueOrDefault();
-		//ParameterSelector.GroupPageCode = new Guid("d5ae2a10-2e17-4b3c-816c-1a0e81cd767c");
 
 	}
 
@@ -105,24 +83,21 @@
 
 	private void createReport(string format)
 	{
-		aspnetForm.Target = "_blank";
+		//aspnetForm.Target = "_blank";
 		var commonReports = new CommonReports(ParameterSelector.ConnectionString, ParameterSelector.ReportId);
 
-		var parameters = ParameterSelector.Parameters;
+		var sqlParams = ParameterSelector.Parameters;
 		var texts = ParameterSelector.ParameterTexts;
 		commonReports.LoadReportInfo();
-		DataSet dataset = commonReports.GetReportData(ParameterSelector.UserCode, ParameterSelector.BusinessUnitCode, parameters);
-
+		DataSet dataset = commonReports.GetReportData(ParameterSelector.UserCode, ParameterSelector.BusinessUnitCode, sqlParams);
 
 		string reportName = commonReports.ReportFileName;
 		string reportPath = Server.MapPath(reportName);
 		IList<ReportParameter> @params = new List<ReportParameter>();
-		var viewer = new ReportViewer();
-		viewer.ProcessingMode = ProcessingMode.Local;
+		var viewer = new ReportViewer {ProcessingMode = ProcessingMode.Local};
 		viewer.LocalReport.ReportPath = reportPath;
 		ReportParameterInfoCollection repInfos = viewer.LocalReport.GetParameters();
 
-		IList<SqlParameter> sqlParams = parameters;
 		foreach (ReportParameterInfo repInfo in repInfos)
 		{
 			int i = 0;
@@ -145,10 +120,9 @@
 			}
 		}
 
-
 		viewer.LocalReport.SetParameters(@params);
 
-		//The first in the report has to hve the name DataSet1
+		//The first in the report has to have the name DataSet1
 		dataset.Tables[0].TableName = "DataSet1";
 		foreach (DataTable t in dataset.Tables)
 		{
@@ -161,11 +135,8 @@
 		string encoding;
 		string extension;
 
-
 		// Setup the report viewer object and get the array of bytes
-
 		byte[] bytes = viewer.LocalReport.Render(format, null, out mimeType, out encoding, out extension, out streamIds, out warnings);
-
 
 		// Now that you have all the bytes representing the PDF report, buffer it and send it to the client.
 		Response.Buffer = true;
@@ -174,14 +145,11 @@
 		Response.AddHeader("content-disposition", "inline; filename=" + reportName + "." + extension);
 		Response.BinaryWrite(bytes); // create the file
 		Response.Flush(); // send it to the client to download
-
 	}
-	
-	
 </script>
 
 <body >
-	<form id="aspnetForm" runat="server" style="align-content: center">
+	<form id="aspnetForm" runat="server">
 		<asp:ScriptManager ID="ScriptManager1" EnablePartialRendering="true" runat="server" EnableScriptGlobalization="true" EnableScriptLocalization="true" />
 		<%--<div class="Caption">
 				<div style="float: left; padding-top: 2px">
@@ -191,26 +159,20 @@
 		<div class="Panel">
 			<div class="DetailsView" style="height: 80%; overflow: auto">
 				<Analytics:Selector LabelWidth="30%" List1Width="75%" ID="ParameterSelector" name="ParameterSelector" runat="server" OnInit="Selector_OnInit"></Analytics:Selector>
-				<div>
+				<div style="float: left; width: 29%">
 					<asp:ValidationSummary ID="ValidationSummary1" runat="server" ForeColor="Red" />
-				</div>
-				<div style="float: left; width: 64%">
-				<asp:ImageButton Style="float: right" formtarget="_blank" OnClick="buttonShowClickPdf" ID="buttonShowPdf" Width="48" Height="48" ImageUrl="images/filetype_pdf.png" ToolTip='Show PDF report' runat="server" />
-			</div>
-			<div style="float: right; width: 34%">
-				<asp:ImageButton Style="float: left" formtarget="_blank" OnClick="buttonShowClickExcel" ID="buttonShowExcel" Width="48" Height="48" ImageUrl="images/excel.png" ToolTip='Show Excel report' runat="server" />
-
-			</div>
-				<div style="text-align: center; padding-top: 10px;">
 					<asp:Label ID="labelPermissionDenied" runat="server" ForeColor="Red" Font-Size="Large" Visible="false"></asp:Label>
 				</div>
-				<div>
-			
-		</div>
+				<div style="float: right; width: 69%">
+					<div style="float: left; width: 50%;">
+						<asp:ImageButton Style="float: right;margin-right: 25px" formtarget="_blank" OnClick="buttonShowClickPdf" ID="buttonShowPdf" Width="48" Height="48" ImageUrl="images/filetype_pdf.png" ToolTip='Show PDF report' runat="server" />
+					</div>
+					<div style="float: right; width: 50%">
+						<asp:ImageButton Style="float: left" formtarget="_blank" OnClick="buttonShowClickExcel" ID="buttonShowExcel" Width="48" Height="48" ImageUrl="images/excel.png" ToolTip='Show Excel report' runat="server" />
+					</div>
+				</div>
 			</div>
-		</div>
-		
-
+	</div>
 	</form>
 </body>
 </html>

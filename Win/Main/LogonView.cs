@@ -85,9 +85,24 @@ namespace Teleopti.Ccc.Win.Main
 
 		public bool InitStateHolderWithoutDataSource(IMessageBrokerComposite messageBroker)
 		{
-			if (!LogonInitializeStateHolder.InitWithoutDataSource(_model, messageBroker))
-				return showError();
+			if (_model.GetConfigFromWebService)
+			{
+				if (!LogonInitializeStateHolder.InitWithoutDataSource(_model, messageBroker))
+					return showError();
+			}
+			else
+			{
+				var nhibConfPath = ApplicationDeployment.IsNetworkDeployed
+											 ? ApplicationDeployment.CurrentDeployment.DataDirectory
+											 : ConfigurationManager.AppSettings["nhibConfPath"];
+				var useMessageBroker = string.IsNullOrEmpty(ConfigurationManager.AppSettings["MessageBroker"]);
 
+				if (!LogonInitializeStateHolder.GetConfigFromFileSystem(nhibConfPath, useMessageBroker, messageBroker))
+					return showError();
+			}
+
+			if (!string.IsNullOrEmpty(LogonInitializeStateHolder.WarningMessage))
+				MessageBox.Show(this, LogonInitializeStateHolder.WarningMessage, "Configuration warning", MessageBoxButtons.OK);
 			return true;
 		}
 
