@@ -40,7 +40,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Tenant.Core
 				settings.Stub(x => x.nhibConfPath()).Return(path);
 
 				File.WriteAllText(filename, nhibFile);
-				var target = new ReadNHibFiles(settings, new physicalApplicationPathStub(path));
+				var target = new ReadNHibFiles(settings, new physicalApplicationPathStub(path), new ParseNhibFile());
 				var res = target.Read()["sessionFactoryName"];
 
 				res.Tennant.Should().Be.EqualTo("sessionFactoryName");
