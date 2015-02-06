@@ -1794,11 +1794,10 @@ namespace Teleopti.Analytics.Etl.TransformerInfrastructure
 				case "Agg":
 				{
 					const string initCatString = "Initial Catalog=";
-					const string appNameString = ";Application Name";
 
 					var firstIndex = _dataMartConnectionString.IndexOf(initCatString) + initCatString.Length;
-					var lastIndex = _dataMartConnectionString.IndexOf(appNameString);
-
+                    var lastIndex = _dataMartConnectionString.IndexOf(";", firstIndex);
+     
 					var aggName = getAggName();
 
 					connectionString = _dataMartConnectionString.Substring(0, firstIndex) + aggName +
