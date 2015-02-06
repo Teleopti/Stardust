@@ -29,9 +29,6 @@ namespace Teleopti.Ccc.Domain.Optimization
             using (PerformanceOutput.ForOperation("Optimizing days off for " + optimizers.Count() + " agents"))
             {
                 executeOptimizersWhileActiveFound(optimizers);
-				if (_cancelMe)
-					return;
-				//executeOptimizersWhileActiveFound(optimizers);
             }
         }
 
@@ -61,7 +58,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 
             while (successfulContainers.Count > 0)
             {
-                IList<IDayOffOptimizerContainer> unSuccessfulContainers =
+                IEnumerable<IDayOffOptimizerContainer> unSuccessfulContainers =
                     shuffleAndExecuteOptimizersInList(successfulContainers);
 
                 if (_cancelMe)
@@ -77,7 +74,7 @@ namespace Teleopti.Ccc.Domain.Optimization
             }
         }
 
-        private IList<IDayOffOptimizerContainer> shuffleAndExecuteOptimizersInList(ICollection<IDayOffOptimizerContainer> activeOptimizers)
+        private IEnumerable<IDayOffOptimizerContainer> shuffleAndExecuteOptimizersInList(ICollection<IDayOffOptimizerContainer> activeOptimizers)
         {
             IList<IDayOffOptimizerContainer> retList = new List<IDayOffOptimizerContainer>();
             int executes = 0;
@@ -91,8 +88,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 
 				double newPeriodValue = _periodValueCalculatorForAllSkills.PeriodValue(IterationOperationOption.DayOffOptimization);
 
-            	string progress = Resources.OptimizingDaysOff + Resources.Colon + "(" + activeOptimizers.Count + ")" +
-            	                  executes + " ";
+            	string progress = Resources.OptimizingDaysOff + Resources.Colon + "(" + activeOptimizers.Count + ")" + executes + " ";
                 string who = optimizer.Owner.Name.ToString(NameOrderOption.FirstNameLastName);
                 string success;
                 if (result)

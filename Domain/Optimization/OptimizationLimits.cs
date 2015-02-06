@@ -6,7 +6,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 {
 	public interface IOptimizationLimits
 	{
-		bool HasOverLimitIncreased(OverLimitResults lastOverLimitCounts, IScheduleMatrixPro matrix);
+		bool HasOverLimitExceeded(OverLimitResults lastOverLimitCounts, IScheduleMatrixPro matrix);
 		OverLimitResults OverLimitsCounts(IScheduleMatrixPro matrix);
 		bool MoveMaxDaysOverLimit();
 		bool ValidateMinWorkTimePerWeek(IScheduleMatrixPro scheduleMatrixPro);
@@ -33,7 +33,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 			return _overLimitByRestrictionDecider.MoveMaxDaysOverLimit();
 		}
 
-		public bool HasOverLimitIncreased(OverLimitResults lastOverLimitCounts, IScheduleMatrixPro matrix)
+		public bool HasOverLimitExceeded(OverLimitResults lastOverLimitCounts, IScheduleMatrixPro matrix)
 		{
 			return _overLimitByRestrictionDecider.HasOverLimitIncreased(lastOverLimitCounts, matrix);
 		}

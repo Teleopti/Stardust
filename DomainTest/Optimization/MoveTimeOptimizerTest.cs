@@ -129,7 +129,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 				tryScheduleSecondDate(true);
 				Expect.Call(_periodValueCalculator.PeriodValue(IterationOperationOption.WorkShiftOptimization)).Return(1);
 	           
-	            Expect.Call(_optimizationLimits.HasOverLimitIncreased(_overLimitCounts, _scheduleMatrix)).Return(false);
+	            Expect.Call(_optimizationLimits.HasOverLimitExceeded(_overLimitCounts, _scheduleMatrix)).Return(false);
 				Expect.Call(_optimizationLimits.ValidateMinWorkTimePerWeek(_scheduleMatrix)).Return(true);
             }
 
@@ -299,7 +299,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 				Expect.Call(_periodValueCalculator.PeriodValue(IterationOperationOption.WorkShiftOptimization)).Return(1);
 				
 
-				Expect.Call(_optimizationLimits.HasOverLimitIncreased(_overLimitCounts, _scheduleMatrix)).Return(false);
+				Expect.Call(_optimizationLimits.HasOverLimitExceeded(_overLimitCounts, _scheduleMatrix)).Return(false);
 				Expect.Call(_optimizationLimits.ValidateMinWorkTimePerWeek(_scheduleMatrix)).Return(false);
 
 				Expect.Call(() => _rollbackService.Rollback());

@@ -148,7 +148,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 					return false;
 				}
 
-				if (_optimizationLimits.HasOverLimitIncreased(lastOverLimitCount, sourceMatrix))
+				if (_optimizationLimits.HasOverLimitExceeded(lastOverLimitCount, sourceMatrix))
 				{
 					rollbackAndResourceCalculate();
 					return true;	

@@ -152,7 +152,7 @@ namespace Teleopti.Ccc.Domain.Optimization
                 return false;
             }
 
-			if (_optimizationLimits.HasOverLimitIncreased(lastOverLimitCount, Matrix))
+			if (_optimizationLimits.HasOverLimitExceeded(lastOverLimitCount, Matrix))
 			{
 				rollbackLockAndCalculate(firstDayDate, secondDayDate, originalFirstScheduleDay, originalSecondScheduleDay, resourceCalculateDelayer);
 				lockDays(firstDayDate, secondDayDate);

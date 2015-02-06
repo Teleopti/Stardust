@@ -149,7 +149,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
             _scheduleMatrix.LockPeriod(new DateOnlyPeriod(_removedDate, _removedDate));
             // NO rollback
             _rollbackService.ClearModificationCollection();
-	        Expect.Call(_optimizationLimits.HasOverLimitIncreased(_overLimitCounts, _scheduleMatrix)).Return(false);
+	        Expect.Call(_optimizationLimits.HasOverLimitExceeded(_overLimitCounts, _scheduleMatrix)).Return(false);
         }
 
         private void makePeriodBetter()
@@ -349,7 +349,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
                 // NO rollback
                 _rollbackService.ClearModificationCollection();
                 _scheduleMatrix.LockPeriod(new DateOnlyPeriod(_removedDate, _removedDate));
-	            Expect.Call(_optimizationLimits.HasOverLimitIncreased(_overLimitCounts, _scheduleMatrix)).Return(false);
+	            Expect.Call(_optimizationLimits.HasOverLimitExceeded(_overLimitCounts, _scheduleMatrix)).Return(false);
             }
 
             using (_mockRepository.Playback())
