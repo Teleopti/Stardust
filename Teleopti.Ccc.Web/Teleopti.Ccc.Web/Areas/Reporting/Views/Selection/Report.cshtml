@@ -1,4 +1,4 @@
-﻿@model Teleopti.Ccc.Web.Areas.Reporting.Models.ReportModel
+﻿@model@*@model Teleopti.Ccc.Web.Areas.Reporting.Models.ReportModel*@
 <head>
 	<title>@Model.Name</title>
 	<link href="~/Areas/Reporting/Content/Styles/Styles.css" rel="stylesheet" />
@@ -6,9 +6,9 @@
 <body style="margin-top: 0">
 	<div class="Caption">
 		<div class="ReportName" style="align-content: center; padding-top: 2px">
-			@Model.Name
-		@*<label id="labelRepCaption" class="ReportName" text="@Model.Name"></label>*@
+			@*@Model.Name*@
+			@*<label id="labelRepCaption" class="ReportName" text="@Model.Name"></label>*@
+		</div>
 	</div>
-	</div>
-	<iframe style="border: none;height: 90%;width: 100%;margin-top: 50px" src="~/Areas/Reporting/Index.aspx?ReportID=@Model.Id"></iframe>
+	@*<iframe style="border: none;height: 90%;width: 100%;margin-top: 50px" src="~/Areas/Reporting/Index.aspx?ReportID=@Model.Id"></iframe>*@
 </body>
