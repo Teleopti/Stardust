@@ -91,7 +91,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 
 			using (_mock.Playback())
 			{
-				var result = _target.HasOverLimitIncreased(_overLimitResults, _scheduleMatrixPro);
+				var result = _target.HasOverLimitExceeded(_overLimitResults, _scheduleMatrixPro);
 				Assert.IsTrue(result);
 			}	
 		}
@@ -106,7 +106,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 
 			using (_mock.Playback())
 			{
-				var result = _target.HasOverLimitIncreased(_overLimitResults, _scheduleMatrixPro);
+				var result = _target.HasOverLimitExceeded(_overLimitResults, _scheduleMatrixPro);
 				Assert.IsFalse(result);
 			}
 		}

@@ -119,8 +119,6 @@ namespace Teleopti.Ccc.Domain.Optimization
 				oldValue = _periodValueCalculator.PeriodValue(IterationOperationOption.DayOffOptimization);
 			}
 
-            
-
             writeToLogMovedDays(movedDays);
 
             var workingBitArrayBeforeBackToLegalState = (ILockableBitArray)workingBitArray.Clone();
@@ -134,7 +132,6 @@ namespace Teleopti.Ccc.Domain.Optimization
 				}
 			}
            
-
             movedDays = changesTracker.DayOffChanges(workingBitArray, workingBitArrayBeforeBackToLegalState, currentScheduleMatrix, daysOffPreferences.ConsiderWeekBefore);
             if (movedDays.Count > 0)
             {
@@ -191,11 +188,13 @@ namespace Teleopti.Ccc.Domain.Optimization
             }
 
 
-			var overLimitIncreased = _optimizationLimits.HasOverLimitIncreased(lastOverLimitCount, currentScheduleMatrix);
+			var overLimitIncreased = _optimizationLimits.HasOverLimitExceeded(lastOverLimitCount, currentScheduleMatrix);
 
 			if (overLimitIncreased)
 			{
 				rollbackMovedDays(movedDates, removedIllegalWorkTimeDays, currentScheduleMatrix);
+				var lastDay = movedDates.Last().DateChanged;
+				currentScheduleMatrix.LockPeriod(new DateOnlyPeriod(lastDay, lastDay));
 				return true;
 			}
 

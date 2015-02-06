@@ -166,7 +166,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 				Expect.Call(_workTimeBackToLegalStateService.Execute(_matrix, _schedulingOptions, _rollbackService)).Return(true);
                 Expect.Call(_workTimeBackToLegalStateService.RemovedDays).Return(new List<DateOnly> { DateOnly.MinValue });
 				Expect.Call(() => _matrix.LockPeriod(new DateOnlyPeriod())).IgnoreArguments().Repeat.AtLeastOnce();
-	            Expect.Call(_optimizationLimits.HasOverLimitIncreased(_overLimitCount, _matrix)).Return(false);
+	            Expect.Call(_optimizationLimits.HasOverLimitExceeded(_overLimitCount, _matrix)).Return(false);
 	            Expect.Call(_optimizationLimits.ValidateMinWorkTimePerWeek(_matrix)).Return(true);
             }
 
@@ -230,7 +230,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
                     new ReadOnlyCollection<IScheduleDay>(new List<IScheduleDay> { _scheduleDay }));
                 Expect.Call(() => _rollbackService.Rollback());
             	Expect.Call(() => _matrix.LockPeriod(new DateOnlyPeriod())).IgnoreArguments();
-	            Expect.Call(_optimizationLimits.HasOverLimitIncreased(_overLimitCount, _matrix)).Return(false);
+	            Expect.Call(_optimizationLimits.HasOverLimitExceeded(_overLimitCount, _matrix)).Return(false);
 	            Expect.Call(_optimizationLimits.ValidateMinWorkTimePerWeek(_matrix)).Return(true);
             }
 
@@ -389,7 +389,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 				Expect.Call(_rollbackService.ModificationCollection).Return(new ReadOnlyCollection<IScheduleDay>(new List<IScheduleDay> { _scheduleDay }));
 				Expect.Call(() => _rollbackService.Rollback());
 				Expect.Call(() => _matrix.LockPeriod(new DateOnlyPeriod())).IgnoreArguments();
-				Expect.Call(_optimizationLimits.HasOverLimitIncreased(_overLimitCount, _matrix)).Return(false);
+				Expect.Call(_optimizationLimits.HasOverLimitExceeded(_overLimitCount, _matrix)).Return(false);
 				Expect.Call(_optimizationLimits.ValidateMinWorkTimePerWeek(_matrix)).Return(false);
 			}
 

@@ -112,7 +112,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
                     .Return(30);
                 Expect.Call(_originalStateContainerForTagChange.WorkShiftChanged(new DateOnly(2011, 1, 1)))
                     .Return(true).Repeat.Any();
-	            Expect.Call(_optimizationLimits.HasOverLimitIncreased(_overLimtitesResult, _matrix)).Return(false);
+	            Expect.Call(_optimizationLimits.HasOverLimitExceeded(_overLimtitesResult, _matrix)).Return(false);
 				Expect.Call(_optimizationLimits.ValidateMinWorkTimePerWeek(_matrix)).Return(true);
             }
 
@@ -150,7 +150,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
                 Expect.Call(_originalStateContainerForTagChange.WorkShiftChanged(new DateOnly(2011, 1, 2)))
                     .Return(false).Repeat.Any();
 				
-	            Expect.Call(_optimizationLimits.HasOverLimitIncreased(_overLimtitesResult, _matrix)).Return(false);
+	            Expect.Call(_optimizationLimits.HasOverLimitExceeded(_overLimtitesResult, _matrix)).Return(false);
 				Expect.Call(_optimizationLimits.ValidateMinWorkTimePerWeek(_matrix)).Return(true);
             }
 
@@ -219,7 +219,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
                     .Return(100);
                 Expect.Call(_originalStateContainerForTagChange.WorkShiftChanged(new DateOnly(2011, 1, 2)))
                     .Return(false).Repeat.Any();
-	            Expect.Call(_optimizationLimits.HasOverLimitIncreased(_overLimtitesResult, _matrix)).Return(false);
+	            Expect.Call(_optimizationLimits.HasOverLimitExceeded(_overLimtitesResult, _matrix)).Return(false);
 				Expect.Call(_optimizationLimits.ValidateMinWorkTimePerWeek(_matrix)).Return(true);
             }
 
@@ -338,7 +338,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 				Expect.Call(_scheduleService.SchedulePersonOnDay(_scheduleDay2, _schedulingOptions, _effectiveRestriction, _resourceCalculateDelayer, null, _rollbackService)).IgnoreArguments().Return(true);
 				Expect.Call(_periodValueCalculator.PeriodValue(IterationOperationOption.WorkShiftOptimization)).Return(30);
 				Expect.Call(_originalStateContainerForTagChange.WorkShiftChanged(new DateOnly(2011, 1, 2))).Return(false).Repeat.Any();
-				Expect.Call(_optimizationLimits.HasOverLimitIncreased(_overLimtitesResult, _matrix)).Return(false);
+				Expect.Call(_optimizationLimits.HasOverLimitExceeded(_overLimtitesResult, _matrix)).Return(false);
 				Expect.Call(_optimizationLimits.ValidateMinWorkTimePerWeek(_matrix)).Return(false);
 			}
 

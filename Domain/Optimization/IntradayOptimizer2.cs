@@ -124,7 +124,7 @@ namespace Teleopti.Ccc.Domain.Optimization
                 return true;
             }
 
-	        if (_optimizationLimits.HasOverLimitIncreased(lastOverLimitCounts, _matrixConverter.SourceMatrix) || daysOverMax())
+	        if (_optimizationLimits.HasOverLimitExceeded(lastOverLimitCounts, _matrixConverter.SourceMatrix) || daysOverMax())
 	        {
 				_rollbackService.Rollback();
 				_resourceCalculateDelayer.CalculateIfNeeded(dateToBeRemoved, null);
