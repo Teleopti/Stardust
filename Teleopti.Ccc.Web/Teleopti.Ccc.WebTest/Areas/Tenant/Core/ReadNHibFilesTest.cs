@@ -43,7 +43,6 @@ namespace Teleopti.Ccc.WebTest.Areas.Tenant.Core
 				var target = new ReadNHibFiles(settings, new physicalApplicationPathStub(path), new ParseNhibFile());
 				var res = target.Read()["sessionFactoryName"];
 
-				res.Tennant.Should().Be.EqualTo("sessionFactoryName");
 				res.AnalyticsConnectionString.Should().Be.EqualTo("Analytics connection string");
 				res.ApplicationNHibernateConfig["command_timeout"].Should().Be.EqualTo("60");
 				res.ApplicationNHibernateConfig["connection.connection_string"].Should().Be.EqualTo("App connection string");

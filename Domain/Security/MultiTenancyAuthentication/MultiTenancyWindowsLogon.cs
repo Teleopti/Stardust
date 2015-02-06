@@ -2,7 +2,6 @@
 using Teleopti.Ccc.Domain.Security.Authentication;
 using Teleopti.Ccc.UserTexts;
 using Teleopti.Interfaces.Domain;
-using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.Domain.Security.MultiTenancyAuthentication
 {
@@ -41,12 +40,9 @@ namespace Teleopti.Ccc.Domain.Security.MultiTenancyAuthentication
 
 			var dataSourceName = result.Tenant;
 			var personId = result.PersonId;
-			var nhibConfig = result.DataSource;
-			if (!string.IsNullOrEmpty(result.DataSourceConfig))
-				nhibConfig = result.DataSourceConfig;
+			var dataSourceCfg = result.DataSourceConfiguration;
 
-			logonModel.SelectedDataSourceContainer = getDataSorce(nhibConfig, applicationData);
-			// if null error
+			logonModel.SelectedDataSourceContainer = getDataSorce(dataSourceName, dataSourceCfg, applicationData);
 			if (logonModel.SelectedDataSourceContainer == null)
 				return new AuthenticationResult
 				{
@@ -69,9 +65,9 @@ namespace Teleopti.Ccc.Domain.Security.MultiTenancyAuthentication
 			};
 		}
 
-		IDataSourceContainer getDataSorce(string nhibConfig, IApplicationData applicationData)
+		private IDataSourceContainer getDataSorce(string dataSourceName, DataSourceConfig nhibConfig, IApplicationData applicationData)
 		{
-			var datasource = applicationData.CreateAndAddDataSource(nhibConfig);
+			var datasource = applicationData.CreateAndAddDataSource(dataSourceName, nhibConfig.ApplicationNHibernateConfig, nhibConfig.AnalyticsConnectionString);
 
 			return new DataSourceContainer(datasource, _repositoryFactory, null, AuthenticationTypeOption.Application);
 		}

@@ -28,7 +28,7 @@ namespace Teleopti.Ccc.Web.Areas.Tenant.Core
 			foreach (var nhibFile in Directory.GetFiles(fullPathToNhibFolder, "*.nhib.xml"))
 			{
 				var dsCfg = _parseNhibFile.CreateDataSourceConfiguration(XDocument.Load(nhibFile));
-				ret[dsCfg.Tennant] = dsCfg;
+				ret[dsCfg.Item1] = dsCfg.Item2;
 			}
 			return ret;
 		}

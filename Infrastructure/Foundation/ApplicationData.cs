@@ -5,6 +5,7 @@ using System.Globalization;
 using System.Linq;
 using System.Xml.Linq;
 using System.Xml.XPath;
+using NHibernate.Cfg.ConfigurationSchema;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
@@ -140,26 +141,17 @@ namespace Teleopti.Ccc.Infrastructure.Foundation
 			}
 		}
 
-		public IDataSource CreateAndAddDataSource(string nhibConfig)
+		public IDataSource CreateAndAddDataSource(string dataSourceName, IDictionary<string, string> applicationNhibConfiguration, string analyticsConnectionString)
 		{
-			var element = XElement.Parse(nhibConfig);
-			var dataSourceName = element.Descendants().ElementAt(1).Attribute("name").Value;
+			//just hack for now! Will be fixed soon!!
 			var dataSource = existingDataSource(dataSourceName);
 			if (dataSource != null)
 				return dataSource;
-			var success = _dataSourcesFactory.TryCreate(element, out dataSource);
-			if (success)
-			{
-				var children = element.CreateNavigator().Select("authenticationType");
-				foreach (XPathItem child in children)
-				{
-					dataSource.AuthenticationTypeOption |=
-						(AuthenticationTypeOption)Enum.Parse(typeof(AuthenticationTypeOption), child.Value);
-				}
-				_registeredDataSourceCollection.Add(dataSource);
-			}
 
-			return dataSource;
+			var newDataSource =  _dataSourcesFactory.Create(applicationNhibConfiguration, analyticsConnectionString);
+			_registeredDataSourceCollection.Add(newDataSource);
+			return newDataSource;
+			//
 		}
 
 		private IDataSource existingDataSource(string datasourceName)

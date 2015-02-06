@@ -1,9 +1,10 @@
-﻿using System.Xml.Linq;
+﻿using System;
+using System.Xml.Linq;
 
 namespace Teleopti.Ccc.Web.Areas.Tenant.Core
 {
 	public interface IParseNhibFile
 	{
-		DataSourceConfiguration CreateDataSourceConfiguration(XDocument xDocument);
+		Tuple<string, DataSourceConfiguration> CreateDataSourceConfiguration(XDocument xDocument);
 	}
 }

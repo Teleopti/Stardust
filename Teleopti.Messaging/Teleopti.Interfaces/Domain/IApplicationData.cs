@@ -1,9 +1,7 @@
 using System;
 using System.Collections.Generic;
 using Teleopti.Interfaces.Infrastructure;
-using Teleopti.Interfaces.MessageBroker.Client;
 using Teleopti.Interfaces.MessageBroker.Client.Composite;
-using Teleopti.Interfaces.MessageBroker.Events;
 
 namespace Teleopti.Interfaces.Domain
 {
@@ -51,6 +49,6 @@ namespace Teleopti.Interfaces.Domain
 		/// <param name="dataSource"></param>
 		void DisposeAllDataSourcesExcept(IDataSource dataSource);
 
-		IDataSource CreateAndAddDataSource(string nhibContent);
+		IDataSource CreateAndAddDataSource(string dataSourceName, IDictionary<string, string> applicationNhibConfiguration, string analyticsConnectionString);
 	}
 }

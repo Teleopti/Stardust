@@ -15,7 +15,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Tenant.Core
 		{
 			var identityUserQuery = MockRepository.GenerateMock<IIdentityUserQuery>();
 			identityUserQuery.Stub(x => x.FindUserData("nonExisting")).Return(null);
-			var target = new IdentityAuthentication(identityUserQuery, MockRepository.GenerateMock<INHibernateConfigurationsHandler>());
+			var target = new IdentityAuthentication(identityUserQuery, MockRepository.GenerateMock<IDataSourceConfigurationProvider>());
 			var res = target.Logon("nonExisting");
 			
 			res.Success.Should().Be.False();
@@ -27,11 +27,12 @@ namespace Teleopti.Ccc.WebTest.Areas.Tenant.Core
 		public void ShouldSucceedIfValidCredentials()
 		{
 			const string identity = "validUser";
+			var datasourceConfiguration = new DataSourceConfiguration();
 
 			var queryResult = new PersonInfo {Id = Guid.NewGuid()};
 			var findIdentityQuery = MockRepository.GenerateMock<IIdentityUserQuery>();
-			var nhibHandler = MockRepository.GenerateMock<INHibernateConfigurationsHandler>();
-			nhibHandler.Stub(x => x.GetConfigForName(queryResult.Tenant)).Return("aencryptedconfig"); 
+			var nhibHandler = MockRepository.GenerateMock<IDataSourceConfigurationProvider>();
+			nhibHandler.Stub(x => x.ForTenant(queryResult.Tenant)).Return(datasourceConfiguration); 
 			findIdentityQuery.Expect(x => x.FindUserData(identity)).Return(queryResult);
 
 			var target = new IdentityAuthentication(findIdentityQuery,nhibHandler);
@@ -40,6 +41,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Tenant.Core
 			res.Success.Should().Be.True();
 			res.Tenant.Should().Be.EqualTo(queryResult.Tenant);
 			res.PersonId.Should().Be.EqualTo(queryResult.Id);
+			res.DataSourceConfiguration.Should().Be.SameInstanceAs(datasourceConfiguration);
 		}
 
 		[Test]
@@ -49,8 +51,8 @@ namespace Teleopti.Ccc.WebTest.Areas.Tenant.Core
 
 			var queryResult = new PersonInfo { Id = Guid.NewGuid() };
 			var findIdentityQuery = MockRepository.GenerateMock<IIdentityUserQuery>();
-			var nhibHandler = MockRepository.GenerateMock<INHibernateConfigurationsHandler>();
-			nhibHandler.Stub(x => x.GetConfigForName(queryResult.Tenant)).Return("");
+			var nhibHandler = MockRepository.GenerateMock<IDataSourceConfigurationProvider>();
+			nhibHandler.Stub(x => x.ForTenant(queryResult.Tenant)).Return(null);
 			findIdentityQuery.Expect(x => x.FindUserData(identity)).Return(queryResult);
 
 			var target = new IdentityAuthentication(findIdentityQuery, nhibHandler);
