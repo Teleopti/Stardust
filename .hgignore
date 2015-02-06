@@ -84,5 +84,4 @@ Cube/build/*Xmla*
 */03StoredProcedures/dbo.OlaHallengren*.sql
 */03StoredProcedures/dbo.IndexMaintenance*.sql
 
-Teleopti.Ccc.Web/Teleopti.Ccc.Web/Areas/WFM/dist/
 */.sass-cache/*
