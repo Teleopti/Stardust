@@ -313,7 +313,9 @@ namespace Teleopti.Analytics.Parameters
 				//Permission granted
 
 				int flag = 0;
-				
+				//handle this in some way when using without session
+				if (Context.Session != null)
+					_groupPageCode = (Guid)Context.Session["GroupPageCode"];
 				DataSet repCtrlsData = DataReader.LoadReportControls(_reportId, _groupPageCode);
 
 				foreach (DataRow row in repCtrlsData.Tables[0].Rows)
