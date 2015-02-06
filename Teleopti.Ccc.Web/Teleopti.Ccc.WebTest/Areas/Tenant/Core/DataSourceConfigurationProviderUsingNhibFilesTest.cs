@@ -23,7 +23,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Tenant.Core
 		public void NonExistingConfiguration()
 		{
 			var readNHibFiles = MockRepository.GenerateMock<IReadNHibFiles>();
-			readNHibFiles.Expect(x => x.Read()).Return(new Dictionary<string, DataSourceConfiguration> { { "something", new DataSourceConfiguration() } });
+			readNHibFiles.Expect(x => x.Read()).Return(new Dictionary<string, DataSourceConfiguration>());
 			var target = new DataSourceConfigurationProviderUsingNhibFiles(readNHibFiles);
 			target.ForTenant("notsomething")
 				.Should().Be.Null();

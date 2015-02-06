@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 
 namespace Teleopti.Ccc.Web.Areas.Tenant.Core
 {
@@ -16,8 +17,11 @@ namespace Teleopti.Ccc.Web.Areas.Tenant.Core
 		{
 			if(allConfigs==null)
 				allConfigs = _readNHibFiles.Read();
-			DataSourceConfiguration ret;
-			return allConfigs.TryGetValue(tenant, out ret) ? ret : null;
+		
+			//for now - return first one!
+			//DataSourceConfiguration ret;
+			//return allConfigs.TryGetValue(tenant, out ret) ? ret : null;
+			return allConfigs.Select(x => x.Value).FirstOrDefault();
 		}
 	}
 }
