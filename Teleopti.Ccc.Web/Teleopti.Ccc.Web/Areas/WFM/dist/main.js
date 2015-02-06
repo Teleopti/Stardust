@@ -41875,7 +41875,7 @@ wfmCtrls.controller('PermissionsCtrl', [
 
 		$scope.roles = Permissions.roles.get();
 		Permissions.organizationSelections.query().$promise.then(function (result) {
-			// could we have directly  an array from server?
+			// could we have directly an array from server?
 			$scope.organization = { BusinessUnits: [result.BusinessUnit], DynamicOptions: result.DynamicOptions };
 
 		});

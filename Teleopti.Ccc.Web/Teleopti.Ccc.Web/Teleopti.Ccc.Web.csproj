@@ -1532,6 +1532,8 @@
     <Content Include="Areas\WFM\css\animation.css" />
     <Content Include="Areas\WFM\css\form.css" />
     <Content Include="Areas\WFM\css\material-spinner.css" />
+    <Content Include="Areas\WFM\css\_buttons.scss" />
+    <Content Include="Areas\WFM\css\_list.scss" />
     <None Include="Areas\WFM\css\_material.scss" />
     <Content Include="Areas\WFM\html\forecasting-run.html" />
     <Content Include="Areas\WFM\html\forecasting.html" />
@@ -1837,6 +1839,7 @@
     <Content Include="Areas\WFM\css\_role.scss" />
     <Content Include="Areas\WFM\css\_tree.scss" />
     <Content Include="Areas\WFM\css\_variables.scss" />
+    <Content Include="Areas\WFM\css\_tooltip.scss" />
     <None Include="PasswordPolicy.xml.notinuse">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>

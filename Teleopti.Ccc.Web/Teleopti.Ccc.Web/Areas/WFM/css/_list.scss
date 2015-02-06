@@ -1,0 +1,43 @@
+﻿.wfm-list {
+		padding-left: 0px;
+		list-style: none;
+		margin: 5px;
+}
+
+.wfm-list-item {
+	margin-bottom: 10px;
+	padding: $full-padding;
+	cursor: pointer;
+
+	&:active, &:focus, &:active:hover, &:focus:hover {
+	background-color: $blue-500 !important;
+	}
+
+	&:hover{
+		background-color: $blue-100;
+	}
+}
+
+.wfm-list-menu {
+	width: 0;
+	float: right;
+	overflow: hidden;
+	display: inline-block;
+	transition: $trasnition-timing;
+	height: 18px;
+}
+
+.wfm-list-item-selected {
+	background-color: $blue-500;
+	color: white;
+	svg > path {
+		fill: white!important;
+	}
+	.wfm-list-menu {
+		width: 90px;
+	} 
+}
+
+.wfm-list-item:hover > .wfm-list-menu {
+	width: 90px;
+}

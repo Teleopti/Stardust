@@ -1,29 +1,28 @@
-﻿
-.tree {
+﻿.tree {
 	max-height: 800px;
 	overflow-y: auto;
 	padding-bottom: 5px;
+	background-color: #f5f5f5;
+	box-shadow: inset  0px 2px 5px 0px rgba(0, 0, 0, 0.16);
 }
 
-.tree-line {
-	li > div{
+.tree-line div{
 	padding: $half-padding;
-	}
+	margin: 2px;
+}
 
-	ol > li > ol {
-		border-left: 1px dotted $gray-300;
-	}
-
-	 li > ol> li {
-		margin-top: 10px;
-		margin: 5px;
+.angular-ui-tree-handle {
+	cursor: pointer;
+	font-weight: 500;
+	&:hover {
+		background-color: $gray012;
 	}
 }
 
-.tab-heads {
-	padding-left: $full-padding;
 
-	li {
-		display: inline-block;
+.angular-ui-tree-handle.selected {
+	background-color: $blue-500;
+	&:hover {
+		background-color: $blue-300;
 	}
 }

@@ -46,7 +46,7 @@
 input {
   width: 100%;
   margin: 5px 0;
-  padding: 5px;
+  padding: 3px;
   border: none;
   border-bottom: 1px solid #E0E0E0 !important; }
 
@@ -61,8 +61,102 @@ input {
 .selected {
   background-color: #1976D2;
   color: white;
-  padding: 0 5px;
+  padding: 0 3px;
   transition: all 0.5s ease; }
+
+.wfm-toggle-group {
+  list-style: none;
+  margin: 0;
+  padding: 0; }
+  .wfm-toggle-group li {
+    display: inline-block;
+    width: 48%;
+    text-align: center; }
+    .wfm-toggle-group li label {
+      width: 100%;
+      padding: 4px;
+      margin-top: -1px;
+      text-transform: uppercase;
+      cursor: pointer;
+      font-weight: 500;
+      color: rgba(0, 0, 0, 0.54); }
+    .wfm-toggle-group li label.active {
+      border-top: 3px solid #FFA726;
+      font-weight: 700; }
+
+.row > .container {
+  padding-bottom: 9px;
+  border-bottom: 1px solid #ddd; }
+
+.inline-role-name {
+  margin: 0;
+  padding: 0;
+  width: 65%;
+  color: black;
+  border-bottom: none !important; }
+
+.role-input {
+  color: white;
+  background-color: #FFA726; }
+
+.role-container {
+  max-height: 800px;
+  overflow-y: auto; }
+
+.tree {
+  max-height: 800px;
+  overflow-y: auto;
+  padding-bottom: 5px;
+  background-color: #f5f5f5;
+  box-shadow: inset 0px 2px 5px 0px rgba(0, 0, 0, 0.16); }
+
+.tree-line div {
+  padding: 3px;
+  margin: 2px; }
+
+.angular-ui-tree-handle {
+  cursor: pointer;
+  font-weight: 500; }
+  .angular-ui-tree-handle:hover {
+    background-color: rgba(0, 0, 0, 0.06); }
+
+.angular-ui-tree-handle.selected {
+  background-color: #1976D2; }
+  .angular-ui-tree-handle.selected:hover {
+    background-color: #64b5f6; }
+
+.wfm-list {
+  padding-left: 0px;
+  list-style: none;
+  margin: 5px; }
+
+.wfm-list-item {
+  margin-bottom: 10px;
+  padding: 10px;
+  cursor: pointer; }
+  .wfm-list-item:active, .wfm-list-item:focus, .wfm-list-item:active:hover, .wfm-list-item:focus:hover {
+    background-color: #1976D2 !important; }
+  .wfm-list-item:hover {
+    background-color: #BBDEFB; }
+
+.wfm-list-menu {
+  width: 0;
+  float: right;
+  overflow: hidden;
+  display: inline-block;
+  transition: all 0.5s ease;
+  height: 18px; }
+
+.wfm-list-item-selected {
+  background-color: #1976D2;
+  color: white; }
+  .wfm-list-item-selected svg > path {
+    fill: white !important; }
+  .wfm-list-item-selected .wfm-list-menu {
+    width: 90px; }
+
+.wfm-list-item:hover > .wfm-list-menu {
+  width: 90px; }
 
 /*tooltip - this should be removed */
 @-webkit-keyframes tooltipBackgroundShow {
@@ -201,84 +295,5 @@ md-tooltip[width-32="7"].md-show .md-background {
 md-tooltip[width-32="8"].md-show .md-background {
   -webkit-animation-duration: 200ms;
   animation-duration: 200ms; }
-
-.roles-details-wrapper {
-  bottom: 0; }
-
-.inline-role-name {
-  margin: 0;
-  padding: 0;
-  width: 50%;
-  color: black; }
-
-.role-context-menu {
-  width: 0;
-  float: right;
-  overflow: hidden;
-  display: inline-block;
-  transition: all 0.5s ease;
-  height: 18px; }
-
-.selected-role {
-  background-color: #1976D2 !important;
-  color: white; }
-  .selected-role .role-context-menu {
-    width: 90px; }
-    .selected-role .role-context-menu a {
-      text-decoration: none; }
-      .selected-role .role-context-menu a svg > path {
-        fill: white !important; }
-
-.role:hover > .role-context-menu {
-  width: 90px; }
-
-.role-btn {
-  padding: 10px;
-  cursor: pointer; }
-
-.role-btn-success {
-  color: white;
-  background-color: #FFA726; }
-
-.role-btn-default.active,
-.role-btn-default.focus,
-.role-btn-default:active,
-.role-btn-default:focus,
-.role-btn-default.active:hover,
-.role-btn-default.focus:hover,
-.role-btn-default:active:hover,
-.role-btn-default:focus:hover {
-  background-color: #1976D2 !important; }
-
-.role-btn-default:hover {
-  background-color: #BBDEFB;
-  border: none; }
-
-.role-container {
-  max-height: 800px; }
-  .role-container ul {
-    padding-left: 0px;
-    list-style: none;
-    margin-bottom: 10px; }
-    .role-container ul li, .role-container ul .filter-form {
-      margin-bottom: 10px; }
-
-.tree {
-  max-height: 800px;
-  overflow-y: auto;
-  padding-bottom: 5px; }
-
-.tree-line li > div {
-  padding: 5px; }
-.tree-line ol > li > ol {
-  border-left: 1px dotted #E0E0E0; }
-.tree-line li > ol > li {
-  margin-top: 10px;
-  margin: 5px; }
-
-.tab-heads {
-  padding-left: 10px; }
-  .tab-heads li {
-    display: inline-block; }
 
 /*# sourceMappingURL=main.css.map */
