@@ -456,7 +456,6 @@
     <Compile Include="Areas\Tenant\Core\DataSourceConfiguration.cs" />
     <Compile Include="Areas\Tenant\Core\DataSourceConfigurationProviderUsingNhibFiles.cs" />
     <Compile Include="Areas\Tenant\Core\IDataSourceConfigurationProvider.cs" />
-    <Compile Include="Areas\Tenant\Core\INHibernateConfigurationsHandler.cs" />
     <Compile Include="Areas\Tenant\Core\IParseNhibFile.cs" />
     <Compile Include="Areas\Tenant\Core\IReadNHibFiles.cs" />
     <Compile Include="Areas\Tenant\Core\ParseNhibFile.cs" />
@@ -482,7 +481,6 @@
     <Compile Include="Areas\Tenant\Core\IPasswordVerifier.cs" />
     <Compile Include="Areas\Tenant\Core\LoginAttemptModelFactoryForWeb.cs" />
     <Compile Include="Areas\Tenant\Core\LogTenancyLogonAttempt.cs" />
-    <Compile Include="Areas\Tenant\Core\NHibernateConfigurationsHandler.cs" />
     <Compile Include="Areas\Tenant\Core\PasswordPolicyCheck.cs" />
     <Compile Include="Areas\Tenant\Core\PasswordVerifier.cs" />
     <Compile Include="Areas\Tenant\Core\TenantModule.cs" />
