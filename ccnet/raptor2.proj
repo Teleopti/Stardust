@@ -108,7 +108,7 @@
 			<XmlaFile Include="\\a380\t-files\RnD\MSI_Dependencies\390xmla\CreateDatabase.xmla"/>
 		</ItemGroup>
 		<Copy SourceFiles="@(XmlaFile)"
-			DestinationFiles="$(CCNetWorkingDirectory)\Cube\Xmla"/>
+			DestinationFolder="$(CCNetWorkingDirectory)\Cube\Xmla"/>
 	</Target>
 
 	<Target Name="AzurePreDropDatabase">
