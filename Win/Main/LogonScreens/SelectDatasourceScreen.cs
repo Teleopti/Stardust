@@ -45,10 +45,13 @@ namespace Teleopti.Ccc.Win.Main.LogonScreens
 			}
 
 			setCorrectList();
-			comboBoxAdvDataSource.Select();
 			
 			comboBoxAdvDataSource.Visible = _showDataSourceSelection;
-			//labelChooseDataSource.Visible = _showDataSourceSelection;
+			labelChooseDataSource.Visible = _showDataSourceSelection;
+			if(comboBoxAdvDataSource.Visible)
+				comboBoxAdvDataSource.Select();
+			else
+				radioButtonAdvWindows.Select();
 		}
 
 		private void setCorrectList()
