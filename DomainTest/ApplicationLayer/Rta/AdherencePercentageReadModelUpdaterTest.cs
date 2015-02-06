@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using Autofac;
 using NUnit.Framework;
 using SharpTestsEx;
@@ -51,7 +52,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta
 				Timestamp = "2014-10-13 8:10".Utc()
 			});
 
-			Persister.PersistedModel.TimeInAdherence.Should().Be(TimeSpan.FromMinutes(10));
+			Persister.PersistedModel.TimeInAdherence.Should().Be("10".Minutes());
 		}
 
 		[Test]
@@ -70,7 +71,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta
 				Timestamp = "2014-10-13 8:20".Utc()
 			});
 
-			Persister.PersistedModel.TimeOutOfAdherence.Should().Be(TimeSpan.FromMinutes(20));
+			Persister.PersistedModel.TimeOutOfAdherence.Should().Be("20".Minutes());
 		}
 
 		[Test]
@@ -89,7 +90,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta
 				Timestamp = "2014-10-13 9:00".Utc()
 			});
 
-			Persister.PersistedModel.TimeInAdherence.Should().Be(TimeSpan.FromMinutes(60));
+			Persister.PersistedModel.TimeInAdherence.Should().Be("60".Minutes());
 		}
 
 		[Test]
@@ -108,7 +109,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta
 				Timestamp = "2014-10-13 9:10".Utc()
 			});
 
-			Persister.PersistedModel.TimeOutOfAdherence.Should().Be(TimeSpan.FromMinutes(70));
+			Persister.PersistedModel.TimeOutOfAdherence.Should().Be("70".Minutes());
 		}
 
 		[Test]
@@ -132,7 +133,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta
 				Timestamp = "2014-10-13 8:30".Utc()
 			});
 
-			Persister.PersistedModel.TimeOutOfAdherence.Should().Be(TimeSpan.FromMinutes(15));
+			Persister.PersistedModel.TimeOutOfAdherence.Should().Be("15".Minutes());
 		}
 
 		[Test]
@@ -156,81 +157,71 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta
 				Timestamp = "2014-10-13 8:40".Utc()
 			});
 
-			Persister.PersistedModel.TimeInAdherence.Should().Be(TimeSpan.FromMinutes(20));
+			Persister.PersistedModel.TimeInAdherence.Should().Be("20".Minutes());
 		}
 
 		[Test]
 		public void TimeInAdherence_WhenLoggingInAndOutInShortPeriods_ShouldBeTheSumOfThePeriodsInAdherence()
 		{
 			var personId = Guid.NewGuid();
-			var startTime = "2014-10-13 8:00".Utc();
 
 			Target.Handle(new PersonInAdherenceEvent
 			{
 				PersonId = personId,
-				Timestamp = startTime
+				Timestamp = "2014-10-13 8:00:00".Utc()
 			});
 
 			Target.Handle(new PersonOutOfAdherenceEvent
 			{
 				PersonId = personId,
-				Timestamp = startTime.AddSeconds(12)
+				Timestamp = "2014-10-13 8:00:01".Utc()
 			});
 
 			Target.Handle(new PersonInAdherenceEvent
 			{
 				PersonId = personId,
-				Timestamp = startTime.AddSeconds(37)
+				Timestamp = "2014-10-13 8:00:02".Utc()
 			});
 
 			Target.Handle(new PersonOutOfAdherenceEvent
 			{
 				PersonId = personId,
-				Timestamp = startTime.AddMinutes(1).AddSeconds(45)
+				Timestamp = "2014-10-13 8:00:03".Utc()
 			});
-
-			var expected = TimeSpan.FromSeconds(12)
-				.Add(TimeSpan.FromMinutes(1).Add(TimeSpan.FromSeconds(45)))
-				.Subtract(TimeSpan.FromSeconds(37));
-
-			Persister.PersistedModel.TimeInAdherence.Should().Be(expected);
+			
+			Persister.PersistedModel.TimeInAdherence.Should().Be("2".Seconds());
 		}
 
 		[Test]
 		public void TimeOutOfAdherence_WhenLoggingInAndOutInShortPeriods_ShouldBeTheSumOfThePeriodsOutOfAdherence()
 		{
 			var personId = Guid.NewGuid();
-			var startTime = "2014-10-13 8:00".Utc();
-
+			
 			Target.Handle(new PersonOutOfAdherenceEvent
 			{
 				PersonId = personId,
-				Timestamp = startTime
+				Timestamp = "2014-10-13 8:00:00".Utc()
 			});
 
 			Target.Handle(new PersonInAdherenceEvent
 			{
 				PersonId = personId,
-				Timestamp = startTime.AddMinutes(3).AddSeconds(12)
+				Timestamp = "2014-10-13 8:00:01".Utc()
 			});
 
 			Target.Handle(new PersonOutOfAdherenceEvent
 			{
 				PersonId = personId,
-				Timestamp = startTime.AddMinutes(4)
+				Timestamp = "2014-10-13 8:00:02".Utc()
 			});
 
 			Target.Handle(new PersonInAdherenceEvent
 			{
 				PersonId = personId,
-				Timestamp = startTime.AddMinutes(4).AddSeconds(1)
+				Timestamp = "2014-10-13 8:00:03".Utc()
 			});
 
-			var expected = TimeSpan
-				.FromMinutes(3).Add(TimeSpan.FromSeconds(12))
-				.Add(TimeSpan.FromSeconds(1));
-
-			Persister.PersistedModel.TimeOutOfAdherence.Should().Be(expected);
+			Persister.PersistedModel.TimeOutOfAdherence.Should().Be("2".Seconds());
 		}
 
 		[Test]
@@ -254,8 +245,8 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta
 				ShiftEndTime = "2014-10-13 17:00".Utc()
 			});
 
-			Persister.PersistedModel.TimeOutOfAdherence.Should().Be(TimeSpan.FromMinutes(60));
-			Persister.PersistedModel.TimeInAdherence.Should().Be(TimeSpan.FromMinutes(60));
+			Persister.PersistedModel.TimeOutOfAdherence.Should().Be("60".Minutes());
+			Persister.PersistedModel.TimeInAdherence.Should().Be("60".Minutes());
 		}
 
 		[Test]
@@ -280,7 +271,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta
 			});
 
 			Persister.PersistedModel.TimeOutOfAdherence.Should().Be(TimeSpan.Zero);
-			Persister.PersistedModel.TimeInAdherence.Should().Be(TimeSpan.FromMinutes(60));
+			Persister.PersistedModel.TimeInAdherence.Should().Be("60".Minutes());
 		}
 
 	}

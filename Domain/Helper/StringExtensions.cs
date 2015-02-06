@@ -52,5 +52,15 @@ namespace Teleopti.Ccc.Domain.Helper
 		{
 			return DateTime.SpecifyKind(DateTime.Parse(dateTimeString, CultureInfo.GetCultureInfo("sv-SE")), DateTimeKind.Utc);
 		}
+
+		public static TimeSpan Minutes(this string value)
+		{
+			return TimeSpan.FromMinutes(Convert.ToInt32(value));
+		}
+
+		public static TimeSpan Seconds(this string value)
+		{
+			return TimeSpan.FromSeconds(Convert.ToInt32(value));
+		}
 	}
 }
