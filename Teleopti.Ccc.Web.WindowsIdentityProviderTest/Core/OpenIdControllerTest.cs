@@ -57,10 +57,10 @@ namespace Teleopti.Ccc.Web.WindowsIdentityProviderTest.Core
 			providerEndpointWrapper.Expect(x => x.PendingRequest).PropertyBehavior();
 
 			var target = new OpenIdController(openIdProviderWapper, null, null, providerEndpointWrapper);
-			var result = (RedirectToRouteResult)target.Provider();
+			var result = (ViewResult)target.Provider();
 
 			providerEndpointWrapper.PendingRequest.Should().Be.SameInstanceAs(request);
-			result.RouteValues.ContainsValue("TriggerWindowsAuthorization").Should().Be.True();
+			result.ViewName.Should().Be.EqualTo("SignIn");
 		}
 
 		[Test]
