@@ -242,6 +242,7 @@
     <Compile Include="Areas\Tenant\Core\IoCTest.cs" />
     <Compile Include="Areas\Tenant\Core\LogTenancyLogonAttemptTest.cs" />
     <Compile Include="Areas\Tenant\Core\NHibernateConfigurationsHandlerTest.cs" />
+    <Compile Include="Areas\Tenant\Core\ReadNHibFilesTest.cs" />
     <Compile Include="Areas\Tenant\Core\SuccessfulPasswordPolicy.cs" />
     <Compile Include="Areas\Tenant\Core\LoginAttemptModelFactoryForWebTest.cs" />
     <Compile Include="Areas\Tenant\TenantControllerTest.cs" />
