@@ -8,7 +8,6 @@ using Teleopti.Ccc.Web.Core.Aop.Aspects;
 namespace Teleopti.Ccc.Web.Areas.Anywhere.Core
 {
 	[HubName("personScheduleHub")]
-	[Intercept(typeof(AspectInterceptor))]
 	[CLSCompliant(false)]
 	public class PersonScheduleHub : Hub
 	{

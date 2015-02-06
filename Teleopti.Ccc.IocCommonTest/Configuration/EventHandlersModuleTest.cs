@@ -1,13 +1,21 @@
-﻿using System.Linq;
+﻿using System;
+using System.Collections;
+using System.Collections.Generic;
+using System.Diagnostics;
+using System.Linq;
 using Autofac;
 using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.ApplicationLayer;
+using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Analytics;
+using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Resources;
 using Teleopti.Ccc.Domain.Collection;
+using Teleopti.Ccc.Infrastructure.ApplicationLayer;
 using Teleopti.Ccc.Infrastructure.Toggle;
 using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.IocCommon.Toggle;
+using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
 using Teleopti.Interfaces.Infrastructure.Analytics;
 
@@ -19,48 +27,41 @@ namespace Teleopti.Ccc.IocCommonTest.Configuration
 		[Test]
 		public void ShouldResolveAllEventHandlersWhenTogglesEnabled()
 		{
-			testResolveAllEventHandlers(new TrueToggleManager());
+			testResolveHandlersForAllEvents(new TrueToggleManager());
 		}
 
 		[Test]
 		public void ShouldResolveAllEventHandlersWhenTogglesDisabled()
 		{
-			testResolveAllEventHandlers(new FalseToggleManager());
+			testResolveHandlersForAllEvents(new FalseToggleManager());
 		}
 
-		private static void testResolveAllEventHandlers(IToggleManager toggleManager)
+		private static void testResolveHandlersForAllEvents(IToggleManager toggleManager)
 		{
-			var handlers = (
-				from type in typeof(IHandleEvent<>).Assembly.GetTypes()
-				where type.EnabledByToggle(toggleManager)
-				let handlerInterfaces =
-					from i in type.GetInterfaces()
-					let isHandlerInterface = i.IsGenericType && i.GetGenericTypeDefinition() == typeof(IHandleEvent<>)
-					where isHandlerInterface
-					select i
-				where handlerInterfaces.Any()
-				select new
-				{
-					type,
-					handlerInterfaces = handlerInterfaces.ToArray()
-				}
-				).ToArray();
-
 			var builder = new ContainerBuilder();
 			builder.RegisterModule(CommonModule.ForTest(toggleManager));
 			var container = builder.Build();
+			var resolver = new ResolveEventHandlers(new AutofacResolve(container));
 
-			handlers.Should().Have.Count.GreaterThan(10);
-			handlers.ForEach(x =>
+			var events = (
+				from type in typeof (Event).Assembly.GetTypes()
+				let isEvent = typeof (IEvent).IsAssignableFrom(type) && type.IsClass && !type.IsAbstract
+				where isEvent
+				select Activator.CreateInstance(type) as IEvent
+				).ToArray();
+
+
+			events.ForEach(x =>
 			{
-				var instance1 = container.Resolve(x.handlerInterfaces.First());
-				var instance2 = container.Resolve(x.handlerInterfaces.First());
-				instance1.Should().Not.Be.Null();
-				instance1.Should().Be.SameInstanceAs(instance2);
+				var instances = resolver.ResolveHandlersForEvent(x);
+				instances.Should().Not.Be.Null();
+				if (!instances.Cast<object>().Any())
+					return;
+				var instance2 = resolver.ResolveHandlersForEvent(x).Cast<object>().First();
+				instances.Cast<object>().First().Should().Be.SameInstanceAs(instance2);
 			});
+
 		}
-
-
 
 		[Test]
 		public void ShouldRegisterAnalytics()

@@ -5,6 +5,7 @@ using Autofac.Extras.DynamicProxy2;
 using Teleopti.Ccc.Domain;
 using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta;
+using Teleopti.Ccc.Domain.ApplicationLayer.Rta.Performance;
 using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers;
 using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Analytics;
 using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.PersonScheduleDayReadModel;
@@ -13,6 +14,7 @@ using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Schedule
 using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.ScheduleProjection;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Repositories;
+using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Infrastructure.Aop;
 using Teleopti.Ccc.Infrastructure.ApplicationLayer;
 using Teleopti.Ccc.Infrastructure.Repositories;
@@ -55,8 +57,9 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 						select i;
 				})
 				.SingleInstance()
-				.EnableClassInterceptors().InterceptedBy(typeof (AspectInterceptor));
-			
+				.ApplyAspects()
+				;
+
 			builder.RegisterType<UnitOfWorkTransactionEventSyncronization>().As<IEventSyncronization>().SingleInstance();
 
 			builder.RegisterType<ProjectionChangedEventBuilder>().As<IProjectionChangedEventBuilder>().SingleInstance();
@@ -115,6 +118,8 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 					.As<IScheduledResourcesReadModelUpdater>().SingleInstance();
 			}
 
+			builder.RegisterType<PerformanceCounter>().As<IPerformanceCounter>().SingleInstance();
+			builder.RegisterType<PersonSkillProvider>().As<IPersonSkillProvider>().InstancePerLifetimeScope();
 
 		}
 	}

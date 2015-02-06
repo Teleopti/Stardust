@@ -170,6 +170,7 @@
     <Compile Include="..\GlobalAssemblyInfo.cs">
       <Link>GlobalAssemblyInfo.cs</Link>
     </Compile>
+    <Compile Include="Aop\Bug32045.cs" />
     <Compile Include="ApplicationLayer\HangfireEventProcessorTest.cs" />
     <Compile Include="ApplicationLayer\HangfireEventPublisherTest.cs" />
     <Compile Include="ApplicationLayer\HangfireOrBusEventPublisherTest.cs" />

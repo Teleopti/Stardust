@@ -5,6 +5,7 @@ using Autofac;
 using Autofac.Extras.DynamicProxy2;
 using NUnit.Framework;
 using SharpTestsEx;
+using Teleopti.Ccc.Infrastructure.Aop;
 using Teleopti.Ccc.Infrastructure.DistributedLock;
 using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.TestCommon;
@@ -35,7 +36,7 @@ namespace Teleopti.Ccc.InfrastructureTest.DistributedLock
 
 			builder.RegisterType<Lock1>()
 				.AsSelf()
-				.EnableClassInterceptors()
+				.ApplyAspects()
 				;
 		}
 

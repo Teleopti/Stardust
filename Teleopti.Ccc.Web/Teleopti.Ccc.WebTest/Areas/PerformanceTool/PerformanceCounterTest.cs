@@ -2,7 +2,8 @@
 using NUnit.Framework;
 using Rhino.Mocks;
 using SharpTestsEx;
-using Teleopti.Ccc.Web.Areas.PerformanceTool.Core;
+using Teleopti.Ccc.Domain.ApplicationLayer.Rta.Performance;
+using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.MessageBroker.Client;
 
@@ -14,7 +15,7 @@ namespace Teleopti.Ccc.WebTest.Areas.PerformanceTool
 		[Test]
 		public void ShouldEnableWhenLimitIsGreaterThanZero()
 		{
-			var target = new PerformanceCounter(null, null) {Limit = 1};
+			var target = new PerformanceCounter(null, null, new NewtonsoftJsonSerializer()) { Limit = 1 };
 			target.IsEnabled.Should().Be(true);
 		}
 
@@ -24,7 +25,7 @@ namespace Teleopti.Ccc.WebTest.Areas.PerformanceTool
 			var messageSender = MockRepository.GenerateStub<IMessageSender>(); 
 			var now = MockRepository.GenerateMock<INow>();
 			now.Stub(x => x.UtcDateTime()).Return(new DateTime());
-			var target = new PerformanceCounter(messageSender, now) { Limit = 1 };
+			var target = new PerformanceCounter(messageSender, now, new NewtonsoftJsonSerializer()) { Limit = 1 };
 			target.Count();
 			messageSender.AssertWasCalled(x => x.Send(null), o => o.IgnoreArguments());
 		}
@@ -35,7 +36,7 @@ namespace Teleopti.Ccc.WebTest.Areas.PerformanceTool
 			var timestamp = new DateTime(2015, 1, 1, 1, 1, 1, 1);
 			var now = MockRepository.GenerateMock<INow>();
 			now.Stub(x => x.UtcDateTime()).Return(timestamp);
-			var target = new PerformanceCounter(null, now) { Limit = 2 };
+			var target = new PerformanceCounter(null, now, new NewtonsoftJsonSerializer()) { Limit = 2 };
 			target.Count();
 			target.FirstTimestamp.Should().Be(timestamp);
 		}
@@ -47,7 +48,7 @@ namespace Teleopti.Ccc.WebTest.Areas.PerformanceTool
 			var now = MockRepository.GenerateMock<INow>();
 			var messageSender = MockRepository.GenerateStub<IMessageSender>(); 
 			now.Stub(x => x.UtcDateTime()).Return(timestamp);
-			var target = new PerformanceCounter(messageSender, now) { Limit = 1 };
+			var target = new PerformanceCounter(messageSender, now, new NewtonsoftJsonSerializer()) { Limit = 1 };
 			target.Count();
 			target.LastTimestamp.Should().Be(timestamp);
 		}

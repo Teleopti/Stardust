@@ -9,6 +9,7 @@ using Autofac.Extras.DynamicProxy2;
 using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.ApplicationLayer;
+using Teleopti.Ccc.Infrastructure.Aop;
 using Teleopti.Ccc.Infrastructure.ApplicationLayer;
 using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.TestCommon;
@@ -24,14 +25,14 @@ namespace Teleopti.Ccc.InfrastructureTest.ApplicationLayer
 	{
 		public AHandler Handler;
 		public AnotherHandler Another;
-		public InterceptedHandler Intercepted;
+		public AspectedHandler aspected;
 		public IHangfireEventProcessor Target;
 
 		public void RegisterInContainer(ContainerBuilder builder, IIocConfiguration configuration)
 		{
 			builder.RegisterInstance(new AHandler()).AsSelf().As<IHandleEvent<AnEvent>>().SingleInstance();
 			builder.RegisterInstance(new AnotherHandler()).AsSelf().As<IHandleEvent<AnEvent>>().SingleInstance();
-			builder.RegisterType<InterceptedHandler>().AsSelf().As<IHandleEvent<AnEvent>>().EnableClassInterceptors().SingleInstance();
+			builder.RegisterType<AspectedHandler>().AsSelf().As<IHandleEvent<AnEvent>>().ApplyAspects().SingleInstance();
 			builder.RegisterInstance(new NonConcurrenctSafeHandler()).AsSelf().As<IHandleEvent<AnEvent>>().SingleInstance();
 
 			builder.RegisterInstance(new FakeConfigReader
@@ -71,9 +72,9 @@ namespace Teleopti.Ccc.InfrastructureTest.ApplicationLayer
 		[Test]
 		public void ShouldPublishToInterceptedHandler()
 		{
-			Target.Process(null, typeof(AnEvent).AssemblyQualifiedName, "{}", typeof(InterceptedHandler).AssemblyQualifiedName);
+			Target.Process(null, typeof(AnEvent).AssemblyQualifiedName, "{}", typeof(AspectedHandler).AssemblyQualifiedName);
 
-			Intercepted.HandledEvents.Single().Should().Be.OfType<AnEvent>();
+			aspected.HandledEvents.Single().Should().Be.OfType<AnEvent>();
 		}
 
 		[Test]
@@ -120,7 +121,7 @@ namespace Teleopti.Ccc.InfrastructureTest.ApplicationLayer
 			}
 		}
 
-		public class InterceptedHandler : IHandleEvent<AnEvent>
+		public class AspectedHandler : IHandleEvent<AnEvent>
 		{
 			public List<IEvent> HandledEvents = new List<IEvent>();
 

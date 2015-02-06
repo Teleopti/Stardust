@@ -3,6 +3,7 @@ using Autofac.Extras.DynamicProxy2;
 using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.ApplicationLayer;
+using Teleopti.Ccc.Infrastructure.Aop;
 using Teleopti.Ccc.Infrastructure.ApplicationLayer;
 using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.TestCommon;
@@ -34,10 +35,10 @@ namespace Teleopti.Ccc.InfrastructureTest.ApplicationLayer
 			builder.RegisterInstance(new TestMultiHandler2())
 				.As<IHandleEvent<MultiHandlerTestEvent>>()
 				;
-			builder.RegisterType<TestInterceptedHandler>()
-				.As<IHandleEvent<InterceptedHandlerTestEvent>>()
+			builder.RegisterType<TestAspectedHandler>()
+				.As<IHandleEvent<AspectedHandlerTestEvent>>()
 				.SingleInstance()
-				.EnableClassInterceptors()
+				.ApplyAspects()
 				;
 		}
 
@@ -92,9 +93,9 @@ namespace Teleopti.Ccc.InfrastructureTest.ApplicationLayer
 		[Test]
 		public void ShouldNotPassInterceptedHandlerTypeAsProxy()
 		{
-			Target.Publish(new InterceptedHandlerTestEvent());
+			Target.Publish(new AspectedHandlerTestEvent());
 
-			JobClient.HandlerType.Should().Be(typeof(TestInterceptedHandler).AssemblyQualifiedName);
+			JobClient.HandlerType.Should().Be(typeof(TestAspectedHandler).AssemblyQualifiedName);
 		}
 
 		[Test]
@@ -151,14 +152,14 @@ namespace Teleopti.Ccc.InfrastructureTest.ApplicationLayer
 			}
 		}
 
-		public class InterceptedHandlerTestEvent : IEvent
+		public class AspectedHandlerTestEvent : IEvent
 		{
 			
 		}
 
-		public class TestInterceptedHandler : IHandleEvent<InterceptedHandlerTestEvent>
+		public class TestAspectedHandler : IHandleEvent<AspectedHandlerTestEvent>
 		{
-			public void Handle(InterceptedHandlerTestEvent @event)
+			public void Handle(AspectedHandlerTestEvent @event)
 			{
 			}
 		}

@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.IO;
 using Autofac;
-using Autofac.Extras.DynamicProxy2;
 using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.Aop.Core;
@@ -14,11 +13,11 @@ namespace Teleopti.Ccc.InfrastructureTest.Aop
 	public class AspectsTest
 	{
 
-		private static IContainer SetupContainer()
+		private static IContainer setupContainer()
 		{
 			var builder = new ContainerBuilder();
 			builder.RegisterType<AspectInterceptor>();
-			builder.RegisterType<AspectedClass>().EnableClassInterceptors();
+			builder.RegisterType<AspectedClass>().ApplyAspects();
 			builder.RegisterType<AResolvedAspect.TheResolvedAspect>();
 			return builder.Build();
 		}
@@ -39,7 +38,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Aop
 		public void ShouldInvokeAspectBeforeMethod()
 		{
 			var beforeInvoked = false;
-			var container = SetupContainer();
+			var container = setupContainer();
 			ASimpleAspect.BeforeCallback = () => beforeInvoked = true;
 
 			container.Resolve<AspectedClass>().AspectedMethod();
@@ -51,7 +50,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Aop
 		public void ShouldInvokeAspectAfterMethod()
 		{
 			var afterInvokted = false;
-			var container = SetupContainer();
+			var container = setupContainer();
 			ASimpleAspect.AfterCallback = () => afterInvokted = true;
 
 			container.Resolve<AspectedClass>().AspectedMethod();
@@ -63,7 +62,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Aop
 		public void ShouldInvokeOriginalMethod()
 		{
 			var methodInvoked = false;
-			var container = SetupContainer();
+			var container = setupContainer();
 
 			var target = container.Resolve<AspectedClass>();
 			target.AspectedMethodCallback = () => methodInvoked = true;
@@ -76,7 +75,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Aop
 		public void ShouldInvokeAspectBeforeMethodsInOrder()
 		{
 			var callbacks = new List<int>();
-			var container = SetupContainer();
+			var container = setupContainer();
 			ASimpleAspect.BeforeCallback = () => callbacks.Add(1);
 			AnotherAspect.BeforeCallback = () => callbacks.Add(2);
 
@@ -89,7 +88,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Aop
 		public void ShouldInvokeAspectAfterMethodsInReverseOrder()
 		{
 			var callbacks = new List<int>();
-			var container = SetupContainer();
+			var container = setupContainer();
 			ASimpleAspect.AfterCallback = () => callbacks.Add(1);
 			AnotherAspect.AfterCallback = () => callbacks.Add(2);
 
@@ -101,7 +100,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Aop
 		[Test]
 		public void ShouldIgnoreOtherAttributes()
 		{
-			var container = SetupContainer();
+			var container = setupContainer();
 			container.Resolve<AspectedClass>().AttributedMethod();
 		}
 
@@ -110,7 +109,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Aop
 		{
 			var beforeInvoked = false;
 			var afterInvoked = false;
-			var container = SetupContainer();
+			var container = setupContainer();
 			AResolvedAspect.BeforeCallback = () => beforeInvoked = true;
 			AResolvedAspect.AfterCallback = () => afterInvoked = true;
 
@@ -123,7 +122,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Aop
 		[Test]
 		public void ShouldThrowOnAspectException()
 		{
-			var container = SetupContainer();
+			var container = setupContainer();
 			ASimpleAspect.BeforeCallback = () => { throw new FileNotFoundException(); };
 
 			var target = container.Resolve<AspectedClass>();
@@ -135,7 +134,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Aop
 		public void ShouldInvokeAspectAfterMethodEvenThoughInvokationThrows()
 		{
 			var afterInvoked = false;
-			var container = SetupContainer();
+			var container = setupContainer();
 			ASimpleAspect.AfterCallback = () => afterInvoked = true;
 
 			var target = container.Resolve<AspectedClass>();
@@ -150,7 +149,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Aop
 		{
 			Exception expected = new FileNotFoundException();
 			Exception actual = null;
-			var container = SetupContainer();
+			var container = setupContainer();
 			ASimpleAspect.AfterCallbackWithException = e => actual = e;
 
 			var target = container.Resolve<AspectedClass>();
@@ -160,7 +159,6 @@ namespace Teleopti.Ccc.InfrastructureTest.Aop
 			actual.Should().Be.SameInstanceAs(expected);
 		}
 
-		[Intercept(typeof(AspectInterceptor))]
 		public class AspectedClass
 		{
 			public Action AspectedMethodCallback;

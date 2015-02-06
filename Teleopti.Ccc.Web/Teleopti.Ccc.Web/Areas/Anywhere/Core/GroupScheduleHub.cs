@@ -11,7 +11,6 @@ using Teleopti.Interfaces.Domain;
 namespace Teleopti.Ccc.Web.Areas.Anywhere.Core
 {
 	[HubName("groupScheduleHub")]
-	[Intercept(typeof(AspectInterceptor))]
 	[CLSCompliant(false)]
 	public class GroupScheduleHub : Hub
 	{

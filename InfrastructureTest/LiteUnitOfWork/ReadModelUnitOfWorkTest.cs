@@ -5,7 +5,6 @@ using System.Data.SqlClient;
 using System.Linq;
 using System.Threading;
 using Autofac;
-using Autofac.Extras.DynamicProxy2;
 using NHibernate;
 using NUnit.Framework;
 using SharpTestsEx;
@@ -32,7 +31,7 @@ namespace Teleopti.Ccc.InfrastructureTest.LiteUnitOfWork
 		{
 			base.RegisterInContainer(builder, configuration);
 
-			builder.RegisterType<TheService>().EnableClassInterceptors().InterceptedBy(typeof(AspectInterceptor));
+			builder.RegisterType<TheService>().ApplyAspects();
 			builder.RegisterType<NestedService>().AsSelf().As<NestedBase>().SingleInstance();
 			builder.RegisterType<NestedService2>().AsSelf().As<NestedBase>().SingleInstance();
 
