@@ -129,7 +129,6 @@
     <EmbeddedResource Include="Resources.de.resx">
       <SubType>Designer</SubType>
     </EmbeddedResource>
-    <EmbeddedResource Include="Resources.el.resx" />
     <EmbeddedResource Include="Resources.en-ZW.resx">
       <SubType>Designer</SubType>
     </EmbeddedResource>
@@ -156,10 +155,8 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Resources.ru.resx" />
     <EmbeddedResource Include="Resources.sk.resx" />
-    <EmbeddedResource Include="Resources.sq.resx" />
     <EmbeddedResource Include="Resources.th.resx" />
     <EmbeddedResource Include="Resources.tr.resx" />
-    <EmbeddedResource Include="Resources.uz.resx" />
     <EmbeddedResource Include="Resources.vi.resx" />
     <EmbeddedResource Include="Resources.zh-CN.resx">
       <SubType>Designer</SubType>
