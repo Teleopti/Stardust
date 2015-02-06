@@ -1,6 +1,12 @@
-﻿@{
-    ViewBag.Title = "Identifier";
-}
+﻿<h2>Identifier</h2>
 
-<h2>Identifier</h2>
-
+<div>
+	@if (Request.IsAuthenticated)
+	{
+		<text>Welcome <strong>@Request.ServerVariables["LOGON_USER"]</strong>!</text>
+	}
+	else
+	{
+		<text> <strong>Not Signed in</strong></text>
+	}
+</div>

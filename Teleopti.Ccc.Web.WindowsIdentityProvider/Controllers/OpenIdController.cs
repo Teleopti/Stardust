@@ -57,7 +57,13 @@ namespace Teleopti.Ccc.Web.WindowsIdentityProvider.Controllers
 
 			// handles request from browser
 			_providerEndpointWrapper.PendingRequest = (IHostProcessedRequest)request;
-			return RedirectToAction("TriggerWindowsAuthorization");
+
+			return SignIn();
+		}
+
+		public ViewResult SignIn()
+		{
+			return View("SignIn");
 		}
 
 		[Authorize]
@@ -100,6 +106,7 @@ namespace Teleopti.Ccc.Web.WindowsIdentityProvider.Controllers
 				var identifier = new Uri(currentHttp.Request.Url, userIdentifier);
 				idrequest.LocalIdentifier = identifier;
 				idrequest.IsAuthenticated = true;
+				
 				_openIdProvider.SendResponse(idrequest);
 			}
 			else

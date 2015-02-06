@@ -61,7 +61,7 @@ Scenario: Send message
 	 | Ashley Andeen |
 
 @OnlyRunIfEnabled('RTA_NotifyViaSMS_31567')
-Scenario: Send message after sign in
+Scenario: Send message after application sign in
 	Given there is a site named 'Paris'
 	And there is a team named 'Red' on site 'Paris'
 	And I have a role with
@@ -83,6 +83,36 @@ Scenario: Send message after sign in
 	 | Ashley Andeen |
 	Then I should be redirected to the sign in page
 	When I sign in
+	Then I should see receivers as
+	 | Name          |
+	 | Pierre Baldi  |
+	 | Ashley Andeen |
+
+@OnlyRunIfEnabled('RTA_NotifyViaSMS_31567')
+@WindowsAsDefaultIdentityProviderLogon
+Scenario: Send message after windows sign in
+	Given there is a site named 'Paris'
+	And there is a team named 'Red' on site 'Paris'
+	And I have a role with
+	 | Field                                  | Value       |
+	 | Name                                   | Team leader |
+	 | Access to team                         | Red         |
+	 | Access to real time adherence overview | True        |
+	 And I am a user with
+	| Field                  | Value |
+	| Windows authentication | true  |
+	And Pierre Baldi has a person period with
+	 | Field          | Value        |
+	 | Team           | Red          |
+	 | Start Date     | 2014-01-21   |
+	 And Ashley Andeen has a person period with
+	 | Field          | Value         |
+	 | Team           | Red           |
+	 | Start Date     | 2014-01-21    |
+	When I (without signed in) send message for 
+	 | Name          |
+	 | Pierre Baldi  |
+	 | Ashley Andeen |
 	Then I should see receivers as
 	 | Name          |
 	 | Pierre Baldi  |

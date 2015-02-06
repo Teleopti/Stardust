@@ -55,10 +55,8 @@ namespace Teleopti.Ccc.Web.Areas.SSO.Controllers
 				{
 					return _openIdProvider.PrepareResponse(request).AsActionResultMvc5();
 				}
-
-				var pendingRequest = Convert.ToBase64String(SerializationHelper.SerializeAsBinary(request).ToCompressedByteArray());
-					
 				// handles request from browser
+				var pendingRequest = Convert.ToBase64String(SerializationHelper.SerializeAsBinary(request).ToCompressedByteArray());
 				string userName;
 				if (!_formsAuthentication.TryGetCurrentUser(out userName))
 				{

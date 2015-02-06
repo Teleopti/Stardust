@@ -1,0 +1,15 @@
+﻿<head>
+	<meta charset="UTF-8">
+	<script type="text/javascript">
+		if (window.location.hash) {
+			var d = new Date();
+			d.setTime(d.getTime() + (5 * 60 * 1000));
+			var expires = 'expires=' + d.toUTCString();
+			document.cookie = 'returnHash' + '=' + window.location.hash + '; ' + expires + '; path=/';
+		}
+		window.location.href = "TriggerWindowsAuthorization";
+	</script>
+</head>
+<body>
+	If you are not redirected automatically, follow the <a href='TriggerWindowsAuthorization'>link</a>
+</body>
