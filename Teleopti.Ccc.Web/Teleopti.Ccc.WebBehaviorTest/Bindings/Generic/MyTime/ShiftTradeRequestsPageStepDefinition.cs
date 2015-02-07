@@ -293,6 +293,13 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.MyTime
 			Select2Box.SelectItemByText("Team-Picker", optionToSelect);
 		}
 
+		[When(@"I type '(.*)' in the name search box")]
+		public void WhenITypeInTheNameSearchBox(string partialName)
+		{
+			Browser.Interactions.TypeTextIntoInputTextUsingJQuery(".name-search input.form-control", partialName);
+		}
+
+
 		[Then(@"I should see MySchedule is dayoff")]
 		public void ThenIShouldSeeMyScheduleIsDayoff()
 		{

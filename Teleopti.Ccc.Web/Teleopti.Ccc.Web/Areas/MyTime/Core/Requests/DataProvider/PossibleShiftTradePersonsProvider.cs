@@ -38,8 +38,8 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.DataProvider
 		public DatePersons RetrievePersons(ShiftTradeScheduleViewModelData shiftTradeArguments)
 		{
 			var me = _loggedOnUser.CurrentUser();
-			var personForShiftTradeList =
-				_personForShiftTradeRepository.GetPersonForShiftTrade(shiftTradeArguments.ShiftTradeDate, shiftTradeArguments.TeamId);
+
+			var personForShiftTradeList = _personForShiftTradeRepository.GetPersonForShiftTrade(shiftTradeArguments.ShiftTradeDate, shiftTradeArguments.TeamIdList,shiftTradeArguments.SearchNameText);
 
 			personForShiftTradeList = personForShiftTradeList.Where(
 				personGuid => personGuid.PersonId != me.Id &&
@@ -59,35 +59,6 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.DataProvider
 							_shiftTradeValidator.Validate(new ShiftTradeAvailableCheckItem(shiftTradeArguments.ShiftTradeDate, me, person))
 												.Value && _permissionProvider.IsPersonSchedulePublished(shiftTradeArguments.ShiftTradeDate, person))
 				};
-		}
-
-		public DatePersons RetrievePersonsForAllTeams(ShiftTradeScheduleViewModelDataForAllTeams shiftTradeArguments)
-		{
-			var me = _loggedOnUser.CurrentUser();
-			var personForShiftTradeList = new List<IAuthorizeOrganisationDetail>(){};
-			foreach (var teamId in shiftTradeArguments.TeamIds)
-			{
-				personForShiftTradeList = (_personForShiftTradeRepository.GetPersonForShiftTrade(shiftTradeArguments.ShiftTradeDate, teamId)).Union(personForShiftTradeList).ToList();
-			}
-
-			personForShiftTradeList = personForShiftTradeList.Where(
-				personGuid => personGuid.PersonId != me.Id &&
-				_permissionProvider.HasOrganisationDetailPermission(DefinedRaptorApplicationFunctionPaths.ViewSchedules,
-																	shiftTradeArguments.ShiftTradeDate, personGuid)).ToList();
-
-			var personGuidList = personForShiftTradeList.Select(item => item.PersonId).ToList();
-
-			var personList = _personRepository.FindPeople(personGuidList);
-			
-			return new DatePersons
-			{
-				Date = shiftTradeArguments.ShiftTradeDate,
-				Persons =
-					personList.Where(
-						person =>
-						_shiftTradeValidator.Validate(new ShiftTradeAvailableCheckItem(shiftTradeArguments.ShiftTradeDate, me, person))
-											.Value && _permissionProvider.IsPersonSchedulePublished(shiftTradeArguments.ShiftTradeDate, person))
-			};
 		}
 	}
 }

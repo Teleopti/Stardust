@@ -720,6 +720,7 @@
     <Compile Include="Repositories\IAgentBadgeSettingsRepository.cs" />
     <Compile Include="Repositories\IGamificationSettingRepository.cs" />
     <Compile Include="Repositories\IGlobalSettingDataRepository.cs" />
+    <Compile Include="Repositories\Paging.cs" />
     <Compile Include="Repositories\TimeFilterInfo.cs" />
     <Compile Include="Aop\Core\ResolvedAspectAttribute.cs" />
     <Compile Include="ResourceCalculation\DayOffsInPeriodCalculator.cs" />
@@ -847,7 +848,7 @@
     <Compile Include="ApplicationLayer\ScheduleChangedEventHandlers\ScheduleProjection\IScheduleProjectionReadOnlyRepository.cs" />
     <Compile Include="Repositories\IScheduleTagRepository.cs" />
     <Compile Include="Repositories\IUserDetailRepository.cs" />
-    <Compile Include="Repositories\Paging.cs" />
+    <Compile Include="Repositories\ScheduleFilter.cs" />
     <Compile Include="Repositories\PagingDetail.cs" />
     <Compile Include="ResourceCalculation\ActivitySkillCombinationFromStorage.cs" />
     <Compile Include="ResourceCalculation\ActivitySkillsCombination.cs" />

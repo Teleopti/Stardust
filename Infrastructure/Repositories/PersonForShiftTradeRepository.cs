@@ -1,6 +1,8 @@
 using System;
 using System.Collections.Generic;
 using NHibernate.Transform;
+using Teleopti.Ccc.Domain.ApplicationLayer.Rta;
+using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Interfaces.Domain;
@@ -22,15 +24,17 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 			_unitOfWork = new FixedCurrentUnitOfWork(unitOfWork);
 		}
 
-		public IList<IAuthorizeOrganisationDetail> GetPersonForShiftTrade(DateOnly shiftTradeDate, Guid teamId)
+
+		public IList<IAuthorizeOrganisationDetail> GetPersonForShiftTrade(DateOnly shiftTradeDate, IList<Guid> teamIdList , string name)
 		{
 			return ((NHibernateUnitOfWork)_unitOfWork.Current()).Session.CreateSQLQuery(
-				"exec ReadModel.LoadPersonForShiftTrade @shiftTradeDate=:shiftTradeDate, @myTeamId=:myTeamId")
-			                                          .SetDateTime("shiftTradeDate", shiftTradeDate)
-			                                          .SetParameter("myTeamId", teamId)
-			                                          .SetResultTransformer(Transformers.AliasToBean(typeof(PersonSelectorShiftTrade)))
-			                                          .SetReadOnly(true)
-			                                          .List<IAuthorizeOrganisationDetail>();
+				"exec ReadModel.LoadPersonForScheduleSearch @scheduleDate=:scheduleDate, @teamIdList=:teamIdList, @name=:name")
+													  .SetDateTime("scheduleDate", shiftTradeDate)
+													  .SetString("teamIdList", string.Join(",", teamIdList))
+													  .SetString("name", name)
+													  .SetResultTransformer(Transformers.AliasToBean(typeof(PersonSelectorShiftTrade)))
+													  .SetReadOnly(true)
+													  .List<IAuthorizeOrganisationDetail>();
 		}
 	}
 

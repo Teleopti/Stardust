@@ -24,10 +24,10 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping
 			_shiftTradeTimeLineHoursViewModelMapper = shiftTradeTimeLineHoursViewModelMapper;
 		}
 
-		public ShiftTradeScheduleViewModel Map(ShiftTradeScheduleViewModelDataForAllTeams data)
+		public ShiftTradeScheduleViewModel Map(ShiftTradeScheduleViewModelData data)
 		{
 			var myScheduleDayReadModel = _shiftTradeRequestProvider.RetrieveMySchedule(data.ShiftTradeDate);
-			var possibleTradePersons = _possibleShiftTradePersonsProvider.RetrievePersonsForAllTeams(data);
+			var possibleTradePersons = _possibleShiftTradePersonsProvider.RetrievePersons(data);
 			if (data.Paging == null || data.Paging.Take <= 0)
 			{
 				return new ShiftTradeScheduleViewModel();

@@ -159,49 +159,18 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 
 		[UnitOfWorkAction]
 		[HttpGet]
-		public JsonResult ShiftTradeRequestSchedule(DateOnly selectedDate, string teamId, Paging paging)
+		public JsonResult ShiftTradeRequestSchedule(DateOnly selectedDate, ScheduleFilter filter, Paging paging)
 		{
-			//var calendarDate = new DateTime(selectedDate.Year, selectedDate.Month, selectedDate.Day, CultureInfo.CurrentCulture.Calendar);
-			var data = new ShiftTradeScheduleViewModelData { ShiftTradeDate = selectedDate, TeamId = new Guid(teamId), Paging = paging };
-			return Json(_requestsViewModelFactory.CreateShiftTradeScheduleViewModel(data), JsonRequestBehavior.AllowGet);
-		}
-
-		[UnitOfWorkAction]
-		[HttpGet]
-		public JsonResult ShiftTradeRequestScheduleByFilterTime(DateOnly selectedDate, string teamId, string filteredStartTimes, string filteredEndTimes, bool isDayOff, Paging paging)
-		{
+			var allTeamIds = filter.TeamIds.Split(',').Select(teamId => new Guid(teamId)).ToList();
 			var data = new ShiftTradeScheduleViewModelData
 			{
 				ShiftTradeDate = selectedDate,
-				TeamId = new Guid(teamId),
+				TeamIdList = allTeamIds,
 				Paging = paging,
-				TimeFilter = _timeFilterHelper.GetFilter(selectedDate, filteredStartTimes, filteredEndTimes, isDayOff, isEmptyDay: false)
+				TimeFilter = _timeFilterHelper.GetFilter(selectedDate, filter.FilteredStartTimes, filter.FilteredEndTimes, filter.IsDayOff,filter.IsEmptyDay),
+				SearchNameText = filter.SearchNameText
 			};
 			return Json(_requestsViewModelFactory.CreateShiftTradeScheduleViewModel(data), JsonRequestBehavior.AllowGet);
-		}
-
-		[UnitOfWorkAction]
-		[HttpGet]
-		public JsonResult ShiftTradeRequestScheduleForAllTeamsByFilterTime(DateOnly selectedDate, string teamIds, string filteredStartTimes, string filteredEndTimes, bool isDayOff, Paging paging)
-		{
-			var allTeamIds = teamIds.Split(',').Select(teamId => new Guid(teamId)).ToList();
-			var data = new ShiftTradeScheduleViewModelDataForAllTeams
-			{
-				ShiftTradeDate = selectedDate,
-				TeamIds = allTeamIds,
-				Paging = paging,
-				TimeFilter = _timeFilterHelper.GetFilter(selectedDate, filteredStartTimes, filteredEndTimes, isDayOff, isEmptyDay: false)
-			};
-			return Json(_requestsViewModelFactory.CreateShiftTradeScheduleViewModelForAllTeams(data), JsonRequestBehavior.AllowGet);
-		}
-
-		[UnitOfWorkAction]
-		[HttpGet]
-		public JsonResult ShiftTradeRequestScheduleForAllTeams(DateOnly selectedDate, string teamIds, Paging paging)
-		{
-			var allTeamIds = teamIds.Split(',').Select(teamId => new Guid(teamId)).ToList();
-			var data = new ShiftTradeScheduleViewModelDataForAllTeams { ShiftTradeDate = selectedDate,TeamIds = allTeamIds, Paging = paging };
-			return Json(_requestsViewModelFactory.CreateShiftTradeScheduleViewModelForAllTeams(data), JsonRequestBehavior.AllowGet);
 		}
 
 		[UnitOfWorkAction]

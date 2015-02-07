@@ -29,10 +29,10 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 		public JsonResult BulletinSchedules(DateOnly selectedDate, string teamIds, Paging paging)
 		{
 			var allTeamIds = teamIds.Split(',').Select(teamId => new Guid(teamId)).ToList();
-			var data = new ShiftTradeScheduleViewModelDataForAllTeams
+			var data = new ShiftTradeScheduleViewModelData
 			{
 				ShiftTradeDate = selectedDate,
-				TeamIds = allTeamIds,
+				TeamIdList = allTeamIds,
 				Paging = paging
 			};
 			return Json(_requestsShiftTradebulletinViewModelFactory.CreateShiftTradeBulletinViewModel(data),
@@ -41,16 +41,15 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 
 		[UnitOfWorkAction]
 		[HttpGet]
-		public JsonResult BulletinSchedulesWithTimeFilter(DateOnly selectedDate, string teamIds, string filteredStartTimes,
-			string filteredEndTimes, bool isDayOff, bool isEmptyDay, Paging paging)
+		public JsonResult BulletinSchedulesWithTimeFilter(DateOnly selectedDate, ScheduleFilter filter, Paging paging)
 		{
-			var allTeamIds = teamIds.Split(',').Select(teamId => new Guid(teamId)).ToList();
-			var data = new ShiftTradeScheduleViewModelDataForAllTeams
+			var allTeamIds = filter.TeamIds.Split(',').Select(teamId => new Guid(teamId)).ToList();
+			var data = new ShiftTradeScheduleViewModelData
 			{
 				ShiftTradeDate = selectedDate,
-				TeamIds = allTeamIds,
+				TeamIdList = allTeamIds,
 				Paging = paging,
-				TimeFilter = _timeFilterHelper.GetFilter(selectedDate, filteredStartTimes, filteredEndTimes, isDayOff, isEmptyDay)
+				TimeFilter = _timeFilterHelper.GetFilter(selectedDate, filter.FilteredStartTimes, filter.FilteredEndTimes, filter.IsDayOff, filter.IsEmptyDay),
 			};
 			return Json(_requestsShiftTradebulletinViewModelFactory.CreateShiftTradeBulletinViewModel(data),
 				JsonRequestBehavior.AllowGet);

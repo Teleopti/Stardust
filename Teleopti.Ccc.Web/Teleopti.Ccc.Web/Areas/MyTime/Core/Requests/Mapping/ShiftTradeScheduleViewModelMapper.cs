@@ -4,6 +4,7 @@ using System.Linq;
 using Teleopti.Ccc.Domain.AgentInfo.Requests;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Repositories;
+using Teleopti.Ccc.Domain.Security.Authentication;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.DataProvider;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.Requests;
@@ -49,19 +50,6 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping
 			var possibleTradePersons = _possibleShiftTradePersonsProvider.RetrievePersons(data);
 			return getShiftTradeScheduleViewModel(data.Paging, data.ShiftTradeDate, data.TimeFilter, possibleTradePersons);
 		}
-
-		public ShiftTradeScheduleViewModel Map(ShiftTradeScheduleViewModelDataForAllTeams data)
-		{
-			if (data.Paging == null || data.Paging.Take <= 0)
-			{
-				return new ShiftTradeScheduleViewModel();
-			}
-
-			var possibleTradePersons = _possibleShiftTradePersonsProvider.RetrievePersonsForAllTeams(data);
-			return getShiftTradeScheduleViewModel(data.Paging, data.ShiftTradeDate, data.TimeFilter, possibleTradePersons);
-		}
-
-
 
 		private IEnumerable<IShiftExchangeOffer> getMatchShiftExchangeOffers(IEnumerable<IPerson> persons, DateOnly shiftTradeDate)
 		{
@@ -120,13 +108,13 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping
 		}
 
 
-		public ShiftTradeScheduleViewModel MapForBulletin(ShiftTradeScheduleViewModelDataForAllTeams data)
+		public ShiftTradeScheduleViewModel MapForBulletin(ShiftTradeScheduleViewModelData data)
 		{
 			if (data.Paging == null || data.Paging.Take <= 0)
 			{
 				return new ShiftTradeScheduleViewModel();
 			}
-			var possibleTradePersons = _possibleShiftTradePersonsProvider.RetrievePersonsForAllTeams(data);						
+			var possibleTradePersons = _possibleShiftTradePersonsProvider.RetrievePersons(data);					
 			var myScheduleDayReadModel = _shiftTradeRequestProvider.RetrieveMySchedule(data.ShiftTradeDate);
 
 			var filteredShiftExchangeOffers = getMatchShiftExchangeOffers(possibleTradePersons.Persons, data.ShiftTradeDate);

@@ -4,6 +4,6 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping
 {
 	public interface IShiftTradeBulletinScheduleViewModelMapper
 	{
-		ShiftTradeScheduleViewModel Map(ShiftTradeScheduleViewModelDataForAllTeams data);
+		ShiftTradeScheduleViewModel Map(ShiftTradeScheduleViewModelData data);
 	}
 }

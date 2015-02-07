@@ -13,7 +13,6 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.ViewModelFactory
 		RequestViewModel CreateRequestViewModel(Guid id);
 		ShiftTradeRequestsPeriodViewModel CreateShiftTradePeriodViewModel();
 		ShiftTradeScheduleViewModel CreateShiftTradeScheduleViewModel(ShiftTradeScheduleViewModelData data);
-		ShiftTradeScheduleViewModel CreateShiftTradeScheduleViewModelForAllTeams(ShiftTradeScheduleViewModelDataForAllTeams data);
 		IList<ShiftTradeSwapDetailsViewModel> CreateShiftTradeRequestSwapDetails(Guid id);
 		string CreateShiftTradeMyTeamSimpleViewModel(DateOnly selectedDate);
 		AbsenceAccountViewModel GetAbsenceAccountViewModel(Guid absenceId, DateOnly date);
