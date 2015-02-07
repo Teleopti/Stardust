@@ -1,4 +1,6 @@
-﻿using System.Linq;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.WorkflowControl;
@@ -22,7 +24,8 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			var person = persistPerson(date, team);
 
 			_target = new PersonForShiftTradeRepository(UnitOfWork);
-			var result = _target.GetPersonForShiftTrade(date, team.Id.Value);
+			var teamIdList = new List<Guid> {team.Id.GetValueOrDefault()};
+			var result = _target.GetPersonForShiftTrade(date, teamIdList, "anna");
 
 			result.Count.Should().Be.EqualTo(1);
 			result.First().PersonId.Should().Be.EqualTo(person.Id.Value);
@@ -38,21 +41,33 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			businessUnit.AddSite(site);
 			site.AddTeam(team);
 			var workflowControlSet = new WorkflowControlSet("new set");
-			var personPeriod = PersonPeriodFactory.CreatePersonPeriod(startDate, team);
-			var person = PersonFactory.CreatePerson("anna", "andersson");
-			person.AddPersonPeriod(personPeriod);
-			person.WorkflowControlSet = workflowControlSet;
+
+			var person1Period = PersonPeriodFactory.CreatePersonPeriod(startDate, team);
+			var person1 = PersonFactory.CreatePerson("anna", "andersson");
+			person1.AddPersonPeriod(person1Period);
+			person1.WorkflowControlSet = workflowControlSet;
+			
+			var person2Period = PersonPeriodFactory.CreatePersonPeriod(startDate, team);
+			var person2 = PersonFactory.CreatePerson("steven", "selter");
+			person2.AddPersonPeriod(person2Period);
+			person2.WorkflowControlSet = workflowControlSet;
+
+
 
 			PersistAndRemoveFromUnitOfWork(businessUnit);
 			PersistAndRemoveFromUnitOfWork(site);
 			PersistAndRemoveFromUnitOfWork(team);
-			PersistAndRemoveFromUnitOfWork(personPeriod.PersonContract.ContractSchedule);
-			PersistAndRemoveFromUnitOfWork(personPeriod.PersonContract.PartTimePercentage);
-			PersistAndRemoveFromUnitOfWork(personPeriod.PersonContract.Contract);
+			PersistAndRemoveFromUnitOfWork(person1Period.PersonContract.ContractSchedule);
+			PersistAndRemoveFromUnitOfWork(person1Period.PersonContract.PartTimePercentage);
+			PersistAndRemoveFromUnitOfWork(person1Period.PersonContract.Contract);
+			PersistAndRemoveFromUnitOfWork(person2Period.PersonContract.ContractSchedule);
+			PersistAndRemoveFromUnitOfWork(person2Period.PersonContract.PartTimePercentage);
+			PersistAndRemoveFromUnitOfWork(person2Period.PersonContract.Contract);
 			PersistAndRemoveFromUnitOfWork(workflowControlSet);
-			PersistAndRemoveFromUnitOfWork(person);
+			PersistAndRemoveFromUnitOfWork(person1);
+			PersistAndRemoveFromUnitOfWork(person2);
 
-			return new PersonRepository(UnitOfWork).Get(person.Id.Value);
+			return new PersonRepository(UnitOfWork).Get(person1.Id.Value);
 		}
 	}
 }

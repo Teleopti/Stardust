@@ -23,6 +23,14 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 	[TestFixture]
 	public class RequestsControllerTest
 	{
+		private ITimeFilterHelper _timeFilterHelper;
+
+		[SetUp]
+		public void Setup()
+		{
+			_timeFilterHelper = MockRepository.GenerateMock<ITimeFilterHelper>();
+		}
+
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Reliability", "CA2000:Dispose objects before losing scope"), Test]
 		public void ShouldReturnRequestsPartialView()
 		{
@@ -264,7 +272,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		}
 
 		[Test]
-		public void ShouldGetScheduleModelForOneTeam()
+		public void ShouldGetScheduleModelWithFilter()
 		{
 			var modelFactory = MockRepository.GenerateMock<IRequestsViewModelFactory>();
 			var model = new ShiftTradeScheduleViewModel();
@@ -272,58 +280,15 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			modelFactory.Stub(x => x.CreateShiftTradeScheduleViewModel(Arg<ShiftTradeScheduleViewModelData>.Is.Anything))
 			            .Return(model);
 
-			var target = new RequestsController(modelFactory, null, null, null, null, new FakePermissionProvider(), null);
+			var target = new RequestsController(modelFactory, null, null, null, null, new FakePermissionProvider(), _timeFilterHelper);
 
-			var result = target.ShiftTradeRequestSchedule(DateOnly.Today, Guid.NewGuid().ToString(), new Paging());
-			result.Data.Should().Be.SameInstanceAs(model);
-		}
-
-		[Test]
-		public void ShouldGetScheduleModelForAllTeam()
-		{
-			var modelFactory = MockRepository.GenerateMock<IRequestsViewModelFactory>();
-			var model = new ShiftTradeScheduleViewModel();
-
-			modelFactory.Stub(x => x.CreateShiftTradeScheduleViewModelForAllTeams(Arg<ShiftTradeScheduleViewModelDataForAllTeams>.Is.Anything))
-			            .Return(model);
-
-			var target = new RequestsController(modelFactory, null, null, null, null, new FakePermissionProvider(), null);
-
-			var result = target.ShiftTradeRequestScheduleForAllTeams(DateOnly.Today, Guid.NewGuid().ToString(), new Paging());
-			result.Data.Should().Be.SameInstanceAs(model);
-		}
-
-		[Test]
-		public void ShouldGetScheduleModelForOneTeamWithTimeFilter()
-		{
-			var modelFactory = MockRepository.GenerateMock<IRequestsViewModelFactory>();
-			var timeFilterHelper = MockRepository.GenerateMock<ITimeFilterHelper>();
-			var model = new ShiftTradeScheduleViewModel();
-
-			modelFactory.Stub(x => x.CreateShiftTradeScheduleViewModel(Arg<ShiftTradeScheduleViewModelData>.Is.Anything))
-							.Return(model);
-
-			
-
-			var target = new RequestsController(modelFactory, null, null, null, null, new FakePermissionProvider(), timeFilterHelper);
-
-			var result = target.ShiftTradeRequestScheduleByFilterTime(DateOnly.Today, Guid.NewGuid().ToString(), "8:00-10:00", "16:00-18:00", false, new Paging());
-			result.Data.Should().Be.SameInstanceAs(model);
-		}
-
-		[Test]
-		public void ShouldGetScheduleModelForAllTeamWithTimeFilter()
-		{
-			var modelFactory = MockRepository.GenerateMock<IRequestsViewModelFactory>();
-			var timeFilterHelper = MockRepository.GenerateMock<ITimeFilterHelper>();
-			var model = new ShiftTradeScheduleViewModel();
-
-			modelFactory.Stub(x => x.CreateShiftTradeScheduleViewModelForAllTeams(Arg<ShiftTradeScheduleViewModelDataForAllTeams>.Is.Anything))
-							.Return(model);
-
-			var target = new RequestsController(modelFactory, null, null, null, null, new FakePermissionProvider(), timeFilterHelper);
-
-			var result = target.ShiftTradeRequestScheduleForAllTeamsByFilterTime(DateOnly.Today, Guid.NewGuid().ToString(), "8:00-10:00", "16:00-18:00", true, new Paging());
+			var result = target.ShiftTradeRequestSchedule(DateOnly.Today, new ScheduleFilter
+			{
+				TeamIds = Guid.NewGuid().ToString(),
+				FilteredStartTimes = "8:00-10:00",
+				FilteredEndTimes = "16:00-18:00",
+				IsDayOff = true
+			}, new Paging());
 			result.Data.Should().Be.SameInstanceAs(model);
 		}
 
@@ -439,5 +404,6 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			target.Type.Should().Be.EqualTo(expected.Type);
 			target.UpdatedOn.Should().Be.EqualTo(expected.UpdatedOn);
 		}
+		
 	}
 }

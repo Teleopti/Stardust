@@ -26,6 +26,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.ViewModelFactory
 	[TestFixture]
 	public class RequestsViewModelFactoryTest
 	{
+		
 		[Test]
 		public void ShouldRetrieveDatePickerFormatForPersonForViewModel()
 		{
@@ -255,14 +256,19 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.ViewModelFactory
 
 			target.CreateShiftTradeMyTeamSimpleViewModel(shiftTradeDate).Should().Be.EqualTo(string.Empty);
 		}
-
+		
 		[Test]
 		public void ShouldRetrieveShiftTradeScheduleViewModel()
 		{
 			var mapper = MockRepository.GenerateMock<IShiftTradeScheduleViewModelMapper>();
 			var target = new RequestsViewModelFactory(null, null, null, null, null, null, null, null, null, mapper, null);
 			var viewModel = new ShiftTradeScheduleViewModel();
-			var data = new ShiftTradeScheduleViewModelData { ShiftTradeDate = DateOnly.Today, TeamId = Guid.NewGuid() };
+			var teamId = Guid.NewGuid();
+			var data = new ShiftTradeScheduleViewModelData
+			{
+				ShiftTradeDate = DateOnly.Today,
+				TeamIdList = new List<Guid> {teamId}
+			};
 
 			mapper.Stub(x => x.Map(Arg<ShiftTradeScheduleViewModelData>.Is.Anything)).Return(viewModel);
 

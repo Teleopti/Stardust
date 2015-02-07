@@ -19,9 +19,9 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.ViewModelFactory
 			var mapper = MockRepository.GenerateMock<IShiftTradeScheduleViewModelMapper>();
 			var target = new RequestsShiftTradebulletinViewModelFactory(mapper);
 			var viewModel = new ShiftTradeScheduleViewModel();
-			var data = new ShiftTradeScheduleViewModelDataForAllTeams { ShiftTradeDate = DateOnly.Today, TeamIds = new List<Guid>(){ Guid.NewGuid()} };
+			var data = new ShiftTradeScheduleViewModelData { ShiftTradeDate = DateOnly.Today, TeamIdList = new List<Guid>() { Guid.NewGuid() } };
 
-			mapper.Stub(x => x.MapForBulletin(Arg<ShiftTradeScheduleViewModelDataForAllTeams>.Is.Anything)).Return(viewModel);
+			mapper.Stub(x => x.MapForBulletin(Arg<ShiftTradeScheduleViewModelData>.Is.Anything)).Return(viewModel);
 
 			var result = target.CreateShiftTradeBulletinViewModel(data);
 			result.Should().Be.SameInstanceAs(viewModel);

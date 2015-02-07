@@ -59,9 +59,13 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 					BusinessUnitId = Guid.NewGuid()
 				};
 			var date = DateOnly.Today;
-			var data = new ShiftTradeScheduleViewModelData { ShiftTradeDate = date, TeamId = myTeam.Id.Value };
+			var data = new ShiftTradeScheduleViewModelData
+			{
+				ShiftTradeDate = date,
+				TeamIdList = new List<Guid> {myTeam.Id.GetValueOrDefault()}
+			};
 
-			personForShiftTradeRepository.Expect(rep => rep.GetPersonForShiftTrade(data.ShiftTradeDate, myTeam.Id.Value))
+			personForShiftTradeRepository.Expect(rep => rep.GetPersonForShiftTrade(data.ShiftTradeDate,data.TeamIdList , data.SearchNameText))
 											.Return(new List<IAuthorizeOrganisationDetail> { currentUserGuids });
 
 			personRepository.Expect(rep => rep.FindPeople(new List<Guid>())).Return(new Collection<IPerson>());
@@ -71,7 +75,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 			result.Date.Should().Be.EqualTo(data.ShiftTradeDate);
 			result.Persons.Should().Be.Empty();
 		}
-
+		
 		[Test]
 		public void ShouldReturnPossiblePersonsToTradeShiftWithForOneTeam()
 		{
@@ -79,9 +83,13 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 			personInMyTeam.SetId(Guid.NewGuid());
 			var personInMyTeamGuids = new PersonSelectorShiftTrade { PersonId = personInMyTeam.Id.Value, TeamId = myTeam.Id, SiteId = Guid.NewGuid(), BusinessUnitId = Guid.NewGuid() };
 			var date = DateOnly.Today;
-			var data = new ShiftTradeScheduleViewModelData { ShiftTradeDate = date, TeamId = myTeam.Id.Value };
+			var data = new ShiftTradeScheduleViewModelData
+			{
+				ShiftTradeDate = date,
+				TeamIdList = new List<Guid> {myTeam.Id.GetValueOrDefault()}
+			};
 
-			personForShiftTradeRepository.Expect(rep => rep.GetPersonForShiftTrade(data.ShiftTradeDate, myTeam.Id.Value))
+			personForShiftTradeRepository.Expect(rep => rep.GetPersonForShiftTrade(data.ShiftTradeDate, data.TeamIdList, data.SearchNameText))
 											.Return(new List<IAuthorizeOrganisationDetail> { personInMyTeamGuids });
 			permissionProvider.Expect(
 				perm =>
@@ -98,9 +106,9 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 
 			result.Persons.First().Should().Be.SameInstanceAs(personInMyTeam);
 		}
-
+		
 		[Test]
-		public void ShouldReturnPossiblePersonsToTradeShiftWithForAllTeams()
+		public void ShouldReturnPossiblePersonsToTradeShiftWithWhenSelectedAllTeams()
 		{
 			var personInMyTeam = new Person();
 			personInMyTeam.SetId(Guid.NewGuid());
@@ -108,9 +116,10 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 			var date = DateOnly.Today;
 			var teamIds = new List<Guid>();
 			teamIds.Add(myTeam.Id.Value);
-			var data = new ShiftTradeScheduleViewModelDataForAllTeams { ShiftTradeDate = date, TeamIds = teamIds};
+			string teamIdsString = string.Join(",", teamIds.ToArray());
+			var data = new ShiftTradeScheduleViewModelData { ShiftTradeDate = date, TeamIdList = teamIds };
 
-			personForShiftTradeRepository.Expect(rep => rep.GetPersonForShiftTrade(data.ShiftTradeDate, myTeam.Id.Value))
+			personForShiftTradeRepository.Expect(rep => rep.GetPersonForShiftTrade(data.ShiftTradeDate, data.TeamIdList, data.SearchNameText))
 											.Return(new List<IAuthorizeOrganisationDetail> { personInMyTeamGuids });
 			permissionProvider.Expect(
 				perm =>
@@ -123,11 +132,11 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 				val => val.Validate(new ShiftTradeAvailableCheckItem(data.ShiftTradeDate, currentUser, personInMyTeam)))
 							   .Return(new ShiftTradeRequestValidationResult(true));
 			
-			var result = target.RetrievePersonsForAllTeams(data);
+			var result = target.RetrievePersons(data);
 
 			result.Persons.First().Should().Be.SameInstanceAs(personInMyTeam);
 		}
-
+		
 		[Test]
 		public void ShouldFilterPersonsWithNoPermissionToViewSchedules()
 		{
@@ -139,9 +148,9 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 			var validAgentGuids = new PersonSelectorShiftTrade { PersonId = validAgent.Id.Value, TeamId = myTeam.Id, SiteId = Guid.NewGuid(), BusinessUnitId = Guid.NewGuid() };
 			var invalidAgentGuids = new PersonSelectorShiftTrade { PersonId = invalidAgent.Id.Value, TeamId = myTeam.Id, SiteId = Guid.NewGuid(), BusinessUnitId = Guid.NewGuid() };
 			var date = DateOnly.Today;
-			var data = new ShiftTradeScheduleViewModelData { ShiftTradeDate = date, TeamId = myTeam.Id.Value };
+			var data = new ShiftTradeScheduleViewModelData { ShiftTradeDate = date, TeamIdList = new List<Guid>(){myTeam.Id.GetValueOrDefault()}};
 
-			personForShiftTradeRepository.Expect(rep => rep.GetPersonForShiftTrade(data.ShiftTradeDate, myTeam.Id.Value))
+			personForShiftTradeRepository.Expect(rep => rep.GetPersonForShiftTrade(data.ShiftTradeDate,data.TeamIdList,data.SearchNameText))
 											.Return(new List<IAuthorizeOrganisationDetail> { validAgentGuids, invalidAgentGuids });
 			permissionProvider.Expect(
 				perm =>
@@ -162,6 +171,44 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 
 			result.Persons.Should().Contain(validAgent);
 			result.Persons.Should().Not.Contain(invalidAgent);
+		}
+
+		[Test]
+		public void ShouldReturnPossiblePersonsToTradeShiftWhenSearchNameText()
+		{
+			var person1InMyTeam = new Person();
+			person1InMyTeam.Name = new Name("1", "person");
+			person1InMyTeam.SetId(Guid.NewGuid());
+
+			var person2InMyTeam = new Person();
+			person2InMyTeam.Name=new Name("2","person");
+			person2InMyTeam.SetId(Guid.NewGuid());
+			var person2InMyTeamGuids = new PersonSelectorShiftTrade { PersonId = person2InMyTeam.Id.Value, TeamId = myTeam.Id, SiteId = Guid.NewGuid(), BusinessUnitId = Guid.NewGuid() };
+			
+			var date = DateOnly.Today;
+			var data = new ShiftTradeScheduleViewModelData
+			{
+				ShiftTradeDate = date,
+				TeamIdList = new List<Guid> { myTeam.Id.GetValueOrDefault() },
+				SearchNameText = person2InMyTeam.Name.FirstName
+			};
+
+			personForShiftTradeRepository.Expect(rep => rep.GetPersonForShiftTrade(data.ShiftTradeDate, data.TeamIdList, data.SearchNameText))
+											.Return(new List<IAuthorizeOrganisationDetail> { person2InMyTeamGuids });
+			permissionProvider.Expect(
+				perm =>
+				perm.HasOrganisationDetailPermission(DefinedRaptorApplicationFunctionPaths.ViewSchedules, data.ShiftTradeDate,
+													 person2InMyTeamGuids)).Return(true);
+			permissionProvider.Expect(perm => perm.IsPersonSchedulePublished(data.ShiftTradeDate, person2InMyTeam)).Return(true);
+			personRepository.Expect(rep => rep.FindPeople(new[] { person2InMyTeamGuids.PersonId }))
+							.Return(new Collection<IPerson>(new List<IPerson> { person2InMyTeam }));
+			shiftTradeValidator.Expect(
+				val => val.Validate(new ShiftTradeAvailableCheckItem(data.ShiftTradeDate, currentUser, person2InMyTeam)))
+							   .Return(new ShiftTradeRequestValidationResult(true));
+
+			var result = target.RetrievePersons(data);
+
+			result.Persons.First().Should().Be.SameInstanceAs(person2InMyTeam);
 		}
 	}
 }

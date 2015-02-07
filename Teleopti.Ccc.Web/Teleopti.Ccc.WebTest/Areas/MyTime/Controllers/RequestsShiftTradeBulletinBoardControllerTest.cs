@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using NUnit.Framework;
 using Rhino.Mocks;
 using SharpTestsEx;
@@ -27,7 +28,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			var modelFactory = MockRepository.GenerateMock<IRequestsShiftTradebulletinViewModelFactory>();
 			var model = new ShiftTradeScheduleViewModel();
 
-			modelFactory.Stub(x => x.CreateShiftTradeBulletinViewModel(Arg<ShiftTradeScheduleViewModelDataForAllTeams>.Is.Anything))
+			modelFactory.Stub(x => x.CreateShiftTradeBulletinViewModel(Arg<ShiftTradeScheduleViewModelData>.Is.Anything))
 							.Return(model);
 
 			var target = new RequestsShiftTradeBulletinBoardController(modelFactory, _timeFilterHelper);
@@ -39,19 +40,16 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		[Test]
 		public void ShouldGetAllBulletinSchedulesWithFilters()
 		{
-			const bool isDayOff = true;
-
 			var modelFactory = MockRepository.GenerateMock<IRequestsShiftTradebulletinViewModelFactory>();
 			var model = new ShiftTradeScheduleViewModel();
 
 			modelFactory.Stub(
-				x => x.CreateShiftTradeBulletinViewModel(Arg<ShiftTradeScheduleViewModelDataForAllTeams>.Is.Anything))
+				x => x.CreateShiftTradeBulletinViewModel(Arg<ShiftTradeScheduleViewModelData>.Is.Anything))
 				.Return(model);
 
 			var target = new RequestsShiftTradeBulletinBoardController(modelFactory, _timeFilterHelper);
 
-			var result = target.BulletinSchedulesWithTimeFilter(DateOnly.Today, Guid.NewGuid().ToString(), "", "", isDayOff,
-				false, new Paging());
+			var result = target.BulletinSchedulesWithTimeFilter(DateOnly.Today, new ScheduleFilter { TeamIds = Guid.NewGuid().ToString() }, new Paging());
 			result.Data.Should().Be.SameInstanceAs(model);
 		}
 	}
