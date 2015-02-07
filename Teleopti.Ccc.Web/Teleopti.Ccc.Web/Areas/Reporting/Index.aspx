@@ -13,7 +13,7 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head runat="server">
-	<title>Title</title>
+	<title></title>
 	<script type="text/javascript" src="../../Content/jquery/jquery-1.10.2.min.js"></script>
 	<script type="text/javascript" src="Content/Scripts/persianDatepicker.min.js"></script>
 	<link href="Content/Styles/persianDatepicker-default.css" rel="stylesheet" />
@@ -43,6 +43,9 @@
 											? Selector.BusinessHierarchyCode
 											: new Guid(Request.Form.Get(groupPageComboBoxControlCollectionIdName));
 				ParameterSelector.GroupPageCode = GroupPageCode;
+				commonReports.LoadReportInfo();
+				Page.Header.Title = commonReports.Name;
+				labelRepCaption.Text = commonReports.Name;
 			}
 			else
 			{
@@ -52,7 +55,7 @@
 				labelPermissionDenied.Visible = true;
 				ParameterSelector.Visible = false;
 				labelPermissionDenied.Text = Resources.ResPermissionDenied;
-				//labelRepCaption.Text = "";
+				Page.Header.Title = Resources.ResPermissionDenied;
 			}
 		}
 	}
@@ -81,6 +84,10 @@
 		createReport("Excel");
 	}
 
+	private void buttonShowClickWord(object sender, ImageClickEventArgs e)
+	{
+		createReport("Word");
+	}
 	private void createReport(string format)
 	{
 		//aspnetForm.Target = "_blank";
@@ -90,7 +97,7 @@
 		var texts = ParameterSelector.ParameterTexts;
 		commonReports.LoadReportInfo();
 		DataSet dataset = commonReports.GetReportData(ParameterSelector.UserCode, ParameterSelector.BusinessUnitCode, sqlParams);
-
+		
 		string reportName = commonReports.ReportFileName;
 		string reportPath = Server.MapPath(reportName);
 		IList<ReportParameter> @params = new List<ReportParameter>();
@@ -149,13 +156,13 @@
 </script>
 
 <body >
-	<form id="aspnetForm" runat="server">
+	<div class="Caption">
+		<div class="ReportName" style="padding-top: 2px">
+			<asp:Label ID="labelRepCaption" runat="server" Text=""></asp:Label>
+		</div>
+	</div>
+	<form id="aspnetForm" style="margin-top: 50px" runat="server">
 		<asp:ScriptManager ID="ScriptManager1" EnablePartialRendering="true" runat="server" EnableScriptGlobalization="true" EnableScriptLocalization="true" />
-		<%--<div class="Caption">
-				<div style="float: left; padding-top: 2px">
-					<asp:Label ID="labelRepCaption" CssClass="ReportName" runat="server" Text="xxxRapportnamnet"></asp:Label>
-				</div>
-			</div>--%>
 		<div class="Panel">
 			<div class="DetailsView" style="height: 80%; overflow: auto">
 				<Analytics:Selector LabelWidth="30%" List1Width="75%" ID="ParameterSelector" name="ParameterSelector" runat="server" OnInit="Selector_OnInit"></Analytics:Selector>
@@ -164,11 +171,14 @@
 					<asp:Label ID="labelPermissionDenied" runat="server" ForeColor="Red" Font-Size="Large" Visible="false"></asp:Label>
 				</div>
 				<div style="float: right; width: 69%">
-					<div style="float: left; width: 50%;">
+					<div style="float: left; width: 33%;">
 						<asp:ImageButton Style="float: right;margin-right: 25px" formtarget="_blank" OnClick="buttonShowClickPdf" ID="buttonShowPdf" Width="48" Height="48" ImageUrl="images/filetype_pdf.png" ToolTip='Show PDF report' runat="server" />
 					</div>
-					<div style="float: right; width: 50%">
+					<div style="float: right; width: 33%">
 						<asp:ImageButton Style="float: left" formtarget="_blank" OnClick="buttonShowClickExcel" ID="buttonShowExcel" Width="48" Height="48" ImageUrl="images/excel.png" ToolTip='Show Excel report' runat="server" />
+					</div>
+					<div style="float: right; width: 20%">
+						<asp:ImageButton Style="float: left" formtarget="_blank" OnClick="buttonShowClickWord" ID="buttonShowWord" Width="48" Height="48" ImageUrl="images/icon.doc.png" ToolTip='Show Word report' runat="server" />
 					</div>
 				</div>
 			</div>
