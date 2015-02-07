@@ -12787,18 +12787,22 @@ Reduce the complexity to use these shifts.</value>
     <value>On {0} you have not been allocated a seat.</value>
     <comment>Used in Seat Planner when an agent was not allocated a seat for a given day</comment>
   </data>
-   <data name="StartDateMustBeEndDateOrSmaller" xml:space="preserve">
+  <data name="StartDateMustBeEndDateOrSmaller" xml:space="preserve">
     <value>Start date must be end date or smaller</value>
   </data>
   <data name="StartDateMustBeTodayOrGreater" xml:space="preserve">
     <value>Start date must be today or greater</value>
   </data>
-    <data name="AnonymousBulletinBoardTrading" xml:space="preserve">
+  <data name="AnonymousBulletinBoardTrading" xml:space="preserve">
     <value>Anonymous Bulletin Board Trading</value>
     <comment>used by the check box under shift trade request tab in admin client settings of work flow control set </comment>
   </data>
   <data name="Miscellaneous" xml:space="preserve">
     <value>Miscellaneous</value>
     <comment>the colleciton of shift trade related settings under shift trade request tab in admin client settings of work flow control set</comment>
+  </data>
+  <data name="SearchHintForName" xml:space="preserve">
+    <value>Search agent name</value>
+    <comment>Search agent by name</comment>
   </data>
 </root>

@@ -449,3 +449,36 @@ border-bottom: 1px solid rgba(255, 255, 255, 0.3);
 	border: 0;
 	outline: none;
 }
+
+.row > .input-group {
+	margin-left: 15px;
+}
+
+.input-right-inner-addon {
+    position: relative;
+}
+
+.input-right-inner-addon input {
+    padding-right: 30px;    
+}
+
+.input-right-inner-addon span {
+    position: absolute;
+    right: 0px;
+    padding: 13px 12px;
+    pointer-events: none;
+}
+.glyphicon-refresh-animate {
+    -animation: spin 2s infinite linear;
+    -webkit-animation: spin2 2s infinite linear;
+}
+
+@-webkit-keyframes spin2 {
+    from { -webkit-transform: rotate(0deg);}
+    to { -webkit-transform: rotate(360deg);}
+}
+
+@keyframes spin {
+    from { transform: scale(1) rotate(0deg);}
+    to { transform: scale(1) rotate(360deg);}
+}

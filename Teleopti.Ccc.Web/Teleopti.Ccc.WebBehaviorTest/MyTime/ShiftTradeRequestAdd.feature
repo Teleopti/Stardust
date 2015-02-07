@@ -30,6 +30,10 @@ Background:
 	| Field      | Value      |
 	| Start date | 2012-06-18 |
 	| Team       | My team    |
+	And OtherAgent1 has a person period with
+	| Field      | Value      |
+	| Start date | 2012-06-18 |
+	| Team       | My team    |
 	And OtherAgent2 has a person period with
 	| Field      | Value      |
 	| Start date | 2012-06-18 |
@@ -723,3 +727,30 @@ Scenario: Show possible shift trades from All
 	And I select the 'All'
 	Then I should see a possible schedule trade with 'OtherAgent'
 	And I should see a possible schedule trade with 'OtherAgentNotInMyTeam' 
+
+@OnlyRunIfEnabled('MyTimeWeb_SortSchedule_32092')
+Scenario: Show possible shift trades with name filter
+	Given I have the role 'Full access to mytime'
+	And I have the workflow control set 'Trade from tomorrow until 30 days forward'
+	And OtherAgent1 has the workflow control set 'Trade from tomorrow until 30 days forward'
+	And OtherAgent2 has the workflow control set 'Trade from tomorrow until 30 days forward'
+	And I have a shift with
+	| Field                 | Value            |
+	| StartTime             | 2030-01-01 06:00 |
+	| EndTime               | 2030-01-01 16:00 |
+	| Shift category		| Day	           |
+	And OtherAgent1 has a shift with
+	| Field                 | Value            |
+	| StartTime             | 2030-01-01 10:00 |
+	| EndTime               | 2030-01-01 20:00 |
+	| Shift category		| Late	           |
+	And OtherAgent2 has a shift with
+	| Field          | Value            |
+	| StartTime      | 2030-01-01 10:00 |
+	| EndTime        | 2030-01-01 20:00 |
+	| Shift category | Late             |
+	And the time is '2029-12-27'
+	When I view Add Shift Trade Request for date '2030-01-01'
+	And I type '2' in the name search box 
+	Then I should see a possible schedule trade with 'OtherAgent2'
+	And I should not see a possible schedule trade with 'OtherAgent1' 

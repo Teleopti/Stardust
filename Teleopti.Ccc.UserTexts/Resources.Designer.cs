@@ -22046,6 +22046,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Search agent name.
+        /// </summary>
+        public static string SearchHintForName {
+            get {
+                return ResourceManager.GetString("SearchHintForName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Searching for data sources....
         /// </summary>
         public static string SearchingForDataSourcesTreeDots {
