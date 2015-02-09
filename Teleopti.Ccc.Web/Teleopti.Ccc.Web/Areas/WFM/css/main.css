@@ -31,7 +31,6 @@
   color: rgba(0, 0, 0, 0.54); }
 
 .navbar {
-  background-image: none;
   background-color: #1976D2;
   border: none; }
   .navbar a {
@@ -46,12 +45,9 @@
 input {
   width: 100%;
   margin: 5px 0;
-  padding: 3px;
+  padding: 10px;
   border: none;
   border-bottom: 1px solid #E0E0E0 !important; }
-
-.container > hr {
-  margin-top: 10px !important; }
 
 .filter-form svg {
   margin-top: 8px;
@@ -74,7 +70,7 @@ input {
     text-align: center; }
     .wfm-toggle-group li label {
       width: 100%;
-      padding: 4px;
+      padding: 12px;
       margin-top: -1px;
       text-transform: uppercase;
       cursor: pointer;
@@ -91,7 +87,7 @@ input {
 .inline-role-name {
   margin: 0;
   padding: 0;
-  width: 65%;
+  width: 60%;
   color: black;
   border-bottom: none !important; }
 

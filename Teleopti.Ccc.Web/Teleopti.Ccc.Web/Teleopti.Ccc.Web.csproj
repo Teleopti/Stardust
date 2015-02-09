@@ -1536,9 +1536,7 @@
     <Content Include="Areas\Anywhere\Content\Templates\teamschedule\view.html" />
     <Content Include="Areas\Anywhere\Content\Translation\TranslationTemplate.txt" />
     <Content Include="Areas\WFM\css\animation.css" />
-    <Content Include="Areas\WFM\css\form.css" />
     <Content Include="Areas\WFM\css\material-spinner.css" />
-    <Content Include="Areas\WFM\css\_buttons.scss" />
     <Content Include="Areas\WFM\css\_list.scss" />
     <None Include="Areas\WFM\css\_material.scss" />
     <Content Include="Areas\WFM\html\forecasting-run.html" />

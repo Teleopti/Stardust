@@ -39,7 +39,6 @@
 }
 
 .navbar {
-    background-image: none;
     background-color: $blue-500;
     border :none;
 
@@ -58,13 +57,9 @@
 input {
 	width: 100%;
 	margin: 5px 0;
-	padding: $half-padding;
+	padding: $full-padding;
 	border: none;
 	border-bottom: 1px solid $gray-300 !important;
-}
-
-.container > hr {
-	margin-top: 10px !important;
 }
 
 .filter-form svg {
@@ -91,7 +86,7 @@ input {
 	
 		label {
 			width: 100%;
-			padding: 4px;
+			padding: 12px;
 			margin-top:-1px;
 			text-transform: uppercase;
 			cursor:pointer;
