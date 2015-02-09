@@ -70,10 +70,10 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.Senior
                 var juniorScheduleDayToRemoveDayOff = scheduleRangeJunior.ScheduledDay(daysToSwap.DateForSeniorDayOff);
                 var seniorScheduleDayToRemoveDayOff = scheduleRangeSenior.ScheduledDay(daysToSwap.DateForRemovingSeniorDayOff);
                 var juniorScheduleDayToHaveDayOff = scheduleRangeJunior.ScheduledDay(daysToSwap.DateForRemovingSeniorDayOff);
-                totalModifyList.AddRange(_swapServiceNew.Swap(new List<IScheduleDay> { seniorScheduleDayToHaveDayOff, juniorScheduleDayToRemoveDayOff },
-                                         scheduleDictionary));
-                totalModifyList.AddRange(_swapServiceNew.Swap(new List<IScheduleDay> { seniorScheduleDayToRemoveDayOff, juniorScheduleDayToHaveDayOff },
-                                         scheduleDictionary));
+
+	            if (!validateContractTime(seniorScheduleDayToHaveDayOff, juniorScheduleDayToHaveDayOff)) return false;
+	            totalModifyList.AddRange(_swapServiceNew.Swap(new List<IScheduleDay> {seniorScheduleDayToHaveDayOff, juniorScheduleDayToRemoveDayOff}, scheduleDictionary));
+	            totalModifyList.AddRange(_swapServiceNew.Swap(new List<IScheduleDay> {seniorScheduleDayToRemoveDayOff, juniorScheduleDayToHaveDayOff}, scheduleDictionary));
             }
 
             rollbackService.ClearModificationCollection();
@@ -88,6 +88,13 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.Senior
 
             return true;
         }
+
+		private bool validateContractTime(IScheduleDay scheduleDaySenior, IScheduleDay scheduleDayJunior)
+		{
+			var contractTimeSenior = scheduleDaySenior.ProjectionService().CreateProjection().ContractTime();
+			var contractTimeJunior = scheduleDayJunior.ProjectionService().CreateProjection().ContractTime();
+			return contractTimeJunior.Equals(contractTimeSenior);
+		}
 
         private bool validate(ITeamBlockInfo mostSeniorTeamBlock, ITeamBlockInfo blockToSwapWith, IOptimizationPreferences optimizationPreferences)
         {

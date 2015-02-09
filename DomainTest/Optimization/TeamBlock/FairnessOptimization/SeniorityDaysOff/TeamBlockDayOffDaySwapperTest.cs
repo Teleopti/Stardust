@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using NUnit.Framework;
 using Rhino.Mocks;
 using Teleopti.Ccc.Domain.GroupPageCreator;
@@ -38,6 +39,10 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock.FairnessOptimization.Se
 		private PossibleSwappableDays _daysToSwap;
 	    private IPostSwapValidationForTeamBlock _postSwapValidationForTeamBlock;
 		private ITeamBlockShiftCategoryLimitationValidator _teamBlockShiftCategoryLimitationValidator;
+		private IProjectionService _projectionService1;
+		private IProjectionService _projectionService2;
+		private IVisualLayerCollection _visualLayerCollection1;
+		private IVisualLayerCollection _visualLayerCollection2;
 
 	    [SetUp]
 		public void Setup()
@@ -78,6 +83,11 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock.FairnessOptimization.Se
 				DateForSeniorDayOff = _dateOnly,
 				DateForRemovingSeniorDayOff = _dateBefore
 			};
+
+		    _projectionService1 = _mocks.StrictMock<IProjectionService>();
+		    _projectionService2 = _mocks.StrictMock<IProjectionService>();
+		    _visualLayerCollection1 = _mocks.StrictMock<IVisualLayerCollection>();
+		    _visualLayerCollection2 = _mocks.StrictMock<IVisualLayerCollection>();
 		}
 
 		[Test]
@@ -112,6 +122,13 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock.FairnessOptimization.Se
 			using (_mocks.Record())
 			{
 				commonMocks(seniorToHaveDayOffScheduleDay, juniorToRemoveDayOffScheduleDay, seniorGiveDayOffScheduleDay, juniorAcceptDayOffScheduleDay, swapList1, swapList2);
+				Expect.Call(_swapServiceNew.Swap(new List<IScheduleDay> { seniorToHaveDayOffScheduleDay, juniorToRemoveDayOffScheduleDay }, _scheduleDictionary)).Return(swapList1);
+				Expect.Call(_swapServiceNew.Swap(new List<IScheduleDay> { seniorGiveDayOffScheduleDay, juniorAcceptDayOffScheduleDay }, _scheduleDictionary)).Return(swapList2);
+				Expect.Call(_projectionService1.CreateProjection()).Return(_visualLayerCollection1);
+				Expect.Call(_projectionService2.CreateProjection()).Return(_visualLayerCollection2);
+				Expect.Call(_visualLayerCollection1.ContractTime()).Return(TimeSpan.FromHours(8));
+				Expect.Call(_visualLayerCollection2.ContractTime()).Return(TimeSpan.FromHours(8));
+
 				Expect.Call(() => _rollbackService.ClearModificationCollection()).Repeat.Twice();
 				Expect.Call(_rollbackService.ModifyParts(swapList)).Return(new List<IBusinessRuleResponse>());
                 Expect.Call(_postSwapValidationForTeamBlock.Validate(_teamBlockInfoSenior, _optimizationPreferences))
@@ -151,6 +168,13 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock.FairnessOptimization.Se
 			using (_mocks.Record())
 			{
 				commonMocks(seniorToHaveDayOffScheduleDay, juniorToRemoveDayOffScheduleDay, seniorGiveDayOffScheduleDay, juniorAcceptDayOffScheduleDay, swapList1, swapList2);
+				Expect.Call(_swapServiceNew.Swap(new List<IScheduleDay> { seniorToHaveDayOffScheduleDay, juniorToRemoveDayOffScheduleDay }, _scheduleDictionary)).Return(swapList1);
+				Expect.Call(_swapServiceNew.Swap(new List<IScheduleDay> { seniorGiveDayOffScheduleDay, juniorAcceptDayOffScheduleDay }, _scheduleDictionary)).Return(swapList2);
+				Expect.Call(_projectionService1.CreateProjection()).Return(_visualLayerCollection1);
+				Expect.Call(_projectionService2.CreateProjection()).Return(_visualLayerCollection2);
+				Expect.Call(_visualLayerCollection1.ContractTime()).Return(TimeSpan.FromHours(8));
+				Expect.Call(_visualLayerCollection2.ContractTime()).Return(TimeSpan.FromHours(8));
+
 				Expect.Call(() => _rollbackService.ClearModificationCollection()).Repeat.AtLeastOnce();
 				Expect.Call(_rollbackService.ModifyParts(swapList)).Return(new List<IBusinessRuleResponse> { response });
 				Expect.Call(()=>_rollbackService.Rollback());
@@ -163,23 +187,37 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock.FairnessOptimization.Se
 			}
 		}
 
-        //[Test]
-        //public void ShouldBeAbleToCancel()
-        //{
-        //    using (_mocks.Record())
-        //    {
-        //        Expect.Call(_decisionMaker.Decide(_dateOnly, _teamBlockInfoSenior, _teamBlockInfoJunior, _scheduleDictionary,
-        //                                      _optimizationPreferences, _dayOffsToGiveAway)).Return(_daysToSwap);
-        //        Expect.Call(() => _rollbackService.ClearModificationCollection());
-        //    }
-        //    using (_mocks.Playback())
-        //    {
-        //        _target.Cancel();
-        //        var result = _target.TrySwap(_dateOnly, _teamBlockInfoSenior, _teamBlockInfoJunior, _rollbackService,
-        //                                     _scheduleDictionary, _optimizationPreferences, _dayOffsToGiveAway);
-        //        Assert.IsFalse(result);
-        //    }
-        //}
+		[Test]
+		public void ShouldNotSwapWhenContractTimeDiffers()
+		{
+			var seniorToHaveDayOffScheduleDay = _mocks.StrictMock<IScheduleDay>();
+			var juniorToRemoveDayOffScheduleDay = _mocks.StrictMock<IScheduleDay>();
+			var seniorGiveDayOffScheduleDay = _mocks.StrictMock<IScheduleDay>();
+			var juniorAcceptDayOffScheduleDay = _mocks.StrictMock<IScheduleDay>();
+			var swapList1 = new List<IScheduleDay> { seniorToHaveDayOffScheduleDay, juniorToRemoveDayOffScheduleDay };
+			var swapList2 = new List<IScheduleDay> { seniorGiveDayOffScheduleDay, juniorAcceptDayOffScheduleDay };
+			var swapList = new List<IScheduleDay>();
+			swapList.AddRange(swapList1);
+			swapList.AddRange(swapList2);
+			using (_mocks.Record())
+			{
+				commonMocks(seniorToHaveDayOffScheduleDay, juniorToRemoveDayOffScheduleDay, seniorGiveDayOffScheduleDay, juniorAcceptDayOffScheduleDay, swapList1, swapList2);
+				Expect.Call(_projectionService1.CreateProjection()).Return(_visualLayerCollection1);
+				Expect.Call(_projectionService2.CreateProjection()).Return(_visualLayerCollection2);
+				Expect.Call(_visualLayerCollection1.ContractTime()).Return(TimeSpan.FromHours(8));
+				Expect.Call(_visualLayerCollection2.ContractTime()).Return(TimeSpan.FromHours(7));
+
+				Expect.Call(() => _rollbackService.ClearModificationCollection());
+				
+			}
+			using (_mocks.Playback())
+			{
+				var result = _target.TrySwap(_dateOnly, _teamBlockInfoSenior, _teamBlockInfoJunior, _rollbackService, _scheduleDictionary, _optimizationPreferences, _dayOffsToGiveAway);
+				Assert.IsFalse(result);
+			}
+		}
+
+       
 
 		private void commonMocks(IScheduleDay seniorToHaveDayOffScheduleDay,
 		                         IScheduleDay juniorToRemoveDayOffScheduleDay, IScheduleDay seniorGiveDayOffScheduleDay,
@@ -193,12 +231,9 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock.FairnessOptimization.Se
 			Expect.Call(_range2.ScheduledDay(_dateOnly)).Return(juniorToRemoveDayOffScheduleDay);
 			Expect.Call(_range1.ScheduledDay(_dateBefore)).Return(seniorGiveDayOffScheduleDay);
 			Expect.Call(_range2.ScheduledDay(_dateBefore)).Return(juniorAcceptDayOffScheduleDay);
-			Expect.Call(
-				_swapServiceNew.Swap(new List<IScheduleDay> {seniorToHaveDayOffScheduleDay, juniorToRemoveDayOffScheduleDay},
-				                     _scheduleDictionary)).Return(swapList1);
-			Expect.Call(_swapServiceNew.Swap(new List<IScheduleDay> {seniorGiveDayOffScheduleDay, juniorAcceptDayOffScheduleDay},
-			                                 _scheduleDictionary)).Return(swapList2);
-            
+
+			Expect.Call(seniorToHaveDayOffScheduleDay.ProjectionService()).Return(_projectionService1);
+			Expect.Call(juniorAcceptDayOffScheduleDay.ProjectionService()).Return(_projectionService2);
 		}
 	}
 }
