@@ -325,7 +325,9 @@ namespace Teleopti.Analytics.Parameters
 					var dbId = (Guid)row["Id"];
 					var name = (string)row["control_name"];
 					var resourceKey = (string)row["control_name_resource_key"];
-					string text = ReportTexts.Resources.ResourceManager.GetString(resourceKey);
+					var text = ReportTexts.Resources.ResourceManager.GetString(resourceKey, new CultureInfo(LanguageId));
+					if(string.IsNullOrEmpty(text))
+						text = ReportTexts.Resources.ResourceManager.GetString(resourceKey);
 					if (string.IsNullOrEmpty(text))
 						text = resourceKey;
 					var defaultValue = (string)row["default_value"];

@@ -63,7 +63,7 @@ namespace Teleopti.Analytics.Parameters
 									DataValueField = "id",
 									ID = "List" + Dbid
 								};
-
+			_listBox.Style.Add("padding", "2px");
 			_label.Text = Text;
 
 			//ListBox nummer två
@@ -76,7 +76,7 @@ namespace Teleopti.Analytics.Parameters
 									 CssClass = "ControlStyle",
 									 ID = "List2" + Dbid
 								 };
-
+			_listBox2.Style.Add("padding", "2px");
 			_textBox = new TextBox { Width = new Unit(0), Height = new Unit(0), ID = "TextHidden" + Dbid };
 			_textBox.Style.Add("position", "absolute");
 			_textBox.Style.Add("left", "-10px");

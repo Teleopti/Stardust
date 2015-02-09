@@ -851,7 +851,7 @@
         <Style />
       </Tablix>
       <Line Name="line3">
-        <Top>5.93274cm</Top>
+        <Top>6.7cm</Top>
         <Left>0.25cm</Left>
         <Height>0cm</Height>
         <Width>27cm</Width>
@@ -1279,7 +1279,7 @@
         <FixedRowHeaders>true</FixedRowHeaders>
         <KeepTogether>true</KeepTogether>
         <DataSetName>DataSet1</DataSetName>
-        <Top>13.74049cm</Top>
+        <Top>14.69299cm</Top>
         <Left>0.25cm</Left>
         <Height>1.90334cm</Height>
         <Width>5.75001cm</Width>
@@ -1562,10 +1562,10 @@
             <VerticalAlign>Top</VerticalAlign>
           </Style>
         </ChartNoDataMessage>
-        <Top>6.69505cm</Top>
+        <Top>6.84111cm</Top>
         <Left>0.25cm</Left>
-        <Height>6.86905cm</Height>
-        <Width>14cm</Width>
+        <Height>7.46382cm</Height>
+        <Width>15.21708cm</Width>
         <ZIndex>3</ZIndex>
         <CustomProperties>
           <CustomProperty>

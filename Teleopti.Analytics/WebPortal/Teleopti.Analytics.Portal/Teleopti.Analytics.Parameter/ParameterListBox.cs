@@ -85,9 +85,9 @@ namespace Teleopti.Analytics.Parameters
 								CssClass = "ControlStyle",
 								DataTextField = "name",
 								DataValueField = "id",
-								ID = "List" + Dbid
+								ID = "List" + Dbid,
 							};
-
+			_listBox.Style.Add("padding","2px");
 			_listBox2 = new ListBox
 							{
 								SelectionMode = ListSelectionMode.Multiple,
@@ -96,7 +96,7 @@ namespace Teleopti.Analytics.Parameters
 								CssClass = "ControlStyle",
 								ID = "List2" + Dbid
 							};
-
+			_listBox2.Style.Add("padding", "2px");
 			_textBox = new TextBox
 						{
 							Width = new Unit(0),

@@ -1964,7 +1964,7 @@ sum(Fields!preferences_fulfilled.Value)/sum(Fields!preferences_requested.Value),
           </Paragraphs>
           <rd:DefaultName>textbox4</rd:DefaultName>
           <Height>1.50529cm</Height>
-          <Width>15.67249cm</Width>
+          <Width>15.80478cm</Width>
           <Style>
             <Border>
               <Color>#d3e5ef</Color>
@@ -2001,9 +2001,9 @@ sum(Fields!preferences_fulfilled.Value)/sum(Fields!preferences_requested.Value),
             </Paragraph>
           </Paragraphs>
           <rd:DefaultName>textbox7</rd:DefaultName>
-          <Left>15cm</Left>
+          <Left>15.98117cm</Left>
           <Height>0.5cm</Height>
-          <Width>3.75cm</Width>
+          <Width>2.76883cm</Width>
           <ZIndex>1</ZIndex>
           <Style>
             <PaddingLeft>2pt</PaddingLeft>

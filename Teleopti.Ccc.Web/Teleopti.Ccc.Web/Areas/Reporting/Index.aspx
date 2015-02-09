@@ -45,7 +45,7 @@
 				ParameterSelector.GroupPageCode = GroupPageCode;
 				commonReports.LoadReportInfo();
 				Page.Header.Title = commonReports.Name;
-				labelRepCaption.Text = commonReports.Name;
+				//labelRepCaption.Text = commonReports.Name;
 			}
 			else
 			{
@@ -69,8 +69,8 @@
 
 		ParameterSelector.ConnectionString = dataSource.Statistic.ConnectionString;
 		ParameterSelector.UserCode = id.GetValueOrDefault();
-		ParameterSelector.BusinessUnitCode = bu.GetValueOrDefault(); 
-		ParameterSelector.LanguageId = ((TeleoptiPrincipalCacheable)princip).Person.PermissionInformation.UICultureLCID().GetValueOrDefault();
+		ParameterSelector.BusinessUnitCode = bu.GetValueOrDefault();
+		ParameterSelector.LanguageId = ((TeleoptiPrincipalCacheable) princip).Person.PermissionInformation.UICulture().LCID;
 
 	}
 
@@ -156,11 +156,11 @@
 </script>
 
 <body >
-	<div class="Caption">
+	<%--<div class="Caption">
 		<div class="ReportName" style="padding-top: 2px">
 			<asp:Label ID="labelRepCaption" runat="server" Text=""></asp:Label>
 		</div>
-	</div>
+	</div>--%>
 	<form id="aspnetForm" style="margin-top: 50px" runat="server">
 		<asp:ScriptManager ID="ScriptManager1" EnablePartialRendering="true" runat="server" EnableScriptGlobalization="true" EnableScriptLocalization="true" />
 		<div class="Panel">
