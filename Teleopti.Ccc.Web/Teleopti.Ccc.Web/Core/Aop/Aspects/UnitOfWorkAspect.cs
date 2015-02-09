@@ -21,13 +21,13 @@ namespace Teleopti.Ccc.Web.Core.Aop.Aspects
 			_context = context;
 		}
 
-		public void OnBeforeInvokation()
+		public void OnBeforeInvocation()
 		{
 			_unitOfWork = _currentUnitOfWorkFactory.LoggedOnUnitOfWorkFactory().CreateAndOpenUnitOfWork();
 			_businessUnitOverrideScope = overrideBusinessUnitFilter();
 		}
 
-		public void OnAfterInvokation(Exception exception)
+		public void OnAfterInvocation(Exception exception)
 		{
 			persistWhenNoExpcetion(exception);
 			diposeBusinessUnitFilterOverride();

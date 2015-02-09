@@ -41,8 +41,8 @@ namespace Teleopti.Ccc.WebTest.Core.Aop.Aspects
 			var currentHttpContext = new FakeCurrentHttpContext(httpContext);
 			var target = new UnitOfWorkAspect(unitOfWorkFactoryProvider, businessUnitFilterOverrider, currentHttpContext);
 
-			target.OnBeforeInvokation();
-			target.OnAfterInvokation(null);
+			target.OnBeforeInvocation();
+			target.OnAfterInvocation(null);
 
 			unitOfWork.AssertWasCalled(x => x.PersistAll());
 			businessUnitOverriderScope.AssertWasCalled(x => x.Dispose());
@@ -69,8 +69,8 @@ namespace Teleopti.Ccc.WebTest.Core.Aop.Aspects
 			var currentHttpContext = new FakeCurrentHttpContext(httpContext);
 			var target = new UnitOfWorkAspect(unitOfWorkFactoryProvider, businessUnitFilterOverrider, currentHttpContext);
 
-			target.OnBeforeInvokation();
-			target.OnAfterInvokation(new Exception());
+			target.OnBeforeInvocation();
+			target.OnAfterInvocation(new Exception());
 
 			unitOfWork.AssertWasNotCalled(x => x.PersistAll());
 			businessUnitOverriderScope.AssertWasCalled(x => x.Dispose());
@@ -94,7 +94,7 @@ namespace Teleopti.Ccc.WebTest.Core.Aop.Aspects
 			uowFactory.Expect(x => x.CreateAndOpenUnitOfWork()).Return(unitOfWork);
 			var target = new UnitOfWorkAspect(unitOfWorkFactoryProvider, businessUnitFilterOverrider, currentHttpContext);
 
-			target.OnBeforeInvokation();
+			target.OnBeforeInvocation();
 
 			businessUnitFilterOverrider.AssertWasCalled(x => x.OverrideWith(guid));
 		}
@@ -116,7 +116,7 @@ namespace Teleopti.Ccc.WebTest.Core.Aop.Aspects
 			uowFactory.Expect(x => x.CreateAndOpenUnitOfWork()).Return(unitOfWork);
 			var target = new UnitOfWorkAspect(unitOfWorkFactoryProvider, businessUnitFilterOverrider, currentHttpContext);
 
-			target.OnBeforeInvokation();
+			target.OnBeforeInvocation();
 
 			businessUnitFilterOverrider.AssertWasCalled(x => x.OverrideWith(guid));
 		}
@@ -140,7 +140,7 @@ namespace Teleopti.Ccc.WebTest.Core.Aop.Aspects
 			uowFactory.Expect(x => x.CreateAndOpenUnitOfWork()).Return(unitOfWork);
 			var target = new UnitOfWorkAspect(unitOfWorkFactoryProvider, businessUnitFilterOverrider, currentHttpContext);
 
-			target.OnBeforeInvokation();
+			target.OnBeforeInvocation();
 
 			businessUnitFilterOverrider.AssertWasCalled(x => x.OverrideWith(idFromCustomHeader));
 		}
@@ -155,7 +155,7 @@ namespace Teleopti.Ccc.WebTest.Core.Aop.Aspects
 			unitOfWorkFactoryProvider.Stub(x => x.LoggedOnUnitOfWorkFactory()).Return(uowFactory);
 			uowFactory.Expect(x => x.CreateAndOpenUnitOfWork()).Return(unitOfWork);
 			var target = new UnitOfWorkAspect(unitOfWorkFactoryProvider, null, currentHttpContext);
-			target.OnBeforeInvokation();
+			target.OnBeforeInvocation();
 		}
 	}
 }

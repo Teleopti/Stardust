@@ -13,13 +13,13 @@ namespace Teleopti.Ccc.Infrastructure.LiteUnitOfWork
 			_currentDataSource = currentDataSource;
 		}
 
-		public void OnBeforeInvokation()
+		public void OnBeforeInvocation()
 		{
 			var factory = _currentDataSource.Current().ReadModel;
 			factory.StartUnitOfWork();
 		}
 
-		public void OnAfterInvokation(Exception exception)
+		public void OnAfterInvocation(Exception exception)
 		{
 			var factory = _currentDataSource.Current().ReadModel;
 			factory.EndUnitOfWork(exception);

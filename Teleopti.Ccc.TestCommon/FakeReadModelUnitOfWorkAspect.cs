@@ -5,11 +5,11 @@ namespace Teleopti.Ccc.TestCommon
 {
 	public class FakeReadModelUnitOfWorkAspect : IReadModelUnitOfWorkAspect
 	{
-		public void OnBeforeInvokation()
+		public void OnBeforeInvocation()
 		{
 		}
 
-		public void OnAfterInvokation(Exception exception)
+		public void OnAfterInvocation(Exception exception)
 		{
 		}
 	}

@@ -12,11 +12,11 @@ namespace Teleopti.Ccc.Infrastructure.MultiTenancy.NHibernate
 			_tenantUnitOfWorkManager = tenantUnitOfWorkManager;
 		}
 
-		public void OnBeforeInvokation()
+		public void OnBeforeInvocation()
 		{
 		}
 
-		public void OnAfterInvokation(Exception exception)
+		public void OnAfterInvocation(Exception exception)
 		{
 			if (exception == null)
 			{
