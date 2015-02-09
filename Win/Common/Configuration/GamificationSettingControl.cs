@@ -467,21 +467,21 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 		{
 			if (selectedGamificationSettingRuleSet == GamificationSettingRuleSet.RuleWithRatioConvertor)
 			{
-				SelectedGamificationSetting.AHTBadgeEnabled =
-					gamificationSettingRuleWithRatioConvertorControl.Value.CurrentSetting.AHTBadgeEnabled;
-				SelectedGamificationSetting.AdherenceBadgeEnabled =
-					gamificationSettingRuleWithRatioConvertorControl.Value.CurrentSetting.AdherenceBadgeEnabled;
-				SelectedGamificationSetting.AnsweredCallsBadgeEnabled =
-					gamificationSettingRuleWithRatioConvertorControl.Value.CurrentSetting.AnsweredCallsBadgeEnabled;
+				gamificationSettingRuleWithRatioConvertorControl.Value.CurrentSetting.AHTBadgeEnabled =
+					SelectedGamificationSetting.AHTBadgeEnabled;
+				gamificationSettingRuleWithRatioConvertorControl.Value.CurrentSetting.AdherenceBadgeEnabled =
+					SelectedGamificationSetting.AdherenceBadgeEnabled;
+				gamificationSettingRuleWithRatioConvertorControl.Value.CurrentSetting.AnsweredCallsBadgeEnabled =
+					SelectedGamificationSetting.AnsweredCallsBadgeEnabled;
 			}
 			else
 			{
-				SelectedGamificationSetting.AHTBadgeEnabled =
-						gamificationSettingRuleWithDifferentThresholdControl.Value.CurrentSetting.AHTBadgeEnabled;
-				SelectedGamificationSetting.AdherenceBadgeEnabled =
-					gamificationSettingRuleWithDifferentThresholdControl.Value.CurrentSetting.AdherenceBadgeEnabled;
-				SelectedGamificationSetting.AnsweredCallsBadgeEnabled =
-					gamificationSettingRuleWithDifferentThresholdControl.Value.CurrentSetting.AnsweredCallsBadgeEnabled;
+				gamificationSettingRuleWithDifferentThresholdControl.Value.CurrentSetting.AHTBadgeEnabled =
+						SelectedGamificationSetting.AHTBadgeEnabled;
+				gamificationSettingRuleWithDifferentThresholdControl.Value.CurrentSetting.AdherenceBadgeEnabled =
+					SelectedGamificationSetting.AdherenceBadgeEnabled;
+				gamificationSettingRuleWithDifferentThresholdControl.Value.CurrentSetting.AnsweredCallsBadgeEnabled =
+					SelectedGamificationSetting.AnsweredCallsBadgeEnabled;
 			}
 		}
 
