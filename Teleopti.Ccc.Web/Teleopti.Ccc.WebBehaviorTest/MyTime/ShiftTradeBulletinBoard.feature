@@ -282,3 +282,28 @@ Scenario: Should not show agent name in shift trade board list
 	And the time is '2029-12-27'
 	When I view Shift Trade Bulletin Board for date '2030-01-01'
 	Then I should not see agent name in the possible schedule trade list
+
+@OnlyRunIfEnabled('MyTimeWeb_AnonymousTrades_31638')
+Scenario: Should not show subject and message box
+	Given I have the role 'Full access to mytime'
+	And I have the workflow control set 'Anonymous trade 30 days forward'
+	And OtherAgent have the workflow control set 'Trade from tomorrow until 30 days forward'
+	And I have a shift with
+	| Field          | Value            |
+	| StartTime      | 2030-01-01 09:00 |
+	| EndTime        | 2030-01-01 17:00 |
+	| Shift category | Day              |
+	And OtherAgent has a shift with
+	| Field          | Value            |
+	| StartTime      | 2030-01-01 08:00 |
+	| EndTime        | 2030-01-01 18:00 |
+	| Shift category | Day              |
+	And OtherAgent has a shift exchange for bulletin
+	| Field     | Value            |
+	| Valid To  | 2029-12-31       |
+	| StartTime | 2030-01-01 09:00 |
+	| EndTime   | 2030-01-01 17:00 |
+	And the time is '2029-12-27'
+	And I view Shift Trade Bulletin Board for date '2030-01-01'
+	When I click OtherAgent shift
+	Then I should see a confirm message on bulletin trade board

@@ -25097,6 +25097,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Are you sure you want to make this shift trade?.
+        /// </summary>
+        public static string SureToMakeShiftTrade {
+            get {
+                return ResourceManager.GetString("SureToMakeShiftTrade", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Swap.
         /// </summary>
         public static string Swap {

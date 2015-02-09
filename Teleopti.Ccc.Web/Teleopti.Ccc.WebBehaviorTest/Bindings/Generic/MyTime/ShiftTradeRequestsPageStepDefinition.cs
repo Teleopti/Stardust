@@ -3,6 +3,7 @@ using System.Globalization;
 using TechTalk.SpecFlow;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.TestData.Setups.Configurable;
+using Teleopti.Ccc.UserTexts;
 using Teleopti.Ccc.WebBehaviorTest.Core;
 using Teleopti.Ccc.WebBehaviorTest.Core.BrowserDriver;
 using Teleopti.Ccc.WebBehaviorTest.Core.Navigation;
@@ -34,6 +35,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.MyTime
 		}
 
 		[When(@"I view Shift Trade Bulletin Board for date '(.*)'")]
+		[Given(@"I view Shift Trade Bulletin Board for date '(.*)'")]
 		public void WhenIViewShiftTradeBulletinBoardForDate(DateTime date)
 		{
 			gotoShfitTradeBulletinBoardToday();
@@ -360,7 +362,18 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.MyTime
 		{
 			Browser.Interactions.AssertFirstContains("#choose-history-list", agentName);
 			Browser.Interactions.AssertFirstContains("#choose-history-list .trade-date", date);
-	}
+		}
 
-}
+		[Then(@"I should see a confirm message on bulletin trade board")]
+		public void ThenIShouldSeeAConfirmMessageOnBulletinTradeBoard()
+		{
+			Browser.Interactions.AssertAnyContains("#Request-add-shift-trade-detail-section", Resources.SureToMakeShiftTrade);
+		}
+
+		[When(@"I click OtherAgent shift")]
+		public void WhenIClickOtherAgentShift()
+		{
+			Browser.Interactions.ClickUsingJQuery(".agent");
+		}
+	}
 }

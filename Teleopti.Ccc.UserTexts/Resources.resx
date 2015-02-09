@@ -12805,4 +12805,8 @@ Reduce the complexity to use these shifts.</value>
     <value>Search agent name</value>
     <comment>Search agent by name</comment>
   </data>
+  <data name="SureToMakeShiftTrade" xml:space="preserve">
+    <value>Are you sure you want to make this shift trade?</value>
+    <comment>use in MyTime bulletin board anonymous trade</comment>
+  </data>
 </root>
