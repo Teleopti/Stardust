@@ -35,7 +35,7 @@
     <!--[if lt IE 7]>
         <p class="chromeframe">You are using an outdated browser. <a href="http://browsehappy.com/">Upgrade your browser today</a> or <a href="http://www.google.com/chromeframe/?redirect=true">install Google Chrome Frame</a> to better experience this application.</p>
     <![endif]-->
-	<div class="container">
+	<div id="Health-Check" class="container">
 		<div class="row">
 			<div class="col-xs-12">
 				<h1>Health Check</h1>
@@ -70,9 +70,9 @@
 				</ul>
 				<button class="btn btn-default" data-bind="click: loadAllEtlJobHistory">Load all ETL job history from current week</button>
 				<h3>Check bus</h3>
-				<button data-bind="click: checkBus, enable: checkBusEnabled" class="btn btn-primary">Start check</button>
+				<button id="Start-Check" data-bind="click: checkBus, enable: checkBusEnabled" class="btn btn-primary">Start check</button>
 				<!-- ko with: busResults -->
-				<h3>Bus results</h3>
+				<h3 id="Bus-Results">Bus results</h3>
 				<p><b data-bind="text: MachineName"></b> (<span data-bind="text: OSFullName + ' ' + OSPlatform + ' ' + OSVersion"></span>)</p>
 				<ul class="list-group">
 					<li class="list-group-item">Delay (ms): <span data-bind="text: MillisecondsDifference"></span></li>
