@@ -60,7 +60,7 @@ namespace Teleopti.Ccc.WebTest.Core.Common.DataProvider
 			var date = new DateOnly(2011, 5, 18);
 			var period = new DateOnlyPeriod(date, date);
 			var persons = new IPerson[] {user};
-			var scenario = new Scenario(" ");
+			var scenario = new Scenario("s");
 			var scheduleDictionary = MockRepository.GenerateMock<IScheduleDictionary>();
 			var scheduleDays = new IScheduleDay[] {};
 

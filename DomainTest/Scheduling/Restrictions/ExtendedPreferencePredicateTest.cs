@@ -61,7 +61,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Restrictions
 				new Person(), DateOnly.Today,
 				new PreferenceRestriction
 					{
-						ShiftCategory = new ShiftCategory(" ")
+						ShiftCategory = new ShiftCategory("sc")
 					});
 
 			target.IsExtended(preferenceDay).Should().Be.False();
@@ -118,7 +118,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Restrictions
 			var target = new ExtendedPreferencePredicate();
 
 			var preferenceRestriction = new PreferenceRestriction();
-			preferenceRestriction.AddActivityRestriction(new ActivityRestriction(new Activity(" ")));
+			preferenceRestriction.AddActivityRestriction(new ActivityRestriction(new Activity("activity")));
 			var preferenceDay = new PreferenceDay(
 				new Person(), DateOnly.Today,
 				preferenceRestriction);

@@ -101,7 +101,7 @@ namespace Teleopti.Ccc.WebTest.Core.MonthSchedule.Mapping
 		{
 			//arrange
 			var stubs = new StubFactory();
-			var personAbsence = new PersonAbsence(new Person(), new Scenario(" "), new AbsenceLayer(new Absence { Description = new Description("Illness") }, new DateTimePeriod()));
+			var personAbsence = new PersonAbsence(new Person(), new Scenario("s"), new AbsenceLayer(new Absence { Description = new Description("Illness") }, new DateTimePeriod()));
 			var scheduleDay = stubs.ScheduleDayStub(new DateTime(2011, 5, 18), SchedulePartView.FullDayAbsence, personAbsence);
 			var monthDomainData = new MonthScheduleDomainData { Days = new[] { new MonthScheduleDayDomainData { ScheduleDay = scheduleDay } }, CurrentDate = DateOnly.Today };
 
@@ -116,12 +116,12 @@ namespace Teleopti.Ccc.WebTest.Core.MonthSchedule.Mapping
 		public void ShouldMapAbsenceShortName()
 		{
 			var stubs = new StubFactory();
-			var scenario = new Scenario(" ");
-			var personAbsence0 = new PersonAbsence(new Person(), scenario, new AbsenceLayer(new Absence { Description = new Description(" ", "FI") }, new DateTimePeriod()));
+			var scenario = new Scenario("s");
+			var personAbsence0 = new PersonAbsence(new Person(), scenario, new AbsenceLayer(new Absence { Description = new Description("a", "FI") }, new DateTimePeriod()));
 			personAbsence0.Layer.Payload.Priority = 1;
-			var personAbsence = new PersonAbsence(new Person(), scenario, new AbsenceLayer(new Absence { Description = new Description(" ", "IL") }, new DateTimePeriod()));
+			var personAbsence = new PersonAbsence(new Person(), scenario, new AbsenceLayer(new Absence { Description = new Description("a", "IL") }, new DateTimePeriod()));
 			personAbsence.Layer.Payload.Priority = 1;
-			var personAbsence2 = new PersonAbsence(new Person(), scenario, new AbsenceLayer(new Absence { Description = new Description(" ", "HO") }, new DateTimePeriod()));
+			var personAbsence2 = new PersonAbsence(new Person(), scenario, new AbsenceLayer(new Absence { Description = new Description("a", "HO") }, new DateTimePeriod()));
 			personAbsence2.Layer.Payload.Priority = 100;
 			var scheduleDay = stubs.ScheduleDayStub(new DateTime(2011, 5, 18), SchedulePartView.FullDayAbsence, personAbsence);
 			var monthDomainData = new MonthScheduleDomainData { Days = new[] { new MonthScheduleDayDomainData { ScheduleDay = scheduleDay } }, CurrentDate = DateOnly.Today };
@@ -136,7 +136,7 @@ namespace Teleopti.Ccc.WebTest.Core.MonthSchedule.Mapping
 		{
 			//arrange
 			var stubs = new StubFactory();
-			var personAbsence = new PersonAbsence(new Person(), new Scenario(" "),
+			var personAbsence = new PersonAbsence(new Person(), new Scenario("s"),
 			                                      new AbsenceLayer(new Absence {Description = new Description("Illness")},
 			                                                       new DateTimePeriod()));
 			var scheduleDay = stubs.ScheduleDayStub(new DateTime(2011, 5, 18), SchedulePartView.FullDayAbsence, personAbsence);
@@ -157,7 +157,7 @@ namespace Teleopti.Ccc.WebTest.Core.MonthSchedule.Mapping
 		public void ShouldMapIsDayOff()
 		{
 			var stubs = new StubFactory();
-			var personAssignment = new PersonAssignment(new Person(), new Scenario(" "), new DateOnly(2011, 5, 18));
+			var personAssignment = new PersonAssignment(new Person(), new Scenario("s"), new DateOnly(2011, 5, 18));
 			var scheduleDay = stubs.ScheduleDayStub(new DateTime(2011, 5, 18), SchedulePartView.DayOff, personAssignment);
 
 			var result = Mapper.Map<MonthScheduleDayDomainData, MonthDayViewModel>(new MonthScheduleDayDomainData { ScheduleDay = scheduleDay });
@@ -169,7 +169,7 @@ namespace Teleopti.Ccc.WebTest.Core.MonthSchedule.Mapping
 		public void ShouldMapIsNotDayOffForWorkingDay()
 		{
 			var stubs = new StubFactory();
-			var personAssignment = new PersonAssignment(new Person(), new Scenario(" "), new DateOnly(2011, 5, 18));
+			var personAssignment = new PersonAssignment(new Person(), new Scenario("s"), new DateOnly(2011, 5, 18));
 			var scheduleDay = stubs.ScheduleDayStub(new DateTime(2011, 5, 18), SchedulePartView.MainShift, personAssignment);
 
 			var result = Mapper.Map<MonthScheduleDayDomainData, MonthDayViewModel>(new MonthScheduleDayDomainData { ScheduleDay = scheduleDay });
@@ -181,7 +181,7 @@ namespace Teleopti.Ccc.WebTest.Core.MonthSchedule.Mapping
 		public void ShouldMapIsDayOffForContractDayOff()
 		{
 			var stubs = new StubFactory();
-			var personAssignment = new PersonAssignment(new Person(), new Scenario(" "), new DateOnly(2011, 5, 18));
+			var personAssignment = new PersonAssignment(new Person(), new Scenario("s"), new DateOnly(2011, 5, 18));
 			var scheduleDay = stubs.ScheduleDayStub(new DateTime(2011, 5, 18), SchedulePartView.ContractDayOff, personAssignment);
 
 			var result = Mapper.Map<MonthScheduleDayDomainData, MonthDayViewModel>(new MonthScheduleDayDomainData { ScheduleDay = scheduleDay });
@@ -193,8 +193,8 @@ namespace Teleopti.Ccc.WebTest.Core.MonthSchedule.Mapping
 		public void ShouldMapShiftCategoryForWorkingDay()
 		{
 			var stubs = new StubFactory();
-			var personAssignment = new PersonAssignment(new Person(), new Scenario(" "), new DateOnly(2011, 5, 18));
-			personAssignment.AddActivity(new Activity(" "), new DateTimePeriod(2011, 5, 18, 2011, 5, 18));
+			var personAssignment = new PersonAssignment(new Person(), new Scenario("s"), new DateOnly(2011, 5, 18));
+			personAssignment.AddActivity(new Activity("a"), new DateTimePeriod(2011, 5, 18, 2011, 5, 18));
 			personAssignment.SetShiftCategory(new ShiftCategory("Late"));
 			var scheduleDay = stubs.ScheduleDayStub(new DateTime(2011, 5, 18), SchedulePartView.MainShift, personAssignment);
 
@@ -207,9 +207,9 @@ namespace Teleopti.Ccc.WebTest.Core.MonthSchedule.Mapping
 		public void ShouldMapShiftCategoryShortNameForWorkingDay()
 		{
 			var stubs = new StubFactory();
-			var personAssignment = new PersonAssignment(new Person(), new Scenario(" "), new DateOnly(2011, 5, 18));
-			personAssignment.AddActivity(new Activity(" "), new DateTimePeriod(2011, 5, 18, 2011, 5, 18));
-			personAssignment.SetShiftCategory(new ShiftCategory(" ") { Description = new Description(" ", "PM") });
+			var personAssignment = new PersonAssignment(new Person(), new Scenario("s"), new DateOnly(2011, 5, 18));
+			personAssignment.AddActivity(new Activity("a"), new DateTimePeriod(2011, 5, 18, 2011, 5, 18));
+			personAssignment.SetShiftCategory(new ShiftCategory("sc") { Description = new Description("sc", "PM") });
 			var scheduleDay = stubs.ScheduleDayStub(new DateTime(2011, 5, 18), SchedulePartView.MainShift, personAssignment);
 
 			var result = Mapper.Map<MonthScheduleDayDomainData, MonthDayViewModel>(new MonthScheduleDayDomainData { ScheduleDay = scheduleDay });
@@ -221,9 +221,9 @@ namespace Teleopti.Ccc.WebTest.Core.MonthSchedule.Mapping
 		public void ShouldMapShiftColorForWorkingDay()
 		{
 			var stubs = new StubFactory();
-			var personAssignment = new PersonAssignment(new Person(), new Scenario(" "), new DateOnly(2011, 5, 18));
-			personAssignment.AddActivity(new Activity(" "), new DateTimePeriod(2011, 5, 18, 2011, 5, 18));
-			personAssignment.SetShiftCategory(new ShiftCategory(" ") { DisplayColor = Color.Green });
+			var personAssignment = new PersonAssignment(new Person(), new Scenario("s"), new DateOnly(2011, 5, 18));
+			personAssignment.AddActivity(new Activity("a"), new DateTimePeriod(2011, 5, 18, 2011, 5, 18));
+			personAssignment.SetShiftCategory(new ShiftCategory("sc") { DisplayColor = Color.Green });
 			var scheduleDay = stubs.ScheduleDayStub(new DateTime(2011, 5, 18), SchedulePartView.MainShift, personAssignment);
 
 			var result = Mapper.Map<MonthScheduleDayDomainData, MonthDayViewModel>(new MonthScheduleDayDomainData { ScheduleDay = scheduleDay });
@@ -236,9 +236,9 @@ namespace Teleopti.Ccc.WebTest.Core.MonthSchedule.Mapping
 		public void ShouldMapTimeSpanForWorkingDay()
 		{
 			var stubs = new StubFactory();
-			var personAssignment = new PersonAssignment(new Person(), new Scenario(" "), new DateOnly(2011, 5, 18));
-			personAssignment.AddActivity(new Activity(" ") { InWorkTime = true }, new DateTimePeriod(2011, 5, 18, 7, 2011, 5, 18, 16));
-			personAssignment.SetShiftCategory(new ShiftCategory(" "));
+			var personAssignment = new PersonAssignment(new Person(), new Scenario("s"), new DateOnly(2011, 5, 18));
+			personAssignment.AddActivity(new Activity("a") { InWorkTime = true }, new DateTimePeriod(2011, 5, 18, 7, 2011, 5, 18, 16));
+			personAssignment.SetShiftCategory(new ShiftCategory("sc"));
 			var scheduleDay = stubs.ScheduleDayStub(new DateTime(2011, 5, 18), SchedulePartView.MainShift, personAssignment);
 
 			var result = Mapper.Map<MonthScheduleDayDomainData, MonthDayViewModel>(new MonthScheduleDayDomainData { ScheduleDay = scheduleDay });
@@ -252,7 +252,7 @@ namespace Teleopti.Ccc.WebTest.Core.MonthSchedule.Mapping
 		public void ShouldMapWorkingHoursForWorkingDay()
 		{
 			var contractTime = TimeSpan.FromHours(8);
-			var personAssignment = new PersonAssignment(new Person(), new Scenario(" "), new DateOnly(2011, 5, 18));
+			var personAssignment = new PersonAssignment(new Person(), new Scenario("s"), new DateOnly(2011, 5, 18));
 			var scheduleDay = new StubFactory().ScheduleDayStub(new DateTime(2011, 5, 18), SchedulePartView.MainShift, personAssignment);
 			var projection = MockRepository.GenerateMock<IVisualLayerCollection>();
 			projection.Stub(x => x.ContractTime()).Return(contractTime);

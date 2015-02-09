@@ -18,7 +18,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ScheduleChangedEventHandlers
 		[Test]
 		public void ShouldPublishWithDayOffData()
 		{
-			var scenario = ScenarioFactory.CreateScenarioWithId(" ", true);
+			var scenario = ScenarioFactory.CreateScenarioWithId("scenario", true);
 			var person = PersonFactory.CreatePersonWithPersonPeriodTeamSite(new DateOnly(2013, 10, 02));
 			var publisher = new FakePublishEventsFromEventHandlers();
 			var personAssignment = PersonAssignmentFactory.CreateAssignmentWithDayOff(scenario, person, new DateOnly(2013, 10, 02), new DayOffTemplate(new Description("Day off", "DO")));
@@ -42,7 +42,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ScheduleChangedEventHandlers
 		[Test]
 		public void ShouldPublishWithDayOffStartTimeAndEndTime()
 		{
-			var scenario = ScenarioFactory.CreateScenarioWithId(" ", true);
+			var scenario = ScenarioFactory.CreateScenarioWithId("scenario", true);
 			var person = PersonFactory.CreatePersonWithPersonPeriodTeamSite(new DateOnly(2013, 10, 08));
 			person.PermissionInformation.SetDefaultTimeZone(TimeZoneInfoFactory.StockholmTimeZoneInfo());
 			var publisher = new FakePublishEventsFromEventHandlers();
@@ -66,7 +66,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ScheduleChangedEventHandlers
 		public void ShouldPublishWithFullDayAbsence()
 		{
 			var person = PersonFactory.CreatePersonWithPersonPeriodTeamSite(new DateOnly(2013, 10, 04));
-			var scenario = ScenarioFactory.CreateScenarioWithId(" ", true);
+			var scenario = ScenarioFactory.CreateScenarioWithId("scenario", true);
 			var personAbsence = PersonAbsenceFactory.CreatePersonAbsence(person, scenario, new DateTimePeriod(2013, 10, 04, 2013, 10, 05));
 			var publisher = new FakePublishEventsFromEventHandlers();
 			var target = new ProjectionChangedEventPublisher(publisher, new FakeScenarioRepository(scenario), new FakePersonRepository(person), new FakePersonAbsenceReadScheduleRepository(personAbsence), new ProjectionChangedEventBuilder());
@@ -87,7 +87,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ScheduleChangedEventHandlers
 		public void ShouldPublishWithFullDayAbsenceForConfidentialAbsence()
 		{
 			var person = PersonFactory.CreatePersonWithPersonPeriodTeamSite(new DateOnly(2013, 10, 04));
-			var scenario = ScenarioFactory.CreateScenarioWithId(" ", true);
+			var scenario = ScenarioFactory.CreateScenarioWithId("scenario", true);
 			var absence = AbsenceFactory.CreateAbsence("123");
 			absence.Confidential = true;
 			var personAbsence = PersonAbsenceFactory.CreatePersonAbsence(person, scenario, new DateTimePeriod(2013, 10, 04, 2013, 10, 05), absence);
@@ -110,7 +110,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ScheduleChangedEventHandlers
 		public void ShouldPublishWithFullDayAbsenceOnDayOff()
 		{
 			var person = PersonFactory.CreatePersonWithPersonPeriodTeamSite(new DateOnly(2013, 10, 29));
-			var scenario = ScenarioFactory.CreateScenarioWithId(" ", true);
+			var scenario = ScenarioFactory.CreateScenarioWithId("scenario", true);
 			var absence = AbsenceFactory.CreateAbsence("Holiday");
 			var personAbsence = PersonAbsenceFactory.CreatePersonAbsence(person, scenario, new DateTimePeriod(2013, 10, 29, 2013, 10, 30), absence);
 			var personAssignment = PersonAssignmentFactory.CreateAssignmentWithDayOff(scenario, person, new DateOnly(2013, 10, 29), new DayOffTemplate(new Description("Day off", "DO")));
@@ -136,7 +136,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ScheduleChangedEventHandlers
 		{
 			//Bug 23647
 			var person = PersonFactory.CreatePersonWithPersonPeriodTeamSite(new DateOnly(2013, 10, 29));
-			var scenario = ScenarioFactory.CreateScenarioWithId(" ", true);
+			var scenario = ScenarioFactory.CreateScenarioWithId("scenario", true);
 			var personAssignment = PersonAssignmentFactory.CreateAssignmentWithDayOff(scenario, person, new DateOnly(2013, 10, 29), new DayOffTemplate(new Description("Day off", "DO")));
 			var scheduleRepository = new FakeScheduleDataReadScheduleRepository(personAssignment);
 			

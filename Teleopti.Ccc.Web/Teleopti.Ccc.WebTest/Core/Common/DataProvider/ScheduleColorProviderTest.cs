@@ -104,7 +104,7 @@ namespace Teleopti.Ccc.WebTest.Core.Common.DataProvider
 			var preferenceDay = new PreferenceDay(new Person(), DateOnly.Today,
 			                                      new PreferenceRestriction
 			                                      	{
-			                                      		ShiftCategory = new ShiftCategory(" ")
+			                                      		ShiftCategory = new ShiftCategory("sc")
 			                                      		                	{
 			                                      		                		DisplayColor = Color.Plum
 			                                      		                	}
@@ -161,7 +161,7 @@ namespace Teleopti.Ccc.WebTest.Core.Common.DataProvider
 		[Test]
 		public void ShouldGetDisplayColorFromWorkflowControlSetShiftCategory()
 		{
-			var shiftCategory = new ShiftCategory(" ") {DisplayColor = Color.Violet};
+			var shiftCategory = new ShiftCategory("sc") {DisplayColor = Color.Violet};
 			var workflowControlSet = new WorkflowControlSet
 			                         	{
 			                         		AllowedPreferenceShiftCategories = new[] { shiftCategory }

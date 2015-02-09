@@ -17,7 +17,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Preference.DataProvider
 		public void ShouldRetrieveShiftCategoriesFromWorkflowControlSet()
 		{
 			var loggedOnUser = MockRepository.GenerateMock<ILoggedOnUser>();
-			var shiftCategory = new ShiftCategory(" ");
+			var shiftCategory = new ShiftCategory("sc");
 			var person = new Person {
 			             		WorkflowControlSet = new WorkflowControlSet {
 									AllowedPreferenceShiftCategories = new[] { shiftCategory }
@@ -36,8 +36,8 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Preference.DataProvider
         public void ShouldOnlyRetrieveUnDeletedShiftCategoriesFromWorkflowControlSet()
         {
             var loggedOnUser = MockRepository.GenerateMock<ILoggedOnUser>();
-            var shiftCategory = new ShiftCategory(" ");
-            var deletedShiftCategory = new ShiftCategory(" ");
+            var shiftCategory = new ShiftCategory("sc");
+            var deletedShiftCategory = new ShiftCategory("dsc");
             deletedShiftCategory.SetDeleted();
             var person = new Person
             {
@@ -187,7 +187,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Preference.DataProvider
 		public void ShouldRetrieveActivityFromWorkflowControlSet()
 		{
 			var loggedOnUser = MockRepository.GenerateMock<ILoggedOnUser>();
-			var activity = new Activity(" ");
+			var activity = new Activity("a");
 			var person = new Person
 			{
 				WorkflowControlSet = new WorkflowControlSet

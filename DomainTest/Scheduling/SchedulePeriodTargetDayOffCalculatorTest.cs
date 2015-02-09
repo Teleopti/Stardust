@@ -26,7 +26,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
 		[Test]
 		public void ShouldCalculateDaysOffWithToleranceFromContract()
 		{
-			var contract = ContractFactory.CreateContract(" ");
+			var contract = ContractFactory.CreateContract("Contract");
 			contract.NegativeDayOffTolerance = 2;
 			contract.PositiveDayOffTolerance = 1;
 			var virtualSchedulePeriod = MockRepository.GenerateMock<IVirtualSchedulePeriod>();

@@ -121,7 +121,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
 		[Test]
 		public void ShouldNotIncludePreferenceDayOffInTargetTimeWhenEmploymentTypeIsFixedStaffDayWorkTime()
 		{
-			var contract = ContractFactory.CreateContract(" ");
+			var contract = ContractFactory.CreateContract("Contract");
 			contract.EmploymentType = EmploymentType.FixedStaffDayWorkTime;
 
 			var virtualSchedulePeriod = MockRepository.GenerateMock<IVirtualSchedulePeriod>();
@@ -145,7 +145,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
 		[Test]
 		public void ShouldIncludePreferenceAbsenceInTargetTimeWhenEmploymentTypeIsFixedStaffDayWorkTime()
 		{
-			var contract = ContractFactory.CreateContract(" ");
+			var contract = ContractFactory.CreateContract("Contract");
 			contract.EmploymentType = EmploymentType.FixedStaffDayWorkTime;
 
 			var virtualSchedulePeriod = MockRepository.GenerateMock<IVirtualSchedulePeriod>();
@@ -171,7 +171,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
 		{
 			var dayOffTemplate = new DayOffTemplate(new Description());
 
-			var contract = ContractFactory.CreateContract(" ");
+			var contract = ContractFactory.CreateContract("Contract");
 			contract.EmploymentType = EmploymentType.FixedStaffDayWorkTime;
 
 			var virtualSchedulePeriod = MockRepository.GenerateMock<IVirtualSchedulePeriod>();
@@ -180,7 +180,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
 			virtualSchedulePeriod.Stub(x => x.AverageWorkTimePerDay).Return(TimeSpan.FromHours(8));
 
 			var dayOffPreferenceRestriction = new PreferenceRestriction { DayOffTemplate = dayOffTemplate };
-			var dayOff = PersonAssignmentFactory.CreateAssignmentWithDayOff(new Scenario(" "), new Person(), DateOnly.Today.AddDays(1), new DayOffTemplate());
+			var dayOff = PersonAssignmentFactory.CreateAssignmentWithDayOff(new Scenario("scenario"), new Person(), DateOnly.Today.AddDays(1), new DayOffTemplate());
 			var scheduleDayWithDayOffPreference = new StubFactory().ScheduleDayStub(DateOnly.Today, SchedulePartView.DayOff, dayOff);
 			scheduleDayWithDayOffPreference.Stub(x => x.RestrictionCollection()).Return(new[] { dayOffPreferenceRestriction });
 

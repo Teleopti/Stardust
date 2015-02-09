@@ -141,7 +141,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.ShiftCreator
                                                   new WorkTimeLimitation(TimeSpan.FromHours(4), TimeSpan.FromHours(8))
                                           };
 
-			var shiftCategory = new ShiftCategory(" ");
+			var shiftCategory = new ShiftCategory("sc");
 			var templateGenerator = MockRepository.GenerateMock<IWorkShiftTemplateGenerator>();
 			templateGenerator.Stub(x => x.Category).Return(shiftCategory);
 
@@ -267,7 +267,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.ShiftCreator
                     new WorkTimeLimitation(TimeSpan.FromHours(6), TimeSpan.FromHours(11))
             };
 
-	        var shiftCategory = new ShiftCategory(" ");
+	        var shiftCategory = new ShiftCategory("sc");
 	        var templateGenerator = MockRepository.GenerateMock<IWorkShiftTemplateGenerator>();
 	        templateGenerator.Stub(x => x.Category).Return(shiftCategory);
 

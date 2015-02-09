@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using NUnit.Framework;
 using Teleopti.Interfaces.Domain;
 
@@ -132,7 +133,7 @@ namespace Teleopti.Ccc.DomainTest.Common
         [ExpectedException(typeof(ArgumentOutOfRangeException))]
         public void VerifyTooLongNameGivesException()
         {
-            target = new Description("".PadLeft(51), null);
+					target = new Description(String.Concat(Enumerable.Repeat("a", 55)), null);
         }
 
         /// <summary>
@@ -148,5 +149,12 @@ namespace Teleopti.Ccc.DomainTest.Common
         {
             target = new Description(_name, "".PadLeft(26));
         }
+
+				[Test]
+				[ExpectedException(typeof(ArgumentException))]
+				public void ShouldNotAcceptOnlyWhitespacesInName()
+				{
+					target = new Description(" ");
+				}
     }
 }

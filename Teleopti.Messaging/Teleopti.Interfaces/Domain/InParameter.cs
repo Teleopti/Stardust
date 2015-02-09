@@ -98,6 +98,22 @@ namespace Teleopti.Interfaces.Domain
             }
         }
 
+				/// <summary>
+				/// Verifies that a string (e.g. a value) is not string.Empty, null or only contains whitespace(s)
+				/// </summary>
+				/// <param name="parameterName">Name of the param.</param>
+				/// <param name="value">The value.</param>
+				public static void NotStringEmptyOrWhiteSpace(string parameterName, string value)
+				{
+					if (string.IsNullOrWhiteSpace(value))
+					{
+						string errMess = string.Format(CultureInfo.CurrentCulture,
+																					 "Parameter '{0}' must not be empty or contain only whitespaces.",
+																					 parameterName);
+						throw new ArgumentException(parameterName, errMess);
+					}
+				}
+
         /// <summary>
         /// Shared methed to check if timespan is within limits
         /// </summary>

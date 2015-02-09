@@ -49,7 +49,7 @@ namespace Teleopti.Interfaces.Domain
         /// </remarks>
         private static void ValidateName(string name, string shortName)
         {
-            InParameter.NotStringEmptyOrNull("name", name);
+            InParameter.NotStringEmptyOrWhiteSpace("name", name);
 
             if (name.Length > _nameLength)
                 throw new ArgumentOutOfRangeException("name", "String too long.");

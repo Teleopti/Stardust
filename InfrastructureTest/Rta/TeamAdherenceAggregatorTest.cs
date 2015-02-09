@@ -23,7 +23,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta
 			var today = new Now().LocalDateOnly();
 
 			var teamId = Guid.NewGuid();
-			var team = TeamFactory.CreateTeam(" ", " ");
+			var team = TeamFactory.CreateTeam("t", "s");
 
 			var personId1 = Guid.NewGuid();
 			var person1 = createPerson(team);
@@ -60,7 +60,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta
 			var today = new Now().LocalDateOnly();
 
 			var teamId = Guid.NewGuid();
-			var team = TeamFactory.CreateTeam(" ", " ");
+			var team = TeamFactory.CreateTeam("t", "s");
 
 			var personId1 = Guid.NewGuid();
 			var person1 = createPerson(team);
@@ -93,9 +93,9 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta
 
 		private static IPerson createPerson(ITeam team)
 		{
-			var ptp = new PartTimePercentage(" ");
-			var contract = new Contract(" ");
-			var contractSchedule = new ContractSchedule(" ");
+			var ptp = new PartTimePercentage("ptp");
+			var contract = new Contract("c");
+			var contractSchedule = new ContractSchedule("cs");
 			var personPeriod = new PersonPeriod(new DateOnly(1900, 1, 1), new PersonContract(contract, ptp, contractSchedule),
 				team);
 			var person = new Person();

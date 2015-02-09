@@ -135,7 +135,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Controllers
 			site.AddTeam(team);
 			var person = new Person().WithId();
 			person.Name = new Name("bill", "gates");
-			person.AddPersonPeriod(new PersonPeriod(new DateOnly(date), PersonContractFactory.CreatePersonContract(" ", " ", " "), team));
+			person.AddPersonPeriod(new PersonPeriod(new DateOnly(date), PersonContractFactory.CreatePersonContract("c", "cs", "ptp"), team));
 			var personRepository = MockRepository.GenerateMock<IPersonRepository>();
 			personRepository.Stub(x => x.Get(person.Id.GetValueOrDefault())).Return(person);
 

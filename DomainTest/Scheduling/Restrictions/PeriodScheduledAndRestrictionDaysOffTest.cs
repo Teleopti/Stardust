@@ -113,8 +113,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Restrictions
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling"), Test]
         public void ShouldCountPreferenceAbsenceOnContractNoWorkdayAsDayOff()
         {
-			var contractSchedule = ContractScheduleFactory.CreateContractScheduleWithoutWorkDays(" ");
-        	var personContract = new PersonContract(new Contract(" "), new PartTimePercentage(" "), contractSchedule);
+			var contractSchedule = ContractScheduleFactory.CreateContractScheduleWithoutWorkDays("contractSchedule");
+        	var personContract = new PersonContract(new Contract("contract"), new PartTimePercentage("PTP"), contractSchedule);
 			var personPeriod = new PersonPeriod(DateOnly.Today, personContract, new Team());
 			_person.AddPersonPeriod(personPeriod);
 

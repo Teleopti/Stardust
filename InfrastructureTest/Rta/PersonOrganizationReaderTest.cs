@@ -19,7 +19,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta
 		[Test]
 		public void ShouldFetchTeamForPerson()
 		{
-			var team = TeamFactory.CreateTeam(" ", " ");
+			var team = TeamFactory.CreateTeam("t", "s");
 			var person = new Person();
 			person.AddPersonPeriod(createPersonPeriodAndPersistDependencies(team));
 			person.PermissionInformation.SetDefaultTimeZone(TimeZoneInfo.Local);
@@ -56,7 +56,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta
 		[Test]
 		public void ShouldFetchSiteForPerson()
 		{
-			var team = TeamFactory.CreateTeam(" ", " ");
+			var team = TeamFactory.CreateTeam("t", "s");
 			var site = team.Site;
 			var person = new Person();
 			person.AddPersonPeriod(createPersonPeriodAndPersistDependencies(team));
@@ -93,9 +93,9 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta
 
 		private PersonPeriod createPersonPeriodAndPersistDependencies(ITeam team)
 		{
-			var ptp = new PartTimePercentage(" ");
-			var contract = new Contract(" ");
-			var contractSchedule = new ContractSchedule(" ");
+			var ptp = new PartTimePercentage("ptp");
+			var contract = new Contract("c");
+			var contractSchedule = new ContractSchedule("cs");
 			var pp = new PersonPeriod(new DateOnly(1900, 1, 1), new PersonContract(contract, ptp, contractSchedule), team);
 
 			PersistAndRemoveFromUnitOfWork(contractSchedule);

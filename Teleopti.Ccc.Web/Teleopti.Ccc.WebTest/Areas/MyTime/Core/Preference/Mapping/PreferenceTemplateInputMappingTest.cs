@@ -82,7 +82,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Preference.Mapping
 		[Test]
 		public void ShouldMapShiftCategory()
 		{
-			var shiftCategory = new ShiftCategory(" ");
+			var shiftCategory = new ShiftCategory("sc");
 			shiftCategory.SetId(Guid.NewGuid());
 			var input = new PreferenceTemplateInput { PreferenceId = shiftCategory.Id.Value };
 
@@ -96,7 +96,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Preference.Mapping
 		[Test]
 		public void ShouldMapDayOff()
 		{
-			var dayOffTemplate = new DayOffTemplate(new Description(" "));
+			var dayOffTemplate = new DayOffTemplate(new Description("do"));
 			dayOffTemplate.SetId(Guid.NewGuid());
 			var input = new PreferenceTemplateInput { PreferenceId = dayOffTemplate.Id.Value };
 

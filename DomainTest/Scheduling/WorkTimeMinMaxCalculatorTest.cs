@@ -218,7 +218,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
 			var workTimeMinMaxRestrictionCreator = MockRepository.GenerateMock<IWorkTimeMinMaxRestrictionCreator>();
 			var effectiveRestriction = MockRepository.GenerateMock<IEffectiveRestriction>();
 			var scheduleDay = new StubFactory().ScheduleDayStub();
-			var personPeriod = new PersonPeriod(DateOnly.Today, new PersonContract(new Contract(" "), new PartTimePercentage(" "), new ContractSchedule(" ")), new Team()) { RuleSetBag = MockRepository.GenerateMock<IRuleSetBag>() };
+			var personPeriod = new PersonPeriod(DateOnly.Today, new PersonContract(new Contract("Contract"), new PartTimePercentage("PTP"), new ContractSchedule("ContractSchedule")), new Team()) { RuleSetBag = MockRepository.GenerateMock<IRuleSetBag>() };
 			var person = new Person();
 			person.AddPersonPeriod(personPeriod);
 			var target = new WorkTimeMinMaxCalculator(null, workTimeMinMaxRestrictionCreator);

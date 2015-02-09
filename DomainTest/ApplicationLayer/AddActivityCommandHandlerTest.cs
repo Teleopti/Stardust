@@ -142,7 +142,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 			shiftCategoryRepository.Stub(x => x.FindAll()).Return(new List<IShiftCategory> {shiftCategory});
 
 			var target = new AddActivityCommandHandler(personAssignmentRepository,
-								   new ThisCurrentScenario(ScenarioFactory.CreateScenarioWithId("   ", true)),
+								   new ThisCurrentScenario(ScenarioFactory.CreateScenarioWithId("scenario", true)),
 								   activityRepository, personRepository,
 								   new UtcTimeZone(), shiftCategoryRepository
 								   );

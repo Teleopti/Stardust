@@ -57,7 +57,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Preference.Mapping
 		[Test]
 		public void ShouldMapShiftCategoryColor()
 		{
-			var preferenceRestriction = new PreferenceRestriction {ShiftCategory = new ShiftCategory(" ") {DisplayColor = Color.PeachPuff}};
+			var preferenceRestriction = new PreferenceRestriction {ShiftCategory = new ShiftCategory("sc") {DisplayColor = Color.PeachPuff}};
 			var preferenceDay = new PreferenceDay(new Person(), DateOnly.Today, preferenceRestriction);
 
 			var result = Mapper.Map<IPreferenceDay, PreferenceDayViewModel>(preferenceDay);
@@ -161,7 +161,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Preference.Mapping
 				new Person(), DateOnly.Today,
 				new PreferenceRestriction
 					{
-						ShiftCategory = new ShiftCategory(" ")
+						ShiftCategory = new ShiftCategory("sc")
 					});
 
 			extendedPreferencePredicate.Stub(x => x.IsExtended(preferenceDay)).Return(true);
@@ -351,7 +351,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Preference.Mapping
 		public void ShouldMapActivityStartTimeLimitation()
 		{
 			var preferenceDay = new PreferenceDay(new Person(), DateOnly.Today, new PreferenceRestriction());
-			var activityRestriction = new ActivityRestriction(new Activity(" "))
+			var activityRestriction = new ActivityRestriction(new Activity("a"))
 			                          	{
 			                          		StartTimeLimitation = new StartTimeLimitation(TimeSpan.FromHours(8), TimeSpan.FromHours(9))
 			                          	};
@@ -366,7 +366,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Preference.Mapping
 		public void ShouldMapActivityEndTimeLimitation()
 		{
 			var preferenceDay = new PreferenceDay(new Person(), DateOnly.Today, new PreferenceRestriction());
-			var activityRestriction = new ActivityRestriction(new Activity(" "))
+			var activityRestriction = new ActivityRestriction(new Activity("a"))
 			{
 				EndTimeLimitation = new EndTimeLimitation(TimeSpan.FromHours(8), TimeSpan.FromHours(9))
 			};
@@ -381,7 +381,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Preference.Mapping
 		public void ShouldMapActivityWorkTimeLimitation()
 		{
 			var preferenceDay = new PreferenceDay(new Person(), DateOnly.Today, new PreferenceRestriction());
-			var activityRestriction = new ActivityRestriction(new Activity(" "))
+			var activityRestriction = new ActivityRestriction(new Activity("a"))
 			{
 				WorkTimeLimitation = new WorkTimeLimitation(TimeSpan.FromHours(6), TimeSpan.FromHours(10))
 			};

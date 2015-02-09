@@ -10,7 +10,7 @@ namespace Teleopti.Ccc.TestCommon
 
 		public FakeCurrentScenario()
 		{
-			_scenario = ScenarioFactory.CreateScenarioWithId(" ", true);
+			_scenario = ScenarioFactory.CreateScenarioWithId("scenario", true);
 		}
 
 		public IScenario Current()

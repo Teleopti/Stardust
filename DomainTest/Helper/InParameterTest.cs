@@ -36,9 +36,6 @@ namespace Teleopti.Ccc.DomainTest.Helper
             InParameter.ValueMustBePositive(_value, value);
         }
 
-        /// <summary>
-        /// Verifies that parameter is not string.Empty
-        /// </summary>
         [Test]
         [ExpectedException(typeof (ArgumentException))]
         public void CannotSetStringEmpty()
@@ -47,15 +44,33 @@ namespace Teleopti.Ccc.DomainTest.Helper
             InParameter.NotStringEmptyOrNull(_value, empty);
         }
 
-        /// <summary>
-        /// Verifies that parameter is not null
-        /// </summary>
         [Test]
         [ExpectedException(typeof (ArgumentException))]
         public void CannotSetNull()
         {
             InParameter.NotStringEmptyOrNull(_value, null);
         }
+
+				[Test]
+				[ExpectedException(typeof(ArgumentException))]
+				public void ShouldStopWhiteSpace()
+				{
+					InParameter.NotStringEmptyOrWhiteSpace(_value, " ");
+				}
+
+				[Test]
+				[ExpectedException(typeof(ArgumentException))]
+				public void ShouldStopEmpty()
+				{
+					InParameter.NotStringEmptyOrWhiteSpace(_value, string.Empty);
+				}
+
+				[Test]
+				[ExpectedException(typeof(ArgumentException))]
+				public void ShouldStopNull()
+				{
+					InParameter.NotStringEmptyOrWhiteSpace(_value, null);
+				}
 
         [Test]
         [ExpectedException(typeof(ArgumentOutOfRangeException))]

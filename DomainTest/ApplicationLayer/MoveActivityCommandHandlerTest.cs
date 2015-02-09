@@ -21,7 +21,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 			var agent = new Person().WithId();
 			var activity = new Activity("act").WithId();
 			var personAssignmentRepository = new FakePersonAssignmentWriteSideRepository();
-			var scenario = new ThisCurrentScenario(new Scenario(" "));
+			var scenario = new ThisCurrentScenario(new Scenario("scenario"));
 			var personRepository = new FakeWriteSideRepository<IPerson> { agent };
 			var target = new MoveActivityCommandHandler(personAssignmentRepository, personRepository, new FakeWriteSideRepository<IActivity>{activity}, scenario, new UtcTimeZone());
 

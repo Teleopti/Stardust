@@ -191,7 +191,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Preference.Mapping
 		public void ShouldMapActivityStartTimeLimitation()
 		{
 			var extendedPreferenceTemplate = new ExtendedPreferenceTemplate(null, new PreferenceRestrictionTemplate(), "name", Color.Red);
-			var activityRestriction = new ActivityRestriction(new Activity(" "))
+			var activityRestriction = new ActivityRestriction(new Activity("a"))
 			{
 				StartTimeLimitation = new StartTimeLimitation(TimeSpan.FromHours(8), TimeSpan.FromHours(9))
 			};
@@ -207,7 +207,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Preference.Mapping
 		public void ShouldMapActivityEndTimeLimitation()
 		{
 			var extendedPreferenceTemplate = new ExtendedPreferenceTemplate(null, new PreferenceRestrictionTemplate(), "name", Color.Red);
-			var activityRestriction = new ActivityRestriction(new Activity(" "))
+			var activityRestriction = new ActivityRestriction(new Activity("a"))
 			{
 				EndTimeLimitation = new EndTimeLimitation(TimeSpan.FromHours(8), TimeSpan.FromHours(9))
 			};
@@ -223,7 +223,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Preference.Mapping
 		public void ShouldMapActivityWorkTimeLimitation()
 		{
 			var extendedPreferenceTemplate = new ExtendedPreferenceTemplate(null, new PreferenceRestrictionTemplate(), "name", Color.Red);
-			var activityRestriction = new ActivityRestriction(new Activity(" "))
+			var activityRestriction = new ActivityRestriction(new Activity("a"))
 			{
 				WorkTimeLimitation = new WorkTimeLimitation(TimeSpan.FromHours(6), TimeSpan.FromHours(10))
 			};

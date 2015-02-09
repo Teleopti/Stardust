@@ -47,9 +47,9 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Controllers
 
 			var siteRepository = MockRepository.GenerateMock<ISiteRepository>();
 			var numberOfAgentsQuery = MockRepository.GenerateMock<INumberOfAgentsInTeamReader>();
-			var site = new Site(" ");
+			var site = new Site("s");
 			site.SetId(Guid.NewGuid());
-			var team = new Team { Description = new Description(" ") };
+			var team = new Team { Description = new Description("t") };
 			team.SetId(Guid.NewGuid());
 			site.AddTeam(team);
 			siteRepository.Stub(x => x.Get(site.Id.Value)).Return(site);
@@ -111,8 +111,8 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Controllers
 		[Test]
 		public void ShouldGetBusinessUnitIdFromTeamId()
 		{
-			var site = new Site(" ").WithId();
-			var bu = new BusinessUnit(" ").WithId();
+			var site = new Site("s").WithId();
+			var bu = new BusinessUnit("bu").WithId();
 			site.SetBusinessUnit(bu);
 			var team = new Team().WithId();
 			team.Site = site;
@@ -136,7 +136,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Controllers
 
 		private static Site addNewSiteToRepository(ISiteRepository siteRepository)
 		{
-			var site = new Site(" ");
+			var site = new Site("s");
 			site.SetId(Guid.NewGuid());
 			siteRepository.Stub(x => x.Get(site.Id.Value)).Return(site);
 			return site;

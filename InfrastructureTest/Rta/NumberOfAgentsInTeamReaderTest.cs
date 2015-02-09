@@ -18,7 +18,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta
 		[Test]
 		public void ShouldLoadNumberOfAgentesForTeam()
 		{
-			var team = TeamFactory.CreateTeam(" ", " ");
+			var team = TeamFactory.CreateTeam("t", "s");
 			var personPeriod = createPersonPeriodAndPersistDependencies(team);
 
 			var person = new Person();
@@ -51,9 +51,9 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta
 
 		private PersonPeriod createPersonPeriodAndPersistDependencies(ITeam team)
 		{
-			var ptp = new PartTimePercentage(" ");
-			var contract = new Contract(" ");
-			var contractSchedule = new ContractSchedule(" ");
+			var ptp = new PartTimePercentage("ptp");
+			var contract = new Contract("c");
+			var contractSchedule = new ContractSchedule("cs");
 			var pp = new PersonPeriod(new DateOnly(1900, 1, 1), new PersonContract(contract, ptp, contractSchedule), team);
 
 			PersistAndRemoveFromUnitOfWork(contractSchedule);

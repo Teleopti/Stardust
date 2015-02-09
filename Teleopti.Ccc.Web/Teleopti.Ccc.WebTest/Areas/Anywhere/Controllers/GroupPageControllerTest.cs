@@ -35,7 +35,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Controllers
 		[Test]
 		public void ShouldReturnMyTeamAsDefaultGroup()
 		{
-			var site = SiteFactory.CreateSimpleSite(" ");
+			var site = SiteFactory.CreateSimpleSite("s");
 			var team = new Team { Site = site, Description = new Description("Team red") };
 			team.SetId(Guid.NewGuid());
 			var person = PersonFactory.CreatePersonWithPersonPeriodFromTeam(DateOnly.Today, team);

@@ -45,7 +45,7 @@ namespace Teleopti.Ccc.TestCommon.FakeData
 
 	    public static IAbsence CreateAbsenceWithId()
 	    {
-		    var ret = CreateAbsence("  ");
+		    var ret = CreateAbsence("absence");
 			ret.SetId(Guid.NewGuid());
 			return ret;
 		}

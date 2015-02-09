@@ -101,8 +101,8 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Controllers
 		[Test]
 		public void ShouldGetBusinessUnitIdFromSiteId()
 		{
-			var site = new Site(" ").WithId();
-			var bu = new BusinessUnit(" ").WithId();
+			var site = new Site("s").WithId();
+			var bu = new BusinessUnit("bu").WithId();
 			site.SetBusinessUnit(bu);
 			var siteRepository = MockRepository.GenerateMock<ISiteRepository>();
 			siteRepository.Stub(x => x.Get(site.Id.GetValueOrDefault())).Return(site);

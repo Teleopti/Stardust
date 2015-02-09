@@ -71,7 +71,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Preference.Mapping
 		{
 			var destination = new PreferenceDay(null, DateOnly.Today, new PreferenceRestriction());
 			var input = new PreferenceDayInput { PreferenceId = Guid.NewGuid() };
-			var shiftCategory = new ShiftCategory(" ");
+			var shiftCategory = new ShiftCategory("sc");
 
 			shiftCategoryRepository.Stub(x => x.Get(input.PreferenceId.Value)).Return(shiftCategory);
 
@@ -127,7 +127,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Preference.Mapping
 		[Test]
 		public void ShouldMapShiftCategory()
 		{
-			var shiftCategory = new ShiftCategory(" ");
+			var shiftCategory = new ShiftCategory("sc");
 			shiftCategory.SetId(Guid.NewGuid());
 			var input = new PreferenceDayInput { PreferenceId = shiftCategory.Id.Value };
 
@@ -141,7 +141,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Preference.Mapping
 		[Test]
 		public void ShouldMapDayOff()
 		{
-			var dayOffTemplate = new DayOffTemplate(new Description(" "));
+			var dayOffTemplate = new DayOffTemplate(new Description("do"));
 			dayOffTemplate.SetId(Guid.NewGuid());
 			var input = new PreferenceDayInput { PreferenceId = dayOffTemplate.Id.Value };
 

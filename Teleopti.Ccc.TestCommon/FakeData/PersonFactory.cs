@@ -118,7 +118,7 @@ namespace Teleopti.Ccc.TestCommon.FakeData
 
 		public static IPerson CreatePersonWithPersonPeriodTeamSite(DateOnly personPeriodStart)
 		{
-			var site = SiteFactory.CreateSimpleSite(" ");
+			var site = SiteFactory.CreateSimpleSite("Site");
 			site.SetId(Guid.NewGuid());
 			var team = new Team() {Site = site};
 			var person = CreatePersonWithPersonPeriod(new Person(), personPeriodStart, new ISkill[] { }, team, new Contract("ctr"), new PartTimePercentage("ptc"));

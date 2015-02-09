@@ -102,9 +102,9 @@ namespace Teleopti.Ccc.TestCommon.FakeData
 		public static IPersonAssignment CreateAssignmentWithMainShift(IActivity activity, IPerson agent, DateTimePeriod period)
 		{
 			var date = new DateOnly(TimeZoneHelper.ConvertFromUtc(period.StartDateTime, agent.PermissionInformation.DefaultTimeZone()));
-			var ass = new PersonAssignment(agent, ScenarioFactory.CreateScenarioWithId("   ", true), date);
+			var ass = new PersonAssignment(agent, ScenarioFactory.CreateScenarioWithId("scenario", true), date);
 			ass.AddActivity(activity, period);
-			ass.SetShiftCategory(ShiftCategoryFactory.CreateShiftCategory("   "));
+			ass.SetShiftCategory(ShiftCategoryFactory.CreateShiftCategory("shiftcategory"));
 			return ass;
 		}
 
@@ -465,7 +465,7 @@ namespace Teleopti.Ccc.TestCommon.FakeData
 		}
 		public static IPersonAssignment CreateAssignmentWithDayOff()
 		{
-			return CreateAssignmentWithDayOff(new Scenario(" "), new Person(), new DateOnly(2000, 1, 1), new DayOffTemplate(new Description("for", "test")));
+			return CreateAssignmentWithDayOff(new Scenario("scenario"), new Person(), new DateOnly(2000, 1, 1), new DayOffTemplate(new Description("for", "test")));
 		}
 	}
 

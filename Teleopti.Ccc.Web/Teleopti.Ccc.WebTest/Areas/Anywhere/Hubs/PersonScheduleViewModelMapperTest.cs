@@ -195,7 +195,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Hubs
 		public void ShouldMapAbsenceId()
 		{
 			var target = new PersonScheduleViewModelMapper();
-			var absence = new Absence { Description = new Description(" ") };
+			var absence = new Absence { Description = new Description("a") };
 			absence.SetId(Guid.NewGuid());
 
 			var result = target.Map(new PersonScheduleData { Absences = new[] { absence }, CommonAgentNameSetting = _commonNameDescriptionSetting });

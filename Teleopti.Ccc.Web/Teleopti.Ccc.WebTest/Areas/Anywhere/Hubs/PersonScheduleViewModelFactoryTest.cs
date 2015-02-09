@@ -269,7 +269,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Hubs
 			var startTime = TimeZoneInfo.ConvertTimeToUtc(date, person.PermissionInformation.DefaultTimeZone());
 			var period = new DateTimePeriod(startTime, startTime.AddHours(24));
 
-			var personAbsences = new Collection<IPersonAbsence> { new PersonAbsence(new Scenario(" ")) };
+			var personAbsences = new Collection<IPersonAbsence> { new PersonAbsence(new Scenario("s")) };
 			personAbsenceRepository.Stub(x => x.Find(new[] {person}, period)).Return(personAbsences);
 
 			target.CreateViewModel(person.Id.Value, date);
@@ -299,7 +299,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Hubs
 
 			var period = new DateTimePeriod(shiftStart, shiftEnd);
 
-			var personAbsences = new Collection<IPersonAbsence> { new PersonAbsence(new Scenario(" ")) };
+			var personAbsences = new Collection<IPersonAbsence> { new PersonAbsence(new Scenario("s")) };
 			personAbsenceRepository.Stub(x => x.Find(new[] { person }, period)).Return(personAbsences);
 
 			target.CreateViewModel(person.Id.Value, date);
@@ -330,7 +330,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Hubs
 			var endTime = TimeZoneInfo.ConvertTimeToUtc(new DateTime(2013, 5, 8, 0, 0, 0, 0), person.PermissionInformation.DefaultTimeZone());
 			var period = new DateTimePeriod(shiftEnd, endTime);
 
-			var personAbsences = new Collection<IPersonAbsence> { new PersonAbsence(new Scenario(" ")) };
+			var personAbsences = new Collection<IPersonAbsence> { new PersonAbsence(new Scenario("s")) };
 			personAbsenceRepository.Stub(x => x.Find(new[] { person }, period)).Return(personAbsences);
 
 			target.CreateViewModel(person.Id.Value, date);

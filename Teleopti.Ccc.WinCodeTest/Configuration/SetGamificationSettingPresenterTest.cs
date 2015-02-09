@@ -132,7 +132,7 @@ namespace Teleopti.Ccc.WinCodeTest.Configuration
 			var teams = new List<ITeam> { teamWithNewSetting, teamToBeUpdated, teamToBeDeleted };
 
 			var newTeamSetting = new TeamGamificationSetting { Team = teamWithNewSetting, GamificationSetting = new GamificationSetting("newSetting") };
-			var teamSettingToBeRemoved = new TeamGamificationSetting{Team = teamToBeDeleted,GamificationSetting = new GamificationSetting(" ")};
+			var teamSettingToBeRemoved = new TeamGamificationSetting { Team = teamToBeDeleted, GamificationSetting = new GamificationSetting("NullGameSetting") };
 			teamSettingToBeRemoved.SetId(Guid.NewGuid());
 			var teamSettingToToBeUpdated = new TeamGamificationSetting{Team = teamToBeUpdated,GamificationSetting = new GamificationSetting("toBeUpdated")};
 			teamSettingToToBeUpdated.SetId(Guid.NewGuid());
