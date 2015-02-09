@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Web.Http;
 using Teleopti.Ccc.Domain.AgentInfo;
@@ -146,7 +147,7 @@ namespace Teleopti.Ccc.Web.Areas.Permissions.Controllers
 		public virtual IHttpActionResult CopyExistingRole(Guid roleId)
 		{
 			var roleToCopy = _roleRepository.Get(roleId);
-			var newRole = createNewRole("Copy of " + roleToCopy.DescriptionText);
+			var newRole = createNewRole(string.Format(CultureInfo.CurrentUICulture,"{0} {1}", UserTexts.Resources.CopyOf, roleToCopy.DescriptionText));
 			roleToCopy.ApplicationFunctionCollection.ForEach(newRole.AddApplicationFunction);
 			roleToCopy.AvailableData.AvailableBusinessUnits.ForEach(newRole.AvailableData.AddAvailableBusinessUnit);
 			roleToCopy.AvailableData.AvailableSites.ForEach(newRole.AvailableData.AddAvailableSite);
