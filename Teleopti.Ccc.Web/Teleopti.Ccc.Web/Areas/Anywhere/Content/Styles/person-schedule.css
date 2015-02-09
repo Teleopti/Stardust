@@ -233,7 +233,8 @@
     margin-bottom: 5px !important;
 }
 
-.person-schedule .schedule-column .apply {
+.person-schedule .schedule-column .apply,
+.person-schedule .schedule-column .cancel {
     margin-top: 10px !important;
 }
 

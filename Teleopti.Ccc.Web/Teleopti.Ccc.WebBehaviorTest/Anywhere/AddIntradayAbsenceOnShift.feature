@@ -222,4 +222,11 @@ Scenario: Back to viewing schedule after adding an intraday absence
 	| Start time | 17:00   |
 	| End time   | 18:00   |
 	And I initiate 'apply'
+	Then I should be viewing schedules for '2013-11-18'
+
+@OnlyRunIfEnabled('MyTeam_MakeTeamScheduleConsistent_31897')
+Scenario: Back to viewing schedule after cancel add intraday absence
+	Given I have the role 'Anywhere Team Green'
+	When I view person schedules add intraday absence form for 'Pierre Baldi' in 'Team green' on '2013-11-18'
+	And I click 'cancel'
 	Then I should be viewing schedules for '2013-11-18'	

@@ -199,8 +199,5 @@
 	        var time = self.SelectedStartMinutes();
 	        self.StartTime(date.clone().add('m',time));
 	    };
-		self.cancel = function() {
-			navigation.GoToTeamSchedule(businessUnitId, self.GroupId(), self.ScheduleDate());
-		};
 	};
 });

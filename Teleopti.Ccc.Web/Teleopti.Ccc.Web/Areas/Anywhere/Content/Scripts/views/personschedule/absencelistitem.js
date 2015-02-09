@@ -210,9 +210,5 @@ define([
 			this.ShowBackToWorkSection = function() {
 				this.IsBackToWorkFormVisible(!this.IsBackToWorkFormVisible());
 			}
-
-			this.Cancel = function () {
-				navigation.GoToTeamSchedule(data.BusinessUnitId, data.GroupId, data.Date);
-			};
 		};
 	});

@@ -11,7 +11,7 @@ define([
 	'views/personschedule/moveactivityform',
 	'shared/group-page',
 	'shared/timezone-display',
-'shared/timezone-current',
+	'shared/timezone-current',
 	'helpers',
 	'resources',
 	'select2',
@@ -29,7 +29,7 @@ define([
 	moveActivityFormViewModel,
 	groupPageViewModel,
 	timezoneDisplay,
-timezoneCurrent,
+	timezoneCurrent,
 	helpers,
 	resources,
 	select2,
@@ -278,5 +278,9 @@ timezoneCurrent,
 	    		self.MoveActivityForm.ScheduleDate(self.ScheduleDate().clone());
 		    }
 	    };
+
+		this.backToTeamSchedule = function() {
+			navigation.GoToTeamSchedule(self.BusinessUnitId(), self.GroupId(), self.ScheduleDate());
+		}
 	};
 });

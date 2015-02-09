@@ -114,17 +114,19 @@
 														</td>
 													</tr>
 													<tr>
-														<td class="col-md-3">
+														<td class="col-md-3" colspan="2">
 															<!-- ko if: ErrorMessage -->
 															<div class="alert">
 																<span data-bind="text: ErrorMessage"></span>
 															</div>
 															<!-- /ko -->
 															<div>
+																<!-- ko if: $root.Resources.MyTeam_MakeTeamScheduleConsistent_31897 -->
+																<button class="btn btn-default cancel" data-bind="text: $root.Resources.Cancel, click: $root.backToTeamSchedule"></button>
+																<!-- /ko -->
 																<button class="btn btn-primary apply" data-bind="disable: $root.Loading() || ErrorMessage(), text: $root.Resources.AddIntradayAbsence, click: Apply"></button>
 															</div>
 														</td>
-														<td></td>
 													</tr>
 												</table>
 											</form>
@@ -187,7 +189,10 @@
 															</div>
 															<!-- /ko -->
 															<div>
-																<button class="btn btn-primary apply" data-bind="disable: $root.Loading() || ErrorMessage(), text: $root.Resources.AddActivity, click: Apply"></button>
+																<!-- ko if: $root.Resources.MyTeam_MakeTeamScheduleConsistent_31897 -->
+																<button class="btn btn-default cancel" data-bind="text: $root.Resources.Cancel, click: $root.backToTeamSchedule"></button>
+																<!-- /ko -->
+															    <button class="btn btn-primary apply" data-bind="disable: $root.Loading() || ErrorMessage(), text: $root.Resources.AddActivity, click: Apply"></button>
 															</div>
 														</td>
 														<td></td>
@@ -235,7 +240,7 @@
 															</div>
 															<!-- /ko -->
 															<div>
-																<button class="btn btn-default apply" data-bind="text: $root.Resources.Cancel, click: cancel"></button>
+																<button class="btn btn-default cancel" data-bind="text: $root.Resources.Cancel, click: $root.backToTeamSchedule"></button>
 																<button class="btn btn-primary apply" data-bind="disable: $root.Loading() || ErrorMessage() || !formHasChanged(), text: $root.Resources.MoveActivity, click: Apply"></button>
 															</div>
 														</td>
@@ -288,6 +293,9 @@
 															</div>
 															<!-- /ko -->
 															<div>
+																<!-- ko if: $root.Resources.MyTeam_MakeTeamScheduleConsistent_31897 -->
+																<button class="btn btn-default cancel" data-bind="text: $root.Resources.Cancel, click: $root.backToTeamSchedule"></button>
+																<!-- /ko -->
 																<button class="btn btn-primary apply" data-bind="enable: !InvalidEndDate() && !$root.Loading(), text: $root.Resources.AddFullDayAbsence, click: Apply"></button>
 															</div>
 														</td>
@@ -436,7 +444,7 @@
 								<!-- /ko -->
 								<div class="row form-group">
 									<div class="col-xs-8">
-										<button class="btn btn-default cancel" data-bind="click: Cancel, text: $root.Resources.Cancel" />
+										<button class="btn btn-default cancel" data-bind="click: $root.backToTeamSchedule, text: $root.Resources.Cancel" />
 										<button class="btn btn-primary save-absence" data-bind="click: Save, text: $root.Resources.Save, enable: IsAbsenceValid" />
 									</div>
 								</div>
@@ -445,6 +453,11 @@
 					</tr>
 				</tbody>
 			</table>
+			<div>
+				<!-- ko if: $root.Resources.MyTeam_MakeTeamScheduleConsistent_31897 -->
+				<button class="btn btn-default cancel" data-bind="text: $root.Resources.Cancel, click: $root.backToTeamSchedule"></button>
+				<!-- /ko -->
+			</div>
 		</div>
 		<div class="col-md-4"></div>
 	</div>

@@ -106,4 +106,20 @@ Scenario: Back to viewing schedule after moving an activity
 	| Field          | Value            |
 	| Start time     | 2013-11-18 13:00 |
 	And I save the shift
+	Then I should be viewing schedules for '2013-11-18'
+
+@OnlyRunIfEnabled('MyTeam_MakeTeamScheduleConsistent_31897')
+Scenario: Back to viewing schedule after cancel move activity
+	Given 'John King' has a person period with
+	| Field      | Value      |
+	| Team       | Team green |
+	| Start date | 2013-11-18 |
+	And 'John King' has a shift with
+	| Field          | Value            |
+	| Shift category | Day              |
+	| Activity       | Phone            |
+	| Start time     | 2013-11-18 11:00 |
+	| End time       | 2013-11-18 17:00 |
+	When I view schedules for 'Team green' on '2013-11-18'
+	And I click 'cancel'
 	Then I should be viewing schedules for '2013-11-18'	
