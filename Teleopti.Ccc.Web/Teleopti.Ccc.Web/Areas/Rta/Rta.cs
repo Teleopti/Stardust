@@ -180,7 +180,7 @@ namespace Teleopti.Ccc.Web.Areas.Rta
 
 		public void CheckForActivityChange(CheckForActivityChangeInputModel input)
 		{
-			Log.InfoFormat("Recieved message from servicebus to check schedule for Person: {0}, BusinessUnit: {1}}", input.PersonId, input.BusinessUnitId);
+			Log.InfoFormat("Recieved message from servicebus to check schedule for Person: {0}, BusinessUnit: {1}", input.PersonId, input.BusinessUnitId);
 
 			_rtaDataHandler.CheckForActivityChange(input.PersonId, input.BusinessUnitId);
 		}
