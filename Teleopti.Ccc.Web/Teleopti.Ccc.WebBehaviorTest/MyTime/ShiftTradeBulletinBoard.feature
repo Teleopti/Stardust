@@ -18,12 +18,12 @@ Background:
 	| Shift Trade sliding period start | 1                                         |
 	| Shift Trade sliding period end   | 30                                        |
 	And there is a workflow control set with
-	| Field                            | Value                                               |
-	| Name                             | Anonymous trade from tomorrow until 30 days forward |
-	| Schedule published to date       | 2040-06-24                                          |
-	| Shift Trade sliding period start | 1                                                   |
-	| Shift Trade sliding period end   | 30                                                  |
-	| Anonymous trading                | true                                                |
+	| Field                            | Value                           |
+	| Name                             | Anonymous trade 30 days forward |
+	| Schedule published to date       | 2040-06-24                      |
+	| Shift Trade sliding period start | 1                               |
+	| Shift Trade sliding period end   | 30                              |
+	| Anonymous trading                | true                            |
 	And I have a schedule period with 
 	| Field      | Value      |
 	| Start date | 2012-06-18 |
@@ -262,7 +262,7 @@ Scenario: Should modify shift trade post
 @OnlyRunIfEnabled('MyTimeWeb_AnonymousTrades_31638')
 Scenario: Should not show agent name in shift trade board list
 	Given I have the role 'Full access to mytime'
-	And I have the workflow control set 'Anonymous trade from tomorrow until 30 days forward'
+	And I have the workflow control set 'Anonymous trade 30 days forward'
 	And OtherAgent have the workflow control set 'Trade from tomorrow until 30 days forward'
 	And I have a shift with
 	| Field          | Value            |

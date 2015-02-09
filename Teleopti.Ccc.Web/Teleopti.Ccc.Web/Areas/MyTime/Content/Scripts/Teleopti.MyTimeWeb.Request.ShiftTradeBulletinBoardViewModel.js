@@ -414,7 +414,9 @@ Teleopti.MyTimeWeb.Request.ShiftTradeBulletinBoardViewModel = function(ajax) {
 					return new Teleopti.MyTimeWeb.Request.LayerAddShiftTradeViewModel(layer, minutesSinceTimeLineStart, self.pixelPerMinute());
 				});
 			}
-			var model = new Teleopti.MyTimeWeb.Request.PersonScheduleAddShiftTradeViewModel(mappedLayers, scheduleStartTime, scheduleEndTime, personSchedule.Name, personSchedule.PersonId, personSchedule.IsDayOff, personSchedule.ShiftExchangeOfferId);
+			var name = '';
+			if (!self.isAnonymousTrading()) name = personSchedule.Name;
+			var model = new Teleopti.MyTimeWeb.Request.PersonScheduleAddShiftTradeViewModel(mappedLayers, scheduleStartTime, scheduleEndTime, name, personSchedule.PersonId, personSchedule.IsDayOff, personSchedule.ShiftExchangeOfferId);
 			self.possibleTradeSchedules.push(model);
 			return model;
 		});
@@ -667,7 +669,7 @@ Teleopti.MyTimeWeb.Request.ShiftTradeBulletinBoardViewModel = function(ajax) {
 			type: 'GET',
 			success: function (data, textStatus, jqXHR) {
 				if (data.HasWorkflowControlSet) {
-					self.isAnonymousTrading(data.AnonymousTrading);
+					if (Teleopti.MyTimeWeb.Common.IsToggleEnabled('MyTimeWeb_AnonymousTrades_31638')) self.isAnonymousTrading(data.AnonymousTrading);
 					var now = moment(new Date(data.NowYear, data.NowMonth - 1, data.NowDay));
 					self.setDatePickerRange(now, data.OpenPeriodRelativeStart, data.OpenPeriodRelativeEnd);
 					var requestedDate = moment(now).add('days', data.OpenPeriodRelativeStart);
