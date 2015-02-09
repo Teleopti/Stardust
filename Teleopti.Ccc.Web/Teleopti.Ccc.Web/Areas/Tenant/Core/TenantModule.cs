@@ -1,8 +1,8 @@
 ﻿using System.Linq;
 using Autofac;
-using Teleopti.Ccc.Domain.Security.Authentication;
 using Teleopti.Ccc.Infrastructure.MultiTenancy;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.NHibernate;
+using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Web.Areas.Tenant.Core
 {
@@ -21,7 +21,7 @@ namespace Teleopti.Ccc.Web.Areas.Tenant.Core
 			//ta första appdb för nu!
 			builder.Register(c =>
 			{
-				var allDataSources = c.Resolve<IAvailableDataSourcesProvider>().AvailableDataSources();
+				var allDataSources = c.Resolve<IApplicationData>().RegisteredDataSourceCollection;
 				return TenantUnitOfWorkManager.CreateInstanceForWeb(allDataSources.First().Application.ConnectionString);
 			})
 				.AsImplementedInterfaces()
