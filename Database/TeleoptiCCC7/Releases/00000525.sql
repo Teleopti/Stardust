@@ -1,8 +1,3 @@
-SET ANSI_NULLS ON
-GO
-SET QUOTED_IDENTIFIER ON
-GO
-
 -- =============================================
 -- Author:		Fan Zhang, Zhiping Lan, Yanyi Wan
 -- Create date: 2015-02-05
@@ -38,7 +33,5 @@ BEGIN
 		INNER JOIN @teamids tids ON tids.Team = t.id
 	WHERE p.WorkflowControlSet IS NOT NULL		
 		AND (@scheduleDate BETWEEN StartDate AND EndDate) 	
-		AND ((@namesearch is null or @namesearch = '') or (CONCAT(p.LastName, p.FirstName) like @namesearch) or (CONCAT(p.FirstName, p.LastName) like @namesearch)) 	
+		AND ((@namesearch is null or @namesearch = '') or ((p.LastName + p.FirstName) like @namesearch) or ((p.FirstName + p.LastName) like @namesearch))	
 END
-GO
-
