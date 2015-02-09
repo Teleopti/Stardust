@@ -1,5 +1,4 @@
 using System;
-using System.Linq;
 using Autofac;
 using NUnit.Framework;
 using SharpTestsEx;
@@ -10,11 +9,11 @@ using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.IoC;
 
-namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta
+namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.AdherencePercentage
 {
 	[AdherenceTest]
 	[TestFixture]
-	public class AdherencePercentageReadModelUpdaterTest : IRegisterInContainer
+	public class OrderedEventsTest : IRegisterInContainer
 	{
 		public FakeAdherencePercentageReadModelPersister Persister;
 		public AdherencePercentageReadModelUpdater Target;
@@ -273,6 +272,5 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta
 			Persister.PersistedModel.TimeOutOfAdherence.Should().Be(TimeSpan.Zero);
 			Persister.PersistedModel.TimeInAdherence.Should().Be("60".Minutes());
 		}
-
 	}
 }

@@ -175,7 +175,8 @@
     <Compile Include="ApplicationLayer\Rta\AdherenceDetails\OutOfAdherenceTest.cs" />
     <Compile Include="ApplicationLayer\Rta\AdherenceDetails\ShiftEndedTest.cs" />
     <Compile Include="ApplicationLayer\Rta\AdherenceDetails\StartTimesTest.cs" />
-    <Compile Include="ApplicationLayer\Rta\AdherencePercentageReadModelUpdaterTest.cs" />
+    <Compile Include="ApplicationLayer\Rta\AdherencePercentage\OrderedEventsTest.cs" />
+    <Compile Include="ApplicationLayer\Rta\AdherencePercentage\UnorderedEventsTest.cs" />
     <Compile Include="ApplicationLayer\Rta\AdherenceTestAttribute.cs" />
     <Compile Include="ApplicationLayer\Rta\CalculateAdherenceDetailsTest.cs" />
     <Compile Include="ApplicationLayer\Rta\CalculateAdherenceTest.cs" />
