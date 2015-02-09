@@ -269,6 +269,7 @@
     <Compile Include="DayOffPlanning\FreeWeekendDayValidatorTest.cs" />
     <Compile Include="DayOffPlanning\FreeWeekendSolverTest.cs" />
     <Compile Include="DayOffPlanning\FreeWeekendValidatorTest.cs" />
+    <Compile Include="DayOffPlanning\GeneticDayOffBackToLegalStateSolverTest.cs" />
     <Compile Include="DayOffPlanning\IntradayDecisionMakerTest.cs" />
     <Compile Include="DayOffPlanning\KeepFreeWeekendDayValidatorTest.cs" />
     <Compile Include="DayOffPlanning\KeepFreeWeekendValidatorTest.cs" />
