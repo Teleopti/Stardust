@@ -196,6 +196,11 @@
 	vertical-align: middle;
 }
 
+.person-schedule .absence-detail {
+	border-style: solid;
+	border-width: thin;
+}
+
 .person-schedule .space {
 	margin-top: 15px;
 }

@@ -147,7 +147,7 @@ define([
 
 		this.DisplayGroupMates = ko.computed(function () {
 			return self.Resources.MyTeam_MakeTeamScheduleConsistent_31897
-				? self.AddingActivity() || self.AddingFullDayAbsence() || self.AddingIntradayAbsence() || self.MovingActivity()
+				? true
 				: self.AddingActivity();
 		});
 
