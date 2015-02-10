@@ -47,7 +47,7 @@ Teleopti.MyTimeWeb.StudentAvailability.PeriodFeedbackViewModel = function (ajax,
 	this.PossibleResultContractTimeMinutesLower = ko.computed(function () {
 		var sum = 0;
 		$.each(self.DayViewModels, function (index, day) {
-			if (day.HasAvailability()) {
+			if (day.EditableIsInOpenPeriod() && day.HasAvailability()) {
 				var value = day.PossibleContractTimeMinutesLower();
 				if (value)
 					sum += parseInt(value);
@@ -59,7 +59,7 @@ Teleopti.MyTimeWeb.StudentAvailability.PeriodFeedbackViewModel = function (ajax,
 	this.PossibleResultContractTimeMinutesUpper = ko.computed(function () {
 		var sum = 0;
 		$.each(self.DayViewModels, function (index, day) {
-			if (day.HasAvailability()) {
+			if (day.EditableIsInOpenPeriod() && day.HasAvailability()) {
 				var value = day.PossibleContractTimeMinutesUpper();
 				if (value)
 					sum += parseInt(value);
