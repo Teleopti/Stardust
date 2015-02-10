@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
+using Microsoft.FSharp.Linq;
 using NUnit.Framework;
 using Rhino.Mocks;
 using SharpTestsEx;
@@ -143,6 +144,31 @@ namespace Teleopti.Ccc.InfrastructureTest.Foundation
         {
             new ApplicationData(_receivedSettings, (IDataSource) null, null);
         }
+
+		[Test]
+		public void CanFindDataSourceByTenant()
+		{
+			var dsName = Guid.NewGuid().ToString();
+			var ds = new DataSource(UnitOfWorkFactoryFactory.CreateUnitOfWorkFactory(dsName), null, null);
+			var target = new ApplicationData(_receivedSettings, new[] {ds}, null, null);
+			target.DataSource(dsName).Should().Be.SameInstanceAs(ds);
+		}
+
+		[Test, Ignore("Enable this test when we're getting further with tenancy stuff")]
+		public void MissingDataSourceTenant()
+		{
+			var dsName = Guid.NewGuid().ToString();
+			var ds = new DataSource(UnitOfWorkFactoryFactory.CreateUnitOfWorkFactory(dsName), null, null);
+			var target = new ApplicationData(_receivedSettings, new[] { ds }, null, null);
+			target.DataSource("something else").Should().Be.Null();
+		}
+
+		[Test]
+		public void NoDataSourceTenant()
+		{
+			var target = new ApplicationData(_receivedSettings, (IMessageBrokerComposite)null, null, null);
+			target.DataSource("something").Should().Be.Null();
+		}
 
         [Test]
         public void VerifyDispose()

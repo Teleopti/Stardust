@@ -63,7 +63,7 @@ namespace Teleopti.Ccc.WebTest.Core.Authentication.DataProvider
 			var tokenIdentity = new TokenIdentity {UserIdentifier = "user", DataSource = dataSource};
 
 			validDs.Stub(x => x.DataSourceName).Return(dataSource);
-			applicationData.Stub(x => x.RegisteredDataSourceCollection).Return(new []{validDs});
+			applicationData.Stub(x => x.DataSource(dataSource)).Return(validDs);
 
 			tokenIdentityProvider.Stub(x => x.RetrieveToken()).Return(tokenIdentity);
 			availableApplicationTokenDataSource.Stub(x => x.IsDataSourceAvailable(validDs, tokenIdentity.UserIdentifier)).Return(true);
@@ -116,9 +116,8 @@ namespace Teleopti.Ccc.WebTest.Core.Authentication.DataProvider
 		public void CanFindDataSourceByName()
 		{
 			var hit = new testDataSource("gnaget!");
-			var dataSources = new[] {new testDataSource("heja"), hit};
 
-			applicationData.Stub(x => x.RegisteredDataSourceCollection).Return(dataSources);
+			applicationData.Stub(x => x.DataSource("gnaget!")).Return(hit);
 
 			target.RetrieveDataSourceByName("gnaget!").Should().Be.SameInstanceAs(hit);
 		}

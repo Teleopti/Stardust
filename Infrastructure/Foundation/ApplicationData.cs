@@ -83,6 +83,13 @@ namespace Teleopti.Ccc.Infrastructure.Foundation
 			get { return _registeredDataSourceCollection; }
 		}
 
+		public IDataSource DataSource(string tenant)
+		{
+			//here real name should be used!
+			//return _registeredDataSourceCollection.SingleOrDefault(x => x.DataSourceName.Equals(tenant));
+			return _registeredDataSourceCollection.FirstOrDefault();
+		}
+
 		public IMessageBrokerComposite Messaging
 		{
 			get { return _messageBroker; }
@@ -115,7 +122,7 @@ namespace Teleopti.Ccc.Infrastructure.Foundation
 
 		protected virtual void ReleaseManagedResources()
 		{
-			foreach (IDataSource dataSources in RegisteredDataSourceCollection)
+			foreach (IDataSource dataSources in _registeredDataSourceCollection)
 			{
 				dataSources.Dispose();
 			}

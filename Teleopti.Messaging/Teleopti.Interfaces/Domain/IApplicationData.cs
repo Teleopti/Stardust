@@ -16,6 +16,8 @@ namespace Teleopti.Interfaces.Domain
 		/// <value>The registered data sources.</value>
 		IEnumerable<IDataSource> RegisteredDataSourceCollection { get; }
 
+		IDataSource DataSource(string tenant);
+
 		/// <summary>
 		/// Gets the message broker.
 		/// </summary>

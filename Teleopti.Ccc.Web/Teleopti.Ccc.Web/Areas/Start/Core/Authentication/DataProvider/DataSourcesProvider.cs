@@ -36,7 +36,7 @@ namespace Teleopti.Ccc.Web.Areas.Start.Core.Authentication.DataProvider
 
 		public IDataSource RetrieveDataSourceByName(string dataSourceName)
 		{
-			return _applicationData.RegisteredDataSourceCollection.FirstOrDefault(x => x.DataSourceName.Equals(dataSourceName));
+			return _applicationData.DataSource(dataSourceName);
 		}
 
 		public IEnumerable<IDataSource> RetrieveDatasourcesForApplicationIdentityToken()
