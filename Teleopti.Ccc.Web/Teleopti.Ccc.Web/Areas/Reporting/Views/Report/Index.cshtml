@@ -1,0 +1,19 @@
+﻿@model Teleopti.Ccc.Web.Areas.Reporting.Models.ReportModel
+@{
+	Layout = null;
+}
+<!DOCTYPE html>
+<html style="height:100%">
+<head>
+	<title>@Model.Name</title>
+	<link href="~/Areas/Reporting/Content/Styles/Styles.css" rel="stylesheet" />
+</head>
+<body style="margin-top: 0;height:98%">
+	<div class="Caption">
+		<div class="ReportName" style="padding-top: 2px">
+			@Model.Name
+		</div>
+	</div>
+	<iframe style="border: none;height: 90%;width: 100%;margin-top: 2%" src="~/Areas/Reporting/Index.aspx?ReportID=@Model.Id"></iframe>
+</body>
+</html>
