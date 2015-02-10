@@ -146,7 +146,9 @@ define([
 		});
 
 		this.DisplayGroupMates = ko.computed(function () {
-			return self.AddingActivity();
+			return self.Resources.MyTeam_MakeTeamScheduleConsistent_31897
+				? self.AddingActivity() || self.AddingFullDayAbsence() || self.AddingIntradayAbsence() || self.MovingActivity()
+				: self.AddingActivity();
 		});
 
 		this.SetViewOptions = function (options) {
@@ -206,12 +208,14 @@ define([
 
 		this.UpdateSchedules = function (data) {
 			var schedules = data.Schedules;
+
 			// if we dont display group mates, then filter out their data
 			if (!self.DisplayGroupMates()) {
 				schedules = lazy(schedules)
 					.filter(function (x) {return x.PersonId == self.PersonId(); })
 					.toArray();
 			}
+
 			// data might include the same person more than once, with schedule for more than one day
 			self.Persons([]);
 			var people = [];

@@ -314,7 +314,6 @@
 						</tr>
 
 						<!-- ko ifnot: Loading -->
-						<!-- ko if: AddingActivity -->
 						<!-- ko foreach: SortedPersons -->
 						<tr class="person" data-bind="attr: { 'data-person-id': Id }, if: $parent.PersonId() != Id">
 							<td class="person-name person-name-column">
@@ -343,124 +342,154 @@
 						</tr>
 						<!-- /ko -->
 						<!-- /ko -->
-						<!-- /ko -->
 					</tbody>
 				</table>
 			</div>
 		</div>
 	</div>
-
-	<div class="row" data-bind="ifnot: DisplayForm">
-		<div class="col-md-8">
-			<table class="absence-list">
-				<tbody data-bind="foreach: Absences">
-					<tr class="absence">
-						<td>
-							<table class="table">
-								<tr class="absence-user-timezone">
-									<td class="absence-item" data-bind="style: { backgroundColor: BackgroundColor }">
-									<td class="absence-item">
-										<span class="absence-name" data-bind="text: Name"></span>
-									</td>
-									<td class="absence-item">
-										<i class="glyphicon glyphicon-step-backward"></i>
-										<span data-bind="text: StartDateTime"></span>
-									</td>
-									<td class="absence-item">
-										<i class="glyphicon glyphicon-minus"></i>
-									</td>
-									<td class="absence-item">
-										<span data-bind="text: EndDateTime"></span>
-										<i class="glyphicon glyphicon-step-forward"></i>
-									</td>
-									<td class="absence-item" rowspan="2">
-										<!-- ko ifnot: AboutToRemove -->
-										<button class="btn remove" data-bind="click: Remove, text: $root.Resources.Remove" />
-										<!-- /ko -->
-										<!-- ko if: AboutToRemove -->
-										<button class="btn btn-danger confirm-removal" data-bind="disable: Removing, click: ConfirmRemoval, text: $root.Resources.ConfirmRemoval" />
-										<!-- /ko -->
-									</td>
-									<td class="absence-item" rowspan="2">
-										<button class="btn back-to-work" data-bind="click: ShowBackToWorkSection, text: $root.Resources.AbsenceBackToWork, visible: IsBackToWorkFormFeatureEnabled" />
-									</td>
-								</tr>
-								<tr class="absence-other-timezone" data-bind="visible:IsOtherTimezone">
-									<td class="absence-item" data-bind="style: { backgroundColor: BackgroundColor }">
-									<td class="absence-item other-time-zone-short">
-										<i class="glyphicon glyphicon-globe"></i>
-										<span data-bind="text: TimeZoneNameShort"></span>
-									</td>
-									<td class="absence-item">
-										<i class="glyphicon glyphicon-step-backward"></i>
-										<span data-bind="text: StartTimeOtherTimeZone"></span>
-									</td>
-									<td class="absence-item">
-										<i class="glyphicon glyphicon-minus"></i>
-									</td>
-									<td class="absence-item">
-										<span data-bind="text: EndTimeOtherTimeZone"></span>
-										<i class="glyphicon glyphicon-step-forward"></i>
-									</td>
-								</tr>
-							</table>
-							<div class="back-to-work-form" data-bind="visible:IsBackToWorkFormVisible">
-								<div class="row form-group">
-									<div class="col-xs-8">
-										<div data-bind="text: BackToWorkTextPrompt"></div>
-									</div>
-								</div>
-								<div class="row form-group">
-									<div class="col-xs-4">
-										<div class="input-group">
-											<span class="input-group-btn">
-												<button class="btn btn-sm">
-													<i class="glyphicon glyphicon-step-forward"></i>
-												</button>
-											</span>
-											<input type="text" class="input-sm date-input form-control" readonly="readonly" data-bind="value : CurrentDate" />
-											<span class="input-group-btn">
-												<button class="btn btn-sm" data-bind="datepicker: CurrentDateMoment, datepickerOptions: { format: $root.Resources.DateFormatForMoment, weekStart: $root.Resources.FirstDayOfWeek, autoclose: true }">
-													<i class="glyphicon glyphicon-calendar"></i>
-												</button>
-											</span>
-										</div>
-									</div>
-								</div>
-								<div class="row form-group" data-bind="visible:IsOtherTimezone">
-									<div class="col-xs-4 timeZoneText">
-										<i class="glyphicon glyphicon-globe"></i>
-										<span data-bind="text: TimeZoneNameShort"></span>
-									</div>
-									<div class="col-xs-4 timeZoneText">
-										<span data-bind="text: ModifiedEndTimeOtherTimeZone"></span>
-										<i class="glyphicon glyphicon-step-forward"></i>
-									</div>
-								</div>
-									<!-- ko if: ErrorMessage -->
-								<div class="alert">
-									<span data-bind="text: ErrorMessage"></span>
-								</div>
-								<!-- /ko -->
-								<div class="row form-group">
-									<div class="col-xs-8">
-										<button class="btn btn-default cancel" data-bind="click: $root.backToTeamSchedule, text: $root.Resources.Cancel" />
-										<button class="btn btn-primary save-absence" data-bind="click: Save, text: $root.Resources.Save, enable: IsAbsenceValid" />
-									</div>
-								</div>
-							</div>
-						</td>
-					</tr>
-				</tbody>
-			</table>
-			<div>
-				<!-- ko if: $root.Resources.MyTeam_MakeTeamScheduleConsistent_31897 -->
-				<button class="btn btn-default cancel" data-bind="text: $root.Resources.Cancel, click: $root.backToTeamSchedule"></button>
+	
+	<!-- ko ifnot: DisplayForm-->
+    <div class="row">
+        <div class="col-md-8">
+            <table class="absence-list">
+                <tbody data-bind="foreach: Absences">
+                    <tr class="absence">
+                        <td>
+                            <table class="table">
+                                <tr class="absence-user-timezone">
+                                    <td class="absence-item" data-bind="style: { backgroundColor: BackgroundColor }">
+                                    <td class="absence-item">
+                                        <span class="absence-name" data-bind="text: Name"></span>
+                                    </td>
+                                    <td class="absence-item">
+                                        <i class="glyphicon glyphicon-step-backward"></i>
+                                        <span data-bind="text: StartDateTime"></span>
+                                    </td>
+                                    <td class="absence-item">
+                                        <i class="glyphicon glyphicon-minus"></i>
+                                    </td>
+                                    <td class="absence-item">
+                                        <span data-bind="text: EndDateTime"></span>
+                                        <i class="glyphicon glyphicon-step-forward"></i>
+                                    </td>
+                                    <td class="absence-item" rowspan="2">
+                                        <!-- ko ifnot: AboutToRemove -->
+                                        <button class="btn remove" data-bind="click: Remove, text: $root.Resources.Remove" />
+                                        <!-- /ko -->
+                                        <!-- ko if: AboutToRemove -->
+                                        <button class="btn btn-danger confirm-removal" data-bind="disable: Removing, click: ConfirmRemoval, text: $root.Resources.ConfirmRemoval" />
+                                        <!-- /ko -->
+                                    </td>
+                                    <td class="absence-item" rowspan="2">
+                                        <button class="btn back-to-work" data-bind="click: ShowBackToWorkSection, text: $root.Resources.AbsenceBackToWork, visible: IsBackToWorkFormFeatureEnabled" />
+                                    </td>
+                                </tr>
+                                <tr class="absence-other-timezone" data-bind="visible:IsOtherTimezone">
+                                    <td class="absence-item" data-bind="style: { backgroundColor: BackgroundColor }">
+                                    <td class="absence-item other-time-zone-short">
+                                        <i class="glyphicon glyphicon-globe"></i>
+                                        <span data-bind="text: TimeZoneNameShort"></span>
+                                    </td>
+                                    <td class="absence-item">
+                                        <i class="glyphicon glyphicon-step-backward"></i>
+                                        <span data-bind="text: StartTimeOtherTimeZone"></span>
+                                    </td>
+                                    <td class="absence-item">
+                                        <i class="glyphicon glyphicon-minus"></i>
+                                    </td>
+                                    <td class="absence-item">
+                                        <span data-bind="text: EndTimeOtherTimeZone"></span>
+                                        <i class="glyphicon glyphicon-step-forward"></i>
+                                    </td>
+                                </tr>
+                            </table>
+                            <div class="back-to-work-form" data-bind="visible:IsBackToWorkFormVisible">
+                                <div class="row form-group">
+                                    <div class="col-xs-8">
+                                        <div data-bind="text: BackToWorkTextPrompt"></div>
+                                    </div>
+                                </div>
+                                <div class="row form-group">
+                                    <div class="col-xs-4">
+                                        <div class="input-group">
+                                            <span class="input-group-btn">
+                                                <button class="btn btn-sm">
+                                                    <i class="glyphicon glyphicon-step-forward"></i>
+                                                </button>
+                                            </span>
+                                            <input type="text" class="input-sm date-input form-control" readonly="readonly" data-bind="value : CurrentDate" />
+                                            <span class="input-group-btn">
+                                                <button class="btn btn-sm" data-bind="datepicker: CurrentDateMoment, datepickerOptions: { format: $root.Resources.DateFormatForMoment, weekStart: $root.Resources.FirstDayOfWeek, autoclose: true }">
+                                                    <i class="glyphicon glyphicon-calendar"></i>
+                                                </button>
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row form-group" data-bind="visible:IsOtherTimezone">
+                                    <div class="col-xs-4 timeZoneText">
+                                        <i class="glyphicon glyphicon-globe"></i>
+                                        <span data-bind="text: TimeZoneNameShort"></span>
+                                    </div>
+                                    <div class="col-xs-4 timeZoneText">
+                                        <span data-bind="text: ModifiedEndTimeOtherTimeZone"></span>
+                                        <i class="glyphicon glyphicon-step-forward"></i>
+                                    </div>
+                                </div>
+                                <!-- ko if: ErrorMessage -->
+                                <div class="alert">
+                                    <span data-bind="text: ErrorMessage"></span>
+                                </div>
+                                <!-- /ko -->
+                                <div class="row form-group">
+                                    <div class="col-xs-8">
+                                        <button class="btn btn-default cancel" data-bind="click: $root.backToTeamSchedule, text: $root.Resources.Cancel"></button>
+                                        <button class="btn btn-primary save-absence" data-bind="click: Save, text: $root.Resources.Save, enable: IsAbsenceValid"></button>
+                                    </div>
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+            <div>
+                <!-- ko if: $root.Resources.MyTeam_MakeTeamScheduleConsistent_31897 -->
+                <button class="btn btn-default cancel" data-bind="text: $root.Resources.Cancel, click: $root.backToTeamSchedule"></button>
+                <!-- /ko -->
+            </div>
+        </div>
+        <div class="col-md-4"></div>
+    </div>
+	<!-- ko ifnot: Loading -->
+	<!-- ko foreach: SortedPersons -->
+	<tr class="person" data-bind="attr: { 'data-person-id': Id }, if: $parent.PersonId() != Id">
+		<td class="person-name person-name-column">
+			<div class="person-name nowrap" data-bind="text: Name"></div>
+		</td>
+		<td class="schedule schedule-column" style="padding-top: 4px">
+			<div class="relative time-line-for">
+				<!-- ko foreach: Shifts -->
+				<div class="shift" data-bind="
+		template: {
+				name: 'layerTemplate',
+				foreach: Layers
+		}
+										">
+				</div>
+				<!-- /ko -->
+				<!-- ko foreach: DayOffs -->
+				<!-- ko if: OverlapsTimeLine -->
+				<div class="dayoff absolute"
+					 data-bind="style: { left: StartPixels() + 'px', width: LengthPixels() + 'px' }">
+				</div>
+				<!-- /ko -->
 				<!-- /ko -->
 			</div>
-		</div>
-		<div class="col-md-4"></div>
-	</div>
+		</td>
+	</tr>
+	<!-- /ko -->
+	<!-- /ko -->
+	<!-- /ko -->
 </div>
 
 <script id="layerTemplate" type="text/html">
