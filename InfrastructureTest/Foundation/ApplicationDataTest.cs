@@ -73,18 +73,6 @@ namespace Teleopti.Ccc.InfrastructureTest.Foundation
         }
 
         /// <summary>
-        /// At least one data source must exist.
-        /// </summary>
-        [Test]
-        [ExpectedException(typeof (DataSourceException))]
-        public void AtLeastOneDataSourceMustExist()
-        {
-            ReadOnlyCollection<IDataSource> oneDataSource
-                = new ReadOnlyCollection<IDataSource>(new List<IDataSource>());
-						using (new ApplicationData(_receivedSettings, oneDataSource, null, null, null)) { }
-        }
-
-        /// <summary>
         /// Duplicate data sources are not allowed.
         /// </summary>
         [Test]
