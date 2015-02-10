@@ -18,8 +18,7 @@ namespace Teleopti.Ccc.Sdk.WcfService.LogOn
         public void SetDataSource(ITokenWithBusinessUnitAndDataSource customUserNameSecurityToken)
         {
             var dataSource =
-                StateHolderReader.Instance.StateReader.ApplicationScopeData.RegisteredDataSourceCollection.
-                    FirstOrDefault(d => d.Application.Name == customUserNameSecurityToken.DataSource);
+                StateHolderReader.Instance.StateReader.ApplicationScopeData.DataSource(customUserNameSecurityToken.DataSource);
 
             _dataSourceContainer = new DataSourceContainer(dataSource, new RepositoryFactory(), null,
                                                            AuthenticationTypeOption.Windows);

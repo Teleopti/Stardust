@@ -26,7 +26,7 @@ namespace Teleopti.Ccc.Sdk.WcfHost
             var password = Request.Form["Password"];
             var useWindowsIdentity = Convert.ToBoolean(Request.Form["UseWindowsIdentity"], CultureInfo.InvariantCulture); 
 
-            var ds = StateHolder.Instance.StateReader.ApplicationScopeData.RegisteredDataSourceCollection.FirstOrDefault(d => d.Application.Name == datasource);
+            var ds = StateHolder.Instance.StateReader.ApplicationScopeData.DataSource(datasource);
             var repFactory = new RepositoryFactory();
             var findApplicationUser = AutofacHostFactory.Container.Resolve<IFindApplicationUser>();
 

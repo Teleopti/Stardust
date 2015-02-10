@@ -21,8 +21,7 @@ namespace Teleopti.Ccc.Sdk.WcfService.LogOn
         {
             var findApplicationUser = AutofacHostFactory.Container.Resolve<IFindApplicationUser>();
             var dataSource =
-                StateHolderReader.Instance.StateReader.ApplicationScopeData.RegisteredDataSourceCollection.
-                    FirstOrDefault<IDataSource>(d => d.Application.Name == customUserNameSecurityToken.DataSource);
+                StateHolderReader.Instance.StateReader.ApplicationScopeData.DataSource(customUserNameSecurityToken.DataSource);
 
             _dataSourceContainer = new DataSourceContainer(dataSource, new RepositoryFactory(), findApplicationUser,
                                                            AuthenticationTypeOption.Application);
