@@ -92,8 +92,6 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 				 try
 				 {
 
-			killNotNeededSessionFactories();
-
 					 applicationStarter.LoadShellApplication();
 				 }
 				 catch (Exception exception)
