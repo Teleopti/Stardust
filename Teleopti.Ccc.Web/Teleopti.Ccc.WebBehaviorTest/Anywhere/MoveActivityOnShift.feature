@@ -120,6 +120,14 @@ Scenario: Back to viewing schedule after cancel move activity
 	| Activity       | Phone            |
 	| Start time     | 2013-11-18 11:00 |
 	| End time       | 2013-11-18 17:00 |
+	| Lunch activity | Lunch            |
+	| Lunch start time     | 2013-11-18 12:00 |
+	| Lunch end time       | 2013-11-18 13:00 |
 	When I view schedules for 'Team green' on '2013-11-18'
+	And I select the activity with
+	| Field          | Value            |
+	| Activity       | Lunch            |
+	| Start time     | 2013-11-18 12:00 |
+	And I view person schedules move activity form for 'John King' in 'Team green' on '2013-11-18' with selected start minutes of '720'
 	And I click 'cancel'
-	Then I should be viewing schedules for '2013-11-18'	
+	Then I should be viewing schedules for '2013-11-18'
