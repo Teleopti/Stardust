@@ -46,8 +46,8 @@ namespace Teleopti.Ccc.WebTest.Areas.Permissions
 			((Guid) result.BusinessUnit.Id).Should()
 				.Be.EqualTo(BusinessUnitFactory.BusinessUnitUsedInTest.Id.GetValueOrDefault());
 
-			((ICollection<object>)result.BusinessUnit.Sites).Count.Should().Be.EqualTo(1);
-			((ICollection<object>)(((ICollection<dynamic>)result.BusinessUnit.Sites).First()).Teams).Count.Should().Be.EqualTo(1);
+			((ICollection<object>)result.BusinessUnit.ChildNodes).Count.Should().Be.EqualTo(1);
+			((ICollection<object>)(((ICollection<dynamic>)result.BusinessUnit.ChildNodes).First()).ChildNodes).Count.Should().Be.EqualTo(1);
 		}
 
 
@@ -66,7 +66,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Permissions
 			var target = new OrganizationSelectionController(currentBusinessUnit, siteRepository);
 			dynamic result = target.GetOrganizationSelection();
 
-			((ICollection<object>)(((ICollection<dynamic>)result.BusinessUnit.Sites).First()).Teams).Count.Should().Be.EqualTo(0);
+			((ICollection<object>)(((ICollection<dynamic>)result.BusinessUnit.ChildNodes).First()).ChildNodes).Count.Should().Be.EqualTo(0);
 		}
 	}
 }

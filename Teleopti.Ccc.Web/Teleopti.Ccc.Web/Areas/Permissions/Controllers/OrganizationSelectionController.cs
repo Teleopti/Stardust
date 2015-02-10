@@ -15,6 +15,9 @@ namespace Teleopti.Ccc.Web.Areas.Permissions.Controllers
 	{
 		private readonly ICurrentBusinessUnit _currentBusinessUnit;
 		private readonly ISiteRepository _siteRepository;
+		private const string SiteType = "Site";
+		private const string TeamType = "Team";
+		private const string BusinessUnitType = "BusinessUnit";
 
 		public OrganizationSelectionController(ICurrentBusinessUnit currentBusinessUnit, ISiteRepository siteRepository)
 		{
@@ -34,7 +37,8 @@ namespace Teleopti.Ccc.Web.Areas.Permissions.Controllers
 						{
 							currentBusinessUnit.Name,
 							Id = currentBusinessUnit.Id.GetValueOrDefault(),
-							Sites =
+							Type = BusinessUnitType,
+							ChildNodes =
 								_siteRepository.LoadAll()
 									.Select(
 										s =>
@@ -42,9 +46,10 @@ namespace Teleopti.Ccc.Web.Areas.Permissions.Controllers
 											{
 												s.Description.Name,
 												Id = s.Id.GetValueOrDefault(),
-												Teams =
+												Type = SiteType,
+												ChildNodes =
 													s.TeamCollection.Where(t => t.IsChoosable)
-														.Select(t => new { t.Description.Name, Id = t.Id.GetValueOrDefault() }).ToArray()
+														.Select(t => new { Type = TeamType, t.Description.Name, Id = t.Id.GetValueOrDefault() }).ToArray()
 											})
 									.ToArray()
 						},
