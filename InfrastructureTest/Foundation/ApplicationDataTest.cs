@@ -62,16 +62,6 @@ namespace Teleopti.Ccc.InfrastructureTest.Foundation
             Assert.AreSame(passwordPolicy,target.LoadPasswordPolicyService);
         }
 
-        [Test]
-        public void VerifySingleDataSourceConstructor()
-        {
-            IMessageBrokerComposite messBroker = mocks.StrictMock<IMessageBrokerComposite>();
-            IDataSource dataSource = mocks.StrictMock<IDataSource>();
-            IApplicationData target = new ApplicationData(_receivedSettings, new[]{dataSource}, messBroker, null, null);
-            Assert.AreSame(_receivedSettings, target.AppSettings);
-            Assert.AreSame(dataSource, target.RegisteredDataSourceCollection.First());
-        }
-
         /// <summary>
         /// Duplicate data sources are not allowed.
         /// </summary>
