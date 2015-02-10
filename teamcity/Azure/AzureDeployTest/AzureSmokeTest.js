@@ -11,8 +11,8 @@ var log = function(msg){
 	client.call(function(){console.log(msg)});
 };
 client.init();
-log('navigate to web');
-client.url('https://teleoptirnd.teleopticloud.com/Web')
+log('navigate to url ' + process.env.UrlToTest);
+client.url(process.env.UrlToTest)
 	.waitForExist('#Username-input', 60000, false, function(err, res, response) {
 		if (err) {
 			log('failed to navigate to sign in page.');
@@ -31,7 +31,7 @@ client.setValue('#Username-input', 'demo')
 		log('sign in succeeded');
 	});
 log('navigate to health check');
-client.url('https://teleoptirnd.teleopticloud.com/Web/HealthCheck')
+client.url(process.env.UrlToTest + '/HealthCheck')
 	.waitForEnabled('#Start-Check', 60000, false, function(err, res, response) {
 		if (err) {
 			log('failed to navigate to health check page.');
