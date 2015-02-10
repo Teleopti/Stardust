@@ -1,0 +1,12 @@
+{
+  "name": "SmokeTest",
+  "version": "0.0.1",
+  "description": "",
+  "scripts": {
+  },
+  "author": "Teleopti",
+  "dependencies": {
+    "request": "2.53.0",
+    "webdriverio": "2.4.5"
+  }
+}
