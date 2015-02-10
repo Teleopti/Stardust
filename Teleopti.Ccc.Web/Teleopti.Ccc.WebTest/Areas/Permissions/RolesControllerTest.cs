@@ -124,7 +124,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Permissions
 		}
 
 		[Test]
-		public void ShouldRemoveAvailableDataFromRole()
+		public void ShouldRemoveAvailableBusinessUnitFromRole()
 		{
 			var roleRepository = MockRepository.GenerateMock<IApplicationRoleRepository>();
 			var dataRepository = MockRepository.GenerateMock<IAvailableDataRepository>();
@@ -132,29 +132,57 @@ namespace Teleopti.Ccc.WebTest.Areas.Permissions
 
 			var roleId = Guid.NewGuid();
 			var businessUnit = BusinessUnitFactory.CreateWithId("Bu 2");
-			var site = SiteFactory.CreateSimpleSite();
-			site.SetId(Guid.NewGuid());
+			
+			var agentRole = new ApplicationRole { Name = "Agent", AvailableData = new AvailableData() };
+			agentRole.AvailableData.AddAvailableBusinessUnit(businessUnit);
+			
+			roleRepository.Stub(x => x.Get(roleId)).Return(agentRole);
+
+			target.RemoveAvailableBusinessUnit(roleId, businessUnit.Id.GetValueOrDefault());
+
+			agentRole.AvailableData.AvailableBusinessUnits.Should().Have.Count.EqualTo(0);
+		}
+
+		[Test]
+		public void ShouldRemoveAvailableTeamFromRole()
+		{
+			var roleRepository = MockRepository.GenerateMock<IApplicationRoleRepository>();
+			var dataRepository = MockRepository.GenerateMock<IAvailableDataRepository>();
+			var target = new RolesController(roleRepository, null, dataRepository, new CurrentBusinessUnit(new FakeCurrentIdentity("Pelle")));
+
+			var roleId = Guid.NewGuid();
 			var team = TeamFactory.CreateSimpleTeam();
 			team.SetId(Guid.NewGuid());
 
 			var agentRole = new ApplicationRole { Name = "Agent", AvailableData = new AvailableData() };
-			agentRole.AvailableData.AddAvailableBusinessUnit(businessUnit);
-			agentRole.AvailableData.AddAvailableSite(site);
 			agentRole.AvailableData.AddAvailableTeam(team);
 
 			roleRepository.Stub(x => x.Get(roleId)).Return(agentRole);
 
-			target.RemoveAvailableData(roleId,
-				new AvailableDataForRoleInput
-				{
-					BusinessUnits = new Collection<Guid> { businessUnit.Id.GetValueOrDefault() },
-					Sites = new Collection<Guid> { site.Id.GetValueOrDefault() },
-					Teams = new Collection<Guid> { team.Id.GetValueOrDefault() },
-				});
+			target.RemoveAvailableTeam(roleId, team.Id.GetValueOrDefault());
 
-			agentRole.AvailableData.AvailableBusinessUnits.Should().Have.Count.EqualTo(0);
-			agentRole.AvailableData.AvailableSites.Should().Have.Count.EqualTo(0);
 			agentRole.AvailableData.AvailableTeams.Should().Have.Count.EqualTo(0);
+		}
+
+		[Test]
+		public void ShouldRemoveAvailableSiteFromRole()
+		{
+			var roleRepository = MockRepository.GenerateMock<IApplicationRoleRepository>();
+			var dataRepository = MockRepository.GenerateMock<IAvailableDataRepository>();
+			var target = new RolesController(roleRepository, null, dataRepository, new CurrentBusinessUnit(new FakeCurrentIdentity("Pelle")));
+
+			var roleId = Guid.NewGuid();
+			var site = SiteFactory.CreateSimpleSite();
+			site.SetId(Guid.NewGuid());
+			
+			var agentRole = new ApplicationRole { Name = "Agent", AvailableData = new AvailableData() };
+			agentRole.AvailableData.AddAvailableSite(site);
+			
+			roleRepository.Stub(x => x.Get(roleId)).Return(agentRole);
+
+			target.RemoveAvailableSite(roleId,site.Id.GetValueOrDefault());
+
+			agentRole.AvailableData.AvailableSites.Should().Have.Count.EqualTo(0);
 		}
 
 		[Test]
@@ -274,7 +302,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Permissions
 			roleRepository.Stub(x => x.Get(roleId)).Return(agentRole);
 			functionRepository.Stub(x => x.Load(functionOneId)).Return(functionOne);
 
-			target.RemoveFunctions(roleId, new FunctionsForRoleInput { Functions = new Collection<Guid> { functionOneId } });
+			target.RemoveFunction(roleId, functionOneId);
 
 			agentRole.ApplicationFunctionCollection.Should().Be.Empty();
 		}
@@ -296,7 +324,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Permissions
 			roleRepository.Stub(x => x.Get(roleId)).Return(agentRole);
 			functionRepository.Stub(x => x.Load(functionOneId)).Return(functionOne);
 
-			target.RemoveFunctions(roleId, new FunctionsForRoleInput { Functions = new Collection<Guid> { functionOneId } });
+			target.RemoveFunction(roleId, functionOneId);
 
 			agentRole.ApplicationFunctionCollection.Should().Contain(functionOne);
 		}

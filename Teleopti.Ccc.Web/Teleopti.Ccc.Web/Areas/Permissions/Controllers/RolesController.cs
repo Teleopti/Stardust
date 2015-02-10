@@ -111,16 +111,14 @@ namespace Teleopti.Ccc.Web.Areas.Permissions.Controllers
 			return Ok();
 		}
 
-		[UnitOfWork, Route("api/Permissions/Roles/{roleId}/Functions"), HttpDelete]
-		public virtual IHttpActionResult RemoveFunctions(Guid roleId, [FromBody]FunctionsForRoleInput model)
+		[UnitOfWork, Route("api/Permissions/Roles/{roleId}/Function/{functionId}"), HttpDelete]
+		public virtual IHttpActionResult RemoveFunction(Guid roleId, Guid functionId)
 		{
 			var role = _roleRepository.Get(roleId);
 			if (role.BuiltIn) return BadRequest(CannotModifyBuiltInRoleErrorMessage);
 
-			foreach (var function in model.Functions)
-			{
-				role.RemoveApplicationFunction(_applicationFunctionRepository.Load(function));
-			}
+			role.RemoveApplicationFunction(_applicationFunctionRepository.Load(functionId));
+			
 			return Ok();
 		}
 
@@ -186,21 +184,38 @@ namespace Teleopti.Ccc.Web.Areas.Permissions.Controllers
 			return Ok();
 		}
 
-		[UnitOfWork, Route("api/Permissions/Roles/{roleId}/AvailableData"), HttpDelete]
-		public virtual IHttpActionResult RemoveAvailableData(Guid roleId, [FromBody]AvailableDataForRoleInput model)
+		[UnitOfWork, Route("api/Permissions/Roles/{roleId}/AvailableData/BusinessUnit/{businessUnitId}"), HttpDelete]
+		public virtual IHttpActionResult RemoveAvailableBusinessUnit(Guid roleId, Guid businessUnitId)
 		{
 			var role = _roleRepository.Get(roleId);
 			if (role.BuiltIn) return BadRequest(CannotModifyBuiltInRoleErrorMessage);
 
-			var businessUnits =
-				role.AvailableData.AvailableBusinessUnits.Where(b => model.BusinessUnits.Contains(b.Id.GetValueOrDefault())).ToArray();
+			var businessUnits = role.AvailableData.AvailableBusinessUnits.Where(b => businessUnitId == b.Id.GetValueOrDefault()).ToArray();
 			businessUnits.ForEach(role.AvailableData.DeleteAvailableBusinessUnit);
-			var sites =
-				role.AvailableData.AvailableSites.Where(s => model.Sites.Contains(s.Id.GetValueOrDefault())).ToArray();
-			sites.ForEach(role.AvailableData.DeleteAvailableSite);
-			var teams =
-				role.AvailableData.AvailableTeams.Where(t => model.Teams.Contains(t.Id.GetValueOrDefault())).ToArray();
+
+			return Ok();
+		}
+
+		[UnitOfWork, Route("api/Permissions/Roles/{roleId}/AvailableData/Team/{teamId}"), HttpDelete]
+		public virtual IHttpActionResult RemoveAvailableTeam(Guid roleId, Guid teamId)
+		{
+			var role = _roleRepository.Get(roleId);
+			if (role.BuiltIn) return BadRequest(CannotModifyBuiltInRoleErrorMessage);
+
+			var teams = role.AvailableData.AvailableTeams.Where(t => teamId == t.Id.GetValueOrDefault()).ToArray();
 			teams.ForEach(role.AvailableData.DeleteAvailableTeam);
+
+			return Ok();
+		}
+
+		[UnitOfWork, Route("api/Permissions/Roles/{roleId}/AvailableData/Site/{siteId}"), HttpDelete]
+		public virtual IHttpActionResult RemoveAvailableSite(Guid roleId, Guid siteId)
+		{
+			var role = _roleRepository.Get(roleId);
+			if (role.BuiltIn) return BadRequest(CannotModifyBuiltInRoleErrorMessage);
+
+			var sites = role.AvailableData.AvailableSites.Where(s => siteId == s.Id.GetValueOrDefault()).ToArray();
+			sites.ForEach(role.AvailableData.DeleteAvailableSite);
 
 			return Ok();
 		}
