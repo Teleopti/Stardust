@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Interfaces.Domain;
@@ -12,12 +13,10 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta
 		IInitializeble
 	{
 		private readonly IAdherencePercentageReadModelPersister _persister;
-		private readonly AdherencePercentageCalculator _calculator;
 
-		public AdherencePercentageReadModelUpdater(IAdherencePercentageReadModelPersister persister, AdherencePercentageCalculator calculator)
+		public AdherencePercentageReadModelUpdater(IAdherencePercentageReadModelPersister persister)
 		{
 			_persister = persister;
-			_calculator = calculator;
 		}
 
 		[ReadModelUnitOfWork]
@@ -25,10 +24,10 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta
 		{
 			handleEvent(
 				@event.PersonId,
-				new AdherencePercentageState
+				new AdherencePercentageReadModelState
 				{
 					Timestamp = @event.Timestamp, 
-					Adherence = Adherence.In
+					InAdherence = true
 				}, 
 				m => m.IsLastTimeInAdherence = true);
 		}
@@ -38,10 +37,10 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta
 		{
 			handleEvent(
 				@event.PersonId, 
-				new AdherencePercentageState
+				new AdherencePercentageReadModelState
 				{
 					Timestamp = @event.Timestamp, 
-					Adherence = Adherence.Out
+					InAdherence = false
 				}, 
 				m => m.IsLastTimeInAdherence = false);
 		}
@@ -51,32 +50,31 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta
 		{
 			handleEvent(
 				@event.PersonId,
-				new AdherencePercentageState
+				new AdherencePercentageReadModelState
 				{
 					Timestamp = @event.ShiftEndTime,
-					Adherence = Adherence.None,
 					ShiftEnded = true
 				},
 				m => m.ShiftHasEnded = true);
 		}
 
-		private void handleEvent(Guid personId, AdherencePercentageState state, Action<AdherencePercentageReadModel> mutate)
+		private void handleEvent(Guid personId, AdherencePercentageReadModelState readModelState, Action<AdherencePercentageReadModel> mutate)
 		{
-			var model = _persister.Get(new DateOnly(state.Timestamp), personId);
+			var model = _persister.Get(new DateOnly(readModelState.Timestamp), personId);
 			if (model == null)
 			{
 				model = new AdherencePercentageReadModel
 				{
-					Date = new DateOnly(state.Timestamp),
+					Date = new DateOnly(readModelState.Timestamp),
 					PersonId = personId,
-					LastTimestamp = state.Timestamp,
+					LastTimestamp = readModelState.Timestamp,
 				};
-				model.Saga.Add(state);
+				model.State = new[] { readModelState };
 			}
 			else
 			{
-				model.Saga.Add(state);
-				_calculator.Calculate(model);
+				model.State = model.State.Concat(new[] {readModelState});
+				calculate(model);
 			}
 			mutate(model);
 			_persister.Persist(model);
@@ -87,6 +85,32 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta
 		{
 			return _persister.HasData();
 		}
+
+		private static void calculate(AdherencePercentageReadModel model)
+		{
+			model.TimeInAdherence = TimeSpan.Zero;
+			model.TimeOutOfAdherence = TimeSpan.Zero;
+			AdherencePercentageReadModelState previous = null;
+			model.State = model.State.OrderBy(x => x.Timestamp).ToArray();
+			foreach (var current in model.State)
+			{
+				if (previous != null)
+				{
+					var timeDifferenceBetweenCurrentAndPrevious = current.Timestamp - previous.Timestamp;
+					if (previous.InAdherence.HasValue)
+					{
+						if (previous.InAdherence.Value)
+							model.TimeInAdherence += timeDifferenceBetweenCurrentAndPrevious;
+						if (!previous.InAdherence.Value)
+							model.TimeOutOfAdherence += timeDifferenceBetweenCurrentAndPrevious;
+					}
+				}
+				if (current.ShiftEnded.GetValueOrDefault(false))
+					break;
+				previous = current;
+			}
+		}
+
 	}
 
 }

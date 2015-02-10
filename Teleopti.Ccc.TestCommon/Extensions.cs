@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Linq;
 using Teleopti.Ccc.Domain.Collection;
+using Teleopti.Ccc.Domain.Helper;
+using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.TestCommon
 {
@@ -15,5 +17,21 @@ namespace Teleopti.Ccc.TestCommon
 		{
 			Enumerable.Range(0, times).ForEach(action);
 		}
+
+		public static TimeSpan Minutes(this string value)
+		{
+			return TimeSpan.FromMinutes(Convert.ToInt32(value));
+		}
+
+		public static TimeSpan Seconds(this string value)
+		{
+			return TimeSpan.FromSeconds(Convert.ToInt32(value));
+		}
+
+		public static DateOnly Date(this string dateString)
+		{
+			return new DateOnly(dateString.Utc());
+		}
+
 	}
 }

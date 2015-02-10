@@ -3,7 +3,9 @@ using System.Linq;
 using NHibernate;
 using NHibernate.Transform;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta;
+using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Infrastructure.LiteUnitOfWork;
+using Teleopti.Interfaces;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Infrastructure.Repositories
@@ -11,10 +13,14 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 	public class AdherencePercentageReadModelPersister : IAdherencePercentageReadModelPersister
 	{
 		private readonly ICurrentReadModelUnitOfWork _unitOfWork;
+		private readonly IJsonSerializer _serializer;
+		private readonly IJsonDeserializer _deserializer;
 
-		public AdherencePercentageReadModelPersister(ICurrentReadModelUnitOfWork unitOfWork)
+		public AdherencePercentageReadModelPersister(ICurrentReadModelUnitOfWork unitOfWork, IJsonSerializer serializer, IJsonDeserializer deserializer)
 		{
 			_unitOfWork = unitOfWork;
+			_serializer = serializer;
+			_deserializer = deserializer;
 		}
 
 		public void Persist(AdherencePercentageReadModel model)
@@ -34,7 +40,8 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 				"			IsLastTimeInAdherence = :IsLastTimeInAdherence," +
 				"			TimeInAdherence = :TimeInAdherence," +
 				"			TimeOutOfAdherence = :TimeOutOfAdherence," +
-				"			ShiftHasEnded = :ShiftHasEnded " +
+				"			ShiftHasEnded = :ShiftHasEnded, " +
+				"			[State] = :State " +
 				"WHERE " +
 				"	PersonId = :PersonId AND " +
 				"	BelongsToDate =:Date")
@@ -45,6 +52,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 				.SetParameter("TimeInAdherence", model.TimeInAdherence)
 				.SetParameter("TimeOutOfAdherence", model.TimeOutOfAdherence)
 				.SetParameter("ShiftHasEnded", model.ShiftHasEnded)
+				.SetParameter("State", _serializer.SerializeObject(model.State))
 				.ExecuteUpdate();
 		}
 
@@ -59,7 +67,8 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 				"	IsLastTimeInAdherence," +
 				"	TimeInAdherence," +
 				"	TimeOutOfAdherence," +
-				"	ShiftHasEnded" +
+				"	ShiftHasEnded," +
+				"	[State]" +
 				") VALUES (" +
 				"	:PersonId," +
 				"	:BelongsToDate," +
@@ -67,7 +76,8 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 				"	:IsLastTimeInAdherence," +
 				"	:TimeInAdherence," +
 				"	:TimeOutOfAdherence," +
-				"	:ShiftHasEnded" +
+				"	:ShiftHasEnded," +
+				"	:State" +
 				")")
 				.SetGuid("PersonId", model.PersonId)
 				.SetDateTime("BelongsToDate", model.BelongsToDate)
@@ -76,12 +86,13 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 				.SetTimeSpan("TimeInAdherence", model.TimeInAdherence)
 				.SetTimeSpan("TimeOutOfAdherence", model.TimeOutOfAdherence)
 				.SetParameter("ShiftHasEnded", model.ShiftHasEnded)
+				.SetParameter("State", _serializer.SerializeObject(model.State))
 				.ExecuteUpdate();
 		}
 
 		public AdherencePercentageReadModel Get(DateOnly date, Guid personId)
 		{
-			return _unitOfWork.Current().CreateSqlQuery(
+			var result = _unitOfWork.Current().CreateSqlQuery(
 				"SELECT " +
 				"	PersonId," +
 				"	BelongsToDate AS Date," +
@@ -89,7 +100,8 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 				"	IsLastTimeInAdherence," +
 				"	TimeInAdherence," +
 				"	TimeOutOfAdherence," +
-				"	ShiftHasEnded " +
+				"	ShiftHasEnded, " +
+				"	[State] AS StateJson " +
 				"FROM ReadModel.AdherencePercentage WHERE" +
 				"	PersonId =:PersonId AND " +
 				"	BelongsToDate =:Date ")
@@ -100,16 +112,31 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 				.AddScalar("TimeInAdherence", NHibernateUtil.TimeSpan)
 				.AddScalar("TimeOutOfAdherence", NHibernateUtil.TimeSpan)
 				.AddScalar("ShiftHasEnded", NHibernateUtil.Boolean)
+				.AddScalar("StateJson", NHibernateUtil.StringClob)
 				.SetGuid("PersonId", personId)
 				.SetDateTime("Date", date)
-				.SetResultTransformer(Transformers.AliasToBean(typeof (AdherencePercentageReadModel)))
-				.List<AdherencePercentageReadModel>()
+				.SetResultTransformer(Transformers.AliasToBean(typeof(internalModel)))
+				.List<internalModel>()
 				.SingleOrDefault();
+
+			if (result == null) return null;
+			if (result.StateJson == null) return result;
+
+			result.State = _deserializer.DeserializeObject<AdherencePercentageReadModelState[]>(result.StateJson);
+			result.StateJson = null;
+
+			return result;
 		}
 
 		public bool HasData()
 		{
 			return (int)_unitOfWork.Current().CreateSqlQuery("SELECT count(*) FROM ReadModel.AdherencePercentage ").UniqueResult() > 0;
 		}
+
+		private class internalModel : AdherencePercentageReadModel
+		{
+			public string StateJson { get; set; }
+		} 
+
 	}
 }

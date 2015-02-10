@@ -112,6 +112,7 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\log4net.2.0.3\lib\net40-full\log4net.dll</HintPath>
     </Reference>
+    <Reference Include="Microsoft.CSharp" />
     <Reference Include="NHibernate">
       <HintPath>..\packages\NHibernate.4.0.0.4000\lib\net40\NHibernate.dll</HintPath>
       <Private>True</Private>
@@ -175,6 +176,7 @@
     <Compile Include="ApplicationLayer\Rta\AdherenceDetails\OutOfAdherenceTest.cs" />
     <Compile Include="ApplicationLayer\Rta\AdherenceDetails\ShiftEndedTest.cs" />
     <Compile Include="ApplicationLayer\Rta\AdherenceDetails\StartTimesTest.cs" />
+    <Compile Include="ApplicationLayer\Rta\AdherencePercentage\LinqPerumationExtension.cs" />
     <Compile Include="ApplicationLayer\Rta\AdherencePercentage\OrderedEventsTest.cs" />
     <Compile Include="ApplicationLayer\Rta\AdherencePercentage\UnorderedEventsTest.cs" />
     <Compile Include="ApplicationLayer\Rta\AdherenceTestAttribute.cs" />
