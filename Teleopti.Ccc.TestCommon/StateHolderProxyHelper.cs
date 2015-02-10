@@ -43,7 +43,7 @@ namespace Teleopti.Ccc.TestCommon
 
 			MessageBrokerContainerDontUse.Configure(null, new IConnectionKeepAliveStrategy[] {}, MessageFilterManager.Instance);
 			var signalBroker = MessageBrokerContainerDontUse.CompositeClient();
-			var applicationData = new ApplicationData(appSettings, new[] { dataSource }, signalBroker, null);
+			var applicationData = new ApplicationData(appSettings, new[] { dataSource }, signalBroker, null, null);
 			var sessionData = CreateSessionData(person, applicationData, businessUnit, principalContext);
 
 			var state = new FakeState { ApplicationScopeData = applicationData, SessionScopeData = sessionData, IsLoggedIn = true };
@@ -170,7 +170,7 @@ namespace Teleopti.Ccc.TestCommon
             IList<IDataSource> dataSources = new List<IDataSource>();
             dataSources.Add(new DataSource(UnitOfWorkFactoryFactory.CreateUnitOfWorkFactory("for test"), null, null));
             IApplicationData applicationData =
-                new ApplicationData(appSettings, new ReadOnlyCollection<IDataSource>(dataSources), messageBroker, null);
+								new ApplicationData(appSettings, new ReadOnlyCollection<IDataSource>(dataSources), messageBroker, null, null);
 
             return applicationData;
         }

@@ -31,19 +31,7 @@ namespace Teleopti.Ccc.Infrastructure.Foundation
 			_messageBroker = messageBroker;
 			_loadPasswordPolicyService = loadPasswordPolicyService;
 			_dataSourcesFactory = dataSourcesFactory;
-		}
-
-		public ApplicationData(IDictionary<string, string> appSettings, IEnumerable<IDataSource> registeredDataSources, IMessageBrokerComposite messageBroker, ILoadPasswordPolicyService loadPasswordPolicyService)
-		{
-			InParameter.NotNull("appSettings", appSettings);
-			InParameter.NotNull("registeredDataSources", registeredDataSources);
-			AppSettings = appSettings;
-			if (!registeredDataSources.Any())
-				throw new DataSourceException("Can not find any registered data source");
-			checkNoDuplicateDataSourceExists(registeredDataSources);
-			_registeredDataSourceCollection = new List<IDataSource>(registeredDataSources);
-			_messageBroker = messageBroker;
-			_loadPasswordPolicyService = loadPasswordPolicyService;
+			checkNoDuplicateDataSourceExists(_registeredDataSourceCollection);
 		}
 
 		public ILoadPasswordPolicyService LoadPasswordPolicyService

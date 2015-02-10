@@ -76,7 +76,7 @@ namespace Teleopti.Ccc.Infrastructure.Foundation
 	    	StartMessageBroker(appSettings);
 	    	StateHolder.Instance.State.SetApplicationData(
 	    		new ApplicationData(appSettings, new ReadOnlyCollection<IDataSource>(dataSources), MessageBroker,
-	    		                    loadPasswordPolicyService));
+	    		                    loadPasswordPolicyService, DataSourcesFactory));
 	    }
 
 		public void Start(IState clientCache, IDictionary<string, string> appSettings,
@@ -125,7 +125,7 @@ namespace Teleopti.Ccc.Infrastructure.Foundation
 			if (startMessageBroker)
 				StartMessageBroker(appSettings);
 			StateHolder.Instance.State.SetApplicationData(
-				new ApplicationData(appSettings, new ReadOnlyCollection<IDataSource>(dataSources), MessageBroker, loadPasswordPolicyService));
+				new ApplicationData(appSettings, new ReadOnlyCollection<IDataSource>(dataSources), MessageBroker, loadPasswordPolicyService, DataSourcesFactory));
 		}
 
 		public void Start(IState clientCache,

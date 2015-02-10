@@ -54,7 +54,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Foundation
             IMessageBrokerComposite messBroker = mocks.StrictMock<IMessageBrokerComposite>();
             ILoadPasswordPolicyService passwordPolicy = mocks.StrictMock<ILoadPasswordPolicyService>();
 
-            IApplicationData target = new ApplicationData(_receivedSettings, dataSources, messBroker, passwordPolicy);
+            IApplicationData target = new ApplicationData(_receivedSettings, dataSources, messBroker, passwordPolicy, null);
             Assert.AreEqual(_receivedSettings["HelpUrl"], target.AppSettings["HelpUrl"]);
             Assert.AreSame(_receivedSettings, target.AppSettings);
 				target.RegisteredDataSourceCollection.Should().Have.SameValuesAs(dataSources);
@@ -81,7 +81,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Foundation
         {
             ReadOnlyCollection<IDataSource> oneDataSource
                 = new ReadOnlyCollection<IDataSource>(new List<IDataSource>());
-            using(new ApplicationData(_receivedSettings, oneDataSource, null, null)){}
+						using (new ApplicationData(_receivedSettings, oneDataSource, null, null, null)) { }
         }
 
         /// <summary>
@@ -98,7 +98,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Foundation
             IList<IDataSource> dataSourceList = new List<IDataSource>();
             dataSourceList.Add(dataSource1);
             dataSourceList.Add(dataSource2);
-            using(new ApplicationData(null, new ReadOnlyCollection<IDataSource>(dataSourceList), null, null)){}
+						using (new ApplicationData(null, new ReadOnlyCollection<IDataSource>(dataSourceList), null, null, null)) { }
         }
 
         /// <summary>
@@ -113,7 +113,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Foundation
             IList<IDataSource> dataSourceList = new List<IDataSource>();
             dataSourceList.Add(dataSource);
             dataSourceList.Add(dataSource);
-            using(new ApplicationData(_receivedSettings, new ReadOnlyCollection<IDataSource>(dataSourceList), null, null)){}
+						using (new ApplicationData(_receivedSettings, new ReadOnlyCollection<IDataSource>(dataSourceList), null, null, null)) { }
         }
 
         /// <summary>
@@ -128,7 +128,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Foundation
             dataSourceList.Add(dataSource1);
             dataSourceList.Add(dataSource2);
             ApplicationData target =
-                new ApplicationData(_receivedSettings, new ReadOnlyCollection<IDataSource>(dataSourceList), null, null);
+								new ApplicationData(_receivedSettings, new ReadOnlyCollection<IDataSource>(dataSourceList), null, null, null);
             Assert.AreEqual(2, target.RegisteredDataSourceCollection.Count());
             Assert.IsTrue(target.RegisteredDataSourceCollection.Contains(dataSource1));
             Assert.IsTrue(target.RegisteredDataSourceCollection.Contains(dataSource2));
@@ -140,7 +140,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Foundation
 		{
 			var dsName = Guid.NewGuid().ToString();
 			var ds = new DataSource(UnitOfWorkFactoryFactory.CreateUnitOfWorkFactory(dsName), null, null);
-			var target = new ApplicationData(_receivedSettings, new[] {ds}, null, null);
+			var target = new ApplicationData(_receivedSettings, new[] { ds }, null, null, null);
 			target.DataSource(dsName).Should().Be.SameInstanceAs(ds);
 		}
 
@@ -149,7 +149,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Foundation
 		{
 			var dsName = Guid.NewGuid().ToString();
 			var ds = new DataSource(UnitOfWorkFactoryFactory.CreateUnitOfWorkFactory(dsName), null, null);
-			var target = new ApplicationData(_receivedSettings, new[] { ds }, null, null);
+			var target = new ApplicationData(_receivedSettings, new[] { ds }, null, null, null);
 			target.DataSource("something else").Should().Be.Null();
 		}
 
@@ -197,7 +197,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Foundation
             using (mocks.Playback())
             {
                 ApplicationData target = new ApplicationData(_receivedSettings,
-                                                             new ReadOnlyCollection<IDataSource>(dsList), messBroker, null);
+																														 new ReadOnlyCollection<IDataSource>(dsList), messBroker, null, null);
                 target.Dispose();
             }
         }
