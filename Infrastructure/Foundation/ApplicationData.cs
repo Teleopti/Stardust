@@ -91,6 +91,8 @@ namespace Teleopti.Ccc.Infrastructure.Foundation
 			if (dataSource != null)
 				return dataSource;
 
+			applicationNhibConfiguration[NHibernate.Cfg.Environment.SessionFactoryName] = dataSourceName;
+
 			var newDataSource =  _dataSourcesFactory.Create(applicationNhibConfiguration, analyticsConnectionString);
 			_registeredDataSourceCollection.Add(newDataSource);
 			return newDataSource;
