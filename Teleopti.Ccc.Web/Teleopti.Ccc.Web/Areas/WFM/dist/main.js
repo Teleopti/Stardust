@@ -41870,14 +41870,15 @@ wfmCtrls.controller('PermissionsCtrl', [
 		$scope.roleDetails = 'functionsAvailable';
 		$scope.functionsDisplayed = [];
 		$scope.functionsFlat = [];
+		$scope.dataFlat = [];
 		$scope.selectedRole = {};
-		$scope.organization = { BusinessUnits: [{ BusinessUnit: { Sites: [] } }], DynamicOptions: [] };
+		$scope.organization = { BusinessUnit: [{ BusinessUnit: { Sites: [] } }], DynamicOptions: [] };
 
 		$scope.roles = Permissions.roles.get();
 		Permissions.organizationSelections.query().$promise.then(function (result) {
 			// could we have directly an array from server?
-			$scope.organization = { BusinessUnits: [result.BusinessUnit], DynamicOptions: result.DynamicOptions };
-
+			$scope.organization = { BusinessUnit: [result.BusinessUnit], DynamicOptions: result.DynamicOptions };
+			flatData($scope.organization.BusinessUnit);
 		});
 
 		Permissions.applicationFunctions.query().$promise.then(function (result) {
@@ -41898,7 +41899,7 @@ wfmCtrls.controller('PermissionsCtrl', [
 		$scope.reset = function () {
 			$scope.roleName = "";
 			$scope.form.$setPristine();
-		}
+		};
 
 		$scope.copyRole = function(roleId) {
 			var roleCopy = {};
@@ -41921,10 +41922,10 @@ wfmCtrls.controller('PermissionsCtrl', [
 			}
 		};
 
-		$scope.toggleOrganizationSelection = function (node, typeOfNode) {
+		$scope.toggleOrganizationSelection = function (node) {
 			var data = {};
 			data.Id = $scope.selectedRole;
-			data[typeOfNode] = [node.Id];
+			data[node.Type] = [node.Id];
 
 			if (node.selected) {
 				Permissions.assignOrganizationSelection.deleteData(data).$promise.then(function (result) {
@@ -41953,20 +41954,7 @@ wfmCtrls.controller('PermissionsCtrl', [
 		$scope.selectedRole = roleId;
 		Permissions.rolesPermissions.query({ Id: roleId }).$promise.then(function (result) {
 			var permsFunc = result.AvailableFunctions;
-
-			//yeah, we know, it's amazing
-			$scope.organization.BusinessUnits.forEach(function(bu){
-				var availableBu = $filter('filter')(result.AvailableBusinessUnits, { Id: bu.Id });
-				bu.selected = availableBu.length != 0 ? true : false;
-				bu.Sites.forEach(function (site) {
-					var availableSite = $filter('filter')(result.AvailableSites, { Id: site.Id });
-					site.selected = availableSite.length != 0 ? true : false;
-					site.Teams.forEach(function (team) {
-						var availableTeam = $filter('filter')(result.AvailableTeams, { Id: team.Id });
-						team.selected = availableTeam.length != 0 ? true : false;
-					});
-				});
-			});
+			var permsData = result.AvailableBusinessUnits.concat(result.AvailableSites.concat(result.AvailableTeams));
 
 			$scope.organization.DynamicOptions.forEach(function (dyna) {
 				dyna.selected = result.AvailableDataRange === dyna.RangeOption ? true : false;
@@ -41976,6 +41964,11 @@ wfmCtrls.controller('PermissionsCtrl', [
 				var availableFunctions = $filter('filter')(permsFunc, { Id: item.FunctionId });
 				item.selected = availableFunctions.length != 0 ? true : false;
 			});
+
+			$scope.dataFlat.forEach(function (item) {
+				var availableData = $filter('filter')(permsData, { Id: item.Id });
+				item.selected = availableData.length != 0 ? true : false;
+			});
 		});
 	};
 
@@ -41984,6 +41977,15 @@ wfmCtrls.controller('PermissionsCtrl', [
 			$scope.functionsFlat.push(item);
 			if (item.ChildFunctions.length != 0) {
 				flatFunctions(item.ChildFunctions);
+			}
+		});
+	};
+
+	var flatData = function (dataTab) {
+		dataTab.forEach(function (item) {
+			$scope.dataFlat.push(item);
+			if (item.ChildNodes && item.ChildNodes.length != 0) {
+				flatData(item.ChildNodes);
 			}
 		});
 	};

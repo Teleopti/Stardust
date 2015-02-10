@@ -107,8 +107,11 @@
 				</div>
 
 				<div ui-tree data-drag-enabled="false">
-					<ol ui-tree-nodes="" ng-model="organization.BusinessUnits" id="tree-root" class="tree-line">
-						<li ng-repeat="bu in organization.BusinessUnits | filter:searchData" ui-tree-node>
+					<ol ui-tree-nodes="" ng-model="organization.BusinessUnit" id="tree-root" class="tree-line">
+						<li ng-repeat="node in organization.BusinessUnit | filter:searchData" ui-tree-node ng-include="'nodes_bu_renderer.html'"></li>
+						
+
+						<!-- <li ng-repeat="bu in organization.BusinessUnit | filter:searchData" ui-tree-node>
 							<div ui-tree-handle ng-class="{selected: bu.selected}" ng-click="toggleOrganizationSelection(bu, 'BusinessUnits')">
 								{{bu.Name}}
 							</div>
@@ -126,7 +129,7 @@
 									</ol>
 								</li>
 							</ol>
-						</li>
+						</li>-->
 					</ol>
 				</div>
 			</div>
@@ -144,6 +147,17 @@
 	</div>
 	<ol ui-tree-nodes="" ng-model="node.ChildFunctions">
 		<li ng-repeat="node in node.ChildFunctions" ui-tree-node ng-include="'nodes_renderer.html'">
+		</li>
+	</ol>
+</script>
+
+<!-- Nested node template -->
+<script type="text/ng-template" id="nodes_bu_renderer.html">
+	<div ui-tree-handle ng-class="{selected: node.selected}" ng-click="toggleOrganizationSelection(node)">
+		{{node.Name}}
+	</div>
+	<ol ui-tree-nodes="" ng-model="node.ChildNodes">
+		<li ng-repeat="node in node.ChildNodes" ui-tree-node ng-include="'nodes_bu_renderer.html'">
 		</li>
 	</ol>
 </script>
