@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Interfaces.Domain;
@@ -14,7 +13,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta
 	{
 		private readonly IAdherencePercentageReadModelPersister _persister;
 		private readonly AdherencePercentageCalculator _calculator;
-		private readonly IList<AdherenceState> adherenceHistory = new List<AdherenceState>();
 
 		public AdherencePercentageReadModelUpdater(IAdherencePercentageReadModelPersister persister, AdherencePercentageCalculator calculator)
 		{
@@ -25,41 +23,61 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta
 		[ReadModelUnitOfWork]
 		public virtual void Handle(PersonInAdherenceEvent @event)
 		{
-			adherenceHistory.Add(new AdherenceState {Timestamp = @event.Timestamp, Adherence = Adherence.In});
-			handleEvent(@event.PersonId, @event.Timestamp, m => m.IsLastTimeInAdherence = true);
+			handleEvent(
+				@event.PersonId,
+				new AdherencePercentageState
+				{
+					Timestamp = @event.Timestamp, 
+					Adherence = Adherence.In
+				}, 
+				m => m.IsLastTimeInAdherence = true);
 		}
 
 		[ReadModelUnitOfWork]
 		public virtual void Handle(PersonOutOfAdherenceEvent @event)
 		{
-			adherenceHistory.Add(new AdherenceState {Timestamp = @event.Timestamp, Adherence = Adherence.Out});
-			handleEvent(@event.PersonId, @event.Timestamp, m => m.IsLastTimeInAdherence = false);
+			handleEvent(
+				@event.PersonId, 
+				new AdherencePercentageState
+				{
+					Timestamp = @event.Timestamp, 
+					Adherence = Adherence.Out
+				}, 
+				m => m.IsLastTimeInAdherence = false);
 		}
 
 		[ReadModelUnitOfWork]
 		public virtual void Handle(PersonShiftEndEvent @event)
 		{
-			adherenceHistory.Add(new AdherenceState
-			{
-				Timestamp = @event.ShiftEndTime,
-				Adherence = Adherence.None,
-				ShiftEnded = true
-			});
-			handleEvent(@event.PersonId, @event.ShiftEndTime, m =>  m.ShiftHasEnded = true);
+			handleEvent(
+				@event.PersonId,
+				new AdherencePercentageState
+				{
+					Timestamp = @event.ShiftEndTime,
+					Adherence = Adherence.None,
+					ShiftEnded = true
+				},
+				m => m.ShiftHasEnded = true);
 		}
 
-		private void handleEvent(Guid personId, DateTime time, Action<AdherencePercentageReadModel> mutate)
+		private void handleEvent(Guid personId, AdherencePercentageState state, Action<AdherencePercentageReadModel> mutate)
 		{
-			var model = _persister.Get(new DateOnly(time), personId);
+			var model = _persister.Get(new DateOnly(state.Timestamp), personId);
 			if (model == null)
+			{
 				model = new AdherencePercentageReadModel
 				{
-					Date = new DateOnly(time),
+					Date = new DateOnly(state.Timestamp),
 					PersonId = personId,
-					LastTimestamp = time
+					LastTimestamp = state.Timestamp,
 				};
+				model.Saga.Add(state);
+			}
 			else
-				_calculator.Calculate(model, adherenceHistory);
+			{
+				model.Saga.Add(state);
+				_calculator.Calculate(model);
+			}
 			mutate(model);
 			_persister.Persist(model);
 		}

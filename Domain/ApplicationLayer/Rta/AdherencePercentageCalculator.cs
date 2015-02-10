@@ -1,17 +1,16 @@
 using System;
-using System.Collections.Generic;
 using System.Linq;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta
 {
 	public class AdherencePercentageCalculator
 	{
-		public void Calculate(AdherencePercentageReadModel model, IEnumerable<AdherenceState> recievedEvents)
+		public void Calculate(AdherencePercentageReadModel model)
 		{
 			model.TimeInAdherence = TimeSpan.Zero;
 			model.TimeOutOfAdherence = TimeSpan.Zero;
-			AdherenceState previous = null;
-			foreach (var current in recievedEvents.OrderBy(x => x.Timestamp))
+			AdherencePercentageState previous = null;
+			foreach (var current in model.Saga.OrderBy(x => x.Timestamp))
 			{
 				if (previous != null)
 				{
