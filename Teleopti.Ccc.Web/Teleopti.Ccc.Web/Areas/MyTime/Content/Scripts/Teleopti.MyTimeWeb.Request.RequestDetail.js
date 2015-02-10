@@ -38,6 +38,7 @@ Teleopti.MyTimeWeb.Request.RequestDetail = (function ($) {
         self.createShiftTradeRequestViewModel = function () {
         	var shiftTradeRequestDetailViewModel = new Teleopti.MyTimeWeb.Request.ShiftTradeRequestDetailViewModel(ajax);
         	shiftTradeRequestDetailViewModel.loadIsEditMessageEnabled();
+	        shiftTradeRequestDetailViewModel.checkIsAnonymousTrading();
 	        self.requestViewModel(shiftTradeRequestDetailViewModel);
         };
 

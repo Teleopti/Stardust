@@ -396,6 +396,24 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			} 
 		}
 
+		[Test]
+		public void ShouldGetAnonymousTradingTrue()
+		{
+			var modelFactory = MockRepository.GenerateMock<IRequestsViewModelFactory>();
+			var model = new ShiftTradeRequestsPeriodViewModel
+			{
+				AnonymousTrading = true
+			};
+
+			modelFactory.Stub(x => x.CreateShiftTradePeriodViewModel()).Return(model);
+
+			var target = new RequestsController(modelFactory, null, null, null, null, new FakePermissionProvider(), null);
+			var result = target.GetAnonymousTradingSetting();
+			var data = (bool)result.Data;
+
+			data.Should().Be.EqualTo(model.AnonymousTrading);
+		}
+
 		private static void assertRequestEqual(RequestViewModel target, RequestViewModel expected)
 		{
 			target.Dates.Should().Be.EqualTo(expected.Dates);

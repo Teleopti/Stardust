@@ -34,6 +34,20 @@ Teleopti.MyTimeWeb.Request.ShiftTradeRequestDetailViewModel = function (ajax) {
 		var toggleEnabled = Teleopti.MyTimeWeb.Common.IsToggleEnabled("Request_GiveCommentWhenDenyOrApproveShiftTradeRequest_28341");
 		self.IsEditMessageEnabled(toggleEnabled);
 	};
+	self.isAnonymousTrading = ko.observable(false);
+	self.checkIsAnonymousTrading = function() {
+		if (Teleopti.MyTimeWeb.Common.IsToggleEnabled('MyTimeWeb_AnonymousTrades_31638')) {
+			self.ajax.Ajax({
+				url: "Requests/GetAnonymousTradingSetting",
+				dataType: "json",
+				type: "GET",
+				success: function(data) {
+					self.isAnonymousTrading(data);
+				}
+		});			
+		}
+	}
+
 	self.UpdatedMessage = ko.observable();
 	self.PrefixAgentNameToMessage = function () {
 

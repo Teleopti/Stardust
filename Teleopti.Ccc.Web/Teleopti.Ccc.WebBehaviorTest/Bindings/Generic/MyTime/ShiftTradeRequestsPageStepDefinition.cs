@@ -247,6 +247,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.MyTime
 		}
 
 		[When(@"I click send button in bulletin board")]
+		[Given(@"I click send button in bulletin board")]
 		public void WhenIClickSendButtonInBulletinBoard()
 		{
 			Browser.Interactions.Click("#Shift-trade-bulletin-board-send");
@@ -371,9 +372,18 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.MyTime
 		}
 
 		[When(@"I click OtherAgent shift")]
+		[Given(@"I click OtherAgent shift")]
 		public void WhenIClickOtherAgentShift()
 		{
 			Browser.Interactions.Click("#agent-in-bulletin-board");
 		}
+
+		[Then(@"I should not see the agent name in detail view")]
+		public void ThenIShouldNotSeeTheAgentNameInDetailView()
+		{
+			Browser.Interactions.AssertNotExists("#shift-trade-request-detail-view", "#sender-info");
+			Browser.Interactions.AssertNotExists("#shift-trade-request-detail-view", "#reciever-info");
+		}
+
 	}
 }
