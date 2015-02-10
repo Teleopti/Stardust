@@ -109,10 +109,6 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 			var applicationStarter = container.Resolve<ApplicationStartup>();
 			if (applicationStarter.LogOn())
 			{
-
-				killNotNeededSessionFactories();
-
-
 				applicationStarter.LoadShellApplication();
 			}
 #endif
@@ -153,13 +149,6 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 			}
 
 			return ret.ToString();
-		}
-
-		private static void killNotNeededSessionFactories()
-		{
-			//kan man inte f?tag p?datasource p?nåt lättare sätt?
-			var loggedOnDataSource = ((ITeleoptiIdentity)TeleoptiPrincipal.Current.Identity).DataSource;
-			StateHolder.Instance.StateReader.ApplicationScopeData.DisposeAllDataSourcesExcept(loggedOnDataSource);
 		}
 
 		public SmartClientShellApplication(IComponentContext container)

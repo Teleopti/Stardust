@@ -3,9 +3,6 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Globalization;
 using System.Linq;
-using System.Xml.Linq;
-using System.Xml.XPath;
-using NHibernate.Cfg.ConfigurationSchema;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
@@ -125,19 +122,6 @@ namespace Teleopti.Ccc.Infrastructure.Foundation
 			if (Messaging != null)
 			{
 				Messaging.Dispose();
-			}
-		}
-
-		public void DisposeAllDataSourcesExcept(IDataSource dataSource)
-		{
-			for (var i = _registeredDataSourceCollection.Count - 1; i >= 0; i--)
-			{
-				var ds = _registeredDataSourceCollection[i];
-				if (ds != dataSource)
-				{
-					_registeredDataSourceCollection.Remove(ds);
-					ds.Dispose();
-				}
 			}
 		}
 

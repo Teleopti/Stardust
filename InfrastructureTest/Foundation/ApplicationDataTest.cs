@@ -71,24 +71,6 @@ namespace Teleopti.Ccc.InfrastructureTest.Foundation
             Assert.AreSame(dataSource, target.RegisteredDataSourceCollection.First());
         }
 
-		 [Test]
-		 public void ShouldDisposeNotUsedDataSources()
-		 {
-		 	var drop1 = MockRepository.GenerateStub<IDataSource>();
-		 	var drop2 = MockRepository.GenerateStub<IDataSource>();
-		 	var theOneToKeep = MockRepository.GenerateStub<IDataSource>();
-			 var dataSourceList = new List<IDataSource> {drop1, theOneToKeep, drop2};
-		 	var target = new ApplicationData(_receivedSettings, dataSourceList, null, null);
-		 	target.DisposeAllDataSourcesExcept(theOneToKeep);
-
-			 theOneToKeep.AssertWasNotCalled(obj => obj.Dispose());
-			 drop1.AssertWasCalled(obj => obj.Dispose());
-			 drop2.AssertWasCalled(obj => obj.Dispose());
-
-			 target.RegisteredDataSourceCollection
-		 		.Should().Have.SameValuesAs(theOneToKeep);
-		 }
-
         /// <summary>
         /// At least one data source must exist.
         /// </summary>

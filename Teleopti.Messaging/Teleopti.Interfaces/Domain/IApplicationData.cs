@@ -41,14 +41,6 @@ namespace Teleopti.Interfaces.Domain
 		///</summary>
 		ILoadPasswordPolicyService LoadPasswordPolicyService { get; }
 
-		/// <summary>
-		/// Disposes and removes specified <paramref name="dataSource"/> 
-		/// from <see cref="RegisteredDataSourceCollection"/>.
-		/// Good to use after logon in hosts where only one database is used.
-		/// </summary>
-		/// <param name="dataSource"></param>
-		void DisposeAllDataSourcesExcept(IDataSource dataSource);
-
 		IDataSource CreateAndAddDataSource(string dataSourceName, IDictionary<string, string> applicationNhibConfiguration, string analyticsConnectionString);
 	}
 }
