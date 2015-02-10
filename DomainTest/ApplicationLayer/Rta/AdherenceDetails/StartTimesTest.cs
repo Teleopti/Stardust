@@ -1,91 +1,86 @@
 using System;
 using System.Linq;
+using Autofac;
 using NUnit.Framework;
-using Rhino.Mocks;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta;
-using Teleopti.Ccc.Domain.ApplicationLayer.Rta.Performance;
 using Teleopti.Ccc.Domain.Helper;
+using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.TestCommon;
+using Teleopti.Ccc.TestCommon.IoC;
 
 namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.AdherenceDetails
 {
+	[AdherenceTest]
 	[TestFixture]
-	public class StartTimesTest
+	public class StartTimesTest : IRegisterInContainer
 	{
+		public FakeAdherenceDetailsReadModelPersister Persister;
+		public AdherenceDetailsReadModelUpdater Target;
+
+		public void RegisterInContainer(ContainerBuilder builder, IIocConfiguration configuration)
+		{
+			builder.RegisterType<AdherenceDetailsReadModelUpdater>().AsSelf();
+		}
+
 		[Test]
 		public void ShouldPersist()
 		{
-			var persister = new FakeAdherenceDetailsReadModelPersister();
-			var performanceCounter = MockRepository.GenerateStub<IPerformanceCounter>();
-			var target = new AdherenceDetailsReadModelUpdater(persister, null, performanceCounter);
-
-			target.Handle(new PersonActivityStartEvent
+			Target.Handle(new PersonActivityStartEvent
 			{
 				PersonId = Guid.NewGuid(),
 				Name = "Phone",
 				StartTime = "2014-11-17 8:00".Utc()
 			});
 
-			persister.Details.Single().Name.Should().Be("Phone");
+			Persister.Details.Single().Name.Should().Be("Phone");
 		}
 
 		[Test]
 		public void ShouldPersistEachActivityStarted()
 		{
-			var persister = new FakeAdherenceDetailsReadModelPersister();
-			var performanceCounter = MockRepository.GenerateStub<IPerformanceCounter>();
-			var target = new AdherenceDetailsReadModelUpdater(persister, null, performanceCounter);
 			var personId = Guid.NewGuid();
-			target.Handle(new PersonActivityStartEvent
+			Target.Handle(new PersonActivityStartEvent
 			{
 				PersonId = personId,
 				Name = "Phone",
 				StartTime = "2014-11-17 8:00".Utc()
 			});
-			target.Handle(new PersonActivityStartEvent
+			Target.Handle(new PersonActivityStartEvent
 			{
 				PersonId = personId,
 				Name = "Break",
 				StartTime = "2014-11-17 9:00".Utc()
 			});
 
-			persister.Details.Select(x => x.Name).Should().Have.SameValuesAs("Phone", "Break");
+			Persister.Details.Select(x => x.Name).Should().Have.SameValuesAs("Phone", "Break");
 		}
 
 		[Test]
 		public void ShouldPersistActivitiesStartTime()
 		{
-			var persister = new FakeAdherenceDetailsReadModelPersister();
-			var performanceCounter = MockRepository.GenerateStub<IPerformanceCounter>();
-			var target = new AdherenceDetailsReadModelUpdater(persister, null, performanceCounter);
-
-			target.Handle(new PersonActivityStartEvent
+			Target.Handle(new PersonActivityStartEvent
 			{
 				PersonId = Guid.NewGuid(),
 				Name = "Phone",
 				StartTime = "2014-11-17 8:00".Utc()
 			});
 
-			persister.Details.Single().StartTime.Should().Be("2014-11-17 8:00".Utc());
+			Persister.Details.Single().StartTime.Should().Be("2014-11-17 8:00".Utc());
 		}
 
 		[Test]
 		public void ShouldPersistActivitiesStartTimeWhenStateChangedBeforeShiftStarted()
 		{
 			var personId = Guid.NewGuid();
-			var persister = new FakeAdherenceDetailsReadModelPersister();
-			var performanceCounter = MockRepository.GenerateStub<IPerformanceCounter>();
-			var target = new AdherenceDetailsReadModelUpdater(persister, null, performanceCounter);
-
-			target.Handle(new PersonStateChangedEvent
+			Target.Handle(new PersonStateChangedEvent
 			{
 				PersonId = personId,
 				Timestamp = "2014-11-17 7:55".Utc(),
 				InAdherence = false
 			});
-			target.Handle(new PersonActivityStartEvent
+			Target.Handle(new PersonActivityStartEvent
 			{
 				PersonId = personId,
 				Name = "Phone",
@@ -93,129 +88,180 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.AdherenceDetails
 				InAdherence = true
 			});
 
-			persister.Details.Single().ActualStartTime.Should().Be("2014-11-17 7:55".Utc());
+			Persister.Details.Single().ActualStartTime.Should().Be("2014-11-17 7:55".Utc());
 		}
 
 		[Test]
 		public void ShouldPersistActualStartTime()
 		{
 			var personId = Guid.NewGuid();
-			var persister = new FakeAdherenceDetailsReadModelPersister();
-			var liteUnitOfWorkSync = MockRepository.GenerateMock<ILiteTransactionSyncronization>();
-			var performanceCounter = MockRepository.GenerateStub<IPerformanceCounter>();
-			var target = new AdherenceDetailsReadModelUpdater(persister, liteUnitOfWorkSync, performanceCounter);
-
-			target.Handle(new PersonActivityStartEvent
+			Target.Handle(new PersonActivityStartEvent
 			{
 				PersonId = personId,
 				Name = "Phone",
 				StartTime = "2014-11-17 8:00".Utc()
 			});
-			target.Handle(new PersonStateChangedEvent
+			Target.Handle(new PersonStateChangedEvent
 			{
 				PersonId = personId,
 				Timestamp = "2014-11-17 8:00".Utc(),
 				InAdherence = true
 			});
-			persister.Details.Single().ActualStartTime.Should().Be("2014-11-17 8:00".Utc());
+
+			Persister.Details.Single().ActualStartTime.Should().Be("2014-11-17 8:00".Utc());
 		}
 
 		[Test]
 		public void ShouldPersistActualStartTimeWhenStartedLater()
 		{
 			var personId = Guid.NewGuid();
-			var persister = new FakeAdherenceDetailsReadModelPersister();
-			var liteUnitOfWorkSync = MockRepository.GenerateMock<ILiteTransactionSyncronization>();
-			var performanceCounter = MockRepository.GenerateStub<IPerformanceCounter>();
-			var target = new AdherenceDetailsReadModelUpdater(persister, liteUnitOfWorkSync, performanceCounter);
+			Target.Handle(new PersonActivityStartEvent
+			{
+				PersonId = personId,
+				StartTime = "2014-11-17 8:00".Utc(),
+				Name = "Phone",
+				InAdherence = false
+			});
+			Target.Handle(new PersonStateChangedEvent
+			{
+				PersonId = personId,
+				Timestamp = "2014-11-17 8:05".Utc(),
+				InAdherence = true
+			});
 
-			target.Handle(new PersonActivityStartEvent { PersonId = personId, StartTime = "2014-11-17 8:00".Utc(), Name = "Phone", InAdherence = false });
-
-			target.Handle(new PersonStateChangedEvent { PersonId = personId, Timestamp = "2014-11-17 8:05".Utc(), InAdherence = true });
-
-			persister.Details.Single().ActualStartTime.Should().Be("2014-11-17 8:05".Utc());
+			Persister.Details.Single().ActualStartTime.Should().Be("2014-11-17 8:05".Utc());
 		}
 
 		[Test]
 		public void ShouldPersistActualStartTimeWhenStartedEarlier()
 		{
 			var personId = Guid.NewGuid();
-			var persister = new FakeAdherenceDetailsReadModelPersister();
-			var liteUnitOfWorkSync = MockRepository.GenerateMock<ILiteTransactionSyncronization>();
-			var performanceCounter = MockRepository.GenerateStub<IPerformanceCounter>();
-			var target = new AdherenceDetailsReadModelUpdater(persister, liteUnitOfWorkSync, performanceCounter);
+			Target.Handle(new PersonActivityStartEvent
+			{
+				PersonId = personId,
+				StartTime = "2014-11-17 8:00".Utc(),
+				Name = "Phone",
+				InAdherence = false
+			});
+			Target.Handle(new PersonStateChangedEvent
+			{
+				PersonId = personId,
+				Timestamp = "2014-11-17 8:02".Utc(),
+				InAdherence = true
+			});
+			Target.Handle(new PersonStateChangedEvent
+			{
+				PersonId = personId,
+				Timestamp = "2014-11-17 8:55".Utc(),
+				InAdherence = false
+			});
+			Target.Handle(new PersonActivityStartEvent
+			{
+				PersonId = personId,
+				StartTime = "2014-11-17 9:00".Utc(),
+				Name = "Break",
+				InAdherence = true
+			});
 
-			target.Handle(new PersonActivityStartEvent { PersonId = personId, StartTime = "2014-11-17 8:00".Utc(), Name = "Phone", InAdherence = false });
-			target.Handle(new PersonStateChangedEvent { PersonId = personId, Timestamp = "2014-11-17 8:02".Utc(), InAdherence = true });
-
-			target.Handle(new PersonStateChangedEvent { PersonId = personId, Timestamp = "2014-11-17 8:55".Utc(), InAdherence = false });
-
-			target.Handle(new PersonActivityStartEvent { PersonId = personId, StartTime = "2014-11-17 9:00".Utc(), Name = "Break", InAdherence = true });
-
-			persister.Details.Last().ActualStartTime.Should().Be("2014-11-17 8:55".Utc());
+			Persister.Details.Last().ActualStartTime.Should().Be("2014-11-17 8:55".Utc());
 		}
 
 		[Test]
 		public void ShouldNotPersistActualStartTimeWhenNeverStarted()
 		{
 			var personId = Guid.NewGuid();
-			var persister = new FakeAdherenceDetailsReadModelPersister();
-			var performanceCounter = MockRepository.GenerateStub<IPerformanceCounter>();
-			var target = new AdherenceDetailsReadModelUpdater(persister,null, performanceCounter);
+			Target.Handle(new PersonActivityStartEvent
+			{
+				PersonId = personId,
+				StartTime = "2014-11-17 8:00".Utc(),
+				Name = "Phone",
+				InAdherence = false
+			});
 
-			target.Handle(new PersonActivityStartEvent { PersonId = personId, StartTime = "2014-11-17 8:00".Utc(), Name = "Phone", InAdherence = false });
-
-			persister.Details.Single().ActualStartTime.Should().Be(null);
+			Persister.Details.Single().ActualStartTime.Should().Be(null);
 		}
 
 		[Test]
 		public void ShouldPersistActualStartTimeWhenRedundantInAdherenceEvents()
 		{
 			var personId = Guid.NewGuid();
-			var persister = new FakeAdherenceDetailsReadModelPersister();
-			var liteUnitOfWorkSync = MockRepository.GenerateMock<ILiteTransactionSyncronization>();
-			var performanceCounter = MockRepository.GenerateStub<IPerformanceCounter>();
-			var target = new AdherenceDetailsReadModelUpdater(persister, liteUnitOfWorkSync, performanceCounter);
+			Target.Handle(new PersonActivityStartEvent
+			{
+				PersonId = personId,
+				StartTime = "2014-11-17 8:00".Utc(),
+				Name = "Phone",
+				InAdherence = false
+			});
+			Target.Handle(new PersonStateChangedEvent
+			{
+				PersonId = personId,
+				Timestamp = "2014-11-17 8:02".Utc(),
+				InAdherence = true
+			});
+			Target.Handle(new PersonStateChangedEvent
+			{
+				PersonId = personId,
+				Timestamp = "2014-11-17 8:10".Utc(),
+				InAdherence = true
+			});
 
-			target.Handle(new PersonActivityStartEvent { PersonId = personId, StartTime = "2014-11-17 8:00".Utc(), Name = "Phone", InAdherence = false });
-
-			target.Handle(new PersonStateChangedEvent { PersonId = personId, Timestamp = "2014-11-17 8:02".Utc(), InAdherence = true });
-
-			target.Handle(new PersonStateChangedEvent { PersonId = personId, Timestamp = "2014-11-17 8:10".Utc(), InAdherence = true });
-
-			persister.Details.Single().ActualStartTime.Should().Be("2014-11-17 8:02".Utc());
+			Persister.Details.Single().ActualStartTime.Should().Be("2014-11-17 8:02".Utc());
 		}
 
 		[Test]
 		public void ShouldPersistActualStartTimeWhenAdherenceDoesNotChangeWhenActivityChanges()
 		{
 			var personId = Guid.NewGuid();
-			var persister = new FakeAdherenceDetailsReadModelPersister();
-			var liteUnitOfWorkSync = MockRepository.GenerateMock<ILiteTransactionSyncronization>();
-			var performanceCounter = MockRepository.GenerateStub<IPerformanceCounter>();
-			var target = new AdherenceDetailsReadModelUpdater(persister, liteUnitOfWorkSync, performanceCounter);
+			Target.Handle(new PersonActivityStartEvent
+			{
+				PersonId = personId,
+				StartTime = "2014-11-17 8:00".Utc(),
+				Name = "Phone",
+				InAdherence = false
+			});
+			Target.Handle(new PersonStateChangedEvent
+			{
+				PersonId = personId,
+				Timestamp = "2014-11-17 8:02".Utc(),
+				InAdherence = true
+			});
+			Target.Handle(new PersonActivityStartEvent
+			{
+				PersonId = personId,
+				StartTime = "2014-11-17 9:00".Utc(),
+				Name = "Phone 2",
+				InAdherence = true
+			});
 
-			target.Handle(new PersonActivityStartEvent { PersonId = personId, StartTime = "2014-11-17 8:00".Utc(), Name = "Phone", InAdherence = false });
-			target.Handle(new PersonStateChangedEvent { PersonId = personId, Timestamp = "2014-11-17 8:02".Utc(), InAdherence = true });
-			target.Handle(new PersonActivityStartEvent { PersonId = personId, StartTime = "2014-11-17 9:00".Utc(), Name = "Phone 2", InAdherence = true });
-
-			persister.Details.Last().ActualStartTime.Should().Be("2014-11-17 9:00".Utc());
+			Persister.Details.Last().ActualStartTime.Should().Be("2014-11-17 9:00".Utc());
 		}
 
 		[Test]
 		public void ShouldNotPersistActualStartTimeWhenSecondActivityNeverStarted()
 		{
 			var personId = Guid.NewGuid();
-			var persister = new FakeAdherenceDetailsReadModelPersister();
-			var liteUnitOfWorkSync = MockRepository.GenerateMock<ILiteTransactionSyncronization>();
-			var performanceCounter = MockRepository.GenerateStub<IPerformanceCounter>();
-			var target = new AdherenceDetailsReadModelUpdater(persister, liteUnitOfWorkSync, performanceCounter);
+			Target.Handle(new PersonActivityStartEvent
+			{
+				PersonId = personId,
+				StartTime = "2014-11-17 8:00".Utc(),
+				Name = "Phone",
+				InAdherence = false
+			});
+			Target.Handle(new PersonStateChangedEvent
+			{
+				PersonId = personId,
+				Timestamp = "2014-11-17 8:02".Utc(),
+				InAdherence = true
+			});
+			Target.Handle(new PersonActivityStartEvent
+			{
+				PersonId = personId,
+				StartTime = "2014-11-17 9:00".Utc(),
+				Name = "Lunch",
+				InAdherence = false
+			});
 
-			target.Handle(new PersonActivityStartEvent { PersonId = personId, StartTime = "2014-11-17 8:00".Utc(), Name = "Phone", InAdherence = false });
-			target.Handle(new PersonStateChangedEvent { PersonId = personId, Timestamp = "2014-11-17 8:02".Utc(), InAdherence = true });
-			target.Handle(new PersonActivityStartEvent { PersonId = personId, StartTime = "2014-11-17 9:00".Utc(), Name = "Lunch", InAdherence = false });
-
-			persister.Details.Last().ActualStartTime.Should().Be(null);
+			Persister.Details.Last().ActualStartTime.Should().Be(null);
 		}
 	}
 }
