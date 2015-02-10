@@ -16,20 +16,24 @@
         <GruntCmd>$(NodeDir)grunt</GruntCmd>
             
         <!-- Grunt Build Command -->
-        <GruntBuild>"$(GruntCmd)" --verbose --no-color</GruntBuild>
+        <GruntBuild>"$(GruntCmd)" dist --verbose --no-color </GruntBuild>
         
         <!-- NPM install command -->
         <NpmInstallCmd>"$(NpmCmd)" update</NpmInstallCmd>
     
         <!-- Protractor install command -->
         <NpmInstallProtractorCmd>"$(NpmCmd)" update -g protractor</NpmInstallProtractorCmd>
-            
+
+			<!-- grunt-cli install command -->
+			<NpmInstallGruntCliCmd>"$(NpmCmd)" install -g grunt-cli</NpmInstallGruntCliCmd>
     </PropertyGroup>
 
     <!-- Runs NPM command -->
     <Target Name="RestoreNodePackages">
+			<Message Text="Restore Node Packages Command: $(NpmInstallGruntCliCmd) /w WorkingDirectory: $(NodeDir)" Importance="high" />
+			<Exec Command="$(NpmInstallGruntCliCmd)" ContinueOnError="false" WorkingDirectory="$(NodeDir)" />
       <Message Text="Restore Node Packages Command: $(NpmInstallCmd) /w WorkingDirectory: $(MSBuildProjectDirectory)\Areas\WFM" Importance="high" />  
-      <Exec Command="$(NpmInstallCmd)" ContinueOnError="false" WorkingDirectory="$(MSBuildProjectDirectory)\Areas\WFM" />     
+      <Exec Command="$(NpmInstallCmd)" ContinueOnError="false" WorkingDirectory="$(MSBuildProjectDirectory)\Areas\WFM" />
     </Target>
 	
 		<!-- Install protractor -->
@@ -40,7 +44,7 @@
 
     <!-- Executes Build -->
    <Target Name="RunGruntBuild">
-      <Message Text="Executing Node.JS Builds: $(GruntBuild)" Importance="high" />     
-      <Exec ContinueOnError="false" WorkingDirectory="$(MSBuildProjectDirectory)\.node" Command="$(GruntBuild)" />     
+      <Message Text="Executing Node.JS Builds: $(GruntBuild) /w WorkingDirectory: $(MSBuildProjectDirectory)\Areas\WFM" Importance="high" />     
+      <Exec ContinueOnError="false" WorkingDirectory="$(MSBuildProjectDirectory)\Areas\WFM" Command="$(GruntBuild)" />     
    </Target>  
 </Project>

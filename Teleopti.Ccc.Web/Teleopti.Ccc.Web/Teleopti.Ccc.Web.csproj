@@ -1193,8 +1193,6 @@
       <DependentUpon>main.css</DependentUpon>
     </Content>
     <Content Include="Areas\WFM\css\material.css" />
-    <Content Include="Areas\WFM\dist\main.js" />
-    <Content Include="Areas\WFM\dist\main.min.js" />
     <Content Include="Areas\WFM\Gruntfile.js" />
     <Content Include="Areas\WFM\js\permissions.service.js" />
     <Content Include="Areas\WFM\karma.conf.js" />
@@ -1967,6 +1965,7 @@
     <Folder Include="Areas\PerformanceTool\Content\Templates\" />
     <Folder Include="Areas\SeatPlanner\Views\LocationHierarchy\" />
     <Folder Include="Areas\SSO\Views\Authentication\" />
+    <Folder Include="Areas\WFM\dist\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Areas\MyTime\Views\TeamSchedule\TeamSchedulePartial.cshtml" />
@@ -2060,7 +2059,7 @@ copy "$(ProjectDir)..\..\Domain\FeatureFlags\toggles.txt" "$(TargetDir)FeatureFl
   </PropertyGroup>
   <Import Project=".node\node.targets" Condition="Exists('.node\node.targets')" />
   <Target Name="BeforeBuild">
-    <CallTarget Targets="RestoreNodePackageProtractor;RestoreNodePackages" />
+    <CallTarget Targets="RestoreNodePackageProtractor;RestoreNodePackages;RunGruntBuild" />
   </Target>
   <!--  <Import Project="..\..\.nuget\Microsoft.Bcl.Build.targets" Condition="Exists('..\..\.nuget\Microsoft.Bcl.Build.targets')" />
   <Target Name="EnsureBclBuildImported" BeforeTargets="BeforeBuild" Condition="'$(BclBuildImported)' == ''">
