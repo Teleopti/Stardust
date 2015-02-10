@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--EXTERNAL_PROPERTIES: WorkingDirectory-->
+
+<Project DefaultTargets="StartSeleniumServer" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="12.0">
+
+	<PropertyGroup>
+		<WorkingDirectory Condition="'$(WorkingDirectory)'==''">C:\temp\azure_deploy\AzureDeployTest\webdriverio-test</WorkingDirectory>
+		<JavaPath Condition="'$(JavaPath)'==''">C:\Program Files\Java\jdk1.8.0_11\bin</JavaPath>
+	</PropertyGroup>
+
+	<UsingTask AssemblyFile="$(WorkingDirectory)\packages\MSBuild.Extension.Pack.1.3.0\tools\net40\MSBuild.ExtensionPack.dll" TaskName="MSBuild.ExtensionPack.Framework.AsyncExec"/>
+
+	<Target Name="StartSeleniumServer">
+		<MSBuild.ExtensionPack.Framework.AsyncExec Command ="%22$(JavaPath)\java%22 -jar %22$(WorkingDirectory)\selenium-server-standalone-2.43.1.jar%22 -Dwebdriver.chrome.driver=chromedriver.exe"/>
+	</Target>	
+</Project>
