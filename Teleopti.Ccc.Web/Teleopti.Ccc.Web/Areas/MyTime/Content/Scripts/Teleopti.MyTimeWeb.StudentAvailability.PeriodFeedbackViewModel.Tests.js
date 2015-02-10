@@ -1,14 +1,39 @@
 ﻿$(document).ready(function () {
 	module("Teleopti.MyTimeWeb.StudentAvailability period feedback view model");
 
+	test("should only summarize possible contract time for days in opened period", function () {
+		var viewModelDay1 = new Teleopti.MyTimeWeb.StudentAvailability.DayViewModel();
+		var viewModelDay2 = new Teleopti.MyTimeWeb.StudentAvailability.DayViewModel();
+		var viewModel = new Teleopti.MyTimeWeb.StudentAvailability.PeriodFeedbackViewModel(
+			null, [viewModelDay1, viewModelDay2], null);
+
+		viewModelDay1.EditableIsInOpenPeriod(true);
+		viewModelDay1.HasAvailability(true);
+		viewModelDay1.PossibleContractTimeMinutesLower(7 * 60);
+		viewModelDay1.PossibleContractTimeMinutesUpper(10 * 60);
+
+		viewModelDay2.EditableIsInOpenPeriod(false);
+		viewModelDay2.HasAvailability(true);
+		viewModelDay2.PossibleContractTimeMinutesLower(5 * 60);
+		viewModelDay2.PossibleContractTimeMinutesUpper(9 * 60);
+
+		expect(2);
+		equal(viewModel.PossibleResultContractTimeMinutesLower(), 7 * 60);
+		equal(viewModel.PossibleResultContractTimeMinutesUpper(), 10 * 60);
+	});
+
 	test("should summarize possible contract time", function () {
 		var viewModelDay1 = new Teleopti.MyTimeWeb.StudentAvailability.DayViewModel();
 		var viewModelDay2 = new Teleopti.MyTimeWeb.StudentAvailability.DayViewModel();
 		var viewModel = new Teleopti.MyTimeWeb.StudentAvailability.PeriodFeedbackViewModel(
 			null, [viewModelDay1, viewModelDay2], null);
+
+		viewModelDay1.EditableIsInOpenPeriod(true);
 		viewModelDay1.HasAvailability(true);
 		viewModelDay1.PossibleContractTimeMinutesLower(6 * 60);
 		viewModelDay1.PossibleContractTimeMinutesUpper(10 * 60);
+
+		viewModelDay2.EditableIsInOpenPeriod(true);
 		viewModelDay2.HasAvailability(true);
 		viewModelDay2.PossibleContractTimeMinutesLower(6 * 60);
 		viewModelDay2.PossibleContractTimeMinutesUpper(10 * 60);
@@ -22,6 +47,7 @@
 		var viewModelDay = new Teleopti.MyTimeWeb.StudentAvailability.DayViewModel();
 		viewModelDay.HasAvailability(true);
 		var viewModel = new Teleopti.MyTimeWeb.StudentAvailability.PeriodFeedbackViewModel(null, [viewModelDay], null);
+		viewModelDay.EditableIsInOpenPeriod(true);
 		viewModelDay.PossibleContractTimeMinutesLower(100 * 60 + 30);
 		viewModelDay.PossibleContractTimeMinutesUpper(160 * 60 + 5);
 
