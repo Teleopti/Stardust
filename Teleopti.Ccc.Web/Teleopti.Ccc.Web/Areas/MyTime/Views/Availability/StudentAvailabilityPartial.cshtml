@@ -92,7 +92,7 @@
 									<!-- /ko -->
 									<div class="fullwidth day-content-text" data-bind="visible: HasAvailability(), text: AvailableTimeSpan"></div>
 									<!-- ko if: ToggleAvailabilityVerifyHours31654Enabled() -->
-									<!-- ko if: !HasAvailability() -->
+									<!-- ko if: !HasAvailability() && EditableIsInOpenPeriod -->
 									<div class="fullwidth day-content-text" style="padding-top: 15px">
 										<i class="glyphicon glyphicon-plus canAddAvailibility"></i>
 									</div>
