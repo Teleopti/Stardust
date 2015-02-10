@@ -85,23 +85,6 @@ namespace Teleopti.Ccc.InfrastructureTest.Foundation
         }
 
         /// <summary>
-        /// At least one data source must exist.
-        /// </summary>
-        [SuppressMessage("Microsoft.Usage", "CA1806:DoNotIgnoreMethodResults",
-            MessageId = "Teleopti.Ccc.Infrastructure.Foundation.ApplicationData"),
-         SuppressMessage("Microsoft.Performance", "CA1822:MarkMembersAsStatic"), Test]
-        [ExpectedException(typeof (ArgumentNullException))]
-        public void AppSettingsMustNotBeNull()
-        {
-            IDataSource dataSource1 = new DataSource(UnitOfWorkFactoryFactory.CreateUnitOfWorkFactory("one"), null, null);
-            IDataSource dataSource2 = new DataSource(UnitOfWorkFactoryFactory.CreateUnitOfWorkFactory("two"), null, null);
-            IList<IDataSource> dataSourceList = new List<IDataSource>();
-            dataSourceList.Add(dataSource1);
-            dataSourceList.Add(dataSource2);
-						using (new ApplicationData(null, new ReadOnlyCollection<IDataSource>(dataSourceList), null, null, null)) { }
-        }
-
-        /// <summary>
         /// Duplicate data sources are not allowed.
         /// </summary>
         [Test]
