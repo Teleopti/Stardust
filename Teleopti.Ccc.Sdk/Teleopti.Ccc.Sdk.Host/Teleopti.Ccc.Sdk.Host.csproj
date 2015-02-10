@@ -161,7 +161,6 @@
     <Content Include="Web.config">
       <SubType>Designer</SubType>
     </Content>
-    <Content Include="Auth.aspx" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="..\..\GlobalAssemblyInfo.cs">
@@ -181,13 +180,6 @@
     <Compile Include="Ioc\AssemblerModule.cs" />
     <Compile Include="Ioc\RequestFactoryModule.cs" />
     <Compile Include="SdkState.cs" />
-    <Compile Include="Auth.aspx.cs">
-      <DependentUpon>Auth.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="Auth.aspx.designer.cs">
-      <DependentUpon>Auth.aspx</DependentUpon>
-    </Compile>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\Domain\Teleopti.Ccc.Domain.csproj">
