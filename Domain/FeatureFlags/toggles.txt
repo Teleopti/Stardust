@@ -73,6 +73,7 @@ RTA_EventStreamInitialization_31237 = DEV
 RTA_NotifyViaSMS_31567 = RC
 MyTimeWeb_ShiftTradeExchangeBulletin_31296 = RC
 MyTimeWeb_SeeAnnouncedShifts_31639 = RC
+MyTimeWeb_AnonymousTrades_31638 = RC
 Schedule_OvertimeBeforeShiftStart_30712 = true
 MyTimeWeb_AvailabilityVerifyHours_31654 = true
 MyTeam_AbsenceBackToWork_31478 = true
