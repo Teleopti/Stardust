@@ -22,7 +22,7 @@ namespace Teleopti.Ccc.Win.Common.Controls.Cells
 
         public override bool ApplyFormattedText(GridStyleInfo style, string text, int textInfo)
         {
-            if(text.Length > Interfaces.Domain.Description.MaxLengthOfName || text.Length == 0)
+            if(text.Length > Interfaces.Domain.Description.MaxLengthOfName || string.IsNullOrWhiteSpace(text))
                 return false;
 
             style.CellValue = new Description(text, ((Description)style.CellValue).ShortName);

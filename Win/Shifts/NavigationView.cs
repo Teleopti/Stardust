@@ -90,7 +90,7 @@ namespace Teleopti.Ccc.Win.Shifts
 
 		void treeViewNodeEditorValidating(object sender, TreeNodeAdvCancelableEditEventArgs e)
 		{
-			if(string.IsNullOrEmpty(e.Label))
+			if(string.IsNullOrWhiteSpace(e.Label))
 				e.Cancel = true;
 		}
 

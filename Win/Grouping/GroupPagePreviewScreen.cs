@@ -85,9 +85,15 @@ namespace Teleopti.Ccc.Win.Grouping
 		void treeViewAdvPreviewTreeNodeEditorValidated(object sender, TreeNodeAdvEditEventArgs e)
 		{
 			var group = (PersonGroupBase)e.Node.TagObject;
+			if (string.IsNullOrWhiteSpace(e.Node.Text))
+			{
+				e.Node.Text = group.Description.Name;
+				return;
+			}
 			var len = e.Node.Text.Length;
 			if (len > 50) len = 50;
 			e.Node.Text = e.Node.Text.Substring(0, len);
+			
 			group.Description = new Description(e.Node.Text);
 		}
 

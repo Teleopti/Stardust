@@ -198,13 +198,11 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 
         private bool validatePartTimePercentageDescription()
         {
-            bool failed = string.IsNullOrEmpty(textBoxDescription.Text);
-            if (failed)
-            {
-                textBoxDescription.Text = SelectedPartTimePercentage.Description.Name;
-            }
+					bool failed = string.IsNullOrWhiteSpace(textBoxDescription.Text);
+	        if (failed)
+		        textBoxDescription.Text = SelectedPartTimePercentage.Description.Name;
 
-            return !failed;
+	        return !failed;
         }
 
         private void addNewPartTimePercentage()

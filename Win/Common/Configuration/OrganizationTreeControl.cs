@@ -336,7 +336,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 
         private void renameNodeText(TreeNodeAdv node)
         {
-            if (string.IsNullOrEmpty(node.Text))
+            if (string.IsNullOrWhiteSpace(node.Text))
             {
                 ViewBase.ShowErrorMessage(Resources.NodeTextCantBeNulls, Resources.WarningMessageTitle);
                 treeViewAdvHierarchyTree.BeginEdit(treeViewAdvHierarchyTree.SelectedNode);

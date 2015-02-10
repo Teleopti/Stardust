@@ -431,11 +431,8 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 
 		private void validateContractDescription()
 		{
-			bool failed = string.IsNullOrEmpty(textBoxDescription.Text);
-			if (failed)
-			{
+			if (string.IsNullOrWhiteSpace(textBoxDescription.Text))
 				textBoxDescription.SelectedText = SelectedContract.Description.Name;
-			}
 		}
 
 		private void deleteContract()

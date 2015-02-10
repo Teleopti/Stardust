@@ -137,7 +137,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 
         private void textBoxExtDescriptionValidated(object sender, EventArgs e)
         {
-            if (string.IsNullOrEmpty(textBoxExtDescription.Text))
+            if (string.IsNullOrWhiteSpace(textBoxExtDescription.Text))
             {
                 textBoxExtDescription.Text = SelectedContractSchedule.Description.Name;
             }
@@ -150,7 +150,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
                 //ShowMyErrorMessage(UserTexts.Resources.YouHaveToHaveAtLeastOneScoreCard, UserTexts.Resources.SaveError);
                 return;
             }
-            if (string.IsNullOrEmpty(textBoxExtDescription.Text))
+            if (string.IsNullOrWhiteSpace(textBoxExtDescription.Text))
             {
                 textBoxExtDescription.Focus();
                 return;
@@ -294,7 +294,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 
         public bool ValidateData()
         {
-            return !string.IsNullOrEmpty(textBoxExtDescription.Text);
+            return !string.IsNullOrWhiteSpace(textBoxExtDescription.Text);
         }
 
         protected override void SetCommonTexts()

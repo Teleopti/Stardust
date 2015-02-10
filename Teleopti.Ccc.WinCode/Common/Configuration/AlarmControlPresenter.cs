@@ -223,21 +223,21 @@ namespace Teleopti.Ccc.WinCode.Common.Configuration
 
         private void NewName(GridSaveCellInfoEventArgs e)
         {
-            string s = (string) e.Style.CellValue;
+            var name = (string) e.Style.CellValue;
 
-            if(string.IsNullOrEmpty(s))
+            if(string.IsNullOrWhiteSpace(name))
             {
                 return;
             }
 
-        	IAlarmType alarmType = _alarmTypes.SingleOrDefault(a => a.Description.Name == s);
+        	IAlarmType alarmType = _alarmTypes.SingleOrDefault(a => a.Description.Name == name);
             if (alarmType != null)
             {
                 _view.Warning(Resources.NameAlreadyExists );
                 return;
             }
 
-            _alarm.Description = new Description(s);
+            _alarm.Description = new Description(name);
         }
     }
 }

@@ -302,7 +302,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 
 		private bool validatDayOffDescription()
 		{
-			bool failed = string.IsNullOrEmpty(textBoxDescription.Text);
+			bool failed = string.IsNullOrWhiteSpace(textBoxDescription.Text);
 
 			if (failed)
 			{

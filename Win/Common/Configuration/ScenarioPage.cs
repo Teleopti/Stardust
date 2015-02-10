@@ -201,7 +201,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 
 		private bool validateScenarioDescription()
 		{
-			bool failed = string.IsNullOrEmpty(textBoxExtDescription.Text);
+			bool failed = string.IsNullOrWhiteSpace(textBoxExtDescription.Text);
 			if (failed)
 			{
 				textBoxExtDescription.SelectedText = SelectedScenario.Description.Name;
