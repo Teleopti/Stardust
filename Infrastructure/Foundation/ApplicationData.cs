@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
@@ -18,7 +17,6 @@ namespace Teleopti.Ccc.Infrastructure.Foundation
 		private readonly IMessageBrokerComposite _messageBroker;
 		private readonly ILoadPasswordPolicyService _loadPasswordPolicyService;
 		private readonly IDataSourcesFactory _dataSourcesFactory;
-		private bool disposed;
 
 		public ApplicationData(IDictionary<string, string> appSettings,
 			IEnumerable<IDataSource> registeredDataSources,
@@ -76,30 +74,7 @@ namespace Teleopti.Ccc.Infrastructure.Foundation
 
 		public void Dispose()
 		{
-			Dispose(true);
-			GC.SuppressFinalize(this);
-		}
-
-		private void Dispose(bool disposing)
-		{
-			if (!disposed)
-			{
-				if (disposing)
-				{
-					ReleaseManagedResources();
-				}
-				ReleaseUnmanagedResources();
-				disposed = true;
-			}
-		}
-
-		protected virtual void ReleaseUnmanagedResources()
-		{
-		}
-
-		protected virtual void ReleaseManagedResources()
-		{
-			foreach (IDataSource dataSources in _registeredDataSourceCollection)
+			foreach (var dataSources in _registeredDataSourceCollection)
 			{
 				dataSources.Dispose();
 			}
