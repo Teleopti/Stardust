@@ -84,6 +84,11 @@ namespace Teleopti.Ccc.Infrastructure.Foundation
 			}
 		}
 
+		public void DisposeAllDataSourcesExcept(IDataSource dataSource)
+		{
+			throw new System.NotImplementedException();
+		}
+
 		public IDataSource CreateAndAddDataSource(string dataSourceName, IDictionary<string, string> applicationNhibConfiguration, string analyticsConnectionString)
 		{
 			//just hack for now! Will be fixed soon!!
