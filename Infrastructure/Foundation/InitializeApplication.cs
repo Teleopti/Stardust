@@ -2,8 +2,10 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.IO;
+using System.Linq;
 using System.Xml.Linq;
 using log4net;
+using Microsoft.FSharp.Linq;
 using NHibernate.Cfg.ConfigurationSchema;
 using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
@@ -84,7 +86,7 @@ namespace Teleopti.Ccc.Infrastructure.Foundation
 			
 			StartMessageBroker(appSettings);
 			StateHolder.Instance.State.SetApplicationData(
-				new ApplicationData(appSettings, MessageBroker,
+				new ApplicationData(appSettings, Enumerable.Empty<IDataSource>(), MessageBroker,
 										  loadPasswordPolicyService,DataSourcesFactory));
 		}
 
@@ -132,11 +134,10 @@ namespace Teleopti.Ccc.Infrastructure.Foundation
 			IConfigurationWrapper configurationWrapper)
 		{
 			StateHolder.Initialize(clientCache);
-			IDataSource datasources = DataSourcesFactory.Create(settings, statisticConnectionString);
+			IDataSource dataSource = DataSourcesFactory.Create(settings, statisticConnectionString);
 			var appSettings = configurationWrapper.AppSettings;
 			StartMessageBroker(appSettings);
-			StateHolder.Instance.State.SetApplicationData(new ApplicationData(appSettings, datasources,
-																			  MessageBroker));
+			StateHolder.Instance.State.SetApplicationData(new ApplicationData(appSettings, new[]{dataSource},MessageBroker, null, DataSourcesFactory));
 		}
 
 		private void StartMessageBroker(IDictionary<string, string> appSettings)

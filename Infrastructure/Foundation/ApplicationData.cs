@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Globalization;
 using System.Linq;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
@@ -21,6 +20,19 @@ namespace Teleopti.Ccc.Infrastructure.Foundation
 		private readonly IDataSourcesFactory _dataSourcesFactory;
 		private bool disposed;
 
+		public ApplicationData(IDictionary<string, string> appSettings,
+			IEnumerable<IDataSource> registeredDataSources,
+			IMessageBrokerComposite messageBroker,
+			ILoadPasswordPolicyService loadPasswordPolicyService,
+			IDataSourcesFactory dataSourcesFactory)
+		{
+			AppSettings = appSettings;
+			_registeredDataSourceCollection = registeredDataSources == null ? new List<IDataSource>() : registeredDataSources.ToList();
+			_messageBroker = messageBroker;
+			_loadPasswordPolicyService = loadPasswordPolicyService;
+			_dataSourcesFactory = dataSourcesFactory;
+		}
+
 		public ApplicationData(IDictionary<string, string> appSettings, IEnumerable<IDataSource> registeredDataSources, IMessageBrokerComposite messageBroker, ILoadPasswordPolicyService loadPasswordPolicyService)
 		{
 			InParameter.NotNull("appSettings", appSettings);
@@ -32,29 +44,6 @@ namespace Teleopti.Ccc.Infrastructure.Foundation
 			_registeredDataSourceCollection = new List<IDataSource>(registeredDataSources);
 			_messageBroker = messageBroker;
 			_loadPasswordPolicyService = loadPasswordPolicyService;
-		}
-
-		public ApplicationData(IDictionary<string, string> appSettings, IDataSource registeredDataSources,
-									  IMessageBrokerComposite messageBroker)
-		{
-			InParameter.NotNull("appSettings", appSettings);
-			InParameter.NotNull("registeredDataSources", registeredDataSources);
-			AppSettings = appSettings;
-			IList<IDataSource> sources = new List<IDataSource> { registeredDataSources };
-			_registeredDataSourceCollection = new ReadOnlyCollection<IDataSource>(sources);
-			_messageBroker = messageBroker;
-		}
-
-		//factory so we can add datasources later
-		public ApplicationData(IDictionary<string, string> appSettings, IMessageBrokerComposite messageBroker,
-			ILoadPasswordPolicyService loadPasswordPolicyService, IDataSourcesFactory dataSourcesFactory)
-		{
-			InParameter.NotNull("appSettings", appSettings);
-			AppSettings = appSettings;
-			_registeredDataSourceCollection = new List<IDataSource>();
-			_messageBroker = messageBroker;
-			_loadPasswordPolicyService = loadPasswordPolicyService;
-			_dataSourcesFactory = dataSourcesFactory;
 		}
 
 		public ILoadPasswordPolicyService LoadPasswordPolicyService

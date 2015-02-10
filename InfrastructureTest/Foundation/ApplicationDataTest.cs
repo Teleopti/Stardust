@@ -67,7 +67,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Foundation
         {
             IMessageBrokerComposite messBroker = mocks.StrictMock<IMessageBrokerComposite>();
             IDataSource dataSource = mocks.StrictMock<IDataSource>();
-            IApplicationData target = new ApplicationData(_receivedSettings, dataSource, messBroker);
+            IApplicationData target = new ApplicationData(_receivedSettings, new[]{dataSource}, messBroker, null, null);
             Assert.AreSame(_receivedSettings, target.AppSettings);
             Assert.AreSame(dataSource, target.RegisteredDataSourceCollection.First());
         }
@@ -135,16 +135,6 @@ namespace Teleopti.Ccc.InfrastructureTest.Foundation
         }
 
 
-        /// <summary>
-        /// Verifies the constructor dont accept null.
-        /// </summary>
-        [Test]
-        [ExpectedException(typeof (ArgumentNullException))]
-        public void VerifyDataSourcesDoNotAcceptNull()
-        {
-            new ApplicationData(_receivedSettings, (IDataSource) null, null);
-        }
-
 		[Test]
 		public void CanFindDataSourceByTenant()
 		{
@@ -166,7 +156,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Foundation
 		[Test]
 		public void NoDataSourceTenant()
 		{
-			var target = new ApplicationData(_receivedSettings, (IMessageBrokerComposite)null, null, null);
+			var target = new ApplicationData(_receivedSettings, null, null, null, null);
 			target.DataSource("something").Should().Be.Null();
 		}
 
