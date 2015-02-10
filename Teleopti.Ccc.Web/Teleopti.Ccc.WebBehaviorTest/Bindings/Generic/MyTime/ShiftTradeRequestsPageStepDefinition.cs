@@ -373,7 +373,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.MyTime
 		[When(@"I click OtherAgent shift")]
 		public void WhenIClickOtherAgentShift()
 		{
-			Browser.Interactions.ClickUsingJQuery(".agent");
+			Browser.Interactions.Click("#agent-in-bulletin-board");
 		}
 	}
 }

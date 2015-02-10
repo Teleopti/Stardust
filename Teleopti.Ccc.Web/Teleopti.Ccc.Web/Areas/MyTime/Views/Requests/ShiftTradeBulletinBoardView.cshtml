@@ -98,7 +98,7 @@
 					</tr>
 				</tbody>
 				<tbody data-bind="foreach: possibleTradeSchedules">
-					<tr class="shift-trade-person-schedule-row agent" data-bind="visible: isVisible, click: $parent.chooseAgent, hoverToggle: 'hoverBorder', hoverIf: !$parent.isDetailVisible()">
+					<tr id="agent-in-bulletin-board" class="shift-trade-person-schedule-row agent" data-bind="visible: isVisible, click: $parent.chooseAgent, hoverToggle: 'hoverBorder', hoverIf: !$parent.isDetailVisible()">
 						<td class="shift-trade-agent-name floatleft" data-bind="text: $data.agentName"></td>
 						<td class="shift-trade-possible-trade-schedule">
 							<div data-bind="foreach: $data.layers">
