@@ -18,7 +18,6 @@ define([
 			self.RealTimeAdherenceVisible = ko.observable(false);
 			self.ReportsVisible = ko.observable(false);
 			self.TeamScheduleVisible = ko.observable(false);
-			self.IsNewTeamScheduleEnabled = ko.observable(resources.MyTeam_MakeTeamScheduleConsistent_31897);
 			self.ActiveView = ko.observable("");
 			self.UserName = ko.observable("");
 			self.CurrentBusinessUnitId = ko.observable();
@@ -60,9 +59,6 @@ define([
 			};
 			self.urlForTeamScheduleToday = function() {
 				return navigation.UrlForTeamScheduleToday(self.CurrentBusinessUnitId());
-			}
-			self.urlForTeamScheduleToday_31897 = function() {
-				return navigation.UrlForTeamScheduleToday_31897(self.CurrentBusinessUnitId());
 			}
 			self.urlForRealTimeAdherence = function() {
 				return navigation.UrlForRealTimeAdherence(self.CurrentBusinessUnitId());
