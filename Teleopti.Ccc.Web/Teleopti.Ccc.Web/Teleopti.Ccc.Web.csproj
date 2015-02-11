@@ -1797,7 +1797,6 @@
     <Content Include="Areas\MyTime\Views\BadgeLeaderBoardReport\BadgeLeaderBoardReportPartial.cshtml" />
     <Content Include="Areas\WFM\package.json" />
     <Content Include="Areas\WFM\README.md" />
-    <Content Include="App_Build\node.targets" />
     <Content Include="Areas\MyTime\Views\Schedule\AddAbsenceReportPartial.cshtml" />
     <Content Include="Areas\MyTime\Views\Schedule\AddShiftExchangeOfferPartial.cshtml" />
     <Content Include="Areas\MyTime\Views\Requests\ShiftTradeBulletinBoardView.cshtml" />
@@ -1831,7 +1830,9 @@
     <Content Include="Areas\WFM\vendor\hammerjs\README.md" />
     <Content Include=".node\package.json" />
     <Content Include=".node\npm.cmd" />
-    <Content Include=".node\node.targets" />
+    <Content Include=".node\node.targets">
+      <SubType>Designer</SubType>
+    </Content>
     <Content Include=".node\node.cmd" />
     <Content Include=".node\grunt.cmd" />
     <Content Include="Areas\Reporting\Views\web.config" />

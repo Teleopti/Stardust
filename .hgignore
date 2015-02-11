@@ -36,9 +36,6 @@ _ReSharper*/
 TeleOpti.Messaging.Bin/
 *.jtconfig
 *.sln
-*/node_modules/*
-*/bower_components/*
-*/.idea/*
 
 # VS 2012 on old branches
 Backup/
@@ -84,4 +81,12 @@ Cube/build/*Xmla*
 */03StoredProcedures/dbo.OlaHallengren*.sql
 */03StoredProcedures/dbo.IndexMaintenance*.sql
 
+# front end build
 */.sass-cache/*
+*/node_modules/*
+*/bower_components/*
+*/.idea/*
+*/dist/main.js
+*/dist/main.min.js
+*/dist/main.min.js.map
+*/npm-shrinkwrap.json

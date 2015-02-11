@@ -20,6 +20,9 @@
         
         <!-- NPM install command -->
         <NpmInstallCmd>"$(NpmCmd)" update</NpmInstallCmd>
+			
+			<!-- NPM flatten command -->
+			<NpmFlattenCmd>"$(NpmCmd)" dedupe</NpmFlattenCmd>
     
         <!-- Protractor install command -->
         <NpmInstallProtractorCmd>"$(NpmCmd)" update -g protractor</NpmInstallProtractorCmd>
@@ -34,6 +37,8 @@
 			<Exec Command="$(NpmInstallGruntCliCmd)" ContinueOnError="false" WorkingDirectory="$(NodeDir)" />
       <Message Text="Restore Node Packages Command: $(NpmInstallCmd) /w WorkingDirectory: $(MSBuildProjectDirectory)\Areas\WFM" Importance="high" />  
       <Exec Command="$(NpmInstallCmd)" ContinueOnError="false" WorkingDirectory="$(MSBuildProjectDirectory)\Areas\WFM" />
+			<Message Text="Flatten Node Packages Command: $(NpmFlattenCmd) /w WorkingDirectory: $(MSBuildProjectDirectory)\Areas\WFM" Importance="high" />
+			<Exec Command="$(NpmFlattenCmd)" ContinueOnError="false" WorkingDirectory="$(MSBuildProjectDirectory)\Areas\WFM" />
     </Target>
 	
 		<!-- Install protractor -->
