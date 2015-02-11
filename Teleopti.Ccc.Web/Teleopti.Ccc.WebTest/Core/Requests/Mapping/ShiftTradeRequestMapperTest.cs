@@ -9,8 +9,10 @@ using Teleopti.Ccc.Domain.AgentInfo.Requests;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.Repositories;
+using Teleopti.Ccc.Domain.WorkflowControl;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider;
+using Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.DataProvider;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.Requests;
 using Teleopti.Interfaces.Domain;
@@ -20,7 +22,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 	[TestFixture]
 	public class ShiftTradeRequestMapperTest
 	{
-		private IShiftTradeRequestMapper target;
+		private IShiftTradeRequestMapper _target;
 		private IPersonRepository personRepository;
 		private ShiftTradeRequestForm form;
 		private IPerson loggedOnUser;
@@ -28,6 +30,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 		private IPersonRequestRepository _personRequestRepository;
 		private IScheduleProvider _scheduleProvider;
 		private IScheduleDay _scheduleToTrade;
+		private IShiftTradeRequestProvider _shiftTradeRequestProvider;
 
 		[SetUp]
 		public void Setup()
@@ -37,7 +40,8 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 			_loggedOnUserSvc = MockRepository.GenerateMock<ILoggedOnUser>();
 			_personRequestRepository = MockRepository.GenerateMock<IPersonRequestRepository>();
 			_scheduleProvider = MockRepository.GenerateMock<IScheduleProvider>();
-			target = new ShiftTradeRequestMapper(personRepository, _loggedOnUserSvc, _personRequestRepository, _scheduleProvider);
+			_shiftTradeRequestProvider = MockRepository.GenerateMock<IShiftTradeRequestProvider>();
+			_target = new ShiftTradeRequestMapper(personRepository, _loggedOnUserSvc, _personRequestRepository, _scheduleProvider, _shiftTradeRequestProvider);
 			form = new ShiftTradeRequestForm
 				{
 					Message = "sdfsdfsdf",
@@ -49,6 +53,8 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 			_loggedOnUserSvc.Stub(x => x.CurrentUser()).Return(loggedOnUser);
 			_scheduleToTrade = ScheduleDayFactory.Create(form.Dates.SingleOrDefault());
 			_scheduleProvider.Stub(x => x.GetScheduleForPersons(form.Dates.SingleOrDefault(), new[] { loggedOnUser })).Return(new[] { _scheduleToTrade });
+			_shiftTradeRequestProvider.Stub(x => x.RetrieveUserWorkflowControlSet())
+				.Return(new WorkflowControlSet() {LockTrading = true, AutoGrantShiftTradeRequest = false});		
 		}
 
 		[Test]
@@ -57,7 +63,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 			const string expected = "hejhej";
 			form.Subject = expected;
 			
-			var res = target.Map(form);
+			var res = _target.Map(form);
 			res.GetSubject(new NoFormatting()).Should().Be.EqualTo(expected);
 		}
 
@@ -75,9 +81,27 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 			var personRequest = MockRepository.GenerateMock<IPersonRequest>();
 			offer.Stub(x => x.MakeShiftTradeRequest(_scheduleToTrade)).Return(personRequest);
 			
-			var res = target.Map(form);
+			var res = _target.Map(form);
 			res.Should().Be.SameInstanceAs(personRequest);
 			personRequest.AssertWasCalled(x => x.Subject = expected);
+		}
+
+		[Test]
+		public void ShouldSetOfferStatusToPendingAdminApproval()
+		{
+			
+			var offerId = new Guid();
+			form.ShiftExchangeOfferId = offerId;
+			var offer = MockRepository.GenerateMock<IShiftExchangeOffer>();
+			offer.Status = ShiftExchangeOfferStatus.Pending;
+			var offerRequest = new PersonRequest(PersonFactory.CreatePerson()) { Request = offer };
+			_personRequestRepository.Stub(x => x.FindPersonRequestByRequestId(offerId)).Return(offerRequest);
+
+			var personRequest = MockRepository.GenerateMock<IPersonRequest>();
+			offer.Stub(x => x.MakeShiftTradeRequest(_scheduleToTrade)).Return(personRequest);
+
+			_target.Map(form);
+			offer.Status.Should().Be.EqualTo(ShiftExchangeOfferStatus.PendingAdminApproval);
 		}
 
 		[Test]
@@ -86,14 +110,14 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 			const string expected = "hej då";
 			form.Message = expected;
 
-			var res = target.Map(form);
+			var res = _target.Map(form);
 			res.GetMessage(new NoFormatting()).Should().Be.EqualTo(expected);
 		}
 
 		[Test]
 		public void ShouldMapPerson()
 		{
-			var res = target.Map(form);
+			var res = _target.Map(form);
 			res.Person.Should().Be.SameInstanceAs(loggedOnUser);
 		}
 
@@ -103,7 +127,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 			var expected = new DateOnly(2010, 1, 1);
 			form.Dates = new List<DateOnly> {expected};
 
-			var res = target.Map(form);
+			var res = _target.Map(form);
 			var swapDetail = ((IShiftTradeRequest) res.Request).ShiftTradeSwapDetails[0];
 			swapDetail.DateFrom.Should().Be.EqualTo(expected);
 			swapDetail.DateTo.Should().Be.EqualTo(expected);
@@ -115,7 +139,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 			form.Dates = new List<DateOnly> {new DateOnly(1434, 5, 1)};
 			var expected = new DateOnly(new DateTime(1434, 5, 1, CultureInfo.CurrentCulture.Calendar));
 
-			var res = target.Map(form);
+			var res = _target.Map(form);
 			var swapDetail = ((IShiftTradeRequest)res.Request).ShiftTradeSwapDetails[0];
 			swapDetail.DateFrom.Should().Be.EqualTo(expected);
 			swapDetail.DateTo.Should().Be.EqualTo(expected);
@@ -129,7 +153,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 			personRepository.Expect(x => x.Get(id)).Return(personTo);
 			form.PersonToId = id;
 
-			var res = target.Map(form);
+			var res = _target.Map(form);
 			var swapDetail = ((IShiftTradeRequest)res.Request).ShiftTradeSwapDetails[0];
 			swapDetail.PersonTo.Should().Be.SameInstanceAs(personTo);
 			swapDetail.PersonFrom.Should().Be.SameInstanceAs(loggedOnUser);

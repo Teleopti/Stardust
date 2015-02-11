@@ -18,6 +18,11 @@
 		 /// <summary>
 		 /// Shfit has been changed by admin after shift exchange offer send out
 		 /// </summary>
-		 Invalid
+		 Invalid,
+
+		 /// <summary>
+		 /// Shift trade from bulletin board is pending for admin approval
+		 /// </summary>
+		 PendingAdminApproval
 	 };
 }

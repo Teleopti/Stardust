@@ -421,7 +421,7 @@ Teleopti.MyTimeWeb.Request.ShiftTradeBulletinBoardViewModel = function(ajax) {
 			}
 			var name = '';
 			if (!self.isAnonymousTrading()) name = personSchedule.Name;
-			var model = new Teleopti.MyTimeWeb.Request.PersonScheduleAddShiftTradeViewModel(mappedLayers, scheduleStartTime, scheduleEndTime, name, personSchedule.PersonId, personSchedule.IsDayOff, personSchedule.ShiftExchangeOfferId);
+			var model = new Teleopti.MyTimeWeb.Request.PersonScheduleAddShiftTradeViewModel(mappedLayers, scheduleStartTime, scheduleEndTime, name, personSchedule.PersonId, personSchedule.IsDayOff, null, personSchedule.ShiftExchangeOfferId);
 			self.possibleTradeSchedules.push(model);
 			return model;
 		});
