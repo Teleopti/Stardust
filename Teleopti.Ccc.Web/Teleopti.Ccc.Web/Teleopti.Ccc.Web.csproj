@@ -391,12 +391,10 @@
     <Compile Include="Areas\Anywhere\Core\IGetTeamAdherence.cs" />
     <Compile Include="Areas\Anywhere\Core\IPersonScheduleDayViewModelFactory.cs" />
     <Compile Include="Areas\Anywhere\Core\IPersonScheduleDayViewModelMapper.cs" />
-    <Compile Include="Areas\Anywhere\Core\IReportUrl.cs" />
     <Compile Include="Areas\Anywhere\Core\PersonScheduleDayViewModel.cs" />
     <Compile Include="Areas\Anywhere\Core\PersonScheduleDayViewModelMapper.cs" />
     <Compile Include="Areas\Anywhere\Core\PersonScheduleDayViewModelMappingProfile.cs" />
     <Compile Include="Areas\Anywhere\Core\PersonScheduleDayViewModelFactory.cs" />
-    <Compile Include="Areas\Anywhere\Core\ReportUrl.cs" />
     <Compile Include="Areas\Anywhere\Core\ReportItemsProvider.cs" />
     <Compile Include="Areas\Anywhere\Core\IReportItemsProvider.cs" />
     <Compile Include="Areas\Anywhere\Core\TeamOutOfAdherence.cs" />

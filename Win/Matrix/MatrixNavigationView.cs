@@ -12,6 +12,7 @@ using Teleopti.Ccc.WinCode.Common.GuiHelpers;
 using Teleopti.Ccc.WinCode.Matrix;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Ccc.Win.Reporting;
+using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.Win.Matrix
 {
@@ -20,7 +21,7 @@ namespace Teleopti.Ccc.Win.Matrix
 		private readonly IComponentContext _componentContext;
 		private readonly MatrixNavigationPresenter _presenter;
 
-		public MatrixNavigationView(IMatrixNavigationModel model, IComponentContext componentContext)
+		public MatrixNavigationView(IMatrixNavigationModel model, IComponentContext componentContext, IReportUrl reportUrlConstructor)
 		{
 			_componentContext = componentContext;
 			InitializeComponent();
@@ -29,7 +30,7 @@ namespace Teleopti.Ccc.Win.Matrix
 				SetTexts();
 			}
 
-			_presenter = new MatrixNavigationPresenter(model, this);
+			_presenter = new MatrixNavigationPresenter(model, this, reportUrlConstructor);
 			_presenter.Initialize();
 		}
 

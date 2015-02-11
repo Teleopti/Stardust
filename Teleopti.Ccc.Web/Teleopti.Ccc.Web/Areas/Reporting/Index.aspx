@@ -14,7 +14,7 @@
 </head>
 
 <body >
-	<form id="aspnetForm" style="margin-top: 50px" runat="server">
+	<form id="aspnetForm" runat="server">
 		<asp:ScriptManager ID="ScriptManager1" EnablePartialRendering="true" runat="server" EnableScriptGlobalization="true" EnableScriptLocalization="true" />
 		<div class="Panel">
 			<div class="DetailsView" style="height: 80%; overflow: auto">

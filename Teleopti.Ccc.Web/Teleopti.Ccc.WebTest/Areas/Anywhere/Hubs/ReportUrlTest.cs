@@ -3,8 +3,8 @@ using NUnit.Framework;
 using Rhino.Mocks;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.Common;
+using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.TestCommon;
-using Teleopti.Ccc.Web.Areas.Anywhere.Core;
 
 namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Hubs
 {

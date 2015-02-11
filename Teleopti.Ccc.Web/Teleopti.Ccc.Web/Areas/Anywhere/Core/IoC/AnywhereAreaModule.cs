@@ -1,19 +1,30 @@
 ﻿using Autofac;
 using Microsoft.AspNet.SignalR.Hubs;
+using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.ResourceCalculation.IntraIntervalAnalyze;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.NonBlendSkill;
 using Teleopti.Ccc.Domain.Scheduling.SeatLimitation;
+using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.Infrastructure.Repositories;
+using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.Web.Core.Startup;
 using Teleopti.Interfaces.Domain;
+using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.Web.Areas.Anywhere.Core.IoC
 {
 	public class AnywhereAreaModule : Module
 	{
+		private readonly IIocConfiguration _config;
+
+		public AnywhereAreaModule(IIocConfiguration config)
+		{
+			_config = config;
+		}
+
 		protected override void Load(ContainerBuilder builder)
 		{
 			builder.RegisterType<ExceptionHandlerPipelineModule>().As<IHubPipelineModule>();
@@ -26,7 +37,13 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Core.IoC
 			builder.RegisterType<PersonScheduleDayViewModelMapper>().As<IPersonScheduleDayViewModelMapper>().SingleInstance();
 			builder.RegisterType<DailyStaffingMetricsViewModelFactory>().As<IDailyStaffingMetricsViewModelFactory>().InstancePerLifetimeScope();
 			builder.RegisterType<ReportItemsProvider>().As<IReportItemsProvider>().SingleInstance();
-			builder.RegisterType<ReportUrl>().As<IReportUrl>().SingleInstance();
+
+			if (_config.Toggle(Toggles.MultiTenantSSOSupport_StandardReports_15093))
+				builder.RegisterType<ReportUrlConstructor>().As<IReportUrl>().SingleInstance();
+			else
+				builder.RegisterType<ReportUrl>().As<IReportUrl>().SingleInstance();
+			
+			
 			builder.RegisterType<ResourceCalculateSkillCommand>().As<IResourceCalculateSkillCommand>().InstancePerLifetimeScope();
 			builder.RegisterType<SkillLoaderDecider>().As<ISkillLoaderDecider>().SingleInstance();
 			builder.RegisterType<SkillDayLoadHelper>().As<ISkillDayLoadHelper>().SingleInstance();

@@ -2,10 +2,9 @@
 using System.Globalization;
 using Teleopti.Ccc.Domain;
 using Teleopti.Ccc.Domain.Common;
-using Teleopti.Ccc.Web.Core;
 using Teleopti.Interfaces.Infrastructure;
 
-namespace Teleopti.Ccc.Web.Areas.Anywhere.Core
+namespace Teleopti.Ccc.Infrastructure.Foundation
 {
 	public class ReportUrl : IReportUrl
 	{

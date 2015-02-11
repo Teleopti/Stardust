@@ -173,7 +173,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 				builder.RegisterModule(new EncryptionModule());
 				builder.RegisterModule(new EventAggregatorModule());
 				builder.RegisterModule(new StartupModule(configuration));
-				builder.RegisterModule(new NavigationModule());
+				builder.RegisterModule(new NavigationModule(configuration));
 				builder.RegisterModule(new BudgetModule());
 				builder.RegisterModule<IntradayModule>();
 				builder.RegisterModule<ForecasterModule>();

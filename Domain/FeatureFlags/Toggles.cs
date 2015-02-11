@@ -82,5 +82,6 @@
 
 		SeatPlanner_Logon_32003,
 		MyTeam_MakeTeamScheduleConsistent_31897,
+		MultiTenantSSOSupport_StandardReports_15093,
 	}
 }
