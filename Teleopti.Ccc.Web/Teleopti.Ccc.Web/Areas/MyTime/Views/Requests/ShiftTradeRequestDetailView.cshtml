@@ -4,11 +4,11 @@
 }
 
 <div id="shift-trade-request-detail-view">
+	<!-- ko if: !isAnonymousTrading()-->
 	<!-- ko if: IsEditMessageEnabled -->
 	<textarea id="Request-detailed-shift-trade-message-input" class="form-control input-block-level" data-bind="visible: !IsTradeCreatedByMe() && IsPending() && CanApproveAndDeny, value: UpdatedMessage, valueUpdate: 'afterkeydown'" rows="4" placeholder="@Resources.Message" />
 	<!-- /ko -->
 	
-	<!-- ko if: !isAnonymousTrading()-->
 	<div>
 		<div id="sender-info">
 			<span class="request-caption">@Resources.From: </span><span class="shift-trade-swap-detail-agent-name request-data-type" id="Request-shift-trade-sender" data-bind="text: personFrom" ></span>
