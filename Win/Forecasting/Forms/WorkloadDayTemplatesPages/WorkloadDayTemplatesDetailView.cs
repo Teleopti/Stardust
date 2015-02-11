@@ -226,7 +226,6 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.WorkloadDayTemplatesPages
             int periods = ((KeyValuePair<int, object>)comboBoxAdv.SelectedItem).Key;
             WorkloadDayTemplate template = (WorkloadDayTemplate)_workload.GetTemplateAt(TemplateTarget.Workload, _templateIndex);
             template.DoRunningSmoothing(periods, taskPeriodType);
-            _templateGridControl.Refresh();
             _templateGridControl.UpdateGridRowToChart(taskPeriodType);
             Refresh();
         }

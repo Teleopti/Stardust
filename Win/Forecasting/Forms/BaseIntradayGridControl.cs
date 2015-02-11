@@ -431,8 +431,9 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
 
         bool _lockUpdate;
     	private IUnsavedDaysInfo _unsavedDays;
+	    private bool _resize = true;
 
-    	protected bool LockUpdate
+	    protected bool LockUpdate
         {
             get { return _lockUpdate; }
             set { _lockUpdate = value; }
@@ -514,13 +515,27 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
             Refresh();
         }
 
+        /// <summary>
+        /// Refreshes the grid without resizing the cells.
+        /// </summary>
+        /// <remarks>
+        /// Created by: marias
+        /// Created date: 2015-02-09
+        /// </remarks>
+        public void RefreshGridNoResize()
+        {
+	        _resize = false;	
+			RefreshGrid();
+        }
+
         protected virtual void OnUpdatingDataPeriodList()
         {
         }
 
         protected virtual void OnUpdatedDataPeriodList()
         {
-            this.ResizeToFit();
+			if(_resize)
+				this.ResizeToFit();
             Cols.Size[1] = ColorHelper.GridHeaderColumnWidth();
             ResetGridCoveredRanges();
         }

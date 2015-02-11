@@ -132,8 +132,9 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.WorkloadDayTemplatesPages
         /// </remarks>
         public void UpdateGridRowToChart(TaskPeriodType taskPeriodType)
         {
-            int row = (int)taskPeriodType + 1;
+            var row = (int)taskPeriodType + 1;
             var range = GridRangeInfo.Cells(row, Cols.HeaderCount + 1, row, ColCount);
+			RefreshGridNoResize();
             TriggerDataToChart(range);
         }
     }
