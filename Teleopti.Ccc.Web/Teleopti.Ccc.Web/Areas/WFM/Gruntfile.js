@@ -24,18 +24,7 @@
 				separator: '\r\n'
 			},
 			dist: {
-				src: ['node_modules/angular/angular.min.js',
-					'node_modules/angular-ui-router/release/angular-ui-router.min.js',
-					'node_modules/angular-resource/angular-resource.min.js',
-					'vendor/ui-bootstrap.min.js',
-					'node_modules/moment/min/moment-with-locales.min.js',
-					'node_modules/angular-moment/angular-moment.min.js',
-					'vendor/angular-ui-tree/angular-ui-tree.min.js',
-					'vendor/angular-aria/angular-aria.min.js',
-					'vendor/angular-animate/angular-animate.min.js',
-					'vendor/hammerjs/hammer.min.js',
-					'vendor/angular-material/angular-material.min.js',
-					'js/**/*.js'],
+				src: ['js/**/*.js'],
 				dest: 'dist/main.js'
 			}
 		},
