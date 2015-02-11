@@ -43,6 +43,7 @@
 		RTA_HangfireEventProcessinUsingMsmq_31237,
 		RTA_NoBroker_31237,
 		RTA_EventStreamInitialization_31237,
+		RTA_CalculatePercentageInAgentTimezone_31236,
 
 		MyTeam_MoveActivity_25206,
 		MyTeam_StaffingMetrics_25562,
