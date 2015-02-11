@@ -33,8 +33,6 @@
 
     <!-- Runs NPM command -->
     <Target Name="RestoreNodePackages">
-			<Message Text="Restore Node Packages Command: $(NpmInstallGruntCliCmd) /w WorkingDirectory: $(NodeDir)" Importance="high" />
-			<Exec Command="$(NpmInstallGruntCliCmd)" ContinueOnError="false" WorkingDirectory="$(NodeDir)" />
       <Message Text="Restore Node Packages Command: $(NpmInstallCmd) /w WorkingDirectory: $(MSBuildProjectDirectory)\Areas\WFM" Importance="high" />  
       <Exec Command="$(NpmInstallCmd)" ContinueOnError="false" WorkingDirectory="$(MSBuildProjectDirectory)\Areas\WFM" />
 			<Message Text="Flatten Node Packages Command: $(NpmFlattenCmd) /w WorkingDirectory: $(MSBuildProjectDirectory)\Areas\WFM" Importance="high" />

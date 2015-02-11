@@ -86,7 +86,7 @@ Cube/build/*Xmla*
 */node_modules/*
 */bower_components/*
 */.idea/*
-*/dist/main.js
-*/dist/main.min.js
-*/dist/main.min.js.map
+# */dist/main.js
+# */dist/main.min.js
+# */dist/main.min.js.map
 */npm-shrinkwrap.json
