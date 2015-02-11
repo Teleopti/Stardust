@@ -25,10 +25,10 @@
 			<NpmFlattenCmd>"$(NpmCmd)" dedupe</NpmFlattenCmd>
     
         <!-- Protractor install command -->
-        <NpmInstallProtractorCmd>"$(NpmCmd)" update -g protractor</NpmInstallProtractorCmd>
+        <NpmInstallProtractorCmd>"$(NpmCmd)" update -g protractor -save-dev</NpmInstallProtractorCmd>
 
 			<!-- grunt-cli install command -->
-			<NpmInstallGruntCliCmd>"$(NpmCmd)" update -g grunt-cli</NpmInstallGruntCliCmd>
+			<NpmInstallGruntCliCmd>"$(NpmCmd)" install -g grunt-cli -save-dev</NpmInstallGruntCliCmd>
     </PropertyGroup>
 
     <!-- Runs NPM command -->
