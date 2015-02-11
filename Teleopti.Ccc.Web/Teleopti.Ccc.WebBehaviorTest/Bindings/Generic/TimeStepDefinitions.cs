@@ -10,6 +10,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
 	{
 		[Given(@"the time is '(.*)'")]
 		[When(@"the time is '(.*)'")]
+		[When(@"the utc time is '(.*)'")]
 		[SetCulture("sv-SE")]
 		public void GivenCurrentTimeIs(DateTime time)
 		{
