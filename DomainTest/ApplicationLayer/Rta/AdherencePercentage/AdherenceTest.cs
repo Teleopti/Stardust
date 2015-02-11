@@ -14,7 +14,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.AdherencePercentage
 {
 	[AdherenceTest]
 	[TestFixture]
-	public class OrderedEventsTest : IRegisterInContainer
+	public class AdherenceTest : IRegisterInContainer
 	{
 		public FakeAdherencePercentageReadModelPersister Persister;
 		public AdherencePercentageReadModelUpdater Target;
@@ -161,7 +161,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.AdherencePercentage
 		}
 
 		[Test]
-		public void TimeInAdherence_WhenLoggingInAndOutInShortPeriods_ShouldBeTheSumOfThePeriodsInAdherence()
+		public void ShouldUpdateWithSecondResolutionOfTimeInAdherence()
 		{
 			var personId = Guid.NewGuid();
 
@@ -193,7 +193,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.AdherencePercentage
 		}
 
 		[Test]
-		public void TimeOutOfAdherence_WhenLoggingInAndOutInShortPeriods_ShouldBeTheSumOfThePeriodsOutOfAdherence()
+		public void ShouldUpdateWithSecondResolutionOfTimeOutOfAdherence()
 		{
 			var personId = Guid.NewGuid();
 			

@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
 
-namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.AdherencePercentage
+namespace Teleopti.Ccc.TestCommon
 {
 	public static class LinqPerumationExtension
 	{

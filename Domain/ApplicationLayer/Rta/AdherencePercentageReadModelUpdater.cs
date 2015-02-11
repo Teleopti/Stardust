@@ -20,6 +20,12 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta
 		}
 
 		[ReadModelUnitOfWork]
+		public virtual bool Initialized()
+		{
+			return _persister.HasData();
+		}
+
+		[ReadModelUnitOfWork]
 		public virtual void Handle(PersonInAdherenceEvent @event)
 		{
 			handleEvent(
@@ -75,8 +81,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta
 					PersonId = personId,
 					LastTimestamp = readModelState.Timestamp,
 					ShiftEndTime = readModelState.ShiftEndTime
+					State = new[] {readModelState},
 				};
-				model.State = new[] { readModelState };
 			}
 			else
 			{
@@ -89,12 +95,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta
 			_persister.Persist(model);
 		}
 		
-		[ReadModelUnitOfWork]
-		public virtual bool Initialized()
-		{
-			return _persister.HasData();
-		}
-
 		private static void calculate(AdherencePercentageReadModel model)
 		{
 			model.TimeInAdherence = TimeSpan.Zero;

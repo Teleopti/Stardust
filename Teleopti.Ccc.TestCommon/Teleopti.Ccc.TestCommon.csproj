@@ -127,6 +127,7 @@
     <Compile Include="HawaiiTimeZone.cs" />
     <Compile Include="IoC\IoCTestAttribute.cs" />
     <Compile Include="IoC\IoCTestTest.cs" />
+    <Compile Include="LinqPerumationExtension.cs" />
     <Compile Include="TestData\Analytics\DimDayOff.cs" />
     <Compile Include="IoC\ToggleAttribute.cs" />
     <Compile Include="TestData\Analytics\Absence.cs" />
