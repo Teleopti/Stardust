@@ -106,8 +106,26 @@ wfmCtrls.controller('PermissionsCtrl', [
 					node.selected = false;
 				});
 			} else {
-				data[node.Type] = [node.Id];
+				data[node.Type+'s'] = [node.Id];
 				Permissions.assignOrganizationSelection.postData(data).$promise.then(function (result) {
+					node.selected = true;
+				});
+			}
+		};
+
+		$scope.changeRangeOption = function (node) {
+			if (node.selected && node.RangeOption !== 0) {
+				$scope.organization.DynamicOptions[0].selected = true;
+				node.selected = false;
+				$scope.changeRangeOption($scope.organization.DynamicOptions[0]);
+			} else {
+				var data = {};
+				data.Id = $scope.selectedRole;
+				data['RangeOption'] = node.RangeOption;
+				Permissions.assignOrganizationSelection.postData(data).$promise.then(function (result) {
+					$scope.organization.DynamicOptions.forEach(function(option) {
+						option.selected = false;
+					});
 					node.selected = true;
 				});
 			}

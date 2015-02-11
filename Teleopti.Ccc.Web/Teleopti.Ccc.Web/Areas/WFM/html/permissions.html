@@ -99,7 +99,7 @@
 				<div ui-tree data-drag-enabled="false">
 					<ol ui-tree-nodes="" ng-model="organization.DynamicOptions" class="tree-line">
 						<li ng-repeat="dynamic in organization.DynamicOptions | filter:searchData" ui-tree-node>
-							<div ui-tree-handle ng-click="toggleOrganizationSelection(dynamic, 'RangeOption')" ng-class="{selected: dynamic.selected}">
+							<div ui-tree-handle ng-click="changeRangeOption(dynamic)" ng-class="{selected: dynamic.selected}">
 								{{dynamic.Name}}
 							</div>
 						</li>
@@ -109,27 +109,6 @@
 				<div ui-tree data-drag-enabled="false">
 					<ol ui-tree-nodes="" ng-model="organization.BusinessUnit" id="tree-root" class="tree-line">
 						<li ng-repeat="node in organization.BusinessUnit | filter:searchData" ui-tree-node ng-include="'nodes_bu_renderer.html'"></li>
-						
-
-						<!-- <li ng-repeat="bu in organization.BusinessUnit | filter:searchData" ui-tree-node>
-							<div ui-tree-handle ng-class="{selected: bu.selected}" ng-click="toggleOrganizationSelection(bu, 'BusinessUnits')">
-								{{bu.Name}}
-							</div>
-							<ol ui-tree-nodes="" ng-model="bu.Sites" class="tree-line">
-								<li ng-repeat="site in bu.Sites | filter:searchData" ui-tree-node>
-									<div ui-tree-handle ng-class="{selected: site.selected}" ng-click="toggleOrganizationSelection(site, 'Sites')">
-										{{site.Name}}
-									</div>
-									<ol ui-tree-nodes="" ng-model="site.Teams" class=" tree-line">
-										<li ng-repeat="team in site.Teams | filter:searchData" ui-tree-node>
-											<div ui-tree-handle ng-class="{selected: team.selected}" ng-click="toggleOrganizationSelection(team, 'Teams')">
-												{{team.Name}}
-											</div>
-										</li>
-									</ol>
-								</li>
-							</ol>
-						</li>-->
 					</ol>
 				</div>
 			</div>
