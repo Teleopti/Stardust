@@ -87,11 +87,11 @@
                         </tr>
                     </thead>
                     <tbody data-bind="foreach: SortedPersons">
-                        <tr class="person" data-bind="attr: { 'data-person-id': Id }, css: { 'selected-person': IsPersonOrShiftSelected }">
+                        <tr class="person" data-bind="attr: { 'data-person-id': Id }, css: { 'selected-person': IsPersonOrShiftSelected }, click: $root.SelectPerson">
                             <td class="person-name person-name-column">
-                                <div class="person-name nowrap" data-bind="text: Name, click: $root.SelectPerson"></div>
+                                <div class="person-name nowrap" data-bind="text: Name"></div>
                             </td>
-                            <td class="schedule schedule-column" data-bind="click: $root.SelectPerson">
+                            <td class="schedule schedule-column">
                                 <div class="relative time-line-for">
                                     <!-- ko foreach: Shifts -->
                                     <div class="shift" data-bind="
@@ -181,10 +181,16 @@
 	                                <div class="btn-group">
 										<!-- ko if: $root.permissionAddFullDayAbsence -->
 										<a class="btn btn-sm add-full-day-absence" data-bind="attr: { href: $data.urlForAddFullDayAbsence()}"><i class="glyphicon glyphicon-plus"></i><span data-bind="    text: $root.Resources.FullDayAbsence"></span></a>
-										<!-- /ko -->
+		                                <!-- /ko -->
+										<!-- ko if: $root.permissionAddIntradayAbsence -->
+										<a class="btn btn-sm add-intraday-absence" data-bind="attr: { href: $data.urlForAddIntradayAbsence()}"><i class="glyphicon glyphicon-plus"></i><span data-bind="    text: $root.Resources.IntradayAbsence"></span></a>
+										<!-- /ko-->
 										<!-- ko if: $root.permissionAddActivity -->
 										<a class="btn btn-sm add-activity" data-bind="attr: { href: $data.urlForAddActivity()}"><i class="glyphicon glyphicon-plus"></i><span data-bind="    text: $root.Resources.Activity"></span></a>
-										<!-- /ko -->
+		                                <!-- /ko -->
+										<!-- ko if: $root.permissionRemoveAbsence -->
+										<a class="btn btn-sm remove-absence" data-bind="attr: { href: $data.urlForRemoveAbsence()}"><i class="glyphicon glyphicon-minus"></i><span data-bind="    text: $root.Resources.Absence"></span></a>
+										<!-- /ko-->
 	                                </div>
                                     <!-- /ko -->
                                 </div>
