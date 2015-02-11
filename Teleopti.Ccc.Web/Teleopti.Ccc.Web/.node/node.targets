@@ -28,7 +28,7 @@
         <NpmInstallProtractorCmd>"$(NpmCmd)" update -g protractor</NpmInstallProtractorCmd>
 
 			<!-- grunt-cli install command -->
-			<NpmInstallGruntCliCmd>"$(NpmCmd)" install -g grunt-cli</NpmInstallGruntCliCmd>
+			<NpmInstallGruntCliCmd>"$(NpmCmd)" update -g grunt-cli</NpmInstallGruntCliCmd>
     </PropertyGroup>
 
     <!-- Runs NPM command -->
