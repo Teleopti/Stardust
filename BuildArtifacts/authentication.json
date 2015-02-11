@@ -1,0 +1,14 @@
+{
+	"Success":true,
+	"FailReason":null,
+	"PersonId":"F1C49395-2895-4A94-9A4A-9C5E00B31F7E",
+	"Tenant":"Teleopti WFM",
+	"DataSourceConfiguration":{
+		"AnalyticsConnectionString":"Data Source=.;Integrated Security=SSPI;Initial Catalog=Test_SGISikuli_TeleoptiAnalytics;Current Language=us_english",
+		"ApplicationNHibernateConfig":{
+			"connection.connection_string":"Data Source=.;Integrated Security=SSPI;Initial Catalog=Test_SGISikuli_TeleoptiCCC7;Current Language=us_english",
+			"command_timeout":"60"
+		}
+	},
+	"PasswordExpired":false
+}

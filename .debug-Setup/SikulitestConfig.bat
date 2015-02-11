@@ -30,6 +30,7 @@ SET buildServerConfigFiles="%configFilesFolder%\BuildServerConfigFiles.txt"
 if not exist "%configFilesFolder%" mkdir "%configFilesFolder%"
 echo ..\..\..\Teleopti.Ccc.SmartClientPortal\Teleopti.Ccc.SmartClientPortal.Shell\bin\%configuration%\Teleopti.Ccc.SmartClientPortal.Shell.exe.config,BuildArtifacts\AppRaptor.config>%buildServerConfigFiles%
 echo %ROOTDIR%\nhib\FixMyConfig.nhib.xml,BuildArtifacts\TeleoptiCCC7.nhib.xml>>%buildServerConfigFiles%
+echo %ROOTDIR%\nhib\authentication.json,BuildArtifacts\authentication.json>>%buildServerConfigFiles%
 
 ::Run supportTool to replace all config
 "%ROOTDIR%\Teleopti.Support.Tool\bin\%configuration%\Teleopti.Support.Tool.exe" -MOTest
@@ -49,28 +50,32 @@ SLEEP 3
 
 SET nodePath=configuration/appSettings/add[@key='GetConfigFromWebService']
 SET attributeName=value
-SET value=false
-%commonFolder%\XmlSetAttribute.exe %configPath% %nodePath% %attributeName% %value%
+SET attributeValue=false
+%commonFolder%\XmlSetAttribute.exe %configPath% %nodePath% %attributeName% %attributeValue%
 
 SET nodePath=configuration/appSettings/add[@key='nhibconfpath']
 SET attributeName=value
-SET value=%ROOTDIR%\nhib
-%commonFolder%\XmlSetAttribute.exe %configPath% %nodePath% %attributeName% %value%
+SET attributeValue=%ROOTDIR%\nhib
+%commonFolder%\XmlSetAttribute.exe %configPath% %nodePath% %attributeName% %attributeValue%
 
 SET nodePath=configuration/appSettings/add[@key='FeatureToggle']
 SET attributeName=value
-SET value=%ROOTDIR%\Domain\FeatureFlags\toggles.txt
-%commonFolder%\XmlSetAttribute.exe %configPath% %nodePath% %attributeName% %value%
+SET attributeValue=%ROOTDIR%\Domain\FeatureFlags\toggles.txt
+%commonFolder%\XmlSetAttribute.exe %configPath% %nodePath% %attributeName% %attributeValue%
+
+SET nodePath=configuration/appSettings/add[@key='TenantServer']
+SET attributeName=value
+SET value=%ROOTDIR%\nhib\authentication.json
 
 SET nodePath=configuration/system.serviceModel/bindings/basicHttpBinding/binding/security
 SET attributeName=mode
-SET value=TransportCredentialOnly
-%commonFolder%\XmlSetAttribute.exe %configPath% %nodePath% %attributeName% %value%
+SET attributeValue=TransportCredentialOnly
+%commonFolder%\XmlSetAttribute.exe %configPath% %nodePath% %attributeName% %attributeValue%
 
 SET nodePath=configuration/system.serviceModel/bindings/basicHttpBinding/binding/security/transport
 SET attributeName=clientCredentialType
-SET value=Ntlm
-%commonFolder%\XmlSetAttribute.exe %configPath% %nodePath% %attributeName% %value%
+SET attributeValue=Ntlm
+%commonFolder%\XmlSetAttribute.exe %configPath% %nodePath% %attributeName% %attributeValue%
 
 ENDLOCAL
 GOTO:EOF
