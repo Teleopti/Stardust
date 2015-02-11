@@ -153,3 +153,15 @@ Scenario: Remove absence starting from day 2 on night shift
 	| Start time | 02:00 |
 	| End time   | 03:00 |
 	| Color      | Red   |
+
+@OnlyRunIfEnabled('MyTeam_MakeTeamScheduleConsistent_31897')
+Scenario: Back to viewing schedule after cancel remove absence
+	Given I have the role 'Anywhere Team Green'
+	And 'Pierre Baldi' has an absence with
+	| Field      | Value            |
+	| Name       | Vacation         |
+	| Start time | 2013-05-02 00:00 |
+	| End time   | 2013-05-06 15:00 |
+	When I view person schedule for 'Pierre Baldi' in 'Team green' on '2013-05-06'
+	And I click 'cancel'
+	Then I should be viewing schedules for '2013-05-06'
