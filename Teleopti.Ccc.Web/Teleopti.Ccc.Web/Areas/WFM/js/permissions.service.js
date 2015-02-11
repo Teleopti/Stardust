@@ -26,14 +26,21 @@ permissionsService.service('Permissions', ['$resource', function ($resource) {
 		update: { method: 'PUT', params: { newDescription: {} }, isArray: false }
 	});
 
-	this.assignFunction = $resource('../../api/Permissions/Roles/:Id/Functions', { Id: "@Id" }, {
-		postFunctions: { method: 'POST', params: { Functions: [] }, isArray: false },
-		deleteFunctions: { method: 'DELETE', params: { Functions: [] }, isArray: false }
+	this.postFunction = $resource('../../api/Permissions/Roles/:Id/Functions', { Id: "@Id" }, {
+		query: { method: 'POST', params: { Functions: [] }, isArray: false },
 	});
 
+	this.deleteFunction = $resource('../../api/Permissions/Roles/:Id/Function/:FunctionId', { Id: "@Id", FunctionId: "@FunctionId" }, {
+		query: { method: 'DELETE', params: {}, isArray: false }
+	});
+
+	this.deleteAvailableData = $resource('../../api/Permissions/Roles/:Id/AvailableData/:Type/:DataId', { Id: "@Id", Type: '@Type', DataId: "@DataId" }, {
+		query: { method: 'DELETE', params: {}, isArray: false }
+	});
+
+
 	this.assignOrganizationSelection = $resource('../../api/Permissions/Roles/:Id/AvailableData', { Id: "@Id" }, {
-		postData: { method: 'POST', params: { BusinessUnits: [], Sites: [], Teams: [], People: [], RangeOption: [] }, isArray: false },
-		deleteData: { method: 'DELETE', params: { BusinessUnits: [], Sites: [], Teams: [], People: [], RangeOption: [] }, isArray: false }
+		postData: { method: 'POST', params: { BusinessUnits: [], Sites: [], Teams: [], People: [], RangeOption: [] }, isArray: false }
 	});
 	
 }]);

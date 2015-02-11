@@ -50,7 +50,6 @@ wfmCtrls.controller('PermissionsCtrl', [
 
 		$scope.roles = Permissions.roles.get();
 		Permissions.organizationSelections.query().$promise.then(function (result) {
-			// could we have directly an array from server?
 			$scope.organization = { BusinessUnit: [result.BusinessUnit], DynamicOptions: result.DynamicOptions };
 			flatData($scope.organization.BusinessUnit);
 		});
@@ -86,11 +85,11 @@ wfmCtrls.controller('PermissionsCtrl', [
 
 		$scope.toggleFunctionForRole = function (functionNode) {
 			if (functionNode.selected) {
-				Permissions.assignFunction.deleteFunctions({ Id: $scope.selectedRole, Functions: [functionNode.FunctionId] }).$promise.then(function (result) {
+				Permissions.deleteFunction.query({ Id: $scope.selectedRole, FunctionId: [functionNode.FunctionId] }).$promise.then(function (result) {
 					functionNode.selected = false;
 				});
 			} else {
-				Permissions.assignFunction.postFunctions({ Id: $scope.selectedRole, Functions: [functionNode.FunctionId] }).$promise.then(function (result) {
+				Permissions.postFunction.query({ Id: $scope.selectedRole, Functions: [functionNode.FunctionId] }).$promise.then(function (result) {
 					functionNode.selected = true;
 				});
 			}
@@ -98,14 +97,16 @@ wfmCtrls.controller('PermissionsCtrl', [
 
 		$scope.toggleOrganizationSelection = function (node) {
 			var data = {};
-			data.Id = $scope.selectedRole;
-			data[node.Type] = [node.Id];
+			data.Id = $scope.selectedRole;	
 
 			if (node.selected) {
-				Permissions.assignOrganizationSelection.deleteData(data).$promise.then(function (result) {
+				data.Type = node.Type;
+				data.DataId = node.Id;
+				Permissions.deleteAvailableData.query(data).$promise.then(function (result) {
 					node.selected = false;
 				});
 			} else {
+				data[node.Type] = [node.Id];
 				Permissions.assignOrganizationSelection.postData(data).$promise.then(function (result) {
 					node.selected = true;
 				});
