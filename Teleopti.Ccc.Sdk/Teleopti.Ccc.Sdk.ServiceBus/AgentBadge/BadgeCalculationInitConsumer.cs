@@ -3,7 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using log4net;
 using Rhino.ServiceBus;
+using Teleopti.Ccc.Domain.Common;
+using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Repositories;
+using Teleopti.Ccc.Infrastructure.Repositories;
+using Teleopti.Ccc.Infrastructure.Toggle;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
 using Teleopti.Interfaces.Messages.General;
@@ -17,6 +21,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.AgentBadge
 		private readonly IBusinessUnitRepository _buRepository;
 		private readonly ICurrentUnitOfWorkFactory _unitOfWorkFactory;
 		private static readonly ILog Logger = LogManager.GetLogger(typeof(BadgeCalculationInitConsumer));
+		private IToggleManager _toggleManager;
 
 
 		/// <summary>
@@ -28,13 +33,13 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.AgentBadge
 		/// <param name="settingsRepository"></param>
 		/// <param name="buRepository"></param>
 		/// <param name="unitOfWorkFactory"></param>
-		public BadgeCalculationInitConsumer(IServiceBus serviceBus, IAgentBadgeSettingsRepository settingsRepository,
-			IBusinessUnitRepository buRepository, ICurrentUnitOfWorkFactory unitOfWorkFactory)
+		public BadgeCalculationInitConsumer(IServiceBus serviceBus, IAgentBadgeSettingsRepository settingsRepository, IBusinessUnitRepository buRepository, ICurrentUnitOfWorkFactory unitOfWorkFactory, IToggleManager toggleManager)
 		{
 			_serviceBus = serviceBus;
 			_settingsRepository = settingsRepository;
 			_buRepository = buRepository;
 			_unitOfWorkFactory = unitOfWorkFactory;
+			_toggleManager = toggleManager;
 		}
 
 		public void Consume(BadgeCalculationInitMessage message)
@@ -55,17 +60,20 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.AgentBadge
 			using (_unitOfWorkFactory.LoggedOnUnitOfWorkFactory().CreateAndOpenUnitOfWork())
 			{
 				var setting = _settingsRepository.GetSettings();
-				if (setting == null || !setting.BadgeEnabled)
+				if (!_toggleManager.IsEnabled(Toggles.Portal_DifferentiateBadgeSettingForAgents_31318))
 				{
-					_serviceBus.DelaySend(DateOnly.Today.AddDays(1), message);
-					if (Logger.IsDebugEnabled)
+					if (setting == null || !setting.BadgeEnabled)
 					{
-						Logger.DebugFormat(
-							"Feature is diabled. Delay Sending BadgeCalculationInitMessage to Service Bus for "
-							+ "BusinessUnitId={0} in DataSource={1} tommorrow", message.BusinessUnitId,
-							message.Datasource);
+						_serviceBus.DelaySend(DateOnly.Today.AddDays(1), message);
+						if (Logger.IsDebugEnabled)
+						{
+							Logger.DebugFormat(
+								"Feature is diabled. Delay Sending BadgeCalculationInitMessage to Service Bus for "
+								+ "BusinessUnitId={0} in DataSource={1} tommorrow", message.BusinessUnitId,
+								message.Datasource);
+						}
+						return;
 					}
-					return;
 				}
 
 				timeZoneList = _buRepository.LoadAllTimeZones().ToList();
