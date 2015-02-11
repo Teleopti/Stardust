@@ -125,7 +125,7 @@
 		{{node.LocalizedFunctionDescription}}
 	</div>
 	<ol ui-tree-nodes="" ng-model="node.ChildFunctions">
-		<li ng-repeat="node in node.ChildFunctions" ui-tree-node ng-include="'nodes_renderer.html'">
+		<li ng-repeat="node in node.ChildFunctions | filter:searchPermissions" ui-tree-node ng-include="'nodes_renderer.html'">
 		</li>
 	</ol>
 </script>
@@ -136,7 +136,7 @@
 		{{node.Name}}
 	</div>
 	<ol ui-tree-nodes="" ng-model="node.ChildNodes">
-		<li ng-repeat="node in node.ChildNodes" ui-tree-node ng-include="'nodes_bu_renderer.html'">
+		<li ng-repeat="node in node.ChildNodes | filter:searchData" ui-tree-node ng-include="'nodes_bu_renderer.html'">
 		</li>
 	</ol>
 </script>
