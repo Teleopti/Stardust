@@ -81,6 +81,11 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 			if (!toggleManager.IsEnabled(Toggles.MyTimeWeb_AnonymousTrades_31638))
 			{
 				checkBoxAdvAnonymousTrading.Hide();
+			}			
+			
+			if (!toggleManager.IsEnabled(Toggles.MyTimeWeb_LockTrades_31637))
+			{
+				checkBoxAdvLockTrading.Hide();
 			}
 		}
 
@@ -713,6 +718,13 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 			checkBoxAdvAnonymousTrading.CheckStateChanged += checkBoxAdvAnonymousTrading_CheckStateChanged;
 		}
 
+		public void SetLockTrading(bool lockTrading)
+		{
+			checkBoxAdvLockTrading.CheckStateChanged -= checkBoxAdvLockTrading_CheckStateChanged;
+			checkBoxAdvLockTrading.Checked = lockTrading;
+			checkBoxAdvLockTrading.CheckStateChanged += checkBoxAdvLockTrading_CheckStateChanged;
+		}
+
 		public void DisableAllButAdd()
 		{
 			tabControlAdvArea.Enabled = false;
@@ -1085,6 +1097,11 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 		private void checkBoxAdvAnonymousTrading_CheckStateChanged(object sender, EventArgs e)
 		{
 			_presenter.SetAnonymousTrading(checkBoxAdvAnonymousTrading.Checked);
+		}
+
+		private void checkBoxAdvLockTrading_CheckStateChanged(object sender, EventArgs e)
+		{
+			_presenter.SetLockTrading(checkBoxAdvLockTrading.Checked);
 		}
 	
 	}

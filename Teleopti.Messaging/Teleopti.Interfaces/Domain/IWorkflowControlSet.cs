@@ -264,7 +264,13 @@ namespace Teleopti.Interfaces.Domain
         /// </summary>
         IEnumerable<IAbsence> AllowedAbsencesForReport { get; }
 
-        /// <summary>
+		  /// <summary>
+		  /// Gets or sets a value indicating whether [Lock Trading] is enabled.
+		  /// </summary>
+		  /// <value><c>true</c> if [Lock Trading]; otherwise, <c>false</c>.</value>
+	    bool LockTrading { get; set; }
+
+	    /// <summary>
         /// Adds an absence allowed for report.
         /// </summary>
         /// <param name="absence">The absence.</param>

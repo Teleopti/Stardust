@@ -82,6 +82,22 @@ namespace Teleopti.Ccc.WinCodeTest.Configuration
             Assert.IsFalse(_target.ToBeDeleted);
             _target.ToBeDeleted = true;
             Assert.IsTrue(_target.ToBeDeleted);
+        }        
+		 
+		 [Test]
+        public void VerifyAnonymousTradingSet()
+        {
+            Assert.IsFalse(_target.AnonymousTrading);
+				_target.AnonymousTrading = true;
+				Assert.IsTrue(_target.AnonymousTrading);
+        }		 
+		 
+		 [Test]
+        public void VerifyLockTradingSet()
+        {
+            Assert.IsFalse(_target.LockTrading);
+				_target.LockTrading = true;
+				Assert.IsTrue(_target.LockTrading);
         }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1822:MarkMembersAsStatic"), Test]

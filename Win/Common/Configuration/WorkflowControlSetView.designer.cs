@@ -113,6 +113,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 			this.radioButtonAdvFairnessEqual = new Syncfusion.Windows.Forms.Tools.RadioButtonAdv();
 			this.panel7 = new System.Windows.Forms.Panel();
 			this.labelOpenStudentAvailability = new System.Windows.Forms.Label();
+			this.radioButtonAdvSeniority = new Syncfusion.Windows.Forms.Tools.RadioButtonAdv();
 			this.tabPageAdvAbsenceRequests = new Syncfusion.Windows.Forms.Tools.TabPageAdv();
 			this.tableLayoutPanelAbsenceRequestPeriods = new System.Windows.Forms.TableLayoutPanel();
 			this.tableLayoutPanelOpenForAbsenceRequests = new System.Windows.Forms.TableLayoutPanel();
@@ -152,10 +153,10 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 			this.labelHMm = new System.Windows.Forms.Label();
 			this.checkBoxAdvAutoGrant = new Syncfusion.Windows.Forms.Tools.CheckBoxAdv();
 			this.checkBoxAdvAnonymousTrading = new Syncfusion.Windows.Forms.Tools.CheckBoxAdv();
+			this.checkBoxAdvLockTrading = new Syncfusion.Windows.Forms.Tools.CheckBoxAdv();
 			this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
 			this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
 			this.errorProvider1 = new System.Windows.Forms.ErrorProvider(this.components);
-			this.radioButtonAdvSeniority = new Syncfusion.Windows.Forms.Tools.RadioButtonAdv();
 			((System.ComponentModel.ISupportInitialize)(this.gradientPanelHeader)).BeginInit();
 			this.gradientPanelHeader.SuspendLayout();
 			this.tableLayoutPanelHeader.SuspendLayout();
@@ -187,6 +188,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 			((System.ComponentModel.ISupportInitialize)(this.radioButtonAdvFairnessPoints)).BeginInit();
 			((System.ComponentModel.ISupportInitialize)(this.radioButtonAdvFairnessEqual)).BeginInit();
 			this.panel7.SuspendLayout();
+			((System.ComponentModel.ISupportInitialize)(this.radioButtonAdvSeniority)).BeginInit();
 			this.tabPageAdvAbsenceRequests.SuspendLayout();
 			this.tableLayoutPanelAbsenceRequestPeriods.SuspendLayout();
 			this.tableLayoutPanelOpenForAbsenceRequests.SuspendLayout();
@@ -206,8 +208,8 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 			this.tableLayoutPanel2.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)(this.checkBoxAdvAutoGrant)).BeginInit();
 			((System.ComponentModel.ISupportInitialize)(this.checkBoxAdvAnonymousTrading)).BeginInit();
+			((System.ComponentModel.ISupportInitialize)(this.checkBoxAdvLockTrading)).BeginInit();
 			((System.ComponentModel.ISupportInitialize)(this.errorProvider1)).BeginInit();
-			((System.ComponentModel.ISupportInitialize)(this.radioButtonAdvSeniority)).BeginInit();
 			this.SuspendLayout();
 			// 
 			// gradientPanelHeader
@@ -251,7 +253,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 			this.labelHeader.Location = new System.Drawing.Point(3, 6);
 			this.labelHeader.Name = "labelHeader";
 			this.labelHeader.Padding = new System.Windows.Forms.Padding(6, 0, 0, 0);
-			this.labelHeader.Size = new System.Drawing.Size(305, 25);
+			this.labelHeader.Size = new System.Drawing.Size(304, 25);
 			this.labelHeader.TabIndex = 0;
 			this.labelHeader.Text = "xxManageWorkflowControlSets";
 			// 
@@ -318,7 +320,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 			this.labelSubHeader1.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			this.labelSubHeader1.Location = new System.Drawing.Point(3, 8);
 			this.labelSubHeader1.Name = "labelSubHeader1";
-			this.labelSubHeader1.Size = new System.Drawing.Size(232, 17);
+			this.labelSubHeader1.Size = new System.Drawing.Size(231, 17);
 			this.labelSubHeader1.TabIndex = 0;
 			this.labelSubHeader1.Text = "xxChooseWorkflowControlSetToEdit";
 			this.labelSubHeader1.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -929,11 +931,11 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 			// 
 			this.comboBoxAdvAllowedPreferenceActivity.Anchor = System.Windows.Forms.AnchorStyles.Left;
 			this.comboBoxAdvAllowedPreferenceActivity.BackColor = System.Drawing.Color.White;
-			this.comboBoxAdvAllowedPreferenceActivity.BeforeTouchSize = new System.Drawing.Size(199, 23);
+			this.comboBoxAdvAllowedPreferenceActivity.BeforeTouchSize = new System.Drawing.Size(199, 19);
 			this.comboBoxAdvAllowedPreferenceActivity.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
 			this.comboBoxAdvAllowedPreferenceActivity.Location = new System.Drawing.Point(3, 1362);
 			this.comboBoxAdvAllowedPreferenceActivity.Name = "comboBoxAdvAllowedPreferenceActivity";
-			this.comboBoxAdvAllowedPreferenceActivity.Size = new System.Drawing.Size(199, 23);
+			this.comboBoxAdvAllowedPreferenceActivity.Size = new System.Drawing.Size(199, 19);
 			this.comboBoxAdvAllowedPreferenceActivity.Style = Syncfusion.Windows.Forms.VisualStyle.Metro;
 			this.comboBoxAdvAllowedPreferenceActivity.TabIndex = 15;
 			this.comboBoxAdvAllowedPreferenceActivity.SelectedIndexChanged += new System.EventHandler(this.comboBoxAdvAllowedPreferenceActivity_SelectedIndexChanged);
@@ -1291,6 +1293,21 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 			this.labelOpenStudentAvailability.TabIndex = 1;
 			this.labelOpenStudentAvailability.Text = "xxOpenStudentAvailability";
 			// 
+			// radioButtonAdvSeniority
+			// 
+			this.radioButtonAdvSeniority.Anchor = System.Windows.Forms.AnchorStyles.Left;
+			this.radioButtonAdvSeniority.BeforeTouchSize = new System.Drawing.Size(932, 24);
+			this.tableLayoutPanelBasic.SetColumnSpan(this.radioButtonAdvSeniority, 2);
+			this.radioButtonAdvSeniority.Location = new System.Drawing.Point(3, 1730);
+			this.radioButtonAdvSeniority.MetroColor = System.Drawing.Color.FromArgb(((int)(((byte)(88)))), ((int)(((byte)(89)))), ((int)(((byte)(91)))));
+			this.radioButtonAdvSeniority.Name = "radioButtonAdvSeniority";
+			this.radioButtonAdvSeniority.Size = new System.Drawing.Size(932, 24);
+			this.radioButtonAdvSeniority.TabIndex = 25;
+			this.radioButtonAdvSeniority.TabStop = false;
+			this.radioButtonAdvSeniority.Text = "xxSeniority";
+			this.radioButtonAdvSeniority.ThemesEnabled = true;
+			this.radioButtonAdvSeniority.CheckChanged += new System.EventHandler(this.radioButtonAdvSeniorityCheckChanged);
+			// 
 			// tabPageAdvAbsenceRequests
 			// 
 			this.tabPageAdvAbsenceRequests.Controls.Add(this.tableLayoutPanelAbsenceRequestPeriods);
@@ -1530,7 +1547,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 			this.dateTimePickerAdvViewpoint.Calendar.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(209)))), ((int)(((byte)(211)))), ((int)(((byte)(212)))));
 			this.dateTimePickerAdvViewpoint.Calendar.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
 			this.dateTimePickerAdvViewpoint.Calendar.BottomHeight = 25;
-			this.dateTimePickerAdvViewpoint.Calendar.Culture = new System.Globalization.CultureInfo("sv-SE");
+			this.dateTimePickerAdvViewpoint.Calendar.Culture = new System.Globalization.CultureInfo("en-US");
 			this.dateTimePickerAdvViewpoint.Calendar.DayNamesColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(153)))), ((int)(((byte)(255)))));
 			this.dateTimePickerAdvViewpoint.Calendar.DayNamesFont = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
 			this.dateTimePickerAdvViewpoint.Calendar.DaysFont = new System.Drawing.Font("Segoe UI", 9F);
@@ -1758,10 +1775,11 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 			this.tableLayoutPanelShiftTrade.Controls.Add(this.tableLayoutPanel2, 0, 3);
 			this.tableLayoutPanelShiftTrade.Controls.Add(this.checkBoxAdvAutoGrant, 0, 7);
 			this.tableLayoutPanelShiftTrade.Controls.Add(this.checkBoxAdvAnonymousTrading, 0, 8);
+			this.tableLayoutPanelShiftTrade.Controls.Add(this.checkBoxAdvLockTrading, 0, 9);
 			this.tableLayoutPanelShiftTrade.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.tableLayoutPanelShiftTrade.Location = new System.Drawing.Point(0, 0);
 			this.tableLayoutPanelShiftTrade.Name = "tableLayoutPanelShiftTrade";
-			this.tableLayoutPanelShiftTrade.RowCount = 10;
+			this.tableLayoutPanelShiftTrade.RowCount = 11;
 			this.tableLayoutPanelShiftTrade.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 40F));
 			this.tableLayoutPanelShiftTrade.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 40F));
 			this.tableLayoutPanelShiftTrade.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 40F));
@@ -1771,7 +1789,8 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 			this.tableLayoutPanelShiftTrade.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 40F));
 			this.tableLayoutPanelShiftTrade.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 40F));
 			this.tableLayoutPanelShiftTrade.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 39F));
-			this.tableLayoutPanelShiftTrade.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 81F));
+			this.tableLayoutPanelShiftTrade.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 38F));
+			this.tableLayoutPanelShiftTrade.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 63F));
 			this.tableLayoutPanelShiftTrade.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this.tableLayoutPanelShiftTrade.Size = new System.Drawing.Size(965, 429);
 			this.tableLayoutPanelShiftTrade.TabIndex = 0;
@@ -1820,7 +1839,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 			this.labelOpenForShiftTrade.ForeColor = System.Drawing.Color.GhostWhite;
 			this.labelOpenForShiftTrade.Location = new System.Drawing.Point(3, 8);
 			this.labelOpenForShiftTrade.Name = "labelOpenForShiftTrade";
-			this.labelOpenForShiftTrade.Size = new System.Drawing.Size(194, 17);
+			this.labelOpenForShiftTrade.Size = new System.Drawing.Size(193, 17);
 			this.labelOpenForShiftTrade.TabIndex = 0;
 			this.labelOpenForShiftTrade.Text = "xxOpenForShiftTradeRequests";
 			// 
@@ -1844,7 +1863,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 			this.labelTolerance.ForeColor = System.Drawing.Color.GhostWhite;
 			this.labelTolerance.Location = new System.Drawing.Point(3, 8);
 			this.labelTolerance.Name = "labelTolerance";
-			this.labelTolerance.Size = new System.Drawing.Size(243, 17);
+			this.labelTolerance.Size = new System.Drawing.Size(242, 17);
 			this.labelTolerance.TabIndex = 0;
 			this.labelTolerance.Text = "xxToleranceForMatchingContractTime";
 			// 
@@ -1932,7 +1951,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 			this.timeSpanTextBox1.TabIndex = 9;
 			this.timeSpanTextBox1.TimeFormat = Teleopti.Interfaces.Domain.TimeFormatsType.HoursMinutes;
 			this.timeSpanTextBox1.TimeSpanBoxHeight = 23;
-			this.timeSpanTextBox1.TimeSpanBoxWidth = 1349;
+			this.timeSpanTextBox1.TimeSpanBoxWidth = 1834;
 			this.timeSpanTextBox1.Leave += new System.EventHandler(this.timeSpanTextBox1_Leave);
 			// 
 			// labelTolerancePosNeg
@@ -1982,6 +2001,19 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 			this.checkBoxAdvAnonymousTrading.ThemesEnabled = false;
 			this.checkBoxAdvAnonymousTrading.CheckStateChanged += new System.EventHandler(this.checkBoxAdvAnonymousTrading_CheckStateChanged);
 			// 
+			// checkBoxAdvLockTrading
+			// 
+			this.checkBoxAdvLockTrading.Anchor = System.Windows.Forms.AnchorStyles.Left;
+			this.checkBoxAdvLockTrading.BeforeTouchSize = new System.Drawing.Size(349, 24);
+			this.checkBoxAdvLockTrading.Location = new System.Drawing.Point(3, 511);
+			this.checkBoxAdvLockTrading.MetroColor = System.Drawing.Color.FromArgb(((int)(((byte)(88)))), ((int)(((byte)(89)))), ((int)(((byte)(91)))));
+			this.checkBoxAdvLockTrading.Name = "checkBoxAdvLockTrading";
+			this.checkBoxAdvLockTrading.Size = new System.Drawing.Size(349, 24);
+			this.checkBoxAdvLockTrading.TabIndex = 16;
+			this.checkBoxAdvLockTrading.Text = "xxLockBulletinBoardTrading";
+			this.checkBoxAdvLockTrading.ThemesEnabled = false;
+			this.checkBoxAdvLockTrading.CheckStateChanged += new System.EventHandler(this.checkBoxAdvLockTrading_CheckStateChanged);
+			// 
 			// toolStripSeparator1
 			// 
 			this.toolStripSeparator1.Name = "toolStripSeparator1";
@@ -1991,21 +2023,6 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 			// 
 			this.errorProvider1.BlinkStyle = System.Windows.Forms.ErrorBlinkStyle.NeverBlink;
 			this.errorProvider1.ContainerControl = this;
-			// 
-			// radioButtonAdvSeniority
-			// 
-			this.radioButtonAdvSeniority.Anchor = System.Windows.Forms.AnchorStyles.Left;
-			this.radioButtonAdvSeniority.BeforeTouchSize = new System.Drawing.Size(932, 24);
-			this.tableLayoutPanelBasic.SetColumnSpan(this.radioButtonAdvSeniority, 2);
-			this.radioButtonAdvSeniority.Location = new System.Drawing.Point(3, 1730);
-			this.radioButtonAdvSeniority.MetroColor = System.Drawing.Color.FromArgb(((int)(((byte)(88)))), ((int)(((byte)(89)))), ((int)(((byte)(91)))));
-			this.radioButtonAdvSeniority.Name = "radioButtonAdvSeniority";
-			this.radioButtonAdvSeniority.Size = new System.Drawing.Size(932, 24);
-			this.radioButtonAdvSeniority.TabIndex = 25;
-			this.radioButtonAdvSeniority.TabStop = false;
-			this.radioButtonAdvSeniority.Text = "xxSeniority";
-			this.radioButtonAdvSeniority.ThemesEnabled = true;
-			this.radioButtonAdvSeniority.CheckChanged += new System.EventHandler(this.radioButtonAdvSeniorityCheckChanged);
 			// 
 			// WorkflowControlSetView
 			// 
@@ -2064,6 +2081,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 			((System.ComponentModel.ISupportInitialize)(this.radioButtonAdvFairnessEqual)).EndInit();
 			this.panel7.ResumeLayout(false);
 			this.panel7.PerformLayout();
+			((System.ComponentModel.ISupportInitialize)(this.radioButtonAdvSeniority)).EndInit();
 			this.tabPageAdvAbsenceRequests.ResumeLayout(false);
 			this.tableLayoutPanelAbsenceRequestPeriods.ResumeLayout(false);
 			this.tableLayoutPanelOpenForAbsenceRequests.ResumeLayout(false);
@@ -2090,8 +2108,8 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 			this.tableLayoutPanel2.PerformLayout();
 			((System.ComponentModel.ISupportInitialize)(this.checkBoxAdvAutoGrant)).EndInit();
 			((System.ComponentModel.ISupportInitialize)(this.checkBoxAdvAnonymousTrading)).EndInit();
+			((System.ComponentModel.ISupportInitialize)(this.checkBoxAdvLockTrading)).EndInit();
 			((System.ComponentModel.ISupportInitialize)(this.errorProvider1)).EndInit();
-			((System.ComponentModel.ISupportInitialize)(this.radioButtonAdvSeniority)).EndInit();
 			this.ResumeLayout(false);
 
 		}
@@ -2206,5 +2224,6 @@ namespace Teleopti.Ccc.Win.Common.Configuration
         private TwoListSelector twoListSelectorAbsencesForReport;
 		private Syncfusion.Windows.Forms.Tools.CheckBoxAdv checkBoxAdvAnonymousTrading;
 		private Syncfusion.Windows.Forms.Tools.RadioButtonAdv radioButtonAdvSeniority;
+		private Syncfusion.Windows.Forms.Tools.CheckBoxAdv checkBoxAdvLockTrading;
 	}
 }

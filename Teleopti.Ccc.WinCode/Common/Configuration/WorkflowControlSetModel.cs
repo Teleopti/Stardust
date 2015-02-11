@@ -48,6 +48,7 @@ namespace Teleopti.Ccc.WinCode.Common.Configuration
 		void SetFairnessType(FairnessType fairnessType, bool scheduler_HidePointsFairnessSystem_28317, bool scheduler_Seniority_11111);
         bool IsDirty { get; set; }
 	    bool AnonymousTrading { get; set; }
+	    bool LockTrading { get; set; }
     }
 
     public class WorkflowControlSetModel : IWorkflowControlSetModel
@@ -397,6 +398,17 @@ namespace Teleopti.Ccc.WinCode.Common.Configuration
 			{
 				if (DomainEntity.AnonymousTrading == value) return;
 				DomainEntity.AnonymousTrading = value;
+				IsDirty = true;
+			}
+		}
+
+		public bool LockTrading
+		{
+			get { return DomainEntity.LockTrading; }
+			set
+			{
+				if (DomainEntity.LockTrading == value) return;
+				DomainEntity.LockTrading = value;
 				IsDirty = true;
 			}
 		}

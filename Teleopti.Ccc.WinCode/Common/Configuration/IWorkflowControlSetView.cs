@@ -162,7 +162,13 @@ namespace Teleopti.Ccc.WinCode.Common.Configuration
 		/// Sets the anonymous trading.
 		/// </summary>
 		/// <param name="anonymousTrading">if set to <c>true</c> [anonymous trading].</param>
-		void SetAnonymousTrading(bool anonymousTrading);
+		void SetAnonymousTrading(bool anonymousTrading);		
+		 
+		 /// <summary>
+		/// Sets the lock trading.
+		/// </summary>
+		/// <param name="lockTrading">if set to <c>true</c> [lock trading].</param>
+		void SetLockTrading(bool lockTrading);
 
         /// <summary>
         /// Disables all but add.

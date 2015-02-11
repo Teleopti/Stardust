@@ -301,6 +301,22 @@ namespace Teleopti.Ccc.DomainTest.WorkflowControl
             Assert.IsFalse(_target.AutoGrantShiftTradeRequest);
             _target.AutoGrantShiftTradeRequest = true;
             Assert.IsTrue(_target.AutoGrantShiftTradeRequest);
+        }        
+		 
+		 [Test]
+        public void VerifyCanSetAnonymousTrading()
+        {
+            Assert.IsFalse(_target.AnonymousTrading);
+				_target.AnonymousTrading = true;
+				Assert.IsTrue(_target.AnonymousTrading);
+        }		 
+		 
+		 [Test]
+        public void VerifyCanSetLockTrading()
+        {
+            Assert.IsFalse(_target.LockTrading);
+				_target.LockTrading = true;
+				Assert.IsTrue(_target.LockTrading);
         }
 
         [Test]

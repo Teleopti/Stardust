@@ -12372,6 +12372,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Lock Bulletin Board Trading.
+        /// </summary>
+        public static string LockBulletinBoardTrading {
+            get {
+                return ResourceManager.GetString("LockBulletinBoardTrading", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Lock Day Off.
         /// </summary>
         public static string LockDayOff {

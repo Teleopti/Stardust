@@ -12809,4 +12809,8 @@ Reduce the complexity to use these shifts.</value>
     <value>Are you sure you want to make this shift trade?</value>
     <comment>use in MyTime bulletin board anonymous trade</comment>
   </data>
+  <data name="LockBulletinBoardTrading" xml:space="preserve">
+    <value>Lock Bulletin Board Trading</value>
+    <comment>used in Admin Client workflow control set shift trade request setting</comment>
+  </data>
 </root>
