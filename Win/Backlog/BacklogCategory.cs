@@ -2,6 +2,7 @@
 {
 	public enum BacklogCategory
 	{
+		Incoming,
 		ProductionPlan,
 		Scheduled
 	}

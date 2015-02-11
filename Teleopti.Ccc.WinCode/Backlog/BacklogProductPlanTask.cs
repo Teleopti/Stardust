@@ -22,9 +22,11 @@ namespace Teleopti.Ccc.WinCode.Backlog
 			set { _transferedBacklog = value; }
 		}
 
-		public TimeSpan TotalIncoming()
+		public TimeSpan? OverStaff { get; set; }
+
+		public TimeSpan TotalIncomingTime()
 		{
-			return _parent.IncomingDemand.Add(TransferedBacklog);
+			return _parent.IncomingTime.Add(TransferedBacklog);
 		}
 
 		public void SetManualEntry(DateOnly date, TimeSpan time)
@@ -56,6 +58,11 @@ namespace Teleopti.Ccc.WinCode.Backlog
 			return TimeSpan.Zero;
 		}
 
+		public double ForecastedWorkOnDate(DateOnly date)
+		{
+			return ForecastedTimeOnDate(date).Ticks/(double) _parent.IncomingAht.Ticks;
+		}
+
 		public TimeSpan ForecastedTimePerDay()
 		{
 			var numberOfEntries = 0;
@@ -65,17 +72,17 @@ namespace Teleopti.Ccc.WinCode.Backlog
 				numberOfEntries++;
 				totalTime = totalTime.Add(entry);
 			}
-			var timeToDistribute = TotalIncoming().Subtract(totalTime);
+			var timeToDistribute = TotalIncomingTime().Subtract(totalTime);
 			var daysToDistributeOn = _parent.SpanningDateOnlyPeriod().DayCount() - _parent.ClosedDays.Count() - numberOfEntries;
 			return new TimeSpan(timeToDistribute.Ticks / daysToDistributeOn);
 		}
 
-		public TimeSpan ForecastedBacklogOnDate(DateOnly date)
+		public TimeSpan PlannedBacklogTimeOnDate(DateOnly date)
 		{
 			if (!_parent.SpanningDateOnlyPeriod().Contains(date))
 				return TimeSpan.Zero;
 
-			var backlog = TotalIncoming();
+			var backlog = TotalIncomingTime();
 			foreach (var dateOnly in _parent.SpanningDateOnlyPeriod().DayCollection())
 			{
 				if (dateOnly > date)
@@ -85,6 +92,11 @@ namespace Teleopti.Ccc.WinCode.Backlog
 			}
 
 			return backlog;
+		}
+
+		public double PlannedBacklogWorkOnDate(DateOnly date)
+		{
+			return PlannedBacklogTimeOnDate(date).Ticks/(double) _parent.IncomingAht.Ticks;
 		}
 
 		public TimeSpan PlannedTimeOnTask()
@@ -98,9 +110,22 @@ namespace Teleopti.Ccc.WinCode.Backlog
 			return planned;
 		}
 
-		public TimeSpan PlannedBacklogOnTask()
+		public double PlannedWorkOnTask()
 		{
-			return TotalIncoming().Subtract(PlannedTimeOnTask());
+			return PlannedTimeOnTask().Ticks / (double)_parent.IncomingAht.Ticks;
 		}
+
+		public TimeSpan PlannedBacklogTimeOnTask()
+		{
+			return TotalIncomingTime().Subtract(PlannedTimeOnTask());
+		}
+
+		public double PlannedBacklogWorkOnTask()
+		{
+			return PlannedBacklogTimeOnTask().Ticks / (double)_parent.IncomingAht.Ticks;
+		}
+
+
+		
 	}
 }

@@ -6,16 +6,18 @@ namespace Teleopti.Ccc.WinCode.Backlog
 {
 	public class BacklogTask
 	{
-		private readonly TimeSpan _incomingDemand;
+		private readonly double _incomingWorkUnits;
+		private readonly TimeSpan _incomingAht;
 		private readonly DateOnly _startDate;
 		private TimeSpan _serviceLevel;
 		private readonly IList<DateOnly> _closedDays = new List<DateOnly>();
 		private readonly BacklogProductPlanTask _backlogProductPlanTask;
 		private readonly BacklogScheduledTask _backlogScheduledTask;
 
-		public BacklogTask(TimeSpan incomingDemand, DateOnly startDate, TimeSpan serviceLevel)
+		public BacklogTask(double incomingWorkUnits, TimeSpan incomingAht, DateOnly startDate, TimeSpan serviceLevel)
 		{
-			_incomingDemand = incomingDemand;
+			_incomingWorkUnits = incomingWorkUnits;
+			_incomingAht = incomingAht;
 			_startDate = startDate;
 			_serviceLevel = serviceLevel;
 			_backlogProductPlanTask = new BacklogProductPlanTask(this);
@@ -37,9 +39,14 @@ namespace Teleopti.Ccc.WinCode.Backlog
 			get { return _closedDays; }
 		}
 
-		public TimeSpan IncomingDemand
+		public TimeSpan IncomingTime
 		{
-			get { return _incomingDemand; }
+			get { return new TimeSpan((long)(IncomingAht.Ticks* _incomingWorkUnits)); }
+		}
+
+		public double IncomingWork
+		{
+			get { return _incomingWorkUnits; }
 		}
 
 		public BacklogProductPlanTask BacklogProductPlanTask
@@ -50,6 +57,11 @@ namespace Teleopti.Ccc.WinCode.Backlog
 		public BacklogScheduledTask BacklogScheduledTask
 		{
 			get { return _backlogScheduledTask; }
+		}
+
+		public TimeSpan IncomingAht
+		{
+			get { return _incomingAht; }
 		}
 
 		public DateOnlyPeriod SpanningDateOnlyPeriod()

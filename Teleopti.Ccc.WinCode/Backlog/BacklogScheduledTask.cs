@@ -31,12 +31,17 @@ namespace Teleopti.Ccc.WinCode.Backlog
 
 		public TimeSpan TotalIncoming()
 		{
-			return _parent.IncomingDemand.Add(TransferedBacklog);
+			return _parent.IncomingTime.Add(TransferedBacklog);
 		}
 
-		public TimeSpan ScheduledBacklogOnTask()
+		public TimeSpan ScheduledBacklogTimeOnTask()
 		{
 			return TotalIncoming().Subtract(ScheduledTimeOnTask());
+		}
+
+		public double ScheduledBacklogWorkOnTask()
+		{
+			return ScheduledBacklogTimeOnTask().Ticks / (double)_parent.IncomingAht.Ticks;
 		}
 
 		public Percent ScheduledServiceLevelOnTask()
@@ -72,7 +77,12 @@ namespace Teleopti.Ccc.WinCode.Backlog
 			return new TimeSpan(_scheduledTimes.Values.Sum(t => t.Ticks));
 		}
 
-		public TimeSpan ScheduledBackLogOnDate(DateOnly date)
+		public double ScheduledWorkOnTask()
+		{
+			return ScheduledTimeOnTask().Ticks/(double) _parent.IncomingAht.Ticks;
+		}
+
+		public TimeSpan ScheduledBackLogTimeOnDate(DateOnly date)
 		{
 			if (!_parent.SpanningDateOnlyPeriod().Contains(date))
 				return TimeSpan.Zero;
@@ -89,5 +99,13 @@ namespace Teleopti.Ccc.WinCode.Backlog
 
 			return backlog;
 		}
+
+		public double ScheduledBacklogWorkOnDate(DateOnly date)
+		{
+			return ScheduledBackLogTimeOnDate(date).Ticks / (double)_parent.IncomingAht.Ticks;
+		}
+
+
+		
 	}
 }

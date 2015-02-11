@@ -40,34 +40,84 @@ namespace Teleopti.Ccc.Win.Backlog
 			gridControl1.CellModels.Add("TimeS", new TimeSpanDurationStaticCellModel(gridControl1.Model) { DisplaySeconds = false });
 			gridControl1.CellModels.Add("Percent", new PercentReadOnlyCellModel(gridControl1.Model));
 			gridControl1.CellModels.Add("Ignore", new IgnoreCellModel(gridControl1.Model));
+			gridControl1.CellModels.Add("NumericS", new NumericReadOnlyCellModel(gridControl1.Model){NumberOfDecimals = 0});
 
 			_allGridRows.Add(new BacklogGridHeaderRow(_model));
-			_allGridRows.Add(new BacklogGridRow(BacklogCategory.ProductionPlan, "TimeS", "Incoming Demand",
-				_model.GetIncomingForIndex, _model));
-			_allGridRows.Add(new BacklogGridRow(BacklogCategory.ProductionPlan, "TimeS", "Planned Time on Incoming",
-				_model.GetProductPlanTimeOnIncoming, _model));
-			_allGridRows.Add(new BacklogGridRow(BacklogCategory.ProductionPlan, "TimeS", "Planned Backlog on Incoming",
-				_model.GetProductPlanBacklogOnIncoming, _model));
-			_allGridRows.Add(new BacklogGridRow(BacklogCategory.ProductionPlan, "Time", "Manual Production Plan",
-				_model.GetManualEntryOnIndex, _model));
-			_allGridRows.Add(new BacklogGridRow(BacklogCategory.ProductionPlan, "TimeS", "Planned on skill",
-				_model.GetForecastedForIndex, _model));
-
-			_allGridRows.Add(new BacklogGridRow(BacklogCategory.Scheduled, "TimeS", "Scheduled on skill",
-				_model.GetScheduledOnIndex, _model));
-			_allGridRows.Add(new BacklogGridRow(BacklogCategory.Scheduled, "TimeS", "Scheduled backlog on skill",
-				_model.GetScheduledBacklogOnIndex, _model));
-			_allGridRows.Add(new BacklogGridRow(BacklogCategory.Scheduled, "TimeS", "Scheduled on incoming",
-				_model.GetScheduledOnIncomingIndex, _model));
-			_allGridRows.Add(new BacklogGridRow(BacklogCategory.Scheduled, "TimeS", "Backlog on incoming",
-				_model.GetScheduledBacklogOnIncomingIndex, _model));
-			_allGridRows.Add(new BacklogGridPercentRow(BacklogCategory.Scheduled, "Percent", "SL on incoming",
-				_model.GetScheduledServiceLevelOnIncomingIndex, _model));
+			setupIncoming();
+			setupProductionPlan();
+			setupScheduled();
 
 			_selectedGridRows = new List<IBacklogGridRow>(_allGridRows);
 			_fixedRows = _selectedGridRows.Count-1;
 
 			_expandedRow = new BacklogGridExpandedRow("TimeS", _model, _fixedRows);
+		}
+
+		private void setupScheduled()
+		{
+			_allGridRows.Add(new BacklogGridWorkRow(BacklogCategory.Scheduled, "NumericS", "Scheduled production",
+				_model.GetScheduledWorkOnIndex, _model));
+			_allGridRows.Add(new BacklogGridRow(BacklogCategory.Scheduled, "TimeS", "Scheduled time",
+				_model.GetScheduledTimeOnIndex, _model));
+
+			_allGridRows.Add(new BacklogGridWorkRow(BacklogCategory.Scheduled, "NumericS", "Estimated total backlog",
+				_model.GetScheduledBacklogWorkOnIndex, _model));
+			_allGridRows.Add(new BacklogGridRow(BacklogCategory.Scheduled, "TimeS", "Estimated total backlog time",
+				_model.GetScheduledBacklogTimeOnIndex, _model));
+
+			_allGridRows.Add(new BacklogGridWorkRow(BacklogCategory.Scheduled, "NumericS", "Scheduled production on incoming",
+				_model.GetScheduledWorkOnIncomingIndex, _model));
+			_allGridRows.Add(new BacklogGridRow(BacklogCategory.Scheduled, "TimeS", "Scheduled time on incoming",
+				_model.GetScheduledTimeOnIncomingIndex, _model));
+
+			_allGridRows.Add(new BacklogGridWorkRow(BacklogCategory.Scheduled, "NumericS",
+				"Remaining work after SLA on incoming",
+				_model.GetScheduledBacklogWorkOnIncomingIndex, _model));
+			_allGridRows.Add(new BacklogGridRow(BacklogCategory.Scheduled, "TimeS", "Remaining time after SLA on incoming",
+				_model.GetScheduledBacklogTimeOnIncomingIndex, _model));
+
+			_allGridRows.Add(new BacklogGridPercentRow(BacklogCategory.Scheduled, "Percent", "Estimated Service Level on incoming",
+				_model.GetScheduledServiceLevelOnIncomingIndex, _model));
+
+			_allGridRows.Add(new BacklogGridRow(BacklogCategory.Scheduled, "TimeS", "Scheduled overstaffing time",
+				_model.GetScheduledOverstaffOnIncomming, _model));
+		}
+
+		private void setupProductionPlan()
+		{
+			_allGridRows.Add(new BacklogGridWorkRow(BacklogCategory.ProductionPlan, "NumericS", "Work on incoming",
+				_model.GetProductPlanWorkOnIncoming, _model));
+			_allGridRows.Add(new BacklogGridRow(BacklogCategory.ProductionPlan, "TimeS", "Time on incoming",
+				_model.GetProductPlanTimeOnIncoming, _model));
+
+			_allGridRows.Add(new BacklogGridWorkRow(BacklogCategory.ProductionPlan, "NumericS", "Remaining work after SLA on incoming",
+				_model.GetProductPlanBacklogWorkOnIncoming, _model));
+			_allGridRows.Add(new BacklogGridRow(BacklogCategory.ProductionPlan, "TimeS", "Remaining time after SLA on incoming",
+				_model.GetProductPlanBacklogTimeOnIncoming, _model));
+
+			_allGridRows.Add(new BacklogEditableGridRow(BacklogCategory.ProductionPlan, "Time", "Manual production time",
+				_model.GetManualEntryOnIndex, _model));
+
+			_allGridRows.Add(new BacklogGridWorkRow(BacklogCategory.ProductionPlan, "NumericS", "Planned production",
+				_model.GetForecastedWorkForIndex, _model));
+			_allGridRows.Add(new BacklogGridRow(BacklogCategory.ProductionPlan, "TimeS", "Planned time",
+				_model.GetForecastedForIndex, _model));
+
+			_allGridRows.Add(new BacklogGridWorkRow(BacklogCategory.ProductionPlan, "NumericS", "Estimated total backlog",
+				_model.GetAccumulatedPlannedBacklogWorkForIndex, _model));
+			_allGridRows.Add(new BacklogGridRow(BacklogCategory.ProductionPlan, "TimeS", "Estimated total backlog",
+				_model.GetAccumulatedPlannedBacklogTimeForIndex, _model));
+
+			_allGridRows.Add(new BacklogGridRow(BacklogCategory.ProductionPlan, "TimeS", "Planned overstaffing time",
+				_model.GetPlannedOverstaffingTimeForIndex, _model));
+		}
+
+		private void setupIncoming()
+		{
+			_allGridRows.Add(new BacklogGridWorkRow(BacklogCategory.Incoming, "NumericS", "Incoming work",
+				_model.GetIncomingWorkForIndex, _model));
+			_allGridRows.Add(new BacklogGridRow(BacklogCategory.Incoming, "TimeS", "Incoming time",
+				_model.GetIncomingTimeForIndex, _model));
 		}
 
 		private void populateTabControl()
@@ -209,12 +259,12 @@ namespace Teleopti.Ccc.Win.Backlog
 				DataPoint datapoint;
 				if(dateOnIndex < dateTimePicker1.Value)
 				{
-					datapoint = new DataPoint(i, _model.GetScheduledOnIncomingIndex(i, skill).GetValueOrDefault(TimeSpan.Zero).TotalHours);
+					datapoint = new DataPoint(i, _model.GetScheduledTimeOnIncomingIndex(i, skill).GetValueOrDefault(TimeSpan.Zero).TotalHours);
 					datapoint.AxisLabel = dateOnIndex.ToShortDateString();
 					series1.Points.Add(datapoint);
-					datapoint = new DataPoint(i, _model.GetScheduledBacklogOnIncomingIndex(i, skill).GetValueOrDefault(TimeSpan.Zero).TotalHours);
+					datapoint = new DataPoint(i, _model.GetScheduledBacklogTimeOnIncomingIndex(i, skill).GetValueOrDefault(TimeSpan.Zero).TotalHours);
 					series2.Points.Add(datapoint);
-					datapoint = new DataPoint(i, _model.GetScheduledOverstaffOnIncomming(i, skill).TotalHours);
+					datapoint = new DataPoint(i, _model.GetScheduledOverstaffOnIncomming(i, skill).GetValueOrDefault(TimeSpan.Zero).TotalHours);
 					series3.Points.Add(datapoint);
 				}
 				else
@@ -222,8 +272,10 @@ namespace Teleopti.Ccc.Win.Backlog
 					datapoint = new DataPoint(i, _model.GetProductPlanTimeOnIncoming(i, skill).GetValueOrDefault(TimeSpan.Zero).TotalHours);
 					datapoint.AxisLabel = dateOnIndex.ToShortDateString();
 					series1.Points.Add(datapoint);
-					datapoint = new DataPoint(i, _model.GetProductPlanBacklogOnIncoming(i, skill).GetValueOrDefault(TimeSpan.Zero).TotalHours);
+					datapoint = new DataPoint(i, _model.GetProductPlanBacklogTimeOnIncoming(i, skill).GetValueOrDefault(TimeSpan.Zero).TotalHours);
 					series2.Points.Add(datapoint);
+					datapoint = new DataPoint(i, _model.GetPlannedOverstaffingTimeForIndex(i, skill).GetValueOrDefault(TimeSpan.Zero).TotalHours);
+					series3.Points.Add(datapoint);
 				}
 			}
 		}
@@ -243,7 +295,8 @@ namespace Teleopti.Ccc.Win.Backlog
 
 		private void gridControl1_SaveCellInfo(object sender, GridSaveCellInfoEventArgs e)
 		{
-			if (e.RowIndex != 4)
+			var row = _selectedGridRows[e.RowIndex] as BacklogEditableGridRow;
+			if (row == null)
 				return;
 
 			if (e.Style.CellValue == null)

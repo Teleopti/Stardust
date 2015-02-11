@@ -291,10 +291,12 @@
       <Link>GlobalAssemblyInfo.cs</Link>
     </Compile>
     <Compile Include="Backlog\BacklogCategory.cs" />
+    <Compile Include="Backlog\BacklogEditableGridRow.cs" />
     <Compile Include="Backlog\BacklogGridExpandedRow.cs" />
     <Compile Include="Backlog\BacklogGridHeaderRow.cs" />
     <Compile Include="Backlog\BacklogGridPercentRow.cs" />
     <Compile Include="Backlog\BacklogGridRow.cs" />
+    <Compile Include="Backlog\BacklogGridWorkRow.cs" />
     <Compile Include="Backlog\BacklogSelector.cs">
       <SubType>Form</SubType>
     </Compile>

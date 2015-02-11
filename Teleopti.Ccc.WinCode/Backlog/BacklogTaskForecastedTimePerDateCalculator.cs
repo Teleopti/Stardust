@@ -17,5 +17,16 @@ namespace Teleopti.Ccc.WinCode.Backlog
 
 			return time;
 		}
+
+		public double CalculateWorkForDate(DateOnly date, IDictionary<DateOnly, BacklogTask> taskDic)
+		{
+			var work = 0d;
+			foreach (var task in taskDic.Values)
+			{
+				work += task.BacklogProductPlanTask.ForecastedWorkOnDate(date);
+			}
+
+			return work;
+		}
 	}
 }
