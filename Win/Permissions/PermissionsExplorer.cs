@@ -2060,8 +2060,16 @@ namespace Teleopti.Ccc.Win.Permissions
 				var applicationRoles = helper.LoadAllApplicationRoles().ToList();
 				bindThisList(applicationRoles);
 				loadAllApplicationFunctions(helper.LoadAllApplicationFunctions());
-				_availableDataCollection = applicationRoles.Select(x => x.AvailableData).ToList();
+				_availableDataCollection = applicationRoles.Select(getAndInitializeAvailableData).ToList();
 			}
+		}
+
+		private static IAvailableData getAndInitializeAvailableData(IApplicationRole x)
+		{
+			LazyLoadingManager.Initialize(x.AvailableData.AvailableBusinessUnits);
+			LazyLoadingManager.Initialize(x.AvailableData.AvailableTeams);
+			LazyLoadingManager.Initialize(x.AvailableData.AvailableSites);
+			return x.AvailableData;
 		}
 
 		private IList<IEnumerable<IBusinessUnit>> loadAvailableData(ICollection<IAvailableData> dataCollection, out IList<IEnumerable<ISite>> siteAll, out IList<IEnumerable<ITeam>> teamAll, out IList<IEnumerable<AvailableDataRangeOption>> dataRangeOptionAll)
