@@ -49,11 +49,11 @@ client.url(process.env.UrlToTest + '/HealthCheck')
 		}
 	});
 log('check service bus and broker');
-client.pause(1000);
+client.pause(3000);
 client.click('#Start-Check')
-	.waitForExist('#Bus-Results', 300000, false, function(err, res, response) {
+	.waitForExist('#Bus-Results', 600000, false, function(err, res, response) {
 		if (err || !res) {
-			closeAndThrow('service bus doesnot work well after trying 5 minutes.');
+			closeAndThrow('service bus doesnot work well after trying 10 minutes.');
 		}
 		log('service bus and broker work well');
 	});
