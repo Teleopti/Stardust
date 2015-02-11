@@ -30,4 +30,18 @@ ASSOCIATED_MEASURE_GROUP = 'QA Agent Evaluation';
 		ASSOCIATED_MEASURE_GROUP = 'QA Agent Evaluation';
 		</MdxString>
 	</CalculatedMember>
+	<CalculatedMember>
+		<MdxString>
+		CREATE MEMBER CURRENTCUBE.[Measures].[BO Average Handling Time]
+		AS [Measures].[Average Handling Time s]/[Measures].[Number Of Cases], FORMAT_STRING = "#,##0.00", VISIBLE = 1 ,  ASSOCIATED_MEASURE_GROUP = 'BO Performance'  ;
+		</MdxString>
+	</CalculatedMember>
+	<CalculatedMember>
+		<MdxString>
+		CREATE MEMBER CURRENTCUBE.[Measures].[Training Score AVG]
+		AS [Measures].[Training Score]/[Measures].[Training Attendance],
+		FORMAT_STRING = "#,##0.00",
+		VISIBLE = 1 ,  ASSOCIATED_MEASURE_GROUP = 'Training'  ;
+		</MdxString>
+	</CalculatedMember>
 </CalculatedMemberDefinition>

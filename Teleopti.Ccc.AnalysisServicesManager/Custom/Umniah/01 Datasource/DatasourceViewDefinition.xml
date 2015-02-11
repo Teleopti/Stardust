@@ -53,5 +53,119 @@ The <Constraints> tag is optional - all other tags mandatory
 			</Constraint>			
 			</Constraints>
         </DataTable>
-
+		
+		<DataTable>
+            <DbSchemaName>custom</DbSchemaName>
+            <DbTableName>dim_call_outcome</DbTableName>
+			<TableType>Table</TableType>
+			<CommandText>SELECT * FROM [custom].[dim_call_outcome]</CommandText>
+        </DataTable>
+		<DataTable>
+            <DbSchemaName>custom</DbSchemaName>
+            <DbTableName>dim_call_type</DbTableName>
+			<TableType>Table</TableType>
+			<CommandText>SELECT * FROM [custom].[dim_call_type]</CommandText>
+        </DataTable>
+		<DataTable>
+            <DbSchemaName>custom</DbSchemaName>
+            <DbTableName>dim_campaign_type</DbTableName>
+			<TableType>Table</TableType>
+			<CommandText>SELECT * FROM [custom].[dim_campaign_type]</CommandText>
+        </DataTable>
+		<DataTable>
+            <DbSchemaName>custom</DbSchemaName>
+            <DbTableName>dim_service</DbTableName>
+			<TableType>Table</TableType>
+			<CommandText>SELECT * FROM [custom].[dim_service]</CommandText>
+        </DataTable>
+		<DataTable>
+            <DbSchemaName>custom</DbSchemaName>
+            <DbTableName>dim_TRX_type</DbTableName>
+			<TableType>Table</TableType>
+			<CommandText>SELECT * FROM [custom].[dim_TRX_type]</CommandText>
+        </DataTable>
+		<DataTable>
+            <DbSchemaName>custom</DbSchemaName>
+            <DbTableName>fact_3Gbundles</DbTableName>
+			<TableType>Table</TableType>
+			<CommandText>SELECT * FROM [custom].[fact_3Gbundles]</CommandText>
+        </DataTable>
+		<DataTable>
+            <DbSchemaName>custom</DbSchemaName>
+            <DbTableName>fact_BO_performance</DbTableName>
+			<TableType>Table</TableType>
+			<CommandText>SELECT * FROM [custom].[fact_BO_performance]</CommandText>
+        </DataTable>
+		<DataTable>
+            <DbSchemaName>custom</DbSchemaName>
+            <DbTableName>fact_BO_wrap_up</DbTableName>
+			<TableType>Table</TableType>
+			<CommandText>SELECT * FROM [custom].[fact_BO_wrap_up]</CommandText>
+        </DataTable>
+		<DataTable>
+            <DbSchemaName>custom</DbSchemaName>
+            <DbTableName>fact_customer_profiles</DbTableName>
+			<TableType>Table</TableType>
+			<CommandText>SELECT * FROM [custom].[fact_customer_profiles]</CommandText>
+        </DataTable>
+		<DataTable>
+            <DbSchemaName>custom</DbSchemaName>
+            <DbTableName>fact_outbound_performance</DbTableName>
+			<TableType>Table</TableType>
+			<CommandText>SELECT * FROM [custom].[fact_outbound_performance]</CommandText>
+        </DataTable>
+		<DataTable>
+            <DbSchemaName>custom</DbSchemaName>
+            <DbTableName>fact_RBT_download</DbTableName>
+			<TableType>Table</TableType>
+			<CommandText>SELECT * FROM [custom].[fact_RBT_download]</CommandText>
+        </DataTable>
+		<DataTable>
+            <DbSchemaName>custom</DbSchemaName>
+            <DbTableName>dim_attendance_v</DbTableName>
+			<TableType>Table</TableType>
+			<CommandText>SELECT * FROM [custom].[dim_attendance_v]</CommandText>
+        </DataTable>
+		<DataTable>
+            <DbSchemaName>custom</DbSchemaName>
+            <DbTableName>dim_is_approved_v</DbTableName>
+			<TableType>Table</TableType>
+			<CommandText>SELECT * FROM [custom].[dim_is_approved_v]</CommandText>
+        </DataTable>
+		<DataTable>
+            <DbSchemaName>custom</DbSchemaName>
+            <DbTableName>dim_team_leader</DbTableName>
+			<TableType>Table</TableType>
+			<CommandText>SELECT * FROM [custom].[dim_team_leader]</CommandText>
+        </DataTable>
+		<DataTable>
+            <DbSchemaName>custom</DbSchemaName>
+            <DbTableName>dim_training</DbTableName>
+			<TableType>Table</TableType>
+			<CommandText>SELECT * FROM [custom].[dim_training]</CommandText>
+        </DataTable>
+		<DataTable>
+            <DbSchemaName>custom</DbSchemaName>
+            <DbTableName>dim_violation</DbTableName>
+			<TableType>Table</TableType>
+			<CommandText>SELECT * FROM [custom].[dim_violation]</CommandText>
+        </DataTable>
+		<DataTable>
+            <DbSchemaName>custom</DbSchemaName>
+            <DbTableName>fact_training</DbTableName>
+			<TableType>Table</TableType>
+			<CommandText>SELECT * FROM [custom].[fact_training]</CommandText>
+        </DataTable>
+		<DataTable>
+            <DbSchemaName>custom</DbSchemaName>
+            <DbTableName>fact_violation</DbTableName>
+			<TableType>Table</TableType>
+			<CommandText>SELECT * FROM [custom].[fact_violation]</CommandText>
+        </DataTable>
+		<DataTable>
+            <DbSchemaName>custom</DbSchemaName>
+            <DbTableName>dim_provided_by</DbTableName>
+			<TableType>Table</TableType>
+			<CommandText>SELECT * FROM [custom].[dim_provided_by]</CommandText>
+        </DataTable>
 </DatasourceViewDefinition>

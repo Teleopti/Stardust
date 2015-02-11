@@ -1,0 +1,142 @@
+﻿<!--
+The purpose of the file(s) in this folder is to create the as database dimension.
+You can use SSMS to script your dimension when your are done. Or copy needed section  from your full custom XMLA deployment file
+
+NOTE 1
+In the <Object> tag:
+Be sure to replace you local database name with the parameter
+<DatabaseID>#(AS_DATABASE_NAME)</DatabaseID>
+This value is later replaced by ASManager upon deployment
+
+
+NOTE 2
+Dimensions are create at two levels in Analysis Services
+- Database
+- Cube
+
+=> Use one file per dimension!
+To minimize errors use same string for all properties, e.g
+FileName: BO Call Type
+DimensionID: BO Call Type
+Dimension Name: BO Call Type
+
+The Database.Dimension(s) are handle via .xmla files in this folder
+BUT - The Cube.Dimension lack that kind of xmla-support!
+Instead AMO is used to add the Cube.Dimension.
+
+This file Name = "Survey Score.xml", will be used as CubeDimensionId for the Cube Dimension
+<CubeDimensionID>Survey Score</CubeDimensionID>
+And that's the object Id that will be referenced later by your cube measures
+Save file in format UTF 8
+-->
+<Batch Transaction="true" xmlns="http://schemas.microsoft.com/analysisservices/2003/engine">
+	<Alter AllowCreate="true" ObjectExpansion="ExpandFull">
+		<Object>
+			<DatabaseID>#(AS_DATABASE_NAME)</DatabaseID>
+			<DimensionID>BO Call Type</DimensionID>
+		</Object>
+		<ObjectDefinition>
+        <Dimension xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ddl2="http://schemas.microsoft.com/analysisservices/2003/engine/2" xmlns:ddl2_2="http://schemas.microsoft.com/analysisservices/2003/engine/2/2" xmlns:ddl100_100="http://schemas.microsoft.com/analysisservices/2008/engine/100/100" xmlns:ddl200="http://schemas.microsoft.com/analysisservices/2010/engine/200" xmlns:ddl200_200="http://schemas.microsoft.com/analysisservices/2010/engine/200/200" xmlns:ddl300="http://schemas.microsoft.com/analysisservices/2011/engine/300" xmlns:ddl300_300="http://schemas.microsoft.com/analysisservices/2011/engine/300/300" xmlns:ddl400="http://schemas.microsoft.com/analysisservices/2012/engine/400" xmlns:ddl400_400="http://schemas.microsoft.com/analysisservices/2012/engine/400/400">
+            <ID>BO Call Type</ID>
+            <Name>BO Call Type</Name>
+            <Source xsi:type="DataSourceViewBinding">
+                <DataSourceViewID>Teleopti Analytics</DataSourceViewID>
+            </Source>
+            <ErrorConfiguration>
+                <KeyNotFound>ReportAndStop</KeyNotFound>
+                <KeyDuplicate>ReportAndStop</KeyDuplicate>
+                <NullKeyNotAllowed>ReportAndStop</NullKeyNotAllowed>
+            </ErrorConfiguration>
+            <UnknownMemberName>Unknown</UnknownMemberName>
+            <Attributes>
+                <Attribute>
+                    <ID>Call Type Id</ID>
+                    <Name>Call Type Id</Name>
+                    <Usage>Key</Usage>
+                    <KeyColumns>
+                        <KeyColumn>
+                            <DataType>Integer</DataType>
+                            <Source xsi:type="ColumnBinding">
+                                <TableID>dim_call_type</TableID>
+                                <ColumnID>call_type_id</ColumnID>
+                            </Source>
+                        </KeyColumn>
+                    </KeyColumns>
+                    <NameColumn>
+                        <DataType>WChar</DataType>
+                        <Source xsi:type="ColumnBinding">
+                            <TableID>dim_call_type</TableID>
+                            <ColumnID>call_type_id</ColumnID>
+                        </Source>
+                    </NameColumn>
+                    <AttributeRelationships>
+                        <AttributeRelationship>
+                            <AttributeID>Call Subtype</AttributeID>
+                            <Name>Call Subtype</Name>
+                        </AttributeRelationship>
+                        <AttributeRelationship>
+                            <AttributeID>Call Type</AttributeID>
+                            <Name>Call Type</Name>
+                        </AttributeRelationship>
+                    </AttributeRelationships>
+                    <OrderBy>Key</OrderBy>
+                    <AttributeHierarchyVisible>false</AttributeHierarchyVisible>
+                </Attribute>
+                <Attribute>
+                    <ID>Call Subtype</ID>
+                    <Name>Call Subtype</Name>
+                    <KeyColumns>
+                        <KeyColumn>
+                            <DataType>WChar</DataType>
+                            <DataSize>100</DataSize>
+                            <Source xsi:type="ColumnBinding">
+                                <TableID>dim_call_type</TableID>
+                                <ColumnID>call_subtype</ColumnID>
+                            </Source>
+                        </KeyColumn>
+                    </KeyColumns>
+                    <NameColumn>
+                        <DataType>WChar</DataType>
+                        <DataSize>100</DataSize>
+                        <Source xsi:type="ColumnBinding">
+                            <TableID>dim_call_type</TableID>
+                            <ColumnID>call_subtype</ColumnID>
+                        </Source>
+                    </NameColumn>
+                    <OrderBy>Key</OrderBy>
+                </Attribute>
+                <Attribute>
+                    <ID>Call Type</ID>
+                    <Name>Call Type</Name>
+                    <KeyColumns>
+                        <KeyColumn>
+                            <DataType>WChar</DataType>
+                            <DataSize>100</DataSize>
+                            <Source xsi:type="ColumnBinding">
+                                <TableID>dim_call_type</TableID>
+                                <ColumnID>call_type</ColumnID>
+                            </Source>
+                        </KeyColumn>
+                    </KeyColumns>
+                    <NameColumn>
+                        <DataType>WChar</DataType>
+                        <DataSize>100</DataSize>
+                        <Source xsi:type="ColumnBinding">
+                            <TableID>dim_call_type</TableID>
+                            <ColumnID>call_type</ColumnID>
+                        </Source>
+                    </NameColumn>
+                    <OrderBy>Key</OrderBy>
+                </Attribute>
+            </Attributes>
+            <ProactiveCaching>
+                <SilenceInterval>-PT1S</SilenceInterval>
+                <Latency>-PT1S</Latency>
+                <SilenceOverrideInterval>-PT1S</SilenceOverrideInterval>
+                <ForceRebuildInterval>-PT1S</ForceRebuildInterval>
+                <Source xsi:type="ProactiveCachingInheritedBinding" />
+            </ProactiveCaching>
+        </Dimension>
+    </ObjectDefinition>
+	</Alter>
+</Batch>

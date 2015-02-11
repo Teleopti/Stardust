@@ -1,51 +1,158 @@
-﻿<!--
-The purpose of the file(s) in this folder is to create measures groups.
-You can use SSMS to script your measures groups when your are done in VS Data Tools. Or copy needed section  from your full custom XMLA deployment file
-
-NOTE 1
-In the <Object> tag:
-Be sure to replace you local database name with the parameter
-<DatabaseID>#(AS_DATABASE_NAME)</DatabaseID>
--->
-<Create xmlns="http://schemas.microsoft.com/analysisservices/2003/engine">
-    <ParentObject>
+﻿<Create xmlns="http://schemas.microsoft.com/analysisservices/2003/engine">
+	<ParentObject>
 		<DatabaseID>#(AS_DATABASE_NAME)</DatabaseID>
-        <CubeID>Teleopti Analytics 1</CubeID>
-    </ParentObject>
+		<CubeID>Teleopti Analytics 1</CubeID>
+	</ParentObject>
     <ObjectDefinition>
         <MeasureGroup xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ddl2="http://schemas.microsoft.com/analysisservices/2003/engine/2" xmlns:ddl2_2="http://schemas.microsoft.com/analysisservices/2003/engine/2/2" xmlns:ddl100_100="http://schemas.microsoft.com/analysisservices/2008/engine/100/100" xmlns:ddl200="http://schemas.microsoft.com/analysisservices/2010/engine/200" xmlns:ddl200_200="http://schemas.microsoft.com/analysisservices/2010/engine/200/200" xmlns:ddl300="http://schemas.microsoft.com/analysisservices/2011/engine/300" xmlns:ddl300_300="http://schemas.microsoft.com/analysisservices/2011/engine/300/300" xmlns:ddl400="http://schemas.microsoft.com/analysisservices/2012/engine/400" xmlns:ddl400_400="http://schemas.microsoft.com/analysisservices/2012/engine/400/400">
-            <ID>Fact Agent Customer Survey</ID>
-            <Name>CSAT Agent Survey</Name>
+            <ID>Fact Training</ID>
+            <Name>Training</Name>
             <Measures>
                 <Measure>
-                    <ID>Number Of Calls</ID>
-                    <Name>CSAT Number Of Calls</Name>
+                    <ID>Count</ID>
+                    <Name>Training Count</Name>
                     <DataType>Integer</DataType>
                     <Source>
                         <DataType>Integer</DataType>
                         <Source xsi:type="ColumnBinding">
-                            <TableID>fact_agent_customer_survey</TableID>
-                            <ColumnID>number_of_calls</ColumnID>
+                            <TableID>fact_training</TableID>
+                            <ColumnID>count</ColumnID>
                         </Source>
                     </Source>
                 </Measure>
                 <Measure>
-                    <ID>Score 2</ID>
-                    <Name>Score</Name>
+                    <ID>Score - Fact Training</ID>
+                    <Name>Training Score</Name>
                     <DataType>Integer</DataType>
                     <Source>
                         <DataType>Integer</DataType>
                         <Source xsi:type="ColumnBinding">
-                            <TableID>fact_agent_customer_survey</TableID>
+                            <TableID>fact_training</TableID>
                             <ColumnID>score</ColumnID>
                         </Source>
                     </Source>
-                    <Visible>false</Visible>
+                </Measure>
+                <Measure>
+                    <ID>Attendance</ID>
+                    <Name>Training Attendance</Name>
+                    <DataType>Integer</DataType>
+                    <Source>
+                        <DataType>Integer</DataType>
+                        <Source xsi:type="ColumnBinding">
+                            <TableID>fact_training</TableID>
+                            <ColumnID>attendance</ColumnID>
+                        </Source>
+                    </Source>
                 </Measure>
             </Measures>
             <StorageMode>Molap</StorageMode>
             <ProcessingMode>Regular</ProcessingMode>
             <Dimensions>
+                <Dimension xsi:type="RegularMeasureGroupDimension">
+                    <CubeDimensionID>Local Date</CubeDimensionID>
+                    <Attributes>
+                        <Attribute>
+                            <AttributeID>Dim Date</AttributeID>
+                            <KeyColumns>
+                                <KeyColumn>
+                                    <DataType>Integer</DataType>
+                                    <Source xsi:type="ColumnBinding">
+                                        <TableID>fact_training</TableID>
+                                        <ColumnID>start_local_date_id</ColumnID>
+                                    </Source>
+                                </KeyColumn>
+                            </KeyColumns>
+                            <Type>Granularity</Type>
+                        </Attribute>
+                        <Attribute>
+                            <AttributeID>Year</AttributeID>
+                            <KeyColumns>
+                                <KeyColumn>
+                                    <DataType>Integer</DataType>
+                                    <Source xsi:type="ColumnBinding">
+                                        <TableID>dbo_dim_date</TableID>
+                                        <ColumnID>year</ColumnID>
+                                    </Source>
+                                </KeyColumn>
+                            </KeyColumns>
+                        </Attribute>
+                        <Attribute>
+                            <AttributeID>Year Month</AttributeID>
+                            <KeyColumns>
+                                <KeyColumn>
+                                    <DataType>Integer</DataType>
+                                    <Source xsi:type="ColumnBinding">
+                                        <TableID>dbo_dim_date</TableID>
+                                        <ColumnID>year_month</ColumnID>
+                                    </Source>
+                                </KeyColumn>
+                            </KeyColumns>
+                        </Attribute>
+                        <Attribute>
+                            <AttributeID>Weekday Name</AttributeID>
+                            <KeyColumns>
+                                <KeyColumn>
+                                    <DataType>WChar</DataType>
+                                    <DataSize>20</DataSize>
+                                    <Source xsi:type="ColumnBinding">
+                                        <TableID>dbo_dim_date</TableID>
+                                        <ColumnID>weekday_name</ColumnID>
+                                    </Source>
+                                </KeyColumn>
+                            </KeyColumns>
+                        </Attribute>
+                        <Attribute>
+                            <AttributeID>Year Week</AttributeID>
+                            <KeyColumns>
+                                <KeyColumn>
+                                    <DataType>WChar</DataType>
+                                    <DataSize>6</DataSize>
+                                    <Source xsi:type="ColumnBinding">
+                                        <TableID>dbo_dim_date</TableID>
+                                        <ColumnID>year_week</ColumnID>
+                                    </Source>
+                                </KeyColumn>
+                            </KeyColumns>
+                        </Attribute>
+                        <Attribute>
+                            <AttributeID>Weekday Number</AttributeID>
+                            <KeyColumns>
+                                <KeyColumn>
+                                    <DataType>Integer</DataType>
+                                    <Source xsi:type="ColumnBinding">
+                                        <TableID>dbo_dim_date</TableID>
+                                        <ColumnID>weekday_number</ColumnID>
+                                    </Source>
+                                </KeyColumn>
+                            </KeyColumns>
+                        </Attribute>
+                        <Attribute>
+                            <AttributeID>Quarter</AttributeID>
+                            <KeyColumns>
+                                <KeyColumn>
+                                    <DataType>WChar</DataType>
+                                    <DataSize>6</DataSize>
+                                    <Source xsi:type="ColumnBinding">
+                                        <TableID>dbo_dim_date</TableID>
+                                        <ColumnID>quarter</ColumnID>
+                                    </Source>
+                                </KeyColumn>
+                            </KeyColumns>
+                        </Attribute>
+                        <Attribute>
+                            <AttributeID>Date Date</AttributeID>
+                            <KeyColumns>
+                                <KeyColumn>
+                                    <DataType>Date</DataType>
+                                    <Source xsi:type="ColumnBinding">
+                                        <TableID>dbo_dim_date</TableID>
+                                        <ColumnID>date_date</ColumnID>
+                                    </Source>
+                                </KeyColumn>
+                            </KeyColumns>
+                        </Attribute>
+                    </Attributes>
+                </Dimension>
                 <Dimension xsi:type="RegularMeasureGroupDimension">
                     <CubeDimensionID>ACD Login</CubeDimensionID>
                     <Attributes>
@@ -55,8 +162,8 @@ Be sure to replace you local database name with the parameter
                                 <KeyColumn>
                                     <DataType>Integer</DataType>
                                     <Source xsi:type="ColumnBinding">
-                                        <TableID>fact_agent_customer_survey</TableID>
-                                        <ColumnID>acd_login_id</ColumnID>
+                                        <TableID>fact_training</TableID>
+                                        <ColumnID>employee_acd_login_id</ColumnID>
                                     </Source>
                                 </KeyColumn>
                             </KeyColumns>
@@ -78,15 +185,7 @@ Be sure to replace you local database name with the parameter
                     </Attributes>
                 </Dimension>
                 <Dimension xsi:type="ManyToManyMeasureGroupDimension">
-                    <CubeDimensionID>Skill 1</CubeDimensionID>
-                    <MeasureGroupID>Bridge Acd Login Person</MeasureGroupID>
-                </Dimension>
-                <Dimension xsi:type="ManyToManyMeasureGroupDimension">
                     <CubeDimensionID>Person</CubeDimensionID>
-                    <MeasureGroupID>Bridge Acd Login Person</MeasureGroupID>
-                </Dimension>
-                <Dimension xsi:type="ManyToManyMeasureGroupDimension">
-                    <CubeDimensionID>Business Unit</CubeDimensionID>
                     <MeasureGroupID>Bridge Acd Login Person</MeasureGroupID>
                 </Dimension>
                 <Dimension xsi:type="ManyToManyMeasureGroupDimension">
@@ -94,8 +193,16 @@ Be sure to replace you local database name with the parameter
                     <MeasureGroupID>Bridge Acd Login Person</MeasureGroupID>
                 </Dimension>
                 <Dimension xsi:type="ManyToManyMeasureGroupDimension">
-                    <CubeDimensionID>Group Page Person</CubeDimensionID>
+                    <CubeDimensionID>Skill 1</CubeDimensionID>
+                    <MeasureGroupID>v Bridge Agent Skill</MeasureGroupID>
+                </Dimension>
+                <Dimension xsi:type="ManyToManyMeasureGroupDimension">
+                    <CubeDimensionID>Business Unit</CubeDimensionID>
                     <MeasureGroupID>Bridge Acd Login Person</MeasureGroupID>
+                </Dimension>
+                <Dimension xsi:type="ManyToManyMeasureGroupDimension">
+                    <CubeDimensionID>Group Page Person</CubeDimensionID>
+                    <MeasureGroupID>Bridge Group Page Person</MeasureGroupID>
                 </Dimension>
                 <Dimension xsi:type="RegularMeasureGroupDimension">
                     <CubeDimensionID>Date Id Local</CubeDimensionID>
@@ -106,8 +213,8 @@ Be sure to replace you local database name with the parameter
                                 <KeyColumn>
                                     <DataType>Integer</DataType>
                                     <Source xsi:type="ColumnBinding">
-                                        <TableID>fact_agent_customer_survey</TableID>
-                                        <ColumnID>local_date_id</ColumnID>
+                                        <TableID>fact_training</TableID>
+                                        <ColumnID>start_local_date_id</ColumnID>
                                     </Source>
                                 </KeyColumn>
                             </KeyColumns>
@@ -203,104 +310,67 @@ Be sure to replace you local database name with the parameter
                     </Attributes>
                 </Dimension>
                 <Dimension xsi:type="RegularMeasureGroupDimension">
-                    <CubeDimensionID>Local Date</CubeDimensionID>
+                    <CubeDimensionID>Training</CubeDimensionID>
                     <Attributes>
                         <Attribute>
-                            <AttributeID>Dim Date</AttributeID>
+                            <AttributeID>Training Id</AttributeID>
                             <KeyColumns>
                                 <KeyColumn>
                                     <DataType>Integer</DataType>
                                     <Source xsi:type="ColumnBinding">
-                                        <TableID>fact_agent_customer_survey</TableID>
-                                        <ColumnID>local_date_id</ColumnID>
+                                        <TableID>fact_training</TableID>
+                                        <ColumnID>training_id</ColumnID>
                                     </Source>
                                 </KeyColumn>
                             </KeyColumns>
                             <Type>Granularity</Type>
                         </Attribute>
                         <Attribute>
-                            <AttributeID>Year</AttributeID>
-                            <KeyColumns>
-                                <KeyColumn>
-                                    <DataType>Integer</DataType>
-                                    <Source xsi:type="ColumnBinding">
-                                        <TableID>dbo_dim_date</TableID>
-                                        <ColumnID>year</ColumnID>
-                                    </Source>
-                                </KeyColumn>
-                            </KeyColumns>
-                        </Attribute>
-                        <Attribute>
-                            <AttributeID>Year Month</AttributeID>
-                            <KeyColumns>
-                                <KeyColumn>
-                                    <DataType>Integer</DataType>
-                                    <Source xsi:type="ColumnBinding">
-                                        <TableID>dbo_dim_date</TableID>
-                                        <ColumnID>year_month</ColumnID>
-                                    </Source>
-                                </KeyColumn>
-                            </KeyColumns>
-                        </Attribute>
-                        <Attribute>
-                            <AttributeID>Weekday Name</AttributeID>
+                            <AttributeID>Training Name</AttributeID>
                             <KeyColumns>
                                 <KeyColumn>
                                     <DataType>WChar</DataType>
-                                    <DataSize>20</DataSize>
+                                    <DataSize>100</DataSize>
                                     <Source xsi:type="ColumnBinding">
-                                        <TableID>dbo_dim_date</TableID>
-                                        <ColumnID>weekday_name</ColumnID>
+                                        <TableID>dim_training</TableID>
+                                        <ColumnID>training_name</ColumnID>
                                     </Source>
                                 </KeyColumn>
                             </KeyColumns>
                         </Attribute>
                         <Attribute>
-                            <AttributeID>Year Week</AttributeID>
-                            <KeyColumns>
-                                <KeyColumn>
-                                    <DataType>WChar</DataType>
-                                    <DataSize>6</DataSize>
-                                    <Source xsi:type="ColumnBinding">
-                                        <TableID>dbo_dim_date</TableID>
-                                        <ColumnID>year_week</ColumnID>
-                                    </Source>
-                                </KeyColumn>
-                            </KeyColumns>
-                        </Attribute>
-                        <Attribute>
-                            <AttributeID>Weekday Number</AttributeID>
-                            <KeyColumns>
-                                <KeyColumn>
-                                    <DataType>Integer</DataType>
-                                    <Source xsi:type="ColumnBinding">
-                                        <TableID>dbo_dim_date</TableID>
-                                        <ColumnID>weekday_number</ColumnID>
-                                    </Source>
-                                </KeyColumn>
-                            </KeyColumns>
-                        </Attribute>
-                        <Attribute>
-                            <AttributeID>Quarter</AttributeID>
-                            <KeyColumns>
-                                <KeyColumn>
-                                    <DataType>WChar</DataType>
-                                    <DataSize>6</DataSize>
-                                    <Source xsi:type="ColumnBinding">
-                                        <TableID>dbo_dim_date</TableID>
-                                        <ColumnID>quarter</ColumnID>
-                                    </Source>
-                                </KeyColumn>
-                            </KeyColumns>
-                        </Attribute>
-                        <Attribute>
-                            <AttributeID>Date Date</AttributeID>
+                            <AttributeID>Start Date</AttributeID>
                             <KeyColumns>
                                 <KeyColumn>
                                     <DataType>Date</DataType>
                                     <Source xsi:type="ColumnBinding">
-                                        <TableID>dbo_dim_date</TableID>
-                                        <ColumnID>date_date</ColumnID>
+                                        <TableID>dim_training</TableID>
+                                        <ColumnID>start_date</ColumnID>
+                                    </Source>
+                                </KeyColumn>
+                            </KeyColumns>
+                        </Attribute>
+                        <Attribute>
+                            <AttributeID>End Date</AttributeID>
+                            <KeyColumns>
+                                <KeyColumn>
+                                    <DataType>Date</DataType>
+                                    <Source xsi:type="ColumnBinding">
+                                        <TableID>dim_training</TableID>
+                                        <ColumnID>end_date</ColumnID>
+                                    </Source>
+                                </KeyColumn>
+                            </KeyColumns>
+                        </Attribute>
+                        <Attribute>
+                            <AttributeID>Trainer</AttributeID>
+                            <KeyColumns>
+                                <KeyColumn>
+                                    <DataType>WChar</DataType>
+                                    <DataSize>100</DataSize>
+                                    <Source xsi:type="ColumnBinding">
+                                        <TableID>dim_training</TableID>
+                                        <ColumnID>trainer</ColumnID>
                                     </Source>
                                 </KeyColumn>
                             </KeyColumns>
@@ -308,17 +378,34 @@ Be sure to replace you local database name with the parameter
                     </Attributes>
                 </Dimension>
                 <Dimension xsi:type="RegularMeasureGroupDimension">
-                    <CubeDimensionID>CSAT Survey Score</CubeDimensionID>
+                    <CubeDimensionID>Training Attendance</CubeDimensionID>
                     <Attributes>
                         <Attribute>
-                            <AttributeID>Score</AttributeID>
+                            <AttributeID>Attendance</AttributeID>
                             <KeyColumns>
                                 <KeyColumn>
                                     <DataType>Integer</DataType>
-                                    <NullProcessing>UnknownMember</NullProcessing>
                                     <Source xsi:type="ColumnBinding">
-                                        <TableID>fact_agent_customer_survey</TableID>
-                                        <ColumnID>score</ColumnID>
+                                        <TableID>fact_training</TableID>
+                                        <ColumnID>attendance</ColumnID>
+                                    </Source>
+                                </KeyColumn>
+                            </KeyColumns>
+                            <Type>Granularity</Type>
+                        </Attribute>
+                    </Attributes>
+                </Dimension>
+                <Dimension xsi:type="RegularMeasureGroupDimension">
+                    <CubeDimensionID>Training Team Leader</CubeDimensionID>
+                    <Attributes>
+                        <Attribute>
+                            <AttributeID>Team Leader</AttributeID>
+                            <KeyColumns>
+                                <KeyColumn>
+                                    <DataType>Integer</DataType>
+                                    <Source xsi:type="ColumnBinding">
+                                        <TableID>fact_training</TableID>
+                                        <ColumnID>team_leader_id</ColumnID>
                                     </Source>
                                 </KeyColumn>
                             </KeyColumns>
@@ -329,11 +416,11 @@ Be sure to replace you local database name with the parameter
             </Dimensions>
             <Partitions>
                 <Partition>
-                    <ID>Fact Agent Customer Survey</ID>
-                    <Name>Fact Agent Customer Survey</Name>
+                    <ID>Fact Training</ID>
+                    <Name>Fact Training</Name>
                     <Source xsi:type="DsvTableBinding">
                         <DataSourceViewID>Teleopti Analytics</DataSourceViewID>
-                        <TableID>fact_agent_customer_survey</TableID>
+                        <TableID>fact_training</TableID>
                     </Source>
                     <StorageMode>Molap</StorageMode>
                     <ProcessingMode>Regular</ProcessingMode>
@@ -356,3 +443,4 @@ Be sure to replace you local database name with the parameter
         </MeasureGroup>
     </ObjectDefinition>
 </Create>
+

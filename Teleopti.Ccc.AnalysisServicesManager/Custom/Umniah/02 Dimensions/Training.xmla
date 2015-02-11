@@ -1,0 +1,161 @@
+﻿<Batch Transaction="true" xmlns="http://schemas.microsoft.com/analysisservices/2003/engine">
+	<Alter AllowCreate="true" ObjectExpansion="ExpandFull">
+		<Object>
+			<DatabaseID>#(AS_DATABASE_NAME)</DatabaseID>
+			<DimensionID>Training</DimensionID>
+		</Object>
+    <ObjectDefinition>
+        <Dimension xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ddl2="http://schemas.microsoft.com/analysisservices/2003/engine/2" xmlns:ddl2_2="http://schemas.microsoft.com/analysisservices/2003/engine/2/2" xmlns:ddl100_100="http://schemas.microsoft.com/analysisservices/2008/engine/100/100" xmlns:ddl200="http://schemas.microsoft.com/analysisservices/2010/engine/200" xmlns:ddl200_200="http://schemas.microsoft.com/analysisservices/2010/engine/200/200" xmlns:ddl300="http://schemas.microsoft.com/analysisservices/2011/engine/300" xmlns:ddl300_300="http://schemas.microsoft.com/analysisservices/2011/engine/300/300" xmlns:ddl400="http://schemas.microsoft.com/analysisservices/2012/engine/400" xmlns:ddl400_400="http://schemas.microsoft.com/analysisservices/2012/engine/400/400">
+            <ID>Training</ID>
+            <Name>Training</Name>
+            <Source xsi:type="DataSourceViewBinding">
+                <DataSourceViewID>Teleopti Analytics</DataSourceViewID>
+            </Source>
+            <ErrorConfiguration>
+                <KeyNotFound>ReportAndStop</KeyNotFound>
+                <KeyDuplicate>ReportAndStop</KeyDuplicate>
+                <NullKeyNotAllowed>ReportAndStop</NullKeyNotAllowed>
+            </ErrorConfiguration>
+            <UnknownMemberName>Unknown</UnknownMemberName>
+            <Attributes>
+                <Attribute>
+                    <ID>Training Id</ID>
+                    <Name>Training Id</Name>
+                    <Usage>Key</Usage>
+                    <KeyColumns>
+                        <KeyColumn>
+                            <DataType>Integer</DataType>
+                            <Source xsi:type="ColumnBinding">
+                                <TableID>dim_training</TableID>
+                                <ColumnID>training_id</ColumnID>
+                            </Source>
+                        </KeyColumn>
+                    </KeyColumns>
+                    <NameColumn>
+                        <DataType>WChar</DataType>
+                        <Source xsi:type="ColumnBinding">
+                            <TableID>dim_training</TableID>
+                            <ColumnID>training_id</ColumnID>
+                        </Source>
+                    </NameColumn>
+                    <AttributeRelationships>
+                        <AttributeRelationship>
+                            <AttributeID>Training Name</AttributeID>
+                            <Name>Training</Name>
+                        </AttributeRelationship>
+                        <AttributeRelationship>
+                            <AttributeID>Start Date</AttributeID>
+                            <Name>Start Date</Name>
+                        </AttributeRelationship>
+                        <AttributeRelationship>
+                            <AttributeID>End Date</AttributeID>
+                            <Name>End Date</Name>
+                        </AttributeRelationship>
+                        <AttributeRelationship>
+                            <AttributeID>Trainer</AttributeID>
+                            <Name>Trainer</Name>
+                        </AttributeRelationship>
+                    </AttributeRelationships>
+                    <OrderBy>Key</OrderBy>
+                    <AttributeHierarchyVisible>false</AttributeHierarchyVisible>
+                </Attribute>
+                <Attribute>
+                    <ID>Training Name</ID>
+                    <Name>Training</Name>
+                    <KeyColumns>
+                        <KeyColumn>
+                            <DataType>WChar</DataType>
+                            <DataSize>100</DataSize>
+                            <Source xsi:type="ColumnBinding">
+                                <TableID>dim_training</TableID>
+                                <ColumnID>training_name</ColumnID>
+                            </Source>
+                        </KeyColumn>
+                    </KeyColumns>
+                    <NameColumn>
+                        <DataType>WChar</DataType>
+                        <DataSize>100</DataSize>
+                        <Source xsi:type="ColumnBinding">
+                            <TableID>dim_training</TableID>
+                            <ColumnID>training_name</ColumnID>
+                        </Source>
+                    </NameColumn>
+                    <OrderBy>Key</OrderBy>
+                </Attribute>
+                <Attribute>
+                    <ID>Start Date</ID>
+                    <Name>Start Date</Name>
+                    <KeyColumns>
+                        <KeyColumn>
+                            <DataType>Date</DataType>
+                            <Source xsi:type="ColumnBinding">
+                                <TableID>dim_training</TableID>
+                                <ColumnID>start_date</ColumnID>
+                            </Source>
+                        </KeyColumn>
+                    </KeyColumns>
+                    <NameColumn>
+                        <DataType>WChar</DataType>
+                        <Source xsi:type="ColumnBinding">
+                            <TableID>dim_training</TableID>
+                            <ColumnID>start_date</ColumnID>
+                        </Source>
+                    </NameColumn>
+                    <OrderBy>Key</OrderBy>
+                </Attribute>
+                <Attribute>
+                    <ID>End Date</ID>
+                    <Name>End Date</Name>
+                    <KeyColumns>
+                        <KeyColumn>
+                            <DataType>Date</DataType>
+                            <Source xsi:type="ColumnBinding">
+                                <TableID>dim_training</TableID>
+                                <ColumnID>end_date</ColumnID>
+                            </Source>
+                        </KeyColumn>
+                    </KeyColumns>
+                    <NameColumn>
+                        <DataType>WChar</DataType>
+                        <Source xsi:type="ColumnBinding">
+                            <TableID>dim_training</TableID>
+                            <ColumnID>end_date</ColumnID>
+                        </Source>
+                    </NameColumn>
+                    <OrderBy>Key</OrderBy>
+                </Attribute>
+                <Attribute>
+                    <ID>Trainer</ID>
+                    <Name>Trainer</Name>
+                    <KeyColumns>
+                        <KeyColumn>
+                            <DataType>WChar</DataType>
+                            <DataSize>100</DataSize>
+                            <Source xsi:type="ColumnBinding">
+                                <TableID>dim_training</TableID>
+                                <ColumnID>trainer</ColumnID>
+                            </Source>
+                        </KeyColumn>
+                    </KeyColumns>
+                    <NameColumn>
+                        <DataType>WChar</DataType>
+                        <DataSize>100</DataSize>
+                        <Source xsi:type="ColumnBinding">
+                            <TableID>dim_training</TableID>
+                            <ColumnID>trainer</ColumnID>
+                        </Source>
+                    </NameColumn>
+                    <OrderBy>Key</OrderBy>
+                </Attribute>
+            </Attributes>
+            <ProactiveCaching>
+                <SilenceInterval>-PT1S</SilenceInterval>
+                <Latency>-PT1S</Latency>
+                <SilenceOverrideInterval>-PT1S</SilenceOverrideInterval>
+                <ForceRebuildInterval>-PT1S</ForceRebuildInterval>
+                <Source xsi:type="ProactiveCachingInheritedBinding" />
+            </ProactiveCaching>
+        </Dimension>
+    </ObjectDefinition>
+	</Alter>
+</Batch>
