@@ -68,7 +68,7 @@ namespace Teleopti.Analytics.Parameters
 			_label = new Label();
 
 			_dropDown = new DropDownList();
-			_dropDown.Width = new Unit(100, UnitType.Percentage);
+			_dropDown.Width = new Unit(100, UnitType.Pixel);
 			_dropDown.CssClass = "ControlStyle";
 			_dropDown.DataTextField = "name";
 			_dropDown.DataValueField = "id";

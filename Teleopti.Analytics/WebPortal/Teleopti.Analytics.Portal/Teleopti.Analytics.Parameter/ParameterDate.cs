@@ -217,11 +217,19 @@ namespace Teleopti.Analytics.Parameters
 			_calExt.RenderControl(writer);
 			writer.RenderEndTag();
 
-			writer.AddAttribute(HtmlTextWriterAttribute.Style, "padding:0px 0px 0px 0px");
-			writer.AddStyleAttribute("colspan", "2");
-			writer.RenderBeginTag(HtmlTextWriterTag.Td);
-			_dateValidator.RenderControl(writer);
+			//writer.AddAttribute(HtmlTextWriterAttribute.Style, "padding:0px 0px 0px 0px");
+			//writer.AddStyleAttribute("colspan", "2");
+			//writer.RenderBeginTag(HtmlTextWriterTag.Td);
+			//_dateValidator.RenderControl(writer);
 
+			writer.AddAttribute(HtmlTextWriterAttribute.Style, "padding:0px 0px 0px 0px");
+			writer.RenderBeginTag(HtmlTextWriterTag.Td);
+			writer.RenderEndTag();
+
+			writer.RenderBeginTag(HtmlTextWriterTag.Td);
+			writer.AddStyleAttribute(HtmlTextWriterStyle.Width, "20");
+			_dateValidator.RenderControl(writer);
+			
 			writer.RenderEndTag();
 		}
 

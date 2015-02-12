@@ -1,31 +1,18 @@
 ﻿
 body
 {
-	font-family:Segoe UI, Tahoma, Verdana, Arial, Helvetica, Sans-Serif;
-}
-
-.Login 
-{
-	font-size: 14px;
-	vertical-align: middle;
-}
-.SignOut {
-	text-decoration: none;
-	color: black;
-	font-weight: bold;
+	font-family:"Open Sans", Calibri, Candara, Segoe UI, Tahoma, Verdana, Arial, Sans-Serif;
 }
 
 .Panel
 {
-	font-size:11px;
-	font-weight:bold;
+	font-size:14px;
 	color:#545c60;	
 	font-weight: bold;
 	vertical-align: top;
-	/*background-color:#E5F0F6;*/
 	background-color:White;
 	/*border: solid 1px #6e92a4;
-	border-collapse: collapse; /*background-color:#FFF;*/*/
+	border-collapse: collapse; /*background-color:#FFF;*/
 	clear:both;
 	padding: 0;
 	margin: 0;
@@ -41,54 +28,33 @@ body
     
 .Panel TD.NoPadding
 {
-    padding: 0px;
+    padding: 0;
     }
 
-.Panel a 
-{
-	color:#525987;
-	text-decoration:none;
-}
-
-.Panel a:hover 
-{
-	color:#7983C7;
-	text-decoration:underline;
-}
 .Panel input
 {
 	font-size: 0.95em;
     }
- 
- .Caption
-{
-	font-size: 16px;
-	 width: 100%;
-	color: white;
-	background-color: #007fff;
-	/*border-color: #0066cc;*/
-	/*background-color:  #80bfea;*/
-	border-bottom: solid 1px #0066cc;
-	height: 50px;
-	 position: fixed;
-	 top: 0;
-}
 
 .ReportName {
 	margin-top: 10px;
 	padding-left: 10px;
 	text-align: center;
+	color: white;
+	font-size: 18px;
 }
+
 .DetailsView {
 	padding-left: 10px;
 	padding-top: 10px;
 }
+
 .DetailsView TD
 {
-	border-bottom: solid 1px #bed7e5;
-	color: #545a86;
+	border-bottom: dotted 1px gray;
+	color: #545c60;
 	font-size: 14px;
-	font-weight:bold;
+	/*font-weight:bold;*/
 }
 
 .ReportBody

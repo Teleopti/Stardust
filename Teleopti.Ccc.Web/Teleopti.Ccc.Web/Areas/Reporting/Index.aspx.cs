@@ -45,6 +45,7 @@ namespace Teleopti.Ccc.Web.Areas.Reporting
 					// User do not have permission on report
 					buttonShowExcel.Visible = false;
 					buttonShowPdf.Visible = false;
+					buttonShowWord.Visible = false;
 					labelPermissionDenied.Visible = true;
 					ParameterSelector.Visible = false;
 					labelPermissionDenied.Text = Resources.ResPermissionDenied;
@@ -53,12 +54,17 @@ namespace Teleopti.Ccc.Web.Areas.Reporting
 			}
 		}
 
+
 		protected void Selector_OnInit(object sender, EventArgs e)
 		{
 			var princip = Thread.CurrentPrincipal;
-			var id = ((TeleoptiPrincipalCacheable)princip).Person.Id;
+			var person = ((TeleoptiPrincipalCacheable)princip).Person;
+			var id = person.Id;
 			var dataSource = ((TeleoptiIdentity)princip.Identity).DataSource;
 			var bu = ((TeleoptiIdentity)princip.Identity).BusinessUnit.Id;
+
+			Thread.CurrentThread.CurrentUICulture = person.PermissionInformation.UICulture().FixPersianCulture();
+			Thread.CurrentThread.CurrentCulture = person.PermissionInformation.Culture().FixPersianCulture();
 
 			ParameterSelector.ConnectionString = dataSource.Statistic.ConnectionString;
 			ParameterSelector.UserCode = id.GetValueOrDefault();
