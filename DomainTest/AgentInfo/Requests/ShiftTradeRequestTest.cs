@@ -4,6 +4,7 @@ using System.Globalization;
 using System.Linq;
 using NUnit.Framework;
 using Rhino.Mocks;
+using SharpTestsEx;
 using Teleopti.Ccc.Domain.AgentInfo.Requests;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
@@ -135,6 +136,20 @@ namespace Teleopti.Ccc.DomainTest.AgentInfo.Requests
 
 			Assert.AreEqual(notificationString, _target.TextForNotification);
 		}
+
+	    [Test]
+	    public void ShouldSetOfferStatusToPendingWhenDeny()
+	    {
+			 var offer = MockRepository.GenerateMock<IShiftExchangeOffer>();
+		    offer.Status = ShiftExchangeOfferStatus.PendingAdminApproval;
+		    _target.Offer = offer;
+		    var expectStatus = ShiftExchangeOfferStatus.Pending;
+		    offer.Stub(x => x.Status).Return(expectStatus);
+
+			 _target.Deny(_tradePerson);
+
+			 _target.Offer.Status.Should().Be.EqualTo(expectStatus);
+	    }
 
         [Test]
         public void VerifyShiftTradeStatusCanSet()
