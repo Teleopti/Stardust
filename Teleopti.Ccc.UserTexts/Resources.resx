@@ -12813,4 +12813,22 @@ Reduce the complexity to use these shifts.</value>
     <value>Lock Bulletin Board Trading</value>
     <comment>used in Admin Client workflow control set shift trade request setting</comment>
   </data>
+  <data name="Bottom" xml:space="preserve">
+    <value>Bottom</value>
+  </data>
+  <data name="ManageSenioritySettings" xml:space="preserve">
+    <value>Manage Seniority Settings</value>
+    <comment>Page Seniority in options</comment>
+  </data>
+  <data name="RankShiftCategory" xml:space="preserve">
+    <value>Rank shift category from best to worst</value>
+    <comment>Rank shift category for seniority</comment>
+  </data>
+  <data name="RankWorkingDays" xml:space="preserve">
+    <value>Rank working days from best to worst</value>
+    <comment>Rank working days for seniority</comment>
+  </data>
+  <data name="Top" xml:space="preserve">
+    <value>Top</value>
+  </data>
 </root>

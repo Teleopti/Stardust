@@ -1,0 +1,64 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<hibernate-mapping xmlns="urn:nhibernate-mapping-2.2"
+                   assembly="Teleopti.Ccc.Domain"
+                   namespace="Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.Seniority"
+                   default-access="field.camelcase-underscore">
+  <class name="SeniorityWorkDayRanks"
+         batch-size="10">
+    <!--IEntity-->
+    <id name="Id"
+				type="guid"
+			 access="nosetter.camelcase-underscore"
+				unsaved-value="null">
+      <generator class="guid.comb" />
+    </id>
+    <!--version name="Version"
+				 unsaved-value ="null"/-->
+    <many-to-one name="UpdatedBy"
+					 class="Teleopti.Ccc.Domain.Common.Person"
+           not-null="true"
+           foreign-key="FK_SeniorityWorkDayRanks_Person_UpdatedBy"/>				 
+    <property name="UpdatedOn"
+				  type="UtcDateTime"
+				  not-null="true"/>
+    <!--IEntity-->
+    
+     <property name="Monday"
+             type="int"
+             not-null="true"/>
+
+    <property name="Tuesday"
+            type="int"
+            not-null="true"/>
+
+    <property name="Wednesday"
+            type="int"
+            not-null="true"/>
+
+    <property name="Thursday"
+            type="int"
+            not-null="true"/>
+
+    <property name="Friday"
+            type="int"
+            not-null="true"/>
+
+    <property name="Saturday"
+            type="int"
+            not-null="true"/>
+
+    <property name="Sunday"
+            type="int"
+            not-null="true"/>
+
+    <many-to-one name="BusinessUnit"
+      class="Teleopti.Ccc.Domain.Common.BusinessUnit"
+      access="nosetter.camelcase-underscore"
+      not-null="true"
+      foreign-key="FK_SeniorityWorkDayRanks_BusinessUnit"/>
+    <filter name="businessUnitFilter"
+            condition=":businessUnitParameter = BusinessUnit" />
+      
+
+  </class>
+</hibernate-mapping>

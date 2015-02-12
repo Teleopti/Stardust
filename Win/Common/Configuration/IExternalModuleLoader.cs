@@ -68,6 +68,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
         ScheduleTag,
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Sms")]
 		SmsSettings,
-		Gamification
+		Gamification,
+		Seniority
     } ;
 }

@@ -346,6 +346,7 @@
     <Compile Include="Configuration\MasterActivityPresenterTest.cs" />
     <Compile Include="Configuration\MasterActivityModelTest.cs" />
     <Compile Include="Configuration\GamificationSettingProviderTest.cs" />
+    <Compile Include="Configuration\SeniorityControlPresenterTest.cs" />
     <Compile Include="Configuration\SetGamificationSettingPresenterTest.cs" />
     <Compile Include="Configuration\SitePresenterTest.cs">
       <SubType>Code</SubType>

@@ -439,6 +439,12 @@
     <Compile Include="Common\BaseUserControlWithMessageBrokerHandler.cs">
       <SubType>UserControl</SubType>
     </Compile>
+    <Compile Include="Common\Configuration\SeniorityControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Common\Configuration\SeniorityControl.Designer.cs">
+      <DependentUpon>SeniorityControl.cs</DependentUpon>
+    </Compile>
     <Compile Include="Common\Configuration\SetGamificationSettingTargetsControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -2619,6 +2625,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Common\BaseRibbonForm.resx">
       <DependentUpon>BaseRibbonForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Common\Configuration\SeniorityControl.resx">
+      <DependentUpon>SeniorityControl.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Common\Configuration\SetGamificationSettingTargetsControl.resx">
       <DependentUpon>SetGamificationSettingTargetsControl.cs</DependentUpon>
