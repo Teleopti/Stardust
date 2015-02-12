@@ -47,8 +47,6 @@
 			that.notifyViaSMSEnabled = ko.observable(false);
 			that.AgentAdherence = ko.observable();
 
-			that.SelectAgentsEnabled = ko.observable(false);
-
 			that.SetViewOptions = function (options) {
 				that.BusinessUnitId(options.buid);
 				that.rootURI('#realtimeadherencesites/' + that.BusinessUnitId());
@@ -123,7 +121,7 @@
 				that.siteURI('#realtimeadherenceteams/' + that.BusinessUnitId() + '/' + that.siteId());
 			};
 
-			var fillData = function (data) {
+			var fillData = function(data) {
 				var theAgent = that.getAgent(data.PersonId);
 				if (!theAgent) {
 					theAgent = agent();
@@ -139,7 +137,7 @@
 				data.TimeZoneOffset = theAgent.TimeZoneOffset;
 				data.TeamName = theAgent.TeamName;
 				theAgentState.fill(data);
-			}
+			};
 
 			that.fillAgents = function (data) {
 				if (!data || data.length == 0)
@@ -173,12 +171,12 @@
 					return null;
 				return agentState[0];
 			};
-			that.getSelectedAgentState = function () {
-				var selectedAgentState = that.agentStates().filter(function (obj) {
+			that.getSelectedAgentState = function() {
+				var selectedAgentState = that.agentStates().filter(function(obj) {
 					return obj.Selected() === true;
 				});
 				return selectedAgentState;
-			}
+			};
 
 			that.refreshAlarmTime = function () {
 				that.agentStates().forEach(function (item) {
@@ -192,15 +190,15 @@
 				that.fillAgentsStates(data.AgentStates);
 			};
 
-			that.urlForChangingSchedule = function (data) {
+			that.urlForChangingSchedule = function(data) {
 				var a = that.getAgent(data.PersonId());
 				return navigation.UrlForChangingSchedule(that.BusinessUnitId(), a.TeamId, a.PersonId, moment((new Date).getTime()));
-			}
+			};
 
-			that.urlForAdherenceDetails = function (data) {
+			that.urlForAdherenceDetails = function(data) {
 				var a = that.getAgent(data.PersonId());
 				return navigation.UrlForAdherenceDetails(that.BusinessUnitId(), a.PersonId);
-			}
+			};
 
 			that.SelectAgent = function (agentStateClicked) {
 				if (typeof agentStateClicked === "string") {

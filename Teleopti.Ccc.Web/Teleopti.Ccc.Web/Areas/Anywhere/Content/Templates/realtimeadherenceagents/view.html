@@ -8,10 +8,10 @@
 		<div class="row">
 			<div class="col-xs-8 col-sm-6">
 				<!-- ko if: $root.notifyViaSMSEnabled -->
-				<button type="button" class="btn btn-primary navbar-btn select-agents" data-bind="checkbox: SelectAgentsEnabled, if: $root.notifyViaSMSEnabled">
-					<span class="glyphicon glyphicon-envelope" aria-hidden="true"></span>
+				<button type="button" class="btn btn-primary navbar-btn send-message" data-bind="click: SendMessage, enable: SendMessageEnabled">
+					<span class="glyphicon glyphicon-envelope" aria-hidden="true">
+					</span>
 				</button>
-				<button type="button" class="btn btn-primary navbar-btn send-message" data-bind="click: SendMessage, enable: SendMessageEnabled, text: $root.Resources.Send"></button>
 				<!-- /ko -->
 			</div>
 			<div class="col-xs-4 col-sm-6">
@@ -29,7 +29,7 @@
 		<table class="table table-stripped table-condensed rta-agents-details">
 			<thead>
 				<tr>
-					<th class="selectable-agent" data-bind="if: SelectAgentsEnabled"><input type="checkbox" data-bind="checked: AllChecked"></th>
+					<th class="selectable-agent" data-bind="if: notifyViaSMSEnabled"><input type="checkbox" data-bind="checked: AllChecked"></th>
 					<th data-bind="text: resources.AgentName"></th>
 					<th data-bind="text: resources.Team"></th>
 					<th data-bind="text: resources.State"></th>
@@ -42,7 +42,7 @@
 			</thead>
 			<tbody data-bind="foreach: filteredAgents">
 				<tr class="agent-state" data-bind="style:  { backgroundColor: AlarmColor, 'transition': 'background-color 2000ms linear', fontWeight: TextWeight, fontColor: TextColor}, click: $root.SelectAgent">
-					<td class="selectable-agent" data-bind="if: $parent.SelectAgentsEnabled"><input type="checkbox" data-bind="checked: SelectedToSendMessage, stopBubble: true"></td>
+					<td class="selectable-agent" data-bind="if: $parent.notifyViaSMSEnabled"><input type="checkbox" data-bind="checked: SelectedToSendMessage, stopBubble: true"></td>
 					<td class="agent-name" data-bind="text: Name"></td>
 					<td data-bind="text: TeamName"></td>
 					<td data-bind="text: State"></td>

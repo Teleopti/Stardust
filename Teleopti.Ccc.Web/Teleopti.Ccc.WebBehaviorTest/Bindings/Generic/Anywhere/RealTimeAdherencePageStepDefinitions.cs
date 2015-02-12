@@ -73,12 +73,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Anywhere
 			Browser.Interactions.Click(".agent-state");
 		}
 
-		[When(@"I choose to send a message")]
-		public void WhenIChooseToSendAMessage()
-		{
-			Browser.Interactions.Click(".select-agents");
-		}
-
 		[When(@"I select")]
 		public void WhenISelect(Table table)
 		{

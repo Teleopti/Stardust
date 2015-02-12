@@ -21,7 +21,6 @@ Scenario: Access from RTA
 	 | Team           | Red           |
 	 | Start Date     | 2014-01-21    |
 	When I view real time adherence for team 'Red'
-	And I choose to send a message
 	And I select 
 	| Name          |
 	| Pierre Baldi  |
