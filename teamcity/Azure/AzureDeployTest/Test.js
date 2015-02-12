@@ -43,13 +43,21 @@ client.setValue('#Username-input', 'demo')
 	});
 log('navigate to health check');
 client.url(process.env.UrlToTest + '/HealthCheck')
-	.waitForEnabled('#Start-Check', 60000, false, function(err, res, response) {
+	.waitForExist(".services li span", 600000, false, function(err, res, response) {
 		if (err || !res) {
-			closeAndThrow('failed to navigate to health check page.');
+			closeAndThrow('service bus isnot up and running after trying 10 minutes.');
 		}
 	});
 log('check service bus and broker');
+client.click('#Start-Check');
+// have no idea why first time of checking is not working, have to refresh and check it again
 client.pause(3000);
+client.refresh()
+	.waitForExist(".services li span", 600000, false, function(err, res, response) {
+		if (err || !res) {
+			closeAndThrow('service bus isnot up and running after trying 10 minutes.');
+		}
+	});
 client.click('#Start-Check')
 	.waitForExist('#Bus-Results', 600000, false, function(err, res, response) {
 		if (err || !res) {
