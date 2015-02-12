@@ -128,13 +128,12 @@ define([
 			self.Persons(people);
 			if (self.PreSelectedPersonId()) {
 				var preSelectedPerson = personForId(self.PreSelectedPersonId(), people);
-				self.SelectPerson(preSelectedPerson);
 				var isAnyLayerSelected = false;
 				if (!isNaN(self.PreSelectedStartMinute())) {
 					ko.utils.arrayForEach(preSelectedPerson.Shifts(), function(shift) {
 						ko.utils.arrayForEach(shift.Layers(), function(layer) {
 							if (layer.StartMinutes() == self.PreSelectedStartMinute()) {
-								layer.Selected(true);
+								self.SelectLayer(layer, self.PreSelectedPersonId());
 								isAnyLayerSelected = true;
 								return;
 							}
@@ -142,14 +141,8 @@ define([
 						if (isAnyLayerSelected) {
 							return;
 						}
-						
 					});
-
 				}
-				if (isAnyLayerSelected) {
-					preSelectedPerson.Selected(false);
-				}
-				
 			}
 
 			this.TimeLine.BaseDate(data.BaseDate);
@@ -170,10 +163,17 @@ define([
 			person.Selected(!person.Selected());
 		};
 
-		this.SelectLayer = function (layer) {
-			deselectAllPersonsExcept();
-			deselectAllLayersExcept(layer);
+		this.SelectLayer = function (layer, personId) {
+			if (self.Resources.MyTeam_MakeTeamScheduleConsistent_31897) {
+				var person = personForId(personId, self.Persons());
+				deselectAllPersonsExcept(person);
+				person.Selected(!layer.Selected());
+			}
+			else {
+				deselectAllPersonsExcept();
+			}
 
+			deselectAllLayersExcept(layer);
 			layer.Selected(!layer.Selected());
 		};
 
