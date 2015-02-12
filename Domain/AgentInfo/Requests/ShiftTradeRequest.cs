@@ -247,6 +247,10 @@ namespace Teleopti.Ccc.Domain.AgentInfo.Requests
 
              }
 
+				if (Offer != null)
+				{
+					Offer.Status = ShiftExchangeOfferStatus.Pending;
+				}
 			SetNotification(notification, list);
 
         }

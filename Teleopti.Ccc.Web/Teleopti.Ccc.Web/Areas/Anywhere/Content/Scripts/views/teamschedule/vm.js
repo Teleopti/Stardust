@@ -34,6 +34,7 @@ define([
 
 		this.Loading = ko.observable(false);
 		this.PreSelectedPersonId = ko.observable(false);
+		this.PreSelectedStartMinute = ko.observable(NaN);
 		this.BusinessUnitId = ko.observable();
 
 		this.Persons = ko.observableArray();
@@ -95,6 +96,7 @@ define([
 		this.SetViewOptions = function (options) {
 			self.BusinessUnitId(options.buid);
 			self.PreSelectedPersonId(options.personid);
+			self.PreSelectedStartMinute(options.selectedStartMinutes);
 			self.Date(function() {
 				var date = options.date;
 				if (date == undefined) {
@@ -103,7 +105,6 @@ define([
 					return moment.tz(moment(date, 'YYYYMMDD').format('YYYY-MM-DD'), timezoneCurrent.IanaTimeZone());
 				}
 			}());
-			
 		};
 
 		this.UpdateSchedules = function (data) {
@@ -126,7 +127,24 @@ define([
 
 			self.Persons(people);
 			if (self.PreSelectedPersonId()) {
-				self.SelectPerson(personForId(self.PreSelectedPersonId(), people));
+				var preSelectedPerson = personForId(self.PreSelectedPersonId(), people);
+				var isAnyLayerSelected = false;
+				if (!isNaN(self.PreSelectedStartMinute())) {
+					ko.utils.arrayForEach(preSelectedPerson.Shifts(), function(shift) {
+						ko.utils.arrayForEach(shift.Layers(), function(layer) {
+							if (layer.StartMinutes() == self.PreSelectedStartMinute()) {
+								self.SelectLayer(layer, self.PreSelectedPersonId());
+								isAnyLayerSelected = true;
+								return;
+							}
+						});
+						if (isAnyLayerSelected) {
+							return;
+						}
+					});
+				} else {
+					self.SelectPerson(preSelectedPerson);
+				}
 			}
 
 			this.TimeLine.BaseDate(data.BaseDate);
@@ -147,10 +165,18 @@ define([
 			person.Selected(!person.Selected());
 		};
 
-		this.SelectLayer = function (layer) {
-			deselectAllPersonsExcept();
-			deselectAllLayersExcept(layer);
+		this.SelectLayer = function (layer, personId) {
+			if (self.Resources.MyTeam_MakeTeamScheduleConsistent_31897) {
+				var person = personForId(personId, self.Persons());
+				deselectAllPersonsExcept(person);
+				person.Selected(!layer.Selected());
+				person.SelectedStartMinutes(layer.StartMinutes());
+			}
+			else {
+				deselectAllPersonsExcept();
+			}
 
+			deselectAllLayersExcept(layer);
 			layer.Selected(!layer.Selected());
 		};
 

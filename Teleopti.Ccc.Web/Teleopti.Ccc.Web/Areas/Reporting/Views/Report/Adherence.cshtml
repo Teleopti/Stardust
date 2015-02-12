@@ -1,4 +1,5 @@
-﻿@model Teleopti.Ccc.Web.Areas.Reporting.Models.ReportModel
+﻿@using Teleopti.Ccc.UserTexts
+@model Teleopti.Ccc.Web.Areas.Reporting.Models.ReportModel
 @{
 	Layout = null;
 }
@@ -7,13 +8,61 @@
 <head>
 	<title>@Model.Name</title>
 	<link href="~/Areas/Reporting/Content/Styles/Styles.css" rel="stylesheet" />
+	<link href="~/Content/bootstrap/Content/bootstrap.css" rel="stylesheet" />
+	<script src="~/Content/jquery/jquery-1.10.2.min.js"></script>
+	<script src="~/Content/bootstrap/Scripts/bootstrap.js"></script>
 </head>
 <body style="margin-top: 0;height:95%">
-	<div class="Caption">
-		<div class="ReportName" style="padding-top: 2px">
-			@Model.Name
+	<header>
+		<div class="navbar navbar-default navbar-inverse">
+			<div class="navbar-header pull-left">
+				<button id="mainNavbarToggler" type="button" class="navbar-toggle" data-toggle="offcanvas" data-target=".navbar-offcanvas">
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span>
+				</button>
+
+				<a class="navbar-brand" href="#">Teleopti</a>
+			</div>
+
+			<div class="navbar-offcanvas navmenu-fixed-right offcanvas menu-top-adjust" id="bs-example-navbar-collapse-1">
+				<ul class="nav navbar-nav">
+					@if (Model.ReportNavigationItems.Any())
+					{
+
+						<li class="dropdown">
+							<a id="reports" href="#" class="dropdown-toggle" data-toggle="dropdown">@Resources.Reports <b class="caret"></b></a>
+							<ul id="report-list" class="dropdown-menu">
+								@foreach (var reportNavSection in Model.ReportNavigationItems)
+								{
+									if (reportNavSection.IsDivider)
+									{
+										@*<li class="divider"></li>*@
+										continue;
+									}
+									<li>
+										@*@if (reportNavSection.IsWebReport)
+											{
+												<a href="@string.Format("#{0}Tab", reportNavSection.Controller)" data-mytime-action="@Html.Portal().GetAction(reportNavSection)">@reportNavSection.Title<span class="badge hide"></span></a>
+											}*@
+
+										@if (!reportNavSection.IsWebReport)
+										{
+											<a href="@reportNavSection.Url">@reportNavSection.Title</a>
+										}
+									</li>
+								}
+							</ul>
+						</li>
+					}
+				</ul>
+			</div>
+			<div class="ReportName" style="padding-top: 2px">
+				@Model.Name
+			</div>
 		</div>
-	</div>
+	</header>
+
 	<iframe style="border: none;height: 95%;width:99.4%;position: fixed;top: 50px;" src="~/Areas/Reporting/ScheduleAdherence.aspx?ReportID=@Model.Id"></iframe>
 </body>
 </html>

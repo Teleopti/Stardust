@@ -198,6 +198,11 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 			{
 				allSupportedPages.Add(new FairnessValuesControl());
 			}
+
+			if (_toggleManager.IsEnabled(Toggles.Scheduler_Seniority_11111))
+			{
+				allSupportedPages.Add(new SeniorityControl());
+			}
 			
 			if (PrincipalAuthorization.Instance().IsPermitted(DefinedRaptorApplicationFunctionPaths.PayrollIntegration))
 				allSupportedPages.Add(new MultiplicatorControlView());

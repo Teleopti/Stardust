@@ -86,13 +86,14 @@ define([
 		this.Absences = ko.observableArray();
 		
 		var layers = function () {
-			return lazy(self.Persons())
+			return lazy(self.Persons()).filter(function(x) {
+					return x.Id == self.PersonId();
+				})
 				.map(function (x) { return x.Shifts(); })
 				.flatten()
 				.map(function (x) { return x.Layers(); })
 				.flatten();
 		};
-
 		this.Layers = layers;
 
 		this.TimeLine = new timeLineViewModel(ko.computed(function () { return layers().toArray(); }));
@@ -244,18 +245,27 @@ define([
 			self.TimeLine.BaseDate(data.BaseDate);
 		};
 
-		this.SelectedLayer = function() {
-		    if (typeof self.MoveActivityForm.SelectedStartMinutes() === 'undefined') return null;
+		this.SelectedLayer = function () {
+			if (typeof self.MoveActivityForm.SelectedStartMinutes() === 'undefined') {
+				return null;
+			}
 
-		    var selectedLayers = layers().filter(function (layer) {
-		        var selectedMinutes = self.MoveActivityForm.SelectedStartMinutes();
-		        var shiftStartMinutes = self.WorkingShift().OriginalShiftStartMinutes;
-		        if (selectedMinutes < shiftStartMinutes && self.MoveActivityForm.shiftOverMidnight())
-		            selectedMinutes += 1440;
-		        if (layer.StartMinutes() === selectedMinutes)
-				return layer;
-			});
-			var activeLayer = selectedLayers.first();
+			var activeLayer;
+			if (self.MoveActivityForm.SelectedStartMinutes() == 0) {
+				activeLayer = layers().first();
+				self.MoveActivityForm.SelectedStartMinutes(activeLayer.StartMinutes());
+			} else {
+				var selectedLayers = layers().filter(function(layer) {
+					var selectedMinutes = self.MoveActivityForm.SelectedStartMinutes();
+					var shiftStartMinutes = self.WorkingShift().OriginalShiftStartMinutes;
+					if (selectedMinutes < shiftStartMinutes && self.MoveActivityForm.shiftOverMidnight())
+						selectedMinutes += 1440;
+					if (layer.StartMinutes() === selectedMinutes)
+						return layer;
+				});
+				activeLayer = selectedLayers.first();
+			}
+
 			if (activeLayer)
 				activeLayer.Selected(true);
 			return activeLayer;
@@ -283,8 +293,8 @@ define([
 		    }
 	    };
 
-		this.backToTeamSchedule = function() {
-			navigation.GoToTeamSchedule(self.BusinessUnitId(), self.GroupId(), self.ScheduleDate());
+	    this.backToTeamSchedule = function () {
+			navigation.GoToTeamScheduleWithPreselectedParameter(self.BusinessUnitId(), self.GroupId(), self.ScheduleDate(), self.PersonId(), self.SelectedStartMinutes());
 		}
 	};
 });

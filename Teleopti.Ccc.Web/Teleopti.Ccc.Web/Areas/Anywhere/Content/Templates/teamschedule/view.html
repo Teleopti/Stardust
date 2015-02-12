@@ -142,7 +142,7 @@
                                     <span class="label label-default" data-bind="style: { 'background-color': Color, 'color': TextColor }, text: Description"></span>
                                     <!-- /ko -->
                                 </div>
-
+								<!-- ko ifnot: $root.Resources.MyTeam_MakeTeamScheduleConsistent_31897 -->
                                 <div class="shift-menu" data-bind="style: { 'margin-left': $parent.ShiftStartPixels() + 'px' }">
                                     <!-- ko with: $parent.ShiftMenu -->
                                     <div class="btn-group">
@@ -166,6 +166,7 @@
                                     </div>
                                     <!-- /ko -->
                                 </div>
+								<!-- /ko -->
                             </td>
                         </tr>
                         <!-- /ko -->
@@ -174,7 +175,7 @@
 
                         <!-- ko if: Selected -->
                         <tr class="person-menu">
-									<td class="person-name-column-menu" data-bind="text: Name"></td>
+							<td class="person-name-column-menu" data-bind="text: Name"></td>
                             <td class="schedule-column" colspan="2">
                                 <div class="schedule-menu">
                                     <!-- ko with: Menu -->
@@ -190,6 +191,11 @@
 		                                <!-- /ko -->
 										<!-- ko if: $root.permissionRemoveAbsence -->
 										<a class="btn btn-sm remove-absence" data-bind="attr: { href: $data.urlForRemoveAbsence()}"><i class="glyphicon glyphicon-minus"></i><span data-bind="    text: $root.Resources.Absence"></span></a>
+		                                <!-- /ko-->
+										<!-- ko if: $root.Resources.MyTeam_MakeTeamScheduleConsistent_31897 -->
+										<!-- ko if: $root.permissionMoveActivity -->
+										<a class="btn btn-sm move-activity " data-bind="attr: { href: $data.urlForMoveActivity($parent)}"><i class="glyphicon glyphicon-hand-up"></i><span data-bind="    text: $root.Resources.MoveActivity"></span></a>
+										<!-- /ko-->
 										<!-- /ko-->
 	                                </div>
                                     <!-- /ko -->
@@ -219,7 +225,7 @@
         'data-length-minutes': LengthMinutes(),
     },
     click: function () {
-        return $root.SelectLayer($data, $parent.PersonId);
+        return $root.SelectLayer($data, $parent.ShiftMenu.PersonId);
     },
     clickBubble: false
 	">

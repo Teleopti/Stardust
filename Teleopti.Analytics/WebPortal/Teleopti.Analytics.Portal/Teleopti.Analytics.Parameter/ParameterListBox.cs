@@ -255,6 +255,7 @@ namespace Teleopti.Analytics.Parameters
 
 			// Listbox 1
 			writer.AddStyleAttribute(HtmlTextWriterStyle.Width, "50%");
+			writer.AddStyleAttribute(HtmlTextWriterStyle.BorderStyle, "none");
 			writer.AddStyleAttribute("align", "left");
 			writer.AddAttribute(HtmlTextWriterAttribute.Style, "padding:0px 0px 0px 0px");
 			writer.RenderBeginTag(HtmlTextWriterTag.Td);
@@ -263,6 +264,7 @@ namespace Teleopti.Analytics.Parameters
 
 			// Knappar
 			writer.AddStyleAttribute(HtmlTextWriterStyle.Width, "5");
+			writer.AddStyleAttribute(HtmlTextWriterStyle.BorderStyle, "none");
 			writer.AddAttribute(HtmlTextWriterAttribute.Style, "padding:10px 5px 10px 5px");
 			writer.AddAttribute(HtmlTextWriterAttribute.Style, "align:middle");
 			writer.RenderBeginTag(HtmlTextWriterTag.Td);
@@ -284,6 +286,7 @@ namespace Teleopti.Analytics.Parameters
 			//Listbox 2
 			writer.AddStyleAttribute("align", "right");
 			writer.AddStyleAttribute(HtmlTextWriterStyle.Width, "50%");
+			writer.AddStyleAttribute(HtmlTextWriterStyle.BorderStyle, "none");
 			writer.AddAttribute(HtmlTextWriterAttribute.Style, "padding:0px 0px 0px 0px");
 			writer.RenderBeginTag(HtmlTextWriterTag.Td);
 			_listBox2.RenderControl(writer);

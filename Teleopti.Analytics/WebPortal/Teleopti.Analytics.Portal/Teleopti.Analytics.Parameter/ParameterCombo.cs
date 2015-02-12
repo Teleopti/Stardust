@@ -75,7 +75,7 @@ namespace Teleopti.Analytics.Parameters
 
 			DropDown = new DropDownList
 								 {
-									 Width = new Unit(100, UnitType.Percentage),
+									 Width = new Unit(50, UnitType.Percentage),
 									 CssClass = "ControlStyle",
 									 DataTextField = "name",
 									 DataValueField = "id"

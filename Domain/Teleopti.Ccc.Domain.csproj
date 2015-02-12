@@ -497,6 +497,8 @@
     <Compile Include="Optimization\IntraIntervalOptimization\SkillStaffPeriodEvaluator.cs" />
     <Compile Include="Optimization\IntraIntervalOptimization\SkillStaffPeriodIntraIntervalPeriodFinder.cs" />
     <Compile Include="Optimization\OptimizationLimits.cs" />
+    <Compile Include="Optimization\TeamBlock\FairnessOptimization\Seniority\SeniorityWorkDay.cs" />
+    <Compile Include="Optimization\TeamBlock\FairnessOptimization\Seniority\SeniorityWorkDayRanks.cs" />
     <Compile Include="Optimization\TeamBlock\MoveTimeOptimization\ValidateFoundMovedDaysSpecification.cs" />
     <Compile Include="DayOffPlanning\WeeklyDayOffValidator.cs" />
     <Compile Include="DayOffPlanning\WorkShiftBackToLegalStateBitArrayCreator.cs" />
@@ -2247,6 +2249,7 @@
     <Folder Include="Properties\" />
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="Optimization\TeamBlock\FairnessOptimization\Seniority\SeniorityWorkDayRanks.hbm.xml" />
     <EmbeddedResource Include="Common\AgentBadgeTransaction.hbm.xml">
       <SubType>Designer</SubType>
     </EmbeddedResource>

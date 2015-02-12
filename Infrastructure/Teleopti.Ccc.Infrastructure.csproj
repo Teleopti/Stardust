@@ -245,6 +245,7 @@
     <Compile Include="Repositories\IEtlLogObjectRepository.cs" />
     <Compile Include="Repositories\IEtlReadModelRepository.cs" />
     <Compile Include="Repositories\LogObjectDetail.cs" />
+    <Compile Include="Repositories\SeniorityWorkDayRanksRepository.cs" />
     <Compile Include="Repositories\SiteOutOfAdherenceReadModelPersister.cs" />
     <Compile Include="Repositories\TeamOutOfAdherenceReadModelPersister.cs" />
     <Compile Include="Repositories\TeamGamificationSettingRepository.cs" />

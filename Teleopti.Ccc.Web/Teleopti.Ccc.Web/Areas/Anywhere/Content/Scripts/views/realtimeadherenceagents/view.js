@@ -38,46 +38,46 @@
 				viewModel.refreshAlarmTime();
 			}, 1000);
 
-			var populateViewModel = function (teamId) {
+			var populateViewModel = function(teamId) {
 				ajax.ajax({
-					url: "Agents/ForTeam?teamId=" + teamId,
-					error: function (jqXHR, textStatus, errorThrown) {
-						if (jqXHR.status == 403) {
-							errorview.display(resources.InsufficientPermission);
-						}
-					},
-					success: function (data) {
-						viewModel.fillAgents(data);
-						ajax.ajax({
-							url: "Agents/GetStates?teamId=" + teamId,
-							error: function (jqXHR, textStatus, errorThrown) {
-								if (jqXHR.status == 403) {
-									errorview.display(resources.InsufficientPermission);
+						url: "Agents/ForTeam?teamId=" + teamId,
+						error: function(jqXHR, textStatus, errorThrown) {
+							if (jqXHR.status == 403) {
+								errorview.display(resources.InsufficientPermission);
+							}
+						},
+						success: function(data) {
+							viewModel.fillAgents(data);
+							ajax.ajax({
+								url: "Agents/GetStates?teamId=" + teamId,
+								error: function(jqXHR, textStatus, errorThrown) {
+									if (jqXHR.status == 403) {
+										errorview.display(resources.InsufficientPermission);
+									}
+								},
+								success: function(data) {
+									viewModel.fillAgentsStates(data);
 								}
-							},
-							success: function (data) {
-								viewModel.fillAgentsStates(data);
+							});
+						}
+					})
+					.done(function() {
+						ajax.ajax({
+							url: "Teams/GetBusinessUnitId?teamId=" + teamId,
+							success: function(businessUnitId) {
+								subscriptions.subscribeAdherence(function(notification) {
+										viewModel.updateFromNotification(notification);
+									},
+									businessUnitId,
+									teamId,
+									function() {
+										$('.realtimeadherenceagents').attr("data-subscription-done", " ");
+									},
+									true);
 							}
 						});
-					}
-				})
-				.done(function() {
-					ajax.ajax({
-						url: "Teams/GetBusinessUnitId?teamId=" + teamId,
-						success: function (businessUnitId) {
-							subscriptions.subscribeAdherence(function (notification) {
-								viewModel.updateFromNotification(notification);
-							},
-								businessUnitId,
-								teamId,
-								function () {
-									$('.realtimeadherenceagents').attr("data-subscription-done", " ");
-								},
-								true);
-						}
 					});
-				});
-			}
+			};
 
 			if (options.id === 'MultipleTeams') {
 				subscriptions.unsubscribeAdherence();
@@ -114,7 +114,6 @@
 			viewModel.agentAdherenceEnabled(resources.RTA_SeePercentageAdherenceForOneAgent_30783);
 			viewModel.agentAdherenceDetailsEnabled(resources.RTA_SeeAdherenceDetailsForOneAgent_31285);
 			viewModel.notifyViaSMSEnabled(resources.RTA_NotifyViaSMS_31567);
-
 		},
 		dispose: function (options) {
 			subscriptions.unsubscribeAdherence();
