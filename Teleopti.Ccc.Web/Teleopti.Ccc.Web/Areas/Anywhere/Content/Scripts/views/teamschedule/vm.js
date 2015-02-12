@@ -142,6 +142,8 @@ define([
 							return;
 						}
 					});
+				} else {
+					self.SelectPerson(preSelectedPerson);
 				}
 			}
 
