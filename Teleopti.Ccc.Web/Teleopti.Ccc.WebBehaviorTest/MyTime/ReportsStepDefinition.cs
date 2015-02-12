@@ -52,7 +52,9 @@ namespace Teleopti.Ccc.WebBehaviorTest.MyTime
 		public void ThenTheReportShouldNotBeOpenedInTheSameTab()
 		{
 			Browser.Interactions.AssertUrlNotContains("MyTime", "Reporting");
+			Browser.Interactions.CloseWindow("Agent");
 		}
+
 		[When(@"I click one report in drop down list")]
 		public void WhenIClickOneReportInDropDownList()
 		{
@@ -70,6 +72,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.MyTime
 		public void ThenTheReportShouldBeOpenedInAnotherTab()
 		{
 			Browser.Interactions.AssertUrlNotContains("Anywhere","Reporting" );
+			Browser.Interactions.CloseWindow("Agent");
 		}
 	}
 }
