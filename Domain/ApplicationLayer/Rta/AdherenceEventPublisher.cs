@@ -20,25 +20,25 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta
 			if (toAdherence == Adherence.In)
 				_eventPublisher.Publish(new PersonInAdherenceEvent
 				{
-					ScheduleDate = new DateOnly(info.CurrentShiftStartTime),
+					ScheduleDate = info.IsScheduled ? new DateOnly(info.CurrentShiftStartTime): new DateOnly(time),
 					PersonId = info.PersonId,
 					Timestamp = time,
 					BusinessUnitId = info.BusinessUnitId,
 					TeamId = info.TeamId,
 					SiteId = info.SiteId,
-					ShiftEndTime = info.CurrentShiftEndTime
+					ShiftEndTime = info.IsScheduled ? info.CurrentShiftEndTime : new DateOnly(time)
 				});
 
 			if (toAdherence == Adherence.Out)
 				_eventPublisher.Publish(new PersonOutOfAdherenceEvent
 				{
-					ScheduleDate = new DateOnly(info.CurrentShiftStartTime),
+					ScheduleDate = info.IsScheduled ? new DateOnly(info.CurrentShiftStartTime) : new DateOnly(time),
 					PersonId = info.PersonId,
 					Timestamp = time,
 					BusinessUnitId = info.BusinessUnitId,
 					TeamId = info.TeamId,
 					SiteId = info.SiteId,
-					ShiftEndTime = info.CurrentShiftEndTime
+					ShiftEndTime = info.IsScheduled ? info.CurrentShiftEndTime : new DateOnly(time)
 				});
 
 		}
