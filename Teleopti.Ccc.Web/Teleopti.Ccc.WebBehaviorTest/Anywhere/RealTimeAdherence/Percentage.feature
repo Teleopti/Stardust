@@ -70,8 +70,8 @@ Scenario: Should be able to calculate adherence percentage in agent's timezone
 	And 'Pierre Baldi' is located in Hawaii
 	And Pierre Baldi has a shift with
 	| Field                    | Value            |
-	| Start time               | 2014-10-06 09:00 |
-	| End time                 | 2014-10-06 17:00 |
+	| Start time               | 2014-10-06 11:00 |
+	| End time                 | 2014-10-06 19:00 |
 	| Activity                 | Phone            |
 	And there is an alarm with 
 	| Field           | Value        |
@@ -87,11 +87,11 @@ Scenario: Should be able to calculate adherence percentage in agent's timezone
 	| Name            | Adhering |
 	| Alarm Color     | Green    |
 	| Staffing effect | 0        |
-	When the utc time is '2014-10-06 19:00:00'
+	When the utc time is '2014-10-06 21:00:00'
 	And 'Pierre Baldi' sets his phone state to 'Ready' on datasource 6
-	And the utc time is '2014-10-07 03:00:00'
+	And the utc time is '2014-10-07 01:00:00'
 	And 'Pierre Baldi' sets his phone state to 'Pause' on datasource 6
-	And the utc time is '2014-10-07 06:00:00'
+	And the utc time is '2014-10-07 05:00:00'
 	And I view real time adherence view for team 'Red'
 	And I click on an agent state
 	Then I should see historical adherence for 'Pierre Baldi' with adherence of 50%
@@ -117,8 +117,8 @@ Scenario: Should be able to see adherence percentage when agent is in another ti
 	And 'Pierre Baldi' is located in Hawaii
 	And Pierre Baldi has a shift with
 	| Field                    | Value            |
-	| Start time               | 2014-10-06 09:00 |
-	| End time                 | 2014-10-06 17:00 |
+	| Start time               | 2014-10-06 11:00 |
+	| End time                 | 2014-10-06 19:00 |
 	| Activity                 | Phone            |
 	And there is an alarm with 
 	| Field           | Value        |
@@ -134,11 +134,11 @@ Scenario: Should be able to see adherence percentage when agent is in another ti
 	| Name            | Adhering |
 	| Alarm Color     | Green    |
 	| Staffing effect | 0        |
-	When the utc time is '2014-10-06 19:00:00'
+	When the utc time is '2014-10-06 21:00:00'
 	And 'Pierre Baldi' sets his phone state to 'Ready' on datasource 6
-	And the utc time is '2014-10-07 03:00:00'
+	And the utc time is '2014-10-07 01:00:00'
 	And 'Pierre Baldi' sets his phone state to 'Pause' on datasource 6
-	And the utc time is '2014-10-07 06:00:00'
+	And the utc time is '2014-10-07 05:00:00'
 	And I view real time adherence view for team 'Red'
 	And I click on an agent state
 	Then I should see historical adherence for 'Pierre Baldi' with adherence of 50%
