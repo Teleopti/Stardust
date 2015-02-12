@@ -1,5 +1,6 @@
 using System;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
+using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta
 {
@@ -19,6 +20,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta
 			if (toAdherence == Adherence.In)
 				_eventPublisher.Publish(new PersonInAdherenceEvent
 				{
+					ScheduleDate = new DateOnly(info.CurrentShiftStartTime),
 					PersonId = info.PersonId,
 					Timestamp = time,
 					BusinessUnitId = info.BusinessUnitId,
@@ -29,6 +31,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta
 			if (toAdherence == Adherence.Out)
 				_eventPublisher.Publish(new PersonOutOfAdherenceEvent
 				{
+					ScheduleDate = new DateOnly(info.CurrentShiftStartTime),
 					PersonId = info.PersonId,
 					Timestamp = time,
 					BusinessUnitId = info.BusinessUnitId,

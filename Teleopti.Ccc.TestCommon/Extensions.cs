@@ -23,6 +23,11 @@ namespace Teleopti.Ccc.TestCommon
 			return TimeSpan.FromMinutes(Convert.ToInt32(value));
 		}
 
+		public static TimeSpan Hours(this string value)
+		{
+			return TimeSpan.FromHours(Convert.ToInt32(value));
+		}
+
 		public static TimeSpan Seconds(this string value)
 		{
 			return TimeSpan.FromSeconds(Convert.ToInt32(value));

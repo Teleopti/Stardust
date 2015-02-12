@@ -1,4 +1,5 @@
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
+using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta
 {
@@ -38,6 +39,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta
 				_eventPublisher.Publish(new PersonShiftEndEvent
 				{
 					PersonId = info.PersonId,
+					ScheduleDate = new DateOnly(info.ShiftStartTimeForPreviousActivity),
 					ShiftStartTime = info.ShiftStartTimeForPreviousActivity,
 					ShiftEndTime = info.ShiftEndTimeForPreviousActivity,
 					BusinessUnitId = info.BusinessUnitId

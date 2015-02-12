@@ -21,6 +21,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta
 
 	public class AdherencePercentageReadModelState
 	{
+		public DateTime ScheduleDate { get; set; }
 		public DateTime Timestamp { get; set; }
 		public bool? InAdherence { get; set; }
 		public bool? ShiftEnded { get; set; }
