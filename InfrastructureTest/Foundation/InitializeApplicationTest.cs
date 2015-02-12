@@ -6,7 +6,6 @@ using System.Xml.Linq;
 using NUnit.Framework;
 using Rhino.Mocks;
 using SharpTestsEx;
-using Teleopti.Ccc.Domain.Infrastructure;
 using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.Infrastructure.NHibernateConfiguration;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
@@ -14,11 +13,8 @@ using Teleopti.Ccc.Infrastructure.Web;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
-using Teleopti.Interfaces.MessageBroker.Client;
 using Teleopti.Interfaces.MessageBroker.Client.Composite;
-using Teleopti.Interfaces.MessageBroker.Events;
 using Teleopti.Messaging.Client;
-using Teleopti.Messaging.Exceptions;
 using IMessageSender = Teleopti.Ccc.Infrastructure.UnitOfWork.IMessageSender;
 using Is = Rhino.Mocks.Constraints.Is;
 
@@ -184,8 +180,6 @@ namespace Teleopti.Ccc.InfrastructureTest.Foundation
 				{
 					ds1.AuthenticationTypeOption = AuthenticationTypeOption.Unknown;
 					target.Start(stateStub, appSettings, nhibConfigurations, null);
-					Assert.AreEqual(1, StateHolder.Instance.StateReader.ApplicationScopeData.RegisteredDataSourceCollection.Count());
-					CollectionAssert.Contains(StateHolder.Instance.StateReader.ApplicationScopeData.RegisteredDataSourceCollection, ds1);
 				}
 				target.UnavailableDataSources.First().Should().Be.EqualTo("dummy2");
 			}

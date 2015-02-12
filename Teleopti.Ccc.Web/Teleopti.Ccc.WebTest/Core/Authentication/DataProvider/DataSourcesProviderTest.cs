@@ -74,12 +74,10 @@ namespace Teleopti.Ccc.WebTest.Core.Authentication.DataProvider
 		[Test]
 		public void ApplicationIdentityTokenDatasourcesShouldReturnNullWhenNoAvailableDatasource()
 		{
-			var validDs = MockRepository.GenerateMock<IDataSource>();
 			const string dataSource = "Teleopti WFM";
 			var tokenIdentity = new TokenIdentity { UserIdentifier = "user", DataSource = dataSource };
 
-			validDs.Stub(x => x.DataSourceName).Return("Wrong Teleopti WFM");
-			applicationData.Stub(x => x.RegisteredDataSourceCollection).Return(new[] { validDs });
+			applicationData.Stub(x => x.DataSource(dataSource)).Return(null);
 
 			tokenIdentityProvider.Stub(x => x.RetrieveToken()).Return(tokenIdentity);
 
@@ -96,7 +94,7 @@ namespace Teleopti.Ccc.WebTest.Core.Authentication.DataProvider
 			var tokenIdentity = new TokenIdentity { UserIdentifier = "user", DataSource = dataSource };
 
 			validDs.Stub(x => x.DataSourceName).Return(dataSource);
-			applicationData.Stub(x => x.RegisteredDataSourceCollection).Return(new[] { validDs });
+			applicationData.Stub(x => x.DataSource(dataSource)).Return(validDs);
 			availableApplicationTokenDataSource.Stub(x => x.IsDataSourceAvailable(validDs, tokenIdentity.UserIdentifier)).Return(false);
 
 			tokenIdentityProvider.Stub(x => x.RetrieveToken()).Return(tokenIdentity);

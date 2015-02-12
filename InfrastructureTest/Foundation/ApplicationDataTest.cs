@@ -57,7 +57,6 @@ namespace Teleopti.Ccc.InfrastructureTest.Foundation
             IApplicationData target = new ApplicationData(_receivedSettings, dataSources, messBroker, passwordPolicy, null);
             Assert.AreEqual(_receivedSettings["HelpUrl"], target.AppSettings["HelpUrl"]);
             Assert.AreSame(_receivedSettings, target.AppSettings);
-				target.RegisteredDataSourceCollection.Should().Have.SameValuesAs(dataSources);
             Assert.AreSame(messBroker, target.Messaging);
             Assert.AreSame(passwordPolicy,target.LoadPasswordPolicyService);
         }
@@ -75,24 +74,6 @@ namespace Teleopti.Ccc.InfrastructureTest.Foundation
             dataSourceList.Add(dataSource);
             dataSourceList.Add(dataSource);
 						using (new ApplicationData(_receivedSettings, new ReadOnlyCollection<IDataSource>(dataSourceList), null, null, null)) { }
-        }
-
-        /// <summary>
-        /// Verifies that multiple data sources can exist.
-        /// </summary>
-        [Test]
-        public void VerifyMultipleDataSourcesCanExist()
-        {
-            IDataSource dataSource1 = new DataSource(UnitOfWorkFactoryFactory.CreateUnitOfWorkFactory("one"), null, null);
-            IDataSource dataSource2 = new DataSource(UnitOfWorkFactoryFactory.CreateUnitOfWorkFactory("two"), null, null);
-            IList<IDataSource> dataSourceList = new List<IDataSource>();
-            dataSourceList.Add(dataSource1);
-            dataSourceList.Add(dataSource2);
-            ApplicationData target =
-								new ApplicationData(_receivedSettings, new ReadOnlyCollection<IDataSource>(dataSourceList), null, null, null);
-            Assert.AreEqual(2, target.RegisteredDataSourceCollection.Count());
-            Assert.IsTrue(target.RegisteredDataSourceCollection.Contains(dataSource1));
-            Assert.IsTrue(target.RegisteredDataSourceCollection.Contains(dataSource2));
         }
 
 
