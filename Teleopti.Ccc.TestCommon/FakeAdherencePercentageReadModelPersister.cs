@@ -47,6 +47,11 @@ namespace Teleopti.Ccc.TestCommon
 			return null;
 		}
 
+		public AdherencePercentageReadModel Get(DateOnly date, Guid personId)
+		{
+			throw new NotImplementedException();
+		}
+
 		public bool HasData()
 		{
 			return PersistedModel != null;

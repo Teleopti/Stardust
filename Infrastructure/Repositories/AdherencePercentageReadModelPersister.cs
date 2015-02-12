@@ -94,7 +94,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 				.ExecuteUpdate();
 		}
 
-		public AdherencePercentageReadModel Get(DateTime dateTime, Guid personId)
+		public AdherencePercentageReadModel Get(DateOnly date, Guid personId)
 		{
 			var result = _unitOfWork.Current().CreateSqlQuery(
 				"SELECT " +
@@ -109,7 +109,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 				"	[State] AS StateJson " +
 				"FROM ReadModel.AdherencePercentage WHERE" +
 				"	PersonId =:PersonId AND " +
-				"	BelongsToDate =:Date ")
+					"	BelongsToDate =:Date ")
 				.AddScalar("PersonId", NHibernateUtil.Guid)
 				.AddScalar("Date", NHibernateUtil.DateTime)
 				.AddScalar("ShiftEndTime", NHibernateUtil.DateTime)
@@ -120,13 +120,69 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 				.AddScalar("ShiftHasEnded", NHibernateUtil.Boolean)
 				.AddScalar("StateJson", NHibernateUtil.StringClob)
 				.SetGuid("PersonId", personId)
-				.SetDateTime("Date", dateTime)
-				.SetResultTransformer(Transformers.AliasToBean(typeof(internalModel)))
+				.SetDateTime("Date", date)
+				.SetResultTransformer(Transformers.AliasToBean(typeof (internalModel)))
 				.List<internalModel>()
 				.SingleOrDefault();
 
 			if (result == null) return null;
 			if (result.StateJson == null) return result;
+
+			result.State = _deserializer.DeserializeObject<AdherencePercentageReadModelState[]>(result.StateJson);
+			result.StateJson = null;
+
+			return result;
+		}
+
+		public AdherencePercentageReadModel Get(DateTime dateTime, Guid personId)
+		{
+			var models = _unitOfWork.Current().CreateSqlQuery(
+				"SELECT " +
+				"	PersonId," +
+				"	BelongsToDate AS Date," +
+				"	LastTimestamp," +
+				"	IsLastTimeInAdherence," +
+				"	TimeInAdherence," +
+				"	TimeOutOfAdherence," +
+				"	ShiftHasEnded, " +
+				"	ShiftEndTime, " +
+				"	[State] AS StateJson " +
+				"FROM ReadModel.AdherencePercentage WHERE" +
+				"	PersonId =:PersonId AND " +
+				"	BelongsToDate <=:Date AND " +
+				"   BelongsToDate >=:PreviousDate")
+				.AddScalar("PersonId", NHibernateUtil.Guid)
+				.AddScalar("Date", NHibernateUtil.DateTime)
+				.AddScalar("ShiftEndTime", NHibernateUtil.DateTime)
+				.AddScalar("LastTimestamp", NHibernateUtil.DateTime)
+				.AddScalar("IsLastTimeInAdherence", NHibernateUtil.Boolean)
+				.AddScalar("TimeInAdherence", NHibernateUtil.TimeSpan)
+				.AddScalar("TimeOutOfAdherence", NHibernateUtil.TimeSpan)
+				.AddScalar("ShiftHasEnded", NHibernateUtil.Boolean)
+				.AddScalar("StateJson", NHibernateUtil.StringClob)
+				.SetGuid("PersonId", personId)
+				.SetDateTime("Date", dateTime.Date)
+				.SetDateTime("PreviousDate", dateTime.Date.AddDays(-1))
+				.SetResultTransformer(Transformers.AliasToBean(typeof (internalModel)))
+				.List<internalModel>();
+
+			if (models == null) return null;
+			internalModel result = null;
+			foreach (var model in models.OrderBy(x => x.ShiftEndTime))
+			{
+				if (dateTime <= model.ShiftEndTime)
+				{
+					result = model;
+					break;
+				}
+				if (model.BelongsToDate.Date.Equals(dateTime.Date))
+				{
+					result = model;
+					break;
+				}
+			}
+
+			if (result == null || result.StateJson == null) return result;
 
 			result.State = _deserializer.DeserializeObject<AdherencePercentageReadModelState[]>(result.StateJson);
 			result.StateJson = null;

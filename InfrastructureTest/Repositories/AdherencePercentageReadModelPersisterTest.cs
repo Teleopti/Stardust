@@ -161,6 +161,30 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 		{
 			Target.HasData().Should().Be.False();
 		}
+
+		[Test]
+		public void ShouldGetCorrectModel()
+		{
+			var personId = Guid.NewGuid();
+			Target.Persist(new AdherencePercentageReadModel
+			{
+				Date = "2012-08-29".Date(),
+				PersonId = personId,
+				ShiftEndTime = "2012-08-30 02:00".Utc()
+			});
+			Target.Persist(new AdherencePercentageReadModel
+			{
+				Date = "2012-08-30".Date(),
+				PersonId = personId,
+				ShiftEndTime = "2012-08-30 17:00".Utc()
+			});
+
+			var model1 = Target.Get("2012-08-30 02:00".Utc(), personId);
+			model1.BelongsToDate.Should().Be("2012-08-29".Date());
+
+			var model2 = Target.Get("2012-08-30 03:00".Utc(), personId);
+			model2.BelongsToDate.Should().Be("2012-08-30".Date());
+		}
 	}
 }
 
