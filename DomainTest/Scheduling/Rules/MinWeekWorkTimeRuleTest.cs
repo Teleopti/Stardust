@@ -121,8 +121,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
                 Expect.Call(projService8Hours.CreateProjection()).Return(visualLayers8Hours).Repeat.Times(5);
                 Expect.Call(projService0Hours.CreateProjection()).Return(visualLayers0Hours).Repeat.Times(2);
 
-                Expect.Call(visualLayers8Hours.WorkTime()).Return(TimeSpan.FromHours(8)).Repeat.Times(5);
-                Expect.Call(visualLayers0Hours.WorkTime()).Return(TimeSpan.FromHours(0)).Repeat.Times(2);
+                Expect.Call(visualLayers8Hours.ContractTime()).Return(TimeSpan.FromHours(8)).Repeat.Times(5);
+                Expect.Call(visualLayers0Hours.ContractTime()).Return(TimeSpan.FromHours(0)).Repeat.Times(2);
 
                 Expect.Call(day8Hours.IsScheduled()).Return(true).Repeat.AtLeastOnce();
                 Expect.Call(day0Hours.IsScheduled()).Return(true).Repeat.AtLeastOnce();
@@ -182,8 +182,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
                 Expect.Call(projService8Hours.CreateProjection()).Return(visualLayers8Hours).Repeat.Times(4);
                 Expect.Call(projService0Hours.CreateProjection()).Return(visualLayers0Hours).Repeat.Times(3);
 
-                Expect.Call(visualLayers8Hours.WorkTime()).Return(TimeSpan.FromHours(8)).Repeat.Times(4);
-                Expect.Call(visualLayers0Hours.WorkTime()).Return(TimeSpan.FromHours(0)).Repeat.Times(3);
+                Expect.Call(visualLayers8Hours.ContractTime()).Return(TimeSpan.FromHours(8)).Repeat.Times(4);
+                Expect.Call(visualLayers0Hours.ContractTime()).Return(TimeSpan.FromHours(0)).Repeat.Times(3);
 
                 Expect.Call(day8Hours.IsScheduled()).Return(true).Repeat.AtLeastOnce();
                 Expect.Call(day0Hours.IsScheduled()).Return(true).Repeat.AtLeastOnce();
@@ -245,8 +245,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
                 Expect.Call(projService8Hours.CreateProjection()).Return(visualLayers8Hours).Repeat.Times(4);
                 Expect.Call(projService0Hours.CreateProjection()).Return(visualLayers0Hours).Repeat.Times(3);
 
-                Expect.Call(visualLayers8Hours.WorkTime()).Return(TimeSpan.FromHours(8)).Repeat.Times(4);
-                Expect.Call(visualLayers0Hours.WorkTime()).Return(TimeSpan.FromHours(0)).Repeat.Times(3);
+                Expect.Call(visualLayers8Hours.ContractTime()).Return(TimeSpan.FromHours(8)).Repeat.Times(4);
+                Expect.Call(visualLayers0Hours.ContractTime()).Return(TimeSpan.FromHours(0)).Repeat.Times(3);
 
                 Expect.Call(day8Hours.IsScheduled()).Return(true).Repeat.AtLeastOnce();
                 Expect.Call(day0Hours.IsScheduled()).Return(true).Repeat.AtLeastOnce();
@@ -306,8 +306,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
                 Expect.Call(projService8Hours.CreateProjection()).Return(visualLayers8Hours).Repeat.Times(3);
                 Expect.Call(projService0Hours.CreateProjection()).Return(visualLayers0Hours).Repeat.Times(4);
 
-                Expect.Call(visualLayers8Hours.WorkTime()).Return(TimeSpan.FromHours(8)).Repeat.Times(3);
-                Expect.Call(visualLayers0Hours.WorkTime()).Return(TimeSpan.FromHours(0)).Repeat.Times(4);
+                Expect.Call(visualLayers8Hours.ContractTime()).Return(TimeSpan.FromHours(8)).Repeat.Times(3);
+                Expect.Call(visualLayers0Hours.ContractTime()).Return(TimeSpan.FromHours(0)).Repeat.Times(4);
 
                 Expect.Call(day8Hours.IsScheduled()).Return(true).Repeat.AtLeastOnce();
                 Expect.Call(day0Hours.IsScheduled()).Return(false).Repeat.AtLeastOnce();

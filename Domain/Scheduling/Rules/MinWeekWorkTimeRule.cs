@@ -54,7 +54,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Rules
 
                 if (!setMinTimePerWeekMinutes(out minTimePerWeekMinutes, personWeek)) continue;
                 bool missingSchedule;
-                var sumWorkTime = getSumWorkTime(out missingSchedule, personWeek, currentSchedules);
+                var sumWorkTime = getSumContractTime(out missingSchedule, personWeek, currentSchedules);
 
                 if ((sumWorkTime >= minTimePerWeekMinutes) || missingSchedule) continue;
                 var sumWorkTimeString = DateHelper.HourMinutesString(sumWorkTime);
@@ -96,13 +96,13 @@ namespace Teleopti.Ccc.Domain.Scheduling.Rules
             return true;
         }
 
-        private static double getSumWorkTime(out bool missingSchedule, PersonWeek personWeek, IScheduleRange currentSchedules)
+        private static double getSumContractTime(out bool missingSchedule, PersonWeek personWeek, IScheduleRange currentSchedules)
         {
             double ctrTime = 0;
             var noSchedule = false;
             foreach (var schedule in currentSchedules.ScheduledDayCollection(personWeek.Week))
             {
-                ctrTime += schedule.ProjectionService().CreateProjection().WorkTime().TotalMinutes;
+                ctrTime += schedule.ProjectionService().CreateProjection().ContractTime().TotalMinutes;
                 if (!schedule.IsScheduled()) noSchedule = true;
             }
 
