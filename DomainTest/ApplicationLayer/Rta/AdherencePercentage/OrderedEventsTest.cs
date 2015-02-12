@@ -328,5 +328,32 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.AdherencePercentage
 			});
 			Persister.PersistedModel.LastTimestamp.Should().Be("2014-10-07 07:00".Utc());
 		}
+
+		[Test]
+		public void ShouldSaveShiftEndTime()
+		{
+			var personId = Guid.NewGuid();
+			var dateTime = "2014-10-06 23:00".Utc();
+			var date = new DateOnly(dateTime);
+			Target.Handle(new PersonInAdherenceEvent
+			{
+				ScheduleDate = date,
+				ShiftEndTime = dateTime,
+				PersonId = personId
+			});
+			Target.Handle(new PersonOutOfAdherenceEvent
+			{
+				ScheduleDate = date,
+				ShiftEndTime = dateTime,
+				PersonId = personId
+			});
+			Target.Handle(new PersonShiftEndEvent
+			{
+				ScheduleDate = date,
+				PersonId = personId,
+				ShiftEndTime = dateTime
+			});
+			Persister.PersistedModel.ShiftEndTime.Should().Be(dateTime);
+		}
 	}
 }

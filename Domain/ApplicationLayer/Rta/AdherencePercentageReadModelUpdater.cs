@@ -28,7 +28,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta
 				{
 					ScheduleDate = @event.ScheduleDate,
 					Timestamp = @event.Timestamp, 
-					InAdherence = true
+					InAdherence = true,
+					ShiftEndTime = @event.ShiftEndTime
 				}, 
 				m => m.IsLastTimeInAdherence = true);
 		}
@@ -42,7 +43,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta
 				{
 					ScheduleDate = @event.ScheduleDate,
 					Timestamp = @event.Timestamp, 
-					InAdherence = false
+					InAdherence = false,
+					ShiftEndTime = @event.ShiftEndTime
 				}, 
 				m => m.IsLastTimeInAdherence = false);
 		}
@@ -56,7 +58,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta
 				{
 					ScheduleDate = @event.ScheduleDate,
 					Timestamp = @event.ShiftEndTime,
-					ShiftEnded = true
+					ShiftEnded = true,
+					ShiftEndTime = @event.ShiftEndTime
 				},
 				m => m.ShiftHasEnded = true);
 		}
@@ -71,6 +74,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta
 					Date = new DateOnly(readModelState.ScheduleDate),
 					PersonId = personId,
 					LastTimestamp = readModelState.Timestamp,
+					ShiftEndTime = readModelState.ShiftEndTime
 				};
 				model.State = new[] { readModelState };
 			}

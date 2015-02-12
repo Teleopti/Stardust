@@ -13,5 +13,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Events
 		public Guid TeamId { get; set; }
 		public Guid SiteId { get; set; }
 		public DateTime ScheduleDate { get; set; }
+		public DateTime ShiftEndTime { get; set; }
 	}
 }

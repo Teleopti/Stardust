@@ -49,7 +49,10 @@ namespace Teleopti.Ccc.TestCommon
 
 		public AdherencePercentageReadModel Get(DateOnly date, Guid personId)
 		{
-			throw new NotImplementedException();
+			if (PersistedModel == null) return null;
+			if (PersistedModel.BelongsToDate == date && PersistedModel.PersonId.Equals(personId))
+				return PersistedModel;
+			return null;
 		}
 
 		public bool HasData()
@@ -57,7 +60,7 @@ namespace Teleopti.Ccc.TestCommon
 			return PersistedModel != null;
 		}
 
-		public AdherencePercentageReadModel PersistedModel { get { return PersistedModels.First(); }}
+		public AdherencePercentageReadModel PersistedModel { get { return PersistedModels.FirstOrDefault(); }}
 		public IList<AdherencePercentageReadModel> PersistedModels { get; private set; }
 
 		public void Clear()

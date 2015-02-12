@@ -26,6 +26,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta
 		public DateTime Timestamp { get; set; }
 		public bool? InAdherence { get; set; }
 		public bool? ShiftEnded { get; set; }
+		public DateTime ShiftEndTime { get; set; }
 	}
 
 }
