@@ -194,7 +194,7 @@ Teleopti.MyTimeWeb.Request.ShiftTradeBulletinBoardViewModel = function(ajax) {
 	self.keepSelectedAgentVisible = function() {
 		if (self.agentChoosed() != null && self.possibleTradeSchedules() != null) {
 			$.each(self.possibleTradeSchedules(), function(index, value) {
-				value.isVisible(value.agentName == self.agentChoosed().agentName);
+				value.isVisible(value.personId == self.agentChoosed().personId);
 			});
 		}
 	}
