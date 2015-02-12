@@ -17,8 +17,8 @@ if exist "%ROOTDIR%\Teleopti.Support.Tool\Teleopti.Support.Tool.csproj" %MSBUILD
 ::get a fresh Settings.txt
 COPY "%masterSettings%" "%MySettings%"
 ECHO. >> "%MySettings%"
-ECHO $(FeatureToggle)^|%ROOTDIR%\Domain\FeatureFlags\toggles.txt>>"%MySettings%"
-ECHO $(nhibconfpath)^|%ROOTDIR%\nhib>>"%MySettings%"
+::ECHO $(FeatureToggle)^|%ROOTDIR%\Domain\FeatureFlags\toggles.txt>>"%MySettings%"
+::ECHO $(nhibconfpath)^|%ROOTDIR%\nhib>>"%MySettings%"
 ECHO $(DB_CCC7)^|%CCC7DB%>>"%MySettings%"
 ECHO $(DB_ANALYTICS)^|%AnalyticsDB%>>"%MySettings%"
 ECHO $(AS_DATABASE)^|%AnalyticsDB%>>"%MySettings%"
