@@ -106,7 +106,6 @@ namespace Teleopti.Analytics.Etl.ServiceLogic
 		private bool RunJob(IJob jobToRun, int scheduleId, IJobLogRepository repository)
 		{
 			IList<IJobStep> jobStepsNotToRun = new List<IJobStep>();
-			IList<IJobResult> jobResultCollection = new List<IJobResult>();
 			IRunController runController = new RunController((IRunControllerRepository)repository);
 			IEtlRunningInformation etlRunningInformation;
 			if (runController.CanIRunAJob(out etlRunningInformation))
@@ -119,6 +118,7 @@ namespace Teleopti.Analytics.Etl.ServiceLogic
 					var datasources = jobHelper.DataSourceContainers;
 					foreach (var dataSourceContainer in datasources)
 					{
+						IList<IJobResult> jobResultCollection = new List<IJobResult>();
 						jobHelper.SelectDataSourceContainer(dataSourceContainer.DataSourceName);
 						IJobRunner jobRunner = new JobRunner();
 						IList<IJobResult> jobResults = jobRunner.Run(jobToRun, jobResultCollection, jobStepsNotToRun);
