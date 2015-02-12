@@ -27,7 +27,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta
 
 		public AdherencePercentageModel ForToday(Guid personId)
 		{
-			var readModel = _adherencePercentageReadModelPersister.Get(new DateOnly(_now.UtcDateTime()), personId);
+			var readModel = _adherencePercentageReadModelPersister.Get(_now.UtcDateTime(), personId);
 
 			if (readModel == null || !isValid(readModel))
 				return null;

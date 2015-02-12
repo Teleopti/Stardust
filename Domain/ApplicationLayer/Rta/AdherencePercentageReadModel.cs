@@ -17,6 +17,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta
 		public bool ShiftHasEnded { get; set; }
 
 		public IEnumerable<AdherencePercentageReadModelState> State { get; set; }
+		public DateTime ShiftEndTime { get; set; }
 	}
 
 	public class AdherencePercentageReadModelState

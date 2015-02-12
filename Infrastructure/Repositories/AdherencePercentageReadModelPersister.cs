@@ -3,7 +3,6 @@ using System.Linq;
 using NHibernate;
 using NHibernate.Transform;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta;
-using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Infrastructure.LiteUnitOfWork;
 using Teleopti.Interfaces;
 using Teleopti.Interfaces.Domain;
@@ -90,7 +89,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 				.ExecuteUpdate();
 		}
 
-		public AdherencePercentageReadModel Get(DateOnly date, Guid personId)
+		public AdherencePercentageReadModel Get(DateTime dateTime, Guid personId)
 		{
 			var result = _unitOfWork.Current().CreateSqlQuery(
 				"SELECT " +
@@ -114,7 +113,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 				.AddScalar("ShiftHasEnded", NHibernateUtil.Boolean)
 				.AddScalar("StateJson", NHibernateUtil.StringClob)
 				.SetGuid("PersonId", personId)
-				.SetDateTime("Date", date)
+				.SetDateTime("Date", dateTime)
 				.SetResultTransformer(Transformers.AliasToBean(typeof(internalModel)))
 				.List<internalModel>()
 				.SingleOrDefault();

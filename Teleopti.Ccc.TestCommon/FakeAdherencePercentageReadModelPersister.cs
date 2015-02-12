@@ -1,5 +1,8 @@
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta;
+using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.TestCommon
@@ -8,24 +11,39 @@ namespace Teleopti.Ccc.TestCommon
 	{
 		public FakeAdherencePercentageReadModelPersister()
 		{
+			PersistedModels = new List<AdherencePercentageReadModel>();
 		}
 
-		public FakeAdherencePercentageReadModelPersister(AdherencePercentageReadModel model)
+		public FakeAdherencePercentageReadModelPersister(AdherencePercentageReadModel model) : this()
 		{
 			Persist(model);
+		}
+		
+		public FakeAdherencePercentageReadModelPersister(IEnumerable<AdherencePercentageReadModel> models) : this()
+		{
+			models.ForEach(Persist);
 		}
 
 		public void Persist(AdherencePercentageReadModel model)
 		{
-			PersistedModel = model;
+			PersistedModels.Add(model);
 		}
 
-		public AdherencePercentageReadModel Get(DateOnly date, Guid personId)
+		public AdherencePercentageReadModel Get(DateTime dateTime, Guid personId)
 		{
-			if (PersistedModel == null)
+			if (!PersistedModels.Any())
 				return null;
-			if (PersistedModel.BelongsToDate == date && PersistedModel.PersonId.Equals(personId))
-				return PersistedModel;
+			var models = PersistedModels.Where(x => dateTime.Date >= x.BelongsToDate
+				&& dateTime.Date <= x.BelongsToDate.AddDays(1)
+				&& personId.Equals(x.PersonId))
+				.ToList();
+			foreach (var model in models.OrderBy(x => x.ShiftEndTime))
+			{
+				if (dateTime <= model.ShiftEndTime)
+					return model;
+				if (model.BelongsToDate.Date.Equals(dateTime.Date))
+					return model;
+			}
 			return null;
 		}
 
@@ -34,11 +52,12 @@ namespace Teleopti.Ccc.TestCommon
 			return PersistedModel != null;
 		}
 
-		public AdherencePercentageReadModel PersistedModel { get; private set; }
+		public AdherencePercentageReadModel PersistedModel { get { return PersistedModels.First(); }}
+		public IList<AdherencePercentageReadModel> PersistedModels { get; private set; }
 
 		public void Clear()
 		{
-			PersistedModel = null;
+			PersistedModels.Clear();
 		}
 	}
 }

@@ -89,7 +89,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta
 		[Test]
 		public void ShouldReturnNullIfNoDataIsFound()
 		{
-			var target = new CalculateAdherence(new Now(), new FakeAdherencePercentageReadModelPersister(null), new ThreadCulture(), new UtcTimeZone());
+			var target = new CalculateAdherence(new Now(), new FakeAdherencePercentageReadModelPersister(), new ThreadCulture(), new UtcTimeZone());
 
 			var result = target.ForToday(Guid.NewGuid());
 
@@ -206,5 +206,60 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta
 			result.LastTimestamp.Should().Be(TimeZoneInfo.ConvertTimeFromUtc(model.LastTimestamp.Value, new HawaiiTimeZone().TimeZone()).ToShortTimeString());
 		}
 
+		[Test]
+		public void ShouldCalculateModelSpanOverUtcMidnight()
+		{
+			var model = new AdherencePercentageReadModel
+			{
+				PersonId = Guid.NewGuid(),
+				Date = "2014-12-24".Utc(),
+				TimeInAdherence = TimeSpan.FromHours(1),
+				TimeOutOfAdherence = TimeSpan.FromHours(1),
+				ShiftHasEnded = true,
+				ShiftEndTime = "2014-12-25 02:00".Utc(),
+				IsLastTimeInAdherence = null
+			};
+
+			var target = new CalculateAdherence(new ThisIsNow("2014-12-25 02:00"), new FakeAdherencePercentageReadModelPersister(new []{model}), new ThreadCulture(), new UtcTimeZone());
+
+			var result = target.ForToday(model.PersonId);
+
+			result.AdherencePercent.Should().Be.EqualTo(50);
+		}
+
+		[Test]
+		public void ShouldGetCorrectModel()
+		{
+			var personId = Guid.NewGuid();
+			var model1 = new AdherencePercentageReadModel
+			{
+				PersonId = personId,
+				Date = "2014-12-24".Utc(),
+				TimeInAdherence = TimeSpan.FromHours(1),
+				TimeOutOfAdherence = TimeSpan.FromHours(1),
+				ShiftHasEnded = true,
+				ShiftEndTime = "2014-12-25 02:00".Utc(),
+				IsLastTimeInAdherence = null
+			};
+
+			var model2 = new AdherencePercentageReadModel
+			{
+				PersonId = personId,
+				Date = "2014-12-25".Utc(),
+				TimeInAdherence = TimeSpan.FromHours(4),
+				TimeOutOfAdherence = TimeSpan.FromHours(1),
+				ShiftHasEnded = true,
+				ShiftEndTime = "2014-12-25 17:00".Utc(),
+				IsLastTimeInAdherence = null
+			};
+
+			var target1 = new CalculateAdherence(new ThisIsNow("2014-12-25 02:00"), new FakeAdherencePercentageReadModelPersister(new []{model1, model2} ), new ThreadCulture(), new UtcTimeZone());
+			var result1 = target1.ForToday(personId);
+			result1.AdherencePercent.Should().Be.EqualTo(50);
+			
+			var target2 = new CalculateAdherence(new ThisIsNow("2014-12-25 03:00"), new FakeAdherencePercentageReadModelPersister(new[] { model1, model2 }), new ThreadCulture(), new UtcTimeZone());
+			var result2 = target2.ForToday(personId);
+			result2.AdherencePercent.Should().Be.EqualTo(80);
+		}
 	}
 }
