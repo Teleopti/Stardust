@@ -77,6 +77,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta
 			else
 			{
 				model.State = model.State.Concat(new[] {readModelState});
+				if (readModelState.Timestamp - model.LastTimestamp.GetValueOrDefault() > TimeSpan.Zero)
+					model.LastTimestamp = readModelState.Timestamp;
 				calculate(model);
 			}
 			mutate(model);
