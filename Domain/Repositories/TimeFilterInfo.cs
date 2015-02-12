@@ -9,5 +9,6 @@ namespace Teleopti.Ccc.Domain.Repositories
 		public IEnumerable<DateTimePeriod> EndTimes { get; set; } 
 		public bool IsDayOff { get; set; }
 		public bool IsEmptyDay { get; set; }
+		public bool IsWorkingDay { get; set; }
 	}
 }

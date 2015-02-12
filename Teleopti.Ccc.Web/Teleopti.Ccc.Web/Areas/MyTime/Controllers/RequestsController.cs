@@ -168,7 +168,8 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 				TeamIdList = allTeamIds,
 				Paging = paging,
 				TimeFilter = _timeFilterHelper.GetFilter(selectedDate, filter.FilteredStartTimes, filter.FilteredEndTimes, filter.IsDayOff,filter.IsEmptyDay),
-				SearchNameText = filter.SearchNameText
+				SearchNameText = filter.SearchNameText,
+				TimeSortOrder = filter.TimeSortOrder
 			};
 			return Json(_requestsViewModelFactory.CreateShiftTradeScheduleViewModel(data), JsonRequestBehavior.AllowGet);
 		}

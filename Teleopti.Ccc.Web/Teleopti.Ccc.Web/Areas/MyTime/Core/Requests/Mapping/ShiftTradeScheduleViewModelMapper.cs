@@ -48,7 +48,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping
 			}
 
 			var possibleTradePersons = _possibleShiftTradePersonsProvider.RetrievePersons(data);
-			return getShiftTradeScheduleViewModel(data.Paging, data.ShiftTradeDate, data.TimeFilter, possibleTradePersons);
+			return getShiftTradeScheduleViewModel(data.Paging, data.ShiftTradeDate, data.TimeFilter,data.TimeSortOrder, possibleTradePersons);
 		}
 
 		private IEnumerable<IShiftExchangeOffer> getMatchShiftExchangeOffers(IEnumerable<IPerson> persons, DateOnly shiftTradeDate)
@@ -152,12 +152,12 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping
 		}
 
 		private ShiftTradeScheduleViewModel getShiftTradeScheduleViewModel(Paging paging, DateOnly shiftTradeDate,
-			TimeFilterInfo timeFilter, DatePersons possibleTradePersons)
+			TimeFilterInfo timeFilter,string timeSortOrder, DatePersons possibleTradePersons)
 		{
 			var myScheduleDayReadModel = _shiftTradeRequestProvider.RetrieveMySchedule(shiftTradeDate);
 			var possibleTradeSchedule = timeFilter == null
-				? getPossibleTradeSchedules(possibleTradePersons, paging).ToList()
-				: getFilteredTimesPossibleTradeSchedules(possibleTradePersons, paging, timeFilter).ToList();
+				? getPossibleTradeSchedules(possibleTradePersons, paging, timeSortOrder).ToList()
+				: getFilteredTimesPossibleTradeSchedules(possibleTradePersons, paging, timeFilter, timeSortOrder).ToList();
 
 			return getShiftTradeScheduleViewModel(paging, myScheduleDayReadModel, possibleTradeSchedule, shiftTradeDate);
 		}
@@ -175,12 +175,12 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping
 		}
 
 		private IEnumerable<ShiftTradeAddPersonScheduleViewModel> getPossibleTradeSchedules(DatePersons datePersons,
-			Paging paging)
+			Paging paging,string timeSortOrder)
 		{
 			if (datePersons.Persons.Any())
 			{
 				var schedules = _shiftTradeRequestProvider.RetrievePossibleTradeSchedules(datePersons.Date, datePersons.Persons,
-					paging);
+					paging, timeSortOrder);
 				return _shiftTradePersonScheduleViewModelMapper.Map(schedules);
 			}
 
@@ -188,12 +188,12 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping
 		}
 
 		private IEnumerable<ShiftTradeAddPersonScheduleViewModel> getFilteredTimesPossibleTradeSchedules(
-			DatePersons datePersons, Paging paging, TimeFilterInfo timeFilter)
+			DatePersons datePersons, Paging paging, TimeFilterInfo timeFilter, string timeSortOrder)
 		{
 			if (datePersons.Persons.Any())
 			{
 				var schedules = _shiftTradeRequestProvider.RetrievePossibleTradeSchedulesWithFilteredTimes(datePersons.Date,
-					datePersons.Persons, paging, timeFilter);
+					datePersons.Persons, paging, timeFilter, timeSortOrder);
 				return _shiftTradePersonScheduleViewModelMapper.Map(schedules);
 			}
 

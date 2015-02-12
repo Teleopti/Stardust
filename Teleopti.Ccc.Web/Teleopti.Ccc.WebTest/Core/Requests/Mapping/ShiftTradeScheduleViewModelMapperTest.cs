@@ -109,7 +109,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 			var scheduleReadModels = new List<IPersonScheduleDayReadModel>();
 
 			_possibleShiftTradePersonsProvider.Stub(x => x.RetrievePersons(data)).Return(persons);
-			_shiftTradeRequestProvider.Stub(x => x.RetrievePossibleTradeSchedules(persons.Date, persons.Persons, data.Paging))
+			_shiftTradeRequestProvider.Stub(x => x.RetrievePossibleTradeSchedules(persons.Date, persons.Persons, data.Paging, null))
 				.Return(scheduleReadModels);
 			_shiftTradePersonScheduleViewModelMapper.Stub(x => x.Map(scheduleReadModels)).Return(possibleTradeScheduleViewModels);
 
@@ -193,7 +193,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 
 			_possibleShiftTradePersonsProvider.Stub(x => x.RetrievePersons(data)).Return(persons);
 			_shiftTradeRequestProvider.Stub(
-				x => x.RetrievePossibleTradeSchedulesWithFilteredTimes(persons.Date, persons.Persons, data.Paging, data.TimeFilter))
+				x => x.RetrievePossibleTradeSchedulesWithFilteredTimes(persons.Date, persons.Persons, data.Paging, data.TimeFilter, null))
 				.Return(scheduleReadModels);
 			_shiftTradePersonScheduleViewModelMapper.Stub(x => x.Map(scheduleReadModels)).Return(possibleTradeScheduleViewModels);
 
@@ -239,7 +239,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 			var scheduleReadModels = new List<IPersonScheduleDayReadModel>();
 
 			_possibleShiftTradePersonsProvider.Stub(x => x.RetrievePersons(data)).Return(persons);
-			_shiftTradeRequestProvider.Stub(x => x.RetrievePossibleTradeSchedules(persons.Date, persons.Persons, data.Paging))
+			_shiftTradeRequestProvider.Stub(x => x.RetrievePossibleTradeSchedules(persons.Date, persons.Persons, data.Paging, null))
 				.Return(scheduleReadModels);
 			_shiftTradePersonScheduleViewModelMapper.Stub(x => x.Map(scheduleReadModels)).Return(possibleTradeScheduleViewModels);
 
@@ -265,7 +265,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 			var scheduleReadModels = new List<IPersonScheduleDayReadModel>();
 
 			_possibleShiftTradePersonsProvider.Stub(x => x.RetrievePersons(data)).Return(persons);
-			_shiftTradeRequestProvider.Stub(x => x.RetrievePossibleTradeSchedules(persons.Date, persons.Persons, data.Paging))
+			_shiftTradeRequestProvider.Stub(x => x.RetrievePossibleTradeSchedules(persons.Date, persons.Persons, data.Paging, null))
 				.Return(scheduleReadModels);
 			_shiftTradePersonScheduleViewModelMapper.Stub(x => x.Map(scheduleReadModels)).Return(possibleTradeScheduleViewModels);
 

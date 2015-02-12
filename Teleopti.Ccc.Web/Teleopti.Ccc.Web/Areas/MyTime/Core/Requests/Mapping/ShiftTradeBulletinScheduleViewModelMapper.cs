@@ -35,8 +35,8 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping
 
 			var mySchedule = _shiftTradePersonScheduleViewModelMapper.Map(myScheduleDayReadModel, true);
 			var possibleTradeSchedule = data.TimeFilter == null
-				? getPossibleTradeSchedules(possibleTradePersons, data.Paging).ToList()
-				: getFilteredTimesPossibleTradeSchedules(possibleTradePersons, data.Paging, data.TimeFilter).ToList();
+				? getPossibleTradeSchedules(possibleTradePersons, data.Paging, data.TimeSortOrder).ToList()
+				: getFilteredTimesPossibleTradeSchedules(possibleTradePersons, data.Paging, data.TimeFilter, data.TimeSortOrder).ToList();
 			var possibleTradeScheduleNum = possibleTradeSchedule.Any() ? possibleTradeSchedule.First().Total : 0;
 			var pageCount = possibleTradeScheduleNum%data.Paging.Take != 0
 				? possibleTradeScheduleNum/data.Paging.Take + 1
@@ -54,22 +54,22 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping
 			};
 		}
 
-		private IEnumerable<ShiftTradeAddPersonScheduleViewModel> getPossibleTradeSchedules(DatePersons datePersons, Paging paging)
+		private IEnumerable<ShiftTradeAddPersonScheduleViewModel> getPossibleTradeSchedules(DatePersons datePersons, Paging paging, string timeSortOrder)
 		{
 			if (datePersons.Persons.Any())
 			{
-				var schedules = _shiftTradeRequestProvider.RetrievePossibleTradeSchedules(datePersons.Date, datePersons.Persons, paging);
+				var schedules = _shiftTradeRequestProvider.RetrievePossibleTradeSchedules(datePersons.Date, datePersons.Persons, paging, timeSortOrder);
 				return _shiftTradePersonScheduleViewModelMapper.Map(schedules);
 			}
 
 			return new List<ShiftTradeAddPersonScheduleViewModel>();
 		}
 
-		private IEnumerable<ShiftTradeAddPersonScheduleViewModel> getFilteredTimesPossibleTradeSchedules(DatePersons datePersons, Paging paging, TimeFilterInfo timeFilter )
+		private IEnumerable<ShiftTradeAddPersonScheduleViewModel> getFilteredTimesPossibleTradeSchedules(DatePersons datePersons, Paging paging, TimeFilterInfo timeFilter, string timeSortOrder)
 		{
 			if (datePersons.Persons.Any())
 			{
-				var schedules = _shiftTradeRequestProvider.RetrievePossibleTradeSchedulesWithFilteredTimes(datePersons.Date, datePersons.Persons, paging, timeFilter);
+				var schedules = _shiftTradeRequestProvider.RetrievePossibleTradeSchedulesWithFilteredTimes(datePersons.Date, datePersons.Persons, paging, timeFilter, timeSortOrder);
 				return _shiftTradePersonScheduleViewModelMapper.Map(schedules);
 			}
 

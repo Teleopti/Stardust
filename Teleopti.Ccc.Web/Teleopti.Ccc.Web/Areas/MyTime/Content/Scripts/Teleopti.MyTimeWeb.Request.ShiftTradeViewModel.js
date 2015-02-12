@@ -8,7 +8,6 @@
 /// <reference path="Teleopti.MyTimeWeb.Request.List.js"/>
 /// <reference path="Teleopti.MyTimeWeb.Request.AddShiftTradeRequest.js"/>
 
-
 Teleopti.MyTimeWeb.Request.ShiftTradeViewModel = function(ajax) {
 	var self = this;
 	self.layerCanvasPixelWidth = ko.observable();
@@ -430,7 +429,8 @@ Teleopti.MyTimeWeb.Request.ShiftTradeViewModel = function(ajax) {
 				filteredEndTimes: self.filteredEndTimesText().join(","),
 				isDayOff: self.isDayoffFiltered(),
 				Take: take,
-				Skip: skip
+				Skip: skip,
+				TimeSortOrder: self.TimeSortOrder()
 			},
 			beforeSend: function() {
 				self.IsLoading(true);		
@@ -794,7 +794,7 @@ Teleopti.MyTimeWeb.Request.ShiftTradeViewModel = function(ajax) {
 		self.filteredStartTimesText.removeAll();
 		self.filteredEndTimesText.removeAll();
 
-		$.each(self.filterStartTimeList(), function(idx, timeInFilter) {
+		$.each(self.filterStartTimeList(), function (idx, timeInFilter) {
 			if (timeInFilter.isChecked()) {
 				if (timeInFilter.isDayOff()) {
 					self.isDayoffFiltered(true);
@@ -809,7 +809,7 @@ Teleopti.MyTimeWeb.Request.ShiftTradeViewModel = function(ajax) {
 			}
 		});
 
-		$.each(self.filterEndTimeList(), function(idx, timeInFilter) {
+		$.each(self.filterEndTimeList(), function (idx, timeInFilter) {
 			if (timeInFilter.isChecked()) {
 				var timeText = timeInFilter.start + ":00-" + timeInFilter.end + ":00";
 				self.filteredEndTimesText.push(timeText);
@@ -818,7 +818,7 @@ Teleopti.MyTimeWeb.Request.ShiftTradeViewModel = function(ajax) {
 	});
 
 	self.filterTime.subscribe(function () {
-		if (self.filterStartTimeList().length == 13) {//12 time ranges and 1 dayoff
+		if (!self.IsLoading()) {
 			self.prepareLoad();
 			self.loadSchedule(self.getDateWithFormat(), self.selectedTeamInternal());
 		}
@@ -875,13 +875,10 @@ Teleopti.MyTimeWeb.Request.ShiftTradeViewModel = function(ajax) {
 				type: 'GET',
 				contentType: 'application/json; charset=utf-8',
 				success: function(data) {
-					//set dayoff only in start time filter
-					if (data != null) {
+					////set dayoff only in start time filter
+					if (data != null) {					
 						self.setTimeFilters(data.HourTexts);
-						$.each(data.DayOffShortNames, function(idx, name) {
-							if (idx < data.DayOffShortNames.length - 1) dayOffNames += name + ", ";
-							else dayOffNames += name;
-						});
+						dayOffNames += data.DayOffShortNames.join();
 						self.filterStartTimeList.push(new Teleopti.MyTimeWeb.Request.FilterStartTimeView(dayOffNames, 0, 24, false, true));
 					}
 				}
@@ -893,4 +890,36 @@ Teleopti.MyTimeWeb.Request.ShiftTradeViewModel = function(ajax) {
 		self.openPeriodStartDate(moment(now).add('days', relativeStart));
 		self.openPeriodEndDate(moment(now).add('days', relativeEnd));
 	};
+
+
+	self.displaySortOrderTemplateList = ko.observable([
+		{ Description: '<span class="glyphicon glyphicon-arrow-up"></span>', Value: 'start asc', IsStart:true },
+		{ Description: '<span class="glyphicon glyphicon-arrow-up"></span>', Value: 'end asc', IsStart: false },
+		{ Description: '<span class="glyphicon glyphicon-arrow-down"></span>', Value: 'start desc', IsStart: true },
+		{ Description: '<span class="glyphicon glyphicon-arrow-down"></span>', Value: 'end desc', IsStart: false }
+	]);
+
+	
+	self.TimeSortOrder = ko.observable(null);
+
+	self.updateTimeSortOrder = function (data) {
+		if (self.TimeSortOrder() == data.Value) {
+			self.TimeSortOrder(null);
+		} else {
+			self.TimeSortOrder(data.Value);
+		}
+		console.log("Set starttimesortorder to " + self.TimeSortOrder());
+	};
+
+	self.isSortingTimeActive = function (value) {
+		return self.TimeSortOrder() == value.Value;
+	}
+
+	self.TimeSortOrder.subscribe(function() {
+		if (!self.IsLoading()) {
+			self.prepareLoad();
+			self.loadSchedule(self.getDateWithFormat(), self.selectedTeamInternal());
+		}
+	});
+
 };

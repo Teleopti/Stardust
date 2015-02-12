@@ -90,7 +90,8 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider
 						StartTimes = convertStringToUtcTimes(selectedDate, filterStartTimes, false),
 						EndTimes = convertStringToUtcTimes(selectedDate, filterEndTimes, false),
 						IsDayOff = isDayOff,
-						IsEmptyDay =  isEmptyDay
+						IsEmptyDay =  isEmptyDay,
+						IsWorkingDay = false
 					};
 				}
 				else
@@ -105,7 +106,8 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider
 					StartTimes = convertStringToUtcTimes(selectedDate, filterStartTimes, true),
 					EndTimes = convertStringToUtcTimes(selectedDate, filterEndTimes, true, true),
 					IsDayOff = isDayOff,
-					IsEmptyDay = isEmptyDay
+					IsEmptyDay = isEmptyDay,
+					IsWorkingDay = true
 				};
 			}
 			return filter;

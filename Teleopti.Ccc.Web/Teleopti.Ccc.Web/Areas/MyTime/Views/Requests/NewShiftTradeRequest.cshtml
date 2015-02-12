@@ -50,13 +50,24 @@
 							@Resources.StartTime
 							<b class="caret"></b>
 						</a>
-						<ul class="dropdown-menu filter-time-dropdown-form" role="menu" data-bind="foreach: filterStartTimeList">
+						<ul class="dropdown-menu filter-time-dropdown-form" role="menu" >
 							<li>
-								<label class="checkbox filter-time-text">
-									<input type="checkbox" data-bind="checked: isChecked">
+								<div class="input-group start-time-sort-order">
+									<div class="btn-group" role="group" data-bind="foreach: displaySortOrderTemplateList">
+										<!-- ko if: IsStart -->
+										<div class="btn btn-info btn-sm" data-bind="html: Description, css: { active : $parent.isSortingTimeActive( $data)}, click : $parent.updateTimeSortOrder, value: Value"></div>
+										<!-- /ko -->
+									</div>
+								</div>
+							</li>
+							<!-- ko foreach: filterStartTimeList -->
+							<li>
+								<label class="checkbox filter-time-text">									
+									<input type="checkbox" data-bind="checked: isChecked">									
 									<span data-bind="text: text"></span>
 								</label>
 							</li>
+							<!--/ko-->
 						</ul>
 					</div>
 				</div>
@@ -66,13 +77,24 @@
 							@Resources.EndTime
 							<b class="caret"></b>
 						</a>
-						<ul class="dropdown-menu filter-time-dropdown-form" role="menu" data-bind="foreach: filterEndTimeList">
+						<ul class="dropdown-menu filter-time-dropdown-form" role="menu">
+							<li>
+								<div class="input-group end-time-sort-order">
+									<div class="btn-group" role="group" data-bind="foreach: displaySortOrderTemplateList">
+										<!-- ko if: !IsStart -->
+										<div class="btn btn-info btn-sm" data-bind="html: Description, css: { active : $parent.isSortingTimeActive( $data)}, click : $parent.updateTimeSortOrder, value: Value"></div>
+										<!-- /ko -->
+									</div>
+								</div>
+							</li>
+							<!-- ko foreach: filterEndTimeList -->
 							<li>
 								<label class="checkbox filter-time-text">
 									<input type="checkbox" data-bind="checked: isChecked">
 									<span data-bind="text: text"></span>
 								</label>
 							</li>
+							<!--/ko-->
 						</ul>
 					</div>
 				</div>

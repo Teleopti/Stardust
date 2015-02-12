@@ -112,7 +112,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 				IsDayOff = true
 			};
 
-			scheduleDayReadModelFinder.Stub(x => x.ForPersonsByFilteredTimes(date, new[] { person1.Id.Value, person2.Id.Value }, new Paging(), filterInfo)).Return(scheduleReadModels);
+			scheduleDayReadModelFinder.Stub(x => x.ForPersons(date, new[] { person1.Id.Value, person2.Id.Value }, new Paging(), filterInfo)).Return(scheduleReadModels);
 
 			var target = new ShiftTradeRequestProvider(MockRepository.GenerateMock<ILoggedOnUser>(), scheduleDayReadModelFinder, MockRepository.GenerateMock<IPermissionProvider>(), MockRepository.GenerateMock<IToggleManager>());
 

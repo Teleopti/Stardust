@@ -17,6 +17,8 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Models.Requests
 		public TimeFilterInfo TimeFilter { get; set; }
 
 		public string SearchNameText { get; set; }
+
+		public string TimeSortOrder { get; set; }
 	}
 
 }

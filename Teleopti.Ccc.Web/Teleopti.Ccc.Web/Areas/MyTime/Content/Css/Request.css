@@ -482,3 +482,12 @@ border-bottom: 1px solid rgba(255, 255, 255, 0.3);
     from { transform: scale(1) rotate(0deg);}
     to { transform: scale(1) rotate(360deg);}
 }
+.start-time-sort-order .btn-info:hover, .start-time-sort-order .btn-info, .end-time-sort-order .btn-info:hover, .end-time-sort-order .btn-info {
+	background-color: silver;
+	border-color: silver;
+}
+.start-time-sort-order .btn-info.active, .end-time-sort-order .btn-info.active {
+	background-color: #007fff;
+	border-color: #007fff;
+}
+

@@ -43,26 +43,34 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.DataProvider
 		}
 
 		public IEnumerable<IPersonScheduleDayReadModel> RetrievePossibleTradeSchedules(DateOnly date,
-			IEnumerable<IPerson> possibleShiftTradePersons, Paging paging)
+			IEnumerable<IPerson> possibleShiftTradePersons, Paging paging, string timeSortOrder = "")
 		{
-			var personIdList = (from person in possibleShiftTradePersons select person.Id.Value).ToList();
-			return _toggleManager.IsEnabled(Toggles.Request_ShiftTradeWithEmptyDays_28926)
-				? _scheduleDayReadModelFinder.ForPersonsIncludeEmptyDays(date, personIdList, paging)
-				: _scheduleDayReadModelFinder.ForPersons(date, personIdList, paging);
+			var personIdList = (from person in possibleShiftTradePersons  where person.Id.HasValue select person.Id.Value).ToList();
+			
+			if (_toggleManager.IsEnabled(Toggles.Request_ShiftTradeWithEmptyDays_28926))
+			{
+				var timeFilterInfo = new TimeFilterInfo() {IsDayOff = true, IsWorkingDay = true, IsEmptyDay = false};
+				return _scheduleDayReadModelFinder.ForPersons(date, personIdList, paging, timeFilterInfo, timeSortOrder);
+			}
+			else
+			{
+				var timeFilterInfo = new TimeFilterInfo() {IsDayOff = true, IsWorkingDay = true, IsEmptyDay = true};
+				return _scheduleDayReadModelFinder.ForPersons(date, personIdList, paging, timeFilterInfo, timeSortOrder);
+			}			
 		}
 
 		public IEnumerable<IPersonScheduleDayReadModel> RetrieveBulletinTradeSchedules(
-			IEnumerable<string> shiftExchangeOfferIds, Paging paging)
+			IEnumerable<string> shiftExchangeOfferIds, Paging paging, string timeSortOrder = "")
 		{
 			return _scheduleDayReadModelFinder.ForBulletinPersons(shiftExchangeOfferIds, paging);
 		}
 
 		public IEnumerable<IPersonScheduleDayReadModel> RetrievePossibleTradeSchedulesWithFilteredTimes(DateOnly date,
 			IEnumerable<IPerson> possibleShiftTradePersons, Paging paging,
-			TimeFilterInfo filterInfo)
+			TimeFilterInfo filterInfo, string timeSortOrder = "")
 		{
-			var personIdList = (from person in possibleShiftTradePersons select person.Id.Value).ToList();
-			return _scheduleDayReadModelFinder.ForPersonsByFilteredTimes(date, personIdList, paging, filterInfo);
+			var personIdList = (from person in possibleShiftTradePersons where person.Id.HasValue select person.Id.Value).ToList();
+			return _scheduleDayReadModelFinder.ForPersons(date, personIdList, paging, filterInfo, timeSortOrder);
 		}
 
 		public Guid? RetrieveMyTeamId(DateOnly date)

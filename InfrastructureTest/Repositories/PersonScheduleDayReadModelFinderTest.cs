@@ -55,27 +55,76 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 		public void ShouldReturnReadModelsForPersonsAndDaySortedByShiftStart()
 		{
 			_target = new PersonScheduleDayReadModelFinder(CurrentUnitOfWork.Make());
-			var personSortedFirst = Guid.NewGuid();
-			var personSortedSecond = Guid.NewGuid();
-			var personSortedThird = Guid.NewGuid();
+			ISite site = SiteFactory.CreateSimpleSite("d");
+			PersistAndRemoveFromUnitOfWork(site);
+			ITeam team = TeamFactory.CreateSimpleTeam();
+			team.Site = site;
+			team.Description = new Description("sdf");
+			PersistAndRemoveFromUnitOfWork(team);
 
-			using (UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
-			{
-				createAndSaveReadModel(personSortedThird, Guid.NewGuid(), Guid.NewGuid(), new DateTime(2012, 8, 28), 10);
-				createAndSaveReadModel(personSortedFirst, Guid.NewGuid(), Guid.NewGuid(), new DateTime(2012, 8, 28), 7);
-				createAndSaveReadModel(personSortedSecond, Guid.NewGuid(), Guid.NewGuid(), new DateTime(2012, 8, 28), 8);
+			IPerson per1 = PersonFactory.CreatePerson("roger", "kratz");
+			IPerson per2 = PersonFactory.CreatePerson("z", "balog");
+			IPerson per3 = PersonFactory.CreatePerson("a", "balog");
 
-				var result = _target.ForPersons(new DateOnly(2012, 8, 28),
-				                                new[] {personSortedFirst, personSortedSecond, personSortedThird}, new Paging());
+			per1.AddPersonPeriod(new PersonPeriod(new DateOnly(2011, 1, 1), createPersonContract(), team));
+			per2.AddPersonPeriod(new PersonPeriod(new DateOnly(2011, 1, 1), createPersonContract(), team));
+			per3.AddPersonPeriod(new PersonPeriod(new DateOnly(2011, 1, 1), createPersonContract(), team));
 
-				var scheduleReadModels = result as IList<PersonScheduleDayReadModel> ?? result.ToList();
-				Assert.That(scheduleReadModels.ElementAt(0).PersonId, Is.EqualTo(personSortedFirst));
-				Assert.That(scheduleReadModels.ElementAt(1).PersonId, Is.EqualTo(personSortedSecond));
-				Assert.That(scheduleReadModels.ElementAt(2).PersonId, Is.EqualTo(personSortedThird));
-				Assert.That(scheduleReadModels.ElementAt(0).MinStart,Is.EqualTo(new DateTime(2012, 8, 28,7,0,0)));
-			}
-		}		
-		
+			PersistAndRemoveFromUnitOfWork(per1);
+			PersistAndRemoveFromUnitOfWork(per2);
+			PersistAndRemoveFromUnitOfWork(per3);
+
+			createAndSaveReadModel(per1.Id.Value, Guid.NewGuid(), Guid.NewGuid(), new DateTime(2012, 8, 28), 10);
+			createAndSaveReadModel(per2.Id.Value, Guid.NewGuid(), Guid.NewGuid(), new DateTime(2012, 8, 28), 7);
+			createAndSaveReadModel(per3.Id.Value, Guid.NewGuid(), Guid.NewGuid(), new DateTime(2012, 8, 28), 8);
+
+			var result = _target.ForPersons(new DateOnly(2012, 8, 28),
+				new[] {per1.Id.Value, per2.Id.Value, per3.Id.Value}, new Paging() {Skip = 0, Take = 20});
+
+			var scheduleReadModels = result as IList<PersonScheduleDayReadModel> ?? result.ToList();
+			Assert.That(scheduleReadModels.ElementAt(0).PersonId, Is.EqualTo(per2.Id.Value));
+			Assert.That(scheduleReadModels.ElementAt(1).PersonId, Is.EqualTo(per3.Id.Value));
+			Assert.That(scheduleReadModels.ElementAt(2).PersonId, Is.EqualTo(per1.Id.Value));
+			Assert.That(scheduleReadModels.ElementAt(0).MinStart, Is.EqualTo(new DateTime(2012, 8, 28, 7, 0, 0)));
+		}
+
+		[Test]
+		public void ShouldReturnReadModelsForPersonsAndDaySortedByShiftEndDescending()
+		{
+			_target = new PersonScheduleDayReadModelFinder(CurrentUnitOfWork.Make());
+			ISite site = SiteFactory.CreateSimpleSite("d");
+			PersistAndRemoveFromUnitOfWork(site);
+			ITeam team = TeamFactory.CreateSimpleTeam();
+			team.Site = site;
+			team.Description = new Description("sdf");
+			PersistAndRemoveFromUnitOfWork(team);
+
+			IPerson per1 = PersonFactory.CreatePerson("roger", "kratz");
+			IPerson per2 = PersonFactory.CreatePerson("z", "balog");
+			IPerson per3 = PersonFactory.CreatePerson("a", "balog");
+
+			per1.AddPersonPeriod(new PersonPeriod(new DateOnly(2011, 1, 1), createPersonContract(), team));
+			per2.AddPersonPeriod(new PersonPeriod(new DateOnly(2011, 1, 1), createPersonContract(), team));
+			per3.AddPersonPeriod(new PersonPeriod(new DateOnly(2011, 1, 1), createPersonContract(), team));
+
+			PersistAndRemoveFromUnitOfWork(per1);
+			PersistAndRemoveFromUnitOfWork(per2);
+			PersistAndRemoveFromUnitOfWork(per3);
+
+			createAndSaveReadModel(per1.Id.Value, Guid.NewGuid(), Guid.NewGuid(), new DateTime(2012, 8, 28), 10, 14);
+			createAndSaveReadModel(per2.Id.Value, Guid.NewGuid(), Guid.NewGuid(), new DateTime(2012, 8, 28), 7, 15);
+			createAndSaveReadModel(per3.Id.Value, Guid.NewGuid(), Guid.NewGuid(), new DateTime(2012, 8, 28), 8, 13);
+
+			var result = _target.ForPersons(new DateOnly(2012, 8, 28),
+				new[] {per1.Id.Value, per2.Id.Value, per3.Id.Value}, new Paging(), timeSortOrder: "End DESC");
+
+			var scheduleReadModels = result as IList<PersonScheduleDayReadModel> ?? result.ToList();
+			Assert.That(scheduleReadModels.ElementAt(0).PersonId, Is.EqualTo(per2.Id.Value));
+			Assert.That(scheduleReadModels.ElementAt(1).PersonId, Is.EqualTo(per1.Id.Value));
+			Assert.That(scheduleReadModels.ElementAt(2).PersonId, Is.EqualTo(per3.Id.Value));
+			Assert.That(scheduleReadModels.ElementAt(0).MinStart, Is.EqualTo(new DateTime(2012, 8, 28, 7, 0, 0)));
+		}
+
 		//[Test]
 		//public void ShouldReturnReadModelsForBulletinPersonsAndDaySortedByShiftStart()
 		//{
@@ -130,8 +179,8 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			createAndSaveReadModel((Guid) per2.Id, (Guid) team.Id, (Guid) site.BusinessUnit.Id, new DateTime(2012, 8, 28), 8);
 			createAndSaveReadModel((Guid) per3.Id, (Guid) team.Id, (Guid) site.BusinessUnit.Id, new DateTime(2012, 8, 28), 10);
 
-			var result = _target.ForPersonsIncludeEmptyDays(new DateOnly(2012, 8, 28),
-				new[] {(Guid) per1.Id, (Guid) per2.Id, (Guid) per3.Id}, new Paging());
+			var result = _target.ForPersons(new DateOnly(2012, 8, 28),
+				new[] { (Guid)per1.Id, (Guid)per2.Id, (Guid)per3.Id }, new Paging() { Skip = 0, Take = 20 });
 
 			var scheduleReadModels = result as IList<PersonScheduleDayReadModel> ?? result.ToList();
 			Assert.That(scheduleReadModels.ElementAt(2).PersonId, Is.EqualTo(per1.Id));
@@ -194,7 +243,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			persister.UpdateReadModels(new DateOnlyPeriod(new DateOnly(date), new DateOnly(date)), personId, businessUnitId, null, false);
 		}
 
-		private void createAndSaveReadModel(Guid personId, Guid teamId, Guid businessUnitId, DateTime date, int shiftStartHour)
+		private void createAndSaveReadModel(Guid personId, Guid teamId, Guid businessUnitId, DateTime date, int shiftStartHour, int? shiftEndHour = null)
 		{
 			var model = new PersonScheduleDayReadModel
 			{
@@ -208,7 +257,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			if (shiftStartHour >= 0)
 			{
 				model.Start = date.AddHours(shiftStartHour);
-				model.End = date.AddHours(shiftStartHour + 8);
+				model.End = date.AddHours( shiftEndHour.HasValue?shiftEndHour.Value: (shiftStartHour + 8)  );
 			}
 			else
 			{

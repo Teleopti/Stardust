@@ -9,11 +9,11 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.DataProvider
 	{
 		IWorkflowControlSet RetrieveUserWorkflowControlSet();
 		IPersonScheduleDayReadModel RetrieveMySchedule(DateOnly date);
-		
-		IEnumerable<IPersonScheduleDayReadModel> RetrievePossibleTradeSchedules(DateOnly date, IEnumerable<IPerson> possibleShiftTradePersons, Paging paging);
-		IEnumerable<IPersonScheduleDayReadModel> RetrieveBulletinTradeSchedules(IEnumerable<string> shiftExchangeOfferIds, Paging paging);
-		IEnumerable<IPersonScheduleDayReadModel> RetrievePossibleTradeSchedulesWithFilteredTimes(DateOnly date, IEnumerable<IPerson> possibleShiftTradePersons,
-																															  Paging paging, TimeFilterInfo timeFilter);
+		IEnumerable<IPersonScheduleDayReadModel> RetrievePossibleTradeSchedules(DateOnly date, IEnumerable<IPerson> possibleShiftTradePersons, Paging paging, string timeSortOrder = "");
+		IEnumerable<IPersonScheduleDayReadModel> RetrieveBulletinTradeSchedules(IEnumerable<string> shiftExchangeOfferIds, Paging paging, string timeSortOrder = "");
+		IEnumerable<IPersonScheduleDayReadModel> RetrievePossibleTradeSchedulesWithFilteredTimes(DateOnly date,
+			IEnumerable<IPerson> possibleShiftTradePersons, Paging paging,
+			TimeFilterInfo filterInfo, string timeSortOrder = "");
 		Guid? RetrieveMyTeamId(DateOnly date);
 	}
 }

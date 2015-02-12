@@ -19,6 +19,8 @@ namespace Teleopti.Ccc.Domain.Repositories
 
 		public string SearchNameText { get; set; }
 
+		public string TimeSortOrder { get; set; }
+
 
 		#region			Equals
 
@@ -39,7 +41,7 @@ namespace Teleopti.Ccc.Domain.Repositories
 
 		public override int GetHashCode()
 		{
-			var HashCodeForString = TeamIds + FilteredStartTimes + FilteredEndTimes + IsDayOff.ToString() + IsEmptyDay.ToString() + SearchNameText;
+			var HashCodeForString = TeamIds + FilteredStartTimes + FilteredEndTimes + IsDayOff.ToString() + IsEmptyDay.ToString() + SearchNameText + TimeSortOrder;
 			unchecked
 			{
 				return HashCodeForString.GetHashCode();

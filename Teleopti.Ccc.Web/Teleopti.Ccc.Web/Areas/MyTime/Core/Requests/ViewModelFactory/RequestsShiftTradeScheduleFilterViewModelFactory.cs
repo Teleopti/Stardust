@@ -37,7 +37,9 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.ViewModelFactory
 					select dayoff.Description.ShortName,
 				HourTexts = from hour in hours
 								select _createHourText.CreateText(hour),
-				EmptyDayText = Resources.OptionEmptyDay
+				EmptyDayText = Resources.OptionEmptyDay,
+				StartTimeSortOrders = new Dictionary<string, string> { {"Start" , Resources.StartTimeAsc}, {"Start DESC" , Resources.StartTimeDesc} },
+				EndTimeSortOrders = new Dictionary<string, string> { { "End", Resources.EndTimeAsc }, { "End DESC", Resources.EndTimeDesc } }
 			};
 
 			return ret;
