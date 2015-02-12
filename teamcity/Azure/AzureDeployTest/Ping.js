@@ -3,20 +3,28 @@ var request = require("request");
 process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0"
 
 var startTime = new Date();
-var refreshIntervalId = setInterval(function () {
-	request(process.env.UrlToTest, function (error, response, body) {
-		if (!error && response.statusCode == 200) {
-			console.log(process.env.UrlToTest + " is up and running.");
-			clearInterval(refreshIntervalId);
-		} else {
-			var currentTime = new Date();
-			var diff = (currentTime - startTime) / 1000;
-			console.log(process.env.UrlToTest + " isn't available for " + diff + " seconds.");
-			
-			if (diff > 1200) {
+var ping = function(){
+	var currentTime = new Date();
+	var diff = (currentTime - startTime) / 1000;
+	console.log('time '+diff);
+	var refreshIntervalId = setInterval(function () {
+		request(process.env.UrlToTest, function (error, response, body) {
+			if (!error && response.statusCode == 200) {
+				console.log(process.env.UrlToTest + " is up and running.");
 				clearInterval(refreshIntervalId);
-				throw new Error(process.env.UrlToTest + " isn't available for 20 minutes.");
+			} else {
+				var currentTime = new Date();
+				var diff = (currentTime - startTime) / 1000;
+				console.log(process.env.UrlToTest + " isn't available for " + diff + " seconds.");
+				
+				if (diff > 1200) {
+					clearInterval(refreshIntervalId);
+					throw new Error(process.env.UrlToTest + " isn't available for 20 minutes.");
+				}
 			}
-		}
-	})
-}, 10000);
+		})
+	}, 10000);
+};
+
+// cloud deploy and jenkins auto deploy cannot be finished within 5 minutes
+setTimeout(ping, 300000);
