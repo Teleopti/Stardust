@@ -142,7 +142,7 @@
                                     <span class="label label-default" data-bind="style: { 'background-color': Color, 'color': TextColor }, text: Description"></span>
                                     <!-- /ko -->
                                 </div>
-								<!-- ko if: !$root.Resources.MyTeam_MakeTeamScheduleConsistent_31897 -->
+								<!-- ko ifnot: $root.Resources.MyTeam_MakeTeamScheduleConsistent_31897 -->
                                 <div class="shift-menu" data-bind="style: { 'margin-left': $parent.ShiftStartPixels() + 'px' }">
                                     <!-- ko with: $parent.ShiftMenu -->
                                     <div class="btn-group">

@@ -2,7 +2,8 @@
 	In order to ...
 	As a real time analyst
 	I want to see ...
-	
+
+#@OnlyRunIfDisabled('MyTeam_MakeTeamScheduleConsistent_31897')
 @OnlyRunIfEnabled('RTA_ChangeScheduleInAgentStateView_29934')
 Scenario: Should be able to change schedule from agent state overview
 	Given  the time is '2014-09-09 12:30:00'
