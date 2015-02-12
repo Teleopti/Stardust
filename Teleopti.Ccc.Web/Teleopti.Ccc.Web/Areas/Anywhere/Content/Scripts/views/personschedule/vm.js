@@ -293,8 +293,8 @@ define([
 		    }
 	    };
 
-		this.backToTeamSchedule = function() {
-			navigation.GoToTeamSchedule(self.BusinessUnitId(), self.GroupId(), self.ScheduleDate());
+	    this.backToTeamSchedule = function () {
+			navigation.GoToTeamScheduleWithPreselectedParameter(self.BusinessUnitId(), self.GroupId(), self.ScheduleDate(), self.PersonId(), self.SelectedStartMinutes());
 		}
 	};
 });

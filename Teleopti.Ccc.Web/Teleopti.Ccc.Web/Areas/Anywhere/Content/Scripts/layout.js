@@ -146,6 +146,18 @@ define([
 				_displayView({ view: view, buid: buid, id: id, date: date });
 			});
 		crossroads.addRoute(
+			new RegExp('^(' + viewRegex + ')/(' + guidRegex + ')/(' + guidRegex + ')/(' + dateRegex + ')/(' + guidRegex + ')/(' + timeRegex + ')$', "i"),
+			function (view, buid, id, date, selectedPersonId, selectedStartMinutes) {
+				_displayView({
+					view: view,
+					buid: buid,
+					id: id,
+					date: date,
+					personid: selectedPersonId,
+					selectedStartMinutes: selectedStartMinutes
+				});
+			});
+		crossroads.addRoute(
 			new RegExp('^(' + viewRegex + ')/(' + guidRegex + ')/(' + guidRegex + ')/(' + dateRegex + ')/(' + guidRegex + ')$', "i"),
 			function (view,buid, id, date, secondaryId) {
 				_displayView({ view: view, buid: buid, id: id, date: date, secondaryId: secondaryId });

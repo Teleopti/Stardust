@@ -17,6 +17,10 @@ define([
 		GoToTeamSchedule: function (buid, id, date, skill) {
 			window.setLocationHash('teamschedule/' + buid + '/' + id + '/' + toDateString(date) + ((skill) ? '/' + skill.Id : ''));
 		},
+		GoToTeamScheduleWithPreselectedParameter: function (buid, id, date, selectedPersonId, selectedStartMinutes) {
+			window.setLocationHash('teamschedule/' + buid + '/' + id + '/' + toDateString(date) 
+				+ '/' + selectedPersonId +  (!isNaN(selectedStartMinutes) ? '/' + selectedStartMinutes : ''));
+		},
 		GotoRealTimeAdherenceTeams: function (buid, siteId) {
 			window.setLocationHash('realtimeadherenceteams/' + buid + '/' + siteId);
 		},

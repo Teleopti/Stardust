@@ -34,6 +34,7 @@ define([
 
 		this.Loading = ko.observable(false);
 		this.PreSelectedPersonId = ko.observable(false);
+		this.PreSelectedStartMinute = ko.observable(NaN);
 		this.BusinessUnitId = ko.observable();
 
 		this.Persons = ko.observableArray();
@@ -95,6 +96,7 @@ define([
 		this.SetViewOptions = function (options) {
 			self.BusinessUnitId(options.buid);
 			self.PreSelectedPersonId(options.personid);
+			self.PreSelectedStartMinute(options.selectedStartMinutes);
 			self.Date(function() {
 				var date = options.date;
 				if (date == undefined) {
@@ -103,7 +105,6 @@ define([
 					return moment.tz(moment(date, 'YYYYMMDD').format('YYYY-MM-DD'), timezoneCurrent.IanaTimeZone());
 				}
 			}());
-			
 		};
 
 		this.UpdateSchedules = function (data) {
@@ -126,7 +127,29 @@ define([
 
 			self.Persons(people);
 			if (self.PreSelectedPersonId()) {
-				self.SelectPerson(personForId(self.PreSelectedPersonId(), people));
+				var preSelectedPerson = personForId(self.PreSelectedPersonId(), people);
+				self.SelectPerson(preSelectedPerson);
+				var isAnyLayerSelected = false;
+				if (!isNaN(self.PreSelectedStartMinute())) {
+					ko.utils.arrayForEach(preSelectedPerson.Shifts(), function(shift) {
+						ko.utils.arrayForEach(shift.Layers(), function(layer) {
+							if (layer.StartMinutes() == self.PreSelectedStartMinute()) {
+								layer.Selected(true);
+								isAnyLayerSelected = true;
+								return;
+							}
+						});
+						if (isAnyLayerSelected) {
+							return;
+						}
+						
+					});
+
+				}
+				if (isAnyLayerSelected) {
+					preSelectedPerson.Selected(false);
+				}
+				
 			}
 
 			this.TimeLine.BaseDate(data.BaseDate);
