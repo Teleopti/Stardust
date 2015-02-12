@@ -170,6 +170,7 @@ define([
 				var person = personForId(personId, self.Persons());
 				deselectAllPersonsExcept(person);
 				person.Selected(!layer.Selected());
+				person.SelectedStartMinutes(layer.StartMinutes());
 			}
 			else {
 				deselectAllPersonsExcept();

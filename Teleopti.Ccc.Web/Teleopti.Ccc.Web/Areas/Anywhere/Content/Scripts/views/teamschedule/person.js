@@ -36,6 +36,8 @@ define([
 			return time.format("H:mm");
 		});
 
+		this.SelectedStartMinutes = ko.observable();
+
 		this.ClearData = function () {
 			self.Shifts([]);
 			self.DayOffs([]);

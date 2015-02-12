@@ -19,8 +19,8 @@ define([
 		this.urlForRemoveAbsence = function () {
 			return navigation.UrlForPersonSchedule(self.BusinessUnitId, self.GroupId, self.PersonId, self.Date);
 		};
-		this.urlForMoveActivity = function () {
-			return navigation.UrlForPersonScheduleMoveActivity(self.BusinessUnitId, self.GroupId, self.PersonId, self.Date, 0);
+		this.urlForMoveActivity = function (person) {
+			return navigation.UrlForPersonScheduleMoveActivity(self.BusinessUnitId, self.GroupId, self.PersonId, self.Date, person.SelectedStartMinutes());
 		}
 	};
 });
