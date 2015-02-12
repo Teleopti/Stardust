@@ -99,9 +99,11 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 
 			var personRequest = MockRepository.GenerateMock<IPersonRequest>();
 			offer.Stub(x => x.MakeShiftTradeRequest(_scheduleToTrade)).Return(personRequest);
+			var expectStatus = ShiftExchangeOfferStatus.PendingAdminApproval;
+			offer.Stub(x => x.Status).Return(expectStatus);
 
 			_target.Map(form);
-			offer.Status.Should().Be.EqualTo(ShiftExchangeOfferStatus.PendingAdminApproval);
+			offer.Status.Should().Be.EqualTo(expectStatus);
 		}
 
 		[Test]
