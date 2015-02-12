@@ -37,38 +37,39 @@ define([
 	var loadLocations = function(callback) {
 		ajax.ajax({
 			url: "SeatPlanner/LocationHierarchy/Get",
-			success : callback
+			success: callback
 		});
-	}
+	};
+
+	var seatPlanViewModel = new viewModel();
 
 	return {
 		initialize: function (options) {
 			options.renderHtml(view);
-			viewModel = new viewModel();
-			viewModel.SetViewOptions(options);
+			seatPlanViewModel.SetViewOptions(options);
 			ko.cleanNode(options.bindingElement);
-			ko.applyBindings(viewModel, options.bindingElement);
+			ko.applyBindings(seatPlanViewModel, options.bindingElement);
 		},
 
 		display: function (options) {
 
-			viewModel.Loading(true);
+			seatPlanViewModel.Loading(true);
 			var loadedTeamsDeferred = $.Deferred();
 			loadSitesAndTeams(function (data) {
-				viewModel.LoadTeams(data);
+				seatPlanViewModel.LoadTeams(data);
 				loadedTeamsDeferred.resolve();
 			});
 
 			var loadedLocationsDeferred = $.Deferred();
 			loadLocations(function (data) {
-				viewModel.LoadLocations(data);
+				seatPlanViewModel.LoadLocations(data);
 				loadedLocationsDeferred.resolve();
 			});
 
 			
 			return $.when(loadedTeamsDeferred && loadedLocationsDeferred)
 					.done(function () {
-						viewModel.Loading(false);
+						seatPlanViewModel.Loading(false);
 						//resize.notify();
 					});
 
@@ -83,7 +84,7 @@ define([
 		},
 
 		setDateFromTest: function (date) {
-			viewModel.Date(moment(date));
+			seatPlanViewModel.Date(moment(date));
 		}
 
 	};

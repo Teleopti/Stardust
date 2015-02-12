@@ -5,9 +5,10 @@
 		</div>
 		<div>
 			<ul class="nav navbar-nav">
-				<!-- ko if: TeamScheduleVisible -->
-				<li data-bind="css: { active: ActiveView() == 'teamschedule' }"><a data-bind="attr: { href: urlForTeamScheduleToday()}">Schedules</a></li>
-				<!-- /ko -->
+				<!--Robtodo: Resource for Titles-->
+				<li data-bind="css: { active: ActiveView() == 'SeatPlannerPrototype' }"><a data-bind="attr: { href: urlForSeatPlanner()}">Seat Planner</a></li>
+				<li data-bind="css: { active: ActiveView() == 'SeatMap' }"><a data-bind="attr: { href: urlForSeatMap()}">Seat Map</a></li>
+				
 				<!-- ko if: RealTimeAdherenceVisible -->
 				<li id="link-realtimeadherence" data-bind="css: { active: ActiveView() == 'realtimeadherencesites' }"><a data-bind="attr: { href: urlForRealTimeAdherence()}"><span data-bind="text: Resources.RealTimeAdherence"></span></a></li>
 				<!-- /ko -->

@@ -24,7 +24,16 @@ define([
 			//else if (realTimeAdherenceAvailable)
 			//	return window.baseLocation() + "#realtimeadherencesites/" + buid;
 			return window.baseLocation() + "#SeatPlannerPrototype/";
+		},
+		UrlForSeatPlanner: function () {
+
+			return window.baseLocation() + "#SeatPlannerPrototype/";
+			
+		},
+		UrlForSeatMap: function() {
+			return window.baseLocation() + "#SeatMap/";
 		}
+
 
 		/*GotoRealTimeAdherenceTeams: function (buid, siteId) {
 			window.setLocationHash('realtimeadherenceteams/' + buid + '/' + siteId);

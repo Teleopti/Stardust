@@ -22,6 +22,8 @@ var requireconfiguration = {
 		buster: '../../../../Content/busterjs/buster-test',
 		amplify: '../../../../Content/amplify/amplify.min',
 		momentTimezoneData: '../../../../Content/moment-timezone/moment-timezone-with-data',
+		fabric: '../Scripts/FabricJS/fabric.require',
+		fabricViewport: '../Scripts/FabricJS/fabricjs_viewport',
 
 		////depends on eve, hardcoded in  justgage.20130410.js
 		//justgage: '../../../../Content/justgage/justgage.20130410',
@@ -37,7 +39,6 @@ var requireconfiguration = {
 		//xregexp: 'require/xregexp-all-min',
 
 		templates: '../templates',
-		locations: '../Scripts/temp/locations',
 		text: '../../../../Content/require/text'
 	},
 	
@@ -60,6 +61,7 @@ var requireconfiguration = {
 			deps: ['knockout'],
 			exports: 'knockoutMapping'
 		},
+		'fabricViewport': ['fabric'],
 		'select2': ['jquery', 'knockoutBindings'],
 		'timepicker': ['bootstrap', 'knockoutBindings'],
 		'signalr': ['jquery'],

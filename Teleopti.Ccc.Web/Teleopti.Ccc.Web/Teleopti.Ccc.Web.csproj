@@ -1166,6 +1166,24 @@
     <Content Include="Areas\Reporting\images\up.png" />
     <Content Include="Areas\Reporting\ScheduleAdherence.aspx" />
     <Content Include="Areas\Reporting\Index.aspx" />
+    <Content Include="Areas\SeatPlanner\Content\Images\background.svg" />
+    <Content Include="Areas\SeatPlanner\Content\Images\desk.svg" />
+    <Content Include="Areas\SeatPlanner\Content\Images\fourSeatsAndDesks.svg" />
+    <Content Include="Areas\SeatPlanner\Content\Images\roundTable.svg" />
+    <Content Include="Areas\SeatPlanner\Content\Images\seat.svg" />
+    <Content Include="Areas\SeatPlanner\Content\Images\seatAndDesk.svg" />
+    <Content Include="Areas\SeatPlanner\Content\Images\seats.svg" />
+    <Content Include="Areas\SeatPlanner\Content\Scripts\FabricJS\fabric.js" />
+    <Content Include="Areas\SeatPlanner\Content\Scripts\FabricJS\fabric.min.js" />
+    <Content Include="Areas\SeatPlanner\Content\Scripts\FabricJS\fabric.require.js" />
+    <Content Include="Areas\SeatPlanner\Content\Scripts\FabricJS\fabricjs_viewport.js" />
+    <Content Include="Areas\SeatPlanner\Content\Scripts\FabricJS\seat.js" />
+    <Content Include="Areas\SeatPlanner\Content\Scripts\Views\SeatMap\view.js" />
+    <Content Include="Areas\SeatPlanner\Content\Scripts\Views\SeatMap\vm.js" />
+    <Content Include="Areas\SeatPlanner\Content\Scripts\Views\SeatMap\vm_test.js" />
+    <Content Include="Areas\SeatPlanner\Content\Styles\BootstrapXL.css" />
+    <Content Include="Areas\SeatPlanner\Content\Styles\Site.css" />
+    <Content Include="Areas\SeatPlanner\Content\Templates\SeatMap\view.html" />
     <Content Include="Areas\WFM\css\main.css">
       <DependentUpon>main.scss</DependentUpon>
     </Content>
@@ -1939,7 +1957,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Areas\Anywhere\Content\Scripts\polling\" />
-    <Folder Include="Areas\Anywhere\Views\SeatPlan\" />
     <Folder Include="Areas\Mart\Views\Shared\" />
     <Folder Include="Areas\MyTime\Core\BadgeLeaderBoardReport\DataProvider\" />
     <Folder Include="Areas\PerformanceTool\Content\Templates\" />

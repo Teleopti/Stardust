@@ -22,8 +22,9 @@
 		<link rel="stylesheet" href="Content/select2/select2-bootstrap.css"/>
 		<link rel="stylesheet" href="Content/bootstrap-timepicker/css/bootstrap-timepicker.css" />
 		
+		<link rel="stylesheet" href="Areas/SeatPlanner/Content/Styles/bootstrapXL.css" />
 		<link rel="stylesheet" href="Areas/SeatPlanner/Content/Styles/TreeList/TreeList.css" />
-
+		<link rel="stylesheet" href="Areas/SeatPlanner/Content/Styles/Site.css" />
 		
         <link href="content/favicon.ico?v=2" rel="shortcut icon" type="image/x-icon"/>
         
@@ -31,9 +32,7 @@
 	    <%--<script>var require = { urlArgs: 'v=<%=new ResourceVersion().Version()%>' };</script>--%>
 		<script>var require = { urlArgs: 'v=123' };</script>
 		<script src="Areas/SeatPlanner/Content/Scripts/Require/configuration.js"></script>
-        <script data-main="Areas/SeatPlanner/Content/Scripts/main" type="text/javascript" src="Content/require/require.js"></script>
-		
-
+        <script data-main="Areas/SeatPlanner/Content/Scripts/main" type="text/javascript" src="Content/require/require.js"></script>	
 	</head>
 	<body>
 		<!--[if lt IE 7]>

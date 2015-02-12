@@ -46,7 +46,6 @@ namespace Teleopti.Ccc.Domain.SeatPlanning
 		private List<IPerson> getPeople(IEnumerable<ITeam> teams, DateOnlyPeriod period)
 		{
 			var people = new List<IPerson>();
-
 			foreach (var team in teams)
 			{
 				//RobTodo: review: Try to use personscheduledayreadmodel to improve performance
@@ -61,10 +60,11 @@ namespace Teleopti.Ccc.Domain.SeatPlanning
 		{
 			foreach (var dayShift in _dayShifts.Values)
 			{
+				var seatBookingRequestsForDay = dayShift.GetShifts().Select(agentShifts => new SeatBookingRequest(agentShifts.ToArray()));
+				seatAllocator.AllocateSeats(seatBookingRequestsForDay.ToArray());
+
 				foreach (var agentShifts in dayShift.GetShifts())
 				{
-					var bookingRequest = new SeatBookingRequest(agentShifts.ToArray());
-					seatAllocator.AllocateSeats(bookingRequest);
 					publishShiftInformation(agentShifts);
 				}
 			}
@@ -76,10 +76,10 @@ namespace Teleopti.Ccc.Domain.SeatPlanning
 			{
 				var date = shift.ScheduleDay.DateOnlyAsPeriod.DateOnly;
 				var lang = Thread.CurrentThread.CurrentUICulture;
-				var description = shift.Seat != null 
-					? String.Format(Resources.YouHaveBeenAllocatedSeat, date.ToShortDateString(lang), shift.Seat.Name) 
+				var description = shift.Seat != null
+					? String.Format(Resources.YouHaveBeenAllocatedSeat, date.ToShortDateString(lang), shift.Seat.Name)
 					: String.Format(Resources.YouHaveNotBeenAllocatedSeat, date.ToShortDateString(lang));
-				
+
 				var existingNote = _publicNoteRepository.Find(date, shift.Person, _scenario);
 				if (existingNote != null)
 				{
@@ -116,11 +116,8 @@ namespace Teleopti.Ccc.Domain.SeatPlanning
 				foreach (var scheduleDay in scheduleDays.Where(s => s.IsScheduled() && s.DateOnlyAsPeriod.DateOnly == dayShift.date))
 				{
 					SchedulePartView partView = scheduleDay.SignificantPart();
-					if (partView == SchedulePartView.MainShift || partView == SchedulePartView.ContractDayOff)
+					if (partView == SchedulePartView.MainShift)
 					{
-						// Robtodo: Review....I am assumming that Contract Day Off will still require a seat
-						/*partView == SchedulePartView.FullDayAbsence || partView == SchedulePartView.DayOff ||
-							partView == SchedulePartView.ContractDayOff || partView == SchedulePartView.MainShift */
 						createAgentShift(scheduleDay, person, dayShift);
 					}
 				}

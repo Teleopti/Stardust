@@ -59,6 +59,15 @@ define([
 			return navigation.UrlForHome();
 		};
 
+		self.urlForSeatPlanner = function () {
+			//return navigation.UrlForHome(self.CurrentBusinessUnitId(), self.RealTimeAdherenceVisible(), self.TeamScheduleVisible());
+			return navigation.UrlForSeatPlanner();
+		};
+
+		self.urlForSeatMap = function() {
+			return navigation.UrlForSeatMap();
+		}
+
 		/*self.urlForTeamScheduleToday = function () {
 			return navigation.UrlForTeamScheduleToday(self.CurrentBusinessUnitId());
 		}
