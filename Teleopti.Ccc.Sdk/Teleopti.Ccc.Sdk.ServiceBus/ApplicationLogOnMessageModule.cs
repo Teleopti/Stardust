@@ -11,7 +11,6 @@ using Rhino.ServiceBus.Internal;
 using Rhino.ServiceBus.MessageModules;
 using Teleopti.Ccc.Domain.Infrastructure;
 using Teleopti.Ccc.Domain.Repositories;
-using Teleopti.Ccc.Domain.Security.Authentication;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Infrastructure.Licensing;
@@ -27,18 +26,22 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
 	{
 		private static readonly ILog Logger = LogManager.GetLogger(typeof(ApplicationLogOnMessageModule));
 		private readonly ILogOnOff _logOnOff;
-		private readonly IApplicationDataSourceProvider _applicationDataSourceProvider;
 		private readonly IRoleToClaimSetTransformer _roleToClaimSetTransformer;
 		private readonly IRepositoryFactory _repositoryFactory;
 		private readonly ClaimCache _claimCache;
+		private readonly IApplicationData _applicationData;
 
-		public ApplicationLogOnMessageModule(ILogOnOff logOnOff, IApplicationDataSourceProvider applicationDataSourceProvider, IRoleToClaimSetTransformer roleToClaimSetTransformer, IRepositoryFactory repositoryFactory, ClaimCache claimCache)
+		public ApplicationLogOnMessageModule(ILogOnOff logOnOff, 
+																	IRoleToClaimSetTransformer roleToClaimSetTransformer, 
+																	IRepositoryFactory repositoryFactory, 
+																	ClaimCache claimCache,
+																	IApplicationData applicationData)
 		{
 			_logOnOff = logOnOff;
-			_applicationDataSourceProvider = applicationDataSourceProvider;
 			_roleToClaimSetTransformer = roleToClaimSetTransformer;
 			_repositoryFactory = repositoryFactory;
 			_claimCache = claimCache;
+			_applicationData = applicationData;
 		}
 
 		public void Init(ITransport transport, IServiceBus bus)
@@ -70,8 +73,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
 					 arg.MessageId, logOnInfo.Datasource, logOnInfo.BusinessUnitId, DateTime.UtcNow);
 			}
 
-			var dataSourceContainer = DataSourceFactory.GetDesiredDataSource(_applicationDataSourceProvider, logOnInfo.Datasource,
-				_repositoryFactory);
+			var dataSourceContainer = DataSourceFactory.GetDataSource(_applicationData, logOnInfo.Datasource, _repositoryFactory);
 
 			if (Logger.IsInfoEnabled)
 			{
@@ -86,9 +88,9 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
 			return false;
 		}
 
-		private void LogOnRaptorDomain(DataSourceContainer dataSourceContainer, Guid businessUnitId)
+		private void LogOnRaptorDomain(SdkDataSourceResult sdkDataSourceResult, Guid businessUnitId)
 		{
-			var dataSource = dataSourceContainer.DataSource;
+			var dataSource = sdkDataSourceResult.DataSource;
 			if (!DefinedLicenseDataFactory.HasLicense(dataSource.DataSourceName))
 			{
 				var unitOfWorkFactory = dataSource.Application;
@@ -114,7 +116,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
 				AuthenticationMessageHeader.UserName = SuperUser.Id_AvoidUsing_This.ToString(); //rk - is this really correct - why the guid as username?
 				AuthenticationMessageHeader.Password = "custom";
 				AuthenticationMessageHeader.UseWindowsIdentity = false;
-				_logOnOff.LogOn(dataSource, dataSourceContainer.User, businessUnit);
+				_logOnOff.LogOn(dataSource, sdkDataSourceResult.SuperUser, businessUnit);
 
 				setCorrectPermissionsOnUser(dataSource.Application);
 			}
