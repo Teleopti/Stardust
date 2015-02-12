@@ -1,5 +1,7 @@
 var request = require("request");
 
+process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0"
+
 var startTime = new Date();
 var refreshIntervalId = setInterval(function () {
 	request(process.env.UrlToTest, function (error, response, body) {
