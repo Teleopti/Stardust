@@ -40,6 +40,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 				"			TimeInAdherence = :TimeInAdherence," +
 				"			TimeOutOfAdherence = :TimeOutOfAdherence," +
 				"			ShiftHasEnded = :ShiftHasEnded, " +
+				"			ShiftEndTime = :ShiftEndTime, " +
 				"			[State] = :State " +
 				"WHERE " +
 				"	PersonId = :PersonId AND " +
@@ -51,6 +52,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 				.SetParameter("TimeInAdherence", model.TimeInAdherence)
 				.SetParameter("TimeOutOfAdherence", model.TimeOutOfAdherence)
 				.SetParameter("ShiftHasEnded", model.ShiftHasEnded)
+				.SetDateTime("ShiftEndTime", model.ShiftEndTime)
 				.SetParameter("State", _serializer.SerializeObject(model.State))
 				.ExecuteUpdate();
 		}
@@ -67,6 +69,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 				"	TimeInAdherence," +
 				"	TimeOutOfAdherence," +
 				"	ShiftHasEnded," +
+				"   ShiftEndTime," +
 				"	[State]" +
 				") VALUES (" +
 				"	:PersonId," +
@@ -76,6 +79,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 				"	:TimeInAdherence," +
 				"	:TimeOutOfAdherence," +
 				"	:ShiftHasEnded," +
+				"   :ShiftEndTime," +
 				"	:State" +
 				")")
 				.SetGuid("PersonId", model.PersonId)
@@ -85,6 +89,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 				.SetTimeSpan("TimeInAdherence", model.TimeInAdherence)
 				.SetTimeSpan("TimeOutOfAdherence", model.TimeOutOfAdherence)
 				.SetParameter("ShiftHasEnded", model.ShiftHasEnded)
+				.SetDateTime("ShiftEndTime", model.ShiftEndTime)
 				.SetParameter("State", _serializer.SerializeObject(model.State))
 				.ExecuteUpdate();
 		}
@@ -100,12 +105,14 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 				"	TimeInAdherence," +
 				"	TimeOutOfAdherence," +
 				"	ShiftHasEnded, " +
+				"	ShiftEndTime, " +
 				"	[State] AS StateJson " +
 				"FROM ReadModel.AdherencePercentage WHERE" +
 				"	PersonId =:PersonId AND " +
 				"	BelongsToDate =:Date ")
 				.AddScalar("PersonId", NHibernateUtil.Guid)
 				.AddScalar("Date", NHibernateUtil.DateTime)
+				.AddScalar("ShiftEndTime", NHibernateUtil.DateTime)
 				.AddScalar("LastTimestamp", NHibernateUtil.DateTime)
 				.AddScalar("IsLastTimeInAdherence", NHibernateUtil.Boolean)
 				.AddScalar("TimeInAdherence", NHibernateUtil.TimeSpan)
