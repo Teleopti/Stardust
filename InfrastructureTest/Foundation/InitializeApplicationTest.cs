@@ -122,9 +122,6 @@ namespace Teleopti.Ccc.InfrastructureTest.Foundation
 					ds1.AuthenticationTypeOption = AuthenticationTypeOption.Unknown;
 					ds2.AuthenticationTypeOption = AuthenticationTypeOption.Unknown;
 					target.Start(stateStub, appSettings, nhibConfigurations, null);
-					Assert.AreEqual(2, StateHolder.Instance.StateReader.ApplicationScopeData.RegisteredDataSourceCollection.Count());
-					CollectionAssert.Contains(StateHolder.Instance.StateReader.ApplicationScopeData.RegisteredDataSourceCollection, ds1);
-					CollectionAssert.Contains(StateHolder.Instance.StateReader.ApplicationScopeData.RegisteredDataSourceCollection, ds2);
 
 					Assert.AreEqual(StateHolder.Instance.StateReader.ApplicationScopeData.AppSettings["HelpUrl"], appSettingValue);
 				}
