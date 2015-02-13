@@ -368,7 +368,7 @@
 					vm.UpdateData({ PersonId: 1, IanaTimeZoneOther: 'Europe/Berlin' });
 					vm.UpdateSchedules(data);
 
-					assert.equals(vm.Layers().size(), 2);
+					assert.equals(vm.Layers().size(), 1);
 
 					vm.Layers().forEach(function (layer) {
 						var startPX = layer.StartPixels();

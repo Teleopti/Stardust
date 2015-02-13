@@ -56,7 +56,7 @@ define([
 		this.PersonId = ko.observable();
 		this.GroupId = ko.observable();
 		this.ScheduleDate = ko.observable();
-		this.SelectedStartMinutes = ko.observable();
+		this.SelectedStartMinutes = ko.observable(NaN);
 
 		var personForId = function (id, personArray) {
 			if (!id)
@@ -251,7 +251,7 @@ define([
 			}
 
 			var activeLayer;
-			if (self.MoveActivityForm.SelectedStartMinutes() == 0) {
+			if (isNaN(self.MoveActivityForm.SelectedStartMinutes())) {
 				activeLayer = layers().first();
 				self.MoveActivityForm.SelectedStartMinutes(activeLayer.StartMinutes());
 			} else {
