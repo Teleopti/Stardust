@@ -31,7 +31,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.AdherenceDetails
 			{
 				PersonId = personId,
 				StartTime = "2014-11-17 8:00".Utc(),
-				Name = "Phone",
 				InAdherence = false
 			});
 			Target.Handle(new PersonShiftEndEvent

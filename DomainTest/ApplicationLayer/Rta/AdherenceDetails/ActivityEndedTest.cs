@@ -9,7 +9,6 @@ using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.IoC;
-using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.AdherenceDetails
 {
@@ -39,7 +38,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.AdherenceDetails
 			{
 				PersonId = personId,
 				StartTime = "2014-11-17 8:00".Utc(),
-				Name = "Phone",
 				InAdherence = true
 			});
 			Target.Handle(new PersonShiftEndEvent
@@ -60,7 +58,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.AdherenceDetails
 			{
 				PersonId = personId,
 				StartTime = "2014-11-17 8:00".Utc(),
-				Name = "Phone",
 				InAdherence = false
 			});
 			Target.Handle(new PersonStateChangedEvent
@@ -94,7 +91,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.AdherenceDetails
 			{
 				PersonId = personId,
 				StartTime = "2014-11-17 8:00".Utc(),
-				Name = "Phone",
 				InAdherence = true
 			});
 			Target.Handle(new PersonShiftEndEvent

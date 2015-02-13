@@ -32,7 +32,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.AdherenceDetails
 			{
 				PersonId = personId,
 				StartTime = "2014-11-17 8:00".Utc(),
-				Name = "Phone",
 				InAdherence = false
 			});
 			Target.Handle(new PersonStateChangedEvent
@@ -53,14 +52,12 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.AdherenceDetails
 			{
 				PersonId = personId,
 				StartTime = "2014-11-17 8:00".Utc(),
-				Name = "Phone",
 				InAdherence = false
 			});
 			Target.Handle(new PersonActivityStartEvent
 			{
 				PersonId = personId,
 				StartTime = "2014-11-17 9:00".Utc(),
-				Name = "Lunch",
 				InAdherence = false
 			});
 
@@ -81,7 +78,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.AdherenceDetails
 			{
 				PersonId = personId,
 				StartTime = "2014-11-17 8:00".Utc(),
-				Name = "Phone",
 				InAdherence = true
 			});
 			Target.Handle(new PersonStateChangedEvent
@@ -94,7 +90,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.AdherenceDetails
 			{
 				PersonId = personId,
 				StartTime = "2014-11-17 9:00".Utc(),
-				Name = "Lunch",
 				InAdherence = false
 			});
 
@@ -109,7 +104,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.AdherenceDetails
 			{
 				PersonId = personId,
 				StartTime = "2014-11-17 8:00".Utc(),
-				Name = "Phone",
 				InAdherence = false
 			});
 			Target.Handle(new PersonStateChangedEvent
