@@ -72,7 +72,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 
 		public void Unload()
 		{
-			_presenter.Unload();	
+			if(_presenter != null) _presenter.Unload();	
 		}
 
 		public TreeFamily TreeFamily()
