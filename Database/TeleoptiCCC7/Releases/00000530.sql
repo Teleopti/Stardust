@@ -1,8 +1,8 @@
-----------------  
---Name: CS
---Date: 2015-02-12
---Desc: create seniority work day ranks table 
----------------- 
+-----------------  
+---Name: CS
+---Date: 2015-02-12
+---Desc: create seniority work day ranks table 
+----------------- 
 CREATE TABLE [dbo].[SeniorityWorkDayRanks](
 	[Id] [uniqueidentifier] NOT NULL,
 	[UpdatedBy] [uniqueidentifier] NOT NULL,

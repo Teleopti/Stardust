@@ -24,7 +24,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.AdherenceDetails
 		}
 
 		[Test]
-		public void ShouldMarkLastActivityEndedWhenShiftHasEnded()
+		public void ShouldMarkShiftHasEnded()
 		{
 			var personId = Guid.NewGuid();
 			Target.Handle(new PersonActivityStartEvent
@@ -37,7 +37,8 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.AdherenceDetails
 			Target.Handle(new PersonShiftEndEvent
 			{
 				PersonId = personId, 
-				ShiftStartTime = "2014-11-17 8:00".Utc()
+				ShiftStartTime = "2014-11-17 8:00".Utc(),
+				ShiftEndTime = "2014-11-17 9:00".Utc()
 			});
 
 			Persister.Model.HasShiftEnded.Should().Be(true);

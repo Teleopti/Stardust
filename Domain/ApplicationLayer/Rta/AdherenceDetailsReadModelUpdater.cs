@@ -4,6 +4,7 @@ using System.Linq;
 using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta.Performance;
+using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Interfaces.Domain;
 
@@ -20,7 +21,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta
 		private readonly ILiteTransactionSyncronization _liteTransactionSyncronization;
 		private readonly IPerformanceCounter _performanceCounter;
 
-		public AdherenceDetailsReadModelUpdater(IAdherenceDetailsReadModelPersister persister,
+		public AdherenceDetailsReadModelUpdater(
+			IAdherenceDetailsReadModelPersister persister,
 			ILiteTransactionSyncronization liteTransactionSyncronization,
 			IPerformanceCounter performanceCounter)
 		{
@@ -30,188 +32,283 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta
 		}
 
 		[ReadModelUnitOfWork]
+		public virtual bool Initialized()
+		{
+			return _persister.HasData();
+		}
+
+		[ReadModelUnitOfWork]
 		public virtual void Handle(PersonActivityStartEvent @event)
 		{
-			var detailModel = new AdherenceDetailModel
-			{
-				Name = @event.Name,
-				StartTime = @event.StartTime
-			};
-			var readModel = _persister.Get(@event.PersonId, new DateOnly(@event.StartTime));
-			if (readModel == null)
-			{
-				var model = new AdherenceDetailsReadModel
+			handleEvent(
+				@event.PersonId,
+				new DateOnly(@event.StartTime),
+				s =>
 				{
-					PersonId = @event.PersonId,
-					Date = new DateOnly(@event.StartTime),
-					Model = new AdherenceDetailsModel
-					{
-						IsInAdherence = @event.InAdherence,
-						Details = new List<AdherenceDetailModel>()
-					}
-				};
-				model.Model.Details.Add(detailModel);
-				_persister.Add(model);
-				return;
-			}
-
-			var previous = readModel.Model.Details.LastOrDefault();
-			if (previous != null)
-			{
-				detailModel.ActualStartTime = calculateActualStartTime(readModel, previous, @event);
-
-				if (shiftHasStarted(previous))
-					updateAdherence(readModel, previous, @event.StartTime);
-				else
-					_persister.ClearDetails(readModel);
-					
-			}
-			readModel.Model.IsInAdherence = @event.InAdherence;
-			readModel.Model.Details.Add(detailModel);
-			readModel.Model.ActualEndTime = null;
-			_persister.Update(readModel);
+					incrementLastUpdate(s, @event.StartTime);
+					addActivity(s, @event.StartTime, @event.Name);
+					addAdherence(s, @event.StartTime, @event.InAdherence);
+				});
 		}
 
 		[ReadModelUnitOfWork]
 		public virtual void Handle(PersonStateChangedEvent @event)
 		{
-			var readModel = _persister.Get(@event.PersonId, new DateOnly(@event.Timestamp));
-			if (readModel == null)
-			{
-				var model = new AdherenceDetailsReadModel
+			handleEvent(
+				@event.PersonId,
+				new DateOnly(@event.Timestamp),
+				s =>
 				{
-					PersonId = @event.PersonId,
-					Date = new DateOnly(@event.Timestamp),
-					Model = new AdherenceDetailsModel
-					{
-						Details = new List<AdherenceDetailModel>
-						{
-							new AdherenceDetailModel
-							{
-								LastStateChangedTime = @event.Timestamp
-							}
-						}
-					}
-				};
-				_persister.Add(model);
+					incrementLastUpdate(s, @event.Timestamp);
+					addAdherence(s, @event.Timestamp, @event.InAdherence);
+					if (s.ShiftEndTime.HasValue)
+						if (!s.FirstStateChangeOutOfAdherenceWithLastActivity.HasValue)
+							if (!@event.InAdherenceWithPreviousActivity)
+								s.FirstStateChangeOutOfAdherenceWithLastActivity = @event.Timestamp;
+				});
 
-				if (_performanceCounter!= null && _performanceCounter.IsEnabled)
-					_liteTransactionSyncronization.OnSuccessfulTransaction(() => _performanceCounter.Count());
-
-				return;
-			}
-
-			var existingModel = readModel.Model.Details.LastOrDefault();
-			if (existingModel == null)
-			{
-				var detailModel = new AdherenceDetailModel
-				{
-					LastStateChangedTime = @event.Timestamp
-				};
-				readModel.Model.Details.Add(detailModel);
-			}
-			else
-			{
-				if (readModel.Model.HasShiftEnded)
-				{
-					readModel.Model.ActualEndTime = calculateActualEndTimeWhenActivityEnds(readModel, @event);
-				}
-				else
-				{
-					if (shiftHasStarted(existingModel))
-						updateAdherence(readModel, existingModel, @event.Timestamp);
-
-					if (lateForActivity(existingModel, @event))
-						existingModel.ActualStartTime = @event.Timestamp;
-
-					existingModel.LastStateChangedTime = @event.Timestamp;
-					readModel.Model.IsInAdherence = @event.InAdherence;
-					readModel.Model.ActualEndTime = calculateActualEndTimeBeforeActivityEnds(readModel, @event);
-				}
-				_persister.Update(readModel);
-
-				if (_performanceCounter != null && _performanceCounter.IsEnabled)
-					_liteTransactionSyncronization.OnSuccessfulTransaction(() => _performanceCounter.Count());
-			}
+			if (_performanceCounter != null && _performanceCounter.IsEnabled)
+				_liteTransactionSyncronization.OnSuccessfulTransaction(() => _performanceCounter.Count());
 		}
-
-		private static DateTime? calculateActualEndTimeWhenActivityEnds(AdherenceDetailsReadModel model,
-			PersonStateChangedEvent @event)
-		{
-			if (!@event.InAdherenceWithPreviousActivity && model.Model.ActualEndTime == null)
-			{
-				return @event.Timestamp;
-			}
-			return model.Model.ActualEndTime;
-		}
-
-		private static DateTime? calculateActualEndTimeBeforeActivityEnds(AdherenceDetailsReadModel model,
-			PersonStateChangedEvent @event)
-		{
-			if (@event.InAdherence)
-				return null;
-			if (!@event.InAdherence && model.Model.ActualEndTime == null)
-				return @event.Timestamp;
-			return model.Model.ActualEndTime;
-		}
-
-
 
 		[ReadModelUnitOfWork]
 		public virtual void Handle(PersonShiftEndEvent @event)
 		{
-			var readModel = _persister.Get(@event.PersonId, new DateOnly(@event.ShiftStartTime));
-			if (readModel == null)
-				return;
-			var lastModel = readModel.Model.Details.LastOrDefault();
-			if (lastModel == null)
-				return;
-			
-			updateAdherence(readModel, lastModel, @event.ShiftEndTime);
-			readModel.Model.HasShiftEnded = true;
-			readModel.Model.ShiftEndTime = @event.ShiftEndTime;
-			_persister.Update(readModel);
+			handleEvent(
+				@event.PersonId,
+				new DateOnly(@event.ShiftStartTime),
+				s =>
+				{
+					incrementLastUpdate(s, @event.ShiftEndTime);
+					s.ShiftEndTime = @event.ShiftEndTime;
+				});
 		}
 
-		private static bool lateForActivity(AdherenceDetailModel model, PersonStateChangedEvent @event)
+		private void handleEvent(Guid personId, DateOnly date, Action<AdherenceDetailsReadModelState> mutate)
 		{
-			return (@event.InAdherence && model.ActualStartTime == null);
+			var model = _persister.Get(personId, date);
+			if (model == null)
+			{
+				model = new AdherenceDetailsReadModel
+				{
+					Date = date,
+					PersonId = personId,
+					State = new AdherenceDetailsReadModelState()
+				};
+				mutate(model.State);
+				calculate(model);
+				_persister.Add(model);
+			}
+			else
+			{
+				mutate(model.State);
+				calculate(model);
+				_persister.Update(model);
+			}
 		}
 
-		private static DateTime? calculateActualStartTime(AdherenceDetailsReadModel model, AdherenceDetailModel detailModel, PersonActivityStartEvent @event)
+		private static void incrementLastUpdate(AdherenceDetailsReadModelState model, DateTime time)
 		{
-			if (@event.InAdherence && model.Model.IsInAdherence)
+			if (model.LastUpdate < time)
+				model.LastUpdate = time;
+		}
+
+		private static void addActivity(AdherenceDetailsReadModelState model, DateTime time, string name)
+		{
+			model.Activities = model.Activities
+				.Concat(new[]
+				{
+					new AdherenceDetailsReadModelActivityState
+					{
+						StartTime = time,
+						Name = name,
+					}
+				})
+				.OrderBy(x => x.StartTime)
+				.ToArray();
+		}
+
+		private static void addAdherence(AdherenceDetailsReadModelState model, DateTime time, bool inAdherence)
+		{
+			model.Adherence = model.Adherence
+				.Concat(new[]
+				{
+					new AdherenceDetailsReadModelAdherenceState
+					{
+						Time = time,
+						InAdherence = inAdherence,
+					}
+				})
+				.OrderBy(x => x.Time)
+				.ThenBy(x => x.InAdherence)
+				.ToArray()
+				;
+
+			var duplicateByTime = model.Adherence
+				.Where(x => model.Adherence.Count(a => a.Time == x.Time) > 1)
+				.GroupBy(x => x.Time)
+				.Select(x => x.OrderBy(y => y.InAdherence).ExceptLast())
+				.SelectMany(x => x)
+				.ToArray()
+				;
+
+			model.Adherence = model.Adherence.Where(a => !duplicateByTime.Contains(a)).ToArray();
+
+			var redundantAdherence = model.Adherence
+				.WithPrevious()
+				.Where(x => x.This.InAdherence == x.Previous.InAdherence)
+				.Select(x => x.This)
+				.ToArray()
+				;
+
+			model.Adherence = model.Adherence.Where(a => !redundantAdherence.Contains(a)).ToArray();
+
+		}
+
+		private static void calculate(AdherenceDetailsReadModel model)
+		{
+			model.Model = new AdherenceDetailsModel
 			{
-				return @event.StartTime;
-			}
-			if (@event.InAdherence && !model.Model.IsInAdherence)
-			{
-				return detailModel.LastStateChangedTime;
-			}
+				HasShiftEnded = model.State.ShiftEndTime.HasValue,
+				ShiftEndTime = model.State.ShiftEndTime,
+				ActualEndTime = calculateActualEndTimeForShift(model),
+				IsInAdherence = false,
+				Details = model.State.Activities.Select(s => calculateActivity(model, s)).ToArray()
+			};
+		}
+
+		private static DateTime? calculateActualEndTimeForShift(AdherenceDetailsReadModel model)
+		{
+			if (!model.State.ShiftEndTime.HasValue)
+				return null;
+
+			var endingAdherenceOfLastActivity = model.State.Adherence
+				.LastOrDefault(x =>
+					x.Time <= model.State.ShiftEndTime &&
+					x.Time >= model.State.Activities.Last().StartTime
+				);
+
+			if (endingAdherenceOfLastActivity != null)
+				if (!endingAdherenceOfLastActivity.InAdherence)
+					return endingAdherenceOfLastActivity.Time;
+
+			if (model.State.FirstStateChangeOutOfAdherenceWithLastActivity.HasValue)
+				return model.State.FirstStateChangeOutOfAdherenceWithLastActivity.Value;
+
 			return null;
 		}
 
-		private static bool shiftHasStarted(AdherenceDetailModel model)
+		private static AdherenceDetailModel calculateActivity(AdherenceDetailsReadModel model, AdherenceDetailsReadModelActivityState activity)
 		{
-			return model.Name != null;
+			return new AdherenceDetailModel
+			{
+				Name = activity.Name,
+				StartTime = activity.StartTime,
+				ActualStartTime = calculateActualStartTimeForActivity(model, activity),
+				TimeInAdherence = calculateInAdherenceForActivity(model, activity),
+				TimeOutOfAdherence = calculateOutOfAdherenceForActivity(model, activity)
+			};
 		}
 
-		private static void updateAdherence(AdherenceDetailsReadModel model, AdherenceDetailModel detailModel, DateTime timestamp)
+		private static DateTime? calculateActualStartTimeForActivity(AdherenceDetailsReadModel model, AdherenceDetailsReadModelActivityState activity)
 		{
-			var timeToAdd = detailModel.LastStateChangedTime.HasValue
-				? timestamp - detailModel.LastStateChangedTime.Value
-				: timestamp - detailModel.StartTime;
+			var adherenceBefore = model.State.Adherence.LastOrDefault(x => x.Time < activity.StartTime);
+			var adherenceChange = model.State.Adherence.SingleOrDefault(x => x.Time == activity.StartTime);
+			var adherenceAfter = model.State.Adherence.FirstOrDefault(x => x.Time > activity.StartTime);
 
-			if (model.Model.IsInAdherence)
-				detailModel.TimeInAdherence += timeToAdd.Value;
+			if (adherenceChange != null && adherenceAfter != null)
+				if (!adherenceChange.InAdherence && adherenceAfter.InAdherence)
+					return adherenceAfter.Time;
+
+			if (adherenceChange != null && adherenceBefore != null)
+				if (adherenceChange.InAdherence && !adherenceBefore.InAdherence)
+					return adherenceBefore.Time;
+
+			if (adherenceChange != null && adherenceBefore == null)
+				if (adherenceChange.InAdherence)
+					return adherenceChange.Time;
+
+			if (adherenceChange == null && adherenceBefore != null)
+				if (adherenceBefore.InAdherence)
+					return activity.StartTime;
+
+			return null;
+		}
+
+		private static TimeSpan calculateInAdherenceForActivity(AdherenceDetailsReadModel model, AdherenceDetailsReadModelActivityState activity)
+		{
+			var things = adherenceForActivity(model, activity);
+			var result = things
+				.WithPrevious()
+				.Aggregate(TimeSpan.Zero, (current, a) =>
+				{
+					if (a.Previous.InAdherence)
+						return current + (a.This.Time - a.Previous.Time);
+					return current;
+				});
+			return result;
+		}
+
+		private static TimeSpan calculateOutOfAdherenceForActivity(AdherenceDetailsReadModel model, AdherenceDetailsReadModelActivityState activity)
+		{
+			return adherenceForActivity(model, activity)
+				.WithPrevious()
+				.Aggregate(TimeSpan.Zero, (current, a) =>
+				{
+					if (!a.Previous.InAdherence)
+						return current + (a.This.Time - a.Previous.Time);
+					return current;
+				});
+		}
+
+		private static IEnumerable<AdherenceDetailsReadModelAdherenceState> adherenceForActivity(AdherenceDetailsReadModel model, AdherenceDetailsReadModelActivityState activity)
+		{
+			var nextActivity = model.State.Activities
+				.SkipWhile(a => a != activity)
+				.Skip(1)
+				.FirstOrDefault();
+
+			var fromTime = activity.StartTime;
+			DateTime toTime;
+			if (nextActivity != null)
+				toTime = nextActivity.StartTime;
+			else if (model.State.ShiftEndTime.HasValue)
+				toTime = model.State.ShiftEndTime.Value;
 			else
-				detailModel.TimeOutOfAdherence += timeToAdd.Value;
+				toTime = model.State.LastUpdate;
+
+			var adherence = (
+				from a in model.State.Adherence
+				let afterActivityStart = a.Time >= fromTime
+				let beforeActivityEnd = a.Time <= toTime
+				where
+					afterActivityStart && beforeActivityEnd
+				select a
+				).ToArray();
+
+			if (!adherence.Any(x => x.Time == fromTime))
+			{
+				var adherenceBefore = model.State.Adherence.LastOrDefault(x => x.Time < fromTime);
+				var activityStartAdherence = new AdherenceDetailsReadModelAdherenceState
+				{
+					Time = fromTime,
+					InAdherence = adherenceBefore.InAdherence
+				};
+				adherence = new[] { activityStartAdherence }.Concat(adherence).ToArray();
+			}
+
+			if (!adherence.Any(x => x.Time == toTime))
+			{
+				var activityEndAdherence = new AdherenceDetailsReadModelAdherenceState
+				{
+					Time = toTime
+				};
+				adherence = adherence.Concat(new[] { activityEndAdherence }).ToArray();
+			}
+
+			return adherence;
 		}
 
-		[ReadModelUnitOfWork]
-		public virtual bool Initialized()
-		{
-			return _persister.HasData();
-		}
 	}
+
 }

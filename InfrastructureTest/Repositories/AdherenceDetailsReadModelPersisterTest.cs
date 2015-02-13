@@ -1,11 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta;
 using Teleopti.Ccc.Domain.Helper;
-using Teleopti.Interfaces.Domain;
+using Teleopti.Ccc.TestCommon;
 
 namespace Teleopti.Ccc.InfrastructureTest.Repositories
 {
@@ -16,232 +15,182 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 		public IAdherenceDetailsReadModelPersister Target { get; set; }
 
 		[Test]
-		public void ShouldSaveReadModelForPerson()
+		public void ShouldAdd()
 		{
 			var personId = Guid.NewGuid();
-			var dateOnly = new DateOnly(2014, 11, 19);
-			var timeInAdherence = TimeSpan.FromMinutes(10);
-			var timeOutOfAdherence = TimeSpan.FromMinutes(20);
-			var readModel = createReadModel(dateOnly, personId);
-			var detailModel = createAdherenceDetail("Phone", new DateTime(2014, 11, 19, 8, 0, 0), timeInAdherence, timeOutOfAdherence);
-			readModel.Model.Details.Add(detailModel);
-			
-			Target.Add(readModel);
 
-			var savedModel = Target.Get(personId, dateOnly);
-			var model = savedModel.Model.Details.First();
-			savedModel.Model.IsInAdherence.Should().Be(readModel.Model.IsInAdherence);
-			model.Name.Should().Be(detailModel.Name);
-			model.StartTime.Should().Be(detailModel.StartTime);
-			model.ActualStartTime.Should().Be(detailModel.ActualStartTime);
-			model.TimeInAdherence.Should().Be(detailModel.TimeInAdherence);
-			model.TimeOutOfAdherence.Should().Be(detailModel.TimeOutOfAdherence);
-			model.LastStateChangedTime.Should().Be(detailModel.LastStateChangedTime);
+			Target.Add(new AdherenceDetailsReadModel
+			{
+				Date = "2014-11-19".Date(),
+				PersonId = personId,
+				Model = new AdherenceDetailsModel
+				{
+					IsInAdherence = true,
+					Details = new[]
+					{
+						new AdherenceDetailModel
+						{
+							TimeInAdherence = "10".Minutes(),
+							TimeOutOfAdherence = "20".Minutes(),
+							ActualStartTime = "2014-11-19 8:05".Utc(),
+							Name = "Phone",
+							StartTime = "2014-11-19 8:00".Utc(),
+							LastStateChangedTime = "2014-11-19 8:06".Utc()
+						}
+					}
+				},
+				State = new AdherenceDetailsReadModelState
+				{
+					Activities = new[] { new AdherenceDetailsReadModelActivityState() }
+				}
+			});
+
+			var model = Target.Get(personId, "2014-11-19".Date());
+			model.Model.IsInAdherence.Should().Be(true);
+			model.State.Activities.Should().Have.Count.EqualTo(1);
+			var detail = model.Model.Details.First();
+			detail.Name.Should().Be("Phone");
+			detail.StartTime.Should().Be("2014-11-19 8:00".Utc());
+			detail.ActualStartTime.Should().Be("2014-11-19 8:05".Utc());
+			detail.TimeInAdherence.Should().Be("10".Minutes());
+			detail.TimeOutOfAdherence.Should().Be("20".Minutes());
+			detail.LastStateChangedTime.Should().Be( "2014-11-19 8:06".Utc());
 		}
 
 		[Test]
-		public void ShouldSaveWithNullables()
+		public void ShouldUpdate()
 		{
 			var personId = Guid.NewGuid();
-			var dateOnly = new DateOnly(2012, 8, 29);
-			var timeInAdherence = TimeSpan.FromMinutes(17);
-			var timeOutOfAdherence = TimeSpan.FromMinutes(28);
-			var readModel = createReadModel(dateOnly, personId);
-			var detailModel = createAdherenceDetail("Phone", new DateTime(2014, 11, 19, 8, 0, 0), timeInAdherence, timeOutOfAdherence);
-			readModel.Model.Details.Add(detailModel);
+			Target.Add(new AdherenceDetailsReadModel
+			{
+				Date = "2014-11-19".Date(),
+				PersonId = personId,
+			});
 
-			detailModel.LastStateChangedTime = null;
-			detailModel.ActualStartTime = null;
-			detailModel.StartTime = null;
+			Target.Update(new AdherenceDetailsReadModel
+			{
+				Date = "2014-11-19".Date(),
+				PersonId = personId,
+				Model = new AdherenceDetailsModel
+				{
+					IsInAdherence = true,
+					Details = new[]
+					{
+						new AdherenceDetailModel
+						{
+							TimeInAdherence = "10".Minutes(),
+							TimeOutOfAdherence = "20".Minutes(),
+							ActualStartTime = "2014-11-19 8:05".Utc(),
+							Name = "Phone",
+							StartTime = "2014-11-19 8:00".Utc(),
+							LastStateChangedTime = "2014-11-19 8:06".Utc()
+						}
+					}
+				},
+				State = new AdherenceDetailsReadModelState
+				{
+					Activities = new[] { new AdherenceDetailsReadModelActivityState() }
+				}
+			});
 
-			Target.Add(readModel);
-
-			var savedModel = Target.Get(personId, dateOnly);
-
-			var model = savedModel.Model.Details.First();
-			model.StartTime.Should().Be(null);
-			model.ActualStartTime.Should().Be(null);
-			model.LastStateChangedTime.Should().Be(null);
+			var model = Target.Get(personId, "2014-11-19".Date());
+			model.Model.IsInAdherence.Should().Be(true);
+			model.State.Activities.Should().Have.Count.EqualTo(1);
+			var detail = model.Model.Details.First();
+			detail.Name.Should().Be("Phone");
+			detail.StartTime.Should().Be("2014-11-19 8:00".Utc());
+			detail.ActualStartTime.Should().Be("2014-11-19 8:05".Utc());
+			detail.TimeInAdherence.Should().Be("10".Minutes());
+			detail.TimeOutOfAdherence.Should().Be("20".Minutes());
+			detail.LastStateChangedTime.Should().Be("2014-11-19 8:06".Utc());
 		}
 
 		[Test]
-		public void ShouldSaveReadModelOnDifferentActivitiesForSamePerson()
+		public void ShouldAddWithNulls()
 		{
 			var personId = Guid.NewGuid();
-			var dateOnly = new DateOnly(2014, 11, 19);
-			var timeInAdherence = TimeSpan.FromMinutes(10);
-			var timeOutOfAdherence = TimeSpan.FromMinutes(20);
-			var readModel = createReadModel(dateOnly, personId);
-			var detailModel1 = createAdherenceDetail("Phone", new DateTime(2014, 11, 19, 8, 0, 0), timeInAdherence, timeOutOfAdherence);
-			var detailModel2 = createAdherenceDetail("Lunch", new DateTime(2014, 11, 19, 9, 0, 0), timeInAdherence, timeOutOfAdherence);
-			readModel.Model.Details.Add(detailModel1);
-			readModel.Model.Details.Add(detailModel2);
-			Target.Add(readModel);
 
-			var savedModel = Target.Get(personId, dateOnly);
-			savedModel.PersonId.Should().Be(personId);
-			savedModel.BelongsToDate.Should().Be(readModel.BelongsToDate);
-			savedModel.Model.IsInAdherence.Should().Be(readModel.Model.IsInAdherence);
-			
-			var firstModel = savedModel.Model.Details.First();
-			firstModel.Name.Should().Be(detailModel1.Name);
-			firstModel.StartTime.Should().Be(detailModel1.StartTime);
-			firstModel.ActualStartTime.Should().Be(detailModel1.ActualStartTime);
-			firstModel.TimeInAdherence.Should().Be(detailModel1.TimeInAdherence);
-			firstModel.TimeOutOfAdherence.Should().Be(detailModel1.TimeOutOfAdherence);
-			firstModel.LastStateChangedTime.Should().Be(detailModel1.LastStateChangedTime);
+			Target.Add(new AdherenceDetailsReadModel
+			{
+				Date = "2014-11-19".Date(),
+				PersonId = personId,
+				Model = new AdherenceDetailsModel
+				{
+					Details = new[]
+					{
+						new AdherenceDetailModel
+						{
+							ActualStartTime = null,
+							StartTime = null,
+							LastStateChangedTime = null
+						}
+					}
+				}
+			});
 
-			var secondModel = savedModel.Model.Details.Last();
-			secondModel.Name.Should().Be(detailModel2.Name);
-			secondModel.StartTime.Should().Be(detailModel2.StartTime);
-			secondModel.ActualStartTime.Should().Be(detailModel2.ActualStartTime);
-			secondModel.TimeInAdherence.Should().Be(detailModel2.TimeInAdherence);
-			secondModel.TimeOutOfAdherence.Should().Be(detailModel2.TimeOutOfAdherence);
-			secondModel.LastStateChangedTime.Should().Be(detailModel2.LastStateChangedTime);
+			var model = Target.Get(personId, "2014-11-19".Date());
+			var detail = model.Model.Details.First();
+			detail.StartTime.Should().Be(null);
+			detail.ActualStartTime.Should().Be(null);
+			detail.LastStateChangedTime.Should().Be(null);
 		}
 
 		[Test]
-		public void ShouldSaveReadModelOnDifferentDaysForSamePerson()
+		public void ShouldAddForEachDay()
 		{
 			var personId = Guid.NewGuid();
-			var dateOnly1 = new DateOnly(2014, 11, 19);
-			var dateOnly2 = new DateOnly(2014, 11, 20);
-			var timeInAdherence = TimeSpan.FromMinutes(10);
-			var timeOutOfAdherence = TimeSpan.FromMinutes(20);
-			var readModel1 = createReadModel(dateOnly1, personId);
-			var readModel2 = createReadModel(dateOnly2, personId);
-			var detailModel1 = createAdherenceDetail("Phone", new DateTime(2014, 11, 19, 8, 0, 0), timeInAdherence, timeOutOfAdherence);
-			var detailModel2 = createAdherenceDetail("Phone", new DateTime(2014, 11, 20, 9, 0, 0), timeInAdherence, timeOutOfAdherence);
-			readModel1.Model.Details.Add(detailModel1);
-			readModel2.Model.Details.Add(detailModel2);
 
-			Target.Add(readModel1);
-			Target.Add(readModel2);
+			Target.Add(new AdherenceDetailsReadModel
+			{
+				Date = "2014-11-19".Date(),
+				PersonId = personId,
+			});
+			Target.Add(new AdherenceDetailsReadModel
+			{
+				Date = "2014-11-20".Date(),
+				PersonId = personId,
+			});
 
-			var savedModel = Target.Get(personId, dateOnly1);
-			savedModel.PersonId.Should().Be(readModel1.PersonId);
-			savedModel.BelongsToDate.Should().Be(readModel1.BelongsToDate);
-			savedModel.Model.IsInAdherence.Should().Be(readModel1.Model.IsInAdherence);
+			var model1 = Target.Get(personId, "2014-11-19".Date());
+			model1.PersonId.Should().Be(personId);
+			model1.BelongsToDate.Should().Be("2014-11-19".Date());
 
-			var savedDetailModel1 = savedModel.Model.Details.First();
-			savedDetailModel1.Name.Should().Be(detailModel1.Name);
-			savedDetailModel1.StartTime.Should().Be(detailModel1.StartTime);
-			savedDetailModel1.ActualStartTime.Should().Be(detailModel1.ActualStartTime);
-			savedDetailModel1.TimeInAdherence.Should().Be(detailModel1.TimeInAdherence);
-			savedDetailModel1.TimeOutOfAdherence.Should().Be(detailModel1.TimeOutOfAdherence);
-			savedDetailModel1.LastStateChangedTime.Should().Be(detailModel1.LastStateChangedTime);
-			
-			var savedModel2 = Target.Get(personId, dateOnly2);
-
-			savedModel2.PersonId.Should().Be(readModel2.PersonId);
-			savedModel2.BelongsToDate.Should().Be(readModel2.BelongsToDate);
-			savedModel2.Model.IsInAdherence.Should().Be(readModel2.Model.IsInAdherence);
-
-			var savedDetailModel2 = savedModel2.Model.Details.First();
-			savedDetailModel2.Name.Should().Be(detailModel2.Name);
-			savedDetailModel2.StartTime.Should().Be(detailModel2.StartTime);
-			savedDetailModel2.ActualStartTime.Should().Be(detailModel2.ActualStartTime);
-			savedDetailModel2.TimeInAdherence.Should().Be(detailModel2.TimeInAdherence);
-			savedDetailModel2.TimeOutOfAdherence.Should().Be(detailModel2.TimeOutOfAdherence);
-			savedDetailModel2.LastStateChangedTime.Should().Be(detailModel2.LastStateChangedTime);
-		}
-
-		[Test]
-		public void ShouldUpdateExistingReadModel()
-		{
-			var personId = Guid.NewGuid();
-			var dateOnly = new DateOnly(2014, 8, 29);
-			var timeInAdherence = TimeSpan.FromMinutes(17);
-			var timeOutOfAdherence = TimeSpan.FromMinutes(28);
-
-			var readModel = createReadModel(dateOnly, personId);
-			var detailModel = createAdherenceDetail("Phone", new DateTime(2014, 11, 19, 8, 0, 0), timeInAdherence, timeOutOfAdherence);
-			readModel.Model.Details.Add(detailModel);
-			Target.Add(readModel);
-			detailModel.ActualStartTime = new DateTime(2014, 11, 19, 10, 0, 0);
-			detailModel.LastStateChangedTime = new DateTime(2014, 11, 19, 10, 0, 0);
-			readModel.Model.IsInAdherence = false;
-			detailModel.TimeInAdherence = TimeSpan.FromMinutes(20);
-			detailModel.TimeOutOfAdherence = TimeSpan.FromMinutes(30);
-			readModel.Model.HasShiftEnded = true;
-			Target.Update(readModel);
-
-			var savedModel = Target.Get(personId, dateOnly);
-			savedModel.PersonId.Should().Be(personId);
-			savedModel.BelongsToDate.Should().Be(dateOnly);
-			savedModel.Model.HasShiftEnded.Should().Be(true);
-			var model = savedModel.Model.Details.First();
-			model.ActualStartTime.Should().Be(detailModel.ActualStartTime);
-			savedModel.Model.IsInAdherence.Should().Be(readModel.Model.IsInAdherence);
-			model.TimeInAdherence.Should().Be(detailModel.TimeInAdherence);
-			model.TimeOutOfAdherence.Should().Be(detailModel.TimeOutOfAdherence);
-			model.LastStateChangedTime.Should().Be(detailModel.LastStateChangedTime);
+			var model2 = Target.Get(personId, "2014-11-20".Date());
+			model2.PersonId.Should().Be(personId);
+			model2.BelongsToDate.Should().Be("2014-11-20".Date());
 		}
 		
 		[Test]
-		public void ShouldUpdateWithNullables()
+		public void ShouldUpdateWithNulls()
 		{
 			var personId = Guid.NewGuid();
-			var dateOnly = new DateOnly(2012, 8, 29);
-			var timeInAdherence = TimeSpan.FromMinutes(17);
-			var timeOutOfAdherence = TimeSpan.FromMinutes(28);
-			var readModel = createReadModel(dateOnly, personId);
-			var detailModel = createAdherenceDetail("Phone", new DateTime(2014, 11, 19, 8, 0, 0), timeInAdherence, timeOutOfAdherence);
-			readModel.Model.Details.Add(detailModel);
-			Target.Add(readModel);
-			detailModel.LastStateChangedTime = null;
-			detailModel.ActualStartTime = null;
-			Target.Update(readModel);
-
-			var savedModel = Target.Get(personId, dateOnly);
-			savedModel.Model.Details.First().ActualStartTime.Should().Be(null);
-			savedModel.Model.Details.First().LastStateChangedTime.Should().Be(null);
-		}
-
-		[Test]
-		public void ShouldClearExistingReadModel()
-		{
-			var personId = Guid.NewGuid();
-			var dateOnly = new DateOnly(2014, 8, 29);
-			var timeInAdherence = TimeSpan.FromMinutes(17);
-			var timeOutOfAdherence = TimeSpan.FromMinutes(28);
-
-			var readModel = createReadModel(dateOnly, personId);
-			var detailModel = createAdherenceDetail("Phone", new DateTime(2014, 11, 19, 8, 0, 0), timeInAdherence, timeOutOfAdherence);
-			readModel.Model.Details.Add(detailModel);
-			Target.Add(readModel);
-
-			Target.ClearDetails(readModel);
-
-			var savedModel = Target.Get(personId, dateOnly);
-			savedModel.Model.Details.Count.Should().Be(0);
-		}
-
-		private static AdherenceDetailsReadModel createReadModel(DateOnly dateOnly, Guid personId)
-		{
-			var detailsModel = new AdherenceDetailsModel
+			Target.Add(new AdherenceDetailsReadModel
 			{
-				Details = new List<AdherenceDetailModel>()
-			};
-			
-			return new AdherenceDetailsReadModel
-			{
+				Date = "2014-11-19".Date(),
 				PersonId = personId,
-				Date = dateOnly,
-				Model = detailsModel
-			};
-		}
+			});
 
-		private static AdherenceDetailModel createAdherenceDetail(string activityName, DateTime startTime, TimeSpan timeInAdherence, TimeSpan timeOutOfAdherence)
-		{
-			return new AdherenceDetailModel
+			Target.Update(new AdherenceDetailsReadModel
 			{
-				TimeInAdherence = timeInAdherence,
-				TimeOutOfAdherence = timeOutOfAdherence,
-				ActualStartTime = startTime,
-				Name = activityName,
-				StartTime = startTime,
-			};
+				Date = "2014-11-19".Date(),
+				PersonId = personId,
+				Model = new AdherenceDetailsModel
+				{
+					IsInAdherence = true,
+					Details = new[]
+					{
+						new AdherenceDetailModel
+						{
+							LastStateChangedTime = null,
+							ActualStartTime = null
+						}
+					}
+				}
+			});
+
+			var model = Target.Get(personId, "2014-11-19".Date());
+			model.Model.Details.First().ActualStartTime.Should().Be(null);
+			model.Model.Details.First().LastStateChangedTime.Should().Be(null);
 		}
 
 		[Test]
@@ -259,40 +208,60 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 		}
 
 		[Test]
-		public void ShouldPersistIfModelIsMoreThan4000Characters()
+		public void ShouldAddWithAlotOfData()
 		{
 			const string aVeryLongNameForActivty = "There are 4001 characters having fake ids 5d487cf6-af83-4901-ba75-3a17f734a638 5d487cf6-af83-4901-ba75-3a17f734a638 5d487cf6-af83-4901-ba75-3a17f734a638 5d487cf6-af83-4901-ba75-3a17f734a638 5d487cf6-af83-4901-ba75-3a17f734a638 5d487cf6-af83-4901-ba75-3a17f734a638 5d487cf6-af83-4901-ba75-3a17f734a638 5d487cf6-af83-4901-ba75-3a17f734a638 5d487cf6-af83-4901-ba75-3a17f734a638 5d487cf6-af83-4901-ba75-3a17f734a638 5d487cf6-af83-4901-ba75-3a17f734a638 5d487cf6-af83-4901-ba75-3a17f734a638 5d487cf6-af83-4901-ba75-3a17f734a638 5d487cf6-af83-4901-ba75-3a17f734a638 5d487cf6-af83-4901-ba75-3a17f734a638 5d487cf6-af83-4901-ba75-3a17f734a638 5d487cf6-af83-4901-ba75-3a17f734a638 5d487cf6-af83-4901-ba75-3a17f734a638 5d487cf6-af83-4901-ba75-3a17f734a638 5d487cf6-af83-4901-ba75-3a17f734a638 5d487cf6-af83-4901-ba75-3a17f734a638 5d487cf6-af83-4901-ba75-3a17f734a638 5d487cf6-af83-4901-ba75-3a17f734a638 5d487cf6-af83-4901-ba75-3a17f734a638 5d487cf6-af83-4901-ba75-3a17f734a638 5d487cf6-af83-4901-ba75-3a17f734a638 5d487cf6-af83-4901-ba75-3a17f734a638 5d487cf6-af83-4901-ba75-3a17f734a638 5d487cf6-af83-4901-ba75-3a17f734a638 5d487cf6-af83-4901-ba75-3a17f734a638 5d487cf6-af83-4901-ba75-3a17f734a638 5d487cf6-af83-4901-ba75-3a17f734a638 5d487cf6-af83-4901-ba75-3a17f734a638 5d487cf6-af83-4901-ba75-3a17f734a638 5d487cf6-af83-4901-ba75-3a17f734a638 5d487cf6-af83-4901-ba75-3a17f734a638 5d487cf6-af83-4901-ba75-3a17f734a638 5d487cf6-af83-4901-ba75-3a17f734a638 5d487cf6-af83-4901-ba75-3a17f734a638 5d487cf6-af83-4901-ba75-3a17f734a638 5d487cf6-af83-4901-ba75-3a17f734a638 5d487cf6-af83-4901-ba75-3a17f734a638 5d487cf6-af83-4901-ba75-3a17f734a638 5d487cf6-af83-4901-ba75-3a17f734a638 5d487cf6-af83-4901-ba75-3a17f734a638 5d487cf6-af83-4901-ba75-3a17f734a638 5d487cf6-af83-4901-ba75-3a17f734a638 5d487cf6-af83-4901-ba75-3a17f734a638 5d487cf6-af83-4901-ba75-3a17f734a638 5d487cf6-af83-4901-ba75-3a17f734a638 5d487cf6-af83-4901-ba75-3a17f734a638 5d487cf6-af83-4901-ba75-3a17f734a638 5d487cf6-af83-4901-ba75-3a17f734a638 5d487cf6-af83-4901-ba75-3a17f734a638 5d487cf6-af83-4901-ba75-3a17f734a638 5d487cf6-af83-4901-ba75-3a17f734a638 5d487cf6-af83-4901-ba75-3a17f734a638 5d487cf6-af83-4901-ba75-3a17f734a638 5d487cf6-af83-4901-ba75-3a17f734a638 5d487cf6-af83-4901-ba75-3a17f734a638 5d487cf6-af83-4901-ba75-3a17f734a638 5d487cf6-af83-4901-ba75-3a17f734a638 5d487cf6-af83-4901-ba75-3a17f734a638 5d487cf6-af83-4901-ba75-3a17f734a638 5d487cf6-af83-4901-ba75-3a17f734a638 5d487cf6-af83-4901-ba75-3a17f734a638 5d487cf6-af83-4901-ba75-3a17f734a638 5d487cf6-af83-4901-ba75-3a17f734a638 5d487cf6-af83-4901-ba75-3a17f734a638 5d487cf6-af83-4901-ba75-3a17f734a638 5d487cf6-af83-4901-ba75-3a17f734a638 5d487cf6-af83-4901-ba75-3a17f734a638 5d487cf6-af83-4901-ba75-3a17f734a638 5d487cf6-af83-4901-ba75-3a17f734a638 5d487cf6-af83-4901-ba75-3a17f734a638 5d487cf6-af83-4901-ba75-3a17f734a638 5d487cf6-af83-4901-ba75-3a17f734a638 5d487cf6-af83-4901-ba75-3a17f734a638 5d487cf6-af83-4901-ba75-3a17f734a638 5d487cf6-af83-4901-ba75-3a17f734a638 5d487cf6-af83-4901-ba75-3a17f734a638 5d487cf6-af83-4901-ba75-3a17f734a638 5d487cf6-af83-4901-ba75-3a17f734a638 5d487cf6-af83-4901-ba75-3a17f734a638 5d487cf6-af83-4901-ba75-3a17f734a638 5d487cf6-af83-4901-ba75-3a17f734a638 5d487cf6-af83-4901-ba75-3a17f734a638 5d487cf6-af83-4901-ba75-3a17f734a638 5d487cf6-af83-4901-ba75-3a17f734a638 5d487cf6-af83-4901-ba75-3a17f734a638 5d487cf6-af83-4901-ba75-3a17f734a638 5d487cf6-af83-4901-ba75-3a17f734a638 5d487cf6-af83-4901-ba75-3a17f734a638 5d487cf6-af83-4901-ba75-3a17f734a638 5d487cf6-af83-4901-ba75-3a17f734a638 5d487cf6-af83-4901-ba75-3a17f734a638 5d487cf6-af83-4901-ba75-3a17f734a638 5d487cf6-af83-4901-ba75-3a17f734a638 5d487cf6-af83-4901-ba75-3a17f734a638 5d487cf6-af83-4901-ba75-3a17f734a638 5d487cf6-af83-4901-ba75-3a17f734a638 5d487cf6-af83-4901-ba75-3a17f734a638 5d487cf6-af83-4901-ba75-3a17f734a638 5d487cf6-af83-4901-ba75-3a17f734a638 5d487cf6-af83-4901-ba75-3a17f734a638 5d487cf6-af83-4901-ba75-3a17f734a638 5d487cf6-af83-4901-ba75-3a17f734a6388";
 			var personId = Guid.NewGuid();
-			var dateOnly = DateOnly.MinValue ;
-			var timeInAdherence = TimeSpan.Zero;
-			var timeOutOfAdherence = TimeSpan.Zero;
 
-			var readModel = createReadModel(dateOnly, personId);
-			var detailModel = createAdherenceDetail(aVeryLongNameForActivty, new DateTime(2014, 11, 19, 8, 0, 0), timeInAdherence, timeOutOfAdherence);
-			readModel.Model.Details.Add(detailModel);
-			Target.Add(readModel);
-			Target.HasData().Should().Be.True();
+			Target.Add(new AdherenceDetailsReadModel
+			{
+				Date = "2014-11-19".Date(),
+				PersonId = personId,
+				Model = new AdherenceDetailsModel
+				{
+					Details = new[]
+					{
+						new AdherenceDetailModel
+						{
+							Name = aVeryLongNameForActivty
+						}
+					}
+				}
+			});
+
+			var model = Target.Get(personId, "2014-11-19".Date());
+			model.Model.Details.First().Name.Should().Be(aVeryLongNameForActivty);
 		}
 
 		[Test]
-		public void ShouldUpdateModelIsToMakeItMoreThan4000Characters()
+		public void ShouldUpdateWithAlotOfData()
 		{
 			const string aVeryLongNameForActivty = "There are 4001 characters having fake ids 5d487cf6-af83-4901-ba75-3a17f734a638 5d487cf6-af83-4901-ba75-3a17f734a638 5d487cf6-af83-4901-ba75-3a17f734a638 5d487cf6-af83-4901-ba75-3a17f734a638 5d487cf6-af83-4901-ba75-3a17f734a638 5d487cf6-af83-4901-ba75-3a17f734a638 5d487cf6-af83-4901-ba75-3a17f734a638 5d487cf6-af83-4901-ba75-3a17f734a638 5d487cf6-af83-4901-ba75-3a17f734a638 5d487cf6-af83-4901-ba75-3a17f734a638 5d487cf6-af83-4901-ba75-3a17f734a638 5d487cf6-af83-4901-ba75-3a17f734a638 5d487cf6-af83-4901-ba75-3a17f734a638 5d487cf6-af83-4901-ba75-3a17f734a638 5d487cf6-af83-4901-ba75-3a17f734a638 5d487cf6-af83-4901-ba75-3a17f734a638 5d487cf6-af83-4901-ba75-3a17f734a638 5d487cf6-af83-4901-ba75-3a17f734a638 5d487cf6-af83-4901-ba75-3a17f734a638 5d487cf6-af83-4901-ba75-3a17f734a638 5d487cf6-af83-4901-ba75-3a17f734a638 5d487cf6-af83-4901-ba75-3a17f734a638 5d487cf6-af83-4901-ba75-3a17f734a638 5d487cf6-af83-4901-ba75-3a17f734a638 5d487cf6-af83-4901-ba75-3a17f734a638 5d487cf6-af83-4901-ba75-3a17f734a638 5d487cf6-af83-4901-ba75-3a17f734a638 5d487cf6-af83-4901-ba75-3a17f734a638 5d487cf6-af83-4901-ba75-3a17f734a638 5d487cf6-af83-4901-ba75-3a17f734a638 5d487cf6-af83-4901-ba75-3a17f734a638 5d487cf6-af83-4901-ba75-3a17f734a638 5d487cf6-af83-4901-ba75-3a17f734a638 5d487cf6-af83-4901-ba75-3a17f734a638 5d487cf6-af83-4901-ba75-3a17f734a638 5d487cf6-af83-4901-ba75-3a17f734a638 5d487cf6-af83-4901-ba75-3a17f734a638 5d487cf6-af83-4901-ba75-3a17f734a638 5d487cf6-af83-4901-ba75-3a17f734a638 5d487cf6-af83-4901-ba75-3a17f734a638 5d487cf6-af83-4901-ba75-3a17f734a638 5d487cf6-af83-4901-ba75-3a17f734a638 5d487cf6-af83-4901-ba75-3a17f734a638 5d487cf6-af83-4901-ba75-3a17f734a638 5d487cf6-af83-4901-ba75-3a17f734a638 5d487cf6-af83-4901-ba75-3a17f734a638 5d487cf6-af83-4901-ba75-3a17f734a638 5d487cf6-af83-4901-ba75-3a17f734a638 5d487cf6-af83-4901-ba75-3a17f734a638 5d487cf6-af83-4901-ba75-3a17f734a638 5d487cf6-af83-4901-ba75-3a17f734a638 5d487cf6-af83-4901-ba75-3a17f734a638 5d487cf6-af83-4901-ba75-3a17f734a638 5d487cf6-af83-4901-ba75-3a17f734a638 5d487cf6-af83-4901-ba75-3a17f734a638 5d487cf6-af83-4901-ba75-3a17f734a638 5d487cf6-af83-4901-ba75-3a17f734a638 5d487cf6-af83-4901-ba75-3a17f734a638 5d487cf6-af83-4901-ba75-3a17f734a638 5d487cf6-af83-4901-ba75-3a17f734a638 5d487cf6-af83-4901-ba75-3a17f734a638 5d487cf6-af83-4901-ba75-3a17f734a638 5d487cf6-af83-4901-ba75-3a17f734a638 5d487cf6-af83-4901-ba75-3a17f734a638 5d487cf6-af83-4901-ba75-3a17f734a638 5d487cf6-af83-4901-ba75-3a17f734a638 5d487cf6-af83-4901-ba75-3a17f734a638 5d487cf6-af83-4901-ba75-3a17f734a638 5d487cf6-af83-4901-ba75-3a17f734a638 5d487cf6-af83-4901-ba75-3a17f734a638 5d487cf6-af83-4901-ba75-3a17f734a638 5d487cf6-af83-4901-ba75-3a17f734a638 5d487cf6-af83-4901-ba75-3a17f734a638 5d487cf6-af83-4901-ba75-3a17f734a638 5d487cf6-af83-4901-ba75-3a17f734a638 5d487cf6-af83-4901-ba75-3a17f734a638 5d487cf6-af83-4901-ba75-3a17f734a638 5d487cf6-af83-4901-ba75-3a17f734a638 5d487cf6-af83-4901-ba75-3a17f734a638 5d487cf6-af83-4901-ba75-3a17f734a638 5d487cf6-af83-4901-ba75-3a17f734a638 5d487cf6-af83-4901-ba75-3a17f734a638 5d487cf6-af83-4901-ba75-3a17f734a638 5d487cf6-af83-4901-ba75-3a17f734a638 5d487cf6-af83-4901-ba75-3a17f734a638 5d487cf6-af83-4901-ba75-3a17f734a638 5d487cf6-af83-4901-ba75-3a17f734a638 5d487cf6-af83-4901-ba75-3a17f734a638 5d487cf6-af83-4901-ba75-3a17f734a638 5d487cf6-af83-4901-ba75-3a17f734a638 5d487cf6-af83-4901-ba75-3a17f734a638 5d487cf6-af83-4901-ba75-3a17f734a638 5d487cf6-af83-4901-ba75-3a17f734a638 5d487cf6-af83-4901-ba75-3a17f734a638 5d487cf6-af83-4901-ba75-3a17f734a638 5d487cf6-af83-4901-ba75-3a17f734a638 5d487cf6-af83-4901-ba75-3a17f734a638 5d487cf6-af83-4901-ba75-3a17f734a638 5d487cf6-af83-4901-ba75-3a17f734a638 5d487cf6-af83-4901-ba75-3a17f734a638 5d487cf6-af83-4901-ba75-3a17f734a638 5d487cf6-af83-4901-ba75-3a17f734a638 5d487cf6-af83-4901-ba75-3a17f734a638 5d487cf6-af83-4901-ba75-3a17f734a638 5d487cf6-af83-4901-ba75-3a17f734a638 5d487cf6-af83-4901-ba75-3a17f734a638 5d487cf6-af83-4901-ba75-3a17f734a6388";
 			var personId = Guid.NewGuid();
-			var dateOnly = DateOnly.MinValue;
-			var timeInAdherence = TimeSpan.Zero;
-			var timeOutOfAdherence = TimeSpan.Zero;
+			Target.Add(new AdherenceDetailsReadModel
+			{
+				Date = "2014-11-19".Date(),
+				PersonId = personId,
+			});
 
-			var readModel = createReadModel(dateOnly, personId);
-			var detailModel = createAdherenceDetail("Phone", new DateTime(2014, 11, 19, 8, 0, 0), timeInAdherence, timeOutOfAdherence);
-			readModel.Model.Details.Add(detailModel);
-			Target.Add(readModel);
-			
-			detailModel.Name = aVeryLongNameForActivty;
-			Target.Update(readModel);
+			Target.Update(new AdherenceDetailsReadModel
+			{
+				Date = "2014-11-19".Date(),
+				PersonId = personId,
+				Model = new AdherenceDetailsModel
+				{
+					Details = new[]
+					{
+						new AdherenceDetailModel
+						{
+							Name = aVeryLongNameForActivty
+						}
+					}
+				}
+			});
 
-			var savedModel = Target.Get(personId, dateOnly);
-			savedModel.Model.Details.First().Name.Should().Be(aVeryLongNameForActivty);
+			var model = Target.Get(personId, "2014-11-19".Date());
+			model.Model.Details.First().Name.Should().Be(aVeryLongNameForActivty);
 		}
 	}
 

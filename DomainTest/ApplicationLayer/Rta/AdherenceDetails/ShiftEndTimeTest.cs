@@ -13,7 +13,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.AdherenceDetails
 {
 	[AdherenceTest]
 	[TestFixture]
-	public class EndTimeTest : IRegisterInContainer
+	public class ShiftEndTimeTest : IRegisterInContainer
 	{
 		public FakeAdherenceDetailsReadModelPersister Persister;
 		public AdherenceDetailsReadModelUpdater Target;

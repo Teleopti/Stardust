@@ -44,12 +44,6 @@ namespace Teleopti.Ccc.TestCommon
 			_data.Add(model);
 		}
 
-		public void ClearDetails(AdherenceDetailsReadModel model)
-		{
-			model.Model.Details.Clear();
-			Update(model);
-		}
-
 		public bool HasData()
 		{
 			return _data.Any();
@@ -57,6 +51,7 @@ namespace Teleopti.Ccc.TestCommon
 
 		public AdherenceDetailsReadModel Get(Guid personId, DateOnly date)
 		{
+			// IDEA! serialize / deserialize ?
 			return _data.Where(r => r.PersonId == personId && r.Date == date)
 				.Select(m =>
 				{
@@ -89,8 +84,10 @@ namespace Teleopti.Ccc.TestCommon
 					{
 						PersonId = m.PersonId,
 						Date = m.Date,
-						Model = model
+						Model = model,
+						State = m.State
 					};
+
 				}).FirstOrDefault();
 		}
 	}

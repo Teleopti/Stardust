@@ -80,7 +80,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta
 					Date = new DateOnly(readModelState.ScheduleDate),
 					PersonId = personId,
 					LastTimestamp = readModelState.Timestamp,
-					ShiftEndTime = readModelState.ShiftEndTime
+					ShiftEndTime = readModelState.ShiftEndTime,
 					State = new[] {readModelState},
 				};
 			}

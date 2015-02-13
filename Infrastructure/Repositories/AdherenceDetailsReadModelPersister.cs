@@ -29,15 +29,18 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 				"(" +
 				"	PersonId," +
 				"	BelongsToDate," +
-				"	Model" +
+				"	Model, " +
+				"	[State]" +
 				") VALUES (" +
 				"	:PersonId," +
 				"	:BelongsToDate," +
-				"	:Model" +
+				"	:Model," +
+				"	:State" +
 				")")
 				.SetGuid("PersonId", model.PersonId)
 				.SetDateTime("BelongsToDate", model.BelongsToDate)
 				.SetParameter("Model", _jsonSerializer.SerializeObject(model.Model), NHibernateUtil.StringClob)
+				.SetParameter("State", _jsonSerializer.SerializeObject(model.State), NHibernateUtil.StringClob)
 				.ExecuteUpdate();
 		}
 
@@ -45,13 +48,15 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 		{
 			_unitOfWork.Current().CreateSqlQuery(
 				"UPDATE ReadModel.AdherenceDetails SET" +
-				"			Model = :Model " +
+				"	Model = :Model, " +
+				"	State = :State " +
 				"WHERE " +
 				"	PersonId = :PersonId AND " +
 				"	BelongsToDate =:Date")
 				.SetGuid("PersonId", model.PersonId)
 				.SetDateTime("Date", model.BelongsToDate)
 				.SetParameter("Model", _jsonSerializer.SerializeObject(model.Model), NHibernateUtil.StringClob)
+				.SetParameter("State", _jsonSerializer.SerializeObject(model.State), NHibernateUtil.StringClob)
 				.ExecuteUpdate();
 		}
 
@@ -61,13 +66,15 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 				"SELECT " +
 				"	PersonId," +
 				"	BelongsToDate AS Date, " +
-				"	Model " +
+				"	Model AS ModelJson, " +
+				"	[State] AS StateJson " +
 				"FROM ReadModel.AdherenceDetails WHERE" +
 				"	PersonId =:PersonId AND " +
 				"	BelongsToDate =:Date ")
 				.AddScalar("PersonId", NHibernateUtil.Guid)
 				.AddScalar("Date", NHibernateUtil.DateTime)
-				.AddScalar("Model", NHibernateUtil.String)
+				.AddScalar("ModelJson", NHibernateUtil.String)
+				.AddScalar("StateJson", NHibernateUtil.String)
 				.SetGuid("PersonId", personId)
 				.SetDateTime("Date", date)
 				.SetResultTransformer(Transformers.AliasToBean(typeof(internalModel)))
@@ -76,27 +83,12 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 
 			if (result == null) return null;
 
-			return new AdherenceDetailsReadModel
-			{
-				PersonId = result.PersonId,
-				Date = result.Date,
-				Model = _jsonDeserializer.DeserializeObject<AdherenceDetailsModel>(result.Model)
-			};
-		}
+			result.Model = _jsonDeserializer.DeserializeObject<AdherenceDetailsModel>(result.ModelJson);
+			result.ModelJson = null;
+			result.State = _jsonDeserializer.DeserializeObject<AdherenceDetailsReadModelState>(result.StateJson);
+			result.StateJson = null;
 
-		public void ClearDetails(AdherenceDetailsReadModel model)
-		{
-			model.Model.Details.Clear();
-			_unitOfWork.Current().CreateSqlQuery(
-				"UPDATE ReadModel.AdherenceDetails SET" +
-				"			Model = :Model " +
-				"WHERE " +
-				"	PersonId = :PersonId AND " +
-				"	BelongsToDate =:Date")
-				.SetGuid("PersonId", model.PersonId)
-				.SetDateTime("Date", model.BelongsToDate)
-				.SetParameter("Model", _jsonSerializer.SerializeObject(model.Model))
-				.ExecuteUpdate();
+			return result;
 		}
 
 		public bool HasData()
@@ -104,11 +96,10 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 			return (int)_unitOfWork.Current().CreateSqlQuery("SELECT COUNT(*) FROM ReadModel.AdherenceDetails ").UniqueResult() > 0;
 		}
 
-		private class internalModel
+		private class internalModel : AdherenceDetailsReadModel
 		{
-			public Guid PersonId { get; set; }
-			public DateTime Date { get; set; }
-			public string Model { get; set; }
+			public string ModelJson { get; set; }
+			public string StateJson { get; set; }
 		}
 	}
 }

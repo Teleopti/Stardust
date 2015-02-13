@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Interfaces.Domain;
 
@@ -9,6 +10,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta
 	{
 		IEnumerable<AdherenceDetailsPercentageModel> ForDetails(Guid personId);
 	}
+
 	public class CalculateAdherenceDetails : ICalculateAdherenceDetails
 	{
 		private readonly INow _now;
@@ -32,17 +34,18 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta
 			var result = new List<AdherenceDetailsPercentageModel>();
 			if (readModel == null) return result;
 			var detailModels = readModel.Model.Details;
-			for (var i = 0; i < detailModels.Count; i++)
+			for (var i = 0; i < detailModels.Count(); i++)
 			{
-				if (detailModels[i] == null || !isValid(detailModels[i]))
+				var detail = detailModels.ElementAt(i);
+				if (detail == null || !isValid(detail))
 					continue;
 				result.Add(new AdherenceDetailsPercentageModel
 				{
-					Name = detailModels[i].Name,
-					StartTime = convertToAgentTimeZoneAndFormatTimestamp(detailModels[i].StartTime),
-					ActualStartTime = convertToAgentTimeZoneAndFormatTimestamp(detailModels[i].ActualStartTime),
+					Name = detail.Name,
+					StartTime = convertToAgentTimeZoneAndFormatTimestamp(detail.StartTime),
+					ActualStartTime = convertToAgentTimeZoneAndFormatTimestamp(detail.ActualStartTime),
 					AdherencePercent =
-						(int)_calculateAdherencePercent.ForActivity(detailModels[i],isActivityEnded(i, detailModels.Count, readModel.Model.HasShiftEnded), readModel.Model.IsInAdherence)
+						(int)_calculateAdherencePercent.ForActivity(detail,isActivityEnded(i, detailModels.Count(), readModel.Model.HasShiftEnded), readModel.Model.IsInAdherence)
 								.ValueAsPercent()
 				});
 			}

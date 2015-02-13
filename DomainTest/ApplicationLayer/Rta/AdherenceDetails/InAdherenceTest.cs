@@ -202,7 +202,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.AdherenceDetails
 				InAdherence = true
 			});
 
-			Persister.Details.Single().TimeInAdherence.Should().Be(TimeSpan.Zero);
+			Persister.Details.Should().Be.Empty();
 		}
 	}
 }

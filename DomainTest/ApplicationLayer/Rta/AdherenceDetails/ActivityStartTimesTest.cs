@@ -14,7 +14,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.AdherenceDetails
 {
 	[AdherenceTest]
 	[TestFixture]
-	public class StartTimesTest : IRegisterInContainer
+	public class ActivityStartTimesTest : IRegisterInContainer
 	{
 		public FakeAdherenceDetailsReadModelPersister Persister;
 		public AdherenceDetailsReadModelUpdater Target;
@@ -71,6 +71,26 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.AdherenceDetails
 		}
 
 		[Test]
+		public void ShouldPersistActualStartTime()
+		{
+			var personId = Guid.NewGuid();
+			Target.Handle(new PersonActivityStartEvent
+			{
+				PersonId = personId,
+				Name = "Phone",
+				StartTime = "2014-11-17 8:00".Utc()
+			});
+			Target.Handle(new PersonStateChangedEvent
+			{
+				PersonId = personId,
+				Timestamp = "2014-11-17 8:00".Utc(),
+				InAdherence = true
+			});
+
+			Persister.Details.Single().ActualStartTime.Should().Be("2014-11-17 8:00".Utc());
+		}
+
+		[Test]
 		public void ShouldPersistActivitiesStartTimeWhenStateChangedBeforeShiftStarted()
 		{
 			var personId = Guid.NewGuid();
@@ -89,26 +109,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.AdherenceDetails
 			});
 
 			Persister.Details.Single().ActualStartTime.Should().Be("2014-11-17 7:55".Utc());
-		}
-
-		[Test]
-		public void ShouldPersistActualStartTime()
-		{
-			var personId = Guid.NewGuid();
-			Target.Handle(new PersonActivityStartEvent
-			{
-				PersonId = personId,
-				Name = "Phone",
-				StartTime = "2014-11-17 8:00".Utc()
-			});
-			Target.Handle(new PersonStateChangedEvent
-			{
-				PersonId = personId,
-				Timestamp = "2014-11-17 8:00".Utc(),
-				InAdherence = true
-			});
-
-			Persister.Details.Single().ActualStartTime.Should().Be("2014-11-17 8:00".Utc());
 		}
 
 		[Test]

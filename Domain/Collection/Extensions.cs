@@ -213,5 +213,42 @@ namespace Teleopti.Ccc.Domain.Collection
 			}
 			return cnt.Values.All(c => c == 0);
 		}
+
+		public static IEnumerable<Pair<T>> WithPrevious<T>(this IEnumerable<T> source)
+		{
+			var previous = default(T);
+			foreach (var @this in source)
+			{
+				if (!EqualityComparer<T>.Default.Equals(previous, default(T)))
+				{
+					yield return new Pair<T>
+					{
+						This = @this,
+						Previous = previous
+					};
+				}
+				previous = @this;
+			}
+		}
+
+		public class Pair<T>
+		{
+			public T This { get; set; }
+			public T Previous { get; set; }
+		}
+
+		public static IEnumerable<T> ExceptLast<T>(this IEnumerable<T> source)
+		{
+			using (var e = source.GetEnumerator())
+			{
+				if (e.MoveNext())
+				{
+					for (var value = e.Current; e.MoveNext(); value = e.Current)
+					{
+						yield return value;
+					}
+				}
+			}
+		}
     }
 }

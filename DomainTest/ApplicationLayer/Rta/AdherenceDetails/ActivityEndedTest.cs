@@ -51,7 +51,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.AdherenceDetails
 			Persister.Details.First().TimeInAdherence.Should().Be(TimeSpan.FromHours(1));
 		}
 
-
 		[Test]
 		public void ShouldNotPersistTimeInAdherenceWhenInAdherenceAfterShiftHasEnded()
 		{
