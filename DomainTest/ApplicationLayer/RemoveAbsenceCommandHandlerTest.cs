@@ -19,7 +19,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 		public void ShouldRemovePersonAbsenceFromRepository()
 		{
 			var personAbsence = new PersonAbsence(PersonFactory.CreatePersonWithId(), new FakeCurrentScenario().Current(), MockRepository.GenerateMock<IAbsenceLayer>());
-			personAbsence.SetId(new Guid());
+			personAbsence.SetId(Guid.Empty);
 
 			var personAbsenceRepository = new FakeWriteSideRepository<IPersonAbsence>() { personAbsence };
 
@@ -40,7 +40,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 		{
 			var scenario = new FakeCurrentScenario().Current();
 			var personAbsence = new PersonAbsence(PersonFactory.CreatePersonWithId(), scenario, MockRepository.GenerateMock<IAbsenceLayer>());
-			personAbsence.SetId(new Guid());
+			personAbsence.SetId(Guid.Empty);
 
 			var personAbsenceRepository = new FakeWriteSideRepository<IPersonAbsence>() { personAbsence };
 			

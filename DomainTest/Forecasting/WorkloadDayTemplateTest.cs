@@ -456,7 +456,7 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
         {
             public void ChangeTemplateName()
             {
-				TemplateReference = new TemplateReference(new Guid(), 0, "test", 0);
+				TemplateReference = new TemplateReference(Guid.Empty, 0, "test", 0);
             }
 
             public void SetVersionNumber(int versionNumber)

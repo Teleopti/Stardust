@@ -21,7 +21,7 @@ namespace Teleopti.Ccc.DomainTest.Forecasting.Template
         [Test]
         public void VerifyConstructor()
         {
-            var templateId = new Guid();
+            var templateId = Guid.NewGuid();
             const int versionNumber = 5;
             const string templateName = "Juldagen";
             _dayOfWeek = null;
@@ -59,7 +59,7 @@ namespace Teleopti.Ccc.DomainTest.Forecasting.Template
 		[Test]
 		public void ShouldGetUpdatedOnInfo()
 		{
-			var templateId = new Guid();
+			var templateId = Guid.NewGuid();
 			const int versionNumber = 5;
 			const string templateName = "Juldagen";
 			_dayOfWeek = null;

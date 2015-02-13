@@ -12,176 +12,146 @@ namespace Teleopti.Ccc.DomainTest.Security.AuthorizationEntities
 	[TestFixture]
 	public class AvailableDataTest
 	{
-
-		private IAvailableData _target;
-
-	    [SetUp]
-		public void TestInit()
-		{
-			_target = new AvailableData();
-		}
-		
-		[TearDown]
-		public void TestDispose()
-		{
-			_target = null;
-		}
-
 	    [Test]
 		public void VerifyConstructor()
 		{
-			Assert.IsNotNull(_target);
-            Assert.IsNotNull(_target.AvailableBusinessUnits);
-            Assert.IsNotNull(_target.AvailableSites);
-            Assert.IsNotNull(_target.AvailableTeams);
+			var target = new AvailableData();
+			Assert.IsNotNull(target);
+            Assert.IsNotNull(target.AvailableBusinessUnits);
+            Assert.IsNotNull(target.AvailableSites);
+            Assert.IsNotNull(target.AvailableTeams);
 		}
 
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1822:MarkMembersAsStatic"), Test]
+        [Test]
         public void VerifyFindByApplicationRole()
-        {
+		{
             IAvailableData availableData1 = new AvailableData();
-            availableData1.SetId(new Guid());
+            availableData1.SetId(Guid.NewGuid());
             IApplicationRole applicationRole1 = new ApplicationRole();
             availableData1.ApplicationRole = applicationRole1;
             
             IAvailableData availableData2 = new AvailableData();
-            availableData2.SetId(new Guid());
+            availableData2.SetId(Guid.NewGuid());
             IApplicationRole applicationRole2 = new ApplicationRole();
             availableData2.ApplicationRole = applicationRole2;
 
             IList<IAvailableData> availableDataList = new List<IAvailableData>{ availableData1, availableData2 };
 
             IAvailableData result = AvailableData.FindByApplicationRole(availableDataList, applicationRole2);
-            Assert.AreEqual(result, availableData1);
-
-            result = AvailableData.FindByApplicationRole(availableDataList, new ApplicationRole());
-            Assert.IsNull(result);
+            Assert.AreEqual(result, availableData2);
         }
+
+		[Test]
+		public void VerifyFindByApplicationRoleReturnsNullWhenNotFoundInList()
+		{
+			IAvailableData availableData1 = new AvailableData();
+			availableData1.SetId(Guid.NewGuid());
+			IApplicationRole applicationRole1 = new ApplicationRole();
+			availableData1.ApplicationRole = applicationRole1;
+
+			IList<IAvailableData> availableDataList = new List<IAvailableData> { availableData1 };
+
+			var result = AvailableData.FindByApplicationRole(availableDataList, new ApplicationRole());
+			Assert.IsNull(result);
+		}
 
 	    [Test]
 		public void VerifyApplicationRole()
 		{
-			// Declare variable to hold property set method
-			IApplicationRole setValue = ApplicationRoleFactory.CreateRole("TestRole", "TestRole");
+			var target = new AvailableData();
+			var setValue = ApplicationRoleFactory.CreateRole("TestRole", "TestRole");
 
-			// Test set method
-			_target.ApplicationRole = setValue;
+			target.ApplicationRole = setValue;
 
-			// Declare return variable to hold property get method
-
-		    // Test get method
-			IApplicationRole getValue = _target.ApplicationRole;
+			IApplicationRole getValue = target.ApplicationRole;
 			
-			// Perform Assert Tests
 			Assert.AreSame(setValue, getValue);
 		}
 
 		[Test]
 		public void VerifyAvailableBusinessUnits()
 		{
-			// Test set method
-			_target.AddAvailableBusinessUnit(new BusinessUnit("TestUnit"));
+			var target = new AvailableData();
+			target.AddAvailableBusinessUnit(new BusinessUnit("TestUnit"));
 
-			// Declare return variable to hold property get method
-
-			// Test get method
-			ICollection<IBusinessUnit> getValue = _target.AvailableBusinessUnits;
+			ICollection<IBusinessUnit> getValue = target.AvailableBusinessUnits;
 			
-			// Perform Assert Tests
             Assert.AreEqual(1, getValue.Count);
 		}
 
         [Test]
         public void VerifyAddAvailableBusinessUnitsWithSameBusinessUnit()
         {
-            // Test set method
-            IBusinessUnit unit = new BusinessUnit("TestUnit");
+			var target = new AvailableData(); 
+			var unit = new BusinessUnit("TestUnit");
 
-            _target.AddAvailableBusinessUnit(unit);
-            _target.AddAvailableBusinessUnit(unit);
+            target.AddAvailableBusinessUnit(unit);
+            target.AddAvailableBusinessUnit(unit);
 
-            // Declare return variable to hold property get method
+            ICollection<IBusinessUnit> getValue = target.AvailableBusinessUnits;
 
-	        // Test get method
-            ICollection<IBusinessUnit> getValue = _target.AvailableBusinessUnits;
-
-            // Perform Assert Tests
             Assert.AreEqual(1, getValue.Count);
         }
 
 		[Test]
 		public void VerifyAvailableSites()
 		{
-			// Test set method
-			_target.AddAvailableSite(new Site("TestSite"));
+			var target = new AvailableData(); 
+			target.AddAvailableSite(new Site("TestSite"));
 
-			// Declare return variable to hold property get method
-
-			// Test get method
-			ICollection<ISite> getValue = _target.AvailableSites;
+			ICollection<ISite> getValue = target.AvailableSites;
 			
-			// Perform Assert Tests
-            Assert.AreEqual(1, getValue.Count);
+			Assert.AreEqual(1, getValue.Count);
 		}
 
         [Test]
         public void VerifyAddAvailableSitesWithSameSite()
         {
-            ISite site = new Site("TestSite");
+			var target = new AvailableData(); 
+			ISite site = new Site("TestSite");
             
-            _target.AddAvailableSite(site);
-            _target.AddAvailableSite(site);
+            target.AddAvailableSite(site);
+            target.AddAvailableSite(site);
 
-            // Declare return variable to hold property get method
+			ICollection<ISite> getValue = target.AvailableSites;
 
-            // Test get method
-            ICollection<ISite> getValue = _target.AvailableSites;
-
-            // Perform Assert Tests
             Assert.AreEqual(1, getValue.Count);
         }
 
 		[Test]
 		public void VerifyAvailableTeams()
 		{
+			var target = new AvailableData();
+			target.AddAvailableTeam(new Team());
 
-			// Test set method
-			_target.AddAvailableTeam(new Team());
-
-			// Declare return variable to hold property get method
-
-			// Test get method
-			ICollection<ITeam> getValue = _target.AvailableTeams;
+			ICollection<ITeam> getValue = target.AvailableTeams;
 			
-			// Perform Assert Tests
-            Assert.AreEqual(1, getValue.Count);
+			Assert.AreEqual(1, getValue.Count);
 		}
 
         [Test]
         public void VerifyAddAvailableTeamsWithSameTeam()
-        {
+		{
+			var target = new AvailableData();
             ITeam team = new Team();
             
-            _target.AddAvailableTeam(team);
-            _target.AddAvailableTeam(team);
+            target.AddAvailableTeam(team);
+            target.AddAvailableTeam(team);
 
-            // Declare return variable to hold property get method
+			ICollection<ITeam> getValue = target.AvailableTeams;
 
-	        // Test get method
-            ICollection<ITeam> getValue = _target.AvailableTeams;
-
-            // Perform Assert Tests
             Assert.AreEqual(1, getValue.Count);
         }
 
         [Test]
         public void VerifyAvailableDataRange()
         {
-            var setValue = AvailableDataRangeOption.MyOwn;
+			var target = new AvailableData(); 
+			const AvailableDataRangeOption setValue = AvailableDataRangeOption.MyOwn;
 
-            _target.AvailableDataRange = setValue;
+            target.AvailableDataRange = setValue;
 
-	        AvailableDataRangeOption getValue = _target.AvailableDataRange;
+	        AvailableDataRangeOption getValue = target.AvailableDataRange;
 
             Assert.AreEqual(setValue, getValue);
         }
@@ -189,54 +159,57 @@ namespace Teleopti.Ccc.DomainTest.Security.AuthorizationEntities
         [Test]
         public void VerifyDeleteAvailableTeam()
         {
-            Team team = new Team();
+			var target = new AvailableData(); 
+			var team = new Team();
 
-            _target.AddAvailableTeam(team);
-            Assert.AreEqual(1,_target.AvailableTeams.Count);
-            Assert.IsTrue(_target.AvailableTeams.Contains(team));
+            target.AddAvailableTeam(team);
+            Assert.AreEqual(1,target.AvailableTeams.Count);
+            Assert.IsTrue(target.AvailableTeams.Contains(team));
 
-            _target.DeleteAvailableTeam(team);
-            Assert.AreEqual(0,_target.AvailableTeams.Count);
-            Assert.IsFalse(_target.AvailableTeams.Contains(team));
+            target.DeleteAvailableTeam(team);
+            Assert.AreEqual(0,target.AvailableTeams.Count);
+            Assert.IsFalse(target.AvailableTeams.Contains(team));
         }
 
         [Test]
         public void VerifyDeleteAvailableSite()
-        {
-            Site site = new Site("site");
+		{
+			var target = new AvailableData();
+            var site = new Site("site");
 
-            _target.AddAvailableSite(site);
-            Assert.AreEqual(1,_target.AvailableSites.Count);
-            Assert.IsTrue(_target.AvailableSites.Contains(site));
+            target.AddAvailableSite(site);
+            Assert.AreEqual(1,target.AvailableSites.Count);
+            Assert.IsTrue(target.AvailableSites.Contains(site));
 
-            _target.DeleteAvailableSite(site);
-            Assert.AreEqual(0,_target.AvailableSites.Count);
-            Assert.IsFalse(_target.AvailableSites.Contains(site));
+            target.DeleteAvailableSite(site);
+            Assert.AreEqual(0,target.AvailableSites.Count);
+            Assert.IsFalse(target.AvailableSites.Contains(site));
         }
 
         [Test]
         public void VerifyDeleteAvailableBusinessUnit()
-        {
-            BusinessUnit businessUnit = new BusinessUnit("businessUnit");
+		{
+			var target = new AvailableData();
+            var businessUnit = new BusinessUnit("businessUnit");
             
-            _target.AddAvailableBusinessUnit(businessUnit);
-            Assert.AreEqual(1,_target.AvailableBusinessUnits.Count);
-            Assert.IsTrue(_target.AvailableBusinessUnits.Contains(businessUnit));
+            target.AddAvailableBusinessUnit(businessUnit);
+            Assert.AreEqual(1,target.AvailableBusinessUnits.Count);
+            Assert.IsTrue(target.AvailableBusinessUnits.Contains(businessUnit));
 
-            _target.DeleteAvailableBusinessUnit(businessUnit);
-            Assert.AreEqual(0,_target.AvailableBusinessUnits.Count);
-            Assert.IsFalse(_target.AvailableBusinessUnits.Contains(businessUnit));
+            target.DeleteAvailableBusinessUnit(businessUnit);
+            Assert.AreEqual(0,target.AvailableBusinessUnits.Count);
+            Assert.IsFalse(target.AvailableBusinessUnits.Contains(businessUnit));
         }
 
         [Test]
         public void VerifyDeleted()
         {
-            bool isDeleted = ((AvailableData) _target).IsDeleted;
+			var availableData = new AvailableData();
+	        bool isDeleted = availableData.IsDeleted;
             Assert.IsFalse(isDeleted);
-            ((AvailableData) _target).SetDeleted();
-            isDeleted = ((AvailableData)_target).IsDeleted;
+            availableData.SetDeleted();
+            isDeleted = availableData.IsDeleted;
             Assert.IsTrue(isDeleted);
         }
 	}
-
 }

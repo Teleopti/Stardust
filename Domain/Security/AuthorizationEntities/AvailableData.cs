@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Linq;
 using Teleopti.Ccc.Domain.Common.EntityBaseTypes;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
@@ -36,14 +37,9 @@ namespace Teleopti.Ccc.Domain.Security.AuthorizationEntities
         /// <param name="applicationRole">The application role.</param>
         /// <returns></returns>
         public static IAvailableData FindByApplicationRole(IEnumerable<IAvailableData> availableDataList, IApplicationRole applicationRole)
-        {
-            foreach (IAvailableData availableData in availableDataList)
-            {
-                if (availableData.ApplicationRole.Equals(applicationRole))
-                    return availableData;
-            }
-            return null;
-        }
+	    {
+		    return availableDataList.FirstOrDefault(availableData => availableData.ApplicationRole.Equals(applicationRole));
+	    }
 
 	    /// <summary>
         /// Gets or sets the application role.

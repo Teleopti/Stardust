@@ -121,8 +121,8 @@ namespace Teleopti.Ccc.DomainTest.AgentInfo.Requests
             var target = new AbsenceRequest(absence, period);
             
             IPerson person = PersonFactory.CreatePerson();
-            person.SetId(new Guid());
-            PersonRequest personRequest = new PersonRequest(person, target);
+            person.SetId(Guid.Empty);
+            var personRequest = new PersonRequest(person, target);
             target.Deny(null);
             Assert.IsNotEmpty(target.TextForNotification);
         }
@@ -154,21 +154,19 @@ namespace Teleopti.Ccc.DomainTest.AgentInfo.Requests
             mocks.VerifyAll();
         }
 
-        [Test, System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1822:MarkMembersAsStatic")]
+        [Test]
         public void VerifyApproveOneDayAbsenceCallWorks()
         {
-           
             var absence = new Absence();
             absence.Description = new Description("Holiday", "861");
 
-            MockRepository mocks = new MockRepository();
-            IRequestApprovalService requestApprovalService = mocks.StrictMock<IRequestApprovalService>();
-            IPersonRequestCheckAuthorization authorization = mocks.StrictMock<IPersonRequestCheckAuthorization>();
-            //DateTimePeriod period = new DateTimePeriod();
+            var mocks = new MockRepository();
+            var requestApprovalService = mocks.StrictMock<IRequestApprovalService>();
+            var authorization = mocks.StrictMock<IPersonRequestCheckAuthorization>();
             var period = new DateTimePeriod(new DateTime(2008, 7, 16, 0, 0, 0, DateTimeKind.Utc),
                                         new DateTime(2008, 7, 16, 0, 0, 0, DateTimeKind.Utc));
             IPerson person = PersonFactory.CreatePerson();
-            person.SetId(new Guid());
+            person.SetId(Guid.Empty);
             var target = new AbsenceRequest(absence, period);
 
             Expect.Call(requestApprovalService.ApproveAbsence(null, period, null)).Return(new List<IBusinessRuleResponse>()).IgnoreArguments();
@@ -181,11 +179,6 @@ namespace Teleopti.Ccc.DomainTest.AgentInfo.Requests
 
             IList<IBusinessRuleResponse> brokenRules = personRequest.Approve(requestApprovalService, authorization);
             Assert.AreEqual(0, brokenRules.Count);
-            //var datePattern = person.PermissionInformation.Culture().DateTimeFormat.ShortDatePattern;
-            //var notificationMessage = string.Format(person.PermissionInformation.UICulture(),
-            //                                            UserTexts.Resources.AbsenceRequestForOneDayHasBeenApprovedDot,
-            //                                            personRequest.Request.Period.StartDateTimeLocal(person.PermissionInformation.DefaultTimeZone()).Date.ToString(
-            //                                                person.PermissionInformation.UICulture().DateTimeFormat.ShortDatePattern, person.PermissionInformation.UICulture()));
             Assert.IsNotNullOrEmpty(target.TextForNotification);
             mocks.VerifyAll();
         }
@@ -193,11 +186,11 @@ namespace Teleopti.Ccc.DomainTest.AgentInfo.Requests
         [Test]
         public void VerifyApproveAbsenceCallDoesNotSendNotificationWhenFailing()
         {
-            MockRepository mocks = new MockRepository();
-            IRequestApprovalService requestApprovalService = mocks.StrictMock<IRequestApprovalService>();
-            IPersonRequestCheckAuthorization authorization = mocks.StrictMock<IPersonRequestCheckAuthorization>();
-            DateTimePeriod period = new DateTimePeriod();
-            IPerson person = PersonFactory.CreatePerson();
+			var mocks = new MockRepository();
+            var requestApprovalService = mocks.StrictMock<IRequestApprovalService>();
+            var authorization = mocks.StrictMock<IPersonRequestCheckAuthorization>();
+            var period = new DateTimePeriod();
+            var person = PersonFactory.CreatePerson();
 
             Expect.Call(requestApprovalService.ApproveAbsence(null, period, null)).Return(new List<IBusinessRuleResponse>{null}).IgnoreArguments();
             Expect.Call(() => authorization.VerifyEditRequestPermission(null)).IgnoreArguments();

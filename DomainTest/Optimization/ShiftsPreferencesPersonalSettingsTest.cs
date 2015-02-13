@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using NUnit.Framework;
 using Teleopti.Ccc.Domain.Optimization;
-using Teleopti.Ccc.Domain.Scheduling;
+using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.DomainTest.Optimization
@@ -50,8 +50,6 @@ namespace Teleopti.Ccc.DomainTest.Optimization
             _shiftPreferencesSource.KeepShiftsValue = 10.0d;
             _shiftPreferencesSource.KeepStartTimes = !_shiftPreferencesTarget.KeepStartTimes;
             
-           
-
             _target.MapFrom(_shiftPreferencesSource );
             _target.MapTo(_shiftPreferencesTarget,_activityList  );
 
@@ -61,36 +59,31 @@ namespace Teleopti.Ccc.DomainTest.Optimization
             Assert.AreEqual(_shiftPreferencesSource.KeepShifts, _shiftPreferencesTarget.KeepShifts);
             Assert.AreEqual(_shiftPreferencesSource.KeepShiftsValue, _shiftPreferencesTarget.KeepShiftsValue);
             Assert.AreEqual(_shiftPreferencesSource.KeepStartTimes, _shiftPreferencesTarget.KeepStartTimes);
-           
-            
         }
 
         [Test]
         public void MappingShouldGetAndSetListProperties()
         {
             var activityList = new List<IActivity>();
-            var activity = new Activity("Test");
-            activity.SetId(new Guid( ));
+            var activity = ActivityFactory.CreateActivity("Test");
+            activity.SetId(Guid.NewGuid());
             activityList.Add(activity);
             var timePeriod = new TimePeriod(10, 10, 12, 12);
             _shiftPreferencesSource.SelectedActivities = activityList;
             _shiftPreferencesSource.SelectedTimePeriod = timePeriod;
            
-
             _target.MapFrom(_shiftPreferencesSource);
             _target.MapTo(_shiftPreferencesTarget, activityList);
 
             Assert.AreEqual(_shiftPreferencesSource.SelectedActivities.Count , _shiftPreferencesTarget.SelectedActivities.Count );
             Assert.AreEqual(_shiftPreferencesSource.SelectedTimePeriod, _shiftPreferencesTarget.SelectedTimePeriod);
-           
-
         }
 
 		[Test]
 		public void ShouldMapActivityToNotChangeTimeOnIfUserSaySo()
 		{
-			var activity = new Activity("Test");
-			activity.SetId(new Guid());
+			var activity = ActivityFactory.CreateActivity("Test");
+			activity.SetId(Guid.NewGuid());
 			_activityList.Add(activity);
 			_shiftPreferencesSource.KeepActivityLength = true;
 			_shiftPreferencesSource.ActivityToKeepLengthOn = _activityList[0];
@@ -99,6 +92,5 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 			_target.MapTo(_shiftPreferencesTarget, _activityList);
 			Assert.AreSame(activity, _shiftPreferencesTarget.ActivityToKeepLengthOn);
 		}
-
     }
 }

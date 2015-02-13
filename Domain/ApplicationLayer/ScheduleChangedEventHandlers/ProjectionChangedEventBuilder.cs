@@ -112,7 +112,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers
 								ShortName = description.ShortName,
 								ContractTime = contractTime,
 								Overtime = overTime,
-								MultiplicatorDefinitionSetId = layer.DefinitionSet != null ? layer.DefinitionSet.Id.Value : new Guid(),
+								MultiplicatorDefinitionSetId = layer.DefinitionSet != null ? layer.DefinitionSet.Id.GetValueOrDefault() : Guid.Empty,
 								PayloadId = layer.Payload.UnderlyingPayload.Id.GetValueOrDefault(),
 								IsAbsence = layer.Payload.UnderlyingPayload is IAbsence,
 								DisplayColor =
