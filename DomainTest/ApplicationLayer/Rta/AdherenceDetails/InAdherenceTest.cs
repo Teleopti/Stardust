@@ -189,5 +189,44 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.AdherenceDetails
 
 			Persister.Details.Should().Be.Empty();
 		}
+
+		[Test]
+		public void ShouldSaveInOneReadModelWhenScheduleSpanOverUtcMidnight()
+		{
+			var personId = Guid.NewGuid();
+			var time = "2014-10-06 23:00".Utc();
+			var date = new DateOnly(time);
+			Target.Handle(new PersonActivityStartEvent
+			{
+				ScheduleDate = date,
+				PersonId = personId,
+				StartTime = time,
+				Name = "Phone",
+				InAdherence = false
+			});
+			Target.Handle(new PersonStateChangedEvent
+			{
+				ScheduleDate = date,
+				PersonId = personId,
+				Timestamp = time,
+				InAdherence = true
+			});
+			Target.Handle(new PersonStateChangedEvent
+			{
+				ScheduleDate = date,
+				PersonId = personId,
+				Timestamp = "2014-10-07 03:00".Utc(),
+				InAdherence = false
+			});
+			Target.Handle(new PersonStateChangedEvent
+			{
+				ScheduleDate = date,
+				PersonId = personId,
+				Timestamp = "2014-10-07 07:00".Utc(),
+				InAdherence = true
+			});
+
+			Persister.Details.Single().TimeInAdherence.Should().Be("4".Hours());
+		}
 	}
 }
