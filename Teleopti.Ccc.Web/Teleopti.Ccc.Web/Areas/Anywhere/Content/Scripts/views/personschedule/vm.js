@@ -272,7 +272,7 @@ define([
 		};
 
 		this.SelectLayer = function (layer) {
-			if (!self.MovingActivity()) return;
+			if (!self.Resources.MyTeam_MakeTeamScheduleConsistent_31897 || !self.MovingActivity()) return;
 			self.MoveActivityForm.IsChangingLayer(true);
 			deselectAllLayersExcept();
 			self.SelectedStartMinutes(layer.StartMinutes());

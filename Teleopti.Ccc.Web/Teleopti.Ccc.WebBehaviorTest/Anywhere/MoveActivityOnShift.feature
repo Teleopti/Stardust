@@ -82,6 +82,37 @@ Scenario: The team leader should be able to move an activity by drag and drop
 	| Start time | 13:00 |
 	| End time   | 14:00 |
 
+	@OnlyRunIfEnabled('MyTeam_MoveActivity_25206')
+	@OnlyRunIfEnabled('MyTeam_MakeTeamScheduleConsistent_31897')
+Scenario: The team leader should be able to change the current selected activity
+	Given 'John King' has a person period with
+	| Field      | Value      |
+	| Team       | Team green |
+	| Start date | 2013-11-18 |
+	And 'John King' has a shift with
+	| Field          | Value            |
+	| Shift category | Day              |
+	| Activity       | Phone            |
+	| Start time     | 2013-11-18 11:00 |
+	| End time       | 2013-11-18 17:00 |
+	| Lunch activity | Lunch            |
+	| Lunch start time     | 2013-11-18 12:00 |
+	| Lunch end time       | 2013-11-18 13:00 |
+	When I view schedules for 'Team green' on '2013-11-18'
+	And I select the activity with
+	| Field          | Value            |
+	| Activity       | Lunch            |
+	| Start time     | 2013-11-18 12:00 |
+	And I view person schedules move activity form for 'John King' in 'Team green' on '2013-11-18' with selected start minutes of '720'
+	And I select the activity with
+	| Field          | Value            |
+	| Activity       | Phone            |
+	| Start time     | 2013-11-18 11:00 |
+	Then The current selected activity has been changed to
+	| Field          | Value            |
+	| Activity       | Phone            |
+	| Start time     | 2013-11-18 11:00 |
+
 Scenario: Back to viewing schedule after moving an activity
 	Given 'John King' has a person period with
 	| Field      | Value      |

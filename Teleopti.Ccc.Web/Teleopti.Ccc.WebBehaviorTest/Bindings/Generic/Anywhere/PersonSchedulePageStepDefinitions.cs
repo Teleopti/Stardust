@@ -316,6 +316,14 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Anywhere
 			Browser.Interactions.ClickUsingJQuery(".layer[data-start-time='" + scheduledActivityInfo.StartTimeFormatted() + "']");
 		}
 
+		[Then(@"The current selected activity has been changed to")]
+		public void ThenTheCurrentSelectedActivityHasBeenChangedTo(Table table)
+		{
+			var scheduledActivityInfo = table.CreateInstance<ScheduleActivityInfo>();
+			Browser.Interactions.AssertExistsUsingJQuery(".layer.active[data-start-time='{0}']", scheduledActivityInfo.StartTimeFormatted());
+		}
+
+
 		[When(@"I view person schedules move activity form for '(.*)' in '(.*)' on '(.*)' with selected start minutes of '(.*)'")]
 		public void WhenIViewPersonSchedulesMoveActivityFormForInOnWithSelectedStartTimeOf(string name, string teamName, DateTime date, string startTime)
 		{
