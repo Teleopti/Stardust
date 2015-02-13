@@ -13,5 +13,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Events
 		public bool? InAdherence { get; set; }
 		public bool InAdherenceWithPreviousActivity { get; set; }
 		public DateTime ScheduleDate { get; set; }
+		public DateTime ShiftEndTime { get; set; }
 	}
 }

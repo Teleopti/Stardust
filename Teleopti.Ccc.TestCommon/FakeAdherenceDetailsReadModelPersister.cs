@@ -26,6 +26,11 @@ namespace Teleopti.Ccc.TestCommon
 			get { return _data.Single().Model; }
 		}
 
+		public AdherenceDetailsReadModel ReadModel
+		{
+			get { return _data.Single(); }
+		}
+
 		public IEnumerable<AdherenceDetailModel> Details
 		{
 			get { return _data.Single().Model.Details; }

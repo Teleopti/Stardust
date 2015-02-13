@@ -24,7 +24,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta
 					BusinessUnitId = info.BusinessUnitId,
 					TeamId = info.TeamId,
 					SiteId = info.SiteId,
-					ShiftEndTime = info.IsScheduled ? info.CurrentShiftEndTime : new DateOnly(time)
+					ShiftEndTime = info.IsScheduled ? info.CurrentShiftEndTime : time
 				});
 
 			if (toAdherence == Adherence.Out)
@@ -36,7 +36,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta
 					BusinessUnitId = info.BusinessUnitId,
 					TeamId = info.TeamId,
 					SiteId = info.SiteId,
-					ShiftEndTime = info.IsScheduled ? info.CurrentShiftEndTime : new DateOnly(time)
+					ShiftEndTime = info.IsScheduled ? info.CurrentShiftEndTime : time
 				});
 
 		}
