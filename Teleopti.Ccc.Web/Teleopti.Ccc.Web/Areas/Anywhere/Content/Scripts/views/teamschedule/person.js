@@ -73,7 +73,7 @@ define([
 			self.Menu.BusinessUnitId = data.BusinessUnitId;
 			self.Menu.GroupId = data.GroupId;
 			self.Menu.PersonId = self.Id;
-			self.Menu.Date = data.Offset;
+			self.Menu.Date(data.Offset);
 		};
 
 		var layers = function () {

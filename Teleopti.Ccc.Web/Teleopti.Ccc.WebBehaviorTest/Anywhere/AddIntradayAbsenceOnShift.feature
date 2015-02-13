@@ -190,8 +190,7 @@ Scenario: Prevent adding outside of shift
 	| Start time | 17:00   |
 	| End time   | 18:00   |
 	Then I should see the alert 'Invalid Intraday Absence Times'
-	
-@OnlyRunIfDisabled('MyTeam_MakeTeamScheduleConsistent_31897')
+
 Scenario: Go to yesterday when select the night shift starting from yesterday
 	Given I have the role 'Anywhere Team Green'
 	And 'Pierre Baldi' has a shift with

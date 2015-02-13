@@ -165,12 +165,16 @@ define([
 			person.Selected(!person.Selected());
 		};
 
-		this.SelectLayer = function (layer, personId) {
+		this.SelectLayer = function (layer, shift) {
 			if (self.Resources.MyTeam_MakeTeamScheduleConsistent_31897) {
+				var selectedDate = shift.ShiftMenu.Date;
+				var personId = shift.ShiftMenu.PersonId;
 				var person = personForId(personId, self.Persons());
+
 				deselectAllPersonsExcept(person);
 				person.Selected(!layer.Selected());
 				person.SelectedStartMinutes(layer.StartMinutes());
+				person.Menu.Date(selectedDate);
 			}
 			else {
 				deselectAllPersonsExcept();
