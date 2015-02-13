@@ -37,6 +37,9 @@ namespace Teleopti.Ccc.Win.Backlog
 				_rightList.RemoveAt(index);
 				_rightList.Insert(index - 1, selected);
 			}
+			listBox2.DataSource = null;
+			listBox2.DataSource = _rightList;
+			listBox2.DisplayMember = "Name";
 			listBox2.Refresh();
 		}
 
@@ -44,11 +47,14 @@ namespace Teleopti.Ccc.Win.Backlog
 		{
 			var selected = (ISkill)listBox2.SelectedItem;
 			var index = _rightList.IndexOf((ISkill)listBox2.SelectedItem);
-			if (index < _rightList.Count)
+			if (index < _rightList.Count-1)
 			{
 				_rightList.RemoveAt(index);
 				_rightList.Insert(index + 1, selected);
 			}
+			listBox2.DataSource = null;
+			listBox2.DataSource = _rightList;
+			listBox2.DisplayMember = "Name";
 			listBox2.Refresh();
 		}
 
