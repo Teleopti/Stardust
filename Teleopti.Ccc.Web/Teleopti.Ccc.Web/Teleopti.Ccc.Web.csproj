@@ -1178,6 +1178,8 @@
     <Content Include="Areas\SeatPlanner\Content\Scripts\FabricJS\fabric.require.js" />
     <Content Include="Areas\SeatPlanner\Content\Scripts\FabricJS\fabricjs_viewport.js" />
     <Content Include="Areas\SeatPlanner\Content\Scripts\FabricJS\seat.js" />
+    <Content Include="Areas\SeatPlanner\Content\Scripts\Views\SeatMap\edit.js" />
+    <Content Include="Areas\SeatPlanner\Content\Scripts\Views\SeatMap\utils.js" />
     <Content Include="Areas\SeatPlanner\Content\Scripts\Views\SeatMap\view.js" />
     <Content Include="Areas\SeatPlanner\Content\Scripts\Views\SeatMap\vm.js" />
     <Content Include="Areas\SeatPlanner\Content\Scripts\Views\SeatMap\vm_test.js" />
