@@ -144,6 +144,11 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta
 				.ToArray()
 				;
 
+			removeDuplicateAdherences(model);
+		}
+
+		private static void removeDuplicateAdherences(AdherenceDetailsReadModelState model)
+		{
 			var duplicateByTime = model.Adherence
 				.Where(x => model.Adherence.Count(a => a.Time == x.Time) > 1)
 				.GroupBy(x => x.Time)
@@ -153,16 +158,17 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta
 				;
 
 			model.Adherence = model.Adherence.Where(a => !duplicateByTime.Contains(a)).ToArray();
+		}
 
-			var redundantAdherence = model.Adherence
+		private static IEnumerable<AdherenceDetailsReadModelAdherenceState> transitions(IEnumerable<AdherenceDetailsReadModelAdherenceState> adherence)
+		{
+			var nonTransitional = adherence
 				.WithPrevious()
 				.Where(x => x.This.InAdherence == x.Previous.InAdherence)
 				.Select(x => x.This)
 				.ToArray()
 				;
-
-			model.Adherence = model.Adherence.Where(a => !redundantAdherence.Contains(a)).ToArray();
-
+			return adherence.Where(a => !nonTransitional.Contains(a)).ToArray();
 		}
 
 		private static void calculate(AdherenceDetailsReadModel model)
@@ -181,8 +187,11 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta
 		{
 			if (!model.State.ShiftEndTime.HasValue)
 				return null;
+			if (model.State.Activities.IsEmpty())
+				return null;
 
-			var endingAdherenceOfLastActivity = model.State.Adherence
+			var adherenceTransitions = transitions(model.State.Adherence);
+			var endingAdherenceOfLastActivity = adherenceTransitions
 				.LastOrDefault(x =>
 					x.Time <= model.State.ShiftEndTime &&
 					x.Time >= model.State.Activities.Last().StartTime
@@ -212,9 +221,10 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta
 
 		private static DateTime? calculateActualStartTimeForActivity(AdherenceDetailsReadModel model, AdherenceDetailsReadModelActivityState activity)
 		{
-			var adherenceBefore = model.State.Adherence.LastOrDefault(x => x.Time < activity.StartTime);
-			var adherenceChange = model.State.Adherence.SingleOrDefault(x => x.Time == activity.StartTime);
-			var adherenceAfter = model.State.Adherence.FirstOrDefault(x => x.Time > activity.StartTime);
+			var adherenceTransitions = transitions(model.State.Adherence);
+			var adherenceBefore = adherenceTransitions.LastOrDefault(x => x.Time < activity.StartTime);
+			var adherenceChange = adherenceTransitions.SingleOrDefault(x => x.Time == activity.StartTime);
+			var adherenceAfter = adherenceTransitions.FirstOrDefault(x => x.Time > activity.StartTime);
 
 			if (adherenceChange != null && adherenceAfter != null)
 				if (!adherenceChange.InAdherence && adherenceAfter.InAdherence)

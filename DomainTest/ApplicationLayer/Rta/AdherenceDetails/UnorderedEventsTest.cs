@@ -28,7 +28,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.AdherenceDetails
 			builder.RegisterType<AdherenceDetailsReadModelUpdater>().AsSelf();
 		}
 
-		[Test, Ignore]
+		[Test]
 		[TestCaseSource(typeof(DetailsEventsPermuationFactory), "Permutations")]
 		public void ShouldHandleAllCombinationsOfEventOrder(IEnumerable<IEvent> events)
 		{
