@@ -1,10 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using NUnit.Framework;
 using Rhino.Mocks;
-using Teleopti.Ccc.Domain.GroupPageCreator;
 using Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization;
 using Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.EqualNumberOfCategory;
 using Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.Seniority;
@@ -44,6 +41,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock.FairnessOptimization.Se
         private IWeekDayPoints _weekDayPoints;
         private ITeamInfo _teamInfo;
         private ITeamBlockSeniorityValidator _teamBlockSeniorityValidator;
+	    private ISeniorityWorkDayRanks _seniorityWorkDayRanks;
 
         [SetUp]
         public void Setup()
@@ -73,6 +71,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock.FairnessOptimization.Se
             _seniorTeamBlockPoint = new TeamBlockPoints(_seniorTeamBlock,27);
             _juniorTeamBlockPoint = new TeamBlockPoints(_juniorTeamBlock, 15);
             _weekDayPoints = new WeekDayPoints();
+			_seniorityWorkDayRanks = new SeniorityWorkDayRanks();
 
             _target = new DayOffStep2(_seniorityExtractor,_seniorTeamBlockLocator,_juniorTeamBlockExtractor,_suitableDayOffSpotDetector,
                         _constructTeamBlock, _filterForTeamBlockInSelection, _filterForFullyScheduledBlocks, _filterOnSwapableTeamBlocks, _teamBlockDayOffSwapper, _suitableDayOffsToGiveAway,_teamBlockSeniorityValidator);
@@ -108,8 +107,8 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock.FairnessOptimization.Se
 
             using (_mock.Playback())
             {
-                
-                _target.PerformStep2(schedulingOptions,_allPersonMatrixList,_selectedPeriod,_selectedPersons,_rollbackService,_schedulingDictionary,_weekDayPoints.GetWeekDaysPoints(),_optimizationPreferences, true);
+
+				_target.PerformStep2(schedulingOptions, _allPersonMatrixList, _selectedPeriod, _selectedPersons, _rollbackService, _schedulingDictionary, _weekDayPoints.GetWeekDaysPoints(_seniorityWorkDayRanks), _optimizationPreferences, true);
             }
         }
 
@@ -154,8 +153,8 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock.FairnessOptimization.Se
                 Expect.Call(_teamInfo.Name).Return("senior team").Repeat.AtLeastOnce() ;
 
                 //third level
-                Expect.Call(_suitableDayOffSpotDetector.DetectMostValuableSpot(_selectedPeriod.DayCollection(),_weekDayPoints.GetWeekDaysPoints())).IgnoreArguments().Return(new DateOnly(2014, 02, 11));
-                Expect.Call(_suitableDayOffsToGiveAway.DetectMostValuableSpot(_selectedPeriod.DayCollection(),_weekDayPoints.GetWeekDaysPoints())).Return(_selectedPeriod.DayCollection());
+				Expect.Call(_suitableDayOffSpotDetector.DetectMostValuableSpot(_selectedPeriod.DayCollection(), _weekDayPoints.GetWeekDaysPoints(_seniorityWorkDayRanks))).IgnoreArguments().Return(new DateOnly(2014, 02, 11));
+				Expect.Call(_suitableDayOffsToGiveAway.DetectMostValuableSpot(_selectedPeriod.DayCollection(), _weekDayPoints.GetWeekDaysPoints(_seniorityWorkDayRanks))).Return(_selectedPeriod.DayCollection());
                 Expect.Call(_teamBlockDayOffSwapper.TrySwap(DateOnly.Today, _seniorTeamBlock, _juniorTeamBlock,_rollbackService, _schedulingDictionary,
                                                             _optimizationPreferences, _selectedPeriod.DayCollection())).IgnoreArguments().Return(true);
                 //Expect.Call(_seniorTeamBlock.TeamInfo).Return(_teamInfo);
@@ -187,7 +186,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock.FairnessOptimization.Se
             using (_mock.Playback())
             {
 
-                _target.PerformStep2(schedulingOptions, _allPersonMatrixList, _selectedPeriod, _selectedPersons, _rollbackService, _schedulingDictionary, _weekDayPoints.GetWeekDaysPoints(), _optimizationPreferences, true);
+				_target.PerformStep2(schedulingOptions, _allPersonMatrixList, _selectedPeriod, _selectedPersons, _rollbackService, _schedulingDictionary, _weekDayPoints.GetWeekDaysPoints(_seniorityWorkDayRanks), _optimizationPreferences, true);
             }
         }
 
@@ -211,8 +210,8 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock.FairnessOptimization.Se
 				Expect.Call(_teamInfo.Name).Return("senior team").Repeat.AtLeastOnce();
 
 				//third level
-				Expect.Call(_suitableDayOffSpotDetector.DetectMostValuableSpot(_selectedPeriod.DayCollection(), _weekDayPoints.GetWeekDaysPoints())).IgnoreArguments().Return(new DateOnly(2014, 02, 11));
-				Expect.Call(_suitableDayOffsToGiveAway.DetectMostValuableSpot(_selectedPeriod.DayCollection(), _weekDayPoints.GetWeekDaysPoints())).Return(_selectedPeriod.DayCollection());
+				Expect.Call(_suitableDayOffSpotDetector.DetectMostValuableSpot(_selectedPeriod.DayCollection(), _weekDayPoints.GetWeekDaysPoints(_seniorityWorkDayRanks))).IgnoreArguments().Return(new DateOnly(2014, 02, 11));
+				Expect.Call(_suitableDayOffsToGiveAway.DetectMostValuableSpot(_selectedPeriod.DayCollection(), _weekDayPoints.GetWeekDaysPoints(_seniorityWorkDayRanks))).Return(_selectedPeriod.DayCollection());
 				Expect.Call(_teamBlockDayOffSwapper.TrySwap(DateOnly.Today, _seniorTeamBlock, _juniorTeamBlock, _rollbackService, _schedulingDictionary,_optimizationPreferences, _selectedPeriod.DayCollection())).IgnoreArguments().Return(true);
 				
 				teamBlockList.Remove(_seniorTeamBlock);
@@ -221,7 +220,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock.FairnessOptimization.Se
 			using (_mock.Playback())
 			{
 				_target.BlockSwapped += targetReportProgress;
-				_target.PerformStep2(schedulingOptions, _allPersonMatrixList, _selectedPeriod, _selectedPersons, _rollbackService, _schedulingDictionary, _weekDayPoints.GetWeekDaysPoints(), _optimizationPreferences, true);
+				_target.PerformStep2(schedulingOptions, _allPersonMatrixList, _selectedPeriod, _selectedPersons, _rollbackService, _schedulingDictionary, _weekDayPoints.GetWeekDaysPoints(_seniorityWorkDayRanks), _optimizationPreferences, true);
 				_target.BlockSwapped -= targetReportProgress;
 			}
 		}

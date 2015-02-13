@@ -4,8 +4,10 @@ using System.Linq;
 using System.Text;
 using NUnit.Framework;
 using Rhino.Mocks;
+using Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.Seniority;
 using Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.SeniorityDaysOff;
 using Teleopti.Ccc.Domain.Scheduling.TeamBlock;
+using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock.FairnessOptimization.SeniorityDaysOff
 {
@@ -18,6 +20,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock.FairnessOptimization.Se
         private ITeamBlockInfo _teamBlockInfo1;
         private ITeamBlockInfo _teamBlockInfo2;
         private IWeekDayPointCalculatorForTeamBlock _weekDayPointCalculatorForTeamBlock;
+	    private ISeniorityWorkDayRanks _seniorityWorkDayRanks;
 
         [SetUp ]
         public void Setup()
@@ -28,6 +31,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock.FairnessOptimization.Se
             _teamBlockInfo2 = _mock.StrictMock<ITeamBlockInfo>();
             _weekDayPointCalculatorForTeamBlock = _mock.StrictMock<IWeekDayPointCalculatorForTeamBlock>();
             _target = new SeniorityCalculatorForTeamBlock(_weekDayPointCalculatorForTeamBlock);
+			_seniorityWorkDayRanks = new SeniorityWorkDayRanks();
         }
 
         [Test]
@@ -40,7 +44,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock.FairnessOptimization.Se
             }
             using (_mock.Playback())
             {
-                var result = _target.CreateWeekDayValueDictionary(teamBlockList, _weekDayPoints.GetWeekDaysPoints());
+				var result = _target.CreateWeekDayValueDictionary(teamBlockList, _weekDayPoints.GetWeekDaysPoints(_seniorityWorkDayRanks));
                 Assert.AreEqual(result.Count(),0);
             }
         }
@@ -53,16 +57,16 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock.FairnessOptimization.Se
             {
                 Expect.Call(_weekDayPointCalculatorForTeamBlock.CalculateDaysOffSeniorityValue(_teamBlockInfo1,
                                                                                                _weekDayPoints
-                                                                                                   .GetWeekDaysPoints()))
+																								   .GetWeekDaysPoints(_seniorityWorkDayRanks)))
                       .Return(5);
                 Expect.Call(_weekDayPointCalculatorForTeamBlock.CalculateDaysOffSeniorityValue(_teamBlockInfo2,
                                                                                                _weekDayPoints
-                                                                                                   .GetWeekDaysPoints()))
+																								   .GetWeekDaysPoints(_seniorityWorkDayRanks)))
                       .Return(15);
             }
             using (_mock.Playback())
             {
-                var result = _target.CreateWeekDayValueDictionary(teamBlockList, _weekDayPoints.GetWeekDaysPoints());
+				var result = _target.CreateWeekDayValueDictionary(teamBlockList, _weekDayPoints.GetWeekDaysPoints(_seniorityWorkDayRanks));
                 Assert.AreEqual(result[_teamBlockInfo1 ], 5);
                 Assert.AreEqual(result[_teamBlockInfo2 ], 15);
             }

@@ -1,15 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using Teleopti.Ccc.Domain.Scheduling.TeamBlock;
-using Teleopti.Interfaces.Domain;
+﻿using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.SeniorityDaysOff
 {
     public interface IPersonDayOffPointsCalculator
     {
-        double CalculateDaysOffSeniorityValue(IScheduleRange scheduleRange, DateOnlyPeriod visiblePeriod);
+		double CalculateDaysOffSeniorityValue(IScheduleRange scheduleRange, DateOnlyPeriod visiblePeriod, ISeniorityWorkDayRanks seniorityWorkDayRanks);
     }
 
     public class PersonDayOffPointsCalculator : IPersonDayOffPointsCalculator
@@ -21,9 +16,9 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.Senior
             _weekDayPoints = weekDayPoints;
         }
 
-        public double CalculateDaysOffSeniorityValue(IScheduleRange scheduleRange , DateOnlyPeriod visiblePeriod )
+        public double CalculateDaysOffSeniorityValue(IScheduleRange scheduleRange , DateOnlyPeriod visiblePeriod, ISeniorityWorkDayRanks seniorityWorkDayRanks)
         {
-            var weekDayPoints = _weekDayPoints.GetWeekDaysPoints();
+			var weekDayPoints = _weekDayPoints.GetWeekDaysPoints(seniorityWorkDayRanks);
             double totalPoints = 0;
             foreach (var dateOnly in visiblePeriod.DayCollection() )
             {

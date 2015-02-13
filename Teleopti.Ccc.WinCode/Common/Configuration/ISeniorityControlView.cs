@@ -1,5 +1,6 @@
 ﻿
 using Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.Seniority;
+using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.WinCode.Common.Configuration
 {

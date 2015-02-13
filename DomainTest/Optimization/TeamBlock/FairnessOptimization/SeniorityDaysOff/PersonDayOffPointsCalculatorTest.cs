@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using NUnit.Framework;
 using Rhino.Mocks;
+using Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.Seniority;
 using Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.SeniorityDaysOff;
 using Teleopti.Interfaces.Domain;
 
@@ -17,6 +18,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock.FairnessOptimization.Se
         private IScheduleRange _scheduleRange;
         private MockRepository _mock;
         private IScheduleDay _scheduleDay;
+	    private ISeniorityWorkDayRanks _seniorityWorkDayRanks;
 
         [SetUp]
         public void Setup()
@@ -25,7 +27,8 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock.FairnessOptimization.Se
             _scheduleDay = _mock.StrictMock<IScheduleDay>();
             _scheduleRange = _mock.StrictMock<IScheduleRange>();
             _weekDayPoints = new WeekDayPoints();
-            _target = new PersonDayOffPointsCalculator(_weekDayPoints);    
+            _target = new PersonDayOffPointsCalculator(_weekDayPoints);
+    		_seniorityWorkDayRanks = new SeniorityWorkDayRanks();
         }
 
         [Test]
@@ -40,7 +43,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock.FairnessOptimization.Se
             }
             using (_mock.Playback())
             {
-                var result = _target.CalculateDaysOffSeniorityValue(_scheduleRange, requestedPeriod);
+				var result = _target.CalculateDaysOffSeniorityValue(_scheduleRange, requestedPeriod, _seniorityWorkDayRanks);
                 Assert.AreEqual(result,7);
             }
         }
@@ -57,7 +60,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock.FairnessOptimization.Se
             }
             using (_mock.Playback())
             {
-                var result = _target.CalculateDaysOffSeniorityValue(_scheduleRange, requestedPeriod);
+				var result = _target.CalculateDaysOffSeniorityValue(_scheduleRange, requestedPeriod, _seniorityWorkDayRanks);
                 Assert.AreEqual(result, 14);
             }
         }

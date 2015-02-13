@@ -147,6 +147,8 @@
     <Compile Include="Domain\INotificationSender.cs" />
     <Compile Include="Domain\IQueueStatsModel.cs" />
     <Compile Include="Domain\ISeatPlan.cs" />
+    <Compile Include="Domain\ISeniorityWorkDay.cs" />
+    <Compile Include="Domain\ISeniorityWorkDayRanks.cs" />
     <Compile Include="Domain\IShiftExchangeCriteria.cs" />
     <Compile Include="Domain\IShiftExchangeOffer.cs" />
     <Compile Include="Domain\IStaffingCalculatorServiceFacade.cs" />

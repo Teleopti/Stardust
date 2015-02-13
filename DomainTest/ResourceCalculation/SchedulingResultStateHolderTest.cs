@@ -4,6 +4,7 @@ using System.Drawing;
 using NUnit.Framework;
 using Rhino.Mocks;
 using Teleopti.Ccc.Domain.Forecasting;
+using Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.Seniority;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling.Rules;
 using Teleopti.Ccc.TestCommon.FakeData;
@@ -28,6 +29,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
         {
             Skill skill = new Skill("skilling me softly", "with his song", Color.Red, 50, new SkillTypePhone(new Description("amfal"), ForecastSource.InboundTelephony));
             SchedulingResultStateHolder target = SchedulingResultStateHolderFactory.Create(_period, skill);
+			target.SeniorityWorkDayRanks = new SeniorityWorkDayRanks();
             IList<ISkill> list = target.VisibleSkills;
             Assert.IsNotNull(list);
             Assert.AreEqual(1, target.Skills.Count);
@@ -36,6 +38,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
             Assert.IsNotNull(target.SkillDays);
             Assert.IsNotNull(target.SkillStaffPeriodHolder);
             Assert.IsFalse(target.UseMinWeekWorkTime);
+			Assert.IsNotNull(target.SeniorityWorkDayRanks);
         }
 
 

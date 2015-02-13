@@ -2,6 +2,7 @@
 using NUnit.Framework;
 using Rhino.Mocks;
 using Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.EqualNumberOfCategory;
+using Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.Seniority;
 using Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.SeniorityDaysOff;
 using Teleopti.Ccc.Domain.Scheduling.TeamBlock;
 using Teleopti.Interfaces.Domain;
@@ -22,6 +23,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock.FairnessOptimization.Se
         private IWeekDayPoints _weekDayPoints;
         private IScheduleDictionary _scheduleDictionary;
         private ISchedulePartModifyAndRollbackService _rollbackService;
+	    private ISeniorityWorkDayRanks _seniorityWorkDayRanks;
 
         [SetUp]
         public void Setup()
@@ -38,6 +40,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock.FairnessOptimization.Se
             _weekDayPoints = new WeekDayPoints();
             _scheduleDictionary = _mock.StrictMock<IScheduleDictionary>();
             _rollbackService = _mock.StrictMock<ISchedulePartModifyAndRollbackService>();
+			_seniorityWorkDayRanks = new SeniorityWorkDayRanks();
 
         }
 
@@ -54,12 +57,12 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock.FairnessOptimization.Se
 
                 Expect.Call(_seniorityCalculatorForTeamBlock.CreateWeekDayValueDictionary(teamBlocksToWorkWith,
                                                                                           _weekDayPoints
-                                                                                              .GetWeekDaysPoints()))
+																							  .GetWeekDaysPoints(_seniorityWorkDayRanks)))
                       .Return(new Dictionary<ITeamBlockInfo, double>( ));
             }
             using (_mock.Playback())
             {
-                Assert.IsFalse(_target.TrySwapForMostSenior(teamBlocksToWorkWith, mostSeniorTeamBlock, _rollbackService, _scheduleDictionary, _weekDayPoints.GetWeekDaysPoints()));
+				Assert.IsFalse(_target.TrySwapForMostSenior(teamBlocksToWorkWith, mostSeniorTeamBlock, _rollbackService, _scheduleDictionary, _weekDayPoints.GetWeekDaysPoints(_seniorityWorkDayRanks)));
             }
 
         }
@@ -81,12 +84,12 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock.FairnessOptimization.Se
                 
                 Expect.Call(_seniorityCalculatorForTeamBlock.CreateWeekDayValueDictionary(teamBlocksToWorkWith,
                                                                                           _weekDayPoints
-                                                                                              .GetWeekDaysPoints())).IgnoreArguments()
+																							  .GetWeekDaysPoints(_seniorityWorkDayRanks))).IgnoreArguments()
                       .Return(teamBlockSeneriotyList);
             }  
             using (_mock.Playback())
             {
-                Assert.IsFalse(_target.TrySwapForMostSenior(teamBlocksToWorkWith,mostSeniorTeamBlock ,_rollbackService,_scheduleDictionary,_weekDayPoints.GetWeekDaysPoints() ));
+				Assert.IsFalse(_target.TrySwapForMostSenior(teamBlocksToWorkWith, mostSeniorTeamBlock, _rollbackService, _scheduleDictionary, _weekDayPoints.GetWeekDaysPoints(_seniorityWorkDayRanks)));
             }
 
         }
@@ -108,7 +111,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock.FairnessOptimization.Se
 
                 Expect.Call(_seniorityCalculatorForTeamBlock.CreateWeekDayValueDictionary(teamBlocksToWorkWith,
                                                                                           _weekDayPoints
-                                                                                              .GetWeekDaysPoints()))
+																							  .GetWeekDaysPoints(_seniorityWorkDayRanks)))
                       .Return(teamBlockSeneriotyList);
                 Expect.Call(_teamBlockLocatorWithHigestPoints.FindBestTeamBlockToSwapWith(teamBlocksToWorkWith,
                                                                                           teamBlockSeneriotyList))
@@ -119,7 +122,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock.FairnessOptimization.Se
             }
             using (_mock.Playback())
             {
-                Assert.IsTrue(_target.TrySwapForMostSenior(teamBlocksToWorkWith, mostSeniorTeamBlock, _rollbackService, _scheduleDictionary, _weekDayPoints.GetWeekDaysPoints()));
+				Assert.IsTrue(_target.TrySwapForMostSenior(teamBlocksToWorkWith, mostSeniorTeamBlock, _rollbackService, _scheduleDictionary, _weekDayPoints.GetWeekDaysPoints(_seniorityWorkDayRanks)));
             }
 
         }

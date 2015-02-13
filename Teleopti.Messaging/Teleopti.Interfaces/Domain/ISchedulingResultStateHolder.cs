@@ -139,5 +139,7 @@ namespace Teleopti.Interfaces.Domain
         bool UseMinWeekWorkTime { get; set; }
 
 	    ISkillDay SkillDayOnSkillAndDateOnly(ISkill skill, DateOnly dateOnly);
+
+		ISeniorityWorkDayRanks SeniorityWorkDayRanks { get; set; }
     }
 }

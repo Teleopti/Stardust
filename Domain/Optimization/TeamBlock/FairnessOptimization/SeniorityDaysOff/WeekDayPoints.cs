@@ -1,34 +1,35 @@
 ﻿using System;
 using System.Collections.Generic;
+using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.SeniorityDaysOff
 {
     public interface IWeekDayPoints
     {
-        IDictionary<DayOfWeek, int> GetWeekDaysPoints();
+		IDictionary<DayOfWeek, int> GetWeekDaysPoints(ISeniorityWorkDayRanks seniorityWorkDayRanks);
     }
 
     public class WeekDayPoints : IWeekDayPoints
     {
         private Dictionary<DayOfWeek, int> _weekDayProprity;
 
-        public IDictionary<DayOfWeek, int> GetWeekDaysPoints()
+        public IDictionary<DayOfWeek, int> GetWeekDaysPoints(ISeniorityWorkDayRanks seniorityWorkDayRanks)
         {
-            populateReferencePoints();
+            populateReferencePoints(seniorityWorkDayRanks);
             return _weekDayProprity;
         }
 
-        private void populateReferencePoints()
+		private void populateReferencePoints(ISeniorityWorkDayRanks seniorityWorkDayRanks)
         {
             _weekDayProprity = new Dictionary<DayOfWeek, int>
                 {
-                    {DayOfWeek.Monday, 1},
-                    {DayOfWeek.Tuesday, 2},
-                    {DayOfWeek.Wednesday, 3},
-                    {DayOfWeek.Thursday, 4},
-                    {DayOfWeek.Friday, 5},
-                    {DayOfWeek.Saturday, 6},
-                    {DayOfWeek.Sunday, 7}
+                    {DayOfWeek.Monday, seniorityWorkDayRanks.Monday},
+                    {DayOfWeek.Tuesday, seniorityWorkDayRanks.Tuesday},
+                    {DayOfWeek.Wednesday, seniorityWorkDayRanks.Wednesday},
+                    {DayOfWeek.Thursday, seniorityWorkDayRanks.Thursday},
+                    {DayOfWeek.Friday, seniorityWorkDayRanks.Friday},
+                    {DayOfWeek.Saturday, seniorityWorkDayRanks.Saturday},
+                    {DayOfWeek.Sunday, seniorityWorkDayRanks.Sunday}
                 };
         }
     }

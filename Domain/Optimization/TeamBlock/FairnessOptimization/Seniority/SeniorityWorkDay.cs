@@ -1,15 +1,9 @@
 ﻿using System;
 using Teleopti.Ccc.UserTexts;
+using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.Seniority
 {
-	public interface ISeniorityWorkDay
-	{
-		DayOfWeek DayOfWeek { get; set; }
-		int Rank { get; set; }
-		string DayOfWeekName { get; }
-	}
-
 	public class SeniorityWorkDay : ISeniorityWorkDay
 	{
 		public DayOfWeek DayOfWeek { get; set; }

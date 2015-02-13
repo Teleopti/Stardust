@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using NUnit.Framework;
 using Rhino.Mocks;
 using Teleopti.Ccc.Domain.FeatureFlags;
+using Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.Seniority;
 using Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.SeniorityDaysOff;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling.TeamBlock;
@@ -25,6 +26,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock.FairnessOptimization.Se
         private IScheduleDictionary _scheduleDictionary;
         private IDictionary<DayOfWeek, int> _weekDayPoints;
         private IOptimizationPreferences _optimizationPreferences;
+	    private ISeniorityWorkDayRanks _seniorityWorkDayRanks;
 
         [SetUp]
         public void Setup()
@@ -41,6 +43,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock.FairnessOptimization.Se
             _weekDayPoints = new Dictionary<DayOfWeek, int>();
             _optimizationPreferences = _mock.StrictMock<IOptimizationPreferences>();
 	        _target = new TeamBlockDayOffFairnessOptimizationServiceFacade(_dayOffStep1,_dayOffStep2,_teamBlockSchedulingOption);
+			_seniorityWorkDayRanks = new SeniorityWorkDayRanks();
         }
 
         [Test]
@@ -62,8 +65,8 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock.FairnessOptimization.Se
             }
             using (_mock.Playback())
             {
-                
-                _target.Execute(_allPersonMatrixList,_selectedPeriod,_selectedPerson,schedulingOptions,_scheduleDictionary,_rollbackService,_optimizationPreferences, true);
+
+				_target.Execute(_allPersonMatrixList, _selectedPeriod, _selectedPerson, schedulingOptions, _scheduleDictionary, _rollbackService, _optimizationPreferences, true, _seniorityWorkDayRanks);
             }
         }
         [Test]
@@ -94,7 +97,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock.FairnessOptimization.Se
             using (_mock.Playback())
             {
 
-                _target.Execute(_allPersonMatrixList, _selectedPeriod, _selectedPerson, schedulingOptions, _scheduleDictionary, _rollbackService, _optimizationPreferences, true);
+				_target.Execute(_allPersonMatrixList, _selectedPeriod, _selectedPerson, schedulingOptions, _scheduleDictionary, _rollbackService, _optimizationPreferences, true, _seniorityWorkDayRanks);
             }
         }
     }

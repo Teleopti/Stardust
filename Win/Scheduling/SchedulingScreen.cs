@@ -3301,6 +3301,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 				methods.Add(new LoaderMethod(loadDefinitionSets, null));
 				methods.Add(new LoaderMethod(loadContractSchedule, null));
 				methods.Add(new LoaderMethod(loadAccounts, null));
+				methods.Add(new LoaderMethod(loadSeniorityWorkingDays, null));
 
 				using (PerformanceOutput.ForOperation("Loading all data for scheduler"))
 				{
@@ -3626,6 +3627,13 @@ namespace Teleopti.Ccc.Win.Scheduling
 			{
 				stateHolder.LoadPersonRequests(uow, new RepositoryFactory(), _personRequestAuthorizationChecker);
 			}
+		}
+
+		private void loadSeniorityWorkingDays(IUnitOfWork uow, ISchedulerStateHolder stateHolder, IPeopleAndSkillLoaderDecider decider)
+		{
+			var result = new SeniorityWorkDayRanksRepository(uow).LoadAll();
+			var workDayRanks = result.IsEmpty() ? new SeniorityWorkDayRanks() : result.First();
+			stateHolder.SchedulingResultState.SeniorityWorkDayRanks = workDayRanks;
 		}
 
 		private static void loadCommonStateHolder(IUnitOfWork uow, ISchedulerStateHolder stateHolder, IPeopleAndSkillLoaderDecider decider)

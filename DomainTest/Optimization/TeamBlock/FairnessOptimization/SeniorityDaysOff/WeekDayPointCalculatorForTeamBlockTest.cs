@@ -1,10 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Linq;
-using System.Text;
 using NUnit.Framework;
 using Rhino.Mocks;
+using Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.Seniority;
 using Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.SeniorityDaysOff;
 using Teleopti.Ccc.Domain.Scheduling.TeamBlock;
 using Teleopti.Interfaces.Domain;
@@ -23,6 +21,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock.FairnessOptimization.Se
         private IScheduleDayPro _scheduleDayPro2;
         private IScheduleDay _scheduleDay1;
         private IScheduleDay _scheduleDay2;
+	    private ISeniorityWorkDayRanks _seniorityWorkDayRanks;
 
         [SetUp]
         public void Setup()
@@ -36,7 +35,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock.FairnessOptimization.Se
             _scheduleDayPro2 = _mocks.StrictMock<IScheduleDayPro>();
             _scheduleDay1 = _mocks.StrictMock<IScheduleDay>();
             _scheduleDay2 = _mocks.StrictMock<IScheduleDay>();
-
+			_seniorityWorkDayRanks = new SeniorityWorkDayRanks();
         }
 
         [Test]
@@ -56,7 +55,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock.FairnessOptimization.Se
             }
             using (_mocks.Playback())
             {
-                var result = _target.CalculateDaysOffSeniorityValue(_teamBlockInfo1, _weekDayPoints.GetWeekDaysPoints());
+				var result = _target.CalculateDaysOffSeniorityValue(_teamBlockInfo1, _weekDayPoints.GetWeekDaysPoints(_seniorityWorkDayRanks));
                 Assert.AreEqual( result,7);
             }
         }

@@ -779,7 +779,7 @@ namespace Teleopti.Ccc.Win.Scheduling
             var teamBlockDayOffFairnessOptimizationService = _container.Resolve<ITeamBlockDayOffFairnessOptimizationServiceFacade>();
             teamBlockDayOffFairnessOptimizationService.ReportProgress  += resourceOptimizerPersonOptimized;
             teamBlockDayOffFairnessOptimizationService.Execute(matrixListForFairness, selectedPeriod, selectedPersons, schedulingOptions,
-                _schedulerStateHolder.Schedules, rollbackService, optimizationPreferences, true);
+                _schedulerStateHolder.Schedules, rollbackService, optimizationPreferences, true,_stateHolder.SeniorityWorkDayRanks);
             teamBlockDayOffFairnessOptimizationService.ReportProgress -= resourceOptimizerPersonOptimized;
 			
 			var teamBlockSeniorityFairnessOptimizationService = _container.Resolve<ITeamBlockSeniorityFairnessOptimizationService>();

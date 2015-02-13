@@ -189,7 +189,7 @@ namespace Teleopti.Ccc.Win.Scheduling.PropertyPanel
 			var rankedPersonBasedOnStartDate = _container.Resolve<IRankedPersonBasedOnStartDate>();
             var personDayOffPointsCalculator = _container.Resolve<IPersonDayOffPointsCalculator>();
             var personShiftCategoryPointCalculator = _container.Resolve<IPersonShiftCategoryPointCalculator>();
-            var dayOffPoints =  personDayOffPointsCalculator.CalculateDaysOffSeniorityValue(scheduleRange, _requestedPeriod);
+            var dayOffPoints =  personDayOffPointsCalculator.CalculateDaysOffSeniorityValue(scheduleRange, _requestedPeriod, _stateHolder.SchedulingResultState.SeniorityWorkDayRanks);
             var shiftCategoryPoints =
                  personShiftCategoryPointCalculator.CalculateShiftCategorySeniorityValue(scheduleRange, _requestedPeriod,
                                                                                               shiftCategories.ToList());

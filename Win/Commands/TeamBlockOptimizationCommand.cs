@@ -181,7 +181,7 @@ namespace Teleopti.Ccc.Win.Commands
 					_teamBlockDayOffFairnessOptimizationService.ReportProgress += resourceOptimizerPersonOptimized;
 					_teamBlockDayOffFairnessOptimizationService.Execute(allMatrixes, selectedPeriod, selectedPersons, schedulingOptions,
 						_schedulerStateHolder.Schedules,
-						rollbackServiceWithoutResourceCalculation, optimizationPreferences, true);
+						rollbackServiceWithoutResourceCalculation, optimizationPreferences, true, _schedulerStateHolder.SchedulingResultState.SeniorityWorkDayRanks);
 					_teamBlockDayOffFairnessOptimizationService.ReportProgress -= resourceOptimizerPersonOptimized;
 
 
