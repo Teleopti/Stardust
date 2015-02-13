@@ -2,7 +2,10 @@
 using System.Collections.Generic;
 using System.Data;
 using System.Globalization;
+using System.Linq;
+using System.Security.Authentication;
 using NUnit.Framework;
+using Rhino.Mocks;
 using Teleopti.Analytics.Etl.Common;
 using Teleopti.Analytics.Etl.IntegrationTest.TestData;
 using Teleopti.Analytics.Etl.Interfaces.Transformer;
@@ -13,13 +16,14 @@ using Teleopti.Analytics.Etl.Transformer.Job.MultipleDate;
 using Teleopti.Analytics.Etl.Transformer.Job.Steps;
 using Teleopti.Analytics.Etl.TransformerInfrastructure;
 using Teleopti.Ccc.Domain.FeatureFlags;
+using Teleopti.Ccc.Domain.Security;
 using Teleopti.Ccc.Domain.Security.Authentication;
+using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.IocCommon.Toggle;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.TestData.Core;
 using Teleopti.Ccc.TestCommon.TestData.Setups.Configurable;
 using Teleopti.Interfaces.Domain;
-using Teleopti.Interfaces.MessageBroker.Client;
 using IJobResult = Teleopti.Analytics.Etl.Interfaces.Transformer.IJobResult;
 
 namespace Teleopti.Analytics.Etl.IntegrationTest
@@ -85,12 +89,12 @@ namespace Teleopti.Analytics.Etl.IntegrationTest
 				DataSource = SqlCommands.DataSourceIdGet(datasourceName)
 			};
 
-				jobParameters.StateHolder.SetLoadBridgeTimeZonePeriod(period, person.PermissionInformation.DefaultTimeZone().Id);
+			jobParameters.StateHolder.SetLoadBridgeTimeZonePeriod(period, person.PermissionInformation.DefaultTimeZone().Id);
 			StepRunner.RunNightly(jobParameters);
 
 			const string phone = "Phone";
 			var schedule = SqlCommands.ReportDataScheduledTimePerAgent(testDate.AddDays(-2), testDate.AddDays(0), 1, person, timeZoneId, phone);
-			
+
 			Assert.That(schedule.Rows.Count, Is.EqualTo(3));
 			foreach (DataRow row in schedule.Rows)
 			{
@@ -153,7 +157,7 @@ namespace Teleopti.Analytics.Etl.IntegrationTest
 				DataSource = SqlCommands.DataSourceIdGet(datasourceName)
 			};
 
-				jobParameters.StateHolder.SetLoadBridgeTimeZonePeriod(period, person.PermissionInformation.DefaultTimeZone().Id);
+			jobParameters.StateHolder.SetLoadBridgeTimeZonePeriod(period, person.PermissionInformation.DefaultTimeZone().Id);
 			StepRunner.RunNightly(jobParameters);
 
 			// now it should have data on all three dates, 96 interval
@@ -222,7 +226,7 @@ namespace Teleopti.Analytics.Etl.IntegrationTest
 				DataSource = SqlCommands.DataSourceIdGet(datasourceName)
 			};
 
-				jobParameters.StateHolder.SetLoadBridgeTimeZonePeriod(period, person.PermissionInformation.DefaultTimeZone().Id);
+			jobParameters.StateHolder.SetLoadBridgeTimeZonePeriod(period, person.PermissionInformation.DefaultTimeZone().Id);
 
 			//Run ETL.Intraday first time just to set "LastUpdatedPerStep"
 			StepRunner.RunIntraday(jobParameters);
@@ -273,7 +277,7 @@ namespace Teleopti.Analytics.Etl.IntegrationTest
 
 		}
 
-		[Test, Ignore("until its fixed")]
+		[Test]
 		public void TestCtiPlattformUpdate()
 		{
 			var testDate = new DateTime(2013, 06, 15);
@@ -282,7 +286,7 @@ namespace Teleopti.Analytics.Etl.IntegrationTest
 
 			AnalyticsRunner.RunAnalyticsBaseData(new List<IAnalyticsDataSetup>(), testDate);
 			AnalyticsRunner.RunSysSetupTestData(testDate, queueId);
-			
+
 
 			var el = new ExternalLogonConfigurable
 			{
@@ -315,24 +319,33 @@ namespace Teleopti.Analytics.Etl.IntegrationTest
 			dateList.Add(testDate.AddDays(-3), testDate.AddDays(-3), JobCategoryType.Forecast);
 			dateList.Add(testDate.AddDays(-3), testDate.AddDays(-3), JobCategoryType.QueueStatistics);
 
-			var jobHelper = new JobHelper(); 
+			var user = MockRepository.GenerateMock<IPerson>();
+			var permission = MockRepository.GenerateMock<IPermissionInformation>();
+			user.Stub(x => x.PermissionInformation).Return(permission);
+			permission.Stub(x => x.HasAccessToAllBusinessUnits()).Return(true);
+			var dataSource = StateHolderReader.Instance.StateReader.ApplicationScopeData.DataSource("TestData");
+			var jobHelper = new JobHelper(null, null, null,
+				new LogOnHelperFake(dataSource, user));
+			//var jobHelper = new JobHelper(null, null, null,new LogOnHelper(""));
+			jobHelper.LogOffTeleoptiCccDomain();
 			var jobParameters = new JobParameters(
-				dateList, 1, "UTC", 15, "", "False", 
-				CultureInfo.CurrentCulture, 
+				dateList, 1, "UTC", 15, "", "False",
+				CultureInfo.CurrentCulture,
 				new FakeToggleManager(Toggles.ETL_OnlyLatestQueueAgentStatistics_30787),
 				false
 				)
 			{
-				Helper = jobHelper, 
+				Helper = jobHelper,
 				DataSource = SqlCommands.DataSourceIdGet(datasourceName)
 			};
-				jobParameters.StateHolder.SetLoadBridgeTimeZonePeriod(period, person.PermissionInformation.DefaultTimeZone().Id);
+			jobParameters.StateHolder.SetLoadBridgeTimeZonePeriod(period, person.PermissionInformation.DefaultTimeZone().Id);
 			jobHelper.SelectDataSourceContainer(jobHelper.TenantCollection[0].DataSourceName);
 			var jobRunner = new JobRunner();
 			var nightlyJob = new JobBase(jobParameters, new NightlyJobCollection(jobParameters), "Nightly", true, true);
 			var jobResultCollection = new List<IJobResult>();
 
-			var jobListResult = jobRunner.Run(nightlyJob,  jobResultCollection, new List<IJobStep>());
+			nightlyJob.StepList.Remove(nightlyJob.StepList.FirstOrDefault(x => x.Name.Equals("Statistics Update Notification")));
+			var jobListResult = jobRunner.Run(nightlyJob, jobResultCollection, new List<IJobStep>());
 
 			Assert.That(jobListResult[0].HasError, Is.False);
 
@@ -344,18 +357,19 @@ namespace Teleopti.Analytics.Etl.IntegrationTest
 			jobParameters.NowForTestPurpose = testDate.AddDays(0);
 
 			var intradayJob = new JobBase(jobParameters, new IntradayJobCollection(jobParameters), "Intraday", true, true);
+			intradayJob.StepList.Remove(intradayJob.StepList.FirstOrDefault(x => x.Name.Equals("Statistics Update Notification")));
 			jobResultCollection = new List<IJobResult>(); //reset
-			
+
 			jobListResult = jobRunner.Run(intradayJob, jobResultCollection, new List<IJobStep>());
 			Assert.That(jobListResult[0].HasError, Is.False);
 			//check max interval value before (59)
-			Assert.That(SqlCommands.MaxIntervalLogObjectDetail(2, jobParameters.DataSource),  Is.EqualTo(59));
+			Assert.That(SqlCommands.MaxIntervalLogObjectDetail(2, jobParameters.DataSource), Is.EqualTo(59));
 			AnalyticsRunner.AddOneInterval(el.AcdLogOnAggId, el.AcdLogOnName, queueId, 8, null, null);
 			//check interval max value after 60
 			Assert.That(SqlCommands.MaxIntervalLogObjectDetail(2, jobParameters.DataSource), Is.EqualTo(60));
 			//run intraday and check that agg and mart is synced
 			jobResultCollection = new List<IJobResult>(); //reset
-			jobListResult = jobRunner.Run(intradayJob,  jobResultCollection, new List<IJobStep>());
+			jobListResult = jobRunner.Run(intradayJob, jobResultCollection, new List<IJobStep>());
 			Assert.That(jobListResult[0].HasError, Is.False);
 
 			Assert.That(SqlCommands.IntradayDetailSynced(1, jobParameters.DataSource), Is.True);
@@ -378,7 +392,7 @@ namespace Teleopti.Analytics.Etl.IntegrationTest
 
 			//run intraday and check that agg and mart is synced
 			jobResultCollection = new List<IJobResult>(); //reset
-			jobListResult = jobRunner.Run(intradayJob,  jobResultCollection, new List<IJobStep>());
+			jobListResult = jobRunner.Run(intradayJob, jobResultCollection, new List<IJobStep>());
 			Assert.That(jobListResult[0].HasError, Is.False);
 			//check deviation is loaded for today and that all sync dates/intervals are OK. Number of intervals in deviation is now 36
 			Assert.That(SqlCommands.SumFactScheduleDeviation(person, testDate.AddDays(0), "deviation_schedule_s"), Is.EqualTo(16080));
@@ -390,7 +404,7 @@ namespace Teleopti.Analytics.Etl.IntegrationTest
 			stopInterval = stopInterval + 1;
 			AnalyticsRunner.AddOneInterval(el.AcdLogOnAggId, el.AcdLogOnName, queueId, 8, null, null);
 			Assert.That(SqlCommands.MaxIntervalLogObjectDetail(2, jobParameters.DataSource), Is.EqualTo(stopInterval));
-			
+
 			//move @now ahead and run intraday again and verfiy agg and mart is synced, Number of intervals in deviation is now 37
 			jobParameters.NowForTestPurpose = testDate.AddDays(0).AddHours(20);
 			jobResultCollection = new List<IJobResult>(); //reset
@@ -427,7 +441,7 @@ namespace Teleopti.Analytics.Etl.IntegrationTest
 		{
 			//Tests for "Ready Time vs. Schedule Ready Time"
 			var adherance = SqlCommands.ReportDataAgentScheduleAdherence(testDate.AddDays(-2), testDate.AddDays(-1), aheranceTypeReadyTime, person, timeZoneId);
-			
+
 			Assert.That(adherance.Rows.Count, Is.EqualTo(81));
 			foreach (DataRow row in adherance.Rows)
 			{
@@ -529,7 +543,7 @@ namespace Teleopti.Analytics.Etl.IntegrationTest
 
 
 			//Asserts on fact_schedule_deviation
-			Assert.That(SqlCommands.CountIntervalsPerLocalDate(person, testDate.AddDays(-1)), Is.EqualTo(35), "ETL."+ etlType + " count intervals for Day-1");
+			Assert.That(SqlCommands.CountIntervalsPerLocalDate(person, testDate.AddDays(-1)), Is.EqualTo(35), "ETL." + etlType + " count intervals for Day-1");
 			Assert.That(SqlCommands.CountIntervalsPerLocalDate(person, testDate.AddDays(-2)), Is.EqualTo(46), "ETL." + etlType + " count intervals for Day-2");
 			var column = "deviation_schedule_s";
 			Assert.That(SqlCommands.SumFactScheduleDeviation(person, testDate.AddDays(-1), column), Is.EqualTo(24540), "ETL." + etlType + " " + column + " for Day-1");
@@ -544,7 +558,74 @@ namespace Teleopti.Analytics.Etl.IntegrationTest
 			Assert.That(SqlCommands.SumFactScheduleDeviation(person, testDate.AddDays(-1), column), Is.EqualTo(22500), "ETL." + etlType + " " + column + " for Day-1");
 			Assert.That(SqlCommands.SumFactScheduleDeviation(person, testDate.AddDays(-2), column), Is.EqualTo(32580), "ETL." + etlType + " " + column + " for Day-2");
 
-			
+
+		}
+	}
+
+	public class LogOnHelperFake : ILogOnHelper
+	{
+		private readonly DataSourceContainer _choosenDb;
+		private IList<IBusinessUnit> _buList;
+		private readonly List<ITenantName> _tenantNames;
+		private readonly List<IDataSource> _dataSources = new List<IDataSource>();
+
+		public LogOnHelperFake(IDataSource dataSource, IPerson person)
+		{
+			_dataSources.Add(dataSource);
+			_choosenDb = new DataSourceContainer(dataSource, new RepositoryFactory(), null, AuthenticationTypeOption.Application);
+			_choosenDb.SetUser(person);
+			_tenantNames = new List<ITenantName> { new TenantName { DataSourceName = dataSource.DataSourceName } };
+		}
+
+		public IList<IBusinessUnit> GetBusinessUnitCollection()
+		{
+			if (_buList == null)
+			{
+				_buList = new List<IBusinessUnit>(_choosenDb.AvailableBusinessUnitProvider.AvailableBusinessUnits());
+			}
+
+			//Trace.WriteLine("No allowed business unit found in current database.");
+			if (_buList == null || _buList.Count == 0)
+			{
+				throw new AuthenticationException("No allowed business unit found in current database '" +
+											_choosenDb + "'.");
+			}
+
+			return _buList;
+		}
+
+		public List<ITenantName> TenantCollection
+		{
+			get
+			{
+				return _tenantNames;
+			}
+		}
+
+		public IDataSourceContainer SelectedDataSourceContainer { get { return _choosenDb; } }
+
+		public bool SetBusinessUnit(IBusinessUnit businessUnit)
+		{
+			LicenseActivator.ProvideLicenseActivator();
+			return true;
+		}
+
+		public bool SelectDataSourceContainer(string dataSourceName)
+		{
+			using (var unitOfWork = _choosenDb.DataSource.Application.CreateAndOpenUnitOfWork())
+			{
+				_choosenDb.SetUser(new RepositoryFactory().CreatePersonRepository(unitOfWork).LoadOne(SuperUser.Id_AvoidUsing_This));
+			}
+			return true;
+		}
+
+		public void LogOff()
+		{
+		}
+
+		public void Dispose()
+		{
+			throw new NotImplementedException();
 		}
 	}
 }
