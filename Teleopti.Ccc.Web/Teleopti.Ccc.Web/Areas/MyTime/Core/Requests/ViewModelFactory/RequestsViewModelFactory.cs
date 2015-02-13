@@ -27,6 +27,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.ViewModelFactory
 		private readonly INow _now;
 		private readonly ILoggedOnUser _loggedOnUser;
 		private readonly IShiftTradeScheduleViewModelMapper _shiftTradeScheduleViewModelMapper;
+		private readonly IPersonRequestRepository _personRequestRepository;
 
 		public RequestsViewModelFactory(
 			IPersonRequestProvider personRequestProvider,
@@ -39,7 +40,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.ViewModelFactory
 			INow now,
 			ILoggedOnUser loggedOnUser, 
 			IShiftTradeScheduleViewModelMapper shiftTradeScheduleViewModelMapper,
-			IAbsenceAccountProvider personAccountProvider)
+			IAbsenceAccountProvider personAccountProvider, IPersonRequestRepository personRequestRepository)
 		{
 			_personRequestProvider = personRequestProvider;
 			_mapper = mapper;
@@ -52,6 +53,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.ViewModelFactory
 			_loggedOnUser = loggedOnUser;
 			_shiftTradeScheduleViewModelMapper = shiftTradeScheduleViewModelMapper;
 			_personAccountProvider = personAccountProvider;
+			_personRequestRepository = personRequestRepository;
 		}
 
 		public RequestsViewModel CreatePageViewModel()
@@ -117,9 +119,24 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.ViewModelFactory
 			return _mapper.Map<IAccount, AbsenceAccountViewModel>(absenceAccount);
 		}
 
-		public ShiftTradeRequestsPeriodViewModel CreateShiftTradePeriodViewModel()
+		public ShiftTradeRequestsPeriodViewModel CreateShiftTradePeriodViewModel(Guid? id = null)
 		{
-			return _shiftTradeRequestsPeriodViewModelMapper.Map(_shiftTradeRequestprovider.RetrieveUserWorkflowControlSet(), _now);
+			var ret = _shiftTradeRequestsPeriodViewModelMapper.Map(_shiftTradeRequestprovider.RetrieveUserWorkflowControlSet(), _now);
+
+			if (id != null)
+			{
+				var personRequest = _personRequestRepository.Find(id.Value);
+				var shiftTrade = personRequest.Request as IShiftTradeRequest;
+				if (shiftTrade != null)
+				{
+					if (shiftTrade.Offer == null)
+					{
+						ret.MiscSetting.AnonymousTrading = false;
+						ret.MiscSetting.LockTrading = false;
+					}
+				}
+			}
+			return ret;
 		}
 
 		public ShiftTradeScheduleViewModel CreateShiftTradeScheduleViewModel(ShiftTradeScheduleViewModelData data)

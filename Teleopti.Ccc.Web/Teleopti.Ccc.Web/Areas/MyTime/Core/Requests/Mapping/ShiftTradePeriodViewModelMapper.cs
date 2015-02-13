@@ -1,4 +1,5 @@
-﻿using System.Globalization;
+﻿using System;
+using System.Globalization;
 using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.Requests;
 using Teleopti.Interfaces.Domain;
@@ -14,7 +15,11 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping
 			if (workflowControlSet != null)
 			{
 				vm.HasWorkflowControlSet = true;
-				vm.AnonymousTrading = workflowControlSet.AnonymousTrading;
+				vm.MiscSetting = new ShiftTradeRequestMiscSetting()
+				{
+					AnonymousTrading = workflowControlSet.AnonymousTrading,
+					LockTrading = workflowControlSet.LockTrading
+				};
 				vm.OpenPeriodRelativeStart = workflowControlSet.ShiftTradeOpenPeriodDaysForward.Minimum;
 				vm.OpenPeriodRelativeEnd = workflowControlSet.ShiftTradeOpenPeriodDaysForward.Maximum;
 			}

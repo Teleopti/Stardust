@@ -35,10 +35,10 @@ Teleopti.MyTimeWeb.Request.RequestDetail = (function ($) {
             return vm;
         };
         
-        self.createShiftTradeRequestViewModel = function () {
+        self.createShiftTradeRequestViewModel = function (id) {
         	var shiftTradeRequestDetailViewModel = new Teleopti.MyTimeWeb.Request.ShiftTradeRequestDetailViewModel(ajax);
         	shiftTradeRequestDetailViewModel.loadIsEditMessageEnabled();
-	        shiftTradeRequestDetailViewModel.checkIsAnonymousTrading();
+        	shiftTradeRequestDetailViewModel.setMiscSetting(id);
 	        self.requestViewModel(shiftTradeRequestDetailViewModel);
         };
 
@@ -124,7 +124,7 @@ Teleopti.MyTimeWeb.Request.RequestDetail = (function ($) {
 
 	function _setRequest(data) {
 		if (data.TypeEnum == 2) {
-		    parentViewModel.createShiftTradeRequestViewModel();
+		    parentViewModel.createShiftTradeRequestViewModel(data.Id);
 		    parentViewModel.requestViewModel().Initialize(data);
 		    parentViewModel.requestViewModel().loadSwapDetails();
 

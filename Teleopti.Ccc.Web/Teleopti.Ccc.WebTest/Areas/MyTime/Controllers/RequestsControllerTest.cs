@@ -234,7 +234,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			var model = new ShiftTradeRequestsPeriodViewModel
 			{
 				HasWorkflowControlSet = true,
-				AnonymousTrading = true,
+				MiscSetting = new ShiftTradeRequestMiscSetting(){ AnonymousTrading = true, LockTrading = true},
 				OpenPeriodRelativeStart = 2,
 				OpenPeriodRelativeEnd = 30,
 				NowYear = 2013,
@@ -249,7 +249,8 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			var data = (ShiftTradeRequestsPeriodViewModel) result.Data;
 
 			data.HasWorkflowControlSet.Should().Be.EqualTo(model.HasWorkflowControlSet);
-			data.AnonymousTrading.Should().Be.EqualTo(model.AnonymousTrading);
+			data.MiscSetting.AnonymousTrading.Should().Be.EqualTo(model.MiscSetting.AnonymousTrading);
+			data.MiscSetting.LockTrading.Should().Be.EqualTo(model.MiscSetting.LockTrading);
 			data.OpenPeriodRelativeStart.Should().Be.EqualTo(model.OpenPeriodRelativeStart);
 			data.OpenPeriodRelativeEnd.Should().Be.EqualTo(model.OpenPeriodRelativeEnd);
 			data.NowYear = model.NowYear;
@@ -397,21 +398,40 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		}
 
 		[Test]
-		public void ShouldGetAnonymousTradingTrue()
+		public void ShouldGetAnonymousTrading()
 		{
 			var modelFactory = MockRepository.GenerateMock<IRequestsViewModelFactory>();
 			var model = new ShiftTradeRequestsPeriodViewModel
 			{
-				AnonymousTrading = true
+				MiscSetting = new ShiftTradeRequestMiscSetting(){ AnonymousTrading = true }
 			};
 
-			modelFactory.Stub(x => x.CreateShiftTradePeriodViewModel()).Return(model);
+			modelFactory.Stub(x => x.CreateShiftTradePeriodViewModel(new Guid())).IgnoreArguments().Return(model);
 
 			var target = new RequestsController(modelFactory, null, null, null, null, new FakePermissionProvider(), null);
-			var result = target.GetAnonymousTradingSetting();
-			var data = (bool)result.Data;
+			
+			var result = target.GetShiftTradeRequestMiscSetting(new Guid());
+			var data = (ShiftTradeRequestMiscSetting)result.Data;
 
-			data.Should().Be.EqualTo(model.AnonymousTrading);
+			data.AnonymousTrading.Should().Be.True();
+		}		
+		
+		[Test]
+		public void ShouldGetLockTrading()
+		{
+			var modelFactory = MockRepository.GenerateMock<IRequestsViewModelFactory>();
+			var model = new ShiftTradeRequestsPeriodViewModel
+			{
+				MiscSetting = new ShiftTradeRequestMiscSetting(){ LockTrading = true }
+			};
+
+			modelFactory.Stub(x => x.CreateShiftTradePeriodViewModel(new Guid())).IgnoreArguments().Return(model);
+
+			var target = new RequestsController(modelFactory, null, null, null, null, new FakePermissionProvider(), null);
+			var result = target.GetShiftTradeRequestMiscSetting(new Guid());
+			var data = (ShiftTradeRequestMiscSetting)result.Data;
+
+			data.LockTrading.Should().Be.True();
 		}
 
 		private static void assertRequestEqual(RequestViewModel target, RequestViewModel expected)

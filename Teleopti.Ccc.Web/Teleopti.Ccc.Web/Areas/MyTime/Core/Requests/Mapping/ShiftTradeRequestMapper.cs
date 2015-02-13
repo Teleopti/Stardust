@@ -4,10 +4,12 @@ using System.Globalization;
 using System.Linq;
 using Teleopti.Ccc.Domain.AgentInfo.Requests;
 using Teleopti.Ccc.Domain.Repositories;
+using Teleopti.Ccc.Infrastructure.ApplicationLayer;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.DataProvider;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.Requests;
 using Teleopti.Interfaces.Domain;
+using Teleopti.Interfaces.Messages.Requests;
 
 namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping
 {
@@ -56,15 +58,20 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping
 			{
 				var scheduleDays = _scheduleProvider.GetScheduleForPersons(form.Dates.SingleOrDefault(), new[] { loggedOnUser });
 				ret = offer.MakeShiftTradeRequest(scheduleDays.SingleOrDefault());
-				var workflowControlSet = _shiftTradeRequestprovider.RetrieveUserWorkflowControlSet();
-				if (workflowControlSet.LockTrading && !workflowControlSet.AutoGrantShiftTradeRequest)
-				{
-					offer.Status = ShiftExchangeOfferStatus.PendingAdminApproval;
-				}
+				HandleLockTrading(offer);
 			}
 			ret.Subject = form.Subject;
 			ret.TrySetMessage(form.Message);
 			return ret;
+		}
+
+		private void HandleLockTrading(IShiftExchangeOffer offer)
+		{
+			var workflowControlSet = _shiftTradeRequestprovider.RetrieveUserWorkflowControlSet();
+			if (workflowControlSet.LockTrading && !workflowControlSet.AutoGrantShiftTradeRequest)
+			{
+				offer.Status = ShiftExchangeOfferStatus.PendingAdminApproval;
+			}
 		}
 	}
 }

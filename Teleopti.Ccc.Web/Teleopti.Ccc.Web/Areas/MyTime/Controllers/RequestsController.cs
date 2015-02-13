@@ -207,9 +207,9 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 
 		[UnitOfWorkAction]
 		[HttpGet]
-		public JsonResult GetAnonymousTradingSetting()
+		public JsonResult GetShiftTradeRequestMiscSetting(Guid id)
 		{
-			return Json(_requestsViewModelFactory.CreateShiftTradePeriodViewModel().AnonymousTrading, JsonRequestBehavior.AllowGet);
+			return Json(_requestsViewModelFactory.CreateShiftTradePeriodViewModel(id).MiscSetting, JsonRequestBehavior.AllowGet);
 		}
 	}
 }

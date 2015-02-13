@@ -6,7 +6,9 @@ using SharpTestsEx;
 using Teleopti.Ccc.Domain.AgentInfo.Requests;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Repositories;
+using Teleopti.Ccc.Domain.WorkflowControl;
 using Teleopti.Ccc.Infrastructure.ApplicationLayer;
+using Teleopti.Ccc.UserTexts;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.DataProvider;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.Requests;
@@ -23,6 +25,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 		private IPersonRequestRepository repository;
 		private IMessagePopulatingServiceBusSender serviceBusSender;
 		private IShiftTradeRequestSetChecksum shiftTradeSetChecksum;
+		private IShiftTradeRequestProvider shiftTradeRequestProvider;
 
 		[SetUp]
 		public void Setup()
@@ -32,12 +35,13 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 			repository = MockRepository.GenerateMock<IPersonRequestRepository>();
 			serviceBusSender = MockRepository.GenerateMock<IMessagePopulatingServiceBusSender>();
 			shiftTradeSetChecksum = MockRepository.GenerateMock<IShiftTradeRequestSetChecksum>();
+			shiftTradeRequestProvider = MockRepository.GenerateMock<IShiftTradeRequestProvider>();
 		}
 
 		[Test]
 		public void ShouldPersistMappedData()
 		{
-			var target = new ShiftTradeRequestPersister(repository, mapper, autoMapper, serviceBusSender, null, null, null, null, shiftTradeSetChecksum);
+			var target = new ShiftTradeRequestPersister(repository, mapper, autoMapper, serviceBusSender, null, null, null, null, shiftTradeSetChecksum, shiftTradeRequestProvider);
 			var form = new ShiftTradeRequestForm();
 			var shiftTradeRequest = new PersonRequest(new Person());
 			var viewModel = new RequestViewModel();
@@ -49,6 +53,24 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 
 			result.Should().Be.SameInstanceAs(viewModel);
 			repository.AssertWasCalled(x => x.Add(shiftTradeRequest));
+		}		
+		
+		[Test]
+		public void ShouldAutoApprovedByAnnouncerWhenShiftTradeFromBulletinBoard()
+		{
+			shiftTradeRequestProvider.Stub(x => x.RetrieveUserWorkflowControlSet())
+				.Return(new WorkflowControlSet("bla") {LockTrading = true, AutoGrantShiftTradeRequest = false});
+			var target = new ShiftTradeRequestPersister(repository, mapper, autoMapper, serviceBusSender, null, null, null, null, shiftTradeSetChecksum, shiftTradeRequestProvider);
+			var form = new ShiftTradeRequestForm(){ShiftExchangeOfferId = new Guid()};
+			var shiftTradeRequest = new PersonRequest(new Person());
+			var viewModel = new RequestViewModel();
+
+			mapper.Stub(x => x.Map(form)).Return(shiftTradeRequest);
+			autoMapper.Stub(x => x.Map<IPersonRequest, RequestViewModel>(shiftTradeRequest)).Return(viewModel);
+
+			var result = target.Persist(form);
+
+			result.Status.Should().Be.EqualTo(Resources.WaitingThreeDots);
 		}
 
 		[Test]
@@ -73,20 +95,20 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 			                                            dataSourceProvider,
 			                                            businessUnitProvider,
 			                                            currentUnitOfWork,
-																									shiftTradeSetChecksum);
+																									shiftTradeSetChecksum, shiftTradeRequestProvider);
 			var uow = MockRepository.GenerateMock<IUnitOfWork>();
 			currentUnitOfWork.Expect(x => x.Current()).Return(uow);
 
 			target.Persist(form);
 
 			uow.AssertWasCalled(x => x.AfterSuccessfulTx(Arg<Action>.Is.Anything));
-		}
+		}		
 
 		[Test]
 		public void ShouldSetChecksumOnRequest()
 		{
 			//elände - borde inte behöva anropa setchecksum explicit
-			var target = new ShiftTradeRequestPersister(repository, mapper, autoMapper, serviceBusSender, null, null, null, null, shiftTradeSetChecksum);
+			var target = new ShiftTradeRequestPersister(repository, mapper, autoMapper, serviceBusSender, null, null, null, null, shiftTradeSetChecksum, shiftTradeRequestProvider);
 			var form = new ShiftTradeRequestForm();
 			var shiftTradeRequest = new PersonRequest(new Person());
 

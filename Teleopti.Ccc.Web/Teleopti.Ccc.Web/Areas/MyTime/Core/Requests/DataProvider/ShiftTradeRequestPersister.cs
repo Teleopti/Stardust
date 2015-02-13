@@ -3,10 +3,12 @@ using AutoMapper;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Infrastructure.ApplicationLayer;
+using Teleopti.Ccc.UserTexts;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.Requests;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
+using Teleopti.Interfaces.Messages;
 using Teleopti.Interfaces.Messages.Requests;
 
 namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.DataProvider
@@ -22,6 +24,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.DataProvider
 		private readonly ICurrentUnitOfWork _currentUnitOfWork;
 		private readonly IMessagePopulatingServiceBusSender _serviceBusSender;
 		private readonly IShiftTradeRequestSetChecksum _shiftTradeSetChecksum;
+		private readonly IShiftTradeRequestProvider _shiftTradeRequestprovider;
 
 		public ShiftTradeRequestPersister(IPersonRequestRepository personRequestRepository, 
 																		IShiftTradeRequestMapper shiftTradeRequestMapper, 
@@ -31,7 +34,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.DataProvider
 																		ICurrentDataSource dataSourceProvider,
 																		ICurrentBusinessUnit businessUnitProvider,
 																		ICurrentUnitOfWork currentUnitOfWork,
-																		IShiftTradeRequestSetChecksum shiftTradeSetChecksum)
+																		IShiftTradeRequestSetChecksum shiftTradeSetChecksum, IShiftTradeRequestProvider shiftTradeRequestprovider)
 		{
 			_personRequestRepository = personRequestRepository;
 			_shiftTradeRequestMapper = shiftTradeRequestMapper;
@@ -42,6 +45,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.DataProvider
 			_currentUnitOfWork = currentUnitOfWork;
 			_serviceBusSender = serviceBusSender;
 			_shiftTradeSetChecksum = shiftTradeSetChecksum;
+			_shiftTradeRequestprovider = shiftTradeRequestprovider;
 		}
 
 		public RequestViewModel Persist(ShiftTradeRequestForm form)
@@ -50,23 +54,49 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.DataProvider
 			_shiftTradeSetChecksum.SetChecksum(personRequest.Request);
 			_personRequestRepository.Add(personRequest);
 
-			createMessage(personRequest);
+			createMessage(personRequest, form);
 
-			return _autoMapper.Map<IPersonRequest, RequestViewModel>(personRequest);
+			var requestViewModel = _autoMapper.Map<IPersonRequest, RequestViewModel>(personRequest);
+			var workflowControlSet = _shiftTradeRequestprovider.RetrieveUserWorkflowControlSet();
+			if (form.ShiftExchangeOfferId != null && workflowControlSet.LockTrading && !workflowControlSet.AutoGrantShiftTradeRequest)
+			{
+				requestViewModel.Status = Resources.WaitingThreeDots;
+			}
+
+			return requestViewModel;
 		}
 
-		private void createMessage(IPersonRequest personRequest)
+		private void createMessage(IPersonRequest personRequest, ShiftTradeRequestForm form)
 		{
 			if (_currentUnitOfWork == null)
 				return;
-
-			var message = new NewShiftTradeRequestCreated
+			MessageWithLogOnInfo message = null;
+			//if (form.ShiftExchangeOfferId != null)
+			//{
+				var workflowControlSet = _shiftTradeRequestprovider.RetrieveUserWorkflowControlSet();
+				if (form.ShiftExchangeOfferId != null && workflowControlSet.LockTrading && !workflowControlSet.AutoGrantShiftTradeRequest)
+				{
+					var shiftTrade = personRequest.Request as IShiftTradeRequest;
+					if (shiftTrade != null)
+					{
+						message = new AcceptShiftTrade
+						{
+							PersonRequestId = personRequest.Id.GetValueOrDefault(),
+							AcceptingPersonId = shiftTrade.PersonTo.Id.GetValueOrDefault()
+						};
+					}
+				}
+					//}
+			else
 			{
-				BusinessUnitId = _businessUnitProvider.Current().Id.GetValueOrDefault(Guid.Empty),
-				Datasource = _dataSourceProvider.Current().DataSourceName,
-				PersonRequestId = personRequest.Id.GetValueOrDefault(Guid.Empty),
-				Timestamp = _now.UtcDateTime()
-			};
+				message = new NewShiftTradeRequestCreated
+				{
+					BusinessUnitId = _businessUnitProvider.Current().Id.GetValueOrDefault(Guid.Empty),
+					Datasource = _dataSourceProvider.Current().DataSourceName,
+					PersonRequestId = personRequest.Id.GetValueOrDefault(Guid.Empty),
+					Timestamp = _now.UtcDateTime()
+				};
+			}
 			_currentUnitOfWork.Current().AfterSuccessfulTx(() => _serviceBusSender.Send(message, false));
 		}
 	}
