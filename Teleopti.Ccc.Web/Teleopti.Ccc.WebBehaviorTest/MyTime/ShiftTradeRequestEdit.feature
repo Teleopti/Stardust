@@ -33,6 +33,7 @@ Background:
 	| Day   |
 	| Night |
 
+@ignore
 Scenario: Close details when approving shift trade request
 	Given I have the role 'Full access to mytime'
 	And I have received a shift trade request
@@ -57,6 +58,7 @@ Scenario: Can not approve or deny shift trade request created by me
 	Then I should not see the approve button
 	And I should not see the deny button
 
+@ignore
 Scenario: Deny shift trade request
 	Given I have the role 'Full access to mytime'
 	And I have received a shift trade request
@@ -231,6 +233,7 @@ Given I have the role 'Full access to mytime'
 	Then I should see details with subject 'Swap with me'
 	And I should see details with message 'CornercaseMessageWithAReallyReallyLongWordThatWillProbablyNeverHappenInTheRealWorldButItCausedATestIssueSoWePutItHereForTesting'
 
+@ignore
 Scenario: Show information that we dont show schedules in a shifttrade that isnt pending
 	Given I have the role 'Full access to mytime'
 	And I have created a shift trade request
@@ -379,6 +382,7 @@ Scenario:  Should input comment when seeing a shift trade request from other age
 	When I click on the existing request in the list
 	Then I could edit message for the reason why I approve or deny this request
 
+@ignore
 @OnlyRunIfEnabled('Request_GiveCommentWhenDenyOrApproveShiftTradeRequest_28341')
 Scenario:  Should see the updated comment after approved
 	Given I have the role 'Full access to mytime'
@@ -393,6 +397,7 @@ Scenario:  Should see the updated comment after approved
 	And I am viewing requests
 	Then I should see 'OK, you owe me a dinner' in message area
 	
+@ignore
 @OnlyRunIfEnabled('Request_GiveCommentWhenDenyOrApproveShiftTradeRequest_28341')
 Scenario:  Should see the updated comment after denied
 	Given I have the role 'Full access to mytime'
