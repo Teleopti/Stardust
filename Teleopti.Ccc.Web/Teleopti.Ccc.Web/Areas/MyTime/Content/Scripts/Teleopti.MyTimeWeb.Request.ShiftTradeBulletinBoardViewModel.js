@@ -675,7 +675,7 @@ Teleopti.MyTimeWeb.Request.ShiftTradeBulletinBoardViewModel = function(ajax) {
 			success: function (data, textStatus, jqXHR) {
 				if (data.HasWorkflowControlSet) {
 					self.Toggle31638Enabled(Teleopti.MyTimeWeb.Common.IsToggleEnabled('MyTimeWeb_AnonymousTrades_31638'));
-					if (self.Toggle31638Enabled()) self.isAnonymousTrading(data.AnonymousTrading);
+					if (self.Toggle31638Enabled()) self.isAnonymousTrading(data.MiscSetting.AnonymousTrading);
 					var now = moment(new Date(data.NowYear, data.NowMonth - 1, data.NowDay));
 					self.setDatePickerRange(now, data.OpenPeriodRelativeStart, data.OpenPeriodRelativeEnd);
 					var requestedDate = moment(now).add('days', data.OpenPeriodRelativeStart);

@@ -283,7 +283,6 @@ Scenario: Should not show agent name in shift trade board list
 	When I view Shift Trade Bulletin Board for date '2030-01-01'
 	Then I should not see agent name in the possible schedule trade list
 
-@ignore
 @OnlyRunIfEnabled('MyTimeWeb_AnonymousTrades_31638')
 Scenario: Should not show subject and message box
 	Given I have the role 'Full access to mytime'
