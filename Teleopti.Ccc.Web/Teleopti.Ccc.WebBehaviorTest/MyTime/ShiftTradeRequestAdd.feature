@@ -423,7 +423,7 @@ Scenario: Show possible shift trades from my team
 	Then I should see a possible schedule trade with 'OtherAgent'
 	And I should not see a possible schedule trade with 'OtherAgentNotInMyTeam'
 
-Scenario: Sort possible shift trades by starttime
+Scenario: Sort possible shift trades by starttime for default
 	Given I have the role 'Full access to mytime'
 	And I have the workflow control set 'Trade from tomorrow until 30 days forward'
 	And OtherAgent have the workflow control set 'Trade from tomorrow until 30 days forward'
@@ -447,6 +447,34 @@ Scenario: Sort possible shift trades by starttime
 	When I view Add Shift Trade Request for date '2030-01-01'
 	Then I should see 'OtherAgent2' first in the list
 	And I should see 'OtherAgent' last in the list
+
+@OnlyRunIfEnabled('MyTimeWeb_SortSchedule_32092')
+Scenario: Can sort possible shift trades by starttime\endtime and asc or desc
+	Given I have the role 'Full access to mytime'
+	And I have the workflow control set 'Trade from tomorrow until 30 days forward'
+	And OtherAgent have the workflow control set 'Trade from tomorrow until 30 days forward'
+	And OtherAgent2 have the workflow control set 'Trade from tomorrow until 30 days forward'
+	And I have a shift with
+	| Field                 | Value            |
+	| StartTime             | 2030-01-01 06:00 |
+	| EndTime               | 2030-01-01 16:00 |
+	| Shift category		| Day	           |
+	And OtherAgent has a shift with
+	| Field                 | Value            |
+	| StartTime             | 2030-01-01 08:00 |
+	| EndTime               | 2030-01-01 19:00 |
+	| Shift category		| Day	           |
+	And OtherAgent2 has a shift with
+	| Field                 | Value            |
+	| StartTime             | 2030-01-01 09:00 |
+	| EndTime               | 2030-01-01 18:00 |
+	| Shift category		| Day	           |
+	And the time is '2029-12-27'
+	When I view Add Shift Trade Request for date '2030-01-01'
+	Then I click 'sort by end time asc' at end time drop down button
+	Then I should see 'OtherAgent2' first in the list
+	And I should see 'OtherAgent' last in the list
+
 
 Scenario: Show possible shift trades with day off
 	Given I have the role 'Full access to mytime'

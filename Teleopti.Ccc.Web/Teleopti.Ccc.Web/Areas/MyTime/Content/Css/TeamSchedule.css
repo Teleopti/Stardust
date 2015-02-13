@@ -196,8 +196,8 @@
 }
 
 #s2id_Team-Picker {
-	min-width: 255px;
-	max-width: 350px;
+	min-width: 100%;
+	max-width: 100%;
 }
 
 #s2id_Team-Picker_Padding {

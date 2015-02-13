@@ -482,12 +482,27 @@ border-bottom: 1px solid rgba(255, 255, 255, 0.3);
     from { transform: scale(1) rotate(0deg);}
     to { transform: scale(1) rotate(360deg);}
 }
-.start-time-sort-order .btn-info:hover, .start-time-sort-order .btn-info, .end-time-sort-order .btn-info:hover, .end-time-sort-order .btn-info {
-	background-color: silver;
-	border-color: silver;
+
+ .filteractived {
+	Border:1px solid #007fff;
+ }
+
+.btn-group .glyphicon-arrow-up, .glyphicon-arrow-down {
+	color: silver;
+	padding-left: 25px;
 }
-.start-time-sort-order .btn-info.active, .end-time-sort-order .btn-info.active {
-	background-color: #007fff;
-	border-color: #007fff;
+.btn-group .sortingbuttonselected {
+	color: #007fff;
 }
 
+.schedule-filter-component {
+	margin: 8px 0;
+	z-index: 150;
+}
+.btn.dropdown-toggle {
+	width: 100%;
+	align-content: center;
+}
+.btn.dropdown-toggle > b {
+	margin-left: 15%;
+}

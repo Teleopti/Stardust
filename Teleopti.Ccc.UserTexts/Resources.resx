@@ -12802,7 +12802,7 @@ Reduce the complexity to use these shifts.</value>
     <comment>the colleciton of shift trade related settings under shift trade request tab in admin client settings of work flow control set</comment>
   </data>
   <data name="SearchHintForName" xml:space="preserve">
-    <value>Search agent name</value>
+    <value>Search name</value>
     <comment>Search agent by name</comment>
   </data>
   <data name="SureToMakeShiftTrade" xml:space="preserve">

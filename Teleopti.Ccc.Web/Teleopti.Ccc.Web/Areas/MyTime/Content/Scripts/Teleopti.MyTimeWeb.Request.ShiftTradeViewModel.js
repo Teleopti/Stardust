@@ -50,6 +50,7 @@ Teleopti.MyTimeWeb.Request.ShiftTradeViewModel = function(ajax) {
 	self.isDayoffFiltered = ko.observable(false);
 	self.searchNameText = ko.observable();
 	self.currentTimer = null;
+	self.refocusToNameSearch = null;
 
 	self.isDetailVisible = ko.computed(function() {
 		if (self.agentChoosed() === null) {
@@ -65,14 +66,27 @@ Teleopti.MyTimeWeb.Request.ShiftTradeViewModel = function(ajax) {
 		}
 	};
 
-	self.changeInSearchBox = function () {
+	// used to support script-triggered change, e.g. web scenario test
+	self.suppressChangeInSearchBox = false;
+	self.changeInSearchBoxSuppressed = function (data, event) {
+		if (self.suppressChangeInSearchBox) return;
+		else {
+			self.changeInSearchBox($(event.target));
+		}
+	};
+	// -------------------------------------------
+
+	self.changeInSearchBox = function ($target) {
 		self.resetTimer();
-		self.loadSchedule(self.getDateWithFormat(), self.selectedTeam());
+		self.refocusToNameSearch = function() { $target.focus(); };
+		self.loadSchedule(self.getDateWithFormat(), self.selectedTeam());		
 	};
 
-	self.typeInSearchBox = function () {
+	self.typeInSearchBox = function (data, event) {
+		var $target = $(event.target);
 		self.resetTimer();
-		self.currentTimer = setTimeout(self.changeInSearchBox, 500);
+		self.suppressChangeInSearchBox = true;
+		self.currentTimer = setTimeout(function() { self.changeInSearchBox($target); }, 500);
 	};
 
 	self.subject = ko.observable();
@@ -92,7 +106,7 @@ Teleopti.MyTimeWeb.Request.ShiftTradeViewModel = function(ajax) {
 	self.isPossibleSchedulesForAllEnabled = ko.observable(false);
 	self.isTradeForMultiDaysEnabled = ko.observable(false);
 	self.isFilterByTimeEnabled = ko.observable(false);
-	self.isSearchByNameEnabled = ko.observable(false);
+	self.isTeamScheduleSorttingFeatureEnabled = ko.observable(false);
 	self.chooseHistorys = ko.observableArray();
 	self.requestedDates = ko.computed(function() {
 		var dates = [];
@@ -396,6 +410,7 @@ Teleopti.MyTimeWeb.Request.ShiftTradeViewModel = function(ajax) {
 		return true;
 	};
 
+	
 	self.getAllTeamIds = function() {
 		var allTeamIds = [];
 
@@ -451,6 +466,10 @@ Teleopti.MyTimeWeb.Request.ShiftTradeViewModel = function(ajax) {
 			complete: function() {
 				self.IsLoading(false);
 				self.isReadyLoaded(true);
+				if (self.refocusToNameSearch != null) {
+					self.refocusToNameSearch();
+					self.refocusToNameSearch = null;
+				}
 			}
 		});
 	};
@@ -849,8 +868,7 @@ Teleopti.MyTimeWeb.Request.ShiftTradeViewModel = function(ajax) {
 		var filterByTimeEnabled = Teleopti.MyTimeWeb.Common.IsToggleEnabled("Request_FilterPossibleShiftTradeByTime_24560");
 		self.isFilterByTimeEnabled(filterByTimeEnabled);
 
-		var SearchByNameEnabled = Teleopti.MyTimeWeb.Common.IsToggleEnabled("MyTimeWeb_SortSchedule_32092");
-		self.isSearchByNameEnabled(SearchByNameEnabled);
+		self.isTeamScheduleSorttingFeatureEnabled(Teleopti.MyTimeWeb.Common.IsToggleEnabled("MyTimeWeb_SortSchedule_32092"));
 	};
 
 	self.setTimeFilters = function(hourTexts) {
@@ -886,29 +904,25 @@ Teleopti.MyTimeWeb.Request.ShiftTradeViewModel = function(ajax) {
 		}
 	};
 
+	self.TimeSortOrder = ko.observable(null);
 	self.setDatePickerRange = function(now, relativeStart, relativeEnd) {
 		self.openPeriodStartDate(moment(now).add('days', relativeStart));
 		self.openPeriodEndDate(moment(now).add('days', relativeEnd));
 	};
 
-
 	self.displaySortOrderTemplateList = ko.observable([
-		{ Description: '<span class="glyphicon glyphicon-arrow-up"></span>', Value: 'start asc', IsStart:true },
-		{ Description: '<span class="glyphicon glyphicon-arrow-up"></span>', Value: 'end asc', IsStart: false },
-		{ Description: '<span class="glyphicon glyphicon-arrow-down"></span>', Value: 'start desc', IsStart: true },
-		{ Description: '<span class="glyphicon glyphicon-arrow-down"></span>', Value: 'end desc', IsStart: false }
+		{ Description: 'glyphicon glyphicon-arrow-up', Value: 'start asc', IsStart: true },
+		{ Description: 'glyphicon glyphicon-arrow-up', Value: 'end asc', IsStart: false },
+		{ Description: 'glyphicon glyphicon-arrow-down', Value: 'start desc', IsStart: true },
+		{ Description: 'glyphicon glyphicon-arrow-down', Value: 'end desc', IsStart: false }
 	]);
-
 	
-	self.TimeSortOrder = ko.observable(null);
-
 	self.updateTimeSortOrder = function (data) {
 		if (self.TimeSortOrder() == data.Value) {
 			self.TimeSortOrder(null);
 		} else {
 			self.TimeSortOrder(data.Value);
 		}
-		console.log("Set starttimesortorder to " + self.TimeSortOrder());
 	};
 
 	self.isSortingTimeActive = function (value) {
@@ -922,4 +936,11 @@ Teleopti.MyTimeWeb.Request.ShiftTradeViewModel = function(ajax) {
 		}
 	});
 
+	self.isStartTimeFilterActived = ko.computed(function () {
+		return (self.filteredStartTimesText().length != 0 || self.isDayoffFiltered()==true || (self.TimeSortOrder() == 'start asc') || (self.TimeSortOrder() == 'start desc'));
+	});
+
+	self.isEndTimeFilterActived = ko.computed(function () {
+		return (self.filteredEndTimesText().length != 0 || (self.TimeSortOrder() == 'end asc') || (self.TimeSortOrder() == 'end desc'));
+	});
 };
