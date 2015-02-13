@@ -271,6 +271,33 @@ define([
 			return activeLayer;
 		};
 
+		this.SelectLayer = function (layer) {
+			if (!self.MovingActivity()) return;
+			self.MoveActivityForm.IsChangingLayer(true);
+			deselectAllLayersExcept();
+			self.SelectedStartMinutes(layer.StartMinutes());
+			self.initMoveActivityForm();
+			self.MoveActivityForm.update(layer);
+			
+			layer.Selected(!layer.Selected());
+			self.MoveActivityForm.IsChangingLayer(false);
+
+			self.initActivityDraggable();
+		}
+
+		var deselectAllLayersExcept = function (layer) {
+			var selectedLayers = layers()
+				   .filter(function (x) {
+				   	if (layer && x === layer) {
+				   		return false;
+				   	}
+				   	return x.Selected();
+				   });
+			selectedLayers.each(function (x) {
+				x.Selected(false);
+			});
+		};
+
 	    this.updateStartTime = function(pixels) {
 	        var minutes = pixels / self.TimeLine.PixelsPerMinute();
 	        var newStartTimeMinutes = self.MoveActivityForm.getMinutesFromStartTime() + Math.round(minutes / 15) * 15;
@@ -295,6 +322,37 @@ define([
 
 	    this.backToTeamSchedule = function () {
 			navigation.GoToTeamScheduleWithPreselectedParameter(self.BusinessUnitId(), self.GroupId(), self.ScheduleDate(), self.PersonId(), self.SelectedStartMinutes());
+	    }
+
+		this.initActivityDraggable = function() {
+			$('.time-line-for').attr("data-subscription-done", " ");
+			// bind events
+			var activeLayer = $(".layer.active");
+			if (activeLayer.length !== 0) {
+
+				$(".layer.active").draggable({
+					helper: 'clone',
+					cursor: "move",
+					zIndex: 100,
+					stack: ".layer",
+					axis: 'x',
+					containment: 'parent',
+					stop: function (e, ui) {
+						var workingShift = self.WorkingShift();
+						var minStartPixel = (workingShift.OriginalShiftStartMinutes - self.TimeLine.StartMinutes()) * self.TimeLine.PixelsPerMinute();
+						var maxEndPixel = (workingShift.OriginalShiftEndMinutes - self.TimeLine.StartMinutes()) * self.TimeLine.PixelsPerMinute();
+						var pixelTolerance = 1; /*make activity can be moved to the beginning or the end of the shift. bug 30603*/
+						if (ui.position.left + ui.helper[0].offsetWidth <= (maxEndPixel + pixelTolerance) &&
+							ui.position.left >= (minStartPixel - pixelTolerance)) {
+							var pixelsChanged = ui.position.left - ui.originalPosition.left;
+							self.updateStartTime(pixelsChanged);
+							if (self.MoveActivityForm.isMovingToAnotherDay())
+								self.MoveActivityForm.reset();
+						}
+					}
+				});
+			}
+			self.MoveActivityForm.reset();
 		}
 	};
 });

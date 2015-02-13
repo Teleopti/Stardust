@@ -470,7 +470,10 @@
 				'data-start-time': StartTime,
 				'data-length-minutes': LengthMinutes()
 		},
-		css: Active
+		css: Active,
+		click: function () {
+        return $root.SelectLayer($data);
+		}
 		">
 	</div>
 	<!-- /ko -->

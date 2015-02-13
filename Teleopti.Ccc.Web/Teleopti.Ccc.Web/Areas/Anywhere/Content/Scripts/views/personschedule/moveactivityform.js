@@ -67,15 +67,15 @@
 			self.TimeZoneName(data.TimeZoneName);
 			self.ianaTimeZoneOther(data.IanaTimeZoneOther);
 		};
-
+		this.IsChangingLayer = ko.observable(false);
 		this.DisplayedStartTime = ko.computed({
 			read: function () {
 				if (!self.ScheduleDate() || !self.StartTime()) return '';
 				return self.StartTime().format(resources.TimeFormatForMoment);
 			},
 			write: function (option) {
-			    if (!self.layer()) return;
-				var inputTime = getMomentFromInput(option);
+				if (!self.layer() || self.IsChangingLayer()) return;
+			    var inputTime = getMomentFromInput(option);
 				if (!isLayerWithinShift(inputTime)) {
 					self.StartTime(self.getStartTimeFromMinutes(self.OldStartMinutes()));
 				} else {
