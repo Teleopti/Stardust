@@ -55,33 +55,31 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 			target.RetrieveMySchedule(date).Should().Be.SameInstanceAs(scheduleReadModel);
 		}
 
-		//[Test]
-		//public void ShouldGetScheduleForPossibleTradePersons()
-		//{
-		//	var scheduleDayReadModelFinder = MockRepository.GenerateMock<IPersonScheduleDayReadModelFinder>();
-		//	DateOnly date = DateOnly.Today;
-		//	var person1 = new Person();
-		//	var person2 = new Person();
-		//	person1.SetId(Guid.NewGuid());
-		//	person2.SetId(Guid.NewGuid());
-		//	var scheduleReadModels = new[] {new PersonScheduleDayReadModel(), new PersonScheduleDayReadModel()};
-		//	var filterInfo = new TimeFilterInfo
-		//	{
-		//		StartTimes = new List<DateTimePeriod> { new DateTimePeriod() },
-		//		EndTimes = new List<DateTimePeriod> { new DateTimePeriod() },
-		//		IsDayOff = true
-		//	};
+		[Test]
+		public void ShouldGetScheduleForPossibleTradePersons()
+		{
+			var scheduleDayReadModelFinder = MockRepository.GenerateMock<IPersonScheduleDayReadModelFinder>();
+			DateOnly date = DateOnly.Today;
+			var person1 = new Person();
+			var person2 = new Person();
+			person1.SetId(Guid.NewGuid());
+			person2.SetId(Guid.NewGuid());
+			var scheduleReadModels = new[] {new PersonScheduleDayReadModel(), new PersonScheduleDayReadModel()};
+			var timeFilterInfo = new TimeFilterInfo() {IsDayOff = true, IsWorkingDay = true, IsEmptyDay = true};
 
-		//	scheduleDayReadModelFinder.Stub(x => x.ForPersons(date, new[] { person1.Id.Value, person2.Id.Value }, new Paging(), filterInfo,""))
-		//		.Return(scheduleReadModels);
+			var paging = new Paging() {Take = 20, Skip = 0};
 
-		//	var target = new ShiftTradeRequestProvider(MockRepository.GenerateMock<ILoggedOnUser>(), scheduleDayReadModelFinder,
-		//		MockRepository.GenerateMock<IPermissionProvider>(), MockRepository.GenerateMock<IToggleManager>());
+			scheduleDayReadModelFinder.Stub(
+				x => x.ForPersons(date, new[] {person1.Id.Value, person2.Id.Value}, paging, timeFilterInfo, ""))
+				.Return(scheduleReadModels);
 
-		//	var result = target.RetrievePossibleTradeSchedules(date, new[] { person1, person2 }, new Paging());
+			var target = new ShiftTradeRequestProvider(MockRepository.GenerateMock<ILoggedOnUser>(), scheduleDayReadModelFinder,
+				MockRepository.GenerateMock<IPermissionProvider>(), MockRepository.GenerateMock<IToggleManager>());
 
-		//	result.Should().Be.SameInstanceAs(scheduleReadModels);
-		//}
+			var result = target.RetrievePossibleTradeSchedules(date, new[] {person1, person2}, paging);
+
+			result.Should().Be.SameInstanceAs(scheduleReadModels);
+		}
 
 
 		[Test]
