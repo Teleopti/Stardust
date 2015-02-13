@@ -506,3 +506,6 @@ border-bottom: 1px solid rgba(255, 255, 255, 0.3);
 .btn.dropdown-toggle > b {
 	margin-left: 15%;
 }
+.select2-container#s2id_Team-Picker {
+	width: 100% !important ;
+}
