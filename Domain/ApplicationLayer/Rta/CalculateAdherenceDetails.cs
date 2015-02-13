@@ -30,7 +30,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta
 
 		public IEnumerable<AdherenceDetailsPercentageModel> ForDetails(Guid personId)
 		{
-			var readModel = _persister.Get(personId, new DateOnly(_now.UtcDateTime()));
+			var readModel = _persister.Get(personId, _now.UtcDateTime());
 			var result = new List<AdherenceDetailsPercentageModel>();
 			if (readModel == null) return result;
 			var detailModels = readModel.Model.Details;

@@ -438,5 +438,78 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta
 			result.Last().AdherencePercent.Should().Be(null);
 		}
 
+		[Test]
+		public void ShouldCalculateModelSpanOverUtcMidnight()
+		{
+			var model = new AdherenceDetailsReadModel
+			{
+				PersonId = Guid.NewGuid(),
+				Date = "2014-11-20".Utc(),
+				ShiftEndTime = "2014-11-21 02:00".Utc(),
+				Model = new AdherenceDetailsModel
+				{
+					Details = new[]
+					{
+						new AdherenceDetailModel
+						{
+							StartTime = "2014-11-20 8:00".Utc()
+						}
+					}
+				}
+			};
+			var target = new CalculateAdherenceDetails(new ThisIsNow("2014-11-21 02:00".Utc()),
+				new FakeAdherenceDetailsReadModelPersister(new[] { model }), new SwedishCulture(), new UtcTimeZone());
+
+			var result = target.ForDetails(model.PersonId);
+			result.Count().Should().Be(1);
+		}
+
+		[Test]
+		public void ShouldGetCorrectModel()
+		{
+			var model1 = new AdherenceDetailsReadModel
+			{
+				PersonId = Guid.NewGuid(),
+				Date = "2014-11-20".Utc(),
+				ShiftEndTime = "2014-11-21 02:00".Utc(),
+				Model = new AdherenceDetailsModel
+				{
+					Details = new[]
+					{
+						new AdherenceDetailModel
+						{
+							StartTime = "2014-11-20 18:00".Utc()
+						}
+					}
+				}
+			};
+			var model2 = new AdherenceDetailsReadModel
+			{
+				PersonId = Guid.NewGuid(),
+				Date = "2014-11-21".Utc(),
+				ShiftEndTime = "2014-11-21 02:00".Utc(),
+				Model = new AdherenceDetailsModel
+				{
+					Details = new[]
+					{
+						new AdherenceDetailModel
+						{
+							StartTime = "2014-11-21 08:00".Utc()
+						}
+					}
+				}
+			};
+
+			var target1 = new CalculateAdherenceDetails(new ThisIsNow("2014-11-21 02:00".Utc()),
+				new FakeAdherenceDetailsReadModelPersister(new[] {model1}), new SwedishCulture(), new UtcTimeZone());
+			var result1 = target1.ForDetails(model1.PersonId);
+			result1.Single().StartTime.Should().Be("18:00");
+
+			var target2 = new CalculateAdherenceDetails(new ThisIsNow("2014-11-21 03:00".Utc()),
+				new FakeAdherenceDetailsReadModelPersister(new[] {model2}), new SwedishCulture(), new UtcTimeZone());
+			var result2 = target2.ForDetails(model2.PersonId);
+			result2.Single().StartTime.Should().Be("08:00");
+		}
+
 	}
 }
