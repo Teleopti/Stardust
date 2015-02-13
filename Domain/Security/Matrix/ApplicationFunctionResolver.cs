@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
@@ -17,12 +16,9 @@ namespace Teleopti.Ccc.Domain.Security.Matrix
 	public class ApplicationFunctionResolver : IApplicationFunctionResolver
 	{
 		private readonly IFunctionsForRoleProvider _functionsForRoleProvider;
-
 		private readonly ISpecification<IApplicationFunction> _matrixFunctionSpecification =
 			 new ExternalApplicationFunctionSpecification(DefinedForeignSourceNames.SourceMatrix);
-
-		private IList<IApplicationFunction> _matrixFunctions;
-
+		private readonly IList<IApplicationFunction> _matrixFunctionsForThisInstance = new List<IApplicationFunction>();
 
 		public ApplicationFunctionResolver(IFunctionsForRoleProvider functionsForRoleProvider)
 		{
@@ -32,24 +28,19 @@ namespace Teleopti.Ccc.Domain.Security.Matrix
 		public HashSet<MatrixPermissionHolder> ResolveApplicationFunction(HashSet<MatrixPermissionHolder> list, IApplicationRole applicationRole, IUnitOfWorkFactory unitOfWorkFactory)
 		{
 			var result = new HashSet<MatrixPermissionHolder>();
-			if (_matrixFunctions == null)
+
+			var availableFunctions = _functionsForRoleProvider.AvailableFunctions(applicationRole, unitOfWorkFactory);
+			var matrixFunctionsForCurrentRole = availableFunctions.FilterBySpecification(_matrixFunctionSpecification).ToList();
+			foreach (var applicationFunction in matrixFunctionsForCurrentRole)
 			{
-				_matrixFunctions = new List<IApplicationFunction>();
-				var availableFunctions = _functionsForRoleProvider.AvailableFunctions(applicationRole, unitOfWorkFactory);
-				var tmpFunctions = availableFunctions.FilterBySpecification(_matrixFunctionSpecification).ToList();
-				Guid tmp;
-				foreach (var applicationFunction in tmpFunctions.Where(applicationFunction => Guid.TryParse(applicationFunction.ForeignId, out tmp)))
-				{
-					_matrixFunctions.Add(applicationFunction);
-				}
+				_matrixFunctionsForThisInstance.Add(applicationFunction);
 			}
 
 			foreach (MatrixPermissionHolder holder in list)
 			{
-				foreach (IApplicationFunction function in _matrixFunctions)
+				foreach (IApplicationFunction function in _matrixFunctionsForThisInstance)
 				{
-					var newItem = new MatrixPermissionHolder(holder.Person, holder.Team, holder.IsMy, function);
-					result.Add(newItem);
+					result.Add(new MatrixPermissionHolder(holder.Person, holder.Team, holder.IsMy, function));
 				}
 			}
 

@@ -1232,6 +1232,7 @@
     <Compile Include="Security\AuthorizationEntities\LicenseActivatorTest.cs" />
     <Compile Include="Security\LicenseOptions\TeleoptiCccSmsLinkLicenseOptionTest.cs" />
     <Compile Include="Security\LicenseTest.cs" />
+    <Compile Include="Security\Matrix\ApplicationFunctionResolverTest.cs" />
     <Compile Include="Security\Matrix\MatrixPermissionsResolverTest.cs" />
     <Compile Include="Security\Matrix\MatrixReportsSynchronizerTest.cs" />
     <Compile Include="Security\Matrix\MatrixReportsSynchronizerTestClass.cs" />
