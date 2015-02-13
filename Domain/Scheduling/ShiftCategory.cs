@@ -21,6 +21,7 @@ namespace Teleopti.Ccc.Domain.Scheduling
         private Color _displayColor;
         private DayOfWeekIntDictionary _dayOfWeekJusticeValues = new DayOfWeekIntDictionary();
         private bool _isDeleted;
+	    private int? _rank;
 
         #endregion
 
@@ -88,7 +89,13 @@ namespace Teleopti.Ccc.Domain.Scheduling
             return result;
         }
 
-        public virtual bool IsDeleted
+	    public virtual int? Rank
+	    {
+			get { return _rank; }
+			set { _rank = value; }
+	    }
+
+	    public virtual bool IsDeleted
         {
             get { return _isDeleted; }
         }

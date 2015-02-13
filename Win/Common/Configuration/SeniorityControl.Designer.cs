@@ -49,6 +49,9 @@
 			this.buttonTopWorkDay = new Syncfusion.Windows.Forms.ButtonAdv();
 			this.buttonUpWorkDay = new Syncfusion.Windows.Forms.ButtonAdv();
 			this.buttonDownWorkDay = new Syncfusion.Windows.Forms.ButtonAdv();
+			this.tableLayoutPanel4 = new System.Windows.Forms.TableLayoutPanel();
+			this.autoLabelChangeInfo = new Syncfusion.Windows.Forms.Tools.AutoLabel();
+			this.autoLabelInfoAboutChanges = new Syncfusion.Windows.Forms.Tools.AutoLabel();
 			((System.ComponentModel.ISupportInitialize)(this.gradientPanelHeader)).BeginInit();
 			this.gradientPanelHeader.SuspendLayout();
 			this.tableLayoutPanelHeader.SuspendLayout();
@@ -57,6 +60,7 @@
 			this.panelWorkDays.SuspendLayout();
 			this.tableLayoutPanel2.SuspendLayout();
 			this.tableLayoutPanel3.SuspendLayout();
+			this.tableLayoutPanel4.SuspendLayout();
 			this.SuspendLayout();
 			// 
 			// gradientPanelHeader
@@ -114,16 +118,18 @@
 			this.tableLayoutPanel1.Controls.Add(this.tableLayoutPanel2, 1, 1);
 			this.tableLayoutPanel1.Controls.Add(this.listBoxWorkingDays, 0, 3);
 			this.tableLayoutPanel1.Controls.Add(this.tableLayoutPanel3, 1, 3);
+			this.tableLayoutPanel1.Controls.Add(this.tableLayoutPanel4, 0, 4);
 			this.tableLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.tableLayoutPanel1.Location = new System.Drawing.Point(0, 62);
 			this.tableLayoutPanel1.Name = "tableLayoutPanel1";
-			this.tableLayoutPanel1.RowCount = 5;
+			this.tableLayoutPanel1.RowCount = 6;
 			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
+			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 35F));
 			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-			this.tableLayoutPanel1.Size = new System.Drawing.Size(593, 515);
+			this.tableLayoutPanel1.Size = new System.Drawing.Size(593, 561);
 			this.tableLayoutPanel1.TabIndex = 2;
 			// 
 			// panelShiftCategory
@@ -224,6 +230,7 @@
 			this.buttonBottomShiftCategory.TabIndex = 5;
 			this.buttonBottomShiftCategory.Text = "xxBottom";
 			this.buttonBottomShiftCategory.UseVisualStyle = true;
+			this.buttonBottomShiftCategory.Click += new System.EventHandler(this.buttonBottomShiftCategoryClick);
 			// 
 			// buttonTopShiftCategory
 			// 
@@ -240,6 +247,7 @@
 			this.buttonTopShiftCategory.TabIndex = 2;
 			this.buttonTopShiftCategory.Text = "xxTop";
 			this.buttonTopShiftCategory.UseVisualStyle = true;
+			this.buttonTopShiftCategory.Click += new System.EventHandler(this.buttonTopShiftCategoryClick);
 			// 
 			// buttonUpShiftCategory
 			// 
@@ -256,6 +264,7 @@
 			this.buttonUpShiftCategory.TabIndex = 3;
 			this.buttonUpShiftCategory.Text = "xxUp";
 			this.buttonUpShiftCategory.UseVisualStyle = true;
+			this.buttonUpShiftCategory.Click += new System.EventHandler(this.buttonUpShiftCategoryClick);
 			// 
 			// buttonDownShiftCategory
 			// 
@@ -272,6 +281,7 @@
 			this.buttonDownShiftCategory.TabIndex = 4;
 			this.buttonDownShiftCategory.Text = "xxDown";
 			this.buttonDownShiftCategory.UseVisualStyle = true;
+			this.buttonDownShiftCategory.Click += new System.EventHandler(this.buttonDownShiftCategoryClick);
 			// 
 			// listBoxWorkingDays
 			// 
@@ -370,6 +380,48 @@
 			this.buttonDownWorkDay.UseVisualStyle = true;
 			this.buttonDownWorkDay.Click += new System.EventHandler(this.buttonDownWorkDayClick);
 			// 
+			// tableLayoutPanel4
+			// 
+			this.tableLayoutPanel4.ColumnCount = 2;
+			this.tableLayoutPanel1.SetColumnSpan(this.tableLayoutPanel4, 2);
+			this.tableLayoutPanel4.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 16.66667F));
+			this.tableLayoutPanel4.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 83.33334F));
+			this.tableLayoutPanel4.Controls.Add(this.autoLabelChangeInfo, 0, 0);
+			this.tableLayoutPanel4.Controls.Add(this.autoLabelInfoAboutChanges, 1, 0);
+			this.tableLayoutPanel4.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.tableLayoutPanel4.Location = new System.Drawing.Point(3, 462);
+			this.tableLayoutPanel4.Name = "tableLayoutPanel4";
+			this.tableLayoutPanel4.RowCount = 1;
+			this.tableLayoutPanel4.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
+			this.tableLayoutPanel4.Size = new System.Drawing.Size(587, 29);
+			this.tableLayoutPanel4.TabIndex = 12;
+			// 
+			// autoLabelChangeInfo
+			// 
+			this.autoLabelChangeInfo.Anchor = System.Windows.Forms.AnchorStyles.Left;
+			this.autoLabelChangeInfo.AutoSize = false;
+			this.autoLabelChangeInfo.ImeMode = System.Windows.Forms.ImeMode.NoControl;
+			this.autoLabelChangeInfo.Location = new System.Drawing.Point(3, 3);
+			this.autoLabelChangeInfo.Margin = new System.Windows.Forms.Padding(3);
+			this.autoLabelChangeInfo.Name = "autoLabelChangeInfo";
+			this.autoLabelChangeInfo.Size = new System.Drawing.Size(91, 23);
+			this.autoLabelChangeInfo.TabIndex = 10;
+			this.autoLabelChangeInfo.Text = "xxChangeInfoColon";
+			this.autoLabelChangeInfo.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			// 
+			// autoLabelInfoAboutChanges
+			// 
+			this.autoLabelInfoAboutChanges.Anchor = System.Windows.Forms.AnchorStyles.Left;
+			this.autoLabelInfoAboutChanges.AutoSize = false;
+			this.autoLabelInfoAboutChanges.ImeMode = System.Windows.Forms.ImeMode.NoControl;
+			this.autoLabelInfoAboutChanges.Location = new System.Drawing.Point(97, 2);
+			this.autoLabelInfoAboutChanges.Margin = new System.Windows.Forms.Padding(0, 0, 3, 0);
+			this.autoLabelInfoAboutChanges.Name = "autoLabelInfoAboutChanges";
+			this.autoLabelInfoAboutChanges.Size = new System.Drawing.Size(384, 24);
+			this.autoLabelInfoAboutChanges.TabIndex = 11;
+			this.autoLabelInfoAboutChanges.Text = "xxInfoAboutChanges";
+			this.autoLabelInfoAboutChanges.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			// 
 			// SeniorityControl
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -377,7 +429,7 @@
 			this.Controls.Add(this.tableLayoutPanel1);
 			this.Controls.Add(this.gradientPanelHeader);
 			this.Name = "SeniorityControl";
-			this.Size = new System.Drawing.Size(593, 577);
+			this.Size = new System.Drawing.Size(593, 623);
 			((System.ComponentModel.ISupportInitialize)(this.gradientPanelHeader)).EndInit();
 			this.gradientPanelHeader.ResumeLayout(false);
 			this.tableLayoutPanelHeader.ResumeLayout(false);
@@ -389,6 +441,7 @@
 			this.panelWorkDays.PerformLayout();
 			this.tableLayoutPanel2.ResumeLayout(false);
 			this.tableLayoutPanel3.ResumeLayout(false);
+			this.tableLayoutPanel4.ResumeLayout(false);
 			this.ResumeLayout(false);
 
 		}
@@ -415,5 +468,8 @@
 		private Syncfusion.Windows.Forms.ButtonAdv buttonTopWorkDay;
 		private Syncfusion.Windows.Forms.ButtonAdv buttonUpWorkDay;
 		private Syncfusion.Windows.Forms.ButtonAdv buttonDownWorkDay;
+		private Syncfusion.Windows.Forms.Tools.AutoLabel autoLabelChangeInfo;
+		private Syncfusion.Windows.Forms.Tools.AutoLabel autoLabelInfoAboutChanges;
+		private System.Windows.Forms.TableLayoutPanel tableLayoutPanel4;
 	}
 }

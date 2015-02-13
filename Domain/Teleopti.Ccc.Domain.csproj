@@ -497,6 +497,7 @@
     <Compile Include="Optimization\IntraIntervalOptimization\SkillStaffPeriodEvaluator.cs" />
     <Compile Include="Optimization\IntraIntervalOptimization\SkillStaffPeriodIntraIntervalPeriodFinder.cs" />
     <Compile Include="Optimization\OptimizationLimits.cs" />
+    <Compile Include="Optimization\TeamBlock\FairnessOptimization\Seniority\SeniorityShiftCategoryRank.cs" />
     <Compile Include="Optimization\TeamBlock\FairnessOptimization\Seniority\SeniorityWorkDay.cs" />
     <Compile Include="Optimization\TeamBlock\FairnessOptimization\Seniority\SeniorityWorkDayRanks.cs" />
     <Compile Include="Optimization\TeamBlock\MoveTimeOptimization\ValidateFoundMovedDaysSpecification.cs" />

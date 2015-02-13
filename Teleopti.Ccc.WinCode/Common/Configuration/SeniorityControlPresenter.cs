@@ -10,107 +10,210 @@ namespace Teleopti.Ccc.WinCode.Common.Configuration
 	public class SeniorityControlPresenter
 	{
 		private readonly ISeniorityControlView _view;
-		private ISeniorityWorkDayRanks _model;
-		private readonly IRepository<ISeniorityWorkDayRanks> _repository;
+		private ISeniorityWorkDayRanks _modelWorkDayRank;
+		private IList<ISeniorityShiftCategoryRank> _modelShiftCategoryRanks; 
+		private readonly IRepository<ISeniorityWorkDayRanks> _repositoryWorkDayRanks;
+		private readonly IRepository<IShiftCategory> _repositoryShiftCategory;
 
-		public SeniorityControlPresenter(ISeniorityControlView view, IRepository<ISeniorityWorkDayRanks> repository)
+		public SeniorityControlPresenter(ISeniorityControlView view, IRepository<ISeniorityWorkDayRanks> repositoryWorkDayRanks, IRepository<IShiftCategory> repositoryShiftCategory  )
 		{
 			_view = view;
-			_repository = repository;
+			_repositoryWorkDayRanks = repositoryWorkDayRanks;
+			_repositoryShiftCategory = repositoryShiftCategory;
 		}
 
 		public void Initialize()
 		{
-			var workDayRankings = _repository.LoadAll();
-			_model = !workDayRankings.IsEmpty() ? workDayRankings.First() : new SeniorityWorkDayRanks();
+			createWorkDayRanksModel();
+			createShiftCategoryRanksModel();
+			_view.SetChangedInfo(_modelWorkDayRank);
+		}
+
+		private void createShiftCategoryRanksModel()
+		{
+			_modelShiftCategoryRanks = new List<ISeniorityShiftCategoryRank>();
+			var shiftCategories = _repositoryShiftCategory.LoadAll().OrderBy(x => x.Rank.HasValue ? x.Rank : int.MaxValue).ThenBy(x=>x.Description.Name);
+			var lastRank = 0;
+
+			foreach (var shiftCategory in shiftCategories)
+			{
+				if (shiftCategory.Rank.HasValue) lastRank = shiftCategory.Rank.Value;
+				else lastRank += 1;
+
+				var item = new SeniorityShiftCategoryRank(shiftCategory) {Rank = lastRank};
+				_modelShiftCategoryRanks.Add(item);	
+			}
+		}
+
+		private void createWorkDayRanksModel()
+		{
+			var workDayRankings = _repositoryWorkDayRanks.LoadAll();
+			
+			for (var i = workDayRankings.Count -1; i > 0; i--)
+			{
+				_repositoryWorkDayRanks.Remove(workDayRankings[i]);
+			}
+
+			if (workDayRankings.IsEmpty())
+			{
+				_modelWorkDayRank = new SeniorityWorkDayRanks();
+				_repositoryWorkDayRanks.Add(_modelWorkDayRank);
+			}
+			else
+			{
+				_modelWorkDayRank = workDayRankings.First();
+			}
+
+			_repositoryWorkDayRanks.UnitOfWork.PersistAll();
 		}
 
 		public IList<ISeniorityWorkDay> SeniorityWorkDays()
 		{
-			return _model == null ? new List<ISeniorityWorkDay>() : _model.SeniorityWorkDays();
+			return _modelWorkDayRank == null ? new List<ISeniorityWorkDay>() : _modelWorkDayRank.SeniorityWorkDays();
+		}
+
+		public IList<ISeniorityShiftCategoryRank> SeniorityShiftCategoryRanks()
+		{
+			_modelShiftCategoryRanks = _modelShiftCategoryRanks.OrderBy(x => x.Rank).ToList();
+			return _modelShiftCategoryRanks;
 		}
 
 		public void Persist()
 		{
-			if (!_model.Id.HasValue) _repository.Add(_model);
-			else _repository.UnitOfWork.Merge(_model);
-			_repository.UnitOfWork.PersistAll();
+			_repositoryWorkDayRanks.Remove(_modelWorkDayRank);
+			_modelWorkDayRank.ClearId();
+			_repositoryWorkDayRanks.Add(_modelWorkDayRank);
+			_repositoryWorkDayRanks.UnitOfWork.PersistAll();
+
+			foreach (var seniorityShiftCategoryRank in SeniorityShiftCategoryRanks())
+			{
+				seniorityShiftCategoryRank.ShiftCategory.Rank = seniorityShiftCategoryRank.Rank;
+				_repositoryShiftCategory.UnitOfWork.Merge(seniorityShiftCategoryRank.ShiftCategory);
+			}
+
+			_repositoryShiftCategory.UnitOfWork.PersistAll();	
 		}
 
 		public void Unload()
 		{
-			_model = null;
+			_modelWorkDayRank = null;
+			_modelShiftCategoryRanks.Clear();
 		}
 
-		public void MoveTop(int index)
+		public void MoveTopShiftCategory(int index)
 		{
-			var currentOrder = _model.SeniorityWorkDays();
+			for (var i = index; i >= 0; i--)
+			{
+				if (i.Equals(index)) _modelShiftCategoryRanks[i].Rank = 1;
+				else _modelShiftCategoryRanks[i].Rank += 1;
+			}
+
+			_view.RefreshListBoxShiftCategoryRank(0);
+		}
+
+		public void MoveBottomShiftCategory(int index)
+		{
+			for (var i = index; i < _modelShiftCategoryRanks.Count; i++)
+			{
+				if (i.Equals(index)) _modelShiftCategoryRanks[i].Rank = _modelShiftCategoryRanks.Last().Rank;
+				else _modelShiftCategoryRanks[i].Rank -= 1;
+			}
+
+			_view.RefreshListBoxShiftCategoryRank(_modelShiftCategoryRanks.Count -1);
+		}
+
+		public void MoveUpShiftCategory(int index)
+		{
+			if (index == 0) return;
+
+			var currentRank = _modelShiftCategoryRanks[index].Rank;
+			_modelShiftCategoryRanks[index].Rank = _modelShiftCategoryRanks[index - 1].Rank;
+			_modelShiftCategoryRanks[index - 1].Rank = currentRank;
+			
+			_view.RefreshListBoxShiftCategoryRank(index - 1);
+		}
+
+		public void MoveDownShiftCategory(int index)
+		{
+			if (index >= _modelShiftCategoryRanks.Count -1) return;
+
+			var currentRank = _modelShiftCategoryRanks[index].Rank;
+			_modelShiftCategoryRanks[index].Rank = _modelShiftCategoryRanks[index + 1].Rank;
+			_modelShiftCategoryRanks[index + 1].Rank = currentRank;
+
+
+			_view.RefreshListBoxShiftCategoryRank(index + 1);
+		}
+
+		public void MoveTopWorkDay(int index)
+		{
+			var currentOrder = _modelWorkDayRank.SeniorityWorkDays();
 
 			for (var i = index; i >=0 ; i--)
 			{
 				var item = currentOrder[i];
-				setRank(item, i.Equals(index) ? 1 : item.Rank + 1);
+				setRankWorkDay(item, i.Equals(index) ? 1 : item.Rank + 1);
 			}
 
 			_view.RefreshListBoxWorkingDays(0);
 		}
 
-		public void MoveBottom(int index)
+		public void MoveBottomWorkDay(int index)
 		{
-			var currentOrder = _model.SeniorityWorkDays();
+			var currentOrder = _modelWorkDayRank.SeniorityWorkDays();
 
 			for (var i = index; i < 7; i++)
 			{
 				var item = currentOrder[i];
-				setRank(item, i.Equals(index) ? 7 : item.Rank - 1);
+				setRankWorkDay(item, i.Equals(index) ? 7 : item.Rank - 1);
 			}
 
 			_view.RefreshListBoxWorkingDays(6);
 		}
 
-		public void MoveUp(int index)
+		public void MoveUpWorkDay(int index)
 		{
 			if (index == 0) return;
 
-			var currentOrder = _model.SeniorityWorkDays();
+			var currentOrder = _modelWorkDayRank.SeniorityWorkDays();
 
 			var item = currentOrder[index];
 			var itemBefore = currentOrder[index - 1];
 			var currentRank = item.Rank;
 
-			setRank(item, currentRank - 1);
-			setRank(itemBefore, currentRank);
+			setRankWorkDay(item, currentRank - 1);
+			setRankWorkDay(itemBefore, currentRank);
 
 			_view.RefreshListBoxWorkingDays(index -1);
 		}
 
-		public void MoveDown(int index)
+		public void MoveDownWorkDay(int index)
 		{
 			if (index == 6) return;
 
-			var currentOrder = _model.SeniorityWorkDays();
+			var currentOrder = _modelWorkDayRank.SeniorityWorkDays();
 
 			var item = currentOrder[index];
 			var itemAfter = currentOrder[index + 1];
 			var currentRank = item.Rank;
 
-			setRank(item, currentRank + 1);
-			setRank(itemAfter, currentRank);
+			setRankWorkDay(item, currentRank + 1);
+			setRankWorkDay(itemAfter, currentRank);
 
 			_view.RefreshListBoxWorkingDays(index + 1);
 		}
 
-		private void setRank(ISeniorityWorkDay seniorityWorkDay, int rank)
+		private void setRankWorkDay(ISeniorityWorkDay seniorityWorkDay, int rank)
 		{
 			switch (seniorityWorkDay.DayOfWeek)
 			{
-				case DayOfWeek.Monday:_model.Monday = rank; break;
-				case DayOfWeek.Tuesday: _model.Tuesday = rank; break;
-				case DayOfWeek.Wednesday: _model.Wednesday = rank; break;
-				case DayOfWeek.Thursday: _model.Thursday = rank; break;
-				case DayOfWeek.Friday: _model.Friday = rank; break;
-				case DayOfWeek.Saturday: _model.Saturday = rank; break;
-				case DayOfWeek.Sunday: _model.Sunday = rank; break;
+				case DayOfWeek.Monday:_modelWorkDayRank.Monday = rank; break;
+				case DayOfWeek.Tuesday: _modelWorkDayRank.Tuesday = rank; break;
+				case DayOfWeek.Wednesday: _modelWorkDayRank.Wednesday = rank; break;
+				case DayOfWeek.Thursday: _modelWorkDayRank.Thursday = rank; break;
+				case DayOfWeek.Friday: _modelWorkDayRank.Friday = rank; break;
+				case DayOfWeek.Saturday: _modelWorkDayRank.Saturday = rank; break;
+				case DayOfWeek.Sunday: _modelWorkDayRank.Sunday = rank; break;
 			}
 		}
 	}

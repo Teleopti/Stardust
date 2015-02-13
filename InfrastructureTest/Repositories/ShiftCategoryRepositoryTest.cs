@@ -33,7 +33,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
         /// <returns></returns>
         protected override IShiftCategory CreateAggregateWithCorrectBusinessUnit()
         {
-            return ShiftCategoryFactory.CreateShiftCategory("Morning");
+	        return ShiftCategoryFactory.CreateShiftCategory("Morning");
         }
 
 
@@ -74,6 +74,17 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
             Assert.AreEqual(4, loadedCat[0].DayOfWeekJusticeValues[DayOfWeek.Thursday]);
             Assert.AreEqual(2, loadedCat[0].DayOfWeekJusticeValues[DayOfWeek.Sunday]);
         }
+
+		[Test]
+	    public void ShouldPersistRank()
+	    {
+			IShiftCategory cat = CreateAggregateWithCorrectBusinessUnit();
+			cat.Rank = 42;
+			PersistAndRemoveFromUnitOfWork(cat);
+
+			var loadedCat = ((IShiftCategoryRepository)TestRepository(UnitOfWork)).FindAll();
+			Assert.AreEqual(42, loadedCat[0].Rank);
+	    }
 
         /// <summary>
         /// Determines whether this instance can be created.

@@ -50,5 +50,7 @@ namespace Teleopti.Interfaces.Domain
         /// </summary>
         /// <returns></returns>
         int MaxOfJusticeValues();
+
+		int? Rank { get; set; }
     }
 }

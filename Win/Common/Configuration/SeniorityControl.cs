@@ -1,4 +1,6 @@
 ﻿using System;
+using Teleopti.Ccc.Domain.Common;
+using Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.Seniority;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.UserTexts;
 using Teleopti.Ccc.WinCode.Common.Configuration;
@@ -12,6 +14,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 	{
 		private IUnitOfWork _unitOfWork;
 		private SeniorityControlPresenter _presenter;
+		private readonly LocalizedUpdateInfo _localizer = new LocalizedUpdateInfo();
 
 		public SeniorityControl()
 		{
@@ -54,10 +57,12 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 		{
 			if (Disposing) return;
 			var seniorityWorkDayRankingsRepository = new SeniorityWorkDayRanksRepository(_unitOfWork);
-			_presenter = new SeniorityControlPresenter(this, seniorityWorkDayRankingsRepository);
+			var shiftCategoryRepository = new ShiftCategoryRepository(_unitOfWork);
+			_presenter = new SeniorityControlPresenter(this, seniorityWorkDayRankingsRepository, shiftCategoryRepository);
 			_presenter.Initialize();
 
 			RefreshListBoxWorkingDays(0);
+			RefreshListBoxShiftCategoryRank(0);
 		}
 
 		public void SaveChanges()
@@ -97,24 +102,61 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 			listBoxWorkingDays.SelectedIndex = selectedIndex;
 		}
 
+		public void RefreshListBoxShiftCategoryRank(int selectedIndex)
+		{
+			listBoxShiftCatgory.DataSource = _presenter.SeniorityShiftCategoryRanks();
+			listBoxShiftCatgory.DisplayMember = "Text";
+			listBoxShiftCatgory.ValueMember = "ShiftCategory";
+			listBoxShiftCatgory.SelectedIndex = selectedIndex;	
+		}
+
+		public void SetChangedInfo(ISeniorityWorkDayRanks workDayRanks)
+		{
+			autoLabelInfoAboutChanges.ForeColor = ColorHelper.ChangeInfoTextColor();
+			autoLabelInfoAboutChanges.Font = ColorHelper.ChangeInfoTextFontStyleItalic(autoLabelInfoAboutChanges.Font);
+
+			var changed = _localizer.UpdatedByText(workDayRanks, Resources.UpdatedByColon);
+			autoLabelInfoAboutChanges.Text = changed;
+		}
+
 		private void buttonTopWorkDayClick(object sender, EventArgs e)
 		{
-			_presenter.MoveTop(listBoxWorkingDays.SelectedIndex);
+			_presenter.MoveTopWorkDay(listBoxWorkingDays.SelectedIndex);
 		}
 
 		private void buttonUpWorkDayClick(object sender, EventArgs e)
 		{
-			_presenter.MoveUp(listBoxWorkingDays.SelectedIndex);
+			_presenter.MoveUpWorkDay(listBoxWorkingDays.SelectedIndex);
 		}
 
 		private void buttonDownWorkDayClick(object sender, EventArgs e)
 		{
-			_presenter.MoveDown(listBoxWorkingDays.SelectedIndex);
+			_presenter.MoveDownWorkDay(listBoxWorkingDays.SelectedIndex);
 		}
 
 		private void buttonBottomWorkDayClick(object sender, EventArgs e)
 		{
-			_presenter.MoveBottom(listBoxWorkingDays.SelectedIndex);
+			_presenter.MoveBottomWorkDay(listBoxWorkingDays.SelectedIndex);
+		}
+
+		private void buttonTopShiftCategoryClick(object sender, EventArgs e)
+		{
+			_presenter.MoveTopShiftCategory(listBoxShiftCatgory.SelectedIndex);
+		}
+
+		private void buttonUpShiftCategoryClick(object sender, EventArgs e)
+		{
+			_presenter.MoveUpShiftCategory(listBoxShiftCatgory.SelectedIndex);
+		}
+
+		private void buttonDownShiftCategoryClick(object sender, EventArgs e)
+		{
+			_presenter.MoveDownShiftCategory(listBoxShiftCatgory.SelectedIndex);
+		}
+
+		private void buttonBottomShiftCategoryClick(object sender, EventArgs e)
+		{
+			_presenter.MoveBottomShiftCategory(listBoxShiftCatgory.SelectedIndex);
 		}
 	}
 }

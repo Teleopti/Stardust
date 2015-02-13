@@ -44,6 +44,10 @@
         <element column ="Value" type="int" />
       </map>
     </component>
+
+    <property name="Rank"
+					  not-null="false"
+					  type="int"/>
     
     <many-to-one name="BusinessUnit"
       class="Teleopti.Ccc.Domain.Common.BusinessUnit"

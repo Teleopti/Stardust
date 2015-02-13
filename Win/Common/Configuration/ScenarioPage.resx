@@ -568,7 +568,7 @@
     <value>3, 8</value>
   </data>
   <data name="labelSubHeader1.Size" type="System.Drawing.Size, System.Drawing">
-    <value>180, 17</value>
+    <value>181, 17</value>
   </data>
   <data name="labelSubHeader1.TabIndex" type="System.Int32, mscorlib">
     <value>0</value>
