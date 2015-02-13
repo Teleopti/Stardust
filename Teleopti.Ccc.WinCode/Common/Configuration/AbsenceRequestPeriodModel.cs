@@ -198,7 +198,7 @@ namespace Teleopti.Ccc.WinCode.Common.Configuration
             get { return _absenceRequestOpenPeriod.OpenForRequestsPeriod.StartDate; }
             set
             {
-                value = value.ValidDateOnly;
+                value = value.ValidDateOnly();
                 var currentEndDate = _absenceRequestOpenPeriod.OpenForRequestsPeriod.EndDate;
                 if (currentEndDate < value)
                 {
@@ -214,7 +214,7 @@ namespace Teleopti.Ccc.WinCode.Common.Configuration
             get { return _absenceRequestOpenPeriod.OpenForRequestsPeriod.EndDate; }
             set
             {
-                value = value.ValidDateOnly;
+                value = value.ValidDateOnly();
                 var currentStartDate = _absenceRequestOpenPeriod.OpenForRequestsPeriod.StartDate;
                 if (currentStartDate > value)
                 {

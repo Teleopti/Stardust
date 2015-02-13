@@ -1,30 +1,32 @@
 ﻿using System;
 using System.Globalization;
+using System.Runtime.Serialization;
 
 namespace Teleopti.Interfaces.Domain
 {
-    /// <summary>
-    /// Struct for storage of time zone independent date
-    /// </summary>
-    [Serializable]
-    public struct DateOnly : IComparable<DateOnly>, IEquatable<DateOnly>
-    {
-        private DateTime _internalDateTime;
+	/// <summary>
+	/// Struct for storage of time zone independent date
+	/// </summary>
+	[Serializable]
+	[DataContract]
+	public struct DateOnly : IComparable<DateOnly>, IEquatable<DateOnly>
+	{
+		private DateTime _internalDateTime;
 
-        /// <summary>
-        /// Initializes a new instance of the <see cref="DateOnly"/> struct.
-        /// </summary>
-        /// <param name="year">The year.</param>
-        /// <param name="month">The month.</param>
-        /// <param name="day">The day.</param>
-        /// <remarks>
-        /// Created by: micke
-        /// Created date: 2008-10-18
-        /// </remarks>
-        public DateOnly(int year, int month, int day)
-        {
-            _internalDateTime = new DateTime(year, month, day, 0, 0, 0, 0, DateTimeKind.Unspecified);
-        }
+		/// <summary>
+		/// Initializes a new instance of the <see cref="DateOnly"/> struct.
+		/// </summary>
+		/// <param name="year">The year.</param>
+		/// <param name="month">The month.</param>
+		/// <param name="day">The day.</param>
+		/// <remarks>
+		/// Created by: micke
+		/// Created date: 2008-10-18
+		/// </remarks>
+		public DateOnly(int year, int month, int day)
+		{
+			_internalDateTime = new DateTime(year, month, day, 0, 0, 0, 0, DateTimeKind.Unspecified);
+		}
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="DateOnly"/> struct.
@@ -42,424 +44,420 @@ namespace Teleopti.Interfaces.Domain
 			_internalDateTime = new DateTime(year, month, day, 0, 0, 0, 0, kind);
 		}
 
-        /// <summary>
-        /// Initializes a new instance of the <see cref="DateOnly"/> struct.
-        /// </summary>
-        /// <param name="dateTime">The date time.</param>
-        /// <remarks>
-        /// Created by: micke
-        /// Created date: 2008-10-18
-        /// </remarks>
-        public DateOnly(DateTime dateTime)
-            : this(dateTime.Year, dateTime.Month, dateTime.Day, dateTime.Kind)
-        {
+		/// <summary>
+		/// Initializes a new instance of the <see cref="DateOnly"/> struct.
+		/// </summary>
+		/// <param name="dateTime">The date time.</param>
+		/// <remarks>
+		/// Created by: micke
+		/// Created date: 2008-10-18
+		/// </remarks>
+		public DateOnly(DateTime dateTime)
+			: this(dateTime.Year, dateTime.Month, dateTime.Day, dateTime.Kind)
+		{
 
-        }
+		}
 
+		/// <summary>
+		/// Gets the year.
+		/// </summary>
+		/// <value>The year.</value>
+		/// <remarks>
+		/// Created by: micke
+		/// Created date: 2008-10-18
+		/// </remarks>
+		public int Year
+		{
+			get { return _internalDateTime.Year; }
+		}
 
-        /// <summary>
-        /// Gets the valid date only.
-        /// </summary>
-        /// <returns></returns>
-        public DateOnly ValidDateOnly
-        {
-            get
-            {
-                var minDateOnly = new DateOnly(DateHelper.MinSmallDateTime);
-                var maxDateOnly = new DateOnly(DateHelper.MaxSmallDateTime);
+		/// <summary>
+		/// Gets the month.
+		/// </summary>
+		/// <value>The month.</value>
+		/// <remarks>
+		/// Created by: micke
+		/// Created date: 2008-10-18
+		/// </remarks>
+		public int Month
+		{
+			get { return _internalDateTime.Month; }
+		}
 
-                var toReturn = this;
-                if (toReturn < minDateOnly)
-                {
-                    toReturn = minDateOnly;
-                }
-                if (toReturn > maxDateOnly)
-                {
-                    toReturn = maxDateOnly;
-                }
-                return toReturn;
-            }
-        }
+		/// <summary>
+		/// Gets the day.
+		/// </summary>
+		/// <value>The day.</value>
+		/// <remarks>
+		/// Created by: micke
+		/// Created date: 2008-10-18
+		/// </remarks>
+		public int Day
+		{
+			get { return _internalDateTime.Day; }
+		}
 
-        /// <summary>
-        /// Gets the year.
-        /// </summary>
-        /// <value>The year.</value>
-        /// <remarks>
-        /// Created by: micke
-        /// Created date: 2008-10-18
-        /// </remarks>
-        public int Year
-        { 
-            get { return _internalDateTime.Year; }
-        }
+		/// <summary>
+		/// Days the of week.
+		/// </summary>
+		/// <returns></returns>
+		/// <remarks>
+		/// Created by: micke
+		/// Created date: 2008-10-18
+		/// </remarks>
+		public DayOfWeek DayOfWeek
+		{
+			get { return _internalDateTime.DayOfWeek; }
+		}
 
-        /// <summary>
-        /// Gets the month.
-        /// </summary>
-        /// <value>The month.</value>
-        /// <remarks>
-        /// Created by: micke
-        /// Created date: 2008-10-18
-        /// </remarks>
-        public int Month
-        {
-            get { return _internalDateTime.Month; }
-        }
+		/// <summary>
+		/// Gets the date.
+		/// </summary>
+		/// <value>The date.</value>
+		/// <remarks>
+		/// Created by: micke
+		/// Created date: 2008-10-18
+		/// </remarks>
+		[DataMember]
+		public DateTime Date
+		{
+			get { return _internalDateTime.Date; }
+			set { _internalDateTime = new DateTime(value.Year, value.Month, value.Day, 0, 0, 0, 0, value.Kind); }
+		}
 
-        /// <summary>
-        /// Gets the day.
-        /// </summary>
-        /// <value>The day.</value>
-        /// <remarks>
-        /// Created by: micke
-        /// Created date: 2008-10-18
-        /// </remarks>
-        public int Day
-        {
-            get { return _internalDateTime.Day; }
-        }
+		/// <summary>
+		/// Gets the max value.
+		/// </summary>
+		/// <value>The max value.</value>
+		/// <remarks>
+		/// Created by: micke
+		/// Created date: 2008-10-18
+		/// </remarks>
+		public static DateOnly MaxValue
+		{
+			get { return new DateOnly(DateHelper.MaxSmallDateTime); }
+		}
 
-        /// <summary>
-        /// Days the of week.
-        /// </summary>
-        /// <returns></returns>
-        /// <remarks>
-        /// Created by: micke
-        /// Created date: 2008-10-18
-        /// </remarks>
-        public DayOfWeek DayOfWeek
-        {
-            get { return _internalDateTime.DayOfWeek; }
-        }
+		/// <summary>
+		/// Gets the min value.
+		/// </summary>
+		/// <value>The min value.</value>
+		/// <remarks>
+		/// Created by: micke
+		/// Created date: 2008-10-18
+		/// </remarks>
+		public static DateOnly MinValue
+		{
+			get { return new DateOnly(DateHelper.MinSmallDateTime); }
+		}
 
-        /// <summary>
-        /// Gets the date.
-        /// </summary>
-        /// <value>The date.</value>
-        /// <remarks>
-        /// Created by: micke
-        /// Created date: 2008-10-18
-        /// </remarks>
-        public DateTime Date
-        {
-            get { return _internalDateTime.Date; }
-        }
+		/// <summary>
+		/// Gets the today. HA HA !!1
+		/// </summary>
+		/// <value>The today.</value>
+		/// <remarks>
+		/// Created by: HenryG
+		/// Created date: 2010-04-20
+		/// </remarks>
+		public static DateOnly Today
+		{
+			get { return new DateOnly(DateTime.Today); }
+		}
 
-        /// <summary>
-        /// Gets the max value.
-        /// </summary>
-        /// <value>The max value.</value>
-        /// <remarks>
-        /// Created by: micke
-        /// Created date: 2008-10-18
-        /// </remarks>
-        public static DateOnly MaxValue
-        {
-            get { return new DateOnly(DateHelper.MaxSmallDateTime); }
-        }
+		#region operators
 
-        /// <summary>
-        /// Gets the min value.
-        /// </summary>
-        /// <value>The min value.</value>
-        /// <remarks>
-        /// Created by: micke
-        /// Created date: 2008-10-18
-        /// </remarks>
-        public static DateOnly MinValue
-        {
-            get { return new DateOnly(DateHelper.MinSmallDateTime); }
-        }
+		/// <summary>
+		/// Performs an implicit conversion from <see cref="Teleopti.Interfaces.Domain.DateOnly"/> to <see cref="System.DateTime"/>.
+		/// </summary>
+		/// <param name="dateOnly">The date only.</param>
+		/// <returns>The result of the conversion.</returns>
+		/// <remarks>
+		/// Created by: micke
+		/// Created date: 2008-10-18
+		/// </remarks>
+		public static implicit operator DateTime(DateOnly dateOnly)
+		{
+			return dateOnly.Date;
+		}
 
-        /// <summary>
-        /// Gets the today. HA HA !!1
-        /// </summary>
-        /// <value>The today.</value>
-        /// <remarks>
-        /// Created by: HenryG
-        /// Created date: 2010-04-20
-        /// </remarks>
-        public static DateOnly Today
-        {
-            get { return new DateOnly(DateTime.Today); }
-        }
+		/// <summary>
+		/// Performs an implicit conversion from <see cref="System.String"/> to <see cref="Teleopti.Interfaces.Domain.DateOnly"/>.
+		/// </summary>
+		/// <param name="value">The date only string.</param>
+		/// <returns>The result of the conversion.</returns>
+		/// <remarks>
+		/// Created by: HenryG
+		/// Created date: 2008-11-20
+		/// </remarks>
+		public static implicit operator DateOnly(string value)
+		{
+			return new DateOnly(DateTime.Parse(value, CultureInfo.CurrentCulture));
+		}
 
-        #region operators
-        
-        /// <summary>
-        /// Performs an implicit conversion from <see cref="Teleopti.Interfaces.Domain.DateOnly"/> to <see cref="System.DateTime"/>.
-        /// </summary>
-        /// <param name="dateOnly">The date only.</param>
-        /// <returns>The result of the conversion.</returns>
-        /// <remarks>
-        /// Created by: micke
-        /// Created date: 2008-10-18
-        /// </remarks>
-        public static implicit operator DateTime(DateOnly dateOnly)
-        {
-            return dateOnly.Date;
-        }
-        
-        /// <summary>
-        /// Performs an implicit conversion from <see cref="System.String"/> to <see cref="Teleopti.Interfaces.Domain.DateOnly"/>.
-        /// </summary>
-        /// <param name="value">The date only string.</param>
-        /// <returns>The result of the conversion.</returns>
-        /// <remarks>
-        /// Created by: HenryG
-        /// Created date: 2008-11-20
-        /// </remarks>
-        public static implicit operator DateOnly(string value)
-        {
-            return new DateOnly(DateTime.Parse(value, CultureInfo.CurrentCulture));
-        }
+		/// <summary>
+		/// Implements the operator &lt;.
+		/// </summary>
+		/// <param name="obj1">The obj1.</param>
+		/// <param name="obj2">The obj2.</param>
+		/// <returns>The result of the operator.</returns>
+		/// <remarks>
+		/// Created by: micke
+		/// Created date: 2008-10-18
+		/// </remarks>
+		public static bool operator <(DateOnly obj1, DateOnly obj2)
+		{
+			return obj1.Date < obj2.Date;
+		}
 
-        /// <summary>
-        /// Implements the operator &lt;.
-        /// </summary>
-        /// <param name="obj1">The obj1.</param>
-        /// <param name="obj2">The obj2.</param>
-        /// <returns>The result of the operator.</returns>
-        /// <remarks>
-        /// Created by: micke
-        /// Created date: 2008-10-18
-        /// </remarks>
-        public static bool operator <(DateOnly obj1, DateOnly obj2)
-        {
-            return obj1.Date < obj2.Date;
-        }
+		/// <summary>
+		/// Implements the operator &lt;=.
+		/// </summary>
+		/// <param name="obj1">The obj1.</param>
+		/// <param name="obj2">The obj2.</param>
+		/// <returns>The result of the operator.</returns>
+		/// /// 
+		/// <remarks>
+		///  Created by: Ola
+		///  Created date: 2009-03-18    
+		/// /// </remarks>
+		public static bool operator <=(DateOnly obj1, DateOnly obj2)
+		{
+			return obj1.Date <= obj2.Date;
+		}
 
-        /// <summary>
-        /// Implements the operator &lt;=.
-        /// </summary>
-        /// <param name="obj1">The obj1.</param>
-        /// <param name="obj2">The obj2.</param>
-        /// <returns>The result of the operator.</returns>
-        /// /// 
-        /// <remarks>
-        ///  Created by: Ola
-        ///  Created date: 2009-03-18    
-        /// /// </remarks>
-        public static bool operator <=(DateOnly obj1, DateOnly obj2)
-    {
-        return obj1.Date <= obj2.Date;
-    }
+		/// <summary>
+		/// Implements the operator &gt;=.
+		/// </summary>
+		/// <param name="obj1">The obj1.</param>
+		/// <param name="obj2">The obj2.</param>
+		/// <returns>The result of the operator.</returns>
+		/// /// 
+		/// <remarks>
+		///  Created by: Ola
+		///  Created date: 2009-03-18    
+		/// /// </remarks>
+		public static bool operator >=(DateOnly obj1, DateOnly obj2)
+		{
+			return obj1.Date >= obj2.Date;
+		}
+		/// <summary>
+		/// Implements the operator &gt;.
+		/// </summary>
+		/// <param name="obj1">The obj1.</param>
+		/// <param name="obj2">The obj2.</param>
+		/// <returns>The result of the operator.</returns>
+		/// <remarks>
+		/// Created by: micke
+		/// Created date: 2008-10-18
+		/// </remarks>
+		public static bool operator >(DateOnly obj1, DateOnly obj2)
+		{
+			return obj1.Date > obj2.Date;
+		}
+		/// <summary>
+		/// Implements the operator ==.
+		/// </summary>
+		/// <param name="obj1">The obj1.</param>
+		/// <param name="obj2">The obj2.</param>
+		/// <returns>The result of the operator.</returns>
+		/// <remarks>
+		/// Created by: micke
+		/// Created date: 2008-10-18
+		/// </remarks>
+		public static bool operator ==(DateOnly obj1, DateOnly obj2)
+		{
+			return obj1.Equals(obj2);
+		}
 
-        /// <summary>
-        /// Implements the operator &gt;=.
-        /// </summary>
-        /// <param name="obj1">The obj1.</param>
-        /// <param name="obj2">The obj2.</param>
-        /// <returns>The result of the operator.</returns>
-        /// /// 
-        /// <remarks>
-        ///  Created by: Ola
-        ///  Created date: 2009-03-18    
-        /// /// </remarks>
-        public static bool operator >=(DateOnly obj1, DateOnly obj2)
-        {
-            return obj1.Date >= obj2.Date;
-        }
-        /// <summary>
-        /// Implements the operator &gt;.
-        /// </summary>
-        /// <param name="obj1">The obj1.</param>
-        /// <param name="obj2">The obj2.</param>
-        /// <returns>The result of the operator.</returns>
-        /// <remarks>
-        /// Created by: micke
-        /// Created date: 2008-10-18
-        /// </remarks>
-        public static bool operator >(DateOnly obj1, DateOnly obj2)
-        {
-            return obj1.Date > obj2.Date;
-        }
-        /// <summary>
-        /// Implements the operator ==.
-        /// </summary>
-        /// <param name="obj1">The obj1.</param>
-        /// <param name="obj2">The obj2.</param>
-        /// <returns>The result of the operator.</returns>
-        /// <remarks>
-        /// Created by: micke
-        /// Created date: 2008-10-18
-        /// </remarks>
-        public static bool operator ==(DateOnly obj1, DateOnly obj2)
-        {
-            return obj1.Equals(obj2);
-        }
+		/// <summary>
+		/// Implements the operator !=.
+		/// </summary>
+		/// <param name="obj1">The obj1.</param>
+		/// <param name="obj2">The obj2.</param>
+		/// <returns>The result of the operator.</returns>
+		/// <remarks>
+		/// Created by: micke
+		/// Created date: 2008-10-18
+		/// </remarks>
+		public static bool operator !=(DateOnly obj1, DateOnly obj2)
+		{
+			return !obj1.Equals(obj2);
+		}
 
-        /// <summary>
-        /// Implements the operator !=.
-        /// </summary>
-        /// <param name="obj1">The obj1.</param>
-        /// <param name="obj2">The obj2.</param>
-        /// <returns>The result of the operator.</returns>
-        /// <remarks>
-        /// Created by: micke
-        /// Created date: 2008-10-18
-        /// </remarks>
-        public static bool operator !=(DateOnly obj1, DateOnly obj2)
-        {
-            return !obj1.Equals(obj2);
-        }
+		#endregion
 
-        #endregion
+		#region Equals and GetHashCode stuff
 
-        #region Equals and GetHashCode stuff
+		/// <summary>
+		/// Indicates whether this instance and a specified object are equal.
+		/// </summary>
+		/// <param name="obj">Another object to compare to.</param>
+		/// <returns>
+		/// true if <paramref name="obj"/> and this instance are the same type and represent the same value; otherwise, false.
+		/// </returns>
+		/// <remarks>
+		/// Created by: micke
+		/// Created date: 2008-10-18
+		/// </remarks>
+		public override bool Equals(object obj)
+		{
+			if (obj == null)
+				return false;
 
-        /// <summary>
-        /// Indicates whether this instance and a specified object are equal.
-        /// </summary>
-        /// <param name="obj">Another object to compare to.</param>
-        /// <returns>
-        /// true if <paramref name="obj"/> and this instance are the same type and represent the same value; otherwise, false.
-        /// </returns>
-        /// <remarks>
-        /// Created by: micke
-        /// Created date: 2008-10-18
-        /// </remarks>
-        public override bool Equals(object obj)
-        {
-            if (obj == null) 
-                return false;
-            
-            if (obj is DateOnly)
-                return Equals((DateOnly)obj);
+			if (obj is DateOnly)
+				return Equals((DateOnly)obj);
 
-            return false;
-        }
+			return false;
+		}
 
-        /// <summary>
-        /// Equalses the specified other.
-        /// </summary>
-        /// <param name="other">The other.</param>
-        /// <returns></returns>
-        /// <remarks>
-        /// Created by: micke
-        /// Created date: 2008-10-18
-        /// </remarks>
-        public bool Equals(DateOnly other)
-        {
-            return (_internalDateTime.Equals(other._internalDateTime));
-        }
+		/// <summary>
+		/// Equalses the specified other.
+		/// </summary>
+		/// <param name="other">The other.</param>
+		/// <returns></returns>
+		/// <remarks>
+		/// Created by: micke
+		/// Created date: 2008-10-18
+		/// </remarks>
+		public bool Equals(DateOnly other)
+		{
+			return (_internalDateTime.Equals(other._internalDateTime));
+		}
 
-        /// <summary>
-        /// Returns the hash code for this instance.
-        /// </summary>
-        /// <returns>
-        /// A 32-bit signed integer that is the hash code for this instance.
-        /// </returns>
-        /// <remarks>
-        /// Created by: micke
-        /// Created date: 2008-10-18
-        /// </remarks>
-        public override int GetHashCode()
-        {
-            return _internalDateTime.GetHashCode();
-        }
+		/// <summary>
+		/// Returns the hash code for this instance.
+		/// </summary>
+		/// <returns>
+		/// A 32-bit signed integer that is the hash code for this instance.
+		/// </returns>
+		/// <remarks>
+		/// Created by: micke
+		/// Created date: 2008-10-18
+		/// </remarks>
+		public override int GetHashCode()
+		{
+			return _internalDateTime.GetHashCode();
+		}
 
-        /// <summary>
-        /// Compares the current instance with another object of the same type and returns an integer that indicates whether the current instance precedes, follows, or occurs in the same position in the sort order as the other object.
-        /// </summary>
-        /// <param name="obj">An object to compare with this instance.</param>
-        /// <returns>
-        /// A 32-bit signed integer that indicates the relative order of the objects being compared. The return value has these meanings:
-        /// Value
-        /// Meaning
-        /// Less than zero
-        /// This instance is less than <paramref name="obj"/>.
-        /// Zero
-        /// This instance is equal to <paramref name="obj"/>.
-        /// Greater than zero
-        /// This instance is greater than <paramref name="obj"/>.
-        /// </returns>
-        /// <exception cref="T:System.ArgumentException">
-        /// 	<paramref name="obj"/> is not the same type as this instance.
-        /// </exception>
-        /// <remarks>
-        /// Created by: micke
-        /// Created date: 2008-10-18
-        /// </remarks>
-        public int CompareTo(object obj)
-        {
-            return CompareTo((DateOnly) obj);
-        }
+		/// <summary>
+		/// Compares the current instance with another object of the same type and returns an integer that indicates whether the current instance precedes, follows, or occurs in the same position in the sort order as the other object.
+		/// </summary>
+		/// <param name="obj">An object to compare with this instance.</param>
+		/// <returns>
+		/// A 32-bit signed integer that indicates the relative order of the objects being compared. The return value has these meanings:
+		/// Value
+		/// Meaning
+		/// Less than zero
+		/// This instance is less than <paramref name="obj"/>.
+		/// Zero
+		/// This instance is equal to <paramref name="obj"/>.
+		/// Greater than zero
+		/// This instance is greater than <paramref name="obj"/>.
+		/// </returns>
+		/// <exception cref="T:System.ArgumentException">
+		/// 	<paramref name="obj"/> is not the same type as this instance.
+		/// </exception>
+		/// <remarks>
+		/// Created by: micke
+		/// Created date: 2008-10-18
+		/// </remarks>
+		public int CompareTo(object obj)
+		{
+			return CompareTo((DateOnly)obj);
+		}
 
-        /// <summary>
-        /// Compares to.
-        /// </summary>
-        /// <param name="other">The other.</param>
-        /// <returns></returns>
-        /// <remarks>
-        /// Created by: micke
-        /// Created date: 2008-10-18
-        /// </remarks>
-        public int CompareTo(DateOnly other)
-        {
-            
-            return _internalDateTime.CompareTo(other.Date);
-        }
+		/// <summary>
+		/// Compares to.
+		/// </summary>
+		/// <param name="other">The other.</param>
+		/// <returns></returns>
+		/// <remarks>
+		/// Created by: micke
+		/// Created date: 2008-10-18
+		/// </remarks>
+		public int CompareTo(DateOnly other)
+		{
 
-        #endregion
+			return _internalDateTime.CompareTo(other.Date);
+		}
+
+		#endregion
 
 
-        /// <summary>
-        /// Adds the days.
-        /// </summary>
-        /// <param name="days">The days.</param>
-        /// <returns></returns>
-        /// <remarks>
-        /// Created by: micke
-        /// Created date: 2008-10-18
-        /// </remarks>
-        public DateOnly AddDays(int days)
-        {
-            return new DateOnly(_internalDateTime.AddDays(days));
-        }
+		/// <summary>
+		/// Adds the days.
+		/// </summary>
+		/// <param name="days">The days.</param>
+		/// <returns></returns>
+		/// <remarks>
+		/// Created by: micke
+		/// Created date: 2008-10-18
+		/// </remarks>
+		public DateOnly AddDays(int days)
+		{
+			return new DateOnly(_internalDateTime.AddDays(days));
+		}
 
-        /// <summary>
-        /// Returns the fully qualified type name of this instance.
-        /// </summary>
-        /// <returns>
-        /// A <see cref="T:System.String"/> containing a fully qualified type name.
-        /// </returns>
-        /// <remarks>
-        /// Created by: micke
-        /// Created date: 2008-10-18
-        /// </remarks>
-        public override string ToString()
-        {
-            return _internalDateTime.ToString();
-        }
+		/// <summary>
+		/// Returns the fully qualified type name of this instance.
+		/// </summary>
+		/// <returns>
+		/// A <see cref="T:System.String"/> containing a fully qualified type name.
+		/// </returns>
+		/// <remarks>
+		/// Created by: micke
+		/// Created date: 2008-10-18
+		/// </remarks>
+		public override string ToString()
+		{
+			return _internalDateTime.ToString();
+		}
 
-        /// <summary>
-        /// Toes the short date string.
-        /// </summary>
-        /// <returns></returns>
-        /// <remarks>
-        /// Created by: micke
-        /// Created date: 2009-03-21
-        /// </remarks>
-        public string ToShortDateString()
-        {
-            return _internalDateTime.ToShortDateString();
-        }
+		/// <summary>
+		/// Toes the short date string.
+		/// </summary>
+		/// <returns></returns>
+		/// <remarks>
+		/// Created by: micke
+		/// Created date: 2009-03-21
+		/// </remarks>
+		public string ToShortDateString()
+		{
+			return _internalDateTime.ToShortDateString();
+		}
 
-        /// <summary>
-        /// Toes the short date string using the given culture.
-        /// </summary>
-        /// <param name="cultureInfo">The culture info.</param>
-        /// <returns></returns>
-        /// /// <remarks>
-        /// Created by: jonas n
-        /// Created date: 2010-11-23
-        /// </remarks>
-        public string ToShortDateString(IFormatProvider cultureInfo)
-        {
-            return _internalDateTime.ToString("d", cultureInfo);
-        }
-    }
-    
+		/// <summary>
+		/// Toes the short date string using the given culture.
+		/// </summary>
+		/// <param name="cultureInfo">The culture info.</param>
+		/// <returns></returns>
+		/// /// <remarks>
+		/// Created by: jonas n
+		/// Created date: 2010-11-23
+		/// </remarks>
+		public string ToShortDateString(IFormatProvider cultureInfo)
+		{
+			return _internalDateTime.ToString("d", cultureInfo);
+		}
+	}
+
+	public static class DateOnlyExtensions
+	{
+		public static DateOnly ValidDateOnly(this DateOnly value)
+		{
+			var minDateOnly = new DateOnly(DateHelper.MinSmallDateTime);
+			var maxDateOnly = new DateOnly(DateHelper.MaxSmallDateTime);
+
+			var toReturn = value;
+			if (toReturn < minDateOnly)
+			{
+				toReturn = minDateOnly;
+			}
+			if (toReturn > maxDateOnly)
+			{
+				toReturn = maxDateOnly;
+			}
+			return toReturn;
+		}
+	}
 }

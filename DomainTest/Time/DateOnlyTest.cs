@@ -1,6 +1,9 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Globalization;
 using NUnit.Framework;
+using SharpTestsEx;
+using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.DomainTest.Time
@@ -123,16 +126,16 @@ namespace Teleopti.Ccc.DomainTest.Time
         public void VerifyGetValidDateOnly()
         {
             target = new DateOnly(1900, 4, 29);
-            Assert.AreEqual(new DateOnly(DateHelper.MinSmallDateTime), target.ValidDateOnly);
+            Assert.AreEqual(new DateOnly(DateHelper.MinSmallDateTime), target.ValidDateOnly());
 
             target = new DateOnly(1901, 1, 1);
-            Assert.AreEqual(target, target.ValidDateOnly);
+			Assert.AreEqual(target, target.ValidDateOnly());
 
             target = new DateOnly(DateHelper.MaxSmallDateTime).AddDays(1);
-            Assert.AreEqual(new DateOnly(DateHelper.MaxSmallDateTime), target.ValidDateOnly);
+			Assert.AreEqual(new DateOnly(DateHelper.MaxSmallDateTime), target.ValidDateOnly());
 
             target = new DateOnly(DateHelper.MaxSmallDateTime);
-            Assert.AreEqual(target, target.ValidDateOnly);
+			Assert.AreEqual(target, target.ValidDateOnly());
         }
 
         [Test, SetCulture("sv-SE")]
@@ -144,5 +147,24 @@ namespace Teleopti.Ccc.DomainTest.Time
 
             Assert.AreEqual(expectedDateString, target.ToShortDateString(enUs));
         }
+
+	    [Test]
+	    public void ShouldBeJsonSerializable()
+	    {
+		    var date = new DateOnly(2015, 2, 13);
+		    var json = new NewtonsoftJsonSerializer().SerializeObject(date);
+		    var deserialized = new NewtonsoftJsonDeserializer().DeserializeObject<DateOnly>(json);
+		    deserialized.Should().Be(date);
+	    }
+
+		[Test]
+		public void ShouldJsonSerializeAsSingleValue()
+		{
+			var date = new DateOnly(2015, 2, 13);
+			var json = new NewtonsoftJsonSerializer().SerializeObject(date);
+			var deserialized = new NewtonsoftJsonDeserializer().DeserializeObject<Dictionary<string, object>>(json);
+			deserialized.Should().Have.Count.EqualTo(1);
+		}
+
     }
 }

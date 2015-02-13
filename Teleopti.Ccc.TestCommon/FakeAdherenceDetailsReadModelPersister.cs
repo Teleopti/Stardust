@@ -1,6 +1,8 @@
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
+using Newtonsoft.Json;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta;
 using Teleopti.Interfaces.Domain;
 
@@ -51,44 +53,9 @@ namespace Teleopti.Ccc.TestCommon
 
 		public AdherenceDetailsReadModel Get(Guid personId, DateOnly date)
 		{
-			// IDEA! serialize / deserialize ?
 			return _data.Where(r => r.PersonId == personId && r.Date == date)
-				.Select(m =>
-				{
-					AdherenceDetailsModel model = null;
-
-					if (m.Model != null)
-					{
-						var details = new List<AdherenceDetailModel>(
-							from d in m.Model.Details
-							select new AdherenceDetailModel
-							{
-								StartTime = d.StartTime,
-								Name = d.Name,
-								ActualStartTime = d.ActualStartTime,
-								LastStateChangedTime = d.LastStateChangedTime,
-								TimeInAdherence = d.TimeInAdherence,
-								TimeOutOfAdherence = d.TimeOutOfAdherence
-							});
-						model = new AdherenceDetailsModel
-						{
-							Details = details,
-							ShiftEndTime = m.Model.ShiftEndTime,
-							ActualEndTime = m.Model.ActualEndTime,
-							HasShiftEnded = m.Model.HasShiftEnded,
-							IsInAdherence = m.Model.IsInAdherence,
-						};
-					}
-
-					return new AdherenceDetailsReadModel
-					{
-						PersonId = m.PersonId,
-						Date = m.Date,
-						Model = model,
-						State = m.State
-					};
-
-				}).FirstOrDefault();
+				.Select(m => JsonConvert.DeserializeObject<AdherenceDetailsReadModel>(JsonConvert.SerializeObject(m)))
+				.FirstOrDefault();
 		}
 	}
 }
