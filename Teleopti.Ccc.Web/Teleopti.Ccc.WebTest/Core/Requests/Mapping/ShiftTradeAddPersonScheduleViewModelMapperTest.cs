@@ -141,7 +141,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 				LastName = "Anka",
 				Shift = shift
 			};
-			var expectedId = new Guid();
+			var expectedId = Guid.Empty;
 			var readModel = new PersonScheduleDayReadModel
 			{
 				PersonId = Guid.NewGuid(),

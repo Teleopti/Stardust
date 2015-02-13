@@ -126,7 +126,7 @@ namespace Teleopti.Ccc.Win.Permissions
         {
             get
             {
-                var id = new Guid();
+                var id = Guid.Empty;
                 if (listViewPersonsMain.SelectedItems.Count > 0)
                 {
                     id = (Guid) listViewPersonsMain.SelectedItems[0].Tag;
@@ -139,7 +139,7 @@ namespace Teleopti.Ccc.Win.Permissions
         {
             get
             {
-                var id = new Guid();
+                var id = Guid.Empty;
                 if (treeViewFunctionsMain.SelectedNode != null)
                 {
                     id = (Guid)treeViewFunctionsMain.SelectedNode.TagObject;
@@ -171,11 +171,11 @@ namespace Teleopti.Ccc.Win.Permissions
         private void treeViewDataMainAfterSelect(object sender, EventArgs e)
         {
             var id = treeViewDataMain.SelectedNode.TagObject;
-            if (id.GetType().Equals(typeof(Guid)))
+            if (id is Guid)
             {
                 _eventAggregator.GetEvent<DataPersonsAndRolesNeedLoad>().Publish("");
             }
-            if (id.GetType().Equals(typeof(int)))
+            if (id is int)
             {
                _eventAggregator.GetEvent<DataRangePersonsAndRolesNeedLoad>().Publish("");
             }

@@ -36,7 +36,7 @@ namespace Teleopti.Ccc.WebTest.Core.Message.DataProvider
 			var pushMessageDialogueRepository = MockRepository.GenerateMock<IPushMessageDialogueRepository>();
 			var target = CreateTarget(pushMessageDialogueRepository);
 			var pushMessageDialogue = new PushMessageDialogue(new PushMessage(), new Person());
-			var id = new Guid();
+			var id = Guid.Empty;
 			pushMessageDialogue.SetId(id);
 
 			pushMessageDialogueRepository.Expect(x => x.Get(id))
@@ -52,7 +52,7 @@ namespace Teleopti.Ccc.WebTest.Core.Message.DataProvider
 		{
 			var pushMessage = new PushMessage(new []{"OK"});
 			var pushMessageDialogue = new PushMessageDialogue(pushMessage, new Person());
-			var id = new Guid();
+			var id = Guid.Empty;
 			pushMessageDialogue.SetId(id);
 
 			var target = CreateTargetWithDialogueInRepository(pushMessageDialogue);

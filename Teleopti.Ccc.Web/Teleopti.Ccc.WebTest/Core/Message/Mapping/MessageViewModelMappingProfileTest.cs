@@ -38,7 +38,7 @@ namespace Teleopti.Ccc.WebTest.Core.Message.Mapping
 			timeZone.Stub(x => x.TimeZone()).Return(_cccTimeZone);
 
 			_replier = new Person();
-			_replier.SetId(new Guid());
+			_replier.SetId(Guid.Empty);
 			_replier.Name = new Name("Ashley","Andeen");
 			_person = new Person { Name = new Name("ashley", "andeen") };
 			_pushMessage = new PushMessage(new[] { "OK" })

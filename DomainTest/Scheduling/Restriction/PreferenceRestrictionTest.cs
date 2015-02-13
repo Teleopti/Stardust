@@ -102,7 +102,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Restriction
         public void VerifyNoneEntityClone()
         {
             IAbsence absence = new Absence();
-            _preferenceRestrictionNew.SetId(new Guid());
+            _preferenceRestrictionNew.SetId(Guid.NewGuid());
             _preferenceRestrictionNew.Absence = absence; 
             IActivityRestriction activityRestriction = new ActivityRestriction(ActivityFactory.CreateActivity("hej"));
             activityRestriction.SetId(Guid.NewGuid());
@@ -121,7 +121,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Restriction
         public void VerifyEntityClone()
         {
             IAbsence absence = new Absence();
-            _preferenceRestrictionNew.SetId(new Guid());
+            _preferenceRestrictionNew.SetId(Guid.NewGuid());
             _preferenceRestrictionNew.Absence = absence;
             IPreferenceRestriction entityClone = _preferenceRestrictionNew.EntityClone();
             Assert.IsNotNull(entityClone.Id);

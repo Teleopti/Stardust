@@ -10,7 +10,7 @@ namespace Teleopti.Ccc.WinCodeTest.PeopleAdmin.Models
     public class PersonFinderDisplayRowTest
     {
         private PersonFinderDisplayRow _target;
-        private Guid _guid;
+        private readonly Guid _guid = Guid.NewGuid();
         private string _firstName;
         private string _lastName;
         private string _employmentNumber;
@@ -21,7 +21,6 @@ namespace Teleopti.Ccc.WinCodeTest.PeopleAdmin.Models
         public void Setup()
         {
             _target = new PersonFinderDisplayRow();
-            _guid = new Guid();
             _firstName = "firstName";
             _lastName = "lastName";
             _employmentNumber = "employmentNumber";

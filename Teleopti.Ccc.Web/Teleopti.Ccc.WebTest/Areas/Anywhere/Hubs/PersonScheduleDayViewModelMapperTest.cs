@@ -30,7 +30,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Hubs
 		public void ShouldMapPersonId()
 		{
 			var target = new PersonScheduleDayViewModelMapper();
-			var personId = new Guid();
+			var personId = Guid.Empty;
 
 			var result = target.Map(new PersonScheduleDayReadModel() { PersonId = personId });
 

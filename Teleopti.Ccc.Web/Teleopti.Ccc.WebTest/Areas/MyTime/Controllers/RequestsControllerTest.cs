@@ -7,7 +7,6 @@ using NUnit.Framework;
 using Rhino.Mocks;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.Repositories;
-using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.Web;
 using Teleopti.Ccc.Web.Areas.MyTime.Controllers;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider;
@@ -15,7 +14,6 @@ using Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.DataProvider;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.ViewModelFactory;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.Requests;
 using Teleopti.Ccc.Web.Core;
-using Teleopti.Ccc.WebTest.TestHelper;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
@@ -403,14 +401,14 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			var modelFactory = MockRepository.GenerateMock<IRequestsViewModelFactory>();
 			var model = new ShiftTradeRequestsPeriodViewModel
 			{
-				MiscSetting = new ShiftTradeRequestMiscSetting(){ AnonymousTrading = true }
+				MiscSetting = new ShiftTradeRequestMiscSetting{ AnonymousTrading = true }
 			};
 
-			modelFactory.Stub(x => x.CreateShiftTradePeriodViewModel(new Guid())).IgnoreArguments().Return(model);
+			modelFactory.Stub(x => x.CreateShiftTradePeriodViewModel(Guid.Empty)).IgnoreArguments().Return(model);
 
 			var target = new RequestsController(modelFactory, null, null, null, null, new FakePermissionProvider(), null);
 			
-			var result = target.GetShiftTradeRequestMiscSetting(new Guid());
+			var result = target.GetShiftTradeRequestMiscSetting(Guid.Empty);
 			var data = (ShiftTradeRequestMiscSetting)result.Data;
 
 			data.AnonymousTrading.Should().Be.True();
@@ -422,13 +420,13 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			var modelFactory = MockRepository.GenerateMock<IRequestsViewModelFactory>();
 			var model = new ShiftTradeRequestsPeriodViewModel
 			{
-				MiscSetting = new ShiftTradeRequestMiscSetting(){ LockTrading = true }
+				MiscSetting = new ShiftTradeRequestMiscSetting{ LockTrading = true }
 			};
 
-			modelFactory.Stub(x => x.CreateShiftTradePeriodViewModel(new Guid())).IgnoreArguments().Return(model);
+			modelFactory.Stub(x => x.CreateShiftTradePeriodViewModel(Guid.Empty)).IgnoreArguments().Return(model);
 
 			var target = new RequestsController(modelFactory, null, null, null, null, new FakePermissionProvider(), null);
-			var result = target.GetShiftTradeRequestMiscSetting(new Guid());
+			var result = target.GetShiftTradeRequestMiscSetting(Guid.Empty);
 			var data = (ShiftTradeRequestMiscSetting)result.Data;
 
 			data.LockTrading.Should().Be.True();

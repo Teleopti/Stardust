@@ -14,7 +14,7 @@ namespace Teleopti.Ccc.WinCode.Reporting
             ChangeEndDate = DateOnly.Today;
             ScheduleStartDate = DateOnly.Today;
             ScheduleEndDate = DateOnly.Today;
-            User = new Guid();
+            User = Guid.Empty;
             GroupPage = string.Empty;
             Agents = new HashSet<Guid>();
         }

@@ -30,7 +30,7 @@ namespace Teleopti.Ccc.WinCode.Presentation
 
         public void Initialize()
         {
-            _revisionList.Add(new ReportUserSelectorAuditingModel(new Guid(), UserTexts.Resources.All));
+            _revisionList.Add(new ReportUserSelectorAuditingModel(Guid.Empty, UserTexts.Resources.All));
 
             using (_unitOfWorkfactory.CreateAndOpenUnitOfWork())
             {

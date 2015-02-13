@@ -79,7 +79,7 @@ namespace Teleopti.Ccc.WinCodeTest.Meetings.Commands
             Expect.Call(scenarioRep.LoadDefaultScenario()).Return(scenario);
 
             Expect.Call(_repositoryFactory.CreatePersonRepository(uow)).Return(personsRep);
-            Expect.Call(personsRep.Get(new Guid())).Return(new Person());
+            Expect.Call(personsRep.Get(Guid.Empty)).Return(new Person());
             Expect.Call(_repositoryFactory.CreateGlobalSettingDataRepository(uow)).Return(settingsRep);
             Expect.Call(settingsRep.FindValueByKey("CommonNameDescription", new CommonNameDescriptionSetting())).Return(cmnName).IgnoreArguments();
 

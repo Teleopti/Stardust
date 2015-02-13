@@ -54,11 +54,11 @@ namespace Teleopti.Ccc.WebTest.Core.Message.DataProvider
 		public void ShouldGetAMessage()
 		{
 			var pushMessageDialogue = MockRepository.GenerateMock<IPushMessageDialogue>();
-			_repository.Stub(x => x.Get(new Guid())).Return(pushMessageDialogue);
+			_repository.Stub(x => x.Get(Guid.Empty)).Return(pushMessageDialogue);
 
 			_target = new PushMessageProvider(_loggedOnUser, _repository);
 
-			var result = _target.GetMessage(new Guid());
+			var result = _target.GetMessage(Guid.Empty);
 
 			result.Should().Be.SameInstanceAs(pushMessageDialogue);
 		}

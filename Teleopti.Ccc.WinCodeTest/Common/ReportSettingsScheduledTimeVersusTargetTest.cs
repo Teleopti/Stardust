@@ -13,7 +13,6 @@ namespace Teleopti.Ccc.WinCodeTest.Common
 	public class ReportSettingsScheduledTimeVersusTargetTest
 	{
 		private ReportSettingsScheduledTimeVersusTarget _settings;
-		//private IList<IPerson> _persons;
 		private IPerson _person1;
 		private IPerson _person2;
 		private IScenario _scenario;
@@ -25,10 +24,10 @@ namespace Teleopti.Ccc.WinCodeTest.Common
 		{
 			_person1 = PersonFactory.CreatePerson("person1");
 			_person2 = PersonFactory.CreatePerson("person2");
-			_person1.SetId(new Guid());
-			_person2.SetId(new Guid());
+			_person1.SetId(Guid.NewGuid());
+			_person2.SetId(Guid.NewGuid());
 			_scenario = new Scenario("scenario");
-			_scenario.SetId(new Guid());
+			_scenario.SetId(Guid.NewGuid());
 			_period = new DateTimePeriod(2011, 1, 1, 2011, 1, 31);
 			_groupPage = "pageKey";
 			_settings = new ReportSettingsScheduledTimeVersusTarget();
@@ -39,8 +38,6 @@ namespace Teleopti.Ccc.WinCodeTest.Common
 		{
 			Assert.IsTrue(_person1.Id.HasValue);
 			Assert.IsTrue(_person2.Id.HasValue);
-
-			if (!_person1.Id.HasValue || !_person2.Id.HasValue) return;
 
 			IList<Guid> personIDs = new List<Guid> {_person1.Id.Value, _person2.Id.Value};
 
@@ -60,8 +57,6 @@ namespace Teleopti.Ccc.WinCodeTest.Common
 		public void ShouldGetSetScenario()
 		{
 			Assert.IsTrue(_scenario.Id.HasValue);
-
-			if(_scenario.Id.HasValue)
 
 			_settings.Scenario = _scenario.Id.Value;
 			Assert.AreEqual(_scenario.Id, _settings.Scenario);

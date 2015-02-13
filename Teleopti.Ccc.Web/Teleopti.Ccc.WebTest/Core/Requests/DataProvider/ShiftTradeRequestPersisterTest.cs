@@ -61,9 +61,9 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 			shiftTradeRequestProvider.Stub(x => x.RetrieveUserWorkflowControlSet())
 				.Return(new WorkflowControlSet("bla") {LockTrading = true});
 			var target = new ShiftTradeRequestPersister(repository, mapper, autoMapper, serviceBusSender, null, null, null, null, shiftTradeSetChecksum, shiftTradeRequestProvider);
-			var form = new ShiftTradeRequestForm(){ShiftExchangeOfferId = new Guid()};
+			var form = new ShiftTradeRequestForm{ShiftExchangeOfferId = Guid.Empty};
 			var shiftTradeRequest = new PersonRequest(new Person());
-			var viewModel = new RequestViewModel() { Status = Resources.New };
+			var viewModel = new RequestViewModel { Status = Resources.New };
 
 			mapper.Stub(x => x.Map(form)).Return(shiftTradeRequest);
 			autoMapper.Stub(x => x.Map<IPersonRequest, RequestViewModel>(shiftTradeRequest)).Return(viewModel);
@@ -79,9 +79,9 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 			shiftTradeRequestProvider.Stub(x => x.RetrieveUserWorkflowControlSet())
 				.Return(new WorkflowControlSet("bla") {LockTrading = false});
 			var target = new ShiftTradeRequestPersister(repository, mapper, autoMapper, serviceBusSender, null, null, null, null, shiftTradeSetChecksum, shiftTradeRequestProvider);
-			var form = new ShiftTradeRequestForm(){ShiftExchangeOfferId = new Guid()};
+			var form = new ShiftTradeRequestForm{ShiftExchangeOfferId = Guid.Empty};
 			var shiftTradeRequest = new PersonRequest(new Person());
-			var viewModel = new RequestViewModel(){Status = Resources.New};
+			var viewModel = new RequestViewModel{Status = Resources.New};
 
 			mapper.Stub(x => x.Map(form)).Return(shiftTradeRequest);
 			autoMapper.Stub(x => x.Map<IPersonRequest, RequestViewModel>(shiftTradeRequest)).Return(viewModel);
@@ -97,9 +97,9 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 			shiftTradeRequestProvider.Stub(x => x.RetrieveUserWorkflowControlSet())
 				.Return(new WorkflowControlSet("bla") {LockTrading = true});
 			var target = new ShiftTradeRequestPersister(repository, mapper, autoMapper, serviceBusSender, null, null, null, null, shiftTradeSetChecksum, shiftTradeRequestProvider);
-			var form = new ShiftTradeRequestForm(){ShiftExchangeOfferId = null};
+			var form = new ShiftTradeRequestForm{ShiftExchangeOfferId = null};
 			var shiftTradeRequest = new PersonRequest(new Person());
-			var viewModel = new RequestViewModel(){Status = Resources.New};
+			var viewModel = new RequestViewModel{Status = Resources.New};
 
 			mapper.Stub(x => x.Map(form)).Return(shiftTradeRequest);
 			autoMapper.Stub(x => x.Map<IPersonRequest, RequestViewModel>(shiftTradeRequest)).Return(viewModel);

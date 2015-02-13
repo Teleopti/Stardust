@@ -11,54 +11,44 @@ namespace Teleopti.Ccc.WinCodeTest.Grouping.Commands
     [TestFixture]
     public class DeleteGroupPageCommandTest
     {
-        private MockRepository _mocks;
-        private IDeleteGroupPageCommand _target;
-        private IPersonSelectorView _personSelectorView;
-
-        [SetUp]
-        public void Setup()
-        {
-            _mocks = new MockRepository();
-            _personSelectorView = _mocks.StrictMock<IPersonSelectorView>();
-            _target = new DeleteGroupPageCommand(_personSelectorView);
-
-        }
-
         [Test]
         public void ShouldReturnFalseModifyNotAllowed()
-        {
+		{
+			var personSelectorView = MockRepository.GenerateMock<IPersonSelectorView>();
+			var target = new DeleteGroupPageCommand(personSelectorView);
             using (new CustomAuthorizationContext(new PrincipalAuthorizationWithNoPermission()))
             {
-               Assert.That(_target.CanExecute(), Is.False);  
+               Assert.That(target.CanExecute(), Is.False);  
             }
         }
 
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Reliability", "CA2000:Dispose objects before losing scope"), Test]
+        [Test]
         public void ShouldReturnTrueModifyAllowed()
-        {
-            var command = _mocks.StrictMock<ILoadUserDefinedTabsCommand>();
+		{
+			var personSelectorView = MockRepository.GenerateMock<IPersonSelectorView>();
+			var target = new DeleteGroupPageCommand(personSelectorView);
+            var command = MockRepository.GenerateMock<ILoadUserDefinedTabsCommand>();
             var tab = new TabPageAdv("userDefined"){Tag = command};
-            Expect.Call(_personSelectorView.SelectedTab).Return(tab);
-            _mocks.ReplayAll();
-              Assert.That(_target.CanExecute(), Is.True);
-            _mocks.VerifyAll();
+            personSelectorView.Stub(x => x.SelectedTab).Return(tab);
+
+            Assert.That(target.CanExecute(), Is.True);
         }
 
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Reliability", "CA2000:Dispose objects before losing scope"), Test]
+        [Test]
         public void ShouldCallViewToDeleteGroupPage()
-        {
-            var command = _mocks.StrictMock<ILoadUserDefinedTabsCommand>();
+		{
+			var personSelectorView = MockRepository.GenerateMock<IPersonSelectorView>();
+			var target = new DeleteGroupPageCommand(personSelectorView);
+            var command = MockRepository.GenerateMock<ILoadUserDefinedTabsCommand>();
             var tab = new TabPageAdv("userDefined") { Tag = command };
-            Expect.Call(_personSelectorView.SelectedTab).Return(tab).Repeat.Twice();
-            Expect.Call(command.Id).Return(new Guid());
-            Expect.Call(() => _personSelectorView.DeleteGroupPage(new Guid(), "userDefined"));
-            _mocks.ReplayAll();
+			var id = Guid.NewGuid();
+			
+			personSelectorView.Stub(x => x.SelectedTab).Return(tab);
+	        command.Stub(x => x.Id).Return(id);
             
-             _target.Execute();
-            
-            _mocks.VerifyAll();
+             target.Execute();
+
+	        personSelectorView.AssertWasCalled(x => x.DeleteGroupPage(id, "userDefined"));
         }
     }
-
-
 }

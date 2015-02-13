@@ -158,24 +158,8 @@ namespace Teleopti.Ccc.ApplicationConfig.Creators
 		private void createDefaultPersons()
 		{
 			_personCreator = new PersonCreator(_sessionFactory);
-
-			//Create convert user
-			//_person = _personCreator.Create("DatabaseConverter", "DatabaseConverter", "DatabaseConverter", "byseashare10", _cultureInfo,_timeZone);
-			//_personCreator.Save(_person);
-
-			//_person = new Person();
-			//_person.SetId(new Guid(SuperUser.Id));
-			//_person.ApplicationAuthenticationInfo = new ApplicationAuthenticationInfo
-			//	{
-			//		ApplicationLogOnName = SuperUser.UserName,
-			//		Password = SuperUser.Password
-			//	};
-
 			_person = _personCreator.GetTheSystemUser();
-			//_person.PermissionInformation.SetCulture(_cultureInfo);
-			//_person.PermissionInformation.SetUICulture(_cultureInfo);
-			//_person.PermissionInformation.SetDefaultTimeZone(_timeZone);
-
+			
 			if (!string.IsNullOrEmpty(_newUserName) && !string.IsNullOrEmpty(_newUserPassword))
 			{
 				var sysAdmin = _personCreator.Create("Admin", "Administrator", _newUserName, _newUserPassword, _cultureInfo,

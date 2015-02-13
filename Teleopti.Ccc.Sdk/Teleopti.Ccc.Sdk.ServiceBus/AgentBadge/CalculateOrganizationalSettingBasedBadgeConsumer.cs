@@ -229,15 +229,14 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.AgentBadge
 		{
 			var agentBadgeTransactions = newAwardedBadges as IList<IAgentBadgeTransaction> ?? newAwardedBadges.ToList();
 
-			var existedBadges = _badgeRepository.Find(agentBadgeTransactions.Select(
-				x => x.Person.Id != null ? (Guid)x.Person.Id : new Guid()), badgeType);
+			var existedBadges = _badgeRepository.Find(agentBadgeTransactions.Select(x => x.Person.Id.GetValueOrDefault()), badgeType);
 			foreach (var badgeTransaction in agentBadgeTransactions)
 			{
 				var person = badgeTransaction.Person;
 
 				var existedBadge = existedBadges.SingleOrDefault(x => x.Person == person.Id) ?? new Domain.Common.AgentBadge
 				{
-					Person = (Guid)person.Id,
+					Person = person.Id.GetValueOrDefault(),
 					TotalAmount = 0,
 					BadgeType = badgeType
 				};
@@ -306,15 +305,14 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.AgentBadge
 		{
 			var agentBadgeWithRankTransactions = newAwardedBadges as IList<IAgentBadgeWithRankTransaction> ?? newAwardedBadges.ToList();
 
-			var existedBadges = _badgeWithRankRepository.Find(agentBadgeWithRankTransactions.Select(
-				x => x.Person.Id != null ? (Guid)x.Person.Id : new Guid()), badgeType);
+			var existedBadges = _badgeWithRankRepository.Find(agentBadgeWithRankTransactions.Select(x => x.Person.Id.GetValueOrDefault()), badgeType);
 			foreach (var badgeTransaction in agentBadgeWithRankTransactions)
 			{
 				var person = badgeTransaction.Person;
 
 				var existedBadge = existedBadges.SingleOrDefault(x => x.Person == person.Id) ?? new Domain.Common.AgentBadgeWithRank
 				{
-					Person = (Guid)person.Id,
+					Person = person.Id.GetValueOrDefault(),
 					BronzeBadgeAmount = 0,
 					SilverBadgeAmount = 0,
 					GoldBadgeAmount = 0,

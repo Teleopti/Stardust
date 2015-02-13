@@ -80,7 +80,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests
 		[Test]
 		public void ApproveShouldReturnEmptyViewModelIfPersonrequestDoesntExist()
 		{
-			var id = new Guid();
+			var id = Guid.Empty;
 			var personRequestRepository = MockRepository.GenerateMock<IPersonRequestRepository>();
 			personRequestRepository.Expect(p => p.Find(id)).Return(null);
 			var target = new RespondToShiftTrade(personRequestRepository, null, null, null, null, null, null);
@@ -90,7 +90,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests
 		[Test]
 		public void DenyShouldReturnEmptyViewModelIfPersonrequestDoesntExist()
 		{
-			var id = new Guid();
+			var id = Guid.Empty;
 			var personRequestRepository = MockRepository.GenerateMock<IPersonRequestRepository>();
 			personRequestRepository.Expect(p => p.Find(id)).Return(null);
 			var target = new RespondToShiftTrade(personRequestRepository, null, null, null, null, null, null);

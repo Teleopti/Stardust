@@ -229,7 +229,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Controllers
 		[Test]
 		public void ShouldGetPersonScheduleDayViewModel()
 		{
-			var id = new Guid();
+			var id = Guid.Empty;
 			var date = new DateTime();
 			var model = new PersonScheduleDayViewModel();
 			var personScheduleDayViewModelFactory = MockRepository.GenerateMock<IPersonScheduleDayViewModelFactory>();

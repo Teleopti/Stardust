@@ -64,7 +64,7 @@ namespace Teleopti.Ccc.WinCode.Grouping.Commands
 			}
             foreach (var toNode in toNodes)
             {
-                if (toNode.PersonId != new Guid())
+                if (toNode.PersonId != Guid.Empty)
                 {
                     if (!auth.IsPermitted(_applicationFunction.FunctionPath, selectedPeriod.StartDate, toNode))
                         toRemove.Add(toNode);

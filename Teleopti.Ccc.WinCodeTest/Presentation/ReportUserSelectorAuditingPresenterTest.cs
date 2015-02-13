@@ -33,11 +33,11 @@ namespace Teleopti.Ccc.WinCodeTest.Presentation
         [Test]
         public void ShouldLoadViewComboWithTheItemAllFirstInList()
         {
-            IPerson p1 = new Person() { Name = new Name("pf1", "pl1") };
-            IPerson p2 = new Person() { Name = new Name("pf2", "pl2") };
+            IPerson p1 = new Person { Name = new Name("pf1", "pl1") };
+            IPerson p2 = new Person { Name = new Name("pf2", "pl2") };
             p1.SetId(Guid.NewGuid());
             p2.SetId(Guid.NewGuid());
-            IList<IPerson> personList = new List<IPerson>() { p1, p2 };
+            IList<IPerson> personList = new List<IPerson> { p1, p2 };
             var unitOfWork = _mocks.StrictMock<IUnitOfWork>();
 
             using (_mocks.Record())
@@ -61,7 +61,7 @@ namespace Teleopti.Ccc.WinCodeTest.Presentation
 
             Assert.IsNotNull(_target.RevisionList);
             Assert.AreEqual(3, _target.RevisionList.Count);
-            Assert.AreEqual(new Guid(), all.Id);
+            Assert.AreEqual(Guid.Empty, all.Id);
             Assert.AreEqual(UserTexts.Resources.All, all.Text);
             Assert.AreEqual(p1.Id, user1.Id);
             Assert.AreEqual(p1.Name.ToString(NameOrderOption.FirstNameLastName), user1.Text);
@@ -72,13 +72,13 @@ namespace Teleopti.Ccc.WinCodeTest.Presentation
         [Test]
         public void ShouldReturnAllInRevisionListWhenPersonInModelIsNull()
         {
-            var person1 = new Person() { Name = new Name("pf1", "pl1") };
-            var person2 = new Person() { Name = new Name("pf2", "pl2") };
+            var person1 = new Person { Name = new Name("pf1", "pl1") };
+            var person2 = new Person { Name = new Name("pf2", "pl2") };
             person1.SetId(Guid.NewGuid());
             person2.SetId(Guid.NewGuid());
             IList<IPerson> revisionList = new List<IPerson>{person1, person2};
             var unitOfWork = _mocks.StrictMock<IUnitOfWork>();
-            var userModel = new ReportUserSelectorAuditingModel(new Guid(), UserTexts.Resources.All);
+            var userModel = new ReportUserSelectorAuditingModel(Guid.Empty, UserTexts.Resources.All);
 
             using(_mocks.Record())
             {
@@ -102,9 +102,9 @@ namespace Teleopti.Ccc.WinCodeTest.Presentation
         [Test]
         public void ShouldReturnSelectedUserInRevisionListWhenPersonInModelIsNotNull()
         {
-            var person1 = new Person() { Name = new Name("pf1", "pl1") };
+            var person1 = new Person { Name = new Name("pf1", "pl1") };
             person1.SetId(Guid.NewGuid());
-            var person2 = new Person() { Name = new Name("pf2", "pl2") };
+            var person2 = new Person { Name = new Name("pf2", "pl2") };
             person2.SetId(Guid.NewGuid());
             IList<IPerson> revisionList = new List<IPerson> { person1, person2};
             var unitOfWork = _mocks.StrictMock<IUnitOfWork>();

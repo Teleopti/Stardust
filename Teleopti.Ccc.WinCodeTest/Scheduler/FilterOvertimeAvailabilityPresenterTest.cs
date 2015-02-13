@@ -38,7 +38,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
         {
             var person = PersonFactory.CreatePerson("test1");
             IDictionary<Guid, IPerson> listOfPerson = new Dictionary<Guid, IPerson>();
-            listOfPerson.Add(new Guid() ,person);
+            listOfPerson.Add(Guid.Empty ,person);
             var dateOnlyPeriod = new DateOnlyPeriod(DateOnly.Today,DateOnly.Today);
 
 			var persistableCollection = new List<IPersistableScheduleData>();

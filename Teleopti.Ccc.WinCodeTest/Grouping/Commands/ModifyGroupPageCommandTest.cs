@@ -11,65 +11,61 @@ namespace Teleopti.Ccc.WinCodeTest.Grouping.Commands
     [TestFixture]
     public class ModifyPageCommandTest
     {
-        private MockRepository _mocks;
-        private IModifyGroupPageCommand _target;
-        private IPersonSelectorView _personSelectorView;
-
-        [SetUp]
-        public void Setup()
-        {
-            _mocks = new MockRepository();
-            _personSelectorView = _mocks.StrictMock<IPersonSelectorView>();
-            _target = new ModifyGroupPageCommand(_personSelectorView);
-
-        }
-
         [Test]
         public void ShouldReturnFalseModifyNotAllowed()
         {
-
+			var personSelectorView = MockRepository.GenerateMock<IPersonSelectorView>();
+			var target = new ModifyGroupPageCommand(personSelectorView);
             using (new CustomAuthorizationContext(new PrincipalAuthorizationWithNoPermission()))
             {
-               Assert.That(_target.CanExecute(), Is.False);  
+               Assert.That(target.CanExecute(), Is.False);  
             }
         }
 
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Reliability", "CA2000:Dispose objects before losing scope"), Test]
+        [Test]
         public void ShouldReturnFalseIfSelectedTabNotIsUserDefined()
         {
-            var tab = new TabPageAdv();
-            Expect.Call(_personSelectorView.SelectedTab).Return(tab);
-            _mocks.ReplayAll();
-            Assert.That(_target.CanExecute(), Is.False);
-            _mocks.VerifyAll();
+			var personSelectorView = MockRepository.GenerateMock<IPersonSelectorView>();
+			var target = new ModifyGroupPageCommand(personSelectorView);
+	        using (var tab = new TabPageAdv())
+	        {
+		        personSelectorView.Stub(x => x.SelectedTab).Return(tab);
+
+		        Assert.That(target.CanExecute(), Is.False);
+	        }
         }
 
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Reliability", "CA2000:Dispose objects before losing scope"), Test]
+        [Test]
         public void ShouldReturnTrueIfSelectedTabIsUserDefined()
         {
-            var command = _mocks.StrictMock<ILoadUserDefinedTabsCommand>();
-            var tab = new TabPageAdv{Tag = command};
-            Expect.Call(_personSelectorView.SelectedTab).Return(tab);
-            _mocks.ReplayAll();
-            Assert.That(_target.CanExecute(), Is.True);
-            _mocks.VerifyAll();
+			var personSelectorView = MockRepository.GenerateMock<IPersonSelectorView>();
+			var target = new ModifyGroupPageCommand(personSelectorView);
+            var command = MockRepository.GenerateMock<ILoadUserDefinedTabsCommand>();
+	        using (var tab = new TabPageAdv {Tag = command})
+	        {
+		        personSelectorView.Stub(x => x.SelectedTab).Return(tab);
+		        
+				Assert.That(target.CanExecute(), Is.True);
+	        }
         }
 
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Reliability", "CA2000:Dispose objects before losing scope"), Test]
+        [Test]
         public void ShouldCallViewToModifyGroupPage()
         {
-            var command = _mocks.StrictMock<ILoadUserDefinedTabsCommand>();
-            var tab = new TabPageAdv("userDefined") { Tag = command };
-            Expect.Call(_personSelectorView.SelectedTab).Return(tab).Repeat.Twice();
-            Expect.Call(command.Id).Return(new Guid());
-            Expect.Call(() => _personSelectorView.ModifyGroupPage(new Guid()));
-            _mocks.ReplayAll();
+			var personSelectorView = MockRepository.GenerateMock<IPersonSelectorView>();
+			var target = new ModifyGroupPageCommand(personSelectorView);
+			var command = MockRepository.GenerateMock<ILoadUserDefinedTabsCommand>();
+			var id = Guid.NewGuid();
+			
+			using (var tab = new TabPageAdv("userDefined") { Tag = command })
+	        {
+				personSelectorView.Stub(x => x.SelectedTab).Return(tab);
+		        command.Stub(x => x.Id).Return(id);
+		        
+		        target.Execute();
 
-            _target.Execute();
-
-            _mocks.VerifyAll();
+				personSelectorView.AssertWasCalled(x => x.ModifyGroupPage(id));
+	        }
         }
     }
-
-
 }

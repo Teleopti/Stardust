@@ -52,7 +52,7 @@ namespace Teleopti.Ccc.WinCode.Grouping.Commands
 			{
 				foreach (var toNode in toNodes)
 				{
-					if (!toNode.PersonId.Equals(new Guid()) && !_personSelectorView.VisiblePersonIds.Contains(toNode.PersonId))
+					if (!toNode.PersonId.Equals(Guid.Empty) && !_personSelectorView.VisiblePersonIds.Contains(toNode.PersonId))
 						toRemove.Add(toNode);
 
 				}
@@ -63,7 +63,7 @@ namespace Teleopti.Ccc.WinCode.Grouping.Commands
 			}
             foreach (var toNode in toNodes)
             {
-                if (toNode.PersonId != new Guid())
+                if (toNode.PersonId != Guid.Empty)
                 {
                     if (_applicationFunction != null)
                     {
@@ -80,7 +80,7 @@ namespace Teleopti.Ccc.WinCode.Grouping.Commands
 			var nodes = new List<TreeNodeAdv>();
             var root = new TreeNodeAdv("") { LeftImageIndices = new[] { 1 }, Expanded = true ,Tag = new List<Guid>()};
             nodes.Add(root);
-            var currNode = new TreeNodeAdv("") { TagObject = new Guid()};
+            var currNode = new TreeNodeAdv("") { TagObject = Guid.Empty};
 
             var nodeDictionary = new Dictionary<Guid, TreeNodeAdv>();
             foreach (var personSelectorUserDefined in toNodes)
@@ -116,7 +116,7 @@ namespace Teleopti.Ccc.WinCode.Grouping.Commands
                 }
                 
                 // and here have a list with one guid
-                if (personSelectorUserDefined.Show && !personSelectorUserDefined.PersonId.Equals(new Guid()))
+                if (personSelectorUserDefined.Show && !personSelectorUserDefined.PersonId.Equals(Guid.Empty))
                 {
                     //always show persons in these grouping
                         var personNode = new TreeNodeAdv(_commonAgentNameSettings.BuildCommonNameDescription(personSelectorUserDefined))

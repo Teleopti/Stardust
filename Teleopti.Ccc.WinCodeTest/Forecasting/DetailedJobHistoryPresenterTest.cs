@@ -27,7 +27,7 @@ namespace Teleopti.Ccc.WinCodeTest.Forecasting
         [Test]
         public void ShouldInitialize()
         {
-            var jobModel = new JobResultModel{JobId = new Guid(), JobCategory = "Forecast Import", Owner = "talham", Status = "Done"};
+            var jobModel = new JobResultModel{JobId = Guid.NewGuid(), JobCategory = "Forecast Import", Owner = "talham", Status = "Done"};
             var details = new List<JobResultDetailModel>();
             using (mocks.Record())
             {
@@ -41,7 +41,5 @@ namespace Teleopti.Ccc.WinCodeTest.Forecasting
                 target.LoadDetailedHistory(jobModel);
             }
         }
-
-
     }
 }

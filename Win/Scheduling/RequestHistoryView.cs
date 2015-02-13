@@ -32,7 +32,7 @@ namespace Teleopti.Ccc.Win.Scheduling
         {
             get 
             { 
-                var ret = new Guid();
+                var ret = Guid.Empty;
                 if (comboBoxAdvPersons.SelectedItem != null)
                     ret = (Guid)comboBoxAdvPersons.SelectedValue;
                 return ret;

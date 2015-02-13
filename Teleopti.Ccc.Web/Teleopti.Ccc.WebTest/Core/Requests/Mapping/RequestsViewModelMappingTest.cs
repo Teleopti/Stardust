@@ -708,7 +708,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 			var shiftTradeRequest = new ShiftTradeRequest(new List<IShiftTradeSwapDetail> { shiftTradeSwapDetail });
 			var personRequest = new PersonRequest(from) { Subject = "Subject of request", Request = shiftTradeRequest };
 			personRequest.TrySetMessage("This is a short text for the description of a shift trade request");
-			personRequest.SetId(new Guid());
+			personRequest.SetId(Guid.Empty);
 			return personRequest;
 		}
 
@@ -718,7 +718,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 			var shiftTradeRequest = new ShiftTradeRequest(new List<IShiftTradeSwapDetail> { shiftTradeSwapDetail });
 			var personRequest = new PersonRequest(from) { Subject = "Subject of request", Request = shiftTradeRequest };
 			personRequest.TrySetMessage("This is a short text for the description of a shift trade request");
-			personRequest.SetId(new Guid());
+			personRequest.SetId(Guid.Empty);
 			return personRequest;
 		}
 

@@ -72,7 +72,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 		{
 			const string expected = "hejhej";
 			form.Subject = expected;
-			var offerId = new Guid();
+			var offerId = Guid.Empty;
 			form.ShiftExchangeOfferId = offerId;
 			var offer = MockRepository.GenerateMock<IShiftExchangeOffer>();
 			var offerRequest = new PersonRequest(PersonFactory.CreatePerson()){Request = offer};
@@ -90,7 +90,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 		public void ShouldSetOfferStatusToPendingAdminApproval()
 		{
 			
-			var offerId = new Guid();
+			var offerId = Guid.Empty;
 			form.ShiftExchangeOfferId = offerId;
 			var offer = MockRepository.GenerateMock<IShiftExchangeOffer>();
 			offer.Status = ShiftExchangeOfferStatus.Pending;

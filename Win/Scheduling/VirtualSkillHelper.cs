@@ -86,7 +86,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			foreach (VirtualSkill virtualSkill in _currentSetting.VirtualSkills.Values)
 			{
 				ISkill skill = new Skill(virtualSkill.Name, virtualSkill.Name, Color.Pink, 15, availableSkills[0].SkillType);
-				if(!virtualSkill.Id.Equals(new Guid()))
+				if(!virtualSkill.Id.Equals(Guid.Empty))
 					skill.SetId(virtualSkill.Id);
 
 				foreach (Guid guid in virtualSkill.ChildSkills)

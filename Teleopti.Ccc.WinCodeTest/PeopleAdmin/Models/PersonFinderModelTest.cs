@@ -36,8 +36,8 @@ namespace Teleopti.Ccc.WinCodeTest.PeopleAdmin.Models
         {
             _searchCriteria = new PersonFinderSearchCriteria(PersonFinderField.All, "aa", 5,
                                                              new DateOnly(DateTime.Today.AddMonths(-2)),2,0);
-			_searchCriteria.SetRow(0, new PersonFinderDisplayRow { BusinessUnitId = Guid.NewGuid(), PersonId = new Guid() });
-			_searchCriteria.SetRow(1, new PersonFinderDisplayRow{BusinessUnitId = new Guid(), PersonId = Guid.NewGuid()});
+			_searchCriteria.SetRow(0, new PersonFinderDisplayRow { BusinessUnitId = Guid.NewGuid(), PersonId = Guid.Empty });
+			_searchCriteria.SetRow(1, new PersonFinderDisplayRow{BusinessUnitId = Guid.Empty, PersonId = Guid.NewGuid()});
             _target = new PersonFinderModel(_personFinderReadOnlyRepository, _searchCriteria);
             
             Expect.Call(() => _personFinderReadOnlyRepository.Find(_searchCriteria));

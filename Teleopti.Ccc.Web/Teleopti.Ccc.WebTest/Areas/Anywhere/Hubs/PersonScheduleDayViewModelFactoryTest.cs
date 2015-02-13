@@ -40,7 +40,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Hubs
 		[Test]
 		public void ShouldGetPersonScheduleDayViewModel()
 		{
-			var personId = new Guid();
+			var personId = Guid.Empty;
 			var date = new DateTime(2015,1,30);
 			var model = new PersonScheduleDayReadModel();
 			var expected = new PersonScheduleDayViewModel();

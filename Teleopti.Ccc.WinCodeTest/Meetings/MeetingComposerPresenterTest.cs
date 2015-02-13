@@ -261,7 +261,7 @@ namespace Teleopti.Ccc.WinCodeTest.Meetings
         [Test]
         public void VerifyCanDeleteMeeting()
         {
-            var id = new Guid();
+            var id = Guid.NewGuid();
             _meeting.SetId(id);
             var person = PersonFactory.CreatePerson("test");
             _meeting.AddMeetingPerson(new MeetingPerson(person, false));

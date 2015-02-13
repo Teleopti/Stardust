@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using Teleopti.Ccc.Domain.Scheduling.ScheduleTagging;
 using Teleopti.Ccc.Domain.SystemSetting;
 using Teleopti.Interfaces.Domain;
@@ -21,15 +22,10 @@ namespace Teleopti.Ccc.Domain.Scheduling.Overtime
 
         public void MapTo(IOvertimePreferences overtimePreferences , IEnumerable<IScheduleTag> scheduleTags,IEnumerable<IActivity> activityList,IList<IMultiplicatorDefinitionSet> multiplicatorDefinitionSets  )
         {
-            foreach (var scheduleTag in scheduleTags)
-            {
-                if (_scheduleTagId == scheduleTag.Id)
-                    overtimePreferences.ScheduleTag = scheduleTag;
-            }
-            if (overtimePreferences.ScheduleTag == null)
-                overtimePreferences.ScheduleTag = NullScheduleTag.Instance;
+			overtimePreferences.ScheduleTag = scheduleTags.FirstOrDefault(scheduleTag => _scheduleTagId == scheduleTag.Id) ??
+			                                  NullScheduleTag.Instance;
 
-            foreach (var activity in activityList)
+	        foreach (var activity in activityList)
             {
 				if (_skillActivtyId == null)
 				{
@@ -52,8 +48,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.Overtime
 	            if (_overtimeType == overtimeType.Id)
                     overtimePreferences.OvertimeType = overtimeType;
             }
-
-			
 
             overtimePreferences.ExtendExistingShift = _extendExistingShifts;
             overtimePreferences.SelectedTimePeriod = _selectTimePeriod;

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using Teleopti.Ccc.Domain.Scheduling.ScheduleTagging;
 using Teleopti.Ccc.Domain.SystemSetting;
 using Teleopti.Interfaces.Domain;
@@ -22,16 +23,10 @@ namespace Teleopti.Ccc.Domain.Optimization
         private bool _useRotations = true;
 		private bool _showTroubleshotInformation;
         
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "2"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "1"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
 		public void MapTo(ISchedulingOptions schedulingOptions, IEnumerable<IScheduleTag> scheduleTags)
 		{
-			foreach (var scheduleTag in scheduleTags)
-			{
-				if (_scheduleTagId == scheduleTag.Id)
-					schedulingOptions.TagToUseOnScheduling = scheduleTag;
-			}
-			if (schedulingOptions.TagToUseOnScheduling == null)
-				schedulingOptions.TagToUseOnScheduling = NullScheduleTag.Instance;
+			schedulingOptions.TagToUseOnScheduling = scheduleTags.FirstOrDefault(scheduleTag => _scheduleTagId == scheduleTag.Id) ??
+			                                         NullScheduleTag.Instance;
 
 			schedulingOptions.UseRotations = _useRotations;
             schedulingOptions.RotationDaysOnly = _rotationDaysOnly;
@@ -44,11 +39,8 @@ namespace Teleopti.Ccc.Domain.Optimization
 			schedulingOptions.UsePreferencesMustHaveOnly = _useMustHavesOnly;
 			schedulingOptions.UseShiftCategoryLimitations = _useShiftCategoryLimitations;
 			schedulingOptions.ShowTroubleshot = _showTroubleshotInformation;
-
-            
 		}
 
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
 		public void MapFrom(ISchedulingOptions schedulingOptions)
 		{
 			_scheduleTagId = schedulingOptions.TagToUseOnScheduling.Id;
@@ -62,8 +54,6 @@ namespace Teleopti.Ccc.Domain.Optimization
 			_useMustHavesOnly = schedulingOptions.UsePreferencesMustHaveOnly;
 			_useShiftCategoryLimitations = schedulingOptions.UseShiftCategoryLimitations;
 			_showTroubleshotInformation = schedulingOptions.ShowTroubleshot;
-           
 		}
-		
 	}
 }

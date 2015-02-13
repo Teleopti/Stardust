@@ -10,12 +10,11 @@ namespace Teleopti.Ccc.WinCodeTest.Presentation
     public class ReportUserSelectorAuditingModelTest
     {
         private ReportUserSelectorAuditingModel _target;
-        private Guid _guid;
+        private readonly Guid _guid = Guid.NewGuid();
 
         [SetUp]
         public void Setup()
         {
-            _guid = new Guid();
             _target = new ReportUserSelectorAuditingModel(_guid, UserTexts.Resources.All);   
         }
 
