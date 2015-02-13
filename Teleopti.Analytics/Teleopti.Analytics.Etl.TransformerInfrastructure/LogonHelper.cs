@@ -5,9 +5,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Security.Authentication;
-using Teleopti.Ccc.Domain;
-using Teleopti.Ccc.Domain.Collection;
-using Teleopti.Ccc.Domain.Common;
+using Teleopti.Analytics.Etl.Interfaces.Transformer;
 using Teleopti.Ccc.Domain.Infrastructure;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Security;
@@ -24,13 +22,14 @@ namespace Teleopti.Analytics.Etl.TransformerInfrastructure
 	public class LogOnHelper : ILogOnHelper
 	{
 		private DataSourceContainer _choosenDb;
-		private IList<DataSourceContainer> _foundDataBases = new List<DataSourceContainer>();
 		private LogOnService _logonService;
 		private string _nhibConfPath;
 		private IList<IBusinessUnit> _buList;
 		private ILogOnOff _logOnOff;
 		private IRepositoryFactory _repositoryFactory;
-		private List<DataSourceContainer> _dataSources;
+		private List<ITenantName> _tenantNames;
+		//temp
+		private List<IDataSource> _dataSources;
 
 		private LogOnHelper() { }
 
@@ -38,7 +37,7 @@ namespace Teleopti.Analytics.Etl.TransformerInfrastructure
 			: this()
 		{
 			_nhibConfPath = hibernateConfPath;
-			InitializeStateHolder();
+			initializeStateHolder();
 		}
 
 		public IList<IBusinessUnit> GetBusinessUnitCollection()
@@ -58,26 +57,20 @@ namespace Teleopti.Analytics.Etl.TransformerInfrastructure
 			return _buList;
 		}
 
-		public IList<DataSourceContainer> GetDataSourceCollection()
+		public List<ITenantName> TenantCollection
 		{
-			if (_dataSources == null)
+			get
 			{
-				var dataSourceProvider =
-				new AvailableDataSourcesProvider(new ThisApplicationData(StateHolderReader.Instance.StateReader.ApplicationScopeData));
-				var datasourceprovider = new ApplicationDataSourceProvider(dataSourceProvider, new RepositoryFactory(), null);
-				_dataSources = datasourceprovider.DataSourceList().ToList();
-				
-			}
+				if (_tenantNames == null || _tenantNames.Count == 0)
+				{
+					throw new DataSourceException("No datasources found");
+				}
 
-			if (_dataSources == null || _dataSources.Count == 0)
-			{
-				throw new DataSourceException("No datasources found");
+				return _tenantNames;
 			}
-
-			return _dataSources;
 		}
 
-		public IDataSourceContainer SelectedDataSourceContainer { get { return _choosenDb; }}
+		public IDataSourceContainer SelectedDataSourceContainer { get { return _choosenDb; } }
 
 		public bool SetBusinessUnit(IBusinessUnit businessUnit)
 		{
@@ -93,71 +86,53 @@ namespace Teleopti.Analytics.Etl.TransformerInfrastructure
 			return false;
 		}
 
-		
-
-		/// <summary>
-		/// Initializes the state holder components.
-		/// </summary>
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling")]
-		private void InitializeStateHolder()
+		private void initializeStateHolder()
 		{
 			// Code that runs on application startup
 			if (string.IsNullOrEmpty(_nhibConfPath))
-                _nhibConfPath = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
-			var application =
-				new InitializeApplication(
-					new DataSourcesFactory(new EnversConfiguration(), new List<IMessageSender>(),
-					                       DataSourceConfigurationSetter.ForEtl(), new CurrentHttpContext()), null);
-			application.MessageBrokerDisabled = true;
+				_nhibConfPath = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
+			var dataSourcesFactory = new DataSourcesFactory(new EnversConfiguration(), new List<IMessageSender>(),
+				DataSourceConfigurationSetter.ForEtl(), new CurrentHttpContext());
+			var application = new InitializeApplication( dataSourcesFactory, null) {MessageBrokerDisabled = true};
 
 			if (!StateHolder.IsInitialized)
 				application.Start(new StateManager(), _nhibConfPath, null, new ConfigurationManagerWrapper(), true);
 
-			//This one would benefit from some Autofac maybe?
 			_logOnOff = new LogOnOff(new WindowsAppDomainPrincipalContext(new TeleoptiPrincipalFactory()));
 			_repositoryFactory = new RepositoryFactory();
-			var passwordPolicy = new DummyPasswordPolicy();
 			_logonService =
-				new LogOnService(
-					new ApplicationDataSourceProvider(
-						new AvailableDataSourcesProvider(
-							new ThisApplicationData(StateHolderReader.Instance.StateReader.ApplicationScopeData)),
-						_repositoryFactory,
-						new FindApplicationUser(
-							new CheckNullUser(
-								new FindUserDetail(
-									new CheckUserDetail(new CheckPassword(new OneWayEncryption(), new CheckBruteForce(passwordPolicy),
-										new CheckPasswordChange(() => passwordPolicy))), _repositoryFactory)), _repositoryFactory)),_logOnOff);
+				new LogOnService(_logOnOff);
+			_tenantNames = TenantNameCreator.TenantNames(_nhibConfPath);
+			//temp for now until ApplicationData works
+			_dataSources = TenantNameCreator.DataSources(_nhibConfPath, _repositoryFactory, dataSourcesFactory);
 		}
 
 
 		public bool SelectDataSourceContainer(string dataSourceName)
 		{
 			_buList = null;
-			if (GetDataSourceCollection().IsEmpty())
+			//var dataSource = StateHolderReader.Instance.StateReader.ApplicationScopeData.DataSource(dataSourceName);
+			//also temp
+			var dataSource = _dataSources.FirstOrDefault(x => x.DataSourceName.Equals(dataSourceName));
+			if (dataSource == null)
 			{
-				Trace.WriteLine("Login Failed! could not be found in any database configuration.");
+				Trace.WriteLine(string.Format("No datasource found with name {0}", dataSourceName));
 				_choosenDb = null;
 			}
 			else
 			{
-				// If multiple databases we use the first in the list, since it is decided that the ETL Tool not should support multi db
-				_choosenDb = GetDataSourceCollection().FirstOrDefault(x => x.DataSourceName.Equals(dataSourceName));
-				if (_choosenDb == null)
-					Trace.WriteLine(string.Format("No datasource found with name {0}", dataSourceName));
-				else
+				_choosenDb = new DataSourceContainer(dataSource, _repositoryFactory, null, AuthenticationTypeOption.Application);
+
+				using (var unitOfWork = _choosenDb.DataSource.Application.CreateAndOpenUnitOfWork())
 				{
-					using (var unitOfWork = _choosenDb.DataSource.Application.CreateAndOpenUnitOfWork())
-					{
-						var systemId = new Guid("3f0886ab-7b25-4e95-856a-0d726edc2a67");
-						_choosenDb.SetUser(_repositoryFactory.CreatePersonRepository(unitOfWork).LoadOne(systemId));
-					}
-					if (_choosenDb.User == null)
-					{
-						Trace.WriteLine("Error on logon!");
-						_choosenDb = null;
-					}
+					_choosenDb.SetUser(_repositoryFactory.CreatePersonRepository(unitOfWork).LoadOne(SuperUser.Id_AvoidUsing_This));
 				}
+				if (_choosenDb.User == null)
+				{
+					Trace.WriteLine("Error on logon!");
+					_choosenDb = null;
+				}
+
 			}
 			return _choosenDb != null;
 		}
@@ -189,15 +164,10 @@ namespace Teleopti.Analytics.Etl.TransformerInfrastructure
 				_logonService.LogOff();
 				_logonService = null;
 			}
-			if (_buList!=null)
+			if (_buList != null)
 			{
 				_buList.Clear();
 				_buList = null;
-			}
-			if (_foundDataBases!=null)
-			{
-				_foundDataBases.Clear();
-				_foundDataBases = null;
 			}
 		}
 

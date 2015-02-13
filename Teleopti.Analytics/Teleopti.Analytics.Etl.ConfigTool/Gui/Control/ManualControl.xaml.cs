@@ -38,7 +38,7 @@ namespace Teleopti.Analytics.Etl.ConfigTool.Gui.Control
 			GroupBoxSchedule.IsEnabledChanged += (o, s) => changeForegroundColor(o);
 		}
 
-		public void SetTenantDataSource(IList<DataSourceContainer> source)
+		public void SetTenantDataSource(IList<ITenantName> source)
 		{
 			ComboBoxDataSource.DataContext = source;
 		}
@@ -90,12 +90,12 @@ namespace Teleopti.Analytics.Etl.ConfigTool.Gui.Control
 			}
 		}
 
-		internal DataSourceContainer TenantDataSource
+		internal string TenantName
 		{
 			get
 			{
 				if (ComboBoxDataSource.SelectedIndex > -1)
-					return (DataSourceContainer)ComboBoxDataSource.SelectedItem;
+					return (string)ComboBoxDataSource.SelectedValue;
 
 				return null;
 			}
@@ -231,7 +231,7 @@ namespace Teleopti.Analytics.Etl.ConfigTool.Gui.Control
 			try
 			{
 				_baseConfiguration.JobHelper.SelectDataSourceContainer((string)ComboBoxDataSource.SelectedValue);
-				_dataSourceCollection = new DataSourceValidCollection(true, ((DataSourceContainer)ComboBoxDataSource.SelectedItem).DataSource.Statistic.ConnectionString);
+				_dataSourceCollection = new DataSourceValidCollection(true, _baseConfiguration.JobHelper.SelectedDataSourceContainer.DataSource.Statistic.ConnectionString);
 				ComboBoxLogDataSource.DataContext = _dataSourceCollection;
 
 				UpdateControls(null);

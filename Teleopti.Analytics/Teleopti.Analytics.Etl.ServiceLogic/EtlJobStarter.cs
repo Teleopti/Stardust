@@ -10,7 +10,6 @@ using Teleopti.Analytics.Etl.Common.JobSchedule;
 using Teleopti.Analytics.Etl.Interfaces.Transformer;
 using Teleopti.Analytics.Etl.Transformer;
 using Teleopti.Analytics.Etl.TransformerInfrastructure;
-using Teleopti.Interfaces.Domain;
 using log4net;
 using log4net.Config;
 using Teleopti.Analytics.Etl.Interfaces.Common;
@@ -115,11 +114,11 @@ namespace Teleopti.Analytics.Etl.ServiceLogic
 					Log.InfoFormat(CultureInfo.InvariantCulture, "Scheduled job '{0}' ready to start.", jobToRun.Name);
 					runController.StartEtlJobRunLock(jobToRun.Name, true, etlJobLock);
 					var jobHelper = jobToRun.JobParameters.Helper;
-					var datasources = jobHelper.DataSourceContainers;
-					foreach (var dataSourceContainer in datasources)
+					var tenantNames = jobHelper.TenantCollection;
+					foreach (var tenantName in tenantNames)
 					{
 						IList<IJobResult> jobResultCollection = new List<IJobResult>();
-						jobHelper.SelectDataSourceContainer(dataSourceContainer.DataSourceName);
+						jobHelper.SelectDataSourceContainer(tenantName.DataSourceName);
 						IJobRunner jobRunner = new JobRunner();
 						IList<IJobResult> jobResults = jobRunner.Run(jobToRun, jobResultCollection, jobStepsNotToRun);
 						if (jobResults == null)

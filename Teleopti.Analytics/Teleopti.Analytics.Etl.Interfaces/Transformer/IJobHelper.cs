@@ -9,7 +9,7 @@ namespace Teleopti.Analytics.Etl.Interfaces.Transformer
 	public interface IJobHelper : IDisposable
 	{
 		IList<IBusinessUnit> BusinessUnitCollection { get; }
-		IList<DataSourceContainer> DataSourceContainers { get; }
+		List<ITenantName> TenantCollection { get; }
 		IRaptorRepository Repository { get; }
 		ISignalRClient MessageClient { get; }
 		IMessageSender MessageSender { get; }
@@ -17,5 +17,10 @@ namespace Teleopti.Analytics.Etl.Interfaces.Transformer
 		bool SetBusinessUnit(IBusinessUnit businessUnit);
 		void LogOffTeleoptiCccDomain();
 		IDataSourceContainer SelectedDataSourceContainer { get; }
+	}
+
+	public interface ITenantName
+	{
+		string DataSourceName { get; set; }
 	}
 }

@@ -153,7 +153,8 @@ namespace Teleopti.Analytics.Etl.ConfigTool
 
 		private void MenuItem_Click(object sender, RoutedEventArgs e)
 		{
-			initializeDataSourceDialog(manualEtl.myControl.TenantDataSource.DataSource.Statistic.ConnectionString);
+			_baseConfiguration.JobHelper.SelectDataSourceContainer(manualEtl.myControl.TenantName);
+			initializeDataSourceDialog(_baseConfiguration.JobHelper.SelectedDataSourceContainer.DataSource.Statistic.ConnectionString);
 			showDataSourceDialog();
 		}
 

@@ -23,7 +23,7 @@ namespace Teleopti.Analytics.Etl.ConfigTool.Gui.Control
 		private readonly BackgroundWorker _logonWorker = new BackgroundWorker();
 		private JobCollectionFactory _jobCollectionFactory;
 		private ObservableCollection<IJob> _jobCollection;
-		private IList<DataSourceContainer> _tenantCollection = new List<DataSourceContainer>();
+		private IList<ITenantName> _tenantCollection = new List<ITenantName>();
 		private IBaseConfiguration _baseConfiguration;
 
 		public event EventHandler<AlarmEventArgs> JobRun;
@@ -54,7 +54,7 @@ namespace Teleopti.Analytics.Etl.ConfigTool.Gui.Control
 
 		private void logonWorker_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
 		{
-			_tenantCollection = _jobCollection[0].JobParameters.Helper.DataSourceContainers;
+			_tenantCollection = _jobCollection[0].JobParameters.Helper.TenantCollection;
 			
 			InitialJobNowAvailable(sender, new AlarmEventArgs(_jobCollection[0]));
 			SetEnableStateForJobCollection();
@@ -124,7 +124,7 @@ namespace Teleopti.Analytics.Etl.ConfigTool.Gui.Control
 			menuItemExecute.IsEnabled = isEnabled;
 		}
 
-		public IList<DataSourceContainer> TenantCollection
+		public IList<ITenantName> TenantCollection
 		{
 			get { return _tenantCollection; }
 		}

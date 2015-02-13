@@ -327,7 +327,7 @@ namespace Teleopti.Analytics.Etl.IntegrationTest
 				DataSource = SqlCommands.DataSourceIdGet(datasourceName)
 			};
 				jobParameters.StateHolder.SetLoadBridgeTimeZonePeriod(period, person.PermissionInformation.DefaultTimeZone().Id);
-			jobHelper.SelectDataSourceContainer(jobHelper.DataSourceContainers[0].DataSourceName);
+			jobHelper.SelectDataSourceContainer(jobHelper.TenantCollection[0].DataSourceName);
 			var jobRunner = new JobRunner();
 			var nightlyJob = new JobBase(jobParameters, new NightlyJobCollection(jobParameters), "Nightly", true, true);
 			var jobResultCollection = new List<IJobResult>();

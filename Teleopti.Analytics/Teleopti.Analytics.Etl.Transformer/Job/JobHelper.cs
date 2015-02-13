@@ -45,9 +45,9 @@ namespace Teleopti.Analytics.Etl.Transformer.Job
 			get { return _logHelp.GetBusinessUnitCollection(); }
 		}
 
-		public IList<DataSourceContainer> DataSourceContainers
+		public List<ITenantName> TenantCollection
 		{
-			get { return _logHelp.GetDataSourceCollection(); }
+			get { return _logHelp.TenantCollection; }
 		}
 
 		public IRaptorRepository Repository
