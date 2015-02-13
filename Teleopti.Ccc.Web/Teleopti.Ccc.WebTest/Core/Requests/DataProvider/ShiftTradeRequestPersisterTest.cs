@@ -56,14 +56,14 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 		}		
 		
 		[Test]
-		public void ShouldAutoApprovedByAnnouncerWhenShiftTradeFromBulletinBoard()
+		public void ShouldAutoApprovedByAnnouncerWhenLockShiftTradeFromBulletinBoard()
 		{
 			shiftTradeRequestProvider.Stub(x => x.RetrieveUserWorkflowControlSet())
-				.Return(new WorkflowControlSet("bla") {LockTrading = true, AutoGrantShiftTradeRequest = false});
+				.Return(new WorkflowControlSet("bla") {LockTrading = true});
 			var target = new ShiftTradeRequestPersister(repository, mapper, autoMapper, serviceBusSender, null, null, null, null, shiftTradeSetChecksum, shiftTradeRequestProvider);
 			var form = new ShiftTradeRequestForm(){ShiftExchangeOfferId = new Guid()};
 			var shiftTradeRequest = new PersonRequest(new Person());
-			var viewModel = new RequestViewModel();
+			var viewModel = new RequestViewModel() { Status = Resources.New };
 
 			mapper.Stub(x => x.Map(form)).Return(shiftTradeRequest);
 			autoMapper.Stub(x => x.Map<IPersonRequest, RequestViewModel>(shiftTradeRequest)).Return(viewModel);
@@ -71,6 +71,42 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 			var result = target.Persist(form);
 
 			result.Status.Should().Be.EqualTo(Resources.WaitingThreeDots);
+		}		
+		
+		[Test]
+		public void ShouldWaitingApprovedByAnnouncerWhenShiftTradeFromBulletinBoard()
+		{
+			shiftTradeRequestProvider.Stub(x => x.RetrieveUserWorkflowControlSet())
+				.Return(new WorkflowControlSet("bla") {LockTrading = false});
+			var target = new ShiftTradeRequestPersister(repository, mapper, autoMapper, serviceBusSender, null, null, null, null, shiftTradeSetChecksum, shiftTradeRequestProvider);
+			var form = new ShiftTradeRequestForm(){ShiftExchangeOfferId = new Guid()};
+			var shiftTradeRequest = new PersonRequest(new Person());
+			var viewModel = new RequestViewModel(){Status = Resources.New};
+
+			mapper.Stub(x => x.Map(form)).Return(shiftTradeRequest);
+			autoMapper.Stub(x => x.Map<IPersonRequest, RequestViewModel>(shiftTradeRequest)).Return(viewModel);
+
+			var result = target.Persist(form);
+
+			result.Status.Should().Be.EqualTo(Resources.New);
+		}		
+		
+		[Test]
+		public void ShouldWaitingApprovedByAnnouncerWhenShiftTradeFromNormalRequestBoard()
+		{
+			shiftTradeRequestProvider.Stub(x => x.RetrieveUserWorkflowControlSet())
+				.Return(new WorkflowControlSet("bla") {LockTrading = true});
+			var target = new ShiftTradeRequestPersister(repository, mapper, autoMapper, serviceBusSender, null, null, null, null, shiftTradeSetChecksum, shiftTradeRequestProvider);
+			var form = new ShiftTradeRequestForm(){ShiftExchangeOfferId = null};
+			var shiftTradeRequest = new PersonRequest(new Person());
+			var viewModel = new RequestViewModel(){Status = Resources.New};
+
+			mapper.Stub(x => x.Map(form)).Return(shiftTradeRequest);
+			autoMapper.Stub(x => x.Map<IPersonRequest, RequestViewModel>(shiftTradeRequest)).Return(viewModel);
+
+			var result = target.Persist(form);
+
+			result.Status.Should().Be.EqualTo(Resources.New);
 		}
 
 		[Test]

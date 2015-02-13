@@ -58,7 +58,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.DataProvider
 
 			var requestViewModel = _autoMapper.Map<IPersonRequest, RequestViewModel>(personRequest);
 			var workflowControlSet = _shiftTradeRequestprovider.RetrieveUserWorkflowControlSet();
-			if (form.ShiftExchangeOfferId != null && workflowControlSet.LockTrading && !workflowControlSet.AutoGrantShiftTradeRequest)
+			if (form.ShiftExchangeOfferId != null && workflowControlSet.LockTrading)
 			{
 				requestViewModel.Status = Resources.WaitingThreeDots;
 			}
@@ -71,22 +71,19 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.DataProvider
 			if (_currentUnitOfWork == null)
 				return;
 			MessageWithLogOnInfo message = null;
-			//if (form.ShiftExchangeOfferId != null)
-			//{
-				var workflowControlSet = _shiftTradeRequestprovider.RetrieveUserWorkflowControlSet();
-				if (form.ShiftExchangeOfferId != null && workflowControlSet.LockTrading && !workflowControlSet.AutoGrantShiftTradeRequest)
+			var workflowControlSet = _shiftTradeRequestprovider.RetrieveUserWorkflowControlSet();
+			if (form.ShiftExchangeOfferId != null && workflowControlSet.LockTrading)
+			{
+				var shiftTrade = personRequest.Request as IShiftTradeRequest;
+				if (shiftTrade != null)
 				{
-					var shiftTrade = personRequest.Request as IShiftTradeRequest;
-					if (shiftTrade != null)
+					message = new AcceptShiftTrade
 					{
-						message = new AcceptShiftTrade
-						{
-							PersonRequestId = personRequest.Id.GetValueOrDefault(),
-							AcceptingPersonId = shiftTrade.PersonTo.Id.GetValueOrDefault()
-						};
-					}
+						PersonRequestId = personRequest.Id.GetValueOrDefault(),
+						AcceptingPersonId = shiftTrade.PersonTo.Id.GetValueOrDefault()
+					};
 				}
-					//}
+			}
 			else
 			{
 				message = new NewShiftTradeRequestCreated

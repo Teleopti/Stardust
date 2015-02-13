@@ -371,6 +371,10 @@ namespace Teleopti.Ccc.Domain.AgentInfo.Requests
             var approveResult = approvalService.ApproveShiftTrade(this);
             if (approveResult.IsEmpty())
             {
+					if (Offer != null)
+					{
+						Offer.Status = ShiftExchangeOfferStatus.Completed;
+					}
 
 				var culture = PersonFrom.PermissionInformation.Culture();
 				var language = PersonFrom.PermissionInformation.UICulture();
@@ -404,11 +408,6 @@ namespace Teleopti.Ccc.Domain.AgentInfo.Requests
 						Period.EndDateTimeLocal(timezone).AddMinutes(-1).ToString(datePattern)), 
 						new List<IPerson>(InvolvedPeople()));
                 }
-
-	            if (Offer != null)
-	            {
-						Offer.Status = ShiftExchangeOfferStatus.Completed;
-	            }
             }
 	        return approveResult;
         }
