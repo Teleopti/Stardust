@@ -86,6 +86,13 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Anywhere
 				Browser.Interactions.AssertExistsUsingJQuery(".person:contains('{0}') ~ tr .activity-details span[style*='color: {1}']", name, colorNameToCss(scheduleActivity.TextColor));
 		}
 
+		[Then(@"I should not see any shift details")]
+		public void ThenIShouldNotSeeAnyShiftDetails()
+		{
+			Browser.Interactions.AssertNotExists(".person", ".shift-details");
+		}
+
+
 		[Then(@"I should see schedule shift details for '(.*)' with")]
 		public void ThenIShouldSeeScheduleShiftDetailsForWith(string name, Table table)
 		{
@@ -226,7 +233,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Anywhere
 			}
 			if (layer.Description != null)
 			{
-				DescriptionToggle.EnsureIsOn();
 				Browser.Interactions.AssertFirstContainsUsingJQuery(selector, layer.Description);
 			}
 			else

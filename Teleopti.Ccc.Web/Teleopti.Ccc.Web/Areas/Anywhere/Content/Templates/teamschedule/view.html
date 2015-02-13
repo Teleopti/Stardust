@@ -50,7 +50,7 @@
 							<i class="glyphicon glyphicon-chevron-right"></i>
 						</button>
 						<button class="btn btn-navigation toggle-descriptions" data-toggle="button" disabled data-bind="disable: Loading, click: ToggleDisplayDescriptions">
-							<i class="glyphicon glyphicon-question-sign"></i>
+							<i class="glyphicon glyphicon-info-sign"></i>
 						</button>
 					</span>
 
@@ -136,12 +136,14 @@
                                         <span class="label label-default" data-bind="style: { 'background-color': Color, 'color': TextColor }, text: Description + ' ' + StartTime() + ' - ' + EndTime()"></span>
                                     </p>
                                 </div>
-
-                                <div class="shift-details" data-bind="if: $root.DisplayDescriptions, style: { 'margin-left': $parent.ShiftStartPixels() + 'px' }">
-                                    <!-- ko foreach: $parent.DistinctLayers -->
-                                    <span class="label label-default" data-bind="style: { 'background-color': Color, 'color': TextColor }, text: Description"></span>
-                                    <!-- /ko -->
-                                </div>
+								
+								<!-- ko if: $root.DisplayDescriptions -->
+	                            <div class="shift-details" data-bind="style: { 'margin-left': $parent.ShiftStartPixels() + 'px' }">
+		                            <!-- ko foreach: $parent.DistinctLayers -->
+		                            <span class="label label-default" data-bind="style: { 'background-color': Color, 'color': TextColor }, text: Description"></span>
+		                            <!-- /ko -->
+	                            </div>
+								<!-- /ko -->
 								<!-- ko ifnot: $root.Resources.MyTeam_MakeTeamScheduleConsistent_31897 -->
                                 <div class="shift-menu" data-bind="style: { 'margin-left': $parent.ShiftStartPixels() + 'px' }">
                                     <!-- ko with: $parent.ShiftMenu -->

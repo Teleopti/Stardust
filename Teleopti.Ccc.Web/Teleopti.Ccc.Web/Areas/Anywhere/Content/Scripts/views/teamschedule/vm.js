@@ -67,7 +67,7 @@ define([
 
 		this.GroupPages = ko.observableArray();
 
-		this.DisplayDescriptions = ko.observable(false);
+		this.DisplayDescriptions = ko.observable(true);
 		this.ToggleDisplayDescriptions = function () {
 			self.DisplayDescriptions(!self.DisplayDescriptions());
 		};
