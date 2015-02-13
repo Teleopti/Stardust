@@ -1,6 +1,7 @@
 using System.Globalization;
 using TechTalk.SpecFlow;
 using Teleopti.Ccc.UserTexts;
+using Teleopti.Ccc.WebBehaviorTest.Core.BrowserDriver;
 using Teleopti.Ccc.WebBehaviorTest.Data;
 using Browser = Teleopti.Ccc.WebBehaviorTest.Core.Browser;
 
@@ -44,7 +45,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
 			// enforcing button because of :enabled selector.
 			// if its clickable, it has to be enabled after initialization for robustness
 			// probably have to reevaluate this decision later
-			Browser.Interactions.Click(string.Format("button.{0}:enabled", cssClass.Name));
+			Browser.Interactions.ClickUsingJQuery(string.Format("button.{0}:enabled:visible", cssClass.Name));
 		}
 
 
