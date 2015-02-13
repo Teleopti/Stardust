@@ -1,8 +1,8 @@
-﻿using System;
+﻿using NUnit.Framework;
+using SharpTestsEx;
+using System;
 using System.Linq;
 using System.Text.RegularExpressions;
-using NUnit.Framework;
-using SharpTestsEx;
 using TechTalk.SpecFlow;
 using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Infrastructure.Toggle;
@@ -58,6 +58,13 @@ namespace Teleopti.Ccc.WebBehaviorTest.Toggle
 			{
 				Assert.Ignore(ignoreMessage, toggleOnlyRunIfEnabled, "disabled");
 			}
+		}
+
+		public static bool CheckToggleEnabled(Toggles toggle)
+		{
+			var toggleQuerier = new ToggleQuerier(TestSiteConfigurationSetup.URL.ToString());
+			//toggleQuerier.FillAllToggles();
+			return toggleQuerier.IsEnabled(toggle);
 		}
 	}
 }

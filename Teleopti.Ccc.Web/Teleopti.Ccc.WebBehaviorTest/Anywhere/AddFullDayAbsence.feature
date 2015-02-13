@@ -35,7 +35,7 @@ Scenario: View form
 	Given I have the role 'Anywhere Team Green'
 	When I view schedules for 'Team green' on '2012-12-02'	
 	And I click person name 'Pierre Baldi'
-	And I click 'add full day absence' in schedule menu
+	And I choose to 'add full day absence' from schedule menu
 	Then I should see the add full day absence form
 
 Scenario: Add on empty day

@@ -31,7 +31,7 @@ Scenario: View form
 	Given I have the role 'Anywhere Team Green'
 	When I view schedules for 'Team green' on '2013-11-18'
 	And I click person name 'Pierre Baldi'
-	And I click 'add activity' in schedule menu
+	And I choose to 'add activity' from schedule menu
 	Then I should see the add activity form
 
 Scenario: View team mates schedules
@@ -112,7 +112,7 @@ Scenario: Default to next hour for today
 	And the time is '2013-11-18 13:20'
 	When I view schedules for 'Team green' on '2013-11-18'
 	And I click person name 'Pierre Baldi'
-	And I click 'add activity' in schedule menu
+	And I choose to 'add activity' from schedule menu
 	Then I should see the add activity form with
 	| Field      | Value |
 	| Start time | 13:30 |

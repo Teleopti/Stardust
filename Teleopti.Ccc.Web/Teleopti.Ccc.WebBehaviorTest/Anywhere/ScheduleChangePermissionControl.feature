@@ -36,7 +36,6 @@ Scenario: No permission to add full day absence
 	And I click person name 'Pierre Baldi'
 	Then I should not see 'Add full day absence' option in schedule menu
 
-@OnlyRunIfDisabled('MyTeam_MakeTeamScheduleConsistent_31897')
 Scenario: No permission to add intraday absence 
 	Given I have a role with
 	| Field                      | Value                              |
@@ -55,7 +54,6 @@ Scenario: No permission to add intraday absence
 	And I select any schedule activity for 'Pierre Baldi'
 	Then I should not see 'Add intraday absence' option in shift menu
 
-@OnlyRunIfDisabled('MyTeam_MakeTeamScheduleConsistent_31897')
 Scenario: No permission to remove absence 
 	Given I have a role with
 	| Field                      | Value                        |
@@ -74,7 +72,6 @@ Scenario: No permission to remove absence
 	And I select any schedule activity for 'Pierre Baldi'
 	Then I should not see 'Remove absence' option in shift menu
 	
-@OnlyRunIfDisabled('MyTeam_MakeTeamScheduleConsistent_31897')
 Scenario: No permission to add activity 
 	Given I have a role with
 	| Field                      | Value                      |
@@ -93,7 +90,6 @@ Scenario: No permission to add activity
 	And I select any schedule activity for 'Pierre Baldi'
 	Then I should not see 'add activity' option in shift menu
 
-@OnlyRunIfDisabled('MyTeam_MakeTeamScheduleConsistent_31897')
 Scenario: No permission to move activity 
 	Given I have a role with
 	| Field                      | Value                       |

@@ -3,9 +3,11 @@ using System.Linq;
 using TechTalk.SpecFlow;
 using TechTalk.SpecFlow.Assist;
 using Teleopti.Ccc.Domain.Collection;
+using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.WebBehaviorTest.Core.BrowserDriver;
 using Teleopti.Ccc.WebBehaviorTest.Data;
 using Teleopti.Ccc.WebBehaviorTest.Pages.Common;
+using Teleopti.Ccc.WebBehaviorTest.Toggle;
 using Browser = Teleopti.Ccc.WebBehaviorTest.Core.Browser;
 using Table = TechTalk.SpecFlow.Table;
 
@@ -35,16 +37,14 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Anywhere
 			DescriptionToggle.EnsureIsOn();
 		}
 
-		[When(@"I click '(.*)' in schedule menu")]
-		public void WhenIClickInScheduleMenu(CssClass cssClass)
+		[When(@"I choose to '(.*)' from (.*) menu")]
+		public void WhenIChooseActionFromMenu(CssClass cssClass, string menuName)
 		{
-			Browser.Interactions.Click(string.Format(".schedule-menu a.{0}", cssClass.Name));
-		}
+			var className = ToggleStepDefinition.CheckToggleEnabled(Toggles.MyTeam_MakeTeamScheduleConsistent_31897)
+				? string.Format(".schedule-menu a.{0}", cssClass.Name)
+				: string.Format(".{0}-menu a.{1}", menuName, cssClass.Name);
 
-		[When(@"I click '(.*)' in shift menu")]
-		public void WhenIClickInShiftMenu(CssClass cssClass)
-		{
-			Browser.Interactions.Click(string.Format(".shift-menu a.{0}", cssClass.Name));
+			Browser.Interactions.Click(className);
 		}
 
 		[When(@"I select the schedule activity for '(.*)' with start time '(.*)'")]
@@ -65,17 +65,13 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Anywhere
 			Browser.Interactions.ClickUsingJQuery(string.Format(".person:contains('{0}') .shift .layer:first-child", name));
 		}
 
-
-		[Then(@"I should not see '(.*)' option in schedule menu")]
-		public void ThenIShouldNotSeeOptionInScheduleMenu(CssClass cssClass)
+		[Then(@"I should not see '(.*)' option in (.*) menu")]
+		public void ThenIShouldNotSeeOptionInActionMenu(CssClass cssClass, string menuName)
 		{
-			Browser.Interactions.AssertNotExists(".schedule-menu a", string.Format(".schedule-menu a.{0}", cssClass.Name));
-		}
-
-		[Then(@"I should not see '(.*)' option in shift menu")]
-		public void ThenIShouldNotSeeOptionInShiftMenu(CssClass cssClass)
-		{
-			Browser.Interactions.AssertNotExists(".shift-menu a", string.Format(".shift-menu a.{0}", cssClass.Name));
+			var toggle31897Enabled = ToggleStepDefinition.CheckToggleEnabled(Toggles.MyTeam_MakeTeamScheduleConsistent_31897);
+			var existingItemClass = toggle31897Enabled ? ".schedule-menu a" : string.Format(".{0}-menu a", menuName);
+			var notExistClass = string.Format(existingItemClass + ".{0}", cssClass.Name);
+			Browser.Interactions.AssertNotExists(existingItemClass, notExistClass);
 		}
 
 		[Then(@"I should see schedule activity details for '(.*)' with")]

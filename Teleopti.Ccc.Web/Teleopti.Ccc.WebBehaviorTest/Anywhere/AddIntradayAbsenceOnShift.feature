@@ -31,7 +31,6 @@ Background:
 	| Vacation        | Blue  | false        |
 	| Mental disorder | Pink  | true         |
 
-@OnlyRunIfDisabled('MyTeam_MakeTeamScheduleConsistent_31897')
 Scenario: View form
 	Given I have the role 'Anywhere Team Green'
 	And 'Pierre Baldi' has a shift with
@@ -42,7 +41,7 @@ Scenario: View form
 	| End time       | 2013-11-15 17:00 |
 	When I view schedules for 'Team green' on '2013-11-15'
 	And I select any schedule activity for 'Pierre Baldi'
-	And I click 'add intraday absence' in shift menu
+	And I choose to 'add intraday absence' from shift menu
 	Then I should see the add intraday absence form
 
 Scenario: Default times today
@@ -191,7 +190,7 @@ Scenario: Prevent adding outside of shift
 	| Start time | 17:00   |
 	| End time   | 18:00   |
 	Then I should see the alert 'Invalid Intraday Absence Times'
-
+	
 @OnlyRunIfDisabled('MyTeam_MakeTeamScheduleConsistent_31897')
 Scenario: Go to yesterday when select the night shift starting from yesterday
 	Given I have the role 'Anywhere Team Green'
@@ -212,7 +211,7 @@ Scenario: Go to yesterday when select the night shift starting from yesterday
 	| End time       | 2013-11-17 04:15 |
 	When I view schedules for 'Team green' on '2013-11-16'
 	And I select the schedule activity for 'Pierre Baldi' with start time '00:45'
-	And I click 'add intraday absence' in shift menu
+	And I choose to 'add intraday absence' from shift menu
 	Then I should see the add intraday absence form for '2013-11-15'
 
 Scenario: Back to viewing schedule after adding an intraday absence
