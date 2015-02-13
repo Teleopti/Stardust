@@ -47,6 +47,7 @@ Scenario: Close details when approving shift trade request
 
 Scenario: Can not approve or deny shift trade request created by me
 	Given I have the role 'Full access to mytime'
+	And I have the workflow control set 'Trade from tomorrow until 30 days forward'
 	And I have created a shift trade request
 	| Field    | Value         |
 	| To       | Ashley Andeen |
@@ -246,6 +247,7 @@ Scenario: Show information that we dont show schedules in a shifttrade that isnt
 
 Scenario: Can not approve or deny shift trade request that is already approved
 	Given I have the role 'Full access to mytime'
+	And I have the workflow control set 'Trade from tomorrow until 30 days forward'
 	And I have received a shift trade request
 	| Field			| Value         |
 	| From			| Ashley Andeen	|
