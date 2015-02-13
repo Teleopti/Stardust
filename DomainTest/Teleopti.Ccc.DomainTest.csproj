@@ -183,7 +183,9 @@
     <Compile Include="ApplicationLayer\Rta\CalculateAdherenceDetailsTest.cs" />
     <Compile Include="ApplicationLayer\Rta\CalculateAdherenceTest.cs" />
     <Compile Include="ApplicationLayer\Rta\SiteAdherenceReadModelUpdaterTest.cs" />
+    <Compile Include="ApplicationLayer\Rta\SiteAdherence\UnorderedEventsTest.cs" />
     <Compile Include="ApplicationLayer\Rta\TeamAdherenceReadModelUpdaterTest.cs" />
+    <Compile Include="ApplicationLayer\Rta\TeamAdherence\UnorderedEventsTest.cs" />
     <Compile Include="ApplicationLayer\ScheduleChangedEventHandlers\Analytics\AnalyticsFactScheduleDateHandlerTest.cs" />
     <Compile Include="ApplicationLayer\ScheduleChangedEventHandlers\Analytics\AnalyticsFactScheduleDayCountHandlerTest.cs" />
     <Compile Include="ApplicationLayer\ScheduleChangedEventHandlers\Analytics\AnalyticsFactSchedulePersonHandlerTest.cs" />

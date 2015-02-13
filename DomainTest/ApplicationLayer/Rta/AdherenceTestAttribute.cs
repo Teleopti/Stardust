@@ -22,6 +22,14 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta
 				.As<IAdherenceDetailsReadModelPersister>()
 				.AsSelf()
 				.SingleInstance();
+			builder.RegisterType<FakeTeamOutOfAdherenceReadModelPersister>()
+				.As<ITeamOutOfAdherenceReadModelPersister>()
+				.AsSelf()
+				.SingleInstance();
+			builder.RegisterType<FakeSiteOutOfAdherenceReadModelPersister>()
+				.As<ISiteOutOfAdherenceReadModelPersister>()
+				.AsSelf()
+				.SingleInstance();
 
 			builder.RegisterType<FakePerformanceCounter>().As<IPerformanceCounter>().SingleInstance();
 			builder.RegisterType<FakeLiteTransactionSyncronization>().As<ILiteTransactionSyncronization>().SingleInstance();
