@@ -163,6 +163,44 @@
 				assert.equals(vm.Persons()[0].Selected(), true);
 			},
 
+			// Will fail without PBI #31897
+			"should be able to preselect person and layer": function () {
+				var vm = new viewModel();
+
+				vm.Resources = { MyTeam_MakeTeamScheduleConsistent_31897: true };
+
+				vm.SetViewOptions({
+					date: "20150214",
+					personid: "1",
+					selectedStartMinutes: "870" // 14 * 60 + 30 <-- 14:30
+				});
+				var data = {
+					"Schedules": [
+						{
+							"PersonId": "1",
+							"Projection": [
+								{
+									"Start": "2015-02-14 9:45"
+								}, {
+									"Start": "2015-02-14 14:30"
+								}
+							]
+						}
+					]
+				};
+
+				vm.UpdateSchedules(data);
+
+				assert.equals(vm.PreSelectedPersonId(), 1);
+				assert.equals(vm.PreSelectedStartMinute(), 870);
+
+				var expectedSelectedPerson = vm.Persons()[0];
+				assert.equals(expectedSelectedPerson.Selected(), true);
+
+				var expectedSelectedLayer = expectedSelectedPerson.Shifts()[0].Layers()[1];
+				assert.equals(expectedSelectedLayer.Selected(), true);
+			},
+
 			"should show timeline correct for daylight saving time begin boundary day": function (done) {
 				var vm = new viewModel();
 

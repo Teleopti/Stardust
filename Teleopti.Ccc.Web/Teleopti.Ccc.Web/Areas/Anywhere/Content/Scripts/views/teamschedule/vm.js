@@ -133,7 +133,7 @@ define([
 					ko.utils.arrayForEach(preSelectedPerson.Shifts(), function(shift) {
 						ko.utils.arrayForEach(shift.Layers(), function(layer) {
 							if (layer.StartMinutes() == self.PreSelectedStartMinute()) {
-								self.SelectLayer(layer, self.PreSelectedPersonId());
+								self.SelectLayer(layer, shift);
 								isAnyLayerSelected = true;
 								return;
 							}
