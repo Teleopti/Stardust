@@ -291,7 +291,8 @@ define([
 			return activeLayer;
 		};
 
-		this.SelectLayer = function (layer) {
+		this.SelectLayer = function (layer, parents) {
+			if (parents[1].hasOwnProperty('Id')) return; //Only activity for selected agent can be selected.
 			if (!self.Resources.MyTeam_MakeTeamScheduleConsistent_31897 || !self.MovingActivity()) return;
 			self.MoveActivityForm.IsChangingLayer(true);
 			deselectAllLayersExcept();
