@@ -326,6 +326,9 @@
 							<td class="schedule-column edit-column">
 								<div class="row">
 									<div class="col-md-8">
+										<!-- ko if: !Loading() && Absences().length == 0 -->
+										<div class="alert alert-warning" data-bind="text: $root.Resources.NoAbsenceToRemoveInCurrentShift"></div>
+										<!-- /ko -->
 										<table class="absence-list">
 											<tbody data-bind="foreach: Absences">
 												<tr class="absence">

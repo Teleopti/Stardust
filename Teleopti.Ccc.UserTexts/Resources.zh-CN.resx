@@ -11073,4 +11073,7 @@ Teleopti R&amp;D</value>
   <data name="YourProductActivationKeyWillExpireDoNotForgetToRenewItInTime" xml:space="preserve">
     <value>您的产品激活密钥有效期至{0}，请勿忘记及时更新</value>
   </data>
+  <data name="NoAbsenceToRemoveInCurrentShift" xml:space="preserve">
+    <value>当前班次中没有可以移除的缺勤。</value>
+  </data>
 </root>

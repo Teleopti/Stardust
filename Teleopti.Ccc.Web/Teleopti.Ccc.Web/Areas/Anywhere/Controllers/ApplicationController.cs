@@ -143,6 +143,7 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Controllers
 					UserTexts.Resources.BackToWorkCannotBeGreaterThanAbsenceEnd,
 					UserTexts.Resources.BackToWorkTextPrompt,
 					UserTexts.Resources.Schedules,
+					UserTexts.Resources.NoAbsenceToRemoveInCurrentShift,
 
 					DateAndTimeFormatExtensions.FixedDateFormat,
 					DateAndTimeFormatExtensions.FixedDateTimeFormat,

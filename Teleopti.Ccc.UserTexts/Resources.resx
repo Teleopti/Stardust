@@ -12831,4 +12831,8 @@ Reduce the complexity to use these shifts.</value>
   <data name="Top" xml:space="preserve">
     <value>Top</value>
   </data>
+  <data name="NoAbsenceToRemoveInCurrentShift" xml:space="preserve">
+    <value>No absence to remove in current shift.</value>
+    <comment>Message in remove absence form of MyTeam</comment>
+  </data>
 </root>
