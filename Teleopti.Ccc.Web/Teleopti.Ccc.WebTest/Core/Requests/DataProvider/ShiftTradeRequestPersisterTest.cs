@@ -8,6 +8,7 @@ using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.WorkflowControl;
 using Teleopti.Ccc.Infrastructure.ApplicationLayer;
+using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.UserTexts;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.DataProvider;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping;
@@ -26,6 +27,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 		private IMessagePopulatingServiceBusSender serviceBusSender;
 		private IShiftTradeRequestSetChecksum shiftTradeSetChecksum;
 		private IShiftTradeRequestProvider shiftTradeRequestProvider;
+		private ICurrentUnitOfWork currentUnitOfWork;
 
 		[SetUp]
 		public void Setup()
@@ -36,6 +38,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 			serviceBusSender = MockRepository.GenerateMock<IMessagePopulatingServiceBusSender>();
 			shiftTradeSetChecksum = MockRepository.GenerateMock<IShiftTradeRequestSetChecksum>();
 			shiftTradeRequestProvider = MockRepository.GenerateMock<IShiftTradeRequestProvider>();
+			currentUnitOfWork = MockRepository.GenerateMock<ICurrentUnitOfWork>();
 		}
 
 		[Test]
@@ -53,6 +56,56 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 
 			result.Should().Be.SameInstanceAs(viewModel);
 			repository.AssertWasCalled(x => x.Add(shiftTradeRequest));
+		}			
+		
+		[Test]
+		public void ShouldNotPersistMappedDataWhenOfferCompleted()
+		{
+			shiftTradeRequestProvider.Stub(x => x.RetrieveUserWorkflowControlSet())
+				.Return(new WorkflowControlSet("bla") { LockTrading = true });
+			var offer = MockRepository.GenerateMock<IShiftExchangeOffer>();
+			offer.Stub(x => x.Status).Return(ShiftExchangeOfferStatus.Completed);
+			var personRequests = new PersonRequest(new Person()){Request = offer};
+			repository.Stub(x => x.FindPersonRequestByRequestId(Guid.Empty)).Return(personRequests);
+			var target = new ShiftTradeRequestPersister(repository, mapper, autoMapper, serviceBusSender, null, null, null, currentUnitOfWork, shiftTradeSetChecksum, shiftTradeRequestProvider);
+			var form = new ShiftTradeRequestForm() { ShiftExchangeOfferId = Guid.Empty };
+			var shiftTradeRequest = new PersonRequest(new Person());
+			mapper.Stub(x => x.Map(form)).Return(shiftTradeRequest);
+			var viewModel = new RequestViewModel(){ExchangeOffer = new ShiftExchangeOfferRequestViewModel(){IsOfferAvailable = true}};
+			autoMapper.Stub(x => x.Map<IPersonRequest, RequestViewModel>(shiftTradeRequest)).Return(viewModel);
+			var uow = MockRepository.GenerateMock<IUnitOfWork>();
+			currentUnitOfWork.Expect(x => x.Current()).Return(uow);
+
+			var result = target.Persist(form);
+
+			result.ExchangeOffer.IsOfferAvailable.Should().Be.False();
+			repository.AssertWasNotCalled(x => x.Add(shiftTradeRequest));
+			uow.AssertWasNotCalled(x => x.AfterSuccessfulTx(Arg<Action>.Is.Anything));
+		}			
+		
+		[Test]
+		public void ShouldNotPersistMappedDataWhenOfferPendingForAdminApproval()
+		{
+			shiftTradeRequestProvider.Stub(x => x.RetrieveUserWorkflowControlSet())
+				.Return(new WorkflowControlSet("bla") { LockTrading = true });
+			var offer = MockRepository.GenerateMock<IShiftExchangeOffer>();
+			offer.Stub(x => x.Status).Return(ShiftExchangeOfferStatus.PendingAdminApproval);
+			var personRequests = new PersonRequest(new Person()){Request = offer};
+			repository.Stub(x => x.FindPersonRequestByRequestId(Guid.Empty)).Return(personRequests);
+			var target = new ShiftTradeRequestPersister(repository, mapper, autoMapper, serviceBusSender, null, null, null, currentUnitOfWork, shiftTradeSetChecksum, shiftTradeRequestProvider);
+			var form = new ShiftTradeRequestForm() { ShiftExchangeOfferId = Guid.Empty };
+			var shiftTradeRequest = new PersonRequest(new Person());
+			mapper.Stub(x => x.Map(form)).Return(shiftTradeRequest);
+			var viewModel = new RequestViewModel() { ExchangeOffer = new ShiftExchangeOfferRequestViewModel() { IsOfferAvailable = true } };
+			autoMapper.Stub(x => x.Map<IPersonRequest, RequestViewModel>(shiftTradeRequest)).Return(viewModel);
+			var uow = MockRepository.GenerateMock<IUnitOfWork>();
+			currentUnitOfWork.Expect(x => x.Current()).Return(uow);
+
+			var result = target.Persist(form);
+
+			result.ExchangeOffer.IsOfferAvailable.Should().Be.False();
+			repository.AssertWasNotCalled(x => x.Add(shiftTradeRequest));
+			uow.AssertWasNotCalled(x => x.AfterSuccessfulTx(Arg<Action>.Is.Anything));
 		}		
 		
 		[Test]
@@ -63,13 +116,41 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 			var target = new ShiftTradeRequestPersister(repository, mapper, autoMapper, serviceBusSender, null, null, null, null, shiftTradeSetChecksum, shiftTradeRequestProvider);
 			var form = new ShiftTradeRequestForm{ShiftExchangeOfferId = Guid.Empty};
 			var shiftTradeRequest = new PersonRequest(new Person());
-			var viewModel = new RequestViewModel { Status = Resources.New };
+			var viewModel = new RequestViewModel { Status = Resources.New, ExchangeOffer = new ShiftExchangeOfferRequestViewModel() { IsOfferAvailable = true } };
+			var offer = MockRepository.GenerateMock<IShiftExchangeOffer>();
+			offer.Stub(x => x.Status).Return(ShiftExchangeOfferStatus.Pending);
+			var personRequests = new PersonRequest(new Person()) { Request = offer };
+			repository.Stub(x => x.FindPersonRequestByRequestId(Guid.Empty)).Return(personRequests);
 
 			mapper.Stub(x => x.Map(form)).Return(shiftTradeRequest);
 			autoMapper.Stub(x => x.Map<IPersonRequest, RequestViewModel>(shiftTradeRequest)).Return(viewModel);
 
 			var result = target.Persist(form);
 
+			result.ExchangeOffer.IsOfferAvailable.Should().Be.True();
+			result.Status.Should().Be.EqualTo(Resources.WaitingThreeDots);
+		}			
+		
+		[Test]
+		public void ShouldSetPendingAdminApprovalWhenLockShiftTradeFromBulletinBoard()
+		{
+			shiftTradeRequestProvider.Stub(x => x.RetrieveUserWorkflowControlSet())
+				.Return(new WorkflowControlSet("bla") {LockTrading = true, AutoGrantShiftTradeRequest = false});
+			var target = new ShiftTradeRequestPersister(repository, mapper, autoMapper, serviceBusSender, null, null, null, null, shiftTradeSetChecksum, shiftTradeRequestProvider);
+			var form = new ShiftTradeRequestForm{ShiftExchangeOfferId = Guid.Empty};
+			var shiftTradeRequest = new PersonRequest(new Person());
+			var viewModel = new RequestViewModel { Status = Resources.New, ExchangeOffer = new ShiftExchangeOfferRequestViewModel() { IsOfferAvailable = true } };
+			var currentShift = ScheduleDayFactory.Create(DateOnly.Today.AddDays(1));
+			var offer = new ShiftExchangeOffer(currentShift, new ShiftExchangeCriteria(), ShiftExchangeOfferStatus.Pending);	
+			var personRequests = new PersonRequest(new Person()) { Request = offer };
+			repository.Stub(x => x.FindPersonRequestByRequestId(Guid.Empty)).Return(personRequests);
+
+			mapper.Stub(x => x.Map(form)).Return(shiftTradeRequest);
+			autoMapper.Stub(x => x.Map<IPersonRequest, RequestViewModel>(shiftTradeRequest)).Return(viewModel);
+			var result = target.Persist(form);
+
+			offer.Status.Should().Be.EqualTo(ShiftExchangeOfferStatus.PendingAdminApproval);
+			result.ExchangeOffer.IsOfferAvailable.Should().Be.True();
 			result.Status.Should().Be.EqualTo(Resources.WaitingThreeDots);
 		}		
 		
@@ -82,6 +163,10 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 			var form = new ShiftTradeRequestForm{ShiftExchangeOfferId = Guid.Empty};
 			var shiftTradeRequest = new PersonRequest(new Person());
 			var viewModel = new RequestViewModel{Status = Resources.New};
+			var offer = MockRepository.GenerateMock<IShiftExchangeOffer>();
+			offer.Stub(x => x.Status).Return(ShiftExchangeOfferStatus.Pending);
+			var personRequests = new PersonRequest(new Person()) { Request = offer };
+			repository.Stub(x => x.FindPersonRequestByRequestId(Guid.Empty)).Return(personRequests);
 
 			mapper.Stub(x => x.Map(form)).Return(shiftTradeRequest);
 			autoMapper.Stub(x => x.Map<IPersonRequest, RequestViewModel>(shiftTradeRequest)).Return(viewModel);
@@ -120,7 +205,6 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 			dataSourceProvider.Expect(x => x.Current()).Return(MockRepository.GenerateMock<IDataSource>());
 			var businessUnitProvider = MockRepository.GenerateMock<ICurrentBusinessUnit>();
 			businessUnitProvider.Expect(x => x.Current()).Return(new BusinessUnit("d"));
-			var currentUnitOfWork = MockRepository.GenerateMock<ICurrentUnitOfWork>();
 			var form = new ShiftTradeRequestForm();
 			mapper.Stub(x => x.Map(form)).Return(new PersonRequest(new Person()));
 			var target = new ShiftTradeRequestPersister(MockRepository.GenerateMock<IPersonRequestRepository>(),

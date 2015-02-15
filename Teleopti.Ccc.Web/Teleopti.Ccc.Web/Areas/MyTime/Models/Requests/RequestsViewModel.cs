@@ -53,5 +53,6 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Models.Requests
 	{
 		public string WishShiftType { get; set; }
 		public DateTime ValidTo { get; set; }
+		public bool IsOfferAvailable { get; set; }
 	}
 }

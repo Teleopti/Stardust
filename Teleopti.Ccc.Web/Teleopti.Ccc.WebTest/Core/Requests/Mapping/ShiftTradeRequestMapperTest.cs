@@ -9,10 +9,8 @@ using Teleopti.Ccc.Domain.AgentInfo.Requests;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.Repositories;
-using Teleopti.Ccc.Domain.WorkflowControl;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider;
-using Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.DataProvider;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.Requests;
 using Teleopti.Interfaces.Domain;
@@ -30,7 +28,6 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 		private IPersonRequestRepository _personRequestRepository;
 		private IScheduleProvider _scheduleProvider;
 		private IScheduleDay _scheduleToTrade;
-		private IShiftTradeRequestProvider _shiftTradeRequestProvider;
 
 		[SetUp]
 		public void Setup()
@@ -40,8 +37,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 			_loggedOnUserSvc = MockRepository.GenerateMock<ILoggedOnUser>();
 			_personRequestRepository = MockRepository.GenerateMock<IPersonRequestRepository>();
 			_scheduleProvider = MockRepository.GenerateMock<IScheduleProvider>();
-			_shiftTradeRequestProvider = MockRepository.GenerateMock<IShiftTradeRequestProvider>();
-			_target = new ShiftTradeRequestMapper(personRepository, _loggedOnUserSvc, _personRequestRepository, _scheduleProvider, _shiftTradeRequestProvider);
+			_target = new ShiftTradeRequestMapper(personRepository, _loggedOnUserSvc, _personRequestRepository, _scheduleProvider);
 			form = new ShiftTradeRequestForm
 				{
 					Message = "sdfsdfsdf",
@@ -52,9 +48,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 			personRepository.Stub(x => x.Get(form.PersonToId)).Return(new Person());
 			_loggedOnUserSvc.Stub(x => x.CurrentUser()).Return(loggedOnUser);
 			_scheduleToTrade = ScheduleDayFactory.Create(form.Dates.SingleOrDefault());
-			_scheduleProvider.Stub(x => x.GetScheduleForPersons(form.Dates.SingleOrDefault(), new[] { loggedOnUser })).Return(new[] { _scheduleToTrade });
-			_shiftTradeRequestProvider.Stub(x => x.RetrieveUserWorkflowControlSet())
-				.Return(new WorkflowControlSet() {LockTrading = true, AutoGrantShiftTradeRequest = false});		
+			_scheduleProvider.Stub(x => x.GetScheduleForPersons(form.Dates.SingleOrDefault(), new[] { loggedOnUser })).Return(new[] { _scheduleToTrade });	
 		}
 
 		[Test]
@@ -84,26 +78,6 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 			var res = _target.Map(form);
 			res.Should().Be.SameInstanceAs(personRequest);
 			personRequest.AssertWasCalled(x => x.Subject = expected);
-		}
-
-		[Test]
-		public void ShouldSetOfferStatusToPendingAdminApproval()
-		{
-			
-			var offerId = Guid.Empty;
-			form.ShiftExchangeOfferId = offerId;
-			var offer = MockRepository.GenerateMock<IShiftExchangeOffer>();
-			offer.Status = ShiftExchangeOfferStatus.Pending;
-			var offerRequest = new PersonRequest(PersonFactory.CreatePerson()) { Request = offer };
-			_personRequestRepository.Stub(x => x.FindPersonRequestByRequestId(offerId)).Return(offerRequest);
-
-			var personRequest = MockRepository.GenerateMock<IPersonRequest>();
-			offer.Stub(x => x.MakeShiftTradeRequest(_scheduleToTrade)).Return(personRequest);
-			var expectStatus = ShiftExchangeOfferStatus.PendingAdminApproval;
-			offer.Stub(x => x.Status).Return(expectStatus);
-
-			_target.Map(form);
-			offer.Status.Should().Be.EqualTo(expectStatus);
 		}
 
 		[Test]

@@ -179,6 +179,14 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping
 						};
 					}
 					
+					if (s.Request.RequestType == RequestType.ShiftTradeRequest)
+					{
+						return new ShiftExchangeOfferRequestViewModel
+						{
+							IsOfferAvailable = true
+						};
+					}
+					
 					return null;
 				})));
 

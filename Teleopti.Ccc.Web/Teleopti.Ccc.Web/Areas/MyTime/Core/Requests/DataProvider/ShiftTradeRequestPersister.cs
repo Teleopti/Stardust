@@ -26,15 +26,15 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.DataProvider
 		private readonly IShiftTradeRequestSetChecksum _shiftTradeSetChecksum;
 		private readonly IShiftTradeRequestProvider _shiftTradeRequestprovider;
 
-		public ShiftTradeRequestPersister(IPersonRequestRepository personRequestRepository, 
-																		IShiftTradeRequestMapper shiftTradeRequestMapper, 
-																		IMappingEngine autoMapper,
-																		IMessagePopulatingServiceBusSender serviceBusSender,
-																		INow now,
-																		ICurrentDataSource dataSourceProvider,
-																		ICurrentBusinessUnit businessUnitProvider,
-																		ICurrentUnitOfWork currentUnitOfWork,
-																		IShiftTradeRequestSetChecksum shiftTradeSetChecksum, IShiftTradeRequestProvider shiftTradeRequestprovider)
+		public ShiftTradeRequestPersister(IPersonRequestRepository personRequestRepository,
+			IShiftTradeRequestMapper shiftTradeRequestMapper,
+			IMappingEngine autoMapper,
+			IMessagePopulatingServiceBusSender serviceBusSender,
+			INow now,
+			ICurrentDataSource dataSourceProvider,
+			ICurrentBusinessUnit businessUnitProvider,
+			ICurrentUnitOfWork currentUnitOfWork,
+			IShiftTradeRequestSetChecksum shiftTradeSetChecksum, IShiftTradeRequestProvider shiftTradeRequestprovider)
 		{
 			_personRequestRepository = personRequestRepository;
 			_shiftTradeRequestMapper = shiftTradeRequestMapper;
@@ -50,16 +50,26 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.DataProvider
 
 		public RequestViewModel Persist(ShiftTradeRequestForm form)
 		{
+			if (!isOfferAvailable(form))
+			{
+				return new RequestViewModel() {ExchangeOffer = new ShiftExchangeOfferRequestViewModel() {IsOfferAvailable = false}};
+			}
+		
 			var personRequest = _shiftTradeRequestMapper.Map(form);
 			_shiftTradeSetChecksum.SetChecksum(personRequest.Request);
 			_personRequestRepository.Add(personRequest);
 
 			createMessage(personRequest, form);
-
+				
 			var requestViewModel = _autoMapper.Map<IPersonRequest, RequestViewModel>(personRequest);
 			var workflowControlSet = _shiftTradeRequestprovider.RetrieveUserWorkflowControlSet();
 			if (form.ShiftExchangeOfferId != null && workflowControlSet.LockTrading)
 			{
+				if (!workflowControlSet.AutoGrantShiftTradeRequest)
+				{
+					var offer = getOffer(form);
+					offer.Status = ShiftExchangeOfferStatus.PendingAdminApproval;
+				}
 				requestViewModel.Status = Resources.WaitingThreeDots;
 			}
 
@@ -95,6 +105,25 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.DataProvider
 				};
 			}
 			_currentUnitOfWork.Current().AfterSuccessfulTx(() => _serviceBusSender.Send(message, false));
+		}
+
+		private IShiftExchangeOffer getOffer(ShiftTradeRequestForm form)
+		{
+			var personRequest = _personRequestRepository.FindPersonRequestByRequestId(form.ShiftExchangeOfferId.Value);
+			return personRequest.Request as IShiftExchangeOffer;
+		}
+
+		private bool isOfferAvailable(ShiftTradeRequestForm form)
+		{
+			var workflowControlSet = _shiftTradeRequestprovider.RetrieveUserWorkflowControlSet();
+			if (form.ShiftExchangeOfferId != null && workflowControlSet.LockTrading)
+			{
+				var offer = getOffer(form);
+				if (offer == null) return true;
+				return offer.Status != ShiftExchangeOfferStatus.Completed && offer.Status != ShiftExchangeOfferStatus.PendingAdminApproval;
+			}
+
+			return true;
 		}
 	}
 }
