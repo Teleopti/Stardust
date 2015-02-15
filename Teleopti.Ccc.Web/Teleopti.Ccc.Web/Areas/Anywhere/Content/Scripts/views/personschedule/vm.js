@@ -58,6 +58,12 @@ define([
 		this.ScheduleDate = ko.observable();
 		this.SelectedStartMinutes = ko.observable(NaN);
 
+		this.FormattedScheduleDate = ko.computed(function(){
+			var scheduleDate = self.ScheduleDate();
+			return scheduleDate == undefined ? ''
+				: scheduleDate.format(self.Resources.DateFormatForMoment);
+		});
+
 		var personForId = function (id, personArray) {
 			if (!id)
 				return undefined;

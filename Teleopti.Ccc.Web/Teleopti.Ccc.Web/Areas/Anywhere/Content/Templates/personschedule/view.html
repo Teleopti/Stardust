@@ -1,5 +1,15 @@
 <div class="person-schedule container">
 	<div class="row">
+		<!-- ko if: $root.Resources.MyTeam_MakeTeamScheduleConsistent_31897 -->
+		<div class="col-md-3 input-group date pull-right" style="padding-right: 15px">
+			<input type="text" data-bind="value: FormattedScheduleDate" readonly="readonly" class="start-date form-control" />
+			<span class="input-group-btn">
+				<span class="btn btn-navigation" enabled="false">
+					<i class="glyphicon glyphicon-calendar"></i>
+				</span>
+			</span>
+		</div>
+		<!-- /ko -->
 		<div class="col-md-12">
 			<div class="relative">
 
@@ -11,7 +21,7 @@
 							<div class="label label-info absolute" data-bind="style: { left: (Pixel() - 13) + 'px' }, text: Time"></div>
 							<!-- ko if: $parent.IsOtherTimeZone -->
 							<div class="ruler absolute" data-bind="style: { left: Pixel() + 'px' }"></div>
-							<div class="label label-info absolute other-time-zone-label"data-bind="style: { left: (Pixel() - 13) + 'px' }, text: TimeOtherTimeZone"></div>
+							<div class="label label-info absolute other-time-zone-label" data-bind="style: { left: (Pixel() - 13) + 'px' }, text: TimeOtherTimeZone"></div>
 							<!-- /ko -->
 						</div>
 					</div>
@@ -192,7 +202,7 @@
 																<!-- ko if: $root.Resources.MyTeam_MakeTeamScheduleConsistent_31897 -->
 																<button class="btn btn-default cancel" data-bind="text: $root.Resources.Cancel, click: $root.backToTeamSchedule"></button>
 																<!-- /ko -->
-															    <button class="btn btn-primary apply" data-bind="disable: $root.Loading() || ErrorMessage(), text: $root.Resources.AddActivity, click: Apply"></button>
+																<button class="btn btn-primary apply" data-bind="disable: $root.Loading() || ErrorMessage(), text: $root.Resources.AddActivity, click: Apply"></button>
 															</div>
 														</td>
 														<td></td>
@@ -442,7 +452,7 @@
 									<!-- ko foreach: DayOffs -->
 									<!-- ko if: OverlapsTimeLine -->
 									<div class="dayoff absolute"
-											 data-bind="style: { left: StartPixels() + 'px', width: LengthPixels() + 'px' }">
+										 data-bind="style: { left: StartPixels() + 'px', width: LengthPixels() + 'px' }">
 									</div>
 									<!-- /ko -->
 									<!-- /ko -->
