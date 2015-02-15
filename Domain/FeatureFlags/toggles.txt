@@ -87,3 +87,4 @@ Backlog_Module_23980 = DEV
 MultiTenancy_WinLogon_17461 = RC
 MultiTenancy_WebLogon_17461 = RC
 MultiTenantSSOSupport_StandardReports_15093 = RC
+MyTeam_MakeTeamScheduleConsistent_31897 = RC
