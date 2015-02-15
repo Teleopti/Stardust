@@ -251,7 +251,7 @@ define([
 			}
 
 			var activeLayer;
-			if (isNaN(self.MoveActivityForm.SelectedStartMinutes())) {
+			if (isNaN(self.MoveActivityForm.SelectedStartMinutes()) || self.MoveActivityForm.SelectedStartMinutes() == 0) {
 				activeLayer = layers().first();
 				self.MoveActivityForm.SelectedStartMinutes(activeLayer.StartMinutes());
 			} else {

@@ -96,7 +96,9 @@ define([
 		this.SetViewOptions = function (options) {
 			self.BusinessUnitId(options.buid);
 			self.PreSelectedPersonId(options.personid);
-			self.PreSelectedStartMinute(options.selectedStartMinutes);
+			if (options.selectedStartMinutes) {
+				self.PreSelectedStartMinute(Number(options.selectedStartMinutes));
+			}
 			self.Date(function() {
 				var date = options.date;
 				if (date == undefined) {
