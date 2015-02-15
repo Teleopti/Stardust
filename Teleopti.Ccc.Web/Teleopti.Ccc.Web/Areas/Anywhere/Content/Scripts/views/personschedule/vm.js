@@ -39,6 +39,8 @@ define([
 	return function () {
 
 		var self = this;
+
+		this.Resources = resources;
 		
 		this.Loading = ko.observable(false);
 		
@@ -90,19 +92,32 @@ define([
 		});
 		
 		this.Absences = ko.observableArray();
-		
-		var layers = function () {
-			return lazy(self.Persons()).filter(function(x) {
-					return x.Id == self.PersonId();
-				})
+
+		function getLayerArray(persons) {
+			return persons
+
 				.map(function (x) { return x.Shifts(); })
 				.flatten()
 				.map(function (x) { return x.Layers(); })
 				.flatten();
+		}
+
+		var layers = function () {
+			return getLayerArray(lazy(self.Persons())
+				.filter(function(x) {
+					return self.Resources.MyTeam_MakeTeamScheduleConsistent_31897
+						? x.Id == self.PersonId()
+						: true;
+				}));
 		};
 		this.Layers = layers;
 
-		this.TimeLine = new timeLineViewModel(ko.computed(function () { return layers().toArray(); }));
+		var allLayers = function () {
+			return self.Resources.MyTeam_MakeTeamScheduleConsistent_31897
+				? getLayerArray(lazy(self.Persons()))
+				: layers();
+		};
+		this.TimeLine = new timeLineViewModel(ko.computed(function () { return allLayers().toArray(); }));
 		
 		this.WorkingShift = ko.computed(function () {
 			var person = self.SelectedPerson();
@@ -133,8 +148,6 @@ define([
 				return true;
 			return false;
 		});
-
-		this.Resources = resources;
 
 		this.AddFullDayAbsenceForm = new addFullDayAbsenceFormViewModel();
 		this.AddingFullDayAbsence = ko.observable(false);
