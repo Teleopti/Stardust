@@ -5,6 +5,7 @@ using System.Linq;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta;
 using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.Rta;
+using Teleopti.Ccc.Domain.Security.Authentication;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.WebTest.Areas.Rta
@@ -226,7 +227,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta
 
 		public TimeZoneInfo GetTimeZone(Guid personId)
 		{
-			throw new NotImplementedException();
+			return new UtcTimeZone().TimeZone();
 		}
 
 		public ConcurrentDictionary<string, IEnumerable<ResolvedPerson>> ExternalLogOns()
