@@ -522,6 +522,17 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 			var requestViewModel = createRequestViewModelWithShiftExchangeOffer(shiftExchangeOffer);
 
 			requestViewModel.IsNextDay.Should().Be.False();
+		}		
+		
+		[Test]
+		public void ShouldMapExchangeOfferViewModelWhenRequestIsShiftTrade()
+		{
+			var personRequest = MockRepository.GenerateMock<IPersonRequest>();
+			personRequest.Stub(x => x.Request.RequestType).Return(RequestType.ShiftTradeRequest);
+
+			var result = Mapper.Map<IPersonRequest, RequestViewModel>(personRequest);
+
+			result.ExchangeOffer.IsOfferAvailable.Should().Be.True();
 		}
 
 		[Test]

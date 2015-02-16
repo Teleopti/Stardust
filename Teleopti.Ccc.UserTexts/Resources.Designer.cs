@@ -2159,6 +2159,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to This shift has been taken by others, please take another choice in shift trade board..
+        /// </summary>
+        public static string AnnouncementTakenByOthers {
+            get {
+                return ResourceManager.GetString("AnnouncementTakenByOthers", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Post Shift for Trade.
         /// </summary>
         public static string AnnounceShift {

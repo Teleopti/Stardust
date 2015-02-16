@@ -12835,4 +12835,8 @@ Reduce the complexity to use these shifts.</value>
     <value>No absence to remove in current shift.</value>
     <comment>Message in remove absence form of MyTeam</comment>
   </data>
+  <data name="AnnouncementTakenByOthers" xml:space="preserve">
+    <value>This shift has been taken by others, please take another choice in shift trade board.</value>
+    <comment>use in Mytime, when lock trades opens, an announcement has been taken by an agent, when another agent want to take it, this alert will show</comment>
+  </data>
 </root>

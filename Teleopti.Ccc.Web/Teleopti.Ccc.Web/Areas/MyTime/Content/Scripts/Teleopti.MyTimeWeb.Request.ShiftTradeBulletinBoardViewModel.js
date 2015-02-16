@@ -625,7 +625,11 @@ Teleopti.MyTimeWeb.Request.ShiftTradeBulletinBoardViewModel = function(ajax) {
 				self.agentChoosed(null);
 				self.isSendEnabled(true);
 				self.hideWindow();
+				if (data.ExchangeOffer.IsOfferAvailable) {
 				Teleopti.MyTimeWeb.Request.List.AddItemAtTop(data);
+				} else {
+					$('#lock-trade-conflict').modal('show');
+				}
 			},
 			error: function (jqXHR, textStatus, errorThrown) {
 				if (jqXHR.status == 400) {

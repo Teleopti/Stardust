@@ -125,33 +125,6 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			Assert.That(scheduleReadModels.ElementAt(0).MinStart, Is.EqualTo(new DateTime(2012, 8, 28, 7, 0, 0)));
 		}
 
-		//[Test]
-		//public void ShouldReturnReadModelsForBulletinPersonsAndDaySortedByShiftStart()
-		//{
-		//	_target = new PersonScheduleDayReadModelFinder(CurrentUnitOfWork.Make());
-		//	var personSortedFirst = Guid.NewGuid();
-		//	var personSortedSecond = Guid.NewGuid();
-		//	var personSortedThird = Guid.NewGuid();
-
-		//	using (UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
-		//	{
-		//		createAndSaveReadModel(personSortedThird, Guid.NewGuid(), Guid.NewGuid(), new DateTime(2012, 8, 28), 10);
-		//		createAndSaveReadModel(personSortedFirst, Guid.NewGuid(), Guid.NewGuid(), new DateTime(2012, 8, 28), 7);
-		//		createAndSaveReadModel(personSortedSecond, Guid.NewGuid(), Guid.NewGuid(), new DateTime(2012, 8, 28), 8);
-
-		//		var myScheduleStart = new DateTime(2012, 8, 28, 12, 0, 0, DateTimeKind.Utc);
-		//		var myScheduleEnd = new DateTime(2012, 8, 28, 16, 0, 0, DateTimeKind.Utc);
-		//		var result = _target.ForBulletinPersons(new DateOnly(2012, 8, 28),
-		//												  new[] { personSortedFirst, personSortedSecond, personSortedThird }, new DateTimePeriod(myScheduleStart, myScheduleEnd), new Paging());
-
-		//		var scheduleReadModels = result as IList<PersonScheduleDayReadModel> ?? result.ToList();
-		//		Assert.That(scheduleReadModels.ElementAt(0).PersonId, Is.EqualTo(personSortedFirst));
-		//		Assert.That(scheduleReadModels.ElementAt(1).PersonId, Is.EqualTo(personSortedSecond));
-		//		Assert.That(scheduleReadModels.ElementAt(2).PersonId, Is.EqualTo(personSortedThird));
-		//		Assert.That(scheduleReadModels.ElementAt(0).MinStart,Is.EqualTo(new DateTime(2012, 8, 28,7,0,0)));
-		//	}
-		//}
-
 		[Test]
 		public void ShouldReturnReadModelsForPersonsWithEmptySchedule()
 		{
