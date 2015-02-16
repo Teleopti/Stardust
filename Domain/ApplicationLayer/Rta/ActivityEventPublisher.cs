@@ -22,6 +22,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta
 			var startTime = activityStartedInThePast
 				? previousStateTime
 				: info.CurrentActivity.StartDateTime;
+			var adherenceChanged = info.AdherenceForPreviousState != info.AdherenceForPreviousStateAndCurrentActivity;
 
 			_eventPublisher.Publish(new PersonActivityStartEvent
 			{
@@ -32,7 +33,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta
 				InAdherence = info.AdherenceForPreviousStateAndCurrentActivity == Adherence.In
 			});
 
-			_adherenceEventPublisher.Publish(info, startTime, info.AdherenceForPreviousState, info.AdherenceForPreviousStateAndCurrentActivity);
+			if (adherenceChanged)
+				_adherenceEventPublisher.Publish(info, startTime, info.AdherenceForPreviousStateAndCurrentActivity);
 		}
 	}
 }

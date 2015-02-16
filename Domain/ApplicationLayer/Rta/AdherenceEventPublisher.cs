@@ -13,10 +13,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta
 			_eventPublisher = eventPublisher;
 		}
 
-		public void Publish(StateInfo info, DateTime time, Adherence fromAdherence, Adherence toAdherence)
+		public void Publish(StateInfo info, DateTime time, Adherence toAdherence)
 		{
-			if (toAdherence == fromAdherence) return;
-
 			if (toAdherence == Adherence.In)
 				_eventPublisher.Publish(new PersonInAdherenceEvent
 				{

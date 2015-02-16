@@ -1,8 +1,10 @@
 using System;
 using System.Linq;
+using Microsoft.Ajax.Utilities;
 using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
+using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Helper;
@@ -152,6 +154,35 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta
 
 			var @event = publisher.PublishedEvents.OfType<PersonStateChangedEvent>().Single();
 			@event.InAdherence.Should().Be(false);
+		}
+
+		[Test]
+		public void ShouldPublishWithAdherenceTransitions()
+		{
+			var personId = Guid.NewGuid();
+			var activityId = Guid.NewGuid();
+			database
+				.WithUser("usercode", personId)
+				.WithSchedule(personId, activityId, "2014-10-20 10:00", "2014-10-20 11:00")
+				.WithAlarm("statecode1", activityId, 0)
+				.WithAlarm("statecode2", activityId, 0);
+			now.Is("2014-10-20 10:00");
+
+			target.SaveState(new ExternalUserStateForTest
+			{
+				UserCode = "usercode",
+				StateCode = "statecode1"
+			});
+			target.SaveState(new ExternalUserStateForTest
+			{
+				UserCode = "usercode",
+				StateCode = "statecode2"
+			});
+
+			var @event1 = publisher.PublishedEvents.OfType<PersonStateChangedEvent>().First();
+			@event1.InAdherence.Should().Be(true);
+			var @event2 = publisher.PublishedEvents.OfType<PersonStateChangedEvent>().Second();
+			@event2.InAdherence.Should().Be(null);
 		}
 
 		[Test]

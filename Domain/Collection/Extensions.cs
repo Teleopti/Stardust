@@ -262,5 +262,10 @@ namespace Teleopti.Ccc.Domain.Collection
 				}
 			}
 		}
+
+		public static T Second<T>(this IEnumerable<T> source)
+		{
+			return source.ElementAt(1);
+		}
 	}
 }

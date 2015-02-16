@@ -17,16 +17,19 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta
 		{
 			if (info.CurrentStateId == info.PreviousStateId) return;
 
+			var adherenceChanged = info.AdherenceForPreviousStateAndCurrentActivity != info.Adherence;
+
 			_eventPublisher.Publish(new PersonStateChangedEvent
 			{
 				PersonId = info.PersonId,
 				Timestamp = info.CurrentTime,
 				BusinessUnitId = info.BusinessUnitId,
-				InAdherence = info.Adherence == Adherence.In,
+				InAdherence = adherenceChanged ? info.Adherence == Adherence.In : (bool?) null,
 				InAdherenceWithPreviousActivity = info.AdherenceForNewStateAndPreviousActivity == Adherence.In
 			});
 
-			_adherenceEventPublisher.Publish(info, info.CurrentTime, info.AdherenceForPreviousStateAndCurrentActivity, info.Adherence);
+			if (adherenceChanged)
+				_adherenceEventPublisher.Publish(info, info.CurrentTime, info.Adherence);
 		}
 	}
 }

@@ -128,15 +128,18 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta
 				.ToArray();
 		}
 
-		private static void addAdherence(AdherenceDetailsReadModelState model, DateTime time, bool inAdherence)
+		private static void addAdherence(AdherenceDetailsReadModelState model, DateTime time, bool? inAdherence)
 		{
+			if (!inAdherence.HasValue)
+				return;
+
 			model.Adherence = model.Adherence
 				.Concat(new[]
 				{
 					new AdherenceDetailsReadModelAdherenceState
 					{
 						Time = time,
-						InAdherence = inAdherence,
+						InAdherence = inAdherence.Value,
 					}
 				})
 				.OrderBy(x => x.Time)
