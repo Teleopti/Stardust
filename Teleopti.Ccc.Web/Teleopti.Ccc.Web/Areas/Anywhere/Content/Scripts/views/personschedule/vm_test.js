@@ -332,7 +332,7 @@
 					assert.equals(selectedLayer.StartTime(), momentExpected.format('HH:mm'));
 				},
 
-				"should calculate shifts width lower than timeline width when groupmates are displayed": function () {
+				"=>should calculate shifts width lower than timeline width when groupmates are displayed": function () {
 					var vm = new viewModel();
 
 					vm.SetViewOptions({
@@ -368,7 +368,7 @@
 					vm.UpdateData({ PersonId: 1, IanaTimeZoneOther: 'Europe/Berlin' });
 					vm.UpdateSchedules(data);
 
-					assert.equals(vm.Layers().size(), 1);
+					assert.equals(vm.Layers().size(), 2);
 
 					vm.Layers().forEach(function (layer) {
 						var startPX = layer.StartPixels();
