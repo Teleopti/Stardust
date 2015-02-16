@@ -1,8 +1,12 @@
-using System;
+using System.Collections.Generic;
+using System.Linq;
 using Autofac;
+using Teleopti.Ccc.Domain.Aop;
+using Teleopti.Ccc.Domain.ApplicationLayer;
+using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta;
-using Teleopti.Ccc.Domain.ApplicationLayer.Rta.Performance;
 using Teleopti.Ccc.IocCommon;
+using Teleopti.Ccc.IocCommon.Toggle;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.IoC;
 
@@ -10,6 +14,14 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta
 {
 	public class AdherenceTestAttribute : IoCTestAttribute
 	{
+		protected override FakeToggleManager Toggles()
+		{
+			var toggles = base.Toggles();
+			toggles.Enable(Domain.FeatureFlags.Toggles.RTA_NoBroker_31237);
+			toggles.Enable(Domain.FeatureFlags.Toggles.RTA_SeeAdherenceDetailsForOneAgent_31285);
+			return toggles;
+		}
+
 		protected override void RegisterInContainer(ContainerBuilder builder, IIocConfiguration configuration)
 		{
 			base.RegisterInContainer(builder, configuration);
@@ -31,30 +43,34 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta
 				.AsSelf()
 				.SingleInstance();
 
-			builder.RegisterType<FakePerformanceCounter>().As<IPerformanceCounter>().SingleInstance();
-			builder.RegisterType<FakeLiteTransactionSyncronization>().As<ILiteTransactionSyncronization>().SingleInstance();
+			builder.RegisterType<ControllableLiteTransactionSyncronization>().As<ILiteTransactionSyncronization>().SingleInstance();
+			builder.RegisterType<FakeReadModelUnitOfWorkAspect>().As<IReadModelUnitOfWorkAspect>();
+
+			builder.Register(x => x.Resolve<IEnumerable<IHandleEvent<PersonInAdherenceEvent>>>()
+				.OfType<TeamOutOfAdherenceReadModelUpdater>()
+				.Single()
+				)
+				.AsSelf()
+				.SingleInstance();
+			builder.Register(x => x.Resolve<IEnumerable<IHandleEvent<PersonInAdherenceEvent>>>()
+				.OfType<SiteOutOfAdherenceReadModelUpdater>()
+				.Single()
+				)
+				.AsSelf()
+				.SingleInstance();
+			builder.Register(x => x.Resolve<IEnumerable<IHandleEvent<PersonInAdherenceEvent>>>()
+				.OfType<AdherencePercentageReadModelUpdater>()
+				.Single()
+				)
+				.AsSelf()
+				.SingleInstance();
+			builder.Register(x => x.Resolve<IEnumerable<IHandleEvent<PersonStateChangedEvent>>>()
+				.OfType<AdherenceDetailsReadModelUpdater>()
+				.Single()
+				)
+				.AsSelf()
+				.SingleInstance();
 		}
 	}
 
-	public class FakeLiteTransactionSyncronization : ILiteTransactionSyncronization
-	{
-		public void OnSuccessfulTransaction(Action action)
-		{
-		}
-	}
-
-	public class FakePerformanceCounter : IPerformanceCounter
-	{
-		public bool IsEnabled { get; private set; }
-		public int Limit { get; set; }
-		public Guid BusinessUnitId { get; set; }
-		public string DataSource { get; set; }
-		public void Count()
-		{
-		}
-
-		public void ResetCount()
-		{
-		}
-	}
 }

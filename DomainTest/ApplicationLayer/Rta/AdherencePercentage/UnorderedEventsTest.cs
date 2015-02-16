@@ -2,31 +2,23 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using Autofac;
 using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Helper;
-using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.TestCommon;
-using Teleopti.Ccc.TestCommon.IoC;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.AdherencePercentage
 {
 	[AdherenceTest]
 	[TestFixture]
-	public class UnorderedEventsTest : IRegisterInContainer
+	public class UnorderedEventsTest
 	{
 		public FakeAdherencePercentageReadModelPersister Persister;
 		public AdherencePercentageReadModelUpdater Target;
-
-		public void RegisterInContainer(ContainerBuilder builder, IIocConfiguration configuration)
-		{
-			builder.RegisterType<AdherencePercentageReadModelUpdater>().AsSelf();
-		}
 
 		[Test]
 		[TestCaseSource(typeof(PercentageEventsPermuationFactory), "Permutations")]

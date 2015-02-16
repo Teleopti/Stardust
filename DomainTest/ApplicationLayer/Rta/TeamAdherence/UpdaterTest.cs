@@ -6,10 +6,10 @@ using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta;
 using Teleopti.Ccc.TestCommon;
 
-namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta
+namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.TeamAdherence
 {
 	[TestFixture]
-	public class TeamAdherenceReadModelUpdaterTest
+	public class UpdaterTest
 	{
 		[Test]
 		public void ShouldUpdateTeamAdherence()

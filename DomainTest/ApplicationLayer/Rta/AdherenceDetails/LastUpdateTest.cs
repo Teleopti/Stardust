@@ -1,27 +1,18 @@
-using System;
-using Autofac;
 using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta;
 using Teleopti.Ccc.Domain.Helper;
-using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.TestCommon;
-using Teleopti.Ccc.TestCommon.IoC;
 
 namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.AdherenceDetails
 {
 	[AdherenceTest]
 	[TestFixture]
-	public class LastUpdateTest : IRegisterInContainer
+	public class LastUpdateTest
 	{
 		public FakeAdherenceDetailsReadModelPersister Persister;
 		public AdherenceDetailsReadModelUpdater Target;
-
-		public void RegisterInContainer(ContainerBuilder builder, IIocConfiguration configuration)
-		{
-			builder.RegisterType<AdherenceDetailsReadModelUpdater>().AsSelf();
-		}
 
 		[Test]
 		public void ShouldPersistLastAdherenceTrue()

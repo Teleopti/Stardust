@@ -35,7 +35,7 @@ namespace Teleopti.Ccc.TestCommon.IoC
 		private object _fixture;
 		private Type _fixtureType;
 
-		protected virtual IToggleManager Toggles()
+		protected virtual FakeToggleManager Toggles()
 		{
 			var attributes = _fixtureType.GetCustomAttributes(typeof(ToggleAttribute), false).Cast<ToggleAttribute>();
 			var toggles = new FakeToggleManager();

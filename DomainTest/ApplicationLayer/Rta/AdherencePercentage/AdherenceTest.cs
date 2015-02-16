@@ -1,28 +1,20 @@
 using System;
-using Autofac;
 using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta;
 using Teleopti.Ccc.Domain.Helper;
-using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.TestCommon;
-using Teleopti.Ccc.TestCommon.IoC;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.AdherencePercentage
 {
 	[AdherenceTest]
 	[TestFixture]
-	public class AdherenceTest : IRegisterInContainer
+	public class AdherenceTest
 	{
 		public FakeAdherencePercentageReadModelPersister Persister;
 		public AdherencePercentageReadModelUpdater Target;
-
-		public void RegisterInContainer(ContainerBuilder builder, IIocConfiguration configuration)
-		{
-			builder.RegisterType<AdherencePercentageReadModelUpdater>().AsSelf();
-		}
 		
 		[Test]
 		public void ShouldPersist()
