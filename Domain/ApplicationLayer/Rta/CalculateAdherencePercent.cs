@@ -12,15 +12,15 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta
 			_now = now;
 		}
 
-		public Percent ForDay(AdherencePercentageReadModel data)
+		public Percent ForDay(AdherencePercentageReadModel model)
 		{
-			var secondsInAdherence = Convert.ToDouble(data.TimeInAdherence.TotalSeconds);
-			var secondsOutOfAdherence = Convert.ToDouble(data.TimeOutOfAdherence.TotalSeconds);
+			var secondsInAdherence = Convert.ToDouble(model.TimeInAdherence.TotalSeconds);
+			var secondsOutOfAdherence = Convert.ToDouble(model.TimeOutOfAdherence.TotalSeconds);
 
-			if (!data.ShiftHasEnded)
+			if (!model.ShiftHasEnded)
 			{
-				var isLastInAdherence = data.IsLastTimeInAdherence ?? false;
-				var lastTimestamp = data.LastTimestamp ?? DateTime.MinValue;
+				var isLastInAdherence = model.IsLastTimeInAdherence ?? false;
+				var lastTimestamp = model.LastTimestamp ?? DateTime.MinValue;
 				var secondsFromLastUpdate = _now.UtcDateTime().Subtract(lastTimestamp).TotalSeconds;
 				if (isLastInAdherence)
 					secondsInAdherence += secondsFromLastUpdate;
@@ -33,13 +33,13 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta
 			return new Percent(secondsInAdherence / total);
 		}
 
-		public Percent ForActivity(AdherenceDetailModel data, bool activityEnded, bool isInAdherence)
+		public Percent ForActivity(AdherenceDetailsModel model, AdherenceDetailModel detail, bool activityEnded, bool isInAdherence)
 		{
-			var secondsInAdherence = Convert.ToDouble(data.TimeInAdherence.TotalSeconds);
-			var secondsOutOfAdherence = Convert.ToDouble(data.TimeOutOfAdherence.TotalSeconds);
+			var secondsInAdherence = Convert.ToDouble(detail.TimeInAdherence.TotalSeconds);
+			var secondsOutOfAdherence = Convert.ToDouble(detail.TimeOutOfAdherence.TotalSeconds);
 			if (!activityEnded)
 			{
-				var lastTimestamp = data.LastStateChangedTime ?? DateTime.MinValue;
+				var lastTimestamp = model.LastUpdate ?? DateTime.MinValue;
 				var secondsFromLastUpdate = _now.UtcDateTime().Subtract(lastTimestamp).TotalSeconds;
 				if(isInAdherence)
 					secondsInAdherence += secondsFromLastUpdate;

@@ -1,6 +1,7 @@
 using System;
 using System.Linq;
 using Autofac;
+using NHibernate.Criterion;
 using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;

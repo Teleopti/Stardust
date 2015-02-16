@@ -25,7 +25,8 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 				PersonId = personId,
 				Model = new AdherenceDetailsModel
 				{
-					IsInAdherence = true,
+					LastUpdate = "2014-11-19 8:06".Utc(),
+					LastAdherence = true,
 					Details = new[]
 					{
 						new AdherenceDetailModel
@@ -35,18 +36,18 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 							ActualStartTime = "2014-11-19 8:05".Utc(),
 							Name = "Phone",
 							StartTime = "2014-11-19 8:00".Utc(),
-							LastStateChangedTime = "2014-11-19 8:06".Utc()
 						}
 					}
 				},
 				State = new AdherenceDetailsReadModelState
 				{
-					Activities = new[] { new AdherenceDetailsReadModelActivityState() }
+					Activities = new[] {new AdherenceDetailsReadModelActivityState()}
 				}
 			});
 
 			var model = Target.Get(personId, "2014-11-19".Date());
-			model.Model.IsInAdherence.Should().Be(true);
+			model.Model.LastAdherence.Should().Be(true);
+			model.Model.LastUpdate.Should().Be("2014-11-19 8:06".Utc());
 			model.State.Activities.Should().Have.Count.EqualTo(1);
 			var detail = model.Model.Details.First();
 			detail.Name.Should().Be("Phone");
@@ -54,7 +55,6 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			detail.ActualStartTime.Should().Be("2014-11-19 8:05".Utc());
 			detail.TimeInAdherence.Should().Be("10".Minutes());
 			detail.TimeOutOfAdherence.Should().Be("20".Minutes());
-			detail.LastStateChangedTime.Should().Be( "2014-11-19 8:06".Utc());
 		}
 
 		[Test]
@@ -73,7 +73,8 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 				PersonId = personId,
 				Model = new AdherenceDetailsModel
 				{
-					IsInAdherence = true,
+					LastUpdate = "2014-11-19 8:06".Utc(),
+					LastAdherence = true,
 					Details = new[]
 					{
 						new AdherenceDetailModel
@@ -83,26 +84,25 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 							ActualStartTime = "2014-11-19 8:05".Utc(),
 							Name = "Phone",
 							StartTime = "2014-11-19 8:00".Utc(),
-							LastStateChangedTime = "2014-11-19 8:06".Utc()
 						}
 					}
 				},
 				State = new AdherenceDetailsReadModelState
 				{
-					Activities = new[] { new AdherenceDetailsReadModelActivityState() }
+					Activities = new[] {new AdherenceDetailsReadModelActivityState()}
 				}
 			});
 
 			var model = Target.Get(personId, "2014-11-19".Date());
-			model.Model.IsInAdherence.Should().Be(true);
+			model.Model.LastAdherence.Should().Be(true);
 			model.State.Activities.Should().Have.Count.EqualTo(1);
+			model.Model.LastUpdate.Should().Be("2014-11-19 8:06".Utc());
 			var detail = model.Model.Details.First();
 			detail.Name.Should().Be("Phone");
 			detail.StartTime.Should().Be("2014-11-19 8:00".Utc());
 			detail.ActualStartTime.Should().Be("2014-11-19 8:05".Utc());
 			detail.TimeInAdherence.Should().Be("10".Minutes());
 			detail.TimeOutOfAdherence.Should().Be("20".Minutes());
-			detail.LastStateChangedTime.Should().Be("2014-11-19 8:06".Utc());
 		}
 
 		[Test]
@@ -116,23 +116,23 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 				PersonId = personId,
 				Model = new AdherenceDetailsModel
 				{
+					LastUpdate = null,
 					Details = new[]
 					{
 						new AdherenceDetailModel
 						{
 							ActualStartTime = null,
 							StartTime = null,
-							LastStateChangedTime = null
 						}
 					}
 				}
 			});
 
 			var model = Target.Get(personId, "2014-11-19".Date());
+			model.Model.LastUpdate.Should().Be(null);
 			var detail = model.Model.Details.First();
 			detail.StartTime.Should().Be(null);
 			detail.ActualStartTime.Should().Be(null);
-			detail.LastStateChangedTime.Should().Be(null);
 		}
 
 		[Test]
@@ -176,12 +176,12 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 				PersonId = personId,
 				Model = new AdherenceDetailsModel
 				{
-					IsInAdherence = true,
+					LastUpdate = null,
+					LastAdherence = true,
 					Details = new[]
 					{
 						new AdherenceDetailModel
 						{
-							LastStateChangedTime = null,
 							ActualStartTime = null
 						}
 					}
@@ -190,7 +190,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 
 			var model = Target.Get(personId, "2014-11-19".Date());
 			model.Model.Details.First().ActualStartTime.Should().Be(null);
-			model.Model.Details.First().LastStateChangedTime.Should().Be(null);
+			model.Model.LastUpdate.Should().Be(null);
 		}
 
 		[Test]

@@ -45,7 +45,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta
 					StartTime = convertToAgentTimeZoneAndFormatTimestamp(detail.StartTime),
 					ActualStartTime = convertToAgentTimeZoneAndFormatTimestamp(detail.ActualStartTime),
 					AdherencePercent =
-						(int)_calculateAdherencePercent.ForActivity(detail,isActivityEnded(i, detailModels.Count(), readModel.Model.ShiftEndTime.HasValue), readModel.Model.IsInAdherence)
+						(int)_calculateAdherencePercent.ForActivity(readModel.Model, detail, isActivityEnded(i, detailModels.Count(), readModel.Model.ShiftEndTime.HasValue), readModel.Model.LastAdherence)
 								.ValueAsPercent()
 				});
 			}

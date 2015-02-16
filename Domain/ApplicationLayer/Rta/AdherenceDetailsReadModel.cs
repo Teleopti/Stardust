@@ -48,7 +48,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta
 		public IEnumerable<AdherenceDetailModel> Details { get; set; }
 		public DateTime? ShiftEndTime { get; set; }
 		public DateTime? ActualEndTime { get; set; }
-		public bool IsInAdherence { get; set; } //<---- MISSING TEST
+		public bool LastAdherence { get; set; }
+		public DateTime? LastUpdate { get; set; }
 	}
 
 	public class AdherenceDetailModel
@@ -56,7 +57,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta
 		public string Name { get; set; }
 		public DateTime? StartTime { get; set; }
 		public DateTime? ActualStartTime { get; set; }
-		public DateTime? LastStateChangedTime { get; set; }//<---- MISSING TEST
 		public TimeSpan TimeInAdherence { get; set; }
 		public TimeSpan TimeOutOfAdherence { get; set; }
 	}

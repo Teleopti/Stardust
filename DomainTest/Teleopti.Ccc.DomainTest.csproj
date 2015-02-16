@@ -171,6 +171,7 @@
     <Compile Include="ApplicationLayer\MoveActivityCommandHandlerTest.cs" />
     <Compile Include="ApplicationLayer\RemoveAbsenceCommandHandlerTest.cs" />
     <Compile Include="ApplicationLayer\Rta\AdherenceDetails\ActivityEndedTest.cs" />
+    <Compile Include="ApplicationLayer\Rta\AdherenceDetails\LastUpdateTest.cs" />
     <Compile Include="ApplicationLayer\Rta\AdherenceDetails\ShiftEndTimeTest.cs" />
     <Compile Include="ApplicationLayer\Rta\AdherenceDetails\InAdherenceTest.cs" />
     <Compile Include="ApplicationLayer\Rta\AdherenceDetails\OutOfAdherenceTest.cs" />
