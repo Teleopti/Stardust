@@ -11,55 +11,10 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.AdherenceDetails
 {
 	[AdherenceTest]
 	[TestFixture]
-	public class ActivityStartTimesTest
+	public class ActivityActualStartTimeTest
 	{
 		public FakeAdherenceDetailsReadModelPersister Persister;
 		public AdherenceDetailsReadModelUpdater Target;
-
-		[Test]
-		public void ShouldPersist()
-		{
-			Target.Handle(new PersonActivityStartEvent
-			{
-				PersonId = Guid.NewGuid(),
-				Name = "Phone",
-				StartTime = "2014-11-17 8:00".Utc()
-			});
-
-			Persister.Details.Single().Name.Should().Be("Phone");
-		}
-
-		[Test]
-		public void ShouldPersistEachActivityStarted()
-		{
-			var personId = Guid.NewGuid();
-			Target.Handle(new PersonActivityStartEvent
-			{
-				PersonId = personId,
-				Name = "Phone",
-				StartTime = "2014-11-17 8:00".Utc()
-			});
-			Target.Handle(new PersonActivityStartEvent
-			{
-				PersonId = personId,
-				Name = "Break",
-				StartTime = "2014-11-17 9:00".Utc()
-			});
-
-			Persister.Details.Select(x => x.Name).Should().Have.SameValuesAs("Phone", "Break");
-		}
-
-		[Test]
-		public void ShouldPersistActivitiesStartTime()
-		{
-			Target.Handle(new PersonActivityStartEvent
-			{
-				PersonId = Guid.NewGuid(),
-				StartTime = "2014-11-17 8:00".Utc()
-			});
-
-			Persister.Details.Single().StartTime.Should().Be("2014-11-17 8:00".Utc());
-		}
 
 		[Test]
 		public void ShouldPersistActualStartTime()
@@ -243,5 +198,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.AdherenceDetails
 
 			Persister.Details.Last().ActualStartTime.Should().Be(null);
 		}
+
 	}
 }
