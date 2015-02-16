@@ -160,17 +160,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta
 			model.Adherence = model.Adherence.Where(a => !duplicateByTime.Contains(a)).ToArray();
 		}
 
-		private static IEnumerable<AdherenceDetailsReadModelAdherenceState> transitions(IEnumerable<AdherenceDetailsReadModelAdherenceState> adherence)
-		{
-			var nonTransitional = adherence
-				.WithPrevious()
-				.Where(x => x.This.InAdherence == x.Previous.InAdherence)
-				.Select(x => x.This)
-				.ToArray()
-				;
-			return adherence.Where(a => !nonTransitional.Contains(a)).ToArray();
-		}
-
 		private static void calculate(AdherenceDetailsReadModel model)
 		{
 			model.Model = new AdherenceDetailsModel
@@ -190,8 +179,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta
 			if (model.State.Activities.IsEmpty())
 				return null;
 
-			var adherenceTransitions = transitions(model.State.Adherence);
-			var endingAdherenceOfLastActivity = adherenceTransitions
+			var endingAdherenceOfLastActivity = model.State.Adherence
+				.TransitionsOf(x => x.InAdherence)
 				.LastOrDefault(x =>
 					x.Time <= model.State.ShiftEndTime &&
 					x.Time >= model.State.Activities.Last().StartTime
@@ -226,7 +215,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta
 
 		private static DateTime? calculateActualStartTimeForActivity(AdherenceDetailsReadModel model, AdherenceDetailsReadModelActivityState activity)
 		{
-			var adherenceTransitions = transitions(model.State.Adherence);
+			var adherenceTransitions = model.State.Adherence.TransitionsOf(x => x.InAdherence).ToArray();
 			var adherenceBefore = adherenceTransitions.LastOrDefault(x => x.Time < activity.StartTime);
 			var adherenceChange = adherenceTransitions.SingleOrDefault(x => x.Time == activity.StartTime);
 			var adherenceAfter = adherenceTransitions.FirstOrDefault(x => x.Time > activity.StartTime);
