@@ -167,7 +167,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta
 			result.Single().BelongsToDate.Should().Be(new DateOnly("2014-11-07".Utc()));
 		}
 
-		[Test]
+		[Ignore, Test]
 		public void ShouldReadPersonTimeZone()
 		{
 			Guid personId;
