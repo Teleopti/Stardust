@@ -37,6 +37,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.Register<IReadActualAgentStates>(c => c.Resolve<DatabaseReader>());
 			builder.RegisterType<DatabaseWriter>().As<IDatabaseWriter>().SingleInstance();
 
+			builder.RegisterType<AgentDateProvider>().SingleInstance().As<IAgentDateProvider>();
 			builder.RegisterType<CalculateAdherence>().SingleInstance().As<ICalculateAdherence>();
 			builder.RegisterType<CalculateAdherenceDetails>().SingleInstance().As<ICalculateAdherenceDetails>();
 
