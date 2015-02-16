@@ -6,16 +6,21 @@ using NHibernate.Transform;
 using NHibernate.Util;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta;
 using Teleopti.Ccc.Infrastructure.LiteUnitOfWork;
+using Teleopti.Interfaces;
 
 namespace Teleopti.Ccc.Infrastructure.Repositories
 {
 	public class SiteOutOfAdherenceReadModelPersister : ISiteOutOfAdherenceReadModelPersister
 	{
 		private readonly ICurrentReadModelUnitOfWork _unitOfWork;
+		private readonly IJsonSerializer _serializer;
+		private readonly IJsonDeserializer _deserializer;
 
-		public SiteOutOfAdherenceReadModelPersister(ICurrentReadModelUnitOfWork unitOfWork)
+		public SiteOutOfAdherenceReadModelPersister(ICurrentReadModelUnitOfWork unitOfWork, IJsonSerializer serializer, IJsonDeserializer deserializer)
 		{
 			_unitOfWork = unitOfWork;
+			_serializer = serializer;
+			_deserializer = deserializer;
 		}
 
 		public void Persist(SiteOutOfAdherenceReadModel model)
@@ -34,23 +39,58 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 
 		public IEnumerable<SiteOutOfAdherenceReadModel> GetForBusinessUnit(Guid businessUnitId)
 		{
-			return _unitOfWork.Current()
-				.CreateSqlQuery("SELECT * FROM ReadModel.SiteOutOfAdherence WHERE BusinessUnitId =:BusinessUnitId")
+			var models =  _unitOfWork.Current()
+				.CreateSqlQuery("SELECT " + 
+						"SiteId" +
+						",BusinessUnitId" +
+						",Count" + 
+						",[State] AS StateJson " + 
+						"FROM ReadModel.SiteOutOfAdherence WHERE BusinessUnitId =:BusinessUnitId")
+				.AddScalar("SiteId", NHibernateUtil.Guid)
+				.AddScalar("BusinessUnitId", NHibernateUtil.Guid)
+				.AddScalar("Count", NHibernateUtil.Int32)
+				.AddScalar("StateJson", NHibernateUtil.StringClob)
 				.SetParameter("BusinessUnitId", businessUnitId)
-				.SetResultTransformer(Transformers.AliasToBean(typeof(SiteOutOfAdherenceReadModel)))
+				.SetResultTransformer(Transformers.AliasToBean(typeof(internalModel)))
 				.List()
-				.Cast<SiteOutOfAdherenceReadModel>();
+				.Cast<internalModel>();
+
+			if (!models.Any()) return new List<SiteOutOfAdherenceReadModel>(); ;
+			models.ForEach(model =>
+			{
+				model.State = _deserializer.DeserializeObject<SiteOutOfAdherenceReadModelState[]>(model.StateJson);
+				model.StateJson = null;
+			});
+			return models;
 		}
 
 		private SiteOutOfAdherenceReadModel getModel(Guid siteId)
 		{
-			return _unitOfWork.Current()
-				.CreateSqlQuery("SELECT * FROM ReadModel.SiteOutOfAdherence WHERE SiteId =:SiteId")
+			var result =  _unitOfWork.Current()
+				.CreateSqlQuery(
+					"SELECT " + 
+						"SiteId" +
+						",BusinessUnitId" +
+						",Count" + 
+						",[State] AS StateJson" +
+					" FROM ReadModel.SiteOutOfAdherence " +
+				                "WHERE SiteId =:SiteId")
+				.AddScalar("SiteId",NHibernateUtil.Guid)
+				.AddScalar("BusinessUnitId", NHibernateUtil.Guid)
+				.AddScalar("Count", NHibernateUtil.Int32)
+				.AddScalar("StateJson", NHibernateUtil.StringClob)
 				.SetParameter("SiteId", siteId)
-				.SetResultTransformer(Transformers.AliasToBean(typeof(SiteOutOfAdherenceReadModel)))
+				.SetResultTransformer(Transformers.AliasToBean(typeof(internalModel)))
 				.List()
-				.Cast<SiteOutOfAdherenceReadModel>()
+				.Cast<internalModel>()
 				.SingleOrDefault();
+			if (result == null) return null;
+			if (result.StateJson == null) return result;
+			
+			result.State = _deserializer.DeserializeObject<SiteOutOfAdherenceReadModelState[]>(result.StateJson);
+			result.StateJson = null;
+			return result;
+			
 		}
 
 		public void Clear()
@@ -66,23 +106,30 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 		private void updateReadModel(SiteOutOfAdherenceReadModel model)
 		{
 			_unitOfWork.Current()
-				.CreateSqlQuery("UPDATE ReadModel.SiteOutOfAdherence SET Count = :Count, BusinessUnitId = :BusinessUnitId, PersonIds = :PersonIds WHERE SiteId = :SiteId")
+				.CreateSqlQuery("UPDATE ReadModel.SiteOutOfAdherence SET Count = :Count, BusinessUnitId = :BusinessUnitId, [State] =:State WHERE SiteId = :SiteId")
 				.SetParameter("SiteId", model.SiteId)
 				.SetParameter("Count", model.Count)
-				.SetParameter("PersonIds", model.PersonIds, NHibernateUtil.StringClob)
 				.SetParameter("BusinessUnitId", model.BusinessUnitId)
+				.SetParameter("State", _serializer.SerializeObject(model.State))
 				.ExecuteUpdate();
 		}
 
 		private void saveReadModel(SiteOutOfAdherenceReadModel model)
 		{
 			_unitOfWork.Current()
-				.CreateSqlQuery("INSERT INTO ReadModel.SiteOutOfAdherence (BusinessUnitId, SiteId, Count, PersonIds) VALUES (:BusinessUnitId, :SiteId, :Count, :PersonIds)")
+				.CreateSqlQuery("INSERT INTO ReadModel.SiteOutOfAdherence (BusinessUnitId, SiteId, Count, [State]) VALUES (:BusinessUnitId, :SiteId, :Count, :State)")
 				.SetParameter("BusinessUnitId", model.BusinessUnitId)
 				.SetParameter("SiteId", model.SiteId)
 				.SetParameter("Count", model.Count)
-				.SetParameter("PersonIds", model.PersonIds, NHibernateUtil.StringClob)
+				.SetParameter("State", _serializer.SerializeObject(model.State))
 				.ExecuteUpdate();
 		}
+
+		private class internalModel : SiteOutOfAdherenceReadModel
+		{
+			public string StateJson { get; set; }
+		} 
 	}
+
+	
 }

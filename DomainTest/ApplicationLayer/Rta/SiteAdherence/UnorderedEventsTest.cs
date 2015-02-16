@@ -17,7 +17,7 @@ using Teleopti.Interfaces.Domain;
 namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.SiteAdherence
 {
 	[AdherenceTest]
-	[TestFixture, Ignore]
+	[TestFixture]
 	public class UnorderedEventsTest : IRegisterInContainer
 	{
 		public FakeSiteOutOfAdherenceReadModelPersister Persister;
@@ -26,7 +26,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.SiteAdherence
 		public void RegisterInContainer(ContainerBuilder builder, IIocConfiguration configuration)
 		{
 			builder.RegisterType<SiteOutOfAdherenceReadModelUpdater>().AsSelf();
-			
 		}
 
 		[Test]
@@ -37,7 +36,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.SiteAdherence
 			var siteId = events.OfType<PersonOutOfAdherenceEvent>().First().SiteId;
 			Persister.Get(siteId).Count.Should().Be(2);
 		}
-
 	}
 
 	public class EventsPermuationFactory
@@ -71,9 +69,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.SiteAdherence
 						SiteId = siteId
 					}
 				};
-
 				var permutations = events.Permutations();
-
 				return from p in permutations
 					   let name = (from pe in p select pe.GetType().Name).Aggregate((current, next) => current + ", " + next)
 					   select new TestCaseData(p).SetName(name);
