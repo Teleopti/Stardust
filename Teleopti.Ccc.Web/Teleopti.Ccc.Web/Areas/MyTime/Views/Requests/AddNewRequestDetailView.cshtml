@@ -16,7 +16,7 @@
     </label>
     <div class ="row">
 	    <div class="col-md-3 col-sm-4 col-xs-4">
-            <select class="request-new-absence request-abcense input-sm form-control" data-bind="value: AbsenceId">
+            <select class="request-new-absence request-absence input-sm form-control" data-bind="value: AbsenceId">
                 @foreach (var absenceType in Model.AbsenceTypes)
                 {
                     <option value="@Html.AttributeEncode(absenceType.Id)">@absenceType.Name</option>

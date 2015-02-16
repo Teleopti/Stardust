@@ -8,7 +8,6 @@ using Rhino.Mocks;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Scheduling;
-using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Scheduling.Meetings;
 using Teleopti.Ccc.Domain.Scheduling.Restriction;
 using Teleopti.Ccc.Domain.Scheduling.ShiftCreator;
@@ -122,11 +121,9 @@ namespace Teleopti.Ccc.Sdk.LogicTest.Restrictions
             }
         }
 
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling"), Test]
+        [Test]
        public void CanCheckPersonDayOffFromPeriod()
         {
-           var anchor = new DateTime(2009, 2, 2, 12, 0, 0, DateTimeKind.Utc);
-           var dayOff = new DayOff(anchor, TimeSpan.FromHours(12), TimeSpan.FromHours(0), new Description("hej", "då"), Color.Red, "payrollcode007");
            var partWithDayOff = _mocks.StrictMock<IScheduleDay>();
            var personDayOff = PersonAssignmentFactory.CreateAssignmentWithDayOff(new Scenario("d"),_person, new DateOnly(),new DayOffTemplate());
            IEnumerable<IPersistableScheduleData> data = new List<IPersistableScheduleData> ();
@@ -163,7 +160,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.Restrictions
                Assert.AreNotEqual(0, result.Count);
            }
        }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling"), Test]
+        [Test]
         public void CanAddFullDayAbsenceFromPeriod()
         {
             IAbsence payload = AbsenceFactory.CreateAbsence("abs");
@@ -205,7 +202,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.Restrictions
             }
         }
 
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling"), Test]
+        [Test]
         public void CanTellIfOnlyPersonalAssignmentExists()
         {
         	var dateOnly = new DateOnly(2009, 2, 2);
@@ -262,7 +259,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.Restrictions
             }    
         }
 
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling"), Test]
+        [Test]
         public void HasPersonalAssignmentOnlyReturnsFalseWhenPersonalAndShift()
         {
             var preferenceDay = new PreferenceDay(_person, new DateOnly(2009, 2, 2), new PreferenceRestriction());

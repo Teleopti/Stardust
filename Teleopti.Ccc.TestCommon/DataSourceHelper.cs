@@ -44,7 +44,7 @@ namespace Teleopti.Ccc.TestCommon
 					ccc7().ExecuteSql("delete from auditing.Auditsetting");
 					ccc7().ExecuteSql("insert into auditing.Auditsetting (id, IsScheduleEnabled) values (" + AuditSetting.TheId + ", 0)");
 				},
-				"Failed to persistn audit setting in database {0}!", ConnectionStringHelper.ConnectionStringUsedInTests
+				"Failed to persist audit setting in database {0}!", ConnectionStringHelper.ConnectionStringUsedInTests
 				);
 		}
 
