@@ -4,6 +4,7 @@ using System.Linq;
 using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers;
+using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Domain.Helper;
@@ -201,6 +202,17 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta
 		public void AfterTest(TestDetails testDetails)
 		{
 			applySql("DELETE FROM RTA.ActualAgentState");
+			removeAddedPerson();
+		}
+
+		private static void removeAddedPerson()
+		{
+			using (var uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
+			{
+				var personRepository = new PersonRepository(uow);
+				personRepository.LoadAll().ForEach(personRepository.Remove);
+				uow.PersistAll();
+			}
 		}
 
 		public ActionTargets Targets { get { return ActionTargets.Test; } }
