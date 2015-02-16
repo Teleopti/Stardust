@@ -99,7 +99,7 @@ namespace Teleopti.Ccc.Web.Areas.Reporting
 			DataSet dataset = commonReports.GetReportData(ParameterSelector.UserCode, ParameterSelector.BusinessUnitCode, sqlParams);
 
 			string reportName = commonReports.ReportFileName;
-			string reportPath = Server.MapPath(reportName);
+			string reportPath = Server.MapPath(Request.ApplicationPath + "Areas/Reporting/" + reportName);
 			IList<ReportParameter> @params = new List<ReportParameter>();
 			var viewer = new ReportViewer { ProcessingMode = ProcessingMode.Local };
 			viewer.LocalReport.ReportPath = reportPath;
