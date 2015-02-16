@@ -263,20 +263,6 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			var model = Target.Get(personId, "2014-11-19".Date());
 			model.Model.Details.First().Name.Should().Be(aVeryLongNameForActivty);
 		}
-
-	[Test]
-		public void ShouldGetCorrectModel()
-		{
-			var personId = Guid.NewGuid();
-			Target.Add(createReadModel(new DateOnly("2014-11-20".Utc()), personId, "2014-11-21 02:00".Utc()));
-			Target.Add(createReadModel(new DateOnly("2014-11-21".Utc()), personId, "2014-11-21 17:00".Utc()));
-			
-			var model1 = Target.Get(personId, "2014-11-21 02:00".Utc());
-			model1.BelongsToDate.Should().Be("2014-11-20".Date());
-
-			var model2 = Target.Get(personId, "2014-11-21 03:00".Utc());
-			model2.BelongsToDate.Should().Be("2014-11-21".Date());
-		}
 	}
 
 }

@@ -42,7 +42,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta
 		{
 			handleEvent(
 				@event.PersonId,
-				new DateOnly(@event.StartTime),
+				new DateOnly(@event.ScheduleDate),
 				s =>
 				{
 					incrementLastUpdate(s, @event.StartTime);
@@ -56,7 +56,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta
 		{
 			handleEvent(
 				@event.PersonId,
-				new DateOnly(@event.Timestamp),
+				new DateOnly(@event.ScheduleDate),
 				s =>
 				{
 					incrementLastUpdate(s, @event.Timestamp);
@@ -76,7 +76,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta
 		{
 			handleEvent(
 				@event.PersonId,
-				new DateOnly(@event.ShiftStartTime),
+				new DateOnly(@event.ScheduleDate),
 				s =>
 				{
 					incrementLastUpdate(s, @event.ShiftEndTime);

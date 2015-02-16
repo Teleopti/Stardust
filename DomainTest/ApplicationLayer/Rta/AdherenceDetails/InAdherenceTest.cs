@@ -228,41 +228,5 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.AdherenceDetails
 
 			Persister.Details.Single().TimeInAdherence.Should().Be("4".Hours());
 		}
-
-		[Test]
-		public void ShouldSaveShiftEndTime()
-		{
-			var personId = Guid.NewGuid();
-			var time = "2014-10-06 23:00".Utc();
-			var endTime = "2014-10-07 02:00".Utc();
-			var date = new DateOnly(time);
-			Target.Handle(new PersonActivityStartEvent
-			{
-				ScheduleDate = date,
-				PersonId = personId,
-				StartTime = time,
-				Name = "Phone",
-				InAdherence = false,
-				ShiftEndTime = endTime
-			});
-			Persister.ReadModel.ShiftEndTime.Should().Be(endTime);
-		}
-
-		[Test]
-		public void ShouldSaveShiftEndTimeWhenStateChanges()
-		{
-			var personId = Guid.NewGuid();
-			var time = "2014-10-06 23:00".Utc();
-			var endTime = "2014-10-07 02:00".Utc();
-			var date = new DateOnly(time);
-			Target.Handle(new PersonStateChangedEvent
-			{
-				ScheduleDate = date,
-				PersonId = personId,
-				InAdherence = false,
-				ShiftEndTime = endTime
-			});
-			Persister.ReadModel.ShiftEndTime.Should().Be(endTime);
-		}
 	}
 }

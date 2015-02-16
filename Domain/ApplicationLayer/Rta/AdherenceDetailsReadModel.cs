@@ -9,7 +9,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta
 		public Guid PersonId { get; set; }
 		public DateTime Date { get; set; }
 		public DateOnly BelongsToDate { get { return new DateOnly(Date); } }
-		public DateTime ShiftEndTime { get; set; }
 		public AdherenceDetailsModel Model { get; set; }
 
 		public AdherenceDetailsReadModelState State { get; set; }

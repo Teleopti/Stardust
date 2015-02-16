@@ -30,18 +30,15 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 				"	PersonId," +
 				"	BelongsToDate," +
 				"	Model, " +
-				"	ShiftEndTime," +
 				"	[State]" +
 				") VALUES (" +
 				"	:PersonId," +
 				"	:BelongsToDate," +
 				"	:Model," +
-				"	:ShiftEndTime," +
 				"	:State" +
 				")")
 				.SetGuid("PersonId", model.PersonId)
 				.SetDateTime("BelongsToDate", model.BelongsToDate)
-				.SetDateTime("ShiftEndTime", model.ShiftEndTime)
 				.SetParameter("Model", _jsonSerializer.SerializeObject(model.Model), NHibernateUtil.StringClob)
 				.SetParameter("State", _jsonSerializer.SerializeObject(model.State), NHibernateUtil.StringClob)
 				.ExecuteUpdate();
@@ -56,10 +53,8 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 				"WHERE " +
 				"	PersonId = :PersonId AND " +
 				"	BelongsToDate =:Date")
-				"	ShiftEndTime =:ShiftEndTime")
 				.SetGuid("PersonId", model.PersonId)
 				.SetDateTime("Date", model.BelongsToDate)
-				.SetDateTime("ShiftEndTime", model.ShiftEndTime)
 				.SetParameter("Model", _jsonSerializer.SerializeObject(model.Model), NHibernateUtil.StringClob)
 				.SetParameter("State", _jsonSerializer.SerializeObject(model.State), NHibernateUtil.StringClob)
 				.ExecuteUpdate();
@@ -72,7 +67,6 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 				"	PersonId," +
 				"	BelongsToDate AS Date, " +
 				"	Model AS ModelJson, " +
-				"	ShiftEndTime, " +
 				"	[State] AS StateJson " +
 				"FROM ReadModel.AdherenceDetails WHERE" +
 				"	PersonId =:PersonId AND " +
@@ -80,7 +74,6 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 				.AddScalar("PersonId", NHibernateUtil.Guid)
 				.AddScalar("Date", NHibernateUtil.DateTime)
 				.AddScalar("ModelJson", NHibernateUtil.String)
-				.AddScalar("ShiftEndTime", NHibernateUtil.DateTime)
 				.AddScalar("StateJson", NHibernateUtil.String)
 				.SetGuid("PersonId", personId)
 				.SetDateTime("Date", date)
