@@ -1,6 +1,5 @@
 ﻿using System;
 using log4net;
-using Microsoft.FSharp.Data.UnitSystems.SI.UnitNames;
 using Rhino.ServiceBus;
 using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;

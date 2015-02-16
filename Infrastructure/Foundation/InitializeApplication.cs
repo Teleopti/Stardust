@@ -5,15 +5,12 @@ using System.IO;
 using System.Linq;
 using System.Xml.Linq;
 using log4net;
-using Microsoft.FSharp.Linq;
 using NHibernate.Cfg.ConfigurationSchema;
 using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
-using Teleopti.Interfaces.MessageBroker.Client;
 using Teleopti.Interfaces.MessageBroker.Client.Composite;
-using Teleopti.Interfaces.MessageBroker.Events;
 using Teleopti.Messaging.Exceptions;
 using System.Xml.XPath;
 
