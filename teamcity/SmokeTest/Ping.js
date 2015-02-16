@@ -27,4 +27,4 @@ var ping = function(){
 };
 
 // cloud deploy and jenkins auto deploy cannot be finished within 5 minutes
-setTimeout(ping, 300000);
+setTimeout(ping, process.env.WaitingTime);
