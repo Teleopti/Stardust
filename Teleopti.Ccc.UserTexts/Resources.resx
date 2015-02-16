@@ -12221,27 +12221,27 @@ Reduce the complexity to use these shifts.</value>
     <comment>Label for badge setting in admin client</comment>
   </data>
   <data name="AnsweredCallsBronzeThresholdShouldLessThanSilverThreshold" xml:space="preserve">
-    <value>Bronze badge threshold of Answered Calls should less than silver badge threshold.</value>
+    <value>Bronze badge threshold for Answered Calls must be lower than the silver badge threshold.</value>
     <comment>Error message for badge setting in admin client</comment>
   </data>
   <data name="AnsweredCallsSilverThresholdShouldLessThanGoldThreshold" xml:space="preserve">
-    <value>Silver badge threshold of Answered Calls should less than gold badge threshold.</value>
+    <value>Silver badge threshold for Answered Calls must be lower than the gold badge threshold.</value>
     <comment>Error message for badge setting in admin client</comment>
   </data>
   <data name="AHTBronzeThresholdShouldLessThanSilverThreshold" xml:space="preserve">
-    <value>Bronze badge threshold of AHT should less than silver badge threshold.</value>
+    <value>Bronze badge threshold for AHT must be lower than the silver badge threshold.</value>
     <comment>Error message for badge setting in admin client</comment>
   </data>
   <data name="AHTSilverThresholdShouldLessThanGoldThreshold" xml:space="preserve">
-    <value>Silver badge threshold of AHT should less than gold badge threshold.</value>
+    <value>Silver badge threshold for AHT must be lower than the gold badge threshold.</value>
     <comment>Error message for badge setting in admin client</comment>
   </data>
   <data name="AdherenceBronzeThresholdShouldGreaterThanSilverThreshold" xml:space="preserve">
-    <value>Bronze badge threshold of Adherence should greater than silver badge threshold.</value>
+    <value>Bronze badge threshold for Adherence must be higher than the silver badge threshold.</value>
     <comment>Error message for badge setting in admin client</comment>
   </data>
   <data name="AdherenceSilverThresholdShouldGreaterThanGoldThreshold" xml:space="preserve">
-    <value>Silver badge threshold of Adherence should greater than gold badge threshold.</value>
+    <value>Silver badge threshold for Adherence mest be higher than the gold badge threshold.</value>
     <comment>Error message for badge setting in admin client</comment>
   </data>
   <data name="AddingActivityFor" xml:space="preserve">
@@ -12756,7 +12756,7 @@ Reduce the complexity to use these shifts.</value>
     <comment>used when the tennant in the database has no datasource</comment>
   </data>
   <data name="SetSettingTargets" xml:space="preserve">
-    <value>Set Setting Targets</value>
+    <value>Set Gamification Targets</value>
     <comment>Apply setting to team in Gamification option</comment>
   </data>
   <data name="SelectSettingForTeams" xml:space="preserve">
@@ -12774,10 +12774,10 @@ Reduce the complexity to use these shifts.</value>
     <value>Start date must be greater than today</value>
   </data>
   <data name="AnyLocationShouldBeSelected" xml:space="preserve">
-    <value>Any location should be selected</value>
+    <value>A location must be selected</value>
   </data>
   <data name="AnyTeamShouldBeSelected" xml:space="preserve">
-    <value>Any team should be selected</value>
+    <value>A team must be selected</value>
   </data>
   <data name="YouHaveBeenAllocatedSeat" xml:space="preserve">
     <value>On {0} you have been allocated seat {1}.</value>
@@ -12788,10 +12788,10 @@ Reduce the complexity to use these shifts.</value>
     <comment>Used in Seat Planner when an agent was not allocated a seat for a given day</comment>
   </data>
   <data name="StartDateMustBeEndDateOrSmaller" xml:space="preserve">
-    <value>Start date must be end date or smaller</value>
+    <value>Start date must be end date or earlier</value>
   </data>
   <data name="StartDateMustBeTodayOrGreater" xml:space="preserve">
-    <value>Start date must be today or greater</value>
+    <value>Start date must be today or later</value>
   </data>
   <data name="AnonymousBulletinBoardTrading" xml:space="preserve">
     <value>Anonymous Bulletin Board Trading</value>
@@ -12836,7 +12836,7 @@ Reduce the complexity to use these shifts.</value>
     <comment>Message in remove absence form of MyTeam</comment>
   </data>
   <data name="AnnouncementTakenByOthers" xml:space="preserve">
-    <value>This shift has been taken by others, please take another choice in shift trade board.</value>
+    <value>This shift has been taken by someone else, please choose another shift on the shift trade board.</value>
     <comment>use in Mytime, when lock trades opens, an announcement has been taken by an agent, when another agent want to take it, this alert will show</comment>
   </data>
 </root>

@@ -11602,13 +11602,13 @@ Minska komplexiteten för att kunna använda dessa skift.</value>
     <value>Alla team</value>
   </data>
   <data name="SetBadgeThresholdForAnsweredCalls" xml:space="preserve">
-    <value>Tröskelvärde för besvarade samtal:</value>
+    <value>Tröskelvärde:</value>
   </data>
   <data name="SetBadgeThresholdForAHT" xml:space="preserve">
-    <value>Tröskelvärde för genomsnittlig behandlingstid (HH:mm:ss):</value>
+    <value>Tröskelvärde (HH:mm:ss):</value>
   </data>
   <data name="SetBadgeThresholdForAdherence" xml:space="preserve">
-    <value>Tröskelvärde för schemauppföljning (%):</value>
+    <value>Tröskelvärde (%):</value>
   </data>
   <data name="AddingActivityFor" xml:space="preserve">
     <value>Lägger till aktivitet för</value>
@@ -12016,5 +12016,95 @@ Minska komplexiteten för att kunna använda dessa skift.</value>
   </data>
   <data name="Setting" xml:space="preserve">
     <value>Inställning</value>
+  </data>
+  <data name="CalculateBadgeWithRank" xml:space="preserve">
+    <value>Beräkna medaljer med rankning</value>
+  </data>
+  <data name="UseBadgeForAnsweredCalls" xml:space="preserve">
+    <value>Använd medalj för besvarade samtal</value>
+  </data>
+  <data name="UseBadgeforAHT" xml:space="preserve">
+    <value>Använd medalj för genomsnittling behandlingstid</value>
+  </data>
+  <data name="UseBadgeforAdherence" xml:space="preserve">
+    <value>Använd medalj för följsamhet</value>
+  </data>
+  <data name="SetBadgeBronzeThresholdForAnsweredCalls" xml:space="preserve">
+    <value>Tröskelvärde för brons:</value>
+  </data>
+  <data name="SetBadgeSilverThresholdForAnsweredCalls" xml:space="preserve">
+    <value>Tröskelvärde för silver:</value>
+  </data>
+  <data name="SetBadgeGoldThresholdForAnsweredCalls" xml:space="preserve">
+    <value>Tröskelvärde för guld:</value>
+  </data>
+  <data name="SetBadgeBronzeThresholdForAHT" xml:space="preserve">
+    <value>Tröskelvärde för brons (HH:mm:ss):</value>
+  </data>
+  <data name="SetBadgeSilverThresholdForAHT" xml:space="preserve">
+    <value>Tröskelvärde för silver (HH:mm:ss):</value>
+  </data>
+  <data name="SetBadgeGoldThresholdForAHT" xml:space="preserve">
+    <value>Tröskelvärde för guld (HH:mm:ss):</value>
+  </data>
+  <data name="SetBadgeBronzeThresholdForAdherence" xml:space="preserve">
+    <value>Tröskelvärde för brons (%):</value>
+  </data>
+  <data name="SetBadgeSilverThresholdForAdherence" xml:space="preserve">
+    <value>Tröskelvärde för silver (%):</value>
+  </data>
+  <data name="SetBadgeGoldThresholdForAdherence" xml:space="preserve">
+    <value>Tröskelvärde för guld (%):</value>
+  </data>
+  <data name="AnsweredCallsBronzeThresholdShouldLessThanSilverThreshold" xml:space="preserve">
+    <value>Bronsmedaljtröskelvärdet för besvarade samtal måste vara lägre än silvermedaljtröskelvärdet.</value>
+  </data>
+  <data name="AnsweredCallsSilverThresholdShouldLessThanGoldThreshold" xml:space="preserve">
+    <value>Silvermedaljtröskelvärdet för besvarade samtal måste vara lägre än guldmedaljtröskelvärdet.</value>
+  </data>
+  <data name="SetSettingTargets" xml:space="preserve">
+    <value>Sätt målvärden för medaljer</value>
+  </data>
+  <data name="StartDateMustBeGreaterThanToday" xml:space="preserve">
+    <value>Startdatum måste vara senare än idag</value>
+  </data>
+  <data name="StartDateMustBeEndDateOrSmaller" xml:space="preserve">
+    <value>Startdatum måste vara samma som slutdatum eller tidigare</value>
+  </data>
+  <data name="StartDateMustBeTodayOrGreater" xml:space="preserve">
+    <value>Startdatum måste vara idag eller senare</value>
+  </data>
+  <data name="AnonymousBulletinBoardTrading" xml:space="preserve">
+    <value>Anonyma skiftbyten på anslagstavlan</value>
+  </data>
+  <data name="Miscellaneous" xml:space="preserve">
+    <value>Övrigt</value>
+  </data>
+  <data name="SearchHintForName" xml:space="preserve">
+    <value>Sök på namn</value>
+  </data>
+  <data name="SureToMakeShiftTrade" xml:space="preserve">
+    <value>Är du säker på att du vill genomföra det här skiftbytet?</value>
+  </data>
+  <data name="Bottom" xml:space="preserve">
+    <value>Längst ned</value>
+  </data>
+  <data name="ManageSenioritySettings" xml:space="preserve">
+    <value>Hantera erfarenhetsintällningar</value>
+  </data>
+  <data name="RankShiftCategory" xml:space="preserve">
+    <value>Ranka skiftkategorierna från bäst till sämst</value>
+  </data>
+  <data name="RankWorkingDays" xml:space="preserve">
+    <value>Ranka arbetsdagarna från bäst till sämst</value>
+  </data>
+  <data name="Top" xml:space="preserve">
+    <value>Längst upp</value>
+  </data>
+  <data name="NoAbsenceToRemoveInCurrentShift" xml:space="preserve">
+    <value>Ingen frånvaro att ta bort i nuvarande skift</value>
+  </data>
+  <data name="AnnouncementTakenByOthers" xml:space="preserve">
+    <value>Skiftet har tagits av någon annan, var god välj ett annat skift på anslagstavlan.</value>
   </data>
 </root>

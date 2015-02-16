@@ -4917,11 +4917,8 @@
     <value>أسبوع</value>
     <comment>أسبوع</comment>
   </data>
-  <data name="WeekWithNumber" xml:space="preserve">
-    <value>أسبوع {0}</value>
-  </data>
   <data name="WeekAbbreviationDot" xml:space="preserve">
-    <value>أ. {0} {1}</value>
+    <value>أ.</value>
     <comment>اختصار كلمة أسبوع</comment>
   </data>
   <data name="WeekDay" xml:space="preserve">
@@ -10683,5 +10680,250 @@
   </data>
   <data name="AgentDescription" xml:space="preserve">
     <value>وصف الممثل</value>
+  </data>
+  <data name="ApplyProductActivationKey" xml:space="preserve">
+    <value>قم بتطبيق مفتاح التنشيط للمنتج</value>
+  </data>
+  <data name="ApplyProductActivationKeyInstructions" xml:space="preserve">
+    <value>تعليمات: قم بشراء رخصة (عقد معلومات هنا على موقع www.teleopti.com) استلم ملف مفتاح تنشيط المنتج ( على سبيل المثال عن طريق البريد الاليكترونى)قم بحفظ مفتاح التنشيط على الديسك الصلب. إذا كان لديك اى عمل داخل البرنامج قم بحفظه اولا قبل استخدام مفتاح تنشيط المنتج</value>
+  </data>
+  <data name="CannotReadProductActivationKeyFile" xml:space="preserve">
+    <value>مفتاح تنشيط المنتج "}0{"لا يمكن تشغيله : تفاصيل الخطأ }1{</value>
+  </data>
+  <data name="DatabaseProblem" xml:space="preserve">
+    <value>هناك مشكلة حدثت عند محاولة حفظ مفتاح تنشيط المنتج فى قاعدة البيانات تفاصيل المشكلة: }0{</value>
+  </data>
+  <data name="EnterValidFile" xml:space="preserve">
+    <value>ادخل اسم ملف صحيح متضمنا مسار صحيح</value>
+  </data>
+  <data name="ProductActivationKeyApplicationSuccess" xml:space="preserve">
+    <value>تم تطبيق مفتاح تنشيط المنتج بنجاح. مبروك! أنت الآن مستخدم مصرح به لاستخدام حلول إدارة القوى العاملة. هذا التطبيق سيتم اغلاقه الآن
+ملحوظة مهمة: للحصول على كافة الخدمات وتطبيقات الويب وكذلك للحصول على تصريح دخول لكافة خيارات الترخيص، فضلا اطلب من مهندس الدعم الفنى إعادة تشغيل برنامج Teleopti من مجلد Teleopti من قائمة ابدا بالخادم </value>
+  </data>
+  <data name="ProductActivationKeyHasExpiredPleaseApplyANewOne" xml:space="preserve">
+    <value>مفتاح التنشيط الخاص بك انتهت صلاحيته. فضلا اطلب مفتاح جديد</value>
+  </data>
+  <data name="ProductActivationKeyIsInvalidPerhapsForgedPleaseApplyANewOne" xml:space="preserve">
+    <value>مفتاح التنشيط الذى قمت باستخدامه غير صحيح، من الممكن ان يكون قد تم تعديله، فضلا قم بطلب مفتاح جديد</value>
+  </data>
+  <data name="NewProductActivationKeyAlreadyExpired" xml:space="preserve">
+    <value>مفتاح التنشيط {0}الذى تقوم باستخدامه قديم ، لقد انتهت صلاحيته بالفعل</value>
+  </data>
+  <data name="NewProductActivationKeyCorrupted" xml:space="preserve">
+    <value>مفتاح التنشيط {0} غير صحيح من المحتمل ان يكون قد تم تزييفه</value>
+  </data>
+  <data name="NewProductActivationKeyNotValidFile" xml:space="preserve">
+    <value>مفتاح التنشيط {0} غير متوفر بصيغة {xml} تفاصيل الخطأ {1}</value>
+  </data>
+  <data name="NoProductActivationKeyPleaseApplyANewOne" xml:space="preserve">
+    <value>لم تقم بإدخال مفتاح التنشيط بعد، فضلا قم بذلك</value>
+  </data>
+  <data name="UploadingNewProductActivationKeyFailed" xml:space="preserve">
+    <value>مفتاح التنشيط الخاص بالبرنامج خاطئ</value>
+  </data>
+  <data name="YourProductActivationKeyWillExpireDoNotForgetToRenewItInTime" xml:space="preserve">
+    <value>مفتاح التنشيط الخاص بك صالح فقط حتى {0} فضلا لا تنس تجديده فى الميعاد</value>
+  </data>
+  <data name="OpenProductActivationKeyFile" xml:space="preserve">
+    <value>اختر ملف مفتاح التنشيط</value>
+  </data>
+  <data name="ProductActivationKey" xml:space="preserve">
+    <value>هذا النظام مرخص {0} وفقا للشروط واللوائح الخاصة برخصة الاتفاقية، مفتاح التنشيط ستنتهى صلاحيته {1}
+مفتاح التنشيط يغطى بحد أقصى {2} ممثلين نشطاء
+خطة مفتاح التنشيط {3} هذه الصفات تم تنشيطها {4}</value>
+  </data>
+  <data name="YouHaveAlmostTooManyActiveAgents" xml:space="preserve">
+    <value>لديك {0}  ممثلين نشطاء ولكنك مرخص للحصول على {1}  فقط. فضلا قم بترقية مفتاح التنشيط</value>
+  </data>
+  <data name="YouHaveTooManyActiveAgents" xml:space="preserve">
+    <value>لديك {0}  ممثلين نشطاء ولكنك مرخص للحصول على {1}  فقط. يجب أن تقوم بترقية مفتاح التنشيط </value>
+  </data>
+  <data name="NewProductActivationKeyDoesNotCoverEnoughActiveAgents" xml:space="preserve">
+    <value>مفتاح التنشيط يغطى فقط {0} من الممثلين النشطاء ولكنك تملك {1}. يجب أن تحصل على مفتاح تنشيط يغطى عدد كاف من الممثلين النشطاء </value>
+  </data>
+  <data name="TeleoptiProductActivationKeyException" xml:space="preserve">
+    <value>الاستثناء الخاص بمفتاح التنشيط الخاص ب Teleopti</value>
+  </data>
+  <data name="NewProductActivationKeyDoesNotCoverEnoughSeats" xml:space="preserve">
+    <value>مفتاح التنشيط يغطى فقط {0} مقاعد، عليك الحصول على مفتاح تنشيط يسمح بتغطية عدد كاف من المقاعد</value>
+  </data>
+  <data name="SeatProductActivationKey" xml:space="preserve">
+    <value>هذا النظام مرخص {0} وفقا للشروط واللوائح الخاصة برخصة الاتفاقية، مفتاح التنشيط ستنتهى صلاحيته {1}
+مفتاح التنشيط يغطى بحد أقصى {2} مقاعد. 
+خطة مفتاح التنشيط {3} هذه الصفات تم تنشيطها {4}</value>
+  </data>
+  <data name="YouHaveAlmostTooManySeats" xml:space="preserve">
+    <value>لقد وصلت إلى الحد المسموح به من المقاعد المرخصة. فضلا قم بترقية مفتاح التنشيط فى القريب.</value>
+  </data>
+  <data name="YouHaveTooManySeats" xml:space="preserve">
+    <value>انت تستخدم عدد كبير للغاية من المقاعد أنت مرخص فقط لـ {0}. عليك أن تقوم بترقية مفتاح التنشيط الخاص بالمنتج قبل أن تستمر فى عملك.</value>
+  </data>
+  <data name="TooManyAgentsIsUsedWarning" xml:space="preserve">
+    <value>انت تستخدم عدد أكبر من الممثلين {0} أكثر مما تسمح به رخصتك {1} لديك الآن {2} يوم لتخفيض عدد الممثلين، أو قم بطلب مفتاح تنشيط يغطى عدد أكبر من الممثلين. </value>
+  </data>
+  <data name="SetWhichColumnToGetSmsPhoneNumberFromColon" xml:space="preserve">
+    <value>قم بضبط صف للحصول على رسالة نصية من رقم هاتف:</value>
+  </data>
+  <data name="ViewBadgeLeaderBoard" xml:space="preserve">
+    <value>اعرض البادج </value>
+  </data>
+  <data name="Multiple" xml:space="preserve">
+    <value>متعدد</value>
+  </data>
+  <data name="Single" xml:space="preserve">
+    <value>فردى </value>
+  </data>
+  <data name="ResetBadges" xml:space="preserve">
+    <value>إعادة ضبط البادج </value>
+  </data>
+  <data name="ResetBadgesConfirm" xml:space="preserve">
+    <value>إذا قمت بالضغط على OKفإنه سيتم حذف كل البادجات الخاص بكل الممثلين، البادجات سيتم حذفها ولا يمكن استعادتها بعد ذلك هل ترغب فى الاستمرار؟</value>
+  </data>
+  <data name="ShiftBackToLegal" xml:space="preserve">
+    <value>تعديل الورديات للتوافق مع حقيبة الوردية</value>
+  </data>
+  <data name="BadgeTypeEnabled" xml:space="preserve">
+    <value>استخدم</value>
+  </data>
+  <data name="CouldNotFindAnyValidShiftInShiftBag" xml:space="preserve">
+    <value>لا يمكن إيجاد أى وردية صالحة فى حقيبة الورديات</value>
+  </data>
+  <data name="ResetBadgesFailed" xml:space="preserve">
+    <value>فشل فى إعادة ضبط البادجات ، فضلا حاول مرة أخرى!</value>
+  </data>
+  <data name="CannotBeBeforeTime" xml:space="preserve">
+    <value>{0} لا يمكن أن تكون مبكرة عن {1} . </value>
+  </data>
+  <data name="FullDayAbsenceReqEndTime" xml:space="preserve">
+    <value>نهاية الوقت</value>
+  </data>
+  <data name="FullDayAbsenceReqStartTime" xml:space="preserve">
+    <value>بداية الوقت</value>
+  </data>
+  <data name="FullDayAbsenceSettings" xml:space="preserve">
+    <value>إعدادات غياب اليوم بالكامل</value>
+  </data>
+  <data name="UnSupportedOptimizationBlockAndTimeBetweendays" xml:space="preserve">
+    <value>تحسين خطوة " الوقت بين الايام" لم تنفذ حينما تم اختيار الوردية</value>
+  </data>
+  <data name="EmailSettings" xml:space="preserve">
+    <value>إعدادات البريد</value>
+  </data>
+  <data name="ManageNotificationSettings" xml:space="preserve">
+    <value>إدارة إعدادات الإخطارات</value>
+  </data>
+  <data name="NotificationSettings" xml:space="preserve">
+    <value>إعدادات الإخطارات</value>
+  </data>
+  <data name="NotificationType" xml:space="preserve">
+    <value>نوع الإخطارات</value>
+  </data>
+  <data name="SendEmailFromColon" xml:space="preserve">
+    <value>ارسل بريد من:</value>
+  </data>
+  <data name="SMS" xml:space="preserve">
+    <value>SMS</value>
+  </data>
+  <data name="TestSendingToColon" xml:space="preserve">
+    <value>ارسال الاختبار إلى: </value>
+  </data>
+  <data name="IntraIntervalIssue" xml:space="preserve">
+    <value>مسألة توازن ما بين المسافات الزمنية </value>
+  </data>
+  <data name="FilterOnIntraIntervals" xml:space="preserve">
+    <value>تنقيح ما بين المسافات الزمنية </value>
+  </data>
+  <data name="BadgeLeaderBoardReport" xml:space="preserve">
+    <value>لوحة القائد</value>
+  </data>
+  <data name="NeedEnableAtLeastOneBadgeType" xml:space="preserve">
+    <value>فضلا قم بتشغيل على الاقل بادج واحد</value>
+  </data>
+  <data name="Rank" xml:space="preserve">
+    <value>ترتيب</value>
+  </data>
+  <data name="CannotAddPreferenceSelectedItemNotAvailable" xml:space="preserve">
+    <value>قائمة التفضيلات لا يمكن إضافتها لأن الموضوع الذى تم اختياره لم يعد متاحا بعد الآن.</value>
+  </data>
+  <data name="IntraIntervalOptimization" xml:space="preserve">
+    <value>توازن ما بين المسافات الزمنية</value>
+  </data>
+  <data name="CannotGetPreferenceSetting" xml:space="preserve">
+    <value>لا يمكن الحصول على اعدادات قائمة التفضيلات</value>
+  </data>
+  <data name="LowestIntraIntervalBalance" xml:space="preserve">
+    <value>أقل توزان بين المسافات الزمنية</value>
+  </data>
+  <data name="AbsenceReport" xml:space="preserve">
+    <value>عملية إعداد تقارير الغياب</value>
+  </data>
+  <data name="AbsencesAvailableForReport" xml:space="preserve">
+    <value>الغياب المسموح به لتقارير الغياب </value>
+  </data>
+  <data name="AbsenceCanNotBeReported" xml:space="preserve">
+    <value>الغياب لا يمكن رصده فى تقرير</value>
+  </data>
+  <data name="ShiftTradeBulletinBoard" xml:space="preserve">
+    <value>لوحة نقاط تبادل الورديات </value>
+  </data>
+  <data name="Publish" xml:space="preserve">
+    <value>انشر...</value>
+  </data>
+  <data name="PublishSchedulesForColon" xml:space="preserve">
+    <value>انشر الجداول لـ:</value>
+  </data>
+  <data name="PublisSchedulesToDateColon" xml:space="preserve">
+    <value>انشر الجداول إلى:</value>
+  </data>
+  <data name="PublishSchedule" xml:space="preserve">
+    <value>انشر الجداول</value>
+  </data>
+  <data name="StartTimeShouldBeEarlierThanEndTime" xml:space="preserve">
+    <value>بداية الوقت يجب أن تكون قبل نهاية الوقت</value>
+  </data>
+  <data name="ReportAbsenceFor" xml:space="preserve">
+    <value>تقرير الغياب لـ</value>
+  </data>
+  <data name="NoAgentsAvailableForBulletinBoard" xml:space="preserve">
+    <value>لا يوجد ممثلين متاحين للوحة النقاط</value>
+  </data>
+  <data name="FilterOnOpenHours" xml:space="preserve">
+    <value>تنقيح فى الساعات المتاحة</value>
+  </data>
+  <data name="AbsenceBackToWork" xml:space="preserve">
+    <value>عودة للعمل </value>
+  </data>
+  <data name="ApplyTo" xml:space="preserve">
+    <value>تطبيق لـ </value>
+  </data>
+  <data name="Planned" xml:space="preserve">
+    <value>مخطط </value>
+  </data>
+  <data name="UpdatingAbsence" xml:space="preserve">
+    <value>تحديث الغياب لـ</value>
+  </data>
+  <data name="BackToWorkCannotBeGreaterThanAbsenceEnd" xml:space="preserve">
+    <value>وقت العودة للعمل لا يمكن أن يكون أكبر من وقت نهاية الغياب </value>
+  </data>
+  <data name="BackToWorkTextPrompt" xml:space="preserve">
+    <value>عودة من غياب مبكر فى:</value>
+  </data>
+  <data name="AnnounceShift" xml:space="preserve">
+    <value>إعلان وردية </value>
+  </data>
+  <data name="ShiftExchangeOfferValidTo" xml:space="preserve">
+    <value>عرض تبادل وردية متاح حتى </value>
+  </data>
+  <data name="AnnounceShiftConditions" xml:space="preserve">
+    <value>أرغب فى وردية تطابق الشروط التالية </value>
+  </data>
+  <data name="AnnounceShiftDateOutPeriod" xml:space="preserve">
+    <value>التاريخ الذى ترغب فى تبديله يجب أن يكون فى فترة متاحة!</value>
+  </data>
+  <data name="AnnounceShiftValidToNotLegal" xml:space="preserve">
+    <value>الوقت المسموح يجب أن يكون ما بين اليوم واليوم الذى يسبق يوم تبديل الورديات </value>
+  </data>
+  <data name="PublishAnnouncementNoAbsence" xml:space="preserve">
+    <value>لا يمكن نشر الإعلان فى يوم الغياب!</value>
   </data>
 </root>
