@@ -28,7 +28,7 @@ log('navigate to url ' + process.env.UrlToTest);
 client.url(process.env.UrlToTest)
 	.waitForExist('#Username-input', 60000, false, function(err, res, response) {
 		if (err || !res) {
-			closeAndThrow('failed to navigate to sign in page.');
+			closeAndThrow('failed to navigate to sign in page. ' + err);
 		}
 	});
 log('try to sign in');
@@ -37,7 +37,7 @@ client.setValue('#Username-input', 'demo')
 	.click('#Signin-button')
 	.waitForExist('.user-name', 60000, false, function(err, res, response) {
 		if (err || !res) {
-			closeAndThrow('failed to sign in.');
+			closeAndThrow('failed to sign in. ' + err);
 		}
 		log('sign in succeeded');
 	});
@@ -45,7 +45,7 @@ log('navigate to health check');
 client.url(process.env.UrlToTest + '/HealthCheck')
 	.waitForExist(".services li span", 600000, false, function(err, res, response) {
 		if (err || !res) {
-			closeAndThrow('service bus isnot up and running after trying 10 minutes.');
+			closeAndThrow('service bus isnot up and running after trying 10 minutes. ' + err);
 		}
 	});
 log('check service bus and broker');
@@ -55,14 +55,14 @@ client.pause(5000);
 client.refresh()
 	.waitForExist(".services li span", 600000, false, function(err, res, response) {
 		if (err || !res) {
-			closeAndThrow('service bus isnot up and running after trying 10 minutes.');
+			closeAndThrow('service bus isnot up and running after trying 10 minutes. ' + err);
 		}
 	});
 client.pause(5000);
 client.click('#Start-Check')
 	.waitForExist('#Bus-Results', 600000, false, function(err, res, response) {
 		if (err || !res) {
-			closeAndThrow('service bus doesnot work well after trying 10 minutes.');
+			closeAndThrow('service bus doesnot work well after trying 10 minutes. ' + err);
 		}
 		log('service bus and broker work well');
 	});
