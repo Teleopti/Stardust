@@ -28,7 +28,6 @@ namespace Teleopti.Analytics.Etl.TransformerInfrastructure
 		private ILogOnOff _logOnOff;
 		private IRepositoryFactory _repositoryFactory;
 		private List<ITenantName> _tenantNames;
-		//temp
 		private List<IDataSource> _dataSources;
 
 		private LogOnHelper() { }
@@ -63,7 +62,7 @@ namespace Teleopti.Analytics.Etl.TransformerInfrastructure
 			{
 				if (_tenantNames == null || _tenantNames.Count == 0)
 				{
-					throw new DataSourceException("No datasources found");
+					throw new DataSourceException("No Tenants found");
 				}
 
 				return _tenantNames;
@@ -102,21 +101,18 @@ namespace Teleopti.Analytics.Etl.TransformerInfrastructure
 			_repositoryFactory = new RepositoryFactory();
 			_logonService =
 				new LogOnService(_logOnOff);
-			_tenantNames = TenantNameCreator.TenantNames(_nhibConfPath);
-			//temp for now until ApplicationData works
-			_dataSources = TenantNameCreator.DataSources(_nhibConfPath, _repositoryFactory, dataSourcesFactory);
+			_tenantNames = TenantCreator.TenantNames(_nhibConfPath);
+			_dataSources = TenantCreator.DataSources(_nhibConfPath, _repositoryFactory, dataSourcesFactory);
 		}
 
 
 		public bool SelectDataSourceContainer(string dataSourceName)
 		{
 			_buList = null;
-			//var dataSource = StateHolderReader.Instance.StateReader.ApplicationScopeData.DataSource(dataSourceName);
-			//also temp
 			var dataSource = _dataSources.FirstOrDefault(x => x.DataSourceName.Equals(dataSourceName));
 			if (dataSource == null)
 			{
-				Trace.WriteLine(string.Format("No datasource found with name {0}", dataSourceName));
+				Trace.WriteLine(string.Format("No tenant found with name {0}", dataSourceName));
 				_choosenDb = null;
 			}
 			else

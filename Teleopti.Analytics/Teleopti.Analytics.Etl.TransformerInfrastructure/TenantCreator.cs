@@ -9,7 +9,7 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Analytics.Etl.TransformerInfrastructure
 {
-	static class TenantNameCreator
+	static class TenantCreator
 	{
 		public static List<ITenantName> TenantNames(string xmlDirectory)
 		{
@@ -30,7 +30,6 @@ namespace Teleopti.Analytics.Etl.TransformerInfrastructure
 			return dataSources;
 		}
 
-		//temp until ApplicationData.DataSource(tenant) works
 		public static List<IDataSource> DataSources(string xmlDirectory, IRepositoryFactory repositoryFactory, DataSourcesFactory dataSourcesFactory)
 		{
 			var dataSources = new List<IDataSource>();

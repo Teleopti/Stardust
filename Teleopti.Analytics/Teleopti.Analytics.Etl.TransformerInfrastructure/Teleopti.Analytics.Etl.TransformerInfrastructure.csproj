@@ -115,7 +115,7 @@
     <Compile Include="..\..\GlobalAssemblyInfo.cs">
       <Link>GlobalAssemblyInfo.cs</Link>
     </Compile>
-    <Compile Include="TenantNameCreator.cs" />
+    <Compile Include="TenantCreator.cs" />
     <Compile Include="DataTableDefinition\StateGroupInfrastructure.cs" />
     <Compile Include="DataTableDefinition\HourlyAvailabilityInfrastructure.cs" />
     <Compile Include="DataTableDefinition\ScheduleChangedInfrastructure.cs" />
