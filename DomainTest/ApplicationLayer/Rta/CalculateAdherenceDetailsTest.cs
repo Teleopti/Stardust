@@ -309,7 +309,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta
 				Date = "2014-11-20".Utc(),
 				Model = new AdherenceDetailsModel
 				{
-					HasShiftEnded = true,
+					ShiftEndTime = "2014-11-20 9:00".Utc(),
 					IsInAdherence = false,
 					Details = new[]
 					{
@@ -413,7 +413,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta
 				Model = new AdherenceDetailsModel
 				{
 					ShiftEndTime = "2014-11-20 9:00".Utc(),
-					HasShiftEnded = true,
 					ActualEndTime = "2014-11-20 9:00".Utc(),
 					IsInAdherence = false,
 					Details = new[]

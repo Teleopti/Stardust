@@ -175,7 +175,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta
 		{
 			model.Model = new AdherenceDetailsModel
 			{
-				HasShiftEnded = model.State.ShiftEndTime.HasValue,
 				ShiftEndTime = model.State.ShiftEndTime,
 				ActualEndTime = calculateActualEndTimeForShift(model),
 				IsInAdherence = false,

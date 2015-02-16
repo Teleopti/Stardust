@@ -1,5 +1,4 @@
-﻿using Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.Seniority;
-using Teleopti.Interfaces.Domain;
+﻿using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.Infrastructure.Repositories
