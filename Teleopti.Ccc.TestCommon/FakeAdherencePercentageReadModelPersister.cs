@@ -29,30 +29,9 @@ namespace Teleopti.Ccc.TestCommon
 			PersistedModels.Add(model);
 		}
 
-		public AdherencePercentageReadModel Get(DateTime dateTime, Guid personId)
-		{
-			if (!PersistedModels.Any())
-				return null;
-			var models = PersistedModels.Where(x => dateTime.Date >= x.BelongsToDate
-				&& dateTime.Date <= x.BelongsToDate.AddDays(1)
-				&& personId.Equals(x.PersonId))
-				.ToList();
-			foreach (var model in models.OrderBy(x => x.ShiftEndTime))
-			{
-				if (dateTime <= model.ShiftEndTime)
-					return model;
-				if (model.BelongsToDate.Date.Equals(dateTime.Date))
-					return model;
-			}
-			return null;
-		}
-
 		public AdherencePercentageReadModel Get(DateOnly date, Guid personId)
 		{
-			if (PersistedModel == null) return null;
-			if (PersistedModel.BelongsToDate == date && PersistedModel.PersonId.Equals(personId))
-				return PersistedModel;
-			return null;
+			return PersistedModels == null ? null : PersistedModels.FirstOrDefault(x => x.BelongsToDate == date && x.PersonId.Equals(personId));
 		}
 
 		public bool HasData()

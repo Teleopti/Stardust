@@ -1,5 +1,7 @@
-﻿using Teleopti.Ccc.Domain.ApplicationLayer.Rta;
+﻿using System;
+using Teleopti.Ccc.Domain.ApplicationLayer.Rta;
 using Teleopti.Ccc.Domain.Rta;
+using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Web.Areas.Rta.Core.Server
 {
@@ -10,12 +12,14 @@ namespace Teleopti.Ccc.Web.Areas.Rta.Core.Server
 		private readonly IShiftEventPublisher _shiftEventPublisher;
 		private readonly IActivityEventPublisher _activityEventPublisher;
 		private readonly IStateEventPublisher _stateEventPublisher;
+		private readonly INow _now;
 
 		public RtaProcessor(IDatabaseReader databaseReader,
 			IAlarmFinder alarmFinder,
 			IShiftEventPublisher shiftEventPublisher,
 			IActivityEventPublisher activityEventPublisher,
-			IStateEventPublisher stateEventPublisher
+			IStateEventPublisher stateEventPublisher,
+			INow now
 			)
 		{
 			_databaseReader = databaseReader;
@@ -23,6 +27,7 @@ namespace Teleopti.Ccc.Web.Areas.Rta.Core.Server
 			_shiftEventPublisher = shiftEventPublisher;
 			_activityEventPublisher = activityEventPublisher;
 			_stateEventPublisher = stateEventPublisher;
+			_now = now;
 		}
 
 		public void Process(
@@ -37,7 +42,12 @@ namespace Teleopti.Ccc.Web.Areas.Rta.Core.Server
 			var scheduleInfo = new ScheduleInfo(_databaseReader, context.Person.PersonId, context.CurrentTime);
 			var agentStateInfo = new AgentStateInfo(() => context.PreviousState(scheduleInfo), () => context.CurrentState(scheduleInfo));
 			var adherenceInfo = new AdherenceInfo(input, person, agentStateInfo, scheduleInfo, _alarmFinder);
-			var info = new StateInfo(person, agentStateInfo, scheduleInfo, adherenceInfo);
+			var agentDateInfo = new AgentDateInfo
+			{
+				Date = new DateOnly(TimeZoneInfo.ConvertTimeFromUtc(_now.UtcDateTime(),
+					_databaseReader.GetTimeZone(person.PersonId)))
+			};
+			var info = new StateInfo(person, agentStateInfo, scheduleInfo, adherenceInfo, agentDateInfo);
 			
 			context.AgentStateReadModelUpdater.Update(info);
 			context.MessageSender.Send(info);

@@ -224,6 +224,11 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta
 				select s;
 		}
 
+		public TimeZoneInfo GetTimeZone(Guid personId)
+		{
+			throw new NotImplementedException();
+		}
+
 		public ConcurrentDictionary<string, IEnumerable<ResolvedPerson>> ExternalLogOns()
 		{
 			return new ConcurrentDictionary<string, IEnumerable<ResolvedPerson>>(_externalLogOns);

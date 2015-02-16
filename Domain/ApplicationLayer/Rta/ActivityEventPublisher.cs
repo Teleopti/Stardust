@@ -1,5 +1,4 @@
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
-using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta
 {
@@ -32,8 +31,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta
 				Name = info.CurrentActivity.Name,
 				BusinessUnitId = info.BusinessUnitId,
 				InAdherence = info.AdherenceForPreviousStateAndCurrentActivity == Adherence.In,
-				ScheduleDate = info.IsScheduled ? new DateOnly(info.CurrentShiftStartTime) : new DateOnly(startTime),
-				ShiftEndTime = info.IsScheduled ? info.CurrentShiftEndTime : startTime
+				ScheduleDate = info.AgentDate
 			});
 
 			if (adherenceChanged)

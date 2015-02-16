@@ -7,7 +7,6 @@ using System.Data.SqlClient;
 using System.Globalization;
 using System.Linq;
 using log4net;
-using Teleopti.Ccc.Domain.ApplicationLayer.Rta;
 using Teleopti.Ccc.Domain.Rta;
 using Teleopti.Interfaces.Domain;
 
@@ -331,6 +330,27 @@ namespace Teleopti.Ccc.Infrastructure.Rta
 				reader.Close();
 			}
 			return dictionary;
+		}
+
+		public TimeZoneInfo GetTimeZone(Guid personId)
+		{
+			TimeZoneInfo timeZoneInfo = null;
+			var query = @"SELECT DefaultTimeZone FROM Person where Id='" + personId + "'";
+			using (var connection = _databaseConnectionFactory.CreateConnection(_databaseConnectionStringHandler.AppConnectionString()))
+			{
+				var command = connection.CreateCommand();
+				command.CommandType = CommandType.Text;
+				command.CommandText = query;
+				connection.Open();
+				var reader = command.ExecuteReader(CommandBehavior.CloseConnection);
+				while (reader.Read())
+				{
+					timeZoneInfo = TimeZoneInfo.FindSystemTimeZoneById(reader.GetString(reader.GetOrdinal("DefaultTimeZone")));
+					break;
+				}
+				reader.Close();
+			}
+			return timeZoneInfo;
 		}
 	}
 

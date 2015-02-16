@@ -40,19 +40,17 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 				"			TimeInAdherence = :TimeInAdherence," +
 				"			TimeOutOfAdherence = :TimeOutOfAdherence," +
 				"			ShiftHasEnded = :ShiftHasEnded, " +
-				"			ShiftEndTime = :ShiftEndTime, " +
 				"			[State] = :State " +
 				"WHERE " +
 				"	PersonId = :PersonId AND " +
 				"	BelongsToDate =:Date")
 				.SetGuid("PersonId", model.PersonId)
-				.SetDateTime("Date", model.BelongsToDate)
+				.SetDateTime("Date", model.Date)
 				.SetParameter("LastTimestamp", model.LastTimestamp)
 				.SetParameter("IsLastTimeInAdherence", model.IsLastTimeInAdherence)
 				.SetParameter("TimeInAdherence", model.TimeInAdherence)
 				.SetParameter("TimeOutOfAdherence", model.TimeOutOfAdherence)
 				.SetParameter("ShiftHasEnded", model.ShiftHasEnded)
-				.SetDateTime("ShiftEndTime", model.ShiftEndTime)
 				.SetParameter("State", _serializer.SerializeObject(model.State))
 				.ExecuteUpdate();
 		}
@@ -69,7 +67,6 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 				"	TimeInAdherence," +
 				"	TimeOutOfAdherence," +
 				"	ShiftHasEnded," +
-				"   ShiftEndTime," +
 				"	[State]" +
 				") VALUES (" +
 				"	:PersonId," +
@@ -79,17 +76,15 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 				"	:TimeInAdherence," +
 				"	:TimeOutOfAdherence," +
 				"	:ShiftHasEnded," +
-				"   :ShiftEndTime," +
 				"	:State" +
 				")")
 				.SetGuid("PersonId", model.PersonId)
-				.SetDateTime("BelongsToDate", model.BelongsToDate)
+				.SetDateTime("BelongsToDate", model.Date)
 				.SetParameter("LastTimestamp", model.LastTimestamp, NHibernateUtil.DateTime)
 				.SetParameter("IsLastTimeInAdherence", model.IsLastTimeInAdherence)
 				.SetTimeSpan("TimeInAdherence", model.TimeInAdherence)
 				.SetTimeSpan("TimeOutOfAdherence", model.TimeOutOfAdherence)
 				.SetParameter("ShiftHasEnded", model.ShiftHasEnded)
-				.SetDateTime("ShiftEndTime", model.ShiftEndTime)
 				.SetParameter("State", _serializer.SerializeObject(model.State))
 				.ExecuteUpdate();
 		}
@@ -105,14 +100,12 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 				"	TimeInAdherence," +
 				"	TimeOutOfAdherence," +
 				"	ShiftHasEnded, " +
-				"	ShiftEndTime, " +
 				"	[State] AS StateJson " +
 				"FROM ReadModel.AdherencePercentage WHERE" +
 				"	PersonId =:PersonId AND " +
 					"	BelongsToDate =:Date ")
 				.AddScalar("PersonId", NHibernateUtil.Guid)
 				.AddScalar("Date", NHibernateUtil.DateTime)
-				.AddScalar("ShiftEndTime", NHibernateUtil.DateTime)
 				.AddScalar("LastTimestamp", NHibernateUtil.DateTime)
 				.AddScalar("IsLastTimeInAdherence", NHibernateUtil.Boolean)
 				.AddScalar("TimeInAdherence", NHibernateUtil.TimeSpan)
@@ -127,62 +120,6 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 
 			if (result == null) return null;
 			if (result.StateJson == null) return result;
-
-			result.State = _deserializer.DeserializeObject<AdherencePercentageReadModelState[]>(result.StateJson);
-			result.StateJson = null;
-
-			return result;
-		}
-
-		public AdherencePercentageReadModel Get(DateTime dateTime, Guid personId)
-		{
-			var models = _unitOfWork.Current().CreateSqlQuery(
-				"SELECT " +
-				"	PersonId," +
-				"	BelongsToDate AS Date," +
-				"	LastTimestamp," +
-				"	IsLastTimeInAdherence," +
-				"	TimeInAdherence," +
-				"	TimeOutOfAdherence," +
-				"	ShiftHasEnded, " +
-				"	ShiftEndTime, " +
-				"	[State] AS StateJson " +
-				"FROM ReadModel.AdherencePercentage WHERE" +
-				"	PersonId =:PersonId AND " +
-				"	BelongsToDate <=:Date AND " +
-				"   BelongsToDate >=:PreviousDate")
-				.AddScalar("PersonId", NHibernateUtil.Guid)
-				.AddScalar("Date", NHibernateUtil.DateTime)
-				.AddScalar("ShiftEndTime", NHibernateUtil.DateTime)
-				.AddScalar("LastTimestamp", NHibernateUtil.DateTime)
-				.AddScalar("IsLastTimeInAdherence", NHibernateUtil.Boolean)
-				.AddScalar("TimeInAdherence", NHibernateUtil.TimeSpan)
-				.AddScalar("TimeOutOfAdherence", NHibernateUtil.TimeSpan)
-				.AddScalar("ShiftHasEnded", NHibernateUtil.Boolean)
-				.AddScalar("StateJson", NHibernateUtil.StringClob)
-				.SetGuid("PersonId", personId)
-				.SetDateTime("Date", dateTime.Date)
-				.SetDateTime("PreviousDate", dateTime.Date.AddDays(-1))
-				.SetResultTransformer(Transformers.AliasToBean(typeof (internalModel)))
-				.List<internalModel>();
-
-			if (models == null) return null;
-			internalModel result = null;
-			foreach (var model in models.OrderBy(x => x.ShiftEndTime))
-			{
-				if (dateTime <= model.ShiftEndTime)
-				{
-					result = model;
-					break;
-				}
-				if (model.BelongsToDate.Date.Equals(dateTime.Date))
-				{
-					result = model;
-					break;
-				}
-			}
-
-			if (result == null || result.StateJson == null) return result;
 
 			result.State = _deserializer.DeserializeObject<AdherencePercentageReadModelState[]>(result.StateJson);
 			result.StateJson = null;

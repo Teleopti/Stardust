@@ -13,6 +13,5 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Events
 		public Guid BusinessUnitId { get; set; }
 		public bool InAdherence { get; set; }
 		public DateTime ScheduleDate { get; set; }
-		public DateTime ShiftEndTime { get; set; }
 	}
 }

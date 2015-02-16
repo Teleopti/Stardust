@@ -26,7 +26,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta
 				BusinessUnitId = info.BusinessUnitId,
 				InAdherence = adherenceChanged ? info.Adherence == Adherence.In : (bool?) null,
 				InAdherenceWithPreviousActivity = info.AdherenceForNewStateAndPreviousActivity == Adherence.In
-				ScheduleDate = info.IsScheduled ? new DateOnly(info.CurrentShiftStartTime) : new DateOnly(info.CurrentTime)
+				ScheduleDate = info.AgentDate
 			});
 
 			if (adherenceChanged)

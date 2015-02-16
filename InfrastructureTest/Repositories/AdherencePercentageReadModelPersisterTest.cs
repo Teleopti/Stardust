@@ -28,7 +28,6 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 				IsLastTimeInAdherence = true,
 				LastTimestamp = "2012-08-29 8:00".Utc(),
 				ShiftHasEnded = true,
-				ShiftEndTime = "2012-08-29 10:00".Utc(),
 				State = new[] { new AdherencePercentageReadModelState { Timestamp = "2012-08-29 8:00".Utc() } }
 			});
 
@@ -40,7 +39,6 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			model.IsLastTimeInAdherence.Should().Be.EqualTo(true);
 			model.LastTimestamp.Should().Be.EqualTo("2012-08-29 8:00".Utc());
 			model.ShiftHasEnded.Should().Be.EqualTo(true);
-			model.ShiftEndTime.Should().Be.EqualTo("2012-08-29 10:00".Utc());
 			model.State.Single().Timestamp.Should().Be("2012-08-29 8:00".Utc());
 		}
 
@@ -51,14 +49,12 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			Target.Persist(new AdherencePercentageReadModel
 			{
 				Date = "2012-08-29".Date(),
-				PersonId = personId,
-				ShiftEndTime = "2012-08-29".Date()
+				PersonId = personId
 			});
 			Target.Persist(new AdherencePercentageReadModel
 			{
 				Date = "2012-08-30".Date(),
-				PersonId = personId,
-				ShiftEndTime = "2012-08-29".Date()
+				PersonId = personId
 			});
 
 			var model1 = Target.Get("2012-08-29".Date(), personId);
@@ -80,8 +76,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 				PersonId = personId,
 				LastTimestamp = "2012-08-29 8:00".Utc(),
 				TimeInAdherence = "0".Minutes(),
-				TimeOutOfAdherence = "10".Minutes(),
-				ShiftEndTime = "2012-08-29".Date()
+				TimeOutOfAdherence = "10".Minutes()
 			});
 			Target.Persist(new AdherencePercentageReadModel
 			{
@@ -90,14 +85,12 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 				LastTimestamp = "2012-08-29 8:15".Utc(),
 				TimeInAdherence = "17".Minutes(),
 				TimeOutOfAdherence = "28".Minutes(),
-				ShiftEndTime = "2012-08-29 10:00".Utc(),
 				State = new[] { new AdherencePercentageReadModelState { Timestamp = "2012-08-29 8:15".Utc() } }
 			});
 
 			var model = Target.Get("2012-08-29".Date(), personId);
 			model.LastTimestamp.Should().Be("2012-08-29 8:15".Utc());
 			model.BelongsToDate.Should().Be.EqualTo("2012-08-29".Date());
-			model.ShiftEndTime.Should().Be.EqualTo("2012-08-29 10:00".Utc());
 			model.TimeOutOfAdherence.Should().Be.EqualTo("28".Minutes());
 			model.TimeInAdherence.Should().Be.EqualTo("17".Minutes());
 			model.State.Single().Timestamp.Should().Be("2012-08-29 8:15".Utc());
@@ -110,8 +103,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			Target.Persist(new AdherencePercentageReadModel
 			{
 				Date = "2012-08-29".Date(),
-				PersonId = personId,
-				ShiftEndTime = "2012-08-29".Date()
+				PersonId = personId
 			});
 
 			var model = Target.Get("2012-08-29".Date(), personId);
@@ -128,14 +120,12 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 				Date = "2012-08-29".Date(),
 				PersonId = personId,
 				IsLastTimeInAdherence = false,
-				LastTimestamp = "2012-08-29 8:00".Utc(),
-				ShiftEndTime = "2012-08-29".Date()
+				LastTimestamp = "2012-08-29 8:00".Utc()
 			});
 			Target.Persist(new AdherencePercentageReadModel
 			{
 				Date = "2012-08-29".Date(),
-				PersonId = personId,
-				ShiftEndTime = "2012-08-29".Date()
+				PersonId = personId
 			});
 
 			var model = Target.Get("2012-08-29".Date(), personId);
@@ -149,8 +139,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			Target.Persist(new AdherencePercentageReadModel
 			{
 				PersonId = Guid.NewGuid(),
-				Date = "2015-01-19".Utc(),
-				ShiftEndTime = "2012-08-29".Date()
+				Date = "2015-01-19".Utc()
 			});
 
 			Target.HasData().Should().Be.True();
@@ -160,30 +149,6 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 		public void ShouldKnowIfThereIsNoData()
 		{
 			Target.HasData().Should().Be.False();
-		}
-
-		[Test]
-		public void ShouldGetCorrectModel()
-		{
-			var personId = Guid.NewGuid();
-			Target.Persist(new AdherencePercentageReadModel
-			{
-				Date = "2012-08-29".Date(),
-				PersonId = personId,
-				ShiftEndTime = "2012-08-30 02:00".Utc()
-			});
-			Target.Persist(new AdherencePercentageReadModel
-			{
-				Date = "2012-08-30".Date(),
-				PersonId = personId,
-				ShiftEndTime = "2012-08-30 17:00".Utc()
-			});
-
-			var model1 = Target.Get("2012-08-30 02:00".Utc(), personId);
-			model1.BelongsToDate.Should().Be("2012-08-29".Date());
-
-			var model2 = Target.Get("2012-08-30 03:00".Utc(), personId);
-			model2.BelongsToDate.Should().Be("2012-08-30".Date());
 		}
 	}
 }

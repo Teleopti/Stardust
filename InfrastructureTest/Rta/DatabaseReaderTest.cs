@@ -4,6 +4,7 @@ using System.Linq;
 using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers;
+using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Infrastructure.Repositories;
@@ -163,6 +164,26 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta
 			var result = target.GetCurrentSchedule(personId);
 
 			result.Single().BelongsToDate.Should().Be(new DateOnly("2014-11-07".Utc()));
+		}
+
+		[Test]
+		public void ShouldReadPersonTimeZone()
+		{
+			Guid personId;
+			var timeZone = TimeZoneInfo.FindSystemTimeZoneById("UTC");
+			using (var uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
+			{
+				var person = new Person();
+				person.PermissionInformation.SetDefaultTimeZone(timeZone);
+				var repository = new PersonRepository(uow);
+				repository.Add(person);
+				uow.PersistAll();
+				personId = person.Id.GetValueOrDefault();
+			}
+			var target = new DatabaseReader(new DatabaseConnectionFactory(), new FakeDatabaseConnectionStringHandler(), new ThisIsNow("2014-11-07 06:00"));
+
+			var result = target.GetTimeZone(personId);
+			result.Should().Be(timeZone);
 		}
 	}
 

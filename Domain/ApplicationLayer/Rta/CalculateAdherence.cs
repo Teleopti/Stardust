@@ -14,20 +14,22 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta
 		private readonly INow _now;
 		private readonly IUserCulture _culture;
 		private readonly IUserTimeZone _timeZone;
+		private readonly IAgentDateProvider _agentDateProvider;
 		private readonly CalculateAdherencePercent _calculateAdherencePercent;
 
-		public CalculateAdherence(INow now, IAdherencePercentageReadModelPersister adherencePercentageReadModelPersister, IUserCulture culture, IUserTimeZone timeZone)
+		public CalculateAdherence(INow now, IAdherencePercentageReadModelPersister adherencePercentageReadModelPersister, IUserCulture culture, IUserTimeZone timeZone, IAgentDateProvider agentDateProvider)
 		{
 			_adherencePercentageReadModelPersister = adherencePercentageReadModelPersister;
 			_now = now;
 			_culture = culture;
 			_timeZone = timeZone;
+			_agentDateProvider = agentDateProvider;
 			_calculateAdherencePercent = new CalculateAdherencePercent(_now);
 		}
 
 		public AdherencePercentageModel ForToday(Guid personId)
 		{
-			var readModel = _adherencePercentageReadModelPersister.Get(_now.UtcDateTime(), personId);
+			var readModel = _adherencePercentageReadModelPersister.Get(currentAgentDate(personId), personId);
 
 			if (readModel == null || !isValid(readModel))
 				return null;
@@ -37,6 +39,11 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta
 					   LastTimestamp = convertToAgentTimeZoneAndFormatTimestamp(readModel.LastTimestamp),
 				       AdherencePercent = (int)_calculateAdherencePercent.ForDay(readModel).ValueAsPercent()
 			       };
+		}
+
+		private DateOnly currentAgentDate(Guid personId)
+		{
+			return _agentDateProvider.Get(personId);
 		}
 
 		private string convertToAgentTimeZoneAndFormatTimestamp(DateTime? timestamp)
