@@ -50,7 +50,7 @@ namespace Teleopti.Ccc.Domain.Notification
 					}
 					catch (SmtpException exception)
 					{
-						Logger.Error(string.Format("Failed to send E-mail from sender '{0}' to receiver '{1}'.", notificationHeader.EmailSender, notificationHeader.EmailReceiver), exception);
+						Logger.Info(string.Format("Failed to send E-mail from sender '{0}' to receiver '{1}'.", notificationHeader.EmailSender, notificationHeader.EmailReceiver), exception);
 					}
 					catch (Exception exception)
 					{
