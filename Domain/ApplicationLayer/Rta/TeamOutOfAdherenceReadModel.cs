@@ -13,7 +13,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta
 
 	public class TeamOutOfAdherenceReadModelState
 	{
-		public int Count { get; set; }
+		public int OutOfAdherence { get; set; }
 		public Guid PersonId { get; set; }
 	}
 }

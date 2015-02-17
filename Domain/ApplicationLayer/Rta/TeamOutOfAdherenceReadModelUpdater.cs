@@ -24,26 +24,26 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta
 		[ReadModelUnitOfWork]
 		public virtual void Handle(PersonOutOfAdherenceEvent @event)
 		{
-			handleEvent(@event.BusinessUnitId, @event.SiteId, model =>
+			handleEvent(@event.TeamId, @event.SiteId, model =>
 				updatePerson(@event.PersonId, model, person =>
 				{
-					person.Count += 1;
+					person.OutOfAdherence += 1;
 				}));
 		}
 
 		[ReadModelUnitOfWork]
 		public virtual void Handle(PersonInAdherenceEvent @event)
 		{
-			handleEvent(@event.BusinessUnitId, @event.SiteId, model =>
+			handleEvent(@event.TeamId, @event.SiteId, model =>
 				updatePerson(@event.PersonId, model, person =>
 				{
-					person.Count -= 1;
+					person.OutOfAdherence -= 1;
 				}));
 		}
 
 		private void handleEvent(Guid teamId, Guid siteId, Action<TeamOutOfAdherenceReadModel> mutate)
 		{
-			var model = _persister.Get(siteId) ?? new TeamOutOfAdherenceReadModel
+			var model = _persister.Get(teamId) ?? new TeamOutOfAdherenceReadModel
 			{
 				SiteId = siteId,
 				TeamId = teamId,
@@ -58,7 +58,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta
 		{
 			var person = getPerson(model, personId);
 			mutate(person);
-			if (person.Count == 0)
+			if (person.OutOfAdherence == 0)
 				removePerson(model, person);
 		}
 
@@ -78,7 +78,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta
 
 		private static void calculate(TeamOutOfAdherenceReadModel model)
 		{
-			model.Count = model.State.Count(x => x.Count > 0);
+			model.Count = model.State.Count(x => x.OutOfAdherence > 0);
 		}
 		
 		[ReadModelUnitOfWork]
