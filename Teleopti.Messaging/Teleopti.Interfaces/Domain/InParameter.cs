@@ -263,5 +263,21 @@ namespace Teleopti.Interfaces.Domain
                 throw new ArgumentException(@"The seconds part is not allowed for this period.", "period");
             }
         }
+
+		/// <summary>
+		/// Ensure that the two lists has the same size
+		/// </summary>
+		/// <typeparam name="T1">type the the first list</typeparam>
+		/// <typeparam name="T2">type of the second list</typeparam>
+		/// <param name="list1">first list</param>
+		/// <param name="list2">second list</param>
+		/// <remarks>
+		/// Does NOT check for null
+		/// </remarks>
+	    public static void ListsHaveSameSize<T1, T2>(IEnumerable<T1> list1, IEnumerable<T2> list2)
+	    {
+		    if (list1.Count() != list2.Count())
+			    throw new ArgumentException(@"Lists must have the same size");
+	    }
     }
 }

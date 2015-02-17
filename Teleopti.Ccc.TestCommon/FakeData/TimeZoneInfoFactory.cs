@@ -1,8 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using Teleopti.Ccc.Domain.Time;
 
 namespace Teleopti.Ccc.TestCommon.FakeData
 {
@@ -24,9 +21,14 @@ namespace Teleopti.Ccc.TestCommon.FakeData
             return TimeZoneInfo.FindSystemTimeZoneById("E. Europe Standard Time");
         }
 
+		public static TimeZoneInfo GmtTimeZoneInfo()
+		{
+			return TimeZoneInfo.FindSystemTimeZoneById("GMT Standard Time");
+		}
+
         public static TimeZoneInfo UtcTimeZoneInfo()
         {
-            return TimeZoneInfo.Utc;
+			return TimeZoneInfo.Utc;
         }
 
         public static TimeZoneInfo HawaiiTimeZoneInfo()
