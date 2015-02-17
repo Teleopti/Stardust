@@ -145,6 +145,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta
 				;
 
 			removeDuplicateAdherences(model);
+			removeRedundantOldAdherences(model);
 		}
 
 		private static void removeDuplicateAdherences(AdherenceDetailsReadModelState model)
@@ -158,6 +159,17 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta
 				;
 
 			model.Adherence = model.Adherence.Where(a => !duplicateByTime.Contains(a)).ToArray();
+		}
+
+		private static void removeRedundantOldAdherences(AdherenceDetailsReadModelState model)
+		{
+			if (model.LastUpdate == DateTime.MinValue)
+				return;
+			var safeToRemoveOlderThan = model.LastUpdate.Subtract(TimeSpan.FromMinutes(10));
+			var safeToRemove = model.Adherence.Where(x => x.Time < safeToRemoveOlderThan).ToArray();
+			var keep = model.Adherence.Except(safeToRemove);
+			var cleaned = safeToRemove.TransitionsOf(x => x.InAdherence);
+			model.Adherence = cleaned.Concat(keep).ToArray();
 		}
 
 		private static void calculate(AdherenceDetailsReadModel model)

@@ -28,7 +28,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.AdherenceDetails
 		[Test]
 		public void ShouldPersistLastAdherenceFalse()
 		{
-			Target.Handle(new PersonActivityStartEvent()
+			Target.Handle(new PersonActivityStartEvent
 			{
 				InAdherence = false
 			});
