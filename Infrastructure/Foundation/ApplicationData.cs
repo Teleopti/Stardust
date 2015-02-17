@@ -87,7 +87,7 @@ namespace Teleopti.Ccc.Infrastructure.Foundation
 
 		public IDataSource CreateAndAddDataSource(string dataSourceName, IDictionary<string, string> applicationNhibConfiguration, string analyticsConnectionString)
 		{
-			//just hack for now! Will be fixed soon!!
+			//TODO: tenant
 			var dataSource = existingDataSource(dataSourceName);
 			if (dataSource != null)
 				return dataSource;
