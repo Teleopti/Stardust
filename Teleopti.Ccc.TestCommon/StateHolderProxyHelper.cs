@@ -44,7 +44,7 @@ namespace Teleopti.Ccc.TestCommon
 			MessageBrokerContainerDontUse.Configure(null, new IConnectionKeepAliveStrategy[] {}, MessageFilterManager.Instance);
 			var signalBroker = MessageBrokerContainerDontUse.CompositeClient();
 			var applicationData = new ApplicationData(appSettings, new[] { dataSource }, signalBroker, null, null);
-			var sessionData = CreateSessionData(person, applicationData, businessUnit, principalContext);
+			var sessionData = CreateSessionData(person, dataSource, businessUnit, principalContext);
 
 			var state = new FakeState { ApplicationScopeData = applicationData, SessionScopeData = sessionData, IsLoggedIn = true };
 			ClearAndSetStateHolder(state);
@@ -159,31 +159,41 @@ namespace Teleopti.Ccc.TestCommon
             typeof (StateHolderReader).GetField("_instanceInternal", BindingFlags.NonPublic | BindingFlags.Static).SetValue(null, null);
         }
 
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Reliability", "CA2000:Dispose objects before losing scope")]
-        public static IApplicationData CreateApplicationData(IMessageBrokerComposite messageBroker)
+        public static IApplicationData CreateApplicationData(IMessageBrokerComposite messageBroker, IDataSource dataSource)
         {
             IDictionary<string, string> appSettings = new Dictionary<string, string>();
             ConfigurationManager.AppSettings.AllKeys.ToList().ForEach(
                 name => appSettings.Add(name, ConfigurationManager.AppSettings[name]));
 
-            //todo: fixa!
-            IList<IDataSource> dataSources = new List<IDataSource>();
-            dataSources.Add(new DataSource(UnitOfWorkFactoryFactory.CreateUnitOfWorkFactory("for test"), null, null));
-            IApplicationData applicationData =
-								new ApplicationData(appSettings, new ReadOnlyCollection<IDataSource>(dataSources), messageBroker, null, null);
+            IApplicationData applicationData = new ApplicationData(appSettings, new[]{dataSource}, messageBroker, null, null);
 
             return applicationData;
         }
 
 		public static ISessionData CreateSessionData(
 			IPerson loggedOnPerson,
-			IApplicationData applicationData,
+			IDataSource dataSource,
 			IBusinessUnit businessUnit
 			)
 		{
-			return CreateSessionData(loggedOnPerson, applicationData, businessUnit, new WindowsAppDomainPrincipalContext(new TeleoptiPrincipalFactory()));
+			return CreateSessionData(loggedOnPerson, dataSource, businessUnit, new WindowsAppDomainPrincipalContext(new TeleoptiPrincipalFactory()));
 		}
 
+		public static ISessionData CreateSessionData(
+			IPerson loggedOnPerson,
+			IDataSource dataSource,
+			IBusinessUnit businessUnit,
+			ICurrentPrincipalContext principalContext)
+		{
+			principalContext.SetCurrentPrincipal(loggedOnPerson, dataSource, businessUnit);
+
+			PrincipalAuthorization.SetInstance(new PrincipalAuthorizationWithFullPermission());
+			ISessionData sessData = new SessionData();
+			sessData.TimeZone = TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time");
+			return sessData;
+		}
+
+			//2 be removed
     	public static ISessionData CreateSessionData(
             IPerson loggedOnPerson, 
 			IApplicationData applicationData, 

@@ -43,12 +43,11 @@ namespace Teleopti.Ccc.WinCodeTest
             ConfigurationManager.AppSettings.AllKeys.ToList().ForEach(
                 name => appSettings.Add(name, ConfigurationManager.AppSettings[name]));
 
-            IList<IDataSource> dataSources = new List<IDataSource>();
-            dataSources.Add(new DataSource(UnitOfWorkFactoryFactory.CreateUnitOfWorkFactory("for test"), null, null));
+            var dataSource = new DataSource(UnitOfWorkFactoryFactory.CreateUnitOfWorkFactory("for test"), null, null);
 
             loggedOnPerson = StateHolderProxyHelper.CreateLoggedOnPerson();
-						applicationData = new ApplicationData(appSettings, new ReadOnlyCollection<IDataSource>(dataSources), mocks.StrictMock<IMessageBrokerComposite>(), null, null);
-            SessionData = StateHolderProxyHelper.CreateSessionData(loggedOnPerson, applicationData, BusinessUnitFactory.BusinessUnitUsedInTest);
+						applicationData = new ApplicationData(appSettings, new []{dataSource}, mocks.StrictMock<IMessageBrokerComposite>(), null, null);
+            SessionData = StateHolderProxyHelper.CreateSessionData(loggedOnPerson, dataSource, BusinessUnitFactory.BusinessUnitUsedInTest);
 
             IState stateMock = mocks.StrictMock<IState>();
 

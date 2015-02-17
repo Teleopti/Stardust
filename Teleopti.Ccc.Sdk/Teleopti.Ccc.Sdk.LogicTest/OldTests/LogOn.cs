@@ -2,6 +2,7 @@
 using Rhino.Mocks;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Infrastructure.Foundation;
+using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Interfaces.Domain;
@@ -14,7 +15,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.OldTests
         {
             MockRepository mocks = new MockRepository();
             IState state = mocks.StrictMock<IState>();
-            IApplicationData applicationData = StateHolderProxyHelper.CreateApplicationData(null);
+            IApplicationData applicationData = StateHolderProxyHelper.CreateApplicationData(null, new DataSource(UnitOfWorkFactoryFactory.CreateUnitOfWorkFactory("for test"), null, null));
             IBusinessUnit businessUnit = BusinessUnitFactory.BusinessUnitUsedInTest;
             
             IPerson per = new Person {Name = new Name("Peter", "Westlin Junior")};

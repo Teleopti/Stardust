@@ -6,6 +6,7 @@ using NUnit.Framework;
 using Rhino.Mocks;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Infrastructure.Foundation;
+using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Interfaces.Domain;
@@ -22,7 +23,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest
             MockRepository mocks = new MockRepository();
             IState state = mocks.StrictMock<IState>();
             IMessageBrokerComposite messageBroker = mocks.DynamicMock<IMessageBrokerComposite>();
-            IApplicationData applicationData = StateHolderProxyHelper.CreateApplicationData(messageBroker);
+            IApplicationData applicationData = StateHolderProxyHelper.CreateApplicationData(messageBroker, new DataSource(UnitOfWorkFactoryFactory.CreateUnitOfWorkFactory("for test"), null, null));
             IBusinessUnit businessUnit = BusinessUnitFactory.BusinessUnitUsedInTest;
 
             Expect.Call(messageBroker.IsAlive).Return(false).Repeat.Any();

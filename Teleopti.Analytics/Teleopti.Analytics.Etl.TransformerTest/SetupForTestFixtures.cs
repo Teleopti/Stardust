@@ -2,7 +2,9 @@ using System;
 using NUnit.Framework;
 using Rhino.Mocks;
 using Teleopti.Ccc.Infrastructure.Foundation;
+using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.TestCommon;
+using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
 using Teleopti.Interfaces.MessageBroker.Client;
@@ -31,9 +33,10 @@ namespace Teleopti.Analytics.Etl.TransformerTest
             _bu = BusinessUnitFactory.CreateSimpleBusinessUnit("bu1");
             _bu.SetId(Guid.NewGuid());
 
-            applicationData = StateHolderProxyHelper.CreateApplicationData(mocks.StrictMock<IMessageBrokerComposite>());
+	        var dataSource = new DataSource(UnitOfWorkFactoryFactory.CreateUnitOfWorkFactory("for test"), null, null);
+					applicationData = StateHolderProxyHelper.CreateApplicationData(mocks.StrictMock<IMessageBrokerComposite>(), dataSource);
             loggedOnPerson = StateHolderProxyHelper.CreateLoggedOnPerson();
-            sessionData = StateHolderProxyHelper.CreateSessionData(loggedOnPerson, applicationData, _bu);
+						sessionData = StateHolderProxyHelper.CreateSessionData(loggedOnPerson, dataSource, _bu);
 
             StateHolderProxyHelper.SetStateReaderExpectations(stateMock, applicationData, sessionData);
             StateHolderProxyHelper.ClearAndSetStateHolder(stateMock);

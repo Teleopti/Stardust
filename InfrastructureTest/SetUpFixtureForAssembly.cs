@@ -46,7 +46,7 @@ namespace Teleopti.Ccc.InfrastructureTest
 									MessageBrokerContainerDontUse.CompositeClient(), null, null);
 
 			BusinessUnitFactory.BusinessUnitUsedInTest = BusinessUnitFactory.CreateSimpleBusinessUnit("Business unit used in test");
-			sessionData = StateHolderProxyHelper.CreateSessionData(loggedOnPerson, ApplicationData, BusinessUnitFactory.BusinessUnitUsedInTest);
+			sessionData = StateHolderProxyHelper.CreateSessionData(loggedOnPerson, DataSource, BusinessUnitFactory.BusinessUnitUsedInTest);
 
 			StateHolderProxyHelper.ClearAndSetStateHolder(
 				new FakeState

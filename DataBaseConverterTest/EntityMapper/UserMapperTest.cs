@@ -8,6 +8,7 @@ using Teleopti.Ccc.DatabaseConverter.EntityMapper;
 using Teleopti.Ccc.Domain.Security.AuthorizationEntities;
 using Teleopti.Ccc.Domain.Time;
 using Teleopti.Ccc.Infrastructure.Foundation;
+using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Interfaces.Domain;
@@ -166,9 +167,10 @@ namespace Teleopti.Ccc.DatabaseConverterTest.EntityMapper
             var mocks = new MockRepository();
             var stateMock = mocks.StrictMock<IState>();
 
-            var applicationData = StateHolderProxyHelper.CreateApplicationData(mocks.StrictMock<IMessageBrokerComposite>());
+						var dataSource = new DataSource(UnitOfWorkFactoryFactory.CreateUnitOfWorkFactory("for test"), null, null);
+            var applicationData = StateHolderProxyHelper.CreateApplicationData(mocks.StrictMock<IMessageBrokerComposite>(), dataSource);
             var loggedOnPerson = StateHolderProxyHelper.CreateLoggedOnPerson();
-            var sessionData = StateHolderProxyHelper.CreateSessionData(loggedOnPerson, applicationData, BusinessUnitFactory.BusinessUnitUsedInTest);
+            var sessionData = StateHolderProxyHelper.CreateSessionData(loggedOnPerson, dataSource, BusinessUnitFactory.BusinessUnitUsedInTest);
 
             StateHolderProxyHelper.SetStateReaderExpectations(stateMock, applicationData, sessionData);
             StateHolderProxyHelper.ClearAndSetStateHolder(stateMock);

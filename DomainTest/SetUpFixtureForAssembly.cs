@@ -10,6 +10,7 @@ using Teleopti.Ccc.DomainTest.Common;
 using Teleopti.Ccc.DomainTest.Helper;
 using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.Infrastructure.NHibernateConfiguration;
+using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Interfaces.Domain;
@@ -44,9 +45,10 @@ namespace Teleopti.Ccc.DomainTest
             mocks = new MockRepository();
             stateMock = mocks.StrictMock<IState>();
 
-            applicationData = StateHolderProxyHelper.CreateApplicationData(mocks.StrictMock<IMessageBrokerComposite>());
+						var dataSource = new DataSource(UnitOfWorkFactoryFactory.CreateUnitOfWorkFactory("for test"), null, null);
+            applicationData = StateHolderProxyHelper.CreateApplicationData(mocks.StrictMock<IMessageBrokerComposite>(), dataSource);
             loggedOnPerson = StateHolderProxyHelper.CreateLoggedOnPerson();
-            sessionData = StateHolderProxyHelper.CreateSessionData(loggedOnPerson, applicationData, BusinessUnitFactory.BusinessUnitUsedInTest);
+            sessionData = StateHolderProxyHelper.CreateSessionData(loggedOnPerson, dataSource, BusinessUnitFactory.BusinessUnitUsedInTest);
 
             StateHolderProxyHelper.SetStateReaderExpectations(stateMock, applicationData, sessionData);
             StateHolderProxyHelper.ClearAndSetStateHolder(stateMock);
