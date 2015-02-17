@@ -57,15 +57,12 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
                 IState newStateMock = newMock.StrictMock<IState>();
                 BusinessUnit buTemp = new BusinessUnit("dummy");
                 PersistAndRemoveFromUnitOfWork(buTemp);
-                StateHolderProxyHelper.ClearAndSetStateHolder(newMock, LoggedOnPerson, buTemp, SetupFixtureForAssembly.ApplicationData,
-                                                         newStateMock);
+								StateHolderProxyHelper.ClearAndSetStateHolder(newMock, LoggedOnPerson, buTemp, SetupFixtureForAssembly.ApplicationData, SetupFixtureForAssembly.DataSource, newStateMock);
                 T inCorrect = CreateAggregateWithCorrectBusinessUnit();
                 PersistAndRemoveFromUnitOfWork(inCorrect);
 
                 IList<T> retList = rep.LoadAll();
                 Assert.IsTrue(retList.All(r => ((IBelongsToBusinessUnit)r).BusinessUnit.Equals(buRef.BusinessUnit)));
-                //Assert.AreEqual(1, retList.Count);
-                //Assert.AreEqual(correct, retList[0]);
             }
             else
             {

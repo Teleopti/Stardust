@@ -23,7 +23,8 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest
             MockRepository mocks = new MockRepository();
             IState state = mocks.StrictMock<IState>();
             IMessageBrokerComposite messageBroker = mocks.DynamicMock<IMessageBrokerComposite>();
-            IApplicationData applicationData = StateHolderProxyHelper.CreateApplicationData(messageBroker, new DataSource(UnitOfWorkFactoryFactory.CreateUnitOfWorkFactory("for test"), null, null));
+	        var ds = new DataSource(UnitOfWorkFactoryFactory.CreateUnitOfWorkFactory("for test"), null, null);
+            IApplicationData applicationData = StateHolderProxyHelper.CreateApplicationData(messageBroker, ds);
             IBusinessUnit businessUnit = BusinessUnitFactory.BusinessUnitUsedInTest;
 
             Expect.Call(messageBroker.IsAlive).Return(false).Repeat.Any();
@@ -32,7 +33,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest
             IPerson per = new Person { Name = new Name("Peter", "Westlin Junior") };
             per.SetId(Guid.NewGuid());
 
-            StateHolderProxyHelper.ClearAndSetStateHolder(mocks, per, businessUnit, applicationData, state);
+            StateHolderProxyHelper.ClearAndSetStateHolder(mocks, per, businessUnit, applicationData, ds, state);
 
             BasicConfigurator.Configure(new DoNothingAppender());
         }

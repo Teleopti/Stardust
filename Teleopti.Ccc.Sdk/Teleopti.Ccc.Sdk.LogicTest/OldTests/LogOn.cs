@@ -15,13 +15,14 @@ namespace Teleopti.Ccc.Sdk.LogicTest.OldTests
         {
             MockRepository mocks = new MockRepository();
             IState state = mocks.StrictMock<IState>();
-            IApplicationData applicationData = StateHolderProxyHelper.CreateApplicationData(null, new DataSource(UnitOfWorkFactoryFactory.CreateUnitOfWorkFactory("for test"), null, null));
+	        var ds = new DataSource(UnitOfWorkFactoryFactory.CreateUnitOfWorkFactory("for test"), null, null);
+            IApplicationData applicationData = StateHolderProxyHelper.CreateApplicationData(null, ds);
             IBusinessUnit businessUnit = BusinessUnitFactory.BusinessUnitUsedInTest;
             
             IPerson per = new Person {Name = new Name("Peter", "Westlin Junior")};
             per.SetId(Guid.NewGuid());
             
-            StateHolderProxyHelper.ClearAndSetStateHolder(mocks, per, businessUnit, applicationData, state);
+            StateHolderProxyHelper.ClearAndSetStateHolder(mocks, per, businessUnit, applicationData, ds, state);
         }
     }
 }

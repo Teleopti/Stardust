@@ -40,6 +40,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Helper
                                                      LoggedOnPerson,
                                                      BusinessUnitFactory.BusinessUnitUsedInTest,
                                                      SetupFixtureForAssembly.ApplicationData,
+																										 SetupFixtureForAssembly.DataSource,
                                                      stateMock);
 
             UnitOfWork = SetupFixtureForAssembly.DataSource.Application.CreateAndOpenUnitOfWork();

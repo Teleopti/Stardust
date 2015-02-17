@@ -96,19 +96,16 @@ namespace Teleopti.Ccc.TestCommon
             mocks.Replay(sessData);
         }
 
-				//2 be removed
 		public static void ClearAndSetStateHolder(MockRepository mocks,
 										  IPerson loggedOnPerson,
 										  IBusinessUnit businessUnit,
 										  IApplicationData appData,
+											IDataSource logonDataSource,
 										  IState stateMock)
 		{
 			var principalContext = new WindowsAppDomainPrincipalContext(new TeleoptiPrincipalFactory());
-			IDataSource dataSource = null;
-			if (appData != null)
-				dataSource = appData.RegisteredDataSourceCollection.First();
 
-			principalContext.SetCurrentPrincipal(loggedOnPerson, dataSource, businessUnit);
+			principalContext.SetCurrentPrincipal(loggedOnPerson, logonDataSource, businessUnit);
 
 			PrincipalAuthorization.SetInstance(new PrincipalAuthorizationWithFullPermission());
 			ISessionData sessData = new SessionData();
