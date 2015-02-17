@@ -105,6 +105,7 @@ namespace Teleopti.Ccc.TestCommon
 			ClearAndSetStateHolder(mocks, loggedOnPerson, businessUnit, appData, new WindowsAppDomainPrincipalContext(new TeleoptiPrincipalFactory()), stateMock);
 		}
 
+		//2 be removed
     	public static void ClearAndSetStateHolder(MockRepository mocks,
 												  IPerson loggedOnPerson,
 												  IBusinessUnit businessUnit,
@@ -112,10 +113,18 @@ namespace Teleopti.Ccc.TestCommon
 													ICurrentPrincipalContext principalContext,
 												  IState stateMock)
         {
-        	ISessionData sessData = CreateSessionData(loggedOnPerson, appData, businessUnit, principalContext);
-        	if (appData == null)
-        		appData = mocks.StrictMock<IApplicationData>();
+					IDataSource dataSource = null;
+					if (appData != null)
+						dataSource = appData.RegisteredDataSourceCollection.First();
+
+					principalContext.SetCurrentPrincipal(loggedOnPerson, dataSource, businessUnit);
+
+					PrincipalAuthorization.SetInstance(new PrincipalAuthorizationWithFullPermission());
+					ISessionData sessData = new SessionData();
+					sessData.TimeZone = TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time");
+
         	SetStateReaderExpectations(stateMock, appData, sessData);
+
         	ClearAndSetStateHolder(stateMock);
         	mocks.Replay(stateMock);
         }
@@ -183,26 +192,6 @@ namespace Teleopti.Ccc.TestCommon
 			sessData.TimeZone = TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time");
 			return sessData;
 		}
-
-			//2 be removed
-    	public static ISessionData CreateSessionData(
-            IPerson loggedOnPerson, 
-			IApplicationData applicationData, 
-			IBusinessUnit businessUnit,
-			ICurrentPrincipalContext principalContext
-			)
-        {
-            IDataSource dataSource = null;
-            if (applicationData != null)
-                dataSource = applicationData.RegisteredDataSourceCollection.First();
-
-			principalContext.SetCurrentPrincipal(loggedOnPerson, dataSource, businessUnit);
-		
-			PrincipalAuthorization.SetInstance(new PrincipalAuthorizationWithFullPermission());
-            ISessionData sessData = new SessionData();
-            sessData.TimeZone = TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time");
-            return sessData;
-        }
 
         public static IPerson CreateLoggedOnPerson()
         {
