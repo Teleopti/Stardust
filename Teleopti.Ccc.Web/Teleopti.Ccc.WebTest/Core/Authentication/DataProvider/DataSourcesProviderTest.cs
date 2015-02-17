@@ -34,7 +34,9 @@ namespace Teleopti.Ccc.WebTest.Core.Authentication.DataProvider
 		{
 			var dataSources = new List<IDataSource>();
 
+#pragma warning disable 618
 			applicationData.Stub(x => x.RegisteredDataSourceCollection).Return(dataSources);
+#pragma warning restore 618
 
 			target.RetrieveDatasourcesForApplication()
 				.Should().Be.SameInstanceAs(dataSources);
@@ -48,7 +50,9 @@ namespace Teleopti.Ccc.WebTest.Core.Authentication.DataProvider
 			var dsList = new[] {validDs, invalidDs};
 			var token = new TokenIdentity {UserIdentifier = @"domain\user"};
 
+#pragma warning disable 618
 			applicationData.Stub(x => x.RegisteredDataSourceCollection).Return(dsList);
+#pragma warning restore 618
 			tokenIdentityProvider.Stub(x => x.RetrieveToken()).Return(token);
 			_availableIdentityDataSources.Stub(x => x.AvailableDataSources(dsList, token.UserIdentifier)).Return(new[] {validDs});
 
@@ -125,7 +129,9 @@ namespace Teleopti.Ccc.WebTest.Core.Authentication.DataProvider
 		{
 			var dataSources = new[] {new testDataSource("heja")};
 
+#pragma warning disable 618
 			applicationData.Stub(x => x.RegisteredDataSourceCollection).Return(dataSources);
+#pragma warning restore 618
 
 			target.RetrieveDataSourceByName("gnaget").Should().Be.Null();
 		}

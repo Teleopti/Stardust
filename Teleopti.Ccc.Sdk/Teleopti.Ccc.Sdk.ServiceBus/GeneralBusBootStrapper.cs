@@ -30,7 +30,9 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
 
 			foreach (
 				var dataSource in
+#pragma warning disable 618
 					StateHolderReader.Instance.StateReader.ApplicationScopeData.RegisteredDataSourceCollection.ToList())
+#pragma warning restore 618
 			{
 				IList<Guid> businessUnitCollection;
 				using (var unitOfWork = dataSource.Application.CreateAndOpenUnitOfWork())

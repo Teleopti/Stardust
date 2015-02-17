@@ -27,7 +27,9 @@ namespace Teleopti.Ccc.Web.Core.Startup.VerifyLicense
 
 		public Task Execute(IAppBuilder application)
 		{
+#pragma warning disable 618
 			foreach (var dataSource in _applicationData.Value.RegisteredDataSourceCollection)
+#pragma warning restore 618
 			{
 				var unitOfWorkFactory = dataSource.Application;
 				var licenseVerifier = _licenseVerifierFactory.Create(this,

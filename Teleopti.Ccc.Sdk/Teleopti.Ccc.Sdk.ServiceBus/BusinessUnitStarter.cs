@@ -21,7 +21,9 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
 		{
 			var bus = _serviceBusFinder.Invoke();
 
+#pragma warning disable 618
 			foreach (var dataSource in StateHolderReader.Instance.StateReader.ApplicationScopeData.RegisteredDataSourceCollection.ToList())
+#pragma warning restore 618
 			{
 			    IList<Guid> businessUnitCollection;
 			    using (var unitOfWork = dataSource.Application.CreateAndOpenUnitOfWork())

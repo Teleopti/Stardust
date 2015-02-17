@@ -22,7 +22,9 @@ namespace Teleopti.Ccc.Web.Areas.Start.Core.Authentication.DataProvider
 
 		public IEnumerable<IDataSource> RetrieveDatasourcesForApplication()
 		{
+#pragma warning disable 618
 			return _applicationData.RegisteredDataSourceCollection;
+#pragma warning restore 618
 		}
 
 		public IEnumerable<IDataSource> RetrieveDatasourcesForIdentity()
@@ -30,7 +32,9 @@ namespace Teleopti.Ccc.Web.Areas.Start.Core.Authentication.DataProvider
 			var token = _tokenIdentityProvider.RetrieveToken();
 			return token == null
 				? null
+#pragma warning disable 618
 				: _availableIdentityDataSources.AvailableDataSources(_applicationData.RegisteredDataSourceCollection,
+#pragma warning restore 618
 					token.UserIdentifier);
 		}
 

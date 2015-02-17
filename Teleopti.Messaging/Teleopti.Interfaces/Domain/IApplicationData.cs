@@ -10,10 +10,7 @@ namespace Teleopti.Interfaces.Domain
 	/// </summary>
 	public interface IApplicationData : IDisposable
 	{
-		/// <summary>
-		/// Gets the registered data sources kept in nhib files.
-		/// </summary>
-		/// <value>The registered data sources.</value>
+		[Obsolete("Will be removed soon. Please don't add any new code assuming there is a complete list of data sources.")]
 		IEnumerable<IDataSource> RegisteredDataSourceCollection { get; }
 
 		IDataSource DataSource(string tenant);

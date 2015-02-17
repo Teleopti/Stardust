@@ -44,7 +44,9 @@ namespace Teleopti.Ccc.WebTest.Core.Startup
 			using(mocks.Record())
 			{
 			    Expect.Call(dataSource.DataSourceName).Return("asdf");
+#pragma warning disable 618
 				Expect.Call(applicationData.RegisteredDataSourceCollection).Return(dataSources);
+#pragma warning restore 618
 				Expect.Call(licenseVerifierFactory.Create(target, null)).Return(licenseVerifier);
 				Expect.Call(licenseVerifier.LoadAndVerifyLicense()).Return(mocks.DynamicMock<ILicenseService>());
 			}
@@ -66,7 +68,9 @@ namespace Teleopti.Ccc.WebTest.Core.Startup
 
 			using (mocks.Record())
 			{
+#pragma warning disable 618
 				Expect.Call(applicationData.RegisteredDataSourceCollection).Return(dataSources);
+#pragma warning restore 618
 				Expect.Call(licenseVerifierFactory.Create(target, null)).Return(licenseVerifier);
 				//just to fake a license exception
 				Expect.Call(uowFactory.CreateAndOpenUnitOfWork()).Throw(new LicenseMissingException());
