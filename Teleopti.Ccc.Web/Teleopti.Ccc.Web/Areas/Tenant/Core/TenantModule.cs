@@ -1,14 +1,15 @@
-﻿using System.Linq;
-using Autofac;
+﻿using Autofac;
 using Teleopti.Ccc.Infrastructure.MultiTenancy;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.NHibernate;
-using Teleopti.Interfaces.Domain;
+using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.Web.Areas.Tenant.Core
 {
 	//To be moved out to seperate application
 	public class TenantModule : Module
 	{
+		private const string tenancyConnectionStringKey = "Tenancy";
+
 		protected override void Load(ContainerBuilder builder)
 		{
 			builder.RegisterType<ApplicationAuthentication>().As<IApplicationAuthentication>().SingleInstance();
@@ -18,11 +19,10 @@ namespace Teleopti.Ccc.Web.Areas.Tenant.Core
 			builder.RegisterType<PasswordPolicyCheck>().As<IPasswordPolicyCheck>().SingleInstance();
 			builder.RegisterType<ConvertDataToOldUserDetailDomain>().As<IConvertDataToOldUserDetailDomain>().SingleInstance();
 			builder.RegisterType<PasswordVerifier>().As<IPasswordVerifier>().SingleInstance();
-			//ta första appdb för nu!
 			builder.Register(c =>
 			{
-				var allDataSources = c.Resolve<IApplicationData>().RegisteredDataSourceCollection;
-				return TenantUnitOfWorkManager.CreateInstanceForWeb(allDataSources.First().Application.ConnectionString);
+				var configReader = c.Resolve<IConfigReader>();
+				return TenantUnitOfWorkManager.CreateInstanceForWeb(configReader.ConnectionStrings[tenancyConnectionStringKey].ConnectionString);
 			})
 				.AsImplementedInterfaces()
 				.SingleInstance();
