@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
-using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.FeatureFlags;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta
@@ -25,54 +24,54 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta
 		[ReadModelUnitOfWork]
 		public virtual void Handle(PersonOutOfAdherenceEvent @event)
 		{
-			handleModel(@event.BusinessUnitId, @event.SiteId, @event.PersonId, 1, model =>
+			mutateState(@event.BusinessUnitId, @event.SiteId, model =>
 			{
-				model.Count = getCount(model.State);
-				_persister.Persist(model);
+				getPerson(model, @event.PersonId).Count += 1;
 			});
 		}
 
 		[ReadModelUnitOfWork]
 		public virtual void Handle(PersonInAdherenceEvent @event)
 		{
-			SiteOutOfAdherenceReadModel model = null;
-			handleModel(@event.BusinessUnitId, @event.SiteId, @event.PersonId, -1, m =>
+			mutateState(@event.BusinessUnitId, @event.SiteId, model =>
 			{
-				if (m.State.All(x => x.PersonId != @event.PersonId))
-					return;
-				m.Count = getCount(m.State);
-				model = m;
+				var person = getPerson(model, @event.PersonId);
+				person.Count -= 1;
+				if (person.Count == 0)
+					removePerson(model, person);
 			});
-			if (model !=null)
-				_persister.Persist(model);
 		}
 
-		private void handleModel(Guid businessUnitId, Guid siteId, Guid personId, int adhCount, Action<SiteOutOfAdherenceReadModel> mutate)
+		private void mutateState(Guid businessUnitId, Guid siteId, Action<SiteOutOfAdherenceReadModel> mutate)
 		{
-			var model = _persister.Get(siteId);
-			var adherneceModel = new SiteOutOfAdherenceReadModelState() {Count = adhCount,PersonId = personId};
-			if (model == null)
+			var model = _persister.Get(siteId) ?? new SiteOutOfAdherenceReadModel
 			{
-				model = new SiteOutOfAdherenceReadModel()
-				{
-					SiteId = siteId,
-					BusinessUnitId = businessUnitId,
-					State = new[] { adherneceModel }
-				};
-			}
-			else
-				model.State = model.State.Concat(new[] { adherneceModel });
+				SiteId = siteId,
+				BusinessUnitId = businessUnitId,
+				State = new SiteOutOfAdherenceReadModelState[] { }
+			};
 			mutate(model);
+			calculate(model);
+			_persister.Persist(model);
 		}
 
-		private static int getCount(IEnumerable<SiteOutOfAdherenceReadModelState> states)
+		private static SiteOutOfAdherenceReadModelState getPerson(SiteOutOfAdherenceReadModel model, Guid personId)
 		{
-			return ((from o in states
-				group o by o.PersonId into g
-				select new
-				{
-					count = g.Sum(a => a.Count)
-				}).Where(c => c.count > 0)).Count();
+			var person = model.State.SingleOrDefault(x => x.PersonId == personId);
+			if (person != null) return person;
+			person = new SiteOutOfAdherenceReadModelState {PersonId = personId};
+			model.State = model.State.Concat(new[] {person}).ToArray();
+			return person;
+		}
+
+		private void removePerson(SiteOutOfAdherenceReadModel model, SiteOutOfAdherenceReadModelState person)
+		{
+			model.State = model.State.Except(new[] {person}).ToArray();
+		}
+
+		private static void calculate(SiteOutOfAdherenceReadModel model)
+		{
+			model.Count = model.State.Count(x => x.Count > 0);
 		}
 
 		[ReadModelUnitOfWork]
