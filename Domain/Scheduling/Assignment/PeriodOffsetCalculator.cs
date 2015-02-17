@@ -32,33 +32,44 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
         /// <returns></returns>
         public TimeSpan CalculatePeriodOffset(DateTimePeriod sourcePeriod, DateTimePeriod targetPeriod)
         {
-            return CalculatePeriodOffsetWithTimeZoneChanges(sourcePeriod, targetPeriod);
+            return calculatePeriodOffsetWithTimeZoneChanges(sourcePeriod, targetPeriod);
         }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "1"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
         public TimeSpan CalculatePeriodOffset(IScheduleDay source, IScheduleDay target, bool ignoreTimeZoneChanges, DateTimePeriod sourceShiftPeriod)
         {
             if (ignoreTimeZoneChanges)
-                return CalculatePeriodOffsetWithoutTimeZoneChanges(source, target, sourceShiftPeriod);
-            return CalculatePeriodOffsetWithTimeZoneChanges(source.Period, target.Period);
+                return calculatePeriodOffsetWithoutTimeZoneChanges(source, target, sourceShiftPeriod);
+			return calculatePeriodOffsetWithTimeZoneChanges(source, target);
         }
 
-        private static TimeSpan CalculatePeriodOffsetWithTimeZoneChanges(DateTimePeriod sourcePeriod, DateTimePeriod targetPeriod)
+		private static TimeSpan calculatePeriodOffsetWithTimeZoneChanges(IScheduleDay sourcePeriod, IScheduleDay targetPeriod)
+		{
+			if (hasMainShift(sourcePeriod) && hasMainShift(targetPeriod))
+			{
+				var sourceAssignment = sourcePeriod.PersonAssignment(false).Period;
+				var targetAssignment = targetPeriod.PersonAssignment(false).Period;
+				return calculatePeriodDifference(sourceAssignment, targetAssignment);
+			}
+			return calculatePeriodDifference(sourcePeriod.Period, targetPeriod.Period);
+		}
+
+        private static TimeSpan calculatePeriodOffsetWithTimeZoneChanges(DateTimePeriod sourcePeriod, DateTimePeriod targetPeriod)
         {
-            return CalculatePeriodDifference(sourcePeriod, targetPeriod);
+            return calculatePeriodDifference(sourcePeriod, targetPeriod);
         }
 
-        private static TimeSpan CalculatePeriodOffsetWithoutTimeZoneChanges(IScheduleDay source, IScheduleDay target, DateTimePeriod sourceShiftPeriod)
+        private static TimeSpan calculatePeriodOffsetWithoutTimeZoneChanges(IScheduleDay source, IScheduleDay target, DateTimePeriod sourceShiftPeriod)
         {
-            TimeSpan periodDifference = CalculatePeriodDifference(source.Period, target.Period);
-            TimeSpan timeZoneRecorrection = CalculateTimeZoneRecorrection(target, source);
+            TimeSpan periodDifference = calculatePeriodDifference(source.Period, target.Period);
+            TimeSpan timeZoneRecorrection = calculateTimeZoneRecorrection(target, source);
             
             var targetShiftPeriod = sourceShiftPeriod.MovePeriod(periodDifference + timeZoneRecorrection);
-            TimeSpan dayLightSavingsRecorrection = CalculateDaylightSavingsRecorrection(target, source, sourceShiftPeriod, targetShiftPeriod);
+            TimeSpan dayLightSavingsRecorrection = calculateDaylightSavingsRecorrection(target, source, sourceShiftPeriod, targetShiftPeriod);
             return periodDifference.Add(timeZoneRecorrection).Add(dayLightSavingsRecorrection);
         }
 
-        private static TimeSpan CalculateTimeZoneRecorrection(IScheduleDay target, IScheduleDay source)
+        private static TimeSpan calculateTimeZoneRecorrection(IScheduleDay target, IScheduleDay source)
         {
             TimeZoneInfo sourceTimeZone = source.TimeZone;
             TimeZoneInfo targetTimeZone = target.TimeZone;
@@ -66,7 +77,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
                     .Subtract(sourceTimeZone.GetUtcOffset(source.Period.LocalStartDateTime));
         }
 
-        private static TimeSpan CalculateDaylightSavingsRecorrection(IScheduleDay target, IScheduleDay source, DateTimePeriod sourceShiftPeriod, DateTimePeriod targetShiftPeriod)
+        private static TimeSpan calculateDaylightSavingsRecorrection(IScheduleDay target, IScheduleDay source, DateTimePeriod sourceShiftPeriod, DateTimePeriod targetShiftPeriod)
         {
             TimeZoneInfo sourceTimeZone = source.TimeZone;
             TimeZoneInfo targetTimeZone = target.TimeZone;
@@ -86,9 +97,15 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
             return sourceDaylightOffset.Subtract(targetDaylightOffset);
         }
 
-        private static TimeSpan CalculatePeriodDifference(DateTimePeriod sourcePeriod, DateTimePeriod targetPeriod)
+        private static TimeSpan calculatePeriodDifference(DateTimePeriod sourcePeriod, DateTimePeriod targetPeriod)
         {
                 return targetPeriod.StartDateTime.Subtract(sourcePeriod.StartDateTime);
         }
+
+
+	    private static bool hasMainShift(IScheduleDay scheduleDay)
+	    {
+			return (scheduleDay.PersonAssignment() != null && scheduleDay.SignificantPart() == SchedulePartView.MainShift);
+	    }
     }
 }
