@@ -21,7 +21,6 @@ namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork
     public class OptimisticLockTest
     {
         private MockRepository mocks;
-        private IState stateMock;
 
         /// <summary>
         /// Runs once per test
@@ -30,7 +29,6 @@ namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork
         public void Setup()
         {
             mocks = new MockRepository();
-            stateMock = mocks.StrictMock<IState>();
         }
 
 
@@ -63,9 +61,9 @@ namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork
             {
                 IPerson user = PersonFactory.CreatePerson();
                 user.Name = new Name("sdfsdf", "df");
+
+							StateHolderProxyHelper.SetupFakeState(SetupFixtureForAssembly.DataSource, user, BusinessUnitFactory.BusinessUnitUsedInTest, StateHolderProxyHelper.DefaultPrincipalContext);
 							
-                StateHolderProxyHelper.ClearAndSetStateHolder(mocks, user, BusinessUnitFactory.BusinessUnitUsedInTest,
-                                                         SetupFixtureForAssembly.ApplicationData, stateMock);
                 IUnitOfWork uow1 = SetupFixtureForAssembly.DataSource.Application.CreateAndOpenUnitOfWork();
                 IUnitOfWork uow2 = SetupFixtureForAssembly.DataSource.Application.CreateAndOpenUnitOfWork();
                 IPersonRepository rep1 = new PersonRepository(uow1);
@@ -111,8 +109,8 @@ namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork
             {
                 IPerson user = PersonFactory.CreatePerson("sdfd232sg");
 
-                StateHolderProxyHelper.ClearAndSetStateHolder(mocks, user, BusinessUnitFactory.BusinessUnitUsedInTest,
-                                                         SetupFixtureForAssembly.ApplicationData, stateMock);
+							StateHolderProxyHelper.SetupFakeState(SetupFixtureForAssembly.DataSource, user, BusinessUnitFactory.BusinessUnitUsedInTest, StateHolderProxyHelper.DefaultPrincipalContext);
+
                 IUnitOfWork uow1 = SetupFixtureForAssembly.DataSource.Application.CreateAndOpenUnitOfWork();
                 IUnitOfWork uow2 = SetupFixtureForAssembly.DataSource.Application.CreateAndOpenUnitOfWork();
                 IPersonRepository rep1 = new PersonRepository(uow1);
