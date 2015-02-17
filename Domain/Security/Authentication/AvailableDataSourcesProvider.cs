@@ -30,7 +30,7 @@ namespace Teleopti.Ccc.Domain.Security.Authentication
 			{
 				if (!_initialized)
 				{
-					//temp for to be able to remove access to the list
+					//TODO: tenant
 					IDataSource dataSource = _applicationData.Current().DataSource("Teleopti WFM");
 					try
 					{
