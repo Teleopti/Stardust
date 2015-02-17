@@ -96,38 +96,30 @@ namespace Teleopti.Ccc.TestCommon
             mocks.Replay(sessData);
         }
 
+				//2 be removed
 		public static void ClearAndSetStateHolder(MockRepository mocks,
 										  IPerson loggedOnPerson,
 										  IBusinessUnit businessUnit,
 										  IApplicationData appData,
 										  IState stateMock)
 		{
-			ClearAndSetStateHolder(mocks, loggedOnPerson, businessUnit, appData, new WindowsAppDomainPrincipalContext(new TeleoptiPrincipalFactory()), stateMock);
+			var principalContext = new WindowsAppDomainPrincipalContext(new TeleoptiPrincipalFactory());
+			IDataSource dataSource = null;
+			if (appData != null)
+				dataSource = appData.RegisteredDataSourceCollection.First();
+
+			principalContext.SetCurrentPrincipal(loggedOnPerson, dataSource, businessUnit);
+
+			PrincipalAuthorization.SetInstance(new PrincipalAuthorizationWithFullPermission());
+			ISessionData sessData = new SessionData();
+			sessData.TimeZone = TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time");
+
+			SetStateReaderExpectations(stateMock, appData, sessData);
+
+			ClearAndSetStateHolder(stateMock);
+			mocks.Replay(stateMock);
 		}
 
-		//2 be removed
-    	public static void ClearAndSetStateHolder(MockRepository mocks,
-												  IPerson loggedOnPerson,
-												  IBusinessUnit businessUnit,
-												  IApplicationData appData,
-													ICurrentPrincipalContext principalContext,
-												  IState stateMock)
-        {
-					IDataSource dataSource = null;
-					if (appData != null)
-						dataSource = appData.RegisteredDataSourceCollection.First();
-
-					principalContext.SetCurrentPrincipal(loggedOnPerson, dataSource, businessUnit);
-
-					PrincipalAuthorization.SetInstance(new PrincipalAuthorizationWithFullPermission());
-					ISessionData sessData = new SessionData();
-					sessData.TimeZone = TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time");
-
-        	SetStateReaderExpectations(stateMock, appData, sessData);
-
-        	ClearAndSetStateHolder(stateMock);
-        	mocks.Replay(stateMock);
-        }
 
     	public static void SetStateReaderExpectations(IStateReader stateMock, IApplicationData applicationData, ISessionData sessionData)
         {
