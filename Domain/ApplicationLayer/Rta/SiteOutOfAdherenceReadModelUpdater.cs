@@ -27,7 +27,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta
 			handleEvent(@event.BusinessUnitId, @event.SiteId, model =>
 				updatePerson(@event.PersonId, model, person =>
 				{
-					person.Count += 1;
+					person.OutOfAdherence += 1;
 				}));
 		}
 
@@ -37,7 +37,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta
 			handleEvent(@event.BusinessUnitId, @event.SiteId, model =>
 				updatePerson(@event.PersonId, model, person =>
 				{
-					person.Count -= 1;
+					person.OutOfAdherence -= 1;
 				}));
 		}
 
@@ -58,7 +58,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta
 		{
 			var person = getPerson(model, personId);
 			mutate(person);
-			if (person.Count == 0)
+			if (person.OutOfAdherence == 0)
 				removePerson(model, person);
 		}
 
@@ -78,7 +78,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta
 
 		private static void calculate(SiteOutOfAdherenceReadModel model)
 		{
-			model.Count = model.State.Count(x => x.Count > 0);
+			model.Count = model.State.Count(x => x.OutOfAdherence > 0);
 		}
 
 		[ReadModelUnitOfWork]
