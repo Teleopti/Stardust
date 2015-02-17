@@ -19,6 +19,11 @@ namespace Teleopti.Ccc.TestCommon.FakeData
             return TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time");
         }
 
+		public static TimeZoneInfo GmtTimeZoneInfo()
+		{
+			return TimeZoneInfo.FindSystemTimeZoneById("GMT Standard Time");
+		}
+
         public static TimeZoneInfo HelsinkiTimeZoneInfo()
         {
             return TimeZoneInfo.FindSystemTimeZoneById("E. Europe Standard Time");

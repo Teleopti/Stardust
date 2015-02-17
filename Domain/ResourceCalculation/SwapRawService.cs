@@ -62,14 +62,14 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 				if (tempDayTwoHasSwapData)
 				{
 					var tmpAbsences = getAndRemoveAbsences(selectionOne[i]);
-					selectionOne[i].Merge(tempDayTwo, false);
+					selectionOne[i].Merge(tempDayTwo, false, true);
 					modifyDay(tmpAbsences, selectionOne[i], schedulePartModifyAndRollbackService);
 				}
 				else if (tempDayOneHasSwapData)
 				{
 					var tmpAbsences = getAndRemoveAbsences(selectionOne[i]);
 					selectionOne[i].DeleteOvertime();
-					selectionOne[i].Merge(selectionOne[i], true);
+					selectionOne[i].Merge(selectionOne[i], true, true);
 					modifyDay(tmpAbsences, selectionOne[i], schedulePartModifyAndRollbackService);	
 				}
 
@@ -77,13 +77,13 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 				{
 					var tmpAbsences = getAndRemoveAbsences(selectionTwo[i]);
 					selectionTwo[i].DeleteOvertime();
-					selectionTwo[i].Merge(tempDayOne, false);
+					selectionTwo[i].Merge(tempDayOne, false, true);
 					modifyDay(tmpAbsences, selectionTwo[i], schedulePartModifyAndRollbackService);
 				}
 				else if (tempDayTwoHasSwapData)
 				{
 					var tmpAbsences = getAndRemoveAbsences(selectionTwo[i]);
-					selectionTwo[i].Merge(selectionTwo[i], true);
+					selectionTwo[i].Merge(selectionTwo[i], true, true);
 					modifyDay(tmpAbsences, selectionTwo[i], schedulePartModifyAndRollbackService);
 				}
 			}
