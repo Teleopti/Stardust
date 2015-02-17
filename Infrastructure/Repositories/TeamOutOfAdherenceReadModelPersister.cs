@@ -25,26 +25,61 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 
 		public void Persist(TeamOutOfAdherenceReadModel model)
 		{
-			var existingReadModel = getModel(model.TeamId);
-			if (existingReadModel == null)
-				saveReadModel(model);
-			else
-				updateReadModel(model);
+			_unitOfWork.Current().CreateSqlQuery(
+				"MERGE ReadModel.TeamOutOfAdherence AS T " +
+				"USING (VALUES(:TeamId)) AS S (TeamId) " +
+				"ON T.TeamId = S.TeamId " +
+				"WHEN NOT MATCHED THEN " +
+				"	INSERT " +
+				"	(" +
+				"		TeamId," +
+				"		SiteId," +
+				"		Count," +
+				"		[State]" +
+				"	) VALUES (" +
+				"		:TeamId," +
+				"		:SiteId," +
+				"		:Count," +
+				"		:State" +
+				"	) " +
+				"WHEN MATCHED THEN " +
+				"	UPDATE SET" +
+				"		SiteId = :SiteId," +
+				"		Count = :Count," +
+				"		[State] = :State " +
+				";")
+				.SetParameter("TeamId", model.TeamId)
+				.SetParameter("SiteId", model.SiteId)
+				.SetParameter("State", _serializer.SerializeObject(model.State))
+				.SetParameter("Count", model.Count)
+				.ExecuteUpdate();
 		}
 
 		public TeamOutOfAdherenceReadModel Get(Guid teamId)
 		{
-			return getModel(teamId);
-		}
+			var result = _unitOfWork.Current()
+				.CreateSqlQuery(
+					"SELECT " +
+					"		TeamId, " +
+					"		SiteId, " +
+					"		Count, " +
+					"		State as StateJson " +
+					"FROM " +
+					"		ReadModel.TeamOutOfAdherence " +
+					"WHERE " +
+					"		TeamId =:TeamId")
+				.AddScalar("TeamId", NHibernateUtil.Guid)
+				.AddScalar("SiteId", NHibernateUtil.Guid)
+				.AddScalar("Count", NHibernateUtil.Int32)
+				.AddScalar("StateJson", NHibernateUtil.StringClob)
+				.SetParameter("TeamId", teamId)
+				.SetResultTransformer(Transformers.AliasToBean(typeof(internalModel)))
+				.List()
+				.Cast<internalModel>().SingleOrDefault();
 
-		public bool HasData()
-		{
-			return (int) _unitOfWork.Current() .CreateSqlQuery("SELECT COUNT(*) FROM ReadModel.TeamOutOfAdherence ").UniqueResult() > 0;
-		}
-
-		public void Clear()
-		{
-			_unitOfWork.Current().CreateSqlQuery("DELETE FROM ReadModel.TeamOutOfAdherence ").ExecuteUpdate();
+			if (result == null) return null;
+			result.State = _deserializer.DeserializeObject<TeamOutOfAdherenceReadModelState[]>(result.StateJson);
+			return result;
 		}
 
 		public IEnumerable<TeamOutOfAdherenceReadModel> GetForSite(Guid siteId)
@@ -69,7 +104,6 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 				.List()
 				.Cast<internalModel>();
 
-			if (!models.Any()) return new List<TeamOutOfAdherenceReadModel>(); ;
 			models.ForEach(model =>
 			{
 				model.State = _deserializer.DeserializeObject<TeamOutOfAdherenceReadModelState[]>(model.StateJson);
@@ -78,72 +112,14 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 			return models;
 		}
 
-		private TeamOutOfAdherenceReadModel getModel(Guid teamId)
+		public bool HasData()
 		{
-			var result = _unitOfWork.Current()
-				.CreateSqlQuery(
-					"SELECT " +
-					"		TeamId, " +
-					"		SiteId, " +
-					"		Count, " +
-					"		State as StateJson " +
-					"FROM " +
-					"		ReadModel.TeamOutOfAdherence " +
-					"WHERE " +
-					"		TeamId =:TeamId")
-				.AddScalar("TeamId", NHibernateUtil.Guid)
-				.AddScalar("SiteId", NHibernateUtil.Guid)
-				.AddScalar("Count", NHibernateUtil.Int32)
-				.AddScalar("StateJson", NHibernateUtil.StringClob)
-				.SetParameter("TeamId", teamId)
-				.SetResultTransformer(Transformers.AliasToBean(typeof (internalModel)))
-				.List()
-				.Cast<internalModel>().SingleOrDefault();
-
-			if (result == null) return null;
-			result.State = _deserializer.DeserializeObject<TeamOutOfAdherenceReadModelState[]>(result.StateJson);
-			return result;
+			return (int)_unitOfWork.Current().CreateSqlQuery("SELECT COUNT(*) FROM ReadModel.TeamOutOfAdherence ").UniqueResult() > 0;
 		}
 
-		private void updateReadModel(TeamOutOfAdherenceReadModel model)
+		public void Clear()
 		{
-			_unitOfWork.Current().CreateSqlQuery(
-				"UPDATE ReadModel.TeamOutOfAdherence SET " + 
-				"       Count = :Count, " + 
-				"       SiteId = :SiteId, " +
-				"		  [State] = :State " +
-				"WHERE " +
-				"   TeamId = :TeamId")
-				.SetParameter("TeamId", model.TeamId)
-				.SetParameter("SiteId", model.SiteId)
-				.SetParameter("State", _serializer.SerializeObject(model.State))
-				.SetParameter("Count", model.Count)
-				.ExecuteUpdate();
-		}
-
-		private void saveReadModel(TeamOutOfAdherenceReadModel model)
-		{
-			_unitOfWork.Current().CreateSqlQuery(
-				"INSERT INTO ReadModel.TeamOutOfAdherence" +
-				"	(" +
-				"		SiteId, " +
-				"		TeamId, " +
-				"		Count, " +
-				"	[State]" +
-				"	) " +
-				"VALUES " +
-				"	(" +
-				"		:SiteId, " +
-				"		:TeamId, " +
-				"		:Count, " +
-				"		:State" +
-				"	)"
-				)
-				.SetParameter("SiteId", model.SiteId)
-				.SetParameter("TeamId", model.TeamId)
-				.SetParameter("Count", model.Count)
-				.SetParameter("State", _serializer.SerializeObject(model.State))
-				.ExecuteUpdate();
+			_unitOfWork.Current().CreateSqlQuery("DELETE FROM ReadModel.TeamOutOfAdherence ").ExecuteUpdate();
 		}
 
 		private class internalModel : TeamOutOfAdherenceReadModel

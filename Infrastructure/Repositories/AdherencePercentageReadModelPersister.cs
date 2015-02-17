@@ -24,66 +24,46 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 
 		public void Persist(AdherencePercentageReadModel model)
 		{
-			var existingReadModel = Get(model.BelongsToDate, model.PersonId);
-			if (existingReadModel == null)
-				saveReadModel(model);
-			else
-				updateReadModel(model);
-		}
-
-		private void updateReadModel(AdherencePercentageReadModel model)
-		{
 			_unitOfWork.Current().CreateSqlQuery(
-				"UPDATE ReadModel.AdherencePercentage SET" +
-				"			LastTimestamp = :LastTimestamp," +
-				"			IsLastTimeInAdherence = :IsLastTimeInAdherence," +
-				"			TimeInAdherence = :TimeInAdherence," +
-				"			TimeOutOfAdherence = :TimeOutOfAdherence," +
-				"			ShiftHasEnded = :ShiftHasEnded, " +
-				"			[State] = :State " +
-				"WHERE " +
-				"	PersonId = :PersonId AND " +
-				"	BelongsToDate =:Date")
+				"MERGE INTO ReadModel.AdherencePercentage AS T " +
+				"USING (VALUES (:PersonId, :Date )) AS S (PersonId, Date) " +
+				"ON T.PersonId = S.PersonId AND T.BelongsToDate = S.Date " +
+				"WHEN NOT MATCHED THEN " +
+				"	INSERT " +
+				"	(" +
+				"		PersonId," +
+				"		BelongsToDate," +
+				"		LastTimestamp," +
+				"		IsLastTimeInAdherence," +
+				"		TimeInAdherence," +
+				"		TimeOutOfAdherence," +
+				"		ShiftHasEnded," +
+				"		[State]" +
+				"	) VALUES (" +
+				"		:PersonId," +
+				"		:Date," +
+				"		:LastTimestamp," +
+				"		:IsLastTimeInAdherence," +
+				"		:TimeInAdherence," +
+				"		:TimeOutOfAdherence," +
+				"		:ShiftHasEnded," +
+				"		:State" +
+				"	) " +
+				"WHEN MATCHED THEN " +
+				"	UPDATE SET" +
+				"		LastTimestamp = :LastTimestamp," +
+				"		IsLastTimeInAdherence = :IsLastTimeInAdherence," +
+				"		TimeInAdherence = :TimeInAdherence," +
+				"		TimeOutOfAdherence = :TimeOutOfAdherence," +
+				"		ShiftHasEnded = :ShiftHasEnded, " +
+				"		[State] = :State " +
+				";")
 				.SetGuid("PersonId", model.PersonId)
 				.SetDateTime("Date", model.Date)
 				.SetParameter("LastTimestamp", model.LastTimestamp)
 				.SetParameter("IsLastTimeInAdherence", model.IsLastTimeInAdherence)
 				.SetParameter("TimeInAdherence", model.TimeInAdherence)
 				.SetParameter("TimeOutOfAdherence", model.TimeOutOfAdherence)
-				.SetParameter("ShiftHasEnded", model.ShiftHasEnded)
-				.SetParameter("State", _serializer.SerializeObject(model.State))
-				.ExecuteUpdate();
-		}
-
-		private void saveReadModel(AdherencePercentageReadModel model)
-		{
-			_unitOfWork.Current().CreateSqlQuery(
-				"INSERT INTO ReadModel.AdherencePercentage " +
-				"(" +
-				"	PersonId," +
-				"	BelongsToDate," +
-				"	LastTimestamp," +
-				"	IsLastTimeInAdherence," +
-				"	TimeInAdherence," +
-				"	TimeOutOfAdherence," +
-				"	ShiftHasEnded," +
-				"	[State]" +
-				") VALUES (" +
-				"	:PersonId," +
-				"	:BelongsToDate," +
-				"	:LastTimestamp," +
-				"	:IsLastTimeInAdherence," +
-				"	:TimeInAdherence," +
-				"	:TimeOutOfAdherence," +
-				"	:ShiftHasEnded," +
-				"	:State" +
-				")")
-				.SetGuid("PersonId", model.PersonId)
-				.SetDateTime("BelongsToDate", model.Date)
-				.SetParameter("LastTimestamp", model.LastTimestamp, NHibernateUtil.DateTime)
-				.SetParameter("IsLastTimeInAdherence", model.IsLastTimeInAdherence)
-				.SetTimeSpan("TimeInAdherence", model.TimeInAdherence)
-				.SetTimeSpan("TimeOutOfAdherence", model.TimeOutOfAdherence)
 				.SetParameter("ShiftHasEnded", model.ShiftHasEnded)
 				.SetParameter("State", _serializer.SerializeObject(model.State))
 				.ExecuteUpdate();
@@ -114,8 +94,8 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 				.AddScalar("StateJson", NHibernateUtil.StringClob)
 				.SetGuid("PersonId", personId)
 				.SetDateTime("Date", date)
-				.SetResultTransformer(Transformers.AliasToBean(typeof (internalModel)))
-				.List<internalModel>()
+				.SetResultTransformer(Transformers.AliasToBean(typeof (getModel)))
+				.List<getModel>()
 				.SingleOrDefault();
 
 			if (result == null) return null;
@@ -132,7 +112,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 			return (int)_unitOfWork.Current().CreateSqlQuery("SELECT count(*) FROM ReadModel.AdherencePercentage ").UniqueResult() > 0;
 		}
 
-		private class internalModel : AdherencePercentageReadModel
+		private class getModel : AdherencePercentageReadModel
 		{
 			public string StateJson { get; set; }
 		} 
