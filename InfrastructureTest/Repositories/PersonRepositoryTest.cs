@@ -227,8 +227,6 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 		[Test]
 		public void VerifyNoPeopleWithIncorrectBusinessUnit()
 		{
-			MockRepository newMock = new MockRepository();
-			IState newStateMock = newMock.StrictMock<IState>();
 			IBusinessUnit buTemp = BusinessUnitFactory.CreateSimpleBusinessUnit("dummy");
 			PersistAndRemoveFromUnitOfWork(buTemp);
 
@@ -248,8 +246,8 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			PersistAndRemoveFromUnitOfWork(team);
 			PersistAndRemoveFromUnitOfWork(ctr);
 
-			StateHolderProxyHelper.ClearAndSetStateHolder(newMock, LoggedOnPerson, buTemp, SetupFixtureForAssembly.ApplicationData,
-													 newStateMock);
+			StateHolderProxyHelper.SetupFakeState(SetupFixtureForAssembly.DataSource, LoggedOnPerson, buTemp, StateHolderProxyHelper.DefaultPrincipalContext);
+
 			ITeam teamBu = TeamFactory.CreateSimpleTeam();
 			ISite siteBu = SiteFactory.CreateSimpleSite("sdf");
 			teamBu.Site = siteBu;
@@ -266,8 +264,6 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 		[Test]
 		public void VerifyNoPeopleWithIncorrectBusinessUnitForLoadAllPeopleWithHierarchyDataSortByName()
 		{
-			MockRepository newMock = new MockRepository();
-			IState newStateMock = newMock.StrictMock<IState>();
 			IBusinessUnit buTemp = BusinessUnitFactory.CreateSimpleBusinessUnit("dummy");
 			PersistAndRemoveFromUnitOfWork(buTemp);
 
@@ -287,8 +283,8 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			PersistAndRemoveFromUnitOfWork(team);
 			PersistAndRemoveFromUnitOfWork(ctr);
 
-			StateHolderProxyHelper.ClearAndSetStateHolder(newMock, LoggedOnPerson, buTemp, SetupFixtureForAssembly.ApplicationData,
-													 newStateMock);
+			StateHolderProxyHelper.SetupFakeState(SetupFixtureForAssembly.DataSource, LoggedOnPerson, buTemp, StateHolderProxyHelper.DefaultPrincipalContext);
+
 			ITeam teamBu = TeamFactory.CreateSimpleTeam();
 			ISite siteBu = SiteFactory.CreateSimpleSite("sdf");
 			teamBu.Site = siteBu;
@@ -1572,14 +1568,11 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 																	scenario);
 			PersistAndRemoveFromUnitOfWork(ass);
 
-			//change logged on BU
-			MockRepository newMock = new MockRepository();
-			IState newStateMock = newMock.StrictMock<IState>();
 			IBusinessUnit buTemp = BusinessUnitFactory.CreateSimpleBusinessUnit("dummy");
 			((BusinessUnit)buTemp).SetDeleted();
 			PersistAndRemoveFromUnitOfWork(buTemp);
-			StateHolderProxyHelper.ClearAndSetStateHolder(newMock, LoggedOnPerson, buTemp, SetupFixtureForAssembly.ApplicationData,
-													 newStateMock);
+
+			StateHolderProxyHelper.SetupFakeState(SetupFixtureForAssembly.DataSource, LoggedOnPerson, buTemp, StateHolderProxyHelper.DefaultPrincipalContext);
 			Assert.AreEqual(1, target.NumberOfActiveAgents());
 
 			addPersonAssignmentInAnotherBu(act, shiftCategory);
@@ -1611,12 +1604,10 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			Assert.AreEqual(1, target.NumberOfActiveAgents());
 
 			//change logged on BU
-			MockRepository newMock = new MockRepository();
-			IState newStateMock = newMock.StrictMock<IState>();
 			IBusinessUnit buTemp = BusinessUnitFactory.CreateSimpleBusinessUnit("dummy");
 			PersistAndRemoveFromUnitOfWork(buTemp);
-			StateHolderProxyHelper.ClearAndSetStateHolder(newMock, LoggedOnPerson, buTemp, SetupFixtureForAssembly.ApplicationData,
-													 newStateMock);
+
+			StateHolderProxyHelper.SetupFakeState(SetupFixtureForAssembly.DataSource, LoggedOnPerson, buTemp, StateHolderProxyHelper.DefaultPrincipalContext);
 
 			addPersonAssignmentInAnotherBu(act, shiftCategory);
 			Assert.AreEqual(2, target.NumberOfActiveAgents());
