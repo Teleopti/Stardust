@@ -270,12 +270,13 @@ namespace Teleopti.Ccc.WinCodeTest.Main
 			_model.AuthenticationType = AuthenticationTypeOption.Windows;
 			_model.DataSourceContainers = new List<IDataSourceContainer>{ dataSourceContainer };
 			availableDataSourcesProvider.Stub(x => x.UnavailableDataSources()).Return(new List<IDataSource>());
-			_winLogon.Stub(x => x.Logon(_model, _appData, MultiTenancyLogonPresenter.UserAgent)).Return(new AuthenticationResult { Successful = false }).IgnoreArguments();
+			_winLogon.Stub(x => x.Logon(_model, _appData, MultiTenancyLogonPresenter.UserAgent)).Return(new AuthenticationResult { Successful = false, HasMessage = true,Message = "ajajaj"}).IgnoreArguments();
 			_view.Stub(x => x.ShowStep(true));
 
 			_target.CurrentStep = LoginStep.SelectDatasource;
 			_target.OkbuttonClicked();
 			_model.AuthenticationType.Should().Be.EqualTo(AuthenticationTypeOption.Application);
+			_model.Warning.Should().Be.EqualTo("ajajaj");
 			_target.CurrentStep.Should().Be.EqualTo(LoginStep.Login);
 		}
 

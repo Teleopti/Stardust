@@ -135,6 +135,7 @@ namespace Teleopti.Ccc.DomainTest.Security.MultiTenancyAuthentication
 			}
 
 			public AuthenticationTypeOption AuthenticationType { get; set; }
+			public string Warning { get; set; }
 		}
 	}
 }

@@ -19,7 +19,9 @@ namespace Teleopti.Ccc.Win.Main.LogonScreens
         public void SetData()
 		{
             ActiveControl = textBoxLogOnName;
-        }
+	        labelWarning.Visible = !string.IsNullOrEmpty(_model.Warning);
+	        labelWarning.Text = _model.Warning;
+		}
 
 	    public void GetData()
 	    {

@@ -26,5 +26,6 @@ namespace Teleopti.Ccc.WinCode.Main
 		}
 
 		public AuthenticationTypeOption AuthenticationType { get; set; }
+		public string Warning { get; set; }
 	}
 }

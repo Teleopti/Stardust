@@ -232,7 +232,8 @@ namespace Teleopti.Ccc.WinCode.Main
 			var authenticationResult = _multiTenancyWindowsLogon.Logon(_model, StateHolderReader.Instance.StateReader.ApplicationScopeData, UserAgent);
 
 			if (authenticationResult.HasMessage)
-				_view.ShowErrorMessage(string.Concat(authenticationResult.Message, "  "), Resources.ErrorMessage);
+				_model.Warning = authenticationResult.Message;
+				//_view.ShowErrorMessage(string.Concat(authenticationResult.Message, "  "), Resources.ErrorMessage);
 
 			if (authenticationResult.Successful)
 			{

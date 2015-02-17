@@ -16,5 +16,6 @@ namespace Teleopti.Ccc.Domain.Security.Authentication
 		string Password { get; set; }
 		bool HasValidLogin();
 		AuthenticationTypeOption AuthenticationType { get; set; }
+		string Warning { get; set; }
 	}
 }

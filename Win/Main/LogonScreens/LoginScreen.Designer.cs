@@ -36,6 +36,7 @@
 			this.buttonLogOnOK = new Syncfusion.Windows.Forms.ButtonAdv();
 			this.textBoxLogOnName = new Syncfusion.Windows.Forms.Tools.TextBoxExt();
 			this.textBoxPassword = new Syncfusion.Windows.Forms.Tools.TextBoxExt();
+			this.labelWarning = new System.Windows.Forms.Label();
 			((System.ComponentModel.ISupportInitialize)(this.textBoxLogOnName)).BeginInit();
 			((System.ComponentModel.ISupportInitialize)(this.textBoxPassword)).BeginInit();
 			this.SuspendLayout();
@@ -55,7 +56,7 @@
 			// 
 			this.labelPassword.AutoSize = true;
 			this.labelPassword.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-			this.labelPassword.Location = new System.Drawing.Point(6, 70);
+			this.labelPassword.Location = new System.Drawing.Point(6, 66);
 			this.labelPassword.Name = "labelPassword";
 			this.labelPassword.Size = new System.Drawing.Size(57, 15);
 			this.labelPassword.TabIndex = 39;
@@ -65,7 +66,7 @@
 			// 
 			this.labelLoginName.AutoSize = true;
 			this.labelLoginName.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-			this.labelLoginName.Location = new System.Drawing.Point(6, 41);
+			this.labelLoginName.Location = new System.Drawing.Point(6, 37);
 			this.labelLoginName.Name = "labelLoginName";
 			this.labelLoginName.Size = new System.Drawing.Size(70, 15);
 			this.labelLoginName.TabIndex = 38;
@@ -116,7 +117,7 @@
 			this.textBoxLogOnName.CornerRadius = 4;
 			this.textBoxLogOnName.Cursor = System.Windows.Forms.Cursors.IBeam;
 			this.textBoxLogOnName.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-			this.textBoxLogOnName.Location = new System.Drawing.Point(82, 37);
+			this.textBoxLogOnName.Location = new System.Drawing.Point(82, 33);
 			this.textBoxLogOnName.Metrocolor = System.Drawing.Color.FromArgb(((int)(((byte)(209)))), ((int)(((byte)(211)))), ((int)(((byte)(212)))));
 			this.textBoxLogOnName.MinimumSize = new System.Drawing.Size(12, 8);
 			this.textBoxLogOnName.Name = "textBoxLogOnName";
@@ -133,7 +134,7 @@
 			this.textBoxPassword.CornerRadius = 4;
 			this.textBoxPassword.Cursor = System.Windows.Forms.Cursors.IBeam;
 			this.textBoxPassword.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-			this.textBoxPassword.Location = new System.Drawing.Point(82, 66);
+			this.textBoxPassword.Location = new System.Drawing.Point(82, 62);
 			this.textBoxPassword.Metrocolor = System.Drawing.Color.FromArgb(((int)(((byte)(209)))), ((int)(((byte)(211)))), ((int)(((byte)(212)))));
 			this.textBoxPassword.MinimumSize = new System.Drawing.Size(12, 8);
 			this.textBoxPassword.Name = "textBoxPassword";
@@ -143,10 +144,22 @@
 			this.textBoxPassword.TabIndex = 1;
 			this.textBoxPassword.UseSystemPasswordChar = true;
 			// 
+			// labelWarning
+			// 
+			this.labelWarning.Font = new System.Drawing.Font("Segoe UI", 9F);
+			this.labelWarning.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(128)))), ((int)(((byte)(0)))));
+			this.labelWarning.Location = new System.Drawing.Point(5, 92);
+			this.labelWarning.Name = "labelWarning";
+			this.labelWarning.Size = new System.Drawing.Size(198, 50);
+			this.labelWarning.TabIndex = 41;
+			this.labelWarning.Text = "no found";
+			this.labelWarning.Visible = false;
+			// 
 			// LoginScreen
 			// 
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
 			this.BackColor = System.Drawing.Color.White;
+			this.Controls.Add(this.labelWarning);
 			this.Controls.Add(this.textBoxPassword);
 			this.Controls.Add(this.textBoxLogOnName);
 			this.Controls.Add(this.btnBack);
@@ -174,5 +187,6 @@
 		private Syncfusion.Windows.Forms.ButtonAdv buttonLogOnOK;
 		private Syncfusion.Windows.Forms.Tools.TextBoxExt textBoxLogOnName;
 		private Syncfusion.Windows.Forms.Tools.TextBoxExt textBoxPassword;
+		private System.Windows.Forms.Label labelWarning;
 	}
 }
