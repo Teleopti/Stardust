@@ -19,20 +19,12 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 
 		public void Swap(ISchedulePartModifyAndRollbackService schedulePartModifyAndRollbackService, IList<IScheduleDay> selectionOne, IList<IScheduleDay> selectionTwo, IDictionary<IPerson, IList<DateOnly>> locks)
 		{
-			if (selectionOne == null)
-				throw new ArgumentNullException("selectionOne");
 
-			if (selectionTwo == null)
-				throw new ArgumentNullException("selectionTwo");
-
-			if(locks == null)
-				throw new ArgumentNullException("locks");
-
-			if (schedulePartModifyAndRollbackService == null)
-				throw new ArgumentNullException("schedulePartModifyAndRollbackService");
-
-			if (selectionOne.Count != selectionTwo.Count)
-				throw new ArgumentException("selections must be of same size");
+			InParameter.NotNull("selectionOne", selectionOne);
+			InParameter.NotNull("selectionTwo", selectionTwo);
+			InParameter.NotNull("locks", locks);
+			InParameter.NotNull("schedulePartModifyAndRollbackService", schedulePartModifyAndRollbackService);
+			InParameter.ListsHaveSameSize(selectionOne, selectionTwo);
 
 			for (var i = 0; i < selectionOne.Count; i++)
 			{
@@ -56,34 +48,34 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 						continue;
 				}
 				
-				var tempDayOneHasSwapData = copyData(selectionOne[i], tempDayOne);
-				var tempDayTwoHasSwapData = copyData(selectionTwo[i], tempDayTwo);
+				var tempDayOneHasShiftOrDayOff = hasShiftOrDayOff(selectionOne[i], tempDayOne);
+				var tempDayTwoHasShiftOrDayOff = hasShiftOrDayOff(selectionTwo[i], tempDayTwo);
 			
-				if (tempDayTwoHasSwapData)
+				if (tempDayTwoHasShiftOrDayOff)
 				{
 					var tmpAbsences = getAndRemoveAbsences(selectionOne[i]);
-					selectionOne[i].Merge(tempDayTwo, false);
+					selectionOne[i].Merge(tempDayTwo, false, true);
 					modifyDay(tmpAbsences, selectionOne[i], schedulePartModifyAndRollbackService);
 				}
-				else if (tempDayOneHasSwapData)
+				else if (tempDayOneHasShiftOrDayOff)
 				{
 					var tmpAbsences = getAndRemoveAbsences(selectionOne[i]);
 					selectionOne[i].DeleteOvertime();
-					selectionOne[i].Merge(selectionOne[i], true);
+					selectionOne[i].Merge(selectionOne[i], true, true);
 					modifyDay(tmpAbsences, selectionOne[i], schedulePartModifyAndRollbackService);	
 				}
 
-				if (tempDayOneHasSwapData)
+				if (tempDayOneHasShiftOrDayOff)
 				{
 					var tmpAbsences = getAndRemoveAbsences(selectionTwo[i]);
 					selectionTwo[i].DeleteOvertime();
-					selectionTwo[i].Merge(tempDayOne, false);
+					selectionTwo[i].Merge(tempDayOne, false, true);
 					modifyDay(tmpAbsences, selectionTwo[i], schedulePartModifyAndRollbackService);
 				}
-				else if (tempDayTwoHasSwapData)
+				else if (tempDayTwoHasShiftOrDayOff)
 				{
 					var tmpAbsences = getAndRemoveAbsences(selectionTwo[i]);
-					selectionTwo[i].Merge(selectionTwo[i], true);
+					selectionTwo[i].Merge(selectionTwo[i], true, true);
 					modifyDay(tmpAbsences, selectionTwo[i], schedulePartModifyAndRollbackService);
 				}
 			}
@@ -111,7 +103,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 			schedulePartModifyAndRollbackService.Modify(scheduleDay);
 		}
 
-		private static bool copyData(IScheduleDay scheduleDay, IScheduleDay tempDay)
+		private static bool hasShiftOrDayOff(IScheduleDay scheduleDay, IScheduleDay tempDay)
 		{
 			var hasSwapData = false;
 

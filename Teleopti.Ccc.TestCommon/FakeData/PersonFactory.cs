@@ -68,11 +68,21 @@ namespace Teleopti.Ccc.TestCommon.FakeData
         /// </remarks>
         public static IPerson CreatePerson(Name name)
         {
-            var ret = new Person { Name = name };
-            ret.PermissionInformation.SetDefaultTimeZone(TimeZoneInfo.Utc);
-
-            return ret;
+	        return CreatePerson(name, TimeZoneInfoFactory.UtcTimeZoneInfo());
         }
+
+		/// <summary>
+		/// Creates a person with an give timezone.
+		/// </summary>
+		/// <param name="name">The name</param>
+		/// <param name="timeZoneInfo">Timezone</param>
+		/// <returns></returns>
+		public static IPerson CreatePerson(Name name, TimeZoneInfo timeZoneInfo)
+		{
+			var ret = new Person { Name = name };
+			ret.PermissionInformation.SetDefaultTimeZone(timeZoneInfo);
+			return ret;
+		}
 
 		public static IPerson CreatePersonWithId()
 		{

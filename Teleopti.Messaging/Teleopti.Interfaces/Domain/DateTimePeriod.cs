@@ -15,9 +15,6 @@ namespace Teleopti.Interfaces.Domain
         private MinMax<DateTime> period;
         private const string DATETIME_SEPARATOR = " - ";
 
-        #region Properties
-
-
         /// <summary>
         /// Gets the start date time in UTC.
         /// </summary>
@@ -93,10 +90,6 @@ namespace Teleopti.Interfaces.Domain
             return TimeZoneHelper.ConvertFromUtc(EndDateTime, timeZoneInfo);
         }
 
-        #endregion
-
-        #region Constructors
-
         private DateTimePeriod(DateTime startDateTime, DateTime endDateTime, bool validate)
         {
             if(validate)
@@ -171,10 +164,6 @@ namespace Teleopti.Interfaces.Domain
 		    validateDateTime(startDateTimeTemp, endDateTimeTemp);
 		    period = new MinMax<DateTime>(startDateTimeTemp, endDateTimeTemp);
 	    }
-
-	    #endregion
-
-        #region Methods
 
         /// <summary>
         /// Returns a TimeSpan representing the Elapsed time in the TimePeriod.
@@ -408,11 +397,6 @@ namespace Teleopti.Interfaces.Domain
             return intervals;
         }
 
-
-        #endregion
-
-        #region Equals stuff
-
         /// <summary>
         /// Indicates whether the current object is equal to another object of the same type.
         /// </summary>
@@ -486,10 +470,6 @@ namespace Teleopti.Interfaces.Domain
             info.AddValue("EndDateTime", period.Maximum);
         }
 
-        #endregion
-
-        #region IComparable<DateTimePeriod> Members
-
         /// <summary>
         /// Compares the current object with another object of the same type.
         /// </summary>
@@ -538,8 +518,6 @@ namespace Teleopti.Interfaces.Domain
         {
             return (per1.ElapsedTime() > per2.ElapsedTime());
         }
-
-        #endregion
 
         /// <summary>
         /// Returns if intersects with the specified date time period.

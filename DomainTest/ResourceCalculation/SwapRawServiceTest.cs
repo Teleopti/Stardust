@@ -44,8 +44,8 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
             _authorizationService = _mockRepository.StrictMock<IPrincipalAuthorization>();
 			_swapRawService = new SwapRawService(_authorizationService);
 			_scheduleDictionary = _mockRepository.StrictMock<IScheduleDictionary>();
-			_personOne = PersonFactory.CreatePerson("personOne");
-			_personTwo = PersonFactory.CreatePerson("personTwo");
+			_personOne = PersonFactory.CreatePerson(new Name("personOne", "personOne"), TimeZoneInfoFactory.GmtTimeZoneInfo());
+			_personTwo = PersonFactory.CreatePerson(new Name("personTwo", "personTwo"), TimeZoneInfoFactory.GmtTimeZoneInfo());
 			_scenario = new Scenario("scenario1");
 			_schedulePartModifyAndRollbackService = _mockRepository.StrictMock<ISchedulePartModifyAndRollbackService>();
 			_locks = new Dictionary<IPerson, IList<DateOnly>>();
@@ -162,16 +162,57 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 			}
 		}
 
-		private void commonMocks()
+		[Test]
+		public void ShouldShouldKeepStartEndTimeWhenSwapMainShiftAndDayOffOverSummertimeChangeDay()
 		{
-			Expect.Call(_authorizationService.IsPermitted(null, new DateOnly(2011, 1, 1), _personOne))
-			      .IgnoreArguments()
-			      .Return(true)
-			      .Repeat.AtLeastOnce();
-			Expect.Call(_scheduleDictionary.Scenario).Return(_scenario).Repeat.AtLeastOnce();
-			Expect.Call(() => _schedulePartModifyAndRollbackService.Modify(_scheduleDayOnePersonOne))
-			      .IgnoreArguments()
-			      .Repeat.AtLeastOnce();
+			using (_mockRepository.Record())
+			{
+				commonMocks();
+
+			}
+
+			var timeZoneInfo1 = _personOne.PermissionInformation.DefaultTimeZone();
+
+			// summertime change 2015-03-29
+			using (_mockRepository.Playback())
+			{
+
+				// imitate a shift shown as 9:00 to 18:00 (local time) in scheduler grid in wintertime
+				var shiftPeriod1 = TimeZoneHelper.NewUtcDateTimePeriodFromLocalDateTime
+					(new DateTime(2015, 3, 28, 8, 0, 0, DateTimeKind.Unspecified),
+					 new DateTime(2015, 3, 28, 17, 0, 0, DateTimeKind.Unspecified),
+					 timeZoneInfo1);
+
+				_scheduleDayOnePersonOne = ExtractedSchedule.CreateScheduleDay(_scheduleDictionary, _personOne, new DateOnly(2015, 3, 28));
+				_scheduleDayTwoPersonTwo = ExtractedSchedule.CreateScheduleDay(_scheduleDictionary, _personTwo, new DateOnly(2015, 3, 30));
+
+
+				var ass1 = PersonAssignmentFactory.CreateAssignmentWithMainShift(_scenario, _personOne, shiftPeriod1);
+				_scheduleDayOnePersonOne.Add(ass1);
+
+				// imitate a day off shown as 12:00 to 12:00 (local time) in scheduler grid in summertime
+				var ass2 = PersonAssignmentFactory.CreateAssignmentWithDayOff(_scenario, _personTwo,
+																			  new DateOnly(2015, 3, 30),
+																			  TimeSpan.FromHours(24), TimeSpan.FromHours(0), TimeSpan.FromHours(12));
+				_scheduleDayTwoPersonTwo.Add(ass2);
+
+				_selectionOne = new List<IScheduleDay> { _scheduleDayOnePersonOne };
+				_selectionTwo = new List<IScheduleDay> { _scheduleDayTwoPersonTwo };
+
+				// note that for the assert we have to convert back the start and endtime to local time because that 
+				// is how the scheduler shows the shift in grid
+				var shiftStartBeforeSwap = TimeZoneHelper.ConvertFromUtc(_scheduleDayOnePersonOne.PersonAssignment().Period.StartDateTime, timeZoneInfo1).TimeOfDay;
+				var shiftEndBeforeSwap = TimeZoneHelper.ConvertFromUtc(_scheduleDayOnePersonOne.PersonAssignment().Period.EndDateTime, timeZoneInfo1).TimeOfDay;
+
+				_swapRawService.Swap(_schedulePartModifyAndRollbackService, _selectionOne, _selectionTwo, _locks);
+
+				var shiftStartAfterSwap = TimeZoneHelper.ConvertFromUtc(_scheduleDayTwoPersonTwo.PersonAssignment().Period.StartDateTime, timeZoneInfo1).TimeOfDay;
+				var shiftEndAfterSwap = TimeZoneHelper.ConvertFromUtc(_scheduleDayTwoPersonTwo.PersonAssignment().Period.EndDateTime, timeZoneInfo1).TimeOfDay;
+
+				Assert.AreEqual(shiftStartBeforeSwap, shiftStartAfterSwap);
+				Assert.AreEqual(shiftEndBeforeSwap, shiftEndAfterSwap);
+
+			}
 		}
 
 		[Test]
@@ -357,5 +398,420 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 				Assert.AreEqual(2, _scheduleDayTwoPersonOne.PersistableScheduleDataCollection().Count());
 			}	
 		}
+
+		[Test]
+		public void ShiftsShouldKeepStartEndTimeWhenSwapOverSummertimeChange()
+		{
+			using (_mockRepository.Record())
+			{
+				commonMocks();
+
+			}
+
+			var timeZoneInfo = _personOne.PermissionInformation.DefaultTimeZone();
+
+			// summertime change 2015-03-29
+			using (_mockRepository.Playback())
+			{
+
+				// imitate a shift shown as 9:00 to 18:00 (local time) in scheduler grid in wintertime
+				var shiftPeriod1 = TimeZoneHelper.NewUtcDateTimePeriodFromLocalDateTime
+					(new DateTime(2015, 3, 28, 9, 0, 0, DateTimeKind.Unspecified),
+					 new DateTime(2015, 3, 28, 18, 0, 0, DateTimeKind.Unspecified), 
+					 timeZoneInfo);
+
+				// imitate a shift shown as 9:00 to 18:00 (local time) in scheduler grid in summertime
+				var shiftPeriod2 = TimeZoneHelper.NewUtcDateTimePeriodFromLocalDateTime
+					(new DateTime(2015, 3, 30, 13, 0, 0, DateTimeKind.Unspecified),
+					 new DateTime(2015, 3, 30, 22, 0, 0, DateTimeKind.Unspecified),
+					 timeZoneInfo); 
+
+				_scheduleDayOnePersonOne = ExtractedSchedule.CreateScheduleDay(_scheduleDictionary, _personOne, new DateOnly(2015, 3, 28));
+				_scheduleDayTwoPersonOne = ExtractedSchedule.CreateScheduleDay(_scheduleDictionary, _personOne, new DateOnly(2015, 3, 30));
+
+				var ass1 = PersonAssignmentFactory.CreateAssignmentWithMainShift(_scenario, _personOne, shiftPeriod1);
+				_scheduleDayOnePersonOne.Add(ass1);
+				var ass2 = PersonAssignmentFactory.CreateAssignmentWithMainShift(_scenario, _personOne, shiftPeriod2);
+				_scheduleDayTwoPersonOne.Add(ass2);
+
+				_selectionOne = new List<IScheduleDay> { _scheduleDayOnePersonOne };
+				_selectionTwo = new List<IScheduleDay> { _scheduleDayTwoPersonOne };
+
+				// note that for the assert we have to convert back the start and endtime to local time because that 
+				// is how the scheduler shows the shift in grid
+				var shiftStartBeforeSwap = TimeZoneHelper.ConvertFromUtc(_scheduleDayOnePersonOne.PersonAssignment().Period.StartDateTime, timeZoneInfo).TimeOfDay;
+				var shiftEndBeforeSwap = TimeZoneHelper.ConvertFromUtc(_scheduleDayOnePersonOne.PersonAssignment().Period.EndDateTime, timeZoneInfo).TimeOfDay;
+
+				_swapRawService.Swap(_schedulePartModifyAndRollbackService, _selectionOne, _selectionTwo, _locks);
+
+				var shiftStartAfterSwap = TimeZoneHelper.ConvertFromUtc(_scheduleDayTwoPersonOne.PersonAssignment().Period.StartDateTime, timeZoneInfo).TimeOfDay;
+				var shiftEndAfterSwap = TimeZoneHelper.ConvertFromUtc(_scheduleDayTwoPersonOne.PersonAssignment().Period.EndDateTime, timeZoneInfo).TimeOfDay;
+
+				Assert.AreEqual(shiftStartBeforeSwap, shiftStartAfterSwap);
+				Assert.AreEqual(shiftEndBeforeSwap, shiftEndAfterSwap);
+
+			}
+		}
+
+		[Test]
+		public void ShiftsShouldKeepStartEndTimeWhenSwapOnSummertimeChangeDay()
+		{
+			using (_mockRepository.Record())
+			{
+				commonMocks();
+
+			}
+
+			var timeZoneInfo = _personOne.PermissionInformation.DefaultTimeZone();
+
+			// summertime change 2015-03-29
+			using (_mockRepository.Playback())
+			{
+
+				// imitate a shift shown as 9:00 to 18:00 (local time) in scheduler grid on the summertime change day
+				var shiftPeriod1 = TimeZoneHelper.NewUtcDateTimePeriodFromLocalDateTime
+					(new DateTime(2015, 3, 29, 9, 0, 0, DateTimeKind.Unspecified),
+						new DateTime(2015, 3, 29, 18, 0, 0, DateTimeKind.Unspecified),
+						timeZoneInfo);
+
+				// imitate a shift shown as 9:00 to 18:00 (local time) in scheduler grid in summertime
+				var shiftPeriod2 = TimeZoneHelper.NewUtcDateTimePeriodFromLocalDateTime
+					(new DateTime(2015, 3, 31, 13, 0, 0, DateTimeKind.Unspecified),
+						new DateTime(2015, 3, 31, 22, 0, 0, DateTimeKind.Unspecified),
+						timeZoneInfo);
+
+				_scheduleDayOnePersonOne = ExtractedSchedule.CreateScheduleDay(_scheduleDictionary, _personOne,
+					new DateOnly(2015, 3, 29));
+				_scheduleDayTwoPersonOne = ExtractedSchedule.CreateScheduleDay(_scheduleDictionary, _personOne,
+					new DateOnly(2015, 3, 31));
+
+				var ass1 = PersonAssignmentFactory.CreateAssignmentWithMainShift(_scenario, _personOne, shiftPeriod1);
+				_scheduleDayOnePersonOne.Add(ass1);
+				var ass2 = PersonAssignmentFactory.CreateAssignmentWithMainShift(_scenario, _personOne, shiftPeriod2);
+				_scheduleDayTwoPersonOne.Add(ass2);
+
+				_selectionOne = new List<IScheduleDay> {_scheduleDayOnePersonOne};
+				_selectionTwo = new List<IScheduleDay> {_scheduleDayTwoPersonOne};
+
+				// note that for the assert we have to convert back the start and endtime to local time because that 
+				// is how the scheduler shows the shift in grid
+				var shiftStartBeforeSwap =
+					TimeZoneHelper.ConvertFromUtc(_scheduleDayOnePersonOne.PersonAssignment().Period.StartDateTime, timeZoneInfo).TimeOfDay;
+				var shiftEndBeforeSwap =
+					TimeZoneHelper.ConvertFromUtc(_scheduleDayOnePersonOne.PersonAssignment().Period.EndDateTime, timeZoneInfo).TimeOfDay;
+
+				_swapRawService.Swap(_schedulePartModifyAndRollbackService, _selectionOne, _selectionTwo, _locks);
+
+				var shiftStartAfterSwap =
+					TimeZoneHelper.ConvertFromUtc(_scheduleDayTwoPersonOne.PersonAssignment().Period.StartDateTime, timeZoneInfo).TimeOfDay;
+				var shiftEndAfterSwap =
+					TimeZoneHelper.ConvertFromUtc(_scheduleDayTwoPersonOne.PersonAssignment().Period.EndDateTime, timeZoneInfo).TimeOfDay;
+
+				Assert.AreEqual(shiftStartBeforeSwap, shiftStartAfterSwap);
+				Assert.AreEqual(shiftEndBeforeSwap, shiftEndAfterSwap);
+
+			}
+		}
+
+		[Test]
+		public void ShiftsShouldKeepStartEndTimeWhenSwapOnSummertimeChangeDayV2()
+		{
+			using (_mockRepository.Record())
+			{
+				commonMocks();
+
+			}
+
+			var timeZoneInfo = _personOne.PermissionInformation.DefaultTimeZone();
+
+			// summertime change 2015-03-29
+			using (_mockRepository.Playback())
+			{
+
+				// imitate a shift shown as 9:00 to 18:00 (local time) in scheduler grid on the summertime change day
+				var shiftPeriod1 = TimeZoneHelper.NewUtcDateTimePeriodFromLocalDateTime
+					(new DateTime(2015, 3, 26, 9, 0, 0, DateTimeKind.Unspecified),
+						new DateTime(2015, 3, 26, 18, 0, 0, DateTimeKind.Unspecified),
+						timeZoneInfo);
+
+				// imitate a shift shown as 9:00 to 18:00 (local time) in scheduler grid in summertime
+				var shiftPeriod2 = TimeZoneHelper.NewUtcDateTimePeriodFromLocalDateTime
+					(new DateTime(2015, 3, 29, 13, 0, 0, DateTimeKind.Unspecified),
+						new DateTime(2015, 3, 29, 22, 0, 0, DateTimeKind.Unspecified),
+						timeZoneInfo);
+
+				_scheduleDayOnePersonOne = ExtractedSchedule.CreateScheduleDay(_scheduleDictionary, _personOne,
+					new DateOnly(2015, 3, 26));
+				_scheduleDayTwoPersonOne = ExtractedSchedule.CreateScheduleDay(_scheduleDictionary, _personOne,
+					new DateOnly(2015, 3, 29));
+
+				var ass1 = PersonAssignmentFactory.CreateAssignmentWithMainShift(_scenario, _personOne, shiftPeriod1);
+				_scheduleDayOnePersonOne.Add(ass1);
+				var ass2 = PersonAssignmentFactory.CreateAssignmentWithMainShift(_scenario, _personOne, shiftPeriod2);
+				_scheduleDayTwoPersonOne.Add(ass2);
+
+				_selectionOne = new List<IScheduleDay> { _scheduleDayOnePersonOne };
+				_selectionTwo = new List<IScheduleDay> { _scheduleDayTwoPersonOne };
+
+				// note that for the assert we have to convert back the start and endtime to local time because that 
+				// is how the scheduler shows the shift in grid
+				var shiftStartBeforeSwap =
+					TimeZoneHelper.ConvertFromUtc(_scheduleDayOnePersonOne.PersonAssignment().Period.StartDateTime, timeZoneInfo)
+						.TimeOfDay;
+				var shiftEndBeforeSwap =
+					TimeZoneHelper.ConvertFromUtc(_scheduleDayOnePersonOne.PersonAssignment().Period.EndDateTime, timeZoneInfo)
+						.TimeOfDay;
+
+				_swapRawService.Swap(_schedulePartModifyAndRollbackService, _selectionOne, _selectionTwo, _locks);
+
+				var shiftStartAfterSwap =
+					TimeZoneHelper.ConvertFromUtc(_scheduleDayTwoPersonOne.PersonAssignment().Period.StartDateTime, timeZoneInfo)
+						.TimeOfDay;
+				var shiftEndAfterSwap =
+					TimeZoneHelper.ConvertFromUtc(_scheduleDayTwoPersonOne.PersonAssignment().Period.EndDateTime, timeZoneInfo)
+						.TimeOfDay;
+
+				Assert.AreEqual(shiftStartBeforeSwap, shiftStartAfterSwap);
+				Assert.AreEqual(shiftEndBeforeSwap, shiftEndAfterSwap);
+
+			}
+		}
+
+		[Test]
+		public void ShiftsShouldKeepStartEndTimeWhenSwapOverSummertimeChangeBetweenTwoPersons()
+		{
+			using (_mockRepository.Record())
+			{
+				commonMocks();
+
+			}
+
+			var timeZoneInfo1 = _personOne.PermissionInformation.DefaultTimeZone();
+			var timeZoneInfo2 = _personTwo.PermissionInformation.DefaultTimeZone();
+
+			// summertime change 2015-03-29
+			using (_mockRepository.Playback())
+			{
+
+				// imitate a shift shown as 9:00 to 18:00 (local time) in scheduler grid in wintertime
+				var shiftPeriod1 = TimeZoneHelper.NewUtcDateTimePeriodFromLocalDateTime
+					(new DateTime(2015, 3, 28, 9, 0, 0, DateTimeKind.Unspecified),
+					 new DateTime(2015, 3, 28, 18, 0, 0, DateTimeKind.Unspecified),
+					 timeZoneInfo1);
+
+				// imitate a shift shown as 9:00 to 18:00 (local time) in scheduler grid in summertime
+				var shiftPeriod2 = TimeZoneHelper.NewUtcDateTimePeriodFromLocalDateTime
+					(new DateTime(2015, 3, 30, 12, 0, 0, DateTimeKind.Unspecified),
+					 new DateTime(2015, 3, 30, 21, 0, 0, DateTimeKind.Unspecified),
+					 timeZoneInfo2);
+
+				_scheduleDayOnePersonOne = ExtractedSchedule.CreateScheduleDay(_scheduleDictionary, _personOne, new DateOnly(2015, 3, 28));
+				_scheduleDayTwoPersonTwo = ExtractedSchedule.CreateScheduleDay(_scheduleDictionary, _personTwo, new DateOnly(2015, 3, 30));
+
+				var ass1 = PersonAssignmentFactory.CreateAssignmentWithMainShift(_scenario, _personOne, shiftPeriod1);
+				_scheduleDayOnePersonOne.Add(ass1);
+				var ass2 = PersonAssignmentFactory.CreateAssignmentWithMainShift(_scenario, _personTwo, shiftPeriod2);
+				_scheduleDayTwoPersonTwo.Add(ass2);
+
+				_selectionOne = new List<IScheduleDay> { _scheduleDayOnePersonOne };
+				_selectionTwo = new List<IScheduleDay> { _scheduleDayTwoPersonTwo };
+
+				// note that for the assert we have to convert back the start and endtime to local time because that 
+				// is how the scheduler shows the shift in grid
+				var shiftOneStartBeforeSwap = TimeZoneHelper.ConvertFromUtc(_scheduleDayOnePersonOne.PersonAssignment().Period.StartDateTime, timeZoneInfo1).TimeOfDay;
+				var shiftOneEndBeforeSwap = TimeZoneHelper.ConvertFromUtc(_scheduleDayOnePersonOne.PersonAssignment().Period.EndDateTime, timeZoneInfo1).TimeOfDay;
+
+				_swapRawService.Swap(_schedulePartModifyAndRollbackService, _selectionOne, _selectionTwo, _locks);
+
+				var shiftOneStartAfterSwap = TimeZoneHelper.ConvertFromUtc(_scheduleDayTwoPersonTwo.PersonAssignment().Period.StartDateTime, timeZoneInfo1).TimeOfDay;
+				var shiftOneEndAfterSwap = TimeZoneHelper.ConvertFromUtc(_scheduleDayTwoPersonTwo.PersonAssignment().Period.EndDateTime, timeZoneInfo1).TimeOfDay;
+
+				Assert.AreEqual(shiftOneStartBeforeSwap, shiftOneStartAfterSwap);
+				Assert.AreEqual(shiftOneEndBeforeSwap, shiftOneEndAfterSwap);
+
+			}
+		}
+
+		[Test]
+		public void ShiftsShouldKeepStartEndTimeWhenSwapOnSummertimeChangeDayBetweenTwoPersons()
+		{
+			using (_mockRepository.Record())
+			{
+				commonMocks();
+
+			}
+
+			var timeZoneInfo1 = _personOne.PermissionInformation.DefaultTimeZone();
+			var timeZoneInfo2 = _personTwo.PermissionInformation.DefaultTimeZone();
+
+			// summertime change 2015-03-29
+			using (_mockRepository.Playback())
+			{
+
+				// imitate a shift shown as 9:00 to 18:00 (local time) in scheduler grid in wintertime
+				var shiftPeriod1 = TimeZoneHelper.NewUtcDateTimePeriodFromLocalDateTime
+					(new DateTime(2015, 3, 29, 9, 0, 0, DateTimeKind.Unspecified),
+					 new DateTime(2015, 3, 29, 18, 0, 0, DateTimeKind.Unspecified), 
+					 timeZoneInfo1);
+
+				// imitate a shift shown as 9:00 to 18:00 (local time) in scheduler grid in summertime
+				var shiftPeriod2 = TimeZoneHelper.NewUtcDateTimePeriodFromLocalDateTime
+					(new DateTime(2015, 3, 31, 13, 0, 0, DateTimeKind.Unspecified),
+					 new DateTime(2015, 3, 31, 22, 0, 0, DateTimeKind.Unspecified),
+					 timeZoneInfo2); 
+
+				_scheduleDayOnePersonOne = ExtractedSchedule.CreateScheduleDay(_scheduleDictionary, _personOne, new DateOnly(2015, 3, 29));
+				_scheduleDayTwoPersonTwo = ExtractedSchedule.CreateScheduleDay(_scheduleDictionary, _personTwo, new DateOnly(2015, 3, 31));
+
+				var ass1 = PersonAssignmentFactory.CreateAssignmentWithMainShift(_scenario, _personOne, shiftPeriod1);
+				_scheduleDayOnePersonOne.Add(ass1);
+				var ass2 = PersonAssignmentFactory.CreateAssignmentWithMainShift(_scenario, _personTwo, shiftPeriod2);
+				_scheduleDayTwoPersonTwo.Add(ass2);
+
+				_selectionOne = new List<IScheduleDay> { _scheduleDayOnePersonOne };
+				_selectionTwo = new List<IScheduleDay> { _scheduleDayTwoPersonTwo };
+
+				// note that for the assert we have to convert back the start and endtime to local time because that 
+				// is how the scheduler shows the shift in grid
+				var shiftStartBeforeSwap = TimeZoneHelper.ConvertFromUtc(_scheduleDayOnePersonOne.PersonAssignment().Period.StartDateTime, timeZoneInfo1).TimeOfDay;
+				var shiftEndBeforeSwap = TimeZoneHelper.ConvertFromUtc(_scheduleDayOnePersonOne.PersonAssignment().Period.EndDateTime, timeZoneInfo1).TimeOfDay;
+
+				_swapRawService.Swap(_schedulePartModifyAndRollbackService, _selectionOne, _selectionTwo, _locks);
+
+				var shiftStartAfterSwap = TimeZoneHelper.ConvertFromUtc(_scheduleDayTwoPersonTwo.PersonAssignment().Period.StartDateTime, timeZoneInfo1).TimeOfDay;
+				var shiftEndAfterSwap = TimeZoneHelper.ConvertFromUtc(_scheduleDayTwoPersonTwo.PersonAssignment().Period.EndDateTime, timeZoneInfo1).TimeOfDay;
+
+				Assert.AreEqual(shiftStartBeforeSwap, shiftStartAfterSwap);
+				Assert.AreEqual(shiftEndBeforeSwap, shiftEndAfterSwap);
+
+			}
+		}
+
+		[Test]
+		public void ShiftsShouldKeepStartEndTimeWhenSwapOverSummertimeChangeBetweenTwoPersonsInDifferentTimezone()
+		{
+			_personTwo = PersonFactory.CreatePerson(new Name("personTwo", "InDifferentTimeZone"), TimeZoneInfoFactory.StockholmTimeZoneInfo());
+
+			using (_mockRepository.Record())
+			{
+				commonMocks();
+
+			}
+
+			var timeZoneInfo1 = _personOne.PermissionInformation.DefaultTimeZone();
+			var timeZoneInfo2 = _personTwo.PermissionInformation.DefaultTimeZone();
+
+			// summertime change 2015-03-29
+			using (_mockRepository.Playback())
+			{
+
+				// imitate a shift shown as 9:00 to 18:00 (local time) in scheduler grid in wintertime
+				var shiftPeriod1 = TimeZoneHelper.NewUtcDateTimePeriodFromLocalDateTime
+					(new DateTime(2015, 3, 28, 9, 0, 0, DateTimeKind.Unspecified),
+					 new DateTime(2015, 3, 28, 18, 0, 0, DateTimeKind.Unspecified),
+					 timeZoneInfo1);
+
+				// imitate a shift shown as 9:00 to 18:00 (local time) in scheduler grid in summertime
+				var shiftPeriod2 = TimeZoneHelper.NewUtcDateTimePeriodFromLocalDateTime
+					(new DateTime(2015, 3, 30, 13, 0, 0, DateTimeKind.Unspecified),
+					 new DateTime(2015, 3, 30, 22, 0, 0, DateTimeKind.Unspecified),
+					 timeZoneInfo2);
+
+				_scheduleDayOnePersonOne = ExtractedSchedule.CreateScheduleDay(_scheduleDictionary, _personOne, new DateOnly(2015, 3, 28));
+				_scheduleDayTwoPersonTwo = ExtractedSchedule.CreateScheduleDay(_scheduleDictionary, _personTwo, new DateOnly(2015, 3, 30));
+
+				var ass1 = PersonAssignmentFactory.CreateAssignmentWithMainShift(_scenario, _personOne, shiftPeriod1);
+				_scheduleDayOnePersonOne.Add(ass1);
+				var ass2 = PersonAssignmentFactory.CreateAssignmentWithMainShift(_scenario, _personTwo, shiftPeriod2);
+				_scheduleDayTwoPersonTwo.Add(ass2);
+
+				_selectionOne = new List<IScheduleDay> { _scheduleDayOnePersonOne };
+				_selectionTwo = new List<IScheduleDay> { _scheduleDayTwoPersonTwo };
+
+				// note that for the assert we have to convert back the start and endtime to local time because that 
+				// is how the scheduler shows the shift in grid
+				var shiftStartBeforeSwap = TimeZoneHelper.ConvertFromUtc(_scheduleDayOnePersonOne.PersonAssignment().Period.StartDateTime, timeZoneInfo1).TimeOfDay;
+				var shiftEndBeforeSwap = TimeZoneHelper.ConvertFromUtc(_scheduleDayOnePersonOne.PersonAssignment().Period.EndDateTime, timeZoneInfo1).TimeOfDay;
+
+				_swapRawService.Swap(_schedulePartModifyAndRollbackService, _selectionOne, _selectionTwo, _locks);
+
+				var shiftStartAfterSwap = TimeZoneHelper.ConvertFromUtc(_scheduleDayTwoPersonTwo.PersonAssignment().Period.StartDateTime, timeZoneInfo1).TimeOfDay;
+				var shiftEndAfterSwap = TimeZoneHelper.ConvertFromUtc(_scheduleDayTwoPersonTwo.PersonAssignment().Period.EndDateTime, timeZoneInfo1).TimeOfDay;
+
+				Assert.AreEqual(shiftStartBeforeSwap, shiftStartAfterSwap);
+				Assert.AreEqual(shiftEndBeforeSwap, shiftEndAfterSwap);
+
+			}
+		}
+
+		[Test]
+		public void ShiftsShouldKeepStartEndTimeWhenSwapOnSummertimeChangeDayBetweenTwoPersonsInDifferentTimezone()
+		{
+			_personTwo = PersonFactory.CreatePerson(new Name("personTwo", "InDifferentTimeZone"), TimeZoneInfoFactory.StockholmTimeZoneInfo());
+
+			using (_mockRepository.Record())
+			{
+				commonMocks();
+
+			}
+
+			var timeZoneInfo1 = _personOne.PermissionInformation.DefaultTimeZone();
+			var timeZoneInfo2 = _personTwo.PermissionInformation.DefaultTimeZone();
+
+			// summertime change 2015-03-29
+			using (_mockRepository.Playback())
+			{
+
+				// imitate a shift shown as 9:00 to 18:00 (local time) in scheduler grid in wintertime
+				var shiftPeriod1 = TimeZoneHelper.NewUtcDateTimePeriodFromLocalDateTime
+					(new DateTime(2015, 3, 29, 9, 0, 0, DateTimeKind.Unspecified),
+					 new DateTime(2015, 3, 29, 18, 0, 0, DateTimeKind.Unspecified),
+					 timeZoneInfo1);
+
+				// imitate a shift shown as 9:00 to 18:00 (local time) in scheduler grid in summertime
+				var shiftPeriod2 = TimeZoneHelper.NewUtcDateTimePeriodFromLocalDateTime
+					(new DateTime(2015, 3, 31, 13, 0, 0, DateTimeKind.Unspecified),
+					 new DateTime(2015, 3, 31, 22, 0, 0, DateTimeKind.Unspecified),
+					 timeZoneInfo2);
+
+				_scheduleDayOnePersonOne = ExtractedSchedule.CreateScheduleDay(_scheduleDictionary, _personOne, new DateOnly(2015, 3, 29));
+				_scheduleDayTwoPersonTwo = ExtractedSchedule.CreateScheduleDay(_scheduleDictionary, _personTwo, new DateOnly(2015, 3, 31));
+
+				var ass1 = PersonAssignmentFactory.CreateAssignmentWithMainShift(_scenario, _personOne, shiftPeriod1);
+				_scheduleDayOnePersonOne.Add(ass1);
+				var ass2 = PersonAssignmentFactory.CreateAssignmentWithMainShift(_scenario, _personTwo, shiftPeriod2);
+				_scheduleDayTwoPersonTwo.Add(ass2);
+
+				_selectionOne = new List<IScheduleDay> { _scheduleDayOnePersonOne };
+				_selectionTwo = new List<IScheduleDay> { _scheduleDayTwoPersonTwo };
+
+				// note that for the assert we have to convert back the start and endtime to local time because that 
+				// is how the scheduler shows the shift in grid
+				var shiftStartBeforeSwap = TimeZoneHelper.ConvertFromUtc(_scheduleDayOnePersonOne.PersonAssignment().Period.StartDateTime, timeZoneInfo1).TimeOfDay;
+				var shiftEndBeforeSwap = TimeZoneHelper.ConvertFromUtc(_scheduleDayOnePersonOne.PersonAssignment().Period.EndDateTime, timeZoneInfo1).TimeOfDay;
+
+				_swapRawService.Swap(_schedulePartModifyAndRollbackService, _selectionOne, _selectionTwo, _locks);
+
+				var shiftStartAfterSwap = TimeZoneHelper.ConvertFromUtc(_scheduleDayTwoPersonTwo.PersonAssignment().Period.StartDateTime, timeZoneInfo1).TimeOfDay;
+				var shiftEndAfterSwap = TimeZoneHelper.ConvertFromUtc(_scheduleDayTwoPersonTwo.PersonAssignment().Period.EndDateTime, timeZoneInfo1).TimeOfDay;
+
+				Assert.AreEqual(shiftStartBeforeSwap, shiftStartAfterSwap);
+				Assert.AreEqual(shiftEndBeforeSwap, shiftEndAfterSwap);
+
+			}
+		}
+
+		private void commonMocks()
+		{
+			Expect.Call(_authorizationService.IsPermitted(null, new DateOnly(2011, 1, 1), _personOne))
+				  .IgnoreArguments()
+				  .Return(true)
+				  .Repeat.AtLeastOnce();
+			Expect.Call(_scheduleDictionary.Scenario).Return(_scenario).Repeat.AtLeastOnce();
+			Expect.Call(() => _schedulePartModifyAndRollbackService.Modify(_scheduleDayOnePersonOne))
+				  .IgnoreArguments()
+				  .Repeat.AtLeastOnce();
+		}
+
 	}
 }

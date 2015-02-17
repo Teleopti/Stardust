@@ -88,7 +88,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 
         private static TimeSpan CalculatePeriodDifference(DateTimePeriod sourcePeriod, DateTimePeriod targetPeriod)
         {
-                return targetPeriod.StartDateTime.Subtract(sourcePeriod.StartDateTime);
+                return targetPeriod.StartDateTime.Add(TimeSpan.FromHours(8)).Subtract(sourcePeriod.StartDateTime.Add(TimeSpan.FromHours(8)));
         }
     }
 }
