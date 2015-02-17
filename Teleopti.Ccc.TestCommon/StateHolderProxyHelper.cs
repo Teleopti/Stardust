@@ -125,17 +125,8 @@ namespace Teleopti.Ccc.TestCommon
 												 IApplicationData appData
 			)
     	{
-    		ClearAndSetStateHolder(loggedOnPerson, businessUnit, appData, DefaultPrincipalContext);
-		}
-
-    	public static void ClearAndSetStateHolder(IPerson loggedOnPerson,
-												 IBusinessUnit businessUnit,
-												 IApplicationData appData,
-												   ICurrentPrincipalContext principalContext
-			)
-		{
-			var mocks = new MockRepository();
-			ClearAndSetStateHolder(mocks, loggedOnPerson, businessUnit, appData, principalContext, mocks.DynamicMock<IState>());
+				var mocks = new MockRepository();
+				ClearAndSetStateHolder(mocks, loggedOnPerson, businessUnit, appData, DefaultPrincipalContext, mocks.DynamicMock<IState>());
 		}
 
     	public static void SetStateReaderExpectations(IStateReader stateMock, IApplicationData applicationData, ISessionData sessionData)
