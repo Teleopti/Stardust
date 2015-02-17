@@ -21,6 +21,6 @@ namespace Teleopti.Analytics.Etl.Interfaces.Transformer
 		CultureInfo CurrentCulture { get; }
 		IToggleManager ToggleManager { get; }
 		DateTime? NowForTestPurpose { get; set; }
-		bool RunIndexMaintenance { get; set; }
+		bool RunIndexMaintenance { get; }
 	}
 }

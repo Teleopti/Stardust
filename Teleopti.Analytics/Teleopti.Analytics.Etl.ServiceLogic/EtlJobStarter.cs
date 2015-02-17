@@ -87,7 +87,7 @@ namespace Teleopti.Analytics.Etl.ServiceLogic
 				IJob jobToRun = JobExtractor.ExtractJobFromSchedule(
 					scheduleToRun, _jobHelper, configHandler.BaseConfiguration.TimeZoneCode,
 					configHandler.BaseConfiguration.IntervalLength.Value, _cube,
-					_pmInstallation, configHandler.BaseConfiguration.ToggleManager
+					_pmInstallation, configHandler.BaseConfiguration.ToggleManager,configHandler.BaseConfiguration.RunIndexMaintenance
 					);
 				isStopping = !RunJob(jobToRun, scheduleToRun.ScheduleId, rep);
 			}

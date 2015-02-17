@@ -55,7 +55,7 @@ namespace Teleopti.Analytics.Etl.Transformer.Job
 
 		public IToggleManager ToggleManager { get; private set; }
 
-		public bool RunIndexMaintenance { get; set; }
+		public bool RunIndexMaintenance { get; private set; }
 
 		private void setOlapServerAndDatabase(string cubeConnectionsString)
 		{

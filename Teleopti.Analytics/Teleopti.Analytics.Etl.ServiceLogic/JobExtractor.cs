@@ -17,7 +17,7 @@ namespace Teleopti.Analytics.Etl.ServiceLogic
 		public static IJob ExtractJobFromSchedule(
 			IEtlJobSchedule etlJobScheduleToRun, JobHelper jobHelper, 
 			string timeZoneId, int intervalLengthMinutes, string cube, 
-			string pmInstallation, IToggleManager toggleManager)
+			string pmInstallation, IToggleManager toggleManager, bool runIndexMaintenance)
 		{
 			var log = LogManager.GetLogger(typeof(JobExtractor));
 			log.InfoFormat(CultureInfo.InvariantCulture, "Getting job to run from schedule '{0}'.", etlJobScheduleToRun.ScheduleName);
@@ -31,7 +31,7 @@ namespace Teleopti.Analytics.Etl.ServiceLogic
 					pmInstallation,
 					CultureInfo.CurrentCulture, 
 					toggleManager,
-					false)
+                    runIndexMaintenance)
 					{
 						Helper = jobHelper
 					};
