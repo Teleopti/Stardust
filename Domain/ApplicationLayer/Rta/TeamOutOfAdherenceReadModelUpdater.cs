@@ -1,3 +1,6 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
 using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.FeatureFlags;
@@ -21,29 +24,49 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta
 		[ReadModelUnitOfWork]
 		public virtual void Handle(PersonOutOfAdherenceEvent @event)
 		{
-			var model = _persister.Get(@event.TeamId) ??
-				new TeamOutOfAdherenceReadModel() { TeamId = @event.TeamId, SiteId = @event.SiteId };
-			model.PersonIds += @event.PersonId;
-			model.Count++;
-			_persister.Persist(model);
+			handleModel(@event.TeamId, @event.SiteId,  model =>
+			{
+				model.State = updateStates(model.State, @event.PersonId, 1);
+			});
 		}
 
 		[ReadModelUnitOfWork]
 		public virtual void Handle(PersonInAdherenceEvent @event)
 		{
-			var model = _persister.Get(@event.TeamId);
-			if (model == null)
+			handleModel(@event.TeamId, @event.SiteId, model =>
 			{
-				_persister.Persist(new TeamOutOfAdherenceReadModel() { TeamId = @event.TeamId, SiteId = @event.SiteId });
-				return;
-			}
-			if (!model.PersonIds.Contains(@event.PersonId.ToString()))
-				return;
-			model.PersonIds = model.PersonIds.Replace(@event.PersonId.ToString(), "");
-			model.Count--;
+				model.State = updateStates(model.State, @event.PersonId, -1);
+			});
+		}
+
+		private void handleModel(Guid teamId, Guid siteId, Action<TeamOutOfAdherenceReadModel> mutate)
+		{
+			var model = _persister.Get(teamId) ?? new TeamOutOfAdherenceReadModel()
+			{
+				SiteId = siteId,
+				TeamId = teamId,
+				State = new TeamOutOfAdherenceReadModelState[] { }
+			};
+			mutate(model);
+			model.Count = model.State.Count(x=>x.AdherenceCounter>0);
 			_persister.Persist(model);
 		}
 
+		private IEnumerable<TeamOutOfAdherenceReadModelState> updateStates( IEnumerable<TeamOutOfAdherenceReadModelState> states, Guid personId, int adherenceState)
+		{
+			if (!states.Any(x => x.PersonId == personId))
+				return states.Concat(new[] {new TeamOutOfAdherenceReadModelState() {AdherenceCounter = adherenceState, PersonId = personId}});
+
+			if (states.Any(x => x.PersonId == personId && ((x.AdherenceCounter + adherenceState) <= 0)))
+				return states.Where(x => x.PersonId != personId);
+
+			foreach (var state in states.Where(state => state.PersonId == personId))
+			{
+				state.AdherenceCounter += adherenceState;
+			}
+			return states;
+		}
+		
 		[ReadModelUnitOfWork]
 		public virtual bool Initialized()
 		{

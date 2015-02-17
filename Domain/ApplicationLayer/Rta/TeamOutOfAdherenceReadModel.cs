@@ -1,18 +1,19 @@
 using System;
+using System.Collections.Generic;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta
 {
 	public class TeamOutOfAdherenceReadModel
 	{
-		public TeamOutOfAdherenceReadModel()
-		{
-			PersonIds = "";
-		}
-
 		public Guid TeamId { get; set; }
 		public Guid SiteId { get; set; }
 		public int Count { get; set; }
-		public string PersonIds { get; set; }
+		public IEnumerable<TeamOutOfAdherenceReadModelState> State { get; set; }
+	}
 
+	public class TeamOutOfAdherenceReadModelState
+	{
+		public int AdherenceCounter { get; set; }
+		public Guid PersonId { get; set; }
 	}
 }

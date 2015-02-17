@@ -13,7 +13,7 @@ using Teleopti.Interfaces.Domain;
 namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.TeamAdherence
 {
 	[AdherenceTest]
-	[TestFixture, Ignore]
+	[TestFixture]
 	public class UnorderedEventsTest
 	{
 		public FakeTeamOutOfAdherenceReadModelPersister Persister;
