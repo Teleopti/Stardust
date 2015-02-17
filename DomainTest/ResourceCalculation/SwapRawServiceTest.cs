@@ -496,20 +496,16 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 				// note that for the assert we have to convert back the start and endtime to local time because that 
 				// is how the scheduler shows the shift in grid
 				var shiftStartBeforeSwap =
-					TimeZoneHelper.ConvertFromUtc(_scheduleDayOnePersonOne.PersonAssignment().Period.StartDateTime, timeZoneInfo)
-						.TimeOfDay;
+					TimeZoneHelper.ConvertFromUtc(_scheduleDayOnePersonOne.PersonAssignment().Period.StartDateTime, timeZoneInfo).TimeOfDay;
 				var shiftEndBeforeSwap =
-					TimeZoneHelper.ConvertFromUtc(_scheduleDayOnePersonOne.PersonAssignment().Period.EndDateTime, timeZoneInfo)
-						.TimeOfDay;
+					TimeZoneHelper.ConvertFromUtc(_scheduleDayOnePersonOne.PersonAssignment().Period.EndDateTime, timeZoneInfo).TimeOfDay;
 
 				_swapRawService.Swap(_schedulePartModifyAndRollbackService, _selectionOne, _selectionTwo, _locks);
 
 				var shiftStartAfterSwap =
-					TimeZoneHelper.ConvertFromUtc(_scheduleDayTwoPersonOne.PersonAssignment().Period.StartDateTime, timeZoneInfo)
-						.TimeOfDay;
+					TimeZoneHelper.ConvertFromUtc(_scheduleDayTwoPersonOne.PersonAssignment().Period.StartDateTime, timeZoneInfo).TimeOfDay;
 				var shiftEndAfterSwap =
-					TimeZoneHelper.ConvertFromUtc(_scheduleDayTwoPersonOne.PersonAssignment().Period.EndDateTime, timeZoneInfo)
-						.TimeOfDay;
+					TimeZoneHelper.ConvertFromUtc(_scheduleDayTwoPersonOne.PersonAssignment().Period.EndDateTime, timeZoneInfo).TimeOfDay;
 
 				Assert.AreEqual(shiftStartBeforeSwap, shiftStartAfterSwap);
 				Assert.AreEqual(shiftEndBeforeSwap, shiftEndAfterSwap);
