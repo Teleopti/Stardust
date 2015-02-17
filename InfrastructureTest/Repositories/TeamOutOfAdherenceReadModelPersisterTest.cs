@@ -40,20 +40,20 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			Target.Persist(new TeamOutOfAdherenceReadModel
 			{
 				TeamId = teamId,
-				State = new [] {new TeamOutOfAdherenceReadModelState(){AdherenceCounter = 1, PersonId = Guid.NewGuid()}}
+				State = new [] {new TeamOutOfAdherenceReadModelState(){Count = 1, PersonId = Guid.NewGuid()}}
 			});
 			Target.Persist(new TeamOutOfAdherenceReadModel
 			{
 				Count = 5, 
 				TeamId = teamId,
 				SiteId = siteId,
-				State = new[] { new TeamOutOfAdherenceReadModelState() { AdherenceCounter = 2, PersonId = Guid.NewGuid() } }
+				State = new[] { new TeamOutOfAdherenceReadModelState() { Count = 2, PersonId = Guid.NewGuid() } }
 			});
 
 			var model = Target.Get(teamId);
 			model.Count.Should().Be(5);
 			model.SiteId.Should().Be(siteId);
-			model.State.SingleOrDefault().AdherenceCounter.Should().Be(2);
+			model.State.SingleOrDefault().Count.Should().Be(2);
 		}
 
 		[Test]
@@ -77,19 +77,19 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 				SiteId = siteId1,
 				TeamId = teamId1,
 				Count = 1,
-				State = new[] {new TeamOutOfAdherenceReadModelState() {AdherenceCounter = 2, PersonId = Guid.NewGuid()}}
+				State = new[] {new TeamOutOfAdherenceReadModelState() {Count = 2, PersonId = Guid.NewGuid()}}
 			});
 			Target.Persist(new TeamOutOfAdherenceReadModel
 			{
 				SiteId = siteId2,
 				TeamId = teamId2,
 				Count = 1,
-				State = new[] {new TeamOutOfAdherenceReadModelState() {AdherenceCounter = 1, PersonId = Guid.NewGuid()}}
+				State = new[] {new TeamOutOfAdherenceReadModelState() {Count = 1, PersonId = Guid.NewGuid()}}
 			});
 
 			var readModel = Target.GetForSite(siteId1);
 			readModel.Single().TeamId.Should().Be(teamId1);
-			readModel.Single().State.SingleOrDefault().AdherenceCounter.Should().Be(2);
+			readModel.Single().State.SingleOrDefault().Count.Should().Be(2);
 		}
 
 		[Test]

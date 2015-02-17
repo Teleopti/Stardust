@@ -24,47 +24,61 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta
 		[ReadModelUnitOfWork]
 		public virtual void Handle(PersonOutOfAdherenceEvent @event)
 		{
-			handleModel(@event.TeamId, @event.SiteId,  model =>
-			{
-				model.State = updateStates(model.State, @event.PersonId, 1);
-			});
+			handleEvent(@event.BusinessUnitId, @event.SiteId, model =>
+				updatePerson(@event.PersonId, model, person =>
+				{
+					person.Count += 1;
+				}));
 		}
 
 		[ReadModelUnitOfWork]
 		public virtual void Handle(PersonInAdherenceEvent @event)
 		{
-			handleModel(@event.TeamId, @event.SiteId, model =>
-			{
-				model.State = updateStates(model.State, @event.PersonId, -1);
-			});
+			handleEvent(@event.BusinessUnitId, @event.SiteId, model =>
+				updatePerson(@event.PersonId, model, person =>
+				{
+					person.Count -= 1;
+				}));
 		}
 
-		private void handleModel(Guid teamId, Guid siteId, Action<TeamOutOfAdherenceReadModel> mutate)
+		private void handleEvent(Guid teamId, Guid siteId, Action<TeamOutOfAdherenceReadModel> mutate)
 		{
-			var model = _persister.Get(teamId) ?? new TeamOutOfAdherenceReadModel()
+			var model = _persister.Get(siteId) ?? new TeamOutOfAdherenceReadModel
 			{
 				SiteId = siteId,
 				TeamId = teamId,
 				State = new TeamOutOfAdherenceReadModelState[] { }
 			};
 			mutate(model);
-			model.Count = model.State.Count(x=>x.AdherenceCounter>0);
+			calculate(model);
 			_persister.Persist(model);
 		}
 
-		private IEnumerable<TeamOutOfAdherenceReadModelState> updateStates( IEnumerable<TeamOutOfAdherenceReadModelState> states, Guid personId, int adherenceState)
+		private void updatePerson(Guid personId, TeamOutOfAdherenceReadModel model, Action<TeamOutOfAdherenceReadModelState> mutate)
 		{
-			if (!states.Any(x => x.PersonId == personId))
-				return states.Concat(new[] {new TeamOutOfAdherenceReadModelState() {AdherenceCounter = adherenceState, PersonId = personId}});
+			var person = getPerson(model, personId);
+			mutate(person);
+			if (person.Count == 0)
+				removePerson(model, person);
+		}
 
-			if (states.Any(x => x.PersonId == personId && ((x.AdherenceCounter + adherenceState) <= 0)))
-				return states.Where(x => x.PersonId != personId);
+		private static TeamOutOfAdherenceReadModelState getPerson(TeamOutOfAdherenceReadModel model, Guid personId)
+		{
+			var person = model.State.SingleOrDefault(x => x.PersonId == personId);
+			if (person != null) return person;
+			person = new TeamOutOfAdherenceReadModelState { PersonId = personId };
+			model.State = model.State.Concat(new[] { person }).ToArray();
+			return person;
+		}
 
-			foreach (var state in states.Where(state => state.PersonId == personId))
-			{
-				state.AdherenceCounter += adherenceState;
-			}
-			return states;
+		private void removePerson(TeamOutOfAdherenceReadModel model, TeamOutOfAdherenceReadModelState person)
+		{
+			model.State = model.State.Except(new[] { person }).ToArray();
+		}
+
+		private static void calculate(TeamOutOfAdherenceReadModel model)
+		{
+			model.Count = model.State.Count(x => x.Count > 0);
 		}
 		
 		[ReadModelUnitOfWork]
