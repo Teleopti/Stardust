@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using NUnit.Framework;
-using Rhino.Mocks;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.Security.AuthorizationEntities;
 using Teleopti.Ccc.Infrastructure.Foundation;
@@ -9,7 +8,6 @@ using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.Infrastructure.Web;
 using Teleopti.Ccc.TestCommon;
-using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.InfrastructureTest.NHibernateConfiguration.Cache
@@ -58,10 +56,6 @@ namespace Teleopti.Ccc.InfrastructureTest.NHibernateConfiguration.Cache
 			applicationFunction = new ApplicationFunction();
 			applicationRole = new ApplicationRole { Name = "hejhej" };
 			applicationRole.AddApplicationFunction(applicationFunction);
-
-			StateHolderProxyHelper.ClearAndSetStateHolder(SetupFixtureForAssembly.loggedOnPerson,
-													  BusinessUnitFactory.BusinessUnitUsedInTest,
-													  SetupFixtureForAssembly.ApplicationData);
 
 			using (var uow = dataSource.Application.CreateAndOpenUnitOfWork())
 			{
