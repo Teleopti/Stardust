@@ -129,15 +129,6 @@ namespace Teleopti.Ccc.TestCommon
         	mocks.Replay(stateMock);
         }
 
-    	public static void ClearAndSetStateHolder(IPerson loggedOnPerson,
-												 IBusinessUnit businessUnit,
-												 IApplicationData appData
-			)
-    	{
-				var mocks = new MockRepository();
-				ClearAndSetStateHolder(mocks, loggedOnPerson, businessUnit, appData, DefaultPrincipalContext, mocks.DynamicMock<IState>());
-		}
-
     	public static void SetStateReaderExpectations(IStateReader stateMock, IApplicationData applicationData, ISessionData sessionData)
         {
             Expect.Call(stateMock.IsLoggedIn)

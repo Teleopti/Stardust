@@ -95,10 +95,6 @@ namespace Teleopti.Ccc.InfrastructureTest.NHibernateConfiguration.Cache
 			availableData.AddAvailableSite(site);
 			availableData.AddAvailableTeam(team);
 
-			StateHolderProxyHelper.ClearAndSetStateHolder(SetupFixtureForAssembly.loggedOnPerson,
-													  businessUnit,
-													  SetupFixtureForAssembly.ApplicationData);
-
 			using (var uow = dataSource.Application.CreateAndOpenUnitOfWork())
 			{
 				new BusinessUnitRepository(uow).Add(businessUnit);
