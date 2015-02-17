@@ -44,8 +44,8 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
             _authorizationService = _mockRepository.StrictMock<IPrincipalAuthorization>();
 			_swapRawService = new SwapRawService(_authorizationService);
 			_scheduleDictionary = _mockRepository.StrictMock<IScheduleDictionary>();
-			_personOne = PersonFactory.CreatePerson("personOne");
-			_personTwo = PersonFactory.CreatePerson("personTwo");
+			_personOne = PersonFactory.CreatePerson(new Name("personOne", "personOne"), TimeZoneInfoFactory.GmtTimeZoneInfo());
+			_personTwo = PersonFactory.CreatePerson(new Name("personTwo", "personTwo"), TimeZoneInfoFactory.GmtTimeZoneInfo());
 			_scenario = new Scenario("scenario1");
 			_schedulePartModifyAndRollbackService = _mockRepository.StrictMock<ISchedulePartModifyAndRollbackService>();
 			_locks = new Dictionary<IPerson, IList<DateOnly>>();
@@ -117,8 +117,53 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
             }
         }
 
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling"), Test]
+		public void ShouldSwapMainShiftAndDayOff()
+		{
+			using (_mockRepository.Record())
+			{
+                commonMocks();
+			}
+
+			using (_mockRepository.Playback())
+			{
+				_scheduleDayOnePersonOne = ExtractedSchedule.CreateScheduleDay(_scheduleDictionary, _personOne, new DateOnly(2011, 1, 1));
+				_scheduleDayTwoPersonOne = ExtractedSchedule.CreateScheduleDay(_scheduleDictionary, _personOne, new DateOnly(2011, 1, 2));
+				_scheduleDayThreePersonOne = ExtractedSchedule.CreateScheduleDay(_scheduleDictionary, _personOne, new DateOnly(2011, 1, 3));
+				_scheduleDayOnePersonTwo = ExtractedSchedule.CreateScheduleDay(_scheduleDictionary, _personTwo, new DateOnly(2011, 1, 3));
+				_scheduleDayTwoPersonTwo = ExtractedSchedule.CreateScheduleDay(_scheduleDictionary, _personTwo, new DateOnly(2011, 1, 4));
+				_scheduleDayThreePersonTwo = ExtractedSchedule.CreateScheduleDay(_scheduleDictionary, _personTwo, new DateOnly(2011, 1, 5));
+
+				var dateTimePeriod1 = new DateTimePeriod(new DateTime(2011, 1, 1, 8, 0, 0, DateTimeKind.Utc), new DateTime(2011, 1, 1, 17, 0, 0, DateTimeKind.Utc));
+				var dateTimePeriod2 = new DateTimePeriod(new DateTime(2011, 1, 2, 9, 0, 0, DateTimeKind.Utc), new DateTime(2011, 1, 2, 17, 0, 0, DateTimeKind.Utc));
+				var dateTimePeriod3 = new DateTimePeriod(new DateTime(2011, 1, 3, 10, 0, 0, DateTimeKind.Utc), new DateTime(2011, 1, 3, 17, 0, 0, DateTimeKind.Utc));
+				var dateTimePeriod4 = new DateTimePeriod(new DateTime(2011, 1, 4, 11, 0, 0, DateTimeKind.Utc), new DateTime(2011, 1, 4, 17, 0, 0, DateTimeKind.Utc));
+
+				_scheduleDayOnePersonOne.Add(PersonAssignmentFactory.CreateAssignmentWithMainShift(_scenario, _personOne, dateTimePeriod1));
+				_scheduleDayTwoPersonOne.Add(PersonAssignmentFactory.CreateAssignmentWithMainShift(_scenario, _personOne, dateTimePeriod2));
+				_scheduleDayOnePersonTwo.Add(PersonAssignmentFactory.CreateAssignmentWithMainShift(_scenario, _personTwo, dateTimePeriod3));
+				_scheduleDayTwoPersonTwo.Add(PersonAssignmentFactory.CreateAssignmentWithMainShift(_scenario, _personTwo, dateTimePeriod4));
+				_scheduleDayThreePersonOne.Add(PersonAssignmentFactory.CreateAssignmentWithDayOff(_scenario, _personOne, 
+																					  new DateOnly(dateTimePeriod3.StartDateTime),
+																					  TimeSpan.FromHours(24), TimeSpan.FromHours(0),
+																					  TimeSpan.FromHours(12)));
+
+				_selectionOne = new List<IScheduleDay> { _scheduleDayOnePersonOne, _scheduleDayTwoPersonOne, _scheduleDayThreePersonOne };
+				_selectionTwo = new List<IScheduleDay> { _scheduleDayOnePersonTwo, _scheduleDayTwoPersonTwo, _scheduleDayThreePersonTwo };
+
+				_swapRawService.Swap(_schedulePartModifyAndRollbackService, _selectionOne, _selectionTwo, _locks);
+
+				Assert.AreEqual(new DateTime(2011, 1, 1, 10, 0, 0, DateTimeKind.Utc), _scheduleDayOnePersonOne.PersonAssignment().Period.StartDateTime);
+				Assert.AreEqual(new DateTime(2011, 1, 2, 11, 0, 0, DateTimeKind.Utc), _scheduleDayTwoPersonOne.PersonAssignment().Period.StartDateTime);
+				Assert.AreEqual(new DateTime(2011, 1, 3, 8, 0, 0, DateTimeKind.Utc), _scheduleDayOnePersonTwo.PersonAssignment().Period.StartDateTime);
+				Assert.AreEqual(new DateTime(2011, 1, 4, 9, 0, 0, DateTimeKind.Utc), _scheduleDayTwoPersonTwo.PersonAssignment().Period.StartDateTime);
+				Assert.AreEqual(1, _scheduleDayThreePersonOne.PersistableScheduleDataCollection().Count());
+				Assert.IsNotNull(_scheduleDayThreePersonTwo.PersonAssignment().DayOff());
+			}
+		}
+
 		[Test]
-		public void ShouldKeepStartEndTimeWhenSwapDayOffOverSummertimeChangeDay()
+		public void ShouldShouldKeepStartEndTimeWhenSwapMainShiftAndDayOffOverSummertimeChangeDay()
 		{
 			using (_mockRepository.Record())
 			{
@@ -167,51 +212,6 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 				Assert.AreEqual(shiftStartBeforeSwap, shiftStartAfterSwap);
 				Assert.AreEqual(shiftEndBeforeSwap, shiftEndAfterSwap);
 
-			}
-		}
-
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling"), Test]
-		public void ShouldSwapMainShiftAndDayOff()
-		{
-			using (_mockRepository.Record())
-			{
-                commonMocks();
-			}
-
-			using (_mockRepository.Playback())
-			{
-				_scheduleDayOnePersonOne = ExtractedSchedule.CreateScheduleDay(_scheduleDictionary, _personOne, new DateOnly(2011, 1, 1));
-				_scheduleDayTwoPersonOne = ExtractedSchedule.CreateScheduleDay(_scheduleDictionary, _personOne, new DateOnly(2011, 1, 2));
-				_scheduleDayThreePersonOne = ExtractedSchedule.CreateScheduleDay(_scheduleDictionary, _personOne, new DateOnly(2011, 1, 3));
-				_scheduleDayOnePersonTwo = ExtractedSchedule.CreateScheduleDay(_scheduleDictionary, _personTwo, new DateOnly(2011, 1, 3));
-				_scheduleDayTwoPersonTwo = ExtractedSchedule.CreateScheduleDay(_scheduleDictionary, _personTwo, new DateOnly(2011, 1, 4));
-				_scheduleDayThreePersonTwo = ExtractedSchedule.CreateScheduleDay(_scheduleDictionary, _personTwo, new DateOnly(2011, 1, 5));
-
-				var dateTimePeriod1 = new DateTimePeriod(new DateTime(2011, 1, 1, 8, 0, 0, DateTimeKind.Utc), new DateTime(2011, 1, 1, 17, 0, 0, DateTimeKind.Utc));
-				var dateTimePeriod2 = new DateTimePeriod(new DateTime(2011, 1, 2, 9, 0, 0, DateTimeKind.Utc), new DateTime(2011, 1, 2, 17, 0, 0, DateTimeKind.Utc));
-				var dateTimePeriod3 = new DateTimePeriod(new DateTime(2011, 1, 3, 10, 0, 0, DateTimeKind.Utc), new DateTime(2011, 1, 3, 17, 0, 0, DateTimeKind.Utc));
-				var dateTimePeriod4 = new DateTimePeriod(new DateTime(2011, 1, 4, 11, 0, 0, DateTimeKind.Utc), new DateTime(2011, 1, 4, 17, 0, 0, DateTimeKind.Utc));
-
-				_scheduleDayOnePersonOne.Add(PersonAssignmentFactory.CreateAssignmentWithMainShift(_scenario, _personOne, dateTimePeriod1));
-				_scheduleDayTwoPersonOne.Add(PersonAssignmentFactory.CreateAssignmentWithMainShift(_scenario, _personOne, dateTimePeriod2));
-				_scheduleDayOnePersonTwo.Add(PersonAssignmentFactory.CreateAssignmentWithMainShift(_scenario, _personTwo, dateTimePeriod3));
-				_scheduleDayTwoPersonTwo.Add(PersonAssignmentFactory.CreateAssignmentWithMainShift(_scenario, _personTwo, dateTimePeriod4));
-				_scheduleDayThreePersonOne.Add(PersonAssignmentFactory.CreateAssignmentWithDayOff(_scenario, _personOne, 
-																					  new DateOnly(dateTimePeriod3.StartDateTime),
-																					  TimeSpan.FromHours(24), TimeSpan.FromHours(0),
-																					  TimeSpan.FromHours(12)));
-
-				_selectionOne = new List<IScheduleDay> { _scheduleDayOnePersonOne, _scheduleDayTwoPersonOne, _scheduleDayThreePersonOne };
-				_selectionTwo = new List<IScheduleDay> { _scheduleDayOnePersonTwo, _scheduleDayTwoPersonTwo, _scheduleDayThreePersonTwo };
-
-				_swapRawService.Swap(_schedulePartModifyAndRollbackService, _selectionOne, _selectionTwo, _locks);
-
-				Assert.AreEqual(new DateTime(2011, 1, 1, 10, 0, 0, DateTimeKind.Utc), _scheduleDayOnePersonOne.PersonAssignment().Period.StartDateTime);
-				Assert.AreEqual(new DateTime(2011, 1, 2, 11, 0, 0, DateTimeKind.Utc), _scheduleDayTwoPersonOne.PersonAssignment().Period.StartDateTime);
-				Assert.AreEqual(new DateTime(2011, 1, 3, 8, 0, 0, DateTimeKind.Utc), _scheduleDayOnePersonTwo.PersonAssignment().Period.StartDateTime);
-				Assert.AreEqual(new DateTime(2011, 1, 4, 9, 0, 0, DateTimeKind.Utc), _scheduleDayTwoPersonTwo.PersonAssignment().Period.StartDateTime);
-				Assert.AreEqual(1, _scheduleDayThreePersonOne.PersistableScheduleDataCollection().Count());
-				Assert.IsNotNull(_scheduleDayThreePersonTwo.PersonAssignment().DayOff());
 			}
 		}
 

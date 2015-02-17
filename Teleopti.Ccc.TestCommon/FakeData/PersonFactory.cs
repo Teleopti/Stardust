@@ -68,7 +68,7 @@ namespace Teleopti.Ccc.TestCommon.FakeData
         /// </remarks>
         public static IPerson CreatePerson(Name name)
         {
-	        return CreatePerson(name, TimeZoneInfoFactory.GmtTimeZoneInfo());
+	        return CreatePerson(name, TimeZoneInfoFactory.UtcTimeZoneInfo());
         }
 
 		/// <summary>
