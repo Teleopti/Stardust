@@ -63,7 +63,7 @@ namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork
             {
                 IPerson user = PersonFactory.CreatePerson();
                 user.Name = new Name("sdfsdf", "df");
-
+							
                 StateHolderProxyHelper.ClearAndSetStateHolder(mocks, user, BusinessUnitFactory.BusinessUnitUsedInTest,
                                                          SetupFixtureForAssembly.ApplicationData, stateMock);
                 IUnitOfWork uow1 = SetupFixtureForAssembly.DataSource.Application.CreateAndOpenUnitOfWork();

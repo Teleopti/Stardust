@@ -104,30 +104,6 @@ namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork
 			}
 		}
 
-		/// <summary>
-		/// Verifies createunitofwork works when user logged in.
-		/// </summary>
-		[Test]
-		public void VerifyCanCreateUnitOfWork()
-		{
-			stateMock = mocks.StrictMock<IState>();
-			BusinessUnit buUsedWhenCreatingUow = new BusinessUnit("f");
-			Guid buGuid = Guid.NewGuid();
-			((IEntity) buUsedWhenCreatingUow).SetId(buGuid);
-			StateHolderProxyHelper.ClearAndSetStateHolder(mocks, PersonFactory.CreatePerson("sdfsg"), buUsedWhenCreatingUow,
-													 SetupFixtureForAssembly.ApplicationData, stateMock);
-
-			using (mocks.Record())
-			{
-				createSessionMock(factoryMock, buGuid);
-			}
-			using (mocks.Playback())
-			{
-				target = new NHibernateUnitOfWorkFactoryFake(factoryMock);
-				target.CreateAndOpenUnitOfWork();
-			}
-		}
-
 		private ISession createSessionMock(ISessionFactoryImplementor sessionFactory, Guid buId)
 		{
 			var sessMock = mocks.StrictMock<ISession>();

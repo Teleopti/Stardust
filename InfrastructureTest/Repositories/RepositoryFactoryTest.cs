@@ -1,10 +1,6 @@
 using NUnit.Framework;
 using Rhino.Mocks;
-using Teleopti.Ccc.Domain.Common;
-using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.Infrastructure.Repositories;
-using Teleopti.Ccc.TestCommon;
-using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.InfrastructureTest.Repositories
@@ -18,7 +14,6 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
     {
         private MockRepository mocks;
         private IUnitOfWork uow;
-        private IState stateMock;
 
         /// <summary>
         /// Runs once per test
@@ -28,10 +23,6 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
         {
             mocks = new MockRepository();
             uow = mocks.StrictMock<IUnitOfWork>();
-            stateMock = mocks.StrictMock<IState>();
-            Person user = new Person();
-            StateHolderProxyHelper.ClearAndSetStateHolder(mocks, user, BusinessUnitFactory.BusinessUnitUsedInTest,
-                                                     SetupFixtureForAssembly.ApplicationData, stateMock);
         }
 
         /// <summary>
