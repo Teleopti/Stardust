@@ -1,3 +1,18 @@
+.swatch-list .blue-500-swatch {
+  background: #1976D2 !important; }
+.swatch-list .blue-300-swatch {
+  background: #64b5f6 !important; }
+.swatch-list .blue-100-swatch {
+  background: #BBDEFB !important; }
+.swatch-list .orange-400-swatch {
+  background: #FFA726 !important; }
+.swatch-list .gray-054-swatch {
+  background: rgba(0, 0, 0, 0.54) !important; }
+.swatch-list .gray-300-swatch {
+  background: #E0E0E0 !important; }
+.swatch-list .gray-012-swatch {
+  background: rgba(0, 0, 0, 0.06) !important; }
+
 .material-depth-1 {
   box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.16); }
 
@@ -41,13 +56,6 @@
 
 .fail {
   color: red; }
-
-input {
-  width: 100%;
-  margin: 5px 0;
-  padding: 10px;
-  border: none;
-  border-bottom: 1px solid #E0E0E0 !important; }
 
 .filter-form svg {
   margin-top: 8px;
@@ -293,33 +301,11 @@ md-tooltip[width-32="8"].md-show .md-background {
   -webkit-animation-duration: 200ms;
   animation-duration: 200ms; }
 
-.spacer {
-  margin: 25px;
-  padding: 15px;
-  text-align: center;
-  display: inline-block;
-  background: white; }
-
-.swatch-list .blue-500-swatch {
-  background: #1976D2 !important; }
-.swatch-list .blue-300-swatch {
-  background: #64b5f6 !important; }
-.swatch-list .blue-100-swatch {
-  background: #BBDEFB !important; }
-.swatch-list .orange-400-swatch {
-  background: #FFA726 !important; }
-.swatch-list .gray-054-swatch {
-  background: rgba(0, 0, 0, 0.54) !important; }
-.swatch-list .gray-300-swatch {
-  background: #E0E0E0 !important; }
-.swatch-list .gray-012-swatch {
-  background: rgba(0, 0, 0, 0.06) !important; }
-
-/*template styles*/
-.kss-sidebar {
-  position: fixed !important; }
-
-#kss-node > div > nav > ul > li:nth-child(1) {
-  display: none !important; }
+input {
+  width: 100%;
+  margin: 5px 0;
+  padding: 10px;
+  border: none;
+  border-bottom: 1px solid #E0E0E0 !important; }
 
 /*# sourceMappingURL=main.css.map */

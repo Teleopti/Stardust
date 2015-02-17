@@ -1,4 +1,39 @@
-﻿.wfm-list {
+﻿//Lists
+//
+//Lets talk about lists. Options can only effect the list item it is a part of. Options can have a tooltip and an icon. 
+//
+//Markup:
+//<ul class="wfm-list">
+//	<li class="wfm-list-item material-depth-1">
+//		List Item 1
+//		<div class="wfm-list-menu pull-right">
+//			<span>
+//				Options
+//			</span>
+//		</div>
+//	</li>
+//	<li class="wfm-list-item material-depth-1">
+//		List Item 2
+//		<div class="wfm-list-menu pull-right">
+//			<span>
+//				Options
+//			</span>
+//		</div>
+//	</li>
+//	<li class="wfm-list-item material-depth-1">
+//		List Item 3
+//		<div class="wfm-list-menu pull-right">
+//			<span>
+//				Options
+//			</span>
+//		</div>
+//	</li>
+//</ul>
+//
+//Styleguide 1.2 
+//
+
+.wfm-list {
 	padding-left: 0px;
 	list-style: none;
 	margin: 5px;

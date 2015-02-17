@@ -7,6 +7,11 @@
 				files: {
 					'css/main.css': 'css/main.scss'
 				}
+			},
+			styleguide: {
+				files: {
+					'css/styleguide.css': 'css/_styleguide.scss'
+				}
 			}
 		},
 		watch: {
@@ -50,5 +55,6 @@
 
 	// Default task(s).
 	grunt.registerTask('default', ['sass', 'watch']); // this task watchs
+	grunt.registerTask('styleguide', ['sass:styleguide']); // this task watchs
 	grunt.registerTask('dist', ['concat']); // this task is kind of package
 };

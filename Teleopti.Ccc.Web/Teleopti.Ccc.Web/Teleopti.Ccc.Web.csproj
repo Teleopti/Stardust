@@ -1558,6 +1558,8 @@
     <Content Include="Areas\WFM\css\_list.scss" />
     <Content Include="Areas\Reporting\Views\Report\Adherence.cshtml" />
     <Content Include="Areas\WFM\css\_styleguide.scss" />
+    <Content Include="Areas\WFM\css\_form.scss" />
+    <Content Include="Areas\WFM\css\_buttons.scss" />
     <None Include="Areas\WFM\css\_material.scss" />
     <Content Include="Areas\WFM\html\forecasting-run.html" />
     <Content Include="Areas\WFM\html\forecasting.html" />
@@ -1865,6 +1867,7 @@
     <Content Include="Areas\WFM\css\_tree.scss" />
     <Content Include="Areas\WFM\css\_variables.scss" />
     <Content Include="Areas\WFM\css\_tooltip.scss" />
+    <Content Include="Areas\WFM\css\_navbar.scss" />
     <None Include="PasswordPolicy.xml.notinuse">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>

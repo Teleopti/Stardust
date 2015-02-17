@@ -1,4 +1,46 @@
-﻿.tree {
+﻿//Trees
+//
+// Based on angular tree
+//
+//Markup:
+//<div class="tree">
+//	<div ui-tree>
+//		<ol class="tree-line angular-ui-tree-nodes">
+//			<li ui-tree-node>
+//				<div>
+//					Parent 
+//					<ol>
+//						<li class="angular-ui-tree-handle">
+//							child 
+//						</li>
+//						<li class="angular-ui-tree-handle">
+//							child 
+//						</li>
+//						<li class="angular-ui-tree-handle">
+//							child 
+//						</li>
+//					</ol>
+//				</div>
+//			</li>
+//			<li ui-tree-node>
+//				<div>
+//					Parent
+//					<ol>
+//						<li class="angular-ui-tree-handle">
+//							child
+//						</li>
+//					</ol>
+//				</div>
+//			</li>
+//		</ol>
+//	</div>
+//</div>
+//
+//Styleguide 1.3
+//
+
+
+.tree {
 	max-height: 800px;
 	overflow-y: auto;
 	padding-bottom: 5px;
