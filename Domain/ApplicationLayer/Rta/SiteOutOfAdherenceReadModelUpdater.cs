@@ -24,25 +24,24 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta
 		[ReadModelUnitOfWork]
 		public virtual void Handle(PersonOutOfAdherenceEvent @event)
 		{
-			mutateState(@event.BusinessUnitId, @event.SiteId, model =>
-			{
-				getPerson(model, @event.PersonId).Count += 1;
-			});
+			handleEvent(@event.BusinessUnitId, @event.SiteId, model =>
+				updatePerson(@event.PersonId, model, person =>
+				{
+					person.Count += 1;
+				}));
 		}
 
 		[ReadModelUnitOfWork]
 		public virtual void Handle(PersonInAdherenceEvent @event)
 		{
-			mutateState(@event.BusinessUnitId, @event.SiteId, model =>
-			{
-				var person = getPerson(model, @event.PersonId);
-				person.Count -= 1;
-				if (person.Count == 0)
-					removePerson(model, person);
-			});
+			handleEvent(@event.BusinessUnitId, @event.SiteId, model =>
+				updatePerson(@event.PersonId, model, person =>
+				{
+					person.Count -= 1;
+				}));
 		}
 
-		private void mutateState(Guid businessUnitId, Guid siteId, Action<SiteOutOfAdherenceReadModel> mutate)
+		private void handleEvent(Guid businessUnitId, Guid siteId, Action<SiteOutOfAdherenceReadModel> mutate)
 		{
 			var model = _persister.Get(siteId) ?? new SiteOutOfAdherenceReadModel
 			{
@@ -53,6 +52,14 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta
 			mutate(model);
 			calculate(model);
 			_persister.Persist(model);
+		}
+
+		private void updatePerson(Guid personId, SiteOutOfAdherenceReadModel model, Action<SiteOutOfAdherenceReadModelState> mutate)
+		{
+			var person = getPerson(model, personId);
+			mutate(person);
+			if (person.Count == 0)
+				removePerson(model, person);
 		}
 
 		private static SiteOutOfAdherenceReadModelState getPerson(SiteOutOfAdherenceReadModel model, Guid personId)
