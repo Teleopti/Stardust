@@ -225,6 +225,7 @@
     <Compile Include="MultiTenancy\NHibernate\PasswordPolicyForUserMapping.cs" />
     <Compile Include="MultiTenancy\PasswordPolicyForUser.cs" />
     <Compile Include="MultiTenancy\NHibernate\TenantUnitOfWorkManager.cs" />
+    <Compile Include="MultiTenancy\Tenant.cs" />
     <Compile Include="NHibernateConfiguration\SecondLevelCache.cs" />
     <Compile Include="PerformanceTool\PersonGenerator.cs" />
     <Compile Include="PerformanceTool\ScheduleGenerator.cs" />
@@ -583,6 +584,7 @@
     <Content Include="Config\PolicyForPassword.xml" />
     <EmbeddedResource Include="MultiTenancy\PersonInfo.hbm.xml" />
     <EmbeddedResource Include="MultiTenancy\PasswordPolicyForUser.hbm.xml" />
+    <EmbeddedResource Include="MultiTenancy\Tenant.hbm.xml" />
     <Content Include="MultiTenancy\these_files_will_probably_be_moved.txt" />
     <EmbeddedResource Include="Licensing\Agreements\TeleoptiLic_De_De_St.txt" />
     <EmbeddedResource Include="Licensing\Agreements\TeleoptiLic_TeleoptiCloud.txt" />

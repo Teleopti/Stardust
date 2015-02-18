@@ -11,6 +11,8 @@
 				type="Teleopti.Ccc.Infrastructure.NHibernateConfiguration.DateOnlyMappingType, Teleopti.Ccc.Infrastructure"
 				not-null="false"/>
 		<property name="isDeleted" />
+		<many-to-one name="tenant" class="Tenant" />
+		
 		<join table="AuthenticationInfo" fetch="join" optional="true">
 			<key column="Person" />
 			<property column="[Identity]" name="identity" />

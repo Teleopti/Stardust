@@ -11,13 +11,17 @@ namespace Teleopti.Ccc.Infrastructure.MultiTenancy
 		private string applicationLogonName;
 		private string identity;
 #pragma warning restore 169
+#pragma warning disable 649
+		private Tenant tenant;
+#pragma warning restore 649
+
 
 		public virtual Guid Id { get; set; }
 		public virtual string Password { get; set; }
 
 		public virtual string Tenant
 		{
-			get { return "Teleopti WFM"; }
+			get { return tenant.Name; }
 		}
 	}
 }

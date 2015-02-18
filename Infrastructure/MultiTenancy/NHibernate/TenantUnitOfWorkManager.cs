@@ -33,6 +33,7 @@ namespace Teleopti.Ccc.Infrastructure.MultiTenancy.NHibernate
 			cfg.SetProperty(Environment.CurrentSessionContextClass, sessionContext);
 			cfg.AddClass(typeof (PersonInfo));
 			cfg.AddClass(typeof (PasswordPolicyForUser));
+			cfg.AddClass(typeof (Tenant));
 
 			var ret = new TenantUnitOfWorkManager {_sessionFactory = cfg.BuildSessionFactory()};
 			return ret;

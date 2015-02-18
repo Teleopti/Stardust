@@ -31,9 +31,9 @@ namespace Teleopti.Ccc.InfrastructureTest.MultiTenancy
 		[Test]
 		public void ShouldFindTenant()
 		{
-			//this will change in the future
+			const string defaultTenant = "Teleopti WFM";
 			var result = target.FindUserData(correctIdentity);
-			result.Tenant.Should().Be.EqualTo("Teleopti WFM");
+			result.Tenant.Should().Be.EqualTo(defaultTenant);
 		}
 
 		
