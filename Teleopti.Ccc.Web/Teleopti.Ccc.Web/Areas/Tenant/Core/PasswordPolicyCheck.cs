@@ -26,7 +26,8 @@ namespace Teleopti.Ccc.Web.Areas.Tenant.Core
 			{
 				FailReason = res.Message,
 				PasswordExpired = res.PasswordExpired,
-				Success = res.Successful
+				Success = res.Successful,
+				Tenant = passwordPolicyForUser.PersonInfo.Tenant
 			};
 		}
 	}

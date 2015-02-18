@@ -119,13 +119,15 @@ namespace Teleopti.Ccc.WebTest.Areas.Tenant.Core
 			res.FailReason.Should().Be.EqualTo(Resources.LogOnFailedAccountIsLocked);
 		}
 
-		//rewrite this and replace with real tests when old password policy is converted!
+		//TODO: tenant, rewrite the setup when password policy is utbruten!
 		[Test]
 		public void PasswordThatWillExpireSoonShouldSuccedButHaveFailReasonSet()
 		{
 			const string userName = "validUserName";
 			const string password = "somePassword";
+			const string tenant = "theTenant";
 			var personInfo = new PersonInfo { Id = Guid.NewGuid(), Password = EncryptPassword.ToDbFormat(password) };
+			personInfo.SetTenant_DoNotUseThisIfYouAreNotSureWhatYouAreDoing(tenant);
 			var passwordPolicyForUser = new PasswordPolicyForUser(personInfo);
 			var theUserDetail = new UserDetail(null);
 			var findApplicationQuery = MockRepository.GenerateMock<IApplicationUserQuery>();
@@ -143,9 +145,10 @@ namespace Teleopti.Ccc.WebTest.Areas.Tenant.Core
 			var res = target.Logon(userName, password);
 			res.Success.Should().Be.True();
 			res.FailReason.Should().Be.EqualTo("THEMESSAGE");
+			res.Tenant.Should().Be.EqualTo(tenant);
 		}
 
-		//rewrite this and replace with real tests when old password policy is converted!
+		//TODO: tenant, rewrite the setup when password policy is utbruten!
 		[Test]
 		public void ExpiredUserShouldSetPropertyOnResult()
 		{
@@ -173,7 +176,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Tenant.Core
 		}
 
 
-		//remove this and replace with real tests when old password policy is converted!
+		//TODO: tenant, rewrite the setup when password policy is utbruten!
 		[Test]
 		public void PasswordPolicyShouldBeChecked()
 		{

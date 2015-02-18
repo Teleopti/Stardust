@@ -10,5 +10,11 @@
 #pragma warning restore 169
 
 		public virtual string Name { get; protected set; }
+
+		//TODO: tenant
+		public virtual void SetName_DoNotUseThisOneIfYouDoNotKnowWhatYouAreDoing(string name)
+		{
+			Name = name;
+		}
 	}
 }

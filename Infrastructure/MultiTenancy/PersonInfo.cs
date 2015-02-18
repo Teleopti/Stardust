@@ -28,5 +28,11 @@ namespace Teleopti.Ccc.Infrastructure.MultiTenancy
 		{
 			get { return tenant.Name; }
 		}
+
+		//TODO: tenant
+		public virtual void SetTenant_DoNotUseThisIfYouAreNotSureWhatYouAreDoing(string tenantName)
+		{
+			tenant.SetName_DoNotUseThisOneIfYouDoNotKnowWhatYouAreDoing(tenantName);
+		}
 	}
 }
