@@ -20,21 +20,27 @@ define([
 		}
 	}
 
+	var load = function (callback, businessUnitId, siteId) {
+		ajax.ajax({
+			headers: { 'X-Business-Unit-Filter': businessUnitId },
+			url: "Teams/GetOutOfAdherenceForTeamsOnSite?siteId=" + siteId,
+			success: function (data) {
+				for (var i = 0; i < data.length; i++) {
+					callback(mapAsNotification(data[i]));
+				}
+			}
+		});
+	};
+
 	return {
 		subscribeAdherence: function (callback, businessUnitId, siteId, subscriptionDone) {
 			unsubscribeAdherence();
 
-			teamAdherencePoller = setInterval(function() {
-				ajax.ajax({
-					headers: { 'X-Business-Unit-Filter': businessUnitId },
-					url: "Teams/GetOutOfAdherenceForTeamsOnSite?siteId=" + siteId,
-					success: function (data) {
-						for (var i = 0; i < data.length; i++) {
-							callback(mapAsNotification(data[i]));
-						}
-					}
-				});
-			}, 5000);
+			var poll = function() {
+				load(callback, businessUnitId, siteId);
+			};
+			setTimeout(poll, 100);
+			teamAdherencePoller = setInterval(poll, 5000);
 
 			subscriptionDone();
 		},

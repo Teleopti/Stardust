@@ -32,10 +32,22 @@
 			ajax.ajax({
 				url: "Teams/ForSite?siteId=" + siteId,
 				success: function (data) {
+
 					viewModel.fill(data);
-					checkFeature();
-					checkDetailFeature();
-					checkAgentsForMultipleTeamsFeature();
+
+					if (resources.RTA_RtaLastStatesOverview_27789 && !resources.RTA_NoBroker_31237)
+						loadCurrentData('Teams/GetOutOfAdherence');
+
+					if (resources.RTA_DrilldownToAllAgentsInOneTeam_25234) {
+						for (var i = 0; i < viewModel.teams().length; i++) {
+							var team = viewModel.teams()[i];
+							team.canOpenTeam(true);
+						}
+					}
+
+					if (resources.RTA_ViewAgentsForMultipleTeams_28967) {
+						viewModel.agentStatesForMultipleTeams(true);
+					}
 				}
 			});
 
@@ -60,39 +72,15 @@
 				}
 			});
 
-			var checkFeature = function () {
-				if (resources.RTA_RtaLastStatesOverview_27789)
-					loadLastStates('Teams/GetOutOfAdherence');
-				if (resources.RTA_NoBroker_31237)
-					loadLastStates('Teams/GetOutOfAdherenceLite');
-			}
-			
-			var checkDetailFeature = function () {
-				if (resources.RTA_DrilldownToAllAgentsInOneTeam_25234) {
-					for (var i = 0; i < viewModel.teams().length; i++) {
-						(function(team) {
-							team.canOpenTeam(true);
-						})(viewModel.teams()[i]);
-					}
-				}
-			};
-
-			var checkAgentsForMultipleTeamsFeature = function () {
-				if (resources.RTA_ViewAgentsForMultipleTeams_28967) {
-					viewModel.agentStatesForMultipleTeams(true);
-				}
-			}
-
-			var loadLastStates = function (url) {
+			var loadCurrentData = function () {
 				for (var i = 0; i < viewModel.teams().length; i++) {
-					(function (team) {
-						ajax.ajax({
-							url: url+"?teamId=" + team.Id,
-							success: function (d) {
-								viewModel.update(d);
-							}
-						});
-					})(viewModel.teams()[i]);
+					var team = viewModel.teams()[i];
+					ajax.ajax({
+						url: "Teams/GetOutOfAdherence?teamId=" + team.Id,
+						success: function (d) {
+							viewModel.update(d);
+						}
+					});
 				}
 			};
 		},

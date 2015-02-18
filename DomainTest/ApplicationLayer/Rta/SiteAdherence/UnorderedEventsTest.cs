@@ -7,6 +7,7 @@ using SharpTestsEx;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta;
 using Teleopti.Ccc.Domain.Collection;
+using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Interfaces.Domain;
 
@@ -35,29 +36,42 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.SiteAdherence
 		{
 			get
 			{
-				var personId = Guid.NewGuid();
+				var personId1 = Guid.NewGuid();
+				var personId2 = Guid.NewGuid();
 				var siteId = Guid.NewGuid();
 				var events = new List<IEvent>
 				{
+
 					new PersonOutOfAdherenceEvent
 					{
-						PersonId = personId,
-						SiteId = siteId
+						PersonId = personId1,
+						SiteId = siteId,
+						Timestamp = "2015-02-18 12:00".Utc()
 					},
 					new PersonInAdherenceEvent
 					{
-						PersonId = personId,
-						SiteId = siteId
+						PersonId = personId1,
+						SiteId = siteId,
+						Timestamp = "2015-02-18 12:02".Utc()
 					},
 					new PersonOutOfAdherenceEvent
 					{
-						PersonId = personId,
-						SiteId = siteId
+						PersonId = personId1,
+						SiteId = siteId,
+						Timestamp = "2015-02-18 12:04".Utc()
+					},
+
+					new PersonInAdherenceEvent
+					{
+						PersonId = personId2,
+						SiteId = siteId,
+						Timestamp = "2015-02-18 12:06".Utc()
 					},
 					new PersonOutOfAdherenceEvent
 					{
-						PersonId = Guid.NewGuid(),
-						SiteId = siteId
+						PersonId = personId2,
+						SiteId = siteId,
+						Timestamp = "2015-02-18 12:08".Utc()
 					}
 				};
 				var permutations = events.Permutations();

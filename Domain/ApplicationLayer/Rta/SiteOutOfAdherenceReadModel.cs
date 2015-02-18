@@ -14,6 +14,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta
 	public class SiteOutOfAdherenceReadModelState
 	{
 		public Guid PersonId { get; set; }
-		public int OutOfAdherence { get; set; }
+		public bool OutOfAdherence { get; set; }
+		public DateTime Time { get; set; }
 	}
 }

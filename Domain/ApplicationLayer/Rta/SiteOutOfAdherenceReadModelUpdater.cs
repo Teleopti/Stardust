@@ -25,9 +25,9 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta
 		public virtual void Handle(PersonOutOfAdherenceEvent @event)
 		{
 			handleEvent(@event.BusinessUnitId, @event.SiteId, model =>
-				updatePerson(@event.PersonId, model, person =>
+				updatePerson(model, @event.PersonId, @event.Timestamp, person =>
 				{
-					person.OutOfAdherence += 1;
+					person.OutOfAdherence = true;
 				}));
 		}
 
@@ -35,9 +35,9 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta
 		public virtual void Handle(PersonInAdherenceEvent @event)
 		{
 			handleEvent(@event.BusinessUnitId, @event.SiteId, model =>
-				updatePerson(@event.PersonId, model, person =>
+				updatePerson(model, @event.PersonId, @event.Timestamp, person =>
 				{
-					person.OutOfAdherence -= 1;
+					person.OutOfAdherence = false;
 				}));
 		}
 
@@ -54,33 +54,42 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta
 			_persister.Persist(model);
 		}
 
-		private void updatePerson(Guid personId, SiteOutOfAdherenceReadModel model, Action<SiteOutOfAdherenceReadModelState> mutate)
+		private void updatePerson(SiteOutOfAdherenceReadModel model, Guid personId, DateTime time, Action<SiteOutOfAdherenceReadModelState> mutate)
 		{
-			var person = getPerson(model, personId);
-			mutate(person);
-			if (person.OutOfAdherence == 0)
-				removePerson(model, person);
+			var state = stateForPerson(model, personId);
+			if (state.Time <= time)
+			{
+				state.Time = time;
+				mutate(state);
+			}
+			removeRedundantOldStates(model);
 		}
 
-		private static SiteOutOfAdherenceReadModelState getPerson(SiteOutOfAdherenceReadModel model, Guid personId)
+		private static void removeRedundantOldStates(SiteOutOfAdherenceReadModel model)
+		{
+			var latestUpdate = model.State.Max(x => x.Time);
+			if (latestUpdate == DateTime.MinValue)
+				return;
+			var safeToRemoveOlderThan = latestUpdate.Subtract(TimeSpan.FromMinutes(10));
+			model.State = model.State
+				.Where(x => x.OutOfAdherence || x.Time > safeToRemoveOlderThan)
+				.ToArray();
+		}
+
+		private static SiteOutOfAdherenceReadModelState stateForPerson(SiteOutOfAdherenceReadModel model, Guid personId)
 		{
 			var person = model.State.SingleOrDefault(x => x.PersonId == personId);
 			if (person != null) return person;
-			person = new SiteOutOfAdherenceReadModelState {PersonId = personId};
-			model.State = model.State.Concat(new[] {person}).ToArray();
+			person = new SiteOutOfAdherenceReadModelState { PersonId = personId };
+			model.State = model.State.Concat(new[] { person }).ToArray();
 			return person;
-		}
-
-		private void removePerson(SiteOutOfAdherenceReadModel model, SiteOutOfAdherenceReadModelState person)
-		{
-			model.State = model.State.Except(new[] {person}).ToArray();
 		}
 
 		private static void calculate(SiteOutOfAdherenceReadModel model)
 		{
-			model.Count = model.State.Count(x => x.OutOfAdherence > 0);
+			model.Count = model.State.Count(x => x.OutOfAdherence);
 		}
-
+		
 		[ReadModelUnitOfWork]
 		public virtual bool Initialized()
 		{

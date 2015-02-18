@@ -17,7 +17,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Core
 		{
 			var teamOutOfAdherenceReadModelReader = MockRepository.GenerateMock<ITeamOutOfAdherenceReadModelReader>();
 			var teamId = Guid.NewGuid();
-			var target = new GetTeamAdherence(null, null,null, null, teamOutOfAdherenceReadModelReader);
+			var target = new GetTeamAdherence(null, null,null, teamOutOfAdherenceReadModelReader);
 			var siteId = Guid.NewGuid();
 			var teamsOutOfAdherence = new List<TeamOutOfAdherenceReadModel>()
 			{
@@ -32,31 +32,6 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Core
 			result.Single().Id.Should().Be(teamId.ToString());
 		}
 
-		[Test]
-		public void ShouldGetTeamAdherenceForSingleTeam()
-		{
-			var teamAdherencePersister = MockRepository.GenerateMock<ITeamOutOfAdherenceReadModelPersister>();
-			var teamId = Guid.NewGuid();
-			var target = new GetTeamAdherence(null, null, null, teamAdherencePersister, null);
-			var teamsOutOfAdherence = new TeamOutOfAdherenceReadModel { TeamId = teamId, Count = 3 };
-			teamAdherencePersister.Stub(t => t.Get(teamId)).Return(teamsOutOfAdherence);
-			var result = target.GetOutOfAdherenceLite(teamId.ToString());
-			result.Id.Should().Be(teamId.ToString());
-			result.OutOfAdherence.Should().Be(3);
-		}
-
-		[Test]
-		public void ShouldHaveZeroAdherenceIfReadModelDoesNotExists()
-		{
-			var teamAdherencePersister = MockRepository.GenerateMock<ITeamOutOfAdherenceReadModelPersister>();
-			var teamId = Guid.NewGuid();
-			var target = new GetTeamAdherence(null, null, null, teamAdherencePersister, null);
-			teamAdherencePersister.Stub(t => t.Get(teamId)).Return(null);
-			var result = target.GetOutOfAdherenceLite(teamId.ToString());
-			result.Id.Should().Be(teamId.ToString());
-			result.OutOfAdherence.Should().Be(0);
-		}
-		
 	}
 
 }

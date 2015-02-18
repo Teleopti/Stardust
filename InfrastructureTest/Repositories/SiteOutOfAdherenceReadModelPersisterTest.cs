@@ -1,6 +1,5 @@
 using System;
 using System.Linq;
-using System.Security.Policy;
 using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta;
@@ -21,17 +20,18 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			var businessUnitId = Guid.NewGuid();
 			var personId = Guid.NewGuid();
 
-			var  stateModel = new SiteOutOfAdherenceReadModelState()
+			Target.Persist(new SiteOutOfAdherenceReadModel()
 			{
-				OutOfAdherence = 9,
-				PersonId = personId
-			};
-			Target.Persist( new SiteOutOfAdherenceReadModel()
-			{
-				Count = 21, 
-				SiteId = siteId, 
+				Count = 21,
+				SiteId = siteId,
 				BusinessUnitId = businessUnitId,
-				State = new[] { stateModel }
+				State = new[]
+				{
+					new SiteOutOfAdherenceReadModelState()
+					{
+						PersonId = personId
+					}
+				}
 			});
 
 			var model = Target.Get(siteId);
@@ -40,7 +40,6 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			model.BusinessUnitId.Should().Be(businessUnitId);
 			model.State.Count().Should().Be(1);
 			model.State.Single().PersonId.Should().Be(personId);
-			model.State.Single().OutOfAdherence.Should().Be(9);
 		}
 
 		[Test]
@@ -50,26 +49,24 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			var businessUnitId = Guid.NewGuid();
 			var personId = Guid.NewGuid();
 
-			var stateModel = new SiteOutOfAdherenceReadModelState() {OutOfAdherence = 9,PersonId = personId};
 			Target.Persist(new SiteOutOfAdherenceReadModel()
 			{
 				SiteId = siteId,
-				State = new[] { stateModel }
+				State = new[] { new SiteOutOfAdherenceReadModelState() { PersonId = personId} }
 			});
-			stateModel.OutOfAdherence = 15;
 			Target.Persist(new SiteOutOfAdherenceReadModel()
 			{
 				Count = 5,
 				SiteId = siteId,
 				BusinessUnitId = businessUnitId,
-				State = new[] { stateModel }
+				State = new[] { new SiteOutOfAdherenceReadModelState() { PersonId = personId} }
 			});
 
 			var model = Target.Get(siteId);
 			model.Count.Should().Be(5);
 			model.SiteId.Should().Be(siteId);
 			model.BusinessUnitId.Should().Be(businessUnitId);
-			model.State.Single().OutOfAdherence.Should().Be(15);
+			model.State.Should().Have.Count.EqualTo(1);
 		}
 
 		[Test]

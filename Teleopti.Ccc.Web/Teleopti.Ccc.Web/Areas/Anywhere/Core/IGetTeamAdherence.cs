@@ -6,7 +6,6 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Core
 	{
 		IEnumerable<TeamViewModel> ForSite(string siteId);
 		TeamOutOfAdherence GetOutOfAdherence(string teamId);
-		TeamOutOfAdherence GetOutOfAdherenceLite(string teamId);
 		IEnumerable<TeamOutOfAdherence> GetOutOfAdherenceForTeamsOnSite(string siteId);
 	}
 }

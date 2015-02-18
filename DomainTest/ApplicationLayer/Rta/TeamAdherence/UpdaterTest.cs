@@ -4,7 +4,6 @@ using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta;
-using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.TestCommon;
 
 namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.TeamAdherence
@@ -142,14 +141,14 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.TeamAdherence
 		[Test]
 		public void ShouldNeverCountNegativePersonsBeingOutOfAdherence()
 		{
-			var teamId1 = Guid.NewGuid();
+			var teamId = Guid.NewGuid();
 			var persister = new FakeTeamOutOfAdherenceReadModelPersister();
 			var target = new TeamOutOfAdherenceReadModelUpdater(persister);
 
-			target.Handle(new PersonInAdherenceEvent { TeamId = teamId1 });
-			target.Handle(new PersonInAdherenceEvent { TeamId = teamId1 });
+			target.Handle(new PersonInAdherenceEvent { TeamId = teamId, PersonId = Guid.NewGuid() });
+			target.Handle(new PersonInAdherenceEvent { TeamId = teamId, PersonId = Guid.NewGuid() });
 
-			persister.Get(teamId1).Count.Should().Be(0);
+			persister.Get(teamId).Count.Should().Be(0);
 		}
 
 		[Test]
