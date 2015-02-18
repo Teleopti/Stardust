@@ -112,7 +112,7 @@ INNER JOIN mart.dim_person p
 	ON fs.person_id = p.person_id
 WHERE p.team_id IN(select right_id from #rights_teams)
 AND p.person_id in (SELECT right_id FROM #rights_agents)--check permissions
-AND fs.schedule_date_id IN
+AND fs.shift_startdate_id IN
 	(
 	select b.date_id 
 	from mart.bridge_time_zone b 
