@@ -56,7 +56,7 @@ namespace Teleopti.Ccc.Web.Core.Startup
 					if (!_applicationStarted)
 					{
 						// this will run only once per application start
-						OnStart(app, new System.Web.Http.HttpConfiguration());
+						OnStart(app, new HttpConfiguration());
 						_applicationStarted = true;
 					}
 				}
@@ -65,6 +65,7 @@ namespace Teleopti.Ccc.Web.Core.Startup
 
 		public void OnStart(IAppBuilder application, HttpConfiguration config)
 		{
+			MvcHandler.DisableMvcResponseHeader = true;
 			HostingEnvironment.RegisterObject(new ActionThrottleObject());
 			ApplicationStartModule.ErrorAtStartup = null;
 			try
