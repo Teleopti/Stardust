@@ -60,8 +60,20 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta
 			if (state.Time <= time)
 			{
 				state.Time = time;
-				mutate(state);	
+				mutate(state);
 			}
+			removeRedundantOldStates(model);
+		}
+
+		private static void removeRedundantOldStates(TeamOutOfAdherenceReadModel model)
+		{
+			var latestUpdate = model.State.Max(x => x.Time);
+			if (latestUpdate == DateTime.MinValue)
+				return;
+			var safeToRemoveOlderThan = latestUpdate.Subtract(TimeSpan.FromMinutes(10));
+			model.State = model.State
+				.Where(x => x.OutOfAdherence || x.Time > safeToRemoveOlderThan)
+				.ToArray();
 		}
 
 		private static TeamOutOfAdherenceReadModelState stateForPerson(TeamOutOfAdherenceReadModel model, Guid personId)
