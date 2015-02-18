@@ -1,6 +1,5 @@
 using System;
 using System.Linq;
-using NHibernate.Exceptions;
 using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta;
@@ -42,20 +41,22 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			Target.Persist(new TeamOutOfAdherenceReadModel
 			{
 				TeamId = teamId,
-				State = new [] {new TeamOutOfAdherenceReadModelState(){OutOfAdherence = 1, PersonId = Guid.NewGuid()}}
+				State = new [] {new TeamOutOfAdherenceReadModelState(){ PersonId = Guid.NewGuid()}}
 			});
-			Target.Persist(new TeamOutOfAdherenceReadModel
+			var persisted = new TeamOutOfAdherenceReadModel
 			{
 				Count = 5, 
 				TeamId = teamId,
 				SiteId = siteId,
-				State = new[] { new TeamOutOfAdherenceReadModelState() { OutOfAdherence = 2, PersonId = Guid.NewGuid() } }
-			});
+				State = new[] { new TeamOutOfAdherenceReadModelState() {PersonId = Guid.NewGuid() } }
+			};
+			Target.Persist(persisted);
 
 			var model = Target.Get(teamId);
 			model.Count.Should().Be(5);
+			model.TeamId.Should().Be(teamId);
 			model.SiteId.Should().Be(siteId);
-			model.State.SingleOrDefault().OutOfAdherence.Should().Be(2);
+			model.State.Should().Have.Count.EqualTo(1);
 		}
 
 		[Test]
@@ -123,4 +124,5 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			Target.HasData().Should().Be.False();
 		}
 	}
+
 }

@@ -25,9 +25,9 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta
 		public virtual void Handle(PersonOutOfAdherenceEvent @event)
 		{
 			handleEvent(@event.TeamId, @event.SiteId, model =>
-				updatePerson(@event.PersonId, model, person =>
+				updatePerson(model, @event.PersonId, @event.Timestamp, person =>
 				{
-					person.OutOfAdherence += 1;
+					person.OutOfAdherence = true;
 				}));
 		}
 
@@ -35,9 +35,9 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta
 		public virtual void Handle(PersonInAdherenceEvent @event)
 		{
 			handleEvent(@event.TeamId, @event.SiteId, model =>
-				updatePerson(@event.PersonId, model, person =>
+				updatePerson(model, @event.PersonId, @event.Timestamp, person =>
 				{
-					person.OutOfAdherence -= 1;
+					person.OutOfAdherence = false;
 				}));
 		}
 
@@ -54,15 +54,17 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta
 			_persister.Persist(model);
 		}
 
-		private void updatePerson(Guid personId, TeamOutOfAdherenceReadModel model, Action<TeamOutOfAdherenceReadModelState> mutate)
+		private void updatePerson(TeamOutOfAdherenceReadModel model, Guid personId, DateTime time, Action<TeamOutOfAdherenceReadModelState> mutate)
 		{
-			var person = getPerson(model, personId);
-			mutate(person);
-			if (person.OutOfAdherence == 0)
-				removePerson(model, person);
+			var state = stateForPerson(model, personId);
+			if (state.Time <= time)
+			{
+				state.Time = time;
+				mutate(state);	
+			}
 		}
 
-		private static TeamOutOfAdherenceReadModelState getPerson(TeamOutOfAdherenceReadModel model, Guid personId)
+		private static TeamOutOfAdherenceReadModelState stateForPerson(TeamOutOfAdherenceReadModel model, Guid personId)
 		{
 			var person = model.State.SingleOrDefault(x => x.PersonId == personId);
 			if (person != null) return person;
@@ -71,14 +73,9 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta
 			return person;
 		}
 
-		private void removePerson(TeamOutOfAdherenceReadModel model, TeamOutOfAdherenceReadModelState person)
-		{
-			model.State = model.State.Except(new[] { person }).ToArray();
-		}
-
 		private static void calculate(TeamOutOfAdherenceReadModel model)
 		{
-			model.Count = model.State.Count(x => x.OutOfAdherence > 0);
+			model.Count = model.State.Count(x => x.OutOfAdherence);
 		}
 		
 		[ReadModelUnitOfWork]
