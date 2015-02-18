@@ -58,12 +58,9 @@ namespace Teleopti.Ccc.Infrastructure.Foundation
 			get { return _registeredDataSourceCollection; }
 		}
 
-		//TODO: tenant
 		public IDataSource DataSource(string tenant)
 		{
-			//here real name should be used!
-			//return _registeredDataSourceCollection.SingleOrDefault(x => x.DataSourceName.Equals(tenant));
-			return _registeredDataSourceCollection.FirstOrDefault();
+			return _registeredDataSourceCollection.SingleOrDefault(x => x.DataSourceName.Equals(tenant));
 		}
 
 		public IMessageBrokerComposite Messaging

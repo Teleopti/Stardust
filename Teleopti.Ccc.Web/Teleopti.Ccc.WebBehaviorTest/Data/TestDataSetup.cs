@@ -28,7 +28,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data
 			builder.RegisterType<EventsMessageSender>().As<IMessageSender>().SingleInstance();
 			var container = builder.Build();
 
-			datasource = DataSourceHelper.CreateDataSource(container.Resolve<IEnumerable<IMessageSender>>(), "TestData");
+			datasource = DataSourceHelper.CreateDataSource(container.Resolve<IEnumerable<IMessageSender>>(), TestControllerMethods.TenantName);
 			TestSiteConfigurationSetup.StartApplicationAsync();
 
 			StateHolderProxyHelper.SetupFakeState(datasource, DefaultPersonThatCreatesDbData.PersonThatCreatesDbData, DefaultBusinessUnit.BusinessUnitFromFakeState, new ThreadPrincipalContext(new TeleoptiPrincipalFactory()));
@@ -53,5 +53,9 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data
 			DataSourceHelper.RestoreCcc7Database(globalData.HashValue);
 		}
 
+		public static void SetTenant(string tenantName)
+		{
+			DataSourceHelper.SetTenant(tenantName);
+		}
 	}
 }

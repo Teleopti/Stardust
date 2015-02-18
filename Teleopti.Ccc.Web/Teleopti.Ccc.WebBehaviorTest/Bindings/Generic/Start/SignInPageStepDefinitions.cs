@@ -17,7 +17,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Start
 
 		public void SelectTestDataSource()
 		{
-			Browser.Interactions.ClickContaining("#DataSources a", "TestData");
+			Browser.Interactions.ClickContaining("#DataSources a", TestControllerMethods.TenantName);
 		}
 		
 		private void SignInApplication(string username, string password)

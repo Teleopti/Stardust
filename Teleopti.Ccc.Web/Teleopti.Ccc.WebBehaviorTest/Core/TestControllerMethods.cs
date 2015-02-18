@@ -1,11 +1,9 @@
 using System;
 using System.Globalization;
 using System.Linq;
-using NUnit.Framework;
 using TechTalk.SpecFlow;
 using Teleopti.Ccc.TestCommon.TestData.Setups.Configurable;
 using Teleopti.Ccc.WebBehaviorTest.Core.BrowserDriver;
-using Teleopti.Ccc.WebBehaviorTest.Core.Navigation;
 using Teleopti.Ccc.WebBehaviorTest.Data;
 using Teleopti.Ccc.WebBehaviorTest.Data.Setups.Default;
 
@@ -13,6 +11,8 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core
 {
 	public static class TestControllerMethods
 	{
+		public const string TenantName = "TestData";
+
 		public static void CreateCorruptCookie()
 		{
 			navigateOrRequest("Test/CorruptMyCookie");
@@ -93,9 +93,8 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core
 		/// <param name="password">The password.</param>
 		private static void InnerLogon(string userName, string password)
 		{
-			const string dataSourceName = "TestData";
 			var businessUnitName = DataMaker.Data().MePerson.PermissionInformation.ApplicationRoleCollection.Single().BusinessUnit.Name;
-			var queryString = string.Format("?dataSourceName={0}&businessUnitName={1}&userName={2}&password={3}", dataSourceName, businessUnitName, userName, password);
+			var queryString = string.Format("?dataSourceName={0}&businessUnitName={1}&userName={2}&password={3}", TenantName, businessUnitName, userName, password);
 			Navigation.Navigation.GoToPage("Test/Logon" + queryString);
 		}
 

@@ -30,27 +30,30 @@ namespace Teleopti.Ccc.Domain.Security.Authentication
 			{
 				if (!_initialized)
 				{
-					//TODO: tenant
-					IDataSource dataSource = _applicationData.Current().DataSource("Teleopti WFM");
-					try
+#pragma warning disable 618
+					foreach (IDataSource dataSource in _applicationData.Current().RegisteredDataSourceCollection)
+#pragma warning restore 618
 					{
-						using (dataSource.Application.CreateAndOpenUnitOfWork())
+						try
 						{
-							//Must probably do something to get a connection opened
+							using (dataSource.Application.CreateAndOpenUnitOfWork())
+							{
+								//Must probably do something to get a connection opened
+							}
+							_availableDataSources.Add(dataSource);
 						}
-						_availableDataSources.Add(dataSource);
-					}
-					catch (Exception ex)
-					{
-						var sqlEx = ex.InnerException as SqlException;
-						if (sqlEx != null &&
-							 (sqlEx.Number == 4060 || sqlEx.Number == 53 || sqlEx.Number == -1 || sqlEx.Number == -2))
-							_unavailableDataSources.Add(dataSource);
-						else
-							throw;
-					}
+						catch (Exception ex)
+						{
+							var sqlEx = ex.InnerException as SqlException;
+							if (sqlEx != null &&
+								 (sqlEx.Number == 4060 || sqlEx.Number == 53 || sqlEx.Number == -1 || sqlEx.Number == -2))
+								_unavailableDataSources.Add(dataSource);
+							else
+								throw;
+						}
 
-					_initialized = true;
+						_initialized = true;
+					}
 				}
 			}
 		}

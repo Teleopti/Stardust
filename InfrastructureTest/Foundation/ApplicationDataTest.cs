@@ -81,8 +81,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Foundation
 			target.DataSource(dsName).Should().Be.SameInstanceAs(ds);
 		}
 
-		//TODO: tenant
-		[Test, Ignore("Enable this test when we're getting further with tenancy stuff")]
+		[Test]
 		public void MissingDataSourceTenant()
 		{
 			var dsName = Guid.NewGuid().ToString();
