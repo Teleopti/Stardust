@@ -5,12 +5,12 @@ define([
 	$,
 	ajax
 	) {
-	var siteAdherencePoller = null;
+	var poller = null;
 	var unsubscribeAdherence = function () {
-		if (!siteAdherencePoller)
+		if (!poller)
 			return;
-		clearInterval(siteAdherencePoller);
-		siteAdherencePoller = null;
+		clearInterval(poller);
+		poller = null;
 	};
 
 	var mapAsNotification = function(data) {
@@ -20,21 +20,27 @@ define([
 		}
 	}
 
+	var load = function(callback, businessUnitId) {
+		ajax.ajax({
+			headers: { 'X-Business-Unit-Filter': businessUnitId },
+			url: "Sites/GetOutOfAdherenceForAllSites",
+			success: function(data) {
+				for (var i = 0; i < data.length; i++) {
+					callback(mapAsNotification(data[i]));
+				}
+			}
+		});
+	};
+
 	return {
 		subscribeAdherence: function (callback, businessUnitId, subscriptionDone) {
 			unsubscribeAdherence();
 
-			siteAdherencePoller = setInterval(function() {
-				ajax.ajax({
-					headers: { 'X-Business-Unit-Filter': businessUnitId },
-					url: "Sites/GetOutOfAdherenceForAllSites",
-					success: function (data) {
-						for (var i = 0; i < data.length; i++) {
-							callback(mapAsNotification(data[i]));
-						}
-					}
-				});
-			}, 5000);
+			var poll = function() {
+				load(callback, businessUnitId);
+			};
+			setTimeout(poll, 100);
+			poller = setInterval(poll, 5000);
 
 			subscriptionDone();
 		},

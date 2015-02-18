@@ -83,9 +83,16 @@
 					url: "Sites",
 					success: function (data) {
 						that.fill(data);
-						checkFeature();
-						checkAgentsForMultipleTeamsFeature();
-						checkBusinessUnitsFeature();
+
+						if (resources.RTA_RtaLastStatesOverview_27789 && !resources.RTA_NoBroker_31237)
+							loadCurrentData();
+
+						if (resources.RTA_ViewAgentsForMultipleTeams_28967)
+							that.agentStatesForMultipleSites(true);
+
+						if (resources.RTA_MonitorMultipleBusinessUnits_28348)
+							that.monitorMultipleBusinessUnits(true);
+
 					}
 				});
 				subscriptions.unsubscribeAdherence();
@@ -96,33 +103,16 @@
 				});
 			};
 
-
-			var checkFeature = function () {
-				if (resources.RTA_RtaLastStatesOverview_27789)
-					loadLastStates();
-			};
-
-			var loadLastStates = function () {
+			var loadCurrentData = function () {
 				for (var i = 0; i < that.sites().length; i++) {
-					(function (s) {
-						ajax.ajax({
-							url: "Sites/GetOutOfAdherence?siteId=" + s.Id,
-							success: function (d) {
-								that.update(d);
-							}
-						});
-					})(that.sites()[i]);
+					var site = that.sites()[i];
+					ajax.ajax({
+						url: "Sites/GetOutOfAdherence?siteId=" + site.Id,
+						success: function (d) {
+							that.update(d);
+						}
+					});
 				}
-			};
-
-			var checkAgentsForMultipleTeamsFeature = function () {
-				if (resources.RTA_ViewAgentsForMultipleTeams_28967)
-					that.agentStatesForMultipleSites(true);
-			};
-
-			var checkBusinessUnitsFeature = function () {
-				if (resources.RTA_MonitorMultipleBusinessUnits_28348)
-					that.monitorMultipleBusinessUnits(true);
 			};
 
 			return that;

@@ -5,12 +5,13 @@ define([
 	$,
 	ajax
 	) {
-	var teamAdherencePoller = null;
+	var poller = null;
+
 	var unsubscribeAdherence = function () {
-		if (!teamAdherencePoller)
+		if (!poller)
 			return;
-		clearInterval(teamAdherencePoller);
-		teamAdherencePoller = null;
+		clearInterval(poller);
+		poller = null;
 	};
 
 	var mapAsNotification = function (data) {
@@ -40,7 +41,7 @@ define([
 				load(callback, businessUnitId, siteId);
 			};
 			setTimeout(poll, 100);
-			teamAdherencePoller = setInterval(poll, 5000);
+			poller = setInterval(poll, 5000);
 
 			subscriptionDone();
 		},

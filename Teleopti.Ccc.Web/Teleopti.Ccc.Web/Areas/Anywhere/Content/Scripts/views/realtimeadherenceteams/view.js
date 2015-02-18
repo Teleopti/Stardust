@@ -36,7 +36,7 @@
 					viewModel.fill(data);
 
 					if (resources.RTA_RtaLastStatesOverview_27789 && !resources.RTA_NoBroker_31237)
-						loadCurrentData('Teams/GetOutOfAdherence');
+						loadCurrentData();
 
 					if (resources.RTA_DrilldownToAllAgentsInOneTeam_25234) {
 						for (var i = 0; i < viewModel.teams().length; i++) {
