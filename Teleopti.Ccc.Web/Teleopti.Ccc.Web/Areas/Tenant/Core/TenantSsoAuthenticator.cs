@@ -26,7 +26,7 @@ namespace Teleopti.Ccc.Web.Areas.Tenant.Core
 
 			if (result.Success)
 			{
-				var dataSource = _dataSourceProvider.RetrieveDataSourceByName(dataSourceName);
+				var dataSource = _dataSourceProvider.RetrieveDataSourceByName(result.Tenant);
 				using (var uow = dataSource.Application.CreateAndOpenUnitOfWork())
 				{
 					var person = _repositoryFactory.CreatePersonRepository(uow).LoadOne(result.PersonId); //todo: don't load permissions here - just needed to get web scenarios to work
