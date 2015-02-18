@@ -15,6 +15,11 @@ namespace Teleopti.Ccc.Infrastructure.MultiTenancy
 		private Tenant tenant;
 #pragma warning restore 649
 
+		public PersonInfo()
+		{
+			tenant=new Tenant();
+		}
+
 
 		public virtual Guid Id { get; set; }
 		public virtual string Password { get; set; }

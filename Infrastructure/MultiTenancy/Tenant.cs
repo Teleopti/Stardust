@@ -9,11 +9,6 @@
 		private int id;
 #pragma warning restore 169
 
-		public Tenant()
-		{
-			Name = DefaultName;
-		}
-
 		public virtual string Name { get; protected set; }
 	}
 }
