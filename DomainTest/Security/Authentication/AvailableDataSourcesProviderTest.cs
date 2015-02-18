@@ -35,7 +35,9 @@ namespace Teleopti.Ccc.DomainTest.Security.Authentication
 			var unitOfWork = mocks.StrictMock<IUnitOfWork>();
 			using (mocks.Record())
 			{
+#pragma warning disable 618
 				Expect.Call(applicationData.RegisteredDataSourceCollection).Return(dataSources);
+#pragma warning restore 618
 				Expect.Call(unitOfWorkFactory.CreateAndOpenUnitOfWork()).Return(unitOfWork);
 				Expect.Call(dataSource.Application).Return(unitOfWorkFactory);
 				Expect.Call(unitOfWork.Dispose);
@@ -55,7 +57,9 @@ namespace Teleopti.Ccc.DomainTest.Security.Authentication
 			var unitOfWorkFactory = mocks.StrictMock<IUnitOfWorkFactory>();
 			using (mocks.Record())
 			{
+#pragma warning disable 618
 				Expect.Call(applicationData.RegisteredDataSourceCollection).Return(dataSources);
+#pragma warning restore 618
 				Expect.Call(unitOfWorkFactory.CreateAndOpenUnitOfWork()).Throw(new Exception("test",
 																							 SqlExceptionConstructor.
 																								CreateSqlException("Error message", 4060)));
