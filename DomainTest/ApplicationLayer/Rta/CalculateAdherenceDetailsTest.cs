@@ -35,7 +35,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta
 				}
 			};
 			var target = new CalculateAdherenceDetails(new ThisIsNow("2014-11-20 9:00".Utc()),
-				new FakeAdherenceDetailsReadModelPersister(new[] { model }), new ThreadCulture(), new UtcTimeZone(), stubAgentDate(model));
+				new FakeAdherenceDetailsReadModelReader(new[] { model }), new ThreadCulture(), new UtcTimeZone(), stubAgentDate(model));
 
 			var result = target.ForDetails(model.PersonId);
 
@@ -65,7 +65,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta
 				}
 			};
 			var target = new CalculateAdherenceDetails(new ThisIsNow(now),
-				new FakeAdherenceDetailsReadModelPersister(new[] { model }), new ThreadCulture(), new UtcTimeZone(), stubAgentDate(model));
+				new FakeAdherenceDetailsReadModelReader(new[] { model }), new ThreadCulture(), new UtcTimeZone(), stubAgentDate(model));
 
 			var result = target.ForDetails(model.PersonId);
 
@@ -95,7 +95,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta
 				}
 			};
 			var target = new CalculateAdherenceDetails(new ThisIsNow(now),
-				new FakeAdherenceDetailsReadModelPersister(new[] { model }), new ThreadCulture(), new UtcTimeZone(), stubAgentDate(model));
+				new FakeAdherenceDetailsReadModelReader(new[] { model }), new ThreadCulture(), new UtcTimeZone(), stubAgentDate(model));
 
 			var result = target.ForDetails(model.PersonId);
 
@@ -124,7 +124,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta
 				}
 			};
 			var target = new CalculateAdherenceDetails(new ThisIsNow(now),
-				new FakeAdherenceDetailsReadModelPersister(new[] { model }), new ThreadCulture(), new UtcTimeZone(), stubAgentDate(model));
+				new FakeAdherenceDetailsReadModelReader(new[] { model }), new ThreadCulture(), new UtcTimeZone(), stubAgentDate(model));
 
 			var result = target.ForDetails(model.PersonId);
 
@@ -162,7 +162,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta
 				}
 			};
 			var target = new CalculateAdherenceDetails(new ThisIsNow(now),
-				new FakeAdherenceDetailsReadModelPersister(new[] { model }), new ThreadCulture(), new UtcTimeZone(), stubAgentDate(model));
+				new FakeAdherenceDetailsReadModelReader(new[] { model }), new ThreadCulture(), new UtcTimeZone(), stubAgentDate(model));
 
 			var result = target.ForDetails(personId);
 
@@ -179,7 +179,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta
 			agentDateProvider.Stub(x => agentDateProvider.Get(personId)).Return(new DateOnly(now.UtcDateTime()));
 
 			var target = new CalculateAdherenceDetails(now,
-				new FakeAdherenceDetailsReadModelPersister(), new ThreadCulture(), new UtcTimeZone(), agentDateProvider);
+				new FakeAdherenceDetailsReadModelReader(), new ThreadCulture(), new UtcTimeZone(), agentDateProvider);
 
 			var result = target.ForDetails(Guid.NewGuid());
 
@@ -210,7 +210,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta
 				}
 			};
 			var target = new CalculateAdherenceDetails(new ThisIsNow(now),
-				new FakeAdherenceDetailsReadModelPersister(new[] { model }), new ThreadCulture(), new UtcTimeZone(), stubAgentDate(model));
+				new FakeAdherenceDetailsReadModelReader(new[] { model }), new ThreadCulture(), new UtcTimeZone(), stubAgentDate(model));
 
 			var result = target.ForDetails(model.PersonId);
 
@@ -240,7 +240,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta
 				}
 			};
 			var target = new CalculateAdherenceDetails(new ThisIsNow(now),
-				new FakeAdherenceDetailsReadModelPersister(new[] { model }), new ThreadCulture(), new UtcTimeZone(), stubAgentDate(model));
+				new FakeAdherenceDetailsReadModelReader(new[] { model }), new ThreadCulture(), new UtcTimeZone(), stubAgentDate(model));
 
 			var result = target.ForDetails(model.PersonId);
 
@@ -270,7 +270,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta
 				}
 			};
 			var target = new CalculateAdherenceDetails(new ThisIsNow("2014-11-20 9:00".Utc()),
-				new FakeAdherenceDetailsReadModelPersister(new[] { model }), new ThreadCulture(), new UtcTimeZone(), stubAgentDate(model));
+				new FakeAdherenceDetailsReadModelReader(new[] { model }), new ThreadCulture(), new UtcTimeZone(), stubAgentDate(model));
 
 			var result = target.ForDetails(model.PersonId);
 
@@ -300,7 +300,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta
 				}
 			};
 			var target = new CalculateAdherenceDetails(new ThisIsNow("2014-11-20 9:00".Utc()),
-				new FakeAdherenceDetailsReadModelPersister(new[] { model }), new ThreadCulture(), new UtcTimeZone(), stubAgentDate(model));
+				new FakeAdherenceDetailsReadModelReader(new[] { model }), new ThreadCulture(), new UtcTimeZone(), stubAgentDate(model));
 
 			var result = target.ForDetails(model.PersonId);
 
@@ -331,7 +331,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta
 				}
 			};
 			var target = new CalculateAdherenceDetails(new ThisIsNow("2014-11-20 10:00".Utc()),
-				new FakeAdherenceDetailsReadModelPersister(new[] { model }), new ThreadCulture(), new UtcTimeZone(), stubAgentDate(model));
+				new FakeAdherenceDetailsReadModelReader(new[] { model }), new ThreadCulture(), new UtcTimeZone(), stubAgentDate(model));
 
 			var result = target.ForDetails(model.PersonId);
 
@@ -367,7 +367,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta
 				}
 			};
 			var target = new CalculateAdherenceDetails(new ThisIsNow("2014-11-20 10:00".Utc()),
-				new FakeAdherenceDetailsReadModelPersister(new[] { model }), new ThreadCulture(), new UtcTimeZone(), stubAgentDate(model));
+				new FakeAdherenceDetailsReadModelReader(new[] { model }), new ThreadCulture(), new UtcTimeZone(), stubAgentDate(model));
 
 			var result = target.ForDetails(model.PersonId);
 
@@ -400,7 +400,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta
 				}
 			};
 			var target = new CalculateAdherenceDetails(new ThisIsNow(now),
-			new FakeAdherenceDetailsReadModelPersister(new[] { model }), new SwedishCulture(), new UtcTimeZone(), stubAgentDate(model));
+			new FakeAdherenceDetailsReadModelReader(new[] { model }), new SwedishCulture(), new UtcTimeZone(), stubAgentDate(model));
 
 			var result = target.ForDetails(model.PersonId);
 			result.Single().Name.Should().Be(detailModel.Name);
@@ -434,7 +434,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta
 				}
 			};
 			var target = new CalculateAdherenceDetails(new ThisIsNow("2014-11-20 9:00".Utc()),
-				new FakeAdherenceDetailsReadModelPersister(new[] { model }), new SwedishCulture(), new UtcTimeZone(), stubAgentDate(model));
+				new FakeAdherenceDetailsReadModelReader(new[] { model }), new SwedishCulture(), new UtcTimeZone(), stubAgentDate(model));
 
 			var result = target.ForDetails(model.PersonId);
 
@@ -464,7 +464,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta
 				}
 			};
 			var target = new CalculateAdherenceDetails(new ThisIsNow("2014-11-21 02:00".Utc()),
-				new FakeAdherenceDetailsReadModelPersister(new[] { model }), new SwedishCulture(), new HawaiiTimeZone(), stubAgentDate(model));
+				new FakeAdherenceDetailsReadModelReader(new[] { model }), new SwedishCulture(), new HawaiiTimeZone(), stubAgentDate(model));
 
 			var result = target.ForDetails(model.PersonId);
 			result.Count().Should().Be(1);
@@ -505,12 +505,12 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta
 			};
 
 			var target1 = new CalculateAdherenceDetails(new ThisIsNow("2014-11-21 02:00".Utc()),
-				new FakeAdherenceDetailsReadModelPersister(new[] { model1 }), new SwedishCulture(), new HawaiiTimeZone(), stubAgentDate(model1));
+				new FakeAdherenceDetailsReadModelReader(new[] { model1 }), new SwedishCulture(), new HawaiiTimeZone(), stubAgentDate(model1));
 			var result1 = target1.ForDetails(model1.PersonId);
 			result1.Count().Should().Be(1);
 
 			var target2 = new CalculateAdherenceDetails(new ThisIsNow("2014-11-21 17:00".Utc()),
-				new FakeAdherenceDetailsReadModelPersister(new[] { model2 }), new SwedishCulture(), new HawaiiTimeZone(), stubAgentDate(model2));
+				new FakeAdherenceDetailsReadModelReader(new[] { model2 }), new SwedishCulture(), new HawaiiTimeZone(), stubAgentDate(model2));
 			var result2 = target2.ForDetails(model2.PersonId);
 			result2.Count().Should().Be(1);
 		}

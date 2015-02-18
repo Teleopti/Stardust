@@ -117,7 +117,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.TeamAdherence
 
 			target.Handle(new PersonInAdherenceEvent() { TeamId = teamId, SiteId = siteId});
 
-			persister.GetForSite(siteId).Single().TeamId.Should().Be(teamId);
+			persister.Read(siteId).Single().TeamId.Should().Be(teamId);
 		}
 
 		[Test]
@@ -130,7 +130,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.TeamAdherence
 
 			target.Handle(new PersonOutOfAdherenceEvent{ TeamId = teamId, SiteId = siteId});
 
-			persister.GetForSite(siteId).Single().TeamId.Should().Be(teamId);
+			persister.Read(siteId).Single().TeamId.Should().Be(teamId);
 		}
 
 

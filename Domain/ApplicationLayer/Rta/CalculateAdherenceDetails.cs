@@ -13,13 +13,13 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta
 	public class CalculateAdherenceDetails : ICalculateAdherenceDetails
 	{
 		private readonly INow _now;
-		private readonly IAdherenceDetailsReadModelPersister _persister;
+		private readonly IAdherenceDetailsReadModelReader _persister;
 		private readonly IUserCulture _culture;
 		private readonly IUserTimeZone _timeZone;
 		private readonly IAgentDateProvider _agentDateProvider;
 		private readonly CalculateAdherencePercent _calculateAdherencePercent;
 
-		public CalculateAdherenceDetails(INow now, IAdherenceDetailsReadModelPersister persister, IUserCulture culture, IUserTimeZone timeZone, IAgentDateProvider agentDateProvider)
+		public CalculateAdherenceDetails(INow now, IAdherenceDetailsReadModelReader persister, IUserCulture culture, IUserTimeZone timeZone, IAgentDateProvider agentDateProvider)
 		{
 			_now = now;
 			_persister = persister;
@@ -31,7 +31,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta
 
 		public IEnumerable<AdherenceDetailsPercentageModel> ForDetails(Guid personId)
 		{
-			var readModel = _persister.Get(personId, currentAgentDate(personId));
+			var readModel = _persister.Read(personId, currentAgentDate(personId));
 			var result = new List<AdherenceDetailsPercentageModel>();
 			if (readModel == null) return result;
 			var detailModels = readModel.Model.Details;

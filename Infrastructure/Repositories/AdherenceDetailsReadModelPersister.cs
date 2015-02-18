@@ -9,7 +9,7 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Infrastructure.Repositories
 {
-	public class AdherenceDetailsReadModelPersister : IAdherenceDetailsReadModelPersister
+	public class AdherenceDetailsReadModelPersister : IAdherenceDetailsReadModelPersister, IAdherenceDetailsReadModelReader
 	{
 		private readonly ICurrentReadModelUnitOfWork _unitOfWork;
 		private readonly IJsonSerializer _jsonSerializer;
@@ -100,6 +100,33 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 		{
 			public string ModelJson { get; set; }
 			public string StateJson { get; set; }
+		}
+
+		public AdherenceDetailsReadModel Read(Guid personId, DateOnly date)
+		{
+			var result = _unitOfWork.Current().CreateSqlQuery(
+				"SELECT " +
+				"	PersonId," +
+				"	BelongsToDate AS Date, " +
+				"	Model AS ModelJson " +
+				"FROM ReadModel.AdherenceDetails WHERE" +
+				"	PersonId =:PersonId AND " +
+				"	BelongsToDate =:Date ")
+				.AddScalar("PersonId", NHibernateUtil.Guid)
+				.AddScalar("Date", NHibernateUtil.DateTime)
+				.AddScalar("ModelJson", NHibernateUtil.String)
+				.SetGuid("PersonId", personId)
+				.SetDateTime("Date", date)
+				.SetResultTransformer(Transformers.AliasToBean(typeof(internalModel)))
+				.List<internalModel>()
+				.FirstOrDefault();
+
+			if (result == null) return null;
+
+			result.Model = _jsonDeserializer.DeserializeObject<AdherenceDetailsModel>(result.ModelJson);
+			result.ModelJson = null;
+
+			return result;
 		}
 	}
 }

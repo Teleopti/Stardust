@@ -14,13 +14,20 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Core
 		private readonly INumberOfAgentsInTeamReader _numberOfAgentsInTeamReader;
 		private readonly ITeamAdherenceAggregator _teamAdherenceAggregator;
 		private readonly ITeamOutOfAdherenceReadModelPersister _teamOutOfAdherenceReadModelPersister;
+		private readonly ITeamOutOfAdherenceReadModelReader _teamOutOfAdherenceReadModelReader;
 
-		public GetTeamAdherence(ISiteRepository siteRepository, INumberOfAgentsInTeamReader numberOfAgentsInTeamReader,ITeamAdherenceAggregator teamAdherenceAggregator, ITeamOutOfAdherenceReadModelPersister teamOutOfAdherenceReadModelPersister)
+		public GetTeamAdherence(
+			ISiteRepository siteRepository, 
+			INumberOfAgentsInTeamReader numberOfAgentsInTeamReader,
+			ITeamAdherenceAggregator teamAdherenceAggregator, 
+			ITeamOutOfAdherenceReadModelPersister teamOutOfAdherenceReadModelPersister,
+			ITeamOutOfAdherenceReadModelReader teamOutOfAdherenceReadModelReader)
 		{
 			_siteRepository = siteRepository;
 			_numberOfAgentsInTeamReader = numberOfAgentsInTeamReader;
 			_teamAdherenceAggregator = teamAdherenceAggregator;
 			_teamOutOfAdherenceReadModelPersister = teamOutOfAdherenceReadModelPersister;
+			_teamOutOfAdherenceReadModelReader = teamOutOfAdherenceReadModelReader;
 		}
 
 		public IEnumerable<TeamViewModel> ForSite(string siteId)
@@ -67,7 +74,7 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Core
 
 		public IEnumerable<TeamOutOfAdherence> GetOutOfAdherenceForTeamsOnSite(string siteId)
 		{
-			var result = _teamOutOfAdherenceReadModelPersister.GetForSite(Guid.Parse(siteId));
+			var result = _teamOutOfAdherenceReadModelReader.Read(Guid.Parse(siteId));
 			return result.Select(r => new TeamOutOfAdherence() { Id = r.TeamId.ToString(), OutOfAdherence = r.Count });
 		}
 

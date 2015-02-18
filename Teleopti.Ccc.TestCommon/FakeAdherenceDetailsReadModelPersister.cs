@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
 using Newtonsoft.Json;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta;
@@ -62,5 +61,6 @@ namespace Teleopti.Ccc.TestCommon
 				.Select(m => JsonConvert.DeserializeObject<AdherenceDetailsReadModel>(JsonConvert.SerializeObject(m)))
 				.FirstOrDefault();
 		}
+
 	}
 }

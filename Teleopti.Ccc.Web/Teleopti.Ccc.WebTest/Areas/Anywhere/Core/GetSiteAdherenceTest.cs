@@ -19,8 +19,8 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Core
 		{
 			var buId = Guid.NewGuid();
 			var site = new Site("s").WithId();
-			var siteAdherencePersister = MockRepository.GenerateMock<ISiteOutOfAdherenceReadModelPersister>();
-			siteAdherencePersister.Stub(x => x.GetForBusinessUnit(buId))
+			var siteAdherencePersister = MockRepository.GenerateMock<ISiteOutOfAdherenceReadModelReader>();
+			siteAdherencePersister.Stub(x => x.Read(buId))
 				.Return(new List<SiteOutOfAdherenceReadModel>()
 			          {
 				          new SiteOutOfAdherenceReadModel()

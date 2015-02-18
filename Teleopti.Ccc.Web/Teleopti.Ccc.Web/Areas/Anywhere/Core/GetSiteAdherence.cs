@@ -7,9 +7,9 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Core
 {
 	public class GetSiteAdherence : IGetSiteAdherence
 	{
-		private readonly ISiteOutOfAdherenceReadModelPersister _siteOutOfAdherenceReadModelPersister;
+		private readonly ISiteOutOfAdherenceReadModelReader _siteOutOfAdherenceReadModelPersister;
 
-		public GetSiteAdherence(ISiteOutOfAdherenceReadModelPersister siteOutOfAdherenceReadModelPersister)
+		public GetSiteAdherence(ISiteOutOfAdherenceReadModelReader siteOutOfAdherenceReadModelPersister)
 		{
 			_siteOutOfAdherenceReadModelPersister = siteOutOfAdherenceReadModelPersister;
 		}
@@ -17,7 +17,7 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Core
 		public IEnumerable<SiteOutOfAdherence> ReadAdherenceForAllSites(Guid businessUnitId)
 		{
 			return
-				_siteOutOfAdherenceReadModelPersister.GetForBusinessUnit(businessUnitId)
+				_siteOutOfAdherenceReadModelPersister.Read(businessUnitId)
 					.Select(x => new SiteOutOfAdherence {Id = x.SiteId.ToString(), OutOfAdherence = x.Count});
 		}
 	}

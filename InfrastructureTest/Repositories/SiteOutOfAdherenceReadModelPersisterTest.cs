@@ -1,7 +1,6 @@
 using System;
-using System.Data.SqlClient;
 using System.Linq;
-using NHibernate.Exceptions;
+using System.Security.Policy;
 using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta;
@@ -10,9 +9,10 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 {
 	[TestFixture, Category("LongRunning")]
 	[ReadModelTest]
-	public class SiteAdherenceReadModelPersisterTest
+	public class SiteOutOfAdherenceReadModelPersisterTest
 	{
 		public ISiteOutOfAdherenceReadModelPersister Target { get; set; }
+		public ISiteOutOfAdherenceReadModelReader Reader { get; set; }
 
 		[Test]
 		public void ShouldPersist()
@@ -83,17 +83,19 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 		[Test]
 		public void ShouldGetSitesForBusinessUnit()
 		{
-			var site1 = Guid.NewGuid();
-			var site2 = Guid.NewGuid();
-			var site3 = Guid.NewGuid();
-			var buId1 = Guid.NewGuid();
+			var siteId1 = Guid.NewGuid();
+			var siteId2 = Guid.NewGuid();
+			var siteId3 = Guid.NewGuid();
+			var bu1A = Guid.NewGuid();
 
-			Target.Persist(new SiteOutOfAdherenceReadModel() { SiteId = site1, BusinessUnitId = buId1});
-			Target.Persist(new SiteOutOfAdherenceReadModel() { SiteId = site2, BusinessUnitId = buId1 });
-			Target.Persist(new SiteOutOfAdherenceReadModel() { SiteId = site3, BusinessUnitId = Guid.NewGuid() });
+			Target.Persist(new SiteOutOfAdherenceReadModel() { SiteId = siteId1, BusinessUnitId = bu1A, Count = 1});
+			Target.Persist(new SiteOutOfAdherenceReadModel() { SiteId = siteId2, BusinessUnitId = bu1A, Count = 2 });
+			Target.Persist(new SiteOutOfAdherenceReadModel() { SiteId = siteId3, BusinessUnitId = Guid.NewGuid(), Count = 3 });
 
-			var models = Target.GetForBusinessUnit(buId1);
-			models.Select(x => x.SiteId).Should().Have.SameValuesAs(new[] {site1, site2});
+			var models = Reader.Read(bu1A);
+			models.Single(x => x.SiteId == siteId1).Count.Should().Be(1);
+			models.Single(x => x.SiteId == siteId2).Count.Should().Be(2);
+			models.Any(x => x.SiteId == siteId3).Should().Be.False();
 		}
 
 		[Test]

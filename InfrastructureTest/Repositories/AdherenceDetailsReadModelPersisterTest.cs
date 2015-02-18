@@ -13,6 +13,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 	public class AdherenceDetailsReadModelPersisterTest
 	{
 		public IAdherenceDetailsReadModelPersister Target { get; set; }
+		public IAdherenceDetailsReadModelReader Reader { get; set; }
 
 		[Test]
 		public void ShouldAdd()
@@ -262,6 +263,32 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 
 			var model = Target.Get(personId, "2014-11-19".Date());
 			model.Model.Details.First().Name.Should().Be(aVeryLongNameForActivty);
+		}
+
+		[Test]
+		public void ShouldRead()
+		{
+
+			var personId = Guid.NewGuid();
+
+			Target.Add(new AdherenceDetailsReadModel
+			{
+				Date = "2014-11-19".Date(),
+				PersonId = personId,
+				Model = new AdherenceDetailsModel
+				{
+					Details = new[]
+					{
+						new AdherenceDetailModel
+						{
+							TimeInAdherence = "10".Minutes()
+						}
+					}
+				}
+			});
+
+			var model = Reader.Read(personId, "2014-11-19".Date());
+			model.Model.Details.Single().TimeInAdherence.Should().Be("10".Minutes());
 		}
 	}
 

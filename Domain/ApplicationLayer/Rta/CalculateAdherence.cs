@@ -10,16 +10,21 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta
 
 	public class CalculateAdherence : ICalculateAdherence
 	{
-		private readonly IAdherencePercentageReadModelPersister _adherencePercentageReadModelPersister;
+		private readonly IAdherencePercentageReadModelReader _adherencePercentageReadModelReader;
 		private readonly INow _now;
 		private readonly IUserCulture _culture;
 		private readonly IUserTimeZone _timeZone;
 		private readonly IAgentDateProvider _agentDateProvider;
 		private readonly CalculateAdherencePercent _calculateAdherencePercent;
 
-		public CalculateAdherence(INow now, IAdherencePercentageReadModelPersister adherencePercentageReadModelPersister, IUserCulture culture, IUserTimeZone timeZone, IAgentDateProvider agentDateProvider)
+		public CalculateAdherence(
+			INow now, 
+			IAdherencePercentageReadModelReader adherencePercentageReadModelReader, 
+			IUserCulture culture, 
+			IUserTimeZone timeZone, 
+			IAgentDateProvider agentDateProvider)
 		{
-			_adherencePercentageReadModelPersister = adherencePercentageReadModelPersister;
+			_adherencePercentageReadModelReader = adherencePercentageReadModelReader;
 			_now = now;
 			_culture = culture;
 			_timeZone = timeZone;
@@ -29,7 +34,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta
 
 		public AdherencePercentageModel ForToday(Guid personId)
 		{
-			var readModel = _adherencePercentageReadModelPersister.Get(currentAgentDate(personId), personId);
+			var readModel = _adherencePercentageReadModelReader.Read(currentAgentDate(personId), personId);
 
 			if (readModel == null || !isValid(readModel))
 				return null;

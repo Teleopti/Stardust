@@ -10,7 +10,7 @@ using Teleopti.Interfaces;
 
 namespace Teleopti.Ccc.Infrastructure.Repositories
 {
-	public class SiteOutOfAdherenceReadModelPersister : ISiteOutOfAdherenceReadModelPersister
+	public class SiteOutOfAdherenceReadModelPersister : ISiteOutOfAdherenceReadModelPersister, ISiteOutOfAdherenceReadModelReader
 	{
 		private readonly ICurrentReadModelUnitOfWork _unitOfWork;
 		private readonly IJsonSerializer _serializer;
@@ -83,32 +83,21 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 			return result;
 		}
 
-		public IEnumerable<SiteOutOfAdherenceReadModel> GetForBusinessUnit(Guid businessUnitId)
+		public IEnumerable<SiteOutOfAdherenceReadModel> Read(Guid businessUnitId)
 		{
-			var models = _unitOfWork.Current()
+			return _unitOfWork.Current()
 				.CreateSqlQuery(
 					"SELECT " +
 					"SiteId," +
-					"BusinessUnitId," +
-					"Count," +
-					"[State] AS StateJson " +
+					"Count " +
 					"FROM ReadModel.SiteOutOfAdherence " + 
 					"WHERE BusinessUnitId =:BusinessUnitId")
 				.AddScalar("SiteId", NHibernateUtil.Guid)
-				.AddScalar("BusinessUnitId", NHibernateUtil.Guid)
 				.AddScalar("Count", NHibernateUtil.Int32)
-				.AddScalar("StateJson", NHibernateUtil.StringClob)
 				.SetParameter("BusinessUnitId", businessUnitId)
-				.SetResultTransformer(Transformers.AliasToBean(typeof (internalModel)))
+				.SetResultTransformer(Transformers.AliasToBean(typeof(SiteOutOfAdherenceReadModel)))
 				.List()
-				.Cast<internalModel>();
-
-			models.ForEach(model =>
-			{
-				model.State = _deserializer.DeserializeObject<SiteOutOfAdherenceReadModelState[]>(model.StateJson);
-				model.StateJson = null;
-			});
-			return models;
+				.Cast<SiteOutOfAdherenceReadModel>();
 		}
 
 		public void Clear()
@@ -124,7 +113,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 		private class internalModel : SiteOutOfAdherenceReadModel
 		{
 			public string StateJson { get; set; }
-		} 
+		}
 	}
 
 	

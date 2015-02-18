@@ -7,44 +7,46 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.TestCommon
 {
-	public class FakeAdherencePercentageReadModelPersister : IAdherencePercentageReadModelPersister
+	public class FakeAdherencePercentageReadModelPersister : IAdherencePercentageReadModelPersister 
 	{
+		private readonly IList<AdherencePercentageReadModel> _data = new List<AdherencePercentageReadModel>();
+
+		public AdherencePercentageReadModel PersistedModel { get { return PersistedModels.FirstOrDefault(); } }
+
+		public IEnumerable<AdherencePercentageReadModel> PersistedModels { get { return _data; }}
+
 		public FakeAdherencePercentageReadModelPersister()
 		{
-			PersistedModels = new List<AdherencePercentageReadModel>();
 		}
 
-		public FakeAdherencePercentageReadModelPersister(AdherencePercentageReadModel model) : this()
+		public FakeAdherencePercentageReadModelPersister(AdherencePercentageReadModel model)
 		{
-			Persist(model);
+			_data.Add(model);
 		}
 		
-		public FakeAdherencePercentageReadModelPersister(IEnumerable<AdherencePercentageReadModel> models) : this()
+		public FakeAdherencePercentageReadModelPersister(IEnumerable<AdherencePercentageReadModel> models)
 		{
-			models.ForEach(Persist);
+			models.ForEach(x => _data.Add(x));
 		}
 
 		public void Persist(AdherencePercentageReadModel model)
 		{
-			PersistedModels.Add(model);
+			_data.Add(model);
 		}
 
 		public AdherencePercentageReadModel Get(DateOnly date, Guid personId)
 		{
-			return PersistedModels == null ? null : PersistedModels.FirstOrDefault(x => x.BelongsToDate == date && x.PersonId.Equals(personId));
+			return _data.FirstOrDefault(x => x.BelongsToDate == date && x.PersonId.Equals(personId));
 		}
 
 		public bool HasData()
 		{
-			return PersistedModel != null;
+			return _data.Any();
 		}
-
-		public AdherencePercentageReadModel PersistedModel { get { return PersistedModels.FirstOrDefault(); }}
-		public IList<AdherencePercentageReadModel> PersistedModels { get; private set; }
 
 		public void Clear()
 		{
-			PersistedModels.Clear();
+			_data.Clear();
 		}
 	}
 }

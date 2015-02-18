@@ -71,10 +71,22 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<PersonScheduleDayReadModelFinder>().As<IPersonScheduleDayReadModelFinder>().SingleInstance();
 			builder.RegisterType<CommonAgentNameProvider>().As<ICommonAgentNameProvider>().SingleInstance();
 			builder.RegisterType<TrackingMessageSender>().As<ITrackingMessageSender>().SingleInstance();
-			builder.RegisterType<AdherencePercentageReadModelPersister>().As<IAdherencePercentageReadModelPersister>().SingleInstance();
-			builder.RegisterType<AdherenceDetailsReadModelPersister>().As<IAdherenceDetailsReadModelPersister>().SingleInstance();
-			builder.RegisterType<TeamOutOfAdherenceReadModelPersister>().As<ITeamOutOfAdherenceReadModelPersister>().SingleInstance();
-			builder.RegisterType<SiteOutOfAdherenceReadModelPersister>().As<ISiteOutOfAdherenceReadModelPersister>().SingleInstance();
+			builder.RegisterType<AdherencePercentageReadModelPersister>()
+				.As<IAdherencePercentageReadModelPersister>()
+				.As<IAdherencePercentageReadModelReader>()
+				.SingleInstance();
+			builder.RegisterType<AdherenceDetailsReadModelPersister>()
+				.As<IAdherenceDetailsReadModelPersister>()
+				.As<IAdherenceDetailsReadModelReader>()
+				.SingleInstance();
+			builder.RegisterType<TeamOutOfAdherenceReadModelPersister>()
+				.As<ITeamOutOfAdherenceReadModelPersister>()
+				.As<ITeamOutOfAdherenceReadModelReader>()
+				.SingleInstance();
+			builder.RegisterType<SiteOutOfAdherenceReadModelPersister>()
+				.As<ISiteOutOfAdherenceReadModelPersister>()
+				.As<ISiteOutOfAdherenceReadModelReader>()
+				.SingleInstance();
 			builder.RegisterType<IntervalLengthFetcher>().As<IIntervalLengthFetcher>().SingleInstance();
 			builder.RegisterType<AnalyticsFactScheduleTimeHandler>().As<IAnalyticsFactScheduleTimeHandler>().SingleInstance();
 			builder.RegisterType<AnalyticsFactScheduleDateHandler>().As<IAnalyticsFactScheduleDateHandler>().SingleInstance();

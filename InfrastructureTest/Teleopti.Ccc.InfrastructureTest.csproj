@@ -213,7 +213,7 @@
     <Compile Include="Repositories\GamificationSettingtRepositoryTest.cs" />
     <Compile Include="Repositories\ReadModelTestAttribute.cs" />
     <Compile Include="Repositories\SeniorityWorkDayRanksRepositoryTest.cs" />
-    <Compile Include="Repositories\SiteAdherenceReadModelPersisterTest.cs" />
+    <Compile Include="Repositories\SiteOutOfAdherenceReadModelPersisterTest.cs" />
     <Compile Include="Repositories\TeamOutOfAdherenceReadModelPersisterTest.cs" />
     <Compile Include="Repositories\TeamGamificationSettingRepositoryTest.cs" />
     <Compile Include="Rta\AgentStateReadModelForTest.cs" />

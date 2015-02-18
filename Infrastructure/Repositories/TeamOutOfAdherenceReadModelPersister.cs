@@ -10,7 +10,7 @@ using Teleopti.Interfaces;
 
 namespace Teleopti.Ccc.Infrastructure.Repositories
 {
-	public class TeamOutOfAdherenceReadModelPersister : ITeamOutOfAdherenceReadModelPersister
+	public class TeamOutOfAdherenceReadModelPersister : ITeamOutOfAdherenceReadModelPersister, ITeamOutOfAdherenceReadModelReader
 	{
 		private readonly ICurrentReadModelUnitOfWork _unitOfWork;
 		private readonly IJsonSerializer _serializer;
@@ -82,36 +82,6 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 			return result;
 		}
 
-		public IEnumerable<TeamOutOfAdherenceReadModel> GetForSite(Guid siteId)
-		{
-			var models = _unitOfWork.Current()
-				.CreateSqlQuery(
-					"SELECT " +
-					"		TeamId, " +
-					"		SiteId, " +
-					"		Count, " +
-					"		State as StateJson " +
-					"FROM " +
-					"		ReadModel.TeamOutOfAdherence " +
-					"WHERE " +
-					"		SiteId =:SiteId")
-				.AddScalar("TeamId", NHibernateUtil.Guid)
-				.AddScalar("SiteId", NHibernateUtil.Guid)
-				.AddScalar("Count", NHibernateUtil.Int32)
-				.AddScalar("StateJson", NHibernateUtil.StringClob)
-				.SetParameter("SiteId", siteId)
-				.SetResultTransformer(Transformers.AliasToBean(typeof(internalModel)))
-				.List()
-				.Cast<internalModel>();
-
-			models.ForEach(model =>
-			{
-				model.State = _deserializer.DeserializeObject<TeamOutOfAdherenceReadModelState[]>(model.StateJson);
-				model.StateJson = null;
-			});
-			return models;
-		}
-
 		public bool HasData()
 		{
 			return (int)_unitOfWork.Current().CreateSqlQuery("SELECT COUNT(*) FROM ReadModel.TeamOutOfAdherence ").UniqueResult() > 0;
@@ -125,6 +95,26 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 		private class internalModel : TeamOutOfAdherenceReadModel
 		{
 			public string StateJson { get; set; }
-		} 
+		}
+
+		public IEnumerable<TeamOutOfAdherenceReadModel> Read(Guid siteId)
+		{
+			return _unitOfWork.Current()
+				.CreateSqlQuery(
+					"SELECT " +
+					"		TeamId, " +
+					"		Count " +
+					"FROM " +
+					"		ReadModel.TeamOutOfAdherence " +
+					"WHERE " +
+					"		SiteId =:SiteId")
+				.AddScalar("TeamId", NHibernateUtil.Guid)
+				.AddScalar("Count", NHibernateUtil.Int32)
+				.SetParameter("SiteId", siteId)
+				.SetResultTransformer(Transformers.AliasToBean(typeof(TeamOutOfAdherenceReadModel)))
+				.List()
+				.Cast<TeamOutOfAdherenceReadModel>();
+		}
+
 	}
 }

@@ -14,6 +14,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 	public class AdherencePercentageReadModelPersisterTest
 	{
 		public IAdherencePercentageReadModelPersister Target { get; set; }
+		public IAdherencePercentageReadModelReader Reader { get; set; }
 
 		[Test]
 		public void ShouldSaveReadModelForPerson()
@@ -149,6 +150,32 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 		public void ShouldKnowIfThereIsNoData()
 		{
 			Target.HasData().Should().Be.False();
+		}
+
+		[Test]
+		public void ShouldRead()
+		{
+			var personId = Guid.NewGuid();
+			Target.Persist(new AdherencePercentageReadModel
+			{
+				Date = "2012-08-29".Date(),
+				PersonId = personId,
+				TimeInAdherence = "17".Minutes(),
+				TimeOutOfAdherence = "28".Minutes(),
+				IsLastTimeInAdherence = true,
+				LastTimestamp = "2012-08-29 8:00".Utc(),
+				ShiftHasEnded = true
+			});
+
+			var model = Reader.Read("2012-08-29".Date(), personId);
+
+			model.PersonId.Should().Be.EqualTo(model.PersonId);
+			model.BelongsToDate.Should().Be.EqualTo("2012-08-29".Date());
+			model.TimeOutOfAdherence.Should().Be.EqualTo("28".Minutes());
+			model.TimeInAdherence.Should().Be.EqualTo("17".Minutes());
+			model.IsLastTimeInAdherence.Should().Be.EqualTo(true);
+			model.LastTimestamp.Should().Be.EqualTo("2012-08-29 8:00".Utc());
+			model.ShiftHasEnded.Should().Be.EqualTo(true);
 		}
 	}
 }

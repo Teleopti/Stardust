@@ -3,6 +3,11 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta
 {
+	public interface IAdherencePercentageReadModelReader
+	{
+		AdherencePercentageReadModel Read(DateOnly date, Guid personId);
+	}
+
 	public interface IAdherencePercentageReadModelPersister
 	{
 		void Persist(AdherencePercentageReadModel model);

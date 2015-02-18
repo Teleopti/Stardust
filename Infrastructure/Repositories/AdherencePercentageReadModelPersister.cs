@@ -9,7 +9,7 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Infrastructure.Repositories
 {
-	public class AdherencePercentageReadModelPersister : IAdherencePercentageReadModelPersister
+	public class AdherencePercentageReadModelPersister : IAdherencePercentageReadModelPersister, IAdherencePercentageReadModelReader
 	{
 		private readonly ICurrentReadModelUnitOfWork _unitOfWork;
 		private readonly IJsonSerializer _serializer;
@@ -115,7 +115,34 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 		private class getModel : AdherencePercentageReadModel
 		{
 			public string StateJson { get; set; }
-		} 
+		}
 
+		public AdherencePercentageReadModel Read(DateOnly date, Guid personId)
+		{
+			return _unitOfWork.Current().CreateSqlQuery(
+				"SELECT " +
+				"	PersonId," +
+				"	BelongsToDate AS Date," +
+				"	LastTimestamp," +
+				"	IsLastTimeInAdherence," +
+				"	TimeInAdherence," +
+				"	TimeOutOfAdherence," +
+				"	ShiftHasEnded " +
+				"FROM ReadModel.AdherencePercentage WHERE" +
+				"	PersonId =:PersonId AND " +
+				"	BelongsToDate =:Date ")
+				.AddScalar("PersonId", NHibernateUtil.Guid)
+				.AddScalar("Date", NHibernateUtil.DateTime)
+				.AddScalar("LastTimestamp", NHibernateUtil.DateTime)
+				.AddScalar("IsLastTimeInAdherence", NHibernateUtil.Boolean)
+				.AddScalar("TimeInAdherence", NHibernateUtil.TimeSpan)
+				.AddScalar("TimeOutOfAdherence", NHibernateUtil.TimeSpan)
+				.AddScalar("ShiftHasEnded", NHibernateUtil.Boolean)
+				.SetGuid("PersonId", personId)
+				.SetDateTime("Date", date)
+				.SetResultTransformer(Transformers.AliasToBean(typeof (AdherencePercentageReadModel)))
+				.List<AdherencePercentageReadModel>()
+				.SingleOrDefault();
+		}
 	}
 }

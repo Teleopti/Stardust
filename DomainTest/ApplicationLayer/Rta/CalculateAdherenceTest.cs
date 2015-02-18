@@ -23,7 +23,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta
 				Date = new DateTime(2014, 12, 24),
 				TimeInAdherence = TimeSpan.FromMinutes(1)
 			};
-			var target = new CalculateAdherence(new ThisIsNow(new DateTime(2014, 12, 24, 15, 0, 0)), new FakeAdherencePercentageReadModelPersister(model), new ThreadCulture(), new UtcTimeZone(), stubAgentDate(model));
+			var target = new CalculateAdherence(new ThisIsNow(new DateTime(2014, 12, 24, 15, 0, 0)), new FakeAdherencePercentageReadModelReader(model), new ThreadCulture(), new UtcTimeZone(), stubAgentDate(model));
 
 			var result = target.ForToday(model.PersonId);
 
@@ -42,7 +42,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta
 				TimeOutOfAdherence = TimeSpan.FromMinutes(74),
 				LastTimestamp = now,
 			};
-			var target = new CalculateAdherence(new ThisIsNow(now), new FakeAdherencePercentageReadModelPersister(model), new ThreadCulture(), new UtcTimeZone(), stubAgentDate(model));
+			var target = new CalculateAdherence(new ThisIsNow(now), new FakeAdherencePercentageReadModelReader(model), new ThreadCulture(), new UtcTimeZone(), stubAgentDate(model));
 
 			var result = target.ForToday(model.PersonId);
 
@@ -61,7 +61,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta
 				TimeOutOfAdherence = TimeSpan.FromMinutes(0),
 				LastTimestamp = now,
 			};
-			var target = new CalculateAdherence(new ThisIsNow(now), new FakeAdherencePercentageReadModelPersister(model), new ThreadCulture(), new UtcTimeZone(), stubAgentDate(model));
+			var target = new CalculateAdherence(new ThisIsNow(now), new FakeAdherencePercentageReadModelReader(model), new ThreadCulture(), new UtcTimeZone(), stubAgentDate(model));
 
 			var result = target.ForToday(model.PersonId);
 
@@ -80,7 +80,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta
 				TimeOutOfAdherence = TimeSpan.FromMinutes(12),
 				LastTimestamp = now,
 			};
-			var target = new CalculateAdherence(new ThisIsNow(now), new FakeAdherencePercentageReadModelPersister(model), new ThreadCulture(), new UtcTimeZone(), stubAgentDate(model));
+			var target = new CalculateAdherence(new ThisIsNow(now), new FakeAdherencePercentageReadModelReader(model), new ThreadCulture(), new UtcTimeZone(), stubAgentDate(model));
 
 			var result = target.ForToday(model.PersonId);
 
@@ -94,7 +94,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta
 			var personId = Guid.NewGuid();
 			var agentDateProvider = MockRepository.GenerateStub<IAgentDateProvider>();
 			agentDateProvider.Stub(x => agentDateProvider.Get(personId)).Return(new DateOnly(now.UtcDateTime()));
-			var target = new CalculateAdherence(now, new FakeAdherencePercentageReadModelPersister(), new ThreadCulture(),
+			var target = new CalculateAdherence(now, new FakeAdherencePercentageReadModelReader(), new ThreadCulture(),
 				new UtcTimeZone(), agentDateProvider);
 
 			var result = target.ForToday(Guid.NewGuid());
@@ -112,7 +112,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta
 				TimeInAdherence = TimeSpan.Zero,
 				TimeOutOfAdherence = TimeSpan.Zero
 			};
-			var target = new CalculateAdherence(new ThisIsNow("2014-12-24 11:00".Utc()), new FakeAdherencePercentageReadModelPersister(model), new ThreadCulture(), new UtcTimeZone(), stubAgentDate(model));
+			var target = new CalculateAdherence(new ThisIsNow("2014-12-24 11:00".Utc()), new FakeAdherencePercentageReadModelReader(model), new ThreadCulture(), new UtcTimeZone(), stubAgentDate(model));
 
 			var result = target.ForToday(model.PersonId);
 
@@ -131,7 +131,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta
 				LastTimestamp = "2014-12-24 10:00".Utc(),
 				IsLastTimeInAdherence = true
 			};
-			var target = new CalculateAdherence(new ThisIsNow("2014-12-24 11:00"), new FakeAdherencePercentageReadModelPersister(model), new ThreadCulture(), new UtcTimeZone(), stubAgentDate(model));
+			var target = new CalculateAdherence(new ThisIsNow("2014-12-24 11:00"), new FakeAdherencePercentageReadModelReader(model), new ThreadCulture(), new UtcTimeZone(), stubAgentDate(model));
 
 			var result = target.ForToday(model.PersonId);
 
@@ -150,7 +150,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta
 				LastTimestamp = "2014-12-24 10:00".Utc(),
 				IsLastTimeInAdherence = false
 			};
-			var target = new CalculateAdherence(new ThisIsNow("2014-12-24 11:00"), new FakeAdherencePercentageReadModelPersister(model), new ThreadCulture(), new UtcTimeZone(), stubAgentDate(model));
+			var target = new CalculateAdherence(new ThisIsNow("2014-12-24 11:00"), new FakeAdherencePercentageReadModelReader(model), new ThreadCulture(), new UtcTimeZone(), stubAgentDate(model));
 
 			var result = target.ForToday(model.PersonId);
 
@@ -170,7 +170,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta
 				LastTimestamp = null,
 				IsLastTimeInAdherence = null
 			};
-			var target = new CalculateAdherence(new ThisIsNow("2014-12-24 11:00"), new FakeAdherencePercentageReadModelPersister(model), new ThreadCulture(), new UtcTimeZone(), stubAgentDate(model));
+			var target = new CalculateAdherence(new ThisIsNow("2014-12-24 11:00"), new FakeAdherencePercentageReadModelReader(model), new ThreadCulture(), new UtcTimeZone(), stubAgentDate(model));
 
 			var result = target.ForToday(model.PersonId);
 
@@ -188,7 +188,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta
 				TimeInAdherence = TimeSpan.FromMinutes(1),
 				LastTimestamp = "2014-12-24 14:00".Utc()
 			};
-			var target = new CalculateAdherence(new ThisIsNow("2014-12-24 15:00"), new FakeAdherencePercentageReadModelPersister(model), new CatalanCulture(), new UtcTimeZone(), stubAgentDate(model));
+			var target = new CalculateAdherence(new ThisIsNow("2014-12-24 15:00"), new FakeAdherencePercentageReadModelReader(model), new CatalanCulture(), new UtcTimeZone(), stubAgentDate(model));
 
 			var result = target.ForToday(model.PersonId);
 
@@ -205,7 +205,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta
 				TimeInAdherence = TimeSpan.FromMinutes(1),
 				LastTimestamp = "2014-12-24 14:00".Utc()
 			};
-			var target = new CalculateAdherence(new ThisIsNow("2014-12-24 14:00"), new FakeAdherencePercentageReadModelPersister(model), new ThreadCulture(), new HawaiiTimeZone(), stubAgentDate(model));
+			var target = new CalculateAdherence(new ThisIsNow("2014-12-24 14:00"), new FakeAdherencePercentageReadModelReader(model), new ThreadCulture(), new HawaiiTimeZone(), stubAgentDate(model));
 
 			var result = target.ForToday(model.PersonId);
 
@@ -225,7 +225,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta
 				IsLastTimeInAdherence = null
 			};
 
-			var target = new CalculateAdherence(new ThisIsNow("2014-12-25 02:00"), new FakeAdherencePercentageReadModelPersister(new[] { model }), new ThreadCulture(), new HawaiiTimeZone(), stubAgentDate(model));
+			var target = new CalculateAdherence(new ThisIsNow("2014-12-25 02:00"), new FakeAdherencePercentageReadModelReader(new[] { model }), new ThreadCulture(), new HawaiiTimeZone(), stubAgentDate(model));
 
 			var result = target.ForToday(model.PersonId);
 
@@ -256,11 +256,11 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta
 				IsLastTimeInAdherence = null
 			};
 
-			var target1 = new CalculateAdherence(new ThisIsNow("2014-12-25 02:00"), new FakeAdherencePercentageReadModelPersister(new[] { model1, model2 }), new ThreadCulture(), new HawaiiTimeZone(), stubAgentDate(model1));
+			var target1 = new CalculateAdherence(new ThisIsNow("2014-12-25 02:00"), new FakeAdherencePercentageReadModelReader(new[] { model1, model2 }), new ThreadCulture(), new HawaiiTimeZone(), stubAgentDate(model1));
 			var result1 = target1.ForToday(personId);
 			result1.AdherencePercent.Should().Be.EqualTo(50);
 
-			var target2 = new CalculateAdherence(new ThisIsNow("2014-12-25 19:00"), new FakeAdherencePercentageReadModelPersister(new[] { model1, model2 }), new ThreadCulture(), new HawaiiTimeZone(), stubAgentDate(model2));
+			var target2 = new CalculateAdherence(new ThisIsNow("2014-12-25 19:00"), new FakeAdherencePercentageReadModelReader(new[] { model1, model2 }), new ThreadCulture(), new HawaiiTimeZone(), stubAgentDate(model2));
 			var result2 = target2.ForToday(personId);
 			result2.AdherencePercent.Should().Be.EqualTo(80);
 		}

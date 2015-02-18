@@ -15,16 +15,16 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Core
 		[Test]
 		public void GetOutOfAdherenceForTeamsOnSite_ShouldGetTeamsFromReadModel()
 		{
-			var teamAdherencePersister = MockRepository.GenerateMock<ITeamOutOfAdherenceReadModelPersister>();
+			var teamOutOfAdherenceReadModelReader = MockRepository.GenerateMock<ITeamOutOfAdherenceReadModelReader>();
 			var teamId = Guid.NewGuid();
-			var target = new GetTeamAdherence(null, null,null, teamAdherencePersister);
+			var target = new GetTeamAdherence(null, null,null, null, teamOutOfAdherenceReadModelReader);
 			var siteId = Guid.NewGuid();
 			var teamsOutOfAdherence = new List<TeamOutOfAdherenceReadModel>()
 			{
 				new TeamOutOfAdherenceReadModel(){ TeamId = teamId ,Count= 3}
 			};
 
-			teamAdherencePersister.Stub(t => t.GetForSite(siteId)).Return(teamsOutOfAdherence);
+			teamOutOfAdherenceReadModelReader.Stub(t => t.Read(siteId)).Return(teamsOutOfAdherence);
 
 			IEnumerable<TeamOutOfAdherence> result = target.GetOutOfAdherenceForTeamsOnSite(siteId.ToString());
 
@@ -37,7 +37,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Core
 		{
 			var teamAdherencePersister = MockRepository.GenerateMock<ITeamOutOfAdherenceReadModelPersister>();
 			var teamId = Guid.NewGuid();
-			var target = new GetTeamAdherence(null, null,null, teamAdherencePersister);
+			var target = new GetTeamAdherence(null, null, null, teamAdherencePersister, null);
 			var teamsOutOfAdherence = new TeamOutOfAdherenceReadModel { TeamId = teamId, Count = 3 };
 			teamAdherencePersister.Stub(t => t.Get(teamId)).Return(teamsOutOfAdherence);
 			var result = target.GetOutOfAdherenceLite(teamId.ToString());
@@ -50,7 +50,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Core
 		{
 			var teamAdherencePersister = MockRepository.GenerateMock<ITeamOutOfAdherenceReadModelPersister>();
 			var teamId = Guid.NewGuid();
-			var target = new GetTeamAdherence(null, null,null, teamAdherencePersister);
+			var target = new GetTeamAdherence(null, null, null, teamAdherencePersister, null);
 			teamAdherencePersister.Stub(t => t.Get(teamId)).Return(null);
 			var result = target.GetOutOfAdherenceLite(teamId.ToString());
 			result.Id.Should().Be(teamId.ToString());

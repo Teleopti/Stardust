@@ -4,6 +4,7 @@ using NHibernate.Exceptions;
 using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta;
+using Teleopti.Ccc.Domain.Collection;
 
 namespace Teleopti.Ccc.InfrastructureTest.Repositories
 {
@@ -12,6 +13,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 	public class TeamOutOfAdherenceReadModelPersisterTest
 	{
 		public ITeamOutOfAdherenceReadModelPersister Target { get; set; }
+		public ITeamOutOfAdherenceReadModelReader Reader { get; set; }
 
 		[Test]
 		public void ShouldPersist()
@@ -69,27 +71,32 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 		{
 			var siteId1 = Guid.NewGuid();
 			var siteId2 = Guid.NewGuid();
-			var teamId1 = Guid.NewGuid();
-			var teamId2 = Guid.NewGuid();
+			var teamId1A = Guid.NewGuid();
+			var teamId1B = Guid.NewGuid();
+			var teamId2A = Guid.NewGuid();
 
 			Target.Persist(new TeamOutOfAdherenceReadModel
 			{
 				SiteId = siteId1,
-				TeamId = teamId1,
-				Count = 1,
-				State = new[] {new TeamOutOfAdherenceReadModelState() {OutOfAdherence = 2, PersonId = Guid.NewGuid()}}
+				TeamId = teamId1A,
+				Count = 1
+			});
+			Target.Persist(new TeamOutOfAdherenceReadModel
+			{
+				SiteId = siteId1,
+				TeamId = teamId1B,
+				Count = 2
 			});
 			Target.Persist(new TeamOutOfAdherenceReadModel
 			{
 				SiteId = siteId2,
-				TeamId = teamId2,
-				Count = 1,
-				State = new[] {new TeamOutOfAdherenceReadModelState() {OutOfAdherence = 1, PersonId = Guid.NewGuid()}}
+				TeamId = teamId2A,
+				Count = 3
 			});
 
-			var readModel = Target.GetForSite(siteId1);
-			readModel.Single().TeamId.Should().Be(teamId1);
-			readModel.Single().State.SingleOrDefault().OutOfAdherence.Should().Be(2);
+			var models = Reader.Read(siteId1);
+			models.Single(x => x.TeamId == teamId1A).Count.Should().Be(1);
+			models.Single(x => x.TeamId == teamId1B).Count.Should().Be(2);
 		}
 
 		[Test]
