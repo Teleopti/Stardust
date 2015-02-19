@@ -124,6 +124,8 @@ namespace Teleopti.Ccc.WebBehaviorTest.MyTime
 		[Then(@"I should see english text")]
 		public void ThenIShouldSeeEnglishText()
 		{
+			//Adding this to see if random failing stops
+			TryGotoTeamSchedule(new DateTime(2014, 5, 2));
 			Browser.Interactions.AssertFirstContains("a[href='#RequestsTab']","Requests");
 		}
 
