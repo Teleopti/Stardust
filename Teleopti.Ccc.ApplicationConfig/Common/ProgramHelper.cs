@@ -2,14 +2,11 @@ using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Globalization;
-using System.Linq;
 using System.Reflection;
 using System.Text;
 using System.Threading;
 using Teleopti.Ccc.ApplicationConfig.Creators;
 using Teleopti.Ccc.DatabaseConverter;
-using Teleopti.Ccc.Domain;
-using Teleopti.Ccc.Domain.Security;
 using Teleopti.Ccc.Domain.Security.Authentication;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.Security.Principal;
@@ -23,21 +20,13 @@ using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.ApplicationConfig.Common
 {
-	/// <summary>
-	/// This is just a class made because we wanted to
-	/// move functions from Programs Main method
-	/// </summary>
-	/// <remarks>
-	/// Created by: peterwe
-	/// Created date: 2008-11-17
-	/// </remarks>
 	public class ProgramHelper
 	{
 		public static string UsageInfo
 		{
 			get
 			{
-				StringBuilder stringBuilder = new StringBuilder();
+				var stringBuilder = new StringBuilder();
 				stringBuilder.AppendLine("***  TPS REPORT ***");
 				stringBuilder.AppendLine("Usage:");
 				stringBuilder.AppendLine("-SS[Source Server name]"); // Source Server Name.
@@ -67,7 +56,7 @@ namespace Teleopti.Ccc.ApplicationConfig.Common
 				string versionNumber = version.ToString();
 
 				return String.Format(CultureInfo.CurrentCulture,
-						     "Teleopti WFM, Application Configurator version {0}", versionNumber);
+							  "Teleopti WFM, Application Configurator version {0}", versionNumber);
 			}
 		}
 
@@ -75,20 +64,13 @@ namespace Teleopti.Ccc.ApplicationConfig.Common
 		{
 			var initializeApplication = new InitializeApplication(new DataSourcesFactory(new EnversConfiguration(), new List<IMessageSender>(), DataSourceConfigurationSetter.ForApplicationConfig(), new CurrentHttpContext()), null);
 			initializeApplication.Start(new StateNewVersion(), databaseHandler.DataSourceSettings(), "", new ConfigurationManagerWrapper());
-
-			var availableDataSourcesProvider =
-				new AvailableDataSourcesProvider(new ThisApplicationData(StateHolderReader.Instance.StateReader.ApplicationScopeData));
 			var repositoryFactory = new RepositoryFactory();
-			var passwordPolicy = new DummyPasswordPolicy();
-			var applicationDataSourceProvider =
-			    new ApplicationDataSourceProvider(availableDataSourcesProvider, repositoryFactory,
-							      new FindApplicationUser(
-								  new CheckNullUser(
-									  new FindUserDetail(
-									      new CheckUserDetail(
-										  new CheckPassword(new OneWayEncryption(), new CheckBruteForce(passwordPolicy), new CheckPasswordChange(() => passwordPolicy))),
-									      repositoryFactory)), repositoryFactory));
-			DataSourceContainer dataSourceContainer = applicationDataSourceProvider.DataSourceList().First();
+			IDataSource dataSource =
+				new DataSourcesFactory(new EnversConfiguration(), new List<IMessageSender>(),
+					DataSourceConfigurationSetter.ForApplicationConfig(), new CurrentHttpContext()).Create(
+						databaseHandler.DataSourceSettings(), "");
+
+			var dataSourceContainer = new DataSourceContainer(dataSource, repositoryFactory, null, AuthenticationTypeOption.Application);
 
 			var logOnOff = new LogOnOff(new WindowsAppDomainPrincipalContext(new TeleoptiPrincipalFactory()));
 			using (var unitOfWork = dataSourceContainer.DataSource.Application.CreateAndOpenUnitOfWork())
@@ -97,19 +79,14 @@ namespace Teleopti.Ccc.ApplicationConfig.Common
 				var personRep = repositoryFactory.CreatePersonRepository(unitOfWork);
 				dataSourceContainer.SetUser(personRep.LoadOne(systemId));
 			}
-			
+
 			logOnOff.LogOn(dataSourceContainer.DataSource, dataSourceContainer.User, businessUnit);
 
 			var unitOfWorkFactory = dataSourceContainer.DataSource.Application;
 			var roleToPrincipalCommand =
 				new RoleToPrincipalCommand(
-					new RoleToClaimSetTransformer(
-						new FunctionsForRoleProvider(
-							new DummyLicensedFunctionsProvider(),
-							new ExternalFunctionsProvider(repositoryFactory)
-							)
-						)
-					);
+					new RoleToClaimSetTransformer(new FunctionsForRoleProvider(new DummyLicensedFunctionsProvider(),
+						new ExternalFunctionsProvider(repositoryFactory))));
 			using (var uow = unitOfWorkFactory.CreateAndOpenUnitOfWork())
 			{
 				roleToPrincipalCommand.Execute(TeleoptiPrincipal.Current, unitOfWorkFactory, repositoryFactory.CreatePersonRepository(uow));
@@ -122,27 +99,24 @@ namespace Teleopti.Ccc.ApplicationConfig.Common
 		public void CreateNewEmptyCcc7(Action saveBusinessUnitAction)
 		{
 			//Create standard absences
-            AbsenceCreator absenceCreator = new AbsenceCreator();
+			var absenceCreator = new AbsenceCreator();
 			IAbsence defaultAbsence = absenceCreator.Create(new Description("Default", "DE"), Color.DarkViolet, 1, true);
 
 			//Create standard activities
-			ActivityCreator activityCreator = new ActivityCreator();
+			var activityCreator = new ActivityCreator();
 			IActivity defaultActivity = activityCreator.Create("Default", new Description("Default"), Color.DeepSkyBlue, true, true);
 
 			//Create standard contract
-			ContractCreator contractCreator = new ContractCreator();
-			IContract contract = contractCreator.Create("Fixed Staff", new Description("Fixed Staff"), EmploymentType.FixedStaffNormalWorkTime,
-								    new WorkTime(new TimeSpan(8, 0, 0)),
-								    new WorkTimeDirective(new TimeSpan(0, 0, 0),
-										new TimeSpan(40, 0, 0),
-											  new TimeSpan(12, 0, 0),
-											  new TimeSpan(50, 0, 0)));
+			var contractCreator = new ContractCreator();
+			IContract contract = contractCreator.Create("Fixed Staff", new Description("Fixed Staff"),
+				EmploymentType.FixedStaffNormalWorkTime, new WorkTime(new TimeSpan(8, 0, 0)),
+				new WorkTimeDirective(new TimeSpan(0, 0, 0), new TimeSpan(40, 0, 0), new TimeSpan(12, 0, 0), new TimeSpan(50, 0, 0)));
 			//Create standard scenario
-			ScenarioCreator scenarioCreator = new ScenarioCreator();
+			var scenarioCreator = new ScenarioCreator();
 			IScenario scenario = scenarioCreator.Create("Default", new Description("Default"), true, true, false);
 
 			//This path ends up on the root where the dll's are stored /Peter /David
-			RtaStateGroupCreator rtaStateGroupCreator = new RtaStateGroupCreator(@"RtaStates.xml");
+			var rtaStateGroupCreator = new RtaStateGroupCreator(@"RtaStates.xml");
 
 			saveBusinessUnitAction.Invoke();
 
@@ -159,24 +133,11 @@ namespace Teleopti.Ccc.ApplicationConfig.Common
 			//Fix settings, finns ingen nhib mappning ?!?!?
 		}
 
-		/// <summary>
-		/// Gets the default aggregate root.
-		/// </summary>
-		/// <param name="argument">The argument.</param>
-		/// <returns></returns>
-		/// <remarks>
-		/// Created by: peterwe
-		/// Created date: 2008-11-17
-		/// </remarks>
 		public DefaultAggregateRoot GetDefaultAggregateRoot(ICommandLineArgument argument)
 		{
-			DatabaseHandler databaseHandler = new DatabaseHandler(argument);
-			DefaultDataCreator defaultDataCreator = new DefaultDataCreator(argument.BusinessUnit,
-			                                                               argument.CultureInfo,
-			                                                               argument.TimeZone,
-			                                                               argument.NewUserName,
-			                                                               argument.NewUserPassword,
-			                                                               databaseHandler.SessionFactory);
+			var databaseHandler = new DatabaseHandler(argument);
+			var defaultDataCreator = new DefaultDataCreator(argument.BusinessUnit, argument.CultureInfo, argument.TimeZone,
+				argument.NewUserName, argument.NewUserPassword, databaseHandler.SessionFactory);
 
 			DefaultAggregateRoot defaultAggregateRoot = defaultDataCreator.Create();
 			defaultDataCreator.Save(defaultAggregateRoot);

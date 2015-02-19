@@ -19,11 +19,11 @@ namespace Teleopti.Ccc.ApplicationConfig
 	class Program
 	{
 		private static DBConverter.DatabaseConvert _databaseConvert;
-		private static readonly ILog Logger = LogManager.GetLogger(typeof(Program));
+		private static readonly ILog logger = LogManager.GetLogger(typeof(Program));
 
 		static void Main(string[] args)
 		{
-			AppDomain.CurrentDomain.UnhandledException += CurrentDomain_UnhandledException;
+			AppDomain.CurrentDomain.UnhandledException += currentDomainUnhandledException;
 			XmlConfigurator.Configure();
 
 			Console.WriteLine(ProgramHelper.VersionInfo);
@@ -33,7 +33,7 @@ namespace Teleopti.Ccc.ApplicationConfig
 				return;
 			}
 
-			Logger.Info("Starting CccAppConfig");
+			logger.Info("Starting CccAppConfig");
 
 			ICommandLineArgument argument = new CommandLineArgument(args);
 
@@ -54,22 +54,22 @@ namespace Teleopti.Ccc.ApplicationConfig
 				_databaseConvert = new DBConverter.DatabaseConvert(argument);
 				ProgramHelper.CheckRaptorCompatibility();
 			}
-			
+
 			if (argument.OnlyRunMergeDefaultResolution)
 			{
-				LoadSessionAndLogOn(argument);
+				loadSessionAndLogOn(argument);
 				_databaseConvert.MergeToResolution(argument.FromDate, argument.ToDate, argument.TimeZone, argument.DefaultResolution);
 			}
 			else
 			{
 				//Create default aggregate roots
-                ProgramHelper programHelper = new ProgramHelper();
+				var programHelper = new ProgramHelper();
 
 				if (argument.ConvertMode)
 				{
 					DefaultAggregateRoot defaultAggregateRoot = programHelper.GetDefaultAggregateRoot(argument);
 					//start the converter
-					convertCCC6(argument, defaultAggregateRoot);
+					convertCcc6(argument, defaultAggregateRoot);
 				}
 				else
 				{
@@ -80,30 +80,29 @@ namespace Teleopti.Ccc.ApplicationConfig
 			}
 		}
 
-		static void CurrentDomain_UnhandledException(object sender, UnhandledExceptionEventArgs e)
+		static void currentDomainUnhandledException(object sender, UnhandledExceptionEventArgs e)
 		{
 			var ex = (Exception)e.ExceptionObject;
-			Logger.Error(ex.Message);
+			logger.Error(ex.Message);
 		}
 
-		private static void LoadSessionAndLogOn(ICommandLineArgument argument)
+		private static void loadSessionAndLogOn(ICommandLineArgument argument)
 		{
-			DatabaseHandler databaseHandler = new DatabaseHandler(argument);
+			var databaseHandler = new DatabaseHandler(argument);
 
 			IBusinessUnit businessUnit;
 			using (ISession session = databaseHandler.SessionFactory.OpenSession())
 			{
 				ICriteria criteria =
-					session.CreateCriteria(typeof(BusinessUnit)).Add(Restrictions.Eq("Description.Name",
-																					  argument.BusinessUnit));
+					session.CreateCriteria(typeof (BusinessUnit)).Add(Restrictions.Eq("Description.Name", argument.BusinessUnit));
 				businessUnit = criteria.UniqueResult<IBusinessUnit>();
 				LazyLoadingManager.Initialize(businessUnit.UpdatedBy);
 			}
-		    var programHelper = new ProgramHelper();
-		    programHelper.LogOn(argument, databaseHandler, businessUnit);
+			var programHelper = new ProgramHelper();
+			programHelper.LogOn(argument, databaseHandler, businessUnit);
 		}
 
-		private static void convertCCC6(ICommandLineArgument argument, DefaultAggregateRoot defaultAggregateRoot)
+		private static void convertCcc6(ICommandLineArgument argument, DefaultAggregateRoot defaultAggregateRoot)
 		{
 			using (IUnitOfWork uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
 			{
@@ -113,8 +112,8 @@ namespace Teleopti.Ccc.ApplicationConfig
 			}
 
 			//Call the converter
-			_databaseConvert.StartConverter(argument.FromDate, argument.ToDate,
-											 argument.TimeZone, defaultAggregateRoot, argument.DefaultResolution);
+			_databaseConvert.StartConverter(argument.FromDate, argument.ToDate, argument.TimeZone, defaultAggregateRoot,
+				argument.DefaultResolution);
 		}
 	}
 }
