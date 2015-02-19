@@ -28,19 +28,27 @@ define([
 		}
 	}
 
+	var load = function (callback, businessUnitId, teamId) {
+		ajax.ajax({
+			headers: { 'X-Business-Unit-Filter': businessUnitId },
+			url: "Agents/GetStates?teamId=" + teamId,
+			success: function (data) {
+				callback(mapAsNotification(data));
+			}
+		});
+	};
+
 	return {
 		subscribeAdherence: function (callback, businessUnitId, teamId, subscriptionDone) {
-			var agentPoller = setInterval(function () {
-				ajax.ajax({
-					headers: { 'X-Business-Unit-Filter': businessUnitId },
-					url: "Agents/GetStates?teamId=" + teamId,
-					success: function (data) {
-						callback(mapAsNotification(data));
-					}
-				});
-			}, 2000);
 
-			agentAdherencePollers.push(agentPoller);
+			var poll = function() {
+				load(callback, businessUnitId, teamId);
+			}
+
+			setTimeout(poll, 100);
+			var poller = setInterval(poll, 2000);
+
+			agentAdherencePollers.push(poller);
 			subscriptionDone();
 		},
 

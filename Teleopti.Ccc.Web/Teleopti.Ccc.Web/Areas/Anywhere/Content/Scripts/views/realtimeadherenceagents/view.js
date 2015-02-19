@@ -38,6 +38,20 @@
 				viewModel.refreshAlarmTime();
 			}, 1000);
 
+			var loadStates = function (teamId) {
+				ajax.ajax({
+					url: "Agents/GetStates?teamId=" + teamId,
+					error: function (jqXHR, textStatus, errorThrown) {
+						if (jqXHR.status == 403) {
+							errorview.display(resources.InsufficientPermission);
+						}
+					},
+					success: function (data) {
+						viewModel.fillAgentsStates(data);
+					}
+				});
+			};
+
 			var populateViewModel = function(teamId) {
 				ajax.ajax({
 						url: "Agents/ForTeam?teamId=" + teamId,
@@ -48,17 +62,9 @@
 						},
 						success: function(data) {
 							viewModel.fillAgents(data);
-							ajax.ajax({
-								url: "Agents/GetStates?teamId=" + teamId,
-								error: function(jqXHR, textStatus, errorThrown) {
-									if (jqXHR.status == 403) {
-										errorview.display(resources.InsufficientPermission);
-									}
-								},
-								success: function(data) {
-									viewModel.fillAgentsStates(data);
-								}
-							});
+							if (!resources.RTA_NoBroker_31237) {
+								loadStates(teamId);
+							}
 						}
 					})
 					.done(function() {
