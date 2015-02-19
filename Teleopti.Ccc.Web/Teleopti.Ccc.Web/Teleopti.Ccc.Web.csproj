@@ -1559,6 +1559,7 @@
     <Content Include="Areas\WFM\css\_styleguide.scss" />
     <Content Include="Areas\WFM\css\_form.scss" />
     <Content Include="Areas\WFM\css\_buttons.scss" />
+    <Content Include="Areas\Reporting\Views\Report\Empty.cshtml" />
     <None Include="Areas\WFM\css\_material.scss" />
     <Content Include="Areas\WFM\html\forecasting-run.html" />
     <Content Include="Areas\WFM\html\forecasting.html" />

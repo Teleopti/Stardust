@@ -19,8 +19,8 @@ namespace Teleopti.Ccc.Infrastructure.Foundation
 			var matrixWebsiteUrl = _configReader.AppSettings["ReportServer"] ?? "/";
 			if (!matrixWebsiteUrl.EndsWith("/")) matrixWebsiteUrl += "/";
 
-			var url = string.Format(CultureInfo.InvariantCulture, "{0}Reporting/Report/{1}",
-											matrixWebsiteUrl, reportId);
+			var url = string.Format(CultureInfo.InvariantCulture, "{0}Reporting/Report/{1}#{2}",
+											matrixWebsiteUrl, reportId, reportId);
 			var uri = new Uri(url, UriKind.RelativeOrAbsolute);
 			return _configReader.AppSettings.GetBoolSetting("UseRelativeConfiguration")
 				? "/" + new Uri(uri.GetComponents(UriComponents.SchemeAndServer, UriFormat.Unescaped)).MakeRelativeUri(uri)
