@@ -1,6 +1,4 @@
 using System;
-using System.Globalization;
-using System.Web;
 using Autofac;
 using Hangfire;
 using Owin;
@@ -19,17 +17,20 @@ namespace Teleopti.Ccc.Web.Core.Hangfire
 			_storageConfiguration = storageConfiguration;
 		}
 
+		const int setThisToOneAndErikWillHuntYouDownAndKillYouSlowlyAndPainfully = 4;
+		// But really.. using one worker will:
+		// - reduce performance of RTA too much
+		// - will be a one-way street where the code will never handle the concurrency
+		// - still wont handle the fact that some customers have more than one server running, 
+		//   so you will still have more than one worker
+
 		public void Start(IAppBuilder application)
 		{
-			// cant have more than 1 worker even though we use distrubuted locks !!
-			if (HttpContext.Current.Request.ApplicationPath.EndsWith("Rta", true, CultureInfo.CurrentCulture))
-				return;
-
 			application.UseHangfire(c =>
 			{
 				_storageConfiguration.ConfigureStorage(c);
 				c.UseAutofacActivator(_lifetimeScope);
-				c.UseServer(1);	// cant have more than 1 worker even though we use distrubuted locks !!
+				c.UseServer(setThisToOneAndErikWillHuntYouDownAndKillYouSlowlyAndPainfully);
 			});
 		}
 	}
