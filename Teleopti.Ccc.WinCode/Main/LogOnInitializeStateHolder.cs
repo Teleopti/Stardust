@@ -4,17 +4,13 @@ using System.Linq;
 using System.ServiceModel;
 using System.Xml.Linq;
 using Teleopti.Ccc.Domain.ApplicationLayer;
-using Teleopti.Ccc.Domain.Common;
-using Teleopti.Ccc.Domain.Infrastructure;
 using Teleopti.Ccc.Domain.Security.Authentication;
-using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Infrastructure.ApplicationLayer;
 using Teleopti.Ccc.Infrastructure.NHibernateConfiguration;
 using Teleopti.Ccc.Infrastructure.Web;
 using Teleopti.Ccc.Sdk.ClientProxies;
 using Teleopti.Ccc.WinCode.Common.ServiceBus;
 using Teleopti.Ccc.WinCode.Services;
-using Teleopti.Interfaces.Domain;
 using log4net;
 using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.Security;
@@ -22,14 +18,12 @@ using Teleopti.Ccc.Infrastructure.Config;
 using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Interfaces.MessageBroker.Client.Composite;
-using Teleopti.Messaging.Client;
 
 namespace Teleopti.Ccc.WinCode.Main
 {
     public static class LogonInitializeStateHolder
 	{
 		public static string ErrorMessage = string.Empty;
-		public static string WarningMessage = string.Empty;
         private static readonly ILog Logger = LogManager.GetLogger(typeof (LogonInitializeStateHolder));
 
 		public static bool GetConfigFromFileSystem(string nhibConfPath, bool messageBrokerDisabled, IMessageBrokerComposite messageBroker)
@@ -118,15 +112,6 @@ namespace Teleopti.Ccc.WinCode.Main
                                                   Interfaces.Infrastructure.EncryptionConstants.Image1,
                                                   Interfaces.Infrastructure.EncryptionConstants.Image2),
                                               passwordPolicyService);
-
-            if (initializeApplication.UnavailableDataSources.Any())
-            {
-                WarningMessage = UserTexts.Resources.ErrorOccuredWhenAccessingTheDataSource;
-                foreach (var unavailableDataSource in initializeApplication.UnavailableDataSources)
-                {
-                    WarningMessage = string.Concat(WarningMessage, Environment.NewLine, unavailableDataSource);
-                }
-            }
 
             return true;
         }

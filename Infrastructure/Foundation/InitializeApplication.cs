@@ -2,10 +2,8 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.IO;
-using System.Linq;
 using System.Xml.Linq;
 using log4net;
-using NHibernate.Cfg.ConfigurationSchema;
 using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Interfaces.Domain;
@@ -16,14 +14,9 @@ using System.Xml.XPath;
 
 namespace Teleopti.Ccc.Infrastructure.Foundation
 {
-	/// <summary>
-	/// Configure helper for application
-	/// Run Start method once
-	/// </summary>
 	public class InitializeApplication : IInitializeApplication
 	{
 		private static readonly ILog log = LogManager.GetLogger(typeof (InitializeApplication));
-        private readonly IList<string> _unavailableDataSources = new List<string>();
 	    
 		public InitializeApplication(IDataSourcesFactory dataSourcesFactory, IMessageBrokerComposite messageBroker)
 		{
@@ -35,11 +28,7 @@ namespace Teleopti.Ccc.Infrastructure.Foundation
 		public IDataSourcesFactory DataSourcesFactory { get; private set; }
 		public IMessageBrokerComposite MessageBroker { get; private set; }
 		public bool MessageBrokerDisabled { get; set; }
-	    
-        public IEnumerable<string> UnavailableDataSources
-	    {
-	        get { return _unavailableDataSources; }
-	    }
+
 
 		public void Start(IState clientCache, IDictionary<string, string> appSettings,
 						  IEnumerable<string> hibernateConfigurations,
@@ -63,28 +52,12 @@ namespace Teleopti.Ccc.Infrastructure.Foundation
 	    			}
 	    			dataSources.Add(dataSource);
 	    		}
-	    		if (!success)
-	    		{
-	    			string name = extractName(element);
-	    			_unavailableDataSources.Add(name);
-	    		}
 	    	}
 
 	    	StartMessageBroker(appSettings);
 	    	StateHolder.Instance.State.SetApplicationData(
 	    		new ApplicationData(appSettings, new List<IDataSource>(dataSources), MessageBroker,
 	    		                    loadPasswordPolicyService, DataSourcesFactory));
-	    }
-
-		private static string extractName(XElement element)
-	    {
-	        var navigator = element.CreateNavigator();
-            XPathNavigator navigator2 = navigator.SelectSingleNode(CfgXmlHelper.SessionFactoryExpression);
-            if ((navigator2 != null) && navigator2.MoveToFirstAttribute())
-            {
-                return navigator2.Value;
-            }
-	        return string.Empty;
 	    }
 
 		public void Start(IState clientCache, string xmlDirectory, ILoadPasswordPolicyService loadPasswordPolicyService, IConfigurationWrapper configurationWrapper, bool startMessageBroker)

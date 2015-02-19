@@ -76,11 +76,7 @@ namespace Teleopti.Ccc.Win.Main
 				if (!LogonInitializeStateHolder.GetConfigFromFileSystem(nhibConfPath, useMessageBroker, messageBroker))
 					return showError();
 			}
-
-			if (!string.IsNullOrEmpty(LogonInitializeStateHolder.WarningMessage))
-				MessageBox.Show(this, LogonInitializeStateHolder.WarningMessage, "Configuration warning", MessageBoxButtons.OK);
 			return true;
-			// ReSharper restore LocalizableElement
 		}
 
 		public bool InitStateHolderWithoutDataSource(IMessageBrokerComposite messageBroker)
@@ -100,9 +96,6 @@ namespace Teleopti.Ccc.Win.Main
 				if (!LogonInitializeStateHolder.GetConfigFromFileSystem(nhibConfPath, useMessageBroker, messageBroker))
 					return showError();
 			}
-
-			if (!string.IsNullOrEmpty(LogonInitializeStateHolder.WarningMessage))
-				MessageBox.Show(this, LogonInitializeStateHolder.WarningMessage, "Configuration warning", MessageBoxButtons.OK);
 			return true;
 		}
 

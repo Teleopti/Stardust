@@ -1,11 +1,9 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Xml.Linq;
 using NUnit.Framework;
 using Rhino.Mocks;
-using SharpTestsEx;
 using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.Infrastructure.NHibernateConfiguration;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
@@ -125,62 +123,10 @@ namespace Teleopti.Ccc.InfrastructureTest.Foundation
 
 					Assert.AreEqual(StateHolder.Instance.StateReader.ApplicationScopeData.AppSettings["HelpUrl"], appSettingValue);
 				}
-				target.UnavailableDataSources.Any().Should().Be.False();
 				Assert.AreSame(datasourcesFactory, target.DataSourcesFactory);
 			}
 		}
 
-		[Test]
-		public void ShouldHandleNotAvailableDataSources()
-		{
-			IDictionary<string, string> appSettings = new Dictionary<string, string>
-			                                          	{
-															  {"MessageBroker", "http://localhost/signalr"}
-			                                          	};
-			ICollection<string> nhibConfigurations = new List<string>();
-
-			var nhibString1 = XmlText("dummy1", string.Empty);
-			var nhibString2 = XmlText("dummy2", correctMatrix());
-			var nhibXml1 = XElement.Parse(nhibString1);
-			var nhibXml2 = XElement.Parse(nhibString2);
-
-			nhibConfigurations.Add(nhibString1);
-			nhibConfigurations.Add(nhibString2);
-
-			var ds1 = mocks.StrictMock<IDataSource>();
-			var uowF1 = mocks.StrictMock<IUnitOfWorkFactory>();
-
-			using (mocks.Record())
-			{
-				Expect.Call(ds1.Application).Return(uowF1).Repeat.Any();
-				Expect.Call(ds1.AuthenticationTypeOption).PropertyBehavior();
-				Expect.Call(uowF1.Name).Return("dummy1").Repeat.Any();
-				Expect.Call(datasourcesFactory.TryCreate(nhibXml1, out ds1))
-					.OutRef(ds1)
-					.Return(true)
-					.IgnoreArguments()
-					.Constraints(
-					Is.Matching<XElement>(x => x.ToString() == nhibXml1.ToString()), Is.Anything());
-				IDataSource ds2;
-				Expect.Call(datasourcesFactory.TryCreate(nhibXml2, out ds2))
-					.Return(false)
-					.IgnoreArguments()
-					.Constraints(
-					Is.Matching<XElement>(x => x.ToString() == nhibXml2.ToString()), Is.Anything());
-				messBroker.StartBrokerService();
-				Expect.Call(messBroker.ServerUrl).PropertyBehavior();
-			}
-
-			using (new StateHolderModificationContext())
-			{
-				using (mocks.Playback())
-				{
-					ds1.AuthenticationTypeOption = AuthenticationTypeOption.Unknown;
-					target.Start(stateStub, appSettings, nhibConfigurations, null);
-				}
-				target.UnavailableDataSources.First().Should().Be.EqualTo("dummy2");
-			}
-		}
 
 		[Test]
 		public void VerifyDefaultProperty()
