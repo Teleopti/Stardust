@@ -1,8 +1,6 @@
 using Autofac;
 using NUnit.Framework;
-using Rhino.Mocks;
 using SharpTestsEx;
-using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Infrastructure.ApplicationLayer;
 using Teleopti.Ccc.Infrastructure.Toggle;
 using Teleopti.Ccc.IocCommon;
@@ -31,24 +29,6 @@ namespace Teleopti.Ccc.WebTest.Core.IoC
 			}
 		}
 
-		[Test]
-		public void ShouldResolveHangfireMsmqStorageConfigurationIfToggleEnabled()
-		{
-			using (var container = buildContainer(Toggles.RTA_HangfireEventProcessinUsingMsmq_31237, true))
-			{
-				container.Resolve<IHangfireServerStorageConfiguration>().Should().Be.OfType<MsmqStorageConfiguration>();
-			}
-		}
-
-		[Test]
-		public void ShouldResolveHangfireSqlStorageConfigurationIfToggleDisabled()
-		{
-			using (var container = buildContainer(Toggles.RTA_HangfireEventProcessinUsingMsmq_31237, false))
-			{
-				container.Resolve<IHangfireServerStorageConfiguration>().Should().Be.OfType<SqlStorageConfiguration>();
-			}
-		}
-
 		private ILifetimeScope buildContainer()
 		{
 			return buildContainer(CommonModule.ToggleManagerForIoc());
@@ -61,13 +41,6 @@ namespace Teleopti.Ccc.WebTest.Core.IoC
 			builder.RegisterModule(new CommonModule(configuration));
 			builder.RegisterModule(new HangfireModule(configuration));
 			return builder.Build();
-		}
-
-		private ILifetimeScope buildContainer(Toggles toggle, bool value)
-		{
-			var toggleManager = MockRepository.GenerateStub<IToggleManager>();
-			toggleManager.Stub(x => x.IsEnabled(toggle)).Return(value);
-			return buildContainer(toggleManager);
 		}
 
 	}

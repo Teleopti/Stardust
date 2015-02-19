@@ -40,7 +40,6 @@
 		RTA_SeePercentageAdherenceForOneAgent_30783,
 		RTA_SeeAdherenceDetailsForOneAgent_31285,
 		RTA_HangfireEventProcessing_31237,
-		RTA_HangfireEventProcessinUsingMsmq_31237,
 		RTA_NoBroker_31237,
 		RTA_EventStreamInitialization_31237,
 		RTA_CalculatePercentageInAgentTimezone_31236,

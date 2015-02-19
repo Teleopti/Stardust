@@ -697,7 +697,6 @@
     <Compile Include="Core\Hangfire\HangfireEventServer.cs" />
     <Compile Include="Core\Hangfire\HangfireServerStarter.cs" />
     <Compile Include="Core\Hangfire\IHangfireServerStorageConfiguration.cs" />
-    <Compile Include="Core\Hangfire\MsmqStorageConfiguration.cs" />
     <Compile Include="Core\Hangfire\SqlStorageConfiguration.cs" />
     <Compile Include="Core\Hangfire\IHangfireServerStarter.cs" />
     <Compile Include="Core\IanaTimeZoneProvider.cs" />

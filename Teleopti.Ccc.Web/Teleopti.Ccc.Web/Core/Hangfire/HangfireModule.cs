@@ -1,6 +1,5 @@
 using Autofac;
 using Hangfire;
-using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Infrastructure.ApplicationLayer;
 using Teleopti.Ccc.IocCommon;
 
@@ -18,10 +17,7 @@ namespace Teleopti.Ccc.Web.Core.Hangfire
 		protected override void Load(ContainerBuilder builder)
 		{
 			builder.RegisterType<HangfireServerStarter>().As<IHangfireServerStarter>().SingleInstance();
-			if (_configuration.Toggle(Toggles.RTA_HangfireEventProcessinUsingMsmq_31237))
-				builder.RegisterType<MsmqStorageConfiguration>().As<IHangfireServerStorageConfiguration>().SingleInstance();
-			else
-				builder.RegisterType<SqlStorageConfiguration>().As<IHangfireServerStorageConfiguration>().SingleInstance();
+			builder.RegisterType<SqlStorageConfiguration>().As<IHangfireServerStorageConfiguration>().SingleInstance();
 
 			builder.RegisterType<HangfireEventServer>().SingleInstance();
 

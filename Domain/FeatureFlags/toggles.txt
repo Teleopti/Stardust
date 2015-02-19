@@ -67,7 +67,6 @@ RTA_SeePercentageAdherenceForOneAgent_30783 = RC
 RTA_SeeAdherenceDetailsForOneAgent_31285 = RC
 ETL_SpeedUpETL_30791 = RC
 RTA_HangfireEventProcessing_31237 = DEV
-RTA_HangfireEventProcessinUsingMsmq_31237 = false	#keep as false, or the world will end
 RTA_NoBroker_31237 = DEV
 RTA_EventStreamInitialization_31237 = DEV
 RTA_NotifyViaSMS_31567 = true
