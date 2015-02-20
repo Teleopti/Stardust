@@ -1189,13 +1189,8 @@
     <Content Include="Areas\SeatPlanner\Content\Styles\BootstrapXL.css" />
     <Content Include="Areas\SeatPlanner\Content\Styles\Site.css" />
     <Content Include="Areas\SeatPlanner\Content\Templates\SeatMap\view.html" />
-    <Content Include="Areas\WFM\css\main.css">
-      <DependentUpon>main.scss</DependentUpon>
-    </Content>
-    <Content Include="Areas\WFM\css\main.min.css">
-      <DependentUpon>main.css</DependentUpon>
-    </Content>
     <Content Include="Areas\WFM\css\material.css" />
+    <Content Include="Areas\WFM\Build_Gruntfile.js" />
     <Content Include="Areas\WFM\Gruntfile.js" />
     <Content Include="Areas\WFM\js\permissions.service.js" />
     <Content Include="Areas\WFM\karma.conf.js" />
@@ -1563,6 +1558,7 @@
     <Content Include="Areas\Reporting\Views\Report\Empty.cshtml" />
     <Content Include=".node\kss-node.cmd" />
     <Content Include=".node\package.json" />
+    <Content Include=".node\flatten-packages.cmd" />
     <None Include="Areas\WFM\css\_material.scss" />
     <Content Include="Areas\WFM\html\forecasting-run.html" />
     <Content Include="Areas\WFM\html\forecasting.html" />
@@ -1975,7 +1971,6 @@
     <Folder Include="Areas\PerformanceTool\Content\Templates\" />
     <Folder Include="Areas\SeatPlanner\Views\LocationHierarchy\" />
     <Folder Include="Areas\SSO\Views\Authentication\" />
-    <Folder Include="Areas\WFM\dist\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Areas\MyTime\Views\TeamSchedule\TeamSchedulePartial.cshtml" />
@@ -2069,7 +2064,7 @@ copy "$(ProjectDir)..\..\Domain\FeatureFlags\toggles.txt" "$(TargetDir)FeatureFl
   </PropertyGroup>
   <Import Project=".node\node.targets" Condition="Exists('.node\node.targets')" />
   <Target Name="BeforeBuild">
-    <CallTarget Targets="RestoreNodePackageProtractor;RestoreNodePackages;BuildStyleGuide" />
+    <CallTarget Targets="RestoreNodePackageProtractor;RestoreNodePackages;RunGruntBuild;BuildStyleGuide" />
   </Target>
   <!--  <Import Project="..\..\.nuget\Microsoft.Bcl.Build.targets" Condition="Exists('..\..\.nuget\Microsoft.Bcl.Build.targets')" />
   <Target Name="EnsureBclBuildImported" BeforeTargets="BeforeBuild" Condition="'$(BclBuildImported)' == ''">
