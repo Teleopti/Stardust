@@ -28,14 +28,10 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
 			    !toggleManager.IsEnabled(Toggles.Portal_DifferentiateBadgeSettingForAgents_31318))
 				return;
 
-			foreach (
-				var dataSource in
-#pragma warning disable 618
-					StateHolderReader.Instance.StateReader.ApplicationScopeData.RegisteredDataSourceCollection.ToList())
-#pragma warning restore 618
+			StateHolderReader.Instance.StateReader.ApplicationScopeData.DoOnAllTenants_AvoidUsingThis(tenant =>
 			{
 				IList<Guid> businessUnitCollection;
-				using (var unitOfWork = dataSource.Application.CreateAndOpenUnitOfWork())
+				using (var unitOfWork = tenant.Application.CreateAndOpenUnitOfWork())
 				{
 					var businessUnitRepository = new BusinessUnitRepository(unitOfWork);
 					businessUnitCollection = businessUnitRepository.LoadAll().Select(b => b.Id.GetValueOrDefault()).ToList();
@@ -45,16 +41,16 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
 				{
 					bus.Send(new BadgeCalculationInitMessage
 					{
-						Datasource = dataSource.DataSourceName,
+						Datasource = tenant.DataSourceName,
 						BusinessUnitId = businessUnitId,
 						Timestamp = DateTime.UtcNow
 					});
 					Logger.DebugFormat(
 						"Sending BadgeCalculationInitMessage to Service Bus for Datasource={0} and BusinessUnitId={1}",
-						dataSource.DataSourceName,
+						tenant.DataSourceName,
 						businessUnitId);
 				}
-			}
+			});
 		}
 	}
 }

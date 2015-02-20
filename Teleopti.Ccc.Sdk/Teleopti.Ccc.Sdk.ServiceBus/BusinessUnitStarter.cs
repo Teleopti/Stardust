@@ -21,22 +21,20 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
 		{
 			var bus = _serviceBusFinder.Invoke();
 
-#pragma warning disable 618
-			foreach (var dataSource in StateHolderReader.Instance.StateReader.ApplicationScopeData.RegisteredDataSourceCollection.ToList())
-#pragma warning restore 618
-			{
-			    IList<Guid> businessUnitCollection;
-			    using (var unitOfWork = dataSource.Application.CreateAndOpenUnitOfWork())
-			    {
-				    var businessUnitRepository = new BusinessUnitRepository(unitOfWork);
-				    businessUnitCollection = businessUnitRepository.LoadAll().Select(b => b.Id.GetValueOrDefault()).ToList();
-			    }
+					StateHolderReader.Instance.StateReader.ApplicationScopeData.DoOnAllTenants_AvoidUsingThis(tenant =>
+					{
+						IList<Guid> businessUnitCollection;
+						using (var unitOfWork = tenant.Application.CreateAndOpenUnitOfWork())
+						{
+							var businessUnitRepository = new BusinessUnitRepository(unitOfWork);
+							businessUnitCollection = businessUnitRepository.LoadAll().Select(b => b.Id.GetValueOrDefault()).ToList();
+						}
 
-                foreach (var businessUnitId in businessUnitCollection)
-			    {
-				    bus.Send(new StartUpBusinessUnit { Datasource = dataSource.DataSourceName, BusinessUnitId = businessUnitId, Timestamp = DateTime.UtcNow });
-			    }
-			}
+						foreach (var businessUnitId in businessUnitCollection)
+						{
+							bus.Send(new StartUpBusinessUnit { Datasource = tenant.DataSourceName, BusinessUnitId = businessUnitId, Timestamp = DateTime.UtcNow });
+						}
+					});
 		}
     }
 }

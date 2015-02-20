@@ -138,5 +138,18 @@ namespace Teleopti.Ccc.InfrastructureTest.Foundation
                 target.Dispose();
             }
         }
+
+		[Test]
+		public void DoActionOnAllTenants()
+		{
+			var ds1 = MockRepository.GenerateMock<IDataSource>();
+			var ds2 = MockRepository.GenerateMock<IDataSource>();
+			var target = new ApplicationData(null, new[] { ds1, ds2 }, null, null, null);
+
+			target.DoOnAllTenants_AvoidUsingThis(tenant => tenant.ResetStatistic());
+
+			ds1.AssertWasCalled(x => x.ResetStatistic());
+			ds2.AssertWasCalled(x => x.ResetStatistic());
+		}
     }
 }

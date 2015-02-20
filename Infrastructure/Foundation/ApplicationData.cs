@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
@@ -45,11 +46,11 @@ namespace Teleopti.Ccc.Infrastructure.Foundation
 			{
 				if(dataSource.Application==null)
 					continue;
-				if (uniqueNames.Contains(dataSource.Application.Name))
+				if (uniqueNames.Contains(dataSource.DataSourceName))
 					throw new DataSourceException(
 						 string.Format(CultureInfo.CurrentCulture, "The data sources '{0}' is registered multiple times.",
-											dataSource.Application.Name));
-				uniqueNames.Add(dataSource.Application.Name);
+											dataSource.DataSourceName));
+				uniqueNames.Add(dataSource.DataSourceName);
 			}
 		}
 
@@ -100,6 +101,14 @@ namespace Teleopti.Ccc.Infrastructure.Foundation
 		private IDataSource existingDataSource(string datasourceName)
 		{
 			return _registeredDataSourceCollection.FirstOrDefault(dataSource => dataSource.DataSourceName.Equals(datasourceName));
+		}
+
+		public void DoOnAllTenants_AvoidUsingThis(Action<IDataSource> actionOnTenant)
+		{
+			foreach (var dataSource in _registeredDataSourceCollection)
+			{
+				actionOnTenant(dataSource);
+			}
 		}
 	}
 }

@@ -18,7 +18,6 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
 			_serviceBusFinder = serviceBusFinder;
 		}
 
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA1806:DoNotIgnoreMethodResults", MessageId = "System.Boolean.TryParse(System.String,System.Boolean@)")]
 		public void Check()
 		{
 			var messagesOnBoot = true;
@@ -31,21 +30,19 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
 
 			var bus = _serviceBusFinder.Invoke();
 
-#pragma warning disable 618
-			foreach (var dataSource in StateHolderReader.Instance.StateReader.ApplicationScopeData.RegisteredDataSourceCollection.ToList())
-#pragma warning restore 618
+			StateHolderReader.Instance.StateReader.ApplicationScopeData.DoOnAllTenants_AvoidUsingThis(tenant =>
 			{
 				IList<Guid> businessUnitCollection;
-				using (var unitOfWork = dataSource.Application.CreateAndOpenUnitOfWork())
+				using (var unitOfWork = tenant.Application.CreateAndOpenUnitOfWork())
 				{
 					var businessUnitRepository = new BusinessUnitRepository(unitOfWork);
 					businessUnitCollection = businessUnitRepository.LoadAll().Select(b => b.Id.GetValueOrDefault()).ToList();
 				}
 				foreach (var businessUnitId in businessUnitCollection)
 				{
-					bus.Send(new InitialLoadScheduleProjection { Datasource = dataSource.DataSourceName, BusinessUnitId = businessUnitId, Timestamp = DateTime.UtcNow, StartDays = start, EndDays = end });
+					bus.Send(new InitialLoadScheduleProjection { Datasource = tenant.DataSourceName, BusinessUnitId = businessUnitId, Timestamp = DateTime.UtcNow, StartDays = start, EndDays = end });
 				}
-			}
+			});
 		}
 
 		private static int parseNumber(string configString, string defaultValue)
