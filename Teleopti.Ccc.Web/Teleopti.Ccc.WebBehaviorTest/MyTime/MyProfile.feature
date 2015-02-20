@@ -23,6 +23,7 @@ Scenario: Change my culture
 	And I change culture to US
 	Then I should see US date format
 
+@ignore
 Scenario: Change my language
 	Given I am an agent
 	And I am swedish
