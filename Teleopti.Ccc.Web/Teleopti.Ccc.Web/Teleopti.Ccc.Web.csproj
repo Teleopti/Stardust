@@ -1215,6 +1215,7 @@
     <Content Include="Areas\Reporting\images\Question_16x16.png" />
     <Content Include="Areas\Reporting\images\right_all_light.gif" />
     <Content Include="Areas\Reporting\images\right_light.gif" />
+    <Content Include="Areas\WFM\wfm-template\public\styleguide.css" />
     <Content Include="Content\Site.css" />
     <Content Include="Content\xregexp\xregexp-all-min.js" />
     <Content Include="Areas\Anywhere\Content\Scripts\business_unit.js" />
@@ -1868,6 +1869,8 @@
     <Content Include="Areas\WFM\css\_variables.scss" />
     <Content Include="Areas\WFM\css\_tooltip.scss" />
     <Content Include="Areas\WFM\css\_navbar.scss" />
+    <Content Include="Areas\WFM\css\_tables.scss" />
+    <Content Include="Areas\WFM\css\_typo.scss" />
     <None Include="PasswordPolicy.xml.notinuse">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
