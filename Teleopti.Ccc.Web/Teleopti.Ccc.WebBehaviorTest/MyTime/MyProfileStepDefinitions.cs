@@ -102,7 +102,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.MyTime
 		[When(@"I change language to english")]
 		public void WhenIChangeLanguageToEnglish()
 		{
-			Browser.Interactions.SelectOptionByTextUsingJQuery("#CultureUi-Picker", CultureInfo.GetCultureInfo(1033).DisplayName);
+			Browser.Interactions.SelectOptionByTextUsingJQuery("#CultureUi-Picker", CultureInfo.GetCultureInfo(2057).DisplayName);
 		}
 
 		[Then(@"I should see US date format"), SetCulture("en-US")]
@@ -124,8 +124,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.MyTime
 		[Then(@"I should see english text")]
 		public void ThenIShouldSeeEnglishText()
 		{
-			//Adding this to see if random failing stops
-			TryGotoTeamSchedule(new DateTime(2014, 5, 2));
 			Browser.Interactions.AssertFirstContains("a[href='#RequestsTab']","Requests");
 		}
 
