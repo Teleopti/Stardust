@@ -93,6 +93,7 @@ Scenario: Should be able to see adherence details for one agent outside of worki
 	Then I should see daily adherence for 'Pierre Baldi' is 25%
 	And I should see 'Phone' with adherence of 25%
 
+@ignore
 @OnlyRunIfEnabled('RTA_CalculatePercentageInAgentTimezone_31236')
 Scenario:  Should caculate adherence details according to agent local timezone
 	Given there is an activity named 'Phone'
@@ -140,6 +141,7 @@ Scenario:  Should caculate adherence details according to agent local timezone
 	Then I should see daily adherence for 'Pierre Baldi' is 50%
 	And I should see 'Phone' with adherence of 50%
 
+@ignore
 @OnlyRunIfEnabled('RTA_CalculatePercentageInAgentTimezone_31236')
 Scenario:  Should be able to see adherence details when agent is in another timezone
 	Given there is an activity named 'Phone'

@@ -48,6 +48,7 @@ Scenario: Should be able to see adherence percentage from agent state overview
 	And I click on an agent state
 	Then I should see historical adherence for 'Pierre Baldi' with adherence of 50%
 
+@ignore
 @OnlyRunIfEnabled('RTA_CalculatePercentageInAgentTimezone_31236')
 Scenario: Should be able to calculate adherence percentage in agent's timezone
 	Given there is an activity named 'Phone'
@@ -95,6 +96,7 @@ Scenario: Should be able to calculate adherence percentage in agent's timezone
 	And I click on an agent state
 	Then I should see historical adherence for 'Pierre Baldi' with adherence of 50%
 
+@ignore
 @OnlyRunIfEnabled('RTA_CalculatePercentageInAgentTimezone_31236')
 Scenario: Should be able to see adherence percentage when agent is in another timezone
 	Given there is an activity named 'Phone'

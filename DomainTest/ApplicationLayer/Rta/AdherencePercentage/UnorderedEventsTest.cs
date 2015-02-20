@@ -30,27 +30,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.AdherencePercentage
 			Persister.PersistedModel.TimeInAdherence.Should().Be("2".Seconds());
 			Persister.PersistedModel.TimeOutOfAdherence.Should().Be("1".Seconds());
 		}
-
-		[Test]
-		public void ShouldUpdateLastTimestampWhenEventsAreNotHandledInOrder()
-		{
-			var personId = Guid.NewGuid();
-			var shiftStartTime = "2014-10-06 23:00".Utc();
-			var date = new DateOnly(shiftStartTime);
-			Target.Handle(new PersonOutOfAdherenceEvent
-			{
-				ScheduleDate = date,
-				PersonId = personId,
-				Timestamp = "2014-10-07 03:00".Utc()
-			});
-			Target.Handle(new PersonInAdherenceEvent
-			{
-				ScheduleDate = date,
-				PersonId = personId,
-				Timestamp = shiftStartTime
-			});
-			Persister.PersistedModel.LastTimestamp.Should().Be("2014-10-07 03:00".Utc());
-		}
 	}
 
 	public class PercentageEventsPermuationFactory

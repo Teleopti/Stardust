@@ -39,7 +39,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta
 				_eventPublisher.Publish(new PersonShiftEndEvent
 				{
 					PersonId = info.PersonId,
-					ScheduleDate = info.AgentDate,
 					ShiftStartTime = info.ShiftStartTimeForPreviousActivity,
 					ShiftEndTime = info.ShiftEndTimeForPreviousActivity,
 					BusinessUnitId = info.BusinessUnitId

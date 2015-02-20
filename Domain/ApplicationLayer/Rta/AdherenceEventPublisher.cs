@@ -18,18 +18,15 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta
 			if (toAdherence == Adherence.In)
 				_eventPublisher.Publish(new PersonInAdherenceEvent
 				{
-					ScheduleDate = info.IsScheduled ? new DateOnly(info.CurrentShiftStartTime): new DateOnly(time),
 					PersonId = info.PersonId,
 					Timestamp = time,
 					BusinessUnitId = info.BusinessUnitId,
 					TeamId = info.TeamId,
-					SiteId = info.SiteId
-				});
+					SiteId = info.SiteId});
 
 			if (toAdherence == Adherence.Out)
 				_eventPublisher.Publish(new PersonOutOfAdherenceEvent
 				{
-					ScheduleDate = info.IsScheduled ? new DateOnly(info.CurrentShiftStartTime) : new DateOnly(time),
 					PersonId = info.PersonId,
 					Timestamp = time,
 					BusinessUnitId = info.BusinessUnitId,

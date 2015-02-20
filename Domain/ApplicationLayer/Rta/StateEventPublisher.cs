@@ -26,7 +26,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta
 				BusinessUnitId = info.BusinessUnitId,
 				InAdherence = info.Adherence == Adherence.In,
 				InAdherenceWithPreviousActivity = info.AdherenceForNewStateAndPreviousActivity == Adherence.In,
-				ScheduleDate = info.AgentDate
 			});
 
 			if (adherenceChanged)

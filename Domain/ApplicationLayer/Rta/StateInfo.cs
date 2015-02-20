@@ -11,19 +11,16 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta
 		private readonly Lazy<AgentState> _currentState;
 		private readonly ScheduleInfo _scheduleInfo;
 		private readonly AdherenceInfo _adherenceInfo;
-		private readonly AgentDateInfo _agentDateInfo;
 
-		public StateInfo(PersonOrganizationData person, AgentStateInfo agentState, ScheduleInfo scheduleInfo, AdherenceInfo adherenceInfo, AgentDateInfo agentDateInfo)
+		public StateInfo(PersonOrganizationData person, AgentStateInfo agentState, ScheduleInfo scheduleInfo, AdherenceInfo adherenceInfo)
 		{
 			_person = person;
 			_scheduleInfo = scheduleInfo;
 			_adherenceInfo = adherenceInfo;
-			_agentDateInfo = agentDateInfo;
 
 			_previousState = new Lazy<AgentState>(agentState.PreviousState);
 			_currentState = new Lazy<AgentState>(agentState.CurrentState);
 		}
-		public DateOnly AgentDate { get { return _agentDateInfo.Date; } }
 
 		public bool IsScheduled { get { return _currentState.Value.ActivityId != null; } }
 		public bool WasScheduled { get { return _previousState.Value.ActivityId != null; } }

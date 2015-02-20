@@ -7,12 +7,12 @@ namespace Teleopti.Ccc.Domain.Rta
     public class ScheduleLayer
     {
         public Guid PayloadId { get; set; }
-        public DateTime StartDateTime { get; set; }
+		public DateOnly BelongsToDate { get; set; }
+		public DateTime StartDateTime { get; set; }
         public DateTime EndDateTime { get; set; }
         public string Name { get; set; }
         public string ShortName { get; set; }
         public int DisplayColor { get; set; }
-	    public DateOnly BelongsToDate { get; set; }
 
 	    public Color TheColor()
         {

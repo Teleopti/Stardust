@@ -17,7 +17,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta
 		IFakeDataBuilder WithSource(string sourceId);
 		IFakeDataBuilder WithBusinessUnit(Guid businessUnitId);
 		IFakeDataBuilder WithUser(string userCode, Guid personId, Guid? businessUnitId, Guid? teamId, Guid? siteId);
-		IFakeDataBuilder WithSchedule(Guid personId, Guid activityId, string name, string start, string end);
+		IFakeDataBuilder WithSchedule(Guid personId, Guid activityId, string name, DateOnly date, string start, string end);
 		IFakeDataBuilder WithAlarm(string stateCode, Guid activityId, Guid alarmId, double staffingEffect, string name, bool isLoggedOutState, TimeSpan threshold);
 		FakeRtaDatabase Make();
 	}
@@ -104,7 +104,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta
 			return this;
 		}
 
-		public IFakeDataBuilder WithSchedule(Guid personId, Guid activityId, string name, string start, string end)
+		public IFakeDataBuilder WithSchedule(Guid personId, Guid activityId, string name, DateOnly belongsToDate, string start, string end)
 		{
 			_schedules.Add(new scheduleLayer2
 			{
@@ -115,12 +115,11 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta
 					Name = name,
 					StartDateTime = start.Utc(),
 					EndDateTime = end.Utc(),
-					BelongsToDate = new DateOnly(start.Utc().Date)
+					BelongsToDate = belongsToDate
 				}
 			});
 			return this;
 		}
-
 
 		public IFakeDataBuilder ClearSchedule(Guid personId)
 		{
@@ -279,7 +278,17 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta
 
 		public static IFakeDataBuilder WithSchedule(this IFakeDataBuilder fakeDataBuilder, Guid personId, Guid activityId, string start, string end)
 		{
-			return fakeDataBuilder.WithSchedule(personId, activityId, null, start, end);
+			return fakeDataBuilder.WithSchedule(personId, activityId, null, new DateOnly(start.Utc()), start, end);
+		}
+
+		public static IFakeDataBuilder WithSchedule(this IFakeDataBuilder fakeDataBuilder, Guid personId, Guid activityId, string name, string start, string end)
+		{
+			return fakeDataBuilder.WithSchedule(personId, activityId, name, new DateOnly(start.Utc()), start, end);
+		}
+
+		public static IFakeDataBuilder WithSchedule(this IFakeDataBuilder fakeDataBuilder, Guid personId, Guid activityId, DateOnly belongsToDate, string start, string end)
+		{
+			return fakeDataBuilder.WithSchedule(personId, activityId, null, belongsToDate, start, end);
 		}
 
 		public static IFakeDataBuilder WithAlarm(this IFakeDataBuilder fakeDataBuilder, string stateCode, Guid activityId)

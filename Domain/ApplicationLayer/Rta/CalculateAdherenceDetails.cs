@@ -16,22 +16,20 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta
 		private readonly IAdherenceDetailsReadModelReader _persister;
 		private readonly IUserCulture _culture;
 		private readonly IUserTimeZone _timeZone;
-		private readonly IAgentDateProvider _agentDateProvider;
 		private readonly CalculateAdherencePercent _calculateAdherencePercent;
 
-		public CalculateAdherenceDetails(INow now, IAdherenceDetailsReadModelReader persister, IUserCulture culture, IUserTimeZone timeZone, IAgentDateProvider agentDateProvider)
+		public CalculateAdherenceDetails(INow now, IAdherenceDetailsReadModelReader persister, IUserCulture culture, IUserTimeZone timeZone)
 		{
 			_now = now;
 			_persister = persister;
 			_culture = culture;
 			_timeZone = timeZone;
-			_agentDateProvider = agentDateProvider;
 			_calculateAdherencePercent = new CalculateAdherencePercent(_now);
 		}
 
 		public IEnumerable<AdherenceDetailsPercentageModel> ForDetails(Guid personId)
 		{
-			var readModel = _persister.Read(personId, currentAgentDate(personId));
+			var readModel = _persister.Read(personId, new DateOnly(_now.UtcDateTime()));
 			var result = new List<AdherenceDetailsPercentageModel>();
 			if (readModel == null) return result;
 			var detailModels = readModel.Model.Details;
@@ -60,11 +58,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta
 				});
 			}
 			return result;
-		}
-
-		private DateOnly currentAgentDate(Guid personId)
-		{
-			return _agentDateProvider.Get(personId);
 		}
 
 		private static bool isActivityEnded(int modelIndex, int totalActivites, bool hasShiftEnded)

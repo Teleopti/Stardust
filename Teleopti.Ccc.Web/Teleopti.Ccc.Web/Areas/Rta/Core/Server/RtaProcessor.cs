@@ -42,12 +42,7 @@ namespace Teleopti.Ccc.Web.Areas.Rta.Core.Server
 			var scheduleInfo = new ScheduleInfo(_databaseReader, context.Person.PersonId, context.CurrentTime);
 			var agentStateInfo = new AgentStateInfo(() => context.PreviousState(scheduleInfo), () => context.CurrentState(scheduleInfo));
 			var adherenceInfo = new AdherenceInfo(input, person, agentStateInfo, scheduleInfo, _alarmFinder);
-			var agentDateInfo = new AgentDateInfo
-			{
-				Date = new DateOnly(TimeZoneInfo.ConvertTimeFromUtc(_now.UtcDateTime(),
-					_databaseReader.GetTimeZone(person.PersonId)))
-			};
-			var info = new StateInfo(person, agentStateInfo, scheduleInfo, adherenceInfo, agentDateInfo);
+			var info = new StateInfo(person, agentStateInfo, scheduleInfo, adherenceInfo);
 			
 			context.AgentStateReadModelUpdater.Update(info);
 			context.MessageSender.Send(info);

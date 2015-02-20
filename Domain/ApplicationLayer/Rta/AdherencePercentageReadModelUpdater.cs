@@ -32,7 +32,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta
 				@event.PersonId,
 				new AdherencePercentageReadModelState
 				{
-					ScheduleDate = @event.ScheduleDate,
 					Timestamp = @event.Timestamp, 
 					InAdherence = true
 				}, 
@@ -46,7 +45,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta
 				@event.PersonId, 
 				new AdherencePercentageReadModelState
 				{
-					ScheduleDate = @event.ScheduleDate,
 					Timestamp = @event.Timestamp, 
 					InAdherence = false
 				}, 
@@ -60,7 +58,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta
 				@event.PersonId,
 				new AdherencePercentageReadModelState
 				{
-					ScheduleDate = @event.ScheduleDate,
 					Timestamp = @event.ShiftEndTime,
 					ShiftEnded = true
 				},
@@ -69,12 +66,12 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta
 
 		private void handleEvent(Guid personId, AdherencePercentageReadModelState readModelState, Action<AdherencePercentageReadModel> mutate)
 		{
-			var model = _persister.Get(new DateOnly(readModelState.ScheduleDate), personId);
+			var model = _persister.Get(new DateOnly(readModelState.Timestamp), personId);
 			if (model == null)
 			{
 				model = new AdherencePercentageReadModel
 				{
-					Date = readModelState.ScheduleDate,
+					Date = readModelState.Timestamp,
 					PersonId = personId,
 					LastTimestamp = readModelState.Timestamp,
 					State = new[] {readModelState},

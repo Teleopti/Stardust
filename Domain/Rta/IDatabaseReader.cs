@@ -20,7 +20,6 @@ namespace Teleopti.Ccc.Domain.Rta
 
 		IList<ScheduleLayer> GetCurrentSchedule(Guid personId);
 		IEnumerable<AgentStateReadModel> GetMissingAgentStatesFromBatch(DateTime batchId, string dataSourceId);
-		TimeZoneInfo GetTimeZone(Guid personId);
 	}
 
 	public interface IReadActualAgentStates

@@ -9,7 +9,7 @@ namespace Teleopti.Interfaces.Domain
 	/// </summary>
 	[Serializable]
 	[DataContract]
-	public struct DateOnly : IComparable<DateOnly>, IEquatable<DateOnly>
+	public struct DateOnly : IComparable<DateOnly>, IEquatable<DateOnly>, IComparable
 	{
 		private DateTime _internalDateTime;
 
