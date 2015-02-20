@@ -27,9 +27,6 @@ namespace Teleopti.Ccc.InfrastructureTest.Foundation
 		private IState stateStub;
 		private InitializeApplication target;
 
-		/// <summary>
-		/// Runs once per test.
-		/// </summary>
 		[SetUp]
 		public void Setup()
 		{
@@ -40,18 +37,12 @@ namespace Teleopti.Ccc.InfrastructureTest.Foundation
 			target = new InitializeApplication(datasourcesFactory, messBroker);
 		}
 
-		/// <summary>
-		/// Runs at teardown for this test fixture
-		/// </summary>
 		[TearDown]
 		public void Teardown()
 		{
 			clearDummyXml();
 		}
 
-		/// <summary>
-		/// Runs once per test fixture
-		/// </summary>
 		[TestFixtureSetUp]
 		public void TestFixtureSetup()
 		{
@@ -154,32 +145,6 @@ namespace Teleopti.Ccc.InfrastructureTest.Foundation
 		private static string correctMatrix()
 		{
 			return @"<matrix name=""matrixName""><connectionString>matrixDatabase</connectionString></matrix>";
-		}
-
-		private void createDummyXml()
-		{
-			using (var file1 = new StreamWriter(xmlFile1))
-			{
-				file1.WriteLine(XmlText("test", string.Empty));
-			}
-			using (var file2 = new StreamWriter(xmlFile2))
-			{
-				file2.WriteLine(XmlText(string.Empty, correctMatrix()));
-			}
-		}
-
-		private static IDictionary<string, string> nHibSettings()
-		{
-			IDictionary<string, string> ret = new Dictionary<string, string>();
-			ret.Add("connection.provider", "NHibernate.Connection.DriverConnectionProvider");
-			ret.Add("connection.driver_class", "NHibernate.Driver.SqlClientDriver");
-			ret.Add("connection.connection_string", ConnectionStringHelper.ConnectionStringUsedInTests);
-			ret.Add("show_sql", "false");
-			ret.Add("dialect", "NHibernate.Dialect.MsSql2005Dialect");
-			ret.Add("use_outer_join", "true");
-			ret.Add("default_schema", "nhtest2.dbo");
-
-			return ret;
 		}
 
 		private static string XmlText(string applicationDataSourceName, string matrixInfo)
