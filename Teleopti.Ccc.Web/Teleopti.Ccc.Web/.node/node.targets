@@ -44,6 +44,8 @@
 		<Exec Command="$(NpmInstallFlattenPackages)" ContinueOnError="false" WorkingDirectory="$(NodeDir)" />
 		<Message Text="Flatten Node Packages Command: $(NpmFlattenCmd) /w WorkingDirectory: $(MSBuildProjectDirectory)\Areas\WFM" Importance="high" />
 		<Exec Command="$(NpmFlattenCmd)" ContinueOnError="false" WorkingDirectory="$(MSBuildProjectDirectory)\Areas\WFM" />
+		<Message Text="HACK! Removing directory to get below 260 characters" Importance="high" />
+		<Exec Command="rmdir /S /Q $(MSBuildProjectDirectory)\Areas\WFM\node_modules\node-sass\test" />
 	</Target>
 
 	<!-- Run node-kss to build the style guide -->
@@ -74,7 +76,7 @@
 		<DistJsFiles Include="$(MSBuildProjectDirectory)\Areas\WFM\dist;$(MSBuildProjectDirectory)\Areas\WFM\dist\**\*" />
 	</ItemGroup>
 	<Target Name="RunGruntBuild" Inputs="@(OriginalJsFiles);@(SassFiles)" Outputs="@(DistJsFiles);@(DistCssFiles)">
-				<Message Text="Restore Node Packages Command: $(NpmInstallGruntCliCmd) /w WorkingDirectory: $(NodeDir)" Importance="high" />
+		<Message Text="Restore Node Packages Command: $(NpmInstallGruntCliCmd) /w WorkingDirectory: $(NodeDir)" Importance="high" />
 		<Exec Command="$(NpmInstallGruntCliCmd)" ContinueOnError="false" WorkingDirectory="$(NodeDir)" />
 		<Message Text="Executing Node.JS Builds: $(GruntBuild) /w WorkingDirectory: $(MSBuildProjectDirectory)\Areas\WFM" Importance="high" />
 		<Exec ContinueOnError="false" WorkingDirectory="$(MSBuildProjectDirectory)\Areas\WFM" Command="$(GruntBuild)" />
