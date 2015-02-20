@@ -1561,6 +1561,7 @@
     <Content Include="Areas\WFM\css\_form.scss" />
     <Content Include="Areas\WFM\css\_buttons.scss" />
     <Content Include="Areas\Reporting\Views\Report\Empty.cshtml" />
+    <Content Include=".node\kss-node.cmd" />
     <None Include="Areas\WFM\css\_material.scss" />
     <Content Include="Areas\WFM\html\forecasting-run.html" />
     <Content Include="Areas\WFM\html\forecasting.html" />
@@ -2068,7 +2069,7 @@ copy "$(ProjectDir)..\..\Domain\FeatureFlags\toggles.txt" "$(TargetDir)FeatureFl
   </PropertyGroup>
   <Import Project=".node\node.targets" Condition="Exists('.node\node.targets')" />
   <Target Name="BeforeBuild">
-    <CallTarget Targets="RestoreNodePackageProtractor;RestoreNodePackages" />
+    <CallTarget Targets="RestoreNodePackageProtractor;RestoreNodePackages;BuildStyleGuide" />
   </Target>
   <!--  <Import Project="..\..\.nuget\Microsoft.Bcl.Build.targets" Condition="Exists('..\..\.nuget\Microsoft.Bcl.Build.targets')" />
   <Target Name="EnsureBclBuildImported" BeforeTargets="BeforeBuild" Condition="'$(BclBuildImported)' == ''">

@@ -1,53 +1,71 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-    <PropertyGroup>
-        <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">$(MSBuildProjectDirectory)\..\</SolutionDir>
-      
-        <!-- Node Directory  -->
-        <NodeDir>$(MSBuildProjectDirectory)\.node\</NodeDir>
-            
-        <!-- Path to Node.exe -->
-        <NodeCmd>$(NodeDir)node</NodeCmd>
-      
-        <!-- Path to npm command -->
-        <NpmCmd>$(NodeDir)npm</NpmCmd>
-      
-        <!-- Path to grunt command -->
-        <GruntCmd>$(NodeDir)grunt</GruntCmd>
-            
-        <!-- Grunt Build Command -->
-        <GruntBuild>"$(GruntCmd)" dist --verbose --no-color </GruntBuild>
-        
-        <!-- NPM install command -->
-        <NpmInstallCmd>"$(NpmCmd)" update</NpmInstallCmd>
-			
-			<!-- NPM flatten command -->
-			<NpmFlattenCmd>"$(NpmCmd)" dedupe</NpmFlattenCmd>
-    
-        <!-- Protractor install command -->
-        <NpmInstallProtractorCmd>"$(NpmCmd)" update -g protractor -save-dev</NpmInstallProtractorCmd>
+	<PropertyGroup>
+		<SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">$(MSBuildProjectDirectory)\..\</SolutionDir>
 
-			<!-- grunt-cli install command -->
-			<NpmInstallGruntCliCmd>"$(NpmCmd)" install -g grunt-cli -save-dev</NpmInstallGruntCliCmd>
-    </PropertyGroup>
+		<!-- Node Directory  -->
+		<NodeDir>$(MSBuildProjectDirectory)\.node\</NodeDir>
 
-    <!-- Runs NPM command -->
-    <Target Name="RestoreNodePackages">
-      <Message Text="Restore Node Packages Command: $(NpmInstallCmd) /w WorkingDirectory: $(MSBuildProjectDirectory)\Areas\WFM" Importance="high" />  
-      <Exec Command="$(NpmInstallCmd)" ContinueOnError="false" WorkingDirectory="$(MSBuildProjectDirectory)\Areas\WFM" />
-			<Message Text="Flatten Node Packages Command: $(NpmFlattenCmd) /w WorkingDirectory: $(MSBuildProjectDirectory)\Areas\WFM" Importance="high" />
-			<Exec Command="$(NpmFlattenCmd)" ContinueOnError="false" WorkingDirectory="$(MSBuildProjectDirectory)\Areas\WFM" />
-    </Target>
+		<!-- Path to Node.exe -->
+		<NodeCmd>$(NodeDir)node</NodeCmd>
+
+		<!-- Path to npm command -->
+		<NpmCmd>$(NodeDir)npm</NpmCmd>
+
+		<!-- Path to grunt command -->
+		<GruntCmd>$(NodeDir)grunt</GruntCmd>
+
+		<!-- Grunt Build Command -->
+		<GruntBuild>"$(GruntCmd)" dist --verbose --no-color </GruntBuild>
+
+		<!-- NPM install command -->
+		<NpmInstallCmd>"$(NpmCmd)" update</NpmInstallCmd>
+
+		<!-- NPM flatten command -->
+		<NpmFlattenCmd>"$(NpmCmd)" dedupe</NpmFlattenCmd>
+
+		<!-- Protractor install command -->
+		<NpmInstallProtractorCmd>"$(NpmCmd)" update -g protractor -save-dev</NpmInstallProtractorCmd>
+
+		<!-- kss install command -->
+		<NpmInstallKssCmd>"$(NpmCmd)" install -g kss -save-dev</NpmInstallKssCmd>
+		<KssGenerateStyleGuide>$(NodeDir)kss-node $(MSBuildProjectDirectory)\Areas\WFM\css $(MSBuildProjectDirectory)\Areas\WFM\styleguide $(MSBuildProjectDirectory)\Areas\WFM\css\styleguide.md --template $(MSBuildProjectDirectory)\Areas\WFM\wfm-template</KssGenerateStyleGuide>
+
+		<!-- grunt-cli install command -->
+		<NpmInstallGruntCliCmd>"$(NpmCmd)" install -g grunt-cli -save-dev</NpmInstallGruntCliCmd>
+	</PropertyGroup>
+
+	<!-- Runs NPM command -->
+	<Target Name="RestoreNodePackages">
+		<Message Text="Restore Node Packages Command: $(NpmInstallCmd) /w WorkingDirectory: $(MSBuildProjectDirectory)\Areas\WFM" Importance="high" />
+		<Exec Command="$(NpmInstallCmd)" ContinueOnError="false" WorkingDirectory="$(MSBuildProjectDirectory)\Areas\WFM" />
+		<Message Text="Flatten Node Packages Command: $(NpmFlattenCmd) /w WorkingDirectory: $(MSBuildProjectDirectory)\Areas\WFM" Importance="high" />
+		<Exec Command="$(NpmFlattenCmd)" ContinueOnError="false" WorkingDirectory="$(MSBuildProjectDirectory)\Areas\WFM" />
+	</Target>
+
+	<!-- Run node-kss to build the style guide -->
+	<ItemGroup>
+		<CssFiles Include="$(MSBuildProjectDirectory)\Areas\WFM\css\**\*" Exclude="main.*" />
+		<TemplateFiles Include="$(MSBuildProjectDirectory)\Areas\WFM\wfm-template\**\*" />
+		<StyleguideFiles Include="$(MSBuildProjectDirectory)\Areas\WFM\styleguide;$(MSBuildProjectDirectory)\Areas\WFM\styleguide\**\*" />
+		<MainCssFiles Include="$(MSBuildProjectDirectory)\Areas\WFM\css\**\main.*" />
+	</ItemGroup>
+	<Target Name="BuildStyleGuide" Inputs="@(CssFiles);@(TemplateFiles);@(MainCssFiles)" Outputs="@(StyleguideFiles)">
+		<Message Text="Restore Node Packages Command: $(NpmInstallKssCmd) /w WorkingDirectory: $(NodeDir)" Importance="high" />
+		<Exec Command="$(NpmInstallKssCmd)" ContinueOnError="false" WorkingDirectory="$(NodeDir)" />
+		<Message Text="Build Style Guide Command: $(KssGenerateStyleGuide) /w WorkingDirectory: $(MSBuildProjectDirectory)\Areas\WFM" Importance="high" />
+		<Exec Command="$(KssGenerateStyleGuide)" ContinueOnError="false" WorkingDirectory="$(MSBuildProjectDirectory)\Areas\WFM" />
+	</Target>
 	
-		<!-- Install protractor -->
-    <Target Name="RestoreNodePackageProtractor">
-      <Message Text="Restore Node Packages Command: $(NpmInstallProtractorCmd) /w WorkingDirectory: $(NodeDir)" Importance="high" />  
-      <Exec Command="$(NpmInstallProtractorCmd)" ContinueOnError="false" WorkingDirectory="$(NodeDir)" />     
-    </Target>
+	<!-- Install protractor -->
+	<Target Name="RestoreNodePackageProtractor">
+		<Message Text="Restore Node Packages Command: $(NpmInstallProtractorCmd) /w WorkingDirectory: $(NodeDir)" Importance="high" />
+		<Exec Command="$(NpmInstallProtractorCmd)" ContinueOnError="false" WorkingDirectory="$(NodeDir)" />
+	</Target>
 
-    <!-- Executes Build -->
-   <Target Name="RunGruntBuild">
-      <Message Text="Executing Node.JS Builds: $(GruntBuild) /w WorkingDirectory: $(MSBuildProjectDirectory)\Areas\WFM" Importance="high" />     
-      <Exec ContinueOnError="false" WorkingDirectory="$(MSBuildProjectDirectory)\Areas\WFM" Command="$(GruntBuild)" />     
-   </Target>  
+	<!-- Executes Build -->
+	<Target Name="RunGruntBuild">
+		<Message Text="Executing Node.JS Builds: $(GruntBuild) /w WorkingDirectory: $(MSBuildProjectDirectory)\Areas\WFM" Importance="high" />
+		<Exec ContinueOnError="false" WorkingDirectory="$(MSBuildProjectDirectory)\Areas\WFM" Command="$(GruntBuild)" />
+	</Target>
 </Project>
