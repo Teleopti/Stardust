@@ -270,7 +270,7 @@
     <Compile Include="BusinessUnitStarter.cs" />
     <Compile Include="ScheduleIsInvalidSpecification.cs" />
     <Compile Include="SchedulingContainerInstaller.cs" />
-    <Compile Include="SdkConfigurationReader.cs" />
+    <Compile Include="FileConfigurationReader.cs" />
     <Compile Include="SerializationContainerInstaller.cs" />
     <Compile Include="ServiceBusRunner.cs" />
     <Compile Include="ShiftTrade\ShiftTradeRequestSaga.cs" />
