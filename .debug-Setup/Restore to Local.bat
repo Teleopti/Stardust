@@ -281,20 +281,12 @@ SQLCMD -S%INSTANCE% -E -Q"SET NOCOUNT ON;select name from sys.databases where na
 findstr /I /C:"%TELEOPTIAGG%" "%LogFolder%\FindDB.txt" > NUL
 if %errorlevel% NEQ 0 SET CreateAgg=-C
 
-::check if we need to create Agg (no stat)
+::check if we need to create Analytics (no stat)
 SQLCMD -S%INSTANCE% -E -Q"SET NOCOUNT ON;select name from sys.databases where name='%TELEOPTIANALYTICS%'" -h-1 > "%LogFolder%\FindDB.txt"
 findstr /I /C:"%TELEOPTIANALYTICS%" "%LogFolder%\FindDB.txt" > NUL
 if %errorlevel% NEQ 0 SET CreateAnalytics=-C
 
-::create or patch Analytics
-"%DBMANAGER%" -S%INSTANCE% -D"%TELEOPTIANALYTICS%" -E -OTeleoptiAnalytics %TRUNK% %CreateAnalytics% -F"%DATABASEPATH%" > "%ROOTDIR%\upgradeDB.log"
-IF %ERRORLEVEL% NEQ 0 SET /A ERRORLEV=2 & GOTO :Error
-
-::Create or Patch Agg
-"%DBMANAGER%" -S%INSTANCE% -D"%TELEOPTIAGG%" -E -OTeleoptiCCCAgg %TRUNK% %CreateAgg% -F"%DATABASEPATH%" >> "%ROOTDIR%\upgradeDB.log"
-IF %ERRORLEVEL% NEQ 0 SET /A ERRORLEV=4 & GOTO :Error
-
-::Upgrade Raptor DB to latest version
+ECHO Upgrade Raptor DB to latest version
 CD "%DBMANAGERPATH%"
 "%DBMANAGER%" -S%INSTANCE% -D"%TELEOPTICCC%" -E -OTeleoptiCCC7 %TRUNK% -F"%DATABASEPATH%" >> "%ROOTDIR%\upgradeDB.log"
 IF %ERRORLEVEL% NEQ 0 SET /A ERRORLEV=3 & GOTO :error
@@ -303,6 +295,14 @@ IF NOT EXIST "%ROOTDIR%\..\Teleopti.Support.Security\bin\%configuration%\Teleopt
 	IF EXIST "%ROOTDIR%\..\Teleopti.Support.Security\Teleopti.Support.Security.csproj" %MSBUILD% "%ROOTDIR%\..\Teleopti.Support.Security\Teleopti.Support.Security.csproj" > "%LogFolder%\build.log"
 	IF %ERRORLEVEL% NEQ 0 SET /A ERRORLEV=12 & GOTO :error
 )
+
+ECHO create or patch Analytics
+"%DBMANAGER%" -S%INSTANCE% -D"%TELEOPTIANALYTICS%" -E -OTeleoptiAnalytics %TRUNK% %CreateAnalytics% -F"%DATABASEPATH%" > "%ROOTDIR%\upgradeDB.log"
+IF %ERRORLEVEL% NEQ 0 SET /A ERRORLEV=2 & GOTO :error
+
+ECHO create or patch Add
+"%DBMANAGER%" -S%INSTANCE% -D"%TELEOPTIAGG%" -E -OTeleoptiCCCAgg %TRUNK% %CreateAgg% -F"%DATABASEPATH%" >> "%ROOTDIR%\upgradeDB.log"
+IF %ERRORLEVEL% NEQ 0 SET /A ERRORLEV=4 & GOTO :error
 
 "%ROOTDIR%\..\Teleopti.Support.Security\bin\%configuration%\Teleopti.Support.Security.exe" -DS%INSTANCE% -DD"%TELEOPTICCC%" -EE >> "%ROOTDIR%\upgradeDB.log"
 IF %ERRORLEVEL% NEQ 0 SET /A ERRORLEV=10 & GOTO :error
