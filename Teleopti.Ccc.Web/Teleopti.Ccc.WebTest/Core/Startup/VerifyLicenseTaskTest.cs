@@ -1,12 +1,12 @@
 using System;
-using System.Collections.Generic;
+using System.Linq;
+using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.Secrets.Licensing;
 using Teleopti.Ccc.Web.Core.Startup.VerifyLicense;
 using log4net;
 using NUnit.Framework;
 using Rhino.Mocks;
 using SharpTestsEx;
-using Teleopti.Ccc.Domain.Security;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Infrastructure.Licensing;
 using Teleopti.Interfaces.Domain;
@@ -17,85 +17,65 @@ namespace Teleopti.Ccc.WebTest.Core.Startup
 	[TestFixture]
 	public class VerifyLicenseTaskTest
 	{
-		private VerifyLicenseTask target;
-		private MockRepository mocks;
-		private ILicenseVerifierFactory licenseVerifierFactory;
-		private IApplicationData applicationData;
-		private ILog logger;
+		private const string datasourceName = "hejsvejs";
 
 		[SetUp]
 		public void Setup()
 		{
-			mocks=new MockRepository();
-			licenseVerifierFactory = mocks.DynamicMock<ILicenseVerifierFactory>();
-			logger = mocks.DynamicMock<ILog>();
-			applicationData = mocks.DynamicMock<IApplicationData>();
-			target = new VerifyLicenseTask(licenseVerifierFactory, new Lazy<IApplicationData>(() => applicationData), logger);
-			DefinedLicenseDataFactory.SetLicenseActivator("asdf", null);
+			DefinedLicenseDataFactory.SetLicenseActivator(datasourceName, null);
 		}
 
 		[Test]
 		public void ShouldSetLicenseActivatorOnHappyPath()
 		{
-			var dataSource = mocks.DynamicMock<IDataSource>();
-			var dataSources = new List<IDataSource> {dataSource};
-			var licenseVerifier = mocks.DynamicMock<ILicenseVerifier>();
+			var dataSource = MockRepository.GenerateStub<IDataSource>();
+			var licenseVerifierFactory = MockRepository.GenerateStub<ILicenseVerifierFactory>();
+			var target = new VerifyLicenseTask(licenseVerifierFactory, new Lazy<IApplicationData>(
+					() => new ApplicationData(null, new[] { dataSource }, null, null, null)), null);
+			var licenseVerifier = MockRepository.GenerateStub<ILicenseVerifier>();
 
-			using(mocks.Record())
-			{
-			    Expect.Call(dataSource.DataSourceName).Return("asdf");
-#pragma warning disable 618
-				Expect.Call(applicationData.RegisteredDataSourceCollection).Return(dataSources);
-#pragma warning restore 618
-				Expect.Call(licenseVerifierFactory.Create(target, null)).Return(licenseVerifier);
-				Expect.Call(licenseVerifier.LoadAndVerifyLicense()).Return(mocks.DynamicMock<ILicenseService>());
-			}
-			using(mocks.Playback())
-			{
-				target.Execute(null);
-				DefinedLicenseDataFactory.GetLicenseActivator("asdf")
-					.Should().Not.Be.Null();
-			}
+			dataSource.Expect(x => x.DataSourceName).Return(datasourceName);
+			licenseVerifierFactory.Expect(x => x.Create(target, null)).Return(licenseVerifier);
+			licenseVerifier.Expect(x => x.LoadAndVerifyLicense()).Return(MockRepository.GenerateStub<ILicenseService>());
+
+			target.Execute(null);
+			DefinedLicenseDataFactory.GetLicenseActivator(datasourceName)
+				.Should().Not.Be.Null();
 		}
 
 		[Test]
 		public void ShouldNotSetLicenseActivatorOnUnHappyPath()
 		{
-			var dataSource = mocks.DynamicMock<IDataSource>();
-			var dataSources = new List<IDataSource> { dataSource };
-			var uowFactory = mocks.DynamicMock<IUnitOfWorkFactory>();
+			var dataSource = MockRepository.GenerateStub<IDataSource>();
+			var uowFactory = MockRepository.GenerateStub<IUnitOfWorkFactory>();
+			var licenseVerifierFactory = MockRepository.GenerateStub<ILicenseVerifierFactory>();
+			var target = new VerifyLicenseTask(licenseVerifierFactory, new Lazy<IApplicationData>(
+					() => new ApplicationData(null, new[] { dataSource }, null, null, null)), MockRepository.GenerateMock<ILog>());
 			var licenseVerifier = new LicenseVerifier(target, uowFactory, null);
 
-			using (mocks.Record())
-			{
-#pragma warning disable 618
-				Expect.Call(applicationData.RegisteredDataSourceCollection).Return(dataSources);
-#pragma warning restore 618
-				Expect.Call(licenseVerifierFactory.Create(target, null)).Return(licenseVerifier);
-				//just to fake a license exception
-				Expect.Call(uowFactory.CreateAndOpenUnitOfWork()).Throw(new LicenseMissingException());
-			}
-			using (mocks.Playback())
-			{
-				target.Execute(null);
-				DefinedLicenseDataFactory.GetLicenseActivator("asdf")
+			dataSource.Expect(x => x.DataSourceName).Return(datasourceName);
+			licenseVerifierFactory.Expect(x => x.Create(target, null)).Return(licenseVerifier);
+			//just to fake a license exception
+			uowFactory.Expect(x => x.CreateAndOpenUnitOfWork()).Throw(new LicenseMissingException());
+		
+			target.Execute(null);
+			DefinedLicenseDataFactory.GetLicenseActivator(datasourceName)
 					.Should().Be.Null();
-			}
+
 		}
 
 		[Test]
 		public void ErrorAndWarningIsLogged()
 		{
-			using(mocks.Record())
-			{
-				logger.Warn("Should be");
-				logger.Error("logged");
-			}
-			using(mocks.Playback())
-			{
-				target.Warning("Should be");
-				target.Error("logged");
-			}
+			var logger = MockRepository.GenerateMock<ILog>();
+			var target = new VerifyLicenseTask(MockRepository.GenerateStub<ILicenseVerifierFactory>(), new Lazy<IApplicationData>(
+					() => new ApplicationData(null, Enumerable.Empty<IDataSource>(), null, null, null)), logger);
+
+			target.Warning("should be");
+			target.Error("logged");
+
+			logger.AssertWasCalled(x => x.Warn("should be"));
+			logger.AssertWasCalled(x => x.Error("logged"));
 		}
 	}
 }

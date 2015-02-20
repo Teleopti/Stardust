@@ -27,19 +27,16 @@ namespace Teleopti.Ccc.Web.Core.Startup.VerifyLicense
 
 		public Task Execute(IAppBuilder application)
 		{
-#pragma warning disable 618
-			foreach (var dataSource in _applicationData.Value.RegisteredDataSourceCollection)
-#pragma warning restore 618
+			_applicationData.Value.DoOnAllTenants_AvoidUsingThis(tenant =>
 			{
-				var unitOfWorkFactory = dataSource.Application;
-				var licenseVerifier = _licenseVerifierFactory.Create(this,
-																	 unitOfWorkFactory);
+				var unitOfWorkFactory = tenant.Application;
+				var licenseVerifier = _licenseVerifierFactory.Create(this, unitOfWorkFactory);
 				var licenseService = licenseVerifier.LoadAndVerifyLicense();
 				if (licenseService != null)
 				{
-					LicenseProvider.ProvideLicenseActivator(dataSource.DataSourceName, licenseService);
+					LicenseProvider.ProvideLicenseActivator(tenant.DataSourceName, licenseService);
 				}
-			}
+			});
 			return null;
 		}
 
