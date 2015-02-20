@@ -39,6 +39,9 @@ namespace Teleopti.Ccc.Web.Areas.Reporting
 					commonReports.LoadReportInfo();
 					Page.Header.Title = commonReports.Name;
 					//labelRepCaption.Text = commonReports.Name;
+					buttonShowExcel.ToolTip = UserTexts.Resources.ShowExcelReport;
+					buttonShowWord.ToolTip = UserTexts.Resources.ShowWordReport;
+					buttonShowPdf.ToolTip = UserTexts.Resources.ShowPDFReport;
 				}
 				else
 				{

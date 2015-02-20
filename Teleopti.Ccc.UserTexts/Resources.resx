@@ -12839,4 +12839,16 @@ Reduce the complexity to use these shifts.</value>
     <value>This shift has been taken by someone else, please choose another shift on the shift trade board.</value>
     <comment>use in Mytime, when lock trades opens, an announcement has been taken by an agent, when another agent want to take it, this alert will show</comment>
   </data>
+  <data name="ShowExcelReport" xml:space="preserve">
+    <value>Show Excel Report</value>
+    <comment>on report parameter selection page</comment>
+  </data>
+  <data name="ShowPDFReport" xml:space="preserve">
+    <value>Show PDF Report</value>
+    <comment>on report parameter selection page</comment>
+  </data>
+  <data name="ShowWordReport" xml:space="preserve">
+    <value>Show Word Report</value>
+    <comment>on report parameter selection page</comment>
+  </data>
 </root>

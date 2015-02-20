@@ -12107,4 +12107,16 @@ Minska komplexiteten för att kunna använda dessa skift.</value>
   <data name="AnnouncementTakenByOthers" xml:space="preserve">
     <value>Skiftet har tagits av någon annan, var god välj ett annat skift på anslagstavlan.</value>
   </data>
+  <data name="ShowExcelReport" xml:space="preserve">
+    <value>Visa Excel-rapport</value>
+    <comment>on report parameter selection page</comment>
+  </data>
+  <data name="ShowPDFReport" xml:space="preserve">
+    <value>Visa PDF-rapport</value>
+    <comment>on report parameter selection page</comment>
+  </data>
+  <data name="ShowWordReport" xml:space="preserve">
+    <value>Visa Word-rapport</value>
+    <comment>on report parameter selection page</comment>
+  </data>
 </root>
