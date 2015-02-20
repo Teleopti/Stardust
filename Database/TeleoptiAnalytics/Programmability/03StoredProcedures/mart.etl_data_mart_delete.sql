@@ -52,6 +52,7 @@ BEGIN
 	TRUNCATE TABLE mart.fact_quality
 	TRUNCATE TABLE mart.fact_agent_state
 	TRUNCATE TABLE mart.fact_agent_skill
+	TRUNCATE TABLE mart.fact_hourly_availability
 	
 	-- Delete data from dim tables
 	DELETE FROM mart.dim_state_group
