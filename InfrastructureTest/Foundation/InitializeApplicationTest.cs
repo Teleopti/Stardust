@@ -95,8 +95,8 @@ namespace Teleopti.Ccc.InfrastructureTest.Foundation
 				Expect.Call(ds1.AuthenticationTypeOption).PropertyBehavior();
 				Expect.Call(ds2.Application).Return(uowF2).Repeat.Any();
 				Expect.Call(ds2.AuthenticationTypeOption).PropertyBehavior();
-				Expect.Call(uowF1.Name).Return("dummy1").Repeat.Any();
-				Expect.Call(uowF2.Name).Return("dummy2").Repeat.Any();
+				Expect.Call(ds1.DataSourceName).Return("dummy1").Repeat.Any();
+				Expect.Call(ds2.DataSourceName).Return("dummy2").Repeat.Any();
 				Expect.Call(datasourcesFactory.TryCreate(nhibXml1, out ds1))
 					.OutRef(ds1)
 					.Return(true)

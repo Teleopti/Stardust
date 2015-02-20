@@ -102,13 +102,11 @@ namespace Teleopti.Ccc.InfrastructureTest.Foundation
         {
             IMessageBrokerComposite messBroker = mocks.StrictMock<IMessageBrokerComposite>();
             IList<IDataSource> dsList = new List<IDataSource>();
-            IDataSource ds1 = mocks.StrictMock<IDataSource>();
-            IDataSource ds2 = mocks.StrictMock<IDataSource>();
-            dsList.Add(ds1);
-            dsList.Add(ds2);
             IUnitOfWorkFactory ds1App = mocks.StrictMock<IUnitOfWorkFactory>();
             IUnitOfWorkFactory ds2App = mocks.StrictMock<IUnitOfWorkFactory>();
             IUnitOfWorkFactory ds1Stat = mocks.StrictMock<IUnitOfWorkFactory>();
+						dsList.Add(new DataSource(ds1App, ds1Stat, null));
+						dsList.Add(new DataSource(ds2App, null, null));
 
 
             using (mocks.Record())
@@ -118,16 +116,9 @@ namespace Teleopti.Ccc.InfrastructureTest.Foundation
                 Expect.Call(ds2App.Name).Return("2").Repeat.Any();
 
                 //dispose uowFactories
-                Expect.Call(ds1.Statistic)
-                    .Return(ds1Stat).Repeat.Any();
-                Expect.Call(ds2.Statistic)
-                    .Return(null).Repeat.Any();
-                Expect.Call(ds1.Application)
-                    .Return(ds1App).Repeat.Any();
-                Expect.Call(ds2.Application)
-                    .Return(ds2App).Repeat.Any();
-                ds1.Dispose();
-                ds2.Dispose();
+                ds1App.Dispose();
+                ds2App.Dispose();
+                ds1Stat.Dispose();
                 //dispose mess broker
                 messBroker.Dispose();
             }
