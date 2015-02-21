@@ -24,13 +24,13 @@ namespace Teleopti.Ccc.WebTest.Areas.Search
 			string keyword = null;
 			var searchRepository = MockRepository.GenerateMock<IPersonFinderReadOnlyRepository>();
 			var permissionProvider = MockRepository.GenerateMock<IPermissionProvider>();
-			var personFinderDisplayRow = new PersonFinderDisplayRow{FirstName = "Ashley",LastName = "Andeen",EmploymentNumber = "1011",PersonId = personId};
+			var personFinderDisplayRow = new PersonFinderDisplayRow{FirstName = "Ashley",LastName = "Andeen",EmploymentNumber = "1011",PersonId = personId,RowNumber = 1};
 				
 			searchRepository.Stub(x => x.Find(null)).Callback(new Func<IPersonFinderSearchCriteria, bool>(c =>
 			{
 				field = c.Field;
 				keyword = c.SearchValue;
-				c.SetRow(0,personFinderDisplayRow);
+				c.SetRow(1,personFinderDisplayRow);
 				return true;
 			}));
 			permissionProvider.Stub(
@@ -54,11 +54,11 @@ namespace Teleopti.Ccc.WebTest.Areas.Search
 			var personId = Guid.NewGuid();
 			var searchRepository = MockRepository.GenerateMock<IPersonFinderReadOnlyRepository>();
 			var permissionProvider = MockRepository.GenerateMock<IPermissionProvider>();
-			var personFinderDisplayRow = new PersonFinderDisplayRow { FirstName = "Ashley", LastName = "Andeen", EmploymentNumber = "1011", PersonId = personId };
+			var personFinderDisplayRow = new PersonFinderDisplayRow { FirstName = "Ashley", LastName = "Andeen", EmploymentNumber = "1011", PersonId = personId,RowNumber = 1};
 
 			searchRepository.Stub(x => x.Find(null)).Callback(new Func<IPersonFinderSearchCriteria, bool>(c =>
 			{
-				c.SetRow(0, personFinderDisplayRow);
+				c.SetRow(1, personFinderDisplayRow);
 				return true;
 			}));
 			permissionProvider.Stub(
