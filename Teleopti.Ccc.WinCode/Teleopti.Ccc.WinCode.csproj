@@ -511,7 +511,6 @@
     <Compile Include="PeopleAdmin\IScheduleNavigator.cs" />
     <Compile Include="PeopleAdmin\IPersonFinderView.cs" />
     <Compile Include="PeopleAdmin\Models\PersonFinderModel.cs" />
-    <Compile Include="PeopleAdmin\Models\PersonFinderSearchCriteria.cs" />
     <Compile Include="PeopleAdmin\Commands\OpenModuleCommand.cs" />
     <Compile Include="PeopleAdmin\Models\PersonGeneralModel.cs" />
     <Compile Include="PeopleAdmin\PeopleNavigatorPresenter.cs" />

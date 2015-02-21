@@ -211,6 +211,7 @@
     <Compile Include="Repositories\EtlJobStatusRepositoryTest.cs" />
     <Compile Include="Repositories\EtlLogObjectRepositoryTest.cs" />
     <Compile Include="Repositories\GamificationSettingtRepositoryTest.cs" />
+    <Compile Include="Repositories\PersonFinderSearchCriteriaTest.cs" />
     <Compile Include="Repositories\ReadModelTestAttribute.cs" />
     <Compile Include="Repositories\SeniorityWorkDayRanksRepositoryTest.cs" />
     <Compile Include="Repositories\SiteOutOfAdherenceReadModelPersisterTest.cs" />

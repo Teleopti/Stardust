@@ -520,7 +520,6 @@
     <Compile Include="PeopleAdmin\DayOfWeekDisplayTest.cs" />
     <Compile Include="PeopleAdmin\Models\PersonFinderDisplayRowTest.cs" />
     <Compile Include="PeopleAdmin\Models\PersonFinderModelTest.cs" />
-    <Compile Include="PeopleAdmin\Models\PersonFinderSearchCriteriaTest.cs" />
     <Compile Include="PeopleAdmin\PersonFinderFindCommandTest.cs" />
     <Compile Include="PeopleAdmin\PersonFinderNextCommandTest.cs" />
     <Compile Include="PeopleAdmin\PersonFinderPresenterTest.cs" />

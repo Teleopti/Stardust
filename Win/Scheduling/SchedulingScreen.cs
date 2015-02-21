@@ -5822,22 +5822,17 @@ namespace Teleopti.Ccc.Win.Scheduling
 		{
 			IList<IPerson> persons = new List<IPerson>(SchedulerState.FilteredPersonDictionary.Values);
 
-			using (SearchPerson searchForm = new SearchPerson(persons))
+			using (var searchForm = new SearchPerson(persons))
 			{
-				searchForm.ShowDialog(this);
+				if (searchForm.ShowDialog(this) != DialogResult.OK) return;
+				if (searchForm.SelectedPerson == null) return;
 
-				if (searchForm.DialogResult == DialogResult.OK)
-				{
-					if (searchForm.SelectedPerson != null)
-					{
-						int row = _scheduleView.GetRowForAgent(searchForm.SelectedPerson);
-						GridRangeInfo info = GridRangeInfo.Cells(row, 0, row, 0);
-						_scheduleView.TheGrid.Selections.Clear(true);
-						_scheduleView.TheGrid.CurrentCell.Activate(row, 0, GridSetCurrentCellOptions.SetFocus);
-						_scheduleView.TheGrid.Selections.ChangeSelection(info, info, true);
-						_scheduleView.TheGrid.CurrentCell.MoveTo(row, 0, GridSetCurrentCellOptions.ScrollInView);
-					}
-				}
+				int row = _scheduleView.GetRowForAgent(searchForm.SelectedPerson);
+				GridRangeInfo info = GridRangeInfo.Cells(row, 0, row, 0);
+				_scheduleView.TheGrid.Selections.Clear(true);
+				_scheduleView.TheGrid.CurrentCell.Activate(row, 0, GridSetCurrentCellOptions.SetFocus);
+				_scheduleView.TheGrid.Selections.ChangeSelection(info, info, true);
+				_scheduleView.TheGrid.CurrentCell.MoveTo(row, 0, GridSetCurrentCellOptions.ScrollInView);
 			}
 		}
 
