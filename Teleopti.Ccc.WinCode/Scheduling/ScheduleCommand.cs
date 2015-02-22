@@ -1,20 +1,17 @@
-﻿using System.Collections.Generic;
-using System.ComponentModel;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
+using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.ResourceCalculation.GroupScheduling;
 using Teleopti.Ccc.Domain.ResourceCalculation.IntraIntervalAnalyze;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.ScheduleTagging;
 using Teleopti.Ccc.Domain.Security.Principal;
-using Teleopti.Ccc.Infrastructure.Toggle;
-using Teleopti.Ccc.Win.Scheduling;
 using Teleopti.Ccc.WinCode.Common;
-using Teleopti.Ccc.WinCode.Scheduling;
 using Teleopti.Interfaces.Domain;
 
-namespace Teleopti.Ccc.Win.Commands
+namespace Teleopti.Ccc.WinCode.Scheduling
 {
 	public class ScheduleCommand
 	{
@@ -29,13 +26,13 @@ namespace Teleopti.Ccc.Win.Commands
 		private readonly IIntraIntervalFinderService _intraIntervalFinderService;
 
 		public ScheduleCommand(IPersonSkillProvider personSkillProvider, IGroupPageCreator groupPageCreator,
-		                       IGroupScheduleGroupPageDataProvider groupScheduleGroupPageDataProvider,
-		                       IResourceOptimizationHelper resourceOptimizationHelper,
-		                       IScheduleDayChangeCallback scheduleDayChangeCallback,
-		                       ITeamBlockScheduleCommand teamBlockScheduleCommand,
-								ClassicScheduleCommand classicScheduleCommand,
-								IMatrixListFactory matrixListFactory,
-								IIntraIntervalFinderService intraIntervalFinderService)
+			IGroupScheduleGroupPageDataProvider groupScheduleGroupPageDataProvider,
+			IResourceOptimizationHelper resourceOptimizationHelper,
+			IScheduleDayChangeCallback scheduleDayChangeCallback,
+			ITeamBlockScheduleCommand teamBlockScheduleCommand,
+			ClassicScheduleCommand classicScheduleCommand,
+			IMatrixListFactory matrixListFactory,
+			IIntraIntervalFinderService intraIntervalFinderService)
 		{
 			_personSkillProvider = personSkillProvider;
 			_groupPageCreator = groupPageCreator;
@@ -48,10 +45,10 @@ namespace Teleopti.Ccc.Win.Commands
 			_intraIntervalFinderService = intraIntervalFinderService;
 		}
 
-		public void Execute(IOptimizerOriginalPreferences optimizerOriginalPreferences, BackgroundWorker backgroundWorker,
-		                    ISchedulerStateHolder schedulerStateHolder, IList<IScheduleDay> selectedScheduleDays,
-		                    IGroupPagePerDateHolder groupPagePerDateHolder, ScheduleOptimizerHelper scheduleOptimizerHelper,
-							IOptimizationPreferences optimizationPreferences)
+		public void Execute(IOptimizerOriginalPreferences optimizerOriginalPreferences, IBackgroundWorkerWrapper backgroundWorker,
+			ISchedulerStateHolder schedulerStateHolder, IList<IScheduleDay> selectedScheduleDays,
+			IGroupPagePerDateHolder groupPagePerDateHolder, ScheduleOptimizerHelper scheduleOptimizerHelper,
+			IOptimizationPreferences optimizationPreferences)
 		{
 			setThreadCulture();
 			var schedulingOptions = optimizerOriginalPreferences.SchedulingOptions;
@@ -73,29 +70,29 @@ namespace Teleopti.Ccc.Win.Commands
 			DateOnlyPeriod groupPagePeriod = schedulerStateHolder.RequestedPeriod.DateOnlyPeriod;
 			groupPagePerDateHolder.ShiftCategoryFairnessGroupPagePerDate = _groupPageCreator
 				.CreateGroupPagePerDate(groupPagePeriod.DayCollection(), _groupScheduleGroupPageDataProvider,
-				                        optimizerOriginalPreferences.SchedulingOptions.GroupPageForShiftCategoryFairness);
+					optimizerOriginalPreferences.SchedulingOptions.GroupPageForShiftCategoryFairness);
 
 			if (schedulingOptions.ScheduleEmploymentType == ScheduleEmploymentType.FixedStaff)
 			{
 				schedulingOptions.OnlyShiftsWhenUnderstaffed = false;
 
-				if (schedulingOptions.UseBlock || schedulingOptions.UseTeam )
+				if (schedulingOptions.UseBlock || schedulingOptions.UseTeam)
 				{
 					var resourceCalculateDelayer = new ResourceCalculateDelayer(_resourceOptimizationHelper, 1, true,
-					                                                            schedulingOptions.ConsiderShortBreaks);
+						schedulingOptions.ConsiderShortBreaks);
 
 					ISchedulePartModifyAndRollbackService rollbackService =
 						new SchedulePartModifyAndRollbackService(schedulerStateHolder.SchedulingResultState,
-						                                         _scheduleDayChangeCallback,
-						                                         new ScheduleTagSetter(schedulingOptions.TagToUseOnScheduling));
+							_scheduleDayChangeCallback,
+							new ScheduleTagSetter(schedulingOptions.TagToUseOnScheduling));
 					scheduleOptimizerHelper.WorkShiftFinderResultHolder =
-					_teamBlockScheduleCommand.Execute(schedulingOptions, backgroundWorker, selectedPersons, selectedScheduleDays,
-					                                  rollbackService, resourceCalculateDelayer);
+						_teamBlockScheduleCommand.Execute(schedulingOptions, backgroundWorker, selectedPersons, selectedScheduleDays,
+							rollbackService, resourceCalculateDelayer);
 				}
 				else
 				{
 					_classicScheduleCommand.Execute(schedulingOptions, backgroundWorker, scheduleOptimizerHelper, selectedScheduleDays,
-					                                schedulerStateHolder);
+						schedulerStateHolder);
 				}
 			}
 			else
@@ -123,9 +120,9 @@ namespace Teleopti.Ccc.Win.Commands
 						return;
 
 					scheduleOptimizerHelper.RemoveShiftCategoryBackToLegalState(matrixesOfSelectedScheduleDays, backgroundWorker,
-																				 optimizationPreferences,
-					                                                             schedulingOptions,
-					                                                             selectedPeriod, allMatrixes);
+						optimizationPreferences,
+						schedulingOptions,
+						selectedPeriod, allMatrixes);
 				}
 			}
 			schedulerStateHolder.SchedulingResultState.SkipResourceCalculation = lastCalculationState;

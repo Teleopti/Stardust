@@ -29,7 +29,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
             Expect.Call(_workShift.LayerCollection).Return(layerColl);
             Expect.Call(layer.Payload).Return(payload);
             _mocks.ReplayAll();
-            Assert.That(WorkShiftMasterActivityChecker.DoesContainMasterActivity(_workShift),Is.True);
+            Assert.That(WorkShiftContainsMasterActivitySpecification.DoesContainMasterActivity(_workShift),Is.True);
             //_mocks.VerifyAll();
 
         }
@@ -44,7 +44,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
             Expect.Call(_workShift.LayerCollection).Return(layerColl);
             Expect.Call(layer.Payload).Return(payload);
             _mocks.ReplayAll();
-            Assert.That(WorkShiftMasterActivityChecker.DoesContainMasterActivity(_workShift), Is.False);
+            Assert.That(WorkShiftContainsMasterActivitySpecification.DoesContainMasterActivity(_workShift), Is.False);
             //_mocks.VerifyAll();
 
         }
@@ -53,7 +53,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
         public void ShouldReturnFalseIfWorkShiftIsNull()
         {
             _workShift = null;
-            Assert.That(WorkShiftMasterActivityChecker.DoesContainMasterActivity(_workShift), Is.False);
+            Assert.That(WorkShiftContainsMasterActivitySpecification.DoesContainMasterActivity(_workShift), Is.False);
             
         }
     }

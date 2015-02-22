@@ -1,8 +1,6 @@
-﻿using System.Collections.Generic;
-using System.ComponentModel;
+using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
-using System.Windows.Forms;
 using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.ResourceCalculation.IntraIntervalAnalyze;
@@ -10,10 +8,9 @@ using Teleopti.Ccc.Domain.Scheduling.NonBlendSkill;
 using Teleopti.Ccc.Domain.Scheduling.SeatLimitation;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.WinCode.Common;
-using Teleopti.Ccc.WinCode.Scheduling;
 using Teleopti.Interfaces.Domain;
 
-namespace Teleopti.Ccc.Win.Scheduling
+namespace Teleopti.Ccc.WinCode.Scheduling
 {
 	/// <summary>
 	/// HelperClass for calculating resources
@@ -38,7 +35,6 @@ namespace Teleopti.Ccc.Win.Scheduling
 		/// Created by: henrika
 		/// Created date: 2008-05-27
 		/// </remarks>
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
 		public ResourceOptimizationHelperWin(ISchedulerStateHolder stateHolder, IPersonSkillProvider personSkillProvider, IIntraIntervalFinderService intraIntervalFinderService)
 			: base(stateHolder.SchedulingResultState, new OccupiedSeatCalculator(), new NonBlendSkillCalculator(), personSkillProvider, new PeriodDistributionService(), new CurrentTeleoptiPrincipal(), intraIntervalFinderService)
 		{
@@ -46,35 +42,31 @@ namespace Teleopti.Ccc.Win.Scheduling
 			_personSkillProvider = personSkillProvider;
 		}
 
-		public void ResourceCalculateAllDays(BackgroundWorker backgroundWorker, bool useOccupancyAdjustment)
+		public void ResourceCalculateAllDays(IBackgroundWorkerWrapper backgroundWorker, bool useOccupancyAdjustment)
 		{
 			_progressEvent = null;
 			if (!_stateHolder.SchedulingResultState.Skills.Any()) return;
 
 			var period = new DateOnlyPeriod(_stateHolder.RequestedPeriod.DateOnlyPeriod.StartDate.AddDays(-10), _stateHolder.RequestedPeriod.DateOnlyPeriod.EndDate.AddDays(2));
-            var extractor = new ScheduleProjectionExtractor(_personSkillProvider, _stateHolder.SchedulingResultState.Skills.Min(s => s.DefaultResolution));
+			var extractor = new ScheduleProjectionExtractor(_personSkillProvider, _stateHolder.SchedulingResultState.Skills.Min(s => s.DefaultResolution));
 			var resources = extractor.CreateRelevantProjectionList(_stateHolder.Schedules, period.ToDateTimePeriod(_stateHolder.TimeZoneInfo));
 			backgroundWorker.ReportProgress(1);
 			using (new ResourceCalculationContext<IResourceCalculationDataContainerWithSingleOperation>(resources))
 			{
 				resourceCalculateDays(backgroundWorker, useOccupancyAdjustment, _stateHolder.ConsiderShortBreaks,
-				                      _stateHolder.RequestedPeriod.DateOnlyPeriod.DayCollection());
+					_stateHolder.RequestedPeriod.DateOnlyPeriod.DayCollection());
 			}
 		}
 
-		private void prepareAndCalculateDate(DateOnly date, bool useOccupancyAdjustment, bool considerShortBreaks, ToolStripProgressBar progressBar)
+		private void prepareAndCalculateDate(DateOnly date, bool useOccupancyAdjustment, bool considerShortBreaks)
 		{
-
 			using (PerformanceOutput.ForOperation("PrepareAndCalculateDate " + date.ToShortDateString(CultureInfo.CurrentCulture)))
 			{
 				ResourceCalculateDate(date, useOccupancyAdjustment, considerShortBreaks);
 			}
-
-			if (progressBar != null)
-				progressBar.PerformStep();
 		}
 
-		public void ResourceCalculateMarkedDays(BackgroundWorker backgroundWorker, bool considerShortBreaks, bool useOccupancyAdjustment)
+		public void ResourceCalculateMarkedDays(IBackgroundWorkerWrapper backgroundWorker, bool considerShortBreaks, bool useOccupancyAdjustment)
 		{
 			_progressEvent = null;
 			if (!_stateHolder.DaysToRecalculate.Any()) return;
@@ -86,24 +78,24 @@ namespace Teleopti.Ccc.Win.Scheduling
 			using (new ResourceCalculationContext<IResourceCalculationDataContainerWithSingleOperation>(resources))
 			{
 				resourceCalculateDays(backgroundWorker, useOccupancyAdjustment, considerShortBreaks,
-				                      _stateHolder.DaysToRecalculate.ToList());
+					_stateHolder.DaysToRecalculate.ToList());
 				_stateHolder.ClearDaysToRecalculate();
 			}
 		}
 
-		private void resourceCalculateDays(BackgroundWorker backgroundWorker, bool useOccupancyAdjustment, bool considerShortBreaks, ICollection<DateOnly> datesList)
+		private void resourceCalculateDays(IBackgroundWorkerWrapper backgroundWorker, bool useOccupancyAdjustment, bool considerShortBreaks, ICollection<DateOnly> datesList)
 		{
 			if (datesList.Count == 0)
 				return;
 
 			foreach (var date in datesList)
 			{
-				prepareAndCalculateDate(date, useOccupancyAdjustment, considerShortBreaks, null);
+				prepareAndCalculateDate(date, useOccupancyAdjustment, considerShortBreaks);
 
 				if (backgroundWorker != null)
 				{
 					var progress = new ResourceOptimizerProgressEventArgs(0, 0, string.Empty);
-					
+
 					backgroundWorker.ReportProgress(1, progress);
 
 					if (backgroundWorker.CancellationPending)

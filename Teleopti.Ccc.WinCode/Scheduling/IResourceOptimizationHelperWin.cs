@@ -1,11 +1,9 @@
-using System.Collections.Generic;
-using System.ComponentModel;
-using Teleopti.Interfaces.Domain;
+using Teleopti.Ccc.Domain.Helper;
 
 namespace Teleopti.Ccc.WinCode.Scheduling
 {
     public interface IResourceOptimizationHelperWin
     {
-        void ResourceCalculateAllDays(BackgroundWorker backgroundWorker, bool useOccupancyAdjustment);
+        void ResourceCalculateAllDays(IBackgroundWorkerWrapper backgroundWorker, bool useOccupancyAdjustment);
     }
 }

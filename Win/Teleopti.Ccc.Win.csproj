@@ -419,16 +419,6 @@
     <Compile Include="Budgeting\EditShrinkageForm.Designer.cs">
       <DependentUpon>EditShrinkageForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="Commands\BackToLegalShiftCommand.cs" />
-    <Compile Include="Commands\ClassicScheduleCommand.cs" />
-    <Compile Include="Commands\GroupPersonBuilderForOptimizationFactory.cs" />
-    <Compile Include="Commands\IntraIntervalOptimizationCommand.cs" />
-    <Compile Include="Commands\MatrixListFactory.cs" />
-    <Compile Include="Commands\OptimizationCommand.cs" />
-    <Compile Include="Commands\ScheduleCommand.cs" />
-    <Compile Include="Commands\TeamBlockMoveTimeBetweenDaysCommand.cs" />
-    <Compile Include="Commands\TeamBlockOptimizationCommand.cs" />
-    <Compile Include="Commands\WeeklyRestSolverCommand.cs" />
     <Compile Include="Common\AvailableSkillWithPreselectedSkill.cs" />
     <Compile Include="Common\BaseDialogForm.cs">
       <SubType>Form</SubType>
@@ -768,6 +758,7 @@
       <DependentUpon>PersonSelectorViewNew.cs</DependentUpon>
     </Compile>
     <Compile Include="Main\IDummyInterface.cs" />
+    <Compile Include="Scheduling\BackgroundWorkerWrapper.cs" />
     <Compile Include="Scheduling\PublishScheduleDateView.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -1571,7 +1562,6 @@
       <DependentUpon>ShiftStatisticsControl.cs</DependentUpon>
     </Compile>
     <Compile Include="Scheduling\QuickAccessState.cs" />
-    <Compile Include="Scheduling\ScheduleOvertimeCommand.cs" />
     <Compile Include="Scheduling\SchedulerRibbonHelper.cs" />
     <Compile Include="Scheduling\ScheduleTimeType.cs" />
     <Compile Include="Scheduling\SchedulingScreenInternals\BaseCutPasteHandler.cs" />
@@ -1624,9 +1614,6 @@
     <Compile Include="Scheduling\ExportToScenarioResultView.Designer.cs">
       <DependentUpon>ExportToScenarioResultView.cs</DependentUpon>
     </Compile>
-    <Compile Include="Scheduling\ExtendReduceDaysOffHelper.cs" />
-    <Compile Include="Scheduling\ExtendReduceTimeHelper.cs" />
-    <Compile Include="Scheduling\OptimizerHelperHelper.cs" />
     <Compile Include="Scheduling\PersistConflictView.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -1755,7 +1742,6 @@
     <Compile Include="Scheduling\Swapper.cs" />
     <Compile Include="Scheduling\TagsMenuLoader.cs" />
     <Compile Include="Scheduling\PropertyPanel\UpdateSelectionForAgentInfo.cs" />
-    <Compile Include="Scheduling\TeleoptiProgressChangeMessage.cs" />
     <Compile Include="Scheduling\VirtualSkillHelper.cs" />
     <Compile Include="SearchPersonView.cs">
       <SubType>UserControl</SubType>
@@ -2486,8 +2472,6 @@
     <Compile Include="Scheduling\FormClipboardSpecial.Designer.cs">
       <DependentUpon>FormClipboardSpecial.cs</DependentUpon>
     </Compile>
-    <Compile Include="Scheduling\ResourceOptimizationHelperWin.cs" />
-    <Compile Include="Scheduling\ScheduleOptimizerHelper.cs" />
     <Compile Include="Scheduling\SchedulingScreen.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -2596,7 +2580,6 @@
     <Compile Include="Shifts\WorkShiftsExplorer.designer.cs">
       <DependentUpon>WorkShiftsExplorer.cs</DependentUpon>
     </Compile>
-    <Compile Include="Commands\TeamBlockScheduleCommand.cs" />
     <Compile Include="Sikuli\Validators\ScheduleOvertimePeriodValidator.cs" />
     <Compile Include="Sikuli\Validators\IntervalBalanceAfterValidator.cs" />
     <Compile Include="Sikuli\Validators\OptimizeWithinDaysValidator.cs" />

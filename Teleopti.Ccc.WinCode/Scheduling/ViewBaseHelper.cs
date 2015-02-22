@@ -18,22 +18,12 @@ using Teleopti.Ccc.WinCode.Scheduling.Panels;
 
 namespace Teleopti.Ccc.WinCode.Scheduling
 {
-    /// <summary>
-    /// ViewBase helper
-    /// </summary>
-	[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling")]
 	public static class ViewBaseHelper
     {
-        /// <summary>
-        /// GetToolTip
-        /// </summary>
-        /// <param name="cell"></param>
-        /// <returns></returns>
         public static string GetToolTip(IScheduleDay cell)
         {
             StringBuilder sb = new StringBuilder();
 
-            string conflictingAssignments = GetToolTipConflictingAssignments(cell);
             string assignments = GetToolTipAssignments(cell);
             string absences = GetToolTipAbsences(cell);
             string dayOff = GetToolTipDayOff(cell);
@@ -41,10 +31,6 @@ namespace Teleopti.Ccc.WinCode.Scheduling
             string meetings = GetToolTipMeetings(cell);
             string overtime = GetToolTipOvertime(cell);
             
-
-            if (conflictingAssignments.Length > 0)
-                sb.Append(conflictingAssignments);
-
             if (assignments.Length > 0)
             {
                 if (sb.Length > 0) sb.AppendLine();
@@ -113,33 +99,6 @@ namespace Teleopti.Ccc.WinCode.Scheduling
                 sb.Insert(0, new string('-', longest) + Environment.NewLine);
 
             return sb.ToString();
-        }
-        /// <summary>
-        /// Get tooltip for conflicting assignments
-        /// </summary>
-        /// <param name="cell"></param>
-        /// <returns></returns>
-				public static string GetToolTipConflictingAssignments(IScheduleDay cell)
-        {
-					//todo: probably another type of conflict information here if schedules are overlapping
-						//StringBuilder sb = new StringBuilder();
-
-						//IList<IPersonAssignment> conflicts = cell.PersonAssignmentConflictCollection;
-						//if (conflicts.Count > 0)
-						//{
-						//		foreach (IPersonAssignment pa in conflicts)
-						//		{
-						//				if (sb.Length > 0) sb.AppendLine();
-						//				if(pa.ShiftCategory != null)
-						//						sb.Append(pa.ShiftCategory.Description.Name);             //name
-						//				sb.Append("  ");
-						//				sb.Append(ToLocalStartEndTimeString(pa.Period, cell.TimeZone));      //time
-						//		}
-						//}
-
-						//if (sb.Length > 0)
-						//		return string.Format(CultureInfo.CurrentUICulture, "{0}{1}({2})",UserTexts.Resources.OverlappningShifts, Environment.NewLine, sb);
-            return string.Empty;
         }
 
         public static string ToLocalStartEndTimeString(DateTimePeriod period, TimeZoneInfo timeZoneInfo)

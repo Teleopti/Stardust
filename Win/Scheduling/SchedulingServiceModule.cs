@@ -1,5 +1,5 @@
 using Autofac;
-using Teleopti.Ccc.Win.Commands;
+using Teleopti.Ccc.WinCode.Scheduling;
 using Teleopti.Interfaces;
 using Teleopti.Interfaces.Domain;
 

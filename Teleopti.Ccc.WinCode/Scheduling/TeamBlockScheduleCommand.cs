@@ -1,24 +1,16 @@
-﻿using System.Collections.Generic;
-using System.ComponentModel;
+using System.Collections.Generic;
 using System.Linq;
+using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.Optimization;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling.DayOffScheduling;
 using Teleopti.Ccc.Domain.Scheduling.ScheduleTagging;
 using Teleopti.Ccc.Domain.Scheduling.TeamBlock;
-using Teleopti.Ccc.Win.Scheduling;
 using Teleopti.Ccc.WinCode.Common;
 using Teleopti.Interfaces.Domain;
 
-namespace Teleopti.Ccc.Win.Commands
+namespace Teleopti.Ccc.WinCode.Scheduling
 {
-	public interface ITeamBlockScheduleCommand
-	{
-		IWorkShiftFinderResultHolder Execute(ISchedulingOptions schedulingOptions, BackgroundWorker backgroundWorker, IList<IPerson> selectedPersons,
-		             IList<IScheduleDay> selectedSchedules, ISchedulePartModifyAndRollbackService rollbackService,
-		             IResourceCalculateDelayer resourceCalculateDelayer);
-	}
-
 	public class TeamBlockScheduleCommand : ITeamBlockScheduleCommand
 	{
 		private readonly IFixedStaffSchedulingService _fixedStaffSchedulingService;
@@ -32,13 +24,13 @@ namespace Teleopti.Ccc.Win.Commands
 		private readonly IWorkShiftMinMaxCalculator _workShiftMinMaxCalculator;
 		private readonly ITeamBlockSteadyStateValidator _teamBlockSteadyStateValidator;
 		private readonly ITeamBlockMaxSeatChecker _teamBlockMaxSeatChecker;
-		private BackgroundWorker _backgroundWorker;
+		private IBackgroundWorkerWrapper _backgroundWorker;
 		private int _scheduledCount;
 		private ISchedulingOptions _schedulingOptions;
-	    private readonly ITeamBlockSchedulingOptions _teamBlockSchedulingOptions;
+		private readonly ITeamBlockSchedulingOptions _teamBlockSchedulingOptions;
 		private readonly ITeamBlockSchedulingCompletionChecker _teamBlockSchedulingCompletionChecker;
 		private readonly ITeamBlockScheduler _teamBlockScheduler;
-	    private readonly IWeeklyRestSolverCommand  _weeklyRestSolverCommand;
+		private readonly IWeeklyRestSolverCommand _weeklyRestSolverCommand;
 		private readonly ITeamMatrixChecker _teamMatrixChecker;
 
 		public TeamBlockScheduleCommand(IFixedStaffSchedulingService fixedStaffSchedulingService,
@@ -52,7 +44,7 @@ namespace Teleopti.Ccc.Win.Commands
 			IWorkShiftMinMaxCalculator workShiftMinMaxCalculator,
 			ITeamBlockSteadyStateValidator teamBlockSteadyStateValidator,
 			ITeamBlockMaxSeatChecker teamBlockMaxSeatChecker,
- 			ITeamBlockSchedulingOptions teamBlockSchedulingOptions,
+			ITeamBlockSchedulingOptions teamBlockSchedulingOptions,
 			ITeamBlockSchedulingCompletionChecker teamBlockSchedulingCompletionChecker,
 			ITeamBlockScheduler teamBlockScheduler, IWeeklyRestSolverCommand weeklyRestSolverCommand,
 			ITeamMatrixChecker teamMatrixChecker)
@@ -68,14 +60,14 @@ namespace Teleopti.Ccc.Win.Commands
 			_workShiftMinMaxCalculator = workShiftMinMaxCalculator;
 			_teamBlockSteadyStateValidator = teamBlockSteadyStateValidator;
 			_teamBlockMaxSeatChecker = teamBlockMaxSeatChecker;
-	        _teamBlockSchedulingOptions = teamBlockSchedulingOptions;
+			_teamBlockSchedulingOptions = teamBlockSchedulingOptions;
 			_teamBlockSchedulingCompletionChecker = teamBlockSchedulingCompletionChecker;
-		    _teamBlockScheduler = teamBlockScheduler;
-	        _weeklyRestSolverCommand = weeklyRestSolverCommand;
-		    _teamMatrixChecker = teamMatrixChecker;
+			_teamBlockScheduler = teamBlockScheduler;
+			_weeklyRestSolverCommand = weeklyRestSolverCommand;
+			_teamMatrixChecker = teamMatrixChecker;
 		}
 
-		public IWorkShiftFinderResultHolder Execute(ISchedulingOptions schedulingOptions, BackgroundWorker backgroundWorker,
+		public IWorkShiftFinderResultHolder Execute(ISchedulingOptions schedulingOptions, IBackgroundWorkerWrapper backgroundWorker,
 			IList<IPerson> selectedPersons, IList<IScheduleDay> selectedSchedules,
 			ISchedulePartModifyAndRollbackService rollbackService, IResourceCalculateDelayer resourceCalculateDelayer)
 		{
@@ -130,8 +122,8 @@ namespace Teleopti.Ccc.Win.Commands
 			{
 				e.Cancel = true;
 			}
-			if(e.IsSuccessful)
-			_scheduledCount++;
+			if (e.IsSuccessful)
+				_scheduledCount++;
 			if (_scheduledCount >= _schedulingOptions.RefreshRate)
 			{
 				//_backgroundWorker.ReportProgress(1, e.SchedulePart);
@@ -145,15 +137,15 @@ namespace Teleopti.Ccc.Win.Commands
 			ITeamInfoFactory teamInfoFactory = new TeamInfoFactory(groupPersonBuilderForOptimization);
 			IValidatedTeamBlockInfoExtractor validatedTeamBlockExtractor =
 				new ValidatedTeamBlockInfoExtractor(_teamBlockSteadyStateValidator, _teamBlockInfoFactory,
-				                                    _teamBlockSchedulingOptions, _teamBlockSchedulingCompletionChecker);
+					_teamBlockSchedulingOptions, _teamBlockSchedulingCompletionChecker);
 			var schedulingService =
 				new TeamBlockSchedulingService(schedulingOptions,
 					teamInfoFactory,
 					_teamBlockScheduler,
 					_safeRollbackAndResourceCalculation,
-					_workShiftMinMaxCalculator, 
-					_teamBlockMaxSeatChecker, 
-					validatedTeamBlockExtractor, 
+					_workShiftMinMaxCalculator,
+					_teamBlockMaxSeatChecker,
+					validatedTeamBlockExtractor,
 					_teamMatrixChecker);
 
 			return schedulingService;

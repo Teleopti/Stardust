@@ -1,14 +1,8 @@
-﻿using System.Collections.Generic;
-using Teleopti.Ccc.WinCode.Scheduling.ScheduleSortingCommands;
+using System.Collections.Generic;
 using Teleopti.Interfaces.Domain;
 
-namespace Teleopti.Ccc.WinCode.Scheduling
+namespace Teleopti.Ccc.Domain.Scheduling
 {
-	public interface IMatrixUnselectedDaysLocker
-	{
-		void Execute();
-	}
-
 	public class MatrixUnselectedDaysLocker : IMatrixUnselectedDaysLocker
 	{
 		private readonly IList<IScheduleMatrixPro> _matrixList;
@@ -31,7 +25,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 						matrix.LockPeriod(new DateOnlyPeriod(dateOnly, dateOnly));
 				}
 			}
-			
+
 		}
 	}
 }

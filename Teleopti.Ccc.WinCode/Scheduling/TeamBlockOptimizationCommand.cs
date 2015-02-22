@@ -1,9 +1,8 @@
-﻿using System.Collections.Generic;
-using System.ComponentModel;
-using System.Diagnostics.CodeAnalysis;
+using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.DayOffPlanning;
 using Teleopti.Ccc.Domain.FeatureFlags;
+using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.Optimization;
 using Teleopti.Ccc.Domain.Optimization.TeamBlock;
 using Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.EqualNumberOfCategory;
@@ -14,23 +13,13 @@ using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.TeamBlock;
 using Teleopti.Ccc.Infrastructure.Toggle;
 using Teleopti.Ccc.Secrets.DayOffPlanning;
-using Teleopti.Ccc.Win.Scheduling;
 using Teleopti.Ccc.WinCode.Common;
 using Teleopti.Interfaces;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
 
-namespace Teleopti.Ccc.Win.Commands
+namespace Teleopti.Ccc.WinCode.Scheduling
 {
-	public interface ITeamBlockOptimizationCommand
-	{
-		[SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "3")]
-		void Execute(BackgroundWorker backgroundWorker, DateOnlyPeriod selectedPeriod, IList<IPerson> selectedPersons,
-			IOptimizationPreferences optimizationPreferences, ISchedulePartModifyAndRollbackService rollbackService,
-			IScheduleTagSetter tagSetter, ISchedulingOptions schedulingOptions,
-			IResourceCalculateDelayer resourceCalculateDelayer, IList<IScheduleDay> selectedSchedules);
-	}
-
 	public class TeamBlockOptimizationCommand : ITeamBlockOptimizationCommand
 	{
 		private readonly IDayOffBackToLegalStateFunctions _dayOffBackToLegalStateFunctions;
@@ -51,7 +40,7 @@ namespace Teleopti.Ccc.Win.Commands
 		private readonly ITeamBlockMaxSeatChecker _teamBlockMaxSeatChecker;
 		private readonly ITeamBlockSteadyStateValidator _teamBlockSteadyStateValidator;
 		private readonly ITeamDayOffModifier _teamDayOffModifier;
-		private BackgroundWorker _backgroundWorker;
+		private IBackgroundWorkerWrapper _backgroundWorker;
 		private readonly ITeamBlockSchedulingOptions _teamBlockScheudlingOptions;
 		private readonly IDailyTargetValueCalculatorForTeamBlock _dailyTargetValueCalculatorForTeamBlock;
 		private readonly IEqualNumberOfCategoryFairnessService _equalNumberOfCategoryFairness;
@@ -91,7 +80,7 @@ namespace Teleopti.Ccc.Win.Commands
 			ITeamBlockDayOffFairnessOptimizationServiceFacade teamBlockDayOffFairnessOptimizationService,
 			ITeamBlockScheduler teamBlockScheduler, IWeeklyRestSolverCommand weeklyRestSolverCommand,
 			IAllTeamMembersInSelectionSpecification allTeamMembersInSelectionSpecification,
-			ITeamBlockMoveTimeBetweenDaysCommand teamBlockMoveTimeBetweenDaysCommand, 
+			ITeamBlockMoveTimeBetweenDaysCommand teamBlockMoveTimeBetweenDaysCommand,
 			IToggleManager toggleManager,
 			IIntraIntervalOptimizationCommand intraIntervalOptimizationCommand)
 		{
@@ -127,7 +116,7 @@ namespace Teleopti.Ccc.Win.Commands
 			_intraIntervalOptimizationCommand = intraIntervalOptimizationCommand;
 		}
 
-		public void Execute(BackgroundWorker backgroundWorker, DateOnlyPeriod selectedPeriod, IList<IPerson> selectedPersons,
+		public void Execute(IBackgroundWorkerWrapper backgroundWorker, DateOnlyPeriod selectedPeriod, IList<IPerson> selectedPersons,
 			IOptimizationPreferences optimizationPreferences,
 			ISchedulePartModifyAndRollbackService rollbackServiceWithResourceCalculation, IScheduleTagSetter tagSetter,
 			ISchedulingOptions schedulingOptions, IResourceCalculateDelayer resourceCalculateDelayer,
@@ -135,7 +124,7 @@ namespace Teleopti.Ccc.Win.Commands
 		{
 
 			_backgroundWorker = backgroundWorker;
-			var args = new ResourceOptimizerProgressEventArgs(0, 0, LanguageResourceHelper.Translate("XXCollectingData"));
+			var args = new ResourceOptimizerProgressEventArgs(0, 0, UserTexts.Resources.CollectingData);
 			_backgroundWorker.ReportProgress(1, args);
 
 			IList<IScheduleMatrixPro> allMatrixes = _matrixListFactory.CreateMatrixListAll(selectedPeriod);
@@ -196,7 +185,7 @@ namespace Teleopti.Ccc.Win.Commands
 
 			if (optimizationPreferences.General.OptimizationStepIntraInterval)
 			{
-				_intraIntervalOptimizationCommand.Execute(schedulingOptions, selectedPeriod, selectedSchedules, _schedulerStateHolder.SchedulingResultState, allMatrixes, rollbackServiceWithResourceCalculation, resourceCalculateDelayer, _backgroundWorker);	
+				_intraIntervalOptimizationCommand.Execute(schedulingOptions, selectedPeriod, selectedSchedules, _schedulerStateHolder.SchedulingResultState, allMatrixes, rollbackServiceWithResourceCalculation, resourceCalculateDelayer, _backgroundWorker);
 			}
 
 			solveWeeklyRestViolations(selectedPeriod, selectedPersons, optimizationPreferences, resourceCalculateDelayer,
@@ -205,7 +194,7 @@ namespace Teleopti.Ccc.Win.Commands
 
 		}
 
-		private void optimizeMoveTimeBetweenDays(BackgroundWorker backgroundWorker, DateOnlyPeriod selectedPeriod,
+		private void optimizeMoveTimeBetweenDays(IBackgroundWorkerWrapper backgroundWorker, DateOnlyPeriod selectedPeriod,
 			IList<IPerson> selectedPersons, IOptimizationPreferences optimizationPreferences,
 			ISchedulePartModifyAndRollbackService rollbackServiceWithResourceCalculation, ISchedulingOptions schedulingOptions,
 			IResourceCalculateDelayer resourceCalculateDelayer, IList<IScheduleMatrixPro> matrixesOnSelectedperiod,
@@ -283,10 +272,10 @@ namespace Teleopti.Ccc.Win.Commands
 					);
 
 			IList<IDayOffTemplate> dayOffTemplates = (from item in _schedulerStateHolder.CommonStateHolder.DayOffs
-				where ((IDeleteTag) item).IsDeleted == false
+				where ((IDeleteTag)item).IsDeleted == false
 				select item).ToList();
 
-			((List<IDayOffTemplate>) dayOffTemplates).Sort(new DayOffTemplateSorter());
+			((List<IDayOffTemplate>)dayOffTemplates).Sort(new DayOffTemplateSorter());
 
 			teamBlockDayOffOptimizerService.ReportProgress += resourceOptimizerPersonOptimized;
 			schedulingOptions.DayOffTemplate = dayOffTemplates[0];
@@ -302,7 +291,6 @@ namespace Teleopti.Ccc.Win.Commands
 			teamBlockDayOffOptimizerService.ReportProgress -= resourceOptimizerPersonOptimized;
 		}
 
-		[SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling")]
 		private void optimizeTeamBlockIntraday(DateOnlyPeriod selectedPeriod, IList<IPerson> selectedPersons,
 			IOptimizationPreferences optimizationPreferences,
 			IList<IScheduleMatrixPro> allMatrixes,
@@ -310,8 +298,6 @@ namespace Teleopti.Ccc.Win.Commands
 			IResourceCalculateDelayer resourceCalculateDelayer,
 			ITeamBlockGenerator teamBlockGenerator)
 		{
-
-
 			ITeamBlockIntradayOptimizationService teamBlockIntradayOptimizationService =
 				new TeamBlockIntradayOptimizationService(
 					teamBlockGenerator,

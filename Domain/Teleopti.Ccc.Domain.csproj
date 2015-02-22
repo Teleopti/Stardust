@@ -478,6 +478,7 @@
     <Compile Include="Aop\IReadModelUnitOfWorkAspect.cs" />
     <Compile Include="GenericDisposable.cs" />
     <Compile Include="Helper\DateExtensions.cs" />
+    <Compile Include="Helper\IBackgroundWorkerWrapper.cs" />
     <Compile Include="ICurrentApplicationData.cs" />
     <Compile Include="Notification\ClickatellNotificationSender.cs" />
     <Compile Include="Notification\CustomNotificationSenderFactory.cs" />
@@ -778,6 +779,8 @@
     <Compile Include="Scheduling\BackToLegalShift\BackToLegalShiftWorker.cs" />
     <Compile Include="Scheduling\BackToLegalShift\LegalShiftDecider.cs" />
     <Compile Include="Scheduling\DoNothingScheduleDayChangeCallBack.cs" />
+    <Compile Include="Scheduling\IMatrixUnselectedDaysLocker.cs" />
+    <Compile Include="Scheduling\MatrixUnselectedDaysLocker.cs" />
     <Compile Include="Scheduling\Overtime\AdjustOvertimeLengthBasedOnAvailability.cs" />
     <Compile Include="Scheduling\Overtime\AnalyzePersonAccordingToAvailability.cs" />
     <Compile Include="Scheduling\Overtime\CalculateBestOvertime.cs" />

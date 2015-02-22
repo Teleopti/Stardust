@@ -1,9 +1,8 @@
-﻿using System.Collections.Generic;
-using System.ComponentModel;
-using System.Diagnostics;
+using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.GroupPageCreator;
+using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.Optimization;
 using Teleopti.Ccc.Domain.Optimization.TeamBlock;
 using Teleopti.Ccc.Domain.ResourceCalculation;
@@ -13,10 +12,9 @@ using Teleopti.Ccc.Domain.Scheduling.ScheduleTagging;
 using Teleopti.Ccc.Domain.Scheduling.TeamBlock;
 using Teleopti.Ccc.Infrastructure.Toggle;
 using Teleopti.Ccc.UserTexts;
-using Teleopti.Ccc.Win.Scheduling;
 using Teleopti.Interfaces.Domain;
 
-namespace Teleopti.Ccc.Win.Commands
+namespace Teleopti.Ccc.WinCode.Scheduling
 {
 	public class BackToLegalShiftCommand
 	{
@@ -29,7 +27,7 @@ namespace Teleopti.Ccc.Win.Commands
 		private readonly IScheduleDayChangeCallback _scheduleDayChangeCallback;
 		private readonly IToggleManager _toggleManager;
 		private readonly IResourceOptimizationHelper _resourceOptimizationHelper;
-		private BackgroundWorker _backgroundWorker;
+		private IBackgroundWorkerWrapper _backgroundWorker;
 
 		public BackToLegalShiftCommand(ITeamBlockInfoFactory teamBlockInfoFactory,
 			IGroupPersonBuilderForOptimizationFactory groupPersonBuilderForOptimizationFactory,
@@ -52,8 +50,8 @@ namespace Teleopti.Ccc.Win.Commands
 			_resourceOptimizationHelper = resourceOptimizationHelper;
 		}
 
-		public void Execute(BackgroundWorker backgroundWorker,
-			IList<IScheduleDay> selectedSchedules, 
+		public void Execute(IBackgroundWorkerWrapper backgroundWorker,
+			IList<IScheduleDay> selectedSchedules,
 			ISchedulingResultStateHolder schedulingResultStateHolder)
 		{
 			_backgroundWorker = backgroundWorker;
@@ -61,7 +59,7 @@ namespace Teleopti.Ccc.Win.Commands
 			setupPreferences(optimizationPreferences);
 			var schedulingOptions = _schedulingOptionsCreator.CreateSchedulingOptions(optimizationPreferences);
 			schedulingOptions.BlockFinderTypeForAdvanceScheduling = BlockFinderType.SingleDay;
-			
+
 			var groupPersonBuilderForOptimization = _groupPersonBuilderForOptimizationFactory.Create(schedulingOptions);
 			var teamInfoFactory = new TeamInfoFactory(groupPersonBuilderForOptimization);
 
@@ -74,8 +72,8 @@ namespace Teleopti.Ccc.Win.Commands
 			var selectedTeamBlocks = teamBlockGenerator.Generate(allMatrixes, selectedPeriod, selectedPersons, schedulingOptions);
 			var tagSetter = new ScheduleTagSetter(KeepOriginalScheduleTag.Instance);
 			var rollbackService = new SchedulePartModifyAndRollbackService(schedulingResultStateHolder,
-																					   _scheduleDayChangeCallback,
-																					   tagSetter);
+				_scheduleDayChangeCallback,
+				tagSetter);
 			var resourceCalculateDelayer = new ResourceCalculateDelayer(_resourceOptimizationHelper, 1, false, true);
 			var maxSeatToggle = _toggleManager.IsEnabled(Toggles.Scheduler_TeamBlockAdhereWithMaxSeatRule_23419);
 			_backToLegalShiftService.Progress += _backToLegalShiftService_Progress;
@@ -95,7 +93,7 @@ namespace Teleopti.Ccc.Win.Commands
 
 		private static void setupPreferences(OptimizationPreferences optimizationPreferences)
 		{
-			var singleAgentEntry = new GroupPageLight {Key = "SingleAgentTeam", Name = Resources.SingleAgentTeam};
+			var singleAgentEntry = new GroupPageLight { Key = "SingleAgentTeam", Name = Resources.SingleAgentTeam };
 			var extraPreferences = optimizationPreferences.Extra;
 			extraPreferences.TeamGroupPage = singleAgentEntry;
 			extraPreferences.BlockTypeValue = BlockFinderType.SingleDay;

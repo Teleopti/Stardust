@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Forms;
-using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.Security.Principal;
@@ -24,6 +23,7 @@ namespace Teleopti.Ccc.Win.Scheduling.SchedulingScreenInternals
         private readonly Action<PasteOptions> _pasteFromClipboardAction;
         private readonly Action _enablePasteOperationAction;
         private readonly IExternalExceptionHandler _externalExceptionHandler = new ExternalExceptionHandler();
+		private readonly WorkShiftContainsMasterActivitySpecification _workShiftContainsMasterActivity = new WorkShiftContainsMasterActivitySpecification();
 
         public ScheduleGridCutPasteHandler(SchedulingScreen owner, Func<ScheduleViewBase> scheduleViewFunction, Action<DeleteOption> startDeleteAction, Action checkPastePermissionsAction, Action<PasteOptions> pasteFromClipboardAction, Action enablePasteOperationAction)
         {
@@ -300,10 +300,10 @@ namespace Teleopti.Ccc.Win.Scheduling.SchedulingScreenInternals
 
         public override void PasteShiftFromShifts()
         {
-            IWorkShift workShift = StateHolderReader.Instance.StateReader.SessionScopeData.Clip as WorkShift;
+            var workShift = StateHolderReader.Instance.StateReader.SessionScopeData.Clip as IWorkShift;
             if (workShift == null)
                 return;
-            if (WorkShiftMasterActivityChecker.DoesContainMasterActivity(workShift))
+            if (_workShiftContainsMasterActivity.IsSatisfiedBy(workShift))
             {
                 ViewBase.ShowErrorMessage(Resources.CannotPasteAShiftWithMasterActivity, Resources.PasteError);
                 return;
