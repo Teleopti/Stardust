@@ -220,7 +220,7 @@ namespace Teleopti.Ccc.Win.Backlog
 			gridControl1.ControllerOptions = GridControllerOptions.All & (~GridControllerOptions.OleDataSource);
 			gridControl1.ResetVolatileData();
 			gridControl1.BeginUpdate();
-			gridControl1.ColWidths.SetSize(0, 140);
+			gridControl1.ColWidths.SetSize(0, 160);
 			gridControl1.RowHeights.SetSize(0, 30);
 			gridControl1.Rows.FreezeRange(1, _fixedRows);
 			gridControl1.EndUpdate(true);
@@ -231,9 +231,11 @@ namespace Teleopti.Ccc.Win.Backlog
 
 		private void toolStripButtonSkillMapper_Click(object sender, EventArgs e)
 		{
-			using (var dialog = new SkillMapperDialog(_model.SkillPairsBackofficeEmail))
+			using (var dialog = new SkillMapperDialog(_model.SkillMappings, _model.GetAllSkills()))
 			{
 				dialog.ShowDialog(this);
+				if(DialogResult == DialogResult.OK)
+					_model.SaveMappings();
 			}
 		}
 

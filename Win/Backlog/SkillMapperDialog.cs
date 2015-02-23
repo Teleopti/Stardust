@@ -1,26 +1,51 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Windows.Forms;
+using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Win.Backlog
 {
 	public partial class SkillMapperDialog : Form
 	{
-		private readonly IDictionary<ISkill, ISkill> _skillPairs;
+		private readonly IList<ISkillMap_DEV> _skillMappings;
+		private IList<ISkill> _allSkills;
 		private IList<ISkill> _rightList;
+		private List<ISkill> _originalSkills;
 
 		public SkillMapperDialog()
 		{
 			InitializeComponent();
 		}
 
-		public SkillMapperDialog(IDictionary<ISkill, ISkill> skillPairs )
-		{	
+		public SkillMapperDialog(IEnumerable<ISkillMap_DEV> skillMappings, IEnumerable<ISkill> allSkills)
+		{
 			InitializeComponent();
-			_skillPairs = skillPairs;
-			IList<ISkill> leftList = new List<ISkill>(skillPairs.Keys);
-			_rightList = new List<ISkill>(skillPairs.Values);
+			_skillMappings = new List<ISkillMap_DEV>(skillMappings);
+			
+			_allSkills = allSkills.ToList();
+			_originalSkills = new List<ISkill>(_allSkills);
+
+			rebuildDataBindings();
+		}
+
+		private void rebuildDataBindings()
+		{
+			_allSkills = new List<ISkill>(_originalSkills);
+			IList<ISkill> leftList = new List<ISkill>();
+			_rightList = new List<ISkill>();
+			foreach (var skillMapping in _skillMappings)
+			{
+				leftList.Add(skillMapping.Parent);
+				_allSkills.Remove(skillMapping.Parent);
+				if (skillMapping.MappedSkill != null)
+				{
+					_rightList.Add(skillMapping.MappedSkill);
+					_allSkills.Remove(skillMapping.MappedSkill);
+				}
+			}
+
 			listBox1.DataSource = leftList;
 			listBox1.DisplayMember = "Name";
 
@@ -36,6 +61,7 @@ namespace Teleopti.Ccc.Win.Backlog
 			{
 				_rightList.RemoveAt(index);
 				_rightList.Insert(index - 1, selected);
+
 			}
 			listBox2.DataSource = null;
 			listBox2.DataSource = _rightList;
@@ -60,11 +86,39 @@ namespace Teleopti.Ccc.Win.Backlog
 
 		private void buttonOK_Click(object sender, EventArgs e)
 		{
-			foreach (var key in _skillPairs.Keys)
+			foreach (var skillMapping in _skillMappings)
 			{
-				_skillPairs[key] = _rightList[0];
+				skillMapping.MappedSkill = _rightList[0];
 				_rightList.RemoveAt(0);
 			}
+		}
+
+		private void buttonAL_Click(object sender, EventArgs e)
+		{
+			using (var selector = new SkillSelector(_allSkills))
+			{
+				selector.ShowDialog(this);
+				if (selector.DialogResult == DialogResult.OK)
+				{
+					_skillMappings.Add(new SkillMap_DEV(selector.SelectedSkills.Item1, selector.SelectedSkills.Item2));
+				}
+			}
+			rebuildDataBindings();
+		}
+
+		private void buttonRL_Click(object sender, EventArgs e)
+		{
+
+		}
+
+		private void buttonAR_Click(object sender, EventArgs e)
+		{
+
+		}
+
+		private void buttonRR_Click(object sender, EventArgs e)
+		{
+
 		}
 	}
 }

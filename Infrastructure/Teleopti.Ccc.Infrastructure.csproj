@@ -233,6 +233,7 @@
     <Compile Include="Persisters\WorkflowControlSetPublishDatePersister.cs" />
     <Compile Include="Repositories\AdherenceDetailsReadModelPersister.cs" />
     <Compile Include="Repositories\AdherencePercentageReadModelPersister.cs" />
+    <Compile Include="Repositories\SkillMapRepository.cs" />
     <Compile Include="Repositories\GamificationSettingRepository.cs" />
     <Compile Include="Repositories\AgentBadgeWithRankRepository.cs" />
     <Compile Include="Repositories\AgentBadgeRepository.cs" />

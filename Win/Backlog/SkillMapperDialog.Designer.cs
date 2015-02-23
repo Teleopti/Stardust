@@ -34,6 +34,10 @@
 			this.buttonOK = new System.Windows.Forms.Button();
 			this.buttonRightUp = new System.Windows.Forms.Button();
 			this.buttonRightDown = new System.Windows.Forms.Button();
+			this.buttonAR = new System.Windows.Forms.Button();
+			this.buttonRR = new System.Windows.Forms.Button();
+			this.buttonRL = new System.Windows.Forms.Button();
+			this.buttonAL = new System.Windows.Forms.Button();
 			this.SuspendLayout();
 			// 
 			// listBox1
@@ -81,7 +85,7 @@
 			this.buttonRightUp.Name = "buttonRightUp";
 			this.buttonRightUp.Size = new System.Drawing.Size(26, 23);
 			this.buttonRightUp.TabIndex = 6;
-			this.buttonRightUp.Text = "button5";
+			this.buttonRightUp.Text = "U";
 			this.buttonRightUp.UseVisualStyleBackColor = true;
 			this.buttonRightUp.Click += new System.EventHandler(this.buttonRightUp_Click);
 			// 
@@ -91,9 +95,49 @@
 			this.buttonRightDown.Name = "buttonRightDown";
 			this.buttonRightDown.Size = new System.Drawing.Size(26, 23);
 			this.buttonRightDown.TabIndex = 7;
-			this.buttonRightDown.Text = "button6";
+			this.buttonRightDown.Text = "D";
 			this.buttonRightDown.UseVisualStyleBackColor = true;
 			this.buttonRightDown.Click += new System.EventHandler(this.buttonRightDown_Click);
+			// 
+			// buttonAR
+			// 
+			this.buttonAR.Location = new System.Drawing.Point(364, 126);
+			this.buttonAR.Name = "buttonAR";
+			this.buttonAR.Size = new System.Drawing.Size(26, 23);
+			this.buttonAR.TabIndex = 8;
+			this.buttonAR.Text = "A";
+			this.buttonAR.UseVisualStyleBackColor = true;
+			this.buttonAR.Click += new System.EventHandler(this.buttonAR_Click);
+			// 
+			// buttonRR
+			// 
+			this.buttonRR.Location = new System.Drawing.Point(364, 155);
+			this.buttonRR.Name = "buttonRR";
+			this.buttonRR.Size = new System.Drawing.Size(26, 23);
+			this.buttonRR.TabIndex = 9;
+			this.buttonRR.Text = "R";
+			this.buttonRR.UseVisualStyleBackColor = true;
+			this.buttonRR.Click += new System.EventHandler(this.buttonRR_Click);
+			// 
+			// buttonRL
+			// 
+			this.buttonRL.Location = new System.Drawing.Point(157, 155);
+			this.buttonRL.Name = "buttonRL";
+			this.buttonRL.Size = new System.Drawing.Size(26, 23);
+			this.buttonRL.TabIndex = 11;
+			this.buttonRL.Text = "R";
+			this.buttonRL.UseVisualStyleBackColor = true;
+			this.buttonRL.Click += new System.EventHandler(this.buttonRL_Click);
+			// 
+			// buttonAL
+			// 
+			this.buttonAL.Location = new System.Drawing.Point(157, 126);
+			this.buttonAL.Name = "buttonAL";
+			this.buttonAL.Size = new System.Drawing.Size(26, 23);
+			this.buttonAL.TabIndex = 10;
+			this.buttonAL.Text = "A";
+			this.buttonAL.UseVisualStyleBackColor = true;
+			this.buttonAL.Click += new System.EventHandler(this.buttonAL_Click);
 			// 
 			// SkillMapperDialog
 			// 
@@ -102,6 +146,10 @@
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.CancelButton = this.buttonCancel;
 			this.ClientSize = new System.Drawing.Size(402, 262);
+			this.Controls.Add(this.buttonRL);
+			this.Controls.Add(this.buttonAL);
+			this.Controls.Add(this.buttonRR);
+			this.Controls.Add(this.buttonAR);
 			this.Controls.Add(this.buttonRightDown);
 			this.Controls.Add(this.buttonRightUp);
 			this.Controls.Add(this.buttonOK);
@@ -128,5 +176,9 @@
 		private System.Windows.Forms.Button buttonOK;
 		private System.Windows.Forms.Button buttonRightUp;
 		private System.Windows.Forms.Button buttonRightDown;
+		private System.Windows.Forms.Button buttonAR;
+		private System.Windows.Forms.Button buttonRR;
+		private System.Windows.Forms.Button buttonRL;
+		private System.Windows.Forms.Button buttonAL;
 	}
 }

@@ -30,6 +30,7 @@ namespace Teleopti.Ccc.WinCode.Backlog
 		private readonly IDictionary<ISkill, IDictionary<DateOnly, TimeSpan>> _manualEntries = new Dictionary<ISkill, IDictionary<DateOnly, TimeSpan>>();
 		private readonly IDictionary<ISkill, ISkill> _skillPairsBackofficeEmail = new Dictionary<ISkill, ISkill>();
 		private readonly IDictionary<ISkill, ISkill> _skillPairsEmailBackOffice = new Dictionary<ISkill, ISkill>();
+		private IList<ISkillMap_DEV> _skillMappings = new List<ISkillMap_DEV>();
 		private bool _loaded;
 
 		public BacklogModel(IComponentContext componentContext, DateOnlyPeriod period)
@@ -41,14 +42,19 @@ namespace Teleopti.Ccc.WinCode.Backlog
 			_stateHolder = new SchedulerStateHolder(container.Resolve<ISchedulingResultStateHolder>());
 		}
 
-		public IDictionary<ISkill, ISkill> SkillPairsBackofficeEmail
+		public IList<ISkillMap_DEV> SkillMappings
 		{
-			get { return _skillPairsBackofficeEmail; }
+			get { return _skillMappings; }
 		}
 
 		public bool Loaded
 		{
 			get { return _loaded; }
+		}
+
+		public IEnumerable<ISkill> GetAllSkills()
+		{
+			return new List<ISkill>(_stateHolder.SchedulingResultState.Skills);
 		}
 
 		public void Load(BackgroundWorker backgroundWorker, DateOnly productPlanStart)
@@ -61,6 +67,7 @@ namespace Teleopti.Ccc.WinCode.Backlog
 				var scenarioRepository = new ScenarioRepository(uow);
 				loadCommonStateHolder(uow,_stateHolder);				
 				loadSkills(uow, _stateHolder);
+				loadSkillMappings(uow);
 				_stateHolder.SetRequestedScenario(scenarioRepository.LoadDefaultScenario());
 				backgroundWorker.ReportProgress(0,"Loading forecasts...");
 				loadSkillDays(uow, _stateHolder, dateOnlyPeriodAsDateTimePeriod.Period());
@@ -76,28 +83,20 @@ namespace Teleopti.Ccc.WinCode.Backlog
 			
 			backgroundWorker.ReportProgress(0, "Initializing...");
 
-			var backOfficeSkills =
-				_stateHolder.SchedulingResultState.Skills.Where(s => s.SkillType.ForecastSource == ForecastSource.Backoffice).ToList();
-			var emailSkills =
-				_stateHolder.SchedulingResultState.Skills.Where(s => s.SkillType.ForecastSource == ForecastSource.Email).ToList();
-			
-			var cnt = 0;
-			foreach (var backOfficeSkill in backOfficeSkills)
+			foreach (var skillMap in _skillMappings)
 			{
-				cnt++;
-				if(cnt>emailSkills.Count())
-					break;
-
-				SkillPairsBackofficeEmail.Add(backOfficeSkill, emailSkills[cnt - 1]);
-				_skillPairsEmailBackOffice.Add(emailSkills[cnt - 1], backOfficeSkill);
+				_skillPairsBackofficeEmail.Add(skillMap.MappedSkill, skillMap.Parent);
+				_skillPairsEmailBackOffice.Add(skillMap.Parent, skillMap.MappedSkill);
 			}
 
 			createBacklogTasks(_period);
 			setClosedDates(_period);
 			setScheduledTime(_period);
-			transferScheduledBacklog(emailSkills, productPlanStart);
+			TransferBacklogs(productPlanStart);
 			_loaded = true;
 		}
+
+		
 
 		public void TransferBacklogs(DateOnly productPlanStart)
 		{
@@ -141,7 +140,7 @@ namespace Teleopti.Ccc.WinCode.Backlog
 
 					var time =
 						TimeSpan.FromHours(SkillStaffPeriodHelper.ScheduledHours(skillDay.SkillStaffPeriodCollection).GetValueOrDefault(0));
-					setScheduledTimeOnBacklogTasks(SkillPairsBackofficeEmail[skillDay.Skill], time, dateOnly);
+					setScheduledTimeOnBacklogTasks(_skillPairsBackofficeEmail[skillDay.Skill], time, dateOnly);
 				}
 			}
 		}
@@ -231,6 +230,11 @@ namespace Teleopti.Ccc.WinCode.Backlog
 			stateHolder.LoadCommonState(uow, new RepositoryFactory());
 			if (!stateHolder.CommonStateHolder.DayOffs.Any())
 				throw new StateHolderException("You must create at least one Day Off in Options!");
+		}
+
+		private void loadSkillMappings(IUnitOfWork uow)
+		{
+			_skillMappings = new SkillMapRepository(uow).LoadAll();
 		}
 
 		private void loadSkills(IUnitOfWork uow, ISchedulerStateHolder stateHolder)
@@ -457,7 +461,7 @@ namespace Teleopti.Ccc.WinCode.Backlog
 
 		public void SetManualEntryOnDate(DateOnly date, ISkill skill, TimeSpan time, DateOnly productPlanStart)
 		{
-			if (_taskDic[skill][date].ClosedDays.Contains(date))
+			if ( _taskDic[skill].ContainsKey(date) && _taskDic[skill][date].ClosedDays.Contains(date))
 				return;
 
 			var distributedTime = setManualEntryOnBacklogTasks(skill, time, date);
@@ -601,10 +605,24 @@ namespace Teleopti.Ccc.WinCode.Backlog
 					{
 
 					}
-					catch (ConstraintViolationException)
-					{
+				}
+			}
+		}
 
-					}
+		public void SaveMappings()
+		{
+			using (var uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
+			{
+				try
+				{
+					//var skillDayRepository = new SkillMapRepository(uow);
+					uow.Reassociate(_skillMappings);
+					//skillDayRepository.AddRange(_skillMappings);
+					uow.PersistAll();
+				}
+				catch (OptimisticLockException)
+				{
+
 				}
 			}
 		}
