@@ -67,7 +67,7 @@ namespace Teleopti.Ccc.WinCode.Backlog
 				var scenarioRepository = new ScenarioRepository(uow);
 				loadCommonStateHolder(uow,_stateHolder);				
 				loadSkills(uow, _stateHolder);
-				loadSkillMappings(uow);
+				//loadSkillMappings(uow);
 				_stateHolder.SetRequestedScenario(scenarioRepository.LoadDefaultScenario());
 				backgroundWorker.ReportProgress(0,"Loading forecasts...");
 				loadSkillDays(uow, _stateHolder, dateOnlyPeriodAsDateTimePeriod.Period());
