@@ -40,9 +40,10 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta
 		[ReadModelUnitOfWork]
 		public virtual void Handle(PersonActivityStartEvent @event)
 		{
+			var date = @event.BelongsToDate.HasValue ? @event.BelongsToDate.Value : new DateOnly(@event.StartTime);
 			handleEvent(
 				@event.PersonId,
-				new DateOnly(@event.StartTime),
+				date,
 				s =>
 				{
 					incrementLastUpdate(s, @event.StartTime);
@@ -54,9 +55,10 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta
 		[ReadModelUnitOfWork]
 		public virtual void Handle(PersonStateChangedEvent @event)
 		{
+			var date = @event.BelongsToDate.HasValue ? @event.BelongsToDate.Value : new DateOnly(@event.Timestamp);
 			handleEvent(
 				@event.PersonId,
-				new DateOnly(@event.Timestamp),
+				date,
 				s =>
 				{
 					incrementLastUpdate(s, @event.Timestamp);
@@ -74,9 +76,10 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta
 		[ReadModelUnitOfWork]
 		public virtual void Handle(PersonShiftEndEvent @event)
 		{
+			var date = @event.BelongsToDate.HasValue ? @event.BelongsToDate.Value : new DateOnly(@event.ShiftStartTime);
 			handleEvent(
 				@event.PersonId,
-				new DateOnly(@event.ShiftStartTime),
+				date,
 				s =>
 				{
 					incrementLastUpdate(s, @event.ShiftEndTime);

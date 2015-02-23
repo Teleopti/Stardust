@@ -30,6 +30,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta
 		{
 			handleEvent(
 				@event.PersonId,
+				@event.BelongsToDate,
 				new AdherencePercentageReadModelState
 				{
 					Timestamp = @event.Timestamp, 
@@ -42,7 +43,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta
 		public virtual void Handle(PersonOutOfAdherenceEvent @event)
 		{
 			handleEvent(
-				@event.PersonId, 
+				@event.PersonId,
+ 				@event.BelongsToDate,
 				new AdherencePercentageReadModelState
 				{
 					Timestamp = @event.Timestamp, 
@@ -56,6 +58,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta
 		{
 			handleEvent(
 				@event.PersonId,
+				@event.BelongsToDate,
 				new AdherencePercentageReadModelState
 				{
 					Timestamp = @event.ShiftEndTime,
@@ -64,17 +67,18 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta
 				m => m.ShiftHasEnded = true);
 		}
 
-		private void handleEvent(Guid personId, AdherencePercentageReadModelState readModelState, Action<AdherencePercentageReadModel> mutate)
+		private void handleEvent(Guid personId, DateOnly? belongsToDate, AdherencePercentageReadModelState readModelState, Action<AdherencePercentageReadModel> mutate)
 		{
-			var model = _persister.Get(new DateOnly(readModelState.Timestamp), personId);
+			var date = belongsToDate.HasValue ? belongsToDate.Value : new DateOnly(readModelState.Timestamp);
+			var model = _persister.Get(date, personId);
 			if (model == null)
 			{
 				model = new AdherencePercentageReadModel
 				{
-					Date = readModelState.Timestamp,
+					Date = date,
 					PersonId = personId,
 					LastTimestamp = readModelState.Timestamp,
-					State = new[] {readModelState},
+					State = new[] {readModelState}
 				};
 			}
 			else

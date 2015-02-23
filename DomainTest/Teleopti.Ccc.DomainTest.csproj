@@ -174,6 +174,7 @@
     <Compile Include="ApplicationLayer\MoveActivityCommandHandlerTest.cs" />
     <Compile Include="ApplicationLayer\RemoveAbsenceCommandHandlerTest.cs" />
     <Compile Include="ApplicationLayer\Rta\AdherenceDetails\ActivityTest.cs" />
+    <Compile Include="ApplicationLayer\Rta\AdherenceDetails\BelongsToDateTest.cs" />
     <Compile Include="ApplicationLayer\Rta\AdherenceDetails\LastUpdateTest.cs" />
     <Compile Include="ApplicationLayer\Rta\AdherenceDetails\ShiftActualEndTimeTest.cs" />
     <Compile Include="ApplicationLayer\Rta\AdherenceDetails\ShiftEndTimeTest.cs" />
@@ -182,6 +183,7 @@
     <Compile Include="ApplicationLayer\Rta\AdherenceDetails\ActivityActualStartTimeTest.cs" />
     <Compile Include="ApplicationLayer\Rta\AdherenceDetails\UnorderedEventsTest.cs" />
     <Compile Include="ApplicationLayer\Rta\AdherencePercentage\AdherenceTest.cs" />
+    <Compile Include="ApplicationLayer\Rta\AdherencePercentage\BelongsToDateTest.cs" />
     <Compile Include="ApplicationLayer\Rta\AdherencePercentage\UnorderedEventsTest.cs" />
     <Compile Include="ApplicationLayer\Rta\AdherenceTestAttribute.cs" />
     <Compile Include="ApplicationLayer\Rta\AgentDateProviderTest.cs" />
