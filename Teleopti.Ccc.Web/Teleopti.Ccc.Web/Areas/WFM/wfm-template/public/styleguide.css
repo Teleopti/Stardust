@@ -12,6 +12,3 @@
 	position:fixed!important;
 }
 
-#kss-node > div > nav > ul > li:nth-child(1){
-	display:none!important;
-}

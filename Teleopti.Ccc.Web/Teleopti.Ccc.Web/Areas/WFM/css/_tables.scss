@@ -1,9 +1,15 @@
 ﻿// Tables
 //
+// If a table take time to be loaded, a loading bar should be displayed during this time.
+// A table must be displayed in alphabetical order, except for specific use case.
+// In general, providing ways to filter and sort on tables, lists, grid is good.
+//
 //Styleguide 1.8
 //
 
 // Default table
+//
+
 //
 //Markup:
 //<table class="table">
