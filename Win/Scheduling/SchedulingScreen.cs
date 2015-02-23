@@ -988,7 +988,6 @@ namespace Teleopti.Ccc.Win.Scheduling
 				}
 			}
 
-			
 			Cursor.Current = Cursors.Default;
 		}
 
@@ -5405,18 +5404,19 @@ namespace Teleopti.Ccc.Win.Scheduling
 			if (_grid != null) _grid.ContextMenu = null;
 			if (contextMenuViews != null) contextMenuViews.Dispose();
 			if (schedulerSplitters1 != null) schedulerSplitters1.Dispose();
-
 			
 			if(backStageView != null)
 			{
+				backStageView.HideBackStage();
 				backStageView.BackStage = null;
 				backStageView.HostControl = null;
 				backStageView.HostForm = null;
+				backStageView = null;
 			}
-			backStageView = null;
+
 			ribbonControlAdv1.BackStageView = null;
 			backStage1.Parent = null;
-					
+
 			if (!Disposing)
 			{
 				Dispose(true);
