@@ -129,6 +129,8 @@
     <Compile Include="FakeServiceBusSender.cs" />
     <Compile Include="FakeSiteOutOfAdherenceReadModelPersister.cs" />
     <Compile Include="FakeTeamOutOfAdherenceReadModelPersister.cs" />
+    <Compile Include="FakeUserCulture.cs" />
+    <Compile Include="FakeUserTimeZone.cs" />
     <Compile Include="HawaiiTimeZone.cs" />
     <Compile Include="IoC\IoCTestAttribute.cs" />
     <Compile Include="IoC\IoCTestTest.cs" />

@@ -68,13 +68,10 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta
 		private string convertToAgentTimeZoneAndFormatTimestamp(DateTime? timestamp)
 		{
 			if (!timestamp.HasValue)
-			{
 				return string.Empty;
-			}
 			var localTimestamp = TimeZoneInfo.ConvertTimeFromUtc(timestamp.Value, _timeZone.TimeZone());
 			return localTimestamp.ToString(_culture.GetCulture().DateTimeFormat.ShortTimePattern);
 		}
-
 
 		private static bool isValid(AdherenceDetailModel detailModel)
 		{

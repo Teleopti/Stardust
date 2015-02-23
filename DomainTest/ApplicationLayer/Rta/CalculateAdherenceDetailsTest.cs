@@ -1,26 +1,42 @@
 ﻿using System;
 using System.Linq;
+using Autofac;
 using NUnit.Framework;
-using Rhino.Mocks;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta;
 using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Domain.Helper;
-using Teleopti.Ccc.Domain.Security.Authentication;
+using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.TestCommon;
-using Teleopti.Interfaces.Domain;
+using Teleopti.Ccc.TestCommon.IoC;
 
 namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta
 {
 	[TestFixture]
-	public class CalculateAdherenceDetailsTest
+	[IoCTest]
+	public class CalculateAdherenceDetailsTest : IRegisterInContainer
 	{
+		public void RegisterInContainer(ContainerBuilder builder, IIocConfiguration configuration)
+		{
+			builder.RegisterType<FakeAdherenceDetailsReadModelReader>()
+				.AsSelf()
+				.As<IAdherenceDetailsReadModelReader>()
+				.SingleInstance();
+		}
+
+		public FakeAdherenceDetailsReadModelReader Reader;
+		public ICalculateAdherenceDetails Target;
+		public MutableNow Now;
+		public FakeUserTimeZone TimeZone;
+		public FakeUserCulture Culture;
+
 		[Test]
 		public void ShouldReturnCalculatedResult()
 		{
-			var model = new AdherenceDetailsReadModel
+			var personId = Guid.NewGuid();
+			Reader.Data(new AdherenceDetailsReadModel
 			{
-				PersonId = Guid.NewGuid(),
+				PersonId = personId,
 				Date = "2014-11-20".Utc(),
 				Model = new AdherenceDetailsModel
 				{
@@ -33,11 +49,9 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta
 						}
 					}
 				}
-			};
-			var target = new CalculateAdherenceDetails(new ThisIsNow("2014-11-20 9:00".Utc()),
-				new FakeAdherenceDetailsReadModelReader(new[] { model }), new ThreadCulture(), new UtcTimeZone());
+			});
 
-			var result = target.ForDetails(model.PersonId);
+			var result = Target.ForDetails(personId);
 
 			result.Should().Not.Be.Null();
 		}
@@ -45,14 +59,15 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta
 		[Test]
 		public void ShouldResultIn100PercenWithOnlyInAdherence()
 		{
-			var now = "2014-11-20 9:00".Utc();
-			var model = new AdherenceDetailsReadModel
+			var personId = Guid.NewGuid();
+			Now.Is("2014-11-20 9:00");
+			Reader.Data(new AdherenceDetailsReadModel
 			{
-				PersonId = Guid.NewGuid(),
+				PersonId = personId,
 				Date = "2014-11-20".Utc(),
 				Model = new AdherenceDetailsModel
 				{
-					LastUpdate = now,
+					LastUpdate = "2014-11-20 9:00".Utc(),
 					Details = new[]
 					{
 						new AdherenceDetailModel
@@ -63,11 +78,9 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta
 						}
 					}
 				}
-			};
-			var target = new CalculateAdherenceDetails(new ThisIsNow(now),
-				new FakeAdherenceDetailsReadModelReader(new[] { model }), new ThreadCulture(), new UtcTimeZone());
-
-			var result = target.ForDetails(model.PersonId);
+			});
+			
+			var result = Target.ForDetails(personId);
 
 			result.Single().AdherencePercent.Should().Be(100);
 		}
@@ -75,14 +88,15 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta
 		[Test]
 		public void ShouldResultIn80PercenWhenHaveInAndOutOfAdherence()
 		{
-			var now = "2014-11-20 9:00".Utc();
-			var model = new AdherenceDetailsReadModel
+			var personId = Guid.NewGuid();
+			Now.Is("2014-11-20 9:00");
+			Reader.Data(new AdherenceDetailsReadModel
 			{
-				PersonId = Guid.NewGuid(),
+				PersonId = personId,
 				Date = "2014-11-20".Utc(),
 				Model = new AdherenceDetailsModel
 				{
-					LastUpdate = now,
+					LastUpdate = "2014-11-20 9:00".Utc(),
 					Details = new[]
 					{
 						new AdherenceDetailModel
@@ -93,11 +107,9 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta
 						}
 					}
 				}
-			};
-			var target = new CalculateAdherenceDetails(new ThisIsNow(now),
-				new FakeAdherenceDetailsReadModelReader(new[] { model }), new ThreadCulture(), new UtcTimeZone());
+			});
 
-			var result = target.ForDetails(model.PersonId);
+			var result = Target.ForDetails(personId);
 
 			result.Single().AdherencePercent.Should().Be(50);
 		}
@@ -105,10 +117,11 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta
 		[Test]
 		public void ShouldResultIn0PercenWhenOnlyOutOfAdherence()
 		{
-			var now = "2014-11-20 9:00".Utc();
-			var model = new AdherenceDetailsReadModel
+			var personId = Guid.NewGuid();
+			Now.Is("2014-11-20 9:00");
+			Reader.Data(new AdherenceDetailsReadModel
 			{
-				PersonId = Guid.NewGuid(),
+				PersonId = personId,
 				Date = "2014-11-20".Utc(),
 				Model = new AdherenceDetailsModel
 				{
@@ -122,11 +135,9 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta
 						}
 					}
 				}
-			};
-			var target = new CalculateAdherenceDetails(new ThisIsNow(now),
-				new FakeAdherenceDetailsReadModelReader(new[] { model }), new ThreadCulture(), new UtcTimeZone());
-
-			var result = target.ForDetails(model.PersonId);
+			});
+			
+			var result = Target.ForDetails(personId);
 
 			result.Single().AdherencePercent.Should().Be(0);
 		}
@@ -134,16 +145,15 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta
 		[Test]
 		public void ShouldCalculateForTwoActivities()
 		{
-			var now = "2014-11-20 9:00".Utc();
 			var personId = Guid.NewGuid();
-			var date = "2014-11-20".Utc();
-			var model = new AdherenceDetailsReadModel
+			Now.Is("2014-11-20 9:00");
+			Reader.Data(new AdherenceDetailsReadModel
 			{
 				PersonId = personId,
-				Date = date,
+				Date = "2014-11-20".Utc(),
 				Model = new AdherenceDetailsModel
 				{
-					LastUpdate = now,
+					LastUpdate = "2014-11-20 9:00".Utc(),
 					Details = new[]
 					{
 						new AdherenceDetailModel
@@ -160,11 +170,9 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta
 						}
 					}
 				}
-			};
-			var target = new CalculateAdherenceDetails(new ThisIsNow(now),
-				new FakeAdherenceDetailsReadModelReader(new[] { model }), new ThreadCulture(), new UtcTimeZone());
-
-			var result = target.ForDetails(personId);
+			});
+			
+			var result = Target.ForDetails(personId);
 
 			result.First().AdherencePercent.Should().Be(0);
 			result.Last().AdherencePercent.Should().Be(50);
@@ -173,11 +181,9 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta
 		[Test]
 		public void ShouldReturnEmptyResultIfNoDataIsFound()
 		{
-			var now = new ThisIsNow("2014-11-20 9:00".Utc());
-			var target = new CalculateAdherenceDetails(now,
-				new FakeAdherenceDetailsReadModelReader(), new ThreadCulture(), new UtcTimeZone());
-
-			var result = target.ForDetails(Guid.NewGuid());
+			Now.Is("2014-11-20 9:00");
+			
+			var result = Target.ForDetails(Guid.NewGuid());
 
 			result.Count().Should().Be(0);
 		}
@@ -185,13 +191,12 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta
 		[Test]
 		public void ShouldReturnWhenActivityHasStartedEvenNoAdherenceData()
 		{
-			var now = "2014-11-20 9:00".Utc();
 			var personId = Guid.NewGuid();
-			var date = "2014-11-20".Utc();
-			var model = new AdherenceDetailsReadModel
+			Now.Is("2014-11-20 9:00");
+			Reader.Data(new AdherenceDetailsReadModel
 			{
 				PersonId = personId,
-				Date = date,
+				Date = "2014-11-20".Utc(),
 				Model = new AdherenceDetailsModel
 				{
 					Details = new[]
@@ -204,11 +209,9 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta
 						}
 					}
 				}
-			};
-			var target = new CalculateAdherenceDetails(new ThisIsNow(now),
-				new FakeAdherenceDetailsReadModelReader(new[] { model }), new ThreadCulture(), new UtcTimeZone());
+			});
 
-			var result = target.ForDetails(model.PersonId);
+			var result = Target.ForDetails(personId);
 
 			result.Count().Should().Be(1);
 		}
@@ -216,13 +219,12 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta
 		[Test]
 		public void ShouldNotReturnWhenActivityHasNotStartedYet()
 		{
-			var now = "2014-11-20 9:00".Utc();
 			var personId = Guid.NewGuid();
-			var date = "2014-11-20".Utc();
-			var model = new AdherenceDetailsReadModel
+			Now.Is("2014-11-20 9:00");
+			Reader.Data(new AdherenceDetailsReadModel
 			{
 				PersonId = personId,
-				Date = date,
+				Date = "2014-11-20".Utc(),
 				Model = new AdherenceDetailsModel
 				{
 					Details = new[]
@@ -234,11 +236,9 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta
 						}
 					}
 				}
-			};
-			var target = new CalculateAdherenceDetails(new ThisIsNow(now),
-				new FakeAdherenceDetailsReadModelReader(new[] { model }), new ThreadCulture(), new UtcTimeZone());
-
-			var result = target.ForDetails(model.PersonId);
+			});
+			
+			var result = Target.ForDetails(personId);
 
 			result.Count().Should().Be(0);
 		}
@@ -246,9 +246,11 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta
 		[Test]
 		public void ShouldAddTimeInAdherenceBasedOnCurrentTime()
 		{
-			var model = new AdherenceDetailsReadModel
+			var personId = Guid.NewGuid();
+			Now.Is("2014-11-20 9:00");
+			Reader.Data(new AdherenceDetailsReadModel
 			{
-				PersonId = Guid.NewGuid(),
+				PersonId = personId,
 				Date = "2014-11-20".Utc(),
 				Model = new AdherenceDetailsModel
 				{
@@ -264,11 +266,9 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta
 						}
 					}
 				}
-			};
-			var target = new CalculateAdherenceDetails(new ThisIsNow("2014-11-20 9:00".Utc()),
-				new FakeAdherenceDetailsReadModelReader(new[] { model }), new ThreadCulture(), new UtcTimeZone());
-
-			var result = target.ForDetails(model.PersonId);
+			});
+			
+			var result = Target.ForDetails(personId);
 
 			result.Single().AdherencePercent.Should().Be(50);
 		}
@@ -276,9 +276,11 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta
 		[Test]
 		public void ShouldAddTimeOutOfAdherenceBasedOnCurrentTime()
 		{
-			var model = new AdherenceDetailsReadModel
+			var personId = Guid.NewGuid();
+			Now.Is("2014-11-20 9:00");
+			Reader.Data(new AdherenceDetailsReadModel
 			{
-				PersonId = Guid.NewGuid(),
+				PersonId = personId,
 				Date = "2014-11-20".Utc(),
 				Model = new AdherenceDetailsModel
 				{
@@ -294,11 +296,9 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta
 						}
 					}
 				}
-			};
-			var target = new CalculateAdherenceDetails(new ThisIsNow("2014-11-20 9:00".Utc()),
-				new FakeAdherenceDetailsReadModelReader(new[] { model }), new ThreadCulture(), new UtcTimeZone());
-
-			var result = target.ForDetails(model.PersonId);
+			});
+			
+			var result = Target.ForDetails(personId);
 
 			result.Single().AdherencePercent.Should().Be(0);
 		}
@@ -306,9 +306,11 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta
 		[Test]
 		public void ShouldNotAddTimeAfterShiftHasEnded()
 		{
-			var model = new AdherenceDetailsReadModel
+			var personId = Guid.NewGuid();
+			Now.Is("2014-11-20 10:00");
+			Reader.Data(new AdherenceDetailsReadModel
 			{
-				PersonId = Guid.NewGuid(),
+				PersonId = personId,
 				Date = "2014-11-20".Utc(),
 				Model = new AdherenceDetailsModel
 				{
@@ -325,11 +327,9 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta
 						}
 					}
 				}
-			};
-			var target = new CalculateAdherenceDetails(new ThisIsNow("2014-11-20 10:00".Utc()),
-				new FakeAdherenceDetailsReadModelReader(new[] { model }), new ThreadCulture(), new UtcTimeZone());
-
-			var result = target.ForDetails(model.PersonId);
+			});
+			
+			var result = Target.ForDetails(personId);
 
 			result.First().AdherencePercent.Should().Be(50);
 		}
@@ -337,9 +337,11 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta
 		[Test]
 		public void ShouldNotAddTimeAfterActivityHasEnded()
 		{
-			var model = new AdherenceDetailsReadModel
+			var personId = Guid.NewGuid();
+			Now.Is("2014-11-20 10:00");
+			Reader.Data(new AdherenceDetailsReadModel
 			{
-				PersonId = Guid.NewGuid(),
+				PersonId = personId,
 				Date = "2014-11-20".Utc(),
 				Model = new AdherenceDetailsModel
 				{
@@ -361,11 +363,9 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta
 						},
 					}
 				}
-			};
-			var target = new CalculateAdherenceDetails(new ThisIsNow("2014-11-20 10:00".Utc()),
-				new FakeAdherenceDetailsReadModelReader(new[] { model }), new ThreadCulture(), new UtcTimeZone());
-
-			var result = target.ForDetails(model.PersonId);
+			});
+			
+			var result = Target.ForDetails(personId);
 
 			result.First().AdherencePercent.Should().Be(50);
 		}
@@ -373,44 +373,46 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta
 		[Test]
 		public void ShouldReturnModelWithFormattedTime()
 		{
-			var now = "2014-11-20 9:00".Utc();
-			var detailModel = new AdherenceDetailModel
+			var personId = Guid.NewGuid();
+			Culture.IsCatalan();
+			Now.Is("2014-11-20 9:00");
+			Reader.Data(new AdherenceDetailsReadModel
 			{
-				Name = "phone",
-				TimeInAdherence = TimeSpan.FromMinutes(30),
-				TimeOutOfAdherence = TimeSpan.FromMinutes(30),
-				ActualStartTime = "2014-11-20 9:00".Utc(),
-				StartTime = "2014-11-20 8:00".Utc(),
-			};
-			var model = new AdherenceDetailsReadModel
-			{
-				PersonId = Guid.NewGuid(),
+				PersonId = personId,
 				Date = "2014-11-20".Utc(),
 				Model = new AdherenceDetailsModel
 				{
-					LastUpdate = now,
+					LastUpdate = "2014-11-20 9:00".Utc(),
 					Details = new[]
 					{
-						detailModel
+						new AdherenceDetailModel
+						{
+							Name = "phone",
+							TimeInAdherence = TimeSpan.FromMinutes(30),
+							TimeOutOfAdherence = TimeSpan.FromMinutes(30),
+							ActualStartTime = "2014-11-20 9:00".Utc(),
+							StartTime = "2014-11-20 8:00".Utc(),
+						}
 					}
 				}
-			};
-			var target = new CalculateAdherenceDetails(new ThisIsNow(now),
-			new FakeAdherenceDetailsReadModelReader(new[] { model }), new SwedishCulture(), new UtcTimeZone());
-
-			var result = target.ForDetails(model.PersonId);
-			result.Single().Name.Should().Be(detailModel.Name);
-			result.First().StartTime.Should().Be(detailModel.StartTime.Value.ToShortTimeString(new SwedishCulture().GetCulture()));
-			result.First().ActualStartTime.Should().Be(detailModel.ActualStartTime.Value.ToShortTimeString(new SwedishCulture().GetCulture()));
+			});
+			
+			var result = Target.ForDetails(personId);
+			result.Single().Name.Should().Be("phone");
+			result.First().StartTime.Should().Be("2014-11-20 8:00".Utc().ToShortTimeString(new CatalanCulture().GetCulture()));
+			result.First().ActualStartTime.Should().Be("2014-11-20 9:00".Utc().ToShortTimeString(new CatalanCulture().GetCulture()));
 			result.Single().AdherencePercent.Should().Be(50);
 		}
 
 		[Test]
 		public void ShouldReturnEndStatusIfShiftHasEnded()
 		{
-			var model = new AdherenceDetailsReadModel
+			var personId = Guid.NewGuid();
+			Now.Is("2014-11-20 9:00");
+			Culture.IsCatalan();
+			Reader.Data(new AdherenceDetailsReadModel
 			{
-				PersonId = Guid.NewGuid(),
+				PersonId = personId,
 				Date = "2014-11-20".Utc(),
 				Model = new AdherenceDetailsModel
 				{
@@ -428,16 +430,14 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta
 						}
 					}
 				}
-			};
-			var target = new CalculateAdherenceDetails(new ThisIsNow("2014-11-20 9:00".Utc()),
-				new FakeAdherenceDetailsReadModelReader(new[] { model }), new SwedishCulture(), new UtcTimeZone());
-
-			var result = target.ForDetails(model.PersonId);
+			});
+			
+			var result = Target.ForDetails(personId);
 
 			result.Count().Should().Be(2);
 			result.Last().Name.Should().Be(UserTexts.Resources.End);
-			result.Last().StartTime.Should().Be(model.Model.ShiftEndTime.Value.ToShortTimeString(new SwedishCulture().GetCulture()));
-			result.Last().ActualStartTime.Should().Be(model.Model.ActualEndTime.Value.ToShortTimeString(new SwedishCulture().GetCulture()));
+			result.Last().StartTime.Should().Be("2014-11-20 9:00".Utc().ToShortTimeString(new CatalanCulture().GetCulture()));
+			result.Last().ActualStartTime.Should().Be("2014-11-20 9:00".Utc().ToShortTimeString(new CatalanCulture().GetCulture()));
 			result.Last().AdherencePercent.Should().Be(null);
 		}
 	}

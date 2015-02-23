@@ -8,7 +8,7 @@ namespace Teleopti.Ccc.TestCommon
 {
 	public class FakeAdherenceDetailsReadModelReader : IAdherenceDetailsReadModelReader
 	{
-		private readonly IEnumerable<AdherenceDetailsReadModel> _data = new List<AdherenceDetailsReadModel>();
+		private IEnumerable<AdherenceDetailsReadModel> _data = new AdherenceDetailsReadModel[] {};
 		
 		public FakeAdherenceDetailsReadModelReader()
 		{
@@ -17,6 +17,11 @@ namespace Teleopti.Ccc.TestCommon
 		public FakeAdherenceDetailsReadModelReader(IEnumerable<AdherenceDetailsReadModel> data)
 		{
 			_data = data;
+		}
+
+		public void Data(AdherenceDetailsReadModel data)
+		{
+			_data = new[] {data};
 		}
 
 		public AdherenceDetailsReadModel Read(Guid personId, DateOnly date)
