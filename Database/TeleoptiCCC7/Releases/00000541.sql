@@ -2,19 +2,14 @@
 -- Author: Micke Deigård
 -- Description:	Added temporary storage for skill mappings
 -- =============================================
-SET ANSI_NULLS ON
-GO
-
-SET QUOTED_IDENTIFIER ON
-GO
-
 CREATE TABLE [dbo].[SkillMap_DEV](
+	[Id] [uniqueidentifier] NOT NULL,
 	[Skill] [uniqueidentifier] NOT NULL,
-	[MappedSkill] [uniqueidentifier] NULL,
+	[MappedSkill] [uniqueidentifier] NOT NULL,
  CONSTRAINT [PK_SkillMap_DEV] PRIMARY KEY CLUSTERED 
 (
 	[Skill] ASC
-)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+)
 ) ON [PRIMARY]
 
 GO
