@@ -67,7 +67,7 @@ namespace Teleopti.Ccc.WinCode.Backlog
 				var scenarioRepository = new ScenarioRepository(uow);
 				loadCommonStateHolder(uow,_stateHolder);				
 				loadSkills(uow, _stateHolder);
-				//loadSkillMappings(uow);
+				loadSkillMappings(uow);
 				_stateHolder.SetRequestedScenario(scenarioRepository.LoadDefaultScenario());
 				backgroundWorker.ReportProgress(0,"Loading forecasts...");
 				loadSkillDays(uow, _stateHolder, dateOnlyPeriodAsDateTimePeriod.Period());
@@ -88,6 +88,9 @@ namespace Teleopti.Ccc.WinCode.Backlog
 				_skillPairsBackofficeEmail.Add(skillMap.MappedSkill, skillMap.Parent);
 				_skillPairsEmailBackOffice.Add(skillMap.Parent, skillMap.MappedSkill);
 			}
+
+			if(!_skillMappings.Any())
+				return;
 
 			createBacklogTasks(_period);
 			setClosedDates(_period);
@@ -172,15 +175,13 @@ namespace Teleopti.Ccc.WinCode.Backlog
 
 		public IEnumerable<ISkill> GetTabSkillList()
 		{
-			return _stateHolder.SchedulingResultState.Skills.Where(s => s.SkillType.ForecastSource == ForecastSource.Email).ToList();
+			return _skillPairsEmailBackOffice.Values;
 		}
 
 		private void createBacklogTasks(DateOnlyPeriod period)
-		{			
-			foreach (var skill in _stateHolder.SchedulingResultState.Skills)
+		{
+			foreach (var skill in _skillPairsEmailBackOffice.Values)
 			{
-				if (skill.SkillType.ForecastSource != ForecastSource.Email)
-					continue;
 
 				if(!_taskDic.ContainsKey(skill))
 					_taskDic.Add(skill, new Dictionary<DateOnly, BacklogTask>());

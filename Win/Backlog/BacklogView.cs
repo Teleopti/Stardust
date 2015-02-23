@@ -216,6 +216,9 @@ namespace Teleopti.Ccc.Win.Backlog
 
 		private void backgroundWorker1_RunWorkerCompleted(object sender, System.ComponentModel.RunWorkerCompletedEventArgs e)
 		{
+			if (!_model.Loaded)
+				return;
+
 			populateTabControl();
 			gridControl1.ControllerOptions = GridControllerOptions.All & (~GridControllerOptions.OleDataSource);
 			gridControl1.ResetVolatileData();

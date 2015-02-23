@@ -14,13 +14,14 @@
     <!--IUnique-->
 
     <many-to-one name="Parent"
+                 column ="Skill"
                 class="Teleopti.Ccc.Domain.Forecasting.Skill"
                 not-null ="true" 
                 foreign-key="FK_Parent_Skill"/>
 
     <many-to-one name="MappedSkill"
                 class="Teleopti.Ccc.Domain.Forecasting.Skill"             
-                not-null="false"
+                not-null="true"
                 foreign-key="FK_MappedSkill_Skill"/>
 
   </class>

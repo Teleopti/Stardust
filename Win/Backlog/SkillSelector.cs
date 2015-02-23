@@ -23,7 +23,7 @@ namespace Teleopti.Ccc.Win.Backlog
 			InitializeComponent();
 			listBox1.DataSource = unmappedSkills;
 			listBox1.DisplayMember = "Name";
-			listBox2.DataSource = unmappedSkills;
+			listBox2.DataSource = new List<ISkill>(unmappedSkills);
 			listBox2.DisplayMember = "Name";
 		}
 
@@ -34,7 +34,7 @@ namespace Teleopti.Ccc.Win.Backlog
 
 		public Tuple<ISkill, ISkill> SelectedSkills
 		{
-			get { return new Tuple<ISkill, ISkill>((ISkill) listBox1.SelectedItem, (ISkill) listBox1.SelectedItem); }
+			get { return new Tuple<ISkill, ISkill>((ISkill) listBox1.SelectedItem, (ISkill) listBox2.SelectedItem); }
 		}
 	}
 }

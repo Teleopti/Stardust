@@ -2259,9 +2259,9 @@
     <Folder Include="Properties\" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Forecasting\SkillMap_DEV.hbm.xml">
+    <EmbeddedResource Include="Forecasting\SkillMap_DEV.hbm.xml">
       <SubType>Designer</SubType>
-    </None>
+    </EmbeddedResource>
     <EmbeddedResource Include="Optimization\TeamBlock\FairnessOptimization\Seniority\SeniorityWorkDayRanks.hbm.xml" />
     <EmbeddedResource Include="Common\AgentBadgeTransaction.hbm.xml">
       <SubType>Designer</SubType>
