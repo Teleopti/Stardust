@@ -3,7 +3,10 @@
 ---Date: 2015-02-12
 ---Desc: trying to fix azure
 ----------------- 
---DROP TABLE [dbo].[SkillMap_DEV]
+
+IF EXISTS (SELECT * FROM sys.tables WHERE object_id = OBJECT_ID(N'[dbo].[SkillMap_DEV]'))
+   DROP TABLE [dbo].[SkillMap_DEV]
+GO
 
 CREATE TABLE [dbo].[SkillMap_DEV](
 	[Skill] [uniqueidentifier] NOT NULL,
