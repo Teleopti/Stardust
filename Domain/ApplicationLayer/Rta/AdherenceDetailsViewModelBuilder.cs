@@ -5,12 +5,12 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta
 {
-	public interface ICalculateAdherenceDetails
+	public interface IAdherenceDetailsViewModelBuilder
 	{
-		IEnumerable<AdherenceDetailsPercentageModel> ForDetails(Guid personId);
+		IEnumerable<AdherenceDetailsPercentageModel> Build(Guid personId);
 	}
 
-	public class CalculateAdherenceDetails : ICalculateAdherenceDetails
+	public class AdherenceDetailsViewModelBuilderViewModelBuilder : IAdherenceDetailsViewModelBuilder
 	{
 		private readonly INow _now;
 		private readonly IAdherenceDetailsReadModelReader _persister;
@@ -18,7 +18,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta
 		private readonly IUserTimeZone _timeZone;
 		private readonly CalculateAdherencePercent _calculateAdherencePercent;
 
-		public CalculateAdherenceDetails(INow now, IAdherenceDetailsReadModelReader persister, IUserCulture culture, IUserTimeZone timeZone)
+		public AdherenceDetailsViewModelBuilderViewModelBuilder(INow now, IAdherenceDetailsReadModelReader persister, IUserCulture culture, IUserTimeZone timeZone)
 		{
 			_now = now;
 			_persister = persister;
@@ -27,17 +27,15 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta
 			_calculateAdherencePercent = new CalculateAdherencePercent(_now);
 		}
 
-		public IEnumerable<AdherenceDetailsPercentageModel> ForDetails(Guid personId)
+		public IEnumerable<AdherenceDetailsPercentageModel> Build(Guid personId)
 		{
 			var readModel = _persister.Read(personId, new DateOnly(_now.UtcDateTime()));
 			var result = new List<AdherenceDetailsPercentageModel>();
 			if (readModel == null) return result;
-			var detailModels = readModel.Model.Details;
+			var detailModels = readModel.Model.Activities;
 			for (var i = 0; i < detailModels.Count(); i++)
 			{
 				var detail = detailModels.ElementAt(i);
-				if (detail == null || !isValid(detail))
-					continue;
 				result.Add(new AdherenceDetailsPercentageModel
 				{
 					Name = detail.Name,
@@ -73,9 +71,5 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta
 			return localTimestamp.ToString(_culture.GetCulture().DateTimeFormat.ShortTimePattern);
 		}
 
-		private static bool isValid(AdherenceDetailModel detailModel)
-		{
-			return detailModel.StartTime.HasValue;
-		}
 	}
 }

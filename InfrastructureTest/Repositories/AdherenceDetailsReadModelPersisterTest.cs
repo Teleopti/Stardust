@@ -28,9 +28,9 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 				{
 					LastUpdate = "2014-11-19 8:06".Utc(),
 					LastAdherence = true,
-					Details = new[]
+					Activities = new[]
 					{
-						new AdherenceDetailModel
+						new ActivityAdherence
 						{
 							TimeInAdherence = "10".Minutes(),
 							TimeOutOfAdherence = "20".Minutes(),
@@ -50,7 +50,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			model.Model.LastAdherence.Should().Be(true);
 			model.Model.LastUpdate.Should().Be("2014-11-19 8:06".Utc());
 			model.State.Activities.Should().Have.Count.EqualTo(1);
-			var detail = model.Model.Details.First();
+			var detail = model.Model.Activities.First();
 			detail.Name.Should().Be("Phone");
 			detail.StartTime.Should().Be("2014-11-19 8:00".Utc());
 			detail.ActualStartTime.Should().Be("2014-11-19 8:05".Utc());
@@ -76,9 +76,9 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 				{
 					LastUpdate = "2014-11-19 8:06".Utc(),
 					LastAdherence = true,
-					Details = new[]
+					Activities = new[]
 					{
-						new AdherenceDetailModel
+						new ActivityAdherence
 						{
 							TimeInAdherence = "10".Minutes(),
 							TimeOutOfAdherence = "20".Minutes(),
@@ -98,7 +98,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			model.Model.LastAdherence.Should().Be(true);
 			model.State.Activities.Should().Have.Count.EqualTo(1);
 			model.Model.LastUpdate.Should().Be("2014-11-19 8:06".Utc());
-			var detail = model.Model.Details.First();
+			var detail = model.Model.Activities.First();
 			detail.Name.Should().Be("Phone");
 			detail.StartTime.Should().Be("2014-11-19 8:00".Utc());
 			detail.ActualStartTime.Should().Be("2014-11-19 8:05".Utc());
@@ -118,9 +118,9 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 				Model = new AdherenceDetailsModel
 				{
 					LastUpdate = null,
-					Details = new[]
+					Activities = new[]
 					{
-						new AdherenceDetailModel
+						new ActivityAdherence
 						{
 							ActualStartTime = null,
 							StartTime = null,
@@ -131,7 +131,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 
 			var model = Target.Get(personId, "2014-11-19".Date());
 			model.Model.LastUpdate.Should().Be(null);
-			var detail = model.Model.Details.First();
+			var detail = model.Model.Activities.First();
 			detail.StartTime.Should().Be(null);
 			detail.ActualStartTime.Should().Be(null);
 		}
@@ -179,9 +179,9 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 				{
 					LastUpdate = null,
 					LastAdherence = true,
-					Details = new[]
+					Activities = new[]
 					{
-						new AdherenceDetailModel
+						new ActivityAdherence
 						{
 							ActualStartTime = null
 						}
@@ -190,7 +190,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			});
 
 			var model = Target.Get(personId, "2014-11-19".Date());
-			model.Model.Details.First().ActualStartTime.Should().Be(null);
+			model.Model.Activities.First().ActualStartTime.Should().Be(null);
 			model.Model.LastUpdate.Should().Be(null);
 		}
 
@@ -220,9 +220,9 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 				PersonId = personId,
 				Model = new AdherenceDetailsModel
 				{
-					Details = new[]
+					Activities = new[]
 					{
-						new AdherenceDetailModel
+						new ActivityAdherence
 						{
 							Name = aVeryLongNameForActivty
 						}
@@ -231,7 +231,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			});
 
 			var model = Target.Get(personId, "2014-11-19".Date());
-			model.Model.Details.First().Name.Should().Be(aVeryLongNameForActivty);
+			model.Model.Activities.First().Name.Should().Be(aVeryLongNameForActivty);
 		}
 
 		[Test]
@@ -251,9 +251,9 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 				PersonId = personId,
 				Model = new AdherenceDetailsModel
 				{
-					Details = new[]
+					Activities = new[]
 					{
-						new AdherenceDetailModel
+						new ActivityAdherence
 						{
 							Name = aVeryLongNameForActivty
 						}
@@ -262,7 +262,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			});
 
 			var model = Target.Get(personId, "2014-11-19".Date());
-			model.Model.Details.First().Name.Should().Be(aVeryLongNameForActivty);
+			model.Model.Activities.First().Name.Should().Be(aVeryLongNameForActivty);
 		}
 
 		[Test]
@@ -277,9 +277,9 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 				PersonId = personId,
 				Model = new AdherenceDetailsModel
 				{
-					Details = new[]
+					Activities = new[]
 					{
-						new AdherenceDetailModel
+						new ActivityAdherence
 						{
 							TimeInAdherence = "10".Minutes()
 						}
@@ -288,7 +288,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			});
 
 			var model = Reader.Read(personId, "2014-11-19".Date());
-			model.Model.Details.Single().TimeInAdherence.Should().Be("10".Minutes());
+			model.Model.Activities.Single().TimeInAdherence.Should().Be("10".Minutes());
 		}
 	}
 

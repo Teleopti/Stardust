@@ -46,7 +46,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta.Synchronization
 
 			Target.Initialize();
 
-			Persister.Get(personId, new DateOnly("2015-01-08 12:00".Utc())).Model.Details.Single().StartTime
+			Persister.Get(personId, new DateOnly("2015-01-08 12:00".Utc())).Model.Activities.Single().StartTime
 				.Should().Be("2015-01-08 11:00".Utc());
 		}
 

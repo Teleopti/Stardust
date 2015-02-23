@@ -9,12 +9,12 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Controllers
 	public class AdherenceController : Controller
 	{
 		private readonly ICalculateAdherence _calculateAdherence;
-		private readonly ICalculateAdherenceDetails _calculateAdherenceDetails;
+		private readonly IAdherenceDetailsViewModelBuilder _adherenceDetailsViewModelBuilder;
 
-		public AdherenceController(ICalculateAdherence calculateAdherence, ICalculateAdherenceDetails calculateAdherenceDetails)
+		public AdherenceController(ICalculateAdherence calculateAdherence, IAdherenceDetailsViewModelBuilder adherenceDetailsViewModelBuilder)
 		{
 			_calculateAdherence = calculateAdherence;
-			_calculateAdherenceDetails = calculateAdherenceDetails;
+			_adherenceDetailsViewModelBuilder = adherenceDetailsViewModelBuilder;
 		}
 
 		[ReadModelUnitOfWork, UnitOfWork, HttpGet]
@@ -27,7 +27,7 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Controllers
 		[ReadModelUnitOfWork, UnitOfWork, HttpGet]
 		public virtual JsonResult ForDetails(Guid personId)
 		{
-			var model = _calculateAdherenceDetails.ForDetails(personId);
+			var model = _adherenceDetailsViewModelBuilder.Build(personId);
 			return Json(model, JsonRequestBehavior.AllowGet);
 		}
 	}

@@ -183,7 +183,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta
 				ActualEndTime = calculateActualEndTimeForShift(model),
 				LastAdherence = calculateLastAdherence(model),
 				LastUpdate = model.State.LastUpdate,
-				Details = model.State.Activities.Select(s => calculateActivity(model, s)).ToArray()
+				Activities = model.State.Activities.Select(s => calculateActivity(model, s)).ToArray()
 			};
 		}
 
@@ -216,9 +216,9 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta
 			return !model.State.Adherence.IsEmpty() && model.State.Adherence.Last().InAdherence;
 		}
 
-		private static AdherenceDetailModel calculateActivity(AdherenceDetailsReadModel model, AdherenceDetailsReadModelActivityState activity)
+		private static ActivityAdherence calculateActivity(AdherenceDetailsReadModel model, AdherenceDetailsReadModelActivityState activity)
 		{
-			return new AdherenceDetailModel
+			return new ActivityAdherence
 			{
 				Name = activity.Name,
 				StartTime = activity.StartTime,

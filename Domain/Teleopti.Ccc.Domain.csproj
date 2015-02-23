@@ -207,7 +207,7 @@
     <Compile Include="ApplicationLayer\Rta\AgentStateAssembler.cs" />
     <Compile Include="ApplicationLayer\Rta\AgentStateInfo.cs" />
     <Compile Include="ApplicationLayer\Rta\BelongsToDateDecorator.cs" />
-    <Compile Include="ApplicationLayer\Rta\CalculateAdherenceDetails.cs" />
+    <Compile Include="ApplicationLayer\Rta\AdherenceDetailsViewModelBuilder.cs" />
     <Compile Include="ApplicationLayer\Rta\CheckForActivityChangeWebModel.cs" />
     <Compile Include="ApplicationLayer\Rta\ControllableLiteTransactionSyncronization.cs" />
     <Compile Include="ApplicationLayer\Rta\IActivityEventPublisher.cs" />

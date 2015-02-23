@@ -30,9 +30,9 @@ namespace Teleopti.Ccc.TestCommon
 			get { return _data.Single(); }
 		}
 
-		public IEnumerable<AdherenceDetailModel> Details
+		public IEnumerable<ActivityAdherence> Details
 		{
-			get { return _data.Single().Model.Details; }
+			get { return _data.Single().Model.Activities; }
 		}
 
 		public void Add(AdherenceDetailsReadModel model)

@@ -9,6 +9,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta
 		public Guid PersonId { get; set; }
 		public DateTime Date { get; set; }
 		public DateOnly BelongsToDate { get { return new DateOnly(Date); } }
+
 		public AdherenceDetailsModel Model { get; set; }
 
 		public AdherenceDetailsReadModelState State { get; set; }
@@ -44,17 +45,17 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta
 
 	public class AdherenceDetailsModel
 	{
-		public IEnumerable<AdherenceDetailModel> Details { get; set; }
+		public IEnumerable<ActivityAdherence> Activities { get; set; }
 		public DateTime? ShiftEndTime { get; set; }
 		public DateTime? ActualEndTime { get; set; }
 		public bool LastAdherence { get; set; }
 		public DateTime? LastUpdate { get; set; }
 	}
 
-	public class AdherenceDetailModel
+	public class ActivityAdherence
 	{
 		public string Name { get; set; }
-		public DateTime? StartTime { get; set; }
+		public DateTime StartTime { get; set; }
 		public DateTime? ActualStartTime { get; set; }
 		public TimeSpan TimeInAdherence { get; set; }
 		public TimeSpan TimeOutOfAdherence { get; set; }

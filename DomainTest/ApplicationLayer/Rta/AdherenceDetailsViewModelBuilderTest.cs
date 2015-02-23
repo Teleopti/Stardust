@@ -14,7 +14,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta
 {
 	[TestFixture]
 	[IoCTest]
-	public class CalculateAdherenceDetailsTest : IRegisterInContainer
+	public class AdherenceDetailsViewModelBuilderTest : IRegisterInContainer
 	{
 		public void RegisterInContainer(ContainerBuilder builder, IIocConfiguration configuration)
 		{
@@ -25,39 +25,27 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta
 		}
 
 		public FakeAdherenceDetailsReadModelReader Reader;
-		public ICalculateAdherenceDetails Target;
+		public IAdherenceDetailsViewModelBuilder Target;
 		public MutableNow Now;
 		public FakeUserTimeZone TimeZone;
 		public FakeUserCulture Culture;
 
 		[Test]
-		public void ShouldReturnCalculatedResult()
+		public void ShouldBuildViewModel()
 		{
 			var personId = Guid.NewGuid();
 			Reader.Data(new AdherenceDetailsReadModel
 			{
-				PersonId = personId,
-				Date = "2014-11-20".Utc(),
-				Model = new AdherenceDetailsModel
-				{
-					Details = new[]
-					{
-						new AdherenceDetailModel
-						{
-							StartTime = "2014-11-20 9:00".Utc(),
-							TimeInAdherence = TimeSpan.FromMinutes(10)
-						}
-					}
-				}
+				PersonId = personId
 			});
 
-			var result = Target.ForDetails(personId);
+			var result = Target.Build(personId);
 
 			result.Should().Not.Be.Null();
 		}
 
 		[Test]
-		public void ShouldResultIn100PercenWithOnlyInAdherence()
+		public void ShouldBuildSingleResultWith100PercentAdherence()
 		{
 			var personId = Guid.NewGuid();
 			Now.Is("2014-11-20 9:00");
@@ -68,9 +56,9 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta
 				Model = new AdherenceDetailsModel
 				{
 					LastUpdate = "2014-11-20 9:00".Utc(),
-					Details = new[]
+					Activities = new[]
 					{
-						new AdherenceDetailModel
+						new ActivityAdherence
 						{
 							StartTime = "2014-11-20 8:00".Utc(),
 							TimeInAdherence = TimeSpan.FromMinutes(60),
@@ -80,13 +68,13 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta
 				}
 			});
 			
-			var result = Target.ForDetails(personId);
+			var result = Target.Build(personId);
 
 			result.Single().AdherencePercent.Should().Be(100);
 		}
 
 		[Test]
-		public void ShouldResultIn80PercenWhenHaveInAndOutOfAdherence()
+		public void ShouldBuildSingleResultWith50PercentAdherence()
 		{
 			var personId = Guid.NewGuid();
 			Now.Is("2014-11-20 9:00");
@@ -97,9 +85,9 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta
 				Model = new AdherenceDetailsModel
 				{
 					LastUpdate = "2014-11-20 9:00".Utc(),
-					Details = new[]
+					Activities = new[]
 					{
-						new AdherenceDetailModel
+						new ActivityAdherence
 						{
 							StartTime = "2014-11-20 8:00".Utc(),
 							TimeInAdherence = TimeSpan.FromMinutes(30),
@@ -109,13 +97,13 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta
 				}
 			});
 
-			var result = Target.ForDetails(personId);
+			var result = Target.Build(personId);
 
 			result.Single().AdherencePercent.Should().Be(50);
 		}
 
 		[Test]
-		public void ShouldResultIn0PercenWhenOnlyOutOfAdherence()
+		public void ShouldBuildSingleResultWith0PercentAdherence()
 		{
 			var personId = Guid.NewGuid();
 			Now.Is("2014-11-20 9:00");
@@ -125,9 +113,9 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta
 				Date = "2014-11-20".Utc(),
 				Model = new AdherenceDetailsModel
 				{
-					Details = new[]
+					Activities = new[]
 					{
-						new AdherenceDetailModel
+						new ActivityAdherence
 						{
 							StartTime = "2014-11-20 8:00".Utc(),
 							TimeInAdherence = TimeSpan.FromMinutes(0),
@@ -137,13 +125,13 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta
 				}
 			});
 			
-			var result = Target.ForDetails(personId);
+			var result = Target.Build(personId);
 
 			result.Single().AdherencePercent.Should().Be(0);
 		}
 
 		[Test]
-		public void ShouldCalculateForTwoActivities()
+		public void ShouldBuildPercentAdherenceForEachActivity()
 		{
 			var personId = Guid.NewGuid();
 			Now.Is("2014-11-20 9:00");
@@ -154,15 +142,15 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta
 				Model = new AdherenceDetailsModel
 				{
 					LastUpdate = "2014-11-20 9:00".Utc(),
-					Details = new[]
+					Activities = new[]
 					{
-						new AdherenceDetailModel
+						new ActivityAdherence
 						{
 							StartTime = "2014-11-20 8:00".Utc(),
 							TimeInAdherence = TimeSpan.FromMinutes(0),
 							TimeOutOfAdherence = TimeSpan.FromMinutes(60)
 						},
-						new AdherenceDetailModel
+						new ActivityAdherence
 						{
 							StartTime = "2014-11-20 9:00".Utc(),
 							TimeInAdherence = TimeSpan.FromMinutes(30),
@@ -172,24 +160,22 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta
 				}
 			});
 			
-			var result = Target.ForDetails(personId);
+			var result = Target.Build(personId);
 
 			result.First().AdherencePercent.Should().Be(0);
 			result.Last().AdherencePercent.Should().Be(50);
 		}
 
 		[Test]
-		public void ShouldReturnEmptyResultIfNoDataIsFound()
+		public void ShouldBuildEmptyResultWhenNoData()
 		{
-			Now.Is("2014-11-20 9:00");
-			
-			var result = Target.ForDetails(Guid.NewGuid());
+			var result = Target.Build(Guid.NewGuid());
 
-			result.Count().Should().Be(0);
+			result.Should().Have.Count.EqualTo(0);
 		}
 
 		[Test]
-		public void ShouldReturnWhenActivityHasStartedEvenNoAdherenceData()
+		public void ShouldBuildResultForEachActivity()
 		{
 			var personId = Guid.NewGuid();
 			Now.Is("2014-11-20 9:00");
@@ -199,9 +185,9 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta
 				Date = "2014-11-20".Utc(),
 				Model = new AdherenceDetailsModel
 				{
-					Details = new[]
+					Activities = new[]
 					{
-						new AdherenceDetailModel
+						new ActivityAdherence
 						{
 							StartTime = "2014-11-20 8:00".Utc(),
 							TimeInAdherence = TimeSpan.Zero,
@@ -211,36 +197,9 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta
 				}
 			});
 
-			var result = Target.ForDetails(personId);
+			var result = Target.Build(personId);
 
 			result.Count().Should().Be(1);
-		}
-
-		[Test]
-		public void ShouldNotReturnWhenActivityHasNotStartedYet()
-		{
-			var personId = Guid.NewGuid();
-			Now.Is("2014-11-20 9:00");
-			Reader.Data(new AdherenceDetailsReadModel
-			{
-				PersonId = personId,
-				Date = "2014-11-20".Utc(),
-				Model = new AdherenceDetailsModel
-				{
-					Details = new[]
-					{
-						new AdherenceDetailModel
-						{
-							TimeInAdherence = TimeSpan.Zero,
-							TimeOutOfAdherence = TimeSpan.Zero
-						}
-					}
-				}
-			});
-			
-			var result = Target.ForDetails(personId);
-
-			result.Count().Should().Be(0);
 		}
 
 		[Test]
@@ -256,9 +215,9 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta
 				{
 					LastUpdate = "2014-11-20 8:30".Utc(),
 					LastAdherence = true,
-					Details = new[]
+					Activities = new[]
 					{
-						new AdherenceDetailModel
+						new ActivityAdherence
 						{
 							StartTime = "2014-11-20 8:00".Utc(),
 							TimeInAdherence = TimeSpan.FromMinutes(0),
@@ -268,7 +227,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta
 				}
 			});
 			
-			var result = Target.ForDetails(personId);
+			var result = Target.Build(personId);
 
 			result.Single().AdherencePercent.Should().Be(50);
 		}
@@ -286,21 +245,21 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta
 				{
 					LastUpdate = "2014-11-20 8:30".Utc(),
 					LastAdherence = false,
-					Details = new[]
+					Activities = new[]
 					{
-						new AdherenceDetailModel
+						new ActivityAdherence
 						{
 							StartTime = "2014-11-20 8:00".Utc(),
-							TimeInAdherence = TimeSpan.FromMinutes(0),
-							TimeOutOfAdherence = TimeSpan.FromMinutes(30),
+							TimeInAdherence = TimeSpan.FromMinutes(30),
+							TimeOutOfAdherence = TimeSpan.FromMinutes(0),
 						}
 					}
 				}
 			});
 			
-			var result = Target.ForDetails(personId);
+			var result = Target.Build(personId);
 
-			result.Single().AdherencePercent.Should().Be(0);
+			result.Single().AdherencePercent.Should().Be(50);
 		}
 
 		[Test]
@@ -317,9 +276,9 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta
 					ShiftEndTime = "2014-11-20 9:00".Utc(),
 					LastUpdate = "2014-11-20 9:00".Utc(),
 					LastAdherence = false,
-					Details = new[]
+					Activities = new[]
 					{
-						new AdherenceDetailModel
+						new ActivityAdherence
 						{
 							StartTime = "2014-11-20 8:00".Utc(),
 							TimeInAdherence = TimeSpan.FromMinutes(30),
@@ -329,7 +288,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta
 				}
 			});
 			
-			var result = Target.ForDetails(personId);
+			var result = Target.Build(personId);
 
 			result.First().AdherencePercent.Should().Be(50);
 		}
@@ -347,15 +306,15 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta
 				{
 					LastUpdate = "2014-11-20 10:00".Utc(),
 					LastAdherence = false,
-					Details = new[]
+					Activities = new[]
 					{
-						new AdherenceDetailModel
+						new ActivityAdherence
 						{
 							StartTime = "2014-11-20 8:00".Utc(),
 							TimeInAdherence = TimeSpan.FromMinutes(30),
 							TimeOutOfAdherence = TimeSpan.FromMinutes(30),
 						},
-						new AdherenceDetailModel
+						new ActivityAdherence
 						{
 							StartTime = "2014-11-20 9:00".Utc(),
 							TimeInAdherence = TimeSpan.FromMinutes(60),
@@ -365,13 +324,13 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta
 				}
 			});
 			
-			var result = Target.ForDetails(personId);
+			var result = Target.Build(personId);
 
 			result.First().AdherencePercent.Should().Be(50);
 		}
-		
+
 		[Test]
-		public void ShouldReturnModelWithFormattedTime()
+		public void ShouldBuildWithActivityName()
 		{
 			var personId = Guid.NewGuid();
 			Culture.IsCatalan();
@@ -383,13 +342,36 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta
 				Model = new AdherenceDetailsModel
 				{
 					LastUpdate = "2014-11-20 9:00".Utc(),
-					Details = new[]
+					Activities = new[]
 					{
-						new AdherenceDetailModel
+						new ActivityAdherence
 						{
-							Name = "phone",
-							TimeInAdherence = TimeSpan.FromMinutes(30),
-							TimeOutOfAdherence = TimeSpan.FromMinutes(30),
+							Name = "Phone"
+						}
+					}
+				}
+			});
+
+			var result = Target.Build(personId);
+			result.Single().Name.Should().Be("Phone");
+		}
+
+		[Test]
+		public void ShouldFormatTime()
+		{
+			var personId = Guid.NewGuid();
+			Now.Is("2014-11-20 9:00");
+			Culture.IsCatalan();
+			Reader.Data(new AdherenceDetailsReadModel
+			{
+				PersonId = personId,
+				Date = "2014-11-20".Utc(),
+				Model = new AdherenceDetailsModel
+				{
+					Activities = new[]
+					{
+						new ActivityAdherence
+						{
 							ActualStartTime = "2014-11-20 9:00".Utc(),
 							StartTime = "2014-11-20 8:00".Utc(),
 						}
@@ -397,15 +379,13 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta
 				}
 			});
 			
-			var result = Target.ForDetails(personId);
-			result.Single().Name.Should().Be("phone");
+			var result = Target.Build(personId);
 			result.First().StartTime.Should().Be("2014-11-20 8:00".Utc().ToShortTimeString(new CatalanCulture().GetCulture()));
 			result.First().ActualStartTime.Should().Be("2014-11-20 9:00".Utc().ToShortTimeString(new CatalanCulture().GetCulture()));
-			result.Single().AdherencePercent.Should().Be(50);
 		}
 
 		[Test]
-		public void ShouldReturnEndStatusIfShiftHasEnded()
+		public void ShouldBuildFooterItemIfShiftHasEnded()
 		{
 			var personId = Guid.NewGuid();
 			Now.Is("2014-11-20 9:00");
@@ -420,21 +400,18 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta
 					ActualEndTime = "2014-11-20 9:00".Utc(),
 					LastUpdate = "2014-11-20 9:00".Utc(),
 					LastAdherence = false,
-					Details = new[]
+					Activities = new[]
 					{
-						new AdherenceDetailModel
+						new ActivityAdherence
 						{
-							StartTime = "2014-11-20 8:00".Utc(),
-							TimeInAdherence = TimeSpan.FromMinutes(30),
-							TimeOutOfAdherence = TimeSpan.FromMinutes(30),
+							StartTime = "2014-11-20 8:00".Utc()
 						}
 					}
 				}
 			});
 			
-			var result = Target.ForDetails(personId);
+			var result = Target.Build(personId);
 
-			result.Count().Should().Be(2);
 			result.Last().Name.Should().Be(UserTexts.Resources.End);
 			result.Last().StartTime.Should().Be("2014-11-20 9:00".Utc().ToShortTimeString(new CatalanCulture().GetCulture()));
 			result.Last().ActualStartTime.Should().Be("2014-11-20 9:00".Utc().ToShortTimeString(new CatalanCulture().GetCulture()));

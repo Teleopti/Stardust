@@ -26,8 +26,8 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.AdherenceDetails
 		{
 			events.ForEach(e => Target.Handle((dynamic)e));
 
-			Persister.Model.Details.Single().TimeInAdherence.Should().Be("2".Seconds());
-			Persister.Model.Details.Single().TimeOutOfAdherence.Should().Be("1".Seconds());
+			Persister.Model.Activities.Single().TimeInAdherence.Should().Be("2".Seconds());
+			Persister.Model.Activities.Single().TimeOutOfAdherence.Should().Be("1".Seconds());
 		}
 	}
 
