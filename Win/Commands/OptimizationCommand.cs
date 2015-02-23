@@ -134,10 +134,8 @@ namespace Teleopti.Ccc.Win.Commands
 					groupPagePerDateHolder.GroupPersonGroupPagePerDate = groupPagePerDateHolder.ShiftCategoryFairnessGroupPagePerDate;
 					scheduleOptimizerHelper.ReOptimize(backgroundWorker, selectedSchedules, schedulingOptions);
                     allMatrixes = _matrixListFactory.CreateMatrixListAll(selectedPeriod);
-
-                    runWeeklyRestSolver(optimizationPreferences, schedulingOptions, selectedPeriod, allMatrixes,selectedPersons,rollbackService,resourceCalculateDelayer ,backgroundWorker  );
-
-			        break;
+					runWeeklyRestSolver(optimizationPreferences, schedulingOptions, selectedPeriod, allMatrixes,selectedPersons,rollbackService,resourceCalculateDelayer ,backgroundWorker  );
+					break;
 			}
 
 

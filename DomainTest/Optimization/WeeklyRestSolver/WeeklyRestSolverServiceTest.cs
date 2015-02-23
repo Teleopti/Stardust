@@ -149,7 +149,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.WeeklyRestSolver
 				Expect.Call(_ensureWeeklyRestRule.HasMinWeeklyRest(_personWeek1, _scheduleRange1, TimeSpan.FromHours(40)))
 					.Return(false);
 				Expect.Call(_dayOffToTimeSpanExtractor.GetDayOffWithTimeSpanAmongAWeek(_personWeek1.Week,
-					_scheduleRange1)).Return(dayOffToSpanDictionary);
+					_scheduleRange1, _matrix1)).Return(dayOffToSpanDictionary);
 				Expect.Call(_brokenWeekCounterForAPerson.CountBrokenWeek(_scheduleDayList, _scheduleRange1)).Return(1);
 				Expect.Call(_shiftNudgeManager.TrySolveForDayOff(_personWeek1, dayOffDate, _teamBlockGenerator,
 					_allPersonMatrixList, _rollbackService, _resourceCalculateDelayer, _schedulingResultStateHolder,
@@ -186,7 +186,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.WeeklyRestSolver
 				Expect.Call(_ensureWeeklyRestRule.HasMinWeeklyRest(_personWeek1, _scheduleRange1, TimeSpan.FromHours(40)))
 					.Return(false);
 				Expect.Call(_dayOffToTimeSpanExtractor.GetDayOffWithTimeSpanAmongAWeek(_personWeek1.Week,
-					_scheduleRange1)).Return(dayOffToSpanDictionary);
+					_scheduleRange1, _matrix1)).Return(dayOffToSpanDictionary);
 				Expect.Call(_shiftNudgeManager.TrySolveForDayOff(_personWeek1, dayOffDate, _teamBlockGenerator,
 					_allPersonMatrixList, _rollbackService, _resourceCalculateDelayer, _schedulingResultStateHolder,
 					_selectedPeriod, _selectedPersons, _optimizationPreferences, _schedulingOptions)).Return(true);
@@ -226,7 +226,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.WeeklyRestSolver
 				Expect.Call(_ensureWeeklyRestRule.HasMinWeeklyRest(_personWeek1, _scheduleRange1, TimeSpan.FromHours(40)))
 					.Return(false);
 				Expect.Call(_dayOffToTimeSpanExtractor.GetDayOffWithTimeSpanAmongAWeek(_personWeek1.Week,
-					_scheduleRange1)).Return(dayOffToSpanDictionary);
+					_scheduleRange1, _matrix1)).Return(dayOffToSpanDictionary);
 				Expect.Call(_shiftNudgeManager.TrySolveForDayOff(_personWeek1, dayOffDate, _teamBlockGenerator,
 					_allPersonMatrixList, _rollbackService, _resourceCalculateDelayer, _schedulingResultStateHolder,
 					_selectedPeriod, _selectedPersons, _optimizationPreferences, _schedulingOptions)).Return(true);
@@ -266,7 +266,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.WeeklyRestSolver
 				Expect.Call(_ensureWeeklyRestRule.HasMinWeeklyRest(_personWeek1, _scheduleRange1, TimeSpan.FromHours(40)))
 					.Return(false);
 				Expect.Call(_dayOffToTimeSpanExtractor.GetDayOffWithTimeSpanAmongAWeek(_personWeek1.Week,
-					_scheduleRange1)).Return(dayOffToSpanDictionary);
+					_scheduleRange1, _matrix1)).Return(dayOffToSpanDictionary);
 				Expect.Call(_shiftNudgeManager.TrySolveForDayOff(_personWeek1, dayOffDate, _teamBlockGenerator,
 					_allPersonMatrixList, _rollbackService, _resourceCalculateDelayer, _schedulingResultStateHolder,
 					_selectedPeriod, _selectedPersons, _optimizationPreferences, _schedulingOptions)).Return(true);
@@ -298,7 +298,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.WeeklyRestSolver
 				Expect.Call(_ensureWeeklyRestRule.HasMinWeeklyRest(_personWeek1, _scheduleRange1, TimeSpan.FromHours(40)))
 					.Return(false);
 				Expect.Call(_dayOffToTimeSpanExtractor.GetDayOffWithTimeSpanAmongAWeek(_personWeek1.Week,
-					_scheduleRange1)).Return(dayOffToSpanDictionary);
+					_scheduleRange1, _matrix1)).Return(dayOffToSpanDictionary);
 			}
 			using (_mock.Playback())
 			{
@@ -324,7 +324,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.WeeklyRestSolver
 
 				//analyzing failed weeks
 				Expect.Call(_ensureWeeklyRestRule.HasMinWeeklyRest(_personWeek1, _scheduleRange1, TimeSpan.FromHours(40))).Return(false);
-				Expect.Call(_dayOffToTimeSpanExtractor.GetDayOffWithTimeSpanAmongAWeek(_personWeek1.Week,_scheduleRange1)).Return(dayOffToSpanDictionary);
+				Expect.Call(_dayOffToTimeSpanExtractor.GetDayOffWithTimeSpanAmongAWeek(_personWeek1.Week, _scheduleRange1, _matrix1)).Return(dayOffToSpanDictionary);
 			}
 			using (_mock.Playback())
 			{
@@ -350,7 +350,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.WeeklyRestSolver
 				Expect.Call(_ensureWeeklyRestRule.HasMinWeeklyRest(_personWeek1, _scheduleRange1, TimeSpan.FromHours(40)))
 					.Return(false);
 				Expect.Call(_dayOffToTimeSpanExtractor.GetDayOffWithTimeSpanAmongAWeek(_personWeek1.Week,
-					_scheduleRange1)).Return(new Dictionary<DateOnly, TimeSpan>());
+					_scheduleRange1, _matrix1)).Return(new Dictionary<DateOnly, TimeSpan>());
 				Expect.Call(_ensureWeeklyRestRule.HasMinWeeklyRest(_personWeek1, _scheduleRange1, TimeSpan.FromHours(40)))
 					.Return(false);
 				Expect.Call(() => _deleteScheduleDayFromUnsolvedPersonWeek.DeleteAppropiateScheduleDay(_scheduleRange1,
