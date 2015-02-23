@@ -28,9 +28,9 @@ namespace Teleopti.Ccc.WinCode.Autofac
 			builder.RegisterType<WeeksFromScheduleDaysExtractor>().As<IWeeksFromScheduleDaysExtractor>();
 			builder.RegisterType<DayOffMaxFlexCalculator>().As<IDayOffMaxFlexCalculator>();
 			builder.RegisterType<VerifyWeeklyRestAroundDayOffSpecification>().As<IVerifyWeeklyRestAroundDayOffSpecification>();
+			builder.RegisterType<VerifyWeeklyRestNotLockedAroundDayOffSpecification>().As<IVerifyWeeklyRestNotLockedAroundDayOffSpecification>();
 			builder.RegisterType<AllTeamMembersInSelectionSpecification>().As<IAllTeamMembersInSelectionSpecification>();
-			builder.RegisterType<PersonWeekVoilatingWeeklyRestSpecification>()
-				.As<IPersonWeekVoilatingWeeklyRestSpecification>();
+			builder.RegisterType<PersonWeekVoilatingWeeklyRestSpecification>().As<IPersonWeekVoilatingWeeklyRestSpecification>();
 			builder.RegisterType<BrokenWeekCounterForAPerson>().As<IBrokenWeekCounterForAPerson>();
 		}
 	}
