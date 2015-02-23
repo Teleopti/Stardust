@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 using NUnit.Framework;
 using Rhino.Mocks;
 using SharpTestsEx;
@@ -27,48 +22,23 @@ namespace Teleopti.Analytics.Etl.TransformerTest
 		}
 
 		[Test, ExpectedException(typeof(PmSynchronizeException))]
-		public void ShouldThrowExceptionIfAuthCheckFails()
-		{
-			_transformer.Stub(x => x.IsPmWindowsAuthenticated("olapServer", "oladDb")).Return(new ResultDto { Success = false });
-			_target.Synchronize(null, _transformer, null, null, "olapServer", "oladDb");
-		}
-
-		[Test]
-		public void ShouldReturnEmptyUserListIfNotWindowsAuth()
-		{
-			_transformer.Stub(x => x.IsPmWindowsAuthenticated("olapServer", "oladDb"))
-				.Return(new ResultDto {Success = true, IsWindowsAuthentication = false});
-
-			var result = _target.Synchronize(null, _transformer, null, null, "olapServer", "oladDb");
-			result.Count.Should().Be.EqualTo(0);
-		}
-
-		[Test, ExpectedException(typeof(PmSynchronizeException))]
 		public void ShouldThrowExceptionSynchronizationOfPermissionsFails()
 		{
 			var users = new List<UserDto>();
-
-			_transformer.Stub(x => x.IsPmWindowsAuthenticated("olapServer", "oladDb"))
-				.Return(new ResultDto {Success = true, IsWindowsAuthentication = true});
-			_transformer.Stub(x => x.GetUsersWithPermissionsToPerformanceManager(null, true, null, null)).Return(users);
 			_transformer.Stub(x => x.SynchronizeUserPermissions(users, "olapServer", "oladDb")).Return(new ResultDto { Success = false });
-
-			_target.Synchronize(null, _transformer, null, null, "olapServer", "oladDb");
+			_target.Synchronize(users, _transformer, "olapServer", "oladDb");
 		}
 
 		[Test]
-		public void ShouldReturnTheSynchronizatedUsers()
+		public void ShouldReturnTheSynchronizedUsers()
 		{
-			var users = new List<UserDto>();
+			var windowsAuthUsers = new List<UserDto>();
 			var resultDto = new ResultDto { Success = true };
 			resultDto.ValidAnalyzerUsers.Add(new UserDto());
 
-			_transformer.Stub(x => x.IsPmWindowsAuthenticated("olapServer", "oladDb"))
-				.Return(new ResultDto {Success = true, IsWindowsAuthentication = true});
-			_transformer.Stub(x => x.GetUsersWithPermissionsToPerformanceManager(null, true, null, null)).Return(users);
-			_transformer.Stub(x => x.SynchronizeUserPermissions(users, "olapServer", "oladDb")).Return(resultDto);
+			_transformer.Stub(x => x.SynchronizeUserPermissions(windowsAuthUsers, "olapServer", "oladDb")).Return(resultDto);
 
-			var result = _target.Synchronize(null, _transformer, null, null, "olapServer", "oladDb");
+			var result = _target.Synchronize(windowsAuthUsers, _transformer, "olapServer", "oladDb");
 
 			result.Should().Be.SameInstanceAs(resultDto.ValidAnalyzerUsers);
 		}

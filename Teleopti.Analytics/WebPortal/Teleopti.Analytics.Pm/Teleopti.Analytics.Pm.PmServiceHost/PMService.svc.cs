@@ -33,6 +33,12 @@ namespace Teleopti.Analytics.PM.PMServiceHost
 		{
 			var resultDto = new ResultDto { Success = false };
 
+			if (!PermissionInformation.IsPmAuthenticationWindows)
+			{
+				resultDto.Success = true;
+				return resultDto;
+			}
+
 			if (_clientUsersToSynchronize == null)
 			{
 				var pme = new PmSynchronizeException("Cannot add users to be synchronized since field variable _clientUsersToSynchronize is not instantiated!");
@@ -50,7 +56,7 @@ namespace Teleopti.Analytics.PM.PMServiceHost
 			}
 			else
 			{
-				_logger.Debug("User arary is either null contains no elements in call to AddUsersToSynchronize(UserDto[] users).");
+				_logger.Debug("User array is either null contains no elements in call to AddUsersToSynchronize(UserDto[] users).");
 			}
 
 			return resultDto;

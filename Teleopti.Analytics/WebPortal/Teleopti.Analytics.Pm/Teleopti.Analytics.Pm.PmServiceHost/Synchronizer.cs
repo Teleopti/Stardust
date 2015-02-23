@@ -13,7 +13,7 @@ namespace Teleopti.Analytics.PM.PMServiceHost
 		private readonly Dictionary<string, User> _analyzerUsersDictionary;
 		private readonly Dictionary<string, UserDto> _clientUsersDictionary;
 		readonly ILog _logger = LogManager.GetLogger(typeof(Synchronizer));
-		static private bool _isWindowsInstallation { get { return PermissionInformation.IsPmAuthenticationWindows; }}
+		static private bool isWindowsInstallation { get { return PermissionInformation.IsPmAuthenticationWindows; }}
 
 		private Synchronizer() { }
 
@@ -36,7 +36,7 @@ namespace Teleopti.Analytics.PM.PMServiceHost
 				}
 			}
 
-			if (!_isWindowsInstallation) //If Anonymous mode fake the Analyzer users
+			if (!isWindowsInstallation) //If Anonymous mode fake the Analyzer users
 			{
 				_analyzerUsersDictionary = _clientUsersDictionary.ToDictionary(k => k.Key, v => new User { Name = v.Value.UserName });
 			}
@@ -72,7 +72,7 @@ namespace Teleopti.Analytics.PM.PMServiceHost
 				{
 					User analyzerUser = _analyzerUsersDictionary[userDto.UserName.ToUpperInvariant()];
 					// Update users role membership
-					if (_isWindowsInstallation)
+					if (isWindowsInstallation)
 					{
 						userUpdated = _userHandler.UpdateRoleMembership(userDto, analyzerUser);
 					}
@@ -90,7 +90,7 @@ namespace Teleopti.Analytics.PM.PMServiceHost
 				else
 				{
 					// Need to create the user
-					if (_isWindowsInstallation)
+					if (isWindowsInstallation)
 					{
 						_userHandler.Add(userDto);
 					}
@@ -105,7 +105,7 @@ namespace Teleopti.Analytics.PM.PMServiceHost
 				if (!_clientUsersDictionary.ContainsKey(user.Name.Trim().ToUpperInvariant()))
 				{
 					// Delete user from analyzer, do not remove analyzer admin
-					if (_isWindowsInstallation && _userHandler.Delete(user))
+					if (isWindowsInstallation && _userHandler.Delete(user))
 					{
 						var userDto = new UserDto { UserName = user.Name.Trim() };
 						resultDto.AddUsersDeleted(userDto);

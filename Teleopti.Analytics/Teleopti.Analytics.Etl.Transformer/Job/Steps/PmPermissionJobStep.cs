@@ -46,21 +46,27 @@ namespace Teleopti.Analytics.Etl.Transformer.Job.Steps
 				return 0;
 
 			var personList = _jobParameters.StateHolder.UserCollection;
-			List<UserDto> applicationAuthUsers;
-			IEnumerable<UserDto> windowsAuthUsers;
-			
+
 			using (var uow = UnitOfWorkFactory.CreateAndOpenUnitOfWork())
 			{
 				uow.Reassociate(personList);
-				windowsAuthUsers = PmWindowsUserSynchronizer.Synchronize(personList, Transformer, PermissionExtractor,
-					UnitOfWorkFactory, _jobParameters.OlapServer, _jobParameters.OlapDatabase);
-				applicationAuthUsers = (List<UserDto>)Transformer.GetUsersWithPermissionsToPerformanceManager(personList, false, PermissionExtractor, UnitOfWorkFactory);
+				var applicationAuthUsers =
+					(List<UserDto>)
+						Transformer.GetUsersWithPermissionsToPerformanceManager(personList, false, PermissionExtractor, UnitOfWorkFactory);
+				IList<UserDto> windowsAuthUsers = Transformer.GetUsersWithPermissionsToPerformanceManager(personList, true,
+					PermissionExtractor, UnitOfWorkFactory);
+				var windowsAuthValidatedUsers = PmWindowsUserSynchronizer.Synchronize(windowsAuthUsers, Transformer,
+					_jobParameters.OlapServer, _jobParameters.OlapDatabase);
+
+				var isPmWinAuth = Transformer.IsPmWindowsAuthenticated(_jobParameters.OlapServer, _jobParameters.OlapDatabase);
+				if (isPmWinAuth.IsWindowsAuthentication)
+					windowsAuthUsers = windowsAuthValidatedUsers;
+
+				applicationAuthUsers.AddRange(windowsAuthUsers);
+				Transformer.Transform(applicationAuthUsers, BulkInsertDataTable1);
+
+				return _jobParameters.Helper.Repository.PersistPmUser(BulkInsertDataTable1);
 			}
-
-			applicationAuthUsers.AddRange(windowsAuthUsers);
-			Transformer.Transform(applicationAuthUsers, BulkInsertDataTable1);
-
-			return _jobParameters.Helper.Repository.PersistPmUser(BulkInsertDataTable1);
 		}
 	}
 }

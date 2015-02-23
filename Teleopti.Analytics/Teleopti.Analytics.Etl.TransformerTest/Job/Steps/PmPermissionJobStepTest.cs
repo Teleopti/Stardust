@@ -20,7 +20,7 @@ namespace Teleopti.Analytics.Etl.TransformerTest.Job.Steps
 		[Test]
 		public void ShouldDoNothingIfNotLastBusinessUnit()
 		{
-			var target = new PmPermissionJobStep(null, false);
+			var target = new PmPermissionJobStep(null);
 			var result = target.Run(new List<IJobStep>(), null, new List<IJobResult>(), false);
 			result.RowsAffected.Should().Be.EqualTo(0);
 		}
@@ -40,7 +40,7 @@ namespace Teleopti.Analytics.Etl.TransformerTest.Job.Steps
 		}
 
 		[Test]
-		public void ShouldSynchronizeBothApplicationAndWindowsUsers()
+		public void ShouldSynchronizeWhenPmAuthenticationIsWindows()
 		{
 			var jobParameters = MockRepository.GenerateMock<IJobParameters>();
 			var stateHolder = MockRepository.GenerateMock<ICommonStateHolder>();
@@ -52,8 +52,57 @@ namespace Teleopti.Analytics.Etl.TransformerTest.Job.Steps
 			var jobHelper = MockRepository.GenerateMock<IJobHelper>();
 			var raptorRep = MockRepository.GenerateMock<IRaptorRepository>();
 			var personList = new List<IPerson>();
-			var windowsUsers = new List<UserDto>();
-			var appUsers = new List<UserDto>();
+			var windowsAuthUsers = new List<UserDto> { new UserDto(), new UserDto() };
+			var appAuthUsers = new List<UserDto> { new UserDto() };
+			var target = new PmPermissionJobStepForTest(jobParameters, unitOfWorkFactory, true)
+			{
+				Transformer = transformer,
+				PmWindowsUserSynchronizer = pmWindowsUserSynchronizer,
+				PermissionExtractor = permissionExtractor
+			};
+
+			jobParameters.Stub(x => x.StateHolder).Return(stateHolder);
+			stateHolder.Stub(x => x.PermissionsMustRun()).Return(true);
+			stateHolder.Stub(x => x.UserCollection).Return(personList);
+			unitOfWorkFactory.Stub(x => x.CreateAndOpenUnitOfWork()).Return(uow);
+			jobParameters.Stub(x => x.OlapServer).Return("os");
+			jobParameters.Stub(x => x.OlapDatabase).Return("od");	
+			transformer.Stub(
+				x => x.GetUsersWithPermissionsToPerformanceManager(personList, false, permissionExtractor, unitOfWorkFactory))
+				.Return(appAuthUsers);
+			transformer.Stub(
+			x => x.GetUsersWithPermissionsToPerformanceManager(personList, true, permissionExtractor, unitOfWorkFactory))
+			.Return(windowsAuthUsers);
+			pmWindowsUserSynchronizer.Stub(x => x.Synchronize(windowsAuthUsers, transformer, "os", "od"))
+				.Return(new List<UserDto> {new UserDto()});
+			transformer.Stub(x => x.IsPmWindowsAuthenticated("os", "od")).Return(new ResultDto {IsWindowsAuthentication = true});
+			jobParameters.Stub(x => x.Helper).Return(jobHelper);
+			jobHelper.Stub(x => x.Repository).Return(raptorRep);
+			raptorRep.Stub(x => x.PersistPmUser(target.BulkInsertDataTable1)).Return(99);
+
+			var result = target.Run(new List<IJobStep>(), null, new List<IJobResult>(), true);
+
+			appAuthUsers.Count.Should().Be.EqualTo(2);
+			transformer.AssertWasCalled(x => x.Transform(appAuthUsers, target.BulkInsertDataTable1));
+			result.RowsAffected.Should().Be.EqualTo(99);
+
+		}
+
+		[Test]
+		public void ShouldSynchronizeWhenPmAuthenticationIsAnonymous()
+		{
+			var jobParameters = MockRepository.GenerateMock<IJobParameters>();
+			var stateHolder = MockRepository.GenerateMock<ICommonStateHolder>();
+			var unitOfWorkFactory = MockRepository.GenerateMock<IUnitOfWorkFactory>();
+			var uow = MockRepository.GenerateMock<IUnitOfWork>();
+			var transformer = MockRepository.GenerateMock<IPmPermissionTransformer>();
+			var pmWindowsUserSynchronizer = MockRepository.GenerateMock<IPmWindowsUserSynchronizer>();
+			var permissionExtractor = MockRepository.GenerateMock<IPmPermissionExtractor>();
+			var jobHelper = MockRepository.GenerateMock<IJobHelper>();
+			var raptorRep = MockRepository.GenerateMock<IRaptorRepository>();
+			var personList = new List<IPerson>();
+			var windowsAuthUsers = new List<UserDto> { new UserDto(), new UserDto() };
+			var appAuthUsers = new List<UserDto> { new UserDto() };
 			var target = new PmPermissionJobStepForTest(jobParameters, unitOfWorkFactory, true)
 			{
 				Transformer = transformer,
@@ -67,22 +116,27 @@ namespace Teleopti.Analytics.Etl.TransformerTest.Job.Steps
 			unitOfWorkFactory.Stub(x => x.CreateAndOpenUnitOfWork()).Return(uow);
 			jobParameters.Stub(x => x.OlapServer).Return("os");
 			jobParameters.Stub(x => x.OlapDatabase).Return("od");
-			pmWindowsUserSynchronizer.Stub(
-				x => x.Synchronize(personList, transformer, permissionExtractor, unitOfWorkFactory, "os", "od"))
-				.Return(windowsUsers);
 			transformer.Stub(
 				x => x.GetUsersWithPermissionsToPerformanceManager(personList, false, permissionExtractor, unitOfWorkFactory))
-				.Return(appUsers);
+				.Return(appAuthUsers);
+			transformer.Stub(
+			x => x.GetUsersWithPermissionsToPerformanceManager(personList, true, permissionExtractor, unitOfWorkFactory))
+			.Return(windowsAuthUsers);
+			pmWindowsUserSynchronizer.Stub(x => x.Synchronize(windowsAuthUsers, transformer, "os", "od")).Return(new List<UserDto>());
+			transformer.Stub(x => x.IsPmWindowsAuthenticated("os", "od")).Return(new ResultDto { IsWindowsAuthentication = false });
 			jobParameters.Stub(x => x.Helper).Return(jobHelper);
 			jobHelper.Stub(x => x.Repository).Return(raptorRep);
-			raptorRep.Stub(x => x.PersistPmUser(Arg<DataTable>.Is.Anything)).Return(99);
+			raptorRep.Stub(x => x.PersistPmUser(target.BulkInsertDataTable1)).Return(99);
 
 			var result = target.Run(new List<IJobStep>(), null, new List<IJobResult>(), true);
 
-			transformer.AssertWasCalled(x => x.Transform(Arg<IEnumerable<UserDto>>.Is.Anything, Arg<DataTable>.Is.Anything));
+			appAuthUsers.Count.Should().Be.EqualTo(3);
+			transformer.AssertWasCalled(x => x.Transform(appAuthUsers, target.BulkInsertDataTable1));
 			result.RowsAffected.Should().Be.EqualTo(99);
 		}
 	}
+
+
 
 	public class PmPermissionJobStepForTest : PmPermissionJobStep
 	{

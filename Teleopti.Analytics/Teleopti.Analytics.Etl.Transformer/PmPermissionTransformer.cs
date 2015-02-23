@@ -6,13 +6,11 @@ using System.Text;
 using log4net;
 using Teleopti.Analytics.Etl.Interfaces.Common;
 using Teleopti.Analytics.Etl.Interfaces.PerformanceManager;
-using Teleopti.Analytics.Etl.Interfaces.Transformer;
 using Teleopti.Analytics.Etl.PerformanceManagerProxy;
 using Teleopti.Analytics.PM.PMServiceHost;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
-using IJobResult = Teleopti.Analytics.Etl.Interfaces.Transformer.IJobResult;
 
 namespace Teleopti.Analytics.Etl.Transformer
 {
@@ -180,6 +178,8 @@ namespace Teleopti.Analytics.Etl.Transformer
 				resultDto = proxy.IsWindowsAuthentication(olapServer, olapDatabase);
 				_logger.Debug("After call to proxy.IsWindowsAuthentication(olapServer, olapDatabase).");
 				proxy.Close();
+				if (!resultDto.Success)
+					throw new PmSynchronizeException(resultDto.ErrorMessage + "; " + resultDto.ErrorType);
 			}
 			catch (Exception e)
 			{
