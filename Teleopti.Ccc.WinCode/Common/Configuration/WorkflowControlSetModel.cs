@@ -44,8 +44,8 @@ namespace Teleopti.Ccc.WinCode.Common.Configuration
         void UpdateAfterMerge(IWorkflowControlSet updatedWorkflowControlSet);
         void AddSkillToMatchList(ISkill skill);
         void RemoveSkillFromMatchList(ISkill skill);
-	    FairnessType GetFairnessType(bool scheduler_HidePointsFairnessSystem_28317, bool scheduler_Seniority_11111);
-		void SetFairnessType(FairnessType fairnessType, bool scheduler_HidePointsFairnessSystem_28317, bool scheduler_Seniority_11111);
+	    FairnessType GetFairnessType(bool scheduler_HidePointsFairnessSystem_28317, bool scheduler_Seniority_24331);
+		void SetFairnessType(FairnessType fairnessType, bool scheduler_HidePointsFairnessSystem_28317, bool scheduler_Seniority_24331);
         bool IsDirty { get; set; }
 	    bool AnonymousTrading { get; set; }
 	    bool LockTrading { get; set; }
@@ -373,14 +373,14 @@ namespace Teleopti.Ccc.WinCode.Common.Configuration
             }
         }
 
-		public FairnessType GetFairnessType(bool scheduler_HidePointsFairnessSystem_28317, bool scheduler_Seniority_11111)
+		public FairnessType GetFairnessType(bool scheduler_HidePointsFairnessSystem_28317, bool scheduler_Seniority_24331)
         {
-			return DomainEntity.GetFairnessType(scheduler_HidePointsFairnessSystem_28317, scheduler_Seniority_11111);
+			return DomainEntity.GetFairnessType(scheduler_HidePointsFairnessSystem_28317, scheduler_Seniority_24331);
         }
 
-		public void SetFairnessType(FairnessType fairnessType, bool scheduler_HidePointsFairnessSystem_28317, bool scheduler_Seniority_11111)
+		public void SetFairnessType(FairnessType fairnessType, bool scheduler_HidePointsFairnessSystem_28317, bool scheduler_Seniority_24331)
         {
-			if (DomainEntity.GetFairnessType(scheduler_HidePointsFairnessSystem_28317, scheduler_Seniority_11111) == fairnessType) return;
+			if (DomainEntity.GetFairnessType(scheduler_HidePointsFairnessSystem_28317, scheduler_Seniority_24331) == fairnessType) return;
 			DomainEntity.SetFairnessType(fairnessType);
             IsDirty = true;
         }

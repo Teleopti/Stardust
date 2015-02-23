@@ -59,7 +59,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 				tableLayoutPanelBasic.RowStyles[rowIndex].Height = 0;
 			}
 
-			if (!toggleManager.IsEnabled(Toggles.Scheduler_Seniority_11111))
+			if (!toggleManager.IsEnabled(Toggles.Scheduler_Seniority_24331))
 			{
 				radioButtonAdvSeniority.Hide();
 				var rowIndex = tableLayoutPanelBasic.GetRow(radioButtonAdvSeniority);
@@ -1051,6 +1051,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 		{
 			radioButtonAdvFairnessEqual.CheckChanged -= radioButtonAdvFairnessEqualCheckChanged;
 			radioButtonAdvFairnessPoints.CheckChanged -= radioButtonAdvFairnessPointsCheckChanged;
+			radioButtonAdvSeniority.CheckChanged -= radioButtonAdvSeniorityCheckChanged;
 
 			radioButtonAdvFairnessEqual.Checked = false;
 			radioButtonAdvFairnessPoints.Checked = false;
@@ -1059,9 +1060,12 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 				radioButtonAdvFairnessEqual.Checked = true;
 			else if(value == FairnessType.FairnessPoints)
 				radioButtonAdvFairnessPoints.Checked = true;
+			else if (value == FairnessType.Seniority)
+				radioButtonAdvSeniority.Checked = true;
 
 			radioButtonAdvFairnessEqual.CheckChanged += radioButtonAdvFairnessEqualCheckChanged;
 			radioButtonAdvFairnessPoints.CheckChanged += radioButtonAdvFairnessPointsCheckChanged;
+			radioButtonAdvSeniority.CheckChanged += radioButtonAdvSeniorityCheckChanged;
 		}
 
 		public void SetStudentAvailabilityPeriods(DateOnlyPeriod insertPeriod, DateOnlyPeriod studentAvailabilityPeriod)

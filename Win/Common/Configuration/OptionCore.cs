@@ -199,7 +199,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 				allSupportedPages.Add(new FairnessValuesControl());
 			}
 
-			if (_toggleManager.IsEnabled(Toggles.Scheduler_Seniority_11111))
+			if (_toggleManager.IsEnabled(Toggles.Scheduler_Seniority_24331))
 			{
 				allSupportedPages.Add(new SeniorityControl());
 			}

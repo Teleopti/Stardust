@@ -362,7 +362,7 @@ namespace Teleopti.Ccc.WinCode.Autofac
 				.As<TeamBlockDayOffFairnessOptimizationServiceFacade>();
 			builder.RegisterType<TeamBlockDayOffFairnessOptimizationServiceFacadeSeniorityTurnedOff>()
 				.As<TeamBlockDayOffFairnessOptimizationServiceFacadeSeniorityTurnedOff>();
-			builder.Register(c => c.Resolve<IToggleManager>().IsEnabled(Toggles.Scheduler_Seniority_11111)
+			builder.Register(c => c.Resolve<IToggleManager>().IsEnabled(Toggles.Scheduler_Seniority_24331)
 				? (ITeamBlockDayOffFairnessOptimizationServiceFacade) c.Resolve<TeamBlockDayOffFairnessOptimizationServiceFacade>()
 				: c.Resolve<TeamBlockDayOffFairnessOptimizationServiceFacadeSeniorityTurnedOff>())
 				.As<ITeamBlockDayOffFairnessOptimizationServiceFacade>();

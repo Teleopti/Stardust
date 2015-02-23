@@ -369,16 +369,16 @@ namespace Teleopti.Ccc.DomainTest.WorkflowControl
 		}
 
 	    [Test]
-		public void ShouldReturnCorrectFairnessTypeWhenScheduler_HidePointsFairnessSystem_28317IsTrue_Scheduler_Seniority_11111IsTrue()
+		public void ShouldReturnCorrectFairnessTypeWhenScheduler_HidePointsFairnessSystem_28317IsTrue_scheduler_Seniority_24331IsTrue()
 	    {
 		    var scheduler_HidePointsFairnessSystem_28317 = true;
-		    var seniority_11111 = true;
+		    var seniority_24331 = true;
 			_target.SetFairnessType(FairnessType.FairnessPoints);
-			Assert.AreEqual(FairnessType.EqualNumberOfShiftCategory, _target.GetFairnessType(scheduler_HidePointsFairnessSystem_28317, seniority_11111));
+			Assert.AreEqual(FairnessType.EqualNumberOfShiftCategory, _target.GetFairnessType(scheduler_HidePointsFairnessSystem_28317, seniority_24331));
 			_target.SetFairnessType(FairnessType.EqualNumberOfShiftCategory);
-			Assert.AreEqual(FairnessType.EqualNumberOfShiftCategory, _target.GetFairnessType(scheduler_HidePointsFairnessSystem_28317, seniority_11111));
+			Assert.AreEqual(FairnessType.EqualNumberOfShiftCategory, _target.GetFairnessType(scheduler_HidePointsFairnessSystem_28317, seniority_24331));
 			_target.SetFairnessType(FairnessType.Seniority);
-			Assert.AreEqual(FairnessType.Seniority, _target.GetFairnessType(scheduler_HidePointsFairnessSystem_28317, seniority_11111));
+			Assert.AreEqual(FairnessType.Seniority, _target.GetFairnessType(scheduler_HidePointsFairnessSystem_28317, seniority_24331));
 	    }
 
 		[Test]

@@ -62,7 +62,7 @@ namespace Teleopti.Ccc.WinCodeTest.Configuration
             _workflowControlSetModel = new WorkflowControlSetModel(_workflowControlSet);
             _toggleManager = _mocks.StrictMock<IToggleManager>();
             _toggleManager.Stub(x => x.IsEnabled(Toggles.Scheduler_HidePointsFairnessSystem_28317)).IgnoreArguments().Return(true);
-			_toggleManager.Stub(x => x.IsEnabled(Toggles.Scheduler_Seniority_11111)).IgnoreArguments().Return(true);
+			_toggleManager.Stub(x => x.IsEnabled(Toggles.Scheduler_Seniority_24331)).IgnoreArguments().Return(true);
             _target = new WorkflowControlSetPresenter(_view, _unitOfWorkFactory, _repositoryFactory, _toggleManager);
         }
 

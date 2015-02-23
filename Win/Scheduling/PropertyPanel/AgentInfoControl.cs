@@ -152,7 +152,7 @@ namespace Teleopti.Ccc.Win.Scheduling.PropertyPanel
 				}
 
 				var fairnessType = _selectedPerson.WorkflowControlSet
-				   .GetFairnessType(_toggleManager.IsEnabled(Toggles.Scheduler_HidePointsFairnessSystem_28317), _toggleManager.IsEnabled(Toggles.Scheduler_Seniority_11111));
+				   .GetFairnessType(_toggleManager.IsEnabled(Toggles.Scheduler_HidePointsFairnessSystem_28317), _toggleManager.IsEnabled(Toggles.Scheduler_Seniority_24331));
 
 				tableLayoutPanelNoWorkflowControlSet.Visible = false;
 
@@ -228,7 +228,7 @@ namespace Teleopti.Ccc.Win.Scheduling.PropertyPanel
 
 			var service = _container.Resolve<IDistributionReportService>();
 			var pointsFairnessHidden = _toggleManager.IsEnabled(Toggles.Scheduler_HidePointsFairnessSystem_28317);
-			var seniorityFairness = _toggleManager.IsEnabled(Toggles.Scheduler_Seniority_11111);
+			var seniorityFairness = _toggleManager.IsEnabled(Toggles.Scheduler_Seniority_24331);
 			var report = service.CreateReport(person, _groupPagePerDate.GetGroupPageByDate(dateOnly),
 				state.PersonsInOrganization.ToList(), state.Schedules, pointsFairnessHidden, seniorityFairness);
 			foreach (var shiftCategory in report.DistributionDictionary.Keys)
