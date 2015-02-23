@@ -102,8 +102,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.MyTime
 		[When(@"I change language to english")]
 		public void WhenIChangeLanguageToEnglish()
 		{
-			var language = Browser.Interactions.GetText("#CultureUi-Picker option[value='1033']");
-			Browser.Interactions.SelectOptionByTextUsingJQuery("#CultureUi-Picker", language);
+			Browser.Interactions.SelectOptionByTextUsingJQuery("#CultureUi-Picker", CultureInfo.GetCultureInfo(1033).DisplayName.Substring(0, 3));
 		}
 
 		[Then(@"I should see US date format"), SetCulture("en-US")]
