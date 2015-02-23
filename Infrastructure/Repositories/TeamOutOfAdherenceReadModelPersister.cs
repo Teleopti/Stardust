@@ -50,7 +50,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 				";")
 				.SetParameter("TeamId", model.TeamId)
 				.SetParameter("SiteId", model.SiteId)
-				.SetParameter("State", _serializer.SerializeObject(model.State))
+				.SetParameter("State", _serializer.SerializeObject(model.State),NHibernateUtil.StringClob)
 				.SetParameter("Count", model.Count)
 				.ExecuteUpdate();
 		}

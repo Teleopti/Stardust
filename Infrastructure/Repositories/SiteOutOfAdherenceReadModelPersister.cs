@@ -25,6 +25,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 
 		public void Persist(SiteOutOfAdherenceReadModel model)
 		{
+			//var data = _serializer.SerializeObject(model.State)
 			_unitOfWork.Current().CreateSqlQuery(
 				"MERGE ReadModel.SiteOutOfAdherence AS T " +
 				"USING (VALUES(:SiteId)) AS S (SiteId) " +
@@ -51,7 +52,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 				.SetParameter("SiteId", model.SiteId)
 				.SetParameter("BusinessUnitId", model.BusinessUnitId)
 				.SetParameter("Count", model.Count)
-				.SetParameter("State", _serializer.SerializeObject(model.State))
+				.SetParameter("State", _serializer.SerializeObject(model.State), NHibernateUtil.StringClob)
 				.ExecuteUpdate();
 		}
 

@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using NUnit.Framework;
 using SharpTestsEx;
@@ -119,5 +120,21 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			Target.HasData().Should().Be.False();
 		}
 
+		[Test]
+		public void ShouldPersistIfStatesAreMoreThan4000Characters()
+		{
+			var states = Enumerable.Range(0, 200).Select(i => new SiteOutOfAdherenceReadModelState()
+			{
+				OutOfAdherence = true,
+				PersonId = Guid.NewGuid(),
+				Time = DateTime.Now
+			}).ToList();
+
+			Target.Persist(new SiteOutOfAdherenceReadModel()
+			{
+				State = states
+			});
+			Target.HasData().Should().Be.True();
+		}
 	}
 }

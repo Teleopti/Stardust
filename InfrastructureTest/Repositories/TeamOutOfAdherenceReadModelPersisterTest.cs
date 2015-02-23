@@ -123,6 +123,23 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 
 			Target.HasData().Should().Be.False();
 		}
+
+		[Test]
+		public void ShouldPersistIfStatesAreMoreThan4000Characters()
+		{
+			var states = Enumerable.Range(0, 200).Select(i => new TeamOutOfAdherenceReadModelState()
+			{
+				OutOfAdherence = true,
+				PersonId = Guid.NewGuid(),
+				Time = DateTime.Now
+			}).ToList();
+
+			Target.Persist(new TeamOutOfAdherenceReadModel()
+			{
+				State = states
+			});
+			Target.HasData().Should().Be.True();
+		}
 	}
 
 }
