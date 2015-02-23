@@ -244,8 +244,8 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta
 				.WithDefaultsFromState(state1)
 				.WithUser("usercode", personId)
 				.WithSchedule(personId, phoneId, "phone", "2015-01-13 10:00", "2015-01-13 11:00")
-				.WithAlarm("phone", phoneId, 1, TimeSpan.FromMinutes(10))
-				.WithAlarm("break", phoneId, -1, TimeSpan.FromMinutes(10))
+				.WithAlarm("phone", phoneId, TimeSpan.FromMinutes(10))
+				.WithAlarm("break", phoneId, TimeSpan.FromMinutes(10))
 				;
 			Now.Is("2015-01-13 10:00");
 			Target.SaveState(state1);

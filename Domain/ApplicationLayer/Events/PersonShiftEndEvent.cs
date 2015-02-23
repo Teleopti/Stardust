@@ -7,7 +7,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Events
 	public class PersonShiftEndEvent : IEvent, ILogOnInfo, IGoToHangfire
 	{
 		public Guid PersonId { get; set; }
-		public DateTime ScheduleDate { get; set; }
+		public DateOnly? BelongsToDate { get; set; }
 		public DateTime ShiftStartTime { get; set; }
 		public DateTime ShiftEndTime { get; set; }
 		public Guid InitiatorId { get; set; }

@@ -206,6 +206,7 @@
     <Compile Include="ApplicationLayer\Rta\AgentState.cs" />
     <Compile Include="ApplicationLayer\Rta\AgentStateAssembler.cs" />
     <Compile Include="ApplicationLayer\Rta\AgentStateInfo.cs" />
+    <Compile Include="ApplicationLayer\Rta\BelongsToDateDecorator.cs" />
     <Compile Include="ApplicationLayer\Rta\CalculateAdherenceDetails.cs" />
     <Compile Include="ApplicationLayer\Rta\CheckForActivityChangeWebModel.cs" />
     <Compile Include="ApplicationLayer\Rta\ControllableLiteTransactionSyncronization.cs" />
@@ -217,6 +218,8 @@
     <Compile Include="ApplicationLayer\Rta\ILiteTransactionSyncronization.cs" />
     <Compile Include="ApplicationLayer\Rta\INotificationCreator.cs" />
     <Compile Include="ApplicationLayer\Rta\IPersonOrganizationReader.cs" />
+    <Compile Include="ApplicationLayer\Rta\IRtaDecoratingEventPublisher.cs" />
+    <Compile Include="ApplicationLayer\Rta\IRtaEventDecorator.cs" />
     <Compile Include="ApplicationLayer\Rta\IRtaEventPublisher.cs" />
     <Compile Include="ApplicationLayer\Rta\IShiftEventPublisher.cs" />
     <Compile Include="ApplicationLayer\Rta\ISiteOutOfAdherenceReadModelPersister.cs" />
@@ -229,6 +232,7 @@
     <Compile Include="ApplicationLayer\Rta\Performance\IPerformanceCounter.cs" />
     <Compile Include="ApplicationLayer\Rta\Performance\PerformanceCounter.cs" />
     <Compile Include="ApplicationLayer\Rta\PersonOrganizationData.cs" />
+    <Compile Include="ApplicationLayer\Rta\RtaDecoratingEventPublisher.cs" />
     <Compile Include="ApplicationLayer\Rta\ScheduleInfo.cs" />
     <Compile Include="ApplicationLayer\Rta\ShiftEventPublisher.cs" />
     <Compile Include="ApplicationLayer\Rta\CalculateAdherence.cs" />

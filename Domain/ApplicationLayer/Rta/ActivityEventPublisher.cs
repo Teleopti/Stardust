@@ -4,10 +4,10 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta
 {
 	public class ActivityEventPublisher : IActivityEventPublisher
 	{
-		private readonly IEventPopulatingPublisher _eventPublisher;
+		private readonly IRtaDecoratingEventPublisher _eventPublisher;
 		private readonly IAdherenceEventPublisher _adherenceEventPublisher;
 
-		public ActivityEventPublisher(IEventPopulatingPublisher eventPublisher, IAdherenceEventPublisher adherenceEventPublisher)
+		public ActivityEventPublisher(IRtaDecoratingEventPublisher eventPublisher, IAdherenceEventPublisher adherenceEventPublisher)
 		{
 			_eventPublisher = eventPublisher;
 			_adherenceEventPublisher = adherenceEventPublisher;
@@ -24,7 +24,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta
 				: info.CurrentActivity.StartDateTime;
 			var adherenceChanged = info.AdherenceForPreviousState != info.AdherenceForPreviousStateAndCurrentActivity;
 
-			_eventPublisher.Publish(new PersonActivityStartEvent
+			_eventPublisher.Publish(info, new PersonActivityStartEvent
 			{
 				PersonId = info.PersonId,
 				StartTime = startTime,

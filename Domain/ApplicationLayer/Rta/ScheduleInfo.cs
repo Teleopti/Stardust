@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.Rta;
+using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta
 {
@@ -16,6 +17,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta
 		private readonly Lazy<DateTime> _currentShiftEndTime;
 		private readonly Lazy<DateTime> _shiftStartTimeForPreviousActivity;
 		private readonly Lazy<DateTime> _shiftEndTimeForPreviousActivity;
+		private readonly Lazy<DateOnly?> _belongsToDate;
 
 		public ScheduleInfo(IDatabaseReader databaseReader, Guid personId, DateTime currentTime)
 		{
@@ -28,6 +30,13 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta
 			_previousActivity = new Lazy<ScheduleLayer>(() => (from l in _scheduleLayers.Value where l.EndDateTime <= currentTime select l).LastOrDefault());
 			_shiftStartTimeForPreviousActivity = new Lazy<DateTime>(() => startTimeOfShift(_previousActivity.Value));
 			_shiftEndTimeForPreviousActivity = new Lazy<DateTime>(() => endTimeOfShift(_previousActivity.Value));
+			_belongsToDate = new Lazy<DateOnly?>(() =>
+			{
+				var activity = CurrentActivity() ?? activityNear(_currentTime);
+				if (activity != null)
+					return activity.BelongsToDate;
+				return null;
+			});
 		}
 
 		public ScheduleLayer CurrentActivity()
@@ -80,6 +89,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta
 		public DateTime ShiftStartTimeForPreviousActivity { get { return _shiftStartTimeForPreviousActivity.Value; } }
 		public DateTime ShiftEndTimeForPreviousActivity { get { return _shiftEndTimeForPreviousActivity.Value; } }
 
+		public DateOnly? BelongsToDate { get { return _belongsToDate.Value; } }
+
 		private DateTime startTimeOfShift(ScheduleLayer activity)
 		{
 			if (activity == null)
@@ -118,5 +129,15 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta
 			return null;
 		}
 
+		private ScheduleLayer activityNear(DateTime time)
+		{
+			return (
+				from l in _scheduleLayers.Value
+				let ended = l.EndDateTime >= _currentTime.AddHours(-1) && l.StartDateTime < time
+				let starting = l.StartDateTime <= _currentTime.AddHours(1) && l.EndDateTime > time
+				where ended || starting
+				select l
+				).FirstOrDefault();
+		}
 	}
 }

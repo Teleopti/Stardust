@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Interfaces.Domain;
 
@@ -5,9 +6,9 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta
 {
 	public class ShiftEventPublisher : IShiftEventPublisher
 	{
-		private readonly IEventPopulatingPublisher _eventPublisher;
+		private readonly IRtaDecoratingEventPublisher _eventPublisher;
 
-		public ShiftEventPublisher(IEventPopulatingPublisher eventPublisher)
+		public ShiftEventPublisher(IRtaDecoratingEventPublisher eventPublisher)
 		{
 			_eventPublisher = eventPublisher;
 		}
@@ -22,7 +23,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta
 		{
 			if (info.IsScheduled && !info.WasScheduled)
 			{
-				_eventPublisher.Publish(new PersonShiftStartEvent
+				_eventPublisher.Publish(info, new PersonShiftStartEvent
 				{
 					PersonId = info.PersonId,
 					ShiftStartTime = info.CurrentShiftStartTime,
@@ -36,7 +37,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta
 		{
 			if (!info.IsScheduled && info.WasScheduled)
 			{
-				_eventPublisher.Publish(new PersonShiftEndEvent
+				_eventPublisher.Publish(info, new PersonShiftEndEvent
 				{
 					PersonId = info.PersonId,
 					ShiftStartTime = info.ShiftStartTimeForPreviousActivity,
@@ -44,8 +45,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta
 					BusinessUnitId = info.BusinessUnitId
 				});
 			}
-
 		}
 
 	}
+
 }

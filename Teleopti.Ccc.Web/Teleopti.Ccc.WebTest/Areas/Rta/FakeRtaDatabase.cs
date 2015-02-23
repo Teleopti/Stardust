@@ -316,10 +316,9 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta
 			return fakeDataBuilder.WithAlarm(stateCode, activityId, Guid.NewGuid(), 0, null, isLoggedOutState, TimeSpan.Zero);
 		}
 
-
-		public static IFakeDataBuilder WithAlarm(this IFakeDataBuilder fakeDataBuilder, string stateCode, Guid activityId, int isLoggedOutState, TimeSpan staffingEffect)
+		public static IFakeDataBuilder WithAlarm(this IFakeDataBuilder fakeDataBuilder, string stateCode, Guid activityId, TimeSpan threshold)
 		{
-			return fakeDataBuilder.WithAlarm(stateCode, activityId, Guid.NewGuid(), 0, null, false, staffingEffect);
+			return fakeDataBuilder.WithAlarm(stateCode, activityId, Guid.NewGuid(), 0, null, false, threshold);
 		}
 	}
 

@@ -1,9 +1,15 @@
-﻿using Autofac;
+﻿using System;
+using System.Collections.Generic;
+using Autofac;
+using Teleopti.Ccc.Domain.ApplicationLayer;
+using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta;
 using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.Rta.WebService;
 using Teleopti.Ccc.Web.Areas.Rta.Core.Server.Adherence;
+using Teleopti.Interfaces.Domain;
+using WebGrease.Css.Extensions;
 
 namespace Teleopti.Ccc.Web.Areas.Rta.Core.Server
 {
@@ -26,7 +32,8 @@ namespace Teleopti.Ccc.Web.Areas.Rta.Core.Server
 			builder.RegisterType<AlarmFinder>().As<IAlarmFinder>().SingleInstance();
 			builder.RegisterType<RtaProcessor>().SingleInstance();
 			builder.RegisterType<AgentStateReadModelUpdater>().As<IAgentStateReadModelUpdater>().SingleInstance();
-
+			
+			
 			if (_config.Toggle(Toggles.RTA_NoBroker_31237))
 			{
 				builder.RegisterType<NoMessagge>().As<IAgentStateMessageSender>().SingleInstance();
@@ -44,7 +51,8 @@ namespace Teleopti.Ccc.Web.Areas.Rta.Core.Server
 				builder.RegisterType<StateStreamSynchronizer>().As<IStateStreamSynchronizer>().SingleInstance();
 			else
 				builder.RegisterType<NoStateStreamSynchronizer>().As<IStateStreamSynchronizer>().SingleInstance();
-
 		}
 	}
+
+	
 }

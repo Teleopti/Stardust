@@ -7,6 +7,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Events
 	public class PersonInAdherenceEvent : IEvent, ILogOnInfo, IGoToHangfire
 	{
 		public Guid PersonId { get; set; }
+		public DateOnly? BelongsToDate { get; set; }
 		public DateTime Timestamp { get; set; }
 		public string Datasource { get; set; }
 		public Guid BusinessUnitId { get; set; }

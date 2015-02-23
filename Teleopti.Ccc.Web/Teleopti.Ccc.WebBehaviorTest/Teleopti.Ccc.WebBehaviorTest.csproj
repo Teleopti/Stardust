@@ -127,6 +127,11 @@
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
     </Compile>
+    <Compile Include="Anywhere\RealTimeAdherence\TimeZone.feature.cs">
+      <DependentUpon>TimeZone.feature</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
     <Compile Include="Anywhere\RealTimeAdherence\Percentage.feature.cs">
       <DependentUpon>Percentage.feature</DependentUpon>
       <AutoGen>True</AutoGen>
@@ -840,6 +845,10 @@
     <None Include="Anywhere\RealTimeAdherence\ChangeSchedule.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>
       <LastGenOutput>ChangeSchedule.feature.cs</LastGenOutput>
+    </None>
+    <None Include="Anywhere\RealTimeAdherence\TimeZone.feature">
+      <Generator>SpecFlowSingleFileGenerator</Generator>
+      <LastGenOutput>TimeZone.feature.cs</LastGenOutput>
     </None>
     <None Include="Anywhere\RealTimeAdherence\Percentage.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>

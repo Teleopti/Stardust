@@ -40,6 +40,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<AgentDateProvider>().SingleInstance().As<IAgentDateProvider>();
 			builder.RegisterType<CalculateAdherence>().SingleInstance().As<ICalculateAdherence>();
 			builder.RegisterType<CalculateAdherenceDetails>().SingleInstance().As<ICalculateAdherenceDetails>();
+			builder.RegisterType<RtaDecoratingEventPublisher>().As<IRtaDecoratingEventPublisher>().SingleInstance();
 
 			if (_config.Toggle(Toggles.RTA_SeePercentageAdherenceForOneAgent_30783) ||
 				_config.Toggle(Toggles.RTA_SeeAdherenceDetailsForOneAgent_31285))
@@ -64,6 +65,9 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 				builder.RegisterType<NoEvents>().SingleInstance().As<IStateEventPublisher>();
 				builder.RegisterType<NoEvents>().SingleInstance().As<IActivityEventPublisher>();
 			}
+
+			if (_config.Toggle(Toggles.RTA_CalculatePercentageInAgentTimezone_31236))
+				builder.RegisterType<BelongsToDateDecorator>().As<IRtaEventDecorator>();
 
 			_config.Args().CacheBuilder
 				.For<PersonOrganizationProvider>()

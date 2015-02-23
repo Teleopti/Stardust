@@ -50,6 +50,11 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta
 		public Guid? CurrentActivityId { get { return _currentState.Value.ActivityId; } }
 		public Guid? PreviousActivityId { get { return _previousState.Value.ActivityId; } }
 
+		public DateOnly? BelongsToDate
+		{
+			get { return _scheduleInfo.BelongsToDate; }
+		}
+
 		public bool Send
 		{
 			get

@@ -7,6 +7,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Events
 	public class PersonActivityStartEvent : IEvent, ILogOnInfo, IGoToHangfire
 	{
 		public Guid PersonId { get; set; }
+		public DateOnly? BelongsToDate { get; set; }
 		public DateTime StartTime { get; set; }
 		public string Name { get; set; }
 		public string Datasource { get; set; }
