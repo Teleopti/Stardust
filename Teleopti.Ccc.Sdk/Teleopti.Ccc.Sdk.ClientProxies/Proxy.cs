@@ -30,9 +30,11 @@ namespace Teleopti.Ccc.Sdk.ClientProxies
         }
 
         public ICollection<string> GetHibernateConfigurationInternal()
-        {
-            return Channel.GetHibernateConfigurationInternal();
-        }
+		  {
+#pragma warning disable 618
+			  return Channel.GetHibernateConfigurationInternal();
+#pragma warning restore 618
+		  }
 
         public IDictionary<string, string> GetAppSettingsInternal()
         {
