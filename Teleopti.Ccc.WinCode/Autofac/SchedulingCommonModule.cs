@@ -65,7 +65,6 @@ namespace Teleopti.Ccc.WinCode.Autofac
 			builder.RegisterModule<BackToLegalShiftModule>();
 			builder.RegisterModule<ScheduleOvertimeModule>();
 
-			//fattar inte fråga Roger
 			builder.RegisterModule(new RuleSetModule(_configuration, true));
 			builder.RegisterType<DisableDeletedFilter>().As<IDisableDeletedFilter>().SingleInstance();
 			builder.RegisterType<OptimizerHelperHelper>().As<IOptimizerHelperHelper>().SingleInstance();
@@ -73,16 +72,13 @@ namespace Teleopti.Ccc.WinCode.Autofac
 
 			builder.RegisterModule<WeeklyRestSolverModule>();
 			builder.RegisterModule<EqualNumberOfCategoryFairnessModule>();
-			//EqualNumberOfCategoryFairnessModule
-
-
+			
 			builder.RegisterType<SchedulerStateHolder>().As<ISchedulerStateHolder>().InstancePerLifetimeScope();
 			builder.RegisterType<OverriddenBusinessRulesHolder>().As<IOverriddenBusinessRulesHolder>().InstancePerLifetimeScope();
 			builder.RegisterType<SchedulingResultStateHolder>().As<ISchedulingResultStateHolder>().InstancePerLifetimeScope();
 			builder.RegisterType<PreSchedulingStatusChecker>().As<IPreSchedulingStatusChecker>().InstancePerLifetimeScope();
 			builder.RegisterType<CurrentTeleoptiPrincipal>().As<ICurrentTeleoptiPrincipal>().InstancePerLifetimeScope();
-			//ICurrentTeleoptiPrincipal
-
+			
 			builder.RegisterType<SeatLimitationWorkShiftCalculator2>()
 				.As<ISeatLimitationWorkShiftCalculator2>()
 				.InstancePerLifetimeScope();
