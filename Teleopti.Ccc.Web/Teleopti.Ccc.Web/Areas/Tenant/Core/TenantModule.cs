@@ -22,7 +22,9 @@ namespace Teleopti.Ccc.Web.Areas.Tenant.Core
 			builder.Register(c =>
 			{
 				var configReader = c.Resolve<IConfigReader>();
-				return TenantUnitOfWorkManager.CreateInstanceForWeb(configReader.ConnectionStrings[tenancyConnectionStringKey].ConnectionString);
+				var connStringToTenant = configReader.ConnectionStrings[tenancyConnectionStringKey];
+				var connstringAsString = connStringToTenant == null ? null : connStringToTenant.ConnectionString;
+				return TenantUnitOfWorkManager.CreateInstanceForWeb(connstringAsString);
 			})
 				.As<ITenantUnitOfWorkManager>()
 				.As<ICurrentTenantSession>()

@@ -325,7 +325,6 @@
     <Compile Include="Areas\Start\Controllers\UrlControllerTest.cs" />
     <Compile Include="Areas\Toggle\ToggleHandlerControllerTest.cs" />
     <Compile Include="Core\Authentication\DataProvider\BadgeProviderTest.cs" />
-    <Compile Include="Core\Authentication\Services\LogLogonAttemptTest.cs" />
     <Compile Include="Areas\Tenant\Core\TenantSsoAuthenticatorTest.cs" />
     <Compile Include="Core\Common\DataProvider\DefaultScenarioForStudentAvailabilityScheduleProviderTest.cs" />
     <Compile Include="Core\Common\DataProvider\FakeScheduleProvider.cs" />

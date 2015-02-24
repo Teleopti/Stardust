@@ -71,7 +71,7 @@ namespace Teleopti.Ccc.Web.Core.IoC
 			builder.RegisterModule<WebModule>();
 			builder.RegisterModule(new MyTimeAreaModule(_configuration));
 			builder.RegisterModule<SSOAreaModule>();
-			builder.RegisterModule(new StartAreaModule(_configuration));
+			builder.RegisterModule<StartAreaModule>();
 			builder.RegisterModule(new AnywhereAreaModule(_configuration));
 			
 			builder.RegisterModule<PerformanceToolAreaModule>();

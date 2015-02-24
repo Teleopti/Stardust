@@ -18,30 +18,16 @@ namespace Teleopti.Ccc.Web.Areas.Start.Core.IoC
 {
 	public class StartAreaModule : Module
 	{
-		private readonly IIocConfiguration _configuration;
-
-		public StartAreaModule(IIocConfiguration configuration)
-		{
-			_configuration = configuration;
-		}
-
 		protected override void Load(ContainerBuilder builder)
 		{
 			builder.RegisterType<WebLogOn>().As<IWebLogOn>();
 			builder.RegisterType<DataSourcesProvider>().As<IDataSourcesProvider>().SingleInstance();
-			if (_configuration.Toggle(Toggles.MultiTenancy_WebLogon_17461))
-			{
-				builder.RegisterType<TenantSsoAuthenticator>().As<ISsoAuthenticator>().SingleInstance();
-				builder.RegisterType<LogTenancyLogonAttempt>().As<ILogLogonAttempt>().SingleInstance();
-				builder.RegisterType<LoginAttemptModelFactoryForWeb>().As<ILoginAttemptModelFactory>();
-			}
-			else
-			{
-				builder.RegisterType<Authenticator>().As<ISsoAuthenticator>().SingleInstance();
-				builder.RegisterType<LogLogonAttempt>().As<ILogLogonAttempt>().SingleInstance();
-				builder.RegisterType<LoginAttemptModelFactoryForWeb_OLD_JustKeepUntilOldStuffIsGone>().As<ILoginAttemptModelFactory>();
-			}
 
+			builder.RegisterType<TenantSsoAuthenticator>().As<ISsoAuthenticator>().SingleInstance();
+			builder.RegisterType<LogTenancyLogonAttempt>().As<ILogLogonAttempt>().SingleInstance();
+			builder.RegisterType<LoginAttemptModelFactoryForWeb>().As<ILoginAttemptModelFactory>();
+
+			//TODO: tenant - Authenticator should be replaced later - doing it "wrong" currently
 			builder.RegisterType<Authenticator>().As<IIdentityLogon>();
 			builder.RegisterType<HttpRequestUserAgent>().As<IHttpRequestUserAgent>();
 			

@@ -1,27 +1,22 @@
 ﻿using Teleopti.Ccc.Domain.Repositories;
-using Teleopti.Ccc.Domain.Security.Authentication;
-using Teleopti.Ccc.Web.Areas.SSO.Core;
 using Teleopti.Ccc.Web.Areas.Start.Core.Authentication.DataProvider;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Web.Areas.Start.Core.Authentication.Services
 {
-	public class Authenticator : IIdentityLogon, ISsoAuthenticator
+	public class Authenticator : IIdentityLogon
 	{
 		private readonly IDataSourcesProvider _dataSourceProvider;
 		private readonly ITokenIdentityProvider _tokenIdentityProvider;
 		private readonly IRepositoryFactory _repositoryFactory;
-		private readonly IFindApplicationUser _findApplicationUser;
 
 		public Authenticator(IDataSourcesProvider dataSourceProvider,
 									ITokenIdentityProvider tokenIdentityProvider,
-									IRepositoryFactory repositoryFactory,
-									IFindApplicationUser findApplicationUser)
+									IRepositoryFactory repositoryFactory)
 		{
 			_dataSourceProvider = dataSourceProvider;
 			_tokenIdentityProvider = tokenIdentityProvider;
 			_repositoryFactory = repositoryFactory;
-			_findApplicationUser = findApplicationUser;
 		}
 
 		public AuthenticateResult LogonWindowsUser(string dataSourceName)
@@ -57,18 +52,6 @@ namespace Teleopti.Ccc.Web.Areas.Start.Core.Authentication.Services
 			}
 
 			return null;
-		}
-
-		public AuthenticateResult AuthenticateApplicationUser(string dataSourceName, string userName, string password)
-		{
-			var dataSource = _dataSourceProvider.RetrieveDataSourceByName(dataSourceName);
-
-			using (var uow = dataSource.Application.CreateAndOpenUnitOfWork())
-			{
-				var authResult = _findApplicationUser.CheckLogOn(uow, userName, password);
-				uow.PersistAll();
-				return new AuthenticateResult { DataSource = dataSource, Person = authResult.Person, Successful = authResult.Successful, HasMessage = authResult.HasMessage, Message = authResult.Message, PasswordExpired = authResult.PasswordExpired };
-			}
 		}
 	}
 }

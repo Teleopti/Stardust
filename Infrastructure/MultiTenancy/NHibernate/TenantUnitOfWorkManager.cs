@@ -11,6 +11,10 @@ namespace Teleopti.Ccc.Infrastructure.MultiTenancy.NHibernate
 	{
 		private ISessionFactory _sessionFactory;
 
+		private TenantUnitOfWorkManager()
+		{
+		}
+
 		public static TenantUnitOfWorkManager CreateInstanceForTest(string connectionString)
 		{
 			return createInstance(connectionString, "call");
@@ -23,6 +27,9 @@ namespace Teleopti.Ccc.Infrastructure.MultiTenancy.NHibernate
 
 		private static TenantUnitOfWorkManager createInstance(string connectionString, string sessionContext)
 		{
+			if(connectionString==null)
+				return new TenantUnitOfWorkManager();
+
 			var cfg = new Configuration()
 				.DataBaseIntegration(db =>
 				{
