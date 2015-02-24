@@ -1,13 +1,15 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Teleopti.Ccc.Domain.Collection;
+using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta
 {
 	public interface IAdherenceDetailsViewModelBuilder
 	{
-		IEnumerable<AdherenceDetailsPercentageModel> Build(Guid personId);
+		IEnumerable<AdherenceDetailViewModel> Build(Guid personId);
 	}
 
 	public class AdherenceDetailsViewModelBuilderViewModelBuilder : IAdherenceDetailsViewModelBuilder
@@ -16,67 +18,70 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta
 		private readonly IAdherenceDetailsReadModelReader _persister;
 		private readonly IUserCulture _culture;
 		private readonly IUserTimeZone _timeZone;
+		private readonly IPersonRepository _personRepository;
 
-		public AdherenceDetailsViewModelBuilderViewModelBuilder(INow now, IAdherenceDetailsReadModelReader persister, IUserCulture culture, IUserTimeZone timeZone)
+		public AdherenceDetailsViewModelBuilderViewModelBuilder(
+			INow now, 
+			IAdherenceDetailsReadModelReader persister, 
+			IUserCulture culture, 
+			IUserTimeZone timeZone,
+			IPersonRepository personRepository)
 		{
 			_now = now;
 			_persister = persister;
 			_culture = culture;
 			_timeZone = timeZone;
+			_personRepository = personRepository;
 		}
 
-		public IEnumerable<AdherenceDetailsPercentageModel> Build(Guid personId)
+		public IEnumerable<AdherenceDetailViewModel> Build(Guid personId)
 		{
-			var readModel = _persister.Read(personId, new DateOnly(_now.UtcDateTime()));
-			var result = new List<AdherenceDetailsPercentageModel>();
-			if (readModel == null) return result;
-			var detailModels = readModel.Model.Activities;
-			for (var i = 0; i < detailModels.Count(); i++)
-			{
-				var detail = detailModels.ElementAt(i);
-				result.Add(new AdherenceDetailsPercentageModel
+			var model = _persister.Read(personId, getDate(personId));
+			if (model == null) return new AdherenceDetailViewModel[] {};
+
+			var activities = from a in model.Model.Activities
+				select new AdherenceDetailViewModel
 				{
-					Name = detail.Name,
-					StartTime = formatToUserTimeZone(detail.StartTime),
-					ActualStartTime = formatToUserTimeZone(detail.ActualStartTime),
-					AdherencePercent =
-						(int) forActivity(readModel.Model, detail, isActivityEnded(i, detailModels.Count(), readModel.Model.ShiftEndTime.HasValue), readModel.Model.LastAdherence)
-								.ValueAsPercent()
-				});
-			}
-			if (readModel.Model.ShiftEndTime.HasValue)
-			{
-				result.Add(new AdherenceDetailsPercentageModel
+					Name = a.Name,
+					StartTime = formatToUserTimeZone(a.StartTime),
+					ActualStartTime = formatToUserTimeZone(a.ActualStartTime),
+					AdherencePercent = percent(model.Model, a)
+				};
+			if (model.Model.ShiftEndTime.HasValue)
+				activities = activities.Append(new AdherenceDetailViewModel
 				{
 					Name = UserTexts.Resources.End,
-					StartTime = formatToUserTimeZone(readModel.Model.ShiftEndTime),
-					ActualStartTime = formatToUserTimeZone(readModel.Model.ActualEndTime)
+					StartTime = formatToUserTimeZone(model.Model.ShiftEndTime),
+					ActualStartTime = formatToUserTimeZone(model.Model.ActualEndTime)
 				});
-			}
-			return result;
+			return activities.ToArray();
 		}
 
-		private Percent forActivity(AdherenceDetailsModel model, ActivityAdherence detail, bool activityEnded, bool isInAdherence)
+		private DateOnly getDate(Guid personId)
 		{
-			var secondsInAdherence = Convert.ToDouble(detail.TimeInAdherence.TotalSeconds);
-			var secondsOutOfAdherence = Convert.ToDouble(detail.TimeOutOfAdherence.TotalSeconds);
+			var person = _personRepository.Get(personId);
+			return person != null ? 
+				new DateOnly(TimeZoneInfo.ConvertTimeFromUtc(_now.UtcDateTime(), person.PermissionInformation.DefaultTimeZone())) : 
+				new DateOnly(_now.UtcDateTime());
+		}
+
+		private int percent(AdherenceDetailsModel model, ActivityAdherence activity)
+		{
+			var activityEnded = model.ShiftEndTime.HasValue || !model.Activities.Last().Equals(activity);
+			var secondsInAdherence = Convert.ToDouble(activity.TimeInAdherence.TotalSeconds);
+			var secondsOutOfAdherence = Convert.ToDouble(activity.TimeOutOfAdherence.TotalSeconds);
 			if (!activityEnded)
 			{
 				var lastTimestamp = model.LastUpdate ?? DateTime.MinValue;
 				var secondsFromLastUpdate = _now.UtcDateTime().Subtract(lastTimestamp).TotalSeconds;
-				if (isInAdherence)
+				if (model.LastAdherence)
 					secondsInAdherence += secondsFromLastUpdate;
 				else
 					secondsOutOfAdherence += secondsFromLastUpdate;
 			}
 			var total = secondsInAdherence + secondsOutOfAdherence;
 
-			return new Percent(secondsInAdherence / total);
-		}
-
-		private static bool isActivityEnded(int modelIndex, int totalActivites, bool hasShiftEnded)
-		{
-			return modelIndex < totalActivites - 1 || hasShiftEnded;
+			return (int) (secondsInAdherence/total*100);
 		}
 
 		private string formatToUserTimeZone(DateTime? timestamp)

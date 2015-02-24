@@ -195,7 +195,7 @@
     <Compile Include="ApplicationLayer\Commands\MoveActivityCommandHandler.cs" />
     <Compile Include="ApplicationLayer\Rta\ActivityEventPublisher.cs" />
     <Compile Include="ApplicationLayer\Rta\AdherenceAggregatorInfo.cs" />
-    <Compile Include="ApplicationLayer\Rta\AdherenceDetailsPercentageModel.cs" />
+    <Compile Include="ApplicationLayer\Rta\AdherenceDetailViewModel.cs" />
     <Compile Include="ApplicationLayer\Rta\AdherenceDetailsReadModel.cs" />
     <Compile Include="ApplicationLayer\Rta\AdherenceDetailsReadModelUpdater.cs" />
     <Compile Include="ApplicationLayer\Rta\AdherenceEventPublisher.cs" />

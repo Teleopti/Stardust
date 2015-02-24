@@ -19,7 +19,7 @@ namespace Teleopti.Ccc.TestCommon
 			_data = data;
 		}
 
-		public void Data(AdherenceDetailsReadModel data)
+		public void Has(AdherenceDetailsReadModel data)
 		{
 			_data = new[] {data};
 		}

@@ -15,7 +15,7 @@ namespace Teleopti.Ccc.Domain.Collection
 	/// </remarks>
 	public static class Extensions
 	{
-		private static readonly Random _random = new Random((int)DateTime.Now.TimeOfDay.TotalSeconds);
+		private static readonly Random _random = new Random((int) DateTime.Now.TimeOfDay.TotalSeconds);
 
 
 		/// <summary>
@@ -53,7 +53,7 @@ namespace Teleopti.Ccc.Domain.Collection
 		{
 			InParameter.ValueMustBeLargerThanZero("batchSize", batchSize);
 			var wrappedSource = new List<T>(source);
-			var count = (int)Math.Ceiling(wrappedSource.Count / (double)batchSize);
+			var count = (int) Math.Ceiling(wrappedSource.Count/(double) batchSize);
 			var partitions = new List<T>[count];
 
 			var k = 0;
@@ -104,7 +104,7 @@ namespace Teleopti.Ccc.Domain.Collection
 			return RandomIterator<T>(list, numberOfElements, onlyUnique);
 		}
 
-		static IEnumerable<T> RandomIterator<T>(IEnumerable<T> list, int numberOfElements, bool onlyUnique)
+		private static IEnumerable<T> RandomIterator<T>(IEnumerable<T> list, int numberOfElements, bool onlyUnique)
 		{
 			List<T> buffer = new List<T>(list);
 			numberOfElements = Math.Min(numberOfElements, buffer.Count);
@@ -153,11 +153,11 @@ namespace Teleopti.Ccc.Domain.Collection
 			IList<T> copyList = new List<T>();
 
 			//Check whether interface been inherited by ICloneableEntity
-			if (typeof(T).IsInterface && typeof(T).GetInterface("ICloneableEntity`1") != null)
+			if (typeof (T).IsInterface && typeof (T).GetInterface("ICloneableEntity`1") != null)
 			{
 				foreach (T listItem in originalList)
 				{
-					T copyItem = ((ICloneableEntity<T>)listItem).EntityClone();
+					T copyItem = ((ICloneableEntity<T>) listItem).EntityClone();
 					copyList.Add(copyItem);
 				}
 			}
@@ -174,7 +174,8 @@ namespace Teleopti.Ccc.Domain.Collection
 			return source == null || !source.Any();
 		}
 
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1004:GenericMethodsShouldProvideTypeParameter")]
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1004:GenericMethodsShouldProvideTypeParameter"
+			)]
 		public static IEnumerable<T> CopyEnumerable<T>(this IEnumerable source)
 		{
 			return source.Cast<T>().ToList();
@@ -266,6 +267,20 @@ namespace Teleopti.Ccc.Domain.Collection
 		public static T Second<T>(this IEnumerable<T> source)
 		{
 			return source.ElementAt(1);
+		}
+
+		public static IEnumerable<T> Prepend<T>(this IEnumerable<T> source, T item)
+		{
+			yield return item;
+			foreach (var a in source)
+				yield return a;
+		}
+
+		public static IEnumerable<T> Append<T>(this IEnumerable<T> source, T item)
+		{
+			foreach (var a in source)
+				yield return a;
+			yield return item;
 		}
 	}
 }

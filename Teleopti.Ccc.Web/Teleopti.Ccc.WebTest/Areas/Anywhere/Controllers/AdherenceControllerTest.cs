@@ -50,14 +50,14 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Controllers
 			var personId = Guid.NewGuid();
 			calculateAdherence.Expect(h => h.Build(personId)).Return(new[]
 			{
-				new AdherenceDetailsPercentageModel {AdherencePercent = 70}
+				new AdherenceDetailViewModel {AdherencePercent = 70}
 			});
 
 			var target = new AdherenceController(null, calculateAdherence);
 
 			var result = target.ForDetails(personId);
 
-			((IEnumerable<AdherenceDetailsPercentageModel>)result.Data).First().AdherencePercent.Should().Be.EqualTo(70);
+			((IEnumerable<AdherenceDetailViewModel>)result.Data).First().AdherencePercent.Should().Be.EqualTo(70);
 		}
 
 		[Test]
@@ -65,13 +65,13 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Controllers
 		{
 			var calculateAdherence = MockRepository.GenerateStub<IAdherenceDetailsViewModelBuilder>();
 			var personId = Guid.NewGuid();
-			calculateAdherence.Expect(h => h.Build(personId)).Return(new List<AdherenceDetailsPercentageModel>());
+			calculateAdherence.Expect(h => h.Build(personId)).Return(new List<AdherenceDetailViewModel>());
 
 			var target = new AdherenceController(null, calculateAdherence);
 
 			var result = target.ForDetails(personId);
 
-			((IEnumerable<AdherenceDetailsPercentageModel>) result.Data).Count().Should().Be(0);
+			((IEnumerable<AdherenceDetailViewModel>) result.Data).Count().Should().Be(0);
 		}
 
 		private static bool isFalsy(dynamic resultFromController)

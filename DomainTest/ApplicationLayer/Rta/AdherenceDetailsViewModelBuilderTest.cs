@@ -4,11 +4,16 @@ using Autofac;
 using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta;
+using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Domain.Helper;
+using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.TestCommon;
+using Teleopti.Ccc.TestCommon.FakeData;
+using Teleopti.Ccc.TestCommon.FakeRepositories;
 using Teleopti.Ccc.TestCommon.IoC;
+using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta
 {
@@ -22,6 +27,11 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta
 				.AsSelf()
 				.As<IAdherenceDetailsReadModelReader>()
 				.SingleInstance();
+			builder.RegisterType<FakePersonRepository>()
+				.AsSelf()
+				.As<IPersonRepository>()
+				.As<IRepository<IPerson>>()
+				.SingleInstance();
 		}
 
 		public FakeAdherenceDetailsReadModelReader Reader;
@@ -29,12 +39,13 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta
 		public MutableNow Now;
 		public FakeUserTimeZone TimeZone;
 		public FakeUserCulture Culture;
+		public FakePersonRepository PersonRepository;
 
 		[Test]
 		public void ShouldBuildViewModel()
 		{
 			var personId = Guid.NewGuid();
-			Reader.Data(new AdherenceDetailsReadModel
+			Reader.Has(new AdherenceDetailsReadModel
 			{
 				PersonId = personId
 			});
@@ -49,7 +60,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta
 		{
 			var personId = Guid.NewGuid();
 			Now.Is("2014-11-20 9:00");
-			Reader.Data(new AdherenceDetailsReadModel
+			Reader.Has(new AdherenceDetailsReadModel
 			{
 				PersonId = personId,
 				Date = "2014-11-20".Utc(),
@@ -78,7 +89,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta
 		{
 			var personId = Guid.NewGuid();
 			Now.Is("2014-11-20 9:00");
-			Reader.Data(new AdherenceDetailsReadModel
+			Reader.Has(new AdherenceDetailsReadModel
 			{
 				PersonId = personId,
 				Date = "2014-11-20".Utc(),
@@ -107,7 +118,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta
 		{
 			var personId = Guid.NewGuid();
 			Now.Is("2014-11-20 9:00");
-			Reader.Data(new AdherenceDetailsReadModel
+			Reader.Has(new AdherenceDetailsReadModel
 			{
 				PersonId = personId,
 				Date = "2014-11-20".Utc(),
@@ -135,7 +146,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta
 		{
 			var personId = Guid.NewGuid();
 			Now.Is("2014-11-20 9:00");
-			Reader.Data(new AdherenceDetailsReadModel
+			Reader.Has(new AdherenceDetailsReadModel
 			{
 				PersonId = personId,
 				Date = "2014-11-20".Utc(),
@@ -179,7 +190,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta
 		{
 			var personId = Guid.NewGuid();
 			Now.Is("2014-11-20 9:00");
-			Reader.Data(new AdherenceDetailsReadModel
+			Reader.Has(new AdherenceDetailsReadModel
 			{
 				PersonId = personId,
 				Date = "2014-11-20".Utc(),
@@ -207,7 +218,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta
 		{
 			var personId = Guid.NewGuid();
 			Now.Is("2014-11-20 9:00");
-			Reader.Data(new AdherenceDetailsReadModel
+			Reader.Has(new AdherenceDetailsReadModel
 			{
 				PersonId = personId,
 				Date = "2014-11-20".Utc(),
@@ -237,7 +248,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta
 		{
 			var personId = Guid.NewGuid();
 			Now.Is("2014-11-20 9:00");
-			Reader.Data(new AdherenceDetailsReadModel
+			Reader.Has(new AdherenceDetailsReadModel
 			{
 				PersonId = personId,
 				Date = "2014-11-20".Utc(),
@@ -267,7 +278,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta
 		{
 			var personId = Guid.NewGuid();
 			Now.Is("2014-11-20 10:00");
-			Reader.Data(new AdherenceDetailsReadModel
+			Reader.Has(new AdherenceDetailsReadModel
 			{
 				PersonId = personId,
 				Date = "2014-11-20".Utc(),
@@ -298,7 +309,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta
 		{
 			var personId = Guid.NewGuid();
 			Now.Is("2014-11-20 10:00");
-			Reader.Data(new AdherenceDetailsReadModel
+			Reader.Has(new AdherenceDetailsReadModel
 			{
 				PersonId = personId,
 				Date = "2014-11-20".Utc(),
@@ -334,7 +345,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta
 		{
 			var personId = Guid.NewGuid();
 			Now.Is("2014-11-20 9:00");
-			Reader.Data(new AdherenceDetailsReadModel
+			Reader.Has(new AdherenceDetailsReadModel
 			{
 				PersonId = personId,
 				Date = "2014-11-20".Utc(),
@@ -361,7 +372,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta
 			var personId = Guid.NewGuid();
 			Now.Is("2014-11-20 9:00");
 			Culture.IsCatalan();
-			Reader.Data(new AdherenceDetailsReadModel
+			Reader.Has(new AdherenceDetailsReadModel
 			{
 				PersonId = personId,
 				Date = "2014-11-20".Utc(),
@@ -390,7 +401,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta
 			Now.Is("2014-11-20 9:00");
 			Culture.IsCatalan();
 			TimeZone.IsHawaii();
-			Reader.Data(new AdherenceDetailsReadModel
+			Reader.Has(new AdherenceDetailsReadModel
 			{
 				PersonId = personId,
 				Date = "2014-11-20".Utc(),
@@ -424,7 +435,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta
 			var personId = Guid.NewGuid();
 			TimeZone.IsHawaii();
 			Now.Is("2014-11-20 9:00");
-			Reader.Data(new AdherenceDetailsReadModel
+			Reader.Has(new AdherenceDetailsReadModel
 			{
 				PersonId = personId,
 				Date = "2014-11-20".Utc(),
@@ -447,6 +458,31 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta
 			result.First().ActualStartTime.Should().Be("2014-11-20 9:00".InHawaii().AsShortTime(Culture));
 		}
 
+		[Test]
+		public void ShouldBuildForAgentsDate()
+		{
+			var person = new Person();
+			person.SetId(Guid.NewGuid());
+			person.PermissionInformation.SetDefaultTimeZone(TimeZoneInfoFactory.HawaiiTimeZoneInfo());
+			PersonRepository.Has(person);
+			Now.Is("2015-02-24 09:00");
+			Reader.Has(new AdherenceDetailsReadModel
+			{
+				PersonId = person.Id.Value,
+				Date = "2015-02-23".Date(),
+				Model = new AdherenceDetailsModel
+				{
+					Activities = new[]
+					{
+						new ActivityAdherence {}
+					}
+				}
+			});
+
+			var result = Target.Build(person.Id.Value);
+
+			result.Should().Have.Count.GreaterThan(0);
+		}
 
 	}
 }

@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
+using NHibernate.Criterion;
 using Teleopti.Ccc.Domain.Auditing;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.TestCommon.FakeData;
@@ -9,34 +11,38 @@ using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.TestCommon.FakeRepositories
 {
-	// feel free to continue implementing as see fit
-	// im all for keeping it stupid (in the same manner as an .IgnoreArguments()) until smartness is required
 	public class FakePersonRepository : IPersonRepository, IEnumerable<IPerson>
 	{
-		private readonly IPerson _person;
+		private readonly IList<IPerson> _persons = new List<IPerson>();
 
 		public FakePersonRepository()
 		{
-			_person = PersonFactory.CreatePersonWithId();
+			Has(PersonFactory.CreatePersonWithId());
 		}
 
 		public FakePersonRepository(IPerson person)
 		{
-			_person = person;
+			Has(person);
 		}
 
-		public void Add(IPerson entity)
+		public void Has(IPerson person)
 		{
+			_persons.Add(person);
 		}
 
-		public void Remove(IPerson entity)
+		public void Add(IPerson person)
+		{
+			throw new NotImplementedException();
+		}
+
+		public void Remove(IPerson person)
 		{
 			throw new NotImplementedException();
 		}
 
 		public IPerson Get(Guid id)
 		{
-			throw new NotImplementedException();
+			return _persons.SingleOrDefault(x => x.Id.Equals(id));
 		}
 
 		public IList<IPerson> LoadAll()
@@ -46,7 +52,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 
 		public IPerson Load(Guid id)
 		{
-			return _person;
+			return _persons.SingleOrDefault(x => x.Id.Equals(id));
 		}
 
 		public long CountAllEntities()
@@ -138,7 +144,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 
 		public ICollection<IPerson> FindPeople(IEnumerable<Guid> peopleId)
 		{
-			return new[] {_person};
+			return _persons.Where(x => peopleId.Any(id => id.Equals(x.Id.Value))).ToArray();
 		}
 
 		public ICollection<IPerson> FindPeople(IEnumerable<IPerson> people)
@@ -163,12 +169,12 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 
 		public IEnumerator<IPerson> GetEnumerator()
 		{
-			return new List<IPerson> {_person}.GetEnumerator();
+			return _persons.GetEnumerator();
 		}
 
 		IEnumerator IEnumerable.GetEnumerator()
 		{
-			return new List<IPerson> { _person }.GetEnumerator();
+			return _persons.GetEnumerator();
 		}
 
 		public IPerson LoadAggregate(Guid id)
