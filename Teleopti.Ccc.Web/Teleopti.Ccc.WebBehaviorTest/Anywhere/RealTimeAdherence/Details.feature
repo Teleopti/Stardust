@@ -45,8 +45,8 @@ Scenario: Should be able to see adherence details for one agent within working h
 	And 'Pierre Baldi' sets his phone state to 'Pause' on datasource 6
 	And the time is '2014-10-06 10:00:00'
 	And I view manage adherence view for agent 'Pierre Baldi'
-	Then I should see daily adherence for 'Pierre Baldi' is 25%
-	And I should see 'Phone' with adherence of 25%
+	Then I should see 'Phone' with adherence of 25%
+	And I should see daily adherence for 'Pierre Baldi' is 25%
 
 @OnlyRunIfEnabled('RTA_SeeAdherenceDetailsForOneAgent_31285')
 Scenario: Should be able to see adherence details for one agent outside of working hour
@@ -90,5 +90,5 @@ Scenario: Should be able to see adherence details for one agent outside of worki
 	And 'Pierre Baldi' sets his phone state to 'Pause' on datasource 6
 	And the time is '2014-10-06 17:00:00'
 	And I view manage adherence view for agent 'Pierre Baldi'
-	Then I should see daily adherence for 'Pierre Baldi' is 25%
-	And I should see 'Phone' with adherence of 25%
+	Then I should see 'Phone' with adherence of 25%
+	And I should see daily adherence for 'Pierre Baldi' is 25%

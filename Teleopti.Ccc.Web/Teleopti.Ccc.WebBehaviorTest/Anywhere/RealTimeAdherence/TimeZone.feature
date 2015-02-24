@@ -3,6 +3,7 @@
 	As a real time analyst
 	I want to see adherence things
 	
+@ignore
 @OnlyRunIfEnabled('RTA_CalculatePercentageInAgentTimezone_31236')
 Scenario: Should see adherence percentage when call center is in Hawaii
 	Given I am located in Hawaii
@@ -50,6 +51,7 @@ Scenario: Should see adherence percentage when call center is in Hawaii
 	And I click on an agent state
 	Then I should see historical adherence for 'Pierre Baldi' with adherence of 50%
 
+@ignore
 @OnlyRunIfEnabled('RTA_CalculatePercentageInAgentTimezone_31236')
 Scenario: Should see adherence details when call center is in Hawaii
 	Given I am located in Hawaii
@@ -94,5 +96,5 @@ Scenario: Should see adherence details when call center is in Hawaii
 	And 'Pierre Baldi' sets his phone state to 'Pause' on datasource 6
 	And the utc time is '2014-10-08 05:00:00'
 	And I view manage adherence view for agent 'Pierre Baldi'
-	Then I should see daily adherence for 'Pierre Baldi' is 50%
-	And I should see 'Phone' with adherence of 50%
+	Then I should see 'Phone' with adherence of 50%
+	And I should see daily adherence for 'Pierre Baldi' is 50%
