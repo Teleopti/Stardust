@@ -394,7 +394,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core.Navigation
 
 		public static void GotoQuickForecaster()
 		{
-			GoToPage("areas/wfm");
+			GoToPage("wfm");
 		}
 
 		public static void GotoMessageTool(IEnumerable<Guid> ids)

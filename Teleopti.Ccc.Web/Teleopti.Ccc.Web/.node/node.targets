@@ -30,7 +30,7 @@
 
 		<!-- kss install command -->
 		<NpmInstallKssCmd>"$(NpmCmd)" install -g kss -save-dev</NpmInstallKssCmd>
-		<KssGenerateStyleGuide>$(NodeDir)kss-node $(MSBuildProjectDirectory)\Areas\WFM\css $(MSBuildProjectDirectory)\Areas\WFM\styleguide $(MSBuildProjectDirectory)\Areas\WFM\css\styleguide.md --template $(MSBuildProjectDirectory)\Areas\WFM\wfm-template</KssGenerateStyleGuide>
+		<KssGenerateStyleGuide>$(NodeDir)kss-node $(MSBuildProjectDirectory)\WFM\css $(MSBuildProjectDirectory)\WFM\styleguide $(MSBuildProjectDirectory)\WFM\css\styleguide.md --template $(MSBuildProjectDirectory)\WFM\wfm-template</KssGenerateStyleGuide>
 
 		<!-- grunt-cli install command -->
 		<NpmInstallGruntCliCmd>"$(NpmCmd)" install -g grunt-cli -save-dev</NpmInstallGruntCliCmd>
@@ -38,28 +38,28 @@
 
 	<!-- Runs NPM command -->
 	<Target Name="RestoreNodePackages">
-		<Message Text="Restore Node Packages Command: $(NpmInstallCmd) /w WorkingDirectory: $(MSBuildProjectDirectory)\Areas\WFM" Importance="high" />
-		<Exec Command="$(NpmInstallCmd)" ContinueOnError="false" WorkingDirectory="$(MSBuildProjectDirectory)\Areas\WFM" />
-		<Message Text="Install Flatten Node Packages Command: $(NpmInstallFlattenPackages) /w WorkingDirectory: $(MSBuildProjectDirectory)\Areas\WFM" Importance="high" />
+		<Message Text="Restore Node Packages Command: $(NpmInstallCmd) /w WorkingDirectory: $(MSBuildProjectDirectory)\WFM" Importance="high" />
+		<Exec Command="$(NpmInstallCmd)" ContinueOnError="false" WorkingDirectory="$(MSBuildProjectDirectory)\WFM" />
+		<Message Text="Install Flatten Node Packages Command: $(NpmInstallFlattenPackages) /w WorkingDirectory: $(MSBuildProjectDirectory)\WFM" Importance="high" />
 		<Exec Command="$(NpmInstallFlattenPackages)" ContinueOnError="false" WorkingDirectory="$(NodeDir)" />
-		<Message Text="Flatten Node Packages Command: $(NpmFlattenCmd) /w WorkingDirectory: $(MSBuildProjectDirectory)\Areas\WFM" Importance="high" />
-		<Exec Command="$(NpmFlattenCmd)" ContinueOnError="false" WorkingDirectory="$(MSBuildProjectDirectory)\Areas\WFM" />
+		<Message Text="Flatten Node Packages Command: $(NpmFlattenCmd) /w WorkingDirectory: $(MSBuildProjectDirectory)\WFM" Importance="high" />
+		<Exec Command="$(NpmFlattenCmd)" ContinueOnError="false" WorkingDirectory="$(MSBuildProjectDirectory)\WFM" />
 		<Message Text="HACK! Removing directory to get below 260 characters" Importance="high" />
-		<Exec Command="rmdir /S /Q $(MSBuildProjectDirectory)\Areas\WFM\node_modules\node-sass\test" />
+		<Exec Command="rmdir /S /Q $(MSBuildProjectDirectory)\WFM\node_modules\node-sass\test" />
 	</Target>
 
 	<!-- Run node-kss to build the style guide -->
 	<ItemGroup>
-		<CssFiles Include="$(MSBuildProjectDirectory)\Areas\WFM\css\**\*" Exclude="main.*" />
-		<TemplateFiles Include="$(MSBuildProjectDirectory)\Areas\WFM\wfm-template\**\*" />
-		<StyleguideFiles Include="$(MSBuildProjectDirectory)\Areas\WFM\styleguide;$(MSBuildProjectDirectory)\Areas\WFM\styleguide\**\*" />
-		<MainCssFiles Include="$(MSBuildProjectDirectory)\Areas\WFM\css\**\main.*" />
+		<CssFiles Include="$(MSBuildProjectDirectory)\WFM\css\**\*" Exclude="main.*" />
+		<TemplateFiles Include="$(MSBuildProjectDirectory)\WFM\wfm-template\**\*" />
+		<StyleguideFiles Include="$(MSBuildProjectDirectory)\WFM\styleguide;$(MSBuildProjectDirectory)\Areas\WFM\styleguide\**\*" />
+		<MainCssFiles Include="$(MSBuildProjectDirectory)\WFM\css\**\main.*" />
 	</ItemGroup>
 	<Target Name="BuildStyleGuide" Inputs="@(CssFiles);@(TemplateFiles);@(MainCssFiles)" Outputs="@(StyleguideFiles)">
 		<Message Text="Restore Node Packages Command: $(NpmInstallKssCmd) /w WorkingDirectory: $(NodeDir)" Importance="high" />
 		<Exec Command="$(NpmInstallKssCmd)" ContinueOnError="false" WorkingDirectory="$(NodeDir)" />
-		<Message Text="Build Style Guide Command: $(KssGenerateStyleGuide) /w WorkingDirectory: $(MSBuildProjectDirectory)\Areas\WFM" Importance="high" />
-		<Exec Command="$(KssGenerateStyleGuide)" ContinueOnError="false" WorkingDirectory="$(MSBuildProjectDirectory)\Areas\WFM" />
+		<Message Text="Build Style Guide Command: $(KssGenerateStyleGuide) /w WorkingDirectory: $(MSBuildProjectDirectory)\WFM" Importance="high" />
+		<Exec Command="$(KssGenerateStyleGuide)" ContinueOnError="false" WorkingDirectory="$(MSBuildProjectDirectory)\WFM" />
 	</Target>
 	
 	<!-- Install protractor -->
@@ -70,15 +70,15 @@
 
 	<!-- Executes Build -->
 	<ItemGroup>
-		<OriginalJsFiles Include="$(MSBuildProjectDirectory)\Areas\WFM\js\**\*.js" />
-		<SassFiles Include="$(MSBuildProjectDirectory)\Areas\WFM\css\**\*.scss" />
-		<DistCssFiles Include="$(MSBuildProjectDirectory)\Areas\WFM\css\main.css" />
-		<DistJsFiles Include="$(MSBuildProjectDirectory)\Areas\WFM\dist;$(MSBuildProjectDirectory)\Areas\WFM\dist\**\*" />
+		<OriginalJsFiles Include="$(MSBuildProjectDirectory)\WFM\js\**\*.js" />
+		<SassFiles Include="$(MSBuildProjectDirectory)\WFM\css\**\*.scss" />
+		<DistCssFiles Include="$(MSBuildProjectDirectory)\WFM\css\main.css" />
+		<DistJsFiles Include="$(MSBuildProjectDirectory)\WFM\dist;$(MSBuildProjectDirectory)\WFM\dist\**\*" />
 	</ItemGroup>
 	<Target Name="RunGruntBuild" Inputs="@(OriginalJsFiles);@(SassFiles)" Outputs="@(DistJsFiles);@(DistCssFiles)">
 		<Message Text="Restore Node Packages Command: $(NpmInstallGruntCliCmd) /w WorkingDirectory: $(NodeDir)" Importance="high" />
 		<Exec Command="$(NpmInstallGruntCliCmd)" ContinueOnError="false" WorkingDirectory="$(NodeDir)" />
-		<Message Text="Executing Node.JS Builds: $(GruntBuild) /w WorkingDirectory: $(MSBuildProjectDirectory)\Areas\WFM" Importance="high" />
-		<Exec ContinueOnError="false" WorkingDirectory="$(MSBuildProjectDirectory)\Areas\WFM" Command="$(GruntBuild)" />
+		<Message Text="Executing Node.JS Builds: $(GruntBuild) /w WorkingDirectory: $(MSBuildProjectDirectory)\WFM" Importance="high" />
+		<Exec ContinueOnError="false" WorkingDirectory="$(MSBuildProjectDirectory)\WFM" Command="$(GruntBuild)" />
 	</Target>
 </Project>

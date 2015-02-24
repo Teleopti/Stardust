@@ -91,4 +91,4 @@ Cube/build/*Xmla*
 */dist/main.min.js.map
 */css/main.css
 */npm-shrinkwrap.json
-Teleopti.Ccc.Web/Teleopti.Ccc.Web/Areas/WFM/styleguide
+*/WFM/styleguide
