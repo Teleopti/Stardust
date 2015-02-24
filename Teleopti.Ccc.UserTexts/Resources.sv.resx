@@ -12119,4 +12119,16 @@ Minska komplexiteten för att kunna använda dessa skift.</value>
     <value>Visa Word-rapport</value>
     <comment>on report parameter selection page</comment>
   </data>
+  <data name="RuleWithRatioConvertor" xml:space="preserve">
+    <value>Använd konvertering</value>
+  </data>
+  <data name="AnyLocationShouldBeSelected" xml:space="preserve">
+    <value>En plats måste väljas</value>
+  </data>
+  <data name="AnyTeamShouldBeSelected" xml:space="preserve">
+    <value>Ett team måste väljas</value>
+  </data>
+  <data name="LockBulletinBoardTrading" xml:space="preserve">
+    <value>Lås skiftbyten via anslagstavlan</value>
+  </data>
 </root>

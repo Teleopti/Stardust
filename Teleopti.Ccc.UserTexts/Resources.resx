@@ -4991,8 +4991,8 @@ Standard</value>
     <comment>Admin Status</comment>
   </data>
   <data name="NodeTextCantBeNull" xml:space="preserve">
-    <value>Node text cant not be null..!</value>
-    <comment>Setting pages : Tree node text cant be null.</comment>
+    <value>Node text cannot be null..!</value>
+    <comment>Setting pages: Tree node text cannot be null.</comment>
   </data>
   <data name="NodeTextCantBeNulls" xml:space="preserve">
     <value>Site / Team name can not be null..!</value>
@@ -5566,8 +5566,8 @@ Availability</value>
     <comment>used in configuration alarmtype </comment>
   </data>
   <data name="CancelingLoadAndCloseProgram" xml:space="preserve">
-    <value>Canceling load and closing application...</value>
-    <comment>Canceling load and closing application...</comment>
+    <value>Cancelling load and closing application...</value>
+    <comment>Cancelling load and closing application...</comment>
   </data>
   <data name="IsPaidTime" xml:space="preserve">
     <value>Is Paid time</value>
@@ -6820,7 +6820,7 @@ Updated on: {1}</value>
     <comment>Select rule sets</comment>
   </data>
   <data name="WorkTimeLimitation" xml:space="preserve">
-    <value>Work time lmitation</value>
+    <value>Work time limitation</value>
     <comment>Agent info</comment>
   </data>
   <data name="NoScenario" xml:space="preserve">
@@ -7967,8 +7967,8 @@ Period</value>
     <comment>Unknown</comment>
   </data>
   <data name="PeriodInLegalState" xml:space="preserve">
-    <value>Period  in legal state</value>
-    <comment>Period  in legal state</comment>
+    <value>Period in legal state</value>
+    <comment>Period in legal state</comment>
   </data>
   <data name="WeekInLegalState" xml:space="preserve">
     <value>Week in legal state</value>
@@ -12381,7 +12381,7 @@ Reduce the complexity to use these shifts.</value>
     <comment>The filtered list is the result that the user constructed using the advance filter</comment>
   </data>
   <data name="FilterMultiplePerson" xml:space="preserve">
-    <value>Filter Multiple Person</value>
+    <value>Filter Multiple Persons</value>
     <comment>Used in advance filter</comment>
   </data>
   <data name="EnterPropertyValuesForShiftCategories" xml:space="preserve">
