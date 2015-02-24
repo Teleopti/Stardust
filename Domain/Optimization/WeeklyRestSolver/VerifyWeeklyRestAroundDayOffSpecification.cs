@@ -5,7 +5,7 @@ namespace Teleopti.Ccc.Domain.Optimization.WeeklyRestSolver
 {
     public interface IVerifyWeeklyRestAroundDayOffSpecification
     {
-        bool IsSatisfy(IList<DateOnly> dayOffList, IScheduleRange currentSchedules);
+		bool IsSatisfy(IList<DateOnly> dayOffList, IScheduleRange currentSchedules);
     }
 
     public class VerifyWeeklyRestAroundDayOffSpecification : IVerifyWeeklyRestAroundDayOffSpecification
