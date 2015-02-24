@@ -4,7 +4,7 @@ using Teleopti.Ccc.Infrastructure.MultiTenancy;
 
 namespace Teleopti.Ccc.IocCommon.Configuration
 {
-	internal class TenantClientModule : Module
+	public class TenantClientModule : Module
 	{
 		private readonly IIocConfiguration _configuration;
 

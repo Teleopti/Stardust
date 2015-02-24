@@ -1,5 +1,4 @@
-﻿using System.Linq;
-using Autofac.Integration.Wcf;
+﻿using Autofac.Integration.Wcf;
 using Teleopti.Ccc.Domain.Security.Authentication;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.Sdk.Common.WcfExtensions;

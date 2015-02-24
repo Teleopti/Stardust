@@ -12,22 +12,22 @@ namespace Teleopti.Ccc.Sdk.Common.WcfExtensions
         private readonly static ILog Logger = LogManager.GetLogger(typeof (LicenseCache));
         const string key = "License";
 
-        public void Add(LicenseVerificationResultDto licenseVerificationResultDto)
+		  public void Add(LicenseVerificationResultDto licenseVerificationResultDto, string tenant)
         {
             Logger.Debug("Adding new license to cache.");
-            _cache.Add(key, licenseVerificationResultDto, null, DateTime.Now.AddMinutes(60), Cache.NoSlidingExpiration, CacheItemPriority.Normal, null);
+            _cache.Add(key+tenant, licenseVerificationResultDto, null, DateTime.Now.AddMinutes(60), Cache.NoSlidingExpiration, CacheItemPriority.Normal, null);
         }
 
-        public LicenseVerificationResultDto Get()
+		  public LicenseVerificationResultDto Get(string tenant)
         {
             Logger.Debug("Fetching license from cache.");
-            return (LicenseVerificationResultDto)_cache[key];
+            return (LicenseVerificationResultDto)_cache[key+tenant];
         }
     }
 
     public interface ILicenseCache
     {
-        void Add(LicenseVerificationResultDto licenseVerificationResultDto);
-        LicenseVerificationResultDto Get();
+        void Add(LicenseVerificationResultDto licenseVerificationResultDto, string tenant);
+        LicenseVerificationResultDto Get( string tenant);
     }
 }

@@ -487,7 +487,6 @@
     <Compile Include="Main\LogonInitializeStateHolder.cs" />
     <Compile Include="Main\LogonLicenseChecker.cs" />
     <Compile Include="Main\LogonMatrix.cs" />
-    <Compile Include="Main\LogonModel.cs" />
     <Compile Include="Main\MultiTenancyLogonPresenter.cs" />
     <Compile Include="Main\LogonPresenter.cs" />
     <Compile Include="Main\ServerEndpointSelector.cs" />

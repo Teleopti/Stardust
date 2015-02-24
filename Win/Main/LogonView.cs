@@ -5,6 +5,7 @@ using System.Deployment.Application;
 using System.Globalization;
 using System.Windows.Forms;
 using Syncfusion.Windows.Forms;
+using Teleopti.Ccc.Domain.Security.Authentication;
 using Teleopti.Ccc.UserTexts;
 using Teleopti.Ccc.Win.Common;
 using Teleopti.Ccc.Win.Main.LogonScreens;

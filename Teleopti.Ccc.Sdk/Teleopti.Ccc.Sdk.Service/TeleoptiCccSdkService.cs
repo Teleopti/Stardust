@@ -55,10 +55,10 @@ namespace Teleopti.Ccc.Sdk.WcfService
         private readonly ILifetimeScope _lifetimeScope;
         private static readonly object PayrollExportLock = new object();
 		private static readonly ILog Logger = LogManager.GetLogger(typeof (TeleoptiCccSdkService));
-        private readonly AuthenticationFactory _authenticationFactory;
+		private readonly IAuthenticationFactory _authenticationFactory;
         private readonly IPayrollResultFactory _payrollResultFactory;
 
-        public TeleoptiCccSdkService(AuthenticationFactory authenticationFactory,
+        public TeleoptiCccSdkService(IAuthenticationFactory authenticationFactory,
                                         IPayrollResultFactory payrollResultFactory,
             IFactoryProvider factoryProvider,
             ILifetimeScope lifetimeScope)
@@ -214,7 +214,12 @@ namespace Teleopti.Ccc.Sdk.WcfService
 			return _authenticationFactory.LogOnWindows(dataSource);
 		}
 
-		/// <summary>
+	    public AuthenticationResultDto LogOnAsWindowsUser()
+	    {
+		    return _authenticationFactory.LogOnWindows(null);
+	    }
+
+	    /// <summary>
 		/// Log on application.
 		/// </summary>
 		/// <param name="userName">Name of the user.</param>
@@ -231,7 +236,12 @@ namespace Teleopti.Ccc.Sdk.WcfService
 			return _authenticationFactory.LogOnApplication(userName, password, dataSource);
 		}
 
-		/// <summary>
+	    public AuthenticationResultDto LogOnAsApplicationUser(string userName, string password)
+	    {
+		    return _authenticationFactory.LogOnApplication(userName, password, null);
+	    }
+
+	    /// <summary>
 		/// Transfers the session.
 		/// </summary>
 		/// <param name="sessionDataDto">The session data dto.</param>
@@ -264,7 +274,8 @@ namespace Teleopti.Ccc.Sdk.WcfService
 		public LicenseVerificationResultDto VerifyLicense()
 		{
 			//wrong - if multidb...
-			return _factoryProvider.CreateLicenseFactory().VerifyLicense(UnitOfWorkFactory.Current);
+			
+			return _factoryProvider.CreateLicenseFactory().VerifyLicense(UnitOfWorkFactory.Current, "");
 		}
 
 		/// <summary>
@@ -380,8 +391,9 @@ namespace Teleopti.Ccc.Sdk.WcfService
 		/// </returns>
 		public bool IsAuthenticated()
 		{
+			//also wrong if multidb
 			return (StateHolderReader.Instance.StateReader.IsLoggedIn
-                && new LicenseCache().Get() != null);
+                && new LicenseCache().Get("") != null);
 		}
 
 		#endregion

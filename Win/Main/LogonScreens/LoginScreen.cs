@@ -1,4 +1,5 @@
 using System.Windows.Forms;
+using Teleopti.Ccc.Domain.Security.Authentication;
 using Teleopti.Ccc.WinCode.Main;
 
 namespace Teleopti.Ccc.Win.Main.LogonScreens

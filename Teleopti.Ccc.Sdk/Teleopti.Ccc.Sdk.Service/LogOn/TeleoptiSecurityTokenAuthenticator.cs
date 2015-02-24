@@ -41,7 +41,7 @@ namespace Teleopti.Ccc.Sdk.WcfService.LogOn
         {
             var userNameToken = token as CustomUserNameSecurityToken;
 
-            if (IsIncompleteToken(userNameToken))
+            if (isIncompleteToken(userNameToken))
             {
                 return new ReadOnlyCollection<IAuthorizationPolicy>(new List<IAuthorizationPolicy>());
             }
@@ -52,7 +52,7 @@ namespace Teleopti.Ccc.Sdk.WcfService.LogOn
                 throw new FaultException(string.Format(CultureInfo.InvariantCulture, "The datasource {0} cannot be found.", userNameToken.DataSource));
             }
 
-            _licenseFromToken.SetLicense(_applicationDataSourceFromToken.DataSourceContainer);
+				_licenseFromToken.SetLicense(_applicationDataSourceFromToken.DataSourceContainer, userNameToken.DataSource);
 
             _applicationUserFromToken.SetPersonFromToken(userNameToken,_applicationDataSourceFromToken.DataSourceContainer);
 
@@ -62,15 +62,16 @@ namespace Teleopti.Ccc.Sdk.WcfService.LogOn
             }
 
             // Create just one Claim instance for the username token - the name of the user.
-            DefaultClaimSet userNameClaimSet = new DefaultClaimSet(
-                ClaimSet.System,
-                new Claim(ClaimTypes.Name, userNameToken.UserName, Rights.PossessProperty));
-            List<IAuthorizationPolicy> policies = new List<IAuthorizationPolicy>(1);
-            policies.Add(new TeleoptiPrincipalAuthorizationPolicy(userNameClaimSet, _applicationUserFromToken.PersonContainer));
-            return policies.AsReadOnly();
+	        var userNameClaimSet = new DefaultClaimSet(ClaimSet.System,
+		        new Claim(ClaimTypes.Name, userNameToken.UserName, Rights.PossessProperty));
+            var policies = new List<IAuthorizationPolicy>(1)
+            {
+	            new TeleoptiPrincipalAuthorizationPolicy(userNameClaimSet, _applicationUserFromToken.PersonContainer)
+            };
+	        return policies.AsReadOnly();
         }
 
-        private static bool IsIncompleteToken(CustomUserNameSecurityToken userNameToken)
+        private static bool isIncompleteToken(CustomUserNameSecurityToken userNameToken)
         {
             return userNameToken == null ||
                    string.IsNullOrEmpty(userNameToken.DataSource) ||

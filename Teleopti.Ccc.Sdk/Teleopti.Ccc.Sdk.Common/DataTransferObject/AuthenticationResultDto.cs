@@ -50,5 +50,12 @@ namespace Teleopti.Ccc.Sdk.Common.DataTransferObject
         /// </summary>
         [DataMember]
         public ICollection<BusinessUnitDto> BusinessUnitCollection { get; private set; }
+
+		  /// <summary>
+		  /// The tenant.
+		  /// </summary>
+		  /// <remarks>The tenant should be provided in the header in further calls to the sdk</remarks>
+		  [DataMember]
+		  public string Tenant { get; set; }
     }
 }

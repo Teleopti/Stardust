@@ -25,9 +25,9 @@ namespace Teleopti.Ccc.Sdk.WcfService.Factory
         /// Created by: Muhamad Risath
         /// Created date: 12/9/2008
         /// </remarks>
-        public LicenseVerificationResultDto VerifyLicense(IUnitOfWorkFactory unitOfWorkFactory)
+        public LicenseVerificationResultDto VerifyLicense(IUnitOfWorkFactory unitOfWorkFactory, string tenant)
         {
-            _licenseVerificationResultDto = _licenseCache.Get();
+			  _licenseVerificationResultDto = _licenseCache.Get(tenant);
             if (_licenseVerificationResultDto == null)
             {
                 _licenseVerificationResultDto = new LicenseVerificationResultDto(false);
@@ -42,7 +42,7 @@ namespace Teleopti.Ccc.Sdk.WcfService.Factory
                         DefinedLicenseDataFactory.GetLicenseActivator(unitOfWorkFactory.Name).CustomerName;
                 }
 
-                _licenseCache.Add(_licenseVerificationResultDto);
+					 _licenseCache.Add(_licenseVerificationResultDto, tenant);
             }
             return _licenseVerificationResultDto;
         }

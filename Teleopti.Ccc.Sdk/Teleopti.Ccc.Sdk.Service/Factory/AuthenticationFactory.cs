@@ -15,7 +15,7 @@ namespace Teleopti.Ccc.Sdk.WcfService.Factory
     /// <summary>
     /// Later on we can probably load this using AutoFac instead and get rid of some of the code. /Robin
     /// </summary>
-    public class AuthenticationFactory
+	public class AuthenticationFactory : IAuthenticationFactory
     {
         private readonly IEnumerable<IDataSourceProvider> _dataSourceProviders;
         private readonly IAssembler<AuthenticationResult, AuthenticationResultDto> _authenticationResultAssembler;
@@ -33,10 +33,10 @@ namespace Teleopti.Ccc.Sdk.WcfService.Factory
         public void SetBusinessUnit(BusinessUnitDto businessUnit)
         {
             //Must do a check for license here the first time the service is started
-            if (_licenseCache.Get()==null)
+            if (_licenseCache.Get("")==null)
             {
 							//wrong - if multidb
-                _licenseFactory.VerifyLicense(UnitOfWorkFactory.Current);
+                _licenseFactory.VerifyLicense(UnitOfWorkFactory.Current, "");
             }
         }
 

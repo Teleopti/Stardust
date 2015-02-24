@@ -30,7 +30,7 @@ namespace Teleopti.Ccc.Sdk.WcfService.LogOn
         {
             var windowsSecurityToken = token as CustomWindowsSecurityToken;
             
-            if (IsTokenEmpty(windowsSecurityToken))
+            if (isTokenEmpty(windowsSecurityToken))
             {
                 throw new SecurityTokenValidationException("Invalid windows security token.");
             }
@@ -42,7 +42,7 @@ namespace Teleopti.Ccc.Sdk.WcfService.LogOn
                 throw new FaultException(string.Format(CultureInfo.InvariantCulture, "The datasource {0} cannot be found.", windowsSecurityToken.DataSource));
             }
 
-            _licenseFromToken.SetLicense(_windowsDataSourceFromToken.DataSourceContainer);
+				_licenseFromToken.SetLicense(_windowsDataSourceFromToken.DataSourceContainer, windowsSecurityToken.DataSource);
 
             _windowsUserFromToken.SetPersonFromToken(windowsSecurityToken,_windowsDataSourceFromToken.DataSourceContainer);
 
@@ -52,12 +52,13 @@ namespace Teleopti.Ccc.Sdk.WcfService.LogOn
             }
 
             // Create just one Claim instance for the username token - the name of the user.
-            DefaultClaimSet userNameClaimSet = new DefaultClaimSet(
-                ClaimSet.Windows,
-                new Claim(ClaimTypes.Name, windowsSecurityToken.WindowsIdentity.Name, Rights.PossessProperty));
-            List<IAuthorizationPolicy> policies = new List<IAuthorizationPolicy>(1);
-            policies.Add(new TeleoptiPrincipalAuthorizationPolicy(userNameClaimSet, _windowsUserFromToken.PersonContainer));
-            return policies.AsReadOnly();
+	        var userNameClaimSet = new DefaultClaimSet(ClaimSet.Windows,
+		        new Claim(ClaimTypes.Name, windowsSecurityToken.WindowsIdentity.Name, Rights.PossessProperty));
+            var policies = new List<IAuthorizationPolicy>(1)
+            {
+	            new TeleoptiPrincipalAuthorizationPolicy(userNameClaimSet, _windowsUserFromToken.PersonContainer)
+            };
+	        return policies.AsReadOnly();
         }
 
         public IDataSource DataSource {get { return _windowsDataSourceFromToken.DataSourceContainer.DataSource; }}
@@ -67,7 +68,7 @@ namespace Teleopti.Ccc.Sdk.WcfService.LogOn
             get { return _businessUnitFromToken.BusinessUnit; }
         }
 
-        private static bool IsTokenEmpty(CustomWindowsSecurityToken windowsSecurityToken)
+        private static bool isTokenEmpty(CustomWindowsSecurityToken windowsSecurityToken)
         {
             return windowsSecurityToken==null;
         }

@@ -40,7 +40,7 @@ namespace Teleopti.Ccc.Sdk.Common.Contracts
         /// Gets the encrypted configuration for the available data sources.
         /// </summary>
         /// <returns></returns>
-        [SuppressMessage("Microsoft.Design", "CA1024:UsePropertiesWhereAppropriate"), OperationContract]
+		  [SuppressMessage("Microsoft.Design", "CA1024:UsePropertiesWhereAppropriate"), OperationContract, Obsolete("This will only return an empty list and should not be used")]
         ICollection<string> GetHibernateConfigurationInternal();
 
         /// <summary>

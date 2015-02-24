@@ -186,6 +186,7 @@
     </Compile>
     <Compile Include="AsyncResult.cs" />
     <Compile Include="AutofacServiceBus.cs" />
+    <Compile Include="Factory\MultiTenancyAuthenticationFactory.cs" />
     <Compile Include="Factory\ServiceLevelCalculator.cs" />
     <Compile Include="Factory\TeleoptiPayrollExportFactory.cs" />
     <Compile Include="Factory\TeleoptiPayrollExportBuilder.cs" />
