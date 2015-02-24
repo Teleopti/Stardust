@@ -237,8 +237,15 @@ namespace Teleopti.Ccc.Win.Backlog
 			using (var dialog = new SkillMapperDialog(_model.SkillMappings, _model.GetAllSkills()))
 			{
 				dialog.ShowDialog(this);
-				if(DialogResult == DialogResult.OK)
+				if(dialog.DialogResult == DialogResult.OK)
+				{
+					_model.SkillMappings.Clear();
+					foreach (var skillMapDev in dialog.Mappings())
+					{
+						_model.SkillMappings.Add(skillMapDev);
+					}
 					_model.SaveMappings();
+				}
 			}
 		}
 

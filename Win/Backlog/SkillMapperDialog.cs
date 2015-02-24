@@ -93,6 +93,11 @@ namespace Teleopti.Ccc.Win.Backlog
 			}
 		}
 
+		public IList<ISkillMap_DEV> Mappings()
+		{
+			return _skillMappings;
+		}
+
 		private void buttonAL_Click(object sender, EventArgs e)
 		{
 			using (var selector = new SkillSelector(_allSkills))

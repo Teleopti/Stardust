@@ -175,12 +175,12 @@ namespace Teleopti.Ccc.WinCode.Backlog
 
 		public IEnumerable<ISkill> GetTabSkillList()
 		{
-			return _skillPairsEmailBackOffice.Values;
+			return _skillPairsBackofficeEmail.Values;
 		}
 
 		private void createBacklogTasks(DateOnlyPeriod period)
 		{
-			foreach (var skill in _skillPairsEmailBackOffice.Values)
+			foreach (var skill in _skillPairsBackofficeEmail.Values)
 			{
 
 				if(!_taskDic.ContainsKey(skill))
@@ -616,9 +616,9 @@ namespace Teleopti.Ccc.WinCode.Backlog
 			{
 				try
 				{
-					//var skillDayRepository = new SkillMapRepository(uow);
-					uow.Reassociate(_skillMappings);
-					//skillDayRepository.AddRange(_skillMappings);
+					//uow.Reassociate(_skillMappings);
+					var skillMappingRepository = new SkillMapRepository(uow);
+					skillMappingRepository.AddRange(_skillMappings);
 					uow.PersistAll();
 				}
 				catch (OptimisticLockException)
