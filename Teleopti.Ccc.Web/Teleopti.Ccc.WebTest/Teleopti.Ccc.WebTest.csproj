@@ -214,7 +214,6 @@
     <Compile Include="..\..\GlobalAssemblyInfo.cs">
       <Link>GlobalAssemblyInfo.cs</Link>
     </Compile>
-    <Compile Include="Areas\Anywhere\Controllers\AdherenceControllerTest.cs" />
     <Compile Include="Areas\Anywhere\Controllers\AgentsControllerTest.cs" />
     <Compile Include="Areas\Anywhere\Controllers\BusinessUnitControllerTest.cs" />
     <Compile Include="Areas\Anywhere\Controllers\GroupPageControllerTest.cs" />
