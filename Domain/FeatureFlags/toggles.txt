@@ -89,4 +89,4 @@ MultiTenancy_WebLogon_17461 = RC
 MultiTenantSSOSupport_StandardReports_15093 = RC
 MyTeam_MakeTeamScheduleConsistent_31897 = RC
 RTA_CalculatePercentageInAgentTimezone_31236 = false
-MultiTenancy_SDK_17458 = true
+MultiTenancy_SDK_17458 = RC
