@@ -12,3 +12,6 @@
 	position:fixed!important;
 }
 
+#kss-node .kss-section {
+	max-width: 100%;
+}

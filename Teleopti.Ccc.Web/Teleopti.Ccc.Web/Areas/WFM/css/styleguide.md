@@ -13,23 +13,23 @@ Main concepts
 1. Maintain consistency.
 2. Avoid unnecessary clicks.
 3. Automatic tasks in background. 
-4. "Nature doesn't like empty space, and so do users". 
+4. "Nature doesn't like empty space, and so don't users". 
 6. From the previous rule : Never provide an empty form but suggest things or display placeholders.
 7. Learning from users habits.
 8. Adapt to scale.
-9. Be aware of performance. Don't display a big bunch of data which doesn't fit in the screen. Instead, use infinite scrolling or pagination
+9. Be aware of performance. Don't display a big bunch of data which doesn't fit in the screen. Consider aggregating data as an entry point. If it's not possible, then use infinite scrolling or pagination
 10. Should be responsive
 
 
 Other things to keep in mind
 ---
 
-1. Try to avoid too many actions displayed in same time. Maybe some of them could be hidden until needed?
+1. Reduce the number of actions displayed at the same time. Maybe some of them could be hidden until needed?
 For example when a list is displayed : actions icons can be displayed only when an item is selected. See list section for an example.
 2. If an action takes time (ajax request...) => display a loading bar (or a spinner). See loading bar section.
-3. Tables, lists... etc must be displayed in alphabetical order, except for specific use case.
+3. Tables, lists... etc should be sorted according to context (alphabetical order for example).
 4. Giving visual identity to objects (by icons for example).
-5. In general, providing ways to filter and sort on tables, lists, grid is good.
+5. In general, providing ways to filter, sort and export to excel on tables, lists, grid is good.
 6. Actions history must be available.
 7. If possible, provide undo/redo feature.
 8. Keyboard shortcuts must be available.
