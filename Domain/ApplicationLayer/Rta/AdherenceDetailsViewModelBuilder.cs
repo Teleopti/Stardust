@@ -16,7 +16,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta
 		private readonly IAdherenceDetailsReadModelReader _persister;
 		private readonly IUserCulture _culture;
 		private readonly IUserTimeZone _timeZone;
-		private readonly CalculateAdherencePercent _calculateAdherencePercent;
 
 		public AdherenceDetailsViewModelBuilderViewModelBuilder(INow now, IAdherenceDetailsReadModelReader persister, IUserCulture culture, IUserTimeZone timeZone)
 		{
@@ -24,7 +23,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta
 			_persister = persister;
 			_culture = culture;
 			_timeZone = timeZone;
-			_calculateAdherencePercent = new CalculateAdherencePercent(_now);
 		}
 
 		public IEnumerable<AdherenceDetailsPercentageModel> Build(Guid personId)
@@ -42,7 +40,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta
 					StartTime = formatToUserTimeZone(detail.StartTime),
 					ActualStartTime = formatToUserTimeZone(detail.ActualStartTime),
 					AdherencePercent =
-						(int)_calculateAdherencePercent.ForActivity(readModel.Model, detail, isActivityEnded(i, detailModels.Count(), readModel.Model.ShiftEndTime.HasValue), readModel.Model.LastAdherence)
+						(int) forActivity(readModel.Model, detail, isActivityEnded(i, detailModels.Count(), readModel.Model.ShiftEndTime.HasValue), readModel.Model.LastAdherence)
 								.ValueAsPercent()
 				});
 			}
@@ -56,6 +54,24 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta
 				});
 			}
 			return result;
+		}
+
+		private Percent forActivity(AdherenceDetailsModel model, ActivityAdherence detail, bool activityEnded, bool isInAdherence)
+		{
+			var secondsInAdherence = Convert.ToDouble(detail.TimeInAdherence.TotalSeconds);
+			var secondsOutOfAdherence = Convert.ToDouble(detail.TimeOutOfAdherence.TotalSeconds);
+			if (!activityEnded)
+			{
+				var lastTimestamp = model.LastUpdate ?? DateTime.MinValue;
+				var secondsFromLastUpdate = _now.UtcDateTime().Subtract(lastTimestamp).TotalSeconds;
+				if (isInAdherence)
+					secondsInAdherence += secondsFromLastUpdate;
+				else
+					secondsOutOfAdherence += secondsFromLastUpdate;
+			}
+			var total = secondsInAdherence + secondsOutOfAdherence;
+
+			return new Percent(secondsInAdherence / total);
 		}
 
 		private static bool isActivityEnded(int modelIndex, int totalActivites, bool hasShiftEnded)
