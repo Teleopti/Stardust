@@ -35,12 +35,15 @@ namespace Teleopti.Ccc.TestCommon.IoC
 		private IContainer _container;
 		private object _fixture;
 		private Type _fixtureType;
+		private MethodInfo _method;
 
 		protected virtual FakeToggleManager Toggles()
 		{
-			var attributes = _fixtureType.GetCustomAttributes(typeof(ToggleAttribute), false).Cast<ToggleAttribute>();
+			var fixtureToggles = _fixtureType.GetCustomAttributes(typeof(ToggleAttribute), false).Cast<ToggleAttribute>();
+			var testToggles = _method.GetCustomAttributes(typeof(ToggleAttribute), false).Cast<ToggleAttribute>();
 			var toggles = new FakeToggleManager();
-			attributes.ForEach(a => toggles.Enable(a.Toggle));
+			fixtureToggles.ForEach(a => toggles.Enable(a.Toggle));
+			testToggles.ForEach(a => toggles.Enable(a.Toggle));
 			return toggles;
 		}
 
@@ -59,6 +62,7 @@ namespace Teleopti.Ccc.TestCommon.IoC
 		public void BeforeTest(TestDetails testDetails)
 		{
 			fixture(testDetails);
+			method(testDetails);
 			buildContainer(b => {});
 			injectMembers();
 			BeforeTest();
@@ -74,6 +78,11 @@ namespace Teleopti.Ccc.TestCommon.IoC
 		{
 			_fixture = testDetails.Fixture;
 			_fixtureType = _fixture.GetType();
+		}
+
+		private void method(TestDetails testDetails)
+		{
+			_method = testDetails.Method;
 		}
 
 		private void buildContainer(Action<ContainerBuilder> registerInContainer)

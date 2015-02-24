@@ -18,25 +18,25 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta
 		private readonly IAdherenceDetailsReadModelReader _persister;
 		private readonly IUserCulture _culture;
 		private readonly IUserTimeZone _timeZone;
-		private readonly IPersonRepository _personRepository;
+		private readonly ICurrentBelongsToDate _date;
 
 		public AdherenceDetailsViewModelBuilderViewModelBuilder(
 			INow now, 
 			IAdherenceDetailsReadModelReader persister, 
 			IUserCulture culture, 
 			IUserTimeZone timeZone,
-			IPersonRepository personRepository)
+			ICurrentBelongsToDate date)
 		{
 			_now = now;
 			_persister = persister;
 			_culture = culture;
 			_timeZone = timeZone;
-			_personRepository = personRepository;
+			_date = date;
 		}
 
 		public IEnumerable<AdherenceDetailViewModel> Build(Guid personId)
 		{
-			var model = _persister.Read(personId, getDate(personId));
+			var model = _persister.Read(personId, _date.ForPerson(personId));
 			if (model == null) return new AdherenceDetailViewModel[] {};
 
 			var activities = from a in model.Model.Activities
@@ -55,14 +55,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta
 					ActualStartTime = formatToUserTimeZone(model.Model.ActualEndTime)
 				});
 			return activities.ToArray();
-		}
-
-		private DateOnly getDate(Guid personId)
-		{
-			var person = _personRepository.Get(personId);
-			return person != null ? 
-				new DateOnly(TimeZoneInfo.ConvertTimeFromUtc(_now.UtcDateTime(), person.PermissionInformation.DefaultTimeZone())) : 
-				new DateOnly(_now.UtcDateTime());
 		}
 
 		private int percent(AdherenceDetailsModel model, ActivityAdherence activity)

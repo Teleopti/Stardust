@@ -3,11 +3,17 @@ using Autofac;
 using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta;
+using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Common.Time;
+using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Helper;
+using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.TestCommon;
+using Teleopti.Ccc.TestCommon.FakeData;
+using Teleopti.Ccc.TestCommon.FakeRepositories;
 using Teleopti.Ccc.TestCommon.IoC;
+using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta
 {
@@ -21,6 +27,11 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta
 				.AsSelf()
 				.As<IAdherencePercentageReadModelReader>()
 				.SingleInstance();
+			builder.RegisterType<FakePersonRepository>()
+				.AsSelf()
+				.As<IPersonRepository>()
+				.As<IRepository<IPerson>>()
+				.SingleInstance();
 		}
 
 		public FakeAdherencePercentageReadModelReader Reader;
@@ -28,7 +39,8 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta
 		public MutableNow Now;
 		public FakeUserTimeZone TimeZone;
 		public FakeUserCulture Culture;
-
+		public FakePersonRepository PersonRepository;
+		
 		[Test]
 		public void ShouldBuildViewModel()
 		{
@@ -210,5 +222,45 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta
 
 			result.LastTimestamp.Should().Be("2014-12-24 14:00".InHawaii().AsCatalanShortTime());
 		}
+
+		[Test]
+		[Toggle(Toggles.RTA_CalculatePercentageInAgentTimezone_31236)]
+		public void ShouldBuildForAgentsDate()
+		{
+			var person = new Person();
+			person.SetId(Guid.NewGuid());
+			person.PermissionInformation.SetDefaultTimeZone(TimeZoneInfoFactory.HawaiiTimeZoneInfo());
+			PersonRepository.Has(person);
+			Now.Is("2015-02-24 09:00");
+			Reader.Has(new AdherencePercentageReadModel
+			{
+				PersonId = person.Id.Value,
+				Date = "2015-02-23".Date(),
+				TimeInAdherence = "1".Minutes(),
+				LastTimestamp = "2015-02-24 09:00".Utc()
+			});
+
+			var result = Target.Build(person.Id.Value);
+
+			result.AdherencePercent.Should().Not.Be(null);
+		}
+
+		[Test]
+		[Toggle(Toggles.RTA_CalculatePercentageInAgentTimezone_31236)]
+		public void ShouldSetAgentDateToUtcNowWhenPersonNotFound()
+		{
+			var personId = Guid.NewGuid();
+			Now.Is("2014-12-24 15:00");
+			Reader.Has(new AdherencePercentageReadModel
+			{
+				PersonId = personId,
+				Date = "2014-12-24".Date()
+			});
+
+			var result = Target.Build(personId);
+
+			result.Should().Not.Be.Null();
+		}
+
 	}
 }

@@ -14,22 +14,26 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta
 		private readonly INow _now;
 		private readonly IUserCulture _culture;
 		private readonly IUserTimeZone _timeZone;
+		private readonly ICurrentBelongsToDate _date;
 
 		public AdherencePercentageViewModelBuilder(
 			INow now, 
 			IAdherencePercentageReadModelReader adherencePercentageReadModelReader, 
 			IUserCulture culture, 
-			IUserTimeZone timeZone)
+			IUserTimeZone timeZone, 
+			ICurrentBelongsToDate date
+			)
 		{
 			_adherencePercentageReadModelReader = adherencePercentageReadModelReader;
 			_now = now;
 			_culture = culture;
 			_timeZone = timeZone;
+			_date = date;
 		}
 
 		public AdherencePercentageViewModel Build(Guid personId)
 		{
-			var readModel = _adherencePercentageReadModelReader.Read(new DateOnly(_now.UtcDateTime()), personId);
+			var readModel = _adherencePercentageReadModelReader.Read(_date.ForPerson(personId), personId);
 			if (readModel == null)
 				return new AdherencePercentageViewModel();
 
@@ -76,4 +80,5 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta
 		public string LastTimestamp { get; set; }
 		public int? AdherencePercent { get; set; }
 	}
+
 }

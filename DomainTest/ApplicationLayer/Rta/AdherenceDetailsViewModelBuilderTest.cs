@@ -6,6 +6,7 @@ using SharpTestsEx;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Common.Time;
+using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.IocCommon;
@@ -459,6 +460,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta
 		}
 
 		[Test]
+		[Toggle(Toggles.RTA_CalculatePercentageInAgentTimezone_31236)]
 		public void ShouldBuildForAgentsDate()
 		{
 			var person = new Person();

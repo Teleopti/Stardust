@@ -2,6 +2,7 @@
 using Autofac;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta;
 using Teleopti.Ccc.Domain.FeatureFlags;
+using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Rta;
 using Teleopti.Ccc.Infrastructure.Rta;
 using Teleopti.Interfaces.Domain;
@@ -67,7 +68,18 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			}
 
 			if (_config.Toggle(Toggles.RTA_CalculatePercentageInAgentTimezone_31236))
-				builder.RegisterType<BelongsToDateDecorator>().As<IRtaEventDecorator>();
+			{
+				builder.RegisterType<BelongsToDateDecorator>().As<IRtaEventDecorator>().SingleInstance();
+				builder.RegisterType<CurrentBelongsToDateFromPersonsCurrentTime>()
+					.As<ICurrentBelongsToDate>()
+					.SingleInstance();
+			}
+			else
+			{
+				builder.RegisterType<CurrentBelongsToDateFromUtcNow>()
+					.As<ICurrentBelongsToDate>()
+					.SingleInstance();
+			}
 
 			_config.Args().CacheBuilder
 				.For<PersonOrganizationProvider>()
@@ -80,4 +92,5 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 				.SingleInstance().As<IPersonOrganizationReader>();
 		}
 	}
+
 }
