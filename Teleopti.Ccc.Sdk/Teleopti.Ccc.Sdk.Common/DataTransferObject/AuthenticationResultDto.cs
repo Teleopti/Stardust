@@ -55,7 +55,7 @@ namespace Teleopti.Ccc.Sdk.Common.DataTransferObject
 		  /// The tenant.
 		  /// </summary>
 		  /// <remarks>The tenant should be provided in the header in further calls to the sdk</remarks>
-		  [DataMember]
+		  [DataMember(IsRequired = false, Order = 1)]
 		  public string Tenant { get; set; }
     }
 }
