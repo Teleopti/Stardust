@@ -42,5 +42,20 @@ namespace Teleopti.Ccc.WebTest.Areas.Tenant.Core
 
 			readNHibFiles.AssertWasCalled(x => x.Read(), x => x.Repeat.Once());
 		}
+
+		[Test]
+		public void ExistingMultipleConfigurations()
+		{
+			var expected = new DataSourceConfiguration();
+			var expectedTwo = new DataSourceConfiguration();
+			var readNHibFiles = MockRepository.GenerateMock<IReadNHibFiles>();
+			readNHibFiles.Expect(x => x.Read()).Return(new Dictionary<string, DataSourceConfiguration> { { "something", expected }, { "somethingElse", expectedTwo } });
+			var target = new DataSourceConfigurationProviderUsingNhibFiles(readNHibFiles);
+			target.ForTenant("something")
+				.Should().Be.SameInstanceAs(expected);
+
+			target.ForTenant("somethingElse")
+				.Should().Be.SameInstanceAs(expectedTwo);
+		}
 	}
 }

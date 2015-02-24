@@ -17,11 +17,9 @@ namespace Teleopti.Ccc.Web.Areas.Tenant.Core
 		{
 			if(allConfigs==null)
 				allConfigs = _readNHibFiles.Read();
-		
-			//for now - return first one!
-			//DataSourceConfiguration ret;
-			//return allConfigs.TryGetValue(tenant, out ret) ? ret : null;
-			return allConfigs.Select(x => x.Value).FirstOrDefault();
+	
+			DataSourceConfiguration ret;
+			return allConfigs.TryGetValue(tenant, out ret) ? ret : null;
 		}
 	}
 }

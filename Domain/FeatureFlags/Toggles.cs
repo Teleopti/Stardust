@@ -77,7 +77,6 @@
 
 		Gamification_NewBadgeCalculation_31185,
 		Portal_DifferentiateBadgeSettingForAgents_31318,
-		MultiTenancy_WinLogon_17461,
 		MultiTenancy_WebLogon_17461,
 
 		SeatPlanner_Logon_32003,

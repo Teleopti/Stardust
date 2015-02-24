@@ -14,6 +14,26 @@ using Teleopti.Interfaces.MessageBroker.Client.Composite;
 
 namespace Teleopti.Ccc.WinCode.Main
 {
+	public interface ILogonPresenter
+	{
+		void OkbuttonClicked();
+		void BackButtonClicked();
+		void Initialize();
+		void GetDataForCurrentStep(bool goingBack);
+		bool Start();
+		LoginStep CurrentStep { get; set; }
+	}
+
+	public enum LoginStep
+	{
+		SelectSdk = 0,
+		SelectDatasource = 1,
+		Login = 2,
+		SelectBu = 3,
+		Loading = 4, // not used
+		Ready = 5 // not used
+	}
+
 	public class MultiTenancyLogonPresenter : ILogonPresenter
 	{
 		private readonly ILogonView _view;
