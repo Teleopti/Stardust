@@ -29,7 +29,7 @@ namespace Teleopti.Ccc.Domain.Optimization.WeeklyRestSolver
 		private readonly IDeleteScheduleDayFromUnsolvedPersonWeek _deleteScheduleDayFromUnsolvedPersonWeek;
 		private bool _cancelMe;
 		private readonly IAllTeamMembersInSelectionSpecification _allTeamMembersInSelectionSpecification;
-		private readonly IPersonWeekVoilatingWeeklyRestSpecification  _personWeekVoilatingWeeklyRestSpecification;
+		private readonly IPersonWeekVoilatingWeeklyRestSpecification  _personWeekViolatingWeeklyRestSpecification;
 		private readonly IBrokenWeekCounterForAPerson  _brokenWeekCounterForAPerson;
 		public event EventHandler<ResourceOptimizerProgressEventArgs> ResolvingWeek;
 		private ResourceOptimizerProgressEventArgs _progressEvent;
@@ -40,7 +40,7 @@ namespace Teleopti.Ccc.Domain.Optimization.WeeklyRestSolver
 			IdentifyDayOffWithHighestSpan identifyDayOffWithHighestSpan,
 			IDeleteScheduleDayFromUnsolvedPersonWeek deleteScheduleDayFromUnsolvedPersonWeek,
 			IAllTeamMembersInSelectionSpecification allTeamMembersInSelectionSpecification, 
-			IPersonWeekVoilatingWeeklyRestSpecification personWeekVoilatingWeeklyRestSpecification, 
+			IPersonWeekVoilatingWeeklyRestSpecification personWeekViolatingWeeklyRestSpecification, 
 			IBrokenWeekCounterForAPerson brokenWeekCounterForAPerson)
 		{
 			_weeksFromScheduleDaysExtractor = weeksFromScheduleDaysExtractor;
@@ -51,7 +51,7 @@ namespace Teleopti.Ccc.Domain.Optimization.WeeklyRestSolver
 			_identifyDayOffWithHighestSpan = identifyDayOffWithHighestSpan;
 			_deleteScheduleDayFromUnsolvedPersonWeek = deleteScheduleDayFromUnsolvedPersonWeek;
 			_allTeamMembersInSelectionSpecification = allTeamMembersInSelectionSpecification;
-			_personWeekVoilatingWeeklyRestSpecification = personWeekVoilatingWeeklyRestSpecification;
+			_personWeekViolatingWeeklyRestSpecification = personWeekViolatingWeeklyRestSpecification;
 			_brokenWeekCounterForAPerson = brokenWeekCounterForAPerson;
 		}
 
@@ -81,33 +81,35 @@ namespace Teleopti.Ccc.Domain.Optimization.WeeklyRestSolver
 
 			foreach (var person in selectedPersons)
 			{
-				var personMatrix = allPersonMatrixList.FirstOrDefault(s => s.Person == person);
-				var weeklyRestInPersonWeek = new Dictionary<PersonWeek, TimeSpan>();
-				if (personMatrix != null)
+				//var personMatrix = allPersonMatrixList.FirstOrDefault(s => s.Person == person && s.SchedulePeriod.DateOnlyPeriod == selectedPeriod);
+
+				var personMatrixes = allPersonMatrixList.Where(s => s.Person == person && s.SchedulePeriod.DateOnlyPeriod.Intersection(selectedPeriod).HasValue).ToList();
+
+				foreach (var personMatrix in personMatrixes)
 				{
+
+					var weeklyRestInPersonWeek = new Dictionary<PersonWeek, TimeSpan>();
 					var personScheduleRange = schedulingResultStateHolder.Schedules[person];
 					var selectedPeriodScheduleDays = personScheduleRange.ScheduledDayCollection(selectedPeriod);
-					var selctedPersonWeeks =
-						_weeksFromScheduleDaysExtractor.CreateWeeksFromScheduleDaysExtractor(selectedPeriodScheduleDays,
-							false).ToList();
-					var personWeeksVoilatingWeeklyRest = new List<PersonWeek>();
-					foreach (var personWeek in selctedPersonWeeks)
+					var selectedPersonWeeks = _weeksFromScheduleDaysExtractor
+						.CreateWeeksFromScheduleDaysExtractor(selectedPeriodScheduleDays, false).ToList();
+					var personWeeksViolatingWeeklyRest = new List<PersonWeek>();
+					foreach (var personWeek in selectedPersonWeeks)
 					{
 						var weeklyRest = _contractWeeklyRestForPersonWeek.GetWeeklyRestFromContract(personWeek);
 						if (!weeklyRestInPersonWeek.ContainsKey(personWeek))
 							weeklyRestInPersonWeek.Add(personWeek, weeklyRest);
-						
-						if (!_personWeekVoilatingWeeklyRestSpecification.IsSatisfyBy(personScheduleRange, personWeek, weeklyRest))
-							personWeeksVoilatingWeeklyRest.Add(personWeek);
+
+						if (!_personWeekViolatingWeeklyRestSpecification.IsSatisfyBy(personScheduleRange, personWeek, weeklyRest))
+							personWeeksViolatingWeeklyRest.Add(personWeek);
 					}
-					var totalNumberOfBrokenWeek = _brokenWeekCounterForAPerson.CountBrokenWeek(selectedPeriodScheduleDays,
-						personScheduleRange);
-					foreach (var personWeek in personWeeksVoilatingWeeklyRest)
+					var totalNumberOfBrokenWeek = _brokenWeekCounterForAPerson.CountBrokenWeek(selectedPeriodScheduleDays, personScheduleRange);
+					foreach (var personWeek in personWeeksViolatingWeeklyRest)
 					{
 						if (_ensureWeeklyRestRule.HasMinWeeklyRest(personWeek, personScheduleRange, weeklyRestInPersonWeek[personWeek]))
 							continue;
 						var possiblePositionsToFix = _dayOffToTimeSpanExtractor.GetDayOffWithTimeSpanAmongAWeek(personWeek.Week,
-							personScheduleRange);
+							personScheduleRange, personMatrix);
 						var firstDayOfElement = DateOnly.MinValue;
 						if (possiblePositionsToFix.Count > 0)
 							firstDayOfElement = possiblePositionsToFix.FirstOrDefault().Key;

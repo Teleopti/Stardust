@@ -6,7 +6,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 {
     public interface IMatrixUserLockLocker
     {
-        void Execute(IList<IScheduleDay> scheduleDays, IEnumerable<IScheduleMatrixPro> scheduleMatrixes, DateOnlyPeriod selectedPeriod);
+        void Execute(IEnumerable<IScheduleMatrixPro> scheduleMatrixes, DateOnlyPeriod selectedPeriod);
     }
 
     public class MatrixUserLockLocker : IMatrixUserLockLocker
@@ -19,11 +19,10 @@ namespace Teleopti.Ccc.WinCode.Scheduling
         }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "1"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
-		public void Execute(IList<IScheduleDay> scheduleDays, IEnumerable<IScheduleMatrixPro> scheduleMatrixes, DateOnlyPeriod selectedPeriod)
+		public void Execute(IEnumerable<IScheduleMatrixPro> scheduleMatrixes, DateOnlyPeriod selectedPeriod)
         {
             foreach (var matrix in scheduleMatrixes)
             {
-
 	            setUserLockedDaysInMatrix(matrix, selectedPeriod, _gridlockManager);
             }
         }
