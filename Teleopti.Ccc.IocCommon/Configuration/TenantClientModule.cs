@@ -1,4 +1,5 @@
 ﻿using Autofac;
+using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Security.MultiTenancyAuthentication;
 using Teleopti.Ccc.Infrastructure.MultiTenancy;
 
@@ -17,7 +18,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 		{
 			var tenantServer = _configuration.Args().TenantServer;
 
-			if (isRunFromTest(tenantServer) || pathIsAnUrl(tenantServer))
+			if (isRunFromTest(tenantServer) || tenantServer.IsAnUrl())
 			{
 				builder.Register(c => new AuthenticationQuerier(tenantServer))
 				.As<IAuthenticationQuerier>()
@@ -33,12 +34,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 
 		private static bool isRunFromTest(string tenantServer)
 		{
-			return tenantServer==null;
-		}
-
-		private static bool pathIsAnUrl(string tenantServer)
-		{
-			return tenantServer.StartsWith("http://") || tenantServer.StartsWith("https://");
+			return tenantServer == null;
 		}
 	}
 }

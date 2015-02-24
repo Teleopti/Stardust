@@ -385,6 +385,7 @@
     <Compile Include="Common\PersonIsActiveSpecification.cs" />
     <Compile Include="Common\ScheduleDictionaryLoadOptions.cs" />
     <Compile Include="Common\SpecificBusinessUnit.cs" />
+    <Compile Include="Common\StringExtensions.cs" />
     <Compile Include="Common\TeamGamificationSetting.cs" />
     <Compile Include="Common\ThisCurrentScenario.cs" />
     <Compile Include="Common\Time\INowExtensions.cs" />

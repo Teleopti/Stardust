@@ -1,6 +1,7 @@
 ﻿using System;
 using Autofac;
 using log4net;
+using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.Infrastructure.Toggle;
@@ -34,7 +35,7 @@ namespace Teleopti.Ccc.IocCommon.Toggle
 					.SingleInstance()
 					.As<IToggleManager>();
 			}
-			else if (togglePathIsAnUrl())
+			else if (pathToToggle.IsAnUrl())
 			{
 				builder.Register(c => new ToggleQuerier(pathToToggle))
 					.SingleInstance()
@@ -75,12 +76,6 @@ namespace Teleopti.Ccc.IocCommon.Toggle
 				.SingleInstance().As<ITogglesActive>();
 			builder.RegisterType<AllToggles>()
 				.SingleInstance().As<IAllToggles>();
-		}
-
-		private bool togglePathIsAnUrl()
-		{
-			var pathToToggle = _configuration.Args().FeatureToggle;
-			return pathToToggle.StartsWith("http://") || pathToToggle.StartsWith("https://");
 		}
 
 		private class toggleCheckerWrapper : IToggleManager
