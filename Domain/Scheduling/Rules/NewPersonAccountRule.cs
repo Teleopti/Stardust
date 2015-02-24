@@ -112,7 +112,8 @@ namespace Teleopti.Ccc.Domain.Scheduling.Rules
                 }
                 foreach (var businessRuleResponse in responseList)
                 {
-                    rangeCloneValueKey.Value.BusinessRuleResponseInternalCollection.Add(businessRuleResponse);
+					if (rangeCloneValueKey.Key.Equals(businessRuleResponse.Person))
+						rangeCloneValueKey.Value.BusinessRuleResponseInternalCollection.Add(businessRuleResponse);
                 }
             }
 

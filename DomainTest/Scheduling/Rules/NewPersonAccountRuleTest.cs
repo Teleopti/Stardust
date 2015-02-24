@@ -122,5 +122,67 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
                 Assert.That(responses.Count(), Is.EqualTo(1));
             }
         }
+
+		[Test]
+	    public void ShouldOnlyAddResponseOnAffectedPerson()
+	    {
+			var mocks = new MockRepository();
+			var scheduleDay1 = mocks.StrictMock<IScheduleDay>();
+			var scheduleDay2 = mocks.StrictMock<IScheduleDay>();
+			var person1 = PersonFactory.CreatePerson();
+			var person2 = PersonFactory.CreatePerson();
+
+			person1.SetId(Guid.NewGuid());
+			person2.SetId(Guid.NewGuid());
+
+			var range = new DateTimePeriod(2012, 12, 14, 2012, 12, 14);
+			var personAccountCollection1 = new PersonAccountCollection(person1);
+			var personAccountCollection2 = new PersonAccountCollection(person2);
+
+			var absence1 = AbsenceFactory.CreateAbsence("ab1");
+			var absense2 = AbsenceFactory.CreateAbsence("ab2");
+
+			absence1.Tracker = Tracker.CreateDayTracker();
+			absense2.Tracker = Tracker.CreateDayTracker();
+
+			var account1 = new PersonAbsenceAccount(person1, absence1);
+			var account2 = new PersonAbsenceAccount(person2, absense2);
+
+			account1.Add(new AccountDay(new DateOnly(2012, 12, 13)) { BalanceOut = TimeSpan.FromDays(2), Accrued = TimeSpan.FromDays(1) });
+			account2.Add(new AccountDay(new DateOnly(2012, 12, 13)) { BalanceOut = TimeSpan.FromDays(1), Accrued = TimeSpan.FromDays(1) });
+
+			personAccountCollection1.Add(account1);
+			personAccountCollection2.Add(account2);
+
+			_allAccounts.Add(person1, personAccountCollection1);
+			_allAccounts.Add(person2, personAccountCollection2);
+
+			var scenario = new Scenario("Default") { DefaultScenario = true };
+			_stateHolder.Schedules = new ScheduleDictionary(scenario, new ScheduleDateTimePeriod(range));
+
+			var scheduleRange1 = new ScheduleRange(_stateHolder.Schedules, new ScheduleParameters(scenario, person1, range));
+			var scheduleRange2 = new ScheduleRange(_stateHolder.Schedules, new ScheduleParameters(scenario, person2, range));
+			var dictionary = new Dictionary<IPerson, IScheduleRange> {{person1, scheduleRange1}, {person2, scheduleRange2}};
+
+			IDateOnlyAsDateTimePeriod dateOnlyAsDateTimePeriod = new DateOnlyAsDateTimePeriod(new DateOnly(2012, 12, 14),TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time"));
+			ICollection<IScheduleDay> scheduleDays = new Collection<IScheduleDay>{scheduleDay1, scheduleDay2};
+
+			using (mocks.Record())
+			{
+				Expect.Call(scheduleDay1.Person).Return(person1).Repeat.AtLeastOnce();
+				Expect.Call(scheduleDay2.Person).Return(person2).Repeat.AtLeastOnce();
+
+				Expect.Call(scheduleDay1.DateOnlyAsPeriod).Return(dateOnlyAsDateTimePeriod);
+				Expect.Call(scheduleDay2.DateOnlyAsPeriod).Return(dateOnlyAsDateTimePeriod);
+			}
+
+			using (mocks.Playback())
+			{
+				var responses = _target.Validate(dictionary, scheduleDays);
+				Assert.That(responses.Count(), Is.EqualTo(1));
+				Assert.That(scheduleRange1.BusinessRuleResponseInternalCollection.Count, Is.EqualTo(1));
+				Assert.That(scheduleRange2.BusinessRuleResponseInternalCollection.Count, Is.EqualTo(0));
+			}   
+	    }
     }
 }
