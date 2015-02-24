@@ -27,7 +27,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Tenant.Core
 			datasourcesProvider.Stub(x => x.RetrieveDataSourceByName(dataSourceName)).Return(datasource);
 			datasource.Stub(x => x.DataSourceName).Return(dataSourceName);
 
-			target.AuthenticateApplicationUser(dataSourceName, userName, password)
+			target.AuthenticateApplicationUser(userName, password)
 				.PasswordExpired.Should().Be.True();
 		}
 	}

@@ -7,7 +7,6 @@ namespace Teleopti.Ccc.Web.Areas.SSO.Models
 	{
 		private readonly ISsoAuthenticator _authenticator;
 		private readonly ILogLogonAttempt _logLogonAttempt;
-		public string DataSourceName { get; set; }
 		public string UserName { get; set; }
 		public string Password { get; set; }
 
@@ -19,7 +18,7 @@ namespace Teleopti.Ccc.Web.Areas.SSO.Models
 
 		public AuthenticateResult AuthenticateUser()
 		{
-			return _authenticator.AuthenticateApplicationUser(DataSourceName, UserName, Password);
+			return _authenticator.AuthenticateApplicationUser(UserName, Password);
 		}
 
 		public void SaveAuthenticateResult(AuthenticateResult result)

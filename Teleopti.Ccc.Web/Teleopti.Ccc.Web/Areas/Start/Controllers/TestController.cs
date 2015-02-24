@@ -114,24 +114,24 @@ namespace Teleopti.Ccc.Web.Areas.Start.Controllers
 		}
 
 		[TenantUnitOfWork]
-		public virtual ViewResult Logon(string dataSourceName, string businessUnitName, string userName, string password)
+		public virtual ViewResult Logon(string businessUnitName, string userName, string password)
 		{
-			var result = _authenticator.AuthenticateApplicationUser(dataSourceName, userName, password);
+			var result = _authenticator.AuthenticateApplicationUser(userName, password);
 			var businessUnits = _businessUnitProvider.RetrieveBusinessUnitsForPerson(result.DataSource, result.Person);
 			var businessUnit = businessUnits.Single(b => b.Name == businessUnitName);
 
 			if (result.Successful)
 			{
-				_formsAuthentication.SetAuthCookie(userName + "@@" + dataSourceName);
+				_formsAuthentication.SetAuthCookie(userName + "@@" + result.DataSource.DataSourceName);
 			}
 
 			var claims = new List<Claim>
 			{
-				new Claim(System.IdentityModel.Claims.ClaimTypes.NameIdentifier, userName + "@@" + dataSourceName)
+				new Claim(System.IdentityModel.Claims.ClaimTypes.NameIdentifier, userName + "@@" + result.DataSource.DataSourceName)
 			};
 			var claimsIdentity = new ClaimsIdentity(claims, "IssuerForTest");
 			_httpContext.Current().User = new ClaimsPrincipal(new IClaimsIdentity[] { claimsIdentity });
-			_logon.LogOn(dataSourceName, businessUnit.Id.Value, result.Person.Id.Value);
+			_logon.LogOn(result.DataSource.DataSourceName, businessUnit.Id.Value, result.Person.Id.Value);
 
 			var viewModel = new TestMessageViewModel
 								{

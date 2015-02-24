@@ -20,7 +20,7 @@ namespace Teleopti.Ccc.Web.Areas.Tenant.Core
 			_applicationAuthentication = applicationAuthentication;
 		}
 
-		public AuthenticateResult AuthenticateApplicationUser(string dataSourceName, string userName, string password)
+		public AuthenticateResult AuthenticateApplicationUser(string userName, string password)
 		{
 			var result = _applicationAuthentication.Logon(userName, password);
 
@@ -29,7 +29,7 @@ namespace Teleopti.Ccc.Web.Areas.Tenant.Core
 				var dataSource = _dataSourceProvider.RetrieveDataSourceByName(result.Tenant);
 				using (var uow = dataSource.Application.CreateAndOpenUnitOfWork())
 				{
-					var person = _repositoryFactory.CreatePersonRepository(uow).LoadOne(result.PersonId); //todo: don't load permissions here - just needed to get web scenarios to work
+					var person = _repositoryFactory.CreatePersonRepository(uow).LoadOne(result.PersonId); //TODO tenant: - don't load permissions here - just needed to get web scenarios to work
 					return new AuthenticateResult { DataSource = dataSource, Person = person, Successful = true, HasMessage = !string.IsNullOrEmpty(result.FailReason), Message = result.FailReason, PasswordExpired = false };
 				}
 			}

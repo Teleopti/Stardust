@@ -40,8 +40,7 @@ namespace Teleopti.Ccc.Web.Areas.SSO.Core
 			return new ApplicationAuthenticationModel(_authenticator.Value, _logLogonAttempt.Value)
 				{
 					UserName = bindingContext.ValueProvider.GetValue("username").AttemptedValue,
-					Password = bindingContext.ValueProvider.GetValue("password").AttemptedValue,
-					DataSourceName = bindingContext.ValueProvider.GetValue("datasource").AttemptedValue
+					Password = bindingContext.ValueProvider.GetValue("password").AttemptedValue
 				};
 		}
 	}

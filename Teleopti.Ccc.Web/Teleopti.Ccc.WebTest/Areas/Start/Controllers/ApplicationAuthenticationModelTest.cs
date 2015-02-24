@@ -15,10 +15,9 @@ namespace Teleopti.Ccc.WebTest.Areas.Start.Controllers
 		{
 			var authenticator = MockRepository.GenerateMock<ISsoAuthenticator>();
 			var expectedResult = new AuthenticateResult();
-			authenticator.Stub(x => x.AuthenticateApplicationUser("mydata", "username", "password")).Return(expectedResult);
+			authenticator.Stub(x => x.AuthenticateApplicationUser("username", "password")).Return(expectedResult);
 			var target = new ApplicationAuthenticationModel(authenticator, null)
 				{
-					DataSourceName = "mydata",
 					Password = "password",
 					UserName = "username"
 				};
@@ -38,7 +37,6 @@ namespace Teleopti.Ccc.WebTest.Areas.Start.Controllers
 
 			var target = new ApplicationAuthenticationModel(null, logLogResult)
 			{
-				DataSourceName = "mydata",
 				Password = "password",
 				UserName = userName
 			};

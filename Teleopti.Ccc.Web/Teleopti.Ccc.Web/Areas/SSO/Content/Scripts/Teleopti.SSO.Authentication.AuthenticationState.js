@@ -97,6 +97,7 @@ Teleopti.SSO.Authentication.AuthenticationState = function (data) {
 	};
 
 	this.TryToSignIn = function (options) {
+		//TODO: tenant - remove datasource from this model when cleaning up views
 		authenticationModel = options.data;
 
 		var error = function (jqXHR, textStatus, errorThrown) {
