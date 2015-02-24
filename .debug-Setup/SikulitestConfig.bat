@@ -64,6 +64,7 @@ SET attributeValue=%ROOTDIR%\Domain\FeatureFlags\toggles.txt
 SET nodePath=configuration/appSettings/add[@key='TenantServer']
 SET attributeName=value
 SET value=%ROOTDIR%\nhib\authentication.json
+%commonFolder%\XmlSetAttribute.exe %configPath% %nodePath% %attributeName% %attributeValue%
 
 SET nodePath=configuration/system.serviceModel/bindings/basicHttpBinding/binding/security
 SET attributeName=mode
