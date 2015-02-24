@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using NUnit.Framework;
@@ -120,7 +119,7 @@ namespace Teleopti.Ccc.WebTest.Areas.SSO.Contollers
 			var target = new ApplicationAuthenticationApiController(null, null, null, null, MockRepository.GenerateMock<IFormsAuthentication>());
 			var authenticator = MockRepository.GenerateMock<ISsoAuthenticator>();
 			const string message = "test";
-			var authResult = new AuthenticateResult {Successful = true, HasMessage = true, Message = message};
+			var authResult = new AuthenticateResult { Successful = true, HasMessage = true, Message = message, DataSource = new FakeDataSource { DataSourceName = dataSourceName } };
 			var authenticationModel = new ApplicationAuthenticationModel(authenticator, shouldBeLogged(null, authResult));
 			authenticator.Stub(x => x.AuthenticateApplicationUser(authenticationModel.UserName,authenticationModel.Password))
 				.Return(authResult);
@@ -153,7 +152,7 @@ namespace Teleopti.Ccc.WebTest.Areas.SSO.Contollers
 		{
 			var target = new ApplicationAuthenticationApiController(null, null, null, null, MockRepository.GenerateMock<IFormsAuthentication>());
 			var authenticator = MockRepository.GenerateMock<ISsoAuthenticator>();
-			var authResult = new AuthenticateResult {Successful = true, HasMessage = false};
+			var authResult = new AuthenticateResult {Successful = true, HasMessage = false, DataSource = new FakeDataSource{DataSourceName = dataSourceName}};
 			var authenticationModel = new ApplicationAuthenticationModel(authenticator, shouldBeLogged(null, authResult));
 			authenticator.Stub(x => x.AuthenticateApplicationUser(authenticationModel.UserName, authenticationModel.Password)).Return(authResult);
 
