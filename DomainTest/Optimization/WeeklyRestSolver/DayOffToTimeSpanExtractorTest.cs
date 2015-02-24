@@ -88,6 +88,8 @@ namespace Teleopti.Ccc.DomainTest.Optimization.WeeklyRestSolver
                 Expect.Call(_extractDayOffFromGivenWeek.GetDaysOff(scheduleDayList)).Return(dayOffList);
                 Expect.Call(_verifyWeeklyRestAroundDayOffSpecification.IsSatisfy(dayOffList, _currentSchedules))
                     .Return(true);
+	            Expect.Call(_verifyWeeklyRestNotLockedAroundDayOffSpecification.IsSatisfy(dayOffDate, _currentSchedules, _scheduleMatrixPro))
+		            .Return(true);
                 Expect.Call(_currentSchedules.ScheduledDay(week.StartDate)).Return(_scheduleDay1);
                 Expect.Call(_currentSchedules.ScheduledDay(week.EndDate)).Return(_scheduleDay3);
 

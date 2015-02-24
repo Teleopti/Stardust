@@ -37,11 +37,12 @@ namespace Teleopti.Ccc.Domain.Optimization.WeeklyRestSolver
             var daysOffInProvidedWeek = _extractDayOffFromGivenWeek.GetDaysOff(scheduleDayList);
             if (daysOffInProvidedWeek.IsEmpty())
                 return possibleDaysOffWithSpan;
-            if (!_verifyWeeklyRestAroundDayOffSpecification.IsSatisfy(daysOffInProvidedWeek, currentSchedules) ||
-				!_verifyWeeklyRestNotLockedAroundDayOffSpecification.IsSatisfy(daysOffInProvidedWeek, currentSchedules, scheduleMatrix))
+            if (!_verifyWeeklyRestAroundDayOffSpecification.IsSatisfy(daysOffInProvidedWeek, currentSchedules))
                 return possibleDaysOffWithSpan;
             foreach(var dayOffDate in daysOffInProvidedWeek )
             {
+				if(!_verifyWeeklyRestNotLockedAroundDayOffSpecification.IsSatisfy(dayOffDate, currentSchedules, scheduleMatrix))
+					continue;
                 var longestSpanWithConsecutiveDays = getTimeSpanOnConsecutiveDays(dayOffDate, currentSchedules);
                 if (!longestSpanWithConsecutiveDays.HasValue ) continue;
                 possibleDaysOffWithSpan.Add(dayOffDate, longestSpanWithConsecutiveDays.Value);
@@ -50,7 +51,7 @@ namespace Teleopti.Ccc.Domain.Optimization.WeeklyRestSolver
 
         }
 
-        private TimeSpan? getTimeSpanOnConsecutiveDays(DateOnly dayOffDate, IScheduleRange currentSchedules)
+	    private TimeSpan? getTimeSpanOnConsecutiveDays(DateOnly dayOffDate, IScheduleRange currentSchedules)
         {
             var previousScheduleDay = currentSchedules.ScheduledDay(dayOffDate.AddDays(-1));
             var nextScheduleDay = currentSchedules.ScheduledDay(dayOffDate.AddDays(1));

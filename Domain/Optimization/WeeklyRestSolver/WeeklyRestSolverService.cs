@@ -81,8 +81,6 @@ namespace Teleopti.Ccc.Domain.Optimization.WeeklyRestSolver
 
 			foreach (var person in selectedPersons)
 			{
-				//var personMatrix = allPersonMatrixList.FirstOrDefault(s => s.Person == person && s.SchedulePeriod.DateOnlyPeriod == selectedPeriod);
-
 				var personMatrixes = allPersonMatrixList.Where(s => s.Person == person && s.SchedulePeriod.DateOnlyPeriod.Intersection(selectedPeriod).HasValue).ToList();
 
 				foreach (var personMatrix in personMatrixes)
@@ -117,8 +115,7 @@ namespace Teleopti.Ccc.Domain.Optimization.WeeklyRestSolver
 						if (!possiblePositionsToFix.Any())
 						{
 							var endDayOfWeek = personWeek.Week.EndDate.AddDays(1);
-							while (
-								!_ensureWeeklyRestRule.HasMinWeeklyRest(personWeek, personScheduleRange, weeklyRestInPersonWeek[personWeek]))
+							while(!_ensureWeeklyRestRule.HasMinWeeklyRest(personWeek, personScheduleRange, weeklyRestInPersonWeek[personWeek]))
 							{
 								_deleteScheduleDayFromUnsolvedPersonWeek.DeleteAppropiateScheduleDay(personScheduleRange, endDayOfWeek
 												, rollbackService, selectedPeriod);
@@ -129,7 +126,7 @@ namespace Teleopti.Ccc.Domain.Optimization.WeeklyRestSolver
 						}
 						else
 						{
-							while (possiblePositionsToFix.Count() != 0)
+							while(possiblePositionsToFix.Count() != 0)
 							{
 								OnDayScheduled(new ResourceOptimizerProgressEventArgs(0, 0,
 									string.Format(UserTexts.Resources.ResolvingWeeklyRestFor, personWeek.Person.Name.FirstName,

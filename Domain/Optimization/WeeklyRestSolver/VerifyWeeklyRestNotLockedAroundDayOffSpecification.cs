@@ -6,20 +6,17 @@ namespace Teleopti.Ccc.Domain.Optimization.WeeklyRestSolver
 {
 	public interface IVerifyWeeklyRestNotLockedAroundDayOffSpecification
     {
-		bool IsSatisfy(IList<DateOnly> dayOffList, IScheduleRange currentSchedules, IScheduleMatrixPro scheduleMatrix);
+		bool IsSatisfy(DateOnly dayOff, IScheduleRange currentSchedules, IScheduleMatrixPro scheduleMatrix);
     }
 
 	public class VerifyWeeklyRestNotLockedAroundDayOffSpecification : IVerifyWeeklyRestNotLockedAroundDayOffSpecification
     {
-        public bool IsSatisfy(IList<DateOnly> dayOffList, IScheduleRange currentSchedules, IScheduleMatrixPro scheduleMatrix)
+        public bool IsSatisfy(DateOnly dayOff, IScheduleRange currentSchedules, IScheduleMatrixPro scheduleMatrix)
         {
-            foreach (var dayOffDate in dayOffList)
-            {
-                var previousScheduleDay = currentSchedules.ScheduledDay(dayOffDate.AddDays(-1));
-                var nextScheduleDay = currentSchedules.ScheduledDay(dayOffDate.AddDays(1));
-                if (isNeighbouringDaysLocked(previousScheduleDay, nextScheduleDay, scheduleMatrix))
-                    return false;
-            }
+			var previousScheduleDay = currentSchedules.ScheduledDay(dayOff.AddDays(-1));
+			var nextScheduleDay = currentSchedules.ScheduledDay(dayOff.AddDays(1));
+            if (isNeighbouringDaysLocked(previousScheduleDay, nextScheduleDay, scheduleMatrix))
+                return false;
             return true;
         }
 
