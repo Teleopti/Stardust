@@ -15,9 +15,9 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Controllers
 		[Test]
 		public void ForToday_WhenAdherenceInfoIsValid_ShouldGenerateResultBasedOnAdherenceInfo()
 		{
-			var calculateAdherence = MockRepository.GenerateStub<ICalculateAdherence>();
+			var calculateAdherence = MockRepository.GenerateStub<IAdherencePercentageViewModelBuilder>();
 			var personId = Guid.NewGuid();
-			calculateAdherence.Expect(h => h.ForToday(personId)).Return(new AdherencePercentageModel()
+			calculateAdherence.Expect(h => h.ForToday(personId)).Return(new AdherencePercentageViewModel()
 			                                               {
 															   AdherencePercent = 70
 			                                               });
@@ -26,13 +26,13 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Controllers
 
 			var result = target.ForToday(personId);
 
-			((AdherencePercentageModel) result.Data).AdherencePercent.Should().Be.EqualTo(70);
+			((AdherencePercentageViewModel) result.Data).AdherencePercent.Should().Be.EqualTo(70);
 		}
 
 		[Test]
 		public void ForToday_WhenAdherenceInfoIsNotValid_ShouldHaveFalsyAdherencePercentage()
 		{
-			var calculateAdherence = MockRepository.GenerateStub<ICalculateAdherence>();
+			var calculateAdherence = MockRepository.GenerateStub<IAdherencePercentageViewModelBuilder>();
 			var personId = Guid.NewGuid();
 			calculateAdherence.Expect(h => h.ForToday(personId)).Return(null);
 

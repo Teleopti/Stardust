@@ -235,13 +235,12 @@
     <Compile Include="ApplicationLayer\Rta\RtaDecoratingEventPublisher.cs" />
     <Compile Include="ApplicationLayer\Rta\ScheduleInfo.cs" />
     <Compile Include="ApplicationLayer\Rta\ShiftEventPublisher.cs" />
-    <Compile Include="ApplicationLayer\Rta\CalculateAdherence.cs" />
+    <Compile Include="ApplicationLayer\Rta\AdherencePercentageViewModelBuilder.cs" />
     <Compile Include="ApplicationLayer\Rta\ExternalUserStateInputModel.cs" />
     <Compile Include="ApplicationLayer\Rta\SiteOutOfAdherenceReadModel.cs" />
     <Compile Include="ApplicationLayer\Rta\SiteOutOfAdherenceReadModelUpdater.cs" />
     <Compile Include="ApplicationLayer\Rta\StateEventPublisher.cs" />
     <Compile Include="ApplicationLayer\Rta\ExternalUserStateWebModel.cs" />
-    <Compile Include="ApplicationLayer\Rta\CalculateAdherencePercent.cs" />
     <Compile Include="ApplicationLayer\Rta\IAdherencePercentageReadModelPersister.cs" />
     <Compile Include="ApplicationLayer\Rta\INotifyRtaToCheckForActivityChange.cs" />
     <Compile Include="ApplicationLayer\Rta\DontNotifyRtaToCheckForActivityChange.cs" />

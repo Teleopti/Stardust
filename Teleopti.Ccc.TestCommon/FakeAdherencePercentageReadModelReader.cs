@@ -29,5 +29,10 @@ namespace Teleopti.Ccc.TestCommon
 		{
 			return _models.FirstOrDefault(x => x.BelongsToDate == date && x.PersonId.Equals(personId));
 		}
+
+		public void Has(AdherencePercentageReadModel adherencePercentageReadModel)
+		{
+			_models.Add(adherencePercentageReadModel);
+		}
 	}
 }
