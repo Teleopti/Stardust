@@ -24,7 +24,8 @@ namespace Teleopti.Ccc.Web.Areas.Tenant.Core
 				var configReader = c.Resolve<IConfigReader>();
 				return TenantUnitOfWorkManager.CreateInstanceForWeb(configReader.ConnectionStrings[tenancyConnectionStringKey].ConnectionString);
 			})
-				.AsImplementedInterfaces()
+				.As<ITenantUnitOfWorkManager>()
+				.As<ICurrentTenantSession>()
 				.SingleInstance();
 			builder.RegisterType<TenantUnitOfWorkAspect>().SingleInstance();
 			builder.RegisterType<PersistLogonAttempt>().As<IPersistLogonAttempt>().SingleInstance();
