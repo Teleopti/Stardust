@@ -169,7 +169,6 @@ namespace Teleopti.Ccc.Sdk.WcfHost
 					.InstancePerDependency();
 			  builder.RegisterModule(SchedulePersistModule.ForOtherModules());
 
-			  builder.RegisterModule(new TenantClientModule(configuration));
 			  builder.RegisterType<MultiTenancyApplicationLogon>().As<IMultiTenancyApplicationLogon>().SingleInstance();
 			  builder.RegisterType<MultiTenancyWindowsLogon>().As<IMultiTenancyWindowsLogon>().SingleInstance();
 
