@@ -6,7 +6,6 @@ namespace Teleopti.Ccc.Domain.Security.Authentication
 	public interface ILogonModel
 	{
 		bool GetConfigFromWebService { get; set; }
-		IList<IDataSourceContainer> DataSourceContainers { get; set; }
 		IDataSourceContainer SelectedDataSourceContainer { get; set; }
 		IList<string> Sdks { get; set; }
 		string SelectedSdk { get; set; }
@@ -26,7 +25,6 @@ namespace Teleopti.Ccc.Domain.Security.Authentication
 			AuthenticationType = AuthenticationTypeOption.Windows;
 		}
 		public bool GetConfigFromWebService { get; set; }
-		public IList<IDataSourceContainer> DataSourceContainers { get; set; }
 		public IDataSourceContainer SelectedDataSourceContainer { get; set; }
 		public IList<string> Sdks { get; set; }
 		public string SelectedSdk { get; set; }

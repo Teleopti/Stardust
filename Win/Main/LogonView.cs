@@ -27,17 +27,21 @@ namespace Teleopti.Ccc.Win.Main
 			labelVersion.Text = string.Concat("Version ", Application.ProductVersion);
 		}
 
-		public bool StartLogon(bool showDataSourceSelection)
+		public bool StartLogon(IMessageBrokerComposite messageBroker)
 		{
 			_logonSteps = new List<ILogonStep>
 				{
 					new SelectSdkScreen(this, _model),
-					new SelectDatasourceScreen(this, _model, showDataSourceSelection),
+					new SelectDatasourceScreen(this, _model),
 					new LoginScreen(this, _model),
 					new SelectBuScreen(this, _model)
 				};
-			var result = ShowDialog();
-			return result != DialogResult.Cancel;
+			if (InitStateHolderWithoutDataSource(messageBroker))
+			{
+				DialogResult result = ShowDialog();
+				return result != DialogResult.Cancel;
+			}
+			return false;
 		}
 
 		public void ShowStep(bool showBackButton)
@@ -58,28 +62,7 @@ namespace Teleopti.Ccc.Win.Main
 			
 			Refresh();
 		}
-
-		public bool InitializeAndCheckStateHolder(string skdProxyName, IMessageBrokerComposite messageBroker)
-		{
-			// ReSharper disable LocalizableElement
-			if (_model.GetConfigFromWebService)
-			{
-				if (!LogonInitializeStateHolder.GetConfigFromWebService(skdProxyName, messageBroker))
-					return showError();
-			}
-			else
-			{
-				var nhibConfPath = ApplicationDeployment.IsNetworkDeployed
-					                   ? ApplicationDeployment.CurrentDeployment.DataDirectory
-					                   : ConfigurationManager.AppSettings["nhibConfPath"];
-				var useMessageBroker = string.IsNullOrEmpty(ConfigurationManager.AppSettings["MessageBroker"]);
-
-				if (!LogonInitializeStateHolder.GetConfigFromFileSystem(nhibConfPath, useMessageBroker, messageBroker))
-					return showError();
-			}
-			return true;
-		}
-
+		
 		public bool InitStateHolderWithoutDataSource(IMessageBrokerComposite messageBroker)
 		{
 			if (_model.GetConfigFromWebService)

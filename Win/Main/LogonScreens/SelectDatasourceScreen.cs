@@ -1,5 +1,3 @@
-using System.Collections.Generic;
-using System.Linq;
 using System.Windows.Forms;
 using Syncfusion.Windows.Forms.Tools;
 using Teleopti.Ccc.Domain.Security.Authentication;
@@ -12,64 +10,30 @@ namespace Teleopti.Ccc.Win.Main.LogonScreens
 	{
 		private readonly ILogonView _logonView;
 		private LogonModel _model;
-		private readonly bool _showDataSourceSelection;
-		private List<IDataSourceContainer> _logonableWindowsDataSources;
-		private List<IDataSourceContainer> _availableApplicationDataSources;
-
-		public SelectDatasourceScreen(ILogonView logonView, LogonModel model, bool showDataSourceSelection)
+		
+		public SelectDatasourceScreen(ILogonView logonView, LogonModel model)
 		{
 			_logonView = logonView;
 			_model = model;
-			_showDataSourceSelection = showDataSourceSelection;
 			InitializeComponent();
-			if (!DesignMode)
-				runTimeDesign();
 		}
 
-		private void runTimeDesign()
-		{
-			comboBoxAdvDataSource.Style = Syncfusion.Windows.Forms.VisualStyle.Metro;
-		}
+		
 		public void SetData()
-		{
-			_logonableWindowsDataSources = _model.DataSourceContainers.Where(d => d.AuthenticationTypeOption == AuthenticationTypeOption.Windows).ToList();
-			_availableApplicationDataSources = _model.DataSourceContainers.Where(d => d.AuthenticationTypeOption == AuthenticationTypeOption.Application).ToList();
-			comboBoxAdvDataSource.DisplayMember = "DataSourceName";
-			comboBoxAdvDataSource.DataSource = _logonableWindowsDataSources;
-
-			if (_logonableWindowsDataSources.Count < 1 && _showDataSourceSelection)
-			{
-				radioButtonAdvApplication.Visible = false;
-				radioButtonAdvWindows.Visible = false;
-				comboBoxAdvDataSource.DataSource = _availableApplicationDataSources;
-			}
-
-			setCorrectList();
-			
-			comboBoxAdvDataSource.Visible = _showDataSourceSelection;
-			labelChooseDataSource.Visible = _showDataSourceSelection;
-			if(comboBoxAdvDataSource.Visible)
-				comboBoxAdvDataSource.Select();
-			else
-				radioButtonAdvWindows.Select();
-		}
-
-		private void setCorrectList()
 		{
 			radioButtonAdvWindows.Checked = _model.AuthenticationType == AuthenticationTypeOption.Windows;
 			radioButtonAdvApplication.Checked = _model.AuthenticationType == AuthenticationTypeOption.Application;
-			comboBoxAdvDataSource.DataSource = radioButtonAdvWindows.Checked ? _logonableWindowsDataSources : _availableApplicationDataSources;
+			
+			radioButtonAdvWindows.Select();
 		}
-
+		
 		public void GetData()
 		{
-			_model.SelectedDataSourceContainer = (IDataSourceContainer)comboBoxAdvDataSource.SelectedItem;
 		}
 
 		public void Release()
 		{
 			_model = null;
-			comboBoxAdvDataSource.DataSource = null;
 		}
 
 		public void SetBackButtonVisible(bool visible)
@@ -106,20 +70,15 @@ namespace Teleopti.Ccc.Win.Main.LogonScreens
 
 		private void radioButtonAdvWindows_CheckChanged(object sender, System.EventArgs e)
 		{
-			comboBoxAdvDataSource.DataSource = null;
-			comboBoxAdvDataSource.DisplayMember = "DataSourceName";
 			if (radioButtonAdvWindows.Checked)
 			{
 				_model.AuthenticationType = AuthenticationTypeOption.Windows;
-				comboBoxAdvDataSource.DataSource = _logonableWindowsDataSources;
 			}
 			else
 			{
 				_model.AuthenticationType = AuthenticationTypeOption.Application;
-				comboBoxAdvDataSource.DataSource = _availableApplicationDataSources;
 			}
 
-			comboBoxAdvDataSource.Select();
 		}
 
 	}

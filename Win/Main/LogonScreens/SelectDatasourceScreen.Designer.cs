@@ -29,30 +29,13 @@ namespace Teleopti.Ccc.Win.Main.LogonScreens
 		private void InitializeComponent()
 		{
 			this.components = new System.ComponentModel.Container();
-			this.labelChooseDataSource = new System.Windows.Forms.Label();
 			this.buttonLogOnOK = new Syncfusion.Windows.Forms.ButtonAdv();
 			this.btnBack = new Syncfusion.Windows.Forms.ButtonAdv();
-			this.comboBoxAdvDataSource = new Syncfusion.Windows.Forms.Tools.ComboBoxAdv();
 			this.radioButtonAdvWindows = new Syncfusion.Windows.Forms.Tools.RadioButtonAdv();
 			this.radioButtonAdvApplication = new Syncfusion.Windows.Forms.Tools.RadioButtonAdv();
-			((System.ComponentModel.ISupportInitialize)(this.comboBoxAdvDataSource)).BeginInit();
 			((System.ComponentModel.ISupportInitialize)(this.radioButtonAdvWindows)).BeginInit();
 			((System.ComponentModel.ISupportInitialize)(this.radioButtonAdvApplication)).BeginInit();
 			this.SuspendLayout();
-			// 
-			// labelChooseDataSource
-			// 
-			this.labelChooseDataSource.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-			this.labelChooseDataSource.AutoSize = true;
-			this.labelChooseDataSource.BackColor = System.Drawing.Color.Transparent;
-			this.labelChooseDataSource.Font = new System.Drawing.Font("Segoe UI", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-			this.labelChooseDataSource.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(153)))), ((int)(((byte)(255)))));
-			this.labelChooseDataSource.Location = new System.Drawing.Point(0, 0);
-			this.labelChooseDataSource.Name = "labelChooseDataSource";
-			this.labelChooseDataSource.Size = new System.Drawing.Size(165, 25);
-			this.labelChooseDataSource.TabIndex = 36;
-			this.labelChooseDataSource.Text = "Select data source";
 			// 
 			// buttonLogOnOK
 			// 
@@ -90,22 +73,11 @@ namespace Teleopti.Ccc.Win.Main.LogonScreens
 			this.btnBack.UseVisualStyleBackColor = false;
 			this.btnBack.Click += new System.EventHandler(this.btnBack_Click);
 			// 
-			// comboBoxAdvDataSource
-			// 
-			this.comboBoxAdvDataSource.BackColor = System.Drawing.Color.White;
-			this.comboBoxAdvDataSource.BeforeTouchSize = new System.Drawing.Size(223, 23);
-			this.comboBoxAdvDataSource.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-			this.comboBoxAdvDataSource.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-			this.comboBoxAdvDataSource.Location = new System.Drawing.Point(3, 28);
-			this.comboBoxAdvDataSource.MetroColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(153)))), ((int)(((byte)(255)))));
-			this.comboBoxAdvDataSource.Name = "comboBoxAdvDataSource";
-			this.comboBoxAdvDataSource.Size = new System.Drawing.Size(223, 23);
-			this.comboBoxAdvDataSource.TabIndex = 0;
-			// 
 			// radioButtonAdvWindows
 			// 
 			this.radioButtonAdvWindows.BeforeTouchSize = new System.Drawing.Size(211, 21);
 			this.radioButtonAdvWindows.Checked = true;
+			this.radioButtonAdvWindows.DrawFocusRectangle = false;
 			this.radioButtonAdvWindows.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
 			this.radioButtonAdvWindows.Location = new System.Drawing.Point(3, 65);
 			this.radioButtonAdvWindows.MetroColor = System.Drawing.Color.FromArgb(((int)(((byte)(88)))), ((int)(((byte)(89)))), ((int)(((byte)(91)))));
@@ -120,6 +92,7 @@ namespace Teleopti.Ccc.Win.Main.LogonScreens
 			// radioButtonAdvApplication
 			// 
 			this.radioButtonAdvApplication.BeforeTouchSize = new System.Drawing.Size(211, 21);
+			this.radioButtonAdvApplication.DrawFocusRectangle = false;
 			this.radioButtonAdvApplication.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
 			this.radioButtonAdvApplication.Location = new System.Drawing.Point(3, 85);
 			this.radioButtonAdvApplication.MetroColor = System.Drawing.Color.FromArgb(((int)(((byte)(88)))), ((int)(((byte)(89)))), ((int)(((byte)(91)))));
@@ -127,6 +100,7 @@ namespace Teleopti.Ccc.Win.Main.LogonScreens
 			this.radioButtonAdvApplication.Size = new System.Drawing.Size(211, 21);
 			this.radioButtonAdvApplication.Style = Syncfusion.Windows.Forms.Tools.RadioButtonAdvStyle.Metro;
 			this.radioButtonAdvApplication.TabIndex = 2;
+			this.radioButtonAdvApplication.TabStop = false;
 			this.radioButtonAdvApplication.Text = "&Application logon";
 			this.radioButtonAdvApplication.ThemesEnabled = false;
 			// 
@@ -137,26 +111,20 @@ namespace Teleopti.Ccc.Win.Main.LogonScreens
 			this.Controls.Add(this.btnBack);
 			this.Controls.Add(this.radioButtonAdvApplication);
 			this.Controls.Add(this.radioButtonAdvWindows);
-			this.Controls.Add(this.comboBoxAdvDataSource);
 			this.Controls.Add(this.buttonLogOnOK);
-			this.Controls.Add(this.labelChooseDataSource);
 			this.Font = new System.Drawing.Font("Segoe UI", 8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
 			this.Name = "SelectDatasourceScreen";
 			this.Size = new System.Drawing.Size(285, 142);
-			((System.ComponentModel.ISupportInitialize)(this.comboBoxAdvDataSource)).EndInit();
 			((System.ComponentModel.ISupportInitialize)(this.radioButtonAdvWindows)).EndInit();
 			((System.ComponentModel.ISupportInitialize)(this.radioButtonAdvApplication)).EndInit();
 			this.ResumeLayout(false);
-			this.PerformLayout();
 
 		}
 
 		#endregion
 
-		private System.Windows.Forms.Label labelChooseDataSource;
 		private Syncfusion.Windows.Forms.ButtonAdv buttonLogOnOK;
 		private Syncfusion.Windows.Forms.ButtonAdv btnBack;
-		private Syncfusion.Windows.Forms.Tools.ComboBoxAdv comboBoxAdvDataSource;
 		private Syncfusion.Windows.Forms.Tools.RadioButtonAdv radioButtonAdvWindows;
 		private Syncfusion.Windows.Forms.Tools.RadioButtonAdv radioButtonAdvApplication;
 

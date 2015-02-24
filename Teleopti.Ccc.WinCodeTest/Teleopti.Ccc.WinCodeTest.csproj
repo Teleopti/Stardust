@@ -435,7 +435,6 @@
     <Compile Include="Main\AuthenticationFromFileQuerierTest.cs" />
     <Compile Include="Main\LicenseStatusLoaderTest.cs" />
     <Compile Include="Main\LoginInitializerTest.cs" />
-    <Compile Include="Main\LogonDataSourceHandlerTest.cs" />
     <Compile Include="Main\LogonLicenseCheckerTest.cs" />
     <Compile Include="Main\LogonMatrixTest.cs" />
     <Compile Include="Main\MultiTenancyLogonPresenterTest.cs" />

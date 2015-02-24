@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using NUnit.Framework;
 using Rhino.Mocks;
 using SharpTestsEx;
@@ -19,7 +18,6 @@ namespace Teleopti.Ccc.DomainTest.Security.MultiTenancyAuthentication
 		private IRepositoryFactory _repositoryFactory;
 		private IAuthenticationQuerier _authenticationQuerier;
 		private IDataSource _dataSource;
-		private DataSourceContainer _dataSourceCont;
 		private ILogonModel _model;
 		private IApplicationData _appData;
 		private IWindowsUserProvider _windowsUserProvider;
@@ -34,8 +32,7 @@ namespace Teleopti.Ccc.DomainTest.Security.MultiTenancyAuthentication
 			_dataSource = MockRepository.GenerateMock<IDataSource>();
 			_appData = MockRepository.GenerateStub<IApplicationData>();
 			_dataSource.Expect(x => x.DataSourceName).Return("Teleopti WFM");
-			_dataSourceCont = new DataSourceContainer(_dataSource, _repositoryFactory, null, AuthenticationTypeOption.Application);
-			_model = new logonModel { DataSourceContainers = new List<IDataSourceContainer> { _dataSourceCont }, UserName = "kalle", Password = "kula" };
+			_model = new LogonModel { UserName = "kalle", Password = "kula" };
 			_target = new MultiTenancyWindowsLogon(_repositoryFactory, _authenticationQuerier, _windowsUserProvider);
 		}
 
@@ -76,23 +73,5 @@ namespace Teleopti.Ccc.DomainTest.Security.MultiTenancyAuthentication
 			_model.SelectedDataSourceContainer.Should().Be.Null();
 		}
 	}
-	class logonModel : ILogonModel
-	{
-		public bool GetConfigFromWebService { get; set; }
-		public IList<IDataSourceContainer> DataSourceContainers { get; set; }
-		public IDataSourceContainer SelectedDataSourceContainer { get; set; }
-		public IList<string> Sdks { get; set; }
-		public string SelectedSdk { get; set; }
-		public IList<IBusinessUnit> AvailableBus { get; set; }
-		public IBusinessUnit SelectedBu { get; set; }
-		public string UserName { get; set; }
-		public string Password { get; set; }
-		public bool HasValidLogin()
-		{
-			throw new NotImplementedException();
-		}
-
-		public AuthenticationTypeOption AuthenticationType { get; set; }
-		public string Warning { get; set; }
-	}
+	
 }

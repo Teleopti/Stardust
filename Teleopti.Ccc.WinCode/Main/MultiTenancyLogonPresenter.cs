@@ -27,7 +27,7 @@ namespace Teleopti.Ccc.WinCode.Main
 	public enum LoginStep
 	{
 		SelectSdk = 0,
-		SelectDatasource = 1,
+		SelectLogonType = 1,
 		Login = 2,
 		SelectBu = 3,
 		Loading = 4, // not used
@@ -75,7 +75,7 @@ namespace Teleopti.Ccc.WinCode.Main
 		public bool Start()
 		{
 			CurrentStep = LoginStep.SelectSdk;
-			return _view.StartLogon(false);
+			return _view.StartLogon(_messageBroker);
 		}
 
 		public void Initialize()
@@ -100,7 +100,7 @@ namespace Teleopti.Ccc.WinCode.Main
 			{
 				case LoginStep.SelectSdk:
 					return _model.SelectedSdk != null;
-				case LoginStep.SelectDatasource:
+				case LoginStep.SelectLogonType:
 					return checkAndReportDataSources();
 				case LoginStep.Login:
 					return _model.HasValidLogin();
@@ -133,8 +133,8 @@ namespace Teleopti.Ccc.WinCode.Main
 					if (!goingBack)
 						getSdks();
 					break;
-				case LoginStep.SelectDatasource:
-					getDataSources();
+				case LoginStep.SelectLogonType:
+					getLogonType();
 					break;
 				case LoginStep.Login:
 					_view.ShowStep(true);
@@ -157,24 +157,15 @@ namespace Teleopti.Ccc.WinCode.Main
 			{
 				_model.SelectedSdk = endpoints[0];
 				CurrentStep++;
-				getDataSources();
+				getLogonType();
 			}
 
 
 			_view.ShowStep(false);
 		}
 
-		private void getDataSources()
+		private void getLogonType()
 		{
-			if (_model.DataSourceContainers == null)
-			{
-				if (!_view.InitStateHolderWithoutDataSource(_messageBroker))
-					CurrentStep--; //?
-			}
-			
-
-			_model.DataSourceContainers = new List<IDataSourceContainer>();
-	
 			_view.ShowStep(false); //once a sdk is loaded it is not changeable
 		}
 
@@ -206,7 +197,7 @@ namespace Teleopti.Ccc.WinCode.Main
 				if (exception.InnerException != null)
 					message = message + " " + exception.InnerException.Message;
 				_view.ShowErrorMessage(message,"Logon Error");
-				CurrentStep = LoginStep.SelectDatasource;
+				CurrentStep = LoginStep.SelectLogonType;
 				_view.ShowStep(false);
 				
 				return;
