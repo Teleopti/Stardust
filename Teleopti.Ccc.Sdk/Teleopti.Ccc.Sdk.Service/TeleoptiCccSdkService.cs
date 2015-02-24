@@ -273,6 +273,7 @@ namespace Teleopti.Ccc.Sdk.WcfService
 		/// <returns>A <see cref="LicenseVerificationResultDto"/>.</returns>
 		public LicenseVerificationResultDto VerifyLicense()
 		{
+			//TODO: tenant, do need to do something here? Detect tenant?
 			//wrong - if multidb...
 			
 			return _factoryProvider.CreateLicenseFactory().VerifyLicense(UnitOfWorkFactory.Current, "");
@@ -392,6 +393,7 @@ namespace Teleopti.Ccc.Sdk.WcfService
 		public bool IsAuthenticated()
 		{
 			//also wrong if multidb
+			//TODO: tenant, but this is obsolete so it is no problem
 			return (StateHolderReader.Instance.StateReader.IsLoggedIn
                 && new LicenseCache().Get("") != null);
 		}
