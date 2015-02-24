@@ -157,7 +157,6 @@
     <Compile Include="TestData\Setups\Configurable\WorkloadConfigurable.cs" />
     <Compile Include="ThreadCulture.cs" />
     <Compile Include="DatabaseHelper.cs" />
-    <Compile Include="DateTimeExtensions.cs" />
     <Compile Include="DummyContextPopulator.cs" />
     <Compile Include="EntityExtensions.cs" />
     <Compile Include="FakeConfigReader.cs" />

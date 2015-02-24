@@ -333,7 +333,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta
 		public void ShouldBuildWithActivityName()
 		{
 			var personId = Guid.NewGuid();
-			Culture.IsCatalan();
 			Now.Is("2014-11-20 9:00");
 			Reader.Data(new AdherenceDetailsReadModel
 			{
@@ -357,7 +356,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta
 		}
 
 		[Test]
-		public void ShouldFormatTime()
+		public void ShouldFormatActivityTimes()
 		{
 			var personId = Guid.NewGuid();
 			Now.Is("2014-11-20 9:00");
@@ -380,8 +379,8 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta
 			});
 			
 			var result = Target.Build(personId);
-			result.First().StartTime.Should().Be("2014-11-20 8:00".Utc().ToShortTimeString(new CatalanCulture().GetCulture()));
-			result.First().ActualStartTime.Should().Be("2014-11-20 9:00".Utc().ToShortTimeString(new CatalanCulture().GetCulture()));
+			result.First().StartTime.Should().Be("2014-11-20 8:00".Utc().ToShortTimeString(Culture));
+			result.First().ActualStartTime.Should().Be("2014-11-20 9:00".Utc().ToShortTimeString(Culture));
 		}
 
 		[Test]
@@ -390,6 +389,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta
 			var personId = Guid.NewGuid();
 			Now.Is("2014-11-20 9:00");
 			Culture.IsCatalan();
+			TimeZone.IsHawaii();
 			Reader.Data(new AdherenceDetailsReadModel
 			{
 				PersonId = personId,
@@ -413,9 +413,40 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta
 			var result = Target.Build(personId);
 
 			result.Last().Name.Should().Be(UserTexts.Resources.End);
-			result.Last().StartTime.Should().Be("2014-11-20 9:00".Utc().ToShortTimeString(new CatalanCulture().GetCulture()));
-			result.Last().ActualStartTime.Should().Be("2014-11-20 9:00".Utc().ToShortTimeString(new CatalanCulture().GetCulture()));
+			result.Last().StartTime.Should().Be("2014-11-20 9:00".InHawaii().AsCatalanShortTime());
+			result.Last().ActualStartTime.Should().Be("2014-11-20 9:00".InHawaii().AsCatalanShortTime());
 			result.Last().AdherencePercent.Should().Be(null);
 		}
+
+		[Test]
+		public void ShouldConvertActivityTimesToUserTimeZone()
+		{
+			var personId = Guid.NewGuid();
+			TimeZone.IsHawaii();
+			Now.Is("2014-11-20 9:00");
+			Reader.Data(new AdherenceDetailsReadModel
+			{
+				PersonId = personId,
+				Date = "2014-11-20".Utc(),
+				Model = new AdherenceDetailsModel
+				{
+					Activities = new[]
+					{
+						new ActivityAdherence
+						{
+							ActualStartTime = "2014-11-20 9:00".Utc(),
+							StartTime = "2014-11-20 8:00".Utc(),
+						}
+					}
+				}
+			});
+
+			var result = Target.Build(personId);
+
+			result.First().StartTime.Should().Be("2014-11-20 8:00".InHawaii().AsShortTime(Culture));
+			result.First().ActualStartTime.Should().Be("2014-11-20 9:00".InHawaii().AsShortTime(Culture));
+		}
+
+
 	}
 }

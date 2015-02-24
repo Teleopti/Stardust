@@ -39,8 +39,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta
 				result.Add(new AdherenceDetailsPercentageModel
 				{
 					Name = detail.Name,
-					StartTime = convertToAgentTimeZoneAndFormatTimestamp(detail.StartTime),
-					ActualStartTime = convertToAgentTimeZoneAndFormatTimestamp(detail.ActualStartTime),
+					StartTime = formatToUserTimeZone(detail.StartTime),
+					ActualStartTime = formatToUserTimeZone(detail.ActualStartTime),
 					AdherencePercent =
 						(int)_calculateAdherencePercent.ForActivity(readModel.Model, detail, isActivityEnded(i, detailModels.Count(), readModel.Model.ShiftEndTime.HasValue), readModel.Model.LastAdherence)
 								.ValueAsPercent()
@@ -51,8 +51,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta
 				result.Add(new AdherenceDetailsPercentageModel
 				{
 					Name = UserTexts.Resources.End,
-					StartTime = convertToAgentTimeZoneAndFormatTimestamp(readModel.Model.ShiftEndTime),
-					ActualStartTime = convertToAgentTimeZoneAndFormatTimestamp(readModel.Model.ActualEndTime)
+					StartTime = formatToUserTimeZone(readModel.Model.ShiftEndTime),
+					ActualStartTime = formatToUserTimeZone(readModel.Model.ActualEndTime)
 				});
 			}
 			return result;
@@ -63,12 +63,12 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta
 			return modelIndex < totalActivites - 1 || hasShiftEnded;
 		}
 
-		private string convertToAgentTimeZoneAndFormatTimestamp(DateTime? timestamp)
+		private string formatToUserTimeZone(DateTime? timestamp)
 		{
 			if (!timestamp.HasValue)
 				return string.Empty;
-			var localTimestamp = TimeZoneInfo.ConvertTimeFromUtc(timestamp.Value, _timeZone.TimeZone());
-			return localTimestamp.ToString(_culture.GetCulture().DateTimeFormat.ShortTimePattern);
+			var userTime = TimeZoneInfo.ConvertTimeFromUtc(timestamp.Value, _timeZone.TimeZone());
+			return userTime.ToString(_culture.GetCulture().DateTimeFormat.ShortTimePattern);
 		}
 
 	}

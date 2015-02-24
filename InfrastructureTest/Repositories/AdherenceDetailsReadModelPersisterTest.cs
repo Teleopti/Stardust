@@ -122,8 +122,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 					{
 						new ActivityAdherence
 						{
-							ActualStartTime = null,
-							StartTime = null,
+							ActualStartTime = null
 						}
 					}
 				}
@@ -132,7 +131,6 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			var model = Target.Get(personId, "2014-11-19".Date());
 			model.Model.LastUpdate.Should().Be(null);
 			var detail = model.Model.Activities.First();
-			detail.StartTime.Should().Be(null);
 			detail.ActualStartTime.Should().Be(null);
 		}
 
