@@ -6,6 +6,7 @@ using Microsoft.Practices.Composite.Events;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
+using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.WinCode.Common;
@@ -82,14 +83,14 @@ namespace Teleopti.Ccc.WpfControls.Controls.Editor
         }
 
         public void LoadSelectablePayloads()
-        {
-            CommonStateHolder stateHolder = new CommonStateHolder();
-            using(IUnitOfWork uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
-            {
-                stateHolder.LoadCommonStateHolder(new RepositoryFactory(), uow);
-                LoadFromStateHolder(stateHolder);
-            }
-        }
+		{
+	        using (IUnitOfWork uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
+	        {
+		        var stateHolder = new CommonStateHolder(new DisableDeletedFilter(new FixedCurrentUnitOfWork(uow)));
+		        stateHolder.LoadCommonStateHolder(new RepositoryFactory(), uow);
+		        LoadFromStateHolder(stateHolder);
+	        }
+		}
 
         #region IShiftEditor Members
 

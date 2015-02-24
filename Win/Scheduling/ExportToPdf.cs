@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Windows.Forms;
 using Syncfusion.Windows.Forms;
+using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
 using Teleopti.Ccc.Win.Scheduling.ScheduleReporting;
 using Teleopti.Ccc.WinCode.Common;
 using Teleopti.Ccc.WinCode.Scheduling;
@@ -63,7 +64,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 					personDic.Add(part.Person, _schedulerStateHolder.CommonAgentNameScheduleExport(part.Person));
 			}
 
-			var period = OptimizerHelperHelper.GetSelectedPeriod(selection);
+			var period = new OptimizerHelperHelper().GetSelectedPeriod(selection);
 
 			string path;
 

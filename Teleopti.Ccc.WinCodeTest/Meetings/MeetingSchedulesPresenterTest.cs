@@ -8,9 +8,10 @@ using Rhino.Mocks;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
+using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
 using Teleopti.Ccc.Domain.Scheduling.Meetings;
+using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.TestCommon.FakeData;
-using Teleopti.Ccc.WinCode.Common;
 using Teleopti.Ccc.WinCode.Meetings;
 using Teleopti.Ccc.WinCode.Meetings.Interfaces;
 using Teleopti.Ccc.WinCode.Scheduling;
@@ -18,7 +19,6 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.WinCodeTest.Meetings
 {
-    [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1001:TypesThatOwnDisposableFieldsShouldBeDisposable"), TestFixture]
     public class MeetingSchedulesPresenterTest
     {
         private MockRepository _mocks;
@@ -50,7 +50,7 @@ namespace Teleopti.Ccc.WinCodeTest.Meetings
             _scenario = _mocks.StrictMock<IScenario>();
             _rangeProjectionService = _mocks.StrictMock<IRangeProjectionService>();
             _schedulerStateLoader = _mocks.DynamicMock<ISchedulerStateLoader>();
-			_schedulerStateHolder = new SchedulerStateHolder(_scenario, new DateOnlyPeriodAsDateTimePeriod(_period, _timeZone), new List<IPerson> { _person });
+			_schedulerStateHolder = new SchedulerStateHolder(_scenario, new DateOnlyPeriodAsDateTimePeriod(_period, _timeZone), new List<IPerson> { _person }, _mocks.DynamicMock<IDisableDeletedFilter>());
 		    _schedulerStateHolder.TimeZoneInfo = _timeZone;
             _meetingSlotFinderService = _mocks.StrictMock<IMeetingSlotFinderService>();
 

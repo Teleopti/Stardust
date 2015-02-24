@@ -1,6 +1,7 @@
 ﻿using System;
 using Autofac;
 using Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.Seniority;
+using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
 using Teleopti.Ccc.WinCode.Common;
 
 namespace Teleopti.Ccc.WinCode.Scheduling.ScheduleSortingCommands

@@ -3,8 +3,9 @@ using System.Linq;
 using NUnit.Framework;
 using Rhino.Mocks;
 using Teleopti.Ccc.Domain.Repositories;
+using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
+using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.TestCommon.FakeData;
-using Teleopti.Ccc.WinCode.Common;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
 
@@ -28,7 +29,6 @@ namespace Teleopti.Ccc.WinCodeTest.Common
         public void Setup()
         {
             _mockRep = new MockRepository();
-            _commonStateHolder = new CommonStateHolder();
         }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling"), Test]
@@ -72,6 +72,8 @@ namespace Teleopti.Ccc.WinCodeTest.Common
 	        Expect.Call(workflowControlSetRepository.LoadAll()).Return(_workflowControlSets);
 
             _mockRep.ReplayAll();
+
+			_commonStateHolder = new CommonStateHolder(new DisableDeletedFilter(new FixedCurrentUnitOfWork(unitOfWork)));
             _commonStateHolder.LoadCommonStateHolder(repositoryFactory,unitOfWork);
 
             Assert.AreEqual(1, _commonStateHolder.Absences.Count());

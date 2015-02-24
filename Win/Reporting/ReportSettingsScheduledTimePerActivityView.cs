@@ -4,6 +4,7 @@ using System.Linq;
 using Autofac;
 using Microsoft.Practices.Composite.Events;
 using Teleopti.Ccc.Domain.Common;
+using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.Security.AuthorizationEntities;
 using Teleopti.Ccc.Domain.Security.Principal;
@@ -94,7 +95,7 @@ namespace Teleopti.Ccc.Win.Reporting
                 factory.CreateContractScheduleRepository(unitOfWork).LoadAllAggregate();
 
                 ICollection<IPerson> persons = rep.FindPeopleInOrganization(period, false);
-                return new SchedulerStateHolder(Scenario, new DateOnlyPeriodAsDateTimePeriod(period,TimeZoneHelper.CurrentSessionTimeZone), persons);
+				return new SchedulerStateHolder(Scenario, new DateOnlyPeriodAsDateTimePeriod(period, TimeZoneHelper.CurrentSessionTimeZone), persons, new DisableDeletedFilter(new FixedCurrentUnitOfWork(unitOfWork)));
             }
         }
 

@@ -193,14 +193,6 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
         }
 
         [Test]
-        public void VerifyToolTipConflictingAssignments()
-        {
-            //will be removed (or changed)
-					ViewBaseHelper.GetToolTipConflictingAssignments(_scheduleRange.ScheduledDay(new DateOnly(2001, 1, 1)))
-						.Should().Be.Empty();
-        }
-
-        [Test]
         public void VerifyToolTipAbsences()
         {
             IPersonAbsence abs3 = new PersonAbsence(_agent, _scenario, new AbsenceLayer(_absence, new DateTimePeriod(2006, 1, 1, 2006, 1, 3)));

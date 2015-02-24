@@ -6,12 +6,13 @@ using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.Repositories;
+using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
 using Teleopti.Ccc.Domain.Scheduling.Meetings;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Domain.SystemSetting.GlobalSetting;
 using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.Infrastructure.Repositories;
-using Teleopti.Ccc.WinCode.Common;
+using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.WinCode.Meetings.Interfaces;
 using Teleopti.Ccc.WinCode.Scheduling;
 using Teleopti.Interfaces.Domain;
@@ -24,7 +25,8 @@ namespace Teleopti.Ccc.WinCode.Meetings
         private ISchedulerStateHolder _schedulerStateHolder;
         private readonly IMeetingComposerView _view;
         private readonly IMeetingViewModel _model;
-        private readonly DateOnly _minDate = new DateOnly(DateHelper.MinSmallDateTime);
+	    private readonly IDisableDeletedFilter _disableDeletedFilter;
+	    private readonly DateOnly _minDate = new DateOnly(DateHelper.MinSmallDateTime);
         private readonly DateOnly _maxDate = new DateOnly(DateHelper.MaxSmallDateTime);
         private Guid _instanceId = Guid.NewGuid();
         protected static CommonNameDescriptionSetting CommonNameDescription;
@@ -33,16 +35,18 @@ namespace Teleopti.Ccc.WinCode.Meetings
         private bool _disposed;
     	private bool _trySave;
 
-    	public MeetingComposerPresenter(IMeetingComposerView view, IMeetingViewModel model)
+    	public MeetingComposerPresenter(IMeetingComposerView view, IMeetingViewModel model, IDisableDeletedFilter disableDeletedFilter)
         {
             _view = view;
             _model = model;
+    		_disableDeletedFilter = disableDeletedFilter;
 
-            RepositoryFactory = new RepositoryFactory();
+    		RepositoryFactory = new RepositoryFactory();
             UnitOfWorkFactory = Infrastructure.UnitOfWork.UnitOfWorkFactory.Current;
         }
 
-        public MeetingComposerPresenter(IMeetingComposerView view, IMeetingViewModel model, ISchedulerStateHolder schedulerStateHolder) : this(view,model)
+		public MeetingComposerPresenter(IMeetingComposerView view, IMeetingViewModel model, IDisableDeletedFilter disableDeletedFilter, ISchedulerStateHolder schedulerStateHolder)
+			: this(view, model,disableDeletedFilter)
         {
             _schedulerStateHolder = schedulerStateHolder;
 
@@ -115,7 +119,7 @@ namespace Teleopti.Ccc.WinCode.Meetings
                 var availablePersons = _schedulerStateHolder.SchedulingResultState.PersonsInOrganization;
                 _schedulerStateHolder = new SchedulerStateHolder(_schedulerStateHolder.RequestedScenario,
                                                                  _schedulerStateHolder.RequestedPeriod,
-                                                                 availablePersons);
+																 availablePersons, new DisableDeletedFilter(new CurrentUnitOfWork(new CurrentUnitOfWorkFactory(new CurrentTeleoptiPrincipal()))));
                 _schedulerStateHolder.SchedulingResultState.PersonsInOrganization = new List<IPerson>(availablePersons);
             }
 
@@ -142,8 +146,8 @@ namespace Teleopti.Ccc.WinCode.Meetings
         {
             var requestedPeriod =
                 new DateOnlyPeriod(_model.StartDate.AddDays(-1), _model.RecurringEndDate.AddDays(2));
-			_schedulerStateHolder = new SchedulerStateHolder(_model.Meeting.Scenario, new DateOnlyPeriodAsDateTimePeriod(requestedPeriod, Model.TimeZone), 
-                                                             new List<IPerson>());
+			_schedulerStateHolder = new SchedulerStateHolder(_model.Meeting.Scenario, new DateOnlyPeriodAsDateTimePeriod(requestedPeriod, Model.TimeZone),
+															 new List<IPerson>(), _disableDeletedFilter);
                                         
             var stateLoader = new SchedulerStateLoader(
                                                     _schedulerStateHolder,

@@ -4,11 +4,12 @@ using NUnit.Framework;
 using Rhino.Mocks;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
+using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Domain.Time;
+using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.TestCommon.FakeData;
-using Teleopti.Ccc.WinCode.Common;
 using Teleopti.Ccc.WinCode.Scheduling;
 using Teleopti.Interfaces.Domain;
 
@@ -45,7 +46,7 @@ namespace Teleopti.Ccc.WinCodeTest
 			_dateOnlyPeriod = new DateOnlyPeriod(2012, 7, 16, 2012, 7, 16);
 			_schedulePart = MockRepository.GenerateMock<IScheduleDay>();
 			_scheduleDictionary = MockRepository.GenerateMock<IScheduleDictionary>();
-			_schedulerStateHolder = new SchedulerStateHolder(_scenario, new DateOnlyPeriodAsDateTimePeriod(_dateOnlyPeriod,TeleoptiPrincipal.Current.Regional.TimeZone),new List<IPerson>());
+			_schedulerStateHolder = new SchedulerStateHolder(_scenario, new DateOnlyPeriodAsDateTimePeriod(_dateOnlyPeriod, TeleoptiPrincipal.Current.Regional.TimeZone), new List<IPerson>(), MockRepository.GenerateMock<IDisableDeletedFilter>());
 			_selectedItem = MockRepository.GenerateMock<IAbsence>();
 			_schedulePresenterBase = MockRepository.GenerateMock<ISchedulePresenterBase>();
 			_principalAuthorization = MockRepository.GenerateMock<IPrincipalAuthorization>();

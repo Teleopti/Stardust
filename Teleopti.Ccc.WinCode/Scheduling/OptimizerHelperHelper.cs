@@ -9,6 +9,7 @@ using Teleopti.Ccc.Domain.Optimization.MatrixLockers;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
+using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
 using Teleopti.Ccc.Secrets.DayOffPlanning;
 using Teleopti.Ccc.WinCode.Common;
 using Teleopti.Interfaces;
@@ -16,9 +17,9 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.WinCode.Scheduling
 {
-	public static class OptimizerHelperHelper
+	public class OptimizerHelperHelper : IOptimizerHelperHelper
 	{
-		public static void ScheduleBlankSpots(
+		public void ScheduleBlankSpots(
 			IEnumerable<IScheduleMatrixOriginalStateContainer> matrixOriginalStateContainers,
 			IScheduleService scheduleService,
 			IComponentContext container,
@@ -29,7 +30,6 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 			var optimizerPreferences = container.Resolve<IOptimizationPreferences>();
 			var schedulingOptionsSynchronizer = new SchedulingOptionsCreator();
 			var schedulingOptions = schedulingOptionsSynchronizer.CreateSchedulingOptions(optimizerPreferences);
-
 
 			foreach (IScheduleMatrixOriginalStateContainer matrixOriginalStateContainer in matrixOriginalStateContainers)
 			{
@@ -57,7 +57,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 			}
 		}
 
-		public static void LockDaysForIntradayOptimization(IList<IScheduleMatrixPro> matrixList, DateOnlyPeriod selectedPeriod)
+		public void LockDaysForIntradayOptimization(IList<IScheduleMatrixPro> matrixList, DateOnlyPeriod selectedPeriod)
 		{
 			IMatrixOvertimeLocker matrixOvertimeLocker = new MatrixOvertimeLocker(matrixList);
 			matrixOvertimeLocker.Execute();
@@ -67,7 +67,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 			matrixUnselectedDaysLocker.Execute();
 		}
 
-		public static void LockDaysForDayOffOptimization(IList<IScheduleMatrixPro> matrixList, IRestrictionExtractor restrictionExtractor, IOptimizationPreferences optimizationPreferences, DateOnlyPeriod selectedPeriod)
+		public void LockDaysForDayOffOptimization(IList<IScheduleMatrixPro> matrixList, IRestrictionExtractor restrictionExtractor, IOptimizationPreferences optimizationPreferences, DateOnlyPeriod selectedPeriod)
 		{
 			var schedulingOptionsCreator = new SchedulingOptionsCreator();
 			var schedulingOptions = schedulingOptionsCreator.CreateSchedulingOptions(optimizationPreferences);
@@ -102,14 +102,14 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 			}
 		}
 
-		public static IPeriodValueCalculator CreatePeriodValueCalculator(IAdvancedPreferences advancedPreferences,
+		public IPeriodValueCalculator CreatePeriodValueCalculator(IAdvancedPreferences advancedPreferences,
 			IScheduleResultDataExtractor dataExtractor)
 		{
 			IPeriodValueCalculatorProvider calculatorProvider = new PeriodValueCalculatorProvider();
 			return calculatorProvider.CreatePeriodValueCalculator(advancedPreferences, dataExtractor);
 		}
 
-		public static IScheduleResultDataExtractor CreateAllSkillsDataExtractor(
+		public IScheduleResultDataExtractor CreateAllSkillsDataExtractor(
 			IAdvancedPreferences advancedPreferences,
 			DateOnlyPeriod selectedPeriod,
 			ISchedulingResultStateHolder stateHolder)
@@ -119,7 +119,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 			return allSkillsDataExtractor;
 		}
 
-		public static IScheduleResultDataExtractor CreatePersonalSkillsDataExtractor(
+		public IScheduleResultDataExtractor CreatePersonalSkillsDataExtractor(
 			IAdvancedPreferences advancedPreferences,
 			IScheduleMatrixPro scheduleMatrix)
 		{
@@ -127,7 +127,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 			return dataExtractorProvider.CreatePersonalSkillDataExtractor(scheduleMatrix, advancedPreferences);
 		}
 
-		public static DateOnlyPeriod GetSelectedPeriod(IEnumerable<IScheduleDay> scheduleDays)
+		public DateOnlyPeriod GetSelectedPeriod(IEnumerable<IScheduleDay> scheduleDays)
 		{
 			if (scheduleDays == null) throw new ArgumentNullException("scheduleDays");
 			DateOnly minDate = DateOnly.MaxValue;
@@ -151,7 +151,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 		/// <remarks>
 		/// This method is used to get the selected objects in a grid.
 		/// </remarks>
-		public static ReadOnlyCollection<IScheduleDay> ContainedSchedulePartList(IEnumerable<Clip> clipList)
+		public ReadOnlyCollection<IScheduleDay> ContainedSchedulePartList(IEnumerable<Clip> clipList)
 		{
 			Func<IList<IScheduleDay>> clipObjectListFilter = delegate
 			{
@@ -170,7 +170,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 			return new ReadOnlyCollection<IScheduleDay>(clipObjectListFilter());
 		}
 
-		public static IEnumerable<IDayOffDecisionMaker> CreateDecisionMakers(
+		public IEnumerable<IDayOffDecisionMaker> CreateDecisionMakers(
 			ILockableBitArray scheduleMatrixArray,
 			IOptimizationPreferences optimizerPreferences, IComponentContext container)
 		{
@@ -180,21 +180,21 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 			return dayOffOptimizationDecisionMakerFactory.CreateDecisionMakers(scheduleMatrixArray, optimizerPreferences);
 		}
 
-		public static void SetConsiderShortBreaks(IEnumerable<IPerson> persons, DateOnlyPeriod period, IReschedulingPreferences options, IComponentContext container)
+		public void SetConsiderShortBreaks(IEnumerable<IPerson> persons, DateOnlyPeriod period, IReschedulingPreferences options, IComponentContext container)
 		{
 			var ruleSetBagsOfGroupOfPeopleCanHaveShortBreak =
 				container.Resolve<IRuleSetBagsOfGroupOfPeopleCanHaveShortBreak>();
 			options.ConsiderShortBreaks = ruleSetBagsOfGroupOfPeopleCanHaveShortBreak.CanHaveShortBreak(persons, period);
 		}
 
-		public static void SetConsiderShortBreaks(IEnumerable<IPerson> persons, DateOnlyPeriod period, ISchedulingOptions options, IComponentContext container)
+		public void SetConsiderShortBreaks(IEnumerable<IPerson> persons, DateOnlyPeriod period, ISchedulingOptions options, IComponentContext container)
 		{
 			var ruleSetBagsOfGroupOfPeopleCanHaveShortBreak =
 				container.Resolve<IRuleSetBagsOfGroupOfPeopleCanHaveShortBreak>();
 			options.ConsiderShortBreaks = ruleSetBagsOfGroupOfPeopleCanHaveShortBreak.CanHaveShortBreak(persons, period);
 		}
 
-		public static IList<ISmartDayOffBackToLegalStateSolverContainer> CreateSmartDayOffSolverContainers(
+		public IList<ISmartDayOffBackToLegalStateSolverContainer> CreateSmartDayOffSolverContainers(
 			IEnumerable<IScheduleMatrixOriginalStateContainer> matrixOriginalStateContainers,
 			IDaysOffPreferences daysOffPreferences,
 			IScheduleMatrixLockableBitArrayConverterEx scheduleMatrixLockableBitArrayConverterEx)
@@ -218,7 +218,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 			return solverContainers;
 		}
 
-		public static void SyncSmartDayOffContainerWithMatrix(
+		public void SyncSmartDayOffContainerWithMatrix(
 			ISmartDayOffBackToLegalStateSolverContainer backToLegalStateSolverContainer,
 			IDayOffTemplate dayOffTemplate,
 			IDaysOffPreferences daysOffPreferences,
@@ -264,25 +264,22 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 			}
 		}
 
-		public static IWorkShiftBackToLegalStateServicePro CreateWorkShiftBackToLegalStateServicePro(ILifetimeScope container)
+		public IWorkShiftBackToLegalStateServicePro CreateWorkShiftBackToLegalStateServicePro(ILifetimeScope container)
 		{
 			var workShiftMinMaxCalculator = container.Resolve<IWorkShiftMinMaxCalculator>();
-			//var bitArrayCreator = container.Resolve<IWorkShiftBackToLegalStateBitArrayCreator>();
 			var bitArrayCreator = new WorkShiftBackToLegalStateBitArrayCreator();
 
-			var dailySkillForecastAndScheduledValueCalculator =
-				container.Resolve<IDailySkillForecastAndScheduledValueCalculator>();
+			var dailySkillForecastAndScheduledValueCalculator = container.Resolve<IDailySkillForecastAndScheduledValueCalculator>();
 
-			ISkillExtractor allSkillExtractor = container.Resolve<SchedulingStateHolderAllSkillExtractor>();
+			var allSkillExtractor = container.Resolve<SchedulingStateHolderAllSkillExtractor>();
 
 			// when we move the period to the method we can have all this in autofac
-			IRelativeDailyDifferencesByAllSkillsExtractor dataExtractor = new RelativeDailyDifferencesByAllSkillsExtractor(dailySkillForecastAndScheduledValueCalculator, allSkillExtractor);
+			var dataExtractor = new RelativeDailyDifferencesByAllSkillsExtractor(dailySkillForecastAndScheduledValueCalculator, allSkillExtractor);
 
 			var dayIndexCalculator = container.Resolve<IWorkShiftLegalStateDayIndexCalculator>();
-			IWorkShiftBackToLegalStateDecisionMaker decisionMaker = new WorkShiftBackToLegalStateDecisionMaker(dataExtractor, dayIndexCalculator);
+			var decisionMaker = new WorkShiftBackToLegalStateDecisionMaker(dataExtractor, dayIndexCalculator);
 			var deleteService = container.Resolve<IDeleteSchedulePartService>();
-			IWorkShiftBackToLegalStateStep workShiftBackToLegalStateStep =
-				new WorkShiftBackToLegalStateStep(bitArrayCreator, decisionMaker, deleteService);
+			var workShiftBackToLegalStateStep = new WorkShiftBackToLegalStateStep(bitArrayCreator, decisionMaker, deleteService);
 			return new WorkShiftBackToLegalStateServicePro(workShiftBackToLegalStateStep, workShiftMinMaxCalculator);
 		}
 	}

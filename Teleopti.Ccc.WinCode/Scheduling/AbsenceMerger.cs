@@ -1,5 +1,7 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
+using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.WinCode.Scheduling
@@ -117,6 +119,33 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 					scheduleDay.Add(personAbsence);
 				}
 			}	
+		}
+	}
+
+	public class ScheduleViewSelectedPeriod : ISelectedPeriod
+	{
+		private readonly IScheduleViewBase _scheduleView;
+
+		public ScheduleViewSelectedPeriod(IScheduleViewBase scheduleView)
+		{
+			if (scheduleView == null) throw new ArgumentNullException("scheduleView");
+			_scheduleView = scheduleView;
+		}
+
+		public DateOnlyPeriod Period()
+		{
+			var minDate = DateOnly.MaxValue;
+			var maxDate = DateOnly.MinValue;
+			foreach (var dateOnly in _scheduleView.AllSelectedDates())
+			{
+				if (dateOnly < minDate)
+					minDate = dateOnly;
+
+				if (dateOnly > maxDate)
+					maxDate = dateOnly;
+			}
+
+			return new DateOnlyPeriod(minDate, maxDate);
 		}
 	}
 }

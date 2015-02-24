@@ -6,10 +6,12 @@ using Autofac;
 using Microsoft.Practices.Composite.Events;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Scheduling;
+using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Domain.SystemSetting.GlobalSetting;
 using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.Infrastructure.Repositories;
+using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.OnlineReporting;
 using Teleopti.Ccc.Win.ExceptionHandling;
 using Teleopti.Ccc.Win.Scheduling;
@@ -140,7 +142,7 @@ namespace Teleopti.Ccc.Win.Reporting
 
 			if(endDate > startDate)
 				loadPeriod = new DateOnlyPeriod(startDate, endDate);
-			var stateHolder = new SchedulerStateHolder(model.Scenario, new DateOnlyPeriodAsDateTimePeriod(loadPeriod,timeZoneInfo), model.Persons);
+			var stateHolder = new SchedulerStateHolder(model.Scenario, new DateOnlyPeriodAsDateTimePeriod(loadPeriod, timeZoneInfo), model.Persons, new DisableDeletedFilter(new FixedCurrentUnitOfWork(unitOfWork)));
 			stateHolder.CommonNameDescription.AliasFormat = commonNameDescriptionSetting.AliasFormat;
 			loadSchedules(unitOfWork, model.Persons, stateHolder);
 			

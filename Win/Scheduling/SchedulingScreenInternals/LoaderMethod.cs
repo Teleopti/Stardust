@@ -1,4 +1,5 @@
 ﻿using System;
+using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
 using Teleopti.Ccc.WinCode.Common;
 using Teleopti.Interfaces.Infrastructure;
 

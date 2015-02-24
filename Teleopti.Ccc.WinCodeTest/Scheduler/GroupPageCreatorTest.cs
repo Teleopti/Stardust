@@ -4,7 +4,7 @@ using NUnit.Framework;
 using Rhino.Mocks;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.GroupPageCreator;
-using Teleopti.Ccc.WinCode.Scheduling;
+using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.WinCodeTest.Scheduler
@@ -36,11 +36,6 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 			_target.CreateGroupPagePerDate(null as List<DateOnly>, _groupPageDataProvider, grouping);
 		}
 
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1822:MarkMembersAsStatic"), Test, ExpectedException(typeof(ArgumentNullException))]
-		public void ShouldThrowIfViewIsNull()
-		{
-			GroupPageCreator.GetSelectedPeriod(null);
-		}
 		[Test, ExpectedException(typeof(ArgumentNullException))]
 		public void ShouldThrowIfProviderIsNull()
 		{
@@ -186,8 +181,8 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 			var grouping = new GroupPageLight { Key = "Main" };
 			var date = new DateOnly(2012, 9, 12);
 			var creator = _mocks.DynamicMock<IGroupPageCreator<IBusinessUnit>>();
-			var view = _mocks.DynamicMock<IScheduleViewBase>();
-			Expect.Call(view.AllSelectedDates()).Return(new List<DateOnly> {date});
+			var view = _mocks.DynamicMock<ISelectedPeriod>();
+			Expect.Call(view.Period()).Return(new DateOnlyPeriod(date,date));
 			Expect.Call(_groupPageFactory.GetPersonsGroupPageCreator()).Return(creator);
 			Expect.Call(_groupPageDataProvider.BusinessUnitCollection).Return(new List<IBusinessUnit>());
 			Expect.Call(creator.CreateGroupPage(null, null)).IgnoreArguments().Return(new GroupPage("page"));

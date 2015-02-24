@@ -10,11 +10,11 @@ using Teleopti.Ccc.Domain.Infrastructure;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling;
+using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
-using Teleopti.Ccc.WinCode.Common;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
 
@@ -39,7 +39,7 @@ namespace Teleopti.Ccc.WinCode.Backlog
 			var lifetimeScope = componentContext.Resolve<ILifetimeScope>();
 			ILifetimeScope container = lifetimeScope.BeginLifetimeScope();
 			_resourceOptimizationHelper = container.Resolve<IResourceOptimizationHelper>();
-			_stateHolder = new SchedulerStateHolder(container.Resolve<ISchedulingResultStateHolder>());
+			_stateHolder = new SchedulerStateHolder(container.Resolve<ISchedulingResultStateHolder>(), container.Resolve<IDisableDeletedFilter>());
 		}
 
 		public IList<ISkillMap_DEV> SkillMappings

@@ -1,4 +1,5 @@
 ﻿using NUnit.Framework;
+using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
 using Teleopti.Ccc.WinCode.Scheduling;
 using Teleopti.Ccc.Domain.Common;
 using System.Globalization;

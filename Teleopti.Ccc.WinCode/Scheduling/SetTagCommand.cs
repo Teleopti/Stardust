@@ -1,6 +1,7 @@
 ﻿using System.Globalization;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common;
+using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
 using Teleopti.Ccc.UserTexts;
 using Teleopti.Interfaces.Domain;
 

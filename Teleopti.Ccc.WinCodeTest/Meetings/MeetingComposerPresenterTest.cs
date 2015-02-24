@@ -7,13 +7,14 @@ using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.ResourceCalculation;
+using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
 using Teleopti.Ccc.Domain.Scheduling.Meetings;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Domain.SystemSetting.GlobalSetting;
 using Teleopti.Ccc.Infrastructure.Foundation;
+using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
-using Teleopti.Ccc.WinCode.Common;
 using Teleopti.Ccc.WinCode.Meetings;
 using Teleopti.Ccc.WinCode.Meetings.Interfaces;
 using Teleopti.Interfaces.Domain;
@@ -179,8 +180,8 @@ namespace Teleopti.Ccc.WinCodeTest.Meetings
                                                                                           _person,
                                                                                           _requiredPerson,
                                                                                           _optionalPerson
-                                                                                      });
-            _target = new MeetingComposerPresenter(_view, _model, schedulerStateHolder);
+                                                                                      }, new DisableDeletedFilter(new DummyCurrentUnitOfWork()));
+            _target = new MeetingComposerPresenter(_view, _model, new DisableDeletedFilter(new DummyCurrentUnitOfWork()), schedulerStateHolder);
             _view.SetRecurrentMeetingActive(true);
 
             _mocks.ReplayAll();
@@ -495,7 +496,7 @@ namespace Teleopti.Ccc.WinCodeTest.Meetings
         [Test]
         public void VerifyCanCreateDefaultMeetingWithSchedulerStateHolder()
         {
-            var commonStateHolder = new CommonStateHolder();
+			var commonStateHolder = new CommonStateHolder(new DisableDeletedFilter(new DummyCurrentUnitOfWork()));
 
             Expect.Call(_schedulerStateHolder.RequestedScenario).Return(_scenario);
             Expect.Call(_schedulerStateHolder.TimeZoneInfo).Return(_timeZone);
@@ -548,7 +549,7 @@ namespace Teleopti.Ccc.WinCodeTest.Meetings
                                                                                           _person,
                                                                                           _requiredPerson,
                                                                                           _optionalPerson
-                                                                                      });
+                                                                                      }, new DisableDeletedFilter(new DummyCurrentUnitOfWork()));
 			_target = new MeetingComposerPresenterForTest(_view, _model, schedulerStateHolder, _unitOfWorkFactory,
 														  _repositoryFactory);
 			_target.TrySave();
@@ -565,7 +566,7 @@ namespace Teleopti.Ccc.WinCodeTest.Meetings
                                                                                           _person,
                                                                                           _requiredPerson,
                                                                                           _optionalPerson
-                                                                                      });
+                                                                                      }, new DisableDeletedFilter(new DummyCurrentUnitOfWork()));
             _target = new MeetingComposerPresenterForTest(_view, _model, schedulerStateHolder, _unitOfWorkFactory,
                                                           _repositoryFactory);
 
@@ -634,7 +635,7 @@ namespace Teleopti.Ccc.WinCodeTest.Meetings
         public MeetingComposerPresenterForTest(IMeetingComposerView view, MeetingViewModel model, ISchedulerStateHolder
 
 schedulerStateHolder, IUnitOfWorkFactory unitOfWorkFactory, IRepositoryFactory repositoryFactory)
-            : base(view, model, schedulerStateHolder)
+            : base(view, model, new DisableDeletedFilter(new DummyCurrentUnitOfWork()), schedulerStateHolder)
         {
             RepositoryFactory = repositoryFactory;
             UnitOfWorkFactory = unitOfWorkFactory;

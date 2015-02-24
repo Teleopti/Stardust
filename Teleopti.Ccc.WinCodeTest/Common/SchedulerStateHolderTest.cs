@@ -9,14 +9,12 @@ using Teleopti.Ccc.Domain.AgentInfo.Requests;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Repositories;
-using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling;
-using Teleopti.Ccc.Domain.Scheduling.Assignment;
+using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
 using Teleopti.Ccc.Domain.SystemSetting.GlobalSetting;
-using Teleopti.Ccc.Domain.Time;
+using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.Services;
-using Teleopti.Ccc.WinCode.Common;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
 
@@ -57,7 +55,7 @@ namespace Teleopti.Ccc.WinCodeTest.Common
 	        target = new SchedulerStateHolder(scenario,
         	                                  new DateOnlyPeriodAsDateTimePeriod(
         	                                  	dtp.VisiblePeriod.ToDateOnlyPeriod(TimeZoneInfoFactory.UtcTimeZoneInfo()),
-												TimeZoneInfoFactory.UtcTimeZoneInfo()), selectedPersons, schedulingResultStateHolder);
+												TimeZoneInfoFactory.UtcTimeZoneInfo()), selectedPersons, new DisableDeletedFilter(new DummyCurrentUnitOfWork()), schedulingResultStateHolder);
 			target.SetRequestedScenario(scenario);
             mocks = new MockRepository();
         }

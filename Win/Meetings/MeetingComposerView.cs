@@ -2,11 +2,12 @@
 using System.Collections.Generic;
 using System.Windows.Forms;
 using Microsoft.Practices.Composite.Events;
-using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.ResourceCalculation.IntraIntervalAnalyze;
+using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
+using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Infrastructure.Toggle;
+using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.Win.Common;
-using Teleopti.Ccc.WinCode.Common;
 using Teleopti.Ccc.WinCode.Meetings;
 using Teleopti.Ccc.WinCode.Meetings.Events;
 using Teleopti.Ccc.WinCode.Meetings.Interfaces;
@@ -43,7 +44,7 @@ namespace Teleopti.Ccc.Win.Meetings
 			_eventAggregator = eventAggregator;
 			_toogleManager = toogleManager;
 			_intraIntervalFinderService = intraIntervalFinderService;
-			_meetingComposerPresenter = new MeetingComposerPresenter(this,meetingViewModel,schedulerStateHolder);
+			_meetingComposerPresenter = new MeetingComposerPresenter(this,meetingViewModel, new DisableDeletedFilter(new CurrentUnitOfWork(new CurrentUnitOfWorkFactory(new CurrentTeleoptiPrincipal()))),schedulerStateHolder);
 			panelContent.Enabled = editMeetingPermission;
 			ribbonControlAdv1.Enabled = editMeetingPermission;
 			toolStripButtonSchedules.Enabled = _viewSchedulesPermission;

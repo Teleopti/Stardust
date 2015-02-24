@@ -2,8 +2,10 @@
 using NUnit.Framework;
 using Rhino.Mocks;
 using Teleopti.Ccc.Domain.Common;
+using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
 using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.Infrastructure.Toggle;
+using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.WinCode.Common;
 using Teleopti.Ccc.WinCode.Intraday;
 using Teleopti.Interfaces.Domain;
@@ -33,7 +35,7 @@ namespace Teleopti.Ccc.WinCodeTest.Intraday
             mocks = new MockRepository();
             unitOfWorkFactory = mocks.StrictMock<IUnitOfWorkFactory>();
             view = mocks.StrictMock<IIntradayView>();
-            schedulingResultLoader = new SchedulingResultLoader(new SchedulerStateHolder(null, new DateOnlyPeriodAsDateTimePeriod(new DateOnlyPeriod(),TimeZoneHelper.CurrentSessionTimeZone), new IPerson[]{}), null,
+			schedulingResultLoader = new SchedulingResultLoader(new SchedulerStateHolder(null, new DateOnlyPeriodAsDateTimePeriod(new DateOnlyPeriod(), TimeZoneHelper.CurrentSessionTimeZone), new IPerson[] { }, mocks.DynamicMock<IDisableDeletedFilter>()), null,
                                                      null, null, null,null,null,null,null);
             
             statisticCommand = mocks.StrictMock<OnEventStatisticMessageCommand>();

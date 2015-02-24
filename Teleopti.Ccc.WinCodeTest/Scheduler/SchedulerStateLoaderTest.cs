@@ -2,7 +2,9 @@ using System.Collections.ObjectModel;
 using System.ComponentModel;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Scheduling;
+using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
 using Teleopti.Ccc.Infrastructure.Foundation;
+using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.WinCode.Scheduling;
 using Rhino.Mocks;
@@ -10,7 +12,6 @@ using Teleopti.Interfaces.Infrastructure;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Interfaces.Domain;
 using NUnit.Framework;
-using Teleopti.Ccc.WinCode.Common;
 using System.Collections.Generic;
 
 namespace Teleopti.Ccc.WinCodeTest.Scheduler
@@ -39,7 +40,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
             _repositoryFactory = MockRepository.GenerateMock<IRepositoryFactory>();
             _targetScenario = ScenarioFactory.CreateScenarioAggregate();
             _selectedSkill = SkillFactory.CreateSkill("Phone");
-			_targetStateHolder = new SchedulerStateHolder(_targetScenario, new DateOnlyPeriodAsDateTimePeriod(_targetPeriod, TimeZoneInfoFactory.UtcTimeZoneInfo()), _permittedPeople);
+			_targetStateHolder = new SchedulerStateHolder(_targetScenario, new DateOnlyPeriodAsDateTimePeriod(_targetPeriod, TimeZoneInfoFactory.UtcTimeZoneInfo()), _permittedPeople, MockRepository.GenerateMock<IDisableDeletedFilter>());
         	_lazyManager = MockRepository.GenerateMock<ILazyLoadingManager>();
         }
 

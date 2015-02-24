@@ -1,3 +1,5 @@
+using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
+
 namespace Teleopti.Ccc.WinCode.Common
 {
     public interface IPeopleLoader 

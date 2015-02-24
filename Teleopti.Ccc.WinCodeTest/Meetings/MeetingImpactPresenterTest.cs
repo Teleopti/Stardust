@@ -5,6 +5,7 @@ using NUnit.Framework;
 using Rhino.Mocks;
 using Rhino.Mocks.Interfaces;
 using Teleopti.Ccc.Domain.Common;
+using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
 using Teleopti.Ccc.Domain.Scheduling.Meetings;
 using Teleopti.Ccc.Domain.Time;
 using Teleopti.Ccc.WinCode.Common;

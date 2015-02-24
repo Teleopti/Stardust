@@ -2,7 +2,9 @@
 using NUnit.Framework;
 using Rhino.Mocks;
 using Teleopti.Ccc.Domain.Common;
+using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
 using Teleopti.Ccc.Domain.Security.Principal;
+using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.WinCode.Common;
 using Teleopti.Ccc.WinCode.Intraday;
 using Teleopti.Interfaces.Domain;
@@ -36,7 +38,7 @@ namespace Teleopti.Ccc.WinCodeTest.Intraday
 
 			_scenario = mocks.StrictMock<IScenario>();
 			_persons = new List<IPerson> { mocks.StrictMock<IPerson>() };
-			_schedulerStateHolder = new SchedulerStateHolder(_scenario, new DateOnlyPeriodAsDateTimePeriod(_period,TeleoptiPrincipal.Current.Regional.TimeZone), _persons);
+			_schedulerStateHolder = new SchedulerStateHolder(_scenario, new DateOnlyPeriodAsDateTimePeriod(_period, TeleoptiPrincipal.Current.Regional.TimeZone), _persons, mocks.DynamicMock<IDisableDeletedFilter>());
 
 			_scheduleDictionary = mocks.StrictMock<IScheduleDictionary>();
 			_unitOfWork = mocks.DynamicMock<IUnitOfWork>();

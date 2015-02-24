@@ -3,7 +3,8 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using NUnit.Framework;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
-using Teleopti.Ccc.WinCode.Common;
+using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
+using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.WinCode.Scheduling;
 using Rhino.Mocks;
 using Teleopti.Interfaces.Domain;
@@ -79,7 +80,7 @@ namespace Teleopti.Ccc.WinCodeTest
 				Expect.Call(_personPeriod.PersonContract).Return(_personContract);
 				Expect.Call(_personContract.Contract).Return(_contract);
 				Expect.Call(_contract.MultiplicatorDefinitionSetCollection).Return(new ReadOnlyCollection<IMultiplicatorDefinitionSet>(_multiplicatorDefinitionSets));
-				Expect.Call(_schedulerStateHolder.CommonStateHolder).Return(new CommonStateHolder());
+				Expect.Call(_schedulerStateHolder.CommonStateHolder).Return(new CommonStateHolder(_mock.DynamicMock<IDisableDeletedFilter>()));
 				Expect.Call(_schedulerStateHolder.TimeZoneInfo).Return(null);
 				Expect.Call(_scheduleViewBase.CreateAddOvertimeViewModel( new List<IActivity>(),
 				                                                         _multiplicatorDefinitionSets, null, dateTimePeriod,

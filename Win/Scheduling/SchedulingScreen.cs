@@ -20,6 +20,7 @@ using Teleopti.Ccc.Domain.Optimization.IntraIntervalOptimization;
 using Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.Seniority;
 using Teleopti.Ccc.Domain.ResourceCalculation.IntraIntervalAnalyze;
 using Teleopti.Ccc.Domain.Scheduling.BackToLegalShift;
+using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
 using Teleopti.Ccc.Domain.Scheduling.Meetings;
 using Teleopti.Ccc.Domain.Scheduling.ScheduleTagging;
 using Teleopti.Ccc.Domain.Scheduling.TeamBlock;
@@ -1120,7 +1121,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 				ISchedulingOptions schedulingOptions = new SchedulingOptions { GroupPageForShiftCategoryFairness = _groupPagesProvider.GetGroups(false)[0], UseRotations = false };
 
 				_groupPagePerDateHolder.ShiftCategoryFairnessGroupPagePerDate = _container.Resolve<IGroupPageCreator>()
-					.CreateGroupPagePerDate(_scheduleView, _container.Resolve<IGroupScheduleGroupPageDataProvider>(),
+					.CreateGroupPagePerDate(new ScheduleViewSelectedPeriod(_scheduleView), _container.Resolve<IGroupScheduleGroupPageDataProvider>(),
 					schedulingOptions.GroupPageForShiftCategoryFairness);
 
 				var finderService = _container.Resolve<IWorkShiftFinderService>();
@@ -2933,7 +2934,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			_undoRedo.CreateBatch(Resources.UndoRedoScheduling);
 			var argument = (SchedulingAndOptimizeArgument)e.Argument;
 			var scheduleDays = argument.SelectedScheduleDays;
-			var selectedPeriod = OptimizerHelperHelper.GetSelectedPeriod(scheduleDays);
+			var selectedPeriod = new OptimizerHelperHelper().GetSelectedPeriod(scheduleDays);
 			turnOffCalculateMinMaxCacheIfNeeded(_optimizerOriginalPreferences.SchedulingOptions);
 			AdvanceLoggingService.LogSchedulingInfo(_optimizerOriginalPreferences.SchedulingOptions,
 			                                        scheduleDays.Select(x => x.Person).Distinct().Count(),
@@ -3166,7 +3167,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 
 			var scheduleDays = argument.SelectedScheduleDays;
 
-			var selectedPeriod = OptimizerHelperHelper.GetSelectedPeriod(scheduleDays);
+			var selectedPeriod = new OptimizerHelperHelper().GetSelectedPeriod(scheduleDays);
 
 			IList<IScheduleMatrixPro> matrixesOfSelectedScheduleDays = _container.Resolve<IMatrixListFactory>().CreateMatrixList(scheduleDays, selectedPeriod);
 			if (matrixesOfSelectedScheduleDays.Count == 0)
@@ -3236,7 +3237,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			_undoRedo.CreateBatch(Resources.UndoRedoReOptimize);
 			var argument = (SchedulingAndOptimizeArgument)e.Argument;
 			var scheduleDays = argument.SelectedScheduleDays;
-			var selectedPeriod = OptimizerHelperHelper.GetSelectedPeriod(scheduleDays);
+			var selectedPeriod = new OptimizerHelperHelper().GetSelectedPeriod(scheduleDays);
 			var dateOnlyList = selectedPeriod.DayCollection();
 			_schedulerState.SchedulingResultState.SkillDaysOnDateOnly(dateOnlyList);
 			var optimizerPreferences = _container.Resolve<IOptimizationPreferences>();
@@ -3275,6 +3276,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 
 		private void loadAndOptimizeData(DoWorkEventArgs e)
 		{
+			var optimizerHelper = new OptimizerHelperHelper();
 			IList<LoaderMethod> methods = new List<LoaderMethod>();
 			using (IUnitOfWork uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
 			{
@@ -3319,7 +3321,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 				if (!_teamLeaderMode)
 				{
 					ISchedulingOptions options = new SchedulingOptions();
-					OptimizerHelperHelper.SetConsiderShortBreaks(SchedulerState.SchedulingResultState.PersonsInOrganization, SchedulerState.RequestedPeriod.DateOnlyPeriod, options, _container);
+					optimizerHelper.SetConsiderShortBreaks(SchedulerState.SchedulingResultState.PersonsInOrganization, SchedulerState.RequestedPeriod.DateOnlyPeriod, options, _container);
 					SchedulerState.ConsiderShortBreaks = options.ConsiderShortBreaks;
 				}
 				else
@@ -3330,7 +3332,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			}
 
 			var toggleManager = _container.Resolve<IToggleManager>();
-			_scheduleOptimizerHelper = new ScheduleOptimizerHelper(_container, toggleManager);
+			_scheduleOptimizerHelper = new ScheduleOptimizerHelper(_container, optimizerHelper, toggleManager);
 
 			if (!_schedulerState.SchedulingResultState.SkipResourceCalculation && !_teamLeaderMode)
 			{

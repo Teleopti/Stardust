@@ -1,4 +1,5 @@
-﻿using Teleopti.Ccc.Win.Sikuli.Validators;
+﻿using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
+using Teleopti.Ccc.Win.Sikuli.Validators;
 using Teleopti.Ccc.Win.Sikuli.Validators.TestValidators;
 using Teleopti.Ccc.WinCode.Common;
 using Teleopti.Interfaces.Domain;
