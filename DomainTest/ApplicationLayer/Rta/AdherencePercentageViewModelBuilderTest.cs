@@ -40,7 +40,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta
 				Date = "2014-12-24".Date()
 			});
 			
-			var result = Target.ForToday(personId);
+			var result = Target.Build(personId);
 
 			result.Should().Not.Be.Null();
 		}
@@ -59,7 +59,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta
 				LastTimestamp = "2014-12-24 15:00".Utc(),
 			});
 			
-			var result = Target.ForToday(personId);
+			var result = Target.Build(personId);
 
 			result.AdherencePercent.Should().Be.EqualTo(50);
 		}
@@ -78,7 +78,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta
 				LastTimestamp = "2014-12-24 15:00".Utc(),
 			});
 			
-			var result = Target.ForToday(personId);
+			var result = Target.Build(personId);
 
 			result.AdherencePercent.Should().Be.EqualTo(100);
 		}
@@ -97,7 +97,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta
 				LastTimestamp = "2014-12-24 15:00".Utc(),
 			});
 			
-			var result = Target.ForToday(personId);
+			var result = Target.Build(personId);
 
 			result.AdherencePercent.Should().Be.EqualTo(0);
 		}
@@ -105,7 +105,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta
 		[Test]
 		public void ShouldBuildEmptyResultWhenNoData()
 		{
-			var result = Target.ForToday(Guid.NewGuid());
+			var result = Target.Build(Guid.NewGuid());
 
 			result.AdherencePercent.Should().Be.EqualTo(null);
 			result.LastTimestamp.Should().Be.EqualTo(null);
@@ -127,7 +127,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta
 				IsLastTimeInAdherence = true
 			});
 			
-			var result = Target.ForToday(personId);
+			var result = Target.Build(personId);
 
 			result.AdherencePercent.Should().Be.EqualTo(50);
 		}
@@ -147,7 +147,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta
 				IsLastTimeInAdherence = false
 			});
 			
-			var result = Target.ForToday(personId);
+			var result = Target.Build(personId);
 
 			result.AdherencePercent.Should().Be.EqualTo(50);
 		}
@@ -166,7 +166,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta
 				ShiftHasEnded = true,
 			});
 
-			var result = Target.ForToday(personId);
+			var result = Target.Build(personId);
 
 			result.AdherencePercent.Should().Be.EqualTo(50);
 		}
@@ -186,7 +186,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta
 				LastTimestamp = "2014-12-24 14:00".Utc()
 			});
 
-			var result = Target.ForToday(personId);
+			var result = Target.Build(personId);
 
 			result.LastTimestamp.Should().Be("2014-12-24 14:00".Utc().AsCatalanShortTime());
 		}
@@ -206,7 +206,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta
 				LastTimestamp = "2014-12-24 14:00".Utc()
 			});
 
-			var result = Target.ForToday(personId);
+			var result = Target.Build(personId);
 
 			result.LastTimestamp.Should().Be("2014-12-24 14:00".InHawaii().AsCatalanShortTime());
 		}

@@ -20,7 +20,7 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Controllers
 		[ReadModelUnitOfWork, UnitOfWork, HttpGet]
 		public virtual JsonResult ForToday(Guid personId)
 		{
-			var model = _adherencePercentageViewModelBuilder.ForToday(personId);
+			var model = _adherencePercentageViewModelBuilder.Build(personId);
 			return Json(model ?? new object(), JsonRequestBehavior.AllowGet);
 		}
 

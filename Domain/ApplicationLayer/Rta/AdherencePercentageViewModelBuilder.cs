@@ -5,7 +5,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta
 {
 	public interface IAdherencePercentageViewModelBuilder
 	{
-		AdherencePercentageViewModel ForToday(Guid personId);
+		AdherencePercentageViewModel Build(Guid personId);
 	}
 
 	public class AdherencePercentageViewModelBuilder : IAdherencePercentageViewModelBuilder
@@ -27,7 +27,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta
 			_timeZone = timeZone;
 		}
 
-		public AdherencePercentageViewModel ForToday(Guid personId)
+		public AdherencePercentageViewModel Build(Guid personId)
 		{
 			var readModel = _adherencePercentageReadModelReader.Read(new DateOnly(_now.UtcDateTime()), personId);
 			if (readModel == null)

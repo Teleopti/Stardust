@@ -17,7 +17,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Controllers
 		{
 			var calculateAdherence = MockRepository.GenerateStub<IAdherencePercentageViewModelBuilder>();
 			var personId = Guid.NewGuid();
-			calculateAdherence.Expect(h => h.ForToday(personId)).Return(new AdherencePercentageViewModel()
+			calculateAdherence.Expect(h => h.Build(personId)).Return(new AdherencePercentageViewModel()
 			                                               {
 															   AdherencePercent = 70
 			                                               });
@@ -34,7 +34,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Controllers
 		{
 			var calculateAdherence = MockRepository.GenerateStub<IAdherencePercentageViewModelBuilder>();
 			var personId = Guid.NewGuid();
-			calculateAdherence.Expect(h => h.ForToday(personId)).Return(null);
+			calculateAdherence.Expect(h => h.Build(personId)).Return(null);
 
 			var target = new AdherenceController(calculateAdherence,null);
 
