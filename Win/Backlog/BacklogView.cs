@@ -47,7 +47,13 @@ namespace Teleopti.Ccc.Win.Backlog
 			setupProductionPlan();
 			setupScheduled();
 
-			_selectedGridRows = new List<IBacklogGridRow>(_allGridRows);
+			_selectedGridRows = new List<IBacklogGridRow>();
+			foreach (var backlogGridRow in _allGridRows)
+			{
+				if(backlogGridRow.Category == BacklogCategory.Scheduled && !toolStripButtonShowScheduled.Checked)
+					continue;
+				_selectedGridRows.Add(backlogGridRow);
+			}
 			_fixedRows = _selectedGridRows.Count-1;
 
 			_expandedRow = new BacklogGridExpandedRow("TimeS", _model, _fixedRows);
@@ -335,6 +341,20 @@ namespace Teleopti.Ccc.Win.Backlog
 
 			_model.TransferBacklogs(new DateOnly(dateTimePicker1.Value));
 			updateChartChart();
+			gridControl1.Refresh();
+		}
+
+		private void toolStripButtonShowScheduled_CheckedChanged(object sender, EventArgs e)
+		{
+			_selectedGridRows.Clear();
+			foreach (var backlogGridRow in _allGridRows)
+			{
+				if (backlogGridRow.Category == BacklogCategory.Scheduled && !toolStripButtonShowScheduled.Checked)
+					continue;
+				_selectedGridRows.Add(backlogGridRow);
+			}
+			_fixedRows = _selectedGridRows.Count - 1;
+			gridControl1.ResetVolatileData();
 			gridControl1.Refresh();
 		}
 	}

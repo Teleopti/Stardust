@@ -46,6 +46,7 @@
 			Syncfusion.Windows.Forms.Grid.GridRangeStyle gridRangeStyle13 = new Syncfusion.Windows.Forms.Grid.GridRangeStyle();
 			Syncfusion.Windows.Forms.Grid.GridRangeStyle gridRangeStyle14 = new Syncfusion.Windows.Forms.Grid.GridRangeStyle();
 			Syncfusion.Windows.Forms.Grid.GridRangeStyle gridRangeStyle15 = new Syncfusion.Windows.Forms.Grid.GridRangeStyle();
+			Syncfusion.Windows.Forms.Grid.GridRangeStyle gridRangeStyle16 = new Syncfusion.Windows.Forms.Grid.GridRangeStyle();
 			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(BacklogView));
 			this.toolStripContainer1 = new System.Windows.Forms.ToolStripContainer();
 			this.statusStrip1 = new System.Windows.Forms.StatusStrip();
@@ -65,6 +66,7 @@
 			this.toolStripButtonSkillMapper = new System.Windows.Forms.ToolStripButton();
 			this.toolStripButtonExpand = new System.Windows.Forms.ToolStripButton();
 			this.backgroundWorker1 = new System.ComponentModel.BackgroundWorker();
+			this.toolStripButtonShowScheduled = new System.Windows.Forms.ToolStripButton();
 			this.toolStripContainer1.BottomToolStripPanel.SuspendLayout();
 			this.toolStripContainer1.ContentPanel.SuspendLayout();
 			this.toolStripContainer1.TopToolStripPanel.SuspendLayout();
@@ -351,6 +353,14 @@
 			gridRangeStyle15.StyleInfo.Font.Strikeout = false;
 			gridRangeStyle15.StyleInfo.Font.Underline = false;
 			gridRangeStyle15.StyleInfo.Font.Unit = System.Drawing.GraphicsUnit.Point;
+			gridRangeStyle16.Range = Syncfusion.Windows.Forms.Grid.GridRangeInfo.Table();
+			gridRangeStyle16.StyleInfo.Font.Bold = false;
+			gridRangeStyle16.StyleInfo.Font.Facename = "Segoe UI";
+			gridRangeStyle16.StyleInfo.Font.Italic = false;
+			gridRangeStyle16.StyleInfo.Font.Size = 8.25F;
+			gridRangeStyle16.StyleInfo.Font.Strikeout = false;
+			gridRangeStyle16.StyleInfo.Font.Underline = false;
+			gridRangeStyle16.StyleInfo.Font.Unit = System.Drawing.GraphicsUnit.Point;
 			this.gridControl1.RangeStyles.AddRange(new Syncfusion.Windows.Forms.Grid.GridRangeStyle[] {
             gridRangeStyle1,
             gridRangeStyle2,
@@ -366,7 +376,8 @@
             gridRangeStyle12,
             gridRangeStyle13,
             gridRangeStyle14,
-            gridRangeStyle15});
+            gridRangeStyle15,
+            gridRangeStyle16});
 			this.gridControl1.SerializeCellsBehavior = Syncfusion.Windows.Forms.Grid.GridSerializeCellsBehavior.SerializeAsRangeStylesIntoCode;
 			this.gridControl1.Size = new System.Drawing.Size(899, 230);
 			this.gridControl1.SmartSizeBox = false;
@@ -385,10 +396,11 @@
             this.buttonLoad,
             this.toolStripButtonSave,
             this.toolStripButtonSkillMapper,
-            this.toolStripButtonExpand});
+            this.toolStripButtonExpand,
+            this.toolStripButtonShowScheduled});
 			this.toolStrip1.Location = new System.Drawing.Point(3, 0);
 			this.toolStrip1.Name = "toolStrip1";
-			this.toolStrip1.Size = new System.Drawing.Size(321, 25);
+			this.toolStrip1.Size = new System.Drawing.Size(387, 25);
 			this.toolStrip1.TabIndex = 0;
 			// 
 			// buttonLoad
@@ -437,6 +449,17 @@
 			this.backgroundWorker1.DoWork += new System.ComponentModel.DoWorkEventHandler(this.backgroundWorker1_DoWork);
 			this.backgroundWorker1.ProgressChanged += new System.ComponentModel.ProgressChangedEventHandler(this.backgroundWorker1_ProgressChanged);
 			this.backgroundWorker1.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.backgroundWorker1_RunWorkerCompleted);
+			// 
+			// toolStripButtonShowScheduled
+			// 
+			this.toolStripButtonShowScheduled.CheckOnClick = true;
+			this.toolStripButtonShowScheduled.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
+			this.toolStripButtonShowScheduled.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButtonShowScheduled.Image")));
+			this.toolStripButtonShowScheduled.ImageTransparentColor = System.Drawing.Color.Magenta;
+			this.toolStripButtonShowScheduled.Name = "toolStripButtonShowScheduled";
+			this.toolStripButtonShowScheduled.Size = new System.Drawing.Size(66, 22);
+			this.toolStripButtonShowScheduled.Text = "Scheduled";
+			this.toolStripButtonShowScheduled.CheckedChanged += new System.EventHandler(this.toolStripButtonShowScheduled_CheckedChanged);
 			// 
 			// BacklogView
 			// 
@@ -495,5 +518,6 @@
 		private System.Windows.Forms.Label label1;
 		private System.Windows.Forms.DateTimePicker dateTimePicker1;
 		private System.Windows.Forms.TableLayoutPanel tableLayoutPanel1;
+		private System.Windows.Forms.ToolStripButton toolStripButtonShowScheduled;
 	}
 }
