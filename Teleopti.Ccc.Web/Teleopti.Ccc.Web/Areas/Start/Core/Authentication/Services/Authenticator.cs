@@ -27,27 +27,24 @@ namespace Teleopti.Ccc.Web.Areas.Start.Core.Authentication.Services
 
 		public AuthenticateResult LogonIdentityUser()
 		{
-			var winAccount = _tokenIdentityProvider.RetrieveToken();
-			var personInfo = _identityUserQuery.FindUserData(winAccount.UserIdentifier);
-			var dataSource = _dataSourceProvider.RetrieveDataSourceByName(personInfo.Tenant);
-
-			using (var uow = dataSource.Application.CreateAndOpenUnitOfWork())
-			{
-				var foundAppUser =  _repositoryFactory.CreatePersonRepository(uow).LoadOne(personInfo.Id);
-				return new AuthenticateResult { Successful = true, Person = foundAppUser, DataSource = dataSource };
-			}
+			return getResult(userIdentifier => _identityUserQuery.FindUserData(userIdentifier));
 		}
 
 		public AuthenticateResult LogonApplicationUser()
 		{
-			var account = _tokenIdentityProvider.RetrieveToken();
-			var personInfo = _applicationUserTenantQuery.Find(account.UserIdentifier);
+			return getResult(userIdentifier => _applicationUserTenantQuery.Find(userIdentifier));
+		}
+
+		private AuthenticateResult getResult(System.Func<string, PersonInfo> findPersonInfo)
+		{
+			var token = _tokenIdentityProvider.RetrieveToken();
+			var personInfo = findPersonInfo(token.UserIdentifier);
 			var dataSource = _dataSourceProvider.RetrieveDataSourceByName(personInfo.Tenant);
 
 			using (var uow = dataSource.Application.CreateAndOpenUnitOfWork())
 			{
 				var foundAppUser = _repositoryFactory.CreatePersonRepository(uow).LoadOne(personInfo.Id);
-				return new AuthenticateResult { Successful = true, Person = foundAppUser, DataSource = dataSource };
+				return new AuthenticateResult {Successful = true, Person = foundAppUser, DataSource = dataSource};
 			}
 		}
 	}
