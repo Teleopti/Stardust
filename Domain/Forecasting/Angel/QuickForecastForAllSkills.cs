@@ -20,5 +20,10 @@ namespace Teleopti.Ccc.Domain.Forecasting.Angel
 			_skillRepository.FindSkillsWithAtLeastOneQueueSource().ForEach(skill =>
 				_quickForecaster.Execute(skill, historicalPeriod, futurePeriod));
 		}
+
+		public double MeasureForecast(DateOnlyPeriod historicalPeriod, DateOnlyPeriod futurePeriod)
+		{
+			throw new System.NotImplementedException();
+		}
 	}
 }

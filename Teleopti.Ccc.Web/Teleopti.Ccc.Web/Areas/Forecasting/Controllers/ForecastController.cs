@@ -16,13 +16,14 @@ namespace Teleopti.Ccc.Web.Areas.Forecasting.Controllers
 		private readonly IQuickForecastForAllSkills _quickForecastForAllSkills;
 		private readonly IForecastHistoricalPeriodCalculator _forecastHistoricalPeriodCalculator;
 		private readonly ICurrentIdentity _currentIdentity;
+		private readonly INow _now;
 
-		public ForecastController(IQuickForecastForAllSkills quickForecastForAllSkills, 
-														IForecastHistoricalPeriodCalculator forecastHistoricalPeriodCalculator, ICurrentIdentity currentIdentity)
+		public ForecastController(IQuickForecastForAllSkills quickForecastForAllSkills, IForecastHistoricalPeriodCalculator forecastHistoricalPeriodCalculator, ICurrentIdentity currentIdentity, INow now)
 		{
 			_quickForecastForAllSkills = quickForecastForAllSkills;
 			_forecastHistoricalPeriodCalculator = forecastHistoricalPeriodCalculator;
 			_currentIdentity = currentIdentity;
+			_now = now;
 		}
 
 		public object GetThatShouldBeInAMoreGenericControllerLaterOn()
@@ -38,6 +39,16 @@ namespace Teleopti.Ccc.Web.Areas.Forecasting.Controllers
 
 			_quickForecastForAllSkills.CreateForecast(historicalPeriod, futurePeriod);
 			return Task.FromResult(true);
+		}
+
+		[HttpGet, UnitOfWork, Route("api/Forecast/Measure")]
+		public virtual double MeasureForecast()
+		{
+			var yesterday = _now.UtcDateTime().AddDays(-1);
+			var futurePeriod = new DateOnlyPeriod(new DateOnly(yesterday.AddYears(-1)), new DateOnly(yesterday));
+			var historicalPeriod = _forecastHistoricalPeriodCalculator.OneYearHistoricalPeriod(futurePeriod);
+
+			return _quickForecastForAllSkills.MeasureForecast(historicalPeriod, futurePeriod);
 		}
 	}
 }
