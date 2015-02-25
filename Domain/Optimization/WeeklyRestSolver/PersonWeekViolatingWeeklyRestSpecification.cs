@@ -4,18 +4,18 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Optimization.WeeklyRestSolver
 {
-	public interface IPersonWeekVoilatingWeeklyRestSpecification
+	public interface IPersonWeekViolatingWeeklyRestSpecification
 	{
 		bool IsSatisfyBy(IScheduleRange currentSchedules, PersonWeek personWeek, TimeSpan weeklyRest);
 	}
 
-	public class PersonWeekVoilatingWeeklyRestSpecification : IPersonWeekVoilatingWeeklyRestSpecification
+	public class PersonWeekViolatingWeeklyRestSpecification : IPersonWeekViolatingWeeklyRestSpecification
 	{
 		private readonly IExtractDayOffFromGivenWeek _extractDayOffFromGivenWeek;
 		private readonly IVerifyWeeklyRestAroundDayOffSpecification  _verifyWeeklyRestAroundDayOffSpecification;
 		private readonly IEnsureWeeklyRestRule  _ensureWeeklyRestRule;
 
-		public PersonWeekVoilatingWeeklyRestSpecification(IExtractDayOffFromGivenWeek extractDayOffFromGivenWeek, IVerifyWeeklyRestAroundDayOffSpecification verifyWeeklyRestAroundDayOffSpecification, IEnsureWeeklyRestRule ensureWeeklyRestRule)
+		public PersonWeekViolatingWeeklyRestSpecification(IExtractDayOffFromGivenWeek extractDayOffFromGivenWeek, IVerifyWeeklyRestAroundDayOffSpecification verifyWeeklyRestAroundDayOffSpecification, IEnsureWeeklyRestRule ensureWeeklyRestRule)
 		{
 			_extractDayOffFromGivenWeek = extractDayOffFromGivenWeek;
 			_verifyWeeklyRestAroundDayOffSpecification = verifyWeeklyRestAroundDayOffSpecification;

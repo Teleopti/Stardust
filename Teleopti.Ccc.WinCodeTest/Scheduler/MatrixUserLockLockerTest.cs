@@ -58,7 +58,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 
             using(_mockRepository.Playback())
             {
-				_target.Execute(_scheduleDays, _scheduleMatrixList, new DateOnlyPeriod(_dateOnly, _dateOnly));
+				_target.Execute(_scheduleMatrixList, new DateOnlyPeriod(_dateOnly, _dateOnly));
             }
         }
 
@@ -76,7 +76,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 
             using (_mockRepository.Playback())
             {
-				_target.Execute(_scheduleDays, _scheduleMatrixList, new DateOnlyPeriod(_dateOnly, _dateOnly));
+				_target.Execute(_scheduleMatrixList, new DateOnlyPeriod(_dateOnly, _dateOnly));
             }
         }
 
@@ -94,7 +94,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 			Expect.Call(() => _scheduleMatrix.UnlockPeriod(new DateOnlyPeriod(_dateOnly, _dateOnly)));
 			Expect.Call(_gridlockManager.Gridlocks(_person, _dateOnly)).Return(null);
 			_mockRepository.ReplayAll();
-			_target.Execute(_scheduleDays, _scheduleMatrixList, new DateOnlyPeriod(_dateOnly, dateOnly2));
+			_target.Execute(_scheduleMatrixList, new DateOnlyPeriod(_dateOnly, dateOnly2));
 			_mockRepository.VerifyAll();
 		}
     }

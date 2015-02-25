@@ -24,15 +24,15 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
 		private IContract _contract;
 		private IPersonContract _personContract;
 		private IPersonPeriod _personPeriod;
-		private IPersonWeekVoilatingWeeklyRestSpecification _personWeekVoilatingWeeklyRestSpecification;
+		private IPersonWeekViolatingWeeklyRestSpecification _personWeekViolatingWeeklyRestSpecification;
 
 		[SetUp]
 		public void Setup()
 		{
 			_mocks = new MockRepository();
 			_weeksFromScheduleDaysExtractor = _mocks.StrictMock<IWeeksFromScheduleDaysExtractor>();
-			_personWeekVoilatingWeeklyRestSpecification = _mocks.StrictMock<IPersonWeekVoilatingWeeklyRestSpecification>();
-			_target = new MinWeeklyRestRule(_weeksFromScheduleDaysExtractor, _personWeekVoilatingWeeklyRestSpecification);
+			_personWeekViolatingWeeklyRestSpecification = _mocks.StrictMock<IPersonWeekViolatingWeeklyRestSpecification>();
+			_target = new MinWeeklyRestRule(_weeksFromScheduleDaysExtractor, _personWeekViolatingWeeklyRestSpecification);
 			_permissionInformation = _mocks.StrictMock<IPermissionInformation>();
 			_timeZone = (TimeZoneInfo.FindSystemTimeZoneById("UTC"));
 			var maxTimePerWeek = new TimeSpan(40, 0, 0);
@@ -128,7 +128,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
 
 				Expect.Call(_personPeriod.PersonContract).Return(_personContract).Repeat.Times(1);
 				Expect.Call(_personContract.Contract).Return(_contract);
-				Expect.Call(_personWeekVoilatingWeeklyRestSpecification.IsSatisfyBy(range, personWeek, TimeSpan.FromHours(40))).Return(true).IgnoreArguments();
+				Expect.Call(_personWeekViolatingWeeklyRestSpecification.IsSatisfyBy(range, personWeek, TimeSpan.FromHours(40))).Return(true).IgnoreArguments();
 			}
 			using (_mocks.Playback())
 			{
@@ -169,7 +169,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
 				Expect.Call(_personPeriod.PersonContract).Return(_personContract).Repeat.Times(1);
 				Expect.Call(_personContract.Contract).Return(_contract);
 
-				Expect.Call(_personWeekVoilatingWeeklyRestSpecification.IsSatisfyBy(range, personWeek, weeklyRest)).Return(true).IgnoreArguments();
+				Expect.Call(_personWeekViolatingWeeklyRestSpecification.IsSatisfyBy(range, personWeek, weeklyRest)).Return(true).IgnoreArguments();
 			}
 			using (_mocks.Playback())
 			{
@@ -216,7 +216,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
 				Expect.Call(person.Period(new DateOnly(2010, 8, 23))).Return(_personPeriod);
 				Expect.Call(_personPeriod.PersonContract).Return(_personContract).Repeat.Times(1);
 				Expect.Call(_personContract.Contract).Return(_contract);
-				Expect.Call(_personWeekVoilatingWeeklyRestSpecification.IsSatisfyBy(range, personWeek, weeklyRest)).Return(false).IgnoreArguments();
+				Expect.Call(_personWeekViolatingWeeklyRestSpecification.IsSatisfyBy(range, personWeek, weeklyRest)).Return(false).IgnoreArguments();
 
 			}
 			using (_mocks.Playback())
@@ -263,7 +263,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
 				Expect.Call(person.Period(new DateOnly(2010, 8, 23))).Return(_personPeriod);
 				Expect.Call(_personPeriod.PersonContract).Return(_personContract).Repeat.Times(1);
 				Expect.Call(_personContract.Contract).Return(_contract);
-				Expect.Call(_personWeekVoilatingWeeklyRestSpecification.IsSatisfyBy(range, personWeek, weeklyRest)).Return(false).IgnoreArguments();
+				Expect.Call(_personWeekViolatingWeeklyRestSpecification.IsSatisfyBy(range, personWeek, weeklyRest)).Return(false).IgnoreArguments();
 			}
 			using (_mocks.Playback())
 			{
@@ -303,7 +303,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
 
 				Expect.Call(_personPeriod.PersonContract).Return(_personContract).Repeat.Times(1);
 				Expect.Call(_personContract.Contract).Return(_contract);
-				Expect.Call(_personWeekVoilatingWeeklyRestSpecification.IsSatisfyBy(range, personWeek, TimeSpan.FromHours(40))).Return(true).IgnoreArguments();
+				Expect.Call(_personWeekViolatingWeeklyRestSpecification.IsSatisfyBy(range, personWeek, TimeSpan.FromHours(40))).Return(true).IgnoreArguments();
 
 			}
 			using (_mocks.Playback())
@@ -343,7 +343,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
 
 				Expect.Call(_personPeriod.PersonContract).Return(_personContract).Repeat.Times(1);
 				Expect.Call(_personContract.Contract).Return(_contract);
-				Expect.Call(_personWeekVoilatingWeeklyRestSpecification.IsSatisfyBy(range, personWeek, TimeSpan.FromHours(40))).Return(true).IgnoreArguments();
+				Expect.Call(_personWeekViolatingWeeklyRestSpecification.IsSatisfyBy(range, personWeek, TimeSpan.FromHours(40))).Return(true).IgnoreArguments();
 			}
 			using (_mocks.Playback())
 			{
@@ -391,7 +391,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
 				Expect.Call(person.Period(new DateOnly(2010, 8, 23))).Return(_personPeriod);
 				Expect.Call(_personPeriod.PersonContract).Return(_personContract).Repeat.Times(1);
 				Expect.Call(_personContract.Contract).Return(_contract);
-				Expect.Call(_personWeekVoilatingWeeklyRestSpecification.IsSatisfyBy(range, personWeek, weeklyRest)).Return(false).IgnoreArguments();
+				Expect.Call(_personWeekViolatingWeeklyRestSpecification.IsSatisfyBy(range, personWeek, weeklyRest)).Return(false).IgnoreArguments();
 
 			}
 			using (_mocks.Playback())
@@ -440,7 +440,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
 				Expect.Call(person.Period(new DateOnly(2010, 8, 23))).Return(_personPeriod);
 				Expect.Call(_personPeriod.PersonContract).Return(_personContract).Repeat.Times(1);
 				Expect.Call(_personContract.Contract).Return(_contract);
-				Expect.Call(_personWeekVoilatingWeeklyRestSpecification.IsSatisfyBy(range, personWeek, weeklyRest)).Return(true).IgnoreArguments() ;
+				Expect.Call(_personWeekViolatingWeeklyRestSpecification.IsSatisfyBy(range, personWeek, weeklyRest)).Return(true).IgnoreArguments() ;
 			}
 			using (_mocks.Playback())
 			{

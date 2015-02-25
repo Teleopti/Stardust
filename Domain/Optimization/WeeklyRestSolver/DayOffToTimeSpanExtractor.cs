@@ -18,14 +18,16 @@ namespace Teleopti.Ccc.Domain.Optimization.WeeklyRestSolver
         private readonly IScheduleDayWorkShiftTimeExtractor _scheduleDayWorkShiftTimeExtractor;
         private readonly IVerifyWeeklyRestAroundDayOffSpecification  _verifyWeeklyRestAroundDayOffSpecification;
 
-        public DayOffToTimeSpanExtractor(IExtractDayOffFromGivenWeek extractDayOffFromGivenWeek, IScheduleDayWorkShiftTimeExtractor scheduleDayWorkShiftTimeExtractor, IVerifyWeeklyRestAroundDayOffSpecification verifyWeeklyRestAroundDayOffSpecification)
+		public DayOffToTimeSpanExtractor(IExtractDayOffFromGivenWeek extractDayOffFromGivenWeek, 
+			IScheduleDayWorkShiftTimeExtractor scheduleDayWorkShiftTimeExtractor, 
+			IVerifyWeeklyRestAroundDayOffSpecification verifyWeeklyRestAroundDayOffSpecification)
         {
             _extractDayOffFromGivenWeek = extractDayOffFromGivenWeek;
             _scheduleDayWorkShiftTimeExtractor = scheduleDayWorkShiftTimeExtractor;
             _verifyWeeklyRestAroundDayOffSpecification = verifyWeeklyRestAroundDayOffSpecification;
         }
 
-        public IDictionary<DateOnly, TimeSpan> GetDayOffWithTimeSpanAmongAWeek(DateOnlyPeriod week, IScheduleRange currentSchedules)
+		public IDictionary<DateOnly, TimeSpan> GetDayOffWithTimeSpanAmongAWeek(DateOnlyPeriod week, IScheduleRange currentSchedules)
         {
             var possibleDaysOffWithSpan = new Dictionary<DateOnly, TimeSpan>();
             var scheduleDayList = currentSchedules.ScheduledDayCollection(week);
@@ -44,7 +46,7 @@ namespace Teleopti.Ccc.Domain.Optimization.WeeklyRestSolver
 
         }
 
-        private TimeSpan? getTimeSpanOnConsecutiveDays(DateOnly dayOffDate, IScheduleRange currentSchedules)
+	    private TimeSpan? getTimeSpanOnConsecutiveDays(DateOnly dayOffDate, IScheduleRange currentSchedules)
         {
             var previousScheduleDay = currentSchedules.ScheduledDay(dayOffDate.AddDays(-1));
             var nextScheduleDay = currentSchedules.ScheduledDay(dayOffDate.AddDays(1));

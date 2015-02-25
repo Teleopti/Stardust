@@ -11,13 +11,13 @@ namespace Teleopti.Ccc.Domain.Scheduling.Rules
 	{
 		private bool _haltModify = true;
 		private readonly IWeeksFromScheduleDaysExtractor _weeksFromScheduleDaysExtractor;
-		private readonly IPersonWeekVoilatingWeeklyRestSpecification _personWeekVoilatingWeeklyRestSpecification;
+		private readonly IPersonWeekViolatingWeeklyRestSpecification _personWeekViolatingWeeklyRestSpecification;
 
 		public MinWeeklyRestRule(IWeeksFromScheduleDaysExtractor weeksFromScheduleDaysExtractor,
-			IPersonWeekVoilatingWeeklyRestSpecification personWeekVoilatingWeeklyRestSpecification)
+			IPersonWeekViolatingWeeklyRestSpecification personWeekViolatingWeeklyRestSpecification)
 		{
 			_weeksFromScheduleDaysExtractor = weeksFromScheduleDaysExtractor;
-			_personWeekVoilatingWeeklyRestSpecification = personWeekVoilatingWeeklyRestSpecification;
+			_personWeekViolatingWeeklyRestSpecification = personWeekViolatingWeeklyRestSpecification;
 		}
 
 		public string ErrorMessage
@@ -77,7 +77,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Rules
 				}
 				else
 				{
-					if (!_personWeekVoilatingWeeklyRestSpecification.IsSatisfyBy(currentSchedules, personWeek, weeklyRest))
+					if (!_personWeekViolatingWeeklyRestSpecification.IsSatisfyBy(currentSchedules, personWeek, weeklyRest))
 					{
 						string weeklyRestString = DateHelper.HourMinutesString(weeklyRest.TotalMinutes);
 						string message = string.Format(TeleoptiPrincipal.Current.Regional.Culture,

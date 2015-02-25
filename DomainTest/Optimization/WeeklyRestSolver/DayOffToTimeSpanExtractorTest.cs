@@ -19,6 +19,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.WeeklyRestSolver
         private IExtractDayOffFromGivenWeek _extractDayOffFromGivenWeek;
         private IScheduleDayWorkShiftTimeExtractor _scheduleDayWorkShiftTimeExtractor;
         private IVerifyWeeklyRestAroundDayOffSpecification _verifyWeeklyRestAroundDayOffSpecification;
+	    private IScheduleMatrixPro _scheduleMatrixPro;
 
         [SetUp]
         public void Setup()
@@ -27,7 +28,10 @@ namespace Teleopti.Ccc.DomainTest.Optimization.WeeklyRestSolver
             _extractDayOffFromGivenWeek = _mock.StrictMock<IExtractDayOffFromGivenWeek>();
             _scheduleDayWorkShiftTimeExtractor = _mock.StrictMock<IScheduleDayWorkShiftTimeExtractor>();
             _verifyWeeklyRestAroundDayOffSpecification = _mock.StrictMock<IVerifyWeeklyRestAroundDayOffSpecification>();
-            _target = new DayOffToTimeSpanExtractor(_extractDayOffFromGivenWeek,_scheduleDayWorkShiftTimeExtractor, _verifyWeeklyRestAroundDayOffSpecification);
+			_scheduleMatrixPro = _mock.StrictMock<IScheduleMatrixPro>();
+
+            _target = new DayOffToTimeSpanExtractor(_extractDayOffFromGivenWeek,_scheduleDayWorkShiftTimeExtractor,
+				_verifyWeeklyRestAroundDayOffSpecification);
             
             _scheduleDay1 = _mock.StrictMock<IScheduleDay>();
             _scheduleDay2 = _mock.StrictMock<IScheduleDay>();
@@ -45,7 +49,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.WeeklyRestSolver
                 Expect.Call(_currentSchedules.ScheduledDayCollection(week)).Return(scheduleDayList);
                 Expect.Call(_extractDayOffFromGivenWeek.GetDaysOff(scheduleDayList)).Return(new List<DateOnly>());
             }
-            var result = _target.GetDayOffWithTimeSpanAmongAWeek(week,_currentSchedules);
+			var result = _target.GetDayOffWithTimeSpanAmongAWeek(week, _currentSchedules);
             Assert.AreEqual( 0, result.Count);
         }
 
@@ -63,7 +67,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.WeeklyRestSolver
                 Expect.Call(_verifyWeeklyRestAroundDayOffSpecification.IsSatisfy(dayOffList, _currentSchedules))
                     .Return(false);
             }
-            var result = _target.GetDayOffWithTimeSpanAmongAWeek(week, _currentSchedules);
+			var result = _target.GetDayOffWithTimeSpanAmongAWeek(week, _currentSchedules);
             Assert.AreEqual(0, result.Count);
         }
 
@@ -80,8 +84,8 @@ namespace Teleopti.Ccc.DomainTest.Optimization.WeeklyRestSolver
             {
                 Expect.Call(_currentSchedules.ScheduledDayCollection(week)).Return(scheduleDayList);
                 Expect.Call(_extractDayOffFromGivenWeek.GetDaysOff(scheduleDayList)).Return(dayOffList);
-                Expect.Call(_verifyWeeklyRestAroundDayOffSpecification.IsSatisfy(dayOffList, _currentSchedules))
-                    .Return(true);
+				Expect.Call(_verifyWeeklyRestAroundDayOffSpecification.IsSatisfy(dayOffList, _currentSchedules))
+					.Return(true);
                 Expect.Call(_currentSchedules.ScheduledDay(week.StartDate)).Return(_scheduleDay1);
                 Expect.Call(_currentSchedules.ScheduledDay(week.EndDate)).Return(_scheduleDay3);
 
@@ -91,7 +95,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.WeeklyRestSolver
                 Expect.Call(_scheduleDayWorkShiftTimeExtractor.ShiftStartEndTime(_scheduleDay3))
                     .Return(nextShiftperiod);
             }
-            var result = _target.GetDayOffWithTimeSpanAmongAWeek(week, _currentSchedules);
+			var result = _target.GetDayOffWithTimeSpanAmongAWeek(week, _currentSchedules);
             Assert.AreEqual(1, result.Count);
             
             Assert.AreEqual(TimeSpan.FromHours(36),result[dayOffDate]);
