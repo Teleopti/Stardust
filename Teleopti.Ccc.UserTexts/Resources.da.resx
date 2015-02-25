@@ -10432,7 +10432,7 @@ Der er ikke nok budgetteret kvote til denne forespørgelse.</value>
     <value>SMS Indstillinger</value>
   </data>
   <data name="YourWorkingHoursHaveChanged" xml:space="preserve">
-    <value>Din Arbejdstid har ændret sig:</value>
+    <value>Din arbejdstid er rettet:</value>
   </data>
   <data name="GraphLOC" xml:space="preserve">
     <value>Graf (loc)</value>
