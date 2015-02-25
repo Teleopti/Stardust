@@ -177,7 +177,7 @@ define([
 			self.PersonId(options.personid || options.id);
 			self.GroupId(options.groupid);
 			self.SelectedStartMinutes(Number(options.minutes));
-            self.initMoveActivityForm();
+			self.initMoveActivityForm();
 		};
 
 		this.IsOtherTimeZone = ko.computed(function () {
@@ -256,9 +256,9 @@ define([
 			self.AddActivityForm.WorkingShift(self.WorkingShift());
 
 			if (self.MovingActivity()) {
-                self.MoveActivityForm.WorkingShift(self.WorkingShift());
-                var selectedLayer = self.SelectedLayer();
-                self.MoveActivityForm.update(selectedLayer);
+				self.MoveActivityForm.WorkingShift(self.WorkingShift());
+				var selectedLayer = self.SelectedLayer();
+				self.MoveActivityForm.update(selectedLayer);
 			}
 
 			self.TimeLine.BaseDate(data.BaseDate);
@@ -309,41 +309,41 @@ define([
 		var deselectAllLayersExcept = function (layer) {
 			var selectedLayers = layers()
 				   .filter(function (x) {
-				   	if (layer && x === layer) {
-				   		return false;
-				   	}
-				   	return x.Selected();
+					if (layer && x === layer) {
+						return false;
+					}
+					return x.Selected();
 				   });
 			selectedLayers.each(function (x) {
 				x.Selected(false);
 			});
 		};
 
-	    this.updateStartTime = function(pixels) {
-	        var minutes = pixels / self.TimeLine.PixelsPerMinute();
-	        var newStartTimeMinutes = self.MoveActivityForm.getMinutesFromStartTime() + Math.round(minutes / 15) * 15;
-	        self.MoveActivityForm.StartTime(self.MoveActivityForm.getStartTimeFromMinutes(newStartTimeMinutes));
-	    };
+		this.updateStartTime = function(pixels) {
+			var minutes = pixels / self.TimeLine.PixelsPerMinute();
+			var newStartTimeMinutes = self.MoveActivityForm.getMinutesFromStartTime() + Math.round(minutes / 15) * 15;
+			self.MoveActivityForm.StartTime(self.MoveActivityForm.getStartTimeFromMinutes(newStartTimeMinutes));
+		};
 
 		this.lengthMinutesToPixels = function (minutes) {
 			var pixels = minutes * self.TimeLine.PixelsPerMinute();
 			return Math.round(pixels);
 		};
 
-	    this.setTimelineWidth = function(width) {
-	        self.TimeLine.WidthPixels(width);
-	    };
+		this.setTimelineWidth = function(width) {
+			self.TimeLine.WidthPixels(width);
+		};
 
-	    this.initMoveActivityForm = function() {
-	    	self.MoveActivityForm.SelectedStartMinutes(self.SelectedStartMinutes());
-	    	if (!self.MoveActivityForm.ScheduleDate()) {
-	    		self.MoveActivityForm.ScheduleDate(self.ScheduleDate().clone());
-		    }
-	    };
+		this.initMoveActivityForm = function() {
+			self.MoveActivityForm.SelectedStartMinutes(self.SelectedStartMinutes());
+			if (!self.MoveActivityForm.ScheduleDate()) {
+				self.MoveActivityForm.ScheduleDate(self.ScheduleDate().clone());
+			}
+		};
 
-	    this.backToTeamSchedule = function () {
+		this.backToTeamSchedule = function () {
 			navigation.GoToTeamScheduleWithPreselectedParameter(self.BusinessUnitId(), self.GroupId(), self.ScheduleDate(), self.PersonId(), self.SelectedStartMinutes());
-	    }
+		}
 
 		this.initActivityDraggable = function() {
 			$('.time-line-for').attr("data-subscription-done", " ");

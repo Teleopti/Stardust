@@ -332,7 +332,7 @@
 					assert.equals(selectedLayer.StartTime(), momentExpected.format('HH:mm'));
 				},
 
-				"=>should calculate shifts width lower than timeline width when groupmates are displayed": function () {
+				"should calculate shifts width lower than timeline width when groupmates are displayed": function () {
 					var vm = new viewModel();
 
 					vm.SetViewOptions({
