@@ -67,6 +67,7 @@ namespace Teleopti.Ccc.Infrastructure.MultiTenancy.NHibernate
 
 		public void CancelCurrent()
 		{
+			if (_sessionFactory == null) return;
 			var session = CurrentSessionContext.Unbind(_sessionFactory);
 			if (session == null) return;
 			
