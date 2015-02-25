@@ -49,6 +49,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.WeeklyRestSolver
 		private ISchedulingOptionsCreator _schedulingOptionsCreator;
 		private List<IScheduleMatrixPro> _allPersonMatrixList;
 		private ITeamBlockSteadyStateValidator _teamBlockSteadyStateValidator;
+		private IScheduleDayIsLockedSpecification _scheduleDayIsLockedSpecification;
 
 		[SetUp]
 		public void Setup()
@@ -62,7 +63,11 @@ namespace Teleopti.Ccc.DomainTest.Optimization.WeeklyRestSolver
 			_schedulingOptionsCreator = MockRepository.GenerateMock<ISchedulingOptionsCreator>();
 			_teamBlockOptimizationLimits = MockRepository.GenerateMock<ITeamBlockOptimizationLimits>();
 			_teamBlockSteadyStateValidator = MockRepository.GenerateMock<ITeamBlockSteadyStateValidator>();
-			_target = new ShiftNudgeManager(_shiftNudgeEarlier, _shiftNudgeLater, _ensureWeeklyRestRule, _contractWeeklyRestForPersonWeek, _teamBlockScheduleCloner, _filterForTeamBlockInSelection, _teamBlockOptimizationLimits, _schedulingOptionsCreator, _teamBlockSteadyStateValidator);
+			_target = new ShiftNudgeManager(_shiftNudgeEarlier, _shiftNudgeLater, 
+				_ensureWeeklyRestRule, _contractWeeklyRestForPersonWeek, 
+				_teamBlockScheduleCloner, _filterForTeamBlockInSelection, 
+				_teamBlockOptimizationLimits, _schedulingOptionsCreator, 
+				_teamBlockSteadyStateValidator, _scheduleDayIsLockedSpecification);
 			_person = PersonFactory.CreatePersonWithPersonPeriod(DateOnly.MinValue);
 			_person.AddSchedulePeriod(new SchedulePeriod(_selectedPeriod.StartDate, SchedulePeriodType.Month, 1));
 			_person.Period(DateOnly.MinValue).PersonContract.Contract.WorkTimeDirective = new WorkTimeDirective(TimeSpan.Zero, TimeSpan.FromHours(48), TimeSpan.FromHours(11), TimeSpan.FromHours(36));
@@ -73,6 +78,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.WeeklyRestSolver
 			_resourceCalculateDelayer = MockRepository.GenerateMock<IResourceCalculateDelayer>();
 			_schedulingResultStateHolder = MockRepository.GenerateMock<ISchedulingResultStateHolder>();
 			_allPersonMatrixList = new List<IScheduleMatrixPro>();
+			_scheduleDayIsLockedSpecification = MockRepository.GenerateMock<IScheduleDayIsLockedSpecification>();
 
 			_selectedPersons = new List<IPerson> {_person};
 			_leftTeamBlockInfo = new TeamBlockInfo(new TeamInfo(new Group(new List<IPerson> {_person}, ""), new List<IList<IScheduleMatrixPro>> {_allPersonMatrixList}), new BlockInfo(new DateOnlyPeriod(2014, 3, 29, 2014, 3, 29)));

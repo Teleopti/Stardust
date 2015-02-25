@@ -29,7 +29,7 @@ namespace Teleopti.Ccc.Domain.Optimization.WeeklyRestSolver
 		private readonly IDeleteScheduleDayFromUnsolvedPersonWeek _deleteScheduleDayFromUnsolvedPersonWeek;
 		private bool _cancelMe;
 		private readonly IAllTeamMembersInSelectionSpecification _allTeamMembersInSelectionSpecification;
-		private readonly IPersonWeekVoilatingWeeklyRestSpecification  _personWeekViolatingWeeklyRestSpecification;
+		private readonly IPersonWeekViolatingWeeklyRestSpecification  _personWeekViolatingWeeklyRestSpecification;
 		private readonly IBrokenWeekCounterForAPerson  _brokenWeekCounterForAPerson;
 		public event EventHandler<ResourceOptimizerProgressEventArgs> ResolvingWeek;
 		private ResourceOptimizerProgressEventArgs _progressEvent;
@@ -40,7 +40,7 @@ namespace Teleopti.Ccc.Domain.Optimization.WeeklyRestSolver
 			IdentifyDayOffWithHighestSpan identifyDayOffWithHighestSpan,
 			IDeleteScheduleDayFromUnsolvedPersonWeek deleteScheduleDayFromUnsolvedPersonWeek,
 			IAllTeamMembersInSelectionSpecification allTeamMembersInSelectionSpecification, 
-			IPersonWeekVoilatingWeeklyRestSpecification personWeekViolatingWeeklyRestSpecification, 
+			IPersonWeekViolatingWeeklyRestSpecification personWeekViolatingWeeklyRestSpecification, 
 			IBrokenWeekCounterForAPerson brokenWeekCounterForAPerson)
 		{
 			_weeksFromScheduleDaysExtractor = weeksFromScheduleDaysExtractor;
@@ -83,6 +83,8 @@ namespace Teleopti.Ccc.Domain.Optimization.WeeklyRestSolver
 			{
 				var personMatrixes = allPersonMatrixList.Where(s => s.Person == person && s.SchedulePeriod.DateOnlyPeriod.Intersection(selectedPeriod).HasValue).ToList();
 
+				//var personMatrixOld = allPersonMatrixList.FirstOrDefault(s => s.Person == person);
+
 				foreach (var personMatrix in personMatrixes)
 				{
 
@@ -107,7 +109,7 @@ namespace Teleopti.Ccc.Domain.Optimization.WeeklyRestSolver
 						if (_ensureWeeklyRestRule.HasMinWeeklyRest(personWeek, personScheduleRange, weeklyRestInPersonWeek[personWeek]))
 							continue;
 						var possiblePositionsToFix = _dayOffToTimeSpanExtractor.GetDayOffWithTimeSpanAmongAWeek(personWeek.Week,
-							personScheduleRange, personMatrix);
+							personScheduleRange);
 						var firstDayOfElement = DateOnly.MinValue;
 						if (possiblePositionsToFix.Count > 0)
 							firstDayOfElement = possiblePositionsToFix.FirstOrDefault().Key;
@@ -117,8 +119,7 @@ namespace Teleopti.Ccc.Domain.Optimization.WeeklyRestSolver
 							var endDayOfWeek = personWeek.Week.EndDate.AddDays(1);
 							while(!_ensureWeeklyRestRule.HasMinWeeklyRest(personWeek, personScheduleRange, weeklyRestInPersonWeek[personWeek]))
 							{
-								_deleteScheduleDayFromUnsolvedPersonWeek.DeleteAppropiateScheduleDay(personScheduleRange, endDayOfWeek
-												, rollbackService, selectedPeriod);
+								_deleteScheduleDayFromUnsolvedPersonWeek.DeleteAppropiateScheduleDay(personScheduleRange, endDayOfWeek, rollbackService, selectedPeriod, personMatrix);
 								endDayOfWeek = endDayOfWeek.AddDays(-1);
 								if(endDayOfWeek < personWeek.Week.StartDate)
 									break;
@@ -139,9 +140,11 @@ namespace Teleopti.Ccc.Domain.Optimization.WeeklyRestSolver
 
 								var highProbablePosition = _identifyDayOffWithHighestSpan.GetHighProbableDayOffPosition(possiblePositionsToFix);
 								success = _shiftNudgeManager.TrySolveForDayOff(personWeek, highProbablePosition,
-									teamBlockGenerator,
-									allPersonMatrixList, rollbackService, resourceCalculateDelayer,
-									schedulingResultStateHolder, selectedPeriod, selectedPersons, optimizationPreferences, schedulingOptions);
+									teamBlockGenerator, allPersonMatrixList, 
+									rollbackService, resourceCalculateDelayer,
+									schedulingResultStateHolder, selectedPeriod, 
+									selectedPersons, optimizationPreferences, 
+									schedulingOptions);
 
 								if (success)
 								{
@@ -154,7 +157,7 @@ namespace Teleopti.Ccc.Domain.Optimization.WeeklyRestSolver
 										if (isFullTeamSelected(selectedPersons, personWeek.Person, teamBlockGenerator, schedulingOptions,
 											allPersonMatrixList, personWeek.Week))
 											_deleteScheduleDayFromUnsolvedPersonWeek.DeleteAppropiateScheduleDay(personScheduleRange,
-												possiblePositionsToFix.First().Key, rollbackService, selectedPeriod);
+												possiblePositionsToFix.First().Key, rollbackService, selectedPeriod, personMatrix);
 									}
 									break;
 								}
@@ -163,10 +166,8 @@ namespace Teleopti.Ccc.Domain.Optimization.WeeklyRestSolver
 							}
 							if (!success && firstDayOfElement != DateOnly.MinValue)
 							{
-								if (isFullTeamSelected(selectedPersons, personWeek.Person, teamBlockGenerator, schedulingOptions,
-									allPersonMatrixList, personWeek.Week))
-									_deleteScheduleDayFromUnsolvedPersonWeek.DeleteAppropiateScheduleDay(personScheduleRange, firstDayOfElement,
-										rollbackService, selectedPeriod);
+								if (isFullTeamSelected(selectedPersons, personWeek.Person, teamBlockGenerator, schedulingOptions, allPersonMatrixList, personWeek.Week))
+									_deleteScheduleDayFromUnsolvedPersonWeek.DeleteAppropiateScheduleDay(personScheduleRange, firstDayOfElement, rollbackService, selectedPeriod, personMatrix);
 							}
 						}
 					}

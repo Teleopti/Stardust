@@ -53,7 +53,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Overtime
 				IWorkTimeStartEndExtractor workTimeStartEndExtractor = new WorkTimeStartEndExtractor();
 				IDayOffMaxFlexCalculator dayOffMaxFlexCalculator = new DayOffMaxFlexCalculator(workTimeStartEndExtractor);
 				IEnsureWeeklyRestRule ensureWeeklyRestRule = new EnsureWeeklyRestRule(workTimeStartEndExtractor, dayOffMaxFlexCalculator);
-				rules.Add(new MinWeeklyRestRule(new WeeksFromScheduleDaysExtractor(), new PersonWeekVoilatingWeeklyRestSpecification(new ExtractDayOffFromGivenWeek(), new VerifyWeeklyRestAroundDayOffSpecification(), ensureWeeklyRestRule)));
+				rules.Add(new MinWeeklyRestRule(new WeeksFromScheduleDaysExtractor(), new PersonWeekViolatingWeeklyRestSpecification(new ExtractDayOffFromGivenWeek(), new VerifyWeeklyRestAroundDayOffSpecification(), ensureWeeklyRestRule)));
 			}
 
 			_schedulePartModifyAndRollbackService.ClearModificationCollection();

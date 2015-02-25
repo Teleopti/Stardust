@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using NUnit.Framework;
 using Rhino.Mocks;
+using Teleopti.Ccc.Domain.Optimization;
 using Teleopti.Ccc.Domain.Optimization.WeeklyRestSolver;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Interfaces.Domain;
@@ -17,13 +18,17 @@ namespace Teleopti.Ccc.DomainTest.Optimization.WeeklyRestSolver
         private IDeleteSchedulePartService _deleteSchedulePartService;
         private DeleteScheduleDayFromUnsolvedPersonWeek _target;
         private MockRepository _mock;
+	    private IScheduleMatrixPro _scheduleMatrixPro;
+	    private IScheduleDayIsLockedSpecification _scheduleDayIsLockedSpecification;
 
         [SetUp]
         public void Setup()
         {
             _mock = new MockRepository();
             _deleteSchedulePartService = _mock.StrictMock<IDeleteSchedulePartService>();
-            _target = new DeleteScheduleDayFromUnsolvedPersonWeek(_deleteSchedulePartService);
+			_scheduleDayIsLockedSpecification = _mock.StrictMock<IScheduleDayIsLockedSpecification>();
+	        _scheduleMatrixPro = _mock.StrictMock<IScheduleMatrixPro>();
+			_target = new DeleteScheduleDayFromUnsolvedPersonWeek(_deleteSchedulePartService, _scheduleDayIsLockedSpecification);
         }
 
         [Test]
@@ -38,13 +43,16 @@ namespace Teleopti.Ccc.DomainTest.Optimization.WeeklyRestSolver
             using(_mock.Record())
             {
                 
-                Expect.Call(personRange.ScheduledDay(date.AddDays(-1))).Return(scheduleDay);
+                Expect.Call(personRange.ScheduledDay(date.AddDays(-1)))
+					.Return(scheduleDay);
+	            Expect.Call(_scheduleDayIsLockedSpecification.IsSatisfy(scheduleDay, _scheduleMatrixPro))
+		            .Return(false);
                 Expect.Call(_deleteSchedulePartService.Delete(scheduleDayList, deleteOption, rollbackService,
                     new BackgroundWorker())).IgnoreArguments();
             }
             using (_mock.Playback())
             {
-                _target.DeleteAppropiateScheduleDay(personRange,date,rollbackService, new DateOnlyPeriod(2014,03,25,2014,03,27));
+                _target.DeleteAppropiateScheduleDay(personRange,date,rollbackService, new DateOnlyPeriod(2014,03,25,2014,03,27), _scheduleMatrixPro);
             }
         }
 
@@ -54,7 +62,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.WeeklyRestSolver
 			  var personRange = _mock.StrictMock<IScheduleRange>();
 			  var date = new DateOnly(2014, 03, 26);
 			  var rollbackService = _mock.StrictMock<ISchedulePartModifyAndRollbackService>();
-			  _target.DeleteAppropiateScheduleDay(personRange, date, rollbackService, new DateOnlyPeriod(2014, 04, 25, 2014, 04, 27));
+			  _target.DeleteAppropiateScheduleDay(personRange, date, rollbackService, new DateOnlyPeriod(2014, 04, 25, 2014, 04, 27), _scheduleMatrixPro);
 		  }
     }
 }
