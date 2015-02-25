@@ -112,17 +112,6 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
 		}
 	}
 
-	public class ConfigFromWebServiceSpecification
-	{
-		public bool IsRunningWithSdk()
-		{
-			var wrapper = new ConfigurationManagerWrapper();
-			return !wrapper.AppSettings.ContainsKey("ConfigPath");
-		}
-	}
-
-	
-
 	public interface IConfigurationReader
 	{
 		void ReadConfiguration(MessageSenderCreator creator, Func<IMessageBrokerComposite> messageBroker);

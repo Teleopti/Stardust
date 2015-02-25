@@ -10,13 +10,11 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
     public class BusStartup : IServiceBusAware
     {
         private readonly IInitializePayrollFormats _initializePayrollFormats;
-	    private readonly ConfigFromWebServiceSpecification _configFromWebServiceSpecification;
 	    private static readonly ILog Logger = LogManager.GetLogger(typeof (BusStartup));
         
-        public BusStartup(IInitializePayrollFormats initializePayrollFormats, ConfigFromWebServiceSpecification configFromWebServiceSpecification)
+        public BusStartup(IInitializePayrollFormats initializePayrollFormats)
         {
 	        _initializePayrollFormats = initializePayrollFormats;
-	        _configFromWebServiceSpecification = configFromWebServiceSpecification;
         }
 
 	    public void BusStarting(IServiceBus bus)
@@ -40,7 +38,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
 		public void BusStarted(IServiceBus bus)
         {
-			if(bus.Endpoint.Uri.AbsolutePath.Equals("/payroll") && _configFromWebServiceSpecification.IsRunningWithSdk())
+			if(bus.Endpoint.Uri.AbsolutePath.Equals("/payroll"))
 				_initializePayrollFormats.Initialize();
         }
 
