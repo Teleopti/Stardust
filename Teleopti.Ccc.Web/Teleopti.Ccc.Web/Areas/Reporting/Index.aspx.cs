@@ -138,6 +138,9 @@ namespace Teleopti.Ccc.Web.Areas.Reporting
 			{
 				viewer.LocalReport.DataSources.Add(new ReportDataSource(t.TableName, t));
 			}
+			var inlineOrAtt = "inline;";
+			if(format == "Word")
+				inlineOrAtt = "attachment;";
 			// Variables
 			Warning[] warnings;
 			string[] streamIds;
@@ -152,7 +155,7 @@ namespace Teleopti.Ccc.Web.Areas.Reporting
 			Response.Buffer = true;
 			Response.Clear();
 			Response.ContentType = mimeType;
-			Response.AddHeader("content-disposition", "inline; filename=" + reportName + "." + extension);
+			Response.AddHeader("content-disposition", inlineOrAtt + " filename=" + reportName + "." + extension);
 			Response.BinaryWrite(bytes); // create the file
 			Response.Flush(); // send it to the client to download
 		}
