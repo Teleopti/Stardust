@@ -77,7 +77,7 @@ namespace Teleopti.Ccc.InfrastructureTest.MultiTenancy
 				personId = personInDatabase.Id.Value;
 			}
 			_tenantUnitOfWorkManager = TenantUnitOfWorkManager.CreateInstanceForTest(ConnectionStringHelper.ConnectionStringUsedInTests);
-			target = new IdentityUserQuery(() => _tenantUnitOfWorkManager);
+			target = new IdentityUserQuery(_tenantUnitOfWorkManager);
 		}
 
 		[TearDown]

@@ -1,21 +1,19 @@
-﻿using System;
-using Teleopti.Ccc.Infrastructure.MultiTenancy.NHibernate;
+﻿using Teleopti.Ccc.Infrastructure.MultiTenancy.NHibernate;
 
 namespace Teleopti.Ccc.Infrastructure.MultiTenancy
 {
 	public class ApplicationUserQuery : IApplicationUserQuery
 	{
-		private readonly Func<ICurrentTenantSession> _currentTenantSession;
+		private readonly ICurrentTenantSession _currentTenantSession;
 
-		//remove "func" when we later move away from list of datasources
-		public ApplicationUserQuery(Func<ICurrentTenantSession> currentTenantSession)
+		public ApplicationUserQuery(ICurrentTenantSession currentTenantSession)
 		{
 			_currentTenantSession = currentTenantSession;
 		}
 
 		public PasswordPolicyForUser FindUserData(string userName)
 		{
-			var session = _currentTenantSession().CurrentSession();
+			var session = _currentTenantSession.CurrentSession();
 			var readPersonInfo = session.GetNamedQuery("applicationUserQuery")
 				.SetString("userName", userName)
 				.UniqueResult<PersonInfo>();
