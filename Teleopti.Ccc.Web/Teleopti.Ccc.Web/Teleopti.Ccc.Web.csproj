@@ -1189,7 +1189,6 @@
     <Content Include="Areas\SeatPlanner\Content\Styles\Site.css" />
     <Content Include="Areas\SeatPlanner\Content\Templates\SeatMap\view.html" />
     <Content Include="WFM\css\material.css" />
-    <Content Include="WFM\Build_Gruntfile.js" />
     <Content Include="WFM\Gruntfile.js" />
     <Content Include="WFM\js\permissions.service.js" />
     <Content Include="WFM\karma.conf.js" />

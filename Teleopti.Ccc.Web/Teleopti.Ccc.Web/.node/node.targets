@@ -16,7 +16,7 @@
 		<GruntCmd>$(NodeDir)grunt</GruntCmd>
 
 		<!-- Grunt Build Command -->
-		<GruntBuild>"$(GruntCmd)" dist --gruntfile Build_Gruntfile.js --verbose --no-color </GruntBuild>
+		<GruntBuild>"$(GruntCmd)" dist --verbose --no-color </GruntBuild>
 
 		<!-- NPM install command -->
 		<NpmInstallCmd>"$(NpmCmd)" update</NpmInstallCmd>

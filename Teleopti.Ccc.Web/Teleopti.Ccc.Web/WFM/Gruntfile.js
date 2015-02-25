@@ -40,7 +40,7 @@
 			}
 		},
 
-		/*uglify: {
+		uglify: {
 			options: {
 				sourceMap: true
 			},
@@ -49,7 +49,8 @@
 					'dist/main.min.js': ['<%= concat.dist.dest %>']
 				}
 			}
-		}*/
+		},
+
 		kss: {
 			options: {
 				template: 'wfm-template'
@@ -74,7 +75,7 @@
 	grunt.loadNpmTasks('grunt-sass');
 	grunt.loadNpmTasks('grunt-contrib-watch');
 	grunt.loadNpmTasks('grunt-contrib-concat');
-	//grunt.loadNpmTasks('grunt-contrib-uglify');
+	grunt.loadNpmTasks('grunt-contrib-uglify');
 	grunt.loadNpmTasks('grunt-kss');
 	grunt.loadNpmTasks('grunt-shell');
 
@@ -82,5 +83,5 @@
 	// Default task(s).
 	grunt.registerTask('default', ['sass', 'watch']); // this task watchs
 	grunt.registerTask('styleguide', ['watch:styleguide']); // this task watchs
-	grunt.registerTask('dist', ['concat']); // this task is kind of package
+	grunt.registerTask('dist', ['concat', 'uglify', 'sass']); // this task is kind of package
 };
