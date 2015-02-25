@@ -1,4 +1,5 @@
 ﻿using Teleopti.Ccc.Domain.Repositories;
+using Teleopti.Ccc.Infrastructure.MultiTenancy;
 using Teleopti.Ccc.Web.Areas.Start.Core.Authentication.DataProvider;
 using Teleopti.Interfaces.Domain;
 
@@ -9,26 +10,30 @@ namespace Teleopti.Ccc.Web.Areas.Start.Core.Authentication.Services
 		private readonly IDataSourcesProvider _dataSourceProvider;
 		private readonly ITokenIdentityProvider _tokenIdentityProvider;
 		private readonly IRepositoryFactory _repositoryFactory;
+		private readonly IIdentityUserQuery _identityUserQuery;
 
 		public Authenticator(IDataSourcesProvider dataSourceProvider,
 									ITokenIdentityProvider tokenIdentityProvider,
-									IRepositoryFactory repositoryFactory)
+									IRepositoryFactory repositoryFactory,
+									IIdentityUserQuery identityUserQuery)
 		{
 			_dataSourceProvider = dataSourceProvider;
 			_tokenIdentityProvider = tokenIdentityProvider;
 			_repositoryFactory = repositoryFactory;
+			_identityUserQuery = identityUserQuery;
 		}
 
-		public AuthenticateResult LogonWindowsUser(string dataSourceName)
+		public AuthenticateResult LogonWindowsUser()
 		{
-			var dataSource = _dataSourceProvider.RetrieveDataSourceByName(dataSourceName);
+			var winAccount = _tokenIdentityProvider.RetrieveToken();
+			//TODO: tenant - use a simpler query here when joining these two methods. Tenant is enough to get back.
+			var tenant = _identityUserQuery.FindUserData(winAccount.UserIdentifier).Tenant;
+			var dataSource = _dataSourceProvider.RetrieveDataSourceByName(tenant);
 
 			using (var uow = dataSource.Application.CreateAndOpenUnitOfWork())
 			{
 				IPerson foundUser;
-				var winAccount = _tokenIdentityProvider.RetrieveToken();
-				if (_repositoryFactory.CreatePersonRepository(uow).TryFindIdentityAuthenticatedPerson(winAccount.UserIdentifier,
-					out foundUser))
+				if (_repositoryFactory.CreatePersonRepository(uow).TryFindIdentityAuthenticatedPerson(winAccount.UserIdentifier, out foundUser))
 				{
 					return new AuthenticateResult { Successful = true, Person = foundUser, DataSource = dataSource };
 				}

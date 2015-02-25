@@ -6,7 +6,6 @@ namespace Teleopti.Ccc.Web.Areas.Start.Models.Authentication
 	{
 		private readonly IIdentityLogon _identityLogon;
 		private readonly ILogLogonAttempt _logLogonAttempt;
-		public string DataSourceName { get; set; }
 
 		public WindowsAuthenticationModel(IIdentityLogon identityLogon, ILogLogonAttempt logLogonAttempt)
 		{
@@ -16,7 +15,7 @@ namespace Teleopti.Ccc.Web.Areas.Start.Models.Authentication
 
 		public AuthenticateResult AuthenticateUser()
 		{
-			return _identityLogon.LogonWindowsUser(DataSourceName);
+			return _identityLogon.LogonWindowsUser();
 		}
 
 		public void SaveAuthenticateResult(AuthenticateResult result)

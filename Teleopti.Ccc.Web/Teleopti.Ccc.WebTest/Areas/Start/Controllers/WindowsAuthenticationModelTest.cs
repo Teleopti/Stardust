@@ -14,13 +14,14 @@ namespace Teleopti.Ccc.WebTest.Areas.Start.Controllers
 		{
 			var authenticator = MockRepository.GenerateMock<IIdentityLogon>();
 			var expectedResult = new AuthenticateResult();
-			authenticator.Stub(x => x.LogonWindowsUser("mydata")).Return(expectedResult);
-			var target = new WindowsAuthenticationModel(authenticator, null) { DataSourceName = "mydata" };
+			authenticator.Stub(x => x.LogonWindowsUser()).Return(expectedResult);
+			var target = new WindowsAuthenticationModel(authenticator, null);
 
 			var result = target.AuthenticateUser();
 
 			result.Should().Be.SameInstanceAs(expectedResult);
 		}
+
 		[Test]
 		public void ShouldSaveResult()
 		{
@@ -29,7 +30,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Start.Controllers
 			var logLogResult = MockRepository.GenerateMock<ILogLogonAttempt>();
 			logLogResult.Expect(x => x.SaveAuthenticateResult(userName, expectedResult));
 
-			var target = new WindowsAuthenticationModel(null, logLogResult) { DataSourceName = "mydata" };
+			var target = new WindowsAuthenticationModel(null, logLogResult);
 
 			target.SaveAuthenticateResult(expectedResult);
 		}

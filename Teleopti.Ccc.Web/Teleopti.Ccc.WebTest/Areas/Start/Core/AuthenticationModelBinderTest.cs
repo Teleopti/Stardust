@@ -41,13 +41,11 @@ namespace Teleopti.Ccc.WebTest.Areas.Start.Core
 			var target = Target();
 			var bindingContext = BindingContext(new NameValueCollection
 				{
-					{"type", "windows"},
-					{"datasource", "mydata"}
+					{"type", "windows"}
 				});
 
 			var result = target.BindModel(null, bindingContext) as WindowsAuthenticationModel;
 
-			result.DataSourceName.Should().Be("mydata");
 			result.Should().Not.Be.Null();
 		}
 

@@ -29,10 +29,7 @@ namespace Teleopti.Ccc.Web.Areas.Start.Models.Authentication
 
 		public IAuthenticationModel BindModel(ModelBindingContext bindingContext)
 		{
-			return new WindowsAuthenticationModel(_authenticator.Value, _logLogonAttempt.Value)
-				{
-					DataSourceName = bindingContext.ValueProvider.GetValue("datasource").AttemptedValue
-				};
+			return new WindowsAuthenticationModel(_authenticator.Value, _logLogonAttempt.Value);
 		}
 	}
 }

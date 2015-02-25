@@ -3,6 +3,7 @@ using Rhino.Mocks;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Repositories;
+using Teleopti.Ccc.Infrastructure.MultiTenancy;
 using Teleopti.Ccc.Web.Areas.Start.Core.Authentication.DataProvider;
 using Teleopti.Ccc.Web.Areas.Start.Core.Authentication.Services;
 using Teleopti.Interfaces.Domain;
@@ -17,7 +18,8 @@ namespace Teleopti.Ccc.WebTest.Core.Authentication.Services
 		private IRepositoryFactory repositoryFactory;
 		private Authenticator target;
 		private ITokenIdentityProvider tokenIdentityProvider;
-		const string dataSourceName = "Gurkmajonääääs";
+		private IIdentityUserQuery identityUserQuery;
+		const string tenant = "Gurkmajonääääs";
 
 		[SetUp]
 		public void Setup()
@@ -25,7 +27,8 @@ namespace Teleopti.Ccc.WebTest.Core.Authentication.Services
 			dataSourcesProvider = MockRepository.GenerateMock<IDataSourcesProvider>();
 			repositoryFactory = MockRepository.GenerateMock<IRepositoryFactory>();
 			tokenIdentityProvider = MockRepository.GenerateMock<ITokenIdentityProvider>();
-			target = new Authenticator(dataSourcesProvider, tokenIdentityProvider, repositoryFactory);
+			identityUserQuery = MockRepository.GenerateMock<IIdentityUserQuery>();
+			target = new Authenticator(dataSourcesProvider, tokenIdentityProvider, repositoryFactory, identityUserQuery);
 		}
 
 		[Test]
@@ -36,20 +39,22 @@ namespace Teleopti.Ccc.WebTest.Core.Authentication.Services
 			var personRep = MockRepository.GenerateMock<IPersonRepository>();
 			var uow = MockRepository.GenerateMock<IUnitOfWork>();
 			var winAccount = new TokenIdentity { UserIdentifier = @"domain\user", OriginalToken = @"http://fake/domain#user" };
+			var pInfo = new PersonInfo();
+			pInfo.SetTenant_DoNotUseThisIfYouAreNotSureWhatYouAreDoing(tenant);
 
 			IPerson person = null;
 
-			dataSourcesProvider.Stub(x => x.RetrieveDataSourceByName(dataSourceName)).Return(dataSource);
+			dataSourcesProvider.Stub(x => x.RetrieveDataSourceByName(tenant)).Return(dataSource);
 			dataSource.Stub(x => x.Application).Return(unitOfWorkFactory);
 			unitOfWorkFactory.Stub(x => x.CreateAndOpenUnitOfWork()).Return(uow);
 			repositoryFactory.Stub(x => x.CreatePersonRepository(uow)).Return(personRep);
+			identityUserQuery.Stub(x => x.FindUserData(winAccount.UserIdentifier)).Return(pInfo);
 
 			tokenIdentityProvider.Stub(x => x.RetrieveToken()).Return(winAccount);
 
-			personRep.Stub(x => x.TryFindIdentityAuthenticatedPerson(winAccount.UserIdentifier,
-				out person)).Return(true);
+			personRep.Stub(x => x.TryFindIdentityAuthenticatedPerson(winAccount.UserIdentifier, out person)).Return(true);
 
-			var result = target.LogonWindowsUser(dataSourceName);
+			var result = target.LogonWindowsUser();
 			result.Person.Should().Be.EqualTo(person);
 			result.Successful.Should().Be.True();
 			result.DataSource.Should().Be.SameInstanceAs(dataSource);
@@ -66,7 +71,7 @@ namespace Teleopti.Ccc.WebTest.Core.Authentication.Services
 
 			IPerson person = new Person();
 
-			dataSourcesProvider.Stub(x => x.RetrieveDataSourceByName(dataSourceName)).Return(dataSource);
+			dataSourcesProvider.Stub(x => x.RetrieveDataSourceByName(tenant)).Return(dataSource);
 			dataSource.Stub(x => x.Application).Return(unitOfWorkFactory);
 			unitOfWorkFactory.Stub(x => x.CreateAndOpenUnitOfWork()).Return(uow);
 			repositoryFactory.Stub(x => x.CreatePersonRepository(uow)).Return(personRep);
@@ -75,7 +80,7 @@ namespace Teleopti.Ccc.WebTest.Core.Authentication.Services
 
 			personRep.Stub(x => x.TryFindBasicAuthenticatedPerson(account.UserIdentifier)).Return(person);
 
-			var result = target.LogonApplicationIdentityUser(dataSourceName);
+			var result = target.LogonApplicationIdentityUser(tenant);
 			result.Person.Should().Be.EqualTo(person);
 			result.Successful.Should().Be.True();
 			result.DataSource.Should().Be.SameInstanceAs(dataSource);
