@@ -19,7 +19,7 @@ namespace Teleopti.Ccc.WebTest.Core.Aop.Aspects
 		{
 			var target = new UnitOfWorkAttribute();
 			target.Should().Be.AssignableTo<Attribute>();
-			target.AspectType.Should().Be(typeof(UnitOfWorkAspect));
+			target.AspectType.Should().Be(typeof(IUnitOfWorkAspect));
 		}
 
 		[Test]
