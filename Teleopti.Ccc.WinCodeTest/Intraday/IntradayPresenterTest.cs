@@ -52,7 +52,7 @@ namespace Teleopti.Ccc.WinCodeTest.Intraday
 		private IRepositoryFactory _repositoryFactory;
         private IScenario _scenario;
         private IEventAggregator _eventAggregator;
-				private IScheduleDifferenceSaver _scheduleDictionarySaver;
+		private IScheduleDifferenceSaver _scheduleDictionarySaver;
         private OnEventScheduleMessageCommand _scheduleCommand;
         private OnEventForecastDataMessageCommand _forecastCommand;
         private OnEventStatisticMessageCommand _statisticCommand;

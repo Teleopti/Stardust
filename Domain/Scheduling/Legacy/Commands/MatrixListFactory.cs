@@ -46,7 +46,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 			IList<IScheduleMatrixPro> matrixes =
 				new ScheduleMatrixListCreator(_schedulerStateHolder.SchedulingResultState).CreateMatrixListFromScheduleParts(scheduleDays);
 
-			_matrixUserLockLocker.Execute(scheduleDays, matrixes, selectedPeriod);
+			_matrixUserLockLocker.Execute(matrixes, selectedPeriod);
 			_matrixNotPermittedLocker.Execute(matrixes);
 
 			return matrixes;
