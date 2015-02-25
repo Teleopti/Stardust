@@ -106,7 +106,7 @@ define([
 
 		this.visibleLayers = ko.computed(function () {
 			var shift = self.WorkingShift();
-			if (shift) {
+			if (shift != undefined) {
 				return lazy(shift.Layers())
 					.filter(function(x) { return x.OverlapsTimeLine(); })
 					.toArray();
@@ -115,16 +115,16 @@ define([
 		});
 
 		this.ShiftStart = ko.computed(function () {
-			var visibleLayers = self.visibleLayers();
-			if (visibleLayers.length > 0) {
+			if (self.visibleLayers().length > 0) {
+				var visibleLayers = self.visibleLayers();
 				return moment(self.ScheduleDate()).add("minutes", visibleLayers[0].StartMinutes());
 			}
 			return moment(self.ScheduleDate()).startOf('d');
 		});
 		
 		this.ShiftEnd = ko.computed(function () {
-			var visibleLayers = self.visibleLayers();
-			if (visibleLayers.length > 0) {
+			if (self.visibleLayers().length > 0) {
+				var visibleLayers = self.visibleLayers();
 				return moment(self.ScheduleDate()).add("minutes", visibleLayers[visibleLayers.length - 1].EndMinutes());
 			}
 			return moment(self.ScheduleDate()).startOf('d').add('d', 1);
