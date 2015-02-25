@@ -285,7 +285,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
             IPersonAssignment loaded = null;
             try
             {
-                SkipRollback();
+                CleanUpAfterTest();
 
                 //setup
                 IPersonAssignment org = CreateAggregateWithCorrectBusinessUnit();
@@ -323,7 +323,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
             IPersonAssignment loaded = null;
             try
             {
-                SkipRollback();
+                CleanUpAfterTest();
 
                 //setup
                 IPersonAssignment org = CreateAggregateWithCorrectBusinessUnit();

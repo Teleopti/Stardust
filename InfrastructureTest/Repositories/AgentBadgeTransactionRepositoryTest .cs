@@ -69,7 +69,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 	    public void ShouldResetBadges()
 	    {
 		    UnitOfWork.PersistAll();
-		    SkipRollback();
+		    CleanUpAfterTest();
 
 		    var target = (Infrastructure.Repositories.AgentBadgeTransactionRepository) TestRepository(UnitOfWork);
 		    target.ResetAgentBadges();

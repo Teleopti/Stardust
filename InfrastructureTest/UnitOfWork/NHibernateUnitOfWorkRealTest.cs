@@ -19,7 +19,7 @@ namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork
         [Test]
         public void VerifyDatabaseVersionOnExistingRoot()
         {
-            SkipRollback();
+            CleanUpAfterTest();
             var p = PersonFactory.CreatePerson();
             PersistAndRemoveFromUnitOfWork(p);
             UnitOfWork.PersistAll();
@@ -37,7 +37,7 @@ namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork
 				{
 					//does not verify that a pess lock is created, just that the method works logically
 					//the lock itself will be tested in the use cases where needed
-					SkipRollback();
+					CleanUpAfterTest();
 					var p = PersonFactory.CreatePerson();
 					PersistAndRemoveFromUnitOfWork(p);
 					UnitOfWork.PersistAll();
@@ -68,7 +68,7 @@ namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork
         [Test]
         public void VerifyDatabaseVersionOnProxy()
         {
-            SkipRollback();
+            CleanUpAfterTest();
             var p = PersonFactory.CreatePerson();
             PersistAndRemoveFromUnitOfWork(p);
             UnitOfWork.PersistAll();
@@ -98,7 +98,7 @@ namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork
         public void VerifyImplicitTransaction()
         {
             UnitOfWork.PersistAll();
-            SkipRollback();
+            CleanUpAfterTest();
 
             IPerson p;
             Guid id;
@@ -121,7 +121,7 @@ namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork
         public void SetIdToNullToNewlyAddedRootsIfTranRollback()
         {
             UnitOfWork.PersistAll();
-            SkipRollback();
+            CleanUpAfterTest();
 
             IPerson cantBePersisted;
             using (var uow1 = SetupFixtureForAssembly.DataSource.Application.CreateAndOpenUnitOfWork())

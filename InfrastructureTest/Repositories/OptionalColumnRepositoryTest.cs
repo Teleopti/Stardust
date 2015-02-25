@@ -60,7 +60,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			PersistAndRemoveFromUnitOfWork(person4);
 			
 			UnitOfWork.PersistAll();
-			SkipRollback();
+			CleanUpAfterTest();
 
 			var ret = repository.UniqueValuesOnColumn(col.Id.Value);
 			Assert.That(ret.Count,Is.EqualTo(3));

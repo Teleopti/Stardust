@@ -77,7 +77,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Foundation
                 rep1.Add(workload);
                 UnitOfWork.PersistAll();
 
-                SkipRollback();
+                CleanUpAfterTest();
 
                 UnitOfWork2.Refresh(secondWorkload);
 

@@ -778,7 +778,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
         [Test]
         public void VerifyGeneratesPushMessage()
         {
-            SkipRollback();
+            CleanUpAfterTest();
             IPersonRequest request1 = CreateAggregateWithCorrectBusinessUnit();
             request1.Request = new AbsenceRequest(_absence, new DateTimePeriod(2000, 1, 1, 2000, 1, 2));
             PersistAndRemoveFromUnitOfWork(_absence);

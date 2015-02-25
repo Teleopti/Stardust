@@ -21,7 +21,7 @@ namespace Teleopti.Ccc.InfrastructureTest.NHibernateConfiguration
 		[Test]
 		public void VerifyViolatingUniqueIndex()
 		{
-			SkipRollback();
+			CleanUpAfterTest();
 			var ok = false;
 			var per1 = new Person();
 			addLogonInfo(per1);

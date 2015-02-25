@@ -94,7 +94,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
         {
             try
             {
-                SkipRollback();
+                CleanUpAfterTest();
                 UnitOfWork.PersistAll();
 
                 IList<IForecastProcessReport> processReports = ForecastProcessReportRepository.ValidationReport(workload, _period);
@@ -129,7 +129,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
         {
             try
             {
-                SkipRollback();
+                CleanUpAfterTest();
                 UnitOfWork.PersistAll();
 
                 IList<IForecastProcessReport> processReports =
@@ -153,7 +153,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
         {
             try
             {
-                SkipRollback();
+                CleanUpAfterTest();
                 UnitOfWork.PersistAll();
 
                 IList<IForecastProcessReport> processReports =

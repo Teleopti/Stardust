@@ -17,7 +17,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
         public void ShouldLoadPersons()
         {
             UnitOfWork.PersistAll();
-            SkipRollback();
+            CleanUpAfterTest();
             var crit = new PersonFinderSearchCriteria(PersonFinderField.All, "hejhej", 10,
                                                              new DateOnly(2012, 1, 1), 1, 1);
             _target = new PersonFinderReadOnlyRepository(UnitOfWorkFactory.CurrentUnitOfWork());
@@ -29,7 +29,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 		public void ShouldCallUpdateReadModelWithoutCrash()
 		{
 			UnitOfWork.PersistAll();
-			SkipRollback();
+			CleanUpAfterTest();
 			_target = new PersonFinderReadOnlyRepository(UnitOfWorkFactory.CurrentUnitOfWork());
 			_target.UpdateFindPerson(new[ ] {Guid.NewGuid()});
 		}
@@ -38,7 +38,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 		public void ShouldCallUpdateGroupingReadModelGroupPageWithoutCrash()
 		{
 			UnitOfWork.PersistAll();
-			SkipRollback();
+			CleanUpAfterTest();
 			_target = new PersonFinderReadOnlyRepository(UnitOfWorkFactory.CurrentUnitOfWork());
             _target.UpdateFindPersonData(new[] { Guid.NewGuid() });
 		}
@@ -47,7 +47,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 		public void ShouldHandleTooSmallDate()
 		{
 			UnitOfWork.PersistAll();
-			SkipRollback();
+			CleanUpAfterTest();
 			var crit = new PersonFinderSearchCriteria(PersonFinderField.All, "hejhej", 10,
 																			 new DateOnly(1012, 1, 1), 1, 1);
 			_target = new PersonFinderReadOnlyRepository(UnitOfWorkFactory.CurrentUnitOfWork());

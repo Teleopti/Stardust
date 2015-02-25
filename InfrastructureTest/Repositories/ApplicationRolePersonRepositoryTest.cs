@@ -29,7 +29,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
         public void ShouldLoadPersonsNotInRole()
         {
             UnitOfWork.PersistAll();
-            SkipRollback();
+            CleanUpAfterTest();
             var roleId = Guid.NewGuid();
             var person1Id = Guid.NewGuid();
             var person2Id = Guid.NewGuid();
@@ -47,7 +47,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
         public void ShouldLoadPersons()
         {
             UnitOfWork.PersistAll();
-            SkipRollback();
+            CleanUpAfterTest();
             using (var uow = UnitOfWorkFactory.Current.CreateAndOpenStatelessUnitOfWork())
             {
                 _target = new ApplicationRolePersonRepository(uow);
@@ -60,7 +60,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
         public void ShouldLoadRolesOnPerson()
         {
             UnitOfWork.PersistAll();
-            SkipRollback();
+            CleanUpAfterTest();
             using (var uow = UnitOfWorkFactory.Current.CreateAndOpenStatelessUnitOfWork())
             {
                 _target = new ApplicationRolePersonRepository(uow);
@@ -73,7 +73,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
         public void ShouldLoadFunctionsOnPerson()
         {
             UnitOfWork.PersistAll();
-            SkipRollback();
+            CleanUpAfterTest();
             using (var uow = UnitOfWorkFactory.Current.CreateAndOpenStatelessUnitOfWork())
             {
                 _target = new ApplicationRolePersonRepository(uow);
@@ -86,7 +86,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
         public void ShouldLoadFunctions()
         {
             UnitOfWork.PersistAll();
-            SkipRollback();
+            CleanUpAfterTest();
             using (var uow = UnitOfWorkFactory.Current.CreateAndOpenStatelessUnitOfWork())
             {
                 _target = new ApplicationRolePersonRepository(uow);
@@ -99,7 +99,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
         public void ShouldLoadPersonsOnFunction()
         {
             UnitOfWork.PersistAll();
-            SkipRollback();
+            CleanUpAfterTest();
             using (var uow = UnitOfWorkFactory.Current.CreateAndOpenStatelessUnitOfWork())
             {
                 _target = new ApplicationRolePersonRepository(uow);
@@ -112,7 +112,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
         public void ShouldLoadRolesOnFunction()
         {
             UnitOfWork.PersistAll();
-            SkipRollback();
+            CleanUpAfterTest();
             using (var uow = UnitOfWorkFactory.Current.CreateAndOpenStatelessUnitOfWork())
             {
                 _target = new ApplicationRolePersonRepository(uow);
@@ -125,7 +125,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
         public void ShouldLoadDataOnPerson()
         {
             UnitOfWork.PersistAll();
-            SkipRollback();
+            CleanUpAfterTest();
             using (var uow = UnitOfWorkFactory.Current.CreateAndOpenStatelessUnitOfWork())
             {
                 _target = new ApplicationRolePersonRepository(uow);
@@ -138,7 +138,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
         public void ShouldLoadDataRangeOptionsOnPerson()
         {
             UnitOfWork.PersistAll();
-            SkipRollback();
+            CleanUpAfterTest();
             using (var uow = UnitOfWorkFactory.Current.CreateAndOpenStatelessUnitOfWork())
             {
                 _target = new ApplicationRolePersonRepository(uow);
@@ -151,7 +151,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
         public void ShouldLoadRolesWithData()
         {
             UnitOfWork.PersistAll();
-            SkipRollback();
+            CleanUpAfterTest();
             using (var uow = UnitOfWorkFactory.Current.CreateAndOpenStatelessUnitOfWork())
             {
                 _target = new ApplicationRolePersonRepository(uow);
@@ -164,7 +164,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
         public void ShouldLoadPersonsOnRoles()
         {
             UnitOfWork.PersistAll();
-            SkipRollback();
+            CleanUpAfterTest();
             using (var uow = UnitOfWorkFactory.Current.CreateAndOpenStatelessUnitOfWork())
             {
                 _target = new ApplicationRolePersonRepository(uow);
@@ -177,7 +177,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
         public void ShouldLoadRolesWithDataRange()
         {
             UnitOfWork.PersistAll();
-            SkipRollback();
+            CleanUpAfterTest();
             using (var uow = UnitOfWorkFactory.Current.CreateAndOpenStatelessUnitOfWork())
             {
                 _target = new ApplicationRolePersonRepository(uow);

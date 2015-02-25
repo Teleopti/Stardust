@@ -23,7 +23,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Bugs
 			personRequestRepository = new PersonRequestRepository(SetupFixtureForAssembly.DataSource.Application);
 			
 			//make sure setup data is persisted
-			SkipRollback();
+			CleanUpAfterTest();
 			UnitOfWork.PersistAll();
 		}
 

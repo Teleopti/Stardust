@@ -172,7 +172,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
         [Test]
         public void CanDeleteSkillDays()
         {
-            SkipRollback();
+            CleanUpAfterTest();
 
             IMultisiteDay multisiteDay = CreateAggregateWithCorrectBusinessUnit();
             PersistAndRemoveFromUnitOfWork(multisiteDay);

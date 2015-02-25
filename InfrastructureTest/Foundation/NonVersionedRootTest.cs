@@ -14,7 +14,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Foundation
         [Test]
         public void VerifyNoOptimisticLock()
         {
-            SkipRollback();
+            CleanUpAfterTest();
             ISettingData setting = new PersonalSettingData("nyckel", ((IUnsafePerson)TeleoptiPrincipal.Current).Person);
             try
             {

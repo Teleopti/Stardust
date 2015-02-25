@@ -89,7 +89,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
         public void SimulateTwoThreadsCreatingNewPersonalSettingLastShouldWin()
         {
             defaultValue = new testData();
-            SkipRollback();
+            CleanUpAfterTest();
             rep = new PersonalSettingDataRepository(UnitOfWork);
             testData looser = rep.FindValueByKey("roger", defaultValue);
             looser.Data = -100;
@@ -130,7 +130,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
         public void SimulateTwoThreadsCreatingNewPersonalSettingLastShouldWinKey()
         {
             defaultValue = new testData();
-            SkipRollback();
+            CleanUpAfterTest();
             rep = new PersonalSettingDataRepository(UnitOfWork);
             testData looser = rep.FindValueByKey("roger", defaultValue);
             looser.Data = -100;

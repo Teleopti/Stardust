@@ -50,7 +50,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories.Deadlock
 
 		private void setup()
 		{
-			SkipRollback();
+			CleanUpAfterTest();
 
 			for (var day = 1; day <= noOfDays; day++)
 			{

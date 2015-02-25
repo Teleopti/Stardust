@@ -16,7 +16,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
         public void ShouldLoadRequestWithoutCrash()
         {
             UnitOfWork.PersistAll();
-            SkipRollback();
+            CleanUpAfterTest();
 
             _target = new RequestHistoryReadOnlyRepository(UnitOfWorkFactory.Current.CreateAndOpenStatelessUnitOfWork());
             var result = _target.LoadOnPerson(new Guid(),1, 10 );

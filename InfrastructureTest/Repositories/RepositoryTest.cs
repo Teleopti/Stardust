@@ -19,7 +19,7 @@ using Teleopti.Interfaces.Infrastructure;
 namespace Teleopti.Ccc.InfrastructureTest.Repositories
 {
     /// <summary>
-    /// Base class for repository tests
+	/// Base class for repository testsPersistAndRemoveFromUnitOfWork
     /// </summary>
     public abstract class RepositoryTest<T> : DatabaseTest where T : IAggregateRoot
     {

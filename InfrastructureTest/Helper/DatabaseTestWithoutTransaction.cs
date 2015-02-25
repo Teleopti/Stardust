@@ -4,7 +4,7 @@
 	{
 		protected override sealed void SetupForRepositoryTest()
 		{
-			SkipRollback();
+			CleanUpAfterTest();
 			UnitOfWork.PersistAll();
 			SetupForRepositoryTestWithoutTransaction();
 		}

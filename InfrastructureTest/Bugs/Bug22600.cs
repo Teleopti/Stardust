@@ -17,7 +17,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Bugs
 
 		protected override void SetupForRepositoryTest()
 		{
-			SkipRollback();
+			CleanUpAfterTest();
 			personInRootGroup = PersonFactory.CreatePerson("Person1");
 			personInChildGroup = PersonFactory.CreatePerson("Person2");
 			groupPage = new GroupPage("Contract Basis Page");

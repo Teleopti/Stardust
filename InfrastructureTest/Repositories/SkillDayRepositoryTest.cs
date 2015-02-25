@@ -239,7 +239,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
         [Test]
         public void CanDeleteSkillDays()
         {
-            SkipRollback();
+            CleanUpAfterTest();
 
             ISkillDay skillDay = CreateAggregateWithCorrectBusinessUnit();
             PersistAndRemoveFromUnitOfWork(skillDay);
@@ -385,7 +385,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 	    [Test]
 	    public void VerifyIntervalsAreRemovedWhenSplitting()
 	    {
-			SkipRollback();
+			CleanUpAfterTest();
 
 		    ISkillDay skillDay = CreateAggregateWithCorrectBusinessUnit();
 		    skillDay.SetupSkillDay();

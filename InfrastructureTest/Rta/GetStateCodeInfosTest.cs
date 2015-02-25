@@ -18,18 +18,19 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta
 		public IRtaStateGroupRepository StateGroupRepository;
 		public ICurrentUnitOfWork UnitOfWork;
 
-		[Test, Ignore]
+		[Test]
 		public void ShouldGetStateCodeInfos()
 		{
-			//var stategroup = new RtaStateGroup(" ", true, true);
-			//StateGroupRepository.Add(stategroup);
+			var stategroup = new RtaStateGroup(" ", true, true);
+			StateGroupRepository.Add(stategroup);
 			UnitOfWork.Current().PersistAll();
 
-			//Writer.AddAndGetStateCode("statecode", "statedescription", Guid.NewGuid(), stategroup.BusinessUnit.Id.Value);
+			Writer.AddAndGetStateCode("statecode", "statedescription", Guid.NewGuid(), stategroup.BusinessUnit.Id.Value);
 
-			//var result = Target.StateCodeInfos();
+			var result = Target.StateCodeInfos();
 
-			//result.Single().StateCode.Should().Be("STATECODE");
+			result.Single().StateCode.Should().Be("STATECODE");
 		}
+
 	}
 }

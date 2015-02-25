@@ -9,7 +9,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Helper
 {
     public abstract class DatabaseTest
     {
-        private bool skipRollback = false;
+        private bool cleanUpAfterTest;
 	    private ISession _session;
 	    private IPerson _loggedOnPerson;
 	    private IUnitOfWork _unitOfWork;
@@ -17,19 +17,16 @@ namespace Teleopti.Ccc.InfrastructureTest.Helper
 	    protected ISession Session
 	    {
 		    get { return _session; }
-		    private set { _session = value; }
 	    }
 
 	    protected IPerson LoggedOnPerson
 	    {
 		    get { return _loggedOnPerson; }
-		    private set { _loggedOnPerson = value; }
 	    }
 
 	    protected IUnitOfWork UnitOfWork
 	    {
 		    get { return _unitOfWork; }
-		    private set { _unitOfWork = value; }
 	    }
 
 	    protected MockRepository Mocks { get; private set; }
@@ -38,6 +35,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Helper
         public void Setup()
         {
 			Mocks = new MockRepository();
+	        cleanUpAfterTest = false;
 			UnitOfWorkTestAttribute.Before(out _loggedOnPerson, out _unitOfWork, out _session);
             SetupForRepositoryTest();
         }
@@ -47,9 +45,9 @@ namespace Teleopti.Ccc.InfrastructureTest.Helper
         [TearDown]
         public void BaseTeardown()
         {
-			UnitOfWorkTestAttribute.After(UnitOfWork, skipRollback);
-            TeardownForRepositoryTest();
-        }
+			UnitOfWorkTestAttribute.After(UnitOfWork, cleanUpAfterTest);
+			TeardownForRepositoryTest();
+		}
 
         protected virtual void TeardownForRepositoryTest(){}
 
@@ -68,9 +66,9 @@ namespace Teleopti.Ccc.InfrastructureTest.Helper
             }
         }
 
-        protected void SkipRollback()
+        protected void CleanUpAfterTest()
         {
-            skipRollback = true;
+            cleanUpAfterTest = true;
         }
     }
 }

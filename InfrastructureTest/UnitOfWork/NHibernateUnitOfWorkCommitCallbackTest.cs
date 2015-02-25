@@ -15,7 +15,7 @@ namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork
 		[Test]
 		public void ShouldCallTxCallbackWhenSuccessfulCommit()
 		{
-			SkipRollback();
+			CleanUpAfterTest();
 			var isCalled = false;
 			UnitOfWork.AfterSuccessfulTx(() => isCalled = true);
 			UnitOfWork.PersistAll();
@@ -33,7 +33,7 @@ namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork
 		[Test]
 		public void ShouldNotCallTxCallbackIfException()
 		{
-			SkipRollback();
+			CleanUpAfterTest();
 			var isCalled = false;
 			var person = new Person();
 			var correctEx = false;
@@ -69,7 +69,7 @@ namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork
 		[Test]
 		public void ShouldWorkWithCurrentUnitOfWork()
 		{
-			SkipRollback();
+			CleanUpAfterTest();
 			var isCalled = false;
 			UnitOfWorkFactory.Current.CurrentUnitOfWork().AfterSuccessfulTx(() => isCalled = true);
 			UnitOfWorkFactory.Current.CurrentUnitOfWork().PersistAll();

@@ -27,7 +27,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 		public void ShouldLoadOrganization()
 		{
 			UnitOfWork.PersistAll();
-			SkipRollback();
+			CleanUpAfterTest();
 			using (UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
 			{
 				_target = new PersonSelectorReadOnlyRepository(UnitOfWorkFactory.Current);
@@ -40,7 +40,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 		public void ShouldLoadBuiltIn()
 		{
 			UnitOfWork.PersistAll();
-			SkipRollback();
+			CleanUpAfterTest();
 			using (UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
 			{
 				_target = new PersonSelectorReadOnlyRepository(UnitOfWorkFactory.Current);
@@ -53,7 +53,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 		public void ShouldLoadUserTabs()
 		{
 			UnitOfWork.PersistAll();
-			SkipRollback();
+			CleanUpAfterTest();
 			using (UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
 			{
 				_target = new PersonSelectorReadOnlyRepository(UnitOfWorkFactory.Current);

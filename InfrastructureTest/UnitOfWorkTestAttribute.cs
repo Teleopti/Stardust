@@ -18,8 +18,6 @@ namespace Teleopti.Ccc.InfrastructureTest
 
 		protected override void BeforeTest()
 		{
-			SetupFixtureForAssembly.RestoreCcc7Database();
-
 			IPerson loggedOnPerson;
 			ISession session;
 			Before(out loggedOnPerson, out unitOfWork, out session);
@@ -28,10 +26,12 @@ namespace Teleopti.Ccc.InfrastructureTest
 		protected override void AfterTest()
 		{
 			After(unitOfWork, false);
+			SetupFixtureForAssembly.RestoreCcc7Database();
 		}
 
-		public static void Before(out IPerson LoggedOnPerson, out IUnitOfWork UnitOfWork, out ISession Session)
+		public static void Before(out IPerson loggedOnPerson, out IUnitOfWork unitOfWork, out ISession session)
 		{
+
 			BusinessUnitFactory.SetBusinessUnitUsedInTestToNull();
 
 			var Mocks = new MockRepository();
@@ -39,32 +39,32 @@ namespace Teleopti.Ccc.InfrastructureTest
 
 			Guid buGuid = Guid.NewGuid();
 			BusinessUnitFactory.BusinessUnitUsedInTest.SetId(buGuid);
-			LoggedOnPerson =
+			loggedOnPerson =
 				PersonFactory.CreatePersonWithBasicPermissionInfo(string.Concat("logOnName", Guid.NewGuid().ToString()), string.Empty);
 
 			StateHolderProxyHelper.ClearAndSetStateHolder(Mocks,
-				LoggedOnPerson,
+				loggedOnPerson,
 				BusinessUnitFactory.BusinessUnitUsedInTest,
 				SetupFixtureForAssembly.ApplicationData,
 				SetupFixtureForAssembly.DataSource,
 				stateMock);
 
-			UnitOfWork = SetupFixtureForAssembly.DataSource.Application.CreateAndOpenUnitOfWork();
-			Session = UnitOfWork.FetchSession();
+			unitOfWork = SetupFixtureForAssembly.DataSource.Application.CreateAndOpenUnitOfWork();
+			session = unitOfWork.FetchSession();
 
-			((IDeleteTag)LoggedOnPerson).SetDeleted();
-			Session.Save(LoggedOnPerson);
+			((IDeleteTag)loggedOnPerson).SetDeleted();
+			session.Save(loggedOnPerson);
 
 			//force a insert
 			BusinessUnitFactory.BusinessUnitUsedInTest.SetId(null);
-			Session.Save(BusinessUnitFactory.BusinessUnitUsedInTest, buGuid);
-			Session.Flush();
+			session.Save(BusinessUnitFactory.BusinessUnitUsedInTest, buGuid);
+			session.Flush();
 		}
 
-		public static void After(IUnitOfWork UnitOfWork, bool skipRollback)
+		public static void After(IUnitOfWork unitOfWork, bool cleanUp)
 		{
-			UnitOfWork.Dispose();
-			if (skipRollback)
+			unitOfWork.Dispose();
+			if (cleanUp)
 			{
 				if (BusinessUnitFactory.BusinessUnitUsedInTest.Id.HasValue)
 				{
@@ -77,8 +77,6 @@ namespace Teleopti.Ccc.InfrastructureTest
 				}
 			}
 		}
-
-
 
 	}
 }

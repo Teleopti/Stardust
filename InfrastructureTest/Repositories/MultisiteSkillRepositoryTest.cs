@@ -83,7 +83,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
         [Test]
         public void VerifyCanSaveMultisitePeriodDistribution()
         {
-            SkipRollback();
+            CleanUpAfterTest();
             IMultisiteSkill skill = CreateAggregateWithCorrectBusinessUnit();
             IMultisiteDayTemplate dayTemplate = skill.TemplateMultisiteWeekCollection.Values.First();
             SkillRepository skillRep = new SkillRepository(UnitOfWork);

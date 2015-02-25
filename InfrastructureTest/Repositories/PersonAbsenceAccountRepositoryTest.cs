@@ -119,7 +119,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
             var two = new PersonAbsenceAccount(person, absence);
             try
             {
-                SkipRollback();
+                CleanUpAfterTest();
                 var rep = new PersonAbsenceAccountRepository(UnitOfWork);
                 rep.Add(one);
                 rep.Add(two);

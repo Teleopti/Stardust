@@ -23,7 +23,7 @@ namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork
 					IPayload pLoad = ass.MainActivities().First().Payload;
             try
             {
-                SkipRollback();
+                CleanUpAfterTest();
 
                 PersistAndRemoveFromUnitOfWork(ass.Scenario);
                 PersistAndRemoveFromUnitOfWork(ass.ShiftCategory);

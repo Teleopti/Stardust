@@ -31,7 +31,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Foundation
         {
             mocks = new MockRepository();
             messBroker = mocks.StrictMock<IMessageBrokerComposite>();
-            SkipRollback();
+            CleanUpAfterTest();
             uow = createUnitOfWorkWithMessageMock();
         }
 
