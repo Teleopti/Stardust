@@ -47,8 +47,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
         /// </summary>
         /// <param name="person">The person.</param>
         /// <param name="dateOnly">The date only.</param>
-        void RemoveLock(IPerson person, DateOnly dateOnly)
-            ;
+        void RemoveLock(IPerson person, DateOnly dateOnly);
 
         /// <summary>
         /// Remove lock on person + date
@@ -56,14 +55,13 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
         /// <param name="person">The person.</param>
         /// <param name="dateOnly">The date only.</param>
         /// <param name="lockType">Type of the lock.</param>
-        void RemoveLock(IPerson person, DateOnly dateOnly, LockType lockType)
-            ;
+        void RemoveLock(IPerson person, DateOnly dateOnly, LockType lockType);
 
         /// <summary>
         /// Remove lock on schedule
         /// </summary>
         /// <param name="schedulePart"></param>
-				void RemoveLock(IScheduleDay schedulePart);
+		void RemoveLock(IScheduleDay schedulePart);
 
         /// <summary>
         /// Remove lock on list of schedules
@@ -91,7 +89,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
         /// </summary>
         /// <param name="schedulePart"></param>
         /// <returns></returns>
-				GridlockDictionary Gridlocks(IScheduleDay schedulePart);
+		GridlockDictionary Gridlocks(IScheduleDay schedulePart);
 
         /// <summary>
         /// Clear all locks

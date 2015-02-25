@@ -13,7 +13,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.WeeklyRestSolver
 {
 	public class PersonWeekVoilatingWeeklyRestSpecificationTest
 	{
-		private IPersonWeekVoilatingWeeklyRestSpecification _target;
+		private IPersonWeekViolatingWeeklyRestSpecification _target;
 		private IScheduleRange _currentSchedules;
 		private PersonWeek _personWeek;
 		private MockRepository _mock;
@@ -31,7 +31,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.WeeklyRestSolver
 			_extractDayOffFromGivenWeek = _mock.StrictMock<IExtractDayOffFromGivenWeek>();
 			_ensureWeeklyRestRule = _mock.StrictMock<IEnsureWeeklyRestRule>();
 			_verifyWeeklyRestAroundDayOffSpecification = _mock.StrictMock<IVerifyWeeklyRestAroundDayOffSpecification>();
-			_target = new PersonWeekVoilatingWeeklyRestSpecification(_extractDayOffFromGivenWeek ,_verifyWeeklyRestAroundDayOffSpecification,_ensureWeeklyRestRule  );
+			_target = new PersonWeekViolatingWeeklyRestSpecification(_extractDayOffFromGivenWeek ,_verifyWeeklyRestAroundDayOffSpecification,_ensureWeeklyRestRule  );
 			_currentSchedules = _mock.StrictMock<IScheduleRange>();
 			_personWeek = new PersonWeek(PersonFactory.CreatePerson( "test1"),new DateOnlyPeriod(2014,06,15,2014,06,18));
 			_scheduleDay1 = _mock.StrictMock<IScheduleDay>();

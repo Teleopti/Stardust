@@ -47,7 +47,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling.AgentRestrictions
 
 				if (scheduleDays.Count <= 0) continue;
 				var matrixLists = _scheduleMatrixListCreator.CreateMatrixListFromScheduleParts(scheduleDays);
-				_locker.Execute(scheduleDays, matrixLists,period);
+				_locker.Execute(matrixLists, period);
 
 				foreach (var scheduleMatrixPro in matrixLists)
 				{

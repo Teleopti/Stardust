@@ -1,11 +1,22 @@
-﻿using System;
+﻿
+
+using System;
 using System.Collections.Generic;
+using Autofac;
 using Teleopti.Ccc.Domain.Optimization;
 using Teleopti.Ccc.Domain.Optimization.MatrixLockers;
+using Teleopti.Ccc.WinCode.Common;
+using Teleopti.Ccc.WinCode.Scheduling;
 using Teleopti.Interfaces.Domain;
 
-namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
+namespace Teleopti.Ccc.Win.Commands
 {
+	public interface IMatrixListFactory
+	{
+		IList<IScheduleMatrixPro> CreateMatrixListAll(DateOnlyPeriod selectedPeriod);
+		IList<IScheduleMatrixPro> CreateMatrixList(IList<IScheduleDay> scheduleDays, DateOnlyPeriod selectedPeriod);
+	}
+
 	public class MatrixListFactory : IMatrixListFactory
 	{
 		private readonly ISchedulerStateHolder _schedulerStateHolder;
@@ -50,6 +61,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 			_matrixNotPermittedLocker.Execute(matrixes);
 
 			return matrixes;
-		}
+		} 
 	}
 }

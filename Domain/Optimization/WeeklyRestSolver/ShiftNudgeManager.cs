@@ -31,13 +31,14 @@ namespace Teleopti.Ccc.Domain.Optimization.WeeklyRestSolver
 		private readonly ITeamBlockOptimizationLimits _teamBlockOptimizationLimits;
 		private readonly ISchedulingOptionsCreator _schedulingOptionsCreator;
 		private readonly ITeamBlockSteadyStateValidator _teamBlockSteadyStateValidator;
+		private readonly IScheduleDayIsLockedSpecification _scheduleDayIsLockedSpecification;
 		private IList<IScheduleDay> _clonedSchedules;
 
 		public ShiftNudgeManager(IShiftNudgeEarlier shiftNudgeEarlier, IShiftNudgeLater shiftNudgeLater,
 			IEnsureWeeklyRestRule ensureWeeklyRestRule, IContractWeeklyRestForPersonWeek contractWeeklyRestForPersonWeek,
 			ITeamBlockScheduleCloner teamBlockScheduleCloner, IFilterForTeamBlockInSelection filterForTeamBlockInSelection,
 			ITeamBlockOptimizationLimits teamBlockOptimizationLimits, ISchedulingOptionsCreator schedulingOptionsCreator,
-			ITeamBlockSteadyStateValidator teamBlockSteadyStateValidator)
+			ITeamBlockSteadyStateValidator teamBlockSteadyStateValidator, IScheduleDayIsLockedSpecification scheduleDayIsLockedSpecification)
 		{
 			_shiftNudgeEarlier = shiftNudgeEarlier;
 			_shiftNudgeLater = shiftNudgeLater;
@@ -48,6 +49,7 @@ namespace Teleopti.Ccc.Domain.Optimization.WeeklyRestSolver
 			_teamBlockOptimizationLimits = teamBlockOptimizationLimits;
 			_schedulingOptionsCreator = schedulingOptionsCreator;
 			_teamBlockSteadyStateValidator = teamBlockSteadyStateValidator;
+			_scheduleDayIsLockedSpecification = scheduleDayIsLockedSpecification;
 		}
 
 		public bool TrySolveForDayOff(PersonWeek personWeek, DateOnly dayOffDateToWorkWith,
@@ -114,13 +116,17 @@ namespace Teleopti.Ccc.Domain.Optimization.WeeklyRestSolver
 
 			var weeklyRestTime = _contractWeeklyRestForPersonWeek.GetWeeklyRestFromContract(personWeek);
 			var personRange = leftTeamBlock.TeamInfo.MatrixForMemberAndDate(person, leftDate).ActiveScheduleRange;
+			var personMatrix = leftTeamBlock.TeamInfo.MatrixForMemberAndDate(person, leftDate);
+
 			bool restTimeEnsured = _ensureWeeklyRestRule.HasMinWeeklyRest(personWeek, personRange, weeklyRestTime);
 			bool leftNudgeSuccess = true;
 			bool rightNudgeSuccess = true;
 			while (!restTimeEnsured)
 			{
 				var leftScheduleDay = personRange.ScheduledDay(leftDate);
-				var rightScheduleDay = personRange.ScheduledDay(rightDate);
+				if (isDaysLocked(leftScheduleDay, personMatrix))
+					leftNudgeSuccess = false;
+
 				if (leftNudgeSuccess)
 				{
 					leftNudgeSuccess = _shiftNudgeEarlier.Nudge(leftScheduleDay, rollbackService, schedulingOptions,
@@ -131,9 +137,17 @@ namespace Teleopti.Ccc.Domain.Optimization.WeeklyRestSolver
 
 				if (rightNudgeSuccess && !restTimeEnsured)
 				{
-					rightNudgeSuccess = _shiftNudgeLater.Nudge(rightScheduleDay, rollbackService, schedulingOptions,
-						resourceCalculateDelayer, rightTeamBlock, schedulingResultStateHolder);
-					restTimeEnsured = _ensureWeeklyRestRule.HasMinWeeklyRest(personWeek, personRange, weeklyRestTime);
+					var rightScheduleDay = personRange.ScheduledDay(rightDate);
+					if (isDaysLocked(rightScheduleDay, personMatrix))
+						rightNudgeSuccess = false;
+
+					if (rightNudgeSuccess)
+					{
+						rightNudgeSuccess = _shiftNudgeLater.Nudge(rightScheduleDay, rollbackService, 
+							schedulingOptions, resourceCalculateDelayer, 
+							rightTeamBlock, schedulingResultStateHolder);
+						restTimeEnsured = _ensureWeeklyRestRule.HasMinWeeklyRest(personWeek, personRange, weeklyRestTime);
+					}
 				}
 
 				if (!leftNudgeSuccess && !rightNudgeSuccess)
@@ -229,6 +243,10 @@ namespace Teleopti.Ccc.Domain.Optimization.WeeklyRestSolver
 			return clonedSchedules;
 		}
 
+		private bool isDaysLocked(IScheduleDay scheduleDay, IScheduleMatrixPro scheduleMatrixPro)
+		{
+			return _scheduleDayIsLockedSpecification.IsSatisfy(scheduleDay, scheduleMatrixPro);
+		}
 		
 	}
 }
