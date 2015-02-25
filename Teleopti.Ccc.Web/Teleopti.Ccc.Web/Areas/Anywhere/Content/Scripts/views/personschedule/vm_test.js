@@ -621,7 +621,7 @@
 				    assert.equals(result, true);
 
 				},
-				"=>should select layer starts at midnight in move activity form": function () {
+				"//should select layer starts at midnight in move activity form": function () {
 				    var vm = new viewModel();
 				    vm.SetViewOptions({
 				        id: 1,
