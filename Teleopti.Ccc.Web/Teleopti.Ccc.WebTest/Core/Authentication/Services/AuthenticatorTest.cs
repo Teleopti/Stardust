@@ -1,4 +1,5 @@
-﻿using NUnit.Framework;
+﻿using System;
+using NUnit.Framework;
 using Rhino.Mocks;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.Common;
@@ -32,17 +33,16 @@ namespace Teleopti.Ccc.WebTest.Core.Authentication.Services
 		}
 
 		[Test]
-		public void AuthenticateWindowsUserShouldReturnSuccessfulAuthenticationResult()
+		public void AuthenticateIdentityUserShouldReturnSuccessfulAuthenticationResult()
 		{
 			var dataSource = MockRepository.GenerateMock<IDataSource>();
 			var unitOfWorkFactory = MockRepository.GenerateMock<IUnitOfWorkFactory>();
 			var personRep = MockRepository.GenerateMock<IPersonRepository>();
 			var uow = MockRepository.GenerateMock<IUnitOfWork>();
 			var winAccount = new TokenIdentity { UserIdentifier = @"domain\user", OriginalToken = @"http://fake/domain#user" };
-			var pInfo = new PersonInfo();
+			var pInfo = new PersonInfo {Id = Guid.NewGuid()};
 			pInfo.SetTenant_DoNotUseThisIfYouAreNotSureWhatYouAreDoing(tenant);
-
-			IPerson person = null;
+			var person = new Person();
 
 			dataSourcesProvider.Stub(x => x.RetrieveDataSourceByName(tenant)).Return(dataSource);
 			dataSource.Stub(x => x.Application).Return(unitOfWorkFactory);
@@ -51,11 +51,10 @@ namespace Teleopti.Ccc.WebTest.Core.Authentication.Services
 			identityUserQuery.Stub(x => x.FindUserData(winAccount.UserIdentifier)).Return(pInfo);
 
 			tokenIdentityProvider.Stub(x => x.RetrieveToken()).Return(winAccount);
-
-			personRep.Stub(x => x.TryFindIdentityAuthenticatedPerson(winAccount.UserIdentifier, out person)).Return(true);
+			personRep.Stub(x => x.LoadOne(pInfo.Id)).Return(person);
 
 			var result = target.LogonIdentityUser();
-			result.Person.Should().Be.EqualTo(person);
+			result.Person.Should().Be.SameInstanceAs(person);
 			result.Successful.Should().Be.True();
 			result.DataSource.Should().Be.SameInstanceAs(dataSource);
 		}

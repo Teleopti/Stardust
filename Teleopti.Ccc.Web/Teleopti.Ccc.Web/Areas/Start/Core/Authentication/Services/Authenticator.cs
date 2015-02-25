@@ -26,20 +26,14 @@ namespace Teleopti.Ccc.Web.Areas.Start.Core.Authentication.Services
 		public AuthenticateResult LogonIdentityUser()
 		{
 			var winAccount = _tokenIdentityProvider.RetrieveToken();
-			//TODO: tenant - use a simpler query here when joining these two methods. Tenant is enough to get back.
-			var tenant = _identityUserQuery.FindUserData(winAccount.UserIdentifier).Tenant;
-			var dataSource = _dataSourceProvider.RetrieveDataSourceByName(tenant);
+			var personInfo = _identityUserQuery.FindUserData(winAccount.UserIdentifier);
+			var dataSource = _dataSourceProvider.RetrieveDataSourceByName(personInfo.Tenant);
 
 			using (var uow = dataSource.Application.CreateAndOpenUnitOfWork())
 			{
-				IPerson foundUser;
-				if (_repositoryFactory.CreatePersonRepository(uow).TryFindIdentityAuthenticatedPerson(winAccount.UserIdentifier, out foundUser))
-				{
-					return new AuthenticateResult { Successful = true, Person = foundUser, DataSource = dataSource };
-				}
+				var foundAppUser =  _repositoryFactory.CreatePersonRepository(uow).LoadOne(personInfo.Id);
+				return new AuthenticateResult { Successful = true, Person = foundAppUser, DataSource = dataSource };
 			}
-
-			return null;
 		}
 
 		public AuthenticateResult LogonApplicationUser(string dataSourceName)
