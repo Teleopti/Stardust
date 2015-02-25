@@ -28,14 +28,7 @@ namespace Teleopti.Ccc.Sdk.ClientProxies
         {
             Channel.InitializePayrollFormats(payrollFormatDtos);
         }
-
-        public ICollection<string> GetHibernateConfigurationInternal()
-		  {
-#pragma warning disable 618
-			  return Channel.GetHibernateConfigurationInternal();
-#pragma warning restore 618
-		  }
-
+		 
         public IDictionary<string, string> GetAppSettingsInternal()
         {
             return Channel.GetAppSettingsInternal();

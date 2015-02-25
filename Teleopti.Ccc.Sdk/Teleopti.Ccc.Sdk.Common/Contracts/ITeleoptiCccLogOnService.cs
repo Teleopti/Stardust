@@ -50,7 +50,7 @@ namespace Teleopti.Ccc.Sdk.Common.Contracts
 		/// Gets the data sources.
 		/// </summary>
 		/// <returns></returns>
-		[SuppressMessage("Microsoft.Design", "CA1024:UsePropertiesWhereAppropriate"), OperationContract, Obsolete("This will only return an empty list and should not be used")]
+		[SuppressMessage("Microsoft.Design", "CA1024:UsePropertiesWhereAppropriate"), OperationContract, Obsolete("This will only return a list of fake datasources and should not be used")]
 		ICollection<DataSourceDto> GetDataSources();
 
 		/// <summary>
@@ -174,7 +174,7 @@ namespace Teleopti.Ccc.Sdk.Common.Contracts
 		/// Gets the hibernate configuration.
 		/// </summary>
 		/// <returns></returns>
-		[SuppressMessage("Microsoft.Design", "CA1024:UsePropertiesWhereAppropriate"), OperationContract]
+		[SuppressMessage("Microsoft.Design", "CA1024:UsePropertiesWhereAppropriate"), OperationContract, Obsolete("Will not return anything anymore")]
 		ICollection<string> GetHibernateConfiguration();
 
 		/// <summary>

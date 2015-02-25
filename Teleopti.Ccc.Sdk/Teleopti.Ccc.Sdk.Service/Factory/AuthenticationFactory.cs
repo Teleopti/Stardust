@@ -74,7 +74,8 @@ namespace Teleopti.Ccc.Sdk.WcfService.Factory
 
             if (!string.IsNullOrEmpty(dataSource.Client) && dataSourceContainer != null)
                 saveLogonAttempt(authenticationResultDto, dataSourceContainer, dataSource.Client, dataSource.IpAddress);
-            
+
+	        authenticationResultDto.Tenant = dataSource.Name;
             return authenticationResultDto;
         }
 
@@ -168,7 +169,7 @@ namespace Teleopti.Ccc.Sdk.WcfService.Factory
                                     Message = UserTexts.Resources.NoAvailableDataSourcesHasBeenFound
                                 };
             }
-            
+				resultDto.Tenant = dataSource.Name;
             return resultDto;
         }
 

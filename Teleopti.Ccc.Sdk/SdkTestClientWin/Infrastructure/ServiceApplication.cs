@@ -76,13 +76,25 @@ namespace SdkTestClientWin.Infrastructure
 
 			var currentHeader = AuthenticationSoapHeader.Current;
 
-			var authenticationResult = LogonService.LogOnAsApplicationUser(logonName, passWord);
-			
+			// the new impl. will just return some "fake" datasources
+			// NO NEED TO CALL THIS IN THE NEW WAY
+			var dataSources = LogonService.GetDataSources();
+			currentHeader.DataSource = dataSources.FirstOrDefault().Name;
+			var authenticationResult = LogonService.LogOnApplicationUser(logonName, passWord, dataSources.FirstOrDefault());
+			//End OLD WAY
+
+			//new way
+			//var authenticationResult = LogonService.LogOnAsApplicationUser(logonName, passWord);
+			// END NEW WAY
+
 			if (authenticationResult.Successful)
 			{
 				//Select the first one (generally choosen by a user)
 				_businessUnit = authenticationResult.BusinessUnitCollection.FirstOrDefault();
-				currentHeader.DataSource = authenticationResult.Tenant;
+				// IN THE NEW IMPL YOU GET THE DATASOURCE NAME AS THE TENANT
+				// AND YOU SET IT HERE INSTEAD
+				if(!string.IsNullOrEmpty(authenticationResult.Tenant))
+					currentHeader.DataSource = authenticationResult.Tenant;
 				currentHeader.UserName = logonName;
 				currentHeader.Password = passWord;
 				currentHeader.BusinessUnit = _businessUnit.Id;

@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Security.Authentication;
 using Teleopti.Ccc.Domain.Security.MultiTenancyAuthentication;
@@ -59,8 +58,12 @@ namespace Teleopti.Ccc.Sdk.WcfService.Factory
 
 		public ICollection<DataSourceDto> GetDataSources()
 		{
-			var dataSourceList = DataSourceContainers();
-			return dataSourceList.Select(dataSource => new DataSourceDto(dataSource.AuthenticationTypeOption == AuthenticationTypeOption.Windows ? AuthenticationTypeOptionDto.Windows : AuthenticationTypeOptionDto.Application) {Name = dataSource.DataSource.Application.Name}).ToList();
+			//return some fake ones for backward comp.
+			return new List<DataSourceDto>
+			{
+				new DataSourceDto {Name = "Teleopti WFM", AuthenticationTypeOptionDto = AuthenticationTypeOptionDto.Application},
+				new DataSourceDto {Name = "Teleopti WFM", AuthenticationTypeOptionDto = AuthenticationTypeOptionDto.Windows}
+			};
 		}
 
 		public IEnumerable<DataSourceContainer> DataSourceContainers()
@@ -99,8 +102,6 @@ namespace Teleopti.Ccc.Sdk.WcfService.Factory
 				UserName = model.UserName
 			};
 			_personCache.Add(personContainer);
-
-			
 		}
 	}
 }

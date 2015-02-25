@@ -29,7 +29,7 @@ namespace Teleopti.Ccc.Infrastructure.Foundation
 		public IMessageBrokerComposite MessageBroker { get; private set; }
 		public bool MessageBrokerDisabled { get; set; }
 
-
+		// from LogonInitializeStateHolder
 		public void Start(IState clientCache, IDictionary<string, string> appSettings,
 						  IEnumerable<string> hibernateConfigurations,
 						  ILoadPasswordPolicyService loadPasswordPolicyService)
@@ -60,7 +60,9 @@ namespace Teleopti.Ccc.Infrastructure.Foundation
 	    		                    loadPasswordPolicyService, DataSourcesFactory));
 	    }
 
-		public void Start(IState clientCache, string xmlDirectory, ILoadPasswordPolicyService loadPasswordPolicyService, IConfigurationWrapper configurationWrapper, bool startMessageBroker)
+		// from Web, ServiceBus, Sdk, ETL, LogonInitializeStateHolder
+		public void Start(IState clientCache, string xmlDirectory, ILoadPasswordPolicyService loadPasswordPolicyService,
+			IConfigurationWrapper configurationWrapper, bool startMessageBroker)
 		{
 			StateHolder.Initialize(clientCache);
 
@@ -84,9 +86,11 @@ namespace Teleopti.Ccc.Infrastructure.Foundation
 			if (startMessageBroker)
 				StartMessageBroker(appSettings);
 			StateHolder.Instance.State.SetApplicationData(
-				new ApplicationData(appSettings, new ReadOnlyCollection<IDataSource>(dataSources), MessageBroker, loadPasswordPolicyService, DataSourcesFactory));
+				new ApplicationData(appSettings, new ReadOnlyCollection<IDataSource>(dataSources), MessageBroker,
+					loadPasswordPolicyService, DataSourcesFactory));
 		}
 
+		//from applicationconfig
 		public void Start(IState clientCache,
 						  IDictionary<string, string> settings,
 						  string statisticConnectionString,

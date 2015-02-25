@@ -104,27 +104,27 @@ namespace Teleopti.Ccc.Sdk.WcfService
 		public ICollection<string> GetHibernateConfiguration()
 		{
 			ICollection<string> hibConfigs = new List<string>();
-			var availableDataSources = _authenticationFactory.DataSourceContainers();
-			var groupedByFileName = availableDataSources.GroupBy(t => t.DataSource.OriginalFileName);
-			foreach (var dataSourceContainers in groupedByFileName)
-			{
-				if (!File.Exists(dataSourceContainers.Key)) continue; //To handle the case where someone deleted the data source while running the application
+			//var availableDataSources = _authenticationFactory.DataSourceContainers();
+			//var groupedByFileName = availableDataSources.GroupBy(t => t.DataSource.OriginalFileName);
+			//foreach (var dataSourceContainers in groupedByFileName)
+			//{
+			//	if (!File.Exists(dataSourceContainers.Key)) continue; //To handle the case where someone deleted the data source while running the application
 
-				var xmlData = new XmlDocument();
-				xmlData.Load(dataSourceContainers.Key);
+			//	var xmlData = new XmlDocument();
+			//	xmlData.Load(dataSourceContainers.Key);
 
-				var navigator = xmlData.CreateNavigator();
-				var datasourceElement = navigator.SelectSingleNode("datasource");
-				foreach (var dataSourceContainer in dataSourceContainers)
-				{
-					datasourceElement.AppendChildElement(string.Empty, "authenticationType", string.Empty, dataSourceContainer.AuthenticationTypeOption.ToString());
-				}
+			//	var navigator = xmlData.CreateNavigator();
+			//	var datasourceElement = navigator.SelectSingleNode("datasource");
+			//	foreach (var dataSourceContainer in dataSourceContainers)
+			//	{
+			//		datasourceElement.AppendChildElement(string.Empty, "authenticationType", string.Empty, dataSourceContainer.AuthenticationTypeOption.ToString());
+			//	}
 
-				string encryptedString = Encryption.EncryptStringToBase64(navigator.OuterXml,
-																		  EncryptionConstants.Image1,
-																		  EncryptionConstants.Image2);
-				hibConfigs.Add(encryptedString);
-			}
+			//	string encryptedString = Encryption.EncryptStringToBase64(navigator.OuterXml,
+			//															  EncryptionConstants.Image1,
+			//															  EncryptionConstants.Image2);
+			//	hibConfigs.Add(encryptedString);
+			//}
 
 			return hibConfigs;
 		}
