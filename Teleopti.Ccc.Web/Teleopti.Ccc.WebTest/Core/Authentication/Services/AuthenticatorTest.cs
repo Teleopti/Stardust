@@ -54,7 +54,7 @@ namespace Teleopti.Ccc.WebTest.Core.Authentication.Services
 
 			personRep.Stub(x => x.TryFindIdentityAuthenticatedPerson(winAccount.UserIdentifier, out person)).Return(true);
 
-			var result = target.LogonWindowsUser();
+			var result = target.LogonIdentityUser();
 			result.Person.Should().Be.EqualTo(person);
 			result.Successful.Should().Be.True();
 			result.DataSource.Should().Be.SameInstanceAs(dataSource);
@@ -80,7 +80,7 @@ namespace Teleopti.Ccc.WebTest.Core.Authentication.Services
 
 			personRep.Stub(x => x.TryFindBasicAuthenticatedPerson(account.UserIdentifier)).Return(person);
 
-			var result = target.LogonApplicationIdentityUser(tenant);
+			var result = target.LogonApplicationUser(tenant);
 			result.Person.Should().Be.EqualTo(person);
 			result.Successful.Should().Be.True();
 			result.DataSource.Should().Be.SameInstanceAs(dataSource);

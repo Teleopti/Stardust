@@ -16,7 +16,7 @@ namespace Teleopti.Ccc.Web.Areas.Start.Models.Authentication
 
 		public AuthenticateResult AuthenticateUser()
 		{
-			return _identityLogon.LogonApplicationIdentityUser(DataSourceName);
+			return _identityLogon.LogonApplicationUser(DataSourceName);
 		}
 
 		public void SaveAuthenticateResult(AuthenticateResult result)

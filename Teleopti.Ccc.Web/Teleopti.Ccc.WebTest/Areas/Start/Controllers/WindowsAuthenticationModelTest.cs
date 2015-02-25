@@ -14,7 +14,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Start.Controllers
 		{
 			var authenticator = MockRepository.GenerateMock<IIdentityLogon>();
 			var expectedResult = new AuthenticateResult();
-			authenticator.Stub(x => x.LogonWindowsUser()).Return(expectedResult);
+			authenticator.Stub(x => x.LogonIdentityUser()).Return(expectedResult);
 			var target = new WindowsAuthenticationModel(authenticator, null);
 
 			var result = target.AuthenticateUser();

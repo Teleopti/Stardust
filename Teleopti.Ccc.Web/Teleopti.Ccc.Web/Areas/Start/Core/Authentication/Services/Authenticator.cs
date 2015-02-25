@@ -23,7 +23,7 @@ namespace Teleopti.Ccc.Web.Areas.Start.Core.Authentication.Services
 			_identityUserQuery = identityUserQuery;
 		}
 
-		public AuthenticateResult LogonWindowsUser()
+		public AuthenticateResult LogonIdentityUser()
 		{
 			var winAccount = _tokenIdentityProvider.RetrieveToken();
 			//TODO: tenant - use a simpler query here when joining these two methods. Tenant is enough to get back.
@@ -42,7 +42,7 @@ namespace Teleopti.Ccc.Web.Areas.Start.Core.Authentication.Services
 			return null;
 		}
 
-		public AuthenticateResult LogonApplicationIdentityUser(string dataSourceName)
+		public AuthenticateResult LogonApplicationUser(string dataSourceName)
 		{
 			var dataSource = _dataSourceProvider.RetrieveDataSourceByName(dataSourceName);
 
