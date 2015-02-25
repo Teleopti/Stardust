@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Web.Mvc;
 using Microsoft.IdentityModel.Protocols.WSFederation;
-using Microsoft.IdentityModel.Web;
 using Teleopti.Ccc.Infrastructure.Web;
 using Teleopti.Ccc.Web.Areas.Start.Core.Shared;
 using Teleopti.Ccc.Web.Core;

@@ -1,7 +1,9 @@
-﻿using System.Web;
+﻿using System;
+using System.Web;
 using System.Web.Mvc;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Infrastructure.Foundation;
+using Teleopti.Ccc.Infrastructure.MultiTenancy;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.NHibernate;
 using Teleopti.Ccc.UserTexts;
 using Teleopti.Ccc.Web.Areas.MyTime.Core;
@@ -18,14 +20,21 @@ namespace Teleopti.Ccc.Web.Areas.SSO.Controllers
 	{
 		private readonly ICurrentPrincipalContext _currentPrincipalContext;
 		private readonly IFormsAuthentication _formsAuthentication;
+		private readonly IApplicationUserTenantQuery _applicationUserTenantQuery;
 		private readonly IDataSourcesProvider _dataSourceProvider;
 		private readonly IRepositoryFactory _repositoryFactory;
 		private readonly ILoadPasswordPolicyService _loadPasswordPolicyService;
 
-		public ApplicationAuthenticationApiController(IDataSourcesProvider dataSourceProvider, IRepositoryFactory repositoryFactory, ILoadPasswordPolicyService loadPasswordPolicyService, ICurrentPrincipalContext currentPrincipalContext, IFormsAuthentication formsAuthentication)
+		public ApplicationAuthenticationApiController(IDataSourcesProvider dataSourceProvider, 
+																							IRepositoryFactory repositoryFactory, 
+																							ILoadPasswordPolicyService loadPasswordPolicyService, 
+																							ICurrentPrincipalContext currentPrincipalContext, 
+																							IFormsAuthentication formsAuthentication,
+																							IApplicationUserTenantQuery applicationUserTenantQuery)
 		{
 			_currentPrincipalContext = currentPrincipalContext;
 			_formsAuthentication = formsAuthentication;
+			_applicationUserTenantQuery = applicationUserTenantQuery;
 			_dataSourceProvider = dataSourceProvider;
 			_repositoryFactory = repositoryFactory;
 			_loadPasswordPolicyService = loadPasswordPolicyService;
@@ -57,15 +66,15 @@ namespace Teleopti.Ccc.Web.Areas.SSO.Controllers
 		[HttpPostOrPut]
 		public JsonResult ChangePassword(ChangePasswordInput model)
 		{
-			var dataSource = _dataSourceProvider.RetrieveDataSourceByName(model.DataSourceName);
+			var personInfo = _applicationUserTenantQuery.Find(model.UserName);
+			if (personInfo == null)
+				throw new HttpException(500, "person not found");
+
+			var dataSource = _dataSourceProvider.RetrieveDataSourceByName(personInfo.Tenant);
 			using (var uow = dataSource.Application.CreateAndOpenUnitOfWork())
 			{
 				var personRepository = _repositoryFactory.CreatePersonRepository(uow);
-				var person = personRepository.TryFindBasicAuthenticatedPerson(model.UserName);
-				if (person == null)
-				{
-					throw new HttpException(500, "person not found");
-				}
+				var person = personRepository.LoadOne(personInfo.Id);
 				_currentPrincipalContext.SetCurrentPrincipal(person, dataSource, null);
 				var userDetailRepository = _repositoryFactory.CreateUserDetailRepository(uow);
 				var result = person.ChangePassword(model.OldPassword, model.NewPassword, _loadPasswordPolicyService, userDetailRepository.FindByUser(person));
@@ -77,7 +86,7 @@ namespace Teleopti.Ccc.Web.Areas.SSO.Controllers
 					ModelState.AddModelError("Error", result.IsAuthenticationSuccessful ? Resources.PasswordPolicyWarning : Resources.InvalidUserNameOrPassword);
 					return ModelState.ToJson();
 				}
-				_formsAuthentication.SetAuthCookie(model.UserName + "@@" + model.DataSourceName);
+				_formsAuthentication.SetAuthCookie(model.UserName + "@@" + dataSource.DataSourceName);
 				return Json(result);
 			}
 		}
