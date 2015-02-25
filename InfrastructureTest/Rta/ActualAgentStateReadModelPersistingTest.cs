@@ -1,29 +1,21 @@
 using System;
-using Autofac;
 using NUnit.Framework;
 using SharpTestsEx;
-using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.Rta;
 using Teleopti.Ccc.Infrastructure.Rta;
-using Teleopti.Ccc.IocCommon;
-using Teleopti.Ccc.TestCommon.IoC;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.InfrastructureTest.Rta
 {
 	[TestFixture]
 	[Category("LongRunning")]
-	[IoCTest]
-	public class ActualAgentStateReadModelPersistingTest : IActualAgentStateReadWriteTest, IRegisterInContainer
+	[ActualAgentStateReadWriteTest]
+	public class ActualAgentStateReadModelPersistingTest
 	{
 		public IDatabaseWriter Target;
 		public IDatabaseReader Reader;
 
-		public void RegisterInContainer(ContainerBuilder builder, IIocConfiguration configuration)
-		{
-			builder.RegisterInstance(new FakeDatabaseConnectionStringHandler()).As<IDatabaseConnectionStringHandler>();
-		}
 
 		[Test]
 		public void ShouldPersistModel()
@@ -32,7 +24,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta
 
 			Target.PersistActualAgentReadModel(state);
 
-			var result = new DatabaseReader(new DatabaseConnectionFactory(), new FakeDatabaseConnectionStringHandler(), new Now()).GetCurrentActualAgentState(state.PersonId);
+			var result = Reader.GetCurrentActualAgentState(state.PersonId);
 			result.Should().Not.Be.Null();
 		}
 

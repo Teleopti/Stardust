@@ -171,7 +171,7 @@ namespace Teleopti.Ccc.Infrastructure.Rta
 			return missingUsers;
 		}
 
-		public ConcurrentDictionary<Tuple<string, Guid, Guid>, List<RtaStateGroupLight>> StateGroups()
+		public IEnumerable<StateCodeInfo> StateCodeInfos()
 		{
 			const string query =
 				@"SELECT s.Id StateId, s.Name StateName, s.PlatformTypeId,s.StateCode, sg.Id StateGroupId, sg.Name StateGroupName, BusinessUnit BusinessUnitId, sg.IsLogOutState 
@@ -179,7 +179,7 @@ namespace Teleopti.Ccc.Infrastructure.Rta
 								INNER JOIN RtaState s ON s.Parent = sg.Id 
 								WHERE sg.IsDeleted = 0 
 								ORDER BY StateCode";
-			var stateGroups = new List<RtaStateGroupLight>();
+			var stateCodes = new List<StateCodeInfo>();
 			using (
 				var connection = _databaseConnectionFactory.CreateConnection(_databaseConnectionStringHandler.AppConnectionString())
 				)
@@ -191,27 +191,25 @@ namespace Teleopti.Ccc.Infrastructure.Rta
 				var reader = command.ExecuteReader(CommandBehavior.CloseConnection);
 				while (reader.Read())
 				{
-					var rtaStateGroupLight = new RtaStateGroupLight
-												{
-													StateGroupName = reader.GetString(reader.GetOrdinal("StateGroupName")),
-													BusinessUnitId = reader.GetGuid(reader.GetOrdinal("BusinessUnitId")),
-													PlatformTypeId = reader.GetGuid(reader.GetOrdinal("PlatformTypeId")),
-													StateCode = reader.GetString(reader.GetOrdinal("StateCode")).ToUpper(CultureInfo.InvariantCulture),
-													StateGroupId = reader.GetGuid(reader.GetOrdinal("StateGroupId")),
-													StateId = reader.GetGuid(reader.GetOrdinal("StateId")),
-													StateName = reader.GetString(reader.GetOrdinal("StateName")),
-													IsLogOutState = reader.GetBoolean(reader.GetOrdinal("IsLogOutState"))
-												};
-					stateGroups.Add(rtaStateGroupLight);
+					stateCodes.Add(new StateCodeInfo
+					{
+						StateGroupName = reader.GetString(reader.GetOrdinal("StateGroupName")),
+						BusinessUnitId = reader.GetGuid(reader.GetOrdinal("BusinessUnitId")),
+						PlatformTypeId = reader.GetGuid(reader.GetOrdinal("PlatformTypeId")),
+						StateCode = reader.GetString(reader.GetOrdinal("StateCode")).ToUpper(CultureInfo.InvariantCulture),
+						StateGroupId = reader.GetGuid(reader.GetOrdinal("StateGroupId")),
+						StateName = reader.GetString(reader.GetOrdinal("StateName")),
+						IsLogOutState = reader.GetBoolean(reader.GetOrdinal("IsLogOutState"))
+					});
 				}
 				reader.Close();
 			}
-			return new ConcurrentDictionary<Tuple<string, Guid, Guid>, List<RtaStateGroupLight>>(stateGroups.GroupBy(s => new Tuple<string, Guid, Guid>(s.StateCode, s.PlatformTypeId, s.BusinessUnitId)).ToDictionary(g => g.Key, g => g.ToList()));
+			return stateCodes;
 		}
 
-		public ConcurrentDictionary<Tuple<Guid, Guid, Guid>, List<RtaAlarmLight>> ActivityAlarms()
+		public ConcurrentDictionary<Tuple<Guid, Guid, Guid>, List<AlarmMappingInfo>> AlarmMappingInfos()
 		{
-			var stateGroups = new List<RtaAlarmLight>();
+			var stateGroups = new List<AlarmMappingInfo>();
 			using (var connection = _databaseConnectionFactory.CreateConnection(_databaseConnectionStringHandler.AppConnectionString()))
 			{
 				var command = connection.CreateCommand();
@@ -221,11 +219,8 @@ namespace Teleopti.Ccc.Infrastructure.Rta
 				var reader = command.ExecuteReader(CommandBehavior.CloseConnection);
 				while (reader.Read())
 				{
-					var rtaAlarmLight = new RtaAlarmLight
+					var rtaAlarmLight = new AlarmMappingInfo
 						{
-							StateGroupName = !reader.IsDBNull(reader.GetOrdinal("StateGroupName"))
-												 ? reader.GetString(reader.GetOrdinal("StateGroupName"))
-												 : "",
 							StateGroupId = !reader.IsDBNull(reader.GetOrdinal("StateGroupId"))
 												 ? reader.GetGuid(reader.GetOrdinal("StateGroupId"))
 												 : Guid.Empty,
@@ -254,7 +249,7 @@ namespace Teleopti.Ccc.Infrastructure.Rta
 				reader.Close();
 			}
 			return
-				new ConcurrentDictionary<Tuple<Guid, Guid, Guid>, List<RtaAlarmLight>>(stateGroups.GroupBy(g => new Tuple<Guid, Guid, Guid>(g.ActivityId, g.StateGroupId, g.BusinessUnit))
+				new ConcurrentDictionary<Tuple<Guid, Guid, Guid>, List<AlarmMappingInfo>>(stateGroups.GroupBy(g => new Tuple<Guid, Guid, Guid>(g.ActivityId, g.StateGroupId, g.BusinessUnit))
 																				 .ToDictionary(k => k.Key, v => v.ToList()));
 		}
 

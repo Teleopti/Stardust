@@ -140,6 +140,8 @@
     <Compile Include="AgentInfo\Requests\ShiftExchangeOffer.cs" />
     <Compile Include="AgentInfo\Requests\ShiftTradeRequestIsAfterLoadedPeriodSpecification.cs" />
     <Compile Include="AgentInfo\Requests\ShiftTradeStatusExtensions.cs" />
+    <Compile Include="Aop\IUnitOfWorkAspect.cs" />
+    <Compile Include="Aop\UnitOfWorkAttribute.cs" />
     <Compile Include="ApplicationLayer\Commands\AddActivityCommand.cs" />
     <Compile Include="ApplicationLayer\Commands\AddFullDayAbsenceCommand.cs" />
     <Compile Include="ApplicationLayer\Commands\AddFullDayAbsenceCommandHandler.cs" />
@@ -771,8 +773,8 @@
     <Compile Include="Rta\IDatabaseWriter.cs" />
     <Compile Include="Rta\IRtaRepository.cs" />
     <Compile Include="ApplicationLayer\Rta\PersonOrganizationProvider.cs" />
-    <Compile Include="Rta\RtaAlarmLight.cs" />
-    <Compile Include="Rta\RtaStateGroupLight.cs" />
+    <Compile Include="Rta\AlarmMappingInfo.cs" />
+    <Compile Include="Rta\StateCodeInfo.cs" />
     <Compile Include="Rta\ScheduleLayer.cs" />
     <Compile Include="Scheduling\Assignment\DayOffMaxFlexCalculator.cs" />
     <Compile Include="Scheduling\Assignment\MoveShiftLayerDown.cs" />

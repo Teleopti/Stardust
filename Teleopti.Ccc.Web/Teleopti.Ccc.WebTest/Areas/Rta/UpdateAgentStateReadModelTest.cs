@@ -108,5 +108,6 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta
 
 			Database.PersistedAgentStateReadModel.SiteId.Should().Be(siteId);
 		}
+
 	}
 }

@@ -28,7 +28,6 @@ using Teleopti.Ccc.Web.Areas.SeatPlanner.Core.IOC;
 using Teleopti.Ccc.Web.Areas.SSO.Core.IoC;
 using Teleopti.Ccc.Web.Areas.Start.Core.IoC;
 using Teleopti.Ccc.Web.Areas.Tenant.Core;
-using Teleopti.Ccc.Web.Core.Aop.Aspects;
 using Teleopti.Ccc.Web.Core.Hangfire;
 using Teleopti.Ccc.Web.Core.RequestContext.Initialize;
 using Teleopti.Ccc.Web.Core.Startup;
@@ -82,8 +81,6 @@ namespace Teleopti.Ccc.Web.Core.IoC
 			builder.RegisterModule<ResourceHandlerModule>();
 
 			builder.RegisterType<WebRequestPrincipalContext>().As<ICurrentPrincipalContext>().SingleInstance();
-
-			builder.RegisterType<UnitOfWorkAspect>();
 
 			builder.RegisterModule(new RuleSetModule(_configuration, false));
 			builder.RegisterModule(new AuthenticationCachedModule(_configuration));

@@ -5,7 +5,7 @@ namespace Teleopti.Ccc.Domain.Rta
 {
     public interface IDatabaseWriter
     {
-        RtaStateGroupLight AddAndGetNewRtaState(string stateCode, Guid platformTypeId, Guid businessUnit);
+        StateCodeInfo AddAndGetStateCode(string stateCode, string stateDescription, Guid platformTypeId, Guid businessUnit);
         void PersistActualAgentReadModel(AgentStateReadModel model);
     }
 }

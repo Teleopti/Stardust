@@ -8,7 +8,7 @@ using Teleopti.Ccc.Domain.Collection;
 namespace Teleopti.Ccc.InfrastructureTest.Repositories
 {
 	[TestFixture, Category("LongRunning")]
-	[ReadModelTest]
+	[ReadModelUnitOfWorkTest]
 	public class TeamOutOfAdherenceReadModelPersisterTest
 	{
 		public ITeamOutOfAdherenceReadModelPersister Target { get; set; }

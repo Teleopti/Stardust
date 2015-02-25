@@ -5,7 +5,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta
 {
 	public interface IAlarmFinder
 	{
-		RtaAlarmLight GetAlarm(Guid? activityId, Guid stateGroupId, Guid businessUnit);
-		RtaStateGroupLight GetStateGroup(string stateCode, Guid platformTypeId, Guid businessUnitId);
+		AlarmMappingInfo GetAlarm(Guid? activityId, Guid stateGroupId, Guid businessUnit);
+		StateCodeInfo StateCodeInfoFor(string stateCode, string stateDescription, Guid platformTypeId, Guid businessUnitId);
 	}
 }

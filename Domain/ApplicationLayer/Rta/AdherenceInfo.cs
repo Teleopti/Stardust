@@ -68,9 +68,9 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta
 			return adherenceFor(state.StaffingEffect);
 		}
 
-		private static Adherence adherenceFor(RtaAlarmLight alarm)
+		private static Adherence adherenceFor(AlarmMappingInfo alarmMapping)
 		{
-			return adherenceFor(alarm.StaffingEffect);
+			return adherenceFor(alarmMapping.StaffingEffect);
 		}
 
 		private static Adherence adherenceFor(double? staffingEffect)
@@ -89,8 +89,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta
 
 		private Adherence adherenceFor(string stateCode, Guid? activityId)
 		{
-			var stateGroup = _alarmFinder.GetStateGroup(
-				stateCode,
+			var stateGroup = _alarmFinder.StateCodeInfoFor(
+				stateCode, null,
 				_input.ParsedPlatformTypeId(),
 				_person.BusinessUnitId);
 			var alarm = _alarmFinder.GetAlarm(activityId, stateGroup.StateGroupId, _person.BusinessUnitId);

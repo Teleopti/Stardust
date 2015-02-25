@@ -1,12 +1,12 @@
 using System;
-using Teleopti.Ccc.Domain.Aop.Core;
+using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.Infrastructure.Web;
 using Teleopti.Interfaces.Infrastructure;
 
-namespace Teleopti.Ccc.Web.Core.Aop.Aspects
+namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 {
-	public class UnitOfWorkAspect : IAspect
+	public class UnitOfWorkAspect : IUnitOfWorkAspect
 	{
 		private readonly ICurrentUnitOfWorkFactory _currentUnitOfWorkFactory;
 		private readonly IBusinessUnitFilterOverrider _overrider;

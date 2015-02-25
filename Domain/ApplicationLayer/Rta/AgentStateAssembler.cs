@@ -72,8 +72,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta
 		{
 			var platformTypeId = string.IsNullOrEmpty(input.PlatformTypeId) ?  previous.PlatformTypeId : input.ParsedPlatformTypeId();
 			var stateCode = input.StateCode ?? previous.StateCode;
-			var stateGroup = _alarmFinder.GetStateGroup(stateCode, platformTypeId, person.BusinessUnitId);
-			var alarm = _alarmFinder.GetAlarm(scheduleInfo.CurrentActivityId(), stateGroup.StateGroupId, person.BusinessUnitId) ?? new RtaAlarmLight();
+			var stateGroup = _alarmFinder.StateCodeInfoFor(stateCode, input.StateDescription, platformTypeId, person.BusinessUnitId);
+			var alarm = _alarmFinder.GetAlarm(scheduleInfo.CurrentActivityId(), stateGroup.StateGroupId, person.BusinessUnitId) ?? new AlarmMappingInfo();
 			var agentState = new AgentState
 			{
 				PersonId = person.PersonId,

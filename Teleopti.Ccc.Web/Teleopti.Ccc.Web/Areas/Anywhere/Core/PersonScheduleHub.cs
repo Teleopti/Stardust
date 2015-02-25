@@ -2,8 +2,8 @@
 using Autofac.Extras.DynamicProxy2;
 using Microsoft.AspNet.SignalR;
 using Microsoft.AspNet.SignalR.Hubs;
+using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Infrastructure.Aop;
-using Teleopti.Ccc.Web.Core.Aop.Aspects;
 
 namespace Teleopti.Ccc.Web.Areas.Anywhere.Core
 {

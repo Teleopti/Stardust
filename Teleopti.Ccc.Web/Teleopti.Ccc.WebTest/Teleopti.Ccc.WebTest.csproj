@@ -236,6 +236,7 @@
     <Compile Include="Areas\Permissions\RolesControllerTest.cs" />
     <Compile Include="Areas\Rta\BelongsToDateTest.cs" />
     <Compile Include="Areas\Rta\Synchronization\LockingTest.cs" />
+    <Compile Include="Areas\Rta\UnrecognizedStateTest.cs" />
     <Compile Include="Areas\Search\SearchControllerTest.cs" />
     <Compile Include="Areas\SeatPlanner\Controllers\LocationHierarchyControllerTest.cs" />
     <Compile Include="Areas\SeatPlanner\Controllers\TeamHierarchyControllerTest.cs" />

@@ -1,9 +1,9 @@
 ﻿using Teleopti.Ccc.Domain.Aop;
-using Teleopti.Ccc.TestCommon.IoC;
+using Teleopti.Ccc.InfrastructureTest.Rta;
 
-namespace Teleopti.Ccc.InfrastructureTest.Repositories
+namespace Teleopti.Ccc.InfrastructureTest
 {
-	public class ReadModelTestAttribute : IoCTestAttribute
+	public class ReadModelUnitOfWorkTestAttribute : InfrastructureTestAttribute
 	{
 		protected override void BeforeTest()
 		{

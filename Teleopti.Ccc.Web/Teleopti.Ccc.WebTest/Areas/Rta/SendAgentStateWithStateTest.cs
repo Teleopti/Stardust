@@ -65,31 +65,6 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta
 		}
 
 		[Test]
-		public void ShouldAddStateCodeToDatabaseWhenNotRecognized()
-		{
-			var businesUnitId = Guid.NewGuid();
-			Database
-				.WithBusinessUnit(businesUnitId)
-				.WithUser("usercode");
-
-			Target.SaveState(new ExternalUserStateForTest
-			{
-				UserCode = "usercode",
-				StateCode = "newStateCode"
-			});
-
-			Database.StateGroups()
-				.Single(x => x.Key.Equals(new Tuple<string, Guid, Guid>("newStateCode".ToUpper(), Guid.Empty, businesUnitId)))
-				.Value.Single().StateCode.Should().Be("newStateCode");
-		}
-
-		[Test, Ignore]
-		public void ShouldUseDefaultStateGroupIfStateCodeIsNotRecognized()
-		{
-			Assert.Fail();
-		}
-
-		[Test]
 		public void ShouldSendWithStateStartFromSystemTime()
 		{
 			var state = new ExternalUserStateForTest

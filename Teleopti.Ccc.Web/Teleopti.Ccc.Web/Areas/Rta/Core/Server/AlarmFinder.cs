@@ -21,15 +21,15 @@ namespace Teleopti.Ccc.Web.Areas.Rta.Core.Server
 			_mbCacheFactory = mbCacheFactory;
 		}
 
-		public RtaAlarmLight GetAlarm(Guid? activityId, Guid stateGroupId, Guid businessUnit)
+		public AlarmMappingInfo GetAlarm(Guid? activityId, Guid stateGroupId, Guid businessUnit)
 		{
-			return findAlarmForActivity(activityId ?? Guid.Empty, stateGroupId, businessUnit, _databaseReader.ActivityAlarms());
+			return findAlarmForActivity(activityId ?? Guid.Empty, stateGroupId, businessUnit, _databaseReader.AlarmMappingInfos());
 		}
 
-		private static RtaAlarmLight findAlarmForActivity(Guid activityId, Guid stateGroupId, Guid businessUnit,
-			IDictionary<Tuple<Guid, Guid, Guid>, List<RtaAlarmLight>> allAlarms)
+		private static AlarmMappingInfo findAlarmForActivity(Guid activityId, Guid stateGroupId, Guid businessUnit,
+			IDictionary<Tuple<Guid, Guid, Guid>, List<AlarmMappingInfo>> allAlarms)
 		{
-			List<RtaAlarmLight> alarmForActivity;
+			List<AlarmMappingInfo> alarmForActivity;
 			if (allAlarms.TryGetValue(new Tuple<Guid, Guid, Guid>(activityId, stateGroupId, businessUnit), out alarmForActivity))
 			{
 				var alarmForStateGroup = alarmForActivity.FirstOrDefault();
@@ -43,25 +43,28 @@ namespace Teleopti.Ccc.Web.Areas.Rta.Core.Server
 				: null;
 		}
 
-		public RtaStateGroupLight GetStateGroup(string stateCode, Guid platformTypeId, Guid businessUnitId)
+		public StateCodeInfo StateCodeInfoFor(string stateCode, string stateDescription, Guid platformTypeId, Guid businessUnitId)
 		{
-			var allStateGroups = _databaseReader.StateGroups();
-			List<RtaStateGroupLight> stateGroupsForStateCode;
-			if (stateCode == null) stateCode = "";
-			var tuple = new Tuple<string, Guid, Guid>(stateCode.ToUpperInvariant(), platformTypeId, businessUnitId);
-			if (allStateGroups.TryGetValue(tuple, out stateGroupsForStateCode))
-			{
-				return stateGroupsForStateCode.First();
-			}
+			var stateCodeInfos = _databaseReader.StateCodeInfos();
+			stateCode = stateCode ?? "";
 
-			var newState = _databaseWriter.AddAndGetNewRtaState(stateCode, platformTypeId, businessUnitId);
+			var match = (from s in stateCodeInfos
+				where s.StateCode.ToUpper() == stateCode.ToUpper()
+				      && s.PlatformTypeId == platformTypeId
+				      && s.BusinessUnitId == businessUnitId
+				select s).FirstOrDefault();
+
+			if (match != null)
+				return match;
+
+			var newState = _databaseWriter.AddAndGetStateCode(stateCode, stateDescription, platformTypeId, businessUnitId);
 			invalidateStateGroupCache();
 			return newState;
 		}
 
 		private void invalidateStateGroupCache()
 		{
-			_mbCacheFactory.Invalidate(_databaseReader, x => x.StateGroups(), false);
+			_mbCacheFactory.Invalidate(_databaseReader, x => x.StateCodeInfos(), false);
 		}
 	}
 }

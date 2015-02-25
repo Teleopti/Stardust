@@ -27,8 +27,8 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta
 		private readonly List<AgentStateReadModel> _actualAgentStates = new List<AgentStateReadModel>();
 		private readonly List<KeyValuePair<string, int>> _datasources = new List<KeyValuePair<string, int>>();
 		private readonly List<KeyValuePair<string, IEnumerable<ResolvedPerson>>> _externalLogOns = new List<KeyValuePair<string, IEnumerable<ResolvedPerson>>>();
-		private readonly Dictionary<Tuple<string, Guid, Guid>, List<RtaStateGroupLight>> _stateGroups = new Dictionary<Tuple<string, Guid, Guid>, List<RtaStateGroupLight>>();
-		private readonly List<KeyValuePair<Tuple<Guid, Guid, Guid>, List<RtaAlarmLight>>> _activityAlarms = new List<KeyValuePair<Tuple<Guid, Guid, Guid>, List<RtaAlarmLight>>>();
+		private readonly List<StateCodeInfo> _stateCodeInfos = new List<StateCodeInfo>();
+		private readonly List<KeyValuePair<Tuple<Guid, Guid, Guid>, List<AlarmMappingInfo>>> _activityAlarms = new List<KeyValuePair<Tuple<Guid, Guid, Guid>, List<AlarmMappingInfo>>>();
 		private readonly List<scheduleLayer2> _schedules = new List<scheduleLayer2>();
 		private readonly List<PersonOrganizationData> _personOrganizationData = new List<PersonOrganizationData>();
 
@@ -39,6 +39,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta
 		}
 
 		public AgentStateReadModel PersistedAgentStateReadModel { get; set; }
+		public StateCodeInfo AddedStateCode { get; set; }
 
 		private Guid _businessUnitId;
 		private string _platformTypeId;
@@ -132,23 +133,22 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta
 			//putting all this logic here is just WRONG
 			var platformTypeIdGuid = new Guid(_platformTypeId);
 
-			var stateGroup = getOrAddState(stateCode, name, isLoggedOutState, platformTypeIdGuid);
+			var stateCodeInfo = getOrAddStateCodeInfo(stateCode, null, name, isLoggedOutState, platformTypeIdGuid);
 
-			var alarms = new List<RtaAlarmLight>
+			var alarms = new List<AlarmMappingInfo>
 			{
-				new RtaAlarmLight
+				new AlarmMappingInfo
 				{
 					Name = name,
-					StateGroupId = stateGroup.StateGroupId,
+					StateGroupId = stateCodeInfo.StateGroupId,
 					ActivityId = activityId,
 					BusinessUnit = _businessUnitId,
 					AlarmTypeId = alarmId,
 					StaffingEffect = staffingEffect,
-					StateGroupName = name,
 					ThresholdTime = threshold.Ticks
 				}
 			};
-			_activityAlarms.Add(new KeyValuePair<Tuple<Guid, Guid, Guid>, List<RtaAlarmLight>>(new Tuple<Guid, Guid, Guid>(activityId, stateGroup.StateGroupId, _businessUnitId), alarms));
+			_activityAlarms.Add(new KeyValuePair<Tuple<Guid, Guid, Guid>, List<AlarmMappingInfo>>(new Tuple<Guid, Guid, Guid>(activityId, stateCodeInfo.StateGroupId, _businessUnitId), alarms));
 			return this;
 		}
 
@@ -162,29 +162,30 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta
 
 
 
-		private RtaStateGroupLight getOrAddState(string stateCode, string name, bool isLoggedOutState, Guid platformTypeIdGuid)
+		private StateCodeInfo getOrAddStateCodeInfo(string stateCode, string stateDescription, string stateGroupName, bool isLoggedOutState, Guid platformTypeId)
 		{
-			var stateGroupId = Guid.NewGuid();
-			var stateId = Guid.NewGuid();
-			var stateGroupKey = new Tuple<string, Guid, Guid>(stateCode.ToUpper(), platformTypeIdGuid, _businessUnitId);
-			
-			if (_stateGroups.ContainsKey(stateGroupKey)) return _stateGroups[stateGroupKey].Single();
+			var match = (from s in _stateCodeInfos
+						 where s.StateCode.ToUpper() == stateCode.ToUpper()
+							   && s.PlatformTypeId == platformTypeId
+							   && s.BusinessUnitId == _businessUnitId
+						 select s).FirstOrDefault();
 
-			var states = new List<RtaStateGroupLight>
+			if (match != null)
+				return match;
+
+			var stateGroupId = Guid.NewGuid();
+			var stateCodeInfo = new StateCodeInfo
 			{
-				new RtaStateGroupLight
-				{
-					StateGroupId = stateGroupId,
-					StateGroupName = name,
-					BusinessUnitId = _businessUnitId,
-					PlatformTypeId = platformTypeIdGuid,
-					StateCode = stateCode,
-					StateId = stateId,
-					IsLogOutState = isLoggedOutState
-				}
+				StateGroupId = stateGroupId,
+				StateGroupName = stateGroupName,
+				BusinessUnitId = _businessUnitId,
+				PlatformTypeId = platformTypeId,
+				StateCode = stateCode,
+				StateName = stateDescription,
+				IsLogOutState = isLoggedOutState
 			};
-			_stateGroups.Add(new Tuple<string, Guid, Guid>(stateCode.ToUpper(), platformTypeIdGuid, _businessUnitId), states);
-			return states.Single();
+			_stateCodeInfos.Add(stateCodeInfo);
+			return stateCodeInfo;
 		}
 
 		public AgentStateReadModel GetCurrentActualAgentState(Guid personId)
@@ -197,14 +198,14 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta
 			return _actualAgentStates.ToList();
 		}
 
-		public ConcurrentDictionary<Tuple<string, Guid, Guid>, List<RtaStateGroupLight>> StateGroups()
+		public IEnumerable<StateCodeInfo> StateCodeInfos()
 		{
-			return new ConcurrentDictionary<Tuple<string, Guid, Guid>, List<RtaStateGroupLight>>(_stateGroups);
+			return _stateCodeInfos;
 		}
 
-		public ConcurrentDictionary<Tuple<Guid, Guid, Guid>, List<RtaAlarmLight>> ActivityAlarms()
+		public ConcurrentDictionary<Tuple<Guid, Guid, Guid>, List<AlarmMappingInfo>> AlarmMappingInfos()
 		{
-			return new ConcurrentDictionary<Tuple<Guid, Guid, Guid>, List<RtaAlarmLight>>(_activityAlarms);
+			return new ConcurrentDictionary<Tuple<Guid, Guid, Guid>, List<AlarmMappingInfo>>(_activityAlarms);
 		}
 
 		public IList<ScheduleLayer> GetCurrentSchedule(Guid personId)
@@ -239,9 +240,10 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta
 			return new ConcurrentDictionary<string, int>(_datasources);
 		}
 
-		public RtaStateGroupLight AddAndGetNewRtaState(string stateCode, Guid platformTypeId, Guid businessUnit)
+		public StateCodeInfo AddAndGetStateCode(string stateCode, string stateDescription, Guid platformTypeId, Guid businessUnit)
 		{
-			return getOrAddState(stateCode, null, false, platformTypeId);
+			AddedStateCode = getOrAddStateCodeInfo(stateCode, stateDescription, null, false, platformTypeId);
+			return AddedStateCode;
 		}
 
 		public void PersistActualAgentReadModel(AgentStateReadModel model)

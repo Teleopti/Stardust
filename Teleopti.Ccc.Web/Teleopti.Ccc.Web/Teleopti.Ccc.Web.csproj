@@ -695,8 +695,6 @@
     <Compile Include="Areas\Start\Models\Authentication\ApplicationIdentityProviderAuthenticationType.cs" />
     <Compile Include="Areas\Toggle\ToggleHandlerController.cs" />
     <Compile Include="Core\AllowTokenPostRequestValidator.cs" />
-    <Compile Include="Core\Aop\Aspects\UnitOfWorkAspect.cs" />
-    <Compile Include="Core\Aop\Aspects\UnitOfWorkAttribute.cs" />
     <Compile Include="Core\Hangfire\HangfireEventClient.cs" />
     <Compile Include="Core\Hangfire\HangfireEventServer.cs" />
     <Compile Include="Core\Hangfire\HangfireServerStarter.cs" />
@@ -1974,6 +1972,7 @@
     <Folder Include="Areas\PerformanceTool\Content\Templates\" />
     <Folder Include="Areas\SeatPlanner\Views\LocationHierarchy\" />
     <Folder Include="Areas\SSO\Views\Authentication\" />
+    <Folder Include="Core\Aop\Aspects\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Areas\MyTime\Views\TeamSchedule\TeamSchedulePartial.cshtml" />

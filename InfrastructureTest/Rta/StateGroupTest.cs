@@ -23,11 +23,11 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta
 			{
 				var target = new DatabaseWriter(new DatabaseConnectionFactory(), new FakeDatabaseConnectionStringHandler());
 
-				var defaultStateGroup = target.AddAndGetNewRtaState("phone", Guid.Empty, BusinessUnitFactory.BusinessUnitUsedInTest.Id.Value);
+				var info = target.AddAndGetStateCode("phone", null, Guid.Empty, BusinessUnitFactory.BusinessUnitUsedInTest.Id.Value);
 
-				new RtaStateGroupRepository(UnitOfWork).Get(defaultStateGroup.StateGroupId)
+				new RtaStateGroupRepository(UnitOfWork).Get(info.StateGroupId)
 					.StateCollection.Single()
-					.Name
+					.StateCode
 					.Should().Be.EqualTo("phone");
 			}
 		}
@@ -39,13 +39,42 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta
 			{
 				var target = new DatabaseWriter(new DatabaseConnectionFactory(), new FakeDatabaseConnectionStringHandler());
 
-				var defaultStateGroup = target.AddAndGetNewRtaState("", Guid.Empty, BusinessUnitFactory.BusinessUnitUsedInTest.Id.Value);
+				var info = target.AddAndGetStateCode("", null, Guid.Empty, BusinessUnitFactory.BusinessUnitUsedInTest.Id.Value);
 
-				new RtaStateGroupRepository(UnitOfWork).Get(defaultStateGroup.StateGroupId)
+				new RtaStateGroupRepository(UnitOfWork).Get(info.StateGroupId)
 					.StateCollection
 					.Should().Be.Empty();
 			}
 
+		}
+
+		[Test]
+		public void ShouldAddStateCodeWithDescription()
+		{
+			using (new DefaultStateGroupCreator(PersistAndRemoveFromUnitOfWork))
+			{
+				var target = new DatabaseWriter(new DatabaseConnectionFactory(), new FakeDatabaseConnectionStringHandler());
+
+				var info = target.AddAndGetStateCode(" ", "talk alot of blah blah", Guid.Empty, BusinessUnitFactory.BusinessUnitUsedInTest.Id.Value);
+
+				new RtaStateGroupRepository(UnitOfWork).Get(info.StateGroupId)
+					.StateCollection.Single()
+					.Name
+					.Should().Be.EqualTo("talk alot of blah blah");
+			}
+		}
+
+		[Test]
+		public void ShouldGetStateCodeWithDescription()
+		{
+			using (new DefaultStateGroupCreator(PersistAndRemoveFromUnitOfWork))
+			{
+				var target = new DatabaseWriter(new DatabaseConnectionFactory(), new FakeDatabaseConnectionStringHandler());
+
+				var info = target.AddAndGetStateCode(" ", "talk alot of blah blah", Guid.Empty, BusinessUnitFactory.BusinessUnitUsedInTest.Id.Value);
+
+				info.StateName.Should().Be.EqualTo("talk alot of blah blah");
+			}
 		}
 	}
 

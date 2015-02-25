@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Data;
-using System.Data.SqlClient;
 using log4net;
 using Teleopti.Ccc.Domain.Rta;
 using Teleopti.Interfaces.Domain;
@@ -20,13 +19,13 @@ namespace Teleopti.Ccc.Infrastructure.Rta
 			_databaseConnectionStringHandler = databaseConnectionStringHandler;
 		}
 
-		public RtaStateGroupLight AddAndGetNewRtaState(string stateCode, Guid platformTypeId, Guid businessUnit)
+		public StateCodeInfo AddAndGetStateCode(string stateCode, string stateDescription, Guid platformTypeId, Guid businessUnit)
 		{
 			var stateId = Guid.NewGuid();
 			var defaultStateGroupId = Guid.Empty;
 			var defaultStateGroupName = "";
 			string getDefaultStateGroupQuery = string.Format(@"SELECT Name, Id, BusinessUnit FROM RtaStateGroup WHERE DefaultStateGroup = 1 AND BusinessUnit = '{0}'", businessUnit);
-			const string insert = @"INSERT INTO RtaState VALUES ('{0}', N'{1}', N'{1}', '{2}', '{3}')";
+			const string insert = @"INSERT INTO RtaState (Id, Name, StateCode, PlatformTypeId, Parent) VALUES ('{0}', N'{4}', N'{1}', '{2}', '{3}')";
 
 			using (var connection = _databaseConnectionFactory.CreateConnection(_databaseConnectionStringHandler.AppConnectionString()))
 			{
@@ -41,7 +40,7 @@ namespace Teleopti.Ccc.Infrastructure.Rta
 					defaultStateGroupId = reader.GetGuid(reader.GetOrdinal("Id"));
 					defaultStateGroupName = reader.GetString(reader.GetOrdinal("Name"));
 
-					insertStatement = string.Format(insert, stateId, stateCode, platformTypeId, defaultStateGroupId);
+					insertStatement = string.Format(insert, stateId, stateCode, platformTypeId, defaultStateGroupId, stateDescription);
 				}
 				reader.Close();
 
@@ -52,15 +51,14 @@ namespace Teleopti.Ccc.Infrastructure.Rta
 					command.ExecuteNonQuery();
 				}
 			}
-			return new RtaStateGroupLight
+			return new StateCodeInfo
 				{
 					StateGroupId = defaultStateGroupId,
 					StateGroupName = defaultStateGroupName,
 					BusinessUnitId = businessUnit,
-					StateName = stateCode,
+					StateName = stateDescription,
 					PlatformTypeId = platformTypeId,
 					StateCode = stateCode,
-					StateId = stateId
 				};
 		}
 

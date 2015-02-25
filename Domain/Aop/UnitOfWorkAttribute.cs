@@ -1,11 +1,11 @@
 using Teleopti.Ccc.Domain.Aop.Core;
 
-namespace Teleopti.Ccc.Web.Core.Aop.Aspects
+namespace Teleopti.Ccc.Domain.Aop
 {
 	public sealed class UnitOfWorkAttribute : ResolvedAspectAttribute
 	{
 		public UnitOfWorkAttribute()
-			: base(typeof(UnitOfWorkAspect))
+			: base(typeof(IUnitOfWorkAspect))
 		{
 		}
 	}

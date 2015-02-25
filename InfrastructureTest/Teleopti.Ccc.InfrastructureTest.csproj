@@ -213,7 +213,7 @@
     <Compile Include="Repositories\EtlLogObjectRepositoryTest.cs" />
     <Compile Include="Repositories\GamificationSettingtRepositoryTest.cs" />
     <Compile Include="Repositories\PersonFinderSearchCriteriaTest.cs" />
-    <Compile Include="Repositories\ReadModelTestAttribute.cs" />
+    <Compile Include="ReadModelUnitOfWorkTestAttribute.cs" />
     <Compile Include="Repositories\SeniorityWorkDayRanksRepositoryTest.cs" />
     <Compile Include="Repositories\SiteOutOfAdherenceReadModelPersisterTest.cs" />
     <Compile Include="Repositories\TeamOutOfAdherenceReadModelPersisterTest.cs" />
@@ -222,6 +222,8 @@
     <Compile Include="Rta\DatabaseReaderTest.cs" />
     <Compile Include="Rta\ActualAgentStateReadModelPersistingTest.cs" />
     <Compile Include="Rta\FakeDatabaseConnectionStringHandler.cs" />
+    <Compile Include="Rta\GetStateCodeInfosTest.cs" />
+    <Compile Include="InfrastructureTestAttribute.cs" />
     <Compile Include="Rta\RtaLoadExternalLogOnProcTest.cs" />
     <Compile Include="Repositories\BusinessUnitFilterOverriderTest.cs" />
     <Compile Include="Rta\RtaRepositoryTest.cs" />
@@ -455,6 +457,7 @@
     <Compile Include="SystemCheck\AgentDayConverter\VerifyAllConvertedTest.cs" />
     <Compile Include="SystemCheck\CheckMessageBrokerTest.cs" />
     <Compile Include="SystemCheck\SystemCheckerValidatorTest.cs" />
+    <Compile Include="UnitOfWorkTestAttribute.cs" />
     <Compile Include="UnitOfWork\ConnectionStringTest.cs" />
     <Compile Include="UnitOfWork\DifferentPersistAllTest.cs" />
     <Compile Include="UnitOfWork\DisableFilterScopeTest.cs" />

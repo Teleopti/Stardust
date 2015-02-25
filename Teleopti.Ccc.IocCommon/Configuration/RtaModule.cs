@@ -27,8 +27,8 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			//mark activityalarms and stategroups to be cached
 			_config.Args().CacheBuilder
 				.For<DatabaseReader>()
-				.CacheMethod(x => x.ActivityAlarms())
-				.CacheMethod(x => x.StateGroups())
+				.CacheMethod(x => x.AlarmMappingInfos())
+				.CacheMethod(x => x.StateCodeInfos())
 				.CacheMethod(x => x.GetCurrentSchedule(Guid.NewGuid()))
 				.CacheMethod(x => x.Datasources())
 				.CacheMethod(x => x.ExternalLogOns())

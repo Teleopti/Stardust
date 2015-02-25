@@ -5,9 +5,9 @@ using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers;
 using Teleopti.Ccc.Domain.Collection;
-using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Domain.Helper;
+using Teleopti.Ccc.Domain.Rta;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.Infrastructure.Rta;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
@@ -18,24 +18,19 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta
 {
 	[TestFixture]
 	[Category("LongRunning")]
-	public class DatabaseReaderTest : IActualAgentStateReadWriteTest
+	[ActualAgentStateReadWriteTest]
+	public class DatabaseReaderTest
 	{
-		private static DatabaseReader createReader()
-		{
-			return new DatabaseReader(new DatabaseConnectionFactory(), new FakeDatabaseConnectionStringHandler(), new Now());
-		}
-
-		private static DatabaseWriter createWriter()
-		{
-			return new DatabaseWriter(new DatabaseConnectionFactory(), new FakeDatabaseConnectionStringHandler());
-		}
+		public IDatabaseReader Reader;
+		public IDatabaseWriter Writer;
+		public MutableNow Now;
 
 		[Test]
 		public void ShouldGetCurrentActualAgentState()
 		{
 			var state = new AgentStateReadModelForTest { PersonId = Guid.NewGuid() };
-			createWriter().PersistActualAgentReadModel(state);
-			var target = createReader();
+			Writer.PersistActualAgentReadModel(state);
+			var target = Reader;
 
 			var result = target.GetCurrentActualAgentState(state.PersonId);
 
@@ -45,7 +40,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta
 		[Test]
 		public void ShouldGetNullCurrentActualAgentStateIfNotFound()
 		{
-			var target = createReader();
+			var target = Reader;
 
 			var result = target.GetCurrentActualAgentState(Guid.NewGuid());
 
@@ -55,12 +50,12 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta
 		[Test]
 		public void ShouldGetCurrentActualAgentStates()
 		{
-			var writer = createWriter();
+			var writer = Writer;
 			var personId1 = Guid.NewGuid();
 			var personId2 = Guid.NewGuid();
 			writer.PersistActualAgentReadModel(new AgentStateReadModelForTest { PersonId = personId1 });
 			writer.PersistActualAgentReadModel(new AgentStateReadModelForTest { PersonId = personId2 });
-			var target = createReader();
+			var target = Reader;
 
 			var result = target.GetActualAgentStates();
 
@@ -71,7 +66,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta
 		[Test]
 		public void ShouldGetCurrentActualAgentStatesWithAllData()
 		{
-			var writer = createWriter();
+			var writer = Writer;
 			var state = new AgentStateReadModelForTest
 			{
 				PersonId = Guid.NewGuid(),
@@ -96,7 +91,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta
 				StateStart = "2014-11-11 10:37".Utc(),
 			};
 			writer.PersistActualAgentReadModel(state);
-			var target = createReader();
+			var target = Reader;
 
 			var result = target.GetActualAgentStates().Single();
 
@@ -125,10 +120,10 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta
 		[Test]
 		public void ShouldReadActualAgentStateWithoutBusinessUnit()
 		{
-			var writer = createWriter();
+			var writer = Writer;
 			writer.PersistActualAgentReadModel(new AgentStateReadModelForTest());
 			setBusinessUnitInDbToNull();
-			var reader = createReader();
+			var reader = Reader;
 
 			reader.GetActualAgentStates().Single()
 				.BusinessUnitId
@@ -149,6 +144,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta
 		public void ShouldReadBelongsToDate()
 		{
 			var personId = Guid.NewGuid();
+			Now.Is("2014-11-07 06:00");
 			using (var uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
 			{
 				var layer = new ProjectionChangedEventLayer
@@ -160,31 +156,22 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta
 				repository.AddProjectedLayer(new DateOnly("2014-11-07".Utc()), Guid.NewGuid(), personId, layer);
 				uow.PersistAll();
 			}
-			var target = new DatabaseReader(new DatabaseConnectionFactory(), new FakeDatabaseConnectionStringHandler(), new ThisIsNow("2014-11-07 06:00"));
-
-			var result = target.GetCurrentSchedule(personId);
+			
+			var result = Reader.GetCurrentSchedule(personId);
 
 			result.Single().BelongsToDate.Should().Be(new DateOnly("2014-11-07".Utc()));
 		}
+
 	}
 
-	[ActualAgentStateReadWriteTest]
-	public interface IActualAgentStateReadWriteTest
+	public class ActualAgentStateReadWriteTestAttribute : InfrastructureTestAttribute
 	{
-	}
-
-	public class ActualAgentStateReadWriteTestAttribute : Attribute, ITestAction
-	{
-		public void BeforeTest(TestDetails testDetails)
-		{
-		}
-
-		public void AfterTest(TestDetails testDetails)
+		protected override void AfterTest()
 		{
 			applySql("DELETE FROM RTA.ActualAgentState");
 			removeAddedPerson();
 		}
-
+		
 		private static void removeAddedPerson()
 		{
 			using (var uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
@@ -194,8 +181,6 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta
 				uow.PersistAll();
 			}
 		}
-
-		public ActionTargets Targets { get { return ActionTargets.Test; } }
 
 		private void applySql(string sql)
 		{

@@ -15,8 +15,8 @@ namespace Teleopti.Ccc.Domain.Rta
 	{
 		ConcurrentDictionary<string, int> Datasources();
 		ConcurrentDictionary<string, IEnumerable<ResolvedPerson>> ExternalLogOns();
-		ConcurrentDictionary<Tuple<string, Guid, Guid>, List<RtaStateGroupLight>> StateGroups();
-		ConcurrentDictionary<Tuple<Guid, Guid, Guid>, List<RtaAlarmLight>> ActivityAlarms();
+		IEnumerable<StateCodeInfo> StateCodeInfos();
+		ConcurrentDictionary<Tuple<Guid, Guid, Guid>, List<AlarmMappingInfo>> AlarmMappingInfos();
 
 		IList<ScheduleLayer> GetCurrentSchedule(Guid personId);
 		IEnumerable<AgentStateReadModel> GetMissingAgentStatesFromBatch(DateTime batchId, string dataSourceId);
