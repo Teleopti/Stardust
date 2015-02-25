@@ -245,7 +245,7 @@ Teleopti.MyTimeWeb.AsmMessageList = (function ($) {
 			}
 		});
 
-		var toggleEnabled = Teleopti.MyTimeWeb.Common.IsToggleEnabled("MyTimeWeb_AgentBadge_28913");
+		var toggleEnabled = Teleopti.MyTimeWeb.Common.IsToggleEnabled("MyTimeWeb_AgentBadge_28913") || Teleopti.MyTimeWeb.Common.IsToggleEnabled("Portal_DifferentiateBadgeSettingForAgents_31318");
 		vm.isBadgeFeatureEnabled(toggleEnabled);
 	}
 
