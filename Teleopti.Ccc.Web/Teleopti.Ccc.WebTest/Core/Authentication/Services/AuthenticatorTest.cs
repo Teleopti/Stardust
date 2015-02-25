@@ -20,6 +20,7 @@ namespace Teleopti.Ccc.WebTest.Core.Authentication.Services
 		private Authenticator target;
 		private ITokenIdentityProvider tokenIdentityProvider;
 		private IIdentityUserQuery identityUserQuery;
+		private IApplicationUserTenantQuery applicationUserTenantQuery;
 		const string tenant = "Gurkmajonääääs";
 
 		[SetUp]
@@ -29,7 +30,8 @@ namespace Teleopti.Ccc.WebTest.Core.Authentication.Services
 			repositoryFactory = MockRepository.GenerateMock<IRepositoryFactory>();
 			tokenIdentityProvider = MockRepository.GenerateMock<ITokenIdentityProvider>();
 			identityUserQuery = MockRepository.GenerateMock<IIdentityUserQuery>();
-			target = new Authenticator(dataSourcesProvider, tokenIdentityProvider, repositoryFactory, identityUserQuery);
+			applicationUserTenantQuery = MockRepository.GenerateMock<IApplicationUserTenantQuery>();
+			target = new Authenticator(dataSourcesProvider, tokenIdentityProvider, repositoryFactory, identityUserQuery, applicationUserTenantQuery);
 		}
 
 		[Test]
@@ -66,21 +68,21 @@ namespace Teleopti.Ccc.WebTest.Core.Authentication.Services
 			var unitOfWorkFactory = MockRepository.GenerateMock<IUnitOfWorkFactory>();
 			var personRep = MockRepository.GenerateMock<IPersonRepository>();
 			var uow = MockRepository.GenerateMock<IUnitOfWork>();
-			var account = new TokenIdentity { DataSource = "Teleopti WFM", UserIdentifier = "user" };
-
-			IPerson person = new Person();
+			var account = new TokenIdentity { UserIdentifier = "user" };
+			var pInfo = new PersonInfo { Id = Guid.NewGuid() };
+			pInfo.SetTenant_DoNotUseThisIfYouAreNotSureWhatYouAreDoing(tenant);
+			var person = new Person();
 
 			dataSourcesProvider.Stub(x => x.RetrieveDataSourceByName(tenant)).Return(dataSource);
 			dataSource.Stub(x => x.Application).Return(unitOfWorkFactory);
 			unitOfWorkFactory.Stub(x => x.CreateAndOpenUnitOfWork()).Return(uow);
 			repositoryFactory.Stub(x => x.CreatePersonRepository(uow)).Return(personRep);
-
+			applicationUserTenantQuery.Stub(x => x.Find(account.UserIdentifier)).Return(pInfo);
 			tokenIdentityProvider.Stub(x => x.RetrieveToken()).Return(account);
+			personRep.Stub(x => x.LoadOne(pInfo.Id)).Return(person);
 
-			personRep.Stub(x => x.TryFindBasicAuthenticatedPerson(account.UserIdentifier)).Return(person);
-
-			var result = target.LogonApplicationUser(tenant);
-			result.Person.Should().Be.EqualTo(person);
+			var result = target.LogonApplicationUser();
+			result.Person.Should().Be.SameInstanceAs(person);
 			result.Successful.Should().Be.True();
 			result.DataSource.Should().Be.SameInstanceAs(dataSource);
 		}

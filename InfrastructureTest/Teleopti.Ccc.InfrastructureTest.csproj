@@ -180,6 +180,7 @@
     <Compile Include="Bugs\BugShiftExchangeInvalidUpdate.cs" />
     <Compile Include="DistributedLock\DistributedLockTest.cs" />
     <Compile Include="Foundation\CouldNotCreateTransactionExceptionTest.cs" />
+    <Compile Include="MultiTenancy\ApplicationUserTenantQueryTest.cs" />
     <Compile Include="MultiTenancy\IdentityUserQueryTest.cs" />
     <Compile Include="MultiTenancy\ApplicationUserQueryTest.cs" />
     <Compile Include="MultiTenancy\PersistLogonAttemptTest.cs" />

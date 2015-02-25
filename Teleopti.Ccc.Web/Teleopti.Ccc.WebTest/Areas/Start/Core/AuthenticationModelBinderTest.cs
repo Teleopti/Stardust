@@ -55,14 +55,12 @@ namespace Teleopti.Ccc.WebTest.Areas.Start.Core
 			var target = Target();
 			var bindingContext = BindingContext(new NameValueCollection
 				{
-					{"type", "application_token"},
-					{"datasource", "mydata"}
+					{"type", "application_token"}
 				});
 
 			var result = target.BindModel(null, bindingContext) as ApplicationIdentityAuthenticationModel;
 
 			result.Should().Not.Be.Null();
-			result.DataSourceName.Should().Be("mydata");
 		}
 
 		[Test]

@@ -15,6 +15,7 @@ namespace Teleopti.Ccc.Web.Areas.Tenant.Core
 			builder.RegisterType<ApplicationAuthentication>().As<IApplicationAuthentication>().SingleInstance();
 			builder.RegisterType<IdentityAuthentication>().As<IIdentityAuthentication>().SingleInstance();
 			builder.RegisterType<ApplicationUserQuery>().As<IApplicationUserQuery>().SingleInstance();
+			builder.RegisterType<ApplicationUserTenantQuery>().As<IApplicationUserTenantQuery>().SingleInstance();
 			builder.RegisterType<IdentityUserQuery>().As<IIdentityUserQuery>().SingleInstance();
 			builder.RegisterType<PasswordPolicyCheck>().As<IPasswordPolicyCheck>().SingleInstance();
 			builder.RegisterType<ConvertDataToOldUserDetailDomain>().As<IConvertDataToOldUserDetailDomain>().SingleInstance();

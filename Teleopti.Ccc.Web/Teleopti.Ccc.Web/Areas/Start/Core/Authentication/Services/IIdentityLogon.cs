@@ -4,7 +4,6 @@
 	public interface IIdentityLogon
 	{
 		AuthenticateResult LogonIdentityUser();
-		//TODO: tenant, remove datasourceName parameter here when toggle is removed
-		AuthenticateResult LogonApplicationUser(string dataSourceName);
+		AuthenticateResult LogonApplicationUser();
 	}
 }

@@ -216,6 +216,8 @@
     <Compile Include="MultiTenancy\AuthenticationQuerier.cs" />
     <Compile Include="MultiTenancy\IApplicationUserQuery.cs" />
     <Compile Include="MultiTenancy\IPersistLogonAttempt.cs" />
+    <Compile Include="MultiTenancy\ApplicationUserTenantQuery.cs" />
+    <Compile Include="MultiTenancy\IApplicationUserTenantQuery.cs" />
     <Compile Include="MultiTenancy\NHibernate\TenantUnitOfWorkAspect.cs" />
     <Compile Include="MultiTenancy\NHibernate\TenantUnitOfWorkAttribute.cs" />
     <Compile Include="MultiTenancy\PersistLogonAttempt.cs" />
