@@ -20,7 +20,6 @@ ECHO. >> "%MySettings%"
 ECHO $(DB_CCC7)^|%CCC7DB%>>"%MySettings%"
 ECHO $(DB_ANALYTICS)^|%AnalyticsDB%>>"%MySettings%"
 ECHO $(AS_DATABASE)^|%AnalyticsDB%>>"%MySettings%"
-ECHO $(DATASOURCE_NAME)^|Sikuli>>"%MySettings%"
 
 ::telling what files to modify
 SET configFilesFolder=%ROOTDIR%\Teleopti.Support.Tool\bin\%configuration%\ConfigFiles

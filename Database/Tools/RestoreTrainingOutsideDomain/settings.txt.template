@@ -29,6 +29,5 @@ $(ETL_TOOL_nhibConfPath)|c:\Program Files (x86)\Teleopti\ConfigurationFiles
 $(SDK_nhibConfPath)|c:\Program Files (x86)\Teleopti\ConfigurationFiles
 $(AGENTPORTALWEB_nhibConfPath)|c:\Program Files (x86)\Teleopti\ConfigurationFiles
 $(CONFIGURATION_FILES_PATH)|c:\Program Files (x86)\Teleopti\ConfigurationFiles
-$(DATASOURCE_NAME)|Teleopti CCC
 $(ETLPM_BINDING_NAME)|Etl_Pm_Http_Binding
 $(WEB_DEPLOY)|true

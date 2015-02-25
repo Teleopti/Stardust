@@ -40,7 +40,6 @@ ECHO $(AGENTPORTALWEB_nhibConfPath)^|bin>>"%MySettings%"
 ECHO $(DB_CCC7)^|%CCC7DB%>>"%MySettings%"
 ECHO $(DB_ANALYTICS)^|%AnalyticsDB%>>"%MySettings%"
 ECHO $(AS_DATABASE)^|%AnalyticsDB%>>"%MySettings%"
-ECHO $(DATASOURCE_NAME)^|TestData>>"%MySettings%"
 ECHO $(TOGGLE_MODE)^|%ToggleMode%>>"%MySettings%"
 
 ::telling what config to modify

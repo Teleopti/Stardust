@@ -204,7 +204,6 @@ Try
     Add-Content "$fullPathsettingsFile" "`$(PM_SERVICE|NotImplemented"
     Add-Content "$fullPathsettingsFile" "`$(AS_DATABASE)|NotImplemented"
     Add-Content "$fullPathsettingsFile" "`$(AS_SERVER_NAME)|NotImplemented"
-	Add-Content "$fullPathsettingsFile" "`$(DATASOURCE_NAME)|$DataSourceName"
     Add-Content "$fullPathsettingsFile" "`$(LOCAL_WIKI)|http://wiki.teleopti.com/TeleoptiCCC/Special:MyLanguage/"
     Add-Content "$fullPathsettingsFile" "`$(ETLPM_BINDING_NAME)|Etl_Pm_Https_Binding"	
 	Add-Content "$fullPathsettingsFile" "`$(URL)|https://$DataSourceName.teleopticloud.com/Web/"

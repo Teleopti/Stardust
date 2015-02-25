@@ -38,7 +38,6 @@ $(CONFIGURATION_FILES_PATH)|c:\nhib
 <compilation targetFramework="4.0"|<compilation debug="true" targetFramework="4.0"
 <compilation targetFramework="4.5"|<compilation debug="true" targetFramework="4.5"
 $(SDK_nhibConfPath)|c:\nhib
-$(DATASOURCE_NAME)|Teleopti WFM
 $(ETLPM_BINDING_NAME)|Etl_Pm_Http_Binding
 $(WEB_DEPLOY)|false
 _replace_|c:\InfraTest.ini
