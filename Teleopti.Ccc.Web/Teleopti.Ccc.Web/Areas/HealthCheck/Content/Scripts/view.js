@@ -24,7 +24,7 @@ define([
     	signalR: sigR,
     	messageBroker: $.connection.MessageBrokerHub,
 		checkBus: function() {
-			http.get('HealthCheck/Application/CheckBus').done(function (data) { console.log(data.InitiatorId); });
+			http.get('HealthCheck/Application/CheckBus').done(function () {  });
 		},
 		loadEtlHistory: loadEtlHistory
     });
