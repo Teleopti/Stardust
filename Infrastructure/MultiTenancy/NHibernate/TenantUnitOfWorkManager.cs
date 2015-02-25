@@ -67,7 +67,6 @@ namespace Teleopti.Ccc.Infrastructure.MultiTenancy.NHibernate
 
 		public void CancelCurrent()
 		{
-			if (_sessionFactory == null) return;
 			var session = CurrentSessionContext.Unbind(_sessionFactory);
 			if (session == null) return;
 			
@@ -86,6 +85,7 @@ namespace Teleopti.Ccc.Infrastructure.MultiTenancy.NHibernate
 
 		public void Dispose()
 		{
+			if (_sessionFactory == null) return;
 			//to end just current transaction doesn't make sense in real code, but makes testing easier
 			CancelCurrent();
 		}
