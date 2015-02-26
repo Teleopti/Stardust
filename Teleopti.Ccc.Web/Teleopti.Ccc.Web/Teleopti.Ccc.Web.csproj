@@ -1552,15 +1552,11 @@
     <Content Include="Areas\Anywhere\Content\Translation\TranslationTemplate.txt" />
     <Content Include="WFM\css\animation.css" />
     <Content Include="WFM\css\material-spinner.css" />
-    <Content Include="WFM\css\_listO.scss" />
     <Content Include="Areas\Reporting\Views\Report\Adherence.cshtml" />
-    <Content Include="WFM\css\_formO.scss" />
-    <Content Include="WFM\css\_buttonsO.scss" />
     <Content Include="Areas\Reporting\Views\Report\Empty.cshtml" />
     <Content Include=".node\kss-node.cmd" />
     <Content Include=".node\package.json" />
     <Content Include=".node\flatten-packages.cmd" />
-    <None Include="WFM\css\_materialO.scss" />
     <Content Include="WFM\html\forecasting-run.html" />
     <Content Include="WFM\html\forecasting.html" />
     <Content Include="WFM\html\main.html" />
@@ -1862,8 +1858,6 @@
     <Content Include="Areas\Reporting\Views\web.config" />
     <Content Include="Areas\Reporting\Views\Report\Index.cshtml" />
     <Content Include="WFM\css\_role.scss" />
-    <Content Include="WFM\css\_tree.scss" />
-    <Content Include="WFM\css\_navbarO.scss" />
     <None Include="PasswordPolicy.xml.notinuse">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
@@ -2061,7 +2055,7 @@ copy "$(ProjectDir)..\..\Domain\FeatureFlags\toggles.txt" "$(TargetDir)FeatureFl
   </PropertyGroup>
   <Import Project=".node\node.targets" Condition="Exists('.node\node.targets')" />
   <Target Name="BeforeBuild">
-    <CallTarget Targets="RestoreNodePackageProtractor;RestoreNodePackages;RunGruntBuild;BuildStyleGuide" />
+    <CallTarget Targets="RestoreNodePackageProtractor;RestoreNodePackages;RunGruntBuild" />
   </Target>
   <!--  <Import Project="..\..\.nuget\Microsoft.Bcl.Build.targets" Condition="Exists('..\..\.nuget\Microsoft.Bcl.Build.targets')" />
   <Target Name="EnsureBclBuildImported" BeforeTargets="BeforeBuild" Condition="'$(BclBuildImported)' == ''">

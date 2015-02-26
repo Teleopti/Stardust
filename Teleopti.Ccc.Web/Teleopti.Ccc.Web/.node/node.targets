@@ -55,12 +55,7 @@
 		<StyleguideFiles Include="$(MSBuildProjectDirectory)\WFM\styleguide;$(MSBuildProjectDirectory)\Areas\WFM\styleguide\**\*" />
 		<MainCssFiles Include="$(MSBuildProjectDirectory)\WFM\css\**\main.*" />
 	</ItemGroup>
-	<Target Name="BuildStyleGuide" Inputs="@(CssFiles);@(TemplateFiles);@(MainCssFiles)" Outputs="@(StyleguideFiles)">
-		<Message Text="Restore Node Packages Command: $(NpmInstallKssCmd) /w WorkingDirectory: $(NodeDir)" Importance="high" />
-		<Exec Command="$(NpmInstallKssCmd)" ContinueOnError="false" WorkingDirectory="$(NodeDir)" />
-		<Message Text="Build Style Guide Command: $(KssGenerateStyleGuide) /w WorkingDirectory: $(MSBuildProjectDirectory)\WFM" Importance="high" />
-		<Exec Command="$(KssGenerateStyleGuide)" ContinueOnError="false" WorkingDirectory="$(MSBuildProjectDirectory)\WFM" />
-	</Target>
+
 	
 	<!-- Install protractor -->
 	<Target Name="RestoreNodePackageProtractor">
