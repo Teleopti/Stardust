@@ -36,25 +36,23 @@ namespace Teleopti.Ccc.Web.Core.Startup
 			return null;
 		}
 
-		//rk - org from global.asax
 		private void registerGlobalFilters(GlobalFilterCollection filters)
 		{
 			filters.Add(new AjaxHandleErrorAttribute(_errorMessageProvider));
 			filters.Add(new TeleoptiPrincipalAuthorizeAttribute(_authenticationModule, _identityProviderProvider, new List<Type>
-			                                                    	{
-																		typeof(ShareCalendarController),
-																		typeof(TestController),
-																		typeof(UrlController),
-																		typeof(OpenIdController),
-																		typeof(Areas.SSO.Controllers.AuthenticationApiController),
-																		typeof(ApplicationAuthenticationApiController),
-																		typeof(ToggleHandlerController),
-																		typeof(StateController),
-																		typeof(ActivityChangeController),
-																		typeof(MessageBrokerController),
-																		typeof(ApplicationController),
-																		typeof(TenantController)
-			                                                    	}));
+			{
+				typeof (ShareCalendarController),
+				typeof (TestController),
+				typeof (UrlController),
+				typeof (OpenIdController),
+				typeof (ApplicationAuthenticationApiController),
+				typeof (ToggleHandlerController),
+				typeof (StateController),
+				typeof (ActivityChangeController),
+				typeof (MessageBrokerController),
+				typeof (ApplicationController),
+				typeof (TenantController)
+			}));
 		}
 	}
 }
