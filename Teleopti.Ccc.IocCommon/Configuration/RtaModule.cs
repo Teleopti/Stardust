@@ -40,7 +40,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 
 			builder.RegisterType<AgentDateProvider>().SingleInstance().As<IAgentDateProvider>();
 			builder.RegisterType<AdherencePercentageViewModelBuilder>().SingleInstance().As<IAdherencePercentageViewModelBuilder>();
-			builder.RegisterType<AdherenceDetailsViewModelBuilderViewModelBuilder>().SingleInstance().As<IAdherenceDetailsViewModelBuilder>();
+			builder.RegisterType<AdherenceDetailsViewModelBuilder>().SingleInstance().As<IAdherenceDetailsViewModelBuilder>();
 			builder.RegisterType<RtaDecoratingEventPublisher>().As<IRtaDecoratingEventPublisher>().SingleInstance();
 
 			if (_config.Toggle(Toggles.RTA_SeePercentageAdherenceForOneAgent_30783) ||

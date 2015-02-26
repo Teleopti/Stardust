@@ -12,7 +12,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta
 		IEnumerable<AdherenceDetailViewModel> Build(Guid personId);
 	}
 
-	public class AdherenceDetailsViewModelBuilderViewModelBuilder : IAdherenceDetailsViewModelBuilder
+	public class AdherenceDetailsViewModelBuilder : IAdherenceDetailsViewModelBuilder
 	{
 		private readonly INow _now;
 		private readonly IAdherenceDetailsReadModelReader _persister;
@@ -20,7 +20,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta
 		private readonly IUserTimeZone _timeZone;
 		private readonly ICurrentBelongsToDate _date;
 
-		public AdherenceDetailsViewModelBuilderViewModelBuilder(
+		public AdherenceDetailsViewModelBuilder(
 			INow now, 
 			IAdherenceDetailsReadModelReader persister, 
 			IUserCulture culture, 
