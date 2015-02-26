@@ -1,3 +1,9 @@
+
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[ReadModel].[LoadPersonSchedule]') AND type in (N'P', N'PC'))
+DROP PROCEDURE  [ReadModel].[LoadPersonSchedule] 
+GO
+
+
 /****** Object:  StoredProcedure [ReadModel].[LoadPersonSchedule]    Script Date: 2/25/2015 2:28:02 PM ******/
 SET ANSI_NULLS ON
 GO
