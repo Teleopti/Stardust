@@ -294,6 +294,7 @@ define([
 		this.SelectLayer = function (layer, parents) {
 			if (parents[1].hasOwnProperty('Id')) return; //Only activity for selected agent can be selected.
 			if (!self.Resources.MyTeam_MakeTeamScheduleConsistent_31897 || !self.MovingActivity()) return;
+			self.MoveActivityForm.reset();
 			self.MoveActivityForm.IsChangingLayer(true);
 			deselectAllLayersExcept();
 			self.SelectedStartMinutes(layer.StartMinutes());
