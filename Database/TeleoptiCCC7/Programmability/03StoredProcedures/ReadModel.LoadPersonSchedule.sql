@@ -76,7 +76,7 @@ BEGIN
 
 	INSERT INTO @filterEndTimeList(endTimeStart, endTimeEnd)
 	SELECT startTime,endTime
-	FROM [dbo].[SplitAndMergeTimeInterval](@filterEndTimes)
+	FROM [dbo].[SplitAndMergeTimeInterval](@filterEndTimes);
 
 	WITH ScheduleResultSet AS
 	(
