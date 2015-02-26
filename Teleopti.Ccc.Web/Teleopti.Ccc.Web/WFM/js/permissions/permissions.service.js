@@ -1,4 +1,6 @@
-﻿var permissionsService = angular.module('restService', ['ngResource']);
+﻿'use strict';
+
+var permissionsService = angular.module('restService', ['ngResource']);
 permissionsService.service('Permissions', ['$resource', function ($resource) {
 	this.roles = $resource('../api/Permissions/Roles', {}, {
 		get: { method: 'GET', params: {}, isArray: true },

@@ -6,26 +6,28 @@ var wfm = angular.module('wfm', [
 	'ui.tree',
     'ngMaterial',
     'angularMoment',
-    'wfmCtrls',
-	'restService'
+	'restService',
+	'wfmCtrls',
+	'wfm.permissions',
+	'wfm.forecasting'
 ]);
 wfm.config(['$stateProvider', '$urlRouterProvider',function ($stateProvider, $urlRouterProvider) {
-    $urlRouterProvider.otherwise("forecasting");
-    $stateProvider.state('main', {
+	$urlRouterProvider.otherwise("forecasting");
+    $stateProvider.state('main', { 
         url:'/',
         templateUrl: 'html/main.html',
         controller: 'MainCtrl'
     }).state('forecasting', {
         url:'/forecasting',
-        templateUrl: 'html/forecasting.html',
+        templateUrl: 'html/forecasting/forecasting.html',
         controller: 'ForecastingCtrl'
     }).state('forecasting.run', {
         params:{period: {}},
-        templateUrl: 'html/forecasting-run.html',
+        templateUrl: 'html/forecasting/forecasting-run.html',
         controller: 'ForecastingRunCtrl'
     }).state('permissions', {
     	url: '/permissions',
-    	templateUrl: 'html/permissions.html',
+    	templateUrl: 'html/permissions/permissions.html',
     	controller: 'PermissionsCtrl'
     });
 }]).run(['$rootScope', '$http', '$state', function ($rootScope, $http, $state) {
