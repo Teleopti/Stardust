@@ -1191,6 +1191,7 @@
     <Content Include="Areas\SeatPlanner\Content\Styles\BootstrapXL.css" />
     <Content Include="Areas\SeatPlanner\Content\Styles\Site.css" />
     <Content Include="Areas\SeatPlanner\Content\Templates\SeatMap\view.html" />
+    <Content Include="WFM\css\main.css" />
     <Content Include="WFM\css\material.css" />
     <Content Include="WFM\Gruntfile.js" />
     <Content Include="WFM\js\permissions.service.js" />
@@ -1551,16 +1552,15 @@
     <Content Include="Areas\Anywhere\Content\Translation\TranslationTemplate.txt" />
     <Content Include="WFM\css\animation.css" />
     <Content Include="WFM\css\material-spinner.css" />
-    <Content Include="WFM\css\_list.scss" />
+    <Content Include="WFM\css\_listO.scss" />
     <Content Include="Areas\Reporting\Views\Report\Adherence.cshtml" />
-    <Content Include="WFM\css\_styleguide.scss" />
-    <Content Include="WFM\css\_form.scss" />
-    <Content Include="WFM\css\_buttons.scss" />
+    <Content Include="WFM\css\_formO.scss" />
+    <Content Include="WFM\css\_buttonsO.scss" />
     <Content Include="Areas\Reporting\Views\Report\Empty.cshtml" />
     <Content Include=".node\kss-node.cmd" />
     <Content Include=".node\package.json" />
     <Content Include=".node\flatten-packages.cmd" />
-    <None Include="WFM\css\_material.scss" />
+    <None Include="WFM\css\_materialO.scss" />
     <Content Include="WFM\html\forecasting-run.html" />
     <Content Include="WFM\html\forecasting.html" />
     <Content Include="WFM\html\main.html" />
@@ -1861,14 +1861,9 @@
     <Content Include=".node\grunt.cmd" />
     <Content Include="Areas\Reporting\Views\web.config" />
     <Content Include="Areas\Reporting\Views\Report\Index.cshtml" />
-    <Content Include="WFM\css\main.scss" />
     <Content Include="WFM\css\_role.scss" />
     <Content Include="WFM\css\_tree.scss" />
-    <Content Include="WFM\css\_variables.scss" />
-    <Content Include="WFM\css\_tooltip.scss" />
-    <Content Include="WFM\css\_navbar.scss" />
-    <Content Include="WFM\css\_tables.scss" />
-    <Content Include="WFM\css\_typo.scss" />
+    <Content Include="WFM\css\_navbarO.scss" />
     <None Include="PasswordPolicy.xml.notinuse">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>

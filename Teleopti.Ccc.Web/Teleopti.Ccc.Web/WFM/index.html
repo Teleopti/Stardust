@@ -7,7 +7,11 @@
 	<link rel="stylesheet" href="css/material-spinner.css">
 	<link rel="stylesheet" href="vendor/angular-ui-tree/angular-ui-tree.min.css">
 	<link rel="stylesheet" href="css/main.css">
-  
+	<link rel="stylesheet" href="css/layout.css">
+	<link rel="stylesheet" href="../css/materialdesignicons.min.css" media="all" type="text/css" />
+
+	
+
 	<script src="node_modules/angular/angular.min.js"></script>
 	<script src="node_modules/angular-ui-router/release/angular-ui-router.min.js"></script>
 	<script src="node_modules/angular-resource/angular-resource.min.js"></script>
@@ -26,10 +30,20 @@
 
 </head>
 <body>
-    <div ng-include="'html/nav.html'" class="navbar navbar-default navbar-static-top " role="navigation"></div>
-    <div class="material-header material-depth-1"></div>
-	<div class="container material-depth-2 material-block " ui-view>
+	<div ng-include="'html/nav.html'" class="material-depth-1 navbar navbar-default navbar-static-top " role="navigation"></div>
+	<div class="layout-container">
+		<div class="sidenav">
+			<div class="wfm-block sub-header">Permissions</div>
+			<div class="wfm-block sub-header">Forecasting</div>
+			<div class="wfm-block sub-header">Scheduling</div>
+		</div>
+		<div class="container content material-depth-2 material-block " ui-view>
 
+		</div>
+		<div class="sidenav">
+			<div class="wfm-block sub-header">Notifications</div>
+			<div class="wfm-block sub-header">Help</div>
+		</div>
 	</div>
 </body>
 </html>

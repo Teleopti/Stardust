@@ -1,14 +1,10 @@
-﻿<div class="row">
+﻿<div >
+	<h4>Permissions</h4>
+	<p>Here you can decide who is allowed to access specific parts of the application</p>
 
-	<div class="container">
-		<div class="navbar-header"><a class="navbar-brand">Permissions</a></div>
-		<div class="collapse navbar-collapse">
-
-		</div>
-	</div>
-
-	<div class="role-nav col-md-4 ">
-		<div class="align-center">
+	<div class="role-nav col-md-4 material-depth-1 container-block">
+		<div class="wfm-block sub-header">Roles</div>
+		<div class="wfm-block">
 			<form ng-submit="createRole(); reset()">
 				<input type="text" ng-model="roleName" placeholder="Create new role" class="role-input material-depth-1 role" />
 			</form>
@@ -21,7 +17,7 @@
 		</div>
 		<div id="searchRoleResults" class="role-container">
 			<ul class="wfm-list">
-				<li ng-repeat="role in roles | filter:searchRoles" ng-click="showRole(role.Id)" ng-dblclick="editing = true" ng-class="{'wfm-list-item-selected': role.Id==selectedRole}" class="role-btn wfm-list-item material-depth-1 role">
+				<li ng-repeat="role in roles | filter:searchRoles" ng-click="showRole(role.Id)" ng-dblclick="editing = true" ng-class="{'wfm-list-item-selected': role.Id==selectedRole}" class="role-btn wfm-block wfm-list-item material-depth-1 role">
 					<div class="wfm-list-menu pull-right">
 						<span ng-click="copyRole(role.Id)">
 							<svg style="width:18px;height:18px" viewBox="0 0 24 24">
@@ -59,7 +55,7 @@
 
 	
 
-	<div class="roles-details-wrapper col-md-8">
+	<div class="roles-details-wrapper col-md-8 material-depth-1 container-block">
 		<ul class="wfm-toggle-group">
 			<li>
 				<label ng-model="roleDetails" btn-radio="'functionsAvailable'">function</label>
@@ -69,9 +65,9 @@
 				<label ng-model="roleDetails" btn-radio="'dataAvailable'">data</label>
 			</li>
 		</ul>
-		
+
 		<div ng-show="roleDetails=='functionsAvailable'">
-			<form class="filter-form">
+			<form class="filter-form wfm-block">
 				<svg style="width: 18px; height: 18px;" viewBox="0 0 24 24">
 					<path fill="#000000" d="M9.5,3A6.5,6.5 0 0,1 16,9.5C16,11.11 15.41,12.59 14.44,13.73L14.71,14H15.5L20.5,19L19,20.5L14,15.5V14.71L13.73,14.44C12.59,15.41 11.11,16 9.5,16A6.5,6.5 0 0,1 3,9.5A6.5,6.5 0 0,1 9.5,3M9.5,5C7,5 5,7 5,9.5C5,12 7,14 9.5,14C12,14 14,12 14,9.5C14,7 12,5 9.5,5Z" />
 				</svg>
@@ -94,7 +90,7 @@
 				</svg>
 				<input type="text" name="filterDetails" ng-model="searchData" placeholder="Data filter ..." />
 			</form>
-			
+
 			<div class="tree">
 				<div ui-tree data-drag-enabled="false">
 					<ol ui-tree-nodes="" ng-model="organization.DynamicOptions" class="tree-line">

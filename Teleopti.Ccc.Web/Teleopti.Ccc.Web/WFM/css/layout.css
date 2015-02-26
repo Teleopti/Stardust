@@ -1,0 +1,35 @@
+﻿.layout-container {
+  width:100%;
+  /* flexbox specific properties */
+  display: -webkit-flex;
+  display: flex;
+  -webkit-flex-direction: row;
+  flex-direction: row;
+}
+.layout-container .sidenav {
+  /* flexbox specific properties */
+  -webkit-flex: auto;
+  flex: auto;
+	flex-basis: 15%;
+}
+
+.layout-container .content {
+  /* flexbox specific properties */
+  -webkit-flex: auto;
+  flex: auto;
+	padding: 10px;
+	flex-basis: 70%;
+	margin: 10px;
+}
+
+.container-block {
+	background-color: rgb(205, 200, 200); /*ah ah too ugly, you have to refactor that*/
+}
+
+.col-md-4, .col-md-8 { /* please bootstrap, don't make any assumption about padding' */
+	padding: 0;
+}
+
+.sidenav .wfm-block {
+	padding: 12px 5px ;
+}
