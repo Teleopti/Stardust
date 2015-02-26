@@ -210,6 +210,7 @@
     <Compile Include="LiteUnitOfWork\ReadModelUnitOfWorkFactory.cs" />
     <Compile Include="LiteUnitOfWork\ReadModelUnitOfWorkState.cs" />
     <Compile Include="MultiTenancy\AuthenticationFromFileQuerier.cs" />
+    <Compile Include="MultiTenancy\FindTenantAndPersonIdForIdentity.cs" />
     <Compile Include="MultiTenancy\IIdentityUserQuery.cs" />
     <Compile Include="MultiTenancy\IdentityUserQuery.cs" />
     <Compile Include="MultiTenancy\ApplicationUserQuery.cs" />
