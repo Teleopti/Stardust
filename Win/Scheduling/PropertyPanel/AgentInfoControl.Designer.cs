@@ -510,7 +510,7 @@
 			this.labelDayOffPoints.Name = "labelDayOffPoints";
 			this.labelDayOffPoints.Size = new System.Drawing.Size(144, 22);
 			this.labelDayOffPoints.TabIndex = 1;
-			this.labelDayOffPoints.Text = "xxDayOffPoints";
+			this.labelDayOffPoints.Text = "xxDayOffValueColon";
 			this.labelDayOffPoints.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			// 
 			// labelShiftCategoryPoint
@@ -521,7 +521,7 @@
 			this.labelShiftCategoryPoint.Name = "labelShiftCategoryPoint";
 			this.labelShiftCategoryPoint.Size = new System.Drawing.Size(144, 22);
 			this.labelShiftCategoryPoint.TabIndex = 0;
-			this.labelShiftCategoryPoint.Text = "xxShiftCategoryPoints";
+			this.labelShiftCategoryPoint.Text = "xxShiftCategoryValueColon";
 			this.labelShiftCategoryPoint.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			// 
 			// label2

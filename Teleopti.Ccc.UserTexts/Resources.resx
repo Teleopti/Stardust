@@ -12851,4 +12851,12 @@ Reduce the complexity to use these shifts.</value>
     <value>Show Word Report</value>
     <comment>on report parameter selection page</comment>
   </data>
+  <data name="DayOffValueColon" xml:space="preserve">
+    <value>Day Off Value:</value>
+    <comment>Day off value for the selected agent. Under fairness tab in agent info</comment>
+  </data>
+  <data name="ShiftCategoryValueColon" xml:space="preserve">
+    <value>Shift Category Value:</value>
+    <comment>Shift category value for the selected agent. Under fairness tab in agent info</comment>
+  </data>
 </root>
