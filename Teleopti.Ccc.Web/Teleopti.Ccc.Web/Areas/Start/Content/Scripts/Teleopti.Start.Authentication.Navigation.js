@@ -1,7 +1,7 @@
 ﻿
 Teleopti.Start.Authentication.NavigationConstructor = function () {
-	this.GotoBusinessUnits = function (authenticationType, dataSourceName) {
-		window.location.hash = 'businessunit/' + authenticationType + '/' + encodeURIComponent(dataSourceName);
+	this.GotoBusinessUnits = function () {
+		window.location.hash = 'businessunit';
 	};
 	this.GotoSignIn = function () {
 		window.location.hash = '';

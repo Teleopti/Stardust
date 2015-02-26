@@ -16,7 +16,7 @@ Teleopti.Start.Authentication.AuthenticationState = function (data) {
 			success: function (responseData, textStatus, jqXHR) {
 
 				if (responseData.length > 1) {
-					gotoBusinessUnitsView(authenticationModel.type, authenticationModel.datasource);
+					gotoBusinessUnitsView();
 					return;
 				}
 

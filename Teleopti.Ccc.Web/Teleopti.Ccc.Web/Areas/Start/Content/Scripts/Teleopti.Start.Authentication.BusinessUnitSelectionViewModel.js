@@ -6,8 +6,6 @@ Teleopti.Start.Authentication.BusinessUnitSelectionViewModel = function (data) {
 	this.LoadBusinessUnits = function () {
 		data.authenticationState.GetDataForBusinessUnitSelectionView({
 			data: {
-				type: data.authenticationType,
-				datasource: data.dataSourceName
 			},
 			businessunits: function (businessunits) {
 				self.BusinessUnits([]);

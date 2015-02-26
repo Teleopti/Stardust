@@ -7,6 +7,6 @@ Teleopti.Start.Authentication.SignInView = function (args) {
 		});
 		data.render(args.html);
 		ko.applyBindings(viewModel, data.element[0]);
-		viewModel.LoadDataSources();
+		viewModel.SignIn();
 	};
 };

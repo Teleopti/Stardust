@@ -29,17 +29,11 @@
 		<div id="view" class="login-form"></div>
 
 		<div id="signin">
-
-			<div id="DataSources" data-bind="visible: DataSourcesVisible, foreach: DataSources" class="list-group">
-				<a href="#" class="list-group-item" data-bind="click: $parent.SignIn">
-					<span data-bind="text: Name"></span>
-				</a>
-			</div>
 			<div id="Signin-error"
-				 class="alert alert-warning"
-				 data-bind="visible: HasErrorMessage, text: ErrorMessage"
-				 data-nobusinessunitext="@Resources.NoAllowedBusinessUnitFoundInCurrentDatabase"
-				 data-nodatasourcetext="@Resources.NoDatasource">
+					 class="alert alert-warning"
+					 data-bind="visible: HasErrorMessage, text: ErrorMessage"
+					 data-nobusinessunitext="@Resources.NoAllowedBusinessUnitFoundInCurrentDatabase"
+					 data-nodatasourcetext="@Resources.NoDatasource">
 			</div>
 			<div data-bind="if: ShowSignInAsAnotherUser">
 				<a class="btn btn-primary" href="authentication/SignOut">@Resources.SignInAsAnotherUser</a>

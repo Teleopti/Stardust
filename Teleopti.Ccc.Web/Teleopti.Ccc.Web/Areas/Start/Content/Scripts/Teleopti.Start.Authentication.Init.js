@@ -51,6 +51,7 @@ Teleopti.Start.Authentication.Init = function () {
 	function _initRoutes() {
 		var viewRegex = 'signin|businessunit|menu';
 		var authenticationTypeRegex = 'windows|application_token';
+		//TODO: tenant - remove datasource stuff here
 		var dataSourceNameRegex = '.*';
 		crossroads.addRoute(
 			new RegExp('^(' + viewRegex + ')/(' + authenticationTypeRegex + ')/(' + dataSourceNameRegex + ')$', "i"),
