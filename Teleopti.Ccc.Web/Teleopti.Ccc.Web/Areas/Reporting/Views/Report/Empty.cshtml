@@ -3,6 +3,7 @@
 }
 <script type="text/javascript">
 	var id = window.location.hash.substr(1);
-	if(id != '')
-		window.location = window.location.pathname + "/Report/" + id + "#" + id;
+	if (id === '')
+		id = '00000000-0000-0000-0000-000000000000';
+	window.location = window.location.pathname + "/Report/" + id + "#" + id;
 </script>

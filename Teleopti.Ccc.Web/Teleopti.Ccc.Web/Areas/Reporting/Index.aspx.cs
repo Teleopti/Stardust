@@ -49,8 +49,9 @@ namespace Teleopti.Ccc.Web.Areas.Reporting
 					buttonShowExcel.Visible = false;
 					buttonShowPdf.Visible = false;
 					buttonShowWord.Visible = false;
-					labelPermissionDenied.Visible = true;
 					ParameterSelector.Visible = false;
+					if (ReportId.Equals(Guid.Empty)) return;
+					labelPermissionDenied.Visible = true;
 					labelPermissionDenied.Text = Resources.ResPermissionDenied;
 					Page.Header.Title = Resources.ResPermissionDenied;
 				}
