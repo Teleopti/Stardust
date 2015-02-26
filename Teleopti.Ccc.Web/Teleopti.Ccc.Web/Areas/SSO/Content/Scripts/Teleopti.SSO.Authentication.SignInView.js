@@ -10,10 +10,6 @@ Teleopti.SSO.Authentication.SignInView = function (args) {
 
 		Teleopti.SSO.Common.Layout.ActivatePlaceHolderText();
 
-		viewModel.UserNameFocus.subscribe(function (newValue) {
-			if (newValue == true) {
-				$('#Username-input').focus();
-			}
-		});
+		$('#Username-input').focus();
 	};
 };

@@ -12,12 +12,6 @@ Teleopti.SSO.Authentication.SignInViewModel = function (data) {
 
 	this.Ajax = new Teleopti.SSO.Authentication.JQueryAjaxViewModel();
 
-	//TODO: tenant - can this be hard coded instead?
-	this.DisplayUserNameAndPasswordBoxes = ko.observable(true);
-
-	//TODO: tenant - can this be hard coded instead?
-	this.UserNameFocus = ko.observable(true);
-
 	this.SignIn = function () {
 		if (!self.UserName() || !self.Password())
 			return;
