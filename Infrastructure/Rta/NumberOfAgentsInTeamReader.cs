@@ -35,8 +35,11 @@ FROM
 	FROM dbo.v_PersonPeriodTeamSiteBu pp WITH(NOEXPAND)
 	WHERE pp.StartDate <= :now 
 ) a
+inner join person p on 
+a.parent = p.id
 where a.is_current=1
 and a.Team in (:teams)
+and (p.TerminalDate is null or p.TerminalDate > :now)
 group by a.Team";
 
 
