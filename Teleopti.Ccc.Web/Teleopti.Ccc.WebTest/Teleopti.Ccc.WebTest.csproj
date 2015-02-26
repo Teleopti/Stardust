@@ -389,7 +389,6 @@
     <Compile Include="Areas\SSO\OpenIdProviderWapperTest.cs" />
     <Compile Include="Areas\SSO\Contollers\ApplicationAuthenticationApiControllerTest.cs" />
     <Compile Include="Areas\Start\Core\Authentication\ViewModelFactory\BusinessUnitsViewModelFactoryTest.cs" />
-    <Compile Include="Areas\Start\Core\AuthenticationModelBinderTest.cs" />
     <Compile Include="Areas\Anywhere\Controllers\PersonControllerTest.cs" />
     <Compile Include="Areas\Anywhere\Hubs\GroupScheduleHubTest.cs" />
     <Compile Include="Areas\Anywhere\AnywhereAreaRegistrationTest.cs" />
@@ -406,8 +405,6 @@
     <Compile Include="Areas\Start\Controllers\ApplicationAuthenticationModelTest.cs" />
     <Compile Include="Areas\Start\Controllers\AuthenticationApiControllerTest.cs" />
     <Compile Include="Areas\Start\Controllers\AuthenticationControllerTest.cs" />
-    <Compile Include="Areas\Start\Controllers\WindowsAuthenticationModelTest.cs" />
-    <Compile Include="Areas\Start\Core\Authentication\ViewModelFactory\DataSourcesViewModelFactoryTest.cs" />
     <Compile Include="Areas\Start\Core\IpAddressResolverTest.cs" />
     <Compile Include="Core\Asm\ViewModelFactory\AsmViewModelFactoryTest.cs" />
     <Compile Include="Core\Asm\Mapping\AsmViewModelMapperTest.cs" />

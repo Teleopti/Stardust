@@ -1,14 +1,11 @@
 ﻿using Autofac;
-using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Infrastructure.Foundation;
-using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.Web.Areas.SSO.Core;
 using Teleopti.Ccc.Web.Areas.Start.Core.Authentication.DataProvider;
 using Teleopti.Ccc.Web.Areas.Start.Core.Authentication.Services;
 using Teleopti.Ccc.Web.Areas.Start.Core.Authentication.ViewModelFactory;
 using Teleopti.Ccc.Web.Areas.Start.Core.LayoutBase;
 using Teleopti.Ccc.Web.Areas.Start.Core.Shared;
-using Teleopti.Ccc.Web.Areas.Start.Models.Authentication;
 using Teleopti.Ccc.Web.Areas.Tenant.Core;
 using Teleopti.Ccc.Web.Core;
 using Teleopti.Ccc.Web.Core.RequestContext.Cookie;
@@ -27,7 +24,6 @@ namespace Teleopti.Ccc.Web.Areas.Start.Core.IoC
 			builder.RegisterType<LogTenancyLogonAttempt>().As<ILogLogonAttempt>().SingleInstance();
 			builder.RegisterType<LoginAttemptModelFactoryForWeb>().As<ILoginAttemptModelFactory>();
 
-			//TODO: tenant - Authenticator should be replaced later - doing it "wrong" currently
 			builder.RegisterType<Authenticator>().As<IIdentityLogon>();
 			builder.RegisterType<HttpRequestUserAgent>().As<IHttpRequestUserAgent>();
 			
@@ -41,13 +37,8 @@ namespace Teleopti.Ccc.Web.Areas.Start.Core.IoC
 			builder.RegisterType<SessionSpecificDataStringSerializer>().As<ISessionSpecificDataStringSerializer>().SingleInstance();
 
 			builder.RegisterType<BusinessUnitsViewModelFactory>().As<IBusinessUnitsViewModelFactory>();
-			builder.RegisterAssemblyTypes(GetType().Assembly)
-				.AssignableTo<IAuthenticationType>()
-				.As<IAuthenticationType>()
-				.SingleInstance();
 
 			builder.RegisterType<AvailableApplicationIdentityDataSource>().As<IAvailableApplicationTokenDataSource>();
-			builder.RegisterType<DataSourcesViewModelFactory>().As<IDataSourcesViewModelFactory>().SingleInstance();
 		}
 	}
 }

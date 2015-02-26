@@ -6,7 +6,6 @@ using Teleopti.Ccc.Secrets.Licensing;
 using Teleopti.Ccc.UserTexts;
 using Teleopti.Ccc.Web.Areas.Start.Core.Authentication.Services;
 using Teleopti.Ccc.Web.Areas.Start.Core.Authentication.ViewModelFactory;
-using Teleopti.Ccc.Web.Areas.Start.Models.Authentication;
 using Teleopti.Ccc.Web.Core;
 
 namespace Teleopti.Ccc.Web.Areas.Start.Controllers
@@ -14,28 +13,27 @@ namespace Teleopti.Ccc.Web.Areas.Start.Controllers
 	[OutputCache(NoStore = true, Duration = 0, VaryByParam = "None")]
 	public class AuthenticationApiController : Controller
 	{
-		private readonly IDataSourcesViewModelFactory _dataSourcesViewModelFactory;
 		private readonly IBusinessUnitsViewModelFactory _businessUnitViewModelFactory;
+		private readonly IIdentityLogon _identityLogon;
+		private readonly ILogLogonAttempt _logLogonAttempt;
 		private readonly IWebLogOn _webLogon;
 
-		public AuthenticationApiController(IDataSourcesViewModelFactory dataSourcesViewModelFactory, IBusinessUnitsViewModelFactory businessUnitViewModelFactory, IWebLogOn webLogon)
+		public AuthenticationApiController(IBusinessUnitsViewModelFactory businessUnitViewModelFactory, 
+																					IIdentityLogon identityLogon,
+																					ILogLogonAttempt logLogonAttempt,
+																					IWebLogOn webLogon)
 		{
-			_dataSourcesViewModelFactory = dataSourcesViewModelFactory;
 			_businessUnitViewModelFactory = businessUnitViewModelFactory;
+			_identityLogon = identityLogon;
+			_logLogonAttempt = logLogonAttempt;
 			_webLogon = webLogon;
 		}
 
 		[HttpGet]
-		public JsonResult DataSources()
-		{
-			return Json(_dataSourcesViewModelFactory.DataSources(), JsonRequestBehavior.AllowGet);
-		}
-
-		[HttpGet]
 		[TenantUnitOfWork]
-		public virtual JsonResult BusinessUnits(IAuthenticationModel model)
+		public virtual JsonResult BusinessUnits()
 		{
-			var result = model.AuthenticateUser();
+			var result = _identityLogon.LogonIdentityUser();
 			if (!result.Successful)
 				return errorMessage(result.Message);
 			var businessUnits = _businessUnitViewModelFactory.BusinessUnits(result.DataSource, result.Person);
@@ -44,12 +42,12 @@ namespace Teleopti.Ccc.Web.Areas.Start.Controllers
 
 		[HttpPost]
 		[TenantUnitOfWork]
-		public virtual JsonResult Logon(IAuthenticationModel model, Guid businessUnitId)
+		public virtual JsonResult Logon(Guid businessUnitId)
 		{
 			try
 			{
-				var result = model.AuthenticateUser();
-				model.SaveAuthenticateResult(result);
+				var result = _identityLogon.LogonIdentityUser();
+				_logLogonAttempt.SaveAuthenticateResult(string.Empty, result);
 				if (!result.Successful)
 					return errorMessage(Resources.LogOnFailedInvalidUserNameOrPassword);
 				_webLogon.LogOn(result.DataSource.DataSourceName, businessUnitId, result.Person.Id.Value);
