@@ -2,8 +2,8 @@
 
 var permissions = angular.module('wfm.permissions',[]);
 permissions.controller('PermissionsCtrl', [
-	'$scope', '$stateParams', '$filter', 'Permissions',
-	function ($scope, $stateParams, $filter, Permissions) {
+	'$scope', '$filter', 'Permissions',
+	function ($scope, $filter, Permissions) {
 		$scope.roles = [];
 		$scope.list = [];
 		$scope.roleName = null;

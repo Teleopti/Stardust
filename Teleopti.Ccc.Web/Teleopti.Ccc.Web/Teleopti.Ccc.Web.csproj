@@ -1197,7 +1197,7 @@
     <Content Include="WFM\js\permissions\permissions.controller.js" />
     <Content Include="WFM\js\permissions\permissions.service.js" />
     <Content Include="WFM\karma.conf.js" />
-    <Content Include="WFM\tests\permissions.controller.spec.js" />
+    <Content Include="WFM\tests\permissions\permissions.controller.spec.js" />
     <Content Include="Areas\Reporting\Content\Scripts\persianDatepicker.min.js" />
     <Content Include="Areas\Reporting\Content\Scripts\reportController.js" />
     <Content Include="Areas\Reporting\Content\Styles\calendar.css" />
