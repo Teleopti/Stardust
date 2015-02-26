@@ -78,10 +78,6 @@ BEGIN
 	SELECT startTime,endTime
 	FROM [dbo].[SplitAndMergeTimeInterval](@filterEndTimes)
 
-
-	
-	SET ROWCOUNT @maxIndex;
-
 	WITH ScheduleResultSet AS
 	(
 	  SELECT DISTINCT 

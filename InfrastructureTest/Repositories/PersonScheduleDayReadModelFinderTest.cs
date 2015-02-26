@@ -92,11 +92,11 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 		public void ShouldReturnReadModelsForPersonsAndDaySortedByShiftEndDescending()
 		{
 			_target = new PersonScheduleDayReadModelFinder(CurrentUnitOfWork.Make());
-			ISite site = SiteFactory.CreateSimpleSite("d");
+			ISite site = SiteFactory.CreateSimpleSite("site");
 			PersistAndRemoveFromUnitOfWork(site);
 			ITeam team = TeamFactory.CreateSimpleTeam();
 			team.Site = site;
-			team.Description = new Description("sdf");
+			team.Description = new Description("team");
 			PersistAndRemoveFromUnitOfWork(team);
 
 			IPerson per1 = PersonFactory.CreatePerson("roger", "kratz");
@@ -111,12 +111,12 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			PersistAndRemoveFromUnitOfWork(per2);
 			PersistAndRemoveFromUnitOfWork(per3);
 
-			createAndSaveReadModel(per1.Id.Value, Guid.NewGuid(), Guid.NewGuid(), new DateTime(2012, 8, 28), 10, 14);
-			createAndSaveReadModel(per2.Id.Value, Guid.NewGuid(), Guid.NewGuid(), new DateTime(2012, 8, 28), 7, 15);
-			createAndSaveReadModel(per3.Id.Value, Guid.NewGuid(), Guid.NewGuid(), new DateTime(2012, 8, 28), 8, 13);
+			createAndSaveReadModel((Guid)per1.Id, (Guid)team.Id, (Guid)site.BusinessUnit.Id, new DateTime(2012, 8, 28), 10, 14);
+			createAndSaveReadModel((Guid)per2.Id, (Guid)team.Id, (Guid)site.BusinessUnit.Id, new DateTime(2012, 8, 28), 7, 15);
+			createAndSaveReadModel((Guid)per3.Id, (Guid)team.Id, (Guid)site.BusinessUnit.Id, new DateTime(2012, 8, 28), 8, 13);
 
 			var result = _target.ForPersons(new DateOnly(2012, 8, 28),
-				new[] {per1.Id.Value, per2.Id.Value, per3.Id.Value}, new Paging(), timeSortOrder: "End DESC");
+				new[] { per1.Id.Value, per2.Id.Value, per3.Id.Value }, new Paging(){Skip = 0, Take = 20},  timeSortOrder: "end desc");
 
 			var scheduleReadModels = result as IList<PersonScheduleDayReadModel> ?? result.ToList();
 			Assert.That(scheduleReadModels.ElementAt(0).PersonId, Is.EqualTo(per2.Id.Value));
@@ -128,18 +128,18 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 		[Test]
 		public void ShouldReturnReadModelsForPersonsWithEmptySchedule()
 		{
-
 			_target = new PersonScheduleDayReadModelFinder(CurrentUnitOfWork.Make());
-			ISite site = SiteFactory.CreateSimpleSite("d");
+			ISite site = SiteFactory.CreateSimpleSite("site");
 			PersistAndRemoveFromUnitOfWork(site);
 			ITeam team = TeamFactory.CreateSimpleTeam();
 			team.Site = site;
-			team.Description = new Description("sdf");
+			team.Description = new Description("team");
 			PersistAndRemoveFromUnitOfWork(team);
 
 			IPerson per1 = PersonFactory.CreatePerson("roger", "kratz");
 			IPerson per2 = PersonFactory.CreatePerson("z", "balog");
 			IPerson per3 = PersonFactory.CreatePerson("a", "balog");
+
 			per1.AddPersonPeriod(new PersonPeriod(new DateOnly(2011, 1, 1), createPersonContract(), team));
 			per2.AddPersonPeriod(new PersonPeriod(new DateOnly(2011, 1, 1), createPersonContract(), team));
 			per3.AddPersonPeriod(new PersonPeriod(new DateOnly(2011, 1, 1), createPersonContract(), team));
