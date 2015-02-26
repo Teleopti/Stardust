@@ -160,8 +160,17 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.WFControls
 		}
 
         public void ReloadTemplateView(int templateIndex)
-		{
-			_detailViews[templateIndex-1].ReloadWorkloadDayTemplates();
+        {
+	        const int weekLength = 7;
+
+	        for (var i = 0; i < weekLength; i++)
+	        {
+		        if (_detailViews[0].TemplateIndex == i)
+		        {
+			        templateIndex = (templateIndex + weekLength - i)%weekLength;
+		        }
+	        }
+	        _detailViews[templateIndex].ReloadWorkloadDayTemplates();
 		}
 
 		protected override void OnLoad(EventArgs e)
