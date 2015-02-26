@@ -86,11 +86,11 @@ Scenario: Should see adherence details for night shift agents
 	| Name            | Adhering |
 	| Alarm Color     | Green    |
 	| Staffing effect | 0        |
-	When the utc time is '2014-10-06 21:00:00'
+	When the time is '2014-10-06 21:00:00'
 	And 'Pierre Baldi' sets his phone state to 'Ready' on datasource 6
-	And the utc time is '2014-10-07 01:00:00'
+	And the time is '2014-10-07 01:00:00'
 	And 'Pierre Baldi' sets his phone state to 'Pause' on datasource 6
-	And the utc time is '2014-10-07 05:00:00'
+	And the time is '2014-10-07 05:00:00'
 	And I view manage adherence view for agent 'Pierre Baldi'
 	Then I should see 'Phone' with adherence of 50%
 	And I should see daily adherence for 'Pierre Baldi' is 50%
