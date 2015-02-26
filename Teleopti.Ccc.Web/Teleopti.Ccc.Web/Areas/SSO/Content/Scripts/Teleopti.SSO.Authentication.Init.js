@@ -45,6 +45,7 @@ Teleopti.SSO.Authentication.Init = function () {
 	function _initRoutes() {
 		var viewRegex = 'signin';
 		var authenticationTypeRegex = 'application';
+		//TODO: tenant - remove datasource stuff
 		var dataSourceNameRegex = '.*';
 		crossroads.addRoute(
 			new RegExp('^(' + viewRegex + ')/(' + authenticationTypeRegex + ')/(' + dataSourceNameRegex + ')$', "i"),

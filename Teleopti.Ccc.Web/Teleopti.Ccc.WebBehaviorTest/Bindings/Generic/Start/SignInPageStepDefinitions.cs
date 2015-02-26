@@ -14,12 +14,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Start
 	[Binding]
 	public class SignInPageStepDefinitions
 	{
-
-		public void SelectTestDataSource()
-		{
-			Browser.Interactions.ClickContaining("#DataSources a", TestControllerMethods.TenantName);
-		}
-		
 		private void SignInApplication(string username, string password)
 		{
 			Browser.Interactions.TypeTextIntoInputTextUsingJQuery("#Username-input", username);
@@ -43,7 +37,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Start
 			var user = table.CreateInstance<UserConfigurable>();
 			var userName = user.UserName;
 			var password = user.Password;
-			WhenISelectApplicationLogonDataSource();
 			SignInApplication(userName, password);
 		}
 
@@ -54,14 +47,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Start
 			var userName = user.UserName;
 			var password = user.Password;
 			SignInApplication(userName, password);
-		}
-
-
-		[Given(@"I select application logon data source")]
-		[When(@"I select application logon data source")]
-		public void WhenISelectApplicationLogonDataSource()
-		{
-			SelectTestDataSource();
 		}
 
 		[When(@"I sign in by user name and wrong password")]
@@ -136,7 +121,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Start
 		public void WhenISignInUsingMyNewPassword(string newPassword)
 		{
 			var userName = DataMaker.Data().MePerson.ApplicationAuthenticationInfo.ApplicationLogOnName;
-			SelectTestDataSource();
 			SignInApplication(userName, newPassword);
 		}
 

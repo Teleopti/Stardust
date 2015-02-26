@@ -38,34 +38,29 @@ Scenario: Browse to root
 Scenario: Browse to root and sign in to MyTime
 	Given I have the role 'Access to mytime only'
 	When I navigate to the site's root
-	And I select application logon data source
 	And I sign in
 	Then I should see MyTime
 
 Scenario: Browse to root and sign in to Anywhere
 	Given I have the role 'Access to anywhere only'
 	When I navigate to the site's root
-	And I select application logon data source
 	And I sign in
 	Then I should see Anywhere
 
 Scenario: Browse to root and always sign in to Anywhere if have Anywhere permission
 	Given I have the role 'Access to all areas'
 	When I navigate to the site's root
-	And I select application logon data source
 	And I sign in
 	Then I should see Anywhere
 
 Scenario: Browse to MyTime and sign in
 	Given I have the role 'Access to all areas'
 	When I navigate to MyTime
-	And I select application logon data source
 	And I sign in
 	Then I should see MyTime
 	
 Scenario: Browse to Anywhere and sign in
 	Given I have the role 'Access to all areas'
 	When I navigate to Anywhere
-	And I select application logon data source
 	And I sign in
 	Then I should see Anywhere

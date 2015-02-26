@@ -22,7 +22,6 @@ Teleopti.SSO.Authentication.ChangePasswordViewModel = function (data) {
 		data.authenticationState.ApplyChangePassword({
 			baseUrl: data.baseUrl,
 			data: {
-				dataSourceName: data.dataSourceName,
 				newPassword: self.NewPassword(),
 				oldPassword: self.OldPassword()
 			},

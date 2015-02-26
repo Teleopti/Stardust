@@ -7,7 +7,6 @@ Teleopti.SSO.Authentication.SignInView = function (args) {
 		});
 		data.render(args.html);
 		ko.applyBindings(viewModel, data.element[0]);
-		viewModel.LoadDataSources();
 
 		Teleopti.SSO.Common.Layout.ActivatePlaceHolderText();
 

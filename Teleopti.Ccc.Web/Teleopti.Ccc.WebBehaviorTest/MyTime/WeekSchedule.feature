@@ -53,7 +53,6 @@ Background:
 Scenario: No access to schedule page
 	Given I have the role 'Only access to Anywhere'
 	And I navigate to Anywhere
-	And I select application logon data source
 	And I sign in
 	And I should see Anywhere
 	When I manually navigate to week schedule page

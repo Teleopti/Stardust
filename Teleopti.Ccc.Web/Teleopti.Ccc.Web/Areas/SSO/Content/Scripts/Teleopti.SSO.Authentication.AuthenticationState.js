@@ -29,10 +29,12 @@ Teleopti.SSO.Authentication.AuthenticationState = function (data) {
 			data: authenticationModel,
 			success: function (responseData, textStatus, jqXHR) {
 				if (responseData.WillExpireSoon) {
+					//TODO: tenant - remove datasource param
 					gotoChangePassword(authenticationModel.datasource);
 					return;
 				}
 				if (responseData.AlreadyExpired) {
+					//TODO: tenant - remove datasource param
 					gotoMustChangePassword(authenticationModel.datasource);
 					return;
 				}
@@ -97,7 +99,6 @@ Teleopti.SSO.Authentication.AuthenticationState = function (data) {
 	};
 
 	this.TryToSignIn = function (options) {
-		//TODO: tenant - remove datasource from this model when cleaning up views
 		authenticationModel = options.data;
 
 		var error = function (jqXHR, textStatus, errorThrown) {
