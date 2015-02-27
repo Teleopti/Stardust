@@ -38,7 +38,11 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 				clearPeriodForPerson(period, personId);
 
 			if (readModels != null)
+			{
+				if (Logger.IsDebugEnabled)
+					Logger.Debug("Saving model PersonScheduleDayReadModel");
 				readModels.ForEach(saveReadModel);
+			}
 
 			if (!initialLoad)
 				_currentUnitOfWork.Current().AfterSuccessfulTx(() =>
@@ -63,6 +67,9 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 
 		private void saveReadModel(PersonScheduleDayReadModel model)
 		{
+			if (Logger.IsDebugEnabled)
+				Logger.DebugFormat("Saving model PersonScheduleDayReadModel on date {0} for person {1}, Start {2}, End {3}", model.BelongsToDate, model.PersonId, model.Start, model.End);
+
 			_currentUnitOfWork.Session().CreateSQLQuery(
 				"INSERT INTO ReadModel.PersonScheduleDay (PersonId,TeamId,SiteId,BusinessUnitId,Start,[End],BelongsToDate,IsDayOff,Model) VALUES (:PersonId,:TeamId,:SiteId,:BusinessUnitId,:Start,:End,:BelongsToDate,:IsDayOff,:Model)")
 			                  .SetGuid("PersonId", model.PersonId)

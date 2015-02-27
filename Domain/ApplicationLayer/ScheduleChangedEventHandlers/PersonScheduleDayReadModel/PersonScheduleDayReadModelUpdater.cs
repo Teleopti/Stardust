@@ -52,7 +52,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Pers
 		private void createReadModel(ProjectionChangedEventBase message)
 		{
 			if (Logger.IsDebugEnabled)
-				Logger.Debug("Updating model PersonScheduleDayReadModel");
+				Logger.DebugFormat("Updating model PersonScheduleDayReadModel for person {0}", message.PersonId);
 
 			if (!message.IsDefaultScenario)
 			{
