@@ -1,9 +1,7 @@
 using System;
-using System.Collections.Generic;
 using NUnit.Framework;
 using Rhino.Mocks;
 using SharpTestsEx;
-using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.Web.Areas.Start.Core.Authentication.DataProvider;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
@@ -15,103 +13,12 @@ namespace Teleopti.Ccc.WebTest.Core.Authentication.DataProvider
 	{
 		private IApplicationData applicationData;
 		private IDataSourcesProvider target;
-		private IAvailableIdentityDataSources _availableIdentityDataSources;
-		private ITokenIdentityProvider tokenIdentityProvider;
-		private IAvailableApplicationTokenDataSource availableApplicationTokenDataSource;
 
 		[SetUp]
 		public void Setup()
 		{
 			applicationData = MockRepository.GenerateMock<IApplicationData>();
-			_availableIdentityDataSources = MockRepository.GenerateMock<IAvailableIdentityDataSources>();
-			availableApplicationTokenDataSource = MockRepository.GenerateMock<IAvailableApplicationTokenDataSource>();
-			tokenIdentityProvider = MockRepository.GenerateMock<ITokenIdentityProvider>();
-			target = new DataSourcesProvider(applicationData, _availableIdentityDataSources, availableApplicationTokenDataSource, tokenIdentityProvider);
-		}
-
-		[Test]
-		public void ApplicationDatasourcesShouldReturnFullListOfAvailableDatasources()
-		{
-			var dataSources = new List<IDataSource>();
-
-#pragma warning disable 618
-			applicationData.Stub(x => x.RegisteredDataSourceCollection).Return(dataSources);
-#pragma warning restore 618
-
-			target.RetrieveDatasourcesForApplication()
-				.Should().Be.SameInstanceAs(dataSources);
-		}
-
-		[Test]
-		public void WindowsDatasourcesShouldReturnAvailableDatasource()
-		{
-			var validDs = MockRepository.GenerateMock<IDataSource>();
-			var invalidDs = MockRepository.GenerateMock<IDataSource>();
-			var dsList = new[] {validDs, invalidDs};
-			var token = new TokenIdentity {UserIdentifier = @"domain\user"};
-
-#pragma warning disable 618
-			applicationData.Stub(x => x.RegisteredDataSourceCollection).Return(dsList);
-#pragma warning restore 618
-			tokenIdentityProvider.Stub(x => x.RetrieveToken()).Return(token);
-			_availableIdentityDataSources.Stub(x => x.AvailableDataSources(dsList, token.UserIdentifier)).Return(new[] {validDs});
-
-			target.RetrieveDatasourcesForIdentity().Should().Have.SameValuesAs(new[] {validDs});
-		}
-
-		[Test]
-		public void ApplicationIdentityTokenDatasourcesShouldReturnAvailableDatasource()
-		{
-			var validDs = MockRepository.GenerateMock<IDataSource>();
-			const string dataSource = "Teleopti WFM";
-			var tokenIdentity = new TokenIdentity {UserIdentifier = "user", DataSource = dataSource};
-
-			validDs.Stub(x => x.DataSourceName).Return(dataSource);
-			applicationData.Stub(x => x.DataSource(dataSource)).Return(validDs);
-
-			tokenIdentityProvider.Stub(x => x.RetrieveToken()).Return(tokenIdentity);
-			availableApplicationTokenDataSource.Stub(x => x.IsDataSourceAvailable(validDs, tokenIdentity.UserIdentifier)).Return(true);
-
-			target.RetrieveDatasourcesForApplicationIdentityToken().Should().Have.SameValuesAs(new[] {validDs});
-		}
-
-		[Test]
-		public void ApplicationIdentityTokenDatasourcesShouldReturnNullWhenNoAvailableDatasource()
-		{
-			const string dataSource = "Teleopti WFM";
-			var tokenIdentity = new TokenIdentity { UserIdentifier = "user", DataSource = dataSource };
-
-			applicationData.Stub(x => x.DataSource(dataSource)).Return(null);
-
-			tokenIdentityProvider.Stub(x => x.RetrieveToken()).Return(tokenIdentity);
-
-			target.RetrieveDatasourcesForApplicationIdentityToken().Should().Be.Null();
-
-			availableApplicationTokenDataSource.AssertWasNotCalled(x => x.IsDataSourceAvailable(null, tokenIdentity.UserIdentifier));
-		}
-
-		[Test]
-		public void ApplicationIdentityTokenDatasourcesShouldReturnNullWhenNoUserFoundInAvailableDatasource()
-		{
-			var validDs = MockRepository.GenerateMock<IDataSource>();
-			const string dataSource = "Teleopti WFM";
-			var tokenIdentity = new TokenIdentity { UserIdentifier = "user", DataSource = dataSource };
-
-			validDs.Stub(x => x.DataSourceName).Return(dataSource);
-			applicationData.Stub(x => x.DataSource(dataSource)).Return(validDs);
-			availableApplicationTokenDataSource.Stub(x => x.IsDataSourceAvailable(validDs, tokenIdentity.UserIdentifier)).Return(false);
-
-			tokenIdentityProvider.Stub(x => x.RetrieveToken()).Return(tokenIdentity);
-
-			target.RetrieveDatasourcesForApplicationIdentityToken().Should().Be.Null();
-		}
-
-		[Test]
-		public void WindowsDatasourcesShouldReturnNullIfWinAccountIsNull()
-		{
-			tokenIdentityProvider.Stub(x => x.RetrieveToken()).Return(null);
-
-			target.RetrieveDatasourcesForIdentity().Should().Be.Null();
+			target = new DataSourcesProvider(applicationData);
 		}
 
 		[Test]
@@ -127,12 +34,6 @@ namespace Teleopti.Ccc.WebTest.Core.Authentication.DataProvider
 		[Test]
 		public void DataSourceShouldReturnNullIfNonExisting()
 		{
-			var dataSources = new[] {new testDataSource("heja")};
-
-#pragma warning disable 618
-			applicationData.Stub(x => x.RegisteredDataSourceCollection).Return(dataSources);
-#pragma warning restore 618
-
 			target.RetrieveDataSourceByName("gnaget").Should().Be.Null();
 		}
 

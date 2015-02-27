@@ -13,13 +13,6 @@ namespace Teleopti.Ccc.Web.Core.Startup
 	[TaskPriority(4)]
 	public class RegisterModelBindersTask : IBootstrapperTask
 	{
-		private readonly IApplicationAuthenticationType _applicationAuthenticationType;
-
-		public RegisterModelBindersTask(IApplicationAuthenticationType applicationAuthenticationType)
-		{
-			_applicationAuthenticationType = applicationAuthenticationType;
-		}
-
 		public Func<ModelBinderDictionary> BindersGetter = () => ModelBinders.Binders;
 
 		public Task Execute(IAppBuilder application)
@@ -35,7 +28,6 @@ namespace Teleopti.Ccc.Web.Core.Startup
 			var nullableTimeOfDayModelBinder = new TimeOfDayModelBinder(nullable: true);
 			var timeSpanModelBinder = new TimeSpanModelBinder();
 			var nullableTimeSpanModelBinder = new TimeSpanModelBinder(nullable: true);
-			var ssoSuthenticationModelBinder = new SsoAuthenticationModelBinder(_applicationAuthenticationType);
 			var shiftExchangeLookingForDayModelBinder = new EnumByStringModelBinder<ShiftExchangeLookingForDay>();
 
 			binders[typeof (DateOnly?)] = dateOnlyModelBinder;
@@ -44,7 +36,6 @@ namespace Teleopti.Ccc.Web.Core.Startup
 			binders[typeof (TimeOfDay?)] = nullableTimeOfDayModelBinder;
 			binders[typeof (TimeSpan)] = timeSpanModelBinder;
 			binders[typeof (TimeSpan?)] = nullableTimeSpanModelBinder;
-			binders[typeof (ApplicationAuthenticationModel)] = ssoSuthenticationModelBinder;
 			binders[typeof (ShiftExchangeLookingForDay)] = shiftExchangeLookingForDayModelBinder;
 		}
 	}
