@@ -134,6 +134,36 @@ function CopyFileFromBlobStorage {
     }
 }
 
+function CopyFileToBlobStorage {
+    Param(
+      [string]$sourceFolder,
+      [string]$pattern
+      )
+    $BlobPath = TeleoptiDriveMapProperty-get -name "BlobPath"
+    $AccountKey = TeleoptiDriveMapProperty-get -name "AccountKey"
+    $ContainerName = TeleoptiDriveMapProperty-get -name "ContainerName"
+    $DataSourceName = TeleoptiDriveMapProperty-get -name "DataSourceName"
+
+	## Options to be added to AzCopy
+	$OPTIONS = @("/XO","/Y","/destKey:$AccountKey")
+
+    $BlobDestination = $BlobPath + $ContainerName + "/" + $DataSourceName
+
+	## Wrap all above arguments
+	$cmdArgs = @("sourceFolder","$BlobDestination","$pattern", $OPTIONS)
+
+	$AzCopyExe = $directory + "\ccc7_azure\AzCopy\AzCopy.exe"
+	$AzCopyExe
+
+	## Start the azcopy with above parameters and log errors in Windows Eventlog.
+	& $AzCopyExe @cmdArgs
+    $AzExitCode = $LastExitCode
+    
+    if ($LastExitCode -ne 0) {
+        throw "AsCopy generated an error!"
+    }
+}
+
 ##===========
 ## Main
 ##===========
@@ -173,6 +203,7 @@ Try
 
     #Get customer specific config from BlobStorage
     CopyFileFromBlobStorage -destinationFolder "$SupportToolFolder" -filename "$settingsFile"
+    CopyFileFromBlobStorage -destinationFolder "$SupportToolFolder" -filename "*.key"
 
 	$DatasourcesPath="$directory\..\Services\ETL\Service"
 
@@ -226,6 +257,9 @@ Try
     if ($LastExitCode -ne 0) {
         throw "SupportTool generated an error!"
     }
+
+	#Save machine key files for later usage on other instances
+	CopyFileToBlobStorage -sourceFolder "$SupportToolFolder" -pattern "*.key"
     
     #more - show content of ETL + Service bus config
     $AzureConfigFiles = $SupportToolFolder + "\ConfigFiles\AzureConfigFiles.txt"
