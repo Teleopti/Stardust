@@ -15,7 +15,6 @@ describe('PermissionsCtrl', function () {
 			post: function () {
 				var queryDeferred = $q.defer();
 				queryDeferred.resolve({ Id: 1, DescriptionText: 'text' });
-				
 				return { $promise: queryDeferred.promise };
 			},
 			get: function() {
@@ -38,12 +37,13 @@ describe('PermissionsCtrl', function () {
 
 	it('creates a role in the list', inject( function ($controller) {
 		var scope = $rootScope.$new();
-
+		
 		$controller('PermissionsCtrl', { $scope: scope, Permissions: mockPermissionsService });
-
+		
 
 		scope.roleName = 'name';
 		scope.createRole();
+		scope.$digest(); // this is needed to resolve the promise
 		
 		expect(scope.roles.length).toEqual(1);
 	}));
