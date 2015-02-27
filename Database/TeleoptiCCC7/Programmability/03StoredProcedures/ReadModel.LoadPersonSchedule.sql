@@ -62,6 +62,8 @@ BEGIN
 		TeamId uniqueidentifier, 
 		SiteId uniqueidentifier, 
 		BusinessUnitId uniqueidentifier,
+		FirstName nvarchar(max),
+		LastName nvarchar(max),
 		[Date] datetime, 
 		Start datetime, 
 		[End] datetime,		
@@ -101,6 +103,8 @@ BEGIN
 			 isnull(sd.TeamId, t.Id) as TeamID, 
 			 isnull(sd.SiteId, s.Id) as SiteId, 
 			 isnull(sd.BusinessUnitId, s.BusinessUnit) as BusinessUnitId, 
+			 person.FirstName as FirstName,
+			 person.LastName as LastName,
 			 isnull(sd.BelongsToDate, @scheduleDate) as BelongsToDate, 
 			 sd.Start, 
 			 sd.[End], 
@@ -108,6 +112,7 @@ BEGIN
 			 sd.IsDayOff AS DayOffFlag,
 			 CASE WHEN Start IS NULL THEN 1 ELSE 0 END As IsEmptySchedule
 			 FROM @PersonIdList p 
+			 JOIN dbo.Person person ON p.Person = person.Id 
 			 LEFT JOIN ReadModel.PersonScheduleDay sd  ON sd.PersonId = p.Person and sd.BelongsToDate = @scheduleDate		 
 			 
 			 -- These joins are used to support backward compatibility with incomplete ReadModel.PersonScheduleDay
@@ -147,6 +152,8 @@ BEGIN
 			TeamId, 
 			SiteId, 
 			BusinessUnitId, 
+			FirstName,
+			LastName,
 			BelongsToDate AS [Date], 
 			Start, 
 			[End],

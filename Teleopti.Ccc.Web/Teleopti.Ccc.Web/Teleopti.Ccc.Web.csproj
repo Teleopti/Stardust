@@ -425,6 +425,18 @@
     <Compile Include="Areas\Anywhere\Core\TeamViewModel.cs" />
     <Compile Include="Areas\MyTime\Core\Common\DataProvider\AllowanceDay.cs" />
     <Compile Include="Areas\MyTime\Core\Common\DataProvider\IAllowanceDay.cs" />
+    <Compile Include="Areas\MyTime\Core\TeamSchedule\DataProvider\ITeamSchedulePersonsProvider.cs" />
+    <Compile Include="Areas\MyTime\Core\TeamSchedule\DataProvider\TeamSchedulePersonsProvider.cs" />
+    <Compile Include="Areas\MyTime\Core\TeamSchedule\Mapping\AgentScheduleViewModelReworkedMapper.cs" />
+    <Compile Include="Areas\MyTime\Core\TeamSchedule\Mapping\IAgentScheduleViewModelReworkedMapper.cs" />
+    <Compile Include="Areas\MyTime\Core\TeamSchedule\Mapping\ITimeLineViewModelReworkedFactory.cs" />
+    <Compile Include="Areas\MyTime\Core\TeamSchedule\Mapping\ITimeLineViewModelReworkedMapper.cs" />
+    <Compile Include="Areas\MyTime\Core\TeamSchedule\Mapping\LayerViewModelReworkedMapper.cs" />
+    <Compile Include="Areas\MyTime\Core\TeamSchedule\Mapping\ILayerViewModelReworkedMapper.cs" />
+    <Compile Include="Areas\MyTime\Core\TeamSchedule\Mapping\ITeamScheduleViewModelReworkedMapper.cs" />
+    <Compile Include="Areas\MyTime\Core\TeamSchedule\Mapping\TimeLineViewModelReworkedFactory.cs" />
+    <Compile Include="Areas\MyTime\Core\TeamSchedule\Mapping\TimeLineViewModelReworkedMapper.cs" />
+    <Compile Include="Areas\MyTime\Core\TeamSchedule\Mapping\TeamScheduleViewModelReworkedMapper.cs" />
     <Compile Include="Areas\MyTime\Core\WeekSchedule\DataProvider\AbsenceRequestProbability.cs" />
     <Compile Include="Areas\MyTime\Core\WeekSchedule\DataProvider\IAbsenceRequestProbability.cs" />
     <Compile Include="Areas\MyTime\Core\WeekSchedule\DataProvider\IAbsenceRequestProbabilityProvider.cs" />
@@ -1155,6 +1167,8 @@
     <Content Include="Areas\Anywhere\Content\Scripts\views\realtimeadherenceagents\view.js" />
     <Content Include="Areas\Anywhere\Content\Scripts\views\realtimeadherenceagents\vm.js" />
     <Content Include="Areas\Anywhere\Content\Scripts\views\realtimeadherenceagents\vm_test.js" />
+    <Content Include="Areas\MyTime\Content\Scripts\Teleopti.MyTimeWeb.TeamScheduleUtility.js" />
+    <Content Include="Areas\MyTime\Content\Scripts\Teleopti.MyTimeWeb.TeamScheduleViewModel.js" />
     <Content Include="Areas\Reporting\images\icon.doc.png" />
     <Content Include="Areas\Reporting\images\icon_show.gif" />
     <Content Include="Areas\Reporting\images\next.gif" />
@@ -1956,7 +1970,7 @@
     <Folder Include="Core\Aop\Aspects\" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Areas\MyTime\Views\TeamSchedule\TeamSchedulePartial.cshtml" />
+    <Content Include="Areas\MyTime\Views\TeamSchedule\TeamSchedulePartialOriginal.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Areas\MyTime\Views\Settings\RegionalSettingsPartial.cshtml" />

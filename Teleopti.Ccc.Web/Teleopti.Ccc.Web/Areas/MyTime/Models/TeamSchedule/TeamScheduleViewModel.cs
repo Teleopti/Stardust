@@ -15,6 +15,17 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Models.TeamSchedule
 		public bool ShiftTradePermisssion { get; set; }
 	}
 
+	public class TeamScheduleViewModelReworked
+	{
+		
+		public IEnumerable<AgentScheduleViewModelReworked> AgentSchedules { get; set; }		
+		public IEnumerable<TimeLineViewModelReworked> TimeLine { get; set; }
+
+		public int TimeLineLengthInMinutes { get; set; }
+		public int PageCount { get; set; }
+	}
+
+
 	public class TimeLineViewModel
 	{
 		public string ShortTime { get; set; }
@@ -22,12 +33,33 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Models.TeamSchedule
 		public bool IsFullHour { get; set; }
 	}
 
+	public class TimeLineViewModelReworked
+	{
+		public string HourText { get; set; }
+		public int LengthInMinutesToDisplay { get; set; }
+
+		public DateTime StartTime { get; set; }
+		public DateTime EndTime { get; set; }
+	}
+
+
 	public class AgentScheduleViewModel
 	{
 		public bool HasDayOffUnder { get; set; }
 		public string AgentName { get; set; }
 		public IEnumerable<LayerViewModel> Layers { get; set; }
 		public string DayOffText { get; set; }
+	}
+
+	public class AgentScheduleViewModelReworked
+	{		
+		public IEnumerable<LayerViewModelReworked> ScheduleLayers { get; set; }
+		public string Name { get; set; }
+		public DateTime StartTimeUtc { get; set; }
+		public Guid PersonId { get; set; }
+		public DateTime? MinStart { get; set; }
+		public bool IsDayOff { get; set; }
+		public int Total { get; set; }	
 	}
 
 	public class LayerViewModel
@@ -39,4 +71,16 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Models.TeamSchedule
 		public string EndTime { get; set; }
 		public string ActivityName { get; set; }
 	}
+
+	public class LayerViewModelReworked
+	{
+		public DateTime Start { get; set; }
+		public DateTime End { get; set; }
+		public int LengthInMinutes { get; set; }
+		public string Color { get; set; }
+		public string TitleHeader { get; set; }
+		public bool IsAbsenceConfidential { get; set; }
+		public string TitleTime { get; set; }
+	}
+
 }

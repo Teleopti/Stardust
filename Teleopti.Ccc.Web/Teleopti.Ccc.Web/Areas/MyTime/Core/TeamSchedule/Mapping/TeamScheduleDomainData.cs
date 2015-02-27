@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.TeamSchedule.DataProvider;
 using Teleopti.Interfaces.Domain;
 
@@ -21,5 +22,20 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.TeamSchedule.Mapping
 		public DateTimePeriod DisplayTimePeriod { get; set; }
 		public IPerson Person { get; set; }
 		public ITeamScheduleProjection Projection { get; set; }
+	}
+
+	public class TeamScheduleViewModelData
+	{
+		public DateOnly ScheduleDate { get; set; }
+
+		public IList<Guid> TeamIdList { get; set; }
+
+		public Paging Paging { get; set; }
+
+		public TimeFilterInfo TimeFilter { get; set; }
+
+		public string SearchNameText { get; set; }
+
+		public string TimeSortOrder { get; set; }
 	}
 }

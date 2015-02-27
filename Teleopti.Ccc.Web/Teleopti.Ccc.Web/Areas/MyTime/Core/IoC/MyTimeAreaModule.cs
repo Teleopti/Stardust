@@ -38,6 +38,7 @@ using Teleopti.Ccc.Web.Areas.MyTime.Core.StudentAvailability.DataProvider;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.StudentAvailability.Mapping;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.StudentAvailability.ViewModelFactory;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.TeamSchedule.DataProvider;
+using Teleopti.Ccc.Web.Areas.MyTime.Core.TeamSchedule.Mapping;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.TeamSchedule.ViewModelFactory;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.DataProvider;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.ViewModelFactory;
@@ -205,7 +206,13 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.IoC
 		private static void registerTeamScheduleTypes(ContainerBuilder builder)
 		{
 			builder.RegisterType<TeamScheduleViewModelFactory>().As<ITeamScheduleViewModelFactory>();
+			builder.RegisterType<TeamSchedulePersonsProvider>().As<ITeamSchedulePersonsProvider>();
 			builder.RegisterType<TeamScheduleProjectionProvider>().As<ITeamScheduleProjectionProvider>();
+			builder.RegisterType<LayerViewModelReworkedMapper>().As<ILayerViewModelReworkedMapper>();
+			builder.RegisterType<TeamScheduleViewModelReworkedMapper>().As<ITeamScheduleViewModelReworkedMapper>();
+			builder.RegisterType<TimeLineViewModelReworkedFactory>().As<ITimeLineViewModelReworkedFactory>();
+			builder.RegisterType<TimeLineViewModelReworkedMapper>().As<ITimeLineViewModelReworkedMapper>();
+			builder.RegisterType<AgentScheduleViewModelReworkedMapper>().As<IAgentScheduleViewModelReworkedMapper>();
 			builder.RegisterType<TeamProvider>().As<ITeamProvider>();
 			builder.RegisterType<DefaultTeamProvider>().As<IDefaultTeamProvider>();
 			builder.RegisterType<GroupingReadOnlyRepository>().As<IGroupingReadOnlyRepository>();

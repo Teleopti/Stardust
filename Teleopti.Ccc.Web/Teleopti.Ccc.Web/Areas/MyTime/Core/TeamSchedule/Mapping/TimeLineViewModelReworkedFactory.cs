@@ -1,26 +1,26 @@
 ﻿using System.Collections.Generic;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Common.Mapping;
-using Teleopti.Ccc.Web.Areas.MyTime.Models.Requests;
+using Teleopti.Ccc.Web.Areas.MyTime.Models.TeamSchedule;
 using Teleopti.Interfaces.Domain;
 
-namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping
+namespace Teleopti.Ccc.Web.Areas.MyTime.Core.TeamSchedule.Mapping
 {
-	public class ShiftTradeTimeLineHoursViewModelFactory : IShiftTradeTimeLineHoursViewModelFactory
+	public class TimeLineViewModelReworkedFactory : ITimeLineViewModelReworkedFactory
 	{
 		private readonly ICreateHourText _createHourText;
 		private readonly IUserTimeZone _userTimeZone;
 
-		public ShiftTradeTimeLineHoursViewModelFactory(ICreateHourText createHourText, IUserTimeZone userTimeZone)
+		public TimeLineViewModelReworkedFactory(ICreateHourText createHourText, IUserTimeZone userTimeZone)
 		{
 			_createHourText = createHourText;
 			_userTimeZone = userTimeZone;
 		}
 
 
-		public IEnumerable<ShiftTradeTimeLineHoursViewModel> CreateTimeLineHours(DateTimePeriod timeLinePeriod)
+		public IEnumerable<TimeLineViewModelReworked> CreateTimeLineHours(DateTimePeriod timeLinePeriod)
 		{
-			var hourList = new List<ShiftTradeTimeLineHoursViewModel>();
-			ShiftTradeTimeLineHoursViewModel lastHour = null;
+			var hourList = new List<TimeLineViewModelReworked>();
+			TimeLineViewModelReworked lastHour = null;
 			var shiftStartRounded = timeLinePeriod.StartDateTime;
 			var shiftEndRounded = timeLinePeriod.EndDateTime;
 			var timeZone = _userTimeZone.TimeZone();
@@ -28,7 +28,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping
 			if (timeLinePeriod.StartDateTime.Minute != 0)
 			{
 				var lengthInMinutes = 60 - timeLinePeriod.StartDateTime.Minute;
-				hourList.Add(new ShiftTradeTimeLineHoursViewModel
+				hourList.Add(new TimeLineViewModelReworked
 					             {
 						             HourText = string.Empty,
 						             LengthInMinutesToDisplay = lengthInMinutes,
@@ -40,7 +40,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping
 			if (timeLinePeriod.EndDateTime.Minute != 0)
 			{
 				shiftEndRounded = timeLinePeriod.EndDateTime.AddMinutes(-timeLinePeriod.EndDateTime.Minute);
-				lastHour = new ShiftTradeTimeLineHoursViewModel
+				lastHour = new TimeLineViewModelReworked
 					           {
 								   HourText = _createHourText.CreateText(shiftEndRounded),
 						           LengthInMinutesToDisplay = timeLinePeriod.EndDateTime.Minute,
@@ -51,7 +51,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping
 
 			for (var time = shiftStartRounded; time < shiftEndRounded; time = time.AddHours(1))
 			{
-				hourList.Add(new ShiftTradeTimeLineHoursViewModel
+				hourList.Add(new TimeLineViewModelReworked
 					             {
 									 HourText = _createHourText.CreateText(time),
 						             LengthInMinutesToDisplay = 60,

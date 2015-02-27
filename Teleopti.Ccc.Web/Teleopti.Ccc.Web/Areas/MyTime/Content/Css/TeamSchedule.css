@@ -1,9 +1,6 @@
 ﻿
-.body-teamschedule {
-	 
-}
-.body-teamschedule-inner {
-	
+.teamschedule-body-inner {
+	white-space: nowrap;
 }
 
 .teamschedule ul 

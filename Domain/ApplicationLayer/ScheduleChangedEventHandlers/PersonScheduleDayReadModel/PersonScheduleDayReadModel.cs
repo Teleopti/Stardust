@@ -10,6 +10,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Pers
 		public Guid TeamId { get; set; }
 		public Guid SiteId { get; set; }
 		public Guid BusinessUnitId { get; set; }
+		public string FirstName { get; set; }
+		public string LastName { get; set; }
 		public DateTime Date { get; set; }
 		public DateOnly BelongsToDate { get { return new DateOnly(Date); } }
 		public DateTime? Start { get; set; }

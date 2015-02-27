@@ -39,22 +39,17 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping
 			var ret = new ShiftTradeAddPersonScheduleViewModel
 			{
 				PersonId = scheduleReadModel.PersonId,
+				Name =  _personNameProvider.BuildNameFromSetting(scheduleReadModel.FirstName, scheduleReadModel.LastName),
 				Total = scheduleReadModel.Total,
 				IsDayOff = false,
 				ShiftExchangeOfferId = scheduleReadModel.ShiftExchangeOffer
 			};
-			
-			//for agents with empty schedule, retrieve name from person repository, for those haveing normal schedule, all infor. is included in shiftReadModel
-			if (shiftReadModel == null)
+												
+			if (shiftReadModel != null)
 			{
-				var person = _personRepository.FindPeople(new List<Guid> {scheduleReadModel.PersonId}).First();
-				ret.Name = _personNameProvider.BuildNameFromSetting(person.Name.FirstName, person.Name.LastName);
-			}
-			else //for agents with non-empty schedule, namely, regular schedule, day off, full day absence (full day abasence is not allowed to trade)
-			{
-				ret.Name = _personNameProvider.BuildNameFromSetting(shiftReadModel.FirstName, shiftReadModel.LastName);
 				//while having shift and layers, if it is my schedule it'll get shown, or if others agent's schedule is not full day absence, 
 				//that should be available for trade. (full day absence is not allowed to  be used for trade)
+
 				if ((shiftReadModel.Shift != null) && (shiftReadModel.Shift.Projection.Count > 0) &&
 				    (isMySchedule || !shiftReadModel.Shift.IsFullDayAbsence))
 				{
@@ -74,12 +69,12 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping
 						Start = shiftReadModel.DayOff.Start,
 						End = shiftReadModel.DayOff.End,
 						Description = shiftReadModel.DayOff.Title,
-						Minutes = (int)(shiftReadModel.DayOff.End - shiftReadModel.DayOff.Start).TotalMinutes
+						Minutes = (int) (shiftReadModel.DayOff.End - shiftReadModel.DayOff.Start).TotalMinutes
 					};
 
 					dayOffProjection.Add(sl);
 
-					if (scheduleReadModel.Start != null) 
+					if (scheduleReadModel.Start != null)
 						ret.StartTimeUtc = scheduleReadModel.Start.Value;
 					ret.MinStart = scheduleReadModel.MinStart;
 					ret.ScheduleLayers = _layerMapper.Map(dayOffProjection);
