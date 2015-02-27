@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
@@ -9,235 +10,218 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.WinCode.Common.Configuration
 {
-    public class AlarmControlPresenter
-    {
-        private readonly IAlarmControlView _view;
-        private readonly IList<IAlarmType> _alarmTypes;
-        private IAlarmType _alarm;
-        private readonly LocalizedUpdateInfo _localizer = new LocalizedUpdateInfo();
-        
-        public AlarmControlPresenter(IList<IAlarmType> alarmTypes, IAlarmControlView view)
-        {
-            _view = view;
-            _alarmTypes = alarmTypes;
-        }
+	public class AlarmControlPresenter
+	{
+		private readonly IAlarmControlView _view;
+		private readonly IList<IAlarmType> _alarmTypes;
+		private IAlarmType _alarm;
+		private readonly LocalizedUpdateInfo _localizer = new LocalizedUpdateInfo();
 
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Security", "CA2109:ReviewVisibleEventHandlers")]
-        public void QueryRowCount(object sender, GridRowColCountEventArgs e)
-        {
-            e.Count = _alarmTypes.Count;
-            e.Handled = true;
-        }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Security", "CA2109:ReviewVisibleEventHandlers")]
-        public void QueryColCount(object sender, GridRowColCountEventArgs e)
-        {
-            e.Count =Enum.GetNames( typeof (ColumnHeader) ).Length -1;
-            e.Handled = true;
-        }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Security", "CA2109:ReviewVisibleEventHandlers")]
-        public void QueryCellInfo(object sender, GridQueryCellInfoEventArgs e)
-        {
-            if (e.RowIndex < (int) ColumnHeader.Empty || e.ColIndex < (int) ColumnHeader.Empty)
-                return; // Bad index
-            if (e.RowIndex == (int) ColumnHeader.Empty && e.ColIndex == 0)
-                return;
-            if (e.RowIndex == 0)
-                QueryHeader(e);
-            else
-            {
-                switch ((ColumnHeader)e.ColIndex)
-                {
-                    case ColumnHeader.Name:
-                        QueryName(e);
-                        break;
-                    case ColumnHeader.Time:
-                        QueryTimespan(e);
-                        break;
-                    case ColumnHeader.Color:
-                        QueryColorPicker(e);
-                        break;
-                    case ColumnHeader.StaffingEffect:
-                        QueryStaffingEffect(e);
-                        break;
-                    case ColumnHeader.UpdatedOn:
-                        QueryUpdatedOn(e);
-                        break;
-                    case ColumnHeader.UpdatedBy:
-                        QueryUpdatedBy(e);
-                        break;
-                }
+		public AlarmControlPresenter(IList<IAlarmType> alarmTypes, IAlarmControlView view)
+		{
+			_view = view;
+			_alarmTypes = alarmTypes;
+		}
 
-            }
-            e.Handled = true;
-        }
+		public void QueryRowCount(object sender, GridRowColCountEventArgs e)
+		{
+			e.Count = _alarmTypes.Count;
+			e.Handled = true;
+		}
 
-        private void QueryStaffingEffect(GridQueryCellInfoEventArgs e)
-        {
+		public void QueryColCount(object sender, GridRowColCountEventArgs e)
+		{
+			e.Count = 6;
+			e.Handled = true;
+		}
+
+		public void QueryCellInfo(object sender, GridQueryCellInfoEventArgs e)
+		{
+			if (e.RowIndex < 0 || e.ColIndex < 0)
+				return; // Bad index
+			if (e.RowIndex == 0 && e.ColIndex == 0)
+				return;
+			if (e.RowIndex == 0)
+				QueryHeader(e);
+			else
+			{
+				if (e.ColIndex == ColumnHeader.Name)
+					QueryName(e);
+				if (e.ColIndex == ColumnHeader.Time)
+					QueryTimespan(e);
+				if (e.ColIndex == ColumnHeader.Color)
+					QueryColorPicker(e);
+				if (e.ColIndex == ColumnHeader.StaffingEffect)
+					QueryStaffingEffect(e);
+				if (e.ColIndex == ColumnHeader.UpdatedOn)
+					QueryUpdatedOn(e);
+				if (e.ColIndex == ColumnHeader.UpdatedBy)
+					QueryUpdatedBy(e);
+			}
+			e.Handled = true;
+		}
+
+		private void QueryStaffingEffect(GridQueryCellInfoEventArgs e)
+		{
 			e.Style.CellType = "NumericCell";
-            e.Style.CellValue  = _alarmTypes[e.RowIndex - 1].StaffingEffect ;
-        }
+			e.Style.CellValue = _alarmTypes[e.RowIndex - 1].StaffingEffect;
+		}
 
-        private void QueryName(GridQueryCellInfoEventArgs e)
-        {
-            e.Style.Text = _alarmTypes[e.RowIndex - 1].Description.Name;
-        }
+		private void QueryName(GridQueryCellInfoEventArgs e)
+		{
+			e.Style.Text = _alarmTypes[e.RowIndex - 1].Description.Name;
+		}
 
-        private void QueryColorPicker(GridQueryCellInfoEventArgs e)
-        {
-            e.Style.CellType = "ColorPickerCell";
-            e.Style.CellValueType = typeof(Color);
-            e.Style.CellValue = _alarmTypes[e.RowIndex - 1].DisplayColor;
-        }
+		private void QueryColorPicker(GridQueryCellInfoEventArgs e)
+		{
+			e.Style.CellType = "ColorPickerCell";
+			e.Style.CellValueType = typeof(Color);
+			e.Style.CellValue = _alarmTypes[e.RowIndex - 1].DisplayColor;
+		}
 
-        private void QueryTimespan(GridQueryCellInfoEventArgs e)
-        {
-            e.Style.CellValue = _alarmTypes[e.RowIndex - 1].ThresholdTime.TotalSeconds ;
+		private void QueryTimespan(GridQueryCellInfoEventArgs e)
+		{
+			e.Style.CellValue = _alarmTypes[e.RowIndex - 1].ThresholdTime.TotalSeconds;
 			e.Style.CellType = "NumericCell";
-        }
+		}
 
-        private void QueryUpdatedBy(GridQueryCellInfoEventArgs e)
-        {
-            e.Style.CellType = "Static";
-            if (_alarmTypes[e.RowIndex - 1].UpdatedBy != null)
-                e.Style.CellValue = _alarmTypes[e.RowIndex - 1].UpdatedBy.Name;
-        }
+		private void QueryUpdatedBy(GridQueryCellInfoEventArgs e)
+		{
+			e.Style.CellType = "Static";
+			if (_alarmTypes[e.RowIndex - 1].UpdatedBy != null)
+				e.Style.CellValue = _alarmTypes[e.RowIndex - 1].UpdatedBy.Name;
+		}
 
-        private void QueryUpdatedOn(GridQueryCellInfoEventArgs e)
-        {
-            e.Style.CellType = "Static";
-            if (_alarmTypes[e.RowIndex - 1].UpdatedOn.HasValue)
-                e.Style.CellValue = _localizer.UpdatedTimeInUserPerspective(_alarmTypes[e.RowIndex - 1]);
-        }
+		private void QueryUpdatedOn(GridQueryCellInfoEventArgs e)
+		{
+			e.Style.CellType = "Static";
+			if (_alarmTypes[e.RowIndex - 1].UpdatedOn.HasValue)
+				e.Style.CellValue = _localizer.UpdatedTimeInUserPerspective(_alarmTypes[e.RowIndex - 1]);
+		}
 
-        private static void QueryHeader(GridQueryCellInfoEventArgs e)
-        {
-            switch ((ColumnHeader)e.ColIndex)
-            {
-                case ColumnHeader.Name:
+		private static void QueryHeader(GridQueryCellInfoEventArgs e)
+		{
+			if (e.ColIndex == ColumnHeader.Name)
+				e.Style.Text = Resources.Name;
+			if (e.ColIndex == ColumnHeader.Time)
+				e.Style.Text = Resources.Time;
+			if (e.ColIndex == ColumnHeader.Color)
+				e.Style.Text = Resources.Color;
+			if (e.ColIndex == ColumnHeader.StaffingEffect)
+				e.Style.Text = Resources.StaffingEffect;
+			if (e.ColIndex == ColumnHeader.UpdatedOn)
+				e.Style.Text = Resources.UpdatedOn;
+			if (e.ColIndex == ColumnHeader.UpdatedBy)
+				e.Style.Text = Resources.UpdatedBy;
+		}
 
-                    e.Style.Text = Resources.Name;
-                    break;
+		public class ColumnHeader : IEnumerable<Column>
+		{
+			public static readonly IList<Column> Columns = new List<Column>(); 
 
-                case ColumnHeader.Time:
+			public static Column Name = new Column { Index = 1 };
+			public static Column StaffingEffect = new Column { Index = 3 };
+			public static Column Color = new Column { Index = 4 };
+			public static Column Time = new Column { Index = 2 };
+			public static Column UpdatedBy = new Column { Index = 5 };
+			public static Column UpdatedOn = new Column { Index = 6 };
 
-                    e.Style.Text = Resources.Time ;
-                    break;
+			static ColumnHeader()
+			{
+				Columns.Add(Name);
+				Columns.Add(StaffingEffect);
+				Columns.Add(Color);
+				Columns.Add(Time);
+				Columns.Add(UpdatedBy);
+				Columns.Add(UpdatedOn);
+			}
 
-                case ColumnHeader.Color:
+			public IEnumerator<Column> GetEnumerator()
+			{
+				return Columns.GetEnumerator();
+			}
 
-                    e.Style.Text = Resources.Color;
-                    break;
-                case ColumnHeader.StaffingEffect:
+			IEnumerator IEnumerable.GetEnumerator()
+			{
+				return GetEnumerator();
+			}
+		}
 
-                    e.Style.Text = Resources.StaffingEffect;
-                    break;
+		public class Column
+		{
+			public static implicit operator int(Column column)
+			{
+				return column.Index;
+			}
 
-                case ColumnHeader.UpdatedBy:
+			public int Index { get; set; }
+		}
 
-                    e.Style.Text = Resources.UpdatedBy;
-                    break;
-                case ColumnHeader.UpdatedOn:
+		public void CellClick(object sender, GridCellCancelEventArgs e)
+		{
+			_view.ShowThisItem(e.RowIndex - 1);
+		}
 
-                    e.Style.Text = Resources.UpdatedOn;
-                    break;
-            }
-       }
+		public void SaveCellInfo(object sender, GridSaveCellInfoEventArgs e)
+		{
+			if (e.RowIndex == 0 || e.ColIndex == 0) return;
 
-        /// <summary>
-        /// only public for testing
-        ///add header here
-        /// </summary>
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1034:NestedTypesShouldNotBeVisible")]
-        public enum ColumnHeader
-        {
-            Empty,
+			//find alarmtype
+			if (_alarmTypes.Count >= 1)
+				_alarm = _alarmTypes[e.RowIndex - 1];
+			else
+				return;
 
-            Name,
+			if (e.ColIndex == ColumnHeader.Name)
+				NewName(e);
+			if (e.ColIndex == ColumnHeader.Time)
+				NewTimeSpan(e);
+			if (e.ColIndex == ColumnHeader.Color)
+				NewColor(e);
+			if (e.ColIndex == ColumnHeader.StaffingEffect)
+				NewStaffingEffect(e);
 
-            Time,
+			e.Handled = true;
+		}
 
-            StaffingEffect,
-
-            Color,
-
-            UpdatedBy,
-
-            UpdatedOn
-
-        }
-
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Security", "CA2109:ReviewVisibleEventHandlers")]
-        public void CellClick(object sender, GridCellCancelEventArgs  e)
-        {
-           _view.ShowThisItem(e.RowIndex -1);
-        }
-
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Security", "CA2109:ReviewVisibleEventHandlers")]
-        public void SaveCellInfo(object sender, GridSaveCellInfoEventArgs e)
-        {
-            if (e.RowIndex == 0 || e.ColIndex == 0) return;
-
-            //find alarmtype
-            if (_alarmTypes.Count >= 1)
-                _alarm = _alarmTypes[e.RowIndex - 1];
-            else
-                return;
-
-            switch ((ColumnHeader) e.ColIndex)
-            {
-                case ColumnHeader.Name:
-                    NewName(e);
-                    break;
-                case ColumnHeader.Time:
-                    NewTimeSpan(e);
-                    break;
-                case ColumnHeader.Color:
-                    NewColor(e);
-                    break;
-                case ColumnHeader.StaffingEffect:
-                    NewStaffingEffect(e);
-                    break;
-            }
-            e.Handled = true;
-        }
-
-        private void NewStaffingEffect(GridSaveCellInfoEventArgs e)
-        {
+		private void NewStaffingEffect(GridSaveCellInfoEventArgs e)
+		{
 			_alarm.StaffingEffect = (double)e.Style.CellValue;
-        }
+		}
 
-        private void NewColor(GridSaveCellInfoEventArgs e)
-        {
-            Color t = (Color)e.Style.CellValue;
-            if(t == Color.Empty ) return;
-        	_alarm.DisplayColor = t;
-        }
+		private void NewColor(GridSaveCellInfoEventArgs e)
+		{
+			Color t = (Color)e.Style.CellValue;
+			if (t == Color.Empty) return;
+			_alarm.DisplayColor = t;
+		}
 
-        private void NewTimeSpan(GridSaveCellInfoEventArgs e)
-        {
+		private void NewTimeSpan(GridSaveCellInfoEventArgs e)
+		{
 			double d = (double)e.Style.CellValue;
-            if(d< 0) return;
+			if (d < 0) return;
 
-            _alarm.ThresholdTime = TimeSpan.FromSeconds(d);
-        }
+			_alarm.ThresholdTime = TimeSpan.FromSeconds(d);
+		}
 
-        private void NewName(GridSaveCellInfoEventArgs e)
-        {
-            var name = (string) e.Style.CellValue;
+		private void NewName(GridSaveCellInfoEventArgs e)
+		{
+			var name = (string)e.Style.CellValue;
 
-            if(string.IsNullOrWhiteSpace(name))
-            {
-                return;
-            }
+			if (string.IsNullOrWhiteSpace(name))
+			{
+				return;
+			}
 
-        	IAlarmType alarmType = _alarmTypes.SingleOrDefault(a => a.Description.Name == name);
-            if (alarmType != null)
-            {
-                _view.Warning(Resources.NameAlreadyExists );
-                return;
-            }
+			IAlarmType alarmType = _alarmTypes.SingleOrDefault(a => a.Description.Name == name);
+			if (alarmType != null)
+			{
+				_view.Warning(Resources.NameAlreadyExists);
+				return;
+			}
 
-            _alarm.Description = new Description(name);
-        }
-    }
+			_alarm.Description = new Description(name);
+		}
+	}
+
 }

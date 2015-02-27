@@ -68,7 +68,7 @@ namespace Teleopti.Ccc.WinCodeTest.Configuration
         {
             var e = new GridRowColCountEventArgs();
             _target.QueryColCount(null, e);
-            Assert.AreEqual(Enum.GetValues(typeof(AlarmControlPresenter.ColumnHeader)).Length - 1, e.Count);
+            Assert.AreEqual(AlarmControlPresenter.ColumnHeader.Columns.Count, e.Count);
         }
 
         [Test]
