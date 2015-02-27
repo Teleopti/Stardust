@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using Teleopti.Interfaces.Domain;
 
-namespace Teleopti.Ccc.Domain.Security.Authentication
+namespace Teleopti.Ccc.Sdk.Logic
 {
     public interface IAvailableDataSourcesProvider
     {

@@ -1084,9 +1084,7 @@
     <Compile Include="Scheduling\WorkTimeMinMaxCalculatorTest.cs" />
     <Compile Include="Scheduling\WorkTimeMinMaxTest.cs" />
     <Compile Include="SeatPlanning\SeatPlanAllocationTests.cs" />
-    <Compile Include="Security\Authentication\ApplicationDataSourceProviderTest.cs" />
     <Compile Include="Security\Authentication\AvailableBusinessUnitsProviderTest.cs" />
-    <Compile Include="Security\Authentication\AvailableDataSourcesProviderTest.cs" />
     <Compile Include="Security\Authentication\CheckNullUserTest.cs" />
     <Compile Include="Security\Authentication\CheckUserDetailTest.cs" />
     <Compile Include="Security\Authentication\CheckPasswordTest.cs" />
@@ -1101,7 +1099,6 @@
     <Compile Include="Security\Authentication\LoggedOnUserTest.cs" />
     <Compile Include="Security\Authentication\LogonLoggerTest.cs" />
     <Compile Include="Security\Authentication\UserTimeZoneTest.cs" />
-    <Compile Include="Security\Authentication\WindowsDataSourceProviderTest.cs" />
     <Compile Include="Security\AuthorizationData\DefinedLicenseDataFactoryTest.cs" />
     <Compile Include="Security\AuthorizationEntities\AllLicenseOptionTest.cs" />
     <Compile Include="Security\AuthorizationEntities\ApplicationFunctionsProviderTest.cs" />

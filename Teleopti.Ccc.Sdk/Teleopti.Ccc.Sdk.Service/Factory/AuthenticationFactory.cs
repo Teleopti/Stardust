@@ -7,14 +7,12 @@ using Teleopti.Ccc.Domain.Security.Authentication;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.Sdk.Common.DataTransferObject;
 using Teleopti.Ccc.Sdk.Common.WcfExtensions;
+using Teleopti.Ccc.Sdk.Logic;
 using Teleopti.Ccc.Sdk.Logic.Assemblers;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Sdk.WcfService.Factory
 {
-    /// <summary>
-    /// Later on we can probably load this using AutoFac instead and get rid of some of the code. /Robin
-    /// </summary>
 	public class AuthenticationFactory : IAuthenticationFactory
     {
         private readonly IEnumerable<IDataSourceProvider> _dataSourceProviders;

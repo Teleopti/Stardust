@@ -200,6 +200,11 @@ namespace Teleopti.Ccc.Sdk.WcfHost
 		  {
 				builder.RegisterType<TeleoptiCccSdkService>();
 
+				builder.RegisterType<ApplicationDataSourceProvider>().As<IApplicationDataSourceProvider>().SingleInstance();
+				builder.RegisterType<WindowsDataSourceProvider>().As<IDataSourceProvider>();
+				builder.RegisterType<ApplicationDataSourceProvider>().As<IDataSourceProvider>();
+				builder.RegisterType<AvailableDataSourcesProvider>().As<IAvailableDataSourcesProvider>().SingleInstance();
+
 				if (configuration.Toggle(Toggles.MultiTenancy_SDK_17458))
 					builder.RegisterType<MultiTenancyAuthenticationFactory>().As<IAuthenticationFactory>().InstancePerLifetimeScope();
 				else

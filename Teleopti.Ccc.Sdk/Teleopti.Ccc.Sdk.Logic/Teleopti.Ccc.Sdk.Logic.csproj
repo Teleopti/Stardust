@@ -107,6 +107,7 @@
       <Link>GlobalAssemblyInfo.cs</Link>
     </Compile>
     <Compile Include="AgentPortalSettings.cs" />
+    <Compile Include="ApplicationDataSourceProvider.cs" />
     <Compile Include="Assemblers\AbsenceAssembler.cs" />
     <Compile Include="Assemblers\AbsenceRequestAssembler.cs" />
     <Compile Include="Assemblers\ActivityLayerAssembler.cs" />
@@ -167,6 +168,7 @@
     <Compile Include="Assemblers\StudentAvailabilityAssembler.cs" />
     <Compile Include="Assemblers\TextRequestAssembler.cs" />
     <Compile Include="Assemblers\WorkflowControlSetAssembler.cs" />
+    <Compile Include="AvailableDataSourcesProvider.cs" />
     <Compile Include="CommandHandler\AddAbsenceCommandHandler.cs" />
     <Compile Include="CommandHandler\AddActivityCommandHandler.cs" />
     <Compile Include="CommandHandler\AddDayOffCommandHandler.cs" />
@@ -199,6 +201,9 @@
     <Compile Include="CommandHandler\SetPersonAccountForPersonCommandHandler.cs" />
     <Compile Include="CommandHandler\SetPersonOptionalValuesForPersonCommandHandler.cs" />
     <Compile Include="CommandHandler\SetSchedulePeriodWorktimeOverrideCommandHandler.cs" />
+    <Compile Include="IApplicationDataSourceProvider.cs" />
+    <Compile Include="IAvailableDataSourcesProvider.cs" />
+    <Compile Include="IDataSourceProvider.cs" />
     <Compile Include="IMessageBrokerEnablerFactory.cs" />
     <Compile Include="IServiceLevelCalculator.cs" />
     <Compile Include="IPayrollResultFactory.cs" />
@@ -249,6 +254,7 @@
     <Compile Include="Restrictions\RestrictionsValidator.cs" />
     <Compile Include="Restrictions\PlanningTimeBankCalculator.cs" />
     <Compile Include="SaveSchedulePartService.cs" />
+    <Compile Include="WindowsDataSourceProvider.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\Domain\Teleopti.Ccc.Domain.csproj">

@@ -1,8 +1,5 @@
 ﻿using System;
-using System.Configuration;
 using System.Data.SqlClient;
-using System.Linq;
-using Teleopti.Ccc.Domain.Security.Authentication;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
@@ -13,7 +10,7 @@ namespace Teleopti.Ccc.Domain.Common
 	{
 		private readonly ICurrentIdentity _currentIdentity;
 		private readonly IConfigReader _configReader;
-		private readonly IAvailableDataSourcesProvider _dataSourcesProvider;
+		private readonly ICurrentApplicationData _applicationData;
 		private readonly Lazy<IDataSource> _rtaConfigurationDataSource;
  
 		public static ICurrentDataSource Make()
@@ -21,11 +18,12 @@ namespace Teleopti.Ccc.Domain.Common
 			return new CurrentDataSource(new CurrentIdentity(new CurrentTeleoptiPrincipal()), null, null);
 		}
 
-		public CurrentDataSource(ICurrentIdentity currentIdentity, IConfigReader configReader, IAvailableDataSourcesProvider dataSourcesProvider)
+		public CurrentDataSource(ICurrentIdentity currentIdentity, IConfigReader configReader, ICurrentApplicationData applicationData)
 		{
 			_currentIdentity = currentIdentity;
 			_configReader = configReader;
-			_dataSourcesProvider = dataSourcesProvider;
+			_applicationData = applicationData;
+
 			_rtaConfigurationDataSource = new Lazy<IDataSource>(dataSourceFromRtaConfiguration);
 		}
 
@@ -36,7 +34,7 @@ namespace Teleopti.Ccc.Domain.Common
 				return identity.DataSource;
 			if (_configReader == null)
 				return null;
-			if (_dataSourcesProvider == null)
+			if (_applicationData == null)
 				return null;
 			return _rtaConfigurationDataSource.Value;
 		}
@@ -44,14 +42,18 @@ namespace Teleopti.Ccc.Domain.Common
 		private IDataSource dataSourceFromRtaConfiguration()
 		{
 			var configString = new SqlConnectionStringBuilder(_configReader.ConnectionStrings["RtaApplication"].ConnectionString);
-			var matching =
-				from ds in _dataSourcesProvider.AvailableDataSources()
-				let c = new SqlConnectionStringBuilder(ds.Application.ConnectionString)
-				where c.DataSource == configString.DataSource &&
-				      c.InitialCatalog == configString.InitialCatalog
-				select ds;
+			IDataSource dataSource = null;
+			_applicationData.Current().DoOnAllTenants_AvoidUsingThis(tenant =>
+			{
+				var c = new SqlConnectionStringBuilder(tenant.Application.ConnectionString);
+				if (c.DataSource == configString.DataSource &&
+				    c.InitialCatalog == configString.InitialCatalog)
+				{
+					dataSource = tenant;
+				}
+			});
 
-			return matching.Single();
+			return dataSource;
 		}
 
 		public string CurrentName()

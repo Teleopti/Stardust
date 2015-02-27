@@ -1449,10 +1449,8 @@
     <Compile Include="Security\AuthorizationEntities\IApplicationFunctionsProvider.cs" />
     <Compile Include="Security\AuthorizationEntities\SystemFunction.cs" />
     <Compile Include="Security\MultiTenancyAuthentication\IMultiTenancyApplicationLogon.cs" />
-    <Compile Include="Security\Authentication\ApplicationDataSourceProvider.cs" />
     <Compile Include="Security\Authentication\AuthenticationResult.cs" />
     <Compile Include="Security\Authentication\AvailableBusinessUnitsProvider.cs" />
-    <Compile Include="Security\Authentication\AvailableDataSourcesProvider.cs" />
     <Compile Include="Security\Authentication\ChangePasswordResultInfo.cs" />
     <Compile Include="Security\Authentication\CheckBruteForce.cs" />
     <Compile Include="Security\Authentication\CheckNullUser.cs" />
@@ -1465,8 +1463,6 @@
     <Compile Include="Security\Authentication\FindApplicationUser.cs" />
     <Compile Include="Security\Authentication\FindUserDetail.cs" />
     <Compile Include="Security\Authentication\FuncTimeZone.cs" />
-    <Compile Include="Security\Authentication\IApplicationDataSourceProvider.cs" />
-    <Compile Include="Security\Authentication\IAvailableDataSourcesProvider.cs" />
     <Compile Include="Security\Authentication\ICheckBruteForce.cs" />
     <Compile Include="Security\Authentication\ICheckNullUser.cs" />
     <Compile Include="Security\Authentication\ICheckPassword.cs" />
@@ -1474,7 +1470,6 @@
     <Compile Include="Security\Authentication\ICheckSuperUser.cs" />
     <Compile Include="Security\Authentication\ICheckUserDetail.cs" />
     <Compile Include="Security\Authentication\IDataSourceContainer.cs" />
-    <Compile Include="Security\Authentication\IDataSourceProvider.cs" />
     <Compile Include="Security\Authentication\IdentityHelper.cs" />
     <Compile Include="Security\Authentication\IFindApplicationUser.cs" />
     <Compile Include="Security\Authentication\IFindUserDetail.cs" />
@@ -1485,7 +1480,6 @@
     <Compile Include="Security\Authentication\SpecificTimeZone.cs" />
     <Compile Include="Security\Authentication\UserTimeZone.cs" />
     <Compile Include="Security\Authentication\UtcTimeZone.cs" />
-    <Compile Include="Security\Authentication\WindowsDataSourceProvider.cs" />
     <Compile Include="Security\AuthorizationEntities\AuthenticationInfo.cs" />
     <Compile Include="Security\AuthorizationEntities\ILicenseActivatorProvider.cs" />
     <Compile Include="Security\LicenseOptions\TeleoptiCccCalendarLinkLicenseOption.cs" />

@@ -87,7 +87,11 @@ namespace Teleopti.Ccc.Web.Areas.Reporting
 			createReport("Excel");
 		}
 
-		protected void ButtonShowClickWord(object sender, ImageClickEventArgs e)
+		//protected void ButtonShowClickWord(object sender, ImageClickEventArgs e)
+		//{
+		//	createReport("Word");
+		//}
+		protected void ButtonShowClickWord(object sender, EventArgs e)
 		{
 			createReport("Word");
 		}
@@ -160,6 +164,7 @@ namespace Teleopti.Ccc.Web.Areas.Reporting
 			Response.BinaryWrite(bytes); // create the file
 			Response.Flush(); // send it to the client to download
 		}
+
 		
 	}
 }

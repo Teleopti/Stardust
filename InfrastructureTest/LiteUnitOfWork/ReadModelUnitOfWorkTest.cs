@@ -8,10 +8,10 @@ using Autofac;
 using NHibernate;
 using NUnit.Framework;
 using SharpTestsEx;
+using Teleopti.Ccc.Domain;
 using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta;
 using Teleopti.Ccc.Domain.Collection;
-using Teleopti.Ccc.Domain.Security.Authentication;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Infrastructure.Aop;
 using Teleopti.Ccc.Infrastructure.LiteUnitOfWork;
@@ -21,6 +21,7 @@ using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.IoC;
 using Teleopti.Ccc.TestCommon.Web;
+using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.InfrastructureTest.LiteUnitOfWork
@@ -40,11 +41,11 @@ namespace Teleopti.Ccc.InfrastructureTest.LiteUnitOfWork
 
 			builder.Register(c =>
 			{
-				var dataSourcesProvider = new FakeDataSourcesProvider();
+				var dataSourcesProvider = new FakeCurrentApplicationData();
 				var dataSource = c.Resolve<IDataSourcesFactory>().Create("App", ConnectionStringHelper.ConnectionStringUsedInTests, null);
-				dataSourcesProvider.SetAvailableDataSources(new[] { dataSource });
+				dataSourcesProvider.RegisteredDataSourceCollection = new List<IDataSource>{dataSource};
 				return dataSourcesProvider;
-			}).AsSelf().As<IAvailableDataSourcesProvider>().SingleInstance();
+			}).AsSelf().As<ICurrentApplicationData>().SingleInstance();
 
 			builder.RegisterInstance(new FakeConfigReader
 			{
@@ -68,7 +69,7 @@ namespace Teleopti.Ccc.InfrastructureTest.LiteUnitOfWork
 		public ICurrentReadModelUnitOfWork UnitOfWork;
 		public MutableFakeCurrentTeleoptiPrincipal Principal;
 		public IDataSourcesFactory DataSourcesFactory;
-		public FakeDataSourcesProvider DataSourcesProvider;
+		public FakeCurrentApplicationData ApplicationData;
 		public FakeConfigReader ConfigReader;
 
 		[Test]
@@ -251,7 +252,7 @@ namespace Teleopti.Ccc.InfrastructureTest.LiteUnitOfWork
 			var factory = DataSourcesFactory;
 			var dataSource1 = factory.Create("Wrong", ConnectionStringHelper.ConnectionStringUsedInTestsMatrix, null);
 			var dataSource2 = factory.Create("Correct", ConnectionStringHelper.ConnectionStringUsedInTests, null);
-			DataSourcesProvider.SetAvailableDataSources(new[] { dataSource1, dataSource2 }.Randomize());
+			ApplicationData.RegisteredDataSourceCollection = new[] { dataSource1, dataSource2 }.Randomize();
 
 			Principal.SetPrincipal(null);
 

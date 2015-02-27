@@ -3,9 +3,9 @@ using Teleopti.Ccc.Domain.Security.Authentication;
 
 namespace Teleopti.Ccc.WinCode.Main
 {
-    public interface IDataSourceHandler
-    {
-        IAvailableDataSourcesProvider AvailableDataSourcesProvider();
-        IEnumerable<IDataSourceProvider> DataSourceProviders();
-    }
+	 //public interface IDataSourceHandler
+	 //{
+	 //	 IAvailableDataSourcesProvider AvailableDataSourcesProvider();
+	 //	 IEnumerable<IDataSourceProvider> DataSourceProviders();
+	 //}
 }

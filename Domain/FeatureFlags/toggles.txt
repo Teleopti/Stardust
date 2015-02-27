@@ -87,4 +87,4 @@ Backlog_Module_23980 = DEV
 MultiTenantSSOSupport_StandardReports_15093 = RC
 MyTeam_MakeTeamScheduleConsistent_31897 = RC
 RTA_CalculatePercentageInAgentTimezone_31236 = RC
-MultiTenancy_SDK_17458 = RC
+MultiTenancy_SDK_17458 = false

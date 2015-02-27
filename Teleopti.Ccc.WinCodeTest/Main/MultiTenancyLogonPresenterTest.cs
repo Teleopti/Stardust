@@ -153,11 +153,7 @@ namespace Teleopti.Ccc.WinCodeTest.Main
 		public void ShouldGoToLoginIfApplication()
 		{
 			var dataSourceContainer = new DataSourceContainer(null, null, null, AuthenticationTypeOption.Application);
-			var availableDataSourcesProvider = MockRepository.GenerateMock<IAvailableDataSourcesProvider>();
 			_model.SelectedDataSourceContainer = dataSourceContainer;
-
-			availableDataSourcesProvider.Stub(x => x.UnavailableDataSources())
-				  .Return(new List<IDataSource>());
 			_view.Stub(x => x.ShowStep(false));
 			_target.CurrentStep = LoginStep.SelectLogonType;
 			_target.OkbuttonClicked();
@@ -220,13 +216,11 @@ namespace Teleopti.Ccc.WinCodeTest.Main
 		{
 			var dataSourceContainer = MockRepository.GenerateMock<IDataSourceContainer>();
 			var buProvider = MockRepository.GenerateMock<IAvailableBusinessUnitsProvider>();
-			var availableDataSourcesProvider = MockRepository.GenerateMock<IAvailableDataSourcesProvider>();
 			_model.AuthenticationType = AuthenticationTypeOption.Windows;
 			var bu = new BusinessUnit("Bu One");
 			var bu2 = new BusinessUnit("Bu two");
 			_model.SelectedDataSourceContainer = dataSourceContainer;
 
-			availableDataSourcesProvider.Stub(x => x.UnavailableDataSources()).Return(new List<IDataSource>());
 			_winLogon.Stub(x => x.Logon(_model, _appData, MultiTenancyLogonPresenter.UserAgent)).Return(new AuthenticationResult { Successful = true }).IgnoreArguments();
 			dataSourceContainer.Stub(x => x.AvailableBusinessUnitProvider).Return(buProvider);
 			buProvider.Stub(x => x.AvailableBusinessUnits()).Return(new List<IBusinessUnit> { bu, bu2 });
@@ -239,10 +233,7 @@ namespace Teleopti.Ccc.WinCodeTest.Main
 		[Test]
 		public void ShouldGoToAppLoginIfWindowsFails()
 		{
-			var dataSourceContainer = MockRepository.GenerateMock<IDataSourceContainer>();
-			var availableDataSourcesProvider = MockRepository.GenerateMock<IAvailableDataSourcesProvider>();
 			_model.AuthenticationType = AuthenticationTypeOption.Windows;
-			availableDataSourcesProvider.Stub(x => x.UnavailableDataSources()).Return(new List<IDataSource>());
 			_winLogon.Stub(x => x.Logon(_model, _appData, MultiTenancyLogonPresenter.UserAgent)).Return(new AuthenticationResult { Successful = false, HasMessage = true,Message = "ajajaj"}).IgnoreArguments();
 			_view.Stub(x => x.ShowStep(true));
 
@@ -256,10 +247,7 @@ namespace Teleopti.Ccc.WinCodeTest.Main
 		[Test]
 		public void ShouldGoToDatasourceStepIfWebException()
 		{
-			var dataSourceContainer = MockRepository.GenerateMock<IDataSourceContainer>();
-			var availableDataSourcesProvider = MockRepository.GenerateMock<IAvailableDataSourcesProvider>();
 			_model.AuthenticationType = AuthenticationTypeOption.Windows;
-			availableDataSourcesProvider.Stub(x => x.UnavailableDataSources()).Return(new List<IDataSource>());
 			_winLogon.Stub(x => x.Logon(_model, _appData, MultiTenancyLogonPresenter.UserAgent)).Throw(new WebException("shit")).IgnoreArguments();
 			_view.Stub(x => x.ShowStep(false));
 

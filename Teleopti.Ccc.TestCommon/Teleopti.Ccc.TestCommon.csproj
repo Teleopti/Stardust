@@ -121,7 +121,7 @@
     <Compile Include="FakeAdherenceDetailsReadModelReader.cs" />
     <Compile Include="FakeAdherencePercentageReadModelPersister.cs" />
     <Compile Include="FakeAdherencePercentageReadModelReader.cs" />
-    <Compile Include="FakeDataSourcesProvider.cs" />
+    <Compile Include="FakeCurrentApplicationData.cs" />
     <Compile Include="FakeData\FakeCurrentIdentity.cs" />
     <Compile Include="FakeEventPublisher.cs" />
     <Compile Include="FakeHangfireEventClient.cs" />

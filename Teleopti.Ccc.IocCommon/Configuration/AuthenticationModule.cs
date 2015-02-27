@@ -32,13 +32,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<RepositoryFactory>()
 				.As<IRepositoryFactory>()
 				.SingleInstance();
-			builder.RegisterType<WindowsDataSourceProvider>()
-				.As<IDataSourceProvider>();
-			builder.RegisterType<ApplicationDataSourceProvider>()
-				.As<IDataSourceProvider>();
-			builder.RegisterType<AvailableDataSourcesProvider>()
-				.As<IAvailableDataSourcesProvider>()
-				.SingleInstance();
+			
 			builder.RegisterType<FindUserDetail>()
 				.As<IFindUserDetail>()
 				.SingleInstance();
@@ -94,7 +88,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<UserCulture>().As<IUserCulture>().SingleInstance();
 			builder.RegisterType<LoggedOnUser>().As<ILoggedOnUser>().SingleInstance();
 			builder.RegisterType<UserTimeZone>().As<IUserTimeZone>().SingleInstance();
-			builder.RegisterType<ApplicationDataSourceProvider>().As<IApplicationDataSourceProvider>().SingleInstance();
+			
 			builder.RegisterType<OneWayEncryption>().As<IOneWayEncryption>().SingleInstance();
 			builder.RegisterType<CurrentIdentity>().As<ICurrentIdentity>().SingleInstance();
 			builder.RegisterType<LogonLogger>().As<ILogonLogger>().SingleInstance();

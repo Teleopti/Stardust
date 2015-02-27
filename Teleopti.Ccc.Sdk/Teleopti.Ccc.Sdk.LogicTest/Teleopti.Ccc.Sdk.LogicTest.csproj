@@ -125,6 +125,7 @@
     <Compile Include="..\..\GlobalAssemblyInfo.cs">
       <Link>GlobalAssemblyInfo.cs</Link>
     </Compile>
+    <Compile Include="ApplicationDataSourceProviderTest.cs" />
     <Compile Include="AssemblersTest\AbsenceAssemblerTest.cs" />
     <Compile Include="AssemblersTest\ActivityRestrictionAssemblerTest.cs" />
     <Compile Include="AssemblersTest\AssemblerTest.cs" />
@@ -167,6 +168,7 @@
     <Compile Include="AssemblersTest\PersonDayOffAssemblerTest.cs" />
     <Compile Include="AssemblersTest\SchedulePartAssemblerTest.cs" />
     <Compile Include="AssemblersTest\WorkflowControlSetAssemblerTest.cs" />
+    <Compile Include="AvailableDataSourcesProviderTest.cs" />
     <Compile Include="CommandHandler\AddAbsenceCommandHandlerTest.cs" />
     <Compile Include="CommandHandler\AddActivityCommandHandlerTest.cs" />
     <Compile Include="CommandHandler\AddDayOffCommandHandlerTest.cs" />
@@ -271,6 +273,7 @@
     <Compile Include="Restrictions\RestrictionsValidatorTest.cs" />
     <Compile Include="SaveSchedulePartServiceTest.cs" />
     <Compile Include="SetUpFixtureForAssembly.cs" />
+    <Compile Include="WindowsDataSourceProviderTest.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\Domain\Teleopti.Ccc.Domain.csproj">
