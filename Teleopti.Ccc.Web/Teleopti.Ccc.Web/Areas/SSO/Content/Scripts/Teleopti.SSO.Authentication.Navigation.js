@@ -1,12 +1,10 @@
 ﻿
 Teleopti.SSO.Authentication.NavigationConstructor = function () {
-	//TODO: tenant remove datasource parameter
-	this.GotoChangePassword = function (dataSourceName) {
-		window.location.hash = 'changepassword/' + encodeURIComponent(dataSourceName);
+	this.GotoChangePassword = function () {
+		window.location.hash = 'changepassword';
 	};
-	//TODO: tenant remove datasource parameter
-	this.GotoMustChangePassword = function (dataSourceName) {
-		window.location.hash = 'mustchangepassword/' + encodeURIComponent(dataSourceName);
+	this.GotoMustChangePassword = function () {
+		window.location.hash = 'mustchangepassword';
 	};
 	this.GotoReturnUrl = function(returnUrl, pendingRequest) {
 		var form = $('<form></form>');

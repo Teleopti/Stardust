@@ -29,13 +29,11 @@ Teleopti.SSO.Authentication.AuthenticationState = function (data) {
 			data: authenticationModel,
 			success: function (responseData, textStatus, jqXHR) {
 				if (responseData.WillExpireSoon) {
-					//TODO: tenant - remove datasource param
-					gotoChangePassword(authenticationModel.datasource);
+					gotoChangePassword();
 					return;
 				}
 				if (responseData.AlreadyExpired) {
-					//TODO: tenant - remove datasource param
-					gotoMustChangePassword(authenticationModel.datasource);
+					gotoMustChangePassword();
 					return;
 				}
 				self.SetReturnUrlToCookie();
