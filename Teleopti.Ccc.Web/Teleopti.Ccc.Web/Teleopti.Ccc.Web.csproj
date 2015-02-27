@@ -683,7 +683,9 @@
     <Compile Include="Areas\Rta\RtaAreaRegistration.cs" />
     <Compile Include="Areas\Rta\TeleoptiRtaService.cs" />
     <Compile Include="Areas\SSO\Controllers\ApplicationAuthenticationApiController.cs" />
+    <Compile Include="Areas\SSO\Core\ApplicationAuthenticationType.cs" />
     <Compile Include="Areas\SSO\Core\CustomErrorReporting.cs" />
+    <Compile Include="Areas\SSO\Core\SsoAuthenticationModelBinder.cs" />
     <Compile Include="Areas\SSO\Core\IProviderEndpointWrapper.cs" />
     <Compile Include="Areas\SSO\Core\ProviderEndpointWrapper.cs" />
     <Compile Include="Areas\Start\Controllers\UrlController.cs" />
