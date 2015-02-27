@@ -642,7 +642,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			}
 			if (e.KeyCode == Keys.V && e.Alt && e.Shift)
 			{
-				SikuliHelper.EnterValidator(this);
+				SikuliHelper.Validation.EnterValidator(this);
 			}
 			if (e.KeyCode == Keys.D && e.Modifiers == Keys.Control)
 			{
@@ -2121,16 +2121,16 @@ namespace Teleopti.Ccc.Win.Scheduling
 			}
 			_scheduleOptimizerHelper.ResetWorkShiftFinderResults();
 
-			if (SikuliHelper.TestMode)
+			if (SikuliHelper.InTestMode)
 			{
 				var skillTabPage = _tabSkillData.TabPages[0];
 				var totalSkill = skillTabPage.Tag as IAggregateSkill;
 				var currentValidator = SikuliValidatorFactory.Scheduler.CreateValidator(_schedulerState, totalSkill);
 
 				if (currentValidator != null)
-					SikuliHelper.Validate(currentValidator, this);
+					SikuliHelper.Validation.Validate(currentValidator, this);
 				else
-					SikuliHelper.ShowTaskDone(this);
+					SikuliHelper.Popups.ShowTaskDoneMessage(this);
 			}
 		}
 
@@ -2357,7 +2357,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			toolStripStatusLabelStatus.Text = LanguageResourceHelper.Translate("XXReadyThreeDots");
 			Cursor = Cursors.Default;
 
-			Sikuli.SikuliHelper.ShowLoaded(this);
+			SikuliHelper.Popups.ShowLoadedMessage(this);
 		}
 
 		private void setupRequestViewButtonStates()

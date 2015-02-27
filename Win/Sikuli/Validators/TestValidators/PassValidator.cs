@@ -1,8 +1,8 @@
 ﻿namespace Teleopti.Ccc.Win.Sikuli.Validators.TestValidators
 {
-	public class PassValidator : ISikuliValidator
+	internal class PassValidator : ISikuliValidator
 	{
-		public SikuliValidationResult Validate()
+		public SikuliValidationResult Validate(ITestDuration duration)
 		{
 			return new SikuliValidationResult(SikuliValidationResult.ResultValue.Pass);
 		}

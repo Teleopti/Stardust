@@ -1,13 +1,11 @@
 ﻿using System.Collections.Generic;
-using System.ComponentModel.Design.Serialization;
 using System.Linq;
 using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
-using Teleopti.Ccc.WinCode.Common;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Win.Sikuli.Validators
 {
-	public class IntervalBalanceAfterValidator : ISikuliValidator
+	internal class IntervalBalanceAfterValidator : ISikuliValidator
 	{
 		private readonly ISchedulerStateHolder _schedulerState;
 		private readonly IAggregateSkill _totalSkill;
@@ -23,7 +21,7 @@ namespace Teleopti.Ccc.Win.Sikuli.Validators
 			get { return "Only one 'lowest intra interval balance' value can be under 0.8."; }
 		}
 
-		public SikuliValidationResult Validate()
+		public SikuliValidationResult Validate(ITestDuration duration)
 		{
 			var result = new SikuliValidationResult(SikuliValidationResult.ResultValue.Pass);
 			var lowestIntervalBalances = ValidatorHelper.GetDailyLowestIntraIntervalBalanceForPeriod(_schedulerState, _totalSkill.AggregateSkills[1]);

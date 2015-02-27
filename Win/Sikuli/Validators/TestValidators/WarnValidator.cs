@@ -1,8 +1,8 @@
 ﻿namespace Teleopti.Ccc.Win.Sikuli.Validators.TestValidators
 {
-	public class WarnValidator : ISikuliValidator
+	internal class WarnValidator : ISikuliValidator
 	{
-		public SikuliValidationResult Validate()
+		public SikuliValidationResult Validate(ITestDuration duration)
 		{
 			return new SikuliValidationResult(SikuliValidationResult.ResultValue.Warn);
 		}

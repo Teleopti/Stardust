@@ -1,10 +1,8 @@
-﻿using System.Collections;
-using System.Windows;
-using System.Windows.Forms;
+﻿using System.Windows.Forms;
 
 namespace Teleopti.Ccc.Win.Sikuli
 {
-	public partial class SikuliResultView : Form
+	internal partial class SikuliResultView : Form
 	{
 
 		public SikuliResultView()

@@ -4,7 +4,7 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Win.Sikuli.Validators
 {
-	public class DeleteAllValidator : ISikuliValidator
+	internal class DeleteAllValidator : ISikuliValidator
 	{
 		private readonly ISchedulerStateHolder _schedulerState;
 		private readonly IAggregateSkill _totalSkill;
@@ -20,7 +20,7 @@ namespace Teleopti.Ccc.Win.Sikuli.Validators
 			get { return "All scheduled hours must be 0."; }
 		}
 
-		public SikuliValidationResult Validate()
+		public SikuliValidationResult Validate(ITestDuration duration)
 		{
 			var result = new SikuliValidationResult(SikuliValidationResult.ResultValue.Pass);
 			var scheduledHours = ValidatorHelper.GetDailyScheduledHoursForFullPeriod(_schedulerState, _totalSkill);

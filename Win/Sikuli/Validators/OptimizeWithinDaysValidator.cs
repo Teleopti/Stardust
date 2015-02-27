@@ -1,15 +1,13 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
-using Teleopti.Ccc.WinCode.Common;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Win.Sikuli.Validators
 {
-	public class OptimizeWithinDaysValidator : ISikuliValidator
+	internal class OptimizeWithinDaysValidator : ISikuliValidator
 	{
 		private readonly ISchedulerStateHolder _schedulerState;
 		private readonly IAggregateSkill _totalSkill;
@@ -26,17 +24,16 @@ namespace Teleopti.Ccc.Win.Sikuli.Validators
 						 "current contract times must be equal to the target for each person."; } 
 		}
 
-		public SikuliValidationResult Validate()
+		public SikuliValidationResult Validate(ITestDuration duration)
 		{
-			bool stdDevSumResult;
 			bool contractTimeResult = true;
 			bool daysOffResult = true;
 			const double limit = 4.65d;
 
-			SikuliValidationResult result = new SikuliValidationResult(SikuliValidationResult.ResultValue.Pass);
+			var result = new SikuliValidationResult(SikuliValidationResult.ResultValue.Pass);
 			var std = ValidatorHelper.GetDailySumOfStandardDeviationsFullPeriod(_schedulerState, _totalSkill);
 
-			stdDevSumResult = std < limit;
+			bool stdDevSumResult = std < limit;
 			
 			IList<IPerson> persons = _schedulerState.FilteredPersonDictionary.Values.ToList();
 			

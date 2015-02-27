@@ -1,10 +1,8 @@
-﻿using Teleopti.Ccc.Sdk.Common.DataTransferObject.QueryDtos;
-
-namespace Teleopti.Ccc.Win.Sikuli
+﻿namespace Teleopti.Ccc.Win.Sikuli
 {
 	public interface ISikuliValidator
 	{
-		SikuliValidationResult Validate();
+		SikuliValidationResult Validate(ITestDuration duration);
 		string Description { get; }
 	}
 }

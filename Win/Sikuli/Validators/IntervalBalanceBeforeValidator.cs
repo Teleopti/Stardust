@@ -9,7 +9,7 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Win.Sikuli.Validators
 {
-	public class IntervalBalanceBeforeValidator : ISikuliValidator
+	internal class IntervalBalanceBeforeValidator : ISikuliValidator
 	{
 		private readonly ISchedulerStateHolder _schedulerState;
 		private readonly IAggregateSkill _totalSkill;
@@ -26,7 +26,7 @@ namespace Teleopti.Ccc.Win.Sikuli.Validators
 												 "and 0.8 to have a good start point for optimization."; } 
 		}
 
-		public SikuliValidationResult Validate()
+		public SikuliValidationResult Validate(ITestDuration duration)
 		{
 
 			var result = new SikuliValidationResult(SikuliValidationResult.ResultValue.Pass);

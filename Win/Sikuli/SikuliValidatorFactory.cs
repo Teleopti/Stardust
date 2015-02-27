@@ -6,13 +6,13 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Win.Sikuli
 {
-	public static class SikuliValidatorFactory
+	internal static class SikuliValidatorFactory
 	{
-		public static class Scheduler
+		internal static class Scheduler
 		{
 			public static ISikuliValidator CreateValidator(ISchedulerStateHolder schedulerState, IAggregateSkill totalSkill)
 			{
-				switch (SikuliHelper.CurrentValidator)
+				switch (SikuliHelper.Validation.CurrentValidator)
 				{
 					case SikuliValidatorRegister.DeleteAll:
 						return new DeleteAllValidator(schedulerState, totalSkill);
