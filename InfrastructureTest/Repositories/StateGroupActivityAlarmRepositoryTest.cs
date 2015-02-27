@@ -28,8 +28,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
             stateGroup = new RtaStateGroup("state group", true, true);
             PersistAndRemoveFromUnitOfWork(stateGroup);
 
-            alarmType = new AlarmType(new Description("alarma!"), Color.DodgerBlue, TimeSpan.FromSeconds(50),
-                                      AlarmTypeMode.UserDefined,0.0);
+            alarmType = new AlarmType(new Description("alarma!"), Color.DodgerBlue, TimeSpan.FromSeconds(50),0.0);
             PersistAndRemoveFromUnitOfWork(alarmType);
         }
 

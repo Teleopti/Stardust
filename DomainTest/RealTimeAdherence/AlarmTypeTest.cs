@@ -21,7 +21,7 @@ namespace Teleopti.Ccc.DomainTest.RealTimeAdherence
         [SetUp]
         public void Setup()
         {
-            target = new AlarmType(_description,_color, _thresholdTime, _mode, _staffingEffect );
+            target = new AlarmType(_description,_color, _thresholdTime, _staffingEffect );
         }
 
         [Test]
@@ -32,7 +32,6 @@ namespace Teleopti.Ccc.DomainTest.RealTimeAdherence
             Assert.AreEqual(_color,target.DisplayColor);
             Assert.AreEqual(_color,target.ConfidentialDisplayColor(null,new DateOnly()));
             Assert.AreEqual(_thresholdTime, target.ThresholdTime);
-            Assert.AreEqual(_mode, target.Mode);
             Assert.AreEqual(_staffingEffect ,target.StaffingEffect);
             Assert.IsNull(target.Tracker);
             Assert.IsFalse(target.InContractTime);
@@ -45,7 +44,6 @@ namespace Teleopti.Ccc.DomainTest.RealTimeAdherence
             target.Description = description;
             target.DisplayColor = color;
             target.ThresholdTime = thresholdTime;
-            target.Mode = mode;
             target.Tracker = null;
             target.InContractTime = true;
             target.StaffingEffect = 0.8;
@@ -54,7 +52,6 @@ namespace Teleopti.Ccc.DomainTest.RealTimeAdherence
             Assert.AreEqual(description,target.Description);
             Assert.AreEqual(color,target.DisplayColor);
             Assert.AreEqual(thresholdTime,target.ThresholdTime);
-            Assert.AreEqual(mode,target.Mode);
             Assert.IsNull(target.Tracker);
             Assert.IsTrue(target.InContractTime);
             Assert.AreEqual(0.8,target.StaffingEffect );

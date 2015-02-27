@@ -21,7 +21,7 @@ namespace Teleopti.Ccc.TestCommon.TestData.Setups.Configurable
 		public void Apply(IUnitOfWork uow)
 		{
 			var color = string.IsNullOrEmpty(AlarmColor) ? Color.Red : Color.FromName(AlarmColor);
-			var alarmType = new AlarmType(new Description(Name), color, TimeSpan.Zero, AlarmTypeMode.UserDefined, StaffingEffect);
+			var alarmType = new AlarmType(new Description(Name), color, TimeSpan.Zero, StaffingEffect);
 
 			var activityRepository = new ActivityRepository(uow);
 

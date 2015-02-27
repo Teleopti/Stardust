@@ -26,7 +26,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
         /// <returns></returns>
         protected override IAlarmType CreateAggregateWithCorrectBusinessUnit()
         {
-            return new AlarmType(new Description("Wrong state"), Color.DarkTurquoise, TimeSpan.FromSeconds(15), AlarmTypeMode.Unknown,0.8);
+            return new AlarmType(new Description("Wrong state"), Color.DarkTurquoise, TimeSpan.FromSeconds(15),0.8);
         }
 
         /// <summary>
@@ -39,7 +39,6 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
             Assert.AreEqual(org.Description.Name, loadedAggregateFromDatabase.Description.Name);
             Assert.AreEqual(org.DisplayColor.ToArgb(), loadedAggregateFromDatabase.DisplayColor.ToArgb());
             Assert.AreEqual(org.ThresholdTime,loadedAggregateFromDatabase.ThresholdTime);
-            Assert.AreEqual(org.Mode,loadedAggregateFromDatabase.Mode);
             Assert.AreEqual(0.8, loadedAggregateFromDatabase.StaffingEffect );
         }
 

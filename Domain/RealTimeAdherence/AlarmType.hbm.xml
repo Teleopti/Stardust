@@ -36,8 +36,6 @@
     <property name="DisplayColor"
               type="Teleopti.Ccc.Infrastructure.NHibernateConfiguration.ColorNumber, Teleopti.Ccc.Infrastructure"
               not-null="true" />
-    <property name="Mode"
-              not-null="true" />
     <property name="ThresholdTime"
           type="TimeSpan"
           not-null="true" />

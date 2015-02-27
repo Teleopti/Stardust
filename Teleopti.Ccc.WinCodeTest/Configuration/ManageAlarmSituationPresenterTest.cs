@@ -383,11 +383,9 @@ namespace Teleopti.Ccc.WinCodeTest.Configuration
 
 			var alarms = new List<IAlarmType>
 				{
-					new AlarmType(new Description("userALARM"), Color.Blue, new TimeSpan(0, 0, 1),
-					              AlarmTypeMode.UserDefined, 0.8),
-					new AlarmType(new Description("ok"), Color.Blue, new TimeSpan(0, 0, 1), AlarmTypeMode.Ok, 0.8),
-					new AlarmType(new Description("unknown"), Color.Blue, new TimeSpan(0, 0, 1),
-					              AlarmTypeMode.Unknown, 0.8)
+					new AlarmType(new Description("userALARM"), Color.Blue, new TimeSpan(0, 0, 1), 0.8),
+					new AlarmType(new Description("ok"), Color.Blue, new TimeSpan(0, 0, 1), 0.8),
+					new AlarmType(new Description("unknown"), Color.Blue, new TimeSpan(0, 0, 1), 0.8)
 				};
 
 			var stategroupactivityalarm1 = new StateGroupActivityAlarm(rtaitem1, activity) {AlarmType = alarms[1]};
@@ -454,11 +452,9 @@ namespace Teleopti.Ccc.WinCodeTest.Configuration
 		{
 			var alarms = new List<IAlarmType>
 				{
-					new AlarmType(new Description("userALARM"), Color.Blue, new TimeSpan(0, 0, 1),
-					              AlarmTypeMode.UserDefined, 0.8),
-					new AlarmType(new Description("ok"), Color.Blue, new TimeSpan(0, 0, 1), AlarmTypeMode.Ok, 0.8),
-					new AlarmType(new Description("unknown"), Color.Blue, new TimeSpan(0, 0, 1),
-					              AlarmTypeMode.Unknown, 0.8)
+					new AlarmType(new Description("userALARM"), Color.Blue, new TimeSpan(0, 0, 1), 0.8),
+					new AlarmType(new Description("ok"), Color.Blue, new TimeSpan(0, 0, 1), 0.8),
+					new AlarmType(new Description("unknown"), Color.Blue, new TimeSpan(0, 0, 1), 0.8)
 				};
 
 			var activity = ActivityFactory.CreateActivity("activity");
@@ -484,11 +480,9 @@ namespace Teleopti.Ccc.WinCodeTest.Configuration
 		{
 			var alarms = new List<IAlarmType>
 				{
-					new AlarmType(new Description("userALARM"), Color.Blue, new TimeSpan(0, 0, 1),
-					              AlarmTypeMode.UserDefined, 0.8),
-					new AlarmType(new Description("ok"), Color.Blue, new TimeSpan(0, 0, 1), AlarmTypeMode.Ok, 0.8),
-					new AlarmType(new Description("unknown"), Color.Blue, new TimeSpan(0, 0, 1),
-					              AlarmTypeMode.Unknown, 0.8)
+					new AlarmType(new Description("userALARM"), Color.Blue, new TimeSpan(0, 0, 1), 0.8),
+					new AlarmType(new Description("ok"), Color.Blue, new TimeSpan(0, 0, 1), 0.8),
+					new AlarmType(new Description("unknown"), Color.Blue, new TimeSpan(0, 0, 1), 0.8)
 				};
 
 			var activity = ActivityFactory.CreateActivity("activity");
@@ -527,9 +521,9 @@ namespace Teleopti.Ccc.WinCodeTest.Configuration
 
 			var alarms = new List<IAlarmType>
 				{
-					new AlarmType(new Description("userALARM"), Color.Blue, new TimeSpan(0, 0, 1), AlarmTypeMode.UserDefined, 0.8),
-					new AlarmType(new Description("ok"), Color.Blue, new TimeSpan(0, 0, 1), AlarmTypeMode.Ok, 0.8),
-					new AlarmType(new Description("unknown"), Color.Blue, new TimeSpan(0, 0, 1), AlarmTypeMode.Unknown, 0.8)
+					new AlarmType(new Description("userALARM"), Color.Blue, new TimeSpan(0, 0, 1), 0.8),
+					new AlarmType(new Description("ok"), Color.Blue, new TimeSpan(0, 0, 1), 0.8),
+					new AlarmType(new Description("unknown"), Color.Blue, new TimeSpan(0, 0, 1), 0.8)
 				};
 
 			var activities = new List<IActivity>();
@@ -565,9 +559,9 @@ namespace Teleopti.Ccc.WinCodeTest.Configuration
 
 			var alarms = new List<IAlarmType>
 				{
-					new AlarmType(new Description("userALARM"), Color.Blue, new TimeSpan(0, 0, 1), AlarmTypeMode.UserDefined, 0.8),
-					new AlarmType(new Description("ok"), Color.Blue, new TimeSpan(0, 0, 1), AlarmTypeMode.Ok, 0.8),
-					new AlarmType(new Description("unknown"), Color.Blue, new TimeSpan(0, 0, 1), AlarmTypeMode.Unknown, 0.8)
+					new AlarmType(new Description("userALARM"), Color.Blue, new TimeSpan(0, 0, 1), 0.8),
+					new AlarmType(new Description("ok"), Color.Blue, new TimeSpan(0, 0, 1), 0.8),
+					new AlarmType(new Description("unknown"), Color.Blue, new TimeSpan(0, 0, 1), 0.8)
 				};
 
 			var activities = new List<IActivity>();
@@ -600,9 +594,9 @@ namespace Teleopti.Ccc.WinCodeTest.Configuration
 
 			var alarms = new List<IAlarmType>
 				{
-					new AlarmType(new Description("userALARM"), Color.Blue, new TimeSpan(0, 0, 1), AlarmTypeMode.UserDefined, 0.8),
-					new AlarmType(new Description("ok"), Color.Blue, new TimeSpan(0, 0, 1), AlarmTypeMode.Ok, 0.8),
-					new AlarmType(new Description("unknown"), Color.Blue, new TimeSpan(0, 0, 1), AlarmTypeMode.Unknown, 0.8)
+					new AlarmType(new Description("userALARM"), Color.Blue, new TimeSpan(0, 0, 1), 0.8),
+					new AlarmType(new Description("ok"), Color.Blue, new TimeSpan(0, 0, 1), 0.8),
+					new AlarmType(new Description("unknown"), Color.Blue, new TimeSpan(0, 0, 1), 0.8)
 				};
 
 			var activities = new List<IActivity>();
@@ -633,9 +627,9 @@ namespace Teleopti.Ccc.WinCodeTest.Configuration
 		{
 			var alarms = new List<IAlarmType>
 				{
-					new AlarmType(new Description("userALARM"), Color.Blue, new TimeSpan(0, 0, 1), AlarmTypeMode.UserDefined, 0.8),
-					new AlarmType(new Description("ok"), Color.Blue, new TimeSpan(0, 0, 1), AlarmTypeMode.Ok, 0.8),
-					new AlarmType(new Description("unknown"), Color.Blue, new TimeSpan(0, 0, 1), AlarmTypeMode.Unknown, 0.8)
+					new AlarmType(new Description("userALARM"), Color.Blue, new TimeSpan(0, 0, 1), 0.8),
+					new AlarmType(new Description("ok"), Color.Blue, new TimeSpan(0, 0, 1), 0.8),
+					new AlarmType(new Description("unknown"), Color.Blue, new TimeSpan(0, 0, 1), 0.8)
 				};
 
 			var unitOfWork = MockRepository.GenerateMock<IUnitOfWork>();

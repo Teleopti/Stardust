@@ -6,6 +6,7 @@ using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Rta;
 using Teleopti.Interfaces.Domain;
+using Adherence = Teleopti.Ccc.Domain.ApplicationLayer.Rta.Adherence;
 
 namespace Teleopti.Ccc.Infrastructure.Rta
 {

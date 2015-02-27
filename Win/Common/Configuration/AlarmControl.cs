@@ -70,7 +70,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 
 		private void buttonNewClick(object sender, EventArgs e)
 		{
-			var atype = new AlarmType(new Description(Resources.GiveAlarmAName), Color.Red, new TimeSpan(0, 0, 0), AlarmTypeMode.UserDefined, 0.0);
+			var atype = new AlarmType(new Description(Resources.GiveAlarmAName), Color.Red, new TimeSpan(0, 0, 0), 0.0);
 			_alarmTypes.Add(atype);
 			_view.LoadGrid();
 		}

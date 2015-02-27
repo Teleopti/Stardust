@@ -1,39 +1,79 @@
 using System;
+using System.Collections.Generic;
 using System.Drawing;
+using System.Linq;
 using Teleopti.Ccc.Domain.Common.EntityBaseTypes;
+using Teleopti.Ccc.UserTexts;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.Domain.RealTimeAdherence
 {
-    public class AlarmType : VersionedAggregateRootWithBusinessUnit, IAlarmType, IDeleteTag
+	public class AlarmType : VersionedAggregateRootWithBusinessUnit, IAlarmType, IDeleteTag
     {
         private Description _description;
         private Color _displayColor;
         private TimeSpan _thresholdTime;
-        private AlarmTypeMode _mode;
         private double _staffingEffect;
         private bool _isDeleted;
+		private Adherence _adherence;
 
-        public AlarmType(Description description, Color color, TimeSpan thresholdTime, AlarmTypeMode mode, double staffingEffect)
+		public AlarmType(Description description, Color color, TimeSpan thresholdTime, double staffingEffect)
         {
             _description = description;
             _displayColor = color;
             _thresholdTime = thresholdTime;
-            _mode = mode;
             _staffingEffect = staffingEffect;
         }
 
-        protected AlarmType()
+		public AlarmType()
         {}
 
-        public virtual  double StaffingEffect
+        public virtual double StaffingEffect
         {
             get { return _staffingEffect; }
             set{ _staffingEffect = value;}
         }
 
-        public virtual TimeSpan ThresholdTime
+		public virtual Adherence Adherence
+		{
+			get { return _adherence; }
+			set { _adherence = value; }
+		}
+
+		private static readonly IEnumerable<adherenceWithText> _adherences = new[]
+		{
+			new adherenceWithText
+			{
+				Adherence = Adherence.In,
+				Text = Resources.InAdherence
+			},
+			new adherenceWithText
+			{
+				Adherence = Adherence.Out,
+				Text = Resources.OutOfAdherence
+			},
+			new adherenceWithText
+			{
+				Adherence = Adherence.Neutral,
+				Text = Resources.NeutralAdherence
+			}
+		};
+
+		private class adherenceWithText
+		{
+			public Adherence Adherence { get; set; }
+			public string Text { get; set; }
+		}
+
+		public virtual void SetAdherenceByText(string text)
+		{
+			Adherence = _adherences.Single(x => x.Text == text).Adherence;
+		}
+
+		public virtual string AdherenceText { get { return _adherences.Single(x => x.Adherence == Adherence).Text; } }
+
+		public virtual TimeSpan ThresholdTime
         {
             get { return _thresholdTime; }
             set
@@ -65,15 +105,8 @@ namespace Teleopti.Ccc.Domain.RealTimeAdherence
             return DisplayColor;
         }
 
-
         public virtual bool InContractTime { get; set; }
         public virtual ITracker Tracker { get; set; }
-
-        public virtual AlarmTypeMode Mode
-        {
-            get { return _mode; }
-            set { _mode = value; }
-        }
 
         public virtual bool IsDeleted
         {
@@ -89,5 +122,7 @@ namespace Teleopti.Ccc.Domain.RealTimeAdherence
         {
             get { return this; }
         }
+
     }
+
 }

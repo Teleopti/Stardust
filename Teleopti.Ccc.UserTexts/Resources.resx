@@ -12859,4 +12859,12 @@ Reduce the complexity to use these shifts.</value>
     <value>Shift Category Value:</value>
     <comment>Shift category value for the selected agent. Under fairness tab in agent info</comment>
   </data>
+  <data name="InAdherence" xml:space="preserve">
+    <value>In adherence</value>
+    <comment>In adherence</comment>
+  </data>
+  <data name="NeutralAdherence" xml:space="preserve">
+    <value>Neutral</value>
+    <comment>Neutral adherence</comment>
+  </data>
 </root>

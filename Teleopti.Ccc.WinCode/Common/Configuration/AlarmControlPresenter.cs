@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.Specialized;
 using System.Drawing;
 using System.Linq;
 using Syncfusion.Windows.Forms.Grid;
@@ -18,10 +19,10 @@ namespace Teleopti.Ccc.WinCode.Common.Configuration
 	public class AlarmControlPresenter
 	{
 		private readonly IAlarmControlView _view;
-		private readonly IList<IAlarmType> _alarmTypes;
+		private readonly IEnumerable<IAlarmType> _alarmTypes;
 		private readonly IList<Column> _columns = new List<Column>();
 
-		public AlarmControlPresenter(IList<IAlarmType> alarmTypes, IAlarmControlView view, IEnumerable<IAlarmControlPresenterDecorator> decorators)
+		public AlarmControlPresenter(IEnumerable<IAlarmType> alarmTypes, IAlarmControlView view, IEnumerable<IAlarmControlPresenterDecorator> decorators)
 		{
 			decorators = decorators ?? new IAlarmControlPresenterDecorator[] {};
 
@@ -68,7 +69,7 @@ namespace Teleopti.Ccc.WinCode.Common.Configuration
 
 		public void QueryRowCount(object sender, GridRowColCountEventArgs e)
 		{
-			e.Count = _alarmTypes.Count;
+			e.Count = _alarmTypes.Count();
 			e.Handled = true;
 		}
 
@@ -90,7 +91,7 @@ namespace Teleopti.Ccc.WinCode.Common.Configuration
 			{
 				if (e.ColIndex == 0)
 					return;
-				var alarmType = _alarmTypes[e.RowIndex - 1];
+				var alarmType = _alarmTypes.ElementAt(e.RowIndex - 1);
 				Columns.Single(c => c.Index == e.ColIndex).Get(alarmType, e);
 			}
 			e.Handled = true;
@@ -148,14 +149,14 @@ namespace Teleopti.Ccc.WinCode.Common.Configuration
 		{
 			if (e.RowIndex == 0 || e.ColIndex == 0) return;
 
-			if (_alarmTypes.Count == 0)
+			if (!_alarmTypes.Any())
 				return;
 
 			var column = Columns.SingleOrDefault(c => c.Index == e.ColIndex && c.Update != null);
 
 			if (column != null)
 			{
-				var alarmType = _alarmTypes[e.RowIndex - 1];
+				var alarmType = _alarmTypes.ElementAt(e.RowIndex - 1);
 				column.Update(alarmType, _alarmTypes, _view, e);
 			}
 
@@ -201,4 +202,33 @@ namespace Teleopti.Ccc.WinCode.Common.Configuration
 			alarm.Description = new Description(name);
 		}
 	}
+
+	public class AdherenceColumn : IAlarmControlPresenterDecorator
+	{
+		public void Decorate(AlarmControlPresenter alarmControlPresenter)
+		{
+			var staffingEffect = alarmControlPresenter.Columns.IndexOf(AlarmControlPresenter.ColumnHeader.StaffingEffect);
+			alarmControlPresenter.Columns.Insert(staffingEffect + 1,
+				new AlarmControlPresenter.Column
+				{
+					Text = Resources.Adherence,
+					Get = getAdherence,
+					Update = updateAdherence
+				});
+		}
+
+		private static void updateAdherence(IAlarmType alarmType, IEnumerable<IAlarmType> alarmTypes, IAlarmControlView view, GridSaveCellInfoEventArgs e)
+		{
+			alarmType.SetAdherenceByText(e.Style.CellValue as string);
+		}
+
+		private static void getAdherence(IAlarmType alarmType, GridQueryCellInfoEventArgs e)
+		{
+			e.Style.CellType = "ComboBox";
+			e.Style.ChoiceList = new StringCollection { Resources.InAdherence, Resources.OutOfAdherence, Resources.NeutralAdherence };
+			e.Style.DropDownStyle = GridDropDownStyle.Exclusive;
+			e.Style.CellValue = alarmType.AdherenceText;
+		}
+	}
+
 }

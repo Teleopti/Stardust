@@ -13,9 +13,9 @@ using Teleopti.Ccc.UserTexts;
 using Teleopti.Ccc.WinCode.Common.Configuration;
 using Teleopti.Interfaces.Domain;
 
-namespace Teleopti.Ccc.WinCodeTest.Configuration
+namespace Teleopti.Ccc.WinCodeTest.Configuration.AlarmControl
 {
-    [TestFixture, SetUICulture("en-US")]
+	[TestFixture, SetUICulture("en-US")]
     public class AlarmControlPresenterTest
     {
         private AlarmControlPresenter _target;
@@ -31,10 +31,10 @@ namespace Teleopti.Ccc.WinCodeTest.Configuration
             mocks = new MockRepository();
 
             _alarms = new List<IAlarmType>();
-            _alarms.Add(new AlarmType(new Description("userALARM"), Color.Blue, new TimeSpan(0, 0, 1), AlarmTypeMode.UserDefined, 0.8));
-            _alarms.Add(new AlarmType(new Description("moo"), Color.Blue, new TimeSpan(0, 0, 1), AlarmTypeMode.UserDefined, 0.8));
-            _alarms.Add(new AlarmType(new Description("ok"), Color.Blue, new TimeSpan(0, 0, 1), AlarmTypeMode.Ok, 0.8));
-            _alarms.Add(new AlarmType(new Description("unknown"), Color.Blue, new TimeSpan(0, 0, 1), AlarmTypeMode.Unknown, 0.8));
+            _alarms.Add(new AlarmType(new Description("userALARM"), Color.Blue, new TimeSpan(0, 0, 1), 0.8));
+            _alarms.Add(new AlarmType(new Description("moo"), Color.Blue, new TimeSpan(0, 0, 1), 0.8));
+            _alarms.Add(new AlarmType(new Description("ok"), Color.Blue, new TimeSpan(0, 0, 1), 0.8));
+            _alarms.Add(new AlarmType(new Description("unknown"), Color.Blue, new TimeSpan(0, 0, 1), 0.8));
             SetCreatedInfo(_alarms);
             _view = mocks.StrictMock<IAlarmControlView>();
             _target = new AlarmControlPresenter(_alarms, _view, null);

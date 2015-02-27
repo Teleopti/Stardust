@@ -345,6 +345,7 @@
     <Compile Include="Common\TransparentMeetingControlModelTest.cs" />
     <Compile Include="Common\TransparentMeetingControlPresenterTest.cs" />
     <Compile Include="Common\WhenAddingNewScheduleToShiftEditor.cs" />
+    <Compile Include="Configuration\AlarmControl\AdherenceTest.cs" />
     <Compile Include="Configuration\ChangePasswordPresenterTest.cs" />
     <Compile Include="Configuration\MasterActivityPresenterTest.cs" />
     <Compile Include="Configuration\MasterActivityModelTest.cs" />
@@ -763,7 +764,7 @@
     <Compile Include="Common\Rows\CellInfoTest.cs" />
     <Compile Include="Common\Rows\RowManagerTest.cs" />
     <Compile Include="Common\Rows\SkillStaffPeriodGridRowSchedulerTest.cs" />
-    <Compile Include="Configuration\AlarmControlPresenterTest.cs" />
+    <Compile Include="Configuration\AlarmControl\PresenterTest.cs" />
     <Compile Include="Configuration\ManageAlarmSituationPresenterTest.cs" />
     <Compile Include="Converters\TimeSpanConverterTest.cs" />
     <Compile Include="FakeData\PeopleAdminGridDataFactory.cs" />
