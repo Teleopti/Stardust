@@ -5,6 +5,6 @@ namespace Teleopti.Ccc.Domain.Forecasting.Angel.Future
 {
 	public interface IFutureData
 	{
-		IEnumerable<ITaskOwner> Fetch(IWorkload workload, DateOnlyPeriod futurePeriod, IEnumerable<ISkillDay> skillDays);
+		IEnumerable<ITaskOwner> Fetch(QuickForecasterWorkloadParams quickForecasterWorkloadParams);
 	}
 }

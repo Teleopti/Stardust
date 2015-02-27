@@ -18,11 +18,5 @@ namespace Teleopti.Ccc.Web.Areas.Forecasting.Core
 			var historicalPeriodStartTime = new DateOnly(nowDate.Date.AddYears(-1));
 			return new DateOnlyPeriod(historicalPeriodStartTime, nowDate);
 		}
-
-		public DateOnlyPeriod OneYearHistoricalPeriod(DateOnlyPeriod futurePeriod)
-		{
-			var historicalPeriodStartTime = new DateOnly(futurePeriod.StartDate.Date.AddYears(-1));
-			return new DateOnlyPeriod(historicalPeriodStartTime, futurePeriod.StartDate);
-		}
 	}
 }

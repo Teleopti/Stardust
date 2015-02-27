@@ -5,6 +5,6 @@ namespace Teleopti.Ccc.Domain.Forecasting.Angel.Future
 {
 	public interface IForecastVolumeApplier
 	{
-		void Apply(IWorkload workload, ITaskOwnerPeriod taskOwnerPeriod, IEnumerable<ITaskOwner> futureWorkloadDays);
+		void Apply(IWorkload workload, ITaskOwnerPeriod historicalData, IEnumerable<ITaskOwner> futureWorkloadDays);
 	}
 }

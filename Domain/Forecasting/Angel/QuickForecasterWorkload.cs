@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
+using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Domain.Forecasting.Angel.Future;
 using Teleopti.Ccc.Domain.Forecasting.Angel.Historical;
-using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Forecasting.Angel
 {
@@ -18,12 +18,15 @@ namespace Teleopti.Ccc.Domain.Forecasting.Angel
 			_volumeApplier = volumeApplier;
 		}
 
-		public void Execute(IWorkload workload, DateOnlyPeriod historicalPeriod, DateOnlyPeriod futurePeriod, IEnumerable<ISkillDay> skillDays)
+		public void Execute(QuickForecasterWorkloadParams quickForecasterWorkloadParams)
 		{
-			var taskOwnerPeriod = _historicalData.Fetch(workload, historicalPeriod);
+			var historicalData = _historicalData.Fetch(quickForecasterWorkloadParams.WorkLoad, quickForecasterWorkloadParams.HistoricalPeriod);
 
-			var futureWorkloadDays = _futureData.Fetch(workload, futurePeriod, skillDays);
-			_volumeApplier.Apply(workload, taskOwnerPeriod, futureWorkloadDays);
+			var futureWorkloadDays = _futureData.Fetch(quickForecasterWorkloadParams);
+
+			_volumeApplier.Apply(quickForecasterWorkloadParams.WorkLoad, historicalData, futureWorkloadDays);
+
+			quickForecasterWorkloadParams.Accuracy = 0;
 		}
 	}
 }

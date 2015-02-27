@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using NUnit.Framework;
 using Rhino.Mocks;
+using SharpTestsEx;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.Forecasting.Angel;
@@ -44,9 +45,10 @@ namespace Teleopti.Ccc.DomainTest.Forecasting.Angel.QuickForecastSkillWithOneWor
 			var futureData =new FutureData();
 			var quickForecasterWorkload = new QuickForecasterWorkload(new HistoricalData(dailyStatistics, validatedVolumeDayRepository), futureData, new ForecastVolumeApplier());
 			var target = new QuickForecaster(quickForecasterWorkload, new FetchAndFillSkillDays(SkillDayRepository(skillDays), currentScenario, new SkillDayRepository(MockRepository.GenerateStrictMock<ICurrentUnitOfWork>())));
-			target.Execute(Workload.Skill, HistoricalPeriod, FuturePeriod);
+			var result = target.Execute(Workload.Skill, FuturePeriod, HistoricalPeriod);
 
 			Assert(skillDays);
+			result.Should().Be.EqualTo(0);
 		}
 
 		protected IScenario DefaultScenario { get; private set; }

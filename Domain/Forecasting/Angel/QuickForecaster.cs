@@ -1,4 +1,5 @@
-﻿using Teleopti.Ccc.Domain.Forecasting.Angel.Future;
+﻿using System.Collections.Generic;
+using Teleopti.Ccc.Domain.Forecasting.Angel.Future;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Forecasting.Angel
@@ -14,13 +15,35 @@ namespace Teleopti.Ccc.Domain.Forecasting.Angel
 			_fetchAndFillSkillDays = fetchAndFillSkillDays;
 		}
 
-		public void Execute(ISkill skill, DateOnlyPeriod historicalPeriod, DateOnlyPeriod futurePeriod)
+		public double Execute(ISkill skill, DateOnlyPeriod futurePeriod, DateOnlyPeriod historicalPeriod)
 		{
 			var skillDays = _fetchAndFillSkillDays.FindRange(futurePeriod, skill);
+			var sum = 0d;
+			
+
 			foreach (var workload in skill.WorkloadCollection)
 			{
-				_quickForecasterWorkload.Execute(workload, historicalPeriod, futurePeriod, skillDays);
+				var quickForecasterWorkloadParams = new QuickForecasterWorkloadParams
+				{
+					WorkLoad = workload,
+					FuturePeriod = futurePeriod,
+					SkillDays = skillDays,
+					HistoricalPeriod = historicalPeriod
+
+				};
+				_quickForecasterWorkload.Execute(quickForecasterWorkloadParams);
+				sum += quickForecasterWorkloadParams.Accuracy;
 			}
+			return sum;
 		}
+	}
+
+	public class QuickForecasterWorkloadParams
+	{
+		public IWorkload WorkLoad { get; set; }
+		public DateOnlyPeriod FuturePeriod { get; set; }
+		public ICollection<ISkillDay> SkillDays { get; set; }
+		public double Accuracy { get; set; }
+		public DateOnlyPeriod HistoricalPeriod { get; set; }
 	}
 }

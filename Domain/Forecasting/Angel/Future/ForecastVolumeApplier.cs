@@ -6,19 +6,19 @@ namespace Teleopti.Ccc.Domain.Forecasting.Angel.Future
 {
 	public class ForecastVolumeApplier : IForecastVolumeApplier
 	{
-		public void Apply(IWorkload workload, ITaskOwnerPeriod taskOwnerPeriod, IEnumerable<ITaskOwner> futureWorkloadDays)
+		public void Apply(IWorkload workload, ITaskOwnerPeriod historicalData, IEnumerable<ITaskOwner> futureWorkloadDays)
 		{
-			if (!taskOwnerPeriod.TaskOwnerDayCollection.Any())
+			if (!historicalData.TaskOwnerDayCollection.Any())
 				return;
 
 			var totalVolume = new TotalVolume();
 			var indexes = new IVolumeYear[]
 			{
-				new MonthOfYear(taskOwnerPeriod, new MonthOfYearCreator()),
-				new WeekOfMonth(taskOwnerPeriod, new WeekOfMonthCreator()),
-				new DayOfWeeks(taskOwnerPeriod, new DaysOfWeekCreator())
+				new MonthOfYear(historicalData, new MonthOfYearCreator()),
+				new WeekOfMonth(historicalData, new WeekOfMonthCreator()),
+				new DayOfWeeks(historicalData, new DaysOfWeekCreator())
 			};
-			totalVolume.Create(taskOwnerPeriod, futureWorkloadDays, indexes, new IOutlier[] { }, 0, 0, false, workload);
+			totalVolume.Create(historicalData, futureWorkloadDays, indexes, new IOutlier[] { }, 0, 0, false, workload);
 		}
 	}
 }
