@@ -36,10 +36,6 @@ Teleopti.Start.Authentication.AuthenticationState = function (data) {
 				}
 
 				options.errormessage("obscure amount of business units found");
-			},
-			error: function () {
-				//TODO: tenant - should not "catch all" here
-				options.nodatasource();
 			}
 		});
 		businessUnitsAjax(options);
@@ -57,7 +53,7 @@ Teleopti.Start.Authentication.AuthenticationState = function (data) {
 
 		var success = options.success;
 
-		$.extend(options, {
+		var optionForBusinessUnits= {
 			url: data.baseUrl + "Start/AuthenticationApi/BusinessUnits",
 			dataType: "json",
 			type: 'GET',
@@ -66,10 +62,14 @@ Teleopti.Start.Authentication.AuthenticationState = function (data) {
 			success: function (responseData, textStatus, jqXHR) {
 				businessUnits = responseData;
 				success(responseData, textStatus, jqXHR);
+			},
+			error: function () {
+				//TODO: tenant - a bit strange here. Just made the scenarios green
+				options.nodatasource();
 			}
-		});
+		}
 
-		$.ajax(options);
+		$.ajax(optionForBusinessUnits);
 	};
 
 	var logonAjax = function (options) {
