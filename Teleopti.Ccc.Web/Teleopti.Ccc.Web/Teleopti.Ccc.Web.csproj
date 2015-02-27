@@ -1434,7 +1434,6 @@
     <Content Include="Areas\SSO\Content\Scripts\Teleopti.SSO.Authentication.AuthenticationState.js" />
     <Content Include="Areas\SSO\Content\Scripts\Teleopti.SSO.Authentication.ChangePasswordView.js" />
     <Content Include="Areas\SSO\Content\Scripts\Teleopti.SSO.Authentication.ChangePasswordViewModel.js" />
-    <Content Include="Areas\SSO\Content\Scripts\Teleopti.SSO.Authentication.DataSourceViewModel.js" />
     <Content Include="Areas\SSO\Content\Scripts\Teleopti.SSO.Authentication.Init.js" />
     <Content Include="Areas\SSO\Content\Scripts\Teleopti.SSO.Authentication.JQueryAjaxViewModel.js" />
     <Content Include="Areas\SSO\Content\Scripts\Teleopti.SSO.Authentication.Navigation.js" />
@@ -1510,7 +1509,6 @@
     <Content Include="Areas\Start\Content\Scripts\Teleopti.Start.Authentication.BusinessUnitSelectionViewModel.js" />
     <Content Include="Areas\Start\Content\Scripts\Teleopti.Start.Authentication.SignInView.js" />
     <Content Include="Areas\Start\Content\Scripts\Teleopti.Start.Authentication.SignInViewModel.js" />
-    <Content Include="Areas\Start\Content\Scripts\Teleopti.Start.Authentication.DataSourceViewModel.js" />
     <Content Include="Areas\Start\Content\Scripts\Teleopti.Start.Authentication.Settings.js" />
     <Content Include="Areas\Start\Content\Scripts\Teleopti.Start.Authentication.Navigation.js" />
     <Content Include="Areas\Start\Content\Scripts\Teleopti.Start.Authentication.Init.js" />
