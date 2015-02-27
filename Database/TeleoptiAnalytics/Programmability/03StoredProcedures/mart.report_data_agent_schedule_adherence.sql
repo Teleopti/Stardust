@@ -210,7 +210,16 @@ CREATE TABLE #rights_agents (right_id int)
 CREATE TABLE #rights_teams (right_id int)
 
 --Table to hold agents to view
-CREATE TABLE #person_id (person_id int)
+CREATE TABLE #person_id (person_id int,
+	site_id int,
+	site_name nvarchar(100),
+	team_id int,
+	team_name nvarchar(100),
+	person_code uniqueidentifier,
+	first_name nvarchar(30),
+	last_name nvarchar(30),
+	person_name	nvarchar(200)
+)
 
 CREATE TABLE #bridge_time_zone
 	(
@@ -322,7 +331,16 @@ BEGIN
 	INSERT #rights_teams --Insert the current team
 	SELECT * FROM mart.SplitStringInt(@team_set)
 	
-	INSERT INTO #person_id SELECT Distinct dp.person_id
+	INSERT INTO #person_id 
+	SELECT DISTINCT dp.person_id,
+	dp.site_id,
+	dp.site_name,
+	dp.team_id,
+	dp.team_name,
+	dp.person_code,
+	dp.first_name,
+	dp.last_name,
+	dp.person_name
 	FROM mart.dim_person dp WHERE person_code = @agent_person_code
 END
 
@@ -331,13 +349,21 @@ END
 --b) agent allowed = #rights_agents
 --c) valid for this period
 INSERT INTO #person_id
-SELECT dp.person_id
+SELECT dp.person_id,
+	dp.site_id,
+	dp.site_name,
+	dp.team_id,
+	dp.team_name,
+	dp.person_code,
+	dp.first_name,
+	dp.last_name,
+	dp.person_name	
 FROM mart.dim_person dp
 INNER JOIN #rights_teams t
 	ON dp.team_id = t.right_id
 INNER JOIN #rights_agents a
 	ON a.right_id = dp.person_id
-	
+
 --Create UTC table from: mart.fact_schedule_deviation
 INSERT INTO #fact_schedule_deviation_raw(shift_startdate_local_id,shift_startdate_id,shift_startinterval_id,date_id,interval_id,person_id,deviation_schedule_ready_s,deviation_schedule_s,deviation_contract_s,ready_time_s,is_logged_in,contract_time_s)
 SELECT 
@@ -461,7 +487,6 @@ INNER JOIN #fact_schedule SchTemp
 	AND SchTemp.shift_startdate_local_id=fs.shift_startdate_local_id--in case overlapping shifts
 WHERE SchTemp.absence_id IS NULL
 
-
 --Start creating the result set
 --a) insert agent statistics matching scheduled time
 INSERT #result(shift_startdate_local_id,shift_startdate_id,shift_startdate,date_id,date,interval_id,interval_name,intervals_per_day,site_id,site_name,team_id,team_name,person_code,person_id,
@@ -501,7 +526,7 @@ adherence_type_selected,hide_time_zone,count_activity_per_interval)
 			@selected_adherence_type,
 			@hide_time_zone,
 			isnull(count_activity_per_interval,2) --fake a mixed shift = white color	
-	FROM mart.dim_person p
+	FROM #person_id p
 	INNER JOIN #fact_schedule fs
 		ON fs.person_id=p.person_id
 	LEFT JOIN #fact_schedule_deviation fsd
@@ -559,7 +584,7 @@ adherence_type_selected,hide_time_zone,count_activity_per_interval)
 			@selected_adherence_type,
 			@hide_time_zone,
 			2 --fake a mixed shift = white color	
-	FROM mart.dim_person p
+	FROM #person_id p
 	INNER JOIN #fact_schedule_deviation fsd
 		ON fsd.person_id=p.person_id
 	INNER JOIN #bridge_time_zone b1
