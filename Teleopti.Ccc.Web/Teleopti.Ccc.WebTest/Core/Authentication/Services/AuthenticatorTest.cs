@@ -5,6 +5,7 @@ using SharpTestsEx;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Infrastructure.MultiTenancy;
+using Teleopti.Ccc.TestCommon.TestData;
 using Teleopti.Ccc.Web.Areas.Start.Core.Authentication.DataProvider;
 using Teleopti.Ccc.Web.Areas.Start.Core.Authentication.Services;
 using Teleopti.Interfaces.Domain;
@@ -56,6 +57,17 @@ namespace Teleopti.Ccc.WebTest.Core.Authentication.Services
 			result.Person.Should().Be.SameInstanceAs(person);
 			result.Successful.Should().Be.True();
 			result.DataSource.Should().Be.SameInstanceAs(dataSource);
+		}
+
+		[Test]
+		public void NonExistingUserShouldReturnFailure()
+		{
+			var identity = RandomName.Make();
+			tokenIdentityProvider.Stub(x => x.RetrieveToken()).Return(new TokenIdentity {UserIdentifier = identity});
+			findTenantAndPersonIdForIdentity.Stub(x=> x.Find(identity)).Return(null);
+
+			target.LogonIdentityUser().Successful
+				.Should().Be.False();
 		}
 	}
 }

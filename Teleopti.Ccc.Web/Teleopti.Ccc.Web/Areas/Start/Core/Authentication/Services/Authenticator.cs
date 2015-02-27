@@ -26,8 +26,10 @@ namespace Teleopti.Ccc.Web.Areas.Start.Core.Authentication.Services
 		{
 			var token = _tokenIdentityProvider.RetrieveToken();
 			var personInfo = _findTenantAndPersonIdForIdentity.Find(token.UserIdentifier);
-			var dataSource = _dataSourceProvider.RetrieveDataSourceByName(personInfo.Tenant);
+			if (personInfo == null)
+				return new AuthenticateResult{Successful = false};
 
+			var dataSource = _dataSourceProvider.RetrieveDataSourceByName(personInfo.Tenant);
 			using (var uow = dataSource.Application.CreateAndOpenUnitOfWork())
 			{
 				var foundAppUser = _repositoryFactory.CreatePersonRepository(uow).LoadOne(personInfo.PersonId);

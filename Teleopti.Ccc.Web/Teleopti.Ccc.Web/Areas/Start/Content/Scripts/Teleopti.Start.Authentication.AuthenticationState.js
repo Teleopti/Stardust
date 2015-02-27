@@ -36,9 +36,12 @@ Teleopti.Start.Authentication.AuthenticationState = function (data) {
 				}
 
 				options.errormessage("obscure amount of business units found");
+			},
+			error: function () {
+				//TODO: tenant - should not "catch all" here
+				options.nodatasource();
 			}
 		});
-
 		businessUnitsAjax(options);
 	};
 
@@ -227,7 +230,6 @@ Teleopti.Start.Authentication.AuthenticationState = function (data) {
 			},
 			error: gotoSignInView
 		});
-
 		businessUnitsAjax(options);
 	};
 
