@@ -37,10 +37,10 @@ namespace Teleopti.Ccc.WinCode.Common.Configuration
 
 			decorators.ForEach(d => d.Decorate(this));
 
-			_columns.ForEach(c => c.IndexG = () => _columns.IndexOf(c) + 1);
+			_columns.ForEach(c => c.Index = _columns.IndexOf(c) + 1);
 		}
 
-		public IEnumerable<Column> Columns { get { return _columns; } }
+		public IList<Column> Columns { get { return _columns; } }
 
 		public class ColumnHeader
 		{
@@ -57,12 +57,11 @@ namespace Teleopti.Ccc.WinCode.Common.Configuration
 			// so we dont have the break the tests who assumed this was an enum
 			public static implicit operator int(Column column)
 			{
-				return column.IndexG();
+				return column.Index;
 			}
 
 			public string Text { get; set; }
-			public int Index { get { return IndexG(); }}
-			public Func<int> IndexG { get; set; }
+			public int Index { get; set; }
 			public Action<IAlarmType, GridQueryCellInfoEventArgs> Get { get; set; }
 			public Action<IAlarmType, IEnumerable<IAlarmType>, IAlarmControlView, GridSaveCellInfoEventArgs> Update { get; set; }
 		}
