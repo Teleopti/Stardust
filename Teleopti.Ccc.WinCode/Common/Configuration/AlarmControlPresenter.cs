@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
 using Syncfusion.Windows.Forms.Grid;
+using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.UserTexts;
 using Teleopti.Interfaces.Domain;
@@ -26,22 +27,25 @@ namespace Teleopti.Ccc.WinCode.Common.Configuration
 			_columns.Add(ColumnHeader.Time);
 			_columns.Add(ColumnHeader.UpdatedBy);
 			_columns.Add(ColumnHeader.UpdatedOn);
+
+			_columns.Select((c, i) => new {c, i}).ForEach(e => { e.c.Index = e.i + 1; });
 		}
 
 		public IEnumerable<Column> Columns { get { return _columns; } }
 
 		public class ColumnHeader
 		{
-			public static Column Name = new Column { Index = 1, Text = Resources.Name, Get = getName, Update = updateName };
-			public static Column StaffingEffect = new Column { Index = 3, Text = Resources.StaffingEffect, Get = getStaffingEffect, Update = updateStaffingEffect };
-			public static Column Color = new Column { Index = 4, Text = Resources.Color, Get = getColor, Update = updateColor };
-			public static Column Time = new Column { Index = 2, Text = Resources.Time, Get = getTime, Update = updateTime };
-			public static Column UpdatedBy = new Column { Index = 5, Text = Resources.UpdatedBy, Get = getUpdatedBy };
-			public static Column UpdatedOn = new Column { Index = 6, Text = Resources.UpdatedOn, Get = getUpdatedOn };
+			public static Column Name = new Column { Text = Resources.Name, Get = getName, Update = updateName };
+			public static Column StaffingEffect = new Column { Text = Resources.StaffingEffect, Get = getStaffingEffect, Update = updateStaffingEffect };
+			public static Column Color = new Column { Text = Resources.Color, Get = getColor, Update = updateColor };
+			public static Column Time = new Column { Text = Resources.Time, Get = getTime, Update = updateTime };
+			public static Column UpdatedBy = new Column { Text = Resources.UpdatedBy, Get = getUpdatedBy };
+			public static Column UpdatedOn = new Column { Text = Resources.UpdatedOn, Get = getUpdatedOn };
 		}
 
 		public class Column
 		{
+			// so we dont have the break the tests who assumed this was an enum
 			public static implicit operator int(Column column)
 			{
 				return column.Index;
