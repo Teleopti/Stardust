@@ -322,6 +322,26 @@ BEGIN --Standard Report Permisssions
 	
 	INSERT INTO #rights_teams
 	SELECT * FROM mart.PermittedTeamsMultipleTeams(@person_code, @report_id, @site_id, @team_set)
+
+		--Join the ResultSets above as:
+	--a) teams allowed = #rights_teams.
+	--b) agent allowed = #rights_agents
+	--c) valid for this period
+	INSERT INTO #person_id
+	SELECT dp.person_id,
+		dp.site_id,
+		dp.site_name,
+		dp.team_id,
+		dp.team_name,
+		dp.person_code,
+		dp.first_name,
+		dp.last_name,
+		dp.person_name	
+	FROM mart.dim_person dp
+	INNER JOIN #rights_teams t
+		ON dp.team_id = t.right_id
+	INNER JOIN #rights_agents a
+		ON a.right_id = dp.person_id
 END
 ELSE  --MyTime and SDK, don't use permissions, just go for the current agent looking on her/him self
 BEGIN	
@@ -343,26 +363,6 @@ BEGIN
 	dp.person_name
 	FROM mart.dim_person dp WHERE person_code = @agent_person_code
 END
-
---Join the ResultSets above as:
---a) teams allowed = #rights_teams.
---b) agent allowed = #rights_agents
---c) valid for this period
-INSERT INTO #person_id
-SELECT dp.person_id,
-	dp.site_id,
-	dp.site_name,
-	dp.team_id,
-	dp.team_name,
-	dp.person_code,
-	dp.first_name,
-	dp.last_name,
-	dp.person_name	
-FROM mart.dim_person dp
-INNER JOIN #rights_teams t
-	ON dp.team_id = t.right_id
-INNER JOIN #rights_agents a
-	ON a.right_id = dp.person_id
 
 --Create UTC table from: mart.fact_schedule_deviation
 INSERT INTO #fact_schedule_deviation_raw(shift_startdate_local_id,shift_startdate_id,shift_startinterval_id,date_id,interval_id,person_id,deviation_schedule_ready_s,deviation_schedule_s,deviation_contract_s,ready_time_s,is_logged_in,contract_time_s)
