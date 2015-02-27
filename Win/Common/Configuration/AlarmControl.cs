@@ -50,7 +50,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 		void setupAlarmGrid(object sender, RunWorkerCompletedEventArgs e)
 		{
 			_view = new AlarmControlView(gridControlAlarmTypes);
-			_view.Presenter = new AlarmControlPresenter(_alarmTypes, _view);
+			_view.Presenter = new AlarmControlPresenter(_alarmTypes, _view, null);
 			_view.PresentThisItem += viewPresentThisItem;
 			_view.WarnOfThis += viewWarnOfThis;
 			_view.LoadGrid();

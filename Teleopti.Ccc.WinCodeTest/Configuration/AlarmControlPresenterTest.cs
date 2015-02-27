@@ -37,7 +37,7 @@ namespace Teleopti.Ccc.WinCodeTest.Configuration
             _alarms.Add(new AlarmType(new Description("unknown"), Color.Blue, new TimeSpan(0, 0, 1), AlarmTypeMode.Unknown, 0.8));
             SetCreatedInfo(_alarms);
             _view = mocks.StrictMock<IAlarmControlView>();
-            _target = new AlarmControlPresenter(_alarms, _view);
+            _target = new AlarmControlPresenter(_alarms, _view, null);
         }
 
         private void SetCreatedInfo(IEnumerable<IAlarmType> alarms)
@@ -73,7 +73,7 @@ namespace Teleopti.Ccc.WinCodeTest.Configuration
         [Test]
         public void QueryCellInfoWithBadIndex()
         {
-            _target = new AlarmControlPresenter(new List<IAlarmType>(), _view);
+            _target = new AlarmControlPresenter(new List<IAlarmType>(), _view, null);
             var style = new GridStyleInfo();
             var e = new GridQueryCellInfoEventArgs(-1, -1, style);
             _target.QueryCellInfo(null, e);
@@ -82,7 +82,7 @@ namespace Teleopti.Ccc.WinCodeTest.Configuration
         [Test]
         public void QueryHeaderShouldReturnColumnHeader()
         {
-            _target = new AlarmControlPresenter(new List<IAlarmType>(), _view);
+            _target = new AlarmControlPresenter(new List<IAlarmType>(), _view, null);
             var style = new GridStyleInfo();
             var e = new GridQueryCellInfoEventArgs(0, (int)AlarmControlPresenter.ColumnHeader.Name, style);
             _target.QueryCellInfo(null, e);

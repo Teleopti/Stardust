@@ -10,14 +10,21 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.WinCode.Common.Configuration
 {
+	public interface IAlarmControlPresenterDecorator
+	{
+		void Decorate(AlarmControlPresenter alarmControlPresenter);
+	}
+
 	public class AlarmControlPresenter
 	{
 		private readonly IAlarmControlView _view;
 		private readonly IList<IAlarmType> _alarmTypes;
 		private readonly IList<Column> _columns = new List<Column>();
 
-		public AlarmControlPresenter(IList<IAlarmType> alarmTypes, IAlarmControlView view)
+		public AlarmControlPresenter(IList<IAlarmType> alarmTypes, IAlarmControlView view, IEnumerable<IAlarmControlPresenterDecorator> decorators)
 		{
+			decorators = decorators ?? new IAlarmControlPresenterDecorator[] {};
+
 			_view = view;
 			_alarmTypes = alarmTypes;
 
@@ -28,7 +35,9 @@ namespace Teleopti.Ccc.WinCode.Common.Configuration
 			_columns.Add(ColumnHeader.UpdatedBy);
 			_columns.Add(ColumnHeader.UpdatedOn);
 
-			_columns.Select((c, i) => new {c, i}).ForEach(e => { e.c.Index = e.i + 1; });
+			decorators.ForEach(d => d.Decorate(this));
+
+			_columns.ForEach(c => c.IndexG = () => _columns.IndexOf(c) + 1);
 		}
 
 		public IEnumerable<Column> Columns { get { return _columns; } }
@@ -48,11 +57,12 @@ namespace Teleopti.Ccc.WinCode.Common.Configuration
 			// so we dont have the break the tests who assumed this was an enum
 			public static implicit operator int(Column column)
 			{
-				return column.Index;
+				return column.IndexG();
 			}
 
-			public int Index { get; set; }
 			public string Text { get; set; }
+			public int Index { get { return IndexG(); }}
+			public Func<int> IndexG { get; set; }
 			public Action<IAlarmType, GridQueryCellInfoEventArgs> Get { get; set; }
 			public Action<IAlarmType, IEnumerable<IAlarmType>, IAlarmControlView, GridSaveCellInfoEventArgs> Update { get; set; }
 		}
@@ -192,5 +202,4 @@ namespace Teleopti.Ccc.WinCode.Common.Configuration
 			alarm.Description = new Description(name);
 		}
 	}
-
 }
