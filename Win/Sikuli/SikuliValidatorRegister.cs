@@ -1,6 +1,6 @@
 ﻿namespace Teleopti.Ccc.Win.Sikuli
 {
-	public static class SikuliValidatorRegister
+	internal static class SikuliValidatorRegister
 	{
 
 		/// <summary>

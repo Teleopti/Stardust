@@ -2,7 +2,7 @@
 
 namespace Teleopti.Ccc.Win.Sikuli
 {
-	public partial class SikuliEnterValidatorDialog : MetroForm
+	internal partial class SikuliEnterValidatorDialog : MetroForm
 	{
 
 		public SikuliEnterValidatorDialog()

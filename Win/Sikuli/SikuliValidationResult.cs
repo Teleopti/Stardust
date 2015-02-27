@@ -12,7 +12,6 @@ namespace Teleopti.Ccc.Win.Sikuli
 			Warn
 		}
 
-
 		private readonly StringBuilder _stringBuilder;
 
 		public SikuliValidationResult(ResultValue defaultResult)

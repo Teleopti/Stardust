@@ -5,7 +5,7 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Win.Sikuli.Validators
 {
-	public class OptimizeBetweenDaysValidator : ISikuliValidator
+	internal class OptimizeBetweenDaysValidator : ISikuliValidator
 	{
 		private readonly ISchedulerStateHolder _schedulerState;
 		private readonly IAggregateSkill _totalSkill;
@@ -21,9 +21,9 @@ namespace Teleopti.Ccc.Win.Sikuli.Validators
 			get { return "The period's standard deviation must be under the limit."; }
 		}
 
-		public SikuliValidationResult Validate()
+		public SikuliValidationResult Validate(ITestDuration duration)
 		{
-			SikuliValidationResult result = new SikuliValidationResult(SikuliValidationResult.ResultValue.Pass);
+			var result = new SikuliValidationResult(SikuliValidationResult.ResultValue.Pass);
 			var std = ValidatorHelper.GetStandardDeviationForPeriod(_schedulerState, _totalSkill);
 			const double limit = 0.03d;
 			result.AppendLimitValueLineToDetails("Period StdDev", limit.ToString(CultureInfo.CurrentCulture), std.Value.ToString(CultureInfo.CurrentCulture));

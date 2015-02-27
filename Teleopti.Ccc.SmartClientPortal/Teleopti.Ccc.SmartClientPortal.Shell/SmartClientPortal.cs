@@ -201,7 +201,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 			}
 			if (e.KeyCode == Keys.V && e.Shift && e.Alt)
 			{
-				SikuliHelper.EnterValidator(this);
+				SikuliHelper.Validation.EnterValidator(this);
 			}
 			base.OnKeyDown(e);
 		}
