@@ -25,11 +25,26 @@ namespace Teleopti.Ccc.TestCommon.FakeData
 		{
 			return TimeZoneInfo.FindSystemTimeZoneById("GMT Standard Time");
 		}
-
+		
         public static TimeZoneInfo UtcTimeZoneInfo()
         {
 			return TimeZoneInfo.Utc;
         }
+
+		public static TimeZoneInfo MoskowTimeZoneInfo()
+		{
+			return TimeZoneInfo.FindSystemTimeZoneById("Russian Standard Time");
+		}
+
+		public static TimeZoneInfo AbuDhabiTimeZoneInfo()
+		{
+			return TimeZoneInfo.FindSystemTimeZoneById("Arabian Standard Time");
+		}
+
+		public static TimeZoneInfo NewYorkTimeZoneInfo()
+		{
+			return TimeZoneInfo.FindSystemTimeZoneById("Eastern Standard Time");
+		}
 
         public static TimeZoneInfo HawaiiTimeZoneInfo()
         {
