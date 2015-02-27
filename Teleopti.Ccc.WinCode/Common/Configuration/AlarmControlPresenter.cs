@@ -13,11 +13,44 @@ namespace Teleopti.Ccc.WinCode.Common.Configuration
 	{
 		private readonly IAlarmControlView _view;
 		private readonly IList<IAlarmType> _alarmTypes;
+		private readonly IList<Column> _columns = new List<Column>();
 
 		public AlarmControlPresenter(IList<IAlarmType> alarmTypes, IAlarmControlView view)
 		{
 			_view = view;
 			_alarmTypes = alarmTypes;
+
+			_columns.Add(ColumnHeader.Name);
+			_columns.Add(ColumnHeader.StaffingEffect);
+			_columns.Add(ColumnHeader.Color);
+			_columns.Add(ColumnHeader.Time);
+			_columns.Add(ColumnHeader.UpdatedBy);
+			_columns.Add(ColumnHeader.UpdatedOn);
+		}
+
+		public IEnumerable<Column> Columns { get { return _columns; } }
+
+		public class ColumnHeader
+		{
+			public static Column Name = new Column { Index = 1, Text = Resources.Name, Get = getName, Update = updateName };
+			public static Column StaffingEffect = new Column { Index = 3, Text = Resources.StaffingEffect, Get = getStaffingEffect, Update = updateStaffingEffect };
+			public static Column Color = new Column { Index = 4, Text = Resources.Color, Get = getColor, Update = updateColor };
+			public static Column Time = new Column { Index = 2, Text = Resources.Time, Get = getTime, Update = updateTime };
+			public static Column UpdatedBy = new Column { Index = 5, Text = Resources.UpdatedBy, Get = getUpdatedBy };
+			public static Column UpdatedOn = new Column { Index = 6, Text = Resources.UpdatedOn, Get = getUpdatedOn };
+		}
+
+		public class Column
+		{
+			public static implicit operator int(Column column)
+			{
+				return column.Index;
+			}
+
+			public int Index { get; set; }
+			public string Text { get; set; }
+			public Action<IAlarmType, GridQueryCellInfoEventArgs> Get { get; set; }
+			public Action<IAlarmType, IEnumerable<IAlarmType>, IAlarmControlView, GridSaveCellInfoEventArgs> Update { get; set; }
 		}
 
 		public void QueryRowCount(object sender, GridRowColCountEventArgs e)
@@ -28,7 +61,7 @@ namespace Teleopti.Ccc.WinCode.Common.Configuration
 
 		public void QueryColCount(object sender, GridRowColCountEventArgs e)
 		{
-			e.Count = 6;
+			e.Count = Columns.Count();
 			e.Handled = true;
 		}
 
@@ -88,44 +121,9 @@ namespace Teleopti.Ccc.WinCode.Common.Configuration
 				e.Style.CellValue = new LocalizedUpdateInfo().UpdatedTimeInUserPerspective(alarmType);
 		}
 
-		private static void queryHeader(GridQueryCellInfoEventArgs e)
+		private void queryHeader(GridQueryCellInfoEventArgs e)
 		{
 			e.Style.Text = Columns.Single(c => c.Index == e.ColIndex).Text;
-		}
-
-		public static readonly IList<Column> Columns = new List<Column>();
-
-		public class ColumnHeader
-		{
-			public static Column Name = new Column { Index = 1, Text = Resources.Name, Get = getName, Update = updateName};
-			public static Column StaffingEffect = new Column { Index = 3, Text = Resources.StaffingEffect, Get = getStaffingEffect, Update = updateStaffingEffect };
-			public static Column Color = new Column { Index = 4, Text = Resources.Color, Get = getColor, Update = updateColor };
-			public static Column Time = new Column { Index = 2, Text = Resources.Time, Get = getTime, Update = updateTime };
-			public static Column UpdatedBy = new Column { Index = 5, Text = Resources.UpdatedBy, Get = getUpdatedBy };
-			public static Column UpdatedOn = new Column { Index = 6, Text = Resources.UpdatedOn, Get = getUpdatedOn };
-
-			static ColumnHeader()
-			{
-				Columns.Add(Name);
-				Columns.Add(StaffingEffect);
-				Columns.Add(Color);
-				Columns.Add(Time);
-				Columns.Add(UpdatedBy);
-				Columns.Add(UpdatedOn);
-			}
-		}
-
-		public class Column
-		{
-			public static implicit operator int(Column column)
-			{
-				return column.Index;
-			}
-
-			public int Index { get; set; }
-			public string Text { get; set; }
-			public Action<IAlarmType, GridQueryCellInfoEventArgs> Get { get; set; }
-			public Action<IAlarmType, IEnumerable<IAlarmType>, IAlarmControlView, GridSaveCellInfoEventArgs> Update { get; set; }
 		}
 
 		public void CellClick(object sender, GridCellCancelEventArgs e)

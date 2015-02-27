@@ -1,13 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
-using System.Globalization;
+using System.Linq;
 using NUnit.Framework;
 using Rhino.Mocks;
 using Syncfusion.Styles;
 using Syncfusion.Windows.Forms.Grid;
 using Teleopti.Ccc.Domain.RealTimeAdherence;
-using Teleopti.Ccc.Domain.Time;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.UserTexts;
@@ -68,7 +67,7 @@ namespace Teleopti.Ccc.WinCodeTest.Configuration
         {
             var e = new GridRowColCountEventArgs();
             _target.QueryColCount(null, e);
-            Assert.AreEqual(AlarmControlPresenter.Columns.Count, e.Count);
+			Assert.AreEqual(_target.Columns.Count(), e.Count);
         }
 
         [Test]
