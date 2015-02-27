@@ -44,34 +44,28 @@ Teleopti.SSO.Authentication.Init = function () {
 
 	function _initRoutes() {
 		var viewRegex = 'signin';
-		var authenticationTypeRegex = 'application';
-		//TODO: tenant - remove datasource stuff
-		var dataSourceNameRegex = '.*';
+
 		crossroads.addRoute(
-			new RegExp('^(' + viewRegex + ')/(' + authenticationTypeRegex + ')/(' + dataSourceNameRegex + ')$', "i"),
-			function (view, authenticationType, dataSourceName) {
+			new RegExp('^(' + viewRegex + ')$', "i"),
+			function (view) {
 				_displayView({
-					view: view,
-					authenticationType: authenticationType,
-					dataSourceName: decodeURIComponent(dataSourceName)
+					view: view
 				});
 			});
 		crossroads.addRoute(
-			new RegExp('^(changepassword)/(' + dataSourceNameRegex + ')$', "i"),
-			function (view, dataSourceName) {
+			new RegExp('^(changepassword)$', "i"),
+			function () {
 				_displayView({
 					view: "changepassword",
-					mustChangePassword: false,
-					dataSourceName: decodeURIComponent(dataSourceName)
+					mustChangePassword: false
 				});
 			});
 		crossroads.addRoute(
-			new RegExp('^(mustchangepassword)/(' + dataSourceNameRegex + ')$', "i"),
-			function (view, dataSourceName) {
+			new RegExp('^(mustchangepassword)$', "i"),
+			function () {
 				_displayView({
 					view: "changepassword",
-					mustChangePassword: true,
-					dataSourceName: decodeURIComponent(dataSourceName)
+					mustChangePassword: true
 				});
 			});
 		crossroads.addRoute(
