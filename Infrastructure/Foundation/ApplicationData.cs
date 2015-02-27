@@ -9,9 +9,6 @@ using Teleopti.Interfaces.MessageBroker.Client.Composite;
 
 namespace Teleopti.Ccc.Infrastructure.Foundation
 {
-	/// <summary>
-	/// Data shared by hole application
-	/// </summary>
 	public class ApplicationData : IApplicationData
 	{
 		private readonly IList<IDataSource> _registeredDataSourceCollection;
@@ -26,7 +23,7 @@ namespace Teleopti.Ccc.Infrastructure.Foundation
 			IDataSourcesFactory dataSourcesFactory)
 		{
 			AppSettings = appSettings;
-			_registeredDataSourceCollection = registeredDataSources == null ? new List<IDataSource>() : registeredDataSources.ToList();
+			_registeredDataSourceCollection = registeredDataSources.ToList();
 			_messageBroker = messageBroker;
 			_loadPasswordPolicyService = loadPasswordPolicyService;
 			_dataSourcesFactory = dataSourcesFactory;

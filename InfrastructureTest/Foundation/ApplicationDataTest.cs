@@ -3,6 +3,7 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Linq;
 using NUnit.Framework;
 using Rhino.Mocks;
 using SharpTestsEx;
@@ -93,7 +94,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Foundation
 		[Test]
 		public void NoDataSourceTenant()
 		{
-			var target = new ApplicationData(_receivedSettings, null, null, null, null);
+			var target = new ApplicationData(_receivedSettings, Enumerable.Empty<IDataSource>(), null, null, null);
 			target.DataSource("something").Should().Be.Null();
 		}
 
