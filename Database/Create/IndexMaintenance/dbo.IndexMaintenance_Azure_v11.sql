@@ -90,6 +90,7 @@ DECLARE TableCursor CURSOR FOR
 		AND ips.index_id = i.index_id
 		AND ips.object_id = i.object_id
 	WHERE OBJECT_NAME(ps.object_id) not like '%_old' --IGNORE _OLD-TABLE INDEXES
+	AND OBJECT_NAME(ps.object_id) not like 'stg_%' --IGNORE stg_xxtable
 )
 
 --Rebuild
