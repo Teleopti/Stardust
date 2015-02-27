@@ -1,4 +1,5 @@
 ﻿using System;
+using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Scheduling.Assignment
@@ -54,7 +55,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
             TimeSpan timeZoneRecorrection = CalculateTimeZoneRecorrection(target, source);
             
             var targetShiftPeriod = sourceShiftPeriod.MovePeriod(periodDifference + timeZoneRecorrection);
-            TimeSpan dayLightSavingsRecorrection = CalculateDaylightSavingsRecorrection(target, source, sourceShiftPeriod, targetShiftPeriod);
+            TimeSpan dayLightSavingsRecorrection = CalculateDaylightSavingsRecorrection(sourceShiftPeriod, targetShiftPeriod);
             return periodDifference.Add(timeZoneRecorrection).Add(dayLightSavingsRecorrection);
         }
 
@@ -66,24 +67,36 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
                     .Subtract(sourceTimeZone.GetUtcOffset(source.Period.LocalStartDateTime));
         }
 
-        private static TimeSpan CalculateDaylightSavingsRecorrection(IScheduleDay target, IScheduleDay source, DateTimePeriod sourceShiftPeriod, DateTimePeriod targetShiftPeriod)
+        private static TimeSpan CalculateDaylightSavingsRecorrection(DateTimePeriod sourceShiftPeriod, DateTimePeriod targetShiftPeriod)
         {
-            TimeZoneInfo sourceTimeZone = source.TimeZone;
-            TimeZoneInfo targetTimeZone = target.TimeZone;
+			var loggedOnPersonsTimezone = StateHolderReader.Instance.StateReader.SessionScopeData.TimeZone;
 
-            if (targetShiftPeriod.StartDateTime == sourceShiftPeriod.StartDateTime)
-                return TimeSpan.FromHours(0);
-            var milliVanilli = -1;
-            if (targetShiftPeriod.StartDateTime < sourceShiftPeriod.StartDateTime && targetShiftPeriod.StartDateTime.Month < 7) // spring, could be change to daylight
-                milliVanilli = 1;
-            if (targetShiftPeriod.StartDateTime == sourceShiftPeriod.StartDateTime)
-                milliVanilli = 0;
-            TimeSpan sourceDaylightOffset =
-                sourceTimeZone.GetUtcOffset(sourceShiftPeriod.LocalStartDateTime).Subtract(sourceTimeZone.BaseUtcOffset);
-            TimeSpan targetDaylightOffset =
-                targetTimeZone.GetUtcOffset(targetShiftPeriod.LocalStartDateTime.AddMilliseconds(milliVanilli)).Subtract((targetTimeZone.BaseUtcOffset));
+			var sourceIsDaylightSavingTime = loggedOnPersonsTimezone.IsDaylightSavingTime(sourceShiftPeriod.LocalStartDateTime);
+			var targetIsDaylightSavingTime = loggedOnPersonsTimezone.IsDaylightSavingTime(targetShiftPeriod.LocalStartDateTime);
 
-            return sourceDaylightOffset.Subtract(targetDaylightOffset);
+			if (sourceIsDaylightSavingTime == targetIsDaylightSavingTime)
+				return TimeSpan.Zero;
+
+			var milliVanilli = -1;
+			if (targetShiftPeriod.StartDateTime < sourceShiftPeriod.StartDateTime && targetShiftPeriod.StartDateTime.Month < 7) // spring, could be change to daylight
+				milliVanilli = 1;
+			if (targetShiftPeriod.StartDateTime == sourceShiftPeriod.StartDateTime)
+				milliVanilli = 0;
+
+	        var sourceShiftStartTimeInLoggedOnLocal = TimeZoneHelper.ConvertFromUtc(sourceShiftPeriod.StartDateTime, loggedOnPersonsTimezone);
+			var targetShiftStartTimeInLoggedOnLocal = TimeZoneHelper.ConvertFromUtc(targetShiftPeriod.StartDateTime, loggedOnPersonsTimezone);
+
+			TimeSpan sourceDaylightOffset =
+				loggedOnPersonsTimezone.GetUtcOffset(sourceShiftStartTimeInLoggedOnLocal).Subtract(loggedOnPersonsTimezone.BaseUtcOffset);
+			TimeSpan targetDaylightOffset =
+				loggedOnPersonsTimezone.GetUtcOffset(targetShiftStartTimeInLoggedOnLocal.AddMilliseconds(milliVanilli)).Subtract((loggedOnPersonsTimezone.BaseUtcOffset));
+
+			return sourceDaylightOffset.Subtract(targetDaylightOffset);
+
+			//if (sourceIsSummerTime)
+			//	return TimeSpan.FromHours(1);
+
+			//return TimeSpan.FromHours(-1);
         }
 
         private static TimeSpan CalculatePeriodDifference(DateTimePeriod sourcePeriod, DateTimePeriod targetPeriod)

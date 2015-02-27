@@ -29,6 +29,21 @@ namespace Teleopti.Ccc.TestCommon.FakeData
             return TimeZoneInfo.FindSystemTimeZoneById("E. Europe Standard Time");
         }
 
+		public static TimeZoneInfo MoskowTimeZoneInfo()
+		{
+			return TimeZoneInfo.FindSystemTimeZoneById("Russian Standard Time");
+		}
+
+		public static TimeZoneInfo AbuDhabiTimeZoneInfo()
+		{
+			return TimeZoneInfo.FindSystemTimeZoneById("Arabian Standard Time");
+		}
+
+		public static TimeZoneInfo NewYorkTimeZoneInfo()
+		{
+			return TimeZoneInfo.FindSystemTimeZoneById("Eastern Standard Time");
+		}
+		
         public static TimeZoneInfo UtcTimeZoneInfo()
         {
             return TimeZoneInfo.Utc;
