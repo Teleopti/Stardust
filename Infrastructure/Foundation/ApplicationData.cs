@@ -54,11 +54,6 @@ namespace Teleopti.Ccc.Infrastructure.Foundation
 			}
 		}
 
-		public IEnumerable<IDataSource> RegisteredDataSourceCollection
-		{
-			get { return _registeredDataSourceCollection; }
-		}
-
 		public IDataSource DataSource(string tenant)
 		{
 			return _registeredDataSourceCollection.SingleOrDefault(x => x.DataSourceName.Equals(tenant));
@@ -83,9 +78,9 @@ namespace Teleopti.Ccc.Infrastructure.Foundation
 			}
 		}
 
+		//TODO: tenant remove this!
 		public IDataSource CreateAndAddDataSource(string dataSourceName, IDictionary<string, string> applicationNhibConfiguration, string analyticsConnectionString)
 		{
-			//TODO: tenant
 			var dataSource = existingDataSource(dataSourceName);
 			if (dataSource != null)
 				return dataSource;
@@ -95,7 +90,6 @@ namespace Teleopti.Ccc.Infrastructure.Foundation
 			var newDataSource =  _dataSourcesFactory.Create(applicationNhibConfiguration, analyticsConnectionString);
 			_registeredDataSourceCollection.Add(newDataSource);
 			return newDataSource;
-			//
 		}
 
 		private IDataSource existingDataSource(string datasourceName)

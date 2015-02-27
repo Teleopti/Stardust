@@ -10,9 +10,6 @@ namespace Teleopti.Interfaces.Domain
 	/// </summary>
 	public interface IApplicationData : IDisposable
 	{
-		[Obsolete("Will be removed soon. Please don't add any new code assuming there is a complete list of data sources.")]
-		IEnumerable<IDataSource> RegisteredDataSourceCollection { get; }
-
 		IDataSource DataSource(string tenant);
 
 		/// <summary>
