@@ -16,7 +16,7 @@ namespace Teleopti.Ccc.WebTest.Core.Authentication.Services
 	[TestFixture]
 	public class AuthenticatorTest
 	{
-		private IDataSourcesProvider dataSourcesProvider;
+		private IApplicationData applicationData;
 		private IRepositoryFactory repositoryFactory;
 		private Authenticator target;
 		private ITokenIdentityProvider tokenIdentityProvider;
@@ -26,11 +26,11 @@ namespace Teleopti.Ccc.WebTest.Core.Authentication.Services
 		[SetUp]
 		public void Setup()
 		{
-			dataSourcesProvider = MockRepository.GenerateMock<IDataSourcesProvider>();
+			applicationData = MockRepository.GenerateMock<IApplicationData>();
 			repositoryFactory = MockRepository.GenerateMock<IRepositoryFactory>();
 			tokenIdentityProvider = MockRepository.GenerateMock<ITokenIdentityProvider>();
 			findTenantAndPersonIdForIdentity = MockRepository.GenerateMock<IFindTenantAndPersonIdForIdentity>();
-			target = new Authenticator(dataSourcesProvider, tokenIdentityProvider, repositoryFactory, findTenantAndPersonIdForIdentity);
+			target = new Authenticator(applicationData, tokenIdentityProvider, repositoryFactory, findTenantAndPersonIdForIdentity);
 		}
 
 		[Test]
@@ -44,7 +44,7 @@ namespace Teleopti.Ccc.WebTest.Core.Authentication.Services
 			var tenantAndPersonId = new TenantAndPersonId {PersonId = Guid.NewGuid(), Tenant = tenant};
 			var person = new Person();
 
-			dataSourcesProvider.Stub(x => x.RetrieveDataSourceByName(tenant)).Return(dataSource);
+			applicationData.Stub(x => x.DataSource(tenant)).Return(dataSource);
 			dataSource.Stub(x => x.Application).Return(unitOfWorkFactory);
 			unitOfWorkFactory.Stub(x => x.CreateAndOpenUnitOfWork()).Return(uow);
 			repositoryFactory.Stub(x => x.CreatePersonRepository(uow)).Return(personRep);

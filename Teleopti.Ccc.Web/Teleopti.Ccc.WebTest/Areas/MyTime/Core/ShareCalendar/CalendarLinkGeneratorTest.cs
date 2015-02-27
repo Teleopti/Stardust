@@ -53,8 +53,8 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.ShareCalendar
 		public void ShouldGetCalendarForPerson()
 		{
 		    const string dataSourceName = "Main";
-		    var dataSourcesProvider = MockRepository.GenerateMock<IDataSourcesProvider>();
-            dataSourcesProvider.Stub(x => x.RetrieveDataSourceByName(dataSourceName)).Return(_dataSource);
+		    var applicationData = MockRepository.GenerateMock<IApplicationData>();
+            applicationData.Stub(x => x.DataSource(dataSourceName)).Return(_dataSource);
 
             var calendarTransformer = MockRepository.GenerateMock<ICalendarTransformer>();
 	    
@@ -94,7 +94,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.ShareCalendar
             _findSharedCalendarScheduleDays.Stub(x => x.GetScheduleDays(calendarlinkid, _unitOfWork, scheduledTo)).Return(models);
 			calendarTransformer.Stub(x => x.Transform(models)).Return("success!");
 
-		    var target = new CalendarLinkGenerator(_repositoryFactory, dataSourcesProvider, calendarTransformer,
+		    var target = new CalendarLinkGenerator(_repositoryFactory, applicationData, calendarTransformer,
 		        _findSharedCalendarScheduleDays, _checkCalendarPermissionCommand, _checkCalendarActiveCommand);
 			target.Generate(calendarlinkid).Should().Be.EqualTo("success!");
 

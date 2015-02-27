@@ -510,7 +510,6 @@
     <Compile Include="Core\Authentication\DataProvider\BusinessUnitProviderTest.cs" />
     <Compile Include="Core\DateTimePeriodFormValidatorTest.cs" />
     <Compile Include="Core\RequestContext\DefaultSessionSpecificCookieDataProviderSettingsTest.cs" />
-    <Compile Include="Core\Authentication\DataProvider\DataSourcesProviderTest.cs" />
     <Compile Include="Core\RequestContext\SetThreadCultureTest.cs" />
     <Compile Include="Core\RequestContext\RequestContextInitializerTest.cs" />
     <Compile Include="Core\RequestContext\SessionSpecificCookieDataProviderTest.cs" />

@@ -5,23 +5,23 @@ using Teleopti.Ccc.Domain.Security;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Infrastructure.Foundation;
-using Teleopti.Ccc.Web.Areas.Start.Core.Authentication.DataProvider;
 using Teleopti.Ccc.Web.Core.RequestContext.Cookie;
+using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Web.Areas.Start.Core.Authentication.Services
 {
 	public class WebLogOn : IWebLogOn
 	{
-		private readonly IDataSourcesProvider _dataSourceProvider;
 		private readonly IRepositoryFactory _repositoryFactory;
 		private readonly ILogOnOff _logOnOff;
+		private readonly IApplicationData _applicationData;
 		private readonly ISessionSpecificDataProvider _sessionSpecificDataProvider;
 		private readonly IRoleToPrincipalCommand _roleToPrincipalCommand;
 		private readonly ICurrentTeleoptiPrincipal _currentTeleoptiPrincipal;
 		private readonly IPrincipalAuthorization _principalAuthorization;
 
 		public WebLogOn(ILogOnOff logOnOff,
-		                IDataSourcesProvider dataSourceProvider,
+										IApplicationData applicationData,
 		                IRepositoryFactory repositoryFactory,
 		                ISessionSpecificDataProvider sessionSpecificDataProvider,
 		                IRoleToPrincipalCommand roleToPrincipalCommand,
@@ -29,7 +29,7 @@ namespace Teleopti.Ccc.Web.Areas.Start.Core.Authentication.Services
 		                IPrincipalAuthorization principalAuthorization)
 		{
 			_logOnOff = logOnOff;
-			_dataSourceProvider = dataSourceProvider;
+			_applicationData = applicationData;
 			_repositoryFactory = repositoryFactory;
 			_sessionSpecificDataProvider = sessionSpecificDataProvider;
 			_roleToPrincipalCommand = roleToPrincipalCommand;
@@ -39,7 +39,7 @@ namespace Teleopti.Ccc.Web.Areas.Start.Core.Authentication.Services
 
 		public void LogOn(string dataSourceName, Guid businessUnitId, Guid personId)
 		{
-			var dataSource = _dataSourceProvider.RetrieveDataSourceByName(dataSourceName);
+			var dataSource = _applicationData.DataSource(dataSourceName);
 			using (var uow = dataSource.Application.CreateAndOpenUnitOfWork())
 			{
 				var personRep = _repositoryFactory.CreatePersonRepository(uow);

@@ -1,7 +1,6 @@
 using System;
 using System.Security.Principal;
 using System.Web;
-using Microsoft.IdentityModel.Claims;
 using NUnit.Framework;
 using Rhino.Mocks;
 using SharpTestsEx;
@@ -11,7 +10,6 @@ using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.Infrastructure.Web;
 using Teleopti.Ccc.Web.Areas.Start.Core.Authentication.DataProvider;
-using Teleopti.Ccc.Web.Core.RequestContext;
 using Teleopti.Ccc.Web.Core.RequestContext.Cookie;
 using Teleopti.Ccc.Web.Core.RequestContext.Initialize;
 using Teleopti.Interfaces.Domain;
@@ -19,8 +17,6 @@ using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.WebTest.Core.RequestContext
 {
-	//ouch - för stor. blame roger. fixar till senare
-	//MS: I think this needs to be split into several resposibilites: data provider(s?), principal factory at the least..
 	[TestFixture]
 	public class SessionPrincipalFactoryTest
 	{
@@ -28,7 +24,7 @@ namespace Teleopti.Ccc.WebTest.Core.RequestContext
 		private SessionPrincipalFactory target;
 		private ISessionSpecificDataProvider sessionSpecificDataProvider;
 		private IRepositoryFactory repositoryFactory;
-		private IDataSourcesProvider dataSourcesProvider;
+		private IApplicationData applicationData;
 		private IRoleToPrincipalCommand roleToPrincipalCommand;
 
 	    [SetUp]
@@ -37,13 +33,13 @@ namespace Teleopti.Ccc.WebTest.Core.RequestContext
 			mocks = new MockRepository();
 			sessionSpecificDataProvider = mocks.DynamicMock<ISessionSpecificDataProvider>();
 			repositoryFactory = mocks.DynamicMock<IRepositoryFactory>();
-			dataSourcesProvider = mocks.DynamicMock<IDataSourcesProvider>();
+			applicationData = mocks.DynamicMock<IApplicationData>();
 			roleToPrincipalCommand = mocks.DynamicMock<IRoleToPrincipalCommand>();
 
 			var httpContext = MockRepository.GenerateStub<HttpContextBase>();
 			var currentHttpContext = MockRepository.GenerateMock<ICurrentHttpContext>();
 			currentHttpContext.Stub(x => x.Current()).Return(httpContext);
-			target = new SessionPrincipalFactory(dataSourcesProvider, sessionSpecificDataProvider, repositoryFactory, roleToPrincipalCommand, new TeleoptiPrincipalFactory(), new TokenIdentityProvider(currentHttpContext));
+			target = new SessionPrincipalFactory(applicationData, sessionSpecificDataProvider, repositoryFactory, roleToPrincipalCommand, new TeleoptiPrincipalFactory(), new TokenIdentityProvider(currentHttpContext));
 		}
 
 
@@ -62,7 +58,7 @@ namespace Teleopti.Ccc.WebTest.Core.RequestContext
 			using (mocks.Record())
 			{
 				Expect.Call(sessionSpecificDataProvider.GrabFromCookie()).Return(sessData);
-				Expect.Call(dataSourcesProvider.RetrieveDataSourceByName(sessData.DataSourceName)).Return(dataSource);
+				Expect.Call(applicationData.DataSource(sessData.DataSourceName)).Return(dataSource);
 				Expect.Call(dataSource.Application).Return(uowFactory);
 				Expect.Call(uowFactory.CreateAndOpenUnitOfWork()).Return(uow);
 				Expect.Call(repositoryFactory.CreatePersonRepository(uow)).Return(personRepository);

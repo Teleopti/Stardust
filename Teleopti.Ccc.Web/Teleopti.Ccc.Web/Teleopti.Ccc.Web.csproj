@@ -944,9 +944,7 @@
     <Compile Include="Areas\Start\Models\LayoutBase\LayoutBaseViewModel.cs" />
     <Compile Include="Areas\Start\StartAreaRegistration.cs" />
     <Compile Include="Areas\Start\Core\Authentication\DataProvider\BusinessUnitProvider.cs" />
-    <Compile Include="Areas\Start\Core\Authentication\DataProvider\DataSourcesProvider.cs" />
     <Compile Include="Areas\Start\Core\Authentication\DataProvider\IBusinessUnitProvider.cs" />
-    <Compile Include="Areas\Start\Core\Authentication\DataProvider\IDataSourcesProvider.cs" />
     <Compile Include="Areas\Start\Core\Authentication\DataProvider\ITokenIdentityProvider.cs" />
     <Compile Include="Areas\Start\Core\Authentication\DataProvider\TokenIdentityProvider.cs" />
     <Compile Include="Areas\Start\Core\Authentication\Services\AuthenticateResult.cs" />

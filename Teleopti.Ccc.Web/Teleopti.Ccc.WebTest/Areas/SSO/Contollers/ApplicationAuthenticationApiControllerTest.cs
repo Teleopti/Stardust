@@ -15,7 +15,6 @@ using Teleopti.Ccc.UserTexts;
 using Teleopti.Ccc.Web.Areas.SSO.Controllers;
 using Teleopti.Ccc.Web.Areas.SSO.Core;
 using Teleopti.Ccc.Web.Areas.SSO.Models;
-using Teleopti.Ccc.Web.Areas.Start.Core.Authentication.DataProvider;
 using Teleopti.Ccc.Web.Areas.Start.Core.Authentication.Services;
 using Teleopti.Ccc.Web.Areas.Start.Models.Authentication;
 using Teleopti.Ccc.Web.Core;
@@ -30,7 +29,7 @@ namespace Teleopti.Ccc.WebTest.Areas.SSO.Contollers
 		private const string dataSourceName = "dataSource";
 		private const string userName = "user";
 		private IRepositoryFactory repositoryFactory;
-		private IDataSourcesProvider dataSourcesProvider;
+		private IApplicationData applicationData;
 		private IPerson person;
 		private ILoadPasswordPolicyService loadPasswordPolicyService;
 		private IUserDetail userDetail;
@@ -41,8 +40,8 @@ namespace Teleopti.Ccc.WebTest.Areas.SSO.Contollers
 		public void Setup()
 		{
 			var dataSource = MockRepository.GenerateMock<IDataSource>();
-			dataSourcesProvider = MockRepository.GenerateMock<IDataSourcesProvider>();
-			dataSourcesProvider.Stub(x => x.RetrieveDataSourceByName(dataSourceName)).Return(dataSource);
+			applicationData = MockRepository.GenerateMock<IApplicationData>();
+			applicationData.Stub(x => x.DataSource(dataSourceName)).Return(dataSource);
 			var uowFactory = MockRepository.GenerateMock<IUnitOfWorkFactory>();
 			var uow = MockRepository.GenerateMock<IUnitOfWork>();
 			dataSource.Stub(x => x.Application).Return(uowFactory);
@@ -184,7 +183,7 @@ namespace Teleopti.Ccc.WebTest.Areas.SSO.Contollers
 			var applicationUserTenantQuery = MockRepository.GenerateMock<IApplicationUserTenantQuery>();
 			applicationUserTenantQuery.Stub(x => x.Find(userName)).Return(pInfo);
 
-			var target = new ApplicationAuthenticationApiController(dataSourcesProvider, repositoryFactory, loadPasswordPolicyService, currentPrincipalContext, MockRepository.GenerateMock<IFormsAuthentication>(), applicationUserTenantQuery);
+			var target = new ApplicationAuthenticationApiController(applicationData, repositoryFactory, loadPasswordPolicyService, currentPrincipalContext, MockRepository.GenerateMock<IFormsAuthentication>(), applicationUserTenantQuery);
 
 			var result = target.ChangePassword(input);
 
@@ -208,7 +207,7 @@ namespace Teleopti.Ccc.WebTest.Areas.SSO.Contollers
 				});
 			var applicationUserTenantQuery = MockRepository.GenerateMock<IApplicationUserTenantQuery>();
 			applicationUserTenantQuery.Stub(x => x.Find(userName)).Return(null);
-			var target = new StubbingControllerBuilder().CreateController<ApplicationAuthenticationApiController>(dataSourcesProvider, repositoryFactory, loadPasswordPolicyService, null, null, applicationUserTenantQuery);
+			var target = new StubbingControllerBuilder().CreateController<ApplicationAuthenticationApiController>(applicationData, repositoryFactory, loadPasswordPolicyService, null, null, applicationUserTenantQuery);
 
 			var exception = Assert.Throws<HttpException>(() => target.ChangePassword(input));
 			exception.GetHttpCode().Should().Be(500);
@@ -234,7 +233,7 @@ namespace Teleopti.Ccc.WebTest.Areas.SSO.Contollers
 			var applicationUserTenantQuery = MockRepository.GenerateMock<IApplicationUserTenantQuery>();
 			applicationUserTenantQuery.Stub(x => x.Find(userName)).Return(pInfo);
 
-			var target = new StubbingControllerBuilder().CreateController<ApplicationAuthenticationApiController>(dataSourcesProvider, repositoryFactory, loadPasswordPolicyService, currentPrincipalContext, MockRepository.GenerateMock<IFormsAuthentication>(), applicationUserTenantQuery);
+			var target = new StubbingControllerBuilder().CreateController<ApplicationAuthenticationApiController>(applicationData, repositoryFactory, loadPasswordPolicyService, currentPrincipalContext, MockRepository.GenerateMock<IFormsAuthentication>(), applicationUserTenantQuery);
 
 			var result = target.ChangePassword(input);
 

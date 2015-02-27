@@ -9,7 +9,6 @@ using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.TestCommon;
-using Teleopti.Ccc.Web.Areas.Start.Core.Authentication.DataProvider;
 using Teleopti.Ccc.Web.Areas.Start.Core.Authentication.Services;
 using Teleopti.Ccc.Web.Core.RequestContext.Cookie;
 using Teleopti.Interfaces.Domain;
@@ -23,7 +22,7 @@ namespace Teleopti.Ccc.WebTest.Core.Authentication.Services
 		private IWebLogOn target;
 		private ILogOnOff logOnOff;
 		private MockRepository mocks;
-		private IDataSourcesProvider dataSourcesProvider;
+		private IApplicationData applicationData;
 		private IPersonRepository personRepository;
 		private IBusinessUnitRepository businessUnitRepository;
 		private ISessionSpecificDataProvider sessionSpecificDataProvider;
@@ -35,7 +34,7 @@ namespace Teleopti.Ccc.WebTest.Core.Authentication.Services
 		public void Setup()
 		{
 			mocks = new MockRepository();
-			dataSourcesProvider = mocks.DynamicMock<IDataSourcesProvider>();
+			applicationData = mocks.DynamicMock<IApplicationData>();
 			repositoryFactory = mocks.DynamicMock<IRepositoryFactory>();
 			personRepository = mocks.DynamicMock<IPersonRepository>();
 			businessUnitRepository = mocks.DynamicMock<IBusinessUnitRepository>();
@@ -47,7 +46,7 @@ namespace Teleopti.Ccc.WebTest.Core.Authentication.Services
 			ITeleoptiPrincipal principal = new TeleoptiPrincipal(new TeleoptiIdentity("", null, null, null), new Person());
 
 			target = new WebLogOn(logOnOff,
-			                      dataSourcesProvider,
+			                      applicationData,
 			                      repositoryFactory,
 			                      sessionSpecificDataProvider,
 			                      ruleToPrincipalCommand,
@@ -69,7 +68,7 @@ namespace Teleopti.Ccc.WebTest.Core.Authentication.Services
 
 			using (mocks.Record())
 			{
-				Expect.Call(dataSourcesProvider.RetrieveDataSourceByName(dataSourceName))
+				Expect.Call(applicationData.DataSource(dataSourceName))
 					.Return(choosenDatasource);
 				Expect.Call(choosenDatasource.Application).Return(unitOfWorkFactory);
 				Expect.Call(unitOfWorkFactory.CreateAndOpenUnitOfWork()).Return(uow);
@@ -101,7 +100,7 @@ namespace Teleopti.Ccc.WebTest.Core.Authentication.Services
 
 			using (mocks.Record())
 			{
-				Expect.Call(dataSourcesProvider.RetrieveDataSourceByName(dataSourceName))
+				Expect.Call(applicationData.DataSource(dataSourceName))
 					.Return(choosenDatasource);
 				Expect.Call(choosenDatasource.Application).Return(unitOfWorkFactory);
 				Expect.Call(unitOfWorkFactory.CreateAndOpenUnitOfWork()).Return(uow);
@@ -133,7 +132,7 @@ namespace Teleopti.Ccc.WebTest.Core.Authentication.Services
 
 			using (mocks.Record())
 			{
-				Expect.Call(dataSourcesProvider.RetrieveDataSourceByName(dataSourceName))
+				Expect.Call(applicationData.DataSource(dataSourceName))
 					.Return(choosenDatasource);
 				Expect.Call(choosenDatasource.Application).Return(unitOfWorkFactory);
 				Expect.Call(unitOfWorkFactory.CreateAndOpenUnitOfWork()).Return(uow);

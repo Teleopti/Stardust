@@ -1,5 +1,4 @@
-﻿using System;
-using System.Web;
+﻿using System.Web;
 using System.Web.Mvc;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Infrastructure.Foundation;
@@ -8,9 +7,9 @@ using Teleopti.Ccc.Infrastructure.MultiTenancy.NHibernate;
 using Teleopti.Ccc.UserTexts;
 using Teleopti.Ccc.Web.Areas.MyTime.Core;
 using Teleopti.Ccc.Web.Areas.SSO.Models;
-using Teleopti.Ccc.Web.Areas.Start.Core.Authentication.DataProvider;
 using Teleopti.Ccc.Web.Areas.Start.Models.Authentication;
 using Teleopti.Ccc.Web.Core;
+using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.Web.Areas.SSO.Controllers
@@ -18,24 +17,24 @@ namespace Teleopti.Ccc.Web.Areas.SSO.Controllers
 	[OutputCache(NoStore = true, Duration = 0, VaryByParam = "None")]
 	public class ApplicationAuthenticationApiController : Controller
 	{
+		private readonly IApplicationData _applicationData;
 		private readonly ICurrentPrincipalContext _currentPrincipalContext;
 		private readonly IFormsAuthentication _formsAuthentication;
 		private readonly IApplicationUserTenantQuery _applicationUserTenantQuery;
-		private readonly IDataSourcesProvider _dataSourceProvider;
 		private readonly IRepositoryFactory _repositoryFactory;
 		private readonly ILoadPasswordPolicyService _loadPasswordPolicyService;
 
-		public ApplicationAuthenticationApiController(IDataSourcesProvider dataSourceProvider, 
+		public ApplicationAuthenticationApiController(IApplicationData applicationData, 
 																							IRepositoryFactory repositoryFactory, 
 																							ILoadPasswordPolicyService loadPasswordPolicyService, 
 																							ICurrentPrincipalContext currentPrincipalContext, 
 																							IFormsAuthentication formsAuthentication,
 																							IApplicationUserTenantQuery applicationUserTenantQuery)
 		{
+			_applicationData = applicationData;
 			_currentPrincipalContext = currentPrincipalContext;
 			_formsAuthentication = formsAuthentication;
 			_applicationUserTenantQuery = applicationUserTenantQuery;
-			_dataSourceProvider = dataSourceProvider;
 			_repositoryFactory = repositoryFactory;
 			_loadPasswordPolicyService = loadPasswordPolicyService;
 		}
@@ -70,7 +69,7 @@ namespace Teleopti.Ccc.Web.Areas.SSO.Controllers
 			if (personInfo == null)
 				throw new HttpException(500, "person not found");
 
-			var dataSource = _dataSourceProvider.RetrieveDataSourceByName(personInfo.Tenant);
+			var dataSource = _applicationData.DataSource(personInfo.Tenant);
 			using (var uow = dataSource.Application.CreateAndOpenUnitOfWork())
 			{
 				var personRepository = _repositoryFactory.CreatePersonRepository(uow);

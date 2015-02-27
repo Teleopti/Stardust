@@ -1,21 +1,21 @@
 ﻿using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Web.Areas.SSO.Core;
-using Teleopti.Ccc.Web.Areas.Start.Core.Authentication.DataProvider;
 using Teleopti.Ccc.Web.Areas.Start.Core.Authentication.Services;
+using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Web.Areas.Tenant.Core
 {
 	public class TenantSsoAuthenticator : ISsoAuthenticator
 	{
-		private readonly IDataSourcesProvider _dataSourceProvider;
+		private readonly IApplicationData _applicationData;
 		private readonly IRepositoryFactory _repositoryFactory;
 		private readonly IApplicationAuthentication _applicationAuthentication;
 
-		public TenantSsoAuthenticator(IDataSourcesProvider dataSourceProvider,
+		public TenantSsoAuthenticator(IApplicationData applicationData,
 																IRepositoryFactory repositoryFactory,
 																IApplicationAuthentication applicationAuthentication)
 		{
-			_dataSourceProvider = dataSourceProvider;
+			_applicationData = applicationData;
 			_repositoryFactory = repositoryFactory;
 			_applicationAuthentication = applicationAuthentication;
 		}
@@ -26,7 +26,7 @@ namespace Teleopti.Ccc.Web.Areas.Tenant.Core
 
 			if (result.Success)
 			{
-				var dataSource = _dataSourceProvider.RetrieveDataSourceByName(result.Tenant);
+				var dataSource = _applicationData.DataSource(result.Tenant);
 				using (var uow = dataSource.Application.CreateAndOpenUnitOfWork())
 				{
 					var person = _repositoryFactory.CreatePersonRepository(uow).LoadOne(result.PersonId); //TODO tenant: - don't load permissions here - just needed to get web scenarios to work

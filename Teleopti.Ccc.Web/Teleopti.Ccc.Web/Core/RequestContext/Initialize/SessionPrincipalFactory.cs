@@ -10,16 +10,16 @@ namespace Teleopti.Ccc.Web.Core.RequestContext.Initialize
 {
 	public class SessionPrincipalFactory : ISessionPrincipalFactory
 	{
-		private readonly IDataSourcesProvider _dataSourcesProvider;
+		private readonly IApplicationData _applicationData;
 		private readonly ISessionSpecificDataProvider _sessionSpecificDataProvider;
 		private readonly IRepositoryFactory _repositoryFactory;
 		private readonly IRoleToPrincipalCommand _roleToPrincipalCommand;
 		private readonly IPrincipalFactory _principalFactory;
 		private readonly ITokenIdentityProvider _tokenIdentityProvider;
 
-		public SessionPrincipalFactory(IDataSourcesProvider dataSourcesProvider, ISessionSpecificDataProvider sessionSpecificDataProvider, IRepositoryFactory repositoryFactory, IRoleToPrincipalCommand roleToPrincipalCommand, IPrincipalFactory principalFactory, ITokenIdentityProvider tokenIdentityProvider)
+		public SessionPrincipalFactory(IApplicationData applicationData, ISessionSpecificDataProvider sessionSpecificDataProvider, IRepositoryFactory repositoryFactory, IRoleToPrincipalCommand roleToPrincipalCommand, IPrincipalFactory principalFactory, ITokenIdentityProvider tokenIdentityProvider)
 		{
-			_dataSourcesProvider = dataSourcesProvider;
+			_applicationData = applicationData;
 			_sessionSpecificDataProvider = sessionSpecificDataProvider;
 			_repositoryFactory = repositoryFactory;
 			_roleToPrincipalCommand = roleToPrincipalCommand;
@@ -35,7 +35,7 @@ namespace Teleopti.Ccc.Web.Core.RequestContext.Initialize
 
 		private ITeleoptiPrincipal createPrincipal(SessionSpecificData sessionData)
 		{
-			var dataSource = _dataSourcesProvider.RetrieveDataSourceByName(sessionData.DataSourceName);
+			var dataSource = _applicationData.DataSource(sessionData.DataSourceName);
 			if (dataSource == null)
 				return null;
 

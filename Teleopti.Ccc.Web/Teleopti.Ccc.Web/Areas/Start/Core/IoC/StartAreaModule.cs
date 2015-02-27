@@ -18,7 +18,6 @@ namespace Teleopti.Ccc.Web.Areas.Start.Core.IoC
 		protected override void Load(ContainerBuilder builder)
 		{
 			builder.RegisterType<WebLogOn>().As<IWebLogOn>();
-			builder.RegisterType<DataSourcesProvider>().As<IDataSourcesProvider>().SingleInstance();
 
 			builder.RegisterType<TenantSsoAuthenticator>().As<ISsoAuthenticator>().SingleInstance();
 			builder.RegisterType<LogTenancyLogonAttempt>().As<ILogLogonAttempt>().SingleInstance();

@@ -1,6 +1,6 @@
 ﻿using System.Data.SqlClient;
 using System.Threading;
-using Teleopti.Ccc.Web.Areas.Start.Core.Authentication.DataProvider;
+using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Web.Areas.Mart.Core
 {
@@ -11,18 +11,18 @@ namespace Teleopti.Ccc.Web.Areas.Mart.Core
 
 	public class DatabaseConnectionHandler : IDatabaseConnectionHandler
 	{
-		private readonly IDataSourcesProvider _dataSourceProvider;
+		private readonly IApplicationData _applicationData;
 
-		public DatabaseConnectionHandler(IDataSourcesProvider dataSourceProvider)
+		public DatabaseConnectionHandler(IApplicationData applicationData)
 		{
-			_dataSourceProvider = dataSourceProvider;
+			_applicationData = applicationData;
 		}
 
 		public SqlConnection MartConnection(string name, int latency)
 		{
 			if (latency > 0)
 				Thread.Sleep(latency);
-			return new SqlConnection(_dataSourceProvider.RetrieveDataSourceByName(name).Statistic.ConnectionString);
+			return new SqlConnection(_applicationData.DataSource(name).Statistic.ConnectionString);
 		}
 	}
 }
