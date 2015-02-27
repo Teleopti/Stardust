@@ -191,7 +191,6 @@
 		        </tbody>
 			</table>
 	        <div style="float: right" data-bind="visible: !isDetailVisible() && isPageVisible()">
-				<!-- ko if: isTeamScheduleSorttingFeatureEnabled-->
 		        <ul class="pagination pagination-sm">
 			        <li><a data-bind="click: goToFirstPage"><i class="glyphicon glyphicon-fast-backward"></i></a></li>
 			        <li>
@@ -209,16 +208,6 @@
 				        <a data-bind="click: goToLastPage"><i class="glyphicon glyphicon-fast-forward"></i></a>
 			        </li>
 		        </ul>
-		        <!-- /ko -->
-		        <!-- ko if: !isTeamScheduleSorttingFeatureEnabled()-->
-					<a data-bind="click: goToFirstPage"><i class="glyphicon glyphicon-fast-backward"></i></a>
-					<a data-bind="click: goPreviousPages, visible: isPreviousMore()">...</a>
-					<!-- ko foreach: selectablePages() -->
-					<a data-bind="text: $data.index(), click: $parent.selectPage, css: {'page-selected': $data.isSelected()}"></a>
-					<!-- /ko -->
-					<a data-bind="click: goNextPages, visible: isMore()">...</a>
-					<a data-bind="click: goToLastPage"><i class="glyphicon glyphicon-fast-forward"></i></a>
-				<!-- /ko -->
 	        </div>
 			<div class="tooltipContainer"></div>
 		</div>
