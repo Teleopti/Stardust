@@ -69,11 +69,24 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.Senior
 
                 var mostSeniorTeamBlock = _seniorTeamBlockLocator.FindMostSeniorTeamBlock(seniorityInfoDictionary.Values);
                 teamBlocksToWorkWith = new List<ITeamBlockInfo>(seniorityInfoDictionary.Keys);
-                trySwapForTeamBlock(teamBlocksToWorkWith, mostSeniorTeamBlock, weekDayPoints, selectedPeriod, originalBlockCount, seniorityInfoDictionary.Count, rollbackService,scheduleDictionary,optimizationPreferences);
+
+				removeTeamBlockOfEqualSeniority(mostSeniorTeamBlock, teamBlocksToWorkWith, seniorityInfoDictionary);
+
+				if(teamBlocksToWorkWith.Count > 1) trySwapForTeamBlock(teamBlocksToWorkWith, mostSeniorTeamBlock, weekDayPoints, selectedPeriod, originalBlockCount, seniorityInfoDictionary.Count, rollbackService,scheduleDictionary,optimizationPreferences);
                 seniorityInfoDictionary.Remove(mostSeniorTeamBlock);
             }
-
         }
+
+		private void removeTeamBlockOfEqualSeniority(ITeamBlockInfo mostSeniorTeamBlockInfo, IList<ITeamBlockInfo> teamBlockInfos, IDictionary<ITeamBlockInfo, ITeamBlockPoints> infoDictionary)
+	    {
+			var mostSeniorSeniority = infoDictionary[mostSeniorTeamBlockInfo].Points;
+
+			for (var i = teamBlockInfos.Count - 1; i >= 0; i--)
+			{
+				var juniorSeniority = infoDictionary[teamBlockInfos[i]].Points;
+				if (mostSeniorSeniority.Equals(juniorSeniority) && !mostSeniorTeamBlockInfo.Equals(teamBlockInfos[i])) teamBlockInfos.RemoveAt(i);
+			}   
+	    }
         
         private void trySwapForTeamBlock(IList<ITeamBlockInfo> teamBlocksToWorkWith, ITeamBlockInfo mostSeniorTeamBlock, IDictionary<DayOfWeek, int> weekDayPoints, DateOnlyPeriod selectedPeriod, int originalBlocksCount, 
                                     int remainingBlocksCount, ISchedulePartModifyAndRollbackService rollbackService, IScheduleDictionary scheduleDictionary, IOptimizationPreferences optimizationPreferences)

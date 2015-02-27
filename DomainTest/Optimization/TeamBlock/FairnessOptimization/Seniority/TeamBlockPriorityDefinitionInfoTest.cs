@@ -74,5 +74,21 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock.FairnessOptimization.Se
 				Assert.AreEqual(_teamBlockInfo1, result[1]);
 			}
 		}
+
+		[Test]
+		public void ShouldGetSeniorityOfBlock()
+		{
+			using (_mock.Record())
+			{
+				Expect.Call(_teamBlockInfoPriority1.TeamBlockInfo).Return(_teamBlockInfo1);
+				Expect.Call(_teamBlockInfoPriority1.Seniority).Return(1.7d).Repeat.AtLeastOnce();		
+			}
+
+			using (_mock.Playback())
+			{
+				var result = _target.GetSeniorityOfBlock(_teamBlockInfo1);
+				Assert.AreEqual(1.7d, result);
+			}
+		}
 	}
 }

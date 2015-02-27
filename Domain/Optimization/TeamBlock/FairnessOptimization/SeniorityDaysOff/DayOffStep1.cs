@@ -80,6 +80,9 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.Senior
 
                 var mostSeniorTeamBlock = _seniorTeamBlockLocator.FindMostSeniorTeamBlock(seniorityInfoDictionary.Values);
                 teamBlocksToWorkWith = new List<ITeamBlockInfo>(seniorityInfoDictionary.Keys);
+
+				removeTeamBlockOfEqualSeniority(mostSeniorTeamBlock, teamBlocksToWorkWith, seniorityInfoDictionary);
+
                 trySwapForMostSenior(weekDayPoints, teamBlocksToWorkWith, mostSeniorTeamBlock, rollbackService, scheduleDictionary,
                                      optimizationPreferences, originalBlockCount, seniorityInfoDictionary.Count);
 
@@ -87,6 +90,17 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.Senior
             }
             
         }
+
+	    private void removeTeamBlockOfEqualSeniority(ITeamBlockInfo mostSeniorTeamBlockInfo, IList<ITeamBlockInfo> teamBlockInfos, IDictionary<ITeamBlockInfo, ITeamBlockPoints> infoDictionary )
+	    {
+			var mostSeniorSeniority = infoDictionary[mostSeniorTeamBlockInfo].Points;
+
+		    for (var i = teamBlockInfos.Count - 1; i >= 0; i--)
+		    {
+				var juniorSeniority = infoDictionary[teamBlockInfos[i]].Points;
+				if(mostSeniorSeniority.Equals(juniorSeniority) && !mostSeniorTeamBlockInfo.Equals(teamBlockInfos[i])) teamBlockInfos.RemoveAt(i);
+		    }
+	    }
 
         public virtual void OnBlockSwapped(ResourceOptimizerProgressEventArgs eventArgs)
         {

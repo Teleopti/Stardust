@@ -214,6 +214,35 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock.FairnessOptimization.Se
 			}
 		}
 
+		[Test]
+	    public void ShouldNotSwapBlockOfEqualSeniority()
+	    {
+			IDictionary<ITeamBlockInfo, double> teamBlockPointsDic = new Dictionary<ITeamBlockInfo, double>();
+			teamBlockPointsDic.Add(_seniorTeamBlock, 10);
+			teamBlockPointsDic.Add(_juniorTeamBlock, 10);
+			using (_mocks.Record())
+			{
+				commonMocks();
+
+				////outer loop
+				Expect.Call(_filterOnSwapableTeamBlocks.Filter(_teamBlocksFirstLoop, _seniorTeamBlock)).IgnoreArguments().Return(_teamBlocksFirstLoop);
+				Expect.Call(_seniorityCalculatorForTeamBlock.CreateWeekDayValueDictionary(_teamBlocksFirstLoop, _weekDayValueDic)).IgnoreArguments().Return(teamBlockPointsDic);
+
+				////inner loop success
+				Expect.Call(_teamBlockLocatorWithHighestPoints.FindBestTeamBlockToSwapWith(_teamBlocksFirstLoop, _seniorityValueDic)).IgnoreArguments().Return(_juniorTeamBlock);
+				Expect.Call(_seniorTeamBlock.TeamInfo).Return(_seniorTeamInfo);
+				Expect.Call(_seniorTeamInfo.Name).Return("Senior");
+
+			}
+
+			using (_mocks.Playback())
+			{
+				_target.BlockSwapped += _target_BlockSwapped2;
+				_target.PerformStep1(_matrixList, new DateOnlyPeriod(), _selectedPersons, _rollbackService, _scheduleDictionary, _weekDayValueDic, _optimizationPreferences, true);
+				_target.BlockSwapped -= _target_BlockSwapped2;
+			}    
+	    }
+
         void _target_BlockSwapped(object sender, ResourceOptimizerProgressEventArgs e)
         {
             e.Cancel = true;

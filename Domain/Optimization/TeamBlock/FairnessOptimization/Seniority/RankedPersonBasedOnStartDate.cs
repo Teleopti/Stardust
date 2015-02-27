@@ -54,12 +54,28 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.Senior
 
 		private IDictionary<IPerson, int> getPersonValueDictionary(Dictionary<IPerson, DateOnly> dicToEvaluate)
 		{
-			var sortedByValue = dicToEvaluate.OrderBy(s => s.Value).Select(value => value.Key).ToList();
+			//var sortedByValue = dicToEvaluate.OrderBy(s => s.Value).Select(value => value.Key).ToList();
+			var sortedByValueDic = dicToEvaluate.OrderBy(s => s.Value).ToDictionary(s => s.Key, s => s.Value);
+
+			
+
 			IDictionary<IPerson, int> ret = new Dictionary<IPerson, int>();
-			for (int order = 0; order < sortedByValue.Count; order++)
+
+			var rank = 0;
+			var currentItem = sortedByValueDic.FirstOrDefault();
+			foreach (var keyValuePair in sortedByValueDic)
 			{
-				ret.Add(sortedByValue[order], order);
+				if (!currentItem.Value.Equals(keyValuePair.Value)) ++rank;
+				ret.Add(keyValuePair.Key, rank);
+				
+				currentItem = keyValuePair;
 			}
+
+
+			//for (int order = 0; order < sortedByValue.Count; order++)
+			//{
+			//	ret.Add(sortedByValue[order], order);
+			//}
 
 			return ret;
 		}

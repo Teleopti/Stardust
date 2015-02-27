@@ -93,16 +93,6 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock.FairnessOptimization.Se
                 
                 commonMocks(teamBlockList, teamBlockPointList);
                 Expect.Call(_teamBlockSeniorityValidator.ValidateSeniority(_seniorTeamBlock, true)).Return(true);
-                //Second level
-                Expect.Call(_filterOnSwapableTeamBlocks.Filter(teamBlockList, _seniorTeamBlock))
-                      .IgnoreArguments()
-                      .Return(teamBlockList );
-                Expect.Call(_seniorityExtractor.ExtractSeniority(teamBlockList)).IgnoreArguments().Return(teamBlockPointList);
-                Expect.Call(_juniorTeamBlockExtractor.GetJuniorTeamBlockInfo(teamBlockPointList)).IgnoreArguments()
-                      .Return(_seniorTeamBlock);
-                Expect.Call(_seniorTeamBlock.TeamInfo).Return(_teamInfo);
-                Expect.Call(_teamInfo.Name).Return("senior team");
-
             }
 
             using (_mock.Playback())
@@ -135,10 +125,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock.FairnessOptimization.Se
         public void ShouldRunStep1WithOnlyTwoElements()
         {
             IList<ITeamBlockInfo> teamBlockList = new List<ITeamBlockInfo>() { _seniorTeamBlock,_juniorTeamBlock };
-            IList<ITeamBlockPoints> teamBlockPointList = new List<ITeamBlockPoints>()
-                {
-                    _seniorTeamBlockPoint,_juniorTeamBlockPoint 
-                };
+            IList<ITeamBlockPoints> teamBlockPointList = new List<ITeamBlockPoints>(){_seniorTeamBlockPoint,_juniorTeamBlockPoint };
             ISchedulingOptions schedulingOptions = new SchedulingOptions();
             using (_mock.Record())
             {
@@ -147,40 +134,25 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock.FairnessOptimization.Se
                 //Second level
                 Expect.Call(_filterOnSwapableTeamBlocks.Filter(teamBlockList, _seniorTeamBlock)).IgnoreArguments().Return(teamBlockList);
                 Expect.Call(_seniorityExtractor.ExtractSeniority(teamBlockList)).IgnoreArguments().Return(teamBlockPointList);
-                Expect.Call(_juniorTeamBlockExtractor.GetJuniorTeamBlockInfo(teamBlockPointList.ToList())).IgnoreArguments().Return(_juniorTeamBlock );
+                Expect.Call(_juniorTeamBlockExtractor.GetJuniorTeamBlockInfo(teamBlockPointList.ToList())).IgnoreArguments().Return(_juniorTeamBlock);
                 Expect.Call(_seniorTeamBlock.TeamInfo).Return(_teamInfo).Repeat.AtLeastOnce()  ;
-                Expect.Call(_juniorTeamBlock.TeamInfo).Return(_teamInfo).Repeat.AtLeastOnce();
-                Expect.Call(_teamInfo.Name).Return("senior team").Repeat.AtLeastOnce() ;
+				Expect.Call(_teamInfo.Name).Return("senior team").Repeat.AtLeastOnce() ;
 
                 //third level
 				Expect.Call(_suitableDayOffSpotDetector.DetectMostValuableSpot(_selectedPeriod.DayCollection(), _weekDayPoints.GetWeekDaysPoints(_seniorityWorkDayRanks))).IgnoreArguments().Return(new DateOnly(2014, 02, 11));
 				Expect.Call(_suitableDayOffsToGiveAway.DetectMostValuableSpot(_selectedPeriod.DayCollection(), _weekDayPoints.GetWeekDaysPoints(_seniorityWorkDayRanks))).Return(_selectedPeriod.DayCollection());
-                Expect.Call(_teamBlockDayOffSwapper.TrySwap(DateOnly.Today, _seniorTeamBlock, _juniorTeamBlock,_rollbackService, _schedulingDictionary,
-                                                            _optimizationPreferences, _selectedPeriod.DayCollection())).IgnoreArguments().Return(true);
-                //Expect.Call(_seniorTeamBlock.TeamInfo).Return(_teamInfo);
-                //Expect.Call(_teamInfo.Name).Return("Senior Team").Repeat.AtLeastOnce() ;
-                
-
-                Expect.Call(_juniorTeamBlockExtractor.GetJuniorTeamBlockInfo(teamBlockPointList.ToList()))
-                      .IgnoreArguments()
-                      .Return(_seniorTeamBlock);
+                Expect.Call(_teamBlockDayOffSwapper.TrySwap(DateOnly.Today, _seniorTeamBlock, _juniorTeamBlock,_rollbackService, _schedulingDictionary,_optimizationPreferences, _selectedPeriod.DayCollection())).IgnoreArguments().Return(true);
+               
+				Expect.Call(_juniorTeamBlockExtractor.GetJuniorTeamBlockInfo(teamBlockPointList.ToList())).IgnoreArguments().Return(_seniorTeamBlock);
                
 
                 //Step 2
                 Expect.Call(_seniorTeamBlockLocator.FindMostSeniorTeamBlock(teamBlockPointList))
                       .IgnoreArguments()
                       .Return(_juniorTeamBlock);
-                Expect.Call(_filterOnSwapableTeamBlocks.Filter(teamBlockList, _juniorTeamBlock))
-                      .IgnoreArguments()
-                      .Return(teamBlockList);
+				
                 teamBlockList.Remove(_seniorTeamBlock);
-                Expect.Call(_seniorityExtractor.ExtractSeniority(teamBlockList))
-                      .IgnoreArguments()
-                      .Return(new List<ITeamBlockPoints>( ){_juniorTeamBlockPoint});
-                Expect.Call(_juniorTeamBlockExtractor.GetJuniorTeamBlockInfo(teamBlockPointList.ToList()))
-                      .IgnoreArguments()
-                      .Return(_juniorTeamBlock);
-
+				
             }
 
             using (_mock.Playback())
@@ -224,6 +196,31 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock.FairnessOptimization.Se
 				_target.BlockSwapped -= targetReportProgress;
 			}
 		}
+
+		[Test]
+	    public void ShouldNotSwapBlockOfEqualSeniority()
+		{
+			_seniorTeamBlockPoint = new TeamBlockPoints(_seniorTeamBlock, 15);
+			_juniorTeamBlockPoint = new TeamBlockPoints(_juniorTeamBlock, 15);
+
+			IList<ITeamBlockInfo> teamBlockList = new List<ITeamBlockInfo>() { _seniorTeamBlock, _juniorTeamBlock };
+			IList<ITeamBlockPoints> teamBlockPointList = new List<ITeamBlockPoints>() { _seniorTeamBlockPoint, _juniorTeamBlockPoint };
+			ISchedulingOptions schedulingOptions = new SchedulingOptions();
+			using (_mock.Record())
+			{
+				Expect.Call(_teamBlockSeniorityValidator.ValidateSeniority(_juniorTeamBlock, true)).Return(true);
+				commonMocks(teamBlockList, teamBlockPointList);
+				Expect.Call(_seniorTeamBlockLocator.FindMostSeniorTeamBlock(teamBlockPointList)).IgnoreArguments().Return(_juniorTeamBlock);	
+				teamBlockList.Remove(_seniorTeamBlock);
+			}
+
+			using (_mock.Playback())
+			{
+				_target.BlockSwapped += targetReportProgress;
+				_target.PerformStep2(schedulingOptions, _allPersonMatrixList, _selectedPeriod, _selectedPersons, _rollbackService, _schedulingDictionary, _weekDayPoints.GetWeekDaysPoints(_seniorityWorkDayRanks), _optimizationPreferences, true);
+				_target.BlockSwapped -= targetReportProgress;
+			}
+	    }
 
 		void targetReportProgress(object sender, ResourceOptimizerProgressEventArgs e)
 		{

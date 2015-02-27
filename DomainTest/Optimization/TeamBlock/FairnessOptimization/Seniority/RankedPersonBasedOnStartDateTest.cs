@@ -1,7 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using NUnit.Framework;
 using Rhino.Mocks;
 using Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.Seniority;
@@ -17,6 +15,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock.FairnessOptimization.Se
         private IPerson _person1;
         private IPerson _person2;
         private IPerson _person3;
+	    private IPerson _person4;
         private IPersonStartDateFromPersonPeriod _personStartDateFromPersonPeriod;
 
         [SetUp]
@@ -29,6 +28,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock.FairnessOptimization.Se
             _person1 = _mock.StrictMock<IPerson>();
             _person2 = _mock.StrictMock<IPerson>();
             _person3 = _mock.StrictMock<IPerson>();
+	        _person4 = _mock.StrictMock<IPerson>();
         }
 
         [Test]
@@ -97,7 +97,28 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock.FairnessOptimization.Se
                 Assert.AreEqual(result[2], _person3);
             }
         }
-    }
 
-    
+		[Test]
+	    public void ShouldGetEqualRankWhenSameStartDate()
+	    {
+			var personList = new List<IPerson>() { _person1, _person2, _person3, _person4};
+			var today = DateOnly.Today;
+			using (_mock.Record())
+			{
+				Expect.Call(_personStartDateFromPersonPeriod.GetPersonStartDate(_person1)).Return(today);
+				Expect.Call(_personStartDateFromPersonPeriod.GetPersonStartDate(_person2)).Return(today);
+				Expect.Call(_personStartDateFromPersonPeriod.GetPersonStartDate(_person3)).Return(today.AddDays(-15));
+				Expect.Call(_personStartDateFromPersonPeriod.GetPersonStartDate(_person4)).Return(today.AddDays(1));
+			}
+			using (_mock.Playback())
+			{
+				var result = _target.GetRankedPersonDictionary(personList).ToList();
+				Assert.AreEqual(4 ,result.Count());
+				Assert.AreEqual(0, result[0].Value);
+				Assert.AreEqual(1,result[1].Value);
+				Assert.AreEqual(1, result[2].Value);
+				Assert.AreEqual(2, result[3].Value);
+			}    
+	    }
+    }   
 }

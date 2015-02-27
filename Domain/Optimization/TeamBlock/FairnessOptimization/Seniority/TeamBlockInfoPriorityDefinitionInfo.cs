@@ -7,6 +7,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.Senior
     public interface ITeamBlockPriorityDefinitionInfo
     {
         double GetShiftCategoryPriorityOfBlock(ITeamBlockInfo teamBlockInfo);
+	    double GetSeniorityOfBlock(ITeamBlockInfo teamBlockInfo);
         void AddItem(ITeamBlockInfoPriority teamBlockInfoPriority, ITeamBlockInfo teamBlockInfo, double priority);
         void SetShiftCategoryPoint(ITeamBlockInfo teamBlockInfo, double shiftCategoryPriority);
 	    IList<ITeamBlockInfo> HighToLowSeniorityListBlockInfo { get; }
@@ -53,6 +54,17 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.Senior
         public void SetShiftCategoryPoint(ITeamBlockInfo teamBlockInfo, double shiftCategoryPriority)
 		{
 			_teamBlockShiftCategoryPriority[teamBlockInfo] = shiftCategoryPriority;
+		}
+
+		public double GetSeniorityOfBlock(ITeamBlockInfo teamBlockInfo)
+		{
+			foreach (var teamBlockInfoPriority in _teamBlockInfoPriorityList)
+			{
+				if (teamBlockInfoPriority.TeamBlockInfo.Equals(teamBlockInfo))
+					return teamBlockInfoPriority.Seniority;
+			}
+
+			return double.MaxValue;
 		}
 	}
 }
