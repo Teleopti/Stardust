@@ -47,10 +47,8 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.AgentBadge
 				return newAwardedBadges;
 			}
 
-			foreach (
-				var person in
-					agentsListShouldGetBadge.Select(agent => allPersons.SingleOrDefault(x => agent.Equals(x.Id)))
-						)
+			var persons = allPersons.Where(x => x.Id != null && agentIdListShouldGetBadge.Contains(x.Id.Value));
+			foreach (var person in persons)
 			{
 				var hasBadgePermission = person.PermissionInformation.ApplicationRoleCollection.Any(
 					role => role.ApplicationFunctionCollection.Contains(viewBadgeFunc));
