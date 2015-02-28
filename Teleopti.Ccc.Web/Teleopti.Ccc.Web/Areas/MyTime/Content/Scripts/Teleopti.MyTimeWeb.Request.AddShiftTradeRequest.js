@@ -17,11 +17,12 @@ if (typeof (Teleopti.MyTimeWeb.Request) === 'undefined') {
 	Teleopti.MyTimeWeb.Request = {};
 }
 
-Teleopti.MyTimeWeb.Request.AddShiftTradeRequest = (function ($) {
+Teleopti.MyTimeWeb.Request.AddShiftTradeRequest = (function($) {
 	var vm;
 	var vmBulletin;
 
 	function _init() {
+
 		var elementToBind = $('#Request-add-shift-trade')[0];
 		if (elementToBind !== undefined) {
 			if ((vm || '') == '') {
@@ -39,12 +40,12 @@ Teleopti.MyTimeWeb.Request.AddShiftTradeRequest = (function ($) {
 			vm.chooseAgent(null);
 			_setWeekStart(vm);
 			vm.goToFirstPage();
-			if(vm.isFilterByTimeEnabled) vm.loadFilterTimes();
+			if (vm.isFilterByTimeEnabled) vm.loadFilterTimes();
 		}
 
-		$(window).resize(function() {
+		$(window).bind('resize.addShiftTrade', function(){
 			vm.redrawLayers();
-		});
+		});		
 	}
 
 	function _initBulletinBoard() {
@@ -67,9 +68,9 @@ Teleopti.MyTimeWeb.Request.AddShiftTradeRequest = (function ($) {
 			vmBulletin.loadFilterTimes();
 		}
 
-		$(window).resize(function () {
+		$(window).bind('resize.addShiftTradeBullitin', function () {
 			vmBulletin.redrawLayers();
-		});
+		});		
 	}
 
 	function _setWeekStart(vm) {

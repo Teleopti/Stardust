@@ -1,7 +1,7 @@
 ﻿@using Teleopti.Ccc.UserTexts
 @using Teleopti.Ccc.Web.Areas.MyTime.Core
-@using Teleopti.Ccc.Web.Areas.MyTime.Models.Shared
 @using Teleopti.Ccc.Web.Areas.MyTime.Models.TeamSchedule
+@using Teleopti.Interfaces.Domain
 @model TeamScheduleViewModel
 @{
 	Layout = null;
@@ -10,117 +10,216 @@
 }
 
 
+<script>
+	
+	$(function () {
+		var vm = new Teleopti.MyTimeWeb.TeamScheduleViewModel();
+		$(window).unbind('resize');
+		$(window).resize(function () {
+			vm.redrawLayers();
+		});
+		ko.applyBindings(vm);
+		var now = moment().startOf('day');
+		vm.setDatePickerRange(now, -99, 99);
+		vm.requestedDate(now);
+	});
+
+</script>
+
 <div class="navbar navbar-teleopti subnavbar">
 	<div class="container">
 		<ul class="nav navbar-nav navbar-teleopti row submenu">
-			<li class="col-xs-12 col-sm-3">
-				<div id="ScheduleDatePicker" class="input-group " style="max-width: 294px;">
-					<span class="input-group-btn">
-						<button class="btn btn-default" data-bind="click: previousDay, css: 'done'"><i class="glyphicon glyphicon-chevron-left"></i></button>
-					</span>
-					<input data-bind="value: displayDate" style="width: 100%" type="text" class="text-center form-control date-input-style" readonly="readonly" />
-					<div class="input-group-btn">
-						<button class="btn btn-default moment-datepicker"><i class="glyphicon glyphicon-calendar"></i></button>
-						<button class="btn btn-default" data-bind="click: nextDay, css: 'done'"><i class="glyphicon glyphicon-chevron-right"></i></button>
-					</div>
-				</div>
-			</li>
-			<!-- ko if: showTeamPicker -->
-			<li data-bind="if: showGroupings" class="ie8style col-xs-12 col-sm-3 ">
-				<select id="Team-Picker" data-bind="foreach: availableTeams, select2: { value: selectedTeam } ">
-					<optgroup data-bind="attr: { label: text }, foreach: children">
-						<option data-bind="text: text, value: id"></option>
-					</optgroup>
-				</select>
-			</li>
-			<li data-bind="ifnot: showGroupings" class="ie8style col-xs-12 col-sm-3 ">
-				<select id="Team-Picker" data-bind="foreach: availableTeams, select2: { value: selectedTeam } ">
-					<option data-bind="text: text, value: id"></option>
-				</select>
-			</li>
-			<!-- /ko -->
+
 			@if (Model.ShiftTradePermisssion)
-			{
-				<li class="divider" data-bind="if: showTeamPicker"></li>
+			{				
 				<li class="col-xs-12 col-sm-3">
-					<a class="initialize-shift-trade" href="#" data-bind="click: initializeShiftTrade"><i class="glyphicon glyphicon-plus"></i>&nbsp;@Resources.ShiftTradeRequest</a>
+					<a class="initialize-shift-trade" href="#"><i class="glyphicon glyphicon-plus"></i>&nbsp;@Resources.ShiftTradeRequest</a>
 				</li>
 			}
 		</ul>
 	</div>
 </div>
 
-<div class="container fixed-non-responsive pagebody">
-
-	<div id="TeamSchedule-body" class="body-teamschedule" data-mytime-teamselection="@Model.TeamSelection" data-mytime-periodselection='@Html.Schedule().PeriodSelectionAsJson(Model.PeriodSelection)'>
-		<div>
-
-			<div class="teamschedule relative ui-corner-all">
-
-
-				<div class="teamschedule-timeline absolute">
-					<div class="teamschedule-timeline-spacer floatleft">&nbsp;</div>
-					<ul class="teamschedule-timeline-times floatleft relative">
-						@if (Model.TimeLine.Count() < 20)
-						{
-							foreach (var time in Model.TimeLine)
-							{
-								<li class="teamschedule-timeline-time @(time.IsFullHour ? "hour" : "minute") absolute" style="@left: @(Math.Round(scheduleWidth*time.PositionPercent))px;">
-									<div class="teamschedule-timeline-label label label-info ui-corner-all">@time.ShortTime</div>
-								</li>
-							}
-						}
-						else
-						{
-							var list = Model.TimeLine.ToArray();
-							var len = list.Length;
-							for (var i = 0; i < len; i++)
-							{
-								<li class="teamschedule-timeline-time @(list[i].IsFullHour ? "hour" : "minute") absolute" style="@left: @(Math.Round(scheduleWidth*list[i].PositionPercent))px;">
-									<div class="teamschedule-timeline-label label label-info ui-corner-all">@list[i].ShortTime</div>
-								</li>
-								i++;
-							}
-						}
-					</ul>
+<div class="container pagebody">
+	<div id="teamschedule-body-inner" class="teamschedule-body-inner relative">
+		<div id="draw-schedule-container" class="well well-sm fixed-non-responsive">
+			<div class="row">
+				<div class="col-md-6 col-lg-4">
+					<div class="input-group schedule-filter-component">
+						<span class="input-group-btn">
+							<button class="previous-date btn" data-bind="click: previousDate, clickable: previousDateValid, enable: previousDateValid">
+								<i class="glyphicon glyphicon-chevron-left" data-bind="enable: !isLocked()"></i>
+							</button>
+						</span>
+						<![if (!IE)|(gt IE 8)]>
+						
+						<input data-bind="value: requestedDate().format(DatePickerFormat())" style="width: 100%" type="text" class="text-center form-control date-input-style" readonly></input>
+						<![endif]>
+						<!--[if lte IE 8]>
+						<input type="text" class="col-lg-2 form-control add-shifttrade-datepicker" data-bind="value: requestedDate().format(DatePickerFormat())" readonly="readonly" />
+						<![endif]-->
+						<span class="input-group-btn">
+							<button class="btn moment-datepicker" data-bind="datepicker: requestedDate, datepickerOptions: { autoHide: true, weekStart: weekStart() }, enable: !isLoading()">
+								<i class="glyphicon glyphicon-calendar"></i>
+							</button>
+							<button class="next-date btn" data-bind="click: nextDate, clickable: nextDateValid, enable: nextDateValid">
+								<i class="glyphicon glyphicon-chevron-right" data-bind="enable: !isLoading()"></i>
+							</button>
+						</span>
+					</div>
 				</div>
-
-				<ul class="teamschedule-agents">
-
-					@foreach (var agentSchedule in Model.AgentSchedules)
-					{
-						<li class="teamschedule-agent-without-badge relative">
-							<div class="teamschedule-agent-name-without-badge floatleft qtip-tooltip" tooltip-text="@agentSchedule.AgentName">@agentSchedule.AgentName</div>
-							<ul class="teamschedule-agent-schedule floatleft relative">
-								@if (agentSchedule.DayOffText != null)
-								{
-									<li class="dayoff  ui-corner-all" style="width:@(scheduleWidth)px">@agentSchedule.DayOffText</li>
-								}
-								else
-								{
-
-									foreach (var layer in agentSchedule.Layers)
-									{
-										var leftPixel = (Math.Round(scheduleWidth * layer.PositionPercent));
-										var rightPixel = (Math.Round(scheduleWidth * layer.EndPositionPercent));
-										var widthPixel = rightPixel - leftPixel;
-										var IEString = "filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ffffff', endColorstr='" + layer.Color + "',GradientType=0 ); /* IE6-9 */";
-										<li class="layer absolute qtip-tooltip @(agentSchedule.HasDayOffUnder ? StyleClasses.Striped : "gradient")" tooltip-title="@Html.AttributeEncode(layer.ActivityName)" tooltip-text="@layer.StartTime &ndash; @layer.EndTime"
-											style="width: @(widthPixel)px;@left: @(leftPixel)px;background-color: @layer.Color;@(!agentSchedule.HasDayOffUnder ? IEString : "")"></li>
-
-									}
-								}
-							</ul>
-
-						</li>
-
-
-					}
+				<!-- ko if: showTeamPicker -->
+				<div class="col-md-6 col-lg-3">
+					<!-- ko if: showGroupings -->
+					<div class="schedule-filter-component" >
+							<select id="Team-Picker" data-bind="foreach: availableTeams, select2: { value: selectedTeam } ">
+								<optgroup data-bind="attr: { label: text }, foreach: children">
+									<option data-bind="text: text, value: id"></option>
+								</optgroup>
+							</select>
+					</div>
+					<!-- /ko -->
+					<!-- ko ifnot: showGroupings-->
+					<div class="schedule-filter-component">
+						<select id="Team-Picker" data-bind="foreach: availableTeams, select2: { value: selectedTeam } ">
+							<option data-bind="text: text, value: id"></option>
+						</select>
+					</div>
+					<!-- /ko -->
+				</div>
+				
+				<!-- /ko -->
+				<!-- ko if: isFilterByTimeEnabled-->
+				<div class="col-sm-7 col-md-6 col-lg-3">
+					<div class="row">
+						<div class="col-xs-6">
+							<div class=" dropdown filter-time-dropdown-button schedule-filter-component" data-bind="click: filterStartEndTimeClick, css:{'filteractived':isStartTimeFilterActived()}">
+								<a class="dropdown-toggle btn" data-toggle="dropdown" href="#" style="color: black">
+									@Resources.StartTime
+									<b class="caret"></b>
+								</a>
+								<ul class="dropdown-menu filter-time-dropdown-form" role="menu">
+									<!-- ko if: isTeamScheduleSorttingFeatureEnabled-->
+									<li>
+										<div class="input-group start-time-sort-order">
+											<div class="btn-group" role="group" data-bind="foreach: displaySortOrderTemplateList">
+												<!-- ko if: IsStart -->
+												<span data-bind="attr:{class: Description},css:{'sortingbuttonselected': $parent.isSortingTimeActive( $data)}, click : $parent.updateTimeSortOrder, value: Value"></span>
+												<!-- /ko -->
+											</div>
+										</div>
+									</li>
+									<!--/ko-->
+									<!-- ko foreach: filterStartTimeList -->
+									<li>
+										<label class="checkbox filter-time-text">
+											<input type="checkbox" data-bind="checked: isChecked">
+											<span data-bind="text: text"></span>
+										</label>
+									</li>
+									<!--/ko-->
+								</ul>
+							</div>
+						</div>
+						<div class="col-xs-6">
+							<div class="dropdown filter-time-dropdown-button schedule-filter-component" data-bind="click: filterStartEndTimeClick , css:{'filteractived':isEndTimeFilterActived()}">
+								<a class="dropdown-toggle btn" data-toggle="dropdown" href="#" style="color: black">
+									@Resources.EndTime
+									<b class="caret"></b>
+								</a>
+								<ul class="dropdown-menu filter-time-dropdown-form" role="menu">
+									<!-- ko if: isTeamScheduleSorttingFeatureEnabled-->
+									<li>
+										<div class="input-group end-time-sort-order">
+											<div class="btn-group" role="group" data-bind="foreach: displaySortOrderTemplateList">
+												<!-- ko if: !IsStart -->
+												<span data-bind="attr:{class: Description},css:{'sortingbuttonselected': $parent.isSortingTimeActive( $data)}, click : $parent.updateTimeSortOrder, value: Value"></span>
+												<!-- /ko -->
+											</div>
+										</div>
+									</li>
+									<!--/ko-->
+									<!-- ko foreach: filterEndTimeList -->
+									<li>
+										<label class="checkbox filter-time-text">
+											<input type="checkbox" data-bind="checked: isChecked">
+											<span data-bind="text: text"></span>
+										</label>
+									</li>
+									<!--/ko-->
+								</ul>
+							</div>
+						</div>
+					</div>
+				</div>
+				<!--/ko-->
+				<!-- ko if: isTeamScheduleSorttingFeatureEnabled-->
+				<div class="col-sm-5 col-md-6 col-lg-2">
+					<div class="input-right-inner-addon name-search schedule-filter-component">
+						<span class="glyphicon glyphicon-search" aria-hidden="true" data-bind="visible: !isLocked()"></span>
+						<span class="glyphicon glyphicon-refresh glyphicon-refresh-animate" data-bind="visible: isLocked()"></span>
+						<input type="search" class="form-control" placeholder='@Resources.SearchHintForName' data-bind="value: searchNameText, disable: isLocked(), valueUpdate: 'keyup', event: { change: changeInSearchBoxSuppressed,   keyup: typeInSearchBox } " />
+					</div>
+				</div>
+				<!--/ko-->
+			</div>
+			<div class="shift-trade-add-schedule">
+				<div class=" shift-trade-timeline">
+					<div class="relative">
+						<div data-bind="foreach: hours">
+							<div class="shift-trade-ruler absolute" data-bind="style: rulerStyleJson, visible: showHourLine"></div>
+							<div class="shift-trade-label label label-info absolute" data-bind="style: labelStyleJson, text: hourText, visible: isVisible"></div>
+						</div>
+					</div>
+				</div>
+				<table class="responsive" style="width: 100%">
+					<thead>
+						<tr>
+							<td class="shift-trade-agent-name">&nbsp;</td>
+							<td></td>
+						</tr>
+					</thead>
+					<tbody data-bind="foreach: toDrawSchedules">
+						<tr class="shift-trade-person-schedule-row agent" data-bind="visible: isVisible">
+							<td id="shift-trade-agent-name" class="shift-trade-agent-name floatleft " data-bind="text: $data.agentName"></td>
+							<td class="shift-trade-possible-trade-schedule">
+								<div data-bind="foreach: $data.layers">
+									<!--ko if:!$parent.isDayOff-->
+									<div class="shift-trade-layer-container floatleft">
+										<div class="shift-trade-layer add" data-bind="style: styleJson, tooltip: { title: tooltipText, html: true}"></div>
+									</div>
+									<!--/ko-->
+									<!--ko if:$parent.isDayOff-->
+									<div class="shift-trade-layer-container floatleft shift-trade-dayoff">
+										<div class="dayoff" data-bind="text: titleHeader"></div>
+									</div>
+									<!--/ko-->
+								</div>
+							</td>
+						</tr>
+					</tbody>
+				</table>							
+			</div>
+			<div style="float:right" data-bind="visible: isPageVisible()">
+				<ul class="pagination pagination-sm">
+					<li><a data-bind="click: goToFirstPage"><i class="glyphicon glyphicon-fast-backward"></i></a></li>
+					<li>
+						<a data-bind="click: goPreviousPages, visible: isPreviousMore()">...</a>
+					</li>
+					<!-- ko foreach: selectablePages() -->
+					<li data-bind="css: {'active': $data.isSelected()}">
+						<a data-bind="text: $data.index(), click: $parent.selectPage"></a>
+					</li>
+					<!-- /ko -->
+					<li>
+						<a data-bind="click: goNextPages, visible: isMore()">...</a>
+					</li>
+					<li><a data-bind="click: goToLastPage"><i class="glyphicon glyphicon-fast-forward"></i></a></li>
 
 				</ul>
-
 			</div>
 
+			<div class="clearfix"></div>
 		</div>
 	</div>
 </div>

@@ -7,5 +7,6 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.TeamSchedule.ViewModelFactory
 	public interface ITeamScheduleViewModelFactory
 	{
 		TeamScheduleViewModel CreateViewModel(DateOnly date, Guid id);
+		TeamScheduleViewModel CreateViewModel();
 	}
 }

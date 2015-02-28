@@ -1849,6 +1849,7 @@
     <Content Include="Areas\Reporting\Views\web.config" />
     <Content Include="Areas\Reporting\Views\Report\Index.cshtml" />
     <Content Include="WFM\css\_role.scss" />
+    <Content Include="Areas\MyTime\Views\TeamSchedule\TeamSchedulePartial.cshtml" />
     <None Include="PasswordPolicy.xml.notinuse">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>

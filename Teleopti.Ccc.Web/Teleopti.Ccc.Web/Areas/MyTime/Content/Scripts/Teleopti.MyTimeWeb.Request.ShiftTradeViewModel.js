@@ -651,7 +651,6 @@ Teleopti.MyTimeWeb.Request.ShiftTradeViewModel = function(ajax) {
 
 			},
 			error: function(e) {
-				//console.log(e);
 			}
 		});
 	};

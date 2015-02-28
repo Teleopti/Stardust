@@ -3,9 +3,11 @@ using NUnit.Framework;
 using Rhino.Mocks;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.Common.Time;
+using Teleopti.Ccc.Infrastructure.Toggle;
 using Teleopti.Ccc.Web.Areas.MyTime.Controllers;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.TeamSchedule.DataProvider;
+using Teleopti.Ccc.Web.Areas.MyTime.Core.TeamSchedule.Mapping;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.TeamSchedule.ViewModelFactory;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.TeamSchedule;
 using Teleopti.Interfaces.Domain;
@@ -25,7 +27,8 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			personPeriodProvider.Stub(x => x.HasPersonPeriod(date)).Return(true);
 			now.Stub(x => x.UtcDateTime()).Return(date.Date.ToUniversalTime());
 			var id = Guid.NewGuid();
-			var target = new TeamScheduleController(now,viewModelFactory, MockRepository.GenerateMock<IDefaultTeamProvider>());
+			var target = new TeamScheduleController(now, viewModelFactory, MockRepository.GenerateMock<IDefaultTeamProvider>(),
+				MockRepository.GenerateMock<ITeamScheduleViewModelReworkedMapper>(), MockRepository.GenerateMock<ITimeFilterHelper>(), MockRepository.GenerateMock<IToggleManager>());
 
 			viewModelFactory.Stub(x => x.CreateViewModel(date, id)).Return(new TeamScheduleViewModel());
 
@@ -43,7 +46,8 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			var now = MockRepository.GenerateMock<INow>();
 			now.Stub(x => x.UtcDateTime()).Return(DateTime.UtcNow); 
 			personPeriodProvider.Stub(x => x.HasPersonPeriod(DateOnly.Today)).Return(true);
-			var target = new TeamScheduleController(now,viewModelFactory, MockRepository.GenerateMock<IDefaultTeamProvider>());
+			var target = new TeamScheduleController(now, viewModelFactory, MockRepository.GenerateMock<IDefaultTeamProvider>(), MockRepository.GenerateMock<ITeamScheduleViewModelReworkedMapper>(),
+				MockRepository.GenerateMock<ITimeFilterHelper>(), MockRepository.GenerateMock<IToggleManager>());
 
 			target.Index(null, Guid.Empty);
 
@@ -63,7 +67,8 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			team.SetId(Guid.NewGuid());
 			defaultTeamCalculator.Stub(x => x.DefaultTeam(DateOnly.Today)).Return(team);
 
-			var target = new TeamScheduleController(now,viewModelFactory, defaultTeamCalculator);
+			var target = new TeamScheduleController(now,viewModelFactory, defaultTeamCalculator,
+				MockRepository.GenerateMock<ITeamScheduleViewModelReworkedMapper>(), MockRepository.GenerateMock<ITimeFilterHelper>(), MockRepository.GenerateMock<IToggleManager>());
 
 			target.Index(DateOnly.Today, null);
 
