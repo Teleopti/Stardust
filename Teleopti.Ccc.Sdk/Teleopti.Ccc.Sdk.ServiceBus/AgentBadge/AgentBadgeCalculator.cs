@@ -1,7 +1,7 @@
-﻿using System;
+﻿using log4net;
+using System;
 using System.Collections.Generic;
 using System.Linq;
-using log4net;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.SystemSetting.GlobalSetting;
@@ -28,13 +28,13 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.AgentBadge
 			_now = now;
 		}
 
-		protected IList<IAgentBadgeTransaction> AddBadge(IEnumerable<IPerson> allPersons, IEnumerable<Guid> agentsThatShouldGetBadge,
+		protected IList<IAgentBadgeTransaction> AddBadge(IEnumerable<IPerson> allPersons, IEnumerable<Guid> agentIdsThatShouldGetBadge,
 			BadgeType badgeType, int silverToBronzeBadgeRate, int goldToSilverBadgeRate, DateOnly date)
 		{
 			var newAwardedBadges = new List<IAgentBadgeTransaction>();
 
-			var agentsListShouldGetBadge = agentsThatShouldGetBadge as IList<Guid> ?? agentsThatShouldGetBadge.Where(a => a!=null).ToList();
-			if (!agentsListShouldGetBadge.Any())
+			var agentIdListShouldGetBadge = agentIdsThatShouldGetBadge as IList<Guid> ?? agentIdsThatShouldGetBadge.Where(a => a!=null).ToList();
+			if (!agentIdListShouldGetBadge.Any())
 			{
 				return newAwardedBadges;
 			}

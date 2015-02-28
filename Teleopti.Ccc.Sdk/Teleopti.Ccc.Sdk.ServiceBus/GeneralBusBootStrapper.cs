@@ -1,14 +1,14 @@
+using Autofac;
+using log4net;
+using Rhino.ServiceBus;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Autofac;
-using Rhino.ServiceBus;
 using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.Infrastructure.Toggle;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Messages.General;
-using log4net;
 
 namespace Teleopti.Ccc.Sdk.ServiceBus
 {
@@ -45,10 +45,14 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
 						BusinessUnitId = businessUnitId,
 						Timestamp = DateTime.UtcNow
 					});
-					Logger.DebugFormat(
-						"Sending BadgeCalculationInitMessage to Service Bus for Datasource={0} and BusinessUnitId={1}",
-						tenant.DataSourceName,
-						businessUnitId);
+
+					if (Logger.IsDebugEnabled)
+					{
+						Logger.DebugFormat(
+							"Sending BadgeCalculationInitMessage to Service Bus for Datasource={0} and BusinessUnitId={1}",
+							tenant.DataSourceName,
+							businessUnitId);
+					}
 				}
 			});
 		}
