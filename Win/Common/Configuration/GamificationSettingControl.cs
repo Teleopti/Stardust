@@ -273,11 +273,16 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 
 		private void deleteGamificationSetting()
 		{
+
+			if (_gamificationSettingList.IsEmpty()) return;
+
+			_gamificationSettingList.Remove(SelectedGamificationSetting);
 			if (SelectedGamificationSetting.Id.HasValue)
 			{
 				_gamificationSettingListToBeDeleted.Add(new GamificationSettingView(SelectedGamificationSetting.ContainedEntity));
 			}
-			_gamificationSettingList.Remove(SelectedGamificationSetting);
+			if (_gamificationSettingList.IsEmpty())	_gamificationSettingList.Add(createGamificationSetting());
+
 			bindSettingListToComboBox();
 		}
 

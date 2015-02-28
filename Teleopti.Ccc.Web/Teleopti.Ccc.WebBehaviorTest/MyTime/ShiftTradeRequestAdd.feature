@@ -516,18 +516,18 @@ Scenario: Should be able to add a day to a shift trade
 	And OtherAgent have the workflow control set 'Trade from tomorrow until 30 days forward'
 	And I have a shift with
 	| Field          | Value            |
-	| StartTime      | 2015-03-01 06:00 |
-	| EndTime        | 2015-03-01 16:00 |
+	| StartTime      | 2030-03-01 06:00 |
+	| EndTime        | 2030-03-01 16:00 |
 	| Shift category | Day              |
 	And OtherAgent has a shift with
 	| Field          | Value            |
-	| StartTime      | 2015-03-01 09:00 |
-	| EndTime        | 2015-03-01 18:00 |
+	| StartTime      | 2030-03-01 09:00 |
+	| EndTime        | 2030-03-01 18:00 |
 	| Shift category | Day              |
-	And the time is '2015-02-27'
-	When I view Add Shift Trade Request for date '2015-03-01'
+	And the time is '2030-02-27'
+	When I view Add Shift Trade Request for date '2030-03-01'
 	And I choose 'OtherAgent' to make a shift trade
-	Then I should see 'OtherAgent' in my shift trade list for date '2015-03-01'
+	Then I should see 'OtherAgent' in my shift trade list for date '2030-03-01'
 
 @OnlyRunIfEnabled('Request_ShiftTradeRequestForMoreDays_20918')
 Scenario: Should be able to remove a day from a shift trade
