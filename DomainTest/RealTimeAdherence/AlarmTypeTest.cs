@@ -15,7 +15,6 @@ namespace Teleopti.Ccc.DomainTest.RealTimeAdherence
         private readonly Description _description = new Description("Wrong state");
         private readonly Color _color = Color.DeepPink;
         private readonly TimeSpan _thresholdTime = TimeSpan.FromSeconds(150);
-        private const AlarmTypeMode _mode = AlarmTypeMode.UserDefined;
         private const double _staffingEffect= 1.0;
 
         [SetUp]
