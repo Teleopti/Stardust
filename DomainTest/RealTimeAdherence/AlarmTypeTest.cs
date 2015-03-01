@@ -2,7 +2,6 @@
 using System.Drawing;
 using NUnit.Framework;
 using Teleopti.Ccc.Domain.RealTimeAdherence;
-using Teleopti.Ccc.DomainTest.Helper;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Interfaces.Domain;
 
@@ -38,7 +37,6 @@ namespace Teleopti.Ccc.DomainTest.RealTimeAdherence
             Description description = new Description("My new description");
             Color color = Color.Firebrick;
             TimeSpan thresholdTime = TimeSpan.FromSeconds(73);
-            AlarmTypeMode mode = AlarmTypeMode.Unknown;
 
             target.Description = description;
             target.DisplayColor = color;
