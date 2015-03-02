@@ -57,11 +57,6 @@ namespace Teleopti.Ccc.Infrastructure.Foundation
                     return proxyType.GetProperty("Items", BindingFlags.NonPublic | BindingFlags.Instance)
                                     .GetValue(proxy, null);   
                 }
-                if(genericUnderlyingType.Equals(typeof(ReadOnlyDictionary<,>)))
-                {
-                    return proxyType.GetField("_wrappedDictionary", BindingFlags.NonPublic | BindingFlags.Instance)
-                                .GetValue(proxy);   
-                }
                 if(genericUnderlyingType.Equals(typeof(LayerCollection<>)))
                 {
                     return proxyType.GetProperty("Items", BindingFlags.NonPublic | BindingFlags.Instance)

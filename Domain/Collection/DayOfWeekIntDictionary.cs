@@ -1,10 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 
 namespace Teleopti.Ccc.Domain.Collection
 {
-    public class DayOfWeekIntDictionary : ReadOnlyDictionary<DayOfWeek, int>
+    public class DayOfWeekIntDictionary : Dictionary<DayOfWeek, int>
     {
         public DayOfWeekIntDictionary()
             : base(new Dictionary<DayOfWeek, int>
