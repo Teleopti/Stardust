@@ -270,7 +270,8 @@ define([
 			}
 
 			var activeLayer;
-			if (isNaN(self.MoveActivityForm.SelectedStartMinutes()) || self.MoveActivityForm.SelectedStartMinutes() == 0) {
+			if (self.Resources.MyTeam_MakeTeamScheduleConsistent_31897 &&
+					(isNaN(self.MoveActivityForm.SelectedStartMinutes()) || self.MoveActivityForm.SelectedStartMinutes() == 0)) {
 				activeLayer = layers().first();
 				self.MoveActivityForm.SelectedStartMinutes(activeLayer.StartMinutes());
 				self.SelectedStartMinutes(activeLayer.StartMinutes());
@@ -280,8 +281,7 @@ define([
 					var shiftStartMinutes = self.WorkingShift().OriginalShiftStartMinutes;
 					if (selectedMinutes < shiftStartMinutes && self.MoveActivityForm.shiftOverMidnight())
 						selectedMinutes += 1440;
-					if (layer.StartMinutes() === selectedMinutes)
-						return layer;
+					return layer.StartMinutes() === selectedMinutes;
 				});
 				activeLayer = selectedLayers.first();
 			}

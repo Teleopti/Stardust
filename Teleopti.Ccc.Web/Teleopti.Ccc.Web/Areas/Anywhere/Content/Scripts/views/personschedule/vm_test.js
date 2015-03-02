@@ -621,14 +621,18 @@
 				    assert.equals(result, true);
 
 				},
-				"//should select layer starts at midnight in move activity form": function () {
+				"should select layer starts at midnight in move activity form": function () {
 				    var vm = new viewModel();
+
+					vm.Resources = { MyTeam_MakeTeamScheduleConsistent_31897: false };
+
 				    vm.SetViewOptions({
 				        id: 1,
 				        date: '20131118',
 				        groupid: 2,
 				        minutes: 0
 				    });
+
 					var data = {
 						Schedules: [
 							{
