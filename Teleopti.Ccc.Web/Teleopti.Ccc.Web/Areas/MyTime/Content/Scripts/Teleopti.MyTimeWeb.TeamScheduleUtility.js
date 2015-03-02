@@ -580,6 +580,21 @@ Teleopti.MyTimeWeb.TeamScheduleDataProviderMixin = function(ajax) {
 
 	var self = this;
 
+	self.loadCurrentDate = function(success, error) {
+		ajax.Ajax({
+			url: "TeamSchedule/TeamScheduleCurrentDate",
+			dataType: "json",
+			type: 'GET',
+			contentType: 'application/json; charset=utf-8',
+			success: function (data) {
+				if (success != null) success(data);
+			},
+			error: function (e) {
+				if (error != null) error(e);
+			}
+		});
+	};
+
 	self.loadFilterTimes = function (success, error) {
 		if (self.filterStartTimeList().length == 0) {
 			var dayOffNames = "";

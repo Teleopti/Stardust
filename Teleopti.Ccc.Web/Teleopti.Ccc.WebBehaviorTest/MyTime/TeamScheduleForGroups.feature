@@ -1,4 +1,4 @@
-﻿
+﻿@OnlyRunIfDisabled('MyTimeWeb_SortSchedule_32092')
 Feature: Team schedule for groups
 In order to know when my colleagues work
 As an agent

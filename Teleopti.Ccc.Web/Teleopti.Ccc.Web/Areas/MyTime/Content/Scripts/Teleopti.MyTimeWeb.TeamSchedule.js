@@ -22,7 +22,6 @@ Teleopti.MyTimeWeb.TeamSchedule = (function ($) {
 
 	var teamScheduleViewModel = function (urlDate) {
 		var self = this;
-
 		var periodData = $('#TeamSchedule-body').data('mytime-periodselection');
 		this.selectedDate = ko.observable(moment(periodData.Date));
 		if (urlDate) {

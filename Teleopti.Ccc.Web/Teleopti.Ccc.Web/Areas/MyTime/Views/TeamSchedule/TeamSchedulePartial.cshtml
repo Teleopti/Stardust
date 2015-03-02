@@ -14,14 +14,12 @@
 	
 	$(function () {
 		var vm = new Teleopti.MyTimeWeb.TeamScheduleViewModel();
+		vm.initCurrentDate();
 		$(window).unbind('resize');
 		$(window).resize(function () {
 			vm.redrawLayers();
 		});
-		ko.applyBindings(vm);
-		var now = moment().startOf('day');
-		vm.setDatePickerRange(now, -99, 99);
-		vm.requestedDate(now);
+		ko.applyBindings(vm);	
 	});
 
 </script>

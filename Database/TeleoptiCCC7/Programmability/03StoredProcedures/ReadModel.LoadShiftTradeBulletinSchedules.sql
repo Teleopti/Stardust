@@ -36,6 +36,8 @@ AS
 		[TeamId] [uniqueidentifier] NOT NULL,
 		[SiteId] [uniqueidentifier] NOT NULL,
 		[BusinessUnitId] [uniqueidentifier] NOT NULL,
+		FirstName nvarchar(max),
+		LastName nvarchar(max),
 		[Date] [smalldatetime] NOT NULL,
 		[Start] [datetime] NULL,
 		[End] [datetime] NULL,
@@ -62,12 +64,15 @@ AS
 				TeamId,
 				SiteId,
 				BusinessUnitId,
+				person.FirstName as FirstName,
+				person.LastName as LastName,
 				BelongsToDate,
 				Start,
 				[End],
 				Model,
 				seo.Request AS ShiftExchangeOffer
 			FROM ReadModel.PersonScheduleDay sd 
+			JOIN dbo.Person person ON sd.PersonId = person.Id
 			INNER JOIN dbo.ShiftExchangeOffer seo ON sd.PersonId = seo.Person AND sd.BelongsToDate = seo.Date
 			INNER JOIN @TempList t ON seo.Request = t.Request
 			INNER JOIN dbo.Request req ON seo.Request = req.Id
@@ -80,6 +85,8 @@ AS
 		TeamId,
 		SiteId,
 		BusinessUnitId,
+		FirstName,
+		LastName,
 		BelongsToDate AS [Date],
 		Start,
 		[End],

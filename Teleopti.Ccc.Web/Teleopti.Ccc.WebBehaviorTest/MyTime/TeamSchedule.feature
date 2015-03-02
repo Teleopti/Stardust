@@ -1,4 +1,5 @@
-﻿Feature: Team schedule
+﻿@OnlyRunIfDisabled('MyTimeWeb_SortSchedule_32092')
+Feature: Team schedule
 In order to know when my colleagues work
 As an agent
 I want to see my team mates' schedules
@@ -10,7 +11,7 @@ Scenario: Team schedule tab
 
 Scenario: View team schedule
 	Given I am an agent in a team
-	And the time is '2014-05-02 20:00'
+	And the time is '2014-05-02 08:00'
 	And I have an assigned shift with
 	| Field      | Value      |
 	| Date | 2014-05-02 |

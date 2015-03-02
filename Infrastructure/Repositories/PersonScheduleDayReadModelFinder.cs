@@ -98,6 +98,8 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 				.AddScalar("TeamId", NHibernateUtil.Guid)
 				.AddScalar("SiteId", NHibernateUtil.Guid)
 				.AddScalar("BusinessUnitId", NHibernateUtil.Guid)
+				.AddScalar("FirstName", NHibernateUtil.String)
+				.AddScalar("LastName", NHibernateUtil.String)
 				.AddScalar("Date", NHibernateUtil.DateTime)
 				.AddScalar("Start", NHibernateUtil.DateTime)
 				.AddScalar("End", NHibernateUtil.DateTime)

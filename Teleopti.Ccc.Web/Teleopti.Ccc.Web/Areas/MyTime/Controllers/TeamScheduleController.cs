@@ -1,6 +1,8 @@
 using System;
+using System.Globalization;
 using System.Linq;
 using System.Web.Mvc;
+using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Repositories;
@@ -61,11 +63,23 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 			{
 				return View("TeamSchedulePartial", _teamScheduleViewModelFactory.CreateViewModel());
 			}
-			else
-			{
-				return View("TeamSchedulePartialOriginal", _teamScheduleViewModelFactory.CreateViewModel(date.Value, id.Value));
-			}
 
+			return View("TeamSchedulePartialOriginal", _teamScheduleViewModelFactory.CreateViewModel(date.Value, id.Value));
+		}
+
+		[UnitOfWorkAction]
+		[HttpGet]
+		public JsonResult TeamScheduleCurrentDate()
+		{			 
+			var calendar = CultureInfo.CurrentCulture.Calendar;
+			return Json(
+				new
+				{
+					NowYear = calendar.GetYear(_now.LocalDateOnly()),
+					NowMonth = calendar.GetMonth(_now.LocalDateOnly()),
+					NowDay = calendar.GetDayOfMonth(_now.LocalDateOnly())
+				},
+				JsonRequestBehavior.AllowGet);
 		}
 
 		[UnitOfWorkAction]

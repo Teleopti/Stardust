@@ -7,6 +7,15 @@ Teleopti.MyTimeWeb.TeamScheduleViewModel = function() {
 	self.isTeamScheduleSorttingFeatureEnabled = ko.observable(true);
 	self.isLoading = ko.observable(false);
 
+	self.initCurrentDate = function() {
+		self.loadCurrentDate(
+			function(data) {
+				self.requestedDate( moment(new Date(data.NowYear, data.NowMonth - 1, data.NowDay)));
+			},
+			null
+		);
+	};
+
 	var loadSchedule = function () {
 		self.loadSchedule(
 			self.requestedDateWithFormat(),
