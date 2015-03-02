@@ -26,7 +26,10 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
         /// <returns></returns>
         protected override IAlarmType CreateAggregateWithCorrectBusinessUnit()
         {
-            return new AlarmType(new Description("Wrong state"), Color.DarkTurquoise, TimeSpan.FromSeconds(15),0.8);
+            return new AlarmType(new Description("Wrong state"), Color.DarkTurquoise, TimeSpan.FromSeconds(15),0.8)
+            {
+	            Adherence = Adherence.In
+            };
         }
 
         /// <summary>
@@ -40,6 +43,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
             Assert.AreEqual(org.DisplayColor.ToArgb(), loadedAggregateFromDatabase.DisplayColor.ToArgb());
             Assert.AreEqual(org.ThresholdTime,loadedAggregateFromDatabase.ThresholdTime);
             Assert.AreEqual(0.8, loadedAggregateFromDatabase.StaffingEffect );
+			Assert.AreEqual(Adherence.In, loadedAggregateFromDatabase.Adherence);
         }
 
         protected override Repository<IAlarmType> TestRepository(IUnitOfWork unitOfWork)

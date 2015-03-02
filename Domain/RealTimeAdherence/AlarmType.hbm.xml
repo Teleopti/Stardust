@@ -42,6 +42,8 @@
     <property name="StaffingEffect"
           type="double"
           not-null="true" />
+	<property name="Adherence"/>
+		
 
     <many-to-one name="BusinessUnit"
 					 class="Teleopti.Ccc.Domain.Common.BusinessUnit"
