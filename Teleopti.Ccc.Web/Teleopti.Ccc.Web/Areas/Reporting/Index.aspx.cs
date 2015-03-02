@@ -87,11 +87,7 @@ namespace Teleopti.Ccc.Web.Areas.Reporting
 			createReport("Excel");
 		}
 
-		//protected void ButtonShowClickWord(object sender, ImageClickEventArgs e)
-		//{
-		//	createReport("Word");
-		//}
-		protected void ButtonShowClickWord(object sender, EventArgs e)
+		protected void ButtonShowClickWord(object sender, ImageClickEventArgs e)
 		{
 			createReport("Word");
 		}
