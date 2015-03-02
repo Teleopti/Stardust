@@ -15,6 +15,7 @@ using Teleopti.Ccc.UserTexts;
 using Teleopti.Ccc.Web.Areas.SSO.Controllers;
 using Teleopti.Ccc.Web.Areas.SSO.Core;
 using Teleopti.Ccc.Web.Areas.SSO.Models;
+using Teleopti.Ccc.Web.Areas.Start.Core.Authentication.DataProvider;
 using Teleopti.Ccc.Web.Areas.Start.Core.Authentication.Services;
 using Teleopti.Ccc.Web.Areas.Start.Models.Authentication;
 using Teleopti.Ccc.Web.Core;
@@ -76,7 +77,7 @@ namespace Teleopti.Ccc.WebTest.Areas.SSO.Contollers
 
 			target.CheckPassword(authenticationModel);
 
-			formsAuthentication.AssertWasCalled(x => x.SetAuthCookie(authenticationModel.UserName + "@@" + dataSourceName));
+			formsAuthentication.AssertWasCalled(x => x.SetAuthCookie(authenticationModel.UserName + TokenIdentityProvider.ApplicationIdentifier));
 		}
 
 		[Test]

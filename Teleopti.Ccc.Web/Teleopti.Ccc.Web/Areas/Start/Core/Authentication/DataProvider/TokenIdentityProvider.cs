@@ -3,12 +3,13 @@ using System.Linq;
 using Microsoft.IdentityModel.Claims;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Infrastructure.Web;
-using Teleopti.Ccc.Web.Core.RequestContext;
 
 namespace Teleopti.Ccc.Web.Areas.Start.Core.Authentication.DataProvider
 {
 	public class TokenIdentityProvider : ITokenIdentityProvider
 	{
+		public const char ApplicationIdentifier = '@';
+
 		private readonly ICurrentHttpContext _httpContext;
 		
 		public TokenIdentityProvider(ICurrentHttpContext httpContext)
@@ -43,25 +44,23 @@ namespace Teleopti.Ccc.Web.Areas.Start.Core.Authentication.DataProvider
 
 		private static TokenIdentity getTokenIdentity(string nameClaimValue)
 		{
-			return nameClaimValue.Contains("@@")
+			return nameClaimValue.EndsWith(ApplicationIdentifier.ToString())
 				? getApplicationTokenIdentity(nameClaimValue)
 				: getWindowsTokenIdentity(nameClaimValue);
 		}
 
 		private static TokenIdentity getApplicationTokenIdentity(string nameClaimValue)
 		{
-			var nameAndDatasource = nameClaimValue.Split('/').Last().Split(new[] { "@@" }, StringSplitOptions.RemoveEmptyEntries);
+			var nameAndDatasource = nameClaimValue.Split('/').Last().TrimEnd(ApplicationIdentifier);
 			return new TokenIdentity
 			{
-				DataSource = nameAndDatasource[1],
-				UserIdentifier = nameAndDatasource[0],
+				UserIdentifier = nameAndDatasource,
 				OriginalToken = nameClaimValue
 			};
 		}
 
 		private static TokenIdentity getWindowsTokenIdentity(string nameClaimValue)
 		{
-			if (nameClaimValue.Contains("@@")) return null;
 			var nameAndDomain = nameClaimValue.Split('/').Last();
 			return new TokenIdentity
 			{
@@ -75,7 +74,5 @@ namespace Teleopti.Ccc.Web.Areas.Start.Core.Authentication.DataProvider
 	{
 		public string UserIdentifier { get; set; }
 		public string OriginalToken { get; set; }
-		//TODO: tenant remove this!
-		public string DataSource { get; set; }
 	}
 }

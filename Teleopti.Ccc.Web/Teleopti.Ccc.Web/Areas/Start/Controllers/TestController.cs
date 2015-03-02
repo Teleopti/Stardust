@@ -122,12 +122,12 @@ namespace Teleopti.Ccc.Web.Areas.Start.Controllers
 
 			if (result.Successful)
 			{
-				_formsAuthentication.SetAuthCookie(userName + "@@" + result.DataSource.DataSourceName);
+				_formsAuthentication.SetAuthCookie(userName + TokenIdentityProvider.ApplicationIdentifier);
 			}
 
 			var claims = new List<Claim>
 			{
-				new Claim(System.IdentityModel.Claims.ClaimTypes.NameIdentifier, userName + "@@" + result.DataSource.DataSourceName)
+				new Claim(System.IdentityModel.Claims.ClaimTypes.NameIdentifier, userName + TokenIdentityProvider.ApplicationIdentifier)
 			};
 			var claimsIdentity = new ClaimsIdentity(claims, "IssuerForTest");
 			_httpContext.Current().User = new ClaimsPrincipal(new IClaimsIdentity[] { claimsIdentity });

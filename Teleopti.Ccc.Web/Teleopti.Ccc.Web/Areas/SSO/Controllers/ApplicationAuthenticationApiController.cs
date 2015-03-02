@@ -7,6 +7,7 @@ using Teleopti.Ccc.Infrastructure.MultiTenancy.NHibernate;
 using Teleopti.Ccc.UserTexts;
 using Teleopti.Ccc.Web.Areas.MyTime.Core;
 using Teleopti.Ccc.Web.Areas.SSO.Models;
+using Teleopti.Ccc.Web.Areas.Start.Core.Authentication.DataProvider;
 using Teleopti.Ccc.Web.Areas.Start.Models.Authentication;
 using Teleopti.Ccc.Web.Core;
 using Teleopti.Interfaces.Domain;
@@ -57,7 +58,7 @@ namespace Teleopti.Ccc.Web.Areas.SSO.Controllers
 				return ModelState.ToJson();
 			}
 
-			_formsAuthentication.SetAuthCookie(model.UserName + "@@" + result.DataSource.DataSourceName);
+			_formsAuthentication.SetAuthCookie(model.UserName + TokenIdentityProvider.ApplicationIdentifier);
 			model.SaveAuthenticateResult(result);
 			return Json(new PasswordWarningViewModel { WillExpireSoon = result.HasMessage}, JsonRequestBehavior.AllowGet);
 		}
@@ -85,7 +86,7 @@ namespace Teleopti.Ccc.Web.Areas.SSO.Controllers
 					ModelState.AddModelError("Error", result.IsAuthenticationSuccessful ? Resources.PasswordPolicyWarning : Resources.InvalidUserNameOrPassword);
 					return ModelState.ToJson();
 				}
-				_formsAuthentication.SetAuthCookie(model.UserName + "@@" + dataSource.DataSourceName);
+				_formsAuthentication.SetAuthCookie(model.UserName + TokenIdentityProvider.ApplicationIdentifier);
 				return Json(result);
 			}
 		}
