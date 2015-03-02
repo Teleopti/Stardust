@@ -365,6 +365,7 @@
     <Compile Include="Collection\CachedShiftCategoryDistribution.cs" />
     <Compile Include="Collection\IdenticalLayersSpecification.cs" />
     <Compile Include="Collection\ITeamCollection.cs" />
+    <Compile Include="Collection\ReadOnlyDictionary_DoNotUse.cs" />
     <Compile Include="Collection\TeamCollection.cs" />
     <Compile Include="Common\AgentBadgeInfo.cs" />
     <Compile Include="Common\AgentBadge.cs" />
@@ -1880,7 +1881,9 @@
   <ItemGroup>
     <EmbeddedResource Include="Common\BusinessUnit.hbm.xml" />
     <EmbeddedResource Include="Common\Scenario.hbm.xml" />
-    <EmbeddedResource Include="Scheduling\ShiftCategory.hbm.xml" />
+    <EmbeddedResource Include="Scheduling\ShiftCategory.hbm.xml">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
     <Service Include="{B4F97281-0DBD-4835-9ED8-7DFB966E87FF}" />

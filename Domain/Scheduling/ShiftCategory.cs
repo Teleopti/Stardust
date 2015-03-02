@@ -19,7 +19,7 @@ namespace Teleopti.Ccc.Domain.Scheduling
 
         private Description _description;
         private Color _displayColor;
-				private IDictionary<DayOfWeek, int> _dayOfWeekJusticeValues = new DayOfWeekIntDictionary();
+				private DayOfWeekIntDictionary _dayOfWeekJusticeValues = new DayOfWeekIntDictionary();
         private bool _isDeleted;
 	    private int? _rank;
 

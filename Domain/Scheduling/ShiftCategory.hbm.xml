@@ -37,11 +37,13 @@
 				  type="Teleopti.Ccc.Infrastructure.NHibernateConfiguration.ColorNumber, Teleopti.Ccc.Infrastructure"
 				  not-null="true"/>
 
-      <map name="DayOfWeekJusticeValues" table="ShiftCategoryJusticeValues" fetch="join">
-        <key column="ShiftCategory" foreign-key ="FK_ShiftCategory_Justice" />
-        <index column ="DayOfWeek" type="System.DayOfWeek"/>
-        <element column ="Value" type="int" />
-      </map>
+		<component name="DayOfWeekJusticeValues">
+			 <map name="WrappedDictionary" table="ShiftCategoryJusticeValues">
+					<key column="ShiftCategory" foreign-key ="FK_ShiftCategory_Justice" />
+					<index column ="DayOfWeek" type="System.DayOfWeek"/>
+					<element column ="Value" type="int" />
+				</map>
+			</component>
 
     <property name="Rank"
 					  not-null="false"

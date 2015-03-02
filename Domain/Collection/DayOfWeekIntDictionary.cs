@@ -3,10 +3,10 @@ using System.Collections.Generic;
 
 namespace Teleopti.Ccc.Domain.Collection
 {
-    public class DayOfWeekIntDictionary : Dictionary<DayOfWeek, int>
-    {
-        public DayOfWeekIntDictionary()
-            : base(new Dictionary<DayOfWeek, int>
+	public class DayOfWeekIntDictionary : ReadOnlyDictionary_DoNotUse<DayOfWeek, int>
+	{
+		public DayOfWeekIntDictionary()
+			: base(new Dictionary<DayOfWeek, int>
                        {
                            {DayOfWeek.Monday, 0},
                            {DayOfWeek.Tuesday, 0},
@@ -16,7 +16,22 @@ namespace Teleopti.Ccc.Domain.Collection
                            {DayOfWeek.Saturday, 0},
                            {DayOfWeek.Sunday, 0}
                        }
-            )
-        {}
-    }
+			)
+		{ }
+
+		public override int this[DayOfWeek key]
+		{
+			get
+			{
+				if (WrappedDictionary.ContainsKey(key))
+					return WrappedDictionary[key];
+
+				return 0;
+			}
+			set
+			{
+				WrappedDictionary[key] = value;
+			}
+		}
+	}
 }
