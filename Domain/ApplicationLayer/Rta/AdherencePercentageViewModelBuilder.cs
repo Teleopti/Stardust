@@ -44,7 +44,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta
 			       };
 		}
 
-		private int percent(AdherencePercentageReadModel model)
+		private int? percent(AdherencePercentageReadModel model)
 		{
 			var secondsInAdherence = Convert.ToDouble(model.TimeInAdherence.TotalSeconds);
 			var secondsOutOfAdherence = Convert.ToDouble(model.TimeOutOfAdherence.TotalSeconds);
@@ -61,7 +61,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta
 			}
 
 			var total = secondsInAdherence + secondsOutOfAdherence;
-
+			if (total.Equals(0))
+				return null;
 			return (int) (secondsInAdherence/total*100);
 		}
 
