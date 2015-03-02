@@ -54,6 +54,20 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta
 		}
 
 		[ReadModelUnitOfWork]
+		public virtual void Handle(PersonNeutralAdherenceEvent @event)
+		{
+			handleEvent(
+				@event.PersonId,
+				@event.BelongsToDate,
+				new AdherencePercentageReadModelState
+				{
+					Timestamp = @event.Timestamp,
+					InAdherence = null
+				},
+				m => m.IsLastTimeInAdherence = null);
+		}
+
+		[ReadModelUnitOfWork]
 		public virtual void Handle(PersonShiftEndEvent @event)
 		{
 			handleEvent(
@@ -116,7 +130,5 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta
 				previous = current;
 			}
 		}
-
 	}
-
 }

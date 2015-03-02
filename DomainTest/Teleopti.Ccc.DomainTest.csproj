@@ -184,6 +184,7 @@
     <Compile Include="ApplicationLayer\Rta\AdherenceDetails\UnorderedEventsTest.cs" />
     <Compile Include="ApplicationLayer\Rta\AdherencePercentage\AdherenceTest.cs" />
     <Compile Include="ApplicationLayer\Rta\AdherencePercentage\BelongsToDateTest.cs" />
+    <Compile Include="ApplicationLayer\Rta\AdherencePercentage\NeutralAdherenceTest.cs" />
     <Compile Include="ApplicationLayer\Rta\AdherencePercentage\UnorderedEventsTest.cs" />
     <Compile Include="ApplicationLayer\Rta\AdherenceTestAttribute.cs" />
     <Compile Include="ApplicationLayer\Rta\AgentDateProviderTest.cs" />
