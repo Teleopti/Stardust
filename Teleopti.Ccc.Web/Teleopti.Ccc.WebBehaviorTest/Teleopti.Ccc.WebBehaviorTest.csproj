@@ -132,6 +132,11 @@
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
     </Compile>
+    <Compile Include="Anywhere\RealTimeAdherence\NeutralPolicy.feature.cs">
+      <DependentUpon>NeutralPolicy.feature</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
     <Compile Include="Anywhere\RealTimeAdherence\TimeZone.feature.cs">
       <DependentUpon>TimeZone.feature</DependentUpon>
       <AutoGen>True</AutoGen>
@@ -854,6 +859,10 @@
     <None Include="Anywhere\RealTimeAdherence\Nighshift.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>
       <LastGenOutput>Nighshift.feature.cs</LastGenOutput>
+    </None>
+    <None Include="Anywhere\RealTimeAdherence\NeutralPolicy.feature">
+      <Generator>SpecFlowSingleFileGenerator</Generator>
+      <LastGenOutput>NeutralPolicy.feature.cs</LastGenOutput>
     </None>
     <None Include="Anywhere\RealTimeAdherence\TimeZone.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>

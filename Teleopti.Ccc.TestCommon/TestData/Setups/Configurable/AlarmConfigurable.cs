@@ -17,6 +17,7 @@ namespace Teleopti.Ccc.TestCommon.TestData.Setups.Configurable
 		public int StaffingEffect { get; set; }
 		public string AlarmColor { get; set; }
 		public string BusinessUnit { get; set; }
+		public string Adherence { get; set; }
 
 		public void Apply(IUnitOfWork uow)
 		{
@@ -41,6 +42,13 @@ namespace Teleopti.Ccc.TestCommon.TestData.Setups.Configurable
 				stateGroup.SetBusinessUnit(businessUnit);
 				stateGroupActivityAlarm.SetBusinessUnit(businessUnit);
 			}
+			if (!string.IsNullOrWhiteSpace(Adherence))
+			{
+				Adherence adherence;
+				if(Enum.TryParse(Adherence, true, out adherence))
+				alarmType.Adherence = adherence;
+			}
+				
 
 			var stateGroupRepository = new RtaStateGroupRepository(uow);
 			stateGroupRepository.Add(stateGroup);
