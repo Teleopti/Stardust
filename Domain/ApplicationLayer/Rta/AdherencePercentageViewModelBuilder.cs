@@ -49,9 +49,9 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta
 			var secondsInAdherence = Convert.ToDouble(model.TimeInAdherence.TotalSeconds);
 			var secondsOutOfAdherence = Convert.ToDouble(model.TimeOutOfAdherence.TotalSeconds);
 
-			if (!model.ShiftHasEnded)
+			if (!model.ShiftHasEnded && model.IsLastTimeInAdherence.HasValue)
 			{
-				var isLastInAdherence = model.IsLastTimeInAdherence ?? false;
+				var isLastInAdherence = model.IsLastTimeInAdherence.Value;
 				var lastTimestamp = model.LastTimestamp ?? DateTime.MinValue;
 				var secondsFromLastUpdate = _now.UtcDateTime().Subtract(lastTimestamp).TotalSeconds;
 				if (isLastInAdherence)
