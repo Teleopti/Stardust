@@ -456,6 +456,9 @@
     <Compile Include="DayOffPlanning\SmartDayOffBackToLegalStateService.cs" />
     <Compile Include="DayOffPlanning\TeDataDayOffDecisionMaker.cs" />
     <Compile Include="DayOffPlanning\TuiCaseSolver.cs" />
+    <Compile Include="Forecasting\Angel\AverageStatistics.cs" />
+    <Compile Include="Forecasting\Angel\ForecastingTargetMerger.cs" />
+    <Compile Include="Forecasting\Angel\ForecastMethod.cs" />
     <Compile Include="Forecasting\Angel\Future\ForecastVolumeApplier.cs" />
     <Compile Include="Forecasting\Angel\Future\FutureData.cs" />
     <Compile Include="Forecasting\Angel\Future\IFutureData.cs" />
@@ -463,6 +466,8 @@
     <Compile Include="Forecasting\Angel\Historical\DailyStatisticsAggregator.cs" />
     <Compile Include="Forecasting\Angel\Future\IFetchAndFillSkillDays.cs" />
     <Compile Include="Forecasting\Angel\Future\IForecastVolumeApplier.cs" />
+    <Compile Include="Forecasting\Angel\IForecastingTargetMerger.cs" />
+    <Compile Include="Forecasting\Angel\IForecastMethod.cs" />
     <Compile Include="Forecasting\Angel\IQuickForecaster.cs" />
     <Compile Include="Forecasting\Angel\IQuickForecastForAllSkills.cs" />
     <Compile Include="Forecasting\Angel\LegacyWrappers\DailyStatisticsToTaskOwnerConverterExtension.cs" />
@@ -479,6 +484,7 @@
     <Compile Include="Forecasting\Angel\QuickForecaster.cs" />
     <Compile Include="Forecasting\Angel\QuickForecasterWorkload.cs" />
     <Compile Include="Forecasting\Angel\QuickForecastForAllSkills.cs" />
+    <Compile Include="Forecasting\ForecastingTarget.cs" />
     <Compile Include="Forecasting\SkillMap_DEV.cs" />
     <Compile Include="Forecasting\StaffingCalculatorServiceFacade.cs" />
     <Compile Include="Aop\Core\IAspect.cs" />

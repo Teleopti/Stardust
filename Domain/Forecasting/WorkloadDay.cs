@@ -6,7 +6,7 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Forecasting
 {
-    /// <summary>
+	/// <summary>
     /// Class for holding one day of workload data
     /// </summary>
     public class WorkloadDay : WorkloadDayBase, IWorkloadDay

@@ -136,7 +136,7 @@ namespace Teleopti.Ccc.Domain.Forecasting
             _workloadDayPeriod.EndUpdate();
         }
 
-        private void SetComparison(ITaskOwner day, TotalDayItem totalDayItem, double trendFactor)
+		private void SetComparison(IForecastingTarget day, TotalDayItem totalDayItem, double trendFactor)
         {
             double totalTaskIndex = 1;
             double talkTimeIndex = 1;
@@ -170,7 +170,7 @@ namespace Teleopti.Ccc.Domain.Forecasting
         }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1822:MarkMembersAsStatic")]
-        private void SetComparisonFromOutlier(ITaskOwner day, TaskOwnerPeriod statisticsForOutlier, TotalDayItem totalDayItem, double trendFactor)
+        private void SetComparisonFromOutlier(IForecastingTarget day, TaskOwnerPeriod statisticsForOutlier, TotalDayItem totalDayItem, double trendFactor)
         {
             double totalTaskIndex = totalDayItem.TaskIndex == 0 ? 1 * trendFactor : totalDayItem.TaskIndex;
             double talkTimeIndex = totalDayItem.TalkTimeIndex == 0 ? 1 : totalDayItem.TalkTimeIndex;

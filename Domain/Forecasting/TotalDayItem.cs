@@ -18,7 +18,7 @@ namespace Teleopti.Ccc.Domain.Forecasting
         private double _comparisonTasks;
         private TimeSpan _comparisonAverageTalkTime;
         private TimeSpan _comparisonAverageAfterWorkTime;
-        private ITaskOwner _taskOwner;
+		private IForecastingTarget _taskOwner;
         private double _dayTrendFactor;
         
 
@@ -34,7 +34,7 @@ namespace Teleopti.Ccc.Domain.Forecasting
         /// Created by: robink
         /// Created date: 2009-11-03
         /// </remarks>
-        public void SetComparisonValues(ITaskOwner taskOwner, double taskIndex, double talkTimeIndex, double afterTalkTimeIndex, double dayTrendFactor)
+        public void SetComparisonValues(IForecastingTarget taskOwner, double taskIndex, double talkTimeIndex, double afterTalkTimeIndex, double dayTrendFactor)
         {
             //Count comparison values to index 1
             if (taskIndex != 0 && taskOwner.Tasks != 0)
@@ -212,7 +212,7 @@ namespace Teleopti.Ccc.Domain.Forecasting
             }
         }
 
-        public ITaskOwner TaskOwner
+        public IForecastingTarget TaskOwner
         {
             get { return _taskOwner; }
         }

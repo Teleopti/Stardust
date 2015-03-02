@@ -10,6 +10,12 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 	{
 		protected override void Load(ContainerBuilder builder)
 		{
+			builder.RegisterType<ForecastingTargetMerger>()
+				.SingleInstance()
+				.As<IForecastingTargetMerger>();
+			builder.RegisterType<ForecastMethod>()
+				.SingleInstance()
+				.As<IForecastMethod>();
 			builder.RegisterType<QuickForecasterWorkload>()
 				.SingleInstance()
 				.As<IQuickForecasterWorkload>();

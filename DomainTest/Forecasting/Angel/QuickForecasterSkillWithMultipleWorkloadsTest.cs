@@ -49,7 +49,7 @@ namespace Teleopti.Ccc.DomainTest.Forecasting.Angel
 			var skillDayRepository = MockRepository.GenerateStub<ISkillDayRepository>();
 			skillDayRepository.Stub(x => x.FindRange(futurePeriod, skill, currentScenario.Current())).Return(skillDays);
 
-			var quickForecasterWorkload = new QuickForecasterWorkload(new HistoricalData(dailyStatistics, validatedVolumeDayRepository), new FutureData(), new ForecastVolumeApplier());
+			var quickForecasterWorkload = new QuickForecasterWorkload(new HistoricalData(dailyStatistics, validatedVolumeDayRepository), new FutureData(),new ForecastMethod(), new ForecastingTargetMerger());
 			var target = new QuickForecaster(quickForecasterWorkload, new FetchAndFillSkillDays(skillDayRepository, currentScenario, new SkillDayRepository(MockRepository.GenerateStrictMock<ICurrentUnitOfWork>())));
 			target.Execute(skill, futurePeriod, historicalPeriod);
 

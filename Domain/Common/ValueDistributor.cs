@@ -84,13 +84,13 @@ namespace Teleopti.Ccc.Domain.Common
         public static void DistributeTaskTimes(double changeAsPercent, TimeSpan newTime, IEnumerable targets, TaskFieldToDistribute taskFieldToDistribute, DistributionType distributionType, double originalValue)
         {
             if (newTime < TimeSpan.Zero) throw new ArgumentOutOfRangeException("newTime", "The new time cannot be negative. Use TimeSpan.Zero instead.");
-            IList<ITaskOwner> typedTargets = targets.OfType<ITaskOwner>().ToList();
+			IList<IForecastingTarget> typedTargets = targets.OfType<IForecastingTarget>().ToList();
 
             int numberOfTargets = typedTargets.Count();
             if (numberOfTargets == 0) return;
 
-            PropertyInfo property = typeof(ITaskOwner).GetProperty(taskFieldToDistribute.ToString());
-            foreach (ITaskOwner owner in typedTargets)
+			PropertyInfo property = typeof(IForecastingTarget).GetProperty(taskFieldToDistribute.ToString());
+			foreach (IForecastingTarget owner in typedTargets)
             {
                 long averageTaskTimeTicks = ((TimeSpan)property.GetValue(owner, null)).Ticks;
                 if (distributionType == DistributionType.ByPercent)
