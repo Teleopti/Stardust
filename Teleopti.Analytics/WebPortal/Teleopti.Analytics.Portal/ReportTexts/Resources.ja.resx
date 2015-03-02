@@ -881,13 +881,13 @@
     <value>残業の種類:</value>
   </data>
   <data name="ResKpiAverageAfterCallWork" xml:space="preserve">
-    <value>平均アフターコールワーク (秒)</value>
+    <value>平均アフターコールワーク</value>
   </data>
   <data name="ResKpiAverageHandleTime" xml:space="preserve">
-    <value>平均処理時間 (秒)</value>
+    <value>平均処理時間</value>
   </data>
   <data name="ResKpiAverageTalkTime" xml:space="preserve">
-    <value>平均通話時間 (秒)</value>
+    <value>平均通話時間</value>
   </data>
   <data name="ResReportAgentQueueMetrics" xml:space="preserve">
     <value>エージェントキューの評価指標</value>

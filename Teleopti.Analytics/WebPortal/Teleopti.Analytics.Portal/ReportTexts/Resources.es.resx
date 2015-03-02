@@ -883,13 +883,13 @@
     <value>Tipo de tiempo extra:</value>
   </data>
   <data name="ResKpiAverageAfterCallWork" xml:space="preserve">
-    <value>Tiempo promedio de ACW (s)</value>
+    <value>Tiempo promedio de ACW</value>
   </data>
   <data name="ResKpiAverageHandleTime" xml:space="preserve">
-    <value>Tiempo promedio de Gestión (s)</value>
+    <value>Tiempo promedio de Gestión</value>
   </data>
   <data name="ResKpiAverageTalkTime" xml:space="preserve">
-    <value>Tiempo promedio de conversación (s)</value>
+    <value>Tiempo promedio de conversación</value>
   </data>
   <data name="ResReportAgentQueueMetrics" xml:space="preserve">
     <value>Métricas del Agente y Cola</value>

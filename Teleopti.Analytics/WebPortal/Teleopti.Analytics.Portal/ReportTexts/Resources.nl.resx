@@ -1042,7 +1042,7 @@
     <value>Groep:</value>
   </data>
   <data name="ResKpiAverageAfterCallWork" xml:space="preserve">
-    <value>Gemiddeld After Call Work (s)</value>
+    <value>Gemiddeld After Call Work</value>
   </data>
   <data name="ResRequestTypeText" xml:space="preserve">
     <value>Tekst</value>

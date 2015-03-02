@@ -877,13 +877,13 @@
     <value>Agenten - Kennzahlen Queue</value>
   </data>
   <data name="ResKpiAverageAfterCallWork" xml:space="preserve">
-    <value>Durchschnitt Nachbearbeitungszeit (sek)</value>
+    <value>Durchschnitt Nachbearbeitungszeit</value>
   </data>
   <data name="ResKpiAverageHandleTime" xml:space="preserve">
-    <value>Durchschnitt Bearbeitungszeit (sek)</value>
+    <value>Durchschnitt Bearbeitungszeit</value>
   </data>
   <data name="ResKpiAverageTalkTime" xml:space="preserve">
-    <value>Durchschnitt Gesprächszeit (ATT)</value>
+    <value>Durchschnitt Gesprächszeit</value>
   </data>
   <data name="ResOvertimeTypeColon" xml:space="preserve">
     <value>Überstunde-typ:</value>

@@ -884,13 +884,13 @@
     <value>Тип сверхурочного времени:</value>
   </data>
   <data name="ResKpiAverageAfterCallWork" xml:space="preserve">
-    <value>Среднее время работы после звонка (с)</value>
+    <value>Среднее время работы после звонка</value>
   </data>
   <data name="ResKpiAverageHandleTime" xml:space="preserve">
-    <value>Среднее время обработки (с)</value>
+    <value>Среднее время обработки</value>
   </data>
   <data name="ResKpiAverageTalkTime" xml:space="preserve">
-    <value>Среднее время разговора (с)</value>
+    <value>Среднее время разговора</value>
   </data>
   <data name="ResReportAgentQueueMetrics" xml:space="preserve">
     <value>Метрики очереди оператора</value>

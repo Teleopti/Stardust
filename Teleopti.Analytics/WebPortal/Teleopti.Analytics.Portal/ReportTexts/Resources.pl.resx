@@ -1087,12 +1087,12 @@
     <value>Grupa:</value>
   </data>
   <data name="ResKpiAverageAfterCallWork" xml:space="preserve">
-    <value>Średni Czas Pracy Po Połączeniu (s)</value>
+    <value>Średni Czas Pracy Po Połączeniu</value>
   </data>
   <data name="ResKpiAverageHandleTime" xml:space="preserve">
-    <value>Średni Czas Obsługi (s)</value>
+    <value>Średni Czas Obsługi</value>
   </data>
   <data name="ResKpiAverageTalkTime" xml:space="preserve">
-    <value>Średni Czas Rozmowy (s)</value>
+    <value>Średni Czas Rozmowy</value>
   </data>
 </root>

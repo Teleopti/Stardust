@@ -1098,16 +1098,16 @@ Schedule</value>
     <comment>Overtime type:</comment>
   </data>
   <data name="ResKpiAverageAfterCallWork" xml:space="preserve">
-    <value>Average After Call Work (s)</value>
-    <comment>Average After Call Work (s)</comment>
+    <value>Average After Call Work</value>
+    <comment>Average After Call Work</comment>
   </data>
   <data name="ResKpiAverageHandleTime" xml:space="preserve">
-    <value>Average Handle Time (s)</value>
-    <comment>Average Handle Time (s)</comment>
+    <value>Average Handle Time</value>
+    <comment>Average Handle Time</comment>
   </data>
   <data name="ResKpiAverageTalkTime" xml:space="preserve">
-    <value>Average Talk Time (s)</value>
-    <comment>Average Talk Time (s)</comment>
+    <value>Average Talk Time</value>
+    <comment>Average Talk Time</comment>
   </data>
   <data name="ResReportAgentQueueMetrics" xml:space="preserve">
     <value>Agent Queue Metrics</value>

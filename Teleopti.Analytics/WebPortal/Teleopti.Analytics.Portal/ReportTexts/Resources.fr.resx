@@ -553,13 +553,13 @@
     <value>Type d'heures supplémentaires:</value>
   </data>
   <data name="ResKpiAverageAfterCallWork" xml:space="preserve">
-    <value>Moyenne travail post-appel (s)</value>
+    <value>Moyenne travail post-appel</value>
   </data>
   <data name="ResKpiAverageHandleTime" xml:space="preserve">
-    <value>Durée moyenne de traitement(s)</value>
+    <value>Durée moyenne de traitement</value>
   </data>
   <data name="ResKpiAverageTalkTime" xml:space="preserve">
-    <value>Durée moyenne de communication (s)</value>
+    <value>Durée moyenne de communication</value>
   </data>
   <data name="ResReportAgentQueueMetrics" xml:space="preserve">
     <value>Métriques file agent</value>

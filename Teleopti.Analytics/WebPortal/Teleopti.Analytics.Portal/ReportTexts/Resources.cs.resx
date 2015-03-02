@@ -1033,13 +1033,13 @@
     <value>Typ přesčasu:</value>
   </data>
   <data name="ResKpiAverageAfterCallWork" xml:space="preserve">
-    <value>Průměrná práce po hovoru (s)</value>
+    <value>Průměrná práce po hovoru</value>
   </data>
   <data name="ResKpiAverageHandleTime" xml:space="preserve">
-    <value>Průměrná doba obsluhy (s)</value>
+    <value>Průměrná doba obsluhy</value>
   </data>
   <data name="ResKpiAverageTalkTime" xml:space="preserve">
-    <value>Průměrná doba hovoru (s)</value>
+    <value>Průměrná doba hovoru</value>
   </data>
   <data name="ResOnlyActiveSkill" xml:space="preserve">
     <value>Pouze aktivní kvalifikace</value>

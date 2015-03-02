@@ -1089,13 +1089,13 @@
     <value>Ylityön tyyppi:</value>
   </data>
   <data name="ResKpiAverageAfterCallWork" xml:space="preserve">
-    <value>Keskimääräinen puhelun jälkeinen työ (s)</value>
+    <value>Keskimääräinen puhelun jälkeinen työ</value>
   </data>
   <data name="ResKpiAverageHandleTime" xml:space="preserve">
-    <value>Keskimääräinen käsittelyaika (s)</value>
+    <value>Keskimääräinen käsittelyaika</value>
   </data>
   <data name="ResKpiAverageTalkTime" xml:space="preserve">
-    <value>Keskimääräinen puheaika (s)</value>
+    <value>Keskimääräinen puheaika</value>
   </data>
   <data name="ResReportAgentQueueMetrics" xml:space="preserve">
     <value>Agentin jonometriikka</value>

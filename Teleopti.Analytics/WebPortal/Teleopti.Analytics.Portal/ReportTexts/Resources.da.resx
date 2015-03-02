@@ -1087,13 +1087,13 @@
     <value>Overarbejds type:</value>
   </data>
   <data name="ResKpiAverageAfterCallWork" xml:space="preserve">
-    <value>Gennemsnitlig efterbehandlings tid (s)</value>
+    <value>Gennemsnitlig efterbehandlings tid</value>
   </data>
   <data name="ResKpiAverageHandleTime" xml:space="preserve">
-    <value>Gennemsnitlig Håndterings Tid (s)</value>
+    <value>Gennemsnitlig Håndterings Tid</value>
   </data>
   <data name="ResKpiAverageTalkTime" xml:space="preserve">
-    <value>Gennemsnitlig Tale Tid (s)</value>
+    <value>Gennemsnitlig Tale Tid</value>
   </data>
   <data name="ResReportAgentQueueMetrics" xml:space="preserve">
     <value>Medarbejer Målværdier pr. Kø</value>

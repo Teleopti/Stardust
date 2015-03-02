@@ -886,13 +886,13 @@
     <value>加班类型：</value>
   </data>
   <data name="ResKpiAverageAfterCallWork" xml:space="preserve">
-    <value>平均话后处理时长 (秒)</value>
+    <value>平均话后处理时长</value>
   </data>
   <data name="ResKpiAverageHandleTime" xml:space="preserve">
-    <value>平均处理时间 (秒)</value>
+    <value>平均处理时间</value>
   </data>
   <data name="ResKpiAverageTalkTime" xml:space="preserve">
-    <value>平均通话时间 (秒)</value>
+    <value>平均通话时间</value>
   </data>
   <data name="ResReportAgentQueueMetrics" xml:space="preserve">
     <value>座席代表队列度量</value>

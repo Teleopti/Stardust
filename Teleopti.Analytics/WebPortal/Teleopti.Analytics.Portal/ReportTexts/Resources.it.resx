@@ -895,13 +895,13 @@
     <value>Chiamate risposte entro la soglia del livello di servizio / Chiamate entranti</value>
   </data>
   <data name="ResKpiAverageAfterCallWork" xml:space="preserve">
-    <value>After Call Work medio (s)</value>
+    <value>After Call Work medio</value>
   </data>
   <data name="ResKpiAverageHandleTime" xml:space="preserve">
-    <value>Tempo di gestione medio (s)</value>
+    <value>Tempo di gestione medio</value>
   </data>
   <data name="ResKpiAverageTalkTime" xml:space="preserve">
-    <value>Tempo di conversazione medio (s)</value>
+    <value>Tempo di conversazione medio</value>
   </data>
   <data name="ResReportActivityTimePerAgent" xml:space="preserve">
     <value>Ore di attività per agente</value>

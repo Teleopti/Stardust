@@ -131,34 +131,64 @@
     <EmbeddedResource Include="Resources.ar.resx">
       <SubType>Designer</SubType>
     </EmbeddedResource>
-    <EmbeddedResource Include="Resources.cs.resx" />
-    <EmbeddedResource Include="Resources.da.resx" />
-    <EmbeddedResource Include="Resources.de.resx" />
-    <EmbeddedResource Include="Resources.es.resx" />
-    <EmbeddedResource Include="Resources.fa.resx" />
-    <EmbeddedResource Include="Resources.fi.resx" />
-    <EmbeddedResource Include="Resources.fr-CA.resx" />
-    <EmbeddedResource Include="Resources.fr.resx" />
+    <EmbeddedResource Include="Resources.cs.resx">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources.da.resx">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources.de.resx">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources.es.resx">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources.fa.resx">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources.fi.resx">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources.fr-CA.resx">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources.fr.resx">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
     <EmbeddedResource Include="Resources.it.resx">
       <SubType>Designer</SubType>
     </EmbeddedResource>
-    <EmbeddedResource Include="Resources.ja.resx" />
-    <EmbeddedResource Include="Resources.nl.resx" />
+    <EmbeddedResource Include="Resources.ja.resx">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources.nl.resx">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
     <EmbeddedResource Include="Resources.no.resx" />
-    <EmbeddedResource Include="Resources.pl.resx" />
-    <EmbeddedResource Include="Resources.pt.resx" />
+    <EmbeddedResource Include="Resources.pl.resx">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources.pt.resx">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
     <EmbeddedResource Include="Resources.resx">
       <SubType>Designer</SubType>
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
-    <EmbeddedResource Include="Resources.ru.resx" />
+    <EmbeddedResource Include="Resources.ru.resx">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
     <EmbeddedResource Include="Resources.sk.resx" />
     <EmbeddedResource Include="Resources.sv.resx">
       <SubType>Designer</SubType>
     </EmbeddedResource>
-    <EmbeddedResource Include="Resources.tr.resx" />
-    <EmbeddedResource Include="Resources.zh-CN.resx" />
+    <EmbeddedResource Include="Resources.tr.resx">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources.zh-CN.resx">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include="Microsoft.Net.Client.3.5">

@@ -1082,16 +1082,16 @@
     <comment>Övertidstyp:</comment>
   </data>
   <data name="ResKpiAverageAfterCallWork" xml:space="preserve">
-    <value>Snitt Efterbearbetningstid (s)</value>
-    <comment>Snitt Efterbearbetningstid (s)</comment>
+    <value>Snitt Efterbearbetningstid</value>
+    <comment>Snitt Efterbearbetningstid</comment>
   </data>
   <data name="ResKpiAverageHandleTime" xml:space="preserve">
-    <value>Snitt Hanteringstid (s)</value>
-    <comment>Snitt Hanterings tid (s)</comment>
+    <value>Snitt Hanteringstid</value>
+    <comment>Snitt Hanterings tid</comment>
   </data>
   <data name="ResKpiAverageTalkTime" xml:space="preserve">
-    <value>Snitt Samtalstid (s)</value>
-    <comment>Snitt Samtalstid (s)</comment>
+    <value>Snitt Samtalstid</value>
+    <comment>Snitt Samtalstid</comment>
   </data>
   <data name="ResReportAgentQueueMetrics" xml:space="preserve">
     <value>Agent - Mätvärden per kö</value>

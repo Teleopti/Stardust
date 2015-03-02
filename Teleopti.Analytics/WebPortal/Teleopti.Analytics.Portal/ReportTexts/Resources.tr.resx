@@ -883,13 +883,13 @@
     <value>Fazla mesai tipi:</value>
   </data>
   <data name="ResKpiAverageAfterCallWork" xml:space="preserve">
-    <value>Ortalama çağrı sonrası çalışma (s)</value>
+    <value>Ortalama çağrı sonrası çalışma</value>
   </data>
   <data name="ResKpiAverageHandleTime" xml:space="preserve">
-    <value>Ortalama çağrı yönetim süresi (s)</value>
+    <value>Ortalama çağrı yönetim süresi</value>
   </data>
   <data name="ResKpiAverageTalkTime" xml:space="preserve">
-    <value>Ortalama konuşma süresi (s)</value>
+    <value>Ortalama konuşma süresi</value>
   </data>
   <data name="ResReportAgentQueueMetrics" xml:space="preserve">
     <value>Müşteri temsilcisi kuyruk metrikleri</value>

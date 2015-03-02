@@ -907,13 +907,13 @@
     <value>Tipo de Hora Extra:</value>
   </data>
   <data name="ResKpiAverageAfterCallWork" xml:space="preserve">
-    <value>Tempo Médio de Pós Atendimento (s)</value>
+    <value>Tempo Médio de Pós Atendimento</value>
   </data>
   <data name="ResKpiAverageHandleTime" xml:space="preserve">
-    <value>Tempo Médio de Atendimento (s)</value>
+    <value>Tempo Médio de Atendimento</value>
   </data>
   <data name="ResKpiAverageTalkTime" xml:space="preserve">
-    <value>Tempo Médio Falado (s)</value>
+    <value>Tempo Médio Falado</value>
   </data>
   <data name="ResReportAgentQueueMetrics" xml:space="preserve">
     <value>Métricas de Fila e Agente</value>
