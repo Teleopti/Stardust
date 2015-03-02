@@ -48,10 +48,22 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.DataProvider
 			try
 			{
 				_personRequestRepository.Remove(personRequest);
+				setExchangeOfferBack(personRequest);
 			}
 			catch (DataSourceException)
 			{
 				throw new RequestPersistException(404, Resources.RequestCannotUpdateDelete, Resources.Request);
+			}
+		}
+
+		private void setExchangeOfferBack(IPersonRequest personRequest)
+		{
+			var shiftTradeRequest = personRequest.Request as IShiftTradeRequest;
+			if (shiftTradeRequest == null) return;
+			var offer = shiftTradeRequest.Offer;
+			if (offer != null && offer.Status == ShiftExchangeOfferStatus.PendingAdminApproval)
+			{
+				offer.Status = ShiftExchangeOfferStatus.Pending;
 			}
 		}
 	}
