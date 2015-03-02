@@ -17,6 +17,7 @@ namespace Teleopti.Ccc.Win.Scheduling.PropertyPanel
 			GridHelper.GridStyle(gridControl1);
 			gridControl1.ResizingColumns += shiftPerAgentGridResizingColumns;
 			gridControl1.CellModels.Add("IntegerReadOnlyCell", initializeNumericNoDecimalsReadOnlyCell());
+			gridControl1.DefaultColWidth = 30;
 			gridControl1.ResetVolatileData();
 		}
 		
@@ -29,7 +30,7 @@ namespace Teleopti.Ccc.Win.Scheduling.PropertyPanel
 			_presenter = new ShiftPerAgentPresenter(model);
 			_presenter.ReSort(null, true);
 			gridControl1.ResetVolatileData();
-			gridControl1.ColWidths.ResizeToFit(GridRangeInfo.Table(), GridResizeToFitOptions.IncludeHeaders);
+			gridControl1.ColWidths.ResizeToFit(GridRangeInfo.Col(0), GridResizeToFitOptions.IncludeHeaders);
 			gridControl1.UpdateScrollBars();
 			gridControl1.Invalidate(true);
 			
@@ -45,7 +46,7 @@ namespace Teleopti.Ccc.Win.Scheduling.PropertyPanel
 			{
 				gridControl1.ResetVolatileData();
 				_presenter.ReSort(null, true);
-				gridControl1.ColWidths.ResizeToFit(GridRangeInfo.Table(), GridResizeToFitOptions.IncludeHeaders);
+				gridControl1.ColWidths.ResizeToFit(GridRangeInfo.Col(0), GridResizeToFitOptions.IncludeHeaders);
 				gridControl1.UpdateScrollBars();
 				gridControl1.Invalidate(true);
 			}

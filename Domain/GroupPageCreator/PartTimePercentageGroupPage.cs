@@ -20,14 +20,14 @@ namespace Teleopti.Ccc.Domain.GroupPageCreator
             //Create the GroupPage object
             IGroupPage groupPage = new GroupPage(groupPageOptions.CurrentGroupPageName) { DescriptionKey = groupPageOptions.CurrentGroupPageNameKey };
 
-            var allPersonPeriods = from p in groupPageOptions.Persons
+            var allPersonPeriods = (from p in groupPageOptions.Persons
                                    from pp in p.PersonPeriods(groupPageOptions.SelectedPeriod)
                                    select
                                        new
                                        {
                                            Person = p,
                                            pp.PersonContract.PartTimePercentage
-                                       };
+                                       }).ToList();
 
             var connectedPartTimePercentages = new HashSet<IPartTimePercentage>();
             foreach (var ppp in allPersonPeriods)

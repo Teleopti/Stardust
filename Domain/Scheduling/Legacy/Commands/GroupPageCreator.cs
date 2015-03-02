@@ -1,5 +1,8 @@
 ﻿using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 using Teleopti.Ccc.Domain.GroupPageCreator;
 using Teleopti.Ccc.Domain.ResourceCalculation.GroupScheduling;
 using Teleopti.Interfaces.Domain;
@@ -16,15 +19,16 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 		}
 		
 		public IGroupPagePerDate CreateGroupPagePerDate(ISelectedPeriod currentView, IGroupPageDataProvider groupPageDataProvider, IGroupPageLight selectedGrouping)
-		{
-			IDictionary<DateOnly, IGroupPage> dic = new Dictionary<DateOnly, IGroupPage>();
+		{	
 			var selectedPeriod = currentView.Period();
-			foreach (var dateOnly in selectedPeriod.DayCollection())
-			{
-				var groupPage = createGroupPageForDate(groupPageDataProvider, selectedGrouping, dateOnly,false);
-				dic.Add(dateOnly, groupPage);
-			}
-			return new GroupPagePerDate(dic);
+			return CreateGroupPagePerDate(selectedPeriod.DayCollection(), groupPageDataProvider, selectedGrouping, false);
+		}
+
+		private void createAndAddGroupPageForDate(IGroupPageDataProvider groupPageDataProvider,
+			IGroupPageLight selectedGrouping, DateOnly date, ConcurrentDictionary<DateOnly, IGroupPage> dic)
+		{
+			var groupPage = createGroupPageForDate(groupPageDataProvider, selectedGrouping, date, false);
+			dic.GetOrAdd(date, groupPage);
 		}
 
 		public IGroupPagePerDate CreateGroupPagePerDate(IList<DateOnly> dates, IGroupPageDataProvider groupPageDataProvider, IGroupPageLight selectedGrouping)
@@ -35,12 +39,21 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 		{
 			if (dates == null) throw new ArgumentNullException("dates");
 			if (groupPageDataProvider == null) throw new ArgumentNullException("groupPageDataProvider");
-			IDictionary<DateOnly, IGroupPage> dic = new Dictionary<DateOnly, IGroupPage>();
+	
+			var concDic = new ConcurrentDictionary<DateOnly, IGroupPage>();
 
+			var tasks = new List<Task>();
 			foreach (var dateOnly in dates)
 			{
-				var groupPage = createGroupPageForDate(groupPageDataProvider, selectedGrouping, dateOnly, useAllLoadedPersons);
-				dic.Add(dateOnly, groupPage);
+				DateOnly date = dateOnly;
+				tasks.Add(Task.Factory.StartNew(() => createAndAddGroupPageForDate(groupPageDataProvider, selectedGrouping, date, concDic)));
+			}
+			Task.WaitAll(tasks.ToArray());
+
+			IDictionary<DateOnly, IGroupPage> dic = new Dictionary<DateOnly, IGroupPage>();
+			foreach (var keyValuePair in concDic)
+			{
+				dic.Add(keyValuePair);
 			}
 
 			return new GroupPagePerDate(dic);

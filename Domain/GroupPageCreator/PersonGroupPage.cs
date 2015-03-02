@@ -31,14 +31,14 @@ namespace Teleopti.Ccc.Domain.GroupPageCreator
             groupPage.AddRootPersonGroup(userGroup);
 
             //Creates a root Group object & add into GroupPage
-            var allPersonPeriods = from p in groupPageOptions.Persons
+            var allPersonPeriods = (from p in groupPageOptions.Persons
                                    from pp in p.PersonPeriods(groupPageOptions.SelectedPeriod)
                                    select
                                        new
                                        {
                                            Person = p,
                                            PersonPeriod = pp
-                                       };
+                                       }).ToList();
             foreach (var site in businessUnit.SiteCollection.OrderBy(s => s.Description.Name))
             {
                 if (((IDeleteTag) site).IsDeleted) continue;

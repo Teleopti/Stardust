@@ -829,7 +829,6 @@ namespace Teleopti.Ccc.Win.Scheduling.PropertyPanel
         {
             initializeFairnessTab();
 	        timerRefresh.Interval = 2000;
-			resetGroupPageData();
         }
 
 		private void timerRefreshTick(object sender, EventArgs e)
