@@ -177,14 +177,14 @@ namespace Teleopti.Ccc.WebBehaviorTest.MyTime
 		[When(@"I click the Deny button on the shift request")]
 		public void WhenIClickTheDenyButtonOnTheShiftRequest()
 		{
-			//Browser.Interactions.AssertNotExists("#Deny-shift-trade", ".close");
+			Browser.Interactions.AssertNotExists("#Deny-shift-trade", ".request-delete");
 			Browser.Interactions.ClickUsingJQuery("#Deny-shift-trade");
 		}
 
 		[Then(@"I should not see a delete button on the request")]
 		public void ThenIShouldNotSeeADeletebuttonOnTheRequest()
 		{
-			Browser.Interactions.AssertNotExists(".request-data-subject", ".close");	
+			Browser.Interactions.AssertNotExists(".request-data-subject", ".request-delete");	
 		}
 
 		[Then(@"I should see '(.*)' as the sender of the request")]

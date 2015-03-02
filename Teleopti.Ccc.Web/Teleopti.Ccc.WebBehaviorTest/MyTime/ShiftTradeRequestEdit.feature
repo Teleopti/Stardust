@@ -71,7 +71,6 @@ Scenario: Deny shift trade request
 	And I click the Deny button on the shift request
 	Then Details should be closed
 
-@ignore
 Scenario: Should not be able to delete received shift trade request
 	Given I am an agent
 	And I have received a shift trade request
