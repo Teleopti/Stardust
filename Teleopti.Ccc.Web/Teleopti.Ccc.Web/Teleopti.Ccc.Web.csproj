@@ -965,7 +965,6 @@
     <Compile Include="Core\RequestContext\Cookie\ISessionSpecificDataProvider.cs" />
     <Compile Include="Core\RequestContext\Cookie\SessionSpecificData.cs" />
     <Compile Include="Areas\Start\Models\Authentication\BusinessUnitViewModel.cs" />
-    <Compile Include="Areas\Start\Models\Authentication\DataSourceViewModel.cs" />
     <Compile Include="Areas\MyTime\MyTimeAreaRegistration.cs" />
     <Compile Include="Core\CoreExtensions.cs" />
     <Compile Include="Core\Logging\Log4NetModule.cs" />

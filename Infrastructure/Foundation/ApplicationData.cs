@@ -75,7 +75,7 @@ namespace Teleopti.Ccc.Infrastructure.Foundation
 			}
 		}
 
-		//TODO: tenant remove this!
+		//TODO: if this should be kept - make it thread safe if/when other clients than desktop is using it
 		public IDataSource CreateAndAddDataSource(string dataSourceName, IDictionary<string, string> applicationNhibConfiguration, string analyticsConnectionString)
 		{
 			var dataSource = existingDataSource(dataSourceName);
