@@ -1131,7 +1131,6 @@
     <Compile Include="Security\AuthorizationEntities\LicenseSchemaTest.cs" />
     <Compile Include="Collection\ExtensionsTest.cs" />
     <Compile Include="Collection\LayerCollectionTest.cs" />
-    <Compile Include="Collection\ReadOnlyDictionaryTest.cs" />
     <Compile Include="Collection\ScheduleDictionaryTest.cs" />
     <Compile Include="Collection\VisualLayerCollectionTest.cs" />
     <Compile Include="Common\AggregateExceptionTest.cs" />

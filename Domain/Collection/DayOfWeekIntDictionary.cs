@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 
 namespace Teleopti.Ccc.Domain.Collection
 {
@@ -18,21 +19,5 @@ namespace Teleopti.Ccc.Domain.Collection
                        }
             )
         {}
-
-        public override int this[DayOfWeek key]
-        {
-            get
-            {
-                if(WrappedDictionary.ContainsKey(key))
-                    return WrappedDictionary[key];
-
-                return 0;
-            }
-            set
-            {
-                WrappedDictionary[key] = value;
-            }
-        }
-
     }
 }
