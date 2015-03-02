@@ -11,6 +11,7 @@ using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.Win.Payroll.DefinitionSets;
 using Teleopti.Ccc.Win.Payroll.Overtime;
 using Teleopti.Ccc.Win.Scheduling;
+using Teleopti.Ccc.WinCode.Common.Configuration;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
 
@@ -175,7 +176,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 											new SystemSettingControl(_toggleManager),
 											new RotationPage(),
 											new DaysOffControl(),
-											new AlarmControl(),
+											new AlarmControl(alarmControlPresenterDecorators()),
 											new ManageAlarmSituations(),
 											new DefinitionSetSettings(),
 											new WorkflowControlSetView(_toggleManager),
@@ -218,6 +219,12 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 			}
 
 			return allSupportedPages;
+		}
+
+		private IEnumerable<IAlarmControlPresenterDecorator> alarmControlPresenterDecorators()
+		{
+			if (_toggleManager.IsEnabled(Toggles.RTA_NeutralAdherence_30930))
+				yield return new AdherenceColumn();
 		}
 	}
 

@@ -18,14 +18,16 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 {
 	public partial class AlarmControl : BaseUserControl, ISettingPage
 	{
+		private readonly IEnumerable<IAlarmControlPresenterDecorator> _decorators;
 		private IUnitOfWork _uow;
 		private AlarmTypeRepository _alarmTypeRepository;
 		private readonly List<IAlarmType> _alarmTypes = new List<IAlarmType>();
 		private AlarmControlView _view;
 		private int _selectedItem =-1;
 
-		public AlarmControl()
+		public AlarmControl(IEnumerable<IAlarmControlPresenterDecorator> decorators)
 		{
+			_decorators = decorators;
 			InitializeComponent();
 		}
 
@@ -50,7 +52,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 		void setupAlarmGrid(object sender, RunWorkerCompletedEventArgs e)
 		{
 			_view = new AlarmControlView(gridControlAlarmTypes);
-			_view.Presenter = new AlarmControlPresenter(_alarmTypes, _view, null);
+			_view.Presenter = new AlarmControlPresenter(_alarmTypes, _view, _decorators);
 			_view.PresentThisItem += viewPresentThisItem;
 			_view.WarnOfThis += viewWarnOfThis;
 			_view.LoadGrid();

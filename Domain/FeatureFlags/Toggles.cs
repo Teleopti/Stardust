@@ -5,6 +5,7 @@
 		//Don't remove this one - used in tests
 		TestToggle,
 		//////
+		// ReSharper disable InconsistentNaming
 		Scheduler_Seniority_24331,
 		Forecast_CopySettingsToWorkflow_11112,
 
@@ -43,6 +44,7 @@
 		RTA_NoBroker_31237,
 		RTA_EventStreamInitialization_31237,
 		RTA_CalculatePercentageInAgentTimezone_31236,
+		RTA_NeutralAdherence_30930,
 
 		MyTeam_MoveActivity_25206,
 		MyTeam_StaffingMetrics_25562,
@@ -82,5 +84,6 @@
 		MyTeam_MakeTeamScheduleConsistent_31897,
 		MultiTenantSSOSupport_StandardReports_15093,
 		MultiTenancy_SDK_17458,
+		// ReSharper restore InconsistentNaming
 	}
 }
