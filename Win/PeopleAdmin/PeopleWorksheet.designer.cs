@@ -113,7 +113,7 @@ namespace Teleopti.Ccc.Win.PeopleAdmin
 			// 
 			this.backStagePeople.ActiveTabFont = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
 			this.backStagePeople.AllowDrop = true;
-			this.backStagePeople.BeforeTouchSize = new System.Drawing.Size(1668, 798);
+			this.backStagePeople.BeforeTouchSize = new System.Drawing.Size(1289, 798);
 			this.backStagePeople.BorderStyle = System.Windows.Forms.BorderStyle.None;
 			this.backStagePeople.Controls.Add(this.backStageButton1);
 			this.backStagePeople.Controls.Add(this.backStageSeparator1);
@@ -127,7 +127,7 @@ namespace Teleopti.Ccc.Win.PeopleAdmin
 			this.backStagePeople.Location = new System.Drawing.Point(0, 0);
 			this.backStagePeople.Name = "backStage1";
 			this.backStagePeople.OfficeColorScheme = Syncfusion.Windows.Forms.Tools.ToolStripEx.ColorScheme.Silver;
-			this.backStagePeople.Size = new System.Drawing.Size(1668, 798);
+			this.backStagePeople.Size = new System.Drawing.Size(1289, 798);
 			this.backStagePeople.TabIndex = 6;
 			this.backStagePeople.Visible = false;
 			// 
@@ -137,7 +137,7 @@ namespace Teleopti.Ccc.Win.PeopleAdmin
 			this.backStageButton1.BackColor = System.Drawing.Color.Transparent;
 			this.backStageButton1.BeforeTouchSize = new System.Drawing.Size(75, 23);
 			this.backStageButton1.IsBackStageButton = false;
-			this.backStageButton1.Location = new System.Drawing.Point(0, 16);
+			this.backStageButton1.Location = new System.Drawing.Point(34, 10);
 			this.backStageButton1.Name = "backStageButton1";
 			this.backStageButton1.Size = new System.Drawing.Size(110, 25);
 			this.backStageButton1.TabIndex = 3;
@@ -147,7 +147,7 @@ namespace Teleopti.Ccc.Win.PeopleAdmin
 			// backStageSeparator1
 			// 
 			this.backStageSeparator1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(128)))), ((int)(((byte)(204)))), ((int)(((byte)(255)))));
-			this.backStageSeparator1.Location = new System.Drawing.Point(15, 47);
+			this.backStageSeparator1.Location = new System.Drawing.Point(39, 22);
 			this.backStageSeparator1.Name = "backStageSeparator1";
 			this.backStageSeparator1.Size = new System.Drawing.Size(100, 1);
 			this.backStageSeparator1.TabIndex = 4;
@@ -159,7 +159,7 @@ namespace Teleopti.Ccc.Win.PeopleAdmin
 			this.backStageButton2.BackColor = System.Drawing.Color.Transparent;
 			this.backStageButton2.BeforeTouchSize = new System.Drawing.Size(75, 23);
 			this.backStageButton2.IsBackStageButton = false;
-			this.backStageButton2.Location = new System.Drawing.Point(0, 53);
+			this.backStageButton2.Location = new System.Drawing.Point(34, 35);
 			this.backStageButton2.Name = "backStageButton2";
 			this.backStageButton2.Size = new System.Drawing.Size(110, 25);
 			this.backStageButton2.TabIndex = 5;
@@ -169,7 +169,7 @@ namespace Teleopti.Ccc.Win.PeopleAdmin
 			// backStageSeparator2
 			// 
 			this.backStageSeparator2.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(128)))), ((int)(((byte)(204)))), ((int)(((byte)(255)))));
-			this.backStageSeparator2.Location = new System.Drawing.Point(15, 84);
+			this.backStageSeparator2.Location = new System.Drawing.Point(39, 34);
 			this.backStageSeparator2.Name = "backStageSeparator2";
 			this.backStageSeparator2.Size = new System.Drawing.Size(100, 1);
 			this.backStageSeparator2.TabIndex = 6;
@@ -181,7 +181,7 @@ namespace Teleopti.Ccc.Win.PeopleAdmin
 			this.backStageButton3.BackColor = System.Drawing.Color.Transparent;
 			this.backStageButton3.BeforeTouchSize = new System.Drawing.Size(75, 23);
 			this.backStageButton3.IsBackStageButton = false;
-			this.backStageButton3.Location = new System.Drawing.Point(0, 90);
+			this.backStageButton3.Location = new System.Drawing.Point(34, 60);
 			this.backStageButton3.Name = "backStageButton3";
 			this.backStageButton3.Size = new System.Drawing.Size(110, 25);
 			this.backStageButton3.TabIndex = 7;
@@ -195,7 +195,7 @@ namespace Teleopti.Ccc.Win.PeopleAdmin
 			this.backStageButton4.BackColor = System.Drawing.Color.Transparent;
 			this.backStageButton4.BeforeTouchSize = new System.Drawing.Size(75, 23);
 			this.backStageButton4.IsBackStageButton = false;
-			this.backStageButton4.Location = new System.Drawing.Point(11, 115);
+			this.backStageButton4.Location = new System.Drawing.Point(-3, 85);
 			this.backStageButton4.Name = "backStageButton4";
 			this.backStageButton4.Size = new System.Drawing.Size(111, 25);
 			this.backStageButton4.TabIndex = 8;
@@ -211,7 +211,7 @@ namespace Teleopti.Ccc.Win.PeopleAdmin
 			this.tabPageAdv1.Location = new System.Drawing.Point(140, 0);
 			this.tabPageAdv1.Name = "tabPageAdv1";
 			this.tabPageAdv1.ShowCloseButton = true;
-			this.tabPageAdv1.Size = new System.Drawing.Size(1528, 798);
+			this.tabPageAdv1.Size = new System.Drawing.Size(1149, 798);
 			this.tabPageAdv1.TabIndex = 9;
 			this.tabPageAdv1.Text = "tabPageAdv1";
 			this.tabPageAdv1.ThemesEnabled = false;
@@ -236,8 +236,8 @@ namespace Teleopti.Ccc.Win.PeopleAdmin
 			this.splitContainerWorksheet.Panel2.Controls.Add(this.tableLayoutPanel1);
 			this.splitContainerWorksheet.Panel2.Controls.Add(this.shiftCategoryLimitationView);
 			this.splitContainerWorksheet.PanelToBeCollapsed = Syncfusion.Windows.Forms.Tools.Enums.CollapsedPanel.Panel2;
-			this.splitContainerWorksheet.Size = new System.Drawing.Size(1661, 696);
-			this.splitContainerWorksheet.SplitterDistance = 1430;
+			this.splitContainerWorksheet.Size = new System.Drawing.Size(1282, 696);
+			this.splitContainerWorksheet.SplitterDistance = 1051;
 			this.splitContainerWorksheet.Style = Syncfusion.Windows.Forms.Tools.Enums.Style.Mozilla;
 			this.splitContainerWorksheet.TabIndex = 3;
 			this.splitContainerWorksheet.Text = "splitContainerAdv1";
@@ -384,7 +384,7 @@ namespace Teleopti.Ccc.Win.PeopleAdmin
 			this.peopleRibbon.ShowLauncher = false;
 			this.peopleRibbon.ShowQuickItemsDropDownButton = false;
 			this.peopleRibbon.ShowRibbonDisplayOptionButton = false;
-			this.peopleRibbon.Size = new System.Drawing.Size(1673, 146);
+			this.peopleRibbon.Size = new System.Drawing.Size(1294, 146);
 			this.peopleRibbon.SystemText.QuickAccessDialogDropDownName = "Start menu";
 			this.peopleRibbon.TabIndex = 7;
 			this.peopleRibbon.Text = "ribbonControlAdvFixed1";
@@ -502,6 +502,7 @@ namespace Teleopti.Ccc.Win.PeopleAdmin
             this.toolStripButtonFilterPeople,
             this.toolStripSeparator3,
             this.toolStripComboBoxExTrackerDescription});
+			this.toolStripFilter.LauncherStyle = Syncfusion.Windows.Forms.Tools.LauncherStyle.Office2007;
 			this.toolStripFilter.Location = new System.Drawing.Point(288, 1);
 			this.toolStripFilter.Name = "toolStripFilter";
 			this.toolStripFilter.Office12Mode = false;
@@ -558,7 +559,7 @@ namespace Teleopti.Ccc.Win.PeopleAdmin
 			this.toolStripDatePicker.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(59)))), ((int)(((byte)(59)))), ((int)(((byte)(59)))));
 			this.toolStripDatePicker.GripStyle = System.Windows.Forms.ToolStripGripStyle.Hidden;
 			this.toolStripDatePicker.Image = null;
-			this.toolStripDatePicker.LauncherStyle = Syncfusion.Windows.Forms.Tools.LauncherStyle.Metro;
+			this.toolStripDatePicker.LauncherStyle = Syncfusion.Windows.Forms.Tools.LauncherStyle.Office2007;
 			this.toolStripDatePicker.Location = new System.Drawing.Point(559, 1);
 			this.toolStripDatePicker.Name = "toolStripDatePicker";
 			this.toolStripDatePicker.Office12Mode = false;
@@ -572,7 +573,6 @@ namespace Teleopti.Ccc.Win.PeopleAdmin
 			// 
 			// toolStripViews
 			// 
-			this.toolStripViews.AutoSize = false;
 			this.peopleRibbon.SetDescription(this.toolStripViews, "");
 			this.toolStripViews.Dock = System.Windows.Forms.DockStyle.None;
 			this.toolStripViews.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(59)))), ((int)(((byte)(59)))), ((int)(((byte)(59)))));
@@ -585,13 +585,13 @@ namespace Teleopti.Ccc.Win.PeopleAdmin
             this.toolStripButtonPersonRotation,
             this.toolStripButtonPersonAccounts,
             this.toolStripButtonPersonAvailability});
+			this.toolStripViews.LauncherStyle = Syncfusion.Windows.Forms.Tools.LauncherStyle.Office2007;
 			this.toolStripViews.LayoutStyle = System.Windows.Forms.ToolStripLayoutStyle.HorizontalStackWithOverflow;
 			this.toolStripViews.Location = new System.Drawing.Point(667, 1);
 			this.toolStripViews.Name = "toolStripViews";
 			this.toolStripViews.Office12Mode = false;
 			this.toolStripViews.ShowLauncher = false;
-			this.toolStripViews.Size = new System.Drawing.Size(594, 87);
-			this.toolStripViews.Stretch = true;
+			this.toolStripViews.Size = new System.Drawing.Size(596, 87);
 			this.toolStripViews.TabIndex = 11;
 			this.toolStripViews.Text = "xxViews";
 			this.peopleRibbon.SetUseInCustomQuickAccessDialog(this.toolStripViews, true);
@@ -698,7 +698,6 @@ namespace Teleopti.Ccc.Win.PeopleAdmin
 			// 
 			// toolStripExEditing
 			// 
-			this.toolStripExEditing.AutoSize = false;
 			this.toolStripExEditing.BackColor = System.Drawing.SystemColors.Control;
 			this.peopleRibbon.SetDescription(this.toolStripExEditing, "");
 			this.toolStripExEditing.Dock = System.Windows.Forms.DockStyle.None;
@@ -709,7 +708,8 @@ namespace Teleopti.Ccc.Win.PeopleAdmin
             this.toolStripButtonFind,
             this.toolStripDropDownButtonSort,
             this.toolStripButtonClosePreviousPeriod});
-			this.toolStripExEditing.Location = new System.Drawing.Point(1263, 1);
+			this.toolStripExEditing.LauncherStyle = Syncfusion.Windows.Forms.Tools.LauncherStyle.Office2007;
+			this.toolStripExEditing.Location = new System.Drawing.Point(1265, 1);
 			this.toolStripExEditing.Name = "toolStripExEditing";
 			this.toolStripExEditing.Office12Mode = false;
 			this.toolStripExEditing.OfficeColorScheme = Syncfusion.Windows.Forms.Tools.ToolStripEx.ColorScheme.Managed;
@@ -900,7 +900,7 @@ namespace Teleopti.Ccc.Win.PeopleAdmin
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.BackColor = System.Drawing.Color.White;
 			this.Borders = new System.Windows.Forms.Padding(0);
-			this.ClientSize = new System.Drawing.Size(1671, 850);
+			this.ClientSize = new System.Drawing.Size(1292, 850);
 			this.ColorScheme = Syncfusion.Windows.Forms.Tools.RibbonForm.ColorSchemeType.Silver;
 			this.Controls.Add(this.backStagePeople);
 			this.Controls.Add(this.peopleRibbon);
