@@ -66,7 +66,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta
 			{
 				var lastTimestamp = model.LastUpdate ?? DateTime.MinValue;
 				var secondsFromLastUpdate = _now.UtcDateTime().Subtract(lastTimestamp).TotalSeconds;
-				if (model.LastAdherence)
+				if (model.LastAdherence.GetValueOrDefault())
 					secondsInAdherence += secondsFromLastUpdate;
 				else
 					secondsOutOfAdherence += secondsFromLastUpdate;

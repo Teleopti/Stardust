@@ -22,7 +22,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.AdherenceDetails
 				InAdherence = true
 			});
 
-			Persister.Model.LastAdherence.Should().Be.True();
+			Persister.Model.LastAdherence.Should().Be(true);
 		}
 
 		[Test]
@@ -33,7 +33,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.AdherenceDetails
 				InAdherence = false
 			});
 
-			Persister.Model.LastAdherence.Should().Be.False();
+			Persister.Model.LastAdherence.Should().Be(false);
 		}
 
 		[Test]

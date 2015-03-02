@@ -176,6 +176,7 @@
     <Compile Include="ApplicationLayer\Rta\AdherenceDetails\ActivityTest.cs" />
     <Compile Include="ApplicationLayer\Rta\AdherenceDetails\BelongsToDateTest.cs" />
     <Compile Include="ApplicationLayer\Rta\AdherenceDetails\LastUpdateTest.cs" />
+    <Compile Include="ApplicationLayer\Rta\AdherenceDetails\NeutralAdherenceTest.cs" />
     <Compile Include="ApplicationLayer\Rta\AdherenceDetails\ShiftActualEndTimeTest.cs" />
     <Compile Include="ApplicationLayer\Rta\AdherenceDetails\ShiftEndTimeTest.cs" />
     <Compile Include="ApplicationLayer\Rta\AdherenceDetails\InAdherenceTest.cs" />

@@ -131,7 +131,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta
 				.ToArray();
 		}
 
-		private static void addAdherence(AdherenceDetailsReadModelState model, DateTime time, bool inAdherence)
+		private static void addAdherence(AdherenceDetailsReadModelState model, DateTime time, bool? inAdherence)
 		{
 			model.Adherence = model.Adherence
 				.Concat(new[]
@@ -202,7 +202,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta
 				);
 
 			if (endingAdherenceOfLastActivity != null)
-				if (!endingAdherenceOfLastActivity.InAdherence)
+				if (!endingAdherenceOfLastActivity.InAdherence.GetValueOrDefault())
 					return endingAdherenceOfLastActivity.Time;
 
 			if (model.State.FirstStateChangeOutOfAdherenceWithLastActivity.HasValue)
@@ -211,9 +211,9 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta
 			return null;
 		}
 
-		private static bool calculateLastAdherence(AdherenceDetailsReadModel model)
+		private static bool? calculateLastAdherence(AdherenceDetailsReadModel model)
 		{
-			return !model.State.Adherence.IsEmpty() && model.State.Adherence.Last().InAdherence;
+			return model.State.Adherence.IsEmpty() ? null : model.State.Adherence.Last().InAdherence;
 		}
 
 		private static ActivityAdherence calculateActivity(AdherenceDetailsReadModel model, AdherenceDetailsReadModelActivityState activity)
@@ -236,19 +236,19 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta
 			var adherenceAfter = adherenceTransitions.FirstOrDefault(x => x.Time > activity.StartTime);
 
 			if (adherenceChange != null && adherenceAfter != null)
-				if (!adherenceChange.InAdherence && adherenceAfter.InAdherence)
+				if (!adherenceChange.InAdherence.GetValueOrDefault() && adherenceAfter.InAdherence.GetValueOrDefault())
 					return adherenceAfter.Time;
 
 			if (adherenceChange != null && adherenceBefore != null)
-				if (adherenceChange.InAdherence && !adherenceBefore.InAdherence)
+				if (adherenceChange.InAdherence.GetValueOrDefault() && !adherenceBefore.InAdherence.GetValueOrDefault())
 					return adherenceBefore.Time;
 
 			if (adherenceChange != null && adherenceBefore == null)
-				if (adherenceChange.InAdherence)
+				if (adherenceChange.InAdherence.GetValueOrDefault())
 					return adherenceChange.Time;
 
 			if (adherenceChange == null && adherenceBefore != null)
-				if (adherenceBefore.InAdherence)
+				if (adherenceBefore.InAdherence.GetValueOrDefault())
 					return activity.StartTime;
 
 			return null;
@@ -261,7 +261,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta
 				.WithPrevious()
 				.Aggregate(TimeSpan.Zero, (current, a) =>
 				{
-					if (a.Previous.InAdherence)
+					if (a.Previous.InAdherence.GetValueOrDefault())
 						return current + (a.This.Time - a.Previous.Time);
 					return current;
 				});
@@ -274,7 +274,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta
 				.WithPrevious()
 				.Aggregate(TimeSpan.Zero, (current, a) =>
 				{
-					if (!a.Previous.InAdherence)
+					if (a.Previous.InAdherence.HasValue && !a.Previous.InAdherence.Value)
 						return current + (a.This.Time - a.Previous.Time);
 					return current;
 				});
