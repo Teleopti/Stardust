@@ -99,7 +99,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 
 			gridColumns.Add(new SFGridReadOnlyTextColumn<JusticeValuesView>("Name", Resources.ShiftCategoryHeader));
 			var days = DateHelper.GetDaysOfWeek(
-					TeleoptiPrincipal.Current.Regional.Culture);
+					TeleoptiPrincipal.CurrentPrincipal.Regional.Culture);
 			foreach (var dayOfWeek in days)
 			{
 				gridColumns.Add(new SFGridIntegerCellColumn<JusticeValuesView>(dayOfWeek.ToString(), getDayNameShort(dayOfWeek)));
@@ -113,7 +113,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 
 		private static string getDayNameShort(DayOfWeek day)
 		{
-			return TeleoptiPrincipal.Current.Regional.UICulture.
+			return TeleoptiPrincipal.CurrentPrincipal.Regional.UICulture.
 				DateTimeFormat.GetShortestDayName(day);
 		}
 

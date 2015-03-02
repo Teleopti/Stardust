@@ -169,7 +169,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
 
             Assert.AreNotEqual(0, response.Count());
 
-            var expectedErrorMessage = string.Format(TeleoptiPrincipal.Current.Regional.Culture,
+            var expectedErrorMessage = string.Format(TeleoptiPrincipal.CurrentPrincipal.Regional.Culture,
                                            UserTexts.Resources.BusinessRuleNoSkillsOpenErrorMessage,
                                            layer.DisplayDescription(),
                                            TimeZoneHelper.ConvertFromUtc(layer.Period.StartDateTime, _timeZone),

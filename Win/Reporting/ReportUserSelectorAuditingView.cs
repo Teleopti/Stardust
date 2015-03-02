@@ -61,7 +61,7 @@ namespace Teleopti.Ccc.Win.Reporting
 
         public void Initialize()
         {
-			  _presenter = new ReportUserSelectorAuditingPresenter(this, new ScheduleHistoryReport(UnitOfWorkFactory.Current, TeleoptiPrincipal.Current.Regional), UnitOfWorkFactory.Current);
+			  _presenter = new ReportUserSelectorAuditingPresenter(this, new ScheduleHistoryReport(UnitOfWorkFactory.Current, TeleoptiPrincipal.CurrentPrincipal.Regional), UnitOfWorkFactory.Current);
             _presenter.Initialize();
         }
 

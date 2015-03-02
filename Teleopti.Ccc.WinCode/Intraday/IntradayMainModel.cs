@@ -12,7 +12,7 @@ namespace Teleopti.Ccc.WinCode.Intraday
 
         public DateTimePeriod PeriodAsDateTimePeriod()
         {
-            return Period.ToDateTimePeriod(TeleoptiPrincipal.Current.Regional.TimeZone);
+            return Period.ToDateTimePeriod(TeleoptiPrincipal.CurrentPrincipal.Regional.TimeZone);
         }
     }
 }

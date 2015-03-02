@@ -33,7 +33,7 @@ namespace Teleopti.Analytics.Etl.Transformer.Job.Steps
 					messageClient.StartBrokerService(useLongPolling: true);
 				if (messageClient.IsAlive)
 				{
-					var identity = (ITeleoptiIdentity)TeleoptiPrincipal.Current.Identity;
+					var identity = (ITeleoptiIdentity)TeleoptiPrincipal.CurrentPrincipal.Identity;
 
 					var notification = NotificationFactory.CreateNotification(DateTime.Now.Date,
 					                                                          DateTime.Now.Date,

@@ -19,14 +19,14 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 
         public IList<IPersonSelectorOrganization> GetOrganization(DateOnlyPeriod dateOnlyPeriod, bool loadUsers)
         {
-            int cultureId = TeleoptiPrincipal.Current.Regional.UICulture.LCID;
+            int cultureId = TeleoptiPrincipal.CurrentPrincipal.Regional.UICulture.LCID;
             return _unitOfWorkFactory.Session().CreateSQLQuery(
                     "exec ReadModel.LoadOrganizationForSelector @type=:type,  @ondate=:ondate,@enddate=:enddate, @bu=:bu, @users=:users, @culture=:culture")
                     .SetString("type", "Organization")
                     .SetDateTime("ondate", dateOnlyPeriod.StartDate)
                     .SetDateTime("enddate",dateOnlyPeriod.EndDate )
                     .SetGuid("bu",
-                            ((ITeleoptiIdentity)TeleoptiPrincipal.Current.Identity).BusinessUnit.Id.GetValueOrDefault())
+                            ((ITeleoptiIdentity)TeleoptiPrincipal.CurrentPrincipal.Identity).BusinessUnit.Id.GetValueOrDefault())
                     .SetBoolean("users", loadUsers)
                     .SetInt32("culture", cultureId)
                     .SetResultTransformer(Transformers.AliasToBean(typeof(PersonSelectorOrganization)))
@@ -36,14 +36,14 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 
         public IList<IPersonSelectorBuiltIn> GetBuiltIn(DateOnlyPeriod dateOnlyPeriod, PersonSelectorField loadType)
         {
-            int cultureId = TeleoptiPrincipal.Current.Regional.UICulture.LCID;
+            int cultureId = TeleoptiPrincipal.CurrentPrincipal.Regional.UICulture.LCID;
             return _unitOfWorkFactory.Session().CreateSQLQuery(
                     "exec ReadModel.LoadOrganizationForSelector @type=:type,  @ondate=:ondate,@enddate=:enddate, @bu=:bu, @users=:users, @culture=:culture")
                     .SetString("type", loadType.ToString())
                     .SetDateTime("ondate", dateOnlyPeriod.StartDate)
                     .SetDateTime("enddate", dateOnlyPeriod.EndDate)
                     .SetGuid("bu",
-                            ((ITeleoptiIdentity)TeleoptiPrincipal.Current.Identity).BusinessUnit.Id.GetValueOrDefault())
+                            ((ITeleoptiIdentity)TeleoptiPrincipal.CurrentPrincipal.Identity).BusinessUnit.Id.GetValueOrDefault())
                     .SetBoolean("users", false)
                     .SetInt32("culture", cultureId)
                     .SetResultTransformer(Transformers.AliasToBean(typeof(PersonSelectorBuiltIn)))
@@ -53,12 +53,12 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 
         public IList<IPersonSelectorUserDefined> GetUserDefinedTab(DateOnly onDate, Guid value)
         {
-            int cultureId = TeleoptiPrincipal.Current.Regional.UICulture.LCID;
+            int cultureId = TeleoptiPrincipal.CurrentPrincipal.Regional.UICulture.LCID;
             return _unitOfWorkFactory.Session().CreateSQLQuery(
                     "exec ReadModel.LoadUserDefinedTab @tabid=:tabid, @bu=:bu,  @ondate=:ondate, @culture=:culture")
                     .SetGuid("tabid", value)
                     .SetGuid("bu",
-                            ((ITeleoptiIdentity)TeleoptiPrincipal.Current.Identity).BusinessUnit.Id.GetValueOrDefault())
+                            ((ITeleoptiIdentity)TeleoptiPrincipal.CurrentPrincipal.Identity).BusinessUnit.Id.GetValueOrDefault())
                     .SetDateTime("ondate", onDate)
                     .SetInt32("culture", cultureId)
                     .SetResultTransformer(Transformers.AliasToBean(typeof(PersonSelectorUserDefined)))
@@ -71,7 +71,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
             return _unitOfWorkFactory.Session().CreateSQLQuery(
                     "SELECT Id, Name FROM GroupPage WHERE IsDeleted = 0 AND BusinessUnit = :bu")
                     .SetGuid("bu",
-                            ((ITeleoptiIdentity)TeleoptiPrincipal.Current.Identity).BusinessUnit.Id.GetValueOrDefault())
+                            ((ITeleoptiIdentity)TeleoptiPrincipal.CurrentPrincipal.Identity).BusinessUnit.Id.GetValueOrDefault())
                     .SetResultTransformer(Transformers.AliasToBean(typeof(UserDefinedTabLight)))
                     .SetReadOnly(true)
                     .List<IUserDefinedTabLight>();   

@@ -48,7 +48,7 @@ namespace Teleopti.Ccc.WinCodeTest.Configuration
         [Test]
         public void VerifyInitialize()
         {
-        	var identity = (ITeleoptiIdentity)TeleoptiPrincipal.Current.Identity;
+        	var identity = (ITeleoptiIdentity)TeleoptiPrincipal.CurrentPrincipal.Identity;
             var site = _mocks.StrictMock<ISite>();
             var sites = new List<ISite> { site};
             var scorecards = new List<IScorecard> {_mocks.StrictMock<IScorecard>()};

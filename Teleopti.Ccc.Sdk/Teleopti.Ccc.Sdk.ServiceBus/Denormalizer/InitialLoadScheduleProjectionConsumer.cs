@@ -87,7 +87,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Denormalizer
 			_people = _personRepository.LoadAll();
 			_defaultScenario = _scenarioRepository.Current();
 			_period = new DateOnlyPeriod(DateOnly.Today.AddDays(startDays), DateOnly.Today.AddDays(endDays));
-			_utcPeriod = _period.ToDateTimePeriod(TeleoptiPrincipal.Current.Regional.TimeZone);
+			_utcPeriod = _period.ToDateTimePeriod(TeleoptiPrincipal.CurrentPrincipal.Regional.TimeZone);
 		}
 
 		private IEnumerable<T> initialLoad<T>(InitialLoadScheduleProjection message) where T : ScheduleChangedEventBase, new()

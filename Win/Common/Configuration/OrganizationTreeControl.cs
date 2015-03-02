@@ -63,7 +63,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
             _nodeCollection = new List<TreeNodeAdv>();
 
             //Create busienssunit node & add into the nodes.
-            var bu = ((ITeleoptiIdentity)TeleoptiPrincipal.Current.Identity).BusinessUnit;
+            var bu = ((ITeleoptiIdentity)TeleoptiPrincipal.CurrentPrincipal.Identity).BusinessUnit;
             
             var rootNode = new TreeNodeAdv(bu.Description.ToString())
                                {
@@ -472,7 +472,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
         public void SaveChanges()
         {
 
-            var identity = ((ITeleoptiIdentity)TeleoptiPrincipal.Current.Identity);
+            var identity = ((ITeleoptiIdentity)TeleoptiPrincipal.CurrentPrincipal.Identity);
             foreach (IAggregateRoot aggregateRoot in _newNodesCollection)
             {
                 var theSite = aggregateRoot as ISite;

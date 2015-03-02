@@ -46,7 +46,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling.AgentRestrictions
 				//"--Veckodag--";
 				_model.DetailData().TryGetValue(e.ColIndex - 1, out preferenceCellData);
 				if (preferenceCellData == null) e.Style.CellValue = string.Empty;
-				else e.Style.CellValue = TeleoptiPrincipal.Current.Regional.Culture.DateTimeFormat.GetDayName(TeleoptiPrincipal.Current.Regional.Culture.Calendar.GetDayOfWeek(preferenceCellData.TheDate));	
+				else e.Style.CellValue = TeleoptiPrincipal.CurrentPrincipal.Regional.Culture.DateTimeFormat.GetDayName(TeleoptiPrincipal.CurrentPrincipal.Regional.Culture.Calendar.GetDayOfWeek(preferenceCellData.TheDate));	
 				
 				return;
 			}
@@ -56,7 +56,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling.AgentRestrictions
 				//"--VeckoNum--";
 				e.Style.CellType = "RestrictionWeekHeaderViewCellModel";
 				e.Style.CellValue = OnQueryWeekHeader(e.RowIndex);
-				e.Style.CultureInfo = TeleoptiPrincipal.Current.Regional.Culture;
+				e.Style.CultureInfo = TeleoptiPrincipal.CurrentPrincipal.Regional.Culture;
 				return;
 			}
 
@@ -99,7 +99,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling.AgentRestrictions
 			var maxTime = new TimeSpan();
 			IPreferenceCellData preferenceCellData;
 
-			var culture = TeleoptiPrincipal.Current.Regional.Culture;
+			var culture = TeleoptiPrincipal.CurrentPrincipal.Regional.Culture;
 			var myCal = culture.Calendar;
 			var myCwr = culture.DateTimeFormat.CalendarWeekRule;
 			var myFirstDow = culture.DateTimeFormat.FirstDayOfWeek;

@@ -62,7 +62,7 @@ namespace Teleopti.Ccc.Infrastructure.Foundation
             {
 				var businessUnitId = Guid.Empty;
 				var dataSourceName = string.Empty;
-            	var currentPrincipal = TeleoptiPrincipal.Current;
+            	var currentPrincipal = TeleoptiPrincipal.CurrentPrincipal;
 				if (currentPrincipal!=null)
 				{
 					var identity = currentPrincipal.Identity as ITeleoptiIdentity;

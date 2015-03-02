@@ -13,7 +13,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
         {
             get
             {
-                return TeleoptiPrincipal.Current.Regional.UICulture;
+                return TeleoptiPrincipal.CurrentPrincipal.Regional.UICulture;
             }
         }
 

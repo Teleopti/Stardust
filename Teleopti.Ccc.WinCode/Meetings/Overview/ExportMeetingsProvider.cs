@@ -25,7 +25,7 @@ namespace Teleopti.Ccc.WinCode.Meetings.Overview
             _meetingRepository = meetingRepository;
             _unitOfWorkFactory = unitOfWorkFactory;
             _model = model;
-            _userTimeZone = TeleoptiPrincipal.Current.Regional.TimeZone;
+            _userTimeZone = TeleoptiPrincipal.CurrentPrincipal.Regional.TimeZone;
         }
 
 

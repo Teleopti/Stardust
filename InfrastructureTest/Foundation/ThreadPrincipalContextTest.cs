@@ -12,7 +12,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Foundation
 		public void ShouldBeCovered()
 		{
 			var threadPreviousIdentity = Thread.CurrentPrincipal.Identity;
-			var threadPreviousPerson = ((IUnsafePerson)TeleoptiPrincipal.Current).Person;
+			var threadPreviousPerson = ((IUnsafePerson)TeleoptiPrincipal.CurrentPrincipal).Person;
 			try
 			{
 				var principal = MockRepository.GenerateMock<ITeleoptiPrincipal>();
@@ -27,7 +27,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Foundation
 			finally
 			{
 				Thread.CurrentPrincipal = new TeleoptiPrincipal(threadPreviousIdentity, threadPreviousPerson);
-				((TeleoptiPrincipal)TeleoptiPrincipal.Current).ChangePrincipal(new TeleoptiPrincipal(threadPreviousIdentity, threadPreviousPerson));
+				((TeleoptiPrincipal)TeleoptiPrincipal.CurrentPrincipal).ChangePrincipal(new TeleoptiPrincipal(threadPreviousIdentity, threadPreviousPerson));
 			}
 		}
 	}

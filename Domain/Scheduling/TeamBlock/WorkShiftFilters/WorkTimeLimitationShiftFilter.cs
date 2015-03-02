@@ -29,7 +29,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftFilters
 						workShiftsWithinMinMax.Add(proj);
 				}
 				finderResult.AddFilterResults(
-				new WorkShiftFilterResult(string.Format(TeleoptiPrincipal.Current.Regional.Culture, UserTexts.Resources.FilterOnWorkTimeLimitationsWithParams, restriction.WorkTimeLimitation.StartTimeString, restriction.WorkTimeLimitation.EndTimeString),
+				new WorkShiftFilterResult(string.Format(TeleoptiPrincipal.CurrentPrincipal.Regional.Culture, UserTexts.Resources.FilterOnWorkTimeLimitationsWithParams, restriction.WorkTimeLimitation.StartTimeString, restriction.WorkTimeLimitation.EndTimeString),
 										  shiftList.Count, workShiftsWithinMinMax.Count));
 			}
 			else

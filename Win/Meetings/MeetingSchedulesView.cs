@@ -200,7 +200,7 @@ namespace Teleopti.Ccc.Win.Meetings
 
 			monthCalendarAdvDateSelection.Culture = CultureInfo.CurrentCulture;
 			var stateHolderLoader = new SchedulerStateLoader(schedulerStateHolder);
-			var meetingMover = new MeetingMover(this, meetingViewModel, schedulerStateHolder.DefaultSegmentLength, TeleoptiPrincipal.Current.Regional.UICulture.TextInfo.IsRightToLeft);
+			var meetingMover = new MeetingMover(this, meetingViewModel, schedulerStateHolder.DefaultSegmentLength, TeleoptiPrincipal.CurrentPrincipal.Regional.UICulture.TextInfo.IsRightToLeft);
 			var meetingMousePositionDecider = new MeetingMousePositionDecider(this);
 			_presenter = new MeetingSchedulesPresenter(this, meetingViewModel, schedulerStateHolder, new RangeProjectionService(), stateHolderLoader, new MeetingSlotFinderService(), meetingMover, meetingMousePositionDecider);
 

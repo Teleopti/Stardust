@@ -39,7 +39,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.SeatLimitation
 
 				IList<ITemplateSkillDataPeriod> templateSkillDataPeriods = new List<ITemplateSkillDataPeriod>();
                 var baseDate = SkillDayTemplate.BaseDate.Date;
-			    var timeZone = TeleoptiPrincipal.Current.Regional.TimeZone;
+			    var timeZone = TeleoptiPrincipal.CurrentPrincipal.Regional.TimeZone;
 			    newSkill.TimeZone = timeZone;
                 for (int i = 0; i < 96; i++)
                 {

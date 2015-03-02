@@ -26,7 +26,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
         public void Find(IPersonFinderSearchCriteria personFinderSearchCriteria)
         {
             personFinderSearchCriteria.TotalRows = 0;
-            int cultureId = Domain.Security.Principal.TeleoptiPrincipal.Current.Regional.UICulture.LCID;
+            int cultureId = Domain.Security.Principal.TeleoptiPrincipal.CurrentPrincipal.Regional.UICulture.LCID;
 	        if (personFinderSearchCriteria.TerminalDate < new DateOnly(1753, 1, 1))
 		        personFinderSearchCriteria.TerminalDate = new DateOnly(1753, 1, 1);
 

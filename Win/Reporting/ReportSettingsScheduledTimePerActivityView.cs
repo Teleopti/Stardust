@@ -71,7 +71,7 @@ namespace Teleopti.Ccc.Win.Reporting
         void reportAgentSelector1BeforeDialog(object sender, EventArgs e)
         {
             _schedulerStateHolder.RequestedPeriod = new DateOnlyPeriodAsDateTimePeriod(
-                reportDateFromToSelector1.GetSelectedDates[0],TeleoptiPrincipal.Current.Regional.TimeZone);
+                reportDateFromToSelector1.GetSelectedDates[0],TeleoptiPrincipal.CurrentPrincipal.Regional.TimeZone);
         }
 
         private SchedulerStateHolder createStateHolder()

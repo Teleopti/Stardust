@@ -136,7 +136,7 @@ namespace Teleopti.Ccc.WinCodeTest.Configuration
                 target.Model.ConfirmPassword = "newNotEncryptedPassword2";
                 target.Save();
                 Assert.AreEqual("newNotEncryptedPassword2",
-                                ((IUnsafePerson)TeleoptiPrincipal.Current).Person.ApplicationAuthenticationInfo.Password);
+                                ((IUnsafePerson)TeleoptiPrincipal.CurrentPrincipal).Person.ApplicationAuthenticationInfo.Password);
             }
         }
 

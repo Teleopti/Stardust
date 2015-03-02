@@ -44,7 +44,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			absence = AbsenceFactory.CreateAbsence("Vacation");
 			PersistAndRemoveFromUnitOfWork(absence);
 
-			budgetGroup = new BudgetGroup{Name = "My Budget",TimeZone = TeleoptiPrincipal.Current.Regional.TimeZone};
+			budgetGroup = new BudgetGroup{Name = "My Budget",TimeZone = TeleoptiPrincipal.CurrentPrincipal.Regional.TimeZone};
 			var shrinkage = new CustomShrinkage("test",true);
 			shrinkage.AddAbsence(absence);
 			budgetGroup.AddCustomShrinkage(shrinkage);

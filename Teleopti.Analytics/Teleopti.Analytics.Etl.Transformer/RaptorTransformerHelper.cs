@@ -10,7 +10,7 @@ namespace Teleopti.Analytics.Etl.Transformer
     {
         public static IBusinessUnit CurrentBusinessUnit
         {
-            get { return ((ITeleoptiIdentity)TeleoptiPrincipal.Current.Identity).BusinessUnit; }
+            get { return ((ITeleoptiIdentity)TeleoptiPrincipal.CurrentPrincipal.Identity).BusinessUnit; }
         }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1011:ConsiderPassingBaseTypesAsParameters")]

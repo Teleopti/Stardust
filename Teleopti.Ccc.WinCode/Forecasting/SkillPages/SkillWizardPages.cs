@@ -94,7 +94,7 @@ namespace Teleopti.Ccc.WinCode.Forecasting.SkillPages
             {
                 _preselectedSkillType = new SkillTypePhone(new Description("Skill type"), ForecastSource.InboundTelephony);
             }
-            var culture = TeleoptiPrincipal.Current.Regional.Culture;
+            var culture = TeleoptiPrincipal.CurrentPrincipal.Regional.Culture;
             var newSkill = new Skill(UserTexts.Resources.LessThanSkillNameGreaterThan,
                                        string.Format(culture, UserTexts.Resources.SkillCreatedDotParameter0,
                                                      DateTime.Now), Color.FromArgb(0),
@@ -114,10 +114,10 @@ namespace Teleopti.Ccc.WinCode.Forecasting.SkillPages
         /// </remarks>
         public static void SetSkillDefaultSettings(ISkill newSkill)
         {
-            newSkill.TimeZone = TeleoptiPrincipal.Current.Regional.TimeZone;
+            newSkill.TimeZone = TeleoptiPrincipal.CurrentPrincipal.Regional.TimeZone;
 
             newSkill.Activity = null;
-            var culture = TeleoptiPrincipal.Current.Regional.Culture;
+            var culture = TeleoptiPrincipal.CurrentPrincipal.Regional.Culture;
             ServiceAgreement serviceAgreement = ServiceAgreement.DefaultValues();
             DateTime startDateUtc = TimeZoneInfo.ConvertTimeToUtc(SkillDayTemplate.BaseDate, newSkill.TimeZone);
             DateTimePeriod timePeriod = new DateTimePeriod(

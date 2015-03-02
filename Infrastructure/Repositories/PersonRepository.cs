@@ -167,7 +167,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
         {
             try
             {
-                var identity = ((ITeleoptiIdentity)TeleoptiPrincipal.Current.Identity);
+                var identity = ((ITeleoptiIdentity)TeleoptiPrincipal.CurrentPrincipal.Identity);
                 var personsubQuery = DetachedCriteria.For<PersonPeriod>("personPeriod")
                     .CreateAlias("Team", "team", JoinType.InnerJoin)
                     .CreateAlias("team.Site", "site", JoinType.InnerJoin)
@@ -309,7 +309,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
         {
 			try
 			{
-				var identity = ((ITeleoptiIdentity)TeleoptiPrincipal.Current.Identity);
+				var identity = ((ITeleoptiIdentity)TeleoptiPrincipal.CurrentPrincipal.Identity);
 				var personsubQuery = DetachedCriteria.For<PersonPeriod>("personPeriod")
 					.CreateAlias("Team", "team", JoinType.InnerJoin)
 					.CreateAlias("team.Site", "site", JoinType.InnerJoin)
@@ -355,7 +355,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 			{
 				try
 				{
-					var identity = ((ITeleoptiIdentity)TeleoptiPrincipal.Current.Identity);
+					var identity = ((ITeleoptiIdentity)TeleoptiPrincipal.CurrentPrincipal.Identity);
 					var personsubQuery = DetachedCriteria.For<PersonPeriod>("personPeriod")
 						.CreateAlias("Team", "team", JoinType.InnerJoin)
 						.CreateAlias("team.Site", "site", JoinType.InnerJoin)
@@ -669,7 +669,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 
         private static DetachedCriteria findPeriodMatch(DateOnlyPeriod period)
         {
-            var identity = ((ITeleoptiIdentity)TeleoptiPrincipal.Current.Identity);
+            var identity = ((ITeleoptiIdentity)TeleoptiPrincipal.CurrentPrincipal.Identity);
             DetachedCriteria detachedCriteria = DetachedCriteria.For(typeof(PersonPeriod), "first")
                 .CreateAlias("Team", "team", JoinType.InnerJoin)
                 .CreateAlias("team.Site", "site", JoinType.InnerJoin)
@@ -687,7 +687,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 
         public IEnumerable<Tuple<Guid, Guid>> PeopleSkillMatrix(IScenario scenario, DateTimePeriod period)
         {
-            var identity = ((ITeleoptiIdentity)TeleoptiPrincipal.Current.Identity);
+            var identity = ((ITeleoptiIdentity)TeleoptiPrincipal.CurrentPrincipal.Identity);
             return Session.GetNamedQuery("AgentSkillMatrix")
                     .SetEntity("bu", identity.BusinessUnit)
                     .SetEntity("scenario", scenario)
@@ -697,7 +697,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 
         public IEnumerable<Guid> PeopleSiteMatrix(DateTimePeriod period)
         {
-            var identity = ((ITeleoptiIdentity)TeleoptiPrincipal.Current.Identity);
+            var identity = ((ITeleoptiIdentity)TeleoptiPrincipal.CurrentPrincipal.Identity);
             return Session.GetNamedQuery("AgentSiteMatrix")
                     .SetEntity("bu", identity.BusinessUnit)
                     .SetProperties(period)

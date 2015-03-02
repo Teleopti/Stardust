@@ -70,7 +70,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
             _gridlockManager = new GridlockManager();
             _clipHandlerSchedulePart = new ClipHandler<IScheduleDay>();
             _period = new DateOnlyPeriod(2009, 2, 2, 2009, 3, 1);
-			_schedulerState = new SchedulerStateHolder(_scenario, new DateOnlyPeriodAsDateTimePeriod(_period, TeleoptiPrincipal.Current.Regional.TimeZone), new List<IPerson>(), _mocks.DynamicMock<IDisableDeletedFilter>());
+			_schedulerState = new SchedulerStateHolder(_scenario, new DateOnlyPeriodAsDateTimePeriod(_period, TeleoptiPrincipal.CurrentPrincipal.Regional.TimeZone), new List<IPerson>(), _mocks.DynamicMock<IDisableDeletedFilter>());
             _overriddenBusinessRulesHolder = new OverriddenBusinessRulesHolder();
 
             createMockObjects();
@@ -89,7 +89,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
             _multiplicatorDefinitionSets = new List<IMultiplicatorDefinitionSet>();
             _definitionSet = new MultiplicatorDefinitionSet("Overtime", MultiplicatorType.Overtime);
             _scheduleTag = _mocks.StrictMock<IScheduleTag>();
-            _personNameComparer = new PersonNameComparer(TeleoptiPrincipal.Current.Regional.Culture);
+            _personNameComparer = new PersonNameComparer(TeleoptiPrincipal.CurrentPrincipal.Regional.Culture);
         }
 
         private void createMockObjects()
@@ -135,7 +135,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 
             var lastUnsavedSchedulePart = _mocks.StrictMock<IScheduleDay>();
 
-            var period = new DateOnlyPeriodAsDateTimePeriod(new DateOnlyPeriod(_date,_date), TeleoptiPrincipal.Current.Regional.TimeZone);
+            var period = new DateOnlyPeriodAsDateTimePeriod(new DateOnlyPeriod(_date,_date), TeleoptiPrincipal.CurrentPrincipal.Regional.TimeZone);
             _target.SelectedPeriod = period;
             _target.VisibleWeeks = 6;
             _target.LastUnsavedSchedulePart = lastUnsavedSchedulePart;
@@ -465,7 +465,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
             _mocks.ReplayAll();
 
             _target.ColWeekMap.Add((int)ColumnType.StartScheduleColumns, 45);
-            _target.SelectedPeriod = new DateOnlyPeriodAsDateTimePeriod(new DateOnlyPeriod(_date,_date), TeleoptiPrincipal.Current.Regional.TimeZone);
+            _target.SelectedPeriod = new DateOnlyPeriodAsDateTimePeriod(new DateOnlyPeriod(_date,_date), TeleoptiPrincipal.CurrentPrincipal.Regional.TimeZone);
             //_schedulerState.FilteredPersonDictionary.Add(person1.Id.Value, person1);
 			_schedulerState.FilteredAgentsDictionary.Add(person1.Id.Value, person1);
             _schedulerState.SchedulingResultState.Schedules = scheduleDictionary;
@@ -539,7 +539,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 
             _mocks.ReplayAll();
 
-            _target.SelectedPeriod = new DateOnlyPeriodAsDateTimePeriod(new DateOnlyPeriod(_date,_date), TeleoptiPrincipal.Current.Regional.TimeZone);
+            _target.SelectedPeriod = new DateOnlyPeriodAsDateTimePeriod(new DateOnlyPeriod(_date,_date), TeleoptiPrincipal.CurrentPrincipal.Regional.TimeZone);
             if (person1.Id != null) _schedulerState.FilteredAgentsDictionary.Add(person1.Id.Value, person1);
             _schedulerState.SchedulingResultState.Schedules = scheduleDictionary;
 
@@ -550,7 +550,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 
             _target = new SchedulePresenterBase(_viewBase, _schedulerState, _gridlockManager, _clipHandlerSchedulePart, SchedulePartFilter.Meetings, _overriddenBusinessRulesHolder,
                 _scheduleDayChangeCallback, NullScheduleTag.Instance);
-            _target.SelectedPeriod = new DateOnlyPeriodAsDateTimePeriod(new DateOnlyPeriod(_date,_date), TeleoptiPrincipal.Current.Regional.TimeZone);
+            _target.SelectedPeriod = new DateOnlyPeriodAsDateTimePeriod(new DateOnlyPeriod(_date,_date), TeleoptiPrincipal.CurrentPrincipal.Regional.TimeZone);
 
             eventArgs = new GridQueryCellInfoEventArgs(2, (int)ColumnType.StartScheduleColumns, new GridStyleInfo());
             _target.QueryCellInfo(null, eventArgs);
@@ -585,7 +585,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
             _mocks.ReplayAll();
 
             _target.ColWeekMap.Add((int)ColumnType.StartScheduleColumns, 45);
-            _target.SelectedPeriod = new DateOnlyPeriodAsDateTimePeriod(new DateOnlyPeriod(_date,_date), TeleoptiPrincipal.Current.Regional.TimeZone);
+            _target.SelectedPeriod = new DateOnlyPeriodAsDateTimePeriod(new DateOnlyPeriod(_date,_date), TeleoptiPrincipal.CurrentPrincipal.Regional.TimeZone);
             //_schedulerState.FilteredPersonDictionary.Add(person1.Id.Value, person1);
 			_schedulerState.FilteredAgentsDictionary.Add(person1.Id.Value, person1);
             _schedulerState.SchedulingResultState.Schedules = scheduleDictionary;
@@ -1701,7 +1701,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 		[Test]
 		public void ShouldCompareContractTime()
 		{
-			var comparer = new ContractTimeComparer(TeleoptiPrincipal.Current.Regional.Culture);
+			var comparer = new ContractTimeComparer(TeleoptiPrincipal.CurrentPrincipal.Regional.Culture);
 			Assert.AreEqual(0, comparer.Compare(null, null));
 			Assert.AreEqual(-1, comparer.Compare(null, "2"));
 			Assert.AreEqual(1, comparer.Compare("1", null));
@@ -1715,7 +1715,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 		[Test]
 		public void ShouldCompareDayOffCount()
 		{
-			var comparer = new ContractTimeComparer(TeleoptiPrincipal.Current.Regional.Culture);
+			var comparer = new ContractTimeComparer(TeleoptiPrincipal.CurrentPrincipal.Regional.Culture);
 			Assert.AreEqual(0, comparer.Compare(null, null));
 			Assert.AreEqual(-1, comparer.Compare(null, "2"));
 			Assert.AreEqual(1, comparer.Compare("1", null));

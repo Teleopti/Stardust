@@ -45,7 +45,7 @@ namespace Teleopti.Ccc.Win.Shifts.Grids
         {
             _columnDictionary = new Dictionary<DayOfWeek, ColumnBase<IDaysOfWeekViewModel>>();
 
-            IList<DayOfWeek> daysOfWeek = DateHelper.GetDaysOfWeek(TeleoptiPrincipal.Current.Regional.Culture);
+            IList<DayOfWeek> daysOfWeek = DateHelper.GetDaysOfWeek(TeleoptiPrincipal.CurrentPrincipal.Regional.Culture);
             
             AddColumn(new RowHeaderColumn<IDaysOfWeekViewModel>());
             

@@ -39,7 +39,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
         private void mockExpectations()
         {
             TimeZoneInfo tz = (TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time"));
-            ((IUnsafePerson)TeleoptiPrincipal.Current).Person.PermissionInformation.SetDefaultTimeZone(tz);
+            ((IUnsafePerson)TeleoptiPrincipal.CurrentPrincipal).Person.PermissionInformation.SetDefaultTimeZone(tz);
             IPerson person = PersonFactory.CreatePerson();
             person.PermissionInformation.SetDefaultTimeZone(tz);
             //Winter time, this shift should not pass midnight in WesternEurope

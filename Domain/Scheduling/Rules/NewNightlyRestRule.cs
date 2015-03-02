@@ -157,7 +157,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Rules
 
         private static string createErrorMessage(DateOnly dateOnly1, DateOnly dateOnly2, TimeSpan nightRest, TimeSpan currentRest)
         {
-            var loggedOnCulture = TeleoptiPrincipal.Current.Regional.Culture;
+            var loggedOnCulture = TeleoptiPrincipal.CurrentPrincipal.Regional.Culture;
             string start = dateOnly1.ToShortDateString();
             string end = dateOnly2.ToShortDateString();
             string rest = TimeHelper.GetLongHourMinuteTimeString(currentRest, loggedOnCulture);

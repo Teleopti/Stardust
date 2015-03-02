@@ -8,7 +8,7 @@ namespace Teleopti.Ccc.Win.Payroll.Forms.PayrollExportPages
     {
         public void SetSdkAuthenticationHeader()
         {
-            var principal = TeleoptiPrincipal.Current;
+            var principal = TeleoptiPrincipal.CurrentPrincipal;
             var identity = ((ITeleoptiIdentity)principal.Identity);
             AuthenticationMessageHeader.BusinessUnit = identity.BusinessUnit.Id.GetValueOrDefault();
             AuthenticationMessageHeader.DataSource = identity.DataSource.Application.Name;

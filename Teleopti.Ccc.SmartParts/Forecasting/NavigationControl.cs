@@ -51,7 +51,7 @@ namespace Teleopti.Ccc.SmartParts.Forecasting
             if (StateHolderReader.IsInitialized && StateHolderReader.Instance.StateReader.IsLoggedIn)
             {
                 var culture =
-                    TeleoptiPrincipal.Current.Regional.Culture;
+                    TeleoptiPrincipal.CurrentPrincipal.Regional.Culture;
                 _previousDate = DateOnly.Today;
                 int dayOfYear = culture.Calendar.GetDayOfYear(_previousDate);
                 _previousDate = new DateOnly(culture.Calendar.AddDays(_previousDate, -dayOfYear + 1));
@@ -66,7 +66,7 @@ namespace Teleopti.Ccc.SmartParts.Forecasting
             if (StateHolderReader.IsInitialized && StateHolderReader.Instance.StateReader.IsLoggedIn)
             {
                 var culture =
-                    TeleoptiPrincipal.Current.Regional.Culture;
+                    TeleoptiPrincipal.CurrentPrincipal.Regional.Culture;
                 _nextDate = new DateOnly(culture.Calendar.AddYears(_nextDate,1));
                 _previousDate = new DateOnly(culture.Calendar.AddYears(_previousDate, 1));
                 autoLabelYear.Text = culture.Calendar.GetYear(_nextDate).ToString(culture);
@@ -79,7 +79,7 @@ namespace Teleopti.Ccc.SmartParts.Forecasting
             if (StateHolderReader.IsInitialized && StateHolderReader.Instance.StateReader.IsLoggedIn)
             {
                 var culture =
-                    TeleoptiPrincipal.Current.Regional.Culture;
+                    TeleoptiPrincipal.CurrentPrincipal.Regional.Culture;
                 _nextDate = new DateOnly(culture.Calendar.AddYears(_nextDate, -1));
                 _previousDate = new DateOnly(culture.Calendar.AddYears(_previousDate, -1));
                 autoLabelYear.Text = culture.Calendar.GetYear(_nextDate).ToString(culture);

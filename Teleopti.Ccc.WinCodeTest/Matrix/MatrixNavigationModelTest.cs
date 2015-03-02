@@ -38,7 +38,7 @@ namespace Teleopti.Ccc.WinCodeTest.Matrix
 		[Test]
 		public void ShouldProvideBusinessUnitId()
 		{
-			var expectedBusinessUnitId = ((ITeleoptiIdentity)TeleoptiPrincipal.Current.Identity).BusinessUnit.Id;
+			var expectedBusinessUnitId = ((ITeleoptiIdentity)TeleoptiPrincipal.CurrentPrincipal.Identity).BusinessUnit.Id;
 			var actualBusinessUnitId = _target.BusinessUnitId;
 			Assert.That(expectedBusinessUnitId, Is.EqualTo(actualBusinessUnitId));
 		}

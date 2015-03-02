@@ -278,8 +278,8 @@ namespace Teleopti.Ccc.Win.Intraday
 
 		private void skillGridBackgroundLoaderDoWork(object sender, DoWorkEventArgs e)
 		{
-			System.Threading.Thread.CurrentThread.CurrentUICulture = Domain.Security.Principal.TeleoptiPrincipal.Current.Regional.UICulture;
-			System.Threading.Thread.CurrentThread.CurrentCulture = Domain.Security.Principal.TeleoptiPrincipal.Current.Regional.Culture;
+			System.Threading.Thread.CurrentThread.CurrentUICulture = Domain.Security.Principal.TeleoptiPrincipal.CurrentPrincipal.Regional.UICulture;
+			System.Threading.Thread.CurrentThread.CurrentCulture = Domain.Security.Principal.TeleoptiPrincipal.CurrentPrincipal.Regional.Culture;
 
 			IList<ISkillStaffPeriod> periods = _presenter.PrepareSkillIntradayCollection();
 			_skillIntradayGridControl.SetupDataSource(periods, SelectedSkill, true, _presenter.SchedulerStateHolder);

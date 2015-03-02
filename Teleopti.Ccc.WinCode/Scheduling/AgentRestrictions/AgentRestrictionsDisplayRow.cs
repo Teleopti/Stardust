@@ -124,12 +124,12 @@ namespace Teleopti.Ccc.WinCode.Scheduling.AgentRestrictions
 
 		public string StartDate
 		{
-			get { return _matrix.SchedulePeriod.DateOnlyPeriod.StartDate.ToShortDateString(TeleoptiPrincipal.Current.Regional.Culture); }
+			get { return _matrix.SchedulePeriod.DateOnlyPeriod.StartDate.ToShortDateString(TeleoptiPrincipal.CurrentPrincipal.Regional.Culture); }
 		}
 
 		public string EndDate
 		{
-			get { return _matrix.SchedulePeriod.DateOnlyPeriod.EndDate.ToShortDateString(TeleoptiPrincipal.Current.Regional.Culture); }
+			get { return _matrix.SchedulePeriod.DateOnlyPeriod.EndDate.ToShortDateString(TeleoptiPrincipal.CurrentPrincipal.Regional.Culture); }
 		}
 
 		public int TargetDaysOff
@@ -148,16 +148,16 @@ namespace Teleopti.Ccc.WinCode.Scheduling.AgentRestrictions
 		{
 			get
 			{	
-				return TimeHelper.GetLongHourMinuteTimeString(ContractTargetTime, TeleoptiPrincipal.Current.Regional.Culture)	 + 
-					" (" + TimeHelper.GetLongHourMinuteTimeString(MinMaxTime.StartTime, TeleoptiPrincipal.Current.Regional.Culture) + 
-					" - " + TimeHelper.GetLongHourMinuteTimeString(MinMaxTime.EndTime, TeleoptiPrincipal.Current.Regional.Culture) + 
+				return TimeHelper.GetLongHourMinuteTimeString(ContractTargetTime, TeleoptiPrincipal.CurrentPrincipal.Regional.Culture)	 + 
+					" (" + TimeHelper.GetLongHourMinuteTimeString(MinMaxTime.StartTime, TeleoptiPrincipal.CurrentPrincipal.Regional.Culture) + 
+					" - " + TimeHelper.GetLongHourMinuteTimeString(MinMaxTime.EndTime, TeleoptiPrincipal.CurrentPrincipal.Regional.Culture) + 
 					")";
 			}
 		}
 
 		public string ContractTargetTimeHourlyEmployees
 		{
-			get { return TimeHelper.GetLongHourMinuteTimeString(ContractTargetTime, TeleoptiPrincipal.Current.Regional.Culture); }
+			get { return TimeHelper.GetLongHourMinuteTimeString(ContractTargetTime, TeleoptiPrincipal.CurrentPrincipal.Regional.Culture); }
 		}
 
 		public string TargetDaysOffWithTolerance

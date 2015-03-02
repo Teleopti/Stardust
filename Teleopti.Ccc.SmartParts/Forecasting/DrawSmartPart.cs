@@ -119,7 +119,7 @@ namespace Teleopti.Ccc.SmartParts.Forecasting
             {
                 var startDate = period.StartDate;
                 Calendar calendar =
-                    TeleoptiPrincipal.Current.Regional.Culture.Calendar;
+                    TeleoptiPrincipal.CurrentPrincipal.Regional.Culture.Calendar;
                 int totalDays = calendar.GetDaysInYear(calendar.GetYear(startDate));
                 double unitOfDraw = drawProperties.DrawingWidth / (totalDays * 1.0);
 
@@ -188,7 +188,7 @@ namespace Teleopti.Ccc.SmartParts.Forecasting
 
             string lastUpdated = string.Empty;
             if (entityUpdateInformation.LastUpdate.HasValue && StateHolderReader.IsInitialized && StateHolderReader.Instance.StateReader.IsLoggedIn)
-                lastUpdated = entityUpdateInformation.LastUpdate.Value.ToString(DateFormat, TeleoptiPrincipal.Current.Regional.Culture);
+                lastUpdated = entityUpdateInformation.LastUpdate.Value.ToString(DateFormat, TeleoptiPrincipal.CurrentPrincipal.Regional.Culture);
             lastUpdated = string.Format(CultureInfo.CurrentCulture, "{0}: {1}", UserTexts.Resources.LastUpdated, lastUpdated);
             string lastChangedByName = string.Format(CultureInfo.CurrentCulture, "{0}: {1}", UserTexts.Resources.ChangedBy,
                                                      (entityUpdateInformation.Name.HasValue)

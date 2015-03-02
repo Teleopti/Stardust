@@ -76,7 +76,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftFilters
 			}
 			finderResult.AddFilterResults(
 				new WorkShiftFilterResult(
-					string.Format(TeleoptiPrincipal.Current.Regional.Culture,
+					string.Format(TeleoptiPrincipal.CurrentPrincipal.Regional.Culture,
 					              UserTexts.Resources.FilterOnContractTimeLimitationsWithParams, allowedMinMax.Value.Minimum,
 					              allowedMinMax.Value.Maximum),
 					cntBefore, workShiftsWithinMinMax.Count));

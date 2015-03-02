@@ -198,7 +198,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 		
         public IEnumerable<IBusinessUnit> BusinessUnitCollection
         {
-            get { yield return ((ITeleoptiIdentity)TeleoptiPrincipal.Current.Identity).BusinessUnit; }
+            get { yield return ((ITeleoptiIdentity)TeleoptiPrincipal.CurrentPrincipal.Identity).BusinessUnit; }
         }
 
         public DateOnlyPeriod SelectedPeriod

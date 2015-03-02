@@ -216,7 +216,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 
 		public ICollection<IPerson> Search(string searchText)
 		{
-			CultureInfo cultureInfo = TeleoptiPrincipal.Current.Regional.Culture;
+			CultureInfo cultureInfo = TeleoptiPrincipal.CurrentPrincipal.Regional.Culture;
 			string lowerSearchText = searchText.ToLower(cultureInfo);
 			ICollection<IPerson> personQuery =
 					(from
@@ -276,7 +276,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			var inputText = textBoxCustomSearch.Text;
 			var currentDelimiter = CultureInfo.CurrentCulture.TextInfo.ListSeparator;
 			var inputTextArray = inputText.Split(new[] { currentDelimiter.First() }, StringSplitOptions.RemoveEmptyEntries);
-			CultureInfo cultureInfo = TeleoptiPrincipal.Current.Regional.Culture;
+			CultureInfo cultureInfo = TeleoptiPrincipal.CurrentPrincipal.Regional.Culture;
 			_duplicateInputText.Clear();
 			var actualInput = new List<String>();
 			actualInput.AddRange(inputTextArray);

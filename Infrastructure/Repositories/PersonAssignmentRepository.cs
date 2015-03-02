@@ -103,7 +103,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 		{
 			if (!typeof (IAggregateRoot).IsAssignableFrom(criteria.GetRootEntityTypeIfAvailable()))
 				criteria.Add(Expression.Eq("ass.BusinessUnit",
-				                           ((ITeleoptiIdentity) TeleoptiPrincipal.Current.Identity).BusinessUnit));
+				                           ((ITeleoptiIdentity) TeleoptiPrincipal.CurrentPrincipal.Identity).BusinessUnit));
 		}
 
 		private static void addScenarioAndFilterClauses(ICriteria criteria, IScenario scenario, DateOnlyPeriod period)

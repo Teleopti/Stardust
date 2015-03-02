@@ -33,7 +33,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftFilters
 			}
 			finderResult.AddFilterResults(
 				new WorkShiftFilterResult(
-					string.Format(TeleoptiPrincipal.Current.Regional.Culture,
+					string.Format(TeleoptiPrincipal.CurrentPrincipal.Regional.Culture,
 								  UserTexts.Resources.FilterOnPersonalPeriodLimitationsWithParams,
 								  validPeriod.LocalStartDateTime, validPeriod.LocalEndDateTime), cntBefore,
 					workShiftsWithinPeriod.Count));

@@ -9,7 +9,7 @@ namespace Teleopti.Ccc.Domain.Security.Principal
 	public class TeleoptiPrincipal : GenericPrincipal, IUnsafePerson, ITeleoptiPrincipal
 	{
 		private static readonly CurrentTeleoptiPrincipal CurrentTeleoptiPrincipal = new CurrentTeleoptiPrincipal();
-		public static ITeleoptiPrincipal Current { get { return CurrentTeleoptiPrincipal.Current(); } }
+		public static ITeleoptiPrincipal CurrentPrincipal { get { return CurrentTeleoptiPrincipal.Current(); } }
 
 
 

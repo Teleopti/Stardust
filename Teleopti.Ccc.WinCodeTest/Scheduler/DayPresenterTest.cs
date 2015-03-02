@@ -38,7 +38,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
             scenario = mocks.StrictMock<IScenario>();
             gridlockManager = new GridlockManager();
             clipHandlerSchedulePart = new ClipHandler<IScheduleDay>();
-			schedulerState = new SchedulerStateHolder(scenario, new DateOnlyPeriodAsDateTimePeriod(new DateOnlyPeriod(_date, _date), TeleoptiPrincipal.Current.Regional.TimeZone), new List<IPerson>(), mocks.DynamicMock<IDisableDeletedFilter>());
+			schedulerState = new SchedulerStateHolder(scenario, new DateOnlyPeriodAsDateTimePeriod(new DateOnlyPeriod(_date, _date), TeleoptiPrincipal.CurrentPrincipal.Regional.TimeZone), new List<IPerson>(), mocks.DynamicMock<IDisableDeletedFilter>());
             _overriddenBusinessRulesHolder = new OverriddenBusinessRulesHolder();
             _scheduleDayChangeCallback = mocks.DynamicMock<IScheduleDayChangeCallback>();
             target = new DayPresenter(viewBase, schedulerState, gridlockManager, clipHandlerSchedulePart,
@@ -64,7 +64,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
             GridQueryCellInfoEventArgs eventArgs = new GridQueryCellInfoEventArgs(0, -1, new GridStyleInfo());
             ((DayPresenterTestClass)target).CreateDayHeaderTest(eventArgs);
 
-            target.SelectedPeriod = new DateOnlyPeriodAsDateTimePeriod(new DateOnlyPeriod(_date,_date), TeleoptiPrincipal.Current.Regional.TimeZone);
+            target.SelectedPeriod = new DateOnlyPeriodAsDateTimePeriod(new DateOnlyPeriod(_date,_date), TeleoptiPrincipal.CurrentPrincipal.Regional.TimeZone);
             eventArgs = new GridQueryCellInfoEventArgs(0, (int)ColumnType.StartScheduleColumns,new GridStyleInfo());
             ((DayPresenterTestClass)target).CreateDayHeaderTest(eventArgs);
             Assert.AreEqual(target.SelectedPeriod.DateOnlyPeriod.StartDate, eventArgs.Style.Tag);
@@ -97,7 +97,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
             mocks.ReplayAll();
             target.SchedulerState.FilteredPersonDictionary.Add(person1.Id.Value,person1);
             target.SchedulerState.SchedulingResultState.Schedules = scheduleDictionary;
-            target.SelectedPeriod = new DateOnlyPeriodAsDateTimePeriod(new DateOnlyPeriod(_date,_date.AddDays(1)), TeleoptiPrincipal.Current.Regional.TimeZone);
+            target.SelectedPeriod = new DateOnlyPeriodAsDateTimePeriod(new DateOnlyPeriod(_date,_date.AddDays(1)), TeleoptiPrincipal.CurrentPrincipal.Regional.TimeZone);
             target.TimelineList();
             Assert.AreEqual(2, target.TimelineSpan.Count);
 			Assert.AreEqual(17, (int)target.TimelineSpan[_date].ElapsedTime().TotalHours);
@@ -116,7 +116,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
         [Test]
         public void GetNowPositionFromColumnShouldReturnCurrentPosition()
         {
-            target.SelectedPeriod = new DateOnlyPeriodAsDateTimePeriod(new DateOnlyPeriod(2008, 11, 26,2008, 11, 26),TeleoptiPrincipal.Current.Regional.TimeZone);
+            target.SelectedPeriod = new DateOnlyPeriodAsDateTimePeriod(new DateOnlyPeriod(2008, 11, 26,2008, 11, 26),TeleoptiPrincipal.CurrentPrincipal.Regional.TimeZone);
             var date = new DateTime(2008, 11, 26, 13, 00, 00, DateTimeKind.Utc);
             target.TimelineSpan[date.Date] = target.SelectedPeriod.Period();
             target.Now = date;
@@ -136,7 +136,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
         [Test]
         public void GetNowPositionFromColumnShouldReturnCurrentPositionWhenRightToLeft()
         {
-            target.SelectedPeriod = new DateOnlyPeriodAsDateTimePeriod(new DateOnlyPeriod(2008, 11, 26,2008, 11, 26),TeleoptiPrincipal.Current.Regional.TimeZone);
+            target.SelectedPeriod = new DateOnlyPeriodAsDateTimePeriod(new DateOnlyPeriod(2008, 11, 26,2008, 11, 26),TeleoptiPrincipal.CurrentPrincipal.Regional.TimeZone);
             var date = new DateTime(2008, 11, 26, 13, 00, 00, DateTimeKind.Utc);
             target.TimelineSpan[date.Date] = target.SelectedPeriod.Period();
             target.Now = date;
@@ -156,7 +156,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
         [Test]
         public void GetColumnFromLocalDateShouldReturnColumn()
         {
-            target.SelectedPeriod = new DateOnlyPeriodAsDateTimePeriod(new DateOnlyPeriod(_date,_date), TeleoptiPrincipal.Current.Regional.TimeZone);
+            target.SelectedPeriod = new DateOnlyPeriodAsDateTimePeriod(new DateOnlyPeriod(_date,_date), TeleoptiPrincipal.CurrentPrincipal.Regional.TimeZone);
             int column = target.GetColumnFromLocalDate(_date.AddDays(3));
             Assert.AreEqual((int)ColumnType.StartScheduleColumns + 3, column);
         }

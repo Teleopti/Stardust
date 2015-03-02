@@ -44,7 +44,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.SeatLimitations
             Assert.AreEqual(15, skills[0].DefaultResolution);
             Assert.AreEqual(_site1.Description.Name, skills[0].Name);
             Assert.AreEqual(ForecastSource.MaxSeatSkill, skills[0].SkillType.ForecastSource);
-            Assert.AreEqual(TeleoptiPrincipal.Current.Regional.TimeZone.Id, skills[0].TimeZone.Id);
+            Assert.AreEqual(TeleoptiPrincipal.CurrentPrincipal.Regional.TimeZone.Id, skills[0].TimeZone.Id);
             Assert.AreEqual(96, skills[0].GetTemplateAt(0).TemplateSkillDataPeriodCollection.Count);
             Assert.AreEqual(20, skills[0].GetTemplateAt(0).TemplateSkillDataPeriodCollection[0].MaxSeats);
 			_mocks.VerifyAll();

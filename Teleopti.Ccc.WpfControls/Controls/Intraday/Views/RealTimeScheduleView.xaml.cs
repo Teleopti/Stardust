@@ -211,8 +211,8 @@ namespace Teleopti.Ccc.WpfControls.Controls.Intraday.Views
 				e.Content = "";
 			else
 				e.Content =
-					TimeZoneHelper.ConvertFromUtc(utcTime, TeleoptiPrincipal.Current.Regional.TimeZone)
-								.ToString(TeleoptiPrincipal.Current.Regional.Culture);
+					TimeZoneHelper.ConvertFromUtc(utcTime, TeleoptiPrincipal.CurrentPrincipal.Regional.TimeZone)
+								.ToString(TeleoptiPrincipal.CurrentPrincipal.Regional.Culture);
 		}
 
 		private void PinnedColumn_OnCopyingCellClipboardContent(object sender, DataGridCellClipboardEventArgs e)

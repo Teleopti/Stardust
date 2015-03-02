@@ -50,19 +50,19 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.ViewModelFactory
                                                                                CultureInfo.CurrentUICulture),
                                     Title = visualLayer.DisplayDescription().Name,
                                     TimeSpan =
-                                        visualLayer.Period.TimePeriod(TeleoptiPrincipal.Current.Regional.TimeZone).
+                                        visualLayer.Period.TimePeriod(TeleoptiPrincipal.CurrentPrincipal.Regional.TimeZone).
                                         ToShortTimeString(),
                                     StyleClassName = colorToString(visualLayer.DisplayColor()),
                                     Meeting = meetingModel,
                                     Color = visualLayer.DisplayColor().ToCSV(),
                                     StartPositionPercentage =
                                         (decimal)
-                                        (visualLayer.VisualPeriod.TimePeriod(TeleoptiPrincipal.Current.Regional.TimeZone).
+                                        (visualLayer.VisualPeriod.TimePeriod(TeleoptiPrincipal.CurrentPrincipal.Regional.TimeZone).
                                              StartTime - minMaxTime.StartTime).Ticks/
                                         (minMaxTime.EndTime - minMaxTime.StartTime).Ticks,
                                     EndPositionPercentage =
                                         (decimal)
-                                        (visualLayer.VisualPeriod.TimePeriod(TeleoptiPrincipal.Current.Regional.TimeZone).
+                                        (visualLayer.VisualPeriod.TimePeriod(TeleoptiPrincipal.CurrentPrincipal.Regional.TimeZone).
                                              EndTime - minMaxTime.StartTime).Ticks/
                                         (minMaxTime.EndTime - minMaxTime.StartTime).Ticks
                                 });

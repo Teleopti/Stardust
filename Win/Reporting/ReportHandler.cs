@@ -265,7 +265,7 @@ namespace Teleopti.Ccc.Win.Reporting
 			
 			parameters.Add(new ReportDataParameter("param_date_from", dateFrom.ToShortDateString(culture)));
 			parameters.Add(new ReportDataParameter("param_date_to", dateTo.ToShortDateString(culture)));
-			parameters.Add(new ReportDataParameter("param_timezone", TeleoptiPrincipal.Current.Regional.TimeZone.StandardName));
+			parameters.Add(new ReportDataParameter("param_timezone", TeleoptiPrincipal.CurrentPrincipal.Regional.TimeZone.StandardName));
 		}
 
 

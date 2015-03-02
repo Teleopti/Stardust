@@ -186,7 +186,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 		{
 			List<KeyValuePair<Guid, IPerson>> sortedFilteredPersonDictionary;
 		
-			var loggedOnCulture = TeleoptiPrincipal.Current.Regional.Culture;
+			var loggedOnCulture = TeleoptiPrincipal.CurrentPrincipal.Regional.Culture;
 			IComparer<object> comparer = new PersonNameComparer(loggedOnCulture);
 
 			if (IsAscendingSort)
@@ -217,7 +217,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 
             if (CurrentSortColumn != column || !IsAscendingSort)
             {
-                var loggedOnCulture = TeleoptiPrincipal.Current.Regional.Culture;
+                var loggedOnCulture = TeleoptiPrincipal.CurrentPrincipal.Regional.Culture;
                 IComparer<object> comparer = new PersonNameComparer(loggedOnCulture);
 
 				if ((ColumnType)column == ColumnType.CurrentContractTimeColumn || (ColumnType)column == ColumnType.TargetContractTimeColumn)
@@ -232,7 +232,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
             }
             else
             {
-                var loggedOnCulture = TeleoptiPrincipal.Current.Regional.Culture;
+                var loggedOnCulture = TeleoptiPrincipal.CurrentPrincipal.Regional.Culture;
                 IComparer<object> comparer = new PersonNameComparer(loggedOnCulture);
 
 				if ((ColumnType)column == ColumnType.CurrentContractTimeColumn || (ColumnType)column == ColumnType.TargetContractTimeColumn)

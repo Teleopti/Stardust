@@ -57,7 +57,7 @@ namespace Teleopti.Ccc.Sdk.WcfService.Factory
         private void SendEmailWithAttachedSchedule(DateOnlyPeriod datePeriod, IEnumerable<PersonWithScheduleStream> returnList)
         {
             SmtpClient smtpClient = new SmtpClient();
-            var senderAddress = ((IUnsafePerson)TeleoptiPrincipal.Current).Person.Email;
+            var senderAddress = ((IUnsafePerson)TeleoptiPrincipal.CurrentPrincipal).Person.Email;
             foreach (PersonWithScheduleStream personWithScheduleStream in returnList)
             {
                 if (string.IsNullOrEmpty(personWithScheduleStream.Person.Email)) continue;

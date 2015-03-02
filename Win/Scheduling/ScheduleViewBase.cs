@@ -337,7 +337,7 @@ namespace Teleopti.Ccc.Win.Scheduling
         {
             if (_grid.Model.ColCount < colIndex) return;
             _grid.Model.Selections.Clear(true);
-            var culture = TeleoptiPrincipal.Current.Regional.Culture;
+            var culture = TeleoptiPrincipal.CurrentPrincipal.Regional.Culture;
             int weekNumWeekHeader = DateHelper.WeekNumber(((DateOnly)_grid.Model[rowIndex, colIndex].Tag).Date, culture);
             for (int i = (int)ColumnType.StartScheduleColumns; i <= _grid.ColCount; i++)
             {
@@ -920,7 +920,7 @@ namespace Teleopti.Ccc.Win.Scheduling
         public void ValidatePersons(IEnumerable<IPerson> listPersons)
         {
             Presenter.SchedulerState.Schedules.ValidateBusinessRulesOnPersons(listPersons,
-                                                                              TeleoptiPrincipal.Current.Regional.Culture,
+                                                                              TeleoptiPrincipal.CurrentPrincipal.Regional.Culture,
 																					Presenter.SchedulerState.SchedulingResultState.GetRulesToRun());
         }
 

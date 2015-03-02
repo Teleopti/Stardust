@@ -39,7 +39,7 @@ namespace Teleopti.Ccc.WinCodeTest.Configuration
         private IList<IDayOffTemplate> _dayOffTemplates;
         private WorkflowControlSetModel _workflowControlSetModel;
         private IWorkflowControlSet _workflowControlSet;
-        private readonly CultureInfo _culture = TeleoptiPrincipal.Current.Regional.Culture;
+        private readonly CultureInfo _culture = TeleoptiPrincipal.CurrentPrincipal.Regional.Culture;
         private List<ISkill> _skillList;
         private IToggleManager _toggleManager;
 

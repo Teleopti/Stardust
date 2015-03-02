@@ -127,8 +127,8 @@ namespace Teleopti.Ccc.Win.Reporting
 
 		private static void setThreadCulture()
 		{
-			Thread.CurrentThread.CurrentCulture = TeleoptiPrincipal.Current.Regional.Culture;
-			Thread.CurrentThread.CurrentUICulture = TeleoptiPrincipal.Current.Regional.UICulture;
+			Thread.CurrentThread.CurrentCulture = TeleoptiPrincipal.CurrentPrincipal.Regional.Culture;
+			Thread.CurrentThread.CurrentUICulture = TeleoptiPrincipal.CurrentPrincipal.Regional.UICulture;
 		}
 
 		void _backgroundWorkerLoadReport_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
@@ -266,7 +266,7 @@ namespace Teleopti.Ccc.Win.Reporting
 
 			using (UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
 			{
-				IScheduleHistoryReport rep = new ScheduleHistoryReport(UnitOfWorkFactory.Current, TeleoptiPrincipal.Current.Regional);
+				IScheduleHistoryReport rep = new ScheduleHistoryReport(UnitOfWorkFactory.Current, TeleoptiPrincipal.CurrentPrincipal.Regional);
 
 				if (model.ModifiedBy.Count > 1 || model.ModifiedBy.Count == 0)
 				{

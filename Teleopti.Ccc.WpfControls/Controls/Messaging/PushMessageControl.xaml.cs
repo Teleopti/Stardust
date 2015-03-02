@@ -38,7 +38,7 @@ namespace Teleopti.Ccc.WpfControls.Controls.Messaging
 
     	public PushMessageControl(IUnitOfWorkFactory unitOfWorkFactory, IRepositoryFactory repositoryFactory) : this()
     	{
-			IPerson currentPerson = ((IUnsafePerson)TeleoptiPrincipal.Current).Person;
+			IPerson currentPerson = ((IUnsafePerson)TeleoptiPrincipal.CurrentPrincipal).Person;
 			SendPushMessageModel = new SendPushMessageViewModel(repositoryFactory,unitOfWorkFactory);
 			if (currentPerson != null)
 			{

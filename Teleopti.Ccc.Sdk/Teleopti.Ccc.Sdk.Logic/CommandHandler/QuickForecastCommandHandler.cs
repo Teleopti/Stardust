@@ -36,7 +36,7 @@ namespace Teleopti.Ccc.Sdk.Logic.CommandHandler
 				//Save start of processing to job history
 				var period = command.TargetPeriod.ToDateOnlyPeriod();
 				var jobResult = new JobResult(JobCategory.QuickForecast, period,
-				                              ((IUnsafePerson) TeleoptiPrincipal.Current).Person, DateTime.UtcNow);
+				                              ((IUnsafePerson) TeleoptiPrincipal.CurrentPrincipal).Person, DateTime.UtcNow);
 				_jobResultRepository.Add(jobResult);
 				jobId = jobResult.Id.GetValueOrDefault();
 

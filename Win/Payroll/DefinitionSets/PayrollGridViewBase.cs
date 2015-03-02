@@ -16,7 +16,7 @@ namespace Teleopti.Ccc.Win.Payroll.DefinitionSets
         {
             get
             {
-                return TeleoptiPrincipal.Current.Regional.UICulture;
+                return TeleoptiPrincipal.CurrentPrincipal.Regional.UICulture;
             }
         }
 

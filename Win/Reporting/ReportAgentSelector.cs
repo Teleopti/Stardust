@@ -119,7 +119,7 @@ namespace Teleopti.Ccc.Win.Reporting
 
 		public void UpdateComboWithSelectedAgents()
 		{
-			var currentCultureInfo = TeleoptiPrincipal.Current.Regional.Culture;
+			var currentCultureInfo = TeleoptiPrincipal.CurrentPrincipal.Regional.Culture;
 
 			var builder = new StringBuilder();
 

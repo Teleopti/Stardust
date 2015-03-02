@@ -76,7 +76,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 		private void buttonDeleteClick(object sender, EventArgs e)
 		{
 			if (SelectedTag == null) return;
-			var culture = TeleoptiPrincipal.Current.Regional.Culture;
+			var culture = TeleoptiPrincipal.CurrentPrincipal.Regional.Culture;
 			string text = string.Format(
 				culture,
 				Resources.AreYouSureYouWantToDeleteItem,

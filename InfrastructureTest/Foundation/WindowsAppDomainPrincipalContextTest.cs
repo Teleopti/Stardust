@@ -14,7 +14,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Foundation
 		public void ShouldChangeCurrentPrincipalWhenTeleoptiPrincipalForThread()
 		{
 			var threadPreviousIdentity = Thread.CurrentPrincipal.Identity;
-			var threadPreviousPerson = ((IUnsafePerson)TeleoptiPrincipal.Current).Person;
+			var threadPreviousPerson = ((IUnsafePerson)TeleoptiPrincipal.CurrentPrincipal).Person;
 			try
 			{
 				var target = new WindowsAppDomainPrincipalContext(new TeleoptiPrincipalFactory());
@@ -23,13 +23,13 @@ namespace Teleopti.Ccc.InfrastructureTest.Foundation
 
 				target.SetCurrentPrincipal(newPerson, null, null);
 
-				var currentPrincipal = TeleoptiPrincipal.Current;
+				var currentPrincipal = TeleoptiPrincipal.CurrentPrincipal;
 				((IUnsafePerson)currentPrincipal).Person.Should().Be.EqualTo(newPerson);
 				currentPrincipal.Identity.Should().Not.Be.EqualTo(threadPreviousIdentity);
 			}
 			finally
 			{
-				((TeleoptiPrincipal)TeleoptiPrincipal.Current).ChangePrincipal(new TeleoptiPrincipal(threadPreviousIdentity, threadPreviousPerson));
+				((TeleoptiPrincipal)TeleoptiPrincipal.CurrentPrincipal).ChangePrincipal(new TeleoptiPrincipal(threadPreviousIdentity, threadPreviousPerson));
 			}
 		}
 
@@ -37,7 +37,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Foundation
 		public void ShouldChangeCurrentPrincipalWhenNotTeleoptiPrincipalForThread()
 		{
 			var threadPreviousIdentity = Thread.CurrentPrincipal.Identity;
-			var threadPreviousPerson = ((IUnsafePerson)TeleoptiPrincipal.Current).Person;
+			var threadPreviousPerson = ((IUnsafePerson)TeleoptiPrincipal.CurrentPrincipal).Person;
 
 			try
 			{
@@ -48,13 +48,13 @@ namespace Teleopti.Ccc.InfrastructureTest.Foundation
 				Thread.CurrentPrincipal = new GenericPrincipal(new GenericIdentity("test"), new string[] { });
 				target.SetCurrentPrincipal(newPerson, null, null);
 
-				var currentPrincipal = TeleoptiPrincipal.Current;
+				var currentPrincipal = TeleoptiPrincipal.CurrentPrincipal;
 				((IUnsafePerson)currentPrincipal).Person.Should().Be.EqualTo(newPerson);
 				currentPrincipal.Identity.Should().Not.Be.EqualTo(threadPreviousIdentity);
 			}
 			finally
 			{
-				((TeleoptiPrincipal)TeleoptiPrincipal.Current).ChangePrincipal(new TeleoptiPrincipal(threadPreviousIdentity, threadPreviousPerson));
+				((TeleoptiPrincipal)TeleoptiPrincipal.CurrentPrincipal).ChangePrincipal(new TeleoptiPrincipal(threadPreviousIdentity, threadPreviousPerson));
 			}
 		}
 	}

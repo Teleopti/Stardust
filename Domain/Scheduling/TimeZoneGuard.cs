@@ -14,7 +14,7 @@ namespace Teleopti.Ccc.Domain.Scheduling
 		
 		private TimeZoneGuard()
 		{
-			TimeZone = TeleoptiPrincipal.Current.Regional.TimeZone;
+			TimeZone = TeleoptiPrincipal.CurrentPrincipal.Regional.TimeZone;
 		}
 
 		public static TimeZoneGuard Instance

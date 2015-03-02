@@ -169,7 +169,7 @@ namespace Teleopti.Ccc.Win.Scheduling
                 {
                     meetingViewModel =
                         MeetingComposerPresenter.CreateDefaultMeeting(
-                            TeleoptiPrincipal.Current.GetPerson(_repositoryFactory.CreatePersonRepository(unitOfWork)),
+                            TeleoptiPrincipal.CurrentPrincipal.GetPerson(_repositoryFactory.CreatePersonRepository(unitOfWork)),
                             _schedulerStateHolder, meetingStartOrToday,
 							selectedActivePersons, new Now());
                 }

@@ -32,7 +32,7 @@ namespace Teleopti.Ccc.WinCode.Common.Rows
             TimeSpan time = _intervals[cellInfo.ColIndex - cellInfo.RowHeaderCount].TimeSpan;
             cellInfo.Style.BaseStyle = "Header";
         	cellInfo.Style.HorizontalAlignment = GridHorizontalAlignment.Center;
-        	cellInfo.Style.CellValue = _baseDate.Add(time).ToString("t", TeleoptiPrincipal.Current.Regional.Culture);
+        	cellInfo.Style.CellValue = _baseDate.Add(time).ToString("t", TeleoptiPrincipal.CurrentPrincipal.Regional.Culture);
         }
 
         public void SaveCellInfo(CellInfo cellInfo)

@@ -51,7 +51,7 @@ namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork
 				.Return(stat)
 				.Repeat.Any();
 			stat.IsStatisticsEnabled = true;
-			StateHolderProxyHelper.ClearAndSetStateHolder(mocks, ((IUnsafePerson)TeleoptiPrincipal.Current).Person, null, SetupFixtureForAssembly.ApplicationData, SetupFixtureForAssembly.DataSource, stateMock);
+			StateHolderProxyHelper.ClearAndSetStateHolder(mocks, ((IUnsafePerson)TeleoptiPrincipal.CurrentPrincipal).Person, null, SetupFixtureForAssembly.ApplicationData, SetupFixtureForAssembly.DataSource, stateMock);
 		}
 
 		/// <summary>

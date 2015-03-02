@@ -1128,7 +1128,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
 
 		private void createMultisiteSkill(skillTypeModel skillTypeModel)
 		{
-			var culture = TeleoptiPrincipal.Current.Regional.Culture;
+			var culture = TeleoptiPrincipal.CurrentPrincipal.Regional.Culture;
 			var skillType = getInitializedSkillType(skillTypeModel);
 
 			IMultisiteSkill skill = new MultisiteSkill(

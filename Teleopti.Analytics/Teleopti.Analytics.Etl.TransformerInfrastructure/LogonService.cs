@@ -46,7 +46,7 @@ namespace Teleopti.Analytics.Etl.TransformerInfrastructure
 					);
 			using (var uow = unitOfWorkFactory.CreateAndOpenUnitOfWork())
 			{
-				roleToPrincipalCommand.Execute(TeleoptiPrincipal.Current, unitOfWorkFactory, new PersonRepository(uow));
+				roleToPrincipalCommand.Execute(TeleoptiPrincipal.CurrentPrincipal, unitOfWorkFactory, new PersonRepository(uow));
 			}
 			return true;
 		}

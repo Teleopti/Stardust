@@ -167,7 +167,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.SkillPages
                 if (resolution != expectedResolution)
                 {
                     errorProvider1.SetError(comboBoxAdvIntervalLength,
-                                            string.Format(TeleoptiPrincipal.Current.Regional.UICulture,
+                                            string.Format(TeleoptiPrincipal.CurrentPrincipal.Regional.UICulture,
                                                 UserTexts.Resources.
                                                     TheIntervalLengthOfThisSubskillShouldBeTheSameAsItsParentSkillCommaWhichIsParameterMinutesDot,
                                                 expectedResolution));

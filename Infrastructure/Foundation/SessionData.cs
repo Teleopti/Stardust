@@ -15,7 +15,7 @@ namespace Teleopti.Ccc.Infrastructure.Foundation
         
         public SessionData()
         {
-            _timeZone = TeleoptiPrincipal.Current.Regional.TimeZone;
+            _timeZone = TeleoptiPrincipal.CurrentPrincipal.Regional.TimeZone;
         }
 
         public TimeZoneInfo TimeZone

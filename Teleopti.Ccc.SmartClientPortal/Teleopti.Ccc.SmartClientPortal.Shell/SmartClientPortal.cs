@@ -239,7 +239,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 			Cursor = Cursors.WaitCursor;
 			toolStripStatusLabelSpring.Text = LanguageResourceHelper.Translate("XXLoadingThreeDots");
 			_mainStatusStrip.Refresh();
-			var identity = (ITeleoptiIdentity)TeleoptiPrincipal.Current.Identity;
+			var identity = (ITeleoptiIdentity)TeleoptiPrincipal.CurrentPrincipal.Identity;
 			var loggedOnBu = identity.BusinessUnit;
 			Text = UserTexts.Resources.TeleoptiRaptorColonMainNavigation + @" " + loggedOnBu.Name;
 			
@@ -372,7 +372,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 		{
 #if(DEBUG)
 			string outPut = string.Concat(UnitOfWorkFactory.Current.NumberOfLiveUnitOfWorks.ToString(), " Raptor UOW:s");
-			IUnitOfWorkFactory matrix = ((ITeleoptiIdentity)TeleoptiPrincipal.Current.Identity).DataSource.Statistic;
+			IUnitOfWorkFactory matrix = ((ITeleoptiIdentity)TeleoptiPrincipal.CurrentPrincipal.Identity).DataSource.Statistic;
 			if(matrix!=null)
 				outPut +=string.Concat(", ", matrix.NumberOfLiveUnitOfWorks, " Matrix UOW:s");
 			Roger65(outPut);
@@ -400,7 +400,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 			backStageButtonOptions.Enabled =
 				authorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.OpenOptionsPage);
 			backStageButtonMyProfile.Enabled =
-				((IUnsafePerson) TeleoptiPrincipal.Current).Person.ApplicationAuthenticationInfo != null;
+				((IUnsafePerson) TeleoptiPrincipal.CurrentPrincipal).Person.ApplicationAuthenticationInfo != null;
 		}
 
 		private void LoadOutLookBar()

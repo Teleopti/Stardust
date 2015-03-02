@@ -489,7 +489,7 @@ namespace Teleopti.Ccc.Win.Intraday
 
 		private void backgroundWorkerLoadControlsDoWork(object sender, DoWorkEventArgs e)
 		{
-			System.Threading.Thread.CurrentThread.CurrentUICulture = TeleoptiPrincipal.Current.Regional.UICulture;
+			System.Threading.Thread.CurrentThread.CurrentUICulture = TeleoptiPrincipal.CurrentPrincipal.Regional.UICulture;
 			Presenter.Initialize();
 		}
 

@@ -100,7 +100,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Rules
                     {
                         foreach (var scheduleDay in scheduleDaysForAccount)
                         {
-                            string message = string.Format(TeleoptiPrincipal.Current.Regional.Culture,
+                            string message = string.Format(TeleoptiPrincipal.CurrentPrincipal.Regional.Culture,
                                                     UserTexts.Resources.BusinessRulePersonAccountError1,
                                                     affectedAccount.Owner.Absence.Description.Name, affectedAccount.Period().StartDate.ToShortDateString());
 

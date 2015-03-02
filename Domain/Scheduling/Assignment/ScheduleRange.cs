@@ -208,7 +208,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
             {
                 return
                     new DateOnly(
-                        _persistableScheduleData.Period.StartDateTimeLocal(TeleoptiPrincipal.Current.Regional.TimeZone));
+                        _persistableScheduleData.Period.StartDateTimeLocal(TeleoptiPrincipal.CurrentPrincipal.Regional.TimeZone));
             } }
         }
 

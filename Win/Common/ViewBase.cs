@@ -79,7 +79,7 @@ namespace Teleopti.Ccc.Win.Common
 
 	    private static MessageBoxOptions rightToLeftOptions()
 	    {
-		    return (((IUnsafePerson)TeleoptiPrincipal.Current).Person.PermissionInformation.RightToLeftDisplay)
+		    return (((IUnsafePerson)TeleoptiPrincipal.CurrentPrincipal).Person.PermissionInformation.RightToLeftDisplay)
 			           ? MessageBoxOptions.RtlReading |
 			             MessageBoxOptions.RightAlign
 			           : 0;

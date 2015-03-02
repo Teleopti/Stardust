@@ -124,7 +124,7 @@ namespace Teleopti.Ccc.Win.Scheduling.AgentRestrictions
 				format.Alignment = StringAlignment.Center;
 
 				CultureInfo culture =
-					TeleoptiPrincipal.Current.Regional.Culture;
+					TeleoptiPrincipal.CurrentPrincipal.Regional.Culture;
 
 				g.DrawString(cellData.TheDate.ToShortDateString(culture), Grid.Font, Brushes.Black, clientRectangle);
 

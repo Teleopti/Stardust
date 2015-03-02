@@ -28,7 +28,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 		private IScenario _requestedScenario;
 		private readonly IList<IPersonRequest> _workingPersonRequests = new List<IPersonRequest>();
 		private ShiftTradeRequestStatusCheckerWithSchedule _shiftTradeRequestStatusChecker;
-		private TimeZoneInfo _timeZoneInfo = TeleoptiPrincipal.Current.Regional.TimeZone;
+		private TimeZoneInfo _timeZoneInfo = TeleoptiPrincipal.CurrentPrincipal.Regional.TimeZone;
 		private CommonNameDescriptionSetting _commonNameDescription = new CommonNameDescriptionSetting();
 		private CommonNameDescriptionSettingScheduleExport _commonNameDescriptionScheduleExport = new CommonNameDescriptionSettingScheduleExport();
 		private DefaultSegment _defaultSegment = new DefaultSegment();

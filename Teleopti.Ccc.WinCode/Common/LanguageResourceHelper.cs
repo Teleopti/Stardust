@@ -42,7 +42,7 @@ namespace Teleopti.Ccc.WinCode.Common
                 if (Thread.CurrentPrincipal is TeleoptiPrincipal)
                 {
                     _targetControl.RightToLeft =
-                        (((IUnsafePerson)TeleoptiPrincipal.Current).Person.PermissionInformation.RightToLeftDisplay)
+                        (((IUnsafePerson)TeleoptiPrincipal.CurrentPrincipal).Person.PermissionInformation.RightToLeftDisplay)
                             ? RightToLeft.Yes
                             : RightToLeft.No;
 
@@ -127,7 +127,7 @@ namespace Teleopti.Ccc.WinCode.Common
 	        {
 		        if (Thread.CurrentPrincipal is TeleoptiPrincipal)
 		        {
-			        var cultureInfo = ((IUnsafePerson) TeleoptiPrincipal.Current).Person.PermissionInformation.UICulture();
+			        var cultureInfo = ((IUnsafePerson) TeleoptiPrincipal.CurrentPrincipal).Person.PermissionInformation.UICulture();
 			        resourceText = resourceText.ToUpper(cultureInfo);
 		        }
 	        }

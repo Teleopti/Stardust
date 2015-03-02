@@ -131,8 +131,8 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 
 		private static void setThreadCulture()
 		{
-			Thread.CurrentThread.CurrentCulture = TeleoptiPrincipal.Current.Regional.Culture;
-			Thread.CurrentThread.CurrentUICulture = TeleoptiPrincipal.Current.Regional.UICulture;
+			Thread.CurrentThread.CurrentCulture = TeleoptiPrincipal.CurrentPrincipal.Regional.Culture;
+			Thread.CurrentThread.CurrentUICulture = TeleoptiPrincipal.CurrentPrincipal.Regional.UICulture;
 		}
 	}
 }

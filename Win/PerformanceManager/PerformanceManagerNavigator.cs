@@ -46,7 +46,7 @@ namespace Teleopti.Ccc.Win.PerformanceManager
             if (StateHolderReader.Instance.StateReader.SessionScopeData.AuthenticationTypeOption == AuthenticationTypeOption.Windows)
                 forceFormsLogin = "false";
 
-            var bUnitID = ((ITeleoptiIdentity)TeleoptiPrincipal.Current.Identity).BusinessUnit.Id.ToString();
+            var bUnitID = ((ITeleoptiIdentity)TeleoptiPrincipal.CurrentPrincipal.Identity).BusinessUnit.Id.ToString();
 
             var proc = new Process {EnableRaisingEvents = false, StartInfo = {FileName = "iexplore.exe"}};
 

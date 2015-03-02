@@ -124,7 +124,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
 
 		private void setCorrectPermissionsOnUser(IUnitOfWorkFactory unitOfWorkFactory)
 		{
-			var person = TeleoptiPrincipal.Current.GetPerson(_repositoryFactory.CreatePersonRepository(unitOfWorkFactory.CurrentUnitOfWork()));
+			var person = TeleoptiPrincipal.CurrentPrincipal.GetPerson(_repositoryFactory.CreatePersonRepository(unitOfWorkFactory.CurrentUnitOfWork()));
 			foreach (var applicationRole in person.PermissionInformation.ApplicationRoleCollection)
 			{
 				var cachedClaim = _claimCache.Get(AuthenticationMessageHeader.DataSource, applicationRole.Id.GetValueOrDefault());
@@ -133,7 +133,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
 					cachedClaim = _roleToClaimSetTransformer.Transform(applicationRole, unitOfWorkFactory);
 					_claimCache.Add(cachedClaim, AuthenticationMessageHeader.DataSource, applicationRole.Id.GetValueOrDefault());
 				}
-				TeleoptiPrincipal.Current.AddClaimSet(cachedClaim);
+				TeleoptiPrincipal.CurrentPrincipal.AddClaimSet(cachedClaim);
 			}
 		}
 

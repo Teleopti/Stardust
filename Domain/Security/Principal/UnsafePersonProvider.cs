@@ -6,7 +6,7 @@ namespace Teleopti.Ccc.Domain.Security.Principal
 	{
 		public IPerson CurrentUser()
 		{
-			return ((IUnsafePerson) TeleoptiPrincipal.Current).Person;
+			return ((IUnsafePerson) TeleoptiPrincipal.CurrentPrincipal).Person;
 		}
 	}
 }

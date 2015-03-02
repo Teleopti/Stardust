@@ -59,7 +59,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Rules
                 if ((sumWorkTime >= minTimePerWeekMinutes) || missingSchedule) continue;
                 var sumWorkTimeString = DateHelper.HourMinutesString(sumWorkTime);
                 var minTimePerWeekString = DateHelper.HourMinutesString(minTimePerWeekMinutes);
-                var message = string.Format(TeleoptiPrincipal.Current.Regional.Culture, UserTexts.Resources.BusinessRuleMinWeekWorktimeErrorMessage, sumWorkTimeString, minTimePerWeekString);
+                var message = string.Format(TeleoptiPrincipal.CurrentPrincipal.Regional.Culture, UserTexts.Resources.BusinessRuleMinWeekWorktimeErrorMessage, sumWorkTimeString, minTimePerWeekString);
                 foreach (var dateOnly in personWeek.Week.DayCollection())
                 {
                     var response = createResponse(person, dateOnly, message, typeof(MinWeekWorkTimeRule));

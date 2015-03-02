@@ -221,7 +221,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 		{
 			var businessUnitRepository = new BusinessUnitRepository(uow);
 			businessUnitRepository.Get(
-				((ITeleoptiIdentity)TeleoptiPrincipal.Current.Identity).BusinessUnit.Id.GetValueOrDefault());
+				((ITeleoptiIdentity)TeleoptiPrincipal.CurrentPrincipal.Identity).BusinessUnit.Id.GetValueOrDefault());
 			using (uow.DisableFilter(QueryFilter.Deleted))
 			{
 				new SiteRepository(uow).LoadAll();

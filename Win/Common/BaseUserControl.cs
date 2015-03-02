@@ -94,7 +94,7 @@ namespace Teleopti.Ccc.Win.Common
                 {
                     return CultureInfo.CurrentUICulture;
                 }
-                return TeleoptiPrincipal.Current.Regional.UICulture;
+                return TeleoptiPrincipal.CurrentPrincipal.Regional.UICulture;
             }
         }
     }

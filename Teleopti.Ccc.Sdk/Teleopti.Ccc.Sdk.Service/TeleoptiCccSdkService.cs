@@ -287,7 +287,7 @@ namespace Teleopti.Ccc.Sdk.WcfService
 		{
 			using (IUnitOfWork unitOfWork = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
 			{
-                IPerson currentPerson = TeleoptiPrincipal.Current.GetPerson(new PersonRepository(unitOfWork));
+                IPerson currentPerson = TeleoptiPrincipal.CurrentPrincipal.GetPerson(new PersonRepository(unitOfWork));
 			
                 return _factoryProvider.CreatePersonAssembler().DomainEntityToDto(currentPerson);
 			}
@@ -330,7 +330,7 @@ namespace Teleopti.Ccc.Sdk.WcfService
 		/// <returns>A collection of <see cref="PayrollFormatDto"/>.</returns>
         public ICollection<PayrollFormatDto> GetPayrollFormats()
 		{
-			var dataSource = ((TeleoptiIdentity) TeleoptiPrincipal.Current.Identity).DataSource.DataSourceName;
+			var dataSource = ((TeleoptiIdentity) TeleoptiPrincipal.CurrentPrincipal.Identity).DataSource.DataSourceName;
             var formatter = new PayrollFormatHandler(Path.GetFullPath(AppDomain.CurrentDomain.BaseDirectory));
 		    return formatter.Load(dataSource);
 		}
@@ -1167,7 +1167,7 @@ namespace Teleopti.Ccc.Sdk.WcfService
 			var repositoryFactory = new RepositoryFactory();
 			using (IUnitOfWork uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
 			{
-                var person = TeleoptiPrincipal.Current.GetPerson(repositoryFactory.CreatePersonRepository(uow));
+                var person = TeleoptiPrincipal.CurrentPrincipal.GetPerson(repositoryFactory.CreatePersonRepository(uow));
                 var extendedPreferenceTemplateRepository = repositoryFactory.CreateExtendedPreferenceTemplateRepository(uow);
 
 				var assembler =  new ExtendedPreferenceTemplateAssembler(person,
@@ -1450,7 +1450,7 @@ namespace Teleopti.Ccc.Sdk.WcfService
                 var factory = _factoryProvider.CreatePersonRequestFactory(inner);
                 using (IUnitOfWork unitOfWork = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
                 {
-                    var person = TeleoptiPrincipal.Current.GetPerson(new PersonRepository(unitOfWork));
+                    var person = TeleoptiPrincipal.CurrentPrincipal.GetPerson(new PersonRepository(unitOfWork));
                     personRequest = factory.AcceptShiftTradeRequest(personRequest, unitOfWork, person);
                 }
                 using (UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
@@ -1709,7 +1709,7 @@ namespace Teleopti.Ccc.Sdk.WcfService
 		{
             using (IUnitOfWork unitOfWork = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
             {
-                IPerson person = TeleoptiPrincipal.Current.GetPerson(new PersonRepository(unitOfWork));
+                IPerson person = TeleoptiPrincipal.CurrentPrincipal.GetPerson(new PersonRepository(unitOfWork));
                 DateTime localTime = GetPersonLocalTime(utcDate, person);
                 DateOnly localDate = new DateOnly(localTime);
                 ITeam loggedOnPersonsTeam = person.MyTeam(localDate);
@@ -1929,7 +1929,7 @@ namespace Teleopti.Ccc.Sdk.WcfService
 				new List<ApplicationFunctionDto>();
 			List<IApplicationFunction> afUnionCollection = new List<IApplicationFunction>();
 
-			if (((IUnsafePerson)TeleoptiPrincipal.Current).Person.Id == person.Id.GetValueOrDefault(Guid.Empty))
+			if (((IUnsafePerson)TeleoptiPrincipal.CurrentPrincipal).Person.Id == person.Id.GetValueOrDefault(Guid.Empty))
 			{
 				afUnionCollection.AddRange(PrincipalAuthorization.Instance().GrantedFunctions());
 			}
@@ -1996,7 +1996,7 @@ namespace Teleopti.Ccc.Sdk.WcfService
 					// Remove logged person
 					if (excludeLoggedOnPerson)
 					{
-						memberList.Remove(TeleoptiPrincipal.Current.GetPerson(personRep));
+						memberList.Remove(TeleoptiPrincipal.CurrentPrincipal.GetPerson(personRep));
 					}
 
                     var personAssembler = _factoryProvider.CreatePersonAssembler();

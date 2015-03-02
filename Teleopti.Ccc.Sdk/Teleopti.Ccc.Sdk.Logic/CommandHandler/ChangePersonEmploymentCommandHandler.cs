@@ -165,7 +165,7 @@ namespace Teleopti.Ccc.Sdk.Logic.CommandHandler
 
         private void checkBusinessUnitConsistency(IBelongsToBusinessUnit belongsToBusinessUnit)
         {
-            var currentBusinessUnit = ((TeleoptiIdentity) TeleoptiPrincipal.Current.Identity).BusinessUnit.Id.GetValueOrDefault();
+            var currentBusinessUnit = ((TeleoptiIdentity) TeleoptiPrincipal.CurrentPrincipal.Identity).BusinessUnit.Id.GetValueOrDefault();
             if (belongsToBusinessUnit.BusinessUnit != null && currentBusinessUnit != belongsToBusinessUnit.BusinessUnit.Id.GetValueOrDefault())
             {
                 throw new FaultException(

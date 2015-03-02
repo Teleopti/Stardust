@@ -140,7 +140,7 @@ namespace Teleopti.Ccc.SmartParts.Forecasting
 
 				 string updatedOn = string.Empty;
 				 if (workloadDetail.LastUpdate.HasValue && StateHolderReader.IsInitialized && StateHolderReader.Instance.StateReader.IsLoggedIn)
-					 updatedOn = workloadDetail.LastUpdate.Value.ToString(DateFormat, TeleoptiPrincipal.Current.Regional.Culture);
+					 updatedOn = workloadDetail.LastUpdate.Value.ToString(DateFormat, TeleoptiPrincipal.CurrentPrincipal.Regional.Culture);
 				 
 				 string updatedBy = string.Empty;
 				 if (workloadDetail.Name.HasValue) updatedBy = workloadDetail.Name.Value.ToString();

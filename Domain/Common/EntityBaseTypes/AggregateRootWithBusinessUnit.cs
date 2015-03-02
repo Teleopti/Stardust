@@ -13,7 +13,7 @@ namespace Teleopti.Ccc.Domain.Common.EntityBaseTypes
             get
             {
                 if (_businessUnit == null)
-                    _businessUnit = ((ITeleoptiIdentity)TeleoptiPrincipal.Current.Identity).BusinessUnit;
+                    _businessUnit = ((ITeleoptiIdentity)TeleoptiPrincipal.CurrentPrincipal.Identity).BusinessUnit;
                 return _businessUnit;
             }
 			protected set { _businessUnit = value; }
@@ -27,7 +27,7 @@ namespace Teleopti.Ccc.Domain.Common.EntityBaseTypes
 
 		public virtual IBusinessUnit BusinessUnit
 		{
-			get { return _businessUnit ?? (_businessUnit = ((ITeleoptiIdentity) TeleoptiPrincipal.Current.Identity).BusinessUnit); }
+			get { return _businessUnit ?? (_businessUnit = ((ITeleoptiIdentity) TeleoptiPrincipal.CurrentPrincipal.Identity).BusinessUnit); }
 			protected set { _businessUnit = value; }
 		}
 	}

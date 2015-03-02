@@ -31,7 +31,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Forecast
             _feedback.Info(stepMessage);
             _feedback.ReportProgress(0, stepMessage);
 
-            var identity = ((ITeleoptiIdentity)TeleoptiPrincipal.Current.Identity);
+            var identity = ((ITeleoptiIdentity)TeleoptiPrincipal.CurrentPrincipal.Identity);
             var listOfMessages =
                 generateMessages(
                     new OpenAndSplitTargetSkill

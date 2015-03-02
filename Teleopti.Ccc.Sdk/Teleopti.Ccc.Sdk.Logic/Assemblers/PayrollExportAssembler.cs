@@ -71,7 +71,7 @@ namespace Teleopti.Ccc.Sdk.Logic.Assemblers
 
                 payrollExport = new PayrollExport();
                 payrollExport.SetId(dto.Id);
-                SetCreatedBy(payrollExport, TeleoptiPrincipal.Current.GetPerson(_personRepository));
+                SetCreatedBy(payrollExport, TeleoptiPrincipal.CurrentPrincipal.GetPerson(_personRepository));
                 payrollExport.AddPersons(allPersonsForPayrollExport);
             }
             if (payrollExport == null) return null;

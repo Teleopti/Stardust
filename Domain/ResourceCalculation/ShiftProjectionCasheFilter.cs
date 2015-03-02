@@ -18,7 +18,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 
         public ShiftProjectionCacheFilter(ILongestPeriodForAssignmentCalculator rules, IPersonalShiftAndMeetingFilter personalShiftAndMeetingFilter)
         {
-	        _culture = TeleoptiPrincipal.Current.Regional.Culture;
+	        _culture = TeleoptiPrincipal.CurrentPrincipal.Regional.Culture;
         	_rules = rules;
 	        _personalShiftAndMeetingFilter = personalShiftAndMeetingFilter;
         }

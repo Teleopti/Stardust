@@ -39,12 +39,12 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 
         public Color DisplayColor()
         {
-			return Payload.ConfidentialDisplayColor(Person, new DateOnly(Period.StartDateTimeLocal(TeleoptiPrincipal.Current.Regional.TimeZone)));
+			return Payload.ConfidentialDisplayColor(Person, new DateOnly(Period.StartDateTimeLocal(TeleoptiPrincipal.CurrentPrincipal.Regional.TimeZone)));
         }
 
         public Description DisplayDescription()
         {
-			return Payload.ConfidentialDescription(Person, new DateOnly(Period.StartDateTimeLocal(TeleoptiPrincipal.Current.Regional.TimeZone)));
+			return Payload.ConfidentialDescription(Person, new DateOnly(Period.StartDateTimeLocal(TeleoptiPrincipal.CurrentPrincipal.Regional.TimeZone)));
         }
 
         internal TimeSpan ThisLayerContractTime()

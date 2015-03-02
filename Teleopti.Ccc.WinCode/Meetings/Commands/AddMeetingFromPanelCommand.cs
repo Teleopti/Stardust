@@ -57,7 +57,7 @@ namespace Teleopti.Ccc.WinCode.Meetings.Commands
 
                     IScenario defaultScenario = _repositoryFactory.CreateScenarioRepository(unitOfWork).LoadDefaultScenario();
                     var rep = _repositoryFactory.CreatePersonRepository(unitOfWork);
-                    IPerson organizer = TeleoptiPrincipal.Current.GetPerson(rep);
+                    IPerson organizer = TeleoptiPrincipal.CurrentPrincipal.GetPerson(rep);
 
                     ISettingDataRepository settingDataRepository =
                             _repositoryFactory.CreateGlobalSettingDataRepository(unitOfWork);
@@ -91,7 +91,7 @@ namespace Teleopti.Ccc.WinCode.Meetings.Commands
 
         private static bool isPermittedToViewSchedules()
         {
-            IPerson person = ((IUnsafePerson)TeleoptiPrincipal.Current).Person;
+            IPerson person = ((IUnsafePerson)TeleoptiPrincipal.CurrentPrincipal).Person;
             ITeam rightClickedPersonsTeam = person.MyTeam(DateOnly.Today);
             if (PrincipalAuthorization.Instance().IsPermitted(DefinedRaptorApplicationFunctionPaths.ViewSchedules, DateOnly.Today, rightClickedPersonsTeam))
             {

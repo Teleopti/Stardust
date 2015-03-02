@@ -45,7 +45,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
             Expect.Call(_resultHolder.PersonsInOrganization).Return(persons);
             _mocks.ReplayAll();
             _stateHolder = new SchedulerStateHolder(ScenarioFactory.CreateScenarioAggregate(), new DateOnlyPeriodAsDateTimePeriod(new DateOnlyPeriod(),
-				TeleoptiPrincipal.Current.Regional.TimeZone), new List<IPerson> { _person1, _person2 }, new DisableDeletedFilter(new FixedCurrentUnitOfWork(_uow)), _resultHolder);
+				TeleoptiPrincipal.CurrentPrincipal.Regional.TimeZone), new List<IPerson> { _person1, _person2 }, new DisableDeletedFilter(new FixedCurrentUnitOfWork(_uow)), _resultHolder);
 			_target = new GroupScheduleGroupPageDataProvider(_stateHolder, _repositoryFactory, _unitOfWorkFactory);
             _mocks.BackToRecordAll();
 		}
@@ -58,7 +58,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 				
 			}
 
-            var expected = ((ITeleoptiIdentity)TeleoptiPrincipal.Current.Identity).BusinessUnit;
+            var expected = ((ITeleoptiIdentity)TeleoptiPrincipal.CurrentPrincipal.Identity).BusinessUnit;
 
 			using (_mocks.Playback())
 			{

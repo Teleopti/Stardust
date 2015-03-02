@@ -38,7 +38,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 
             return Session.CreateCriteria(typeof(PersonalSettingData))
                         .Add(Restrictions.Eq("Key", key))
-                        .Add(Restrictions.Eq("OwnerPerson", TeleoptiPrincipal.Current.GetPerson(new PersonRepository(UnitOfWork))))
+                        .Add(Restrictions.Eq("OwnerPerson", TeleoptiPrincipal.CurrentPrincipal.GetPerson(new PersonRepository(UnitOfWork))))
                         .SetCacheable(true)
                         .UniqueResult<ISettingData>();
         }
@@ -60,7 +60,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
         {
             ISettingData data = FindByKey(key)
                    ?? new GlobalSettingDataRepository(UnitOfWork).FindByKey(key)
-                   ?? new PersonalSettingData(key, TeleoptiPrincipal.Current.GetPerson(new PersonRepository(UnitOfWork)));
+                   ?? new PersonalSettingData(key, TeleoptiPrincipal.CurrentPrincipal.GetPerson(new PersonRepository(UnitOfWork)));
             return data.GetValue(defaultValue);
         }
     }

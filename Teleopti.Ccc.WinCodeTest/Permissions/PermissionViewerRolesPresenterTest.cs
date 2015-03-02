@@ -106,7 +106,7 @@ namespace Teleopti.Ccc.WinCodeTest.Permissions
             deletedTeam.SetDeleted();
             site.AddTeam(new Team());
             site.AddTeam(deletedTeam);
-            IBusinessUnit bu = ((ITeleoptiIdentity)TeleoptiPrincipal.Current.Identity).BusinessUnit;
+            IBusinessUnit bu = ((ITeleoptiIdentity)TeleoptiPrincipal.CurrentPrincipal.Identity).BusinessUnit;
             bu.AddSite(site);
             bu.AddSite(deletedSite);
             Expect.Call(_loadPersonsCommand.Execute);

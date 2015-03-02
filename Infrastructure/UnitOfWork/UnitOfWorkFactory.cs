@@ -13,11 +13,11 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 		{
 			get
 			{
-				if (TeleoptiPrincipal.Current == null)
+				if (TeleoptiPrincipal.CurrentPrincipal == null)
 				{
 					return null;
 				}
-				var identity = ((ITeleoptiIdentity)TeleoptiPrincipal.Current.Identity);
+				var identity = ((ITeleoptiIdentity)TeleoptiPrincipal.CurrentPrincipal.Identity);
 				return identity.DataSource.Application;
 			}
 		}

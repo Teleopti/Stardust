@@ -92,7 +92,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 				return false;
 			if (original.LayerCollection.Count != current.LayerCollection.Count)
 				return false;
-			var timeZone = TeleoptiPrincipal.Current.Regional.TimeZone;
+			var timeZone = TeleoptiPrincipal.CurrentPrincipal.Regional.TimeZone;
 			for (int layerIndex = 0; layerIndex < original.LayerCollection.Count; layerIndex++)
 			{
 				ILayer<IActivity> originalLayer = original.LayerCollection[layerIndex];

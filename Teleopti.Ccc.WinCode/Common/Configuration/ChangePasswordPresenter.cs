@@ -30,7 +30,7 @@ namespace Teleopti.Ccc.WinCode.Common.Configuration
             using (IUnitOfWork unitOfWork = _unitOfWorkFactory.CreateAndOpenUnitOfWork())
             {
                 IPersonRepository personRepository = _repositoryFactory.CreatePersonRepository(unitOfWork);
-                IPerson person = TeleoptiPrincipal.Current.GetPerson(personRepository);
+                IPerson person = TeleoptiPrincipal.CurrentPrincipal.GetPerson(personRepository);
                 Model = new ChangePasswordModel
                             {OldEncryptedPassword = person.ApplicationAuthenticationInfo.Password};
             }
@@ -47,7 +47,7 @@ namespace Teleopti.Ccc.WinCode.Common.Configuration
             using (IUnitOfWork unitOfWork = _unitOfWorkFactory.CreateAndOpenUnitOfWork())
             {
                 IPersonRepository personRepository = _repositoryFactory.CreatePersonRepository(unitOfWork);
-                IPerson person = TeleoptiPrincipal.Current.GetPerson(personRepository);
+                IPerson person = TeleoptiPrincipal.CurrentPrincipal.GetPerson(personRepository);
                 IUserDetailRepository userDetailRepository = _repositoryFactory.CreateUserDetailRepository(unitOfWork);
                 IUserDetail userDetail = userDetailRepository.FindByUser(person);
                 bool result = person.ChangePassword(Model.NewPassword,
@@ -58,7 +58,7 @@ namespace Teleopti.Ccc.WinCode.Common.Configuration
                     _view.ShowValidationError();
                     return;
                 }
-                ((IUnsafePerson)TeleoptiPrincipal.Current).Person.ApplicationAuthenticationInfo.Password = Model.NewPassword;
+                ((IUnsafePerson)TeleoptiPrincipal.CurrentPrincipal).Person.ApplicationAuthenticationInfo.Password = Model.NewPassword;
                 unitOfWork.PersistAll();
             }
             _view.Close();

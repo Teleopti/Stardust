@@ -33,8 +33,8 @@ namespace Teleopti.Ccc.Win.Meetings
 			dateTimePickerAdvStartDate.SetSafeBoundary();
 			dateTimePickerAdvEndDate.SetSafeBoundary();
 			
-			dateTimePickerAdvStartDate.SetCultureInfoSafe(TeleoptiPrincipal.Current.Regional.Culture);
-			dateTimePickerAdvEndDate.SetCultureInfoSafe(TeleoptiPrincipal.Current.Regional.Culture);
+			dateTimePickerAdvStartDate.SetCultureInfoSafe(TeleoptiPrincipal.CurrentPrincipal.Regional.Culture);
+			dateTimePickerAdvEndDate.SetCultureInfoSafe(TeleoptiPrincipal.CurrentPrincipal.Regional.Culture);
 
 			dateTimePickerAdvStartDate.ValueChanged += dateTimePickerAdvStartDateValueChanged;
 		}

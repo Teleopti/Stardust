@@ -93,7 +93,7 @@ namespace Teleopti.Ccc.Win.Common.Controls
 			}
 
 			staffings.Sort();
-			CultureInfo culture = TeleoptiPrincipal.Current.Regional.Culture;
+			CultureInfo culture = TeleoptiPrincipal.CurrentPrincipal.Regional.Culture;
 			for (int i = 0; i < rowCount; i++)
 			{
 				if (i < staffings.Count)

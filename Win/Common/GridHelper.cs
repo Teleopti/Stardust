@@ -119,7 +119,7 @@ namespace Teleopti.Ccc.Win.Common
         public static void ModifySelectionInput(GridControl grid, IList<double> list)
         {
             GridRangeInfoList rangelist;
-            var culture = TeleoptiPrincipal.Current.Regional.Culture;
+            var culture = TeleoptiPrincipal.CurrentPrincipal.Regional.Culture;
             if (grid.Selections.GetSelectedRanges(out rangelist, true))
             {
                 int top;

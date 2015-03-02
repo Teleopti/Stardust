@@ -53,7 +53,7 @@ namespace Teleopti.Ccc.Infrastructure.Rta
 
 	    private IUnitOfWorkFactory StatisticUnitOfWorkFactory()
         {
-            var identity = ((ITeleoptiIdentity)TeleoptiPrincipal.Current.Identity);
+            var identity = ((ITeleoptiIdentity)TeleoptiPrincipal.CurrentPrincipal.Identity);
             return identity.DataSource.Statistic;
         }
     }

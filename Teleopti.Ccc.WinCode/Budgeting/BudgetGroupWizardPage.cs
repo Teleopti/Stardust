@@ -24,7 +24,7 @@ namespace Teleopti.Ccc.WinCode.Budgeting
             IBudgetGroup budgetGroup = new BudgetGroup();
             budgetGroup.Name = UserTexts.Resources.LessThanBudgetGroupNameGreaterThan;
             budgetGroup.TrySetDaysPerYear(365);
-            budgetGroup.TimeZone = TeleoptiPrincipal.Current.Regional.TimeZone;
+            budgetGroup.TimeZone = TeleoptiPrincipal.CurrentPrincipal.Regional.TimeZone;
 
             return budgetGroup;
         }

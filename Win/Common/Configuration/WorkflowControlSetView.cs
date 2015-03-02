@@ -48,9 +48,9 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 			_presenter = new WorkflowControlSetPresenter(this, UnitOfWorkFactory.Current, new RepositoryFactory(), toggleManager);
 			GridStyleInfoStore.CellValueProperty.IsCloneable = false;
 			dateTimePickerAdvPublishedTo.NullString = Resources.NotPublished;
-			dateOnlyPeriodsVisualizer1.Culture = TeleoptiPrincipal.Current.Regional.UICulture;
+			dateOnlyPeriodsVisualizer1.Culture = TeleoptiPrincipal.CurrentPrincipal.Regional.UICulture;
 			timeSpanTextBox1.TimeSpanBoxWidth = timeSpanTextBox1.Width;
-			dateTimePickerAdvViewpoint.SetCultureInfoSafe(TeleoptiPrincipal.Current.Regional.Culture);
+			dateTimePickerAdvViewpoint.SetCultureInfoSafe(TeleoptiPrincipal.CurrentPrincipal.Regional.Culture);
 
 			if (toggleManager.IsEnabled(Toggles.Scheduler_HidePointsFairnessSystem_28317))
 			{
@@ -790,7 +790,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 		{
 			if (_presenter.SelectedModel == null) return;
 
-			var culture = TeleoptiPrincipal.Current.Regional.Culture;
+			var culture = TeleoptiPrincipal.CurrentPrincipal.Regional.Culture;
 			string text = string.Format(
 				culture,
 				Resources.AreYouSureYouWantToDeleteItem,

@@ -148,7 +148,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.AgentRestrictions
 				_detailData.Add(0, _preferenceCellData);
 				var e = new GridQueryCellInfoEventArgs(0, 1, _info);
 				_presenter.QueryCellInfo(null, e);
-				var expectedDay = TeleoptiPrincipal.Current.Regional.Culture.DateTimeFormat.GetDayName(TeleoptiPrincipal.Current.Regional.Culture.Calendar.GetDayOfWeek(new DateOnly(2012, 1, 1)));
+				var expectedDay = TeleoptiPrincipal.CurrentPrincipal.Regional.Culture.DateTimeFormat.GetDayName(TeleoptiPrincipal.CurrentPrincipal.Regional.Culture.Calendar.GetDayOfWeek(new DateOnly(2012, 1, 1)));
 				//because of constructor in SchedulePresenterBase
 				var period = _schedulerStateHolder.RequestedPeriod;
 				Assert.AreEqual(expectedDay, e.Style.CellValue.ToString());

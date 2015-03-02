@@ -31,7 +31,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 			if (_schedulerStateHolder.LoadedPeriod != null)
 			{
 				IList<DateOnly> dates =
-					_schedulerStateHolder.LoadedPeriod.Value.ToDateOnlyPeriod(TeleoptiPrincipal.Current.Regional.TimeZone).
+					_schedulerStateHolder.LoadedPeriod.Value.ToDateOnlyPeriod(TeleoptiPrincipal.CurrentPrincipal.Regional.TimeZone).
 						DayCollection();
 				_groupPagePerDateHolder.GroupPersonGroupPagePerDate =
 					_groupPageCreator.CreateGroupPagePerDate(dates,

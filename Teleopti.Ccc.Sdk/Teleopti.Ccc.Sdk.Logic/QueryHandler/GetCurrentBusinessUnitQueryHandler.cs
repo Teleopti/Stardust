@@ -9,7 +9,7 @@ namespace Teleopti.Ccc.Sdk.Logic.QueryHandler
     {
         public ICollection<BusinessUnitDto> Handle(GetCurrentBusinessUnitQueryDto query)
         {
-            var currentBusinessUnit = ((ITeleoptiIdentity) TeleoptiPrincipal.Current.Identity).BusinessUnit;
+            var currentBusinessUnit = ((ITeleoptiIdentity) TeleoptiPrincipal.CurrentPrincipal.Identity).BusinessUnit;
             return new[] {new BusinessUnitDto{Id = currentBusinessUnit.Id,Name = currentBusinessUnit.Name}};
         }
     }

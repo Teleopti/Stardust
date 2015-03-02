@@ -36,7 +36,7 @@ namespace Teleopti.Ccc.Sdk.WcfService.Factory
 			var message = new RunPayrollExport
 							  {
 								  PayrollExportId = payrollExport.Id.GetValueOrDefault(Guid.Empty),
-								  OwnerPersonId = ((IUnsafePerson)TeleoptiPrincipal.Current).Person.Id.GetValueOrDefault(Guid.Empty),
+								  OwnerPersonId = ((IUnsafePerson)TeleoptiPrincipal.CurrentPrincipal).Person.Id.GetValueOrDefault(Guid.Empty),
 								  ExportPeriod = new DateOnlyPeriod(new DateOnly(payrollExport.DatePeriod.StartDate.DateTime), new DateOnly(payrollExport.DatePeriod.EndDate.DateTime)),
 								  PayrollExportFormatId = payrollExport.PayrollFormat.FormatId,
 								  PayrollResultId = payrollResultId
@@ -61,7 +61,7 @@ namespace Teleopti.Ccc.Sdk.WcfService.Factory
 		{
 			using (var unitOfWork = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
 			{
-				var exportingPersonDomain = TeleoptiPrincipal.Current.GetPerson(_personRepository);
+				var exportingPersonDomain = TeleoptiPrincipal.CurrentPrincipal.GetPerson(_personRepository);
 				var payrollExportDomain = _payrollExportRepository.Get(payrollExport.Id.GetValueOrDefault(Guid.Empty));
 
 				var payrollResult = GetPayrollResult(payrollExportDomain, exportingPersonDomain, DateTime.UtcNow);

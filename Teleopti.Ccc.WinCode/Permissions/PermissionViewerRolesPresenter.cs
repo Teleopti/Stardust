@@ -153,7 +153,7 @@ namespace Teleopti.Ccc.WinCode.Permissions
                 dataNodes.Add(dataNode);
             }
         
-            IBusinessUnit bu = ((ITeleoptiIdentity)TeleoptiPrincipal.Current.Identity).BusinessUnit;
+            IBusinessUnit bu = ((ITeleoptiIdentity)TeleoptiPrincipal.CurrentPrincipal.Identity).BusinessUnit;
 
             var buNode = new TreeNodeAdv
             {

@@ -105,7 +105,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Rules
 										IList<DateOnly> datesWithCategory;
 										if (_limitationChecker.IsShiftCategoryOverWeekLimit(shiftCategoryLimitation, schedule, personWeek.Week, out datesWithCategory))
 										{
-											string message = string.Format(TeleoptiPrincipal.Current.Regional.Culture,
+											string message = string.Format(TeleoptiPrincipal.CurrentPrincipal.Regional.Culture,
 											                               Resources.BusinessRuleShiftCategoryLimitationErrorMessage,
 											                               shiftCategoryLimitation.ShiftCategory.Description.Name);
 											foreach (DateOnly dateOnly in datesWithCategory)

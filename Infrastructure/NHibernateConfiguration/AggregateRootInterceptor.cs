@@ -212,7 +212,7 @@ namespace Teleopti.Ccc.Infrastructure.NHibernateConfiguration
 			{
 				var nu = DateTime.UtcNow;
 				var props = propertyIndexesForInsert(propertyNames);
-				state[props[createdByPropertyName]] = ((IUnsafePerson) TeleoptiPrincipal.Current).Person;
+				state[props[createdByPropertyName]] = ((IUnsafePerson) TeleoptiPrincipal.CurrentPrincipal).Person;
 				state[props[createdOnPropertyName]] = nu;
 				return true;
 			}
@@ -240,7 +240,7 @@ namespace Teleopti.Ccc.Infrastructure.NHibernateConfiguration
 			{
 				var nu = DateTime.UtcNow;
 				var props = propertyIndexesForUpdate(propertyNames);
-				currentState[props[updatedByPropertyName]] = ((IUnsafePerson)TeleoptiPrincipal.Current).Person;
+				currentState[props[updatedByPropertyName]] = ((IUnsafePerson)TeleoptiPrincipal.CurrentPrincipal).Person;
 				currentState[props[updatedOnPropertyName]] = nu;
 				return true;
 			}

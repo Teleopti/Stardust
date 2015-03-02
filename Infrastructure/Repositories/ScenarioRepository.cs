@@ -80,7 +80,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
                  .UniqueResult<IScenario>();
 			if (defaultScenario == null)
 			{
-				var identity = (ITeleoptiIdentity) TeleoptiPrincipal.Current.Identity;
+				var identity = (ITeleoptiIdentity) TeleoptiPrincipal.CurrentPrincipal.Identity;
 				var bu = identity.BusinessUnit;
 				throw new DataSourceException(string.Format(CultureInfo.CurrentCulture, "Business unit '{0}' has no default scenario", bu.Name));
 			}

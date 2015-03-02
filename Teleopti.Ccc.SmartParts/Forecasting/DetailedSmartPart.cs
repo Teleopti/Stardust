@@ -177,7 +177,7 @@ namespace Teleopti.Ccc.SmartParts.Forecasting
             {
                 string lastUpdated = string.Empty;
                 if (_lastUpdatedByText.LastUpdate.HasValue && StateHolderReader.IsInitialized && StateHolderReader.Instance.StateReader.IsLoggedIn)
-                    lastUpdated = _lastUpdatedByText.LastUpdate.Value.ToString(DateFormat, TeleoptiPrincipal.Current.Regional.Culture);
+                    lastUpdated = _lastUpdatedByText.LastUpdate.Value.ToString(DateFormat, TeleoptiPrincipal.CurrentPrincipal.Regional.Culture);
 
                 labelLastUpdated.Text = string.Format(CultureInfo.CurrentCulture, "{0}: {1}", UserTexts.Resources.LastUpdated, lastUpdated);
                 labelChangedBy.Text = string.Format(CultureInfo.CurrentCulture, "{0}: {1}", UserTexts.Resources.ChangedBy,

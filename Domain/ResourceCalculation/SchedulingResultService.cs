@@ -61,7 +61,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 			if (_allSkills.Count == 0)
 				return _relevantSkillStaffPeriods;
 
-			var period = periodToRecalculate.ToDateOnlyPeriod(TeleoptiPrincipal.Current.Regional.TimeZone);
+			var period = periodToRecalculate.ToDateOnlyPeriod(TeleoptiPrincipal.CurrentPrincipal.Regional.TimeZone);
 			var datePeriod = new DateOnlyPeriod(period.StartDate.AddDays(-1), period.EndDate.AddDays(1));
 			IAffectedPersonSkillService personSkillService = new AffectedPersonSkillService(datePeriod, _allSkills);
 

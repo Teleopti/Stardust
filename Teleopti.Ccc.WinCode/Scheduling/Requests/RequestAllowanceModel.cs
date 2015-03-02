@@ -97,7 +97,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling.Requests
 
         private void calculateVisibleWeek()
         {
-            VisibleWeek = DateHelper.GetWeekPeriod(SelectedDate, TeleoptiPrincipal.Current.Regional.Culture);
+            VisibleWeek = DateHelper.GetWeekPeriod(SelectedDate, TeleoptiPrincipal.CurrentPrincipal.Regional.Culture);
         }
 
         private void initializeSelectedBudgetGroup(IBudgetGroup budgetGroup)

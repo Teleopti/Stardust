@@ -19,7 +19,7 @@ namespace Teleopti.Ccc.Sdk.Logic.CommandHandler
 
 		public void Handle(RecalculateForecastOnSkillCollectionCommandDto command)
 		{
-			var principal = TeleoptiPrincipal.Current;
+			var principal = TeleoptiPrincipal.CurrentPrincipal;
 			var person = ((IUnsafePerson)principal).Person;
 			var message = new RecalculateForecastOnSkillMessageCollection
 				{

@@ -26,7 +26,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Denormalizer
 		{
 			using (var unitOfWork = _unitOfWorkFactory.LoggedOnUnitOfWorkFactory().CreateAndOpenUnitOfWork())
 			{
-				var messages = _denormalizerQueueRepository.DequeueDenormalizerMessages(((ITeleoptiIdentity)TeleoptiPrincipal.Current.Identity).BusinessUnit);
+				var messages = _denormalizerQueueRepository.DequeueDenormalizerMessages(((ITeleoptiIdentity)TeleoptiPrincipal.CurrentPrincipal.Identity).BusinessUnit);
 				var messagelist = messages.Select(m => SerializationHelper.Deserialize(Type.GetType(m.Type, true, true), m.Message));
 				foreach (var m in messagelist)
 				{

@@ -12,7 +12,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Rules
     public class NewDayOffRule : INewDayOffRule
     {
     	private readonly IWorkTimeStartEndExtractor _workTimeStartEndExtractor;
-    	private readonly CultureInfo _loggedOnCulture = TeleoptiPrincipal.Current.Regional.Culture;
+    	private readonly CultureInfo _loggedOnCulture = TeleoptiPrincipal.CurrentPrincipal.Regional.Culture;
 
         private bool _haltModify = true;
         private string _errorMessage = "";

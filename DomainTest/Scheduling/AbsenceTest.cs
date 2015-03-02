@@ -43,7 +43,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
         {
             target.DisplayColor = Color.Red;
             target.Confidential = true;
-            var loggedOn = ((IUnsafePerson)TeleoptiPrincipal.Current).Person;
+            var loggedOn = ((IUnsafePerson)TeleoptiPrincipal.CurrentPrincipal).Person;
             Assert.AreEqual(target.DisplayColor, target.ConfidentialDisplayColor(loggedOn,DateOnly.Today));
             Assert.AreEqual(target.Description, target.ConfidentialDescription(loggedOn,DateOnly.Today));
         }

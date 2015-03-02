@@ -1098,7 +1098,7 @@ namespace Teleopti.Analytics.Etl.TransformerInfrastructure
 			using (IUnitOfWork uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
 			{
 				var rep = new PersonRequestRepository(uow);
-				uow.Reassociate(((ITeleoptiIdentity)TeleoptiPrincipal.Current.Identity).BusinessUnit);
+				uow.Reassociate(((ITeleoptiIdentity)TeleoptiPrincipal.CurrentPrincipal.Identity).BusinessUnit);
 				uow.Reassociate(person);
 				personRequests = rep.FindPersonRequestUpdatedAfter(lastTime);
 			}
@@ -1111,7 +1111,7 @@ namespace Teleopti.Analytics.Etl.TransformerInfrastructure
             using (IUnitOfWork uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
 			{
 				var rep = new PersonRequestRepository(uow);
-                uow.Reassociate(((ITeleoptiIdentity)TeleoptiPrincipal.Current.Identity).BusinessUnit);
+                uow.Reassociate(((ITeleoptiIdentity)TeleoptiPrincipal.CurrentPrincipal.Identity).BusinessUnit);
 			    personRequests = rep.FindPersonRequestWithinPeriod(period);
 			}
 		    return personRequests;

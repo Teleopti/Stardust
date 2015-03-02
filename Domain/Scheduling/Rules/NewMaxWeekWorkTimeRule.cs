@@ -71,7 +71,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Rules
                     {
                         string sumWorkTimeString = DateHelper.HourMinutesString(sumWorkTime);
                         string maxTimePerWeekString = DateHelper.HourMinutesString(maxTimePerWeekMinutes);
-                        string message = string.Format(TeleoptiPrincipal.Current.Regional.Culture,
+                        string message = string.Format(TeleoptiPrincipal.CurrentPrincipal.Regional.Culture,
                                                 UserTexts.Resources.BusinessRuleMaxWeekWorkTimeErrorMessage,
                                                 sumWorkTimeString,
                                                 maxTimePerWeekString);

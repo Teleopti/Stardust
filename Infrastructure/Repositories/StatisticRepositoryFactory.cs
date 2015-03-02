@@ -28,7 +28,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
         public static IStatisticRepository Create()
         {
 			ITeleoptiIdentity identity = null;
-			var principal = TeleoptiPrincipal.Current;
+			var principal = TeleoptiPrincipal.CurrentPrincipal;
 			if (principal!=null)
 			{
 				identity = principal.Identity as ITeleoptiIdentity;
@@ -42,7 +42,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 		  public static IAnalyticsScheduleRepository CreateAnalytics()
 		  {
 			  ITeleoptiIdentity identity = null;
-			  var principal = TeleoptiPrincipal.Current;
+			  var principal = TeleoptiPrincipal.CurrentPrincipal;
 			  if (principal != null)
 			  {
 				  identity = principal.Identity as ITeleoptiIdentity;

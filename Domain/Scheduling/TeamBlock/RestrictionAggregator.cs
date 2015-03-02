@@ -50,7 +50,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 		    var groupMembers = teamBlockInfo.TeamInfo.GroupMembers;
 		    var matrixList = teamBlockInfo.TeamInfo.MatrixesForGroup().ToList();
 		    var scheduleDictionary = _schedulingResultStateHolder.Schedules;
-		    var timeZone = TeleoptiPrincipal.Current.Regional.TimeZone;
+		    var timeZone = TeleoptiPrincipal.CurrentPrincipal.Regional.TimeZone;
 
 		    IEffectiveRestriction effectiveRestriction = new EffectiveRestriction(new StartTimeLimitation(),
 		                                                                          new EndTimeLimitation(),
@@ -92,7 +92,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 		    if (restriction == null)
 			    return null;
 
-		    var timeZone = TeleoptiPrincipal.Current.Regional.TimeZone;
+		    var timeZone = TeleoptiPrincipal.CurrentPrincipal.Regional.TimeZone;
 		    var matrixes = teamBlockInfo.TeamInfo.MatrixesForMemberAndPeriod(person, teamBlockInfo.BlockInfo.BlockPeriod);
             if (schedulingOptions.UseTeam)
 		    {

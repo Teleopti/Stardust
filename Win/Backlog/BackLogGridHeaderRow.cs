@@ -23,7 +23,7 @@ namespace Teleopti.Ccc.Win.Backlog
 				return;
 
 			cellInfo.Style.CellValue = _model.GetDateStringForIndex(cellInfo.ColIndex);
-			var cultureInfo = TeleoptiPrincipal.Current.Regional.Culture;
+			var cultureInfo = TeleoptiPrincipal.CurrentPrincipal.Regional.Culture;
 			var dayofWeek = cultureInfo.Calendar.GetDayOfWeek(_model.GetDateOnIndex(cellInfo.ColIndex));
 			if (dayofWeek == DayOfWeek.Saturday || dayofWeek == DayOfWeek.Sunday)
 				cellInfo.Style.TextColor = Color.Goldenrod;

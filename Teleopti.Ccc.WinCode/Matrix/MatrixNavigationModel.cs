@@ -227,12 +227,12 @@ namespace Teleopti.Ccc.WinCode.Matrix
 
 		public Guid? BusinessUnitId
 		{
-			get { return ((ITeleoptiIdentity)TeleoptiPrincipal.Current.Identity).BusinessUnit.Id; }
+			get { return ((ITeleoptiIdentity)TeleoptiPrincipal.CurrentPrincipal.Identity).BusinessUnit.Id; }
 		}
 
 		public string DataSourceName
 		{
-			get { return ((ITeleoptiIdentity)TeleoptiPrincipal.Current.Identity).DataSource.DataSourceName; }
+			get { return ((ITeleoptiIdentity)TeleoptiPrincipal.CurrentPrincipal.Identity).DataSource.DataSourceName; }
 		}
 	}
 

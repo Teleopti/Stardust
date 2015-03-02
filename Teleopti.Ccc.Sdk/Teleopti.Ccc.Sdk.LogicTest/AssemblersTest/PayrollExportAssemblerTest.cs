@@ -120,7 +120,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.AssemblersTest
         [Test]
         public void VerifyDtoToDoWithIdListOnly()
         {
-            var principalPerson = ((IUnsafePerson) TeleoptiPrincipal.Current).Person;
+            var principalPerson = ((IUnsafePerson) TeleoptiPrincipal.CurrentPrincipal).Person;
             using (_mocks.Record())
             {
                 Expect.Call(_personRepository.FindAllSortByName()).Return(new List<IPerson>{_person, PersonFactory.CreatePerson()});

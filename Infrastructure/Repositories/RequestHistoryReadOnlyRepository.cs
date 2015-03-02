@@ -82,7 +82,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
         {
             get
             {
-                var timeZone = TeleoptiPrincipal.Current.Regional.TimeZone;
+                var timeZone = TeleoptiPrincipal.CurrentPrincipal.Regional.TimeZone;
                 return TimeZoneHelper.ConvertFromUtc(StartDateTime, timeZone) + Delimiter +
                        TimeZoneHelper.ConvertFromUtc(EndDateTime, timeZone);
             }
@@ -92,7 +92,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
         {
             get
             {
-                var timeZone = TeleoptiPrincipal.Current.Regional.TimeZone;
+                var timeZone = TeleoptiPrincipal.CurrentPrincipal.Regional.TimeZone;
                 return TimeZoneHelper.ConvertFromUtc(StartDateTime, timeZone).ToShortDateString() + Delimiter +
                        TimeZoneHelper.ConvertFromUtc(EndDateTime, timeZone).ToShortDateString();
             }
@@ -102,8 +102,8 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
         {
             get
             {
-                var timeZone = TeleoptiPrincipal.Current.Regional.TimeZone;
-                var culture = TeleoptiPrincipal.Current.Regional.Culture;
+                var timeZone = TeleoptiPrincipal.CurrentPrincipal.Regional.TimeZone;
+                var culture = TeleoptiPrincipal.CurrentPrincipal.Regional.Culture;
                 return TimeZoneHelper.ConvertFromUtc(LastUpdatedDateTime, timeZone).ToString(culture);
             }
         }

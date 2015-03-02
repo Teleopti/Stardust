@@ -80,7 +80,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Rules
 					if (!_personWeekViolatingWeeklyRestSpecification.IsSatisfyBy(currentSchedules, personWeek, weeklyRest))
 					{
 						string weeklyRestString = DateHelper.HourMinutesString(weeklyRest.TotalMinutes);
-						string message = string.Format(TeleoptiPrincipal.Current.Regional.Culture,
+						string message = string.Format(TeleoptiPrincipal.CurrentPrincipal.Regional.Culture,
 							UserTexts.Resources.BusinessRuleWeeklyRestErrorMessage, weeklyRestString);
 						foreach (DateOnly dateOnly in personWeek.Week.DayCollection())
 						{

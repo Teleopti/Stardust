@@ -22,7 +22,7 @@ namespace Teleopti.Ccc.WpfControls.Converters
 			return (DateTime) values[0] <= DateHelper.MinSmallDateTime
 				       ? null
 				       : TimeZoneHelper.ConvertFromUtc((DateTime) values[0], (TimeZoneInfo) values[1])
-				                       .ToString(TeleoptiPrincipal.Current.Regional.Culture);
+				                       .ToString(TeleoptiPrincipal.CurrentPrincipal.Regional.Culture);
         }
 
         public object[] ConvertBack(object value, Type[] targetTypes, object parameter, CultureInfo culture)

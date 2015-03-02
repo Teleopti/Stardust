@@ -102,7 +102,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.WorkloadPages
                 if(!_isClosed && startTime >= endTime)
                 {
                     errorProvider1.SetError(chbClose,
-                                            string.Format(TeleoptiPrincipal.Current.Regional.UICulture, UserTexts.Resources.StartTimeShouldBeEarlierThanEndTimeDot,
+                                            string.Format(TeleoptiPrincipal.CurrentPrincipal.Regional.UICulture, UserTexts.Resources.StartTimeShouldBeEarlierThanEndTimeDot,
                                                           DateTime.MinValue.Add(startTime).ToShortTimeStringWithDays(),
                                                           DateTime.MinValue.Add(endTime).ToShortTimeStringWithDays()));
                     return false;

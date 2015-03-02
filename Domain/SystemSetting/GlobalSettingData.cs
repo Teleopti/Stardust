@@ -29,7 +29,7 @@ namespace Teleopti.Ccc.Domain.SystemSetting
             get
             {
                 if (_businessUnit == null)
-                    _businessUnit = ((ITeleoptiIdentity)TeleoptiPrincipal.Current.Identity).BusinessUnit;
+                    _businessUnit = ((ITeleoptiIdentity)TeleoptiPrincipal.CurrentPrincipal.Identity).BusinessUnit;
                 return _businessUnit;
             }
             protected set { _businessUnit = value; }

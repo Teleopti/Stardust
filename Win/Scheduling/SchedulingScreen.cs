@@ -333,7 +333,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			_groupPagesProvider = _container.Resolve<ISchedulerGroupPagesProvider>();
 
 			_schedulerState.SetRequestedScenario(loadScenario);
-			_schedulerState.RequestedPeriod = new DateOnlyPeriodAsDateTimePeriod(loadingPeriod, TeleoptiPrincipal.Current.Regional.TimeZone);
+			_schedulerState.RequestedPeriod = new DateOnlyPeriodAsDateTimePeriod(loadingPeriod, TeleoptiPrincipal.CurrentPrincipal.Regional.TimeZone);
 			_schedulerState.UndoRedoContainer = _undoRedo;
 			_schedulerMessageBrokerHandler = new SchedulerMessageBrokerHandler(this, _container);
 			updateContainer(_container.ComponentRegistry, _schedulerMessageBrokerHandler, _schedulerMessageBrokerHandler, (IClearReferredShiftTradeRequests) _schedulerState);
@@ -489,7 +489,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 
 		private void setHeaderText(DateOnly start, DateOnly end)
 		{
-			CultureInfo currentCultureInfo = TeleoptiPrincipal.Current.Regional.Culture;
+			CultureInfo currentCultureInfo = TeleoptiPrincipal.CurrentPrincipal.Regional.Culture;
 			string startDate = start.Date.ToString("d", currentCultureInfo);
 			string endDate = end.Date.ToString("d", currentCultureInfo);
 			Text = string.Format(currentCultureInfo, Resources.TeleoptiCCCColonModuleColonFromToDateScenarioColon, Resources.Schedules, startDate, endDate, _scenario.Description.Name);
@@ -2071,8 +2071,8 @@ namespace Teleopti.Ccc.Win.Scheduling
 
 		private static void setThreadCulture()
 		{
-			Thread.CurrentThread.CurrentCulture = TeleoptiPrincipal.Current.Regional.Culture;
-			Thread.CurrentThread.CurrentUICulture = TeleoptiPrincipal.Current.Regional.UICulture;
+			Thread.CurrentThread.CurrentCulture = TeleoptiPrincipal.CurrentPrincipal.Regional.Culture;
+			Thread.CurrentThread.CurrentUICulture = TeleoptiPrincipal.CurrentPrincipal.Regional.UICulture;
 		}
 
 		private void _backgroundWorkerValidatePersons_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
@@ -3420,7 +3420,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			{
 				_personsToValidate.Add(permittedPerson);
 			}
-			_schedulerState.Schedules.ValidateBusinessRulesOnPersons(_personsToValidate, TeleoptiPrincipal.Current.Regional.Culture, _schedulerState.SchedulingResultState.GetRulesToRun());
+			_schedulerState.Schedules.ValidateBusinessRulesOnPersons(_personsToValidate, TeleoptiPrincipal.CurrentPrincipal.Regional.Culture, _schedulerState.SchedulingResultState.GetRulesToRun());
 			_personsToValidate.Clear();
 		}
 
@@ -3854,7 +3854,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			toolStripTabItem1.Enabled = value;
 			toolStripTabItemHome.Enabled = !value;
 
-			var textInfo = TeleoptiPrincipal.Current.Regional.Culture.TextInfo;
+			var textInfo = TeleoptiPrincipal.CurrentPrincipal.Regional.Culture.TextInfo;
 			var home = textInfo.ToUpper(Resources.Home);
 			var requests = textInfo.ToUpper(Resources.RequestsMenu);
 
@@ -5339,7 +5339,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 		{
 			foreach (var personRequestViewModel in selectedRequestList)
 			{
-				var days = personRequestViewModel.PersonRequest.Request.Period.ToDateOnlyPeriod(TeleoptiPrincipal.Current.Regional.TimeZone).DayCollection();
+				var days = personRequestViewModel.PersonRequest.Request.Period.ToDateOnlyPeriod(TeleoptiPrincipal.CurrentPrincipal.Regional.TimeZone).DayCollection();
 				days.ForEach(_schedulerState.MarkDateToBeRecalculated);
 			}
 			RecalculateResources();
@@ -5523,7 +5523,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 
 		private void setupContextMenuAvailTimeZones()
 		{
-			TimeZoneGuard.Instance.TimeZone = TeleoptiPrincipal.Current.Regional.TimeZone;
+			TimeZoneGuard.Instance.TimeZone = TeleoptiPrincipal.CurrentPrincipal.Regional.TimeZone;
 			_schedulerState.TimeZoneInfo = TimeZoneGuard.Instance.TimeZone;
 			toolStripMenuItemLoggedOnUserTimeZone.Tag = _schedulerState.TimeZoneInfo;
 			wpfShiftEditor1.SetTimeZone(_schedulerState.TimeZoneInfo);
@@ -5546,13 +5546,13 @@ namespace Teleopti.Ccc.Win.Scheduling
 		private void ToolStripMenuItemExportToPdfGraphicalMouseUp(object sender, MouseEventArgs e)
 		{
 			if (e.Button != MouseButtons.Left) return;
-			var exporter = new ExportToPdfGraphical(_scheduleView, this, _schedulerState, TeleoptiPrincipal.Current.Regional.Culture, TeleoptiPrincipal.Current.Regional.UICulture.TextInfo.IsRightToLeft);
+			var exporter = new ExportToPdfGraphical(_scheduleView, this, _schedulerState, TeleoptiPrincipal.CurrentPrincipal.Regional.Culture, TeleoptiPrincipal.CurrentPrincipal.Regional.UICulture.TextInfo.IsRightToLeft);
 			exporter.Export();
 		}
 
 		private void ExportToPdf(bool shiftsPerDay)
 		{
-			var exporter = new ExportToPdf(_scheduleView, this, _schedulerState, TeleoptiPrincipal.Current.Regional.Culture, TeleoptiPrincipal.Current.Regional.UICulture.TextInfo.IsRightToLeft);
+			var exporter = new ExportToPdf(_scheduleView, this, _schedulerState, TeleoptiPrincipal.CurrentPrincipal.Regional.Culture, TeleoptiPrincipal.CurrentPrincipal.Regional.UICulture.TextInfo.IsRightToLeft);
 			exporter.Export(shiftsPerDay);
 		}
 

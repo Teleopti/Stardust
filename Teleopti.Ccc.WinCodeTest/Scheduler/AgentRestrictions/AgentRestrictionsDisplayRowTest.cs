@@ -163,7 +163,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.AgentRestrictions
 
 			using(_mocks.Playback())
 			{
-				Assert.AreEqual(_dateOnlyPeriod.StartDate.ToShortDateString(TeleoptiPrincipal.Current.Regional.Culture), _displayRow.StartDate);		
+				Assert.AreEqual(_dateOnlyPeriod.StartDate.ToShortDateString(TeleoptiPrincipal.CurrentPrincipal.Regional.Culture), _displayRow.StartDate);		
 			}
 		}
 
@@ -178,7 +178,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.AgentRestrictions
 
 			using (_mocks.Playback())
 			{
-				Assert.AreEqual(_dateOnlyPeriod.EndDate.ToShortDateString(TeleoptiPrincipal.Current.Regional.Culture), _displayRow.EndDate);
+				Assert.AreEqual(_dateOnlyPeriod.EndDate.ToShortDateString(TeleoptiPrincipal.CurrentPrincipal.Regional.Culture), _displayRow.EndDate);
 			}
 		}
 
@@ -196,9 +196,9 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.AgentRestrictions
 			_displayRow.MinMaxTime = minMax;
 			_displayRow.ContractTargetTime = _timeSpan;
 			
-			var expectedString = TimeHelper.GetLongHourMinuteTimeString(_timeSpan, TeleoptiPrincipal.Current.Regional.Culture) +
-					" (" + TimeHelper.GetLongHourMinuteTimeString(minMax.StartTime, TeleoptiPrincipal.Current.Regional.Culture) +
-					" - " + TimeHelper.GetLongHourMinuteTimeString(minMax.EndTime, TeleoptiPrincipal.Current.Regional.Culture) +
+			var expectedString = TimeHelper.GetLongHourMinuteTimeString(_timeSpan, TeleoptiPrincipal.CurrentPrincipal.Regional.Culture) +
+					" (" + TimeHelper.GetLongHourMinuteTimeString(minMax.StartTime, TeleoptiPrincipal.CurrentPrincipal.Regional.Culture) +
+					" - " + TimeHelper.GetLongHourMinuteTimeString(minMax.EndTime, TeleoptiPrincipal.CurrentPrincipal.Regional.Culture) +
 					")";
 
 			Assert.AreEqual(expectedString, _displayRow.ContractTargetTimeWithTolerance);	
@@ -209,7 +209,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.AgentRestrictions
 		{
 			_displayRow.ContractTargetTime = _timeSpan;
 
-			var expectedString = TimeHelper.GetLongHourMinuteTimeString(_timeSpan, TeleoptiPrincipal.Current.Regional.Culture);
+			var expectedString = TimeHelper.GetLongHourMinuteTimeString(_timeSpan, TeleoptiPrincipal.CurrentPrincipal.Regional.Culture);
 
 			Assert.AreEqual(expectedString, _displayRow.ContractTargetTimeHourlyEmployees);	
 		}

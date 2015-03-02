@@ -37,7 +37,7 @@ namespace Teleopti.Ccc.Sdk.Logic.CommandHandler
                 throw new FaultException("You're not authorized to run this command.");
             }
             Guid jobResultId;
-            var person = ((IUnsafePerson) TeleoptiPrincipal.Current).Person;
+            var person = ((IUnsafePerson) TeleoptiPrincipal.CurrentPrincipal).Person;
             using (var unitOfWork = _unitOfWorkFactory.LoggedOnUnitOfWorkFactory().CreateAndOpenUnitOfWork())
             {
                 var jobResult = new JobResult(JobCategory.ForecastsImport, new DateOnlyPeriod(DateOnly.Today, DateOnly.Today),

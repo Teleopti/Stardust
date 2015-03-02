@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Globalization;
@@ -174,7 +174,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			IPerson loaded = Session.Get<Person>(person.Id);
 			Assert.AreEqual(person, loaded);
 			Assert.AreEqual(new DateOnly(2000,1,1), loaded.PersonWriteProtection.PersonWriteProtectedDate);
-			Assert.AreEqual(((IUnsafePerson)TeleoptiPrincipal.Current).Person, loaded.PersonWriteProtection.UpdatedBy);
+			Assert.AreEqual(((IUnsafePerson)TeleoptiPrincipal.CurrentPrincipal).Person, loaded.PersonWriteProtection.UpdatedBy);
 			Assert.IsNotNull(loaded.PersonWriteProtection.UpdatedOn);
 			Assert.AreSame(loaded, loaded.PersonWriteProtection.BelongsTo);
 		    var version = ((IVersioned) loaded).Version;

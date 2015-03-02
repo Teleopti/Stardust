@@ -214,7 +214,7 @@ namespace Teleopti.Ccc.Win.Payroll
             using (IUnitOfWork uow = _unitOfWorkFactory.CreateAndOpenUnitOfWork())
             {
                 IPersonRepository personRepository = _repositoryFactory.CreatePersonRepository(uow);
-                TeleoptiPrincipal.Current.GetPerson(personRepository);
+                TeleoptiPrincipal.CurrentPrincipal.GetPerson(personRepository);
                 
                 IPayrollExportRepository payrollExportRepository = _repositoryFactory.CreatePayrollExportRepository(uow);
                 payrollExport = payrollExportRepository.Load(payrollExport.Id.GetValueOrDefault());

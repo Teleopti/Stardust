@@ -79,7 +79,7 @@ namespace Teleopti.Ccc.Win.Scheduling.SingleAgentRestriction.PreferenceCellPaint
         private static string WorkTimeLimitationToString(ILimitation limitation)
         {
             CultureInfo culture =
-                TeleoptiPrincipal.Current.Regional.Culture;
+                TeleoptiPrincipal.CurrentPrincipal.Regional.Culture;
             if (!limitation.StartTime.HasValue && !limitation.EndTime.HasValue)
                 return string.Empty;
             if (!limitation.StartTime.HasValue && !limitation.EndTime.HasValue)

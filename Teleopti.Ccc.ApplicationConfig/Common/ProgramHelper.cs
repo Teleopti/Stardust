@@ -89,7 +89,7 @@ namespace Teleopti.Ccc.ApplicationConfig.Common
 						new ExternalFunctionsProvider(repositoryFactory))));
 			using (var uow = unitOfWorkFactory.CreateAndOpenUnitOfWork())
 			{
-				roleToPrincipalCommand.Execute(TeleoptiPrincipal.Current, unitOfWorkFactory, repositoryFactory.CreatePersonRepository(uow));
+				roleToPrincipalCommand.Execute(TeleoptiPrincipal.CurrentPrincipal, unitOfWorkFactory, repositoryFactory.CreatePersonRepository(uow));
 			}
 
 			Thread.CurrentThread.CurrentCulture = argument.CultureInfo;

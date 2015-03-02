@@ -48,7 +48,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 													 new RepositoryFactory(), new OneWayEncryption());
 			_presenter.Initialize();
 			labelSubHeader2.Text = string.Concat(labelSubHeader2.Text, " ",
-												 ((IUnsafePerson)TeleoptiPrincipal.Current).Person.Name);
+												 ((IUnsafePerson)TeleoptiPrincipal.CurrentPrincipal).Person.Name);
 		}
 
 		/// <summary>

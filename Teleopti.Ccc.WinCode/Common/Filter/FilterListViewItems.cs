@@ -22,7 +22,7 @@ namespace Teleopti.Ccc.WinCode.Common.Filter
                 return _allItems;
 
             var splitted = filterOn.Split(new []{" "},StringSplitOptions.RemoveEmptyEntries);
-            var info = TeleoptiPrincipal.Current.Regional.UICulture;
+            var info = TeleoptiPrincipal.CurrentPrincipal.Regional.UICulture;
 
             var toBeFiltered = new List<ListViewItem>(_allItems);
 

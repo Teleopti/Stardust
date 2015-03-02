@@ -86,7 +86,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 
             DateTimePeriod dateTimePeriod = TimeZoneHelper.NewUtcDateTimePeriodFromLocalDateTime(
                scheduleDay.Date, scheduleDay.Date.AddDays(1),
-               TeleoptiPrincipal.Current.Regional.TimeZone);
+               TeleoptiPrincipal.CurrentPrincipal.Regional.TimeZone);
 
 			IList<IList<ISkillIntervalData>> nestedList = new List<IList<ISkillIntervalData>>();
 

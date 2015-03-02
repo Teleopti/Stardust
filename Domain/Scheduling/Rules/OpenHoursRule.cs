@@ -94,7 +94,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Rules
                         bool found = openHours.Any(dateTimePeriod => dateTimePeriod.Contains(layer.Period));
                         if (!found)
                         {
-                            var errorMessage = string.Format(TeleoptiPrincipal.Current.Regional.Culture,
+                            var errorMessage = string.Format(TeleoptiPrincipal.CurrentPrincipal.Regional.Culture,
                                            UserTexts.Resources.BusinessRuleNoSkillsOpenErrorMessage,
                                            layer.DisplayDescription(),
                                            layer.Period.StartDateTimeLocal(timeZone),

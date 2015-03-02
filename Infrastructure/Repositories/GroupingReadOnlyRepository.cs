@@ -54,7 +54,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 			object businessUnitId;
 			if (!filter.Parameters.TryGetValue("businessUnitParameter", out businessUnitId))
 			{
-				businessUnitId = ((ITeleoptiIdentity) TeleoptiPrincipal.Current.Identity).BusinessUnit.Id.GetValueOrDefault();
+				businessUnitId = ((ITeleoptiIdentity) TeleoptiPrincipal.CurrentPrincipal.Identity).BusinessUnit.Id.GetValueOrDefault();
 			}
 			return Guid.Parse(businessUnitId.ToString());
 		}

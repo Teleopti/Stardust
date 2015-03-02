@@ -222,7 +222,7 @@ namespace Teleopti.Ccc.Win.Common.Controls.Cells
                         g.FillRectangle(brush, upperRect);
                         var tipData = new ToolTipData(rect.X, rect.X + rect.Width,
                                                       layer.DisplayDescription() + "  " +
-                                                      layer.Period.TimePeriodLocal().ToShortTimeString(TeleoptiPrincipal.Current.Regional.UICulture));
+                                                      layer.Period.TimePeriodLocal().ToShortTimeString(TeleoptiPrincipal.CurrentPrincipal.Regional.UICulture));
                         tipDatas.Add(tipData);
                     }
 
@@ -270,7 +270,7 @@ namespace Teleopti.Ccc.Win.Common.Controls.Cells
                         g.FillRectangle(brush, upperRect);
                         var tipData = new ToolTipData(rect.X, rect.X + rect.Width,
                                                       layer.DisplayDescription() + "  " +
-                                                      period.TimePeriodLocal().ToShortTimeString(TeleoptiPrincipal.Current.Regional.UICulture));
+                                                      period.TimePeriodLocal().ToShortTimeString(TeleoptiPrincipal.CurrentPrincipal.Regional.UICulture));
                         tipDatas.Add(tipData);
                     }
 
@@ -320,7 +320,7 @@ namespace Teleopti.Ccc.Win.Common.Controls.Cells
                         g.FillRectangle(brush, upperRect);
                         var tipData = new ToolTipData(rect.X, rect.X + rect.Width,
                                                       layer.DisplayDescription() + "  " +
-                                                      period.TimePeriodLocal().ToShortTimeString(TeleoptiPrincipal.Current.Regional.UICulture));
+                                                      period.TimePeriodLocal().ToShortTimeString(TeleoptiPrincipal.CurrentPrincipal.Regional.UICulture));
                         tipDatas.Add(tipData);
                     }
 

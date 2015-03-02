@@ -39,7 +39,7 @@ namespace Teleopti.Ccc.Sdk.Logic.CommandHandler
                 //Save start of processing to job history
                 var period = command.Period.ToDateOnlyPeriod();
                 var jobResult = new JobResult(JobCategory.MultisiteExport, period,
-                                              ((IUnsafePerson) TeleoptiPrincipal.Current).Person, DateTime.UtcNow);
+                                              ((IUnsafePerson) TeleoptiPrincipal.CurrentPrincipal).Person, DateTime.UtcNow);
                 _jobResultRepository.Add(jobResult);
                 jobId = jobResult.Id.GetValueOrDefault();
                 unitOfWork.PersistAll();
@@ -48,7 +48,7 @@ namespace Teleopti.Ccc.Sdk.Logic.CommandHandler
                 var message = new ExportMultisiteSkillsToSkill
                                   {
                                       OwnerPersonId =
-                                          ((IUnsafePerson) TeleoptiPrincipal.Current).Person.Id.GetValueOrDefault(
+                                          ((IUnsafePerson) TeleoptiPrincipal.CurrentPrincipal).Person.Id.GetValueOrDefault(
                                               Guid.Empty),
                                               JobId = jobId,
                                       Period = period

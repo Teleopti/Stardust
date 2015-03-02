@@ -22,7 +22,7 @@ namespace Teleopti.Ccc.Domain.Common
             {
                 DateTime tempDate = entity.UpdatedOn.Value;
                 DateTime localChangeDateTime = TimeZoneHelper.ConvertFromUtc(
-                    tempDate, TeleoptiPrincipal.Current.Regional.TimeZone);
+                    tempDate, TeleoptiPrincipal.CurrentPrincipal.Regional.TimeZone);
 
                 updated = string.Format(CultureInfo.CurrentCulture, localChangeDateTime.ToString());
             }
@@ -38,7 +38,7 @@ namespace Teleopti.Ccc.Domain.Common
                 DateTime tempDate = entity.UpdatedOn.Value;
                 DateTime localChangeDateTime = TimeZoneHelper.ConvertFromUtc(
                     tempDate,
-                    TeleoptiPrincipal.Current.Regional.TimeZone);
+                    TeleoptiPrincipal.CurrentPrincipal.Regional.TimeZone);
 
                 updatedBy = string.Concat(localizedUpdatedByText, " ", entity.UpdatedBy.Name, " ",
                                           string.Format(CultureInfo.CurrentCulture, localChangeDateTime.ToString()));

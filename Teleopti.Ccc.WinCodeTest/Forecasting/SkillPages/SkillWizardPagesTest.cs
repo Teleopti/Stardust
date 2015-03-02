@@ -93,7 +93,7 @@ namespace Teleopti.Ccc.WinCodeTest.Forecasting.SkillPages
             Skill skill = new Skill("name", "desc", Color.FromArgb(0), 15, _skillType);
             SkillWizardPages.SetSkillDefaultSettings(skill);
 
-            Assert.AreEqual(TeleoptiPrincipal.Current.Regional.TimeZone.Id,
+            Assert.AreEqual(TeleoptiPrincipal.CurrentPrincipal.Regional.TimeZone.Id,
                             skill.TimeZone.Id);
             Assert.IsNull(skill.Activity);
             Assert.AreEqual(7,skill.TemplateWeekCollection.Count);

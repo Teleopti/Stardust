@@ -110,7 +110,7 @@ namespace Teleopti.Ccc.Domain.Scheduling
 
         private bool isPermittedToSeePayloadInfo(IPerson assignedPerson)
         {
-            var principal = TeleoptiPrincipal.Current;
+            var principal = TeleoptiPrincipal.CurrentPrincipal;
             return !Confidential ||
                    principal.Organisation.IsUser(assignedPerson) ||
                    PrincipalAuthorization.Instance().IsPermitted(DefinedRaptorApplicationFunctionPaths.ViewConfidential, DateOnly.Today, assignedPerson);

@@ -110,8 +110,8 @@ namespace Teleopti.Ccc.DomainTest.Optimization.IntraIntervalOptimization
 		public void ShouldSkipMaxSeatEmailBackofficeSkills()
 		{
 			var maxSeatSkill = SkillFactory.CreateSiteSkill("maxSeat");
-			var emailSkill = SkillFactory.CreateSkill("email", SkillTypeFactory.CreateSkillTypeEmail(), 15, TeleoptiPrincipal.Current.Regional.TimeZone, TimeSpan.FromHours(1));
-			var backOfficeSkill = SkillFactory.CreateSkill("email", SkillTypeFactory.CreateSkillTypeBackoffice(), 15, TeleoptiPrincipal.Current.Regional.TimeZone, TimeSpan.FromHours(1));
+			var emailSkill = SkillFactory.CreateSkill("email", SkillTypeFactory.CreateSkillTypeEmail(), 15, TeleoptiPrincipal.CurrentPrincipal.Regional.TimeZone, TimeSpan.FromHours(1));
+			var backOfficeSkill = SkillFactory.CreateSkill("email", SkillTypeFactory.CreateSkillTypeBackoffice(), 15, TeleoptiPrincipal.CurrentPrincipal.Regional.TimeZone, TimeSpan.FromHours(1));
 			_skills = new List<ISkill> { maxSeatSkill, emailSkill, backOfficeSkill };
 
 			using (_mock.Record())

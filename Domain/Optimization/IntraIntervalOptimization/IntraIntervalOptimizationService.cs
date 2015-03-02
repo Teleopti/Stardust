@@ -33,7 +33,7 @@ namespace Teleopti.Ccc.Domain.Optimization.IntraIntervalOptimization
 		public void Execute(ISchedulingOptions schedulingOptions, DateOnlyPeriod selectedPeriod, IList<IScheduleDay> selectedSchedules, ISchedulingResultStateHolder schedulingResultStateHolder, IList<IScheduleMatrixPro> allScheduleMatrixPros, ISchedulePartModifyAndRollbackService rollbackService, IResourceCalculateDelayer resourceCalculateDelayer)
 		{
 			var personHashSet = new HashSet<IPerson>();
-			var cultureInfo = TeleoptiPrincipal.Current.Regional.Culture;
+			var cultureInfo = TeleoptiPrincipal.CurrentPrincipal.Regional.Culture;
 			_progressEvent = null;
 			_cancelMe = false;
 

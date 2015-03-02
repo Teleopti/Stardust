@@ -27,7 +27,7 @@ namespace Teleopti.Ccc.Domain.Security.Matrix
 
 		private void add(MatrixPermissionHolder holder)
 		{
-			if (holder.Team.BusinessUnitExplicit.Id.Value == ((ITeleoptiIdentity)TeleoptiPrincipal.Current.Identity).BusinessUnit.Id.Value)
+			if (holder.Team.BusinessUnitExplicit.Id.Value == ((ITeleoptiIdentity)TeleoptiPrincipal.CurrentPrincipal.Identity).BusinessUnit.Id.Value)
 				_result.Add(holder);
 		}
 

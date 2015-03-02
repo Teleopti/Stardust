@@ -450,7 +450,7 @@ namespace Teleopti.Ccc.Win.Permissions
 
 		private void buildDataTree()
 		{
-			IBusinessUnit bu = ((ITeleoptiIdentity)TeleoptiPrincipal.Current.Identity).BusinessUnit;
+			IBusinessUnit bu = ((ITeleoptiIdentity)TeleoptiPrincipal.CurrentPrincipal.Identity).BusinessUnit;
 
 			var buNode = new TreeNodeAdv
 									 {
@@ -1015,7 +1015,7 @@ namespace Teleopti.Ccc.Win.Permissions
 		{
 			if (StateHolderReader.IsInitialized)
 			{
-				bool rightToLeft = (((IUnsafePerson)TeleoptiPrincipal.Current).Person.PermissionInformation.RightToLeftDisplay);
+				bool rightToLeft = (((IUnsafePerson)TeleoptiPrincipal.CurrentPrincipal).Person.PermissionInformation.RightToLeftDisplay);
 				listViewRoles.RightToLeftLayout = rightToLeft;
 				listViewPeople.RightToLeftLayout = rightToLeft;
 			}
@@ -1258,7 +1258,7 @@ namespace Teleopti.Ccc.Win.Permissions
 			permissionsExplorerStateHolder.AddRoleToPermissionsDataDictionary(newRole, permissionsDataHolder);
 
 			// manually add BusinessUnit
-			newRole.SetBusinessUnit(((ITeleoptiIdentity)TeleoptiPrincipal.Current.Identity).BusinessUnit);
+			newRole.SetBusinessUnit(((ITeleoptiIdentity)TeleoptiPrincipal.CurrentPrincipal.Identity).BusinessUnit);
 
 			// Create an AvailableData instance for the new ApplicationRole
 			IAvailableData availableData = new AvailableData { ApplicationRole = newRole };

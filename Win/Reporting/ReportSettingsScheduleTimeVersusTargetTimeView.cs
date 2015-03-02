@@ -94,7 +94,7 @@ namespace Teleopti.Ccc.Win.Reporting
 		void ReportAgentSelector1BeforeDialog(object sender, EventArgs e)
 		{
 			_schedulerStateHolder.RequestedPeriod =
-				new DateOnlyPeriodAsDateTimePeriod(reportDateFromToSelector1.GetSelectedDates[0],TeleoptiPrincipal.Current.Regional.TimeZone);
+				new DateOnlyPeriodAsDateTimePeriod(reportDateFromToSelector1.GetSelectedDates[0],TeleoptiPrincipal.CurrentPrincipal.Regional.TimeZone);
 		}
 
 		private SchedulerStateHolder CreateStateHolder()
@@ -113,7 +113,7 @@ namespace Teleopti.Ccc.Win.Reporting
 				new PartTimePercentageRepository(unitOfWork).LoadAll();
 				var persons = rep.FindPeopleTeamSiteSchedulePeriodWorkflowControlSet(period);
 
-				return new SchedulerStateHolder(Scenario, new DateOnlyPeriodAsDateTimePeriod(period, TeleoptiPrincipal.Current.Regional.TimeZone), persons, new DisableDeletedFilter(new FixedCurrentUnitOfWork(unitOfWork)));
+				return new SchedulerStateHolder(Scenario, new DateOnlyPeriodAsDateTimePeriod(period, TeleoptiPrincipal.CurrentPrincipal.Regional.TimeZone), persons, new DisableDeletedFilter(new FixedCurrentUnitOfWork(unitOfWork)));
 			}
 		}
 

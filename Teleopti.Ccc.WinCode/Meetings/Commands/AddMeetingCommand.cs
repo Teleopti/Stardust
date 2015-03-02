@@ -55,7 +55,7 @@ namespace Teleopti.Ccc.WinCode.Meetings.Commands
             IList<IActivity> activities;
             using (_unitOfWorkFactory.LoggedOnUnitOfWorkFactory().CreateAndOpenUnitOfWork())
             {
-                IPerson organizer = TeleoptiPrincipal.Current.GetPerson(_personRepository);
+                IPerson organizer = TeleoptiPrincipal.CurrentPrincipal.GetPerson(_personRepository);
                 activities = _activityRepository.LoadAllSortByName();
 
                 var commonNameDescription = _settingDataRepository.FindValueByKey("CommonNameDescription",

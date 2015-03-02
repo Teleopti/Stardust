@@ -279,7 +279,7 @@ namespace Teleopti.Ccc.WinCode.Backlog
 
 		public string GetDateStringForIndex(int colIndex)
 		{
-			var cultureInfo = TeleoptiPrincipal.Current.Regional.Culture;
+			var cultureInfo = TeleoptiPrincipal.CurrentPrincipal.Regional.Culture;
 			return _stateHolder.RequestedPeriod.DateOnlyPeriod.DayCollection()[colIndex-1].ToShortDateString(cultureInfo);
 		}
 

@@ -104,7 +104,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
 		public void MessageDateContainsOutlier(string outlierName)
 		{
 			CultureInfo culture =
-				  TeleoptiPrincipal.Current.Regional.UICulture;
+				  TeleoptiPrincipal.CurrentPrincipal.Regional.UICulture;
 
 			ViewBase.ShowInformationMessage(string.Format(culture, Resources.TheSpecialEventParameterContainsThisDate, outlierName),Resources.DateAlreadyExists);
 		}
