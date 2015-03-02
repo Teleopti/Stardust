@@ -275,6 +275,66 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta
 		}
 
 		[Test]
+		public void ShouldNotAddTimeInAdherenceWhenInNeutralAdherence()
+		{
+			var personId = Guid.NewGuid();
+			Now.Is("2014-11-20 10:00");
+			Reader.Has(new AdherenceDetailsReadModel
+			{
+				PersonId = personId,
+				Date = "2014-11-20".Utc(),
+				Model = new AdherenceDetailsModel
+				{
+					LastUpdate = "2014-11-20 9:00".Utc(),
+					LastAdherence = null,
+					Activities = new[]
+					{
+						new ActivityAdherence
+						{
+							StartTime = "2014-11-20 8:00".Utc(),
+							TimeInAdherence = TimeSpan.FromMinutes(30),
+							TimeOutOfAdherence = TimeSpan.FromMinutes(30),
+						}
+					}
+				}
+			});
+
+			var result = Target.Build(personId);
+
+			result.Single().AdherencePercent.Should().Be(50);
+		}
+
+		[Test]
+		public void ShouldNotHaveAdherencePercentageWhenOnlyNeutralAdherence()
+		{
+			var personId = Guid.NewGuid();
+			Now.Is("2014-11-20 8:00");
+			Reader.Has(new AdherenceDetailsReadModel
+			{
+				PersonId = personId,
+				Date = "2014-11-20".Utc(),
+				Model = new AdherenceDetailsModel
+				{
+					LastUpdate = "2014-11-20 8:00".Utc(),
+					LastAdherence = null,
+					Activities = new[]
+					{
+						new ActivityAdherence
+						{
+							StartTime = "2014-11-20 8:00".Utc(),
+							TimeInAdherence = TimeSpan.Zero,
+							TimeOutOfAdherence = TimeSpan.Zero
+						}
+					}
+				}
+			});
+
+			var result = Target.Build(personId);
+
+			result.Single().AdherencePercent.Should().Be(null);
+		}
+
+		[Test]
 		public void ShouldNotAddTimeAfterShiftHasEnded()
 		{
 			var personId = Guid.NewGuid();
