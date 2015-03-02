@@ -20,7 +20,6 @@ namespace Teleopti.Ccc.Domain.Forecasting.Angel
 			var skillDays = _fetchAndFillSkillDays.FindRange(futurePeriod, skill);
 			var sum = 0d;
 			
-
 			foreach (var workload in skill.WorkloadCollection)
 			{
 				var quickForecasterWorkloadParams = new QuickForecasterWorkloadParams

@@ -4,10 +4,6 @@ using System.Collections.ObjectModel;
 
 namespace Teleopti.Interfaces.Domain
 {
-	public interface ITaskOwnerBase
-	{
-		double Tasks { get; set; }
-	}
     /// <summary>
     /// Base interface for workload days and workload day templates
     /// </summary>

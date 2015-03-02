@@ -2,6 +2,7 @@
 using NUnit.Framework;
 using Rhino.Mocks;
 using SharpTestsEx;
+using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.Forecasting.Angel;
 using Teleopti.Ccc.Domain.Repositories;
@@ -20,13 +21,14 @@ namespace Teleopti.Ccc.WebTest.Areas.Forecasting.Controllers
 			var now = new Now();
 			var expectedFuturePeriod = new DateOnlyPeriod(new DateOnly(now.UtcDateTime()),
 				new DateOnly(now.UtcDateTime().AddYears(1)));
+			var expectedHistoricPeriod = new DateOnlyPeriod(new DateOnly(now.LocalDateOnly().Date.AddYears(-1)), now.LocalDateOnly());
 			var skillRepository = MockRepository.GenerateStub<ISkillRepository>();
 			var skill = SkillFactory.CreateSkill("_");
 			var workload = new Workload(skill);
 			workload.AddQueueSource(QueueSourceFactory.CreateQueueSource());
 			skillRepository.Stub(x => x.FindSkillsWithAtLeastOneQueueSource()).Return(new[] {skill});
 			var quickForecaster = MockRepository.GenerateMock<IQuickForecaster>();
-			var target = new ForecastController(new QuickForecastForAllSkills(quickForecaster, skillRepository), null);
+			var target = new ForecastController(new QuickForecastForAllSkills(quickForecaster, skillRepository, now), null);
 
 			var result = target.QuickForecast(new QuickForecastInputModel
 			{
@@ -35,7 +37,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Forecasting.Controllers
 			});
 
 			result.Result.Should().Be.EqualTo(0);
-			quickForecaster.AssertWasCalled(x => x.Execute(skill, expectedFuturePeriod, TODO));
+			quickForecaster.AssertWasCalled(x => x.Execute(skill, expectedFuturePeriod, expectedHistoricPeriod));
 		}
 
 		[Test]

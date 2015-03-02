@@ -9,7 +9,7 @@ namespace Teleopti.Interfaces.Domain
     /// Created by: robink
     /// Created date: 2007-12-17
     /// </remarks>
-    public interface ITaskOwner
+    public interface ITaskOwner : IForecastingTarget
     {
         /// <summary>
         /// Gets or sets the total tasks.
@@ -40,37 +40,7 @@ namespace Teleopti.Interfaces.Domain
         /// Created date: 2008-03-04
         /// </remarks>
         TimeSpan TotalAverageTaskTime { get; }
-
-        /// <summary>
-        /// Gets or sets the tasks.
-        /// </summary>
-        /// <value>The tasks.</value>
-        /// <remarks>
-        /// Created by: robink
-        /// Created date: 2008-03-04
-        /// </remarks>
-        double Tasks { get; set; }
-
-        /// <summary>
-        /// Gets or sets the average after task time.
-        /// </summary>
-        /// <value>The average after task time.</value>
-        /// <remarks>
-        /// Created by: robink
-        /// Created date: 2007-12-17
-        /// </remarks>
-        TimeSpan AverageAfterTaskTime { get; set; }
-
-        /// <summary>
-        /// Gets or sets the average task time.
-        /// </summary>
-        /// <value>The average task time.</value>
-        /// <remarks>
-        /// Created by: robink
-        /// Created date: 2007-12-17
-        /// </remarks>
-        TimeSpan AverageTaskTime { get; set; }
-
+		
         /// <summary>
         /// Gets or sets the campaign tasks.
         /// </summary>
@@ -316,4 +286,37 @@ namespace Teleopti.Interfaces.Domain
         void ResetTaskOwner();
 
     }
+
+	public interface IForecastingTarget
+	{
+		/// <summary>
+		/// Gets or sets the tasks.
+		/// </summary>
+		/// <value>The tasks.</value>
+		/// <remarks>
+		/// Created by: robink
+		/// Created date: 2008-03-04
+		/// </remarks>
+		double Tasks { get; set; }
+
+		/// <summary>
+		/// Gets or sets the average after task time.
+		/// </summary>
+		/// <value>The average after task time.</value>
+		/// <remarks>
+		/// Created by: robink
+		/// Created date: 2007-12-17
+		/// </remarks>
+		TimeSpan AverageAfterTaskTime { get; set; }
+
+		/// <summary>
+		/// Gets or sets the average task time.
+		/// </summary>
+		/// <value>The average task time.</value>
+		/// <remarks>
+		/// Created by: robink
+		/// Created date: 2007-12-17
+		/// </remarks>
+		TimeSpan AverageTaskTime { get; set; }
+	}
 }

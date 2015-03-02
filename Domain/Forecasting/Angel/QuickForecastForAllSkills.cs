@@ -21,8 +21,9 @@ namespace Teleopti.Ccc.Domain.Forecasting.Angel
 		public double CreateForecast(DateOnlyPeriod futurePeriod)
 		{
 			var nowDate = _now.LocalDateOnly();
+			var historicalPeriod = new DateOnlyPeriod(new DateOnly(nowDate.Date.AddYears(-1)), nowDate);
 			_skillRepository.FindSkillsWithAtLeastOneQueueSource().ForEach(skill =>
-				_quickForecaster.Execute(skill, futurePeriod, new DateOnlyPeriod(new DateOnly(nowDate.Date.AddYears(-1)), nowDate)));
+				_quickForecaster.Execute(skill, futurePeriod, historicalPeriod));
 			return 0;
 		}
 	}
