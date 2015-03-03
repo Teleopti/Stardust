@@ -57,23 +57,22 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta
 			return activities.ToArray();
 		}
 
-		private int? percent(AdherenceDetailsModel model, ActivityAdherence activity)
+		private int percent(AdherenceDetailsModel model, ActivityAdherence activity)
 		{
 			var activityEnded = model.ShiftEndTime.HasValue || !model.Activities.Last().Equals(activity);
 			var secondsInAdherence = Convert.ToDouble(activity.TimeInAdherence.TotalSeconds);
 			var secondsOutOfAdherence = Convert.ToDouble(activity.TimeOutOfAdherence.TotalSeconds);
-			if (!activityEnded && model.LastAdherence.HasValue)
+			if (!activityEnded)
 			{
 				var lastTimestamp = model.LastUpdate ?? DateTime.MinValue;
 				var secondsFromLastUpdate = _now.UtcDateTime().Subtract(lastTimestamp).TotalSeconds;
-				if (model.LastAdherence.Value)
+				if (model.LastAdherence)
 					secondsInAdherence += secondsFromLastUpdate;
 				else
 					secondsOutOfAdherence += secondsFromLastUpdate;
 			}
 			var total = secondsInAdherence + secondsOutOfAdherence;
-			if (total.Equals(0))
-				return null;
+
 			return (int) (secondsInAdherence/total*100);
 		}
 

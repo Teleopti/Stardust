@@ -56,19 +56,13 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.AdherenceDetails
 					{
 						PersonId = personId,
 						Timestamp = "2015-02-09 08:00:02".Utc(),
-						InAdherence = null
-					},
-					new PersonStateChangedEvent
-					{
-						PersonId = personId,
-						Timestamp = "2015-02-09 08:00:03".Utc(),
 						InAdherence = true
 					},
 					new PersonShiftEndEvent
 					{
 						PersonId = personId,
 						ShiftStartTime = "2015-02-09 08:00:00".Utc(),
-						ShiftEndTime = "2015-02-09 08:00:04".Utc()
+						ShiftEndTime = "2015-02-09 08:00:03".Utc()
 					}
 				};
 

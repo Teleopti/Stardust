@@ -169,7 +169,6 @@
     <Compile Include="ApplicationLayer\Events\PersonActivityStartEvent.cs" />
     <Compile Include="ApplicationLayer\Events\PersonDeletedEvent.cs" />
     <Compile Include="ApplicationLayer\Events\PersonInAdherenceEvent.cs" />
-    <Compile Include="ApplicationLayer\Events\PersonNeutralAdherenceEvent.cs" />
     <Compile Include="ApplicationLayer\Events\PersonOutOfAdherenceEvent.cs" />
     <Compile Include="ApplicationLayer\Events\PersonPeriodAddedEvent.cs" />
     <Compile Include="ApplicationLayer\Events\PersonPeriodDetail.cs" />

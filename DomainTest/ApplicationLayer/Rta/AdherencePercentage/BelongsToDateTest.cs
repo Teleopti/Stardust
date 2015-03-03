@@ -81,19 +81,5 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.AdherencePercentage
 			Persister.Get("2015-02-22".Date(), personId).Should().Not.Be.Null();
 		}
 
-		[Test]
-		public void ShouldPersistOnNeutralAdherenceBelongsToDate()
-		{
-			var personId = Guid.NewGuid();
-
-			Target.Handle(new PersonNeutralAdherenceEvent
-			{
-				PersonId = personId,
-				Timestamp = "2015-03-02 03:00".Utc(),
-				BelongsToDate = "2015-03-01"
-			});
-
-			Persister.Get("2015-03-01".Date(), personId).Should().Not.Be.Null();
-		}
 	}
 }

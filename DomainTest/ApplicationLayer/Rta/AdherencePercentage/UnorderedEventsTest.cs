@@ -51,20 +51,15 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.AdherencePercentage
 						PersonId = personId,
 						Timestamp = "2015-02-09 08:00:01".Utc()
 					},
-					new PersonNeutralAdherenceEvent
+					new PersonInAdherenceEvent
 					{
 						PersonId = personId,
 						Timestamp = "2015-02-09 08:00:02".Utc()
 					},
-					new PersonInAdherenceEvent
-					{
-						PersonId = personId,
-						Timestamp = "2015-02-09 08:00:03".Utc()
-					},
 					new PersonShiftEndEvent
 					{
 						PersonId = personId,
-						ShiftEndTime = "2015-02-09 08:00:04".Utc()
+						ShiftEndTime = "2015-02-09 08:00:03".Utc()
 					}
 				};
 

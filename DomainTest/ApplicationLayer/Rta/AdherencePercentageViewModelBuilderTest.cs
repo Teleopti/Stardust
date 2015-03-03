@@ -165,46 +165,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta
 		}
 
 		[Test]
-		public void ShouldNotAddTimeInAdherenceWhenInNeutralAdherence()
-		{
-			var personId = Guid.NewGuid();
-			Now.Is("2015-03-02 09:00");
-			Reader.Has(new AdherencePercentageReadModel
-			{
-				PersonId = personId,
-				Date = "2015-03-02".Date(),
-				TimeInAdherence = "60".Minutes(),
-				TimeOutOfAdherence = "60".Minutes(),
-				LastTimestamp = "2015-03-02 08:00".Utc(),
-				IsLastTimeInAdherence = null
-			});
-
-			var result = Target.Build(personId);
-
-			result.AdherencePercent.Should().Be.EqualTo(50);
-		}
-
-		[Test]
-		public void ShouldNotHaveAdherencePercentWhenOnlyNeutralAdherence()
-		{
-			var personId = Guid.NewGuid();
-			Now.Is("2015-03-02 09:00");
-			Reader.Has(new AdherencePercentageReadModel
-			{
-				PersonId = personId,
-				Date = "2015-03-02".Date(),
-				TimeInAdherence = TimeSpan.Zero,
-				TimeOutOfAdherence = TimeSpan.Zero,
-				LastTimestamp = "2015-03-02 08:00".Utc(),
-				IsLastTimeInAdherence = null
-			});
-
-			var result = Target.Build(personId);
-
-			result.AdherencePercent.Should().Be(null);
-		}
-
-		[Test]
 		public void ShouldNotAddTimeAfterShiftHasEnded()
 		{
 			var personId = Guid.NewGuid();

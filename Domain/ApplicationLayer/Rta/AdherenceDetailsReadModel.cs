@@ -34,7 +34,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta
 	public class AdherenceDetailsReadModelAdherenceState
 	{
 		public DateTime Time { get; set; }
-		public bool? InAdherence { get; set; }
+		public bool InAdherence { get; set; }
 	}
 
 	public class AdherenceDetailsReadModelActivityState
@@ -48,7 +48,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta
 		public IEnumerable<ActivityAdherence> Activities { get; set; }
 		public DateTime? ShiftEndTime { get; set; }
 		public DateTime? ActualEndTime { get; set; }
-		public bool? LastAdherence { get; set; }
+		public bool LastAdherence { get; set; }
 		public DateTime? LastUpdate { get; set; }
 	}
 
