@@ -80,6 +80,10 @@ namespace SdkTestClientWin.Infrastructure
 			// NO NEED TO CALL THIS IN THE NEW WAY
 			var dataSources = LogonService.GetDataSources();
 			currentHeader.DataSource = dataSources.FirstOrDefault().Name;
+			//just a hack to get logging to work for now - remove when bug #32544 is fixed
+			dataSources.FirstOrDefault().Client = "SDK test client";
+			dataSources.FirstOrDefault().IpAddress = "1.1.1.1";
+			//
 			var authenticationResult = LogonService.LogOnApplicationUser(logonName, passWord, dataSources.FirstOrDefault());
 			//End OLD WAY
 
