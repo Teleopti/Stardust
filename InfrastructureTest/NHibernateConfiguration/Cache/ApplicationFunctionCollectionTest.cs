@@ -7,6 +7,7 @@ using Teleopti.Ccc.Infrastructure.NHibernateConfiguration;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.Infrastructure.Web;
+using Teleopti.Ccc.InfrastructureTest.Helper;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Interfaces.Domain;
 
@@ -14,7 +15,7 @@ namespace Teleopti.Ccc.InfrastructureTest.NHibernateConfiguration.Cache
 {
 	[TestFixture]
 	[Category("LongRunning")]
-	public class ApplicationFunctionCollectionTest
+	public class ApplicationFunctionCollectionTest : DatabaseTestWithoutTransaction
 	{
 		private IDataSource dataSource;
 		private IApplicationRole applicationRole;

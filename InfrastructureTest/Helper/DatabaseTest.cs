@@ -46,7 +46,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Helper
         public void BaseTeardown()
         {
 			UnitOfWorkTestAttribute.After(UnitOfWork, cleanUpAfterTest);
-			TeardownForRepositoryTest();
+			//TeardownForRepositoryTest();
 		}
 
         protected virtual void TeardownForRepositoryTest(){}

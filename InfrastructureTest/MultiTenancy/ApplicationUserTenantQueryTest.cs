@@ -5,13 +5,14 @@ using Teleopti.Ccc.Infrastructure.MultiTenancy;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.NHibernate;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
+using Teleopti.Ccc.InfrastructureTest.Helper;
 using Teleopti.Ccc.InfrastructureTest.UnitOfWork;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 
 namespace Teleopti.Ccc.InfrastructureTest.MultiTenancy
 {
-	public class ApplicationUserTenantQueryTest
+	public class ApplicationUserTenantQueryTest : DatabaseTestWithoutTransaction
 	{
 		private Guid personId;
 		private string correctUserName;
@@ -54,18 +55,18 @@ namespace Teleopti.Ccc.InfrastructureTest.MultiTenancy
 			target = new ApplicationUserTenantQuery(_tenantUnitOfWorkManager);
 		}
 
-		[TearDown]
-		public void Teardown_WillBeChangedWhenMovedAwayFromUnitOfWork()
-		{
-			_tenantUnitOfWorkManager.CancelCurrent();
-			using (var uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
-			{
-				var rep = new PersonRepository(uow);
-				var personInDatabase = rep.Get(personId);
-				rep.Remove(personInDatabase);
-				uow.FetchSession().CreateQuery("delete from UserDetail").ExecuteUpdate();
-				uow.PersistAll();
-			}
-		} 
+		//[TearDown]
+		//public void Teardown_WillBeChangedWhenMovedAwayFromUnitOfWork()
+		//{
+		//	_tenantUnitOfWorkManager.CancelCurrent();
+		//	using (var uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
+		//	{
+		//		var rep = new PersonRepository(uow);
+		//		var personInDatabase = rep.Get(personId);
+		//		rep.Remove(personInDatabase);
+		//		uow.FetchSession().CreateQuery("delete from UserDetail").ExecuteUpdate();
+		//		uow.PersistAll();
+		//	}
+		//} 
 	}
 }

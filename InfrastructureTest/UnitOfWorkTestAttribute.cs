@@ -25,8 +25,8 @@ namespace Teleopti.Ccc.InfrastructureTest
 
 		protected override void AfterTest()
 		{
-			After(unitOfWork, false);
-			SetupFixtureForAssembly.RestoreCcc7Database();
+			After(unitOfWork, true);
+			//SetupFixtureForAssembly.RestoreCcc7Database();
 		}
 
 		public static void Before(out IPerson loggedOnPerson, out IUnitOfWork unitOfWork, out ISession session)
@@ -64,17 +64,23 @@ namespace Teleopti.Ccc.InfrastructureTest
 		public static void After(IUnitOfWork unitOfWork, bool cleanUp)
 		{
 			unitOfWork.Dispose();
+
 			if (cleanUp)
 			{
-				if (BusinessUnitFactory.BusinessUnitUsedInTest.Id.HasValue)
-				{
-					using (IUnitOfWork uow = SetupFixtureForAssembly.DataSource.Application.CreateAndOpenUnitOfWork())
-					{
-						IBusinessUnitRepository buRep = new BusinessUnitRepository(uow);
-						buRep.Remove(BusinessUnitFactory.BusinessUnitUsedInTest);
-						uow.PersistAll();
-					}
-				}
+				SetupFixtureForAssembly.RestoreCcc7Database();
+				//if (BusinessUnitFactory.BusinessUnitUsedInTest.Id.HasValue)
+				//{
+				//	using (IUnitOfWork uow = SetupFixtureForAssembly.DataSource.Application.CreateAndOpenUnitOfWork())
+				//	{
+				//		IBusinessUnitRepository buRep = new BusinessUnitRepository(uow);
+				//		buRep.Remove(BusinessUnitFactory.BusinessUnitUsedInTest);
+				//		uow.PersistAll();
+				//	}
+				//}
+			}
+			else
+			{
+				SetupFixtureForAssembly.checkThatDbIsEmtpy();
 			}
 		}
 

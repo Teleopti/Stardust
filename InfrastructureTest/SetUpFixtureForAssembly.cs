@@ -131,7 +131,7 @@ namespace Teleopti.Ccc.InfrastructureTest
 			s.CreateQuery("delete from Revision").ExecuteUpdate();
 		}
 
-		private static void checkThatDbIsEmtpy()
+		public static void checkThatDbIsEmtpy()
 		{
 			const string assertMess =
 				 @"After running last test in suite, there's still data in db.

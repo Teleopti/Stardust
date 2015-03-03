@@ -119,18 +119,18 @@ namespace Teleopti.Ccc.InfrastructureTest.MultiTenancy
 			target = new ApplicationUserQuery(_tenantUnitOfWorkManager);
 		}
 
-		[TearDown]
-		public void Teardown_WillBeChangedWhenMovedAwayFromUnitOfWork()
-		{
-			_tenantUnitOfWorkManager.CancelCurrent();
-			using (var uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
-			{
-				var rep = new PersonRepository(uow);
-				var personInDatabase = rep.Get(personId);
-				rep.Remove(personInDatabase);
-				uow.FetchSession().CreateQuery("delete from UserDetail").ExecuteUpdate();
-				uow.PersistAll();
-			}
-		}
+		//[TearDown]
+		//public void Teardown_WillBeChangedWhenMovedAwayFromUnitOfWork()
+		//{
+		//	_tenantUnitOfWorkManager.CancelCurrent();
+		//	using (var uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
+		//	{
+		//		var rep = new PersonRepository(uow);
+		//		var personInDatabase = rep.Get(personId);
+		//		rep.Remove(personInDatabase);
+		//		uow.FetchSession().CreateQuery("delete from UserDetail").ExecuteUpdate();
+		//		uow.PersistAll();
+		//	}
+		//}
 	}
 }
