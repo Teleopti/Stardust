@@ -172,9 +172,13 @@
       <Link>Teleopti.Ccc.snk</Link>
     </None>
     <None Include="App.config" />
-    <None Include="New BU.bat" />
+    <None Include="New BU.bat">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Include="packages.config" />
-    <None Include="Upgrade BU.bat" />
+    <None Include="Upgrade BU.bat">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <Content Include="RtaStates.xml">
