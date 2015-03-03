@@ -187,21 +187,26 @@ namespace Teleopti.Ccc.Win.Scheduling.PropertyPanel
             labelShiftCategoryPointValue.Text = "";
 	        labelRanking.Text = "";
 
+			//bug32528, hide this for now...
+			labelDayOffPointValue.Visible = false;
+			labelShiftCategoryPointValue.Visible = false;
+			labelSeniorityPointsValue.Visible = false;
+
+	        labelDayOffPoints.Visible = false;
+	        labelShiftCategoryPoint.Visible = false;
+	        labelSeniorityPoints.Visible = false;
+	       
 			var rankedPersonBasedOnStartDate = _container.Resolve<IRankedPersonBasedOnStartDate>();
             var personDayOffPointsCalculator = _container.Resolve<IPersonDayOffPointsCalculator>();
             var personShiftCategoryPointCalculator = _container.Resolve<IPersonShiftCategoryPointCalculator>();
             var dayOffPoints =  personDayOffPointsCalculator.CalculateDaysOffSeniorityValue(scheduleRange, _requestedPeriod, _stateHolder.SchedulingResultState.SeniorityWorkDayRanks);
-            var shiftCategoryPoints =
-                 personShiftCategoryPointCalculator.CalculateShiftCategorySeniorityValue(scheduleRange, _requestedPeriod,
-                                                                                              shiftCategories.ToList());
+            var shiftCategoryPoints = personShiftCategoryPointCalculator.CalculateShiftCategorySeniorityValue(scheduleRange, _requestedPeriod,shiftCategories.ToList());
             var ranking = rankedPersonBasedOnStartDate.GetRankForPerson(filteredPersons, _selectedPerson);
             if (ranking.HasValue)
             {
-                labelRanking.Text =
-                    rankedPersonBasedOnStartDate.GetRankForPerson(filteredPersons, _selectedPerson).Value
-                                                .ToString(CultureInfo.CurrentCulture);    
+                labelRanking.Text = rankedPersonBasedOnStartDate.GetRankForPerson(filteredPersons, _selectedPerson).Value.ToString(CultureInfo.CurrentCulture);    
             }
-            
+
 			labelDayOffPointValue.Text = dayOffPoints.ToString(CultureInfo.CurrentCulture);
             labelShiftCategoryPointValue.Text = shiftCategoryPoints.ToString(CultureInfo.CurrentCulture);
             labelSeniorityPointsValue.Text = (dayOffPoints + shiftCategoryPoints).ToString(CultureInfo.CurrentCulture);
