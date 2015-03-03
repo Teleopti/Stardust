@@ -53,7 +53,7 @@ body {
 .container-block, .tab-group .tab-container {
   background-color: #f5f5f5; }
 
-.wfm-block, .tree ol, .tree li, .wfm-list li, select option, .wfm-accordion input[type='radio'] + label, .tab-group .tab-container, .notice, .notification-list li {
+.wfm-block, .tree ol, .tree li, .wfm-list li, select option, .wfm-radio, .wfm-checkbox, .wfm-accordion input[type='radio'] + label, .inner span, .tab-group .tab-container, .notice, .notification-list li {
   padding: 5px;
   width: 100%; }
 
@@ -501,7 +501,8 @@ input[type='text'], select {
   .navbar .right-actions {
     position: absolute;
     right: 5px;
-    top: 30%; }
+    top: 30%;
+    display: inline-block; }
 
 .wfm-btn {
   border: none;
@@ -624,50 +625,33 @@ tr {
     transition: max-height 0.8s;
     overflow: hidden; }
   .wfm-accordion input:checked ~ article {
-    max-height: 500px;
+    max-height: 1000px;
     transition: max-height 0.8s; }
 
 .dropdown {
+  width: 18px;
+  content: " ";
+  position: relative;
   cursor: pointer; }
-  .dropdown label {
-    background-color: #1976D2;
-    width: 18px;
-    height: 18px;
-    float: right;
-    border-radius: 4px;
-    text-align: center;
-    display: inline-block;
-    transition: all 0.2s linear 0s;
-    cursor: pointer;
-    color: #ffffff; }
-  .dropdown label::after {
-    margin-left: 8px; }
-  .dropdown ul {
-    margin: 0px;
-    padding: 0px;
-    list-style: none;
-    width: 100%; }
-  .dropdown li {
-    background-color: #ffffff !important;
-    margin: 0px;
-    padding: 0px;
-    width: inherit;
-    max-height: 0px;
-    overflow: hidden;
-    box-sizing: border-box;
-    transition: max-height 0.5s linear; }
-  .dropdown li span {
-    display: inline-block;
-    font-size: 14px; }
-  .dropdown li:hover {
-    background-color: #E0E0E0 !important; }
 
-.dropdown:hover label {
-  background: #64b5f6; }
+.dropdown:focus {
+  background-color: #ffffff; }
+  .dropdown:focus .inner {
+    visibility: visible;
+    pointer-events: auto; }
 
-.dropdown:hover li {
-  max-height: 60px;
-  padding: 5px; }
+.inner {
+  margin-left: -1100%;
+  width: 1200% !important;
+  position: absolute;
+  visibility: hidden;
+  transition: 0.5s visibility;
+  background: #ffffff; }
+
+.inner span {
+  display: block; }
+  .inner span:hover {
+    background-color: rgba(0, 0, 0, 0.06); }
 
 .tab-group {
   width: 100%;
@@ -709,7 +693,7 @@ tr {
     -webkit-flex-grow: 1;
     -ms-flex-positive: 1;
     flex-grow: 1;
-    min-width: 100px;
+    min-width: 100px !important;
     border-bottom: 3px solid #1976D2;
     background-color: #1976D2;
     text-align: center;
