@@ -16,7 +16,7 @@ namespace Teleopti.Ccc.Infrastructure.MultiTenancy
 		public void SaveLoginAttempt(LoginAttemptModel model)
 		{
 			_currentTenantSession.CurrentSession().CreateSQLQuery(
-					"INSERT INTO [Auditing].[Security] (Result, UserCredentials, Provider, Client, ClientIp, PersonId) VALUES (:Result, :UserCredentials, :Provider, :Client, :ClientIp, :PersonId)")
+					"INSERT INTO [Tenant].[Security] (Result, UserCredentials, Provider, Client, ClientIp, PersonId) VALUES (:Result, :UserCredentials, :Provider, :Client, :ClientIp, :PersonId)")
 					.SetString("Result", model.Result)
 					.SetString("UserCredentials", model.UserCredentials)
 					.SetString("Provider", model.Provider)
@@ -29,7 +29,7 @@ namespace Teleopti.Ccc.Infrastructure.MultiTenancy
 		public LoginAttemptModel ReadLast()
 		{
 			return _currentTenantSession.CurrentSession().CreateSQLQuery(
-				"select top 1 Result, UserCredentials, Provider, Client, ClientIp, PersonId from [Auditing].[Security] order by DateTimeUTC desc")
+				"select top 1 Result, UserCredentials, Provider, Client, ClientIp, PersonId from [Tenant].[Security] order by DateTimeUTC desc")
 				.SetResultTransformer(Transformers.AliasToBean(typeof(LoginAttemptModel)))
 				.UniqueResult<LoginAttemptModel>();
 		}
