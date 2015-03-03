@@ -19,9 +19,8 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 	/// </summary>
 	public class NHibernateUnitOfWorkFactory : IUnitOfWorkFactory
 	{
-		private ISessionFactory _factory;
+		private readonly ISessionFactory _factory;
 		private readonly IAuditSetter _auditSettingProvider;
-		private bool disposed;
 
 		private readonly IEnumerable<IMessageSender> _messageSenders;
 
@@ -49,11 +48,6 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 		public ISessionFactory SessionFactory
 		{
 			get { return _factory; }
-		}
-
-		public void Close()
-		{
-			_factory.Close();
 		}
 
 		public long? NumberOfLiveUnitOfWorks
@@ -145,50 +139,9 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 			return nhibSession;
 		}
 
-		#region Dispose methods
-
-		///<summary>
-		///Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources.
-		///</summary>
 		public void Dispose()
 		{
-			Dispose(true);
-			//Don't know how to test next row. Impossible?
-			GC.SuppressFinalize(this);
+			_factory.Dispose();
 		}
-
-		private void Dispose(bool disposing)
-		{
-			if (!disposed)
-			{
-				if (disposing)
-				{
-					ReleaseManagedResources();
-				}
-				ReleaseUnmanagedResources();
-				disposed = true;
-			}
-		}
-
-		/// <summary>
-		/// Releases the unmanaged resources.
-		/// </summary>
-		protected virtual void ReleaseUnmanagedResources()
-		{
-		}
-
-		/// <summary>
-		/// Releases the managed resources.
-		/// </summary>
-		protected virtual void ReleaseManagedResources()
-		{
-			if (_factory != null)
-			{
-				_factory.Dispose();
-				_factory = null;
-			}
-		}
-
-		#endregion
 	}
 }

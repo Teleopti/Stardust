@@ -185,19 +185,6 @@ namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork
 		}
 
 		/// <summary>
-		/// Verifies the close method.
-		/// </summary>
-		[Test]
-		public void VerifyClose()
-		{
-			factoryMock.Close();
-			mocks.ReplayAll();
-			target = new NHibernateUnitOfWorkFactoryFake(factoryMock);
-			target.Close();
-			mocks.VerifyAll();
-		}
-
-		/// <summary>
 		/// Verifies that Dispose() disposes session.
 		/// </summary>
 		[Test]

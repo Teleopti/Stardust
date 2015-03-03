@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Interfaces.Infrastructure
@@ -38,12 +37,6 @@ namespace Teleopti.Interfaces.Infrastructure
 		/// <value>The name.</value>
 		/// <remarks>A unique name</remarks>
 		string Name { get; }
-
-		/// <summary>
-		/// Closes and releases resources on this IUnitOfWorkFactory.
-		/// It's the client's responsibility to close all IUnitOfWorks first!
-		/// </summary>
-		void Close();
 
 		/// <summary>
 		/// Gets the number of live unit of works.

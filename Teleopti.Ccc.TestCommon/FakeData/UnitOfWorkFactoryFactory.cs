@@ -60,11 +60,6 @@ namespace Teleopti.Ccc.TestCommon.FakeData
                 get { return _name; }
             }
 
-            public void Close()
-            {
-                throw new NotImplementedException();
-            }
-
             public long? NumberOfLiveUnitOfWorks
             {
                 get { return null; }

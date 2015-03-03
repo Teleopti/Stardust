@@ -107,9 +107,9 @@ namespace Teleopti.Ccc.InfrastructureTest
 		[TearDown]
 		public void AfterTestSuite()
 		{
-			DataSource.Application.Close();
+			DataSource.Application.Dispose();
 			if (DataSource.Statistic != null)
-				DataSource.Statistic.Close();	
+				DataSource.Statistic.Dispose();
 		}
 
 		public static void CheckThatDbIsEmtpy()
