@@ -513,6 +513,7 @@
     <Compile Include="PeopleAdmin\Models\PersonFinderModel.cs" />
     <Compile Include="PeopleAdmin\Commands\OpenModuleCommand.cs" />
     <Compile Include="PeopleAdmin\Models\PersonGeneralModel.cs" />
+    <Compile Include="PeopleAdmin\Models\TenantAuthenticationData.cs" />
     <Compile Include="PeopleAdmin\PeopleNavigatorPresenter.cs" />
     <Compile Include="PeopleAdmin\Commands\PersonFinderFindCommand.cs" />
     <Compile Include="PeopleAdmin\Commands\PersonFinderNextCommand.cs" />
