@@ -1,7 +1,6 @@
 using System.Web.Mvc;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta.Performance;
 using Teleopti.Ccc.Domain.Common;
-using Teleopti.Ccc.Infrastructure.PerformanceTool;
 using Teleopti.Ccc.Web.Filters;
 
 namespace Teleopti.Ccc.Web.Areas.PerformanceTool.Controllers

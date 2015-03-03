@@ -1,5 +1,6 @@
 ﻿using Autofac;
 using Teleopti.Ccc.Domain.Collection;
+using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.Infrastructure.Persisters;
 using Teleopti.Ccc.Infrastructure.Persisters.Schedules;

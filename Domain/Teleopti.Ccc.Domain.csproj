@@ -236,6 +236,9 @@
     <Compile Include="ApplicationLayer\Rta\ITeamOutOfAdherenceReadModelPersister.cs" />
     <Compile Include="ApplicationLayer\Rta\NoEvents.cs" />
     <Compile Include="ApplicationLayer\Rta\NotificationCreator.cs" />
+    <Compile Include="ApplicationLayer\Rta\Performance\PersonGenerator.cs" />
+    <Compile Include="ApplicationLayer\Rta\Performance\ScheduleGenerator.cs" />
+    <Compile Include="ApplicationLayer\Rta\Performance\StateGenerator.cs" />
     <Compile Include="ApplicationLayer\Rta\Performance\PerformanceCountDone.cs" />
     <Compile Include="ApplicationLayer\Rta\Performance\IPerformanceCounter.cs" />
     <Compile Include="ApplicationLayer\Rta\Performance\PerformanceCounter.cs" />
@@ -790,6 +793,7 @@
     <Compile Include="Scheduling\BackToLegalShift\LegalShiftDecider.cs" />
     <Compile Include="Scheduling\DoNothingScheduleDayChangeCallBack.cs" />
     <Compile Include="Scheduling\IMatrixUnselectedDaysLocker.cs" />
+    <Compile Include="Scheduling\IScheduleDifferenceSaver.cs" />
     <Compile Include="Scheduling\Legacy\Commands\BackToLegalShiftCommand.cs" />
     <Compile Include="Scheduling\Legacy\Commands\ClassicScheduleCommand.cs" />
     <Compile Include="Scheduling\Legacy\Commands\CommonStateHolder.cs" />

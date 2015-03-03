@@ -186,9 +186,6 @@
     <Compile Include="MultiTenancy\ApplicationUserQueryTest.cs" />
     <Compile Include="MultiTenancy\PersistLogonAttemptTest.cs" />
     <Compile Include="MultiTenancy\TenantUnitOfWorkManagerTest.cs" />
-    <Compile Include="PerformanceTool\PersonGeneratorTest.cs" />
-    <Compile Include="PerformanceTool\ScheduleGeneratorTest.cs" />
-    <Compile Include="PerformanceTool\StateGeneratorTest.cs" />
     <Compile Include="Repositories\AdherenceDetailsReadModelPersisterTest.cs" />
     <Compile Include="Aop\AspectsTest.cs" />
     <Compile Include="ApplicationLayer\SyncEventPublisherTest.cs" />

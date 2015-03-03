@@ -4,7 +4,6 @@ using Rhino.Mocks;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta.Performance;
 using Teleopti.Ccc.Domain.Common;
-using Teleopti.Ccc.Infrastructure.PerformanceTool;
 using Teleopti.Ccc.Web.Areas.PerformanceTool.Controllers;
 
 namespace Teleopti.Ccc.WebTest.Areas.PerformanceTool.Controllers

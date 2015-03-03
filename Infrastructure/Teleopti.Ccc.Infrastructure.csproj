@@ -234,9 +234,6 @@
     <Compile Include="MultiTenancy\NHibernate\TenantUnitOfWorkManager.cs" />
     <Compile Include="MultiTenancy\Tenant.cs" />
     <Compile Include="NHibernateConfiguration\SecondLevelCache.cs" />
-    <Compile Include="PerformanceTool\PersonGenerator.cs" />
-    <Compile Include="PerformanceTool\ScheduleGenerator.cs" />
-    <Compile Include="PerformanceTool\StateGenerator.cs" />
     <Compile Include="Persisters\WorkflowControlSetPublishDatePersister.cs" />
     <Compile Include="Repositories\AdherenceDetailsReadModelPersister.cs" />
     <Compile Include="Repositories\AdherencePercentageReadModelPersister.cs" />
@@ -363,7 +360,6 @@
     <Compile Include="Persisters\Schedules\IScheduleDictionaryPersister.cs" />
     <Compile Include="Persisters\Schedules\IScheduleRangeConflictCollector.cs" />
     <Compile Include="Persisters\Schedules\IScheduleRangePersister.cs" />
-    <Compile Include="Persisters\Schedules\IScheduleDifferenceSaver.cs" />
     <Compile Include="Persisters\Schedules\NoScheduleRangeConflictCollector.cs" />
     <Compile Include="Persisters\Schedules\PersistConflict.cs" />
     <Compile Include="Persisters\Schedules\ScheduleDictionaryPersister.cs" />

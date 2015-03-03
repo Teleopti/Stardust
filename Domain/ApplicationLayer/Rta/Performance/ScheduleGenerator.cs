@@ -8,11 +8,10 @@ using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Scheduling.Rules;
 using Teleopti.Ccc.Domain.Scheduling.ScheduleTagging;
-using Teleopti.Ccc.Infrastructure.Persisters.Schedules;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
 
-namespace Teleopti.Ccc.Infrastructure.PerformanceTool
+namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Performance
 {
 	public interface IScheduleGenerator
 	{

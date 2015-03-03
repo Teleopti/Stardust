@@ -7,6 +7,7 @@ using System.Threading;
 using Newtonsoft.Json;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.FeatureFlags;
+using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
 using Teleopti.Ccc.Infrastructure.Persisters.Schedules;
 using log4net;

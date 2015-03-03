@@ -4,6 +4,7 @@ using NUnit.Framework;
 using Rhino.Mocks;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Repositories;
+using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.ScheduleTagging;
 using Teleopti.Ccc.Infrastructure.Persisters.Schedules;
 using Teleopti.Ccc.Sdk.Logic;

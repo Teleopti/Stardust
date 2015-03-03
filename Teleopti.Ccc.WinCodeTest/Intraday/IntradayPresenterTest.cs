@@ -15,6 +15,7 @@ using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.RealTimeAdherence;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Rta;
+using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.Security.Principal;

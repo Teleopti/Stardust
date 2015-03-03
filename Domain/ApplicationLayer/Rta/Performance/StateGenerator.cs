@@ -4,7 +4,7 @@ using Teleopti.Ccc.Domain.RealTimeAdherence;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Interfaces.Infrastructure;
 
-namespace Teleopti.Ccc.Infrastructure.PerformanceTool
+namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Performance
 {
 	public interface IStateGenerator
 	{
