@@ -22,14 +22,10 @@
 	margin: 10px;
 }
 
-.container-block {
-	background-color: rgb(205, 200, 200); /*ah ah too ugly, you have to refactor that*/
-}
-
 .col-md-4, .col-md-8 { /* please bootstrap, don't make any assumption about padding' */
 	padding: 0;
 }
 
-.sidenav .wfm-block {
-	padding: 12px 5px ;
+ul {
+	margin-bottom:0!important;
 }

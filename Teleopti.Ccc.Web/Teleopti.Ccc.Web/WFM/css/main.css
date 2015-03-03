@@ -25,7 +25,7 @@
 body {
   color: rgba(0, 0, 0, 0.87); }
 
-.material-depth-1, .wfm-btn-default, .wfm-btn-primary, .wfm-fab {
+.material-depth-1, .angular-ui-tree-handle.selected:after, .wfm-btn-default, .wfm-btn-primary, .wfm-fab {
   box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.16); }
 
 .material-depth-2, .wfm-btn-default:hover, .wfm-btn-primary:hover, .wfm-fab:hover {
@@ -49,6 +49,9 @@ body {
   min-height: 400px;
   background-color: white;
   border-radius: 2px; }
+
+.container-block, .tab-group .tab-container {
+  background-color: #f5f5f5; }
 
 .wfm-block, .tree ol, .tree li, .wfm-list li, select option, .wfm-accordion input[type='radio'] + label, .tab-group .tab-container, .notice, .notification-list li {
   padding: 5px;
@@ -86,7 +89,7 @@ body {
     .tree li .active-tree {
       background-color: #ffffff; }
 
-.tree .active:after {
+.angular-ui-tree-handle.selected:after {
   float: right;
   height: 25px;
   width: 25px;
@@ -100,13 +103,17 @@ body {
 
 .angular-ui-tree-handle {
   cursor: pointer;
-  font-weight: 500; }
+  font-weight: 500;
+  -webkit-transition: all .2s ease-in-out;
+  transition: all .2s ease-in-out; }
   .angular-ui-tree-handle:hover {
     background-color: rgba(0, 0, 0, 0.06); }
 
 .angular-ui-tree-handle.selected {
-  background-color: #1976D2; }
+  background-color: #1976D2;
+  color: #ffffff; }
   .angular-ui-tree-handle.selected:hover {
+    color: rgba(0, 0, 0, 0.87);
     background-color: #64b5f6; }
 
 .wfm-list {
@@ -487,6 +494,8 @@ input[type='text'], select {
     font-size: 18px;
     line-height: 20px;
     margin-left: -15px; }
+  .navbar .wfm-container {
+    padding-left: 5px; }
   .navbar .breadbin {
     margin-left: 30px; }
   .navbar .right-actions {
@@ -624,19 +633,20 @@ tr {
     background-color: #1976D2;
     width: 18px;
     height: 18px;
+    float: right;
     border-radius: 4px;
     text-align: center;
     display: inline-block;
     transition: all 0.2s linear 0s;
     cursor: pointer;
     color: #ffffff; }
-  .dropdown i {
+  .dropdown label::after {
     margin-left: 8px; }
   .dropdown ul {
     margin: 0px;
     padding: 0px;
     list-style: none;
-    width: 50%; }
+    width: 100%; }
   .dropdown li {
     background-color: #ffffff !important;
     margin: 0px;
@@ -711,8 +721,6 @@ tr {
     /*overrides bootstrap*/
     font-size: 100% !important;
     /*overrides bootstrap*/ }
-  .tab-group .tab-container {
-    background-color: rgba(0, 0, 0, 0.06); }
   .tab-group section {
     display: none;
     position: relative;
