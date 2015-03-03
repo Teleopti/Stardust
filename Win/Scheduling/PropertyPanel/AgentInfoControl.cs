@@ -42,7 +42,7 @@ namespace Teleopti.Ccc.Win.Scheduling.PropertyPanel
         private IDictionary<IPerson, IPersonAccountCollection> _allAccounts;
 		private readonly IDictionary<EmploymentType, string> _employmentTypeList;
     	private readonly IDictionary<SchedulePeriodType, string> _schedulePeriodTypeList;
-        private ISchedulerGroupPagesProvider _groupPagesProvider;
+        private readonly ISchedulerGroupPagesProvider _groupPagesProvider;
 	    private readonly ILifetimeScope _container;
 	    private readonly DateOnlyPeriod _dateOnlyPeriod;
 	    private readonly DateOnlyPeriod _requestedPeriod;
@@ -50,6 +50,7 @@ namespace Teleopti.Ccc.Win.Scheduling.PropertyPanel
 	    private IList<IGroupPageLight> _groupPages;
 	    private IGroupPagePerDate _groupPagePerDate;
 	    private bool _mbCacheDisabled;
+	    private IGroupPageLight _lastSelectedGroupPage = null;
 
         public AgentInfoControl()
         {
@@ -844,13 +845,13 @@ namespace Teleopti.Ccc.Win.Scheduling.PropertyPanel
 			}
 		}
 
-        public void SetDefaultSelectedTab()
-        {
-            tabControlAgentInfo.SelectedIndex  = 0;
-        }
-
 		private void comboBoxAgentGrouping_SelectedIndexChanged(object sender, EventArgs e)
 		{
+			var selected = (IGroupPageLight) comboBoxAgentGrouping.SelectedItem;
+			if (selected == _lastSelectedGroupPage)
+				return;
+
+			_lastSelectedGroupPage = selected;
 			resetGroupPageData();
 			update();
 		}
