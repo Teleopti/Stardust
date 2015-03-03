@@ -1253,6 +1253,7 @@
     <Compile Include="Security\ModifyPasswordTest.cs" />
     <Compile Include="Security\MultiTenancyAuthentication\MultiTenancyIdentityLogonTest.cs" />
     <Compile Include="Security\MultiTenancyAuthentication\MultiTenancyApplicationLogonTest.cs" />
+    <Compile Include="Security\NhibConfigEncryptionTest.cs" />
     <Compile Include="Security\PasswordPolicyTest.cs" />
     <Compile Include="Security\PasswordStrengthRuleTest.cs" />
     <Compile Include="Security\Principal\AllowedToSeeUsersNotInOrganizationSpecificationTest.cs" />

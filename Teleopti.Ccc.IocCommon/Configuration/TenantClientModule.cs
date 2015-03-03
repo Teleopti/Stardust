@@ -1,5 +1,6 @@
 ﻿using Autofac;
 using Teleopti.Ccc.Domain.Common;
+using Teleopti.Ccc.Domain.Security;
 using Teleopti.Ccc.Domain.Security.MultiTenancyAuthentication;
 using Teleopti.Ccc.Infrastructure.MultiTenancy;
 
@@ -20,7 +21,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 
 			if (isRunFromTest(tenantServer) || tenantServer.IsAnUrl())
 			{
-				builder.Register(c => new AuthenticationQuerier(tenantServer))
+				builder.Register(c => new AuthenticationQuerier(tenantServer, new NhibConfigEncryption()))
 				.As<IAuthenticationQuerier>()
 				.SingleInstance();
 			}

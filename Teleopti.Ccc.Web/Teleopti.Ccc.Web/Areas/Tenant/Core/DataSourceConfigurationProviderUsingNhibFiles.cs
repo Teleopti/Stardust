@@ -1,16 +1,17 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
 
 namespace Teleopti.Ccc.Web.Areas.Tenant.Core
 {
 	public class DataSourceConfigurationProviderUsingNhibFiles : IDataSourceConfigurationProvider
 	{
 		private readonly IReadNHibFiles _readNHibFiles;
+		private readonly INhibConfigurationEncryption _nhibConfigurationEncryption;
 		private IDictionary<string, DataSourceConfiguration> allConfigs;
 
-		public DataSourceConfigurationProviderUsingNhibFiles(IReadNHibFiles readNHibFiles)
+		public DataSourceConfigurationProviderUsingNhibFiles(IReadNHibFiles readNHibFiles, INhibConfigurationEncryption nhibConfigurationEncryption)
 		{
 			_readNHibFiles = readNHibFiles;
+			_nhibConfigurationEncryption = nhibConfigurationEncryption;
 		}
 
 		public DataSourceConfiguration ForTenant(string tenant)
@@ -19,7 +20,12 @@ namespace Teleopti.Ccc.Web.Areas.Tenant.Core
 				allConfigs = _readNHibFiles.Read();
 	
 			DataSourceConfiguration ret;
-			return allConfigs.TryGetValue(tenant, out ret) ? ret : null;
+			if (allConfigs.TryGetValue(tenant, out ret))
+			{
+				return _nhibConfigurationEncryption.EncryptConfig(ret);
+			}
+				
+			return null;
 		}
 	}
 }

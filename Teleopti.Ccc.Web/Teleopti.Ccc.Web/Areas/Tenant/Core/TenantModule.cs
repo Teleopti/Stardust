@@ -36,6 +36,8 @@ namespace Teleopti.Ccc.Web.Areas.Tenant.Core
 			builder.RegisterType<DataSourceConfigurationProviderUsingNhibFiles>().As<IDataSourceConfigurationProvider>().SingleInstance();
 			builder.RegisterType<ReadNHibFiles>().As<IReadNHibFiles>().SingleInstance();
 			builder.RegisterType<ParseNhibFile>().As<IParseNhibFile>().SingleInstance();
+			builder.RegisterType<NhibConfigurationEncryption>().As<INhibConfigurationEncryption>().SingleInstance();
+
 		}
 	}
 }

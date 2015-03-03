@@ -1525,6 +1525,7 @@
     <Compile Include="Security\MultiTenancyAuthentication\IAuthenticationQuerier.cs" />
     <Compile Include="Security\MultiTenancyAuthentication\MultiTenancyApplicationLogon.cs" />
     <Compile Include="Security\MultiTenancyAuthentication\MultiTenancyWindowsLogon.cs" />
+    <Compile Include="Security\NhibConfigEncryption.cs" />
     <Compile Include="Security\OneWayEncryption.cs">
       <SubType>Code</SubType>
     </Compile>

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Net;
+using Teleopti.Ccc.Domain.Security;
 using Teleopti.Ccc.Domain.Security.MultiTenancyAuthentication;
 using Teleopti.Ccc.Infrastructure.Foundation;
 
@@ -9,10 +10,12 @@ namespace Teleopti.Ccc.Infrastructure.MultiTenancy
 	public class AuthenticationQuerier : IAuthenticationQuerier
 	{
 		private readonly string _pathToTenantServer;
+		private readonly INhibConfigEncryption _nhibConfigEncryption;
 
-		public AuthenticationQuerier(string pathToTenantServer)
+		public AuthenticationQuerier(string pathToTenantServer, INhibConfigEncryption nhibConfigEncryption)
 		{
 			_pathToTenantServer = pathToTenantServer;
+			_nhibConfigEncryption = nhibConfigEncryption;
 		}
 
 		public AuthenticationQueryResult TryLogon(string userName, string password, string userAgent)
@@ -23,7 +26,9 @@ namespace Teleopti.Ccc.Infrastructure.MultiTenancy
 			var request = (HttpWebRequest)WebRequest.Create(uriBuilder.Uri);
 			request.UserAgent = userAgent;
 
-			return request.PostRequest<AuthenticationQueryResult>(post);
+			var answer = request.PostRequest<AuthenticationQueryResult>(post);
+			answer.DataSourceConfiguration = _nhibConfigEncryption.DecryptConfig(answer.DataSourceConfiguration);
+			return answer;
 		}
 
 		public AuthenticationQueryResult TryIdentityLogon(string identity, string userAgent)
@@ -34,7 +39,9 @@ namespace Teleopti.Ccc.Infrastructure.MultiTenancy
 			var request = (HttpWebRequest)WebRequest.Create(uriBuilder.Uri);
 			request.UserAgent = userAgent;
 
-			return request.PostRequest<AuthenticationQueryResult>(post);
+			var answer = request.PostRequest<AuthenticationQueryResult>(post);
+			answer.DataSourceConfiguration = _nhibConfigEncryption.DecryptConfig(answer.DataSourceConfiguration);
+			return answer;
 		}
 	}
 }

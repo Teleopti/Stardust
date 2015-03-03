@@ -13,8 +13,10 @@ namespace Teleopti.Ccc.WebTest.Areas.Tenant.Core
 		{
 			var expected = new DataSourceConfiguration();
 			var readNHibFiles = MockRepository.GenerateMock<IReadNHibFiles>();
+			var encrypter = MockRepository.GenerateMock<INhibConfigurationEncryption>();
 			readNHibFiles.Expect(x => x.Read()).Return(new Dictionary<string, DataSourceConfiguration> {{"something", expected}});
-			var target = new DataSourceConfigurationProviderUsingNhibFiles(readNHibFiles);
+			encrypter.Stub(x => x.EncryptConfig(expected)).Return(expected);
+			var target = new DataSourceConfigurationProviderUsingNhibFiles(readNHibFiles, encrypter);
 			target.ForTenant("something")
 				.Should().Be.SameInstanceAs(expected);
 		}
@@ -23,8 +25,9 @@ namespace Teleopti.Ccc.WebTest.Areas.Tenant.Core
 		public void NonExistingConfiguration()
 		{
 			var readNHibFiles = MockRepository.GenerateMock<IReadNHibFiles>();
+			var encrypter = MockRepository.GenerateMock<INhibConfigurationEncryption>();
 			readNHibFiles.Expect(x => x.Read()).Return(new Dictionary<string, DataSourceConfiguration>());
-			var target = new DataSourceConfigurationProviderUsingNhibFiles(readNHibFiles);
+			var target = new DataSourceConfigurationProviderUsingNhibFiles(readNHibFiles, encrypter);
 			target.ForTenant("notsomething")
 				.Should().Be.Null();
 		}
@@ -33,9 +36,10 @@ namespace Teleopti.Ccc.WebTest.Areas.Tenant.Core
 		public void ShouldKeepStateIfReadNhibFiles()
 		{
 			var readNHibFiles = MockRepository.GenerateMock<IReadNHibFiles>();
+			var encrypter = MockRepository.GenerateMock<INhibConfigurationEncryption>();
 			readNHibFiles.Expect(x => x.Read()).Return(new Dictionary<string, DataSourceConfiguration>());
 
-			var target = new DataSourceConfigurationProviderUsingNhibFiles(readNHibFiles);
+			var target = new DataSourceConfigurationProviderUsingNhibFiles(readNHibFiles,encrypter);
 			target.ForTenant("1");
 			target.ForTenant("1");
 			target.ForTenant("2");
@@ -49,8 +53,11 @@ namespace Teleopti.Ccc.WebTest.Areas.Tenant.Core
 			var expected = new DataSourceConfiguration();
 			var expectedTwo = new DataSourceConfiguration();
 			var readNHibFiles = MockRepository.GenerateMock<IReadNHibFiles>();
+			var encrypter = MockRepository.GenerateMock<INhibConfigurationEncryption>();
+			encrypter.Stub(x => x.EncryptConfig(expected)).Return(expected);
+			encrypter.Stub(x => x.EncryptConfig(expectedTwo)).Return(expectedTwo);
 			readNHibFiles.Expect(x => x.Read()).Return(new Dictionary<string, DataSourceConfiguration> { { "something", expected }, { "somethingElse", expectedTwo } });
-			var target = new DataSourceConfigurationProviderUsingNhibFiles(readNHibFiles);
+			var target = new DataSourceConfigurationProviderUsingNhibFiles(readNHibFiles,encrypter);
 			target.ForTenant("something")
 				.Should().Be.SameInstanceAs(expected);
 
