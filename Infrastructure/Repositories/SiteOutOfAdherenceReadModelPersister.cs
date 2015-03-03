@@ -3,11 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using NHibernate;
 using NHibernate.Transform;
+using NHibernate.Util;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta;
 using Teleopti.Ccc.Infrastructure.LiteUnitOfWork;
 using Teleopti.Interfaces;
 
-namespace Teleopti.Ccc.Infrastructure.Rta.Persisters
+namespace Teleopti.Ccc.Infrastructure.Repositories
 {
 	public class SiteOutOfAdherenceReadModelPersister : ISiteOutOfAdherenceReadModelPersister, ISiteOutOfAdherenceReadModelReader
 	{
