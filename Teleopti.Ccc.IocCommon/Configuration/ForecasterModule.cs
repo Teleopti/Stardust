@@ -13,6 +13,9 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<ForecastingTargetMerger>()
 				.SingleInstance()
 				.As<IForecastingTargetMerger>();
+			builder.RegisterType<ForecastingMeasurer>()
+				.SingleInstance()
+				.As<IForecastingMeasurer>();
 			builder.RegisterType<ForecastMethod>()
 				.SingleInstance()
 				.As<IForecastMethod>();

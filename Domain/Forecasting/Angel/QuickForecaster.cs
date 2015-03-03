@@ -31,7 +31,7 @@ namespace Teleopti.Ccc.Domain.Forecasting.Angel
 
 				};
 				_quickForecasterWorkload.Execute(quickForecasterWorkloadParams);
-				sum += quickForecasterWorkloadParams.Accuracy;
+				sum += quickForecasterWorkloadParams.Difference;
 			}
 			return sum;
 		}
@@ -42,7 +42,7 @@ namespace Teleopti.Ccc.Domain.Forecasting.Angel
 		public IWorkload WorkLoad { get; set; }
 		public DateOnlyPeriod FuturePeriod { get; set; }
 		public ICollection<ISkillDay> SkillDays { get; set; }
-		public double Accuracy { get; set; }
+		public double Difference { get; set; }
 		public DateOnlyPeriod HistoricalPeriod { get; set; }
 	}
 }
