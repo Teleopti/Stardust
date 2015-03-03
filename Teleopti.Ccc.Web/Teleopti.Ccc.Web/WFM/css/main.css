@@ -50,7 +50,7 @@ body {
   background-color: white;
   border-radius: 2px; }
 
-.wfm-block, .tree ol, .tree li, .wfm-list li, select option, .wfm-accordion label, .tab-group .tab-container, .notice, .notification-list li {
+.wfm-block, .tree ol, .tree li, .wfm-list li, select option, .wfm-accordion input[type='radio'] + label, .tab-group .tab-container, .notice, .notification-list li {
   padding: 5px;
   width: 100%; }
 
@@ -416,31 +416,34 @@ input[type='text'], select {
     /*Slider width + 5px*/
     margin-left: 53px; }
 
-.wfm-checkbox input[type='checkbox'] {
-  display: none; }
-.wfm-checkbox label {
-  background-color: #E0E0E0;
-  width: 18px;
-  height: 18px;
-  border-radius: 4px;
-  text-align: center;
-  -webkit-transition: background-color .2s ease-in-out;
-  transition: background-color .2s ease-in-out; }
-.wfm-checkbox label:before {
-  content: "";
-  display: block;
-  width: 20px;
-  height: 20px;
-  color: #ffffff;
-  cursor: pointer;
-  position: absolute; }
-.wfm-checkbox input[type=checkbox]:checked ~ label {
-  background-color: #64b5f6; }
-.wfm-checkbox input[type=checkbox]:checked ~ label:before {
-  content: "✓"; }
-.wfm-checkbox span {
-  /*Slider width + 5px*/
-  margin-left: 23px; }
+.wfm-checkbox {
+  margin-left: 5px; }
+  .wfm-checkbox input[type='checkbox'] {
+    display: none; }
+  .wfm-checkbox label {
+    background-color: #E0E0E0;
+    width: 18px;
+    height: 18px;
+    border-radius: 4px;
+    text-align: center;
+    -webkit-transition: background-color .2s ease-in-out;
+    transition: background-color .2s ease-in-out; }
+  .wfm-checkbox label:before {
+    content: "";
+    display: block;
+    width: 20px;
+    height: 20px;
+    color: #ffffff;
+    cursor: pointer;
+    position: absolute; }
+  .wfm-checkbox input[type=checkbox]:checked ~ label {
+    background-color: #64b5f6; }
+  .wfm-checkbox input[type=checkbox]:checked ~ label:before {
+    content: "✓"; }
+  .wfm-checkbox span {
+    /*Slider width + 5px*/
+    margin-left: 23px;
+    white-space: nowrap; }
 
 .sidenav-toggle input[type='checkbox'] {
   display: none; }
@@ -590,7 +593,7 @@ tr {
 }*/
 .wfm-accordion {
   width: 100%; }
-  .wfm-accordion label {
+  .wfm-accordion input[type='radio'] + label {
     position: relative;
     z-index: 20;
     cursor: pointer;
@@ -599,7 +602,7 @@ tr {
     margin-bottom: 0;
     border-bottom: 1px solid #ffffff;
     font-weight: inherit; }
-  .wfm-accordion .sub-label {
+  .wfm-accordion input[type='radio'] + .sub-label {
     background-color: #64b5f6;
     color: rgba(0, 0, 0, 0.87); }
   .wfm-accordion input[type='radio'] {
