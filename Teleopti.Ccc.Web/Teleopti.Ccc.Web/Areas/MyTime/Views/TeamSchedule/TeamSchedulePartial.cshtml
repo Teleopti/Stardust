@@ -12,9 +12,9 @@
 
 <script>
 	
-	$(function () {
+	$(function () {		
 		var vm = new Teleopti.MyTimeWeb.TeamScheduleViewModel();
-		vm.initCurrentDate();
+		vm.initCurrentDate(Teleopti.MyTimeWeb.Portal.ParseHash().dateHash);
 		$(window).unbind('resize');
 		$(window).resize(function () {
 			vm.redrawLayers();

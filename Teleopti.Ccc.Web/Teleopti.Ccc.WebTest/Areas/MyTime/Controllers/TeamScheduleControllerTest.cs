@@ -28,7 +28,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			now.Stub(x => x.UtcDateTime()).Return(date.Date.ToUniversalTime());
 			var id = Guid.NewGuid();
 			var target = new TeamScheduleController(now, viewModelFactory, MockRepository.GenerateMock<IDefaultTeamProvider>(),
-				MockRepository.GenerateMock<ITeamScheduleViewModelReworkedMapper>(), MockRepository.GenerateMock<ITimeFilterHelper>(), MockRepository.GenerateMock<IToggleManager>());
+				MockRepository.GenerateMock<ITeamScheduleViewModelReworkedMapper>(), MockRepository.GenerateMock<ITimeFilterHelper>(), MockRepository.GenerateMock<IToggleManager>(), MockRepository.GenerateMock<ILoggedOnUser>());
 
 			viewModelFactory.Stub(x => x.CreateViewModel(date, id)).Return(new TeamScheduleViewModel());
 
@@ -47,7 +47,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			now.Stub(x => x.UtcDateTime()).Return(DateTime.UtcNow); 
 			personPeriodProvider.Stub(x => x.HasPersonPeriod(DateOnly.Today)).Return(true);
 			var target = new TeamScheduleController(now, viewModelFactory, MockRepository.GenerateMock<IDefaultTeamProvider>(), MockRepository.GenerateMock<ITeamScheduleViewModelReworkedMapper>(),
-				MockRepository.GenerateMock<ITimeFilterHelper>(), MockRepository.GenerateMock<IToggleManager>());
+				MockRepository.GenerateMock<ITimeFilterHelper>(), MockRepository.GenerateMock<IToggleManager>(), MockRepository.GenerateMock<ILoggedOnUser>());
 
 			target.Index(null, Guid.Empty);
 
@@ -68,7 +68,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			defaultTeamCalculator.Stub(x => x.DefaultTeam(DateOnly.Today)).Return(team);
 
 			var target = new TeamScheduleController(now,viewModelFactory, defaultTeamCalculator,
-				MockRepository.GenerateMock<ITeamScheduleViewModelReworkedMapper>(), MockRepository.GenerateMock<ITimeFilterHelper>(), MockRepository.GenerateMock<IToggleManager>());
+				MockRepository.GenerateMock<ITeamScheduleViewModelReworkedMapper>(), MockRepository.GenerateMock<ITimeFilterHelper>(), MockRepository.GenerateMock<IToggleManager>(), MockRepository.GenerateMock<ILoggedOnUser>());
 
 			target.Index(DateOnly.Today, null);
 

@@ -1,8 +1,10 @@
 Teleopti.MyTimeWeb.DayScheduleMixin = function() {
 	var self = this;
 
-	self.openPeriodStartDate = ko.observable(moment().startOf('year').add('days', -1));
-	self.openPeriodEndDate = ko.observable(moment().startOf('year').add('days', -1));
+	self.openPeriodStartDate = ko.observable();
+
+	//moment().startOf('year').add('days', -1)
+	self.openPeriodEndDate = ko.observable();
 	self.DatePickerFormat = ko.observable("YYYY-MM-DD");
 	self.weekStart = ko.observable(1);
 
@@ -25,11 +27,11 @@ Teleopti.MyTimeWeb.DayScheduleMixin = function() {
 
 	self.requestedDate = ko.observable(moment().startOf('day'));	
 	
-	self.reloadDatePickerFormat = function($hiddenInput) {
-		self.DatePickerFormat($hiddenInput.val());
+	self.setDatePickerFormat = function(format) {
+		self.DatePickerFormat(format);
 	};
 
-	self.requestedDateWithFormat = ko.computed(function() {
+	self.requestedDateWithFormat = ko.computed(function () {
 		return self.requestedDate().format(self.DatePickerFormat());
 	});
 
@@ -44,10 +46,10 @@ Teleopti.MyTimeWeb.DayScheduleMixin = function() {
 		}
 	});
 
-	self.isRequestedDateValid = function(date) {
-		if (date.diff(self.openPeriodStartDate()) < 0) {
+	self.isRequestedDateValid = function (date) {
+		if (self.openPeriodStartDate() &&  date.diff(self.openPeriodStartDate()) < 0) {
 			return false;
-		} else if (self.openPeriodEndDate().diff(date) < 0) {
+		} else if (self.openPeriodEndDate()  && self.openPeriodEndDate().diff(date) < 0) {
 			return false;
 		}
 		return true;
@@ -74,11 +76,11 @@ Teleopti.MyTimeWeb.DayScheduleMixin = function() {
 	};
 
 	self.nextDateValid = ko.computed(function () {
-		return self.openPeriodEndDate().diff(self.requestedDate()) > 0;
+		return self.openPeriodEndDate() == null || self.openPeriodEndDate().diff(self.requestedDate()) > 0;
 	});
 
 	self.previousDateValid = ko.computed(function () {
-		return self.requestedDate().diff(self.openPeriodStartDate()) > 0;
+		return self.openPeriodStartDate() == null || self.requestedDate().diff(self.openPeriodStartDate()) > 0;
 	});
 
 };

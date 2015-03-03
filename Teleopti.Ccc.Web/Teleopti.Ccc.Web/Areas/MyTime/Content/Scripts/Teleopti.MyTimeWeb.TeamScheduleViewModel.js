@@ -7,10 +7,16 @@ Teleopti.MyTimeWeb.TeamScheduleViewModel = function() {
 	self.isTeamScheduleSorttingFeatureEnabled = ko.observable(true);
 	self.isLoading = ko.observable(false);
 
-	self.initCurrentDate = function() {
+	self.initCurrentDate = function (urlDate) {
 		self.loadCurrentDate(
-			function(data) {
-				self.requestedDate( moment(new Date(data.NowYear, data.NowMonth - 1, data.NowDay)));
+			function (data) {
+				if (urlDate) {
+					self.requestedDate(moment(urlDate));
+				} else {
+					self.requestedDate(moment(new Date(data.NowYear, data.NowMonth - 1, data.NowDay)));
+				}
+				if (data.DateTimeFormat)
+					self.setDatePickerFormat(data.DateTimeFormat.toUpperCase());
 			},
 			null
 		);

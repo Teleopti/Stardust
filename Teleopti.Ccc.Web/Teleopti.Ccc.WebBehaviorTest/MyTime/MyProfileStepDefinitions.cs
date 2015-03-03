@@ -110,7 +110,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.MyTime
 		{
 			var date = new DateTime(2014, 5, 2);
 			TryGotoTeamSchedule(date);
-			Browser.Interactions.AssertInputValueUsingJQuery(".navbar-nav input.text-center.form-control", date.ToShortDateString());
+			Browser.Interactions.AssertInputValueUsingJQuery("input.date-input-style", date.ToShortDateString());
 		}
 
 		private void TryGotoTeamSchedule(DateTime date)

@@ -13,7 +13,6 @@ using Teleopti.Ccc.Web.Areas.MyTime.Core.Filters;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.TeamSchedule.DataProvider;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.TeamSchedule.Mapping;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.TeamSchedule.ViewModelFactory;
-using Teleopti.Ccc.Web.Areas.MyTime.Models.TeamSchedule;
 using Teleopti.Ccc.Web.Filters;
 using Teleopti.Interfaces.Domain;
 
@@ -29,8 +28,9 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 		private readonly ITeamScheduleViewModelReworkedMapper _teamScheduleViewModelReworked;
 		private readonly ITimeFilterHelper _timeFilterHelper;
 		private readonly IToggleManager _toggleManager;
+		private readonly ILoggedOnUser _loggedOnUser;
 
-		public TeamScheduleController(INow now, ITeamScheduleViewModelFactory teamScheduleViewModelFactory, IDefaultTeamProvider defaultTeamProvider, ITeamScheduleViewModelReworkedMapper teamScheduleViewModelReworked, ITimeFilterHelper timeFilterHelper, IToggleManager toggleManager)
+		public TeamScheduleController(INow now, ITeamScheduleViewModelFactory teamScheduleViewModelFactory, IDefaultTeamProvider defaultTeamProvider, ITeamScheduleViewModelReworkedMapper teamScheduleViewModelReworked, ITimeFilterHelper timeFilterHelper, IToggleManager toggleManager, ILoggedOnUser loggedOnUser)
 		{
 			_now = now;
 			_teamScheduleViewModelFactory = teamScheduleViewModelFactory;
@@ -38,6 +38,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 			_teamScheduleViewModelReworked = teamScheduleViewModelReworked;
 			_timeFilterHelper = timeFilterHelper;
 			_toggleManager = toggleManager;
+			_loggedOnUser = loggedOnUser;
 		}
 
 		[EnsureInPortal]
@@ -72,12 +73,14 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 		public JsonResult TeamScheduleCurrentDate()
 		{			 
 			var calendar = CultureInfo.CurrentCulture.Calendar;
+		
 			return Json(
 				new
 				{
 					NowYear = calendar.GetYear(_now.LocalDateOnly()),
 					NowMonth = calendar.GetMonth(_now.LocalDateOnly()),
-					NowDay = calendar.GetDayOfMonth(_now.LocalDateOnly())
+					NowDay = calendar.GetDayOfMonth(_now.LocalDateOnly()),
+					DateTimeFormat = _loggedOnUser.CurrentUser().PermissionInformation.Culture().DateTimeFormat.ShortDatePattern
 				},
 				JsonRequestBehavior.AllowGet);
 		}
