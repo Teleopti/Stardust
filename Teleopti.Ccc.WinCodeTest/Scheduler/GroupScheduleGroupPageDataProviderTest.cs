@@ -149,14 +149,6 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 		}
 
 		[Test]
-		public void VerifySelectedPeriod()
-		{
-			var period = new DateOnlyPeriod(new DateOnly(2000, 1, 1), new DateOnly(2010, 1, 1));
-			_target.SetSelectedPeriod(period);
-			Assert.AreEqual(period, _target.SelectedPeriod);
-		}
-
-		[Test]
 		public void VerifyUserDefinedGroupings()
 		{
 			var repository = _mocks.StrictMock<IGroupPageRepository>();
@@ -245,7 +237,6 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 			var person2 = PersonFactory.CreatePerson("tvåan");
 			var person3 = PersonFactory.CreatePerson("trean");
 			var persons = new List<IPerson> {person1, person2, person3,};
-			_target.SetSelectedPeriod(new DateOnlyPeriod(2012,1,1,2012,12,31));
 			Expect.Call(_resultHolder.PersonsInOrganization).Return(persons);
 		    
             _mocks.ReplayAll();
@@ -253,8 +244,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
             person3.TerminatePerson(new DateOnly(2005, 1, 1), _personAccountUpdater);
 
 			var result = _target.AllLoadedPersons;
-			Assert.That(result.Count(),Is.EqualTo(2));
-			Assert.That(!result.Contains(person3));
+			Assert.That(result.Count(),Is.EqualTo(3));
 			_mocks.VerifyAll();
 		}
 	}

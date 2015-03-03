@@ -1,9 +1,9 @@
+using System;
 using System.Collections.Generic;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
-using Teleopti.Ccc.WinCode.Common;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
 
@@ -19,11 +19,11 @@ namespace Teleopti.Ccc.WinCode.Scheduling
         private IList<IContractSchedule> _contractScheduleCollection;
         private IList<IPartTimePercentage> _partTimePercentageCollection;
         private IList<IRuleSetBag> _ruleSetBagCollection;
-        private DateOnlyPeriod _selectedPeriod;
         private IList<IGroupPage> _groupPageCollection;
         private IList<ISkill> _skillCollection;
         private IList<IPerson> _personCollection;
 		private IList<IPerson> _allPersons;
+		private readonly object _lockObject = new Object();
 
 		public GroupScheduleGroupPageDataProvider(ISchedulerStateHolder stateHolder, IRepositoryFactory repositoryFactory, IUnitOfWorkFactory unitOfWorkFactory)
         {
@@ -34,25 +34,13 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 
         public IEnumerable<IPerson> PersonCollection
         {
-            get { 
-                if(_personCollection == null)
-                {
-                    IList<IPerson> validPersons = new List<IPerson>();
-                    foreach (var person in _stateHolder.AllPermittedPersons)
-                    {
-                        if(person.TerminalDate.HasValue)
-                        {
-                            if(person.TerminalDate.Value >= SelectedPeriod.StartDate)
-                                validPersons.Add(person);
-                        }
-                        else
-                        {
-                            validPersons.Add(person);
-                        }
-                    }
-                    _personCollection = validPersons;
-                }
-
+            get {
+	            lock (_lockObject)
+	            {
+					if (_personCollection == null)
+						_personCollection = new List<IPerson>(_stateHolder.AllPermittedPersons);
+	            }
+                
                 return _personCollection;
             }
         }
@@ -61,17 +49,21 @@ namespace Teleopti.Ccc.WinCode.Scheduling
         {
             get
             {
-                if (_contractCollection == null)
-                {
-                    using (IUnitOfWork uow = _unitOfWorkFactory.CreateAndOpenUnitOfWork())
-                    {
-                        using (uow.DisableFilter(QueryFilter.Deleted))
-                        {
-                            _contractCollection =
-                            _repositoryFactory.CreateContractRepository(uow).LoadAll();
-                        }
-                    }
-                }
+	            lock (_lockObject)
+	            {
+					if (_contractCollection == null)
+					{
+						using (IUnitOfWork uow = _unitOfWorkFactory.CreateAndOpenUnitOfWork())
+						{
+							using (uow.DisableFilter(QueryFilter.Deleted))
+							{
+								_contractCollection =
+								_repositoryFactory.CreateContractRepository(uow).LoadAll();
+							}
+						}
+					}
+	            }
+               
                 return _contractCollection;
             }
         }
@@ -80,17 +72,21 @@ namespace Teleopti.Ccc.WinCode.Scheduling
         {
             get
             {
-                if (_contractScheduleCollection == null)
-                {
-                    using (IUnitOfWork uow = _unitOfWorkFactory.CreateAndOpenUnitOfWork())
-                    {
-                        using (uow.DisableFilter(QueryFilter.Deleted))
-                        {
-                            _contractScheduleCollection =
-                            _repositoryFactory.CreateContractScheduleRepository(uow).LoadAll();
-                        }
-                    }
-                }
+	            lock (_lockObject)
+	            {
+					if (_contractScheduleCollection == null)
+					{
+						using (IUnitOfWork uow = _unitOfWorkFactory.CreateAndOpenUnitOfWork())
+						{
+							using (uow.DisableFilter(QueryFilter.Deleted))
+							{
+								_contractScheduleCollection =
+								_repositoryFactory.CreateContractScheduleRepository(uow).LoadAll();
+							}
+						}
+					}
+	            }
+               
                 return _contractScheduleCollection;
             }
         }
@@ -99,17 +95,21 @@ namespace Teleopti.Ccc.WinCode.Scheduling
         {
             get
             {
-                if (_partTimePercentageCollection == null)
-                {
-                    using (IUnitOfWork uow = _unitOfWorkFactory.CreateAndOpenUnitOfWork())
-                    {
-                        using (uow.DisableFilter(QueryFilter.Deleted))
-                        {
-                            _partTimePercentageCollection =
-                            _repositoryFactory.CreatePartTimePercentageRepository(uow).LoadAll();
-                        }
-                    }
-                }
+	            lock (_lockObject)
+	            {
+					if (_partTimePercentageCollection == null)
+					{
+						using (IUnitOfWork uow = _unitOfWorkFactory.CreateAndOpenUnitOfWork())
+						{
+							using (uow.DisableFilter(QueryFilter.Deleted))
+							{
+								_partTimePercentageCollection =
+								_repositoryFactory.CreatePartTimePercentageRepository(uow).LoadAll();
+							}
+						}
+					}
+	            }
+                
                 return _partTimePercentageCollection;
             }
         }
@@ -118,17 +118,21 @@ namespace Teleopti.Ccc.WinCode.Scheduling
         {
             get
             {
-                if (_ruleSetBagCollection == null)
-                {
-                    using (IUnitOfWork uow = _unitOfWorkFactory.CreateAndOpenUnitOfWork())
-                    {
-                        using (uow.DisableFilter(QueryFilter.Deleted))
-                        {
-                            _ruleSetBagCollection =
-                            _repositoryFactory.CreateRuleSetBagRepository(uow).LoadAll();
-                        }
-                    }
-                }
+	            lock (_lockObject)
+	            {
+					if (_ruleSetBagCollection == null)
+					{
+						using (IUnitOfWork uow = _unitOfWorkFactory.CreateAndOpenUnitOfWork())
+						{
+							using (uow.DisableFilter(QueryFilter.Deleted))
+							{
+								_ruleSetBagCollection =
+								_repositoryFactory.CreateRuleSetBagRepository(uow).LoadAll();
+							}
+						}
+					}
+	            }
+                
                 return _ruleSetBagCollection;
             }
         }
@@ -137,16 +141,20 @@ namespace Teleopti.Ccc.WinCode.Scheduling
         {
             get
             {
-                if (_groupPageCollection == null)
-                {
-                    using (IUnitOfWork uow = _unitOfWorkFactory.CreateAndOpenUnitOfWork())
-                    {
-                        uow.Reassociate(_stateHolder.Schedules.Keys);
-                        IGroupPageRepository groupPageRepository = _repositoryFactory.CreateGroupPageRepository(uow);
-                        _groupPageCollection = new List<IGroupPage>(groupPageRepository.LoadAllGroupPageWhenPersonCollectionReAssociated());
-                    }
-					RemoveNotLoadedPersonsFromCollection(_groupPageCollection);
-                }
+	            lock (_lockObject)
+	            {
+					if (_groupPageCollection == null)
+					{
+						using (IUnitOfWork uow = _unitOfWorkFactory.CreateAndOpenUnitOfWork())
+						{
+							uow.Reassociate(_stateHolder.Schedules.Keys);
+							IGroupPageRepository groupPageRepository = _repositoryFactory.CreateGroupPageRepository(uow);
+							_groupPageCollection = new List<IGroupPage>(groupPageRepository.LoadAllGroupPageWhenPersonCollectionReAssociated());
+						}
+						RemoveNotLoadedPersonsFromCollection(_groupPageCollection);
+					}
+	            }
+                
                 return _groupPageCollection;
             }
         }
@@ -201,55 +209,44 @@ namespace Teleopti.Ccc.WinCode.Scheduling
             get { yield return ((ITeleoptiIdentity)TeleoptiPrincipal.CurrentPrincipal.Identity).BusinessUnit; }
         }
 
-        public DateOnlyPeriod SelectedPeriod
-        {
-            get { return _selectedPeriod; }
-        }
+		public DateOnlyPeriod SelectedPeriod
+		{
+			//never call this when using this instance
+			get { return new DateOnlyPeriod(DateOnly.MaxValue, DateOnly.MinValue);}
+		}
 
-        public IList<ISkill> SkillCollection
+		public IList<ISkill> SkillCollection
         {
             get
             {
-                if (_skillCollection == null)
-                {
-                    using (IUnitOfWork uow = _unitOfWorkFactory.CreateAndOpenUnitOfWork())
-                    {
-                       _skillCollection = _repositoryFactory.CreateSkillRepository(uow).LoadAll();
-                    }
-                }
+	            lock (_lockObject)
+	            {
+					if (_skillCollection == null)
+					{
+						using (IUnitOfWork uow = _unitOfWorkFactory.CreateAndOpenUnitOfWork())
+						{
+							_skillCollection = _repositoryFactory.CreateSkillRepository(uow).LoadAll();
+						}
+					}
+	            }
+                
                 return _skillCollection;
             }
         }
 
 		public IEnumerable<IPerson> AllLoadedPersons
 		{
-			get { 
-				if(_allPersons == null)
-                {
-                    IList<IPerson> validPersons = new List<IPerson>();
-                    foreach (var person in _stateHolder.SchedulingResultState.PersonsInOrganization)
-                    {
-                        if(person.TerminalDate.HasValue)
-                        {
-                            if(person.TerminalDate.Value >= SelectedPeriod.StartDate)
-                                validPersons.Add(person);
-                        }
-                        else
-                        {
-                            validPersons.Add(person);
-                        }
-                    }
-                    _allPersons = validPersons;
-                }
-
+			get {
+				lock (_lockObject)
+				{
+					if (_allPersons == null)
+					{
+						_allPersons = new List<IPerson>(_stateHolder.SchedulingResultState.PersonsInOrganization);
+					}
+				}
+				
                 return _allPersons;
             }
 		}
-
-		public void SetSelectedPeriod(DateOnlyPeriod selectedPeriod)
-        {
-            _selectedPeriod = selectedPeriod;
-        }
-
     }
 }
