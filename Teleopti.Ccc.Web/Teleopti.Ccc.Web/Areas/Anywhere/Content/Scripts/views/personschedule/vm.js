@@ -47,10 +47,15 @@ define([
 		this.Persons = ko.observableArray();
 
 		this.SortedPersons = ko.computed(function () {
-			return self.Persons().sort(function(first, second) {
-				first = first.OrderBy();
-				second = second.OrderBy();
-				return first == second ? 0 : (first < second ? -1 : 1);
+			return self.Persons().sort(function (first, second) {
+				var firstOrderBy = first.OrderBy();
+				var firstAgentName = first.Name();
+
+				var secondOrderBy = second.OrderBy();
+				var secondAgentName = second.Name();
+
+				var nameOrder = firstAgentName == secondAgentName ? 0 : (firstAgentName < secondAgentName ? -1 : 1);
+				return firstOrderBy == secondOrderBy ? nameOrder : (firstOrderBy < secondOrderBy ? -1 : 1);
 			});
 		}).extend({ throttle: 500 });
 
