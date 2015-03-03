@@ -52,7 +52,6 @@ namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork
 			IDataSource res;
 			target.TryCreate(nhibernateXmlConfiguration, out res);
 			Assert.AreEqual("test", res.Application.Name);
-			Assert.IsNull(res.OriginalFileName);
 
 			Assert.IsInstanceOf<NHibernateUnitOfWorkFactory>(res.Application);
 			Assert.IsInstanceOf<NHibernateUnitOfWorkMatrixFactory>(res.Statistic);

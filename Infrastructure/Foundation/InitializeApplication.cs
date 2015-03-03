@@ -78,7 +78,6 @@ namespace Teleopti.Ccc.Infrastructure.Foundation
 				if (DataSourcesFactory.TryCreate(element, out dataSource))
 				{
 					dataSource.AuthenticationTypeOption = AuthenticationTypeOption.Application | AuthenticationTypeOption.Windows;
-					dataSource.OriginalFileName = file;
 					dataSources.Add(dataSource);
 				}
 			}

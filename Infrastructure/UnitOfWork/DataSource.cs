@@ -13,8 +13,7 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 			ReadModel = readModel;
 		}
 
-		public string OriginalFileName { get; set; }
-
+		//TODO: tenant Can probably be removed later
 		public AuthenticationTypeOption AuthenticationTypeOption { get; set; }
 
 		public IUnitOfWorkFactory Statistic { get; private set; }

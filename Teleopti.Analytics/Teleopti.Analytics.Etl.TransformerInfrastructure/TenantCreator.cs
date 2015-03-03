@@ -47,7 +47,6 @@ namespace Teleopti.Analytics.Etl.TransformerInfrastructure
 				if (dataSourcesFactory.TryCreate(element, out dataSource))
 				{
 					dataSource.AuthenticationTypeOption = AuthenticationTypeOption.Application | AuthenticationTypeOption.Windows;
-					dataSource.OriginalFileName = file;
 					dataSources.Add(dataSource);
 				}
 			}
