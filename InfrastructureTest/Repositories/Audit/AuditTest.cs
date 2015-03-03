@@ -85,26 +85,5 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories.Audit
 		{
 		}
 
-		protected sealed override void TeardownForRepositoryTest()
-		{
-			//cleanup
-			using (var uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
-			{
-				var session = uow.FetchSession();
-				foreach (var scheduleData in session.CreateCriteria(typeof(IPersistableScheduleData)).List())
-				{
-					session.Delete(scheduleData);
-				}
-				session.CreateQuery(@"update Person p set p.IsDeleted = 1").ExecuteUpdate();
-				session.CreateQuery(@"update Scenario p set p.IsDeleted = 1").ExecuteUpdate();
-				session.CreateQuery(@"update ShiftCategory p set p.IsDeleted = 1").ExecuteUpdate();
-				session.CreateQuery(@"update Activity p set p.IsDeleted = 1").ExecuteUpdate();
-				session.CreateQuery(@"update Absence p set p.IsDeleted = 1").ExecuteUpdate();
-				session.CreateQuery(@"update DayOffTemplate p set p.IsDeleted = 1").ExecuteUpdate();
-				session.CreateQuery(@"update MultiplicatorDefinitionSet p set p.IsDeleted = 1").ExecuteUpdate();
-				uow.PersistAll();
-			}
-			turnOffAudit();
-		}
 	}
 }

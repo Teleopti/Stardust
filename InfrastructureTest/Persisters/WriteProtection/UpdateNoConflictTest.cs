@@ -62,14 +62,5 @@ namespace Teleopti.Ccc.InfrastructureTest.Persisters.WriteProtection
 			writeProtection = person.PersonWriteProtection;
 		}
 
-		protected override void TeardownForRepositoryTest()
-		{
-			using (var uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
-			{
-				var rep = new Repository(uow);
-				rep.Remove(writeProtection.BelongsTo);
-				uow.PersistAll();
-			}
-		}
 	}
 }

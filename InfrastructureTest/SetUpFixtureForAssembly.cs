@@ -107,39 +107,29 @@ namespace Teleopti.Ccc.InfrastructureTest
 		[TearDown]
 		public void AfterTestSuite()
 		{
-			using (var uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
-			{
-				CleanupHistory(uow);
-				uow.PersistAll();
-			}
-			checkThatDbIsEmtpy();
-
 			DataSource.Application.Close();
 			if (DataSource.Statistic != null)
 				DataSource.Statistic.Close();	
 		}
 
-		public static void CleanupHistory(IUnitOfWork uow)
-		{
-			var s = uow.FetchSession();
-			foreach (var classMetaData in s.SessionFactory.GetAllClassMetadata().Values)
-			{
-				var entityName = classMetaData.EntityName;
-				if (entityName.Contains("_AUD"))
-					s.CreateQuery("delete from " + entityName).ExecuteUpdate();
-			}
-			s.CreateQuery("delete from Revision").ExecuteUpdate();
-		}
-
-		public static void checkThatDbIsEmtpy()
+		public static void CheckThatDbIsEmtpy()
 		{
 			const string assertMess =
-				 @"After running last test in suite, there's still data in db.
-Every test that's marked as 'SkipRollBack()' have to clean up db rows.
-This hasn't been done somewhere. Unfortunatly you will have to search yourself 
-in what infrastructuretest this has happened - it is unknown for me.";
+				 @"
+After running this test there's still data in db.
+If the test executes code that calls PersistAll(),
+you have to manually clean up or call CleanUpAfterTest() to restore the database state.
+";
 
-			createTemporaryStateHolder();
+			var mocks = new MockRepository();
+			var stateMock = mocks.StrictMock<IState>();
+			BusinessUnitFactory.BusinessUnitUsedInTest.SetId(Guid.NewGuid());
+			StateHolderProxyHelper.ClearAndSetStateHolder(mocks,
+																  loggedOnPerson,
+																  BusinessUnitFactory.BusinessUnitUsedInTest,
+																  ApplicationData,
+																	DataSource,
+																  stateMock);
 
 			using (IUnitOfWork uowTemp = DataSource.Application.CreateAndOpenUnitOfWork())
 			{
@@ -157,27 +147,6 @@ in what infrastructuretest this has happened - it is unknown for me.";
 					}
 				}
 			}
-		}
-
-		/// <summary>
-		/// Creates a local temporary state holder.
-		/// </summary>
-		/// <remarks>
-		/// we need to rectreated a local temporary mocked stateholder to make the ApplicationData object available in the stateholder when creting
-		/// Unit of work in DB empt check. It is because we are in the verified state of the old mock object, so its properies are not available
-		/// but we want to read its ApplicationScopeData property
-		/// </remarks>
-		private static void createTemporaryStateHolder()
-		{
-			var mocks = new MockRepository();
-			var stateMock = mocks.StrictMock<IState>();
-			BusinessUnitFactory.BusinessUnitUsedInTest.SetId(Guid.NewGuid());
-			StateHolderProxyHelper.ClearAndSetStateHolder(mocks,
-																  loggedOnPerson,
-																  BusinessUnitFactory.BusinessUnitUsedInTest,
-																  ApplicationData,
-																	DataSource,
-																  stateMock);
 		}
 
 		internal static IDictionary<string, string> Sql2005conf(string connString, int? timeout)

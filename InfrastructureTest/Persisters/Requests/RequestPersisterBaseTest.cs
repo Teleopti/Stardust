@@ -83,17 +83,6 @@ namespace Teleopti.Ccc.InfrastructureTest.Persisters.Requests
 			}
 		}
 
-		protected override void TeardownForRepositoryTest()
-		{
-			using (var uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
-			{
-				var rep = new Repository(uow);
-				rep.Remove(Person);
-				rep.Remove(requestToRemove);
-				uow.PersistAll();
-			}
-		}
-
 		public void ClearReferredShiftTradeRequests()
 		{
 			ClearRefferedRequestsWasCalled = true;

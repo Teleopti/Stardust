@@ -61,16 +61,5 @@ namespace Teleopti.Ccc.InfrastructureTest.SystemCheck.AgentDayConverter
 			return pa;
 		}
 
-		protected override void TeardownForRepositoryTest()
-		{
-			using (var uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
-			{
-				var s = uow.FetchSession();
-				s.CreateQuery("update Activity set IsDeleted=1").ExecuteUpdate();
-				s.CreateQuery("update ShiftCategory set IsDeleted=1").ExecuteUpdate();
-				s.CreateQuery("update Scenario set IsDeleted=1").ExecuteUpdate();
-				uow.PersistAll();
-			}
-		}
 	}
 }

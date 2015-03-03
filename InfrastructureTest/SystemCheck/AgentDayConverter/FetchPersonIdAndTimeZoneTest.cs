@@ -6,7 +6,6 @@ using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Infrastructure.SystemCheck.AgentDayConverter;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.InfrastructureTest.Helper;
-using Teleopti.Ccc.InfrastructureTest.UnitOfWork;
 
 namespace Teleopti.Ccc.InfrastructureTest.SystemCheck.AgentDayConverter
 {
@@ -30,14 +29,5 @@ namespace Teleopti.Ccc.InfrastructureTest.SystemCheck.AgentDayConverter
 				.Should().Be.EqualTo(p2.PermissionInformation.DefaultTimeZone().Id);
 		}
 
-		protected override void TeardownForRepositoryTest()
-		{
-			using (var uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
-			{
-				var s = uow.FetchSession();
-				s.CreateQuery("update Person set IsDeleted=1").ExecuteUpdate();
-				uow.PersistAll();
-			}
-		}
 	}
 }

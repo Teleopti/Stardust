@@ -62,18 +62,5 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories.Deadlock
 			UnitOfWork.PersistAll();
 		}
 
-		protected override void TeardownForRepositoryTest()
-		{
-			using (var uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
-			{
-				var rep = new StudentAvailabilityDayRepository(uow);
-				foreach (var item in rep.LoadAll())
-				{
-					rep.Remove(item);
-				}
-				uow.PersistAll();
-				
-			}
-		}
 	}
 }

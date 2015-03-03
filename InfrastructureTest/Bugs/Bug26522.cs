@@ -43,16 +43,5 @@ namespace Teleopti.Ccc.InfrastructureTest.Bugs
 			}
 		}
 
-		protected override void TeardownForRepositoryTest()
-		{
-			using (var uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
-			{
-				var rep = new Repository(uow);
-				rep.Remove(workShiftRuleSet);
-				rep.Remove(shiftCategory);
-				rep.Remove(activity);
-				uow.PersistAll();
-			}
-		}
 	}
 }

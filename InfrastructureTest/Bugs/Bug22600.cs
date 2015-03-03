@@ -88,16 +88,5 @@ namespace Teleopti.Ccc.InfrastructureTest.Bugs
 			}
 		}
 
-		protected override void TeardownForRepositoryTest()
-		{
-			using (var uow = SetupFixtureForAssembly.DataSource.Application.CreateAndOpenUnitOfWork())
-			{
-				var rep = new Repository(uow);
-				rep.Remove(groupPage);
-				rep.Remove(personInChildGroup);
-				rep.Remove(personInRootGroup);
-				uow.PersistAll();
-			}
-		}
 	}
 }

@@ -80,23 +80,5 @@ namespace Teleopti.Ccc.InfrastructureTest.Persisters.Account
 			}
 		}
 
-		protected override void TeardownForRepositoryTest()
-		{
-			using (var unitOfWork = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
-			{
-				var repository = new PersonAbsenceAccountRepository(unitOfWork);
-				var account = repository.Get(personAbsenceAccount.Id.Value);
-				repository.Remove(account.Absence);
-				repository.Remove(account.Person);
-				repository.Remove(account);
-				repository.Remove(account);
-				var scenarioRep = new ScenarioRepository(unitOfWork);
-				foreach (var scenario in scenarioRep.LoadAll())
-				{
-					repository.Remove(scenario);
-				}
-				unitOfWork.PersistAll();
-			}
-		}
 	}
 }

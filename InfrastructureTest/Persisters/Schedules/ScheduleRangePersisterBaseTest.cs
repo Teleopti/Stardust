@@ -80,29 +80,6 @@ namespace Teleopti.Ccc.InfrastructureTest.Persisters.Schedules
 			}
 		}
 
-		protected override void TeardownForRepositoryTest()
-		{
-			using (var unitOfWork = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
-			{
-				var repository = new Repository(unitOfWork);
-				var schedRep = new ScheduleRepository(unitOfWork);
-				foreach (var persistableScheduleData in schedRep.LoadAll())
-				{
-					repository.Remove(persistableScheduleData);
-				}
-				unitOfWork.PersistAll();
-				unitOfWork.Clear();
-				repository.Remove(Person);
-				repository.Remove(DefinitionSet);
-				repository.Remove(Activity);
-				repository.Remove(ShiftCategory);
-				repository.Remove(Scenario);
-				repository.Remove(DayOffTemplate);
-				repository.Remove(Absence);
-				unitOfWork.PersistAll();
-			}
-		}
-
 		protected void DoModify(IScheduleDay scheduleDay)
 		{
 			scheduleDay.Owner.Modify(ScheduleModifier.Scheduler, scheduleDay, NewBusinessRuleCollection.Minimum(),

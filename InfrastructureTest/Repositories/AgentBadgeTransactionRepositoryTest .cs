@@ -18,21 +18,6 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
     {
 	    private IPerson person;
 
-	    protected override void TeardownForRepositoryTest()
-	    {
-		    if (person != null && person.Id != null)
-		    {
-			    using (var uow = SetupFixtureForAssembly.DataSource.Application.CreateAndOpenUnitOfWork())
-			    {
-					var personRep = new PersonRepository(uow);
-				    personRep.Remove(person);
-					uow.PersistAll();
-			    }
-		    }
-
-		    base.TeardownForRepositoryTest();
-	    }
-
 	    protected override IAgentBadgeTransaction CreateAggregateWithCorrectBusinessUnit()
 	    {
 			person = PersonFactory.CreatePerson();

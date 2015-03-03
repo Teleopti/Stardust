@@ -35,11 +35,6 @@ namespace Teleopti.Ccc.InfrastructureTest.Foundation
             uow = createUnitOfWorkWithMessageMock();
         }
 
-        protected override void TeardownForRepositoryTest()
-        {
-            uow.Dispose();
-        }
-
         [Test]
         public void VerifyRootWithDeleteSentToMessageBroker()
         {
