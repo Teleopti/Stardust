@@ -235,8 +235,8 @@
     <Compile Include="MultiTenancy\Tenant.cs" />
     <Compile Include="NHibernateConfiguration\SecondLevelCache.cs" />
     <Compile Include="Persisters\WorkflowControlSetPublishDatePersister.cs" />
-    <Compile Include="Repositories\AdherenceDetailsReadModelPersister.cs" />
-    <Compile Include="Repositories\AdherencePercentageReadModelPersister.cs" />
+    <Compile Include="Rta\Persisters\AdherenceDetailsReadModelPersister.cs" />
+    <Compile Include="Rta\Persisters\AdherencePercentageReadModelPersister.cs" />
     <Compile Include="Repositories\SkillMapRepository.cs" />
     <Compile Include="Repositories\GamificationSettingRepository.cs" />
     <Compile Include="Repositories\AgentBadgeWithRankRepository.cs" />
@@ -255,8 +255,8 @@
     <Compile Include="Repositories\IEtlReadModelRepository.cs" />
     <Compile Include="Repositories\LogObjectDetail.cs" />
     <Compile Include="Repositories\SeniorityWorkDayRanksRepository.cs" />
-    <Compile Include="Repositories\SiteOutOfAdherenceReadModelPersister.cs" />
-    <Compile Include="Repositories\TeamOutOfAdherenceReadModelPersister.cs" />
+    <Compile Include="Rta\Persisters\SiteOutOfAdherenceReadModelPersister.cs" />
+    <Compile Include="Rta\Persisters\TeamOutOfAdherenceReadModelPersister.cs" />
     <Compile Include="Repositories\TeamGamificationSettingRepository.cs" />
     <Compile Include="Rta\ActualAgentStateExtension.cs" />
     <Compile Include="Rta\DatabaseConnectionFactory.cs" />

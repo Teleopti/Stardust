@@ -186,7 +186,7 @@
     <Compile Include="MultiTenancy\ApplicationUserQueryTest.cs" />
     <Compile Include="MultiTenancy\PersistLogonAttemptTest.cs" />
     <Compile Include="MultiTenancy\TenantUnitOfWorkManagerTest.cs" />
-    <Compile Include="Repositories\AdherenceDetailsReadModelPersisterTest.cs" />
+    <Compile Include="Rta\Persisters\AdherenceDetailsReadModelPersisterTest.cs" />
     <Compile Include="Aop\AspectsTest.cs" />
     <Compile Include="ApplicationLayer\SyncEventPublisherTest.cs" />
     <Compile Include="ApplicationLayer\SyncCommandDispatcherTest.cs" />
@@ -204,7 +204,7 @@
     <Compile Include="Foundation\ConfigurationManagerWrapperTest.cs" />
     <Compile Include="Foundation\ThreadPrincipalContextTest.cs" />
     <Compile Include="LiteUnitOfWork\ReadModelUnitOfWorkTest.cs" />
-    <Compile Include="Repositories\AdherencePercentageReadModelPersisterTest.cs" />
+    <Compile Include="Rta\Persisters\AdherencePercentageReadModelPersisterTest.cs" />
     <Compile Include="Repositories\AgentBadgeTransactionRepositoryTest .cs" />
     <Compile Include="Repositories\AgentBadgeWithRankTransactionRepositoryTest.cs" />
     <Compile Include="Repositories\EtlJobStatusRepositoryTest.cs" />
@@ -213,8 +213,8 @@
     <Compile Include="Repositories\PersonFinderSearchCriteriaTest.cs" />
     <Compile Include="ReadModelUnitOfWorkTestAttribute.cs" />
     <Compile Include="Repositories\SeniorityWorkDayRanksRepositoryTest.cs" />
-    <Compile Include="Repositories\SiteOutOfAdherenceReadModelPersisterTest.cs" />
-    <Compile Include="Repositories\TeamOutOfAdherenceReadModelPersisterTest.cs" />
+    <Compile Include="Rta\Persisters\SiteOutOfAdherenceReadModelPersisterTest.cs" />
+    <Compile Include="Rta\Persisters\TeamOutOfAdherenceReadModelPersisterTest.cs" />
     <Compile Include="Repositories\TeamGamificationSettingRepositoryTest.cs" />
     <Compile Include="Rta\AgentStateReadModelForTest.cs" />
     <Compile Include="Rta\DatabaseReaderTest.cs" />

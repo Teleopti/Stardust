@@ -7,7 +7,7 @@ using Teleopti.Ccc.Infrastructure.LiteUnitOfWork;
 using Teleopti.Interfaces;
 using Teleopti.Interfaces.Domain;
 
-namespace Teleopti.Ccc.Infrastructure.Repositories
+namespace Teleopti.Ccc.Infrastructure.Rta.Persisters
 {
 	public class AdherenceDetailsReadModelPersister : IAdherenceDetailsReadModelPersister, IAdherenceDetailsReadModelReader
 	{
