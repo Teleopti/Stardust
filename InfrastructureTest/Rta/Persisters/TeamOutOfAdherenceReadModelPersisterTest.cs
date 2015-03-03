@@ -3,9 +3,8 @@ using System.Linq;
 using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta;
-using Teleopti.Ccc.Domain.Collection;
 
-namespace Teleopti.Ccc.InfrastructureTest.Repositories
+namespace Teleopti.Ccc.InfrastructureTest.Rta.Persisters
 {
 	[TestFixture, Category("LongRunning")]
 	[ReadModelUnitOfWorkTest]

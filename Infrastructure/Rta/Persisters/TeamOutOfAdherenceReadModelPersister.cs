@@ -1,14 +1,13 @@
-﻿using NHibernate;
-using NHibernate.Transform;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using NHibernate;
+using NHibernate.Transform;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta;
-using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Infrastructure.LiteUnitOfWork;
 using Teleopti.Interfaces;
 
-namespace Teleopti.Ccc.Infrastructure.Repositories
+namespace Teleopti.Ccc.Infrastructure.Rta.Persisters
 {
 	public class TeamOutOfAdherenceReadModelPersister : ITeamOutOfAdherenceReadModelPersister, ITeamOutOfAdherenceReadModelReader
 	{
