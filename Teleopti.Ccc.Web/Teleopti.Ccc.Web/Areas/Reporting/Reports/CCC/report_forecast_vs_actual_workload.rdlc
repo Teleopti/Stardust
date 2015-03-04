@@ -558,7 +558,7 @@
         <DataSetName>DataSet1</DataSetName>
         <Left>0.25cm</Left>
         <Height>4.2cm</Height>
-        <Width>18.50009cm</Width>
+        <Width>18.5001cm</Width>
         <Style />
       </Tablix>
       <Chart Name="chart1">
@@ -3677,6 +3677,9 @@ Public Function Divide(a as integer, b as integer) as integer
 	end if
 End Function
 Public Function RoundToLarger(ByVal Number, ByVal NumDigitsAfterDecimal)
+if Number = 0 then
+	return 0
+end if
   RoundToLarger = FormatNumber(CDbl(FormatNumber(Number, NumDigitsAfterDecimal)),NumDigitsAfterDecimal)
 End Function
 </Code>
