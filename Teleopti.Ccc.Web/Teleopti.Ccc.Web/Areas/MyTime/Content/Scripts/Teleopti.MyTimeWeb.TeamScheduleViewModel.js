@@ -1,4 +1,4 @@
-Teleopti.MyTimeWeb.TeamScheduleViewModel = function() {
+Teleopti.MyTimeWeb.TeamScheduleViewModel = function () {
 	var self = this;
 
 	self.isPossibleSchedulesForAllEnabled = ko.observable(true);
@@ -6,6 +6,14 @@ Teleopti.MyTimeWeb.TeamScheduleViewModel = function() {
 	self.isFilterByTimeEnabled = ko.observable(true);
 	self.isTeamScheduleSorttingFeatureEnabled = ko.observable(true);
 	self.isLoading = ko.observable(false);
+
+
+	self.hasError = ko.observable(false);
+	self.errorMessage = ko.observable();
+
+	self.initializeShiftTrade = function () {
+		Teleopti.MyTimeWeb.Portal.NavigateTo("Requests/Index/ShiftTrade/", self.requestedDate().format("YYYYMMDD"));
+	};
 
 	self.initCurrentDate = function (urlDate) {
 		self.loadCurrentDate(
@@ -51,8 +59,10 @@ Teleopti.MyTimeWeb.TeamScheduleViewModel = function() {
 		);
 	};
 
-	self.setDayMixinChangeHandler(function (newDate) {		
-		self.loadMyTeam(
+	self.setDayMixinChangeHandler(function (newDate) {
+		self.hasError(false);
+		self.errorMessage(null);
+		self.loadDefaultTeam(
 			newDate,
 			function (myTeam) {			
 				self.loadTeams(
@@ -60,6 +70,8 @@ Teleopti.MyTimeWeb.TeamScheduleViewModel = function() {
 					function (allTeams) {
 						self.suspendFilterMixinChangeHandler();
 						self.suspendPagingMixinChangeHandler();
+						self.hasError(false);
+						self.errorMessage();
 						self.defaultTeam(myTeam);
 						self.setTeamPicker(allTeams);
 						if (self.selectedTeam() == null) self.selectedTeam(myTeam);
@@ -68,6 +80,10 @@ Teleopti.MyTimeWeb.TeamScheduleViewModel = function() {
 						loadSchedule();
 					}
 				);
+			},
+			function (error) {				
+				self.hasError(true);
+				self.errorMessage(error.Message);
 			}
 		);		
 	});
@@ -86,17 +102,18 @@ Teleopti.MyTimeWeb.TeamScheduleViewModel = function() {
 
 
 var ajax = new Teleopti.MyTimeWeb.Ajax();
+
+var endpoints = {
+	loadCurrentDate: "TeamSchedule/TeamScheduleCurrentDate",
+	loadFilterTimes: "RequestsShiftTradeScheduleFilter/Get",
+	loadMyTeam: "Requests/ShiftTradeRequestMyTeam",
+	loadDefaultTeam: "TeamSchedule/DefaultTeam",
+	loadTeams: "Team/TeamsAndOrGroupings",
+	loadSchedule: "TeamSchedule/TeamSchedule"
+};
+
 Teleopti.MyTimeWeb.DayScheduleMixin.call(Teleopti.MyTimeWeb.TeamScheduleViewModel.prototype);
-Teleopti.MyTimeWeb.TeamScheduleDataProviderMixin.call(Teleopti.MyTimeWeb.TeamScheduleViewModel.prototype, ajax);
+Teleopti.MyTimeWeb.TeamScheduleDataProviderMixin.call(Teleopti.MyTimeWeb.TeamScheduleViewModel.prototype, ajax, endpoints);
 Teleopti.MyTimeWeb.TeamScheduleFilterMixin.call(Teleopti.MyTimeWeb.TeamScheduleViewModel.prototype);
 Teleopti.MyTimeWeb.PagingMixin.call(Teleopti.MyTimeWeb.TeamScheduleViewModel.prototype);
 Teleopti.MyTimeWeb.TeamScheduleDrawerMixin.call(Teleopti.MyTimeWeb.TeamScheduleViewModel.prototype);
-
-
-
-//Teleopti.MyTimeWeb.PagingMixin.call(Teleopti.MyTimeWeb.TeamScheduleViewModel.prototype);
-
-
-
-
-

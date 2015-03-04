@@ -38,11 +38,13 @@ Teleopti.MyTimeWeb.DayScheduleMixin = function() {
 		self.requestedDateInternal(newValue.format("YYYY-MM-DD"));
 	});
 
+	self.requestedDate.extend({ notify: "always" });
 	self.requestedDateInternal.subscribe(function (newValue) {
 		if (changeHandler != null && !changeHandlerSuspended) {		
 			changeHandler(self.requestedDateWithFormat());
 		}
 	});
+	self.requestedDateInternal.extend({ notify: "always" });
 
 	self.isRequestedDateValid = function (date) {
 		if (self.openPeriodStartDate() &&  date.diff(self.openPeriodStartDate()) < 0) {
@@ -86,9 +88,10 @@ Teleopti.MyTimeWeb.DayScheduleMixin = function() {
 Teleopti.MyTimeWeb.PagingMixin = function() {
 
 	var self = this;
+	self.maxPagesVisible = 5;
 	self.pageCount = ko.observable(1);
 	self.isPreviousMore = ko.observable(false);
-	self.maxItemsPerPage = ko.observable(4);
+	self.maxItemsPerPage = ko.observable(20);
 	self.isMore = ko.observable(false);
 	self.isPageVisible = ko.observable(false);
 
@@ -133,18 +136,18 @@ Teleopti.MyTimeWeb.PagingMixin = function() {
 
 	self.goToLastPage = function() {
 		self.isMore(false);
-		if (self.pageCount() > 5) self.isPreviousMore(true);
-		var timesOfNumPerPage = self.pageCount() / 5;
-		var modeOfNumPerPage = self.pageCount() % 5;
+		if (self.pageCount() > self.maxPagesVisible) self.isPreviousMore(true);
+		var timesOfNumPerPage = self.pageCount() / self.maxPagesVisible;
+		var modeOfNumPerPage = self.pageCount() % self.maxPagesVisible;
 		if (timesOfNumPerPage > 0) {
 			self.selectablePages.removeAll();
 			if (modeOfNumPerPage != 0) {
 				for (var i = 1; i <= modeOfNumPerPage; i++) {
-					self.selectablePages.push(new Teleopti.MyTimeWeb.Request.PageView(Math.floor(timesOfNumPerPage) * 5 + i));
+					self.selectablePages.push(new Teleopti.MyTimeWeb.Request.PageView(Math.floor(timesOfNumPerPage) * self.maxPagesVisible + i));
 				}
 			} else {
-				for (var j = 1; j <= 5; j++) {
-					self.selectablePages.push(new Teleopti.MyTimeWeb.Request.PageView(self.pageCount() - 5 + j));
+				for (var j = 1; j <= self.maxPagesVisible; j++) {
+					self.selectablePages.push(new Teleopti.MyTimeWeb.Request.PageView(self.pageCount() - self.maxPagesVisible + j));
 				}
 			}
 		}
@@ -154,7 +157,7 @@ Teleopti.MyTimeWeb.PagingMixin = function() {
 	self.initSelectablePages = function(pageCount) {
 		self.selectablePages.removeAll();
 		for (var i = 1; i <= pageCount; ++i) {
-			if (i <= 5) {
+			if (i <= self.maxPagesVisible) {
 				self.selectablePages.push(new Teleopti.MyTimeWeb.Request.PageView(i));
 			} else {
 				break;
@@ -170,42 +173,39 @@ Teleopti.MyTimeWeb.PagingMixin = function() {
 		if (currentLastPageNumber != 0 && currentLastPageNumber < pageCount) self.isMore(true);
 	};
 
-	self.goNextPages = function() {
+	self.goNextPages = function () {
+		var nextPages = [];
 		for (var i = 0; i < self.selectablePages().length; ++i) {
 			var item = self.selectablePages()[i];
-			if ((item.index() + 5) <= self.pageCount()) {
-				item.index(item.index() + 5);
-			} else {
-				self.isMore(false);
-				self.selectablePages.remove(item);
-				i--;
-			}
+			if ((item.index() + self.maxPagesVisible) <= self.pageCount()) {
+				item.index(item.index() + self.maxPagesVisible);
+				nextPages.push(item);
+			} 			
+		}
+		self.selectablePages(nextPages);
+		if (nextPages.length === 0 || nextPages.length < self.maxPagesVisible || nextPages[self.maxPagesVisible - 1].index() === self.pageCount()) {
+			self.isMore(false);
 		}
 
-		if (self.selectablePages()[0].index() > 5) self.isPreviousMore(true);
-
+		if (self.selectablePages()[0].index() > self.maxPagesVisible) self.isPreviousMore(true);
 		self.selectedPageIndex(self.selectablePages()[0].index());
 	};
 
 	self.goPreviousPages = function() {
-		$.each(self.selectablePages(), function(index, item) {
-			if (index + 1 <= self.selectablePages().length) {
-				item.index(item.index() - 5);
-			}
-			if (self.selectablePages()[0].index() == 1) self.isPreviousMore(false);
-		});
+		
+		var start = self.selectablePages()[0].index() - self.maxPagesVisible;
+		self.selectablePages.removeAll();
 
-		if (self.selectablePages().length < 5) {
-			for (var i = self.selectablePages().length + 1; i <= 5; ++i) {
-				var page = new Teleopti.MyTimeWeb.Request.PageView(i);
-				self.selectablePages.push(page);
-				self.isPreviousMore(false);
+		if (start > 0) {			
+			for (var i = 0; i < self.maxPagesVisible; i++) {
+				self.selectablePages.push(new Teleopti.MyTimeWeb.Request.PageView(start + i));
 			}
+			self.isPreviousMore(self.selectablePages()[0].index() !== 1);
+			self.isMore(self.selectablePages()[self.maxPagesVisible -1].index() < self.pageCount());
+			self.selectedPageIndex(self.selectablePages()[0].index());
+		} else {
+			self.goToFirstPage();
 		}
-
-		if (self.selectablePages()[4].index() < self.pageCount()) self.isMore(true);
-
-		self.selectedPageIndex(self.selectablePages()[0].index());
 	};
 
 
@@ -576,13 +576,14 @@ Teleopti.MyTimeWeb.TeamScheduleFilterMixin = function () {
 
 };
 
-Teleopti.MyTimeWeb.TeamScheduleDataProviderMixin = function(ajax) {
+
+Teleopti.MyTimeWeb.TeamScheduleDataProviderMixin = function(ajax, endpoints) {
 
 	var self = this;
 
 	self.loadCurrentDate = function(success, error) {
 		ajax.Ajax({
-			url: "TeamSchedule/TeamScheduleCurrentDate",
+			url: endpoints.loadCurrentDate,
 			dataType: "json",
 			type: 'GET',
 			contentType: 'application/json; charset=utf-8',
@@ -596,10 +597,9 @@ Teleopti.MyTimeWeb.TeamScheduleDataProviderMixin = function(ajax) {
 	};
 
 	self.loadFilterTimes = function (success, error) {
-		if (self.filterStartTimeList().length == 0) {
-			var dayOffNames = "";
+		if (self.filterStartTimeList().length == 0) {			
 			ajax.Ajax({
-				url: "RequestsShiftTradeScheduleFilter/Get",
+				url: endpoints.loadFilterTimes,
 				dataType: "json",
 				type: 'GET',
 				contentType: 'application/json; charset=utf-8',
@@ -615,7 +615,7 @@ Teleopti.MyTimeWeb.TeamScheduleDataProviderMixin = function(ajax) {
 
 	self.loadMyTeam = function (date, success, error) {
 		ajax.Ajax({
-			url: "Requests/ShiftTradeRequestMyTeam",
+			url: endpoints.loadMyTeam,
 			dataType: "json",
 			type: 'GET',
 			contentType: 'application/json; charset=utf-8',
@@ -631,9 +631,30 @@ Teleopti.MyTimeWeb.TeamScheduleDataProviderMixin = function(ajax) {
 		});
 	};
 
+	self.loadDefaultTeam = function (date, success, error) {
+		ajax.Ajax({
+			url: endpoints.loadDefaultTeam,
+			dataType: "json",
+			type: 'GET',
+			contentType: 'application/json; charset=utf-8',
+			data: {
+				selectedDate: date
+			},
+			success: function (data) {
+				if (success != null) success(data.DefaultTeam);
+			},
+			error: function (xhr) {
+				if (error != null) {
+					var errorData = $.parseJSON(xhr.responseText);
+					error(errorData);
+				}
+			}
+		});
+	};
+
 	self.loadTeams = function (date, success, error) {		
 		ajax.Ajax({
-			url: "Team/TeamsForShiftTrade",
+			url: endpoints.loadTeams,
 			dataType: "json",
 			type: 'GET',
 			contentType: 'application/json; charset=utf-8',
@@ -654,7 +675,7 @@ Teleopti.MyTimeWeb.TeamScheduleDataProviderMixin = function(ajax) {
 		if (filter.selectedTeams.length === 0) return;
 
 		ajax.Ajax({
-			url: "TeamSchedule/TeamSchedule",
+			url: endpoints.loadSchedule,
 			dataType: "json",
 			type: 'GET',
 			contentType: 'application/json; charset=utf-8',
