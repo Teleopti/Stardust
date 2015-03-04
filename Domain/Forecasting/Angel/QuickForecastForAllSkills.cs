@@ -1,4 +1,4 @@
-﻿using Teleopti.Ccc.Domain.Collection;
+﻿using System.Linq;
 using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Interfaces.Domain;
@@ -22,9 +22,8 @@ namespace Teleopti.Ccc.Domain.Forecasting.Angel
 		{
 			var nowDate = _now.LocalDateOnly();
 			var historicalPeriod = new DateOnlyPeriod(new DateOnly(nowDate.Date.AddYears(-1)), nowDate);
-			_skillRepository.FindSkillsWithAtLeastOneQueueSource().ForEach(skill =>
-				_quickForecaster.Execute(skill, futurePeriod, historicalPeriod));
-			return 0;
+			var skills = _skillRepository.FindSkillsWithAtLeastOneQueueSource();
+			return skills.Average(skill => _quickForecaster.Execute(skill, futurePeriod, historicalPeriod));
 		}
 	}
 }
