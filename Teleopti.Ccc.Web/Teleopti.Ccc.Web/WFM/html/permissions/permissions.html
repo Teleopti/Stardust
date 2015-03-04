@@ -8,7 +8,7 @@
 			<form ng-submit="createRole(); reset()">
 				<div class="input-prepend">
 					<i class="mdi mdi-magnify"></i>
-					<input type="text" ng-model="roleName" placeholder="Create new role" class="role-input material-depth-1 role" />
+					<input type="text" ng-model="roleName" placeholder="Create new role" class="role-input role" />
 				</div>
 			</form>
 			
@@ -92,10 +92,17 @@
 			<section>
 				<div class="tab-container">
 					<div ng-show="roleDetails=='dataAvailable'">
-							<div class="input-prepend">
-								<i class="mdi mdi-magnify"></i>
-								<input type="text" name="filterDetails" ng-model="searchData" placeholder="Data filter ..." />
+						<div class="input-prepend">
+							<i class="mdi mdi-magnify"></i>
+							<input type="text" name="filterDetails" ng-model="searchData" placeholder="Data filter ..." />
+							<div class="wfm-slider">
+								<input type="checkbox" id="slide1" />
+								<label for="slide1">
+									<span>Toggle</span>
+								</label>
 							</div>
+						</div>
+
 
 						<div class="tree">
 							<div ui-tree data-drag-enabled="false">
