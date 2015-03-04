@@ -28,25 +28,14 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Commands
 		{
 			var person = _personRepository.Load(command.PersonId);
 			var absence = _absenceRepository.Load(command.AbsenceId);
-			var userTimeZone = person.PermissionInformation.DefaultTimeZone();
-			var dateTime = DateTime.SpecifyKind(command.StartDate, DateTimeKind.Unspecified);
-			var startDateTimeInUserTimeZone = TimeZoneInfo.ConvertTime(DateTime.SpecifyKind(command.StartDate, DateTimeKind.Unspecified), userTimeZone);
-			var endDateTimeInUserTimeZone = TimeZoneInfo.ConvertTime(DateTime.SpecifyKind(command.EndDate, DateTimeKind.Unspecified), userTimeZone);
+			var period = new DateOnlyPeriod(new DateOnly(command.StartDate.AddDays(-1)), new DateOnly(command.EndDate));
+			var scheduleDays = getScheduleDaysForPeriod(period, person);
 
-			var periodInUserTimeZone = new DateOnlyPeriod(new DateOnly(startDateTimeInUserTimeZone.AddDays(-1)), new DateOnly(endDateTimeInUserTimeZone));
-			var scheduleDaysO = getScheduleDaysForPeriod(periodInUserTimeZone, person);
-			var previousDayO = scheduleDaysO.First();
-			var absenceTimePeriodO = getDateTimePeriodForAbsence(scheduleDaysO.Except(new[] { previousDayO }), previousDayO);
-
-
-			//var period = new DateOnlyPeriod(new DateOnly(command.StartDate.AddDays(-1)), new DateOnly(command.EndDate));
-			//var scheduleDays = getScheduleDaysForPeriod(period, person);
-
-			//var previousDay = scheduleDays.First();
-			//var absenceTimePeriod = getDateTimePeriodForAbsence(scheduleDays.Except(new[] {previousDay}), previousDay);
+			var previousDay = scheduleDays.First();
+			var absenceTimePeriod = getDateTimePeriodForAbsence(scheduleDays.Except(new[] {previousDay}), previousDay);
 
 			var personAbsence = new PersonAbsence(_scenario.Current());
-			personAbsence.FullDayAbsence(person, absence, absenceTimePeriodO.StartDateTime, absenceTimePeriodO.EndDateTime, command.TrackedCommandInfo);
+			personAbsence.FullDayAbsence(person, absence, absenceTimePeriod.StartDateTime, absenceTimePeriod.EndDateTime, command.TrackedCommandInfo);
 
 			_personAbsenceRepository.Add(personAbsence);
 		}
