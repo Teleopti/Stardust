@@ -17,7 +17,7 @@
 				<input type="text" name="filterRole" ng-model="searchRoles.DescriptionText" placeholder="Role filter ..." />
 			</div>
 		</div>
-		<div id="searchRoleResults" class="role-container">
+		<div id="searchRoleResults" class="role-container" >
 			<ul class="wfm-list">
 				<li ng-repeat="role in roles | filter:searchRoles" ng-click="showRole(role.Id)" ng-dblclick="editing = true" ng-class="{'wfm-list-item-selected': role.Id==selectedRole}" class="role-btn wfm-block wfm-list-item material-depth-1 role">
 					<div class="wfm-leave-behind">
@@ -73,13 +73,13 @@
 								<input type="text" name="filterDetails" ng-model="searchPermissions" placeholder="Permissions filter ..." />
 							</div>
 							<div class="wfm-slider">
-								<input type="checkbox" id="slide1" checked="true"/>
+								<input type="checkbox" id="slide1" ng-model="toggleSelectedFunctions" />
 								<label for="slide1">
 									<span>selected</span>
 								</label>
 							</div>
 							<div class="wfm-slider">
-								<input type="checkbox" id="slide2" checked="true" />
+								<input type="checkbox" id="slide2" ng-model="toggleUnselectedFunctions" />
 								<label for="slide2">
 									<span>unselected</span>
 								</label>
@@ -88,8 +88,8 @@
 
 						<div class="tree">
 							<div ui-tree data-drag-enabled="false">
-								<ol ui-tree-nodes="" ng-model="functionsDisplayed" id="tree-root" class="tree-line">
-									<li ng-repeat="node in functionsDisplayed | filter:searchPermissions" ui-tree-node ng-include="'nodes_renderer.html'"></li>
+								<ol ui-tree-nodes="" ng-model="functionsDisplayed" id="tree-root" class="tree-line" ng-show="toggleSelectedFunctions">
+									<li ng-repeat="node in functionsDisplayed | filter:searchPermissions" ui-tree-node ng-include="'nodes_renderer.html'" ng-show="toggleSelectedFunctions"></li>
 								</ol>
 							</div>
 						</div>
@@ -109,13 +109,13 @@
 								<input type="text" name="filterDetails" ng-model="searchData" placeholder="Data filter ..." />
 							</div>
 							<div class="wfm-slider">
-								<input type="checkbox" id="slide3" checked="true" />
+								<input type="checkbox" id="slide3" />
 								<label for="slide3">
 									<span>selected</span>
 								</label>
 							</div>
 							<div class="wfm-slider">
-								<input type="checkbox" id="slide4" checked="true" />
+								<input type="checkbox" id="slide4" />
 								<label for="slide4">
 									<span>unselected</span>
 								</label>

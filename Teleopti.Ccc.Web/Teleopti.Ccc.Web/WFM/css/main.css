@@ -78,6 +78,7 @@ body {
   flex: auto;
   flex-basis: 15%;
   top: 0;
+  height: 1000px;
   bottom: 0; }
 
 .layout-container {
@@ -350,7 +351,6 @@ md-tooltip[width-32="8"].md-show .md-background {
   animation-duration: 200ms; }
 
 input[type='text'], select {
-  width: 100%;
   border: none;
   color: rgba(0, 0, 0, 0.87);
   border-bottom: 1px solid #E0E0E0; }
@@ -506,7 +506,7 @@ input[type='text'], select {
   height: 34px;
   text-align: center;
   cursor: pointer;
-  transition: all 0.2s ease-in-out; }
+  transition: all 0.2s ease-in-out 0.2s; }
 .sidenav-toggle label i {
   padding-top: 5px; }
 .sidenav-toggle input[type=checkbox]:checked ~ label {
@@ -530,7 +530,8 @@ input[type='text'], select {
     text-decoration: none;
     display: inline-block; }
   .navbar .brand {
-    color: #ffffff !important; }
+    color: #ffffff !important;
+    font-weight: bold; }
   .navbar .content {
     height: 50px;
     padding: 15px;
@@ -540,7 +541,8 @@ input[type='text'], select {
   .navbar .wfm-container {
     padding-left: 5px; }
   .navbar .breadbin {
-    margin-left: 30px; }
+    margin-left: 30px;
+    font-size: 75%; }
   .navbar .right-actions {
     position: absolute;
     right: 5px;

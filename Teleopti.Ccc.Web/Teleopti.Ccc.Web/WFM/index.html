@@ -33,7 +33,7 @@
 <body>
 	<div ng-include="'html/nav.html'" class="material-depth-1 navbar navbar-default navbar-static-top " role="navigation"></div>
 	<div class="layout-container">
-		<div class="sidenav material-depth-1">
+		<div class="sidenav material-depth-1" ng-hide="toggleLeftSide">
 			<section class="wfm-accordion">
 				<!--This accordion could use some dynamic tuneing, for now each row needs its own id. this wont hold for long. -->
 				<div>
@@ -132,7 +132,7 @@
 			</section>
 		</div>
 		<div class="sidenav-toggle">
-			<input type="checkbox" id="nav-left" />
+			<input type="checkbox" id="nav-left" ng-model="toggleLeftSide" />
 			<label for="nav-left">
 				<i class="mdi mdi-rewind"></i>
 			</label>
@@ -141,12 +141,12 @@
 		<div class="container content material-depth-1 material-block " ui-view></div>
 
 		<div class="sidenav-toggle">
-			<input type="checkbox" id="nav-right" />
+			<input type="checkbox" id="nav-right" ng-model="toggleRightSide" />
 			<label for="nav-right">
 				<i class="mdi mdi-fast-forward"></i>
 			</label>
 		</div>
-		<div class="sidenav material-depth-1">
+		<div class="sidenav material-depth-1" ng-hide="toggleRightSide">
 			<div>
 				<div class="wfm-block sub-header">Notifications</div>
 				<ul class="notification-list">
