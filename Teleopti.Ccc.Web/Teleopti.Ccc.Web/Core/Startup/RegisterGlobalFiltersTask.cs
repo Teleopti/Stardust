@@ -51,7 +51,7 @@ namespace Teleopti.Ccc.Web.Core.Startup
 				typeof (ActivityChangeController),
 				typeof (MessageBrokerController),
 				typeof (ApplicationController),
-				typeof (TenantController)
+				typeof (AuthenticateController)
 			}));
 		}
 	}

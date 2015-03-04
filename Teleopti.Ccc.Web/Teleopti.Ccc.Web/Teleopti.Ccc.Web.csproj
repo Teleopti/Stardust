@@ -506,7 +506,7 @@
     <Compile Include="Areas\Tenant\Core\PasswordVerifier.cs" />
     <Compile Include="Areas\Tenant\Core\TenantModule.cs" />
     <Compile Include="Areas\Tenant\Core\IIdentityAuthentication.cs" />
-    <Compile Include="Areas\Tenant\TenantController.cs" />
+    <Compile Include="Areas\Tenant\AuthenticateController.cs" />
     <Compile Include="Areas\Tenant\Core\ApplicationAuthentication.cs" />
     <Compile Include="Areas\Tenant\Core\ApplicationAuthenticationResult.cs" />
     <Compile Include="Areas\Tenant\Core\IApplicationAuthentication.cs" />

@@ -6,14 +6,14 @@ using Teleopti.Ccc.Web.Areas.Tenant.Core;
 
 namespace Teleopti.Ccc.Web.Areas.Tenant
 {
-	public class TenantController : Controller
+	public class AuthenticateController : Controller
 	{
 		private readonly IApplicationAuthentication _applicationAuthentication;
 		private readonly IIdentityAuthentication _identityAuthentication;
 		private readonly ILogLogonAttempt _logLogonAttempt;
 
 
-		public TenantController(IApplicationAuthentication applicationAuthentication, 
+		public AuthenticateController(IApplicationAuthentication applicationAuthentication, 
 													IIdentityAuthentication identityAuthentication,
 													ILogLogonAttempt logLogonAttempt)
 		{

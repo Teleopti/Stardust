@@ -252,7 +252,7 @@
     <Compile Include="Areas\Tenant\Core\ReadNHibFilesTest.cs" />
     <Compile Include="Areas\Tenant\Core\SuccessfulPasswordPolicy.cs" />
     <Compile Include="Areas\Tenant\Core\LoginAttemptModelFactoryForWebTest.cs" />
-    <Compile Include="Areas\Tenant\TenantControllerTest.cs" />
+    <Compile Include="Areas\Tenant\AuthenticateControllerTest.cs" />
     <Compile Include="Areas\Tenant\Core\ApplicationAuthenticationTest.cs" />
     <Compile Include="Areas\Messages\MessagesAreaRegistrationTest.cs" />
     <Compile Include="Areas\Forecasting\Controllers\ForecastControllerTest.cs" />
