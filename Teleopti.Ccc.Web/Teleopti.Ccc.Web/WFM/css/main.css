@@ -56,7 +56,7 @@ body {
 .container-block, .tab-group .tab-container {
   background-color: #f5f5f5; }
 
-.wfm-block, .tree ol, .tree li, .wfm-list li, select option, .wfm-radio, .wfm-checkbox, .wfm-accordion input[type='radio'] + label, .inner span, .tab-group .tab-container, .notice, .notification-list li {
+.wfm-block, .tile-footer, .tree li, .angular-ui-tree-handle, .wfm-list li, select option, .wfm-radio, .wfm-checkbox, .wfm-accordion input[type='radio'] + label, .inner span, .tab-group .tab-container, .notice, .notification-list li {
   padding: 5px;
   width: 100%; }
 
@@ -102,6 +102,20 @@ body {
   max-width: 100%;
   border-radius: 0 !important; }
 
+.help-text {
+  background-color: #ffffff;
+  text-align: center;
+  padding: 5px; }
+
+.help-widget {
+  position: absolute;
+  bottom: 0; }
+
+.tile-footer {
+  background-color: #ffffff;
+  border-top: 1px solid rgba(0, 0, 0, 0.06);
+  text-align: right; }
+
 .tree {
   max-height: 800px;
   overflow-y: auto;
@@ -110,6 +124,7 @@ body {
   .tree ol {
     list-style: none; }
   .tree li {
+    padding-left: 0 !important;
     border-left: 3px solid #1976D2; }
     .tree li .active-tree {
       background-color: #ffffff; }
@@ -123,7 +138,7 @@ body {
   color: #ffffff;
   margin-top: -2px;
   padding-top: 2px;
-  background-color: #64b5f6;
+  background-color: #9CCC65;
   content: "✓"; }
 
 .angular-ui-tree-handle {
