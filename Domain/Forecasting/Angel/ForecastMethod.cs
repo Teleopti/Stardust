@@ -7,20 +7,20 @@ namespace Teleopti.Ccc.Domain.Forecasting.Angel
 {
 	public class ForecastMethod : IForecastMethod
 	{
+		private readonly IIndexVolumes _indexVolumes;
+
+		public ForecastMethod(IIndexVolumes indexVolumes)
+		{
+			_indexVolumes = indexVolumes;
+		}
+
 		public IList<IForecastingTarget> Forecast(TaskOwnerPeriod historicalData, DateOnlyPeriod futurePeriod)
 		{
-			var indexes = new IVolumeYear[]
-			{
-				new MonthOfYear(historicalData, new MonthOfYearCreator()),
-				new WeekOfMonth(historicalData, new WeekOfMonthCreator()),
-				new DayOfWeeks(historicalData, new DaysOfWeekCreator())
-			};
-
+			var indexes = _indexVolumes.Create(historicalData);
 			return create(historicalData, indexes, futurePeriod);
 		}
 
-
-		private IList<IForecastingTarget> create(ITaskOwnerPeriod historicalDepth, IList<IVolumeYear> volumes, DateOnlyPeriod futurePeriod)
+		private IList<IForecastingTarget> create(ITaskOwnerPeriod historicalDepth, IEnumerable<IVolumeYear> volumes, DateOnlyPeriod futurePeriod)
 		{
 			var averageStatistics = new AverageStatistics();
 			if (historicalDepth.TaskOwnerDayCollection.Count > 0)
@@ -53,7 +53,7 @@ namespace Teleopti.Ccc.Domain.Forecasting.Angel
 			double afterTalkTimeIndex = 1;
 
 			//Accumulate the indexes
-			foreach (IVolumeYear year in volumes)
+			foreach (var year in volumes)
 			{
 				totalTaskIndex *= year.TaskIndex(day.CurrentDate);
 				talkTimeIndex *= year.TalkTimeIndex(day.CurrentDate);
@@ -75,6 +75,24 @@ namespace Teleopti.Ccc.Domain.Forecasting.Angel
 			totalDayItem.TaskIndex = currentTotalTaskIndex;
 			totalDayItem.TalkTimeIndex = currentTalkTimeIndex;
 			totalDayItem.AfterTalkTimeIndex = currentAfterTalkTimeIndex;
+		}
+	}
+
+	public interface IIndexVolumes
+	{
+		IEnumerable<IVolumeYear> Create(TaskOwnerPeriod historicalData);
+	}
+
+	public class IndexVolumes : IIndexVolumes
+	{
+		public IEnumerable<IVolumeYear> Create(TaskOwnerPeriod historicalData)
+		{
+			return new IVolumeYear[]
+			{
+				new MonthOfYear(historicalData, new MonthOfYearCreator()),
+				new WeekOfMonth(historicalData, new WeekOfMonthCreator()),
+				new DayOfWeeks(historicalData, new DaysOfWeekCreator())
+			};
 		}
 	}
 }
