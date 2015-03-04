@@ -153,5 +153,74 @@ you have to manually clean up or call CleanUpAfterTest() to restore the database
 		{
 			return DataSourceHelper.CreateDataSourceSettings(connString, timeout, null);
 		}
+
+
+
+
+
+
+		public static void BeforeTestWithOpenUnitOfWork(out IPerson person, out IUnitOfWork unitOfWork)
+		{
+			SetupFakeState(out person);
+			unitOfWork = DataSource.Application.CreateAndOpenUnitOfWork();
+			SaveFakeState(person, unitOfWork);
+		}
+
+		public static void AfterTestWithOpenUnitOfWork(IUnitOfWork unitOfWork, bool cleanUp)
+		{
+			//roll back if still open
+			unitOfWork.Dispose();
+
+			if (cleanUp)
+				RestoreCcc7Database();
+			else
+				CheckThatDbIsEmtpy();
+		}
+
+		public static void BeforeTest()
+		{
+			IPerson person;
+			SetupFakeState(out person);
+			using (var unitOfWork = DataSource.Application.CreateAndOpenUnitOfWork())
+			{
+				SaveFakeState(person, unitOfWork);
+				unitOfWork.PersistAll();
+			}
+		}
+
+		public static void AfterTest()
+		{
+			RestoreCcc7Database();
+		}
+
+		private static void SetupFakeState(out IPerson person)
+		{
+			BusinessUnitFactory.CreateNewBusinessUnitUsedInTest();
+
+			person = PersonFactory.CreatePersonWithBasicPermissionInfo(
+				string.Concat("logOnName", Guid.NewGuid().ToString()),
+				string.Empty);
+
+			StateHolderProxyHelper.SetupFakeState(
+				DataSource, 
+				person, 
+				BusinessUnitFactory.BusinessUnitUsedInTest,
+				new ThreadPrincipalContext(new TeleoptiPrincipalFactory()));
+		}
+
+		private static void SaveFakeState(IPerson person, IUnitOfWork uow)
+		{
+			var session = uow.FetchSession();
+
+			((IDeleteTag)person).SetDeleted();
+			session.Save(person);
+
+			//force a insert
+			var businessUntId = BusinessUnitFactory.BusinessUnitUsedInTest.Id.Value;
+			BusinessUnitFactory.BusinessUnitUsedInTest.SetId(null);
+			session.Save(BusinessUnitFactory.BusinessUnitUsedInTest, businessUntId);
+			session.Flush();
+		}
+
 	}
 }

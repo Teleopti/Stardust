@@ -19,7 +19,7 @@ using Teleopti.Interfaces.Infrastructure;
 namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork
 {
 	[TestFixture]
-	[UnitOfWorkTest]
+	[PrincipalAndStateTest]
 	public class UnitOfWorkAspectTest2 : IRegisterInContainer
 	{
 

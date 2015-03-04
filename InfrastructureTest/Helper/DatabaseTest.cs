@@ -2,6 +2,7 @@
 using NHibernate;
 using NUnit.Framework;
 using Rhino.Mocks;
+using Teleopti.Ccc.InfrastructureTest.UnitOfWork;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
 
@@ -36,8 +37,9 @@ namespace Teleopti.Ccc.InfrastructureTest.Helper
         {
 			Mocks = new MockRepository();
 	        cleanUpAfterTest = false;
-			UnitOfWorkTestAttribute.Before(out _loggedOnPerson, out _unitOfWork, out _session);
-            SetupForRepositoryTest();
+			SetupFixtureForAssembly.BeforeTestWithOpenUnitOfWork(out _loggedOnPerson, out _unitOfWork);
+			_session = _unitOfWork.FetchSession();
+			SetupForRepositoryTest();
         }
 
         protected virtual void SetupForRepositoryTest(){}
@@ -45,7 +47,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Helper
         [TearDown]
         public void BaseTeardown()
         {
-			UnitOfWorkTestAttribute.After(UnitOfWork, cleanUpAfterTest);
+			SetupFixtureForAssembly.AfterTestWithOpenUnitOfWork(UnitOfWork, cleanUpAfterTest);
 		}
 
         protected void PersistAndRemoveFromUnitOfWork(IEntity obj)

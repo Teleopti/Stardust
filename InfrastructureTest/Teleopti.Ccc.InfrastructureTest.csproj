@@ -186,6 +186,7 @@
     <Compile Include="MultiTenancy\ApplicationUserQueryTest.cs" />
     <Compile Include="MultiTenancy\PersistLogonAttemptTest.cs" />
     <Compile Include="MultiTenancy\TenantUnitOfWorkManagerTest.cs" />
+    <Compile Include="PrincipalAndStateTestAttribute.cs" />
     <Compile Include="Rta\Persisters\AdherenceDetailsReadModelPersisterTest.cs" />
     <Compile Include="Aop\AspectsTest.cs" />
     <Compile Include="ApplicationLayer\SyncEventPublisherTest.cs" />
