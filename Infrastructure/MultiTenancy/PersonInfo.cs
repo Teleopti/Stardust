@@ -7,7 +7,6 @@ namespace Teleopti.Ccc.Infrastructure.MultiTenancy
 	{
 #pragma warning disable 169
 		private DateOnly? terminalDate;
-		private bool isDeleted;
 		private string applicationLogonName;
 		private string identity;
 #pragma warning restore 169
