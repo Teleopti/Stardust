@@ -150,7 +150,7 @@ function CopyFileToBlobStorage {
     $BlobDestination = $BlobPath + $ContainerName + "/" + $DataSourceName
 
 	## Wrap all above arguments
-	$cmdArgs = @("sourceFolder","$BlobDestination","$pattern", $OPTIONS)
+	$cmdArgs = @("$sourceFolder","$BlobDestination","$pattern", $OPTIONS)
 
 	$AzCopyExe = $directory + "\ccc7_azure\AzCopy\AzCopy.exe"
 	$AzCopyExe
