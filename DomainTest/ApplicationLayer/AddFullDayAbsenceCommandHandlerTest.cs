@@ -13,6 +13,7 @@ using Teleopti.Interfaces.Domain;
 namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 {
 	[TestFixture]
+	[Ignore]
 	public class AddFullDayAbsenceCommandHandlerTest
 	{
 		[Test]
