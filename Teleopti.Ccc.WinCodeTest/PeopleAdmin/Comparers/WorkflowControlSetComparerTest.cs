@@ -34,11 +34,13 @@ namespace Teleopti.Ccc.WinCodeTest.PeopleAdmin.Comparers
         public void VerifyAscendingAndDescending()
         {
             IPerson personA = PersonFactory.CreatePerson("Kalle", "Kula");
-            PersonGeneralModel personGeneralModelX = new PersonGeneralModel(personA, new UserDetail(personA), _principalAuthorization,new PersonAccountUpdaterDummy());
+	        PersonGeneralModel personGeneralModelX = new PersonGeneralModel(personA, new UserDetail(personA),
+		        _principalAuthorization, new PersonAccountUpdaterDummy(), "Teleopti");
             personGeneralModelX.WorkflowControlSet = new WorkflowControlSet("A set");
 
             IPerson personB = PersonFactory.CreatePerson("Bosse", "Batong");
-			PersonGeneralModel personGeneralModelY = new PersonGeneralModel(personB, new UserDetail(personB), _principalAuthorization, new PersonAccountUpdaterDummy());
+	        PersonGeneralModel personGeneralModelY = new PersonGeneralModel(personB, new UserDetail(personB),
+		        _principalAuthorization, new PersonAccountUpdaterDummy(), "Teleopti");
             personGeneralModelY.WorkflowControlSet = new WorkflowControlSet("B set");
 
             Assert.AreEqual(-1, _target.Compare(personGeneralModelX, personGeneralModelY));
@@ -49,10 +51,12 @@ namespace Teleopti.Ccc.WinCodeTest.PeopleAdmin.Comparers
         public void VerifyWithNulls()
         {
             IPerson personA = PersonFactory.CreatePerson("Kalle", "Kula");
-			PersonGeneralModel personGeneralModelX = new PersonGeneralModel(personA, new UserDetail(personA), _principalAuthorization, new PersonAccountUpdaterDummy());
+	        PersonGeneralModel personGeneralModelX = new PersonGeneralModel(personA, new UserDetail(personA),
+		        _principalAuthorization, new PersonAccountUpdaterDummy(), "Teleopti");
 
             IPerson personB = PersonFactory.CreatePerson("Bosse", "Batong");
-			PersonGeneralModel personGeneralModelY = new PersonGeneralModel(personB, new UserDetail(personB), _principalAuthorization, new PersonAccountUpdaterDummy());
+	        PersonGeneralModel personGeneralModelY = new PersonGeneralModel(personB, new UserDetail(personB),
+		        _principalAuthorization, new PersonAccountUpdaterDummy(), "Teleopti");
 
             Assert.AreEqual(0, _target.Compare(personGeneralModelX, personGeneralModelY));
             

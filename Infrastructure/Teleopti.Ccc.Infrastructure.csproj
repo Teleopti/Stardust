@@ -233,6 +233,7 @@
     <Compile Include="MultiTenancy\PasswordPolicyForUser.cs" />
     <Compile Include="MultiTenancy\NHibernate\TenantUnitOfWorkManager.cs" />
     <Compile Include="MultiTenancy\Tenant.cs" />
+    <Compile Include="MultiTenancy\TenantDataManager.cs" />
     <Compile Include="NHibernateConfiguration\SecondLevelCache.cs" />
     <Compile Include="Persisters\WorkflowControlSetPublishDatePersister.cs" />
     <Compile Include="Rta\Persisters\AdherenceDetailsReadModelPersister.cs" />

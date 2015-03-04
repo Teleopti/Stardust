@@ -182,7 +182,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 				builder.RegisterModule(new MeetingOverviewModule());
 				builder.RegisterModule(new SchedulingServiceModule());
 				builder.RegisterModule(new ShiftsModule());
-				builder.RegisterModule(new PersonSelectorModule());
+				builder.RegisterModule(new PersonSelectorModule(configuration));
 				builder.RegisterModule(new PermissionsModule());
 				builder.RegisterModule(new RequestHistoryModule());
 				builder.RegisterModule(new MainModule());

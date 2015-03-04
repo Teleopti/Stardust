@@ -9,6 +9,7 @@ using Teleopti.Ccc.Domain.Security.AuthorizationEntities;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Domain.WorkflowControl;
 using Teleopti.Ccc.Infrastructure.Foundation;
+using Teleopti.Ccc.Infrastructure.MultiTenancy;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.WinCode.PeopleAdmin.Models
@@ -25,7 +26,7 @@ namespace Teleopti.Ccc.WinCode.PeopleAdmin.Models
 		private RoleCollectionParser _roleCollectionParser;
 		private bool _logonDataCanBeChanged;
 		private bool _rightsHaveBeenChecked;
-		private TenantAuthenticationData _tenantData;
+		private readonly TenantAuthenticationData _tenantData;
 
 		public PersonGeneralModel()
 		{
@@ -33,14 +34,14 @@ namespace Teleopti.Ccc.WinCode.PeopleAdmin.Models
 		}
 
 		public PersonGeneralModel(IPerson person, IUserDetail userDetail, IPrincipalAuthorization principalAuthorization,
-			IPersonAccountUpdater personAccountUpdater)
+			IPersonAccountUpdater personAccountUpdater, string tenant)
 			: this()
 		{
 			ContainedEntity = person;
 			_userDetail = userDetail;
 			_principalAuthorization = principalAuthorization;
 			_personAccountUpdater = personAccountUpdater;
-			_tenantData = new TenantAuthenticationData();
+			_tenantData = new TenantAuthenticationData {PersonId = ContainedEntity.Id, Tenant = tenant};
 			if (ContainedEntity.AuthenticationInfo != null)
 				_tenantData.Identity = ContainedEntity.AuthenticationInfo.Identity;
 			if (ContainedEntity.ApplicationAuthenticationInfo != null)
@@ -51,6 +52,10 @@ namespace Teleopti.Ccc.WinCode.PeopleAdmin.Models
 			_tenantData.TerminalDate = ContainedEntity.TerminalDate;
 		}
 
+		public TenantAuthenticationData TenantData
+		{
+			get { return _tenantData; }
+		}
 		public string FirstName
 		{
 			get
