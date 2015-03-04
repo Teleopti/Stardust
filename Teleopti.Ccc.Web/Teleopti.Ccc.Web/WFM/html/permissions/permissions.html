@@ -70,10 +70,24 @@
 			<section>
 				<div class="tab-container">
 					<div ng-show="roleDetails=='functionsAvailable'">
+						<div class="wfm-block">
 							<div class="input-prepend">
 								<i class="mdi mdi-magnify"></i>
 								<input type="text" name="filterDetails" ng-model="searchPermissions" placeholder="Permissions filter ..." />
 							</div>
+							<div class="wfm-slider">
+								<input type="checkbox" id="slide1" checked="true"/>
+								<label for="slide1">
+									<span>selected</span>
+								</label>
+							</div>
+							<div class="wfm-slider">
+								<input type="checkbox" id="slide2" checked="true" />
+								<label for="slide2">
+									<span>unselected</span>
+								</label>
+							</div>
+						</div>
 
 						<div class="tree">
 							<div ui-tree data-drag-enabled="false">
@@ -92,18 +106,25 @@
 			<section>
 				<div class="tab-container">
 					<div ng-show="roleDetails=='dataAvailable'">
-						<div class="input-prepend">
-							<i class="mdi mdi-magnify"></i>
-							<input type="text" name="filterDetails" ng-model="searchData" placeholder="Data filter ..." />
+						<div class="wfm-block">
+							<div class="input-prepend">
+								<i class="mdi mdi-magnify"></i>
+								<input type="text" name="filterDetails" ng-model="searchData" placeholder="Data filter ..." />
+							</div>
 							<div class="wfm-slider">
-								<input type="checkbox" id="slide1" />
-								<label for="slide1">
-									<span>Toggle</span>
+								<input type="checkbox" id="slide3" checked="true" />
+								<label for="slide3">
+									<span>selected</span>
+								</label>
+							</div>
+							<div class="wfm-slider">
+								<input type="checkbox" id="slide4" checked="true" />
+								<label for="slide4">
+									<span>unselected</span>
 								</label>
 							</div>
 						</div>
-
-
+						
 						<div class="tree">
 							<div ui-tree data-drag-enabled="false">
 								<ol ui-tree-nodes="" ng-model="organization.DynamicOptions" class="tree-line">

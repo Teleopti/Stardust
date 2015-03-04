@@ -336,8 +336,6 @@ md-tooltip[width-32="8"].md-show .md-background {
 
 input[type='text'], select {
   width: 100%;
-  margin: 5px 0;
-  padding: 5px 5px 2px;
   border: none;
   color: rgba(0, 0, 0, 0.87);
   border-bottom: 1px solid #E0E0E0; }
@@ -354,7 +352,9 @@ input[type='text'], select {
     width: 2%; }
   .input-prepend input[type='text'] {
     display: inline-block;
-    width: 95%; }
+    width: 95%;
+    margin: 5px 0;
+    padding: 5px 5px 2px; }
 
 .input-append {
   width: 100%; }
@@ -364,7 +364,9 @@ input[type='text'], select {
     width: 2%; }
   .input-append input[type='text'] {
     display: inline-block;
-    width: 95%; }
+    width: 95%;
+    margin: 5px 0;
+    padding: 5px 5px 2px; }
 
 ::-webkit-input-placeholder {
   /* WebKit browsers */
@@ -446,7 +448,12 @@ input[type='text'], select {
     left: 30px; }
   .wfm-slider span {
     /*Slider width + 5px*/
-    margin-left: 53px; }
+    margin-left: 53px;
+    white-space: nowrap; }
+  .wfm-slider span:before {
+    content: "Show "; }
+  .wfm-slider input[type=checkbox]:checked ~ label span:before {
+    content: "Hide "; }
 
 .wfm-checkbox {
   margin-left: 5px; }
@@ -473,7 +480,6 @@ input[type='text'], select {
   .wfm-checkbox input[type=checkbox]:checked ~ label:before {
     content: "✓"; }
   .wfm-checkbox span {
-    /*Slider width + 5px*/
     margin-left: 23px;
     white-space: nowrap; }
 
