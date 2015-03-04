@@ -58,7 +58,25 @@ namespace Teleopti.Ccc.WinCodeTest.PeopleAdmin
 			_days[0].DayOfWeek.Should().Be.EqualTo(DayOfWeek.Sunday);
 			_days[6].DayOfWeek.Should().Be.EqualTo(DayOfWeek.Saturday);
 		}
-    }
 
-    
+		[Test, SetCulture("sv-SE")]
+	    public void ShouldCompare()
+		{
+			var monday = _days[0];
+			var tuesday = _days[1];
+			var anotherTuesday = _days[1];
+
+			var result = monday.CompareTo(tuesday);
+			Assert.AreEqual(-1, result);
+
+			result = tuesday.CompareTo(monday);
+			Assert.AreEqual(1, result);
+
+			result = tuesday.CompareTo(anotherTuesday);
+			Assert.AreEqual(0, result);
+
+			result = monday.CompareTo(null);
+			Assert.AreEqual(-1, result);
+		}
+    }   
 }

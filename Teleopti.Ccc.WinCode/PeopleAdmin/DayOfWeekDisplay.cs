@@ -1,11 +1,12 @@
 using System;
 using System.Collections.Generic;
 using System.Globalization;
+using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.WinCode.PeopleAdmin
 {
-	public class DayOfWeekDisplay
+	public class DayOfWeekDisplay : IComparable
 	{
 		public DayOfWeek DayOfWeek { get; private set; }
 		public string DisplayName { get; private set; }
@@ -32,5 +33,12 @@ namespace Teleopti.Ccc.WinCode.PeopleAdmin
 		}
 			
 		}
+
+		public int CompareTo(object other)
+		{
+			var o = other as DayOfWeekDisplay;
+			return o != null ? string.Compare(DisplayName, o.DisplayName, true, TeleoptiPrincipal.Current.Regional.Culture) : -1;
+		}
+		
 	}
 }
