@@ -148,7 +148,7 @@
 								<!-- /ko -->
 							</div>
 							<div class="request-edit" data-bind="visible: IsSelected, with: DetailItem">
-								<div class="request-denyreason alert alert-warning" data-bind="html: DenyReason, visible: DenyReason() != ''"></div>
+								<div class="request-denyreason alert alert-warning" data-bind="html: $parent.DenyReason, visible: $parent.DenyReason() != ''"></div>
 								<hr />
 								<div data-bind="template : Template">
 								</div>
