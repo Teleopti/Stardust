@@ -1,6 +1,7 @@
 ﻿using Autofac;
 using Teleopti.Ccc.Infrastructure.MultiTenancy;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.NHibernate;
+using Teleopti.Ccc.Web.Areas.Tenant.Model;
 using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.Web.Areas.Tenant.Core
@@ -37,7 +38,25 @@ namespace Teleopti.Ccc.Web.Areas.Tenant.Core
 			builder.RegisterType<ReadNHibFiles>().As<IReadNHibFiles>().SingleInstance();
 			builder.RegisterType<ParseNhibFile>().As<IParseNhibFile>().SingleInstance();
 			builder.RegisterType<NhibConfigurationEncryption>().As<INhibConfigurationEncryption>().SingleInstance();
+			builder.RegisterType<personInfoPersister_Temporary>().As<IPersonInfoPersister>();
+			builder.RegisterType<personInfoMapper_Temporary>().As<IPersonInfoMapper>();
+		}
 
+		//TODO: tenant - fix impl later
+		private class personInfoMapper_Temporary : IPersonInfoMapper
+		{
+			public PersonInfo Map(PersonInfoDto personInfoDto)
+			{
+				return null;
+			}
+		}
+
+		//TODO: tenant - fix impl later
+		private class personInfoPersister_Temporary : IPersonInfoPersister
+		{
+			public void Persist(PersonInfo personInfo)
+			{
+			}
 		}
 	}
 }

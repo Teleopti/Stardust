@@ -323,6 +323,7 @@
     <Compile Include="Areas\Rta\RtaForTest.cs" />
     <Compile Include="Areas\Rta\SendAgentStateTest.cs" />
     <Compile Include="Areas\Start\Controllers\UrlControllerTest.cs" />
+    <Compile Include="Areas\Tenant\PersonInfoControllerTest.cs" />
     <Compile Include="Areas\Toggle\ToggleHandlerControllerTest.cs" />
     <Compile Include="Core\Authentication\DataProvider\BadgeProviderTest.cs" />
     <Compile Include="Areas\Tenant\Core\TenantSsoAuthenticatorTest.cs" />

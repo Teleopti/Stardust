@@ -398,6 +398,14 @@ namespace Teleopti.Ccc.WebTest.Core.IoC
 				.Should().Not.Be.Null();
 		}
 
+
+		[Test]
+		public void ShouldResolvePersonInfoController()
+		{
+			requestContainer.Resolve<PersonInfoController>()
+				.Should().Not.Be.Null();
+		}
+
 		[Test]
 		public void ShouldResolveTeamController()
 		{
