@@ -47,7 +47,7 @@ namespace Teleopti.Ccc.Web.Areas.Tenant.Core
 		{
 			public PersonInfo Map(PersonInfoDto personInfoDto)
 			{
-				return null;
+				return new PersonInfo();
 			}
 		}
 
