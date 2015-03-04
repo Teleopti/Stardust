@@ -131,6 +131,8 @@ BEGIN
 				-- Condition if time filters are set
 			     OR ( 
 				    @isWorkingDay = 1 
+					AND
+					sd.Start is not null
 				    AND
 					(isnull(@filterStartTimes, '') = '' OR EXISTS ( select * from @filterStartTimeList fstl where sd.Start between fstl.startTimeStart and fstl.startTimeEnd))
 				    AND 

@@ -232,3 +232,6 @@
 .date-input-style {
 	padding: 10px 1px;
 }
+.dropdown-menu {
+	overflow-y: scroll;
+}

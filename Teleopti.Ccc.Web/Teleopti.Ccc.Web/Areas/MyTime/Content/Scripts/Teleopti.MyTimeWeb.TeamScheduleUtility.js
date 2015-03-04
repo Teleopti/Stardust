@@ -2,8 +2,6 @@ Teleopti.MyTimeWeb.DayScheduleMixin = function() {
 	var self = this;
 
 	self.openPeriodStartDate = ko.observable();
-
-	//moment().startOf('year').add('days', -1)
 	self.openPeriodEndDate = ko.observable();
 	self.DatePickerFormat = ko.observable("YYYY-MM-DD");
 	self.weekStart = ko.observable(1);
