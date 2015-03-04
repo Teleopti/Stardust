@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Configuration;
 using System.IdentityModel.Claims;
 using System.Linq;
@@ -11,8 +10,6 @@ using Teleopti.Ccc.Domain.Infrastructure;
 using Teleopti.Ccc.Domain.Security.AuthorizationEntities;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Infrastructure.Foundation;
-using Teleopti.Ccc.Infrastructure.UnitOfWork;
-using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
 using Teleopti.Interfaces.MessageBroker.Client.Composite;
@@ -64,36 +61,10 @@ namespace Teleopti.Ccc.TestCommon
             ClearAndSetStateHolder(stateMock);
         }
 
-        public static void ClearAndSetStateHolder(IState stateMock)
+        public static void ClearAndSetStateHolder(IState state)
         {
             ClearStateHolder();
-            StateHolder.Initialize(stateMock);
-        }
-
-
-        /// <summary>
-        /// Clears the and set state holder.
-        /// </summary>
-        /// <param name="mocks">The mocks.</param>
-        /// <param name="dataSource">The factory.</param>
-        /// <param name="stateMock">The state mock.</param>
-        public static void ClearAndSetStateHolder(MockRepository mocks,
-                                                  IDataSource dataSource,
-                                                  IState stateMock)
-        {
-            ISessionData sessData = mocks.StrictMock<ISessionData>();
-            IApplicationData appData = mocks.StrictMock<IApplicationData>();
-            Expect.Call(stateMock.ApplicationScopeData)
-                .Return(appData)
-                .Repeat.Any();
-            Expect.On(stateMock)
-                .Call(stateMock.SessionScopeData)
-                .Return(sessData)
-                .Repeat.Any();
-            ClearStateHolder();
-            StateHolder.Initialize(stateMock);
-            mocks.Replay(stateMock);
-            mocks.Replay(sessData);
+            StateHolder.Initialize(state);
         }
 
 		public static void ClearAndSetStateHolder(MockRepository mocks,

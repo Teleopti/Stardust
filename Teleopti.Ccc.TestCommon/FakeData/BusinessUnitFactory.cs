@@ -9,24 +9,22 @@ namespace Teleopti.Ccc.TestCommon.FakeData
     {
         private static IBusinessUnit _businessUnitUsedInTest;
 
+	    public static void CreateNewBusinessUnitUsedInTest()
+	    {
+		    _businessUnitUsedInTest = null;
+	    }
+
         public static IBusinessUnit BusinessUnitUsedInTest
         {
             get
             {
-                if (_businessUnitUsedInTest == null)
-                {
-                    _businessUnitUsedInTest = CreateSimpleBusinessUnit("Business unit used in test");
-                    _businessUnitUsedInTest.SetId(Guid.NewGuid());
-                }
+	            if (_businessUnitUsedInTest != null) return _businessUnitUsedInTest;
 
-                return _businessUnitUsedInTest;
+	            _businessUnitUsedInTest = CreateSimpleBusinessUnit("Business unit used in test");
+	            _businessUnitUsedInTest.SetId(Guid.NewGuid());
+	            return _businessUnitUsedInTest;
             }
 	        set { _businessUnitUsedInTest = value; }
-        }
-
-        public static void SetBusinessUnitUsedInTestToNull()
-        {
-            _businessUnitUsedInTest = null;
         }
 
         public static BusinessUnit CreateSimpleBusinessUnit(string name)

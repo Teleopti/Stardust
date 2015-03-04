@@ -447,7 +447,6 @@
     <Compile Include="Areas\MyTime\Controllers\SettingsControllerTest.cs" />
     <Compile Include="Areas\Start\Core\Menu\MenuViewModelFactoryTest.cs" />
     <Compile Include="Areas\MyTime\Controllers\TeamScheduleControllerTest.cs" />
-    <Compile Include="Core\Aop\Aspects\UnitOfWorkAspectTest.cs" />
     <Compile Include="Core\Common\DataProvider\PersonPeriodProviderTest.cs" />
     <Compile Include="Core\Common\DataProvider\SchedulePersonProviderTest.cs" />
     <Compile Include="Core\RequestContext\CurrentIdentityTest.cs" />
@@ -624,7 +623,6 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Core\Aop\Core\" />
     <Folder Include="Core\Hangfire\" />
     <Folder Include="Core\WeekSchedule\Mapping\" />
     <Folder Include="Properties\" />

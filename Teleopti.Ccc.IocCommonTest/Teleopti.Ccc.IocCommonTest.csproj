@@ -138,7 +138,6 @@
     <Compile Include="Toggle\UseOnToggleTest.cs" />
     <Compile Include="Toggle\RcTest.cs" />
     <Compile Include="Toggle\ToggleBaseTest.cs" />
-    <Compile Include="SetUpFixtureForAssembly.cs" />
     <Compile Include="Toggle\UndefinedTest.cs" />
   </ItemGroup>
   <ItemGroup>

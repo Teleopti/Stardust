@@ -1,16 +1,68 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Collections.Specialized;
+using Autofac;
 using NUnit.Framework;
 using Rhino.Mocks;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.Aop;
+using Teleopti.Ccc.Domain.Repositories;
+using Teleopti.Ccc.Infrastructure.Aop;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
+using Teleopti.Ccc.IocCommon;
+using Teleopti.Ccc.TestCommon.IoC;
 using Teleopti.Ccc.TestCommon.Web;
+using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
 
-namespace Teleopti.Ccc.WebTest.Core.Aop.Aspects
+namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork
 {
+	[TestFixture]
+	[UnitOfWorkTest]
+	public class UnitOfWorkAspectTest2 : IRegisterInContainer
+	{
+
+		public void RegisterInContainer(ContainerBuilder builder, IIocConfiguration configuration)
+		{
+			builder.RegisterType<TheService>().AsSelf().SingleInstance().ApplyAspects();
+		}
+
+		public TheService TheService;
+		public IPersonRepository PersonRepository;
+
+		[Test, Ignore]
+		public void ShouldBeAbleToQueryARepository()
+		{
+			IEnumerable<IPerson> persons = null;
+
+			TheService.Does(uow =>
+			{
+				persons = PersonRepository.LoadAll();
+			});
+
+			persons.Should().Not.Be.Null();
+		}
+
+	}
+
+	public class TheService
+	{
+		private readonly ICurrentUnitOfWork _uow;
+
+		public TheService(ICurrentUnitOfWork uow)
+		{
+			_uow = uow;
+		}
+
+		//[UnitOfWork]
+		public virtual void Does(Action<IUnitOfWork> action)
+		{
+			action(_uow.Current());
+		}
+
+	}
+
 	[TestFixture]
 	public class UnitOfWorkAspectTest
 	{

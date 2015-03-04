@@ -28,22 +28,11 @@ namespace Teleopti.Ccc.InfrastructureTest
 
 		public static void Before(out IPerson loggedOnPerson, out IUnitOfWork unitOfWork, out ISession session)
 		{
-			BusinessUnitFactory.SetBusinessUnitUsedInTestToNull();
+			BusinessUnitFactory.CreateNewBusinessUnitUsedInTest();
 
-			var Mocks = new MockRepository();
-			var stateMock = Mocks.StrictMock<IState>();
+			loggedOnPerson = PersonFactory.CreatePersonWithBasicPermissionInfo(string.Concat("logOnName", Guid.NewGuid().ToString()), string.Empty);
 
-			Guid buGuid = Guid.NewGuid();
-			BusinessUnitFactory.BusinessUnitUsedInTest.SetId(buGuid);
-			loggedOnPerson =
-				PersonFactory.CreatePersonWithBasicPermissionInfo(string.Concat("logOnName", Guid.NewGuid().ToString()), string.Empty);
-
-			StateHolderProxyHelper.ClearAndSetStateHolder(Mocks,
-				loggedOnPerson,
-				BusinessUnitFactory.BusinessUnitUsedInTest,
-				SetupFixtureForAssembly.ApplicationData,
-				SetupFixtureForAssembly.DataSource,
-				stateMock);
+			StateHolderProxyHelper.SetupFakeState(SetupFixtureForAssembly.DataSource, loggedOnPerson, BusinessUnitFactory.BusinessUnitUsedInTest, new ThreadPrincipalContext(new TeleoptiPrincipalFactory()));
 
 			unitOfWork = SetupFixtureForAssembly.DataSource.Application.CreateAndOpenUnitOfWork();
 			session = unitOfWork.FetchSession();
@@ -52,8 +41,9 @@ namespace Teleopti.Ccc.InfrastructureTest
 			session.Save(loggedOnPerson);
 
 			//force a insert
+			var businessUntId = BusinessUnitFactory.BusinessUnitUsedInTest.Id.Value;
 			BusinessUnitFactory.BusinessUnitUsedInTest.SetId(null);
-			session.Save(BusinessUnitFactory.BusinessUnitUsedInTest, buGuid);
+			session.Save(BusinessUnitFactory.BusinessUnitUsedInTest, businessUntId);
 			session.Flush();
 		}
 
