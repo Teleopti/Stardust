@@ -126,8 +126,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Tenant.Core
 			const string userName = "validUserName";
 			const string password = "somePassword";
 			const string tenant = "theTenant";
-			var personInfo = new PersonInfo { Id = Guid.NewGuid(), Password = EncryptPassword.ToDbFormat(password) };
-			personInfo.SetTenant_DoNotUseThisIfYouAreNotSureWhatYouAreDoing(tenant);
+			var personInfo = new PersonInfo(tenant) { Id = Guid.NewGuid(), Password = EncryptPassword.ToDbFormat(password) };
 			var passwordPolicyForUser = new PasswordPolicyForUser(personInfo);
 			var theUserDetail = new UserDetail(null);
 			var findApplicationQuery = MockRepository.GenerateMock<IApplicationUserQuery>();

@@ -17,7 +17,12 @@ namespace Teleopti.Ccc.Infrastructure.MultiTenancy
 
 		public PersonInfo()
 		{
-			tenant=new Tenant();
+			tenant=new Tenant(string.Empty);
+		}
+
+		public PersonInfo(string tenantName)
+		{
+			tenant=new Tenant(tenantName);
 		}
 
 
@@ -27,12 +32,6 @@ namespace Teleopti.Ccc.Infrastructure.MultiTenancy
 		public virtual string Tenant
 		{
 			get { return tenant.Name; }
-		}
-
-		//TODO: tenant
-		public virtual void SetTenant_DoNotUseThisIfYouAreNotSureWhatYouAreDoing(string tenantName)
-		{
-			tenant.SetName_DoNotUseThisOneIfYouDoNotKnowWhatYouAreDoing(tenantName);
 		}
 	}
 }
