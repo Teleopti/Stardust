@@ -7,7 +7,7 @@
 		<div class="wfm-block">
 			<form ng-submit="createRole(); reset()">
 				<div class="input-prepend">
-					<i class="mdi mdi-magnify"></i>
+					<i class="mdi mdi-plus"></i>
 					<input type="text" ng-model="roleName" placeholder="Create new role" class="role-input role" />
 				</div>
 			</form>
@@ -73,13 +73,13 @@
 								<input type="text" name="filterDetails" ng-model="searchPermissions" placeholder="Permissions filter ..." />
 							</div>
 							<div class="wfm-slider">
-								<input type="checkbox" id="slide1" ng-model="toggleSelectedFunctions" />
+								<input type="checkbox" id="slide1" />
 								<label for="slide1">
 									<span>selected</span>
 								</label>
 							</div>
 							<div class="wfm-slider">
-								<input type="checkbox" id="slide2" ng-model="toggleUnselectedFunctions" />
+								<input type="checkbox" id="slide2" />
 								<label for="slide2">
 									<span>unselected</span>
 								</label>
@@ -88,8 +88,8 @@
 
 						<div class="tree">
 							<div ui-tree data-drag-enabled="false">
-								<ol ui-tree-nodes="" ng-model="functionsDisplayed" id="tree-root" class="tree-line" ng-show="toggleSelectedFunctions">
-									<li ng-repeat="node in functionsDisplayed | filter:searchPermissions" ui-tree-node ng-include="'nodes_renderer.html'" ng-show="toggleSelectedFunctions"></li>
+								<ol ui-tree-nodes="" ng-model="functionsDisplayed" id="tree-root" class="tree-line">
+									<li ng-repeat="node in functionsDisplayed | filter:searchPermissions" ui-tree-node ng-include="'nodes_renderer.html'"></li>
 								</ol>
 							</div>
 						</div>
