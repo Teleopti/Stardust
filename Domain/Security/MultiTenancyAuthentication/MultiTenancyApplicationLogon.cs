@@ -18,7 +18,7 @@ namespace Teleopti.Ccc.Domain.Security.MultiTenancyAuthentication
 
 		public AuthenticationResult Logon(ILogonModel logonModel, IApplicationData applicationData, string userAgent)
 		{
-			var result = _authenticationQuerier.TryLogon(logonModel.UserName, logonModel.Password, userAgent);
+			var result = _authenticationQuerier.TryApplicationLogon(logonModel.UserName, logonModel.Password, userAgent);
 			if (!result.Success)
 				return new AuthenticationResult
 				{

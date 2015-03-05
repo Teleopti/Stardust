@@ -10,6 +10,7 @@ namespace Teleopti.Ccc.Infrastructure.MultiTenancy
 		private readonly INhibConfigEncryption _nhibConfigEncryption;
 		private readonly IPostHttpRequest _postHttpRequest;
 
+
 		public AuthenticationQuerier(string pathToTenantServer, 
 																INhibConfigEncryption nhibConfigEncryption, 
 																IPostHttpRequest postHttpRequest)
@@ -19,8 +20,7 @@ namespace Teleopti.Ccc.Infrastructure.MultiTenancy
 			_postHttpRequest = postHttpRequest;
 		}
 
-		//rename
-		public AuthenticationQueryResult TryLogon(string userName, string password, string userAgent)
+		public AuthenticationQueryResult TryApplicationLogon(string userName, string password, string userAgent)
 		{
 			var data = new Dictionary<string, string>
 			{

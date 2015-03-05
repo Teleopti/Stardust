@@ -42,7 +42,7 @@ namespace Teleopti.Ccc.DomainTest.Security.MultiTenancyAuthentication
 			var personId = Guid.NewGuid();
 			var person = new Person();
 			var personRepository = MockRepository.GenerateMock<IPersonRepository>();
-			_authenticationQuerier.Stub(x => x.TryLogon("kalle", "kula", userAgent))
+			_authenticationQuerier.Stub(x => x.TryApplicationLogon("kalle", "kula", userAgent))
 				.Return(new AuthenticationQueryResult { PersonId = personId, Success = true, Tenant = "Teleopti WFM", DataSourceConfiguration = new DataSourceConfig()});
 			_appData.Stub(x => x.CreateAndAddDataSource(null, null, null)).Return(_dataSource).IgnoreArguments();
 			_dataSource.Stub(x => x.Application).Return(uowFactory);
@@ -64,7 +64,7 @@ namespace Teleopti.Ccc.DomainTest.Security.MultiTenancyAuthentication
 			var personId = Guid.NewGuid();
 			var person = new Person();
 			var personRepository = MockRepository.GenerateMock<IPersonRepository>();
-			_authenticationQuerier.Stub(x => x.TryLogon("kalle", "kula", userAgent))
+			_authenticationQuerier.Stub(x => x.TryApplicationLogon("kalle", "kula", userAgent))
 				.Return(new AuthenticationQueryResult { PersonId = personId, Success = true, Tenant = "Teleopti WFM", DataSourceConfiguration = new DataSourceConfig() });
 			_appData.Stub(x => x.CreateAndAddDataSource(null,null,null)).Return(_dataSource).IgnoreArguments();
 			_dataSource.Stub(x => x.Application).Return(uowFactory);
@@ -81,7 +81,7 @@ namespace Teleopti.Ccc.DomainTest.Security.MultiTenancyAuthentication
 		[Test]
 		public void ShouldReturnFailureOnNoSuccess()
 		{
-			_authenticationQuerier.Stub(x => x.TryLogon("kalle", "kula", userAgent))
+			_authenticationQuerier.Stub(x => x.TryApplicationLogon("kalle", "kula", userAgent))
 				.Return(new AuthenticationQueryResult { Success = false });
 
 			var result = _target.Logon(_model, _appData, userAgent);
