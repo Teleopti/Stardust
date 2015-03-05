@@ -24,7 +24,6 @@ namespace Teleopti.Ccc.Infrastructure.MultiTenancy
 			tenant=new Tenant(tenantName);
 		}
 
-
 		public virtual Guid Id { get; set; }
 		public virtual string Password { get; set; }
 

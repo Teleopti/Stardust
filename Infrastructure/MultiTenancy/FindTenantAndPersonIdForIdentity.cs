@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace Teleopti.Ccc.Infrastructure.MultiTenancy
+﻿namespace Teleopti.Ccc.Infrastructure.MultiTenancy
 {
 	public class FindTenantAndPersonIdForIdentity : IFindTenantAndPersonIdForIdentity
 	{
@@ -25,16 +23,5 @@ namespace Teleopti.Ccc.Infrastructure.MultiTenancy
 
 			return null;
 		}
-	}
-
-	public interface IFindTenantAndPersonIdForIdentity
-	{
-		TenantAndPersonId Find(string identity);
-	}
-
-	public class TenantAndPersonId
-	{
-		public string Tenant { get; set; }
-		public Guid PersonId { get; set; }
 	}
 }

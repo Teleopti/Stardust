@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace Teleopti.Ccc.Infrastructure.MultiTenancy.NHibernate
+﻿namespace Teleopti.Ccc.Infrastructure.MultiTenancy.NHibernate
 {
 	public interface ITenantUnitOfWorkManager
 	{

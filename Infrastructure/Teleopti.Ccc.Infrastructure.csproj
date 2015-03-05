@@ -219,6 +219,7 @@
     <Compile Include="MultiTenancy\DictionaryToPostData.cs" />
     <Compile Include="MultiTenancy\FindTenantAndPersonIdForIdentity.cs" />
     <Compile Include="MultiTenancy\IDictionaryToPostData.cs" />
+    <Compile Include="MultiTenancy\IFindTenantAndPersonIdForIdentity.cs" />
     <Compile Include="MultiTenancy\IIdentityUserQuery.cs" />
     <Compile Include="MultiTenancy\IdentityUserQuery.cs" />
     <Compile Include="MultiTenancy\ApplicationUserQuery.cs" />
@@ -239,6 +240,7 @@
     <Compile Include="MultiTenancy\NHibernate\TenantUnitOfWorkManager.cs" />
     <Compile Include="MultiTenancy\PostHttpRequest.cs" />
     <Compile Include="MultiTenancy\Tenant.cs" />
+    <Compile Include="MultiTenancy\TenantAndPersonId.cs" />
     <Compile Include="MultiTenancy\TenantDataManager.cs" />
     <Compile Include="NHibernateConfiguration\SecondLevelCache.cs" />
     <Compile Include="Persisters\WorkflowControlSetPublishDatePersister.cs" />
