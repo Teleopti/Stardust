@@ -16,6 +16,8 @@ namespace Teleopti.Ccc.Domain.Security
 
 		public void DecryptConfig(DataSourceConfig dataSourceConfig)
 		{
+			if (dataSourceConfig == null) return;
+
 			dataSourceConfig.ApplicationNHibernateConfig.DecryptDictionary(EncryptionConstants.Image1, EncryptionConstants.Image2);
 			dataSourceConfig.AnalyticsConnectionString = Encryption.DecryptStringFromBase64(dataSourceConfig.AnalyticsConnectionString, EncryptionConstants.Image1, EncryptionConstants.Image2);
 		}
