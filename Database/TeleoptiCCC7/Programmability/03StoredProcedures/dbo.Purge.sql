@@ -230,6 +230,14 @@ where not exists (
 select 1 from Request r
 where r.Parent = pr.Id)
 
+
+--New Adherence read models. Purge for now since we have not yet built or tested with lots of historical data.
+delete ReadModel.AdherencePercentage
+where BelongsToDate < dateadd(day,-7,getdate())
+
+delete ReadModel.AdherenceDetails
+where BelongsToDate < dateadd(day,-7,getdate())
+
 END
 
 GO
