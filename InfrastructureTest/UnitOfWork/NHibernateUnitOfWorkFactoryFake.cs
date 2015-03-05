@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using NHibernate;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
+using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
 using Teleopti.Interfaces.MessageBroker.Client.Composite;
 using IMessageSender = Teleopti.Ccc.Infrastructure.UnitOfWork.IMessageSender;
@@ -13,13 +14,13 @@ namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork
 		private readonly Func<IUnitOfWork> _makeUnitOfWork;
 
 		internal NHibernateUnitOfWorkFactoryFake(ISessionFactory sessFactory)
-			: base(sessFactory, null, null, new List<IMessageSender>()) { }
+			: base(sessFactory, null, null, new List<IMessageSender>(), () => StateHolderReader.Instance.StateReader.ApplicationScopeData.Messaging) { }
 
 		internal NHibernateUnitOfWorkFactoryFake(ISessionFactory sessFactory, 
 			Func<IUnitOfWork> makeUnitOfWork,
 			ISessionContextBinder sessionContextBinder
 			)
-			: base(sessFactory, null, null, new List<IMessageSender>())
+			: base(sessFactory, null, null, new List<IMessageSender>(), () => StateHolderReader.Instance.StateReader.ApplicationScopeData.Messaging)
 		{
 			_makeUnitOfWork = makeUnitOfWork;
 			SessionContextBinder = sessionContextBinder;

@@ -77,21 +77,27 @@ namespace Teleopti.Ccc.Sdk.WcfHost
 			var populator = EventContextPopulator.Make();
 			var messageSender = new MessagePopulatingServiceBusSender(busSender, populator);
 			var eventPublisher = new EventPopulatingPublisher(new ServiceBusEventPublisher(busSender), populator);
-			var initializeApplication =
-				new InitializeApplication(
-					new DataSourcesFactory(new EnversConfiguration(),
-											new List<IMessageSender>
-														 {
-															 new ScheduleMessageSender(eventPublisher, new ClearEvents()),
-															 new EventsMessageSender(new SyncEventsPublisher(eventPublisher)),
-															 new MeetingMessageSender(eventPublisher),
-															 new GroupPageChangedMessageSender(messageSender),
-															 new TeamOrSiteChangedMessageSender(messageSender),
-															 new PersonChangedMessageSender(messageSender),
-															 new PersonPeriodChangedMessageSender(messageSender)
-														 },
-											DataSourceConfigurationSetter.ForSdk(), new CurrentHttpContext()),
-					messageBroker) { MessageBrokerDisabled = messageBrokerDisabled() };
+			  var initializeApplication =
+				  new InitializeApplication(
+					  new DataSourcesFactory(new EnversConfiguration(),
+						  new List<IMessageSender>
+						  {
+							  new ScheduleMessageSender(eventPublisher, new ClearEvents()),
+							  new EventsMessageSender(new SyncEventsPublisher(eventPublisher)),
+							  new MeetingMessageSender(eventPublisher),
+							  new GroupPageChangedMessageSender(messageSender),
+							  new TeamOrSiteChangedMessageSender(messageSender),
+							  new PersonChangedMessageSender(messageSender),
+							  new PersonPeriodChangedMessageSender(messageSender)
+						  },
+						  DataSourceConfigurationSetter.ForSdk(),
+						  new CurrentHttpContext(),
+						  () => StateHolderReader.Instance.StateReader.ApplicationScopeData.Messaging
+						  ),
+					  messageBroker)
+				  {
+					  MessageBrokerDisabled = messageBrokerDisabled()
+				  };
 			string sitePath = Global.sitePath();
 			initializeApplication.Start(new SdkState(), sitePath, new LoadPasswordPolicyService(sitePath), new ConfigurationManagerWrapper(), true);
 

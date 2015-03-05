@@ -100,24 +100,10 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
         /// Can not create repository when user not logged on.
         /// </summary>
         [Test]
-        [ExpectedException(typeof (PermissionException))]
         public virtual void CannotCallDatabaseWhenNotLoggedOn()
         {
-            IState stateMockTemp = Mocks.StrictMock<IState>();
-            StateHolderProxyHelper.ClearAndInitializeStateHolder(stateMockTemp);
-
-            using(Mocks.Record())
-            {
-                Expect.On(stateMockTemp)
-                   .Call(stateMockTemp.IsLoggedIn)
-                   .Return(false);
-                Expect.Call(stateMockTemp.ApplicationScopeData)
-                    .Return(Mocks.StrictMock<IApplicationData>());
-            }
-            using(Mocks.Playback())
-            {
-                rep.Load(Guid.NewGuid());
-            }
+			Logout();
+	        Assert.Throws<PermissionException>(() => rep.Load(Guid.NewGuid()));
         }
 
 

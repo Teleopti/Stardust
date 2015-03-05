@@ -25,7 +25,7 @@ namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork
 		public void Setup()
 		{
 			enversConfiguration = MockRepository.GenerateMock<IEnversConfiguration>();
-			target = new DataSourcesFactory(enversConfiguration, new List<IMessageSender>(), DataSourceConfigurationSetter.ForTest(), new CurrentHttpContext());
+			target = new DataSourcesFactory(enversConfiguration, new List<IMessageSender>(), DataSourceConfigurationSetter.ForTest(), new CurrentHttpContext(), null);
 		}
 
 		[Test]
@@ -60,7 +60,7 @@ namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork
 		[Test]
 		public void VerifyXmlBasedWithDistributedTransaction()
 		{
-			target = new DataSourcesFactory(enversConfiguration, new List<IMessageSender>(), DataSourceConfigurationSetter.ForTest(), new CurrentHttpContext());
+			target = new DataSourcesFactory(enversConfiguration, new List<IMessageSender>(), DataSourceConfigurationSetter.ForTest(), new CurrentHttpContext(), null);
 			string correctMatrix = @"<matrix name=""matrixName""><connectionString>" + ConnectionStringHelper.ConnectionStringUsedInTestsMatrix + @"</connectionString></matrix>";
 
 			var nhibernateXmlConfiguration = xmlText("test", correctMatrix);

@@ -47,6 +47,13 @@ namespace Teleopti.Ccc.TestCommon
 			ClearAndSetStateHolder(state);
 		}
 
+		public static void ClearFakeState(ICurrentPrincipalContext principalContext)
+		{
+			principalContext.ResetPrincipal();
+			PrincipalAuthorization.SetInstance(null);
+			ClearStateHolder();
+	    }
+
         /// <summary>
         /// Clears the and set state holder.
         /// </summary>

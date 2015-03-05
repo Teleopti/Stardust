@@ -13,6 +13,7 @@ using Teleopti.Ccc.Infrastructure.LiteUnitOfWork;
 using Teleopti.Ccc.Infrastructure.NHibernateConfiguration;
 using Teleopti.Ccc.Infrastructure.Web;
 using Teleopti.Interfaces.Domain;
+using Teleopti.Interfaces.MessageBroker.Client.Composite;
 using Environment = NHibernate.Cfg.Environment;
 using Teleopti.Ccc.Domain.Common.Logging;
 
@@ -24,16 +25,19 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 		private readonly IEnumerable<IMessageSender> _messageSenders;
 		private readonly IDataSourceConfigurationSetter _dataSourceConfigurationSetter;
 		private readonly ICurrentHttpContext _httpContext;
+		private readonly Func<IMessageBrokerComposite> _messageBroker;
 		private static readonly ILog Logger = LogManager.GetLogger(typeof(DataSourcesFactory));
 
 		public const string AnalyticsDataSourceName = "AnalyticsDatasource";
 
-		public DataSourcesFactory(IEnversConfiguration enversConfiguration, IEnumerable<IMessageSender> messageSenders, IDataSourceConfigurationSetter dataSourceConfigurationSetter, ICurrentHttpContext httpContext)
+		public DataSourcesFactory(IEnversConfiguration enversConfiguration, IEnumerable<IMessageSender> messageSenders,
+			IDataSourceConfigurationSetter dataSourceConfigurationSetter, ICurrentHttpContext httpContext, Func<IMessageBrokerComposite> messageBroker)
 		{
 			_enversConfiguration = enversConfiguration;
 			_messageSenders = messageSenders;
 			_dataSourceConfigurationSetter = dataSourceConfigurationSetter;
 			_httpContext = httpContext;
+			_messageBroker = messageBroker ?? (() => StateHolderReader.Instance.StateReader.ApplicationScopeData.Messaging);
 		}
 
 		private static string isSqlServerOnline(string connectionString)
@@ -103,7 +107,8 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 			NHibernateUnitOfWorkMatrixFactory statFactory;
 			var appConfig = createApplicationConfiguration(settings);
 			var applicationConnectionString = appConfig.Properties[Environment.ConnectionString];
-			var appFactory = new NHibernateUnitOfWorkFactory(buildSessionFactory(appConfig), _enversConfiguration.AuditSettingProvider, applicationConnectionString, _messageSenders);
+			var appFactory = new NHibernateUnitOfWorkFactory(buildSessionFactory(appConfig),
+				_enversConfiguration.AuditSettingProvider, applicationConnectionString, _messageSenders, _messageBroker);
 
 			if (!string.IsNullOrEmpty(statisticConnectionString))
 			{

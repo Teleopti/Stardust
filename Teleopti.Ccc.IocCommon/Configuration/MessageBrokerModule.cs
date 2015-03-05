@@ -25,7 +25,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 		{
 			builder.RegisterInstance(MessageFilterManager.Instance).As<IMessageFilterManager>().SingleInstance();
 			builder.RegisterType<NotificationCreator>().As<INotificationCreator>().SingleInstance();
-
+			
 			builder.RegisterType<MessageBrokerCompositeClient>()
 				.As<IMessageBrokerComposite>()
 				.As<IMessageCreator>()

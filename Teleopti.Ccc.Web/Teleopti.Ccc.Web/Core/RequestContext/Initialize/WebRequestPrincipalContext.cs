@@ -1,3 +1,4 @@
+using System.Security.Principal;
 using System.Threading;
 using Microsoft.IdentityModel.Claims;
 using Teleopti.Ccc.Domain.Security.Principal;
@@ -27,14 +28,24 @@ namespace Teleopti.Ccc.Web.Core.RequestContext.Initialize
 		{
 			var token = _tokenIdentityProvider.RetrieveToken();
 			var principal = _factory.MakePrincipal(loggedOnUser, dataSource, businessUnit, token == null ? null : token.OriginalToken);
-			Thread.CurrentPrincipal = principal;
-			_httpContext.Current().User = principal;
+			setPrincipal(principal);
 		}
 
 		public void SetCurrentPrincipal(ITeleoptiPrincipal principal)
 		{
+			setPrincipal(principal);
+		}
+
+		public void ResetPrincipal()
+		{
+			setPrincipal(new GenericPrincipal(new GenericIdentity(""), new string[0]));
+		}
+
+		private void setPrincipal(IPrincipal principal)
+		{
 			Thread.CurrentPrincipal = principal;
 			_httpContext.Current().User = principal;
 		}
+
 	}
 }

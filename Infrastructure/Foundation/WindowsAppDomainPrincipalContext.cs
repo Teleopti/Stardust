@@ -42,5 +42,10 @@ namespace Teleopti.Ccc.Infrastructure.Foundation
 		{
 			throw new NotImplementedException();
 		}
+
+		public void ResetPrincipal()
+		{
+			throw new NotImplementedException();
+		}
 	}
 }

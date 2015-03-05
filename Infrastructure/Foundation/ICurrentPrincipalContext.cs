@@ -7,5 +7,6 @@ namespace Teleopti.Ccc.Infrastructure.Foundation
 	{
 		void SetCurrentPrincipal(IPerson loggedOnUser, IDataSource dataSource, IBusinessUnit businessUnit);
 		void SetCurrentPrincipal(ITeleoptiPrincipal principal);
+		void ResetPrincipal();
 	}
 }

@@ -91,7 +91,10 @@ namespace Teleopti.Analytics.Etl.TransformerInfrastructure
 			if (string.IsNullOrEmpty(_nhibConfPath))
 				_nhibConfPath = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
 			var dataSourcesFactory = new DataSourcesFactory(new EnversConfiguration(), new List<IMessageSender>(),
-				DataSourceConfigurationSetter.ForEtl(), new CurrentHttpContext());
+				DataSourceConfigurationSetter.ForEtl(), 
+				new CurrentHttpContext(),
+				() => StateHolderReader.Instance.StateReader.ApplicationScopeData.Messaging
+				);
 			var application = new InitializeApplication( dataSourcesFactory, null) {MessageBrokerDisabled = true};
 
 			if (!StateHolder.IsInitialized)

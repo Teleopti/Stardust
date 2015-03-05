@@ -30,7 +30,7 @@ namespace Teleopti.Ccc.WinCode.Main
 		{
 			new InitializeApplication(
 				new DataSourcesFactory(new EnversConfiguration(), new List<IMessageSender>(),
-										DataSourceConfigurationSetter.ForDesktop(), new CurrentHttpContext()),
+										DataSourceConfigurationSetter.ForDesktop(), new CurrentHttpContext(), () => messageBroker),
 				messageBroker
 				)
 				{
@@ -90,16 +90,18 @@ namespace Teleopti.Ccc.WinCode.Main
 			var initializer =
 				new InitializeApplication(
 					new DataSourcesFactory(new EnversConfiguration(),
-												  new List<IMessageSender>
-														{
-														  new ScheduleMessageSender(eventPublisher, new ClearEvents()), 
-																			 new EventsMessageSender(new SyncEventsPublisher(eventPublisher)),
-															 new MeetingMessageSender(eventPublisher),
-																			 new GroupPageChangedMessageSender(messageSender),
-																			 new TeamOrSiteChangedMessageSender(messageSender),
-																			 new PersonChangedMessageSender(messageSender),
-																			 new PersonPeriodChangedMessageSender(messageSender)
-														}, DataSourceConfigurationSetter.ForDesktop(), new CurrentHttpContext()),
+						new List<IMessageSender>
+						{
+							new ScheduleMessageSender(eventPublisher, new ClearEvents()),
+							new EventsMessageSender(new SyncEventsPublisher(eventPublisher)),
+							new MeetingMessageSender(eventPublisher),
+							new GroupPageChangedMessageSender(messageSender),
+							new TeamOrSiteChangedMessageSender(messageSender),
+							new PersonChangedMessageSender(messageSender),
+							new PersonPeriodChangedMessageSender(messageSender)
+						}, DataSourceConfigurationSetter.ForDesktop(),
+						new CurrentHttpContext(),
+						() => messageBroker),
 					messageBroker)
 				{
 					MessageBrokerDisabled = messageBrokerDisabled

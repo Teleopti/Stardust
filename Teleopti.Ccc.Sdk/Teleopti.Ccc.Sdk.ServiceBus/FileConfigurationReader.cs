@@ -37,7 +37,9 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
 				var application =
 					new InitializeApplication(
 						new DataSourcesFactory(new EnversConfiguration(), creator.Create(),
-							DataSourceConfigurationSetter.ForServiceBus(), new CurrentHttpContext()),
+							DataSourceConfigurationSetter.ForServiceBus(),
+							new CurrentHttpContext(),
+							messageBroker),
 						messageBroker());
 				application.Start(new BasicState(), _xmlFilePath, null, new ConfigurationManagerWrapper(), true);
 

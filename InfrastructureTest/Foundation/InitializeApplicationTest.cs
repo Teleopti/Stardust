@@ -123,7 +123,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Foundation
 		public void VerifyDefaultProperty()
 		{
 			MessageBrokerContainerDontUse.Configure(null, null, null);
-			target = new InitializeApplication(new DataSourcesFactory(null, new List<IMessageSender>(), DataSourceConfigurationSetter.ForTest(), new CurrentHttpContext()), 
+			target = new InitializeApplication(new DataSourcesFactory(null, new List<IMessageSender>(), DataSourceConfigurationSetter.ForTest(), new CurrentHttpContext(), null), 
 				MessageBrokerContainerDontUse.CompositeClient());
 		}
 

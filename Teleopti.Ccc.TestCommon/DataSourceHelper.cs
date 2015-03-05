@@ -162,7 +162,7 @@ namespace Teleopti.Ccc.TestCommon
 			return exceptionToConsole(
 				() =>
 				{
-					var dataSourceFactory = new DataSourcesFactory(new EnversConfiguration(), messageSenders, DataSourceConfigurationSetter.ForTest(), new CurrentHttpContext());
+					var dataSourceFactory = new DataSourcesFactory(new EnversConfiguration(), messageSenders, DataSourceConfigurationSetter.ForTest(), new CurrentHttpContext(), null);
 					var dataSourceSettings = CreateDataSourceSettings(ConnectionStringHelper.ConnectionStringUsedInTests, null, name);
 					return dataSourceFactory.Create(dataSourceSettings, ConnectionStringHelper.ConnectionStringUsedInTestsMatrix);
 				},

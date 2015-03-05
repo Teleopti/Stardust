@@ -1,3 +1,4 @@
+using System.Security.Principal;
 using System.Threading;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Interfaces.Domain;
@@ -23,6 +24,11 @@ namespace Teleopti.Ccc.Infrastructure.Foundation
 		public void SetCurrentPrincipal(ITeleoptiPrincipal principal)
 		{
 			Thread.CurrentPrincipal = principal;
+		}
+
+		public void ResetPrincipal()
+		{
+			Thread.CurrentPrincipal = new GenericPrincipal(new GenericIdentity(""), new string[0]);
 		}
 	}
 }

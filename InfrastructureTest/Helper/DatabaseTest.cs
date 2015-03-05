@@ -69,5 +69,10 @@ namespace Teleopti.Ccc.InfrastructureTest.Helper
         {
             cleanUpAfterTest = true;
         }
+
+	    protected void Logout()
+	    {
+			SetupFixtureForAssembly.ClearFakeState();
+		}
     }
 }

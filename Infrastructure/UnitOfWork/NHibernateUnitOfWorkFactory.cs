@@ -23,11 +23,14 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 		private readonly IAuditSetter _auditSettingProvider;
 
 		private readonly IEnumerable<IMessageSender> _messageSenders;
+		private readonly Func<IMessageBrokerComposite> _messageBroker;
 
-		protected internal NHibernateUnitOfWorkFactory(ISessionFactory sessionFactory,
-		                                               IAuditSetter auditSettingProvider,
-		                                               string connectionString,
-		                                               IEnumerable<IMessageSender> messageSenders)
+		protected internal NHibernateUnitOfWorkFactory(
+			ISessionFactory sessionFactory,
+			IAuditSetter auditSettingProvider,
+			string connectionString,
+			IEnumerable<IMessageSender> messageSenders,
+			Func<IMessageBrokerComposite> messageBroker)
 		{
 			ConnectionString = connectionString;
 			SessionContextBinder = new StaticSessionContextBinder();
@@ -36,6 +39,7 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 			_factory = sessionFactory;
 			_auditSettingProvider = auditSettingProvider;
 			_messageSenders = messageSenders;
+			_messageBroker = messageBroker;
 		}
 
 		protected ISessionContextBinder SessionContextBinder { get; set; }
@@ -71,8 +75,8 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 		{
 			var session = _factory.GetCurrentSession();
 			return MakeUnitOfWork(
-				session, 
-				StateHolderReader.Instance.StateReader.ApplicationScopeData.Messaging,
+				session,
+				_messageBroker(),
 				SessionContextBinder.FilterManager(session),
 				SessionContextBinder.IsolationLevel(session),
 				SessionContextBinder.Initiator(session)
@@ -102,12 +106,12 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 
 		public virtual IUnitOfWork CreateAndOpenUnitOfWork(TransactionIsolationLevel isolationLevel = TransactionIsolationLevel.Default)
 		{
-			return CreateAndOpenUnitOfWork(StateHolderReader.Instance.StateReader.ApplicationScopeData.Messaging, isolationLevel, null);
+			return CreateAndOpenUnitOfWork(_messageBroker(), isolationLevel, null);
 		}
 
 		public IUnitOfWork CreateAndOpenUnitOfWork(IInitiatorIdentifier initiator)
 		{
-			return CreateAndOpenUnitOfWork(StateHolderReader.Instance.StateReader.ApplicationScopeData.Messaging, TransactionIsolationLevel.Default, initiator);
+			return CreateAndOpenUnitOfWork(_messageBroker(), TransactionIsolationLevel.Default, initiator);
 		}
 
 		public IUnitOfWork CreateAndOpenUnitOfWork(IMessageBrokerComposite messageBroker, TransactionIsolationLevel isolationLevel, IInitiatorIdentifier initiator)

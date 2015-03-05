@@ -161,7 +161,8 @@ you have to manually clean up or call CleanUpAfterTest() to restore the database
 
 		public static void BeforeTestWithOpenUnitOfWork(out IPerson person, out IUnitOfWork unitOfWork)
 		{
-			SetupFakeState(out person);
+			CreateFakeStateEntities(out person);
+			SetupFakeState(person);
 			unitOfWork = DataSource.Application.CreateAndOpenUnitOfWork();
 			SaveFakeState(person, unitOfWork);
 		}
@@ -177,10 +178,10 @@ you have to manually clean up or call CleanUpAfterTest() to restore the database
 				CheckThatDbIsEmtpy();
 		}
 
-		public static void BeforeTest()
+		public static void BeforeTest(out IPerson person)
 		{
-			IPerson person;
-			SetupFakeState(out person);
+			CreateFakeStateEntities(out person);
+			SetupFakeState(person);
 			using (var unitOfWork = DataSource.Application.CreateAndOpenUnitOfWork())
 			{
 				SaveFakeState(person, unitOfWork);
@@ -193,19 +194,27 @@ you have to manually clean up or call CleanUpAfterTest() to restore the database
 			RestoreCcc7Database();
 		}
 
-		private static void SetupFakeState(out IPerson person)
+		private static void CreateFakeStateEntities(out IPerson person)
 		{
 			BusinessUnitFactory.CreateNewBusinessUnitUsedInTest();
 
 			person = PersonFactory.CreatePersonWithBasicPermissionInfo(
 				string.Concat("logOnName", Guid.NewGuid().ToString()),
 				string.Empty);
+		}
 
+		public static void SetupFakeState(IPerson person)
+		{
 			StateHolderProxyHelper.SetupFakeState(
 				DataSource, 
 				person, 
 				BusinessUnitFactory.BusinessUnitUsedInTest,
 				new ThreadPrincipalContext(new TeleoptiPrincipalFactory()));
+		}
+
+		public static void ClearFakeState()
+		{
+			StateHolderProxyHelper.ClearFakeState(new ThreadPrincipalContext(new TeleoptiPrincipalFactory()));
 		}
 
 		private static void SaveFakeState(IPerson person, IUnitOfWork uow)

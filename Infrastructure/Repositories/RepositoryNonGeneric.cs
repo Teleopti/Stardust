@@ -1,5 +1,7 @@
 using NHibernate;
+using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Security;
+using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Interfaces.Domain;
@@ -91,9 +93,13 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 		{
 			get
 			{
-				if (ValidateUserLoggedOn &&
-						!StateHolder.Instance.StateReader.IsLoggedIn)
-					throw new PermissionException("This repository is not available for non logged on users");
+				if (ValidateUserLoggedOn)
+				{
+					var identity = new CurrentIdentity(new CurrentTeleoptiPrincipal()).Current();
+					var loggedIn = identity != null && identity.IsAuthenticated;
+					if (!loggedIn)
+						throw new PermissionException("This repository is not available for non logged on users");
+				}
 				return ((NHibernateUnitOfWork)UnitOfWork).Session;
 			}
 		}
