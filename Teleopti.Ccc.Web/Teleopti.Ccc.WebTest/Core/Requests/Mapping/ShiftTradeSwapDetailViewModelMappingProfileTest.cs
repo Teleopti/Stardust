@@ -152,36 +152,36 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 				new DateTimePeriod(shiftTradeRequest.Period.StartDateTime.AddHours(-1), shiftTradeRequest.Period.EndDateTime.AddHours(1))));
 		}
 
-		[Test]
-		public void CreateTimelineBasedOnShiftTradePeriodIfNoSchedulesExists()
-		{
-			var timeLineHoursViewModelFactory = MockRepository.GenerateStrictMock<IShiftTradeTimeLineHoursViewModelFactory>();
+		//[Test]
+		//public void CreateTimelineBasedOnShiftTradePeriodIfNoSchedulesExists()
+		//{
+		//	var timeLineHoursViewModelFactory = MockRepository.GenerateStrictMock<IShiftTradeTimeLineHoursViewModelFactory>();
 
-			Mapper.Reset();
+		//	Mapper.Reset();
 
-			Mapper.Initialize(
-				c =>
-				c.AddProfile(new ShiftTradeSwapDetailViewModelMappingProfile(timeLineHoursViewModelFactory, _projectionProvider,
-																			  _userCulture, _userTimeZone, null)));
-			AddNeededMappingProfiles();
+		//	Mapper.Initialize(
+		//		c =>
+		//		c.AddProfile(new ShiftTradeSwapDetailViewModelMappingProfile(timeLineHoursViewModelFactory, _projectionProvider,
+		//																	  _userCulture, _userTimeZone, null)));
+		//	AddNeededMappingProfiles();
 
-			var from = new DateTime(2001, 1, 1, 0, 0, 0, DateTimeKind.Utc);
-			var to = new DateTime(2001, 1, 2, 0, 0, 0, DateTimeKind.Utc);
+		//	var from = new DateTime(2001, 1, 1, 0, 0, 0, DateTimeKind.Utc);
+		//	var to = new DateTime(2001, 1, 2, 0, 0, 0, DateTimeKind.Utc);
 
 			
-			var shiftTrade = CreateShiftTrade(from, to, null,null);
-			var expectedTimelinePeriod = shiftTrade.Period;
+		//	var shiftTrade = CreateShiftTrade(from, to, null,null);
+		//	var expectedTimelinePeriod = shiftTrade.Period;
 
-			var timelineHours = new List<ShiftTradeTimeLineHoursViewModel>() { new ShiftTradeTimeLineHoursViewModel(), new ShiftTradeTimeLineHoursViewModel() };
-			timeLineHoursViewModelFactory.Expect(s => s.CreateTimeLineHours(expectedTimelinePeriod)).Return(timelineHours);
+		//	var timelineHours = new List<ShiftTradeTimeLineHoursViewModel>() { new ShiftTradeTimeLineHoursViewModel(), new ShiftTradeTimeLineHoursViewModel() };
+		//	timeLineHoursViewModelFactory.Expect(s => s.CreateTimeLineHours(expectedTimelinePeriod)).Return(timelineHours);
 
-			var result = Mapper.Map<IShiftTradeSwapDetail, ShiftTradeSwapDetailsViewModel>(shiftTrade.ShiftTradeSwapDetails.First());
+		//	var result = Mapper.Map<IShiftTradeSwapDetail, ShiftTradeSwapDetailsViewModel>(shiftTrade.ShiftTradeSwapDetails.First());
 
-			timeLineHoursViewModelFactory.VerifyAllExpectations();
+		//	timeLineHoursViewModelFactory.VerifyAllExpectations();
 
-			Assert.That(result.TimeLineHours, Is.EqualTo(timelineHours));
-			Assert.That(result.TimeLineStartDateTime, Is.EqualTo(expectedTimelinePeriod.StartDateTime));
-		}
+		//	Assert.That(result.TimeLineHours, Is.EqualTo(timelineHours));
+		//	Assert.That(result.TimeLineStartDateTime, Is.EqualTo(expectedTimelinePeriod.StartDateTime));
+		//}
 
 		[Test]
 		public void CreateEmptyScheduleViewModelsIfNoSchedulesExists()

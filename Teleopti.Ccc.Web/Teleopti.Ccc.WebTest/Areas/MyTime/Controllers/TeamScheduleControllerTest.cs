@@ -3,6 +3,7 @@ using NUnit.Framework;
 using Rhino.Mocks;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.Common.Time;
+using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Infrastructure.Toggle;
 using Teleopti.Ccc.Web.Areas.MyTime.Controllers;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider;
@@ -27,14 +28,15 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			personPeriodProvider.Stub(x => x.HasPersonPeriod(date)).Return(true);
 			now.Stub(x => x.UtcDateTime()).Return(date.Date.ToUniversalTime());
 			var id = Guid.NewGuid();
+			var toggleManager = MockRepository.GenerateMock<IToggleManager>();
 			var target = new TeamScheduleController(now, viewModelFactory, MockRepository.GenerateMock<IDefaultTeamProvider>(),
-				MockRepository.GenerateMock<ITeamScheduleViewModelReworkedMapper>(), MockRepository.GenerateMock<ITimeFilterHelper>(), MockRepository.GenerateMock<IToggleManager>(), MockRepository.GenerateMock<ILoggedOnUser>());
+				MockRepository.GenerateMock<ITeamScheduleViewModelReworkedMapper>(), MockRepository.GenerateMock<ITimeFilterHelper>(), toggleManager, MockRepository.GenerateMock<ILoggedOnUser>());
 
 			viewModelFactory.Stub(x => x.CreateViewModel(date, id)).Return(new TeamScheduleViewModel());
-
+			toggleManager.Stub(x => x.IsEnabled(Toggles.MyTimeWeb_SortSchedule_32092)).Return(false);
 			var result = target.Index(date, id);
 
-			result.ViewName.Should().Be.EqualTo("TeamSchedulePartial");
+			result.ViewName.Should().Be.EqualTo("TeamSchedulePartialOriginal");
 			result.Model.Should().Not.Be.Null();
 		}
 

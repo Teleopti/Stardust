@@ -47,7 +47,9 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 			{
 				PersonId = Guid.NewGuid(),
 				Start = DateTime.Now,
-				Model = JsonConvert.SerializeObject(model)
+				Model = JsonConvert.SerializeObject(model),
+				FirstName = "Arne",
+				LastName = "Anka"
 			};
 			var layerViewModels = new List<ShiftTradeAddScheduleLayerViewModel>();
 			var layerMapper = MockRepository.GenerateStrictMock<IShiftTradeAddScheduleLayerViewModelMapper>();
