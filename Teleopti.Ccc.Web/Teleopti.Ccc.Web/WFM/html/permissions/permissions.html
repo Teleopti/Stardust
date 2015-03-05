@@ -1,8 +1,8 @@
 ﻿<div>
-		<h4>Permissions</h4>
+		<h4>Manage permissions</h4>
 		<p>Here you can decide who is allowed to access specific parts of the application</p>
 	<div class="row">
-		<div class="col-sm-4">
+		<div class="col-lg-4">
 			<div class="role-nav material-depth-2 container-block">
 				<div class="wfm-block sub-header">Roles</div>
 				<div class="wfm-block">
@@ -20,7 +20,7 @@
 				</div>
 				<div id="searchRoleResults" class="role-container">
 					<ul class="wfm-list">
-						<li ng-repeat="role in roles | filter:searchRoles" ng-click="showRole(role.Id)" ng-dblclick="editing = true" ng-class="{'wfm-list-item-selected': role.Id==selectedRole}" class="role-btn wfm-block wfm-list-item material-depth-1 role">
+						<li ng-repeat="role in roles | filter:searchRoles" ng-click="showRole(role.Id)" ng-dblclick="editing = true" ng-class="{'wfm-list-item-selected': role.Id==selectedRole}" class="role-btn wfm-block wfm-list-item role">
 							<div class="wfm-leave-behind">
 								<span>
 									<i ng-click="copyRole(role.Id)">
@@ -58,6 +58,7 @@
 				</div>
 			</div>
 		</div>
+
 
 		<div class="col-lg-8">
 			<article class="tab-group wfm-toggle-group material-depth-2">

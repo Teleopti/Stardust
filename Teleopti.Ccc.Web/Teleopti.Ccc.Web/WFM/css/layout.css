@@ -1,4 +1,6 @@
-﻿
+﻿body {
+	overflow-x: hidden;
+}
 
 .col-md-4, .col-md-8 { /* please bootstrap, don't make any assumption about padding' */
 	padding: 0;
