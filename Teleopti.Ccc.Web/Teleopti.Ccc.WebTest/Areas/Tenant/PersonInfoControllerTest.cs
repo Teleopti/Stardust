@@ -1,4 +1,5 @@
-﻿using NUnit.Framework;
+﻿using System.Collections.Generic;
+using NUnit.Framework;
 using Rhino.Mocks;
 using Teleopti.Ccc.Infrastructure.MultiTenancy;
 using Teleopti.Ccc.Web.Areas.Tenant;
@@ -19,7 +20,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Tenant
 			mapper.Expect(x => x.Map(dto)).Return(entity);
 
 			var target = new PersonInfoController(persister, mapper);
-			target.Persist(dto);
+			target.Persist(new List<PersonInfoDto>{dto});
 
 			persister.AssertWasCalled(x=>x.Persist(entity));
 		}
