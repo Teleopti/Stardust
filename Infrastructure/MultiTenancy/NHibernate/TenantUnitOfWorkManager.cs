@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Reflection;
 using NHibernate;
 using NHibernate.Cfg;
 using NHibernate.Context;
@@ -38,9 +39,13 @@ namespace Teleopti.Ccc.Infrastructure.MultiTenancy.NHibernate
 				
 				});
 			cfg.SetProperty(Environment.CurrentSessionContextClass, sessionContext);
-			cfg.AddClass(typeof (PersonInfo));
-			cfg.AddClass(typeof (PasswordPolicyForUser));
-			cfg.AddClass(typeof (Tenant));
+			//TODO: tenant - if/when tenant stuff is it's own service, we don't have to pick these one-by-one but take all assembly instead.
+			cfg.AddResources(new[]
+			{
+				"Teleopti.Ccc.Infrastructure.MultiTenancy.PersonInfo_OldSchema.hbm.xml",
+				"Teleopti.Ccc.Infrastructure.MultiTenancy.PasswordPolicyForUser_OldSchema.hbm.xml",
+				"Teleopti.Ccc.Infrastructure.MultiTenancy.Tenant_OldSchema.hbm.xml"
+			}, typeof (TenantUnitOfWorkManager).Assembly);
 
 			var ret = new TenantUnitOfWorkManager {_sessionFactory = cfg.BuildSessionFactory()};
 			return ret;
