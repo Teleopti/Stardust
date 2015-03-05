@@ -214,7 +214,9 @@
     <Compile Include="LiteUnitOfWork\ReadModelUnitOfWorkFactory.cs" />
     <Compile Include="LiteUnitOfWork\ReadModelUnitOfWorkState.cs" />
     <Compile Include="MultiTenancy\AuthenticationFromFileQuerier.cs" />
+    <Compile Include="MultiTenancy\DictionaryToPostData.cs" />
     <Compile Include="MultiTenancy\FindTenantAndPersonIdForIdentity.cs" />
+    <Compile Include="MultiTenancy\IDictionaryToPostData.cs" />
     <Compile Include="MultiTenancy\IIdentityUserQuery.cs" />
     <Compile Include="MultiTenancy\IdentityUserQuery.cs" />
     <Compile Include="MultiTenancy\ApplicationUserQuery.cs" />
@@ -223,6 +225,7 @@
     <Compile Include="MultiTenancy\IPersistLogonAttempt.cs" />
     <Compile Include="MultiTenancy\ApplicationUserTenantQuery.cs" />
     <Compile Include="MultiTenancy\IApplicationUserTenantQuery.cs" />
+    <Compile Include="MultiTenancy\IPostHttpRequest.cs" />
     <Compile Include="MultiTenancy\NHibernate\TenantUnitOfWorkAspect.cs" />
     <Compile Include="MultiTenancy\NHibernate\TenantUnitOfWorkAttribute.cs" />
     <Compile Include="MultiTenancy\PersistLogonAttempt.cs" />
@@ -232,6 +235,7 @@
     <Compile Include="MultiTenancy\NHibernate\PasswordPolicyForUserMapping.cs" />
     <Compile Include="MultiTenancy\PasswordPolicyForUser.cs" />
     <Compile Include="MultiTenancy\NHibernate\TenantUnitOfWorkManager.cs" />
+    <Compile Include="MultiTenancy\PostHttpRequest.cs" />
     <Compile Include="MultiTenancy\Tenant.cs" />
     <Compile Include="MultiTenancy\TenantDataManager.cs" />
     <Compile Include="NHibernateConfiguration\SecondLevelCache.cs" />

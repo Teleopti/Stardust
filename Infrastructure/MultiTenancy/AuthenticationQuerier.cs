@@ -1,47 +1,48 @@
-﻿using System;
-using System.Net;
+﻿using System.Collections.Generic;
 using Teleopti.Ccc.Domain.Security;
 using Teleopti.Ccc.Domain.Security.MultiTenancyAuthentication;
-using Teleopti.Ccc.Infrastructure.Foundation;
 
 namespace Teleopti.Ccc.Infrastructure.MultiTenancy
 {
-	//tested by web scenarios
 	public class AuthenticationQuerier : IAuthenticationQuerier
 	{
 		private readonly string _pathToTenantServer;
 		private readonly INhibConfigEncryption _nhibConfigEncryption;
+		private readonly IPostHttpRequest _postHttpRequest;
 
-		public AuthenticationQuerier(string pathToTenantServer, INhibConfigEncryption nhibConfigEncryption)
+		public AuthenticationQuerier(string pathToTenantServer, 
+																INhibConfigEncryption nhibConfigEncryption, 
+																IPostHttpRequest postHttpRequest)
 		{
 			_pathToTenantServer = pathToTenantServer;
 			_nhibConfigEncryption = nhibConfigEncryption;
+			_postHttpRequest = postHttpRequest;
 		}
 
+		//rename
 		public AuthenticationQueryResult TryLogon(string userName, string password, string userAgent)
 		{
-			var uriBuilder = new UriBuilder(_pathToTenantServer + "Authenticate/ApplicationLogon");
-			var post = string.Format("userName={0}&password={1}", userName, password);
+			var data = new Dictionary<string, string>
+			{
+				{ "userName", userName },
+				{ "password", password }
+			};
+			var result = _postHttpRequest.Send<AuthenticationQueryResult>(_pathToTenantServer + "Authenticate/ApplicationLogon", userAgent, data);
 
-			var request = (HttpWebRequest)WebRequest.Create(uriBuilder.Uri);
-			request.UserAgent = userAgent;
-
-			var answer = request.PostRequest<AuthenticationQueryResult>(post);
-			answer.DataSourceConfiguration = _nhibConfigEncryption.DecryptConfig(answer.DataSourceConfiguration);
-			return answer;
+			_nhibConfigEncryption.DecryptConfig(result.DataSourceConfiguration);
+			return result;
 		}
 
 		public AuthenticationQueryResult TryIdentityLogon(string identity, string userAgent)
 		{
-			var uriBuilder = new UriBuilder(_pathToTenantServer + "Authenticate/IdentityLogon");
-			var post = string.Format("identity={0}", identity);
+			var data = new Dictionary<string, string>
+			{
+				{ "identity", identity }
+			};
+			var result = _postHttpRequest.Send<AuthenticationQueryResult>(_pathToTenantServer + "Authenticate/IdentityLogon", userAgent, data);
 
-			var request = (HttpWebRequest)WebRequest.Create(uriBuilder.Uri);
-			request.UserAgent = userAgent;
-
-			var answer = request.PostRequest<AuthenticationQueryResult>(post);
-			answer.DataSourceConfiguration = _nhibConfigEncryption.DecryptConfig(answer.DataSourceConfiguration);
-			return answer;
+			result.DataSourceConfiguration = _nhibConfigEncryption.DecryptConfig(result.DataSourceConfiguration);
+			return result;
 		}
 	}
 }

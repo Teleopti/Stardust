@@ -181,6 +181,8 @@
     <Compile Include="DistributedLock\DistributedLockTest.cs" />
     <Compile Include="Foundation\CouldNotCreateTransactionExceptionTest.cs" />
     <Compile Include="MultiTenancy\ApplicationUserTenantQueryTest.cs" />
+    <Compile Include="MultiTenancy\AuthenticationQuerierTest.cs" />
+    <Compile Include="MultiTenancy\DictionaryToPostDataTest.cs" />
     <Compile Include="MultiTenancy\FindTenantAndPersonIdForIdentityTest.cs" />
     <Compile Include="MultiTenancy\IdentityUserQueryTest.cs" />
     <Compile Include="MultiTenancy\ApplicationUserQueryTest.cs" />

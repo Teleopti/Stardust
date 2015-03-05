@@ -19,6 +19,7 @@ namespace Teleopti.Ccc.Domain.Security
 			return dataSourceConfig;
 		}
 
+		//MAKE TO VOID
 		public DataSourceConfig DecryptConfig(DataSourceConfig dataSourceConfig)
 		{
 			dataSourceConfig.ApplicationNHibernateConfig.DecryptDictionary(EncryptionConstants.Image1, EncryptionConstants.Image2);

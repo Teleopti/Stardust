@@ -21,7 +21,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 
 			if (isRunFromTest(tenantServer) || tenantServer.IsAnUrl())
 			{
-				builder.Register(c => new AuthenticationQuerier(tenantServer, new NhibConfigEncryption()))
+				builder.Register(c => new AuthenticationQuerier(tenantServer, c.Resolve<INhibConfigEncryption>(), c.Resolve<IPostHttpRequest>()))
 				.As<IAuthenticationQuerier>()
 				.SingleInstance();
 			}
@@ -31,6 +31,9 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 				.As<IAuthenticationQuerier>()
 				.SingleInstance();
 			}
+			builder.RegisterType<PostHttpRequest>().As<IPostHttpRequest>().SingleInstance();
+			builder.RegisterType<NhibConfigEncryption>().As<INhibConfigEncryption>().SingleInstance();
+			builder.RegisterType<DictionaryToPostData>().As<IDictionaryToPostData>().SingleInstance();
 		}
 
 		private static bool isRunFromTest(string tenantServer)
