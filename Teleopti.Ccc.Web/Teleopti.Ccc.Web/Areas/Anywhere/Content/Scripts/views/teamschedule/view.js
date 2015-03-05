@@ -65,7 +65,20 @@ define([
 			viewModel = new teamScheduleViewModel();
 
 			resize.onresize(function () {
-				viewModel.TimeLine.WidthPixels($('.time-line-for').width());
+				var timeLineWidth;
+				var timeLine = $('.time-line-for');
+				if (timeLine.length == 0) {
+					// Since the SortedPerson need be loaded with delay,
+					// The element ".time-line-for" may not exists yet.
+					var rowWidth = $(".table-hover .person").width();
+					var agentNameColumnWidth = $(".table-hover .person .person-name-column").width();
+					var contractTimeTitleWidth = $('.table-hover .person .contract-time-title>span').width();
+					timeLineWidth = rowWidth - agentNameColumnWidth - contractTimeTitleWidth;
+				} else {
+					timeLineWidth = timeLine.width();
+				}
+
+				viewModel.setTimelineWidth(timeLineWidth);
 			});
 
 			viewModel.GroupId.subscribe(function () {

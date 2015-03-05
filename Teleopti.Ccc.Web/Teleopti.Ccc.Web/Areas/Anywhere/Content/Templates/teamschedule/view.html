@@ -78,11 +78,11 @@
                 </div>
                 <!-- /ko -->
 
-                <table class="table table-hover" data-bind="if: SortedPersons().length > 0">
+                <table class="table table-hover">
                     <thead>
-                        <tr>
-                            <th></th>
-                            <th></th>
+                        <tr class="person">
+                            <th class="person-name person-name-column"></th>
+                            <th class="schedule schedule-column"></th>
                             <th class="contract-time contract-time-title"><span data-bind="text: Resources.ContractTime"></span></th>
                         </tr>
                     </thead>
