@@ -20,6 +20,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories.Audit
 	{
 		private readonly IUnitOfWorkFactory _unitOfWorkFactory;
 		private readonly IRegional _regional;
+		private bool _limitReached;
 
 		public ScheduleHistoryReport(IUnitOfWorkFactory unitOfWorkFactory, IRegional regional)
 		{
@@ -27,14 +28,15 @@ namespace Teleopti.Ccc.Infrastructure.Repositories.Audit
 			_regional = regional;
 		}
 
-		public IEnumerable<ScheduleAuditingReportData> Report(IPerson modifiedBy, DateOnlyPeriod changedPeriod, DateOnlyPeriod scheduledPeriod, IEnumerable<IPerson> agents)
+		public IEnumerable<ScheduleAuditingReportData> Report(IPerson modifiedBy, DateOnlyPeriod changedPeriod, DateOnlyPeriod scheduledPeriod, IEnumerable<IPerson> agents, int maximumRows)
 		{			
 			var auditSession = session().Auditer();
 			var ret = new List<ScheduleAuditingReportData>();
 			var changedPeriodAgentTimeZone = changedPeriod.ToDateTimePeriod(_regional.TimeZone);
 			var scheduledPeriodAgentTimeZone = scheduledPeriod.ToDateTimePeriod(_regional.TimeZone);
+			_limitReached = false;
 
-			foreach (var agentsBatch in agents.Batch(400))
+			foreach (var agentsBatch in agents.Batch(100))
 			{
 				var retTemp = new List<ScheduleAuditingReportData>();
 
@@ -55,19 +57,26 @@ namespace Teleopti.Ccc.Infrastructure.Repositories.Audit
 					.Results()
 					.ForEach(absRev => retTemp.Add(createAbsenceAuditingData(absRev)));
 				ret.AddRange(retTemp);
+				if (ret.Count > maximumRows)
+				{
+					_limitReached = true;
+					break;
+				}
 			}
 			return ret;
 		}
 
-		public IEnumerable<ScheduleAuditingReportData> Report(DateOnlyPeriod changedPeriod, DateOnlyPeriod scheduledPeriod, IEnumerable<IPerson> agents)
+		public IEnumerable<ScheduleAuditingReportData> Report(DateOnlyPeriod changedPeriod, DateOnlyPeriod scheduledPeriod, IEnumerable<IPerson> agents, int maximumRows)
 		{
-			return Report(null, changedPeriod, scheduledPeriod, agents);
+			return Report(null, changedPeriod, scheduledPeriod, agents, maximumRows);
 		}
 
 		public IEnumerable<IPerson> RevisionPeople()
 		{
 			return session().GetNamedQuery("RevisionPeople").List<IPerson>();
 		}
+
+		public bool LimitReached { get { return _limitReached; } }
 
 		private ScheduleAuditingReportData createAssignmentAuditingData(IRevisionEntityInfo<PersonAssignment, Revision> auditedAssignment)
 		{

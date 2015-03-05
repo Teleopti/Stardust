@@ -43,6 +43,7 @@ namespace Teleopti.Ccc.Win.Reporting
 		private IScenario _scenario;
 		private bool _openFromScheduler;
 		private readonly CultureInfo _currentCulture;
+		private const int maximumRows = 1000;
 
 		public SchedulerReportsViewer(IEventAggregator eventAggregator, IComponentContext componentContext, IApplicationFunction applicationFunction)
 		{
@@ -56,9 +57,9 @@ namespace Teleopti.Ccc.Win.Reporting
 			if (!DesignMode)
 				SetTexts();
 
-			_backgroundWorkerLoadReport.DoWork += _backgroundWorkerLoadReport_DoWork;
-			_backgroundWorkerLoadReport.RunWorkerCompleted += _backgroundWorkerLoadReport_RunWorkerCompleted;
-			reportViewerControl1.ReportViewerControl1.ReportRefresh += ReportViewerControl_ReportRefresh;
+			_backgroundWorkerLoadReport.DoWork += backgroundWorkerLoadReportDoWork;
+			_backgroundWorkerLoadReport.RunWorkerCompleted += backgroundWorkerLoadReportRunWorkerCompleted;
+			reportViewerControl1.ReportViewerControl1.ReportRefresh += reportViewerControlReportRefresh;
 			Height = 900;
 			Width = 1200;
 			
@@ -78,7 +79,7 @@ namespace Teleopti.Ccc.Win.Reporting
 			_backgroundWorkerLoadReport.RunWorkerAsync(getReportSettingsModel());
 		}
 
-		void ReportViewerControl_ReportRefresh(object sender, CancelEventArgs e)
+		void reportViewerControlReportRefresh(object sender, CancelEventArgs e)
 		{
 
 			try
@@ -92,7 +93,7 @@ namespace Teleopti.Ccc.Win.Reporting
 						refreshScheduleAuditing();
 						break;
 					case DefinedRaptorApplicationFunctionPaths.ScheduleTimeVersusTargetTimeReport:
-						RefreshScheduleTimeVersusTarget();
+						refreshScheduleTimeVersusTarget();
 						break;
 				}
 			}
@@ -105,7 +106,7 @@ namespace Teleopti.Ccc.Win.Reporting
 			}
 		}
 		
-		void _backgroundWorkerLoadReport_DoWork(object sender, DoWorkEventArgs e)
+		void backgroundWorkerLoadReportDoWork(object sender, DoWorkEventArgs e)
 		{
 			setThreadCulture();
 			switch (_reportDetail.FunctionPath)
@@ -118,7 +119,7 @@ namespace Teleopti.Ccc.Win.Reporting
 					e.Result = getReportDataForScheduleAuditingReport(e.Argument as ReportSettingsScheduleAuditingModel);   
 					break;
 				case DefinedRaptorApplicationFunctionPaths.ScheduleTimeVersusTargetTimeReport:
-						e.Result = GetReportDataForScheduledTimeVersusTarget(e.Argument as ReportSettingsScheduleTimeVersusTargetTimeModel);
+						e.Result = getReportDataForScheduledTimeVersusTarget(e.Argument as ReportSettingsScheduleTimeVersusTargetTimeModel);
 					break;
 			}
 			
@@ -131,7 +132,7 @@ namespace Teleopti.Ccc.Win.Reporting
 			Thread.CurrentThread.CurrentUICulture = TeleoptiPrincipal.CurrentPrincipal.Regional.UICulture;
 		}
 
-		void _backgroundWorkerLoadReport_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
+		void backgroundWorkerLoadReportRunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
 		{
 			if (IsDisposed) return;
 			Cursor = Cursors.Default;
@@ -145,18 +146,20 @@ namespace Teleopti.Ccc.Win.Reporting
 						reportViewerControl1.LoadReport(_reportDetail.File, reportDataPackage1);
 					break;
 				case DefinedRaptorApplicationFunctionPaths.ScheduleAuditTrailReport:  
-				   //NEW_AUDIT
 					var reportDataPackage2 = e.Result as ReportDataPackage<ScheduleAuditingReportData>;
 					if (reportDataPackage2 != null)
-						reportViewerControl1.LoadReport(_reportDetail.File, reportDataPackage2);    
+					{
+						reportViewerControl1.LoadReport(_reportDetail.File, reportDataPackage2);
+						if (reportDataPackage2.LimitReached)
+							MessageBox.Show(this, "xxMaximum number of report rows reached",
+								"xxNarrow the criterias to be able to see all data", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+					}
 					
 					break;
 				case DefinedRaptorApplicationFunctionPaths.ScheduleTimeVersusTargetTimeReport:
 					var reportDataPackage3 = e.Result as ReportDataPackage<IScheduledTimeVersusTargetTimeReportData>;
 					if(reportDataPackage3 != null)
 						reportViewerControl1.LoadReport(_reportDetail.File, reportDataPackage3);
-					break;
-				default:
 					break;
 			}
 
@@ -193,9 +196,9 @@ namespace Teleopti.Ccc.Win.Reporting
 			reportViewerControl1.LoadReport(_reportDetail.File, reportDataPackage);
 		}
 
-		private void RefreshScheduleTimeVersusTarget()
+		private void refreshScheduleTimeVersusTarget()
 		{
-			ReportDataPackage<IScheduledTimeVersusTargetTimeReportData> reportDataPackage = GetReportDataForScheduledTimeVersusTarget(getReportSettingsModel() as ReportSettingsScheduleTimeVersusTargetTimeModel);
+			ReportDataPackage<IScheduledTimeVersusTargetTimeReportData> reportDataPackage = getReportDataForScheduledTimeVersusTarget(getReportSettingsModel() as ReportSettingsScheduleTimeVersusTargetTimeModel);
 			reportViewerControl1.LoadReport(_reportDetail.File, reportDataPackage);
 		}
 
@@ -216,7 +219,7 @@ namespace Teleopti.Ccc.Win.Reporting
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1006:DoNotNestGenericTypesInMemberSignatures")]
 		public void LoadScheduledTimePerActivityReport(ReportDetail reportDetail, IDictionary<string, IList<IReportData>> reportData, IList<IReportDataParameter> reportDataParameters, ScheduleViewBase scheduleViewBase, IScenario scenario)
 		{
-			var reportDataPackage = new ReportDataPackage<IReportData>(reportData, reportDataParameters);
+			var reportDataPackage = new ReportDataPackage<IReportData>(reportData, reportDataParameters, false);
 			reportViewerControl1.LoadReport(reportDetail.File, reportDataPackage);
 			setupSettings(reportDetail);
 			_scheduleViewBase = scheduleViewBase;
@@ -241,7 +244,7 @@ namespace Teleopti.Ccc.Win.Reporting
 			_reportDetail = reportDetail;
 		}
 
-		private ReportDataPackage<IScheduledTimeVersusTargetTimeReportData> GetReportDataForScheduledTimeVersusTarget(ReportSettingsScheduleTimeVersusTargetTimeModel model)
+		private ReportDataPackage<IScheduledTimeVersusTargetTimeReportData> getReportDataForScheduledTimeVersusTarget(ReportSettingsScheduleTimeVersusTargetTimeModel model)
 		{
 			
 			var data = new Dictionary<string, IList<IScheduledTimeVersusTargetTimeReportData>>();
@@ -257,32 +260,31 @@ namespace Teleopti.Ccc.Win.Reporting
 				}
 			}
 			
-			return new ReportDataPackage<IScheduledTimeVersusTargetTimeReportData>(data, parameters);
+			return new ReportDataPackage<IScheduledTimeVersusTargetTimeReportData>(data, parameters, false);
 		}
 
 		private ReportDataPackage<ScheduleAuditingReportData> getReportDataForScheduleAuditingReport(ReportSettingsScheduleAuditingModel model)
 		{
 			IList<ScheduleAuditingReportData> reportData;
 
+			IScheduleHistoryReport rep;
 			using (UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
 			{
-				IScheduleHistoryReport rep = new ScheduleHistoryReport(UnitOfWorkFactory.Current, TeleoptiPrincipal.CurrentPrincipal.Regional);
+				 rep = new ScheduleHistoryReport(UnitOfWorkFactory.Current, TeleoptiPrincipal.CurrentPrincipal.Regional);
 
 				if (model.ModifiedBy.Count > 1 || model.ModifiedBy.Count == 0)
 				{
-					reportData = rep.Report(model.ChangePeriod, model.SchedulePeriod, model.Agents).ToList();   
+					reportData = rep.Report(model.ChangePeriod, model.SchedulePeriod, model.Agents, maximumRows).ToList();
 				}
 				else
 				{
-					reportData = rep.Report(model.ModifiedBy[0], model.ChangePeriod, model.SchedulePeriod, model.Agents).ToList();
+					reportData = rep.Report(model.ModifiedBy[0], model.ChangePeriod, model.SchedulePeriod, model.Agents, maximumRows).ToList();
 				}
-				
 			}
-
 			var data = new Dictionary<string, IList<ScheduleAuditingReportData>> { { "DataSet2", reportData } };
 			var parameters = ReportHandler.CreateScheduleAuditingParameters(model, _currentCulture);
 
-			return new ReportDataPackage<ScheduleAuditingReportData>(data, parameters);
+			return new ReportDataPackage<ScheduleAuditingReportData>(data, parameters, rep.LimitReached);
 		}
 
 		//from tree
@@ -315,7 +317,7 @@ namespace Teleopti.Ccc.Win.Reporting
 					IList<IReportDataParameter> parameters = ReportHandler.CreateScheduleTimePerActivityParameters(model, _currentCulture);
 					ReportHandler.CreateScheduleTimePerActivityData(dic, model, data);
 
-					return new ReportDataPackage<IReportData>(data, parameters);
+					return new ReportDataPackage<IReportData>(data, parameters, false);
 				}
 				
 			}
@@ -332,20 +334,18 @@ namespace Teleopti.Ccc.Win.Reporting
 					return reportSettings1.ScheduleAuditingModel;
 				case DefinedRaptorApplicationFunctionPaths.ScheduleTimeVersusTargetTimeReport:
 					return reportSettings1.ScheduleTimeVersusTargetSettingsModel;
-				default:
-					break;
 			}
 
 			return null;
 		}
 
-		private void ReleaseManagedResources()
+		private void releaseManagedResources()
 		{
 			if (reportViewerControl1!=null && reportViewerControl1.ReportViewerControl1!=null)
-			reportViewerControl1.ReportViewerControl1.ReportRefresh -= ReportViewerControl_ReportRefresh;
+			reportViewerControl1.ReportViewerControl1.ReportRefresh -= reportViewerControlReportRefresh;
 		}
 
-		private void SchedulerReportsViewerResize(object sender, EventArgs e)
+		private void schedulerReportsViewerResize(object sender, EventArgs e)
 		{
 			SetSize(true);
 		}

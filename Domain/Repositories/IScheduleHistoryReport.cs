@@ -9,12 +9,15 @@ namespace Teleopti.Ccc.Domain.Repositories
 		IEnumerable<ScheduleAuditingReportData> Report(IPerson modifiedBy, 
 		                                               DateOnlyPeriod changedPeriod, 
 		                                               DateOnlyPeriod scheduledPeriod, 
-		                                               IEnumerable<IPerson> agents);
+		                                               IEnumerable<IPerson> agents,
+														int maximumRows);
 
 		IEnumerable<ScheduleAuditingReportData> Report(DateOnlyPeriod changedPeriod, 
 																		DateOnlyPeriod scheduledPeriod, 
-																		IEnumerable<IPerson> agents);
+																		IEnumerable<IPerson> agents,
+																		int maximumRows);
 
 		IEnumerable<IPerson> RevisionPeople();
+		bool LimitReached { get; }
 	}
 }

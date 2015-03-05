@@ -18,7 +18,7 @@
                 if (components!=null)
                     components.Dispose();
 
-                ReleaseManagedResources();
+                releaseManagedResources();
             }
             base.Dispose(disposing);
         }
@@ -68,7 +68,7 @@
 			this.Name = "SchedulerReportsViewer";
 			this.ShowIcon = false;
 			this.Text = "xxSchedulerReportsViewer";
-			this.Resize += new System.EventHandler(this.SchedulerReportsViewerResize);
+			this.Resize += new System.EventHandler(this.schedulerReportsViewerResize);
 			this.ResumeLayout(false);
 
         }
