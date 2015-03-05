@@ -8,6 +8,19 @@ ul {
 	margin-bottom:0!important;
 }
 
-.mdi:before {
-	font-size: 14px!important;
+.navbar {
+	position:fixed;
+	top: 0;
+	left: 0;
+	right: 0;
+}
+
+.layout-container {
+	padding-top: 50px;
+}
+
+/*override bootstrap*/
+.row {
+	margin-right: 0;
+	margin-left: 0;
 }
