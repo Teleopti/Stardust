@@ -1,8 +1,14 @@
 ﻿using System;
+using System.Collections.Generic;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Web.Areas.Tenant.Model
 {
+	public class PersonInfoModels
+	{
+		public IEnumerable<PersonInfoModel> PersonInfos { get; set; }
+	}
+
 	public class PersonInfoModel
 	{
 		public string Tenant { get; set; }

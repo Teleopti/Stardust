@@ -1,14 +1,10 @@
-﻿using System.Collections.Generic;
-using System.Web.Http;
-using System.Web.Mvc;
+﻿using System.Web.Mvc;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.NHibernate;
 using Teleopti.Ccc.Web.Areas.Tenant.Core;
 using Teleopti.Ccc.Web.Areas.Tenant.Model;
 
 namespace Teleopti.Ccc.Web.Areas.Tenant
 {
-	
-	[System.Web.Mvc.Authorize]
 	public class PersonInfoController : Controller
 	{
 		private readonly IPersonInfoPersister _persister;
@@ -20,16 +16,15 @@ namespace Teleopti.Ccc.Web.Areas.Tenant
 			_mapper = mapper;
 		}
 
-		[System.Web.Mvc.AllowAnonymous] 
-		[System.Web.Mvc.HttpPost]
+		[HttpPost]
 		[TenantUnitOfWork]
 		//TODO: tenant - probably return some kind of json result later
 		// change later to some sort of authentication
-		public void Persist([FromBody]  List<PersonInfoModel> personInfoDtos)
+		public void Persist(PersonInfoModels personInfoModels)
 		{
-			foreach (var personInfoDto in personInfoDtos)
+			foreach (var personInfoModel in personInfoModels.PersonInfos)
 			{
-				_persister.Persist(_mapper.Map(personInfoDto));
+				_persister.Persist(_mapper.Map(personInfoModel));
 			}
 		}
 	}
