@@ -92,7 +92,7 @@ namespace Teleopti.Ccc.Sdk.WcfHost
 						  },
 						  DataSourceConfigurationSetter.ForSdk(),
 						  new CurrentHttpContext(),
-						  () => StateHolderReader.Instance.StateReader.ApplicationScopeData.Messaging
+						  (() => StateHolderReader.Instance.StateReader.ApplicationScopeData.Messaging)
 						  ),
 					  messageBroker)
 				  {
