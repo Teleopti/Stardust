@@ -127,7 +127,7 @@
 
 .layer.active
 {
-    z-index: 100 !important;
+    z-index: 200 !important;
 }
 
 .person-schedule .shift .layer:first-of-type
