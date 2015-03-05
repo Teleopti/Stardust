@@ -80,6 +80,11 @@ namespace Teleopti.Ccc.Win.Reporting
 			return new ReportSettingsScheduledTimePerActivityView(_eventAggregator,_componentContext);
 		}
 
+		public void ShowSpinningProgress(bool show)
+		{
+			reportHeader1.ShowSpinningProgress(show);
+		}
+
 		public void SetHeaderText(string text)
 		{
 			reportHeader1.HeaderText = text;

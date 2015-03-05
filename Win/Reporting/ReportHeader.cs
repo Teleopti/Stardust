@@ -34,6 +34,11 @@ namespace Teleopti.Ccc.Win.Reporting
 			set{ autoLabelHeaderText.Text = value; }
 		}
 
+		public void ShowSpinningProgress(bool show)
+		{
+			spinningProgressControl1.Visible = show;
+		}
+
 		private void pictureBoxUpClick(object sender, EventArgs e)
 		{
 			OnHideSettings(EventArgs.Empty);

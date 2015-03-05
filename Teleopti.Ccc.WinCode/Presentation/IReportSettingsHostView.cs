@@ -6,6 +6,7 @@ namespace Teleopti.Ccc.WinCode.Presentation
     {
         void ShowSettings(ReportDetail reportDetail);
         void SetupFromScheduler(ReportDetail reportDetail);
+	    void ShowSpinningProgress(bool show);
         void SetHeaderText(string text);
         void Unfold();
         void Fold();

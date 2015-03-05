@@ -13192,6 +13192,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Maximum number of report rows reached.
+        /// </summary>
+        public static string MaximumNumberOfReportRowsReached {
+            get {
+                return ResourceManager.GetString("MaximumNumberOfReportRowsReached", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Maximum occupancy.
         /// </summary>
         public static string MaximumOccupancy {
@@ -14718,6 +14727,15 @@ namespace Teleopti.Ccc.UserTexts {
         public static string NameYourTypeColon {
             get {
                 return ResourceManager.GetString("NameYourTypeColon", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Narrow the criterias to be able to see all data.
+        /// </summary>
+        public static string NarrowToSeeAll {
+            get {
+                return ResourceManager.GetString("NarrowToSeeAll", resourceCulture);
             }
         }
         

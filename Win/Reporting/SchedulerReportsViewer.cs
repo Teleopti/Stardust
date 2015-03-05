@@ -76,6 +76,7 @@ namespace Teleopti.Ccc.Win.Reporting
 		private void onLoadReport(bool obj)
 		{
 			Cursor = Cursors.WaitCursor;
+			reportSettings1.ShowSpinningProgress(true);
 			_backgroundWorkerLoadReport.RunWorkerAsync(getReportSettingsModel());
 		}
 
@@ -136,6 +137,7 @@ namespace Teleopti.Ccc.Win.Reporting
 		{
 			if (IsDisposed) return;
 			Cursor = Cursors.Default;
+			reportSettings1.ShowSpinningProgress(false);
 			if (rethrowBackgroundException(e)) return;
 
 			switch (_reportDetail.FunctionPath)
@@ -151,8 +153,8 @@ namespace Teleopti.Ccc.Win.Reporting
 					{
 						reportViewerControl1.LoadReport(_reportDetail.File, reportDataPackage2);
 						if (reportDataPackage2.LimitReached)
-							MessageBox.Show(this, "xxMaximum number of report rows reached",
-								"xxNarrow the criterias to be able to see all data", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+							MessageBox.Show(this, Resources.MaximumNumberOfReportRowsReached,
+								Resources.NarrowToSeeAll, MessageBoxButtons.OK, MessageBoxIcon.Warning);
 					}
 					
 					break;
@@ -163,6 +165,7 @@ namespace Teleopti.Ccc.Win.Reporting
 					break;
 			}
 
+			
 			_eventAggregator.GetEvent<LoadReportDone>().Publish(true);
 		}
 

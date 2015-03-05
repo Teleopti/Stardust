@@ -12867,4 +12867,12 @@ Reduce the complexity to use these shifts.</value>
     <value>Neutral</value>
     <comment>Neutral adherence</comment>
   </data>
+  <data name="MaximumNumberOfReportRowsReached" xml:space="preserve">
+    <value>Maximum number of report rows reached</value>
+    <comment>Maximum number of report rows reached</comment>
+  </data>
+  <data name="NarrowToSeeAll" xml:space="preserve">
+    <value>Narrow the criterias to be able to see all data</value>
+    <comment>Narrow the criterias to be able to see all data</comment>
+  </data>
 </root>

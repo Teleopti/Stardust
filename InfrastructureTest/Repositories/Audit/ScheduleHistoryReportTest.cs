@@ -70,7 +70,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories.Audit
 				var res = target.Report(personProvider.CurrentUser(),
 								  new DateOnlyPeriod(new DateOnly(Today), new DateOnly(Today).AddDays(1)),
 								  PersonAssignment.Period.ToDateOnlyPeriod(TimeZoneInfo.Local),
-								  new List<IPerson> { PersonAssignment.Person });
+								  new List<IPerson> { PersonAssignment.Person },100);
 				res.Any(pa => consideredEqual(pa, expected)).Should().Be.True();
 			}
 		}
@@ -102,7 +102,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories.Audit
 				var res = target.Report(personProvider.CurrentUser(),
 								  new DateOnlyPeriod(new DateOnly(Today), new DateOnly(Today).AddDays(1)),
 								  PersonAssignment.Period.ToDateOnlyPeriod((TimeZoneInfo.Local)),
-								  new List<IPerson> { PersonAssignment.Person });
+								  new List<IPerson> { PersonAssignment.Person },100);
 				res.Any(absence => consideredEqual(absence, expected)).Should().Be.True();
 			}
 		}
@@ -134,7 +134,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories.Audit
 				var res = target.Report(personProvider.CurrentUser(),
 								  new DateOnlyPeriod(new DateOnly(Today), new DateOnly(Today).AddDays(1)),
 								  PersonAssignment.Period.ToDateOnlyPeriod((TimeZoneInfo.Local)),
-								  new List<IPerson> { PersonAssignment.Person });
+								  new List<IPerson> { PersonAssignment.Person },100);
 				res.Any(absence => consideredEqual(absence, expected)).Should().Be.True();
 			}
 		}
@@ -174,7 +174,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories.Audit
 				var res = target.Report(personProvider.CurrentUser(),
 								  new DateOnlyPeriod(new DateOnly(Today), new DateOnly(Today).AddDays(1)),
 									new DateOnlyPeriod(PersonAssignment.Date, PersonAssignment.Date),
-								  new List<IPerson> { PersonAssignment.Person });
+								  new List<IPerson> { PersonAssignment.Person },100);
 				res.Any(absence => consideredEqual(absence, expected)).Should().Be.True();
 			}
 		}
@@ -207,7 +207,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories.Audit
 				var res = target.Report(personProvider.CurrentUser(),
 								  new DateOnlyPeriod(new DateOnly(Today), new DateOnly(Today).AddDays(1)),
 								  PersonAssignment.Period.ToDateOnlyPeriod((TimeZoneInfo.Local)),
-								  new List<IPerson> { PersonAssignment.Person });
+								  new List<IPerson> { PersonAssignment.Person },100);
 				res.Any(schedule => consideredEqual(schedule, expected)).Should().Be.True();
 			}
 		}
@@ -239,7 +239,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories.Audit
 				var res = target.Report(personProvider.CurrentUser(),
 								  new DateOnlyPeriod(new DateOnly(Today), new DateOnly(Today).AddDays(1)),
 								  new DateOnlyPeriod(PersonAssignment.Date, PersonAssignment.Date),
-								  new List<IPerson> { PersonAssignment.Person });
+								  new List<IPerson> { PersonAssignment.Person },100);
 				res.Any(absence => consideredEqual(absence, expected)).Should().Be.True();
 			}
 		}
@@ -266,7 +266,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories.Audit
 			{
 				var res = target.Report(new DateOnlyPeriod(new DateOnly(Today).AddDays(-1), new DateOnly(Today)),
 								  PersonAssignment.Period.ToDateOnlyPeriod(TimeZoneInfo.Local),
-								  new List<IPerson> { PersonAssignment.Person });
+								  new List<IPerson> { PersonAssignment.Person },100);
 				res.Any(dayOff => consideredEqual(dayOff, expected)).Should().Be.True();
 			}
 		}
@@ -294,7 +294,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories.Audit
 			{
 				var res = target.Report(new DateOnlyPeriod(new DateOnly(Today), new DateOnly(Today).AddDays(1)),
 								  new DateOnlyPeriod(assignmentStart.AddDays(2), assignmentStart.AddDays(10)),
-								  new List<IPerson> { PersonAssignment.Person });
+								  new List<IPerson> { PersonAssignment.Person },100);
 				res.Should().Be.Empty();
 			}
 		}
@@ -308,7 +308,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories.Audit
 			{
 				var res = target.Report(new DateOnlyPeriod(new DateOnly(Today), new DateOnly(Today).AddDays(1)),
 								  new DateOnlyPeriod(assignmentStart.AddDays(-100), assignmentStart.AddDays(-1)),
-								  new List<IPerson> { PersonAssignment.Person });
+								  new List<IPerson> { PersonAssignment.Person },100);
 				res.Should().Be.Empty();
 			}
 		}
@@ -323,7 +323,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories.Audit
 			{
 				var res = target.Report(new DateOnlyPeriod(new DateOnly(Today).AddDays(2), new DateOnly(Today).AddDays(100)),
 								  PersonAssignment.Period.ToDateOnlyPeriod(TimeZoneInfo.Local),
-								  new List<IPerson> { PersonAssignment.Person });
+								  new List<IPerson> { PersonAssignment.Person },100);
 				res.Should().Be.Empty();
 			}
 		}
@@ -338,7 +338,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories.Audit
 			{
 				var res = target.Report(new DateOnlyPeriod(new DateOnly(Today).AddDays(-100), new DateOnly(Today).AddDays(-2)),
 								  PersonAssignment.Period.ToDateOnlyPeriod(TimeZoneInfo.Local),
-								  new List<IPerson> { PersonAssignment.Person });
+								  new List<IPerson> { PersonAssignment.Person },100);
 				res.Should().Be.Empty();
 			}
 		}
@@ -349,7 +349,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories.Audit
 			using (UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
 			{
 				var res = target.Report(personProvider.CurrentUser(),new DateOnlyPeriod(new DateOnly(Today), new DateOnly(Today).AddDays(1)),
-							PersonAssignment.Period.ToDateOnlyPeriod(TimeZoneInfo.Local), new List<IPerson> { PersonAssignment.Person });
+							PersonAssignment.Period.ToDateOnlyPeriod(TimeZoneInfo.Local), new List<IPerson> { PersonAssignment.Person },100);
 
 				Assert.AreEqual(res.ElementAt(0).Detail, PersonAssignment.ShiftCategory.Description.Name);
 			}
@@ -370,7 +370,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories.Audit
 			using (UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
 			{
 				var res = target.Report(personProvider.CurrentUser(), new DateOnlyPeriod(new DateOnly(Today), new DateOnly(Today).AddDays(1)),
-							PersonAssignment.Period.ToDateOnlyPeriod(TimeZoneInfo.Local), new List<IPerson> { PersonAssignment.Person });
+							PersonAssignment.Period.ToDateOnlyPeriod(TimeZoneInfo.Local), new List<IPerson> { PersonAssignment.Person },100);
 
 				Assert.AreEqual(res.ElementAt(1).Detail, PersonAssignment.ShiftCategory.Description.Name);
 			}
@@ -390,7 +390,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories.Audit
 			using (UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
 			{
 				var res = target.Report(personProvider.CurrentUser(), new DateOnlyPeriod(new DateOnly(Today), new DateOnly(Today).AddDays(1)),
-							PersonAssignment.Period.ToDateOnlyPeriod(TimeZoneInfo.Local), new List<IPerson> { PersonAssignment.Person });
+							PersonAssignment.Period.ToDateOnlyPeriod(TimeZoneInfo.Local), new List<IPerson> { PersonAssignment.Person },100);
 
 				Assert.AreEqual(res.ElementAt(1).Detail, DayOffTemplate.Description.Name);
 			}
@@ -411,7 +411,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories.Audit
 			using (UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
 			{
 				var res = target.Report(personProvider.CurrentUser(), new DateOnlyPeriod(new DateOnly(Today), new DateOnly(Today).AddDays(1)),
-							PersonAssignment.Period.ToDateOnlyPeriod(TimeZoneInfo.Local), new List<IPerson> { PersonAssignment.Person });
+							PersonAssignment.Period.ToDateOnlyPeriod(TimeZoneInfo.Local), new List<IPerson> { PersonAssignment.Person },100);
 
 				Assert.AreEqual(res.ElementAt(1).Detail, DayOffTemplate.Description.Name);
 			}	
@@ -432,7 +432,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories.Audit
 			using (UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
 			{
 				var res = target.Report(personProvider.CurrentUser(), new DateOnlyPeriod(new DateOnly(Today), new DateOnly(Today).AddDays(1)),
-							PersonAssignment.Period.ToDateOnlyPeriod(TimeZoneInfo.Local), new List<IPerson> { PersonAssignment.Person });
+							PersonAssignment.Period.ToDateOnlyPeriod(TimeZoneInfo.Local), new List<IPerson> { PersonAssignment.Person },100);
 
 				Assert.AreEqual(res.ElementAt(1).Detail, DayOffTemplate.Description.Name);
 			}		
@@ -452,7 +452,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories.Audit
 			using (UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
 			{
 				var res = target.Report(personProvider.CurrentUser(), new DateOnlyPeriod(new DateOnly(Today), new DateOnly(Today).AddDays(1)),
-							PersonAssignment.Period.ToDateOnlyPeriod(TimeZoneInfo.Local), new List<IPerson> { PersonAssignment.Person });
+							PersonAssignment.Period.ToDateOnlyPeriod(TimeZoneInfo.Local), new List<IPerson> { PersonAssignment.Person },100);
 
 				Assert.AreEqual(res.ElementAt(1).Detail, Resources.PersonalShift);
 			}
@@ -472,7 +472,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories.Audit
 			using (UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
 			{
 				var res = target.Report(personProvider.CurrentUser(), new DateOnlyPeriod(new DateOnly(Today), new DateOnly(Today).AddDays(1)),
-							PersonAssignment.Period.ToDateOnlyPeriod(TimeZoneInfo.Local), new List<IPerson> { PersonAssignment.Person });
+							PersonAssignment.Period.ToDateOnlyPeriod(TimeZoneInfo.Local), new List<IPerson> { PersonAssignment.Person },100);
 
 				Assert.AreEqual(res.ElementAt(1).Detail, Resources.Overtime);
 			}
@@ -491,7 +491,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories.Audit
 			using (UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
 			{
 				var res = target.Report(personProvider.CurrentUser(), new DateOnlyPeriod(new DateOnly(Today), new DateOnly(Today).AddDays(1)),
-							PersonAssignment.Period.ToDateOnlyPeriod(TimeZoneInfo.Local), new List<IPerson> { PersonAssignment.Person });
+							PersonAssignment.Period.ToDateOnlyPeriod(TimeZoneInfo.Local), new List<IPerson> { PersonAssignment.Person },100);
 
 				Assert.AreEqual(res.ElementAt(1).Detail, string.Empty);
 			}
@@ -513,7 +513,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories.Audit
 			using (UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
 			{
 				var res = target.Report(personProvider.CurrentUser(), new DateOnlyPeriod(new DateOnly(Today), new DateOnly(Today).AddDays(1)),
-							PersonAssignment.Period.ToDateOnlyPeriod(TimeZoneInfo.Local), new List<IPerson> { PersonAssignment.Person });
+							PersonAssignment.Period.ToDateOnlyPeriod(TimeZoneInfo.Local), new List<IPerson> { PersonAssignment.Person },100);
 
 				Assert.AreEqual(res.ElementAt(1).Detail, string.Empty);
 			}
