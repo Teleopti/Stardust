@@ -295,7 +295,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Foundation
 
         private IUnitOfWork createUnitOfWorkWithMessageMock()
         {
-            return ((NHibernateUnitOfWorkFactory)SetupFixtureForAssembly.DataSource.Application).CreateAndOpenUnitOfWork(messBroker, TransactionIsolationLevel.Default, null);
+            return ((NHibernateUnitOfWorkFactory)SetupFixtureForAssembly.DataSource.Application).CreateAndOpenUnitOfWork(messBroker);
         }
 
         //denna är gjord här för det finns inga rötter som har denna komb
@@ -303,7 +303,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Foundation
         {
             private readonly DateTimePeriod _period;
 
-
+				
             public RootWithPeriodButNoMainReference(DateTimePeriod period)
             {
                 _period = period;

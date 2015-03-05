@@ -222,7 +222,7 @@ namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork
 			using (mocks.Playback())
 			{
 				target = new NHibernateUnitOfWorkFactoryFake(factoryMock);
-				target.CreateAndOpenUnitOfWork(root);
+				target.CreateAndOpenUnitOfWork().Reassociate(root);
 			}
 		}
 	}

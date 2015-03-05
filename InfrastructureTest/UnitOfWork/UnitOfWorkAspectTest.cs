@@ -6,7 +6,6 @@ using Autofac;
 using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.Aop;
-using Teleopti.Ccc.Domain.RealTimeAdherence;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Infrastructure.Aop;
 using Teleopti.Ccc.Infrastructure.Web;
@@ -22,56 +21,36 @@ namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork
 {
 	[TestFixture]
 	[PrincipalAndStateTest]
-	public class UnitOfWorkAspectNotSignedInTest : IRegisterInContainer
-	{
-		public void RegisterInContainer(ContainerBuilder builder, IIocConfiguration configuration)
-		{
-			builder.RegisterType<TheService>().AsSelf().SingleInstance().ApplyAspects();
-			builder.RegisterType<MutableFakeCurrentHttpContext>().AsSelf().As<ICurrentHttpContext>().SingleInstance();
-		}
-
-		public TheService TheService;
-		public IRtaStateGroupRepository RepositoryNotValidatingUserLogon;
-		public IBusinessUnitRepository BusinessUnitRepository;
-		public ISiteRepository SiteRepository;
-		public IPrincipalAndStateContext Context;
-
-		[Test, Ignore]
-		public void ShouldQueryRepositoryNotValidatingUserLogon()
-		{
-			IEnumerable<IRtaStateGroup> stateGroups = null;
-			var stateGroup = new RtaStateGroup(" ", true, true);
-
-			TheService.Does(uow =>
-			{
-				RepositoryNotValidatingUserLogon.Add(stateGroup);
-			});
-			Context.ClearPrincipalAndState();
-			TheService.Does(uow =>
-			{
-				stateGroups = RepositoryNotValidatingUserLogon.LoadAll();
-			});
-
-			stateGroups.Should().Not.Be.Empty();
-		}
-	}
-
-	[TestFixture]
-	[PrincipalAndStateTest]
 	public class UnitOfWorkAspectTest : IRegisterInContainer
 	{
-
 		public void RegisterInContainer(ContainerBuilder builder, IIocConfiguration configuration)
 		{
-			builder.RegisterType<TheService>().AsSelf().SingleInstance().ApplyAspects();
+			builder.RegisterType<TheServiceImpl>().AsSelf().SingleInstance().ApplyAspects();
 			builder.RegisterType<MutableFakeCurrentHttpContext>().AsSelf().As<ICurrentHttpContext>().SingleInstance();
 		}
 
-		public TheService TheService;
+		public TheServiceImpl TheService;
 		public MutableFakeCurrentHttpContext HttpContext;
 		public IPersonRepository PersonRepository;
 		public IBusinessUnitRepository BusinessUnitRepository;
 		public ISiteRepository SiteRepository;
+
+		public class TheServiceImpl
+		{
+			private readonly ICurrentUnitOfWork _uow;
+
+			public TheServiceImpl(ICurrentUnitOfWork uow)
+			{
+				_uow = uow;
+			}
+
+			[UnitOfWork]
+			public virtual void Does(Action<IUnitOfWork> action)
+			{
+				action(_uow.Current());
+			}
+
+		}
 
 		[Test]
 		public void ShouldQuery()
@@ -190,22 +169,7 @@ namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork
 		{
 			Assert.Fail();
 		}
-	}
-
-	public class TheService
-	{
-		private readonly ICurrentUnitOfWork _uow;
-
-		public TheService(ICurrentUnitOfWork uow)
-		{
-			_uow = uow;
-		}
-
-		[UnitOfWork]
-		public virtual void Does(Action<IUnitOfWork> action)
-		{
-			action(_uow.Current());
-		}
 
 	}
+
 }

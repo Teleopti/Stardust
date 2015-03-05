@@ -26,7 +26,7 @@ namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork
 			var target = new NHibernateUnitOfWorkFactoryFake(sessionFactory, () => unitOfWork, MockRepository.GenerateMock<ISessionContextBinder>());
 			var root = MockRepository.GenerateMock<IAggregateRoot>();
 
-			target.CreateAndOpenUnitOfWork(root);
+			target.CreateAndOpenUnitOfWork().Reassociate(root);
 
 			unitOfWork.AssertWasCalled(x => x.Reassociate(root));
 		}

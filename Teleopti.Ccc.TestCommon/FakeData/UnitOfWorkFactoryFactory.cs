@@ -50,6 +50,11 @@ namespace Teleopti.Ccc.TestCommon.FakeData
 		        throw new NotImplementedException();
 	        }
 
+	        public IUnitOfWork CreateAndOpenUnitOfWork(IQueryFilter businessUnitFilter)
+	        {
+				throw new NotImplementedException();
+			}
+
 	        public IStatelessUnitOfWork CreateAndOpenStatelessUnitOfWork()
             {
                 throw new NotImplementedException();

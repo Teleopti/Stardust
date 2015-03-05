@@ -1,20 +1,44 @@
-﻿using Teleopti.Interfaces.Domain;
+﻿using System;
+using NHibernate;
+using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 {
 	public class QueryFilter : IQueryFilter
 	{
-		public static readonly IQueryFilter BusinessUnit = new QueryFilter("businessUnitFilter"); 
-		public static readonly IQueryFilter Deleted = new QueryFilter("deletedFlagFilter");
+		private readonly Action<ISession, object> _enable;
 
-		private QueryFilter(string name)
+		public static readonly IQueryFilter NoFilter = new QueryFilter("noFilter", (session, p) => { });
+
+		public static readonly IQueryFilter BusinessUnit = new QueryFilter("businessUnitFilter", (session, p) =>
 		{
+			session.EnableFilter("businessUnitFilter").SetParameter("businessUnitParameter", p);
+		});
+
+		public static readonly IQueryFilter Deleted = new QueryFilter("deletedFlagFilter", (session, p) =>
+		{
+			session.EnableFilter("deletedFlagFilter");
+		});
+
+		public static readonly IQueryFilter DeletedPeople = new QueryFilter("deletedPeopleFilter", (session, p) =>
+		{
+			session.EnableFilter("deletedPeopleFilter");
+		});
+
+		private QueryFilter(string name, Action<ISession, object> enable)
+		{
+			_enable = enable;
 			InParameter.NotNull("name", name);
 			Name = name;
 		}
 
 		public string Name { get; private set; }
+
+		public void Enable(object session, object payload)
+		{
+			_enable(session as ISession, payload);
+		}
 
 		public override bool Equals(object obj)
 		{

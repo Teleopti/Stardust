@@ -90,10 +90,59 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 
 		public string ConnectionString { get; private set; }
 
+		public virtual IUnitOfWork CreateAndOpenUnitOfWork(TransactionIsolationLevel isolationLevel = TransactionIsolationLevel.Default)
+		{
+			return createAndOpenUnitOfWork(_messageBroker(), isolationLevel, null, QueryFilter.BusinessUnit);
+		}
+
+		public IUnitOfWork CreateAndOpenUnitOfWork(IInitiatorIdentifier initiator)
+		{
+			return createAndOpenUnitOfWork(_messageBroker(), TransactionIsolationLevel.Default, initiator, QueryFilter.BusinessUnit);
+		}
+
+		public IUnitOfWork CreateAndOpenUnitOfWork(IMessageBrokerComposite messageBroker)
+		{
+			return createAndOpenUnitOfWork(messageBroker, TransactionIsolationLevel.Default, null, QueryFilter.BusinessUnit);
+		}
+
+		public IUnitOfWork CreateAndOpenUnitOfWork(IQueryFilter businessUnitFilter)
+		{
+			return createAndOpenUnitOfWork(_messageBroker(), TransactionIsolationLevel.Default, null, businessUnitFilter);
+		}
+
+		private IUnitOfWork createAndOpenUnitOfWork(IMessageBrokerComposite messageBroker, TransactionIsolationLevel isolationLevel, IInitiatorIdentifier initiator, IQueryFilter businessUnitFilter)
+		{
+			var businessUnitId = getBusinessUnitId();
+			var session = createNhibSession(isolationLevel);
+
+			businessUnitFilter.Enable(session, businessUnitId);
+			QueryFilter.Deleted.Enable(session, null);
+			QueryFilter.DeletedPeople.Enable(session, null);
+
+			return MakeUnitOfWork(session, messageBroker, SessionContextBinder.FilterManager(session), isolationLevel, initiator);
+		}
+
+		private static Guid getBusinessUnitId()
+		{
+			var identity = Thread.CurrentPrincipal.Identity as ITeleoptiIdentity;
+			var buId = (identity != null && identity.BusinessUnit != null)
+				? identity.BusinessUnit.Id.GetValueOrDefault()
+				: Guid.Empty;
+			return buId;
+		}
+
+		private ISession createNhibSession(TransactionIsolationLevel isolationLevel)
+		{
+			var session = _factory.OpenSession(new AggregateRootInterceptor());
+			session.FlushMode = FlushMode.Never;
+			SessionContextBinder.Bind(session, isolationLevel);
+			return session;
+		}
+
 		protected virtual IUnitOfWork MakeUnitOfWork(ISession session, IMessageBrokerComposite messaging, NHibernateFilterManager filterManager, TransactionIsolationLevel isolationLevel, IInitiatorIdentifier initiator)
 		{
 			return new NHibernateUnitOfWork(session,
-			                                messaging,
+											messaging,
 											_messageSenders,
 											filterManager,
 											new SendPushMessageWhenRootAlteredService(),
@@ -102,45 +151,6 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 											isolationLevel,
 											initiator
 											);
-		}
-
-		public virtual IUnitOfWork CreateAndOpenUnitOfWork(TransactionIsolationLevel isolationLevel = TransactionIsolationLevel.Default)
-		{
-			return CreateAndOpenUnitOfWork(_messageBroker(), isolationLevel, null);
-		}
-
-		public IUnitOfWork CreateAndOpenUnitOfWork(IInitiatorIdentifier initiator)
-		{
-			return CreateAndOpenUnitOfWork(_messageBroker(), TransactionIsolationLevel.Default, initiator);
-		}
-
-		public IUnitOfWork CreateAndOpenUnitOfWork(IMessageBrokerComposite messageBroker, TransactionIsolationLevel isolationLevel, IInitiatorIdentifier initiator)
-		{
-			var identity = Thread.CurrentPrincipal.Identity as ITeleoptiIdentity;
-			var buId = (identity !=null && identity.BusinessUnit!=null) ? identity.BusinessUnit.Id.GetValueOrDefault() : Guid.Empty;
-			var interceptor = new AggregateRootInterceptor();
-			var nhibSession = createNhibSession(interceptor, buId, isolationLevel);
-
-			var nhUow = MakeUnitOfWork(nhibSession, messageBroker, SessionContextBinder.FilterManager(nhibSession), isolationLevel, initiator);
-			return nhUow;
-		}
-
-		public IUnitOfWork CreateAndOpenUnitOfWork(IAggregateRoot reassociate)
-		{
-			var uow = CreateAndOpenUnitOfWork();
-			uow.Reassociate(reassociate);
-			return uow;
-		}
-
-		private ISession createNhibSession(IInterceptor interceptor, Guid buId, TransactionIsolationLevel isolationLevel)
-		{
-			var nhibSession = _factory.OpenSession(interceptor);
-			nhibSession.FlushMode = FlushMode.Never;
-			nhibSession.EnableFilter("businessUnitFilter").SetParameter("businessUnitParameter", buId);
-			nhibSession.EnableFilter("deletedFlagFilter");
-			nhibSession.EnableFilter("deletedPeopleFilter");
-			SessionContextBinder.Bind(nhibSession, isolationLevel);
-			return nhibSession;
 		}
 
 		public void Dispose()

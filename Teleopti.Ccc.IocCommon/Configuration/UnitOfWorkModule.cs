@@ -30,7 +30,9 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<CheckLicenseExists>().As<ICheckLicenseExists>().SingleInstance();
 			builder.RegisterType<BusinessUnitFilterOverrider>().As<IBusinessUnitFilterOverrider>().SingleInstance();
 
-			builder.RegisterType<UnitOfWorkAspect>().As<IUnitOfWorkAspect>(); // Really bad that it cant be .SingleInstance();
+			// these keep scope state and cant be single instance
+			builder.RegisterType<UnitOfWorkAspect>().As<IUnitOfWorkAspect>().InstancePerDependency();
+			builder.RegisterType<AllBusinessUnitsUnitOfWorkAspect>().As<IAllBusinessUnitsUnitOfWorkAspect>().InstancePerDependency();
 		}
 	}
 }

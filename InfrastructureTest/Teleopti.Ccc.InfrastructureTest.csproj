@@ -497,6 +497,7 @@
     <Compile Include="ApplicationLayer\ServiceBusEventPublisherTest.cs" />
     <Compile Include="UnitOfWork\TeamOrSiteChangedMessageSenderTest.cs" />
     <Compile Include="UnitOfWork\UnitOfWorkAndSession.cs" />
+    <Compile Include="UnitOfWork\UnitOfWorkAspectNotSignedInTest.cs" />
     <Compile Include="UnitOfWork\UnitOfWorkAspectTest.cs" />
     <Compile Include="UnitOfWork\UnitOfWorkFactoryProviderTest.cs" />
     <Compile Include="UnitOfWork\UnitOfWorkInitiatorIdentifierHandlingTest.cs" />

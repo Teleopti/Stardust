@@ -418,6 +418,7 @@
     <Compile Include="UnitOfWork\StaticSessionContextBinder.cs" />
     <Compile Include="UnitOfWork\TeamOrSiteChangedMessageSender.cs" />
     <Compile Include="UnitOfWork\UnitOfWorkAspect.cs" />
+    <Compile Include="UnitOfWork\AllBusinessUnitsUnitOfWorkAspect.cs" />
     <Compile Include="Util\CompressionExtensions.cs" />
     <Compile Include="Repositories\UnitOfWorkExtensions.cs" />
     <Compile Include="Repositories\EtlReadModelRepository.cs" />
