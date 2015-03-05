@@ -60,5 +60,11 @@ namespace Teleopti.Ccc.WebBehaviorTest.Forecasting
 				}
 			});
 		}
+
+		[Then(@"I should see the accuracy for the forecast method")]
+		public void ThenIShouldSeeTheAccuracyForTheForecastMethod()
+		{
+			ScenarioContext.Current.Pending();
+		}
 	}
 }
