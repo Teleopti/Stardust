@@ -3,7 +3,7 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Web.Areas.Tenant.Model
 {
-	public class PersonInfoDto
+	public class PersonInfoModel
 	{
 		public string Tenant { get; set; }
 		public string UserName { get; set; }

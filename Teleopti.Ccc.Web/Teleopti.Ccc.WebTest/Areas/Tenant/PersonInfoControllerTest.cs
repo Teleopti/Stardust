@@ -13,14 +13,14 @@ namespace Teleopti.Ccc.WebTest.Areas.Tenant
 		[Test]
 		public void ShouldPersistPersonInfo()
 		{
-			var dto = new PersonInfoDto();
+			var dto = new PersonInfoModel();
 			var entity = new PersonInfo();
 			var persister = MockRepository.GenerateMock<IPersonInfoPersister>();
 			var mapper = MockRepository.GenerateMock<IPersonInfoMapper>();
 			mapper.Expect(x => x.Map(dto)).Return(entity);
 
 			var target = new PersonInfoController(persister, mapper);
-			target.Persist(new List<PersonInfoDto>{dto});
+			target.Persist(new List<PersonInfoModel>{dto});
 
 			persister.AssertWasCalled(x=>x.Persist(entity));
 		}

@@ -45,7 +45,7 @@ namespace Teleopti.Ccc.Web.Areas.Tenant.Core
 		//TODO: tenant - fix impl later
 		private class personInfoMapper_Temporary : IPersonInfoMapper
 		{
-			public PersonInfo Map(PersonInfoDto personInfoDto)
+			public PersonInfo Map(PersonInfoModel personInfoModel)
 			{
 				return new PersonInfo();
 			}

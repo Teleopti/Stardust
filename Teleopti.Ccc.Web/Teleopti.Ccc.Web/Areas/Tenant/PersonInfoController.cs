@@ -25,7 +25,7 @@ namespace Teleopti.Ccc.Web.Areas.Tenant
 		[TenantUnitOfWork]
 		//TODO: tenant - probably return some kind of json result later
 		// change later to some sort of authentication
-		public void Persist([FromBody]  List<PersonInfoDto> personInfoDtos)
+		public void Persist([FromBody]  List<PersonInfoModel> personInfoDtos)
 		{
 			foreach (var personInfoDto in personInfoDtos)
 			{

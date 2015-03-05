@@ -5,6 +5,6 @@ namespace Teleopti.Ccc.Web.Areas.Tenant.Core
 {
 	public interface IPersonInfoMapper
 	{
-		PersonInfo Map(PersonInfoDto personInfoDto);
+		PersonInfo Map(PersonInfoModel personInfoModel);
 	}
 }
