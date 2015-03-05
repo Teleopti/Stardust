@@ -8,15 +8,8 @@ using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.Infrastructure.Repositories
 {
-    /// <summary>
-    /// Repository for state groups
-    /// </summary>
     public class RtaStateGroupRepository : Repository<IRtaStateGroup>, IRtaStateGroupRepository
     {
-        /// <summary>
-        /// Initializes a new instance of the <see cref="RtaStateGroupRepository"/> class.
-        /// </summary>
-        /// <param name="unitOfWork">The unitofwork</param>
         public RtaStateGroupRepository(IUnitOfWork unitOfWork)
             : base(unitOfWork)
         {
@@ -31,13 +24,6 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 	    {
 	    }
 
-	    /// <summary>
-        /// Loads all complete graph.
-        /// </summary>
-        /// <remarks>
-        /// Created by: robink
-        /// Created date: 2008-11-19
-        /// </remarks>
         public IList<IRtaStateGroup> LoadAllCompleteGraph()
         {
             return Session.CreateCriteria(typeof (RtaStateGroup))
@@ -45,5 +31,10 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
                 .SetResultTransformer(Transformers.DistinctRootEntity)
                 .List<IRtaStateGroup>();
         }
+
+	    public override bool ValidateUserLoggedOn
+	    {
+		    get { return false; }
+	    }
     }
 }
