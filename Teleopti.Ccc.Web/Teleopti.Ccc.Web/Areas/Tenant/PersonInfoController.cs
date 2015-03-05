@@ -1,4 +1,5 @@
-﻿using System.Web.Http;
+﻿using System.Collections.Generic;
+using System.Web.Http;
 using System.Web.Mvc;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.NHibernate;
 using Teleopti.Ccc.Web.Areas.Tenant.Core;
@@ -24,9 +25,12 @@ namespace Teleopti.Ccc.Web.Areas.Tenant
 		[TenantUnitOfWork]
 		//TODO: tenant - probably return some kind of json result later
 		// change later to some sort of authentication
-		public void Persist([FromBody]  PersonInfoDto personInfoDto)
+		public void Persist([FromBody]  List<PersonInfoDto> personInfoDtos)
 		{
-			_persister.Persist(_mapper.Map(personInfoDto));
+			foreach (var personInfoDto in personInfoDtos)
+			{
+				_persister.Persist(_mapper.Map(personInfoDto));
+			}
 		}
 	}
 }

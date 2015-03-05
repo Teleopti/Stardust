@@ -1700,16 +1700,17 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.GuiHelpers
 			var changed = (from personGeneralModel in FilteredPeopleGridData
 				where personGeneralModel.TenantData.Changed
 				select personGeneralModel.TenantData).ToList();
-
-			_tenantDataManager.SaveTenantData(changed);
-			//MessageBox.Show(changed.Count + " personer ändrade");
+			if(changed.Any())
+				_tenantDataManager.SaveTenantData(changed);
+			
 			//reset after save
 			foreach (var personGeneralModel in FilteredPeopleGridData)
 			{
 				personGeneralModel.TenantData.Changed = false;
 			}
-			_tenantDataManager.DeleteTenantPersons(toBeRemovedList);
-			//MessageBox.Show(toBeRemovedList.Count + " borttagna");
+			if (toBeRemovedList.Any())
+				_tenantDataManager.DeleteTenantPersons(toBeRemovedList);
+			
 			toBeRemovedList.Clear();
 		}
 

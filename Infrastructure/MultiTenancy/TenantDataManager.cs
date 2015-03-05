@@ -1,12 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO;
-using System.Net;
 using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
-using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Infrastructure.MultiTenancy
@@ -30,21 +27,20 @@ namespace Teleopti.Ccc.Infrastructure.MultiTenancy
 		public async Task<bool> SaveTenantData(IList<TenantAuthenticationData> tenantAuthenticationData)
 		{
 			var client = new HttpClient();
-			foreach (var authenticationData in tenantAuthenticationData)
-			{
-				string json = JsonConvert.SerializeObject(authenticationData);
-				var response = await client.PostAsync(_pathToTenantServer + "PersonInfo/Persist", new StringContent(json, Encoding.UTF8, "application/json"));
-				if (!response.IsSuccessStatusCode)
-					return false;
-			}
+			string json = JsonConvert.SerializeObject(tenantAuthenticationData);
+			var response = await client.PostAsync(_pathToTenantServer + "PersonInfo/Persist", new StringContent(json, Encoding.UTF8, "application/json"));
+			if (!response.IsSuccessStatusCode)
+				return false;
+
 			return true;
 		}
 
 		public void DeleteTenantPersons(IList<Guid> personsToBeDeleted)
 		{
-			var uriBuilder = new UriBuilder(_pathToTenantServer + "Tenant/Delete");
+			var uriBuilder = new UriBuilder(_pathToTenantServer + "PersonInfo/Delete");
 		}
 
+		//maybe something like this later when we authorize against method
 		//private static string authorizeHeader(string nhibDataSourcename)
 		//{
 		//	var authKey = "!#¤atAbgT%";
@@ -57,17 +53,17 @@ namespace Teleopti.Ccc.Infrastructure.MultiTenancy
 	public class EmptyTenantDataManager : ITenantDataManager
 	{
 		readonly TaskCompletionSource<bool> _fakeThing = new TaskCompletionSource<bool>();
-		private const bool theData = true;
-
+		
 		public async Task<bool> SaveTenantData(IList<TenantAuthenticationData> tenantAuthenticationData)
 		{
+			_fakeThing.SetResult(true);
 			await _fakeThing.Task;
-			return theData;
+			return _fakeThing.Task.Result;
 		}
 
 		public void DeleteTenantPersons(IList<Guid> personsToBeDeleted)
 		{
-			
+
 		}
 	}
 

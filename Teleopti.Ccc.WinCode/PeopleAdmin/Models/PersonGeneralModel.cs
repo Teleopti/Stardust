@@ -4,6 +4,7 @@ using System.Linq;
 using System.Windows.Forms;
 using Syncfusion.Windows.Forms;
 using Teleopti.Ccc.Domain.Common;
+using Teleopti.Ccc.Domain.Security;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.Security.AuthorizationEntities;
 using Teleopti.Ccc.Domain.Security.Principal;
@@ -27,6 +28,7 @@ namespace Teleopti.Ccc.WinCode.PeopleAdmin.Models
 		private bool _logonDataCanBeChanged;
 		private bool _rightsHaveBeenChecked;
 		private readonly TenantAuthenticationData _tenantData;
+		private OneWayEncryption _encryption = new OneWayEncryption();
 
 		public PersonGeneralModel()
 		{
@@ -272,7 +274,8 @@ namespace Teleopti.Ccc.WinCode.PeopleAdmin.Models
 				_isValid = ContainedEntity.ChangePassword(value, policyService, _userDetail);
 				if (!_isValid) //Is there a better solution for this?
 					writeMessage();
-				_tenantData.Password = value;
+				
+				_tenantData.Password = _encryption.EncryptString(value);
 				_tenantData.Changed = true;
 			}
 		}
