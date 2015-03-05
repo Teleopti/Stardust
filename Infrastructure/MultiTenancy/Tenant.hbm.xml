@@ -3,7 +3,7 @@
                    assembly="Teleopti.Ccc.Infrastructure"
                    namespace="Teleopti.Ccc.Infrastructure.MultiTenancy"
                    default-access="property">
-	<class name="Tenant">
+	<class name="Tenant" table="Tenant" entity-name="Tenant_OldSchema">
 		<id name="id" access="field">
 			<generator class="identity" />
 		</id>

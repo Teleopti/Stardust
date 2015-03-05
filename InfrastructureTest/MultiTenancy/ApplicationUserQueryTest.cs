@@ -8,7 +8,6 @@ using Teleopti.Ccc.Infrastructure.MultiTenancy.NHibernate;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.InfrastructureTest.Helper;
-using Teleopti.Ccc.InfrastructureTest.UnitOfWork;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Interfaces.Domain;
@@ -98,9 +97,9 @@ namespace Teleopti.Ccc.InfrastructureTest.MultiTenancy
 		public void ShouldPersistPasswordPolicyIfNonExistingButUserExist()
 		{
 			var session = _tenantUnitOfWorkManager.CurrentSession();
-			session.GetNamedQuery("passwordPolicyForUser").SetEntity("personInfo", session.Get<PersonInfo>(personId)).UniqueResult().Should().Be.Null();
+			session.GetNamedQuery("passwordPolicyForUser").SetGuid("personInfoId", personId).UniqueResult().Should().Be.Null();
 			target.FindUserData(correctUserName);
-			session.GetNamedQuery("passwordPolicyForUser").SetEntity("personInfo", session.Get<PersonInfo>(personId)).UniqueResult().Should().Not.Be.Null();
+			session.GetNamedQuery("passwordPolicyForUser").SetGuid("personInfoId", personId).UniqueResult().Should().Not.Be.Null();
 		}
 
 
@@ -118,19 +117,5 @@ namespace Teleopti.Ccc.InfrastructureTest.MultiTenancy
 			_tenantUnitOfWorkManager = TenantUnitOfWorkManager.CreateInstanceForTest(ConnectionStringHelper.ConnectionStringUsedInTests);
 			target = new ApplicationUserQuery(_tenantUnitOfWorkManager);
 		}
-
-		//[TearDown]
-		//public void Teardown_WillBeChangedWhenMovedAwayFromUnitOfWork()
-		//{
-		//	_tenantUnitOfWorkManager.CancelCurrent();
-		//	using (var uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
-		//	{
-		//		var rep = new PersonRepository(uow);
-		//		var personInDatabase = rep.Get(personId);
-		//		rep.Remove(personInDatabase);
-		//		uow.FetchSession().CreateQuery("delete from UserDetail").ExecuteUpdate();
-		//		uow.PersistAll();
-		//	}
-		//}
 	}
 }

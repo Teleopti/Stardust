@@ -6,7 +6,6 @@ using Teleopti.Ccc.Infrastructure.MultiTenancy.NHibernate;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.InfrastructureTest.Helper;
-using Teleopti.Ccc.InfrastructureTest.UnitOfWork;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 
@@ -54,19 +53,5 @@ namespace Teleopti.Ccc.InfrastructureTest.MultiTenancy
 			_tenantUnitOfWorkManager = TenantUnitOfWorkManager.CreateInstanceForTest(ConnectionStringHelper.ConnectionStringUsedInTests);
 			target = new ApplicationUserTenantQuery(_tenantUnitOfWorkManager);
 		}
-
-		//[TearDown]
-		//public void Teardown_WillBeChangedWhenMovedAwayFromUnitOfWork()
-		//{
-		//	_tenantUnitOfWorkManager.CancelCurrent();
-		//	using (var uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
-		//	{
-		//		var rep = new PersonRepository(uow);
-		//		var personInDatabase = rep.Get(personId);
-		//		rep.Remove(personInDatabase);
-		//		uow.FetchSession().CreateQuery("delete from UserDetail").ExecuteUpdate();
-		//		uow.PersistAll();
-		//	}
-		//} 
 	}
 }

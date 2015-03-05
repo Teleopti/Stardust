@@ -21,7 +21,7 @@ namespace Teleopti.Ccc.Infrastructure.MultiTenancy
 				return null;
 
 			var readPasswordPolicy = session.GetNamedQuery("passwordPolicyForUser")
-				.SetEntity("personInfo", readPersonInfo)
+				.SetGuid("personInfoId", readPersonInfo.Id)
 				.UniqueResult<PasswordPolicyForUser>();
 			if (readPasswordPolicy == null)
 			{

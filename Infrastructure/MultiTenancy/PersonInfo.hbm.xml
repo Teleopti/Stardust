@@ -3,13 +3,13 @@
                    assembly="Teleopti.Ccc.Infrastructure"
                    namespace="Teleopti.Ccc.Infrastructure.MultiTenancy"
                    default-access="field">
-	<class name="PersonInfo" table="Person">
+	<class name="PersonInfo" table="Person" entity-name="PersonInfo_OldSchema">
 		<id name="Id" type="guid" access="property">
 			<generator class="guid.comb" />
 		</id>
 		<property name="terminalDate" 
 				type="Teleopti.Ccc.Infrastructure.NHibernateConfiguration.DateOnlyMappingType, Teleopti.Ccc.Infrastructure"/>
-		<many-to-one name="tenant" class="Tenant" />
+		<many-to-one name="tenant" entity-name="Tenant_OldSchema" class="Tenant" />
 		
 		<join table="AuthenticationInfo" fetch="join" optional="true">
 			<key column="Person" />
@@ -25,7 +25,7 @@
 
 	<query name="identityUserQuery">
 		<![CDATA[
-select p from PersonInfo p
+select p from PersonInfo_OldSchema p
 where p.identity = :identity
 and (p.terminalDate is null or p.terminalDate>getdate())
 ]]>
@@ -33,7 +33,7 @@ and (p.terminalDate is null or p.terminalDate>getdate())
 
 	<query name="applicationUserQuery">
 		<![CDATA[
-select pi from PersonInfo pi
+select pi from PersonInfo_OldSchema pi
 where pi.applicationLogonName=:userName
 and (pi.terminalDate is null or pi.terminalDate>getdate())
 ]]>
