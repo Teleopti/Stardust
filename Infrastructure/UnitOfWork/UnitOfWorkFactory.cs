@@ -1,3 +1,4 @@
+using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Interfaces.Infrastructure;
 
@@ -24,7 +25,7 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 
 		public static ICurrentUnitOfWorkFactory CurrentUnitOfWorkFactory()
 		{
-			return new CurrentUnitOfWorkFactory(new CurrentTeleoptiPrincipal());
+			return new CurrentUnitOfWorkFactory(CurrentDataSource.Make());
 		}
 
 		public static ICurrentUnitOfWork CurrentUnitOfWork()

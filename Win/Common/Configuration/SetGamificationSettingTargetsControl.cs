@@ -32,7 +32,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 			gridControlSelectSettingForTeams.DefaultRowHeight = 18;
 			gridControlSelectSettingForTeams.MinResizeRowSize = 18;
 
-			var currentUow = new CurrentUnitOfWork(new CurrentUnitOfWorkFactory(new CurrentTeleoptiPrincipal()));
+			var currentUow = new CurrentUnitOfWork(CurrentUnitOfWorkFactory.Make());
 			_presenter = new SetGamificationSettingPresenter(this, UnitOfWorkFactory.Current,
 															new TeamGamificationSettingRepository(currentUow),
 															new SiteProvider(new SiteRepository(currentUow)),

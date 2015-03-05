@@ -119,7 +119,7 @@ namespace Teleopti.Ccc.WinCode.Meetings
                 var availablePersons = _schedulerStateHolder.SchedulingResultState.PersonsInOrganization;
                 _schedulerStateHolder = new SchedulerStateHolder(_schedulerStateHolder.RequestedScenario,
                                                                  _schedulerStateHolder.RequestedPeriod,
-																 availablePersons, new DisableDeletedFilter(new CurrentUnitOfWork(new CurrentUnitOfWorkFactory(new CurrentTeleoptiPrincipal()))));
+																 availablePersons, new DisableDeletedFilter(new CurrentUnitOfWork(CurrentUnitOfWorkFactory.Make())));
                 _schedulerStateHolder.SchedulingResultState.PersonsInOrganization = new List<IPerson>(availablePersons);
             }
 

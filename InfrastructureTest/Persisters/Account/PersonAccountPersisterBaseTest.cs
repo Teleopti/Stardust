@@ -48,8 +48,8 @@ namespace Teleopti.Ccc.InfrastructureTest.Persisters.Account
 
 		private void makeTarget()
 		{
-			var currUnitOfWork = new CurrentUnitOfWork(new CurrentUnitOfWorkFactory(new CurrentTeleoptiPrincipal()));
-			var uowFactory = new CurrentUnitOfWorkFactory(new CurrentTeleoptiPrincipal());
+			var currUnitOfWork = new CurrentUnitOfWork(CurrentUnitOfWorkFactory.Make());
+			var uowFactory = CurrentUnitOfWorkFactory.Make();
 			var rep = new PersonAbsenceAccountRepository(currUnitOfWork);
 			Target = new PersonAccountPersister(uowFactory, 
 																	rep, 

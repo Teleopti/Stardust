@@ -113,7 +113,7 @@ namespace Teleopti.Ccc.InfrastructureTest.WebReports.DailyMetricsForDay
             return createTarget(loggedOnUser,
                 CurrentDataSource.Make(),
                 currentBu,
-                new GlobalSettingDataRepository(new CurrentUnitOfWork(new CurrentUnitOfWorkFactory(new CurrentTeleoptiPrincipal()))));
+				new GlobalSettingDataRepository(new CurrentUnitOfWork(CurrentUnitOfWorkFactory.Make())));
         }
 
         protected virtual AdherenceReportSettingCalculationMethod? AdherenceSetting

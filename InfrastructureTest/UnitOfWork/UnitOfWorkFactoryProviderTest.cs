@@ -20,7 +20,7 @@ namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork
 		public void Setup()
 		{
 			currentTeleoptiPrincipal = MockRepository.GenerateMock<ICurrentTeleoptiPrincipal>();
-			target = new CurrentUnitOfWorkFactory(currentTeleoptiPrincipal);
+			target = new CurrentUnitOfWorkFactory(new CurrentDataSource(new CurrentIdentity(currentTeleoptiPrincipal), null, null));
 		}
 
 		[Test]
@@ -37,24 +37,5 @@ namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork
 			target.LoggedOnUnitOfWorkFactory().Should().Be.SameInstanceAs(expectedUnitOfWorkFactory);
 		}
 
-		[Test]
-		public void ShouldThrowIfIdentityDoesNotExist()
-		{
-			//or should null be returned?
-			currentTeleoptiPrincipal.Expect(x => x.Current()).Return(null);
-			Assert.Throws<PermissionException>(() => target.LoggedOnUnitOfWorkFactory());
-		}
-
-		[Test]
-		public void ShouldThrowIfNotAuthenticated()
-		{
-			//or should null be returned?
-			var identity = MockRepository.GenerateMock<ITeleoptiIdentity>();
-			var teleoptiPrincipal = new TeleoptiPrincipal(identity, new Person());
-			currentTeleoptiPrincipal.Expect(x => x.Current()).Return(teleoptiPrincipal);
-			identity.Expect(x => x.IsAuthenticated).Return(false);
-
-			Assert.Throws<PermissionException>(() => target.LoggedOnUnitOfWorkFactory());
-		}
 	}
 }

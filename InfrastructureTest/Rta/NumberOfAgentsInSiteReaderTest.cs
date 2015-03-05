@@ -34,8 +34,8 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta
 			PersistAndRemoveFromUnitOfWork(team);
 			PersistAndRemoveFromUnitOfWork(person);
 			PersistAndRemoveFromUnitOfWork(person2);
-			
-			var target = new NumberOfAgentsInSiteReader(new CurrentUnitOfWork(new CurrentUnitOfWorkFactory(new CurrentTeleoptiPrincipal())), new Now());
+
+			var target = new NumberOfAgentsInSiteReader(new CurrentUnitOfWork(CurrentUnitOfWorkFactory.Make()), new Now());
 			var result = target.FetchNumberOfAgents(new[] {team.Site});
 
 			result[team.Site.Id.Value].Should().Be.EqualTo(2);
@@ -48,7 +48,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta
 			PersistAndRemoveFromUnitOfWork(team.Site);
 			PersistAndRemoveFromUnitOfWork(team);
 
-			var target = new NumberOfAgentsInSiteReader(new CurrentUnitOfWork(new CurrentUnitOfWorkFactory(new CurrentTeleoptiPrincipal())), new Now());
+			var target = new NumberOfAgentsInSiteReader(new CurrentUnitOfWork(CurrentUnitOfWorkFactory.Make()), new Now());
 			var result = target.FetchNumberOfAgents(new[] { team.Site });
 
 			result[team.Site.Id.Value].Should().Be.EqualTo(0);
@@ -74,7 +74,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta
 			PersistAndRemoveFromUnitOfWork(person);
 			PersistAndRemoveFromUnitOfWork(person2);
 
-			var target = new NumberOfAgentsInSiteReader(new CurrentUnitOfWork(new CurrentUnitOfWorkFactory(new CurrentTeleoptiPrincipal())), new ThisIsNow("2015-02-26 08:00"));
+			var target = new NumberOfAgentsInSiteReader(new CurrentUnitOfWork(CurrentUnitOfWorkFactory.Make()), new ThisIsNow("2015-02-26 08:00"));
 			var result = target.FetchNumberOfAgents(new[] { team.Site });
 
 			result[team.Site.Id.Value].Should().Be.EqualTo(1);

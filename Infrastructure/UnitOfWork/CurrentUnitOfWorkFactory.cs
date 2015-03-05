@@ -1,32 +1,26 @@
-﻿using Teleopti.Ccc.Domain.Security;
-using Teleopti.Ccc.Domain.Security.Principal;
+﻿using Teleopti.Ccc.Domain.Common;
 using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 {
 	public class CurrentUnitOfWorkFactory : ICurrentUnitOfWorkFactory
 	{
-		private const string youAreNotLoggedOn ="You are not logged on.";
-		private readonly ICurrentTeleoptiPrincipal _currentTeleoptiPrincipal;
+		private readonly ICurrentDataSource _currentDataSource;
 
-		public CurrentUnitOfWorkFactory(ICurrentTeleoptiPrincipal currentTeleoptiPrincipal)
+		public static ICurrentUnitOfWorkFactory Make()
 		{
-			_currentTeleoptiPrincipal = currentTeleoptiPrincipal;
+			return new CurrentUnitOfWorkFactory(CurrentDataSource.Make());
+		}
+
+		public CurrentUnitOfWorkFactory(ICurrentDataSource currentDataSource)
+		{
+			_currentDataSource = currentDataSource;
 		}
 
 		public IUnitOfWorkFactory LoggedOnUnitOfWorkFactory()
 		{
-			var principal = _currentTeleoptiPrincipal.Current();
-			if (principal == null)
-			{
-				throw new PermissionException(youAreNotLoggedOn);
-			}
-			var identity = ((ITeleoptiIdentity)_currentTeleoptiPrincipal.Current().Identity);
-			if (!identity.IsAuthenticated)
-			{
-				throw new PermissionException(youAreNotLoggedOn);
-			}
-			return identity.DataSource.Application;
+			var current = _currentDataSource.Current();
+			return current == null ? null : current.Application;
 		}
 	}
 }

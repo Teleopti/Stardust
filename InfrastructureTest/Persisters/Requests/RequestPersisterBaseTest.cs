@@ -35,7 +35,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Persisters.Requests
 			setState();
 			var request = Given();
 			makeTarget();
-			var rep = new PersonRequestRepository(new CurrentUnitOfWork(new CurrentUnitOfWorkFactory(new CurrentTeleoptiPrincipal())));
+			var rep = new PersonRequestRepository(new CurrentUnitOfWork(CurrentUnitOfWorkFactory.Make()));
 			if (request != null)
 			{
 				using (var givenUow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
@@ -58,13 +58,13 @@ namespace Teleopti.Ccc.InfrastructureTest.Persisters.Requests
 
 		private void setState()
 		{
-			PersonRequestRepository = new PersonRequestRepository(new CurrentUnitOfWork(new CurrentUnitOfWorkFactory(new CurrentTeleoptiPrincipal())));
+			PersonRequestRepository = new PersonRequestRepository(new CurrentUnitOfWork(CurrentUnitOfWorkFactory.Make()));
 			PrincipalAuthorization = new PrincipalAuthorizationWithFullPermission();
 		}
 
 		private void makeTarget()
 		{
-			target = new RequestPersister(new CurrentUnitOfWorkFactory(new CurrentTeleoptiPrincipal()), 
+			target = new RequestPersister(CurrentUnitOfWorkFactory.Make(), 
 														PersonRequestRepository,
 														this,
 														MockRepository.GenerateMock<IInitiatorIdentifier>(),

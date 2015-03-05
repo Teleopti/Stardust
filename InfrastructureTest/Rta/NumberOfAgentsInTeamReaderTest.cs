@@ -34,8 +34,8 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta
 			PersistAndRemoveFromUnitOfWork(team);
 			PersistAndRemoveFromUnitOfWork(person);
 			PersistAndRemoveFromUnitOfWork(person2);
-			
-			var target = new NumberOfAgentsInTeamReader(new CurrentUnitOfWork(new CurrentUnitOfWorkFactory(new CurrentTeleoptiPrincipal())), new Now());
+
+			var target = new NumberOfAgentsInTeamReader(new CurrentUnitOfWork(CurrentUnitOfWorkFactory.Make()), new Now());
 			var result = target.FetchNumberOfAgents(new[] {team});
 
 			result[team.Id.Value].Should().Be.EqualTo(2);
@@ -62,7 +62,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta
 			PersistAndRemoveFromUnitOfWork(person2);
 
 			var target =
-				new NumberOfAgentsInTeamReader(new CurrentUnitOfWork(new CurrentUnitOfWorkFactory(new CurrentTeleoptiPrincipal())),
+				new NumberOfAgentsInTeamReader(new CurrentUnitOfWork(CurrentUnitOfWorkFactory.Make()),
 					new ThisIsNow("2015-02-26 08:00"));
 			var result = target.FetchNumberOfAgents(new[] {team});
 
@@ -72,7 +72,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta
 		[Test]
 		public void ShouldReturnEmptyListWhenTeamIsEmpty()
 		{
-			var target = new NumberOfAgentsInTeamReader(new CurrentUnitOfWork(new CurrentUnitOfWorkFactory(new CurrentTeleoptiPrincipal())), new Now());
+			var target = new NumberOfAgentsInTeamReader(new CurrentUnitOfWork(CurrentUnitOfWorkFactory.Make()), new Now());
 			var result = target.FetchNumberOfAgents(new ITeam[] {});
 
 			result.Should().Be.Empty();

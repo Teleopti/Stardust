@@ -26,7 +26,7 @@ using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.InfrastructureTest.LiteUnitOfWork
 {
-	public class ReadModelUnitOfWorkTestAttribute : IoCTestAttribute
+	public class ReadModelUnitOfWorkTestAttribute : InfrastructureTestAttribute
 	{
 		protected override void RegisterInContainer(ContainerBuilder builder, IIocConfiguration configuration)
 		{
@@ -46,14 +46,6 @@ namespace Teleopti.Ccc.InfrastructureTest.LiteUnitOfWork
 				dataSourcesProvider.RegisteredDataSourceCollection = new List<IDataSource>{dataSource};
 				return dataSourcesProvider;
 			}).AsSelf().As<ICurrentApplicationData>().SingleInstance();
-
-			builder.RegisterInstance(new FakeConfigReader
-			{
-				ConnectionStrings = new ConnectionStringSettingsCollection
-				{
-					new ConnectionStringSettings("RtaApplication", ConnectionStringHelper.ConnectionStringUsedInTests)
-				}
-			}).As<IConfigReader>().AsSelf().SingleInstance();
 
 		}
 	}

@@ -44,9 +44,9 @@ namespace Teleopti.Ccc.InfrastructureTest.Persisters.Schedules
 
 		private void makeTarget()
 		{
-			var currUnitOfWork = new CurrentUnitOfWork(new CurrentUnitOfWorkFactory(new CurrentTeleoptiPrincipal()));
+			var currUnitOfWork = new CurrentUnitOfWork(CurrentUnitOfWorkFactory.Make());
 			var scheduleRep = new ScheduleRepository(currUnitOfWork);
-			Target = new ScheduleRangePersister(new CurrentUnitOfWorkFactory(new CurrentTeleoptiPrincipal()),
+			Target = new ScheduleRangePersister(CurrentUnitOfWorkFactory.Make(),
 				new DifferenceEntityCollectionService<IPersistableScheduleData>(),
 				ConflictCollector(),
 				new ScheduleDifferenceSaver(scheduleRep),
@@ -123,7 +123,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Persisters.Schedules
 
 		protected virtual IScheduleRangeConflictCollector ConflictCollector()
 		{
-			var currUnitOfWork = new CurrentUnitOfWork(new CurrentUnitOfWorkFactory(new CurrentTeleoptiPrincipal()));
+			var currUnitOfWork = new CurrentUnitOfWork(CurrentUnitOfWorkFactory.Make());
 			var scheduleRep = new ScheduleRepository(currUnitOfWork);
 			return new ScheduleRangeConflictCollector(scheduleRep, new PersonAssignmentRepository(currUnitOfWork), this, new LazyLoadingManagerWrapper());
 		}

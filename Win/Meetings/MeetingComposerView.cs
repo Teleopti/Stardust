@@ -44,7 +44,7 @@ namespace Teleopti.Ccc.Win.Meetings
 			_eventAggregator = eventAggregator;
 			_toogleManager = toogleManager;
 			_intraIntervalFinderService = intraIntervalFinderService;
-			_meetingComposerPresenter = new MeetingComposerPresenter(this,meetingViewModel, new DisableDeletedFilter(new CurrentUnitOfWork(new CurrentUnitOfWorkFactory(new CurrentTeleoptiPrincipal()))),schedulerStateHolder);
+			_meetingComposerPresenter = new MeetingComposerPresenter(this, meetingViewModel, new DisableDeletedFilter(new CurrentUnitOfWork(CurrentUnitOfWorkFactory.Make())), schedulerStateHolder);
 			panelContent.Enabled = editMeetingPermission;
 			ribbonControlAdv1.Enabled = editMeetingPermission;
 			toolStripButtonSchedules.Enabled = _viewSchedulesPermission;

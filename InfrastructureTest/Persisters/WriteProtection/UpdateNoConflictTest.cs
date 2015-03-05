@@ -49,8 +49,8 @@ namespace Teleopti.Ccc.InfrastructureTest.Persisters.WriteProtection
 		protected override void SetupForRepositoryTestWithoutTransaction()
 		{
 			//something is really wrong with the writeprotection mapping
-			repository = new WriteProtectionRepository(new CurrentUnitOfWork(new CurrentUnitOfWorkFactory(new CurrentTeleoptiPrincipal())));
-			target = new WriteProtectionPersister(new CurrentUnitOfWorkFactory(new CurrentTeleoptiPrincipal()), repository, MockRepository.GenerateMock<IInitiatorIdentifier>());
+			repository = new WriteProtectionRepository(new CurrentUnitOfWork(CurrentUnitOfWorkFactory.Make()));
+			target = new WriteProtectionPersister(CurrentUnitOfWorkFactory.Make(), repository, MockRepository.GenerateMock<IInitiatorIdentifier>());
 			var person = PersonFactory.CreatePerson("persist test");
 			person.PersonWriteProtection.PersonWriteProtectedDate = new DateOnly(2000,1,1);
 			using (var uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
