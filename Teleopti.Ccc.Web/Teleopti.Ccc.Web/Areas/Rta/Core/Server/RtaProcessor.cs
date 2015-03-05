@@ -8,14 +8,14 @@ namespace Teleopti.Ccc.Web.Areas.Rta.Core.Server
 	public class RtaProcessor
 	{
 		private readonly IDatabaseReader _databaseReader;
-		private readonly IAlarmFinder _alarmFinder;
+		private readonly IStateMapper _stateMapper;
 		private readonly IShiftEventPublisher _shiftEventPublisher;
 		private readonly IActivityEventPublisher _activityEventPublisher;
 		private readonly IStateEventPublisher _stateEventPublisher;
 		private readonly INow _now;
 
 		public RtaProcessor(IDatabaseReader databaseReader,
-			IAlarmFinder alarmFinder,
+			IStateMapper stateMapper,
 			IShiftEventPublisher shiftEventPublisher,
 			IActivityEventPublisher activityEventPublisher,
 			IStateEventPublisher stateEventPublisher,
@@ -23,7 +23,7 @@ namespace Teleopti.Ccc.Web.Areas.Rta.Core.Server
 			)
 		{
 			_databaseReader = databaseReader;
-			_alarmFinder = alarmFinder;
+			_stateMapper = stateMapper;
 			_shiftEventPublisher = shiftEventPublisher;
 			_activityEventPublisher = activityEventPublisher;
 			_stateEventPublisher = stateEventPublisher;
@@ -41,7 +41,7 @@ namespace Teleopti.Ccc.Web.Areas.Rta.Core.Server
 
 			var scheduleInfo = new ScheduleInfo(_databaseReader, context.Person.PersonId, context.CurrentTime);
 			var agentStateInfo = new AgentStateInfo(() => context.PreviousState(scheduleInfo), () => context.CurrentState(scheduleInfo));
-			var adherenceInfo = new AdherenceInfo(input, person, agentStateInfo, scheduleInfo, _alarmFinder);
+			var adherenceInfo = new AdherenceInfo(input, person, agentStateInfo, scheduleInfo, _stateMapper);
 			var info = new StateInfo(person, agentStateInfo, scheduleInfo, adherenceInfo);
 			
 			context.AgentStateReadModelUpdater.Update(info);

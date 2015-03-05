@@ -15,7 +15,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta
 	{
 		private readonly ExternalUserStateInputModel _input;
 		private readonly PersonOrganizationData _person;
-		private readonly IAlarmFinder _alarmFinder;
+		private readonly IStateMapper _stateMapper;
 		private readonly Lazy<Adherence> _adherence;
 		private readonly Lazy<Adherence> _adherenceForPreviousState;
 		private readonly Lazy<Adherence> _adherenceForPreviousStateAndCurrentActivity;
@@ -26,11 +26,11 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta
 			PersonOrganizationData person, 
 			AgentStateInfo agentState, 
 			ScheduleInfo scheduleInfo, 
-			IAlarmFinder alarmFinder)
+			IStateMapper stateMapper)
 		{
 			_input = input;
 			_person = person;
-			_alarmFinder = alarmFinder;
+			_stateMapper = stateMapper;
 
 			_adherence = new Lazy<Adherence>(() => adherenceFor(agentState.CurrentState()));
 			_adherenceForPreviousState = new Lazy<Adherence>(() => adherenceFor(agentState.PreviousState()));
@@ -68,7 +68,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta
 			return adherenceFor(state.StaffingEffect);
 		}
 
-		private static Adherence adherenceFor(AlarmMappingInfo alarmMapping)
+		private static Adherence adherenceFor(AlarmMapping alarmMapping)
 		{
 			return adherenceFor(alarmMapping.StaffingEffect);
 		}
@@ -89,11 +89,12 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta
 
 		private Adherence adherenceFor(string stateCode, Guid? activityId)
 		{
-			var stateGroup = _alarmFinder.StateCodeInfoFor(
-				stateCode, null,
-				_input.ParsedPlatformTypeId(),
-				_person.BusinessUnitId);
-			var alarm = _alarmFinder.GetAlarm(activityId, stateGroup.StateGroupId, _person.BusinessUnitId);
+			//var stateGroup = _alarmFinder.StateCodeInfoFor(
+			//	stateCode, null,
+			//	_input.ParsedPlatformTypeId(),
+			//	_person.BusinessUnitId);
+			//var alarm = _alarmFinder.GetAlarm(activityId, stateGroup.StateGroupId, _person.BusinessUnitId);
+			var alarm = _stateMapper.AlarmFor(_person.BusinessUnitId, stateCode, activityId);
 			if (alarm == null)
 				return Adherence.None;
 			return adherenceFor(alarm);

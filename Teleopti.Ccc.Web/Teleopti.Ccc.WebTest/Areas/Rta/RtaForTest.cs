@@ -3,12 +3,13 @@ using System.Collections.Generic;
 using Autofac;
 using MbCache.Core;
 using Rhino.Mocks;
+using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Common.Time;
+using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Rta;
-using Teleopti.Ccc.Infrastructure.Toggle;
 using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.IocCommon.Toggle;
 using Teleopti.Ccc.TestCommon;
@@ -69,7 +70,10 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta
 				.As<IPersonOrganizationReader>()
 				.As<IReadActualAgentStates>()
 				;
+			builder.RegisterInstance(database.RtaStateGroupRepository).As<IRtaStateGroupRepository>();
+			builder.RegisterInstance(database.StateGroupActivityAlarmRepository).As<IStateGroupActivityAlarmRepository>();
 			builder.RegisterInstance(new FakeMbCacheFactory()).As<IMbCacheFactory>();
+			builder.RegisterInstance(new FakeAllBusinessUnitsUnitOfWorkAspect()).As<IAllBusinessUnitsUnitOfWorkAspect>();
 			var container = builder.Build();
 
 			_rta = container.Resolve<IRta>();

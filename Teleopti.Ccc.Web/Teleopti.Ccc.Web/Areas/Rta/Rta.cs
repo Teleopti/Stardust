@@ -37,8 +37,8 @@ namespace Teleopti.Ccc.Web.Areas.Rta
 		public Rta(
 			IAdherenceAggregator adherenceAggregator,
 			IDatabaseReader databaseReader, 
-			IMbCacheFactory mbCacheFactory,
-			IAlarmFinder alarmFinder,
+			ICacheInvalidator cacheInvalidator,
+			IStateMapper stateMapper,
 			INow now, 
 			IConfigReader configReader,
 			IAgentStateReadModelUpdater agentStateReadModelUpdater,
@@ -52,8 +52,8 @@ namespace Teleopti.Ccc.Web.Areas.Rta
 			_rtaDataHandler = new RtaDataHandler(
 				adherenceAggregator,
 				databaseReader,
-				alarmFinder,
-				mbCacheFactory,
+				stateMapper,
+				cacheInvalidator,
 				processor,
 				agentStateReadModelUpdater,
 				agentStateMessageSender,

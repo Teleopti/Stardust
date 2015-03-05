@@ -53,7 +53,10 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta.Synchronization
 		public void ShouldPublishEventsAfterInitialize()
 		{
 			var personId = Guid.NewGuid();
-			Database.WithUser("user", personId);
+			Database
+				.WithUser("user", personId)
+				.WithAlarm("state", Guid.NewGuid())
+				.WithAlarm("anotherstate", Guid.NewGuid());
 			Now.Is("2015-01-15 08:00");
 			Rta.SaveState(new ExternalUserStateForTest
 			{

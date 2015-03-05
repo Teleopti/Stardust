@@ -45,8 +45,8 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta
 				.WithBusinessUnit(businessUnitId)
 				.WithUser("usercode1", Guid.NewGuid(), businessUnitId, teamId, siteId)
 				.WithUser("usercode2", personId, businessUnitId, teamId, siteId)
-				.WithAlarm("statecode", Guid.Empty, 1)
-				.WithAlarm("CCC Logged out", Guid.Empty, 0)
+				.WithAlarm("statecode", null, 1)
+				.WithAlarm("CCC Logged out", null, 0)
 				.Make();
 			var sender = new FakeMessageSender();
 			var target = new RtaForTest(database, new ThisIsNow("2014-10-20 10:00"), sender);

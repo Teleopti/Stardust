@@ -216,6 +216,8 @@
     <Compile Include="ApplicationLayer\Rta\AgentState.cs" />
     <Compile Include="ApplicationLayer\Rta\AgentStateAssembler.cs" />
     <Compile Include="ApplicationLayer\Rta\AgentStateInfo.cs" />
+    <Compile Include="ApplicationLayer\Rta\AlarmMapping.cs" />
+    <Compile Include="ApplicationLayer\Rta\AlarmMappingLoader.cs" />
     <Compile Include="ApplicationLayer\Rta\BelongsToDateDecorator.cs" />
     <Compile Include="ApplicationLayer\Rta\AdherenceDetailsViewModelBuilder.cs" />
     <Compile Include="ApplicationLayer\Rta\CurrentBelongsToDate.cs" />
@@ -224,7 +226,10 @@
     <Compile Include="ApplicationLayer\Rta\IActivityEventPublisher.cs" />
     <Compile Include="ApplicationLayer\Rta\IAdherenceDetailsReadModelPersister.cs" />
     <Compile Include="ApplicationLayer\Rta\IAdherenceEventPublisher.cs" />
-    <Compile Include="ApplicationLayer\Rta\IAlarmFinder.cs" />
+    <Compile Include="ApplicationLayer\Rta\IAlarmMappingLoader.cs" />
+    <Compile Include="ApplicationLayer\Rta\ICacheInvalidator.cs" />
+    <Compile Include="ApplicationLayer\Rta\IStateCodeAdder.cs" />
+    <Compile Include="ApplicationLayer\Rta\IStateMapper.cs" />
     <Compile Include="ApplicationLayer\Rta\IInitializeble.cs" />
     <Compile Include="ApplicationLayer\Rta\ILiteTransactionSyncronization.cs" />
     <Compile Include="ApplicationLayer\Rta\INotificationCreator.cs" />
@@ -236,6 +241,7 @@
     <Compile Include="ApplicationLayer\Rta\ISiteOutOfAdherenceReadModelPersister.cs" />
     <Compile Include="ApplicationLayer\Rta\IStateEventPublisher.cs" />
     <Compile Include="ApplicationLayer\Rta\IRecreatable.cs" />
+    <Compile Include="ApplicationLayer\Rta\IStateMappingLoader.cs" />
     <Compile Include="ApplicationLayer\Rta\ITeamOutOfAdherenceReadModelPersister.cs" />
     <Compile Include="ApplicationLayer\Rta\NoEvents.cs" />
     <Compile Include="ApplicationLayer\Rta\NotificationCreator.cs" />
@@ -253,6 +259,7 @@
     <Compile Include="ApplicationLayer\Rta\ExternalUserStateInputModel.cs" />
     <Compile Include="ApplicationLayer\Rta\SiteOutOfAdherenceReadModel.cs" />
     <Compile Include="ApplicationLayer\Rta\SiteOutOfAdherenceReadModelUpdater.cs" />
+    <Compile Include="ApplicationLayer\Rta\StateCodeAdder.cs" />
     <Compile Include="ApplicationLayer\Rta\StateEventPublisher.cs" />
     <Compile Include="ApplicationLayer\Rta\ExternalUserStateWebModel.cs" />
     <Compile Include="ApplicationLayer\Rta\IAdherencePercentageReadModelPersister.cs" />
@@ -263,6 +270,9 @@
     <Compile Include="ApplicationLayer\Events\ScheduleProjectionReadOnlyChanged.cs" />
     <Compile Include="ApplicationLayer\Rta\StateInfo.cs" />
     <Compile Include="ApplicationLayer\Rta\PersonActivityChangePulseLoop.cs" />
+    <Compile Include="ApplicationLayer\Rta\StateMapper.cs" />
+    <Compile Include="ApplicationLayer\Rta\StateMapping.cs" />
+    <Compile Include="ApplicationLayer\Rta\StateMappingLoader.cs" />
     <Compile Include="ApplicationLayer\Rta\TeamOutOfAdherenceReadModel.cs" />
     <Compile Include="ApplicationLayer\Rta\TeamOutOfAdherenceReadModelUpdater.cs" />
     <Compile Include="ApplicationLayer\ScheduleChangedEventHandlers\ ProjectionChangedEventShiftExtension.cs" />

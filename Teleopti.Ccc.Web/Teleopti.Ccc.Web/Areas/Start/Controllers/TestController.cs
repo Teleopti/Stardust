@@ -256,6 +256,8 @@ namespace Teleopti.Ccc.Web.Areas.Start.Controllers
 			{
 				_cacheFactory.Invalidate<IDatabaseReader>();
 				_cacheFactory.Invalidate<IPersonOrganizationProvider>();
+				_cacheFactory.Invalidate<AlarmMappingLoader>();
+				_cacheFactory.Invalidate<StateMappingLoader>();
 			}
 		}
 

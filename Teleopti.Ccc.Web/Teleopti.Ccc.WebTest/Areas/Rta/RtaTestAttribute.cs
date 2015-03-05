@@ -8,6 +8,7 @@ using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Common.Time;
+using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Rta;
 using Teleopti.Ccc.Infrastructure.DistributedLock;
 using Teleopti.Ccc.IocCommon;
@@ -32,6 +33,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta
 			registerFakeDatabase(builder, new FakeRtaDatabase());
 
 			builder.RegisterInstance(new FakeReadModelUnitOfWorkAspect()).As<IReadModelUnitOfWorkAspect>();
+			builder.RegisterInstance(new FakeAllBusinessUnitsUnitOfWorkAspect()).As<IAllBusinessUnitsUnitOfWorkAspect>().AsSelf();
 			builder.RegisterInstance(new FakeDistributedLockAcquirer()).As<IDistributedLockAcquirer>();
 
 			builder.RegisterInstance(new FakeTeamOutOfAdherenceReadModelPersister()).As<ITeamOutOfAdherenceReadModelPersister>().AsSelf();
@@ -61,6 +63,8 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta
 				.As<IReadActualAgentStates>()
 				.AsSelf()
 				;
+			builder.RegisterInstance(database.RtaStateGroupRepository).As<IRtaStateGroupRepository>();
+			builder.RegisterInstance(database.StateGroupActivityAlarmRepository).As<IStateGroupActivityAlarmRepository>();
 		}
 
 		private static void registerFakePublisher(ContainerBuilder builder, FakeEventPublisher publisher)

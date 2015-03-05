@@ -476,6 +476,7 @@
       <DependentUpon>Index.aspx</DependentUpon>
     </Compile>
     <Compile Include="Areas\Rta\Controllers\SyncController.cs" />
+    <Compile Include="Areas\Rta\Core\Server\CacheInvalidator.cs" />
     <Compile Include="Areas\Search\Controllers\SearchController.cs" />
     <Compile Include="Areas\SeatPlanner\Controllers\LocationHierarchyController.cs" />
     <Compile Include="Areas\SeatPlanner\Controllers\SeatMapCommandController.cs" />
@@ -690,7 +691,6 @@
     <Compile Include="Areas\Rta\Core\Server\Adherence\TeamAdherenceAggregator.cs" />
     <Compile Include="Areas\Rta\Core\Server\Adherence\TeamAdherenceMessage.cs" />
     <Compile Include="Areas\Rta\Core\IoC\RtaAreaModule.cs" />
-    <Compile Include="Areas\Rta\Core\Server\AlarmFinder.cs" />
     <Compile Include="Areas\Rta\Core\Server\DontUpdateAgentStateReadModel.cs" />
     <Compile Include="Areas\Rta\Core\Server\IAgentStateReadModelUpdater.cs" />
     <Compile Include="Areas\Rta\Core\Server\IAgentStateMessageSender.cs" />
@@ -701,7 +701,6 @@
     <Compile Include="Areas\Rta\Core\Server\RtaProcessContext.cs" />
     <Compile Include="Areas\Rta\Core\Server\RtaProcessor.cs" />
     <Compile Include="Areas\Rta\Core\Server\StateStreamSynchronizer.cs" />
-    <Compile Include="Areas\Rta\ExternalUserStateInputModel.cs" />
     <Compile Include="Areas\Rta\RtaAreaRegistration.cs" />
     <Compile Include="Areas\Rta\TeleoptiRtaService.cs" />
     <Compile Include="Areas\SSO\Controllers\ApplicationAuthenticationApiController.cs" />

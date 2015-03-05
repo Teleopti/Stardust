@@ -18,6 +18,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta
 			var businesUnitId = Guid.NewGuid();
 			Database
 				.WithBusinessUnit(businesUnitId)
+				.WithDefaultStateGroup()
 				.WithUser("usercode");
 
 			Target.SaveState(new ExternalUserStateForTest
@@ -41,6 +42,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta
 			var businesUnitId = Guid.NewGuid();
 			Database
 				.WithBusinessUnit(businesUnitId)
+				.WithDefaultStateGroup()
 				.WithUser("usercode");
 
 			Target.SaveState(new ExternalUserStateForTest
@@ -50,7 +52,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta
 				StateDescription = "a new description"
 			});
 
-			Database.AddedStateCode.StateName.Should().Be("a new description");
+			Database.AddedStateCode.Name.Should().Be("a new description");
 		}
 
 	}

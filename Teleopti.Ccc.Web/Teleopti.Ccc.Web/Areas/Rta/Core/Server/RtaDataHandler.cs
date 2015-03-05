@@ -16,8 +16,8 @@ namespace Teleopti.Ccc.Web.Areas.Rta.Core.Server
 		private static readonly ILog loggingSvc = LogManager.GetLogger(typeof(RtaDataHandler));
 		private readonly IAdherenceAggregator _adherenceAggregator;
 
-		private readonly IMbCacheFactory _mbCacheFactory;
-		private readonly IAlarmFinder _alarmFinder;
+		private readonly ICacheInvalidator _cacheInvalidator;
+		private readonly IStateMapper _stateMapper;
 		private readonly RtaProcessor _processor;
 		private readonly IAgentStateReadModelUpdater _agentStateReadModelUpdater;
 		private readonly IAgentStateMessageSender _messageSender;
@@ -30,8 +30,8 @@ namespace Teleopti.Ccc.Web.Areas.Rta.Core.Server
 		public RtaDataHandler(
 			IAdherenceAggregator adherenceAggregator,
 			IDatabaseReader databaseReader,
-			IAlarmFinder alarmFinder,
-			IMbCacheFactory mbCacheFactory,
+			IStateMapper stateMapper,
+			ICacheInvalidator cacheInvalidator,
 			RtaProcessor processor, 
 			IAgentStateReadModelUpdater agentStateReadModelUpdater,
 			IAgentStateMessageSender messageSender,
@@ -41,9 +41,9 @@ namespace Teleopti.Ccc.Web.Areas.Rta.Core.Server
 			)
 		{
 			_databaseReader = databaseReader;
-			_alarmFinder = alarmFinder;
+			_stateMapper = stateMapper;
 			_personResolver = new PersonResolver(databaseReader);
-			_mbCacheFactory = mbCacheFactory;
+			_cacheInvalidator = cacheInvalidator;
 			_processor = processor;
 			_agentStateReadModelUpdater = agentStateReadModelUpdater;
 			_messageSender = messageSender;
@@ -55,7 +55,7 @@ namespace Teleopti.Ccc.Web.Areas.Rta.Core.Server
 
 		public void CheckForActivityChange(Guid personId, Guid businessUnitId)
 		{
-			_mbCacheFactory.Invalidate(_databaseReader, x => x.GetCurrentSchedule(personId), true);
+			_cacheInvalidator.InvalidateSchedules(personId);
 			process(
 				null,
 				personId,
@@ -89,7 +89,8 @@ namespace Teleopti.Ccc.Web.Areas.Rta.Core.Server
 			input.PlatformTypeId = Guid.Empty.ToString();
 			var missingAgents = _databaseReader.GetMissingAgentStatesFromBatch(input.BatchId, input.SourceId);
 			var agentsNotAlreadyLoggedOut = from a in missingAgents
-											let state = _alarmFinder.StateCodeInfoFor(a.StateCode, null, a.PlatformTypeId, a.BusinessUnitId)
+											//let state = _alarmFinder.StateCodeInfoFor(a.StateCode, null, a.PlatformTypeId, a.BusinessUnitId)
+											let state = _stateMapper.StateFor(a.BusinessUnitId, a.PlatformTypeId, a.StateCode, null)
 											where !state.IsLogOutState
 											select a;
 			foreach (var agent in agentsNotAlreadyLoggedOut)

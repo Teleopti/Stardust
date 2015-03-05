@@ -32,6 +32,11 @@ namespace Teleopti.Ccc.Domain.RealTimeAdherence
             _available = isAvailable;
         }
 
+	    public virtual void SetBusinessUnit(IBusinessUnit businessUnit)
+	    {
+		    BusinessUnit = businessUnit;
+	    }
+
         public virtual string Name
         {
             get { return _name; }

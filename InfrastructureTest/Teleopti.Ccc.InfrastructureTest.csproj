@@ -227,12 +227,10 @@
     <Compile Include="Rta\DatabaseReaderTest.cs" />
     <Compile Include="Rta\ActualAgentStateReadModelPersistingTest.cs" />
     <Compile Include="Rta\FakeDatabaseConnectionStringHandler.cs" />
-    <Compile Include="Rta\GetStateCodeInfosTest.cs" />
     <Compile Include="InfrastructureTestAttribute.cs" />
     <Compile Include="Rta\RtaLoadExternalLogOnProcTest.cs" />
     <Compile Include="Repositories\BusinessUnitFilterOverriderTest.cs" />
     <Compile Include="Rta\RtaRepositoryTest.cs" />
-    <Compile Include="Rta\StateGroupTest.cs" />
     <Compile Include="Toggle\ApplicationFunctionFeatureFlagTest.cs" />
     <Compile Include="Toggle\TogglesActiveTest.cs" />
     <Compile Include="Licensing\CheckLicenseExistsTest.cs" />

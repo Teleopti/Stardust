@@ -19,49 +19,6 @@ namespace Teleopti.Ccc.Infrastructure.Rta
 			_databaseConnectionStringHandler = databaseConnectionStringHandler;
 		}
 
-		public StateCodeInfo AddAndGetStateCode(string stateCode, string stateDescription, Guid platformTypeId, Guid businessUnit)
-		{
-			var stateId = Guid.NewGuid();
-			var defaultStateGroupId = Guid.Empty;
-			var defaultStateGroupName = "";
-			string getDefaultStateGroupQuery = string.Format(@"SELECT Name, Id, BusinessUnit FROM RtaStateGroup WHERE DefaultStateGroup = 1 AND BusinessUnit = '{0}'", businessUnit);
-			const string insert = @"INSERT INTO RtaState (Id, Name, StateCode, PlatformTypeId, Parent) VALUES ('{0}', N'{4}', N'{1}', '{2}', '{3}')";
-
-			using (var connection = _databaseConnectionFactory.CreateConnection(_databaseConnectionStringHandler.AppConnectionString()))
-			{
-				var command = connection.CreateCommand();
-				command.CommandType = CommandType.Text;
-				command.CommandText = getDefaultStateGroupQuery;
-				connection.Open();
-				string insertStatement = string.Empty;
-				var reader = command.ExecuteReader();
-				while (reader.Read())
-				{
-					defaultStateGroupId = reader.GetGuid(reader.GetOrdinal("Id"));
-					defaultStateGroupName = reader.GetString(reader.GetOrdinal("Name"));
-
-					insertStatement = string.Format(insert, stateId, stateCode, platformTypeId, defaultStateGroupId, stateDescription);
-				}
-				reader.Close();
-
-				if (!string.IsNullOrEmpty(insertStatement) && !string.IsNullOrEmpty(stateCode))
-				{
-					command = connection.CreateCommand();
-					command.CommandText = insertStatement;
-					command.ExecuteNonQuery();
-				}
-			}
-			return new StateCodeInfo
-				{
-					StateGroupId = defaultStateGroupId,
-					StateGroupName = defaultStateGroupName,
-					BusinessUnitId = businessUnit,
-					StateName = stateDescription,
-					PlatformTypeId = platformTypeId,
-					StateCode = stateCode,
-				};
-		}
-
 		public void PersistActualAgentReadModel(AgentStateReadModel model)
 		{
 			using (

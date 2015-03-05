@@ -2,8 +2,8 @@
 using Autofac;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta;
 using Teleopti.Ccc.Domain.FeatureFlags;
-using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Rta;
+using Teleopti.Ccc.Infrastructure.Aop;
 using Teleopti.Ccc.Infrastructure.Rta;
 using Teleopti.Interfaces.Domain;
 
@@ -21,14 +21,26 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 		protected override void Load(ContainerBuilder builder)
 		{
 			builder.RegisterType<AgentStateAssembler>().SingleInstance();
+			builder.RegisterType<StateMapper>().As<IStateMapper>().SingleInstance();
 
 			builder.RegisterType<DatabaseConnectionStringHandler>().As<IDatabaseConnectionStringHandler>();
 			builder.RegisterType<DatabaseConnectionFactory>().As<IDatabaseConnectionFactory>();
-			//mark activityalarms and stategroups to be cached
+
+			_config.Args().CacheBuilder
+				.For<AlarmMappingLoader>()
+				.CacheMethod(x => x.Load())
+				.AsImplemented();
+			_config.Args().CacheBuilder
+				.For<StateMappingLoader>()
+				.CacheMethod(x => x.Load())
+				.AsImplemented();
+			builder.RegisterConcreteMbCacheComponent<AlarmMappingLoader>().As<IAlarmMappingLoader>().ApplyAspects();
+			builder.RegisterConcreteMbCacheComponent<StateMappingLoader>().As<IStateMappingLoader>().ApplyAspects();
+			
+			builder.RegisterType<StateCodeAdder>().As<IStateCodeAdder>().SingleInstance().ApplyAspects();
+
 			_config.Args().CacheBuilder
 				.For<DatabaseReader>()
-				.CacheMethod(x => x.AlarmMappingInfos())
-				.CacheMethod(x => x.StateCodeInfos())
 				.CacheMethod(x => x.GetCurrentSchedule(Guid.NewGuid()))
 				.CacheMethod(x => x.Datasources())
 				.CacheMethod(x => x.ExternalLogOns())

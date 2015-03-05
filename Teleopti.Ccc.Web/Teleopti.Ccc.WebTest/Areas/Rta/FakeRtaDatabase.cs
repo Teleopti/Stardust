@@ -3,10 +3,16 @@ using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta;
+using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Helper;
+using Teleopti.Ccc.Domain.RealTimeAdherence;
+using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Rta;
+using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Security.Authentication;
+using Teleopti.Ccc.TestCommon.TestData;
 using Teleopti.Interfaces.Domain;
+using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.WebTest.Areas.Rta
 {
@@ -18,7 +24,8 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta
 		IFakeDataBuilder WithBusinessUnit(Guid businessUnitId);
 		IFakeDataBuilder WithUser(string userCode, Guid personId, Guid? businessUnitId, Guid? teamId, Guid? siteId);
 		IFakeDataBuilder WithSchedule(Guid personId, Guid activityId, string name, DateOnly date, string start, string end);
-		IFakeDataBuilder WithAlarm(string stateCode, Guid activityId, Guid alarmId, double staffingEffect, string name, bool isLoggedOutState, TimeSpan threshold);
+		IFakeDataBuilder WithAlarm(string stateCode, Guid? activityId, Guid alarmId, double staffingEffect, string name, bool isLoggedOutState, TimeSpan threshold);
+		IFakeDataBuilder WithDefaultStateGroup();
 		FakeRtaDatabase Make();
 	}
 
@@ -27,10 +34,11 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta
 		private readonly List<AgentStateReadModel> _actualAgentStates = new List<AgentStateReadModel>();
 		private readonly List<KeyValuePair<string, int>> _datasources = new List<KeyValuePair<string, int>>();
 		private readonly List<KeyValuePair<string, IEnumerable<ResolvedPerson>>> _externalLogOns = new List<KeyValuePair<string, IEnumerable<ResolvedPerson>>>();
-		private readonly List<StateCodeInfo> _stateCodeInfos = new List<StateCodeInfo>();
-		private readonly List<KeyValuePair<Tuple<Guid, Guid, Guid>, List<AlarmMappingInfo>>> _activityAlarms = new List<KeyValuePair<Tuple<Guid, Guid, Guid>, List<AlarmMappingInfo>>>();
 		private readonly List<scheduleLayer2> _schedules = new List<scheduleLayer2>();
 		private readonly List<PersonOrganizationData> _personOrganizationData = new List<PersonOrganizationData>();
+
+		public FakeRtaStateGroupRepository RtaStateGroupRepository = new FakeRtaStateGroupRepository();
+		public FakeStateGroupActivityAlarmRepository StateGroupActivityAlarmRepository = new FakeStateGroupActivityAlarmRepository();
 
 		private class scheduleLayer2
 		{
@@ -39,14 +47,19 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta
 		}
 
 		public AgentStateReadModel PersistedAgentStateReadModel { get; set; }
-		public StateCodeInfo AddedStateCode { get; set; }
 
+		public IRtaState AddedStateCode
+		{
+			get { return RtaStateGroupRepository.LoadAll().Single(x => x.DefaultStateGroup).StateCollection.Single(); }
+		}
+
+		private BusinessUnit _businessUnit;
 		private Guid _businessUnitId;
 		private string _platformTypeId;
 
 		public FakeRtaDatabase()
 		{
-			_businessUnitId = Guid.NewGuid();
+			WithBusinessUnit(Guid.NewGuid());
 			WithDefaultsFromState(new ExternalUserStateForTest());
 		}
 
@@ -74,6 +87,8 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta
 		public IFakeDataBuilder WithBusinessUnit(Guid businessUnitId)
 		{
 			_businessUnitId = businessUnitId;
+			_businessUnit = new BusinessUnit(".");
+			_businessUnit.SetId(_businessUnitId);
 			return this;
 		}
 
@@ -128,27 +143,59 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta
 			return this;
 		}
 
-		public IFakeDataBuilder WithAlarm(string stateCode, Guid activityId, Guid alarmId, double staffingEffect, string name, bool isLoggedOutState, TimeSpan threshold)
+		public IFakeDataBuilder WithAlarm(string stateCode, Guid? activityId, Guid alarmId, double staffingEffect, string name, bool isLoggedOutState, TimeSpan threshold)
 		{
-			//putting all this logic here is just WRONG
 			var platformTypeIdGuid = new Guid(_platformTypeId);
 
-			var stateCodeInfo = getOrAddStateCodeInfo(stateCode, null, name, isLoggedOutState, platformTypeIdGuid);
+			var alarmType = new AlarmType();
+			alarmType.SetId(alarmId);
+			alarmType.SetBusinessUnit(_businessUnit);
+			alarmType.StaffingEffect = staffingEffect;
+			alarmType.ThresholdTime = threshold;
 
-			var alarms = new List<AlarmMappingInfo>
+			var stateGroup = (
+				from g in RtaStateGroupRepository.LoadAll()
+				from s in g.StateCollection
+				where s.StateCode == stateCode
+				select g
+				).FirstOrDefault();
+			if (stateGroup == null)
 			{
-				new AlarmMappingInfo
-				{
-					Name = name,
-					StateGroupId = stateCodeInfo.StateGroupId,
-					ActivityId = activityId,
-					BusinessUnit = _businessUnitId,
-					AlarmTypeId = alarmId,
-					StaffingEffect = staffingEffect,
-					ThresholdTime = threshold.Ticks
-				}
-			};
-			_activityAlarms.Add(new KeyValuePair<Tuple<Guid, Guid, Guid>, List<AlarmMappingInfo>>(new Tuple<Guid, Guid, Guid>(activityId, stateCodeInfo.StateGroupId, _businessUnitId), alarms));
+				stateGroup = new RtaStateGroup(name, false, true);
+				stateGroup.SetId(Guid.NewGuid());
+				stateGroup.SetBusinessUnit(_businessUnit);
+				stateGroup.IsLogOutState = isLoggedOutState;
+				stateGroup.AddState(null, stateCode, platformTypeIdGuid);
+				RtaStateGroupRepository.Add(stateGroup);
+			}
+
+			IActivity activity = null;
+			if (activityId != null)
+			{
+				activity = new Activity(stateCode);
+				activity.SetId(activityId);
+				activity.SetBusinessUnit(_businessUnit);
+			}
+
+			var mapping = new StateGroupActivityAlarm(stateGroup, activity);
+			mapping.AlarmType = alarmType;
+			mapping.SetId(Guid.NewGuid());
+			mapping.SetBusinessUnit(_businessUnit);
+			StateGroupActivityAlarmRepository.Add(mapping);
+
+			return this;
+		}
+
+		public IFakeDataBuilder WithDefaultStateGroup()
+		{
+			var defaultStateGroup = RtaStateGroupRepository.LoadAll().SingleOrDefault(x => x.DefaultStateGroup);
+			if (defaultStateGroup == null)
+			{
+				defaultStateGroup = new RtaStateGroup(".", true, true);
+				defaultStateGroup.SetId(Guid.NewGuid());
+				defaultStateGroup.SetBusinessUnit(_businessUnit);
+				RtaStateGroupRepository.Add(defaultStateGroup);
+			}
 			return this;
 		}
 
@@ -161,33 +208,6 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta
 
 
 
-
-		private StateCodeInfo getOrAddStateCodeInfo(string stateCode, string stateDescription, string stateGroupName, bool isLoggedOutState, Guid platformTypeId)
-		{
-			var match = (from s in _stateCodeInfos
-						 where s.StateCode.ToUpper() == stateCode.ToUpper()
-							   && s.PlatformTypeId == platformTypeId
-							   && s.BusinessUnitId == _businessUnitId
-						 select s).FirstOrDefault();
-
-			if (match != null)
-				return match;
-
-			var stateGroupId = Guid.NewGuid();
-			var stateCodeInfo = new StateCodeInfo
-			{
-				StateGroupId = stateGroupId,
-				StateGroupName = stateGroupName,
-				BusinessUnitId = _businessUnitId,
-				PlatformTypeId = platformTypeId,
-				StateCode = stateCode,
-				StateName = stateDescription,
-				IsLogOutState = isLoggedOutState
-			};
-			_stateCodeInfos.Add(stateCodeInfo);
-			return stateCodeInfo;
-		}
-
 		public AgentStateReadModel GetCurrentActualAgentState(Guid personId)
 		{
 			return _actualAgentStates.FirstOrDefault(x => x.PersonId == personId);
@@ -198,14 +218,9 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta
 			return _actualAgentStates.ToList();
 		}
 
-		public IEnumerable<StateCodeInfo> StateCodeInfos()
-		{
-			return _stateCodeInfos;
-		}
-
 		public ConcurrentDictionary<Tuple<Guid, Guid, Guid>, List<AlarmMappingInfo>> AlarmMappingInfos()
 		{
-			return new ConcurrentDictionary<Tuple<Guid, Guid, Guid>, List<AlarmMappingInfo>>(_activityAlarms);
+			return null;
 		}
 
 		public IList<ScheduleLayer> GetCurrentSchedule(Guid personId)
@@ -242,8 +257,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta
 
 		public StateCodeInfo AddAndGetStateCode(string stateCode, string stateDescription, Guid platformTypeId, Guid businessUnit)
 		{
-			AddedStateCode = getOrAddStateCodeInfo(stateCode, stateDescription, null, false, platformTypeId);
-			return AddedStateCode;
+			return null;
 		}
 
 		public void PersistActualAgentReadModel(AgentStateReadModel model)
@@ -258,6 +272,154 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta
 		public IEnumerable<PersonOrganizationData> PersonOrganizationData()
 		{
 			return _personOrganizationData;
+		}
+	}
+
+	public class FakeStateGroupActivityAlarmRepository : IStateGroupActivityAlarmRepository
+	{
+		private readonly IList<IStateGroupActivityAlarm> _data = new List<IStateGroupActivityAlarm>();
+
+		public void Add(IStateGroupActivityAlarm entity)
+		{
+			_data.Add(entity);
+		}
+
+		public void Remove(IStateGroupActivityAlarm entity)
+		{
+			throw new NotImplementedException();
+		}
+
+		public IStateGroupActivityAlarm Get(Guid id)
+		{
+			throw new NotImplementedException();
+		}
+
+		public IList<IStateGroupActivityAlarm> LoadAll()
+		{
+			return _data;
+		}
+
+		public IStateGroupActivityAlarm Load(Guid id)
+		{
+			throw new NotImplementedException();
+		}
+
+		public long CountAllEntities()
+		{
+			throw new NotImplementedException();
+		}
+
+		public void AddRange(IEnumerable<IStateGroupActivityAlarm> entityCollection)
+		{
+			throw new NotImplementedException();
+		}
+
+		public IUnitOfWork UnitOfWork
+		{
+			get { throw new NotImplementedException(); }
+		}
+
+		public IList<IStateGroupActivityAlarm> LoadAllCompleteGraph()
+		{
+			throw new NotImplementedException();
+		}
+	}
+
+	public class FakeRtaStateGroupRepository : IRtaStateGroupRepository
+	{
+		private readonly IList<IRtaStateGroup> _data = new List<IRtaStateGroup>();
+		
+		public void Add(IRtaStateGroup entity)
+		{
+			_data.Add(entity);
+		}
+
+		public void Remove(IRtaStateGroup entity)
+		{
+			throw new NotImplementedException();
+		}
+
+		public IRtaStateGroup Get(Guid id)
+		{
+			throw new NotImplementedException();
+		}
+
+		public IList<IRtaStateGroup> LoadAll()
+		{
+			return _data;
+		}
+
+		public IRtaStateGroup Load(Guid id)
+		{
+			throw new NotImplementedException();
+		}
+
+		public long CountAllEntities()
+		{
+			throw new NotImplementedException();
+		}
+
+		public void AddRange(IEnumerable<IRtaStateGroup> entityCollection)
+		{
+			throw new NotImplementedException();
+		}
+
+		public IUnitOfWork UnitOfWork
+		{
+			get { throw new NotImplementedException(); }
+		}
+
+		public IList<IRtaStateGroup> LoadAllCompleteGraph()
+		{
+			throw new NotImplementedException();
+		}
+	}
+
+	public class FakeAlarmTypeRepository : IAlarmTypeRepository
+	{
+		private readonly IList<IAlarmType> _data = new List<IAlarmType>();
+
+		public void Add(IAlarmType entity)
+		{
+			_data.Add(entity);
+		}
+
+		public void Remove(IAlarmType entity)
+		{
+			throw new NotImplementedException();
+		}
+
+		public IAlarmType Get(Guid id)
+		{
+			throw new NotImplementedException();
+		}
+
+		public IList<IAlarmType> LoadAll()
+		{
+			return _data;
+		}
+
+		public IAlarmType Load(Guid id)
+		{
+			throw new NotImplementedException();
+		}
+
+		public long CountAllEntities()
+		{
+			throw new NotImplementedException();
+		}
+
+		public void AddRange(IEnumerable<IAlarmType> entityCollection)
+		{
+			throw new NotImplementedException();
+		}
+
+		public IUnitOfWork UnitOfWork
+		{
+			get
+			{
+				throw new NotImplementedException();
+			}
 		}
 	}
 
@@ -293,32 +455,32 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta
 			return fakeDataBuilder.WithSchedule(personId, activityId, null, belongsToDate, start, end);
 		}
 
-		public static IFakeDataBuilder WithAlarm(this IFakeDataBuilder fakeDataBuilder, string stateCode, Guid activityId)
+		public static IFakeDataBuilder WithAlarm(this IFakeDataBuilder fakeDataBuilder, string stateCode, Guid? activityId)
 		{
 			return fakeDataBuilder.WithAlarm(stateCode, activityId, Guid.NewGuid(), 0, null, false, TimeSpan.Zero);
 		}
 
-		public static IFakeDataBuilder WithAlarm(this IFakeDataBuilder fakeDataBuilder, string stateCode, Guid activityId, double staffingEffect)
+		public static IFakeDataBuilder WithAlarm(this IFakeDataBuilder fakeDataBuilder, string stateCode, Guid? activityId, double staffingEffect)
 		{
 			return fakeDataBuilder.WithAlarm(stateCode, activityId, Guid.NewGuid(), staffingEffect, null, false, TimeSpan.Zero);
 		}
 
-		public static IFakeDataBuilder WithAlarm(this IFakeDataBuilder fakeDataBuilder, string stateCode, Guid activityId, Guid alarmId)
+		public static IFakeDataBuilder WithAlarm(this IFakeDataBuilder fakeDataBuilder, string stateCode, Guid? activityId, Guid alarmId)
 		{
 			return fakeDataBuilder.WithAlarm(stateCode, activityId, alarmId, 0, null, false, TimeSpan.Zero);
 		}
 
-		public static IFakeDataBuilder WithAlarm(this IFakeDataBuilder fakeDataBuilder, string stateCode, Guid activityId, string name)
+		public static IFakeDataBuilder WithAlarm(this IFakeDataBuilder fakeDataBuilder, string stateCode, Guid? activityId, string name)
 		{
 			return fakeDataBuilder.WithAlarm(stateCode, activityId, Guid.NewGuid(), 0, name, false, TimeSpan.Zero);
 		}
 
-		public static IFakeDataBuilder WithAlarm(this IFakeDataBuilder fakeDataBuilder, string stateCode, Guid activityId, bool isLoggedOutState)
+		public static IFakeDataBuilder WithAlarm(this IFakeDataBuilder fakeDataBuilder, string stateCode, Guid? activityId, bool isLoggedOutState)
 		{
 			return fakeDataBuilder.WithAlarm(stateCode, activityId, Guid.NewGuid(), 0, null, isLoggedOutState, TimeSpan.Zero);
 		}
 
-		public static IFakeDataBuilder WithAlarm(this IFakeDataBuilder fakeDataBuilder, string stateCode, Guid activityId, TimeSpan threshold)
+		public static IFakeDataBuilder WithAlarm(this IFakeDataBuilder fakeDataBuilder, string stateCode, Guid? activityId, TimeSpan threshold)
 		{
 			return fakeDataBuilder.WithAlarm(stateCode, activityId, Guid.NewGuid(), 0, null, false, threshold);
 		}
