@@ -364,6 +364,11 @@ namespace Teleopti.Ccc.Win.Intraday
 		private void intradayViewFormClosing(object sender, FormClosingEventArgs e)
 		{
 			if (_forceClose) return;
+			if (!ControlBox)
+			{
+				e.Cancel = true;
+				return;
+			}
 
 			bool cancelClosing;
 			try
