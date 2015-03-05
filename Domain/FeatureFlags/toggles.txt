@@ -27,7 +27,7 @@
 ############################################################################
 
 Scheduler_WeeklyRestRuleSolver_27108 = true
-Scheduler_Seniority_24331 = RC
+Scheduler_Seniority_24331 = true
 Scheduler_ShowIntadayESLWithShrinkage_21874 = true
 RTA_RtaLastStatesOverview_27789 = true
 RTA_DrilldownToAllAgentsInOneTeam_25234 = true
@@ -65,10 +65,10 @@ MyTimeWeb_AbsenceReport_31011 = true
 Schedule_PublishSchedules_30929 = true
 RTA_SeePercentageAdherenceForOneAgent_30783 = RC
 RTA_SeeAdherenceDetailsForOneAgent_31285 = RC
-ETL_SpeedUpETL_30791 = RC
-RTA_HangfireEventProcessing_31237 = RC
-RTA_NoBroker_31237 = RC
-RTA_EventStreamInitialization_31237 = RC
+ETL_SpeedUpETL_30791 = true
+RTA_HangfireEventProcessing_31237 = true
+RTA_NoBroker_31237 = true
+RTA_EventStreamInitialization_31237 = true
 RTA_NotifyViaSMS_31567 = true
 MyTimeWeb_ShiftTradeExchangeBulletin_31296 = true
 MyTimeWeb_SeeAnnouncedShifts_31639 = true
@@ -84,7 +84,7 @@ ETL_OnlyLatestQueueAgentStatistics_30787 = true
 Scheduler_DoNotBreakMinWeekWorkTimeOptimization_31992 = true
 Portal_DifferentiateBadgeSettingForAgents_31318 = RC
 Backlog_Module_23980 = DEV
-MultiTenantSSOSupport_StandardReports_15093 = RC
+MultiTenantSSOSupport_StandardReports_15093 = true
 MyTeam_MakeTeamScheduleConsistent_31897 = RC
 RTA_CalculatePercentageInAgentTimezone_31236 = RC
 MultiTenancy_SDK_17458 = false
