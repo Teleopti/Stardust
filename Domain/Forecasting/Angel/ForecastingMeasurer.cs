@@ -18,17 +18,17 @@ namespace Teleopti.Ccc.Domain.Forecasting.Angel
 				{
 					if (forecastingDay.CurrentDate == day.CurrentDate)
 					{
-						if (Math.Abs(day.Tasks) < 0.000001 && Math.Abs(forecastingDay.Tasks) < 0.000001)
+						if (Math.Abs(day.TotalStatisticCalculatedTasks) < 0.000001 && Math.Abs(forecastingDay.Tasks) < 0.000001)
 						{
 							diff = 0d;
 						}
-						else if (Math.Abs(day.Tasks) < 0.000001)
+						else if (Math.Abs(day.TotalStatisticCalculatedTasks) < 0.000001)
 						{
 							numberOfSkipped++;
 						}
 						else
 						{
-							diff = Math.Abs(day.Tasks - forecastingDay.Tasks)/day.Tasks;
+							diff = Math.Abs(day.TotalStatisticCalculatedTasks - forecastingDay.Tasks) / day.TotalStatisticCalculatedTasks;
 						}
 						break;
 					}

@@ -11,7 +11,7 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.DomainTest.Forecasting.Angel
 {
-	public class IndexFactory
+	public class IndexVolumesFactory
 	{
 		public static IVolumeYear CreateMonthOfYear()
 		{
@@ -39,67 +39,33 @@ namespace Teleopti.Ccc.DomainTest.Forecasting.Angel
 			dayOfWeek.Stub(x => x.TalkTimeIndex(Arg<DateOnly>.Is.Anything)).Return(1.2d);
 			return dayOfWeek;
 		}
+
+		public static IVolumeYear[] Create()
+		{
+			return new[] {CreateMonthOfYear(), CreateWeekOfMonth(), CreateDayOfWeek()};
+		}
 	}
 
 	[TestFixture]
 	public class ForecastMethodTest
 	{
         private ForecastMethod target;
-        private double _averageTasks;
-        private IWorkload workload;
         private TaskOwnerPeriod historicalData;
-        private readonly TimeZoneInfo _timeZone = (TimeZoneInfo.FindSystemTimeZoneById("GMT Standard Time"));
-        private MockRepository mocks;
-		private IList<IVolumeYear> volumes;
-		private readonly IList<IForecastingTarget> _taskOwnerCollection = new List<IForecastingTarget>();
+		private double _averageTasks;
 
-		//[SetUp]
-		//public void Setup()
-		//{
-		//	ISkill skill = SkillFactory.CreateSkill("testSkill");
-		//	skill.TimeZone = _timeZone;
-		//	workload = WorkloadFactory.CreateWorkload(skill);
-		//	mocks = new MockRepository();
-
-		//	var date = new DateOnly(2008, 3, 31);
-		//	var historicalDate = new DateOnly(2006, 1, 1);
-
-		//	var periodForHelper = SkillDayFactory.GenerateMockedStatistics(historicalDate, workload);
-
-		//	var monthOfYear = IndexFactory.CreateMonthOfYear(date);
-		//	var weekOfMonth = IndexFactory.CreateWeekOfMonth(date);
-		//	var dayOfWeek = IndexFactory.CreateDayOfWeek(date);
-
-		//	volumes = new List<IVolumeYear> {monthOfYear, weekOfMonth, dayOfWeek};
-		//	var indexVolumes = MockRepository.GenerateMock<IIndexVolumes>();
-		//	historicalData = new TaskOwnerPeriod(historicalDate, periodForHelper.TaskOwnerDays, TaskOwnerPeriodType.Other);
-		//	indexVolumes.Stub(x => x.Create(historicalData)).Return(volumes);
-
-		//	_averageTasks = historicalData.TotalStatisticCalculatedTasks / historicalData.TaskOwnerDayCollection.Count;
-
-		//	target = new ForecastMethod(indexVolumes);
-		//	target.Forecast(historicalData, new DateOnlyPeriod());
-		//}
-		
         [SetUp]
         public void Setup()
         {
-			ISkill skill = SkillFactory.CreateSkill("testSkill");
-			skill.TimeZone = _timeZone;
-			workload = WorkloadFactory.CreateWorkload(skill);
-			mocks = new MockRepository();
+			var skill = SkillFactory.CreateSkill("testSkill");
+			skill.TimeZone = TimeZoneInfo.FindSystemTimeZoneById("GMT Standard Time");
+			var workload = WorkloadFactory.CreateWorkload(skill);
 
 			var historicalDate = new DateOnly(2006, 1, 1);
-
 			var periodForHelper = SkillDayFactory.GenerateMockedStatistics(historicalDate, workload);
-
-			var monthOfYear = IndexFactory.CreateMonthOfYear();
-			var weekOfMonth = IndexFactory.CreateWeekOfMonth();
-			var dayOfWeek = IndexFactory.CreateDayOfWeek();
-			
-			volumes = new List<IVolumeYear> { monthOfYear, weekOfMonth, dayOfWeek };
-			var indexVolumes = MockRepository.GenerateMock<IIndexVolumes>();
 			historicalData = new TaskOwnerPeriod(historicalDate, periodForHelper.TaskOwnerDays, TaskOwnerPeriodType.Other);
+
+	        var indexVolumes = MockRepository.GenerateMock<IIndexVolumes>();
+			var volumes = IndexVolumesFactory.Create();
 			indexVolumes.Stub(x => x.Create(historicalData)).Return(volumes);
 
 			_averageTasks = historicalData.TotalStatisticCalculatedTasks / historicalData.TaskOwnerDayCollection.Count;
@@ -108,20 +74,17 @@ namespace Teleopti.Ccc.DomainTest.Forecasting.Angel
 		}
 
 		[Test]
-		public void Should()
+		public void ShouldForecastTasksUsingIndexesCorrectly()
 		{
+			const double indexMonth = 1d;
+			const double indexWeek = 1.1d;
+			const double indexDay = 1.2d;
+
+			const double totalIndex = indexMonth * indexWeek * indexDay;
+			var tasks = totalIndex * _averageTasks;
+
 			var result = target.Forecast(historicalData, new DateOnlyPeriod(new DateOnly(2014, 1, 1), new DateOnly(2014, 1, 1)));
-			result.Should().Not.Be.Null();
+			result.Single().Tasks.Should().Be.EqualTo(Math.Round(tasks, 4));
 		}
-
-		//[Test]
-		//public void VerifyCreateWithoutHistoricDepth()
-		//{
-		//	historicalData = new TaskOwnerPeriod(historicalData.CurrentDate, new List<ITaskOwner>(), historicalData.TypeOfTaskOwnerPeriod);
-		//	target.Forecast(historicalData, new DateOnlyPeriod());
-
-		//	Assert.AreEqual(0, target.WorkloadDayCollection[2].Tasks);
-		//	Assert.AreEqual(target.WorkloadDayCollection.Count, target.TotalDayItemCollection.Count);
-		//}
 	}
 }

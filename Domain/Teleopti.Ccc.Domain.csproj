@@ -470,6 +470,8 @@
     <Compile Include="Forecasting\Angel\IForecastingMeasurer.cs" />
     <Compile Include="Forecasting\Angel\IForecastingTargetMerger.cs" />
     <Compile Include="Forecasting\Angel\IForecastMethod.cs" />
+    <Compile Include="Forecasting\Angel\IIndexVolumes.cs" />
+    <Compile Include="Forecasting\Angel\IndexVolumes.cs" />
     <Compile Include="Forecasting\Angel\IQuickForecaster.cs" />
     <Compile Include="Forecasting\Angel\IQuickForecastForAllSkills.cs" />
     <Compile Include="Forecasting\Angel\LegacyWrappers\DailyStatisticsToTaskOwnerConverterExtension.cs" />

@@ -26,6 +26,8 @@ namespace Teleopti.Ccc.DomainTest.Forecasting.Angel.QuickForecastSkillWithOneWor
 			DefaultScenario = new Scenario("default scenario") {DefaultScenario = true};
 		}
 
+		protected double MeasurementResult { get; set; }
+
 		[Test]
 		public void DoTheTest()
 		{
@@ -43,14 +45,13 @@ namespace Teleopti.Ccc.DomainTest.Forecasting.Angel.QuickForecastSkillWithOneWor
 			currentScenario.Stub(x => x.Current()).Return(DefaultScenario);
 
 			var futureData =new FutureData();
-			var quickForecasterWorkload = new QuickForecasterWorkload(new HistoricalData(dailyStatistics, validatedVolumeDayRepository), futureData, new ForecastMethod(MockRepository.GenerateMock<IIndexVolumes>()), new ForecastingTargetMerger(), new ForecastingMeasurer());
+			var quickForecasterWorkload = new QuickForecasterWorkload(new HistoricalData(dailyStatistics, validatedVolumeDayRepository), futureData, new ForecastMethod(new IndexVolumes()), new ForecastingTargetMerger(), new ForecastingMeasurer());
 			var target = new QuickForecaster(quickForecasterWorkload,
 				new FetchAndFillSkillDays(SkillDayRepository(skillDays), currentScenario,
 					new SkillDayRepository(MockRepository.GenerateStrictMock<ICurrentUnitOfWork>())));
-			var result = target.Execute(Workload.Skill, FuturePeriod, HistoricalPeriod);
+			MeasurementResult = target.Execute(Workload.Skill, FuturePeriod, HistoricalPeriod);
 
 			Assert(skillDays);
-			result.Should().Be.EqualTo(0);
 		}
 
 		protected IScenario DefaultScenario { get; private set; }

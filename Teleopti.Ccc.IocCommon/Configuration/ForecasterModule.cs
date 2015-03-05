@@ -16,6 +16,9 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<ForecastingMeasurer>()
 				.SingleInstance()
 				.As<IForecastingMeasurer>();
+			builder.RegisterType<IndexVolumes>()
+				.SingleInstance()
+				.As<IIndexVolumes>();
 			builder.RegisterType<ForecastMethod>()
 				.SingleInstance()
 				.As<IForecastMethod>();

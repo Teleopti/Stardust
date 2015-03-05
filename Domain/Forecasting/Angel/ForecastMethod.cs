@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Forecasting.Angel
@@ -16,20 +15,15 @@ namespace Teleopti.Ccc.Domain.Forecasting.Angel
 
 		public IList<IForecastingTarget> Forecast(TaskOwnerPeriod historicalData, DateOnlyPeriod futurePeriod)
 		{
-			var indexes = _indexVolumes.Create(historicalData);
-			return create(historicalData, indexes, futurePeriod);
-		}
-
-		private IList<IForecastingTarget> create(ITaskOwnerPeriod historicalDepth, IEnumerable<IVolumeYear> volumes, DateOnlyPeriod futurePeriod)
-		{
+			var volumes = _indexVolumes.Create(historicalData);
 			var averageStatistics = new AverageStatistics();
-			if (historicalDepth.TaskOwnerDayCollection.Count > 0)
-				averageStatistics.AverageTasks = historicalDepth.TotalStatisticCalculatedTasks / historicalDepth.TaskOwnerDayCollection.Count;
+			if (historicalData.TaskOwnerDayCollection.Count > 0)
+				averageStatistics.AverageTasks = historicalData.TotalStatisticCalculatedTasks / historicalData.TaskOwnerDayCollection.Count;
 			else
 				averageStatistics.AverageTasks = 0d;
 
-			averageStatistics.TalkTime = historicalDepth.TotalStatisticAverageTaskTime;
-			averageStatistics.AfterTalkTime = historicalDepth.TotalStatisticAverageAfterTaskTime;
+			averageStatistics.TalkTime = historicalData.TotalStatisticAverageTaskTime;
+			averageStatistics.AfterTalkTime = historicalData.TotalStatisticAverageAfterTaskTime;
 
 			var targetForecastingList = new List<IForecastingTarget>();
 
@@ -67,32 +61,14 @@ namespace Teleopti.Ccc.Domain.Forecasting.Angel
 				: totalDayItem.AfterTalkTimeIndex;
 			if (day.OpenForWork.IsOpenForIncomingWork)
 			{
-				day.AverageTaskTime = new TimeSpan((long) (talkTimeIndex*averageStatistics.TalkTime.Ticks));
-				day.AverageAfterTaskTime = new TimeSpan((long) (afterTalkTimeIndex*averageStatistics.AfterTalkTime.Ticks));
-				day.Tasks = totalTaskIndex*averageStatistics.AverageTasks;
+				day.AverageTaskTime = new TimeSpan((long)(talkTimeIndex * averageStatistics.TalkTime.Ticks));
+				day.AverageAfterTaskTime = new TimeSpan((long)(afterTalkTimeIndex * averageStatistics.AfterTalkTime.Ticks));
+				day.Tasks = totalTaskIndex * averageStatistics.AverageTasks;
 			}
 			totalDayItem.SetComparisonValues(day, totalTaskIndex, talkTimeIndex, afterTalkTimeIndex, 1d);
 			totalDayItem.TaskIndex = currentTotalTaskIndex;
 			totalDayItem.TalkTimeIndex = currentTalkTimeIndex;
 			totalDayItem.AfterTalkTimeIndex = currentAfterTalkTimeIndex;
-		}
-	}
-
-	public interface IIndexVolumes
-	{
-		IEnumerable<IVolumeYear> Create(TaskOwnerPeriod historicalData);
-	}
-
-	public class IndexVolumes : IIndexVolumes
-	{
-		public IEnumerable<IVolumeYear> Create(TaskOwnerPeriod historicalData)
-		{
-			return new IVolumeYear[]
-			{
-				new MonthOfYear(historicalData, new MonthOfYearCreator()),
-				new WeekOfMonth(historicalData, new WeekOfMonthCreator()),
-				new DayOfWeeks(historicalData, new DaysOfWeekCreator())
-			};
 		}
 	}
 }
