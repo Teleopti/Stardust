@@ -212,9 +212,9 @@ you have to manually clean up or call CleanUpAfterTest() to restore the database
 				new ThreadPrincipalContext(new TeleoptiPrincipalFactory()));
 		}
 
-		public static void ClearFakeState()
+		public static void Logout()
 		{
-			StateHolderProxyHelper.ClearFakeState(new ThreadPrincipalContext(new TeleoptiPrincipalFactory()));
+			StateHolderProxyHelper.Logout(new ThreadPrincipalContext(null));
 		}
 
 		private static void SaveFakeState(IPerson person, IUnitOfWork uow)

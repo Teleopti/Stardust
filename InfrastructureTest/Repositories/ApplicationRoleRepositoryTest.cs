@@ -80,10 +80,5 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
             Assert.IsTrue(LazyLoadingManager.IsInitialized(rolesList[0].ApplicationFunctionCollection));
         }
 
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA2204:Literals should be spelled correctly", MessageId = "ApplicationRoleRepository"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Globalization", "CA1303:Do not pass literals as localized parameters", MessageId = "NUnit.Framework.Assert.Ignore(System.String)")]
-        public override void CannotCallDatabaseWhenNotLoggedOn()
-        {
-            Assert.Ignore("ApplicationRoleRepository should be available even if not logged on");
-        }
     }
 }

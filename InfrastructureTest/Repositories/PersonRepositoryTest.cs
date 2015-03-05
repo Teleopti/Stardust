@@ -1900,9 +1900,5 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			return new PersonRepository(unitOfWork);
 		}
 
-		public override void CannotCallDatabaseWhenNotLoggedOn()
-		{
-			Assert.Ignore("PersonRepository should be available even if not logged on");
-		}
 	}
 }

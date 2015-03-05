@@ -30,15 +30,15 @@ namespace Teleopti.Ccc.InfrastructureTest
 			SetupFixtureForAssembly.SetupFakeState(person);
 		}
 
-		public void ClearPrincipalAndState()
+		public void Logout()
 		{
-			SetupFixtureForAssembly.ClearFakeState();
+			SetupFixtureForAssembly.Logout();
 		}
 	}
 
 	public interface IPrincipalAndStateContext
 	{
 		void SetupPrincipalAndState();
-		void ClearPrincipalAndState();
+		void Logout();
 	}
 }

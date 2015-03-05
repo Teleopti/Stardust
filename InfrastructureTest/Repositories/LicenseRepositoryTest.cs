@@ -54,11 +54,6 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
             return new FakeRepositoryThatAllowsOldAddRange(unitOfWork);
         }
 
-        public override void CannotCallDatabaseWhenNotLoggedOn()
-        {
-            Assert.Ignore("LicenseRepository should be available even if not logged on");
-        }
-
         private class FakeRepositoryThatAllowsOldAddRange : LicenseRepository
         {
             public FakeRepositoryThatAllowsOldAddRange(IUnitOfWork unitOfWork) : base(unitOfWork) {}

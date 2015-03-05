@@ -13,11 +13,6 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
     [TestFixture, Category("LongRunning")]
     public class ApplicationFunctionRepositoryTest : RepositoryTest<IApplicationFunction>
     {
-		public override void CannotCallDatabaseWhenNotLoggedOn()
-		{
-			Assert.Ignore("ApplicationFunctionRepository should be available even if not logged on");
-		}
-
         /// <summary>
         /// Runs every test. Implemented by repository's concrete implementation.
         /// </summary>

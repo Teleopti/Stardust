@@ -72,7 +72,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Helper
 
 	    protected void Logout()
 	    {
-			SetupFixtureForAssembly.ClearFakeState();
+			SetupFixtureForAssembly.Logout();
 		}
     }
 }

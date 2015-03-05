@@ -100,8 +100,10 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
         /// Can not create repository when user not logged on.
         /// </summary>
         [Test]
-        public virtual void CannotCallDatabaseWhenNotLoggedOn()
+        public void CannotCallDatabaseWhenNotLoggedOn()
         {
+	        if (!rep.ValidateUserLoggedOn)
+				Assert.Ignore("this repository should be available even if not logged on");
 			Logout();
 	        Assert.Throws<PermissionException>(() => rep.Load(Guid.NewGuid()));
         }

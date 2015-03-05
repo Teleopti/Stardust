@@ -133,9 +133,5 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
             return new UserDetailRepository(unitOfWork);
         }
 
-        public override void CannotCallDatabaseWhenNotLoggedOn()
-        {
-            Assert.Ignore("UserDetailRepository should be available even if not logged on");
-        }
     }
 }

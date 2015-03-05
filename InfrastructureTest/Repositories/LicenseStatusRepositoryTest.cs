@@ -51,12 +51,6 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
             }
         }
 
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Globalization", "CA1303:Do not pass literals as localized parameters", MessageId = "NUnit.Framework.Assert.Ignore(System.String)"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA2204:Literals should be spelled correctly", MessageId = "LicenseRepository")]
-        public override void CannotCallDatabaseWhenNotLoggedOn()
-        {
-            Assert.Ignore("LicenseRepository should be available even if not logged on");
-        }
-
         [Test]
         public void VerifyMultipleLicensesNotAllowed()
         {
