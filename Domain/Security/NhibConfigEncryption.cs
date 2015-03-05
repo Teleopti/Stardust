@@ -4,11 +4,6 @@ using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.Domain.Security
 {
-	public interface INhibConfigEncryption
-	{
-		DataSourceConfig EncryptConfig(DataSourceConfig dataSourceConfig);
-		DataSourceConfig DecryptConfig(DataSourceConfig dataSourceConfig);
-	}
 	public class NhibConfigEncryption : INhibConfigEncryption
 	{
 		public DataSourceConfig EncryptConfig(DataSourceConfig dataSourceConfig)
@@ -19,12 +14,10 @@ namespace Teleopti.Ccc.Domain.Security
 			return dataSourceConfig;
 		}
 
-		//MAKE TO VOID
-		public DataSourceConfig DecryptConfig(DataSourceConfig dataSourceConfig)
+		public void DecryptConfig(DataSourceConfig dataSourceConfig)
 		{
 			dataSourceConfig.ApplicationNHibernateConfig.DecryptDictionary(EncryptionConstants.Image1, EncryptionConstants.Image2);
 			dataSourceConfig.AnalyticsConnectionString = Encryption.DecryptStringFromBase64(dataSourceConfig.AnalyticsConnectionString, EncryptionConstants.Image1, EncryptionConstants.Image2);
-			return dataSourceConfig;
 		}
 	}
 }

@@ -10,11 +10,11 @@ namespace Teleopti.Ccc.DomainTest.Security
 	[TestFixture]
 	public class NhibConfigEncryptionTest
 	{
-		private readonly NhibConfigEncryption _target = new NhibConfigEncryption();
-
 		[Test]
 		public void ShouldEncryptAndDecryptValues()
 		{
+			var target = new NhibConfigEncryption();
+
 			var dic = new Dictionary<string, string>
 			{
 				{"key1", "some secret value"},
@@ -32,13 +32,13 @@ namespace Teleopti.Ccc.DomainTest.Security
 			var encryptedTwo = Encryption.EncryptStringToBase64(dic["key2"], EncryptionConstants.Image1, EncryptionConstants.Image2);
 			var encryptedThree = Encryption.EncryptStringToBase64("a very secret connectionstring", EncryptionConstants.Image1, EncryptionConstants.Image2);
 
-			dataSourceConfig = _target.EncryptConfig(dataSourceConfig);
+			dataSourceConfig = target.EncryptConfig(dataSourceConfig);
 
 			dataSourceConfig.AnalyticsConnectionString.Should().Be.EqualTo(encryptedThree);
 			dataSourceConfig.ApplicationNHibernateConfig["key1"].Should().Be.EqualTo(encryptedOne);
 			dataSourceConfig.ApplicationNHibernateConfig["key2"].Should().Be.EqualTo(encryptedTwo);
 
-			dataSourceConfig = _target.DecryptConfig(dataSourceConfig);
+			target.DecryptConfig(dataSourceConfig);
 
 			dataSourceConfig.AnalyticsConnectionString.Should().Be.EqualTo("a very secret connectionstring");
 			dataSourceConfig.ApplicationNHibernateConfig["key1"].Should().Be.EqualTo("some secret value");

@@ -41,7 +41,7 @@ namespace Teleopti.Ccc.Infrastructure.MultiTenancy
 			};
 			var result = _postHttpRequest.Send<AuthenticationQueryResult>(_pathToTenantServer + "Authenticate/IdentityLogon", userAgent, data);
 
-			result.DataSourceConfiguration = _nhibConfigEncryption.DecryptConfig(result.DataSourceConfiguration);
+			_nhibConfigEncryption.DecryptConfig(result.DataSourceConfiguration);
 			return result;
 		}
 	}

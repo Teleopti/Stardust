@@ -1456,6 +1456,7 @@
     <Compile Include="Security\AuthorizationEntities\ApplicationFunctionsProvider.cs" />
     <Compile Include="Security\AuthorizationEntities\IApplicationFunctionsProvider.cs" />
     <Compile Include="Security\AuthorizationEntities\SystemFunction.cs" />
+    <Compile Include="Security\INhibConfigEncryption.cs" />
     <Compile Include="Security\MultiTenancyAuthentication\IMultiTenancyApplicationLogon.cs" />
     <Compile Include="Security\Authentication\AuthenticationResult.cs" />
     <Compile Include="Security\Authentication\AvailableBusinessUnitsProvider.cs" />
