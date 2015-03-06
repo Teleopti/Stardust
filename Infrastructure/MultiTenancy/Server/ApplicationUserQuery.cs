@@ -5,22 +5,22 @@ namespace Teleopti.Ccc.Infrastructure.MultiTenancy.Server
 	public class ApplicationUserQuery : IApplicationUserQuery
 	{
 		private readonly ICurrentTenantSession _currentTenantSession;
+		private readonly IApplicationUserTenantQuery _applicationUserTenantQuery;
 
-		public ApplicationUserQuery(ICurrentTenantSession currentTenantSession)
+		public ApplicationUserQuery(ICurrentTenantSession currentTenantSession, 
+															IApplicationUserTenantQuery applicationUserTenantQuery)
 		{
 			_currentTenantSession = currentTenantSession;
+			_applicationUserTenantQuery = applicationUserTenantQuery;
 		}
 
 		public PasswordPolicyForUser FindUserData(string userName)
 		{
-			//TODO: tenant reuse ApplicationUserTenantQuery here
-			var session = _currentTenantSession.CurrentSession();
-			var readPersonInfo = session.GetNamedQuery("applicationUserQuery_OldSchema")
-				.SetString("userName", userName)
-				.UniqueResult<PersonInfo>();
+			var readPersonInfo = _applicationUserTenantQuery.Find(userName);
 			if (readPersonInfo == null)
 				return null;
 
+			var session = _currentTenantSession.CurrentSession();
 			var readPasswordPolicy = session.GetNamedQuery("passwordPolicyForUser")
 				.SetGuid("personInfoId", readPersonInfo.Id)
 				.UniqueResult<PasswordPolicyForUser>();
