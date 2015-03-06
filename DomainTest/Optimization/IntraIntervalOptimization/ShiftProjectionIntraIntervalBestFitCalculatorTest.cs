@@ -119,34 +119,6 @@ namespace Teleopti.Ccc.DomainTest.Optimization.IntraIntervalOptimization
 		}
 
 		[Test]
-		public void ShouldSetValueToZeroWhenOverLimit()
-		{
-			var affectedPeriods1 = new List<DateTimePeriod> { _period1 };
-			var affectedPeriods2 = new List<DateTimePeriod> { _period1 };
-			var samples1 = new List<int> { 1 };
-			var samples2 = new List<int> { 1 };
-
-			using (_mock.Record())
-			{
-				Expect.Call(_skillStaffPeriodIntraIntervalPeriodFinder.Find(_period1, _shiftProjectionCache1, _skill)).Return(affectedPeriods1);
-				Expect.Call(_skillActivityCounter.Count(affectedPeriods1, _period1)).Return(samples1);
-				Expect.Call(_shiftProjectionCacheIntraIntervalValueCalculator.Calculate(_samplesBefore, samples1)).Return(0.9d);
-
-				Expect.Call(_skillStaffPeriodIntraIntervalPeriodFinder.Find(_period1, _shiftProjectionCache2, _skill)).Return(affectedPeriods2);
-				Expect.Call(_skillActivityCounter.Count(affectedPeriods2, _period1)).Return(samples2);
-				Expect.Call(_shiftProjectionCacheIntraIntervalValueCalculator.Calculate(_samplesBefore, samples2)).Return(0.1d);
-
-			}
-
-			using (_mock.Playback())
-			{
-				var result = _target.GetShiftProjectionCachesSortedByBestIntraIntervalFit(_sortedListResources, new List<ISkillStaffPeriod> { _skillStaffPeriod1 }, _skill, 0.8);
-				Assert.AreEqual(_shiftProjectionCache1, result.ShiftProjection);
-				Assert.AreEqual(0d, result.Value);
-			}
-		}
-
-		[Test]
 		public void ShouldReturnNullWhenCouldNotFindAnyAffectedPeriods()
 		{
 			var affectedPeriods1 = new List<DateTimePeriod>();

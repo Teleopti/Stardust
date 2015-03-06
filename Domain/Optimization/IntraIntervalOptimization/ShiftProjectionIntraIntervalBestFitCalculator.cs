@@ -42,8 +42,6 @@ namespace Teleopti.Ccc.Domain.Optimization.IntraIntervalOptimization
 					if(affectedPeriods.Count == 0) 
 						continue;
 
-					if (!totalValue.HasValue)
-						totalValue = 0;
 				
 					var samples = _skillActivityCounter.Count(affectedPeriods, skillStaffPeriod.Period);
 
@@ -54,14 +52,10 @@ namespace Teleopti.Ccc.Domain.Optimization.IntraIntervalOptimization
 
 					var value = _shiftProjectionCacheIntraIntervalValueCalculator.Calculate(skillStaffPeriod.IntraIntervalSamples, samples);
 
-					if (value > limit)
-					{
-						continue;	
-					}
+					if (!totalValue.HasValue) totalValue = 0;
 
 					totalValue = totalValue.Value + (limit - value);
 				}
-
 
 				if (!totalValue.HasValue || !(totalValue.Value < bestValue)) continue;
 				bestShiftProjectionCache = shiftProjectionCache;
