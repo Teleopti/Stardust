@@ -322,6 +322,18 @@
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
     </Compile>
+    <Compile Include="MyTime\TeamScheduleForGroupsWithFilterAndPagingFunction.feature.cs">
+      <DependentUpon>TeamScheduleForGroupsWithFilterAndPagingFunction.feature</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="MyTime\TeamScheduleForGroupWithFilterAndPagingFunctionStepDefinition.cs" />
+    <Compile Include="MyTime\TeamScheduleWithFilterAndPagingFunctionStepDefinition.cs" />
+    <Compile Include="MyTime\TeamScheduleWithFilterAndPagingFunction.feature.cs">
+      <DependentUpon>TeamScheduleWithFilterAndPagingFunction.feature</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
     <Compile Include="MyTime\TeamScheduleForGroupsStepDefinition.cs" />
     <Compile Include="MyTime\22851_FindShiftTradePageFromTeamScheduleStepDefinition.cs" />
     <Compile Include="MyTime\WeekScheduleOnMobileStepDefinitions.cs" />
@@ -987,6 +999,14 @@
     <None Include="MyTime\ReportsDetailedAdherence.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>
       <LastGenOutput>ReportsDetailedAdherence.feature.cs</LastGenOutput>
+    </None>
+    <None Include="MyTime\TeamScheduleForGroupsWithFilterAndPagingFunction.feature">
+      <Generator>SpecFlowSingleFileGenerator</Generator>
+      <LastGenOutput>TeamScheduleForGroupsWithFilterAndPagingFunction.feature.cs</LastGenOutput>
+    </None>
+    <None Include="MyTime\TeamScheduleWithFilterAndPagingFunction.feature">
+      <Generator>SpecFlowSingleFileGenerator</Generator>
+      <LastGenOutput>TeamScheduleWithFilterAndPagingFunction.feature.cs</LastGenOutput>
     </None>
     <None Include="MyTime\WeekScheduleOnMobile.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>

@@ -40,7 +40,7 @@ Teleopti.MyTimeWeb.DayScheduleMixin = function() {
 
 	self.requestedDate.extend({ notify: "always" });
 	self.requestedDateInternal.subscribe(function (newValue) {
-		if (changeHandler != null && !changeHandlerSuspended) {		
+		if (changeHandler != null && !changeHandlerSuspended) {
 			changeHandler(self.requestedDateWithFormat());
 		}
 	});
@@ -450,10 +450,22 @@ Teleopti.MyTimeWeb.TeamScheduleFilterMixin = function () {
 		self.filterStartTimeList.push(new Teleopti.MyTimeWeb.Request.FilterStartTimeView(dayOffNames, 0, 24, false, true));
 	};
 
-	self.setTeamPicker = function (teams) {
+	self.setTeamPicker = function (teams,myTeam) {
 		self.showTeamPicker(teams.length > 1);
 		self.showGroupings(teams[0] && teams[0].children != null);
 		self.availableTeams(teams);
+
+		if (self.defaultTeam() == null)
+			self.defaultTeam(myTeam);
+		if (self.selectedTeam() == null)
+			self.selectedTeam(myTeam);
+
+		if (self.defaultTeam() != myTeam) {
+			if (self.selectedTeam() == self.defaultTeam()) {
+				self.selectedTeam(myTeam);
+			}
+			self.defaultTeam(myTeam);
+		}
 	};
 
 	self.isFiltered = function() {
@@ -620,7 +632,7 @@ Teleopti.MyTimeWeb.TeamScheduleDataProviderMixin = function(ajax, endpoints) {
 			type: 'GET',
 			contentType: 'application/json; charset=utf-8',
 			data: {
-				selectedDate: date
+				date: date
 			},
 			success: function (data) {
 				if (success != null) success(data);
@@ -638,7 +650,7 @@ Teleopti.MyTimeWeb.TeamScheduleDataProviderMixin = function(ajax, endpoints) {
 			type: 'GET',
 			contentType: 'application/json; charset=utf-8',
 			data: {
-				selectedDate: date
+				date: date
 			},
 			success: function (data) {
 				if (success != null) success(data.DefaultTeam);

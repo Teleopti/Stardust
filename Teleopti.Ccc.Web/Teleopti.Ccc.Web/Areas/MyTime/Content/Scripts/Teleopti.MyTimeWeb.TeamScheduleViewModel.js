@@ -25,6 +25,7 @@ Teleopti.MyTimeWeb.TeamScheduleViewModel = function () {
 				}
 				if (data.DateTimeFormat)
 					self.setDatePickerFormat(data.DateTimeFormat.toUpperCase());
+					
 			},
 			null
 		);
@@ -64,7 +65,7 @@ Teleopti.MyTimeWeb.TeamScheduleViewModel = function () {
 		self.errorMessage(null);
 		self.loadDefaultTeam(
 			newDate,
-			function (myTeam) {			
+			function (myTeam) {
 				self.loadTeams(
 					newDate,
 					function (allTeams) {
@@ -72,9 +73,7 @@ Teleopti.MyTimeWeb.TeamScheduleViewModel = function () {
 						self.suspendPagingMixinChangeHandler();
 						self.hasError(false);
 						self.errorMessage();
-						self.defaultTeam(myTeam);
-						self.setTeamPicker(allTeams);
-						if (self.selectedTeam() == null) self.selectedTeam(myTeam);
+						self.setTeamPicker(allTeams,myTeam);
 						self.activateFilterMixinChangeHandler();
 						self.activatePagingMixinChangeHandler();
 						loadSchedule();
