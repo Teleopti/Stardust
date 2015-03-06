@@ -22,7 +22,7 @@ namespace Teleopti.Ccc.DomainTest.Forecasting.Angel
 			var futurePeriod = new DateOnlyPeriod();
 			var now = new Now();
 			var nowDate = now.LocalDateOnly();
-			var historicalPeriod = new DateOnlyPeriod(new DateOnly(nowDate.Date.AddYears(-1)), nowDate);
+			var historicalPeriod = new DateOnlyPeriod(new DateOnly(nowDate.Date.AddYears(-2)), nowDate);
 
 			quickForecaster.Stub(x => x.Execute(skill1, futurePeriod, historicalPeriod)).Return(2.3);
 			quickForecaster.Stub(x => x.Execute(skill2, futurePeriod, historicalPeriod)).Return(3.4);

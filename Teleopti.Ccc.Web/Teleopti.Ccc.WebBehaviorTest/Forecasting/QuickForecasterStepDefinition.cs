@@ -64,7 +64,14 @@ namespace Teleopti.Ccc.WebBehaviorTest.Forecasting
 		[Then(@"I should see the accuracy for the forecast method")]
 		public void ThenIShouldSeeTheAccuracyForTheForecastMethod()
 		{
-			ScenarioContext.Current.Pending();
+			Browser.Interactions.AssertAnyContains(".forecast-relative-error","%");
 		}
+
+		[Then(@"I should see a message of no historical data for measurement")]
+		public void ThenIShouldSeeAMessageOfNoHistoricalDataForMeasurement()
+		{
+			Browser.Interactions.AssertAnyContains(".forecast-relative-error", "Not enough historical data for measuring.");
+		}
+
 	}
 }

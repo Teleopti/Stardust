@@ -47,15 +47,11 @@ namespace Teleopti.Ccc.TestCommon.TestData.Analytics
 			            let bridgeTimeZones = _bridgeTimeZone.Rows.FindBridgeTimeZoneRowsByIds(date_id, interval_id, time_zone_id)
 						where bridgeTimeZones.Any()
 						let bridgeTimeZone = bridgeTimeZones.Single()
-			            let local_date_id = (int) bridgeTimeZone["local_date_id"]
-			            let local_interval_id = (int) bridgeTimeZone["local_interval_id"]
 			            select new
 			                   	{
 			                   		date_id,
 			                   		interval_id,
 			                   		queue_id,
-			                   		local_date_id,
-			                   		local_interval_id,
 			                   		datasource_id
 			                   	};
 
@@ -73,8 +69,6 @@ namespace Teleopti.Ccc.TestCommon.TestData.Analytics
 			              			a.date_id,
 			              			a.interval_id,
 			              			a.queue_id,
-			              			a.local_date_id,
-			              			a.local_interval_id,
 			              			offered_calls,
 			              			answered_calls,
 			              			0,

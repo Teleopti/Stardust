@@ -8,11 +8,13 @@ namespace Teleopti.Ccc.TestCommon.TestData.Setups.Configurable
 	public class QueueSourceConfigurable : IDataSetup
 	{
 		public string Name { get; set; }
+		public int QueueId { get; set; }
 
 		public void Apply(IUnitOfWork uow)
 		{
-			var qs = new QueueSource {Name = Name};
+			var qs = new QueueSource { Name = Name, QueueMartId = QueueId };
 			new QueueSourceRepository(uow).Add(qs);
 		}
+
 	}
 }

@@ -12,8 +12,6 @@ namespace Teleopti.Ccc.TestCommon.TestData.Analytics.Tables
 			table.Columns.Add("date_id", typeof(int));
 			table.Columns.Add("interval_id", typeof(int));
 			table.Columns.Add("queue_id", typeof(int));
-			table.Columns.Add("local_date_id", typeof(int));
-			table.Columns.Add("local_interval_id", typeof(int));
 			table.Columns.Add("offered_calls", typeof(decimal));
 			table.Columns.Add("answered_calls", typeof(decimal));
 			table.Columns.Add("answered_calls_within_SL", typeof(decimal));
@@ -31,8 +29,6 @@ namespace Teleopti.Ccc.TestCommon.TestData.Analytics.Tables
 			table.Columns.Add("longest_delay_in_queue_abandoned_s", typeof(decimal));
 			table.Columns.Add("datasource_id", typeof(int));
 			table.Columns.Add("insert_date", typeof(DateTime));
-			table.Columns.Add("update_date", typeof(DateTime));
-			table.Columns.Add("datasource_update_date", typeof(DateTime));
 			return table;
 		}
 
@@ -41,8 +37,6 @@ namespace Teleopti.Ccc.TestCommon.TestData.Analytics.Tables
 			int date_id,
 			int interval_id,
 			int queue_id,
-			int local_date_id,
-			int local_interval_id,
 			decimal offered_calls,
 			decimal answered_calls,
 			decimal answered_calls_within_SL,
@@ -65,8 +59,6 @@ namespace Teleopti.Ccc.TestCommon.TestData.Analytics.Tables
 			row["date_id"] = date_id;
 			row["interval_id"] = interval_id;
 			row["queue_id"] = queue_id;
-			row["local_date_id"] = local_date_id;
-			row["local_interval_id"] = local_interval_id;
 			row["offered_calls"] = offered_calls;
 			row["answered_calls"] = answered_calls;
 			row["answered_calls_within_SL"] = answered_calls_within_SL;
@@ -84,8 +76,6 @@ namespace Teleopti.Ccc.TestCommon.TestData.Analytics.Tables
 			row["longest_delay_in_queue_abandoned_s"] = longest_delay_in_queue_abandoned_s;
 			row["datasource_id"] = datasource_id;
 			row["insert_date"] = DateTime.Now;
-			row["update_date"] = DateTime.Now;
-			row["datasource_update_date"] = DateTime.Now;
 			dataTable.Rows.Add(row);
 		}
 	}
