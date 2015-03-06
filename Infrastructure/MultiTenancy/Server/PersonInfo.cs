@@ -5,23 +5,28 @@ namespace Teleopti.Ccc.Infrastructure.MultiTenancy.Server
 {
 	public class PersonInfo
 	{
-#pragma warning disable 169
-		private DateOnly? terminalDate;
 		private string applicationLogonName;
 		private string identity;
+		private readonly Tenant tenant;
+
+#pragma warning disable 169
+		private DateOnly? terminalDate;
 #pragma warning restore 169
-#pragma warning disable 649
-		private Tenant tenant;
-#pragma warning restore 649
 
 		public PersonInfo()
 		{
 			tenant=new Tenant(string.Empty);
 		}
 
+		//TODO: tenant - remove
 		public PersonInfo(string tenantName)
 		{
 			tenant=new Tenant(tenantName);
+		}
+
+		public PersonInfo(Tenant tenant)
+		{
+			this.tenant = tenant;
 		}
 
 		public virtual Guid Id { get; set; }
@@ -30,6 +35,16 @@ namespace Teleopti.Ccc.Infrastructure.MultiTenancy.Server
 		public virtual string Tenant
 		{
 			get { return tenant.Name; }
+		}
+
+		public virtual void SetApplicationLogonName(string logonName)
+		{
+			applicationLogonName = logonName;
+		}
+
+		public virtual void SetIdentity(string identityName)
+		{
+			identity = identityName;
 		}
 	}
 }

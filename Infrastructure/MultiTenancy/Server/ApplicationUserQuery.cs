@@ -13,8 +13,9 @@ namespace Teleopti.Ccc.Infrastructure.MultiTenancy.Server
 
 		public PasswordPolicyForUser FindUserData(string userName)
 		{
+			//TODO: tenant reuse ApplicationUserTenantQuery here
 			var session = _currentTenantSession.CurrentSession();
-			var readPersonInfo = session.GetNamedQuery("applicationUserQuery")
+			var readPersonInfo = session.GetNamedQuery("applicationUserQuery_OldSchema")
 				.SetString("userName", userName)
 				.UniqueResult<PersonInfo>();
 			if (readPersonInfo == null)

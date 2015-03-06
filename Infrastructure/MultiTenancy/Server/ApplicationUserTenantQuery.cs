@@ -14,7 +14,7 @@ namespace Teleopti.Ccc.Infrastructure.MultiTenancy.Server
 		public PersonInfo Find(string username)
 		{
 			var session = _currentTenantSession.CurrentSession();
-			return session.GetNamedQuery("applicationUserQuery")
+			return session.GetNamedQuery("applicationUserQuery_OldSchema")
 				.SetString("userName", username)
 				.UniqueResult<PersonInfo>();
 		}

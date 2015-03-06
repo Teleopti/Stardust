@@ -188,6 +188,7 @@
     <Compile Include="MultiTenancy\Server\ApplicationUserQueryTest.cs" />
     <Compile Include="MultiTenancy\Server\PersistLogonAttemptTest.cs" />
     <Compile Include="MultiTenancy\Server\NHibernate\TenantUnitOfWorkManagerTest.cs" />
+    <Compile Include="MultiTenancy\Server\PersistPersonInfoTest.cs" />
     <Compile Include="PrincipalAndStateTestAttribute.cs" />
     <Compile Include="Rta\Persisters\AdherenceDetailsReadModelPersisterTest.cs" />
     <Compile Include="Aop\AspectsTest.cs" />
