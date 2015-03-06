@@ -44,8 +44,7 @@ namespace Teleopti.Ccc.Sdk.WcfService.Factory
 		public AuthenticationResultDto LogOnWindows(DataSourceDto dataSource)
 		{
 			var model = new LogonModel();
-			var result = _multiTenancyWindowsLogon.Logon(model, StateHolderReader.Instance.StateReader.ApplicationScopeData,
-				UserAgent);
+			var result = _multiTenancyWindowsLogon.Logon(model, UserAgent);
 
 			var resultDto = _authenticationResultAssembler.DomainEntityToDto(result);
 

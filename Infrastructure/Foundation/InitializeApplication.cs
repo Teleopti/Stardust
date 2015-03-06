@@ -10,7 +10,6 @@ using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
 using Teleopti.Interfaces.MessageBroker.Client.Composite;
 using Teleopti.Messaging.Exceptions;
-using System.Xml.XPath;
 
 namespace Teleopti.Ccc.Infrastructure.Foundation
 {
