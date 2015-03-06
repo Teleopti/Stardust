@@ -245,7 +245,7 @@ namespace Teleopti.Ccc.WinCode.Main
 
 		private bool winLogin()
 		{
-			var authenticationResult = _multiTenancyWindowsLogon.Logon(_model, StateHolderReader.Instance.StateReader.ApplicationScopeData, UserAgent);
+			var authenticationResult = _multiTenancyWindowsLogon.Logon(_model, UserAgent);
 
 			if (authenticationResult.HasMessage)
 				_model.Warning = authenticationResult.Message;

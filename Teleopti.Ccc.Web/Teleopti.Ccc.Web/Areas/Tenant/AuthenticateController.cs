@@ -29,6 +29,8 @@ namespace Teleopti.Ccc.Web.Areas.Tenant
 			var res = _applicationAuthentication.Logon(userName, password);
 			var authResult = hackForNow_whenRemovingOldCodeWeDontNeedAuthenticateResultHere_ButWeCanChangeTheInterfaceToAcceptPrimitives(res);
 			_logLogonAttempt.SaveAuthenticateResult(userName, authResult);
+			//just hack to reurn it
+			res.PasswordPolicy = "<!--Default config data-->\r\n<PasswordPolicy MaxNumberOfAttempts=\"3\" InvalidAttemptWindow=\"0\" PasswordValidForDayCount=\"2147483647\" PasswordExpireWarningDayCount=\"0\" />";
 			return Json(res);
 		}
 
@@ -39,6 +41,8 @@ namespace Teleopti.Ccc.Web.Areas.Tenant
 			var res = _identityAuthentication.Logon(identity);
 			var authResult = hackForNow_whenRemovingOldCodeWeDontNeedAuthenticateResultHere_ButWeCanChangeTheInterfaceToAcceptPrimitives(res);
 			_logLogonAttempt.SaveAuthenticateResult(identity, authResult);
+			//just hack to reurn it
+			res.PasswordPolicy = "<!--Default config data-->\r\n<PasswordPolicy MaxNumberOfAttempts=\"3\" InvalidAttemptWindow=\"0\" PasswordValidForDayCount=\"2147483647\" PasswordExpireWarningDayCount=\"0\" />";
 			return Json(res);
 		}
 

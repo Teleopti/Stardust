@@ -30,9 +30,6 @@ namespace Teleopti.Ccc.Infrastructure.MultiTenancy.Client
 			var result = _postHttpRequest.Send<AuthenticationQueryResult>(_pathToTenantServer + "Authenticate/ApplicationLogon", userAgent, data);
 
 			_nhibConfigEncryption.DecryptConfig(result.DataSourceConfiguration);
-			//hardcode for now
-			result.PasswordPolicy =
-				"<!--Default config data-->\r\n<PasswordPolicy MaxNumberOfAttempts=\"3\" InvalidAttemptWindow=\"0\" PasswordValidForDayCount=\"2147483647\" PasswordExpireWarningDayCount=\"0\" />";
 			
 			return result;
 		}
@@ -46,9 +43,6 @@ namespace Teleopti.Ccc.Infrastructure.MultiTenancy.Client
 			var result = _postHttpRequest.Send<AuthenticationQueryResult>(_pathToTenantServer + "Authenticate/IdentityLogon", userAgent, data);
 
 			_nhibConfigEncryption.DecryptConfig(result.DataSourceConfiguration);
-			//hardcode for now
-			result.PasswordPolicy =
-				"<!--Default config data-->\r\n<PasswordPolicy MaxNumberOfAttempts=\"3\" InvalidAttemptWindow=\"0\" PasswordValidForDayCount=\"2147483647\" PasswordExpireWarningDayCount=\"0\" />";
 			
 			return result;
 		}

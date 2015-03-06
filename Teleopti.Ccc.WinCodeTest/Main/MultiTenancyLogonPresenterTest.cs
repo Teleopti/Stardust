@@ -6,7 +6,6 @@ using SharpTestsEx;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Infrastructure;
 using Teleopti.Ccc.Domain.Security.Authentication;
-using Teleopti.Ccc.Domain.Security.MultiTenancyAuthentication;
 using Teleopti.Ccc.Infrastructure.MultiTenancy;
 using Teleopti.Ccc.UserTexts;
 using Teleopti.Ccc.WinCode.Main;
@@ -28,7 +27,6 @@ namespace Teleopti.Ccc.WinCodeTest.Main
 		private IServerEndpointSelector _endPointSelector;
 		private IMultiTenancyApplicationLogon _appLogon;
 		private IMultiTenancyWindowsLogon _winLogon;
-		private IApplicationData _appData;
 		private IMessageBrokerComposite _mBroker;
 
 		[SetUp]
@@ -41,7 +39,6 @@ namespace Teleopti.Ccc.WinCodeTest.Main
 			_endPointSelector = MockRepository.GenerateMock<IServerEndpointSelector>();
 			_appLogon = MockRepository.GenerateMock<IMultiTenancyApplicationLogon>();
 			_winLogon = MockRepository.GenerateMock<IMultiTenancyWindowsLogon>();
-			_appData = MockRepository.GenerateMock<IApplicationData>();
 			_mBroker = MockRepository.GenerateMock<IMessageBrokerComposite>();
 			_target = new MultiTenancyLogonPresenter(_view, _model, _initializer,  _logOnOff,
 				_endPointSelector, _mBroker, _appLogon, _winLogon);
@@ -222,7 +219,7 @@ namespace Teleopti.Ccc.WinCodeTest.Main
 			var bu2 = new BusinessUnit("Bu two");
 			_model.SelectedDataSourceContainer = dataSourceContainer;
 
-			_winLogon.Stub(x => x.Logon(_model, _appData, MultiTenancyLogonPresenter.UserAgent)).Return(new AuthenticationResult { Successful = true }).IgnoreArguments();
+			_winLogon.Stub(x => x.Logon(_model, MultiTenancyLogonPresenter.UserAgent)).Return(new AuthenticationResult { Successful = true }).IgnoreArguments();
 			dataSourceContainer.Stub(x => x.AvailableBusinessUnitProvider).Return(buProvider);
 			buProvider.Stub(x => x.AvailableBusinessUnits()).Return(new List<IBusinessUnit> { bu, bu2 });
 			_view.Stub(x => x.ShowStep(true));
@@ -235,7 +232,7 @@ namespace Teleopti.Ccc.WinCodeTest.Main
 		public void ShouldGoToAppLoginIfWindowsFails()
 		{
 			_model.AuthenticationType = AuthenticationTypeOption.Windows;
-			_winLogon.Stub(x => x.Logon(_model, _appData, MultiTenancyLogonPresenter.UserAgent)).Return(new AuthenticationResult { Successful = false, HasMessage = true,Message = "ajajaj"}).IgnoreArguments();
+			_winLogon.Stub(x => x.Logon(_model, MultiTenancyLogonPresenter.UserAgent)).Return(new AuthenticationResult { Successful = false, HasMessage = true,Message = "ajajaj"}).IgnoreArguments();
 			_view.Stub(x => x.ShowStep(true));
 
 			_target.CurrentStep = LoginStep.SelectLogonType;
@@ -249,7 +246,7 @@ namespace Teleopti.Ccc.WinCodeTest.Main
 		public void ShouldGoToDatasourceStepIfWebException()
 		{
 			_model.AuthenticationType = AuthenticationTypeOption.Windows;
-			_winLogon.Stub(x => x.Logon(_model, _appData, MultiTenancyLogonPresenter.UserAgent)).Throw(new WebException("shit")).IgnoreArguments();
+			_winLogon.Stub(x => x.Logon(_model, MultiTenancyLogonPresenter.UserAgent)).Throw(new WebException("shit")).IgnoreArguments();
 			_view.Stub(x => x.ShowStep(false));
 
 			_target.CurrentStep = LoginStep.SelectLogonType;
