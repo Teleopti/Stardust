@@ -17,6 +17,7 @@ using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Infrastructure.Config;
 using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
+using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.MessageBroker.Client.Composite;
 
 namespace Teleopti.Ccc.WinCode.Main
@@ -24,48 +25,10 @@ namespace Teleopti.Ccc.WinCode.Main
 	public static class LogonInitializeStateHolder
 	{
 		public static string ErrorMessage = string.Empty;
-		private static readonly ILog Logger = LogManager.GetLogger(typeof(LogonInitializeStateHolder));
-
-		public static bool GetConfigFromFileSystem(string nhibConfPath, bool messageBrokerDisabled, IMessageBrokerComposite messageBroker)
+		
+		public static bool InitApplicationData(ILogonModel model, IMessageBrokerComposite messageBroker,
+			IDataSource dataSource, string passwordPolicyString)
 		{
-			new InitializeApplication(
-				new DataSourcesFactory(new EnversConfiguration(), new List<IMessageSender>(),
-										DataSourceConfigurationSetter.ForDesktop(), new CurrentHttpContext(), () => messageBroker),
-				messageBroker
-				)
-				{
-					MessageBrokerDisabled = messageBrokerDisabled
-				}.Start(new StateManager(), nhibConfPath, new LoadPasswordPolicyService(nhibConfPath),
-						  new ConfigurationManagerWrapper(), true);
-			return true;
-		}
-
-		public static bool InitWithoutDataSource(ILogonModel model, IMessageBrokerComposite messageBroker)
-		{
-			string passwordPolicyString;
-			using (var proxy = Proxy.GetProxy(model.SelectedSdk))
-			{
-				using (PerformanceOutput.ForOperation("Getting config from web service"))
-				{
-					try
-					{
-						passwordPolicyString = proxy.GetPasswordPolicy();
-					}
-					catch (TimeoutException timeoutException)
-					{
-						Logger.Error("Configuration could not be retrieved from due to a timeout.", timeoutException);
-						ErrorMessage = timeoutException.Message;
-						return false;
-					}
-					catch (CommunicationException exception)
-					{
-						Logger.Error("Configuration could not be retrieved from server.", exception);
-						ErrorMessage = exception.Message;
-						return false;
-					}
-				}
-			}
-
 			var passwordPolicyDocument = XDocument.Parse(passwordPolicyString);
 			var passwordPolicyService = new LoadPasswordPolicyService(passwordPolicyDocument);
 
@@ -76,7 +39,7 @@ namespace Teleopti.Ccc.WinCode.Main
 			bool messageBrokerDisabled = false;
 			string messageBrokerDisabledString;
 			if (!appSettings.TryGetValue("MessageBroker", out messageBrokerDisabledString) ||
-				 string.IsNullOrEmpty(messageBrokerDisabledString))
+			    string.IsNullOrEmpty(messageBrokerDisabledString))
 			{
 				messageBrokerDisabled = true;
 			}
@@ -105,7 +68,7 @@ namespace Teleopti.Ccc.WinCode.Main
 					MessageBrokerDisabled = messageBrokerDisabled
 				};
 
-			initializer.Start(new StateManager(), appSettings, Enumerable.Empty<string>(), passwordPolicyService);
+			initializer.Start(new StateManager(), appSettings, dataSource, passwordPolicyService);
 
 
 			return true;

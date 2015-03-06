@@ -85,7 +85,7 @@ namespace Teleopti.Ccc.Infrastructure.Foundation
 			applicationNhibConfiguration[NHibernate.Cfg.Environment.SessionFactoryName] = dataSourceName;
 
 			var newDataSource =  _dataSourcesFactory.Create(applicationNhibConfiguration, analyticsConnectionString);
-			_registeredDataSourceCollection.Add(newDataSource);
+			//_registeredDataSourceCollection.Add(newDataSource);
 			return newDataSource;
 		}
 

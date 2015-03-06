@@ -5,9 +5,11 @@ using System.Globalization;
 using System.Linq;
 using System.Net;
 using System.Windows.Forms;
+using Syncfusion.Windows.Forms.Tools;
 using Teleopti.Ccc.Domain.Infrastructure;
 using Teleopti.Ccc.Domain.Security.Authentication;
 using Teleopti.Ccc.Domain.Security.MultiTenancyAuthentication;
+using Teleopti.Ccc.Infrastructure.MultiTenancy;
 using Teleopti.Ccc.UserTexts;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.MessageBroker.Client.Composite;
@@ -166,8 +168,6 @@ namespace Teleopti.Ccc.WinCode.Main
 
 		private void getLogonType()
 		{
-			if (!_view.InitStateHolderWithoutDataSource(_messageBroker))
-				CurrentStep--; //?
 			_view.ShowStep(false); //once a sdk is loaded it is not changeable
 		}
 
@@ -192,6 +192,7 @@ namespace Teleopti.Ccc.WinCode.Main
 						return;
 					}
 				}
+				
 			}
 			catch (WebException exception)
 			{
@@ -224,7 +225,7 @@ namespace Teleopti.Ccc.WinCode.Main
 
 		private bool login()
 		{
-			var authenticationResult = _applicationLogon.Logon(_model, StateHolderReader.Instance.StateReader.ApplicationScopeData, UserAgent);
+			var authenticationResult = _applicationLogon.Logon(_model, UserAgent);
 			var choosenDataSource = _model.SelectedDataSourceContainer;
 
 			if (authenticationResult.HasMessage)
@@ -234,6 +235,8 @@ namespace Teleopti.Ccc.WinCode.Main
 			{
 				//To use for silent background log on
 				choosenDataSource.User.ApplicationAuthenticationInfo.Password = _model.Password;
+				if (!_view.InitStateHolder(_messageBroker, authenticationResult.PasswordPolicy))
+					return false;
 				return true;
 			}
 
@@ -250,6 +253,8 @@ namespace Teleopti.Ccc.WinCode.Main
 
 			if (authenticationResult.Successful)
 			{
+				if (!_view.InitStateHolder(_messageBroker, authenticationResult.PasswordPolicy))
+					return false;
 				return true;
 			}
 			// windows does not work we need to use application

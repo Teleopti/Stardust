@@ -31,29 +31,13 @@ namespace Teleopti.Ccc.Infrastructure.Foundation
 
 		// from LogonInitializeStateHolder
 		public void Start(IState clientCache, IDictionary<string, string> appSettings,
-						  IEnumerable<string> hibernateConfigurations,
+						  IDataSource dataSource,
 						  ILoadPasswordPolicyService loadPasswordPolicyService)
 	    {
 	    	StateHolder.Initialize(clientCache);
 
-	    	IList<IDataSource> dataSources = new List<IDataSource>();
-	    	foreach (string nhibConfig in hibernateConfigurations)
-	    	{
-	    		var element = XElement.Parse(nhibConfig);
-	    		IDataSource dataSource;
-	    		var success = DataSourcesFactory.TryCreate(element, out dataSource);
-	    		if (success)
-	    		{
-	    			var children = element.CreateNavigator().Select("authenticationType");
-	    			foreach (XPathItem child in children)
-	    			{
-	    				dataSource.AuthenticationTypeOption |=
-	    					(AuthenticationTypeOption) Enum.Parse(typeof (AuthenticationTypeOption), child.Value);
-	    			}
-	    			dataSources.Add(dataSource);
-	    		}
-	    	}
-
+	    	IList<IDataSource> dataSources = new List<IDataSource>{dataSource};
+	    	
 	    	StartMessageBroker(appSettings);
 	    	StateHolder.Instance.State.SetApplicationData(
 	    		new ApplicationData(appSettings, new List<IDataSource>(dataSources), MessageBroker,

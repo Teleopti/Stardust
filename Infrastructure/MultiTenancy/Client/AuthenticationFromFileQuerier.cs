@@ -29,7 +29,10 @@ namespace Teleopti.Ccc.Infrastructure.MultiTenancy.Client
 				return new AuthenticationQueryResult { FailReason = string.Format("No file with name {0}", _fullPathToFile), Success = false };
 
 			var json = File.ReadAllText(_fullPathToFile);
-			return JsonConvert.DeserializeObject<AuthenticationQueryResult>(json);
+			var ret = JsonConvert.DeserializeObject<AuthenticationQueryResult>(json);
+			ret.PasswordPolicy =
+				"<!--Default config data-->\r\n<PasswordPolicy MaxNumberOfAttempts=\"3\" InvalidAttemptWindow=\"0\" PasswordValidForDayCount=\"2147483647\" PasswordExpireWarningDayCount=\"0\" />";
+			return ret;
 		}
 	}
 }
