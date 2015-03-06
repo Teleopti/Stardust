@@ -15,7 +15,7 @@ Teleopti.MyTimeWeb.Request.ShiftTradeBulletinBoardViewModel = function(ajax) {
 	self.missingWorkflowControlSet = ko.observable(true);
 	self.openPeriodStartDate = ko.observable(moment().startOf('year').add('days', -1));
 	self.openPeriodEndDate = ko.observable(moment().startOf('year').add('days', -1));
-	self.requestedDateInternal = ko.observable(moment().startOf('day'));
+	self.requestedDateInternal = ko.observable(moment().startOf('day').add('days', -1));
 	self.IsLoading = ko.observable(false);
 	self.isReadyLoaded = ko.observable(false);
 	self.weekStart = ko.observable(1);
@@ -516,9 +516,9 @@ Teleopti.MyTimeWeb.Request.ShiftTradeBulletinBoardViewModel = function(ajax) {
 			ajax.Ajax({
 				url: "RequestsShiftTradeBulletinBoard/BulletinSchedulesWithTimeFilter",
 				dataType: "json",
-				type: 'GET',
+				type: 'POST',
 				contentType: 'application/json; charset=utf-8',
-				data: {
+				data: JSON.stringify({
 					selectedDate: date,
 					teamIds: teamIds.join(","),
 					filteredStartTimes: self.filteredStartTimesText().join(","),
@@ -527,7 +527,7 @@ Teleopti.MyTimeWeb.Request.ShiftTradeBulletinBoardViewModel = function(ajax) {
 					isEmptyDay: self.isEmptyDayFiltered(),
 					Take: take,
 					Skip: skip
-				},
+				}),
 				beforeSend: function () {
 					self.IsLoading(true);
 				},
@@ -563,14 +563,14 @@ Teleopti.MyTimeWeb.Request.ShiftTradeBulletinBoardViewModel = function(ajax) {
 			ajax.Ajax({
 				url: "RequestsShiftTradeBulletinBoard/BulletinSchedules",
 				dataType: "json",
-				type: 'GET',
+				type: 'POST',
 				contentType: 'application/json; charset=utf-8',
-				data: {
+				data: JSON.stringify({
 					selectedDate: date,
 					teamIds: teamIds.join(","),
 					Take: take,
 					Skip: skip
-				},
+				}),
 				beforeSend: function () {
 					self.IsLoading(true);
 				},

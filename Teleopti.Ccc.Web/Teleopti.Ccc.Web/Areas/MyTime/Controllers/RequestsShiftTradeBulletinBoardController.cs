@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Web.Mvc;
 using Teleopti.Ccc.Domain.Repositories;
+using Teleopti.Ccc.Web.Areas.MyTime.Core;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.ViewModelFactory;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.Requests;
@@ -25,7 +26,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 		}
 
 		[UnitOfWorkAction]
-		[HttpGet]
+		[HttpPostOrPut]
 		public JsonResult BulletinSchedules(DateOnly selectedDate, string teamIds, Paging paging)
 		{
 			var allTeamIds = teamIds.Split(',').Select(teamId => new Guid(teamId)).ToList();
@@ -35,12 +36,11 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 				TeamIdList = allTeamIds,
 				Paging = paging
 			};
-			return Json(_requestsShiftTradebulletinViewModelFactory.CreateShiftTradeBulletinViewModel(data),
-				JsonRequestBehavior.AllowGet);
+			return Json(_requestsShiftTradebulletinViewModelFactory.CreateShiftTradeBulletinViewModel(data));
 		}
 
 		[UnitOfWorkAction]
-		[HttpGet]
+		[HttpPostOrPut]
 		public JsonResult BulletinSchedulesWithTimeFilter(DateOnly selectedDate, ScheduleFilter filter, Paging paging)
 		{
 			var allTeamIds = filter.TeamIds.Split(',').Select(teamId => new Guid(teamId)).ToList();
@@ -51,8 +51,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 				Paging = paging,
 				TimeFilter = _timeFilterHelper.GetFilter(selectedDate, filter.FilteredStartTimes, filter.FilteredEndTimes, filter.IsDayOff, filter.IsEmptyDay),
 			};
-			return Json(_requestsShiftTradebulletinViewModelFactory.CreateShiftTradeBulletinViewModel(data),
-				JsonRequestBehavior.AllowGet);
+			return Json(_requestsShiftTradebulletinViewModelFactory.CreateShiftTradeBulletinViewModel(data));
 		}
 	}
 }

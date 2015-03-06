@@ -25,7 +25,7 @@ Teleopti.MyTimeWeb.Request.ShiftTradeViewModel = function(ajax) {
 	self.IsLoading = ko.observable(false);
 	self.errorMessage = ko.observable();
 	self.isReadyLoaded = ko.observable(false);
-	self.requestedDateInternal = ko.observable(moment().startOf('day'));
+	self.requestedDateInternal = ko.observable(moment().startOf('day').add('days', -1));
 	self.myTeamFilter = ko.observable(false);
 	self.timeLineStartTime = ko.observable();
 	self.timeLineLengthInMinutes = ko.observable();
@@ -434,9 +434,9 @@ Teleopti.MyTimeWeb.Request.ShiftTradeViewModel = function(ajax) {
 		ajax.Ajax({
 			url: "Requests/ShiftTradeRequestSchedule",
 			dataType: "json",
-			type: 'GET',
+			type: 'POST',
 			contentType: 'application/json; charset=utf-8',
-			data: {
+			data: JSON.stringify({
 				selectedDate: date,
 				teamIds: teamIds.join(","),
 				SearchNameText: self.searchNameText(),
@@ -446,7 +446,7 @@ Teleopti.MyTimeWeb.Request.ShiftTradeViewModel = function(ajax) {
 				Take: take,
 				Skip: skip,
 				TimeSortOrder: self.TimeSortOrder()
-			},
+			}),
 			beforeSend: function() {
 				self.IsLoading(true);		
 			},
