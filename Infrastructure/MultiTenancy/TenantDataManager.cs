@@ -27,7 +27,11 @@ namespace Teleopti.Ccc.Infrastructure.MultiTenancy
 		public async Task<bool> SaveTenantData(IList<TenantAuthenticationData> tenantAuthenticationData)
 		{
 			var client = new HttpClient();
-			string json = JsonConvert.SerializeObject(tenantAuthenticationData);
+			//TODO: tenant - just a ugly hack for now
+			// * Make a "mapper" that builds the inparamater and make sure that mapper creates correct (=same as server side) structure
+			// * Would be good if we use same way doint the call here and in authenticationquerier. reuse same interface first and then switch to "HttpClient" in its impl
+			string json = "{'PersonInfos':" + JsonConvert.SerializeObject(tenantAuthenticationData) + "}";
+			//
 			var response = await client.PostAsync(_pathToTenantServer + "PersonInfo/Persist", new StringContent(json, Encoding.UTF8, "application/json"));
 			if (!response.IsSuccessStatusCode)
 				return false;
