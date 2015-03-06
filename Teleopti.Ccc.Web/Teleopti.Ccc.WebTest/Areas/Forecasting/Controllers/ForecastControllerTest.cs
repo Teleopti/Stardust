@@ -21,7 +21,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Forecasting.Controllers
 			var now = new Now();
 			var expectedFuturePeriod = new DateOnlyPeriod(new DateOnly(now.UtcDateTime()),
 				new DateOnly(now.UtcDateTime().AddYears(1)));
-			var expectedHistoricPeriod = new DateOnlyPeriod(new DateOnly(now.LocalDateOnly().Date.AddYears(-1)), now.LocalDateOnly());
+			var expectedHistoricPeriod = new DateOnlyPeriod(new DateOnly(now.LocalDateOnly().Date.AddYears(-2)), now.LocalDateOnly());
 			var skillRepository = MockRepository.GenerateStub<ISkillRepository>();
 			var skill = SkillFactory.CreateSkill("_");
 			var workload = new Workload(skill);
