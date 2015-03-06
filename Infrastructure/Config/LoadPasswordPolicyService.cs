@@ -147,7 +147,9 @@ namespace Teleopti.Ccc.Infrastructure.Config
 		    _file = null;
 	    }
 
-		private static XDocument defaultXDocument()
+	    public string DocumentAsString { get { return File.ToString(); } }
+
+	    private static XDocument defaultXDocument()
 		{
 			return new XDocument(
 			 new XDeclaration("1.0", "utf-8", "yes"),

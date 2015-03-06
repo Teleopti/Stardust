@@ -6,7 +6,7 @@ using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.UserTexts;
 using Teleopti.Interfaces.Domain;
 
-namespace Teleopti.Ccc.Infrastructure.MultiTenancy
+namespace Teleopti.Ccc.Infrastructure.MultiTenancy.Client
 {
 	public interface IMultiTenancyWindowsLogon
 	{

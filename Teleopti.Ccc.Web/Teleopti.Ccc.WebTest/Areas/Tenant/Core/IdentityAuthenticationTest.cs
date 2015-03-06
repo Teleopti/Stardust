@@ -6,6 +6,7 @@ using Teleopti.Ccc.Infrastructure.MultiTenancy;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Server;
 using Teleopti.Ccc.UserTexts;
 using Teleopti.Ccc.Web.Areas.Tenant.Core;
+using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.WebTest.Areas.Tenant.Core
 {
@@ -15,8 +16,9 @@ namespace Teleopti.Ccc.WebTest.Areas.Tenant.Core
 		public void NonExistingUserShouldFail()
 		{
 			var identityUserQuery = MockRepository.GenerateMock<IIdentityUserQuery>();
+			
 			identityUserQuery.Stub(x => x.FindUserData("nonExisting")).Return(null);
-			var target = new IdentityAuthentication(identityUserQuery, MockRepository.GenerateMock<IDataSourceConfigurationProvider>());
+			var target = new IdentityAuthentication(identityUserQuery, MockRepository.GenerateMock<IDataSourceConfigurationProvider>(), null);
 			var res = target.Logon("nonExisting");
 			
 			res.Success.Should().Be.False();
@@ -33,16 +35,18 @@ namespace Teleopti.Ccc.WebTest.Areas.Tenant.Core
 			var queryResult = new PersonInfo {Id = Guid.NewGuid()};
 			var findIdentityQuery = MockRepository.GenerateMock<IIdentityUserQuery>();
 			var nhibHandler = MockRepository.GenerateMock<IDataSourceConfigurationProvider>();
+			var pwPolicyLoader = MockRepository.GenerateMock<ILoadPasswordPolicyService>();
 			nhibHandler.Stub(x => x.ForTenant(queryResult.Tenant)).Return(datasourceConfiguration); 
 			findIdentityQuery.Expect(x => x.FindUserData(identity)).Return(queryResult);
-
-			var target = new IdentityAuthentication(findIdentityQuery,nhibHandler);
+			pwPolicyLoader.Expect(x => x.DocumentAsString).Return("somepolicy");
+			var target = new IdentityAuthentication(findIdentityQuery, nhibHandler, pwPolicyLoader);
 			var res = target.Logon(identity);
 
 			res.Success.Should().Be.True();
 			res.Tenant.Should().Be.EqualTo(queryResult.Tenant);
 			res.PersonId.Should().Be.EqualTo(queryResult.Id);
 			res.DataSourceConfiguration.Should().Be.SameInstanceAs(datasourceConfiguration);
+			res.PasswordPolicy.Should().Be.EqualTo("somepolicy");
 		}
 
 		[Test]
@@ -56,7 +60,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Tenant.Core
 			nhibHandler.Stub(x => x.ForTenant(queryResult.Tenant)).Return(null);
 			findIdentityQuery.Expect(x => x.FindUserData(identity)).Return(queryResult);
 
-			var target = new IdentityAuthentication(findIdentityQuery, nhibHandler);
+			var target = new IdentityAuthentication(findIdentityQuery, nhibHandler, null);
 			var res = target.Logon(identity);
 			
 			res.Success.Should().Be.False();

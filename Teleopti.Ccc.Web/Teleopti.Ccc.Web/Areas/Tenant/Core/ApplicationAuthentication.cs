@@ -1,6 +1,7 @@
 ﻿using Teleopti.Ccc.Infrastructure.MultiTenancy;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Server;
 using Teleopti.Ccc.UserTexts;
+using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.Web.Areas.Tenant.Core
 {
@@ -10,15 +11,18 @@ namespace Teleopti.Ccc.Web.Areas.Tenant.Core
 		private readonly IPasswordVerifier _passwordVerifier;
 		private readonly IPasswordPolicyCheck _passwordPolicyCheck;
 		private readonly IDataSourceConfigurationProvider _dataSourceConfigurationProvider;
-		
+		private readonly ILoadPasswordPolicyService _loadPasswordPolicyService;
+
 		public ApplicationAuthentication(IApplicationUserQuery applicationUserQuery, IPasswordVerifier passwordVerifier,
-			IPasswordPolicyCheck passwordPolicyCheck, IDataSourceConfigurationProvider dataSourceConfigurationProvider)
+			IPasswordPolicyCheck passwordPolicyCheck, IDataSourceConfigurationProvider dataSourceConfigurationProvider,
+			ILoadPasswordPolicyService loadPasswordPolicyService)
 		{
 			_applicationUserQuery = applicationUserQuery;
 			_passwordVerifier = passwordVerifier;
 			_passwordPolicyCheck = passwordPolicyCheck;
 			_dataSourceConfigurationProvider = dataSourceConfigurationProvider;
-	}
+			_loadPasswordPolicyService = loadPasswordPolicyService;
+		}
 
 		public ApplicationAuthenticationResult Logon(string userName, string password)
 		{
@@ -45,7 +49,8 @@ namespace Teleopti.Ccc.Web.Areas.Tenant.Core
 				Success = true,
 				PersonId = passwordPolicyForUser.PersonInfo.Id,
 				Tenant = passwordPolicyForUser.PersonInfo.Tenant,
-				DataSourceConfiguration = nhibConfig
+				DataSourceConfiguration = nhibConfig,
+				PasswordPolicy = _loadPasswordPolicyService.DocumentAsString
 			};
 		}
 
