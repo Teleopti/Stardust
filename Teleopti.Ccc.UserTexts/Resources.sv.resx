@@ -6797,7 +6797,7 @@ Uppdaterad den: {1}</value>
     <comment>PersonSelection</comment>
   </data>
   <data name="ChangeInfoColon" xml:space="preserve">
-    <value>Ändringsinformation:</value>
+    <value>Ändringsinfo:</value>
     <comment>Rotations</comment>
   </data>
   <data name="CreatedByColon" xml:space="preserve">
@@ -11745,7 +11745,7 @@ Minska komplexiteten för att kunna använda dessa skift.</value>
     <value>Återställ medaljer</value>
   </data>
   <data name="ResetBadgesConfirm" xml:space="preserve">
-    <value>Detta kommer att ta bort alla medaljer för alla agenter! Vill du fortsätta?</value>
+    <value>Detta kommer att ta bort alla medaljer för alla agenter! Om du klickar OK tas medaljerna bort och kan inte återställas. Vill du fortsätta?</value>
   </data>
   <data name="BadgeTypeChecked" xml:space="preserve">
     <value>Använd</value>
@@ -12024,7 +12024,7 @@ Minska komplexiteten för att kunna använda dessa skift.</value>
     <value>Använd medalj för besvarade samtal</value>
   </data>
   <data name="UseBadgeforAHT" xml:space="preserve">
-    <value>Använd medalj för genomsnittling behandlingstid</value>
+    <value>Använd medalj för genomsnittlig behandlingstid</value>
   </data>
   <data name="UseBadgeforAdherence" xml:space="preserve">
     <value>Använd medalj för följsamhet</value>
@@ -12090,13 +12090,13 @@ Minska komplexiteten för att kunna använda dessa skift.</value>
     <value>Längst ned</value>
   </data>
   <data name="ManageSenioritySettings" xml:space="preserve">
-    <value>Hantera erfarenhetsintällningar</value>
+    <value>Hantera erfarenhetsinställningar</value>
   </data>
   <data name="RankShiftCategory" xml:space="preserve">
-    <value>Ranka skiftkategorierna från bäst till sämst</value>
+    <value>Rangordna skiftkategorierna från bäst till sämst</value>
   </data>
   <data name="RankWorkingDays" xml:space="preserve">
-    <value>Ranka arbetsdagarna från bäst till sämst</value>
+    <value>Rangordna arbetsdagarna från bäst till sämst</value>
   </data>
   <data name="Top" xml:space="preserve">
     <value>Längst upp</value>
@@ -12129,6 +12129,27 @@ Minska komplexiteten för att kunna använda dessa skift.</value>
     <value>Ett team måste väljas</value>
   </data>
   <data name="LockBulletinBoardTrading" xml:space="preserve">
-    <value>Lås skiftbyten via anslagstavlan</value>
+    <value>Först till kvarn får skiftet på anslagstavlan</value>
+  </data>
+  <data name="SetWhichColumnToGetSmsPhoneNumberFromColon" xml:space="preserve">
+    <value>Ange vilken kolumn telefonnumret att skicka SMS till ska hämtas från:</value>
+  </data>
+  <data name="MaximumNumberOfReportRowsReached" xml:space="preserve">
+    <value>Maximalt antal rapportrader är nått</value>
+  </data>
+  <data name="NarrowToSeeAll" xml:space="preserve">
+    <value> Begränsa kriterierna för att kunna se all data</value>
+  </data>
+  <data name="AHTBronzeThresholdShouldLessThanSilverThreshold" xml:space="preserve">
+    <value>Bronsmedaljtröskelvärdet för genomsnittlig behandlingstid måste vara högre än silvermedaljtröskelvärdet.</value>
+  </data>
+  <data name="AHTSilverThresholdShouldLessThanGoldThreshold" xml:space="preserve">
+    <value>Silvermedaljtröskelvärdet för genomsnittlig behandlingstid måste vara högre än guldmedaljtröskelvärdet.</value>
+  </data>
+  <data name="AdherenceBronzeThresholdShouldGreaterThanSilverThreshold" xml:space="preserve">
+    <value>Bronsmedaljtröskelvärdet för följsamheten måste vara lägre än silvermedaljtröskelvärdet.</value>
+  </data>
+  <data name="AdherenceSilverThresholdShouldGreaterThanGoldThreshold" xml:space="preserve">
+    <value>Silvermedaljtröskelvärdet för följsamheten måste vara lägre än guldmedaljtröskelvärdet.</value>
   </data>
 </root>

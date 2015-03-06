@@ -12229,19 +12229,19 @@ Reduce the complexity to use these shifts.</value>
     <comment>Error message for badge setting in admin client</comment>
   </data>
   <data name="AHTBronzeThresholdShouldLessThanSilverThreshold" xml:space="preserve">
-    <value>Bronze badge threshold for AHT must be lower than the silver badge threshold.</value>
+    <value>Bronze badge threshold for AHT must be higher than the silver badge threshold.</value>
     <comment>Error message for badge setting in admin client</comment>
   </data>
   <data name="AHTSilverThresholdShouldLessThanGoldThreshold" xml:space="preserve">
-    <value>Silver badge threshold for AHT must be lower than the gold badge threshold.</value>
+    <value>Silver badge threshold for AHT must be higher than the gold badge threshold.</value>
     <comment>Error message for badge setting in admin client</comment>
   </data>
   <data name="AdherenceBronzeThresholdShouldGreaterThanSilverThreshold" xml:space="preserve">
-    <value>Bronze badge threshold for Adherence must be higher than the silver badge threshold.</value>
+    <value>Bronze badge threshold for Adherence must be lower than the silver badge threshold.</value>
     <comment>Error message for badge setting in admin client</comment>
   </data>
   <data name="AdherenceSilverThresholdShouldGreaterThanGoldThreshold" xml:space="preserve">
-    <value>Silver badge threshold for Adherence mest be higher than the gold badge threshold.</value>
+    <value>Silver badge threshold for Adherence must be lower than the gold badge threshold.</value>
     <comment>Error message for badge setting in admin client</comment>
   </data>
   <data name="AddingActivityFor" xml:space="preserve">

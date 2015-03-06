@@ -118,12 +118,9 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="AlwaysOnTop" xml:space="preserve">
-    <value>Toujours au dessus</value>
-  </data>
-  <data name="AgentScheduleMessenger" xml:space="preserve">
-    <value>Teleopti WFM Agent Schedule Messenger</value>
+    <value>همیشه در بالا</value>
   </data>
   <data name="Refresh" xml:space="preserve">
-    <value>Actualiser</value>
+    <value>نوسازی</value>
   </data>
 </root>

@@ -1245,9 +1245,6 @@
   <data name="Week" xml:space="preserve">
     <value>Semaine</value>
   </data>
-  <data name="WeekWithNumber" xml:space="preserve">
-    <value>Semaine {0}</value>
-  </data>
   <data name="WeekDay" xml:space="preserve">
     <value>Jour</value>
   </data>
@@ -1699,7 +1696,7 @@
     <value>Optionnel</value>
   </data>
   <data name="WeekAbbreviationDot" xml:space="preserve">
-    <value>s. {0} {1}</value>
+    <value>s.</value>
   </data>
   <data name="LoadingDataTreeDots" xml:space="preserve">
     <value>Chargement des données</value>
@@ -9789,5 +9786,182 @@ Ces options sont actives:
   </data>
   <data name="PublishAnnouncementNoAbsence" xml:space="preserve">
     <value>Ne peut pas publier une annonce sur un jour d'absence!</value>
+  </data>
+  <data name="AllTeamMembersMustBeLoaded" xml:space="preserve">
+    <value>Tous les membres de l'équipe doivent être chargés</value>
+  </data>
+  <data name="AnnouncementInvalid" xml:space="preserve">
+    <value>Annonce d'échange de quart invalide</value>
+  </data>
+  <data name="AnnouncementInvalidMessage" xml:space="preserve">
+    <value>Votre annonce d'échange de quart du {0} est invalide car votre quart a changé.</value>
+  </data>
+  <data name="HasNonMainShiftActivityErrorMessage" xml:space="preserve">
+    <value>La personne {0} a une activité personnelle, activité heures supplémentaires ou réunion sur son quart à la date {1}.</value>
+  </data>
+  <data name="NotifyAgent" xml:space="preserve">
+    <value>Notifier l'agent</value>
+  </data>
+  <data name="Everyone" xml:space="preserve">
+    <value>Tous</value>
+  </data>
+  <data name="Announcement" xml:space="preserve">
+    <value>Annonce d'échange d'horaires</value>
+  </data>
+  <data name="AreYouSureYouWantToDeleteGamificationSetting" xml:space="preserve">
+    <value>Êtes-vous sûr de vouloir supprimer le paramètre de ludification '{0}'?</value>
+  </data>
+  <data name="DeleteGamificationSetting" xml:space="preserve">
+    <value>Supprimer le paramètre de ludification</value>
+  </data>
+  <data name="Gamification" xml:space="preserve">
+    <value>Ludification</value>
+  </data>
+  <data name="NewGamificationSetting" xml:space="preserve">
+    <value>Nouveau paramètre de ludification</value>
+  </data>
+  <data name="NewBadgeSetting" xml:space="preserve">
+    <value>Nouveau paramètre de badge</value>
+  </data>
+  <data name="RuleWithDifferentThreshold" xml:space="preserve">
+    <value>Utiliser des seuils différents</value>
+  </data>
+  <data name="RuleWithRatioConvertor" xml:space="preserve">
+    <value>Utiliser un ratio de conversion</value>
+  </data>
+  <data name="ConfirmDeleteRequest" xml:space="preserve">
+    <value>Êtes-vous sûr de vouloir supprimer cette demande?</value>
+  </data>
+  <data name="ShiftExchangeAnnouncement" xml:space="preserve">
+    <value>Annonce d'échange d'horaires</value>
+  </data>
+  <data name="ChooseGamificationSettingToChange" xml:space="preserve">
+    <value>Choisissez le paramètre de ludification à éditer?</value>
+  </data>
+  <data name="EnterGamificationSettingDetails" xml:space="preserve">
+    <value>Entrer les détails de paramètre de ludification</value>
+  </data>
+  <data name="GamificationSettingColon" xml:space="preserve">
+    <value>Paramètre de ludification</value>
+  </data>
+  <data name="GamificationSettingRuleSetsColon" xml:space="preserve">
+    <value>Règle:</value>
+  </data>
+  <data name="ManageGamificationSettings" xml:space="preserve">
+    <value>Gérer les paramètres de ludification</value>
+  </data>
+  <data name="Completed" xml:space="preserve">
+    <value>Accomplie</value>
+  </data>
+  <data name="Expired" xml:space="preserve">
+    <value>Expiré</value>
+  </data>
+  <data name="OptionDayOff" xml:space="preserve">
+    <value>Jour Libre</value>
+  </data>
+  <data name="OptionDayOffOrEmptyDay" xml:space="preserve">
+    <value>Jour libre ou jour vide</value>
+  </data>
+  <data name="OptionEmptyDay" xml:space="preserve">
+    <value>Jour Vide</value>
+  </data>
+  <data name="OptionWorkingDay" xml:space="preserve">
+    <value>Jour ouvré</value>
+  </data>
+  <data name="LogOnFailedIdentityNotFound" xml:space="preserve">
+    <value>Erreur de connexion! Pas de compte relié à {0}.</value>
+  </data>
+  <data name="CannotFindDataSourceWithName" xml:space="preserve">
+    <value>Ne peut pas trouver de source de données avec le nom: {0}</value>
+  </data>
+  <data name="SetSettingTargets" xml:space="preserve">
+    <value>Entrer objectifs de ludification</value>
+  </data>
+  <data name="SelectSettingForTeams" xml:space="preserve">
+    <value>Sélectionner paramètre à utiliser pour équipes</value>
+  </data>
+  <data name="Setting" xml:space="preserve">
+    <value>Paramètre</value>
+  </data>
+  <data name="SeatPlanner" xml:space="preserve">
+    <value>Planificateur de positions</value>
+  </data>
+  <data name="StartDateMustBeGreaterThanToday" xml:space="preserve">
+    <value>La date de début doit être postérieure à aujourd'hui</value>
+  </data>
+  <data name="AnyLocationShouldBeSelected" xml:space="preserve">
+    <value>Un emplacement doit être sélectionné</value>
+  </data>
+  <data name="AnyTeamShouldBeSelected" xml:space="preserve">
+    <value>Une équipe doit être sélectionnée</value>
+  </data>
+  <data name="YouHaveBeenAllocatedSeat" xml:space="preserve">
+    <value>Le {0} vous avez été assigné à la position {1}.</value>
+  </data>
+  <data name="YouHaveNotBeenAllocatedSeat" xml:space="preserve">
+    <value>Le {0} vous n'avez pas éta assigné à une position.</value>
+  </data>
+  <data name="StartDateMustBeEndDateOrSmaller" xml:space="preserve">
+    <value>La date de début doit être la date de fin ou antérieure</value>
+  </data>
+  <data name="StartDateMustBeTodayOrGreater" xml:space="preserve">
+    <value>La date de début doit être aujourd'hui ou après</value>
+  </data>
+  <data name="AnonymousBulletinBoardTrading" xml:space="preserve">
+    <value>Table d'échanges anonyme</value>
+  </data>
+  <data name="Miscellaneous" xml:space="preserve">
+    <value>Divers</value>
+  </data>
+  <data name="SearchHintForName" xml:space="preserve">
+    <value>Rechercher nom</value>
+  </data>
+  <data name="SureToMakeShiftTrade" xml:space="preserve">
+    <value>Êtes-vous sûr de vouloir faire cet échange de quarts?</value>
+  </data>
+  <data name="LockBulletinBoardTrading" xml:space="preserve">
+    <value>Table d'annonce Premier Arrivé Premier Servi</value>
+  </data>
+  <data name="Bottom" xml:space="preserve">
+    <value>Bas</value>
+  </data>
+  <data name="ManageSenioritySettings" xml:space="preserve">
+    <value>Gérer les paramètres de Séniorité</value>
+  </data>
+  <data name="RankShiftCategory" xml:space="preserve">
+    <value>Classer les catégories d'horaires de la meilleure à la moins bonne</value>
+  </data>
+  <data name="RankWorkingDays" xml:space="preserve">
+    <value>Classer les jours ouvrés du meilleur au moins bon</value>
+  </data>
+  <data name="Top" xml:space="preserve">
+    <value>Haut</value>
+  </data>
+  <data name="NoAbsenceToRemoveInCurrentShift" xml:space="preserve">
+    <value>Pas d'absence à supprimer dans l'horaire courant.</value>
+  </data>
+  <data name="AnnouncementTakenByOthers" xml:space="preserve">
+    <value>Cet horaire a été pris par quelqu'un d'autre, merci de choisir un autre horaire dans le tableau d'échange d'horaires.</value>
+  </data>
+  <data name="ShowExcelReport" xml:space="preserve">
+    <value>Montrer rapport Excel</value>
+  </data>
+  <data name="ShowPDFReport" xml:space="preserve">
+    <value>Montrer rapport PDF</value>
+  </data>
+  <data name="ShowWordReport" xml:space="preserve">
+    <value>Montrer rapport Word</value>
+  </data>
+  <data name="DayOffValueColon" xml:space="preserve">
+    <value>Valeur de jour libre:</value>
+  </data>
+  <data name="ShiftCategoryValueColon" xml:space="preserve">
+    <value>Valeur de catégorie d'horaire:</value>
+  </data>
+  <data name="InAdherence" xml:space="preserve">
+    <value>En adhérence</value>
+  </data>
+  <data name="NeutralAdherence" xml:space="preserve">
+    <value>Neutre</value>
   </data>
 </root>
