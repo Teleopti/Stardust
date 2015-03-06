@@ -146,26 +146,24 @@ namespace Teleopti.Ccc.Infrastructure.Rta
 
 				connection.Open();
 				var reader = command.ExecuteReader(CommandBehavior.CloseConnection);
-				while (reader != null && reader.Read())
+				while (reader.Read())
 				{
 					missingUsers.Add(new AgentStateReadModel
 						{
 							BusinessUnitId = reader.GetGuid(reader.GetOrdinal("BusinessUnitId")),
 							PersonId = reader.GetGuid(reader.GetOrdinal("PersonId")),
-							StateCode = reader.GetString(reader.GetOrdinal("StateCode")),
+							StateCode = reader.String("StateCode"),
 							PlatformTypeId = reader.GetGuid(reader.GetOrdinal("PlatformTypeId")),
-							State = reader.GetString(reader.GetOrdinal("State")),
-							StateId = reader.GetGuid(reader.GetOrdinal("StateId")),
-							Scheduled = reader.GetString(reader.GetOrdinal("Scheduled")),
-							ScheduledId = reader.GetGuid(reader.GetOrdinal("ScheduledId")),
-							StateStart = reader.GetDateTime(reader.GetOrdinal("StateStart")),
-							ScheduledNext = reader.GetString(reader.GetOrdinal("ScheduledNext")),
-							ScheduledNextId = reader.GetGuid(reader.GetOrdinal("ScheduledNextId")),
-							NextStart = reader.GetDateTime(reader.GetOrdinal("NextStart")),
+							State = reader.String("State"),
+							StateId = reader.NullableGuid("StateId"),
+							Scheduled = reader.String("Scheduled"),
+							ScheduledId = reader.NullableGuid("ScheduledId"),
+							StateStart = reader.NullableDateTime("StateStart"),
+							ScheduledNext = reader.String("ScheduledNext"),
+							ScheduledNextId = reader.NullableGuid("ScheduledNextId"),
+							NextStart = reader.NullableDateTime("NextStart"),
 						});
 				}
-				if (reader != null)
-					reader.Close();
 			}
 
 			return missingUsers;

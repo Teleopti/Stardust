@@ -25,7 +25,7 @@ BEGIN
 	SELECT @toDayDateId = ISNULL(@toDayDateId, @maxDateId)
 	
 	SELECT
-		P.business_unit_code BusinessUnitId,
+		AAS.BusinessUnitId,
 		AAS.PersonId,
 		AAS.StateCode,
 		AAS.PlatformTypeId,
@@ -38,18 +38,11 @@ BEGIN
 		AAS.ScheduledNextId,
 		AAS.NextStart
 	FROM RTA.ActualAgentState AAS
-	INNER JOIN mart.dim_person P
-		ON p.person_code = AAS.PersonId
 	
 	WHERE AAS.OriginalDataSourceId = @datasource_id
 	AND (
 		AAS.BatchId < @batch_id
 		OR 
 		AAS.BatchId IS NULL
-		)
-	AND (
-			(@toDayDateId BETWEEN (p.valid_from_date_id-1)and (p.valid_to_date_id+1))
-			OR
-			(@toDayDateId > (p.valid_from_date_id-1) AND p.valid_to_date_id=-2)
 		)
 END

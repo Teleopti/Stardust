@@ -162,6 +162,60 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta
 			result.Single().BelongsToDate.Should().Be(new DateOnly("2014-11-07".Utc()));
 		}
 
+		[Test]
+		public void ShouldReadNullValuesWhenClosingSnapshot()
+		{
+			var personId = Guid.NewGuid();
+			var state = new AgentStateReadModel
+			{
+				PersonId = personId,
+				ReceivedTime = "2015-03-06 15:19".Utc(),
+				OriginalDataSourceId = "6"
+			};
+			Writer.PersistActualAgentReadModel(state);
+
+			Reader.GetMissingAgentStatesFromBatch("2015-03-06 15:20".Utc(), "6")
+				.Single(x => x.PersonId == personId).Should().Not.Be.Null();
+		}
+
+		[Test]
+		public void SHouldReadValuesWhenClosingSnapshot()
+		{
+			var personId = Guid.NewGuid();
+			var agentStateReadModel = new AgentStateReadModel
+			{
+				BusinessUnitId = Guid.NewGuid(),
+				PersonId = personId,
+				StateCode = "phone",
+				PlatformTypeId = Guid.NewGuid(),
+				State = "Ready",
+				StateId = Guid.NewGuid(),
+				Scheduled = "Phone",
+				ScheduledId = Guid.NewGuid(),
+				StateStart = "2015-03-06 15:00".Utc(),
+				ScheduledNext = "Break",
+				ScheduledNextId = Guid.NewGuid(),
+				NextStart = "2015-03-06 06:00".Utc(),
+				ReceivedTime = "2015-03-06 15:19".Utc(),
+				OriginalDataSourceId = "6"
+			};
+			Writer.PersistActualAgentReadModel(agentStateReadModel);
+
+			var result = Reader.GetMissingAgentStatesFromBatch("2015-03-06 15:20".Utc(), "6")
+				.Single(x => x.PersonId == personId);
+
+			result.BusinessUnitId.Should().Be(agentStateReadModel.BusinessUnitId);
+			result.StateCode.Should().Be(agentStateReadModel.StateCode);
+			result.PlatformTypeId.Should().Be(agentStateReadModel.PlatformTypeId);
+			result.State.Should().Be(agentStateReadModel.State);
+			result.StateId.Should().Be(agentStateReadModel.StateId);
+			result.Scheduled.Should().Be(agentStateReadModel.Scheduled);
+			result.ScheduledId.Should().Be(agentStateReadModel.ScheduledId);
+			result.StateStart.Should().Be(agentStateReadModel.StateStart);
+			result.ScheduledNext.Should().Be(agentStateReadModel.ScheduledNext);
+			result.ScheduledNextId.Should().Be(agentStateReadModel.ScheduledNextId);
+			result.NextStart.Should().Be(agentStateReadModel.NextStart);
+		}
 	}
 
 	public class ActualAgentStateReadWriteTestAttribute : InfrastructureTestAttribute
