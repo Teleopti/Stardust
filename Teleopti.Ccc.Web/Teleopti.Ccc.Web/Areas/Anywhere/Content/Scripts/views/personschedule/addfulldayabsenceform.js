@@ -5,9 +5,7 @@ define([
         'ajax',
         'resources',
 		'guidgenerator',
-		'notifications',
-		'shared/timezone-display',
-	'shared/timezone-current'
+		'notifications'
     ], function(
         ko,
         moment,
@@ -15,9 +13,7 @@ define([
         ajax,
         resources,
 		guidgenerator,
-		notificationsViewModel,
-			timezoneDisplay,
-	timezoneCurrent
+		notificationsViewModel
     ) {
 
         return function() {
@@ -40,7 +36,7 @@ define([
             	personId = data.PersonId;
             	businessUnitId = data.BusinessUnitId;
             	personName = data.PersonName;
-            	self.StartDate(timezoneDisplay.FromDate(data.Date, timezoneCurrent.IanaTimeZone()));
+            	self.StartDate(moment(data.Date.format('YYYY-MM-DD'),'YYYY-MM-DD'));
                 self.EndDate(self.StartDate().clone());
                 self.AbsenceTypes(data.Absences);
                 self.TimeZoneName(data.TimeZoneName);
