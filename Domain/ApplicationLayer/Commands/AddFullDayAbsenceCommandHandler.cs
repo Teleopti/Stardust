@@ -31,9 +31,14 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Commands
 		{
 			if (Logger.IsDebugEnabled)
 				Logger.DebugFormat("Command start {0}, end {1}", command.StartDate, command.EndDate);
+			
 			var person = _personRepository.Load(command.PersonId);
+			var startDateInUserTimeZone = TimeZoneHelper.ConvertFromUtc(command.StartDate,
+				person.PermissionInformation.DefaultTimeZone());
+			var endDateInUserTimeZone = TimeZoneHelper.ConvertFromUtc(command.EndDate,
+				person.PermissionInformation.DefaultTimeZone());
 			var absence = _absenceRepository.Load(command.AbsenceId);
-			var period = new DateOnlyPeriod(new DateOnly(command.StartDate.AddDays(-1)), new DateOnly(command.EndDate));
+			var period = new DateOnlyPeriod(new DateOnly(startDateInUserTimeZone.AddDays(-1)), new DateOnly(endDateInUserTimeZone));
 			if (Logger.IsDebugEnabled)
 				Logger.DebugFormat("Period start {0}, end {1}", period.StartDate, period.EndDate);
 

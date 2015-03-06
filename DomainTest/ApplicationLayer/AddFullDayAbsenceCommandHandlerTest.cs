@@ -13,7 +13,6 @@ using Teleopti.Interfaces.Domain;
 namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 {
 	[TestFixture]
-	[Ignore]
 	public class AddFullDayAbsenceCommandHandlerTest
 	{
 		[Test]
@@ -80,6 +79,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 		}
 
 		[Test]
+		[Ignore]
 		public void ShouldConvertFromAgentsTimeZone()
 		{
 			var person = PersonFactory.CreatePersonWithId();
@@ -98,15 +98,19 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 					StartDate = new DateTime(2013, 3, 25),
 					EndDate = new DateTime(2013, 3, 25),
 				};
+			var startDateInUserTimeZone = TimeZoneHelper.ConvertFromUtc(command.StartDate,
+				person.PermissionInformation.DefaultTimeZone());
+			var endDateInUserTimeZone = TimeZoneHelper.ConvertFromUtc(command.EndDate,
+				person.PermissionInformation.DefaultTimeZone());
 			target.Handle(command);
 
 			var personAbsence = personAbsenceRepository.Single();
 			var absenceLayer = personAbsence.Layer as AbsenceLayer;
-			absenceLayer.Period.StartDateTime.Should().Be(TimeZoneInfo.ConvertTimeToUtc(command.StartDate, agentsTimeZone));
-			absenceLayer.Period.EndDateTime.Should().Be(TimeZoneInfo.ConvertTimeToUtc(command.EndDate.AddHours(24).AddMinutes(-1), agentsTimeZone));
+			absenceLayer.Period.StartDateTime.Should().Be(TimeZoneInfo.ConvertTimeToUtc(startDateInUserTimeZone, agentsTimeZone));
+			absenceLayer.Period.EndDateTime.Should().Be(TimeZoneInfo.ConvertTimeToUtc(endDateInUserTimeZone.AddHours(24).AddMinutes(-1), agentsTimeZone));
 			var @event = personAbsenceRepository.Single().PopAllEvents().Single() as FullDayAbsenceAddedEvent;
-			@event.StartDateTime.Should().Be(TimeZoneInfo.ConvertTimeToUtc(command.StartDate, agentsTimeZone));
-			@event.EndDateTime.Should().Be(TimeZoneInfo.ConvertTimeToUtc(command.EndDate.AddHours(24).AddMinutes(-1), agentsTimeZone));
+			@event.StartDateTime.Should().Be(TimeZoneInfo.ConvertTimeToUtc(startDateInUserTimeZone, agentsTimeZone));
+			@event.EndDateTime.Should().Be(TimeZoneInfo.ConvertTimeToUtc(endDateInUserTimeZone.AddHours(24).AddMinutes(-1), agentsTimeZone));
 		}
 
 		[Test]
