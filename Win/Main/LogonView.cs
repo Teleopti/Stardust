@@ -36,12 +36,8 @@ namespace Teleopti.Ccc.Win.Main
 					new LoginScreen(this, _model),
 					new SelectBuScreen(this, _model)
 				};
-			if (InitStateHolderWithoutDataSource(messageBroker))
-			{
-				DialogResult result = ShowDialog();
-				return result != DialogResult.Cancel;
-			}
-			return false;
+			DialogResult result = ShowDialog();
+			return result != DialogResult.Cancel;
 		}
 
 		public void ShowStep(bool showBackButton)

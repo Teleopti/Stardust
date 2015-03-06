@@ -166,6 +166,8 @@ namespace Teleopti.Ccc.WinCode.Main
 
 		private void getLogonType()
 		{
+			if (!_view.InitStateHolderWithoutDataSource(_messageBroker))
+				CurrentStep--; //?
 			_view.ShowStep(false); //once a sdk is loaded it is not changeable
 		}
 

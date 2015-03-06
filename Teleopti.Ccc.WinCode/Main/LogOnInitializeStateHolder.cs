@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Linq;
 using System.ServiceModel;
 using System.Xml.Linq;
@@ -13,7 +14,6 @@ using Teleopti.Ccc.WinCode.Common.ServiceBus;
 using Teleopti.Ccc.WinCode.Services;
 using log4net;
 using Teleopti.Ccc.Domain.Helper;
-using Teleopti.Ccc.Domain.Security;
 using Teleopti.Ccc.Infrastructure.Config;
 using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
@@ -42,8 +42,6 @@ namespace Teleopti.Ccc.WinCode.Main
 
 		public static bool InitWithoutDataSource(ILogonModel model, IMessageBrokerComposite messageBroker)
 		{
-			//should get the nhib from logon later
-			IDictionary<string, string> encryptedAppSettings;
 			string passwordPolicyString;
 			using (var proxy = Proxy.GetProxy(model.SelectedSdk))
 			{
@@ -51,7 +49,6 @@ namespace Teleopti.Ccc.WinCode.Main
 				{
 					try
 					{
-						encryptedAppSettings = proxy.GetAppSettingsInternal();
 						passwordPolicyString = proxy.GetPasswordPolicy();
 					}
 					catch (TimeoutException timeoutException)
@@ -72,12 +69,13 @@ namespace Teleopti.Ccc.WinCode.Main
 			var passwordPolicyDocument = XDocument.Parse(passwordPolicyString);
 			var passwordPolicyService = new LoadPasswordPolicyService(passwordPolicyDocument);
 
-			encryptedAppSettings.DecryptDictionary(Interfaces.Infrastructure.EncryptionConstants.Image1, Interfaces.Infrastructure.EncryptionConstants.Image2);
-			encryptedAppSettings.Add("Sdk", model.SelectedSdk);
+			var appsett = ConfigurationManager.AppSettings;
+			var appSettings = appsett.Keys.Cast<string>().ToDictionary(key => key, key => appsett[key]);
+			appSettings.Add("Sdk", model.SelectedSdk);
 
 			bool messageBrokerDisabled = false;
 			string messageBrokerDisabledString;
-			if (!encryptedAppSettings.TryGetValue("MessageBroker", out messageBrokerDisabledString) ||
+			if (!appSettings.TryGetValue("MessageBroker", out messageBrokerDisabledString) ||
 				 string.IsNullOrEmpty(messageBrokerDisabledString))
 			{
 				messageBrokerDisabled = true;
@@ -107,7 +105,7 @@ namespace Teleopti.Ccc.WinCode.Main
 					MessageBrokerDisabled = messageBrokerDisabled
 				};
 
-			initializer.Start(new StateManager(), encryptedAppSettings, Enumerable.Empty<string>(), passwordPolicyService);
+			initializer.Start(new StateManager(), appSettings, Enumerable.Empty<string>(), passwordPolicyService);
 
 
 			return true;
