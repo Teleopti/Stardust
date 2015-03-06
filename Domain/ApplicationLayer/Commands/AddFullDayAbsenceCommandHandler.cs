@@ -29,6 +29,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Commands
 
 		public void Handle(AddFullDayAbsenceCommand command)
 		{
+			if (Logger.IsDebugEnabled)
+				Logger.DebugFormat("Command start {0}, end {1}", command.StartDate, command.EndDate);
 			var person = _personRepository.Load(command.PersonId);
 			var absence = _absenceRepository.Load(command.AbsenceId);
 			var period = new DateOnlyPeriod(new DateOnly(command.StartDate.AddDays(-1)), new DateOnly(command.EndDate));
