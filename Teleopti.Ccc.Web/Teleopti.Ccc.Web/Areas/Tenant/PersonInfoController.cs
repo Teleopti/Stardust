@@ -1,5 +1,5 @@
 ﻿using System.Web.Mvc;
-using Teleopti.Ccc.Infrastructure.MultiTenancy.NHibernate;
+using Teleopti.Ccc.Infrastructure.MultiTenancy.Server.NHibernate;
 using Teleopti.Ccc.Web.Areas.Tenant.Core;
 using Teleopti.Ccc.Web.Areas.Tenant.Model;
 

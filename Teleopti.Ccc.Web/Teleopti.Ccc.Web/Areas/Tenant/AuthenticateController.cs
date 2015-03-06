@@ -1,6 +1,6 @@
 ﻿using System.Web.Mvc;
 using Teleopti.Ccc.Domain.Common;
-using Teleopti.Ccc.Infrastructure.MultiTenancy.NHibernate;
+using Teleopti.Ccc.Infrastructure.MultiTenancy.Server.NHibernate;
 using Teleopti.Ccc.Web.Areas.Start.Core.Authentication.Services;
 using Teleopti.Ccc.Web.Areas.Tenant.Core;
 
