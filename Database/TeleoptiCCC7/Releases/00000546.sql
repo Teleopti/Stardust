@@ -34,13 +34,3 @@ add constraint FK_PersonInfo_Tenant
 foreign key (Tenant) references Tenant.Tenant
 go
 
-create unique index UQ_PersonInfo_ApplicationLogonName
-on Tenant.PersonInfo (ApplicationLogonName)
-where ApplicationLogonName is not null
-go
-
-
-create unique index UQ_PersonInfo_Identity
-on Tenant.PersonInfo ([Identity])
-where [Identity] is not null
-go
