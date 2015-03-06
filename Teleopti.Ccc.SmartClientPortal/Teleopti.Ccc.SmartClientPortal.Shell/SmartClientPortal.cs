@@ -141,6 +141,15 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 			_outlookPanelContentWorker = _container.Resolve<OutlookPanelContentWorker>();
 			_portalSettings = _container.Resolve<PortalSettings>();
 			_toggleManager = _container.Resolve<IToggleManager>();
+			if (!_toggleManager.IsEnabled(Toggles.Portal_NewLandingpage_29415))
+			{
+				splitContainer.Panel2.Controls.Remove(webControl1);
+				webControl1.WebView.Destroy();
+				webControl1.WebView.Dispose();
+				webControl1.Dispose();
+				webControl1 = null;
+				webView1 = null;
+			}
 			
 			
 		}
@@ -631,11 +640,13 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 
 			if (uc is ForecasterNavigator || uc is PayrollExportNavigator)
 			{
-				webControl1.Visible = false;
+				if (webControl1 != null)
+					webControl1.Visible = false;
 				return;
 			}
 
-			webControl1.Visible = true;
+			if (webControl1 != null)
+				webControl1.Visible = true;
 
 			if (uc is SchedulerNavigator || uc is PeopleNavigator)
 				((INavigationPanel)uc).SetMainOwner(this);
