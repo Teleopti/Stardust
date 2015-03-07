@@ -26,7 +26,7 @@ namespace Teleopti.Ccc.DomainTest.Forecasting.Angel.QuickForecastSkillWithOneWor
 
 		protected override void Assert(IEnumerable<ISkillDay> modifiedSkillDays)
 		{
-			MeasurementResult.Should().Be.EqualTo(Math.Round((11d - 9d)/11d, 3));
+			MeasurementResult.Should().Be.EqualTo(100 - Math.Round((11d - 9d)/11d*100, 3));
 		}
 	}
 }

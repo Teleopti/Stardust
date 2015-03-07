@@ -6,7 +6,7 @@
 		{{result.message}}
 	</div>
 	<div ng-if="result" class="forecast-relative-error">
-		Forecast Relative Error: {{result.accuracy}}
+		Forecast Accuracy (using Mean absolute percentage deviation): {{result.accuracy}}
 	</div>
     <div ng-if="!result" class="text-center">
         <svg class="spinner" width="65px" height="65px" viewBox="0 0 66 66" xmlns="http://www.w3.org/2000/svg">

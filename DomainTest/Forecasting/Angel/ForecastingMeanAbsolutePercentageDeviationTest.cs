@@ -8,10 +8,10 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.DomainTest.Forecasting.Angel
 {
-	public class ForecastingMeasurerTest
+	public class ForecastingMeanAbsolutePercentageDeviationTest
 	{
 		[Test]
-		public void ShouldCalculateSumOfDifferenceBetweenForecastingAndHistorical()
+		public void ShouldCalculateAverageOfAccuracyBetweenForecastingAndHistorical()
 		{
 			var date1 = new DateOnly(2015, 1, 2);
 			var date2 = new DateOnly(2015, 1, 3);
@@ -23,7 +23,7 @@ namespace Teleopti.Ccc.DomainTest.Forecasting.Angel
 			workloadDay2.Create(date2, new Workload(SkillFactory.CreateSkill("Phone")), new List<TimePeriod>());
 			workloadDay2.MakeOpen24Hours();
 			workloadDay2.TotalStatisticCalculatedTasks = 8d;
-			var result = new ForecastingMeasurer().Measure(new List<IForecastingTarget>
+			var result = new ForecastingMeanAbsolutePercentageDeviation().Measure(new List<IForecastingTarget>
 			{
 				new ForecastingTarget(date1, new OpenForWork(true, true))
 				{
@@ -40,18 +40,41 @@ namespace Teleopti.Ccc.DomainTest.Forecasting.Angel
 					workloadDay2
 				}, TaskOwnerPeriodType.Other).TaskOwnerDayCollection);
 
-			result.Should().Be.EqualTo(0.125);
+			result.Should().Be.EqualTo(87.5);
 		}
 
 		[Test]
-		public void ShouldCalculateDifferenceBetweenForecastingAndHistorical()
+		public void ShouldCalculateAccuracyBetweenForecastingAndHistorical()
 		{
 			var workloadDay1 = new WorkloadDay();
 			var date1 = new DateOnly(2015, 1, 2);
 			workloadDay1.Create(date1, new Workload(SkillFactory.CreateSkill("Phone")), new List<TimePeriod>());
 			workloadDay1.MakeOpen24Hours();
 			workloadDay1.TotalStatisticCalculatedTasks = 4d;
-			var result = new ForecastingMeasurer().Measure(new List<IForecastingTarget>
+			var result = new ForecastingMeanAbsolutePercentageDeviation().Measure(new List<IForecastingTarget>
+			{
+				new ForecastingTarget(date1, new OpenForWork(true, true))
+				{
+					Tasks = 4d
+				}
+			},
+				new TaskOwnerPeriod(DateOnly.MinValue, new List<WorkloadDay>
+				{
+					workloadDay1
+				}, TaskOwnerPeriodType.Other).TaskOwnerDayCollection);
+
+			result.Should().Be.EqualTo(100);
+		}
+
+		[Test]
+		public void ShouldCalculateAccuracyAsZeroIfDifferenceIsTooBig()
+		{
+			var workloadDay1 = new WorkloadDay();
+			var date1 = new DateOnly(2015, 1, 2);
+			workloadDay1.Create(date1, new Workload(SkillFactory.CreateSkill("Phone")), new List<TimePeriod>());
+			workloadDay1.MakeOpen24Hours();
+			workloadDay1.TotalStatisticCalculatedTasks = 1d;
+			var result = new ForecastingMeanAbsolutePercentageDeviation().Measure(new List<IForecastingTarget>
 			{
 				new ForecastingTarget(date1, new OpenForWork(true, true))
 				{
@@ -79,7 +102,7 @@ namespace Teleopti.Ccc.DomainTest.Forecasting.Angel
 			workloadDay2.Create(date2, new Workload(SkillFactory.CreateSkill("Phone")), new List<TimePeriod>());
 			workloadDay2.MakeOpen24Hours();
 			workloadDay2.TotalStatisticCalculatedTasks = 0d;
-			var result = new ForecastingMeasurer().Measure(new List<IForecastingTarget>
+			var result = new ForecastingMeanAbsolutePercentageDeviation().Measure(new List<IForecastingTarget>
 			{
 				new ForecastingTarget(date1, new OpenForWork(true, true))
 				{
@@ -96,7 +119,7 @@ namespace Teleopti.Ccc.DomainTest.Forecasting.Angel
 					workloadDay2
 				}, TaskOwnerPeriodType.Other).TaskOwnerDayCollection);
 
-			result.Should().Be.EqualTo(0.25);
+			result.Should().Be.EqualTo(75);
 		}
 
 		[Test]
@@ -108,7 +131,7 @@ namespace Teleopti.Ccc.DomainTest.Forecasting.Angel
 			workloadDay1.MakeOpen24Hours();
 			workloadDay1.TotalStatisticCalculatedTasks = 0d;
 
-			var result = new ForecastingMeasurer().Measure(new List<IForecastingTarget>
+			var result = new ForecastingMeanAbsolutePercentageDeviation().Measure(new List<IForecastingTarget>
 			{
 				new ForecastingTarget(date1, new OpenForWork(true, true))
 				{
@@ -120,7 +143,7 @@ namespace Teleopti.Ccc.DomainTest.Forecasting.Angel
 					workloadDay1
 				}, TaskOwnerPeriodType.Other).TaskOwnerDayCollection);
 
-			result.Should().Be.EqualTo(0);
+			result.Should().Be.EqualTo(100);
 		}
 	}
 }

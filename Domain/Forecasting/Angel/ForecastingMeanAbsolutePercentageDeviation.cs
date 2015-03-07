@@ -5,7 +5,10 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Forecasting.Angel
 {
-	public class ForecastingMeasurer : IForecastingMeasurer
+	/// <summary>
+	/// http://en.wikipedia.org/wiki/Mean_absolute_percentage_error
+	/// </summary>
+	public class ForecastingMeanAbsolutePercentageDeviation : IForecastingMeasurer
 	{
 		public double Measure(IList<IForecastingTarget> forecastingForLastYear, ReadOnlyCollection<ITaskOwner> historicalDataForLastYear)
 		{
@@ -24,6 +27,7 @@ namespace Teleopti.Ccc.Domain.Forecasting.Angel
 						}
 						else if (Math.Abs(day.TotalStatisticCalculatedTasks) < 0.000001)
 						{
+							// a main drawback in this measurement method
 							numberOfSkipped++;
 						}
 						else
@@ -40,7 +44,7 @@ namespace Teleopti.Ccc.Domain.Forecasting.Angel
 			{
 				return Double.NaN;
 			}
-			return Math.Round(diffSum/(historicalDataForLastYear.Count - numberOfSkipped), 3);
+			return Math.Max(0, 100 - Math.Round(diffSum/(historicalDataForLastYear.Count - numberOfSkipped)*100, 3));
 		}
 	}
 }

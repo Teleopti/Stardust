@@ -308,7 +308,7 @@
     <Compile Include="DayOffPlanning\WorkShiftLegalStateDayIndexCalculatorTest.cs" />
     <Compile Include="FeatureFlags\AllTogglesTest.cs" />
     <Compile Include="Forecasting\Angel\ForecastMethodTest.cs" />
-    <Compile Include="Forecasting\Angel\ForecastingMeasurerTest.cs" />
+    <Compile Include="Forecasting\Angel\ForecastingMeanAbsolutePercentageDeviationTest.cs" />
     <Compile Include="Forecasting\Angel\ForecastingTargetMergerTest.cs" />
     <Compile Include="Forecasting\Angel\QuickForecasterSkillWithMultipleWorkloadsTest.cs" />
     <Compile Include="Forecasting\Angel\QuickForecastForAllSkillsTest.cs" />
