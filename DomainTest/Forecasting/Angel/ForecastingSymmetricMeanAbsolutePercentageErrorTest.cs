@@ -8,7 +8,7 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.DomainTest.Forecasting.Angel
 {
-	public class ForecastingMeanAbsolutePercentageDeviationTest
+	public class ForecastingSymmetricMeanAbsolutePercentageErrorTest
 	{
 		[Test]
 		public void ShouldCalculateAverageOfAccuracyBetweenForecastingAndHistorical()
@@ -23,7 +23,7 @@ namespace Teleopti.Ccc.DomainTest.Forecasting.Angel
 			workloadDay2.Create(date2, new Workload(SkillFactory.CreateSkill("Phone")), new List<TimePeriod>());
 			workloadDay2.MakeOpen24Hours();
 			workloadDay2.TotalStatisticCalculatedTasks = 8d;
-			var result = new ForecastingMeanAbsolutePercentageDeviation().Measure(new List<IForecastingTarget>
+			var result = new ForecastingSymmetricMeanAbsolutePercentageError().Measure(new List<IForecastingTarget>
 			{
 				new ForecastingTarget(date1, new OpenForWork(true, true))
 				{
@@ -40,7 +40,7 @@ namespace Teleopti.Ccc.DomainTest.Forecasting.Angel
 					workloadDay2
 				}, TaskOwnerPeriodType.Other).TaskOwnerDayCollection);
 
-			result.Should().Be.EqualTo(87.5);
+			result.Should().Be.EqualTo(88.889);
 		}
 
 		[Test]
@@ -51,7 +51,7 @@ namespace Teleopti.Ccc.DomainTest.Forecasting.Angel
 			workloadDay1.Create(date1, new Workload(SkillFactory.CreateSkill("Phone")), new List<TimePeriod>());
 			workloadDay1.MakeOpen24Hours();
 			workloadDay1.TotalStatisticCalculatedTasks = 3d;
-			var result = new ForecastingMeanAbsolutePercentageDeviation().Measure(new List<IForecastingTarget>
+			var result = new ForecastingSymmetricMeanAbsolutePercentageError().Measure(new List<IForecastingTarget>
 			{
 				new ForecastingTarget(date1, new OpenForWork(true, true))
 				{
@@ -63,7 +63,7 @@ namespace Teleopti.Ccc.DomainTest.Forecasting.Angel
 					workloadDay1
 				}, TaskOwnerPeriodType.Other).TaskOwnerDayCollection);
 
-			result.Should().Be.EqualTo(66.667);
+			result.Should().Be.EqualTo(71.429);
 		}
 
 		[Test]
@@ -74,7 +74,7 @@ namespace Teleopti.Ccc.DomainTest.Forecasting.Angel
 			workloadDay1.Create(date1, new Workload(SkillFactory.CreateSkill("Phone")), new List<TimePeriod>());
 			workloadDay1.MakeOpen24Hours();
 			workloadDay1.TotalStatisticCalculatedTasks = 1d;
-			var result = new ForecastingMeanAbsolutePercentageDeviation().Measure(new List<IForecastingTarget>
+			var result = new ForecastingSymmetricMeanAbsolutePercentageError().Measure(new List<IForecastingTarget>
 			{
 				new ForecastingTarget(date1, new OpenForWork(true, true))
 				{
@@ -90,10 +90,11 @@ namespace Teleopti.Ccc.DomainTest.Forecasting.Angel
 		}
 
 		[Test]
-		public void ShouldSkipCalculationWhenHistoricalIsZero()
+		public void ShouldNotSkipCalculationWhenHistoricalIsZero()
 		{
 			var date1 = new DateOnly(2015, 1, 2);
 			var date2 = new DateOnly(2015, 1, 3);
+			var date3 = new DateOnly(2015, 1, 4);
 			var workloadDay1 = new WorkloadDay();
 			workloadDay1.Create(date1, new Workload(SkillFactory.CreateSkill("Phone")), new List<TimePeriod>());
 			workloadDay1.MakeOpen24Hours();
@@ -102,7 +103,11 @@ namespace Teleopti.Ccc.DomainTest.Forecasting.Angel
 			workloadDay2.Create(date2, new Workload(SkillFactory.CreateSkill("Phone")), new List<TimePeriod>());
 			workloadDay2.MakeOpen24Hours();
 			workloadDay2.TotalStatisticCalculatedTasks = 0d;
-			var result = new ForecastingMeanAbsolutePercentageDeviation().Measure(new List<IForecastingTarget>
+			var workloadDay3 = new WorkloadDay();
+			workloadDay3.Create(date3, new Workload(SkillFactory.CreateSkill("Phone")), new List<TimePeriod>());
+			workloadDay3.MakeOpen24Hours();
+			workloadDay3.TotalStatisticCalculatedTasks = 20d;
+			var result = new ForecastingSymmetricMeanAbsolutePercentageError().Measure(new List<IForecastingTarget>
 			{
 				new ForecastingTarget(date1, new OpenForWork(true, true))
 				{
@@ -110,16 +115,21 @@ namespace Teleopti.Ccc.DomainTest.Forecasting.Angel
 				},
 				new ForecastingTarget(date2, new OpenForWork(true, true))
 				{
-					Tasks = 8d
+					Tasks = 0.1d
+				},
+				new ForecastingTarget(date3, new OpenForWork(true, true))
+				{
+					Tasks = 21d
 				}
 			},
 				new TaskOwnerPeriod(DateOnly.MinValue, new List<WorkloadDay>
 				{
 					workloadDay1,
-					workloadDay2
+					workloadDay2,
+					workloadDay3
 				}, TaskOwnerPeriodType.Other).TaskOwnerDayCollection);
 
-			result.Should().Be.EqualTo(75);
+			result.ToString().Should().Be.EqualTo(24.3.ToString());
 		}
 
 		[Test]
@@ -131,7 +141,7 @@ namespace Teleopti.Ccc.DomainTest.Forecasting.Angel
 			workloadDay1.MakeOpen24Hours();
 			workloadDay1.TotalStatisticCalculatedTasks = 0d;
 
-			var result = new ForecastingMeanAbsolutePercentageDeviation().Measure(new List<IForecastingTarget>
+			var result = new ForecastingSymmetricMeanAbsolutePercentageError().Measure(new List<IForecastingTarget>
 			{
 				new ForecastingTarget(date1, new OpenForWork(true, true))
 				{

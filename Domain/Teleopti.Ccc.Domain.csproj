@@ -460,6 +460,7 @@
     <Compile Include="DayOffPlanning\TuiCaseSolver.cs" />
     <Compile Include="Forecasting\Angel\AverageStatistics.cs" />
     <Compile Include="Forecasting\Angel\ForecastingMeanAbsolutePercentageDeviation.cs" />
+    <Compile Include="Forecasting\Angel\ForecastingSymmetricMeanAbsolutePercentageError.cs" />
     <Compile Include="Forecasting\Angel\ForecastingTargetMerger.cs" />
     <Compile Include="Forecasting\Angel\ForecastMethod.cs" />
     <Compile Include="Forecasting\Angel\Future\ForecastVolumeApplier.cs" />
