@@ -1,10 +1,9 @@
 ﻿using System.Linq;
 using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
 using Teleopti.Ccc.Win.Sikuli.Helpers;
-using Teleopti.Ccc.Win.Sikuli.Validators.RootValidators;
 using Teleopti.Interfaces.Domain;
 
-namespace Teleopti.Ccc.Win.Sikuli.Validators
+namespace Teleopti.Ccc.Win.Sikuli.Validators.RootValidators
 {
 	internal class DeleteAllValidator : IRootValidator
 	{
