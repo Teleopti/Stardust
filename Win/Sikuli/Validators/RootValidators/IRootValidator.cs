@@ -2,6 +2,9 @@
 
 namespace Teleopti.Ccc.Win.Sikuli.Validators.RootValidators
 {
+	/// <summary>
+	/// Top level validator.
+	/// </summary>
 	public interface IRootValidator
 	{
 		SikuliValidationResult Validate(ITestDuration duration);
