@@ -9,11 +9,13 @@ namespace Teleopti.Ccc.Win.Sikuli.Validators.AtomicValidators
 	{
 		private readonly ISchedulerStateHolder _schedulerState;
 		private readonly IAggregateSkill _totalSkill;
+		private double _limit;
 
-		public PeriodStandardDeviationValidator(ISchedulerStateHolder schedulerState, IAggregateSkill totalSkill)
+		public PeriodStandardDeviationValidator(ISchedulerStateHolder schedulerState, IAggregateSkill totalSkill, double limit)
 		{
 			_schedulerState = schedulerState;
 			_totalSkill = totalSkill;
+			_limit = limit;
 		}
 
 		public string Description
@@ -25,9 +27,8 @@ namespace Teleopti.Ccc.Win.Sikuli.Validators.AtomicValidators
 		{
 			var result = new SikuliValidationResult(SikuliValidationResult.ResultValue.Pass);
 			var std = ValidatorHelper.GetStandardDeviationForPeriod(_schedulerState, _totalSkill);
-			const double limit = 0.06d;
-			result.AppendLimitValueLineToDetails("Period StdDev", limit.ToString(CultureInfo.CurrentCulture), std.Value.ToString(CultureInfo.CurrentCulture));
-			if (std.Value > limit)
+			result.AppendLimitValueLineToDetails("Period StdDev", _limit.ToString(CultureInfo.CurrentCulture), std.Value.ToString(CultureInfo.CurrentCulture));
+			if (std.Value > _limit)
 				result.Result = SikuliValidationResult.ResultValue.Fail;
 			return result;
 		}

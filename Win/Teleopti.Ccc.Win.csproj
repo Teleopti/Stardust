@@ -2589,11 +2589,11 @@
       <DependentUpon>WorkShiftsExplorer.cs</DependentUpon>
     </Compile>
     <Compile Include="Sikuli\Helpers\TestDuration.cs" />
+    <Compile Include="Sikuli\Validators\RootValidators\OptimizeBetweenDaysValidator.cs" />
     <Compile Include="Sikuli\Validators\RootValidators\RootValidator.cs" />
     <Compile Include="Sikuli\Validators\ScheduleOvertimePeriodValidator.cs" />
     <Compile Include="Sikuli\Validators\IntervalBalanceAfterValidator.cs" />
     <Compile Include="Sikuli\Validators\OptimizeWithinDaysValidator.cs" />
-    <Compile Include="Sikuli\Validators\OptimizeBetweenDaysValidator.cs" />
     <Compile Include="Sikuli\Validators\RootValidators\OptimizeDaysOffValidator.cs" />
     <Compile Include="Sikuli\Validators\OptimizerValidator.cs" />
     <Compile Include="Sikuli\Validators\RootValidators\DeleteAllValidator.cs" />
