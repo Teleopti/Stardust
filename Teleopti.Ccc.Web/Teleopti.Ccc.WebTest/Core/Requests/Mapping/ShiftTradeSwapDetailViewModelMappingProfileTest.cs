@@ -213,7 +213,19 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 				.Should().Be.EqualTo(_toPerson.Name.ToString());
 		}
 
+		[Test]
+		public void ShouldMapSwapDate()
+		{
+			var from = new DateTime(2001, 1, 1, 0, 0, 0, DateTimeKind.Utc);
+			var to = new DateTime(2001, 1, 2, 0, 0, 0, DateTimeKind.Utc);
 
+			var shiftTrade = CreateShiftTrade(from, to, null, null);
+
+			var result = Mapper.Map<IShiftTradeSwapDetail, ShiftTradeSwapDetailsViewModel>(shiftTrade.ShiftTradeSwapDetails.First());
+
+			result.Date.Should().Be.EqualTo("2001-01-01");
+		}		
+		
 		[Test]
 		public void ShouldMapScheduleDayTextFromName()
 		{

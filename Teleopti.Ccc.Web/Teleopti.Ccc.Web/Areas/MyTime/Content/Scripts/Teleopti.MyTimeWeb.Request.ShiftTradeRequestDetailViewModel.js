@@ -411,8 +411,7 @@ ShiftTradeRequestDetailedDayViewModel = function(data) {
 		self.otherSchedule(new Teleopti.MyTimeWeb.Request.PersonScheduleEditShiftTradeViewModel(mappedlayers, myScheduleObject));
 	};
 
-	var dateFormat = $("#Request-detail-datepicker-format").val().toUpperCase();
-	self.TradeDate = ko.observable(moment(data.Date).format(dateFormat));
+	self.TradeDate = ko.observable(data.Date);
 
 	self.createMySchedule(data.From);
 	self.createOtherSchedule(data.To);
