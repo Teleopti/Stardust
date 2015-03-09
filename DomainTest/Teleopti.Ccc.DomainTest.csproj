@@ -309,6 +309,7 @@
     <Compile Include="DayOffPlanning\WorkShiftLegalStateDayIndexCalculatorTest.cs" />
     <Compile Include="FeatureFlags\AllTogglesTest.cs" />
     <Compile Include="Forecasting\Angel\ForecastingSymmetricMeanAbsolutePercentageErrorTest.cs" />
+    <Compile Include="Forecasting\Angel\ForecastingWeightedMeanAbsolutePercentageErrorTest.cs" />
     <Compile Include="Forecasting\Angel\ForecastMethodTest.cs" />
     <Compile Include="Forecasting\Angel\ForecastingMeanAbsolutePercentageDeviationTest.cs" />
     <Compile Include="Forecasting\Angel\ForecastingTargetMergerTest.cs" />

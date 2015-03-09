@@ -1,3 +1,4 @@
+using System;
 using System.Threading.Tasks;
 using System.Web.Http;
 using Teleopti.Ccc.Domain.Aop;
@@ -31,7 +32,7 @@ namespace Teleopti.Ccc.Web.Areas.Forecasting.Controllers
 		{
 			var futurePeriod = new DateOnlyPeriod(new DateOnly(model.ForecastStart), new DateOnly(model.ForecastEnd));
 
-			var measureResult = _quickForecastForAllSkills.CreateForecast(futurePeriod);
+			var measureResult = Math.Round(_quickForecastForAllSkills.CreateForecast(futurePeriod), 1);
 			return Task.FromResult(measureResult);
 		}
 	}

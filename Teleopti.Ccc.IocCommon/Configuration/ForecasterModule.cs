@@ -13,7 +13,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<ForecastingTargetMerger>()
 				.SingleInstance()
 				.As<IForecastingTargetMerger>();
-			builder.RegisterType<ForecastingMeanAbsolutePercentageDeviation>()
+			builder.RegisterType<ForecastingWeightedMeanAbsolutePercentageError>()
 				.SingleInstance()
 				.As<IForecastingMeasurer>();
 			builder.RegisterType<IndexVolumes>()
