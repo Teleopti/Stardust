@@ -111,7 +111,6 @@
 			this.labelTitle.Name = "labelTitle";
 			this.labelTitle.Size = new System.Drawing.Size(164, 20);
 			this.labelTitle.TabIndex = 0;
-			this.labelTitle.Text = "xxDetailedForecasting";
 			// 
 			// panel1
 			// 
