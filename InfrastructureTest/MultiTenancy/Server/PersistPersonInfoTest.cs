@@ -60,7 +60,7 @@ namespace Teleopti.Ccc.InfrastructureTest.MultiTenancy.Server
 			loaded.Id.Should().Be.EqualTo(idBefore);
 		}
 
-		[Test, Ignore("Fix this soon!")]
+		[Test]
 		public void SameApplicationLogonShouldThrow()
 		{
 			var logonName = RandomName.Make();
@@ -91,7 +91,7 @@ namespace Teleopti.Ccc.InfrastructureTest.MultiTenancy.Server
 			Assert.DoesNotThrow(tenantUnitOfWorkManager.CurrentSession().Flush);
 		}
 
-		[Test, Ignore("Fix this soon!")]
+		[Test]
 		public void SameIdentityShouldThrow()
 		{
 			var identity = RandomName.Make();
