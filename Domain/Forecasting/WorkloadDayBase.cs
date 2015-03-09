@@ -1347,7 +1347,9 @@ namespace Teleopti.Ccc.Domain.Forecasting
                 throw new ArgumentException("All items in supplied list must have this entity as parent.", "templateTaskPeriodList");
             }
 
-            var currentUtcDate = TimeZoneHelper.ConvertToUtc(CurrentDate, _workload.Skill.TimeZone);
+            var currentUtcDate = TimeZoneHelper.ConvertToUtc(CurrentDate.AddDays(1), _workload.Skill.TimeZone);
+	        currentUtcDate = currentUtcDate.AddDays(-1);
+
             //Create a list of valid date time periods
             var validPeriods = from o in _openHourList
                                select new DateTimePeriod(
