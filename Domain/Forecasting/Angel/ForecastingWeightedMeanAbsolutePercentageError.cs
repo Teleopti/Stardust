@@ -10,7 +10,6 @@ namespace Teleopti.Ccc.Domain.Forecasting.Angel
 		public double Measure(IList<IForecastingTarget> forecastingForLastYear, ReadOnlyCollection<ITaskOwner> historicalDataForLastYear)
 		{
 			var diffSum = 0d;
-			var numberOfSkipped = 0;
 			var tasksSum = 0d;
 			foreach (var day in historicalDataForLastYear)
 			{
@@ -23,11 +22,6 @@ namespace Teleopti.Ccc.Domain.Forecasting.Angel
 						{
 							diff = 0d;
 						}
-						else if (Math.Abs(day.TotalStatisticCalculatedTasks) < 0.000001)
-						{
-							// a main drawback in this measurement method
-							numberOfSkipped++;
-						}
 						else
 						{
 							diff = Math.Abs(day.TotalStatisticCalculatedTasks - forecastingDay.Tasks);
@@ -39,12 +33,8 @@ namespace Teleopti.Ccc.Domain.Forecasting.Angel
 
 				diffSum += diff;
 			}
-			if (historicalDataForLastYear.Count - numberOfSkipped == 0)
-			{
-				return Double.NaN;
-			}
 			var wmape = Math.Abs(tasksSum) < 0.000001 ? 0 : diffSum / tasksSum;
-			return Math.Max(0, 100 - Math.Round(wmape / (historicalDataForLastYear.Count - numberOfSkipped) * 100, 3));
+			return Math.Max(0, 100 - Math.Round(wmape * 100, 3));
 		}
 	}
 }
