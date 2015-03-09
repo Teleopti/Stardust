@@ -1,4 +1,4 @@
-﻿@charset "UTF-8";
+@charset "UTF-8";
 /*Teleopti blue*/
 /*sets wfm-block*/
 /*depricated, remove if used in code*/
@@ -31,13 +31,13 @@ body {
 body {
   background-color: rgba(0, 0, 0, 0.06); }
 
-.material-depth-1, .angular-ui-tree-handle.selected:after, .wfm-btn-default, .wfm-btn-primary, .wfm-fab {
-  box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.16); }
+.material-depth-1, .angular-ui-tree-handle.selected:after, .wfm-btn-default, .wfm-btn-primary, .wfm-fab, .sidenav-toggle .sidenav-wrapper {
+  box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.26); }
 
 .material-depth-2, .wfm-btn-default:hover, .wfm-btn-primary:hover, .wfm-fab:hover {
-  box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.19); }
+  box-shadow: 0 8px 17px 0 rgba(0, 0, 0, 0.2); }
 
-.material-trench-1, .tree, .wfm-leave-behind, .sidenav-toggle label {
+.material-trench-1, .tree, .wfm-leave-behind {
   -webkit-box-shadow: inset 0 2px 5px 0 rgba(0, 0, 0, 0.16);
   -moz-box-shadow: inset 0 2px 5px 0 rgba(0, 0, 0, 0.16);
   box-shadow: inset 0 2px 5px 0 rgba(0, 0, 0, 0.16); }
@@ -58,7 +58,7 @@ body {
 .container-block, .tab-group .tab-container {
   background-color: #f5f5f5; }
 
-.wfm-block, .tile-footer, .tree li, .angular-ui-tree-handle, .wfm-list li, select option, .wfm-radio, .wfm-checkbox, .wfm-accordion input[type='radio'] + label, .inner span, .tab-group .tab-container, .notice, .notification-list li {
+.wfm-block, .tile-footer, .tree li, .angular-ui-tree-handle, .wfm-list li, select option, .wfm-radio, .wfm-checkbox, .sub-header, .bottom-header, .wfm-accordion input[type='radio'] + label, .inner span, .tab-group .tab-container, .notice, .notification-list li {
   padding: 5px;
   width: 100%; }
 
@@ -68,15 +68,6 @@ body {
 
 .material-title {
   color: rgba(0, 0, 0, 0.54); }
-
-.layout-container .sidenav {
-  background-color: #ffffff;
-  -webkit-flex: auto;
-  flex: auto;
-  flex-basis: 15%;
-  top: 0;
-  height: 1050px;
-  bottom: 0; }
 
 .layout-container {
   width: 100%;
@@ -166,6 +157,7 @@ body {
   overflow: hidden;
   background-color: #f5f5f5;
   border-left: 3px solid transparent;
+  border-top: 1px solid rgba(0, 0, 0, 0.06);
   /*
 	&:active, &:focus, &:active:hover, &:focus:hover {
 		background-color: $blue-500 !important;
@@ -199,7 +191,6 @@ body {
 .wfm-list li:hover > .wfm-leave-behind {
   width: 110px; }
 
-/*tooltip - this should be removed */
 @-webkit-keyframes tooltipBackgroundShow {
   0% {
     -webkit-transform: scale(0.2);
@@ -266,7 +257,7 @@ md-tooltip[md-direction="top"] {
   margin-bottom: 8px; }
 
 md-tooltip .md-background {
-  background: #0099FF;
+  background: #9CCC65;
   position: absolute;
   left: 50%;
   width: 256px;
@@ -494,20 +485,6 @@ input[type='text'], select {
   .wfm-checkbox span {
     margin-left: 23px;
     white-space: nowrap; }
-
-.sidenav-toggle input[type='checkbox'] {
-  display: none; }
-.sidenav-toggle label {
-  background-color: #E0E0E0;
-  width: 34px;
-  height: 34px;
-  text-align: center;
-  cursor: pointer;
-  transition: all 0.2s ease-in-out; }
-.sidenav-toggle label i {
-  padding-top: 5px; }
-.sidenav-toggle input[type=checkbox]:checked ~ label {
-  transform: scale(-1, 1); }
 
 .sub-header {
   background-color: #0099FF;
@@ -814,3 +791,46 @@ tr {
   .notification-list i {
     padding-right: 5px;
     color: rgba(0, 0, 0, 0.54); }
+
+.mdi:before {
+  font-size: 18px !important; }
+
+.sidenav-toggle input[type='checkbox'] {
+  display: none; }
+.sidenav-toggle label {
+  background-color: #ffffff;
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.5s ease-in-out;
+  max-width: none;
+  margin: 0; }
+.sidenav-toggle label i {
+  margin: 5px; }
+.sidenav-toggle input[type=checkbox]:checked ~ label {
+  transform: scale(-1, 1); }
+
+.sidenav-toggle .sidenav-wrapper {
+  background-color: #ffffff;
+  cursor: pointer;
+  margin-top: 10px; }
+  .sidenav-toggle .sidenav-wrapper.left {
+    box-shadow: 2px 2px 5px 0 rgba(0, 0, 0, 0.26); }
+  .sidenav-toggle .sidenav-wrapper.right {
+    box-shadow: -2px 2px 5px 0 rgba(0, 0, 0, 0.26); }
+
+.layout-container .sidenav {
+  background-color: #ffffff;
+  -webkit-flex: auto;
+  flex: auto;
+  flex-basis: 15%;
+  top: 0;
+  height: 1050px;
+  bottom: 0;
+  -webkit-transition: all ease-in-out 0.5s;
+  transition: all 0.5s ease-in-out; }
+
+.sidenav.left.ng-hide {
+  -webkit-transform: translate(-100%, 0%); }
+
+.sidenav.right.ng-hide {
+  -webkit-transform: translate(100%, 0%); }
