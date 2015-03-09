@@ -183,6 +183,8 @@
     <Compile Include="AgentBadge\CalculateTimeZoneConsumer.cs" />
     <Compile Include="AgentBadge\IAgentBadgeCalculator.cs" />
     <Compile Include="AgentBadge\IAgentBadgeWithRankCalculator.cs" />
+    <Compile Include="AgentBadge\IRunningEtlJobChecker.cs" />
+    <Compile Include="AgentBadge\RunningEtlJobChecker.cs" />
     <Compile Include="AutofacServiceBus.cs" />
     <Compile Include="Rta\FactQueueUpdatedConsumer.cs" />
     <Compile Include="NewAbsenceReportConsumer.cs" />

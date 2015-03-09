@@ -30,6 +30,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.AgentBadge
 		private readonly INow _now;
 		private readonly IAgentBadgeRepository _badgeRepository;
 		private readonly IAgentBadgeWithRankRepository _badgeWithRankRepository;
+		private readonly IRunningEtlJobChecker _runningEtlJobChecker;
 		private readonly IToggleManager _toggleManager;
 		private static readonly ILog Logger = LogManager.GetLogger(typeof(CalculateBadgeConsumer));
 
@@ -44,6 +45,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.AgentBadge
 			IAgentBadgeWithRankCalculator badgeWithRankCalculator,
 			IAgentBadgeRepository badgeRepository,
 			IAgentBadgeWithRankRepository badgeWithRankRepository,
+			IRunningEtlJobChecker runningEtlJobChecker,
 			INow now,
 			IToggleManager toggleManager)
 		{
@@ -58,6 +60,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.AgentBadge
 			_now = now;
 			_badgeRepository = badgeRepository;
 			_badgeWithRankRepository = badgeWithRankRepository;
+			_runningEtlJobChecker = runningEtlJobChecker;
 			_toggleManager = toggleManager;
 		}
 
@@ -110,6 +113,8 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.AgentBadge
 				var allAgents = _personRepository.FindPeopleInOrganization(new DateOnlyPeriod(today.AddDays(-1), today.AddDays(1)), false);
 
 				var calculateDate = new DateOnly(message.CalculationDate);
+
+				_runningEtlJobChecker.CheckIfNightlyEtlJobRunning();
 
 				if (setting.AdherenceBadgeEnabled)
 				{

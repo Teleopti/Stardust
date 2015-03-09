@@ -1,8 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using NUnit.Framework;
+﻿using NUnit.Framework;
 using Rhino.Mocks;
 using Rhino.ServiceBus;
+using System;
+using System.Collections.Generic;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Domain.FeatureFlags;
@@ -34,6 +34,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.AgentBadge
 		private IUnitOfWork unitOfWork;
 		private IToggleManager toggleManager;
 		private IAgentBadgeWithRankCalculator badgeWithRankCalculator;
+		private IRunningEtlJobChecker runningEtlJobChecker;
 
 		[SetUp]
 		public void Setup()
@@ -45,6 +46,8 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.AgentBadge
 			loggedOnUnitOfWorkFactory.Stub(x => x.CreateAndOpenUnitOfWork()).Return(unitOfWork);
 			serviceBus = MockRepository.GenerateMock<IServiceBus>();
 			badgeSettingsRepository = MockRepository.GenerateMock<IAgentBadgeSettingsRepository>();
+
+			runningEtlJobChecker = MockRepository.GenerateMock<IRunningEtlJobChecker>();
 
 			badgeRepository = MockRepository.GenerateMock<IAgentBadgeRepository>();
 			badgeWithRankRepository = MockRepository.GenerateMock<IAgentBadgeWithRankRepository>();
@@ -78,7 +81,8 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.AgentBadge
 			badgeWithRankCalculator = MockRepository.GenerateMock<IAgentBadgeWithRankCalculator>();
 
 			target = new CalculateBadgeConsumer(serviceBus, badgeSettingsRepository, personRepository, globalSettingRepository,
-				msgRepository, unitOfWorkFactory, calculator, badgeWithRankCalculator, badgeRepository, badgeWithRankRepository, now, toggleManager);
+				msgRepository, unitOfWorkFactory, calculator, badgeWithRankCalculator, badgeRepository, badgeWithRankRepository,
+				runningEtlJobChecker, now, toggleManager);
 		}
 
 		[Test]

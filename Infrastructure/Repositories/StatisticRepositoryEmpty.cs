@@ -2,7 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Data;
-using NHibernate.Mapping;
+using Teleopti.Ccc.Domain.ETL;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Security.AuthorizationEntities;
 using Teleopti.Ccc.Domain.SystemSetting.GlobalSetting;
@@ -109,6 +109,10 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
         }
 
         #region IStatisticRepository Members
+		public IEnumerable<RunningEtlJob> GetRunningEtlJobs()
+	    {
+			return new List<RunningEtlJob>();
+	    }
 
         public IList LoadAgentStat(Guid scenarioCode, DateTime startDate, DateTime endDate, string timeZoneId, Guid personCode)
         {

@@ -458,6 +458,7 @@
     <Compile Include="DayOffPlanning\SmartDayOffBackToLegalStateService.cs" />
     <Compile Include="DayOffPlanning\TeDataDayOffDecisionMaker.cs" />
     <Compile Include="DayOffPlanning\TuiCaseSolver.cs" />
+    <Compile Include="ETL\RunningEtlJob.cs" />
     <Compile Include="Forecasting\Angel\AverageStatistics.cs" />
     <Compile Include="Forecasting\Angel\ForecastingMeanAbsolutePercentageDeviation.cs" />
     <Compile Include="Forecasting\Angel\ForecastingSymmetricMeanAbsolutePercentageError.cs" />

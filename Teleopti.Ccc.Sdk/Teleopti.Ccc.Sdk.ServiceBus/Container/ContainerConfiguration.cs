@@ -51,6 +51,8 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Container
 
 			build.RegisterType<AgentBadgeCalculator>().As<IAgentBadgeCalculator>();
 			build.RegisterType<AgentBadgeWithRankCalculator>().As<IAgentBadgeWithRankCalculator>();
+			build.RegisterType<RunningEtlJobChecker>().As<IRunningEtlJobChecker>();
+
 			build.RegisterType<NotifyTeleoptiRtaServiceToCheckForActivityChange>().As<INotifyRtaToCheckForActivityChange>().SingleInstance();
 
 			build.Update(_container);

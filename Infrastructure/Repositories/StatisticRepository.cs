@@ -1,20 +1,21 @@
-﻿using System;
+﻿using NHibernate;
+using NHibernate.Transform;
+using System;
 using System.Collections;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Data;
 using System.Data.SqlClient;
-using System.Linq;
-using System.Collections.Generic;
 using System.Globalization;
-using NHibernate;
-using NHibernate.Transform;
+using System.Linq;
 using Teleopti.Ccc.Domain.Collection;
+using Teleopti.Ccc.Domain.ETL;
 using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.Repositories;
+using Teleopti.Ccc.Domain.Security.AuthorizationEntities;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Domain.SystemSetting.GlobalSetting;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
-using Teleopti.Ccc.Domain.Security.AuthorizationEntities;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
 
@@ -353,6 +354,32 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 					 .SetResultTransformer(Transformers.AliasToBean(typeof(ForecastActualDifferNotification))).List<ForecastActualDifferNotification>();
 			 }
 	    }
+
+		public IEnumerable<RunningEtlJob> GetRunningEtlJobs()
+		{
+		    using (var uow = StatisticUnitOfWorkFactory().CreateAndOpenStatelessUnitOfWork())
+		    {
+			    const string sql = "exec [mart].[sys_etl_job_running_info_get]";
+
+			    return ((NHibernateStatelessUnitOfWork) uow).Session.CreateSQLQuery(sql)
+				    .AddScalar("computer_name", NHibernateUtil.String)
+				    .AddScalar("start_time", NHibernateUtil.DateTime)
+				    .AddScalar("job_name", NHibernateUtil.String)
+				    .AddScalar("is_started_by_service", NHibernateUtil.Boolean)
+				    .AddScalar("lock_until", NHibernateUtil.DateTime)
+				    .SetReadOnly(true)
+				    .List<object[]>()
+				    .Select(x =>
+						new RunningEtlJob
+					    {
+						    ComputerName = (string) x[0],
+						    StartTime = (DateTime) x[1],
+						    JobName = (string) x[2],
+						    IsStartedByService = (bool) x[3],
+						    LockUntil = (DateTime) x[4]
+					    });
+		    }
+		}
 
 	    private IUnitOfWorkFactory StatisticUnitOfWorkFactory()
         {

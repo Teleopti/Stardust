@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Data;
+using Teleopti.Ccc.Domain.ETL;
 using Teleopti.Ccc.Domain.Security.AuthorizationEntities;
 using Teleopti.Ccc.Domain.SystemSetting.GlobalSetting;
 using Teleopti.Interfaces.Domain;
@@ -125,6 +126,9 @@ namespace Teleopti.Ccc.Domain.Repositories
 		IList LoadAgentsOverThresholdForAnsweredCalls(string timezoneCode, DateTime date, int answeredCallsThreshold);
 		IList LoadAgentsOverThresholdForAdherence(AdherenceReportSettingCalculationMethod adherenceCalculationMethod, string timezoneCode, DateTime date, Percent adherenceThreshold);
 		IList LoadAgentsUnderThresholdForAHT(string timezoneCode, DateTime date, TimeSpan aHTThreshold);
+
+		IEnumerable<RunningEtlJob> GetRunningEtlJobs();
+
 		IEnumerable<ForecastActualDifferNotification> ForecastActualDifferNotifications();
 	}
 }
