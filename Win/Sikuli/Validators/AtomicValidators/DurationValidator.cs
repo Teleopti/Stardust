@@ -16,7 +16,7 @@ namespace Teleopti.Ccc.Win.Sikuli.Validators.AtomicValidators
 
 		public string Description
 		{
-			get { return "Duration limit is: " + _durationLimit.ToString(@"mm\:ss"); }
+			get { return "Duration limit: " + _durationLimit.ToString(@"mm\:ss"); }
 		}
 
 		public SikuliValidationResult Validate()
