@@ -1172,7 +1172,7 @@
     <Content Include="Areas\Reporting\images\icon.doc.png" />
     <Content Include="Areas\Reporting\images\icon_show.gif" />
     <Content Include="Areas\Reporting\images\next.gif" />
-    <Content Include="Areas\Reporting\images\prev.gif" />
+    <Content Include="Areas\Reporting\images\previous.gif" />
     <Content Include="Areas\Reporting\images\up.png" />
     <Content Include="Areas\Reporting\ScheduleAdherence.aspx" />
     <Content Include="Areas\Reporting\Index.aspx" />

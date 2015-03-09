@@ -92,7 +92,7 @@
     float: left;
     background-repeat: no-repeat;
     background-position: 50% 50%;
-    background-image:url(images/previous.gif);
+    background-image:url(../../images/previous.gif);
     /*background-image: url(../../WebResource.axd?d=h5orERdAXqJwNOs03yyPelp7bMUUMOtSL2yUIRd-eh2-cuX6WPyygZ3af2jYqwPfNQQAbG75SUCIun2YdKD8uQ2&t=633059379620000000);*/
 }
 .MyCalendar .ajax__calendar_next {
@@ -102,7 +102,7 @@
     float: right;
     background-repeat: no-repeat;
     background-position: 50% 50%;
-    background-image:url(images/next.gif);
+    background-image:url(../../images/next.gif);
     /*background-image: url(../../WebResource.axd?d=h5orERdAXqJwNOs03yyPelp7bMUUMOtSL2yUIRd-eh2-cuX6WPyygZ3af2jYqwPf0GxIQ9SNZIrG5n9i8AgXUw2&t=633059379620000000);*/
 }
 .MyCalendar .ajax__calendar_title {
@@ -121,6 +121,7 @@
     width: 17px;
     text-align: right;
     padding: 0 2px;
+	 font-weight: bold;
 }
 .MyCalendar .ajax__calendar_day {
     height: 17px;
