@@ -110,24 +110,28 @@ namespace Teleopti.Ccc.WinCode.Backlog
 
 		private void transferScheduledBacklog(List<ISkill> emailSkills, DateOnly productPlanStart)
 		{
-			foreach (var dateOnly in _period.DayCollection())
+			foreach (var emailSkill in emailSkills)
 			{
-				foreach (var emailSkill in emailSkills)
+				foreach (var dateOnly in _period.DayCollection())
 				{
-					if (!_taskDic[emailSkill].ContainsKey(dateOnly))
+					DateOnly only1 = dateOnly;
+					var taskOnDateKey = _taskDic[emailSkill].FirstOrDefault(t => t.Value.SpanningDateOnlyPeriod().EndDate == only1);
+					if(taskOnDateKey.Key == new DateOnly())
 						continue;
 
-					var taskOnDate = _taskDic[emailSkill][dateOnly];
+					var taskOnDate = taskOnDateKey.Value;
 					DateOnly only = dateOnly;
 					var nextStart = _taskDic[emailSkill].Keys.FirstOrDefault(d => d > only);
 					if (nextStart == new DateOnly())
 						continue;
+
 					var nextTask = _taskDic[emailSkill][nextStart];
 					nextTask.BacklogScheduledTask.TransferedBacklog = taskOnDate.BacklogScheduledTask.ScheduledBacklogTimeOnTask();
 					nextTask.BacklogProductPlanTask.TransferedBacklog = taskOnDate.BacklogProductPlanTask.PlannedBacklogTimeOnTask();
 					if (taskOnDate.StartDate < productPlanStart && nextTask.StartDate >= productPlanStart)
 						nextTask.BacklogProductPlanTask.TransferedBacklog =
-							nextTask.BacklogProductPlanTask.TransferedBacklog.Add(taskOnDate.BacklogScheduledTask.ScheduledBacklogTimeOnTask());
+							nextTask.BacklogProductPlanTask.TransferedBacklog.Add(
+								taskOnDate.BacklogScheduledTask.ScheduledBacklogTimeOnTask());
 				}
 			}
 		}

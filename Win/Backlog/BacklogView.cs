@@ -229,8 +229,8 @@ namespace Teleopti.Ccc.Win.Backlog
 			gridControl1.ControllerOptions = GridControllerOptions.All & (~GridControllerOptions.OleDataSource);
 			gridControl1.ResetVolatileData();
 			gridControl1.BeginUpdate();
-			gridControl1.ColWidths.SetSize(0, 160);
-			gridControl1.RowHeights.SetSize(0, 30);
+			gridControl1.ColWidths.SetSize(0, 179);
+			gridControl1.RowHeights.SetSize(0, 27);
 			gridControl1.Rows.FreezeRange(1, _fixedRows);
 			gridControl1.EndUpdate(true);
 			chart1.Palette = ChartColorPalette.SeaGreen;
@@ -263,13 +263,22 @@ namespace Teleopti.Ccc.Win.Backlog
 			var series1 = chart1.Series.Add("Planned/Scheduled on incoming");
 			var series2 = chart1.Series.Add("Backlog on incoming");
 			var series3 = chart1.Series.Add("Overstaff");
-			series3.Color = Color.OrangeRed;
+			var series4 = chart1.Series.Add("Estimated total backlog");
+
 			series1.ChartType = SeriesChartType.StackedColumn;
 			series1.XValueType = ChartValueType.Date;
+			series1.Color = Color.LightGreen;
 			series2.ChartType = SeriesChartType.StackedColumn;
 			series2.XValueType = ChartValueType.Date;
+			series2.Color = Color.Yellow;
 			series3.ChartType = SeriesChartType.StackedColumn;
 			series3.XValueType = ChartValueType.Date;
+			series3.Color = Color.LightCoral;
+			series4.ChartType = SeriesChartType.Line;
+			series4.YAxisType = AxisType.Primary;
+			series4.XValueType = ChartValueType.Date;
+			series4.Color = Color.Red;
+
 			for (int i = 1; i < gridControl1.ColCount; i++)
 			{
 				var dateOnIndex = _model.GetDateOnIndex(i);
@@ -284,6 +293,8 @@ namespace Teleopti.Ccc.Win.Backlog
 					series2.Points.Add(datapoint);
 					datapoint = new DataPoint(i, _model.GetScheduledOverstaffOnIncomming(i, skill).GetValueOrDefault(TimeSpan.Zero).TotalHours);
 					series3.Points.Add(datapoint);
+					datapoint = new DataPoint(i, _model.GetScheduledBacklogTimeOnIndex(i, skill).GetValueOrDefault(TimeSpan.Zero).TotalHours);
+					series4.Points.Add(datapoint);
 				}
 				else
 				{
@@ -294,6 +305,8 @@ namespace Teleopti.Ccc.Win.Backlog
 					series2.Points.Add(datapoint);
 					datapoint = new DataPoint(i, _model.GetPlannedOverstaffingTimeForIndex(i, skill).GetValueOrDefault(TimeSpan.Zero).TotalHours);
 					series3.Points.Add(datapoint);
+					datapoint = new DataPoint(i, _model.GetAccumulatedPlannedBacklogTimeForIndex(i, skill).GetValueOrDefault(TimeSpan.Zero).TotalHours);
+					series4.Points.Add(datapoint);
 				}
 			}
 		}
