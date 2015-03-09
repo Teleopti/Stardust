@@ -1,12 +1,13 @@
 using System;
 
-namespace Teleopti.Ccc.Win.Sikuli
+namespace Teleopti.Ccc.Win.Sikuli.Helpers
 {
 	public interface ITestDuration
 	{
 		void SetStart();
 		void SetEnd();
 		TimeSpan GetDuration();
+		string GetDurationString();
 	}
 
 	internal class TestDuration : ITestDuration
@@ -28,5 +29,11 @@ namespace Teleopti.Ccc.Win.Sikuli
 		{
 			return _endTime - _starTime;
 		}
+
+		public string GetDurationString()
+		{
+			return GetDuration().ToString(@"mm\:ss");
+		}
+
 	}
 }

@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Windows.Forms;
+using Teleopti.Ccc.Win.Sikuli.Validators;
+using Teleopti.Ccc.Win.Sikuli.Validators.RootValidators;
 using Teleopti.Interfaces.Domain;
 
-namespace Teleopti.Ccc.Win.Sikuli
+namespace Teleopti.Ccc.Win.Sikuli.Helpers
 {
 	public static class SikuliHelper
 	{
@@ -58,19 +60,14 @@ namespace Teleopti.Ccc.Win.Sikuli
 				}
 			}
 
-			public static void Validate(ISikuliValidator validator, IWin32Window owner)
+			public static void Validate(IRootValidator validator, IWin32Window owner)
 			{
 				if (!InTestMode)
 					return;
 				if (_timer != null)
 					_timer.SetEnd();
 				var validationResult = validator.Validate(_timer);
-				if (_timer != null)
-				{
-					validationResult.Details.AppendLine(String.Format("Duration = {0}", _timer.GetDuration().ToString(@"mm\:ss")));
-					_timer = null;
-				}
-				validationResult.Details.AppendLine("Criterion: " + validator.Description);
+				validationResult.Details.AppendLine("Criteria: " + validator.Description);
 				var testView = new SikuliResultView
 				{
 					Header = "Task Done",

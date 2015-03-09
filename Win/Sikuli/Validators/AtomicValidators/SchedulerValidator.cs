@@ -2,17 +2,16 @@
 using System.Linq;
 using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
 using Teleopti.Ccc.Win.Sikuli.Helpers;
-using Teleopti.Ccc.Win.Sikuli.Validators.RootValidators;
 using Teleopti.Interfaces.Domain;
 
-namespace Teleopti.Ccc.Win.Sikuli.Validators
+namespace Teleopti.Ccc.Win.Sikuli.Validators.AtomicValidators
 {
-	internal class SchedulerValidator : IRootValidator
+	internal class SchedulerHoursWeeklyPatternValidator : IAtomicValidator
 	{
 		private readonly ISchedulerStateHolder _schedulerState;
 		private readonly IAggregateSkill _totalSkill;
 
-		public SchedulerValidator(ISchedulerStateHolder schedulerState, IAggregateSkill totalSkill)
+		public SchedulerHoursWeeklyPatternValidator(ISchedulerStateHolder schedulerState, IAggregateSkill totalSkill)
 		{
 			_schedulerState = schedulerState;
 			_totalSkill = totalSkill;
@@ -23,7 +22,7 @@ namespace Teleopti.Ccc.Win.Sikuli.Validators
 			get{ return "The scheduled hours must follow the pattern: 210 hours M-F, 0 hours Sa-Su.";} 
 		}
 
-		public SikuliValidationResult Validate(ITestDuration duration)
+		public SikuliValidationResult Validate()
 		{
 			var result = new SikuliValidationResult(SikuliValidationResult.ResultValue.Pass);
 			var scheduledHours = ValidatorHelper.GetDailyScheduledHoursForFullPeriod(_schedulerState, _totalSkill);
