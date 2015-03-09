@@ -1,15 +1,11 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using Teleopti.Ccc.Domain.Scheduling.TeamBlock.Specification;
 
 namespace Teleopti.Ccc.Domain.SeatPlanning
 {
 	public struct BookingPeriod
 	{
-		private DateTime _start;
-		private DateTime _end;
+		private readonly DateTime _start;
+		private readonly DateTime _end;
 
 		public BookingPeriod(DateTime start, DateTime end)
 		{

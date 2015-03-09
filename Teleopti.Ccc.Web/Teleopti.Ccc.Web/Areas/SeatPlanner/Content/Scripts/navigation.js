@@ -23,17 +23,30 @@ define([
 			//	return window.baseLocation() + "#teamschedule/" + buid;
 			//else if (realTimeAdherenceAvailable)
 			//	return window.baseLocation() + "#realtimeadherencesites/" + buid;
-			return window.baseLocation() + "#SeatPlannerPrototype/";
+			return window.baseLocation() + "#Dashboard/";
 		},
+
+		UrlForDashboard: function() {
+			return window.baseLocation() + "#Dashboard/";
+		},
+
 		UrlForSeatPlanner: function () {
 
 			return window.baseLocation() + "#SeatPlannerPrototype/";
 			
 		},
-		UrlForSeatMap: function() {
+		
+		UrlForSeatMap: function () {
 			return window.baseLocation() + "#SeatMap/";
-		}
+		},
+		GotoSeatMap: function (seatMapId) {
+			window.setLocationHash("#SeatMap/" + seatMapId);
+		},
 
+
+
+
+		
 
 		/*GotoRealTimeAdherenceTeams: function (buid, siteId) {
 			window.setLocationHash('realtimeadherenceteams/' + buid + '/' + siteId);

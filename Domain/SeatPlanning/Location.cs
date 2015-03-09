@@ -1,48 +1,74 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Linq;
-using System.Text;
+using Teleopti.Ccc.Domain.Common.EntityBaseTypes;
 
 namespace Teleopti.Ccc.Domain.SeatPlanning
 {
-	public class Location
+	[Serializable]
+	public class Location : AggregateEntity
 	{
-		private readonly List<Seat> _seats = new List<Seat>();
-		private readonly List<Location> _childLocations = new List<Location>();
+		private IList<Seat> _seats = new List<Seat>();
+		private IList<Location> _childLocations = new List<Location>();
 
+		public virtual IList<Seat> Seats
+		{
+			get { return _seats; }
+		}
 
-		public Guid Id { get; set; }
-		public String Name { get; set; }
-		public bool IncludeInSeatPlan { get; set; }
+		public virtual IList<Location> ChildLocations
+		{
+			get { return _childLocations; }
+		}
 
-		public void AddChild(Location childLocation)
+		public virtual String Name { get; set; }
+		public virtual bool IncludeInSeatPlan { get; set; }
+		public virtual Location ParentLocation { get; set; }
+
+		public virtual void AddChild(Location childLocation)
 		{
 			_childLocations.Add(childLocation);
+			childLocation.setParentLocation(this);
 		}
 
-		public void AddChildren(IEnumerable<Location> childLocations)
+		private void setParentLocation(Location location)
 		{
-			if (childLocations != null)
+			ParentLocation = location;
+		}
+
+		public virtual void AddChildren(IEnumerable<Location> childLocations)
+		{
+			foreach (var child in childLocations)
 			{
-				_childLocations.AddRange(childLocations);
+				_childLocations.Add(child);
+				child.setParentLocation(this);
 			}
 		}
 
-		public void AddSeat(Guid id, String name)
+		public virtual bool HasChild(Guid id)
 		{
-			_seats.Add(new Seat(id, name));
+			return _childLocations.Any(loc => loc.Id == id);
 		}
 
-		public void AddSeats(IEnumerable<Seat> seats)
+		public virtual Seat AddSeat(String name, int priority)
 		{
-			if (seats != null)
+			var seat = new Seat (name, priority);
+			_seats.Add(seat);
+			seat.SetParent (this);
+			return seat;
+		}
+
+		public virtual void AddSeats(IEnumerable<Seat> seats)
+		{
+			if (seats == null) return;
+
+			foreach (var seat in seats)
 			{
-				_seats.AddRange(seats);
+				_seats.Add(seat);
 			}
 		}
 
-		public void ClearBookingInformation()
+		public virtual void ClearBookingInformation()
 		{
 			foreach (var seat in _seats)
 			{
@@ -55,7 +81,7 @@ namespace Teleopti.Ccc.Domain.SeatPlanning
 			}
 		}
 
-		public Seat GetNextUnallocatedSeat(BookingPeriod period, Boolean ignoreChildren)
+		public virtual Seat GetNextUnallocatedSeat(BookingPeriod period, Boolean ignoreChildren)
 		{
 			if (!ignoreChildren)
 			{
@@ -66,23 +92,23 @@ namespace Teleopti.Ccc.Domain.SeatPlanning
 					return seat;
 				}
 			}
-			
+
 			if (IncludeInSeatPlan)
 			{
-				return GetNextUnallocatedSeatOnSelf (period);
+				return getNextUnallocatedSeatOnSelf(period);
 			}
-			
+
 			return null;
 		}
 
-		private Seat GetNextUnallocatedSeatOnSelf(BookingPeriod period)
+		private Seat getNextUnallocatedSeatOnSelf(BookingPeriod period)
 		{
-			return _seats.FirstOrDefault(seat => !seat.IsAllocated(period));
+			return _seats.OrderBy(seat => seat.Priority).FirstOrDefault(seat => !seat.IsAllocated(period));
 		}
 
-		public int SeatCount { get { return _seats.Count; } }
+		public virtual int SeatCount { get { return _seats.Count; } }
 
-		public bool CanAllocateShifts(IEnumerable<AgentShift> agentShifts)
+		public virtual bool CanAllocateShifts(IEnumerable<AgentShift> agentShifts)
 		{
 			if (!IncludeInSeatPlan || SeatCount < agentShifts.Count())
 			{
@@ -107,7 +133,7 @@ namespace Teleopti.Ccc.Domain.SeatPlanning
 		}
 
 
-		public Location GetLocationToAllocateSeats(IEnumerable<AgentShift> agentShifts)
+		public virtual Location GetLocationToAllocateSeats(IEnumerable<AgentShift> agentShifts)
 		{
 			foreach (var childLocation in _childLocations.OrderByDescending(l => l.SeatCount))
 			{
@@ -116,7 +142,7 @@ namespace Teleopti.Ccc.Domain.SeatPlanning
 				//	return childLocation;
 				//}
 
-				var location = childLocation.GetLocationToAllocateSeats (agentShifts);
+				var location = childLocation.GetLocationToAllocateSeats(agentShifts);
 				if (location != null)
 				{
 					return location;

@@ -59,7 +59,8 @@ namespace Teleopti.Ccc.Web.Core.Startup
 			{
 				var startupException = new ApplicationException("Failure on start up", ErrorAtStartup);
 				PreserveStack.ForInnerOf(startupException);
-				throw startupException;
+				
+throw startupException;
 			}
 		}
 	}

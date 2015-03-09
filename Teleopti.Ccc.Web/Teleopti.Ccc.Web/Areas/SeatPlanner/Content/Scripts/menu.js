@@ -59,6 +59,11 @@ define([
 			return navigation.UrlForHome();
 		};
 
+		self.urlForDashboard =function()
+		{
+			return navigation.UrlForHome();
+		};
+
 		self.urlForSeatPlanner = function () {
 			//return navigation.UrlForHome(self.CurrentBusinessUnitId(), self.RealTimeAdherenceVisible(), self.TeamScheduleVisible());
 			return navigation.UrlForSeatPlanner();

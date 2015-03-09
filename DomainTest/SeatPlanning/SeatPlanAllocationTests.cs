@@ -17,10 +17,9 @@ namespace SeatPlanner
 			var seatBookingRequest = new SeatBookingRequest(agentShift);
 
 			var location = new Location(){IncludeInSeatPlan = true};
-			location.AddSeat(Guid.NewGuid(), "Seat1");
+			location.AddSeat("Seat1",1);
 
-			var seatAllocator = new SeatAllocator(location);
-			seatAllocator.AllocateSeats(seatBookingRequest);
+			new SeatAllocator(location).AllocateSeats(seatBookingRequest);
 
 			Assert.That(agentShift.Seat.Name == "Seat1");
 		}
@@ -35,14 +34,31 @@ namespace SeatPlanner
 			var seatBookingRequest2 = new SeatBookingRequest(agentShift2);
 
 			var location = new Location() { IncludeInSeatPlan = true };
-			location.AddSeat(Guid.NewGuid(), "Seat1");
-			location.AddSeat(Guid.NewGuid(), "Seat2");
+			location.AddSeat("Seat1",1);
+			location.AddSeat("Seat2",2);
 
-			var seatAllocator = new SeatAllocator(location);
-			seatAllocator.AllocateSeats(seatBookingRequest1, seatBookingRequest2);
+			new SeatAllocator(location).AllocateSeats(seatBookingRequest1, seatBookingRequest2);
 
 			var allocatedSeats = new[] { agentShift1.Seat.Name, agentShift2.Seat.Name };
 			Assert.That(allocatedSeats.Contains("Seat1") && allocatedSeats.Contains("Seat2"));
+		}
+
+		[Test]
+		public void ShouldAllocateAccordingToPriority()
+		{
+			var agentShift1 = new AgentShift(new BookingPeriod(new DateTime(2014, 01, 01, 8, 0, 0), new DateTime(2014, 01, 01, 17, 0, 0)), null, null);
+			var seatBookingRequest1 = new SeatBookingRequest(agentShift1);
+
+			var agentShift2 = new AgentShift(new BookingPeriod(new DateTime(2014, 01, 01, 8, 0, 0), new DateTime(2014, 01, 01, 17, 0, 0)), null, null);
+			var seatBookingRequest2 = new SeatBookingRequest(agentShift2);
+
+			var location = new Location() { IncludeInSeatPlan = true };
+			location.AddSeat("Seat1", 2);
+			location.AddSeat("Seat2", 1);
+
+			new SeatAllocator(location).AllocateSeats(seatBookingRequest1, seatBookingRequest2);
+			Assert.That (agentShift2.Seat.Name == "Seat1");
+			Assert.That(agentShift1.Seat.Name == "Seat2");
 		}
 
 		[Test]
@@ -55,10 +71,9 @@ namespace SeatPlanner
 			var seatBookingRequest2 = new SeatBookingRequest(agentShift2);
 
 			var location = new Location() { IncludeInSeatPlan = true };
-			location.AddSeat(Guid.NewGuid(), "Seat1");
+			location.AddSeat("Seat1",1);
 
-			var seatAllocator = new SeatAllocator(location);
-			seatAllocator.AllocateSeats(seatBookingRequest1, seatBookingRequest2);
+			new SeatAllocator(location).AllocateSeats(seatBookingRequest1, seatBookingRequest2);
 
 			var allocatedSeats = new[] { agentShift1.Seat.Name, agentShift2.Seat.Name };
 
@@ -75,10 +90,9 @@ namespace SeatPlanner
 			var seatBookingRequest2 = new SeatBookingRequest(agentShift2);
 
 			var location = new Location() { IncludeInSeatPlan = true };
-			location.AddSeat(Guid.NewGuid(), "Seat1");
+			location.AddSeat("Seat1",1);
 
-			var seatAllocator = new SeatAllocator(location);
-			seatAllocator.AllocateSeats(seatBookingRequest1, seatBookingRequest2);
+			new SeatAllocator(location).AllocateSeats(seatBookingRequest1, seatBookingRequest2);
 
 			Assert.That(agentShift2.Seat == null);
 		}
@@ -93,18 +107,16 @@ namespace SeatPlanner
 			var seatBookingRequest2 = new SeatBookingRequest(agentShift2);
 
 			var location1= new Location() { IncludeInSeatPlan = true };
-			location1.AddSeat(Guid.NewGuid(), "L1 Seat1");
+			location1.AddSeat("L1 Seat1",1);
 
 			var location2 = new Location() { IncludeInSeatPlan = true };
-			location2.AddSeat(Guid.NewGuid(), "L2 Seat1");
+			location2.AddSeat("L2 Seat1",1);
 
-			var allocator = new SeatAllocator(location1, location2);
-			allocator.AllocateSeats(seatBookingRequest1, seatBookingRequest2);
+			new SeatAllocator(location1, location2).AllocateSeats(seatBookingRequest1, seatBookingRequest2);
 
 			var allocatedSeats = new[] { agentShift1.Seat.Name, agentShift2.Seat.Name };
 			Assert.That(allocatedSeats.Contains("L1 Seat1") && allocatedSeats.Contains("L2 Seat1"));
 		}
-
 
 		[Test]
 		public void ShouldAllocateAgentGroupsTogether()
@@ -114,18 +126,16 @@ namespace SeatPlanner
 			var agentShift3 = new AgentShift(new BookingPeriod(new DateTime(2014, 01, 01, 8, 0, 0), new DateTime(2014, 01, 01, 17, 0, 0)), null, null);
 
 			var seatBookingRequest1 = new SeatBookingRequest(agentShift1);
-
 			var seatBookingRequest2 = new SeatBookingRequest(agentShift2, agentShift3);
 
 			var location1 = new Location() { IncludeInSeatPlan = true };
-			location1.AddSeat(Guid.NewGuid(), "L1 Seat1");
-			location1.AddSeat(Guid.NewGuid(), "L1 Seat2");
+			location1.AddSeat("L1 Seat1",1);
+			location1.AddSeat("L1 Seat2",2);
 
 			var location2 = new Location() { IncludeInSeatPlan = true };
-			location2.AddSeat(Guid.NewGuid(), "L2 Seat1");
+			location2.AddSeat("L2 Seat1",1);
 
-			var allocator = new SeatAllocator(location1, location2);
-			allocator.AllocateSeats(seatBookingRequest1, seatBookingRequest2);
+			new SeatAllocator(location1, location2).AllocateSeats(seatBookingRequest1, seatBookingRequest2);
 
 			Assert.That(agentShift1.Seat.Name == "L2 Seat1");
 
@@ -139,18 +149,16 @@ namespace SeatPlanner
 			var agentShift3 = new AgentShift(new BookingPeriod(new DateTime(2014, 01, 01, 8, 0, 0), new DateTime(2014, 01, 01, 17, 0, 0)), null, null);
 
 			var seatBookingRequest1 = new SeatBookingRequest(agentShift1);
-
 			var seatBookingRequest2 = new SeatBookingRequest(agentShift2, agentShift3);
 
 			var location1 = new Location() { IncludeInSeatPlan = true };
-			location1.AddSeat(Guid.NewGuid(), "L1 Seat1");
+			location1.AddSeat("L1 Seat1",1);
 
 			var location2 = new Location() { IncludeInSeatPlan = true };
-			location2.AddSeat(Guid.NewGuid(), "L2 Seat1");
-			location2.AddSeat(Guid.NewGuid(), "L2 Seat2");
+			location2.AddSeat("L2 Seat1",1);
+			location2.AddSeat("L2 Seat2",2);
 
-			var allocator = new SeatAllocator(location1, location2);
-			allocator.AllocateSeats(seatBookingRequest1, seatBookingRequest2);
+			new SeatAllocator(location1, location2).AllocateSeats(seatBookingRequest1, seatBookingRequest2);
 
 			Assert.That(agentShift1.Seat.Name == "L1 Seat1");
 
@@ -169,16 +177,15 @@ namespace SeatPlanner
 			var seatBookingRequest2 = new SeatBookingRequest(agentShift3, agentShift4);
 
 			var location1 = new Location() { IncludeInSeatPlan = true };
-			location1.AddSeat(Guid.NewGuid(), "L1 Seat1");
-			location1.AddSeat(Guid.NewGuid(), "L1 Seat2");
-			location1.AddSeat(Guid.NewGuid(), "L1 Seat3");
+			location1.AddSeat("L1 Seat1",1);
+			location1.AddSeat("L1 Seat2",2);
+			location1.AddSeat("L1 Seat2",3);
 
 			var location2 = new Location() { IncludeInSeatPlan = true };
-			location2.AddSeat(Guid.NewGuid(), "L2 Seat1");
-			location2.AddSeat(Guid.NewGuid(), "L2 Seat2");
+			location2.AddSeat("L2 Seat1",1);
+			location2.AddSeat("L2 Seat2",2);
 
-			var allocator = new SeatAllocator(location1, location2);
-			allocator.AllocateSeats(seatBookingRequest1, seatBookingRequest2);
+			new SeatAllocator(location1, location2).AllocateSeats(seatBookingRequest1, seatBookingRequest2);
 
 			Assert.That(agentShift3.Seat.Name == "L2 Seat1");
 			Assert.That(agentShift4.Seat.Name == "L2 Seat2");
@@ -194,13 +201,12 @@ namespace SeatPlanner
 			var seatBookingRequest1 = new SeatBookingRequest(agentShift1, agentShift2);
 
 			var location1 = new Location() { IncludeInSeatPlan = true };
-			location1.AddSeat(Guid.NewGuid(),"L1 Seat1");
+			location1.AddSeat("L1 Seat1",1);
 
 			var location2 = new Location() { IncludeInSeatPlan = true };
-			location2.AddSeat(Guid.NewGuid(),"L2 Seat1");
+			location2.AddSeat("L2 Seat1",1);
 
-			var allocator = new SeatAllocator(location1, location2);
-			allocator.AllocateSeats(seatBookingRequest1);
+			new SeatAllocator(location1, location2).AllocateSeats(seatBookingRequest1);
 
 			Assert.That(seatBookingRequest1.AgentShifts.All(s => s.Seat != null));
 		}
@@ -217,13 +223,12 @@ namespace SeatPlanner
 			var seatBookingRequest1 = new SeatBookingRequest(agentShift1, agentShift2, agentShift3);
 
 			var location1 = new Location() { IncludeInSeatPlan = true };
-			location1.AddSeat(Guid.NewGuid(),"L1 Seat1");
+			location1.AddSeat("L1 Seat1",1);
 
 			var location2 = new Location() { IncludeInSeatPlan = true };
-			location2.AddSeat(Guid.NewGuid(),"L2 Seat1");
+			location2.AddSeat("L2 Seat1",1);
 
-			var allocator = new SeatAllocator(location1, location2);
-			allocator.AllocateSeats(seatBookingRequest1);
+			new SeatAllocator(location1, location2).AllocateSeats(seatBookingRequest1);
 
 			Assert.That(seatBookingRequest1.AgentShifts.SingleOrDefault(s => s.Seat == null) != null);
 		}
@@ -240,22 +245,20 @@ namespace SeatPlanner
 			var seatBookingRequest1 = new SeatBookingRequest(agentShift1, agentShift2, agentShift3, agentShift4);
 
 			var location1 = new Location() { IncludeInSeatPlan = true };
-			location1.AddSeat(Guid.NewGuid(),"L1 Seat1");
-			location1.AddSeat(Guid.NewGuid(),"L1 Seat2");
-			location1.AddSeat(Guid.NewGuid(),"L1 Seat3");
+			location1.AddSeat("L1 Seat1",1);
+			location1.AddSeat("L1 Seat2",2);
+			location1.AddSeat("L1 Seat2",3);
 
 			var location2 = new Location() { IncludeInSeatPlan = true };
-			location2.AddSeat(Guid.NewGuid(),"L2 Seat1");
-			location2.AddSeat(Guid.NewGuid(),"L2 Seat2");
+			location2.AddSeat("L2 Seat1",1);
+			location2.AddSeat("L2 Seat2",2);
 
-			var allocator = new SeatAllocator(location1, location2);
-			allocator.AllocateSeats(seatBookingRequest1);
+			new SeatAllocator(location1, location2).AllocateSeats(seatBookingRequest1);
 
 			var allocatedSeats = seatBookingRequest1.AgentShifts.Select(s => s.Seat.Name);
 			Assert.That(allocatedSeats.Contains("L2 Seat1"));
 			Assert.That(allocatedSeats.Contains("L2 Seat2"));
 		}
-
 
 		[Test]
 		public void ShouldAllocateChildLocationSeatFromParentLocation()
@@ -268,12 +271,11 @@ namespace SeatPlanner
 			var building = new Location() { IncludeInSeatPlan = true };
 
 			var room1 = new Location() { IncludeInSeatPlan = true };
-			room1.AddSeat(Guid.NewGuid(),"Room1 Seat1");
+			room1.AddSeat("Room1 Seat1",1);
 
 			building.AddChild(room1);
 
-			var allocator = new SeatAllocator(building);
-			allocator.AllocateSeats(seatBookingRequest1);
+			new SeatAllocator(building).AllocateSeats(seatBookingRequest1);
 
 			Assert.That(agentShift1.Seat.Name == "Room1 Seat1");
 		}
@@ -291,13 +293,12 @@ namespace SeatPlanner
 			var room2 = new Location() {IncludeInSeatPlan = true};
 			var roomChild1 = new Location() { IncludeInSeatPlan = true };
 		
-			roomChild1.AddSeat(Guid.NewGuid(), "Room1Child Seat1");
+			roomChild1.AddSeat("Room1Child Seat1",1);
 			building.AddChild(room1);
 			building.AddChild(room2);
 			room1.AddChild (roomChild1);
 
-			var allocator = new SeatAllocator(building);
-			allocator.AllocateSeats(seatBookingRequest1);
+			new SeatAllocator(building).AllocateSeats(seatBookingRequest1);
 
 			Assert.That(agentShift1.Seat.Name == "Room1Child Seat1");
 		}
@@ -313,18 +314,16 @@ namespace SeatPlanner
 			var building = new Location() { IncludeInSeatPlan = false };
 			var room1 = new Location() { IncludeInSeatPlan = false };
 			var room2 = new Location() { IncludeInSeatPlan = true };
-			room1.AddSeat(Guid.NewGuid(), "Room1 Seat1");
-			room2.AddSeat(Guid.NewGuid(), "Room2 Seat1");
+			room1.AddSeat("Room1 Seat1",1);
+			room2.AddSeat("Room2 Seat1",1);
 
 			building.AddChild(room1);
 			building.AddChild(room2);
 
-			var allocator = new SeatAllocator(building);
-			allocator.AllocateSeats(seatBookingRequest1);
+			new SeatAllocator(building).AllocateSeats(seatBookingRequest1);
 
 			Assert.That(agentShift1.Seat.Name == "Room2 Seat1");
 		}
-
 
 		[Test]
 		public void ShouldAllocateDirectlyOnParentLocation()
@@ -339,14 +338,12 @@ namespace SeatPlanner
 			var room1 = new Location() { IncludeInSeatPlan = true };
 
 			building.AddChild(room1);
-			building.AddSeat(Guid.NewGuid(),"Building Seat1");
+			building.AddSeat("Building Seat1",1);
 
-			var allocator = new SeatAllocator(building);
-			allocator.AllocateSeats(seatBookingRequest1);
+			new SeatAllocator(building).AllocateSeats(seatBookingRequest1);
 
 			Assert.That(agentShift1.Seat.Name == "Building Seat1");
 		}
-
 
 		[Test]
 		public void ShouldAllocateGroupToParentLocationWithEnoughSeats()
@@ -360,14 +357,13 @@ namespace SeatPlanner
 			var building = new Location() { IncludeInSeatPlan = true };
 
 			var room1 = new Location() { IncludeInSeatPlan = true };
-			room1.AddSeat(Guid.NewGuid(),"Room 1 Seat 1");
+			room1.AddSeat("Room 1 Seat 1",1);
 
 			building.AddChild(room1);
-			building.AddSeat(Guid.NewGuid(),"Building Seat1");
-			building.AddSeat(Guid.NewGuid(),"Building Seat2");
+			building.AddSeat("Building Seat1",1);
+			building.AddSeat("Building Seat2",2);
 
-			var allocator = new SeatAllocator(building);
-			allocator.AllocateSeats(seatBookingRequest1);
+			new SeatAllocator(building).AllocateSeats(seatBookingRequest1);
 
 			var allocatedSeats = seatBookingRequest1.AgentShifts.Select(s => s.Seat.Name);
 			Assert.That(allocatedSeats.Contains("Building Seat1"));
@@ -391,16 +387,15 @@ namespace SeatPlanner
 			var building = new Location() { IncludeInSeatPlan = true };
 
 			var room1 = new Location() { IncludeInSeatPlan = true };
-			room1.AddSeat(Guid.NewGuid(),"Room1 Seat1");
-			room1.AddSeat(Guid.NewGuid(),"Room1 Seat2");
+			room1.AddSeat("Room1 Seat1",1);
+			room1.AddSeat("Room1 Seat2",2);
 
 			building.AddChild(room1);
-			building.AddSeat(Guid.NewGuid(),"Building Seat1");
-			building.AddSeat(Guid.NewGuid(),"Building Seat2");
-			building.AddSeat(Guid.NewGuid(),"Building Seat3");
+			building.AddSeat("Building Seat1",1);
+			building.AddSeat("Building Seat2",2);
+			building.AddSeat("Building Seat3",3);
 
-			var allocator = new SeatAllocator(building);
-			allocator.AllocateSeats(seatBookingRequest1, seatBookingRequest2, seatBookingRequest3);
+			new SeatAllocator(building).AllocateSeats(seatBookingRequest1, seatBookingRequest2, seatBookingRequest3);
 
 			var allocatedSeatsGroup1 = seatBookingRequest1.AgentShifts.Select(s => s.Seat.Name);
 			Assert.That(allocatedSeatsGroup1.Contains("Room1 Seat1"));
@@ -413,7 +408,6 @@ namespace SeatPlanner
 			Assert.That(agentShift5.Seat.Name == "Building Seat3");
 		}
 
-
 		[Test]
 		public void ShouldAssignSplitGroupedAgentsToRoomAndToBuilding()
 		{
@@ -424,14 +418,13 @@ namespace SeatPlanner
 			var seatBookingRequest1 = new SeatBookingRequest(agent1Shift1, agent2Shift1);
 
 			var building = new Location() { IncludeInSeatPlan = true };
-			building.AddSeat(Guid.NewGuid(),"Building Seat 1");
+			building.AddSeat("Building Seat 1", 1);
 
 			var room1 = new Location() { IncludeInSeatPlan = true };
-			room1.AddSeat(Guid.NewGuid(),"Room 1 Seat 1");
+			room1.AddSeat("Room 1 Seat 1", 1);
 			building.AddChild(room1);
 
-			var allocator = new SeatAllocator(building);
-			allocator.AllocateSeats(seatBookingRequest1);
+			new SeatAllocator(building).AllocateSeats(seatBookingRequest1);
 
 			Assert.That(agent1Shift1.Seat.Name == "Room 1 Seat 1");
 			Assert.That(agent2Shift1.Seat.Name == "Building Seat 1");
@@ -456,7 +449,7 @@ namespace SeatPlanner
 				var location = new Location() { IncludeInSeatPlan = true };
 				Enumerable.Range(0, 600).All(s =>
 				{
-					location.AddSeat(Guid.NewGuid(),"temp");
+					location.AddSeat("temp", s);
 					return true;
 				});
 				return location;
@@ -491,7 +484,7 @@ namespace SeatPlanner
 
 						Enumerable.Range(0, 30).All(c =>
 						{
-							childLocation.AddSeat(Guid.NewGuid(),"temp");
+							childLocation.AddSeat("temp", c);
 							return true;
 						});
 
@@ -519,23 +512,29 @@ namespace SeatPlanner
 		[Test]
 		public void ShouldDetectPeriodsOverlap()
 		{
-
 			var period1 = new BookingPeriod(new DateTime(2014, 01, 01, 8, 0, 0), new DateTime(2014, 01, 1, 15, 0, 0));
 			var period2 = new BookingPeriod(new DateTime(2014, 01, 01, 7, 59, 59), new DateTime(2014, 01, 1, 8, 0, 0));
 
 			Assert.True(period1.Intersects(period2));
+		}
 
+
+		[Test]
+		public void ShouldDetectOvernightPeriodsOverlap()
+		{
+			var period1 = new BookingPeriod(new DateTime(2014, 01, 01, 23, 0, 0), new DateTime(2014, 01, 2, 8, 0, 0));
+			var period2 = new BookingPeriod(new DateTime(2014, 01, 02, 7, 59, 59), new DateTime(2014, 01, 2, 15, 0, 0));
+
+			Assert.True(period1.Intersects(period2));
 		}
 
 		[Test]
 		public void ShouldDetectPeriodsDoNotOverlap()
 		{
-
 			var period1 = new BookingPeriod(new DateTime(2014, 01, 01, 8, 0, 0), new DateTime(2014, 01, 1, 15, 0, 0));
 			var period2 = new BookingPeriod(new DateTime(2014, 01, 01, 7, 59, 58), new DateTime(2014, 01, 1, 7, 59, 59));
 
 			Assert.True(!period1.Intersects(period2));
-
 		}
 
 		#endregion

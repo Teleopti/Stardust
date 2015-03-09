@@ -33,7 +33,6 @@ namespace Teleopti.Ccc.Domain.SeatPlanning
 
 		public void CreateSeatPlan(Location rootLocation, ICollection<ITeam> teams, DateOnlyPeriod period, TrackedCommandInfo trackedCommandInfo)
 		{
-			//RobTodo: Fill in save routines when needed.
 			var seatAllocator = new SeatAllocator(rootLocation);
 			var people = getPeople(teams, period);
 			createAgentShiftsFromSchedules(period, people);
@@ -113,13 +112,12 @@ namespace Teleopti.Ccc.Domain.SeatPlanning
 		{
 			if (scheduleDays != null)
 			{
-				foreach (var scheduleDay in scheduleDays.Where(s => s.IsScheduled() && s.DateOnlyAsPeriod.DateOnly == dayShift.date))
+				foreach (var scheduleDay in scheduleDays.Where(s => s.IsScheduled() 
+																&& s.DateOnlyAsPeriod.DateOnly == dayShift.date
+																&& s.SignificantPart() == SchedulePartView.MainShift))
 				{
-					SchedulePartView partView = scheduleDay.SignificantPart();
-					if (partView == SchedulePartView.MainShift)
-					{
-						createAgentShift(scheduleDay, person, dayShift);
-					}
+					createAgentShift(scheduleDay, person, dayShift);
+					
 				}
 			}
 		}
@@ -129,6 +127,7 @@ namespace Teleopti.Ccc.Domain.SeatPlanning
 			var shiftPeriod = scheduleDay.PersonAssignment().Period;
 			var team = person.MyTeam(new DateOnly(shiftPeriod.StartDateTime));
 			var bookingPeriod = new BookingPeriod(shiftPeriod.StartDateTime, shiftPeriod.EndDateTime);
+
 			dayShift.AddShift(new AgentShift(bookingPeriod, person, scheduleDay), team);
 		}
 
@@ -142,7 +141,8 @@ namespace Teleopti.Ccc.Domain.SeatPlanning
 
 			return dictionary;
 		}
-
+		
+		// RobTODO: Review if this will be required...if not then remove SeatPlanAddedEvent.
 		private void addSeatPlanAddedEvent(DateOnlyPeriod period, TrackedCommandInfo trackedCommandInfo)
 		{
 			var seatPlanAddedEvent = new SeatPlanAddedEvent
@@ -221,6 +221,7 @@ namespace Teleopti.Ccc.Domain.SeatPlanning
 
 
 		}
+		
 		private class teamShift
 		{
 			public ITeam Team { get; private set; }

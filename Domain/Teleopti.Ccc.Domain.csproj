@@ -155,6 +155,8 @@
     <Compile Include="ApplicationLayer\Commands\AddActivityCommandHandler.cs" />
     <Compile Include="ApplicationLayer\Commands\AddIntradayAbsenceCommand.cs" />
     <Compile Include="ApplicationLayer\Commands\AddIntradayAbsenceCommandHandler.cs" />
+    <Compile Include="ApplicationLayer\Commands\AddSeatMapCommand.cs" />
+    <Compile Include="ApplicationLayer\Commands\AddSeatMapCommandHandler.cs" />
     <Compile Include="ApplicationLayer\Commands\AddSeatPlanCommand.cs" />
     <Compile Include="ApplicationLayer\Commands\AddSeatPlanCommandHandler.cs" />
     <Compile Include="ApplicationLayer\Commands\ModifyPersonAbsenceCommandHandler.cs" />
@@ -1465,6 +1467,7 @@
     <Compile Include="SeatPlanning\Seat.cs" />
     <Compile Include="SeatPlanning\SeatAllocator.cs" />
     <Compile Include="SeatPlanning\SeatBookingRequest.cs" />
+    <Compile Include="SeatPlanning\SeatMap.cs" />
     <Compile Include="SeatPlanning\SeatPlan.cs" />
     <Compile Include="SeatPlanning\TransientBooking.cs" />
     <Compile Include="Security\AuthorizationEntities\AllFunctions.cs" />
@@ -2329,6 +2332,9 @@
     <Folder Include="Properties\" />
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="SeatPlanning\Seat.hbm.xml" />
+    <EmbeddedResource Include="SeatPlanning\Location.hbm.xml" />
+    <EmbeddedResource Include="SeatPlanning\SeatMap.hbm.xml" />
     <EmbeddedResource Include="Forecasting\SkillMap_DEV.hbm.xml">
       <SubType>Designer</SubType>
     </EmbeddedResource>

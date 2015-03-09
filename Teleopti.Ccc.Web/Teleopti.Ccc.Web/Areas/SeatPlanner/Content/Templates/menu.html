@@ -6,6 +6,7 @@
 		<div>
 			<ul class="nav navbar-nav">
 				<!--Robtodo: Resource for Titles-->
+				<li data-bind="css: { active: ActiveView() == 'Dashboard' }"><a data-bind="attr: { href: urlForDashboard()}">Home</a></li>
 				<li data-bind="css: { active: ActiveView() == 'SeatPlannerPrototype' }"><a data-bind="attr: { href: urlForSeatPlanner()}">Seat Planner</a></li>
 				<li data-bind="css: { active: ActiveView() == 'SeatMap' }"><a data-bind="attr: { href: urlForSeatMap()}">Seat Map</a></li>
 				

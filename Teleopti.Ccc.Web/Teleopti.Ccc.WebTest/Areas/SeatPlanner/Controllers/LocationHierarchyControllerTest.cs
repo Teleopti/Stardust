@@ -1,23 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.IO;
-using System.Linq;
-using System.Net.Http;
-using System.Text;
-using System.Threading.Tasks;
-using System.Web.Hosting;
-using System.Web.Mvc;
-using System.Web.Routing;
-using NUnit.Framework;
-using Rhino.Mocks;
-using SharpTestsEx;
-using Teleopti.Ccc.TestCommon.Web;
-using Teleopti.Ccc.Web.Areas.Permissions.Controllers;
+﻿using NUnit.Framework;
 using Teleopti.Ccc.Web.Areas.SeatPlanner.Controllers;
 using Teleopti.Ccc.Web.Areas.SeatPlanner.Core.Providers;
-using Teleopti.Ccc.Web.Areas.SeatPlanner.Core.ViewModels;
-using RequestContext = System.ServiceModel.Channels.RequestContext;
 
 namespace Teleopti.Ccc.WebTest.Areas.SeatPlanner.Controllers
 {

@@ -27,9 +27,19 @@
 		filter: alpha(opacity=0);
 		opacity: 0;
 		outline: 1px;
-		/*background: white;*/
+		/*background: blue;*/
 		cursor: inherit;
 		/*display: block;*/
+	}
+
+	.btn-file a {
+		/*display: block;*/
+		padding: 3px 20px;
+		clear: both;
+		font-weight: normal;
+		line-height: 1.42857143;
+		color: #333333;
+		white-space: nowrap;
 	}
 
 input[type=range][orient=vertical] {
@@ -69,7 +79,7 @@ input[type=range]::-ms-fill-lower {
 }
 
 input[type=range]::-ms-tooltip {
-	 display: none;
+	display: none;
 }
 
 input[type=range]::-ms-thumb {
@@ -98,4 +108,35 @@ input[type=range]:hover::-ms-thumb {
 	background: lightgray;
 	border: none !important;
 	border-style: none;
+}
+
+.mapLoadingSpinner {
+
+	position: absolute;
+}
+
+.map-toolbar {
+	margin-left: 10px;
+}
+
+.row .breadcrumb {
+	margin-left: 14px;
+}
+
+.seatplanner-dashboard-link-font {
+	font-size: 1em;
+	font-family: 'Segoe UI';
+}
+
+.seatplanner-dashboard-area-image {
+	font-size: 5em;
+}
+
+.seatplanner-dashboard-area-bigtext {
+	font-size: 38px;
+}
+
+.seatplanner-dashboard-area-smalltext {
+	font-size: 18px;
+	font-family: 'Segoe UI';
 }

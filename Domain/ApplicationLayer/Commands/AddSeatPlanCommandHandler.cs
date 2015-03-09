@@ -49,7 +49,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Commands
 
 		}
 		
-
 		private static Location getLocation(dynamic location, IList<Guid> locations)
 		{
 			if (location == null)
@@ -65,7 +64,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Commands
 
 			var loc = new Location()
 			{
-				Id = locationGuid,
 				Name = location.name,
 				IncludeInSeatPlan = isSelectedForSeatPlanning
 			};
@@ -101,7 +99,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Commands
 				var seats = new List<Seat>();
 				foreach (var seat in location.seats)
 				{
-					var agentSeat = new Seat(Guid.Parse(seat.id), seat.name);
+					// Robtodo: hookup priority?
+					var agentSeat = new Seat(seat.name, 0);
 					seats.Add(agentSeat);
 				}
 				return seats;
@@ -109,11 +108,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Commands
 
 			return null;
 		}
-
-
-
-
-		
 
 	}
 }

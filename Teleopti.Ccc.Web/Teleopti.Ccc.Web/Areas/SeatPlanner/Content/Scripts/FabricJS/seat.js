@@ -12,14 +12,14 @@
 			options || (options = {});
 
 			this.callSuper('initialize', element, options);
-			this.set('guid', options.guid);
+			this.set('id', options.id);
 			this.set('name', options.name);
 			this.set('priority', options.priority);
 		},
 
 		toObject: function () {
 			return fabric.util.object.extend(this.callSuper('toObject'), {
-				guid: this.get('guid'),
+				id: this.get('id'),
 				name: this.get('name'),
 				priority: this.get('priority')
 			});

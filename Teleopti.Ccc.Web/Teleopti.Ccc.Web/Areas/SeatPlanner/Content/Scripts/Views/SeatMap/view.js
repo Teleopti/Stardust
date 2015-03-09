@@ -19,6 +19,14 @@ define([
 
 	var seatMapViewModel = new viewModel();
 
+	var loadSeatMap = function (callback, id) {
+		ajax.ajax({
+			url: "SeatPlanner/SeatMap/Get?id=" + id,
+			success: callback
+		});
+	};
+
+
 	return {
 		initialize: function (options) {
 			options.renderHtml(view);
@@ -29,12 +37,22 @@ define([
 
 		display: function (options) {
 
-			//seatMapViewModel.Loading(true); // -- RobTODO causes issues with canvas loading....perhaps float a loading dialog instead.
+			//seatMapViewModel.Loading(true); // -- RobTODO implement loading dialog, including for refreshes...
 
 			seatMapViewModel.SetupCanvas();
 
-			//seatMapViewModel.Loading(false);
+			var loadedSeatMap = $.Deferred();
+			loadSeatMap(function (data) {
+				seatMapViewModel.LoadSeatMap(data);
+				loadedSeatMap.resolve();
+			});
 
+			return $.when(loadedSeatMap)
+					.done(function () {
+						//seatPlanViewModel.Loading(false);
+						
+					});
+			
 		},
 		dispose: function (options) {
 		},

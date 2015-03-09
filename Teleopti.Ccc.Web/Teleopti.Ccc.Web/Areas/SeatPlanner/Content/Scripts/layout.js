@@ -40,7 +40,7 @@ define([
 		) {
 
 	var currentView;
-	var defaultView = 'SeatPlannerPrototype';
+	var defaultView = 'Dashboard';
 
 	var menu = new menuViewModel(resources);
 	var contentPlaceHolder;
@@ -108,6 +108,7 @@ define([
 		var dateRegex = '\\d{8}';
 		var timeRegex = '[-]*\\d*';
 
+		
 		crossroads.addRoute(
 			new RegExp('^(' + viewRegex + ')/(' + guidRegex + ')/(' + guidRegex + ')/(' + dateRegex + ')/(' + actionRegex + ')/(' + guidRegex + ')$', "i"),
 			function (view, buid, id, date, action, secondaryId) {

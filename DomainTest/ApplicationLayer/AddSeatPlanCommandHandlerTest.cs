@@ -77,5 +77,4 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 		//	@event.BusinessUnitId.Should().Be (currentScenario.Current().BusinessUnit.Id.GetValueOrDefault());
 		//}
 	}
-
 }

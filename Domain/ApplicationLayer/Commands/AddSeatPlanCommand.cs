@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using Microsoft.SqlServer.Server;
 using Teleopti.Ccc.UserTexts;
 using Teleopti.Interfaces.Domain;
 

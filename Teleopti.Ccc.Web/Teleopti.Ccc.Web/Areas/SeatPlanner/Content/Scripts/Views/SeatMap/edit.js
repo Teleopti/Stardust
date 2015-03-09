@@ -4,7 +4,9 @@
 		'guidgenerator',
 		'fabric',
 		'fabricJS/seat',
-		'Views/SeatMap/utils'
+		'fabricJS/location',
+		'Views/SeatMap/utils',
+		'Views/SeatMap/save'
 
 ], function (
 		ko,
@@ -12,25 +14,36 @@
 		guidgenerator,
 		fabric,
 		seat,
-		utils
+		location,
+		utils,
+		save
 	) {
 
-	
+
 	return new function () {
+
 
 		var self = this;
 		this.canvas = null;
+		this.id = null;
+		this.locationId = null;
 		this.seatPriority = 0;
+		this.locationName = ko.observable();
+		this.businessUnitId = null;
+		this.canvasUtils = utils;
+		this.newLocations = [];
+		this.newSeats = [];
+		this.refreshPageFunction = null;
 
-		this.Setup = function (canvas, document) {
-
+		this.Setup = function (canvas, document, options, refreshPageFunction) {
 			self.canvas = canvas;
+			self.businessUnitId = options.buid;
+			self.refreshPageFunction = refreshPageFunction;
 
 			document.getElementById('imgLoader').onchange = self.HandleImageLoad;
 			document.getElementById('backgroundLoader').onchange = self.HandleBackgroundLoad;
-			document.getElementById('dataLoader').onchange = self.Import;
-
-			self.CreateListenersKeyboard();
+			//document.getElementById('dataLoader').onchange = self.Import;
+			
 		};
 
 		this.hasActiveGroup = ko.computed(function () {
@@ -39,13 +52,8 @@
 			}
 			return false;
 		});
-
-		this.CreateListenersKeyboard = function () {
-			document.onkeydown = self.OnKeyDownHandler;
-		};
-
+		
 		this.OnKeyDownHandler = function (event) {
-
 			//event.preventDefault();
 			var key = window.event ? window.event.keyCode : event.keyCode;
 
@@ -62,25 +70,22 @@
 						self.Paste();
 					}
 					break;
-
 				case 46: // delete
 					self.RemoveSelected();
 					break;
-
 				default:
 					break;
 			}
 		};
 
 		this.HandleImageLoad = function (e) {
-
 			var onLoadOfImage = function (imgObj) {
 				var image = new fabric.Image(imgObj);
 				image.set({
 					left: 250,
 					top: 250
 				})
-					.setCoords();
+				.setCoords();
 
 				self.canvas.add(image);
 				self.canvas.renderAll();
@@ -90,10 +95,9 @@
 		};
 
 		this.HandleBackgroundLoad = function (e) {
-
 			var onLoadOfBackgroundImage = function (imgObj) {
 				var image = new fabric.Image(imgObj);
-				utils.ScaleImage(self.canvas, image);
+				self.canvasUtils.ScaleImage(self.canvas, image);
 				self.canvas.setBackgroundImage(image);
 				self.canvas.centerObject(image);
 			}
@@ -110,6 +114,7 @@
 					callback(imgObj);
 				}
 			}
+
 			reader.readAsDataURL(e.target.files[0]);
 		}
 
@@ -128,20 +133,22 @@
 					var objToCopy = self.copiedGroup.objects[i];
 					var left = self.copiedGroup.left;
 					var top = self.copiedGroup.top;
+
 					objToCopy.clone(function (obj) {
 						obj.set("top", top + obj.top + 15);
 						obj.set("left", left + obj.left + 15);
-						self.UpdateSeatPriorityOnPaste(obj);
+						self.UpdateSeatDataOnPaste(obj);
 
 						self.canvas.add(obj);
 					});
 					self.canvas.setActiveGroup(self.copiedGroup);
 				}
 			} else if (self.copiedObject) {
+
 				self.copiedObject.clone(function (obj) {
 					obj.set("top", obj.top + 15);
 					obj.set("left", obj.left + 15);
-					self.UpdateSeatPriorityOnPaste(obj);
+					self.UpdateSeatDataOnPaste(obj);
 					self.canvas.add(obj);
 					self.canvas.setActiveObject(obj);
 				});
@@ -150,17 +157,19 @@
 			self.canvas.renderAll();
 		};
 
-		this.UpdateSeatPriorityOnPaste = function (obj) {
+		this.UpdateSeatDataOnPaste = function (obj) {
 			if (obj.type == 'group') {
 				for (var i = 0; i < obj._objects.length; i++) {
 					var childObj = obj._objects[i];
-					self.UpdateSeatPriorityOnPaste(childObj);
+					self.UpdateSeatDataOnPaste(childObj);
 				}
 
 			} else {
 				if (obj.type == 'seat') {
 					self.seatPriority++;
 					obj.set('priority', self.seatPriority);
+					obj.set('id', guidgenerator.newGuid());
+					self.newSeats.push(obj);
 				}
 			}
 		};
@@ -179,12 +188,13 @@
 			else if (activeObject) {
 				self.canvas.remove(activeObject);
 			}
+
+			//Robtodo: remove locations from self.newLocations and seats from self.newSeats when appropriate
 		};
 
 
 		this.Clear = function () {
-			self.canvas.setBackgroundImage(null);
-			self.canvas.clear();
+			self.canvasUtils.ClearCanvas(self.canvas);
 		};
 
 		// Layers
@@ -246,7 +256,7 @@
 			}
 		};
 
-		//Alignment, Rotation and Flip
+		//Alignment, Spacing Rotation and Flip
 
 		this.AlignLeft = function () {
 			self.AlignHorizontal(true);
@@ -272,6 +282,7 @@
 						}
 					}
 				});
+
 				if (activeGroup.forEachObject(function (o) { o.set("left", left); }));
 				self.canvas.renderAll();
 			}
@@ -300,10 +311,9 @@
 							top = o.top;
 						}
 					}
-
 				});
-				activeGroup.forEachObject(function(o) {
-					 o.set("top", top);
+				activeGroup.forEachObject(function (o) {
+					o.set("top", top);
 				});
 
 				self.canvas.renderAll();
@@ -319,7 +329,7 @@
 		this.SpaceGroupEvenlyHorizontal = function (objects) {
 			if (objects) {
 				var left = 0;
-				var offset = 12;
+				var offset = 20;
 				var maxRange = objects.length - 1;
 				for (var i = maxRange; i > -1; i--) {
 					var o = objects[i];
@@ -343,7 +353,7 @@
 		this.SpaceGroupEvenlyVertical = function (objects) {
 			if (objects) {
 				var top = 0;
-				var offset = 10;
+				var offset = 20;
 				var maxRange = objects.length - 1;
 				for (var i = maxRange; i > -1; i--) {
 					var o = objects[i];
@@ -381,7 +391,7 @@
 			angle = angle > 360 ? 45 : angle < 0 ? 325 : angle;
 
 			obj.setAngle(angle).setCoords();
-			
+
 			if (resetOrigin) {
 				obj.setCenterToOrigin && obj.setCenterToOrigin();
 			}
@@ -410,7 +420,6 @@
 		// Add Objects
 
 		this.AddImage = function (imageName) {
-
 			fabric.Image.fromURL('Areas/SeatPlanner/Content/Images/' + imageName, function (image) {
 				image.set({
 					left: 400,
@@ -433,9 +442,9 @@
 			}
 
 			var seatObj = {
-				name: 'foobar',
+				name: 'Unnamed seat',
 				priority: self.seatPriority,
-				guid: guidgenerator.newGuid()
+				id: guidgenerator.newGuid()
 			};
 
 			fabric.util.loadImage(imgName, function (img) {
@@ -443,7 +452,9 @@
 				self.canvas.add(newSeat);
 				newSeat.center();
 				newSeat.setCoords();
+				self.newSeats.push(newSeat);
 			});
+			
 		};
 
 		this.AddText = function (text) {
@@ -463,61 +474,118 @@
 			self.canvas.add(textSample);
 		};
 
+
+		this.AddLocation = function () {
+
+			$('#addLocationModal').on('shown.bs.modal', function () {
+				$('#location').focus();
+			});
+			$('#addLocationModal').modal();
+
+		};
+
+		this.OnAddLocation = function () {
+			self.AddLocationShape();
+			$('#addLocationModal').modal('hide');
+		};
+
+		this.AddLocationShape = function () {
+
+			var locationObj = {
+				name: self.locationName(),
+				id: guidgenerator.newGuid(),
+				seatMapId: guidgenerator.newGuid(),
+				isNew : true,
+				height: 200,
+				width: 300,
+				fill: 'rgba(255,0,0,0.5)'
+			};
+
+			var newLocation = new fabric.Location(locationObj);
+			self.newLocations.push(newLocation);
+			self.canvas.add(newLocation);
+			newLocation.center();
+			newLocation.setCoords();
+		};
+
 		//Serialize
 
-		this.Export = function () {
-			var json = JSON.stringify(self.canvas);
-			// hack to get basic file export working.
-			var downloadLink = document.createElement("a");
-			var blob = new Blob(["\ufeff", json]);
-			var url = URL.createObjectURL(blob);
-			downloadLink.href = url;
-			downloadLink.download = "seatMap.map";
-			document.body.appendChild(downloadLink);
-			downloadLink.click();
-			document.body.removeChild(downloadLink);
-		}
+		//this.Export = function() {
+		//	var json = JSON.stringify(self.canvas);
+		//	// hack to get basic file export working.
+		//	var downloadLink = document.createElement("a");
+		//	var blob = new Blob(["\ufeff", json]);
+		//	var url = URL.createObjectURL(blob);
+		//	downloadLink.href = url;
+		//	downloadLink.download = "seatMap.map";
+		//	document.body.appendChild(downloadLink);
+		//	downloadLink.click();
+		//	document.body.removeChild(downloadLink);
+		//};
 
-		this.Import = function (e) {
-			var reader = new FileReader();
-			reader.onload = function (event) {
-				var json = event.target.result;
-				self.seatPriority = 0;
-				self.canvas.loadFromJSON(json, function () {
-					self.canvas.renderAll();
-					var allSeats = self.GetObjectsByType('seat');
-					for (var loadedSeat in allSeats) {
-						if (allSeats[loadedSeat].priority > self.seatPriority) {
-							self.seatPriority = allSeats[loadedSeat].priority;
-						}
-					}
+		//this.Import = function(e) {
+		//	var reader = new FileReader();
+		//	reader.onload = function(event) {
+		//		var json = event.target.result;
+		//		self.seatPriority = self.canvasUtils.LoadSeatMap(self.canvas, json);
+		//	}
+		//	reader.readAsText(e.target.files[0]);
+		//};
+
+		this.LoadExistingSeatMapData = function (data) {
+			self.id = data.Id;
+			self.seatPriority = data.seatPriority;
+			self.locationId = data.Location;
+
+			self.newSeats = [];
+			self.newLocations = [];
+		};
+
+		this.Save = function() {
+			var saveMgr = new save();
+
+			var childLocations = [];
+			var locations = self.canvasUtils.GetObjectsByType(self.canvas, 'location');
+			for (var i in locations ) {
+				
+				childLocations.push(
+				{
+					Id: locations[i].id,
+					Name: locations[i].name,
+					SeatMapId: locations[i].seatMapId,
+					IsNew: (self.newLocations.indexOf(locations[i]) > -1)
 				});
 			}
-			reader.readAsText(e.target.files[0]);
 
-		}
-
-		this.GetObjectsByType = function (type) {
-			var canvasObjects = self.canvas.getObjects();
-			var objectsArray = new Array();
-
-			for (obj in canvasObjects) {
-				if (canvasObjects[obj].get('type') == type) {
-					objectsArray.push(canvasObjects[obj]);
-				}
-
-				if (canvasObjects[obj].get('type') == 'group') {
-					var groupObjects = canvasObjects[obj].getObjects();
-					for (var groupObj in groupObjects) {
-						if (groupObjects[groupObj].get('type') == type) {
-							objectsArray.push(groupObjects[groupObj]);
-						}
-					}
-				}
+			var seats = [];
+			var seatObjects = self.canvasUtils.GetObjectsByType(self.canvas, 'seat');
+			for (i in seatObjects) {
+				seat = seatObjects[i];
+				seats.push(
+				{
+					Id: seat.id,
+					Name: seat.name,
+					Priority : seat.priority,
+					IsNew: (self.newSeats.indexOf(seat) > -1)
+				});
 			}
-			return objectsArray;
-		}
 
+			var data = {
+				SeatMapData: JSON.stringify(self.canvas),
+				Id: self.id,
+				Location: self.locationId,
+				ChildLocations: childLocations,
+				Seats: seats,
+				BusinessUnitId: self.businessUnitId
+			}
+
+			saveMgr.SetData(data);
+			saveMgr.Apply(self.OnSaveSuccess);
+		};
+
+		this.OnSaveSuccess = function () {
+			self.refreshPageFunction.call();
+		};
 
 	};
 });
