@@ -7,7 +7,6 @@ using log4net;
 using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.ApplicationLayer.Commands;
-using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.PersonScheduleDayReadModel;
 using Teleopti.Ccc.Web.Areas.Anywhere.Core;
 using Teleopti.Ccc.Web.Core;
 using Teleopti.Ccc.Web.Filters;
@@ -20,7 +19,6 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Controllers
 		private readonly ICommandDispatcher _commandDispatcher;
 		private readonly ILoggedOnUser _loggedOnUser;
 		private readonly IPersonScheduleDayViewModelFactory _personScheduleDayViewModelFactory;
-		private readonly static ILog Logger = LogManager.GetLogger(typeof(PersonScheduleCommandController));
 
 		public PersonScheduleCommandController(ICommandDispatcher commandDispatcher, ILoggedOnUser loggedOnUser, IPersonScheduleDayViewModelFactory personScheduleDayViewModelFactory)
 		{
@@ -34,8 +32,6 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Controllers
 		[AddFullDayAbsencePermission]
 		public virtual JsonResult AddFullDayAbsence(AddFullDayAbsenceCommand command)
 		{
-			if (Logger.IsDebugEnabled)
-				Logger.DebugFormat("Command start {0}, end {1}", command.StartDate, command.EndDate);
 			if (command.TrackedCommandInfo != null)
 				command.TrackedCommandInfo.OperatedPersonId = _loggedOnUser.CurrentUser().Id.Value;
 			_commandDispatcher.Execute(command);

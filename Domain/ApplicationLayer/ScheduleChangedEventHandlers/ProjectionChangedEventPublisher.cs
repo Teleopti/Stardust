@@ -78,7 +78,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers
 			var period = new DateTimePeriod(@event.StartDateTime.Subtract(TimeSpan.FromDays(1)), @event.EndDateTime);
 			if (Logger.IsDebugEnabled)
 			{
-				Logger.DebugFormat("GetData => period start: {0}, end: {1}", period.StartDateTime, period.EndDateTime);
+				Logger.DebugFormat("Period start: {0}, end: {1}", period.StartDateTime, period.EndDateTime);
 			}
 			var person = _personRepository.FindPeople(new []{ @event.PersonId}).FirstOrDefault();
 		    if (person == null)
@@ -102,7 +102,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers
 			var realPeriod = actualPeriod.Value.ToDateOnlyPeriod(timeZone);
 			if (Logger.IsDebugEnabled)
 			{
-				Logger.DebugFormat("GetData => realPeriod start: {0}, end: {1}", realPeriod.StartDate, realPeriod.EndDate);
+				Logger.DebugFormat("RealPeriod start: {0}, end: {1}", realPeriod.StartDate, realPeriod.EndDate);
 			}
 			return new range
 				{

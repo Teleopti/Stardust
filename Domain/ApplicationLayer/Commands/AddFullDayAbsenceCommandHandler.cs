@@ -16,7 +16,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Commands
 		private readonly IProxyForId<IAbsence> _absenceRepository;
 		private readonly IWriteSideRepository<IPersonAbsence> _personAbsenceRepository;
 		private readonly IScheduleRepository _scheduleRepository;
-		private readonly static ILog Logger = LogManager.GetLogger(typeof(AddFullDayAbsenceCommandHandler));
 
 		public AddFullDayAbsenceCommandHandler(IScheduleRepository scheduleRepository, IProxyForId<IPerson> personRepository, IProxyForId<IAbsence> absenceRepository, IWriteSideRepository<IPersonAbsence> personAbsenceRepository, ICurrentScenario scenario)
 		{
@@ -29,29 +28,14 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Commands
 
 		public void Handle(AddFullDayAbsenceCommand command)
 		{
-			if (Logger.IsDebugEnabled)
-				Logger.DebugFormat("Command start {0}, end {1}", command.StartDate, command.EndDate);
 			var person = _personRepository.Load(command.PersonId);
 			var absence = _absenceRepository.Load(command.AbsenceId);
 			var period = new DateOnlyPeriod(new DateOnly(command.StartDate.AddDays(-1)), new DateOnly(command.EndDate));
-			if (Logger.IsDebugEnabled)
-				Logger.DebugFormat("Period start {0}, end {1}", period.StartDate, period.EndDate);
 
 			var scheduleDays = getScheduleDaysForPeriod(period, person);
-			if (Logger.IsDebugEnabled)
-			{
-				foreach (var scheduleDay in scheduleDays)
-				{
-					Logger.DebugFormat("Schedule date:{0}", scheduleDay.DateOnlyAsPeriod.DateOnly);
-				}
-			}
 
 			var previousDay = scheduleDays.First();
 			var absenceTimePeriod = getDateTimePeriodForAbsence(scheduleDays.Except(new[] {previousDay}), previousDay);
-			if (Logger.IsDebugEnabled)
-			{
-				Logger.DebugFormat("absenceTimePeriod start: {0}, end: {1}", absenceTimePeriod.StartDateTime, absenceTimePeriod.EndDateTime);
-			}
 
 			var personAbsence = new PersonAbsence(_scenario.Current());
 			personAbsence.FullDayAbsence(person, absence, absenceTimePeriod.StartDateTime, absenceTimePeriod.EndDateTime, command.TrackedCommandInfo);
