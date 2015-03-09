@@ -1,18 +1,16 @@
 ﻿using System.Globalization;
 using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
 using Teleopti.Ccc.Win.Sikuli.Helpers;
-using Teleopti.Ccc.Win.Sikuli.Validators.RootValidators;
-using Teleopti.Ccc.WinCode.Common;
 using Teleopti.Interfaces.Domain;
 
-namespace Teleopti.Ccc.Win.Sikuli.Validators
+namespace Teleopti.Ccc.Win.Sikuli.Validators.AtomicValidators
 {
-	internal class OptimizeDaysOffValidator : IRootValidator
+	internal class PeriodStandardDeviationValidator : IAtomicValidator
 	{
 		private readonly ISchedulerStateHolder _schedulerState;
 		private readonly IAggregateSkill _totalSkill;
 
-		public OptimizeDaysOffValidator(ISchedulerStateHolder schedulerState, IAggregateSkill totalSkill)
+		public PeriodStandardDeviationValidator(ISchedulerStateHolder schedulerState, IAggregateSkill totalSkill)
 		{
 			_schedulerState = schedulerState;
 			_totalSkill = totalSkill;
@@ -23,7 +21,7 @@ namespace Teleopti.Ccc.Win.Sikuli.Validators
 			get { return "The period's standard deviation must be under the limit."; }
 		}
 
-		public SikuliValidationResult Validate(ITestDuration duration)
+		public SikuliValidationResult Validate()
 		{
 			var result = new SikuliValidationResult(SikuliValidationResult.ResultValue.Pass);
 			var std = ValidatorHelper.GetStandardDeviationForPeriod(_schedulerState, _totalSkill);

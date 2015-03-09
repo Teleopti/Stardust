@@ -771,7 +771,8 @@
       <DependentUpon>PublishScheduleDateView.cs</DependentUpon>
     </Compile>
     <Compile Include="Sikuli\Validators\AtomicValidators\IAtomicValidator.cs" />
-    <Compile Include="Sikuli\Validators\AtomicValidators\SchedulerValidator.cs" />
+    <Compile Include="Sikuli\Validators\AtomicValidators\PeriodStandardDeviationValidator.cs" />
+    <Compile Include="Sikuli\Validators\AtomicValidators\SchedulerHoursWeeklyPatternValidator.cs" />
     <Compile Include="Sikuli\Validators\RootValidators\IRootValidator.cs" />
     <Compile Include="Sikuli\SikuliEnterValidatorDialog.cs">
       <SubType>Form</SubType>
@@ -2593,9 +2594,9 @@
     <Compile Include="Sikuli\Validators\IntervalBalanceAfterValidator.cs" />
     <Compile Include="Sikuli\Validators\OptimizeWithinDaysValidator.cs" />
     <Compile Include="Sikuli\Validators\OptimizeBetweenDaysValidator.cs" />
-    <Compile Include="Sikuli\Validators\OptimizeDaysOffValidator.cs" />
+    <Compile Include="Sikuli\Validators\RootValidators\OptimizeDaysOffValidator.cs" />
     <Compile Include="Sikuli\Validators\OptimizerValidator.cs" />
-    <Compile Include="Sikuli\Validators\DeleteAllValidator.cs" />
+    <Compile Include="Sikuli\Validators\RootValidators\DeleteAllValidator.cs" />
     <Compile Include="Sikuli\Validators\OptimizeBlockTeamValidator.cs" />
     <Compile Include="Sikuli\Validators\IntervalBalanceBeforeValidator.cs" />
     <Compile Include="Sikuli\Validators\AtomicValidators\DurationValidator.cs" />
