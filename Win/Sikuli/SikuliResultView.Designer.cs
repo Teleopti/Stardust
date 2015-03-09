@@ -57,7 +57,7 @@
 			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
 			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 36F));
 			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
-			this.tableLayoutPanel1.Size = new System.Drawing.Size(405, 265);
+			this.tableLayoutPanel1.Size = new System.Drawing.Size(405, 281);
 			this.tableLayoutPanel1.TabIndex = 31;
 			// 
 			// labelResult
@@ -91,7 +91,7 @@
 			this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 20F));
 			this.tableLayoutPanel2.Controls.Add(this.buttonOk, 1, 0);
 			this.tableLayoutPanel2.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.tableLayoutPanel2.Location = new System.Drawing.Point(3, 232);
+			this.tableLayoutPanel2.Location = new System.Drawing.Point(3, 248);
 			this.tableLayoutPanel2.Name = "tableLayoutPanel2";
 			this.tableLayoutPanel2.RowCount = 1;
 			this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
@@ -120,12 +120,12 @@
 			this.textBoxDetails.BackColor = System.Drawing.SystemColors.Window;
 			this.textBoxDetails.BorderStyle = System.Windows.Forms.BorderStyle.None;
 			this.textBoxDetails.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.textBoxDetails.Font = new System.Drawing.Font("Segoe UI", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			this.textBoxDetails.Font = new System.Drawing.Font("Segoe UI", 11F);
 			this.textBoxDetails.Location = new System.Drawing.Point(3, 87);
 			this.textBoxDetails.Multiline = true;
 			this.textBoxDetails.Name = "textBoxDetails";
 			this.textBoxDetails.ReadOnly = true;
-			this.textBoxDetails.Size = new System.Drawing.Size(399, 139);
+			this.textBoxDetails.Size = new System.Drawing.Size(399, 155);
 			this.textBoxDetails.TabIndex = 34;
 			// 
 			// SikuliResultView
@@ -134,7 +134,8 @@
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.BackColor = System.Drawing.SystemColors.Window;
-			this.ClientSize = new System.Drawing.Size(405, 265);
+			this.CaptionFont = new System.Drawing.Font("Segoe UI", 12F);
+			this.ClientSize = new System.Drawing.Size(405, 281);
 			this.ControlBox = false;
 			this.Controls.Add(this.tableLayoutPanel1);
 			this.Font = new System.Drawing.Font("Segoe UI", 8F);
@@ -144,7 +145,7 @@
 			this.Name = "SikuliResultView";
 			this.ShowIcon = false;
 			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
-			this.Text = "Additional testing information";
+			this.Text = "Test information ...";
 			this.tableLayoutPanel1.ResumeLayout(false);
 			this.tableLayoutPanel1.PerformLayout();
 			this.tableLayoutPanel2.ResumeLayout(false);

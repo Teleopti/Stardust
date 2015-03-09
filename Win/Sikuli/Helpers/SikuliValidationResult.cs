@@ -1,18 +1,33 @@
 ﻿using System;
 using System.Text;
 
-namespace Teleopti.Ccc.Win.Sikuli
+namespace Teleopti.Ccc.Win.Sikuli.Helpers
 {
 	public class SikuliValidationResult
 	{
 		public enum ResultValue
 		{
-			Pass,
-			Fail,
-			Warn
+			Pass = 0,
+			Warn = 1,
+			Fail = 2
+		}
+
+		public ResultValue CombineResultValue(SikuliValidationResult other)
+		{
+			return Result.CompareTo(other.Result) >= 0 ? Result : other.Result;
+		}
+
+		public StringBuilder CombineDetails(SikuliValidationResult other)
+		{
+			var otherDetails = other.Details.ToString();
+			if (!string.IsNullOrWhiteSpace(otherDetails))
+				Details.Append(otherDetails);
+			return Details;
 		}
 
 		private readonly StringBuilder _stringBuilder;
+
+		public SikuliValidationResult() : this(ResultValue.Pass){}
 
 		public SikuliValidationResult(ResultValue defaultResult)
 		{

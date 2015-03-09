@@ -769,7 +769,9 @@
     <Compile Include="Scheduling\PublishScheduleDateView.Designer.cs">
       <DependentUpon>PublishScheduleDateView.cs</DependentUpon>
     </Compile>
-    <Compile Include="Sikuli\ISikuliValidator.cs" />
+    <Compile Include="Sikuli\Validators\AtomicValidators\IAtomicValidator.cs" />
+    <Compile Include="Sikuli\Validators\AtomicValidators\SchedulerValidator.cs" />
+    <Compile Include="Sikuli\Validators\RootValidators\IRootValidator.cs" />
     <Compile Include="Sikuli\SikuliEnterValidatorDialog.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -788,8 +790,8 @@
     <Compile Include="Sikuli\SikuliResultView.Designer.cs">
       <DependentUpon>SikuliResultView.cs</DependentUpon>
     </Compile>
-    <Compile Include="Sikuli\SikuliHelper.cs" />
-    <Compile Include="Sikuli\SikuliValidationResult.cs" />
+    <Compile Include="Sikuli\Helpers\SikuliHelper.cs" />
+    <Compile Include="Sikuli\Helpers\SikuliValidationResult.cs" />
     <Compile Include="Sikuli\SikuliValidatorFactory.cs" />
     <Compile Include="Sikuli\SikuliValidatorRegister.cs" />
     <Compile Include="Properties\Resources.Designer.cs">
@@ -2584,7 +2586,8 @@
     <Compile Include="Shifts\WorkShiftsExplorer.designer.cs">
       <DependentUpon>WorkShiftsExplorer.cs</DependentUpon>
     </Compile>
-    <Compile Include="Sikuli\TestDuration.cs" />
+    <Compile Include="Sikuli\Helpers\TestDuration.cs" />
+    <Compile Include="Sikuli\Validators\RootValidators\RootValidator.cs" />
     <Compile Include="Sikuli\Validators\ScheduleOvertimePeriodValidator.cs" />
     <Compile Include="Sikuli\Validators\IntervalBalanceAfterValidator.cs" />
     <Compile Include="Sikuli\Validators\OptimizeWithinDaysValidator.cs" />
@@ -2594,11 +2597,13 @@
     <Compile Include="Sikuli\Validators\DeleteAllValidator.cs" />
     <Compile Include="Sikuli\Validators\OptimizeBlockTeamValidator.cs" />
     <Compile Include="Sikuli\Validators\IntervalBalanceBeforeValidator.cs" />
+    <Compile Include="Sikuli\Validators\AtomicValidators\DurationValidator.cs" />
+    <Compile Include="Sikuli\Validators\RootValidators\ScheduleAllOptionsOffValidator.cs" />
     <Compile Include="Sikuli\Validators\SchedulerValidator.cs" />
     <Compile Include="Sikuli\Validators\TestValidators\WarnValidator.cs" />
     <Compile Include="Sikuli\Validators\TestValidators\FailValidator.cs" />
     <Compile Include="Sikuli\Validators\TestValidators\PassValidator.cs" />
-    <Compile Include="Sikuli\Validators\ValidatorHelper.cs" />
+    <Compile Include="Sikuli\Helpers\ValidatorHelper.cs" />
     <EmbeddedResource Include="Backlog\BacklogSelector.resx">
       <DependentUpon>BacklogSelector.cs</DependentUpon>
     </EmbeddedResource>

@@ -1,6 +1,9 @@
-﻿namespace Teleopti.Ccc.Win.Sikuli.Validators.TestValidators
+﻿using Teleopti.Ccc.Win.Sikuli.Helpers;
+using Teleopti.Ccc.Win.Sikuli.Validators.RootValidators;
+
+namespace Teleopti.Ccc.Win.Sikuli.Validators.TestValidators
 {
-	internal class FailValidator : ISikuliValidator
+	internal class FailValidator : IRootValidator
 	{
 		public SikuliValidationResult Validate(ITestDuration duration)
 		{

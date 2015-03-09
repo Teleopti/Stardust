@@ -1,8 +1,9 @@
-﻿using System.Windows.Forms;
+﻿using Syncfusion.Windows.Forms;
+using Teleopti.Ccc.Win.Sikuli.Helpers;
 
 namespace Teleopti.Ccc.Win.Sikuli
 {
-	internal partial class SikuliResultView : Form
+	internal partial class SikuliResultView : MetroForm
 	{
 
 		public SikuliResultView()

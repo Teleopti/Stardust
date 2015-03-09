@@ -1,5 +1,7 @@
 ﻿using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
+using Teleopti.Ccc.Win.Sikuli.Helpers;
 using Teleopti.Ccc.Win.Sikuli.Validators;
+using Teleopti.Ccc.Win.Sikuli.Validators.RootValidators;
 using Teleopti.Ccc.Win.Sikuli.Validators.TestValidators;
 using Teleopti.Ccc.WinCode.Common;
 using Teleopti.Interfaces.Domain;
@@ -10,7 +12,7 @@ namespace Teleopti.Ccc.Win.Sikuli
 	{
 		internal static class Scheduler
 		{
-			public static ISikuliValidator CreateValidator(ISchedulerStateHolder schedulerState, IAggregateSkill totalSkill)
+			public static IRootValidator CreateValidator(ISchedulerStateHolder schedulerState, IAggregateSkill totalSkill)
 			{
 				switch (SikuliHelper.Validation.CurrentValidator)
 				{
@@ -40,6 +42,9 @@ namespace Teleopti.Ccc.Win.Sikuli
 
 					case SikuliValidatorRegister.Schedule:
 						return new SchedulerValidator(schedulerState, totalSkill);
+
+					case SikuliValidatorRegister.ScheduleAllOptionsOff:
+						return new ScheduleAllOptionsOffValidator(schedulerState, totalSkill);
 
 					case SikuliValidatorRegister.ScheduleOvertimePeriod:
 						return new ScheduleOvertimePeriodValidator(schedulerState, totalSkill);
