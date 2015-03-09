@@ -107,7 +107,7 @@ define([
 			viewModel.Loading(true);
 
 			if (resources.MyTeam_MoveActivity_25206) {
-				viewModel.moveActivityVisible(true);
+				viewModel.isMoveActivityFeatureEnabled(true);
 			}
 
 			viewModel.SetViewOptions(options);

@@ -278,8 +278,11 @@ define([
 			if (self.Resources.MyTeam_MakeTeamScheduleConsistent_31897 &&
 					(isNaN(self.MoveActivityForm.SelectedStartMinutes()) || self.MoveActivityForm.SelectedStartMinutes() == 0)) {
 				activeLayer = layers().first();
-				self.MoveActivityForm.SelectedStartMinutes(activeLayer.StartMinutes());
-				self.SelectedStartMinutes(activeLayer.StartMinutes());
+				if (activeLayer != undefined) {
+					self.MoveActivityForm.SelectedStartMinutes(activeLayer.StartMinutes());
+					self.SelectedStartMinutes(activeLayer.StartMinutes());
+				}
+				
 			} else {
 				var selectedLayers = layers().filter(function(layer) {
 					var selectedMinutes = self.MoveActivityForm.SelectedStartMinutes();

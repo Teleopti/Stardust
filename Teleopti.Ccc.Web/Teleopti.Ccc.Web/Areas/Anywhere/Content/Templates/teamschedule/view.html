@@ -160,10 +160,8 @@
 										<!-- ko if: $root.permissionRemoveAbsence -->
 										<a class="btn btn-sm remove-absence" data-bind="attr: { href: $data.urlForRemoveAbsence()}"><i class="glyphicon glyphicon-minus"></i><span data-bind="    text: $root.Resources.Absence"></span></a>
 										<!-- /ko-->
-										<!-- ko if: $root.permissionMoveActivity -->
-	                                    <!-- ko if: $root.moveActivityVisible -->
+										<!-- ko if: $root.HasPermissionForMovingActivity -->
 										<a class="btn btn-sm move-activity "data-bind="attr: { href: $data.urlForMoveActivity($parent)}"><i class="glyphicon glyphicon-hand-up"></i><span data-bind="    text: $root.Resources.MoveActivity"></span></a>
-										<!-- /ko-->
 										<!-- /ko-->
                                     </div>
                                     <!-- /ko -->
@@ -195,8 +193,10 @@
 										<a class="btn btn-sm remove-absence" data-bind="attr: { href: $data.urlForRemoveAbsence()}"><i class="glyphicon glyphicon-minus"></i><span data-bind="    text: $root.Resources.Absence"></span></a>
 		                                <!-- /ko-->
 										<!-- ko if: $root.Resources.MyTeam_MakeTeamScheduleConsistent_31897 -->
-										<!-- ko if: $root.permissionMoveActivity -->
+		                                <!-- ko if: $root.HasPermissionForMovingActivity -->
+										<!-- ko if: $parent.IsMoveActivityVisible -->
 										<a class="btn btn-sm move-activity " data-bind="attr: { href: $data.urlForMoveActivity($parent)}"><i class="glyphicon glyphicon-hand-up"></i><span data-bind="    text: $root.Resources.MoveActivity"></span></a>
+										<!-- /ko-->
 										<!-- /ko-->
 										<!-- /ko-->
 	                                </div>

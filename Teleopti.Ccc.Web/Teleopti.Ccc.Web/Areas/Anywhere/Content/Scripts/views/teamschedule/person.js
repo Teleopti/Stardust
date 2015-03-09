@@ -127,5 +127,9 @@ define([
 				layers().some(function(l) { return l.Selected(); });
 		});
 
+		this.IsMoveActivityVisible = ko.computed(function() {
+			return self.Shifts().length > 0;
+		});
+
 	};
 });

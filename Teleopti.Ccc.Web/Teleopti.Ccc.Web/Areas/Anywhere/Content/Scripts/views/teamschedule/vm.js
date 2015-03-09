@@ -292,6 +292,9 @@ define([
 			self.DiffPercentage(data.RelativeDifference);
 		};
 		
-		this.moveActivityVisible = ko.observable(false);
+		this.isMoveActivityFeatureEnabled = ko.observable(false);
+		this.HasPermissionForMovingActivity = ko.computed(function() {
+			return self.isMoveActivityFeatureEnabled() && self.permissionMoveActivity();
+		});
 	};
 });
