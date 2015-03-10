@@ -1,8 +1,6 @@
-﻿using System;
-using NUnit.Framework;
+﻿using NUnit.Framework;
 using Teleopti.Ccc.Domain.SeatPlanning;
 using Teleopti.Ccc.Infrastructure.Repositories;
-using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
 

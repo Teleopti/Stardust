@@ -56,8 +56,6 @@
 
 		};
 
-
-		// RobTodo: Review these 'get objects' functions
 		this.GetObjectsByType = function (canvas, type) {
 			var canvasObjects = canvas.getObjects();
 			var objectsArray = new Array();
@@ -78,7 +76,6 @@
 			if (!obj) {
 				return null;
 			}
-
 			if (obj.get('type') == type) {
 				return [obj];
 			}
@@ -113,7 +110,6 @@
 			if (!obj) {
 				return null;
 			}
-
 			if (obj.get('type') == type) {
 				return obj;
 			}

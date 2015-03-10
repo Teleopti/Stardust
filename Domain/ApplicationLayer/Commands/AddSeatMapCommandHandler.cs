@@ -54,12 +54,24 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Commands
 
 		private void deleteRemovedChildSeatMaps(AddSeatMapCommand command, SeatMap parentSeatMap)
 		{
-			var locationsToDelete =
-				from childLocation in parentSeatMap.Location.ChildLocations
-				where command.ChildLocations.All(child => child.Id != childLocation.Id)
+			if (parentSeatMap.Location.ChildLocations == null ) return;
+
+
+			IEnumerable<Location> locationsToDelete;
+
+			if (command.ChildLocations == null)
+			{
+				locationsToDelete = parentSeatMap.Location.ChildLocations;
+			}
+			else
+			{
+				locationsToDelete =  from childLocation in parentSeatMap.Location.ChildLocations
+				where command.ChildLocations.All (child => child.Id != childLocation.Id)
 				select childLocation;
-			
-			locationsToDelete.ToList().ForEach(deleteSeatMapAndLocation);
+
+			}
+
+			locationsToDelete.ToList().ForEach (deleteSeatMapAndLocation);
 		}
 
 		private void deleteSeatMapAndLocation(Location location)

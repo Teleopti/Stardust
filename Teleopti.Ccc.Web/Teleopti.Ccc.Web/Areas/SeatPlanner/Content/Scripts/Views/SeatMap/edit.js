@@ -22,7 +22,6 @@
 
 	return new function () {
 
-
 		var self = this;
 		this.canvas = null;
 		this.id = null;
@@ -43,16 +42,16 @@
 			document.getElementById('imgLoader').onchange = self.HandleImageLoad;
 			document.getElementById('backgroundLoader').onchange = self.HandleBackgroundLoad;
 			//document.getElementById('dataLoader').onchange = self.Import;
-			
+
 		};
 
-		this.hasActiveGroup = ko.computed(function () {
+		this.hasActiveGroup = function () {
 			if (self.canvas) {
 				return self.canvas.getActiveGroup() != null;
 			}
 			return false;
-		});
-		
+		};
+
 		this.OnKeyDownHandler = function (event) {
 			//event.preventDefault();
 			var key = window.event ? window.event.keyCode : event.keyCode;
@@ -131,30 +130,27 @@
 			if (self.copiedGroup) {
 				for (var i in self.copiedGroup.objects) {
 					var objToCopy = self.copiedGroup.objects[i];
-					var left = self.copiedGroup.left;
-					var top = self.copiedGroup.top;
-
-					objToCopy.clone(function (obj) {
-						obj.set("top", top + obj.top + 15);
-						obj.set("left", left + obj.left + 15);
-						self.UpdateSeatDataOnPaste(obj);
-
-						self.canvas.add(obj);
-					});
-					self.canvas.setActiveGroup(self.copiedGroup);
+					self.CloneObject(objToCopy);
 				}
 			} else if (self.copiedObject) {
 
-				self.copiedObject.clone(function (obj) {
-					obj.set("top", obj.top + 15);
-					obj.set("left", obj.left + 15);
-					self.UpdateSeatDataOnPaste(obj);
-					self.canvas.add(obj);
-					self.canvas.setActiveObject(obj);
-				});
+				self.CloneObject(self.copiedObject, self.canvas.setActiveObject);
 			}
 
 			self.canvas.renderAll();
+		};
+
+		this.CloneObject = function(objectToClone, onCloneCompleteFunction) {
+
+			objectToClone.clone(function(obj) {
+				obj.set("top", obj.top + 15);
+				obj.set("left", obj.left + 15);
+				self.UpdateSeatDataOnPaste(obj);
+				self.canvas.add(obj);
+				if (onCloneCompleteFunction) {
+					onCloneCompleteFunction.call(obj);
+				}
+			});
 		};
 
 		this.UpdateSeatDataOnPaste = function (obj) {
@@ -179,19 +175,33 @@
 				activeGroup = self.canvas.getActiveGroup();
 
 			if (activeGroup) {
-				var objectsInGroup = activeGroup.getObjects();
 				self.canvas.discardActiveGroup();
-				objectsInGroup.forEach(function (object) {
-					self.canvas.remove(object);
-				});
+				self.RemoveObjectAndTidyReferences(activeGroup);
 			}
 			else if (activeObject) {
 				self.canvas.remove(activeObject);
+				self.RemoveObjectAndTidyReferences(activeObject);
 			}
-
-			//Robtodo: remove locations from self.newLocations and seats from self.newSeats when appropriate
 		};
 
+		this.RemoveObjectAndTidyReferences = function (obj) {
+
+			if (obj.get('type') == 'seat') {
+				self.newSeats.splice($.inArray(obj, self.newSeats), 1);
+			}
+
+			if (obj.get('type') == 'location') {
+				self.newLocations.splice($.inArray(obj, self.newLocations), 1);
+			}
+
+			if (obj.get('type') == 'group') {
+				var objectsInGroup = obj.getObjects();
+				objectsInGroup.forEach(function (child) {
+					self.RemoveObjectAndTidyReferences(child);
+					self.canvas.remove(child);
+				});
+			}
+		};
 
 		this.Clear = function () {
 			self.canvasUtils.ClearCanvas(self.canvas);
@@ -233,7 +243,7 @@
 					self.canvas.remove(object);
 
 				});
-				var group = new fabric.Group(objectsInGroup, { left: 200, top: 200 });
+				var group = new fabric.Group(objectsInGroup, { left: activeGroup.left + 15, top: activeGroup.top + 15 });
 				self.canvas.setActiveObject(group);
 				self.canvas.add(group);
 			}
@@ -454,7 +464,6 @@
 				newSeat.setCoords();
 				self.newSeats.push(newSeat);
 			});
-			
 		};
 
 		this.AddText = function (text) {
@@ -495,7 +504,7 @@
 				name: self.locationName(),
 				id: guidgenerator.newGuid(),
 				seatMapId: guidgenerator.newGuid(),
-				isNew : true,
+				isNew: true,
 				height: 200,
 				width: 300,
 				fill: 'rgba(59, 111, 170, 0.2)'
@@ -541,13 +550,13 @@
 			self.newLocations = [];
 		};
 
-		this.Save = function() {
+		this.Save = function () {
 			var saveMgr = new save();
 
 			var childLocations = [];
 			var locations = self.canvasUtils.GetObjectsByType(self.canvas, 'location');
-			for (var i in locations ) {
-				
+			for (var i in locations) {
+
 				childLocations.push(
 				{
 					Id: locations[i].id,
@@ -565,7 +574,7 @@
 				{
 					Id: seat.id,
 					Name: seat.name,
-					Priority : seat.priority,
+					Priority: seat.priority,
 					IsNew: (self.newSeats.indexOf(seat) > -1)
 				});
 			}
