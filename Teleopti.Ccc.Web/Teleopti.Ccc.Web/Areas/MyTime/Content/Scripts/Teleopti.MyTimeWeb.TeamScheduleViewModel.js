@@ -6,7 +6,7 @@ Teleopti.MyTimeWeb.TeamScheduleViewModel = function () {
 	self.isFilterByTimeEnabled = ko.observable(false);
 	self.isTeamScheduleSorttingFeatureEnabled = ko.observable(false);
 
-	self.isLoading = ko.observable(false);
+	self.isLoading = ko.observable(true);
 
 	self.hasError = ko.observable(false);
 	self.errorMessage = ko.observable();
@@ -109,6 +109,8 @@ Teleopti.MyTimeWeb.TeamScheduleViewModel = function () {
 		self.activateFilterMixinChangeHandler();
 	});
 
+
+	self.isLocked(self.isLoading());
 	self.isLoading.subscribe(function(newValue) { self.isLocked(newValue);  });
 };
 
