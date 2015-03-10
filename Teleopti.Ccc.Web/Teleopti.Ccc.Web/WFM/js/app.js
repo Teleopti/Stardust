@@ -8,6 +8,7 @@ var wfm = angular.module('wfm', [
     'angularMoment',
 	'restService',
 	'restSearchService',
+	'forecastingService',
 	'wfmCtrls',
 	'wfm.permissions',
 	'wfm.forecasting',

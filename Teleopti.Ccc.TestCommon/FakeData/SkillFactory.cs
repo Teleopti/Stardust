@@ -162,6 +162,7 @@ namespace Teleopti.Ccc.TestCommon.FakeData
             SkillType skillType = SkillTypeFactory.CreateSkillType();
             ISkill skill = CreateSkill("TestSkill", skillType,15);
             IWorkload fs = WorkloadFactory.CreateWorkload(skill);
+			fs.SetId(Guid.NewGuid());
 
             QueueSource qsInrikes = QueueSourceFactory.CreateQueueSourceInrikes();
             QueueSource qsHelpDesk = QueueSourceFactory.CreateQueueSourceHelpdesk();

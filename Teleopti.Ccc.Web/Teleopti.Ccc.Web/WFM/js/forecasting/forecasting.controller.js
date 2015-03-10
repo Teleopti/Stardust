@@ -1,8 +1,14 @@
 ﻿'use strict';
 
 angular.module('wfm.forecasting', [])
-.controller('ForecastingCtrl', ['$scope', '$state',
-        function ($scope, $state) {
+.controller('ForecastingCtrl', ['$scope', '$state', 'Forecasting',
+        function ($scope, $state, Forecasting) {
+        	$scope.skillsDisplayed = [];
+
+        	Forecasting.skills.query().$promise.then(function (result) {
+        		$scope.skillsDisplayed = result;
+        	});
+
         	var startDate = moment().add(1, 'months').startOf('month').toDate();
         	var endDate = moment().add(2, 'months').startOf('month').toDate();
         	$scope.period = { startDate: startDate, endDate: endDate }; //use moment to get first day of next month

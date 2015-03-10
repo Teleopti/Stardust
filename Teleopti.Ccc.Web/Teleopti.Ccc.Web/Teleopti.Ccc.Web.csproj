@@ -1210,6 +1210,7 @@
     <Content Include="WFM\css\material.css" />
     <Content Include="WFM\Gruntfile.js" />
     <Content Include="WFM\js\forecasting\forecasting.controller.js" />
+    <Content Include="WFM\js\forecasting\forecasting.service.js" />
     <Content Include="WFM\js\permissions\permissions.controller.js" />
     <Content Include="WFM\js\permissions\permissions.service.js" />
     <Content Include="WFM\js\search\search.controller.js" />
@@ -1610,9 +1611,14 @@
     <Content Include="WFM\vendor\angular-material\themes\red-theme.css" />
     <Content Include="WFM\vendor\angular-material\themes\teal-theme.css" />
     <Content Include="WFM\vendor\angular-material\themes\yellow-theme.css" />
+    <Content Include="WFM\vendor\angular-ui-tree\angular-ui-tree.min.css" />
+    <Content Include="WFM\vendor\angular-ui-tree\angular-ui-tree.min.js" />
     <Content Include="WFM\vendor\hammerjs\.gitignore" />
     <Content Include="WFM\vendor\hammerjs\hammer.js" />
     <Content Include="WFM\vendor\hammerjs\hammer.min.js" />
+    <Content Include="WFM\vendor\MaterialDesignIcons-0.5.18\license.txt" />
+    <Content Include="WFM\vendor\MaterialDesignIcons-0.5.18\MaterialDesignIcons.css" />
+    <Content Include="WFM\vendor\MaterialDesignIcons-0.5.18\MaterialDesignIcons.html" />
     <Content Include="WFM\vendor\ui-bootstrap.min.js" />
     <Content Include="Content\amplify\amplify.min.js" />
     <Content Include="Content\bootstrap-timepicker\css\bootstrap-timepicker.css" />
@@ -1887,6 +1893,9 @@
       <SubType>Designer</SubType>
     </Content>
     <None Include="Properties\PublishProfiles\Local iis.pubxml" />
+    <Content Include="WFM\vendor\MaterialDesignIcons-0.5.18\MaterialDesignIcons.eot" />
+    <Content Include="WFM\vendor\MaterialDesignIcons-0.5.18\MaterialDesignIcons.ttf" />
+    <Content Include="WFM\vendor\MaterialDesignIcons-0.5.18\MaterialDesignIcons.woff" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config">

@@ -7,6 +7,7 @@ using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Forecasting.Angel;
+using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Web.Filters;
 using Teleopti.Interfaces.Domain;
@@ -18,11 +19,13 @@ namespace Teleopti.Ccc.Web.Areas.Forecasting.Controllers
 	{
 		private readonly IQuickForecastCreator _quickForecastCreator;
 		private readonly ICurrentIdentity _currentIdentity;
+		private readonly ISkillRepository _skillRepository;
 
-		public ForecastController(IQuickForecastCreator quickForecastCreator, ICurrentIdentity currentIdentity)
+		public ForecastController(IQuickForecastCreator quickForecastCreator, ICurrentIdentity currentIdentity, ISkillRepository skillRepository)
 		{
 			_quickForecastCreator = quickForecastCreator;
 			_currentIdentity = currentIdentity;
+			_skillRepository = skillRepository;
 		}
 
 		public object GetThatShouldBeInAMoreGenericControllerLaterOn()
@@ -40,5 +43,31 @@ namespace Teleopti.Ccc.Web.Areas.Forecasting.Controllers
 			}
 			return Task.FromResult( _quickForecastCreator.CreateForecastForWorkloads(futurePeriod, model.Workloads));
 		}
+
+		[UnitOfWork, Route("api/Forecasting/Skills"), HttpGet]
+		public virtual IEnumerable<SkillViewModel> Skills()
+		{
+			var skills = _skillRepository.FindSkillsWithAtLeastOneQueueSource();
+			return skills.Select(
+				skill => new SkillViewModel
+				{
+					Id = skill.Id.Value,
+					Name = skill.Name,
+					Workloads = skill.WorkloadCollection.Select(x => new WorkloadViewModel {Id = x.Id.Value, Name = x.Name}).ToArray()
+				});
+		}
+	}
+
+	public class SkillViewModel
+	{
+		public Guid Id { get; set; }
+		public string Name { get; set; }
+		public WorkloadViewModel[] Workloads { get; set; }
+	}
+
+	public class WorkloadViewModel
+	{
+		public Guid Id { get; set; }
+		public string Name { get; set; }
 	}
 }

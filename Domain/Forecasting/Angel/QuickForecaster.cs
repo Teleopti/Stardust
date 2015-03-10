@@ -29,7 +29,6 @@ namespace Teleopti.Ccc.Domain.Forecasting.Angel
 					FuturePeriod = futurePeriod,
 					SkillDays = skillDays,
 					HistoricalPeriod = historicalPeriod
-
 				};
 				sum += _quickForecasterWorkload.Execute(quickForecasterWorkloadParams);
 			}
@@ -45,7 +44,6 @@ namespace Teleopti.Ccc.Domain.Forecasting.Angel
 					FuturePeriod = futurePeriod,
 					SkillDays = skillDays,
 					HistoricalPeriod = historicalPeriod
-
 				};
 			return _quickForecasterWorkload.Execute(quickForecasterWorkloadParams);
 		}
