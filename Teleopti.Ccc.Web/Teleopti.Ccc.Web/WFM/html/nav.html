@@ -9,9 +9,12 @@
 				</span>
 				<div class="right-actions">
 					<span>
-					<div ng-controller="SearchCtrl">
-						<input type="text" class="global-search" placeholder="Search ..." ng-model="keyword" ng-change="searchKeyword()" />
-					</div>
+			<div class="navbar-right" ng-controller="SearchCtrl">
+				<div class="input-prepend">
+					<i class="mdi mdi-magnify"></i>
+					<input type="text" placeholder="Search ..." ng-model="keyword" ng-change="searchKeyword()" />
+							<div ng-repeat="item in searchResult">{{item.FirstName}}</div>
+						</div>
 					</span>
 					<span>
 						<div class="dropdown" tabindex="0">
