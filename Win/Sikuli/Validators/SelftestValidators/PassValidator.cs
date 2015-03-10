@@ -1,7 +1,7 @@
 ﻿using Teleopti.Ccc.Win.Sikuli.Helpers;
 using Teleopti.Ccc.Win.Sikuli.Validators.RootValidators;
 
-namespace Teleopti.Ccc.Win.Sikuli.Validators.TestValidators
+namespace Teleopti.Ccc.Win.Sikuli.Validators.SelftestValidators
 {
 	internal class PassValidator : IRootValidator
 	{

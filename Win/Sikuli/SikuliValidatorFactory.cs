@@ -2,7 +2,7 @@
 using Teleopti.Ccc.Win.Sikuli.Helpers;
 using Teleopti.Ccc.Win.Sikuli.Validators;
 using Teleopti.Ccc.Win.Sikuli.Validators.RootValidators;
-using Teleopti.Ccc.Win.Sikuli.Validators.TestValidators;
+using Teleopti.Ccc.Win.Sikuli.Validators.SelftestValidators;
 using Teleopti.Ccc.WinCode.Common;
 using Teleopti.Interfaces.Domain;
 

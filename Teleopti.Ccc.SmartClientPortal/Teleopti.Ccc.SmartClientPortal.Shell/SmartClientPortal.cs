@@ -207,7 +207,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 			}
 			if (e.KeyCode == Keys.T && e.Shift && e.Alt)
 			{
-				SikuliHelper.SetTestMode(true);
+				SikuliHelper.SetInteractiveMode(true);
 			}
 			if (e.KeyCode == Keys.V && e.Shift && e.Alt)
 			{
