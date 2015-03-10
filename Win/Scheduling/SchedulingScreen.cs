@@ -2122,7 +2122,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			}
 			_scheduleOptimizerHelper.ResetWorkShiftFinderResults();
 
-			if (SikuliHelper.InTestMode)
+			if (SikuliHelper.InteractiveMode)
 			{
 				var skillTabPage = _tabSkillData.TabPages[0];
 				var totalSkill = skillTabPage.Tag as IAggregateSkill;

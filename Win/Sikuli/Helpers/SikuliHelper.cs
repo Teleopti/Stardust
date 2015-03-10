@@ -12,7 +12,7 @@ namespace Teleopti.Ccc.Win.Sikuli.Helpers
 		{
 			public static void ShowLoadedMessage(IWin32Window owner)
 			{
-				if (!InTestMode)
+				if (!InteractiveMode)
 					return;
 				var testView = new SikuliResultView { Header = "Loaded" };
 				testView.ShowDialog(owner);
@@ -20,7 +20,7 @@ namespace Teleopti.Ccc.Win.Sikuli.Helpers
 
 			public static void ShowTaskDoneMessage(IWin32Window owner)
 			{
-				if (!InTestMode)
+				if (!InteractiveMode)
 					return;
 				var testView = new SikuliResultView { Header = "Task Done" };
 				testView.ShowDialog(owner);
@@ -29,15 +29,15 @@ namespace Teleopti.Ccc.Win.Sikuli.Helpers
 
 		private static TestDuration _timer;
 
-		public static bool InTestMode
+		public static bool InteractiveMode
 		{
 			get { return StateHolderReader.Instance.StateReader.SessionScopeData.TestMode; }
 			private set { StateHolderReader.Instance.StateReader.SessionScopeData.TestMode = value; }
 		}
 
-		public static void SetTestMode(bool mode)
+		public static void SetInteractiveMode(bool mode)
 		{
-			InTestMode = mode;
+			InteractiveMode = mode;
 		}
 
 		public static class Validation
@@ -46,7 +46,7 @@ namespace Teleopti.Ccc.Win.Sikuli.Helpers
 
 			public static void EnterValidator(IWin32Window owner)
 			{
-				if (!InTestMode)
+				if (!InteractiveMode)
 					return;
 				using (var dialog = new SikuliEnterValidatorDialog())
 				{
@@ -62,7 +62,7 @@ namespace Teleopti.Ccc.Win.Sikuli.Helpers
 
 			public static void Validate(IRootValidator validator, IWin32Window owner)
 			{
-				if (!InTestMode)
+				if (!InteractiveMode)
 					return;
 				if (_timer != null)
 					_timer.SetEnd();
