@@ -33,7 +33,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 				MockRepository.GenerateMock<ITeamScheduleViewModelReworkedMapper>(), MockRepository.GenerateMock<ITimeFilterHelper>(), toggleManager, MockRepository.GenerateMock<ILoggedOnUser>());
 
 			viewModelFactory.Stub(x => x.CreateViewModel(date, id)).Return(new TeamScheduleViewModel());
-			toggleManager.Stub(x => x.IsEnabled(Toggles.MyTimeWeb_SortSchedule_32092)).Return(false);
+			toggleManager.Stub(x => x.IsEnabled(Toggles.MyTimeWeb_EnhanceTeamSchedule_32580)).Return(false);
 			var result = target.Index(date, id);
 
 			result.ViewName.Should().Be.EqualTo("TeamSchedulePartialOriginal");

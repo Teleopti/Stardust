@@ -69,6 +69,7 @@
 		MyTimeWeb_OrganisationalBasedLeaderboard_31184,
 		MyTimeWeb_TradeWithDayOffAndEmptyDay_31317,
 		MyTimeWeb_SortSchedule_32092,
+		MyTimeWeb_EnhanceTeamSchedule_32580,
 
 		Messaging_HttpSender_29205,
 

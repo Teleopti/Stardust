@@ -1,4 +1,4 @@
-﻿@OnlyRunIfEnabled('MyTimeWeb_SortSchedule_32092')
+﻿@OnlyRunIfEnabled('MyTimeWeb_EnhanceTeamSchedule_32580')
 Feature: Team schedule With Paging And Filter Feature
 In order to know when my colleagues work
 As an agent
@@ -179,6 +179,7 @@ Scenario: Sort late shifts after early shifts
 	When I view group schedule for '2014-05-02'
 	Then I should see my colleague before myself
 
+@OnlyRunIfEnabled('MyTimeWeb_SortSchedule_32092')
 Scenario: Sort shifts by time sorting filter
 	Given I am an agent in a team
 	And I have an assigned shift with
@@ -346,6 +347,7 @@ Scenario: Navigate next date without team
 	When I click the next day button in datepicker
 	Then I should see the next day
 
+@OnlyRunIfEnabled('MyTimeWeb_SortSchedule_32092')
 Scenario: View only my colleague`s schedule by searching his name
 	Given I am an agent in a team with access to the whole site
 	And I have an assigned shift with

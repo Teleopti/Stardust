@@ -15,6 +15,7 @@
 	$(function () {		
 		var vm = new Teleopti.MyTimeWeb.TeamScheduleViewModel();
 		vm.initCurrentDate(Teleopti.MyTimeWeb.Portal.ParseHash().dateHash);
+		vm.featureCheck();
 		$(window).unbind('resize');
 		$(window).resize(function () {
 			vm.redrawLayers();
@@ -50,11 +51,11 @@
 							</button>
 						</span>
 						<![if (!IE)|(gt IE 8)]>
-						<input data-bind="value: requestedDate().format(DatePickerFormat())" style="width: 100%" type="text" class="text-center form-control date-input-style" readonly>
+							<input data-bind="value: requestedDate().format(DatePickerFormat())" style="width: 100%" type="text" class="text-center form-control date-input-style" readonly>
 						<![endif]>
 						<!--[if lte IE 8]>
-			<input type="text" class="col-lg-2 form-control add-shifttrade-datepicker" data-bind="value: requestedDate().format(DatePickerFormat())" readonly="readonly"/>
-		<![endif]-->
+							<input type="text" class="col-lg-2 form-control add-shifttrade-datepicker" data-bind="value: requestedDate().format(DatePickerFormat())" readonly="readonly"/>
+						<![endif]-->
 						<span class="input-group-btn">
 							<button class="btn moment-datepicker" data-bind="datepicker: requestedDate, datepickerOptions: { autoHide: true, weekStart: weekStart() }, enable: !isLoading()">
 								<i class="glyphicon glyphicon-calendar"></i>
@@ -86,7 +87,6 @@
 						</div>
 						<!-- /ko -->
 					</div>
-
 					<!-- /ko -->
 					<!-- ko if: isFilterByTimeEnabled-->
 					<div class="col-sm-7 col-md-6 col-lg-3">
