@@ -2,6 +2,6 @@
 {
 	public interface IQuickForecasterWorkload
 	{
-		void Execute(QuickForecasterWorkloadParams quickForecasterWorkloadParams);
+		double Execute(QuickForecasterWorkloadParams quickForecasterWorkloadParams);
 	}
 }

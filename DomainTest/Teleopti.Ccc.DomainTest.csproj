@@ -315,7 +315,8 @@
     <Compile Include="Forecasting\Angel\ForecastingMeanAbsolutePercentageDeviationTest.cs" />
     <Compile Include="Forecasting\Angel\ForecastingTargetMergerTest.cs" />
     <Compile Include="Forecasting\Angel\QuickForecasterSkillWithMultipleWorkloadsTest.cs" />
-    <Compile Include="Forecasting\Angel\QuickForecastForAllSkillsTest.cs" />
+    <Compile Include="Forecasting\Angel\QuickForecastCreatorTest.cs" />
+    <Compile Include="Forecasting\Angel\QuickForecasterTest.cs" />
     <Compile Include="Forecasting\Angel\QuickForecastSkillWithOneWorkload\AggregateAverageHandlingTimesForOneDayTest.cs" />
     <Compile Include="Forecasting\Angel\QuickForecastSkillWithOneWorkload\AggregateAverageHandlingTimesForOneDayWithNoAnsweredCallsTest.cs" />
     <Compile Include="Forecasting\Angel\QuickForecastSkillWithOneWorkload\AggregateStatisticTasksForSkillLocalDayConsideringSkillMidnightBreakTest.cs" />

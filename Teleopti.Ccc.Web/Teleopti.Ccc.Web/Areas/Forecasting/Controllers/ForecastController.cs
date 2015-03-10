@@ -1,7 +1,10 @@
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using System.Web.Http;
 using Teleopti.Ccc.Domain.Aop;
+using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Forecasting.Angel;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
@@ -13,12 +16,12 @@ namespace Teleopti.Ccc.Web.Areas.Forecasting.Controllers
 	[ApplicationFunctionApi(DefinedRaptorApplicationFunctionPaths.OpenForecasterPage)]
 	public class ForecastController : ApiController
 	{
-		private readonly IQuickForecastForAllSkills _quickForecastForAllSkills;
+		private readonly IQuickForecastCreator _quickForecastCreator;
 		private readonly ICurrentIdentity _currentIdentity;
 
-		public ForecastController(IQuickForecastForAllSkills quickForecastForAllSkills, ICurrentIdentity currentIdentity)
+		public ForecastController(IQuickForecastCreator quickForecastCreator, ICurrentIdentity currentIdentity)
 		{
-			_quickForecastForAllSkills = quickForecastForAllSkills;
+			_quickForecastCreator = quickForecastCreator;
 			_currentIdentity = currentIdentity;
 		}
 
@@ -28,12 +31,14 @@ namespace Teleopti.Ccc.Web.Areas.Forecasting.Controllers
 		}
 
 		[HttpPost, UnitOfWork]
-		public virtual Task<double> QuickForecast([FromBody] QuickForecastInputModel model)
+		public virtual Task<ForecastingAccuracy[]> QuickForecast([FromBody] QuickForecastInputModel model)
 		{
 			var futurePeriod = new DateOnlyPeriod(new DateOnly(model.ForecastStart), new DateOnly(model.ForecastEnd));
-
-			var measureResult = Math.Round(_quickForecastForAllSkills.CreateForecast(futurePeriod), 1);
-			return Task.FromResult(measureResult);
+			if (model.Workloads.IsNullOrEmpty())
+			{
+				return Task.FromResult(new[] { _quickForecastCreator.CreateForecastForAllSkills(futurePeriod) });
+			}
+			return Task.FromResult( _quickForecastCreator.CreateForecastForWorkloads(futurePeriod, model.Workloads));
 		}
 	}
 }

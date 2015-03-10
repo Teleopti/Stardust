@@ -2,6 +2,7 @@
 using NUnit.Framework;
 using Rhino.Mocks;
 using SharpTestsEx;
+using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.Forecasting.Angel;
@@ -16,6 +17,29 @@ namespace Teleopti.Ccc.WebTest.Areas.Forecasting.Controllers
 	public class ForecastControllerTest
 	{
 		[Test]
+		public void ShouldQuickForecastForOneWorkload()
+		{
+			var workloadId = Guid.NewGuid();
+			var workloads = new[] { workloadId };
+			var forecastStart = new DateTime(2015, 1, 1);
+			var forecastEnd = new DateTime(2015, 2, 1);
+			var futurePeriod = new DateOnlyPeriod(new DateOnly(forecastStart), new DateOnly(forecastEnd));
+			var quickForecastCreator = MockRepository.GenerateMock<IQuickForecastCreator>();
+			quickForecastCreator.Stub(x => x.CreateForecastForWorkloads(futurePeriod, workloads)).Return(new[] { new ForecastingAccuracy { Id = workloadId, Accuracy=0.5d} });
+			var target = new ForecastController(quickForecastCreator, MockRepository.GenerateMock<ICurrentIdentity>());
+			
+			var result = target.QuickForecast(new QuickForecastInputModel
+			{
+				ForecastStart = forecastStart,
+				ForecastEnd = forecastEnd,
+				Workloads = workloads
+			});
+
+			result.Result[0].Accuracy.Should().Be.EqualTo(0.5d);
+			result.Result[0].Id.Should().Be.EqualTo(workloadId);
+		}
+
+		[Test]
 		public void ShouldCallQuickForecasterAndReturnAccuracy()
 		{
 			var now = new Now();
@@ -28,7 +52,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Forecasting.Controllers
 			workload.AddQueueSource(QueueSourceFactory.CreateQueueSource());
 			skillRepository.Stub(x => x.FindSkillsWithAtLeastOneQueueSource()).Return(new[] {skill});
 			var quickForecaster = MockRepository.GenerateMock<IQuickForecaster>();
-			var target = new ForecastController(new QuickForecastForAllSkills(quickForecaster, skillRepository, now), null);
+			var target = new ForecastController(new QuickForecastCreator(quickForecaster, skillRepository, now), null);
 
 			var result = target.QuickForecast(new QuickForecastInputModel
 			{
@@ -36,8 +60,9 @@ namespace Teleopti.Ccc.WebTest.Areas.Forecasting.Controllers
 				ForecastEnd = expectedFuturePeriod.EndDate
 			});
 
-			result.Result.Should().Be.EqualTo(0);
-			quickForecaster.AssertWasCalled(x => x.Execute(skill, expectedFuturePeriod, expectedHistoricPeriod));
+			result.Result[0].IsAll.Should().Be.EqualTo(true);
+			result.Result[0].Accuracy.Should().Be.EqualTo(0);
+			quickForecaster.AssertWasCalled(x => x.ForecastForSkill(skill, expectedFuturePeriod, expectedHistoricPeriod));
 		}
 
 		[Test]

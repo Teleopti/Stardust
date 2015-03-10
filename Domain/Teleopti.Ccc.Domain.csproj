@@ -480,7 +480,7 @@
     <Compile Include="Forecasting\Angel\IIndexVolumes.cs" />
     <Compile Include="Forecasting\Angel\IndexVolumes.cs" />
     <Compile Include="Forecasting\Angel\IQuickForecaster.cs" />
-    <Compile Include="Forecasting\Angel\IQuickForecastForAllSkills.cs" />
+    <Compile Include="Forecasting\Angel\IQuickForecastCreator.cs" />
     <Compile Include="Forecasting\Angel\LegacyWrappers\DailyStatisticsToTaskOwnerConverterExtension.cs" />
     <Compile Include="Forecasting\Angel\Historical\HistoricalData.cs" />
     <Compile Include="Forecasting\Angel\Historical\IHistoricalData.cs" />
@@ -494,7 +494,7 @@
     <Compile Include="Forecasting\Angel\Future\FetchAndFillSkillDays.cs" />
     <Compile Include="Forecasting\Angel\QuickForecaster.cs" />
     <Compile Include="Forecasting\Angel\QuickForecasterWorkload.cs" />
-    <Compile Include="Forecasting\Angel\QuickForecastForAllSkills.cs" />
+    <Compile Include="Forecasting\Angel\QuickForecastCreator.cs" />
     <Compile Include="Forecasting\ForecastingTarget.cs" />
     <Compile Include="Forecasting\SkillMap_DEV.cs" />
     <Compile Include="Forecasting\StaffingCalculatorServiceFacade.cs" />

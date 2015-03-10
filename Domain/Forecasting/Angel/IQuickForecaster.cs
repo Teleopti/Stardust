@@ -4,6 +4,7 @@ namespace Teleopti.Ccc.Domain.Forecasting.Angel
 {
 	public interface IQuickForecaster
 	{
-		double Execute(ISkill skill, DateOnlyPeriod futurePeriod, DateOnlyPeriod historicalPeriod);
+		double ForecastForSkill(ISkill skill, DateOnlyPeriod futurePeriod, DateOnlyPeriod historicalPeriod);
+		double ForecastForWorkload(IWorkload workload, DateOnlyPeriod futurePeriod, DateOnlyPeriod historicalPeriod);
 	}
 }

@@ -23,14 +23,11 @@ namespace Teleopti.Ccc.Domain.Forecasting.Angel
 			_forecastingMeasurer = forecastingMeasurer;
 		}
 
-		public void Execute(QuickForecasterWorkloadParams quickForecasterWorkloadParams)
+		public double Execute(QuickForecasterWorkloadParams quickForecasterWorkloadParams)
 		{
 			var historicalData = _historicalData.Fetch(quickForecasterWorkloadParams.WorkLoad, quickForecasterWorkloadParams.HistoricalPeriod);
 			if (!historicalData.TaskOwnerDayCollection.Any())
-			{
-				quickForecasterWorkloadParams.Difference = Double.NaN;
-				return ;
-			}
+				return Double.NaN;
 
 			var oneYearBack = new DateOnly(historicalData.EndDate.Date.AddYears(-1));
 			var lastYearData = new TaskOwnerPeriod(DateOnly.MinValue, historicalData.TaskOwnerDayCollection.Where(x => x.CurrentDate > oneYearBack), TaskOwnerPeriodType.Other);
@@ -44,12 +41,9 @@ namespace Teleopti.Ccc.Domain.Forecasting.Angel
 			{
 				var forecastingMeasureTarget = _forecastMethod.Forecast(yearBeforeLastYearData,
 					new DateOnlyPeriod(oneYearBack, historicalData.EndDate));
-				quickForecasterWorkloadParams.Difference = _forecastingMeasurer.Measure(forecastingMeasureTarget, lastYearData.TaskOwnerDayCollection);
+				return _forecastingMeasurer.Measure(forecastingMeasureTarget, lastYearData.TaskOwnerDayCollection);
 			}
-			else
-			{
-				quickForecasterWorkloadParams.Difference = Double.NaN;
-			}
+			return Double.NaN;
 		}
 	}
 }
