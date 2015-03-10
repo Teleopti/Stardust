@@ -132,7 +132,8 @@ body {
 
 .angular-ui-tree-handle.selected {
   padding-left: 5px;
-  border-left: 3px solid #0099FF; }
+  border-left: 3px solid #0099FF;
+  background-color: #ffffff; }
 
 .wfm-list {
   padding-left: 0px;
@@ -353,7 +354,6 @@ input[type='text'], select {
   width: 100%; }
   .input-prepend i {
     display: inline-block;
-    font-weight: 600;
     width: 5%; }
   .input-prepend input[type='text'] {
     display: inline-block;
@@ -455,10 +455,6 @@ input[type='text'], select {
     /*Slider width + 5px*/
     margin-left: 53px;
     white-space: nowrap; }
-  .wfm-slider span:before {
-    content: "Show "; }
-  .wfm-slider input[type=checkbox]:checked ~ label span:before {
-    content: "Hide "; }
 
 .wfm-checkbox {
   margin-left: 5px; }
@@ -741,7 +737,7 @@ tr {
     display: none; }
   .tab-group input[type=radio]:checked + .label {
     color: #ffffff;
-    border-bottom: 6px solid #FFA726; }
+    border-bottom: 3px solid #FFA726; }
   .tab-group input[type=radio]:checked + .label + section {
     display: block; }
   .tab-group .label {
@@ -758,7 +754,7 @@ tr {
     -ms-flex-positive: 1;
     flex-grow: 1;
     min-width: 100px !important;
-    border-bottom: 6px solid #0099FF;
+    border-bottom: 3px solid #0099FF;
     background-color: #0099FF;
     text-align: center;
     transition: all 0.5s ease-in-out;

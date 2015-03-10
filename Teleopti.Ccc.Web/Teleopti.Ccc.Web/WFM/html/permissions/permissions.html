@@ -70,28 +70,34 @@
 				<section>
 					<div class="tab-container">
 						<div ng-show="roleDetails=='functionsAvailable'">
-							<div class="wfm-block">
-								<div class="input-prepend">
-									<i class="mdi mdi-filter-outline"></i>
-									<input type="text" name="filterDetails" ng-model="searchPermissions" placeholder="Permissions filter ..." />
+							<div class="row">
+								<div class="col-lg-6">
+									<div class="input-prepend">
+										<i class="mdi mdi-filter-outline"></i>
+										<input type="text" name="filterDetails" ng-model="searchPermissions" placeholder="Permissions filter ..." />
+									</div>
 								</div>
-								<div class="wfm-slider">
-									<input type="checkbox" id="slide1" />
-									<label for="slide1">
-										<span>selected</span>
-									</label>
+								<div class="col-lg-3">
+									<div class="wfm-slider">
+										<input type="checkbox" id="slide1" />
+										<label for="slide1">
+											<span>selected</span>
+										</label>
+									</div>
 								</div>
-								<div class="wfm-slider">
-									<input type="checkbox" id="slide2" />
-									<label for="slide2">
-										<span>unselected</span>
-									</label>
+								<div class="col-lg-3">
+									<div class="wfm-slider">
+										<input type="checkbox" id="slide2" />
+										<label for="slide2">
+											<span>unselected</span>
+										</label>
+									</div>
 								</div>
 							</div>
 
-							<div class="tree">
+							<div class="tree" >
 								<div ui-tree data-drag-enabled="false">
-									<ol ui-tree-nodes="" ng-model="functionsDisplayed" id="tree-root" class="tree-line">
+									<ol ui-tree-nodes="" ng-model="functionsDisplayed" id="tree-root" class="tree-line" toggle-focus>
 										<li ng-repeat="node in functionsDisplayed | filter:searchPermissions" ui-tree-node ng-include="'nodes_renderer.html'"></li>
 									</ol>
 								</div>
