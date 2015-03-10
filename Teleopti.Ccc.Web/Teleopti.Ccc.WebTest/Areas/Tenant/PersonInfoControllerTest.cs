@@ -19,7 +19,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Tenant
 			var model = new PersonInfoModels{PersonInfos = new[]{personInfoModel1, personInfoModel2}};
 			var entity1 = new PersonInfo();
 			var entity2 = new PersonInfo();
-			var persister = MockRepository.GenerateMock<IPersonInfoPersister>();
+			var persister = MockRepository.GenerateMock<IPersistPersonInfo>();
 			var mapper = MockRepository.GenerateMock<IPersonInfoMapper>();
 			mapper.Expect(x => x.Map(personInfoModel1)).Return(entity1);
 			mapper.Expect(x => x.Map(personInfoModel2)).Return(entity2);

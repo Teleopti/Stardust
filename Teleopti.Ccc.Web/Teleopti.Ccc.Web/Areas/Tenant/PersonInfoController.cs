@@ -1,4 +1,5 @@
 ﻿using System.Web.Mvc;
+using Teleopti.Ccc.Infrastructure.MultiTenancy.Server;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Server.NHibernate;
 using Teleopti.Ccc.Web.Areas.Tenant.Core;
 using Teleopti.Ccc.Web.Areas.Tenant.Model;
@@ -7,10 +8,10 @@ namespace Teleopti.Ccc.Web.Areas.Tenant
 {
 	public class PersonInfoController : Controller
 	{
-		private readonly IPersonInfoPersister _persister;
+		private readonly IPersistPersonInfo _persister;
 		private readonly IPersonInfoMapper _mapper;
 
-		public PersonInfoController(IPersonInfoPersister persister, IPersonInfoMapper mapper)
+		public PersonInfoController(IPersistPersonInfo persister, IPersonInfoMapper mapper)
 		{
 			_persister = persister;
 			_mapper = mapper;
