@@ -498,7 +498,7 @@
 				isNew : true,
 				height: 200,
 				width: 300,
-				fill: 'rgba(255,0,0,0.5)'
+				fill: 'rgba(59, 111, 170, 0.2)'
 			};
 
 			var newLocation = new fabric.Location(locationObj);
