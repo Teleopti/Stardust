@@ -15,8 +15,8 @@
 		</div>
 		<div class="tree">
 			<div ui-tree data-drag-enabled="false">
-				<ol ui-tree-nodes="" ng-model="skillsDisplayed" id="tree-root" class="tree-line">
-					<li ng-repeat="node in skillsDisplayed" ui-tree-node ng-include="'nodes_renderer.html'"></li>
+				<ol ui-tree-nodes="" ng-model="skillsDisplayed" class="tree-line">
+					<li ng-repeat="skill in skillsDisplayed" ui-tree-node ng-include="'nodes_skill_renderer.html'" value='{{skill.Id}}' ></li>
 				</ol>
 			</div>
 		</div>
@@ -27,3 +27,13 @@
 	</div>
 	<div class="clearfix"></div>
 </div>
+
+<!-- Skill template -->
+<script type="text/ng-template" id="nodes_skill_renderer.html">
+	<div ui-tree-handle>
+		{{skill.Name}}
+		<ol ui-tree-nodes="" ng-model="skill.Workloads" class="tree-line">
+			<li ng-repeat="workload in skill.Workloads" value='{{workload.Id}}'>{{workload.Name}}</li>
+		</ol>
+	</div>
+</script>
