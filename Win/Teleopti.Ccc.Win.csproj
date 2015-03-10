@@ -771,6 +771,8 @@
       <DependentUpon>PublishScheduleDateView.cs</DependentUpon>
     </Compile>
     <Compile Include="Sikuli\Validators\AtomicValidators\IAtomicValidator.cs" />
+    <Compile Include="Sikuli\Validators\AtomicValidators\DailyStandardDeviationValidator.cs" />
+    <Compile Include="Sikuli\Validators\AtomicValidators\DayOffAndContractTimeValidator.cs" />
     <Compile Include="Sikuli\Validators\AtomicValidators\PeriodStandardDeviationValidator.cs" />
     <Compile Include="Sikuli\Validators\AtomicValidators\SchedulerHoursWeeklyPatternValidator.cs" />
     <Compile Include="Sikuli\Validators\RootValidators\IRootValidator.cs" />
@@ -2593,7 +2595,7 @@
     <Compile Include="Sikuli\Validators\RootValidators\RootValidator.cs" />
     <Compile Include="Sikuli\Validators\ScheduleOvertimePeriodValidator.cs" />
     <Compile Include="Sikuli\Validators\IntervalBalanceAfterValidator.cs" />
-    <Compile Include="Sikuli\Validators\OptimizeWithinDaysValidator.cs" />
+    <Compile Include="Sikuli\Validators\RootValidators\OptimizeWithinDaysValidator.cs" />
     <Compile Include="Sikuli\Validators\RootValidators\OptimizeDaysOffValidator.cs" />
     <Compile Include="Sikuli\Validators\OptimizerValidator.cs" />
     <Compile Include="Sikuli\Validators\RootValidators\DeleteAllValidator.cs" />
