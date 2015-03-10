@@ -39,7 +39,7 @@ namespace Teleopti.Ccc.Web.Areas.Tenant.Core
 			builder.RegisterType<ReadNHibFiles>().As<IReadNHibFiles>().SingleInstance();
 			builder.RegisterType<ParseNhibFile>().As<IParseNhibFile>().SingleInstance();
 			builder.RegisterType<NhibConfigurationEncryption>().As<INhibConfigurationEncryption>().SingleInstance();
-			builder.RegisterType<personInfoPersister_Temporary>().As<IPersistPersonInfo>();
+			builder.RegisterType<PersistPersonInfo>().As<IPersistPersonInfo>();
 			builder.RegisterType<personInfoMapper_Temporary>().As<IPersonInfoMapper>();
 		}
 
@@ -49,14 +49,6 @@ namespace Teleopti.Ccc.Web.Areas.Tenant.Core
 			public PersonInfo Map(PersonInfoModel personInfoModel)
 			{
 				return new PersonInfo();
-			}
-		}
-
-		//TODO: tenant - fix impl later
-		private class personInfoPersister_Temporary : IPersistPersonInfo
-		{
-			public void Persist(PersonInfo personInfo)
-			{
 			}
 		}
 	}
