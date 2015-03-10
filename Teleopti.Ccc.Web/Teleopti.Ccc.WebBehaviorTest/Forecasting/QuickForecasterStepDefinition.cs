@@ -35,11 +35,28 @@ namespace Teleopti.Ccc.WebBehaviorTest.Forecasting
 				new SkillDayRepository(uow).LoadAll().Any().Should().Be.False());
 		}
 
-		[When(@"I click Quickforecaster")]
-		public void WhenIClickQuickforecaster()
+		[When(@"I am viewing quick forecast page")]
+		public void WhenIAmViewingQuickForecastPage()
 		{
 			TestControllerMethods.Logon();
 			Navigation.GotoQuickForecaster();
+		}
+
+		[When(@"I select skill '(.*)'")]
+		public void WhenISelectSkill(string skill)
+		{
+			Browser.Interactions.ClickContaining(".skill", skill);
+		}
+
+		[When(@"I select workload '(.*)'")]
+		public void WhenISelectWorkload(string workload)
+		{
+			Browser.Interactions.ClickContaining(".workload", workload);
+		}
+
+		[When(@"I click Quickforecaster")]
+		public void WhenIClickQuickforecaster()
+		{
 			ScenarioContext.Current.Add("startdate", new DateOnly(DateTime.Parse(Browser.Interactions.GetText("span.startDate"))));
 			ScenarioContext.Current.Add("enddate", new DateOnly(DateTime.Parse(Browser.Interactions.GetText("span.endDate"))));
 			Browser.Interactions.Click(".start-forecasting");
@@ -65,6 +82,12 @@ namespace Teleopti.Ccc.WebBehaviorTest.Forecasting
 		public void ThenIShouldSeeTheAccuracyForTheForecastMethod()
 		{
 			Browser.Interactions.AssertAnyContains(".forecast-relative-error","%");
+		}
+
+		[Then(@"I should see the forecasting accuracy for '(.*)'")]
+		public void ThenIShouldSeeTheForecastingAccuracyFor(string skillOrWorkloadOrAll)
+		{
+			Browser.Interactions.AssertFirstContainsUsingJQuery(".forecast-relative-error:contains(" + skillOrWorkloadOrAll + ")", "%");
 		}
 
 		[Then(@"I should see a message of no historical data for measurement")]

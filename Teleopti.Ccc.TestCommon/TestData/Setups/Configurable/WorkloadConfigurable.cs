@@ -10,11 +10,12 @@ namespace Teleopti.Ccc.TestCommon.TestData.Setups.Configurable
 	{
 		public string SkillName { get; set; }
 		public string QueueSourceName { get; set; }
+		public string WorkloadName { get; set; }
 
 		public void Apply(IUnitOfWork uow)
 		{
 			var skill = new SkillRepository(uow).LoadAll().Single(x => x.Name.Equals(SkillName));
-			var wl = new Workload(skill);
+			var wl = new Workload(skill) {Name = WorkloadName};
 			if (QueueSourceName != null)
 			{
 				var qs = new QueueSourceRepository(uow).LoadAll().Single(x => x.Name.Equals(QueueSourceName));
@@ -22,5 +23,6 @@ namespace Teleopti.Ccc.TestCommon.TestData.Setups.Configurable
 			}
 			new WorkloadRepository(uow).Add(wl);
 		}
+
 	}
 }
