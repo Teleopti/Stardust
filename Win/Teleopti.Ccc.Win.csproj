@@ -2593,20 +2593,20 @@
     <Compile Include="Sikuli\Helpers\TestDuration.cs" />
     <Compile Include="Sikuli\Validators\RootValidators\OptimizeBetweenDaysValidator.cs" />
     <Compile Include="Sikuli\Validators\RootValidators\RootValidator.cs" />
-    <Compile Include="Sikuli\Validators\ScheduleOvertimePeriodValidator.cs" />
+    <Compile Include="Sikuli\Validators\RootValidators\ScheduleOvertimePeriodValidator.cs" />
     <Compile Include="Sikuli\Validators\IntervalBalanceAfterValidator.cs" />
     <Compile Include="Sikuli\Validators\RootValidators\OptimizeWithinDaysValidator.cs" />
     <Compile Include="Sikuli\Validators\RootValidators\OptimizeDaysOffValidator.cs" />
     <Compile Include="Sikuli\Validators\OptimizerValidator.cs" />
     <Compile Include="Sikuli\Validators\RootValidators\DeleteAllValidator.cs" />
     <Compile Include="Sikuli\Validators\OptimizeBlockTeamValidator.cs" />
-    <Compile Include="Sikuli\Validators\IntervalBalanceBeforeValidator.cs" />
+    <Compile Include="Sikuli\Validators\RootValidators\IntervalBalanceBeforeValidator.cs" />
     <Compile Include="Sikuli\Validators\AtomicValidators\DurationValidator.cs" />
     <Compile Include="Sikuli\Validators\RootValidators\ScheduleAllOptionsOffValidator.cs" />
     <Compile Include="Sikuli\Validators\SchedulerValidator.cs" />
-    <Compile Include="Sikuli\Validators\TestValidators\WarnValidator.cs" />
-    <Compile Include="Sikuli\Validators\TestValidators\FailValidator.cs" />
-    <Compile Include="Sikuli\Validators\TestValidators\PassValidator.cs" />
+    <Compile Include="Sikuli\Validators\SelftestValidators\WarnValidator.cs" />
+    <Compile Include="Sikuli\Validators\SelftestValidators\FailValidator.cs" />
+    <Compile Include="Sikuli\Validators\SelftestValidators\PassValidator.cs" />
     <Compile Include="Sikuli\Helpers\ValidatorHelper.cs" />
     <EmbeddedResource Include="Backlog\BacklogSelector.resx">
       <DependentUpon>BacklogSelector.cs</DependentUpon>

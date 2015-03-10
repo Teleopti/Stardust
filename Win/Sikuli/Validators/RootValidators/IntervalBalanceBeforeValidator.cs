@@ -1,15 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using Syncfusion.Windows.Forms.Tools;
+﻿using System.Linq;
 using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
 using Teleopti.Ccc.Win.Sikuli.Helpers;
-using Teleopti.Ccc.Win.Sikuli.Validators.RootValidators;
-using Teleopti.Ccc.WinCode.Common;
 using Teleopti.Interfaces.Domain;
 
-namespace Teleopti.Ccc.Win.Sikuli.Validators
+namespace Teleopti.Ccc.Win.Sikuli.Validators.RootValidators
 {
 	internal class IntervalBalanceBeforeValidator : IRootValidator
 	{
@@ -24,8 +18,7 @@ namespace Teleopti.Ccc.Win.Sikuli.Validators
 
 		public string Description 
 		{ 
-			get { return "At least one 'lowest intra interval balance' value must be between 0 " +
-												 "and 0.8 to have a good start point for optimization."; } 
+			get { return "At least one 'lowest intra interval balance' value must be between 0 and 0.8 to have a good start point for optimization."; } 
 		}
 
 		public SikuliValidationResult Validate(ITestDuration duration)
