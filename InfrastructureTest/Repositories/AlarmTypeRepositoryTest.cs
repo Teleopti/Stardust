@@ -19,11 +19,6 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
         {
         }  
 
-        /// <summary>
-        /// Creates an aggregate using the Bu of logged in user.
-        /// Should be a "full detailed" aggregate
-        /// </summary>
-        /// <returns></returns>
         protected override IAlarmType CreateAggregateWithCorrectBusinessUnit()
         {
             return new AlarmType(new Description("Wrong state"), Color.DarkTurquoise, TimeSpan.FromSeconds(15),0.8)
@@ -32,10 +27,6 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
             };
         }
 
-        /// <summary>
-        /// Verifies the aggregate graph properties.
-        /// </summary>
-        /// <param name="loadedAggregateFromDatabase">The loaded aggregate from database.</param>
         protected override void VerifyAggregateGraphProperties(IAlarmType loadedAggregateFromDatabase)
         {
             IAlarmType org = CreateAggregateWithCorrectBusinessUnit();

@@ -16,7 +16,7 @@ namespace Teleopti.Ccc.Domain.RealTimeAdherence
         private TimeSpan _thresholdTime;
         private double _staffingEffect;
         private bool _isDeleted;
-		private Adherence _adherence;
+		private Adherence? _adherence;
 
 		public AlarmType(Description description, Color color, TimeSpan thresholdTime, double staffingEffect)
         {
@@ -35,7 +35,14 @@ namespace Teleopti.Ccc.Domain.RealTimeAdherence
             set{ _staffingEffect = value;}
         }
 
-		public virtual Adherence Adherence
+		public virtual Adherence GuessAdherence()
+		{
+			if (Adherence.HasValue) 
+				return Adherence.Value;
+			return StaffingEffect.Equals(0) ? Interfaces.Domain.Adherence.In : Interfaces.Domain.Adherence.Out;
+		}
+
+		public virtual Adherence? Adherence
 		{
 			get { return _adherence; }
 			set { _adherence = value; }
@@ -45,17 +52,17 @@ namespace Teleopti.Ccc.Domain.RealTimeAdherence
 		{
 			new adherenceWithText
 			{
-				Adherence = Adherence.In,
+				Adherence = Interfaces.Domain.Adherence.In,
 				Text = Resources.InAdherence
 			},
 			new adherenceWithText
 			{
-				Adherence = Adherence.Out,
+				Adherence = Interfaces.Domain.Adherence.Out,
 				Text = Resources.OutOfAdherence
 			},
 			new adherenceWithText
 			{
-				Adherence = Adherence.Neutral,
+				Adherence = Interfaces.Domain.Adherence.Neutral,
 				Text = Resources.NeutralAdherence
 			}
 		};

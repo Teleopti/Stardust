@@ -18,7 +18,7 @@ namespace Teleopti.Interfaces.Domain
 	    TimeSpan ThresholdTime { get; set; }
         double StaffingEffect { get; set; }
 
-		Adherence Adherence { get; set; }
+		Adherence? Adherence { get; set; }
 		void SetAdherenceByText(string text);
 		string AdherenceText { get; }
     }
