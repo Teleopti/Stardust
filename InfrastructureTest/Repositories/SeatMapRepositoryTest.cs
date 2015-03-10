@@ -18,8 +18,9 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 
 		protected override ISeatMap CreateAggregateWithCorrectBusinessUnit()
 		{
+			const string locationName = "Test Location";
 			var seatMap = new SeatMap();
-			seatMap.CreateSeatMap("{DummyData}", null);
+			seatMap.CreateSeatMap("{DummyData}", locationName);
 			return seatMap;
 		}
 		
