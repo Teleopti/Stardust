@@ -22,7 +22,7 @@ namespace Teleopti.Ccc.Win.Scheduling.PropertyPanel
             }
 
             [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "2"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Globalization", "CA1303:Do not pass literals as localized parameters", MessageId = "System.Windows.Forms.ToolStripItem.set_Text(System.String)")]
-            public void Update(IList<IScheduleDay> selectedSchedules, IScheduleViewBase scheduleView, ISchedulerStateHolder schedulerStateHolder, AgentInfoControl agentInfo, ScheduleTimeType scheduleTimeType)
+            public void Update(IList<IScheduleDay> selectedSchedules, IScheduleViewBase scheduleView, ISchedulerStateHolder schedulerStateHolder, AgentInfoControl agentInfo, ScheduleTimeType scheduleTimeType, bool showInfoPanel)
             {
                 if (scheduleView != null)
                 {
@@ -65,10 +65,6 @@ namespace Teleopti.Ccc.Win.Scheduling.PropertyPanel
                             selectedTags.Add(scheduleDay.ScheduleTag());
                     }
 
-                    if (agentInfo != null)
-                        agentInfo.UpdateData(personDic, dateList, schedulerStateHolder,
-											  schedulerStateHolder.SchedulingResultState.AllPersonAccounts);
-
                     string label = string.Empty;
                     switch (scheduleTimeType)
                     {
@@ -110,6 +106,9 @@ namespace Teleopti.Ccc.Win.Scheduling.PropertyPanel
 					var tagLabel = LanguageResourceHelper.Translate("XXScheduleTagColon");
 					_statusLabelTag.Text = string.Concat(tagLabel, " ", selectedTagsText);
 
+					if (agentInfo != null && showInfoPanel)
+						agentInfo.UpdateData(personDic, dateList, schedulerStateHolder,
+											  schedulerStateHolder.SchedulingResultState.AllPersonAccounts);
                 }
             }
         }

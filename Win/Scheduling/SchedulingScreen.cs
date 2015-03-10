@@ -4410,7 +4410,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 		private void updateSelectionInfo(IList<IScheduleDay> selectedSchedules)
 		{
 			var updater = new UpdateSelectionForAgentInfo(toolStripStatusLabelContractTime, toolStripStatusLabelScheduleTag);
-			updater.Update(selectedSchedules, _scheduleView, _schedulerState, _agentInfoControl, _scheduleTimeType);
+			updater.Update(selectedSchedules, _scheduleView, _schedulerState, _agentInfoControl, _scheduleTimeType, _showInfoPanel);
 		}
 
 		private void drawSkillGrid()
@@ -6342,6 +6342,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			toolStripButtonShowPropertyPanel.Checked = !toolStripButtonShowPropertyPanel.Checked;
 			schedulerSplitters1.ToggelPropertyPanel(!toolStripButtonShowPropertyPanel.Checked);
 			_showInfoPanel = toolStripButtonShowPropertyPanel.Checked;
+			updateSelectionInfo(_scheduleView.SelectedSchedules());
 		}
 
 		private void toolStripButtonRequestBackClick(object sender, EventArgs e)
