@@ -1,4 +1,4 @@
-@charset "UTF-8";
+﻿@charset "UTF-8";
 /*Teleopti blue*/
 /*sets wfm-block*/
 /*depricated, remove if used in code*/
@@ -28,6 +28,9 @@
 body {
   color: rgba(0, 0, 0, 0.87); }
 
+*:focus {
+  outline: -webkit-focus-ring-color auto 0; }
+
 body {
   background-color: rgba(0, 0, 0, 0.06); }
 
@@ -55,10 +58,10 @@ body {
   padding: 5px;
   background-color: white; }
 
-.container-block, .tab-group .tab-container {
+.container-block {
   background-color: #f5f5f5; }
 
-.wfm-block, .tile-footer, .tree li, .angular-ui-tree-handle, .wfm-list li, select option, .wfm-radio, .wfm-checkbox, .sub-header, .bottom-header, .wfm-accordion input[type='radio'] + label, .inner span, .tab-group .tab-container, .notice, .notification-list li {
+.wfm-block, .tile-footer, .angular-ui-tree-handle, .wfm-list li, select option, .wfm-radio, .wfm-checkbox, .sub-header, .bottom-header, .wfm-accordion input[type='radio'] + label, .inner span, .tab-group .tab-container, .notice, .notification-list li {
   padding: 5px;
   width: 100%; }
 
@@ -114,10 +117,8 @@ body {
   .tree ol {
     list-style: none; }
   .tree li {
-    padding-left: 0 !important;
-    border-left: 3px solid #0099FF; }
-    .tree li .active-tree {
-      background-color: #ffffff; }
+    padding-left: 5px;
+    border-top: 1px solid rgba(0, 0, 0, 0.06); }
 
 .angular-ui-tree-handle.selected:after {
   float: right;
@@ -139,11 +140,8 @@ body {
     background-color: rgba(0, 0, 0, 0.06); }
 
 .angular-ui-tree-handle.selected {
-  background-color: #0099FF;
-  color: #ffffff; }
-  .angular-ui-tree-handle.selected:hover {
-    color: rgba(0, 0, 0, 0.87);
-    background-color: #64b5f6; }
+  padding-left: 5px;
+  border-left: 3px solid #0099FF; }
 
 .wfm-list {
   padding-left: 0px;
@@ -166,12 +164,17 @@ body {
   .wfm-list li:hover {
     border-left: 3px solid #E0E0E0; }
 
+.wfm-list-item-selected {
+  border-left: 3px solid #0099FF !important;
+  background-color: #ffffff !important; }
+
 .wfm-leave-behind {
   width: 0;
   float: right;
   overflow: hidden;
   margin-top: -12px;
   margin-bottom: -12px;
+  margin-right: -5px;
   background-color: rgba(0, 0, 0, 0.06);
   transition: all 0.5s ease-in-out;
   padding-top: 12px;
@@ -187,6 +190,12 @@ body {
   .wfm-leave-behind p {
     padding-left: 5px;
     margin: 0 5px; }
+  .wfm-leave-behind:before {
+    background-color: rgba(0, 0, 0, 0.06);
+    content: "<";
+    margin-left: -22px;
+    position: absolute;
+    padding: 0 5px; }
 
 .wfm-list li:hover > .wfm-leave-behind {
   width: 110px; }
@@ -493,6 +502,12 @@ input[type='text'], select {
 .bottom-header {
   background-color: #64b5f6;
   color: rgba(0, 0, 0, 0.87); }
+
+.sidenav-header {
+  width: 100%;
+  padding: 10px;
+  background-color: #0099FF;
+  color: #ffffff; }
 
 .navbar {
   background-color: #0099FF;
@@ -826,8 +841,8 @@ tr {
   top: 0;
   height: 1050px;
   bottom: 0;
-  -webkit-transition: all ease-in-out 0.5s;
-  transition: all 0.5s ease-in-out; }
+  -webkit-transition: all 0.5s ease-in-out 0.5s;
+  transition: all 0.5s ease-in-out 0.5s; }
 
 .sidenav.left.ng-hide {
   -webkit-transform: translate(-100%, 0%); }

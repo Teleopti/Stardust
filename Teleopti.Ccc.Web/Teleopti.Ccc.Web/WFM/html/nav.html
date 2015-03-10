@@ -9,10 +9,9 @@
 				</span>
 				<div class="right-actions">
 					<span>
-			<div class="navbar-right" ng-controller="SearchCtrl">
-				<div class="input-prepend">
-					<i class="mdi mdi-magnify"></i>
-					<input type="text" placeholder="Search ..." ng-model="keyword" ng-change="searchKeyword()" />
+					<div ng-controller="SearchCtrl">
+						<input type="text" placeholder="Search ..." ng-model="keyword" ng-change="searchKeyword()" />
+					</div>
 					</span>
 					<span>
 						<div class="dropdown" tabindex="0">
@@ -26,8 +25,7 @@
 					</span>
 					<span><a><i class="mdi mdi-account"></i></a></span>
 				</div>
-				</div>
-				<i class="mdi mdi-logout"></i>
 			</div>
+		</div>
 	</div>
 </div>
