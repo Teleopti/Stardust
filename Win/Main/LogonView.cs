@@ -59,11 +59,31 @@ namespace Teleopti.Ccc.Win.Main
 			Refresh();
 		}
 
-		public bool InitStateHolder(IMessageBrokerComposite messageBroker, string passwordPolicyString)
-		{
-			if (!LogonInitializeStateHolder.InitApplicationData(_model, messageBroker, _model.SelectedDataSourceContainer.DataSource, passwordPolicyString))
-				return showError();
+		//public bool InitStateHolder(IMessageBrokerComposite messageBroker, string passwordPolicyString)
+		//{
+		//	if (!LogonInitializeStateHolder.InitApplicationData(_model, messageBroker, _model.SelectedDataSourceContainer.DataSource, passwordPolicyString))
+		//		return showError();
 
+		//	return true;
+		//}
+
+		public bool InitStateHolderWithoutDataSource(IMessageBrokerComposite messageBroker)
+		{
+			if (_model.GetConfigFromWebService)
+			{
+				if (!LogonInitializeStateHolder.InitWithoutDataSource(_model, messageBroker))
+					return showError();
+			}
+			else
+			{
+				var nhibConfPath = ApplicationDeployment.IsNetworkDeployed
+											 ? ApplicationDeployment.CurrentDeployment.DataDirectory
+											 : ConfigurationManager.AppSettings["nhibConfPath"];
+				var useMessageBroker = string.IsNullOrEmpty(ConfigurationManager.AppSettings["MessageBroker"]);
+
+				if (!LogonInitializeStateHolder.GetConfigFromFileSystem(nhibConfPath, useMessageBroker, messageBroker))
+					return showError();
+			}
 			return true;
 		}
 

@@ -169,6 +169,8 @@ namespace Teleopti.Ccc.WinCode.Main
 
 		private void getLogonType()
 		{
+			if (!_view.InitStateHolderWithoutDataSource(_messageBroker))
+				CurrentStep--; //?
 			_view.ShowStep(false); //once a sdk is loaded it is not changeable
 		}
 
@@ -226,7 +228,8 @@ namespace Teleopti.Ccc.WinCode.Main
 
 		private bool login()
 		{
-			var authenticationResult = _applicationLogon.Logon(_model, UserAgent);
+			//var authenticationResult = _applicationLogon.Logon(_model, UserAgent);
+			var authenticationResult = _applicationLogon.Logon(_model, StateHolderReader.Instance.StateReader.ApplicationScopeData, UserAgent);
 			var choosenDataSource = _model.SelectedDataSourceContainer;
 
 			if (authenticationResult.HasMessage)
@@ -236,8 +239,8 @@ namespace Teleopti.Ccc.WinCode.Main
 			{
 				//To use for silent background log on
 				choosenDataSource.User.ApplicationAuthenticationInfo.Password = _model.Password;
-				if (!_view.InitStateHolder(_messageBroker, authenticationResult.PasswordPolicy))
-					return false;
+				//if (!_view.InitStateHolder(_messageBroker, authenticationResult.PasswordPolicy))
+					//return false;
 				return true;
 			}
 
@@ -246,7 +249,8 @@ namespace Teleopti.Ccc.WinCode.Main
 
 		private bool winLogin()
 		{
-			var authenticationResult = _multiTenancyWindowsLogon.Logon(_model, UserAgent);
+			//var authenticationResult = _multiTenancyWindowsLogon.Logon(_model, UserAgent);
+			var authenticationResult = _multiTenancyWindowsLogon.Logon(_model, StateHolderReader.Instance.StateReader.ApplicationScopeData, UserAgent);
 
 			if (authenticationResult.HasMessage)
 				_model.Warning = authenticationResult.Message;
@@ -254,8 +258,8 @@ namespace Teleopti.Ccc.WinCode.Main
 
 			if (authenticationResult.Successful)
 			{
-				if (!_view.InitStateHolder(_messageBroker, authenticationResult.PasswordPolicy))
-					return false;
+				//if (!_view.InitStateHolder(_messageBroker, authenticationResult.PasswordPolicy))
+					//return false;
 				return true;
 			}
 			// windows does not work we need to use application

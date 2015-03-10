@@ -19,6 +19,7 @@ namespace Teleopti.Ccc.WinCode.Main
 		void ButtonLogOnOkClick(object sender, EventArgs e);
 		void ButtonLogOnCancelClick(object sender, EventArgs e);
 		void BtnBackClick(object sender, EventArgs e);
-		bool InitStateHolder(IMessageBrokerComposite messageBroker, string passwordPolicyString);
+		//bool InitStateHolder(IMessageBrokerComposite messageBroker, string passwordPolicyString);
+		bool InitStateHolderWithoutDataSource(IMessageBrokerComposite messageBroker);
 	}
 }

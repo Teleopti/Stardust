@@ -12,23 +12,67 @@ namespace Teleopti.Ccc.Infrastructure.MultiTenancy.Client
 	{
 		private readonly IRepositoryFactory _repositoryFactory;
 		private readonly IAuthenticationQuerier _authenticationQuerier;
-		private readonly IDataSourcesFactory _dataSourcesFactory;
+		//private readonly IDataSourcesFactory _dataSourcesFactory;
 
-		public MultiTenancyApplicationLogon(IRepositoryFactory repositoryFactory, IAuthenticationQuerier authenticationQuerier,
-			IDataSourcesFactory dataSourcesFactory)
+		public MultiTenancyApplicationLogon(IRepositoryFactory repositoryFactory, IAuthenticationQuerier authenticationQuerier)
+			//IDataSourcesFactory dataSourcesFactory)
 		{
 			_repositoryFactory = repositoryFactory;
 			_authenticationQuerier = authenticationQuerier;
-			_dataSourcesFactory = dataSourcesFactory;
+			//dataSourcesFactory = dataSourcesFactory;
 		}
 
-		public AuthenticationResult Logon(ILogonModel logonModel, string userAgent)
+		//public AuthenticationResult Logon(ILogonModel logonModel, string userAgent)
+		//{
+		//	var result = _authenticationQuerier.TryApplicationLogon(logonModel.UserName, logonModel.Password, userAgent);
+		//	if (!result.Success)
+		//		return new AuthenticationResult
+		//		{
+		//			Successful = false, 
+		//			HasMessage = true,
+		//			Message = result.FailReason
+		//		};
+
+		//	var dataSourceName = result.Tenant;
+		//	var personId = result.PersonId;
+		//	var dataSourceCfg = result.DataSourceConfiguration;
+
+		//	dataSourceCfg.ApplicationNHibernateConfig[Environment.SessionFactoryName] = dataSourceName;
+		//	var datasource = _dataSourcesFactory.Create(dataSourceCfg.ApplicationNHibernateConfig,
+		//		dataSourceCfg.AnalyticsConnectionString);
+		//	logonModel.SelectedDataSourceContainer = new DataSourceContainer(datasource, _repositoryFactory, null, AuthenticationTypeOption.Application);
+		//	// if null error
+		//	if (logonModel.SelectedDataSourceContainer == null)
+		//		return new AuthenticationResult
+		//		{
+		//			Successful = false,
+		//			HasMessage = true,
+		//			Message = string.Format(Resources.CannotFindDataSourceWithName, dataSourceName),
+		//			PasswordPolicy = result.PasswordPolicy
+		//		};
+
+		//	using (var uow = logonModel.SelectedDataSourceContainer.DataSource.Application.CreateAndOpenUnitOfWork())
+		//	{
+		//		var person = _repositoryFactory.CreatePersonRepository(uow).LoadOne(personId);
+		//		logonModel.SelectedDataSourceContainer.SetUser(person);
+		//		logonModel.SelectedDataSourceContainer.LogOnName = logonModel.UserName;
+		//	}
+
+		//	return new AuthenticationResult
+		//	{
+		//		Person = logonModel.SelectedDataSourceContainer.User,
+		//		Successful = true,
+		//		PasswordPolicy = result.PasswordPolicy
+		//	};
+		//}
+
+		public AuthenticationResult Logon(ILogonModel logonModel, IApplicationData applicationData, string userAgent)
 		{
 			var result = _authenticationQuerier.TryApplicationLogon(logonModel.UserName, logonModel.Password, userAgent);
 			if (!result.Success)
 				return new AuthenticationResult
 				{
-					Successful = false, 
+					Successful = false,
 					HasMessage = true,
 					Message = result.FailReason
 				};
@@ -37,18 +81,14 @@ namespace Teleopti.Ccc.Infrastructure.MultiTenancy.Client
 			var personId = result.PersonId;
 			var dataSourceCfg = result.DataSourceConfiguration;
 
-			dataSourceCfg.ApplicationNHibernateConfig[Environment.SessionFactoryName] = dataSourceName;
-			var datasource = _dataSourcesFactory.Create(dataSourceCfg.ApplicationNHibernateConfig,
-				dataSourceCfg.AnalyticsConnectionString);
-			logonModel.SelectedDataSourceContainer = new DataSourceContainer(datasource, _repositoryFactory, null, AuthenticationTypeOption.Application);
+			logonModel.SelectedDataSourceContainer = getDataSorce(dataSourceName, dataSourceCfg, applicationData);
 			// if null error
 			if (logonModel.SelectedDataSourceContainer == null)
 				return new AuthenticationResult
 				{
 					Successful = false,
 					HasMessage = true,
-					Message = string.Format(Resources.CannotFindDataSourceWithName, dataSourceName),
-					PasswordPolicy = result.PasswordPolicy
+					Message = string.Format(Resources.CannotFindDataSourceWithName, dataSourceName)
 				};
 
 			using (var uow = logonModel.SelectedDataSourceContainer.DataSource.Application.CreateAndOpenUnitOfWork())
@@ -61,9 +101,15 @@ namespace Teleopti.Ccc.Infrastructure.MultiTenancy.Client
 			return new AuthenticationResult
 			{
 				Person = logonModel.SelectedDataSourceContainer.User,
-				Successful = true,
-				PasswordPolicy = result.PasswordPolicy
+				Successful = true
 			};
+		}
+
+		private IDataSourceContainer getDataSorce(string dataSourceName, DataSourceConfig nhibConfig, IApplicationData applicationData)
+		{
+			var datasource = applicationData.CreateAndAddDataSource(dataSourceName, nhibConfig.ApplicationNHibernateConfig, nhibConfig.AnalyticsConnectionString);
+
+			return new DataSourceContainer(datasource, _repositoryFactory, null, AuthenticationTypeOption.Application);
 		}
 	}
 }
