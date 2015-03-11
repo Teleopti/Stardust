@@ -1,19 +1,19 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <hibernate-mapping xmlns="urn:nhibernate-mapping-2.2"
                    assembly="Teleopti.Ccc.Infrastructure"
-                   namespace="Teleopti.Ccc.Infrastructure.MultiTenancy.Server"
-                   default-access="field">
+                   namespace="Teleopti.Ccc.Infrastructure.MultiTenancy.Server">
 	<class name="PersonInfo" schema="Tenant">
-		<id name="Id" type="guid" access="property">
+		<id name="Id" type="guid">
 			<generator class="guid.comb" />
 		</id>
 		<property name="terminalDate" 
-				type="Teleopti.Ccc.Infrastructure.NHibernateConfiguration.DateOnlyMappingType, Teleopti.Ccc.Infrastructure"/>
-		<many-to-one name="tenant" class="Tenant" />
+							type="Teleopti.Ccc.Infrastructure.NHibernateConfiguration.DateOnlyMappingType, Teleopti.Ccc.Infrastructure"
+							access="field"/>
+		<many-to-one name="tenant" class="Tenant" access="field"/>
 		
-		<property name="Identity" column="[Identity]" access="property"/>
-		<property name="ApplicationLogonName" access="property"/>
-		<property name="Password" access="property" />
+		<property name="Identity" column="[Identity]"/>
+		<property name="ApplicationLogonName"/>
+		<property name="Password"/>
 	</class>
 
 	<!--<query name="identityUserQuery">
