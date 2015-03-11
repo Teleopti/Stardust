@@ -122,7 +122,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.AgentBadge
 					{
 						var newAwardedBadgesWithRankForAdherence =
 							_badgeWithRankCalculator.CalculateAdherenceBadges(allAgents, message.TimeZoneCode, calculateDate,
-								adherenceReportSetting.CalculationMethod, setting).ToList();
+								adherenceReportSetting.CalculationMethod, setting, message.BusinessUnitId).ToList();
 						if (Logger.IsDebugEnabled)
 						{
 							Logger.DebugFormat("Total {0} agents will get new badge for adherence", newAwardedBadgesWithRankForAdherence.Count());
@@ -133,7 +133,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.AgentBadge
 					{
 						var newAwardedBadgesForAdherence =
 							_calculator.CalculateAdherenceBadges(allAgents, message.TimeZoneCode, calculateDate,
-								adherenceReportSetting.CalculationMethod, setting).ToList();
+								adherenceReportSetting.CalculationMethod, setting, message.BusinessUnitId).ToList();
 						if (Logger.IsDebugEnabled)
 						{
 							Logger.DebugFormat("Total {0} agents will get new badge for adherence", newAwardedBadgesForAdherence.Count());
@@ -147,7 +147,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.AgentBadge
 					if (toggleCalculateBadgeWithRankEnabled && setting.CalculateBadgeWithRank)
 					{
 						var newAwardedBadgesWithRankForAHT =
-							_badgeWithRankCalculator.CalculateAHTBadges(allAgents, message.TimeZoneCode, calculateDate, setting).ToList();
+							_badgeWithRankCalculator.CalculateAHTBadges(allAgents, message.TimeZoneCode, calculateDate, setting, message.BusinessUnitId).ToList();
 						if (Logger.IsDebugEnabled)
 						{
 							Logger.DebugFormat("Total {0} agents will get new badge for AHT", newAwardedBadgesWithRankForAHT.Count());
@@ -157,7 +157,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.AgentBadge
 					else
 					{
 						var newAwardedBadgesForAHT =
-							_calculator.CalculateAHTBadges(allAgents, message.TimeZoneCode, calculateDate, setting).ToList();
+							_calculator.CalculateAHTBadges(allAgents, message.TimeZoneCode, calculateDate, setting, message.BusinessUnitId).ToList();
 						if (Logger.IsDebugEnabled)
 						{
 							Logger.DebugFormat("Total {0} agents will get new badge for AHT", newAwardedBadgesForAHT.Count());
@@ -171,7 +171,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.AgentBadge
 					if (toggleCalculateBadgeWithRankEnabled && setting.CalculateBadgeWithRank)
 					{
 						var newAwardedBadgesWithRankForAnsweredCalls =
-							_badgeWithRankCalculator.CalculateAnsweredCallsBadges(allAgents, message.TimeZoneCode, calculateDate, setting)
+							_badgeWithRankCalculator.CalculateAnsweredCallsBadges(allAgents, message.TimeZoneCode, calculateDate, setting, message.BusinessUnitId)
 								.ToList();
 						if (Logger.IsDebugEnabled)
 						{
@@ -184,7 +184,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.AgentBadge
 					else
 					{
 						var newAwardedBadgesForAnsweredCalls = _calculator.CalculateAnsweredCallsBadges(allAgents, message.TimeZoneCode,
-							calculateDate, setting).ToList();
+							calculateDate, setting, message.BusinessUnitId).ToList();
 						if (Logger.IsDebugEnabled)
 						{
 							Logger.DebugFormat("Total {0} agents will get new badge for answered calls",

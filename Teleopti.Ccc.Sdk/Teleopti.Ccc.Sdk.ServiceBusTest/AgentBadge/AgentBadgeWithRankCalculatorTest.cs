@@ -30,6 +30,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.AgentBadge
 		private IDefinedRaptorApplicationFunctionFactory appFunctionFactory;
 
 		private ApplicationRole _badgeRole;
+		private Guid _businessUnitId;
 
 		[SetUp]
 		public void Setup()
@@ -76,6 +77,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.AgentBadge
 				_allPersons.Add(person);
 			}
 
+			_businessUnitId = new Guid();
 			_calculateDateOnly = new DateOnly(2014, 08, 11);
 
 			_lastPersonId = (Guid) person.Id;
@@ -104,12 +106,12 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.AgentBadge
 			_statisticRepository.Stub(
 				x =>
 					x.LoadAgentsOverThresholdForAdherence(AdherenceReportSettingCalculationMethod.ReadyTimeVSContractScheduleTime,
-						timezoneCode, DateTime.Now, _badgeSetting.AdherenceThreshold))
+						timezoneCode, DateTime.Now, _badgeSetting.AdherenceThreshold, _businessUnitId))
 				.IgnoreArguments().Return(new ArrayList {new object[] {_lastPersonId, DateTime.Now, 0.59}});
 
 			var result = _calculator.CalculateAdherenceBadges(_allPersons, timezoneCode, _calculateDateOnly,
 				AdherenceReportSettingCalculationMethod.ReadyTimeVSContractScheduleTime,
-				_badgeSetting);
+				_badgeSetting, _businessUnitId);
 
 			var badge = result.Single(x => x.Person.Id == _lastPersonId);
 			Assert.AreEqual(badge.Person.Id, _lastPersonId);
@@ -125,12 +127,12 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.AgentBadge
 			_statisticRepository.Stub(
 				x =>
 					x.LoadAgentsOverThresholdForAdherence(AdherenceReportSettingCalculationMethod.ReadyTimeVSContractScheduleTime,
-						timezoneCode, DateTime.Now, _badgeSetting.AdherenceThreshold))
+						timezoneCode, DateTime.Now, _badgeSetting.AdherenceThreshold, _businessUnitId))
 				.IgnoreArguments().Return(new ArrayList {new object[] {_lastPersonId, DateTime.Now, 0.61}});
 
 			var result = _calculator.CalculateAdherenceBadges(_allPersons, timezoneCode, _calculateDateOnly,
 				AdherenceReportSettingCalculationMethod.ReadyTimeVSContractScheduleTime,
-				_badgeSetting);
+				_badgeSetting, _businessUnitId);
 
 			var badge = result.Single(x => x.Person.Id == _lastPersonId);
 			Assert.AreEqual(badge.Person.Id, _lastPersonId);
@@ -146,12 +148,12 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.AgentBadge
 			_statisticRepository.Stub(
 				x =>
 					x.LoadAgentsOverThresholdForAdherence(AdherenceReportSettingCalculationMethod.ReadyTimeVSContractScheduleTime,
-						timezoneCode, DateTime.Now, _badgeSetting.AdherenceThreshold))
+						timezoneCode, DateTime.Now, _badgeSetting.AdherenceThreshold, _businessUnitId))
 				.IgnoreArguments().Return(new ArrayList {new object[] {_lastPersonId, DateTime.Now, 0.75}});
 
 			var result = _calculator.CalculateAdherenceBadges(_allPersons, timezoneCode, _calculateDateOnly,
 				AdherenceReportSettingCalculationMethod.ReadyTimeVSContractScheduleTime,
-				_badgeSetting);
+				_badgeSetting, _businessUnitId);
 
 			var badge = result.Single(x => x.Person.Id == _lastPersonId);
 			Assert.AreEqual(badge.Person.Id, _lastPersonId);
@@ -167,12 +169,12 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.AgentBadge
 			_statisticRepository.Stub(
 				x =>
 					x.LoadAgentsOverThresholdForAdherence(AdherenceReportSettingCalculationMethod.ReadyTimeVSContractScheduleTime,
-						timezoneCode, DateTime.Now, _badgeSetting.AdherenceThreshold))
+						timezoneCode, DateTime.Now, _badgeSetting.AdherenceThreshold, _businessUnitId))
 				.IgnoreArguments().Return(new ArrayList {new object[] {_lastPersonId, DateTime.Now, 0.91}});
 
 			var result = _calculator.CalculateAdherenceBadges(_allPersons, timezoneCode, _calculateDateOnly,
 				AdherenceReportSettingCalculationMethod.ReadyTimeVSContractScheduleTime,
-				_badgeSetting);
+				_badgeSetting, _businessUnitId);
 
 			var badge = result.Single(x => x.Person.Id == _lastPersonId);
 			Assert.AreEqual(badge.Person.Id, _lastPersonId);
@@ -191,11 +193,11 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.AgentBadge
 		{
 			_statisticRepository.Stub(
 				x =>
-					x.LoadAgentsUnderThresholdForAHT(timezoneCode, DateTime.Now, _badgeSetting.AHTThreshold))
+					x.LoadAgentsUnderThresholdForAHT(timezoneCode, DateTime.Now, _badgeSetting.AHTThreshold, _businessUnitId))
 				.IgnoreArguments()
 				.Return(new ArrayList {new object[] {_lastPersonId, DateTime.Now, 1000}});
 			var result = _calculator.CalculateAHTBadges(_allPersons, timezoneCode, _calculateDateOnly,
-				_badgeSetting);
+				_badgeSetting, _businessUnitId);
 
 			var badge = result.Single(x => x.Person.Id == _lastPersonId);
 			Assert.AreEqual(badge.Person.Id, _lastPersonId);
@@ -210,11 +212,11 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.AgentBadge
 		{
 			_statisticRepository.Stub(
 				x =>
-					x.LoadAgentsUnderThresholdForAHT(timezoneCode, DateTime.Now, _badgeSetting.AHTThreshold))
+					x.LoadAgentsUnderThresholdForAHT(timezoneCode, DateTime.Now, _badgeSetting.AHTThreshold, _businessUnitId))
 				.IgnoreArguments()
 				.Return(new ArrayList {new object[] {_lastPersonId, DateTime.Now, 720}});
 			var result = _calculator.CalculateAHTBadges(_allPersons, timezoneCode, _calculateDateOnly,
-				_badgeSetting);
+				_badgeSetting, _businessUnitId);
 
 			var badge = result.Single(x => x.Person.Id == _lastPersonId);
 			Assert.AreEqual(badge.Person.Id, _lastPersonId);
@@ -229,11 +231,11 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.AgentBadge
 		{
 			_statisticRepository.Stub(
 				x =>
-					x.LoadAgentsUnderThresholdForAHT(timezoneCode, DateTime.Now, _badgeSetting.AHTThreshold))
+					x.LoadAgentsUnderThresholdForAHT(timezoneCode, DateTime.Now, _badgeSetting.AHTThreshold, _businessUnitId))
 				.IgnoreArguments()
 				.Return(new ArrayList {new object[] {_lastPersonId, DateTime.Now, 420}});
 			var result = _calculator.CalculateAHTBadges(_allPersons, timezoneCode, _calculateDateOnly,
-				_badgeSetting);
+				_badgeSetting, _businessUnitId);
 
 			var badge = result.Single(x => x.Person.Id == _lastPersonId);
 			Assert.AreEqual(badge.Person.Id, _lastPersonId);
@@ -248,11 +250,11 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.AgentBadge
 		{
 			_statisticRepository.Stub(
 				x =>
-					x.LoadAgentsUnderThresholdForAHT(timezoneCode, DateTime.Now, _badgeSetting.AHTThreshold))
+					x.LoadAgentsUnderThresholdForAHT(timezoneCode, DateTime.Now, _badgeSetting.AHTThreshold, _businessUnitId))
 				.IgnoreArguments()
 				.Return(new ArrayList {new object[] {_lastPersonId, DateTime.Now, 200}});
 			var result = _calculator.CalculateAHTBadges(_allPersons, timezoneCode, _calculateDateOnly,
-				_badgeSetting);
+				_badgeSetting, _businessUnitId);
 
 			var badge = result.Single(x => x.Person.Id == _lastPersonId);
 			Assert.AreEqual(badge.Person.Id, _lastPersonId);
@@ -271,11 +273,11 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.AgentBadge
 		{
 			_statisticRepository.Stub(
 				x =>
-					x.LoadAgentsOverThresholdForAnsweredCalls(timezoneCode, DateTime.Now, _badgeSetting.AnsweredCallsThreshold))
+					x.LoadAgentsOverThresholdForAnsweredCalls(timezoneCode, DateTime.Now, _badgeSetting.AnsweredCallsThreshold, _businessUnitId))
 				.IgnoreArguments()
 				.Return(new ArrayList {new object[] {_lastPersonId, DateTime.Now, 5}});
 			var result = _calculator.CalculateAnsweredCallsBadges(_allPersons, timezoneCode, _calculateDateOnly,
-				_badgeSetting);
+				_badgeSetting, _businessUnitId);
 
 			var badge = result.Single(x => x.Person.Id == _lastPersonId);
 			Assert.AreEqual(badge.Person.Id, _lastPersonId);
@@ -290,11 +292,11 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.AgentBadge
 		{
 			_statisticRepository.Stub(
 				x =>
-					x.LoadAgentsOverThresholdForAnsweredCalls(timezoneCode, DateTime.Now, _badgeSetting.AnsweredCallsThreshold))
+					x.LoadAgentsOverThresholdForAnsweredCalls(timezoneCode, DateTime.Now, _badgeSetting.AnsweredCallsThreshold, _businessUnitId))
 				.IgnoreArguments()
 				.Return(new ArrayList {new object[] {_lastPersonId, DateTime.Now, 15}});
 			var result = _calculator.CalculateAnsweredCallsBadges(_allPersons, timezoneCode, _calculateDateOnly,
-				_badgeSetting);
+				_badgeSetting, _businessUnitId);
 
 			var badge = result.Single(x => x.Person.Id == _lastPersonId);
 			Assert.AreEqual(badge.Person.Id, _lastPersonId);
@@ -309,11 +311,11 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.AgentBadge
 		{
 			_statisticRepository.Stub(
 				x =>
-					x.LoadAgentsOverThresholdForAnsweredCalls(timezoneCode, DateTime.Now, _badgeSetting.AnsweredCallsThreshold))
+					x.LoadAgentsOverThresholdForAnsweredCalls(timezoneCode, DateTime.Now, _badgeSetting.AnsweredCallsThreshold, _businessUnitId))
 				.IgnoreArguments()
 				.Return(new ArrayList {new object[] {_lastPersonId, DateTime.Now, 25}});
 			var result = _calculator.CalculateAnsweredCallsBadges(_allPersons, timezoneCode, _calculateDateOnly,
-				_badgeSetting);
+				_badgeSetting, _businessUnitId);
 
 			var badge = result.Single(x => x.Person.Id == _lastPersonId);
 			Assert.AreEqual(badge.Person.Id, _lastPersonId);
@@ -328,11 +330,11 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.AgentBadge
 		{
 			_statisticRepository.Stub(
 				x =>
-					x.LoadAgentsOverThresholdForAnsweredCalls(timezoneCode, DateTime.Now, _badgeSetting.AnsweredCallsThreshold))
+					x.LoadAgentsOverThresholdForAnsweredCalls(timezoneCode, DateTime.Now, _badgeSetting.AnsweredCallsThreshold, _businessUnitId))
 				.IgnoreArguments()
 				.Return(new ArrayList {new object[] {_lastPersonId, DateTime.Now, 35}});
 			var result = _calculator.CalculateAnsweredCallsBadges(_allPersons, timezoneCode, _calculateDateOnly,
-				_badgeSetting);
+				_badgeSetting, _businessUnitId);
 
 			var badge = result.Single(x => x.Person.Id == _lastPersonId);
 			Assert.AreEqual(badge.Person.Id, _lastPersonId);
@@ -355,32 +357,32 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.AgentBadge
 			_statisticRepository.Stub(
 				x =>
 					x.LoadAgentsOverThresholdForAdherence(AdherenceReportSettingCalculationMethod.ReadyTimeVSContractScheduleTime,
-						timezoneCode, DateTime.Now, _badgeSetting.AdherenceThreshold))
+						timezoneCode, DateTime.Now, _badgeSetting.AdherenceThreshold, _businessUnitId))
 				.IgnoreArguments().Return(new ArrayList {new object[] {_lastPersonId, DateTime.Now, 0.91}});
 
 			_statisticRepository.Stub(
 				x =>
-					x.LoadAgentsOverThresholdForAnsweredCalls(timezoneCode, DateTime.Now, _badgeSetting.AnsweredCallsThreshold))
+					x.LoadAgentsOverThresholdForAnsweredCalls(timezoneCode, DateTime.Now, _badgeSetting.AnsweredCallsThreshold, _businessUnitId))
 				.IgnoreArguments()
 				.Return(new ArrayList {new object[] {_lastPersonId, DateTime.Now, 40}});
 
 			_statisticRepository.Stub(
 				x =>
-					x.LoadAgentsUnderThresholdForAHT(timezoneCode, DateTime.Now, _badgeSetting.AHTThreshold))
+					x.LoadAgentsUnderThresholdForAHT(timezoneCode, DateTime.Now, _badgeSetting.AHTThreshold, _businessUnitId))
 				.IgnoreArguments()
 				.Return(new ArrayList {new object[] {_lastPersonId, DateTime.Now, 120}});
 
 			var result = _calculator.CalculateAnsweredCallsBadges(_allPersons, timezoneCode, _calculateDateOnly,
-				_badgeSetting);
+				_badgeSetting, _businessUnitId);
 			Assert.AreEqual(result.Any(), false);
 
 			result = _calculator.CalculateAdherenceBadges(_allPersons, timezoneCode, _calculateDateOnly,
 				AdherenceReportSettingCalculationMethod.ReadyTimeVSContractScheduleTime,
-				_badgeSetting);
+				_badgeSetting, _businessUnitId);
 			Assert.AreEqual(result.Any(), false);
 
 			result = _calculator.CalculateAHTBadges(_allPersons, timezoneCode, _calculateDateOnly,
-				_badgeSetting);
+				_badgeSetting, _businessUnitId);
 			Assert.AreEqual(result.Any(), false);
 		}
 	}

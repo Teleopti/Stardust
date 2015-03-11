@@ -284,24 +284,25 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
             }
         }
 
-		public IList LoadAgentsOverThresholdForAnsweredCalls(string timezoneCode, DateTime date, int answeredCallsThreshold)
+		public IList LoadAgentsOverThresholdForAnsweredCalls(string timezoneCode, DateTime date, int answeredCallsThreshold, Guid businessUnitId)
 		{
 			using (var uow = StatisticUnitOfWorkFactory().CreateAndOpenStatelessUnitOfWork())
 			{
 				const string sql =
-				"exec [mart].[raptor_number_of_calls_per_agent_by_date] @threshold=:threshold, @time_zone_code=:timezoneCode, @local_date=:date";
+				"exec [mart].[raptor_number_of_calls_per_agent_by_date] @threshold=:threshold, @time_zone_code=:timezoneCode, @local_date=:date, @business_unit_code=:businessUnitId";
 
 				return ((NHibernateStatelessUnitOfWork)uow).Session.CreateSQLQuery(sql)
 					.SetReadOnly(true)
 					.SetInt32("threshold", answeredCallsThreshold)
 					.SetString("timezoneCode", timezoneCode)
 					.SetDateTime("date", date)
+					.SetGuid("businessUnitId", businessUnitId)
 					.List();
 			}
 			
 		}
 
-		public IList LoadAgentsOverThresholdForAdherence(AdherenceReportSettingCalculationMethod adherenceCalculationMethod, string timezoneCode, DateTime date, Percent adherenceThreshold)
+		public IList LoadAgentsOverThresholdForAdherence(AdherenceReportSettingCalculationMethod adherenceCalculationMethod, string timezoneCode, DateTime date, Percent adherenceThreshold, Guid businessUnitId)
 		{
 			var reportSetting = new AdherenceReportSetting
 			{
@@ -311,7 +312,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 			using (var uow = StatisticUnitOfWorkFactory().CreateAndOpenStatelessUnitOfWork())
 			{
 				const string sql =
-				"exec [mart].[raptor_adherence_per_agent_by_date] @threshold=:threshold, @time_zone_code=:timezoneCode, @local_date=:date, @adherence_id=:adherenceId";
+				"exec [mart].[raptor_adherence_per_agent_by_date] @threshold=:threshold, @time_zone_code=:timezoneCode, @local_date=:date, @adherence_id=:adherenceId, @business_unit_code=:businessUnitId";
 
 				return ((NHibernateStatelessUnitOfWork)uow).Session.CreateSQLQuery(sql)
 					.SetReadOnly(true)
@@ -319,22 +320,24 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 					.SetString("timezoneCode", timezoneCode)
 					.SetDateTime("date", date)
 					.SetInt32("adherenceId", reportSetting.AdherenceIdForReport())
+					.SetGuid("businessUnitId", businessUnitId)
 					.List();
 			}
 		}
 
-		public IList LoadAgentsUnderThresholdForAHT(string timezoneCode, DateTime date, TimeSpan aHTThreshold)
+		public IList LoadAgentsUnderThresholdForAHT(string timezoneCode, DateTime date, TimeSpan aHTThreshold, Guid businessUnitId)
 		{
 			using (var uow = StatisticUnitOfWorkFactory().CreateAndOpenStatelessUnitOfWork())
 			{
 				const string sql =
-				"exec [mart].[raptor_AHT_per_agent_by_date] @threshold=:threshold, @time_zone_code=:timezoneCode, @local_date=:date";
+				"exec [mart].[raptor_AHT_per_agent_by_date] @threshold=:threshold, @time_zone_code=:timezoneCode, @local_date=:date, @business_unit_code=:businessUnitId";
 
 				return ((NHibernateStatelessUnitOfWork)uow).Session.CreateSQLQuery(sql)
 					.SetReadOnly(true)
 					.SetDouble("threshold", aHTThreshold.TotalSeconds)
 					.SetString("timezoneCode", timezoneCode)
 					.SetDateTime("date", date)
+					.SetGuid("businessUnitId", businessUnitId)
 					.List();
 			}
 		}

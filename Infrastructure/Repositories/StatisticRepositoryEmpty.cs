@@ -142,18 +142,17 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
         {
         }
 
-	    public IList LoadAgentsOverThresholdForAnsweredCalls(string timezoneCode, DateTime date, int answeredCallsThreshold)
+	    public IList LoadAgentsOverThresholdForAnsweredCalls(string timezoneCode, DateTime date, int answeredCallsThreshold, Guid businessUnitId)
 		{
 			return new List<Guid>();
 		}
 
-	    public IList LoadAgentsOverThresholdForAdherence(AdherenceReportSettingCalculationMethod adherenceCalculationMethod,
-		    string timezoneCode, DateTime date, Percent adherenceThreshold)
+	    public IList LoadAgentsOverThresholdForAdherence(AdherenceReportSettingCalculationMethod adherenceCalculationMethod, string timezoneCode, DateTime date, Percent adherenceThreshold, Guid businessUnitId)
 	    {
 			return new List<Guid>();
 	    }
 
-	    public IList LoadAgentsUnderThresholdForAHT(string timezoneCode, DateTime date, TimeSpan aHTThreshold)
+	    public IList LoadAgentsUnderThresholdForAHT(string timezoneCode, DateTime date, TimeSpan aHTThreshold, Guid businessUnitId)
 	    {
 			return new List<Guid>();
 	    }

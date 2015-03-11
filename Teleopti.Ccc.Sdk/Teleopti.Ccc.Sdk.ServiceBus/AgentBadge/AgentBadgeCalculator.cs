@@ -100,9 +100,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.AgentBadge
 			return newAwardedBadges;
 		}
 
-		public virtual IEnumerable<IAgentBadgeTransaction> CalculateAdherenceBadges(IEnumerable<IPerson> allPersons, string timezoneCode,
-			DateOnly date, AdherenceReportSettingCalculationMethod adherenceCalculationMethod,
-			IAgentBadgeSettings setting)
+		public virtual IEnumerable<IAgentBadgeTransaction> CalculateAdherenceBadges(IEnumerable<IPerson> allPersons, string timezoneCode, DateOnly date, AdherenceReportSettingCalculationMethod adherenceCalculationMethod, IAgentBadgeSettings setting, Guid businessUnitId)
 		{
 			if (Logger.IsDebugEnabled)
 			{
@@ -115,7 +113,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.AgentBadge
 			var personList = allPersons.ToList();
 			var newAwardedBadges = new List<IAgentBadgeTransaction>();
 			var agentsList =
-				_statisticRepository.LoadAgentsOverThresholdForAdherence(adherenceCalculationMethod, timezoneCode, date.Date, setting.AdherenceThreshold);
+				_statisticRepository.LoadAgentsOverThresholdForAdherence(adherenceCalculationMethod, timezoneCode, date.Date, setting.AdherenceThreshold, businessUnitId);
 
 			var agents = new List<Guid>();
 			if (agentsList.Count > 0)
@@ -150,8 +148,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.AgentBadge
 			return newAwardedBadges;
 		}
 
-		public virtual IEnumerable<IAgentBadgeTransaction> CalculateAHTBadges(IEnumerable<IPerson> allPersons, string timezoneCode,
-			DateOnly date, IAgentBadgeSettings setting)
+		public virtual IEnumerable<IAgentBadgeTransaction> CalculateAHTBadges(IEnumerable<IPerson> allPersons, string timezoneCode, DateOnly date, IAgentBadgeSettings setting, Guid businessUnitId)
 		{
 			if (Logger.IsDebugEnabled)
 			{
@@ -163,7 +160,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.AgentBadge
 
 			var personList = allPersons.ToList();
 			var newAwardedBadges = new List<IAgentBadgeTransaction>();
-			var agentsList = _statisticRepository.LoadAgentsUnderThresholdForAHT(timezoneCode, date.Date, setting.AHTThreshold);
+			var agentsList = _statisticRepository.LoadAgentsUnderThresholdForAHT(timezoneCode, date.Date, setting.AHTThreshold, businessUnitId);
 
 			var agents = new List<Guid>();
 			if (agentsList.Count > 0)
@@ -197,8 +194,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.AgentBadge
 			return newAwardedBadges;
 		}
 
-		public virtual IEnumerable<IAgentBadgeTransaction> CalculateAnsweredCallsBadges(IEnumerable<IPerson> allPersons, string timezoneCode,
-			DateOnly date, IAgentBadgeSettings setting)
+		public virtual IEnumerable<IAgentBadgeTransaction> CalculateAnsweredCallsBadges(IEnumerable<IPerson> allPersons, string timezoneCode, DateOnly date, IAgentBadgeSettings setting, Guid businessUnitId)
 		{
 			if (Logger.IsDebugEnabled)
 			{
@@ -210,7 +206,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.AgentBadge
 
 			var personList = allPersons.ToList();
 			var newAwardedBadges = new List<IAgentBadgeTransaction>();
-			var agentsList = _statisticRepository.LoadAgentsOverThresholdForAnsweredCalls(timezoneCode, date.Date, setting.AnsweredCallsThreshold);
+			var agentsList = _statisticRepository.LoadAgentsOverThresholdForAnsweredCalls(timezoneCode, date.Date, setting.AnsweredCallsThreshold, businessUnitId);
 
 			var agents = new List<Guid>();
 			if (agentsList.Count > 0)
@@ -246,7 +242,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.AgentBadge
 		}
 
 		public IEnumerable<IAgentBadgeTransaction> CalculateAdherenceBadges(IEnumerable<IPerson> allPersons, string timezoneCode, DateOnly date,
-			AdherenceReportSettingCalculationMethod adherenceCalculationMethod, IGamificationSetting setting)
+			AdherenceReportSettingCalculationMethod adherenceCalculationMethod, IGamificationSetting setting, Guid businessUnitId)
 		{
 			if (Logger.IsDebugEnabled)
 			{
@@ -259,7 +255,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.AgentBadge
 			var personList = allPersons.ToList();
 			var newAwardedBadges = new List<IAgentBadgeTransaction>();
 			var agentsList =
-				_statisticRepository.LoadAgentsOverThresholdForAdherence(adherenceCalculationMethod, timezoneCode, date.Date, setting.AdherenceThreshold);
+				_statisticRepository.LoadAgentsOverThresholdForAdherence(adherenceCalculationMethod, timezoneCode, date.Date, setting.AdherenceThreshold, businessUnitId);
 
 			var agents = new List<Guid>();
 			if (agentsList.Count > 0)
@@ -294,7 +290,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.AgentBadge
 			return newAwardedBadges;
 		}
 
-		public IEnumerable<IAgentBadgeTransaction> CalculateAHTBadges(IEnumerable<IPerson> allPersons, string timezoneCode, DateOnly date, IGamificationSetting setting)
+		public IEnumerable<IAgentBadgeTransaction> CalculateAHTBadges(IEnumerable<IPerson> allPersons, string timezoneCode, DateOnly date, IGamificationSetting setting, Guid businessUnitId)
 		{
 			if (Logger.IsDebugEnabled)
 			{
@@ -306,7 +302,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.AgentBadge
 
 			var personList = allPersons.ToList();
 			var newAwardedBadges = new List<IAgentBadgeTransaction>();
-			var agentsList = _statisticRepository.LoadAgentsUnderThresholdForAHT(timezoneCode, date.Date, setting.AHTThreshold);
+			var agentsList = _statisticRepository.LoadAgentsUnderThresholdForAHT(timezoneCode, date.Date, setting.AHTThreshold, businessUnitId);
 
 			var agents = new List<Guid>();
 			if (agentsList.Count > 0)
@@ -341,7 +337,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.AgentBadge
 		}
 
 		public IEnumerable<IAgentBadgeTransaction> CalculateAnsweredCallsBadges(IEnumerable<IPerson> allPersons, string timezoneCode, DateOnly date,
-			IGamificationSetting setting)
+			IGamificationSetting setting, Guid businessUnitId)
 		{
 			if (Logger.IsDebugEnabled)
 			{
@@ -353,7 +349,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.AgentBadge
 
 			var personList = allPersons.ToList();
 			var newAwardedBadges = new List<IAgentBadgeTransaction>();
-			var agentsList = _statisticRepository.LoadAgentsOverThresholdForAnsweredCalls(timezoneCode, date.Date, setting.AnsweredCallsThreshold);
+			var agentsList = _statisticRepository.LoadAgentsOverThresholdForAnsweredCalls(timezoneCode, date.Date, setting.AnsweredCallsThreshold, businessUnitId);
 
 			var agents = new List<Guid>();
 			if (agentsList.Count > 0)
