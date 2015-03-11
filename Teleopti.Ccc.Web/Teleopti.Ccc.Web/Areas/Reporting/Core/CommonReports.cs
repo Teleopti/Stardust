@@ -112,8 +112,11 @@ namespace Teleopti.Ccc.Web.Areas.Reporting.Core
 				_sub2ProcedureName = (string)myRow["sub2_proc_name"];
 				_name = (string)myRow["report_name"];
 				ResourceKey = (string)myRow["report_name_resource_key"];
+				HelpKey = (string)myRow["help_key"];
 			}
 		}
+
+		public string HelpKey { get; set; }
 
 		public string ResourceKey { get; private set; }
 		public string Name { get { return _name; } }

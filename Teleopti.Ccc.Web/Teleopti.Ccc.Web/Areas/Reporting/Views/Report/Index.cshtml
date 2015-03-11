@@ -57,9 +57,16 @@
 						}
 					</ul>
 				</div>
+				<div class="nav navbar-nav pull-right" style="margin-top: 12px; margin-right: 50px">
+					<a href="@Model.HelpUrl" target="_blank">
+						<img id="ImageButtonHelp" src="~/Areas/Reporting/images/Question_16x16.png" alt="Help" />
+					</a>
+
+				</div>
 				<div class="ReportName" style="padding-top: 2px">
 					@Model.Name
 				</div>
+				
 			</div>
 		</header>
 		<iframe style="border: none;height: 95%;width:99.4%;position: fixed;top: 50px;" src="~/Areas/Reporting/Index.aspx?ReportID=@Model.Id"></iframe>

@@ -9,5 +9,6 @@ namespace Teleopti.Ccc.Web.Areas.Reporting.Models
 		public Guid Id { get; set; }
 		public string Name { get; set; }
 		public IEnumerable<ReportNavigationItem> ReportNavigationItems { get; set; }
+		public string HelpUrl { get; set; }
 	}
 }
