@@ -1,5 +1,4 @@
-﻿using Teleopti.Ccc.Infrastructure.MultiTenancy;
-using Teleopti.Ccc.Infrastructure.MultiTenancy.Server;
+﻿using Teleopti.Ccc.Infrastructure.MultiTenancy.Server;
 using Teleopti.Ccc.UserTexts;
 using Teleopti.Interfaces.Infrastructure;
 

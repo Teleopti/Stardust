@@ -1,5 +1,4 @@
 ﻿using Teleopti.Ccc.Domain.Security;
-using Teleopti.Ccc.Infrastructure.MultiTenancy;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Server;
 
 namespace Teleopti.Ccc.Web.Areas.Tenant.Core
