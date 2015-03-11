@@ -2,23 +2,29 @@ IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[mart].[rapt
 DROP PROCEDURE [mart].[raptor_adherence_per_agent_by_date]
 GO
 
+
+
 -- ======================================================================================================
 -- Author:		Xinfeng
 -- Create date: 2014-07-22
--- Update date: 
+-- Updated by: Jianguang/Hongzhao
+-- Update date:  2015-03-11
 -- Description:	Gets the agent whose adherence over @threshold during @Date for specify @time_zone_code
+-- Update description: add a parameter when selecting adherence to restrict the selecion within business_unit_code parameter
 -- Example: EXEC [mart].[raptor_adherence_per_agent_by_date]
 --               @threshold=0.58, -- 58%
 --               @local_date='2014-05-29',
 --               @adherence_id=2,
 --               @time_zone_code='UTC';
+--				 @business_unit_code = '48C43F5E-EB5A-485B-82FF-A1B000B75497'
 -- ======================================================================================================
 
 CREATE PROCEDURE [mart].[raptor_adherence_per_agent_by_date]
 @local_date smalldatetime,
 @threshold decimal(3, 2),
 @adherence_id int, --1, 2 or 3 from adherence_calculation table
-@time_zone_code nvarchar(50)
+@time_zone_code nvarchar(50),
+@business_unit_code uniqueidentifier
 AS
 Begin
 
@@ -274,7 +280,7 @@ select distinct
     on tz.local_date_id = d.date_id
  INNER JOIN mart.dim_time_zone t
 	ON tz.time_zone_id = t.time_zone_id
- where d.date_date = @local_date
+ where p.business_unit_code = @business_unit_code and d.date_date = @local_date
    and t.time_zone_code = @time_zone_code;
 
 --Create UTC table from: mart.fact_schedule_deviation
@@ -665,3 +671,5 @@ select person_code, [date], adherence_tot as Adherence
    and date = @local_date
  group by person_code, [date], adherence_tot
 end
+
+GO
