@@ -1,9 +1,7 @@
-using System;
 using System.Collections.Generic;
 using System.Globalization;
-using Teleopti.Ccc.Domain.ApplicationLayer.Rta;
 
-namespace Teleopti.Ccc.Web.Areas.Rta.Core.Server.Resolvers
+namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Resolvers
 {
 	public class PersonResolver
 	{

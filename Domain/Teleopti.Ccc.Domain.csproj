@@ -269,6 +269,9 @@
     <Compile Include="ApplicationLayer\Rta\Performance\IPerformanceCounter.cs" />
     <Compile Include="ApplicationLayer\Rta\Performance\PerformanceCounter.cs" />
     <Compile Include="ApplicationLayer\Rta\PersonOrganizationData.cs" />
+    <Compile Include="ApplicationLayer\Rta\Resolvers\DataSourceResolver.cs" />
+    <Compile Include="ApplicationLayer\Rta\Resolvers\PersonResolver.cs" />
+    <Compile Include="ApplicationLayer\Rta\RtaDataHandler.cs" />
     <Compile Include="ApplicationLayer\Rta\RtaDecoratingEventPublisher.cs" />
     <Compile Include="ApplicationLayer\Rta\RtaProcessContext.cs" />
     <Compile Include="ApplicationLayer\Rta\RtaProcessor.cs" />

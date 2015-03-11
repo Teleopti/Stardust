@@ -2,13 +2,11 @@
 using System.Collections.Generic;
 using System.Linq;
 using log4net;
-using MbCache.Core;
-using Teleopti.Ccc.Domain.ApplicationLayer.Rta;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta.Aggregator;
-using Teleopti.Ccc.Web.Areas.Rta.Core.Server.Resolvers;
+using Teleopti.Ccc.Domain.ApplicationLayer.Rta.Resolvers;
 using Teleopti.Interfaces.Domain;
 
-namespace Teleopti.Ccc.Web.Areas.Rta.Core.Server
+namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta
 {
 	public class RtaDataHandler
 	{
@@ -23,7 +21,6 @@ namespace Teleopti.Ccc.Web.Areas.Rta.Core.Server
 		private readonly INow _now;
 		private readonly IPersonOrganizationProvider _personOrganizationProvider;
 		private readonly AgentStateAssembler _agentStateAssembler;
-		private readonly IDatabaseReader _databaseReader;
 		private readonly IAgentStateReadModelReader _agentStateReadModelReader;
 		private readonly PersonResolver _personResolver;
 
@@ -41,7 +38,6 @@ namespace Teleopti.Ccc.Web.Areas.Rta.Core.Server
 			AgentStateAssembler agentStateAssembler
 			)
 		{
-			_databaseReader = databaseReader;
 			_agentStateReadModelReader = agentStateReadModelReader;
 			_stateMapper = stateMapper;
 			_personResolver = new PersonResolver(databaseReader);
