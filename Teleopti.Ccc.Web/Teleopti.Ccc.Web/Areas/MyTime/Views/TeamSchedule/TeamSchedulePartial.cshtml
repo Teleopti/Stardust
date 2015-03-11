@@ -69,13 +69,18 @@
 				<!-- ko ifnot: hasError -->
 				<div>
 					<!-- ko if: showTeamPicker -->
-					<div class="col-md-6 col-lg-3">
+					<div class="col-md-6 col-lg-3">						
 						<!-- ko if: showGroupings -->
 						<div class="schedule-filter-component">
 							<select id="Team-Picker" data-bind="foreach: availableTeams, select2: { value: selectedTeam } ">
+								<!--ko ifnot: children -->
+								<option data-bind="text: text, value: id"></option>
+								<!-- /ko -->
+								<!--ko if: children -->
 								<optgroup data-bind="attr: { label: text }, foreach: children">
 									<option data-bind="text: text, value: id"></option>
 								</optgroup>
+								<!-- /ko -->
 							</select>
 						</div>
 						<!-- /ko -->
@@ -85,7 +90,7 @@
 								<option data-bind="text: text, value: id"></option>
 							</select>
 						</div>
-						<!-- /ko -->
+						<!-- /ko -->						
 					</div>
 					<!-- /ko -->
 					<!-- ko if: isFilterByTimeEnabled-->

@@ -90,7 +90,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 		}
 
 		[UnitOfWorkAction]
-		[HttpGet]
+		[HttpPost]
 		public JsonResult TeamSchedule(DateOnly selectedDate, ScheduleFilter filter, Paging paging)
 		{
 			var allTeamIds = filter.TeamIds.Split(',').Select(teamId => new Guid(teamId)).ToList();

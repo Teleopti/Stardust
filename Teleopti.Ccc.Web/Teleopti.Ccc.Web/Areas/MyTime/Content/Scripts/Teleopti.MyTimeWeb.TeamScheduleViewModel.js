@@ -63,12 +63,13 @@ Teleopti.MyTimeWeb.TeamScheduleViewModel = function () {
 				self.redrawLayers();
 			},
 			null,
-			function () {
-				self.isLoading(false);
-				if (self.refocusToNameSearch != null) {
-					self.refocusToNameSearch();
-					self.refocusToNameSearch = null;
+			function () {				
+				self.isLoading(false);			
+				if (self.refocusToNameSearch.callable != null) {					
+					self.refocusToNameSearch.callable();
+					self.refocusToNameSearch.callable = null;
 				}
+				self.suppressChangeInSearchBox = false;
 			}
 		);
 	};
@@ -86,12 +87,12 @@ Teleopti.MyTimeWeb.TeamScheduleViewModel = function () {
 						self.suspendPagingMixinChangeHandler();
 						self.hasError(false);
 						self.errorMessage();
-						self.setTeamPicker(allTeams,myTeam);
+						self.setTeamPicker(allTeams.teams,myTeam, allTeams.allTeam);
 						self.activateFilterMixinChangeHandler();
 						self.activatePagingMixinChangeHandler();
 						loadSchedule();
 					}
-				);
+				); 
 			},
 			function (error) {				
 				self.hasError(true);
