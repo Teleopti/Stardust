@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using NUnit.Framework;
 using SharpTestsEx;
+using Teleopti.Ccc.Domain.ApplicationLayer.Rta;
 using Teleopti.Ccc.Domain.Rta;
 using Teleopti.Ccc.Infrastructure.Rta;
 using Teleopti.Ccc.InfrastructureTest.Helper;
@@ -15,11 +16,11 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta
     [Category("LongRunning")]
     public class RtaRepositoryTest : DatabaseTest
     {
-        private IRtaRepository target;
+        private IAgentStateReadModelReader target;
 
 		protected override void SetupForRepositoryTest()
 		{
-			target = new RtaRepository();
+			target = new AgentStateReadModelReader(null, null);
 		}
 
 		[Test]
@@ -27,7 +28,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta
 		{
 			var person = PersonFactory.CreatePerson("Ashlee", "Andeen");
 			person.SetId(Guid.NewGuid());
-			var result = target.LoadActualAgentState(new List<IPerson> {person});
+			var result = target.Load(new List<IPerson> {person});
 			Assert.IsNotNull(result);
 		}
 		
@@ -36,7 +37,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta
 	    {
 			var person = PersonFactory.CreatePerson("Ashlee", "Andeen");
 			person.SetId(Guid.NewGuid());
-			var result = target.LoadLastAgentState(new List<Guid> { person.Id.GetValueOrDefault() });
+			var result = target.Load(new List<Guid> { person.Id.GetValueOrDefault() });
 			Assert.IsNotNull(result);
 	    }
 
@@ -45,9 +46,14 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta
 		{
 			var teamId = Guid.NewGuid();
 			var personId = Guid.NewGuid();
-			var state = new AgentStateReadModelForTest { TeamId =teamId, PersonId = personId};
-			new DatabaseWriter(new DatabaseConnectionFactory(), new FakeDatabaseConnectionStringHandler()).PersistActualAgentReadModel(state);
-			var result = target.LoadTeamAgentStates(teamId);
+			var state = new AgentStateReadModelForTest
+			{
+				TeamId = teamId, 
+				PersonId = personId
+			};
+			new DatabaseWriter(new DatabaseConnectionFactory(), new FakeDatabaseConnectionStringHandler())
+				.PersistActualAgentReadModel(state);
+			var result = target.LoadForTeam(teamId);
 
 			result.Single().PersonId.Should().Be(personId);
 		}
@@ -67,9 +73,27 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta
 			dbWritter.PersistActualAgentReadModel(state2);
 			dbWritter.PersistActualAgentReadModel(state3);
 
-			var result = target.LoadTeamAgentStates(teamId);
+			var result = target.LoadForTeam(teamId);
 
 			result.Count.Should().Be(2);
+		}
+
+		[Test]
+		public void ShouldLoadStatesWithAdherence()
+		{
+			var teamId = Guid.NewGuid();
+			var personId = Guid.NewGuid();
+			var state = new AgentStateReadModelForTest
+			{
+				TeamId = teamId,
+				PersonId = personId,
+				Adherence = (int) AdherenceState.Out
+			};
+			new DatabaseWriter(new DatabaseConnectionFactory(), new FakeDatabaseConnectionStringHandler())
+				.PersistActualAgentReadModel(state);
+
+			target.Load(new[] {personId}).Single().Adherence.Should().Be(AdherenceState.Out);
+			target.LoadForTeam(teamId).Single().Adherence.Should().Be(AdherenceState.Out);
 		}
     }
 }

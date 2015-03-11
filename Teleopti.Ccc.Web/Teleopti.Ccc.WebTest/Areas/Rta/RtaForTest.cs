@@ -68,8 +68,8 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta
 				.As<IDatabaseReader>()
 				.As<IDatabaseWriter>()
 				.As<IPersonOrganizationReader>()
-				.As<IReadActualAgentStates>()
 				;
+			builder.RegisterInstance(database.AgentStateReadModelReader).As<IAgentStateReadModelReader>();
 			builder.RegisterInstance(database.RtaStateGroupRepository).As<IRtaStateGroupRepository>();
 			builder.RegisterInstance(database.StateGroupActivityAlarmRepository).As<IStateGroupActivityAlarmRepository>();
 			builder.RegisterInstance(new FakeMbCacheFactory()).As<IMbCacheFactory>();

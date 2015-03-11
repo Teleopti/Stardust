@@ -22,9 +22,9 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Controllers
 		private readonly INow _date;
 		private readonly IUserTimeZone _userTimeZone;
 	    private readonly ICommonAgentNameProvider _commonAgentNameProvider;
-		private readonly IRtaRepository _rtaRepository;
+		private readonly IAgentStateReadModelReader _agentStateReadModelReader;
 
-		public AgentsController(IPermissionProvider permissionProvider, ITeamRepository teamRepository, IPersonRepository personRepository, INow date, IUserTimeZone userTimeZone, ICommonAgentNameProvider commonAgentNameProvider, IRtaRepository rtaRepository)
+		public AgentsController(IPermissionProvider permissionProvider, ITeamRepository teamRepository, IPersonRepository personRepository, INow date, IUserTimeZone userTimeZone, ICommonAgentNameProvider commonAgentNameProvider, IAgentStateReadModelReader agentStateReadModelReader)
 		{
 			_permissionProvider = permissionProvider;
 			_teamRepository = teamRepository;
@@ -32,13 +32,13 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Controllers
 			_date = date;
 			_userTimeZone = userTimeZone;
 		    _commonAgentNameProvider = commonAgentNameProvider;
-		    _rtaRepository = rtaRepository;
+		    _agentStateReadModelReader = agentStateReadModelReader;
 		}
 
 		[HttpGet]
 		public JsonResult GetStates(Guid teamId)
 		{
-			var states = _rtaRepository.LoadTeamAgentStates(teamId).Select(x => new AgentStateViewModel
+			var states = _agentStateReadModelReader.LoadForTeam(teamId).Select(x => new AgentStateViewModel
 			{
 				PersonId = x.PersonId,
 				State = x.State,

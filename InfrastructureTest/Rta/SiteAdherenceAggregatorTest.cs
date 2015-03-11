@@ -42,8 +42,8 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta
 			var inAdherence2 = new AgentStateReadModel {StaffingEffect = 0};
 			var outOfAdherence = new AgentStateReadModel {StaffingEffect = 1};
 
-			var statisticRepository = MockRepository.GenerateMock<IRtaRepository>();
-			statisticRepository.Stub(x => x.LoadLastAgentState(new[] {personId1, personId2, personId3}))
+			var statisticRepository = MockRepository.GenerateMock<IAgentStateReadModelReader>();
+			statisticRepository.Stub(x => x.Load(new[] {personId1, personId2, personId3}))
 				.Return(new List<AgentStateReadModel> {inAdherence1, inAdherence2, outOfAdherence});
 			var siteRepository = MockRepository.GenerateMock<ISiteRepository>();
 			siteRepository.Stub(x => x.Get(siteId)).Return(site);
@@ -82,8 +82,8 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta
 			var inAdherence2 = new AgentStateReadModel {StaffingEffect = 0};
 			var outOfAdherence = new AgentStateReadModel {StaffingEffect = -1};
 
-			var statisticRepository = MockRepository.GenerateMock<IRtaRepository>();
-			statisticRepository.Stub(x => x.LoadLastAgentState(new[] {personId1, personId2, personId3}))
+			var statisticRepository = MockRepository.GenerateMock<IAgentStateReadModelReader>();
+			statisticRepository.Stub(x => x.Load(new[] {personId1, personId2, personId3}))
 				.Return(new List<AgentStateReadModel> {inAdherence1, inAdherence2, outOfAdherence});
 			var siteRepository = MockRepository.GenerateMock<ISiteRepository>();
 			siteRepository.Stub(x => x.Get(siteId)).Return(site);

@@ -25,17 +25,17 @@ namespace Teleopti.Ccc.Web.Areas.Rta.Core.Server.Adherence
 	public class AdherenceAggregator : IAdherenceAggregator
 	{
 		private readonly IMessageSender _messageSender;
-		private readonly IDatabaseReader _databaseReader;
+		private readonly IAgentStateReadModelReader _agentStateReadModelReader;
 		private readonly IPersonOrganizationProvider _personOrganizationProvider;
 		private readonly TeamAdherenceAggregator _teamAdherenceAggregator;
 		private readonly SiteAdherenceAggregator _siteAdherenceAggregator;
 		private readonly AgentAdherenceAggregator _agentAdherenceAggregator;
 		private readonly AggregationState _aggregationState;
 
-		public AdherenceAggregator(IMessageSender messageSender, IDatabaseReader databaseReader, IPersonOrganizationProvider personOrganizationProvider)
+		public AdherenceAggregator(IMessageSender messageSender, IAgentStateReadModelReader agentStateReadModelReader, IPersonOrganizationProvider personOrganizationProvider)
 		{
 			_messageSender = messageSender;
-			_databaseReader = databaseReader;
+			_agentStateReadModelReader = agentStateReadModelReader;
 			_personOrganizationProvider = personOrganizationProvider;
 			_aggregationState = new AggregationState();
 			_teamAdherenceAggregator = new TeamAdherenceAggregator(_aggregationState);
@@ -50,7 +50,7 @@ namespace Teleopti.Ccc.Web.Areas.Rta.Core.Server.Adherence
 
 		public void Initialize()
 		{
-			foreach (var actualAgentState in _databaseReader.GetActualAgentStates())
+			foreach (var actualAgentState in _agentStateReadModelReader.GetActualAgentStates())
 			{
 				PersonOrganizationData person;
 				if (!_personOrganizationProvider.PersonOrganizationData().TryGetValue(actualAgentState.PersonId, out person))

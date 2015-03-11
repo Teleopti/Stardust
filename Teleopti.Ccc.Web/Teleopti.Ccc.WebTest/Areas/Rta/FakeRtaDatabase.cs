@@ -3,6 +3,7 @@ using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta;
+using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.RealTimeAdherence;
@@ -31,7 +32,6 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta
 
 	public class FakeRtaDatabase : IDatabaseReader, IDatabaseWriter, IPersonOrganizationReader, IFakeDataBuilder
 	{
-		private readonly List<AgentStateReadModel> _actualAgentStates = new List<AgentStateReadModel>();
 		private readonly List<KeyValuePair<string, int>> _datasources = new List<KeyValuePair<string, int>>();
 		private readonly List<KeyValuePair<string, IEnumerable<ResolvedPerson>>> _externalLogOns = new List<KeyValuePair<string, IEnumerable<ResolvedPerson>>>();
 		private readonly List<scheduleLayer2> _schedules = new List<scheduleLayer2>();
@@ -39,6 +39,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta
 
 		public FakeRtaStateGroupRepository RtaStateGroupRepository = new FakeRtaStateGroupRepository();
 		public FakeStateGroupActivityAlarmRepository StateGroupActivityAlarmRepository = new FakeStateGroupActivityAlarmRepository();
+		public FakeAgentStateReadModelReader AgentStateReadModelReader = new FakeAgentStateReadModelReader();
 
 		private class scheduleLayer2
 		{
@@ -209,36 +210,12 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta
 
 
 
-		public AgentStateReadModel GetCurrentActualAgentState(Guid personId)
-		{
-			return _actualAgentStates.FirstOrDefault(x => x.PersonId == personId);
-		}
-
-		public IEnumerable<AgentStateReadModel> GetActualAgentStates()
-		{
-			return _actualAgentStates.ToList();
-		}
-
-		public ConcurrentDictionary<Tuple<Guid, Guid, Guid>, List<AlarmMappingInfo>> AlarmMappingInfos()
-		{
-			return null;
-		}
-
 		public IList<ScheduleLayer> GetCurrentSchedule(Guid personId)
 		{
 			var layers = from l in _schedules
 						 where l.PersonId == personId
 						 select l.ScheduleLayer;
 			return new List<ScheduleLayer>(layers);
-		}
-
-		public IEnumerable<AgentStateReadModel> GetMissingAgentStatesFromBatch(DateTime batchId, string dataSourceId)
-		{
-			return from s in _actualAgentStates.ToList()
-				where s.OriginalDataSourceId == dataSourceId &&
-				      (s.BatchId < batchId ||
-					  s.BatchId == null)
-				select s;
 		}
 
 		public TimeZoneInfo GetTimeZone(Guid personId)
@@ -256,17 +233,9 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta
 			return new ConcurrentDictionary<string, int>(_datasources);
 		}
 
-		public StateCodeInfo AddAndGetStateCode(string stateCode, string stateDescription, Guid platformTypeId, Guid businessUnit)
-		{
-			return null;
-		}
-
 		public void PersistActualAgentReadModel(AgentStateReadModel model)
 		{
-			var previousState = (from s in _actualAgentStates where s.PersonId == model.PersonId select s).FirstOrDefault();
-			if (previousState != null)
-				_actualAgentStates.Remove(previousState);
-			_actualAgentStates.Add(model);
+			AgentStateReadModelReader.Has(model);
 			PersistedAgentStateReadModel = model;
 		}
 
@@ -274,6 +243,63 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta
 		{
 			return _personOrganizationData;
 		}
+	}
+
+	public class FakeAgentStateReadModelReader : IAgentStateReadModelReader
+	{
+		private readonly IList<AgentStateReadModel> _data = new List<AgentStateReadModel>();
+
+		public FakeAgentStateReadModelReader()
+		{
+		}
+
+		public FakeAgentStateReadModelReader(IEnumerable<AgentStateReadModel> data)
+		{
+			data.ForEach(_data.Add);
+		}
+
+		public void Has(AgentStateReadModel model)
+		{
+			var previousState = (from s in _data where s.PersonId == model.PersonId select s).FirstOrDefault();
+			if (previousState != null)
+				_data.Remove(previousState);
+			_data.Add(model);
+		}
+
+		public IList<AgentStateReadModel> Load(IEnumerable<IPerson> persons)
+		{
+			throw new NotImplementedException();
+		}
+
+		public IList<AgentStateReadModel> Load(IEnumerable<Guid> personGuids)
+		{
+			throw new NotImplementedException();
+		}
+
+		public IList<AgentStateReadModel> LoadForTeam(Guid teamId)
+		{
+			return _data.Where(x => x.TeamId == teamId).ToArray();
+		}
+
+		public IEnumerable<AgentStateReadModel> GetMissingAgentStatesFromBatch(DateTime batchId, string dataSourceId)
+		{
+			return (from s in _data
+				where s.OriginalDataSourceId == dataSourceId &&
+				      (s.BatchId < batchId ||
+				       s.BatchId == null)
+				select s).ToArray();
+		}
+
+		public AgentStateReadModel GetCurrentActualAgentState(Guid personId)
+		{
+			return _data.SingleOrDefault(x => x.PersonId == personId);
+		}
+
+		public IEnumerable<AgentStateReadModel> GetActualAgentStates()
+		{
+			return _data.ToArray();
+		}
+
 	}
 
 	public class FakeStateGroupActivityAlarmRepository : IStateGroupActivityAlarmRepository

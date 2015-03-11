@@ -11,12 +11,12 @@ namespace Teleopti.Ccc.Infrastructure.Rta
 {
 	public class SiteAdherenceAggregator : ISiteAdherenceAggregator
 	{
-		private readonly IRtaRepository _statisticRepository;
+		private readonly IAgentStateReadModelReader _statisticRepository;
 		private readonly ISiteRepository _siteRepository;
 		private readonly IPersonRepository _personRepository;
 		private readonly INow _now;
 
-		public SiteAdherenceAggregator(IRtaRepository statisticRepository, ISiteRepository siteRepository, IPersonRepository personRepository, INow now)
+		public SiteAdherenceAggregator(IAgentStateReadModelReader statisticRepository, ISiteRepository siteRepository, IPersonRepository personRepository, INow now)
 		{
 			_statisticRepository = statisticRepository;
 			_siteRepository = siteRepository;
@@ -34,7 +34,7 @@ namespace Teleopti.Ccc.Infrastructure.Rta
 			{
 				personIds.AddRange(_personRepository.FindPeopleBelongTeam(team, timePeriod).Select(x => x.Id.GetValueOrDefault()));
 			}
-			var lastStates = _statisticRepository.LoadLastAgentState(personIds);
+			var lastStates = _statisticRepository.Load(personIds);
 			return lastStates.Count(x => AdherenceInfo.AdherenceFor(x) == AdherenceState.Out);
 		}
 	}

@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
-using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Rta
 {
@@ -11,18 +10,11 @@ namespace Teleopti.Ccc.Domain.Rta
 		public Guid BusinessUnitId { get; set; }
 	}
 
-	public interface IDatabaseReader : IReadActualAgentStates
+	public interface IDatabaseReader
 	{
 		ConcurrentDictionary<string, int> Datasources();
 		ConcurrentDictionary<string, IEnumerable<ResolvedPerson>> ExternalLogOns();
-
 		IList<ScheduleLayer> GetCurrentSchedule(Guid personId);
-		IEnumerable<AgentStateReadModel> GetMissingAgentStatesFromBatch(DateTime batchId, string dataSourceId);
 	}
 
-	public interface IReadActualAgentStates
-	{
-		AgentStateReadModel GetCurrentActualAgentState(Guid personId);
-		IEnumerable<AgentStateReadModel> GetActualAgentStates();
-	}
 }

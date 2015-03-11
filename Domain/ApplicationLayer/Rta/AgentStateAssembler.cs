@@ -38,7 +38,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta
 				AlarmTypeId = fromStorage.AlarmId,
 				AlarmTypeStartTime = fromStorage.StateStart,
 				StaffingEffect = fromStorage.StaffingEffect,
-				Adherence = fromStorage.Adherence
+				Adherence = (AdherenceState?) fromStorage.Adherence
 			};
 		}
 
@@ -61,7 +61,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta
 				AlarmTypeId = fromStorage.AlarmId,
 				AlarmTypeStartTime = fromStorage.StateStart,
 				StaffingEffect = fromStorage.StaffingEffect,
-				Adherence = fromStorage.Adherence
+				Adherence = (AdherenceState?) fromStorage.Adherence
 			};
 		}
 
@@ -108,7 +108,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta
 				ScheduledNext = scheduleInfo.NextActivityName(),
 				ScheduledNextId = scheduleInfo.NextActivityId(),
 				StaffingEffect = agentState.StaffingEffect,
-				Adherence = agentState.Adherence,
+				Adherence = (int?) agentState.Adherence,
 				State = state.StateGroupName,
 				StateCode = agentState.StateCode,
 				StateId = agentState.StateGroupId,

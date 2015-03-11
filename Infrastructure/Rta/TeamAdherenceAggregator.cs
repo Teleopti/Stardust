@@ -11,12 +11,12 @@ namespace Teleopti.Ccc.Infrastructure.Rta
 {
 	public class TeamAdherenceAggregator : ITeamAdherenceAggregator
 	{
-		private readonly IRtaRepository _statisticRepository;
+		private readonly IAgentStateReadModelReader _statisticRepository;
 		private readonly ITeamRepository _teamRepository;
 		private readonly IPersonRepository _personRepository;
 		private readonly INow _now;
 
-		public TeamAdherenceAggregator(IRtaRepository statisticRepository, ITeamRepository teamRepository, IPersonRepository personRepository, INow now)
+		public TeamAdherenceAggregator(IAgentStateReadModelReader statisticRepository, ITeamRepository teamRepository, IPersonRepository personRepository, INow now)
 		{
 			_statisticRepository = statisticRepository;
 			_teamRepository = teamRepository;
@@ -31,7 +31,7 @@ namespace Teleopti.Ccc.Infrastructure.Rta
 			var today = _now.LocalDateOnly();
 			var timePeriod = new DateOnlyPeriod(today, today);
 			personIds.AddRange(_personRepository.FindPeopleBelongTeam(team, timePeriod).Select(x => x.Id.GetValueOrDefault()));
-			var lastStates = _statisticRepository.LoadLastAgentState(personIds);
+			var lastStates = _statisticRepository.Load(personIds);
 			return lastStates.Count(x => AdherenceInfo.AdherenceFor(x) == AdherenceState.Out);
 		}
 	}

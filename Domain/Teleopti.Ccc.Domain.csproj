@@ -808,7 +808,7 @@
     <Compile Include="ResourceCalculation\WorkShiftFinderService.cs" />
     <Compile Include="Rta\IDatabaseReader.cs" />
     <Compile Include="Rta\IDatabaseWriter.cs" />
-    <Compile Include="Rta\IRtaRepository.cs" />
+    <Compile Include="Rta\IAgentStateReadModelReader.cs" />
     <Compile Include="ApplicationLayer\Rta\PersonOrganizationProvider.cs" />
     <Compile Include="Rta\AlarmMappingInfo.cs" />
     <Compile Include="Rta\StateCodeInfo.cs" />

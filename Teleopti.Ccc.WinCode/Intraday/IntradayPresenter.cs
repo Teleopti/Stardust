@@ -332,7 +332,7 @@ namespace Teleopti.Ccc.WinCode.Intraday
 			var statisticRepository = _repositoryFactory.CreateRtaRepository();
             using (PerformanceOutput.ForOperation("Read and collect agent states"))
             {
-                var tmp = statisticRepository.LoadActualAgentState(_rtaStateHolder.FilteredPersons);
+                var tmp = statisticRepository.Load(_rtaStateHolder.FilteredPersons);
                 foreach (var actualAgentState in tmp)
                 {
 					// if we have recieved an RTA event that is more recent than what we get from DB

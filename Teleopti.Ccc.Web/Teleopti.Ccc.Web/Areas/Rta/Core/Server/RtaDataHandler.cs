@@ -25,11 +25,13 @@ namespace Teleopti.Ccc.Web.Areas.Rta.Core.Server
 		private readonly IPersonOrganizationProvider _personOrganizationProvider;
 		private readonly AgentStateAssembler _agentStateAssembler;
 		private readonly IDatabaseReader _databaseReader;
+		private readonly IAgentStateReadModelReader _agentStateReadModelReader;
 		private readonly PersonResolver _personResolver;
 
 		public RtaDataHandler(
 			IAdherenceAggregator adherenceAggregator,
 			IDatabaseReader databaseReader,
+			IAgentStateReadModelReader agentStateReadModelReader,
 			IStateMapper stateMapper,
 			ICacheInvalidator cacheInvalidator,
 			RtaProcessor processor, 
@@ -41,6 +43,7 @@ namespace Teleopti.Ccc.Web.Areas.Rta.Core.Server
 			)
 		{
 			_databaseReader = databaseReader;
+			_agentStateReadModelReader = agentStateReadModelReader;
 			_stateMapper = stateMapper;
 			_personResolver = new PersonResolver(databaseReader);
 			_cacheInvalidator = cacheInvalidator;
@@ -87,7 +90,7 @@ namespace Teleopti.Ccc.Web.Areas.Rta.Core.Server
 
 			input.StateCode = "CCC Logged out";
 			input.PlatformTypeId = Guid.Empty.ToString();
-			var missingAgents = _databaseReader.GetMissingAgentStatesFromBatch(input.BatchId, input.SourceId);
+			var missingAgents = _agentStateReadModelReader.GetMissingAgentStatesFromBatch(input.BatchId, input.SourceId);
 			var agentsNotAlreadyLoggedOut = from a in missingAgents
 											//let state = _alarmFinder.StateCodeInfoFor(a.StateCode, null, a.PlatformTypeId, a.BusinessUnitId)
 											let state = _stateMapper.StateFor(a.BusinessUnitId, a.PlatformTypeId, a.StateCode, null)
@@ -115,7 +118,7 @@ namespace Teleopti.Ccc.Web.Areas.Rta.Core.Server
 					_agentStateReadModelUpdater, 
 					_messageSender, 
 					_adherenceAggregator,
-					() => _agentStateAssembler.MakePreviousState(personId, _databaseReader.GetCurrentActualAgentState(personId)),
+					() => _agentStateAssembler.MakePreviousState(personId, _agentStateReadModelReader.GetCurrentActualAgentState(personId)),
 					(scheduleInfo, context) => _agentStateAssembler.MakeCurrentState(scheduleInfo, context.Input, context.Person, context.PreviousState(scheduleInfo), currentTime)
 					));
 		}

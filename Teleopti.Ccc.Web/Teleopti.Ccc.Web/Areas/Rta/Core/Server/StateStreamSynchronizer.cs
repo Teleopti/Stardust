@@ -32,7 +32,7 @@ namespace Teleopti.Ccc.Web.Areas.Rta.Core.Server
 		private readonly INow _now;
 		private readonly RtaProcessor _processor;
 		private readonly IPersonOrganizationProvider _personOrganizationProvider;
-		private readonly IDatabaseReader _databaseReader;
+		private readonly IAgentStateReadModelReader _agentStateReadModelReader;
 		private readonly AgentStateAssembler _agentStateAssembler;
 		private readonly IEventPublisherScope _eventPublisherScope;
 		private readonly IEnumerable<IInitializeble> _initializebles;
@@ -43,7 +43,7 @@ namespace Teleopti.Ccc.Web.Areas.Rta.Core.Server
 			INow now,
 			RtaProcessor processor,
 			IPersonOrganizationProvider personOrganizationProvider,
-			IDatabaseReader databaseReader,
+			IAgentStateReadModelReader agentStateReadModelReader,
 			AgentStateAssembler agentStateAssembler,
 			IEventPublisherScope eventPublisherScope,
 			IEnumerable<IInitializeble> initializebles,
@@ -54,7 +54,7 @@ namespace Teleopti.Ccc.Web.Areas.Rta.Core.Server
 			_now = now;
 			_processor = processor;
 			_personOrganizationProvider = personOrganizationProvider;
-			_databaseReader = databaseReader;
+			_agentStateReadModelReader = agentStateReadModelReader;
 			_agentStateAssembler = agentStateAssembler;
 			_eventPublisherScope = eventPublisherScope;
 			_initializebles = initializebles;
@@ -65,7 +65,7 @@ namespace Teleopti.Ccc.Web.Areas.Rta.Core.Server
 		public void Sync()
 		{
 			var currentTime = _now.UtcDateTime();
-			var states = _databaseReader.GetActualAgentStates();
+			var states = _agentStateReadModelReader.GetActualAgentStates();
 			_recreatables.ForEach(s =>
 			{
 				s.DeleteAll();
@@ -76,7 +76,7 @@ namespace Teleopti.Ccc.Web.Areas.Rta.Core.Server
 		public virtual void Initialize()
 		{
 			var currentTime = _now.UtcDateTime();
-			var states = _databaseReader.GetActualAgentStates();
+			var states = _agentStateReadModelReader.GetActualAgentStates();
 			_initializebles.ForEach(s =>
 			{
 				if (!s.Initialized())

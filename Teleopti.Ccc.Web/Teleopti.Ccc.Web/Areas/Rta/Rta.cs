@@ -26,6 +26,7 @@ namespace Teleopti.Ccc.Web.Areas.Rta
 
 	public class Rta : IRta
 	{
+		private readonly IAgentStateReadModelReader _agentStateReadModelReader;
 		private readonly RtaDataHandler _rtaDataHandler;
 		private readonly string _authenticationKey;
 		public static string LogOutStateCode = "LOGGED-OFF";
@@ -37,6 +38,7 @@ namespace Teleopti.Ccc.Web.Areas.Rta
 		public Rta(
 			IAdherenceAggregator adherenceAggregator,
 			IDatabaseReader databaseReader, 
+			IAgentStateReadModelReader agentStateReadModelReader, 
 			ICacheInvalidator cacheInvalidator,
 			IStateMapper stateMapper,
 			INow now, 
@@ -48,10 +50,12 @@ namespace Teleopti.Ccc.Web.Areas.Rta
 			AgentStateAssembler agentStateAssembler
 			)
 		{
+			_agentStateReadModelReader = agentStateReadModelReader;
 			_dataSourceResolver = new DataSourceResolver(databaseReader);
 			_rtaDataHandler = new RtaDataHandler(
 				adherenceAggregator,
 				databaseReader,
+				_agentStateReadModelReader,
 				stateMapper,
 				cacheInvalidator,
 				processor,

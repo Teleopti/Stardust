@@ -10,12 +10,12 @@ using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.Repositories;
-using Teleopti.Ccc.Domain.Rta;
 using Teleopti.Ccc.Domain.SystemSetting.GlobalSetting;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.Web.Areas.Anywhere.Controllers;
 using Teleopti.Ccc.Web.Areas.Anywhere.Core;
+using Teleopti.Ccc.WebTest.Areas.Rta;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Controllers
@@ -55,7 +55,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Controllers
 				AlarmColor = "#FF0000"
 			};
 
-			var target = new AgentsController(null, null, null, null, null, null, new FakeRtaRepository(new[] { data }));
+			var target = new AgentsController(null, null, null, null, null, null, new FakeAgentStateReadModelReader(new[] { data }));
 			new StubbingControllerBuilder().InitializeController(target);
 
 			var result = target.GetStates(teamId).Data as IEnumerable<AgentStateViewModel>;
@@ -164,30 +164,6 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Controllers
 			dynamic result = target.PersonDetails(person.Id.GetValueOrDefault()).Data;
 			((object)result.Name).Should().Be(commonAgentNameSettings.BuildCommonNameDescription(person));
 		}
-
-		public class FakeRtaRepository : IRtaRepository
-		{
-			private readonly IEnumerable<AgentStateReadModel> _data;
-
-			public FakeRtaRepository(IEnumerable<AgentStateReadModel> data)
-			{
-				_data = data;
-			}
-
-			public IList<AgentStateReadModel> LoadActualAgentState(IEnumerable<IPerson> persons)
-			{
-				return null;
-			}
-
-			public IList<AgentStateReadModel> LoadLastAgentState(IEnumerable<Guid> personGuids)
-			{
-				return null;
-			}
-
-			public IList<AgentStateReadModel> LoadTeamAgentStates(Guid teamId)
-			{
-				return _data.Where(x => x.TeamId == teamId).ToArray();
-			}
-		}
 	}
+
 }

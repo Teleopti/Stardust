@@ -192,6 +192,7 @@
     <Compile Include="MultiTenancy\Server\PersistPersonInfoTest.cs" />
     <Compile Include="PrincipalAndStateTestAttribute.cs" />
     <Compile Include="RestoreDatabaseAfterTestAttribute.cs" />
+    <Compile Include="Rta\DatabaseReaderTest.cs" />
     <Compile Include="Rta\Persisters\AdherenceDetailsReadModelPersisterTest.cs" />
     <Compile Include="Aop\AspectsTest.cs" />
     <Compile Include="ApplicationLayer\SyncEventPublisherTest.cs" />
@@ -224,7 +225,7 @@
     <Compile Include="Rta\Persisters\TeamOutOfAdherenceReadModelPersisterTest.cs" />
     <Compile Include="Repositories\TeamGamificationSettingRepositoryTest.cs" />
     <Compile Include="Rta\AgentStateReadModelForTest.cs" />
-    <Compile Include="Rta\DatabaseReaderTest.cs" />
+    <Compile Include="Rta\DatabaseReaderAgentStateTest.cs" />
     <Compile Include="Rta\ActualAgentStateReadModelPersistingTest.cs" />
     <Compile Include="Rta\FakeDatabaseConnectionStringHandler.cs" />
     <Compile Include="InfrastructureTestAttribute.cs" />

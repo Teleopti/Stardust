@@ -47,7 +47,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 				.As<IDatabaseReader>();
 			builder.RegisterMbCacheComponent<DatabaseReader, IDatabaseReader>();
 
-			builder.Register<IReadActualAgentStates>(c => c.Resolve<DatabaseReader>());
+			builder.RegisterType<AgentStateReadModelReader>().As<IAgentStateReadModelReader>().SingleInstance();
 			builder.RegisterType<DatabaseWriter>().As<IDatabaseWriter>().SingleInstance();
 
 			builder.RegisterType<AgentDateProvider>().SingleInstance().As<IAgentDateProvider>();

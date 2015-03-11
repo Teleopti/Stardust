@@ -150,9 +150,9 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
             return StatisticRepositoryFactory.Create();
         }
 
-	    public IRtaRepository CreateRtaRepository()
+	    public IAgentStateReadModelReader CreateRtaRepository()
 	    {
-		    return new RtaRepository();
+		    return new AgentStateReadModelReader(null, null);
 	    }
 
 	    /// <summary>

@@ -49,7 +49,7 @@ namespace Teleopti.Ccc.WinCodeTest.Intraday
         private ISchedulingResultLoader _schedulingResultLoader;
         private ISchedulerStateHolder _schedulerStateHolder;
 		private IStatisticRepository _statisticRepository;
-		private IRtaRepository _rtaRepository;
+		private IAgentStateReadModelReader _agentStateReadModelReader;
 		private IRepositoryFactory _repositoryFactory;
         private IScenario _scenario;
         private IEventAggregator _eventAggregator;
@@ -77,7 +77,7 @@ namespace Teleopti.Ccc.WinCodeTest.Intraday
 					_scheduleDictionarySaver = MockRepository.GenerateMock<IScheduleDifferenceSaver>();
 					_schedulerStateHolder = new SchedulerStateHolder(_scenario, new DateOnlyPeriodAsDateTimePeriod(_period, TeleoptiPrincipal.CurrentPrincipal.Regional.TimeZone), _persons, MockRepository.GenerateMock<IDisableDeletedFilter>());
 					_statisticRepository = MockRepository.GenerateMock<IStatisticRepository>();
-					_rtaRepository = MockRepository.GenerateMock<IRtaRepository>();
+					_agentStateReadModelReader = MockRepository.GenerateMock<IAgentStateReadModelReader>();
 					_differenceService = MockRepository.GenerateMock<IDifferenceCollectionService<IPersistableScheduleData>>();
 					_scheduleCommand = MockRepository.GenerateMock<OnEventScheduleMessageCommand>();
 					_meetingCommand = MockRepository.GenerateMock<OnEventMeetingMessageCommand>();
@@ -373,8 +373,8 @@ namespace Teleopti.Ccc.WinCodeTest.Intraday
             _repositoryFactory.Stub(x => x.CreateStatisticRepository())
                               .Return(_statisticRepository);
 			_repositoryFactory.Stub(x => x.CreateRtaRepository())
-							  .Return(_rtaRepository);
-			_rtaRepository.Stub(x => x.LoadActualAgentState(null)).Return(new List<AgentStateReadModel> { agentState });
+							  .Return(_agentStateReadModelReader);
+			_agentStateReadModelReader.Stub(x => x.Load((IEnumerable<IPerson>) null)).Return(new List<AgentStateReadModel> { agentState });
 
             Enumerable.Range(0, 101)
                       .ForEach(_ => _schedulerStateHolder.FilteredAgentsDictionary.Add(Guid.NewGuid(), _persons[0]));
@@ -403,8 +403,8 @@ namespace Teleopti.Ccc.WinCodeTest.Intraday
             _repositoryFactory.Stub(x => x.CreateStatisticRepository())
                               .Return(_statisticRepository);
             _repositoryFactory.Stub(x => x.CreateRtaRepository())
-                              .Return(_rtaRepository);
-			_rtaRepository.Stub(x => x.LoadActualAgentState(null)).Return(new List<AgentStateReadModel> { agentState });
+                              .Return(_agentStateReadModelReader);
+			_agentStateReadModelReader.Stub(x => x.Load((IEnumerable<IPerson>) null)).Return(new List<AgentStateReadModel> { agentState });
             _schedulerStateHolder.RequestedPeriod =
                 new DateOnlyPeriodAsDateTimePeriod(new DateOnlyPeriod(DateOnly.Today.AddDays(-2), DateOnly.Today.AddDays(2)),
                                                    TimeZoneInfo.Utc);
