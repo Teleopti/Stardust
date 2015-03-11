@@ -7,10 +7,6 @@ namespace Teleopti.Ccc.Infrastructure.MultiTenancy.Server
 	{
 		private readonly Tenant tenant;
 
-#pragma warning disable 169
-		private DateOnly? terminalDate;
-#pragma warning restore 169
-
 		public PersonInfo()
 		{
 			tenant=new Tenant(string.Empty);
@@ -31,6 +27,7 @@ namespace Teleopti.Ccc.Infrastructure.MultiTenancy.Server
 		public virtual string Password { get; protected set; }
 		public virtual string Identity { get; protected set; }
 		public virtual string ApplicationLogonName { get; protected set; }
+		public virtual DateOnly? TerminalDate { get; set; }
 
 		public virtual string Tenant
 		{

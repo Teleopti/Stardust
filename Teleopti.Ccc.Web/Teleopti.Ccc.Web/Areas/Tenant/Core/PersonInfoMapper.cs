@@ -11,7 +11,7 @@ namespace Teleopti.Ccc.Web.Areas.Tenant.Core
 			var id = personInfoModel.PersonId.HasValue ?
 							personInfoModel.PersonId.Value :
 							Guid.Empty;
-			var personInfo = new PersonInfo { Id = id };
+			var personInfo = new PersonInfo { Id = id, TerminalDate = personInfoModel.TerminalDate};
 			personInfo.SetIdentity(personInfoModel.Identity);
 			personInfo.SetApplicationLogonName(personInfoModel.UserName);
 			personInfo.SetPassword(personInfoModel.Password);

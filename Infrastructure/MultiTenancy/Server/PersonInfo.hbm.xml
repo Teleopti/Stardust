@@ -6,9 +6,8 @@
 		<id name="Id" type="guid">
 			<generator class="guid.comb" />
 		</id>
-		<property name="terminalDate" 
-							type="Teleopti.Ccc.Infrastructure.NHibernateConfiguration.DateOnlyMappingType, Teleopti.Ccc.Infrastructure"
-							access="field"/>
+		<property name="TerminalDate" 
+							type="Teleopti.Ccc.Infrastructure.NHibernateConfiguration.DateOnlyMappingType, Teleopti.Ccc.Infrastructure" />
 		<many-to-one name="tenant" class="Tenant" access="field"/>
 		
 		<property name="Identity" column="[Identity]"/>

@@ -4,6 +4,7 @@ using SharpTestsEx;
 using Teleopti.Ccc.TestCommon.TestData;
 using Teleopti.Ccc.Web.Areas.Tenant.Core;
 using Teleopti.Ccc.Web.Areas.Tenant.Model;
+using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.WebTest.Areas.Tenant.Core
 {
@@ -54,6 +55,23 @@ namespace Teleopti.Ccc.WebTest.Areas.Tenant.Core
 			var target = new PersonInfoMapper();
 			var result = target.Map(new PersonInfoModel { Password = password });
 			result.Password.Should().Be.EqualTo(password);
+		}
+
+		[Test]
+		public void TerminalDateShouldBeSet()
+		{
+			var terminalDate = DateOnly.Today;
+			var target = new PersonInfoMapper();
+			var result = target.Map(new PersonInfoModel { TerminalDate = terminalDate});
+			result.TerminalDate.Should().Be.EqualTo(terminalDate);
+		}
+
+		[Test]
+		public void NullTerminalDateShouldBeSet()
+		{
+			var target = new PersonInfoMapper();
+			var result = target.Map(new PersonInfoModel { TerminalDate = null });
+			result.TerminalDate.HasValue.Should().Be.False();
 		}
 	}
 }
