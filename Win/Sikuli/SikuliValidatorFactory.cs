@@ -14,7 +14,7 @@ namespace Teleopti.Ccc.Win.Sikuli
 		{
 			public static IRootValidator CreateValidator(ISchedulerStateHolder schedulerState, IAggregateSkill totalSkill)
 			{
-				switch (SikuliHelper.Validation.CurrentValidator)
+				switch (SikuliHelper.CurrentValidator)
 				{
 					case SikuliValidatorRegister.DeleteAll:
 						return new DeleteAllValidator(schedulerState, totalSkill);

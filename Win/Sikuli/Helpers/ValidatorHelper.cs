@@ -7,7 +7,7 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Win.Sikuli.Helpers
 {
-	public static class ValidatorHelper
+	internal static class ValidatorHelper
 	{
 		internal static IEnumerable<double?> GetDailyLowestIntraIntervalBalanceForPeriod(ISchedulerStateHolder stateHolder, ISkill singleSkill)
 		{
