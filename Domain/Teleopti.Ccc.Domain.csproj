@@ -806,13 +806,11 @@
     <Compile Include="ResourceCalculation\WorkShiftCalculatorWrap.cs" />
     <Compile Include="ResourceCalculation\WorkShiftCalculatorsManager.cs" />
     <Compile Include="ResourceCalculation\WorkShiftFinderService.cs" />
-    <Compile Include="Rta\IDatabaseReader.cs" />
-    <Compile Include="Rta\IDatabaseWriter.cs" />
-    <Compile Include="Rta\IAgentStateReadModelReader.cs" />
+    <Compile Include="ApplicationLayer\Rta\IDatabaseReader.cs" />
+    <Compile Include="ApplicationLayer\Rta\IDatabaseWriter.cs" />
+    <Compile Include="ApplicationLayer\Rta\IAgentStateReadModelReader.cs" />
     <Compile Include="ApplicationLayer\Rta\PersonOrganizationProvider.cs" />
-    <Compile Include="Rta\AlarmMappingInfo.cs" />
-    <Compile Include="Rta\StateCodeInfo.cs" />
-    <Compile Include="Rta\ScheduleLayer.cs" />
+    <Compile Include="ApplicationLayer\Rta\ScheduleLayer.cs" />
     <Compile Include="Scheduling\Assignment\DayOffMaxFlexCalculator.cs" />
     <Compile Include="Scheduling\Assignment\MoveShiftLayerDown.cs" />
     <Compile Include="Scheduling\Assignment\MoveShiftLayerUp.cs" />

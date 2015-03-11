@@ -1,7 +1,6 @@
 using System;
 using MbCache.Core;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta;
-using Teleopti.Ccc.Domain.Rta;
 using Teleopti.Ccc.Infrastructure.Rta;
 
 namespace Teleopti.Ccc.Web.Areas.Rta.Core.Server

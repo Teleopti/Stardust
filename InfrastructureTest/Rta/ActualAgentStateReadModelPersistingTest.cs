@@ -1,8 +1,8 @@
 using System;
 using NUnit.Framework;
 using SharpTestsEx;
+using Teleopti.Ccc.Domain.ApplicationLayer.Rta;
 using Teleopti.Ccc.Domain.Helper;
-using Teleopti.Ccc.Domain.Rta;
 using Teleopti.Ccc.Infrastructure.Rta;
 using Teleopti.Interfaces.Domain;
 

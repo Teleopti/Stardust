@@ -2,7 +2,7 @@
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 
-namespace Teleopti.Ccc.Domain.Rta
+namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta
 {
 	public class ResolvedPerson
 	{

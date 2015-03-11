@@ -5,7 +5,6 @@ using System.Linq;
 using Newtonsoft.Json;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta;
 using Teleopti.Ccc.Domain.Collection;
-using Teleopti.Ccc.Domain.Rta;
 using Teleopti.Ccc.Infrastructure.Rta;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.MessageBroker;

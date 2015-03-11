@@ -804,7 +804,6 @@
     <Compile Include="Optimization\RmsPeriodValueCalculatorTest.cs" />
     <Compile Include="Optimization\RelativeDailyDifferencesByPersonalSkillsExtractorTest.cs" />
     <Compile Include="Optimization\ScheduleMatrixLockableBitArrayConverterTest.cs" />
-    <Compile Include="RealTimeAdherence\DefaultStateGroupExceptionTest.cs" />
     <Compile Include="Forecasting\ActiveAgentCountTest.cs" />
     <Compile Include="Forecasting\DayHasBelowMinAgentsTest.cs" />
     <Compile Include="Forecasting\DayHasAboveMaxAgentsTest.cs" />
@@ -1460,7 +1459,6 @@
     </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Analyzer\" />
     <Folder Include="Properties\" />
   </ItemGroup>
   <ItemGroup>

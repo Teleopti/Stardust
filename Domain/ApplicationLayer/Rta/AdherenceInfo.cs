@@ -1,6 +1,5 @@
 using System;
 using Teleopti.Ccc.Domain.RealTimeAdherence;
-using Teleopti.Ccc.Domain.Rta;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta

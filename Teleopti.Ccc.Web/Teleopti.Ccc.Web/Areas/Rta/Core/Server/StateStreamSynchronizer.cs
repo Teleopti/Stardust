@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta;
 using Teleopti.Ccc.Domain.Collection;
-using Teleopti.Ccc.Domain.Rta;
 using Teleopti.Ccc.Infrastructure.ApplicationLayer;
 using Teleopti.Ccc.Infrastructure.DistributedLock;
 using Teleopti.Interfaces.Domain;

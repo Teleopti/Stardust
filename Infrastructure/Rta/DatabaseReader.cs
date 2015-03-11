@@ -7,7 +7,7 @@ using System.Data.SqlClient;
 using System.Globalization;
 using System.Linq;
 using log4net;
-using Teleopti.Ccc.Domain.Rta;
+using Teleopti.Ccc.Domain.ApplicationLayer.Rta;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Infrastructure.Rta

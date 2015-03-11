@@ -2,7 +2,7 @@
 using System.Drawing;
 using Teleopti.Interfaces.Domain;
 
-namespace Teleopti.Ccc.Domain.Rta
+namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta
 {
     public class ScheduleLayer
     {
