@@ -9,11 +9,14 @@
 				</span>
 				<div class="right-actions">
 					<span>
-			<div class="navbar-right" ng-controller="SearchCtrl">
-				<div class="input-prepend">
-					<i class="mdi mdi-magnify"></i>
-					<input type="text" placeholder="Search ..." ng-model="keyword" ng-change="searchKeyword()" />
-							<div ng-repeat="item in searchResult">{{item.FirstName}}</div>
+						<div ng-controller="SearchCtrl">
+							<i class="mdi mdi-magnify"></i>
+							<input type="text" placeholder="Search ..." ng-model="keyword" ng-change="searchKeyword()" />
+							<div class="search-results">
+								<ul class="wfm-list">
+									<li ng-repeat="item in searchResult">{{item.FirstName}}</li>
+								</ul>
+							</div> 
 						</div>
 					</span>
 					<span>
