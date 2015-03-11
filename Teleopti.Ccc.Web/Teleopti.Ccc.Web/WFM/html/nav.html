@@ -14,7 +14,7 @@
 							<input type="text" placeholder="Search ..." ng-model="keyword" ng-change="searchKeyword()" />
 							<div class="search-results material-depth-2">
 								<ul class="wfm-list">
-									<li class="animate-repeat" ng-repeat="item in searchResult">{{item.FirstName}}</li>
+									<li class="animate-repeat" ng-repeat="item in searchResult | orderBy:'FirstName' ">{{item.FirstName }}</li>
 									<li class="animate-repeat" ng-if="results.length == 0">
 </ul>
 							</div> 
