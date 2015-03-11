@@ -27,6 +27,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Tenant.Core
 		}
 
 		[Test]
+		//TODO: tenant - unique identity will be checked on db level currently - enough?
 		public void IdentityShouldBeSet()
 		{
 			var identity = RandomName.Make();
@@ -36,6 +37,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Tenant.Core
 		}
 
 		[Test]
+		//TODO: tenant - unique application logon will be checked on db level currently - enough?
 		public void ApplicationLogonShouldBeSet()
 		{
 			var applicationLogon = RandomName.Make();
