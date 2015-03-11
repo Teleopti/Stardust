@@ -1,3 +1,5 @@
+:: Runs from [repo]\Teleopti.Ccc.Web\Teleopti.Ccc.Web\WFM
+
 call ..\.node\npm install -g karma --save-dev
 call ..\.node\npm install -g karma-teamcity-reporter
 call ..\.node\npm install -g karma-chrome-launcher
