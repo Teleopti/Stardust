@@ -26,12 +26,3 @@ ul {
 	margin-right: 0;
 	margin-left: 0;
 }
-
-.global-search {
-	font-size: 14px !important;
-	padding-left: 5px;}
-
-.search-results {
-	position: fixed;
-	width: 17%;
-}
