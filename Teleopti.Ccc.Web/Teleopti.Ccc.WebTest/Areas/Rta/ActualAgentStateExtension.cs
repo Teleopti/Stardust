@@ -1,10 +1,10 @@
-﻿using System;
+using System;
 using System.Text;
 using Newtonsoft.Json;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.MessageBroker;
 
-namespace Teleopti.Ccc.Infrastructure.Rta
+namespace Teleopti.Ccc.WebTest.Areas.Rta
 {
 	public static class ActualAgentStateExtension
 	{
@@ -12,12 +12,6 @@ namespace Teleopti.Ccc.Infrastructure.Rta
 		{
 			var stateBytes = Convert.FromBase64String(notification.BinaryData);
 			return JsonConvert.DeserializeObject<AgentStateReadModel>(Encoding.UTF8.GetString(stateBytes));
-		}
-
-		public static void SeralizeActualAgentState(this Notification notification, AgentStateReadModel agentStateReadModel)
-		{
-			var domainObject = JsonConvert.SerializeObject(agentStateReadModel);
-			notification.BinaryData = Convert.ToBase64String(Encoding.UTF8.GetBytes(domainObject));
 		}
 
 	}

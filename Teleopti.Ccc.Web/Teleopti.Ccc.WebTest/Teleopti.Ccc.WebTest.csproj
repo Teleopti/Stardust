@@ -239,6 +239,7 @@
     <Compile Include="Areas\MyTime\Core\Common\DataProvider\LeaderboardSettingBasedBadgeProviderTest.cs" />
     <Compile Include="Areas\Permissions\OrganizationSelectionControllerTest.cs" />
     <Compile Include="Areas\Permissions\RolesControllerTest.cs" />
+    <Compile Include="Areas\Rta\ActualAgentStateExtension.cs" />
     <Compile Include="Areas\Rta\BelongsToDateTest.cs" />
     <Compile Include="Areas\Rta\CachingTest.cs" />
     <Compile Include="Areas\Rta\PersonNeutralAdherenceEventTest.cs" />

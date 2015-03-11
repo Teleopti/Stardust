@@ -1,5 +1,6 @@
 ﻿using Teleopti.Ccc.Domain.ApplicationLayer.Rta;
 using Teleopti.Ccc.Domain.Collection;
+using Teleopti.Interfaces;
 using Teleopti.Interfaces.MessageBroker.Client;
 
 namespace Teleopti.Ccc.Web.Areas.Rta.Core.Server.Adherence
@@ -31,15 +32,20 @@ namespace Teleopti.Ccc.Web.Areas.Rta.Core.Server.Adherence
 		private readonly AgentAdherenceAggregator _agentAdherenceAggregator;
 		private readonly AggregationState _aggregationState;
 
-		public AdherenceAggregator(IMessageSender messageSender, IAgentStateReadModelReader agentStateReadModelReader, IPersonOrganizationProvider personOrganizationProvider)
+		public AdherenceAggregator(
+			IMessageSender messageSender, 
+			IAgentStateReadModelReader agentStateReadModelReader, 
+			IPersonOrganizationProvider personOrganizationProvider,
+			IJsonSerializer jsonSerializer
+			)
 		{
 			_messageSender = messageSender;
 			_agentStateReadModelReader = agentStateReadModelReader;
 			_personOrganizationProvider = personOrganizationProvider;
 			_aggregationState = new AggregationState();
-			_teamAdherenceAggregator = new TeamAdherenceAggregator(_aggregationState);
-			_siteAdherenceAggregator = new SiteAdherenceAggregator(_aggregationState);
-			_agentAdherenceAggregator = new AgentAdherenceAggregator(_aggregationState);
+			_teamAdherenceAggregator = new TeamAdherenceAggregator(_aggregationState, jsonSerializer);
+			_siteAdherenceAggregator = new SiteAdherenceAggregator(_aggregationState, jsonSerializer);
+			_agentAdherenceAggregator = new AgentAdherenceAggregator(_aggregationState, jsonSerializer);
 		}
 
 		public void Aggregate(IAdherenceAggregatorInfo state)

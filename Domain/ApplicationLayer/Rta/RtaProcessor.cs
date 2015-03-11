@@ -1,6 +1,4 @@
-﻿using System;
-using Teleopti.Ccc.Domain.ApplicationLayer.Rta;
-using Teleopti.Interfaces.Domain;
+﻿using Teleopti.Ccc.Domain.ApplicationLayer.Rta;
 
 namespace Teleopti.Ccc.Web.Areas.Rta.Core.Server
 {
@@ -11,14 +9,12 @@ namespace Teleopti.Ccc.Web.Areas.Rta.Core.Server
 		private readonly IShiftEventPublisher _shiftEventPublisher;
 		private readonly IActivityEventPublisher _activityEventPublisher;
 		private readonly IStateEventPublisher _stateEventPublisher;
-		private readonly INow _now;
 
 		public RtaProcessor(IDatabaseReader databaseReader,
 			IStateMapper stateMapper,
 			IShiftEventPublisher shiftEventPublisher,
 			IActivityEventPublisher activityEventPublisher,
-			IStateEventPublisher stateEventPublisher,
-			INow now
+			IStateEventPublisher stateEventPublisher
 			)
 		{
 			_databaseReader = databaseReader;
@@ -26,7 +22,6 @@ namespace Teleopti.Ccc.Web.Areas.Rta.Core.Server
 			_shiftEventPublisher = shiftEventPublisher;
 			_activityEventPublisher = activityEventPublisher;
 			_stateEventPublisher = stateEventPublisher;
-			_now = now;
 		}
 
 		public void Process(

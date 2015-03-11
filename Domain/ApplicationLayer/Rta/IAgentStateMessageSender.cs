@@ -1,6 +1,7 @@
 ﻿using System;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta;
 using Teleopti.Ccc.Infrastructure.Rta;
+using Teleopti.Interfaces;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.MessageBroker;
 using Teleopti.Interfaces.MessageBroker.Client;
@@ -23,10 +24,12 @@ namespace Teleopti.Ccc.Web.Areas.Rta.Core.Server
 	public class AgentStateMessageSender : IAgentStateMessageSender
 	{
 		private readonly IMessageSender _messageSender;
+		private readonly IJsonSerializer _jsonSerializer;
 
-		public AgentStateMessageSender(IMessageSender messageSender)
+		public AgentStateMessageSender(IMessageSender messageSender, IJsonSerializer jsonSerializer)
 		{
 			_messageSender = messageSender;
+			_jsonSerializer = jsonSerializer;
 		}
 
 		public void Send(StateInfo state)
@@ -48,7 +51,7 @@ namespace Teleopti.Ccc.Web.Areas.Rta.Core.Server
 				DomainUpdateType = (int)DomainUpdateType.Insert,
 				BusinessUnitId = Subscription.IdToString(actualAgentState.BusinessUnitId)
 			};
-			notification.SeralizeActualAgentState(actualAgentState);
+			notification.SeralizeActualAgentState(_jsonSerializer, actualAgentState);
 
 			_messageSender.Send(notification);
 		}

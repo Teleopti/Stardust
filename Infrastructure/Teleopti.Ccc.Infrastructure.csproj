@@ -273,7 +273,6 @@
     <Compile Include="Rta\Persisters\SiteOutOfAdherenceReadModelPersister.cs" />
     <Compile Include="Rta\Persisters\TeamOutOfAdherenceReadModelPersister.cs" />
     <Compile Include="Repositories\TeamGamificationSettingRepository.cs" />
-    <Compile Include="Rta\ActualAgentStateExtension.cs" />
     <Compile Include="Rta\DatabaseConnectionFactory.cs" />
     <Compile Include="Rta\DatabaseConnectionStringHandler.cs" />
     <Compile Include="Rta\DatabaseReader.cs" />
