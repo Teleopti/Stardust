@@ -52,6 +52,10 @@
 			var canvasObjects = canvas.getObjects();
 			for (var idx in canvasObjects) {
 				canvasObjects[idx].selectable = allowSelection;
+				canvasObjects[idx].hasControls = allowSelection;
+				canvasObjects[idx].hasRotatingPoint = allowSelection;
+				canvasObjects[idx].hasBorders = allowSelection;
+				
 			}
 
 		};

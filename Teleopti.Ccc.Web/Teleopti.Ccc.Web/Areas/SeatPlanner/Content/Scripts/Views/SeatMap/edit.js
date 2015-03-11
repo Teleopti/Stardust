@@ -119,8 +119,10 @@
 
 		this.Copy = function () {
 			if (self.hasActiveGroup()) {
+				// selected separate objects
 				self.copiedGroup = self.canvas.getActiveGroup();
 			} else {
+				// individual object OR individual group
 				self.copiedObject = self.canvas.getActiveObject();
 				self.copiedGroup = null;
 			}
@@ -128,11 +130,9 @@
 
 		this.Paste = function () {
 			if (self.copiedGroup) {
-				self.CloneGroup(self.copiedGroup);
+				self.CloneSelectedItems(self.copiedGroup);
 			} else if (self.copiedObject) {
-
 				self.CloneObject(self.copiedObject);
-				
 			}
 		};
 
@@ -148,7 +148,7 @@
 			});
 		};
 
-		this.CloneGroup = function(cloneGroup) {
+		this.CloneSelectedItems = function(cloneGroup) {
 
 			self.canvas.deactivateAll();
 
@@ -165,13 +165,13 @@
 					childObjects.push(obj);
 					cloneCount++;
 					if (cloneCount == count) {
-						self.AfterCloneGroup(childObjects);
+						self.AfterCloneOfSelectedItems(childObjects);
 					}
 				});
 			}
 		}
 
-		this.AfterCloneGroup = function(childObjects) {
+		this.AfterCloneOfSelectedItems = function(childObjects) {
 
 			var group = new fabric.Group(childObjects.reverse(), {
 				canvas: self.canvas
@@ -181,8 +181,6 @@
 			group.saveCoords();
 			self.canvas.renderAll();
 		}
-
-
 
 		this.UpdateSeatDataOnPaste = function (obj) {
 			if (obj.type == 'group') {
@@ -324,7 +322,13 @@
 					}
 				});
 
-				if (activeGroup.forEachObject(function (o) { o.set("left", left); }));
+				if (activeGroup.forEachObject(function (o) {
+					var angle = o.angle;
+					o.setAngle(0);
+					o.set("left", left);
+					o.setAngle(angle);
+				}));
+				
 				self.canvas.renderAll();
 			}
 		}
@@ -354,9 +358,12 @@
 					}
 				});
 				activeGroup.forEachObject(function (o) {
+					var angle = o.angle;
+					o.setAngle(0);
 					o.set("top", top);
+					o.setAngle(angle);
 				});
-
+				
 				self.canvas.renderAll();
 			}
 		};
