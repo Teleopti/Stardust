@@ -641,6 +641,14 @@ namespace Teleopti.Ccc.Win.Scheduling
 				Refresh();
 				drawSkillGrid();
 			}
+			if (e.KeyCode == Keys.I && e.Shift && e.Alt)
+			{
+				SikuliHelper.SetInteractiveMode(true);
+			}
+			if (e.KeyCode == Keys.N && e.Shift && e.Alt)
+			{
+				SikuliHelper.SetInteractiveMode(false);
+			}
 			if (e.KeyCode == Keys.V && e.Alt && e.Shift)
 			{
 				SikuliHelper.EnterValidator(this);
