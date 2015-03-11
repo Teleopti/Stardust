@@ -45,6 +45,15 @@ namespace Teleopti.Ccc.WebTest.Areas.Tenant.Core
 			var result = target.Map(new PersonInfoModel { UserName = applicationLogon });
 			result.ApplicationLogonName.Should().Be.EqualTo(applicationLogon);
 		}
-	}
 
+		[Test]
+		//TODO: tenant - what about password policies? currently on checked on client side.
+		public void PasswordShouldBeSet()
+		{
+			var password = RandomName.Make();
+			var target = new PersonInfoMapper();
+			var result = target.Map(new PersonInfoModel { Password = password });
+			result.Password.Should().Be.EqualTo(password);
+		}
+	}
 }
