@@ -1,13 +1,10 @@
 using System;
 using System.Collections.Generic;
-using Teleopti.Ccc.Domain.Aop;
-using Teleopti.Ccc.Domain.ApplicationLayer.Rta;
 using Teleopti.Ccc.Domain.Collection;
-using Teleopti.Ccc.Infrastructure.ApplicationLayer;
-using Teleopti.Ccc.Infrastructure.DistributedLock;
+using Teleopti.Ccc.Domain.DistributedLock;
 using Teleopti.Interfaces.Domain;
 
-namespace Teleopti.Ccc.Web.Areas.Rta.Core.Server
+namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta
 {
 	public interface IStateStreamSynchronizer
 	{

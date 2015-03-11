@@ -1,4 +1,5 @@
 ﻿using System.Web.Mvc;
+using Teleopti.Ccc.Domain.ApplicationLayer.Rta;
 using Teleopti.Ccc.Web.Areas.Rta.Core.Server;
 
 namespace Teleopti.Ccc.Web.Areas.Rta.Controllers

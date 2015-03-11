@@ -4,16 +4,6 @@ using Teleopti.Ccc.Domain.ApplicationLayer;
 
 namespace Teleopti.Ccc.Infrastructure.ApplicationLayer
 {
-	public interface ICurrentEventPublisher
-	{
-		IEventPublisher Current();
-	}
-
-	public interface IEventPublisherScope
-	{
-		IDisposable OnThisThreadPublishTo(IEventPublisher eventPublisher);
-	}
-
 	public class CurrentEventPublisher : ICurrentEventPublisher, IEventPublisherScope
 	{
 		[ThreadStatic]

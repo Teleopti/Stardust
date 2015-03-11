@@ -195,8 +195,10 @@
     <Compile Include="ApplicationLayer\AdherencePercentageReadModelUpdatedMessage.cs" />
     <Compile Include="ApplicationLayer\Events\ScheduledResourcesChangedEvent.cs" />
     <Compile Include="ApplicationLayer\Events\SeatPlanAddedEvent.cs" />
+    <Compile Include="ApplicationLayer\ICurrentEventPublisher.cs" />
     <Compile Include="ApplicationLayer\IEventPopulatingPublisher.cs" />
     <Compile Include="ApplicationLayer\IEventPublisher.cs" />
+    <Compile Include="ApplicationLayer\IEventPublisherScope.cs" />
     <Compile Include="ApplicationLayer\IEventsPublisher.cs" />
     <Compile Include="ApplicationLayer\IgnoreDelayedMessages.cs" />
     <Compile Include="ApplicationLayer\IHandleEvent.cs" />
@@ -295,6 +297,7 @@
     <Compile Include="ApplicationLayer\Rta\StateMapper.cs" />
     <Compile Include="ApplicationLayer\Rta\StateMapping.cs" />
     <Compile Include="ApplicationLayer\Rta\StateMappingLoader.cs" />
+    <Compile Include="ApplicationLayer\Rta\StateStreamSynchronizer.cs" />
     <Compile Include="ApplicationLayer\Rta\TeamOutOfAdherenceReadModel.cs" />
     <Compile Include="ApplicationLayer\Rta\TeamOutOfAdherenceReadModelUpdater.cs" />
     <Compile Include="ApplicationLayer\ScheduleChangedEventHandlers\ ProjectionChangedEventShiftExtension.cs" />
@@ -373,6 +376,7 @@
     <Compile Include="ApplicationLayer\Events\ScheduleInitializeTriggeredEventForScheduleProjection.cs" />
     <Compile Include="ApplicationLayer\ScheduleChangedEventHandlers\ScheduleProjection\UpdateScheduleProjectionReadModel.cs" />
     <Compile Include="ApplicationLayer\SyncEventsPublisher.cs" />
+    <Compile Include="ApplicationLayer\SyncPublishToSingleHandler.cs" />
     <Compile Include="ApplicationLayer\TrackingMessageSender.cs" />
     <Compile Include="Aop\Core\AspectAttribute.cs" />
     <Compile Include="Auditing\AuditSetting.cs" />
@@ -492,6 +496,7 @@
     <Compile Include="DayOffPlanning\SmartDayOffBackToLegalStateService.cs" />
     <Compile Include="DayOffPlanning\TeDataDayOffDecisionMaker.cs" />
     <Compile Include="DayOffPlanning\TuiCaseSolver.cs" />
+    <Compile Include="DistributedLock\IDistributedLockAcquirer.cs" />
     <Compile Include="ETL\RunningEtlJob.cs" />
     <Compile Include="Forecasting\Angel\AverageStatistics.cs" />
     <Compile Include="Forecasting\Angel\ForecastingMeanAbsolutePercentageDeviation.cs" />

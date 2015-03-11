@@ -1,12 +1,8 @@
-﻿using System;
-using System.Linq;
+﻿using System.Linq;
 using System.Reflection;
-using System.Runtime.Serialization;
-using Teleopti.Ccc.Domain;
-using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Interfaces.Domain;
 
-namespace Teleopti.Ccc.Infrastructure.ApplicationLayer
+namespace Teleopti.Ccc.Domain.ApplicationLayer
 {
 	public class SyncPublishToSingleHandler : IEventPublisher
 	{

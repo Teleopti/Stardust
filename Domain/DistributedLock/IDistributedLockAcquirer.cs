@@ -1,6 +1,6 @@
 using System;
 
-namespace Teleopti.Ccc.Infrastructure.DistributedLock
+namespace Teleopti.Ccc.Domain.DistributedLock
 {
 	public interface IDistributedLockAcquirer
 	{

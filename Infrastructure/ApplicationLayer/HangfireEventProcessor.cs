@@ -1,6 +1,8 @@
 using System;
 using System.Linq;
 using Castle.DynamicProxy;
+using Teleopti.Ccc.Domain.ApplicationLayer;
+using Teleopti.Ccc.Domain.DistributedLock;
 using Teleopti.Ccc.Infrastructure.DistributedLock;
 using Teleopti.Interfaces;
 using Teleopti.Interfaces.Domain;
