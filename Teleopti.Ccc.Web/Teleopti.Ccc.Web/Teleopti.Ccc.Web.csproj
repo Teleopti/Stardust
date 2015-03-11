@@ -497,6 +497,7 @@
     <Compile Include="Areas\Tenant\Core\IReadNHibFiles.cs" />
     <Compile Include="Areas\Tenant\Core\NhibConfigEncryption.cs" />
     <Compile Include="Areas\Tenant\Core\ParseNhibFile.cs" />
+    <Compile Include="Areas\Tenant\Core\PersonInfoMapper.cs" />
     <Compile Include="Areas\Tenant\Core\ReadNHibFiles.cs" />
     <Compile Include="Areas\Tenant\Core\TenantSsoAuthenticator.cs" />
     <Compile Include="Areas\SeatPlanner\Controllers\ApplicationController.cs" />

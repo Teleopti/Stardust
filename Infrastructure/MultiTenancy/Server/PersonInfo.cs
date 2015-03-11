@@ -5,8 +5,6 @@ namespace Teleopti.Ccc.Infrastructure.MultiTenancy.Server
 {
 	public class PersonInfo
 	{
-		private string applicationLogonName;
-		private string identity;
 		private readonly Tenant tenant;
 
 #pragma warning disable 169
@@ -31,6 +29,8 @@ namespace Teleopti.Ccc.Infrastructure.MultiTenancy.Server
 
 		public virtual Guid Id { get; set; }
 		public virtual string Password { get; set; }
+		public virtual string Identity { get; protected set; }
+		public virtual string ApplicationLogonName { get; protected set; }
 
 		public virtual string Tenant
 		{
@@ -39,12 +39,12 @@ namespace Teleopti.Ccc.Infrastructure.MultiTenancy.Server
 
 		public virtual void SetApplicationLogonName(string logonName)
 		{
-			applicationLogonName = logonName;
+			ApplicationLogonName = logonName;
 		}
 
 		public virtual void SetIdentity(string identityName)
 		{
-			identity = identityName;
+			Identity = identityName;
 		}
 	}
 }

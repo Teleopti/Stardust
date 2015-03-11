@@ -13,12 +13,12 @@
 		
 		<join table="AuthenticationInfo" fetch="join" optional="true">
 			<key column="Person" />
-			<property column="[Identity]" name="identity" />
+			<property column="[Identity]" name="Identity" access="property" />
 		</join>
 
 		<join table="ApplicationAuthenticationInfo" fetch="join" optional="true">
 			<key column="Person"/>
-			<property name="applicationLogonName" />
+			<property name="ApplicationLogonName" access="property"/>
 			<property name="Password" access="property" />
 		</join>
 	</class>
@@ -26,7 +26,7 @@
 	<query name="identityUserQuery_OldSchema">
 		<![CDATA[
 select p from PersonInfo_OldSchema p
-where p.identity = :identity
+where p.Identity = :identity
 and (p.terminalDate is null or p.terminalDate>getdate())
 ]]>
 	</query>
@@ -34,7 +34,7 @@ and (p.terminalDate is null or p.terminalDate>getdate())
 	<query name="applicationUserQuery_OldSchema">
 		<![CDATA[
 select pi from PersonInfo_OldSchema pi
-where pi.applicationLogonName=:userName
+where pi.ApplicationLogonName=:userName
 and (pi.terminalDate is null or pi.terminalDate>getdate())
 ]]>
 	</query>

@@ -251,6 +251,7 @@
     <Compile Include="Areas\Tenant\Core\IoCTest.cs" />
     <Compile Include="Areas\Tenant\Core\LogTenancyLogonAttemptTest.cs" />
     <Compile Include="Areas\Tenant\Core\NhibConfigEncryptionTest.cs" />
+    <Compile Include="Areas\Tenant\Core\PersonInfoMapperTest.cs" />
     <Compile Include="Areas\Tenant\Core\ReadNHibFilesTest.cs" />
     <Compile Include="Areas\Tenant\Core\SuccessfulPasswordPolicy.cs" />
     <Compile Include="Areas\Tenant\Core\LoginAttemptModelFactoryForWebTest.cs" />

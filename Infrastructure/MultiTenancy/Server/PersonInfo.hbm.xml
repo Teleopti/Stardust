@@ -11,8 +11,8 @@
 				type="Teleopti.Ccc.Infrastructure.NHibernateConfiguration.DateOnlyMappingType, Teleopti.Ccc.Infrastructure"/>
 		<many-to-one name="tenant" class="Tenant" />
 		
-		<property name="identity" column="[Identity]"/>
-		<property name="applicationLogonName" />
+		<property name="Identity" column="[Identity]" access="property"/>
+		<property name="ApplicationLogonName" access="property"/>
 		<property name="Password" access="property" />
 	</class>
 
