@@ -93,7 +93,7 @@
                                 <tr id="DayButtons"  runat="server">
                                     <td id="tdDateLabel" runat="server" class="ReportSelectionLabel">xxDate:</td>
                                     <td><asp:ImageButton ID="imageButtonPreviousDay" runat="server" 
-                                            ImageUrl="images/prev.gif" onclick="imageButtonPreviousDay_Click"/></td>
+                                            ImageUrl="images/previous.gif" onclick="imageButtonPreviousDay_Click"/></td>
                                     <td id="tdDateText" runat="server" align="center">xx2008-07-02</td>
                                     <td><asp:ImageButton ID="imageButtonNextDay" runat="server" 
                                             ImageUrl="images/next.gif" onclick="imageButtonNextDay_Click"/></td>
