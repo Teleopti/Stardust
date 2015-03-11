@@ -205,9 +205,13 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 			{
 				StateHolderReader.Instance.StateReader.SessionScopeData.MickeMode = true;
 			}
-			if (e.KeyCode == Keys.T && e.Shift && e.Alt)
+			if (e.KeyCode == Keys.I && e.Shift && e.Alt)
 			{
 				SikuliHelper.SetInteractiveMode(true);
+			}
+			if (e.KeyCode == Keys.N && e.Shift && e.Alt)
+			{
+				SikuliHelper.SetInteractiveMode(false);
 			}
 			if (e.KeyCode == Keys.V && e.Shift && e.Alt)
 			{
