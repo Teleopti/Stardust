@@ -8,6 +8,7 @@ using Teleopti.Ccc.TestCommon.TestData;
 
 namespace Teleopti.Ccc.InfrastructureTest.MultiTenancy.Server
 {
+	[RestoreDatabaseAfterTest]
 	public class PersistPersonInfoTest
 	{
 		private Tenant tenant;
