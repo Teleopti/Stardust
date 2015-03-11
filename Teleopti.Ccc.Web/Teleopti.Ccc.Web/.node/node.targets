@@ -23,17 +23,17 @@
 
 		<!-- NPM flatten command -->
 		<NpmFlattenCmd>$(NodeDir)flatten-packages</NpmFlattenCmd>
-		<NpmInstallFlattenPackages>"$(NpmCmd)" install -g flatten-packages -save-dev</NpmInstallFlattenPackages>
+		<NpmInstallFlattenPackages>"$(NpmCmd)" install -g flatten-packages@0.1.4 -save-dev</NpmInstallFlattenPackages>
 		
 		<!-- Protractor install command -->
 		<NpmInstallProtractorCmd>"$(NpmCmd)" update -g protractor -save-dev</NpmInstallProtractorCmd>
 
 		<!-- kss install command -->
-		<NpmInstallKssCmd>"$(NpmCmd)" install -g kss -save-dev</NpmInstallKssCmd>
+		<NpmInstallKssCmd>"$(NpmCmd)" install -g kss@2.0.2 -save-dev</NpmInstallKssCmd>
 		<KssGenerateStyleGuide>$(NodeDir)kss-node $(MSBuildProjectDirectory)\WFM\css $(MSBuildProjectDirectory)\WFM\styleguide $(MSBuildProjectDirectory)\WFM\css\styleguide.md --template $(MSBuildProjectDirectory)\WFM\wfm-template</KssGenerateStyleGuide>
 
 		<!-- grunt-cli install command -->
-		<NpmInstallGruntCliCmd>"$(NpmCmd)" install -g grunt-cli -save-dev</NpmInstallGruntCliCmd>
+		<NpmInstallGruntCliCmd>"$(NpmCmd)" install -g grunt-cli@0.1.13 -save-dev</NpmInstallGruntCliCmd>
 	</PropertyGroup>
 
 	<!-- Runs NPM command -->
