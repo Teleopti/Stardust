@@ -794,7 +794,7 @@
     <Compile Include="Sikuli\SikuliResultView.Designer.cs">
       <DependentUpon>SikuliResultView.cs</DependentUpon>
     </Compile>
-    <Compile Include="Sikuli\Helpers\SikuliHelper.cs" />
+    <Compile Include="Sikuli\SikuliHelper.cs" />
     <Compile Include="Sikuli\Helpers\SikuliValidationResult.cs" />
     <Compile Include="Sikuli\SikuliValidatorFactory.cs" />
     <Compile Include="Sikuli\SikuliValidatorRegister.cs" />
