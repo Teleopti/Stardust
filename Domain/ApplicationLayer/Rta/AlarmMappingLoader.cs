@@ -9,10 +9,15 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta
 	public class AlarmMappingLoader : IAlarmMappingLoader
 	{
 		private readonly IStateGroupActivityAlarmRepository _stateGroupActivityAlarmRepository;
+		private readonly IAppliedAdherence _appliedAdherence;
 
-		public AlarmMappingLoader(IStateGroupActivityAlarmRepository stateGroupActivityAlarmRepository)
+		public AlarmMappingLoader(
+			IStateGroupActivityAlarmRepository stateGroupActivityAlarmRepository, 
+			IAppliedAdherence appliedAdherence
+			)
 		{
 			_stateGroupActivityAlarmRepository = stateGroupActivityAlarmRepository;
+			_appliedAdherence = appliedAdherence;
 		}
 
 		[AllBusinessUnitsUnitOfWork]
@@ -30,6 +35,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta
 					ActivityId = activityId,
 					AlarmTypeId = m.AlarmType.Id.Value,
 					AlarmName = m.AlarmType.Description.Name,
+					Adherence = AdherenceInfo.ConvertAdherence(_appliedAdherence.ForAlarm(m.AlarmType)),
 					StaffingEffect = (int) m.AlarmType.StaffingEffect,
 					DisplayColor = m.AlarmType.DisplayColor.ToArgb(),
 					ThresholdTime = m.AlarmType.ThresholdTime.Ticks
@@ -37,4 +43,5 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta
 				).ToArray();
 		}
 	}
+
 }

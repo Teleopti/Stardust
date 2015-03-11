@@ -35,13 +35,6 @@ namespace Teleopti.Ccc.Domain.RealTimeAdherence
             set{ _staffingEffect = value;}
         }
 
-		public virtual Adherence GuessAdherence()
-		{
-			if (Adherence.HasValue) 
-				return Adherence.Value;
-			return StaffingEffect.Equals(0) ? Interfaces.Domain.Adherence.In : Interfaces.Domain.Adherence.Out;
-		}
-
 		public virtual Adherence? Adherence
 		{
 			get { return _adherence; }

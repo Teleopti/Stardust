@@ -47,16 +47,18 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta
 		public void ShouldPublishActivityStartBeforeAdherence()
 		{
 			var personId = Guid.NewGuid();
+			var phone = Guid.NewGuid();
 			database
 				.WithDefaultsFromState(new ExternalUserStateForTest())
 				.WithUser("usercode", personId)
-				.WithSchedule(personId, Guid.NewGuid(), "2014-10-20 10:00", "2014-10-20 11:00");
+				.WithSchedule(personId, phone, "2014-10-20 10:00", "2014-10-20 11:00")
+				.WithAlarm("phone", phone, 0);
 			now.Is("2014-10-20 10:00");
 
 			target.SaveState(new ExternalUserStateForTest
 			{
 				UserCode = "usercode",
-				StateCode = "statecode"
+				StateCode = "phone"
 			});
 
 			var before = publisher.PublishedEvents.IndexOf(publisher.PublishedEvents.OfType<PersonActivityStartEvent>().Single());

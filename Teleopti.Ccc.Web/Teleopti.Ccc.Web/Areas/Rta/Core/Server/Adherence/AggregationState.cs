@@ -27,7 +27,7 @@ namespace Teleopti.Ccc.Web.Areas.Rta.Core.Server.Adherence
 			}
 			, (guid, data) =>
 			{
-				adherenceChanged = !StateInfo.AdherenceFor(data.AgentStateReadModel).Equals(state.Adherence);
+				adherenceChanged = !AdherenceInfo.AdherenceFor(data.AgentStateReadModel).Equals(state.Adherence);
 				data.AgentStateReadModel = actualAgentState;
 				data.TeamId = state.TeamId;
 				data.SiteId = state.SiteId;
@@ -40,14 +40,14 @@ namespace Teleopti.Ccc.Web.Areas.Rta.Core.Server.Adherence
 		{
 			return _aggregationDatas
 					.Where(k => k.Value.TeamId == teamId)
-					.Count(x => StateInfo.AdherenceFor(x.Value.AgentStateReadModel).Equals(Domain.ApplicationLayer.Rta.Adherence.Out));
+					.Count(x => AdherenceInfo.AdherenceFor(x.Value.AgentStateReadModel).Equals(Domain.ApplicationLayer.Rta.AdherenceState.Out));
 		}
 
 		public int GetOutOfAdherenceForSite(Guid siteId)
 		{
 			return _aggregationDatas
 				.Where(k => k.Value.SiteId == siteId)
-				.Count(x => StateInfo.AdherenceFor(x.Value.AgentStateReadModel).Equals(Domain.ApplicationLayer.Rta.Adherence.Out));
+				.Count(x => AdherenceInfo.AdherenceFor(x.Value.AgentStateReadModel).Equals(Domain.ApplicationLayer.Rta.AdherenceState.Out));
 		}
 
 		public IEnumerable<AgentStateReadModel> GetActualAgentStateForTeam(Guid teamId)

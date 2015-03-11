@@ -6,7 +6,6 @@ using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Rta;
 using Teleopti.Interfaces.Domain;
-using Adherence = Teleopti.Ccc.Domain.ApplicationLayer.Rta.Adherence;
 
 namespace Teleopti.Ccc.Infrastructure.Rta
 {
@@ -36,7 +35,7 @@ namespace Teleopti.Ccc.Infrastructure.Rta
 				personIds.AddRange(_personRepository.FindPeopleBelongTeam(team, timePeriod).Select(x => x.Id.GetValueOrDefault()));
 			}
 			var lastStates = _statisticRepository.LoadLastAgentState(personIds);
-			return lastStates.Count(x => StateInfo.AdherenceFor(x) == Adherence.Out);
+			return lastStates.Count(x => AdherenceInfo.AdherenceFor(x) == AdherenceState.Out);
 		}
 	}
 }

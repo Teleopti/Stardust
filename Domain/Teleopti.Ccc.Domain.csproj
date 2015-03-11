@@ -173,6 +173,7 @@
     <Compile Include="ApplicationLayer\Events\PersonActivityStartEvent.cs" />
     <Compile Include="ApplicationLayer\Events\PersonDeletedEvent.cs" />
     <Compile Include="ApplicationLayer\Events\PersonInAdherenceEvent.cs" />
+    <Compile Include="ApplicationLayer\Events\PersonNeutralAdherenceEvent.cs" />
     <Compile Include="ApplicationLayer\Events\PersonOutOfAdherenceEvent.cs" />
     <Compile Include="ApplicationLayer\Events\PersonPeriodAddedEvent.cs" />
     <Compile Include="ApplicationLayer\Events\PersonPeriodDetail.cs" />
@@ -227,6 +228,7 @@
     <Compile Include="ApplicationLayer\Rta\IAdherenceDetailsReadModelPersister.cs" />
     <Compile Include="ApplicationLayer\Rta\IAdherenceEventPublisher.cs" />
     <Compile Include="ApplicationLayer\Rta\IAlarmMappingLoader.cs" />
+    <Compile Include="ApplicationLayer\Rta\IAppliedAdherence.cs" />
     <Compile Include="ApplicationLayer\Rta\ICacheInvalidator.cs" />
     <Compile Include="ApplicationLayer\Rta\IStateCodeAdder.cs" />
     <Compile Include="ApplicationLayer\Rta\IStateMapper.cs" />

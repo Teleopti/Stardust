@@ -7,6 +7,7 @@ using System.Data.SqlClient;
 using System.Globalization;
 using System.Linq;
 using log4net;
+using Teleopti.Ccc.Domain.ApplicationLayer.Rta;
 using Teleopti.Ccc.Domain.Rta;
 using Teleopti.Interfaces.Domain;
 
@@ -125,6 +126,7 @@ namespace Teleopti.Ccc.Infrastructure.Rta
 							AlarmStart = reader.NullableDateTime("AlarmStart"),
 							PersonId = reader.Guid("PersonId"),
 							StaffingEffect = reader.NullableDouble("StaffingEffect"),
+							Adherence = reader.NullableEnum<AdherenceState>("Adherence"),
 							TeamId = reader.NullableGuid("TeamId"),
 							SiteId = reader.NullableGuid("SiteId")
 						};
@@ -251,6 +253,15 @@ namespace Teleopti.Ccc.Infrastructure.Rta
 		{
 			var ordinal = reader.GetOrdinal(name);
 			return reader.GetGuid(ordinal);
+		}
+
+		public static T? NullableEnum<T>(this IDataReader reader, string name)
+			where T: struct
+		{
+			var ordinal = reader.GetOrdinal(name);
+			return !reader.IsDBNull(ordinal)
+				? (T) Enum.ToObject(typeof(T), reader.GetInt32(ordinal))
+				: default(T);
 		}
 
 		public static int? NullableInt(this IDataReader reader, string name)

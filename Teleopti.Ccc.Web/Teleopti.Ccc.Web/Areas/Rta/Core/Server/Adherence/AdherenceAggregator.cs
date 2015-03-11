@@ -57,7 +57,7 @@ namespace Teleopti.Ccc.Web.Areas.Rta.Core.Server.Adherence
 					continue;
 				var adherenceAggregatorInfo = new AdherenceAggregatorInfo(actualAgentState, person)
 				{
-					Adherence = StateInfo.AdherenceFor(actualAgentState)
+					Adherence = AdherenceInfo.AdherenceFor(actualAgentState)
 				};
 				aggregate(adherenceAggregatorInfo, false);
 			}

@@ -1,5 +1,4 @@
 using System;
-using Teleopti.Ccc.Domain.Rta;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta
@@ -38,18 +37,15 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta
 				NextActivityStartTime = fromStorage.NextStart,
 				AlarmTypeId = fromStorage.AlarmId,
 				AlarmTypeStartTime = fromStorage.StateStart,
-				StaffingEffect = fromStorage.StaffingEffect
+				StaffingEffect = fromStorage.StaffingEffect,
+				Adherence = fromStorage.Adherence
 			};
 		}
 
 		public AgentState MakePreviousState(Guid personId, AgentStateReadModel fromStorage)
 		{
 			if (fromStorage == null)
-				return new AgentState
-				{
-					PersonId = personId,
-					StateGroupId = Guid.NewGuid()
-				};
+				return MakeEmpty(personId);
 			return new AgentState
 			{
 				PersonId = fromStorage.PersonId,
@@ -64,7 +60,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta
 				NextActivityStartTime = fromStorage.NextStart,
 				AlarmTypeId = fromStorage.AlarmId,
 				AlarmTypeStartTime = fromStorage.StateStart,
-				StaffingEffect = fromStorage.StaffingEffect
+				StaffingEffect = fromStorage.StaffingEffect,
+				Adherence = fromStorage.Adherence
 			};
 		}
 
@@ -72,9 +69,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta
 		{
 			var platformTypeId = string.IsNullOrEmpty(input.PlatformTypeId) ?  previous.PlatformTypeId : input.ParsedPlatformTypeId();
 			var stateCode = input.StateCode ?? previous.StateCode;
-			//var state = _alarmFinder.StateCodeInfoFor(stateCode, input.StateDescription, platformTypeId, person.BusinessUnitId);
 			var state = _stateMapper.StateFor(person.BusinessUnitId, platformTypeId, stateCode, input.StateDescription);
-			//var alarm = _alarmFinder.GetAlarm(scheduleInfo.CurrentActivityId(), stateGroup.StateGroupId, person.BusinessUnitId) ?? new AlarmMappingInfo();
 			var alarm = _stateMapper.AlarmFor(person.BusinessUnitId, stateCode, scheduleInfo.CurrentActivityId()) ?? new AlarmMapping();
 			var agentState = new AgentState
 			{
@@ -90,7 +85,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta
 				AlarmTypeStartTime = alarm.AlarmTypeId == previous.AlarmTypeId ? previous.AlarmTypeStartTime : currentTime,
 				NextActivityId = scheduleInfo.NextActivityId(),
 				NextActivityStartTime = scheduleInfo.NextActivityStartTime(),
-				StaffingEffect = alarm.StaffingEffect
+				StaffingEffect = alarm.StaffingEffect,
+				Adherence = alarm.Adherence
 			};
 			agentState.UseAssembleMethod(() => new AgentStateReadModel
 			{
@@ -112,6 +108,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta
 				ScheduledNext = scheduleInfo.NextActivityName(),
 				ScheduledNextId = scheduleInfo.NextActivityId(),
 				StaffingEffect = agentState.StaffingEffect,
+				Adherence = agentState.Adherence,
 				State = state.StateGroupName,
 				StateCode = agentState.StateCode,
 				StateId = agentState.StateGroupId,

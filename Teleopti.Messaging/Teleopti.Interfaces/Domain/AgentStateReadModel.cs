@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Globalization;
+using Teleopti.Ccc.Domain.ApplicationLayer.Rta;
 
 namespace Teleopti.Interfaces.Domain
 {
@@ -31,6 +32,7 @@ namespace Teleopti.Interfaces.Domain
 		public string AlarmName { get; set; }
 		public int? Color { get; set; }
 		public double? StaffingEffect { get; set; }
+		public AdherenceState? Adherence { get; set; }
 
 		public override string ToString()
 		{

@@ -1,14 +1,16 @@
 using System;
+using Teleopti.Ccc.Domain.RealTimeAdherence;
 using Teleopti.Ccc.Domain.Rta;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta
 {
-	public enum Adherence
+	public enum AdherenceState
 	{
-		None,
+		Unknown,
 		In,
-		Out
+		Out,
+		Neutral
 	}
 
 	public class AdherenceInfo
@@ -16,10 +18,10 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta
 		private readonly ExternalUserStateInputModel _input;
 		private readonly PersonOrganizationData _person;
 		private readonly IStateMapper _stateMapper;
-		private readonly Lazy<Adherence> _adherence;
-		private readonly Lazy<Adherence> _adherenceForPreviousState;
-		private readonly Lazy<Adherence> _adherenceForPreviousStateAndCurrentActivity;
-		private readonly Lazy<Adherence> _adherenceForNewStateAndPreviousActivity;
+		private readonly Lazy<AdherenceState> _adherence;
+		private readonly Lazy<AdherenceState> _adherenceForPreviousState;
+		private readonly Lazy<AdherenceState> _adherenceForPreviousStateAndCurrentActivity;
+		private readonly Lazy<AdherenceState> _adherenceForNewStateAndPreviousActivity;
 
 		public AdherenceInfo(
 			ExternalUserStateInputModel input, 
@@ -32,72 +34,66 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta
 			_person = person;
 			_stateMapper = stateMapper;
 
-			_adherence = new Lazy<Adherence>(() => adherenceFor(agentState.CurrentState()));
-			_adherenceForPreviousState = new Lazy<Adherence>(() => adherenceFor(agentState.PreviousState()));
-			_adherenceForPreviousStateAndCurrentActivity = new Lazy<Adherence>(() => adherenceFor(agentState.PreviousState().StateCode, agentState.CurrentState().ActivityId));
-			_adherenceForNewStateAndPreviousActivity = new Lazy<Adherence>(() => adherenceFor(_input.StateCode, scheduleInfo.PreviousActivity()));
+			_adherence = new Lazy<AdherenceState>(() => adherenceFor(agentState.CurrentState()));
+			_adherenceForPreviousState = new Lazy<AdherenceState>(() => adherenceFor(agentState.PreviousState()));
+			_adherenceForPreviousStateAndCurrentActivity = new Lazy<AdherenceState>(() => adherenceFor(agentState.PreviousState().StateCode, agentState.CurrentState().ActivityId));
+			_adherenceForNewStateAndPreviousActivity = new Lazy<AdherenceState>(() => adherenceFor(_input.StateCode, scheduleInfo.PreviousActivity()));
 		}
 
-		public Adherence CurrentAdherence()
+		public AdherenceState CurrentAdherence()
 		{
 			return _adherence.Value;
 		}
-		public Adherence AdherenceForPreviousState()
+
+		public AdherenceState AdherenceForPreviousState()
 		{
 			return _adherenceForPreviousState.Value;
 		}
 
-		public Adherence AdherenceForPreviousStateAndCurrentActivity()
+		public AdherenceState AdherenceForPreviousStateAndCurrentActivity()
 		{
 			return _adherenceForPreviousStateAndCurrentActivity.Value;
 		}
 
-		public Adherence AdherenceForNewStateAndPreviousActivity()
+		public AdherenceState AdherenceForNewStateAndPreviousActivity()
 		{
 			return _adherenceForNewStateAndPreviousActivity.Value;
 		}
 		
-		public static Adherence AdherenceFor(AgentStateReadModel stateReadModel)
+		private AdherenceState adherenceFor(AgentState state)
 		{
-			return adherenceFor(stateReadModel.StaffingEffect);
+			return state.Adherence.HasValue ? state.Adherence.Value : AdherenceState.Unknown;
 		}
 
-
-		private static Adherence adherenceFor(AgentState state)
-		{
-			return adherenceFor(state.StaffingEffect);
-		}
-
-		private static Adherence adherenceFor(AlarmMapping alarmMapping)
-		{
-			return adherenceFor(alarmMapping.StaffingEffect);
-		}
-
-		private static Adherence adherenceFor(double? staffingEffect)
-		{
-			if (staffingEffect.HasValue)
-				return staffingEffect.Value.Equals(0) ? Adherence.In : Adherence.Out;
-			return Adherence.None;
-		}
-
-		private Adherence adherenceFor(string stateCode, ScheduleLayer activity)
+		private AdherenceState adherenceFor(string stateCode, ScheduleLayer activity)
 		{
 			if (activity == null)
-				return Adherence.None;
+				return adherenceFor(stateCode, (Guid?) null);
 			return adherenceFor(stateCode, activity.PayloadId);
 		}
 
-		private Adherence adherenceFor(string stateCode, Guid? activityId)
+		private AdherenceState adherenceFor(string stateCode, Guid? activityId)
 		{
-			//var stateGroup = _alarmFinder.StateCodeInfoFor(
-			//	stateCode, null,
-			//	_input.ParsedPlatformTypeId(),
-			//	_person.BusinessUnitId);
-			//var alarm = _alarmFinder.GetAlarm(activityId, stateGroup.StateGroupId, _person.BusinessUnitId);
 			var alarm = _stateMapper.AlarmFor(_person.BusinessUnitId, stateCode, activityId);
 			if (alarm == null)
-				return Adherence.None;
-			return adherenceFor(alarm);
+				return AdherenceState.Unknown;
+			return alarm.Adherence;
+		}
+
+		public static AdherenceState ConvertAdherence(Adherence adherence)
+		{
+			AdherenceState adherenceState;
+			if (!Enum.TryParse(adherence.ToString(), out adherenceState))
+				return AdherenceState.Unknown;
+			return adherenceState;
+		}
+
+		public static AdherenceState AdherenceFor(AgentStateReadModel readModel)
+		{
+			var staffingEffect = readModel.StaffingEffect;
+			if (staffingEffect.HasValue)
+				return ConvertAdherence(ByStaffingEffect.ForStaffingEffect(staffingEffect.Value));
+			return AdherenceState.Unknown;
 		}
 
 	}

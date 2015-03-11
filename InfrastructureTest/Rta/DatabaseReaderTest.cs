@@ -3,13 +3,13 @@ using System.Data.SqlClient;
 using System.Linq;
 using NUnit.Framework;
 using SharpTestsEx;
+using Teleopti.Ccc.Domain.ApplicationLayer.Rta;
 using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.Rta;
 using Teleopti.Ccc.Infrastructure.Repositories;
-using Teleopti.Ccc.Infrastructure.Rta;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Interfaces.Domain;
@@ -85,6 +85,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta
 				ScheduledNext = "next",
 				ScheduledNextId = Guid.NewGuid(),
 				StaffingEffect = 1,
+				Adherence = AdherenceState.Neutral,
 				State = "state",
 				StateCode = "statecode",
 				StateId = Guid.NewGuid(),
@@ -111,6 +112,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta
 			result.ScheduledNext.Should().Be(state.ScheduledNext);
 			result.ScheduledNextId.Should().Be(state.ScheduledNextId);
 			result.StaffingEffect.Should().Be(state.StaffingEffect);
+			result.Adherence.Should().Be(state.Adherence);
 			result.State.Should().Be(state.State);
 			result.StateCode.Should().Be(state.StateCode);
 			result.StateId.Should().Be(state.StateId);

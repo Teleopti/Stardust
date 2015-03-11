@@ -39,11 +39,20 @@ namespace Teleopti.Ccc.TestCommon.IoC
 
 		protected virtual FakeToggleManager Toggles()
 		{
-			var fixtureToggles = _fixtureType.GetCustomAttributes(typeof(ToggleAttribute), false).Cast<ToggleAttribute>();
-			var testToggles = _method.GetCustomAttributes(typeof(ToggleAttribute), false).Cast<ToggleAttribute>();
 			var toggles = new FakeToggleManager();
-			fixtureToggles.ForEach(a => toggles.Enable(a.Toggle));
-			testToggles.ForEach(a => toggles.Enable(a.Toggle));
+
+			var enableTogglesFixture = _fixtureType.GetCustomAttributes(typeof(ToggleAttribute), false).Cast<ToggleAttribute>();
+			var enableTogglesTest = _method.GetCustomAttributes(typeof(ToggleAttribute), false).Cast<ToggleAttribute>();
+			var enableToggles = enableTogglesFixture.Union(enableTogglesTest);
+
+			enableToggles.ForEach(a => toggles.Enable(a.Toggle));
+
+			var disableTogglesFixture = _fixtureType.GetCustomAttributes(typeof(ToggleOffAttribute), false).Cast<ToggleOffAttribute>();
+			var disableTogglesTest = _method.GetCustomAttributes(typeof(ToggleOffAttribute), false).Cast<ToggleOffAttribute>();
+			var disableToggles = disableTogglesFixture.Union(disableTogglesTest);
+
+			disableToggles.ForEach(a => toggles.Disable(a.Toggle));
+
 			return toggles;
 		}
 

@@ -21,6 +21,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta
 		public Guid? AlarmTypeId { get; set; }
 		public DateTime? AlarmTypeStartTime { get; set; }
 		public double? StaffingEffect { get; set; }
+		public AdherenceState? Adherence { get; set; }
 
 
 		

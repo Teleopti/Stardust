@@ -140,7 +140,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta
 				.WithBusinessUnit(businessUnitId)
 				.WithUser("usercode", personId, businessUnitId)
 				.WithSchedule(personId, activityId, "phone", "2014-10-20 10:00", "2014-10-20 11:00")
-				.WithAlarm("statecode", activityId, 1d);
+				.WithAlarm("statecode", activityId, 1);
 			now.Is("2014-10-20 09:50");
 
 			target.SaveState(new ExternalUserStateForTest

@@ -25,6 +25,7 @@ CREATE  PROCEDURE [RTA].[rta_addorupdate_actualagentstate]
 @Color int = NULL,
 @AlarmStart datetime = NULL,
 @StaffingEffect float = NULL,
+@Adherence int = NULL,
 @ReceivedTime datetime = NULL,
 @BatchId datetime = NULL,
 @OriginalDataSourceId nvarchar(50) = NULL,
@@ -51,6 +52,7 @@ BEGIN
                       Color = @Color,
                       AlarmStart = @AlarmStart, 
                       StaffingEffect = @StaffingEffect,
+					  Adherence = @Adherence,
                       ReceivedTime = @ReceivedTime,
                       BatchId = @BatchId,
                       OriginalDataSourceId = @OriginalDataSourceId,
@@ -62,11 +64,11 @@ BEGIN
            If @@ROWCOUNT = 0     
            insert into [RTA].[ActualAgentState]
 		   (PersonId, StateCode, PlatformTypeId, State, StateId, Scheduled, ScheduledId, StateStart,
-			ScheduledNext, ScheduledNextId, NextStart, AlarmName, AlarmId, Color, AlarmStart, StaffingEffect, 
-			ReceivedTime, BatchId, OriginalDataSourceId, BusinessUnitId,TeamId,SiteId)
+			ScheduledNext, ScheduledNextId, NextStart, AlarmName, AlarmId, Color, AlarmStart, StaffingEffect,
+			Adherence, ReceivedTime, BatchId, OriginalDataSourceId, BusinessUnitId,TeamId,SiteId)
            values(@PersonId, @StateCode, @PlatformTypeId, @State, @StateId, @Scheduled, @ScheduledId, @StateStart,
-			@ScheduledNext, @ScheduledNextId, @NextStart, @AlarmName, @AlarmId, @Color, @AlarmStart, @StaffingEffect, 
-			@ReceivedTime, @BatchId, @OriginalDataSourceId, @BusinessUnitId,@TeamId,@SiteId)
+			@ScheduledNext, @ScheduledNextId, @NextStart, @AlarmName, @AlarmId, @Color, @AlarmStart, @StaffingEffect,
+			@Adherence, @ReceivedTime, @BatchId, @OriginalDataSourceId, @BusinessUnitId,@TeamId,@SiteId)
 END
 
 GO

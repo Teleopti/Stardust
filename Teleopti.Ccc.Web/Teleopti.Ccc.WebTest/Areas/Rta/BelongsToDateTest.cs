@@ -8,6 +8,7 @@ using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.IoC;
 using Teleopti.Ccc.Web.Areas.Rta;
+using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.WebTest.Areas.Rta
 {
@@ -53,7 +54,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta
 			Database
 				.WithUser("usercode", personId)
 				.WithSchedule(personId, phone, "2015-02-20".Date(), "2015-02-20 8:00", "2015-02-20 17:00")
-				.WithAlarm("phone", Guid.Empty, 0)
+				.WithAlarm("phone", null, 0)
 				;
 			Now.Is("2015-02-20 18:00");
 
@@ -76,7 +77,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta
 			Database
 				.WithUser("usercode", personId)
 				.WithSchedule(personId, phone, "2015-02-20".Date(), "2015-02-20 8:00", "2015-02-20 17:00")
-				.WithAlarm("phone", Guid.Empty, 0)
+				.WithAlarm("phone", null, 0)
 				;
 			Now.Is("2015-02-20 7:00");
 
@@ -100,7 +101,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta
 				.WithUser("usercode", personId)
 				.WithSchedule(personId, phone, "2015-02-20".Date(), "2015-02-20 8:00", "2015-02-20 17:00")
 				.WithSchedule(personId, phone, "2015-02-20".Date(), "2015-02-20 20:00", "2015-02-20 21:00")
-				.WithAlarm("phone", Guid.Empty, 0)
+				.WithAlarm("phone", null, 0)
 				;
 
 			Now.Is("2015-02-20 18:01");
@@ -127,8 +128,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta
 			var personId = Guid.NewGuid();
 			Database
 				.WithUser("usercode", personId)
-				;
-
+				.WithAlarm("phone", null, 0);
 			Now.Is("2015-02-20 18:01");
 			Target.SaveState(new ExternalUserStateForTest
 			{
@@ -160,6 +160,30 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta
 			});
 
 			Publisher.PublishedEvents.OfType<PersonOutOfAdherenceEvent>()
+				.Single()
+				.BelongsToDate.Should().Be("2015-02-19".Date());
+		}
+
+		[Test]
+		[Toggle(Toggles.RTA_NeutralAdherence_30930)]
+		public void ShouldPublishNeutralAdherenceEventWithBelongsToDate()
+		{
+			var personId = Guid.NewGuid();
+			var admin = Guid.NewGuid();
+			Database
+				.WithUser("usercode", personId)
+				.WithSchedule(personId, admin, "2015-02-19".Date(), "2015-02-20 1:00", "2015-02-20 7:00")
+				.WithAlarm("admin", admin, 0, Adherence.Neutral)
+				;
+			Now.Is("2015-02-20 2:00");
+
+			Target.SaveState(new ExternalUserStateForTest
+			{
+				UserCode = "usercode",
+				StateCode = "admin",
+			});
+
+			Publisher.PublishedEvents.OfType<PersonNeutralAdherenceEvent>()
 				.Single()
 				.BelongsToDate.Should().Be("2015-02-19".Date());
 		}

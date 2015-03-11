@@ -122,7 +122,6 @@
       <Link>GlobalAssemblyInfo.cs</Link>
     </Compile>
     <Compile Include="Domain\AgentStateReadModel.cs" />
-    <Compile Include="Domain\AlarmTypeMode.cs" />
     <Compile Include="Domain\AxisLocation.cs" />
     <Compile Include="Domain\BadgeType.cs" />
     <Compile Include="Domain\BlockFinderType.cs" />

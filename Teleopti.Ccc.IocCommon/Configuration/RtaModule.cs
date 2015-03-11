@@ -93,6 +93,11 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 					.SingleInstance();
 			}
 
+			if (_config.Toggle(Toggles.RTA_NeutralAdherence_30930))
+				builder.RegisterType<ByPolicy>().As<IAppliedAdherence>();
+			else
+				builder.RegisterType<ByStaffingEffect>().As<IAppliedAdherence>();
+			
 			_config.Args().CacheBuilder
 				.For<PersonOrganizationProvider>()
 				.CacheMethod(svc => svc.PersonOrganizationData())

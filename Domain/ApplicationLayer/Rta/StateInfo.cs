@@ -33,10 +33,10 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta
 		public DateTime ShiftStartTimeForPreviousActivity { get { return _scheduleInfo.ShiftStartTimeForPreviousActivity; } }
 		public DateTime ShiftEndTimeForPreviousActivity { get { return _scheduleInfo.ShiftEndTimeForPreviousActivity; } }
 		
-		public Adherence Adherence { get { return _adherenceInfo.CurrentAdherence(); } }
-		public Adherence AdherenceForPreviousState { get { return _adherenceInfo.AdherenceForPreviousState(); } }
-		public Adherence AdherenceForPreviousStateAndCurrentActivity { get { return _adherenceInfo.AdherenceForPreviousStateAndCurrentActivity(); } }
-		public Adherence AdherenceForNewStateAndPreviousActivity { get { return _adherenceInfo.AdherenceForNewStateAndPreviousActivity(); } }
+		public AdherenceState Adherence { get { return _adherenceInfo.CurrentAdherence(); } }
+		public AdherenceState AdherenceForPreviousState { get { return _adherenceInfo.AdherenceForPreviousState(); } }
+		public AdherenceState AdherenceForPreviousStateAndCurrentActivity { get { return _adherenceInfo.AdherenceForPreviousStateAndCurrentActivity(); } }
+		public AdherenceState AdherenceForNewStateAndPreviousActivity { get { return _adherenceInfo.AdherenceForNewStateAndPreviousActivity(); } }
 
 		public Guid PersonId { get { return _person.PersonId; } }
 		public Guid BusinessUnitId { get { return _person.BusinessUnitId; } }
@@ -72,11 +72,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta
 			return _currentState.Value.MakeActualAgentState();
 		}
 
-		// TODO: ????
-		public static Adherence AdherenceFor(AgentStateReadModel stateReadModel)
-		{
-			return AdherenceInfo.AdherenceFor(stateReadModel);
-		}
 	}
 
 }

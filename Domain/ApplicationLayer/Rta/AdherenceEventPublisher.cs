@@ -15,9 +15,9 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta
 			_eventPublisher = eventPublisher;
 		}
 
-		public void Publish(StateInfo info, DateTime time, Adherence toAdherence)
+		public void Publish(StateInfo info, DateTime time, AdherenceState toAdherence)
 		{
-			if (toAdherence == Adherence.In)
+			if (toAdherence == AdherenceState.In)
 			{
 				_eventPublisher.Publish(info, new PersonInAdherenceEvent
 				{
@@ -29,9 +29,21 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta
 				});
 			}
 
-			if (toAdherence == Adherence.Out)
+			if (toAdherence == AdherenceState.Out)
 			{
 				_eventPublisher.Publish(info, new PersonOutOfAdherenceEvent
+				{
+					PersonId = info.PersonId,
+					Timestamp = time,
+					BusinessUnitId = info.BusinessUnitId,
+					TeamId = info.TeamId,
+					SiteId = info.SiteId
+				});
+			}
+
+			if (toAdherence == AdherenceState.Neutral)
+			{
+				_eventPublisher.Publish(info, new PersonNeutralAdherenceEvent
 				{
 					PersonId = info.PersonId,
 					Timestamp = time,

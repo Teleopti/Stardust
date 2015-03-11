@@ -23,9 +23,15 @@ namespace Teleopti.Ccc.IocCommon.Toggle
 			_enabled.Add(toggle);
 		}
 
+		public void Disable(Toggles toggle)
+		{
+			_enabled.Remove(toggle);
+		}
+
 		public bool IsEnabled(Toggles toggle)
 		{
 			return _enabled.Any(e => e == toggle);
 		}
+
 	}
 }

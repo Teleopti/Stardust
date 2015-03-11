@@ -46,29 +46,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta
 			var @event = publisher.PublishedEvents.OfType<PersonInAdherenceEvent>().Single();
 			@event.PersonId.Should().Be(personId);
 		}
-
-		[Test]
-		public void ShouldPublishPersonInAdherenceEventWhenNoAlarm()
-		{
-			var state = new ExternalUserStateForTest
-			{
-				UserCode = "usercode",
-				StateCode = "statecode",
-			};
-			var personId = Guid.NewGuid();
-			var activityId = Guid.NewGuid();
-			database
-				.WithDefaultsFromState(state)
-				.WithUser("usercode", personId)
-				.WithSchedule(personId, activityId, "2014-10-20 8:00", "2014-10-20 10:00");
-			now.Is("2014-10-20 9:00");
-
-			target.SaveState(state);
-
-			var @event = publisher.PublishedEvents.OfType<PersonInAdherenceEvent>().Single();
-			@event.PersonId.Should().Be(personId);
-		}
-
+		
 		[Test]
 		public void ShouldNotPublishEventIfStillInAdherence()
 		{

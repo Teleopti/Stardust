@@ -75,19 +75,5 @@ namespace Teleopti.Ccc.DomainTest.RealTimeAdherence
 			Assert.IsTrue(target.IsDeleted);
 		}
 
-		[Test]
-		public void ShouldGuessAdherenceFromStaffingEffectIfNotSpecified()
-		{
-			new AlarmType{StaffingEffect = -1}.GuessAdherence().Should().Be(Adherence.Out);
-			new AlarmType{StaffingEffect = 1}.GuessAdherence().Should().Be(Adherence.Out);
-			new AlarmType{StaffingEffect = 0}.GuessAdherence().Should().Be(Adherence.In);
-		}
-
-		[Test]
-		public void ShouldGuessAdherenceFromSetAdherence()
-		{
-			new AlarmType {StaffingEffect = -1, Adherence = Adherence.In}
-				.GuessAdherence().Should().Be(Adherence.In);
-		}
 	}
 }

@@ -16,7 +16,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta
 		public void Publish(StateInfo info)
 		{
 			if (info.CurrentStateId == info.PreviousStateId) return;
-
+			
 			var adherenceChanged = info.AdherenceForPreviousStateAndCurrentActivity != info.Adherence;
 
 			_eventPublisher.Publish(info, new PersonStateChangedEvent
@@ -24,8 +24,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta
 				PersonId = info.PersonId,
 				Timestamp = info.CurrentTime,
 				BusinessUnitId = info.BusinessUnitId,
-				InAdherence = info.Adherence == Adherence.In,
-				InAdherenceWithPreviousActivity = info.AdherenceForNewStateAndPreviousActivity == Adherence.In,
+				InAdherence = info.Adherence == AdherenceState.In,
+				InAdherenceWithPreviousActivity = info.AdherenceForNewStateAndPreviousActivity == AdherenceState.In,
 			});
 
 			if (adherenceChanged)

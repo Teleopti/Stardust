@@ -16,7 +16,6 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta
 		public IDatabaseWriter Target;
 		public IDatabaseReader Reader;
 
-
 		[Test]
 		public void ShouldPersistModel()
 		{
@@ -95,6 +94,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta
 				AlarmName = null,
 				AlarmStart = null,
 				StaffingEffect = null,
+				Adherence = null,
 				Color = null,
 			});
 
