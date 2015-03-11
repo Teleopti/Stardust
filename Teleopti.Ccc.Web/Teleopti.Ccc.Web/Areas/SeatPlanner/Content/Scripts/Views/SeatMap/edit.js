@@ -128,30 +128,61 @@
 
 		this.Paste = function () {
 			if (self.copiedGroup) {
-				for (var i in self.copiedGroup.objects) {
-					var objToCopy = self.copiedGroup.objects[i];
-					self.CloneObject(objToCopy);
-				}
+				self.CloneGroup(self.copiedGroup);
 			} else if (self.copiedObject) {
 
-				self.CloneObject(self.copiedObject, self.canvas.setActiveObject);
+				self.CloneObject(self.copiedObject);
+				
 			}
-
-			self.canvas.renderAll();
 		};
 
-		this.CloneObject = function(objectToClone, onCloneCompleteFunction) {
+		this.CloneObject = function (objectToClone) {
 
-			objectToClone.clone(function(obj) {
-				obj.set("top", obj.top + 15);
-				obj.set("left", obj.left + 15);
+			objectToClone.clone(function (obj) {
 				self.UpdateSeatDataOnPaste(obj);
+				obj.set("top", obj.top + 35);
+				obj.set("left", obj.left + 35);
+				
 				self.canvas.add(obj);
-				if (onCloneCompleteFunction) {
-					onCloneCompleteFunction.call(obj);
-				}
+				self.canvas.setActiveObject(obj);
 			});
 		};
+
+		this.CloneGroup = function(cloneGroup) {
+
+			self.canvas.deactivateAll();
+
+			var childObjects = [];
+			var count = cloneGroup._objects.length;
+			var cloneCount = 0;
+
+			for (i in cloneGroup._objects) {
+				cloneGroup._objects[i].clone(function (obj) {
+					self.UpdateSeatDataOnPaste(obj);
+					obj.set("top", obj.top + 35);
+					obj.set("left", obj.left + 35);
+					self.canvas.add(obj);
+					childObjects.push(obj);
+					cloneCount++;
+					if (cloneCount == count) {
+						self.AfterCloneGroup(childObjects);
+					}
+				});
+			}
+		}
+
+		this.AfterCloneGroup = function(childObjects) {
+
+			var group = new fabric.Group(childObjects.reverse(), {
+				canvas: self.canvas
+			});
+			group.addWithUpdate();
+			self.canvas.setActiveGroup(group, childObjects);
+			group.saveCoords();
+			self.canvas.renderAll();
+		}
+
+
 
 		this.UpdateSeatDataOnPaste = function (obj) {
 			if (obj.type == 'group') {
