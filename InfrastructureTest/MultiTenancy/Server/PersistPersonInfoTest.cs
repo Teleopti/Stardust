@@ -108,6 +108,7 @@ namespace Teleopti.Ccc.InfrastructureTest.MultiTenancy.Server
 				tenantUnitOfWorkManager.CurrentSession().Flush);
 		}
 
+		[Test]
 		public void MultipleNullIdentityShouldNotThrow()
 		{
 			var personInfo1 = new PersonInfo(tenant);
