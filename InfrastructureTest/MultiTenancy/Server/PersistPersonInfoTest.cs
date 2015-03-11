@@ -50,7 +50,7 @@ namespace Teleopti.Ccc.InfrastructureTest.MultiTenancy.Server
 			session.Flush();
 			session.Clear();
 
-			personInfo.Password = newPassword;
+			personInfo.SetPassword(newPassword);
 			target.Persist(personInfo);
 
 			session.Flush();

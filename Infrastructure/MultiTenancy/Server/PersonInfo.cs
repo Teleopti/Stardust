@@ -28,7 +28,7 @@ namespace Teleopti.Ccc.Infrastructure.MultiTenancy.Server
 		}
 
 		public virtual Guid Id { get; set; }
-		public virtual string Password { get; set; }
+		public virtual string Password { get; protected set; }
 		public virtual string Identity { get; protected set; }
 		public virtual string ApplicationLogonName { get; protected set; }
 
@@ -45,6 +45,11 @@ namespace Teleopti.Ccc.Infrastructure.MultiTenancy.Server
 		public virtual void SetIdentity(string identityName)
 		{
 			Identity = identityName;
+		}
+
+		public virtual void SetPassword(string password)
+		{
+			Password = password;
 		}
 	}
 }

@@ -14,7 +14,7 @@ namespace Teleopti.Ccc.Web.Areas.Tenant.Core
 			var personInfo = new PersonInfo { Id = id };
 			personInfo.SetIdentity(personInfoModel.Identity);
 			personInfo.SetApplicationLogonName(personInfoModel.UserName);
-			personInfo.Password = personInfoModel.Password;
+			personInfo.SetPassword(personInfoModel.Password);
 			return personInfo;
 		}
 	}
