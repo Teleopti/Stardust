@@ -2,8 +2,8 @@ using System;
 using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.ApplicationLayer;
+using Teleopti.Ccc.Domain.ApplicationLayer.Rta.Aggregator;
 using Teleopti.Ccc.Domain.Common.Time;
-using Teleopti.Ccc.Web.Areas.Rta.Core.Server.Adherence;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.WebTest.Areas.Rta

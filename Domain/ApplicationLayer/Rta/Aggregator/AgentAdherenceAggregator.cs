@@ -2,14 +2,12 @@
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
-using Teleopti.Ccc.Domain.ApplicationLayer.Rta;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Interfaces;
 using Teleopti.Interfaces.Domain;
-using Teleopti.Interfaces.MessageBroker;
 using Teleopti.Interfaces.Messages.Rta;
 
-namespace Teleopti.Ccc.Web.Areas.Rta.Core.Server.Adherence
+namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Aggregator
 {
 	public class AgentAdherenceAggregator
 	{
@@ -22,7 +20,7 @@ namespace Teleopti.Ccc.Web.Areas.Rta.Core.Server.Adherence
 			_jsonSerializer = jsonSerializer;
 		}
 
-		public IEnumerable<Notification> CreateNotification(IAdherenceAggregatorInfo state)
+		public IEnumerable<Interfaces.MessageBroker.Notification> CreateNotification(IAdherenceAggregatorInfo state)
 		{
 			var actualAgentStateForTeam = _aggregationState.GetActualAgentStateForTeam(state.TeamId);
 			var agentStates = actualAgentStateForTeam.Select(mapFrom);
@@ -47,11 +45,11 @@ namespace Teleopti.Ccc.Web.Areas.Rta.Core.Server.Adherence
 			};
 		}
 
-		private Notification createAgentsNotification(IEnumerable<AgentAdherenceStateInfo> agentStates, Guid businessUnitId, Guid teamId)
+		private Interfaces.MessageBroker.Notification createAgentsNotification(IEnumerable<AgentAdherenceStateInfo> agentStates, Guid businessUnitId, Guid teamId)
 		{
 			var agentsAdherenceMessage = new AgentsAdherenceMessage { AgentStates = agentStates };
 
-			return new Notification
+			return new Interfaces.MessageBroker.Notification
 			{
 				BinaryData = _jsonSerializer.SerializeObject(agentsAdherenceMessage),
 				BusinessUnitId = businessUnitId.ToString(),

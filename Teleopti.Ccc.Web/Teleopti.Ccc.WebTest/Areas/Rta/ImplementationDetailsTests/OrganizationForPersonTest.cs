@@ -3,10 +3,9 @@ using NUnit.Framework;
 using Rhino.Mocks;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta;
-using Teleopti.Ccc.Infrastructure.Rta;
-using Teleopti.Ccc.Web.Areas.Rta.Core.Server.Adherence;
+using Teleopti.Ccc.Domain.ApplicationLayer.Rta.Aggregator;
 
-namespace Teleopti.Ccc.WebTest.Areas.Rta.ImplementationDetailsTests.Adherence
+namespace Teleopti.Ccc.WebTest.Areas.Rta.ImplementationDetailsTests
 {
 	public class OrganizationForPersonTest
 	{

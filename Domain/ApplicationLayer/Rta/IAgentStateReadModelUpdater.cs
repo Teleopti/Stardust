@@ -1,6 +1,4 @@
-using Teleopti.Ccc.Domain.ApplicationLayer.Rta;
-
-namespace Teleopti.Ccc.Web.Areas.Rta.Core.Server
+namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta
 {
 	public interface IAgentStateReadModelUpdater
 	{

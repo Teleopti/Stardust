@@ -1,9 +1,9 @@
 ﻿using Autofac;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta;
+using Teleopti.Ccc.Domain.ApplicationLayer.Rta.Aggregator;
 using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.Rta.WebService;
-using Teleopti.Ccc.Web.Areas.Rta.Core.Server.Adherence;
 
 namespace Teleopti.Ccc.Web.Areas.Rta.Core.Server
 {

@@ -3,10 +3,10 @@ using System.Linq;
 using Newtonsoft.Json;
 using NUnit.Framework;
 using SharpTestsEx;
+using Teleopti.Ccc.Domain.ApplicationLayer.Rta.Aggregator;
 using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Web.Areas.Rta;
-using Teleopti.Ccc.Web.Areas.Rta.Core.Server.Adherence;
 
 namespace Teleopti.Ccc.WebTest.Areas.Rta
 {

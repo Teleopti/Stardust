@@ -2,10 +2,9 @@
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
-using Teleopti.Ccc.Domain.ApplicationLayer.Rta;
 using Teleopti.Interfaces.Domain;
 
-namespace Teleopti.Ccc.Web.Areas.Rta.Core.Server.Adherence
+namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Aggregator
 {
 	public class AggregationState
 	{

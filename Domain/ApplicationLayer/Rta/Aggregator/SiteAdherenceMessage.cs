@@ -1,4 +1,4 @@
-﻿namespace Teleopti.Ccc.Web.Areas.Rta.Core.Server.Adherence
+﻿namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Aggregator
 {
 	public class SiteAdherenceMessage
 	{

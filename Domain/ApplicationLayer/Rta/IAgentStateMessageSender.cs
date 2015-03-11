@@ -1,13 +1,11 @@
 ﻿using System;
-using Teleopti.Ccc.Domain.ApplicationLayer.Rta;
-using Teleopti.Ccc.Infrastructure.Rta;
 using Teleopti.Interfaces;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.MessageBroker;
 using Teleopti.Interfaces.MessageBroker.Client;
 using Teleopti.Interfaces.MessageBroker.Events;
 
-namespace Teleopti.Ccc.Web.Areas.Rta.Core.Server
+namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta
 {
 	public interface IAgentStateMessageSender
 	{
@@ -40,7 +38,7 @@ namespace Teleopti.Ccc.Web.Areas.Rta.Core.Server
 			var actualAgentState = state.MakeActualAgentState();
 
 			var type = typeof(AgentStateReadModel);
-			var notification = new Notification
+			var notification = new Interfaces.MessageBroker.Notification
 			{
 				StartDate = Subscription.DateToString(actualAgentState.ReceivedTime),
 				EndDate = Subscription.DateToString(actualAgentState.ReceivedTime),

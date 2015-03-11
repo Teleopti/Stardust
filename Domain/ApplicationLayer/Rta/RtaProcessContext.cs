@@ -1,8 +1,7 @@
 ﻿using System;
-using Teleopti.Ccc.Domain.ApplicationLayer.Rta;
-using Teleopti.Ccc.Web.Areas.Rta.Core.Server.Adherence;
+using Teleopti.Ccc.Domain.ApplicationLayer.Rta.Aggregator;
 
-namespace Teleopti.Ccc.Web.Areas.Rta.Core.Server
+namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta
 {
 	public class RtaProcessContext
 	{
