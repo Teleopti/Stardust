@@ -116,25 +116,32 @@
 					<section>
 						<div class="tab-container">
 							<div ng-show="roleDetails=='dataAvailable'">
-								<div class="wfm-block">
-									<div class="input-prepend">
-										<i class="mdi mdi-magnify"></i>
-										<input type="text" name="filterDetails" ng-model="searchData" placeholder="Data filter ..." />
+						
+								<div class="row">
+									<div class="col-lg-6">
+										<div class="input-prepend">
+											<i class="mdi mdi-filter-outline"></i>
+											<input type="text" name="filterDetails" ng-model="searchData" placeholder="Data filter ..." />
+										</div>
 									</div>
-									<div class="wfm-slider">
-										<input type="checkbox" id="slide3" />
-										<label for="slide3">
-											<span>selected</span>
-										</label>
+									<div class="col-lg-3">
+										<div class="wfm-slider">
+											<input type="checkbox" id="slide3" />
+											<label for="slide3">
+												<span>selected</span>
+											</label>
+										</div>
 									</div>
-									<div class="wfm-slider">
-										<input type="checkbox" id="slide4" />
-										<label for="slide4">
-											<span>unselected</span>
-										</label>
+									<div class="col-lg-3">
+										<div class="wfm-slider">
+											<input type="checkbox" id="slide4" />
+											<label for="slide4">
+												<span>unselected</span>
+											</label>
+										</div>
 									</div>
 								</div>
-
+								
 								<div class="tree">
 									<div ui-tree data-drag-enabled="false">
 										<ol ui-tree-nodes="" ng-model="organization.DynamicOptions" class="tree-line">

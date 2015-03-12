@@ -11,10 +11,10 @@
 					<span>
 						<div ng-controller="SearchCtrl">
 							<i class="mdi mdi-magnify"></i>
-							<input type="text" placeholder="Search ..." ng-model="keyword" ng-change="searchKeyword()" />
+							<input type="text" placeholder="Search ..." ng-model="keyword" ng-change="searchKeyword()" class="global-search" />
 							<div class="search-results material-depth-2">
 								<ul class="wfm-list">
-									<li class="animate-repeat" ng-repeat="item in searchResult | orderBy:'FirstName' ">{{item.FirstName }}</li>
+									<li class="animate-repeat" ng-repeat="item in searchResult">{{item.FirstName}}</li>
 									<li class="animate-repeat" ng-if="results.length == 0">
 </ul>
 							</div> 
@@ -30,7 +30,8 @@
 							</div>
 						</div>
 					</span>
-					<span><a><i class="mdi mdi-account"></i></a></span>
+					<span><a><i class="mdi mdi-account"></i></a>
+					</span>
 				</div>
 			</div>
 		</div>
