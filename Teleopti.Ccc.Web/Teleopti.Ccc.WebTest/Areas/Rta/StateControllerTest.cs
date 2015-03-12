@@ -1,8 +1,11 @@
 ﻿using System;
+using System.Collections.Generic;
 using NUnit.Framework;
 using SharpTestsEx;
+using Teleopti.Ccc.Domain.ApplicationLayer.Rta;
 using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Infrastructure.Rta;
+using Teleopti.Ccc.Web.Areas.Rta;
 using Teleopti.Ccc.Web.Areas.Rta.Controllers;
 using Teleopti.Interfaces.Domain;
 
@@ -12,26 +15,43 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta
 	public class StateControllerTest
 	{
 		[Test]
-		public void ShouldSendMessageIfBatchIdIsNull()
+		public void ShouldHandleNullBatchId()
 		{
-			var personId = Guid.NewGuid();
-			var fakeRtaDatabase = new FakeRtaDatabase()
-				.WithUser("usercode", personId)
-				.Make();
-			var fakeMessageSender = new FakeMessageSender();
-			var target =
-				new StateController(new RtaForTest(fakeRtaDatabase, new ThisIsNow("2014-11-14 10:00"),
-					fakeMessageSender));
+			var target = new StateController(new FakeRta());
 
-			target.Change(new ExternalUserStateWebModelForTest
-			{
-				UserCode = "usercode",
-				StateCode = "statecode"
-			});
+			Assert.DoesNotThrow(() =>
+				target.Change(new ExternalUserStateWebModelForTest
+				{
+					UserCode = "usercode",
+					StateCode = "statecode",
+					BatchId = null
+				}));
+		}
+	}
 
-			fakeMessageSender.NotificationOfType<AgentStateReadModel>()
-				.DeseralizeActualAgentState()
-				.PersonId.Should().Be(personId);
+	public class FakeRta : IRta
+	{
+		public int SaveState(ExternalUserStateInputModel input)
+		{
+			return 1;
+		}
+
+		public int SaveStateBatch(IEnumerable<ExternalUserStateInputModel> states)
+		{
+			return 1;
+		}
+
+		public int SaveStateSnapshot(IEnumerable<ExternalUserStateInputModel> states)
+		{
+			return 1;
+		}
+
+		public void CheckForActivityChange(CheckForActivityChangeInputModel input)
+		{
+		}
+
+		public void Initialize()
+		{
 		}
 	}
 }

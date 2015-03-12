@@ -108,11 +108,27 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\Iesi.Collections.4.0.1.4000\lib\net40\Iesi.Collections.dll</HintPath>
     </Reference>
+    <Reference Include="LinFu.DynamicProxy, Version=1.0.4.16035, Culture=neutral, PublicKeyToken=62a6874124340d6e, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\LinFu.DynamicProxy.OfficialRelease.1.0.5\lib\net\LinFu.DynamicProxy.dll</HintPath>
+    </Reference>
     <Reference Include="log4net, Version=1.2.13.0, Culture=neutral, PublicKeyToken=669e0ddf0bb1aa2a, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\log4net.2.0.3\lib\net40-full\log4net.dll</HintPath>
     </Reference>
+    <Reference Include="MbCache, Version=2.6.0.0, Culture=neutral, PublicKeyToken=c4cb4e6f32c7c400, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\MbCache.2.6\lib\net40\MbCache.dll</HintPath>
+    </Reference>
+    <Reference Include="MbCache.ProxyImpl.LinFu, Version=2.6.0.0, Culture=neutral, PublicKeyToken=c4cb4e6f32c7c400, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\MbCache.2.6\lib\net40\MbCache.ProxyImpl.LinFu.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.CSharp" />
+    <Reference Include="Newtonsoft.Json, Version=6.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Newtonsoft.Json.6.0.7\lib\net45\Newtonsoft.Json.dll</HintPath>
+    </Reference>
     <Reference Include="NHibernate">
       <HintPath>..\packages\NHibernate.4.0.0.4000\lib\net40\NHibernate.dll</HintPath>
       <Private>True</Private>
@@ -175,6 +191,8 @@
     <Compile Include="ApplicationLayer\FakePersonAssignmentWriteSideRepository.cs" />
     <Compile Include="ApplicationLayer\MoveActivityCommandHandlerTest.cs" />
     <Compile Include="ApplicationLayer\RemoveAbsenceCommandHandlerTest.cs" />
+    <Compile Include="ApplicationLayer\Rta\ActualAgentStateExtension.cs" />
+    <Compile Include="ApplicationLayer\Rta\AdherenceAggregatorInitializeTest.cs" />
     <Compile Include="ApplicationLayer\Rta\AdherenceDetails\ActivityTest.cs" />
     <Compile Include="ApplicationLayer\Rta\AdherenceDetails\BelongsToDateTest.cs" />
     <Compile Include="ApplicationLayer\Rta\AdherenceDetails\LastUpdateTest.cs" />
@@ -188,13 +206,55 @@
     <Compile Include="ApplicationLayer\Rta\AdherencePercentage\BelongsToDateTest.cs" />
     <Compile Include="ApplicationLayer\Rta\AdherencePercentage\UnorderedEventsTest.cs" />
     <Compile Include="ApplicationLayer\Rta\AdherenceTestAttribute.cs" />
-    <Compile Include="ApplicationLayer\Rta\AgentDateProviderTest.cs" />
     <Compile Include="ApplicationLayer\Rta\AdherenceDetailsViewModelBuilderTest.cs" />
     <Compile Include="ApplicationLayer\Rta\AdherencePercentageViewModelBuilderTest.cs" />
+    <Compile Include="ApplicationLayer\Rta\AuthenticationKeyTest.cs" />
+    <Compile Include="ApplicationLayer\Rta\BelongsToDateTest.cs" />
+    <Compile Include="ApplicationLayer\Rta\CachingTest.cs" />
+    <Compile Include="ApplicationLayer\Rta\CheckForActivityChangeTest.cs" />
+    <Compile Include="ApplicationLayer\Rta\EventsOrderTest.cs" />
+    <Compile Include="ApplicationLayer\Rta\EventsStreamTest.cs" />
+    <Compile Include="ApplicationLayer\Rta\ExternalUserStateForSnapshot.cs" />
+    <Compile Include="ApplicationLayer\Rta\ExternalUserStateForTest.cs" />
+    <Compile Include="ApplicationLayer\Rta\FakeMessageSender.cs" />
+    <Compile Include="ApplicationLayer\Rta\FakeRtaDatabase.cs" />
+    <Compile Include="ApplicationLayer\Rta\FakeSignalRClient.cs" />
+    <Compile Include="ApplicationLayer\Rta\ImplementationDetailsTests\DataSourceResolverTest.cs" />
+    <Compile Include="ApplicationLayer\Rta\ImplementationDetailsTests\OrganizationForPersonTest.cs" />
+    <Compile Include="ApplicationLayer\Rta\NoBrokerTest.cs" />
+    <Compile Include="ApplicationLayer\Rta\NotificationExtension.cs" />
+    <Compile Include="ApplicationLayer\Rta\PersonActivityStartEventTest.cs" />
+    <Compile Include="ApplicationLayer\Rta\PersonAdherenceEventsTest.cs" />
+    <Compile Include="ApplicationLayer\Rta\PersonInAdherenceEventTest.cs" />
+    <Compile Include="ApplicationLayer\Rta\PersonNeutralAdherenceEventTest.cs" />
+    <Compile Include="ApplicationLayer\Rta\PersonOutOfAdherenceEventTest.cs" />
+    <Compile Include="ApplicationLayer\Rta\PersonShiftEndEventTest.cs" />
+    <Compile Include="ApplicationLayer\Rta\PersonShiftStartEventTest.cs" />
+    <Compile Include="ApplicationLayer\Rta\PersonStateChangedEventTest.cs" />
+    <Compile Include="ApplicationLayer\Rta\ReturnCodeTest.cs" />
+    <Compile Include="ApplicationLayer\Rta\RtaForTest.cs" />
+    <Compile Include="ApplicationLayer\Rta\RtaModuleTest.cs" />
+    <Compile Include="ApplicationLayer\Rta\RtaTestAttribute.cs" />
+    <Compile Include="ApplicationLayer\Rta\SendAdherenceMessagesTest.cs" />
+    <Compile Include="ApplicationLayer\Rta\SendAgentStateTest.cs" />
+    <Compile Include="ApplicationLayer\Rta\SendAgentStateWithAlarmTest.cs" />
+    <Compile Include="ApplicationLayer\Rta\SendAgentStateWithStateTest.cs" />
+    <Compile Include="ApplicationLayer\Rta\SiteAdherenceTest.cs" />
     <Compile Include="ApplicationLayer\Rta\SiteAdherence\UpdaterTest.cs" />
     <Compile Include="ApplicationLayer\Rta\SiteAdherence\UnorderedEventsTest.cs" />
+    <Compile Include="ApplicationLayer\Rta\SnapshotTests.cs" />
+    <Compile Include="ApplicationLayer\Rta\Synchronization\AdherenceDetailsTest.cs" />
+    <Compile Include="ApplicationLayer\Rta\Synchronization\AdherencePercentageTest.cs" />
+    <Compile Include="ApplicationLayer\Rta\Synchronization\IndividualModelsTest.cs" />
+    <Compile Include="ApplicationLayer\Rta\Synchronization\InitializeProcessTest.cs" />
+    <Compile Include="ApplicationLayer\Rta\Synchronization\LockingTest.cs" />
+    <Compile Include="ApplicationLayer\Rta\Synchronization\SiteAdherenceTest.cs" />
+    <Compile Include="ApplicationLayer\Rta\Synchronization\TeamAdherenceTest.cs" />
+    <Compile Include="ApplicationLayer\Rta\TeamAdherenceTest.cs" />
     <Compile Include="ApplicationLayer\Rta\TeamAdherence\UpdaterTest.cs" />
     <Compile Include="ApplicationLayer\Rta\TeamAdherence\UnorderedEventsTest.cs" />
+    <Compile Include="ApplicationLayer\Rta\UnrecognizedStateTest.cs" />
+    <Compile Include="ApplicationLayer\Rta\UpdateAgentStateReadModelTest.cs" />
     <Compile Include="ApplicationLayer\ScheduleChangedEventHandlers\Analytics\AnalyticsFactScheduleDateHandlerTest.cs" />
     <Compile Include="ApplicationLayer\ScheduleChangedEventHandlers\Analytics\AnalyticsFactScheduleDayCountHandlerTest.cs" />
     <Compile Include="ApplicationLayer\ScheduleChangedEventHandlers\Analytics\AnalyticsFactSchedulePersonHandlerTest.cs" />

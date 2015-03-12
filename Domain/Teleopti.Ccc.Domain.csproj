@@ -226,7 +226,6 @@
     <Compile Include="ApplicationLayer\Rta\Aggregator\SiteAdherenceMessage.cs" />
     <Compile Include="ApplicationLayer\Rta\Aggregator\TeamAdherenceAggregator.cs" />
     <Compile Include="ApplicationLayer\Rta\Aggregator\TeamAdherenceMessage.cs" />
-    <Compile Include="ApplicationLayer\Rta\AgentDateProvider.cs" />
     <Compile Include="ApplicationLayer\Rta\AgentState.cs" />
     <Compile Include="ApplicationLayer\Rta\AgentStateAssembler.cs" />
     <Compile Include="ApplicationLayer\Rta\AgentStateInfo.cs" />

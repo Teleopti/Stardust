@@ -73,7 +73,6 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<AgentStateReadModelReader>().As<IAgentStateReadModelReader>().SingleInstance();
 			builder.RegisterType<DatabaseWriter>().As<IDatabaseWriter>().SingleInstance();
 
-			builder.RegisterType<AgentDateProvider>().SingleInstance().As<IAgentDateProvider>();
 			builder.RegisterType<AdherencePercentageViewModelBuilder>().SingleInstance().As<IAdherencePercentageViewModelBuilder>();
 			builder.RegisterType<AdherenceDetailsViewModelBuilder>().SingleInstance().As<IAdherenceDetailsViewModelBuilder>();
 			builder.RegisterType<RtaDecoratingEventPublisher>().As<IRtaDecoratingEventPublisher>().SingleInstance();
