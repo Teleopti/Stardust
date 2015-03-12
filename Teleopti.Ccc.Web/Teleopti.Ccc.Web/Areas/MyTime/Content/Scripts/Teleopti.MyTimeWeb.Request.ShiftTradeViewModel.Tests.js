@@ -184,7 +184,7 @@ $(document).ready(function () {
 		viewModel.loadTeams();
 
 		equal(viewModel.availableTeams().length, 4);
-		var teamAll = viewModel.availableTeams()[3];
+		var teamAll = viewModel.availableTeams()[0];
 		equal(teamAll.id, "allTeams");
 		equal(teamAll.text, "Team All");
 	});
@@ -286,13 +286,13 @@ $(document).ready(function () {
 		equal(viewModel.isPageVisible(), true);
 	});
 
-	test("should not init selectable pages when it has data", function () {
+	test("should update selectable pages when page count changes", function () {
 		var viewModel = new Teleopti.MyTimeWeb.Request.ShiftTradeViewModel();
 		viewModel.selectablePages.push(new Teleopti.MyTimeWeb.Request.PageView(1));
 
 		viewModel.setPagingInfo(2);
 
-		equal(viewModel.selectablePages().length, 1);
+		equal(viewModel.selectablePages().length, 2);
 	});
 
 	test("should set page count when set paging infos", function () {
@@ -311,8 +311,7 @@ $(document).ready(function () {
 		viewModel.setPagingInfo(2);
 		
 		equal(viewModel.pageCount(), 2);
-		equal(viewModel.selectablePages().length, 2);
-		equal(viewModel.selectablePages()[1].isSelected(), true);
+		equal(viewModel.selectablePages().length, 2);	
 	});
 
 	test("should can select page", function () {
@@ -387,6 +386,8 @@ $(document).ready(function () {
 
 	test("should go to first page without more", function () {
 		var viewModel = new Teleopti.MyTimeWeb.Request.ShiftTradeViewModel();
+		viewModel.setPagingInfo(3);
+
 		viewModel.selectedPageIndex(3);
 
 		viewModel.goToFirstPage();

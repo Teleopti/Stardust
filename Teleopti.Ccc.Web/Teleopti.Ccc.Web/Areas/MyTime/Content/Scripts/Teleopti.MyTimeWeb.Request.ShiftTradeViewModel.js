@@ -546,6 +546,7 @@ Teleopti.MyTimeWeb.Request.ShiftTradeViewModel = function(ajax) {
 	};
 	self.goToLastPage = function() {
 		var start = Math.floor(self.pageCount() / self.maxPagesVisible) * self.maxPagesVisible + 1;
+		if (start > self.pageCount()) start = Math.max(1, start - self.maxPagesVisible);
 		self.selectablePages.removeAll();
 
 		for (var i = start; i <= self.pageCount(); ++i) {
