@@ -37,8 +37,9 @@ Teleopti.MyTimeWeb.Request.ShiftTradeViewModel = function(ajax) {
 	self.missingMyTeam = ko.observable();
 	self.myTeamId = ko.observable();
 	self.maxShiftsPerPage = 20;
+	self.maxPagesVisible = 5;
 	self.selectedPageIndex = ko.observable(1);
-	self.pageCount = ko.observable(1);
+	self.pageCount = ko.observable();
 	self.selectablePages = ko.observableArray();
 	self.isMore = ko.observable(false);
 	self.isPreviousMore = ko.observable(false);
@@ -414,9 +415,12 @@ Teleopti.MyTimeWeb.Request.ShiftTradeViewModel = function(ajax) {
 	self.getAllTeamIds = function() {
 		var allTeamIds = [];
 
-		for (var i = 0; i < self.availableTeams().length - 1; ++i) {
-			// skip the last one as contains "allTeams"
-			allTeamIds.push(self.availableTeams()[i].id);
+		for (var i = 0; i < self.availableTeams().length; ++i) {
+			// skip the first one as contains "allTeams"
+			if (self.availableTeams()[i].id != "allTeams") {
+
+				allTeamIds.push(self.availableTeams()[i].id);
+			}
 		}
 
 		return allTeamIds;
@@ -537,89 +541,72 @@ Teleopti.MyTimeWeb.Request.ShiftTradeViewModel = function(ajax) {
 		self.selectedInternal(isAddAvaiable);
 	};
 
-	self.goToFirstPage = function() {
-		self.selectedPageIndex(1);
-		self.isPreviousMore(false);
+	self.goToFirstPage = function () {
 		self.initSelectablePages(self.pageCount());
-		self.loadSchedule(self.getDateWithFormat(), self.selectedTeamInternal());
 	};
 	self.goToLastPage = function() {
-		self.isMore(false);
-		if (self.pageCount() > 5) self.isPreviousMore(true);
-		var timesOfNumPerPage = self.pageCount() / 5;
-		var modeOfNumPerPage = self.pageCount() % 5;
-		if (timesOfNumPerPage > 0) {
-			self.selectablePages.removeAll();
-			if (modeOfNumPerPage != 0) {
-				for (var i = 1; i <= modeOfNumPerPage; i++) {
-					self.selectablePages.push(new Teleopti.MyTimeWeb.Request.PageView(Math.floor(timesOfNumPerPage) * 5 + i));
-				}
-			} else {
-				for (var j = 1; j <= 5; j++) {
-					self.selectablePages.push(new Teleopti.MyTimeWeb.Request.PageView(self.pageCount() - 5 + j));
-				}
-			}
+		var start = Math.floor(self.pageCount() / self.maxPagesVisible) * self.maxPagesVisible + 1;
+		self.selectablePages.removeAll();
+
+		for (var i = start; i <= self.pageCount(); ++i) {
+			var page = new Teleopti.MyTimeWeb.Request.PageView(i);
+			self.selectablePages.push(page);
 		}
+
+		self.isPreviousMore(start !== 1);
+		self.isMore(false);
 		self.setSelectPage(self.pageCount());
 	};
+
+
 	self.initSelectablePages = function(pageCount) {
 		self.selectablePages.removeAll();
-		for (var i = 1; i <= pageCount; ++i) {
-			if (i <= 5) {
-				self.selectablePages.push(new Teleopti.MyTimeWeb.Request.PageView(i));
-			} else {
-				break;
-			}
+		
+		for (var i = 1; i <= Math.min(pageCount, self.maxPagesVisible); ++i) {
+			var page = new Teleopti.MyTimeWeb.Request.PageView(i);		
+			self.selectablePages.push(page);			
 		}
-		$.each(self.selectablePages(), function(index, item) {
-			if (item.index() == self.selectedPageIndex()) {
-				item.isSelected(true);
-			}
-		});
 
-		var currentLastPageNumber = self.selectablePages().length > 0 ? self.selectablePages()[self.selectablePages().length - 1].index() : 0;
-		if (currentLastPageNumber != 0 && currentLastPageNumber < pageCount) self.isMore(true);
+		self.isPreviousMore(false);
+		self.isMore(pageCount > self.maxPagesVisible);
+		if (pageCount > 0 ) self.setSelectPage(1);
 	};
 
-	self.goNextPages = function() {
-		for (var i = 0; i < self.selectablePages().length; ++i) {
-			var item = self.selectablePages()[i];
-			if ((item.index() + 5) <= self.pageCount()) {
-				item.index(item.index() + 5);
-			} else {
-				self.isMore(false);
-				self.selectablePages.remove(item);
-				i--;
-			}
+	self.goNextPages = function () {
+		var end = self.selectablePages().slice(-1)[0].index() + self.maxPagesVisible;
+		self.selectablePages.removeAll();
+		
+		var i;
+		for (i = end - self.maxPagesVisible + 1; i <= Math.min(end, self.pageCount()); i++) {
+			self.selectablePages.push(new Teleopti.MyTimeWeb.Request.PageView(i));
 		}
-
-		if (self.selectablePages()[0].index() > 5) self.isPreviousMore(true);
-
+		
+		self.isPreviousMore(true);
+		self.isMore(end < self.pageCount());
 		self.setSelectPage(self.selectablePages()[0].index());
 	};
 
 	self.goPreviousPages = function() {
-		$.each(self.selectablePages(), function(index, item) {
-			if (index + 1 <= self.selectablePages().length) {
-				item.index(item.index() - 5);
-			}
-			if (self.selectablePages()[0].index() == 1) self.isPreviousMore(false);
-		});
+		var start = self.selectablePages()[0].index() - self.maxPagesVisible;
+		self.selectablePages.removeAll();
 
-		if (self.selectablePages().length < 5) {
-			for (var i = self.selectablePages().length + 1; i <= 5; ++i) {
-				var page = new Teleopti.MyTimeWeb.Request.PageView(i);
-				self.selectablePages.push(page);
-				self.isPreviousMore(false);
+		if (start > 0) {
+			for (var i = 0; i < self.maxPagesVisible; i++) {
+				self.selectablePages.push(new Teleopti.MyTimeWeb.Request.PageView(start + i));
 			}
+			self.isPreviousMore(self.selectablePages()[0].index() !== 1);
+			self.isMore(self.selectablePages()[self.maxPagesVisible - 1].index() < self.pageCount());
+			self.setSelectPage(self.selectablePages()[0].index());
+		} else {
+			self.goToFirstPage();
 		}
-
-		if (self.selectablePages()[4].index() < self.pageCount()) self.isMore(true);
-
-		self.setSelectPage(self.selectablePages()[0].index());
 	};
 
-	self.selectPage = function(page) {
+	self.isSelected = function(page) {
+		return page.index() === self.selectedPageIndex();
+	};
+
+	self.selectPage = function (page) {
 		self.setSelectPage(page.index());
 	};
 
@@ -659,7 +646,7 @@ Teleopti.MyTimeWeb.Request.ShiftTradeViewModel = function(ajax) {
 		var text = $("#Request-all-permitted-teams").val() ? $("#Request-all-permitted-teams").val() : "Team All";
 
 		if (self.isPossibleSchedulesForAllEnabled()) {
-			self.availableTeams.push({ id: "allTeams", text: text });
+			self.availableTeams.unshift({ id: "allTeams", text: text });
 		}
 	};
 
@@ -713,26 +700,12 @@ Teleopti.MyTimeWeb.Request.ShiftTradeViewModel = function(ajax) {
 		});
 	};
 
+	self.pageCount.subscribe(function(value) { self.initSelectablePages(value) });
+
 	self.setPagingInfo = function(pageCount) {
 		self.pageCount(pageCount);
-
-		if (self.pageCount() == 0) {
-			self.isPageVisible(false);
-		} else {
-			self.isPageVisible(true);
-		}
-
-		if (self.selectablePages().length == 0) {
-			self.initSelectablePages(self.pageCount());
-		}
-
-		$.each(self.selectablePages(), function (index, item) {
-			if (item.index() == self.selectedPageIndex()) {
-				item.isSelected(true);
-			} else {
-				item.isSelected(false);
-			}
-		});
+		self.isPageVisible(pageCount > 0);
+				
 	};
 	
 	self.setPossibleTradeSchedulesRaw = function(date, data) {

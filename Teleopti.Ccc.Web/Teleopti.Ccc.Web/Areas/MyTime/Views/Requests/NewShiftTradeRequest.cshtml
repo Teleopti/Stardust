@@ -197,7 +197,7 @@
 				        <a data-bind="click: goPreviousPages, visible: isPreviousMore()">...</a>
 			        </li>
 			        <!-- ko foreach: selectablePages() -->
-			        <li data-bind="css: {'active': $data.isSelected()}">
+			        <li data-bind="css: {'active': $parent.isSelected($data)}">
 				        <a data-bind="text: $data.index(), click: $parent.selectPage"></a>
 			        </li>
 			        <!-- /ko -->
