@@ -103,7 +103,7 @@ Teleopti.MyTimeWeb.TeamSchedule = (function ($) {
 			global: false,
 			cache: false,
 			success: function (data, textStatus, jqXHR) {
-				vm.availableTeams(data.teams);
+				vm.availableTeams(data);
 
 				var teamId = _currentId();
 				if (teamId) {

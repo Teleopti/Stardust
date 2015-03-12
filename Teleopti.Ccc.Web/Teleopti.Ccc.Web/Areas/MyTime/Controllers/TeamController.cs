@@ -25,11 +25,8 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 			if (!date.HasValue)
 				date = _now.LocalDateOnly();
 			return Json(
-				new
-				{
-					teams = _teamViewModelFactory.CreateTeamOrGroupOptionsViewModel(date.Value),
-					allTeam = new { id = "allTeams", text = Resources.AllPermittedTeamsToMakeShiftTradeWith }
-				}, JsonRequestBehavior.AllowGet);
+				_teamViewModelFactory.CreateTeamOrGroupOptionsViewModel(date.Value),
+				JsonRequestBehavior.AllowGet);
 		}
 
 		[UnitOfWorkAction]
@@ -42,5 +39,21 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 					_teamViewModelFactory.CreateTeamOptionsViewModel(date.Value, DefinedRaptorApplicationFunctionPaths.ShiftTradeRequestsWeb),
 					JsonRequestBehavior.AllowGet);
 		}
+
+		[UnitOfWorkAction]
+		[HttpGet]
+		public JsonResult TeamsAndGroupsWithAllTeam(DateOnly? date)
+		{
+			if (!date.HasValue)
+				date = _now.LocalDateOnly();
+			return Json(
+				new
+				{
+					teams = _teamViewModelFactory.CreateTeamOrGroupOptionsViewModel(date.Value),
+					allTeam = new { id = "allTeams", text = Resources.AllPermittedTeamsToMakeShiftTradeWith }
+				}, JsonRequestBehavior.AllowGet);
+		}
+
+
 	}
 }

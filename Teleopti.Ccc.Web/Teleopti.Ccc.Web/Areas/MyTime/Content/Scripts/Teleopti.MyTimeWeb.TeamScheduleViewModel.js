@@ -123,7 +123,7 @@ var endpoints = {
 	loadFilterTimes: "RequestsShiftTradeScheduleFilter/Get",
 	loadMyTeam: "Requests/ShiftTradeRequestMyTeam",
 	loadDefaultTeam: "TeamSchedule/DefaultTeam",
-	loadTeams: "Team/TeamsAndOrGroupings",
+	loadTeams: "Team/TeamsAndGroupsWithAllTeam",
 	loadSchedule: "TeamSchedule/TeamSchedule"
 };
 
