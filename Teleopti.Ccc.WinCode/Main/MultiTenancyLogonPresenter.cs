@@ -173,9 +173,13 @@ namespace Teleopti.Ccc.WinCode.Main
 
 		private void getLogonType()
 		{
-			var settings = _sharedSettingsQuerier.GetSharedSettings();
-			if (!_view.InitStateHolderWithoutDataSource(_messageBroker, settings))
-				CurrentStep--; //?
+			if (!StateHolderReader.IsInitialized)
+			{
+				var settings = _sharedSettingsQuerier.GetSharedSettings();
+				if (!_view.InitStateHolderWithoutDataSource(_messageBroker, settings))
+					CurrentStep--; //?
+			}
+			
 			_view.ShowStep(false); //once a sdk is loaded it is not changeable
 		}
 

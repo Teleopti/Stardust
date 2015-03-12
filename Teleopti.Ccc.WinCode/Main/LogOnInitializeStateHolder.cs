@@ -105,14 +105,15 @@ namespace Teleopti.Ccc.WinCode.Main
 			var passwordPolicyService = new LoadPasswordPolicyService(passwordPolicyDocument);
 
 			var appsett = ConfigurationManager.AppSettings;
-			if (!appsett.AllKeys.Contains("Queue")) appsett.Add("Queue", settings.Queue);
-			if (!appsett.AllKeys.Contains("MessageBroker")) appsett.Add("MessageBroker", settings.MessageBroker);
-			if (!appsett.AllKeys.Contains("MessageBrokerLongPolling")) appsett.Add("MessageBrokerLongPolling", settings.MessageBrokerLongPolling);
-			if (!appsett.AllKeys.Contains("RtaPollingInterval")) appsett.Add("RtaPollingInterval", settings.RtaPollingInterval);
 			
 			var appSettings = appsett.Keys.Cast<string>().ToDictionary(key => key, key => appsett[key]);
 			appSettings.Add("Sdk", model.SelectedSdk);
-			
+
+			if (!appsett.AllKeys.Contains("Queue")) appSettings.Add("Queue", settings.Queue);
+			if (!appsett.AllKeys.Contains("MessageBroker")) appSettings.Add("MessageBroker", settings.MessageBroker);
+			if (!appsett.AllKeys.Contains("MessageBrokerLongPolling")) appSettings.Add("MessageBrokerLongPolling", settings.MessageBrokerLongPolling);
+			if (!appsett.AllKeys.Contains("RtaPollingInterval")) appSettings.Add("RtaPollingInterval", settings.RtaPollingInterval);
+
 			bool messageBrokerDisabled = false;
 			string messageBrokerDisabledString;
 			if (!appSettings.TryGetValue("MessageBroker", out messageBrokerDisabledString) ||
