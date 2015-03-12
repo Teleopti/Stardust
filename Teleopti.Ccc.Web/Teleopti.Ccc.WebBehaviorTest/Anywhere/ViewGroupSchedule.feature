@@ -99,7 +99,8 @@ Scenario: View group schedule
 		| Start time     | 2013-10-10 09:00 |
 		| End time       | 2013-10-10 16:00 |
 	When I view schedules for '2013-10-10'
-	And I select group 'Contract/A contract'
+	Then I should see schedule for 'John Smith'
+	When I select group 'Contract/A contract'
 	Then I should see schedule for 'John Smith'
 	And I should not see person 'Pierre Baldi'
 
