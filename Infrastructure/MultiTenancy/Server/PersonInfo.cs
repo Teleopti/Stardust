@@ -12,12 +12,6 @@ namespace Teleopti.Ccc.Infrastructure.MultiTenancy.Server
 			tenant=new Tenant(string.Empty);
 		}
 
-		//TODO: tenant - remove
-		public PersonInfo(string tenantName)
-		{
-			tenant=new Tenant(tenantName);
-		}
-
 		public PersonInfo(Tenant tenant)
 		{
 			this.tenant = tenant;

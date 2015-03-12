@@ -14,7 +14,7 @@ namespace Teleopti.Ccc.InfrastructureTest.MultiTenancy.Server
 		{
 			var identity = RandomName.Make();
 
-			var pInfo = new PersonInfo(RandomName.Make()) {Id = Guid.NewGuid()};
+			var pInfo = new PersonInfo(new Tenant(RandomName.Make())) {Id = Guid.NewGuid()};
 
 			var identityUserQuery = MockRepository.GenerateStub<IIdentityUserQuery>();
 			identityUserQuery.Stub(x => x.FindUserData(identity)).Return(pInfo);
@@ -30,7 +30,7 @@ namespace Teleopti.Ccc.InfrastructureTest.MultiTenancy.Server
 		{
 			var identity = RandomName.Make();
 
-			var pInfo = new PersonInfo(RandomName.Make()) { Id = Guid.NewGuid() };
+			var pInfo = new PersonInfo(new Tenant(RandomName.Make())) { Id = Guid.NewGuid() };
 
 			var applicationQuery = MockRepository.GenerateStub<IApplicationUserTenantQuery>();
 			applicationQuery.Stub(x => x.Find(identity)).Return(pInfo);
@@ -46,7 +46,7 @@ namespace Teleopti.Ccc.InfrastructureTest.MultiTenancy.Server
 		{
 			var identity = RandomName.Make();
 
-			var pInfo = new PersonInfo(RandomName.Make()) { Id = Guid.NewGuid() };
+			var pInfo = new PersonInfo(new Tenant(RandomName.Make())) { Id = Guid.NewGuid() };
 
 
 			var identityUserQuery = MockRepository.GenerateStub<IIdentityUserQuery>();
