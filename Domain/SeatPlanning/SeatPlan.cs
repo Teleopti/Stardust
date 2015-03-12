@@ -60,6 +60,10 @@ namespace Teleopti.Ccc.Domain.SeatPlanning
 			foreach (var dayShift in _dayShifts.Values)
 			{
 				var seatBookingRequestsForDay = dayShift.GetShifts().Select(agentShifts => new SeatBookingRequest(agentShifts.ToArray()));
+	
+				//RobTODO: FIX
+				// we should be allocating all of the seats for the selected period together, so that
+				// overnight shifts do not cause seats to be booked twice.
 				seatAllocator.AllocateSeats(seatBookingRequestsForDay.ToArray());
 
 				foreach (var agentShifts in dayShift.GetShifts())

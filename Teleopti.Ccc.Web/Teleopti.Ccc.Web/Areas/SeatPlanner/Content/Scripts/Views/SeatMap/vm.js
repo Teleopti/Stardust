@@ -60,13 +60,13 @@
 			var container = self.canvas.wrapperEl.parentElement;
 			self.canvas.setHeight($(container).height());
 			self.canvas.setWidth(container.clientWidth);
-			
+
 			if (self.drawGrid()) {
 				self.canvasUtils.DrawGrid(self.canvas);
 			}
 		};
 
-		this.RefreshSeatMap = function() {
+		this.RefreshSeatMap = function () {
 			self.LoadSeatMapFromId(self.seatMapId);
 		};
 
@@ -76,9 +76,12 @@
 			self.canvas.isGrabMode = false;
 			self.seatMapEditor.Setup(self.canvas, $(document)[0], options, self.RefreshSeatMap);
 
-			//self.canvas.renderOnAddRemove = false;  // performance toggle
-			self.canvas.stateful = false; // perhaps add if need undo
-			//self.SetDefaultBackground();
+			//Performance related toggles
+			//self.canvas.skipTargetFind = true;
+			self.canvas.renderOnAddRemove = true;  
+			self.canvas.stateful = false; 
+		
+			//self.canvas.skipTargetFind = true;
 
 			$(document).ready(function () {
 				$(window).resize(self.ResizeCanvas);
@@ -111,7 +114,7 @@
 			});
 		};
 
-		this.HandleBreadcrumbClick = function(data) {
+		this.HandleBreadcrumbClick = function (data) {
 			self.LoadSeatMapFromId(data.Id);
 		};
 
@@ -153,30 +156,53 @@
 				self.parentId = data.ParentId;
 				self.seatMapId = data.Id;
 
-				self.canvasUtils.LoadSeatMap(self.canvas, data, self.allowEdit(), self.ContinueLoadAfterCanvasLoaded);
+				self.canvasUtils.LoadSeatMap(self.canvas, data, self.allowEdit(), self.OnLoadSeatMapCompleted);
 
 			}
-			else
-			{
+			else {
 				self.Loading(false);
 				self.ResetZoom();
 			}
 		};
 
 
-		this.ContinueLoadAfterCanvasLoaded = function(data)
-		{
+		this.OnLoadSeatMapCompleted = function (data) {
 			self.seatMapEditor.LoadExistingSeatMapData(data);
 			self.breadcrumb(data.BreadcrumbInfo);
 
 			self.Loading(false);
 			self.ResetZoom();
+			//self.CacheObjectsAsImages();
 
 		}
-		
+
+		this.CacheObjectsAsImages = function () {
+
+			//Robtodo: Investigate further if needed ....conversion to/from obj, serialisation etc.
+			self.canvas.forEachObject(function (obj, i) {
+				if (obj.type === 'image') return;
+
+				var scaleX = obj.scaleX;
+				var scaleY = obj.scaleY;
+
+				self.canvas.remove(obj);
+				obj.scale(1).cloneAsImage(function (clone) {
+					clone.set({
+						left: obj.left,
+						top: obj.top,
+						scaleX: scaleX,
+						scaleY: scaleY
+					});
+					self.canvas.insertAt(clone, i);
+					
+				});
+			});
+
+		}
+
 		//Zoom and Move
 
-		this.ResetZoom = function() {
+		this.ResetZoom = function () {
 			self.canvas.setZoom(1);
 		};
 

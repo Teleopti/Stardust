@@ -28,9 +28,10 @@
 		_render: function (ctx) {
 			this.callSuper('_render', ctx);
 
-			ctx.font = '16px Helvetica';
+			ctx.font = '18px Helvetica';
 			ctx.fillStyle = '#333';
 			ctx.fillText(this.get('name'), 30 -this.width / 2, 30 -this.height / 2 );
+			
 		}
 		
 	});

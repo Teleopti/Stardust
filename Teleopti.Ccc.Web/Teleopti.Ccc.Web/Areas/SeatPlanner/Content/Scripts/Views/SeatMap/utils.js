@@ -50,7 +50,9 @@
 
 		this.SetSelectionMode = function (canvas, allowSelection) {
 			var canvasObjects = canvas.getObjects();
+			canvas.selection = allowSelection;
 			for (var idx in canvasObjects) {
+				
 				canvasObjects[idx].selectable = allowSelection;
 				canvasObjects[idx].hasControls = allowSelection;
 				canvasObjects[idx].hasRotatingPoint = allowSelection;
