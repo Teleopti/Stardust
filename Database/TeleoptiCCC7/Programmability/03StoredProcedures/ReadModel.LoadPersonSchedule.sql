@@ -100,9 +100,9 @@ BEGIN
 		    AS 'RowNumber'
 
         FROM (select p.Person as PersonId,
-			 isnull(sd.TeamId, t.Id) as TeamID, 
-			 isnull(sd.SiteId, s.Id) as SiteId, 
-			 isnull(sd.BusinessUnitId, s.BusinessUnit) as BusinessUnitId, 
+			 sd.TeamId as TeamID, 
+			 sd.SiteId as SiteId, 
+			 sd.BusinessUnitId as BusinessUnitId, 
 			 person.FirstName as FirstName,
 			 person.LastName as LastName,
 			 isnull(sd.BelongsToDate, @scheduleDate) as BelongsToDate, 
@@ -115,12 +115,6 @@ BEGIN
 			 JOIN dbo.Person person ON p.Person = person.Id 
 			 LEFT JOIN ReadModel.PersonScheduleDay sd  ON sd.PersonId = p.Person and sd.BelongsToDate = @scheduleDate		 
 			 
-			 -- These joins are used to support backward compatibility with incomplete ReadModel.PersonScheduleDay
-			 JOIN PersonPeriod pp on pp.Parent = p.Person
-			 join Team t on t.Id = pp.Team
-			 join [Site] s on s.Id = t.Site 
-			 ------
-
 			 WHERE 			
 			 -- The following enclosed conditions should be "Or"-ed such that the result is a union of each individual condition
 			 (
@@ -138,13 +132,7 @@ BEGIN
 				    AND 
 					(isnull(@filterEndTimes, '') = '' OR EXISTS ( select * from @filterEndTimeList fetl where sd.[End] between fetl.endTimeStart and fetl.endTimeEnd))				 
 				 ) 									
-			)
-			-- Condition to support backward compatibility with incomplete ReadModel.PersonScheduleDay
-			 AND pp.StartDate = (select max(startdate) from PersonPeriod
-								where startdate <= @scheduleDate 
-									and Parent = p.Person)
-				
-							    
+			)							    
 		) as resultSet		
 	) 
 
@@ -166,7 +154,30 @@ BEGIN
 			(SELECT COUNT(*) FROM ScheduleResultSet)  As 'Total', 
 			RowNumber
 	FROM ScheduleResultSet 
-	WHERE RowNumber > @skip AND RowNumber <= @maxIndex
+	WHERE RowNumber > @skip AND RowNumber <= @maxIndex AND TeamID IS NOT NULL
+	UNION
+	SELECT	PersonId, 
+			t.Id, 
+			s.Id, 
+			s.BusinessUnit, 
+			FirstName,
+			LastName,
+			BelongsToDate AS [Date], 
+			Start, 
+			[End],
+			Model,
+			DayOffFlag,
+			IsEmptySchedule, 			 
+			(SELECT MIN(Start) FROM ScheduleResultSet)  As 'MinStart',
+			(SELECT COUNT(*) FROM ScheduleResultSet)  As 'Total', 
+			RowNumber
+	FROM ScheduleResultSet rs
+	JOIN PersonPeriod pp on pp.Parent = rs.PersonId AND rs.TeamId IS NULL
+	join Team t on t.Id = pp.Team
+	join [Site] s on s.Id = t.Site
+ 	WHERE RowNumber > @skip AND RowNumber <= @maxIndex
+		AND pp.StartDate = (select max(startdate) from PersonPeriod
+							where startdate <= @scheduleDate and Parent = rs.PersonId) 
 	
 	DECLARE @lastPage bit 
 	SET @lastPage = 0
