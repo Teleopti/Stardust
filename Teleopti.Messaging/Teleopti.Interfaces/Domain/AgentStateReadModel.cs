@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Globalization;
-using Teleopti.Ccc.Domain.ApplicationLayer.Rta;
 
 namespace Teleopti.Interfaces.Domain
 {
