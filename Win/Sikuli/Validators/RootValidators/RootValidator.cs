@@ -20,7 +20,7 @@ namespace Teleopti.Ccc.Win.Sikuli.Validators.RootValidators
 				var stringBuilder = new StringBuilder();
 				foreach (var validator in AtomicValidators)
 				{
-					stringBuilder.AppendLine(validator.Description);
+					stringBuilder.Append(" " + validator.Description);
 				}
 				return stringBuilder.ToString();
 			} 
