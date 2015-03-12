@@ -83,6 +83,8 @@ namespace Teleopti.Ccc.Win.Scheduling
 				if(endTimeError) setTimeErrorMessage(outlookTimePickerTo, Resources.MustSpecifyValidTime);
 			}
 
+			if (!result && startTimeError && endTimeError) return true;
+
 			return result;
 		}
 
