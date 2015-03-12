@@ -208,6 +208,7 @@
     <Compile Include="ApplicationLayer\Rta\AdherenceTestAttribute.cs" />
     <Compile Include="ApplicationLayer\Rta\AdherenceDetailsViewModelBuilderTest.cs" />
     <Compile Include="ApplicationLayer\Rta\AdherencePercentageViewModelBuilderTest.cs" />
+    <Compile Include="ApplicationLayer\Rta\AlarmMappingTest.cs" />
     <Compile Include="ApplicationLayer\Rta\AuthenticationKeyTest.cs" />
     <Compile Include="ApplicationLayer\Rta\BelongsToDateTest.cs" />
     <Compile Include="ApplicationLayer\Rta\CachingTest.cs" />

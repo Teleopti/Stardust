@@ -1,8 +1,11 @@
 using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
 using Teleopti.Ccc.Domain.Aop;
+using Teleopti.Ccc.Domain.RealTimeAdherence;
 using Teleopti.Ccc.Domain.Repositories;
+using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta
 {
@@ -12,7 +15,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta
 		private readonly IAppliedAdherence _appliedAdherence;
 
 		public AlarmMappingLoader(
-			IStateGroupActivityAlarmRepository stateGroupActivityAlarmRepository, 
+			IStateGroupActivityAlarmRepository stateGroupActivityAlarmRepository,
 			IAppliedAdherence appliedAdherence
 			)
 		{
@@ -26,21 +29,34 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta
 			var mappings = _stateGroupActivityAlarmRepository.LoadAll();
 			return (
 				from m in mappings
-				from c in m.StateGroup.StateCollection
+				let businessUnitId = tryGetBusinessUnitId(m)
+				let stateCodes = m.StateGroup == null
+					? new string[] {null}
+					: from s in m.StateGroup.StateCollection select s.StateCode
+				from c in stateCodes
 				let activityId = m.Activity != null ? m.Activity.Id.Value : (Guid?) null
+				let alarmType = m.AlarmType ?? new AlarmType()
+				let alarmTypeId = alarmType.Id.HasValue ? alarmType.Id.Value : Guid.Empty
 				select new AlarmMapping
 				{
-					BusinessUnitId = m.StateGroup.BusinessUnit.Id.Value,
-					StateCode = c.StateCode,
+					BusinessUnitId = businessUnitId,
+					StateCode = c,
 					ActivityId = activityId,
-					AlarmTypeId = m.AlarmType.Id.Value,
-					AlarmName = m.AlarmType.Description.Name,
+					AlarmTypeId = alarmTypeId,
+					AlarmName = alarmType.Description.Name,
 					Adherence = AdherenceInfo.ConvertAdherence(_appliedAdherence.ForAlarm(m.AlarmType)),
-					StaffingEffect = (int) m.AlarmType.StaffingEffect,
-					DisplayColor = m.AlarmType.DisplayColor.ToArgb(),
-					ThresholdTime = m.AlarmType.ThresholdTime.Ticks
+					StaffingEffect = (int) alarmType.StaffingEffect,
+					DisplayColor = alarmType.DisplayColor.ToArgb(),
+					ThresholdTime = alarmType.ThresholdTime.Ticks
 				}
 				).ToArray();
+		}
+
+		private static Guid tryGetBusinessUnitId(IStateGroupActivityAlarm m)
+		{
+			if (m.StateGroup != null) return m.StateGroup.BusinessUnit.Id.Value;
+			if (m.AlarmType != null) return m.AlarmType.BusinessUnit.Id.Value;
+			return Guid.Empty;
 		}
 	}
 

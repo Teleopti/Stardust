@@ -12,12 +12,16 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta
 	{
 		public Adherence ForAlarm(IAlarmType alarmType)
 		{
+			if (alarmType == null)
+				return Adherence.In;
 			return ForStaffingEffect(alarmType.StaffingEffect);
 		}
 
 		public static Adherence ForStaffingEffect(double staffingEffect)
 		{
-			return staffingEffect.Equals(0) ? Adherence.In : Adherence.Out;
+			return staffingEffect.Equals(0)
+				? Adherence.In
+				: Adherence.Out;
 		}
 	}
 
@@ -25,9 +29,11 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta
 	{
 		public Adherence ForAlarm(IAlarmType alarmType)
 		{
+			if (alarmType == null)
+				return Adherence.Neutral;
 			return alarmType.Adherence.HasValue
 				? alarmType.Adherence.Value
-				: alarmType.StaffingEffect.Equals(0) ? Adherence.In : Adherence.Out;
+				: ByStaffingEffect.ForStaffingEffect(alarmType.StaffingEffect);
 		}
 	}
 }

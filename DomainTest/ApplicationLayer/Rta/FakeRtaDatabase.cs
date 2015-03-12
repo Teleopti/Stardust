@@ -24,7 +24,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta
 		IFakeDataBuilder WithBusinessUnit(Guid businessUnitId);
 		IFakeDataBuilder WithUser(string userCode, Guid personId, Guid? businessUnitId, Guid? teamId, Guid? siteId);
 		IFakeDataBuilder WithSchedule(Guid personId, Guid activityId, string name, DateOnly date, string start, string end);
-		IFakeDataBuilder WithAlarm(string stateCode, Guid? activityId, Guid alarmId, int staffingEffect, string name, bool isLoggedOutState, TimeSpan threshold, Adherence? adherence);
+		IFakeDataBuilder WithAlarm(string stateCode, Guid? activityId, Guid? alarmId, int staffingEffect, string name, bool isLoggedOutState, TimeSpan threshold, Adherence? adherence);
 		IFakeDataBuilder WithDefaultStateGroup();
 		FakeRtaDatabase Make();
 	}
@@ -143,37 +143,45 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta
 			return this;
 		}
 
-		public IFakeDataBuilder WithAlarm(string stateCode, Guid? activityId, Guid alarmId, int staffingEffect, string name, bool isLoggedOutState, TimeSpan threshold, Adherence? adherence)
+		public IFakeDataBuilder WithAlarm(string stateCode, Guid? activityId, Guid? alarmId, int staffingEffect, string name, bool isLoggedOutState, TimeSpan threshold, Adherence? adherence)
 		{
 			var platformTypeIdGuid = new Guid(_platformTypeId);
 
-			var alarmType = new AlarmType();
-			alarmType.SetId(alarmId);
-			alarmType.SetBusinessUnit(_businessUnit);
-			alarmType.StaffingEffect = staffingEffect;
-			alarmType.ThresholdTime = threshold;
-			alarmType.Adherence = adherence;
-
-			var stateGroup = (
-				from g in RtaStateGroupRepository.LoadAll()
-				from s in g.StateCollection
-				where s.StateCode == stateCode
-				select g
-				).FirstOrDefault();
-			if (stateGroup == null)
+			IAlarmType alarmType = null;
+			if (alarmId != null)
 			{
-				stateGroup = new RtaStateGroup(name, false, true);
-				stateGroup.SetId(Guid.NewGuid());
-				stateGroup.SetBusinessUnit(_businessUnit);
-				stateGroup.IsLogOutState = isLoggedOutState;
-				stateGroup.AddState(null, stateCode, platformTypeIdGuid);
-				RtaStateGroupRepository.Add(stateGroup);
+				alarmType = new AlarmType();
+				alarmType.SetId(alarmId);
+				alarmType.SetBusinessUnit(_businessUnit);
+				alarmType.StaffingEffect = staffingEffect;
+				alarmType.ThresholdTime = threshold;
+				alarmType.Adherence = adherence;
+			}
+
+			IRtaStateGroup stateGroup = null;
+			if (stateCode != null)
+			{
+				stateGroup = (
+					from g in RtaStateGroupRepository.LoadAll()
+					from s in g.StateCollection
+					where s.StateCode == stateCode
+					select g
+					).FirstOrDefault();
+				if (stateGroup == null)
+				{
+					stateGroup = new RtaStateGroup(name, false, true);
+					stateGroup.SetId(Guid.NewGuid());
+					stateGroup.SetBusinessUnit(_businessUnit);
+					stateGroup.IsLogOutState = isLoggedOutState;
+					stateGroup.AddState(null, stateCode, platformTypeIdGuid);
+					RtaStateGroupRepository.Add(stateGroup);
+				}
 			}
 
 			IActivity activity = null;
 			if (activityId != null)
 			{
-				activity = new Activity(stateCode);
+				activity = new Activity(stateCode ?? "activity");
 				activity.SetId(activityId);
 				activity.SetBusinessUnit(_businessUnit);
 			}
@@ -434,7 +442,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta
 			return fakeDataBuilder.WithAlarm(stateCode, activityId, Guid.NewGuid(), staffingEffect, null, false, TimeSpan.Zero, null);
 		}
 
-		public static IFakeDataBuilder WithAlarm(this IFakeDataBuilder fakeDataBuilder, string stateCode, Guid? activityId, Guid alarmId)
+		public static IFakeDataBuilder WithAlarm(this IFakeDataBuilder fakeDataBuilder, string stateCode, Guid? activityId, Guid? alarmId)
 		{
 			return fakeDataBuilder.WithAlarm(stateCode, activityId, alarmId, 0, null, false, TimeSpan.Zero, null);
 		}
