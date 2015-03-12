@@ -322,9 +322,9 @@ namespace Teleopti.Ccc.WebBehaviorTest.MyTime
 		[Then(@"I should see myself before my colleague")]
 		public void ThenIShouldSeeMyselfBeforeMyColleague()
 		{
-			Browser.Interactions.AssertFirstContainsUsingJQuery(string.Format(".shift-trade-agent-name:nth(1)"), DataMaker.Data().MePerson.Name.ToString()); 
+			Browser.Interactions.AssertExistsUsingJQuery("input.form-control:enabled");
+			Browser.Interactions.AssertFirstContainsUsingJQuery(string.Format(".shift-trade-agent-name:nth(1)"), DataMaker.Data().MePerson.Name.ToString());
 			Browser.Interactions.AssertFirstContainsUsingJQuery(string.Format(".shift-trade-agent-name:nth(2)"), DataMaker.Person(TeamColleagueName).Person.Name.ToString());
-			
 		}
 
 
@@ -512,13 +512,14 @@ namespace Teleopti.Ccc.WebBehaviorTest.MyTime
 		[Then(@"I click '(.*)' at end time drop down button")]
 		public void ThenIClickAtEndTimeDropDownButton(string p0)
 		{
-			Browser.Interactions.ClickUsingJQuery(".row .filter-time-dropdown-button .dropdown-toggle:contains('Sluttid')");
-			Browser.Interactions.ClickUsingJQuery(".filter-time-dropdown-button .end-time-sort-order .glyphicon-arrow-up:nth-child(1)");
+			Browser.Interactions.ClickContaining(".row .filter-time-dropdown-button .dropdown-toggle", "Sluttid");
+			Browser.Interactions.Click(".filter-time-dropdown-button .end-time-sort-order .glyphicon-arrow-up");
+			
 		}
 
 		private static void AssertAgentIsDisplayed(string name)
 		{
-			Browser.Interactions.AssertAnyContains(".teamschedule-agent-name-without-badge", name);
+			Browser.Interactions.AssertAnyContains(".shift-trade-agent-name", name);
 		}
 
 		private static void AssertAgentIsNotDisplayed(string name)
