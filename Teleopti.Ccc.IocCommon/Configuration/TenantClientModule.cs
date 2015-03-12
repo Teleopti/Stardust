@@ -37,15 +37,15 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<DictionaryToPostData>().As<IDictionaryToPostData>().SingleInstance();
 
 			var configServer = _configuration.Args().ConfigServer;
-			if(configServer.IsAnUrl() || isRunFromTest(tenantServer))
+			if(!configServer.IsAnUrl())
 			{
-				builder.Register(c => new SharedSettingsQuerier(configServer))
+				builder.Register(c => new SharedSettingsQuerierForNoWeb())
 					.As<ISharedSettingsQuerier>()
 					.SingleInstance();
 			}
 			else
 			{
-				builder.Register(c => new SharedSettingsQuerierForNoWeb())
+				builder.Register(c => new SharedSettingsQuerier(configServer))
 					.As<ISharedSettingsQuerier>()
 					.SingleInstance();
 			}
