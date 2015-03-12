@@ -1,5 +1,4 @@
-﻿using NHibernate.Criterion;
-using Teleopti.Ccc.Infrastructure.MultiTenancy.Server.NHibernate;
+﻿using Teleopti.Ccc.Infrastructure.MultiTenancy.Server.NHibernate;
 
 namespace Teleopti.Ccc.Infrastructure.MultiTenancy.Server
 {
@@ -15,8 +14,8 @@ namespace Teleopti.Ccc.Infrastructure.MultiTenancy.Server
 		public Tenant Find(string name)
 		{
 			return _tenantUnitOfWorkManager.CurrentSession()
-				.CreateCriteria<Tenant>()
-				.Add(Restrictions.Eq("Name", name))
+				.GetNamedQuery("findTenantByName")
+				.SetString("name", name)
 				.UniqueResult<Tenant>();
 		}
 	}

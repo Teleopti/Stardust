@@ -1,12 +1,10 @@
 ﻿using Autofac;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Server;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Server.NHibernate;
-using Teleopti.Ccc.Web.Areas.Tenant.Model;
 using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.Web.Areas.Tenant.Core
 {
-	//To be moved out to seperate application
 	public class TenantModule : Module
 	{
 		private const string tenancyConnectionStringKey = "Tenancy";
@@ -38,17 +36,9 @@ namespace Teleopti.Ccc.Web.Areas.Tenant.Core
 			builder.RegisterType<ReadNHibFiles>().As<IReadNHibFiles>().SingleInstance();
 			builder.RegisterType<ParseNhibFile>().As<IParseNhibFile>().SingleInstance();
 			builder.RegisterType<NhibConfigurationEncryption>().As<INhibConfigurationEncryption>().SingleInstance();
-			builder.RegisterType<PersistPersonInfo>().As<IPersistPersonInfo>();
-			builder.RegisterType<personInfoMapper_Temporary>().As<IPersonInfoMapper>();
-		}
-
-		//TODO: tenant - fix impl later
-		private class personInfoMapper_Temporary : IPersonInfoMapper
-		{
-			public PersonInfo Map(PersonInfoModel personInfoModel)
-			{
-				return new PersonInfo();
-			}
+			builder.RegisterType<PersistPersonInfo>().As<IPersistPersonInfo>().SingleInstance();
+			builder.RegisterType<PersonInfoMapper>().As<IPersonInfoMapper>().SingleInstance();
+			builder.RegisterType<FindTenantByNameQuery>().As<IFindTenantByNameQuery>().SingleInstance();
 		}
 	}
 }

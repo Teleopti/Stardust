@@ -20,8 +20,8 @@ namespace Teleopti.Ccc.Web.Areas.Tenant
 		[HttpPost]
 		[TenantUnitOfWork]
 		//TODO: tenant - probably return some kind of json result later
-		// change later to some sort of authentication
-		public void Persist(PersonInfoModels personInfoModels)
+		//TODO: tenant - change later to some sort of authentication
+		public virtual void Persist(PersonInfoModels personInfoModels)
 		{
 			foreach (var personInfoModel in personInfoModels.PersonInfos)
 			{
