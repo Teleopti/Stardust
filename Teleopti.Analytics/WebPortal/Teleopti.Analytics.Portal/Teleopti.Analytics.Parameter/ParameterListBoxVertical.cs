@@ -83,11 +83,13 @@ namespace Teleopti.Analytics.Parameters
 			_TextBox.Width = new Unit("0");
 			_TextBox.Height = new Unit("0");
 			_TextBox.ID = "TextHidden" + Dbid.ToString();
+			_TextBox.Style.Add("visibility", "hidden");
 
 			_TextBoxText = new TextBox();
 			_TextBoxText.Width = new Unit("0");
 			_TextBoxText.Height = new Unit("0");
 			_TextBoxText.ID = "TextHiddenText" + Dbid.ToString();
+			_TextBoxText.Style.Add("visibility", "hidden");
 
 			_Validator.ControlToValidate = _TextBox.ID;
 			_Validator.Text = "*";

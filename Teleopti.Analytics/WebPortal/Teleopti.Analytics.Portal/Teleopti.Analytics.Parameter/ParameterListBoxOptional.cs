@@ -84,6 +84,7 @@ namespace Teleopti.Analytics.Parameters
 			_textBoxText = new TextBox { Width = new Unit("0"), Height = new Unit("0"), ID = "TextHiddenText" + Dbid };
 			_textBoxText.Style.Add("position", "absolute");
 			_textBoxText.Style.Add("left", "-10px");
+			_textBoxText.Style.Add("visibility", "hidden");
 
 			//Hidden textBox			
 

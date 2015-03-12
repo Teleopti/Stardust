@@ -115,6 +115,7 @@ namespace Teleopti.Analytics.Parameters
 			_textBoxText.TextMode = TextBoxMode.MultiLine;
 			_textBoxText.Style.Add("position", "absolute");
 			_textBoxText.Style.Add("left", "-10px");
+			_textBoxText.Style.Add("visibility", "hidden");
 
 			_validator = new RequiredFieldValidator
 							{
