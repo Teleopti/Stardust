@@ -16,7 +16,7 @@ namespace Teleopti.Ccc.Win.Sikuli.Validators.AtomicValidators
 
 		public string Description
 		{
-			get { return "Duration limit: " + _durationLimit.ToString(@"mm\:ss"); }
+			get { return "Duration must be under limit."; }
 		}
 
 		public SikuliValidationResult Validate()
@@ -24,12 +24,9 @@ namespace Teleopti.Ccc.Win.Sikuli.Validators.AtomicValidators
 			var result = new SikuliValidationResult();
 
 			if (_testDurationuration.GetDuration() > _durationLimit)
-			{
 				result.Result = SikuliValidationResult.ResultValue.Warn;
-				result.Details.AppendLine("Duration is over limit!");
-			}
 
-			result.Details.AppendLine(string.Format("Duration is {0}: {1}", _testDurationuration.GetDurationString(), result.Result));
+			result.AppendResultLine("Duration", _durationLimit.ToString(@"mm\:ss"),  _testDurationuration.GetDurationString(), result.Result);
 			
 			return result;
 		}

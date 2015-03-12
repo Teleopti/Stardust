@@ -30,7 +30,7 @@ namespace Teleopti.Ccc.Win.Sikuli.Validators.AtomicValidators
 
 			if (std < _limit)
 				result.Result = SikuliValidationResult.ResultValue.Fail;
-			result.AppendLimitValueLineToDetails("Daily StdDev sum", _limit.ToString(CultureInfo.CurrentCulture), std.ToString(CultureInfo.CurrentCulture));
+			result.AppendResultLine("Daily StdDev sum", _limit.ToString(CultureInfo.CurrentCulture), std.ToString(CultureInfo.CurrentCulture), result.Result);
 			return result;
 		}
 	}
