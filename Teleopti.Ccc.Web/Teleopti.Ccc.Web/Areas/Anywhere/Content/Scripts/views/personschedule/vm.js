@@ -356,10 +356,7 @@ define([
 
 		this.initActivityDraggable = function() {
 			$('.time-line-for').attr("data-subscription-done", " ");
-
-			// Restore original z-index for other layers
-			$(".selected-person .layer").css('z-index', '10');
-
+			
 			// bind events
 			var activeLayer = $(".layer.active");
 			if (activeLayer.length !== 0) {
@@ -372,6 +369,8 @@ define([
 					axis: 'x',
 					containment: 'parent',
 					stop: function (e, ui) {
+						// Restore original z-index for other layers
+						$(".selected-person .layer").css('z-index', 10);
 						var workingShift = self.WorkingShift();
 						var minStartPixel = (workingShift.OriginalShiftStartMinutes - self.TimeLine.StartMinutes()) * self.TimeLine.PixelsPerMinute();
 						var maxEndPixel = (workingShift.OriginalShiftEndMinutes - self.TimeLine.StartMinutes()) * self.TimeLine.PixelsPerMinute();
