@@ -97,14 +97,24 @@ namespace Teleopti.Ccc.Domain.Forecasting
 
             //Copy the TemplateMultisitePeriod to the MultisiteDay
             TimeZoneInfo raptorTimeZoneInfo = _skill.TimeZone;
-
-            var multisiteUtcDate = TimeZoneHelper.ConvertToUtc(_multisiteDayDate, raptorTimeZoneInfo);
-            TimeSpan timeDiff = multisiteUtcDate.Subtract(raptorTimeZoneInfo.SafeConvertTimeToUtc(SkillDayTemplate.BaseDate));
             IList<IMultisitePeriod> multisitePeriods = new List<IMultisitePeriod>();
             foreach (ITemplateMultisitePeriod multisitePeriod in templateDay.TemplateMultisitePeriodCollection)
             {
+	            var localStartDateTime = TimeZoneHelper.ConvertFromUtc(multisitePeriod.Period.StartDateTime, raptorTimeZoneInfo);
+				var localEndDateTime = TimeZoneHelper.ConvertFromUtc(multisitePeriod.Period.EndDateTime, raptorTimeZoneInfo);
+				var start = TimeZoneHelper.ConvertToUtc(_multisiteDayDate.Date.Add(localStartDateTime.TimeOfDay), raptorTimeZoneInfo);
+	            var end =
+		            TimeZoneHelper.ConvertToUtc(
+						_multisiteDayDate.Date.Add(localEndDateTime.Date > localStartDateTime.Date
+				            ? new TimeSpan(1, 0, 0, 0)
+							: localEndDateTime.TimeOfDay)
+			            , raptorTimeZoneInfo);
+
+				if(end<=start)
+					continue;
+
                 IMultisitePeriod newMultisitePeriod = new MultisitePeriod(
-                    multisitePeriod.Period.MovePeriod(timeDiff),
+                    new DateTimePeriod(start,end),
                     new Dictionary<IChildSkill, Percent>(multisitePeriod.Distribution));
                 multisitePeriods.Add(newMultisitePeriod);
             }
@@ -135,9 +145,9 @@ namespace Teleopti.Ccc.Domain.Forecasting
         {
             foreach (IMultisitePeriod multisitePeriod in multisitePeriodCollection)
             {
-                if (_multisitePeriodCollection.Any(t => t.Period.StartDateTime == multisitePeriod.Period.StartDateTime))
-                    throw new InvalidOperationException("The multisite periods must have unique start times");
-                multisitePeriod.SetParent(this);
+	            if (_multisitePeriodCollection.Any(t => t.Period.StartDateTime == multisitePeriod.Period.StartDateTime))
+		            throw new InvalidOperationException("The multisite periods must have unique start times");
+	            multisitePeriod.SetParent(this);
                 _multisitePeriodCollection.Add(multisitePeriod);
             }
         }
