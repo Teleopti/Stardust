@@ -32,7 +32,7 @@ namespace Teleopti.Ccc.Web.Areas.Rta
 			DateTime batchId,
 			bool isSnapshot)
 		{
-			return _rta.SaveState(
+			return handleRtaExceptions(() => _rta.SaveState(
 				new ExternalUserStateInputModel
 				{
 					AuthenticationKey = authenticationKey,
@@ -44,25 +44,28 @@ namespace Teleopti.Ccc.Web.Areas.Rta
 					SourceId = sourceId,
 					BatchId = batchId,
 					IsSnapshot = isLoggedOn
-				});
+				}));
 		}
 
 		public int SaveBatchExternalUserState(string authenticationKey, string platformTypeId, string sourceId, ICollection<ExternalUserState> externalUserStateBatch)
 		{
-			var states = from s in externalUserStateBatch
-				select new ExternalUserStateInputModel
-				{
-					AuthenticationKey = authenticationKey,
-					UserCode = s.UserCode,
-					StateCode = s.StateCode,
-					StateDescription = s.StateDescription,
-					IsLoggedOn = s.IsLoggedOn,
-					PlatformTypeId = platformTypeId,
-					SourceId = sourceId,
-					BatchId = s.BatchId,
-					IsSnapshot = s.IsLoggedOn
-				};
-			return _rta.SaveStateBatch(states.ToArray());
+			return handleRtaExceptions(() =>
+			{
+				var states = from s in externalUserStateBatch
+					select new ExternalUserStateInputModel
+					{
+						AuthenticationKey = authenticationKey,
+						UserCode = s.UserCode,
+						StateCode = s.StateCode,
+						StateDescription = s.StateDescription,
+						IsLoggedOn = s.IsLoggedOn,
+						PlatformTypeId = platformTypeId,
+						SourceId = sourceId,
+						BatchId = s.BatchId,
+						IsSnapshot = s.IsLoggedOn
+					};
+				return _rta.SaveStateBatch(states.ToArray());
+			});
 		}
 
 		public void GetUpdatedScheduleChange(Guid personId, Guid businessUnitId, DateTime timestamp)
@@ -73,5 +76,22 @@ namespace Teleopti.Ccc.Web.Areas.Rta
 				BusinessUnitId = businessUnitId
 			});
 		}
+
+		private int handleRtaExceptions(Func<int> rtaCall)
+		{
+			try
+			{
+				return rtaCall.Invoke();
+			}
+			catch (InvalidAuthenticationKeyException e)
+			{
+				throw new FaultException<InvalidAuthenticationKeyException>(e);
+			}
+			catch (BatchTooBigException e)
+			{
+				throw new FaultException<BatchTooBigException>(e);
+			}
+		}
+
 	}
 }

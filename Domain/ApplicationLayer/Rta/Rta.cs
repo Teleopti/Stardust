@@ -2,17 +2,14 @@
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
-using System.ServiceModel;
 using log4net;
-using MbCache.Core;
-using Teleopti.Ccc.Domain.ApplicationLayer.Rta;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta.Aggregator;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta.Resolvers;
-using Teleopti.Ccc.Web.Areas.Rta.Core.Server;
+using Teleopti.Ccc.Web.Areas.Rta;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
 
-namespace Teleopti.Ccc.Web.Areas.Rta
+namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta
 {
 	public interface IRta
 	{
@@ -178,7 +175,7 @@ namespace Teleopti.Ccc.Web.Areas.Rta
 
 			Log.ErrorFormat("An invalid authentication key was supplied. AuthenticationKey = {0}. (MessageId = {1})",
 				authenticationKey, messageId);
-			throw new FaultException("You supplied an invalid authentication key. Please verify the key and try again.");
+			throw new InvalidAuthenticationKeyException("You supplied an invalid authentication key. Please verify the key and try again.");
 		}
 
 		public void CheckForActivityChange(CheckForActivityChangeInputModel input)
@@ -192,13 +189,26 @@ namespace Teleopti.Ccc.Web.Areas.Rta
 		{
 			if (externalUserStateBatch.Count() <= 50) return;
 			Log.ErrorFormat("The incoming batch contains more than 50 external user states. Reduce the number if states per batch to a number below 50.");
-			throw new FaultException(
-				"Incoming batch too large. Please lower the number of user states in a batch to below 50.");
+			throw new BatchTooBigException("Incoming batch too large. Please lower the number of user states in a batch to below 50.");
 		}
 
 		public void Initialize()
 		{
 			_rtaDataHandler.Initialize();
+		}
+	}
+
+	public class BatchTooBigException : Exception
+	{
+		public BatchTooBigException(string message) : base(message)
+		{
+		}
+	}
+
+	public class InvalidAuthenticationKeyException : Exception
+	{
+		public InvalidAuthenticationKeyException(string message) : base(message)
+		{
 		}
 	}
 }

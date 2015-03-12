@@ -1,6 +1,7 @@
 using System;
 using NUnit.Framework;
 using SharpTestsEx;
+using Teleopti.Ccc.Domain.ApplicationLayer.Rta;
 using Teleopti.Ccc.Web.Areas.Rta;
 
 namespace Teleopti.Ccc.WebTest.Areas.Rta
@@ -44,7 +45,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta
 			state.IsLoggedOn = false;
 			Target.SaveState(state);
 
-			Database.PersistedAgentStateReadModel.StateCode.Should().Be(Web.Areas.Rta.Rta.LogOutStateCode);
+			Database.PersistedAgentStateReadModel.StateCode.Should().Be(Domain.ApplicationLayer.Rta.Rta.LogOutStateCode);
 		}
 
 		[Test]

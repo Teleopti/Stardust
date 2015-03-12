@@ -235,6 +235,7 @@
     <Compile Include="ApplicationLayer\Rta\AlarmMappingLoader.cs" />
     <Compile Include="ApplicationLayer\Rta\BelongsToDateDecorator.cs" />
     <Compile Include="ApplicationLayer\Rta\AdherenceDetailsViewModelBuilder.cs" />
+    <Compile Include="ApplicationLayer\Rta\CheckForActivityChangeInputModel.cs" />
     <Compile Include="ApplicationLayer\Rta\CurrentBelongsToDate.cs" />
     <Compile Include="ApplicationLayer\Rta\CheckForActivityChangeWebModel.cs" />
     <Compile Include="ApplicationLayer\Rta\ControllableLiteTransactionSyncronization.cs" />
@@ -273,6 +274,7 @@
     <Compile Include="ApplicationLayer\Rta\PersonOrganizationData.cs" />
     <Compile Include="ApplicationLayer\Rta\Resolvers\DataSourceResolver.cs" />
     <Compile Include="ApplicationLayer\Rta\Resolvers\PersonResolver.cs" />
+    <Compile Include="ApplicationLayer\Rta\Rta.cs" />
     <Compile Include="ApplicationLayer\Rta\RtaDataHandler.cs" />
     <Compile Include="ApplicationLayer\Rta\RtaDecoratingEventPublisher.cs" />
     <Compile Include="ApplicationLayer\Rta\RtaProcessContext.cs" />

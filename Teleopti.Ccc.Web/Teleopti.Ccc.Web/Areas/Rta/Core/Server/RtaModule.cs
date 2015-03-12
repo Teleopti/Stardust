@@ -23,7 +23,7 @@ namespace Teleopti.Ccc.Web.Areas.Rta.Core.Server
 			// builder.RegisterModule(new IocCommon.Configuration.RtaModule(_config));
 
 			builder.RegisterType<TeleoptiRtaService>().AsSelf().As<ITeleoptiRtaService>().SingleInstance();
-			builder.RegisterType<Rta>().As<IRta>().SingleInstance();
+			builder.RegisterType<Domain.ApplicationLayer.Rta.Rta>().As<IRta>().SingleInstance();
 			builder.RegisterType<CacheInvalidator>().As<ICacheInvalidator>().SingleInstance();
 			builder.RegisterType<RtaProcessor>().SingleInstance();
 			builder.RegisterType<AgentStateReadModelUpdater>().As<IAgentStateReadModelUpdater>().SingleInstance();

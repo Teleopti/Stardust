@@ -675,7 +675,6 @@
     <Compile Include="Areas\MyTime\Models\Requests\ShiftTradeScheduleViewModelData.cs" />
     <Compile Include="Areas\RtaTool\Controllers\ApplicationController.cs" />
     <Compile Include="Areas\RtaTool\RtaToolAreaRegistration.cs" />
-    <Compile Include="Areas\Rta\CheckForActivityChangeInputModel.cs" />
     <Compile Include="Areas\Rta\Controllers\ActivityChangeController.cs" />
     <Compile Include="Areas\Rta\Controllers\StateController.cs" />
     <Compile Include="Areas\Rta\Core\IoC\RtaAreaModule.cs" />
@@ -1100,7 +1099,6 @@
     <Compile Include="Areas\MyTime\Models\WeekSchedule\WeekScheduleViewModel.cs" />
     <Compile Include="Areas\MyTime\Models\StudentAvailability\StudentAvailabilityViewModel.cs" />
     <Compile Include="Areas\Rta\ITeleoptiRtaService.cs" />
-    <Compile Include="Areas\Rta\Rta.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

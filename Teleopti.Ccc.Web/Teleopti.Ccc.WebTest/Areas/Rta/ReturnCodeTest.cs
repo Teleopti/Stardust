@@ -2,6 +2,8 @@ using System.Collections.ObjectModel;
 using System.ServiceModel;
 using NUnit.Framework;
 using SharpTestsEx;
+using Teleopti.Ccc.Domain.ApplicationLayer.Rta;
+using Teleopti.Ccc.Web.Areas.Rta;
 
 namespace Teleopti.Ccc.WebTest.Areas.Rta
 {
@@ -65,7 +67,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta
 			var state = new ExternalUserStateForTest();
 			var target = RtaForTest.MakeBasedOnState(state);
 
-			Assert.Throws(typeof(FaultException), () => target.SaveStateBatch(externalStates));
+			Assert.Throws(typeof(BatchTooBigException), () => target.SaveStateBatch(externalStates));
 		}
 
 	}
