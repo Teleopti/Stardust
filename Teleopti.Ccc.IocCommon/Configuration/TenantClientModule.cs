@@ -2,7 +2,6 @@
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Security;
 using Teleopti.Ccc.Domain.Security.MultiTenancyAuthentication;
-using Teleopti.Ccc.Infrastructure.MultiTenancy;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Client;
 using Teleopti.Ccc.Infrastructure.Web;
 
@@ -38,9 +37,18 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<DictionaryToPostData>().As<IDictionaryToPostData>().SingleInstance();
 
 			var configServer = _configuration.Args().ConfigServer;
-			builder.Register(c => new SharedSettingsQuerier(configServer))
-				.As<ISharedSettingsQuerier>()
-				.SingleInstance();
+			if(configServer.IsAnUrl())
+			{
+				builder.Register(c => new SharedSettingsQuerier(configServer))
+					.As<ISharedSettingsQuerier>()
+					.SingleInstance();
+			}
+			else
+			{
+				builder.Register(c => new SharedSettingsQuerierForNoWeb())
+					.As<ISharedSettingsQuerier>()
+					.SingleInstance();
+			}
 		}
 
 		private static bool isRunFromTest(string tenantServer)

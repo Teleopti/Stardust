@@ -583,6 +583,7 @@
     <Compile Include="Web\CurrentHttpContext.cs" />
     <Compile Include="Web\ICurrentHttpContext.cs" />
     <Compile Include="Web\SharedSettingsQuerier.cs" />
+    <Compile Include="Web\SharedSettingsQuerierForNoWeb.cs" />
   </ItemGroup>
   <ItemGroup>
     <Service Include="{B4F97281-0DBD-4835-9ED8-7DFB966E87FF}" />
