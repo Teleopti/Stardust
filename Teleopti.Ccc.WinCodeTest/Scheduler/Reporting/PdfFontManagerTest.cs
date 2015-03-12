@@ -42,6 +42,30 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.Reporting
             Assert.That(PdfFontManager.GetFont(10, PdfFontStyle.Regular, cultureInfo).Name, Is.EqualTo(font.Name));
         }
 
+		[Test]
+		public void ShouldReturnTahomaOnPersian()
+		{
+			var cultureInfo = CultureInfo.GetCultureInfo("fa-IR");
+			var font = PdfFontManager.GetFont(9, PdfFontStyle.Regular, cultureInfo);
+			Assert.AreEqual("Tahoma", font.Name);
+		}
+
+		[Test]
+		public void ShouldReturnDownSizedFontOnBoldPersian()
+		{
+			var cultureInfo = CultureInfo.GetCultureInfo("fa-IR");
+			var font = PdfFontManager.GetFont(10, PdfFontStyle.Bold, cultureInfo);
+			Assert.AreEqual(9f, font.Size);
+		}
+
+		[Test]
+		public void ShouldReturnDownSizedFontOnSize9Persian()
+		{
+			var cultureInfo = CultureInfo.GetCultureInfo("fa-IR");
+			var font = PdfFontManager.GetFont(9, PdfFontStyle.Regular, cultureInfo);
+			Assert.AreEqual(8f, font.Size);
+		}
+
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Reliability", "CA2000:Dispose objects before losing scope"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1822:MarkMembersAsStatic"), Test]
         public void ShouldReturnHelveticaOnOthers()
         {

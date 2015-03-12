@@ -17,7 +17,12 @@ namespace Teleopti.Ccc.WinCode.Scheduling.ScheduleReporting
             //             MonotypeSungLight The Monotype Sung Light chinese traditional font face.  
             //             SinoTypeSongLight The SinoType Song Light chinese simplified font face. 
 
-            PdfFont font;
+			PdfFont font;
+			var style = FontStyle.Regular;
+			if (fontStyle == PdfFontStyle.Bold) style = FontStyle.Bold;
+			var theFont = new Font("Helvetica", fontSize, style);
+			var pdfFont = new PdfTrueTypeFont(theFont, true);
+
             switch (cultureInfo.IetfLanguageTag)
             {
                 case "zh-CN"://Simplified Chinese
@@ -32,12 +37,15 @@ namespace Teleopti.Ccc.WinCode.Scheduling.ScheduleReporting
                 case "ko"://Korean
                     font = new PdfCjkStandardFont(PdfCjkFontFamily.HanyangSystemsGothicMedium, fontSize, fontStyle);
                     return font;
+				case "fa-IR"://Persian
+					if (fontSize.Equals(9f)) fontSize = 8f;
+					if (fontStyle.Equals(PdfFontStyle.Bold)) fontSize -= 1;
+
+					theFont = new Font("Tahoma", fontSize, style);
+					pdfFont = new PdfTrueTypeFont(theFont, true);
+					return pdfFont;
             }
-            var style = FontStyle.Regular;
-            if (fontStyle == PdfFontStyle.Bold)
-                style = FontStyle.Bold;
-            var theFont = new Font("Helvetica", fontSize, style);
-            var pdfFont = new PdfTrueTypeFont(theFont, true);
+           
             return pdfFont;
         }
     }
