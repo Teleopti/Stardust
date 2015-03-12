@@ -11,6 +11,7 @@ using Teleopti.Ccc.Domain.Security.Authentication;
 using Teleopti.Ccc.Domain.Security.MultiTenancyAuthentication;
 using Teleopti.Ccc.Infrastructure.MultiTenancy;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Client;
+using Teleopti.Ccc.Infrastructure.Web;
 using Teleopti.Ccc.UserTexts;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.MessageBroker.Client.Composite;
@@ -47,6 +48,7 @@ namespace Teleopti.Ccc.WinCode.Main
 		private readonly IMessageBrokerComposite _messageBroker;
 		private readonly IMultiTenancyApplicationLogon _applicationLogon;
 		private readonly IMultiTenancyWindowsLogon _multiTenancyWindowsLogon;
+		private readonly ISharedSettingsQuerier _sharedSettingsQuerier;
 		public const string UserAgent = "WIN";
 
 
@@ -56,7 +58,8 @@ namespace Teleopti.Ccc.WinCode.Main
 			IServerEndpointSelector serverEndpointSelector,
 			IMessageBrokerComposite messageBroker,
 			IMultiTenancyApplicationLogon applicationLogon,
-			IMultiTenancyWindowsLogon multiTenancyWindowsLogon
+			IMultiTenancyWindowsLogon multiTenancyWindowsLogon,
+			ISharedSettingsQuerier sharedSettingsQuerier
 			)
 		{
 			_view = view;
@@ -67,6 +70,7 @@ namespace Teleopti.Ccc.WinCode.Main
 			_messageBroker = messageBroker;
 			_applicationLogon = applicationLogon;
 			_multiTenancyWindowsLogon = multiTenancyWindowsLogon;
+			_sharedSettingsQuerier = sharedSettingsQuerier;
 			if (ConfigurationManager.AppSettings["GetConfigFromWebService"] != null)
 				_model.GetConfigFromWebService = Convert.ToBoolean(ConfigurationManager.AppSettings["GetConfigFromWebService"],
 					CultureInfo.InvariantCulture);
@@ -169,7 +173,8 @@ namespace Teleopti.Ccc.WinCode.Main
 
 		private void getLogonType()
 		{
-			if (!_view.InitStateHolderWithoutDataSource(_messageBroker))
+			var settings = _sharedSettingsQuerier.GetSharedSettings();
+			if (!_view.InitStateHolderWithoutDataSource(_messageBroker, settings))
 				CurrentStep--; //?
 			_view.ShowStep(false); //once a sdk is loaded it is not changeable
 		}

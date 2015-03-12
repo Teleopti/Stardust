@@ -491,6 +491,7 @@
     <Compile Include="Areas\SeatPlanner\Core\ViewModels\SeatMapViewModel.cs" />
     <Compile Include="Areas\SeatPlanner\Core\ViewModels\SeatViewModel.cs" />
     <Compile Include="Areas\SSO\Core\ISsoAuthenticator.cs" />
+    <Compile Include="Areas\Start\Controllers\ConfigController.cs" />
     <Compile Include="Areas\Start\Core\Authentication\Services\ILogLogonAttempt.cs" />
     <Compile Include="Areas\Tenant\Core\DataSourceConfiguration.cs" />
     <Compile Include="Areas\Tenant\Core\DataSourceConfigurationProviderUsingNhibFiles.cs" />
@@ -1966,6 +1967,7 @@
     <Folder Include="Areas\PerformanceTool\Content\Templates\" />
     <Folder Include="Areas\SeatPlanner\Views\LocationHierarchy\" />
     <Folder Include="Areas\SSO\Views\Authentication\" />
+    <Folder Include="Areas\Start\Views\Config\" />
     <Folder Include="Core\Aop\Aspects\" />
   </ItemGroup>
   <ItemGroup>

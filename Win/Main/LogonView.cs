@@ -6,6 +6,7 @@ using System.Globalization;
 using System.Windows.Forms;
 using Syncfusion.Windows.Forms;
 using Teleopti.Ccc.Domain.Security.Authentication;
+using Teleopti.Ccc.Infrastructure.Web;
 using Teleopti.Ccc.UserTexts;
 using Teleopti.Ccc.Win.Common;
 using Teleopti.Ccc.Win.Main.LogonScreens;
@@ -67,11 +68,11 @@ namespace Teleopti.Ccc.Win.Main
 		//	return true;
 		//}
 
-		public bool InitStateHolderWithoutDataSource(IMessageBrokerComposite messageBroker)
+		public bool InitStateHolderWithoutDataSource(IMessageBrokerComposite messageBroker, SharedSettings settings)
 		{
 			if (_model.GetConfigFromWebService)
 			{
-				if (!LogonInitializeStateHolder.InitWithoutDataSource(_model, messageBroker))
+				if (!LogonInitializeStateHolder.InitWithoutDataSource(_model, messageBroker, settings))
 					return showError();
 			}
 			else

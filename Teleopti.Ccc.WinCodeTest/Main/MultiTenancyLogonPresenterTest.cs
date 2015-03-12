@@ -8,6 +8,7 @@ using Teleopti.Ccc.Domain.Infrastructure;
 using Teleopti.Ccc.Domain.Security.Authentication;
 using Teleopti.Ccc.Infrastructure.MultiTenancy;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Client;
+using Teleopti.Ccc.Infrastructure.Web;
 using Teleopti.Ccc.UserTexts;
 using Teleopti.Ccc.WinCode.Main;
 using Rhino.Mocks;
@@ -29,6 +30,7 @@ namespace Teleopti.Ccc.WinCodeTest.Main
 		private IMultiTenancyApplicationLogon _appLogon;
 		private IMultiTenancyWindowsLogon _winLogon;
 		private IMessageBrokerComposite _mBroker;
+		private ISharedSettingsQuerier _sharedSettingsQuerier;
 
 		[SetUp]
 		public void Setup()
@@ -41,8 +43,9 @@ namespace Teleopti.Ccc.WinCodeTest.Main
 			_appLogon = MockRepository.GenerateMock<IMultiTenancyApplicationLogon>();
 			_winLogon = MockRepository.GenerateMock<IMultiTenancyWindowsLogon>();
 			_mBroker = MockRepository.GenerateMock<IMessageBrokerComposite>();
+			_sharedSettingsQuerier = MockRepository.GenerateMock<ISharedSettingsQuerier>();
 			_target = new MultiTenancyLogonPresenter(_view, _model, _initializer,  _logOnOff,
-				_endPointSelector, _mBroker, _appLogon, _winLogon);
+				_endPointSelector, _mBroker, _appLogon, _winLogon, _sharedSettingsQuerier);
 			_model.AuthenticationType = AuthenticationTypeOption.Application;
 		}
 
@@ -69,6 +72,7 @@ namespace Teleopti.Ccc.WinCodeTest.Main
 			_view.Stub(x => x.ClearForm("")).IgnoreArguments();
 			_endPointSelector.Stub(x => x.GetEndpointNames()).Return(new List<string> { "local" });
 			_view.Stub(x => x.ShowStep(false));
+			_sharedSettingsQuerier.Stub(x => x.GetSharedSettings()).Return(new SharedSettings());
 			_target.CurrentStep = LoginStep.SelectSdk;
 			_target.Initialize();
 		}

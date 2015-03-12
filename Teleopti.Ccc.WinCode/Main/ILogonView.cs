@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Windows.Forms;
 using Teleopti.Ccc.Infrastructure.Licensing;
+using Teleopti.Ccc.Infrastructure.Web;
 using Teleopti.Interfaces.MessageBroker.Client.Composite;
 
 namespace Teleopti.Ccc.WinCode.Main
@@ -20,6 +21,6 @@ namespace Teleopti.Ccc.WinCode.Main
 		void ButtonLogOnCancelClick(object sender, EventArgs e);
 		void BtnBackClick(object sender, EventArgs e);
 		//bool InitStateHolder(IMessageBrokerComposite messageBroker, string passwordPolicyString);
-		bool InitStateHolderWithoutDataSource(IMessageBrokerComposite messageBroker);
+		bool InitStateHolderWithoutDataSource(IMessageBrokerComposite messageBroker, SharedSettings settings);
 	}
 }
