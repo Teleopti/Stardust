@@ -41,7 +41,7 @@ namespace Teleopti.Ccc.TestCommon.IoC
 		public void ShouldResetWithTestRegistrations()
 		{
 			var instance1 = PersonRepository;
-			Context.Reset(b => b.RegisterInstance(instance1).As<IPersonRepository>());
+			Context.Reset((b, c) => b.RegisterInstance(instance1).As<IPersonRepository>());
 			var instance2 = PersonRepository;
 			instance1.Should().Be.SameInstanceAs(instance2);
 		}

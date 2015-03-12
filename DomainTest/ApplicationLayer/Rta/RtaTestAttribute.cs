@@ -1,7 +1,6 @@
 using System;
 using System.Threading;
 using Autofac;
-using MbCache.Core;
 using Teleopti.Ccc.Domain;
 using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.ApplicationLayer;
@@ -24,9 +23,8 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta
 		{
 			builder.RegisterInstance(new FakeMessageSender()).As<IMessageSender>().AsSelf();
 			builder.RegisterInstance(new FakeCurrentDatasource()).As<ICurrentDataSource>().AsSelf();
-			builder.RegisterInstance(new FakeMbCacheFactory()).As<IMbCacheFactory>().AsSelf();
-			registerFakePublisher(builder, new FakeEventPublisher());
-			registerFakeDatabase(builder, new FakeRtaDatabase());
+			registerFakePublisher(builder, configuration, new FakeEventPublisher());
+			registerFakeDatabase(builder, configuration, new FakeRtaDatabase());
 
 			builder.RegisterInstance(new FakeReadModelUnitOfWorkAspect()).As<IReadModelUnitOfWorkAspect>();
 			builder.RegisterInstance(new FakeAllBusinessUnitsUnitOfWorkAspect()).As<IAllBusinessUnitsUnitOfWorkAspect>().AsSelf();
@@ -42,15 +40,15 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta
 
 		public void SimulateRestartWith(MutableNow now, FakeRtaDatabase database, FakeEventPublisher publisher)
 		{
-			Reset(b =>
+			Reset((b, c) =>
 			{
-				registerFakeDatabase(b, database);
-				registerFakePublisher(b, publisher);
+				registerFakeDatabase(b, c, database);
+				registerFakePublisher(b, c, publisher);
 				b.RegisterInstance(now).As<INow>().AsSelf();
 			});
 		}
 
-		private static void registerFakeDatabase(ContainerBuilder builder, FakeRtaDatabase database)
+		private static void registerFakeDatabase(ContainerBuilder builder, IIocConfiguration configuration, FakeRtaDatabase database)
 		{
 			builder.RegisterInstance(database)
 				.As<IDatabaseReader>()
@@ -63,7 +61,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta
 			builder.RegisterInstance(database.StateGroupActivityAlarmRepository).As<IStateGroupActivityAlarmRepository>();
 		}
 
-		private static void registerFakePublisher(ContainerBuilder builder, FakeEventPublisher publisher)
+		private static void registerFakePublisher(ContainerBuilder builder, IIocConfiguration configuration, FakeEventPublisher publisher)
 		{
 			builder.RegisterInstance(publisher).As<IEventPublisher>().AsSelf();
 		}

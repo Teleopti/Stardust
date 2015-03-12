@@ -1,4 +1,6 @@
 using System.Configuration;
+using System.Linq;
+using System.Runtime.Caching;
 using Autofac;
 using MbCache.Configuration;
 using MbCache.ProxyImpl.LinFu;
@@ -19,6 +21,7 @@ namespace Teleopti.Ccc.IocCommon
 		public IContainer SharedContainer { get; set; }
 		public ILockObjectGenerator CacheLockObjectGenerator { get; set; }
 		public IDataSourceConfigurationSetter DataSourceConfigurationSetter { get; set; }
+		public bool ClearCache { get; set; }
 
 		private CacheBuilder _cacheModule;
 
@@ -26,10 +29,20 @@ namespace Teleopti.Ccc.IocCommon
 		{
 			get
 			{
-				return _cacheModule ?? (_cacheModule = new CacheBuilder(new LinFuProxyFactory())
+				if (_cacheModule != null)
+					return _cacheModule;
+				if (ClearCache)
+				{
+					MemoryCache.Default
+						.Select(x => x.Key)
+						.ToList()
+						.ForEach(x => MemoryCache.Default.Remove(x));
+				}
+				_cacheModule = new CacheBuilder(new LinFuProxyFactory())
 					.SetCache(new InMemoryCache(20))
 					.SetCacheKey(new TeleoptiCacheKey())
-					.SetLockObjectGenerator(CacheLockObjectGenerator));
+					.SetLockObjectGenerator(CacheLockObjectGenerator);
+				return _cacheModule;
 			}
 		}
 
@@ -41,6 +54,7 @@ namespace Teleopti.Ccc.IocCommon
 			ConfigServer = ConfigurationManager.AppSettings["ConfigServer"];
 			PublishEventsToServiceBus = readBoolAppSetting("PublishEventsToServiceBus", true);
 			DataSourceConfigurationSetter = Infrastructure.NHibernateConfiguration.DataSourceConfigurationSetter.ForWeb();
+			ClearCache = false;
 		}
 
 		

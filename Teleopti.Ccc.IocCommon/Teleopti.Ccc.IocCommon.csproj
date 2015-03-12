@@ -135,6 +135,7 @@
     <Reference Include="System.Core">
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
     </Reference>
+    <Reference Include="System.Runtime.Caching" />
     <Reference Include="System.Xml" />
     <Reference Include="Toggle.Net, Version=0.6.0.0, Culture=neutral, PublicKeyToken=edf35f5974b06d9f, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>

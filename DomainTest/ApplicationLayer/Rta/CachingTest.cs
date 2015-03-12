@@ -13,25 +13,26 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta
 		public FakeAllBusinessUnitsUnitOfWorkAspect UnitOfWorkAspect;
 		public IRta Target;
 
-		[Test, Ignore("Cant include mbcache in test yet")]
-		public void ShouldNotOpenUnitOfWorkWhenGettingFromCache()
+		[Test]
+		public void ShouldOnlyOpenUnitOfWorkFirstTime()
 		{
 			Database
 				.WithUser("usercode")
 				.WithAlarm("phone", null);
+
 			Target.SaveState(new ExternalUserStateForTest
 			{
 				UserCode = "usercode",
 				StateCode = "phone"
 			});
+			UnitOfWorkAspect.Invoked.Should().Be.True();
+
 			UnitOfWorkAspect.Invoked = false;
-
 			Target.SaveState(new ExternalUserStateForTest
 			{
 				UserCode = "usercode",
 				StateCode = "phone"
 			});
-
 			UnitOfWorkAspect.Invoked.Should().Be.False();
 		}
 

@@ -5,7 +5,6 @@ using Autofac;
 using NUnit.Framework;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common.Time;
-using Teleopti.Ccc.Infrastructure.Toggle;
 using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.IocCommon.Toggle;
 using Teleopti.Ccc.TestCommon.FakeData;
@@ -16,7 +15,7 @@ namespace Teleopti.Ccc.TestCommon.IoC
 	public interface IIoCTestContext
 	{
 		void Reset();
-		void Reset(Action<ContainerBuilder> registerInContainer);
+		void Reset(Action<ContainerBuilder, IIocConfiguration> registerInContainer);
 	};
 
 	public interface IRegisterInContainer
@@ -72,7 +71,7 @@ namespace Teleopti.Ccc.TestCommon.IoC
 		{
 			fixture(testDetails);
 			method(testDetails);
-			buildContainer(b => {});
+			buildContainer((b, c) => { });
 			injectMembers();
 			BeforeTest();
 		}
@@ -94,10 +93,10 @@ namespace Teleopti.Ccc.TestCommon.IoC
 			_method = testDetails.Method;
 		}
 
-		private void buildContainer(Action<ContainerBuilder> registerInContainer)
+		private void buildContainer(Action<ContainerBuilder, IIocConfiguration> registerInContainer)
 		{
 			var builder = new ContainerBuilder();
-			var configuration = new IocConfiguration(new IocArgs(), Toggles());
+			var configuration = new IocConfiguration(new IocArgs {ClearCache = true}, Toggles());
 			builder.RegisterModule(new CommonModule(configuration));
 			builder.RegisterInstance(new MutableNow("2014-12-18 13:31")).As<INow>().AsSelf();
 			builder.RegisterInstance(new FakeUserTimeZone(TimeZoneInfo.Utc)).As<IUserTimeZone>().AsSelf().SingleInstance();
@@ -106,7 +105,7 @@ namespace Teleopti.Ccc.TestCommon.IoC
 			RegisterInContainer(builder, configuration);
 			if (_fixture is IRegisterInContainer)
 				(_fixture as IRegisterInContainer).RegisterInContainer(builder, configuration);
-			registerInContainer(builder);
+			registerInContainer(builder, configuration);
 			_container = builder.Build();
 		}
 
@@ -137,11 +136,11 @@ namespace Teleopti.Ccc.TestCommon.IoC
 
 		public void Reset()
 		{
-			buildContainer(b => { });
+			buildContainer((b, c) => { });
 			injectMembers();
 		}
 
-		public void Reset(Action<ContainerBuilder> registerInContainer)
+		public void Reset(Action<ContainerBuilder, IIocConfiguration> registerInContainer)
 		{
 			buildContainer(registerInContainer);
 			injectMembers();
