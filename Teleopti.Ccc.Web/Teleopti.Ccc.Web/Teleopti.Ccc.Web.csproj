@@ -476,7 +476,6 @@
       <DependentUpon>Index.aspx</DependentUpon>
     </Compile>
     <Compile Include="Areas\Rta\Controllers\SyncController.cs" />
-    <Compile Include="Areas\Rta\Core\Server\CacheInvalidator.cs" />
     <Compile Include="Areas\Search\Controllers\SearchController.cs" />
     <Compile Include="Areas\SeatPlanner\Controllers\LocationHierarchyController.cs" />
     <Compile Include="Areas\SeatPlanner\Controllers\SeatMapCommandController.cs" />

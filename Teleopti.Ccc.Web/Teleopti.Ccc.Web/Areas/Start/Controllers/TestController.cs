@@ -33,7 +33,7 @@ namespace Teleopti.Ccc.Web.Areas.Start.Controllers
 	public class TestController : Controller
 	{
 		private readonly IMutateNow _mutateNow;
-		private readonly IMbCacheFactory _cacheFactory;
+		private readonly ICacheInvalidator _cacheInvalidator;
 		private readonly ISessionSpecificDataProvider _sessionSpecificDataProvider;
 		private readonly ISsoAuthenticator _authenticator;
 		private readonly IWebLogOn _logon;
@@ -46,10 +46,10 @@ namespace Teleopti.Ccc.Web.Areas.Start.Controllers
 		private readonly ISettings _settings;
 		private readonly IPhysicalApplicationPath _physicalApplicationPath;
 
-		public TestController(IMutateNow mutateNow, IMbCacheFactory cacheFactory, ISessionSpecificDataProvider sessionSpecificDataProvider, ISsoAuthenticator authenticator, IWebLogOn logon, IBusinessUnitProvider businessUnitProvider, ICurrentHttpContext httpContext, IFormsAuthentication formsAuthentication, IToggleManager toggleManager, IIdentityProviderProvider identityProviderProvider, ILoadPasswordPolicyService loadPasswordPolicyService, ISettings settings, IPhysicalApplicationPath physicalApplicationPath)
+		public TestController(IMutateNow mutateNow, ICacheInvalidator cacheInvalidator, ISessionSpecificDataProvider sessionSpecificDataProvider, ISsoAuthenticator authenticator, IWebLogOn logon, IBusinessUnitProvider businessUnitProvider, ICurrentHttpContext httpContext, IFormsAuthentication formsAuthentication, IToggleManager toggleManager, IIdentityProviderProvider identityProviderProvider, ILoadPasswordPolicyService loadPasswordPolicyService, ISettings settings, IPhysicalApplicationPath physicalApplicationPath)
 		{
 			_mutateNow = mutateNow;
-			_cacheFactory = cacheFactory;
+			_cacheInvalidator = cacheInvalidator;
 			_sessionSpecificDataProvider = sessionSpecificDataProvider;
 			_authenticator = authenticator;
 			_logon = logon;
@@ -251,13 +251,8 @@ namespace Teleopti.Ccc.Web.Areas.Start.Controllers
 
 		private void invalidateRtaCache()
 		{
-			if (_cacheFactory != null)
-			{
-				_cacheFactory.Invalidate<IDatabaseReader>();
-				_cacheFactory.Invalidate<IPersonOrganizationProvider>();
-				_cacheFactory.Invalidate<AlarmMappingLoader>();
-				_cacheFactory.Invalidate<StateMappingLoader>();
-			}
+			if (_cacheInvalidator != null)
+				_cacheInvalidator.InvalidateAll();
 		}
 
 	}

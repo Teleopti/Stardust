@@ -2,6 +2,7 @@
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta.Aggregator;
 using Teleopti.Ccc.Domain.FeatureFlags;
+using Teleopti.Ccc.Infrastructure.Rta;
 using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.Rta.WebService;
 
