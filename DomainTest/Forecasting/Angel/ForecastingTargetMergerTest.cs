@@ -52,10 +52,10 @@ namespace Teleopti.Ccc.DomainTest.Forecasting.Angel
 					workloadDay2
 				}, TaskOwnerPeriodType.Other).TaskOwnerDayCollection);
 
-			workloadDay1.Tasks.ToString().Should().Be.EqualTo(tasks1.ToString());
+			Assert.AreEqual(tasks1,workloadDay1.Tasks,.0001);
 			workloadDay1.AverageAfterTaskTime.Should().Be.EqualTo(averageAfterTaskTime1);
 			workloadDay1.AverageTaskTime.Should().Be.EqualTo(averageTaskTime1);
-			workloadDay2.Tasks.ToString().Should().Be.EqualTo(tasks2.ToString());
+			Assert.AreEqual(tasks2, workloadDay2.Tasks, .0001);
 			workloadDay2.AverageAfterTaskTime.Should().Be.EqualTo(averageAfterTaskTime2);
 			workloadDay2.AverageTaskTime.Should().Be.EqualTo(averageTaskTime2);
 		}
