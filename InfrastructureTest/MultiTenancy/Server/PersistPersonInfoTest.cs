@@ -1,4 +1,5 @@
-﻿using NHibernate.Exceptions;
+﻿using System;
+using NHibernate.Exceptions;
 using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Server;
@@ -36,6 +37,20 @@ namespace Teleopti.Ccc.InfrastructureTest.MultiTenancy.Server
 			session.Flush();
 			session.Clear();
 			session.Get<PersonInfo>(personInfo.Id).Should().Not.Be.Null();
+		}
+
+		[Test]
+		public void ShouldInsertNonExistingWithId()
+		{
+			var id = Guid.NewGuid();
+			var session = tenantUnitOfWorkManager.CurrentSession();
+
+			var personInfo = new PersonInfo(tenant) {Id = id};
+			target.Persist(personInfo);
+
+			session.Flush();
+			session.Clear();
+			session.Get<PersonInfo>(personInfo.Id).Id.Should().Be.EqualTo(id);
 		}
 
 		[Test]
