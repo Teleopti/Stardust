@@ -14,7 +14,12 @@ namespace Teleopti.Ccc.Win.Sikuli.Helpers
 
 		public ResultValue CombineResultValue(SikuliValidationResult other)
 		{
-			return Result.CompareTo(other.Result) >= 0 ? Result : other.Result;
+			return getHigherEnum(this.Result, other.Result);
+		}
+
+		private static ResultValue getHigherEnum(ResultValue first, ResultValue second)
+		{
+			return first.CompareTo(second) >= 0 ? first : second;
 		}
 
 		public StringBuilder CombineDetails(SikuliValidationResult other)
@@ -42,9 +47,9 @@ namespace Teleopti.Ccc.Win.Sikuli.Helpers
 			get { return _stringBuilder; }
 		}
 
-		public void AppendLimitValueLineToDetails(string name, string limit, string value)
+		public void AppendResultLine(string name, string limit, string value, ResultValue resultValue)
 		{
-			var line = String.Format("{0} : Limit = {1}; Value = {2}", name, limit, value);
+			var line = String.Format("{0} : Limit = {1}; Value = {2}; {3}", name, limit, value, resultValue);
 			Details.AppendLine(line);
 		}
 	}
