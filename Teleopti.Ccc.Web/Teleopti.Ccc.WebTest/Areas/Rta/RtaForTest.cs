@@ -13,7 +13,6 @@ using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.IocCommon.Toggle;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.Web.Areas.Rta;
-using Teleopti.Ccc.Web.Areas.Rta.Core.Server;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.MessageBroker.Client;
 
@@ -58,7 +57,6 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta
 			var builder = new ContainerBuilder();
 			var iocConfiguration = new IocConfiguration(new IocArgs(), new FalseToggleManager());
 			builder.RegisterModule(new CommonModule(iocConfiguration));
-			builder.RegisterModule(new RtaModule(iocConfiguration));
 			builder.RegisterInstance(messageSender ?? MockRepository.GenerateMock<IMessageSender>());
 			builder.RegisterInstance(dataSource ?? new FakeCurrentDatasource());
 			builder.RegisterInstance(eventPublisher ?? new FakeEventPublisher());

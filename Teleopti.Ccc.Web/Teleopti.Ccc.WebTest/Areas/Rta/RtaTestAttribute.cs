@@ -10,11 +10,9 @@ using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Domain.DistributedLock;
 using Teleopti.Ccc.Domain.Repositories;
-using Teleopti.Ccc.Infrastructure.DistributedLock;
 using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.IoC;
-using Teleopti.Ccc.Web.Areas.Rta.Core.Server;
 using Teleopti.Interfaces.Domain;
 using IMessageSender = Teleopti.Interfaces.MessageBroker.Client.IMessageSender;
 
@@ -24,8 +22,6 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta
 	{
 		protected override void RegisterInContainer(ContainerBuilder builder, IIocConfiguration configuration)
 		{
-			builder.RegisterModule(new RtaModule(configuration));
-
 			builder.RegisterInstance(new FakeMessageSender()).As<IMessageSender>().AsSelf();
 			builder.RegisterInstance(new FakeCurrentDatasource()).As<ICurrentDataSource>().AsSelf();
 			builder.RegisterInstance(new FakeMbCacheFactory()).As<IMbCacheFactory>().AsSelf();

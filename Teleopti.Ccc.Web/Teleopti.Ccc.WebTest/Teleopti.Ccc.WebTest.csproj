@@ -244,6 +244,7 @@
     <Compile Include="Areas\Rta\CachingTest.cs" />
     <Compile Include="Areas\Rta\PersonNeutralAdherenceEventTest.cs" />
     <Compile Include="Areas\Rta\Synchronization\LockingTest.cs" />
+    <Compile Include="Areas\Rta\TeleoptiRtaServiceResolveTest.cs" />
     <Compile Include="Areas\Rta\UnrecognizedStateTest.cs" />
     <Compile Include="Areas\Search\SearchControllerTest.cs" />
     <Compile Include="Areas\SeatPlanner\Controllers\LocationHierarchyControllerTest.cs" />

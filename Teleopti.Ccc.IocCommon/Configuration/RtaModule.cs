@@ -1,6 +1,7 @@
 ﻿using System;
 using Autofac;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta;
+using Teleopti.Ccc.Domain.ApplicationLayer.Rta.Aggregator;
 using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Infrastructure.Aop;
 using Teleopti.Ccc.Infrastructure.Rta;
@@ -19,6 +20,29 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 
 		protected override void Load(ContainerBuilder builder)
 		{
+			builder.RegisterType<Rta>().As<IRta>().SingleInstance();
+			builder.RegisterType<CacheInvalidator>().As<ICacheInvalidator>().SingleInstance();
+			builder.RegisterType<RtaProcessor>().SingleInstance();
+			builder.RegisterType<AgentStateReadModelUpdater>().As<IAgentStateReadModelUpdater>().SingleInstance();
+
+			if (_config.Toggle(Toggles.RTA_NoBroker_31237))
+			{
+				builder.RegisterType<NoMessagge>().As<IAgentStateMessageSender>().SingleInstance();
+				builder.RegisterType<NoAggregation>().As<IAdherenceAggregator>().SingleInstance();
+			}
+			else
+			{
+				builder.RegisterType<AgentStateMessageSender>().As<IAgentStateMessageSender>().SingleInstance();
+				builder.RegisterType<AdherenceAggregator>().As<IAdherenceAggregator>().SingleInstance();
+			}
+
+			builder.RegisterType<OrganizationForPerson>().SingleInstance().As<IOrganizationForPerson>();
+
+			if (_config.Toggle(Toggles.RTA_EventStreamInitialization_31237))
+				builder.RegisterType<StateStreamSynchronizer>().As<IStateStreamSynchronizer>().SingleInstance();
+			else
+				builder.RegisterType<NoStateStreamSynchronizer>().As<IStateStreamSynchronizer>().SingleInstance();
+
 			builder.RegisterType<AgentStateAssembler>().SingleInstance();
 			builder.RegisterType<StateMapper>().As<IStateMapper>().SingleInstance();
 
