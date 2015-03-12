@@ -49,7 +49,7 @@ namespace Teleopti.Ccc.WinCode.PeopleAdmin.Models
 				_tenantData.Identity = ContainedEntity.AuthenticationInfo.Identity;
 			if (ContainedEntity.ApplicationAuthenticationInfo != null)
 			{
-				_tenantData.UserName = ContainedEntity.ApplicationAuthenticationInfo.ApplicationLogOnName;
+				_tenantData.ApplicationLogonName = ContainedEntity.ApplicationAuthenticationInfo.ApplicationLogOnName;
 				_tenantData.Password = ContainedEntity.ApplicationAuthenticationInfo.Password;
 			}
 			_tenantData.TerminalDate = ContainedEntity.TerminalDate;
@@ -250,7 +250,7 @@ namespace Teleopti.Ccc.WinCode.PeopleAdmin.Models
 				_isValid = ContainedEntity.ChangePassword(ContainedEntity.ApplicationAuthenticationInfo.Password, policyService, _userDetail);
 				if (!_isValid) //Is there a better solution for this?
 					writeMessage();
-				_tenantData.UserName = value;
+				_tenantData.ApplicationLogonName = value;
 				_tenantData.Changed = true;
 			}
 		}

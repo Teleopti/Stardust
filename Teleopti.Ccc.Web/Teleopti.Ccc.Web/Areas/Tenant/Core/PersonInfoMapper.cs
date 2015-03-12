@@ -1,6 +1,7 @@
 ﻿using System;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Server;
 using Teleopti.Ccc.Web.Areas.Tenant.Model;
+using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Web.Areas.Tenant.Core
 {
@@ -19,9 +20,10 @@ namespace Teleopti.Ccc.Web.Areas.Tenant.Core
 							personInfoModel.PersonId.Value :
 							Guid.Empty;
 			var tenant = _findTenantByNameQuery.Find(personInfoModel.Tenant);
-			var personInfo = new PersonInfo(tenant) { Id = id, TerminalDate = personInfoModel.TerminalDate};
+			var dateOnly = personInfoModel.TerminalDate.HasValue ? new DateOnly(personInfoModel.TerminalDate.Value) : (DateOnly?)null;
+			var personInfo = new PersonInfo(tenant) { Id = id, TerminalDate = dateOnly};
 			personInfo.SetIdentity(personInfoModel.Identity);
-			personInfo.SetApplicationLogonName(personInfoModel.UserName);
+			personInfo.SetApplicationLogonName(personInfoModel.ApplicationLogonName);
 			personInfo.SetPassword(personInfoModel.Password);
 			return personInfo;
 		}

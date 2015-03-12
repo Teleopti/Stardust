@@ -45,7 +45,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Tenant.Core
 		{
 			var applicationLogon = RandomName.Make();
 			var target = new PersonInfoMapper(MockRepository.GenerateMock<IFindTenantByNameQuery>());
-			var result = target.Map(new PersonInfoModel { UserName = applicationLogon });
+			var result = target.Map(new PersonInfoModel { ApplicationLogonName = applicationLogon });
 			result.ApplicationLogonName.Should().Be.EqualTo(applicationLogon);
 		}
 
