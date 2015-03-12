@@ -32,6 +32,7 @@ namespace Teleopti.Ccc.WinCode.Backlog
 		private readonly IDictionary<ISkill, ISkill> _skillPairsEmailBackOffice = new Dictionary<ISkill, ISkill>();
 		private IList<ISkillMap_DEV> _skillMappings = new List<ISkillMap_DEV>();
 		private bool _loaded;
+		private DateOnly _productPlanStart;
 
 		public BacklogModel(IComponentContext componentContext, DateOnlyPeriod period)
 		{
@@ -52,6 +53,11 @@ namespace Teleopti.Ccc.WinCode.Backlog
 			get { return _loaded; }
 		}
 
+		public DateOnly ProductPlanStart
+		{
+			get { return _productPlanStart; }
+		}
+
 		public IEnumerable<ISkill> GetAllSkills()
 		{
 			return new List<ISkill>(_stateHolder.SchedulingResultState.Skills);
@@ -61,6 +67,7 @@ namespace Teleopti.Ccc.WinCode.Backlog
 		{
 			var dateOnlyPeriodAsDateTimePeriod = new DateOnlyPeriodAsDateTimePeriod(_period, TimeZoneGuard.Instance.TimeZone);
 			_stateHolder.RequestedPeriod = dateOnlyPeriodAsDateTimePeriod;
+			_productPlanStart = productPlanStart;
 			
 			using (IUnitOfWork uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
 			{
@@ -95,17 +102,17 @@ namespace Teleopti.Ccc.WinCode.Backlog
 			createBacklogTasks(_period);
 			setClosedDates(_period);
 			setScheduledTime(_period);
-			TransferBacklogs(productPlanStart);
+			TransferBacklogs();
 			_loaded = true;
 		}
 
 		
 
-		public void TransferBacklogs(DateOnly productPlanStart)
+		public void TransferBacklogs()
 		{
 			var emailSkills =
 				_stateHolder.SchedulingResultState.Skills.Where(s => s.SkillType.ForecastSource == ForecastSource.Email).ToList();
-			transferScheduledBacklog(emailSkills, productPlanStart);
+			transferScheduledBacklog(emailSkills, _productPlanStart);
 		}
 
 		private void transferScheduledBacklog(List<ISkill> emailSkills, DateOnly productPlanStart)
@@ -126,12 +133,12 @@ namespace Teleopti.Ccc.WinCode.Backlog
 						continue;
 
 					var nextTask = _taskDic[emailSkill][nextStart];
-					nextTask.BacklogScheduledTask.TransferedBacklog = taskOnDate.BacklogScheduledTask.ScheduledBacklogTimeOnTask();
+					nextTask.BacklogScheduledTask.TransferedBacklog = taskOnDate.BacklogScheduledTask.ScheduledBacklogTimeOnTask(_productPlanStart);
 					nextTask.BacklogProductPlanTask.TransferedBacklog = taskOnDate.BacklogProductPlanTask.PlannedBacklogTimeOnTask();
 					if (taskOnDate.StartDate < productPlanStart && nextTask.StartDate >= productPlanStart)
 						nextTask.BacklogProductPlanTask.TransferedBacklog =
 							nextTask.BacklogProductPlanTask.TransferedBacklog.Add(
-								taskOnDate.BacklogScheduledTask.ScheduledBacklogTimeOnTask());
+								taskOnDate.BacklogScheduledTask.ScheduledBacklogTimeOnTask(_productPlanStart));
 				}
 			}
 		}
@@ -145,8 +152,9 @@ namespace Teleopti.Ccc.WinCode.Backlog
 					if (!_skillPairsBackofficeEmail.ContainsKey(skillDay.Skill))
 						continue;
 
-					var time =
-						TimeSpan.FromHours(SkillStaffPeriodHelper.ScheduledHours(skillDay.SkillStaffPeriodCollection).GetValueOrDefault(0));
+					TimeSpan time;
+					time = TimeSpan.FromHours(SkillStaffPeriodHelper.ScheduledHours(skillDay.SkillStaffPeriodCollection).GetValueOrDefault(0));					
+		
 					setScheduledTimeOnBacklogTasks(_skillPairsBackofficeEmail[skillDay.Skill], time, dateOnly);
 				}
 			}
@@ -383,7 +391,7 @@ namespace Teleopti.Ccc.WinCode.Backlog
 			var time = TimeSpan.Zero;
 			foreach (var task in _taskDic[skill].Values)
 			{
-				time = time.Add(task.BacklogProductPlanTask.PlannedBacklogTimeOnDate(date));
+				time = time.Add(task.BacklogProductPlanTask.PlannedBacklogTimeOnDate(date, _productPlanStart));
 			}
 
 			return time;
@@ -458,13 +466,13 @@ namespace Teleopti.Ccc.WinCode.Backlog
 			transferScheduledBacklog(emailSkills, productPlanStart);
 		}
 
-		public void SetManualEntryOnIndex(int colIndex, ISkill skill, TimeSpan time, DateOnly productPlanStart)
+		public void SetManualEntryOnIndex(int colIndex, ISkill skill, TimeSpan time)
 		{
 			var date = _stateHolder.RequestedPeriod.DateOnlyPeriod.DayCollection()[colIndex - 1];
-			SetManualEntryOnDate(date, skill, time, productPlanStart);
+			SetManualEntryOnDate(date, skill, time);
 		}
 
-		public void SetManualEntryOnDate(DateOnly date, ISkill skill, TimeSpan time, DateOnly productPlanStart)
+		public void SetManualEntryOnDate(DateOnly date, ISkill skill, TimeSpan time)
 		{
 			if ( _taskDic[skill].ContainsKey(date) && _taskDic[skill][date].ClosedDays.Contains(date))
 				return;
@@ -481,7 +489,7 @@ namespace Teleopti.Ccc.WinCode.Backlog
 
 			var emailSkills =
 				_stateHolder.SchedulingResultState.Skills.Where(s => s.SkillType.ForecastSource == ForecastSource.Email).ToList();
-			transferScheduledBacklog(emailSkills, productPlanStart);
+			transferScheduledBacklog(emailSkills, _productPlanStart);
 		}
 
 		private void clearManualEntryOnBacklogTasks(ISkill skill, DateOnly date)
@@ -506,7 +514,7 @@ namespace Teleopti.Ccc.WinCode.Backlog
 			TimeSpan timeToBook = time;
 			foreach (var affectedTask in affectedTasks.Values)
 			{
-				var maxTime = affectedTask.BacklogProductPlanTask.PlannedBacklogTimeOnDate(date.AddDays(-1));
+				var maxTime = affectedTask.BacklogProductPlanTask.PlannedBacklogTimeOnDate(date.AddDays(-1),_productPlanStart);
 				if (affectedTask.StartDate == date)
 					maxTime = affectedTask.BacklogProductPlanTask.TotalIncomingTime();
 				if (timeToBook <= maxTime)
@@ -658,7 +666,7 @@ namespace Teleopti.Ccc.WinCode.Backlog
 				return TimeSpan.Zero;
 
 			var task = _taskDic[skill][date];
-			return task.BacklogScheduledTask.ScheduledTimeOnTask();
+			return task.BacklogScheduledTask.ScheduledTimeOnTask(_productPlanStart);
 		}
 
 		public double GetScheduledWorkOnIncomingIndex(int colIndex, ISkill skill)
@@ -668,7 +676,7 @@ namespace Teleopti.Ccc.WinCode.Backlog
 				return 0;
 
 			var task = _taskDic[skill][date];
-			return task.BacklogScheduledTask.ScheduledWorkOnTask();
+			return task.BacklogScheduledTask.ScheduledWorkOnTask(_productPlanStart);
 		}
 
 		public TimeSpan? GetScheduledBacklogTimeOnIncomingIndex(int colIndex, ISkill skill)
@@ -677,7 +685,7 @@ namespace Teleopti.Ccc.WinCode.Backlog
 			if (!_taskDic[skill].ContainsKey(date))
 				return TimeSpan.Zero;
 
-			return _taskDic[skill][date].BacklogScheduledTask.ScheduledBacklogTimeOnTask();
+			return _taskDic[skill][date].BacklogScheduledTask.ScheduledBacklogTimeOnTask(_productPlanStart);
 		}
 
 		public double GetScheduledBacklogWorkOnIncomingIndex(int colIndex, ISkill skill)
@@ -686,7 +694,7 @@ namespace Teleopti.Ccc.WinCode.Backlog
 			if (!_taskDic[skill].ContainsKey(date))
 				return 0;
 
-			return _taskDic[skill][date].BacklogScheduledTask.ScheduledBacklogWorkOnTask();
+			return _taskDic[skill][date].BacklogScheduledTask.ScheduledBacklogWorkOnTask(_productPlanStart);
 		}
 
 		public Percent GetScheduledServiceLevelOnIncomingIndex(int colIndex, ISkill skill)
@@ -695,17 +703,17 @@ namespace Teleopti.Ccc.WinCode.Backlog
 			if (!_taskDic[skill].ContainsKey(date))
 				return new Percent();
 
-			return _taskDic[skill][date].BacklogScheduledTask.ScheduledServiceLevelOnTask();
+			return _taskDic[skill][date].BacklogScheduledTask.ScheduledServiceLevelOnTask(_productPlanStart);
 		}
 
 		public TimeSpan? GetScheduledTimeOnTaskForDate(int colIndex, int rowIndex, int fixedRows, ISkill skill)
 		{
 			var date = _stateHolder.RequestedPeriod.DateOnlyPeriod.DayCollection()[colIndex - 1];
-			var incomingList = _taskDic[skill].Keys.ToList();
-			var incomingDate = incomingList[rowIndex - fixedRows - 1];
+			var incomingList = _taskDic[skill].Keys.ToList();		
 			if (rowIndex - fixedRows > incomingList.Count)
 				return null;
 
+			var incomingDate = incomingList[rowIndex - fixedRows - 1];
 			var task = _taskDic[skill][incomingDate];
 			if (!task.SpanningDateOnlyPeriod().Contains(date))
 				return null;
@@ -716,11 +724,11 @@ namespace Teleopti.Ccc.WinCode.Backlog
 		public TimeSpan? GetPlannedTimeOnTaskForDate(int colIndex, int rowIndex, int fixedRows, ISkill skill)
 		{
 			var date = _stateHolder.RequestedPeriod.DateOnlyPeriod.DayCollection()[colIndex - 1];
-			var incomingList = _taskDic[skill].Keys.ToList();
-			var incomingDate = incomingList[rowIndex - fixedRows - 1];
+			var incomingList = _taskDic[skill].Keys.ToList();		
 			if (rowIndex - fixedRows > incomingList.Count)
 				return null;
 
+			var incomingDate = incomingList[rowIndex - fixedRows - 1];
 			var task = _taskDic[skill][incomingDate];
 			if (!task.SpanningDateOnlyPeriod().Contains(date))
 				return null;
@@ -758,7 +766,7 @@ namespace Teleopti.Ccc.WinCode.Backlog
 			var work = 0d;
 			foreach (var task in _taskDic[skill].Values)
 			{
-				work += task.BacklogProductPlanTask.PlannedBacklogWorkOnDate(date);
+				work += task.BacklogProductPlanTask.PlannedBacklogWorkOnDate(date, _productPlanStart);
 			}
 
 			return work;
@@ -770,13 +778,16 @@ namespace Teleopti.Ccc.WinCode.Backlog
 			var time = TimeSpan.Zero;
 			foreach (var task in _taskDic[skill].Values)
 			{
-				time = time.Add(task.BacklogProductPlanTask.PlannedBacklogTimeOnDate(date));
+				time = time.Add(task.BacklogProductPlanTask.PlannedBacklogTimeOnDate(date, _productPlanStart));
 			}
 
 			return time;
 		}
 
-
+		public void SetProductPlanStart(DateOnly date)
+		{
+			_productPlanStart = date;
+		}
 		
 	}
 }

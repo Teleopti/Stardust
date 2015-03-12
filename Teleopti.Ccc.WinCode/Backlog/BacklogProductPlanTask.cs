@@ -74,10 +74,13 @@ namespace Teleopti.Ccc.WinCode.Backlog
 			}
 			var timeToDistribute = TotalIncomingTime().Subtract(totalTime);
 			var daysToDistributeOn = _parent.SpanningDateOnlyPeriod().DayCount() - _parent.ClosedDays.Count() - numberOfEntries;
-			return new TimeSpan(timeToDistribute.Ticks / daysToDistributeOn);
+			if(daysToDistributeOn > 0)
+				return new TimeSpan(timeToDistribute.Ticks / daysToDistributeOn);
+
+			return TimeSpan.Zero;
 		}
 
-		public TimeSpan PlannedBacklogTimeOnDate(DateOnly date)
+		public TimeSpan PlannedBacklogTimeOnDate(DateOnly date, DateOnly productPlanStart)
 		{
 			if (!_parent.SpanningDateOnlyPeriod().Contains(date))
 				return TimeSpan.Zero;
@@ -88,15 +91,24 @@ namespace Teleopti.Ccc.WinCode.Backlog
 				if (dateOnly > date)
 					break;
 				if (!_parent.ClosedDays.Contains(dateOnly))
-					backlog = backlog.Subtract(ForecastedTimeOnDate(dateOnly));
+				{
+					if(productPlanStart <= dateOnly)
+					{
+						backlog = backlog.Subtract(ForecastedTimeOnDate(dateOnly));
+					}
+					else
+					{
+						backlog = backlog.Subtract(_parent.BacklogScheduledTask.ScheduledTimeOnDate(dateOnly));
+					}
+				}
 			}
 
 			return backlog;
 		}
 
-		public double PlannedBacklogWorkOnDate(DateOnly date)
+		public double PlannedBacklogWorkOnDate(DateOnly date, DateOnly productPlanStart)
 		{
-			return PlannedBacklogTimeOnDate(date).Ticks/(double) _parent.IncomingAht.Ticks;
+			return PlannedBacklogTimeOnDate(date, productPlanStart).Ticks/(double) _parent.IncomingAht.Ticks;
 		}
 
 		public TimeSpan PlannedTimeOnTask()

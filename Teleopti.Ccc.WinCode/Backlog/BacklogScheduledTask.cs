@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.WinCode.Backlog
@@ -34,21 +33,21 @@ namespace Teleopti.Ccc.WinCode.Backlog
 			return _parent.IncomingTime.Add(TransferedBacklog);
 		}
 
-		public TimeSpan ScheduledBacklogTimeOnTask()
+		public TimeSpan ScheduledBacklogTimeOnTask(DateOnly productionPlanStart)
 		{
-			return TotalIncoming().Subtract(ScheduledTimeOnTask());
+			return TotalIncoming().Subtract(ScheduledTimeOnTask(productionPlanStart));
 		}
 
-		public double ScheduledBacklogWorkOnTask()
+		public double ScheduledBacklogWorkOnTask(DateOnly productionPlanStart)
 		{
-			return ScheduledBacklogTimeOnTask().Ticks / (double)_parent.IncomingAht.Ticks;
+			return ScheduledBacklogTimeOnTask(productionPlanStart).Ticks / (double)_parent.IncomingAht.Ticks;
 		}
 
-		public Percent ScheduledServiceLevelOnTask()
+		public Percent ScheduledServiceLevelOnTask(DateOnly productionPlanStart)
 		{
 			var ticks = 0d;
 			if (TotalIncoming().Ticks > 0)
-				ticks = ScheduledTimeOnTask().Ticks / (double)TotalIncoming().Ticks;
+				ticks = ScheduledTimeOnTask(productionPlanStart).Ticks / (double)TotalIncoming().Ticks;
 
 			return new Percent(ticks);
 		}
@@ -72,14 +71,27 @@ namespace Teleopti.Ccc.WinCode.Backlog
 			return TimeSpan.Zero;
 		}
 
-		public TimeSpan ScheduledTimeOnTask()
+		public TimeSpan ScheduledTimeOnTask(DateOnly productionPlanStart)
 		{
-			return new TimeSpan(_scheduledTimes.Values.Sum(t => t.Ticks));
+			var time = TimeSpan.Zero;
+			foreach (var dateOnly in _parent.SpanningDateOnlyPeriod().DayCollection())
+			{			
+				if (dateOnly < productionPlanStart)
+				{
+					time = time.Add(ScheduledTimeOnDate(dateOnly));
+				}
+				else
+				{
+					time = time.Add(_parent.BacklogProductPlanTask.ForecastedTimePerDay());
+				}
+			}
+
+			return time;
 		}
 
-		public double ScheduledWorkOnTask()
+		public double ScheduledWorkOnTask(DateOnly productionPlanStart)
 		{
-			return ScheduledTimeOnTask().Ticks/(double) _parent.IncomingAht.Ticks;
+			return ScheduledTimeOnTask(productionPlanStart).Ticks / (double)_parent.IncomingAht.Ticks;
 		}
 
 		public TimeSpan ScheduledBackLogTimeOnDate(DateOnly date)
