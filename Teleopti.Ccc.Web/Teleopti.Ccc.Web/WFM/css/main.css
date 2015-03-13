@@ -542,6 +542,8 @@ input[type='text'], select {
     top: 30%; }
   .navbar .right-actions span {
     display: inline-block; }
+  .navbar .right-actions i {
+    color: #ffffff; }
 
 /*search*/
 .global-search {
@@ -738,7 +740,8 @@ tr {
 
 .accordion-head:hover {
   border-bottom: 1px solid rgba(0, 0, 0, 0.06);
-  cursor: pointer; }
+  cursor: pointer;
+  transition: all 0.5s ease-in-out; }
 
 .dropdown {
   width: 25px;
@@ -760,7 +763,8 @@ tr {
   position: absolute;
   visibility: hidden;
   transition: 0.5s visibility;
-  background: #ffffff; }
+  background: #ffffff;
+  margin-top: 5px; }
   .inner.right {
     margin-left: -1100%; }
 
