@@ -38,6 +38,18 @@ namespace Teleopti.Ccc.Domain.Forecasting.Angel
 			};
 		}
 
+		public ForecastingAccuracy[] MeasureForecastForAllSkills(DateOnlyPeriod futurePeriod)
+		{
+			var historicalPeriod = getHistoricalPeriod();
+			var skills = _skillRepository.FindSkillsWithAtLeastOneQueueSource();
+			var list = new List<ForecastingAccuracy>();
+			foreach (var skill in skills)
+			{
+				list.AddRange(_quickForecaster.MeasureForecastForSkill(skill, futurePeriod, historicalPeriod));
+			}
+			return list.ToArray();
+		}
+
 		public ForecastingAccuracy[] CreateForecastForWorkloads(DateOnlyPeriod futurePeriod, Guid[] workloadIds)
 		{
 			var historicalPeriod = getHistoricalPeriod();

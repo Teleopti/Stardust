@@ -34,6 +34,29 @@ namespace Teleopti.Ccc.DomainTest.Forecasting.Angel
 		}
 
 		[Test]
+		public void ShouldMeasureForecastForAllSkills()
+		{
+			var skillRepository = MockRepository.GenerateMock<ISkillRepository>();
+			var skill1 = SkillFactory.CreateSkill("skill1");
+			var skill2 = SkillFactory.CreateSkill("skill2");
+			skillRepository.Stub(x => x.FindSkillsWithAtLeastOneQueueSource()).Return(new[] { skill1, skill2 });
+			var quickForecaster = MockRepository.GenerateMock<IQuickForecaster>();
+			var futurePeriod = new DateOnlyPeriod();
+			var now = new Now();
+			var nowDate = now.LocalDateOnly();
+			var historicalPeriod = new DateOnlyPeriod(new DateOnly(nowDate.Date.AddYears(-2)), nowDate);
+
+			quickForecaster.Stub(x => x.MeasureForecastForSkill(skill1, futurePeriod, historicalPeriod)).Return(new[] { new ForecastingAccuracy { Accuracy = 2.3, Id = Guid.NewGuid() }, new ForecastingAccuracy { Accuracy = 2.4, Id = Guid.NewGuid() } });
+			quickForecaster.Stub(x => x.MeasureForecastForSkill(skill2, futurePeriod, historicalPeriod)).Return(new[] { new ForecastingAccuracy { Accuracy = 3.4, Id = Guid.NewGuid() } });
+
+			var target = new QuickForecastCreator(quickForecaster, skillRepository, now);
+			var result = target.MeasureForecastForAllSkills(futurePeriod);
+			result[0].Accuracy.Should().Be.EqualTo(2.3);
+			result[1].Accuracy.Should().Be.EqualTo(2.4);
+			result[2].Accuracy.Should().Be.EqualTo(3.4);
+		}
+
+		[Test]
 		public void ShouldGetAccuracyForWorkloads()
 		{
 			var skillRepository = MockRepository.GenerateMock<ISkillRepository>();

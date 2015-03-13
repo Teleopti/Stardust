@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Forecasting.Angel.Future;
 using Teleopti.Interfaces.Domain;
 
@@ -33,6 +34,16 @@ namespace Teleopti.Ccc.Domain.Forecasting.Angel
 				sum += _quickForecasterWorkload.Execute(quickForecasterWorkloadParams);
 			}
 			return sum / skill.WorkloadCollection.Count();
+		}
+
+		public ForecastingAccuracy[] MeasureForecastForSkill(ISkill skill, DateOnlyPeriod futurePeriod, DateOnlyPeriod historicalPeriod)
+		{
+			var result = new List<ForecastingAccuracy>();
+			foreach (var workload in skill.WorkloadCollection)
+			{
+				result.AddRange(_quickForecasterWorkload.Measure(workload, historicalPeriod));
+			}
+			return result.ToArray();
 		}
 
 		public double ForecastForWorkload(IWorkload workload, DateOnlyPeriod futurePeriod, DateOnlyPeriod historicalPeriod)

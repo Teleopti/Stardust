@@ -4,7 +4,6 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Web.Http;
 using Teleopti.Ccc.Domain.Aop;
-using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Forecasting.Angel;
 using Teleopti.Ccc.Domain.Repositories;
@@ -28,15 +27,11 @@ namespace Teleopti.Ccc.Web.Areas.Forecasting.Controllers
 			_skillRepository = skillRepository;
 		}
 
-		[HttpPost, UnitOfWork]
-		public virtual Task<ForecastingAccuracy[]> QuickForecast([FromBody] QuickForecastInputModel model)
+		[HttpPost, Route("api/Forecasting/MeasureForecast"), UnitOfWork]
+		public virtual Task<ForecastingAccuracy[]> MeasureForecast([FromBody] QuickForecastInputModel model)
 		{
 			var futurePeriod = new DateOnlyPeriod(new DateOnly(model.ForecastStart), new DateOnly(model.ForecastEnd));
-			if (model.Workloads.IsNullOrEmpty())
-			{
-				return Task.FromResult(new[] { _quickForecastCreator.CreateForecastForAllSkills(futurePeriod) });
-			}
-			return Task.FromResult( _quickForecastCreator.CreateForecastForWorkloads(futurePeriod, model.Workloads));
+			return Task.FromResult(_quickForecastCreator.MeasureForecastForAllSkills(futurePeriod));
 		}
 
 		[UnitOfWork, Route("api/Forecasting/Skills"), HttpGet]

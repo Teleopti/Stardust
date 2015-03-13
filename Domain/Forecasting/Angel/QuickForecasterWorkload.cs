@@ -45,5 +45,10 @@ namespace Teleopti.Ccc.Domain.Forecasting.Angel
 			}
 			return Double.NaN;
 		}
+
+		public ForecastingAccuracy[] Measure(IWorkload workload, DateOnlyPeriod historicalPeriod)
+		{
+			throw new NotImplementedException();
+		}
 	}
 }
