@@ -1,6 +1,7 @@
 ﻿using System;
 using NUnit.Framework;
 using TechTalk.SpecFlow;
+using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.WebBehaviorTest.Core;
 
 namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
@@ -29,5 +30,19 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
 				convertTime.Hour, convertTime.Minute, convertTime.Second);
 			Browser.Interactions.Javascript(setJsDate);
 		}
+
+		[When(@"the browser time is '(.*)' in '(.*)'")]
+		public void WhenTheBrowserTimeIsIn(DateTime time, string location)
+		{
+			var localTimeZone = TimeZoneInfoFactory.TimeZone(location).BaseUtcOffset.Hours;
+			var utcTimeZone = TimeZoneInfo.Utc.BaseUtcOffset.Hours;
+			var convertTime = time.AddHours(utcTimeZone - localTimeZone);
+			const string setJsDateTemplate =
+				@"Date.prototype.getTime = function () {{ return new Date(Date.UTC({0}, {1}, {2}, {3}, {4}, {5})); }};";
+			var setJsDate = string.Format(setJsDateTemplate, convertTime.Year, convertTime.Month - 1, convertTime.Day,
+				convertTime.Hour, convertTime.Minute, convertTime.Second);
+			Browser.Interactions.Javascript(setJsDate);
+		}
+
 	}
 }

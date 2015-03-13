@@ -84,7 +84,7 @@ Scenario: Add activity default times for agent in other time zone
 	| Start time     | 2013-11-18 08:00 |
 	| End time       | 2013-11-18 17:00 |
 	When I view person schedules add activity form for 'John King' in 'Team green' on '2013-11-18'
-	And the browser local time is '2013-11-18 12:05:00'
+	And the browser time is '2013-11-18 12:05:00' in 'Stockholm'
 	Then I should see add activity times in other time zone with
 	| Field      | Value |
 	| Start time | 13:15 |

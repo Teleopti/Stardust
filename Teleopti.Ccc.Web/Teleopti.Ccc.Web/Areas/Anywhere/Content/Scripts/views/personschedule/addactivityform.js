@@ -49,8 +49,10 @@ define([
 
 		this.StartTimeOtherTimeZone = ko.computed(function () {
 			if (self.StartTime() && self.ianaTimeZoneOther()) {
+
 				var userTime = timezoneDisplay.FromTimeInput(self.StartTime(), timezoneCurrent.IanaTimeZone(), self.ScheduleDate);
 				var otherTime = userTime.tz(self.ianaTimeZoneOther());
+
 				return otherTime.format('HH:mm');
 			}
 			return undefined;
@@ -132,19 +134,23 @@ define([
 		
 		this.DefaultStart = ko.computed(function () {
 			var now = moment((new Date).getTime());
+
 			var start;
 			if (self.ShiftStart() < now && now < self.ShiftEnd()) {
 				var minutes = Math.ceil(now.minute() / 15) * 15;
 				start = now.startOf('hour').minutes(minutes);
+				start.tz(timezoneCurrent.IanaTimeZone());
 				self.StartTime(start.format(resources.TimeFormatForMoment));
 			} else {
 				start = self.ShiftStart().clone();
+				start.tz(timezoneCurrent.IanaTimeZone());
 				if (self.visibleLayers().length > 0) {
 					self.StartTime(start.format(resources.TimeFormatForMoment));
 				} else {
 					self.StartTime(start.add("hours", 8).format(resources.TimeFormatForMoment));
 				}
 			}
+
 			return start;
 		});
 
