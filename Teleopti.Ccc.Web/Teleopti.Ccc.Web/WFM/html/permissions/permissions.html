@@ -101,7 +101,7 @@
 
 								<div class="tree">
 									<div ui-tree data-drag-enabled="false">
-										<ol ui-tree-nodes="" ng-model="functionsDisplayed" id="tree-root" class="tree-line" toggle-focus>
+										<ol ui-tree-nodes="" ng-model="functionsDisplayed" id="tree-root" class="tree-line" toggle-focus >
 											<li ng-repeat="node in functionsDisplayed | filter:searchPermissions" ui-tree-node ng-include="'nodes_renderer.html'"></li>
 										</ol>
 									</div>
@@ -172,10 +172,14 @@
 
 <!-- Nested node template -->
 <script type="text/ng-template" id="nodes_renderer.html">
-	<div ui-tree-handle ng-class="{selected: node.selected}" ng-click="toggleFunctionForRole(node)">
-		{{node.LocalizedFunctionDescription}}
+	<div class="tree-toggle-group">
+		<div class="toggle-handle" ng-class="{open: node.show}" ng-click="node.show = !node.show"><i ng-show="node.ChildFunctions.length > 0" class="mdi mdi-chevron-right"></i></div>
+		<div ui-tree-handle ng-class="{selected: node.selected}" ng-click="toggleFunctionForRole(node)">
+			{{node.LocalizedFunctionDescription}}
+		</div>
 	</div>
-	<ol ui-tree-nodes="" ng-model="node.ChildFunctions">
+
+	<ol ui-tree-nodes="" ng-model="node.ChildFunctions" ng-show="node.show">
 		<li ng-repeat="node in node.ChildFunctions | filter:searchPermissions" ui-tree-node ng-include="'nodes_renderer.html'">
 		</li>
 	</ol>
