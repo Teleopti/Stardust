@@ -34,8 +34,9 @@ wfm.config(['$stateProvider', '$urlRouterProvider',function ($stateProvider, $ur
     	controller: 'PermissionsCtrl'
     });
 }]).run(['$rootScope', '$http', '$state', function ($rootScope, $http, $state) {
-    var timeout = Date.now() + 10000;
+    var timeout = Date.now();
     $rootScope.$on('$stateChangeStart', function (event, next, toParams) {
+
         if(Date.now() > timeout ) { // TODO : extract it in a service
             event.preventDefault();
             var context = $http.get('../api/Global/User/CurrentUser');
