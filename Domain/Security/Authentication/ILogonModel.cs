@@ -16,6 +16,7 @@ namespace Teleopti.Ccc.Domain.Security.Authentication
 		bool HasValidLogin();
 		AuthenticationTypeOption AuthenticationType { get; set; }
 		string Warning { get; set; }
+		bool WindowsIsPossible { get; set; }
 	}
 
 	public class LogonModel : ILogonModel
@@ -32,7 +33,7 @@ namespace Teleopti.Ccc.Domain.Security.Authentication
 		public IBusinessUnit SelectedBu { get; set; }
 		public string UserName { get; set; }
 		public string Password { get; set; }
-
+		public bool WindowsIsPossible { get; set; }
 		public bool HasValidLogin()
 		{
 			return !string.IsNullOrEmpty(UserName) && !string.IsNullOrEmpty(Password);

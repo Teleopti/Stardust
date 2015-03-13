@@ -179,7 +179,12 @@ namespace Teleopti.Ccc.WinCode.Main
 				if (!_view.InitStateHolderWithoutDataSource(_messageBroker, settings))
 					CurrentStep--; //?
 			}
-			
+			_multiTenancyWindowsLogon.CheckWindowsIsPossible(_model);
+			if (!_model.WindowsIsPossible)
+			{
+				_model.AuthenticationType = AuthenticationTypeOption.Application;
+				CurrentStep++;
+			}
 			_view.ShowStep(false); //once a sdk is loaded it is not changeable
 		}
 

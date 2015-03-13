@@ -12,6 +12,7 @@ namespace Teleopti.Ccc.Infrastructure.MultiTenancy.Client
 	{
 		//AuthenticationResult Logon(ILogonModel logonModel, string userAgent);
 		AuthenticationResult Logon(ILogonModel logonModel, IApplicationData applicationData, string userAgent);
+		void CheckWindowsIsPossible(ILogonModel logonModel);
 	}
 
 	public class MultiTenancyWindowsLogon : IMultiTenancyWindowsLogon
@@ -116,6 +117,14 @@ namespace Teleopti.Ccc.Infrastructure.MultiTenancy.Client
 				Person = logonModel.SelectedDataSourceContainer.User,
 				Successful = true
 			};
+		}
+
+		public void CheckWindowsIsPossible(ILogonModel logonModel)
+		{
+			var userId = _windowsUserProvider.UserName;
+			var domain = _windowsUserProvider.DomainName;
+			logonModel.UserName = domain + "\\" + userId;
+			logonModel.WindowsIsPossible = _authenticationQuerier.TryIdentityLogon(logonModel.UserName, "").Success;
 		}
 
 		private IDataSourceContainer getDataSorce(string dataSourceName, DataSourceConfig nhibConfig, IApplicationData applicationData)

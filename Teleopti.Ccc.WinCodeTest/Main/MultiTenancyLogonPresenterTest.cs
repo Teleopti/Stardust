@@ -1,12 +1,10 @@
 ﻿using System.Collections.Generic;
-using System.Net;
 using System.Windows.Forms;
 using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Infrastructure;
 using Teleopti.Ccc.Domain.Security.Authentication;
-using Teleopti.Ccc.Infrastructure.MultiTenancy;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Client;
 using Teleopti.Ccc.Infrastructure.Web;
 using Teleopti.Ccc.UserTexts;
@@ -257,6 +255,23 @@ namespace Teleopti.Ccc.WinCodeTest.Main
 			_target.CurrentStep = LoginStep.SelectLogonType;
 			_target.OkbuttonClicked();
 			_target.CurrentStep.Should().Be.EqualTo(LoginStep.SelectLogonType);
+		}
+
+		[Test]
+		public void ShouldGoDirectToApplicationIfWindowsNotPossible()
+		{
+			var dataSourceContainer = new DataSourceContainer(null, null, null, AuthenticationTypeOption.Windows);
+			_model.AuthenticationType = AuthenticationTypeOption.Windows;
+			_model.WindowsIsPossible = false;
+			_endPointSelector.Stub(x => x.GetEndpointNames()).Return(new List<string> { "local" });
+			_winLogon.Stub( x => x.CheckWindowsIsPossible(_model));
+
+			_model.SelectedDataSourceContainer = dataSourceContainer;
+			_view.Stub(x => x.ShowStep(false));
+			_target.CurrentStep = LoginStep.SelectSdk;
+			_target.OkbuttonClicked();
+			_target.CurrentStep.Should().Be(LoginStep.Login);
+			_model.AuthenticationType.Should().Be.EqualTo(AuthenticationTypeOption.Application);
 		}
 	}
 
