@@ -456,8 +456,26 @@ Teleopti.MyTimeWeb.TeamScheduleFilterMixin = function () {
 		self.filterStartTimeList.push(new Teleopti.MyTimeWeb.Request.FilterStartTimeView(dayOffNames, 0, 24, false, true));
 	};
 
+	self.setAllStartTimeFilter = ko.observable(false);
+	self.setAllStartTimeFilter.subscribe(function (value) {
+		self.suspendFilterMixinChangeHandler();
+		$.each(self.filterStartTimeList(), function (index, item) { item.isChecked(value); });
+		self.activateFilterMixinChangeHandler();
+		if (changeHandler) changeHandler();
+
+	});
+
+	self.setAllEndTimeFilter = ko.observable(false);
+	self.setAllEndTimeFilter.subscribe(function(value) {
+		self.suspendFilterMixinChangeHandler();
+		$.each(self.filterEndTimeList(), function (index, item) { item.isChecked(value); });
+		self.activateFilterMixinChangeHandler();
+		if (changeHandler) changeHandler();
+
+	});
+
 	self.setTeamPicker = function(teams, defaultTeam, allTeam) {
-		self.showTeamPicker(teams.length > 1);
+		self.showTeamPicker(teams.length >= 1);
 		self.showGroupings(teams[0] && teams[0].children != null);
 
 		if (allTeam !== null) {
@@ -490,11 +508,15 @@ Teleopti.MyTimeWeb.TeamScheduleFilterMixin = function () {
 	};
 
 
-	self.selectedTeam.subscribe(function (newValue) {
+	self.selectedTeam.subscribe(function () {
 		if (changeHandler != null && !changeHandlerSuspended) {
-			changeHandler(newValue, self.requestedFilter());
+			changeHandler();
 		} 
 	});
+
+	self.selectedTeam.extend({ notify: "always" });
+
+
 		
 
 	self.filterTime = ko.computed(function() {
@@ -526,9 +548,9 @@ Teleopti.MyTimeWeb.TeamScheduleFilterMixin = function () {
 		return { filterStartTimeList: self.filterStartTimeList(), filterEndTimeList: self.filterEndTimeList() };
 	});
 
-	self.filterTime.subscribe(function(newValue) {
+	self.filterTime.subscribe(function() {
 		if (!self.isLocked() && changeHandler != null && !changeHandlerSuspended) {
-			changeHandler(newValue, self.requestedFilter());
+			changeHandler();
 		}
 	});
 
@@ -551,9 +573,9 @@ Teleopti.MyTimeWeb.TeamScheduleFilterMixin = function () {
 		return self.timeSortOrder() == value.Value;
 	}
 
-	self.timeSortOrder.subscribe(function(newValue) {
+	self.timeSortOrder.subscribe(function() {
 		if (!self.isLocked() && changeHandler != null && !changeHandlerSuspended) {
-			changeHandler(newValue,self.requestedFilter());
+			changeHandler();
 		}
 	});
 
@@ -588,7 +610,7 @@ Teleopti.MyTimeWeb.TeamScheduleFilterMixin = function () {
 		resetTimer();	
 		self.refocusToNameSearch.callable = function () { $target.focus(); };
 		if (changeHandler != null && !changeHandlerSuspended) {		
-			changeHandler($target.val(), self.requestedFilter());			
+			changeHandler(function () { self.suppressChangeInSearchBox = false; });
 		}
 	};
 

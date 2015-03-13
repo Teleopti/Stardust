@@ -12,15 +12,23 @@
 
 <script>
 	
-	$(function () {		
-		var vm = new Teleopti.MyTimeWeb.TeamScheduleViewModel();
-		vm.initCurrentDate(Teleopti.MyTimeWeb.Portal.ParseHash().dateHash);
-		vm.featureCheck();
+	$(function () {
+		var endpoints = {
+			loadCurrentDate: "TeamSchedule/TeamScheduleCurrentDate",
+			loadFilterTimes: "RequestsShiftTradeScheduleFilter/Get",
+			loadMyTeam: "Requests/ShiftTradeRequestMyTeam",
+			loadDefaultTeam: "TeamSchedule/DefaultTeam",
+			loadTeams: "Team/TeamsAndGroupsWithAllTeam",
+			loadSchedule: "TeamSchedule/TeamSchedule"
+		};
+
+		var vm = Teleopti.MyTimeWeb.TeamScheduleViewModelFactory.createViewModel(endpoints);
+
 		$(window).unbind('resize');
 		$(window).resize(function () {
 			vm.redrawLayers();
 		});
-		ko.applyBindings(vm);	
+		ko.applyBindings(vm);
 	});
 
 </script>
@@ -118,9 +126,12 @@
 										<!-- ko if: isTeamScheduleSorttingFeatureEnabled-->
 										<li>
 											<div class="input-group start-time-sort-order">
-												<div class="btn-group" role="group" data-bind="foreach: displaySortOrderTemplateList">
+												<div class="btn-group" role="group">
+													<input type="checkbox" class="all-input-toggle" data-bind="checked: setAllStartTimeFilter" />
+													<!-- ko foreach: displaySortOrderTemplateList -->
 													<!-- ko if: IsStart -->
 													<span data-bind="attr:{class: Description},css:{'sortingbuttonselected': $parent.isSortingTimeActive( $data)}, click : $parent.updateTimeSortOrder, value: Value"></span>
+													<!-- /ko -->
 													<!-- /ko -->
 												</div>
 											</div>
@@ -147,9 +158,12 @@
 										<!-- ko if: isTeamScheduleSorttingFeatureEnabled-->
 										<li>
 											<div class="input-group end-time-sort-order">
-												<div class="btn-group" role="group" data-bind="foreach: displaySortOrderTemplateList">
+												<div class="btn-group" role="group">
+													<input type="checkbox" class="all-input-toggle" data-bind="checked: setAllEndTimeFilter" />
+													<!-- ko foreach: displaySortOrderTemplateList -->
 													<!-- ko if: !IsStart -->
 													<span data-bind="attr:{class: Description},css:{'sortingbuttonselected': $parent.isSortingTimeActive( $data)}, click : $parent.updateTimeSortOrder, value: Value"></span>
+													<!-- /ko -->
 													<!-- /ko -->
 												</div>
 											</div>

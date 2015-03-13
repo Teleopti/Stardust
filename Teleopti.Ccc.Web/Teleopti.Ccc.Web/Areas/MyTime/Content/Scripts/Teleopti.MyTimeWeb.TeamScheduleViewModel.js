@@ -112,7 +112,10 @@ Teleopti.MyTimeWeb.TeamScheduleViewModel = function () {
 		);		
 	});
 
-	self.setFilterMixinChangeHandler(loadSchedule);
+	self.setFilterMixinChangeHandler(function (callback) {
+		loadSchedule();
+		if (callback) callback();
+	});
 	self.setPagingMixinChangeHandler(loadSchedule);
 
 	self.loadFilterTimes(function (data) {
@@ -127,19 +130,22 @@ Teleopti.MyTimeWeb.TeamScheduleViewModel = function () {
 };
 
 
-var ajax = new Teleopti.MyTimeWeb.Ajax();
+Teleopti.MyTimeWeb.TeamScheduleViewModelFactory = { createViewModel : function(endpoints) {
+	var ajax = new Teleopti.MyTimeWeb.Ajax();
+	var vm = {}; 
+	Teleopti.MyTimeWeb.DayScheduleMixin.call(vm);
+	Teleopti.MyTimeWeb.TeamScheduleDataProviderMixin.call(vm, ajax, endpoints);
+	Teleopti.MyTimeWeb.TeamScheduleFilterMixin.call(vm);
+	Teleopti.MyTimeWeb.PagingMixin.call(vm);
+	Teleopti.MyTimeWeb.TeamScheduleDrawerMixin.call(vm);
+	Teleopti.MyTimeWeb.TeamScheduleViewModel.call(vm);
+	vm.initCurrentDate(Teleopti.MyTimeWeb.Portal.ParseHash().dateHash);
+	vm.featureCheck();
 
-var endpoints = {
-	loadCurrentDate: "TeamSchedule/TeamScheduleCurrentDate",
-	loadFilterTimes: "RequestsShiftTradeScheduleFilter/Get",
-	loadMyTeam: "Requests/ShiftTradeRequestMyTeam",
-	loadDefaultTeam: "TeamSchedule/DefaultTeam",
-	loadTeams: "Team/TeamsAndGroupsWithAllTeam",
-	loadSchedule: "TeamSchedule/TeamSchedule"
-};
+	return vm;
+}};
 
-Teleopti.MyTimeWeb.DayScheduleMixin.call(Teleopti.MyTimeWeb.TeamScheduleViewModel.prototype);
-Teleopti.MyTimeWeb.TeamScheduleDataProviderMixin.call(Teleopti.MyTimeWeb.TeamScheduleViewModel.prototype, ajax, endpoints);
-Teleopti.MyTimeWeb.TeamScheduleFilterMixin.call(Teleopti.MyTimeWeb.TeamScheduleViewModel.prototype);
-Teleopti.MyTimeWeb.PagingMixin.call(Teleopti.MyTimeWeb.TeamScheduleViewModel.prototype);
-Teleopti.MyTimeWeb.TeamScheduleDrawerMixin.call(Teleopti.MyTimeWeb.TeamScheduleViewModel.prototype);
+
+
+
+
