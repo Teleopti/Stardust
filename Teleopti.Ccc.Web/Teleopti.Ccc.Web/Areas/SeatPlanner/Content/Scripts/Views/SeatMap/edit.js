@@ -230,7 +230,7 @@
 					self.canvas.remove(child);
 				});
 			}
-			self.canvas.renderAll();
+			//self.canvas.renderAll();
 		};
 
 		this.Clear = function () {
@@ -276,7 +276,7 @@
 				var group = new fabric.Group(objectsInGroup, { left: activeGroup.left + 15, top: activeGroup.top + 15 });
 				self.canvas.setActiveObject(group);
 				self.canvas.add(group);
-				self.canvas.renderAll();
+				//self.canvas.renderAll();
 			}
 		};
 
@@ -295,7 +295,7 @@
 			for (var i = 0; i < items.length; i++) {
 				self.canvas.add(items[i]);
 			}
-			self.canvas.renderAll();
+			//self.canvas.renderAll();
 		};
 
 		//Alignment, Spacing Rotation and Flip
@@ -477,7 +477,7 @@
 					top: 400
 				});
 				self.canvas.add(image);
-				self.canvas.renderAll();
+				//self.canvas.renderAll();
 			});
 		};
 
@@ -522,7 +522,7 @@
 			});
 
 			self.canvas.add(textSample);
-			self.canvas.renderAll();
+			//self.canvas.renderAll();
 		};
 
 

@@ -194,7 +194,6 @@
     <Compile Include="ApplicationLayer\Events\PersonTerminatedEvent.cs" />
     <Compile Include="ApplicationLayer\AdherencePercentageReadModelUpdatedMessage.cs" />
     <Compile Include="ApplicationLayer\Events\ScheduledResourcesChangedEvent.cs" />
-    <Compile Include="ApplicationLayer\Events\SeatPlanAddedEvent.cs" />
     <Compile Include="ApplicationLayer\ICurrentEventPublisher.cs" />
     <Compile Include="ApplicationLayer\IEventPopulatingPublisher.cs" />
     <Compile Include="ApplicationLayer\IEventPublisher.cs" />
