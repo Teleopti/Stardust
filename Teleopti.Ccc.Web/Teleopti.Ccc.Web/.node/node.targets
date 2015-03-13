@@ -20,6 +20,7 @@
 
 		<!-- NPM install command -->
 		<NpmInstallCmd>"$(NpmCmd)" update</NpmInstallCmd>
+		<NpmSetServerCmd>"$(NpmCmd)" set registry http://hestia:4873</NpmSetServerCmd>
 
 		<!-- NPM flatten command -->
 		<NpmFlattenCmd>$(NodeDir)flatten-packages</NpmFlattenCmd>
@@ -59,6 +60,7 @@
 	
 	<!-- Install protractor -->
 	<Target Name="RestoreNodePackageProtractor">
+		<Exec Command="$(NpmSetServerCmd)"  ContinueOnError="false" WorkingDirectory="$(MSBuildProjectDirectory)\WFM" />
 		<Message Text="Restore Node Packages Command: $(NpmInstallProtractorCmd) /w WorkingDirectory: $(NodeDir)" Importance="high" />
 		<Exec Command="$(NpmInstallProtractorCmd)" ContinueOnError="false" WorkingDirectory="$(NodeDir)" />
 	</Target>
