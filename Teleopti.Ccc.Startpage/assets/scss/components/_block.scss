@@ -1,0 +1,77 @@
+.client-applications {
+	margin-bottom: 30px;
+}
+
+// Blocks
+.block {
+	height: 			250px;
+	color: 				#fff;
+	padding: 			15px;
+	margin-bottom: 		15px;
+	display:			block;
+
+	&:hover,
+	&:focus { 
+		text-decoration: none;
+		color: #fff;
+
+		&:after {
+			opacity: 		1;
+		}
+	}
+
+	span { 
+		font-family: 	Arial;
+		font-size: 		28px;
+		margin: 		0;
+		max-width:		130px;
+		line-height: 	1.1em; 
+		display: 		block;
+	}
+
+	&:after {
+		transition: 	all 0.5s ease;
+		content: 		"";
+		position: 		absolute;		
+		opacity: 		0.2;
+		top: 			0;
+		left: 			0;
+		bottom: 		0;
+		right: 			0;
+		z-index: 		0; 		
+	}
+
+	&.blue { 
+		background: 	$blue;
+		display: 		block;
+		position: 		relative;
+
+		&:after {
+			background: url('../img/agent.png') bottom right no-repeat;
+		}
+	}
+
+	&.green { 
+		background: $green;
+
+		&:after {
+			background: url('../img/leaders.png') bottom right no-repeat;
+		}		
+	}
+
+	&.pink { 
+		background: $pink; 
+
+		&:after {
+			background: url('../img/real-time.png') bottom right no-repeat;
+		}	
+	}
+
+	&.orange { 
+		background: $orange; 
+
+		&:after {
+			background: url('../img/resource.png') bottom right no-repeat;
+		}			
+	}
+}

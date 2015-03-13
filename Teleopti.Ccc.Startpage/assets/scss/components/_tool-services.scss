@@ -1,0 +1,49 @@
+.tools-services {
+	list-style: none;
+	margin: 0;
+	padding: 0;
+	text-align: left;
+
+	li { 
+		display: block;
+		height: 70px;
+		font-size: 25px;
+		padding-left: 75px;
+		vertical-align: middle;
+		line-height: 70px;
+		
+		margin-left: 15px;
+		margin-right: 15px;
+		margin-bottom: 15px;
+
+		a { 
+			color: #000;
+			&:hover { text-decoration: none; }
+		}
+
+		&.broker,
+		&.sdk-service {
+			background: url('../img/gear.png') left center no-repeat;
+		}
+
+		&.rta-service {
+			background: url('../img/mail.png') left center no-repeat;	
+		}
+
+		&:last-child {
+			margin-right: 0;
+		}
+	}
+
+	@media (min-width: $screen-sm-min) {
+		text-align: right;
+
+		& {
+			li { 
+				font-size: 20px;
+				display: inline-block;
+				margin-bottom: 0;
+			}
+		}
+	}	
+}

@@ -1,115 +1,65 @@
 ﻿<!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml">
+<html lang="en">
 <head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<title>Teleopti WFM</title>
-	<style type="text/css">
-		
-	body {
-		margin-left:20px;margin-top:20px;
-	font-family:Segoe UI Light,Segoe UI;
-		}
-
-	.app {
-	width: 200px;
-	height: 110px;
-	font-size:16px;
-	padding: 10px 0 0 10px;
-	margin-right:10px;
-	margin-top: 1px;
-	float:left;
-	color:black;
-	text-decoration: none;
-	}
-	.appAnywhere
-	{
-		background: lightblue url('images/mobile.png') 12px 90px no-repeat;
-	}    
-	.appSDK
-	{
-		background: lightblue url('images/Wheels.png') 12px 90px no-repeat;
-	
-	}
-	.appAnalytics
-	{
-		background: linen url('images/report.png') 12px 90px no-repeat;
-	}
-	.appWin
-	{
-		background: wheat url('images/client.png') 12px 90px no-repeat;
-	}
-	.MyTimeWeb
-	{
-		background: lightcoral url('images/calendar.png') 12px 90px no-repeat;
-	}
-	.appBroker
-	{
-		background: lavenderblush url('images/message.png') 12px 90px no-repeat;
-	}
-	.appRTA
-	{
-		background: khaki url('images/wheels.png') 12px 90px no-repeat;
-	}
-	.app a
-	{
-		text-decoration: none;
-		color:red;
-	}
-	</style>
-	<link href="favicon.ico?v=2" rel="shortcut icon" type="image/x-icon" />
+	<!-- css -->
+	<link href="assets/css/main.min.css" rel="stylesheet">
+	<!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+	<!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+	<!--[if lt IE 9]>
+	  <script src="assets/vendor/html5shiv/dist/html5shiv.js"></script>
+	  <script src="assets/vendor/respond/dest/respond.min.js"></script>
+	<![endif]-->
 </head>
 <body>
-
-	<div style="font-size:20px; line-height:22px;">
-		<img src="images/teleopti_logo.png" />
-		<br />
-		<br />
-
-		<div style="float:left;font-size:16px">
-			<hr />
-			<p style="bottom: 1px">Client Applications</p>
-			<a href="/TeleoptiWFM/Web/Anywhere">
-				<span class="app appAnywhere">
-					Anywhere
-					<div style="font-size:16px">Easy access to schedules in your favorite device</div>
-				</span>
-			</a>
-			<a href="/TeleoptiWFM/Web/MyTime">
-				<span class="app MyTimeWeb">
-					MyTime
-					<div style="font-size:16px">Easy access to schedules in your favorite browser</div>
-				</span>
-			</a>
-			<a href="/TeleoptiWFM/Client">
-				<span class="app appWin">
-					AdminClient
-					<div style="font-size:16px">A top workforce management solution</div>
-				</span>
-			</a> 
+	<header>
+		<div class="container">
+			<div id="header">
+				<div class="row">
+					<div id="logo" class="col-md-3">
+						<a href=""><img src="assets/img/teleopti_logo.png" /></a>
+					</div>
+				</div>
+			</div>
 		</div>
-		<div style="clear:both"></div>
-		<div style="float:left;font-size:16px">
-			<hr />
-			<p style="bottom: 1px">Tools and web services</p>
-			<a href="/TeleoptiWFM/RTA/TeleoptiRtaService.svc">
-				<span class="app appRTA">
-					RTA Web Service
-					<div style="font-size:16px">Used for Real Time integration</div>
-				</span>
-			</a>
-			<a href="/TeleoptiWFM/broker/signalr/negotiate">
-				<span class="app appBroker">
-					Broker
-					<div style="font-size:16px">Used internally to send message and events</div>
-				</span>
-			</a>
-			<a href="/TeleoptiWFM/SDK/TeleoptiCCCSdkService.svc">
-				<span class="app appSDK">
-					SDK Web Service
-					<div style="font-size:16px">Provides your organisation with custom functionality</div>
-				</span>
-			</a>
+	</header>
+	<div class="container">
+		<!-- Blocks -->
+		<div class="client-applications row">
+			<div class="col-md-3">
+				<a class="block blue" href="/TeleoptiWFM/Web/Anywhere">
+					<span>Agents</span>
+				</a>
+			</div>
+			<div class="col-md-3">
+				<a class="block green" href="/TeleoptiWFM/Web/MyTime">
+					<span>Team Leaders</span>
+				</a>
+			</div>
+			<div class="col-md-3">
+				<a class="block pink" href="”/Anywhere#realtimeadherencesites">
+					<span>Real-time Analysts</span>
+				</a>
+			</div>
+			<div class="col-md-3">
+				<a class="block orange" href="/TeleoptiWFM/Client">
+					<span>Resource Planners</span>
+				</a>
+			</div>
+		</div>
+		<!-- bottom links -->
+		<div class="row">
+			<div class="col-md-12">
+				<ul class="tools-services">
+					<li class="broker"><a href="/TeleoptiWFM/broker/signalr/negotiate">Broker</a></li>
+					<li class="rta-service"><a href="/TeleoptiWFM/RTA/TeleoptiRtaService.svc">RTA Web Service</a></li>
+					<li class="sdk-service"><a href="/TeleoptiWFM/SDK/TeleoptiCCCSdkService.svc">SDK Web Service</a></li>
+				</ul>
+			</div>
 		</div>
 	</div>
-
 </body>
 </html>

@@ -1,0 +1,12 @@
+#header {
+	background: transparent url('../img/header_bg.gif') bottom left no-repeat;
+	margin-bottom: 15px;
+	margin-top: 30px;
+	height: 75px;
+
+	@media (min-width: $screen-md-min) {
+		& {
+			margin-bottom: 60px;
+		}
+	}	
+}
