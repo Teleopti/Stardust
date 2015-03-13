@@ -67,8 +67,11 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Commands
 				Name = location.name,
 				IncludeInSeatPlan = isSelectedForSeatPlanning
 			};
-			
-			loc.AddChildren (childLocations);
+
+			if (childLocations != null)
+			{
+				loc.AddChildren (childLocations);
+			}
 			loc.AddSeats (seats);
 
 

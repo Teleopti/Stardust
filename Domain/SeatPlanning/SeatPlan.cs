@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
-using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Common.EntityBaseTypes;
 using Teleopti.Ccc.Domain.Repositories;
@@ -21,7 +20,7 @@ namespace Teleopti.Ccc.Domain.SeatPlanning
 		private readonly IPublicNoteRepository _publicNoteRepository;
 		private readonly IPersonRepository _personRepository;
 		private readonly IScheduleRepository _scheduleRepository;
-		private readonly Dictionary<DateOnly, dayShift> _dayShifts = new Dictionary<DateOnly, dayShift>();
+		private readonly List<dayShift> _shifts = new List<dayShift>();
 
 		public SeatPlan(IScenario currentScenario, IPublicNoteRepository publicNoteRepository, IPersonRepository personRepository, IScheduleRepository scheduleRepository)
 		{
@@ -37,9 +36,6 @@ namespace Teleopti.Ccc.Domain.SeatPlanning
 			var people = getPeople(teams, period);
 			createAgentShiftsFromSchedules(period, people);
 			allocateSeats(seatAllocator);
-
-			//RobTodo: Required by Seat Planner?
-			//addSeatPlanAddedEvent (period, trackedCommandInfo);
 		}
 
 		private List<IPerson> getPeople(IEnumerable<ITeam> teams, DateOnlyPeriod period)
@@ -49,7 +45,6 @@ namespace Teleopti.Ccc.Domain.SeatPlanning
 			{
 				//RobTodo: review: Try to use personscheduledayreadmodel to improve performance
 				people.AddRange(_personRepository.FindPeopleBelongTeamWithSchedulePeriod(team, period));
-
 			}
 
 			return people;
@@ -57,20 +52,20 @@ namespace Teleopti.Ccc.Domain.SeatPlanning
 
 		private void allocateSeats(SeatAllocator seatAllocator)
 		{
-			foreach (var dayShift in _dayShifts.Values)
+			var seatBookingRequests = new List<SeatBookingRequest>();
+			
+			foreach (var shift in _shifts)
 			{
-				var seatBookingRequestsForDay = dayShift.GetShifts().Select(agentShifts => new SeatBookingRequest(agentShifts.ToArray()));
-	
-				//RobTODO: FIX
-				// we should be allocating all of the seats for the selected period together, so that
-				// overnight shifts do not cause seats to be booked twice.
-				seatAllocator.AllocateSeats(seatBookingRequestsForDay.ToArray());
-
-				foreach (var agentShifts in dayShift.GetShifts())
-				{
-					publishShiftInformation(agentShifts);
-				}
+				seatBookingRequests.AddRange(shift.GetShifts().Select(agentShifts => new SeatBookingRequest(agentShifts.ToArray())));
 			}
+
+			seatAllocator.AllocateSeats(seatBookingRequests.ToArray());
+
+			foreach (var agentShifts in _shifts.SelectMany (shift => shift.GetShifts()))
+			{
+				publishShiftInformation (agentShifts);
+			}
+
 		}
 
 		private void publishShiftInformation(IEnumerable<AgentShift> agentShifts)
@@ -104,7 +99,7 @@ namespace Teleopti.Ccc.Domain.SeatPlanning
 			foreach (var date in period.DayCollection())
 			{
 				var dayShift = new dayShift(date);
-				_dayShifts.Add(date, dayShift);
+				_shifts.Add(dayShift);
 				foreach (var person in people)
 				{
 					createAgentShiftsFromScheduleDays(schedulesForPeople[person].ScheduledDayCollection(period), person, dayShift);
@@ -121,7 +116,6 @@ namespace Teleopti.Ccc.Domain.SeatPlanning
 																&& s.SignificantPart() == SchedulePartView.MainShift))
 				{
 					createAgentShift(scheduleDay, person, dayShift);
-					
 				}
 			}
 		}
@@ -146,24 +140,6 @@ namespace Teleopti.Ccc.Domain.SeatPlanning
 			return dictionary;
 		}
 		
-		// RobTODO: Review if this will be required...if not then remove SeatPlanAddedEvent.
-		private void addSeatPlanAddedEvent(DateOnlyPeriod period, TrackedCommandInfo trackedCommandInfo)
-		{
-			var seatPlanAddedEvent = new SeatPlanAddedEvent
-			{
-				StartDate = period.StartDate,
-				EndDate = period.EndDate,
-				ScenarioId = _scenario.Id.GetValueOrDefault(),
-				BusinessUnitId = _scenario.BusinessUnit.Id.GetValueOrDefault()
-			};
-			if (trackedCommandInfo != null)
-			{
-				seatPlanAddedEvent.InitiatorId = trackedCommandInfo.OperatedPersonId;
-				seatPlanAddedEvent.TrackId = trackedCommandInfo.TrackId;
-			}
-			AddEvent(seatPlanAddedEvent);
-		}
-
 		#region IDeleteTag Implementation
 
 		private bool _isDeleted;
@@ -222,8 +198,6 @@ namespace Teleopti.Ccc.Domain.SeatPlanning
 			{
 				return _teamShifts.ContainsKey(teamShift.Team.Id.Value);
 			}
-
-
 		}
 		
 		private class teamShift
@@ -247,8 +221,6 @@ namespace Teleopti.Ccc.Domain.SeatPlanning
 				_agentShifts.Add(agentShift);
 
 			}
-
 		}
-
 	}
 }
