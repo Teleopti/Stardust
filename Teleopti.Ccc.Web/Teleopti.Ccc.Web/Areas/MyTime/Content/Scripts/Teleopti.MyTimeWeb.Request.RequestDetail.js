@@ -86,6 +86,17 @@ Teleopti.MyTimeWeb.Request.RequestDetail = (function ($) {
 	    parentViewModel.requestViewModel().AddAbsenceRequest(true);
 	}
 
+	function _addPostShiftForTradeClick() {
+		_hideOthers();
+		var defaultTime = { defaultStartTime: defaultDateTimes.defaultStartTime, defaultEndTime: defaultDateTimes.defaultEndTime };
+		var model = new Teleopti.MyTimeWeb.Schedule.ShiftExchangeOfferViewModelFactory(ajax, _addItemAtTop).Create(defaultTime);
+		model.DateFormat(_datePickerFormat());
+		parentViewModel.requestViewModel(model);
+		var requestDay = moment(moment().startOf('day').add('days', 1), _datePickerFormat());
+		model.DateFrom(requestDay);
+		model.DateTo(requestDay);
+	}
+
 	function _databindModel(requestDetailViewModel) {
 	    parentViewModel = requestDetailViewModel;
 	    var element = $('#Request-add-data-binding-area')[0];
@@ -190,6 +201,9 @@ Teleopti.MyTimeWeb.Request.RequestDetail = (function ($) {
 		},
 		AddAbsenceRequestClick: function () {
 			_addAbsenceRequestClick();
+		},
+		AddPostShiftForTradeClick: function () {
+			_addPostShiftForTradeClick();
 		},
 		HideNewTextOrAbsenceRequestView: function() {
 		    parentViewModel.requestViewModel(null);

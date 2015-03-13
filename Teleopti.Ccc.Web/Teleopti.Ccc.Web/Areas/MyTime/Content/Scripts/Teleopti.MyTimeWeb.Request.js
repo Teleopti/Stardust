@@ -25,6 +25,7 @@ Teleopti.MyTimeWeb.Request = (function ($) {
         self.addAbsenceRequestActive = ko.observable(false);
         self.addShiftTradeRequestActive = ko.observable(false);
         self.addShiftTradeBulletinBoardActive = ko.observable(false);
+        self.addPostShiftForTradeActive = ko.observable(false);
         self.isShiftTradeBulletinBoardEnabled = ko.observable(false);
 
         self.addTextRequest = function () {
@@ -55,11 +56,19 @@ Teleopti.MyTimeWeb.Request = (function ($) {
 			Teleopti.MyTimeWeb.Common.Layout.ActivatePlaceHolder();
         };
 
+        self.addPostShiftForTradeRequest = function () {
+	        self.resetToolbarActiveButtons();
+	        self.addPostShiftForTradeActive(true);
+	        Teleopti.MyTimeWeb.Request.RequestDetail.AddPostShiftForTradeClick();
+			Teleopti.MyTimeWeb.Common.Layout.ActivatePlaceHolder();
+        };
+
         self.resetToolbarActiveButtons = function() {
             self.addTextRequestActive(false);
             self.addAbsenceRequestActive(false);
             self.addShiftTradeRequestActive(false);
             self.addShiftTradeBulletinBoardActive(false);
+            self.addPostShiftForTradeActive(false);
         };
     }
 
