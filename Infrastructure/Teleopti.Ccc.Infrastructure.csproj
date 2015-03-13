@@ -224,6 +224,7 @@
     <Compile Include="LiteUnitOfWork\ReadModelUnitOfWorkState.cs" />
     <Compile Include="MultiTenancy\Client\AuthenticationFromFileQuerier.cs" />
     <Compile Include="MultiTenancy\Client\DictionaryToPostData.cs" />
+    <Compile Include="MultiTenancy\Server\DeletePersonInfo.cs" />
     <Compile Include="MultiTenancy\Server\FindTenantAndPersonIdForIdentity.cs" />
     <Compile Include="MultiTenancy\Client\IDictionaryToPostData.cs" />
     <Compile Include="MultiTenancy\Server\FindTenantByNameQuery.cs" />

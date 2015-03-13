@@ -9,7 +9,6 @@ using Teleopti.Ccc.TestCommon.TestData;
 
 namespace Teleopti.Ccc.InfrastructureTest.MultiTenancy.Server
 {
-	[RestoreDatabaseAfterTest]
 	public class PersistPersonInfoTest
 	{
 		private Tenant tenant;
@@ -24,6 +23,12 @@ namespace Teleopti.Ccc.InfrastructureTest.MultiTenancy.Server
 
 			tenant = new Tenant(RandomName.Make());
 			tenantUnitOfWorkManager.CurrentSession().Save(tenant);
+		}
+
+		[TearDown]
+		public void Cleanup()
+		{
+			tenantUnitOfWorkManager.Dispose();
 		}
 
 		[Test]
