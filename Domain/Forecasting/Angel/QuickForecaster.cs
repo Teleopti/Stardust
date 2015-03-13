@@ -49,7 +49,7 @@ namespace Teleopti.Ccc.Domain.Forecasting.Angel
 		}
 	}
 
-	public class QuickForecasterWorkloadParams
+	public struct QuickForecasterWorkloadParams
 	{
 		public IWorkload WorkLoad { get; set; }
 		public DateOnlyPeriod FuturePeriod { get; set; }
