@@ -1,4 +1,5 @@
 using System;
+using Teleopti.Ccc.Domain.ApplicationLayer.Rta;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Messages;
 
@@ -13,5 +14,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Events
 		public Guid BusinessUnitId { get; set; }
 		public bool InAdherence { get; set; }
 		public bool InAdherenceWithPreviousActivity { get; set; }
+		public AdherenceState? Adherence { get; set; }
 	}
 }

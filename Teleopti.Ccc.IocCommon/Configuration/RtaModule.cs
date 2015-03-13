@@ -116,7 +116,10 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			}
 
 			if (_config.Toggle(Toggles.RTA_NeutralAdherence_30930))
+			{
 				builder.RegisterType<ByPolicy>().As<IAppliedAdherence>();
+				builder.RegisterType<AdherenceStateDecorator>().As<IRtaEventDecorator>().SingleInstance();
+			}
 			else
 				builder.RegisterType<ByStaffingEffect>().As<IAppliedAdherence>();
 			

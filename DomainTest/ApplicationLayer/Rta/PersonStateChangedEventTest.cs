@@ -9,6 +9,7 @@ using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.IoC;
+using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Messages;
 
 namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta
@@ -194,6 +195,50 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta
 
 			var @event = publisher.PublishedEvents.OfType<PersonStateChangedEvent>().Single();
 			@event.InAdherenceWithPreviousActivity.Should().Be(false);
+		}
+
+
+		[Test]
+		[Toggle(Toggles.RTA_NeutralAdherence_30930)]
+		public void ShouldSetAdhernce()
+		{
+			var personId = Guid.NewGuid();
+			var admin = Guid.NewGuid();
+			database
+				.WithUser("usercode", personId)
+				.WithSchedule(personId, admin, "2015-03-13 08:00", "2015-03-13 09:00")
+				.WithAlarm("admin", admin, 0, Adherence.Neutral);
+			now.Is("2015-03-13 08:00");
+
+			target.SaveState(new ExternalUserStateForTest
+			{
+				UserCode = "usercode",
+				StateCode = "admin"
+			});
+
+			publisher.PublishedEvents.OfType<PersonStateChangedEvent>().Single()
+				.Adherence.Should().Be(AdherenceState.Neutral);
+		}
+
+		[Test]
+		[ToggleOff(Toggles.RTA_NeutralAdherence_30930)]
+		public void ShouldNotSetAdhernce()
+		{
+			var personId = Guid.NewGuid();
+			var admin = Guid.NewGuid();
+			database
+				.WithUser("usercode", personId)
+				.WithSchedule(personId, admin, "2015-03-13 08:00", "2015-03-13 09:00")
+				.WithAlarm("admin", admin, 0, Adherence.Neutral);
+			now.Is("2015-03-13 08:00");
+
+			target.SaveState(new ExternalUserStateForTest
+			{
+				UserCode = "usercode",
+				StateCode = "admin"
+			});
+
+			publisher.PublishedEvents.OfType<PersonStateChangedEvent>().Single().Adherence.Should().Be(null);
 		}
 
 	}

@@ -215,6 +215,7 @@
     <Compile Include="ApplicationLayer\Rta\AdherenceInfo.cs" />
     <Compile Include="ApplicationLayer\Rta\AdherencePercentageReadModel.cs" />
     <Compile Include="ApplicationLayer\Rta\AdherencePercentageReadModelUpdater.cs" />
+    <Compile Include="ApplicationLayer\Rta\AdherenceStateDecorator.cs" />
     <Compile Include="ApplicationLayer\Rta\Aggregator\AdherenceAggregator.cs" />
     <Compile Include="ApplicationLayer\Rta\Aggregator\AgentAdherenceAggregator.cs" />
     <Compile Include="ApplicationLayer\Rta\Aggregator\AgentsAdherenceMessage.cs" />
