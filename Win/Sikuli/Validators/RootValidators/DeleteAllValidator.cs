@@ -31,7 +31,7 @@ namespace Teleopti.Ccc.Win.Sikuli.Validators.RootValidators
 				result.Result = SikuliValidationResult.ResultValue.Fail;
 				return result;
 			}
-			result.Details.AppendLine("Scheduled hours = 0 : OK");
+			result.Details.AppendLine("Scheduled hours = 0 : Pass");
 			return result;
 		}
 	}
