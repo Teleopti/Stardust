@@ -65,7 +65,7 @@ namespace Teleopti.Ccc.Infrastructure.Rta.Persisters
 				.SetParameter("TimeInAdherence", model.TimeInAdherence)
 				.SetParameter("TimeOutOfAdherence", model.TimeOutOfAdherence)
 				.SetParameter("ShiftHasEnded", model.ShiftHasEnded)
-				.SetParameter("State", _serializer.SerializeObject(model.State))
+				.SetParameter("State", _serializer.SerializeObject(model.State), NHibernateUtil.StringClob)
 				.ExecuteUpdate();
 		}
 

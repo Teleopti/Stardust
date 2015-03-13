@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using NUnit.Framework;
 using SharpTestsEx;
@@ -176,6 +177,26 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.Persisters
 			model.IsLastTimeInAdherence.Should().Be.EqualTo(true);
 			model.LastTimestamp.Should().Be.EqualTo("2012-08-29 8:00".Utc());
 			model.ShiftHasEnded.Should().Be.EqualTo(true);
+		}
+
+		[Test]
+		public void ShouldSaveReadModelWithVeryLongStateString()
+		{
+			var personId = Guid.NewGuid();
+			var states = new List<AdherencePercentageReadModelState>();
+			states.AddRange(from i in Enumerable.Range(1, 400) select new AdherencePercentageReadModelState());
+			
+			Assert.DoesNotThrow(() => Target.Persist(new AdherencePercentageReadModel
+			{
+				Date = "2012-08-29".Date(),
+				PersonId = personId,
+				TimeInAdherence = "17".Minutes(),
+				TimeOutOfAdherence = "28".Minutes(),
+				IsLastTimeInAdherence = true,
+				LastTimestamp = "2012-08-29 8:00".Utc(),
+				ShiftHasEnded = true,
+				State = states
+			}));
 		}
 	}
 }
