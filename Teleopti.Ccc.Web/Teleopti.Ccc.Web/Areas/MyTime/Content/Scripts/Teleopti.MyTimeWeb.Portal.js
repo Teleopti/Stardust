@@ -164,6 +164,48 @@ Teleopti.MyTimeWeb.Portal = (function ($) {
 					   });
 	        	
 	        });
+
+		crossroads.addRoute(new RegExp('^(' + viewRegex + ')/(' + actionRegex + ')/(ShiftTradeBulletinBoard)/(' + dateRegex + ')$', 'i'),
+	        function (view, action, secondAction, date) {
+	        	var hashInfo = _parseHash('#' + view + '/' + action);
+
+		        var parsedDate;
+		        if (/^(\d){8}$/.test(date)) {
+			        var y = date.substr(0, 4),
+			            m = date.substr(4, 2) - 1,
+			            d = date.substr(6, 2);
+			        parsedDate = new Date(y, m, d);
+			       
+		        }
+		        _invokeDisposeCallback(currentViewId);
+		        _adjustTabs(hashInfo);
+		        _loadContent(hashInfo,
+					   function () {
+					   	Teleopti.MyTimeWeb.Request.ShiftTradeBulletinBoardRequest(parsedDate);
+					   });
+	        	
+	        });
+
+		crossroads.addRoute(new RegExp('^(' + viewRegex + ')/(' + actionRegex + ')/(PostShiftForTrade)/(' + dateRegex + ')$', 'i'),
+	        function (view, action, secondAction, date) {
+	        	var hashInfo = _parseHash('#' + view + '/' + action);
+
+		        var parsedDate;
+		        if (/^(\d){8}$/.test(date)) {
+			        var y = date.substr(0, 4),
+			            m = date.substr(4, 2) - 1,
+			            d = date.substr(6, 2);
+			        parsedDate = new Date(y, m, d);
+			       
+		        }
+		        _invokeDisposeCallback(currentViewId);
+		        _adjustTabs(hashInfo);
+		        _loadContent(hashInfo,
+					   function () {
+					   	Teleopti.MyTimeWeb.Request.PostShiftForTradeRequest(parsedDate);
+					   });
+	        	
+	        });
 		
 		crossroads.addRoute(new RegExp('^(' + viewRegex + ')/(' + actionRegex + ')/(' + actionRegex + ')/(' + dateRegex + ')$', 'i'),
 	        function (view, action, secondAction, date) {

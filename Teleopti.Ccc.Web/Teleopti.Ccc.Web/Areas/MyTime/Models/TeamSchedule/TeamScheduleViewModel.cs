@@ -13,6 +13,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Models.TeamSchedule
 		public IEnumerable<AgentScheduleViewModel> AgentSchedules { get; set; }
 		public IEnumerable<TimeLineViewModel> TimeLine { get; set; }
 		public bool ShiftTradePermisssion { get; set; }
+		public bool ShiftTradeBulletinBoardPermission { get; set; }
 	}
 
 	public class TeamScheduleViewModelReworked

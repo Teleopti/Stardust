@@ -48,6 +48,24 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.ViewModelFactory
 			Assert.That(result.ShiftTradePermisssion, Is.True);
 		}
 
+		[Test]
+		public void PermissionForShiftTradeBulletinBoard_WhenAgentHasPermissionToViewShiftTradeBulletinBoard_ShouldBeTrue()
+		{
+			var target = new TeamScheduleViewModelFactory(createMappingEngine(), new FakePermissionProvider());
+
+			var result = target.CreateViewModel(DateOnly.Today, new Guid());
+			Assert.That(result.ShiftTradeBulletinBoardPermission, Is.True);
+		}		
+		
+		[Test]
+		public void PermissionForShiftTradeBulletinBoard_WhenAgentHasPermissionToViewShiftTradeBulletinBoardWithDefaultContructor_ShouldBeTrue()
+		{
+			var target = new TeamScheduleViewModelFactory(createMappingEngine(), new FakePermissionProvider());
+
+			var result = target.CreateViewModel();
+			Assert.That(result.ShiftTradeBulletinBoardPermission, Is.True);
+		}
+
 		private static IMappingEngine createMappingEngine()
 		{
 			var mapper = MockRepository.GenerateMock<IMappingEngine>();

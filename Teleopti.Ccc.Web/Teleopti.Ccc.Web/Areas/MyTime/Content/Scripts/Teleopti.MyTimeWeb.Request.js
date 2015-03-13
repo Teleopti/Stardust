@@ -56,10 +56,10 @@ Teleopti.MyTimeWeb.Request = (function ($) {
 			Teleopti.MyTimeWeb.Common.Layout.ActivatePlaceHolder();
         };
 
-        self.addPostShiftForTradeRequest = function () {
+        self.addPostShiftForTradeRequest = function (date) {
 	        self.resetToolbarActiveButtons();
 	        self.addPostShiftForTradeActive(true);
-	        Teleopti.MyTimeWeb.Request.RequestDetail.AddPostShiftForTradeClick();
+	        Teleopti.MyTimeWeb.Request.RequestDetail.AddPostShiftForTradeClick(date);
 			Teleopti.MyTimeWeb.Common.Layout.ActivatePlaceHolder();
         };
 
@@ -110,7 +110,13 @@ Teleopti.MyTimeWeb.Request = (function ($) {
 	    },
 	    ShiftTradeRequest: function (date) {
 		    	requestNavigationViewModel.addShiftTradeRequest(date);
-	    }
+	    },
+		ShiftTradeBulletinBoardRequest: function(date) {
+			requestNavigationViewModel.addShiftTradeBulletinBoardRequest(date);
+		},
+		PostShiftForTradeRequest: function (date) {
+			requestNavigationViewModel.addPostShiftForTradeRequest(date);
+		}
 	};
 
 })(jQuery);

@@ -61,6 +61,26 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.Mapping
 			var result = Mapper.Map<TeamScheduleDomainData, TeamScheduleViewModel>(data);
 
 			result.TeamSelection.Should().Be(data.TeamOrGroupId);
+		}		
+		
+		[Test]
+		public void ShouldMapShiftTradePermission()
+		{
+			data.TeamOrGroupId = Guid.NewGuid();
+
+			var result = Mapper.Map<TeamScheduleDomainData, TeamScheduleViewModel>(data);
+
+			result.ShiftTradePermisssion.Should().Be.False();
+		}		
+		
+		[Test]
+		public void ShouldMapShiftTradeBulletinBoardPermission()
+		{
+			data.TeamOrGroupId = Guid.NewGuid();
+
+			var result = Mapper.Map<TeamScheduleDomainData, TeamScheduleViewModel>(data);
+
+			result.ShiftTradeBulletinBoardPermission.Should().Be.False();
 		}
 
 		[Test]

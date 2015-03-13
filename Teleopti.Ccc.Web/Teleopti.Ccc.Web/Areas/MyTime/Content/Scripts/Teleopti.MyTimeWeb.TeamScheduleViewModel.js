@@ -5,6 +5,7 @@ Teleopti.MyTimeWeb.TeamScheduleViewModel = function () {
 	self.isTradeForMultiDaysEnabled = ko.observable(false);
 	self.isFilterByTimeEnabled = ko.observable(false);
 	self.isTeamScheduleSorttingFeatureEnabled = ko.observable(false);
+	self.isShiftTradeBulletinBoardEnabled = ko.observable(false);
 
 	self.isLoading = ko.observable(true);
 
@@ -22,10 +23,20 @@ Teleopti.MyTimeWeb.TeamScheduleViewModel = function () {
 		self.isFilterByTimeEnabled(filterByTimeEnabled);
 
 		self.isTeamScheduleSorttingFeatureEnabled(Teleopti.MyTimeWeb.Common.IsToggleEnabled("MyTimeWeb_SortSchedule_32092"));
+
+		self.isShiftTradeBulletinBoardEnabled(Teleopti.MyTimeWeb.Common.IsToggleEnabled("MyTimeWeb_ShiftTradeExchangeBulletin_31296"));
 	};
 
 	self.initializeShiftTrade = function () {
 		Teleopti.MyTimeWeb.Portal.NavigateTo("Requests/Index/ShiftTrade/", self.requestedDate().format("YYYYMMDD"));
+	};
+
+	self.initializeShiftTradeBulletinBoard = function () {
+		Teleopti.MyTimeWeb.Portal.NavigateTo("Requests/Index/ShiftTradeBulletinBoard/", self.requestedDate().format("YYYYMMDD"));
+	};
+
+	self.initializePostShiftForTrade = function () {
+		Teleopti.MyTimeWeb.Portal.NavigateTo("Requests/Index/PostShiftForTrade/", self.requestedDate().format("YYYYMMDD"));
 	};
 
 	self.initCurrentDate = function (urlDate) {

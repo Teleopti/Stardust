@@ -86,13 +86,15 @@ Teleopti.MyTimeWeb.Request.RequestDetail = (function ($) {
 	    parentViewModel.requestViewModel().AddAbsenceRequest(true);
 	}
 
-	function _addPostShiftForTradeClick() {
+	function _addPostShiftForTradeClick(date) {
 		_hideOthers();
 		var defaultTime = { defaultStartTime: defaultDateTimes.defaultStartTime, defaultEndTime: defaultDateTimes.defaultEndTime };
 		var model = new Teleopti.MyTimeWeb.Schedule.ShiftExchangeOfferViewModelFactory(ajax, _addItemAtTop).Create(defaultTime);
 		model.DateFormat(_datePickerFormat());
 		parentViewModel.requestViewModel(model);
-		var requestDay = moment(moment().startOf('day').add('days', 1), _datePickerFormat());
+		var tomorrow = moment(moment().startOf('day').add('days', 1), _datePickerFormat());
+		var requestDay = moment(moment(date), _datePickerFormat());
+		if (requestDay.isBefore(tomorrow)) requestDay = tomorrow;
 		model.DateFrom(requestDay);
 		model.DateTo(requestDay);
 	}
@@ -202,8 +204,8 @@ Teleopti.MyTimeWeb.Request.RequestDetail = (function ($) {
 		AddAbsenceRequestClick: function () {
 			_addAbsenceRequestClick();
 		},
-		AddPostShiftForTradeClick: function () {
-			_addPostShiftForTradeClick();
+		AddPostShiftForTradeClick: function (date) {
+			_addPostShiftForTradeClick(date);
 		},
 		HideNewTextOrAbsenceRequestView: function() {
 		    parentViewModel.requestViewModel(null);

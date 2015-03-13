@@ -90,7 +90,15 @@ Teleopti.MyTimeWeb.TeamSchedule = (function ($) {
 
         this.initializeShiftTrade = function () {
             portal.NavigateTo("Requests/Index/ShiftTrade/", self.selectedDate().format('YYYYMMDD'));
-	    };
+        };
+
+        this.initializeShiftTradeBulletinBoard = function () {
+        	Teleopti.MyTimeWeb.Portal.NavigateTo("Requests/Index/ShiftTradeBulletinBoard/", self.selectedDate().format("YYYYMMDD"));
+        };
+
+        this.initializePostShiftForTrade = function () {
+        	Teleopti.MyTimeWeb.Portal.NavigateTo("Requests/Index/PostShiftForTrade/", self.selectedDate().format("YYYYMMDD"));
+        };
 	};
 
 	function _initTeamPickerSelection() {
