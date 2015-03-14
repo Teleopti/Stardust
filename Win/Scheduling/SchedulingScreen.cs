@@ -1540,7 +1540,8 @@ namespace Teleopti.Ccc.Win.Scheduling
 			}
 
 			var url = ConfigurationManager.AppSettings["FeatureToggle"] + "Messages#" + builder;
-			Process.Start(url);
+			if(url.IsAnUrl())
+				Process.Start(url);
 		}
 
 		private void toolStripMenuItemLockAllRestrictionsMouseUp(object sender, MouseEventArgs e)

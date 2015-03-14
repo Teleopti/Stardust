@@ -52,14 +52,14 @@ namespace Syncfusion.Windows.Forms.Tools
         protected override void OnHandleCreated(EventArgs e)
         {
             base.OnHandleCreated(e);
-            RemoveSyncfusionHook();
-            SetupFixedHook();
+			//RemoveSyncfusionHook();
+			//SetupFixedHook();
         }
 
         protected override void OnHandleDestroyed(EventArgs e)
         {
             base.OnHandleDestroyed(e);
-            RemoveFixedHook();
+			//RemoveFixedHook();
         }
 
         private void RemoveSyncfusionHook()
