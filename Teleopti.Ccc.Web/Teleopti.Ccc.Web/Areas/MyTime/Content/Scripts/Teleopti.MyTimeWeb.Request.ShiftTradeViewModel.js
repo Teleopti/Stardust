@@ -491,6 +491,7 @@ Teleopti.MyTimeWeb.Request.ShiftTradeViewModel = function(ajax) {
 				if (self.refocusToNameSearch != null) {
 					self.refocusToNameSearch();
 					self.refocusToNameSearch = null;
+					self.suppressChangeInSearchBox = false;
 				}
 			}
 		});
