@@ -262,9 +262,8 @@ namespace Teleopti.Ccc.WinCodeTest.Main
 		{
 			var dataSourceContainer = new DataSourceContainer(null, null, null, AuthenticationTypeOption.Windows);
 			_model.AuthenticationType = AuthenticationTypeOption.Windows;
-			_model.WindowsIsPossible = false;
 			_endPointSelector.Stub(x => x.GetEndpointNames()).Return(new List<string> { "local" });
-			_winLogon.Stub( x => x.CheckWindowsIsPossible(_model));
+			_winLogon.Stub( x => x.CheckWindowsIsPossible()).Return(false);
 
 			_model.SelectedDataSourceContainer = dataSourceContainer;
 			_view.Stub(x => x.ShowStep(false));
