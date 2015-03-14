@@ -127,6 +127,8 @@ BEGIN
 				    @isWorkingDay = 1 
 					AND
 					sd.Start is not null
+					AND
+					(sd.IsDayOff is null || sd.IsDayOff = 0)
 				    AND
 					(isnull(@filterStartTimes, '') = '' OR EXISTS ( select * from @filterStartTimeList fstl where sd.Start between fstl.startTimeStart and fstl.startTimeEnd))
 				    AND 

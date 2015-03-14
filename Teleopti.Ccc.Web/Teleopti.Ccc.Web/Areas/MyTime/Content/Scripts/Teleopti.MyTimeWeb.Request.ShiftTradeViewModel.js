@@ -289,6 +289,24 @@ Teleopti.MyTimeWeb.Request.ShiftTradeViewModel = function(ajax) {
 		});
 	};
 
+	self.setAllStartTimeFilter = ko.observable(false);
+	self.setAllStartTimeFilter.subscribe(function (value) {
+		self.IsLoading(true);
+		$.each(self.filterStartTimeList(), function (index, item) { item.isChecked(value); });
+		self.IsLoading(false);
+		self.prepareLoad();
+		self.loadSchedule(self.getDateWithFormat(), self.selectedTeamInternal());
+	});
+
+	self.setAllEndTimeFilter = ko.observable(false);
+	self.setAllEndTimeFilter.subscribe(function (value) {
+		self.IsLoading(true);
+		$.each(self.filterEndTimeList(), function (index, item) { item.isChecked(value); });
+		self.IsLoading(false);
+		self.prepareLoad();
+		self.loadSchedule(self.getDateWithFormat(), self.selectedTeamInternal());
+	});
+
 	self.chooseAgent = function(agent) {
 		//hide or show all agents
 		$.each(self.possibleTradeSchedules(), function(index, value) {
@@ -505,7 +523,7 @@ Teleopti.MyTimeWeb.Request.ShiftTradeViewModel = function(ajax) {
 	self.prepareLoad = function() {
 		self.possibleTradeSchedulesRaw = [];
 		self.selectedPageIndex(1);
-		self.selectablePages.removeAll();
+		//self.selectablePages.removeAll();
 		self.isPreviousMore(false);
 		self.isMore(false);
 		if (self.agentChoosed() != null && self.isTradeForMultiDaysEnabled()) {
@@ -701,8 +719,9 @@ Teleopti.MyTimeWeb.Request.ShiftTradeViewModel = function(ajax) {
 		});
 	};
 
-	self.pageCount.subscribe(function(value) { self.initSelectablePages(value) });
-
+	self.pageCount.subscribe(function(value) {
+		self.initSelectablePages(value) });
+	
 	self.setPagingInfo = function(pageCount) {
 		self.pageCount(pageCount);
 		self.isPageVisible(pageCount > 0);
