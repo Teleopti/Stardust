@@ -46,8 +46,12 @@
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
-    <Content Include="assets\css\main.css" />
-    <Content Include="assets\css\main.min.css" />
+    <Content Include="assets\css\main.css">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="assets\css\main.min.css">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="assets\img\agent.png" />
     <Content Include="assets\img\gear.png" />
     <Content Include="assets\img\header_bg.gif" />
