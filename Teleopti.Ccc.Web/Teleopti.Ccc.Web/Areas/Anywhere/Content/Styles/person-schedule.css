@@ -239,7 +239,8 @@
 }
 
 .person-schedule .schedule-column .apply,
-.person-schedule .schedule-column .cancel {
+.person-schedule .schedule-column .cancel,
+.person-schedule .schedule-column .save-absence {
     margin-top: 10px !important;
 }
 
