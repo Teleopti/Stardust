@@ -6,6 +6,7 @@ using Teleopti.Ccc.Web.Areas.Tenant.Model;
 
 namespace Teleopti.Ccc.Web.Areas.Tenant
 {
+	//TODO: tenant - when adding scenarios for multi tenancy scenario(s), use this controller!
 	public class PersonInfoController : Controller
 	{
 		private readonly IPersistPersonInfo _persister;
@@ -39,7 +40,7 @@ namespace Teleopti.Ccc.Web.Areas.Tenant
 		//TODO: tenant - change later to some sort of authentication
 		public virtual void Delete(PersonInfoDeletes personInfoDeletes)
 		{
-			foreach (var personInfoDelete in personInfoDeletes.PersonInfosToDelete)
+			foreach (var personInfoDelete in personInfoDeletes.PersonIdsToDelete)
 			{
 				_deletePersonInfo.Delete(personInfoDelete);
 			}

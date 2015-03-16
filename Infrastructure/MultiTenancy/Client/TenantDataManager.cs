@@ -41,7 +41,13 @@ namespace Teleopti.Ccc.Infrastructure.MultiTenancy.Client
 
 		public void DeleteTenantPersons(IList<Guid> personsToBeDeleted)
 		{
-			var uriBuilder = new UriBuilder(_pathToTenantServer + "PersonInfo/Delete");
+			var client = new HttpClient();
+			//TODO: tenant - just a ugly hack for now
+			// * Make a "mapper" that builds the inparamater and make sure that mapper creates correct (=same as server side) structure
+			// * Would be good if we use same way doint the call here and in authenticationquerier. reuse same interface first and then switch to "HttpClient" in its impl
+			var json = "{'PersonIdsToDelete':" + JsonConvert.SerializeObject(personsToBeDeleted) + "}";
+			//
+			client.PostAsync(_pathToTenantServer + "PersonInfo/Delete", new StringContent(json, Encoding.UTF8, "application/json"));
 		}
 
 		//maybe something like this later when we authorize against method

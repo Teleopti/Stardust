@@ -5,6 +5,6 @@ namespace Teleopti.Ccc.Web.Areas.Tenant.Model
 {
 	public class PersonInfoDeletes
 	{
-		public IEnumerable<Guid> PersonInfosToDelete { get; set; }
+		public IEnumerable<Guid> PersonIdsToDelete { get; set; }
 	}
 }

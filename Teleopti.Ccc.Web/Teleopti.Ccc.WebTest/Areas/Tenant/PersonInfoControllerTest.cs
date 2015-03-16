@@ -36,7 +36,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Tenant
 		{
 			var personId1 = Guid.NewGuid();
 			var personId2 = Guid.NewGuid();
-			var model = new PersonInfoDeletes {PersonInfosToDelete = new[] {personId1, personId2}};
+			var model = new PersonInfoDeletes {PersonIdsToDelete = new[] {personId1, personId2}};
 			var deleter = MockRepository.GenerateMock<IDeletePersonInfo>();
 			
 			var target = new PersonInfoController(null, null, deleter);
