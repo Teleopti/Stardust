@@ -3,7 +3,6 @@
 	As a real time analyst
 	I want to see correct adherence value
 
-@ignore
 @OnlyRunIfEnabled('RTA_NeutralAdherence_30930')
 Scenario: Should be able to see adherence percentage with neutral adherence
 	Given there is an activity named 'Phone'
