@@ -125,6 +125,14 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Anywhere
 			Browser.Interactions.AssertExistsUsingJQuery(".adherence-percent:contains('{0}')", adherence);
 		}
 
+		[Then(@"I should see '(.*)' without adherence")]
+		public void ThenIShouldSeeWithoutAdherence(string activity)
+		{
+			const string noAdherence = "N/A";
+			Browser.Interactions.AssertExistsUsingJQuery(".activity-name:contains('{0}')", activity);
+			Browser.Interactions.AssertExistsUsingJQuery(".adherence-percent:contains('{0}')", noAdherence);
+		}
+
 		[When(@"I click the site checkbox for '(.*)'")]
 		[When(@"I click the team checkbox for '(.*)'")]
 		public void WhenIClickTheCheckboxFor(string name)
