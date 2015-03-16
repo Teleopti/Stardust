@@ -220,7 +220,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Controllers
 
 		public IEnumerable<ReadOnlyGroupDetail> AvailableGroups(DateOnly queryDate)
 		{
-			throw new NotImplementedException();
+			return ReadOnlyGroupDetails;
 		}
 
 		public IEnumerable<ReadOnlyGroupDetail> DetailsForGroup(Guid groupId, DateOnly queryDate)

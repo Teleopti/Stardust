@@ -4,6 +4,7 @@ using System.Web.Http;
 using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Portal.DataProvider;
+using Teleopti.Ccc.Web.Models.Shared;
 
 namespace Teleopti.Ccc.Web.Areas.Global
 {
@@ -14,7 +15,7 @@ namespace Teleopti.Ccc.Web.Areas.Global
 		private static readonly IEnumerable<AreaWithPermissionPath> _areaWithPermissionPaths = new List<AreaWithPermissionPath>
 		{
 			new AreaWithPermissionPath(DefinedRaptorApplicationFunctionPaths.OpenForecasterPage,() => UserTexts.Resources.OpenForecaster,"Forecaster"),
-			new AreaWithPermissionPath(DefinedRaptorApplicationFunctionPaths.OpenSchedulePage,() => UserTexts.Resources.OpenSchedulePage,"Schedules"),
+			new AreaWithPermissionPath(DefinedRaptorApplicationFunctionPaths.OpenSchedulePage,() => UserTexts.Resources.OpenSchedulePage,"Schedules", new Link{href = "api/ResourcePlanner/Filter",rel = "filters"}),
 			new AreaWithPermissionPath(DefinedRaptorApplicationFunctionPaths.OpenPermissionPage,() => UserTexts.Resources.OpenPermissionPage,"Permissions"),
 		};
 
@@ -28,7 +29,7 @@ namespace Teleopti.Ccc.Web.Areas.Global
 		{
 			return
 				_areaWithPermissionPaths.Where(a => _permissionProvider.HasApplicationFunctionPermission(a.Path))
-					.Select(a => new { Name = a.Name(), a.InternalName });
+					.Select(a => new { Name = a.Name(), a.InternalName, _links = a.Links.ToArray() });
 		}
 	}
 }
