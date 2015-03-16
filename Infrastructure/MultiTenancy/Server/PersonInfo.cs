@@ -21,6 +21,7 @@ namespace Teleopti.Ccc.Infrastructure.MultiTenancy.Server
 		public virtual string Password { get; protected set; }
 		public virtual string Identity { get; protected set; }
 		public virtual string ApplicationLogonName { get; protected set; }
+		//TODO: tenant map this as Date in sql server
 		public virtual DateOnly? TerminalDate { get; set; }
 
 		public virtual string Tenant

@@ -39,6 +39,7 @@ namespace Teleopti.Ccc.Web.Areas.Tenant.Core
 			builder.RegisterType<PersistPersonInfo>().As<IPersistPersonInfo>().SingleInstance();
 			builder.RegisterType<PersonInfoMapper>().As<IPersonInfoMapper>().SingleInstance();
 			builder.RegisterType<FindTenantByNameQuery>().As<IFindTenantByNameQuery>().SingleInstance();
+			builder.RegisterType<DeletePersonInfo>().As<IDeletePersonInfo>().SingleInstance();
 		}
 	}
 }

@@ -228,6 +228,7 @@
     <Compile Include="MultiTenancy\Server\FindTenantAndPersonIdForIdentity.cs" />
     <Compile Include="MultiTenancy\Client\IDictionaryToPostData.cs" />
     <Compile Include="MultiTenancy\Server\FindTenantByNameQuery.cs" />
+    <Compile Include="MultiTenancy\Server\IDeletePersonInfo.cs" />
     <Compile Include="MultiTenancy\Server\IFindTenantAndPersonIdForIdentity.cs" />
     <Compile Include="MultiTenancy\Server\IFindTenantByNameQuery.cs" />
     <Compile Include="MultiTenancy\Server\IIdentityUserQuery.cs" />

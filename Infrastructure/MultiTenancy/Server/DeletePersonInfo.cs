@@ -1,8 +1,9 @@
-﻿using Teleopti.Ccc.Infrastructure.MultiTenancy.Server.NHibernate;
+﻿using System;
+using Teleopti.Ccc.Infrastructure.MultiTenancy.Server.NHibernate;
 
 namespace Teleopti.Ccc.Infrastructure.MultiTenancy.Server
 {
-	public class DeletePersonInfo
+	public class DeletePersonInfo : IDeletePersonInfo
 	{
 		private readonly ICurrentTenantSession _currentTenantSession;
 
@@ -11,9 +12,16 @@ namespace Teleopti.Ccc.Infrastructure.MultiTenancy.Server
 			_currentTenantSession = currentTenantSession;
 		}
 
-		public void Delete(PersonInfo personInfo)
+		//TODO: tenant make this smarter. Accept enumerable instead and make query instead?
+		public void Delete(Guid personId)
 		{
-			_currentTenantSession.CurrentSession().Delete(personInfo);
+			var session = _currentTenantSession.CurrentSession();
+			//TODO: tenant no need to explicitly tell entity-name here when old model is gone
+			var personInfo = session.Get("PersonInfo", personId);
+			if (personInfo != null)
+			{
+				session.Delete(personInfo);
+			}
 		}
 	}
 }
