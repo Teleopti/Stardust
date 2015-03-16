@@ -258,7 +258,7 @@ namespace Teleopti.Analytics.Parameters
 
 			var scriptBlock = @"<script type=""text/javascript"">
 			$(function() {
-				$(""#Parameter_" + _textBox.ID + @""").persianDatepicker({persianNumbers: false, selectedDate: """ + stringDate + @"""}); 
+				$(""#" + _textBox.ClientID + @""").persianDatepicker({persianNumbers: false, selectedDate: """ + stringDate + @"""}); 
 			});</script>";
 
 			Page.ClientScript.RegisterClientScriptBlock(GetType(), scriptKey, scriptBlock);
