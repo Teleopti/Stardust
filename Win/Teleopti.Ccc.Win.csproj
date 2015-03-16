@@ -2594,7 +2594,7 @@
     <Compile Include="Sikuli\Validators\RootValidators\OptimizeBetweenDaysValidator.cs" />
     <Compile Include="Sikuli\Validators\RootValidators\RootValidator.cs" />
     <Compile Include="Sikuli\Validators\RootValidators\ScheduleOvertimePeriodValidator.cs" />
-    <Compile Include="Sikuli\Validators\IntervalBalanceAfterValidator.cs" />
+    <Compile Include="Sikuli\Validators\RootValidators\IntervalBalanceAfterValidator.cs" />
     <Compile Include="Sikuli\Validators\RootValidators\OptimizeWithinDaysValidator.cs" />
     <Compile Include="Sikuli\Validators\RootValidators\OptimizeDaysOffValidator.cs" />
     <Compile Include="Sikuli\Validators\OptimizerValidator.cs" />

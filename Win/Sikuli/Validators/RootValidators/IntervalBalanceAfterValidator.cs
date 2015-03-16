@@ -1,11 +1,12 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
 using Teleopti.Ccc.Win.Sikuli.Helpers;
-using Teleopti.Ccc.Win.Sikuli.Validators.RootValidators;
+using Teleopti.Ccc.Win.Sikuli.Validators.AtomicValidators;
 using Teleopti.Interfaces.Domain;
 
-namespace Teleopti.Ccc.Win.Sikuli.Validators
+namespace Teleopti.Ccc.Win.Sikuli.Validators.RootValidators
 {
 	internal class IntervalBalanceAfterValidator : IRootValidator
 	{
@@ -20,13 +21,27 @@ namespace Teleopti.Ccc.Win.Sikuli.Validators
 
 		public string Description
 		{
-			get { return "Only one 'lowest intra interval balance' value can be under 0.8."; }
+			get { return "Only one 'lowest intra interval balance' value can be under 0.8. Duration must be under limit."; }
 		}
 
 		public SikuliValidationResult Validate(ITestDuration duration)
 		{
+			var intradayValidationResult = intradayBalanceValidationResult();
+
+			var durationValidator = new DurationValidator(TimeSpan.FromMinutes(1).Add(TimeSpan.FromSeconds(1)), duration);
+			var durationValidatorResult = durationValidator.Validate();
+
+			intradayValidationResult.CombineResultValue(durationValidatorResult);
+			intradayValidationResult.CombineDetails(durationValidatorResult);
+
+			return intradayValidationResult;
+		}
+
+		private SikuliValidationResult intradayBalanceValidationResult()
+		{
 			var result = new SikuliValidationResult(SikuliValidationResult.ResultValue.Pass);
-			var lowestIntervalBalances = ValidatorHelper.GetDailyLowestIntraIntervalBalanceForPeriod(_schedulerState, _totalSkill.AggregateSkills[1]);
+			var lowestIntervalBalances = ValidatorHelper.GetDailyLowestIntraIntervalBalanceForPeriod(_schedulerState,
+				_totalSkill.AggregateSkills[1]);
 			if (lowestIntervalBalances == null)
 			{
 				result.Result = SikuliValidationResult.ResultValue.Fail;
