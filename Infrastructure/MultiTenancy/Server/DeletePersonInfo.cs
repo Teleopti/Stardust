@@ -16,8 +16,7 @@ namespace Teleopti.Ccc.Infrastructure.MultiTenancy.Server
 		public void Delete(Guid personId)
 		{
 			var session = _currentTenantSession.CurrentSession();
-			//TODO: tenant no need to explicitly tell entity-name here when old model is gone
-			var personInfo = session.Get("PersonInfo", personId);
+			var personInfo = session.Get<PersonInfo>(personId);
 			if (personInfo != null)
 			{
 				session.Delete(personInfo);

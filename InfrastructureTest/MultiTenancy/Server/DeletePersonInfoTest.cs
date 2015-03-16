@@ -21,8 +21,7 @@ namespace Teleopti.Ccc.InfrastructureTest.MultiTenancy.Server
 
 			var session = uowManager.CurrentSession();
 			session.Flush();
-			//TODO: tenant no need to explicitly tell entity-name here when old model is gone
-			session.Get("PersonInfo", person.Id)
+			session.Get<PersonInfo>(person.Id)
 				.Should().Be.Null();
 		}
 
