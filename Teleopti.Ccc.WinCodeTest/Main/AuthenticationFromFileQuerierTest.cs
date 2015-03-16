@@ -2,7 +2,7 @@
 using System.IO;
 using NUnit.Framework;
 using SharpTestsEx;
-using Teleopti.Ccc.Infrastructure.MultiTenancy;
+using Teleopti.Ccc.Domain.Security.MultiTenancyAuthentication;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Client;
 
 namespace Teleopti.Ccc.WinCodeTest.Main
@@ -45,7 +45,7 @@ namespace Teleopti.Ccc.WinCodeTest.Main
 
 			var target = new AuthenticationFromFileQuerier(fullPath);
 
-			target.TryIdentityLogon("", null).Success.Should().Be.True();
+			target.TryIdentityLogon(new IdentityLogonClientModel(), null).Success.Should().Be.True();
 			File.Delete(fullPath);
 		}
 	}

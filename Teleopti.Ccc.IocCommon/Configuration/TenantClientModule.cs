@@ -35,7 +35,6 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			}
 			builder.RegisterType<PostHttpRequest>().As<IPostHttpRequest>().SingleInstance();
 			builder.RegisterType<NhibConfigEncryption>().As<INhibConfigEncryption>().SingleInstance();
-			builder.RegisterType<DictionaryToPostData>().As<IDictionaryToPostData>().SingleInstance();
 
 			var configServer = _configuration.Args().ConfigServer;
 			if(isRunFromTest(configServer) || configServer.IsAnUrl())
