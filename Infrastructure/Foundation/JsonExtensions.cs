@@ -9,22 +9,22 @@ namespace Teleopti.Ccc.Infrastructure.Foundation
 	{
 		public static T ExecuteJsonRequest<T>(this UriBuilder uriBuilder)
 		{
-			var request = (HttpWebRequest)HttpWebRequest.Create(uriBuilder.Uri);
+			var request = (HttpWebRequest)WebRequest.Create(uriBuilder.Uri);
 			request.AllowAutoRedirect = false;
 
 			return responseToJson<T>(request);
 		}
 
-		public static T PostRequest<T>(this HttpWebRequest request, string post)
+		public static T PostRequest<T>(this HttpWebRequest request, string json)
 		{
 			request.AllowAutoRedirect = false;
 			request.Method = "POST";
-			request.ContentType = "application/x-www-form-urlencoded";
-			request.ContentLength = post.Length;
+			request.ContentType = "application/json; charset=utf-8";
+			request.ContentLength = json.Length;
 
 			using (var requestWriter = new StreamWriter(request.GetRequestStream()))
 			{
-				requestWriter.Write(post);
+				requestWriter.Write(json);
 			}
 
 			return responseToJson<T>(request);

@@ -1,11 +1,11 @@
-﻿using System.Collections.Generic;
-using NUnit.Framework;
+﻿using NUnit.Framework;
 using Rhino.Mocks;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.Security;
 using Teleopti.Ccc.Domain.Security.MultiTenancyAuthentication;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Client;
 using Teleopti.Ccc.TestCommon.TestData;
+using Teleopti.Interfaces;
 
 namespace Teleopti.Ccc.InfrastructureTest.MultiTenancy.Client
 {
@@ -14,46 +14,42 @@ namespace Teleopti.Ccc.InfrastructureTest.MultiTenancy.Client
 		[Test]
 		public void DoApplicationLogonWithEncryptedNhibConfiguration()
 		{
-			var userName = RandomName.Make();
-			var password = RandomName.Make();
 			var pathToTenantServer = RandomName.Make();
 			var userAgent = RandomName.Make();
 			var postHttpRequest = MockRepository.GenerateStub<IPostHttpRequest>();
+			var jsonSerializer = MockRepository.GenerateStub<IJsonSerializer>();
+			var applicationLogonClientModel = new ApplicationLogonClientModel();
+			var applicationLogonClientModelSerialized = RandomName.Make();
+			jsonSerializer.Stub(x => x.SerializeObject(applicationLogonClientModel)).Return(applicationLogonClientModelSerialized);
 			var authResult = new AuthenticationQueryResult{DataSourceConfiguration = new DataSourceConfig()};
 			postHttpRequest.Stub(
-				x =>
-					x.Send<AuthenticationQueryResult>(Arg.Is(pathToTenantServer + "Authenticate/ApplicationLogon"), Arg.Is(userAgent),
-						Arg<IEnumerable<KeyValuePair<string, string>>>.List.ContainsAll(new Dictionary<string, string>
-						{
-							{"userName", userName},
-							{"password", password}
-						}))).Return(authResult);
+				x => x.Send<AuthenticationQueryResult>(pathToTenantServer + "Authenticate/ApplicationLogon", userAgent, applicationLogonClientModelSerialized))
+				.Return(authResult);
 			var nhibConfigEncryption = MockRepository.GenerateStub<INhibConfigEncryption>();
 			nhibConfigEncryption.Stub(x => x.DecryptConfig(authResult.DataSourceConfiguration));
-			var target = new AuthenticationQuerier(pathToTenantServer, nhibConfigEncryption, postHttpRequest);
-			target.TryApplicationLogon(userName, password, userAgent)
+			var target = new AuthenticationQuerier(pathToTenantServer, nhibConfigEncryption, postHttpRequest, jsonSerializer);
+			target.TryApplicationLogon(applicationLogonClientModel, userAgent)
 				.Should().Be.SameInstanceAs(authResult);
 		}
 
 		[Test]
 		public void DoIdentityLogonWithEncryptedNhibConfiguration()
 		{
-			var identity = RandomName.Make();
 			var pathToTenantServer = RandomName.Make();
 			var userAgent = RandomName.Make();
 			var postHttpRequest = MockRepository.GenerateStub<IPostHttpRequest>();
+			var jsonSerializer = MockRepository.GenerateStub<IJsonSerializer>();
+			var logonClientModel = new IdentityLogonClientModel();
+			var logonClientModelSerialized = RandomName.Make();
+			jsonSerializer.Stub(x => x.SerializeObject(logonClientModel)).Return(logonClientModelSerialized);
 			var authResult = new AuthenticationQueryResult { DataSourceConfiguration = new DataSourceConfig() };
 			postHttpRequest.Stub(
-				x =>
-					x.Send<AuthenticationQueryResult>(Arg.Is(pathToTenantServer + "Authenticate/IdentityLogon"), Arg.Is(userAgent),
-						Arg<IEnumerable<KeyValuePair<string, string>>>.List.ContainsAll(new Dictionary<string, string>
-						{
-							{"identity", identity}
-						}))).Return(authResult);
+				x => x.Send<AuthenticationQueryResult>(pathToTenantServer + "Authenticate/IdentityLogon", userAgent, logonClientModelSerialized))
+					.Return(authResult);
 			var nhibConfigEncryption = MockRepository.GenerateStub<INhibConfigEncryption>();
 			nhibConfigEncryption.Stub(x => x.DecryptConfig(authResult.DataSourceConfiguration));
-			var target = new AuthenticationQuerier(pathToTenantServer, nhibConfigEncryption, postHttpRequest);
-			target.TryIdentityLogon(identity, userAgent)
+			var target = new AuthenticationQuerier(pathToTenantServer, nhibConfigEncryption, postHttpRequest, jsonSerializer);
+			target.TryIdentityLogon(logonClientModel, userAgent)
 				.Should().Be.SameInstanceAs(authResult);
 		}
 	}

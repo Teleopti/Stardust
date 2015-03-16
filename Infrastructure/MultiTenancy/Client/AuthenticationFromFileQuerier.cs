@@ -13,12 +13,12 @@ namespace Teleopti.Ccc.Infrastructure.MultiTenancy.Client
 			_fullPathToFile = fullPathToFile;
 		}
 
-		public AuthenticationQueryResult TryApplicationLogon(string userName, string password, string userAgent)
+		public AuthenticationQueryResult TryApplicationLogon(ApplicationLogonClientModel applicationLogonClientModel, string userAgent)
 		{
 			return readFile();
 		}
 
-		public AuthenticationQueryResult TryIdentityLogon(string identity, string userAgent)
+		public AuthenticationQueryResult TryIdentityLogon(IdentityLogonClientModel identityLogonClientModel, string userAgent)
 		{
 			return readFile();
 		}

@@ -1,6 +1,4 @@
 ﻿using Newtonsoft.Json;
-using Teleopti.Ccc.Domain.ApplicationLayer;
-using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.PersonScheduleDayReadModel;
 using Teleopti.Interfaces;
 
 namespace Teleopti.Ccc.Infrastructure.Foundation

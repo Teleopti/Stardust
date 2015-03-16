@@ -4,6 +4,7 @@ using Teleopti.Ccc.Domain.Security;
 using Teleopti.Ccc.Domain.Security.MultiTenancyAuthentication;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Client;
 using Teleopti.Ccc.Infrastructure.Web;
+using Teleopti.Interfaces;
 
 namespace Teleopti.Ccc.IocCommon.Configuration
 {
@@ -22,7 +23,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 
 			if (isRunFromTest(tenantServer) || tenantServer.IsAnUrl())
 			{
-				builder.Register(c => new AuthenticationQuerier(tenantServer, c.Resolve<INhibConfigEncryption>(), c.Resolve<IPostHttpRequest>()))
+				builder.Register(c => new AuthenticationQuerier(tenantServer, c.Resolve<INhibConfigEncryption>(), c.Resolve<IPostHttpRequest>(), c.Resolve<IJsonSerializer>()))
 				.As<IAuthenticationQuerier>()
 				.SingleInstance();
 			}

@@ -83,7 +83,7 @@ namespace Teleopti.Ccc.Infrastructure.MultiTenancy.Client
 			var userId = _windowsUserProvider.UserName;
 			var domain = _windowsUserProvider.DomainName;
 			logonModel.UserName = domain + "\\" + userId;
-			var result = _authenticationQuerier.TryIdentityLogon(logonModel.UserName, userAgent);
+			var result = _authenticationQuerier.TryIdentityLogon(new IdentityLogonClientModel{Identity = logonModel.UserName}, userAgent);
 			if (!result.Success)
 				return new AuthenticationResult
 				{
@@ -124,7 +124,7 @@ namespace Teleopti.Ccc.Infrastructure.MultiTenancy.Client
 			var userId = _windowsUserProvider.UserName;
 			var domain = _windowsUserProvider.DomainName;
 
-			return _authenticationQuerier.TryIdentityLogon(domain + "\\" + userId, "").Success;
+			return _authenticationQuerier.TryIdentityLogon(new IdentityLogonClientModel{Identity = domain + "\\" + userId}, "").Success;
 		}
 
 		private IDataSourceContainer getDataSorce(string dataSourceName, DataSourceConfig nhibConfig, IApplicationData applicationData)

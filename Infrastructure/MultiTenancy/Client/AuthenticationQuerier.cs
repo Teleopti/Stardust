@@ -1,6 +1,6 @@
-﻿using System.Collections.Generic;
-using Teleopti.Ccc.Domain.Security;
+﻿using Teleopti.Ccc.Domain.Security;
 using Teleopti.Ccc.Domain.Security.MultiTenancyAuthentication;
+using Teleopti.Interfaces;
 
 namespace Teleopti.Ccc.Infrastructure.MultiTenancy.Client
 {
@@ -9,38 +9,34 @@ namespace Teleopti.Ccc.Infrastructure.MultiTenancy.Client
 		private readonly string _pathToTenantServer;
 		private readonly INhibConfigEncryption _nhibConfigEncryption;
 		private readonly IPostHttpRequest _postHttpRequest;
+		private readonly IJsonSerializer _jsonSerializer;
 
 
 		public AuthenticationQuerier(string pathToTenantServer, 
 																INhibConfigEncryption nhibConfigEncryption, 
-																IPostHttpRequest postHttpRequest)
+																IPostHttpRequest postHttpRequest,
+																IJsonSerializer jsonSerializer)
 		{
 			_pathToTenantServer = pathToTenantServer;
 			_nhibConfigEncryption = nhibConfigEncryption;
 			_postHttpRequest = postHttpRequest;
+			_jsonSerializer = jsonSerializer;
 		}
 
-		public AuthenticationQueryResult TryApplicationLogon(string userName, string password, string userAgent)
+		public AuthenticationQueryResult TryApplicationLogon(ApplicationLogonClientModel applicationLogonClientModel, string userAgent)
 		{
-			var data = new Dictionary<string, string>
-			{
-				{ "userName", userName },
-				{ "password", password }
-			};
-			var result = _postHttpRequest.Send<AuthenticationQueryResult>(_pathToTenantServer + "Authenticate/ApplicationLogon", userAgent, data);
+			var json = _jsonSerializer.SerializeObject(applicationLogonClientModel);
+			var result = _postHttpRequest.Send<AuthenticationQueryResult>(_pathToTenantServer + "Authenticate/ApplicationLogon", userAgent, json);
 
 			_nhibConfigEncryption.DecryptConfig(result.DataSourceConfiguration);
 			
 			return result;
 		}
 
-		public AuthenticationQueryResult TryIdentityLogon(string identity, string userAgent)
+		public AuthenticationQueryResult TryIdentityLogon(IdentityLogonClientModel identityLogonClientModel, string userAgent)
 		{
-			var data = new Dictionary<string, string>
-			{
-				{ "identity", identity }
-			};
-			var result = _postHttpRequest.Send<AuthenticationQueryResult>(_pathToTenantServer + "Authenticate/IdentityLogon", userAgent, data);
+			var json = _jsonSerializer.SerializeObject(identityLogonClientModel);
+			var result = _postHttpRequest.Send<AuthenticationQueryResult>(_pathToTenantServer + "Authenticate/IdentityLogon", userAgent, json);
 
 			_nhibConfigEncryption.DecryptConfig(result.DataSourceConfiguration);
 			

@@ -1579,8 +1579,10 @@
     <Compile Include="Security\Matrix\MatrixPermissionHolder.cs" />
     <Compile Include="Security\Matrix\PersonRoleResolver.cs" />
     <Compile Include="Security\ModifyPassword.cs" />
+    <Compile Include="Security\MultiTenancyAuthentication\ApplicationLogonClientModel.cs" />
     <Compile Include="Security\MultiTenancyAuthentication\AuthenticationQueryResult.cs" />
     <Compile Include="Security\MultiTenancyAuthentication\IAuthenticationQuerier.cs" />
+    <Compile Include="Security\MultiTenancyAuthentication\IdentityLogonClientModel.cs" />
     <Compile Include="Security\NhibConfigEncryption.cs" />
     <Compile Include="Security\OneWayEncryption.cs">
       <SubType>Code</SubType>

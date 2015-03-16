@@ -5,6 +5,7 @@ using SharpTestsEx;
 using Teleopti.Ccc.Web.Areas.Start.Core.Authentication.Services;
 using Teleopti.Ccc.Web.Areas.Tenant;
 using Teleopti.Ccc.Web.Areas.Tenant.Core;
+using Teleopti.Ccc.Web.Areas.Tenant.Model;
 
 namespace Teleopti.Ccc.WebTest.Areas.Tenant
 {
@@ -25,7 +26,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Tenant
 			var target = new AuthenticateController(appAuthentication, null, MockRepository.GenerateMock<ILogLogonAttempt>());
 			appAuthentication.Expect(x => x.Logon(userName, password)).Return(serviceResult);
 
-			var webCall = target.ApplicationLogon(userName, password);
+			var webCall = target.ApplicationLogon(new ApplicationLogonModel{UserName = userName, Password = password});
 			var result = ((ApplicationAuthenticationResult)webCall.Data);
 			result.Should().Be.SameInstanceAs(serviceResult);
 		}
@@ -44,7 +45,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Tenant
 			var target = new StubbingControllerBuilder().CreateController<AuthenticateController>(appAuthentication, null, MockRepository.GenerateMock<ILogLogonAttempt>());
 			appAuthentication.Expect(x => x.Logon(userName, password)).Return(serviceResult);
 
-			var result = ((ApplicationAuthenticationResult)target.ApplicationLogon(userName, password).Data);
+			var result = ((ApplicationAuthenticationResult)target.ApplicationLogon(new ApplicationLogonModel { UserName = userName, Password = password }).Data);
 			result.Should().Be.SameInstanceAs(serviceResult);
 			//target.Response.StatusCode.Should().Be.EqualTo(401);
 		}
@@ -64,7 +65,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Tenant
 			var target = new AuthenticateController(null, identityAuthentication, MockRepository.GenerateMock<ILogLogonAttempt>());
 			identityAuthentication.Expect(x => x.Logon(identity)).Return(serviceResult);
 
-			var webCall = target.IdentityLogon(identity);
+			var webCall = target.IdentityLogon(new IdentityLogonModel{Identity = identity});
 			var result = ((ApplicationAuthenticationResult)webCall.Data);
 			result.Should().Be.SameInstanceAs(serviceResult);
 		}
@@ -82,7 +83,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Tenant
 			var target = new StubbingControllerBuilder().CreateController<AuthenticateController>(null, identityAuthentication, MockRepository.GenerateMock<ILogLogonAttempt>());
 			identityAuthentication.Expect(x => x.Logon(identity)).Return(serviceResult);
 
-			var result = ((ApplicationAuthenticationResult)target.IdentityLogon(identity).Data);
+			var result = ((ApplicationAuthenticationResult)target.IdentityLogon(new IdentityLogonModel { Identity = identity }).Data);
 			result.Should().Be.SameInstanceAs(serviceResult);
 			//target.Response.StatusCode.Should().Be.EqualTo(401);
 		}
@@ -98,7 +99,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Tenant
 			var target = new StubbingControllerBuilder().CreateController<AuthenticateController>(appAuthentication, null, logger);
 			appAuthentication.Expect(x => x.Logon(userName, password)).Return(serviceResult);
 
-			target.ApplicationLogon(userName, password);
+			target.ApplicationLogon((new ApplicationLogonModel { UserName = userName, Password = password }));
 
 			//ignore AuthenticateResult arg due to hack for now
 			logger.AssertWasCalled(x => x.SaveAuthenticateResult(Arg<string>.Is.Equal(userName), Arg<AuthenticateResult>.Is.Anything));
@@ -114,9 +115,9 @@ namespace Teleopti.Ccc.WebTest.Areas.Tenant
 			var target = new StubbingControllerBuilder().CreateController<AuthenticateController>(null, idAuthentication, logger);
 			idAuthentication.Expect(x => x.Logon(identity)).Return(serviceResult);
 
-			target.IdentityLogon(identity);
+			target.IdentityLogon(new IdentityLogonModel { Identity = identity });
 
-			//ignore AuthenticateResult arg due to hack for now
+			//TODO: tenant - ignore AuthenticateResult arg due to hack for now
 			logger.AssertWasCalled(x => x.SaveAuthenticateResult(Arg<string>.Is.Equal(identity), Arg<AuthenticateResult>.Is.Anything));
 		}
 	}

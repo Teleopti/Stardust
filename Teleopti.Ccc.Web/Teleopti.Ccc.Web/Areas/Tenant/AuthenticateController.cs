@@ -3,6 +3,7 @@ using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Server.NHibernate;
 using Teleopti.Ccc.Web.Areas.Start.Core.Authentication.Services;
 using Teleopti.Ccc.Web.Areas.Tenant.Core;
+using Teleopti.Ccc.Web.Areas.Tenant.Model;
 
 namespace Teleopti.Ccc.Web.Areas.Tenant
 {
@@ -24,30 +25,30 @@ namespace Teleopti.Ccc.Web.Areas.Tenant
 
 		[HttpPost]
 		[TenantUnitOfWork]
-		public virtual JsonResult ApplicationLogon(string userName, string password)
+		public virtual JsonResult ApplicationLogon(ApplicationLogonModel applicationLogonModel)
 		{
-			var res = _applicationAuthentication.Logon(userName, password);
+			var res = _applicationAuthentication.Logon(applicationLogonModel.UserName, applicationLogonModel.Password);
 			var authResult = hackForNow_whenRemovingOldCodeWeDontNeedAuthenticateResultHere_ButWeCanChangeTheInterfaceToAcceptPrimitives(res);
-			_logLogonAttempt.SaveAuthenticateResult(userName, authResult);
+			_logLogonAttempt.SaveAuthenticateResult(applicationLogonModel.UserName, authResult);
 			return Json(res);
 		}
 
 		[HttpPost]
 		[TenantUnitOfWork]
-		public virtual JsonResult IdentityLogon(string identity)
+		public virtual JsonResult IdentityLogon(IdentityLogonModel identityLogonModel)
 		{
-			var res = _identityAuthentication.Logon(identity);
+			var res = _identityAuthentication.Logon(identityLogonModel.Identity);
 			var authResult = hackForNow_whenRemovingOldCodeWeDontNeedAuthenticateResultHere_ButWeCanChangeTheInterfaceToAcceptPrimitives(res);
-			_logLogonAttempt.SaveAuthenticateResult(identity, authResult);
+			_logLogonAttempt.SaveAuthenticateResult(identityLogonModel.Identity, authResult);
 			return Json(res);
 		}
 
+		//TODO: tenant - this should be removed
 		private static AuthenticateResult hackForNow_whenRemovingOldCodeWeDontNeedAuthenticateResultHere_ButWeCanChangeTheInterfaceToAcceptPrimitives(ApplicationAuthenticationResult res)
 		{
 			var tempPerson = new Person();
 			tempPerson.SetId(res.PersonId);
 			return new AuthenticateResult {Person = tempPerson, Successful = res.Success};
 		}
-
 	}
 }
