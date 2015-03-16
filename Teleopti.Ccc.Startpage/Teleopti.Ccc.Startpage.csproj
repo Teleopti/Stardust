@@ -52,14 +52,30 @@
     <Content Include="assets\css\main.min.css">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="assets\img\agent.png" />
-    <Content Include="assets\img\gear.png" />
-    <Content Include="assets\img\header_bg.gif" />
-    <Content Include="assets\img\leaders.png" />
-    <Content Include="assets\img\mail.png" />
-    <Content Include="assets\img\real-time.png" />
-    <Content Include="assets\img\resource.png" />
-    <Content Include="assets\img\teleopti_logo.png" />
+    <Content Include="assets\img\agent.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="assets\img\gear.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="assets\img\header_bg.gif">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="assets\img\leaders.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="assets\img\mail.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="assets\img\real-time.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="assets\img\resource.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="assets\img\teleopti_logo.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="assets\vendor\bootstrap-sass\assets\fonts\bootstrap\glyphicons-halflings-regular.svg" />
     <Content Include="assets\vendor\bootstrap-sass\assets\javascripts\bootstrap-sprockets.js" />
     <Content Include="assets\vendor\bootstrap-sass\assets\javascripts\bootstrap.js" />
