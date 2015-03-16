@@ -3,7 +3,10 @@ using System.Collections.Generic;
 using System.Runtime.Serialization;
 using System.ServiceModel;
 
+// ReSharper disable CheckNamespace
+// 2015-03-16 -> DO NOT CHANGE! Changing namespace will break backwards compatibility /Team RealTime
 namespace Teleopti.Ccc.Rta.WebService
+// ReSharper restore CheckNamespace
 {
 	[ServiceContract]
 	public interface ITeleoptiRtaService

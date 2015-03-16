@@ -1,6 +1,7 @@
 using System;
 using MbCache.Core;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta;
+using Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service;
 
 namespace Teleopti.Ccc.Infrastructure.Rta
 {

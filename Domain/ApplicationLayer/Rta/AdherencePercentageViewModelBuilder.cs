@@ -1,4 +1,5 @@
 ﻿using System;
+using Teleopti.Ccc.Domain.ApplicationLayer.Rta.ReadModelUpdaters;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta
@@ -74,11 +75,4 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta
 		}
 
 	}
-
-	public class AdherencePercentageViewModel
-	{
-		public string LastTimestamp { get; set; }
-		public int? AdherencePercent { get; set; }
-	}
-
 }

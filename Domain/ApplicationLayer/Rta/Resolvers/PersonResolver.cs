@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Globalization;
+using Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Resolvers
 {
