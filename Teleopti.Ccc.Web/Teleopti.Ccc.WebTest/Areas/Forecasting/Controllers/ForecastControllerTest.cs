@@ -7,6 +7,7 @@ using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.Forecasting.Angel;
+using Teleopti.Ccc.Domain.Forecasting.Angel.Accuracy;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.Web.Areas.Forecasting.Controllers;
@@ -20,12 +21,12 @@ namespace Teleopti.Ccc.WebTest.Areas.Forecasting.Controllers
 		[Test]
 		public void ShouldGetSkillsAndWorkloads()
 		{
-			var quickForecastCreator = MockRepository.GenerateMock<IQuickForecastCreator>();
+			var quickForecastEvaluator = MockRepository.GenerateMock<IQuickForecastEvaluator>();
 			var skillRepository = MockRepository.GenerateMock<ISkillRepository>();
 			var skill1 = SkillFactory.CreateSkillWithWorkloadAndSources();
 			skill1.SetId(Guid.NewGuid());
 			skillRepository.Stub(x => x.FindSkillsWithAtLeastOneQueueSource()).Return(new[] {skill1});
-			var target = new ForecastController(quickForecastCreator, MockRepository.GenerateMock<ICurrentIdentity>(), skillRepository);
+			var target = new ForecastController(quickForecastEvaluator, MockRepository.GenerateMock<ICurrentIdentity>(), skillRepository);
 			var skills = target.Skills();
 			skills.Single().Id.Should().Be.EqualTo(skill1.Id.Value);
 			skills.Single().Name.Should().Be.EqualTo(skill1.Name);
@@ -35,19 +36,14 @@ namespace Teleopti.Ccc.WebTest.Areas.Forecasting.Controllers
 		}
 
 		[Test]
-		public void ShouldCallQuickForecasterAndReturnAccuracy()
+		public void ShouldMeasureForecast()
 		{
 			var now = new Now();
-			var expectedFuturePeriod = new DateOnlyPeriod(new DateOnly(now.UtcDateTime()),
-				new DateOnly(now.UtcDateTime().AddYears(1)));
-			var expectedHistoricPeriod = new DateOnlyPeriod(new DateOnly(now.LocalDateOnly().Date.AddYears(-2)), now.LocalDateOnly());
-			var skillRepository = MockRepository.GenerateStub<ISkillRepository>();
-			var skill = SkillFactory.CreateSkill("_");
-			var workload = new Workload(skill);
-			workload.AddQueueSource(QueueSourceFactory.CreateQueueSource());
-			skillRepository.Stub(x => x.FindSkillsWithAtLeastOneQueueSource()).Return(new[] {skill});
-			var quickForecaster = MockRepository.GenerateMock<IQuickForecaster>();
-			var target = new ForecastController(new QuickForecastCreator(quickForecaster, skillRepository, now), null, null);
+			var expectedFuturePeriod = new DateOnlyPeriod(new DateOnly(now.UtcDateTime()), new DateOnly(now.UtcDateTime().AddYears(1)));
+			var quickForecastEvaluator = MockRepository.GenerateMock<IQuickForecastEvaluator>();
+			quickForecastEvaluator.Stub(x => x.MeasureForecastForAllSkills(expectedFuturePeriod))
+				.Return(new[] {new ForecastingAccuracy {Accuracy = 90.2}});
+			var target = new ForecastController(quickForecastEvaluator, null, null);
 
 			var result = target.MeasureForecast(new QuickForecastInputModel
 			{
@@ -55,9 +51,9 @@ namespace Teleopti.Ccc.WebTest.Areas.Forecasting.Controllers
 				ForecastEnd = expectedFuturePeriod.EndDate
 			});
 
-			result.Result[0].IsAll.Should().Be.EqualTo(true);
-			result.Result[0].Accuracy.Should().Be.EqualTo(0);
-			quickForecaster.AssertWasCalled(x => x.ForecastForSkill(skill, expectedFuturePeriod, expectedHistoricPeriod));
+			result.Result[0].Accuracy.Should().Be.EqualTo(90.2);
 		}
 	}
+
+
 }

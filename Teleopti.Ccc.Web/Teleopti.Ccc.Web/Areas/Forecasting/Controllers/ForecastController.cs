@@ -6,6 +6,7 @@ using System.Web.Http;
 using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Forecasting.Angel;
+using Teleopti.Ccc.Domain.Forecasting.Angel.Accuracy;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Web.Filters;
@@ -16,13 +17,13 @@ namespace Teleopti.Ccc.Web.Areas.Forecasting.Controllers
 	[ApplicationFunctionApi(DefinedRaptorApplicationFunctionPaths.OpenForecasterPage)]
 	public class ForecastController : ApiController
 	{
-		private readonly IQuickForecastCreator _quickForecastCreator;
+		private readonly IQuickForecastEvaluator _quickForecastEvaluator;
 		private readonly ICurrentIdentity _currentIdentity;
 		private readonly ISkillRepository _skillRepository;
 
-		public ForecastController(IQuickForecastCreator quickForecastCreator, ICurrentIdentity currentIdentity, ISkillRepository skillRepository)
+		public ForecastController(IQuickForecastEvaluator quickForecastEvaluator, ICurrentIdentity currentIdentity, ISkillRepository skillRepository)
 		{
-			_quickForecastCreator = quickForecastCreator;
+			_quickForecastEvaluator = quickForecastEvaluator;
 			_currentIdentity = currentIdentity;
 			_skillRepository = skillRepository;
 		}
@@ -31,7 +32,7 @@ namespace Teleopti.Ccc.Web.Areas.Forecasting.Controllers
 		public virtual Task<ForecastingAccuracy[]> MeasureForecast([FromBody] QuickForecastInputModel model)
 		{
 			var futurePeriod = new DateOnlyPeriod(new DateOnly(model.ForecastStart), new DateOnly(model.ForecastEnd));
-			return Task.FromResult(_quickForecastCreator.MeasureForecastForAllSkills(futurePeriod));
+			return Task.FromResult(_quickForecastEvaluator.MeasureForecastForAllSkills(futurePeriod));
 		}
 
 		[UnitOfWork, Route("api/Forecasting/Skills"), HttpGet]

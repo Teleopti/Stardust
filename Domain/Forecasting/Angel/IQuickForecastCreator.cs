@@ -7,6 +7,5 @@ namespace Teleopti.Ccc.Domain.Forecasting.Angel
 	{
 		ForecastingAccuracy CreateForecastForAllSkills(DateOnlyPeriod futurePeriod);
 		ForecastingAccuracy[] CreateForecastForWorkloads(DateOnlyPeriod futurePeriod, Guid[] workloadIds);
-		ForecastingAccuracy[] MeasureForecastForAllSkills(DateOnlyPeriod futurePeriod);
 	}
 }

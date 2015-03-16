@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Domain.Repositories;
@@ -9,9 +8,9 @@ namespace Teleopti.Ccc.Domain.Forecasting.Angel
 {
 	public class ForecastingAccuracy
 	{
-		public Guid Id { get; set; }
+		public Guid WorkloadId { get; set; }
 		public double Accuracy { get; set; }
-		public bool IsAll { get; set; }
+		public bool CanForecast { get; set; }
 	}
 
 	public class QuickForecastCreator : IQuickForecastCreator
@@ -33,21 +32,8 @@ namespace Teleopti.Ccc.Domain.Forecasting.Angel
 			var skills = _skillRepository.FindSkillsWithAtLeastOneQueueSource();
 			return new ForecastingAccuracy
 			{
-				Accuracy = Math.Round(skills.Average(skill => _quickForecaster.ForecastForSkill(skill, futurePeriod, historicalPeriod)), 1),
-				IsAll = true
+				Accuracy = Math.Round(skills.Average(skill => _quickForecaster.ForecastForSkill(skill, futurePeriod, historicalPeriod)), 1)
 			};
-		}
-
-		public ForecastingAccuracy[] MeasureForecastForAllSkills(DateOnlyPeriod futurePeriod)
-		{
-			var historicalPeriod = getHistoricalPeriod();
-			var skills = _skillRepository.FindSkillsWithAtLeastOneQueueSource();
-			var list = new List<ForecastingAccuracy>();
-			foreach (var skill in skills)
-			{
-				list.AddRange(_quickForecaster.MeasureForecastForSkill(skill, futurePeriod, historicalPeriod));
-			}
-			return list.ToArray();
 		}
 
 		public ForecastingAccuracy[] CreateForecastForWorkloads(DateOnlyPeriod futurePeriod, Guid[] workloadIds)
@@ -62,7 +48,7 @@ namespace Teleopti.Ccc.Domain.Forecasting.Angel
 			return workloads.Select(workload => new ForecastingAccuracy
 			{
 				Accuracy = Math.Round(_quickForecaster.ForecastForWorkload(workload, futurePeriod, historicalPeriod), 1),
-				Id = workload.Id.Value
+				WorkloadId = workload.Id.Value
 			}).ToArray();
 		}
 

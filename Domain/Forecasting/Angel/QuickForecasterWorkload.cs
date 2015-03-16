@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using Teleopti.Ccc.Domain.Forecasting.Angel.Accuracy;
 using Teleopti.Ccc.Domain.Forecasting.Angel.Future;
 using Teleopti.Ccc.Domain.Forecasting.Angel.Historical;
 using Teleopti.Interfaces.Domain;
@@ -37,18 +38,11 @@ namespace Teleopti.Ccc.Domain.Forecasting.Angel
 			var futureWorkloadDays = _futureData.Fetch(quickForecasterWorkloadParams);
 			_forecastingTargetMerger.Merge(forecastingTargets, futureWorkloadDays);
 
-			if (yearBeforeLastYearData.TaskOwnerDayCollection.Any())
-			{
-				var forecastingMeasureTarget = _forecastMethod.Forecast(yearBeforeLastYearData,
-					new DateOnlyPeriod(oneYearBack, historicalData.EndDate));
-				return _forecastingMeasurer.Measure(forecastingMeasureTarget, lastYearData.TaskOwnerDayCollection);
-			}
-			return Double.NaN;
-		}
+			if (!yearBeforeLastYearData.TaskOwnerDayCollection.Any()) 
+				return Double.NaN;
 
-		public ForecastingAccuracy Measure(IWorkload workload, DateOnlyPeriod historicalPeriod)
-		{
-			throw new NotImplementedException();
+			var forecastingMeasureTarget = _forecastMethod.Forecast(yearBeforeLastYearData, new DateOnlyPeriod(oneYearBack, historicalData.EndDate));
+			return _forecastingMeasurer.Measure(forecastingMeasureTarget, lastYearData.TaskOwnerDayCollection);
 		}
 	}
 }

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using Teleopti.Interfaces.Domain;
 
-namespace Teleopti.Ccc.Domain.Forecasting.Angel
+namespace Teleopti.Ccc.Domain.Forecasting.Angel.Accuracy
 {
 	/// <summary>
 	/// http://en.wikipedia.org/wiki/Mean_absolute_percentage_error

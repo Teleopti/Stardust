@@ -1,12 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.Forecasting;
+using Teleopti.Ccc.Domain.Forecasting.Angel;
 using Teleopti.Interfaces.Domain;
 
-namespace Teleopti.Ccc.DomainTest.Forecasting.Angel.QuickForecastSkillWithOneWorkload
+namespace Teleopti.Ccc.DomainTest.Forecasting.Angel.Accuracy
 {
-	public class MeasurementShouldReturnCorrectlyTest : QuickForecastTest
+	public class MeasurementShouldReturnCorrectlyTest : MeasureForecastTest
 	{
 		protected override DateOnlyPeriod HistoricalPeriod
 		{
@@ -24,9 +26,10 @@ namespace Teleopti.Ccc.DomainTest.Forecasting.Angel.QuickForecastSkillWithOneWor
 			return new[] {statisticTasks1, statisticTasks2};
 		}
 
-		protected override void Assert(IEnumerable<ISkillDay> modifiedSkillDays)
+		protected override void Assert(ForecastingAccuracy[] measurementResult)
 		{
-			MeasurementResult.Should().Be.EqualTo(100 - Math.Round((11d - 9d)/11d*100, 3));
+			measurementResult.First().WorkloadId.Should().Be.EqualTo(Workload.Id.Value);
+			measurementResult.First().Accuracy.Should().Be.EqualTo(100 - Math.Round((11d - 9d)/11d*100, 3));
 		}
 	}
 }

@@ -2,11 +2,11 @@ using System.Collections.Generic;
 using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.Forecasting;
-using Teleopti.Ccc.Domain.Forecasting.Angel;
+using Teleopti.Ccc.Domain.Forecasting.Angel.Accuracy;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Interfaces.Domain;
 
-namespace Teleopti.Ccc.DomainTest.Forecasting.Angel
+namespace Teleopti.Ccc.DomainTest.Forecasting.Angel.Accuracy
 {
 	public class ForecastingSymmetricMeanAbsolutePercentageErrorTest
 	{

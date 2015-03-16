@@ -1,18 +1,16 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using Teleopti.Interfaces.Domain;
 
-namespace Teleopti.Ccc.Domain.Forecasting.Angel
+namespace Teleopti.Ccc.Domain.Forecasting.Angel.Accuracy
 {
-	/// <summary>
-	/// http://en.wikipedia.org/wiki/Symmetric_mean_absolute_percentage_error
-	/// </summary>
-	public class ForecastingSymmetricMeanAbsolutePercentageError : IForecastingMeasurer
+	public class ForecastingWeightedMeanAbsolutePercentageError : IForecastingMeasurer
 	{
 		public double Measure(IList<IForecastingTarget> forecastingForLastYear, ReadOnlyCollection<ITaskOwner> historicalDataForLastYear)
 		{
 			var diffSum = 0d;
+			var tasksSum = 0d;
 			foreach (var day in historicalDataForLastYear)
 			{
 				var diff = 0d;
@@ -26,7 +24,8 @@ namespace Teleopti.Ccc.Domain.Forecasting.Angel
 						}
 						else
 						{
-							diff = Math.Abs(day.TotalStatisticCalculatedTasks - forecastingDay.Tasks) / (Math.Abs(day.TotalStatisticCalculatedTasks) + Math.Abs(forecastingDay.Tasks)) * 2;
+							diff = Math.Abs(day.TotalStatisticCalculatedTasks - forecastingDay.Tasks);
+							tasksSum += day.TotalStatisticCalculatedTasks;
 						}
 						break;
 					}
@@ -34,7 +33,8 @@ namespace Teleopti.Ccc.Domain.Forecasting.Angel
 
 				diffSum += diff;
 			}
-			return Math.Max(0, 100 - Math.Round(diffSum / historicalDataForLastYear.Count * 100, 3));
+			var wmape = Math.Abs(tasksSum) < 0.000001 ? 0 : diffSum / tasksSum;
+			return Math.Max(0, 100 - Math.Round(wmape * 100, 3));
 		}
 	}
 }

@@ -31,6 +31,10 @@ Scenario: Show accuracy for forecast method
 	And Quickforecast has succeeded
 	Then I should see the accuracy for the forecast method
 
+@Ignore
+Scenario: Show message if no historical data for forecasting
+
+
 Scenario: Show message if no historical data for measurement
 	Given I have a role with
 	| Field           | Value      |
