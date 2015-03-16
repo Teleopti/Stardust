@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -47,18 +46,5 @@ namespace Teleopti.Ccc.Web.Areas.Forecasting.Controllers
 					Workloads = skill.WorkloadCollection.Select(x => new WorkloadViewModel {Id = x.Id.Value, Name = x.Name}).ToArray()
 				});
 		}
-	}
-
-	public class SkillViewModel
-	{
-		public Guid Id { get; set; }
-		public string Name { get; set; }
-		public WorkloadViewModel[] Workloads { get; set; }
-	}
-
-	public class WorkloadViewModel
-	{
-		public Guid Id { get; set; }
-		public string Name { get; set; }
 	}
 }
