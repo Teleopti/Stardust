@@ -4,7 +4,7 @@
 	<PropertyGroup>
 		<File2Update>$(WorkingDirectory)\Teleopti.Ccc.Startpage\index.html</File2Update>
 		<MSBuildCommunityTasksPath>$(WorkingDirectory)\packages\MSBuildTasks.1.4.0.65\tools</MSBuildCommunityTasksPath>
-		<ApplicationVersion>WillBeSetFromTeamCity</ApplicationVersion>
+		<CccVersion>WillBeSetFromTeamCity</CccVersion>
 	</PropertyGroup>
 
 	<Import Project="$(MSBuildCommunityTasksPath)\MSBuild.Community.Tasks.Targets"/>
@@ -13,6 +13,6 @@
 		<FileUpdate
 			  Files="$(File2Update)"
 			  Regex="#VERSION#"
-			  ReplacementText="$(ApplicationVersion)"/>
+			  ReplacementText="$(CccVersion)"/>
 	</Target>
 </Project>
