@@ -82,13 +82,5 @@ namespace Teleopti.Ccc.WebTest.Areas.Forecasting.Controllers
 			result.Result[0].Accuracy.Should().Be.EqualTo(0);
 			quickForecaster.AssertWasCalled(x => x.ForecastForSkill(skill, expectedFuturePeriod, expectedHistoricPeriod));
 		}
-
-		[Test]
-		public void ShouldGetTheCurrentIdentityName()
-		{
-			var target = new ForecastController(null, new FakeCurrentIdentity("Pelle"), null);
-			dynamic result = target.GetThatShouldBeInAMoreGenericControllerLaterOn();
-			Assert.AreEqual("Pelle", result.UserName);
-		}
 	}
 }

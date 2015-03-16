@@ -28,11 +28,6 @@ namespace Teleopti.Ccc.Web.Areas.Forecasting.Controllers
 			_skillRepository = skillRepository;
 		}
 
-		public object GetThatShouldBeInAMoreGenericControllerLaterOn()
-		{
-			return new {UserName = _currentIdentity.Current().Name};
-		}
-
 		[HttpPost, UnitOfWork]
 		public virtual Task<ForecastingAccuracy[]> QuickForecast([FromBody] QuickForecastInputModel model)
 		{

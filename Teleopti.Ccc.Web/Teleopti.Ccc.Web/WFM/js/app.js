@@ -38,7 +38,7 @@ wfm.config(['$stateProvider', '$urlRouterProvider',function ($stateProvider, $ur
     $rootScope.$on('$stateChangeStart', function (event, next, toParams) {
         if(Date.now() > timeout ) { // TODO : extract it in a service
             event.preventDefault();
-            var context = $http.get('../api/Forecasting/forecast');
+            var context = $http.get('../api/Global/User/CurrentUser');
             context.error(function () {
                 window.location = '../';
             });
