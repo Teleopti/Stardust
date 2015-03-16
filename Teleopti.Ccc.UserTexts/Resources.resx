@@ -12875,4 +12875,12 @@ Reduce the complexity to use these shifts.</value>
     <value>Narrow the criterias to be able to see all data</value>
     <comment>Narrow the criterias to be able to see all data</comment>
   </data>
+  <data name="AddMustHave" xml:space="preserve">
+    <value>Add must have</value>
+    <comment>"Add must have prefererences" Former Veto</comment>
+  </data>
+  <data name="RemoveMustHave" xml:space="preserve">
+    <value>Remove must have</value>
+    <comment>"Remove must have prefererences" Former Veto</comment>
+  </data>
 </root>
