@@ -7,23 +7,23 @@ namespace Teleopti.Ccc.WinCode.Backlog
 {
 	public class BacklogTaskForecastedTimePerDateCalculator
 	{
-		public TimeSpan CalculateForDate(DateOnly date, IDictionary<DateOnly, BacklogTask> taskDic)
+		public TimeSpan CalculateForDate(DateOnly date, IDictionary<DateOnly, BacklogTask> taskDic, DateOnly productPlanStart)
 		{
 			var time = TimeSpan.Zero;
 			foreach (var task in taskDic.Values)
 			{
-				time = time.Add(task.BacklogProductPlanTask.ForecastedTimeOnDate(date));
+				time = time.Add(task.BacklogProductPlanTask.ForecastedTimeOnDate(date, productPlanStart));
 			}
 
 			return time;
 		}
 
-		public double CalculateWorkForDate(DateOnly date, IDictionary<DateOnly, BacklogTask> taskDic)
+		public double CalculateWorkForDate(DateOnly date, IDictionary<DateOnly, BacklogTask> taskDic, DateOnly productPlanStart)
 		{
 			var work = 0d;
 			foreach (var task in taskDic.Values)
 			{
-				work += task.BacklogProductPlanTask.ForecastedWorkOnDate(date);
+				work += task.BacklogProductPlanTask.ForecastedWorkOnDate(date, productPlanStart);
 			}
 
 			return work;
