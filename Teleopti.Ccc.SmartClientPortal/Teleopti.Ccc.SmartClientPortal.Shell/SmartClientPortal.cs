@@ -796,11 +796,13 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 				}
 				catch (ArgumentException exception)
 				{
+					_logger.Error("Can't access teleopti.com on startpage " + exception.Message);
 					var html = "<!doctype html><html ><head></head><body>{0}</body></html>";
 					webView1.LoadHtml(string.Format(html, exception.Message));
 				}
-				catch (Exception)
+				catch (Exception exception)
 				{
+					_logger.Error("Can't access teleopti.com on startpage " + exception.Message);
 					canAccessInternet = false;
 					goToLocalPage();
 					return;
