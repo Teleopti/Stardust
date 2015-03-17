@@ -25,6 +25,36 @@
 				</div>
 			</div>
 		</div>
+		<script>
+			window.onload = function () {
+				var xmlhttp;
+				xmlhttp = new XMLHttpRequest();
+				var isWfmEnabled = false;
+				xmlhttp.onreadystatechange = function () {
+					if (xmlhttp.readyState == 4) {
+						if (xmlhttp.status == 200) {
+							isWfmEnabled = xmlhttp.responseText;
+						} 
+					}
+				};
+
+				xmlhttp.open("GET", "TeleoptiWFM/Web/ToggleHandler/IsEnabled?toggle=Wfm_Minimum_Scaffolding_32659", true);
+				xmlhttp.send();
+				toggleLaunchWfm(isWfmEnabled);
+			};
+
+			function toggleLaunchWfm(isEnabled) {
+				if (!isEnabled) {
+					document.getElementById("webwfm").style.display = "none";
+						document.getElementById("webwfm").style.visibility = "hidden";
+				} else {
+					document.getElementById("webwfm").style.visibility = "visible";
+				}
+
+
+			};
+
+		</script>
 	</header>
 	<div class="container">
 		<!-- Blocks -->
@@ -56,6 +86,7 @@
 		<div class="row">
 			<div class="col-md-12">
 				<ul class="tools-services">
+					<li class="sdk-service" style="visibility: hidden" id="webwfm"><a href="/TeleoptiWFM/Web/wfm">WFM</a></li>
 					<li class="broker"><a href="/TeleoptiWFM/broker/signalr/negotiate">Broker</a></li>
 					<li class="rta-service"><a href="/TeleoptiWFM/RTA/TeleoptiRtaService.svc">RTA Web Service</a></li>
 					<li class="sdk-service"><a href="/TeleoptiWFM/SDK/TeleoptiCCCSdkService.svc">SDK Web Service</a></li>

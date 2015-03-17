@@ -34,7 +34,7 @@ wfm.config(['$stateProvider', '$urlRouterProvider',function ($stateProvider, $ur
     	controller: 'PermissionsCtrl'
     });
 }]).run(['$rootScope', '$http', '$state', function ($rootScope, $http, $state) {
-    var timeout = Date.now();
+    var timeout = Date.now() + 10000;
     $rootScope.$on('$stateChangeStart', function (event, next, toParams) {
 
         if(Date.now() > timeout ) { // TODO : extract it in a service
