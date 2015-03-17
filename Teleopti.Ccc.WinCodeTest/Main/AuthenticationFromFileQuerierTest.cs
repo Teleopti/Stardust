@@ -43,7 +43,7 @@ namespace Teleopti.Ccc.WinCodeTest.Main
 			writer.Write(json);
 			writer.Close();
 
-			var target = new AuthenticationFromFileQuerier(fullPath);
+			var target = new AuthenticationFromFileQuerier(new TenantServerConfiguration(fullPath));
 
 			target.TryIdentityLogon(new IdentityLogonClientModel(), null).Success.Should().Be.True();
 			File.Delete(fullPath);

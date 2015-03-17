@@ -6,11 +6,11 @@ namespace Teleopti.Ccc.Infrastructure.MultiTenancy.Client
 {
 	public class AuthenticationFromFileQuerier : IAuthenticationQuerier
 	{
-		private readonly string _fullPathToFile;
+		private readonly ITenantServerConfiguration _tenantServerConfiguration;
 
-		public AuthenticationFromFileQuerier(string fullPathToFile)
+		public AuthenticationFromFileQuerier(ITenantServerConfiguration tenantServerConfiguration)
 		{
-			_fullPathToFile = fullPathToFile;
+			_tenantServerConfiguration = tenantServerConfiguration;
 		}
 
 		public AuthenticationQueryResult TryApplicationLogon(ApplicationLogonClientModel applicationLogonClientModel, string userAgent)
@@ -25,10 +25,10 @@ namespace Teleopti.Ccc.Infrastructure.MultiTenancy.Client
 
 		private AuthenticationQueryResult readFile()
 		{
-			if (!File.Exists(_fullPathToFile))
-				return new AuthenticationQueryResult { FailReason = string.Format("No file with name {0}", _fullPathToFile), Success = false };
+			if (!File.Exists(_tenantServerConfiguration.Path))
+				return new AuthenticationQueryResult { FailReason = string.Format("No file with name {0}", _tenantServerConfiguration.Path), Success = false };
 
-			var json = File.ReadAllText(_fullPathToFile);
+			var json = File.ReadAllText(_tenantServerConfiguration.Path);
 			var ret = JsonConvert.DeserializeObject<AuthenticationQueryResult>(json);
 			ret.PasswordPolicy =
 				"<!--Default config data-->\r\n<PasswordPolicy MaxNumberOfAttempts=\"3\" InvalidAttemptWindow=\"0\" PasswordValidForDayCount=\"2147483647\" PasswordExpireWarningDayCount=\"0\" />";
