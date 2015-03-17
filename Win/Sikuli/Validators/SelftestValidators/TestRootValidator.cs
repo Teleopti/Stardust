@@ -5,6 +5,14 @@ namespace Teleopti.Ccc.Win.Sikuli.Validators.SelftestValidators
 {
 	internal class TestRootValidator: RootValidator
 	{
+		public override string Description
+		{
+			get
+			{
+				return "Testing atomic validators. The result must be FAIL";
+			}
+		}
+
 		public override SikuliValidationResult Validate(ITestDuration duration)
 		{
 			AtomicValidators.Add(new TestAtomicValidator(SikuliValidationResult.ResultValue.Fail));

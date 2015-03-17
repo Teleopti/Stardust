@@ -39,7 +39,7 @@ namespace Teleopti.Ccc.Win.Sikuli.Validators.RootValidators
 			foreach (var validator in validators)
 			{
 				var validatorResult = validator.Validate();
-				result.CombineResultValue(validatorResult);
+				result.Result = result.CombineResultValue(validatorResult);
 				result.CombineDetails(validatorResult);
 			}
 			return result;
