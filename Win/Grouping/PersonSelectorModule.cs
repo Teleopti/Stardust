@@ -10,6 +10,7 @@ using Teleopti.Ccc.WinCode.Meetings.Commands;
 using Teleopti.Ccc.WinCode.PeopleAdmin;
 using Teleopti.Ccc.WinCode.PeopleAdmin.Commands;
 using Teleopti.Ccc.WinCode.Scheduling;
+using Teleopti.Interfaces;
 
 namespace Teleopti.Ccc.Win.Grouping
 {
@@ -46,10 +47,10 @@ namespace Teleopti.Ccc.Win.Grouping
 			if (_config.Toggle(Toggles.MultiTenancy_People_32113))
 			{
 				var tenantServer = _config.Args().TenantServer;
-				builder.Register(c => new TenantDataManager(tenantServer)).As<ITenantDataManager>().SingleInstance();
+				builder.Register(c => new TenantDataManager(tenantServer, c.Resolve<IPostHttpRequest>(), c.Resolve<IJsonSerializer>())).As<ITenantDataManager>().SingleInstance();
 			}
 			else
-				builder.RegisterType<EmptyTenantDataManager>().As<ITenantDataManager>().InstancePerLifetimeScope();
+				builder.RegisterType<EmptyTenantDataManager>().As<ITenantDataManager>().SingleInstance();
 			
 		}
 
