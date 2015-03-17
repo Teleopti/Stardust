@@ -315,11 +315,6 @@ Scenario: Should show date-picker with no team access
 	When I view team schedule
 	Then I should see the date-picker
 
-Scenario: Don't show team-picker with only one team
-	Given I am an agent in a team with access to my team
-	When I view team schedule
-	Then I should not see the team-picker
-
 Scenario: Default team when no own team but everyone access
 	Given I have a role with
          | Field              | Value |

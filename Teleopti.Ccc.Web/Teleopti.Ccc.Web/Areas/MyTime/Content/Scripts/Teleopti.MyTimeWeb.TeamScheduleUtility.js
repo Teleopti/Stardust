@@ -483,15 +483,14 @@ Teleopti.MyTimeWeb.TeamScheduleFilterMixin = function () {
 				teams.reduce(function(reduced, item) { return reduced.concat(item.children.map(function(_item) { return _item.id; })) }, []).join(',')
 				: teams.map(function(item) { return item.id; }).join(',');
 			if (self.showGroupings()) allTeam.children = false;
-			teams.unshift(allTeam);
+			if (teams.length > 1) teams.unshift(allTeam);
 		}
 		self.availableTeams(teams);
 
 		var isSelectedTeamNotIncluded = allTeam.id.split(',').indexOf(self.selectedTeam()) < 0;
 
-		if (self.defaultTeam() == null)
-			self.defaultTeam(defaultTeam);
-
+		self.defaultTeam(defaultTeam);
+		
 		self.selectedTeam(self.selectedTeam() == null || isSelectedTeamNotIncluded ?
 			self.defaultTeam() : self.selectedTeam());
 
