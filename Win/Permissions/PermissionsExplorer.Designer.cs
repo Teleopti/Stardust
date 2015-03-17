@@ -314,28 +314,35 @@ namespace Teleopti.Ccc.Win.Permissions
 			// 
 			// toolStripExViewer
 			// 
+			this.ExplorerRibbon.SetDescription(this.toolStripExViewer, "");
 			this.toolStripExViewer.Dock = System.Windows.Forms.DockStyle.None;
 			this.toolStripExViewer.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(59)))), ((int)(((byte)(59)))), ((int)(((byte)(59)))));
 			this.toolStripExViewer.GripStyle = System.Windows.Forms.ToolStripGripStyle.Hidden;
 			this.toolStripExViewer.Image = null;
 			this.toolStripExViewer.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.toolStripButtonShowViewer});
-			this.toolStripExViewer.Location = new System.Drawing.Point(351, 1);
+			this.toolStripExViewer.Location = new System.Drawing.Point(476, 1);
 			this.toolStripExViewer.Name = "toolStripExViewer";
 			this.toolStripExViewer.Office12Mode = false;
-			this.toolStripExViewer.Size = new System.Drawing.Size(183, 104);
+			this.toolStripExViewer.Size = new System.Drawing.Size(157, 73);
 			this.toolStripExViewer.TabIndex = 14;
+			this.ExplorerRibbon.SetUseInCustomQuickAccessDialog(this.toolStripExViewer, false);
+			this.ExplorerRibbon.SetUseInQuickAccessMenu(this.toolStripExViewer, false);
+			this.toolStripExViewer.Visible = false;
 			// 
 			// toolStripButtonShowViewer
 			// 
+			this.ExplorerRibbon.SetDescription(this.toolStripButtonShowViewer, "");
 			this.toolStripButtonShowViewer.Image = global::Teleopti.Ccc.Win.Properties.Resources.ccc_role_32x32;
 			this.toolStripButtonShowViewer.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
 			this.toolStripButtonShowViewer.ImageTransparentColor = System.Drawing.Color.Magenta;
 			this.toolStripButtonShowViewer.Name = "toolStripButtonShowViewer";
 			this.SetShortcut(this.toolStripButtonShowViewer, System.Windows.Forms.Keys.None);
-			this.toolStripButtonShowViewer.Size = new System.Drawing.Size(119, 101);
+			this.toolStripButtonShowViewer.Size = new System.Drawing.Size(119, 55);
 			this.toolStripButtonShowViewer.Text = "xxPermissionsViewer";
 			this.toolStripButtonShowViewer.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText;
+			this.ExplorerRibbon.SetUseInCustomQuickAccessDialog(this.toolStripButtonShowViewer, true);
+			this.ExplorerRibbon.SetUseInQuickAccessMenu(this.toolStripButtonShowViewer, false);
 			this.toolStripButtonShowViewer.Click += new System.EventHandler(this.toolStripButtonShowViewerClick);
 			// 
 			// HorizontalSplitter
@@ -660,7 +667,7 @@ namespace Teleopti.Ccc.Win.Permissions
 			this.backStageButton4.BackColor = System.Drawing.Color.Transparent;
 			this.backStageButton4.BeforeTouchSize = new System.Drawing.Size(75, 23);
 			this.backStageButton4.IsBackStageButton = false;
-			this.backStageButton4.Location = new System.Drawing.Point(34, 85);
+			this.backStageButton4.Location = new System.Drawing.Point(-14, 85);
 			this.backStageButton4.Name = "backStageButton4";
 			this.backStageButton4.Size = new System.Drawing.Size(120, 25);
 			this.backStageButton4.TabIndex = 8;
