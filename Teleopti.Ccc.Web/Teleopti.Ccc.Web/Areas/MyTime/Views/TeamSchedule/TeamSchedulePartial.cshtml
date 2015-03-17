@@ -126,8 +126,7 @@
 										<!-- ko if: isTeamScheduleSorttingFeatureEnabled-->
 										<li>
 											<div class="input-group start-time-sort-order">
-												<div class="btn-group" role="group">
-													<input type="checkbox" class="all-input-toggle" data-bind="checked: setAllStartTimeFilter" />
+												<div class="btn-group" role="group">													
 													<!-- ko foreach: displaySortOrderTemplateList -->
 													<!-- ko if: IsStart -->
 													<span data-bind="attr:{class: Description},css:{'sortingbuttonselected': $parent.isSortingTimeActive( $data)}, click : $parent.updateTimeSortOrder, value: Value"></span>
@@ -159,7 +158,6 @@
 										<li>
 											<div class="input-group end-time-sort-order">
 												<div class="btn-group" role="group">
-													<input type="checkbox" class="all-input-toggle" data-bind="checked: setAllEndTimeFilter" />
 													<!-- ko foreach: displaySortOrderTemplateList -->
 													<!-- ko if: !IsStart -->
 													<span data-bind="attr:{class: Description},css:{'sortingbuttonselected': $parent.isSortingTimeActive( $data)}, click : $parent.updateTimeSortOrder, value: Value"></span>

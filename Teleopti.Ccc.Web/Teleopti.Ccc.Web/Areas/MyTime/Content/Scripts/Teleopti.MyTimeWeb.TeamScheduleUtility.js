@@ -38,13 +38,13 @@ Teleopti.MyTimeWeb.DayScheduleMixin = function() {
 		self.requestedDateInternal(newValue.format("YYYY-MM-DD"));
 	});
 
-	self.requestedDate.extend({ notify: "always" });
+
 	self.requestedDateInternal.subscribe(function (newValue) {
 		if (changeHandler != null && !changeHandlerSuspended) {
 			changeHandler(self.requestedDateWithFormat());
 		}
 	});
-	self.requestedDateInternal.extend({ notify: "always" });
+	
 
 	self.isRequestedDateValid = function (date) {
 		if (self.openPeriodStartDate() &&  date.diff(self.openPeriodStartDate()) < 0) {
@@ -487,17 +487,14 @@ Teleopti.MyTimeWeb.TeamScheduleFilterMixin = function () {
 		}
 		self.availableTeams(teams);
 
+		var isSelectedTeamNotIncluded = allTeam.id.split(',').indexOf(self.selectedTeam()) < 0;
+
 		if (self.defaultTeam() == null)
 			self.defaultTeam(defaultTeam);
-		if (self.selectedTeam() == null)
-			self.selectedTeam(defaultTeam);
 
-		if (self.defaultTeam() != defaultTeam) {
-			if (self.selectedTeam() == self.defaultTeam()) {
-				self.selectedTeam(defaultTeam);
-			}
-			self.defaultTeam(defaultTeam);
-		}
+		self.selectedTeam(self.selectedTeam() == null || isSelectedTeamNotIncluded ?
+			self.defaultTeam() : self.selectedTeam());
+
 	};
 
 	self.isFiltered = function() {
@@ -515,9 +512,6 @@ Teleopti.MyTimeWeb.TeamScheduleFilterMixin = function () {
 	});
 
 	self.selectedTeam.extend({ notify: "always" });
-
-
-		
 
 	self.filterTime = ko.computed(function() {
 		self.filteredStartTimesText.removeAll();
