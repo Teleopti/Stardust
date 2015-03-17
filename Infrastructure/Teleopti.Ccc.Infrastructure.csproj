@@ -244,6 +244,7 @@
     <Compile Include="MultiTenancy\Server\IApplicationUserTenantQuery.cs" />
     <Compile Include="MultiTenancy\Client\IPostHttpRequest.cs" />
     <Compile Include="MultiTenancy\Server\IPersistPersonInfo.cs" />
+    <Compile Include="MultiTenancy\Server\NHibernate\DateOnlyAsDateMappingType.cs" />
     <Compile Include="MultiTenancy\Server\NHibernate\TenantUnitOfWorkAspect.cs" />
     <Compile Include="MultiTenancy\Server\NHibernate\TenantUnitOfWorkAttribute.cs" />
     <Compile Include="MultiTenancy\Server\PersistLogonAttempt.cs" />
