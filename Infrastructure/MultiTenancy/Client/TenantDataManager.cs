@@ -61,7 +61,7 @@ namespace Teleopti.Ccc.Infrastructure.MultiTenancy.Client
 		public string Password { get; set; }
 		public string Identity { get; set; }
 		public DateTime? TerminalDate { get; set; }
-		//TODO: tenant - don't serialize this one
+		[JsonIgnore]
 		public bool Changed { get; set; }
 		public Guid? PersonId { get; set; }
 	}
