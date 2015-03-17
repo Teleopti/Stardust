@@ -10,8 +10,7 @@ namespace Teleopti.Ccc.Domain.SeatPlanning
 	{
 		public virtual String Name { get; set; }
 		public virtual int Priority { get; set; }
-		public virtual SeatMapLocation SeatMapLocation { get; set; }
-
+		
 		public Seat() { }
 
 		public Seat(string name, int priority)

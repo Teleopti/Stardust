@@ -74,8 +74,9 @@ namespace Teleopti.Ccc.Domain.SeatPlanning
 			{
 				var date = shift.ScheduleDay.DateOnlyAsPeriod.DateOnly;
 				var lang = Thread.CurrentThread.CurrentUICulture;
+				//Robtodo: revisit seat name display...how/should we use seat.Name?
 				var description = shift.Seat != null
-					? String.Format(Resources.YouHaveBeenAllocatedSeat, date.ToShortDateString(lang), shift.Seat.Name)
+					? String.Format(Resources.YouHaveBeenAllocatedSeat, date.ToShortDateString(lang), ((SeatMapLocation)shift.Seat.Parent).Name + " "+shift.Seat.Priority)
 					: String.Format(Resources.YouHaveNotBeenAllocatedSeat, date.ToShortDateString(lang));
 
 				var existingNote = _publicNoteRepository.Find(date, shift.Person, _scenario);

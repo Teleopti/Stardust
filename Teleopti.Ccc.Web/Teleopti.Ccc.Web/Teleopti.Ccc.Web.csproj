@@ -1314,7 +1314,6 @@
     <Content Include="Areas\SeatPlanner\Content\Templates\layout.html" />
     <Content Include="Areas\SeatPlanner\Content\Templates\menu.html" />
     <Content Include="Areas\SeatPlanner\Content\Templates\notification.html" />
-    <Content Include="Areas\SeatPlanner\Content\Temp\Locations.txt" />
     <Content Include="Areas\SeatPlanner\Content\Translation\TranslationTemplate.txt" />
     <Content Include="Areas\SeatPlanner\Views\Application\index.aspx" />
     <Content Include="Areas\Tenant\these_files_will_probably_be_moved.txt" />
