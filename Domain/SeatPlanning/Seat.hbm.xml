@@ -23,7 +23,7 @@
 							type="Int32"
 							not-null="true"/>
 
-		<many-to-one class="Location"
+		<many-to-one class="SeatMapLocation"
 							access="property"
 							name ="Parent"
 							not-null="false" foreign-key="FK_Seat_SeatMapLocation"/>

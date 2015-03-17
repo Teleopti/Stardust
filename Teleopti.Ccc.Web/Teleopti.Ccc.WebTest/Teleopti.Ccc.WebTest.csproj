@@ -247,6 +247,7 @@
     <Compile Include="Areas\Rta\RtaAreaModuleTest.cs" />
     <Compile Include="Areas\Search\SearchControllerTest.cs" />
     <Compile Include="Areas\SeatPlanner\Controllers\LocationHierarchyControllerTest.cs" />
+    <Compile Include="Areas\SeatPlanner\Controllers\SeatMapControllerTest.cs" />
     <Compile Include="Areas\SeatPlanner\Controllers\TeamHierarchyControllerTest.cs" />
     <Compile Include="Areas\Start\Controllers\ConfigControllerTest.cs" />
     <Compile Include="Areas\Tenant\Core\ApplicationAuthenticationPasswordPolicesTest.cs" />

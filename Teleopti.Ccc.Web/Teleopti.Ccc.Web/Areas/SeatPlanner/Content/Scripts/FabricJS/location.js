@@ -13,15 +13,13 @@
 
 			this.callSuper('initialize', options);
 			this.set('id', options.id);
-			this.set('name', options.name);
-			this.set('seatMapId', options.seatMapId);
+			this.set('name', options.name)
 		},
 
 		toObject: function () {
 			return fabric.util.object.extend(this.callSuper('toObject'), {
 				id: this.get('id'),
-				name: this.get('name'),
-				seatMapId : this.get('seatMapId')
+				name: this.get('name')
 			});
 		},
 

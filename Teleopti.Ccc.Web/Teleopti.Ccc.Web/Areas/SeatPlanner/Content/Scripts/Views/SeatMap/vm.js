@@ -34,7 +34,7 @@
 		this.drawGrid = ko.observable(false);
 		this.seatMapEditor = seatMapEdit;
 		this.canvasUtils = utils;
-		this.seatMapId = null;
+		this.Id = null;
 		var options;
 		this.Resources = resources;
 		this.Loading = ko.observable(false);
@@ -67,7 +67,7 @@
 		};
 
 		this.RefreshSeatMap = function () {
-			self.LoadSeatMapFromId(self.seatMapId);
+			self.LoadSeatMapFromId(self.Id);
 		};
 
 		this.SetupCanvas = function () {
@@ -119,7 +119,7 @@
 		};
 
 		this.LoadSeatMapOnLocationClick = function (location) {
-			self.LoadSeatMapFromId(location.seatMapId);
+			self.LoadSeatMapFromId(location.id);
 		};
 
 		this.LoadParentSeatMap = function () {
@@ -154,7 +154,7 @@
 			if (data != null) {
 
 				self.parentId = data.ParentId;
-				self.seatMapId = data.Id;
+				self.Id = data.Id;
 
 				self.canvasUtils.LoadSeatMap(self.canvas, data, self.allowEdit(), self.OnLoadSeatMapCompleted);
 

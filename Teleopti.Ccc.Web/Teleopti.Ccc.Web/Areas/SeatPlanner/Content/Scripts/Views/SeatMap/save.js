@@ -28,7 +28,6 @@
 			this.data =
 			{
 				SeatMapData: data.SeatMapData,
-				Location: data.Location,
 				Id: data.Id,
 				ChildLocations: data.ChildLocations,
 				Seats: data.Seats,

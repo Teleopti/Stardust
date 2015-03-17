@@ -1,9 +1,9 @@
 ﻿namespace Teleopti.Interfaces.Domain
 {
-	public interface ISeatMap : IAggregateRootWithEvents
+	public interface ISeatMapLocation : IAggregateRootWithEvents
 	{
+
 		string SeatMapJsonData { get; set; }
-		
 	}
 
 	

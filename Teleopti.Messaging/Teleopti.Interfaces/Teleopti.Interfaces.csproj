@@ -151,7 +151,7 @@
     <Compile Include="Domain\INotificationMessage.cs" />
     <Compile Include="Domain\INotificationSender.cs" />
     <Compile Include="Domain\IQueueStatsModel.cs" />
-    <Compile Include="Domain\ISeatMap.cs" />
+    <Compile Include="Domain\ISeatMapLocation.cs" />
     <Compile Include="Domain\ISeatPlan.cs" />
     <Compile Include="Domain\ISeniorityWorkDay.cs" />
     <Compile Include="Domain\ISeniorityWorkDayRanks.cs" />

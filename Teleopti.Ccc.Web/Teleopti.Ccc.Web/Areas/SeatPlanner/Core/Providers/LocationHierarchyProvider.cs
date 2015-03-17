@@ -1,34 +1,38 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Web.Helpers;
+using Teleopti.Ccc.Domain.Repositories;
+using Teleopti.Ccc.Domain.SeatPlanning;
+using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.Web.Areas.SeatPlanner.Core.ViewModels;
+using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Web.Areas.SeatPlanner.Core.Providers
 {
 	public class LocationHierarchyProvider : ILocationHierarchyProvider
 	{
-		public LocationHierarchyProvider()
-		{
+		private readonly ISeatMapLocationRepository _seatMapLocationRepository;
 
+		public LocationHierarchyProvider(ISeatMapLocationRepository seatMapLocationRepository)
+		{
+			_seatMapLocationRepository = seatMapLocationRepository;
 		}
 
 		public LocationViewModel Get(string path)
 		{
 
 			LocationViewModel locationViewModel = null;
-
-			var locationString = System.IO.File.ReadAllText(path);
-			if (!String.IsNullOrEmpty(locationString))
+			var rootSeatMapLocation = _seatMapLocationRepository.LoadRootSeatMap() as SeatMapLocation;
+			
+			if ( rootSeatMapLocation != null )
 			{
-				var locationData = Json.Decode(locationString);
-				dynamic rootLocation = locationData;
-				locationViewModel = getLocationViewModel(rootLocation);
+				locationViewModel = getLocationViewModel (rootSeatMapLocation);
 			}
 			return locationViewModel;
-
 		}
 
-		private static LocationViewModel getLocationViewModel(dynamic location)
+		private static LocationViewModel getLocationViewModel(SeatMapLocation location)
 		{
 			if (location == null)
 			{
@@ -40,8 +44,8 @@ namespace Teleopti.Ccc.Web.Areas.SeatPlanner.Core.Providers
 
 			var locationViewModel = new LocationViewModel()
 			{
-				Id = Guid.Parse (location.id),
-				Name = location.name,
+				Id = Guid.Parse (location.Id.ToString()),
+				Name = location.Name,
 				Seats = seatViewModels,
 				Children = childViewModels
 			};
@@ -49,32 +53,25 @@ namespace Teleopti.Ccc.Web.Areas.SeatPlanner.Core.Providers
 			return locationViewModel;
 		}
 
-		private static List<LocationViewModel> getChildViewModels(dynamic location)
+		private static List<LocationViewModel> getChildViewModels(SeatMapLocation location)
 		{
-			if (location.childLocations != null)
+			if (location.ChildLocations != null)
 			{
-				var childViewModels = new List<LocationViewModel>();
-				var childLocations = location.childLocations;
-			
-				foreach (var child in childLocations)
-				{
-					childViewModels.Add (getLocationViewModel (child));
-				}
-
-				return childViewModels;
+				var childLocations = location.ChildLocations;
+				return childLocations.Select (getLocationViewModel).ToList();
 			}
 
 			return null;
 		}
 
-		private static List<SeatViewModel> getSeatViewModels (dynamic location)
+		private static List<SeatViewModel> getSeatViewModels (SeatMapLocation location)
 		{
-			if (location.seats != null)
+			if (location.Seats != null)
 			{
 				var seatViewModels = new List<SeatViewModel>();
-				foreach (var seat in location.seats)
+				foreach (var seat in location.Seats)
 				{
-					var seatViewModel = new SeatViewModel() {Id = Guid.Parse(seat.id), Name = seat.name};
+					var seatViewModel = new SeatViewModel() {Id = seat.Id.Value, Name = seat.Name};
 					seatViewModels.Add (seatViewModel);
 				}
 				return seatViewModels;

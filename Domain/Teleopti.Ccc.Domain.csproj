@@ -799,6 +799,7 @@
     <Compile Include="Optimization\WeeklyRestSolver\WeeklyRestSolverService.cs" />
     <Compile Include="Aop\ReadModelUnitOfWorkAttribute.cs" />
     <Compile Include="PreserveStack.cs" />
+    <Compile Include="Repositories\ISeatMapLocationRepository.cs" />
     <Compile Include="Repositories\ITeamGamificationSettingRepository.cs" />
     <Compile Include="Repositories\IAgentBadgeSettingsRepository.cs" />
     <Compile Include="Repositories\IGamificationSettingRepository.cs" />
@@ -1500,11 +1501,10 @@
     <Compile Include="Scheduling\WorkTimeMinMaxCalculator.cs" />
     <Compile Include="SeatPlanning\AgentShift.cs" />
     <Compile Include="SeatPlanning\BookingPeriod.cs" />
-    <Compile Include="SeatPlanning\Location.cs" />
+    <Compile Include="SeatPlanning\SeatMapLocation.cs" />
     <Compile Include="SeatPlanning\Seat.cs" />
     <Compile Include="SeatPlanning\SeatAllocator.cs" />
     <Compile Include="SeatPlanning\SeatBookingRequest.cs" />
-    <Compile Include="SeatPlanning\SeatMap.cs" />
     <Compile Include="SeatPlanning\SeatPlan.cs" />
     <Compile Include="SeatPlanning\TransientBooking.cs" />
     <Compile Include="Security\AuthorizationEntities\AllFunctions.cs" />
@@ -2373,7 +2373,6 @@
   <ItemGroup>
     <EmbeddedResource Include="SeatPlanning\Seat.hbm.xml" />
     <EmbeddedResource Include="SeatPlanning\Location.hbm.xml" />
-    <EmbeddedResource Include="SeatPlanning\SeatMap.hbm.xml" />
     <EmbeddedResource Include="Forecasting\SkillMap_DEV.hbm.xml">
       <SubType>Designer</SubType>
     </EmbeddedResource>

@@ -25,7 +25,6 @@
 		var self = this;
 		this.canvas = null;
 		this.id = null;
-		this.locationId = null;
 		this.seatPriority = 0;
 		this.locationName = ko.observable();
 		this.businessUnitId = null;
@@ -545,7 +544,6 @@
 			var locationObj = {
 				name: self.locationName(),
 				id: guidgenerator.newGuid(),
-				seatMapId: guidgenerator.newGuid(),
 				isNew: true,
 				height: 100,
 				width: 300,
@@ -586,8 +584,7 @@
 		this.LoadExistingSeatMapData = function (data) {
 			self.id = data.Id;
 			self.seatPriority = data.seatPriority;
-			self.locationId = data.Location;
-
+			
 			self.newSeats = [];
 			self.newLocations = [];
 		};
@@ -602,8 +599,7 @@
 				childLocations.push(
 				{
 					Id: locations[i].id,
-					Name: locations[i].name,
-					SeatMapId: locations[i].seatMapId,
+					Name: locations[i].name,					
 					IsNew: (self.newLocations.indexOf(locations[i]) > -1)
 				});
 			}
@@ -624,7 +620,6 @@
 			var data = {
 				SeatMapData: JSON.stringify(self.canvas),
 				Id: self.id,
-				Location: self.locationId,
 				ChildLocations: childLocations,
 				Seats: seats,
 				BusinessUnitId: self.businessUnitId

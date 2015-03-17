@@ -5,6 +5,6 @@ namespace Teleopti.Ccc.Web.Areas.SeatPlanner.Core.Providers
 {
 	public interface ISeatMapProvider
 	{
-		SeatMapViewModel Get (Guid? id);
+		LocationViewModel Get (Guid? id);
 	}
 }

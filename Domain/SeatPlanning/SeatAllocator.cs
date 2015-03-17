@@ -6,16 +6,16 @@ namespace Teleopti.Ccc.Domain.SeatPlanning
 {
 	public class SeatAllocator
 	{
-		private readonly Location[] _locations;
+		private readonly SeatMapLocation[] _seatMapLocations;
 
-		public SeatAllocator(params Location[] locations)
+		public SeatAllocator(params SeatMapLocation[] seatMapLocations)
 		{
-			_locations = locations;
+			_seatMapLocations = seatMapLocations;
 		}
 
 		public void AllocateSeats(params SeatBookingRequest[] seatBookingRequests)
 		{
-			foreach (var location in _locations)
+			foreach (var location in _seatMapLocations)
 			{
 				location.ClearBookingInformation();
 			}
@@ -44,7 +44,7 @@ namespace Teleopti.Ccc.Domain.SeatPlanning
 
 		private void bookSeats(IEnumerable<AgentShift> shifts, Boolean bookGroupedRequestsTogether)
 		{
-			foreach (var location in _locations.OrderByDescending(l => l.SeatCount))
+			foreach (var location in _seatMapLocations.OrderByDescending(l => l.SeatCount))
 			{
 				var unallocatedShifts = shifts.Where(s => s.Seat == null);
 				if (!unallocatedShifts.Any()) return;
@@ -60,11 +60,11 @@ namespace Teleopti.Ccc.Domain.SeatPlanning
 			}
 		}
 
-		private void bookSeatsForLocation(bool bookGroupedRequestsTogether, IEnumerable<AgentShift> unallocatedShifts, Location targetLocation)
+		private void bookSeatsForLocation(bool bookGroupedRequestsTogether, IEnumerable<AgentShift> unallocatedShifts, SeatMapLocation targetSeatMapLocation)
 		{
 			foreach (var shift in unallocatedShifts)
 			{
-				var firstUnallocatedSeat = targetLocation.GetNextUnallocatedSeat(shift.Period, bookGroupedRequestsTogether);
+				var firstUnallocatedSeat = targetSeatMapLocation.GetNextUnallocatedSeat(shift.Period, bookGroupedRequestsTogether);
 				if (foundUnallocatedSet(firstUnallocatedSeat))
 				{
 					shift.Book(firstUnallocatedSeat);

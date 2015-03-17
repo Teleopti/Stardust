@@ -1,42 +1,66 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Teleopti.Ccc.Domain.ApplicationLayer.Commands;
 using Teleopti.Ccc.Domain.Common.EntityBaseTypes;
+using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.SeatPlanning
 {
+	
 	[Serializable]
-	public class Location : AggregateEntity
+	public class SeatMapLocation : VersionedAggregateRootWithBusinessUnit, ISeatMapLocation
 	{
 		private IList<Seat> _seats = new List<Seat>();
-		private IList<Location> _childLocations = new List<Location>();
+		private IList<SeatMapLocation> _childLocations = new List<SeatMapLocation>();
 
 		public virtual IList<Seat> Seats
 		{
 			get { return _seats; }
 		}
 
-		public virtual IList<Location> ChildLocations
+		public virtual IList<SeatMapLocation> ChildLocations
 		{
 			get { return _childLocations; }
 		}
 
 		public virtual String Name { get; set; }
 		public virtual bool IncludeInSeatPlan { get; set; }
-		public virtual Location ParentLocation { get; set; }
+		public virtual SeatMapLocation ParentLocation { get; set; }
+		public virtual string SeatMapJsonData { get; set; }
 
-		public virtual void AddChild(Location childLocation)
+		public SeatMapLocation()
 		{
-			_childLocations.Add(childLocation);
-			childLocation.setParentLocation(this);
+			
 		}
 
-		private void setParentLocation(Location location)
+		public virtual void SetLocation(String seatMapJsonData, String name)
 		{
-			ParentLocation = location;
+			SeatMapJsonData = seatMapJsonData;
+			Name = name;
 		}
 
-		public virtual void AddChildren(IEnumerable<Location> childLocations)
+		public virtual SeatMapLocation CreateChildSeatMapLocation(LocationInfo location)
+		{
+			var childSeatMapLocation = new SeatMapLocation();
+			childSeatMapLocation.SetLocation("{}", location.Name);
+			AddChild (childSeatMapLocation);
+			return childSeatMapLocation;
+		}
+
+
+		public virtual void AddChild(SeatMapLocation childSeatMapLocation)
+		{
+			_childLocations.Add(childSeatMapLocation);
+			childSeatMapLocation.setParentLocation(this);
+		}
+
+		private void setParentLocation(SeatMapLocation seatMapLocation)
+		{
+			ParentLocation = seatMapLocation;
+		}
+
+		public virtual void AddChildren(IEnumerable<SeatMapLocation> childLocations)
 		{
 			foreach (var child in childLocations)
 			{
@@ -79,6 +103,11 @@ namespace Teleopti.Ccc.Domain.SeatPlanning
 			{
 				child.ClearBookingInformation();
 			}
+		}
+
+		public virtual void UpdateSeatMapTemporaryId(Guid? temporaryId, Guid? persistedId)
+		{
+			SeatMapJsonData = SeatMapJsonData.Replace(temporaryId.ToString(), persistedId.ToString());
 		}
 
 		public virtual Seat GetNextUnallocatedSeat(BookingPeriod period, Boolean ignoreChildren)
@@ -133,7 +162,7 @@ namespace Teleopti.Ccc.Domain.SeatPlanning
 		}
 
 
-		public virtual Location GetLocationToAllocateSeats(IEnumerable<AgentShift> agentShifts)
+		public virtual SeatMapLocation GetLocationToAllocateSeats(IEnumerable<AgentShift> agentShifts)
 		{
 			foreach (var childLocation in _childLocations.OrderByDescending(l => l.SeatCount))
 			{
@@ -184,5 +213,6 @@ namespace Teleopti.Ccc.Domain.SeatPlanning
 		}
 
 
+		
 	}
 }

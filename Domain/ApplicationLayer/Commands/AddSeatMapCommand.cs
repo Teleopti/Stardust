@@ -17,8 +17,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Commands
 	public class LocationInfo
 	{
 		public Guid? Id { get; set; }
-		public Guid? SeatMapId { get; set; }
-
 		public String Name { get; set; }
 		public Boolean IsNew { get; set; }
 		

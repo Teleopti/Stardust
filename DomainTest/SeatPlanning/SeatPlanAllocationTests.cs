@@ -16,7 +16,7 @@ namespace SeatPlanner
 			var agentShift = new AgentShift(new BookingPeriod(new DateTime(2014, 01, 01, 8, 0, 0), new DateTime(2014, 01, 01, 17, 0, 0)), null, null);
 			var seatBookingRequest = new SeatBookingRequest(agentShift);
 
-			var location = new Location(){IncludeInSeatPlan = true};
+			var location = new SeatMapLocation(){IncludeInSeatPlan = true};
 			location.AddSeat("Seat1",1);
 
 			new SeatAllocator(location).AllocateSeats(seatBookingRequest);
@@ -33,7 +33,7 @@ namespace SeatPlanner
 			var agentShift2 = new AgentShift(new BookingPeriod(new DateTime(2014, 01, 01, 8, 0, 0), new DateTime(2014, 01, 01, 17, 0, 0)), null, null);
 			var seatBookingRequest2 = new SeatBookingRequest(agentShift2);
 
-			var location = new Location() { IncludeInSeatPlan = true };
+			var location = new SeatMapLocation() { IncludeInSeatPlan = true };
 			location.AddSeat("Seat1",1);
 			location.AddSeat("Seat2",2);
 
@@ -52,7 +52,7 @@ namespace SeatPlanner
 			var agentShift2 = new AgentShift(new BookingPeriod(new DateTime(2014, 01, 01, 8, 0, 0), new DateTime(2014, 01, 01, 17, 0, 0)), null, null);
 			var seatBookingRequest2 = new SeatBookingRequest(agentShift2);
 
-			var location = new Location() { IncludeInSeatPlan = true };
+			var location = new SeatMapLocation() { IncludeInSeatPlan = true };
 			location.AddSeat("Seat1", 2);
 			location.AddSeat("Seat2", 1);
 
@@ -70,7 +70,7 @@ namespace SeatPlanner
 			var agentShift2 = new AgentShift(new BookingPeriod(new DateTime(2014, 01, 01, 12, 0, 0), new DateTime(2014, 01, 01, 17, 0, 0)), null, null);
 			var seatBookingRequest2 = new SeatBookingRequest(agentShift2);
 
-			var location = new Location() { IncludeInSeatPlan = true };
+			var location = new SeatMapLocation() { IncludeInSeatPlan = true };
 			location.AddSeat("Seat1",1);
 
 			new SeatAllocator(location).AllocateSeats(seatBookingRequest1, seatBookingRequest2);
@@ -89,7 +89,7 @@ namespace SeatPlanner
 			var agentShift2 = new AgentShift(new BookingPeriod(new DateTime(2014, 01, 01, 12, 0, 0), new DateTime(2014, 01, 01, 17, 0, 0)), null, null);
 			var seatBookingRequest2 = new SeatBookingRequest(agentShift2);
 
-			var location = new Location() { IncludeInSeatPlan = true };
+			var location = new SeatMapLocation() { IncludeInSeatPlan = true };
 			location.AddSeat("Seat1",1);
 
 			new SeatAllocator(location).AllocateSeats(seatBookingRequest1, seatBookingRequest2);
@@ -106,10 +106,10 @@ namespace SeatPlanner
 			var agentShift2 = new AgentShift(new BookingPeriod(new DateTime(2014, 01, 01, 12, 0, 0), new DateTime(2014, 01, 01, 17, 0, 0)), null, null);
 			var seatBookingRequest2 = new SeatBookingRequest(agentShift2);
 
-			var location1= new Location() { IncludeInSeatPlan = true };
+			var location1= new SeatMapLocation() { IncludeInSeatPlan = true };
 			location1.AddSeat("L1 Seat1",1);
 
-			var location2 = new Location() { IncludeInSeatPlan = true };
+			var location2 = new SeatMapLocation() { IncludeInSeatPlan = true };
 			location2.AddSeat("L2 Seat1",1);
 
 			new SeatAllocator(location1, location2).AllocateSeats(seatBookingRequest1, seatBookingRequest2);
@@ -128,11 +128,11 @@ namespace SeatPlanner
 			var seatBookingRequest1 = new SeatBookingRequest(agentShift1);
 			var seatBookingRequest2 = new SeatBookingRequest(agentShift2, agentShift3);
 
-			var location1 = new Location() { IncludeInSeatPlan = true };
+			var location1 = new SeatMapLocation() { IncludeInSeatPlan = true };
 			location1.AddSeat("L1 Seat1",1);
 			location1.AddSeat("L1 Seat2",2);
 
-			var location2 = new Location() { IncludeInSeatPlan = true };
+			var location2 = new SeatMapLocation() { IncludeInSeatPlan = true };
 			location2.AddSeat("L2 Seat1",1);
 
 			new SeatAllocator(location1, location2).AllocateSeats(seatBookingRequest1, seatBookingRequest2);
@@ -151,10 +151,10 @@ namespace SeatPlanner
 			var seatBookingRequest1 = new SeatBookingRequest(agentShift1);
 			var seatBookingRequest2 = new SeatBookingRequest(agentShift2, agentShift3);
 
-			var location1 = new Location() { IncludeInSeatPlan = true };
+			var location1 = new SeatMapLocation() { IncludeInSeatPlan = true };
 			location1.AddSeat("L1 Seat1",1);
 
-			var location2 = new Location() { IncludeInSeatPlan = true };
+			var location2 = new SeatMapLocation() { IncludeInSeatPlan = true };
 			location2.AddSeat("L2 Seat1",1);
 			location2.AddSeat("L2 Seat2",2);
 
@@ -176,12 +176,12 @@ namespace SeatPlanner
 			var seatBookingRequest1 = new SeatBookingRequest(agentShift1, agentShift2);
 			var seatBookingRequest2 = new SeatBookingRequest(agentShift3, agentShift4);
 
-			var location1 = new Location() { IncludeInSeatPlan = true };
+			var location1 = new SeatMapLocation() { IncludeInSeatPlan = true };
 			location1.AddSeat("L1 Seat1",1);
 			location1.AddSeat("L1 Seat2",2);
-			location1.AddSeat("L1 Seat2",3);
+			location1.AddSeat("L1 Seat3",3);
 
-			var location2 = new Location() { IncludeInSeatPlan = true };
+			var location2 = new SeatMapLocation() { IncludeInSeatPlan = true };
 			location2.AddSeat("L2 Seat1",1);
 			location2.AddSeat("L2 Seat2",2);
 
@@ -200,10 +200,10 @@ namespace SeatPlanner
 
 			var seatBookingRequest1 = new SeatBookingRequest(agentShift1, agentShift2);
 
-			var location1 = new Location() { IncludeInSeatPlan = true };
+			var location1 = new SeatMapLocation() { IncludeInSeatPlan = true };
 			location1.AddSeat("L1 Seat1",1);
 
-			var location2 = new Location() { IncludeInSeatPlan = true };
+			var location2 = new SeatMapLocation() { IncludeInSeatPlan = true };
 			location2.AddSeat("L2 Seat1",1);
 
 			new SeatAllocator(location1, location2).AllocateSeats(seatBookingRequest1);
@@ -222,10 +222,10 @@ namespace SeatPlanner
 
 			var seatBookingRequest1 = new SeatBookingRequest(agentShift1, agentShift2, agentShift3);
 
-			var location1 = new Location() { IncludeInSeatPlan = true };
+			var location1 = new SeatMapLocation() { IncludeInSeatPlan = true };
 			location1.AddSeat("L1 Seat1",1);
 
-			var location2 = new Location() { IncludeInSeatPlan = true };
+			var location2 = new SeatMapLocation() { IncludeInSeatPlan = true };
 			location2.AddSeat("L2 Seat1",1);
 
 			new SeatAllocator(location1, location2).AllocateSeats(seatBookingRequest1);
@@ -244,12 +244,12 @@ namespace SeatPlanner
 
 			var seatBookingRequest1 = new SeatBookingRequest(agentShift1, agentShift2, agentShift3, agentShift4);
 
-			var location1 = new Location() { IncludeInSeatPlan = true };
+			var location1 = new SeatMapLocation() { IncludeInSeatPlan = true };
 			location1.AddSeat("L1 Seat1",1);
 			location1.AddSeat("L1 Seat2",2);
 			location1.AddSeat("L1 Seat2",3);
 
-			var location2 = new Location() { IncludeInSeatPlan = true };
+			var location2 = new SeatMapLocation() { IncludeInSeatPlan = true };
 			location2.AddSeat("L2 Seat1",1);
 			location2.AddSeat("L2 Seat2",2);
 
@@ -268,9 +268,9 @@ namespace SeatPlanner
 
 			var seatBookingRequest1 = new SeatBookingRequest(agentShift1);
 
-			var building = new Location() { IncludeInSeatPlan = true };
+			var building = new SeatMapLocation() { IncludeInSeatPlan = true };
 
-			var room1 = new Location() { IncludeInSeatPlan = true };
+			var room1 = new SeatMapLocation() { IncludeInSeatPlan = true };
 			room1.AddSeat("Room1 Seat1",1);
 
 			building.AddChild(room1);
@@ -288,10 +288,10 @@ namespace SeatPlanner
 
 			var seatBookingRequest1 = new SeatBookingRequest(agentShift1);
 
-			var building = new Location() { IncludeInSeatPlan = true };
-			var room1 = new Location() { IncludeInSeatPlan = true };
-			var room2 = new Location() {IncludeInSeatPlan = true};
-			var roomChild1 = new Location() { IncludeInSeatPlan = true };
+			var building = new SeatMapLocation() { IncludeInSeatPlan = true };
+			var room1 = new SeatMapLocation() { IncludeInSeatPlan = true };
+			var room2 = new SeatMapLocation() {IncludeInSeatPlan = true};
+			var roomChild1 = new SeatMapLocation() { IncludeInSeatPlan = true };
 		
 			roomChild1.AddSeat("Room1Child Seat1",1);
 			building.AddChild(room1);
@@ -311,9 +311,9 @@ namespace SeatPlanner
 
 			var seatBookingRequest1 = new SeatBookingRequest(agentShift1);
 
-			var building = new Location() { IncludeInSeatPlan = false };
-			var room1 = new Location() { IncludeInSeatPlan = false };
-			var room2 = new Location() { IncludeInSeatPlan = true };
+			var building = new SeatMapLocation() { IncludeInSeatPlan = false };
+			var room1 = new SeatMapLocation() { IncludeInSeatPlan = false };
+			var room2 = new SeatMapLocation() { IncludeInSeatPlan = true };
 			room1.AddSeat("Room1 Seat1",1);
 			room2.AddSeat("Room2 Seat1",1);
 
@@ -333,9 +333,9 @@ namespace SeatPlanner
 
 			var seatBookingRequest1 = new SeatBookingRequest(agentShift1);
 
-			var building = new Location() { IncludeInSeatPlan = true };
+			var building = new SeatMapLocation() { IncludeInSeatPlan = true };
 
-			var room1 = new Location() { IncludeInSeatPlan = true };
+			var room1 = new SeatMapLocation() { IncludeInSeatPlan = true };
 
 			building.AddChild(room1);
 			building.AddSeat("Building Seat1",1);
@@ -354,9 +354,9 @@ namespace SeatPlanner
 
 			var seatBookingRequest1 = new SeatBookingRequest(agentShift1, agentShift2);
 
-			var building = new Location() { IncludeInSeatPlan = true };
+			var building = new SeatMapLocation() { IncludeInSeatPlan = true };
 
-			var room1 = new Location() { IncludeInSeatPlan = true };
+			var room1 = new SeatMapLocation() { IncludeInSeatPlan = true };
 			room1.AddSeat("Room 1 Seat 1",1);
 
 			building.AddChild(room1);
@@ -384,9 +384,9 @@ namespace SeatPlanner
 			var seatBookingRequest2 = new SeatBookingRequest(agentShift3, agentShift4);
 			var seatBookingRequest3 = new SeatBookingRequest(agentShift5);
 
-			var building = new Location() { IncludeInSeatPlan = true };
+			var building = new SeatMapLocation() { IncludeInSeatPlan = true };
 
-			var room1 = new Location() { IncludeInSeatPlan = true };
+			var room1 = new SeatMapLocation() { IncludeInSeatPlan = true };
 			room1.AddSeat("Room1 Seat1",1);
 			room1.AddSeat("Room1 Seat2",2);
 
@@ -417,10 +417,10 @@ namespace SeatPlanner
 
 			var seatBookingRequest1 = new SeatBookingRequest(agent1Shift1, agent2Shift1);
 
-			var building = new Location() { IncludeInSeatPlan = true };
+			var building = new SeatMapLocation() { IncludeInSeatPlan = true };
 			building.AddSeat("Building Seat 1", 1);
 
-			var room1 = new Location() { IncludeInSeatPlan = true };
+			var room1 = new SeatMapLocation() { IncludeInSeatPlan = true };
 			room1.AddSeat("Room 1 Seat 1", 1);
 			building.AddChild(room1);
 
@@ -446,7 +446,7 @@ namespace SeatPlanner
 
 			var allocator = new SeatAllocator(Enumerable.Range(0, 50).Select(i =>
 			{
-				var location = new Location() { IncludeInSeatPlan = true };
+				var location = new SeatMapLocation() { IncludeInSeatPlan = true };
 				Enumerable.Range(0, 600).All(s =>
 				{
 					location.AddSeat("temp", s);
@@ -474,12 +474,12 @@ namespace SeatPlanner
 
 			var allocator = new SeatAllocator(Enumerable.Range(0, 50).Select(i =>
 			{
-				var location = new Location() { IncludeInSeatPlan = true };
+				var location = new SeatMapLocation() { IncludeInSeatPlan = true };
 				Enumerable.Range(0, 10).All(s =>
 				{
 					Enumerable.Range(0, 20).All(r =>
 					{
-						var childLocation = new Location() { IncludeInSeatPlan = true };
+						var childLocation = new SeatMapLocation() { IncludeInSeatPlan = true };
 						location.AddChild(childLocation);
 
 						Enumerable.Range(0, 30).All(c =>

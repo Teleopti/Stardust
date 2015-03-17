@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.SeatPlanning;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.Web.Areas.SeatPlanner.Core.ViewModels;
@@ -9,76 +10,70 @@ namespace Teleopti.Ccc.Web.Areas.SeatPlanner.Core.Providers
 {
 	public class SeatMapProvider : ISeatMapProvider
 	{
-		private readonly ISeatMapRepository _seatMapRepository;
+		private readonly ISeatMapLocationRepository _seatMapLocationRepository;
 
 		protected SeatMapProvider()
 		{
 		}
 
-		public SeatMapProvider(ISeatMapRepository seatMapRepository)
+		public SeatMapProvider(ISeatMapLocationRepository seatMapLocationRepository)
 		{
-			_seatMapRepository = seatMapRepository;
+			_seatMapLocationRepository = seatMapLocationRepository;
 		}
 
-		public SeatMapViewModel Get(Guid? id)
+		public LocationViewModel Get(Guid? id)
 		{
-			SeatMapViewModel seatMapVm = null;
+			LocationViewModel locationVM = null;
 
-			var seatMap = id.HasValue
-				? _seatMapRepository.LoadAggregate(id.Value) as SeatMap
-				: _seatMapRepository.LoadRootSeatMap() as SeatMap;
+			var seatMapLocation = id.HasValue
+				? _seatMapLocationRepository.LoadAggregate(id.Value) as SeatMapLocation
+				: _seatMapLocationRepository.LoadRootSeatMap() as SeatMapLocation;
 
-			if (seatMap != null)
+			if (seatMapLocation != null)
 			{
-				//RobTodo: this is a quick hack, perhaps need a parent seat map reference on seat map
-				var parentLocation = seatMap.Location.ParentLocation;
-				var parentId = parentLocation != null ? parentLocation.Parent.Id : null;
+				var parentLocation = seatMapLocation.ParentLocation;
+				var parentId = parentLocation != null ? parentLocation.Id : null;
 
-				seatMapVm = new SeatMapViewModel()
+				locationVM = new LocationViewModel()
 				{
-					Id = seatMap.Id.Value,
+					Id = seatMapLocation.Id.Value,
+					Name = seatMapLocation.Name,
 					ParentId = parentId != null ? parentId.Value : Guid.Empty,
-					SeatMapJsonData = seatMap.SeatMapJsonData
+					SeatMapJsonData = seatMapLocation.SeatMapJsonData
 				};
 
-				buildBreadCrumbInformation(seatMapVm, seatMap.Location);
-
-				seatMapVm.Location = new LocationViewModel()
-				{
-					Id = seatMap.Location.Id.Value,
-					Name = seatMap.Location.Name
-				};
+				buildBreadCrumbInformation(locationVM, seatMapLocation);
 
 			}
-			return seatMapVm;
+			return locationVM;
 		}
 
-		private static void buildBreadCrumbInformation(SeatMapViewModel seatMapVm, Location location)
+		private static void buildBreadCrumbInformation(LocationViewModel seatMapLocationViewModel, SeatMapLocation seatMapLocation)
 		{
-			if (location != null)
+			if (seatMapLocation != null)
 			{
-				var breadcrumbList = new List<SeatMapBreadcrumbInfo>()
+				var breadcrumbList = new List<SeatMapLocationBreadcrumbInfo>()
 				{
-					new SeatMapBreadcrumbInfo()
+					new SeatMapLocationBreadcrumbInfo()
 					{
-						Id = location.Parent.Id.Value,
-						Name = location.Name
+						Id = seatMapLocation.Id.Value,
+						Name = seatMapLocation.Name
 					}
 				};
 
-				var parentLocation = location.ParentLocation;
+				var parentLocation = seatMapLocation.ParentLocation;
 
 				while (parentLocation != null)
 				{
-					breadcrumbList.Add(new SeatMapBreadcrumbInfo(){
-											Id = parentLocation.Parent.Id.Value,
+					breadcrumbList.Add(new SeatMapLocationBreadcrumbInfo(){
+											Id = parentLocation.Id.Value,
 											Name = parentLocation.Name
 										});
 
 					parentLocation = parentLocation.ParentLocation;
 				}
 
-				seatMapVm.BreadcrumbInfo = Enumerable.Reverse(breadcrumbList);
+				seatMapLocationViewModel.BreadcrumbInfo = Enumerable.Reverse(breadcrumbList);
 			}
 		}
 	}

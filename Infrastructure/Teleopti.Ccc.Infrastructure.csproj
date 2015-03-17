@@ -260,8 +260,7 @@
     <Compile Include="Rta\CacheInvalidator.cs" />
     <Compile Include="Rta\Persisters\AdherenceDetailsReadModelPersister.cs" />
     <Compile Include="Rta\Persisters\AdherencePercentageReadModelPersister.cs" />
-    <Compile Include="Repositories\ISeatMapRepository.cs" />
-    <Compile Include="Repositories\SeatMapRepository.cs" />
+    <Compile Include="Repositories\SeatMapLocationRepository.cs" />
     <Compile Include="Repositories\SkillMapRepository.cs" />
     <Compile Include="Repositories\GamificationSettingRepository.cs" />
     <Compile Include="Repositories\AgentBadgeWithRankRepository.cs" />

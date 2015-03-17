@@ -30,9 +30,9 @@ namespace Teleopti.Ccc.Domain.SeatPlanning
 			_scheduleRepository = scheduleRepository;
 		}
 
-		public void CreateSeatPlan(Location rootLocation, ICollection<ITeam> teams, DateOnlyPeriod period, TrackedCommandInfo trackedCommandInfo)
+		public void CreateSeatPlan(SeatMapLocation rootSeatMapLocation, ICollection<ITeam> teams, DateOnlyPeriod period, TrackedCommandInfo trackedCommandInfo)
 		{
-			var seatAllocator = new SeatAllocator(rootLocation);
+			var seatAllocator = new SeatAllocator(rootSeatMapLocation);
 			var people = getPeople(teams, period);
 			createAgentShiftsFromSchedules(period, people);
 			allocateSeats(seatAllocator);

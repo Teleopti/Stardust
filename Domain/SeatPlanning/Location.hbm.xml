@@ -4,29 +4,40 @@
 									 namespace="Teleopti.Ccc.Domain.SeatPlanning"
 									 default-access="field.camelcase-underscore">
 
-	<class name="Location" table="SeatMapLocation">
-		<!--IEntity-->
+	<class name="SeatMapLocation" table="SeatMapLocation">
+		
 		<id name="Id"
 						type="guid"
 							access="nosetter.camelcase-underscore"
 						unsaved-value="null">
 			<generator class="guid.comb" />
 		</id>
+		<version name="Version"
+									 unsaved-value ="null"/>
 		
 		<property name="Name"
 							access="property"
 							type="string"
 							length="100"
 							not-null="true"/>
-		
-		<many-to-one class="SeatMap"
-								 access="property"
-							name ="Parent" 
-							not-null="false" foreign-key="FK_SeatMapLocation_SeatMap"/>
 
+		<property name="SeatMapJsonData"
+						not-null="false"
+						access="property"
+						type="StringClob"/>
+		
+		<many-to-one name="UpdatedBy"
+								 class="Teleopti.Ccc.Domain.Common.Person"
+								 not-null="true"
+								 foreign-key="FK_SeatMapLocation_Person_UpdatedBy"/>
+
+		<property name="UpdatedOn"
+								type="UtcDateTime"
+								not-null="true"/>
+		
 		<bag name="ChildLocations" cascade="all" lazy="false" inverse="true">
 			<key column="ParentLocation" />
-			<one-to-many class="Teleopti.Ccc.Domain.SeatPlanning.Location" />
+			<one-to-many class="Teleopti.Ccc.Domain.SeatPlanning.SeatMapLocation" />
 		</bag>
 		
 		<bag name="Seats" cascade="all-delete-orphan" lazy="false" inverse="true">
@@ -34,7 +45,14 @@
 			<one-to-many class="Teleopti.Ccc.Domain.SeatPlanning.Seat" />
 		</bag>
 
-		<many-to-one name="ParentLocation" column="ParentLocation" access="property" />
+		<many-to-one name="ParentLocation" column="ParentLocation" access="property" />		
+
+		<many-to-one name="BusinessUnit"
+					class="Teleopti.Ccc.Domain.Common.BusinessUnit"
+					access="nosetter.camelcase-underscore"
+					not-null="true" foreign-key="FK_SeatMapLocation_BusinessUnit"/>
+		<filter name="businessUnitFilter"
+						condition=":businessUnitParameter = BusinessUnit" />
 		
 	</class>
 	
