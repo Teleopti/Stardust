@@ -480,7 +480,7 @@ INSERT #person_intervals
 --a) insert agent statistics matching scheduled time
 INSERT #result(shift_startdate_id,shift_startdate,date_id,date,interval_id,interval_name,intervals_per_day,site_id,site_name,team_id,team_name,person_code,person_id,
 person_first_name,person_last_name,person_name,deviation_s,ready_time_s,is_logged_in,activity_id,absence_id,adherence_calc_s,
-adherence_type_selected,hide_time_zone,count_activity_per_interval)
+adherence_type_selected,hide_time_zone,count_activity_per_interval, shift_interval_id)
 	SELECT	b1.date_id,
 			b1.date_date,
 			d.date_id,
@@ -513,7 +513,8 @@ adherence_type_selected,hide_time_zone,count_activity_per_interval)
 			END AS 'adherence_calc_s',
 			@selected_adherence_type,
 			@hide_time_zone,
-			isnull(count_activity_per_interval,2) --fake a mixed shift = white color	
+			isnull(count_activity_per_interval,2), --fake a mixed shift = white color	
+			b1.local_interval_id
 	FROM mart.dim_person p
 	INNER JOIN #fact_schedule fs
 		ON fs.person_id=p.person_id
@@ -537,7 +538,7 @@ ORDER BY p.site_id,p.team_id,p.person_id,p.person_name,b1.date_id,b1.date_date,d
 --b) insert agent statistics outside shift
 INSERT #result(shift_startdate_id,shift_startdate,date_id,date,interval_id,interval_name,intervals_per_day,site_id,site_name,team_id,team_name,person_code,person_id,
 person_first_name,person_last_name,person_name,deviation_s,ready_time_s,is_logged_in,activity_id,absence_id,adherence_calc_s,
-adherence_type_selected,hide_time_zone,count_activity_per_interval)
+adherence_type_selected,hide_time_zone,count_activity_per_interval, shift_interval_id)
 	SELECT	b1.date_id,
 			b1.date_date,
 			d.date_id,
@@ -570,7 +571,8 @@ adherence_type_selected,hide_time_zone,count_activity_per_interval)
 			END AS 'adherence_calc_s',
 			@selected_adherence_type,
 			@hide_time_zone,
-			2 --fake a mixed shift = white color	
+			2, --fake a mixed shift = white color	
+			b1.local_interval_id
 	FROM mart.dim_person p
 	INNER JOIN #fact_schedule_deviation fsd
 		ON fsd.person_id=p.person_id
@@ -691,58 +693,56 @@ FROM #result  r
 INNER JOIN mart.dim_activity a on a.activity_id =-1
 WHERE r.count_activity_per_interval >1
 
+--set min_shiftstart to local_shift_startinterval
+UPDATE #result 
+SET person_min_shiftstart_interval= shift_interval_id
 
---maximum and minimum intervals check
-update #result
-set shift_interval_id= interval_id
+UPDATE #result 
+SET person_max_shiftend_interval= interval_id
 
-IF @sort_by=3
-update #result
-set shift_interval_id=abs(0-interval_id)
-where shift_startdate_id<>date_id
+--for shifts covering midnight add 1 day x n intervals
+UPDATE #result 
+SET person_max_shiftend_interval= interval_id+intervals_per_day
+WHERE shift_startdate<>[date]
 
-IF @sort_by=5
-update #result
-set shift_interval_id=interval_id+intervals_per_day
-where shift_startdate_id<>date_id
 
 INSERT INTO #minmax(minint,maxint,person_id,shift_startdate_id)
 SELECT min(minint),max(maxint),person_id,shift_startdate_id
 FROM (
-	SELECT  min(r.shift_interval_id) minint ,max(r.shift_interval_id) maxint, person_id, shift_startdate_id
+	SELECT  min(r.shift_interval_id) minint ,max(r.person_max_shiftend_interval) maxint, person_id, shift_startdate_id
 	FROM #result r
 	WHERE (r.activity_id <> -1 or r.absence_id <> -1)
 	GROUP BY shift_startdate_id,person_id
 	UNION ALL
-	SELECT  min(r.shift_interval_id) minint ,max(r.shift_interval_id) maxint, person_id, shift_startdate_id
+	SELECT  min(r.shift_interval_id) minint ,max(r.person_max_shiftend_interval) maxint, person_id, shift_startdate_id
 	FROM #result r
 	WHERE (r.activity_id = -1 AND r.absence_id = -1) --Only stats exists
 	GROUP BY shift_startdate_id,person_id
 ) a
 GROUP BY shift_startdate_id,person_id
 
-UPDATE #result 
-SET person_min_shiftstart_interval= minint
-FROM #minmax 
-INNER JOIN #result ON #result.shift_startdate_id=#minmax.shift_startdate_id AND #result.person_id=#minmax.person_id
+--SKIP THIS FOR NOW
+--UPDATE #result 
+--SET person_min_shiftstart_interval= minint
+--FROM #minmax 
+--INNER JOIN #result ON #result.shift_startdate_id=#minmax.shift_startdate_id AND #result.person_id=#minmax.person_id
 
 UPDATE #result 
 SET person_max_shiftend_interval= maxint
 FROM #minmax 
 INNER JOIN #result ON #result.shift_startdate_id=#minmax.shift_startdate_id AND #result.person_id=#minmax.person_id
 
---add unique id per date_id and interval_id
+--add unique id per date_id and interval_id(for display sorting)
 INSERT #counter(date_id,interval_id)
-select distinct date_id,interval_id
-from #result
-order by date_id,interval_id
+SELECT DISTINCT date_id,interval_id
+FROM #result
+ORDER BY date_id,interval_id
 
-update #result
-set date_interval_counter=c.date_interval_counter
-from #counter c inner join #result r on r.date_id=c.date_id AND r.interval_id=c.interval_id
+UPDATE #result
+SET date_interval_counter=c.date_interval_counter
+FROM #counter c INNER JOIN #result r on r.date_id=c.date_id AND r.interval_id=c.interval_id
 
-
--- Sortering 1=FirstName,2=LastName,3=Shift_start,4=Adherence,5=ShiftEnd 6=Date
+-- Sorting 1=FirstName,2=LastName,3=Shift_start,4=Adherence,5=ShiftEnd 6=Date
 -- NOTE: If you change the column order/name you need to consider SDK DTO as well!
 
 
