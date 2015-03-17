@@ -89,7 +89,7 @@ namespace Teleopti.Ccc.DomainTest.Security
                         <property name=""connection.driver_class"">NHibernate.Driver.SqlClientDriver</property>
                         <property name=""connection.connection_string"">very secret connection string</property>
                         <property name=""show_sql"">false</property> 
-                        <property name=""dialect"">NHibernate.Dialect.MsSql2005Dialect</property>
+                        <property name=""dialect"">NHibernate.Dialect.MsSql2008Dialect</property>
                         <property name=""use_outer_join"">true</property>
                         <property name=""default_schema"">nhtest2.dbo</property>
                       </session-factory >

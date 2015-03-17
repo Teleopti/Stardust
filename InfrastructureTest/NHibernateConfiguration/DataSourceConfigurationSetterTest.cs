@@ -1,5 +1,6 @@
 ﻿using System.Collections.Specialized;
 using NHibernate.Cfg;
+using NHibernate.Dialect;
 using NUnit.Framework;
 using Rhino.Mocks;
 using SharpTestsEx;
@@ -19,7 +20,7 @@ namespace Teleopti.Ccc.InfrastructureTest.NHibernateConfiguration
 			var target = new dataSourceConfigurationSetterForTest(true, true, string.Empty, null, new ConfigReader());
 			target.AddDefaultSettingsTo(cfg);
 
-			cfg.GetProperty(Environment.Dialect).Should().Be.EqualTo("NHibernate.Dialect.MsSql2005Dialect");
+			cfg.GetProperty(Environment.Dialect).Should().Be.EqualTo(typeof(MsSql2008Dialect).AssemblyQualifiedName);
 			cfg.GetProperty(Environment.ConnectionProvider).Should().Be.EqualTo(typeof(TeleoptiDriverConnectionProvider).AssemblyQualifiedName);
 			cfg.GetProperty(Environment.DefaultSchema).Should().Be.EqualTo("dbo");
 			cfg.GetProperty(Environment.SessionFactoryName).Should().Be.EqualTo("[not set]");
@@ -157,7 +158,7 @@ namespace Teleopti.Ccc.InfrastructureTest.NHibernateConfiguration
 			{
 				cfg.SetProperty(key, cfgValue);
 			}
-			cfg.SetProperty(Environment.Dialect, "NHibernate.Dialect.MsSql2005Dialect");
+			cfg.SetProperty(Environment.Dialect, typeof(MsSql2008Dialect).AssemblyQualifiedName);
 			var target = new dataSourceConfigurationSetterForTest(false, false, null, null, new ConfigReader());
 			target.AddDefaultSettingsTo(cfg);
 			foreach (var key in keys)
@@ -169,7 +170,7 @@ namespace Teleopti.Ccc.InfrastructureTest.NHibernateConfiguration
 		[Test]
 		public void ShouldNotChangeDefinedDialect()
 		{
-			const string dialect = "NHibernate.Dialect.MsSql2008Dialect";
+			var dialect = typeof(MsSql2008Dialect).AssemblyQualifiedName;
 			var cfg = new Configuration();
 			cfg.SetProperty(Environment.Dialect, dialect);
 			var target = new dataSourceConfigurationSetterForTest(false, false, null, null, new ConfigReader());

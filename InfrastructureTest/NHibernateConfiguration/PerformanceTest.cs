@@ -1,5 +1,6 @@
 ﻿using System.Text;
 using NHibernate.Cfg;
+using NHibernate.Dialect;
 using NUnit.Framework;
 using Teleopti.Ccc.Domain.Common;
 using Environment = System.Environment;
@@ -13,7 +14,7 @@ namespace Teleopti.Ccc.InfrastructureTest.NHibernateConfiguration
 		public void ShouldMapEntityIdToProperty()
 		{
 			var nhCfg = new Configuration()
-				.SetProperty(NHibernate.Cfg.Environment.Dialect, "NHibernate.Dialect.MsSql2005Dialect")
+				.SetProperty(NHibernate.Cfg.Environment.Dialect, typeof(MsSql2008Dialect).AssemblyQualifiedName)
 				.AddAssembly(typeof(Person).Assembly);
 
 			var errOutput = new StringBuilder();

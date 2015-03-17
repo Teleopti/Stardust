@@ -141,7 +141,7 @@ namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork
 			ret.Add("connection.driver_class", "NHibernate.Driver.SqlClientDriver");
 			ret.Add("connection.connection_string", ConnectionStringHelper.ConnectionStringUsedInTests);
 			ret.Add("show_sql", "false");
-			ret.Add("dialect", "NHibernate.Dialect.MsSql2005Dialect");
+			ret.Add("dialect", "NHibernate.Dialect.MsSql2008Dialect");
 
 			return ret;
 		}
@@ -161,7 +161,7 @@ namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork
 			ConnectionStringHelper.ConnectionStringUsedInTests,
 				 @"</property>
 								<property name=""show_sql"">false</property> 
-								<property name=""dialect"">NHibernate.Dialect.MsSql2005Dialect</property>
+								<property name=""dialect"">NHibernate.Dialect.MsSql2008Dialect</property>
 								<property name=""default_schema"">nhtest2.dbo</property>
 							 </session-factory >
 						  </hibernate-configuration>
@@ -185,7 +185,7 @@ namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork
 			ConnectionStringHelper.ConnectionStringUsedInTests,
 				 @"</property>
 								<property name=""show_sql"">false</property> 
-								<property name=""dialect"">NHibernate.Dialect.MsSql2005Dialect</property>
+								<property name=""dialect"">NHibernate.Dialect.MsSql2008Dialect</property>
 								<property name=""default_schema"">nhtest2.dbo</property>
 							 </session-factory >
 						  </hibernate-configuration>
@@ -212,7 +212,7 @@ namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork
 			ConnectionStringHelper.NonValidConnectionStringUsedInTests,
 				 @"</property>
 								<property name=""show_sql"">false</property> 
-								<property name=""dialect"">NHibernate.Dialect.MsSql2005Dialect</property>
+								<property name=""dialect"">NHibernate.Dialect.MsSql2008Dialect</property>
 								<property name=""default_schema"">nhtest2.dbo</property>
 							 </session-factory >
 						  </hibernate-configuration>

@@ -6,8 +6,8 @@ using System.Linq;
 using log4net;
 using NHibernate;
 using NHibernate.Cfg;
+using NHibernate.Dialect;
 using Teleopti.Ccc.Domain.Helper;
-using Teleopti.Ccc.Domain.Security.Authentication;
 using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.Infrastructure.LiteUnitOfWork;
 using Teleopti.Ccc.Infrastructure.NHibernateConfiguration;
@@ -165,7 +165,7 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 						 .SetProperty(Environment.ConnectionString, connectionString)
 						 .SetProperty(Environment.ConnectionProvider, "NHibernate.Connection.DriverConnectionProvider")
 						 .SetProperty(Environment.ConnectionDriver, "NHibernate.Driver.SqlClientDriver")
-						 .SetProperty(Environment.Dialect, "NHibernate.Dialect.MsSql2005Dialect")
+						 .SetProperty(Environment.Dialect, typeof(MsSql2008Dialect).AssemblyQualifiedName)
 						 .SetProperty(Environment.SessionFactoryName, AnalyticsDataSourceName)
 						 .SetProperty(Environment.SqlExceptionConverter, typeof(SqlServerExceptionConverter).AssemblyQualifiedName);
 				_dataSourceConfigurationSetter.AddApplicationNameToConnectionString(statCfg);

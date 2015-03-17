@@ -38,7 +38,7 @@ namespace Teleopti.Ccc.ApplicationConfig.Common
                            {"connection.provider", "NHibernate.Connection.DriverConnectionProvider" },
                            {"connection.connection_string", _commandLineArgument.DestinationConnectionString},
                            {"show_sql", "false"},
-                           {"dialect", "NHibernate.Dialect.MsSql2005Dialect"},
+                           {"dialect", "NHibernate.Dialect.MsSql2008Dialect"},
                            {"adonet.batch_size", "50"},
                            {Environment.CurrentSessionContextClass, "thread_static"},
                            {"connection.driver_class", "NHibernate.Driver.SqlClientDriver"},

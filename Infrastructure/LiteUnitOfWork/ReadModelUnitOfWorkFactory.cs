@@ -1,6 +1,7 @@
 ﻿using System;
 using NHibernate;
 using NHibernate.Cfg;
+using NHibernate.Dialect;
 using Teleopti.Ccc.Infrastructure.Web;
 using Teleopti.Interfaces.Infrastructure;
 
@@ -22,7 +23,7 @@ namespace Teleopti.Ccc.Infrastructure.LiteUnitOfWork
 		{
 			var configuration = new Configuration();
 			configuration.SetProperty(NHibernate.Cfg.Environment.ConnectionString, _connectionString);
-			configuration.SetProperty(NHibernate.Cfg.Environment.Dialect, "NHibernate.Dialect.MsSql2005Dialect");
+			configuration.SetProperty(NHibernate.Cfg.Environment.Dialect, typeof(MsSql2008Dialect).AssemblyQualifiedName);
 			_sessionFactory = configuration.BuildSessionFactory();
 		}
 

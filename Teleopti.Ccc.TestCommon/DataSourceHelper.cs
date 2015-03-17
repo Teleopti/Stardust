@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
 using Newtonsoft.Json;
+using NHibernate.Dialect;
 using Teleopti.Ccc.DBManager.Library;
 using Teleopti.Ccc.Domain.Auditing;
 using Teleopti.Ccc.Infrastructure.NHibernateConfiguration;
@@ -55,7 +56,7 @@ namespace Teleopti.Ccc.TestCommon
 				dictionary[NHibernate.Cfg.Environment.SessionFactoryName] = sessionFactoryName;
 			dictionary[NHibernate.Cfg.Environment.ConnectionProvider] =
 				"Teleopti.Ccc.Infrastructure.NHibernateConfiguration.TeleoptiDriverConnectionProvider, Teleopti.Ccc.Infrastructure";
-			dictionary[NHibernate.Cfg.Environment.Dialect] = "NHibernate.Dialect.MsSql2005Dialect";
+			dictionary[NHibernate.Cfg.Environment.Dialect] = typeof(MsSql2008Dialect).AssemblyQualifiedName;
 			dictionary[NHibernate.Cfg.Environment.ConnectionString] = connectionString;
 			dictionary[NHibernate.Cfg.Environment.SqlExceptionConverter] = typeof(SqlServerExceptionConverter).AssemblyQualifiedName;
 			dictionary[NHibernate.Cfg.Environment.CurrentSessionContextClass] = "call";

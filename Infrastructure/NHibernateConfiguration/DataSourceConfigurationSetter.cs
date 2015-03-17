@@ -1,5 +1,6 @@
 ﻿using System.Data.SqlClient;
 using NHibernate.Cfg;
+using NHibernate.Dialect;
 using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Interfaces.Infrastructure;
 using Environment = NHibernate.Cfg.Environment;
@@ -65,7 +66,7 @@ namespace Teleopti.Ccc.Infrastructure.NHibernateConfiguration
 
 		public void AddDefaultSettingsTo(Configuration nhConfiguration)
 		{
-			nhConfiguration.SetPropertyIfNotAlreadySet(Environment.Dialect, "NHibernate.Dialect.MsSql2005Dialect");
+			nhConfiguration.SetPropertyIfNotAlreadySet(Environment.Dialect, typeof(MsSql2008Dialect).AssemblyQualifiedName);
 			nhConfiguration.SetPropertyIfNotAlreadySet(Environment.ConnectionProvider, typeof(TeleoptiDriverConnectionProvider).AssemblyQualifiedName);
 			nhConfiguration.SetPropertyIfNotAlreadySet(Environment.DefaultSchema, "dbo");
 			nhConfiguration.SetNamingStrategy(TeleoptiDatabaseNamingStrategy.Instance);
