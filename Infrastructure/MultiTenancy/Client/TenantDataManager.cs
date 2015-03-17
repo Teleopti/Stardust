@@ -33,13 +33,13 @@ namespace Teleopti.Ccc.Infrastructure.MultiTenancy.Client
 		public void SaveTenantData(IEnumerable<TenantAuthenticationData> tenantAuthenticationData)
 		{
 			var json = _jsonSerializer.SerializeObject(tenantAuthenticationData);
-			_postHttpRequest.Send<object>(_pathToTenantServer + "PersonInfo/Persist", null, json);
+			_postHttpRequest.Send<object>(_pathToTenantServer + "PersonInfo/Persist", json);
 		}
 
 		public void DeleteTenantPersons(IEnumerable<Guid> personsToBeDeleted)
 		{
 			var json = _jsonSerializer.SerializeObject(personsToBeDeleted);
-			_postHttpRequest.Send<object>(_pathToTenantServer + "PersonInfo/Persist", null, json);
+			_postHttpRequest.Send<object>(_pathToTenantServer + "PersonInfo/Persist", json);
 		}
 	}
 

@@ -22,7 +22,7 @@ namespace Teleopti.Ccc.InfrastructureTest.MultiTenancy.Client
 			var target = new TenantDataManager(pathToTenantServer, postHttpRequest, jsonSerializer);
 			target.DeleteTenantPersons(personIds);
 
-			postHttpRequest.AssertWasCalled(x => x.Send<object>(pathToTenantServer + "PersonInfo/Persist", null, serializedPersonIds));
+			postHttpRequest.AssertWasCalled(x => x.Send<object>(pathToTenantServer + "PersonInfo/Persist", serializedPersonIds));
 		}
 
 		[Test]
@@ -37,7 +37,7 @@ namespace Teleopti.Ccc.InfrastructureTest.MultiTenancy.Client
 			var target = new TenantDataManager(pathToTenantServer, postHttpRequest, jsonSerializer);
 			target.SaveTenantData(authDatas);
 
-			postHttpRequest.AssertWasCalled(x => x.Send<object>(pathToTenantServer + "PersonInfo/Persist", null, serializedAuthDatas));
+			postHttpRequest.AssertWasCalled(x => x.Send<object>(pathToTenantServer + "PersonInfo/Persist", serializedAuthDatas));
 		}
 	}
 }

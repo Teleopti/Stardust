@@ -2,6 +2,6 @@
 {
 	public interface IPostHttpRequest
 	{
-		T Send<T>(string url, string userAgent, string json);
+		T Send<T>(string url, string json, string userAgent = null);
 	}
 }
