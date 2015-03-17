@@ -1199,6 +1199,8 @@
     <Content Include="WFM\Gruntfile.js" />
     <Content Include="WFM\js\forecasting\forecasting.controller.js" />
     <Content Include="WFM\js\forecasting\forecasting.service.js" />
+    <Content Include="WFM\js\notification\notification.controller.js" />
+    <Content Include="WFM\js\notification\notification.service.js" />
     <Content Include="WFM\js\permissions\permissions.controller.js" />
     <Content Include="WFM\js\permissions\permissions.service.js" />
     <Content Include="WFM\js\search\search.controller.js" />

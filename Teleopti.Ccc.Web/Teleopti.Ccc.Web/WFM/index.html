@@ -128,12 +128,11 @@
 				</label>
 			</div>
 			</div>
-		<div class="sidenav material-depth-1 right" ng-hide="toggleRightSide">
+		<div class="sidenav material-depth-1 right" ng-hide="toggleRightSide" ng-controller="NotificationCtrl">
 			<div>
 				<a href="#"><div class="wfm-block sidenav-header">Notifications</div></a>
-				<ul class="notification-list">
-					<li><i class="mdi mdi-alert-circle"></i>Notifications are great!</li>
-					<li><i class="mdi mdi-alert-circle"></i>Have another one.</li>
+				<ul class="notification-list" ng-repeat="item in notifications">
+					<li><i class="mdi mdi-alert-circle"></i>{{item}}</li>
 				</ul>
 			</div>
 			<div>

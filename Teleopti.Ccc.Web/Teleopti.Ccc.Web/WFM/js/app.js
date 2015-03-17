@@ -8,11 +8,13 @@ var wfm = angular.module('wfm', [
     'angularMoment',
 	'restService',
 	'restSearchService',
+	'restNotificationService',
 	'forecastingService',
 	'wfmCtrls',
 	'wfm.permissions',
 	'wfm.forecasting',
-	'wfm.searching'
+	'wfm.searching',
+	'wfm.notifications'
 ]);
 wfm.config(['$stateProvider', '$urlRouterProvider',function ($stateProvider, $urlRouterProvider) {
 	$urlRouterProvider.otherwise("forecasting");
