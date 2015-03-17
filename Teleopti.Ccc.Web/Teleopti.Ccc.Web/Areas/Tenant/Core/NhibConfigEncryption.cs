@@ -4,11 +4,6 @@ using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.Web.Areas.Tenant.Core
 {
-	public interface INhibConfigurationEncryption
-	{
-		DataSourceConfiguration EncryptConfig(DataSourceConfiguration dataSourceConfig);
-		DataSourceConfiguration DecryptConfig(DataSourceConfiguration dataSourceConfig);
-	}
 	public class NhibConfigurationEncryption : INhibConfigurationEncryption
 	{
 		public DataSourceConfiguration EncryptConfig(DataSourceConfiguration dataSourceConfig)
@@ -22,13 +17,6 @@ namespace Teleopti.Ccc.Web.Areas.Tenant.Core
 						EncryptionConstants.Image2)
 			};
 			return ret;
-		}
-
-		public DataSourceConfiguration DecryptConfig(DataSourceConfiguration dataSourceConfig)
-		{
-			dataSourceConfig.ApplicationNHibernateConfig.DecryptDictionary(EncryptionConstants.Image1, EncryptionConstants.Image2);
-			dataSourceConfig.AnalyticsConnectionString = Encryption.DecryptStringFromBase64(dataSourceConfig.AnalyticsConnectionString, EncryptionConstants.Image1, EncryptionConstants.Image2);
-			return dataSourceConfig;
 		}
 	}
 }

@@ -37,12 +37,6 @@ namespace Teleopti.Ccc.WebTest.Areas.Tenant.Core
 			dataSourceConfig.AnalyticsConnectionString.Should().Be.EqualTo(encryptedThree);
 			dataSourceConfig.ApplicationNHibernateConfig["key1"].Should().Be.EqualTo(encryptedOne);
 			dataSourceConfig.ApplicationNHibernateConfig["key2"].Should().Be.EqualTo(encryptedTwo);
-
-			dataSourceConfig = _target.DecryptConfig(dataSourceConfig);
-
-			dataSourceConfig.AnalyticsConnectionString.Should().Be.EqualTo("a very secret connectionstring");
-			dataSourceConfig.ApplicationNHibernateConfig["key1"].Should().Be.EqualTo("some secret value");
-			dataSourceConfig.ApplicationNHibernateConfig["key2"].Should().Be.EqualTo("another secret value");
 		}
 
 	}

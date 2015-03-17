@@ -25,7 +25,7 @@ namespace Teleopti.Ccc.InfrastructureTest.MultiTenancy.Client
 			postHttpRequest.Stub(
 				x => x.Send<AuthenticationQueryResult>(pathToTenantServer + "Authenticate/ApplicationLogon", applicationLogonClientModelSerialized, userAgent))
 				.Return(authResult);
-			var nhibConfigEncryption = MockRepository.GenerateStub<INhibConfigEncryption>();
+			var nhibConfigEncryption = MockRepository.GenerateStub<INhibConfigDecryption>();
 			nhibConfigEncryption.Stub(x => x.DecryptConfig(authResult.DataSourceConfiguration));
 			var target = new AuthenticationQuerier(new TenantServerConfiguration(pathToTenantServer), nhibConfigEncryption, postHttpRequest, jsonSerializer);
 			target.TryApplicationLogon(applicationLogonClientModel, userAgent)
@@ -46,7 +46,7 @@ namespace Teleopti.Ccc.InfrastructureTest.MultiTenancy.Client
 			postHttpRequest.Stub(
 				x => x.Send<AuthenticationQueryResult>(pathToTenantServer + "Authenticate/IdentityLogon", logonClientModelSerialized, userAgent))
 					.Return(authResult);
-			var nhibConfigEncryption = MockRepository.GenerateStub<INhibConfigEncryption>();
+			var nhibConfigEncryption = MockRepository.GenerateStub<INhibConfigDecryption>();
 			nhibConfigEncryption.Stub(x => x.DecryptConfig(authResult.DataSourceConfiguration));
 			var target = new AuthenticationQuerier(new TenantServerConfiguration(pathToTenantServer), nhibConfigEncryption, postHttpRequest, jsonSerializer);
 			target.TryIdentityLogon(logonClientModel, userAgent)

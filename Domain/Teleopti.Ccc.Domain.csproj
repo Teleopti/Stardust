@@ -1512,7 +1512,7 @@
     <Compile Include="Security\AuthorizationEntities\ApplicationFunctionsProvider.cs" />
     <Compile Include="Security\AuthorizationEntities\IApplicationFunctionsProvider.cs" />
     <Compile Include="Security\AuthorizationEntities\SystemFunction.cs" />
-    <Compile Include="Security\INhibConfigEncryption.cs" />
+    <Compile Include="Security\INhibConfigDecryption.cs" />
     <Compile Include="Security\Authentication\AuthenticationResult.cs" />
     <Compile Include="Security\Authentication\AvailableBusinessUnitsProvider.cs" />
     <Compile Include="Security\Authentication\ChangePasswordResultInfo.cs" />
@@ -1584,7 +1584,7 @@
     <Compile Include="Security\MultiTenancyAuthentication\AuthenticationQueryResult.cs" />
     <Compile Include="Security\MultiTenancyAuthentication\IAuthenticationQuerier.cs" />
     <Compile Include="Security\MultiTenancyAuthentication\IdentityLogonClientModel.cs" />
-    <Compile Include="Security\NhibConfigEncryption.cs" />
+    <Compile Include="Security\NhibConfigDecryption.cs" />
     <Compile Include="Security\OneWayEncryption.cs">
       <SubType>Code</SubType>
     </Compile>

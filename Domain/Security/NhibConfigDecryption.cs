@@ -4,9 +4,9 @@ using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.Domain.Security
 {
-	public class NhibConfigEncryption : INhibConfigEncryption
+	public class NhibConfigDecryption : INhibConfigDecryption
 	{
-		public DataSourceConfig EncryptConfig(DataSourceConfig dataSourceConfig)
+		public DataSourceConfig EncryptConfigJustForTest(DataSourceConfig dataSourceConfig)
 		{
 			var dic = dataSourceConfig.ApplicationNHibernateConfig.Keys.ToDictionary(key => key, key => Encryption.EncryptStringToBase64(dataSourceConfig.ApplicationNHibernateConfig[key], EncryptionConstants.Image1, EncryptionConstants.Image2));
 			dataSourceConfig.ApplicationNHibernateConfig = dic;

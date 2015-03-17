@@ -14,7 +14,7 @@ namespace Teleopti.Ccc.DomainTest.Security
 		[Test]
 		public void ShouldEncryptAndDecryptValues()
 		{
-			var target = new NhibConfigEncryption();
+			var target = new NhibConfigDecryption();
 
 			var dic = new Dictionary<string, string>
 			{
@@ -33,7 +33,7 @@ namespace Teleopti.Ccc.DomainTest.Security
 			var encryptedTwo = Encryption.EncryptStringToBase64(dic["key2"], EncryptionConstants.Image1, EncryptionConstants.Image2);
 			var encryptedThree = Encryption.EncryptStringToBase64("a very secret connectionstring", EncryptionConstants.Image1, EncryptionConstants.Image2);
 
-			dataSourceConfig = target.EncryptConfig(dataSourceConfig);
+			dataSourceConfig = target.EncryptConfigJustForTest(dataSourceConfig);
 
 			dataSourceConfig.AnalyticsConnectionString.Should().Be.EqualTo(encryptedThree);
 			dataSourceConfig.ApplicationNHibernateConfig["key1"].Should().Be.EqualTo(encryptedOne);
@@ -49,7 +49,7 @@ namespace Teleopti.Ccc.DomainTest.Security
 		[Test]
 		public void ShouldNotTryToDecryptNullValue()
 		{
-			var target = new NhibConfigEncryption();
+			var target = new NhibConfigDecryption();
 			Assert.DoesNotThrow(() => target.DecryptConfig(null));
 		}
 	}

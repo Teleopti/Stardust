@@ -29,7 +29,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 				builder.RegisterType<AuthenticationFromFileQuerier>().As<IAuthenticationQuerier>().SingleInstance();
 			}
 			builder.RegisterType<PostHttpRequest>().As<IPostHttpRequest>().SingleInstance();
-			builder.RegisterType<NhibConfigEncryption>().As<INhibConfigEncryption>().SingleInstance();
+			builder.RegisterType<NhibConfigDecryption>().As<INhibConfigDecryption>().SingleInstance();
 
 			var configServer = _configuration.Args().ConfigServer;
 			if(isRunFromTest(configServer) || configServer.IsAnUrl())
