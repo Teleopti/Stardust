@@ -155,6 +155,29 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 			var @event = Publisher.PublishedEvents.OfType<PersonActivityStartEvent>().Single();
 			@event.InAdherence.Should().Be(false);
 		}
+
+		[Test]
+		public void ShouldPublishWithOutAdherence2()
+		{
+			var personId = Guid.NewGuid();
+			var activityId = Guid.NewGuid();
+			var businessUnitId = Guid.NewGuid();
+			Database
+				.WithBusinessUnit(businessUnitId)
+				.WithUser("usercode", personId, businessUnitId)
+				.WithSchedule(personId, activityId, "phone", "2014-10-20 10:00", "2014-10-20 11:00")
+				.WithAlarm("statecode", activityId, 1);
+			Now.Is("2014-10-20 10:02");
+
+			Target.SaveState(new ExternalUserStateForTest
+			{
+				UserCode = "usercode",
+				StateCode = "statecode"
+			});
+
+			var @event = Publisher.PublishedEvents.OfType<PersonActivityStartEvent>().Single();
+			@event.InAdherence.Should().Be(false);
+		}
 		
 		[Test]
 		[Toggle(Toggles.RTA_NeutralAdherence_30930)]

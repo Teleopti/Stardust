@@ -1,9 +1,11 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Domain;
 using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta.Performance;
+using Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Interfaces.Domain;
@@ -20,6 +22,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ReadModelUpdaters
 		private readonly IAdherenceDetailsReadModelPersister _persister;
 		private readonly ILiteTransactionSyncronization _liteTransactionSyncronization;
 		private readonly IPerformanceCounter _performanceCounter;
+		private readonly IComparer<AdherenceState> _adherenceComparer; 
 
 		public AdherenceDetailsReadModelUpdater(
 			IAdherenceDetailsReadModelPersister persister,
@@ -29,6 +32,15 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ReadModelUpdaters
 			_persister = persister;
 			_liteTransactionSyncronization = liteTransactionSyncronization;
 			_performanceCounter = performanceCounter;
+			_adherenceComparer = new AdherenceStateComparer_DeclarationOrderIsNotToBeTrusted();
+		}
+
+
+		private static AdherenceState adherenceFor(dynamic @event)
+		{
+			if (@event.Adherence != null)
+				return @event.Adherence;
+			return @event.InAdherence ? AdherenceState.In : AdherenceState.Out;
 		}
 
 		[ReadModelUnitOfWork]
@@ -48,7 +60,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ReadModelUpdaters
 				{
 					incrementLastUpdate(s, @event.StartTime);
 					addActivity(s, @event.StartTime, @event.Name);
-					addAdherence(s, @event.StartTime, @event.InAdherence);
+					addAdherence(s, @event.StartTime, adherenceFor(@event));
 				});
 		}
 
@@ -62,7 +74,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ReadModelUpdaters
 				s =>
 				{
 					incrementLastUpdate(s, @event.Timestamp);
-					addAdherence(s, @event.Timestamp, @event.InAdherence);
+					addAdherence(s, @event.Timestamp, adherenceFor(@event));
 					if (s.ShiftEndTime.HasValue)
 						if (!s.FirstStateChangeOutOfAdherenceWithLastActivity.HasValue)
 							if (!@event.InAdherenceWithPreviousActivity)
@@ -86,6 +98,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ReadModelUpdaters
 					s.ShiftEndTime = @event.ShiftEndTime;
 				});
 		}
+
 
 		private void handleEvent(Guid personId, DateOnly date, Action<AdherenceDetailsReadModelState> mutate)
 		{
@@ -131,7 +144,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ReadModelUpdaters
 				.ToArray();
 		}
 
-		private static void addAdherence(AdherenceDetailsReadModelState model, DateTime time, bool inAdherence)
+		private void addAdherence(AdherenceDetailsReadModelState model, DateTime time, AdherenceState adherence)
 		{
 			model.Adherence = model.Adherence
 				.Concat(new[]
@@ -139,11 +152,11 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ReadModelUpdaters
 					new AdherenceDetailsReadModelAdherenceState
 					{
 						Time = time,
-						InAdherence = inAdherence,
+						Adherence = adherence,
 					}
 				})
 				.OrderBy(x => x.Time)
-				.ThenBy(x => x.InAdherence)
+				.ThenBy(x => x.Adherence, _adherenceComparer)
 				.ToArray()
 				;
 
@@ -151,19 +164,19 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ReadModelUpdaters
 			removeRedundantOldAdherences(model);
 		}
 
-		private static void removeDuplicateAdherences(AdherenceDetailsReadModelState model)
+		private void removeDuplicateAdherences(AdherenceDetailsReadModelState model)
 		{
 			var duplicateByTime = model.Adherence
 				.Where(x => model.Adherence.Count(a => a.Time == x.Time) > 1)
 				.GroupBy(x => x.Time)
-				.Select(x => x.OrderBy(y => y.InAdherence).ExceptLast())
+				.Select(x => x.OrderBy(y => y.Adherence, _adherenceComparer).ExceptLast())
 				.SelectMany(x => x)
 				.ToArray()
 				;
 
 			model.Adherence = model.Adherence.Where(a => !duplicateByTime.Contains(a)).ToArray();
 		}
-
+		
 		private static void removeRedundantOldAdherences(AdherenceDetailsReadModelState model)
 		{
 			if (model.LastUpdate == DateTime.MinValue)
@@ -171,7 +184,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ReadModelUpdaters
 			var safeToRemoveOlderThan = model.LastUpdate.Subtract(TimeSpan.FromMinutes(10));
 			var safeToRemove = model.Adherence.Where(x => x.Time < safeToRemoveOlderThan).ToArray();
 			var keep = model.Adherence.Except(safeToRemove);
-			var cleaned = safeToRemove.TransitionsOf(x => x.InAdherence);
+			var cleaned = safeToRemove.TransitionsOf(x => x.Adherence);
 			model.Adherence = cleaned.Concat(keep).ToArray();
 		}
 
@@ -195,14 +208,14 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ReadModelUpdaters
 				return null;
 
 			var endingAdherenceOfLastActivity = model.State.Adherence
-				.TransitionsOf(x => x.InAdherence)
+				.TransitionsOf(x => x.Adherence)
 				.LastOrDefault(x =>
 					x.Time <= model.State.ShiftEndTime &&
 					x.Time >= model.State.Activities.Last().StartTime
 				);
 
 			if (endingAdherenceOfLastActivity != null)
-				if (!endingAdherenceOfLastActivity.InAdherence)
+				if (endingAdherenceOfLastActivity.Adherence == AdherenceState.Out)
 					return endingAdherenceOfLastActivity.Time;
 
 			if (model.State.FirstStateChangeOutOfAdherenceWithLastActivity.HasValue)
@@ -211,9 +224,16 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ReadModelUpdaters
 			return null;
 		}
 
-		private static bool calculateLastAdherence(AdherenceDetailsReadModel model)
+		private static bool? calculateLastAdherence(AdherenceDetailsReadModel model)
 		{
-			return !model.State.Adherence.IsEmpty() && model.State.Adherence.Last().InAdherence;
+			if (!model.State.Adherence.IsEmpty())
+			{
+				if (model.State.Adherence.Last().Adherence == AdherenceState.In)
+					return true;
+				if (model.State.Adherence.Last().Adherence == AdherenceState.Out)
+					return false;
+			}
+			return null;
 		}
 
 		private static ActivityAdherence calculateActivity(AdherenceDetailsReadModel model, AdherenceDetailsReadModelActivityState activity)
@@ -230,25 +250,52 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ReadModelUpdaters
 
 		private static DateTime? calculateActualStartTimeForActivity(AdherenceDetailsReadModel model, AdherenceDetailsReadModelActivityState activity)
 		{
-			var adherenceTransitions = model.State.Adherence.TransitionsOf(x => x.InAdherence).ToArray();
+			var adherenceTransitions = model.State.Adherence.TransitionsOf(x => x.Adherence).ToArray();
 			var adherenceBefore = adherenceTransitions.LastOrDefault(x => x.Time < activity.StartTime);
 			var adherenceChange = adherenceTransitions.SingleOrDefault(x => x.Time == activity.StartTime);
 			var adherenceAfter = adherenceTransitions.FirstOrDefault(x => x.Time > activity.StartTime);
 
-			if (adherenceChange != null && adherenceAfter != null)
-				if (!adherenceChange.InAdherence && adherenceAfter.InAdherence)
-					return adherenceAfter.Time;
+			if (adherenceChange != null)
+			{
+				if (adherenceAfter != null)
+				{
+					if (adherenceChange.Adherence == AdherenceState.Out)
+						if (adherenceAfter.Adherence == AdherenceState.In || 
+							adherenceAfter.Adherence == AdherenceState.Neutral)
+							return adherenceAfter.Time;
 
-			if (adherenceChange != null && adherenceBefore != null)
-				if (adherenceChange.InAdherence && !adherenceBefore.InAdherence)
-					return adherenceBefore.Time;
+					if (adherenceChange.Adherence == AdherenceState.Neutral)
+						if (adherenceAfter.Adherence == AdherenceState.In)
+							return adherenceAfter.Time;
 
-			if (adherenceChange != null && adherenceBefore == null)
-				if (adherenceChange.InAdherence)
-					return adherenceChange.Time;
+					if (adherenceChange.Adherence == AdherenceState.In)
+						if (adherenceAfter.Adherence == AdherenceState.Neutral)
+							return adherenceAfter.Time;
+				}
+
+				if (adherenceBefore != null)
+				{
+					if (adherenceChange.Adherence == AdherenceState.In)
+						if (adherenceBefore.Adherence == AdherenceState.Out)
+							return adherenceBefore.Time;
+
+					if (adherenceChange.Adherence == AdherenceState.Neutral)
+						if (adherenceBefore.Adherence == AdherenceState.Out)
+							return adherenceBefore.Time;
+				}
+
+
+				if (adherenceBefore == null)
+				{
+					if (adherenceChange.Adherence == AdherenceState.In ||
+						adherenceChange.Adherence == AdherenceState.Neutral)
+						return adherenceChange.Time;
+				}
+				
+			}
 
 			if (adherenceChange == null && adherenceBefore != null)
-				if (adherenceBefore.InAdherence)
+				if (adherenceBefore.Adherence == AdherenceState.In)
 					return activity.StartTime;
 
 			return null;
@@ -261,7 +308,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ReadModelUpdaters
 				.WithPrevious()
 				.Aggregate(TimeSpan.Zero, (current, a) =>
 				{
-					if (a.Previous.InAdherence)
+					if (a.Previous.Adherence == AdherenceState.In)
 						return current + (a.This.Time - a.Previous.Time);
 					return current;
 				});
@@ -274,7 +321,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ReadModelUpdaters
 				.WithPrevious()
 				.Aggregate(TimeSpan.Zero, (current, a) =>
 				{
-					if (!a.Previous.InAdherence)
+					if (a.Previous.Adherence == AdherenceState.Out)
 						return current + (a.This.Time - a.Previous.Time);
 					return current;
 				});
@@ -311,7 +358,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ReadModelUpdaters
 				var activityStartAdherence = new AdherenceDetailsReadModelAdherenceState
 				{
 					Time = fromTime,
-					InAdherence = adherenceBefore.InAdherence
+					Adherence = adherenceBefore.Adherence
 				};
 				adherence = new[] { activityStartAdherence }.Concat(adherence).ToArray();
 			}
@@ -330,4 +377,49 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ReadModelUpdaters
 
 	}
 
+	/// <summary>
+	/// And specifying order is just ugly
+	/// Might be wrong, edge case stuff
+	/// </summary>
+	public class AdherenceStateComparer_DeclarationOrderIsNotToBeTrusted : IComparer<AdherenceState>
+	{
+		public int Compare(AdherenceState x, AdherenceState y)
+		{
+
+			if (x == y) return 0;
+
+			const int before = -1;
+			const int after = 1;
+			if (x == AdherenceState.Out && y == AdherenceState.In)
+				return before;
+			if (x == AdherenceState.Out && y == AdherenceState.Neutral)
+				return before;
+			if (x == AdherenceState.Out && y == AdherenceState.Unknown)
+				return before;
+
+			if (x == AdherenceState.Unknown && y == AdherenceState.Out)
+				return after;
+			if (x == AdherenceState.Unknown && y == AdherenceState.Neutral)
+				return before;
+			if (x == AdherenceState.Unknown && y == AdherenceState.In)
+				return before;
+
+			if (x == AdherenceState.Neutral && y == AdherenceState.Out)
+				return after;
+			if (x == AdherenceState.Neutral && y == AdherenceState.Unknown)
+				return after;
+			if (x == AdherenceState.Neutral && y == AdherenceState.In)
+				return before;
+			
+
+			if (x == AdherenceState.In && y == AdherenceState.Out)
+				return after;
+			if (x == AdherenceState.In && y == AdherenceState.Neutral)
+				return after;
+			if (x == AdherenceState.In && y == AdherenceState.Unknown)
+				return after;
+
+			return 0;
+		}
+	}
 }

@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ReadModelUpdaters
@@ -13,6 +14,24 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ReadModelUpdaters
 		public AdherenceDetailsModel Model { get; set; }
 
 		public AdherenceDetailsReadModelState State { get; set; }
+	}
+
+	public class AdherenceDetailsModel
+	{
+		public IEnumerable<ActivityAdherence> Activities { get; set; }
+		public DateTime? ShiftEndTime { get; set; }
+		public DateTime? ActualEndTime { get; set; }
+		public bool? LastAdherence { get; set; }
+		public DateTime? LastUpdate { get; set; }
+	}
+
+	public class ActivityAdherence
+	{
+		public string Name { get; set; }
+		public DateTime StartTime { get; set; }
+		public DateTime? ActualStartTime { get; set; }
+		public TimeSpan TimeInAdherence { get; set; }
+		public TimeSpan TimeOutOfAdherence { get; set; }
 	}
 
 	public class AdherenceDetailsReadModelState
@@ -31,33 +50,15 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ReadModelUpdaters
 		public DateTime LastUpdate { get; set; }
 	}
 
-	public class AdherenceDetailsReadModelAdherenceState
-	{
-		public DateTime Time { get; set; }
-		public bool InAdherence { get; set; }
-	}
-
 	public class AdherenceDetailsReadModelActivityState
 	{
 		public string Name { get; set; }
 		public DateTime StartTime { get; set; }
 	}
 
-	public class AdherenceDetailsModel
+	public class AdherenceDetailsReadModelAdherenceState
 	{
-		public IEnumerable<ActivityAdherence> Activities { get; set; }
-		public DateTime? ShiftEndTime { get; set; }
-		public DateTime? ActualEndTime { get; set; }
-		public bool LastAdherence { get; set; }
-		public DateTime? LastUpdate { get; set; }
-	}
-
-	public class ActivityAdherence
-	{
-		public string Name { get; set; }
-		public DateTime StartTime { get; set; }
-		public DateTime? ActualStartTime { get; set; }
-		public TimeSpan TimeInAdherence { get; set; }
-		public TimeSpan TimeOutOfAdherence { get; set; }
+		public DateTime Time { get; set; }
+		public AdherenceState Adherence { get; set; }
 	}
 }
