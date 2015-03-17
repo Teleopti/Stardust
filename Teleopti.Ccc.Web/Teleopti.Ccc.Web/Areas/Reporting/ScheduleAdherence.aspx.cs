@@ -81,7 +81,14 @@ namespace Teleopti.Ccc.Web.Areas.Reporting
 					labelPermissionDenied.Text = Resources.ResPermissionDenied;
 					Page.Header.Title = Resources.ResPermissionDenied;
 				}
+				
 			}
+		}
+
+		protected override void OnLoadComplete(EventArgs e)
+		{
+			base.OnLoadComplete(e);
+			buttonShowReport.Enabled = ParameterSelector.IsValid;
 		}
 
 		//private IList<SqlParameter> SessionParameters
@@ -1056,6 +1063,7 @@ namespace Teleopti.Ccc.Web.Areas.Reporting
 
 		protected void buttonShowTheReport(object sender, ImageClickEventArgs e)
 		{
+			if (!ParameterSelector.IsValid) return;
 			CheckParametersCollection();
 			CreateReport();
 			hideSelection(null,new ImageClickEventArgs(0,0));

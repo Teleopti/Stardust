@@ -55,6 +55,7 @@ namespace Teleopti.Ccc.Web.Areas.Reporting
 					labelPermissionDenied.Text = Resources.ResPermissionDenied;
 					Page.Header.Title = Resources.ResPermissionDenied;
 				}
+				
 			}
 		}
 
@@ -77,6 +78,14 @@ namespace Teleopti.Ccc.Web.Areas.Reporting
 
 		}
 
+		protected override void OnLoadComplete(EventArgs e)
+		{
+			base.OnLoadComplete(e);
+			buttonShowExcel.Enabled = ParameterSelector.IsValid;
+			buttonShowPdf.Enabled = ParameterSelector.IsValid;
+			buttonShowWord.Enabled = ParameterSelector.IsValid;
+		}
+
 		protected void ButtonShowClickPdf(object sender, ImageClickEventArgs e)
 		{
 			createReport("PDF");
@@ -94,6 +103,7 @@ namespace Teleopti.Ccc.Web.Areas.Reporting
 
 		private void createReport(string format)
 		{
+			if (!ParameterSelector.IsValid) return;
 			//aspnetForm.Target = "_blank";
 			var commonReports = new CommonReports(ParameterSelector.ConnectionString, ParameterSelector.ReportId);
 

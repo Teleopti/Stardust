@@ -108,7 +108,7 @@ namespace Teleopti.Analytics.Parameters
 
 			_dateValidator.ValidationExpression = regexp.ToString();
 			_dateValidator.ErrorMessage = Selector.ErrorMessageValText + " '" + Text + "'";
-
+			_dateValidator.EnableClientScript = false;
 
 			_buttonDate = new Image { ImageUrl="images/Calendar_scheduleHS.png", ImageAlign=ImageAlign.AbsMiddle, ID = "ButtonDate" + Dbid };
 			_buttonDate.Attributes.Add("name", "Selector_" + _buttonDate.ID);
@@ -231,6 +231,7 @@ namespace Teleopti.Analytics.Parameters
 			_dateValidator.RenderControl(writer);
 			
 			writer.RenderEndTag();
+			SetData();
 		}
 
 		private void textBoxTextChanged(object sender, EventArgs e)

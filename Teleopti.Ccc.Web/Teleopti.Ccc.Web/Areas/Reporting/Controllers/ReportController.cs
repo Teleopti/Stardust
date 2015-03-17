@@ -32,7 +32,7 @@ namespace Teleopti.Ccc.Web.Areas.Reporting.Controllers
 			commonReports.LoadReportInfo();
 			var name = "";
 			if (!string.IsNullOrEmpty(commonReports.ResourceKey))
-				Resources.ResourceManager.GetString(commonReports.ResourceKey);
+				name = Resources.ResourceManager.GetString(commonReports.ResourceKey, CultureInfo.CurrentUICulture);
 			if (string.IsNullOrEmpty(name))
 				name = commonReports.Name;
 			var helpUrl = string.Format(CultureInfo.InvariantCulture, "{0}/{1}", ConfigurationManager.AppSettings["HelpUrlOnline"], commonReports.HelpKey);
