@@ -37,11 +37,11 @@ namespace Teleopti.Ccc.DomainTest.DayOffPlanning
 			_daysOffPreferences.UseConsecutiveDaysOff = true;
 			_daysOffPreferences.ConsecutiveDaysOffValue = new MinMax<int>(1, 3);
 			_daysOffPreferences.UseConsecutiveWorkdays = true;
-			_daysOffPreferences.ConsecutiveWorkdaysValue = new MinMax<int>(2, 5);
+			_daysOffPreferences.ConsecutiveWorkdaysValue = new MinMax<int>(1, 5);
 			_daysOffPreferences.UseFullWeekendsOff = true;
-			_daysOffPreferences.FullWeekendsOffValue = new MinMax<int>(1, 1);
+			_daysOffPreferences.FullWeekendsOffValue = new MinMax<int>(3, 3);
 			_daysOffPreferences.UseWeekEndDaysOff = true;
-			_daysOffPreferences.WeekEndDaysOffValue = new MinMax<int>(2, 5);
+			_daysOffPreferences.WeekEndDaysOffValue = new MinMax<int>(6, 6);
 			var validators = _dayOffOptimizationLegalStateValidatorListCreator.BuildActiveValidatorList();
 			var result = _target.Execute(28, 8, validators);
 			Assert.That(result.Count > 0);

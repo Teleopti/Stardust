@@ -17,12 +17,14 @@ namespace Teleopti.Ccc.Domain.DayOffPlanning
 	{
 		private readonly Random _random = new Random();
 		private const int maxIterations = 1000;
+		private const int populationCount = 200;
+		private const int minIterations = 1000;
 
 		public HashSet<DayOffArray> Execute(int crLength, int numberOfDaysOff, IList<IDayOffLegalStateValidator> validatorList)
 		{
 			//randomly generate 100 stone age persons
-			var population = new List<DayOffArray>();
-			for (int i = 0; i < 100; i++)
+			var population = new HashSet<DayOffArray>();
+			for (int i = 0; i < populationCount; i++)
 			{
 				var workingArray = new DayOffArray(crLength);
 				var trueBits = 0;
@@ -41,13 +43,13 @@ namespace Teleopti.Ccc.Domain.DayOffPlanning
 			//calculate value for each person, value calculator will be important
 			calculateAndSetValues(validatorList, population);
 
-			for (int i = 2; i < 100; i++)
+			for (int i = 0; i < minIterations; i++)
 			{
 				//Debug.Print(i + " generation");
 				population = advanceOneGeneration(crLength, numberOfDaysOff, validatorList, population);
 			}
 
-			var iterations = 99;
+			var iterations = minIterations-1;
 			while (population.Count(v => v.Value() == numberOfDaysOff) == 0 && iterations < maxIterations)
 			{
 				population = advanceOneGeneration(crLength, numberOfDaysOff, validatorList, population);
@@ -57,15 +59,21 @@ namespace Teleopti.Ccc.Domain.DayOffPlanning
 			return new HashSet<DayOffArray>(population.Where(v => v.Value() == numberOfDaysOff));
 		}
 
-		private List<DayOffArray> advanceOneGeneration(int crLength, int numberOfDaysOff, IList<IDayOffLegalStateValidator> validatorList, List<DayOffArray> population)
+		private HashSet<DayOffArray> advanceOneGeneration(int crLength, int numberOfDaysOff, IList<IDayOffLegalStateValidator> validatorList, HashSet<DayOffArray> population)
 		{
-			var childPopulation = new List<DayOffArray>();
+			var childPopulation = new HashSet<DayOffArray>();
 			foreach (var parent in population)
 			{
-				if(parent.Value() == numberOfDaysOff)
-					continue;
+				if(parent.Value() != numberOfDaysOff)
+				{
+					childPopulation.Add(createClonedAndMutant(parent, crLength, numberOfDaysOff, 0));
+					childPopulation.Add(createClonedAndMutant(parent, crLength, numberOfDaysOff, 0));
+				}
 
-				childPopulation.Add(createClonedAndMutant(parent, crLength, numberOfDaysOff, 0));
+				
+				childPopulation.Add(createClonedAndMutant(parent, crLength, numberOfDaysOff, 1));
+				childPopulation.Add(createClonedAndMutant(parent, crLength, numberOfDaysOff, 2));
+				childPopulation.Add(createClonedAndMutant(parent, crLength, numberOfDaysOff, 3));
 				childPopulation.Add(createClonedAndMutant(parent, crLength, numberOfDaysOff, 1));
 				childPopulation.Add(createClonedAndMutant(parent, crLength, numberOfDaysOff, 2));
 				childPopulation.Add(createClonedAndMutant(parent, crLength, numberOfDaysOff, 3));
@@ -73,9 +81,17 @@ namespace Teleopti.Ccc.Domain.DayOffPlanning
 
 			//calculate value for each child, value calculator will be important
 			calculateAndSetValues(validatorList, childPopulation);
-			population.AddRange(childPopulation);
+			foreach (var dayOffArray in childPopulation)
+			{
+				population.Add(dayOffArray);
+			}
 			//kill everyone but the top 100 persons by value
-			population = population.OrderByDescending(v => v.Value()).Take(100).ToList();
+			var tmpList = population.OrderByDescending(v => v.Value()).ToList();
+			population.Clear();
+			for (int i = 0; i < populationCount; i++)
+			{
+				population.Add(tmpList[i]);
+			}
 			
 			return population;
 		}
@@ -127,7 +143,7 @@ namespace Teleopti.Ccc.Domain.DayOffPlanning
 			return child;
 		}
 
-		private void calculateAndSetValues(IList<IDayOffLegalStateValidator> validatorList, List<DayOffArray> population)
+		private void calculateAndSetValues(IList<IDayOffLegalStateValidator> validatorList, HashSet<DayOffArray> population)
 		{
 			foreach (var dayOffArray in population)
 			{

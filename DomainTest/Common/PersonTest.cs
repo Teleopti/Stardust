@@ -36,6 +36,16 @@ namespace Teleopti.Ccc.DomainTest.Common
             _target = new Person();
         }
 
+	    [Test]
+	    public void AddingNoteShouldBeTrimmed()
+	    {
+		    var person = PersonFactory.CreatePerson();
+		    person.Note = "   hej   ";
+			Assert.AreEqual("hej", person.Note);
+			person.Note = "         ";
+			Assert.IsTrue(string.IsNullOrEmpty(person.Note));
+	    }
+
         [Test]
         public void VerifyDefaultPropertiesAreSet()
         {

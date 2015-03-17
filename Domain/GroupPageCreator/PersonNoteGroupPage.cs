@@ -20,7 +20,7 @@ namespace Teleopti.Ccc.Domain.GroupPageCreator
         {
             //Loads all agents, i.e persons who has a team.
             var personGroups =
-                groupPageOptions.Persons.Where(person => !string.IsNullOrEmpty(person.Note) &&
+                groupPageOptions.Persons.Where(person => !string.IsNullOrWhiteSpace(person.Note) &&
                                                          person.PersonPeriods(groupPageOptions.SelectedPeriod).Count > 0)
                     .GroupBy(person => person.Note, StringComparer.Ordinal);
 

@@ -70,6 +70,17 @@ namespace Teleopti.Ccc.DomainTest.GroupPageCreator
             _groupPage = _obj.CreateGroupPage(null, new GroupPageOptions(_personCollection) { CurrentGroupPageName = _groupPageName, CurrentGroupPageNameKey = _groupPageNameKey });
         }
 
+	    [Test]
+	    public void ShouldHandleWhiteSpaceNote()
+	    {
+		    var person1 = PersonFactory.CreatePersonWithPersonPeriod(new DateOnly(2015,3,17));
+		    person1.Note = "              ";
+			var person2 = PersonFactory.CreatePersonWithPersonPeriod(new DateOnly(2015, 3, 17));
+		    person2.Note = "hej";
+			var options = new GroupPageOptions(new List<IPerson> { person1, person2 }) { CurrentGroupPageName = _groupPageName, CurrentGroupPageNameKey = _groupPageNameKey, SelectedPeriod = new DateOnlyPeriod(2015,3,17,2015,3,17)};
+			var groupPage = _obj.CreateGroupPage(new List<IPerson> { person1, person2 }, options);
+			Assert.AreEqual(1, groupPage.RootGroupCollection.Count);
+	    }
 
         /// <summary>
         /// Verifies the root person group count.

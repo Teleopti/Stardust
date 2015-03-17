@@ -364,7 +364,7 @@ namespace Teleopti.Ccc.Domain.Common
         public virtual string Note
         {
             get { return _note; }
-            set { _note = value; }
+            set { _note = value.Trim(); }
         }
 
         public virtual bool IsAgent(DateOnly theDate)
