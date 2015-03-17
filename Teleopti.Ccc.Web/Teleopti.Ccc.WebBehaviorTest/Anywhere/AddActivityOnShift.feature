@@ -108,6 +108,7 @@ Scenario: Prevent creation of second shift
 	Then I should see the alert 'Cannot Create Second Shift When Adding Activity'
 
 @ignore
+#hard to mock now under specific timezone
 Scenario: Default to next hour for today
 	Given I have the role 'Anywhere Team Green'
 	And the time is '2013-11-18 13:20'
