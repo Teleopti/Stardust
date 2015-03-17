@@ -728,6 +728,7 @@ namespace Teleopti.Ccc.Win.Permissions
 			this.toolStripTabItem1.Panel.Controls.Add(this.toolStripExClipboard);
 			this.toolStripTabItem1.Panel.Controls.Add(this.toolStripExRoles);
 			this.toolStripTabItem1.Panel.Controls.Add(this.toolStripExPersons);
+			this.toolStripTabItem1.Panel.Controls.Add(this.toolStripExViewer);
 			this.toolStripTabItem1.Panel.Margin = new System.Windows.Forms.Padding(0, 0, 4, 0);
 			this.toolStripTabItem1.Panel.Name = "ribbonPanel1";
 			this.toolStripTabItem1.Panel.Padding = new System.Windows.Forms.Padding(3, 1, 35, 0);
