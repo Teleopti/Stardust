@@ -35,10 +35,10 @@ namespace Teleopti.Ccc.Win.Sikuli
 						return new OptimizeBlockTeamValidator(schedulerState, totalSkill);
 
 					case SikuliValidatorRegister.OptimizeIntervalBalanceBefore:
-						return new IntervalBalanceBeforeValidator(schedulerState, totalSkill);
+						return new OptimizeAllOptionsOffIntradayBalanceBeforeValidator(schedulerState, totalSkill);
 
 					case SikuliValidatorRegister.OptimizeIntervalBalanceAfter:
-						return new IntervalBalanceAfterValidator(schedulerState, totalSkill);
+						return new OptimizeAllOptionsOffIntradayBalanceAfterValidator(schedulerState, totalSkill);
 
 					case SikuliValidatorRegister.Schedule:
 						return new SchedulerValidator(schedulerState, totalSkill);
@@ -48,6 +48,12 @@ namespace Teleopti.Ccc.Win.Sikuli
 
 					case SikuliValidatorRegister.ScheduleOvertimePeriod:
 						return new ScheduleOvertimePeriodValidator(schedulerState, totalSkill);
+
+					case SikuliValidatorRegister.ScheduleBlockSameShiftCategory :
+						return new ScheduleBlockSameShiftCategory(schedulerState, totalSkill);
+
+					case SikuliValidatorRegister.OptimizeBlockSameShiftCategory:
+						return new OptimizeBlockSameShiftCategory(schedulerState, totalSkill);
 
 					case SikuliValidatorRegister.TestPass:
 						return new PassValidator();
