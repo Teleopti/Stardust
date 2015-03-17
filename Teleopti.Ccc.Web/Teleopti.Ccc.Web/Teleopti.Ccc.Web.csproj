@@ -445,6 +445,7 @@
     <Compile Include="Areas\MyTime\Core\WeekSchedule\DataProvider\AbsenceRequestProbability.cs" />
     <Compile Include="Areas\MyTime\Core\WeekSchedule\DataProvider\IAbsenceRequestProbability.cs" />
     <Compile Include="Areas\MyTime\Core\WeekSchedule\DataProvider\IAbsenceRequestProbabilityProvider.cs" />
+    <Compile Include="Areas\Notifications\Controllers\NotificationsController.cs" />
     <Compile Include="Areas\Permissions\Controllers\ApplicationFunctionsController.cs" />
     <Compile Include="Areas\MyTime\Core\Common\DataProvider\ILeaderboardSettingBasedBadgeProvider.cs" />
     <Compile Include="Areas\MyTime\Core\Common\DataProvider\LeaderboardSettingBasedBadgeProvider.cs" />
@@ -1198,8 +1199,8 @@
     <Content Include="WFM\Gruntfile.js" />
     <Content Include="WFM\js\forecasting\forecasting.controller.js" />
     <Content Include="WFM\js\forecasting\forecasting.service.js" />
-    <Content Include="WFM\js\notification\notification.controller.js" />
-    <Content Include="WFM\js\notification\notification.service.js" />
+    <Content Include="WFM\js\notifications\notifications.controller.js" />
+    <Content Include="WFM\js\notifications\notifications.service.js" />
     <Content Include="WFM\js\permissions\permissions.controller.js" />
     <Content Include="WFM\js\permissions\permissions.service.js" />
     <Content Include="WFM\js\search\search.controller.js" />

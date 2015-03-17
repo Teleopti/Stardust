@@ -799,6 +799,7 @@
     <Compile Include="Optimization\WeeklyRestSolver\WeeklyRestSolverService.cs" />
     <Compile Include="Aop\ReadModelUnitOfWorkAttribute.cs" />
     <Compile Include="PreserveStack.cs" />
+    <Compile Include="Repositories\IJobResultRepository.cs" />
     <Compile Include="Repositories\ISeatMapLocationRepository.cs" />
     <Compile Include="Repositories\ITeamGamificationSettingRepository.cs" />
     <Compile Include="Repositories\IAgentBadgeSettingsRepository.cs" />
