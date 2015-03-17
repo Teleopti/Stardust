@@ -182,6 +182,7 @@
     <Compile Include="DistributedLock\DistributedLockTest.cs" />
     <Compile Include="Foundation\CouldNotCreateTransactionExceptionTest.cs" />
     <Compile Include="MultiTenancy\Client\TenantDataManagerTest.cs" />
+    <Compile Include="MultiTenancy\Client\TenantServerConfigurationTest.cs" />
     <Compile Include="MultiTenancy\Server\ApplicationUserTenantQueryTest.cs" />
     <Compile Include="MultiTenancy\Client\AuthenticationQuerierTest.cs" />
     <Compile Include="MultiTenancy\Server\DeletePersonInfoTest.cs" />

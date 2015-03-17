@@ -6,15 +6,15 @@ namespace Teleopti.Ccc.Infrastructure.MultiTenancy.Client
 {
 	public class TenantDataManager : ITenantDataManager
 	{
-		private readonly string _pathToTenantServer;
+		private readonly ITenantServerConfiguration _tenantServerConfiguration;
 		private readonly IPostHttpRequest _postHttpRequest;
 		private readonly IJsonSerializer _jsonSerializer;
 
-		public TenantDataManager(string pathToTenantServer, 
+		public TenantDataManager(ITenantServerConfiguration tenantServerConfiguration, 
 															IPostHttpRequest postHttpRequest,
 															IJsonSerializer jsonSerializer)
 		{
-			_pathToTenantServer = pathToTenantServer;
+			_tenantServerConfiguration = tenantServerConfiguration;
 			_postHttpRequest = postHttpRequest;
 			_jsonSerializer = jsonSerializer;
 		}
@@ -22,13 +22,13 @@ namespace Teleopti.Ccc.Infrastructure.MultiTenancy.Client
 		public void SaveTenantData(IEnumerable<TenantAuthenticationData> tenantAuthenticationData)
 		{
 			var json = _jsonSerializer.SerializeObject(tenantAuthenticationData);
-			_postHttpRequest.Send<object>(_pathToTenantServer + "PersonInfo/Persist", json);
+			_postHttpRequest.Send<object>(_tenantServerConfiguration.Path + "PersonInfo/Persist", json);
 		}
 
 		public void DeleteTenantPersons(IEnumerable<Guid> personsToBeDeleted)
 		{
 			var json = _jsonSerializer.SerializeObject(personsToBeDeleted);
-			_postHttpRequest.Send<object>(_pathToTenantServer + "PersonInfo/Delete", json);
+			_postHttpRequest.Send<object>(_tenantServerConfiguration.Path + "PersonInfo/Delete", json);
 		}
 	}
 }

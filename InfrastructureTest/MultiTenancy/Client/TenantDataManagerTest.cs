@@ -15,7 +15,7 @@ namespace Teleopti.Ccc.InfrastructureTest.MultiTenancy.Client
 		{
 			var personIds = new[] {Guid.NewGuid()};
 			var serializedPersonIds = RandomName.Make();
-			var pathToTenantServer = RandomName.Make();
+			var pathToTenantServer = new TenantServerConfiguration(RandomName.Make());
 			var postHttpRequest = MockRepository.GenerateMock<IPostHttpRequest>();
 			var jsonSerializer = MockRepository.GenerateStub<IJsonSerializer>();
 			jsonSerializer.Stub(x => x.SerializeObject(personIds)).Return(serializedPersonIds);
@@ -30,7 +30,7 @@ namespace Teleopti.Ccc.InfrastructureTest.MultiTenancy.Client
 		{
 			var authDatas = Enumerable.Empty<TenantAuthenticationData>();
 			var serializedAuthDatas = RandomName.Make();
-			var pathToTenantServer = RandomName.Make();
+			var pathToTenantServer = new TenantServerConfiguration(RandomName.Make());
 			var postHttpRequest = MockRepository.GenerateMock<IPostHttpRequest>();
 			var jsonSerializer = MockRepository.GenerateStub<IJsonSerializer>();
 			jsonSerializer.Stub(x => x.SerializeObject(authDatas)).Return(serializedAuthDatas);
