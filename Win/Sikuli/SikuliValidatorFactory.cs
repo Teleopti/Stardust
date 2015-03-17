@@ -23,13 +23,13 @@ namespace Teleopti.Ccc.Win.Sikuli
 						return new OptimizerValidator(schedulerState, totalSkill);
 
 					case SikuliValidatorRegister.OptimizeDaysOff:
-						return new OptimizeDaysOffValidator(schedulerState, totalSkill);
+						return new OptimizeAllOptionsOffDaysOffValidator(schedulerState, totalSkill);
 
 					case SikuliValidatorRegister.OptimizeBetweenDays:
-						return new OptimizeBetweenDaysValidator(schedulerState, totalSkill);
+						return new OptimizeAllOptionsOffTimeBetweenDaysValidator(schedulerState, totalSkill);
 
 					case SikuliValidatorRegister.OptimizeWithinDays:
-						return new OptimizeWithinDaysValidator(schedulerState, totalSkill);
+						return new OptimizeAllOptionsOffShiftsWithinDayValidator(schedulerState, totalSkill);
 
 					case SikuliValidatorRegister.OptimizeBlockTeam:
 						return new OptimizeBlockTeamValidator(schedulerState, totalSkill);
@@ -49,14 +49,17 @@ namespace Teleopti.Ccc.Win.Sikuli
 					case SikuliValidatorRegister.ScheduleOvertimePeriod:
 						return new ScheduleOvertimePeriodValidator(schedulerState, totalSkill);
 
-					case SikuliValidatorRegister.Pass:
+					case SikuliValidatorRegister.TestPass:
 						return new PassValidator();
 
-					case SikuliValidatorRegister.Warn:
+					case SikuliValidatorRegister.TestWarn:
 						return new WarnValidator();
 
-					case SikuliValidatorRegister.Fail:
+					case SikuliValidatorRegister.TestFail:
 						return new FailValidator();
+
+					case SikuliValidatorRegister.TestRoot:
+						return new TestRootValidator();
 
 					default:
 						return null;

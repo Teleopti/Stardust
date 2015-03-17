@@ -8,9 +8,10 @@
 		/// </summary>
 		
 		/// test validators
-		public const string Pass = "Pass";
-		public const string Warn = "Warn";
-		public const string Fail = "Fail";
+		public const string TestPass = "TestPass";
+		public const string TestWarn = "TestWarn";
+		public const string TestFail = "TestFail";
+		public const string TestRoot = "TestRoot";
 
 		/// real validators
 		public const string None = "None";
