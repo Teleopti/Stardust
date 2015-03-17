@@ -1,4 +1,6 @@
-﻿using System.Web.Mvc;
+﻿using System;
+using System.Collections.Generic;
+using System.Web.Mvc;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Server;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Server.NHibernate;
 using Teleopti.Ccc.Web.Areas.Tenant.Core;
@@ -26,9 +28,9 @@ namespace Teleopti.Ccc.Web.Areas.Tenant
 		[TenantUnitOfWork]
 		//TODO: tenant - probably return some kind of json result later
 		//TODO: tenant - change later to some sort of authentication
-		public virtual void Persist(PersonInfoModels personInfoModels)
+		public virtual void Persist(IEnumerable<PersonInfoModel> personInfos)
 		{
-			foreach (var personInfoModel in personInfoModels.PersonInfos)
+			foreach (var personInfoModel in personInfos)
 			{
 				_persister.Persist(_mapper.Map(personInfoModel));
 			}
@@ -38,9 +40,9 @@ namespace Teleopti.Ccc.Web.Areas.Tenant
 		[TenantUnitOfWork]
 		//TODO: tenant - probably return some kind of json result later
 		//TODO: tenant - change later to some sort of authentication
-		public virtual void Delete(PersonInfoDeletes personInfoDeletes)
+		public virtual void Delete(IEnumerable<Guid> personIdsToDelete)
 		{
-			foreach (var personInfoDelete in personInfoDeletes.PersonIdsToDelete)
+			foreach (var personInfoDelete in personIdsToDelete)
 			{
 				_deletePersonInfo.Delete(personInfoDelete);
 			}

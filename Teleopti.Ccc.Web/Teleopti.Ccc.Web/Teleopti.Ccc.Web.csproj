@@ -695,7 +695,6 @@
     <Compile Include="Areas\Start\Controllers\UrlController.cs" />
     <Compile Include="Areas\Tenant\Model\ApplicationLogonModel.cs" />
     <Compile Include="Areas\Tenant\Model\IdentityLogonModel.cs" />
-    <Compile Include="Areas\Tenant\Model\PersonInfoDeletes.cs" />
     <Compile Include="Areas\Tenant\Model\PersonInfoModel.cs" />
     <Compile Include="Areas\Tenant\PersonInfoController.cs" />
     <Compile Include="Areas\Toggle\ToggleHandlerController.cs" />
