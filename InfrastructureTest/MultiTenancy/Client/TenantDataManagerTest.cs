@@ -15,11 +15,11 @@ namespace Teleopti.Ccc.InfrastructureTest.MultiTenancy.Client
 		{
 			var personIds = new[] {Guid.NewGuid()};
 			var serializedPersonIds = RandomName.Make();
-			var pathToTenantServer = new TenantServerConfiguration(RandomName.Make());
+			var pathToTenantServer = RandomName.Make();
 			var postHttpRequest = MockRepository.GenerateMock<IPostHttpRequest>();
 			var jsonSerializer = MockRepository.GenerateStub<IJsonSerializer>();
 			jsonSerializer.Stub(x => x.SerializeObject(personIds)).Return(serializedPersonIds);
-			var target = new TenantDataManager(pathToTenantServer, postHttpRequest, jsonSerializer);
+			var target = new TenantDataManager(new TenantServerConfiguration(pathToTenantServer), postHttpRequest, jsonSerializer);
 			target.DeleteTenantPersons(personIds);
 
 			postHttpRequest.AssertWasCalled(x => x.Send<object>(pathToTenantServer + "PersonInfo/Delete", serializedPersonIds));
@@ -30,11 +30,11 @@ namespace Teleopti.Ccc.InfrastructureTest.MultiTenancy.Client
 		{
 			var authDatas = Enumerable.Empty<TenantAuthenticationData>();
 			var serializedAuthDatas = RandomName.Make();
-			var pathToTenantServer = new TenantServerConfiguration(RandomName.Make());
+			var pathToTenantServer = RandomName.Make();
 			var postHttpRequest = MockRepository.GenerateMock<IPostHttpRequest>();
 			var jsonSerializer = MockRepository.GenerateStub<IJsonSerializer>();
 			jsonSerializer.Stub(x => x.SerializeObject(authDatas)).Return(serializedAuthDatas);
-			var target = new TenantDataManager(pathToTenantServer, postHttpRequest, jsonSerializer);
+			var target = new TenantDataManager(new TenantServerConfiguration(pathToTenantServer), postHttpRequest, jsonSerializer);
 			target.SaveTenantData(authDatas);
 
 			postHttpRequest.AssertWasCalled(x => x.Send<object>(pathToTenantServer + "PersonInfo/Persist", serializedAuthDatas));
