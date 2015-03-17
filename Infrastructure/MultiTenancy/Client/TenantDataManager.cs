@@ -1,20 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Net.Http;
-using System.Text;
-using System.Threading.Tasks;
-using Newtonsoft.Json;
 using Teleopti.Interfaces;
 
 namespace Teleopti.Ccc.Infrastructure.MultiTenancy.Client
 {
-	public interface ITenantDataManager
-	{
-		void SaveTenantData(IEnumerable<TenantAuthenticationData> tenantAuthenticationData);
-		void DeleteTenantPersons(IEnumerable<Guid> personsToBeDeleted);
-	}
-
-
 	public class TenantDataManager : ITenantDataManager
 	{
 		private readonly string _pathToTenantServer;
@@ -39,30 +28,7 @@ namespace Teleopti.Ccc.Infrastructure.MultiTenancy.Client
 		public void DeleteTenantPersons(IEnumerable<Guid> personsToBeDeleted)
 		{
 			var json = _jsonSerializer.SerializeObject(personsToBeDeleted);
-			_postHttpRequest.Send<object>(_pathToTenantServer + "PersonInfo/Persist", json);
+			_postHttpRequest.Send<object>(_pathToTenantServer + "PersonInfo/Delete", json);
 		}
-	}
-
-	public class EmptyTenantDataManager : ITenantDataManager
-	{
-		public void SaveTenantData(IEnumerable<TenantAuthenticationData> tenantAuthenticationData)
-		{
-		}
-
-		public void DeleteTenantPersons(IEnumerable<Guid> personsToBeDeleted)
-		{
-		}
-	}
-
-	public class TenantAuthenticationData
-	{
-		public string Tenant { get; set; }
-		public string ApplicationLogonName { get; set; }
-		public string Password { get; set; }
-		public string Identity { get; set; }
-		public DateTime? TerminalDate { get; set; }
-		[JsonIgnore]
-		public bool Changed { get; set; }
-		public Guid? PersonId { get; set; }
 	}
 }

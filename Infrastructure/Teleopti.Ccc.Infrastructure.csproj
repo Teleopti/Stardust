@@ -223,6 +223,8 @@
     <Compile Include="LiteUnitOfWork\ReadModelUnitOfWorkFactory.cs" />
     <Compile Include="LiteUnitOfWork\ReadModelUnitOfWorkState.cs" />
     <Compile Include="MultiTenancy\Client\AuthenticationFromFileQuerier.cs" />
+    <Compile Include="MultiTenancy\Client\ITenantDataManager.cs" />
+    <Compile Include="MultiTenancy\Client\TenantAuthenticationData.cs" />
     <Compile Include="MultiTenancy\Server\DeletePersonInfo.cs" />
     <Compile Include="MultiTenancy\Server\FindTenantAndPersonIdForIdentity.cs" />
     <Compile Include="MultiTenancy\Server\FindTenantByNameQuery.cs" />

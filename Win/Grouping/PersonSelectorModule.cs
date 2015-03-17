@@ -1,3 +1,5 @@
+using System;
+using System.Collections.Generic;
 using Autofac;
 using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Client;
@@ -43,16 +45,30 @@ namespace Teleopti.Ccc.Win.Grouping
 			builder.RegisterType<ScheduleNavigatorPresenter>().As<IScheduleNavigatorPresenter>().InstancePerLifetimeScope();
 			builder.RegisterType<GroupPageHelper>().As<IGroupPageHelper>().InstancePerLifetimeScope();
 			builder.RegisterType<AddPersonEnableCommand>().As<IAddPersonEnableCommand>().InstancePerLifetimeScope();
-			
+
 			if (_config.Toggle(Toggles.MultiTenancy_People_32113))
 			{
 				var tenantServer = _config.Args().TenantServer;
-				builder.Register(c => new TenantDataManager(tenantServer, c.Resolve<IPostHttpRequest>(), c.Resolve<IJsonSerializer>())).As<ITenantDataManager>().SingleInstance();
+				builder.Register(
+					c => new TenantDataManager(tenantServer, c.Resolve<IPostHttpRequest>(), c.Resolve<IJsonSerializer>()))
+					.As<ITenantDataManager>()
+					.SingleInstance();
 			}
 			else
-				builder.RegisterType<EmptyTenantDataManager>().As<ITenantDataManager>().SingleInstance();
-			
+			{
+				builder.RegisterType<emptyTenantDataManager>().As<ITenantDataManager>().SingleInstance();
+			}
 		}
 
+		private class emptyTenantDataManager : ITenantDataManager
+		{
+			public void SaveTenantData(IEnumerable<TenantAuthenticationData> tenantAuthenticationData)
+			{
+			}
+
+			public void DeleteTenantPersons(IEnumerable<Guid> personsToBeDeleted)
+			{
+			}
+		}
 	}
 }

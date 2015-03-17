@@ -22,7 +22,7 @@ namespace Teleopti.Ccc.InfrastructureTest.MultiTenancy.Client
 			var target = new TenantDataManager(pathToTenantServer, postHttpRequest, jsonSerializer);
 			target.DeleteTenantPersons(personIds);
 
-			postHttpRequest.AssertWasCalled(x => x.Send<object>(pathToTenantServer + "PersonInfo/Persist", serializedPersonIds));
+			postHttpRequest.AssertWasCalled(x => x.Send<object>(pathToTenantServer + "PersonInfo/Delete", serializedPersonIds));
 		}
 
 		[Test]
