@@ -427,6 +427,7 @@
     <Compile Include="Areas\Anywhere\Core\TeamViewModel.cs" />
     <Compile Include="Areas\Global\ApplicationController.cs" />
     <Compile Include="Areas\Global\AreaWithPermissionPath.cs" />
+    <Compile Include="Areas\Global\NotificationsController.cs" />
     <Compile Include="Areas\Global\UserController.cs" />
     <Compile Include="Areas\MyTime\Core\Common\DataProvider\AllowanceDay.cs" />
     <Compile Include="Areas\MyTime\Core\Common\DataProvider\IAllowanceDay.cs" />
@@ -445,7 +446,6 @@
     <Compile Include="Areas\MyTime\Core\WeekSchedule\DataProvider\AbsenceRequestProbability.cs" />
     <Compile Include="Areas\MyTime\Core\WeekSchedule\DataProvider\IAbsenceRequestProbability.cs" />
     <Compile Include="Areas\MyTime\Core\WeekSchedule\DataProvider\IAbsenceRequestProbabilityProvider.cs" />
-    <Compile Include="Areas\Notifications\Controllers\NotificationsController.cs" />
     <Compile Include="Areas\Permissions\Controllers\ApplicationFunctionsController.cs" />
     <Compile Include="Areas\MyTime\Core\Common\DataProvider\ILeaderboardSettingBasedBadgeProvider.cs" />
     <Compile Include="Areas\MyTime\Core\Common\DataProvider\LeaderboardSettingBasedBadgeProvider.cs" />
