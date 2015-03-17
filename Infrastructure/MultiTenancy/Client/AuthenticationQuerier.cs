@@ -6,18 +6,18 @@ namespace Teleopti.Ccc.Infrastructure.MultiTenancy.Client
 {
 	public class AuthenticationQuerier : IAuthenticationQuerier
 	{
-		private readonly string _pathToTenantServer;
+		private readonly ITenantServerConfiguration _tenantServerConfiguration;
 		private readonly INhibConfigEncryption _nhibConfigEncryption;
 		private readonly IPostHttpRequest _postHttpRequest;
 		private readonly IJsonSerializer _jsonSerializer;
 
 
-		public AuthenticationQuerier(string pathToTenantServer, 
+		public AuthenticationQuerier(ITenantServerConfiguration tenantServerConfiguration, 
 																INhibConfigEncryption nhibConfigEncryption, 
 																IPostHttpRequest postHttpRequest,
 																IJsonSerializer jsonSerializer)
 		{
-			_pathToTenantServer = pathToTenantServer;
+			_tenantServerConfiguration = tenantServerConfiguration;
 			_nhibConfigEncryption = nhibConfigEncryption;
 			_postHttpRequest = postHttpRequest;
 			_jsonSerializer = jsonSerializer;
@@ -26,7 +26,7 @@ namespace Teleopti.Ccc.Infrastructure.MultiTenancy.Client
 		public AuthenticationQueryResult TryApplicationLogon(ApplicationLogonClientModel applicationLogonClientModel, string userAgent)
 		{
 			var json = _jsonSerializer.SerializeObject(applicationLogonClientModel);
-			var result = _postHttpRequest.Send<AuthenticationQueryResult>(_pathToTenantServer + "Authenticate/ApplicationLogon", json, userAgent);
+			var result = _postHttpRequest.Send<AuthenticationQueryResult>(_tenantServerConfiguration.Path + "Authenticate/ApplicationLogon", json, userAgent);
 
 			_nhibConfigEncryption.DecryptConfig(result.DataSourceConfiguration);
 			
@@ -36,7 +36,7 @@ namespace Teleopti.Ccc.Infrastructure.MultiTenancy.Client
 		public AuthenticationQueryResult TryIdentityLogon(IdentityLogonClientModel identityLogonClientModel, string userAgent)
 		{
 			var json = _jsonSerializer.SerializeObject(identityLogonClientModel);
-			var result = _postHttpRequest.Send<AuthenticationQueryResult>(_pathToTenantServer + "Authenticate/IdentityLogon", json, userAgent);
+			var result = _postHttpRequest.Send<AuthenticationQueryResult>(_tenantServerConfiguration.Path + "Authenticate/IdentityLogon", json, userAgent);
 
 			_nhibConfigEncryption.DecryptConfig(result.DataSourceConfiguration);
 			

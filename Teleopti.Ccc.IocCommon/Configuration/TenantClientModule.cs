@@ -4,7 +4,6 @@ using Teleopti.Ccc.Domain.Security;
 using Teleopti.Ccc.Domain.Security.MultiTenancyAuthentication;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Client;
 using Teleopti.Ccc.Infrastructure.Web;
-using Teleopti.Interfaces;
 
 namespace Teleopti.Ccc.IocCommon.Configuration
 {
@@ -20,18 +19,14 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 		protected override void Load(ContainerBuilder builder)
 		{
 			var tenantServer = _configuration.Args().TenantServer;
-
+			builder.Register(c => new TenantServerConfiguration(tenantServer)).As<ITenantServerConfiguration>().SingleInstance();
 			if (isRunFromTest(tenantServer) || tenantServer.IsAnUrl())
 			{
-				builder.Register(c => new AuthenticationQuerier(tenantServer, c.Resolve<INhibConfigEncryption>(), c.Resolve<IPostHttpRequest>(), c.Resolve<IJsonSerializer>()))
-				.As<IAuthenticationQuerier>()
-				.SingleInstance();
+				builder.RegisterType<AuthenticationQuerier>().As<IAuthenticationQuerier>().SingleInstance();
 			}
 			else
 			{
-				builder.Register(c => new AuthenticationFromFileQuerier(tenantServer))
-				.As<IAuthenticationQuerier>()
-				.SingleInstance();
+				builder.RegisterType<AuthenticationFromFileQuerier>().As<IAuthenticationQuerier>().SingleInstance();
 			}
 			builder.RegisterType<PostHttpRequest>().As<IPostHttpRequest>().SingleInstance();
 			builder.RegisterType<NhibConfigEncryption>().As<INhibConfigEncryption>().SingleInstance();
