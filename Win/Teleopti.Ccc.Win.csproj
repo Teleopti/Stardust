@@ -2591,12 +2591,12 @@
       <DependentUpon>WorkShiftsExplorer.cs</DependentUpon>
     </Compile>
     <Compile Include="Sikuli\Helpers\TestDuration.cs" />
-    <Compile Include="Sikuli\Validators\RootValidators\OptimizeBetweenDaysValidator.cs" />
+    <Compile Include="Sikuli\Validators\RootValidators\OptimizeAllOptionsOffTimeBetweenDaysValidator.cs" />
     <Compile Include="Sikuli\Validators\RootValidators\RootValidator.cs" />
     <Compile Include="Sikuli\Validators\RootValidators\ScheduleOvertimePeriodValidator.cs" />
     <Compile Include="Sikuli\Validators\RootValidators\IntervalBalanceAfterValidator.cs" />
-    <Compile Include="Sikuli\Validators\RootValidators\OptimizeWithinDaysValidator.cs" />
-    <Compile Include="Sikuli\Validators\RootValidators\OptimizeDaysOffValidator.cs" />
+    <Compile Include="Sikuli\Validators\RootValidators\OptimizeAllOptionsOffShiftsWithinDayValidator.cs" />
+    <Compile Include="Sikuli\Validators\RootValidators\OptimizeAllOptionsOffDaysOffValidator.cs" />
     <Compile Include="Sikuli\Validators\OptimizerValidator.cs" />
     <Compile Include="Sikuli\Validators\RootValidators\DeleteAllValidator.cs" />
     <Compile Include="Sikuli\Validators\OptimizeBlockTeamValidator.cs" />
@@ -2604,6 +2604,8 @@
     <Compile Include="Sikuli\Validators\AtomicValidators\DurationValidator.cs" />
     <Compile Include="Sikuli\Validators\RootValidators\ScheduleAllOptionsOffValidator.cs" />
     <Compile Include="Sikuli\Validators\SchedulerValidator.cs" />
+    <Compile Include="Sikuli\Validators\SelftestValidators\TestAtomicValidator.cs" />
+    <Compile Include="Sikuli\Validators\SelftestValidators\TestRootValidator.cs" />
     <Compile Include="Sikuli\Validators\SelftestValidators\WarnValidator.cs" />
     <Compile Include="Sikuli\Validators\SelftestValidators\FailValidator.cs" />
     <Compile Include="Sikuli\Validators\SelftestValidators\PassValidator.cs" />

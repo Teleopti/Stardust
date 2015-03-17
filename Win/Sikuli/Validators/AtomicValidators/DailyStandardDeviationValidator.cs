@@ -26,11 +26,11 @@ namespace Teleopti.Ccc.Win.Sikuli.Validators.AtomicValidators
 		public SikuliValidationResult Validate()
 		{
 			var result = new SikuliValidationResult(SikuliValidationResult.ResultValue.Pass);
-			var std = ValidatorHelper.GetDailySumOfStandardDeviationsFullPeriod(_schedulerState, _totalSkill);
+			var sumOfStandardDeviations = ValidatorHelper.GetDailySumOfStandardDeviationsFullPeriod(_schedulerState, _totalSkill);
 
-			if (std < _limit)
+			if (sumOfStandardDeviations > _limit)
 				result.Result = SikuliValidationResult.ResultValue.Fail;
-			result.AppendResultLine("Daily StdDev sum", _limit.ToString(CultureInfo.CurrentCulture), std.ToString(CultureInfo.CurrentCulture), result.Result);
+			result.AppendResultLine("Daily StdDev sum", _limit.ToString(CultureInfo.CurrentCulture), sumOfStandardDeviations.ToString(CultureInfo.CurrentCulture), result.Result);
 			return result;
 		}
 	}
