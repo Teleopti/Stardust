@@ -20,7 +20,7 @@ namespace Teleopti.Ccc.Infrastructure.Rta
 	{
 		private readonly IDatabaseConnectionFactory _databaseConnectionFactory;
 		private readonly IDatabaseConnectionStringHandler _databaseConnectionStringHandler;
-		private static readonly ILog LoggingSvc = LogManager.GetLogger(typeof (IDatabaseReader));
+		private static readonly ILog LoggingSvc = LogManager.GetLogger(typeof(IDatabaseReader));
 
 		public AgentStateReadModelReader(
 			IDatabaseConnectionFactory databaseConnectionFactory,
@@ -32,19 +32,19 @@ namespace Teleopti.Ccc.Infrastructure.Rta
 		}
 
 		public IList<AgentStateReadModel> Load(IEnumerable<IPerson> persons)
-        {
-            var guids = persons.Select(person => person.Id.GetValueOrDefault()).ToList();
-	        return Load(guids);
-        }
+		{
+			var guids = persons.Select(person => person.Id.GetValueOrDefault()).ToList();
+			return Load(guids);
+		}
 
-        public IList<AgentStateReadModel> Load(IEnumerable<Guid> personGuids)
-        {
+		public IList<AgentStateReadModel> Load(IEnumerable<Guid> personGuids)
+		{
 			using (var uow = StatisticUnitOfWorkFactory().CreateAndOpenStatelessUnitOfWork())
-            {
-                var ret = new List<AgentStateReadModel>();
+			{
+				var ret = new List<AgentStateReadModel>();
 				foreach (var personList in personGuids.Batch(400))
 				{
-					ret.AddRange(((NHibernateStatelessUnitOfWork) uow).Session.CreateSQLQuery(
+					ret.AddRange(((NHibernateStatelessUnitOfWork)uow).Session.CreateSQLQuery(
 						@"SELECT 
 							PlatformTypeId,
 							BusinessUnitId,
@@ -71,16 +71,16 @@ namespace Teleopti.Ccc.Infrastructure.Rta
 							SiteId 
 						FROM RTA.ActualAgentState WITH (NOLOCK) WHERE PersonId IN(:persons)")
 						.SetParameterList("persons", personList)
-						.SetResultTransformer(Transformers.AliasToBean(typeof (AgentStateReadModel)))
+						.SetResultTransformer(Transformers.AliasToBean(typeof(AgentStateReadModel)))
 						.SetReadOnly(true)
 						.List<AgentStateReadModel>());
 				}
-                return ret;
-            }
+				return ret;
+			}
 		}
 
-	    public IList<AgentStateReadModel> LoadForTeam(Guid teamId)
-	    {
+		public IList<AgentStateReadModel> LoadForTeam(Guid teamId)
+		{
 			using (var uow = StatisticUnitOfWorkFactory().CreateAndOpenStatelessUnitOfWork())
 			{
 				return uow.Session().CreateSQLQuery(
@@ -110,30 +110,23 @@ namespace Teleopti.Ccc.Infrastructure.Rta
 						SiteId 
 					FROM RTA.ActualAgentState WITH (NOLOCK) WHERE TeamId = :teamId")
 					.SetParameter("teamId", teamId)
-					.SetResultTransformer(Transformers.AliasToBean(typeof (AgentStateReadModel)))
+					.SetResultTransformer(Transformers.AliasToBean(typeof(AgentStateReadModel)))
 					.SetReadOnly(true)
 					.List<AgentStateReadModel>();
-			}  
-	    }
+			}
+		}
 
-	    private IUnitOfWorkFactory StatisticUnitOfWorkFactory()
-        {
-            var identity = ((ITeleoptiIdentity)TeleoptiPrincipal.CurrentPrincipal.Identity);
-            return identity.DataSource.Statistic;
-        }
+		private IUnitOfWorkFactory StatisticUnitOfWorkFactory()
+		{
+			var identity = ((ITeleoptiIdentity)TeleoptiPrincipal.CurrentPrincipal.Identity);
+			return identity.DataSource.Statistic;
+		}
 
-
-
-
-
-
-
-
-		public AgentStateReadModel GetCurrentActualAgentState(Guid personId)
+		public AgentStateReadModel GetCurrentActualAgentState(Guid personId, string tenant)
 		{
 			LoggingSvc.DebugFormat("Getting old state for person: {0}", personId);
 
-			var agentState = queryActualAgentStates(personId).FirstOrDefault();
+			var agentState = queryActualAgentStates(personId, tenant).FirstOrDefault();
 
 			if (agentState == null)
 				LoggingSvc.DebugFormat("Found no state for person: {0}", personId);
@@ -143,16 +136,16 @@ namespace Teleopti.Ccc.Infrastructure.Rta
 			return agentState;
 		}
 
-		public IEnumerable<AgentStateReadModel> GetActualAgentStates()
+		public IEnumerable<AgentStateReadModel> GetActualAgentStates(string tenant)
 		{
-			return queryActualAgentStates(null);
+			return queryActualAgentStates(null, tenant);
 		}
 
-		private IEnumerable<AgentStateReadModel> queryActualAgentStates(Guid? personId)
+		private IEnumerable<AgentStateReadModel> queryActualAgentStates(Guid? personId, string tenant)
 		{
 			using (
 				var connection =
-					_databaseConnectionFactory.CreateConnection(_databaseConnectionStringHandler.DataStoreConnectionString()))
+					_databaseConnectionFactory.CreateConnection(_databaseConnectionStringHandler.DataStoreConnectionString(tenant)))
 			{
 				var command = connection.CreateCommand();
 				command.CommandType = CommandType.Text;
@@ -203,10 +196,10 @@ namespace Teleopti.Ccc.Infrastructure.Rta
 			}
 		}
 
-		public IEnumerable<AgentStateReadModel> GetMissingAgentStatesFromBatch(DateTime batchId, string dataSourceId)
+		public IEnumerable<AgentStateReadModel> GetMissingAgentStatesFromBatch(DateTime batchId, string dataSourceId, string tenant)
 		{
 			var missingUsers = new List<AgentStateReadModel>();
-			using (var connection = _databaseConnectionFactory.CreateConnection(_databaseConnectionStringHandler.DataStoreConnectionString()))
+			using (var connection = _databaseConnectionFactory.CreateConnection(_databaseConnectionStringHandler.DataStoreConnectionString(tenant)))
 			{
 				var command = connection.CreateCommand();
 				command.CommandType = CommandType.StoredProcedure;
@@ -239,5 +232,5 @@ namespace Teleopti.Ccc.Infrastructure.Rta
 			return missingUsers;
 		}
 
-    }
+	}
 }

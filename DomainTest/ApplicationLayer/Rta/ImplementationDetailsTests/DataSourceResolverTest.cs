@@ -19,10 +19,10 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ImplementationDetailsTest
 		    var target = new DataSourceResolver(databaseReader);
 
 		    var dictionary = new Dictionary<string, int> {{"1234", 4}};
-		    databaseReader.Stub(d => d.Datasources()).Return(new ConcurrentDictionary<string, int>(dictionary));
-			
-			
-			var result = target.TryResolveId("1234", out datasource);
+		    databaseReader.Stub(d => d.Datasources("Teleopti WFM")).Return(new ConcurrentDictionary<string, int>(dictionary));
+
+
+			 var result = target.TryResolveId("1234", "Teleopti WFM", out datasource);
 			result.Should().Be.True();
 		    datasource.Should().Be(4);
 	    }

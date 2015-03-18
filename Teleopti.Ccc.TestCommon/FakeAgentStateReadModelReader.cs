@@ -44,7 +44,7 @@ namespace Teleopti.Ccc.TestCommon
 			return _data.Where(x => x.TeamId == teamId).ToArray();
 		}
 
-		public IEnumerable<AgentStateReadModel> GetMissingAgentStatesFromBatch(DateTime batchId, string dataSourceId)
+		public IEnumerable<AgentStateReadModel> GetMissingAgentStatesFromBatch(DateTime batchId, string dataSourceId, string tenant)
 		{
 			return (from s in _data
 				where s.OriginalDataSourceId == dataSourceId &&
@@ -53,12 +53,12 @@ namespace Teleopti.Ccc.TestCommon
 				select s).ToArray();
 		}
 
-		public AgentStateReadModel GetCurrentActualAgentState(Guid personId)
+		public AgentStateReadModel GetCurrentActualAgentState(Guid personId, string tenant)
 		{
 			return _data.SingleOrDefault(x => x.PersonId == personId);
 		}
 
-		public IEnumerable<AgentStateReadModel> GetActualAgentStates()
+		public IEnumerable<AgentStateReadModel> GetActualAgentStates(string tenant)
 		{
 			return _data.ToArray();
 		}

@@ -44,7 +44,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Synchronization
 			});
 			MessageSender.AllNotifications.Clear();
 
-			Target.Initialize();
+			Target.Initialize("Teleopti WFM");
 
 			MessageSender.AllNotifications.Should().Have.Count.EqualTo(0);
 		}
@@ -65,7 +65,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Synchronization
 			});
 			EventPublisher.PublishedEvents.Clear();
 
-			Target.Initialize();
+			Target.Initialize("Teleopti WFM");
 			Rta.SaveState(new ExternalUserStateForTest
 			{
 				UserCode = "user",
@@ -93,7 +93,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Synchronization
 				200.Times(i =>
 				{
 					Persister.Clear();
-					Target.Initialize();
+					Target.Initialize("Teleopti WFM");
 				});
 			});
 			var systemTask = Task.Factory.StartNew(() =>

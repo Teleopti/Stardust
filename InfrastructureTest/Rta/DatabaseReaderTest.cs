@@ -38,8 +38,8 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta
 				repository.AddProjectedLayer(new DateOnly("2014-11-07".Utc()), Guid.NewGuid(), personId, layer);
 				uow.PersistAll();
 			}
-			
-			var result = Reader.GetCurrentSchedule(personId);
+
+			var result = Reader.GetCurrentSchedule(personId, "Teleopti WFM");
 
 			result.Single().BelongsToDate.Should().Be(new DateOnly("2014-11-07".Utc()));
 		}

@@ -42,7 +42,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Synchronization
 				StateCode = "break"
 			});
 
-			Target.Initialize();
+			Target.Initialize("Teleopti WFM");
 
 			Model.Get(siteId).Count.Should().Be(1);
 		}
@@ -69,8 +69,8 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Synchronization
 				UserCode = "user", 
 				StateCode = "break"
 			});
-			
-			Target.Initialize();
+
+			Target.Initialize("Teleopti WFM");
 
 			Model.Get(existingSite).Count.Should().Be(3);
 			Model.Get(stateSite).Should().Be.Null();
@@ -103,8 +103,8 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Synchronization
 				UserCode = "user", 
 				StateCode = "break"
 			});
-			
-			Target.Sync();
+
+			Target.Sync("Teleopti WFM");
 
 			Model.Get(siteId1).Count.Should().Be(1);
 			Model.Get(siteId2).Should().Be.Null();

@@ -20,10 +20,10 @@ namespace Teleopti.Ccc.Infrastructure.Rta
 			_databaseConnectionStringHandler = databaseConnectionStringHandler;
 		}
 
-		public void PersistActualAgentReadModel(AgentStateReadModel model)
+		public void PersistActualAgentReadModel(AgentStateReadModel model, string tenant)
 		{
 			using (
-				var connection = _databaseConnectionFactory.CreateConnection(_databaseConnectionStringHandler.DataStoreConnectionString()))
+				var connection = _databaseConnectionFactory.CreateConnection(_databaseConnectionStringHandler.DataStoreConnectionString(tenant)))
 			{
 				connection.Open();
 				var command = connection.CreateCommand();

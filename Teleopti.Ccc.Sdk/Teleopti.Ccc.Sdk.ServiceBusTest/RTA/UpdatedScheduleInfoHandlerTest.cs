@@ -3,7 +3,6 @@ using NUnit.Framework;
 using Rhino.Mocks;
 using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
-using Teleopti.Ccc.Domain.ApplicationLayer.Rta;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta.PulseLoop;
 using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.ScheduleProjection;
 using Teleopti.Ccc.Domain.Repositories;
@@ -44,7 +43,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Rta
 
 			var period = new DateTimePeriod(DateTime.UtcNow, DateTime.UtcNow);
 
-            var personInfoMessage = new PersonActivityChangePulseEvent
+				var personInfoMessage = new PersonActivityChangePulseEvent
 				{
 					PersonId = person.Id.GetValueOrDefault(),
 					Timestamp = period.StartDateTime,
@@ -72,7 +71,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Rta
 			var bussinessUnit = BusinessUnitFactory.CreateSimpleBusinessUnit("TestBU");
 			bussinessUnit.SetId(Guid.NewGuid());
 
-            var updatedSchduleDay = new ScheduleProjectionReadOnlyChanged
+				var updatedSchduleDay = new ScheduleProjectionReadOnlyChanged
 			{
 				ActivityStartDateTime = DateTime.UtcNow.AddHours(1),
 				ActivityEndDateTime = DateTime.UtcNow.AddHours(8),
@@ -99,7 +98,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Rta
 			var bussinessUnit = BusinessUnitFactory.CreateSimpleBusinessUnit("TestBU");
 			bussinessUnit.SetId(Guid.NewGuid());
 
-            var updatedSchduleDay = new ScheduleProjectionReadOnlyChanged
+				var updatedSchduleDay = new ScheduleProjectionReadOnlyChanged
 			{
 				ActivityStartDateTime = DateTime.UtcNow.AddHours(1),
 				ActivityEndDateTime = DateTime.UtcNow.AddHours(8),
@@ -126,7 +125,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Rta
 			var bussinessUnit = BusinessUnitFactory.CreateSimpleBusinessUnit("TestBU");
 			bussinessUnit.SetId(Guid.NewGuid());
 
-            var updatedSchduleDay = new ScheduleProjectionReadOnlyChanged
+				var updatedSchduleDay = new ScheduleProjectionReadOnlyChanged
 				{
 					ActivityStartDateTime = DateTime.UtcNow.AddHours(1),
 					ActivityEndDateTime = DateTime.UtcNow.AddHours(8),
@@ -154,7 +153,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Rta
 			var bussinessUnit = BusinessUnitFactory.CreateSimpleBusinessUnit("TestBU");
 			bussinessUnit.SetId(Guid.NewGuid());
 
-            var updatedSchduleDay = new ScheduleProjectionReadOnlyChanged
+				var updatedSchduleDay = new ScheduleProjectionReadOnlyChanged
 			{
 				ActivityStartDateTime = DateTime.UtcNow.AddDays(3),
 				ActivityEndDateTime = DateTime.UtcNow.AddDays(4),
@@ -181,7 +180,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Rta
 			var bussinessUnit = BusinessUnitFactory.CreateSimpleBusinessUnit("TestBU");
 			bussinessUnit.SetId(Guid.NewGuid());
 
-            var updatedSchduleDay = new ScheduleProjectionReadOnlyChanged
+				var updatedSchduleDay = new ScheduleProjectionReadOnlyChanged
 			{
 				ActivityStartDateTime = DateTime.UtcNow.AddHours(1),
 				ActivityEndDateTime = DateTime.UtcNow.AddHours(8),
@@ -302,7 +301,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Rta
 
 			target.Handle(updatedScheuldeDay);
 			
-			teleoptiRtaService.AssertWasNotCalled(r => r.CheckForActivityChange(Guid.Empty, Guid.Empty, DateTime.UtcNow), a => a.IgnoreArguments());
+			teleoptiRtaService.AssertWasNotCalled(r => r.CheckForActivityChange(Guid.Empty, Guid.Empty, DateTime.UtcNow, ""), a => a.IgnoreArguments());
 		}
 
 		[Test]
@@ -321,7 +320,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Rta
 
 			target.Handle(updatedScheuldeDay);
 
-			teleoptiRtaService.AssertWasCalled(s => s.CheckForActivityChange(Guid.Empty, Guid.Empty, DateTime.UtcNow), a => a.IgnoreArguments());
+			teleoptiRtaService.AssertWasCalled(s => s.CheckForActivityChange(Guid.Empty, Guid.Empty, DateTime.UtcNow, ""), a => a.IgnoreArguments());
 		}
 
 		[Test]
@@ -342,7 +341,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Rta
 
 			target.Handle(personActivityStarting);
 			
-			teleoptiRtaService.AssertWasNotCalled(r => r.CheckForActivityChange(Guid.Empty, Guid.Empty, DateTime.UtcNow), a => a.IgnoreArguments());
+			teleoptiRtaService.AssertWasNotCalled(r => r.CheckForActivityChange(Guid.Empty, Guid.Empty, DateTime.UtcNow, ""), a => a.IgnoreArguments());
 		}
 
 		[Test]
@@ -350,7 +349,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Rta
 		{
 			personRepository = MockRepository.GenerateMock<IPersonRepository>();
 			target = new PersonActivityChangePulseLoop(serviceBus, scheduleProjectionReadOnlyRepository, teleoptiRtaService,
-			                                           personRepository);
+																	 personRepository);
 			var message = new PersonActivityChangePulseEvent {PersonHaveExternalLogOn = true};
 
 			target.Handle(message);

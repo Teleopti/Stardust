@@ -14,8 +14,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.PulseLoop
 		private readonly ISendDelayedMessages _serviceBus;
 		private readonly IScheduleProjectionReadOnlyRepository _scheduleProjectionReadOnlyRepository;
 		private readonly IPersonRepository _personRepository;
-        private readonly INotifyRtaToCheckForActivityChange _teleoptiRtaService;
-        private readonly static ILog Logger = LogManager.GetLogger(typeof(PersonActivityChangePulseLoop));
+		  private readonly INotifyRtaToCheckForActivityChange _teleoptiRtaService;
+		  private readonly static ILog Logger = LogManager.GetLogger(typeof(PersonActivityChangePulseLoop));
 
 		public PersonActivityChangePulseLoop(
 			ISendDelayedMessages serviceBus, 
@@ -25,24 +25,24 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.PulseLoop
 		{
 			_serviceBus = serviceBus;
 			_scheduleProjectionReadOnlyRepository = scheduleProjectionReadOnlyRepository;
-	        _teleoptiRtaService = teleoptiRtaService;
+			  _teleoptiRtaService = teleoptiRtaService;
 			_personRepository = personRepository;
 		}
 
 		public void Handle(PersonActivityChangePulseEvent message)
 		{
-            Logger.Info("Start consuming PersonalWithExternalLogonOn message.");
+				Logger.Info("Start consuming PersonalWithExternalLogonOn message.");
 			
 			if (!message.PersonHaveExternalLogOn && !doesPersonHaveExternalLogOn(message.PersonId)) return;
 			
 			try
 			{
-                _teleoptiRtaService.CheckForActivityChange(message.PersonId, message.BusinessUnitId, DateTime.UtcNow);
+				_teleoptiRtaService.CheckForActivityChange(message.PersonId, message.BusinessUnitId, DateTime.UtcNow, message.Datasource);
 				Logger.InfoFormat("Message successfully send to TeleoptiRtaService BU: {0}, Person: {1}, TimeStamp: {2}.", message.BusinessUnitId, message.PersonId, DateTime.UtcNow);
 			}
 			catch (Exception exception)
 			{
-                Logger.Error("Exception occured when calling TeleoptiRtaService", exception);
+					 Logger.Error("Exception occured when calling TeleoptiRtaService", exception);
 			}
 
 			DateTime? startTime = _scheduleProjectionReadOnlyRepository.GetNextActivityStartTime(DateTime.UtcNow, message.PersonId);
@@ -67,18 +67,18 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.PulseLoop
 
 		public void Handle(ScheduleProjectionReadOnlyChanged message)
 		{
-            Logger.Info("Start consuming ScheduleProjectionReadOnlyChanged message.");
+				Logger.Info("Start consuming ScheduleProjectionReadOnlyChanged message.");
 
 			if (!doesPersonHaveExternalLogOn(message.PersonId)) return;
 			
 			try
 			{
-                _teleoptiRtaService.CheckForActivityChange(message.PersonId, message.BusinessUnitId, DateTime.UtcNow);
+					 _teleoptiRtaService.CheckForActivityChange(message.PersonId, message.BusinessUnitId, DateTime.UtcNow, message.Datasource);
 				Logger.InfoFormat("Message successfully send to TeleoptiRtaService BU: {0}, Person: {1}, TimeStamp: {2}.", message.BusinessUnitId, message.PersonId, DateTime.UtcNow);
 			}
 			catch (Exception exception)
 			{
-                Logger.Error("Exception occured when calling TeleoptiRtaService", exception);
+					 Logger.Error("Exception occured when calling TeleoptiRtaService", exception);
 			}
 
 			DateTime? startTime = _scheduleProjectionReadOnlyRepository.GetNextActivityStartTime(DateTime.UtcNow, message.PersonId);

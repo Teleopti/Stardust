@@ -51,20 +51,21 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 			_adherenceAggregator = adherenceAggregator;
 		}
 
-		public void CheckForActivityChange(Guid personId, Guid businessUnitId)
+		public void CheckForActivityChange(Guid personId, Guid businessUnitId, string tenant)
 		{
-			_cacheInvalidator.InvalidateSchedules(personId);
+			_cacheInvalidator.InvalidateSchedules(personId, tenant);
 			process(
 				null,
 				personId,
-				businessUnitId
+				businessUnitId, 
+				tenant
 				);
 		}
 
 		public int ProcessStateChange(ExternalUserStateInputModel input, int dataSourceId)
 		{
 			IEnumerable<ResolvedPerson> personWithBusinessUnits;
-			if (!_personResolver.TryResolveId(dataSourceId, input.UserCode, out personWithBusinessUnits))
+			if (!_personResolver.TryResolveId(dataSourceId, input.UserCode, input.Tenant, out personWithBusinessUnits))
 			{
 				loggingSvc.InfoFormat("No person available for datasource id = {0} and log on {1}. Event will not be handled before person is set up.", dataSourceId, input.UserCode);
 				return 0;
@@ -74,7 +75,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 			foreach (var p in personWithBusinessUnits)
 			{
 				loggingSvc.DebugFormat("ACD-Logon: {0} is connected to PersonId: {1}", input.UserCode, p.PersonId);
-				process(input, p.PersonId, p.BusinessUnitId);
+				process(input, p.PersonId, p.BusinessUnitId, input.Tenant);
 			}
 			return 1;
 		}
@@ -85,22 +86,18 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 
 			input.StateCode = "CCC Logged out";
 			input.PlatformTypeId = Guid.Empty.ToString();
-			var missingAgents = _agentStateReadModelReader.GetMissingAgentStatesFromBatch(input.BatchId, input.SourceId);
+			var missingAgents = _agentStateReadModelReader.GetMissingAgentStatesFromBatch(input.BatchId, input.SourceId, input.Tenant);
 			var agentsNotAlreadyLoggedOut = from a in missingAgents
 											//let state = _alarmFinder.StateCodeInfoFor(a.StateCode, null, a.PlatformTypeId, a.BusinessUnitId)
 											let state = _stateMapper.StateFor(a.BusinessUnitId, a.PlatformTypeId, a.StateCode, null)
 											where !state.IsLogOutState
 											select a;
 			foreach (var agent in agentsNotAlreadyLoggedOut)
-				process(input, agent.PersonId, agent.BusinessUnitId);
+				process(input, agent.PersonId, agent.BusinessUnitId, input.Tenant );
 			return 1;
 		}
 
-		private void process(
-			ExternalUserStateInputModel input,
-			Guid personId,
-			Guid businessUnitId
-			)
+		private void process(ExternalUserStateInputModel input, Guid personId, Guid businessUnitId, string tenant)
 		{
 			var currentTime = _now.UtcDateTime();
 			_processor.Process(
@@ -113,14 +110,15 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 					_agentStateReadModelUpdater, 
 					_messageSender, 
 					_adherenceAggregator,
-					() => _agentStateAssembler.MakePreviousState(personId, _agentStateReadModelReader.GetCurrentActualAgentState(personId)),
-					(scheduleInfo, context) => _agentStateAssembler.MakeCurrentState(scheduleInfo, context.Input, context.Person, context.PreviousState(scheduleInfo), currentTime)
+					() => _agentStateAssembler.MakePreviousState(personId, _agentStateReadModelReader.GetCurrentActualAgentState(personId, tenant)),
+					(scheduleInfo, context) => _agentStateAssembler.MakeCurrentState(scheduleInfo, context.Input, context.Person, context.PreviousState(scheduleInfo), currentTime),
+					tenant
 					));
 		}
 
-		public void Initialize()
+		public void Initialize(string tenant)
 		{
-			_adherenceAggregator.Initialize();
+			_adherenceAggregator.Initialize(tenant);
 		}
 	}
 

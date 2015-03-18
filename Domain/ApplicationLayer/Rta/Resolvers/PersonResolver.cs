@@ -13,15 +13,15 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Resolvers
 			_databaseReader = databaseReader;
 		}
 
-		public bool TryResolveId(int dataSourceId, string logOn, out IEnumerable<ResolvedPerson> personId)
+		public bool TryResolveId(int dataSourceId, string logOn, string tenant, out IEnumerable<ResolvedPerson> personId)
 		{
 			var lookupKey = string.Format(CultureInfo.InvariantCulture, "{0}|{1}", dataSourceId, logOn).ToUpperInvariant();
 			if (string.IsNullOrEmpty(logOn))
 			{
 				lookupKey = string.Empty;
 			}
-			
-			var dictionary = _databaseReader.ExternalLogOns();
+
+			var dictionary = _databaseReader.ExternalLogOns(tenant);
 			return dictionary.TryGetValue(lookupKey, out personId);
 		}
 	}

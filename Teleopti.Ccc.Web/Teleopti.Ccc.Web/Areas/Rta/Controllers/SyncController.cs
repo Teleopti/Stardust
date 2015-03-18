@@ -15,7 +15,8 @@ namespace Teleopti.Ccc.Web.Areas.Rta.Controllers
 
 		public string Index()
 		{
-			_synchronizer.Sync();
+			//todo: tenant how to solve this what Tenant??
+			_synchronizer.Sync("Teleopti WFM");
 			return "Synchronization done!";
 		}
 	}

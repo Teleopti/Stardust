@@ -9,17 +9,17 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 {
 	public interface IStateStreamSynchronizer
 	{
-		void Sync();
-		void Initialize();
+		void Sync(string tenant);
+		void Initialize(string tenant);
 	}
 
 	public class NoStateStreamSynchronizer : IStateStreamSynchronizer
 	{
-		public void Sync()
+		public void Sync(string tenant)
 		{
 		}
 
-		public void Initialize()
+		public void Initialize(string tenant)
 		{
 		}
 	}
@@ -58,30 +58,30 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 			_recreatables = recreatables;
 			_distributedLockAcquirer = distributedLockAcquirer;
 		}
-		
-		public void Sync()
+
+		public void Sync(string tenant)
 		{
 			var currentTime = _now.UtcDateTime();
-			var states = _agentStateReadModelReader.GetActualAgentStates();
+			var states = _agentStateReadModelReader.GetActualAgentStates(tenant);
 			_recreatables.ForEach(s =>
 			{
 				s.DeleteAll();
-				processStatesTo(s, states, currentTime);
+				processStatesTo(s, states, currentTime, tenant);
 			});
 		}
 
-		public virtual void Initialize()
+		public virtual void Initialize(string tenant)
 		{
 			var currentTime = _now.UtcDateTime();
-			var states = _agentStateReadModelReader.GetActualAgentStates();
+			var states = _agentStateReadModelReader.GetActualAgentStates(tenant);
 			_initializebles.ForEach(s =>
 			{
 				if (!s.Initialized())
-					processStatesTo(s, states, currentTime);
+					processStatesTo(s, states, currentTime, tenant);
 			});
 		}
 
-		private void processStatesTo(object handler, IEnumerable<AgentStateReadModel> states, DateTime currentTime)
+		private void processStatesTo(object handler, IEnumerable<AgentStateReadModel> states, DateTime currentTime, string tenant)
 		{	
 			using (_distributedLockAcquirer.LockForTypeOf(handler))
 			using (_eventPublisherScope.OnThisThreadPublishTo(new SyncPublishToSingleHandler(handler)))
@@ -98,7 +98,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 						null, 
 						null,
 						() => _agentStateAssembler.MakeEmpty(s.PersonId),
-						(a, b) => _agentStateAssembler.MakeCurrentStateFromPrevious(s)
+						(a, b) => _agentStateAssembler.MakeCurrentStateFromPrevious(s),
+						tenant
 						);
 					_processor.Process(context);
 				});

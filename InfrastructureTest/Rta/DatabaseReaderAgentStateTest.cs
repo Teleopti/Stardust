@@ -28,10 +28,10 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta
 		public void ShouldGetCurrentActualAgentState()
 		{
 			var state = new AgentStateReadModelForTest { PersonId = Guid.NewGuid() };
-			Writer.PersistActualAgentReadModel(state);
+			Writer.PersistActualAgentReadModel(state, "Teleopti WFM");
 			var target = Reader;
 
-			var result = target.GetCurrentActualAgentState(state.PersonId);
+			var result = target.GetCurrentActualAgentState(state.PersonId, "Teleopti WFM");
 
 			result.Should().Not.Be.Null();
 		}
@@ -41,7 +41,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta
 		{
 			var target = Reader;
 
-			var result = target.GetCurrentActualAgentState(Guid.NewGuid());
+			var result = target.GetCurrentActualAgentState(Guid.NewGuid(), "Teleopti WFM");
 
 			result.Should().Be.Null();
 		}
@@ -52,11 +52,11 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta
 			var writer = Writer;
 			var personId1 = Guid.NewGuid();
 			var personId2 = Guid.NewGuid();
-			writer.PersistActualAgentReadModel(new AgentStateReadModelForTest { PersonId = personId1 });
-			writer.PersistActualAgentReadModel(new AgentStateReadModelForTest { PersonId = personId2 });
+			writer.PersistActualAgentReadModel(new AgentStateReadModelForTest { PersonId = personId1 }, "Teleopti WFM");
+			writer.PersistActualAgentReadModel(new AgentStateReadModelForTest { PersonId = personId2 }, "Teleopti WFM");
 			var target = Reader;
 
-			var result = target.GetActualAgentStates();
+			var result = target.GetActualAgentStates( "Teleopti WFM");
 
 			result.Where(x => x.PersonId == personId1).Should().Have.Count.EqualTo(1);
 			result.Where(x => x.PersonId == personId2).Should().Have.Count.EqualTo(1);
@@ -90,10 +90,10 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta
 				StateId = Guid.NewGuid(),
 				StateStart = "2014-11-11 10:37".Utc(),
 			};
-			writer.PersistActualAgentReadModel(state);
+			writer.PersistActualAgentReadModel(state, "Teleopti WFM");
 			var target = Reader;
 
-			var result = target.GetActualAgentStates().Single();
+			var result = target.GetActualAgentStates("Teleopti WFM").Single();
 
 			result.PersonId.Should().Be(state.PersonId);
 			result.AlarmId.Should().Be(state.AlarmId);
@@ -122,11 +122,11 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta
 		public void ShouldReadActualAgentStateWithoutBusinessUnit()
 		{
 			var writer = Writer;
-			writer.PersistActualAgentReadModel(new AgentStateReadModelForTest());
+			writer.PersistActualAgentReadModel(new AgentStateReadModelForTest(), "Teleopti WFM");
 			setBusinessUnitInDbToNull();
 			var reader = Reader;
 
-			reader.GetActualAgentStates().Single()
+			reader.GetActualAgentStates("Teleopti WFM").Single()
 				.BusinessUnitId
 				.Should().Be(Guid.Empty);
 		}
@@ -150,9 +150,9 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta
 				ReceivedTime = "2015-03-06 15:19".Utc(),
 				OriginalDataSourceId = "6"
 			};
-			Writer.PersistActualAgentReadModel(state);
+			Writer.PersistActualAgentReadModel(state, "Teleopti WFM");
 
-			Reader.GetMissingAgentStatesFromBatch("2015-03-06 15:20".Utc(), "6")
+			Reader.GetMissingAgentStatesFromBatch("2015-03-06 15:20".Utc(), "6", "Teleopti WFM")
 				.Single(x => x.PersonId == personId).Should().Not.Be.Null();
 		}
 
@@ -177,9 +177,9 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta
 				ReceivedTime = "2015-03-06 15:19".Utc(),
 				OriginalDataSourceId = "6"
 			};
-			Writer.PersistActualAgentReadModel(agentStateReadModel);
+			Writer.PersistActualAgentReadModel(agentStateReadModel, "Teleopti WFM");
 
-			var result = Reader.GetMissingAgentStatesFromBatch("2015-03-06 15:20".Utc(), "6")
+			var result = Reader.GetMissingAgentStatesFromBatch("2015-03-06 15:20".Utc(), "6", "Teleopti WFM")
 				.Single(x => x.PersonId == personId);
 
 			result.BusinessUnitId.Should().Be(agentStateReadModel.BusinessUnitId);

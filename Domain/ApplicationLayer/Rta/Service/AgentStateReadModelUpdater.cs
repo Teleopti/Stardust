@@ -9,10 +9,10 @@
 			_databaseWriter = databaseWriter;
 		}
 
-		public void Update(StateInfo info)
+		public void Update(StateInfo info, string tenant)
 		{
 			var state = info.MakeActualAgentState();
-			_databaseWriter.PersistActualAgentReadModel(state);
+			_databaseWriter.PersistActualAgentReadModel(state, tenant);
 		}
 	}
 }

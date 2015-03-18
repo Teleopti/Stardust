@@ -22,9 +22,9 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta
 		{
 			var state = new AgentStateReadModelForTest();
 
-			Target.PersistActualAgentReadModel(state);
+			Target.PersistActualAgentReadModel(state, "Teleopti WFM");
 
-			var result = Reader.GetCurrentActualAgentState(state.PersonId);
+			var result = Reader.GetCurrentActualAgentState(state.PersonId, "Teleopti WFM");
 			result.Should().Not.Be.Null();
 		}
 
@@ -34,9 +34,9 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta
 			var businessUnitId = Guid.NewGuid();
 			var state = new AgentStateReadModelForTest {BusinessUnitId = businessUnitId};
 
-			Target.PersistActualAgentReadModel(state);
+			Target.PersistActualAgentReadModel(state, "Teleopti WFM");
 
-			Reader.GetCurrentActualAgentState(state.PersonId)
+			Reader.GetCurrentActualAgentState(state.PersonId, "Teleopti WFM")
 				.BusinessUnitId.Should().Be(businessUnitId);
 		}
 
@@ -46,9 +46,9 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta
 			var teamId = Guid.NewGuid();
 			var state = new AgentStateReadModelForTest {TeamId = teamId};
 
-			Target.PersistActualAgentReadModel(state);
+			Target.PersistActualAgentReadModel(state, "Teleopti WFM");
 
-			Reader.GetCurrentActualAgentState(state.PersonId)
+			Reader.GetCurrentActualAgentState(state.PersonId, "Teleopti WFM")
 				.TeamId.Should().Be(teamId);
 		}
 
@@ -58,9 +58,9 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta
 			var siteId = Guid.NewGuid();
 			var state = new AgentStateReadModelForTest {SiteId = siteId};
 
-			Target.PersistActualAgentReadModel(state);
+			Target.PersistActualAgentReadModel(state, "Teleopti WFM");
 
-			Reader.GetCurrentActualAgentState(state.PersonId)
+			Reader.GetCurrentActualAgentState(state.PersonId, "Teleopti WFM")
 				.SiteId.Should().Be(siteId);
 		}
 
@@ -97,9 +97,9 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta
 				StaffingEffect = null,
 				Adherence = null,
 				Color = null,
-			});
+			}, "Teleopti WFM");
 
-			var result = Reader.GetCurrentActualAgentState(personId);
+			var result = Reader.GetCurrentActualAgentState(personId, "Teleopti WFM");
 			result.Should().Not.Be.Null();
 		}
 

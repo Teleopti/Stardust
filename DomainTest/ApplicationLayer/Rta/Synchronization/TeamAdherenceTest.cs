@@ -68,7 +68,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Synchronization
 			Rta.SaveState(new ExternalUserStateForTest {UserCode = "B2", StateCode = "phone"});
 			Rta.SaveState(new ExternalUserStateForTest {UserCode = "B3", StateCode = "phone"});
 
-			Target.Initialize();
+			Target.Initialize("Teleopti WFM");
 
 			Model.Get(teamIdA).Count.Should().Be(2);
 			Model.Get(teamIdB).Count.Should().Be(1);
@@ -97,7 +97,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Synchronization
 				StateCode = "break"
 			});
 
-			Target.Initialize();
+			Target.Initialize("Teleopti WFM");
 
 			Model.Get(existingTeam).Count.Should().Be(3);
 			Model.Get(stateTeam).Should().Be.Null();
@@ -130,7 +130,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Synchronization
 				UserCode = "user", 
 				StateCode = "break"
 			});
-			Target.Sync();
+			Target.Sync("Teleopti WFM");
 
 			Model.Get(teamId1).Count.Should().Be(1);
 			Model.Get(teamId2).Should().Be.Null();

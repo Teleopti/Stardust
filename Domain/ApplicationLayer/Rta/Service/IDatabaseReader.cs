@@ -12,9 +12,9 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 
 	public interface IDatabaseReader
 	{
-		ConcurrentDictionary<string, int> Datasources();
-		ConcurrentDictionary<string, IEnumerable<ResolvedPerson>> ExternalLogOns();
-		IList<ScheduleLayer> GetCurrentSchedule(Guid personId);
+		ConcurrentDictionary<string, int> Datasources(string tenant);
+		ConcurrentDictionary<string, IEnumerable<ResolvedPerson>> ExternalLogOns(string tenant);
+		IList<ScheduleLayer> GetCurrentSchedule(Guid personId, string tenant);
 	}
 
 }

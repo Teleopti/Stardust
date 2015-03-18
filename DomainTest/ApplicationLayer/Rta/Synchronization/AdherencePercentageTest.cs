@@ -44,7 +44,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Synchronization
 			});
 			Now.Is("2015-01-08 12:00");
 
-			Target.Initialize();
+			Target.Initialize("Teleopti WFM");
 
 			Persister.Get(new DateOnly("2015-01-08".Utc()), personId).Should().Not.Be.Null();
 		}
