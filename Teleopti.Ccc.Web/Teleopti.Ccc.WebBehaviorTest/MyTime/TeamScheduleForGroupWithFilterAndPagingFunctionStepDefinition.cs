@@ -154,6 +154,13 @@ namespace Teleopti.Ccc.WebBehaviorTest.MyTime
 			DataMaker.ApplyFromTable<ShiftWithConfidentialAbsence>(TeamColleagueName, table);
 		}
 
+		[When(@"The schedules have been populated")]
+		public void GivenTheSchedulesHaveBeenPopulated()
+		{
+			Browser.Interactions.AssertExists("#existsWhenLoadingFinishes");
+		}
+
+
 		[When(@"I select the other team in the team picker")]
 		public void WhenIChooseTheOtherTeamInTheTeamPicker()
 		{

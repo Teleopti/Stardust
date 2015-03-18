@@ -332,6 +332,12 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Anywhere
 			}
 		}
 
+		[When(@"Loading is finished")]		
+		public void LoadingIsFinished()
+		{
+			Browser.Interactions.AssertExists("#existsWhenLoadingFinishes");
+		}
+
 		[When(@"I select group '(.*)'")]
 		[When(@"I select team '(.*)'")]
 		public void WhenISelectTeam(string teamName)

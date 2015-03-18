@@ -85,8 +85,8 @@ Scenario: View group schedule
 	| EndTime        | 2013-03-25 20:00 |
 	| Shift category | Day              |
 	When I view group schedule for '2013-03-25'
-	Then I should see 'Pierre Baldi' schedule in team schedule
-	When I select 'Kontrakt/A contract' in the team picker
+	And The schedules have been populated
+	And I select 'Kontrakt/A contract' in the team picker
 	Then I should see my schedule in team schedule 
 	And I should see 'John Smith' schedule in team schedule 
 	And I should not see 'Pierre Baldi' schedule
@@ -104,8 +104,8 @@ Scenario: Sort late shifts after early shifts
 	| EndTime        | 2013-03-25 17:00 |
 	| Shift category | Day              |
 	When I view group schedule for '2013-03-25'
-	Then I should see my schedule in team schedule
-	When I select 'Kontrakt/A contract' in the team picker
+	And The schedules have been populated
+	And I select 'Kontrakt/A contract' in the team picker
 	Then I should see 'John Smith' before myself
 
 @ignore
@@ -122,8 +122,8 @@ Scenario: Keep selected group when changing date
 	| EndTime        | 2013-03-25 18:00 |
 	| Shift category | Day              |
 	When I view group schedule for '2013-03-25'
-	Then I should see my schedule in team schedule
-	When I select 'Kontrakt/Another contract' in the team picker
+	And The schedules have been populated
+	And I select 'Kontrakt/Another contract' in the team picker
 	And I click the next day button in datepicker
 	Then I should see colleague 'Pierre Baldi'
 	And I should not see myself

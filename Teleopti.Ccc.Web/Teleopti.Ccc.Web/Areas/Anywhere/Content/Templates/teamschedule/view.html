@@ -25,7 +25,7 @@
         </thead>
     </table>
 	<!-- /ko -->
-    <div class="row">
+    <div class="row"><div id="existsWhenLoadingFinishes" data-bind="ifnot: Loading"></div>
         <div class="col-xs-12 col-md-4">
             <select id="group-picker" class="col-xs-12" data-bind="disable: Loading, foreach: GroupPages, select2: { value: GroupId } ">
                 <optgroup data-bind="attr: { label: Name }, foreach: Groups" label="Missing">
