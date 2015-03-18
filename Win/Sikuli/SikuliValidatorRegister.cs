@@ -7,7 +7,7 @@
 		/// Identifier for validators
 		/// </summary>
 		
-		/// test validators
+		/// selftest validators
 		public const string TestPass = "TestPass";
 		public const string TestWarn = "TestWarn";
 		public const string TestFail = "TestFail";
@@ -28,5 +28,7 @@
 		public const string OptimizeIntervalBalanceAfter = "OptimizeIntervalBalanceAfter";
 		public const string ScheduleBlockSameShiftCategory = "ScheduleBlockSameShiftCategory";
 		public const string OptimizeBlockSameShiftCategory = "OptimizeBlockSameShiftCategory";
+		public const string ScheduleBlockSameStartTime = "ScheduleBlockSameStartTime";
+		public const string OptimizeBlockSameStartTime = "OptimizeBlockSameStartTime";
 	}
 }

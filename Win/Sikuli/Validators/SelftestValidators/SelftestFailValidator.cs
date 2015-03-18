@@ -3,13 +3,13 @@ using Teleopti.Ccc.Win.Sikuli.Validators.RootValidators;
 
 namespace Teleopti.Ccc.Win.Sikuli.Validators.SelftestValidators
 {
-	internal class WarnValidator : IRootValidator
+	internal class SelftestFailValidator : IRootValidator
 	{
 		public SikuliValidationResult Validate(ITestDuration duration)
 		{
-			return new SikuliValidationResult(SikuliValidationResult.ResultValue.Warn);
+			return new SikuliValidationResult(SikuliValidationResult.ResultValue.Fail);
 		}
 
-		public string Description { get { return "Sikuli selftest validator. Result must be WARN."; } }
+		public string Description { get { return "Sikuli selftest validator. Result must be FAIL."; } }
 	}
 }

@@ -56,16 +56,16 @@ namespace Teleopti.Ccc.Win.Sikuli
 						return new OptimizeBlockSameShiftCategory(schedulerState, totalSkill);
 
 					case SikuliValidatorRegister.TestPass:
-						return new PassValidator();
+						return new SelftestPassValidator();
 
 					case SikuliValidatorRegister.TestWarn:
-						return new WarnValidator();
+						return new SelftestWarnValidator();
 
 					case SikuliValidatorRegister.TestFail:
-						return new FailValidator();
+						return new SelftestFailValidator();
 
 					case SikuliValidatorRegister.TestRoot:
-						return new TestRootValidator();
+						return new SelftestRootValidator();
 
 					default:
 						return null;

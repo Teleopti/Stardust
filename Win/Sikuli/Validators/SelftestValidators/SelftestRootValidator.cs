@@ -3,7 +3,7 @@ using Teleopti.Ccc.Win.Sikuli.Validators.RootValidators;
 
 namespace Teleopti.Ccc.Win.Sikuli.Validators.SelftestValidators
 {
-	internal class TestRootValidator: RootValidator
+	internal class SelftestRootValidator: RootValidator
 	{
 		public override string Description
 		{
@@ -15,9 +15,9 @@ namespace Teleopti.Ccc.Win.Sikuli.Validators.SelftestValidators
 
 		public override SikuliValidationResult Validate(ITestDuration duration)
 		{
-			AtomicValidators.Add(new TestAtomicValidator(SikuliValidationResult.ResultValue.Fail));
-			AtomicValidators.Add(new TestAtomicValidator(SikuliValidationResult.ResultValue.Pass));
-			AtomicValidators.Add(new TestAtomicValidator(SikuliValidationResult.ResultValue.Warn));
+			AtomicValidators.Add(new SelftestAtomicValidator(SikuliValidationResult.ResultValue.Fail));
+			AtomicValidators.Add(new SelftestAtomicValidator(SikuliValidationResult.ResultValue.Pass));
+			AtomicValidators.Add(new SelftestAtomicValidator(SikuliValidationResult.ResultValue.Warn));
 			return ValidateAtomicValidators(AtomicValidators);
 		}
 	}
