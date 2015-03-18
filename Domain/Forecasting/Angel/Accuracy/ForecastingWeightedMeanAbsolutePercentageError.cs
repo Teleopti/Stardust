@@ -34,7 +34,7 @@ namespace Teleopti.Ccc.Domain.Forecasting.Angel.Accuracy
 				diffSum += diff;
 			}
 			var wmape = Math.Abs(tasksSum) < 0.000001 ? 0 : diffSum / tasksSum;
-			return Math.Max(0, 100 - Math.Round(wmape * 100, 3));
+			return Math.Round(Math.Max(0, 100 - wmape * 100), 1);
 		}
 	}
 }

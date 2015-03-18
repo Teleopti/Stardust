@@ -1,0 +1,27 @@
+<div ui-view>
+	<h4>Choose workload:</h4>
+	<div class="material-block-content">
+		<div class="tree">
+			<div ui-tree data-drag-enabled="false">
+				<ol ui-tree-nodes="" ng-model="skillsDisplayed" class="tree-line">
+					<li ng-model="all" ui-tree-node>{{all.Name}}<span class="pull-right">{{all.Accuracy}}</span></li>
+					<li ng-repeat="skill in skillsDisplayed" ui-tree-node ng-include="'nodes_skill_renderer.html'" value='{{skill.Id}}' ></li>
+				</ol>
+			</div>
+		</div>
+		<div>
+			<button class="btn btn-primary material-btn material-depth-1" ng-click="nextStep()">Apply</button>
+		</div>
+	</div>
+	<div class="clearfix"></div>
+</div>
+
+<!-- Skill template -->
+<script type="text/ng-template" id="nodes_skill_renderer.html">
+	<div ui-tree-handle>
+		{{skill.Name}}
+		<ol ui-tree-nodes="" ng-model="skill.Workloads">
+			<li class="selected" ng-repeat="workload in skill.Workloads" value='{{workload.Id}}'>{{workload.Name}} <span class="pull-right">{{workload.Accuracy}}</span></li>
+		</ol>
+	</div>
+</script>

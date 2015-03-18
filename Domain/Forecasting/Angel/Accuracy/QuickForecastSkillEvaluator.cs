@@ -12,7 +12,7 @@ namespace Teleopti.Ccc.Domain.Forecasting.Angel.Accuracy
 			_quickForecastWorkloadEvaluator = quickForecastWorkloadEvaluator;
 		}
 
-		public ForecastingAccuracy[] Measure(ISkill skill, DateOnlyPeriod futurePeriod, DateOnlyPeriod historicalPeriod)
+		public ForecastingAccuracy[] Measure(ISkill skill, DateOnlyPeriod historicalPeriod)
 		{
 			return skill.WorkloadCollection.Select(workload => _quickForecastWorkloadEvaluator.Measure(workload, historicalPeriod)).ToArray();
 		}

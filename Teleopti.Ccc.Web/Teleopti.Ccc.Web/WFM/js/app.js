@@ -28,6 +28,10 @@ wfm.config([
 			url: '/forecasting',
 			templateUrl: 'html/forecasting/forecasting.html',
 			controller: 'ForecastingCtrl'
+    }).state('forecasting.target', {
+    	params: { period: {} },
+    	templateUrl: 'html/forecasting/forecasting-target.html',
+    	controller: 'ForecastingTargetCtrl'
 		}).state('forecasting.run', {
 			params: { period: {} },
 			templateUrl: 'html/forecasting/forecasting-run.html',

@@ -231,6 +231,11 @@
     <Compile Include="Data\Setups\Default\DefaultMatrixApplicationFunctions.cs" />
     <Compile Include="Data\Setups\DoNotUse\Agent.cs" />
     <Compile Include="Data\Setups\Default\IHashableDataSetup.cs" />
+    <Compile Include="Forecasting\QuickForecaster.feature.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>QuickForecaster.feature</DependentUpon>
+    </Compile>
     <Compile Include="Forecasting\QuickForecasterStepDefinition.cs" />
     <Compile Include="HealthCheck\HealthCheck.feature.cs">
       <AutoGen>True</AutoGen>
@@ -937,6 +942,7 @@
     </None>
     <None Include="Forecasting\QuickForecaster.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>
+      <LastGenOutput>QuickForecaster.feature.cs</LastGenOutput>
     </None>
     <None Include="HealthCheck\HealthCheck.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>

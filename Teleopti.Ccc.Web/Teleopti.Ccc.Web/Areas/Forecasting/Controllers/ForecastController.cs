@@ -27,11 +27,10 @@ namespace Teleopti.Ccc.Web.Areas.Forecasting.Controllers
 			_skillRepository = skillRepository;
 		}
 
-		[HttpPost, Route("api/Forecasting/MeasureForecast"), UnitOfWork]
-		public virtual Task<ForecastingAccuracy[]> MeasureForecast([FromBody] QuickForecastInputModel model)
+		[HttpGet, Route("api/Forecasting/MeasureForecast"), UnitOfWork]
+		public virtual Task<ForecastingAccuracy[]> MeasureForecast()
 		{
-			var futurePeriod = new DateOnlyPeriod(new DateOnly(model.ForecastStart), new DateOnly(model.ForecastEnd));
-			return Task.FromResult(_quickForecastEvaluator.MeasureForecastForAllSkills(futurePeriod));
+			return Task.FromResult(_quickForecastEvaluator.MeasureForecastForAllSkills());
 		}
 
 		[UnitOfWork, Route("api/Forecasting/Skills"), HttpGet]

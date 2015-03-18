@@ -3,6 +3,8 @@
 	As a user
 	I want to be able to do a forecast
 
+
+@Ignore
 Scenario: Simple forecast
 	Given I have a role with
 	| Field           | Value      |
@@ -13,10 +15,12 @@ Scenario: Simple forecast
 	And there is a Workload 'TheWorkload' with Skill 'TheSkill' and queuesource 'TheQueueSource'
 	And there is no SkillDays in the database
 	When I am viewing quick forecast page
-	And I click Quickforecaster
+	And I use default forecast period and continue
 	And Quickforecast has succeeded
 	Then there are SkillDays for default period
 
+
+@Ignore
 Scenario: Show accuracy for forecast method
 	Given I have a role with
 	| Field           | Value      |
@@ -27,14 +31,14 @@ Scenario: Show accuracy for forecast method
 	And there is a Workload 'TheWorkload' with Skill 'TheSkill' and queuesource 'Queue1'
 	And there is no SkillDays in the database
 	When I am viewing quick forecast page
-	And I click Quickforecaster
+	And I use default forecast period and continue
 	And Quickforecast has succeeded
 	Then I should see the accuracy for the forecast method
 
 @Ignore
 Scenario: Show message if no historical data for forecasting
 
-
+@Ignore
 Scenario: Show message if no historical data for measurement
 	Given I have a role with
 	| Field           | Value      |
@@ -45,9 +49,23 @@ Scenario: Show message if no historical data for measurement
 	And there is a Workload 'TheWorkload' with Skill 'TheSkill' and queuesource 'TheQueueSource'
 	And there is no SkillDays in the database
 	When I am viewing quick forecast page
-	And I click Quickforecaster
+	And I use default forecast period and continue
 	And Quickforecast has succeeded
 	Then I should see a message of no historical data for measurement
+
+@Ignore
+Scenario: Show accuracy for workload
+	Given I have a role with
+	| Field           | Value      |
+	| QuickForecaster | True       |
+	And there is an activity named 'TheActivity1'
+	And there is a skill named 'TheSkill1' with activity 'TheActivity1'
+	And there is queue statistics for 'Queue1'
+	And there is a Workload 'TheWorkload1' with Skill 'TheSkill1' and queuesource 'Queue1'
+	When I am viewing quick forecast page
+	And I use default forecast period and continue
+	Then I should see the total forecasting accuracy
+	And I should see the forecasting accuracy for 'TheWorkload1'
 
 @Ignore
 Scenario: Forecast for one workload
@@ -66,6 +84,6 @@ Scenario: Forecast for one workload
 	When I am viewing quick forecast page
 	And I select skill 'TheSkill1'
 	And I select workload 'TheWorkload2'
-	And I click Quickforecaster
+	And I use default forecast period and continue
 	And Quickforecast has succeeded
 	Then I should see the forecasting accuracy for 'TheWorkload2'

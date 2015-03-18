@@ -39,7 +39,7 @@ namespace Teleopti.Ccc.DomainTest.Forecasting.Angel.Accuracy
 
 			var quickForecasterWorkloadEvaluator = new QuickForecastWorkloadEvaluator(new HistoricalData(dailyStatistics, validatedVolumeDayRepository), new ForecastMethod(new IndexVolumes()), new ForecastingWeightedMeanAbsolutePercentageError());
 			var target = new QuickForecastSkillEvaluator(quickForecasterWorkloadEvaluator);
-			var measurementResult = target.Measure(Workload.Skill, FuturePeriod, HistoricalPeriod);
+			var measurementResult = target.Measure(Workload.Skill, HistoricalPeriod);
 
 			Assert(measurementResult);
 		}

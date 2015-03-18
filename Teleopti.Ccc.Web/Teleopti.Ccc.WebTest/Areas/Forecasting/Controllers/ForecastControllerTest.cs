@@ -41,15 +41,11 @@ namespace Teleopti.Ccc.WebTest.Areas.Forecasting.Controllers
 			var now = new Now();
 			var expectedFuturePeriod = new DateOnlyPeriod(new DateOnly(now.UtcDateTime()), new DateOnly(now.UtcDateTime().AddYears(1)));
 			var quickForecastEvaluator = MockRepository.GenerateMock<IQuickForecastEvaluator>();
-			quickForecastEvaluator.Stub(x => x.MeasureForecastForAllSkills(expectedFuturePeriod))
+			quickForecastEvaluator.Stub(x => x.MeasureForecastForAllSkills())
 				.Return(new[] {new ForecastingAccuracy {Accuracy = 90.2}});
 			var target = new ForecastController(quickForecastEvaluator, null, null);
 
-			var result = target.MeasureForecast(new QuickForecastInputModel
-			{
-				ForecastStart = expectedFuturePeriod.StartDate,
-				ForecastEnd = expectedFuturePeriod.EndDate
-			});
+			var result = target.MeasureForecast();
 
 			result.Result[0].Accuracy.Should().Be.EqualTo(90.2);
 		}

@@ -54,12 +54,12 @@ namespace Teleopti.Ccc.WebBehaviorTest.Forecasting
 			Browser.Interactions.ClickContaining(".workload", workload);
 		}
 
-		[When(@"I click Quickforecaster")]
+		[When(@"I use default forecast period and continue")]
 		public void WhenIClickQuickforecaster()
 		{
 			ScenarioContext.Current.Add("startdate", new DateOnly(DateTime.Parse(Browser.Interactions.GetText("span.startDate"))));
 			ScenarioContext.Current.Add("enddate", new DateOnly(DateTime.Parse(Browser.Interactions.GetText("span.endDate"))));
-			Browser.Interactions.Click(".start-forecasting");
+			Browser.Interactions.Click(".next-step");
 		}
 
 		[Then(@"there are SkillDays for default period")]
@@ -82,6 +82,12 @@ namespace Teleopti.Ccc.WebBehaviorTest.Forecasting
 		public void ThenIShouldSeeTheAccuracyForTheForecastMethod()
 		{
 			Browser.Interactions.AssertAnyContains(".forecast-relative-error","%");
+		}
+
+		[Then(@"I should see the total forecasting accuracy")]
+		public void ThenIShouldSeeTheTotalForecastingAccuracy()
+		{
+			ScenarioContext.Current.Pending();
 		}
 
 		[Then(@"I should see the forecasting accuracy for '(.*)'")]

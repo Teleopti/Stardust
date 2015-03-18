@@ -31,12 +31,12 @@ namespace Teleopti.Ccc.DomainTest.Forecasting.Angel.Accuracy
 			var workload1 = Guid.NewGuid();
 			var workload2 = Guid.NewGuid();
 			var workload3 = Guid.NewGuid();
-			quickForecastSkillEvaluator.Stub(x => x.Measure(skill1, futurePeriod, historicalPeriod)).Return(new[] { new ForecastingAccuracy { Accuracy = 2.3, WorkloadId = workload1 }, new ForecastingAccuracy { Accuracy = 2.4, WorkloadId = workload2 } });
-			quickForecastSkillEvaluator.Stub(x => x.Measure(skill2, futurePeriod, historicalPeriod)).Return(new[] { new ForecastingAccuracy { Accuracy = 3.4, WorkloadId = workload3 } });
+			quickForecastSkillEvaluator.Stub(x => x.Measure(skill1, historicalPeriod)).Return(new[] { new ForecastingAccuracy { Accuracy = 2.3, WorkloadId = workload1 }, new ForecastingAccuracy { Accuracy = 2.4, WorkloadId = workload2 } });
+			quickForecastSkillEvaluator.Stub(x => x.Measure(skill2, historicalPeriod)).Return(new[] { new ForecastingAccuracy { Accuracy = 3.4, WorkloadId = workload3 } });
 
 
 			var target = new QuickForecastEvaluator(quickForecastSkillEvaluator, skillRepository, now);
-			var result = target.MeasureForecastForAllSkills(futurePeriod);
+			var result = target.MeasureForecastForAllSkills();
 			result[0].Accuracy.Should().Be.EqualTo(2.3);
 			result[0].WorkloadId.Should().Be.EqualTo(workload1);
 			result[1].Accuracy.Should().Be.EqualTo(2.4);

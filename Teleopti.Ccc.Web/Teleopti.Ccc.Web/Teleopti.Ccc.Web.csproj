@@ -1201,6 +1201,7 @@
     <Content Include="WFM\css\main.css" />
     <Content Include="WFM\css\material.css" />
     <Content Include="WFM\Gruntfile.js" />
+    <Content Include="WFM\html\forecasting\forecasting-target.html" />
     <Content Include="WFM\js\forecasting\forecasting.controller.js" />
     <Content Include="WFM\js\forecasting\forecasting.service.js" />
     <Content Include="WFM\js\notifications\notice.controller.js" />
