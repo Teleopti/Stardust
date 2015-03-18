@@ -2,27 +2,34 @@ using System;
 using System.Linq;
 using NUnit.Framework;
 using SharpTestsEx;
+using Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service;
 using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 {
+	[RtaTest]
 	[TestFixture]
 	public class SnapshotTests
 	{
+		public FakeRtaDatabase Database;
+		public FakeMessageSender Sender;
+		public MutableNow Now;
+		public IRta Target;
+
 		[Test]
 		public void ShouldLogOutPersonsNotInSnapshot()
 		{
 			var personId = Guid.NewGuid();
-			var database = new FakeRtaDatabase()
+			Database
 				.WithUser("usercode1", Guid.NewGuid())
 				.WithUser("usercode2", personId)
 				.WithAlarm("statecode", Guid.Empty)
-				.Make();
-			var sender = new FakeMessageSender();
-			var target = new RtaForTest(database, new ThisIsNow("2014-10-20 10:00"), sender);
-			target.SaveStateSnapshot(new[]
+				;
+			
+			Now.Is("2014-10-20 10:00");
+			Target.SaveStateSnapshot(new[]
 			{
 				new ExternalUserStateForSnapshot("2014-10-20 10:00".Utc())
 				{
@@ -35,9 +42,9 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 					StateCode = "statecode"
 				}
 			});
-			sender.AllNotifications.Clear();
+			Sender.AllNotifications.Clear();
 
-			target.SaveStateSnapshot(new[]
+			Target.SaveStateSnapshot(new[]
 			{
 				new ExternalUserStateForSnapshot("2014-10-20 10:05".Utc())
 				{
@@ -46,7 +53,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 				},
 			});
 
-			sender.NotificationsOfType<AgentStateReadModel>()
+			Sender.NotificationsOfType<AgentStateReadModel>()
 				.Select(x => x.DeseralizeActualAgentState())
 				.Single(x => x.PersonId == personId)
 				.StateCode.Should().Be("CCC Logged out");
@@ -57,16 +64,15 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 		public void ShouldOnlyLogOutPersonsInSnapshotConnectedToPlatform()
 		{
 			var personId = Guid.NewGuid();
-			var database = new FakeRtaDatabase()
+			Database
 				.WithSource("source1")
 				.WithSource("source2")
 				.WithUser("usercode1", Guid.NewGuid())
 				.WithUser("usercode2", personId)
 				.WithAlarm("statecode1", Guid.Empty)
-				.Make();
-			var sender = new FakeMessageSender();
-			var target = new RtaForTest(database, new ThisIsNow("2014-10-20 10:00"), sender);
-			target.SaveStateSnapshot(new[]
+				;
+			Now.Is("2014-10-20 10:00");
+			Target.SaveStateSnapshot(new[]
 			{
 				new ExternalUserStateForSnapshot("2014-10-20 10:00".Utc())
 				{
@@ -74,7 +80,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 					StateCode = "statecode1"
 				}
 			});
-			target.SaveStateSnapshot(new[]
+			Target.SaveStateSnapshot(new[]
 			{
 				new ExternalUserStateForSnapshot("2014-10-20 10:00".Utc())
 				{
@@ -84,7 +90,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 				}
 			});
 
-			target.SaveStateSnapshot(new[]
+			Target.SaveStateSnapshot(new[]
 			{
 				new ExternalUserStateForSnapshot("2014-10-20 10:05".Utc())
 				{
@@ -93,7 +99,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 				}
 			});
 
-			sender.NotificationsOfType<AgentStateReadModel>()
+			Sender.NotificationsOfType<AgentStateReadModel>()
 				.Select(x => x.DeseralizeActualAgentState())
 				.Single(x => x.PersonId == personId)
 				.StateCode.Should().Be("statecode1");
@@ -103,15 +109,15 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 		public void ShouldNotLogOutAlreadyLoggedOutAgents()
 		{
 			var personId = Guid.NewGuid();
-			var database = new FakeRtaDatabase()
+			Database
 				.WithUser("usercode1", Guid.NewGuid())
 				.WithUser("usercode2", personId)
 				.WithAlarm("statecode", Guid.Empty)
 				.WithAlarm("statecode2", Guid.Empty, true)
 				.Make();
-			var sender = new FakeMessageSender();
-			var target = new RtaForTest(database, new ThisIsNow("2014-10-20 10:00"), sender);
-			target.SaveStateSnapshot(new[]
+			
+			Now.Is("2014-10-20 10:00");
+			Target.SaveStateSnapshot(new[]
 			{
 				new ExternalUserStateForSnapshot("2014-10-20 10:00".Utc())
 				{
@@ -125,7 +131,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 				}
 			});
 
-			target.SaveStateSnapshot(new[]
+			Target.SaveStateSnapshot(new[]
 			{
 				new ExternalUserStateForSnapshot("2014-10-20 10:05".Utc())
 				{
@@ -134,7 +140,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 				},
 			});
 
-			sender.NotificationsOfType<AgentStateReadModel>()
+			Sender.NotificationsOfType<AgentStateReadModel>()
 				.Select(x => x.DeseralizeActualAgentState())
 				.Single(x => x.PersonId == personId)
 				.StateCode.Should().Be("statecode2");
@@ -145,15 +151,14 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 		{
 			var personId = Guid.NewGuid();
 			var platformTypeId = Guid.NewGuid();
-			var database = new FakeRtaDatabase()
+			Database
 				.WithDefaultsFromState(new ExternalUserStateForTest {PlatformTypeId = platformTypeId.ToString()})
 				.WithUser("usercode1", Guid.NewGuid())
 				.WithUser("usercode2", personId)
 				.WithAlarm("statecode", Guid.Empty)
-				.Make();
-			var sender = new FakeMessageSender();
-			var target = new RtaForTest(database, new ThisIsNow("2014-10-20 10:00"), sender);
-			target.SaveStateSnapshot(new[]
+				;
+			Now.Is("2014-10-20 10:00");
+			Target.SaveStateSnapshot(new[]
 			{
 				new ExternalUserStateForSnapshot("2014-10-20 10:00".Utc())
 				{
@@ -168,9 +173,9 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 					PlatformTypeId = platformTypeId.ToString()
 				}
 			});
-			sender.AllNotifications.Clear();
+			Sender.AllNotifications.Clear();
 
-			target.SaveStateSnapshot(new[]
+			Target.SaveStateSnapshot(new[]
 			{
 				new ExternalUserStateForSnapshot("2014-10-20 10:05".Utc())
 				{
@@ -180,7 +185,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 				},
 			});
 
-			sender.NotificationsOfType<AgentStateReadModel>()
+			Sender.NotificationsOfType<AgentStateReadModel>()
 				.Select(x => x.DeseralizeActualAgentState())
 				.Single(x => x.PersonId == personId)
 				.PlatformTypeId.Should().Be.EqualTo(Guid.Empty);

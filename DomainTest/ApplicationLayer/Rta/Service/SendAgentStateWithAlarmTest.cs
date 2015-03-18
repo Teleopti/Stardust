@@ -1,14 +1,21 @@
 ﻿using System;
 using NUnit.Framework;
 using SharpTestsEx;
+using Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service;
 using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 {
+	[RtaTest]
 	[TestFixture]
 	public class SendAgentStateWithAlarmTest
 	{
+		public FakeRtaDatabase Database;
+		public MutableNow Now;
+		public FakeMessageSender Sender;
+		public IRta Target;
+
 		[Test]
 		public void ShouldSendWithAlarm()
 		{
@@ -20,19 +27,17 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 			var personId = Guid.NewGuid();
 			var activityId = Guid.NewGuid();
 			var alarmId = Guid.NewGuid();
-			var database = new FakeRtaDatabase()
-				.WithDefaultsFromState(state)
+			Database
 				.WithUser("usercode", personId)
 				.WithSchedule(personId, activityId, "2014-10-20 10:00", "2014-10-20 11:00")
 				.WithAlarm("statecode", activityId, alarmId)
-				.Make();
-			var sender = new FakeMessageSender();
-			var target = new RtaForTest(database, new ThisIsNow("2014-10-20 10:00"), sender);
+				;
+			Now.Is("2014-10-20 10:00");
 
-			target.SaveState(state);
+			Target.SaveState(state);
 
-			var sent = sender.NotificationOfType<AgentStateReadModel>().DeseralizeActualAgentState();
-			sent.AlarmId.Should().Be(alarmId);
+			Sender.NotificationOfType<AgentStateReadModel>().DeseralizeActualAgentState()
+				.AlarmId.Should().Be(alarmId);
 		}
 
 		[Test, Ignore]

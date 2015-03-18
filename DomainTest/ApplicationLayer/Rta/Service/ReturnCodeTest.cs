@@ -5,42 +5,46 @@ using Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service;
 
 namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 {
+	[RtaTest]
 	[TestFixture]
 	public class ReturnCodeTest
 	{
+		public FakeRtaDatabase Database;
+		public IRta Target;
+
 		[Test]
 		public void ShouldProcessValidState()
 		{
 			var state = new ExternalUserStateForTest();
-			var target = RtaForTest.MakeBasedOnState(state);
-
-			var result = target.SaveState(state);
-
-			result.Should().Be.EqualTo(1);
+			Database
+				.WithDataFromState(state);
+			
+			Target.SaveState(state)
+				.Should().Be.EqualTo(1);
 		}
 
 		[Test]
 		public void ShouldNotProcessIfNoSourceId()
 		{
 			var state = new ExternalUserStateForTest();
-			var target = RtaForTest.MakeBasedOnState(state);
+			Database
+				.WithDataFromState(state);
 			state.SourceId = string.Empty;
 
-			var result = target.SaveState(state);
-
-			result.Should().Not.Be.EqualTo(1);
+			Target.SaveState(state)
+				.Should().Not.Be.EqualTo(1);
 		}
 
 		[Test]
 		public void ShouldNotProcessStateIfNoPlatformId()
 		{
 			var state = new ExternalUserStateForTest();
-			var target = RtaForTest.MakeBasedOnState(state);
+			Database
+				.WithDataFromState(state);
 			state.PlatformTypeId = string.Empty;
 
-			var result = target.SaveState(state);
-
-			result.Should().Not.Be.EqualTo(1);
+			Target.SaveState(state)
+				.Should().Not.Be.EqualTo(1);
 		}
 
 		[Test]
@@ -48,11 +52,11 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 		{
 			var state1 = new ExternalUserStateForTest();
 			var state2 = new ExternalUserStateForTest();
-			var target = RtaForTest.MakeBasedOnState(state1);
+			Database
+				.WithDataFromState(state1);
 
-			var result = target.SaveStateBatch(new[] { state1, state2 });
-
-			result.Should().Be.EqualTo(1);
+			Target.SaveStateBatch(new[] { state1, state2 })
+				.Should().Be.EqualTo(1);
 		}
 
 		[Test]
@@ -63,9 +67,10 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 			for (var i = 0; i < tooManyStates; i++)
 				externalStates.Add(new ExternalUserStateForTest());
 			var state = new ExternalUserStateForTest();
-			var target = RtaForTest.MakeBasedOnState(state);
+			Database
+				.WithDataFromState(state);
 
-			Assert.Throws(typeof(BatchTooBigException), () => target.SaveStateBatch(externalStates));
+			Assert.Throws(typeof(BatchTooBigException), () => Target.SaveStateBatch(externalStates));
 		}
 
 	}

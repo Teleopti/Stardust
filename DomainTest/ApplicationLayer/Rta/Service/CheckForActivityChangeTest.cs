@@ -2,34 +2,39 @@ using System;
 using System.Linq;
 using NUnit.Framework;
 using SharpTestsEx;
+using Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service;
 using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 {
+	[RtaTest]
 	[TestFixture]
 	public class CheckForActivityChangeTest
 	{
+		public FakeRtaDatabase Database;
+		public FakeMessageSender Sender;
+		public MutableNow Now;
+		public IRta Target;
+
 		[Test]
 		public void ShouldKeepPreviousStateCodeWhenNotifiedOfActivityChange()
 		{
 			var personId = Guid.NewGuid();
 			var businessUnitId = Guid.NewGuid();
-			var database = new FakeRtaDatabase()
-				.WithUser("usercode", personId, businessUnitId)
-				.Make();
-			var sender = new FakeMessageSender();
-			var target = new RtaForTest(database, new ThisIsNow("2014-10-20 10:00"), sender);
-
-			target.SaveState(new ExternalUserStateForTest
+			Database
+				.WithUser("usercode", personId, businessUnitId);
+			Now.Is("2014-10-20 10:00");
+			
+			Target.SaveState(new ExternalUserStateForTest
 			{
 				UserCode = "usercode",
 				StateCode = "phone"
 			});
-			target.CheckForActivityChange(personId, businessUnitId);
+			Target.CheckForActivityChange(personId, businessUnitId);
 
-			var sent = sender.NotificationsOfType<AgentStateReadModel>().Last().DeseralizeActualAgentState();
-			sent.StateCode.Should().Be("phone");
+			Sender.NotificationsOfType<AgentStateReadModel>().Last().DeseralizeActualAgentState()
+				.StateCode.Should().Be("phone");
 		}
 
 		[Test]
@@ -38,36 +43,32 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 			var personId = Guid.NewGuid();
 			var businessUnitId = Guid.NewGuid();
 			var activityId = Guid.NewGuid();
-			var database = new FakeRtaDatabase()
+			Database
 				.WithBusinessUnit(businessUnitId)
 				.WithUser("usercode", personId)
 				.WithSchedule(personId, activityId, "2014-10-20 9:00", "2014-10-20 11:00")
 				.WithAlarm("phone", activityId, "alarm")
-				.Make();
-			var sender = new FakeMessageSender();
-			var target = new RtaForTest(database, new ThisIsNow("2014-10-20 10:00"), sender);
-
-			target.SaveState(new ExternalUserStateForTest
+				;
+			
+			Target.SaveState(new ExternalUserStateForTest
 			{
 				UserCode = "usercode",
 				StateCode = "phone"
 			});
-			target.CheckForActivityChange(personId, businessUnitId);
+			Target.CheckForActivityChange(personId, businessUnitId);
 
-			var sent = sender.NotificationsOfType<AgentStateReadModel>().Last().DeseralizeActualAgentState();
-			sent.State.Should().Be("alarm");
+			Sender.NotificationsOfType<AgentStateReadModel>().Last().DeseralizeActualAgentState()
+				.State.Should().Be("alarm");
 		}
 
 		[Test]
 		public void ShouldHandleUnrecognizedPersonId()
 		{
 			var businessUnitId = Guid.NewGuid();
-			var database = new FakeRtaDatabase()
-				.WithBusinessUnit(businessUnitId)
-				.Make();
-			var target = new RtaForTest(database, new Now());
+			Database
+				.WithBusinessUnit(businessUnitId);
 
-			Assert.DoesNotThrow(() => target.CheckForActivityChange(Guid.NewGuid(), businessUnitId));
+			Assert.DoesNotThrow(() => Target.CheckForActivityChange(Guid.NewGuid(), businessUnitId));
 		}
 	}
 }

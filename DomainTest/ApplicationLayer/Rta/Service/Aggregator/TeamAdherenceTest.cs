@@ -1,14 +1,21 @@
 ﻿using System;
 using NUnit.Framework;
 using SharpTestsEx;
+using Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service.Aggregator;
 using Teleopti.Ccc.Domain.Common.Time;
 
 namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service.Aggregator
 {
+	[RtaTest]
 	[TestFixture]
 	public class TeamAdherenceTest
 	{
+		public FakeRtaDatabase Database;
+		public FakeMessageSender Sender;
+		public MutableNow Now;
+		public IRta Target;
+
 		[Test]
 		public void ShouldMapOutOfAdherenceBasedOnPositiveStaffingEffect()
 		{
@@ -22,22 +29,20 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service.Aggregator
 				UserCode = "usercode",
 				StateCode = "loggedoff"
 			};
-			var sender = new FakeMessageSender();
 			var personId = Guid.NewGuid();
 			var phone = Guid.NewGuid();
-			var database = new FakeRtaDatabase()
-				.WithDefaultsFromState(inAdherence)
+			Database
 				.WithUser("usercode", personId)
 				.WithSchedule(personId, phone, "2014-10-20 8:00", "2014-10-20 10:00")
 				.WithAlarm("ready", phone, 0)
 				.WithAlarm("loggedoff", phone, 1)
-				.Make();
-			var target = new RtaForTest(database, new ThisIsNow("2014-10-20 9:00"), sender);
+				;
+			Now.Is("2014-10-20 9:00");
 
-			target.SaveState(inAdherence);
-			target.SaveState(outOfAdherence);
+			Target.SaveState(inAdherence);
+			Target.SaveState(outOfAdherence);
 
-			sender.LastTeamNotification.DeserializeBindaryData<TeamAdherenceMessage>().OutOfAdherence.Should().Be(1);
+			Sender.LastTeamNotification.DeserializeBindaryData<TeamAdherenceMessage>().OutOfAdherence.Should().Be(1);
 		}
 
 		[Test]
@@ -53,22 +58,20 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service.Aggregator
 				UserCode = "usercode",
 				StateCode = "loggedoff"
 			};
-			var sender = new FakeMessageSender();
 			var personId = Guid.NewGuid();
 			var phone = Guid.NewGuid();
-			var database = new FakeRtaDatabase()
-				.WithDefaultsFromState(inAdherence)
+			Database
 				.WithUser("usercode", personId)
 				.WithSchedule(personId, phone, "2014-10-20 8:00", "2014-10-20 10:00")
 				.WithAlarm("ready", phone, 0)
 				.WithAlarm("loggedoff", phone, -1)
-				.Make();
-			var target = new RtaForTest(database, new ThisIsNow("2014-10-20 9:00"), sender);
+				;
+			Now.Is("2014-10-20 9:00");
 
-			target.SaveState(inAdherence);
-			target.SaveState(outOfAdherence);
+			Target.SaveState(inAdherence);
+			Target.SaveState(outOfAdherence);
 
-			sender.LastTeamNotification.DeserializeBindaryData<TeamAdherenceMessage>().OutOfAdherence.Should().Be(1);
+			Sender.LastTeamNotification.DeserializeBindaryData<TeamAdherenceMessage>().OutOfAdherence.Should().Be(1);
 		}
 
 		[Test]
@@ -84,26 +87,24 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service.Aggregator
 				UserCode = "two",
 				StateCode = "loggedoff"
 			};
-			var sender = new FakeMessageSender();
 			var personId1 = Guid.NewGuid();
 			var personId2 = Guid.NewGuid();
 			var teamId = Guid.NewGuid();
 			var phone = Guid.NewGuid();
-			var database = new FakeRtaDatabase()
-				.WithDefaultsFromState(outOfAdherence1)
+			Database
 				.WithUser("one", personId1, null, teamId, null)
 				.WithUser("two", personId2, null, teamId, null)
 				.WithSchedule(personId1, phone, "2014-10-20 8:00", "2014-10-20 10:00")
 				.WithSchedule(personId2, phone, "2014-10-20 8:00", "2014-10-20 10:00")
 				.WithAlarm("ready", phone, 0)
 				.WithAlarm("loggedoff", phone, -1)
-				.Make();
-			var target = new RtaForTest(database, new ThisIsNow("2014-10-20 9:00"), sender);
+				;
+			Now.Is("2014-10-20 9:00");
 
-			target.SaveState(outOfAdherence1);
-			target.SaveState(outOfAdherence2);
+			Target.SaveState(outOfAdherence1);
+			Target.SaveState(outOfAdherence2);
 
-			sender.LastTeamNotification.DeserializeBindaryData<TeamAdherenceMessage>().OutOfAdherence.Should().Be(2);
+			Sender.LastTeamNotification.DeserializeBindaryData<TeamAdherenceMessage>().OutOfAdherence.Should().Be(2);
 		}
 
 		[Test]
@@ -119,25 +120,23 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service.Aggregator
 				UserCode = "two",
 				StateCode = "loggedoff"
 			};
-			var sender = new FakeMessageSender();
 			var personId1 = Guid.NewGuid();
 			var personId2 = Guid.NewGuid();
 			var phone = Guid.NewGuid();
-			var database = new FakeRtaDatabase()
-				.WithDefaultsFromState(outOfAdherence1)
+			Database
 				.WithUser("one", personId1, null, Guid.NewGuid(), null)
 				.WithUser("two", personId2, null, Guid.NewGuid(), null)
 				.WithSchedule(personId1, phone, "2014-10-20 8:00", "2014-10-20 10:00")
 				.WithSchedule(personId2, phone, "2014-10-20 8:00", "2014-10-20 10:00")
 				.WithAlarm("ready", phone, 0)
 				.WithAlarm("loggedoff", phone, -1)
-				.Make();
-			var target = new RtaForTest(database, new ThisIsNow("2014-10-20 9:00"), sender);
+				;
+			Now.Is("2014-10-20 9:00");
 
-			target.SaveState(outOfAdherence1);
-			target.SaveState(outOfAdherence2);
+			Target.SaveState(outOfAdherence1);
+			Target.SaveState(outOfAdherence2);
 
-			sender.LastTeamNotification.DeserializeBindaryData<TeamAdherenceMessage>().OutOfAdherence.Should().Be(1);
+			Sender.LastTeamNotification.DeserializeBindaryData<TeamAdherenceMessage>().OutOfAdherence.Should().Be(1);
 		}
 
 		[Test]
@@ -148,18 +147,14 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service.Aggregator
 				UserCode = "usercode",
 				StateCode = "statecode"
 			};
-			var sender = new FakeMessageSender();
 			var personId = Guid.NewGuid();
 			var siteId = Guid.NewGuid();
-			var database = new FakeRtaDatabase()
-				.WithDefaultsFromState(state)
-				.WithUser("usercode", personId, null, null, siteId)
-				.Make();
-			var target = new RtaForTest(database, new ThisIsNow("2014-10-20 9:00"), sender);
+			Database.WithUser("usercode", personId, null, null, siteId);
+			Now.Is("2014-10-20 9:00");
 
-			target.SaveState(state);
+			Target.SaveState(state);
 
-			sender.LastTeamNotification.DomainReferenceId.Should().Be.EqualTo(siteId.ToString());
+			Sender.LastTeamNotification.DomainReferenceId.Should().Be.EqualTo(siteId.ToString());
 		}
 	}
 }

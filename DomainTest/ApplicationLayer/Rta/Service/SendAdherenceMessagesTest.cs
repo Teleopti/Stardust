@@ -3,15 +3,22 @@ using System.Linq;
 using Newtonsoft.Json;
 using NUnit.Framework;
 using SharpTestsEx;
+using Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service.Aggregator;
 using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Domain.Helper;
 
 namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 {
+	[RtaTest]
 	[TestFixture]
 	public class SendAdherenceMessagesTest
 	{
+		public FakeRtaDatabase Database;
+		public MutableNow Now;
+		public FakeMessageSender Sender;
+		public IRta Target;
+
 		[Test]
 		public void ShouldSendMessageForTeam()
 		{
@@ -20,17 +27,14 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 				UserCode = "usercode",
 				StateCode = "statecode"
 			};
-			var sender = new FakeMessageSender();
 			var teamId = Guid.NewGuid();
-			var database = new FakeRtaDatabase()
-				.WithDefaultsFromState(state)
-				.WithUser("usercode", Guid.NewGuid(), null, teamId, null)
-				.Make();
-			var target = new RtaForTest(database, new ThisIsNow("2014-10-20 9:00"), sender);
+			Database
+				.WithUser("usercode", Guid.NewGuid(), null, teamId, null);
+			Now.Is("2014-10-20 9:00");
 
-			target.SaveState(state);
+			Target.SaveState(state);
 
-			sender.LastNotification.DomainId.Should().Be(teamId.ToString());
+			Sender.LastNotification.DomainId.Should().Be(teamId.ToString());
 		}
 
 		[Test]
@@ -40,16 +44,16 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 			var businessUnitId = Guid.NewGuid();
 			var siteId = Guid.NewGuid();
 			var teamId = Guid.NewGuid();
-			var database = new FakeRtaDatabase()
+			Database
 				.WithBusinessUnit(businessUnitId)
 				.WithUser("usercode1", Guid.NewGuid(), businessUnitId, teamId, siteId)
 				.WithUser("usercode2", personId, businessUnitId, teamId, siteId)
 				.WithAlarm("statecode", null, 1)
 				.WithAlarm("CCC Logged out", null, 0)
-				.Make();
-			var sender = new FakeMessageSender();
-			var target = new RtaForTest(database, new ThisIsNow("2014-10-20 10:00"), sender);
-			target.SaveStateSnapshot(new[]
+				;
+			Now.Is("2014-10-20 10:00");
+			
+			Target.SaveStateSnapshot(new[]
 			{
 				new ExternalUserStateForSnapshot("2014-10-20 10:00".Utc())
 				{
@@ -63,7 +67,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 				}
 			});
 
-			target.SaveStateSnapshot(new[]
+			Target.SaveStateSnapshot(new[]
 			{
 				new ExternalUserStateForSnapshot("2014-10-20 10:05".Utc())
 				{
@@ -72,7 +76,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 				}
 			});
 			
-			var jsonResult = JsonConvert.DeserializeObject<TeamAdherenceMessage>(sender.LastTeamNotification.BinaryData);
+			var jsonResult = JsonConvert.DeserializeObject<TeamAdherenceMessage>(Sender.LastTeamNotification.BinaryData);
 			jsonResult.OutOfAdherence.Should().Be.EqualTo(1);
 		}
 
@@ -84,23 +88,21 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 				UserCode = "usercode",
 				StateCode = "statecode"
 			};
-			var sender = new FakeMessageSender();
 			var teamId = Guid.NewGuid();
 			var phone = Guid.NewGuid();
 			var personId = Guid.NewGuid();
-			var database = new FakeRtaDatabase()
-				.WithDefaultsFromState(state)
+			Database
 				.WithUser("usercode", personId, null, teamId, null)
 				.WithSchedule(personId, phone, "2014-10-20 8:00", "2014-10-20 10:00")
 				.WithAlarm("statecode", phone, 1)
-				.Make();
-			var target = new RtaForTest(database, new ThisIsNow("2014-10-20 9:00"), sender);
+				;
+			Now.Is("2014-10-20 9:00");
+			
+			Target.SaveState(state);
+			Target.SaveState(state);
 
-			target.SaveState(state);
-			target.SaveState(state);
-
-			sender.AllNotifications.Where(x => x.DomainType == typeof(TeamAdherenceMessage).Name).Should().Have.Count.EqualTo(1);
-			sender.AllNotifications.Where(x => x.DomainType == typeof(SiteAdherenceMessage).Name).Should().Have.Count.EqualTo(1);
+			Sender.AllNotifications.Where(x => x.DomainType == typeof(TeamAdherenceMessage).Name).Should().Have.Count.EqualTo(1);
+			Sender.AllNotifications.Where(x => x.DomainType == typeof(SiteAdherenceMessage).Name).Should().Have.Count.EqualTo(1);
 		}
 
 		[Test]
@@ -116,23 +118,21 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 				UserCode = "usercode",
 				StateCode = "phone"
 			};
-			var sender = new FakeMessageSender();
 			var teamId = Guid.NewGuid();
 			var phone = Guid.NewGuid();
 			var personId = Guid.NewGuid();
-			var database = new FakeRtaDatabase()
-				.WithDefaultsFromState(state)
+			Database
 				.WithUser("usercode", personId, null, teamId, null)
 				.WithSchedule(personId, phone, "2014-10-20 8:00", "2014-10-20 10:00")
 				.WithAlarm("ready", phone, 1)
 				.WithAlarm("phone", phone, 1)
-				.Make();
-			var target = new RtaForTest(database, new ThisIsNow("2014-10-20 9:00"), sender);
+				;
+			Now.Is("2014-10-20 9:00");
+			
+			Target.SaveState(state);
+			Target.SaveState(state2);
 
-			target.SaveState(state);
-			target.SaveState(state2);
-
-			sender.AllNotifications.Where(x => x.DomainType == typeof(AgentsAdherenceMessage).Name).Should().Have.Count.EqualTo(2);
+			Sender.AllNotifications.Where(x => x.DomainType == typeof(AgentsAdherenceMessage).Name).Should().Have.Count.EqualTo(2);
 		}
 
 		[Test]
@@ -148,23 +148,21 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 				UserCode = "usercode",
 				StateCode = "phone"
 			};
-			var sender = new FakeMessageSender();
 			var teamId = Guid.NewGuid();
 			var phone = Guid.NewGuid();
 			var personId = Guid.NewGuid();
-			var database = new FakeRtaDatabase()
-				.WithDefaultsFromState(state)
+			Database
 				.WithUser("usercode", personId, null, teamId, null)
 				.WithSchedule(personId, phone, "2014-10-20 8:00", "2014-10-20 10:00")
 				.WithAlarm("ready", phone, "my first state")
 				.WithAlarm("phone", phone, "my second state")
-				.Make();
-			var target = new RtaForTest(database, new ThisIsNow("2014-10-20 9:00"), sender);
+				;
+			Now.Is("2014-10-20 9:00");
+			
+			Target.SaveState(state);
+			Target.SaveState(state2);
 
-			target.SaveState(state);
-			target.SaveState(state2);
-
-			var jsonResult = JsonConvert.DeserializeObject<AgentsAdherenceMessage>(sender.LastAgentsNotification.BinaryData);
+			var jsonResult = JsonConvert.DeserializeObject<AgentsAdherenceMessage>(Sender.LastAgentsNotification.BinaryData);
 			jsonResult.AgentStates.Single().State.Should().Be.EqualTo("my second state");
 		}
 
@@ -175,18 +173,15 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 			{
 				UserCode = "usercode"
 			};
-			var sender = new FakeMessageSender();
 			var businessUnidId = Guid.NewGuid();
 			var personId = Guid.NewGuid();
-			var database = new FakeRtaDatabase()
-				.WithDefaultsFromState(state)
-				.WithUser("usercode", personId, businessUnidId, Guid.NewGuid(), null)
-				.Make();
-			var target = new RtaForTest(database, new ThisIsNow("2014-10-20 9:00"), sender);
+			Database
+				.WithUser("usercode", personId, businessUnidId, Guid.NewGuid(), null);
+			Now.Is("2014-10-20 9:00");
+			
+			Target.SaveState(state);
 
-			target.SaveState(state);
-
-			sender.LastTeamNotification.BusinessUnitId.Should().Be.EqualTo(businessUnidId.ToString());
+			Sender.LastTeamNotification.BusinessUnitId.Should().Be.EqualTo(businessUnidId.ToString());
 		}
 
 		[Test]
@@ -196,18 +191,15 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 			{
 				UserCode = "usercode"
 			};
-			var sender = new FakeMessageSender();
 			var businessUnidId = Guid.NewGuid();
 			var personId = Guid.NewGuid();
-			var database = new FakeRtaDatabase()
-				.WithDefaultsFromState(state)
-				.WithUser("usercode", personId, businessUnidId, Guid.NewGuid(), null)
-				.Make();
-			var target = new RtaForTest(database, new ThisIsNow("2014-10-20 9:00"), sender);
+			Database
+				.WithUser("usercode", personId, businessUnidId, Guid.NewGuid(), null);
+			Now.Is("2014-10-20 9:00");
 
-			target.SaveState(state);
+			Target.SaveState(state);
 
-			sender.AllNotifications.Where(x => x.DomainType == typeof(TeamAdherenceMessage).Name).Should().Have.Count.EqualTo(1);
+			Sender.AllNotifications.Where(x => x.DomainType == typeof(TeamAdherenceMessage).Name).Should().Have.Count.EqualTo(1);
 		}
 
 		[Test]
@@ -217,18 +209,15 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 			{
 				UserCode = "usercode"
 			};
-			var sender = new FakeMessageSender();
 			var businessUnidId = Guid.NewGuid();
 			var personId = Guid.NewGuid();
-			var database = new FakeRtaDatabase()
-				.WithDefaultsFromState(state)
-				.WithUser("usercode", personId, businessUnidId, null, Guid.NewGuid())
-				.Make();
-			var target = new RtaForTest(database, new ThisIsNow("2014-10-20 9:00"), sender);
+			Database
+				.WithUser("usercode", personId, businessUnidId, null, Guid.NewGuid());
+			Now.Is("2014-10-20 9:00");
+			
+			Target.SaveState(state);
 
-			target.SaveState(state);
-
-			sender.LastSiteNotification.BusinessUnitId.Should().Be.EqualTo(businessUnidId.ToString());
+			Sender.LastSiteNotification.BusinessUnitId.Should().Be.EqualTo(businessUnidId.ToString());
 		}
 
 		[Test]
@@ -238,18 +227,15 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 			{
 				UserCode = "usercode"
 			};
-			var sender = new FakeMessageSender();
 			var businessUnidId = Guid.NewGuid();
 			var personId = Guid.NewGuid();
-			var database = new FakeRtaDatabase()
-				.WithDefaultsFromState(state)
-				.WithUser("usercode", personId, businessUnidId, null, Guid.NewGuid())
-				.Make();
-			var target = new RtaForTest(database, new ThisIsNow("2014-10-20 9:00"), sender);
+			Database
+				.WithUser("usercode", personId, businessUnidId, null, Guid.NewGuid());
+			Now.Is("2014-10-20 9:00");
 
-			target.SaveState(state);
+			Target.SaveState(state);
 
-			sender.AllNotifications.Where(x => x.DomainType == typeof(SiteAdherenceMessage).Name).Should().Have.Count.EqualTo(1);
+			Sender.AllNotifications.Where(x => x.DomainType == typeof(SiteAdherenceMessage).Name).Should().Have.Count.EqualTo(1);
 		}
 
 		[Test]
@@ -259,15 +245,13 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 			{
 				UserCode = "usercode",
 			};
-			var sender = new FakeMessageSender();
-			var database = new FakeRtaDatabase()
-				.WithSource(state.SourceId)
-				.Make();
-			var target = new RtaForTest(database, new ThisIsNow("2014-10-20 9:00"), sender);
+			Database
+				.WithSource(state.SourceId);
+			Now.Is("2014-10-20 9:00");
+			
+			Target.SaveState(state);
 
-			target.SaveState(state);
-
-			sender.AllNotifications.Should().Be.Empty();
+			Sender.AllNotifications.Should().Be.Empty();
 		}
 	}
 }
