@@ -173,7 +173,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 			});
 
 			var @event = publisher.PublishedEvents.OfType<PersonStateChangedEvent>().Single();
-			@event.InAdherenceWithPreviousActivity.Should().Be(true);
+			@event.InOrNeutralAdherenceWithPreviousActivity.Should().Be(true);
 		}
 
 		[Test]
@@ -194,7 +194,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 			});
 
 			var @event = publisher.PublishedEvents.OfType<PersonStateChangedEvent>().Single();
-			@event.InAdherenceWithPreviousActivity.Should().Be(false);
+			@event.InOrNeutralAdherenceWithPreviousActivity.Should().Be(false);
 		}
 
 
@@ -218,6 +218,28 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 
 			publisher.PublishedEvents.OfType<PersonStateChangedEvent>().Single()
 				.Adherence.Should().Be(AdherenceState.Neutral);
+		}
+
+		[Test]
+		[Toggle(Toggles.RTA_NeutralAdherence_30930)]
+		public void ShouldSetInAdhernceWithPreviousActivity()
+		{
+			var personId = Guid.NewGuid();
+			var activityId = Guid.NewGuid();
+			database
+				.WithUser("usercode", personId)
+				.WithSchedule(personId, activityId, "2014-10-20 10:00", "2014-10-20 11:00")
+				.WithAlarm("phone", activityId, -1, Adherence.Neutral);
+			now.Is("2014-10-20 11:05");
+
+			target.SaveState(new ExternalUserStateForTest
+			{
+				UserCode = "usercode",
+				StateCode = "phone"
+			});
+
+			publisher.PublishedEvents.OfType<PersonStateChangedEvent>().Single()
+				.InOrNeutralAdherenceWithPreviousActivity.Should().Be(true);
 		}
 
 		[Test]

@@ -204,7 +204,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ViewModels
 						{
 							StartTime = "2014-11-20 8:00".Utc(),
 							TimeInAdherence = TimeSpan.Zero,
-							TimeOutOfAdherence = TimeSpan.Zero
+							TimeOutOfAdherence = TimeSpan.Zero,
 						}
 					}
 				}
@@ -486,6 +486,109 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ViewModels
 
 			result.Should().Have.Count.GreaterThan(0);
 		}
+
+
+		[Test]
+		public void ShouldNotReturnPercentageWhenOnlyNeutralAdherence()
+		{
+			var personId = Guid.NewGuid();
+			Now.Is("2014-11-20 9:00");
+			Reader.Has(new AdherenceDetailsReadModel
+			{
+				PersonId = personId,
+				Date = "2014-11-20".Utc(),
+				Model = new AdherenceDetailsModel
+				{
+					LastUpdate = "2014-11-20 09:00".Utc(),
+					LastAdherence = null,
+					Activities = new[]
+					{
+						new ActivityAdherence
+						{
+							StartTime = "2014-11-20 8:00".Utc(),
+							TimeInAdherence = null,
+							TimeOutOfAdherence = null,
+						},
+						new ActivityAdherence
+						{
+							StartTime = "2014-11-20 9:00".Utc()
+						},
+					}
+				}
+			});
+
+			var result = Target.Build(personId);
+
+			result.First().AdherencePercent.Should().Be(null);
+		}
+
+		[Test]
+		public void ShouldReturn0PercentageWhenMostlyInNeutral()
+		{
+			var personId = Guid.NewGuid();
+			Now.Is("2014-11-20 9:00");
+			Reader.Has(new AdherenceDetailsReadModel
+			{
+				PersonId = personId,
+				Date = "2014-11-20".Utc(),
+				Model = new AdherenceDetailsModel
+				{
+					LastUpdate = "2014-11-20 09:00".Utc(),
+					LastAdherence = null,
+					Activities = new[]
+					{
+						new ActivityAdherence
+						{
+							StartTime = "2014-11-20 8:00".Utc(),
+							TimeInAdherence = null,
+							TimeOutOfAdherence = "5".Minutes(),
+						},
+						new ActivityAdherence
+						{
+							StartTime = "2014-11-20 9:00".Utc()
+						},
+					}
+				}
+			});
+
+			var result = Target.Build(personId);
+
+			result.First().AdherencePercent.Should().Be(0);
+		}
+		[Test]
+		public void ShouldReturn100PercentageWhenMostlyInNeutral()
+		{
+			var personId = Guid.NewGuid();
+			Now.Is("2014-11-20 9:00");
+			Reader.Has(new AdherenceDetailsReadModel
+			{
+				PersonId = personId,
+				Date = "2014-11-20".Utc(),
+				Model = new AdherenceDetailsModel
+				{
+					LastUpdate = "2014-11-20 09:00".Utc(),
+					LastAdherence = null,
+					Activities = new[]
+					{
+						new ActivityAdherence
+						{
+							StartTime = "2014-11-20 8:00".Utc(),
+							TimeInAdherence = "5".Minutes(),
+							TimeOutOfAdherence = null,
+						},
+						new ActivityAdherence
+						{
+							StartTime = "2014-11-20 9:00".Utc()
+						},
+					}
+				}
+			});
+
+			var result = Target.Build(personId);
+
+			result.First().AdherencePercent.Should().Be(100);
+		}
+
 
 	}
 }

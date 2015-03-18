@@ -30,8 +30,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ReadModelUpdaters
 		public string Name { get; set; }
 		public DateTime StartTime { get; set; }
 		public DateTime? ActualStartTime { get; set; }
-		public TimeSpan TimeInAdherence { get; set; }
-		public TimeSpan TimeOutOfAdherence { get; set; }
+		public TimeSpan? TimeInAdherence { get; set; }
+		public TimeSpan? TimeOutOfAdherence { get; set; }
 	}
 
 	public class AdherenceDetailsReadModelState

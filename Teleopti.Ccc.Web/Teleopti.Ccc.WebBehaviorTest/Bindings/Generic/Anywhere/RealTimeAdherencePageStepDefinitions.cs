@@ -128,7 +128,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Anywhere
 		[Then(@"I should see '(.*)' without adherence")]
 		public void ThenIShouldSeeWithoutAdherence(string activity)
 		{
-			const string noAdherence = "N/A";
+			const string noAdherence = "-";
 			Browser.Interactions.AssertExistsUsingJQuery(".activity-name:contains('{0}')", activity);
 			Browser.Interactions.AssertExistsUsingJQuery(".adherence-percent:contains('{0}')", noAdherence);
 		}

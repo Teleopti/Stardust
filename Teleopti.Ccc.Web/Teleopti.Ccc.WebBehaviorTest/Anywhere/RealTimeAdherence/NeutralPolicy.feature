@@ -52,7 +52,6 @@ Scenario: Should adherence percentage with neutral adherence
 	And I click on an agent state
 	Then I should see historical adherence for 'Pierre Baldi' with adherence of 100%
 
-@ignore
 @OnlyRunIfEnabled('RTA_NeutralAdherence_30930')
 Scenario: Should see adherence details with neutral adherence
 	Given there is an activity named 'Phone'
@@ -100,4 +99,4 @@ Scenario: Should see adherence details with neutral adherence
 	And the time is '2015-03-02 10:00:00'
 	And I view manage adherence view for agent 'Pierre Baldi'
 	Then I should see 'Administration' without adherence
-	And I should see historical adherence for 'Pierre Baldi' with adherence of 100%
+	And I should see daily adherence for 'Pierre Baldi' is 100%

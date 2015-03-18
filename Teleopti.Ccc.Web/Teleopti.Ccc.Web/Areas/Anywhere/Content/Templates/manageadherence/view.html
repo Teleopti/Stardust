@@ -35,7 +35,7 @@
 											<td class="activity-startime  col-md-3" data-bind="text: StartTime"></td>
 											<td class="realstarttime  col-md-3" data-bind="text: ActualStartTime"></td>
 											<td class="adherence-percent col-md-3">
-												<span data-bind="text: AdherencePercent"></span><!-- ko if: AdherencePercent !== null -->%<!-- /ko -->
+												<span data-bind="text: AdherencePercent"></span><!-- ko if: AdherencePercent === null -->-<!-- /ko --><!-- ko if: AdherencePercent !== null -->%<!-- /ko -->
 											</td>
 										</tr>
 									</tbody>

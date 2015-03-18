@@ -14,7 +14,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Events
 		public string Datasource { get; set; }
 		public Guid BusinessUnitId { get; set; }
 		public bool InAdherence { get; set; }
-		public bool InAdherenceWithPreviousActivity { get; set; }
+		public bool InOrNeutralAdherenceWithPreviousActivity { get; set; }
 		public AdherenceState? Adherence { get; set; }
 	}
 }

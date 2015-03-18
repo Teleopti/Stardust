@@ -184,21 +184,21 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ReadModelUpdaters.Adheren
 				PersonId = personId,
 				Timestamp = "2014-11-17 9:22".Utc(),
 				InAdherence = false,
-				InAdherenceWithPreviousActivity = true,
+				InOrNeutralAdherenceWithPreviousActivity = true,
 			});
 			Target.Handle(new PersonStateChangedEvent
 			{
 				PersonId = personId,
 				Timestamp = "2014-11-17 9:25".Utc(),
 				InAdherence = false,
-				InAdherenceWithPreviousActivity = true,
+				InOrNeutralAdherenceWithPreviousActivity = true,
 			});
 			Target.Handle(new PersonStateChangedEvent
 			{
 				PersonId = personId,
 				Timestamp = "2014-11-17 9:30".Utc(),
 				InAdherence = false,
-				InAdherenceWithPreviousActivity = false,
+				InOrNeutralAdherenceWithPreviousActivity = false,
 			});
 
 			Persister.Model.ActualEndTime.Should().Be("2014-11-17 9:30".Utc());

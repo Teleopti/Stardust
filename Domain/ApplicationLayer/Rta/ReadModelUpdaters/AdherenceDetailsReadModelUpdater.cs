@@ -77,7 +77,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ReadModelUpdaters
 					addAdherence(s, @event.Timestamp, adherenceFor(@event));
 					if (s.ShiftEndTime.HasValue)
 						if (!s.FirstStateChangeOutOfAdherenceWithLastActivity.HasValue)
-							if (!@event.InAdherenceWithPreviousActivity)
+							if (!@event.InOrNeutralAdherenceWithPreviousActivity)
 								s.FirstStateChangeOutOfAdherenceWithLastActivity = @event.Timestamp;
 				});
 
@@ -282,6 +282,10 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ReadModelUpdaters
 					if (adherenceChange.Adherence == AdherenceState.Neutral)
 						if (adherenceBefore.Adherence == AdherenceState.Out)
 							return adherenceBefore.Time;
+
+					if (adherenceChange.Adherence == AdherenceState.Neutral)
+						if (adherenceBefore.Adherence == AdherenceState.In)
+							return adherenceChange.Time;
 				}
 
 
@@ -301,30 +305,40 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ReadModelUpdaters
 			return null;
 		}
 
-		private static TimeSpan calculateInAdherenceForActivity(AdherenceDetailsReadModel model, AdherenceDetailsReadModelActivityState activity)
+		private static TimeSpan? calculateInAdherenceForActivity(AdherenceDetailsReadModel model, AdherenceDetailsReadModelActivityState activity)
 		{
-			var things = adherenceForActivity(model, activity);
-			var result = things
+			var containsNeutralAdherence = false;
+			var inAdherenceForActivity = adherenceForActivity(model, activity)
 				.WithPrevious()
 				.Aggregate(TimeSpan.Zero, (current, a) =>
 				{
+					if (a.Previous.Adherence == AdherenceState.Neutral)
+						containsNeutralAdherence = true;
 					if (a.Previous.Adherence == AdherenceState.In)
 						return current + (a.This.Time - a.Previous.Time);
 					return current;
 				});
-			return result;
+			if (containsNeutralAdherence && inAdherenceForActivity == TimeSpan.Zero)
+				return null;
+			return inAdherenceForActivity;
 		}
 
-		private static TimeSpan calculateOutOfAdherenceForActivity(AdherenceDetailsReadModel model, AdherenceDetailsReadModelActivityState activity)
+		private static TimeSpan? calculateOutOfAdherenceForActivity(AdherenceDetailsReadModel model, AdherenceDetailsReadModelActivityState activity)
 		{
-			return adherenceForActivity(model, activity)
+			var containsNeutralAdherence = false;
+			var outOfAdherenceForActivity = adherenceForActivity(model, activity)
 				.WithPrevious()
 				.Aggregate(TimeSpan.Zero, (current, a) =>
 				{
+					if (a.Previous.Adherence == AdherenceState.Neutral)
+						containsNeutralAdherence = true;
 					if (a.Previous.Adherence == AdherenceState.Out)
 						return current + (a.This.Time - a.Previous.Time);
 					return current;
 				});
+			if (containsNeutralAdherence && outOfAdherenceForActivity == TimeSpan.Zero)
+				return null;
+			return outOfAdherenceForActivity;
 		}
 
 		private static IEnumerable<AdherenceDetailsReadModelAdherenceState> adherenceForActivity(AdherenceDetailsReadModel model, AdherenceDetailsReadModelActivityState activity)
