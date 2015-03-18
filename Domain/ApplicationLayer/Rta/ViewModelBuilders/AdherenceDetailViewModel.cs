@@ -1,4 +1,4 @@
-namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ViewModels
+namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ViewModelBuilders
 {
 	public class AdherenceDetailViewModel
 	{

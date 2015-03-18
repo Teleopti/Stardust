@@ -205,11 +205,11 @@
     <Compile Include="ApplicationLayer\Commands\RemovePersonAbsenceCommandHandler.cs" />
     <Compile Include="ApplicationLayer\Events\PersonAbsenceRemovedEvent.cs" />
     <Compile Include="ApplicationLayer\Commands\MoveActivityCommandHandler.cs" />
-    <Compile Include="ApplicationLayer\Rta\ViewModels\AdherencePercentageViewModel.cs" />
+    <Compile Include="ApplicationLayer\Rta\ViewModelBuilders\AdherencePercentageViewModel.cs" />
     <Compile Include="ApplicationLayer\Rta\Service\ActivityEventPublisher.cs" />
     <Compile Include="ApplicationLayer\Rta\Service\ActualAgentStateExtension.cs" />
     <Compile Include="ApplicationLayer\Rta\Service\AdherenceAggregatorInfo.cs" />
-    <Compile Include="ApplicationLayer\Rta\ViewModels\AdherenceDetailViewModel.cs" />
+    <Compile Include="ApplicationLayer\Rta\ViewModelBuilders\AdherenceDetailViewModel.cs" />
     <Compile Include="ApplicationLayer\Rta\ReadModelUpdaters\AdherenceDetailsReadModel.cs" />
     <Compile Include="ApplicationLayer\Rta\ReadModelUpdaters\AdherenceDetailsReadModelUpdater.cs" />
     <Compile Include="ApplicationLayer\Rta\Service\AdherenceEventPublisher.cs" />
@@ -234,7 +234,7 @@
     <Compile Include="ApplicationLayer\Rta\Service\AlarmMapping.cs" />
     <Compile Include="ApplicationLayer\Rta\Service\AlarmMappingLoader.cs" />
     <Compile Include="ApplicationLayer\Rta\Service\BelongsToDateDecorator.cs" />
-    <Compile Include="ApplicationLayer\Rta\ViewModels\AdherenceDetailsViewModelBuilder.cs" />
+    <Compile Include="ApplicationLayer\Rta\ViewModelBuilders\AdherenceDetailsViewModelBuilder.cs" />
     <Compile Include="ApplicationLayer\Rta\Service\CheckForActivityChangeInputModel.cs" />
     <Compile Include="ApplicationLayer\Rta\ReadModelUpdaters\CurrentBelongsToDate.cs" />
     <Compile Include="ApplicationLayer\Rta\Service\CheckForActivityChangeWebModel.cs" />
@@ -281,7 +281,7 @@
     <Compile Include="ApplicationLayer\Rta\Service\RtaProcessor.cs" />
     <Compile Include="ApplicationLayer\Rta\Service\ScheduleInfo.cs" />
     <Compile Include="ApplicationLayer\Rta\Service\ShiftEventPublisher.cs" />
-    <Compile Include="ApplicationLayer\Rta\ViewModels\AdherencePercentageViewModelBuilder.cs" />
+    <Compile Include="ApplicationLayer\Rta\ViewModelBuilders\AdherencePercentageViewModelBuilder.cs" />
     <Compile Include="ApplicationLayer\Rta\ExternalUserStateInputModel.cs" />
     <Compile Include="ApplicationLayer\Rta\ReadModelUpdaters\SiteOutOfAdherenceReadModel.cs" />
     <Compile Include="ApplicationLayer\Rta\ReadModelUpdaters\SiteOutOfAdherenceReadModelUpdater.cs" />
