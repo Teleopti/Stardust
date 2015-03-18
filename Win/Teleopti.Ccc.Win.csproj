@@ -2591,9 +2591,11 @@
       <DependentUpon>WorkShiftsExplorer.cs</DependentUpon>
     </Compile>
     <Compile Include="Sikuli\Helpers\TestDuration.cs" />
+    <Compile Include="Sikuli\Validators\RootValidators\OptimizeBlockSameStartTime.cs" />
     <Compile Include="Sikuli\Validators\RootValidators\OptimizeBlockSameShiftCategory.cs" />
     <Compile Include="Sikuli\Validators\RootValidators\OptimizeAllOptionsOffTimeBetweenDaysValidator.cs" />
     <Compile Include="Sikuli\Validators\RootValidators\RootValidator.cs" />
+    <Compile Include="Sikuli\Validators\RootValidators\ScheduleBlockSameStartTime.cs" />
     <Compile Include="Sikuli\Validators\RootValidators\ScheduleBlockSameShiftCategory.cs" />
     <Compile Include="Sikuli\Validators\RootValidators\ScheduleOvertimePeriodValidator.cs" />
     <Compile Include="Sikuli\Validators\RootValidators\OptimizeAllOptionsOffIntradayBalanceAfterValidator.cs" />
@@ -2606,11 +2608,11 @@
     <Compile Include="Sikuli\Validators\AtomicValidators\DurationValidator.cs" />
     <Compile Include="Sikuli\Validators\RootValidators\ScheduleAllOptionsOffValidator.cs" />
     <Compile Include="Sikuli\Validators\SchedulerValidator.cs" />
-    <Compile Include="Sikuli\Validators\SelftestValidators\TestAtomicValidator.cs" />
-    <Compile Include="Sikuli\Validators\SelftestValidators\TestRootValidator.cs" />
-    <Compile Include="Sikuli\Validators\SelftestValidators\WarnValidator.cs" />
-    <Compile Include="Sikuli\Validators\SelftestValidators\FailValidator.cs" />
-    <Compile Include="Sikuli\Validators\SelftestValidators\PassValidator.cs" />
+    <Compile Include="Sikuli\Validators\SelftestValidators\SelftestAtomicValidator.cs" />
+    <Compile Include="Sikuli\Validators\SelftestValidators\SelftestRootValidator.cs" />
+    <Compile Include="Sikuli\Validators\SelftestValidators\SelftestWarnValidator.cs" />
+    <Compile Include="Sikuli\Validators\SelftestValidators\SelftestFailValidator.cs" />
+    <Compile Include="Sikuli\Validators\SelftestValidators\SelftestPassValidator.cs" />
     <Compile Include="Sikuli\Helpers\ValidatorHelper.cs" />
     <EmbeddedResource Include="Backlog\BacklogSelector.resx">
       <DependentUpon>BacklogSelector.cs</DependentUpon>
