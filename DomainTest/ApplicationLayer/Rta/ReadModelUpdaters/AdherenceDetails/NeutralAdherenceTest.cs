@@ -253,6 +253,33 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ReadModelUpdaters.Adheren
 			Persister.Details.Single().ActualStartTime.Should().Be("2015-03-17 8:00".Utc());	
 		}
 
+
+		[Test]
+		public void ShouldPersistActualStartTimeWhenAdherenceDoesNotChangeWhenActivityChanges()
+		{
+			var personId = Guid.NewGuid();
+			Target.Handle(new PersonActivityStartEvent
+			{
+				PersonId = personId,
+				StartTime = "2014-11-17 8:00".Utc(),
+				Adherence = AdherenceState.Out
+			});
+			Target.Handle(new PersonStateChangedEvent
+			{
+				PersonId = personId,
+				Timestamp = "2014-11-17 8:02".Utc(),
+				Adherence = AdherenceState.Neutral
+			});
+			Target.Handle(new PersonActivityStartEvent
+			{
+				PersonId = personId,
+				StartTime = "2014-11-17 9:00".Utc(),
+				Adherence = AdherenceState.Neutral
+			});
+
+			Persister.Details.Last().ActualStartTime.Should().Be("2014-11-17 9:00".Utc());
+		}
+
 		[Test]
 		public void ShouldSetActualEndTimeWhenShiftEnds()
 		{
@@ -290,6 +317,33 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ReadModelUpdaters.Adheren
 			});
 
 			Persister.Details.Last().ActualStartTime.Should().Be("2015-03-17 9:00".Utc());	
+		}
+
+
+		[Test]
+		public void ShouldSetActualStartTimeWhenTransitionFromNeutralToIn()
+		{
+			var personId = Guid.NewGuid();
+			Target.Handle(new PersonActivityStartEvent
+			{
+				PersonId = personId,
+				StartTime = "2014-11-17 8:00".Utc(),
+				Adherence = AdherenceState.Out
+			});
+			Target.Handle(new PersonStateChangedEvent
+			{
+				PersonId = personId,
+				Timestamp = "2014-11-17 8:02".Utc(),
+				Adherence = AdherenceState.Neutral
+			});
+			Target.Handle(new PersonActivityStartEvent
+			{
+				PersonId = personId,
+				StartTime = "2014-11-17 9:00".Utc(),
+				Adherence = AdherenceState.In
+			});
+
+			Persister.Details.Last().ActualStartTime.Should().Be("2014-11-17 9:00".Utc());
 		}
 	}
 }
