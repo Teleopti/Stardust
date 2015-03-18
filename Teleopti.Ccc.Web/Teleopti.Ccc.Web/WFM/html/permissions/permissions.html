@@ -68,7 +68,7 @@
 				<article class="tab-group wfm-toggle-group material-depth-2">
 					<input type="radio" name="perms-tabs" ng-model="roleDetails" ng-value="'functionsAvailable'" id="tab-1" />
 					<label class="label" for="tab-1">
-						FUNCTIONS
+						Functions
 					</label>
 
 					<section>
@@ -85,7 +85,7 @@
 										<div class="wfm-slider">
 											<input type="checkbox" id="slide1" />
 											<label for="slide1">
-												<span>selected</span>
+												<span>selected {{selectedFilter}}</span>
 											</label>
 										</div>
 									</div>
@@ -111,7 +111,7 @@
 					</section>
 					<input type="radio" name="perms-tabs" ng-model="roleDetails" ng-value="'dataAvailable'" id="tab-2" />
 					<label class="label" for="tab-2">
-						DATA
+						Data
 					</label>
 					<section>
 						<div class="tab-container">
@@ -126,7 +126,7 @@
 									</div>
 									<div class="col-lg-3">
 										<div class="wfm-slider">
-											<input type="checkbox" id="slide3" />
+											<input type="checkbox" id="slide3"/>
 											<label for="slide3">
 												<span>selected</span>
 											</label>

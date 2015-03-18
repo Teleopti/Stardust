@@ -1,39 +1,28 @@
+
+
 <div class="material-depth-1 navbar navbar-default">
-	<div class="wfm-container">
-		<div class="navbar-header">
-			<div class="content">
-				<span class="brand">Teleopti WFM</span>
-				<span class="breadbin hidden-xs">
-					<a class="crumb">Bread ></a>
-					<a class="crumb">crumb</a>
-				</span>
-				<div class="right-actions">
-					<span>
-						<div ng-controller="SearchCtrl">
-							<i class="mdi mdi-magnify"></i>
-							<input type="text" placeholder="Search ..." ng-model="keyword" ng-change="searchKeyword()" class="global-search" />
-							<div class="search-results material-depth-2">
-								<ul class="wfm-list">
-									<li class="animate-repeat" ng-repeat="item in searchResult">{{item.FirstName}}</li>
-									<li class="animate-repeat" ng-if="results.length == 0">
-								</ul>
-							</div> 
-						</div>
-					</span>
-					<span>
-						<div class="dropdown" tabindex="0">
-							<a><i class="mdi mdi-menu"></i></a>
-							<div class="inner right material-depth-2">
-								<span>Option 1</span>
-								<span>Option 2</span>
-								<span>Option 3 is a long one, to show how they wrap</span>
-							</div>
-						</div>
-					</span>
-					<span><a><i class="mdi mdi-account"></i></a>
-					</span>
+	<div class="navbar-header content">
+		<div class="navbar-left">
+			<span class="brand">Teleopti WFM</span>
+			<span class="breadbin hidden-xs">
+				<a class="crumb">Bread ></a>
+				<a class="crumb">crumb</a>
+			</span>
+		</div>
+		<div class="navbar-right">
+			<span ng-controller="SearchCtrl">
+				<i class="mdi mdi-magnify"></i>
+				<input type="text" placeholder="Search ..." ng-model="keyword" ng-change="searchKeyword()" class="global-search" />
+				<div class="search-results material-depth-2">
+					<ul class="wfm-list">
+						<li class="animate-repeat" ng-repeat="item in searchResult">{{item.FirstName}}</li>
+						<li class="animate-repeat" ng-if="results.length == 0">
+					</ul>
 				</div>
-			</div>
+			</span>
+			<span>
+				<a><i class="mdi mdi-account"></i></a>
+			</span>
 		</div>
 	</div>
 </div>
