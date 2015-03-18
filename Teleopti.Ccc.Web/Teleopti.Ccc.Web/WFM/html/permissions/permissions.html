@@ -74,7 +74,7 @@
 					<section>
 						<div class="tab-container">
 							<div ng-show="roleDetails=='functionsAvailable'">
-								<div class="row">
+								<div class="row toolbar">
 									<div class="col-lg-6">
 										<div class="input-prepend">
 											<i class="mdi mdi-filter-outline"></i>
@@ -85,7 +85,8 @@
 										<div class="wfm-slider">
 											<input type="checkbox" id="slide1" />
 											<label for="slide1">
-												<span>selected {{selectedFilter}}</span>
+												<span class="wfm-slider-label">Selected rows</span>
+												<span class="wfm-slider-toggle"></span>
 											</label>
 										</div>
 									</div>
@@ -93,7 +94,8 @@
 										<div class="wfm-slider">
 											<input type="checkbox" id="slide2" />
 											<label for="slide2">
-												<span>unselected</span>
+												<span class="wfm-slider-label">Unselected rows</span>
+												<span class="wfm-slider-toggle"></span>
 											</label>
 										</div>
 									</div>
@@ -126,9 +128,10 @@
 									</div>
 									<div class="col-lg-3">
 										<div class="wfm-slider">
-											<input type="checkbox" id="slide3"/>
+											<input type="checkbox" id="slide3" />
 											<label for="slide3">
-												<span>selected</span>
+												<span class="wfm-slider-label">Selected rows</span>
+												<span class="wfm-slider-toggle"></span>
 											</label>
 										</div>
 									</div>
@@ -136,7 +139,8 @@
 										<div class="wfm-slider">
 											<input type="checkbox" id="slide4" />
 											<label for="slide4">
-												<span>unselected</span>
+												<span class="wfm-slider-label">Unselected rows</span>
+												<span class="wfm-slider-toggle"></span>
 											</label>
 										</div>
 									</div>

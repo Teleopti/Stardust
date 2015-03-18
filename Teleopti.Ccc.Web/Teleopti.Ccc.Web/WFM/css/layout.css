@@ -34,3 +34,8 @@ ul {
 #slide1:checked ~ .angular-ui-tree-handle.selected{
 	display: none;
 }
+
+label {
+	display: inline !important;
+}
+
