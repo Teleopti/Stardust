@@ -30,5 +30,7 @@
 		public const string OptimizeBlockSameShiftCategory = "OptimizeBlockSameShiftCategory";
 		public const string ScheduleBlockSameStartTime = "ScheduleBlockSameStartTime";
 		public const string OptimizeBlockSameStartTime = "OptimizeBlockSameStartTime";
+		public const string ScheduleBlockSameShift = "ScheduleBlockSameShift";
+		public const string OptimizeBlockSameShift = "OptimizeBlockSameShift";
 	}
 }

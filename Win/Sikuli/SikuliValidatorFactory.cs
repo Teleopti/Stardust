@@ -1,9 +1,7 @@
 ﻿using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
-using Teleopti.Ccc.Win.Sikuli.Helpers;
 using Teleopti.Ccc.Win.Sikuli.Validators;
 using Teleopti.Ccc.Win.Sikuli.Validators.RootValidators;
 using Teleopti.Ccc.Win.Sikuli.Validators.SelftestValidators;
-using Teleopti.Ccc.WinCode.Common;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Win.Sikuli
@@ -60,6 +58,12 @@ namespace Teleopti.Ccc.Win.Sikuli
 
 					case SikuliValidatorRegister.OptimizeBlockSameStartTime:
 						return new OptimizeBlockSameStartTime(schedulerState, totalSkill);
+
+					case SikuliValidatorRegister.ScheduleBlockSameShift:
+						return new ScheduleBlockSameShift(schedulerState, totalSkill);
+
+					case SikuliValidatorRegister.OptimizeBlockSameShift:
+						return new OptimizeBlockSameShift(schedulerState, totalSkill);
 
 					case SikuliValidatorRegister.TestPass:
 						return new SelftestPassValidator();

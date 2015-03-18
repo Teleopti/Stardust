@@ -2591,10 +2591,12 @@
       <DependentUpon>WorkShiftsExplorer.cs</DependentUpon>
     </Compile>
     <Compile Include="Sikuli\Helpers\TestDuration.cs" />
+    <Compile Include="Sikuli\Validators\RootValidators\OptimizeBlockSameShift.cs" />
     <Compile Include="Sikuli\Validators\RootValidators\OptimizeBlockSameStartTime.cs" />
     <Compile Include="Sikuli\Validators\RootValidators\OptimizeBlockSameShiftCategory.cs" />
     <Compile Include="Sikuli\Validators\RootValidators\OptimizeAllOptionsOffTimeBetweenDaysValidator.cs" />
     <Compile Include="Sikuli\Validators\RootValidators\RootValidator.cs" />
+    <Compile Include="Sikuli\Validators\RootValidators\ScheduleBlockSameShift.cs" />
     <Compile Include="Sikuli\Validators\RootValidators\ScheduleBlockSameStartTime.cs" />
     <Compile Include="Sikuli\Validators\RootValidators\ScheduleBlockSameShiftCategory.cs" />
     <Compile Include="Sikuli\Validators\RootValidators\ScheduleOvertimePeriodValidator.cs" />
