@@ -1,7 +1,6 @@
 using System;
-using Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service;
 
-namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta
+namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 {
 	public class NoEvents : IShiftEventPublisher, IAdherenceEventPublisher, IStateEventPublisher, IActivityEventPublisher
 	{

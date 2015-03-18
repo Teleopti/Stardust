@@ -2,6 +2,7 @@
 using System.Web.Mvc;
 using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta;
+using Teleopti.Ccc.Domain.ApplicationLayer.Rta.ViewModels;
 
 namespace Teleopti.Ccc.Web.Areas.Anywhere.Controllers
 {
