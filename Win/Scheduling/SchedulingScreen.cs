@@ -6452,10 +6452,14 @@ namespace Teleopti.Ccc.Win.Scheduling
 
 		private void toolStripButtonFilterAgents_Click(object sender, EventArgs e)
 		{
+			if (_tmpTimer.Enabled)
+				return;
+
 			showFilterDialog();
 			_shiftCategoryDistributionModel.SetFilteredPersons(_schedulerState.FilteredPersonDictionary.Values);
 			schedulerSplitters1.RefreshTabInfoPanels();
 			updateShiftEditor();
+			_tmpTimer.Enabled = true;
 		}
 
 		private void refreshEntitiesUsingMessageBroker()
