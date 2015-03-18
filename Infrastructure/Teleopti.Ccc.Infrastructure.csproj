@@ -262,6 +262,7 @@
     <Compile Include="MultiTenancy\Client\TenantDataManager.cs" />
     <Compile Include="NHibernateConfiguration\SecondLevelCache.cs" />
     <Compile Include="Persisters\WorkflowControlSetPublishDatePersister.cs" />
+    <Compile Include="Repositories\SeatBookingRepository.cs" />
     <Compile Include="Rta\CacheInvalidator.cs" />
     <Compile Include="Rta\Persisters\AdherenceDetailsReadModelPersister.cs" />
     <Compile Include="Rta\Persisters\AdherencePercentageReadModelPersister.cs" />

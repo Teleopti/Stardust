@@ -4,16 +4,17 @@ using System.Diagnostics;
 using System.Linq;
 using NUnit.Framework;
 using Teleopti.Ccc.Domain.SeatPlanning;
+using Teleopti.Ccc.TestCommon.FakeData;
 
 namespace SeatPlanner
 {
-	public class SeatPlanAllocationTests
+	public class SeatAllocatorTests
 	{
 
 		[Test]
 		public void ShouldAllocateAnAgentToASeat()
 		{
-			var agentShift = new AgentShift(new BookingPeriod(new DateTime(2014, 01, 01, 8, 0, 0), new DateTime(2014, 01, 01, 17, 0, 0)), null, null);
+			var agentShift = new SeatBooking( null, new DateTime(2014, 01, 01, 8, 0, 0), new DateTime(2014, 01, 01, 17, 0, 0));
 			var seatBookingRequest = new SeatBookingRequest(agentShift);
 
 			var location = new SeatMapLocation(){IncludeInSeatPlan = true};
@@ -27,10 +28,10 @@ namespace SeatPlanner
 		[Test]
 		public void ShouldAllocateTwoAgentsToOneSeatEach()
 		{
-			var agentShift1 = new AgentShift(new BookingPeriod(new DateTime(2014, 01, 01, 8, 0, 0), new DateTime(2014, 01, 01, 17, 0, 0)), null, null);
+			var agentShift1 = new SeatBooking(null, new DateTime(2014, 01, 01, 8, 0, 0), new DateTime(2014, 01, 01, 17, 0, 0));
 			var seatBookingRequest1 = new SeatBookingRequest(agentShift1);
 
-			var agentShift2 = new AgentShift(new BookingPeriod(new DateTime(2014, 01, 01, 8, 0, 0), new DateTime(2014, 01, 01, 17, 0, 0)), null, null);
+			var agentShift2 = new SeatBooking(null, new DateTime(2014, 01, 01, 8, 0, 0), new DateTime(2014, 01, 01, 17, 0, 0));
 			var seatBookingRequest2 = new SeatBookingRequest(agentShift2);
 
 			var location = new SeatMapLocation() { IncludeInSeatPlan = true };
@@ -46,10 +47,10 @@ namespace SeatPlanner
 		[Test]
 		public void ShouldAllocateAccordingToPriority()
 		{
-			var agentShift1 = new AgentShift(new BookingPeriod(new DateTime(2014, 01, 01, 8, 0, 0), new DateTime(2014, 01, 01, 17, 0, 0)), null, null);
+			var agentShift1 = new SeatBooking(null, new DateTime(2014, 01, 01, 8, 0, 0), new DateTime(2014, 01, 01, 17, 0, 0));
 			var seatBookingRequest1 = new SeatBookingRequest(agentShift1);
 
-			var agentShift2 = new AgentShift(new BookingPeriod(new DateTime(2014, 01, 01, 8, 0, 0), new DateTime(2014, 01, 01, 17, 0, 0)), null, null);
+			var agentShift2 = new SeatBooking(null, new DateTime(2014, 01, 01, 8, 0, 0), new DateTime(2014, 01, 01, 17, 0, 0));
 			var seatBookingRequest2 = new SeatBookingRequest(agentShift2);
 
 			var location = new SeatMapLocation() { IncludeInSeatPlan = true };
@@ -64,10 +65,10 @@ namespace SeatPlanner
 		[Test]
 		public void ShouldAllocateTwoAgentsSequentiallyToOneSeat()
 		{
-			var agentShift1 = new AgentShift(new BookingPeriod(new DateTime(2014, 01, 01, 8, 0, 0), new DateTime(2014, 01, 01, 11, 59, 59)), null, null);
+			var agentShift1 = new SeatBooking(null, new DateTime(2014, 01, 01, 8, 0, 0), new DateTime(2014, 01, 01, 11, 59, 59));
 			var seatBookingRequest1 = new SeatBookingRequest(agentShift1);
 
-			var agentShift2 = new AgentShift(new BookingPeriod(new DateTime(2014, 01, 01, 12, 0, 0), new DateTime(2014, 01, 01, 17, 0, 0)), null, null);
+			var agentShift2 = new SeatBooking(null, new DateTime(2014, 01, 01, 12, 0, 0), new DateTime(2014, 01, 01, 17, 0, 0));
 			var seatBookingRequest2 = new SeatBookingRequest(agentShift2);
 
 			var location = new SeatMapLocation() { IncludeInSeatPlan = true };
@@ -83,10 +84,10 @@ namespace SeatPlanner
 		[Test]
 		public void ShouldNotAllocateTwoAgentsSequentiallyToOneSeat()
 		{
-			var agentShift1 = new AgentShift(new BookingPeriod(new DateTime(2014, 01, 01, 8, 0, 0), new DateTime(2014, 01, 01, 12, 59, 59)), null, null);
+			var agentShift1 = new SeatBooking(null, new DateTime(2014, 01, 01, 8, 0, 0), new DateTime(2014, 01, 01, 12, 59, 59));
 			var seatBookingRequest1 = new SeatBookingRequest(agentShift1);
 
-			var agentShift2 = new AgentShift(new BookingPeriod(new DateTime(2014, 01, 01, 12, 0, 0), new DateTime(2014, 01, 01, 17, 0, 0)), null, null);
+			var agentShift2 = new SeatBooking(null, new DateTime(2014, 01, 01, 12, 0, 0), new DateTime(2014, 01, 01, 17, 0, 0));
 			var seatBookingRequest2 = new SeatBookingRequest(agentShift2);
 
 			var location = new SeatMapLocation() { IncludeInSeatPlan = true };
@@ -100,10 +101,10 @@ namespace SeatPlanner
 		[Test]
 		public void ShouldAllocateTwoIntersectingBookingRequestsOverTwoLocations()
 		{
-			var agentShift1 = new AgentShift(new BookingPeriod(new DateTime(2014, 01, 01, 8, 0, 0), new DateTime(2014, 01, 01, 12, 59, 59)), null, null);
+			var agentShift1 = new SeatBooking(null, new DateTime(2014, 01, 01, 8, 0, 0), new DateTime(2014, 01, 01, 12, 59, 59));
 			var seatBookingRequest1 = new SeatBookingRequest(agentShift1);
 
-			var agentShift2 = new AgentShift(new BookingPeriod(new DateTime(2014, 01, 01, 12, 0, 0), new DateTime(2014, 01, 01, 17, 0, 0)), null, null);
+			var agentShift2 = new SeatBooking(null, new DateTime(2014, 01, 01, 12, 0, 0), new DateTime(2014, 01, 01, 17, 0, 0));
 			var seatBookingRequest2 = new SeatBookingRequest(agentShift2);
 
 			var location1= new SeatMapLocation() { IncludeInSeatPlan = true };
@@ -121,9 +122,9 @@ namespace SeatPlanner
 		[Test]
 		public void ShouldAllocateAgentGroupsTogether()
 		{
-			var agentShift1 = new AgentShift(new BookingPeriod(new DateTime(2014, 01, 01, 8, 0, 0), new DateTime(2014, 01, 01, 17, 00, 00)), null, null);
-			var agentShift2 = new AgentShift(new BookingPeriod(new DateTime(2014, 01, 01, 8, 0, 0), new DateTime(2014, 01, 01, 17, 0, 0)), null, null);
-			var agentShift3 = new AgentShift(new BookingPeriod(new DateTime(2014, 01, 01, 8, 0, 0), new DateTime(2014, 01, 01, 17, 0, 0)), null, null);
+			var agentShift1 = new SeatBooking(null, new DateTime(2014, 01, 01, 8, 0, 0), new DateTime(2014, 01, 01, 17, 00, 00));
+			var agentShift2 = new SeatBooking(null, new DateTime(2014, 01, 01, 8, 0, 0), new DateTime(2014, 01, 01, 17, 0, 0));
+			var agentShift3 = new SeatBooking(null, new DateTime(2014, 01, 01, 8, 0, 0), new DateTime(2014, 01, 01, 17, 0, 0));
 
 			var seatBookingRequest1 = new SeatBookingRequest(agentShift1);
 			var seatBookingRequest2 = new SeatBookingRequest(agentShift2, agentShift3);
@@ -144,9 +145,9 @@ namespace SeatPlanner
 		[Test]
 		public void ShouldAllocateAgentGroupsTogetherForSecondLocation()
 		{
-			var agentShift1 = new AgentShift(new BookingPeriod(new DateTime(2014, 01, 01, 8, 0, 0), new DateTime(2014, 01, 01, 17, 00, 00)), null, null);
-			var agentShift2 = new AgentShift(new BookingPeriod(new DateTime(2014, 01, 01, 8, 0, 0), new DateTime(2014, 01, 01, 17, 0, 0)), null, null);
-			var agentShift3 = new AgentShift(new BookingPeriod(new DateTime(2014, 01, 01, 8, 0, 0), new DateTime(2014, 01, 01, 17, 0, 0)), null, null);
+			var agentShift1 = new SeatBooking(null, new DateTime(2014, 01, 01, 8, 0, 0), new DateTime(2014, 01, 01, 17, 00, 00));
+			var agentShift2 = new SeatBooking(null, new DateTime(2014, 01, 01, 8, 0, 0), new DateTime(2014, 01, 01, 17, 0, 0));
+			var agentShift3 = new SeatBooking(null, new DateTime(2014, 01, 01, 8, 0, 0), new DateTime(2014, 01, 01, 17, 0, 0));
 
 			var seatBookingRequest1 = new SeatBookingRequest(agentShift1);
 			var seatBookingRequest2 = new SeatBookingRequest(agentShift2, agentShift3);
@@ -167,11 +168,10 @@ namespace SeatPlanner
 		[Test]
 		public void ShouldAllocateAgentGroupsTogetherAcrossLocationsEvenIfFirstLocationHasMostSeats()
 		{
-			var bookingPeriod = new BookingPeriod(new DateTime(2014, 01, 01, 8, 0, 0), new DateTime(2014, 01, 01, 17, 0, 0));
-			var agentShift1 = new AgentShift(bookingPeriod, null, null);
-			var agentShift2 = new AgentShift(bookingPeriod, null, null);
-			var agentShift3 = new AgentShift(bookingPeriod, null, null);
-			var agentShift4 = new AgentShift(bookingPeriod, null, null);
+			var agentShift1 = new SeatBooking(null, new DateTime(2014, 01, 01, 8, 0, 0), new DateTime(2014, 01, 01, 17, 0, 0));
+			var agentShift2 = new SeatBooking(null, new DateTime(2014, 01, 01, 8, 0, 0), new DateTime(2014, 01, 01, 17, 0, 0));
+			var agentShift3 = new SeatBooking(null, new DateTime(2014, 01, 01, 8, 0, 0), new DateTime(2014, 01, 01, 17, 0, 0));
+			var agentShift4 = new SeatBooking(null, new DateTime(2014, 01, 01, 8, 0, 0), new DateTime(2014, 01, 01, 17, 0, 0));
 
 			var seatBookingRequest1 = new SeatBookingRequest(agentShift1, agentShift2);
 			var seatBookingRequest2 = new SeatBookingRequest(agentShift3, agentShift4);
@@ -194,9 +194,8 @@ namespace SeatPlanner
 		[Test]
 		public void ShouldAllocateOnePersonInEachSeatEvenWhenGrouped()
 		{
-			var bookingPeriod = new BookingPeriod(new DateTime(2014, 01, 01, 8, 0, 0), new DateTime(2014, 01, 01, 17, 0, 0));
-			var agentShift1 = new AgentShift(bookingPeriod, null, null);
-			var agentShift2 = new AgentShift(bookingPeriod, null, null);
+			var agentShift1 = new SeatBooking(null, new DateTime(2014, 01, 01, 8, 0, 0), new DateTime(2014, 01, 01, 17, 0, 0));
+			var agentShift2 = new SeatBooking(null, new DateTime(2014, 01, 01, 8, 0, 0), new DateTime(2014, 01, 01, 17, 0, 0));
 
 			var seatBookingRequest1 = new SeatBookingRequest(agentShift1, agentShift2);
 
@@ -208,17 +207,15 @@ namespace SeatPlanner
 
 			new SeatAllocator(location1, location2).AllocateSeats(seatBookingRequest1);
 
-			Assert.That(seatBookingRequest1.AgentShifts.All(s => s.Seat != null));
+			Assert.That(seatBookingRequest1.SeatBookings.All(s => s.Seat != null));
 		}
 
 		[Test]
 		public void ShouldAllocatePeopleEvenWhenTheyCannotSeatInGroups()
 		{
-			var bookingPeriod = new BookingPeriod(new DateTime(2014, 01, 01, 8, 0, 0), new DateTime(2014, 01, 01, 17, 0, 0));
-			var agentShift1 = new AgentShift(bookingPeriod, null,null);
-			var agentShift2 = new AgentShift(bookingPeriod, null,null);
-			var agentShift3 = new AgentShift(bookingPeriod, null,null);
-
+			var agentShift1 = new SeatBooking(null, new DateTime(2014, 01, 01, 8, 0, 0), new DateTime(2014, 01, 01, 17, 0, 0));
+			var agentShift2 = new SeatBooking(null, new DateTime(2014, 01, 01, 8, 0, 0), new DateTime(2014, 01, 01, 17, 0, 0));
+			var agentShift3 = new SeatBooking(null, new DateTime(2014, 01, 01, 8, 0, 0), new DateTime(2014, 01, 01, 17, 0, 0));
 
 			var seatBookingRequest1 = new SeatBookingRequest(agentShift1, agentShift2, agentShift3);
 
@@ -230,17 +227,16 @@ namespace SeatPlanner
 
 			new SeatAllocator(location1, location2).AllocateSeats(seatBookingRequest1);
 
-			Assert.That(seatBookingRequest1.AgentShifts.SingleOrDefault(s => s.Seat == null) != null);
+			Assert.That(seatBookingRequest1.SeatBookings.SingleOrDefault(s => s.Seat == null) != null);
 		}
 
 		[Test, Ignore("We're not handling this case yet. Don't know if it is relevant")]
 		public void ShouldTryToAllocateSplittedGroupsTogether()
 		{
-			var bookingPeriod = new BookingPeriod(new DateTime(2014, 01, 01, 8, 0, 0), new DateTime(2014, 01, 01, 17, 0, 0));
-			var agentShift1 = new AgentShift(bookingPeriod, null, null);
-			var agentShift2 = new AgentShift(bookingPeriod, null, null);
-			var agentShift3 = new AgentShift(bookingPeriod, null, null);
-			var agentShift4 = new AgentShift(bookingPeriod, null, null);
+			var agentShift1 = new SeatBooking(null, new DateTime(2014, 01, 01, 8, 0, 0), new DateTime(2014, 01, 01, 17, 0, 0));
+			var agentShift2 = new SeatBooking(null, new DateTime(2014, 01, 01, 8, 0, 0), new DateTime(2014, 01, 01, 17, 0, 0));
+			var agentShift3 = new SeatBooking(null, new DateTime(2014, 01, 01, 8, 0, 0), new DateTime(2014, 01, 01, 17, 0, 0));
+			var agentShift4 = new SeatBooking(null, new DateTime(2014, 01, 01, 8, 0, 0), new DateTime(2014, 01, 01, 17, 0, 0));
 
 			var seatBookingRequest1 = new SeatBookingRequest(agentShift1, agentShift2, agentShift3, agentShift4);
 
@@ -255,7 +251,7 @@ namespace SeatPlanner
 
 			new SeatAllocator(location1, location2).AllocateSeats(seatBookingRequest1);
 
-			var allocatedSeats = seatBookingRequest1.AgentShifts.Select(s => s.Seat.Name);
+			var allocatedSeats = seatBookingRequest1.SeatBookings.Select(s => s.Seat.Name);
 			Assert.That(allocatedSeats.Contains("L2 Seat1"));
 			Assert.That(allocatedSeats.Contains("L2 Seat2"));
 		}
@@ -263,8 +259,7 @@ namespace SeatPlanner
 		[Test]
 		public void ShouldAllocateChildLocationSeatFromParentLocation()
 		{
-			var bookingPeriod = new BookingPeriod(new DateTime(2014, 01, 01, 8, 0, 0), new DateTime(2014, 01, 01, 17, 0, 0));
-			var agentShift1 = new AgentShift(bookingPeriod, null, null);
+			var agentShift1 = new SeatBooking(null, new DateTime(2014, 01, 01, 8, 0, 0), new DateTime(2014, 01, 01, 17, 0, 0));
 
 			var seatBookingRequest1 = new SeatBookingRequest(agentShift1);
 
@@ -283,8 +278,7 @@ namespace SeatPlanner
 		[Test]
 		public void ShouldAllocateChildOfChildFromParentLocation()
 		{
-			var bookingPeriod = new BookingPeriod(new DateTime(2014, 01, 01, 8, 0, 0), new DateTime(2014, 01, 01, 17, 0, 0));
-			var agentShift1 = new AgentShift(bookingPeriod, null, null);
+			var agentShift1 = new SeatBooking(null, new DateTime(2014, 01, 01, 8, 0, 0), new DateTime(2014, 01, 01, 17, 0, 0));
 
 			var seatBookingRequest1 = new SeatBookingRequest(agentShift1);
 
@@ -306,8 +300,7 @@ namespace SeatPlanner
 		[Test]
 		public void ShouldAllocateChildLocationSeatFromParentLocationEvenWhenParentIsNotIncludedInSeatPlan()
 		{
-			var bookingPeriod = new BookingPeriod(new DateTime(2014, 01, 01, 8, 0, 0), new DateTime(2014, 01, 01, 17, 0, 0));
-			var agentShift1 = new AgentShift(bookingPeriod, null, null);
+			var agentShift1 = new SeatBooking(null, new DateTime(2014, 01, 01, 8, 0, 0), new DateTime(2014, 01, 01, 17, 0, 0));
 
 			var seatBookingRequest1 = new SeatBookingRequest(agentShift1);
 
@@ -328,13 +321,9 @@ namespace SeatPlanner
 		[Test]
 		public void ShouldAllocateDirectlyOnParentLocation()
 		{
-			var bookingPeriod = new BookingPeriod(new DateTime(2014, 01, 01, 8, 0, 0), new DateTime(2014, 01, 01, 17, 0, 0));
-			var agentShift1 = new AgentShift(bookingPeriod, null, null);
-
+			var agentShift1 = new SeatBooking(null, new DateTime(2014, 01, 01, 8, 0, 0), new DateTime(2014, 01, 01, 17, 0, 0));
 			var seatBookingRequest1 = new SeatBookingRequest(agentShift1);
-
 			var building = new SeatMapLocation() { IncludeInSeatPlan = true };
-
 			var room1 = new SeatMapLocation() { IncludeInSeatPlan = true };
 
 			building.AddChild(room1);
@@ -348,10 +337,8 @@ namespace SeatPlanner
 		[Test]
 		public void ShouldAllocateGroupToParentLocationWithEnoughSeats()
 		{
-			var bookingPeriod = new BookingPeriod(new DateTime(2014, 01, 01, 8, 0, 0), new DateTime(2014, 01, 01, 17, 0, 0));
-			var agentShift1 = new AgentShift(bookingPeriod, null, null);
-			var agentShift2 = new AgentShift(bookingPeriod, null, null);
-
+			var agentShift1 = new SeatBooking(null, new DateTime(2014, 01, 01, 8, 0, 0), new DateTime(2014, 01, 01, 17, 0, 0));
+			var agentShift2 = new SeatBooking(null, new DateTime(2014, 01, 01, 8, 0, 0), new DateTime(2014, 01, 01, 17, 0, 0));
 			var seatBookingRequest1 = new SeatBookingRequest(agentShift1, agentShift2);
 
 			var building = new SeatMapLocation() { IncludeInSeatPlan = true };
@@ -365,7 +352,7 @@ namespace SeatPlanner
 
 			new SeatAllocator(building).AllocateSeats(seatBookingRequest1);
 
-			var allocatedSeats = seatBookingRequest1.AgentShifts.Select(s => s.Seat.Name);
+			var allocatedSeats = seatBookingRequest1.SeatBookings.Select(s => s.Seat.Name);
 			Assert.That(allocatedSeats.Contains("Building Seat1"));
 			Assert.That(allocatedSeats.Contains("Building Seat2"));
 		}
@@ -373,12 +360,11 @@ namespace SeatPlanner
 		[Test]
 		public void ShouldAllocateGroupToParentAndChildLocationWithEnoughSeats()
 		{
-			var bookingPeriod = new BookingPeriod(new DateTime(2014, 01, 01, 8, 0, 0), new DateTime(2014, 01, 01, 17, 0, 0));
-			var agentShift1 = new AgentShift(bookingPeriod, null, null);
-			var agentShift2 = new AgentShift(bookingPeriod, null, null);
-			var agentShift3 = new AgentShift(bookingPeriod, null, null);
-			var agentShift4 = new AgentShift(bookingPeriod, null, null);
-			var agentShift5 = new AgentShift(bookingPeriod, null, null);
+			var agentShift1 = new SeatBooking(null, new DateTime(2014, 01, 01, 8, 0, 0), new DateTime(2014, 01, 01, 17, 0, 0));
+			var agentShift2 = new SeatBooking(null, new DateTime(2014, 01, 01, 8, 0, 0), new DateTime(2014, 01, 01, 17, 0, 0));
+			var agentShift3 = new SeatBooking(null, new DateTime(2014, 01, 01, 8, 0, 0), new DateTime(2014, 01, 01, 17, 0, 0));
+			var agentShift4 = new SeatBooking(null, new DateTime(2014, 01, 01, 8, 0, 0), new DateTime(2014, 01, 01, 17, 0, 0));
+			var agentShift5 = new SeatBooking(null, new DateTime(2014, 01, 01, 8, 0, 0), new DateTime(2014, 01, 01, 17, 0, 0));
 
 			var seatBookingRequest1 = new SeatBookingRequest(agentShift1, agentShift2);
 			var seatBookingRequest2 = new SeatBookingRequest(agentShift3, agentShift4);
@@ -397,11 +383,11 @@ namespace SeatPlanner
 
 			new SeatAllocator(building).AllocateSeats(seatBookingRequest1, seatBookingRequest2, seatBookingRequest3);
 
-			var allocatedSeatsGroup1 = seatBookingRequest1.AgentShifts.Select(s => s.Seat.Name);
+			var allocatedSeatsGroup1 = seatBookingRequest1.SeatBookings.Select(s => s.Seat.Name);
 			Assert.That(allocatedSeatsGroup1.Contains("Room1 Seat1"));
 			Assert.That(allocatedSeatsGroup1.Contains("Room1 Seat2"));
 
-			var allocatedSeatsGroup2 = seatBookingRequest2.AgentShifts.Select(s => s.Seat.Name);
+			var allocatedSeatsGroup2 = seatBookingRequest2.SeatBookings.Select(s => s.Seat.Name);
 			Assert.That(allocatedSeatsGroup2.Contains("Building Seat1"));
 			Assert.That(allocatedSeatsGroup2.Contains("Building Seat2"));
 
@@ -411,9 +397,8 @@ namespace SeatPlanner
 		[Test]
 		public void ShouldAssignSplitGroupedAgentsToRoomAndToBuilding()
 		{
-			var bookingPeriod1 = new BookingPeriod(new DateTime(2014, 01, 01, 8, 0, 0), new DateTime(2014, 01, 01, 12, 59, 59));
-			var agent1Shift1 = new AgentShift(bookingPeriod1, null, null);
-			var agent2Shift1 = new AgentShift(bookingPeriod1, null, null);
+			var agent1Shift1 = new SeatBooking(null, new DateTime(2014, 01, 01, 8, 0, 0), new DateTime(2014, 01, 01, 12, 59, 59));
+			var agent2Shift1= new SeatBooking(null, new DateTime(2014, 01, 01, 8, 0, 0), new DateTime(2014, 01, 01, 12, 59, 59));
 
 			var seatBookingRequest1 = new SeatBookingRequest(agent1Shift1, agent2Shift1);
 
@@ -431,6 +416,50 @@ namespace SeatPlanner
 
 		}
 
+		//Robtodo: finish test
+		[Test, Ignore]
+		public void ShouldNotAssignAgentWhenPreviouslyBooked()
+		{
+			var person1 = PersonFactory.CreatePersonWithGuid ("john", "carmack");
+			var person2 = PersonFactory.CreatePersonWithGuid("john", "romero");
+
+			var room1 = new SeatMapLocation() { IncludeInSeatPlan = true };
+			room1.AddSeat("Room 1 Seat 1", 1);
+			var existingBooking = new SeatBooking(person1, new DateTime(2014, 01, 01, 8, 0, 0), new DateTime(2014, 01, 01, 12, 59, 59));
+			existingBooking.Book (room1.Seats.Single());
+			
+			var agent2Shift1 = new SeatBooking(person2, new DateTime(2014, 01, 01, 8, 0, 0), new DateTime(2014, 01, 01, 12, 59, 59));
+			var seatBookingRequest1 = new SeatBookingRequest(existingBooking, agent2Shift1);
+			new SeatAllocator(room1).AllocateSeats(seatBookingRequest1);
+			
+			Assert.That(agent2Shift1.Seat == null);
+		}
+
+		//Robtodo: finish test
+		[Test, Ignore]
+		public void ShouldUpdateExistingBookingForSameAgent()
+		{
+			var person1 = PersonFactory.CreatePersonWithGuid("john", "carmack");
+	
+			var room1 = new SeatMapLocation() { IncludeInSeatPlan = true };
+			room1.AddSeat("Room 1 Seat 1", 1);
+			var existingBooking = new SeatBooking(person1, new DateTime(2014, 01, 01, 8, 0, 0), new DateTime(2014, 01, 01, 12, 59, 59));
+			existingBooking.Book(room1.Seats.Single());
+
+			var room2 = new SeatMapLocation() { IncludeInSeatPlan = true };
+			room2.AddSeat("Room 2 Seat 1", 1);
+
+			var agent2Shift1 = new SeatBooking(person1, new DateTime(2014, 01, 01, 8, 0, 0), new DateTime(2014, 01, 01, 12, 59, 59));
+			var seatBookingRequest1 = new SeatBookingRequest(agent2Shift1);
+			new SeatAllocator(room1).AllocateSeats(seatBookingRequest1);
+
+			// Robtodo: not quite sure what to do with the unsaved booking (we only update the existing one when the agent, date match)
+			// perhaps dont create it in seatplan.cs - just find and use the existing one?
+			Assert.That(existingBooking.Seat == room2.Seats.Single());
+			Assert.That(agent2Shift1.Seat == null);
+		}
+
+
 		#region Performance Benchmarks
 
 		[Test, Ignore]
@@ -441,7 +470,7 @@ namespace SeatPlanner
 				new List<SeatBookingRequest>(
 					Enumerable.Range(0, 1000).Select(r => new SeatBookingRequest(Enumerable.Range(0, 30)
 						.Select(s =>
-							new AgentShift(new BookingPeriod(new DateTime(2014, 01, 01, 8, 0, 0), new DateTime(2014, 01, 01, 17, 00, 00)), null, null))
+							new SeatBooking(null, new DateTime(2014, 01, 01, 8, 0, 0), new DateTime(2014, 01, 01, 17, 00, 00)))
 						.ToArray())));
 
 			var allocator = new SeatAllocator(Enumerable.Range(0, 50).Select(i =>
@@ -469,7 +498,7 @@ namespace SeatPlanner
 				new List<SeatBookingRequest>(
 					Enumerable.Range(0, 1000).Select(r => new SeatBookingRequest(Enumerable.Range(0, 30)
 						.Select(s =>
-							new AgentShift(new BookingPeriod(new DateTime(2014, 01, 01, 8, 0, 0), new DateTime(2014, 01, 01, 17, 00, 00)), null, null))
+							new SeatBooking(null, new DateTime(2014, 01, 01, 8, 0, 0), new DateTime(2014, 01, 01, 17, 00, 00)))
 						.ToArray())));
 
 			var allocator = new SeatAllocator(Enumerable.Range(0, 50).Select(i =>
@@ -503,38 +532,36 @@ namespace SeatPlanner
 		}
 
 
-
-
 		#endregion
 
-		#region Booking Period Tests
+		#region Seat Booking Period Tests
 
 		[Test]
 		public void ShouldDetectPeriodsOverlap()
 		{
-			var period1 = new BookingPeriod(new DateTime(2014, 01, 01, 8, 0, 0), new DateTime(2014, 01, 1, 15, 0, 0));
-			var period2 = new BookingPeriod(new DateTime(2014, 01, 01, 7, 59, 59), new DateTime(2014, 01, 1, 8, 0, 0));
+			var booking1 = new SeatBooking(null, new DateTime(2014, 01, 01, 8, 0, 0), new DateTime(2014, 01, 1, 15, 0, 0));
+			var booking2 = new SeatBooking(null, new DateTime(2014, 01, 01, 7, 59, 59), new DateTime(2014, 01, 1, 8, 0, 0));
 
-			Assert.True(period1.Intersects(period2));
+			Assert.True(booking1.Intersects(booking2));
 		}
 
 
 		[Test]
 		public void ShouldDetectOvernightPeriodsOverlap()
 		{
-			var period1 = new BookingPeriod(new DateTime(2014, 01, 01, 23, 0, 0), new DateTime(2014, 01, 2, 8, 0, 0));
-			var period2 = new BookingPeriod(new DateTime(2014, 01, 02, 7, 59, 59), new DateTime(2014, 01, 2, 15, 0, 0));
+			var booking1 = new SeatBooking(null, new DateTime(2014, 01, 01, 23, 0, 0), new DateTime(2014, 01, 2, 8, 0, 0));
+			var booking2 = new SeatBooking(null, new DateTime(2014, 01, 02, 7, 59, 59), new DateTime(2014, 01, 2, 15, 0, 0));
 
-			Assert.True(period1.Intersects(period2));
+			Assert.True(booking1.Intersects(booking2));
 		}
 
 		[Test]
 		public void ShouldDetectPeriodsDoNotOverlap()
 		{
-			var period1 = new BookingPeriod(new DateTime(2014, 01, 01, 8, 0, 0), new DateTime(2014, 01, 1, 15, 0, 0));
-			var period2 = new BookingPeriod(new DateTime(2014, 01, 01, 7, 59, 58), new DateTime(2014, 01, 1, 7, 59, 59));
+			var booking1 = new SeatBooking(null, new DateTime(2014, 01, 01, 8, 0, 0), new DateTime(2014, 01, 1, 15, 0, 0));
+			var booking2 = new SeatBooking(null, new DateTime(2014, 01, 01, 7, 59, 58), new DateTime(2014, 01, 1, 7, 59, 59));
 
-			Assert.True(!period1.Intersects(period2));
+			Assert.True(!booking1.Intersects(booking2));
 		}
 
 		#endregion

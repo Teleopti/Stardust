@@ -2,8 +2,10 @@
 using System.Linq;
 using NUnit.Framework;
 using SharpTestsEx;
+using Teleopti.Ccc.Domain.AgentInfo;
 using Teleopti.Ccc.Domain.ApplicationLayer.Commands;
-using Teleopti.Ccc.Domain.ApplicationLayer.Events;
+using Teleopti.Ccc.Domain.Helper;
+using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.SeatPlanning;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
@@ -15,66 +17,57 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 	[TestFixture]
 	internal class AddSeatPlanCommandHandlerTest
 	{
-		//RobTodo: Reenable when Handler creates seatplan
-		//[Test, Ignore]
-		//public void ShouldSetupEntityState()
-		//{
-		//	var seatPlanRepository = new FakeWriteSideRepository<ISeatPlan>();
-		//	var target = new AddSeatPlanCommandHandler(seatPlanRepository, new FakeCurrentScenario());
-		//	var operatedPersonId = Guid.NewGuid();
-		//	var trackId = Guid.NewGuid();
+		private FakeCurrentScenario _currentScenario;
+		private FakeWriteSideRepository<ISeatBooking> _seatBookingRepository;
+
+		[SetUp]
+		public void SetUp()
+		{
+			_currentScenario = new FakeCurrentScenario();
+			_seatBookingRepository = new FakeWriteSideRepository<ISeatBooking>();
+		}
+
+		[Test]
+		public void ShouldBookSeat()
+		{
+			var dateTimePeriod = new DateTimePeriod(new DateTime(2015, 1, 20, 9, 0, 0).ToUniversalTime(), new DateTime(2015, 1, 20, 17, 0, 0).ToUniversalTime());
+			var team = new Team() { Description = new Description("Team") };
+			team.SetId(Guid.NewGuid());
+
+			var person = PersonFactory.CreatePersonWithPersonPeriodFromTeam(new DateOnly(dateTimePeriod.StartDateTime), team);
+			var personAssignment = PersonAssignmentFactory.CreateAssignmentWithMainShift(_currentScenario.Current(), person, dateTimePeriod);
+
+			var note = new PublicNote(person, new DateOnly(dateTimePeriod.StartDateTime), _currentScenario.Current(), "Original Note");
+			var publicNoteRepository = new FakePublicNoteRepository(note);
 			
-		//	var command = new AddSeatPlanCommand()
-		//	{
-		//		StartDate = new DateTime(2013, 3, 25),
-		//		EndDate = new DateTime(2013, 3, 25),
-		//		TrackedCommandInfo = new TrackedCommandInfo()
-		//		{
-		//			OperatedPersonId = operatedPersonId,
-		//			TrackId = trackId
-		//		}
-		//	};
+			var seatMapLocation = new SeatMapLocation() { Name = "Location" };
+			seatMapLocation.SetId(Guid.NewGuid());
+			seatMapLocation.AddSeat("Seat One", 1);
+			
+			var target = new AddSeatPlanCommandHandler(new FakeScheduleDataReadScheduleRepository(personAssignment), new FakeTeamRepository(team), new FakePersonRepository(person), _currentScenario, publicNoteRepository, new FakeSeatMapRepository(seatMapLocation), _seatBookingRepository);
 
-		//	target.Handle(command);
+			var command = new AddSeatPlanCommand()
+			{
+				StartDate = dateTimePeriod.StartDateTime,
+				EndDate = dateTimePeriod.EndDateTime,
+				Locations = new[] { seatMapLocation.Id.Value },
+				Teams = new[] { team.Id.Value },
+				TrackedCommandInfo = new TrackedCommandInfo()
+				{
+					OperatedPersonId = Guid.NewGuid(),
+					TrackId = Guid.NewGuid()
+				}
+			};
 
-		//	//Robtodo: Add values here to test
-		//	var seatPlan = seatPlanRepository.Single() as SeatPlan;
-		//	seatPlan.Period.StartDate.Date.Should().Be(command.StartDate.Date);
-		//	seatPlan.Period.EndDate.Date.Should().Be(command.EndDate.Date);
-		//}
+			target.Handle(command);
+			var updatedNote = publicNoteRepository.Get(Guid.Empty);
+			updatedNote.GetScheduleNote(new NoFormatting()).Should().Contain(seatMapLocation.Name);
 
-
-		//RobTodo: Reenable when Handler creates seatplan
-		//[Test, Ignore]
-		//public void ShouldRaiseAddSeatPlanCommandEvent()
-		//{
-		//	var currentScenario = new FakeCurrentScenario();
-		//	var seatPlanRepository = new FakeWriteSideRepository<ISeatPlan>();
-		//	var target = new AddSeatPlanCommandHandler(seatPlanRepository, currentScenario);
-		//	var operatedPersonId = Guid.NewGuid();
-		//	var trackId = Guid.NewGuid();
-	
-		//	var command = new AddSeatPlanCommand()
-		//	{
-		//		StartDate = new DateTime (2013, 3, 25),
-		//		EndDate = new DateTime (2013, 3, 25),
-		//		TrackedCommandInfo = new TrackedCommandInfo()
-		//		{
-		//			OperatedPersonId = operatedPersonId,
-		//			TrackId = trackId
-		//		}
-		//	};
-
-		//	target.Handle (command);
-
-		//	//Robtodo: Add values here to test
-		//	var @event = seatPlanRepository.Single().PopAllEvents().Single() as SeatPlanAddedEvent;
-		//	@event.ScenarioId.Should().Be (currentScenario.Current().Id.Value);
-		//	@event.StartDate.Should().Be (command.StartDate);
-		//	@event.EndDate.Should().Be (command.EndDate);
-		//	@event.InitiatorId.Should().Be (operatedPersonId);
-		//	@event.TrackId.Should().Be (trackId);
-		//	@event.BusinessUnitId.Should().Be (currentScenario.Current().BusinessUnit.Id.GetValueOrDefault());
-		//}
+			var seatBooking = _seatBookingRepository.Single() as SeatBooking;
+			seatBooking.StartDateTime.Date.Should().Be(command.StartDate.Date);
+			seatBooking.EndDateTime.Date.Should().Be(command.EndDate.Date);
+			seatBooking.Seat.Should().Be(seatMapLocation.Seats.Single());
+		}
+		
 	}
 }

@@ -1,21 +1,19 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using System.Collections.Generic;
+using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.SeatPlanning
 {
 	public class SeatBookingRequest
 	{
-		private readonly AgentShift[] _agentShifts;
+		private readonly ISeatBooking[] _seatBookings;
 
-		public SeatBookingRequest(params AgentShift[] agentShifts)
+		public SeatBookingRequest(params ISeatBooking[] seatBookings)
 		{
-			_agentShifts = agentShifts;
+			_seatBookings = seatBookings;
 		}
 
-		public IEnumerable<AgentShift> AgentShifts { get { return _agentShifts; } }
+		public IEnumerable<ISeatBooking> SeatBookings { get { return _seatBookings; } }
 
-		public int MemberCount { get { return _agentShifts.Length; } }
+		public int MemberCount { get { return _seatBookings.Length; } }
 	}
 }

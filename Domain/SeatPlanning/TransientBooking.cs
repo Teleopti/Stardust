@@ -3,27 +3,28 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
+using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.SeatPlanning
 {
 	public class TransientBooking
 	{
 		private readonly Seat _seat;
-		private readonly ICollection<BookingPeriod> _almostAllocatedPeriods = new Collection<BookingPeriod>();
+		private readonly ICollection<ISeatBooking> _almostAllocatedBookings = new Collection<ISeatBooking>();
 
 		public TransientBooking(Seat seat)
 		{
 			_seat = seat;
 		}
 
-		public bool IsAllocated(BookingPeriod period)
+		public bool IsAllocated(ISeatBooking booking)
 		{
-			return _seat.IsAllocated(period) || _almostAllocatedPeriods.Any(p => p.Intersects(period));
+			return _seat.IsAllocated(booking) || _almostAllocatedBookings.Any(p => p.Intersects(booking));
 		}
 
-		public void TemporarilyAllocate(BookingPeriod period)
+		public void TemporarilyAllocate(ISeatBooking booking)
 		{
-			_almostAllocatedPeriods.Add(period);
+			_almostAllocatedBookings.Add(booking);
 		}
 	}
 }

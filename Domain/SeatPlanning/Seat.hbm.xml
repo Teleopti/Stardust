@@ -27,7 +27,7 @@
 							access="property"
 							name ="Parent"
 							not-null="false" foreign-key="FK_Seat_SeatMapLocation"/>
-
+		
 	</class>
 
 </hibernate-mapping>

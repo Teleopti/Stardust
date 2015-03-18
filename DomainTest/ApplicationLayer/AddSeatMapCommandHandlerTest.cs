@@ -33,7 +33,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 			_currentBusinessUnit.Stub(x => x.Current()).Return(bu);
 			_buRepository.Stub(x => x.Get(_currentBusinessUnit.Current().Id.GetValueOrDefault())).Return(bu);
 
-			_target = new AddSeatMapCommandHandler(_seatMapLocationRepository, _buRepository, _currentBusinessUnit);
+			_target = new AddSeatMapCommandHandler(_seatMapLocationRepository, _buRepository, _currentBusinessUnit, MockRepository.GenerateMock<ISeatBookingRepository>());
 			_childLocationInfo = new LocationInfo()
 			{
 				Name = "Chongqing",

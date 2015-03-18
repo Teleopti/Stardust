@@ -31,7 +31,6 @@ namespace Teleopti.Ccc.Domain.SeatPlanning
 
 		public SeatMapLocation()
 		{
-			
 		}
 
 		public virtual void SetLocation(String seatMapJsonData, String name)
@@ -47,7 +46,6 @@ namespace Teleopti.Ccc.Domain.SeatPlanning
 			AddChild (childSeatMapLocation);
 			return childSeatMapLocation;
 		}
-
 
 		public virtual void AddChild(SeatMapLocation childSeatMapLocation)
 		{
@@ -110,12 +108,12 @@ namespace Teleopti.Ccc.Domain.SeatPlanning
 			SeatMapJsonData = SeatMapJsonData.Replace(temporaryId.ToString(), persistedId.ToString());
 		}
 
-		public virtual Seat GetNextUnallocatedSeat(BookingPeriod period, Boolean ignoreChildren)
+		public virtual Seat GetNextUnallocatedSeat(ISeatBooking booking, Boolean ignoreChildren)
 		{
 			if (!ignoreChildren)
 			{
 				foreach (var seat in _childLocations.OrderByDescending(l => l.SeatCount)
-					.Select(childLocation => childLocation.GetNextUnallocatedSeat(period, false))
+					.Select(childLocation => childLocation.GetNextUnallocatedSeat(booking, false))
 					.Where(seat => seat != null))
 				{
 					return seat;
@@ -124,20 +122,20 @@ namespace Teleopti.Ccc.Domain.SeatPlanning
 
 			if (IncludeInSeatPlan)
 			{
-				return getNextUnallocatedSeatOnSelf(period);
+				return getNextUnallocatedSeatOnSelf(booking);
 			}
 
 			return null;
 		}
 
-		private Seat getNextUnallocatedSeatOnSelf(BookingPeriod period)
+		private Seat getNextUnallocatedSeatOnSelf(ISeatBooking booking)
 		{
-			return _seats.OrderBy(seat => seat.Priority).FirstOrDefault(seat => !seat.IsAllocated(period));
+			return _seats.OrderBy(seat => seat.Priority).FirstOrDefault(seat => !seat.IsAllocated(booking));
 		}
 
 		public virtual int SeatCount { get { return _seats.Count; } }
 
-		public virtual bool CanAllocateShifts(IEnumerable<AgentShift> agentShifts)
+		public virtual bool CanAllocateShifts(IEnumerable<ISeatBooking> agentShifts)
 		{
 			if (!IncludeInSeatPlan || SeatCount < agentShifts.Count())
 			{
@@ -150,9 +148,9 @@ namespace Teleopti.Ccc.Domain.SeatPlanning
 			{
 				foreach (var temporaryBooking in temporaryBookedSeats)
 				{
-					if (!temporaryBooking.IsAllocated(agentShift.Shift.Period))
+					if (!temporaryBooking.IsAllocated(agentShift.SeatBooking))
 					{
-						temporaryBooking.TemporarilyAllocate(agentShift.Shift.Period);
+						temporaryBooking.TemporarilyAllocate(agentShift.SeatBooking);
 						agentShift.SetBooked();
 						break;
 					}
@@ -161,16 +159,10 @@ namespace Teleopti.Ccc.Domain.SeatPlanning
 			return temporaryBookings.All(s => s.IsBooked);
 		}
 
-
-		public virtual SeatMapLocation GetLocationToAllocateSeats(IEnumerable<AgentShift> agentShifts)
+		public virtual SeatMapLocation GetLocationToAllocateSeats(IEnumerable<ISeatBooking> agentShifts)
 		{
 			foreach (var childLocation in _childLocations.OrderByDescending(l => l.SeatCount))
 			{
-				//if (childLocation.CanAllocateShifts(agentShifts))
-				//{
-				//	return childLocation;
-				//}
-
 				var location = childLocation.GetLocationToAllocateSeats(agentShifts);
 				if (location != null)
 				{
@@ -178,27 +170,22 @@ namespace Teleopti.Ccc.Domain.SeatPlanning
 				}
 			}
 
-			if (CanAllocateShifts(agentShifts))
-			{
-				return this;
-			}
-
-			return null;
+			return CanAllocateShifts(agentShifts) ? this : null;
 		}
 
 		private class TemporaryBooking
 		{
-			private readonly AgentShift _shift;
+			private readonly ISeatBooking _seatBooking;
 			private bool _isBooked;
 
-			public TemporaryBooking(AgentShift shift)
+			public TemporaryBooking(ISeatBooking seatBooking)
 			{
-				_shift = shift;
+				_seatBooking = seatBooking;
 			}
 
-			public AgentShift Shift
+			public ISeatBooking SeatBooking
 			{
-				get { return _shift; }
+				get { return _seatBooking; }
 			}
 
 			public bool IsBooked

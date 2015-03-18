@@ -89,7 +89,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 
 		public ICollection<IPerson> FindPeopleBelongTeamWithSchedulePeriod(ITeam team, DateOnlyPeriod period)
 		{
-			throw new NotImplementedException();
+			return new List<IPerson> {_persons.FirstOrDefault()};
 		}
 
 		public ICollection<IPerson> FindAllSortByName()

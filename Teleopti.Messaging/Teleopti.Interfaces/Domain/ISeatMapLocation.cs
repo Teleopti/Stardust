@@ -5,6 +5,4 @@
 
 		string SeatMapJsonData { get; set; }
 	}
-
-	
 }

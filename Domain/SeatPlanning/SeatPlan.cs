@@ -1,41 +1,43 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.Remoting.Messaging;
 using System.Threading;
 using Teleopti.Ccc.Domain.Common;
-using Teleopti.Ccc.Domain.Common.EntityBaseTypes;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.UserTexts;
 using Teleopti.Interfaces.Domain;
-using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.Domain.SeatPlanning
 {
 
-	[Serializable]
-	public class SeatPlan : VersionedAggregateRoot, ISeatPlan, IDeleteTag
+
+	public class SeatPlan : ISeatPlan
 	{
 		private readonly IScenario _scenario;
 		private readonly IPublicNoteRepository _publicNoteRepository;
 		private readonly IPersonRepository _personRepository;
 		private readonly IScheduleRepository _scheduleRepository;
+		private readonly ISeatBookingRepository _seatBookingRepository;
 		private readonly List<dayShift> _shifts = new List<dayShift>();
 
-		public SeatPlan(IScenario currentScenario, IPublicNoteRepository publicNoteRepository, IPersonRepository personRepository, IScheduleRepository scheduleRepository)
+		public SeatPlan(IScenario currentScenario, IPublicNoteRepository publicNoteRepository, IPersonRepository personRepository, IScheduleRepository scheduleRepository, ISeatBookingRepository seatBookingRepository)
 		{
 			_scenario = currentScenario;
 			_publicNoteRepository = publicNoteRepository;
 			_personRepository = personRepository;
 			_scheduleRepository = scheduleRepository;
+			_seatBookingRepository = seatBookingRepository;
 		}
 
-		public void CreateSeatPlan(SeatMapLocation rootSeatMapLocation, ICollection<ITeam> teams, DateOnlyPeriod period, TrackedCommandInfo trackedCommandInfo)
+		public IList<ISeatBooking> CreateSeatPlan(SeatMapLocation rootSeatMapLocation, ICollection<ITeam> teams, DateOnlyPeriod period, TrackedCommandInfo trackedCommandInfo)
 		{
 			var seatAllocator = new SeatAllocator(rootSeatMapLocation);
 			var people = getPeople(teams, period);
 			createAgentShiftsFromSchedules(period, people);
-			allocateSeats(seatAllocator);
+			return allocateSeats(seatAllocator);
+
 		}
 
 		private List<IPerson> getPeople(IEnumerable<ITeam> teams, DateOnlyPeriod period)
@@ -50,10 +52,13 @@ namespace Teleopti.Ccc.Domain.SeatPlanning
 			return people;
 		}
 
-		private void allocateSeats(SeatAllocator seatAllocator)
+		private IList<ISeatBooking> allocateSeats(SeatAllocator seatAllocator)
 		{
 			var seatBookingRequests = new List<SeatBookingRequest>();
-			
+
+			//Robtodo: review how the grouping of teams is done, and try
+			// to simplify, reducing the number of iterations...
+
 			foreach (var shift in _shifts)
 			{
 				seatBookingRequests.AddRange(shift.GetShifts().Select(agentShifts => new SeatBookingRequest(agentShifts.ToArray())));
@@ -61,22 +66,29 @@ namespace Teleopti.Ccc.Domain.SeatPlanning
 
 			seatAllocator.AllocateSeats(seatBookingRequests.ToArray());
 
-			foreach (var agentShifts in _shifts.SelectMany (shift => shift.GetShifts()))
+			var seatBookings = new List<ISeatBooking>();
+			var shifts = _shifts.SelectMany(shift => shift.GetShifts());
+
+			foreach (var agentShifts in shifts)
 			{
-				publishShiftInformation (agentShifts);
+				publishShiftInformation(agentShifts);
+				seatBookings.AddRange(agentShifts.Where(shift => shift.Seat != null));
+
 			}
+
+			return seatBookings;
 
 		}
 
-		private void publishShiftInformation(IEnumerable<AgentShift> agentShifts)
+		private void publishShiftInformation(IEnumerable<ISeatBooking> seatBookings)
 		{
-			foreach (var shift in agentShifts)
+			foreach (var shift in seatBookings)
 			{
-				var date = shift.ScheduleDay.DateOnlyAsPeriod.DateOnly;
+				var date = shift.Date;
 				var lang = Thread.CurrentThread.CurrentUICulture;
 				//Robtodo: revisit seat name display...how/should we use seat.Name?
 				var description = shift.Seat != null
-					? String.Format(Resources.YouHaveBeenAllocatedSeat, date.ToShortDateString(lang), ((SeatMapLocation)shift.Seat.Parent).Name + " "+shift.Seat.Priority)
+					? String.Format(Resources.YouHaveBeenAllocatedSeat, date.ToShortDateString(lang), ((SeatMapLocation)shift.Seat.Parent).Name + " " + shift.Seat.Priority)
 					: String.Format(Resources.YouHaveNotBeenAllocatedSeat, date.ToShortDateString(lang));
 
 				var existingNote = _publicNoteRepository.Find(date, shift.Person, _scenario);
@@ -112,7 +124,7 @@ namespace Teleopti.Ccc.Domain.SeatPlanning
 		{
 			if (scheduleDays != null)
 			{
-				foreach (var scheduleDay in scheduleDays.Where(s => s.IsScheduled() 
+				foreach (var scheduleDay in scheduleDays.Where(s => s.IsScheduled()
 																&& s.DateOnlyAsPeriod.DateOnly == dayShift.date
 																&& s.SignificantPart() == SchedulePartView.MainShift))
 				{
@@ -125,9 +137,17 @@ namespace Teleopti.Ccc.Domain.SeatPlanning
 		{
 			var shiftPeriod = scheduleDay.PersonAssignment().Period;
 			var team = person.MyTeam(new DateOnly(shiftPeriod.StartDateTime));
-			var bookingPeriod = new BookingPeriod(shiftPeriod.StartDateTime, shiftPeriod.EndDateTime);
-
-			dayShift.AddShift(new AgentShift(bookingPeriod, person, scheduleDay), team);
+			//Robtodo: check - if we find an existing booking for this person on this date/time then use that.
+			var existingBooking = _seatBookingRepository.LoadSeatBookingForPerson(new DateOnly(shiftPeriod.StartDateTime), person);
+			if (existingBooking != null)
+			{
+				existingBooking.Seat = null;
+				dayShift.AddShift (existingBooking, team);
+			}
+			else
+			{
+				dayShift.AddShift(new SeatBooking(person, shiftPeriod.StartDateTime, shiftPeriod.EndDateTime), team);	
+			}
 		}
 
 		private IScheduleDictionary getScheduleDaysForPeriod(DateOnlyPeriod period, IEnumerable<IPerson> people, IScenario currentScenario)
@@ -140,23 +160,6 @@ namespace Teleopti.Ccc.Domain.SeatPlanning
 
 			return dictionary;
 		}
-		
-		#region IDeleteTag Implementation
-
-		private bool _isDeleted;
-
-		public bool IsDeleted
-		{
-			get { return _isDeleted; }
-			private set { _isDeleted = value; }
-		}
-
-		public void SetDeleted()
-		{
-			_isDeleted = true;
-		}
-
-		#endregion
 
 		private class dayShift
 		{
@@ -168,7 +171,7 @@ namespace Teleopti.Ccc.Domain.SeatPlanning
 				this.date = date;
 			}
 
-			public void AddShift(AgentShift agentShift, ITeam team)
+			public void AddShift(ISeatBooking seatBooking, ITeam team)
 			{
 
 				teamShift teamShift;
@@ -176,11 +179,11 @@ namespace Teleopti.Ccc.Domain.SeatPlanning
 				{
 					teamShift = addTeamShift(new teamShift(team));
 				}
-				teamShift.AddShift(agentShift);
+				teamShift.AddShift(seatBooking);
 
 			}
 
-			public IEnumerable<IEnumerable<AgentShift>> GetShifts()
+			public IEnumerable<IEnumerable<ISeatBooking>> GetShifts()
 			{
 				return _teamShifts.Values.Select(shift => shift.AgentShifts);
 			}
@@ -200,14 +203,14 @@ namespace Teleopti.Ccc.Domain.SeatPlanning
 				return _teamShifts.ContainsKey(teamShift.Team.Id.Value);
 			}
 		}
-		
+
 		private class teamShift
 		{
 			public ITeam Team { get; private set; }
 
-			private readonly List<AgentShift> _agentShifts = new List<AgentShift>();
+			private readonly List<ISeatBooking> _agentShifts = new List<ISeatBooking>();
 
-			public List<AgentShift> AgentShifts
+			public List<ISeatBooking> AgentShifts
 			{
 				get { return _agentShifts; }
 			}
@@ -217,9 +220,9 @@ namespace Teleopti.Ccc.Domain.SeatPlanning
 				Team = team;
 			}
 
-			public void AddShift(AgentShift agentShift)
+			public void AddShift(ISeatBooking seatBooking)
 			{
-				_agentShifts.Add(agentShift);
+				_agentShifts.Add(seatBooking);
 
 			}
 		}

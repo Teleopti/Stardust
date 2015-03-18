@@ -2,11 +2,14 @@
 using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.Common.EntityBaseTypes;
+using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.SeatPlanning
 {
+	
+
 	[Serializable]
-	public class Seat : AggregateEntity
+	public class Seat : AggregateEntity, ISeat
 	{
 		public virtual String Name { get; set; }
 		public virtual int Priority { get; set; }
@@ -15,28 +18,28 @@ namespace Teleopti.Ccc.Domain.SeatPlanning
 
 		public Seat(string name, int priority)
 		{
-			// need Id of the seat before persistance, to update seat map blob.
+			// need Id of the seat before persistance, to update seat map slob.
 			SetId (Guid.NewGuid()); 
 
 			Name = name;
 			Priority = priority;
 		}
 
-		private readonly List<BookingPeriod> _bookingPeriods = new List<BookingPeriod>();
+		private readonly List<ISeatBooking> _seatBookings = new List<ISeatBooking>();
 
-		public virtual void Book(BookingPeriod bookingPeriod)
+		public virtual void AddSeatBooking(ISeatBooking seatBooking)
 		{
-			_bookingPeriods.Add(bookingPeriod);
+			_seatBookings.Add(seatBooking);
 		}
 
-		public virtual bool IsAllocated(BookingPeriod bookingPeriodRequest)
+		public virtual bool IsAllocated(ISeatBooking seatBookingRequest)
 		{
-			return _bookingPeriods.Any (bookingPeriod => bookingPeriod.Intersects (bookingPeriodRequest));
+			return _seatBookings.Any (bookingPeriod => bookingPeriod.Intersects (seatBookingRequest));
 		}
 
 		public virtual void ClearBookings()
 		{
-			_bookingPeriods.Clear();
+			_seatBookings.Clear();
 		}
 	}
 }

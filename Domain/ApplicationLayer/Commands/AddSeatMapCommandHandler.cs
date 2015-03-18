@@ -12,12 +12,14 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Commands
 		private readonly IWriteSideRepository<ISeatMapLocation> _seatMapLocationRepository;
 		private readonly IBusinessUnitRepository _businessUnitRepository;
 		private readonly ICurrentBusinessUnit _currentBusinessUnit;
+		private readonly ISeatBookingRepository _seatBookingRepository;
 
-		public AddSeatMapCommandHandler(IWriteSideRepository<ISeatMapLocation>seatMapLocationRepository, IBusinessUnitRepository businessUnitRepository, ICurrentBusinessUnit currentBusinessUnit)
+		public AddSeatMapCommandHandler(IWriteSideRepository<ISeatMapLocation>seatMapLocationRepository, IBusinessUnitRepository businessUnitRepository, ICurrentBusinessUnit currentBusinessUnit, ISeatBookingRepository seatBookingRepository )
 		{
 			_seatMapLocationRepository = seatMapLocationRepository;
 			_businessUnitRepository = businessUnitRepository;
 			_currentBusinessUnit = currentBusinessUnit;
+			_seatBookingRepository = seatBookingRepository;
 		}
 
 		public void Handle(AddSeatMapCommand command)
@@ -114,6 +116,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Commands
 					where command.Seats.All(currentSeat => currentSeat.Id != seat.Id)
 					select seat;
 			}
+
+			_seatBookingRepository.RemoveSeatBookingsForSeats(seatsToDelete);
 
 			seatsToDelete.ToList().ForEach(seat => seatMapLocation.Seats.Remove(seat));	
 			

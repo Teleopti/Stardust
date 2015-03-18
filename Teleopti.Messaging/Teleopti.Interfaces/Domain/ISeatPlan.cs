@@ -2,7 +2,7 @@
 
 namespace Teleopti.Interfaces.Domain
 {
-	public interface ISeatPlan : IAggregateRootWithEvents
+	public interface ISeatPlan 
 	{
 		
 	}

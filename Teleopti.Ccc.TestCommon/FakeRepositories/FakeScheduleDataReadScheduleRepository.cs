@@ -80,7 +80,8 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 			                                                                    scheduleDictionaryLoadOptions, DateOnlyPeriod period,
 		                                                                    IScenario scenario)
 		{
-			throw new NotImplementedException();
+			var thisPeriod = _data.First().Period; // max period?
+			return ScheduleDictionaryForTest.WithScheduleData(scenario, thisPeriod, _data);
 		}
 
 		public IScheduleRange ScheduleRangeBasedOnAbsence(DateTimePeriod period, IScenario scenario, IPerson person, IAbsence absence)

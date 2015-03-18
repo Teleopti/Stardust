@@ -800,6 +800,7 @@
     <Compile Include="Aop\ReadModelUnitOfWorkAttribute.cs" />
     <Compile Include="PreserveStack.cs" />
     <Compile Include="Repositories\IJobResultRepository.cs" />
+    <Compile Include="Repositories\ISeatBookingRepository.cs" />
     <Compile Include="Repositories\ISeatMapLocationRepository.cs" />
     <Compile Include="Repositories\ITeamGamificationSettingRepository.cs" />
     <Compile Include="Repositories\IAgentBadgeSettingsRepository.cs" />
@@ -1500,8 +1501,7 @@
     <Compile Include="Scheduling\WorkShiftWorkTime.cs" />
     <Compile Include="Scheduling\WorkTimeMinMax.cs" />
     <Compile Include="Scheduling\WorkTimeMinMaxCalculator.cs" />
-    <Compile Include="SeatPlanning\AgentShift.cs" />
-    <Compile Include="SeatPlanning\BookingPeriod.cs" />
+    <Compile Include="SeatPlanning\SeatBooking.cs" />
     <Compile Include="SeatPlanning\SeatMapLocation.cs" />
     <Compile Include="SeatPlanning\Seat.cs" />
     <Compile Include="SeatPlanning\SeatAllocator.cs" />
@@ -2372,6 +2372,7 @@
     <Folder Include="Properties\" />
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="SeatPlanning\SeatBooking.hbm.xml" />
     <EmbeddedResource Include="SeatPlanning\Seat.hbm.xml" />
     <EmbeddedResource Include="SeatPlanning\Location.hbm.xml" />
     <EmbeddedResource Include="Forecasting\SkillMap_DEV.hbm.xml">

@@ -1,11 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.SeatPlanning
 {
 	public class SeatAllocator
 	{
+
 		private readonly SeatMapLocation[] _seatMapLocations;
 
 		public SeatAllocator(params SeatMapLocation[] seatMapLocations)
@@ -29,42 +31,42 @@ namespace Teleopti.Ccc.Domain.SeatPlanning
 		{
 			foreach (var seatBookingRequest in sortedSeatBookingRequests)
 			{
-				bookSeats(seatBookingRequest.AgentShifts, true);
+				bookSeats(seatBookingRequest.SeatBookings, true);
 			}
 		}
 
 		private void bookUnallocatedShifts(IEnumerable<SeatBookingRequest> sortedSeatBookingRequests)
 		{
-			var unallocatedShifts = sortedSeatBookingRequests.SelectMany(s => s.AgentShifts).Where(s => s.Seat == null);
+			var unallocatedShifts = sortedSeatBookingRequests.SelectMany(s => s.SeatBookings).Where(s => s.Seat == null);
 			if (unallocatedShifts.Any())
 			{
 				bookSeats(unallocatedShifts, false);
 			}
 		}
 
-		private void bookSeats(IEnumerable<AgentShift> shifts, Boolean bookGroupedRequestsTogether)
+		private void bookSeats(IEnumerable<ISeatBooking> seatBookings, Boolean bookGroupedRequestsTogether)
 		{
 			foreach (var location in _seatMapLocations.OrderByDescending(l => l.SeatCount))
 			{
-				var unallocatedShifts = shifts.Where(s => s.Seat == null);
-				if (!unallocatedShifts.Any()) return;
+				var unallocatedBookings = seatBookings.Where(s => s.Seat == null);
+				if (!unallocatedBookings.Any()) return;
 
 				var targetLocation = bookGroupedRequestsTogether
-					? location.GetLocationToAllocateSeats(unallocatedShifts)
+					? location.GetLocationToAllocateSeats(unallocatedBookings)
 					: location;
 
 				if (targetLocation != null)
 				{
-					bookSeatsForLocation(bookGroupedRequestsTogether, unallocatedShifts, targetLocation);
+					bookSeatsForLocation(bookGroupedRequestsTogether, unallocatedBookings, targetLocation);
 				}
 			}
 		}
 
-		private void bookSeatsForLocation(bool bookGroupedRequestsTogether, IEnumerable<AgentShift> unallocatedShifts, SeatMapLocation targetSeatMapLocation)
+		private void bookSeatsForLocation(bool bookGroupedRequestsTogether, IEnumerable<ISeatBooking> unallocatedShifts, SeatMapLocation targetSeatMapLocation)
 		{
 			foreach (var shift in unallocatedShifts)
 			{
-				var firstUnallocatedSeat = targetSeatMapLocation.GetNextUnallocatedSeat(shift.Period, bookGroupedRequestsTogether);
+				var firstUnallocatedSeat = targetSeatMapLocation.GetNextUnallocatedSeat(shift, bookGroupedRequestsTogether);
 				if (foundUnallocatedSet(firstUnallocatedSeat))
 				{
 					shift.Book(firstUnallocatedSeat);
