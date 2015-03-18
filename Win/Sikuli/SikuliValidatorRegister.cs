@@ -26,5 +26,7 @@
 		public const string OptimizeBlockTeam = "OptimizeBlockTeam";
 		public const string OptimizeIntervalBalanceBefore = "OptimizeIntervalBalanceBefore";
 		public const string OptimizeIntervalBalanceAfter = "OptimizeIntervalBalanceAfter";
+		public const string ScheduleBlockSameShiftCategory = "ScheduleBlockSameShiftCategory";
+		public const string OptimizeBlockSameShiftCategory = "OptimizeBlockSameShiftCategory";
 	}
 }
