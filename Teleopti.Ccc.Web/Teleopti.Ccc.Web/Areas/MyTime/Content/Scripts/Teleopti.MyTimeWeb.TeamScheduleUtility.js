@@ -577,7 +577,7 @@ Teleopti.MyTimeWeb.TeamScheduleFilterMixin = function () {
 	});
 
 	self.isEndTimeFilterActived = ko.computed(function() {
-		return (self.filteredEndTimesText().length != 0 || (self.timeSortOrder() == 'end asc') || (self.timeSortOrder() == 'end desc'));
+		return (self.filteredEndTimesText().length != 0 || self.isDayoffFiltered() == true || (self.timeSortOrder() == 'end asc') || (self.timeSortOrder() == 'end desc'));
 	});
 
 	

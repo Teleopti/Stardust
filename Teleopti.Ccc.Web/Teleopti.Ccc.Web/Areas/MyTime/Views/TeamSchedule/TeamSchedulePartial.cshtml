@@ -175,6 +175,14 @@
 											</label>
 										</li>
 										<!--/ko-->
+										<!-- ko if: filterStartTimeList().slice(-1) -->
+										<li data-bind="with: filterStartTimeList().slice(-1)[0]">
+											<label class="checkbox filter-time-text">
+												<input type="checkbox" data-bind="checked: isChecked">
+												<span data-bind="text: text"></span>
+											</label>
+										</li>
+										<!--/ko-->
 									</ul>
 								</div>
 							</div>
