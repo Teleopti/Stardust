@@ -135,10 +135,6 @@
     <Compile Include="Exceptions.cs" />
     <Compile Include="Execute.cs" />
     <Compile Include="Extensions.cs" />
-    <Compile Include="FakeAdherenceDetailsReadModelPersister.cs" />
-    <Compile Include="FakeAdherenceDetailsReadModelReader.cs" />
-    <Compile Include="FakeAdherencePercentageReadModelPersister.cs" />
-    <Compile Include="FakeAdherencePercentageReadModelReader.cs" />
     <Compile Include="FakeAgentStateReadModelReader.cs" />
     <Compile Include="FakeAllBusinessUnitsUnitOfWorkAspect.cs" />
     <Compile Include="FakeCurrentApplicationData.cs" />

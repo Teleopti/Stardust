@@ -1,11 +1,10 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Teleopti.Ccc.Domain.ApplicationLayer.Rta;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta.ReadModelUpdaters;
 using Teleopti.Interfaces.Domain;
 
-namespace Teleopti.Ccc.TestCommon
+namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta
 {
 	public class FakeAdherencePercentageReadModelReader : IAdherencePercentageReadModelReader
 	{
