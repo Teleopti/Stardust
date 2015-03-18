@@ -515,3 +515,6 @@ border-bottom: 1px solid rgba(255, 255, 255, 0.3);
 input[type=search]::-ms-clear {
     display: none;
 }
+.shift-trade-agent-name + .tooltip {
+	white-space: pre-wrap;
+}

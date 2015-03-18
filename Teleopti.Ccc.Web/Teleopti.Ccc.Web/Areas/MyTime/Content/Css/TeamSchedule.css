@@ -235,3 +235,6 @@
 .dropdown-menu {
 	overflow-y: scroll;
 }
+.shift-trade-agent-name + .tooltip {
+	white-space: pre-wrap;
+}

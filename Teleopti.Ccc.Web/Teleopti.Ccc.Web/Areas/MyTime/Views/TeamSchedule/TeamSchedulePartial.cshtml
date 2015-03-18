@@ -212,7 +212,7 @@
 					</thead>
 					<tbody data-bind="foreach: toDrawSchedules">
 					<tr class="shift-trade-person-schedule-row agent" data-bind="visible: isVisible">
-						<td id="shift-trade-agent-name" class="shift-trade-agent-name floatleft " data-bind="text: $data.agentName"></td>
+						<td id="shift-trade-agent-name" class="shift-trade-agent-name floatleft " data-bind="text: $data.agentName, tooltip: { title: $data.agentName, html: true}"></td>
 						<td class="shift-trade-possible-trade-schedule">
 							<div data-bind="foreach: $data.layers">
 								<!--ko if:!$parent.isDayOff-->
