@@ -21,14 +21,15 @@ namespace Teleopti.Ccc.Web.Areas.Mart.Core
 		{
 			const string sqlText = @"SELECT  d.[datasource_id],  t.time_zone_code FROM[mart].[sys_datasource] d
 															INNER JOIN [mart].[dim_time_zone] t ON d.time_zone_id = t.time_zone_id 
-															WHERE d.datasource_id = {0}";
+															WHERE d.datasource_id = @datasourceId";
 
 			LogObjectSource logObject = null;
 			using (var connection = _databaseConnectionHandler.MartConnection(nhibDataSourceName, _latency))
 			{
 				var command = connection.CreateCommand();
 				command.CommandType = CommandType.Text;
-				command.CommandText = string.Format(sqlText, logObjectId);
+				command.CommandText = sqlText;
+				command.Parameters.AddWithValue("@datasourceId", logObjectId);
 
 				connection.Open();
 				var reader = command.ExecuteReader(CommandBehavior.CloseConnection);
@@ -74,13 +75,13 @@ namespace Teleopti.Ccc.Web.Areas.Mart.Core
 
 		public int GetDateId(DateTime dateTime, string nhibDataSourceName)
 		{
-			const string sqlText = @"SELECT [date_id] FROM [mart].[dim_date] WHERE date_date = '{0}'";
-			var dateString = dateTime.ToString("yyyy-MM-dd");
+			const string sqlText = @"SELECT [date_id] FROM [mart].[dim_date] WHERE date_date = @date";
 			using (var connection = _databaseConnectionHandler.MartConnection(nhibDataSourceName, _latency))
 			{
 				var command = connection.CreateCommand();
 				command.CommandType = CommandType.Text;
-				command.CommandText = string.Format(sqlText, dateString);
+				command.CommandText = sqlText;
+				command.Parameters.AddWithValue("@date", dateTime.Date);
 
 				connection.Open();
 				var reader = command.ExecuteReader(CommandBehavior.CloseConnection);

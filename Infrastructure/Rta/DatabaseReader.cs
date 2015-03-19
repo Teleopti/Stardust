@@ -7,7 +7,6 @@ using System.Data.SqlClient;
 using System.Globalization;
 using System.Linq;
 using log4net;
-using Teleopti.Ccc.Domain.ApplicationLayer.Rta;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service;
 using Teleopti.Interfaces.Domain;
 
@@ -33,20 +32,20 @@ namespace Teleopti.Ccc.Infrastructure.Rta
 		public IList<ScheduleLayer> GetCurrentSchedule(Guid personId)
 		{
 			var utcDate = _now.UtcDateTime().Date;
-			var query = string.Format(CultureInfo.InvariantCulture,
-				@"SELECT PayloadId,StartDateTime,EndDateTime,rta.Name,rta.ShortName,DisplayColor, BelongsToDate 
+			const string query = @"SELECT PayloadId,StartDateTime,EndDateTime,rta.Name,rta.ShortName,DisplayColor, BelongsToDate 
 											FROM ReadModel.ScheduleProjectionReadOnly rta
-											WHERE PersonId='{0}'
-											AND BelongsToDate BETWEEN '{1}' AND '{2}'",
-				personId,
-				utcDate.AddDays(-1),
-				utcDate.AddDays(1));
+											WHERE PersonId=@PersonId
+											AND BelongsToDate BETWEEN @StartDate AND @EndDate";
+
 			var layers = new List<ScheduleLayer>();
 			using (var connection = _databaseConnectionFactory.CreateConnection(_databaseConnectionStringHandler.AppConnectionString()))
 			{
 				var command = connection.CreateCommand();
 				command.CommandType = CommandType.Text;
 				command.CommandText = query;
+				command.Parameters.AddWithValue("@PersonId", personId);
+				command.Parameters.AddWithValue("@StartDate", utcDate.AddDays(-1));
+				command.Parameters.AddWithValue("@EndDate", utcDate.AddDays(1));
 				connection.Open();
 				var reader = command.ExecuteReader(CommandBehavior.CloseConnection);
 				while (reader.Read())
@@ -76,7 +75,7 @@ namespace Teleopti.Ccc.Infrastructure.Rta
 				var command = connection.CreateCommand();
 				command.CommandType = CommandType.StoredProcedure;
 				command.CommandText = "dbo.rta_load_external_logon";
-				command.Parameters.Add(new SqlParameter("@now", DateTime.UtcNow.Date));
+				command.Parameters.AddWithValue("@now", DateTime.UtcNow.Date);
 				connection.Open();
 				var reader = command.ExecuteReader(CommandBehavior.CloseConnection);
 				while (reader.Read())

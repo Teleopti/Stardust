@@ -150,16 +150,23 @@ namespace Teleopti.Ccc.Infrastructure.Rta
 
 		private IEnumerable<AgentStateReadModel> queryActualAgentStates(Guid? personId)
 		{
-			var query = "SELECT * FROM RTA.ActualAgentState";
-			if (personId.HasValue)
-				query = string.Format("SELECT * FROM RTA.ActualAgentState WHERE PersonId ='{0}'", personId);
 			using (
 				var connection =
 					_databaseConnectionFactory.CreateConnection(_databaseConnectionStringHandler.DataStoreConnectionString()))
 			{
 				var command = connection.CreateCommand();
 				command.CommandType = CommandType.Text;
-				command.CommandText = query;
+
+				if (personId.HasValue)
+				{
+					command.CommandText = "SELECT * FROM RTA.ActualAgentState WHERE PersonId = @PersonId";
+					command.Parameters.AddWithValue("@PersonId", personId.Value);
+				}
+				else
+				{
+					command.CommandText = "SELECT * FROM RTA.ActualAgentState";
+				}
+
 				connection.Open();
 				using (var reader = command.ExecuteReader(CommandBehavior.CloseConnection))
 				{
@@ -204,8 +211,8 @@ namespace Teleopti.Ccc.Infrastructure.Rta
 				var command = connection.CreateCommand();
 				command.CommandType = CommandType.StoredProcedure;
 				command.CommandText = "[RTA].[rta_get_last_batch]";
-				command.Parameters.Add(new SqlParameter("@datasource_id", dataSourceId));
-				command.Parameters.Add(new SqlParameter("@batch_id", batchId));
+				command.Parameters.AddWithValue("@datasource_id", dataSourceId);
+				command.Parameters.AddWithValue("@batch_id", batchId);
 
 				connection.Open();
 				var reader = command.ExecuteReader(CommandBehavior.CloseConnection);
