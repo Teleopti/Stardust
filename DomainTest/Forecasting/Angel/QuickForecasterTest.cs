@@ -22,16 +22,16 @@ namespace Teleopti.Ccc.DomainTest.Forecasting.Angel
 			fetchAndFillSkillDays.Stub(x => x.FindRange(futurePeriod, skill1)).Return(skillDays);
 			var quickForecasterWorkload = MockRepository.GenerateMock<IQuickForecasterWorkload>();
 			var workload = WorkloadFactory.CreateWorkload("workload1", skill1);
-			quickForecasterWorkload.Stub(x => x.Execute(new QuickForecasterWorkloadParams
+			
+			var target = new QuickForecaster(quickForecasterWorkload, fetchAndFillSkillDays);
+			target.ForecastForWorkload(workload, futurePeriod, historicalPeriod);
+			quickForecasterWorkload.AssertWasCalled(x => x.Execute(new QuickForecasterWorkloadParams
 			{
 				FuturePeriod = futurePeriod,
 				HistoricalPeriod = historicalPeriod,
 				SkillDays = skillDays,
 				WorkLoad = workload
-			})).Return(90.9);
-			var target = new QuickForecaster(quickForecasterWorkload, fetchAndFillSkillDays);
-			var result = target.ForecastForWorkload(workload, futurePeriod, historicalPeriod);
-			result.Should().Be.EqualTo(90.9);
+			}));
 		}
 	}
 }

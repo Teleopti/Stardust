@@ -3,7 +3,6 @@ using System.Linq;
 using NUnit.Framework;
 using Rhino.Mocks;
 using SharpTestsEx;
-using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.Forecasting.Angel;
@@ -26,7 +25,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Forecasting.Controllers
 			var skill1 = SkillFactory.CreateSkillWithWorkloadAndSources();
 			skill1.SetId(Guid.NewGuid());
 			skillRepository.Stub(x => x.FindSkillsWithAtLeastOneQueueSource()).Return(new[] {skill1});
-			var target = new ForecastController(quickForecastEvaluator, MockRepository.GenerateMock<ICurrentIdentity>(), skillRepository);
+			var target = new ForecastController(quickForecastEvaluator, skillRepository, null);
 			var skills = target.Skills();
 			skills.Single().Id.Should().Be.EqualTo(skill1.Id.Value);
 			skills.Single().Name.Should().Be.EqualTo(skill1.Name);
@@ -38,8 +37,6 @@ namespace Teleopti.Ccc.WebTest.Areas.Forecasting.Controllers
 		[Test]
 		public void ShouldMeasureForecast()
 		{
-			var now = new Now();
-			var expectedFuturePeriod = new DateOnlyPeriod(new DateOnly(now.UtcDateTime()), new DateOnly(now.UtcDateTime().AddYears(1)));
 			var quickForecastEvaluator = MockRepository.GenerateMock<IQuickForecastEvaluator>();
 			quickForecastEvaluator.Stub(x => x.MeasureForecastForAllSkills())
 				.Return(new[] {new ForecastingAccuracy {Accuracy = 90.2}});
@@ -48,6 +45,25 @@ namespace Teleopti.Ccc.WebTest.Areas.Forecasting.Controllers
 			var result = target.MeasureForecast();
 
 			result.Result[0].Accuracy.Should().Be.EqualTo(90.2);
+		}
+
+		[Test]
+		public void ShouldForecast()
+		{
+			var now = new Now();
+			var expectedFuturePeriod = new DateOnlyPeriod(new DateOnly(now.UtcDateTime()), new DateOnly(now.UtcDateTime().AddYears(1)));
+			var quickForecastCreator = MockRepository.GenerateMock<IQuickForecastCreator>();
+			
+			var target = new ForecastController(null, null, quickForecastCreator);
+			var workloads = new[] {Guid.NewGuid() };
+			var result = target.Forecast(new QuickForecastInputModel
+			{
+				ForecastStart = expectedFuturePeriod.StartDate,
+				ForecastEnd = expectedFuturePeriod.EndDate,
+				Workloads = workloads
+			});
+			result.Result.Should().Be.True();
+			quickForecastCreator.AssertWasCalled(x => x.CreateForecastForWorkloads(expectedFuturePeriod, workloads));
 		}
 	}
 

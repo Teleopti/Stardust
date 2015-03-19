@@ -14,7 +14,7 @@ namespace Teleopti.Ccc.DomainTest.Forecasting.Angel
 	public class QuickForecastCreatorTest
 	{
 		[Test]
-		public void ShouldGetAverageAccuracyForAllSkills()
+		public void ShouldForecastForAllSkills()
 		{
 			var skillRepository = MockRepository.GenerateMock<ISkillRepository>();
 			var skill1 = SkillFactory.CreateSkill("skill1");
@@ -24,18 +24,17 @@ namespace Teleopti.Ccc.DomainTest.Forecasting.Angel
 			var futurePeriod = new DateOnlyPeriod();
 			var now = new Now();
 			var nowDate = now.LocalDateOnly();
-			var historicalPeriod = new DateOnlyPeriod(new DateOnly(nowDate.Date.AddYears(-2)), nowDate);
-
-			quickForecaster.Stub(x => x.ForecastForSkill(skill1, futurePeriod, historicalPeriod)).Return(2.3);
-			quickForecaster.Stub(x => x.ForecastForSkill(skill2, futurePeriod, historicalPeriod)).Return(3.4);
+			var historicalPeriod = new DateOnlyPeriod(new DateOnly(nowDate.Date.AddYears(-1)), nowDate);
 			
 			var target = new QuickForecastCreator(quickForecaster, skillRepository, now);
-			var result = target.CreateForecastForAllSkills(futurePeriod);
-			result.Accuracy.Should().Be.EqualTo((Math.Round(5.7/2, 1)));
+			target.CreateForecastForAllSkills(futurePeriod);
+
+			quickForecaster.AssertWasCalled(x => x.ForecastForSkill(skill1, futurePeriod, historicalPeriod));
+			quickForecaster.AssertWasCalled(x => x.ForecastForSkill(skill2, futurePeriod, historicalPeriod));
 		}
 
 		[Test]
-		public void ShouldGetAccuracyForWorkloads()
+		public void ShouldForecastForWorkloads()
 		{
 			var skillRepository = MockRepository.GenerateMock<ISkillRepository>();
 			var skill1 = SkillFactory.CreateSkill("skill1");
@@ -51,15 +50,12 @@ namespace Teleopti.Ccc.DomainTest.Forecasting.Angel
 			var futurePeriod = new DateOnlyPeriod();
 			var now = new Now();
 			var nowDate = now.LocalDateOnly();
-			var historicalPeriod = new DateOnlyPeriod(new DateOnly(nowDate.Date.AddYears(-2)), nowDate);
-
-			quickForecaster.Stub(x => x.ForecastForWorkload(workload1, futurePeriod, historicalPeriod)).Return(2.3);
-			quickForecaster.Stub(x => x.ForecastForWorkload(workload2, futurePeriod, historicalPeriod)).Return(3.4);
+			var historicalPeriod = new DateOnlyPeriod(new DateOnly(nowDate.Date.AddYears(-1)), nowDate);
 
 			var target = new QuickForecastCreator(quickForecaster, skillRepository, now);
-			var result = target.CreateForecastForWorkloads( futurePeriod,new[] { id1 , id2});
-			result[0].Accuracy.Should().Be.EqualTo(2.3);
-			result[1].Accuracy.Should().Be.EqualTo(3.4);
+			target.CreateForecastForWorkloads( futurePeriod,new[] { id1 , id2});
+			quickForecaster.AssertWasCalled(x => x.ForecastForWorkload(workload1, futurePeriod, historicalPeriod));
+			quickForecaster.AssertWasCalled(x => x.ForecastForWorkload(workload2, futurePeriod, historicalPeriod));
 		}
 	}
 }

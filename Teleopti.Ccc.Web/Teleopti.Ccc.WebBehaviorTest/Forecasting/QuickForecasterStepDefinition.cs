@@ -28,8 +28,8 @@ namespace Teleopti.Ccc.WebBehaviorTest.Forecasting
 			Browser.Interactions.AssertExists("div.success");
 		}
 
-		[Given(@"there is no SkillDays in the database")]
-		public void GivenThereIsNoSkillDaysInTheDatabase()
+		[Given(@"there is no forecast data")]
+		public void GivenThereIsNoForecastData()
 		{
 			GlobalUnitOfWorkState.UnitOfWorkAction(uow =>
 				new SkillDayRepository(uow).LoadAll().Any().Should().Be.False());
@@ -54,6 +54,13 @@ namespace Teleopti.Ccc.WebBehaviorTest.Forecasting
 			Browser.Interactions.ClickContaining(".workload", workload);
 		}
 
+		[When(@"I choose to forecast the selected targets")]
+		public void WhenIChooseToForecastTheSelectedTargets()
+		{
+			Browser.Interactions.Click(".apply");
+		}
+
+
 		[When(@"I use default forecast period and continue")]
 		public void WhenIClickQuickforecaster()
 		{
@@ -61,6 +68,46 @@ namespace Teleopti.Ccc.WebBehaviorTest.Forecasting
 			ScenarioContext.Current.Add("enddate", new DateOnly(DateTime.Parse(Browser.Interactions.GetText("span.endDate"))));
 			Browser.Interactions.Click(".next-step");
 		}
+
+		[Then(@"there is forecast data for default period for '(.*)'")]
+		public void ThenThereIsForecastDataForDefaultPeriodFor(string workload)
+		{
+			var choosenPeriod = new DateOnlyPeriod((DateOnly)ScenarioContext.Current["startdate"], ((DateOnly)ScenarioContext.Current["enddate"]).AddDays(-1));
+			GlobalUnitOfWorkState.UnitOfWorkAction(uow =>
+			{
+				var workloadId = new WorkloadRepository(uow).LoadAll().SingleOrDefault(x => x.Name == workload).Id;
+				var allSkillDays = new SkillDayRepository(uow).LoadAll();
+
+				foreach (var dateOnly in choosenPeriod.DayCollection())
+				{
+					var skillDay = allSkillDays.SingleOrDefault(x => x.CurrentDate == dateOnly);
+					skillDay.Should().Not.Be.Null();
+					skillDay.WorkloadDayCollection.SingleOrDefault(x => x.Workload.Id == workloadId)
+						.Should().Not.Be.Null();
+				}
+			});
+		}
+
+		[Then(@"there is no forecast data for default period for '(.*)'")]
+		public void ThenThereIsNoForecastDataForDefaultPeriodFor(string workload)
+		{
+			var choosenPeriod = new DateOnlyPeriod((DateOnly)ScenarioContext.Current["startdate"], ((DateOnly)ScenarioContext.Current["enddate"]).AddDays(-1));
+			GlobalUnitOfWorkState.UnitOfWorkAction(uow =>
+			{
+				var workloadId = new WorkloadRepository(uow).LoadAll().SingleOrDefault(x => x.Name == workload).Id;
+				var allSkillDays = new SkillDayRepository(uow).LoadAll();
+
+				foreach (var dateOnly in choosenPeriod.DayCollection())
+				{
+					var skillDay = allSkillDays.SingleOrDefault(x => x.CurrentDate == dateOnly);
+					skillDay.Should().Not.Be.Null();
+					skillDay.WorkloadDayCollection.SingleOrDefault(x => x.Workload.Id == workloadId)
+						.Should().Be.Null();
+				}
+			});
+		}
+
+
 
 		[Then(@"there are SkillDays for default period")]
 		public void ThenThereAreSkillDaysForDefaultPeriod()
@@ -87,13 +134,13 @@ namespace Teleopti.Ccc.WebBehaviorTest.Forecasting
 		[Then(@"I should see the total forecasting accuracy")]
 		public void ThenIShouldSeeTheTotalForecastingAccuracy()
 		{
-			Browser.Interactions.AssertFirstContainsUsingJQuery(".forecast-total-accuracy", "%");
+			Browser.Interactions.AssertFirstContainsUsingJQuery(".total-accuracy", "%");
 		}
 
 		[Then(@"I should see the forecasting accuracy for '(.*)'")]
 		public void ThenIShouldSeeTheForecastingAccuracyFor(string workload)
 		{
-			Browser.Interactions.AssertFirstContainsUsingJQuery(".forecast-workload-accuracy:contains(" + workload + ")", "%");
+			Browser.Interactions.AssertFirstContainsUsingJQuery(".workload:contains(" + workload + ") .workload-accuracy", "%");
 		}
 
 		[Then(@"I should see a message of no historical data for measurement")]

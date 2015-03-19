@@ -1,9 +1,6 @@
-﻿using System;
-using System.Linq;
-using Teleopti.Ccc.Domain.Forecasting.Angel.Accuracy;
+﻿using System.Linq;
 using Teleopti.Ccc.Domain.Forecasting.Angel.Future;
 using Teleopti.Ccc.Domain.Forecasting.Angel.Historical;
-using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Forecasting.Angel
 {
@@ -13,36 +10,23 @@ namespace Teleopti.Ccc.Domain.Forecasting.Angel
 		private readonly IFutureData _futureData;
 		private readonly IForecastMethod _forecastMethod;
 		private readonly IForecastingTargetMerger _forecastingTargetMerger;
-		private readonly IForecastingMeasurer _forecastingMeasurer;
 
-		public QuickForecasterWorkload(IHistoricalData historicalData, IFutureData futureData, IForecastMethod forecastMethod, IForecastingTargetMerger forecastingTargetMerger, IForecastingMeasurer forecastingMeasurer)
+		public QuickForecasterWorkload(IHistoricalData historicalData, IFutureData futureData, IForecastMethod forecastMethod, IForecastingTargetMerger forecastingTargetMerger)
 		{
 			_historicalData = historicalData;
 			_futureData = futureData;
 			_forecastMethod = forecastMethod;
 			_forecastingTargetMerger = forecastingTargetMerger;
-			_forecastingMeasurer = forecastingMeasurer;
 		}
 
-		public double Execute(QuickForecasterWorkloadParams quickForecasterWorkloadParams)
+		public void Execute(QuickForecasterWorkloadParams quickForecasterWorkloadParams)
 		{
 			var historicalData = _historicalData.Fetch(quickForecasterWorkloadParams.WorkLoad, quickForecasterWorkloadParams.HistoricalPeriod);
 			if (!historicalData.TaskOwnerDayCollection.Any())
-				return Double.NaN;
-
-			var oneYearBack = new DateOnly(historicalData.EndDate.Date.AddYears(-1));
-			var lastYearData = new TaskOwnerPeriod(DateOnly.MinValue, historicalData.TaskOwnerDayCollection.Where(x => x.CurrentDate > oneYearBack), TaskOwnerPeriodType.Other);
-			var yearBeforeLastYearData = new TaskOwnerPeriod(DateOnly.MinValue, historicalData.TaskOwnerDayCollection.Where(x => x.CurrentDate <= oneYearBack), TaskOwnerPeriodType.Other);
-
-			var forecastingTargets = _forecastMethod.Forecast(lastYearData, quickForecasterWorkloadParams.FuturePeriod);
+				return;
+			var forecastingTargets = _forecastMethod.Forecast(historicalData, quickForecasterWorkloadParams.FuturePeriod);
 			var futureWorkloadDays = _futureData.Fetch(quickForecasterWorkloadParams);
 			_forecastingTargetMerger.Merge(forecastingTargets, futureWorkloadDays);
-
-			if (!yearBeforeLastYearData.TaskOwnerDayCollection.Any()) 
-				return Double.NaN;
-
-			var forecastingMeasureTarget = _forecastMethod.Forecast(yearBeforeLastYearData, new DateOnlyPeriod(oneYearBack, historicalData.EndDate));
-			return _forecastingMeasurer.Measure(forecastingMeasureTarget, lastYearData.TaskOwnerDayCollection);
 		}
 	}
 }

@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
 using Teleopti.Ccc.Domain.Forecasting.Angel.Future;
 using Teleopti.Interfaces.Domain;
 
@@ -16,10 +15,9 @@ namespace Teleopti.Ccc.Domain.Forecasting.Angel
 			_fetchAndFillSkillDays = fetchAndFillSkillDays;
 		}
 
-		public double ForecastForSkill(ISkill skill, DateOnlyPeriod futurePeriod, DateOnlyPeriod historicalPeriod)
+		public void ForecastForSkill(ISkill skill, DateOnlyPeriod futurePeriod, DateOnlyPeriod historicalPeriod)
 		{
 			var skillDays = _fetchAndFillSkillDays.FindRange(futurePeriod, skill);
-			var sum = 0d;
 			
 			foreach (var workload in skill.WorkloadCollection)
 			{
@@ -30,13 +28,12 @@ namespace Teleopti.Ccc.Domain.Forecasting.Angel
 					SkillDays = skillDays,
 					HistoricalPeriod = historicalPeriod
 				};
-				sum += _quickForecasterWorkload.Execute(quickForecasterWorkloadParams);
-			}
-			return sum / skill.WorkloadCollection.Count();
+				_quickForecasterWorkload.Execute(quickForecasterWorkloadParams);
+			};
 		}
 
 
-		public double ForecastForWorkload(IWorkload workload, DateOnlyPeriod futurePeriod, DateOnlyPeriod historicalPeriod)
+		public void ForecastForWorkload(IWorkload workload, DateOnlyPeriod futurePeriod, DateOnlyPeriod historicalPeriod)
 		{
 			var skillDays = _fetchAndFillSkillDays.FindRange(futurePeriod, workload.Skill);
 			var quickForecasterWorkloadParams = new QuickForecasterWorkloadParams
@@ -46,7 +43,7 @@ namespace Teleopti.Ccc.Domain.Forecasting.Angel
 					SkillDays = skillDays,
 					HistoricalPeriod = historicalPeriod
 				};
-			return _quickForecasterWorkload.Execute(quickForecasterWorkloadParams);
+			_quickForecasterWorkload.Execute(quickForecasterWorkloadParams);
 		}
 	}
 

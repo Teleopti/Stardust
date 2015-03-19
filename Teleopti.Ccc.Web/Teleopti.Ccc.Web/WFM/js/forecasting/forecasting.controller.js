@@ -52,8 +52,10 @@ angular.module('wfm.forecasting', [])
 				$scope.all.Accuracy = accuracyForTotal + '%';
 			});
 
+			$scope.targets = [];
+
 			$scope.nextStep = function () {
-				$state.go('forecasting.run', { period: $stateParams.period }); //there's probably a better way to do that
+				$state.go('forecasting.run', { period: $stateParams.period, targets: $scope.targets }); //there's probably a better way to do that
 			};
 		}]
 		)
@@ -61,9 +63,10 @@ angular.module('wfm.forecasting', [])
 		function ($scope, $stateParams, $http) {
 
 			$scope.period = $stateParams.period;
-			$http.post('../api/Forecasting/MeasureForecast', JSON.stringify({ ForecastStart: $scope.period.startDate, ForecastEnd: $scope.period.endDate })).
+			$scope.targets = $stateParams.targets;
+			$http.post('../api/Forecasting/Forecast', JSON.stringify({ ForecastStart: $scope.period.startDate, ForecastEnd: $scope.period.endDate, Targets: $scope.targets })).
 				success(function (data, status, headers, config) {
-					$scope.result = { success: true, message: 'You now have an updated forecast in your default scenario, based on last year\'s data.', accuracy: data[0].Accuracy == 'NaN' ? 'Not enough historical data for measuring.' : data[0].Accuracy + '%' };
+					$scope.result = { success: true, message: 'You now have an updated forecast in your default scenario, based on last year\'s data.' };
 				}).
 				error(function (data, status, headers, config) {
 					$scope.result = { success: false, message: 'The forecast has failed. Please try again later' };

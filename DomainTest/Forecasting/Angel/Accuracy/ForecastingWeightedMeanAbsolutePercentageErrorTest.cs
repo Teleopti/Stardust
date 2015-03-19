@@ -63,7 +63,7 @@ namespace Teleopti.Ccc.DomainTest.Forecasting.Angel.Accuracy
 					workloadDay1
 				}, TaskOwnerPeriodType.Other).TaskOwnerDayCollection);
 
-			result.Should().Be.EqualTo(66.667);
+			result.Should().Be.EqualTo(66.7);
 		}
 
 		[Test]

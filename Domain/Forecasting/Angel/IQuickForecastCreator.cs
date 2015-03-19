@@ -5,7 +5,7 @@ namespace Teleopti.Ccc.Domain.Forecasting.Angel
 {
 	public interface IQuickForecastCreator
 	{
-		ForecastingAccuracy CreateForecastForAllSkills(DateOnlyPeriod futurePeriod);
-		ForecastingAccuracy[] CreateForecastForWorkloads(DateOnlyPeriod futurePeriod, Guid[] workloadIds);
+		void CreateForecastForAllSkills(DateOnlyPeriod futurePeriod);
+		void CreateForecastForWorkloads(DateOnlyPeriod futurePeriod, Guid[] workloadIds);
 	}
 }

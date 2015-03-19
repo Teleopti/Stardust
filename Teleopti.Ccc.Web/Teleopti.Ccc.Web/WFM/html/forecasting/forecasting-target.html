@@ -1,12 +1,12 @@
 <div ui-view>
-	<h4>Choose workload:</h4>
+	<h4>Select forcasting target(s):</h4>
 	<div class="material-block-content">
 		<div class="tree">
 			<div ui-tree data-drag-enabled="false">
 				<ol ui-tree-nodes="" ng-model="all">
 					<li ui-tree-node>
 						<div ui-tree-handle>
-							{{all.Name}} <span class="pull-right forecast-total-accuracy">{{all.Accuracy}}</span>
+							{{all.Name}} <span class="pull-right total-accuracy">{{all.Accuracy}}</span>
 						</div>
 						<ol ui-tree-nodes="" ng-model="skillsDisplayed">
 							<li ng-repeat="skill in skillsDisplayed" ui-tree-node ng-include="'nodes_skill_renderer.html'" value='{{skill.Id}}'></li>
@@ -16,7 +16,7 @@
 			</div>
 		</div>
 		<div>
-			<button class="btn btn-primary material-btn material-depth-1" ng-click="nextStep()">Apply</button>
+			<button class="btn btn-primary material-btn material-depth-1 apply" ng-click="nextStep()">Apply</button>
 		</div>
 	</div>
 	<div class="clearfix"></div>
@@ -29,8 +29,8 @@
 	</div>
 	<ol ui-tree-nodes="" ng-model="skill.Workloads">
 		<li ng-repeat="workload in skill.Workloads" ui-tree-node value='{{workload.Id}}'>
-			<div ui-tree-handle ng-class="{selected: workload.Selected}" ng-click="toggleWorkload(workload)">
-				{{workload.Name}} <span class="pull-right forecast-workload-accuracy">{{workload.Accuracy}}</span>
+			<div ui-tree-handle ng-class="{selected: workload.Selected}" class="workload" ng-click="toggleWorkload(workload)">
+				{{workload.Name}} <span class="pull-right workload-accuracy">{{workload.Accuracy}}</span>
 			</div>
 		</li>
 	</ol>

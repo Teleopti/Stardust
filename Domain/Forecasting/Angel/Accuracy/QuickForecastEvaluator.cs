@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
 using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Interfaces.Domain;
@@ -19,13 +18,6 @@ namespace Teleopti.Ccc.Domain.Forecasting.Angel.Accuracy
 			_now = now;
 		}
 
-		private DateOnlyPeriod getHistoricalPeriod()
-		{
-			var nowDate = _now.LocalDateOnly();
-			var historicalPeriod = new DateOnlyPeriod(new DateOnly(nowDate.Date.AddYears(-2)), nowDate);
-			return historicalPeriod;
-		}
-
 		public ForecastingAccuracy[] MeasureForecastForAllSkills()
 		{
 			var historicalPeriod = getHistoricalPeriod();
@@ -38,7 +30,11 @@ namespace Teleopti.Ccc.Domain.Forecasting.Angel.Accuracy
 			return list.ToArray();
 		}
 
-
-
+		private DateOnlyPeriod getHistoricalPeriod()
+		{
+			var nowDate = _now.LocalDateOnly();
+			var historicalPeriod = new DateOnlyPeriod(new DateOnly(nowDate.Date.AddYears(-2)), nowDate);
+			return historicalPeriod;
+		}
 	}
 }

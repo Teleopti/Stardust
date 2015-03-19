@@ -9,4 +9,5 @@ forecastingService.service('Forecasting', ['$resource', function ($resource) {
 	this.accuracyResult = $resource('../api/Forecasting/MeasureForecast', {}, {
 		get: { method: 'GET', params: {}, isArray: true }
 	});
+
 }]);

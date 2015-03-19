@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Interfaces.Domain;
@@ -26,17 +27,14 @@ namespace Teleopti.Ccc.Domain.Forecasting.Angel
 			_now = now;
 		}
 
-		public ForecastingAccuracy CreateForecastForAllSkills(DateOnlyPeriod futurePeriod)
+		public void CreateForecastForAllSkills(DateOnlyPeriod futurePeriod)
 		{
 			var historicalPeriod = getHistoricalPeriod();
 			var skills = _skillRepository.FindSkillsWithAtLeastOneQueueSource();
-			return new ForecastingAccuracy
-			{
-				Accuracy = Math.Round(skills.Average(skill => _quickForecaster.ForecastForSkill(skill, futurePeriod, historicalPeriod)), 1)
-			};
+			skills.ForEach(skill => _quickForecaster.ForecastForSkill(skill, futurePeriod, historicalPeriod));
 		}
 
-		public ForecastingAccuracy[] CreateForecastForWorkloads(DateOnlyPeriod futurePeriod, Guid[] workloadIds)
+		public void CreateForecastForWorkloads(DateOnlyPeriod futurePeriod, Guid[] workloadIds)
 		{
 			var historicalPeriod = getHistoricalPeriod();
 			var skills = _skillRepository.FindSkillsWithAtLeastOneQueueSource();
@@ -45,17 +43,13 @@ namespace Teleopti.Ccc.Domain.Forecasting.Angel
 				from workload in skill.WorkloadCollection 
 				where workloadId == workload.Id 
 				select workload).Single());
-			return workloads.Select(workload => new ForecastingAccuracy
-			{
-				Accuracy = Math.Round(_quickForecaster.ForecastForWorkload(workload, futurePeriod, historicalPeriod), 1),
-				WorkloadId = workload.Id.Value
-			}).ToArray();
+			workloads.ForEach(x => _quickForecaster.ForecastForWorkload(x, futurePeriod, historicalPeriod));
 		}
 
 		private DateOnlyPeriod getHistoricalPeriod()
 		{
 			var nowDate = _now.LocalDateOnly();
-			var historicalPeriod = new DateOnlyPeriod(new DateOnly(nowDate.Date.AddYears(-2)), nowDate);
+			var historicalPeriod = new DateOnlyPeriod(new DateOnly(nowDate.Date.AddYears(-1)), nowDate);
 			return historicalPeriod;
 		}
 	}

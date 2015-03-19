@@ -3,7 +3,6 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Web.Http;
 using Teleopti.Ccc.Domain.Aop;
-using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Forecasting.Angel;
 using Teleopti.Ccc.Domain.Forecasting.Angel.Accuracy;
 using Teleopti.Ccc.Domain.Repositories;
@@ -17,14 +16,14 @@ namespace Teleopti.Ccc.Web.Areas.Forecasting.Controllers
 	public class ForecastController : ApiController
 	{
 		private readonly IQuickForecastEvaluator _quickForecastEvaluator;
-		private readonly ICurrentIdentity _currentIdentity;
 		private readonly ISkillRepository _skillRepository;
+		private readonly IQuickForecastCreator _quickForecastCreator;
 
-		public ForecastController(IQuickForecastEvaluator quickForecastEvaluator, ICurrentIdentity currentIdentity, ISkillRepository skillRepository)
+		public ForecastController(IQuickForecastEvaluator quickForecastEvaluator, ISkillRepository skillRepository, IQuickForecastCreator quickForecastCreator)
 		{
 			_quickForecastEvaluator = quickForecastEvaluator;
-			_currentIdentity = currentIdentity;
 			_skillRepository = skillRepository;
+			_quickForecastCreator = quickForecastCreator;
 		}
 
 		[HttpGet, Route("api/Forecasting/MeasureForecast"), UnitOfWork]
@@ -44,6 +43,14 @@ namespace Teleopti.Ccc.Web.Areas.Forecasting.Controllers
 					Name = skill.Name,
 					Workloads = skill.WorkloadCollection.Select(x => new WorkloadViewModel {Id = x.Id.Value, Name = x.Name}).ToArray()
 				});
+		}
+
+		[HttpPost, Route("api/Forecasting/Forecast"), UnitOfWork]
+		public virtual Task<bool> Forecast(QuickForecastInputModel model)
+		{
+			var futurePeriod = new DateOnlyPeriod(new DateOnly(model.ForecastStart), new DateOnly(model.ForecastEnd));
+			_quickForecastCreator.CreateForecastForWorkloads(futurePeriod, model.Workloads);
+			return Task.FromResult(true);
 		}
 	}
 }

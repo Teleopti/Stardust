@@ -6,7 +6,6 @@ using Rhino.Mocks;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.Forecasting.Angel;
-using Teleopti.Ccc.Domain.Forecasting.Angel.Accuracy;
 using Teleopti.Ccc.Domain.Forecasting.Angel.Future;
 using Teleopti.Ccc.Domain.Forecasting.Angel.Historical;
 using Teleopti.Ccc.Domain.Repositories;
@@ -50,7 +49,7 @@ namespace Teleopti.Ccc.DomainTest.Forecasting.Angel
 			var skillDayRepository = MockRepository.GenerateStub<ISkillDayRepository>();
 			skillDayRepository.Stub(x => x.FindRange(futurePeriod, skill, currentScenario.Current())).Return(skillDays);
 
-			var quickForecasterWorkload = new QuickForecasterWorkload(new HistoricalData(dailyStatistics, validatedVolumeDayRepository), new FutureData(),new ForecastMethod(new IndexVolumes()), new ForecastingTargetMerger(), new ForecastingMeanAbsolutePercentageDeviation());
+			var quickForecasterWorkload = new QuickForecasterWorkload(new HistoricalData(dailyStatistics, validatedVolumeDayRepository), new FutureData(),new ForecastMethod(new IndexVolumes()), new ForecastingTargetMerger());
 			var target = new QuickForecaster(quickForecasterWorkload, new FetchAndFillSkillDays(skillDayRepository, currentScenario, new SkillDayRepository(MockRepository.GenerateStrictMock<ICurrentUnitOfWork>())));
 			target.ForecastForSkill(skill, futurePeriod, historicalPeriod);
 
