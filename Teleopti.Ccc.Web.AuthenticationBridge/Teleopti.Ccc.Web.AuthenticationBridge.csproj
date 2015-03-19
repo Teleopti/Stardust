@@ -46,15 +46,15 @@
   <ItemGroup>
     <Reference Include="AuthBridge, Version=1.0.0.12, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\AuthBridge.Web.1.0.3.22\lib\net40\AuthBridge.dll</HintPath>
+      <HintPath>..\packages\AuthBridge.Web.1.0.3.23\lib\net40\AuthBridge.dll</HintPath>
     </Reference>
-    <Reference Include="AuthBridge.Web, Version=1.0.3.21, Culture=neutral, processorArchitecture=MSIL">
+    <Reference Include="AuthBridge.Web, Version=1.0.3.23, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\AuthBridge.Web.1.0.3.22\lib\net40\AuthBridge.Web.dll</HintPath>
+      <HintPath>..\packages\AuthBridge.Web.1.0.3.23\lib\net40\AuthBridge.Web.dll</HintPath>
     </Reference>
     <Reference Include="ClaimsPolicyEngine, Version=1.0.0.3, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\AuthBridge.Web.1.0.3.22\lib\net40\ClaimsPolicyEngine.dll</HintPath>
+      <HintPath>..\packages\AuthBridge.Web.1.0.3.23\lib\net40\ClaimsPolicyEngine.dll</HintPath>
     </Reference>
     <Reference Include="DotNetOpenAuth.AspNet, Version=4.1.0.0, Culture=neutral, PublicKeyToken=2780ccd10d57b246, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -248,13 +248,13 @@
     <Content Include="Content\images\twitter.png" />
     <Content Include="Content\images\yahoo.gif" />
     <Content Include="Default.aspx" />
-    <Content Include="Policy.xml" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="fonts\glyphicons-halflings-regular.woff" />
     <Content Include="fonts\glyphicons-halflings-regular.ttf" />
     <Content Include="fonts\glyphicons-halflings-regular.eot" />
     <Content Include="Content\bootstrap.css.map" />
     <Content Include="Global.asax" />
+    <Content Include="Policy.xml" />
     <Content Include="Views\Shared\Error.aspx" />
     <Content Include="xrds.aspx" />
     <None Include="Scripts\jquery-1.9.0.intellisense.js" />

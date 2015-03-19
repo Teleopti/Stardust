@@ -37,6 +37,19 @@ namespace Teleopti.Ccc.WebTest.Areas.Start.Core.Menu
 		}
 
 		[Test]
+		public void ShouldCreateModelForUserWithAccessOnlyToWfm()
+		{
+			var permissionProvider = MockRepository.GenerateMock<IPermissionProvider>();
+			permissionProvider.Stub(x => x.HasApplicationFunctionPermission(DefinedRaptorApplicationFunctionPaths.OpenForecasterPage)).Return(true);
+			var target = new MenuViewModelFactory(permissionProvider);
+
+			var result = target.CreateMenuViewModel();
+
+			result.Single().Area.Should().Be.EqualTo("WFM");
+			result.Single().Name.Should().Be.EqualTo("WFM");
+		}
+
+		[Test]
 		public void ShouldCreateModelForUserWithAccessOnlyToAnywhere()
 		{
 			var permissionProvider = MockRepository.GenerateMock<IPermissionProvider>();

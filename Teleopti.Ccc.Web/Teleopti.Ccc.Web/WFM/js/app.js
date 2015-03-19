@@ -43,7 +43,13 @@ wfm.config(['$stateProvider', '$urlRouterProvider',function ($stateProvider, $ur
             event.preventDefault();
             var context = $http.get('../api/Global/User/CurrentUser');
             context.error(function () {
-                window.location = '../';
+            	if (window.location.hash) {
+            		var d = new Date();
+            		d.setTime(d.getTime() + (5 * 60 * 1000));
+            		var expires = 'expires=' + d.toUTCString();
+            		document.cookie = 'returnHash' + '=' + window.location.hash + '; ' + expires + '; path=/';
+            	}
+            	window.location = 'Authentication';
             });
             context.success(function (data) {
                 timeout = Date.now() + 10000;

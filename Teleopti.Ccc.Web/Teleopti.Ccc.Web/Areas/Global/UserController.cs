@@ -12,7 +12,7 @@ namespace Teleopti.Ccc.Web.Areas.Global
 			_currentIdentity = currentIdentity;
 		}
 
-		[Route("api/Global/User/CurrentUser"), HttpGet]
+		[Route("api/Global/User/CurrentUser"), HttpGet, Authorize]
 		public object CurrentUser()
 		{
 			return new { UserName = _currentIdentity.Current().Name };

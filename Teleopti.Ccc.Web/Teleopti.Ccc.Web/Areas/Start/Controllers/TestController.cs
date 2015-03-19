@@ -255,6 +255,5 @@ namespace Teleopti.Ccc.Web.Areas.Start.Controllers
 			if (_cacheInvalidator != null)
 				_cacheInvalidator.InvalidateAll();
 		}
-
 	}
 }
