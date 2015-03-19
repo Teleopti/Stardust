@@ -9,7 +9,6 @@ search.controller('SearchCtrl', [
 		$scope.searchKeyword = function () {
 			SearchSvrc.search.query({ keyword: $scope.keyword }).$promise.then(function(result) {
 				$scope.searchResult = result;
-				$scope.first = result[0];
 				console.log($scope.searchResult);
 			});
 		};

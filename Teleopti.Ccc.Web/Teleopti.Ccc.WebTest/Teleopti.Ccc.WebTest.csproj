@@ -236,6 +236,7 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Areas\Global\ApplicationControllerTest.cs" />
+    <Compile Include="Areas\Global\NotificationsControllerTest.cs" />
     <Compile Include="Areas\Global\UserControllerTest.cs" />
     <Compile Include="Areas\Permissions\ApplicationFunctionsControllerTest.cs" />
     <Compile Include="Areas\MyTime\Core\Common\DataProvider\LeaderboardSettingBasedBadgeProviderTest.cs" />

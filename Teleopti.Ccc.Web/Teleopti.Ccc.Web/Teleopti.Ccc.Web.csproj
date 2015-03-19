@@ -1207,6 +1207,7 @@
     <Content Include="WFM\js\search\search.controller.js" />
     <Content Include="WFM\js\search\search.service.js" />
     <Content Include="WFM\karma.conf.js" />
+    <Content Include="WFM\tests\global\notification.controller.spec.js" />
     <Content Include="WFM\tests\permissions\permissions.controller.spec.js" />
     <Content Include="Areas\Reporting\Content\Scripts\persianDatepicker.min.js" />
     <Content Include="Areas\Reporting\Content\Scripts\reportController.js" />
