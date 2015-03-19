@@ -180,7 +180,7 @@ namespace Teleopti.Ccc.WebTest.Areas.SSO.Contollers
 					IsSuccessful = true
 				});
 			var pInfo = new PersonInfo(new Infrastructure.MultiTenancy.Server.Tenant(dataSourceName)) {Id = Guid.NewGuid()};
-			personRepository.Stub(x => x.LoadOne(pInfo.Id)).Return(person);
+			personRepository.Stub(x => x.LoadPersonAndPermissions(pInfo.Id)).Return(person);
 			var applicationUserTenantQuery = MockRepository.GenerateMock<IApplicationUserTenantQuery>();
 			applicationUserTenantQuery.Stub(x => x.Find(userName)).Return(pInfo);
 
@@ -229,7 +229,7 @@ namespace Teleopti.Ccc.WebTest.Areas.SSO.Contollers
 					IsSuccessful = false
 				});
 			var pInfo = new PersonInfo(new Infrastructure.MultiTenancy.Server.Tenant(dataSourceName)) {Id = Guid.NewGuid()};
-			personRepository.Stub(x => x.LoadOne(pInfo.Id)).Return(person);
+			personRepository.Stub(x => x.LoadPersonAndPermissions(pInfo.Id)).Return(person);
 			var applicationUserTenantQuery = MockRepository.GenerateMock<IApplicationUserTenantQuery>();
 			applicationUserTenantQuery.Stub(x => x.Find(userName)).Return(pInfo);
 

@@ -517,7 +517,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			  // Persist the Person
 			  PersistAndRemoveFromUnitOfWork(userOk);
 
-			  IPerson userRetOk = target.LoadOne(userOk.Id.GetValueOrDefault());
+			  IPerson userRetOk = target.LoadPersonAndPermissions(userOk.Id.GetValueOrDefault());
 			  Session.Close();
 			  Assert.AreEqual(userOk, userRetOk);
 			  Assert.IsTrue(LazyLoadingManager.IsInitialized(userRetOk.PermissionInformation));

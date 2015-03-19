@@ -34,7 +34,7 @@ namespace Teleopti.Ccc.Web.Areas.Start.Core.Authentication.Services
 			var dataSource = _applicationData.DataSource(personInfo.Tenant);
 			using (var uow = dataSource.Application.CreateAndOpenUnitOfWork())
 			{
-				var foundAppUser = _repositoryFactory.CreatePersonRepository(uow).LoadOne(personInfo.PersonId);
+				var foundAppUser = _repositoryFactory.CreatePersonRepository(uow).LoadPersonAndPermissions(personInfo.PersonId);
 				return new AuthenticateResult { Successful = true, Person = foundAppUser, DataSource = dataSource };
 			}
 		}

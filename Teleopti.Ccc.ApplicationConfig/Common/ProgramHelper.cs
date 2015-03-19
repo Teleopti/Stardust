@@ -89,7 +89,7 @@ namespace Teleopti.Ccc.ApplicationConfig.Common
 			using (var unitOfWork = dataSourceContainer.DataSource.Application.CreateAndOpenUnitOfWork())
 			{
 				var personRep = repositoryFactory.CreatePersonRepository(unitOfWork);
-				dataSourceContainer.SetUser(personRep.LoadOne(SuperUser.Id_AvoidUsing_This));
+				dataSourceContainer.SetUser(personRep.LoadPersonAndPermissions(SuperUser.Id_AvoidUsing_This));
 			}
 
 			logOnOff.LogOn(dataSourceContainer.DataSource, dataSourceContainer.User, businessUnit);

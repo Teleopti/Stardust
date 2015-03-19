@@ -52,7 +52,7 @@ namespace Teleopti.Ccc.WebTest.Core.Authentication.Services
 			findTenantAndPersonIdForIdentity.Stub(x => x.Find(winAccount.UserIdentifier)).Return(tenantAndPersonId);
 
 			tokenIdentityProvider.Stub(x => x.RetrieveToken()).Return(winAccount);
-			personRep.Stub(x => x.LoadOne(tenantAndPersonId.PersonId)).Return(person);
+			personRep.Stub(x => x.LoadPersonAndPermissions(tenantAndPersonId.PersonId)).Return(person);
 
 			var result = target.LogonIdentityUser();
 			result.Person.Should().Be.SameInstanceAs(person);

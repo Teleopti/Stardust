@@ -75,7 +75,7 @@ namespace Teleopti.Ccc.Web.Areas.SSO.Controllers
 			using (var uow = dataSource.Application.CreateAndOpenUnitOfWork())
 			{
 				var personRepository = _repositoryFactory.CreatePersonRepository(uow);
-				var person = personRepository.LoadOne(personInfo.Id);
+				var person = personRepository.LoadPersonAndPermissions(personInfo.Id);
 				_currentPrincipalContext.SetCurrentPrincipal(person, dataSource, null);
 				var userDetailRepository = _repositoryFactory.CreateUserDetailRepository(uow);
 				var result = person.ChangePassword(model.OldPassword, model.NewPassword, _loadPasswordPolicyService, userDetailRepository.FindByUser(person));

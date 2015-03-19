@@ -775,7 +775,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 			return result.Count > 0;
 		}
 
-		public IPerson LoadOne(Guid id)
+		public IPerson LoadPersonAndPermissions(Guid id)
 		{
 			var foundPerson = Session.Get<Person>(id);
 

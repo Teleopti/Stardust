@@ -197,7 +197,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 			throw new NotImplementedException();
 		}
 
-		public IPerson LoadOne(Guid id)
+		public IPerson LoadPersonAndPermissions(Guid id)
 		{
 			throw new NotImplementedException();
 		}

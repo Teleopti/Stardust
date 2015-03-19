@@ -26,7 +26,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
 				using (var uow = dataSource.Application.CreateAndOpenUnitOfWork())
 				{
 					var systemId = SuperUser.Id_AvoidUsing_This;
-					ret.SuperUser=repositoryFactory.CreatePersonRepository(uow).LoadOne(systemId);
+					ret.SuperUser=repositoryFactory.CreatePersonRepository(uow).LoadPersonAndPermissions(systemId);
 				}
 					ret.DataSource = dataSource;
 					return ret;

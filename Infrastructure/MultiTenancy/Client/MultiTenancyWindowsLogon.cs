@@ -107,7 +107,7 @@ namespace Teleopti.Ccc.Infrastructure.MultiTenancy.Client
 
 			using (var uow = logonModel.SelectedDataSourceContainer.DataSource.Application.CreateAndOpenUnitOfWork())
 			{
-				var person = _repositoryFactory.CreatePersonRepository(uow).LoadOne(personId);
+				var person = _repositoryFactory.CreatePersonRepository(uow).LoadPersonAndPermissions(personId);
 				logonModel.SelectedDataSourceContainer.SetUser(person);
 				logonModel.SelectedDataSourceContainer.LogOnName = logonModel.UserName;
 			}

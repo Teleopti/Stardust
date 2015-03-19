@@ -614,7 +614,7 @@ namespace Teleopti.Analytics.Etl.IntegrationTest
 		{
 			using (var unitOfWork = _choosenDb.DataSource.Application.CreateAndOpenUnitOfWork())
 			{
-				_choosenDb.SetUser(new RepositoryFactory().CreatePersonRepository(unitOfWork).LoadOne(SuperUser.Id_AvoidUsing_This));
+				_choosenDb.SetUser(new RepositoryFactory().CreatePersonRepository(unitOfWork).LoadPersonAndPermissions(SuperUser.Id_AvoidUsing_This));
 			}
 			return true;
 		}

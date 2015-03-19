@@ -124,7 +124,7 @@ namespace Teleopti.Analytics.Etl.TransformerInfrastructure
 
 				using (var unitOfWork = _choosenDb.DataSource.Application.CreateAndOpenUnitOfWork())
 				{
-					_choosenDb.SetUser(_repositoryFactory.CreatePersonRepository(unitOfWork).LoadOne(SuperUser.Id_AvoidUsing_This));
+					_choosenDb.SetUser(_repositoryFactory.CreatePersonRepository(unitOfWork).LoadPersonAndPermissions(SuperUser.Id_AvoidUsing_This));
 				}
 				if (_choosenDb.User == null)
 				{

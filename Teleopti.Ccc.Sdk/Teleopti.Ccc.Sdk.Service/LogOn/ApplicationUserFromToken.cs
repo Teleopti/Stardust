@@ -47,7 +47,7 @@ namespace Teleopti.Ccc.Sdk.WcfService.LogOn
 		    using (var unitOfWork = _dataSourceContainer.DataSource.Application.CreateAndOpenUnitOfWork())
 		    {
 			    var personRep = new PersonRepository(unitOfWork);
-			    _dataSourceContainer.SetUser(personRep.LoadOne(CustomPersonId));
+			    _dataSourceContainer.SetUser(personRep.LoadPersonAndPermissions(CustomPersonId));
 		    }
 		    return true;
 	    }
