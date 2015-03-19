@@ -34,6 +34,6 @@ describe('NotificationsCtrl', function () {
 		
 		$controller('NotificationsCtrl', { $scope: scope, NotificationsSvrc: mockNotificationService });
 		scope.$digest(); 
-		expect(scope.searchResult.length).toEqual(5);
+		expect(scope.notificationResult.length).toEqual(5);
 	}));
 });
