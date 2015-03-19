@@ -170,7 +170,9 @@ body {
 
 .wfm-list {
   padding-left: 0px;
-  list-style: none; }
+  list-style: none;
+  max-height: 800px;
+  overflow-y: auto; }
   .wfm-list .active {
     border-left: 3px solid #ec38a3;
     background-color: #ffffff; }
