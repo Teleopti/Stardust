@@ -7,6 +7,7 @@ using System.Text;
 using System.Threading;
 using Teleopti.Ccc.ApplicationConfig.Creators;
 using Teleopti.Ccc.DatabaseConverter;
+using Teleopti.Ccc.Domain.Security;
 using Teleopti.Ccc.Domain.Security.Authentication;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.Security.Principal;
@@ -87,9 +88,8 @@ namespace Teleopti.Ccc.ApplicationConfig.Common
 			var logOnOff = new LogOnOff(new WindowsAppDomainPrincipalContext(new TeleoptiPrincipalFactory()));
 			using (var unitOfWork = dataSourceContainer.DataSource.Application.CreateAndOpenUnitOfWork())
 			{
-				var systemId = new Guid("3f0886ab-7b25-4e95-856a-0d726edc2a67");
 				var personRep = repositoryFactory.CreatePersonRepository(unitOfWork);
-				dataSourceContainer.SetUser(personRep.LoadOne(systemId));
+				dataSourceContainer.SetUser(personRep.LoadOne(SuperUser.Id_AvoidUsing_This));
 			}
 
 			logOnOff.LogOn(dataSourceContainer.DataSource, dataSourceContainer.User, businessUnit);
