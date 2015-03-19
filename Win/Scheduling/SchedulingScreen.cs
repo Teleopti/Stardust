@@ -2140,7 +2140,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 				if (currentValidator != null)
 					SikuliHelper.Validate(currentValidator, this);
 				else
-					SikuliHelper.ShowTaskDoneMessage(this);
+					SikuliHelper.ShowTaskDoneView(this);
 			}
 		}
 
@@ -2367,7 +2367,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			toolStripStatusLabelStatus.Text = LanguageResourceHelper.Translate("XXReadyThreeDots");
 			Cursor = Cursors.Default;
 
-			SikuliHelper.ShowLoadedMessage(this);
+			SikuliHelper.ShowLoadedView(this);
 		}
 
 		private void setupRequestViewButtonStates()

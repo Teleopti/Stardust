@@ -28,7 +28,7 @@ namespace Teleopti.Ccc.Win.Sikuli.Validators.RootValidators
 		{
 			var intradayValidationResult = intradayBalanceValidationResult();
 
-			var durationValidator = new DurationValidator(TimeSpan.FromMinutes(1).Add(TimeSpan.FromSeconds(1)), duration);
+			var durationValidator = new DurationValidator(TimeSpan.FromSeconds(55), duration);
 			var durationValidatorResult = durationValidator.Validate();
 
 			intradayValidationResult.CombineResultValue(durationValidatorResult);

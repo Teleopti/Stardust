@@ -1,6 +1,6 @@
 ﻿using Syncfusion.Windows.Forms;
 
-namespace Teleopti.Ccc.Win.Sikuli
+namespace Teleopti.Ccc.Win.Sikuli.Views
 {
 	internal partial class SikuliEnterValidatorDialog : MetroForm
 	{

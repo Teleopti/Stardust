@@ -776,13 +776,17 @@
     <Compile Include="Sikuli\Validators\AtomicValidators\PeriodStandardDeviationValidator.cs" />
     <Compile Include="Sikuli\Validators\AtomicValidators\SchedulerHoursWeeklyPatternValidator.cs" />
     <Compile Include="Sikuli\Validators\RootValidators\IRootValidator.cs" />
-    <Compile Include="Sikuli\SikuliEnterValidatorDialog.cs">
+    <Compile Include="Sikuli\Validators\RootValidators\OptimizeTeamSameEndTime.cs" />
+    <Compile Include="Sikuli\Validators\RootValidators\OptimizeTeamSameStartTime.cs" />
+    <Compile Include="Sikuli\Validators\RootValidators\ScheduleTeamSameEndTime.cs" />
+    <Compile Include="Sikuli\Validators\RootValidators\ScheduleTeamSameStartTime.cs" />
+    <Compile Include="Sikuli\Views\SikuliEnterValidatorDialog.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Sikuli\SikuliEnterValidatorDialog.Designer.cs">
+    <Compile Include="Sikuli\Views\SikuliEnterValidatorDialog.Designer.cs">
       <DependentUpon>SikuliEnterValidatorDialog.cs</DependentUpon>
     </Compile>
-    <Compile Include="Sikuli\SikuliResultView.cs">
+    <Compile Include="Sikuli\Views\SikuliResultView.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Scheduling\FilterMultiplePersons.cs">
@@ -791,7 +795,7 @@
     <Compile Include="Scheduling\FilterMultiplePersons.Designer.cs">
       <DependentUpon>FilterMultiplePersons.cs</DependentUpon>
     </Compile>
-    <Compile Include="Sikuli\SikuliResultView.Designer.cs">
+    <Compile Include="Sikuli\Views\SikuliResultView.Designer.cs">
       <DependentUpon>SikuliResultView.cs</DependentUpon>
     </Compile>
     <Compile Include="Sikuli\SikuliHelper.cs" />
@@ -2592,11 +2596,13 @@
     </Compile>
     <Compile Include="Sikuli\Helpers\TestDuration.cs" />
     <Compile Include="Sikuli\Validators\RootValidators\OptimizeBlockSameShift.cs" />
+    <Compile Include="Sikuli\Validators\RootValidators\OptimizeTeamSameShiftCategory.cs" />
     <Compile Include="Sikuli\Validators\RootValidators\OptimizeBlockSameStartTime.cs" />
     <Compile Include="Sikuli\Validators\RootValidators\OptimizeBlockSameShiftCategory.cs" />
     <Compile Include="Sikuli\Validators\RootValidators\OptimizeAllOptionsOffTimeBetweenDaysValidator.cs" />
     <Compile Include="Sikuli\Validators\RootValidators\RootValidator.cs" />
     <Compile Include="Sikuli\Validators\RootValidators\ScheduleBlockSameShift.cs" />
+    <Compile Include="Sikuli\Validators\RootValidators\ScheduleTeamSameShiftCategory.cs" />
     <Compile Include="Sikuli\Validators\RootValidators\ScheduleBlockSameStartTime.cs" />
     <Compile Include="Sikuli\Validators\RootValidators\ScheduleBlockSameShiftCategory.cs" />
     <Compile Include="Sikuli\Validators\RootValidators\ScheduleOvertimePeriodValidator.cs" />
@@ -2954,10 +2960,10 @@
     <EmbeddedResource Include="Scheduling\PublishScheduleDateView.resx">
       <DependentUpon>PublishScheduleDateView.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Sikuli\SikuliEnterValidatorDialog.resx">
+    <EmbeddedResource Include="Sikuli\Views\SikuliEnterValidatorDialog.resx">
       <DependentUpon>SikuliEnterValidatorDialog.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Sikuli\SikuliResultView.resx">
+    <EmbeddedResource Include="Sikuli\Views\SikuliResultView.resx">
       <DependentUpon>SikuliResultView.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Reporting\ReportUserSelectorAuditingView.resx">
