@@ -71,12 +71,6 @@ namespace Teleopti.Interfaces.Domain
         bool IsAgent(DateOnly theDate);
 
         /// <summary>
-        /// Gets a value indicating whether the person is a built in and shipped with the application.
-        /// </summary>
-        /// <value><c>true</c> if built in; otherwise, <c>false</c>.</value>
-        bool BuiltIn { get; set; }
-
-        /// <summary>
         /// Adds the person period.
         /// </summary>
         /// <param name="period">The period.</param>

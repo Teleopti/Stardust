@@ -60,7 +60,6 @@ namespace Teleopti.Ccc.DomainTest.Common
             Assert.IsFalse(_target.TerminalDate.HasValue);
             Assert.AreEqual(0, _target.PersonSchedulePeriodCollection.Count);
            Assert.AreSame(_target, _target.PersonWriteProtection.BelongsTo);
-            Assert.IsFalse(_target.BuiltIn);
         }
 
         [Test]
@@ -76,14 +75,11 @@ namespace Teleopti.Ccc.DomainTest.Common
             _target.Note = note;
             _target.EmploymentNumber = employmentNumber;
             _target.TerminatePerson(date, _personAccountUpdater);
-            bool newBuiltIn = !_target.BuiltIn;
-            _target.BuiltIn = newBuiltIn;
             Assert.AreEqual(date, _target.TerminalDate);
             Assert.AreEqual(name, _target.Name);
             Assert.AreEqual(email, _target.Email);
             Assert.AreEqual(note, _target.Note);
             Assert.AreEqual(employmentNumber, _target.EmploymentNumber);
-            Assert.AreEqual(newBuiltIn, _target.BuiltIn);
         }
 
         [Test]

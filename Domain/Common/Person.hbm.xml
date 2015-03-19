@@ -55,10 +55,6 @@
 					  access="nosetter.camelcase-underscore"/>
 		</component>
 
-		<property name="BuiltIn"
-		  not-null="true"
-		  type="boolean" />
-
 		<component name="PermissionInformation"
 				 class="Teleopti.Ccc.Domain.Security.AuthorizationEntities.PermissionInformation">
 			<parent name="BelongsTo"/>

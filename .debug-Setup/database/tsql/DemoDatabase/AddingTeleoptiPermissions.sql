@@ -94,7 +94,6 @@ BEGIN
 	where af.FunctionDescription = 'xxAll'
 	and ar.DescriptionText = 'xxSuperRole'
 	and p.IsDeleted = 0
-	and p.BuiltIn = 0
 	ORDER BY pp.Parent,p.UpdatedOn desc --perferable:oldest, "non"-agent
 END
 

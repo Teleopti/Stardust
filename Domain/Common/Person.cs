@@ -28,7 +28,6 @@ namespace Teleopti.Ccc.Domain.Common
         private string _employmentNumber;
         private DateOnly? _terminalDate;
         private readonly IPersonWriteProtectionInfo _personWriteProtection;
-        private bool _builtIn;
         private bool _isDeleted;
         private static readonly DateOnly MaxDate = new DateOnly(DateTime.MaxValue);
         private IWorkflowControlSet _workflowControlSet;
@@ -370,12 +369,6 @@ namespace Teleopti.Ccc.Domain.Common
         public virtual bool IsAgent(DateOnly theDate)
         {
 	        return !isTerminated(theDate) && _personPeriodCollection.Keys.Any(k => k <= theDate);
-        }
-
-	    public virtual bool BuiltIn
-        {
-            get { return _builtIn; }
-            set { _builtIn = value;}
         }
 
         public virtual string EmploymentNumber

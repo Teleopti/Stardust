@@ -156,7 +156,7 @@ namespace Teleopti.Ccc.WinCode.Common
                     _skillCollection = skillRep.LoadAll();
                 }
                 IPersonRepository rep = _repositoryFactory.CreatePersonRepository(uow);
-                _personCollection = rep.LoadAllPeopleWithHierarchyDataSortByName(SelectedPeriod.StartDate).Where(p => !p.BuiltIn).ToList();
+                _personCollection = rep.LoadAllPeopleWithHierarchyDataSortByName(SelectedPeriod.StartDate).ToList();
 
                 //Clear Collections.
                 if (_groupPageCollection != null) _groupPageCollection.Clear();

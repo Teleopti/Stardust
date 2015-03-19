@@ -34,12 +34,6 @@ CREATE TABLE #last (
 	EndDate DateTime NOT NULL
 )
 
-CREATE TABLE #BuiltinIds(
-	PersonId uniqueidentifier NOT NULL
-)
-
-INSERT INTO #BuiltinIds SELECT Id FROM Person WHERE BuiltIn = 1
-
 IF @persons = '00000000-0000-0000-0000-000000000000'  --"EveryBody"
 --Flush and re-load everybody
 BEGIN
@@ -173,11 +167,6 @@ INNER JOIN Team t ON pp.Team = t.Id
 INNER JOIN Site s ON s.Id = t.Site
 WHERE p.TeamId is null
 AND t.IsDeleted = 0 AND s.IsDeleted = 0
-
-delete fp
-from #BuiltinIds bIds
-inner join [ReadModel].[FindPerson] fp
-            on fp.PersonId = bIds.PersonId
 
 GO
 

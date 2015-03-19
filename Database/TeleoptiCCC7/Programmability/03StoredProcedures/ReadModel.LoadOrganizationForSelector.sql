@@ -116,7 +116,7 @@ BEGIN
 			WHERE Id NOT IN (SELECT PersonId FROM #result)
 			AND Id NOT IN (SELECT * FROM #otherBU)
 		AND ISNULL(TerminalDate, '2100-01-01') >= @ondate
-			AND IsDeleted = 0 AND BuiltIn = 0
+			AND IsDeleted = 0
 
 		END
 		
