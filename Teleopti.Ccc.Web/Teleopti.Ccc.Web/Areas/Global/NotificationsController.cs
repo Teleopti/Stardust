@@ -37,7 +37,7 @@ namespace Teleopti.Ccc.Web.Areas.Global
 						JobCategory = x.JobCategory,
 						Owner = x.Owner.Name.ToString(),
 						Timestamp = TimeZoneInfo.ConvertTimeFromUtc(x.Timestamp, _timeZone.TimeZone())
-					}).ToList();
+					}).OrderByDescending(x=>x.Timestamp).ToList();
 			return Ok(result.AsEnumerable());
 		}
 

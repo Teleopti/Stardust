@@ -84,25 +84,26 @@
 											<span class="wfm-checkbox-toggle"></span>
 										</label>
 									</div>
-							</div>
-						</div>
-						<div ng-repeat="accordionTitle in ['Carpools']">
-							<div class="bottom-header accordion-head" ng-click="accordionToggle = !accordionToggle">{{accordionTitle}}</div>
-							<div ng-hide="accordionToggle">
-
-								<div ng-repeat="accordionItem in ['Carpool x','Carpool y','Carpool z']">
-									<div class="wfm-checkbox">
-										<input type="checkbox" id="{{accordionItem}}" />
-										<label for="{{accordionItem}}">
-											<span class="wfm-checkbox-label">{{accordionItem}}</span>
-											<span class="wfm-checkbox-toggle"></span>
-										</label>
-									</div>
 								</div>
-
 							</div>
-						</div>
+							<div ng-repeat="accordionTitle in ['Carpools']">
+								<div class="bottom-header accordion-head" ng-click="accordionToggle = !accordionToggle">{{accordionTitle}}</div>
+								<div ng-hide="accordionToggle">
 
+									<div ng-repeat="accordionItem in ['Carpool x','Carpool y','Carpool z']">
+										<div class="wfm-checkbox">
+											<input type="checkbox" id="{{accordionItem}}" />
+											<label for="{{accordionItem}}">
+												<span class="wfm-checkbox-label">{{accordionItem}}</span>
+												<span class="wfm-checkbox-toggle"></span>
+											</label>
+										</div>
+									</div>
+
+								</div>
+							</div>
+
+						</div>
 					</div>
 				</div>
 			</section>
@@ -131,7 +132,7 @@
 			<div>
 				<a href="#"><div class="wfm-block sidenav-header">Notifications</div></a>
 				<ul class="notification-list" ng-repeat="item in searchResult">
-					<li><i class="mdi mdi-alert-circle"></i>{{item}}</li>
+					<li><i class="mdi mdi-alert-circle" ></i>{{item.JobCategory}} '{{item.Status}}' at {{item.Timestamp | date:'HH:mm'}}</li>
 				</ul>
 			</div>
 			<div>

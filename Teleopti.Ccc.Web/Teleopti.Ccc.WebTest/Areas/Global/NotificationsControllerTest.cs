@@ -88,9 +88,9 @@ namespace Teleopti.Ccc.WebTest.Areas.Global
 
 			var result = (OkNegotiatedContentResult<IEnumerable<JobResultNotificationModel>>)target.GetNotifications();
 			(result.Content.First().Timestamp).Should()
-				.Be.EqualTo(TimeZoneInfo.ConvertTimeFromUtc(timeStamp.AddMinutes(1), userTimeZone.TimeZone()));
-			(result.Content.Last().Timestamp).Should()
 				.Be.EqualTo(TimeZoneInfo.ConvertTimeFromUtc(timeStamp.AddMinutes(5), userTimeZone.TimeZone()));
+			(result.Content.Last().Timestamp).Should()
+				.Be.EqualTo(TimeZoneInfo.ConvertTimeFromUtc(timeStamp.AddMinutes(1), userTimeZone.TimeZone()));
 
 		}
 
