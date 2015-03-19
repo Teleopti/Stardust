@@ -211,7 +211,6 @@
     <Compile Include="Config\XmlDefaultsTest.cs" />
     <Compile Include="CoverAllAssemblies.cs" />
     <Compile Include="Foundation\AssemblyInfoTest.cs" />
-    <Compile Include="Foundation\AvailableApplicationIdentityDataSourcesTest.cs" />
     <Compile Include="Foundation\ConfigurationManagerWrapperTest.cs" />
     <Compile Include="Foundation\ThreadPrincipalContextTest.cs" />
     <Compile Include="LiteUnitOfWork\ReadModelUnitOfWorkTest.cs" />
@@ -295,7 +294,6 @@
     <Compile Include="Repositories\SkillLoaderDeciderTest.cs" />
     <Compile Include="Repositories\Deadlock\StudentAvailabilityPersistTest.cs" />
     <Compile Include="Foundation\ApplicationDataTest.cs" />
-    <Compile Include="Foundation\AvailableWindowsDataSourcesTest.cs" />
     <Compile Include="Foundation\ConfigReaderTest.cs" />
     <Compile Include="Foundation\ConstraintViolationExceptionTest.cs" />
     <Compile Include="Foundation\PurgeApplicationDataTest.cs" />

@@ -31,13 +31,10 @@ namespace Teleopti.Ccc.Web.Areas.Start.Core.IoC
 			builder.RegisterType<LayoutBaseViewModelFactory>().As<ILayoutBaseViewModelFactory>();
 			builder.RegisterType<CultureSpecificViewModelFactory>().As<ICultureSpecificViewModelFactory>();
 			builder.RegisterType<FormsAuthenticationWrapper>().As<IFormsAuthentication>();
-			builder.RegisterType<AvailableIdentityDataSources>().As<IAvailableIdentityDataSources>().SingleInstance();
 			builder.RegisterType<MenuViewModelFactory>().As<IMenuViewModelFactory>();
 			builder.RegisterType<SessionSpecificDataStringSerializer>().As<ISessionSpecificDataStringSerializer>().SingleInstance();
 
 			builder.RegisterType<BusinessUnitsViewModelFactory>().As<IBusinessUnitsViewModelFactory>();
-
-			builder.RegisterType<AvailableApplicationIdentityDataSource>().As<IAvailableApplicationTokenDataSource>();
 		}
 	}
 }

@@ -164,19 +164,8 @@
     
 		<filter name="deletedFlagFilter"
 		  condition="IsDeleted = 0" />
-	  
-    
 	</class>
 
-	<query name="CheckIfIdentityExists">
-		<![CDATA[
-		select 1 from Person p 
-						where p.AuthenticationInfo.Identity = :identity and
-							(p.TerminalDate is null or p.TerminalDate >= :dateNow)
-		]]>
-	</query>
-
-	
 	<query name="ActiveAgents">
 		<![CDATA[    
     select count(p) from Person p

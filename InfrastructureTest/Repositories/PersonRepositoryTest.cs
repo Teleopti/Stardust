@@ -196,31 +196,6 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			Assert.AreEqual(person, loaded);
 			Assert.IsNotNull(loaded.PersonWriteProtection);
 			Assert.IsNull(loaded.PersonWriteProtection.PersonWriteProtectedDate);
-
-		}
-
-		
-		[Test]
-		public void VerifyCorrectAuthentication()
-		{
-			var person = PersonFactory.CreatePerson("test person");
-			person.AuthenticationInfo = new AuthenticationInfo { Identity = @"DOMAIN\UserName"};
-			PersistAndRemoveFromUnitOfWork(person);
-
-			target.DoesIdentityExists(@"DOMAIN\UserName").Should().Be.True();
-			target.DoesIdentityExists(@"DOMAIN1\UserName").Should().Be.False();
-		}
-
-		[Test]
-		public void DeadPersonShouldNotBeFound()
-		{
-			var person = PersonFactory.CreatePerson("test person");
-		    person.AuthenticationInfo = new AuthenticationInfo { Identity = @"DOMAIN\UserName" };
-
-            person.TerminatePerson(DateOnly.Today.AddDays(-2), _personAccountUpdater);
-			PersistAndRemoveFromUnitOfWork(person);
-
-			target.DoesIdentityExists(@"DOMAIN\UserName").Should().Be.False();
 		}
 
 		[Test]

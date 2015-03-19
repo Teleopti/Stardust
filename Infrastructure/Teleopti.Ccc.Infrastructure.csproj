@@ -201,11 +201,9 @@
     <Compile Include="DistributedLock\DistributedLockAcquirer.cs" />
     <Compile Include="DistributedLock\DistributedLockException.cs" />
     <Compile Include="DistributedLock\SqlServerDistributedLock.cs" />
-    <Compile Include="Foundation\AvailableApplicationIdentityDataSources.cs" />
     <Compile Include="Foundation\ConfigReader.cs" />
     <Compile Include="Foundation\ConfigurationManagerWrapper.cs" />
     <Compile Include="Foundation\CouldNotCreateTransactionException.cs" />
-    <Compile Include="Foundation\IAvailableApplicationTokenDataSource.cs" />
     <Compile Include="Foundation\IConfigurationWrapper.cs" />
     <Compile Include="Foundation\ITogglesActive.cs" />
     <Compile Include="Foundation\JsonExtensions.cs" />
@@ -323,9 +321,7 @@
     <Compile Include="Licensing\LicenseStatusXml.cs" />
     <Compile Include="NHibernateConfiguration\DataSourceConfigurationSetter.cs" />
     <Compile Include="Config\LoadPasswordPolicyService.cs" />
-    <Compile Include="Foundation\AvailableIdentityDataSources.cs" />
     <Compile Include="Foundation\ForeignKeyException.cs" />
-    <Compile Include="Foundation\IAvailableIdentityDataSources.cs" />
     <Compile Include="Foundation\IInitializeApplication.cs" />
     <Compile Include="Foundation\ICurrentPrincipalContext.cs" />
     <Compile Include="Foundation\IRoleToPrincipalCommand.cs" />

@@ -122,15 +122,6 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
                                              String.Empty)))).SetResultTransformer(Transformers.DistinctRootEntity).List<IPerson>();
         }
 
-		public bool DoesIdentityExists(string identity)
-		{
-			var res = Session.GetNamedQuery("CheckIfIdentityExists")
-					.SetString("identity", identity)
-					.SetDateTime("dateNow", DateOnly.Today)
-					.UniqueResult();
-
-			return res != null;
-		}
 
     	private ICriteria createIdentityLogonNameCriteria(string identity)
         {

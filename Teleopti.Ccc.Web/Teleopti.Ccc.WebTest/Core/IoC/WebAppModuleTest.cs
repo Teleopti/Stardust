@@ -203,12 +203,6 @@ namespace Teleopti.Ccc.WebTest.Core.IoC
 				.Should().Not.Be.Null();
 		}
 
-		[Test]
-		public void ShouldRegisterAvailableWindowsDataSources()
-		{
-			requestContainer.Resolve<IAvailableIdentityDataSources>()
-				.Should().Not.Be.Null();
-		}
 
 		[Test]
 		public void ShouldRegisterBusinessUnitProvider()
