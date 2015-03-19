@@ -18,9 +18,9 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Commands
 		private readonly IPersonRepository _personRepository;
 		private readonly IPublicNoteRepository _publicNoteRepository;
 		private readonly ISeatMapLocationRepository _seatMapLocationRepository;
-		private readonly IWriteSideRepository<ISeatBooking> _seatBookingRepository;
+		private readonly ISeatBookingRepository _seatBookingRepository;
 
-		public AddSeatPlanCommandHandler(IScheduleRepository scheduleRepository, ITeamRepository teamRepository, IPersonRepository personRepository, ICurrentScenario scenario, IPublicNoteRepository publicNoteRepository, ISeatMapLocationRepository seatMapLocationRepository, IWriteSideRepository<ISeatBooking> seatBookingRepository)
+		public AddSeatPlanCommandHandler(IScheduleRepository scheduleRepository, ITeamRepository teamRepository, IPersonRepository personRepository, ICurrentScenario scenario, IPublicNoteRepository publicNoteRepository, ISeatMapLocationRepository seatMapLocationRepository, ISeatBookingRepository seatBookingRepository)
 		{
 			_scenario = scenario;
 			_publicNoteRepository = publicNoteRepository;
@@ -42,13 +42,10 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Commands
 
 			var period = new DateOnlyPeriod(new DateOnly(command.StartDate), new DateOnly(command.EndDate));
 			var teams = _teamRepository.FindTeams (command.Teams);
-
-
-			//Robtodo: review this write side repository to ISeatBookingRepository
-			var seatPlan = new SeatPlan(_scenario.Current(), _publicNoteRepository, _personRepository, _scheduleRepository, _seatBookingRepository as ISeatBookingRepository);
+			var seatPlan = new SeatPlan(_scenario.Current(), _publicNoteRepository, _personRepository, _scheduleRepository, _seatBookingRepository);
 
 			seatPlan.CreateSeatPlan(rootLocation, teams, period, command.TrackedCommandInfo)
-				.ForEach(booking => _seatBookingRepository.Add(booking));
+				.ForEach(booking => _seatBookingRepository.Add (booking));
 		}
 		
 		private static void setIncludeInSeatPlan(SeatMapLocation location, IList<Guid> locationsSelected)

@@ -7,6 +7,7 @@ using Teleopti.Ccc.Domain.ApplicationLayer.Commands;
 using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.SeatPlanning;
+using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
@@ -18,13 +19,14 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 	internal class AddSeatPlanCommandHandlerTest
 	{
 		private FakeCurrentScenario _currentScenario;
-		private FakeWriteSideRepository<ISeatBooking> _seatBookingRepository;
+		private FakeSeatBookingRepository _seatBookingRepository;
 
 		[SetUp]
 		public void SetUp()
 		{
 			_currentScenario = new FakeCurrentScenario();
-			_seatBookingRepository = new FakeWriteSideRepository<ISeatBooking>();
+			_seatBookingRepository = new FakeSeatBookingRepository();
+
 		}
 
 		[Test]
@@ -43,7 +45,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 			var seatMapLocation = new SeatMapLocation() { Name = "Location" };
 			seatMapLocation.SetId(Guid.NewGuid());
 			seatMapLocation.AddSeat("Seat One", 1);
-			
+
 			var target = new AddSeatPlanCommandHandler(new FakeScheduleDataReadScheduleRepository(personAssignment), new FakeTeamRepository(team), new FakePersonRepository(person), _currentScenario, publicNoteRepository, new FakeSeatMapRepository(seatMapLocation), _seatBookingRepository);
 
 			var command = new AddSeatPlanCommand()

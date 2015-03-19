@@ -24,7 +24,7 @@
 		<many-to-one class="Seat"
 							access="property"
 							name ="Seat"
-							cascade="delete"
+							cascade="none"
 							not-null="true" foreign-key="FK_SeatBooking_Seat"/>
 
 		<many-to-one name ="Person"

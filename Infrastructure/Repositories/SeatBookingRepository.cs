@@ -28,10 +28,10 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 		{
 		}
 
-		ISeatBooking ILoadAggregateByTypedId<ISeatBooking, Guid>.LoadAggregate(Guid id)
-		{
-			return LoadAggregate(id);
-		}
+		//ISeatBooking ILoadAggregateByTypedId<ISeatBooking, Guid>.LoadAggregate(Guid id)
+		//{
+		//	return LoadAggregate(id);
+		//}
 
 		public ISeatBooking LoadAggregate(Guid id)
 		{
