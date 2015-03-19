@@ -7,13 +7,6 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Forecasting.Angel
 {
-	public class ForecastingAccuracy
-	{
-		public Guid WorkloadId { get; set; }
-		public double Accuracy { get; set; }
-		public bool CanForecast { get; set; }
-	}
-
 	public class QuickForecastCreator : IQuickForecastCreator
 	{
 		private readonly IQuickForecaster _quickForecaster;
@@ -25,13 +18,6 @@ namespace Teleopti.Ccc.Domain.Forecasting.Angel
 			_quickForecaster = quickForecaster;
 			_skillRepository = skillRepository;
 			_now = now;
-		}
-
-		public void CreateForecastForAllSkills(DateOnlyPeriod futurePeriod)
-		{
-			var historicalPeriod = getHistoricalPeriod();
-			var skills = _skillRepository.FindSkillsWithAtLeastOneQueueSource();
-			skills.ForEach(skill => _quickForecaster.ForecastForSkill(skill, futurePeriod, historicalPeriod));
 		}
 
 		public void CreateForecastForWorkloads(DateOnlyPeriod futurePeriod, Guid[] workloadIds)

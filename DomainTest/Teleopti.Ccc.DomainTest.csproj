@@ -382,7 +382,6 @@
     <Compile Include="Forecasting\Angel\ForecastMethodTest.cs" />
     <Compile Include="Forecasting\Angel\Accuracy\ForecastingMeanAbsolutePercentageDeviationTest.cs" />
     <Compile Include="Forecasting\Angel\ForecastingTargetMergerTest.cs" />
-    <Compile Include="Forecasting\Angel\QuickForecasterSkillWithMultipleWorkloadsTest.cs" />
     <Compile Include="Forecasting\Angel\QuickForecastCreatorTest.cs" />
     <Compile Include="Forecasting\Angel\QuickForecasterTest.cs" />
     <Compile Include="Forecasting\Angel\Accuracy\QuickForecastEvaluatorTest.cs" />

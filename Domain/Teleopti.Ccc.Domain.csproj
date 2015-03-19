@@ -505,6 +505,7 @@
     <Compile Include="Forecasting\Angel\AverageStatistics.cs" />
     <Compile Include="Forecasting\Angel\Accuracy\ForecastingMeanAbsolutePercentageDeviation.cs" />
     <Compile Include="Forecasting\Angel\Accuracy\ForecastingSymmetricMeanAbsolutePercentageError.cs" />
+    <Compile Include="Forecasting\Angel\ForecastingAccuracy.cs" />
     <Compile Include="Forecasting\Angel\ForecastingTargetMerger.cs" />
     <Compile Include="Forecasting\Angel\Accuracy\ForecastingWeightedMeanAbsolutePercentageError.cs" />
     <Compile Include="Forecasting\Angel\ForecastMethod.cs" />
