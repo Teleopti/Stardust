@@ -87,13 +87,13 @@ namespace Teleopti.Ccc.WebBehaviorTest.Forecasting
 		[Then(@"I should see the total forecasting accuracy")]
 		public void ThenIShouldSeeTheTotalForecastingAccuracy()
 		{
-			ScenarioContext.Current.Pending();
+			Browser.Interactions.AssertFirstContainsUsingJQuery(".forecast-total-accuracy", "%");
 		}
 
 		[Then(@"I should see the forecasting accuracy for '(.*)'")]
-		public void ThenIShouldSeeTheForecastingAccuracyFor(string skillOrWorkloadOrAll)
+		public void ThenIShouldSeeTheForecastingAccuracyFor(string workload)
 		{
-			Browser.Interactions.AssertFirstContainsUsingJQuery(".forecast-relative-error:contains(" + skillOrWorkloadOrAll + ")", "%");
+			Browser.Interactions.AssertFirstContainsUsingJQuery(".forecast-workload-accuracy:contains(" + workload + ")", "%");
 		}
 
 		[Then(@"I should see a message of no historical data for measurement")]

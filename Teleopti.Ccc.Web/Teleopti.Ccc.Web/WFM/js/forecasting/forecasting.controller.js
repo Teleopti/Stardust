@@ -20,6 +20,18 @@ angular.module('wfm.forecasting', [])
 			$scope.skillsDisplayed = [];
 			$scope.all = { Name: 'All' };
 
+			$scope.toggleAll = function () {
+				
+			};
+
+			$scope.toggleWorkload = function (workload) {
+				if (workload.Selected) {
+					workload.Selected = false;
+				} else {
+					workload.Selected = true;
+				}
+			};
+
 			Forecasting.skills.query().$promise.then(function (result) {
 				$scope.skillsDisplayed = result;
 			});
