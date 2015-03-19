@@ -83,11 +83,10 @@ namespace Teleopti.Ccc.WinCodeTest.Common
         private void ExpectLoadPerson(IUnitOfWork unitOfWork)
         {
             IPerson agent = PersonFactory.CreatePerson();
-            IPerson person = PersonFactory.CreatePerson();
             IPersonRepository personRepository = _mocks.StrictMock<IPersonRepository>();
             Expect.Call(_repositoryFactory.CreatePersonRepository(unitOfWork)).Return(
                 personRepository);
-            Expect.Call(personRepository.LoadAllPeopleWithHierarchyDataSortByName(_target.SelectedPeriod.StartDate)).Return(new List<IPerson> {agent, person});
+            Expect.Call(personRepository.LoadAllPeopleWithHierarchyDataSortByName(_target.SelectedPeriod.StartDate)).Return(new List<IPerson> {agent});
         }
 
         private void ExpectLoadRuleSetBag(IUnitOfWork unitOfWork)
