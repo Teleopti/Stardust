@@ -487,13 +487,20 @@ Teleopti.MyTimeWeb.TeamScheduleFilterMixin = function () {
 		}
 		self.availableTeams(teams);
 
+		var isSelectedTeamAllTeam = self.selectedTeam() && self.selectedTeam().indexOf(',') > 0;
 		var isSelectedTeamNotIncluded = allTeam.id.split(',').indexOf(self.selectedTeam()) < 0;
 
 		self.defaultTeam(defaultTeam);
 		
-		self.selectedTeam(self.selectedTeam() == null || isSelectedTeamNotIncluded ?
-			self.defaultTeam() : self.selectedTeam());
-
+		if (!self.selectedTeam()) {
+			self.selectedTeam(self.defaultTeam());
+		} else if (isSelectedTeamAllTeam) {
+			self.selectedTeam(allTeam.id !== null? allTeam.id: self.defaultTeam());
+		} else if (isSelectedTeamNotIncluded) {
+			self.selectedTeam(self.defaultTeam());
+		} else {
+			self.selectedTeam(self.selectedTeam());
+		}
 	};
 
 	self.isFiltered = function() {
