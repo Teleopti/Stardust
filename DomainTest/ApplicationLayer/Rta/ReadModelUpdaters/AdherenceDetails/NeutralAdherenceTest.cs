@@ -344,5 +344,28 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ReadModelUpdaters.Adheren
 
 			Persister.Details.Last().ActualStartTime.Should().Be("2014-11-17 9:00".Utc());
 		}
+
+
+
+		[Test]
+		public void ShouldNotSetTimeInAdherenceWhenOnlyInUnknown()
+		{
+			var personId = Guid.NewGuid();
+
+			Target.Handle(new PersonActivityStartEvent
+			{
+				PersonId = personId,
+				StartTime = "2015-03-17 8:00".Utc(),
+				Adherence = AdherenceState.Unknown
+			});
+			Target.Handle(new PersonActivityStartEvent
+			{
+				PersonId = personId,
+				StartTime = "2015-03-17 9:00".Utc(),
+				Adherence = AdherenceState.In
+			});
+
+			Persister.Details.First().TimeInAdherence.Should().Be(null);
+		}
 	}
 }

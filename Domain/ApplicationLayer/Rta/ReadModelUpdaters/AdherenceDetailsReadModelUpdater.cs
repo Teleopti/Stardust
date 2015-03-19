@@ -39,7 +39,11 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ReadModelUpdaters
 		private static AdherenceState adherenceFor(dynamic @event)
 		{
 			if (@event.Adherence != null)
-				return @event.Adherence;
+			{
+				return @event.Adherence == AdherenceState.Unknown
+					? AdherenceState.Neutral
+					: @event.Adherence;
+			}
 			return @event.InAdherence ? AdherenceState.In : AdherenceState.Out;
 		}
 
