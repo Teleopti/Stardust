@@ -40,7 +40,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Global
 		{
 			var fakeJobResultRepository = new FakeJobResultRepository();
 			var person = new Person() { Name = new Name("aa", "bb") };
-			var timeStamp = new DateTime(2015, 03, 18, 9, 18, 0, DateTimeKind.Utc);
+			var timeStamp = DateTime.UtcNow.AddHours(1);
 			IUserTimeZone userTimeZone = new HawaiiTimeZone();
 			
 			var jobResult1 = getJobResult(false, person, timeStamp);
