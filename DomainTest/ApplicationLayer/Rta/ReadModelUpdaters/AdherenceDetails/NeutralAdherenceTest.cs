@@ -91,7 +91,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ReadModelUpdaters.Adheren
 			{
 				PersonId = personId,
 				StartTime = "2014-11-17 8:00".Utc(),
-				Adherence = AdherenceState.Unknown
+				Adherence = AdherenceState.Neutral
 			});
 			Target.Handle(new PersonStateChangedEvent
 			{
