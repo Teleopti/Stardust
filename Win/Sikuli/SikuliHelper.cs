@@ -1,13 +1,14 @@
 ﻿using System.Windows.Forms;
 using Teleopti.Ccc.Win.Sikuli.Helpers;
 using Teleopti.Ccc.Win.Sikuli.Validators.RootValidators;
+using Teleopti.Ccc.Win.Sikuli.Views;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Win.Sikuli
 {
 	public static class SikuliHelper
 	{
-		public static void ShowLoadedMessage(IWin32Window owner)
+		public static void ShowLoadedView(IWin32Window owner)
 		{
 			if (!InteractiveMode)
 				return;
@@ -15,7 +16,7 @@ namespace Teleopti.Ccc.Win.Sikuli
 			testView.ShowDialog(owner);
 		}
 
-		public static void ShowTaskDoneMessage(IWin32Window owner)
+		public static void ShowTaskDoneView(IWin32Window owner)
 		{
 			if (!InteractiveMode)
 				return;
