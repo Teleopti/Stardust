@@ -147,6 +147,13 @@ body {
   border-left: 3px solid #ec38a3;
   background-color: #c2e085; }
 
+.angular-ui-tree-handle.selected.ng-hide {
+  display: block !important;
+  line-height: inherit; }
+
+.angular-ui-tree-handle.ng-hide {
+  line-height: 0; }
+
 .toggle-handle {
   display: inline-block;
   width: 25px;
@@ -397,10 +404,10 @@ input[type='text'], select {
   width: 100%; }
   .input-prepend i {
     display: inline-block;
-    width: 2%; }
+    width: 5%; }
   .input-prepend input[type='text'] {
     display: inline-block;
-    width: 97%; }
+    width: 92%; }
 
 ::-webkit-input-placeholder {
   /* WebKit browsers */
@@ -419,9 +426,6 @@ input[type='text'], select {
 :-ms-input-placeholder {
   /* Internet Explorer 10+ */
   color: rgba(0, 0, 0, 0.26); }
-
-.toolbar {
-  margin-bottom: 5px; }
 
 .wfm-radio {
   cursor: pointer; }
@@ -450,17 +454,18 @@ input[type='text'], select {
     background-color: #E0E0E0;
     width: 20px;
     height: 20px;
+    float: right;
     border-radius: 2px;
     content: " ";
     -webkit-transition: background-color .2s ease-in-out;
-    transition: background-color .2s ease-in-out;
-    margin-left: 5px; }
+    transition: background-color .2s ease-in-out; }
   .wfm-checkbox input[type=checkbox]:checked ~ label .wfm-checkbox-toggle:after {
     background-color: #66c2ff;
     content: " ✓";
     text-align: center;
     color: #ffffff; }
   .wfm-checkbox .wfm-checkbox-label {
+    margin-left: 25px;
     white-space: nowrap; }
 
 .wfm-slider {
@@ -515,6 +520,9 @@ input[type='text'], select {
   background-color: #66c2ff;
   color: rgba(0, 0, 0, 0.87);
   border-bottom: 1px solid rgba(0, 0, 0, 0.06); }
+
+.toolbar {
+  margin-bottom: 5px; }
 
 .navbar {
   background-color: #0099FF;
@@ -665,6 +673,8 @@ input[type='text'], select {
   color: rgba(0, 0, 0, 0.87);
   background-color: #99d6ff;
   text-align: center; }
+  .wfm-table th i {
+    float: right; }
 
 .wfm-table .number-cell {
   text-align: right; }
@@ -874,7 +884,8 @@ tr {
   padding-left: 0 !important; }
   .notification-list li {
     background-color: rgba(0, 0, 0, 0.06);
-    cursor: pointer; }
+    cursor: pointer;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.26); }
   .notification-list i {
     padding-right: 5px;
     color: rgba(0, 0, 0, 0.54); }
@@ -885,7 +896,6 @@ tr {
 .sidenav-toggle input[type='checkbox'] {
   display: none; }
 .sidenav-toggle label {
-  background-color: #ffffff;
   text-align: center;
   cursor: pointer;
   transition: all 0.5s ease-in-out;

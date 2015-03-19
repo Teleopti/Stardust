@@ -83,7 +83,7 @@
 									</div>
 									<div class="col-lg-3">
 										<div class="wfm-slider">
-											<input type="checkbox" id="slide1" />
+											<input type="checkbox" id="slide1" ng-model="checked" ng-click="node.show = true" />
 											<label for="slide1">
 												<span class="wfm-slider-label">Selected rows</span>
 												<span class="wfm-slider-toggle"></span>
@@ -178,7 +178,7 @@
 <script type="text/ng-template" id="nodes_renderer.html">
 	<div class="tree-toggle-group">
 		<div class="toggle-handle" ng-class="{open: node.show}" ng-click="node.show = !node.show"><i ng-show="node.ChildFunctions.length > 0" class="mdi mdi-chevron-right"></i></div>
-		<div ui-tree-handle ng-class="{selected: node.selected}" ng-click="toggleFunctionForRole(node)">
+		<div ui-tree-handle ng-class="{selected: node.selected}" ng-click="toggleFunctionForRole(node)" ng-hide="checked">
 			{{node.LocalizedFunctionDescription}}
 		</div>
 	</div>
