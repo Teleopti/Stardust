@@ -32,5 +32,12 @@
 		public const string OptimizeBlockSameStartTime = "OptimizeBlockSameStartTime";
 		public const string ScheduleBlockSameShift = "ScheduleBlockSameShift";
 		public const string OptimizeBlockSameShift = "OptimizeBlockSameShift";
+		public const string ScheduleTeamSameShiftCategory = "ScheduleTeamSameShiftCategory";
+		public const string OptimizeTeamSameShiftCategory = "OptimizeTeamSameShiftCategory";
+		public const string ScheduleTeamSameStartTime = "ScheduleTeamSameStartTime";
+		public const string OptimizeTeamSameStartTime = "OptimizeTeamSameStartTime";
+		public const string ScheduleTeamSameEndTime = "ScheduleTeamSameEndTime";
+		public const string OptimizeTeamSameEndTime = "OptimizeTeamSameEndTime";
+		
 	}
 }

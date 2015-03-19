@@ -1,4 +1,4 @@
-﻿namespace Teleopti.Ccc.Win.Sikuli
+﻿namespace Teleopti.Ccc.Win.Sikuli.Views
 {
 	partial class SikuliEnterValidatorDialog
     {
