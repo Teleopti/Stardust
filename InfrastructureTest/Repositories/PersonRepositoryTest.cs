@@ -469,12 +469,12 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
         }
 
 		  [Test]
-		  public void ShouldLoadPermissionDataOnLoadOne()
+		  public void ShouldLoadPermissionDataOnLoadOne([Values(true, false)] bool isDeleted)
 		  {
-			  string okLogon = @"okDomain\ok";
-			  IPerson userRetOk;
-			  IPerson userOk = PersonFactory.CreatePersonWithIdentityPermissionInfo(okLogon);
+			  var userOk = PersonFactory.CreatePersonWithIdentityPermissionInfo(RandomName.Make());
 			  userOk.PermissionInformation.AddApplicationRole(createAndPersistApplicationRole());
+			  if (isDeleted)
+				  ((IDeleteTag) userOk).SetDeleted();
 
 			  // CreateProjection Team belong to a  site 
 			  ITeam team = TeamFactory.CreateTeam("Dummy Site", "Dummy Team");
@@ -482,7 +482,6 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			  PersistAndRemoveFromUnitOfWork(team);
 
 			  //  CreateProjection Activity with GroupActivity
-
 			  IActivity activity = new Activity("dummy activity");
 			  PersistAndRemoveFromUnitOfWork(activity);
 
@@ -519,7 +518,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			  // Persist the Person
 			  PersistAndRemoveFromUnitOfWork(userOk);
 
-			  userRetOk = target.LoadOne(userOk.Id.GetValueOrDefault());
+			  IPerson userRetOk = target.LoadOne(userOk.Id.GetValueOrDefault());
 			  Session.Close();
 			  Assert.AreEqual(userOk, userRetOk);
 			  Assert.IsTrue(LazyLoadingManager.IsInitialized(userRetOk.PermissionInformation));
@@ -541,7 +540,6 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 		public void VerifyNoHitOnWindowsAuthenticationIfTerminalDate()
 		{
 			IPerson retPer;
-			var okDomain = Guid.NewGuid().ToString();
 			var okLogon = Guid.NewGuid().ToString();
 			var person = PersonFactory.CreatePersonWithIdentityPermissionInfo(okLogon);
 			person.TerminatePerson(new DateOnly(1800, 1, 1), _personAccountUpdater);

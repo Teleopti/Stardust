@@ -399,7 +399,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
         /// </summary>
         /// <param name="person">The person.</param>
         /// <returns></returns>
-        private IPerson loadPermissionData(IPerson person)
+        private Person loadPermissionData(IPerson person)
         {
             var personPeriods = DetachedCriteria.For<Person>()
                 .Add(Restrictions.Eq("Id", person.Id))
@@ -796,9 +796,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 
 		public IPerson LoadOne(Guid id)
 		{
-			var foundPerson = Session.CreateCriteria(typeof(Person), "person")
-					.Add(Restrictions.Eq("Id",id))
-					.UniqueResult<IPerson>();
+			var foundPerson = Session.Get<Person>(id);
 
 			if (foundPerson != null)
 			{
