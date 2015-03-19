@@ -71,8 +71,6 @@ Scenario: Timeline for agent in the same time zone
 	| End time   | 17:00 |
 	And I should not see the agent's timeline
 
-@ignore
-#hard to mock now under specific timezone
 Scenario: Add activity default times for agent in other time zone
 	Given I have the role 'Anywhere Team Green'
 	And I am located in Stockholm
@@ -85,12 +83,10 @@ Scenario: Add activity default times for agent in other time zone
 	| Start time     | 2013-11-18 08:00 |
 	| End time       | 2013-11-18 17:00 |
 	When I view person schedules add activity form for 'John King' in 'Team green' on '2013-11-18'
-	And the browser time is '2013-11-18 12:05:00' in 'Stockholm'
 	Then I should see add activity times in other time zone with
 	| Field      | Value |
-	| Start time | 13:15 |
-	| End time   | 14:15 |
-
+	| Start time | 14:15 |
+	| End time   | 15:15 |
 
 Scenario: Add activity times changed for agent in other time zone
 	Given I have the role 'Anywhere Team Green'

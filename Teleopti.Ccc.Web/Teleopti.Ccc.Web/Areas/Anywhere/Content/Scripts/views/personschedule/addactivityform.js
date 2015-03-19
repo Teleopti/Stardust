@@ -133,13 +133,13 @@ define([
 		});
 		
 		this.DefaultStart = ko.computed(function () {
-			var now = moment((new Date).getTime());
 
+			var now = moment(new Date(new Date().getTeleoptiTime()));
+			var nowInUserTimeZone = now.tz(timezoneCurrent.IanaTimeZone());
 			var start;
-			if (self.ShiftStart() < now && now < self.ShiftEnd()) {
-				var minutes = Math.ceil(now.minute() / 15) * 15;
-				start = now.startOf('hour').minutes(minutes);
-				start.tz(timezoneCurrent.IanaTimeZone());
+			if (self.ShiftStart() < nowInUserTimeZone && nowInUserTimeZone < self.ShiftEnd()) {
+				var minutes = Math.ceil(nowInUserTimeZone.minute() / 15) * 15;
+				start = nowInUserTimeZone.startOf('hour').minutes(minutes);
 				self.StartTime(start.format(resources.TimeFormatForMoment));
 			} else {
 				start = self.ShiftStart().clone();
