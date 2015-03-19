@@ -108,30 +108,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 			Publisher.PublishedEvents.OfType<PersonNeutralAdherenceEvent>().Should().Be.Empty();
 		}
 
-		[Test]
-		public void ShoulPublishWhenUnknownAdherence()
-		{
-			var personId = Guid.NewGuid();
-			var admin = Guid.NewGuid();
-			Database
-				.WithUser("usercode", personId)
-				.WithSchedule(personId, admin, "2015-03-10 8:00", "2015-03-10 10:00")
-				.WithAlarm("break", admin, 0, Adherence.Out);
-			Now.Is("2015-03-10 8:30");
-
-			Target.SaveState(new ExternalUserStateForTest
-			{
-				UserCode = "usercode",
-				StateCode = "break"
-			});
-			Target.SaveState(new ExternalUserStateForTest
-			{
-				UserCode = "usercode",
-				StateCode = "someOtherCode"
-			});
-
-			Publisher.PublishedEvents.OfType<PersonNeutralAdherenceEvent>().Should().Have.Count.EqualTo(1);
-		}
 
 		[Test]
 		public void ShouldNotPublishIfStillNeutralAdherence()

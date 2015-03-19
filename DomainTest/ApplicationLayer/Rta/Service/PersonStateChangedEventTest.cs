@@ -222,24 +222,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 
 		[Test]
 		[Toggle(Toggles.RTA_NeutralAdherence_30930)]
-		public void ShouldSetNeutralAdhernceWhenAlarmIsNotConfigured()
-		{
-			var personId = Guid.NewGuid();
-			database
-				.WithUser("usercode", personId);
-
-			target.SaveState(new ExternalUserStateForTest
-			{
-				UserCode = "usercode",
-				StateCode = "admin"
-			});
-
-			publisher.PublishedEvents.OfType<PersonStateChangedEvent>().Single()
-				.Adherence.Should().Be(AdherenceState.Neutral);
-		}
-
-		[Test]
-		[Toggle(Toggles.RTA_NeutralAdherence_30930)]
 		public void ShouldSetInAdhernceWithPreviousActivity()
 		{
 			var personId = Guid.NewGuid();
@@ -262,7 +244,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 
 		[Test]
 		[ToggleOff(Toggles.RTA_NeutralAdherence_30930)]
-		public void ShouldNotSetAdhernceWhenToggleIsOff()
+		public void ShouldNotSetAdhernce()
 		{
 			var personId = Guid.NewGuid();
 			var admin = Guid.NewGuid();

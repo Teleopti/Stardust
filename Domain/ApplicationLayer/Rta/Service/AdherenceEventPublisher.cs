@@ -8,12 +8,10 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 	public class AdherenceEventPublisher : IAdherenceEventPublisher
 	{
 		private readonly IRtaDecoratingEventPublisher _eventPublisher;
-		private AdherenceMapper _mapper;
 
 		public AdherenceEventPublisher(IRtaDecoratingEventPublisher	eventPublisher)
 		{
 			_eventPublisher = eventPublisher;
-			_mapper = new AdherenceMapper();
 		}
 
 		public void Publish(StateInfo info, DateTime time, AdherenceState toAdherence)
@@ -42,7 +40,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 				});
 			}
 
-			if (_mapper.GetNeutralIfUnknownAdherence(toAdherence) == AdherenceState.Neutral)
+			if (toAdherence == AdherenceState.Neutral)
 			{
 				_eventPublisher.Publish(info, new PersonNeutralAdherenceEvent
 				{

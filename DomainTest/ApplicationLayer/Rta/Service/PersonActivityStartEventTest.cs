@@ -212,36 +212,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 		}
 
 		[Test]
-		[Toggle(Toggles.RTA_NeutralAdherence_30930)]
-		public void ShouldPublishWithNeutralAdherenceWhenAdherenceIsNotConfigured()
-		{
-			var personId = Guid.NewGuid();
-			var phone = Guid.NewGuid();
-			var businessUnitId = Guid.NewGuid();
-			Database
-				.WithBusinessUnit(businessUnitId)
-				.WithUser("usercode", personId, businessUnitId)
-				.WithSchedule(personId, phone, "phone", "2014-10-20 10:00", "2014-10-20 11:00")
-				.WithAlarm("phone", phone, 0, Adherence.In);
-			Now.Is("2014-10-20 09:50");
-
-			Target.SaveState(new ExternalUserStateForTest
-			{
-				UserCode = "usercode",
-				StateCode = "someOtherCode"
-			});
-			Now.Is("2014-10-20 10:01");
-			Target.SaveState(new ExternalUserStateForTest
-			{
-				UserCode = "usercode",
-				StateCode = "phone"
-			});
-
-			var @event = Publisher.PublishedEvents.OfType<PersonActivityStartEvent>().Single();
-			@event.Adherence.Should().Be(AdherenceState.Neutral);
-		}
-
-		[Test]
 		[ToggleOff(Toggles.RTA_NeutralAdherence_30930)]
 		public void ShouldNotSetAdhernce()
 		{
