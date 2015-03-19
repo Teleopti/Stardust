@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
-using System.Linq;
 using Teleopti.Ccc.Rta.Interfaces;
 using Teleopti.Interfaces.Domain;
 using log4net;
@@ -15,6 +14,9 @@ namespace Teleopti.Ccc.Rta.Server
         private readonly IDatabaseConnectionStringHandler _databaseConnectionStringHandler;
         private static readonly ILog LoggingSvc = LogManager.GetLogger(typeof(DatabaseWriter));
 
+		const string getDefaultStateGroupQuery = @"SELECT Name, Id, BusinessUnit FROM RtaStateGroup WHERE DefaultStateGroup = 1 AND BusinessUnit = @BusinessUnitId";
+		const string insert = @"INSERT INTO RtaState VALUES (@StateId, @StateCode, @PlatformTypeId, @DefaultStateGroupId)";
+            
         public DatabaseWriter(IDatabaseConnectionFactory databaseConnectionFactory,
                               IDatabaseConnectionStringHandler databaseConnectionStringHandler)
         {
@@ -27,30 +29,68 @@ namespace Teleopti.Ccc.Rta.Server
             var stateId = Guid.NewGuid();
             var defaultStateGroupId = Guid.Empty;
             var defaultStateGroupName = "";
-            string getDefaultStateGroupQuery = string.Format(@"SELECT Name, Id, BusinessUnit FROM RtaStateGroup WHERE DefaultStateGroup = 1 AND BusinessUnit = '{0}'", businessUnit);
-            const string insert = @"INSERT INTO RtaState VALUES ('{0}', N'{1}', N'{1}', '{2}', '{3}')";
 
             using (var connection = _databaseConnectionFactory.CreateConnection(_databaseConnectionStringHandler.AppConnectionString()))
             {
                 var command = connection.CreateCommand();
                 command.CommandType = CommandType.Text;
                 command.CommandText = getDefaultStateGroupQuery;
+	            command.Parameters.Add(new SqlParameter
+	            {
+		            ParameterName = "@BusinessUnitId",
+		            SqlDbType = SqlDbType.UniqueIdentifier,
+		            Direction = ParameterDirection.Input,
+		            Value = businessUnit
+	            });
                 connection.Open();
-                string insertStatement = string.Empty;
+	            var parameters = new List<SqlParameter>();
                 var reader = command.ExecuteReader();
                 while (reader.Read())
                 {
                     defaultStateGroupId = reader.GetGuid(reader.GetOrdinal("Id"));
                     defaultStateGroupName = reader.GetString(reader.GetOrdinal("Name"));
 
-                    insertStatement = string.Format(insert, stateId, stateCode, platformTypeId, defaultStateGroupId);
+					parameters.Add(new SqlParameter
+					{
+						ParameterName = "@StateId",
+						SqlDbType = SqlDbType.UniqueIdentifier,
+						Direction = ParameterDirection.Input,
+						Value = stateId
+					});
+
+					parameters.Add(new SqlParameter
+					{
+						ParameterName = "@StateCode",
+						SqlDbType = SqlDbType.NVarChar,
+						Direction = ParameterDirection.Input,
+						Value = stateCode
+					});
+
+					parameters.Add(new SqlParameter
+					{
+						ParameterName = "@PlatformTypeId",
+						SqlDbType = SqlDbType.UniqueIdentifier,
+						Direction = ParameterDirection.Input,
+						Value = platformTypeId
+					});
+
+					parameters.Add(new SqlParameter
+					{
+						ParameterName = "@DefaultStateGroupId",
+						SqlDbType = SqlDbType.UniqueIdentifier,
+						Direction = ParameterDirection.Input,
+						Value = defaultStateGroupId
+					});
+
+					break;
                 }
                 reader.Close();
 
-                if (!string.IsNullOrEmpty(insertStatement))
+                if (parameters.Count>0)
                 {
                     command = connection.CreateCommand();
-                    command.CommandText = insertStatement;
+                    command.CommandText = insert;
+	                parameters.ForEach(p => command.Parameters.Add(p));
                     command.ExecuteNonQuery();
                 }
             }

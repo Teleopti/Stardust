@@ -28,16 +28,22 @@ namespace Teleopti.Ccc.Rta.Server
 
 		public IList<ScheduleLayer> GetReadModel(Guid personId)
 		{
-			var query = string.Format(CultureInfo.InvariantCulture,
-										@"SELECT PayloadId,StartDateTime,EndDateTime,rta.Name,rta.ShortName,DisplayColor 
+			const string query = @"SELECT PayloadId,StartDateTime,EndDateTime,rta.Name,rta.ShortName,DisplayColor 
 											FROM ReadModel.v_ScheduleProjectionReadOnlyRTA rta
-											WHERE PersonId='{0}'", personId);
+											WHERE PersonId=@PersonId";
 			var layers = new List<ScheduleLayer>();
 			using (var connection = _databaseConnectionFactory.CreateConnection(_databaseConnectionStringHandler.AppConnectionString()))
 			{
 				var command = connection.CreateCommand();
 				command.CommandType = CommandType.Text;
 				command.CommandText = query;
+				command.Parameters.Add(new SqlParameter
+				{
+					ParameterName = "@PersonId",
+					SqlDbType = SqlDbType.UniqueIdentifier,
+					Direction = ParameterDirection.Input,
+					Value = personId
+				});
 				connection.Open();
 				var reader = command.ExecuteReader(CommandBehavior.CloseConnection);
 				while (reader.Read())
@@ -62,9 +68,7 @@ namespace Teleopti.Ccc.Rta.Server
 		{
 			LoggingSvc.DebugFormat("Getting old state for person: {0}", personToLoad);
 
-			var query =
-			string.Format(
-				"SELECT AlarmId, StateStart, ScheduledId, ScheduledNextId, StateId, ScheduledNextId, NextStart, PlatformTypeId, StateCode, BatchId, OriginalDataSourceId, AlarmStart FROM RTA.ActualAgentState WHERE PersonId ='{0}'", personToLoad);
+			const string query = "SELECT AlarmId, StateStart, ScheduledId, ScheduledNextId, StateId, ScheduledNextId, NextStart, PlatformTypeId, StateCode, BatchId, OriginalDataSourceId, AlarmStart FROM RTA.ActualAgentState WHERE PersonId = @PersonId";
 			using (
 				var connection =
 					_databaseConnectionFactory.CreateConnection(
@@ -73,6 +77,13 @@ namespace Teleopti.Ccc.Rta.Server
 				var command = connection.CreateCommand();
 				command.CommandType = CommandType.Text;
 				command.CommandText = query;
+				command.Parameters.Add(new SqlParameter
+				{
+					ParameterName = "@PersonId",
+					SqlDbType = SqlDbType.UniqueIdentifier,
+					Direction = ParameterDirection.Input,
+					Value = personToLoad
+				}); 
 				connection.Open();
 				using (var reader = command.ExecuteReader(CommandBehavior.CloseConnection))
 				{
