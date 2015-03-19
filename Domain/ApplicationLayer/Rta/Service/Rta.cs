@@ -181,7 +181,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 		{
 			Log.InfoFormat("Recieved message from servicebus to check schedule for Person: {0}, BusinessUnit: {1}", input.PersonId, input.BusinessUnitId);
 
-			_rtaDataHandler.CheckForActivityChange(input.PersonId, input.BusinessUnitId, input.DataSource);
+			_rtaDataHandler.CheckForActivityChange(input.PersonId, input.BusinessUnitId, input.Tenant);
 		}
 
 		private static void verifyBatchNotTooLarge(IEnumerable<ExternalUserStateInputModel> externalUserStateBatch)
