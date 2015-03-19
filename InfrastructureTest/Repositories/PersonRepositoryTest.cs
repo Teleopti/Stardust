@@ -121,8 +121,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 
 			using (FakeLogon.ToBusinessUnit(fakeBu))
 			{
-				target.FindAllSortByName(true).Should().Contain(p);
-				target.FindAllSortByName().Should().Not.Contain(p);				
+				target.FindAllSortByName().Should().Not.Contain(p);
 			}
 		}
 
