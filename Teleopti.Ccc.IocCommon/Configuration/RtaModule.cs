@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Runtime.Remoting.Messaging;
 using Autofac;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta.ReadModelUpdaters;
@@ -120,11 +121,15 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 
 			if (_config.Toggle(Toggles.RTA_NeutralAdherence_30930))
 			{
+				builder.RegisterType<ShouldSendUnknownEvent>().As<IShouldPublishUnknownEvent>();
 				builder.RegisterType<ByPolicy>().As<IAppliedAdherence>();
 				builder.RegisterType<AdherenceStateDecorator>().As<IRtaEventDecorator>().SingleInstance();
 			}
 			else
+			{
+				builder.RegisterType<DontSendUnknownEvent>().As<IShouldPublishUnknownEvent>();
 				builder.RegisterType<ByStaffingEffect>().As<IAppliedAdherence>();
+			}
 			
 			_config.Args().CacheBuilder
 				.For<PersonOrganizationProvider>()

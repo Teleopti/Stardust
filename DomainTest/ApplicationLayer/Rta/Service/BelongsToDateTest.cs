@@ -189,6 +189,35 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 		}
 
 		[Test]
+		[Toggle(Toggles.RTA_NeutralAdherence_30930)]
+		public void ShouldPublishUnknownAdherenceEventWithBelongsToDate()
+		{
+			var personId = Guid.NewGuid();
+			var admin = Guid.NewGuid();
+			Database
+				.WithUser("usercode", personId)
+				.WithSchedule(personId, admin, "2015-02-19".Date(), "2015-02-20 1:00", "2015-02-20 7:00")
+				.WithAlarm("admin", admin, 0, Adherence.In)
+				;
+			Now.Is("2015-02-20 2:00");
+
+			Target.SaveState(new ExternalUserStateForTest
+			{
+				UserCode = "usercode",
+				StateCode = "admin",
+			});
+			Target.SaveState(new ExternalUserStateForTest
+			{
+				UserCode = "usercode",
+				StateCode = "someOtherCode",
+			});
+
+			Publisher.PublishedEvents.OfType<PersonUnknownAdherenceEvent>()
+				.Single()
+				.BelongsToDate.Should().Be("2015-02-19".Date());
+		}
+
+		[Test]
 		public void ShouldPublishShiftStartEventWithBelongsToDate()
 		{
 			var personId = Guid.NewGuid();
