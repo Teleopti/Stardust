@@ -76,7 +76,7 @@
 							<div class="bottom-header accordion-head" ng-click="accordionToggle = !accordionToggle">{{accordionTitle}}</div>
 							<div ng-hide="accordionToggle">
 
-								<div ng-repeat="accordionItem in ['Telephony','Email','Chatt']">
+								<div ng-repeat="accordionItem in ['Telephony','Email','Chat']">
 									<div class="wfm-checkbox">
 										<input type="checkbox" id="{{accordionItem}}" />
 										<label for="{{accordionItem}}">
@@ -86,6 +86,8 @@
 									</div>
 								</div>
 							</div>
+						</div>
+
 							<div ng-repeat="accordionTitle in ['Carpools']">
 								<div class="bottom-header accordion-head" ng-click="accordionToggle = !accordionToggle">{{accordionTitle}}</div>
 								<div ng-hide="accordionToggle">
@@ -103,7 +105,6 @@
 								</div>
 							</div>
 
-						</div>
 					</div>
 				</div>
 			</section>
@@ -145,7 +146,7 @@
 					Click on something to learn more about it.
 				</div>
 				<div class="tile-footer">
-					<button class="wfm-btn wfm-btn-invis-primary">GO TO WIKI</button>
+					<button class="wfm-btn wfm-btn-invis-primary">go to wiki</button>
 				</div>
 			</div>
 		</div>
