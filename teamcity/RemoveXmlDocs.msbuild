@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<Project DefaultTargets="RemoveXmlDocsExceptSdkDoc" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="12.0">
+	<PropertyGroup>
+		<WorkingDirectory>c:\stuff\ccc\teleopticcc</WorkingDirectory>
+		<SdkDocFile>$(WorkingDirectory)\Teleopti.Ccc.Sdk\Teleopti.Ccc.Sdk.Host\bin\Teleopti.Ccc.Sdk.Common.XML</SdkDocFile>
+		<NugetPackageFolder>$(WorkingDirectory)\packages</NugetPackageFolder> 
+	</PropertyGroup>
+	<ItemGroup>
+		<AllExesAndDlls Include="$(WorkingDirectory)\**\*.dll;$(WorkingDirectory)\**\.*.exe" />
+		<AllXmlFiles Include="$(WorkingDirectory)\**\*.xml" Exclude="$(NugetPackageFolder)\**\*.*" />
+	</ItemGroup>
+	
+	<Target Name="RemoveXmlDocsExceptSdkDoc">
+		<ItemGroup>
+			<XmlFilesToKeep Include="@(AllXmlFiles)" Exclude="@(AllExesAndDlls->'%(RootDir)%(Directory)%(filename).xml')"/>
+			<XmlFilesToDelete Include="@(AllXmlFiles)" Exclude="@(XmlFilesToKeep);$(SdkDocFile)" />
+		</ItemGroup>
+		
+		<Delete Files="@(XmlFilesToDelete)"/>
+	</Target>
+</Project>
