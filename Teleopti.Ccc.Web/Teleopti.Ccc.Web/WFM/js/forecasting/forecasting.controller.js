@@ -52,10 +52,19 @@ angular.module('wfm.forecasting', [])
 				$scope.all.Accuracy = accuracyForTotal + '%';
 			});
 
-			$scope.targets = [];
+			$scope.targets = function () {
+				var result = [];
+				angular.forEach($scope.skillsDisplayed, function (skill) {
+					angular.forEach(skill.Workloads, function (workload) {
+						if (workload.Selected)
+							result.push(workload.Id);
+					});
+				});
+				return result;
+			};
 
 			$scope.nextStep = function () {
-				$state.go('forecasting.run', { period: $stateParams.period, targets: $scope.targets }); //there's probably a better way to do that
+				$state.go('forecasting.run', { period: $stateParams.period, targets: $scope.targets() });
 			};
 		}]
 		)
@@ -64,7 +73,7 @@ angular.module('wfm.forecasting', [])
 
 			$scope.period = $stateParams.period;
 			$scope.targets = $stateParams.targets;
-			$http.post('../api/Forecasting/Forecast', JSON.stringify({ ForecastStart: $scope.period.startDate, ForecastEnd: $scope.period.endDate, Targets: $scope.targets })).
+			$http.post('../api/Forecasting/Forecast', JSON.stringify({ ForecastStart: $scope.period.startDate, ForecastEnd: $scope.period.endDate, Workloads: $scope.targets })).
 				success(function (data, status, headers, config) {
 					$scope.result = { success: true, message: 'You now have an updated forecast in your default scenario, based on last year\'s data.' };
 				}).

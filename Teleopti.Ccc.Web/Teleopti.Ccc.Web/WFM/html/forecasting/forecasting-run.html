@@ -5,9 +5,6 @@
 	<div ng-if="result" ng-class="result.success ? 'success' : 'fail'" >
 		{{result.message}}
 	</div>
-	<div ng-if="result" class="forecast-relative-error">
-		Forecast Accuracy (using Weighted Mean Absolute Percentage Error): {{result.accuracy}}
-	</div>
     <div ng-if="!result" class="text-center">
         <svg class="spinner" width="65px" height="65px" viewBox="0 0 66 66" xmlns="http://www.w3.org/2000/svg">
             <circle class="path" fill="none" stroke-width="6" stroke-linecap="round" cx="33" cy="33" r="30"></circle>
