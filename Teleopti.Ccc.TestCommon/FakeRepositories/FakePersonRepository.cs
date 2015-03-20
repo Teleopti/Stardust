@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using NHibernate.Criterion;
 using Teleopti.Ccc.Domain.Auditing;
+using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.TestCommon.FakeData;
@@ -26,9 +27,9 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 			Has(person);
 		}
 
-		public FakePersonRepository(params IPerson[] person)
+		public FakePersonRepository(params IPerson[] persons)
 		{
-			_persons = person;
+			persons.ForEach (Add);
 		}
 
 		public void Has(IPerson person)
