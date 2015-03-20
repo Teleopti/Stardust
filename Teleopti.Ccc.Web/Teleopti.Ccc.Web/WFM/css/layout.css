@@ -39,3 +39,9 @@ label {
 	display: inline !important;
 }
 
+.growl-wrapper {
+	position: fixed;
+	bottom: 10px;
+	z-index: 99999;
+	right: 16%;
+}

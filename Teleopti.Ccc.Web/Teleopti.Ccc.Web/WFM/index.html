@@ -23,9 +23,10 @@
 	<script src="vendor/hammerjs/hammer.min.js"></script>
 	<script src="vendor/angular-material/angular-material.min.js"></script>
 	<script src="js/ABmetrics.min.js"></script>
+	
+	<script src="vendor/angular-growl.js"></script>
 
 	<script src="dist/main.js"></script>
-
 
 </head>
 <body>
@@ -118,8 +119,17 @@
 				</label>
 			</div>
 			</div>
-
 		<div class="container content material-depth-1 material-block" ui-view></div>
+		<!--move this to a smart place -->
+		<div ng-controller="NoticeCtrl" class="growl-wrapper">
+			<div class="container-fluid">
+				<div class="row">
+					<div class="col-md-12">
+						<div growl></div>
+					</div>
+				</div>
+			</div>
+		</div>
 
 		<div class="sidenav-toggle">
 			<div class="sidenav-wrapper right">
@@ -137,7 +147,10 @@
 				</ul>
 			</div>
 			<div>
-				<div class="wfm-block sidenav-header">Something</div>
+				<div class="wfm-block sidenav-header">Sample Notices</div>
+				<div ng-controller="NotificationsCtrl">
+					<button ng-click="triggerCallbacks()" type="button" class="btn ">Show Sample Notices</button><br /><br />
+				</div>
 			</div>
 			<div class="help-widget">
 				<div class="wfm-block sidenav-header">Help</div>
