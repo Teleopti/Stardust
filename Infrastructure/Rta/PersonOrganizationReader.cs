@@ -9,21 +9,21 @@ namespace Teleopti.Ccc.Infrastructure.Rta
 	public class PersonOrganizationReader : IPersonOrganizationReader
 	{
 		private readonly INow _now;
-		private readonly string _applicationConnectionString;
+		private readonly IDatabaseConnectionStringHandler _databaseConnectionStringHandler;
 		private const string sqlQuery = "exec [dbo].[LoadAllPersonsCurrentBuSiteTeam] @now";
 
-		public PersonOrganizationReader(INow now, string applicationConnectionString)
+		public PersonOrganizationReader(INow now, IDatabaseConnectionStringHandler databaseConnectionStringHandler)
 		{
 			_now = now;
-			_applicationConnectionString = applicationConnectionString;
+			_databaseConnectionStringHandler = databaseConnectionStringHandler;
 		}
 
-		public IEnumerable<PersonOrganizationData> PersonOrganizationData()
+		public IEnumerable<PersonOrganizationData> PersonOrganizationData(string tenant)
 		{
 			var ret = new List<PersonOrganizationData>();
 			//inject ICurrentUnitOfWork and handle transaction from outside later
 			//rta client needs to be aware of IUnitOfWork first!
-			using(var conn = new SqlConnection(_applicationConnectionString))
+			using (var conn = new SqlConnection(_databaseConnectionStringHandler.AppConnectionString(tenant)))
 			{
 				conn.Open();
 				using (var cmd = new SqlCommand(sqlQuery, conn))

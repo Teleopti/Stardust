@@ -10,11 +10,11 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service.Aggregator
 		{
 			_personOrganizationProvider = personOrganizationProvider;
 		}
-
-		public PersonOrganizationData GetOrganization(Guid personId)
+		//not used ???
+		public PersonOrganizationData GetOrganization(Guid personId, string tenant)
 		{
 			PersonOrganizationData ret;
-			return _personOrganizationProvider.PersonOrganizationData().TryGetValue(personId, out ret) ? 
+			return _personOrganizationProvider.PersonOrganizationData(tenant).TryGetValue(personId, out ret) ? 
 				ret : 
 				null;
 		}

@@ -6,7 +6,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 {
 	public interface IPersonOrganizationProvider
 	{
-		IDictionary<Guid, PersonOrganizationData> PersonOrganizationData();
+		IDictionary<Guid, PersonOrganizationData> PersonOrganizationData(string tenant);
 	}
 
 	public class PersonOrganizationProvider : IPersonOrganizationProvider
@@ -18,9 +18,9 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 			_personOrganizationReader = personOrganizationReader;
 		}
 
-		public IDictionary<Guid, PersonOrganizationData> PersonOrganizationData()
+		public IDictionary<Guid, PersonOrganizationData> PersonOrganizationData(string tenant)
 		{
-			return _personOrganizationReader.PersonOrganizationData().ToDictionary(data => data.PersonId);
+			return _personOrganizationReader.PersonOrganizationData(tenant).ToDictionary(data => data.PersonId);
 		}
 	}
 }

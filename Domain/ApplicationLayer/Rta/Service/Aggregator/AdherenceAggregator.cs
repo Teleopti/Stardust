@@ -57,7 +57,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service.Aggregator
 			foreach (var actualAgentState in _agentStateReadModelReader.GetActualAgentStates(tenant))
 			{
 				PersonOrganizationData person;
-				if (!_personOrganizationProvider.PersonOrganizationData().TryGetValue(actualAgentState.PersonId, out person))
+				if (!_personOrganizationProvider.PersonOrganizationData(tenant).TryGetValue(actualAgentState.PersonId, out person))
 					continue;
 				var adherenceAggregatorInfo = new AdherenceAggregatorInfo(actualAgentState, person)
 				{
