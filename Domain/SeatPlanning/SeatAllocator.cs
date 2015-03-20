@@ -17,11 +17,6 @@ namespace Teleopti.Ccc.Domain.SeatPlanning
 
 		public void AllocateSeats(params SeatBookingRequest[] seatBookingRequests)
 		{
-			foreach (var location in _seatMapLocations)
-			{
-				location.ClearBookingInformation();
-			}
-
 			var sortedSeatBookingRequests = seatBookingRequests.OrderByDescending(s => s.MemberCount);
 			bookSeatsByGroup(sortedSeatBookingRequests);
 			bookUnallocatedShifts(sortedSeatBookingRequests);
@@ -74,7 +69,7 @@ namespace Teleopti.Ccc.Domain.SeatPlanning
 			}
 		}
 
-		private bool foundUnallocatedSet(Seat firstUnallocatedSeat)
+		private bool foundUnallocatedSet(ISeat firstUnallocatedSeat)
 		{
 			return firstUnallocatedSeat != null;
 		}

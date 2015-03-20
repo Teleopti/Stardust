@@ -15,7 +15,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 		private readonly IList<ISeatBooking> _seatBookings = new List<ISeatBooking>();
 
 
-		public FakeSeatBookingRepository()
+		public FakeSeatBookingRepository() 
 		{
 		}
 
@@ -52,7 +52,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 
 		public long CountAllEntities()
 		{
-			throw new NotImplementedException();
+			return _seatBookings.Count();
 		}
 
 		public void AddRange (IEnumerable<ISeatBooking> entityCollection)
@@ -71,11 +71,11 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 			throw new NotImplementedException();
 		}
 
-		public IList<ISeatBooking> LoadSeatBookingsForPeriod (DateTime start, DateTime end)
+		public IList<ISeatBooking> LoadSeatBookingsForDateOnlyPeriod (DateOnly start, DateOnly end)
 		{
 			return _seatBookings
-				.Where(booking => (booking.StartDateTime >= start
-					&& booking.EndDateTime <= end)).ToList();
+				.Where(booking => (booking.StartDateTime.Date >= start
+					&& booking.EndDateTime.Date <= end)).ToList();
 		}
 
 		public ISeatBooking LoadSeatBookingForPerson (DateOnly date, IPerson person)
@@ -96,8 +96,8 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 
 		public void RemoveSeatBookingsForSeat (ISeat seat)
 		{
-			_seatBookings.Where(booking => booking.Seat == seat)
-				.ForEach(booking => _seatBookings.Remove(booking));
+			var bookingsToRemove = _seatBookings.Where(booking => booking.Seat == seat);
+			bookingsToRemove.ToList().ForEach(booking => _seatBookings.Remove(booking));
 		}
 
 		public IEnumerator<ISeatBooking> GetEnumerator()

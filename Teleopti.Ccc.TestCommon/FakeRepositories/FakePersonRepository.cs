@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using NHibernate.Criterion;
 using Teleopti.Ccc.Domain.Auditing;
+using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Interfaces.Domain;
@@ -25,6 +26,11 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 			Has(person);
 		}
 
+		public FakePersonRepository(params IPerson[] person)
+		{
+			_persons = person;
+		}
+
 		public void Has(IPerson person)
 		{
 			_persons.Add(person);
@@ -32,12 +38,12 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 
 		public void Add(IPerson person)
 		{
-			throw new NotImplementedException();
+			_persons.Add(person);
 		}
 
 		public void Remove(IPerson person)
 		{
-			throw new NotImplementedException();
+			_persons.Remove (person);
 		}
 
 		public IPerson Get(Guid id)
@@ -89,7 +95,14 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 
 		public ICollection<IPerson> FindPeopleBelongTeamWithSchedulePeriod(ITeam team, DateOnlyPeriod period)
 		{
-			return new List<IPerson> {_persons.FirstOrDefault()};
+
+			var people = from per in _persons
+				let periods = per.PersonPeriods (period)
+				where periods.Any(personPeriod => personPeriod.Team == team)
+				select per;
+
+			return people.ToList();
+
 		}
 
 		public ICollection<IPerson> FindAllSortByName()

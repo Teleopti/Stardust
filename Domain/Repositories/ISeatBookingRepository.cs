@@ -6,7 +6,7 @@ namespace Teleopti.Ccc.Domain.Repositories
 {
 	public interface ISeatBookingRepository : IRepository<ISeatBooking>, ILoadAggregateFromBroker<ISeatBooking>
 	{
-		IList<ISeatBooking> LoadSeatBookingsForPeriod(DateTime start, DateTime end);
+		IList<ISeatBooking> LoadSeatBookingsForDateOnlyPeriod(DateOnly start, DateOnly end);
 		ISeatBooking LoadSeatBookingForPerson (DateOnly date, IPerson person);
 		IList<ISeatBooking> LoadSeatBookingsForDay (DateOnly date);
 		void RemoveSeatBookingsForSeats(IEnumerable<ISeat> seats);

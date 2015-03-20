@@ -416,5 +416,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			mocks.ReplayAll();
 			Assert.IsNotNull(new RepositoryFactory().CreateTeamGamificationSettingRepository(uow));
 		}
+
     }
+
 }

@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
@@ -13,24 +14,19 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 		private readonly IList<ISeatMapLocation> _seatMaps = new List<ISeatMapLocation>();
 
 
-		public FakeSeatMapRepository(ISeatMapLocation seatMap)
+		public FakeSeatMapRepository(params ISeatMapLocation[] seatMapLocations)
 		{
-			Has(seatMap);
+			seatMapLocations.ForEach (Add);
 		}
-
-		public void Has(ISeatMapLocation note)
-		{
-			_seatMaps.Add(note);
-		}
-	
+		
 		public void Add (ISeatMapLocation entity)
 		{
-			throw new NotImplementedException();
+			_seatMaps.Add (entity);
 		}
 
 		public void Remove (ISeatMapLocation entity)
 		{
-			throw new NotImplementedException();
+			_seatMaps.Remove (entity);
 		}
 
 		public ISeatMapLocation Get (Guid id)
@@ -76,7 +72,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 
 		public IEnumerator<ISeatMapLocation> GetEnumerator()
 		{
-			throw new NotImplementedException();
+			return _seatMaps.GetEnumerator();
 		}
 
 		IEnumerator IEnumerable.GetEnumerator()

@@ -1508,7 +1508,7 @@
     <Compile Include="SeatPlanning\Seat.cs" />
     <Compile Include="SeatPlanning\SeatAllocator.cs" />
     <Compile Include="SeatPlanning\SeatBookingRequest.cs" />
-    <Compile Include="SeatPlanning\SeatPlan.cs" />
+    <Compile Include="SeatPlanning\SeatPlanner.cs" />
     <Compile Include="SeatPlanning\TransientBooking.cs" />
     <Compile Include="Security\AuthorizationEntities\AllFunctions.cs" />
     <Compile Include="Security\AuthorizationEntities\ApplicationFunctionsProvider.cs" />

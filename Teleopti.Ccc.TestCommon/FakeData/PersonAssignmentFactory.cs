@@ -86,10 +86,10 @@ namespace Teleopti.Ccc.TestCommon.FakeData
 		}
 
 		public static IPersonAssignment CreateAssignmentWithMainShift(IActivity activity,
-		                                                              IPerson agent,
-		                                                              DateTimePeriod period,
-		                                                              IShiftCategory category,
-		                                                              IScenario scenario)
+																	  IPerson agent,
+																	  DateTimePeriod period,
+																	  IShiftCategory category,
+																	  IScenario scenario)
 		{
 			var date = new DateOnly(TimeZoneHelper.ConvertFromUtc(period.StartDateTime, agent.PermissionInformation.DefaultTimeZone()));
 			var ass = new PersonAssignment(agent, scenario, date);
@@ -139,7 +139,7 @@ namespace Teleopti.Ccc.TestCommon.FakeData
 																													 DateTimePeriod period,
 																													IShiftCategory shiftCategory)
 		{
-			return CreateAssignmentWithMainShift(new Activity("ass activity"), 
+			return CreateAssignmentWithMainShift(new Activity("ass activity"),
 																					 person,
 																					 period,
 																					 shiftCategory,
@@ -403,7 +403,7 @@ namespace Teleopti.Ccc.TestCommon.FakeData
 			var ret = new PersonAssignment(new Person(), new Scenario("d"), new DateOnly(2000, 1, 1));
 			ret.AddActivity(new Activity("1"), new DateTimePeriod(start, start.AddHours(1)));
 			ret.AddPersonalActivity(new Activity("2"), new DateTimePeriod(start, start.AddHours(2)));
-			ret.AddOvertimeActivity(new Activity("3"), new DateTimePeriod(start, start.AddHours(3)),new MultiplicatorDefinitionSet("multiplicatorset",MultiplicatorType.Overtime));
+			ret.AddOvertimeActivity(new Activity("3"), new DateTimePeriod(start, start.AddHours(3)), new MultiplicatorDefinitionSet("multiplicatorset", MultiplicatorType.Overtime));
 			ret.SetShiftCategory(new ShiftCategory("test"));
 			return ret;
 		}

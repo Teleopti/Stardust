@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
@@ -50,7 +51,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 
 		public void AddRange(IEnumerable<IPersistableScheduleData> entityCollection)
 		{
-			throw new NotImplementedException();
+			entityCollection.ForEach (Add);
 		}
 
 		public IUnitOfWork UnitOfWork { get; private set; }
@@ -80,8 +81,8 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 			                                                                    scheduleDictionaryLoadOptions, DateOnlyPeriod period,
 		                                                                    IScenario scenario)
 		{
-			var thisPeriod = _data.First().Period; // max period?
-			return ScheduleDictionaryForTest.WithScheduleData(scenario, thisPeriod, _data);
+			//var thisPeriod = _data.First().Period; // max period?
+			return ScheduleDictionaryForTest.WithScheduleDataForManyPeople(scenario, new DateTimePeriod(period.StartDate, period.EndDate), _data);
 		}
 
 		public IScheduleRange ScheduleRangeBasedOnAbsence(DateTimePeriod period, IScenario scenario, IPerson person, IAbsence absence)

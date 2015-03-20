@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using NUnit.Framework;
+using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.SeatPlanning;
 using Teleopti.Ccc.TestCommon.FakeData;
 
@@ -413,53 +414,55 @@ namespace SeatPlanner
 
 			Assert.That(agent1Shift1.Seat.Name == "Room 1 Seat 1");
 			Assert.That(agent2Shift1.Seat.Name == "Building Seat 1");
-
 		}
 
-		//Robtodo: finish test
-		[Test, Ignore]
+		[Test]
 		public void ShouldNotAssignAgentWhenPreviouslyBooked()
 		{
-			var person1 = PersonFactory.CreatePersonWithGuid ("john", "carmack");
-			var person2 = PersonFactory.CreatePersonWithGuid("john", "romero");
-
 			var room1 = new SeatMapLocation() { IncludeInSeatPlan = true };
 			room1.AddSeat("Room 1 Seat 1", 1);
-			var existingBooking = new SeatBooking(person1, new DateTime(2014, 01, 01, 8, 0, 0), new DateTime(2014, 01, 01, 12, 59, 59));
+			var existingBooking = new SeatBooking(new Person(), new DateTime(2014, 01, 01, 8, 0, 0), new DateTime(2014, 01, 01, 12, 59, 59));
 			existingBooking.Book (room1.Seats.Single());
-			
-			var agent2Shift1 = new SeatBooking(person2, new DateTime(2014, 01, 01, 8, 0, 0), new DateTime(2014, 01, 01, 12, 59, 59));
-			var seatBookingRequest1 = new SeatBookingRequest(existingBooking, agent2Shift1);
-			new SeatAllocator(room1).AllocateSeats(seatBookingRequest1);
-			
-			Assert.That(agent2Shift1.Seat == null);
-		}
 
-		//Robtodo: finish test
-		[Test, Ignore]
-		public void ShouldUpdateExistingBookingForSameAgent()
-		{
-			var person1 = PersonFactory.CreatePersonWithGuid("john", "carmack");
-	
-			var room1 = new SeatMapLocation() { IncludeInSeatPlan = true };
-			room1.AddSeat("Room 1 Seat 1", 1);
-			var existingBooking = new SeatBooking(person1, new DateTime(2014, 01, 01, 8, 0, 0), new DateTime(2014, 01, 01, 12, 59, 59));
-			existingBooking.Book(room1.Seats.Single());
-
-			var room2 = new SeatMapLocation() { IncludeInSeatPlan = true };
-			room2.AddSeat("Room 2 Seat 1", 1);
-
-			var agent2Shift1 = new SeatBooking(person1, new DateTime(2014, 01, 01, 8, 0, 0), new DateTime(2014, 01, 01, 12, 59, 59));
+			var agent2Shift1 = new SeatBooking(new Person(), new DateTime(2014, 01, 01, 8, 0, 0), new DateTime(2014, 01, 01, 12, 59, 59));
 			var seatBookingRequest1 = new SeatBookingRequest(agent2Shift1);
 			new SeatAllocator(room1).AllocateSeats(seatBookingRequest1);
-
-			// Robtodo: not quite sure what to do with the unsaved booking (we only update the existing one when the agent, date match)
-			// perhaps dont create it in seatplan.cs - just find and use the existing one?
-			Assert.That(existingBooking.Seat == room2.Seats.Single());
+			
 			Assert.That(agent2Shift1.Seat == null);
+			Assert.That(Equals (existingBooking.Seat, room1.Seats.Single()));
 		}
 
+		[Test]
+		public void ShouldAllocateTeamGroupedBookingsOverMultiDaysWhileHonouringExistingBookings()
+		{
+			var agentShift1 = new SeatBooking(null, new DateTime(2014, 01, 01, 8, 0, 0), new DateTime(2014, 01, 01, 17, 00, 00));
+			var agentShift2 = new SeatBooking(null, new DateTime(2014, 01, 01, 8, 0, 0), new DateTime(2014, 01, 01, 17, 0, 0));
+			var agentShift1_Day2 = new SeatBooking(null, new DateTime(2014, 01, 02, 8, 0, 0), new DateTime(2014, 01, 02, 17, 00, 00));
+			var agentShift2_Day2 = new SeatBooking(null, new DateTime(2014, 01, 02, 8, 0, 0), new DateTime(2014, 01, 02, 17, 0, 0));
+			
+			var seatBookingRequest1 = new SeatBookingRequest(agentShift1, agentShift2, agentShift1_Day2, agentShift2_Day2);
 
+			var location1 = new SeatMapLocation() { IncludeInSeatPlan = true };
+			location1.AddSeat("L1 Seat1", 1);
+
+			var location2 = new SeatMapLocation() { IncludeInSeatPlan = true };
+			location2.AddSeat("L2 Seat1", 1);
+			location2.AddSeat("L2 Seat2", 2);
+
+			var existingBooking = new SeatBooking(new Person(), new DateTime(2014, 01, 02, 8, 0, 0), new DateTime(2014, 01, 02, 17, 00, 00));
+			existingBooking.Book(location2.Seats.First());
+
+
+			new SeatAllocator(location1, location2).AllocateSeats(seatBookingRequest1);
+
+			Assert.That(agentShift1.Seat.Name == "L2 Seat1");
+			Assert.That(agentShift2.Seat.Name == "L2 Seat2");
+			Assert.That(agentShift1_Day2.Seat.Name == "L2 Seat2");
+			Assert.That(agentShift2_Day2.Seat.Name == "L1 Seat1");
+			Assert.That(existingBooking.Seat.Name == "L2 Seat1");
+
+		}
+		
 		#region Performance Benchmarks
 
 		[Test, Ignore]

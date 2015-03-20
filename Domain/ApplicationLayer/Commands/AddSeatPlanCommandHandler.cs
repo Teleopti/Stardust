@@ -42,13 +42,13 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Commands
 
 			var period = new DateOnlyPeriod(new DateOnly(command.StartDate), new DateOnly(command.EndDate));
 			var teams = _teamRepository.FindTeams (command.Teams);
-			var seatPlan = new SeatPlan(_scenario.Current(), _publicNoteRepository, _personRepository, _scheduleRepository, _seatBookingRepository);
+			var seatPlan = new SeatPlanner(_scenario.Current(), _publicNoteRepository, _personRepository, _scheduleRepository, _seatBookingRepository);
 
-			seatPlan.CreateSeatPlan(rootLocation, teams, period, command.TrackedCommandInfo)
-				.ForEach(booking => _seatBookingRepository.Add (booking));
+			seatPlan.CreateSeatPlan (rootLocation, teams, period, command.TrackedCommandInfo);
+
 		}
 		
-		private static void setIncludeInSeatPlan(SeatMapLocation location, IList<Guid> locationsSelected)
+		private static void setIncludeInSeatPlan(SeatMapLocation location, IEnumerable<Guid> locationsSelected)
 		{
 			location.IncludeInSeatPlan = locationsSelected.Any(l => l.Equals(location.Id));
 			foreach (var childLocation in location.ChildLocations)

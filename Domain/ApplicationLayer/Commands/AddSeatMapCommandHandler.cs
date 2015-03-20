@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.SeatPlanning;
@@ -25,6 +26,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Commands
 		public void Handle(AddSeatMapCommand command)
 		{
 			var seatMap = command.Id.HasValue ? updateExistingSeatMap(command) : createNewRootSeatMap(command);
+			deleteRemovedSeats(command, seatMap);
 			updateChildSeatMaps(command, seatMap);
 			updateSeats (command, seatMap);
 		}
@@ -96,14 +98,18 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Commands
 
 		private void updateSeats(AddSeatMapCommand command, SeatMapLocation seatMapLocation)
 		{
-			deleteRemovedSeats(command, seatMapLocation);
 			createSeats(command, seatMapLocation);
 		}
 
 		private void deleteRemovedSeats(AddSeatMapCommand command, SeatMapLocation seatMapLocation)
 		{
+			deleteSeatsFromLocation(command, seatMapLocation);
+			seatMapLocation.ChildLocations.ForEach (childLocation => deleteRemovedSeats (command, childLocation));
+		}
 
-			IEnumerable<Seat> seatsToDelete;
+		private void deleteSeatsFromLocation (AddSeatMapCommand command, SeatMapLocation seatMapLocation)
+		{
+			IEnumerable<ISeat> seatsToDelete;
 
 			if (command.Seats == null)
 			{
@@ -112,15 +118,13 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Commands
 			else
 			{
 				seatsToDelete =
-					from seat in seatMapLocation.Seats
-					where command.Seats.All(currentSeat => currentSeat.Id != seat.Id)
-					select seat;
+					(from seat in seatMapLocation.Seats
+						where command.Seats.All (currentSeat => currentSeat.Id != seat.Id)
+						select seat).ToList();
 			}
 
-			_seatBookingRepository.RemoveSeatBookingsForSeats(seatsToDelete);
-
-			seatsToDelete.ToList().ForEach(seat => seatMapLocation.Seats.Remove(seat));	
-			
+			_seatBookingRepository.RemoveSeatBookingsForSeats (seatsToDelete);
+			seatsToDelete.ToList().ForEach (seat => seatMapLocation.Seats.Remove (seat));
 		}
 
 		private static void createSeats(AddSeatMapCommand command, SeatMapLocation seatMapLocation)

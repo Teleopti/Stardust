@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace Teleopti.Interfaces.Domain
 {
@@ -7,6 +8,7 @@ namespace Teleopti.Interfaces.Domain
 		String Name { get; set; }
 		int Priority { get; set; }
 		void AddSeatBooking(ISeatBooking seatBooking);
+		void AddSeatBookings (IList<ISeatBooking> seatBookings);
 		bool IsAllocated(ISeatBooking seatBookingRequest);
 		void ClearBookings();
 	}

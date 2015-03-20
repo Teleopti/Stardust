@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
@@ -14,19 +15,14 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 		private readonly IList<ITeam> _teams = new List<ITeam>();
 
 
-		public FakeTeamRepository(ITeam team)
+		public FakeTeamRepository(params  ITeam[] teams)
 		{
-			Has(team);
+			teams.ForEach (Add);
 		}
-
-		public void Has(ITeam team)
-		{
-			_teams.Add(team);
-		}
-
+		
 		public void Add (ITeam entity)
 		{
-			throw new NotImplementedException();
+			_teams.Add (entity);
 		}
 
 		public void Remove (ITeam entity)

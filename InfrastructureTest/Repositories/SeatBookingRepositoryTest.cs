@@ -76,7 +76,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			PersistAndRemoveFromUnitOfWork(booking);
 			PersistAndRemoveFromUnitOfWork(booking2);
 
-			var seatBookings = new SeatBookingRepository(UnitOfWork).LoadSeatBookingsForPeriod(new DateTime(2015, 10, 1, 12, 30, 0),new DateTime(2015, 10, 1, 17, 0, 0));
+			var seatBookings = new SeatBookingRepository(UnitOfWork).LoadSeatBookingsForPeriod(new DateTime(2015, 10, 1, 13,0,0),new DateTime(2015, 10, 1, 17,0,0));
 
 			Assert.AreEqual(seatBookings.Single(),booking2 );
 			
@@ -115,7 +115,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			return person;
 		}
 
-		private Seat createSeatMapLocationAndSeatInDb()
+		private ISeat createSeatMapLocationAndSeatInDb()
 		{
 			var rep = new Repository(UnitOfWork);
 			var seatMapLocation = new SeatMapLocation();

@@ -2,7 +2,7 @@
 
 namespace Teleopti.Interfaces.Domain
 {
-	public interface ISeatPlan 
+	public interface ISeatPlanner 
 	{
 		
 	}

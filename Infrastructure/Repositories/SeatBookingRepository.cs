@@ -28,11 +28,6 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 		{
 		}
 
-		//ISeatBooking ILoadAggregateByTypedId<ISeatBooking, Guid>.LoadAggregate(Guid id)
-		//{
-		//	return LoadAggregate(id);
-		//}
-
 		public ISeatBooking LoadAggregate(Guid id)
 		{
 			return Session.Query<ISeatBooking>()
@@ -42,6 +37,13 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 		public ISeatBooking LoadSeatBookingForPerson(DateOnly date, IPerson person)
 		{
 			return Session.Query<ISeatBooking>().SingleOrDefault(booking => (booking.StartDateTime.Date == date && booking.Person == person));
+		}
+
+		public IList<ISeatBooking> LoadSeatBookingsForDateOnlyPeriod(DateOnly start, DateOnly end)
+		{
+			return Session.Query<ISeatBooking>()
+				.Where(booking => (booking.StartDateTime.Date >= start
+					&& booking.EndDateTime.Date <= end)).ToList();
 		}
 
 		public IList<ISeatBooking> LoadSeatBookingsForPeriod(DateTime start, DateTime end)

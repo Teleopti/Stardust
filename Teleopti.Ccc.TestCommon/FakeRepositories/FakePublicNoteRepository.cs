@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
@@ -14,19 +15,15 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 		private readonly IList<IPublicNote> _notes = new List<IPublicNote>();
 
 		
-		public FakePublicNoteRepository(IPublicNote note)
+		public FakePublicNoteRepository(params IPublicNote[] publicNotes)
 		{
-			Has(note);
+			publicNotes.ForEach (Add);
 		}
-
-		public void Has(IPublicNote note)
-		{
-			_notes.Add(note);
-		}
-
+		
 
 		public void Add (IPublicNote entity)
 		{
+			entity.SetId (Guid.NewGuid());
 			_notes.Add (entity);
 		}
 
@@ -37,7 +34,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 
 		public IPublicNote Get (Guid id)
 		{
-			return _notes.FirstOrDefault();
+			return _notes.FirstOrDefault (note => note.Id == id);
 		}
 
 		public IList<IPublicNote> LoadAll()
@@ -83,12 +80,12 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 
 		public IPublicNote Find (DateOnly dateOnly, IPerson person, IScenario scenario)
 		{
-			return Get(Guid.Empty);
+			return _notes.SingleOrDefault (note => note.NoteDate == dateOnly && note.Person == person && note.Scenario == scenario);
 		}
 
 		public IEnumerator<IPublicNote> GetEnumerator()
 		{
-			throw new NotImplementedException();
+			return _notes.GetEnumerator();
 		}
 
 		IEnumerator IEnumerable.GetEnumerator()

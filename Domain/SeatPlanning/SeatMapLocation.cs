@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.ApplicationLayer.Commands;
@@ -11,10 +12,10 @@ namespace Teleopti.Ccc.Domain.SeatPlanning
 	[Serializable]
 	public class SeatMapLocation : VersionedAggregateRootWithBusinessUnit, ISeatMapLocation
 	{
-		private IList<Seat> _seats = new List<Seat>();
+		private IList<ISeat> _seats = new List<ISeat>();
 		private IList<SeatMapLocation> _childLocations = new List<SeatMapLocation>();
 
-		public virtual IList<Seat> Seats
+		public virtual IList<ISeat> Seats
 		{
 			get { return _seats; }
 		}
@@ -108,7 +109,7 @@ namespace Teleopti.Ccc.Domain.SeatPlanning
 			SeatMapJsonData = SeatMapJsonData.Replace(temporaryId.ToString(), persistedId.ToString());
 		}
 
-		public virtual Seat GetNextUnallocatedSeat(ISeatBooking booking, Boolean ignoreChildren)
+		public virtual ISeat GetNextUnallocatedSeat(ISeatBooking booking, Boolean ignoreChildren)
 		{
 			if (!ignoreChildren)
 			{
@@ -128,7 +129,7 @@ namespace Teleopti.Ccc.Domain.SeatPlanning
 			return null;
 		}
 
-		private Seat getNextUnallocatedSeatOnSelf(ISeatBooking booking)
+		private ISeat getNextUnallocatedSeatOnSelf(ISeatBooking booking)
 		{
 			return _seats.OrderBy(seat => seat.Priority).FirstOrDefault(seat => !seat.IsAllocated(booking));
 		}
@@ -198,8 +199,5 @@ namespace Teleopti.Ccc.Domain.SeatPlanning
 				_isBooked = true;
 			}
 		}
-
-
-		
 	}
 }
