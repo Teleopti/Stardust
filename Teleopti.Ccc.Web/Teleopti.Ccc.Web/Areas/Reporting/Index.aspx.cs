@@ -100,7 +100,11 @@ namespace Teleopti.Ccc.Web.Areas.Reporting
 		{
 			createReport("Word");
 		}
-
+		protected void ButtonShowClickImage(object sender, ImageClickEventArgs e)
+		{
+			createReport("Image");
+		}
+		
 		private void createReport(string format)
 		{
 			if (!ParameterSelector.IsValid) return;
