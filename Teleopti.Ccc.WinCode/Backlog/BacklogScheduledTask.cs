@@ -82,7 +82,7 @@ namespace Teleopti.Ccc.WinCode.Backlog
 				}
 				else
 				{
-					//time = time.Add(_parent.BacklogProductPlanTask.ForecastedTimePerDay());
+					time = time.Add(_parent.BacklogProductPlanTask.ForecastedTimePerDay());
 				}
 			}
 
