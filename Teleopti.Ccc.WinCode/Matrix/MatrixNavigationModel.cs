@@ -147,7 +147,7 @@ namespace Teleopti.Ccc.WinCode.Matrix
 													 LocalizedDescription = Resources.ScheduleAnalysis,
 													 ApplicationFunctions =
 														  (from a in PermittedMatrixFunctions
-															where analysisReports().Contains(a.ForeignId)
+															where analysisReports().Contains(a.ForeignId.ToUpper())
 															select a).ToList()
 												},
 										  new MatrixFunctionGroup
@@ -155,7 +155,7 @@ namespace Teleopti.Ccc.WinCode.Matrix
 													 LocalizedDescription = Resources.Preferences,
 													 ApplicationFunctions =
 														  from a in PermittedMatrixFunctions
-														  where preferencesReports().Contains(a.ForeignId)
+														  where preferencesReports().Contains(a.ForeignId.ToUpper())
 														  select a
 												},
 										  new MatrixFunctionGroup
@@ -163,7 +163,7 @@ namespace Teleopti.Ccc.WinCode.Matrix
 													 LocalizedDescription = Resources.EmployeeInformation,
 													 ApplicationFunctions =
 														  from a in PermittedMatrixFunctions
-														  where EmployeeReports().Contains(a.ForeignId)
+														  where EmployeeReports().Contains(a.ForeignId.ToUpper())
 														  select a
 												},
 										  new MatrixFunctionGroup
@@ -171,7 +171,7 @@ namespace Teleopti.Ccc.WinCode.Matrix
 													 LocalizedDescription = Resources.AgentPerformance,
 													 ApplicationFunctions =
 														  from a in PermittedMatrixFunctions
-														  where agentReports().Contains(a.ForeignId)
+														  where agentReports().Contains(a.ForeignId.ToUpper())
 														  select a
 												},
 										  new MatrixFunctionGroup
@@ -179,7 +179,7 @@ namespace Teleopti.Ccc.WinCode.Matrix
 													 LocalizedDescription = Resources.ForecastingPerformance,
 													 ApplicationFunctions =
 														  from a in PermittedMatrixFunctions
-														  where forecastReports().Contains(a.ForeignId)
+														  where forecastReports().Contains(a.ForeignId.ToUpper())
 														  select a
 												},
 										  new MatrixFunctionGroup
@@ -187,7 +187,7 @@ namespace Teleopti.Ccc.WinCode.Matrix
 													 LocalizedDescription = Resources.ServiceLevelAnalysis,
 													 ApplicationFunctions =
 														  from a in PermittedMatrixFunctions
-														  where serviceLevelReports().Contains(a.ForeignId)
+														  where serviceLevelReports().Contains(a.ForeignId.ToUpper())
 														  select a
 												},
 										  
@@ -196,7 +196,7 @@ namespace Teleopti.Ccc.WinCode.Matrix
 													 LocalizedDescription = Resources.Improve,
 													 ApplicationFunctions =
 														  from a in PermittedMatrixFunctions
-														  where new[] {"7F918C26-4044-4F6B-B0AE-7D27625D052E"}.Contains(a.ForeignId)
+														  where new[] {"7F918C26-4044-4F6B-B0AE-7D27625D052E"}.Contains(a.ForeignId.ToUpper())
 														  select a
 												}
 									 };
