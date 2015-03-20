@@ -49,15 +49,6 @@
 		<Exec Command="rmdir /S /Q $(MSBuildProjectDirectory)\WFM\node_modules\node-sass\test" />
 	</Target>
 
-	<!-- Run node-kss to build the style guide -->
-	<ItemGroup>
-		<CssFiles Include="$(MSBuildProjectDirectory)\WFM\css\**\*" Exclude="main.*" />
-		<TemplateFiles Include="$(MSBuildProjectDirectory)\WFM\wfm-template\**\*" />
-		<StyleguideFiles Include="$(MSBuildProjectDirectory)\WFM\styleguide;$(MSBuildProjectDirectory)\Areas\WFM\styleguide\**\*" />
-		<MainCssFiles Include="$(MSBuildProjectDirectory)\WFM\css\**\main.*" />
-	</ItemGroup>
-
-	
 	<!-- Install protractor -->
 	<Target Name="RestoreNodePackageProtractor">
 		<Exec Command="$(NpmSetServerCmd)"  ContinueOnError="false" WorkingDirectory="$(MSBuildProjectDirectory)\WFM" />
@@ -68,11 +59,10 @@
 	<!-- Executes Build -->
 	<ItemGroup>
 		<OriginalJsFiles Include="$(MSBuildProjectDirectory)\WFM\js\**\*.js" />
-		<SassFiles Include="$(MSBuildProjectDirectory)\WFM\css\**\*.scss" />
 		<DistCssFiles Include="$(MSBuildProjectDirectory)\WFM\css\main.css" />
 		<DistJsFiles Include="$(MSBuildProjectDirectory)\WFM\dist;$(MSBuildProjectDirectory)\WFM\dist\**\*" />
 	</ItemGroup>
-	<Target Name="RunGruntBuild" Inputs="@(OriginalJsFiles);@(SassFiles)" Outputs="@(DistJsFiles);@(DistCssFiles)">
+	<Target Name="RunGruntBuild" Inputs="@(OriginalJsFiles);@(DistCssFiles)" Outputs="@(DistJsFiles);@(DistCssFiles)">
 		<Message Text="Restore Node Packages Command: $(NpmInstallGruntCliCmd) /w WorkingDirectory: $(NodeDir)" Importance="high" />
 		<Exec Command="$(NpmInstallGruntCliCmd)" ContinueOnError="false" WorkingDirectory="$(NodeDir)" />
 		<Message Text="Executing Node.JS Builds: $(GruntBuild) /w WorkingDirectory: $(MSBuildProjectDirectory)\WFM" Importance="high" />

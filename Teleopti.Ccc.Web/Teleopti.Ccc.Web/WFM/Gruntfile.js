@@ -31,14 +31,22 @@
 					'dist/main.min.js': ['<%= concat.dist.dest %>']
 				}
 			}
+		},
+
+		download: {
+			dist: {
+				src: ['http://teleopti.github.io/styleguide/css/main.css'],
+				dest: 'css/'
+			},
 		}
 	});
 
 	grunt.loadNpmTasks('grunt-contrib-watch');
 	grunt.loadNpmTasks('grunt-contrib-concat');
 	grunt.loadNpmTasks('grunt-contrib-uglify');
+	grunt.loadNpmTasks('grunt-http-download');
 
 	// Default task(s).
 	grunt.registerTask('default', ['watch:dev']); // this task watchs
-	grunt.registerTask('dist', ['concat', 'uglify']); // this task is kind of package
+	grunt.registerTask('dist', ['concat', 'uglify', 'download']); // this task is kind of package
 };
