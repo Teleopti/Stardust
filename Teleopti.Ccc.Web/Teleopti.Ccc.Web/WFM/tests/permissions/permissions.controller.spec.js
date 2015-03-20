@@ -1,13 +1,16 @@
 ﻿'use strict';
 describe('PermissionsCtrl', function () {
 	var $q,
-		$rootScope;
+		$rootScope,
+		$httpBackend;
 
 	beforeEach(module('wfm'));
 
-	beforeEach(inject(function (_$q_, _$rootScope_) {
+	beforeEach(inject(function (_$httpBackend_, _$q_, _$rootScope_) {
 		$q = _$q_;
 		$rootScope = _$rootScope_;
+		$httpBackend = _$httpBackend_;
+		$httpBackend.expectGET("../api/Global/User/CurrentUser").respond(200, { "meta": { "code": 200, "errors": null }, "response": { "allowed": false } });
 	}));
 
 	var mockPermissionsService = {
