@@ -33,12 +33,12 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta
 			{
 				var builder = new ContainerBuilder();
 				var reader = MockRepository.GenerateMock<IPersonOrganizationReader>();
-				reader.Stub(x => x.PersonOrganizationData()).Return(new PersonOrganizationData[] { });
+				reader.Stub(x => x.PersonOrganizationData("")).Return(new PersonOrganizationData[] { });
 				builder.RegisterInstance(reader).As<IPersonOrganizationReader>();
 				builder.Update(container);
 
 				var resolved = container.Resolve<IPersonOrganizationProvider>();
-				resolved.PersonOrganizationData().Should().Be.SameInstanceAs(resolved.PersonOrganizationData());
+				resolved.PersonOrganizationData("").Should().Be.SameInstanceAs(resolved.PersonOrganizationData(""));
 			}
 		}
 
