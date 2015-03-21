@@ -38,6 +38,6 @@
 		public const string OptimizeTeamSameStartTime = "OptimizeTeamSameStartTime";
 		public const string ScheduleTeamSameEndTime = "ScheduleTeamSameEndTime";
 		public const string OptimizeTeamSameEndTime = "OptimizeTeamSameEndTime";
-		
+		public const string ScheduleBlockTeamSameShiftCategory = "ScheduleBlockTeamSameShiftCategory";
 	}
 }

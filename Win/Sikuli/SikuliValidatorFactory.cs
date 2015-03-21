@@ -48,40 +48,43 @@ namespace Teleopti.Ccc.Win.Sikuli
 						return new ScheduleOvertimePeriodValidator(schedulerState, totalSkill);
 
 					case SikuliValidatorRegister.ScheduleBlockSameShiftCategory :
-						return new ScheduleBlockSameShiftCategory(schedulerState, totalSkill);
+						return new ScheduleBlockSameShiftCategoryValidator(schedulerState, totalSkill);
 
 					case SikuliValidatorRegister.OptimizeBlockSameShiftCategory:
-						return new OptimizeBlockSameShiftCategory(schedulerState, totalSkill);
+						return new OptimizeBlockSameShiftCategoryValidator(schedulerState, totalSkill);
 
 					case SikuliValidatorRegister.ScheduleBlockSameStartTime:
-						return new ScheduleBlockSameStartTime(schedulerState, totalSkill);
+						return new ScheduleBlockSameStartTimeValidator(schedulerState, totalSkill);
 
 					case SikuliValidatorRegister.OptimizeBlockSameStartTime:
-						return new OptimizeBlockSameStartTime(schedulerState, totalSkill);
+						return new OptimizeBlockSameStartTimeValidator(schedulerState, totalSkill);
 
 					case SikuliValidatorRegister.ScheduleBlockSameShift:
-						return new ScheduleBlockSameShift(schedulerState, totalSkill);
+						return new ScheduleBlockSameShiftValidator(schedulerState, totalSkill);
 
 					case SikuliValidatorRegister.OptimizeBlockSameShift:
-						return new OptimizeBlockSameShift(schedulerState, totalSkill);
+						return new OptimizeBlockSameShiftValidator(schedulerState, totalSkill);
 
 					case SikuliValidatorRegister.ScheduleTeamSameShiftCategory:
-						return new ScheduleTeamSameShiftCategory(schedulerState, totalSkill);
+						return new ScheduleTeamSameShiftCategoryValidator(schedulerState, totalSkill);
 
 					case SikuliValidatorRegister.OptimizeTeamSameShiftCategory:
-						return new OptimizeTeamSameShiftCategory(schedulerState, totalSkill);
+						return new OptimizeTeamSameShiftCategoryValidator(schedulerState, totalSkill);
 
 					case SikuliValidatorRegister.ScheduleTeamSameStartTime:
-						return new ScheduleTeamSameStartTime(schedulerState, totalSkill);
+						return new ScheduleTeamSameStartTimeValidator(schedulerState, totalSkill);
 
 					case SikuliValidatorRegister.OptimizeTeamSameStartTime:
-						return new OptimizeTeamSameStartTime(schedulerState, totalSkill);
+						return new OptimizeTeamSameStartTimeValidator(schedulerState, totalSkill);
 
 					case SikuliValidatorRegister.ScheduleTeamSameEndTime:
-						return new ScheduleTeamSameEndTime(schedulerState, totalSkill);
+						return new ScheduleTeamSameEndTimeValidator(schedulerState, totalSkill);
 
 					case SikuliValidatorRegister.OptimizeTeamSameEndTime:
-						return new OptimizeTeamSameEndTime(schedulerState, totalSkill);
+						return new OptimizeTeamSameEndTimeValidator(schedulerState, totalSkill);
+
+					case SikuliValidatorRegister.ScheduleBlockTeamSameShiftCategory:
+						return new ScheduleBlockTeamSameShiftCategoryValidator(schedulerState, totalSkill);
 
 					case SikuliValidatorRegister.TestPass:
 						return new SelftestPassValidator();

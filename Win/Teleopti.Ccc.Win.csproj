@@ -776,10 +776,11 @@
     <Compile Include="Sikuli\Validators\AtomicValidators\PeriodStandardDeviationValidator.cs" />
     <Compile Include="Sikuli\Validators\AtomicValidators\SchedulerHoursWeeklyPatternValidator.cs" />
     <Compile Include="Sikuli\Validators\RootValidators\IRootValidator.cs" />
-    <Compile Include="Sikuli\Validators\RootValidators\OptimizeTeamSameEndTime.cs" />
-    <Compile Include="Sikuli\Validators\RootValidators\OptimizeTeamSameStartTime.cs" />
-    <Compile Include="Sikuli\Validators\RootValidators\ScheduleTeamSameEndTime.cs" />
-    <Compile Include="Sikuli\Validators\RootValidators\ScheduleTeamSameStartTime.cs" />
+    <Compile Include="Sikuli\Validators\RootValidators\OptimizeTeamSameEndTimeValidator.cs" />
+    <Compile Include="Sikuli\Validators\RootValidators\OptimizeTeamSameStartTimeValidator.cs" />
+    <Compile Include="Sikuli\Validators\RootValidators\ScheduleBlockTeamSameShiftCategoryValidator.cs" />
+    <Compile Include="Sikuli\Validators\RootValidators\ScheduleTeamSameEndTimeValidator.cs" />
+    <Compile Include="Sikuli\Validators\RootValidators\ScheduleTeamSameStartTimeValidator.cs" />
     <Compile Include="Sikuli\Views\SikuliEnterValidatorDialog.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -2595,16 +2596,16 @@
       <DependentUpon>WorkShiftsExplorer.cs</DependentUpon>
     </Compile>
     <Compile Include="Sikuli\Helpers\TestDuration.cs" />
-    <Compile Include="Sikuli\Validators\RootValidators\OptimizeBlockSameShift.cs" />
-    <Compile Include="Sikuli\Validators\RootValidators\OptimizeTeamSameShiftCategory.cs" />
-    <Compile Include="Sikuli\Validators\RootValidators\OptimizeBlockSameStartTime.cs" />
-    <Compile Include="Sikuli\Validators\RootValidators\OptimizeBlockSameShiftCategory.cs" />
+    <Compile Include="Sikuli\Validators\RootValidators\OptimizeBlockSameShiftValidator.cs" />
+    <Compile Include="Sikuli\Validators\RootValidators\OptimizeTeamSameShiftCategoryValidator.cs" />
+    <Compile Include="Sikuli\Validators\RootValidators\OptimizeBlockSameStartTimeValidator.cs" />
+    <Compile Include="Sikuli\Validators\RootValidators\OptimizeBlockSameShiftCategoryValidator.cs" />
     <Compile Include="Sikuli\Validators\RootValidators\OptimizeAllOptionsOffTimeBetweenDaysValidator.cs" />
     <Compile Include="Sikuli\Validators\RootValidators\RootValidator.cs" />
-    <Compile Include="Sikuli\Validators\RootValidators\ScheduleBlockSameShift.cs" />
-    <Compile Include="Sikuli\Validators\RootValidators\ScheduleTeamSameShiftCategory.cs" />
-    <Compile Include="Sikuli\Validators\RootValidators\ScheduleBlockSameStartTime.cs" />
-    <Compile Include="Sikuli\Validators\RootValidators\ScheduleBlockSameShiftCategory.cs" />
+    <Compile Include="Sikuli\Validators\RootValidators\ScheduleBlockSameShiftValidator.cs" />
+    <Compile Include="Sikuli\Validators\RootValidators\ScheduleTeamSameShiftCategoryValidator.cs" />
+    <Compile Include="Sikuli\Validators\RootValidators\ScheduleBlockSameStartTimeValidator.cs" />
+    <Compile Include="Sikuli\Validators\RootValidators\ScheduleBlockSameShiftCategoryValidator.cs" />
     <Compile Include="Sikuli\Validators\RootValidators\ScheduleOvertimePeriodValidator.cs" />
     <Compile Include="Sikuli\Validators\RootValidators\OptimizeAllOptionsOffIntradayBalanceAfterValidator.cs" />
     <Compile Include="Sikuli\Validators\RootValidators\OptimizeAllOptionsOffShiftsWithinDayValidator.cs" />

@@ -6,12 +6,12 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Win.Sikuli.Validators.RootValidators
 {
-	internal class ScheduleBlockSameShiftCategory : RootValidator
+	internal class ScheduleBlockSameShiftCategoryValidator : RootValidator
 	{
 		private readonly ISchedulerStateHolder _schedulerState;
 		private readonly IAggregateSkill _totalSkill;
 
-		public ScheduleBlockSameShiftCategory(ISchedulerStateHolder schedulerState, IAggregateSkill totalSkill)
+		public ScheduleBlockSameShiftCategoryValidator(ISchedulerStateHolder schedulerState, IAggregateSkill totalSkill)
 		{
 			_schedulerState = schedulerState;
 			_totalSkill = totalSkill;

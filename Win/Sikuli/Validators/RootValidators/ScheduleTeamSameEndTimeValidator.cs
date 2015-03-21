@@ -6,23 +6,21 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Win.Sikuli.Validators.RootValidators
 {
-	internal class OptimizeBlockSameStartTime : RootValidator
+	internal class ScheduleTeamSameEndTimeValidator : RootValidator
 	{
 		private readonly ISchedulerStateHolder _schedulerState;
 		private readonly IAggregateSkill _totalSkill;
 
-		public OptimizeBlockSameStartTime(ISchedulerStateHolder schedulerState, IAggregateSkill totalSkill)
+		public ScheduleTeamSameEndTimeValidator(ISchedulerStateHolder schedulerState, IAggregateSkill totalSkill)
 		{
 			_schedulerState = schedulerState;
 			_totalSkill = totalSkill;
 		}
 
-
 		public override SikuliValidationResult Validate(ITestDuration duration)
 		{
-			const double periodStandardDeviationLimit = 0.05d;
-			AtomicValidators.Add(new PeriodStandardDeviationValidator(_schedulerState, _totalSkill, periodStandardDeviationLimit));
-			AtomicValidators.Add(new DurationValidator(TimeSpan.FromMinutes(1).Add(TimeSpan.FromSeconds(25)), duration));
+			AtomicValidators.Add(new SchedulerHoursWeeklyPatternValidator(_schedulerState, _totalSkill));
+			AtomicValidators.Add(new DurationValidator(TimeSpan.FromMinutes(2).Add(TimeSpan.FromSeconds(25)), duration));
 			return ValidateAtomicValidators(AtomicValidators);
 		}
 	}
