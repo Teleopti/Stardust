@@ -6,12 +6,12 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Win.Sikuli.Validators.RootValidators
 {
-	internal class ScheduleAllOffValidator : RootValidator
+	internal class OptimizeAllOptionsOffShiftsWithinDayValidator : RootValidator
 	{
 		private readonly ISchedulerStateHolder _schedulerState;
 		private readonly IAggregateSkill _totalSkill;
 
-		public ScheduleAllOffValidator(ISchedulerStateHolder schedulerState, IAggregateSkill totalSkill)
+		public OptimizeAllOptionsOffShiftsWithinDayValidator(ISchedulerStateHolder schedulerState, IAggregateSkill totalSkill)
 		{
 			_schedulerState = schedulerState;
 			_totalSkill = totalSkill;
@@ -19,8 +19,10 @@ namespace Teleopti.Ccc.Win.Sikuli.Validators.RootValidators
 
 		public override SikuliValidationResult Validate(ITestDuration duration)
 		{
-			AtomicValidators.Add(new SchedulerHoursWeeklyPatternValidator(_schedulerState, _totalSkill));
-			AtomicValidators.Add(new DurationValidator(TimeSpan.FromMinutes(2).Add(TimeSpan.FromSeconds(5)), duration));
+			const double dailyStandardDeviationSumlimit = 4.65d;
+			AtomicValidators.Add(new DailyStandardDeviationValidator(_schedulerState, _totalSkill, dailyStandardDeviationSumlimit));
+			AtomicValidators.Add(new DayOffAndContractTimeValidator(_schedulerState));
+			AtomicValidators.Add(new DurationValidator(TimeSpan.FromMinutes(6).Add(TimeSpan.FromSeconds(30)), duration));
 			return ValidateAtomicValidators(AtomicValidators);
 		}
 	}
