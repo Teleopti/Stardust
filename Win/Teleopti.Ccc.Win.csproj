@@ -776,8 +776,13 @@
     <Compile Include="Sikuli\Validators\AtomicValidators\PeriodStandardDeviationValidator.cs" />
     <Compile Include="Sikuli\Validators\AtomicValidators\SchedulerHoursWeeklyPatternValidator.cs" />
     <Compile Include="Sikuli\Validators\RootValidators\IRootValidator.cs" />
+    <Compile Include="Sikuli\Validators\RootValidators\OptimizeBlockTeamSameShiftCategoryBetweenDaysValidator.cs" />
+    <Compile Include="Sikuli\Validators\RootValidators\OptimizeBlockTeamSameShiftCategoryWithinDaysValidator.cs" />
+    <Compile Include="Sikuli\Validators\RootValidators\OptimizeBlockTeamSameShiftCategoryDaysOffValidator.cs" />
+    <Compile Include="Sikuli\Validators\RootValidators\OptimizeBlockTeamSameStartTimeValidator.cs" />
     <Compile Include="Sikuli\Validators\RootValidators\OptimizeTeamSameEndTimeValidator.cs" />
     <Compile Include="Sikuli\Validators\RootValidators\OptimizeTeamSameStartTimeValidator.cs" />
+    <Compile Include="Sikuli\Validators\RootValidators\ScheduleBlockTeamSameStartTimeValidator.cs" />
     <Compile Include="Sikuli\Validators\RootValidators\ScheduleBlockTeamSameShiftCategoryValidator.cs" />
     <Compile Include="Sikuli\Validators\RootValidators\ScheduleTeamSameEndTimeValidator.cs" />
     <Compile Include="Sikuli\Validators\RootValidators\ScheduleTeamSameStartTimeValidator.cs" />

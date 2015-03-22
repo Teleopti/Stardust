@@ -86,6 +86,21 @@ namespace Teleopti.Ccc.Win.Sikuli
 					case SikuliValidatorRegister.ScheduleBlockTeamSameShiftCategory:
 						return new ScheduleBlockTeamSameShiftCategoryValidator(schedulerState, totalSkill);
 
+					case SikuliValidatorRegister.OptimizeBlockTeamSameShiftCategoryDaysOff:
+						return new OptimizeBlockTeamSameShiftCategoryDaysOffValidator(schedulerState, totalSkill);
+
+					case SikuliValidatorRegister.OptimizeBlockTeamSameShiftCategoryBetweenDays:
+						return new OptimizeBlockTeamSameShiftCategoryBetweenDaysValidator(schedulerState, totalSkill);
+
+					case SikuliValidatorRegister.OptimizeBlockTeamSameShiftCategoryWithinDays:
+						return new OptimizeBlockTeamSameShiftCategoryWithinDaysValidator(schedulerState, totalSkill);
+
+					case SikuliValidatorRegister.ScheduleBlockTeamSameStartTime:
+						return new ScheduleBlockTeamSameStartTimeValidator(schedulerState, totalSkill);
+
+					case SikuliValidatorRegister.OptimizeBlockTeamSameStartTime:
+						return new OptimizeBlockTeamSameStartTimeValidator(schedulerState, totalSkill);
+
 					case SikuliValidatorRegister.TestPass:
 						return new SelftestPassValidator();
 
