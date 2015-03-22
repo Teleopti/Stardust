@@ -3,7 +3,7 @@
 namespace Teleopti.Ccc.Win.Sikuli.Validators.RootValidators
 {
 	/// <summary>
-	/// Top level Sikuli validator interface.
+	/// Top level validator.
 	/// </summary>
 	public interface IRootValidator
 	{
