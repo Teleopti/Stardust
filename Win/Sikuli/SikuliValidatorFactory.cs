@@ -17,32 +17,23 @@ namespace Teleopti.Ccc.Win.Sikuli
 					case SikuliValidatorRegister.DeleteAll:
 						return new DeleteAllValidator(schedulerState, totalSkill);
 
-					case SikuliValidatorRegister.Optimize:
-						return new OptimizerValidator(schedulerState, totalSkill);
+					case SikuliValidatorRegister.ScheduleAllOff:
+						return new ScheduleAllOffValidator(schedulerState, totalSkill);
 
 					case SikuliValidatorRegister.OptimizeDaysOff:
-						return new OptimizeAllOptionsOffDaysOffValidator(schedulerState, totalSkill);
+						return new OptimizeDaysOffValidator(schedulerState, totalSkill);
 
 					case SikuliValidatorRegister.OptimizeBetweenDays:
-						return new OptimizeAllOptionsOffTimeBetweenDaysValidator(schedulerState, totalSkill);
+						return new OptimizeBetweenDaysValidator(schedulerState, totalSkill);
 
 					case SikuliValidatorRegister.OptimizeWithinDays:
-						return new OptimizeAllOptionsOffShiftsWithinDayValidator(schedulerState, totalSkill);
-
-					case SikuliValidatorRegister.OptimizeBlockTeam:
-						return new OptimizeBlockTeamValidator(schedulerState, totalSkill);
+						return new OptimizeWithinDaysValidator(schedulerState, totalSkill);
 
 					case SikuliValidatorRegister.OptimizeIntervalBalanceBefore:
-						return new OptimizeAllOptionsOffIntradayBalanceBeforeValidator(schedulerState, totalSkill);
+						return new OptimizeIntervalBalanceBeforeValidator(schedulerState, totalSkill);
 
 					case SikuliValidatorRegister.OptimizeIntervalBalanceAfter:
-						return new OptimizeAllOptionsOffIntradayBalanceAfterValidator(schedulerState, totalSkill);
-
-					case SikuliValidatorRegister.Schedule:
-						return new SchedulerValidator(schedulerState, totalSkill);
-
-					case SikuliValidatorRegister.ScheduleAllOptionsOff:
-						return new ScheduleAllOptionsOffValidator(schedulerState, totalSkill);
+						return new OptimizeIntervalBalanceAfterValidator(schedulerState, totalSkill);
 
 					case SikuliValidatorRegister.ScheduleOvertimePeriod:
 						return new ScheduleOvertimePeriodValidator(schedulerState, totalSkill);
