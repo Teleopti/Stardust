@@ -12,31 +12,32 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
 	[Binding]
 	public class WorkloadStepDefinitions
 	{
-		[Given(@"there is a Workload '(.*)' with Skill '(.*)' and queuesource '(.*)'")]
-		public void GivenThereIsAWorkloadWithSkillAndQueuesource(string workloadName, string skill, string queueSource)
+		[Given(@"there is a workload '(.*)' with skill '(.*)' and queue '(.*)'")]
+		public void GivenThereIsAWorkloadWithSkillAndQueue(string workload, string skill, string queue)
 		{
 			DataMaker.Data().Apply(new WorkloadConfigurable
 			{
-				WorkloadName = workloadName,
+				WorkloadName = workload,
 				SkillName = skill,
-				QueueSourceName = queueSource,
+				QueueSourceName = queue,
 				Open24Hours = true
 			});
 		}
-
 	}
 
 	[Binding]
 	public class QueueSourceDefinitions
 	{
-		[Given(@"there is a QueueSource named '(.*)'")]
-		public void GivenThereIsAQueueSourceNamed(string queueSource)
+		[Given(@"there is no queue statistics for '(.*)'")]
+		public void GivenThereIsNoQueueStatisticsFor(string queue)
 		{
+			//Step definition for testers to make sure there is no statistics
 			DataMaker.Data().Apply(new QueueSourceConfigurable
 			{
-				Name = queueSource
+				Name = queue
 			});
 		}
+
 
 		[Given(@"there is queue statistics for '(.*)'")]
 		public void GivenThereIsQueueStatisticsFor(string name)

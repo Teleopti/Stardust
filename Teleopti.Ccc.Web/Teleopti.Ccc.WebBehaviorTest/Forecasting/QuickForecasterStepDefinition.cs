@@ -22,8 +22,8 @@ namespace Teleopti.Ccc.WebBehaviorTest.Forecasting
 				new SkillDayRepository(uow).LoadAll().Any(x => x.CurrentDate == theDate).Should().Be.True());
 		}
 
-		[When(@"Quickforecast has succeeded")]
-		public void WhenQuickforecastHasSucceeded()
+		[When(@"Forecast has succeeded")]
+		public void WhenForecastHasSucceeded()
 		{
 			Browser.Interactions.AssertExists("div.success");
 		}
@@ -46,12 +46,17 @@ namespace Teleopti.Ccc.WebBehaviorTest.Forecasting
 		public void WhenISelectSkill(string skill)
 		{
 			Browser.Interactions.ClickContaining(".skill", skill);
+			Browser.Interactions.AssertExistsUsingJQuery(".skill:contains('" + skill + "').selected");
+			Browser.Interactions.AssertExistsUsingJQuery(".skill~ ol .workload:first.selected");
+			Browser.Interactions.AssertExistsUsingJQuery(".skill~ ol .workload:last.selected");
+
 		}
 
 		[When(@"I select workload '(.*)'")]
 		public void WhenISelectWorkload(string workload)
 		{
 			Browser.Interactions.ClickContaining(".workload", workload);
+			Browser.Interactions.AssertExistsUsingJQuery(".workload:contains('" + workload + "').selected");
 		}
 
 		[When(@"I choose to forecast the selected targets")]
@@ -149,11 +154,22 @@ namespace Teleopti.Ccc.WebBehaviorTest.Forecasting
 			Browser.Interactions.AssertFirstContainsUsingJQuery(".workload:contains(" + workload + ") .workload-accuracy", "%");
 		}
 
-		[Then(@"I should see a message of no historical data for measurement")]
-		public void ThenIShouldSeeAMessageOfNoHistoricalDataForMeasurement()
+		[Then(@"I should see no accuracy for total")]
+		public void ThenIShouldSeeNoAccuracyForTotal()
 		{
-			Browser.Interactions.AssertAnyContains(".forecast-relative-error", "Not enough historical data for measuring.");
+			Browser.Interactions.AssertFirstContainsUsingJQuery(".total-accuracy", "-%");
 		}
 
+		[Then(@"I should see no accuracy for skill '(.*)'")]
+		public void ThenIShouldSeeNoAccuracyForSkill(string skill)
+		{
+			Browser.Interactions.AssertFirstContainsUsingJQuery(".skill:contains(" + skill + ") .skill-accuracy", "-%");
+		}
+
+		[Then(@"I should see no accuracy for workload '(.*)'")]
+		public void ThenIShouldSeeNoAccuracyForWorkload(string workload)
+		{
+			Browser.Interactions.AssertFirstContainsUsingJQuery(".workload:contains(" + workload + ") .workload-accuracy", "-%");
+		}
 	}
 }
