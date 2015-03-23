@@ -15,6 +15,7 @@ namespace Teleopti.Ccc.DomainTest.Forecasting.Angel.QuickForecastSkillWithOneWor
 		public AggregateStatisticTasksForSkillLocalDayTest()
 		{
 			var workload = WorkloadFactory.CreateWorkloadWithFullOpenHours(SkillFactory.CreateSkill("Direct sales"));
+			workload.SetId(Guid.NewGuid());
 			var localTimeZone = TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time");
 			workload.Skill.TimeZone = localTimeZone;
 			_workload = workload;

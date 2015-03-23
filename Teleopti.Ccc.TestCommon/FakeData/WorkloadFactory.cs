@@ -33,7 +33,6 @@ namespace Teleopti.Ccc.TestCommon.FakeData
         public static IWorkload CreateWorkloadWithFullOpenHours(ISkill skill)
         {
             IWorkload workload = new Workload(skill);
-			workload.SetId(Guid.NewGuid());
             workload.Description = "desc from factory";
             workload.Name = "name from factory";
             workload.TemplateWeekCollection.ForEach(x=>x.Value.MakeOpen24Hours());

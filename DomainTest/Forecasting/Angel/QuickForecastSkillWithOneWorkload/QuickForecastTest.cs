@@ -65,7 +65,13 @@ namespace Teleopti.Ccc.DomainTest.Forecasting.Angel.QuickForecastSkillWithOneWor
 
 		protected virtual IWorkload Workload
 		{
-			get { return _workload ?? (_workload = WorkloadFactory.CreateWorkloadWithFullOpenHours(SkillFactory.CreateSkill("_"))); }
+			get
+			{
+				if (_workload != null) return _workload;
+				_workload = WorkloadFactory.CreateWorkloadWithFullOpenHours(SkillFactory.CreateSkill("_"));
+				_workload.SetId(Guid.NewGuid());
+				return _workload;
+			}
 		}
 
 		protected virtual IEnumerable<StatisticTask> StatisticTasks()
