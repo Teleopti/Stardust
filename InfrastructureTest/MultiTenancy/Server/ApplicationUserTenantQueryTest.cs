@@ -1,6 +1,7 @@
 ﻿using System;
 using NUnit.Framework;
 using SharpTestsEx;
+using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Server;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Server.NHibernate;
 using Teleopti.Ccc.Infrastructure.Repositories;
@@ -8,6 +9,7 @@ using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.InfrastructureTest.Helper;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
+using Teleopti.Ccc.TestCommon.TestData;
 
 namespace Teleopti.Ccc.InfrastructureTest.MultiTenancy.Server
 {
@@ -37,6 +39,23 @@ namespace Teleopti.Ccc.InfrastructureTest.MultiTenancy.Server
 		{
 			target.Find("not existing")
 				.Should().Be.Null();
+		}
+
+		//TODO: tenant - this could be removed when old schema is removed
+		[Test]
+		public void ShouldWorkIfUserCredentialsAlsoInNewSchema()
+		{
+			var persister = new PersistPersonInfo(_tenantUnitOfWorkManager);
+			var person = Session.Get<Person>(personId);
+			var tenant = new Tenant(RandomName.Make());
+			_tenantUnitOfWorkManager.CurrentSession().Save("Tenant_NewSchema", tenant);
+			var personInfo = new PersonInfo(tenant) {Id = person.Id.Value};
+			personInfo.SetApplicationLogonName(person.ApplicationAuthenticationInfo.ApplicationLogOnName);
+			personInfo.SetPassword(person.ApplicationAuthenticationInfo.Password);
+			persister.Persist(personInfo);
+			_tenantUnitOfWorkManager.CurrentSession().Flush();
+			target.Find(person.ApplicationAuthenticationInfo.ApplicationLogOnName).Id
+				.Should().Be.EqualTo(personId);
 		}
 
 		[SetUp]
