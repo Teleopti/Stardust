@@ -14,7 +14,8 @@ var wfm = angular.module('wfm', [
 	'wfm.permissions',
 	'wfm.forecasting',
 	'wfm.searching',
-	'wfm.notifications'
+	'wfm.notifications',
+	'wfm.notice'
 ]);
 wfm.config([
 	'$stateProvider', '$urlRouterProvider', function($stateProvider, $urlRouterProvider) {

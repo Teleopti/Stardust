@@ -1,6 +1,6 @@
 ﻿'use strict';
 
-var notice = angular.module('wfm.notifications', ['angular-growl', 'ngAnimate']);
+var notice = angular.module('wfm.notice', ['angular-growl', 'ngAnimate']);
 notice.controller('NoticeCtrl', [
 	'$scope', 'growl',
 	function ($scope, growl) {
