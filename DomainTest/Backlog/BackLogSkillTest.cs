@@ -17,7 +17,7 @@ namespace Teleopti.Ccc.DomainTest.Backlog
 		public void Setup()
 		{
 			_target = new BacklogSkill();
-			_serviceLevel = new ServiceLevel(new Percent(1), TimeSpan.FromDays(2));
+			_serviceLevel = new ServiceLevel(new Percent(1), TimeSpan.FromDays(2).TotalSeconds);
 		}
 
 		[Test]
