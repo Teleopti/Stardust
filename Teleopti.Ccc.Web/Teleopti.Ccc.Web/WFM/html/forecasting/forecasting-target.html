@@ -1,25 +1,33 @@
 <div ui-view>
 	<h4>Select forcasting target(s):</h4>
+	
 	<div class="material-block-content">
-		<div class="tree">
-			<div ui-tree data-drag-enabled="false">
-				<ol ui-tree-nodes="" ng-model="all">
-					<li ui-tree-node>
-						<div ui-tree-handle ng-class="{selected: all.Selected}" ng-click="toggleAll(all.Selected)">
-							{{all.Name}} <p class="pull-right total-accuracy">{{all.Accuracy}}</p>
-						</div>
-						<ol ui-tree-nodes="" ng-model="skillsDisplayed">
-							<li ng-repeat="skill in skillsDisplayed" ui-tree-node ng-include="'nodes_skill_renderer.html'" value='{{skill.Id}}'></li>
-						</ol>
-					</li>
-				</ol>
+		<div ng-if="showSelection">
+			<div class="tree">
+				<div ui-tree data-drag-enabled="false">
+					<ol ui-tree-nodes="" ng-model="all">
+						<li ui-tree-node>
+							<div ui-tree-handle ng-class="{selected: all.Selected}" ng-click="toggleAll(all.Selected)">
+								{{all.Name}} <p class="pull-right total-accuracy">{{all.Accuracy}}</p>
+							</div>
+							<ol ui-tree-nodes="" ng-model="skillsDisplayed">
+								<li ng-repeat="skill in skillsDisplayed" ui-tree-node ng-include="'nodes_skill_renderer.html'" value='{{skill.Id}}'></li>
+							</ol>
+						</li>
+					</ol>
+				</div>
+			</div>
+			<div ng-show="showExplaination">
+				-% Not enough historical data to measure the forecasting method.
+			</div>
+			<div>
+				<button class="btn btn-primary material-btn material-depth-1 apply" ng-click="nextStep()">Apply</button>
 			</div>
 		</div>
-		<div ng-show="showExplaination">
-			-% Not enough historical data to measure the forecasting method.
-		</div>
-		<div>
-			<button class="btn btn-primary material-btn material-depth-1 apply" ng-click="nextStep()">Apply</button>
+		<div ng-if="!showSelection" class="text-center">
+			<svg class="spinner" width="65px" height="65px" viewBox="0 0 66 66" xmlns="http://www.w3.org/2000/svg">
+				<circle class="path" fill="none" stroke-width="6" stroke-linecap="round" cx="33" cy="33" r="30"></circle>
+			</svg>
 		</div>
 	</div>
 	<div class="clearfix"></div>

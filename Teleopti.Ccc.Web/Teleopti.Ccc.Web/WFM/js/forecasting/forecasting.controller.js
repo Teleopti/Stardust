@@ -17,6 +17,7 @@ angular.module('wfm.forecasting', [])
 	.controller('ForecastingTargetCtrl', [
 		'$scope', '$stateParams', '$state', 'Forecasting',
 		function ($scope, $stateParams, $state, Forecasting) {
+			$scope.showSelection = false;
 			$scope.skillsDisplayed = [];
 			$scope.all = { Name: 'All', Selected: false };
 
@@ -106,6 +107,7 @@ angular.module('wfm.forecasting', [])
 					$scope.all.Accuracy = (sum / (workloadAccuracies.length - numberOfWorkloadsToSkip)).toFixed(1) + '%';
 				}
 				$scope.showExplaination = (numberOfWorkloadsToSkip !== 0);
+				$scope.showSelection = true;
 			});
 
 			$scope.targets = function () {
