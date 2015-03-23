@@ -22,7 +22,7 @@ namespace Teleopti.Ccc.Win.Sikuli.Validators.RootValidators
 		{
 			const double periodStandardDeviationLimit = 0.05d;
 			AtomicValidators.Add(new PeriodStandardDeviationValidator(_schedulerState, _totalSkill, periodStandardDeviationLimit));
-			AtomicValidators.Add(new DurationValidator(TimeSpan.FromMinutes(1).Add(TimeSpan.FromSeconds(25)), duration));
+			AtomicValidators.Add(new DurationValidator(TimeSpan.FromMinutes(1).Add(TimeSpan.FromSeconds(20)), duration));
 			return ValidateAtomicValidators(AtomicValidators);
 		}
 	}

@@ -5,12 +5,12 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Win.Sikuli.Validators.RootValidators
 {
-	internal class OptimizeAllOptionsOffIntradayBalanceBeforeValidator : IRootValidator
+	internal class OptimizeIntervalBalanceBeforeValidator : IRootValidator
 	{
 		private readonly ISchedulerStateHolder _schedulerState;
 		private readonly IAggregateSkill _totalSkill;
 
-		public OptimizeAllOptionsOffIntradayBalanceBeforeValidator(ISchedulerStateHolder schedulerState, IAggregateSkill totalSkill)
+		public OptimizeIntervalBalanceBeforeValidator(ISchedulerStateHolder schedulerState, IAggregateSkill totalSkill)
 		{
 			_schedulerState = schedulerState;
 			_totalSkill = totalSkill;
