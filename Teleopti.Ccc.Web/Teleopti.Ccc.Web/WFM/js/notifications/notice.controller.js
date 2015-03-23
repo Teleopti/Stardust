@@ -7,7 +7,7 @@ notice.controller('NoticeCtrl', [
 		//this is just a test code here should be removed once the mock is finalized
 		$scope.dynamicText = "";
 		$scope.triggerCallbacks = function () {
-			growl.warning("<i class='mdi mdi-alert-circle'></i> Warning: Press refresh as the data is updated by another user", {
+			growl.warning("<i class='mdi mdi-alert'></i> Warning: Press refresh as the data was updated by another user.", {
 				onclose: function () {
 					$scope.dynamicText = "Trigger Close!"
 				},
@@ -17,7 +17,7 @@ notice.controller('NoticeCtrl', [
 				ttl: 8000
 			});
 
-			growl.success("<i class='mdi mdi-message-alert'></i> User is updated successfully", {
+			growl.success("<i class='mdi mdi-thumb-up'></i> Success: User is updated successfully.", {
 				onclose: function () {
 					$scope.dynamicText = "Trigger Close!"
 				},
@@ -28,7 +28,7 @@ notice.controller('NoticeCtrl', [
 				disableCountDown: true
 			});
 
-			growl.info("<i class='mdi mdi-information'></i> Info: Update the schedule of the agent", {
+			growl.info("<i class='mdi mdi-information'></i> Info: A user logged out.", {
 				onclose: function () {
 					$scope.dynamicText = "Trigger Close!"
 				},
@@ -38,7 +38,7 @@ notice.controller('NoticeCtrl', [
 				ttl: 5000
 			});
 
-			growl.error("<i class='mdi mdi-alert-octagon'></i> Error: Something exploded so fix it", {
+			growl.error("<i class='mdi mdi-alert-octagon'></i> Error: Something exploded so fix it.", {
 				onclose: function () {
 					$scope.dynamicText = "Trigger Close!"
 				},
