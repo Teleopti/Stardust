@@ -62,7 +62,7 @@ namespace Teleopti.Analytics.Etl.TransformerTest
 			};
 			dayRestriction.SetId(Guid.NewGuid());
 			dayRestriction.AddActivityRestriction(new ActivityRestriction(activity));
-			IPreferenceDay personRestriction = new PreferenceDay(person, new DateOnly(schedulePart.DateOnlyAsPeriod.DateOnly), dayRestriction);
+			IPreferenceDay personRestriction = new PreferenceDay(person, schedulePart.DateOnlyAsPeriod.DateOnly, dayRestriction);
 			personRestriction.SetId(Guid.NewGuid());
 			var restrictions = new List<IPreferenceDay> { personRestriction };
 			//var schedule = (Schedule)schedulePart;
@@ -103,13 +103,13 @@ namespace Teleopti.Analytics.Etl.TransformerTest
 			IPreferenceRestriction dayRestriction = new PreferenceRestriction();
 			dayRestriction.SetId(Guid.NewGuid());
 			dayRestriction.AddActivityRestriction(new ActivityRestriction(activity));
-			IPreferenceDay personRestriction = new PreferenceDay(person, new DateOnly(schedulePart.DateOnlyAsPeriod.DateOnly), dayRestriction);
+			IPreferenceDay personRestriction = new PreferenceDay(person, schedulePart.DateOnlyAsPeriod.DateOnly, dayRestriction);
 			personRestriction.SetId(Guid.NewGuid());
 
 			IPreferenceRestriction dayRestriction2 = new PreferenceRestriction();
 			dayRestriction2.SetId(Guid.NewGuid());
 			dayRestriction2.AddActivityRestriction(new ActivityRestriction(activity));
-			IPreferenceDay personRestriction2 = new PreferenceDay(person, new DateOnly(schedulePart.DateOnlyAsPeriod.DateOnly), dayRestriction2);
+			IPreferenceDay personRestriction2 = new PreferenceDay(person, schedulePart.DateOnlyAsPeriod.DateOnly, dayRestriction2);
 			personRestriction.SetId(Guid.NewGuid());
 
 			var restrictions = new List<IPreferenceDay> { personRestriction, personRestriction2 };
@@ -144,13 +144,13 @@ namespace Teleopti.Analytics.Etl.TransformerTest
 			IPreferenceRestriction dayRestriction = new PreferenceRestriction();
 			dayRestriction.SetId(Guid.NewGuid());
 			dayRestriction.AddActivityRestriction(new ActivityRestriction(activity));
-			IPreferenceDay personRestriction = new PreferenceDay(person, new DateOnly(schedulePart.DateOnlyAsPeriod.DateOnly), dayRestriction);
+			IPreferenceDay personRestriction = new PreferenceDay(person, schedulePart.DateOnlyAsPeriod.DateOnly, dayRestriction);
 			personRestriction.SetId(Guid.NewGuid());
 
 			IPreferenceRestriction dayRestriction2 = new PreferenceRestriction();
 			dayRestriction2.SetId(Guid.NewGuid());
 			dayRestriction2.AddActivityRestriction(new ActivityRestriction(activity));
-			IPreferenceDay personRestriction2 = new PreferenceDay(person2, new DateOnly(schedulePart2.DateOnlyAsPeriod.DateOnly), dayRestriction2);
+			IPreferenceDay personRestriction2 = new PreferenceDay(person2, schedulePart2.DateOnlyAsPeriod.DateOnly, dayRestriction2);
 			personRestriction.SetId(Guid.NewGuid());
 
 			var restrictions = new List<IPreferenceDay> { personRestriction, personRestriction2 };

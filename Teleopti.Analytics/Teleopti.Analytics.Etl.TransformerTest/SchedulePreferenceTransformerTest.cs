@@ -5,7 +5,6 @@ using System.Threading;
 using NUnit.Framework;
 using Teleopti.Analytics.Etl.Interfaces.Transformer;
 using Teleopti.Analytics.Etl.Transformer;
-using Teleopti.Analytics.Etl.TransformerInfrastructure;
 using Teleopti.Analytics.Etl.TransformerInfrastructure.DataTableDefinition;
 using Teleopti.Analytics.Etl.TransformerTest.FakeData;
 using Teleopti.Ccc.Domain.Scheduling;
@@ -57,7 +56,7 @@ namespace Teleopti.Analytics.Etl.TransformerTest
             };
             dayRestriction.SetId(Guid.NewGuid());
             dayRestriction.AddActivityRestriction(new ActivityRestriction(activity));
-            IPreferenceDay personRestriction = new PreferenceDay(person, new DateOnly(schedulePart.DateOnlyAsPeriod.DateOnly), dayRestriction);
+            IPreferenceDay personRestriction = new PreferenceDay(person, schedulePart.DateOnlyAsPeriod.DateOnly, dayRestriction);
             personRestriction.SetId(Guid.NewGuid());
             Schedule schedule = (Schedule)schedulePart;
             //schedule.Add(assignment);
