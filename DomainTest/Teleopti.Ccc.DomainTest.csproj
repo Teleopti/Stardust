@@ -293,6 +293,7 @@
     <Compile Include="ApplicationLayer\FakeWriteSideRepository.cs" />
     <Compile Include="Auditing\AuditSettingTest.cs" />
     <Compile Include="Auditing\RevisionTest.cs" />
+    <Compile Include="Backlog\BacklogSkillTest.cs" />
     <Compile Include="Budgeting\BudgetCalculatorTest.cs" />
     <Compile Include="Budgeting\BudgetDayCalculationsTest.cs" />
     <Compile Include="Budgeting\BudgetDayTest.cs" />

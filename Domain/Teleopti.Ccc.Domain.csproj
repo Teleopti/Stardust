@@ -387,6 +387,10 @@
     <Compile Include="Auditing\LoginAttemptModel.cs" />
     <Compile Include="Auditing\Revision.cs" />
     <Compile Include="Auditing\ScheduleAuditingReportData.cs" />
+    <Compile Include="Backlog\BacklogSkill.cs" />
+    <Compile Include="Backlog\BackLogSkillLoader.cs" />
+    <Compile Include="Backlog\IncomingTask.cs" />
+    <Compile Include="Backlog\TaskDay.cs" />
     <Compile Include="Budgeting\AllowanceCalculator.cs" />
     <Compile Include="Budgeting\BudgetCalculator.cs" />
     <Compile Include="Budgeting\BudgetDay.cs" />
