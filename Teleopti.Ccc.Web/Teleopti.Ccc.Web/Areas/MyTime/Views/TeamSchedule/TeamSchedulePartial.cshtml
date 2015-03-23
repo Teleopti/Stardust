@@ -192,11 +192,17 @@
 					<!--/ko-->
 					<!-- ko if: isTeamScheduleSorttingFeatureEnabled-->
 					<div class="col-sm-5 col-md-6 col-lg-2">
-						<div class="input-right-inner-addon name-search schedule-filter-component">
-							<span class="glyphicon glyphicon-search" aria-hidden="true" data-bind="visible: !isLocked()"></span>
-							<span class="glyphicon glyphicon-refresh glyphicon-refresh-animate" data-bind="visible: isLocked()"></span>
-							<input type="search" class="form-control" placeholder='@Resources.SearchHintForName' data-bind="value: searchNameText, disable: isLocked(), valueUpdate: 'keyup', event: { change: changeInSearchBoxSuppressed,   keyup: typeInSearchBox } "/>
-						</div>
+						<div class="input-group name-search schedule-filter-component">
+							<input type="search" class="form-control" placeholder='@Resources.SearchHintForName' data-bind="value: searchNameText, disable: isLocked(), event: { change: changeInSearchBox} " />
+							<span class="input-group-addon input-group-addon-narrow">
+								<!-- ko if: isLocked -->
+								<span class=" glyphicon glyphicon-refresh glyphicon-refresh-animate"></span>
+								<!-- /ko -->
+								<!-- ko ifnot: isLocked -->
+								<span class="glyphicon  glyphicon-search clickable" data-bind="click: changeInSearchBox"></span>
+								<!-- /ko -->
+							</span>
+						</div>						
 					</div>
 					<!--/ko-->
 				</div>

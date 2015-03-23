@@ -587,40 +587,13 @@ Teleopti.MyTimeWeb.TeamScheduleFilterMixin = function () {
 		return (self.filteredEndTimesText().length != 0 || self.isDayoffFiltered() == true || (self.timeSortOrder() == 'end asc') || (self.timeSortOrder() == 'end desc'));
 	});
 
-	
-	var currentTimer = null;
-	var resetTimer = function () {
-		if (currentTimer !== null) {
-			clearTimeout(currentTimer);
-			currentTimer = null;
-		}
-	};
-
-	// used to support script-triggered change, e.g. web scenario test
-	self.suppressChangeInSearchBox = false;
-	self.changeInSearchBoxSuppressed = function (data, event) {
-		if (self.suppressChangeInSearchBox) return;
-		else {
-			self.changeInSearchBox($(event.target));
-		}
-	};
-	// -------------------------------------------
-
-	self.changeInSearchBox = function ($target) {
-		resetTimer();	
-		self.refocusToNameSearch.callable = function () { $target.focus(); };
-		if (changeHandler != null && !changeHandlerSuspended) {		
-			changeHandler(function () { self.suppressChangeInSearchBox = false; });
-		}
-	};
-
-	self.typeInSearchBox = function (data, event) {		
+	self.changeInSearchBox = function (data, event) {		
 		var $target = $(event.target);
-		resetTimer();
-		self.suppressChangeInSearchBox = true;
-		currentTimer = setTimeout(function () { self.changeInSearchBox($target); }, 500);
+		self.refocusToNameSearch.callable = function () { $target.focus(); };
+		if (changeHandler != null && !changeHandlerSuspended) {
+			changeHandler();
+		}
 	};
-
 
 };
 

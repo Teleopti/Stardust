@@ -238,3 +238,10 @@
 .shift-trade-agent-name + .tooltip {
 	white-space: pre-wrap;
 }
+.input-group-addon-narrow {
+	padding-left: 7px;
+	padding-right: 7px;
+}
+.clickable {
+	cursor: pointer;
+}

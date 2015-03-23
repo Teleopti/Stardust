@@ -53,6 +53,6 @@ BEGIN
 		AND @scheduleDate BETWEEN gr.StartDate and isnull(gr.EndDate,'2059-12-31') 
 		AND (gr.LeavingDate >= @scheduleDate OR gr.LeavingDate IS NULL)
 		AND p.WorkflowControlSet IS NOT NULL		
-		AND ((@namesearch is null or @namesearch = '') or ((p.LastName + p.FirstName) like @namesearch) or ((p.FirstName + p.LastName) like @namesearch))
+		AND ((@namesearch is null or @namesearch = '') or ((p.LastName + p.FirstName) like @namesearch) or ((p.FirstName + p.LastName) like @namesearch) or ((p.FirstName + ' ' + p.LastName) like @namesearch) or ((p.FirstName + ' ' + p.LastName) like @namesearch))
 				 
 END

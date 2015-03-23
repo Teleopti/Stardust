@@ -50,7 +50,6 @@ Teleopti.MyTimeWeb.Request.ShiftTradeViewModel = function(ajax) {
 	self.filteredEndTimesText = ko.observableArray();
 	self.isDayoffFiltered = ko.observable(false);
 	self.searchNameText = ko.observable();
-	self.currentTimer = null;
 	self.refocusToNameSearch = null;
 
 	self.isDetailVisible = ko.computed(function() {
@@ -60,35 +59,12 @@ Teleopti.MyTimeWeb.Request.ShiftTradeViewModel = function(ajax) {
 		return true;
 	});
 
-	self.resetTimer = function () {
-		if (self.currentTimer !== null) {
-			clearTimeout(self.currentTimer);
-			self.currentTimer = null;
-		}
-	};
-
-	// used to support script-triggered change, e.g. web scenario test
-	self.suppressChangeInSearchBox = false;
-	self.changeInSearchBoxSuppressed = function (data, event) {
-		if (self.suppressChangeInSearchBox) return;
-		else {
-			self.changeInSearchBox($(event.target));
-		}
-	};
-	// -------------------------------------------
-
-	self.changeInSearchBox = function ($target) {
-		self.resetTimer();
-		self.refocusToNameSearch = function() { $target.focus(); };
-		self.loadSchedule(self.getDateWithFormat(), self.selectedTeam());		
-	};
-
-	self.typeInSearchBox = function (data, event) {
+	self.changeInSearchBox = function (data, event) {
 		var $target = $(event.target);
-		self.resetTimer();
-		self.suppressChangeInSearchBox = true;
-		self.currentTimer = setTimeout(function() { self.changeInSearchBox($target); }, 500);
+		self.refocusToNameSearch = function () { $target.focus(); };
+		self.loadSchedule(self.getDateWithFormat(), self.selectedTeam());
 	};
+
 
 	self.subject = ko.observable();
 	self.message = ko.observable();
