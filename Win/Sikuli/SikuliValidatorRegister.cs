@@ -39,5 +39,10 @@
 		public const string ScheduleTeamSameEndTime = "ScheduleTeamSameEndTime";
 		public const string OptimizeTeamSameEndTime = "OptimizeTeamSameEndTime";
 		public const string ScheduleBlockTeamSameShiftCategory = "ScheduleBlockTeamSameShiftCategory";
+		public const string OptimizeBlockTeamSameShiftCategoryDaysOff = "OptimizeBlockTeamSameShiftCategoryDaysOff";
+		public const string OptimizeBlockTeamSameShiftCategoryBetweenDays = "OptimizeBlockTeamSameShiftCategoryBetweenDays";
+		public const string OptimizeBlockTeamSameShiftCategoryWithinDays = "OptimizeBlockTeamSameShiftCategoryWithinDays";
+		public const string ScheduleBlockTeamSameStartTime = "ScheduleBlockTeamSameStartTime";
+		public const string OptimizeBlockTeamSameStartTime = "OptimizeBlockTeamSameStartTime";
 	}
 }
