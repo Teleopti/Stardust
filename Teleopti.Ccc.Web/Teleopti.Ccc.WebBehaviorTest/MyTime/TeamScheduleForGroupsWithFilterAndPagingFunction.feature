@@ -106,7 +106,8 @@ Scenario: Sort late shifts after early shifts
 	When I view group schedule for '2013-03-25'
 	And The schedules have been populated
 	And I select 'Kontrakt/A contract' in the team picker
-	Then I should see 'John Smith' before myself
+	Then I should see my schedule in team schedule 
+	And I should see 'John Smith' before myself
 
 @ignore
 Scenario: Default to my team
