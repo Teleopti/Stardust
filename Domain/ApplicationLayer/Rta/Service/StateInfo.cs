@@ -25,6 +25,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 		public bool WasScheduled { get { return _previousState.Value.ActivityId != null; } }
 
 		public ScheduleLayer CurrentActivity { get { return _scheduleInfo.CurrentActivity(); } }
+		public ScheduleLayer PreviousActivity { get { return _scheduleInfo.PreviousActivity(); } }
 		public ScheduleLayer NextActivityInShift { get { return _scheduleInfo.NextActivityInShift(); } }
 		public DateTime CurrentShiftStartTime { get { return _scheduleInfo.CurrentShiftStartTime; } }
 		public DateTime CurrentShiftEndTime { get { return _scheduleInfo.CurrentShiftEndTime; } }

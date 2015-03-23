@@ -33,7 +33,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 
 		private void publishShiftEndEvent(StateInfo info)
 		{
-			if (!info.IsScheduled && info.WasScheduled)
+			if (!info.IsScheduled && info.WasScheduled && info.PreviousActivity != null)
 			{
 				_eventPublisher.Publish(info, new PersonShiftEndEvent
 				{

@@ -214,7 +214,28 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 			@event.ShiftEndTime.Should().Be("2014-10-20 11:00".Utc());
 		}
 
+		[Test]
+		public void ShouldNotPublishIfScheduleIsDeleted()
+		{
+			var personId = Guid.NewGuid();
+			var activityId = Guid.NewGuid();
+			var businessUnitId = Guid.NewGuid();
+			database
+				.WithUser("usercode", personId, businessUnitId)
+				.WithSchedule(personId, activityId, "2014-10-19 10:00", "2014-10-19 11:00")
+				.WithAlarm("phone", activityId);
+			now.Is("2014-10-19 10:00");
+			target.SaveState(new ExternalUserStateForTest
+			{
+				UserCode = "usercode",
+				StateCode = "phone"
+			});
+			now.Is("2014-10-19 11:00");
+			database.ClearSchedule(personId);
+			target.CheckForActivityChange(personId, businessUnitId);
 
+			publisher.PublishedEvents.OfType<PersonShiftEndEvent>().Should().Have.Count.EqualTo(0);
+		}
 	}
 
 }
