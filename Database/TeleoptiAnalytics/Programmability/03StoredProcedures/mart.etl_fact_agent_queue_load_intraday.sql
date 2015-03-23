@@ -1,14 +1,13 @@
 IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[mart].[etl_fact_agent_queue_load_intraday]') AND type in (N'P', N'PC'))
 DROP PROCEDURE [mart].[etl_fact_agent_queue_load_intraday]
 GO
---set statistics io off
---dbcc dropcleanbuffers
+
 -- =============================================
 -- Author:		Karin
 -- Create date: 2014-10-24
 -- Description:	Loads fact_agent_queue from agent_logg in the intraday job.
 -- =============================================
---EXEC [mart].[etl_fact_agent_queue_load_intraday] @start_date='2014-10-01',@end_date='2014-10-10',@datasource_id=-2
+--EXEC mart.etl_fact_agent_queue_load_intraday @datasource_id=-2
 CREATE PROCEDURE [mart].[etl_fact_agent_queue_load_intraday] 
 @datasource_id int,
 @is_delayed_job bit = 0
@@ -165,6 +164,27 @@ BEGIN  --Single datasource_id
 		AND b.time_zone_id=@time_zone_id
 		AND b.local_interval_id=@target_interval_local
 	WHERE d.date_date=@target_date_local
+	
+	--if missing intervals in bridge_time_zone, probably DST hour
+	IF @target_date_id_utc IS NULL OR @target_interval_id_utc IS NULL
+	BEGIN
+		--try and go back some more
+		SELECT
+		@target_date_local		= date_from,
+		@target_interval_local	= interval_id
+		FROM [mart].[SubtractInterval](dateadd(dd,-1,@target_date_local),@target_interval_local,@intervals_back)
+		
+		--and try set again
+		SELECT
+		@target_date_id_utc = b.date_id,
+		@target_interval_id_utc = b.interval_id
+		FROM  mart.dim_date d
+		INNER JOIN mart.bridge_time_zone b
+			ON d.date_id = b.local_date_id
+			AND b.time_zone_id=@time_zone_id
+			AND b.local_interval_id=@target_interval_local
+		WHERE d.date_date=@target_date_local
+	END
 
 	--If Mart is ahead of Agg, bail out
 	IF (@target_date_id_utc-@source_date_id_utc>0

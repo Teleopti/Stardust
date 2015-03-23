@@ -87,6 +87,7 @@ BEGIN
 			DELETE FROM mart.dim_date
 			DELETE FROM mart.dim_interval
 			DELETE FROM mart.sys_datasource WHERE datasource_id > 1
+			DELETE FROM mart.etl_job_intraday_settings
 			TRUNCATE TABLE Queue.Messages
 		END
 END
