@@ -29,7 +29,7 @@ module.exports = function(config) {
 	  'vendor/angular-material/angular-material.min.js',
 	  
 	  'js/ABmetrics.min.js',
-	  'dist/main.js',
+	  'dist/main.min.js',
       'tests/**/*.js',
       'tests/*.js'
     ],

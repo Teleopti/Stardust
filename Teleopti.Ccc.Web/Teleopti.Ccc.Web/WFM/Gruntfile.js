@@ -5,21 +5,10 @@
 		watch: {
 			dev: {
 				files: ['css/*.css', 'js/**/*.js'],
-				tasks: ['concat'],
+				tasks: ['uglify'],
 				options: {
 					spawn: false,
 				}
-			}
-		},
-
-		concat: {
-			options: {
-				sourceMap: true,
-				separator: '\r\n'
-			},
-			dist: {
-				src: ['js/**/*.js'],
-				dest: 'dist/main.js'
 			}
 		},
 
@@ -29,7 +18,7 @@
 			},
 			dist: {
 				files: {
-					'dist/main.min.js': ['<%= concat.dist.dest %>']
+					'dist/main.min.js': ['js/**/*.js']
 				}
 			}
 		},
@@ -43,11 +32,10 @@
 	});
 
 	grunt.loadNpmTasks('grunt-contrib-watch');
-	grunt.loadNpmTasks('grunt-contrib-concat');
 	grunt.loadNpmTasks('grunt-contrib-uglify');
 	grunt.loadNpmTasks('grunt-http-download');
 
 	// Default task(s).
 	grunt.registerTask('default', ['watch:dev']); // this task watchs
-	grunt.registerTask('dist', ['concat', 'uglify', 'download']); // this task is kind of package
+	grunt.registerTask('dist', ['uglify', 'download']); // this task is kind of package
 };
