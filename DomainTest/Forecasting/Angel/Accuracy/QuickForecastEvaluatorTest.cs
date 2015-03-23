@@ -23,7 +23,6 @@ namespace Teleopti.Ccc.DomainTest.Forecasting.Angel.Accuracy
 
 			var quickForecastSkillEvaluator = MockRepository.GenerateMock<IQuickForecastSkillEvaluator>();
 
-			var futurePeriod = new DateOnlyPeriod();
 			var now = new Now();
 			var nowDate = now.LocalDateOnly();
 			var historicalPeriod = new DateOnlyPeriod(new DateOnly(nowDate.Date.AddYears(-2)), nowDate);
