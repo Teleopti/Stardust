@@ -24,6 +24,7 @@ module.exports = function(config) {
 	  'vendor/angular-ui-tree/angular-ui-tree.min.js',
 	  'vendor/angular-aria/angular-aria.min.js',
 	  'vendor/angular-animate/angular-animate.min.js',
+	  'vendor/angular-growl.js',
 	  'vendor/hammerjs/hammer.min.js',
 	  'vendor/angular-material/angular-material.min.js',
 	  

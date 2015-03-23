@@ -45,3 +45,42 @@ label {
 	z-index: 99999;
 	right: 16%;
 }
+
+
+
+/*
+ * growl-item styles
+ */
+.growl-container > .growl-item {
+  padding: 10px;
+  padding-right: 35px;
+  margin-bottom: 10px;
+  cursor: pointer;
+	vertical-align: middle;
+}
+
+.growl-container > button {
+  border: none;
+  outline:none;
+}
+.growl-container > .growl-item.ng-enter,
+.growl-container > .growl-item.ng-leave {
+  -webkit-transition:0.5s linear all;
+  -moz-transition:0.5s linear all;
+  -o-transition:0.5s linear all;
+  transition:0.5s linear all;
+}
+
+.growl-container > .growl-item.ng-enter,
+.growl-container > .growl-item.ng-leave.ng-leave-active {
+  opacity:0;
+}
+.growl-container > .growl-item.ng-leave,
+.growl-container > .growl-item.ng-enter.ng-enter-active {
+  opacity:1;
+}
+
+.growl-container > div.growl-item {
+  background-position: 12px center;
+  background-repeat: no-repeat;
+}
