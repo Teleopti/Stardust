@@ -22,7 +22,7 @@ angular.module('wfm.forecasting', [])
 
 			$scope.toggleAll = function (selected) {
 				$scope.all.Selected = !selected;
-				angular.forEach($scope.skillsDisplayed, function(skill) {
+				angular.forEach($scope.skillsDisplayed, function (skill) {
 					skill.Selected = !selected;
 					angular.forEach(skill.Workloads, function (workload) {
 						workload.Selected = !selected;
@@ -31,26 +31,41 @@ angular.module('wfm.forecasting', [])
 			};
 
 			$scope.toggleSkill = function (skill) {
-				if (skill.Selected) {
-					skill.Selected = false;
-					angular.forEach(skill.Workloads, function(workload) {
-						workload.Selected = false;
-					});
-				} else {
-					skill.Selected = true;
-					angular.forEach(skill.Workloads, function (workload) {
-						workload.Selected = true;
-					});
-				}
+				var isSelected = skill.Selected;
+				skill.Selected = !isSelected;
+				angular.forEach(skill.Workloads, function (workload) {
+					workload.Selected = !isSelected;
+				});
 			};
 
 			$scope.toggleWorkload = function (workload) {
-				if (workload.Selected) {
-					workload.Selected = false;
-				} else {
-					workload.Selected = true;
-				}
+				var isSelected = workload.Selected;
+				workload.Selected = !isSelected;
 			};
+
+			$scope.$watch('skillsDisplayed', function () {
+				var allSet = true;
+				angular.forEach($scope.skillsDisplayed, function (skill) {
+					var allSetForSkill = true;
+					angular.forEach(skill.Workloads, function (workload) {
+						if (!workload.Selected) {
+							allSetForSkill = false;
+							allSet = false;
+						}
+					});
+					if (allSetForSkill) {
+						skill.Selected = true;
+					} else {
+						skill.Selected = false;
+					}
+				});
+
+				if (allSet) {
+					$scope.all.Selected = true;
+				} else {
+					$scope.all.Selected = false;
+				}
+			}, true);
 
 			Forecasting.skills.query().$promise.then(function (result) {
 				$scope.skillsDisplayed = result;
