@@ -14,8 +14,4 @@
 		<property name="ApplicationLogonName"/>
 		<property name="Password"/>
 	</class>
-
-	<query name="findTenantByName">
-		select t from Tenant t where t.Name=:name
-	</query>
 </hibernate-mapping>
