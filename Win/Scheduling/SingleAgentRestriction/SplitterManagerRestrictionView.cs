@@ -70,7 +70,7 @@ namespace Teleopti.Ccc.Win.Scheduling.SingleAgentRestriction
             if (!_showEditor)
             {
                 GridEditorSplitter.Panel2Collapsed = true;
-                GridEditorSplitter.SplitterWidth = 1;
+                GridEditorSplitter.SplitterWidth = 3;
                 GridEditorSplitter.Style = Style.None;
             }
             if (_showEditor)
@@ -138,7 +138,7 @@ namespace Teleopti.Ccc.Win.Scheduling.SingleAgentRestriction
             if (!_showRestrictionView)
             {
                 RestrictionViewSplitter.Panel1Collapsed = true;
-                RestrictionViewSplitter.SplitterWidth = 1;
+                RestrictionViewSplitter.SplitterWidth = 3;
                 RestrictionViewSplitter.Style = Style.None;
             }
             if (_showRestrictionView)
