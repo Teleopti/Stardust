@@ -47,8 +47,6 @@ namespace Teleopti.Ccc.Win.Grouping
 
 			if (_config.Toggle(Toggles.MultiTenancy_People_32113))
 			{
-				var tenantServer = _config.Args().TenantServer;
-				builder.Register(c => new TenantServerConfiguration(tenantServer)).As<ITenantServerConfiguration>().SingleInstance();
 				builder.RegisterType<TenantDataManager>().As<ITenantDataManager>().SingleInstance();
 			}
 			else
