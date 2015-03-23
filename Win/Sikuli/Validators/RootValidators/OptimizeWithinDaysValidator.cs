@@ -6,12 +6,12 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Win.Sikuli.Validators.RootValidators
 {
-	internal class OptimizeAllOptionsOffShiftsWithinDayValidator : RootValidator
+	internal class OptimizeWithinDaysValidator : RootValidator
 	{
 		private readonly ISchedulerStateHolder _schedulerState;
 		private readonly IAggregateSkill _totalSkill;
 
-		public OptimizeAllOptionsOffShiftsWithinDayValidator(ISchedulerStateHolder schedulerState, IAggregateSkill totalSkill)
+		public OptimizeWithinDaysValidator(ISchedulerStateHolder schedulerState, IAggregateSkill totalSkill)
 		{
 			_schedulerState = schedulerState;
 			_totalSkill = totalSkill;

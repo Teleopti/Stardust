@@ -20,7 +20,7 @@ namespace Teleopti.Ccc.Win.Sikuli.Validators.RootValidators
 		public override SikuliValidationResult Validate(ITestDuration duration)
 		{
 			AtomicValidators.Add(new SchedulerHoursWeeklyPatternValidator(_schedulerState, _totalSkill));
-			AtomicValidators.Add(new DurationValidator(TimeSpan.FromMinutes(2).Add(TimeSpan.FromSeconds(25)), duration));
+			AtomicValidators.Add(new DurationValidator(TimeSpan.FromMinutes(2).Add(TimeSpan.FromSeconds(55)), duration));
 			return ValidateAtomicValidators(AtomicValidators);
 		}
 	}
