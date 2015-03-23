@@ -33,7 +33,7 @@ wfm.config([
     	templateUrl: 'html/forecasting/forecasting-target.html',
     	controller: 'ForecastingTargetCtrl'
 		}).state('forecasting.run', {
-        params:{period: {}, targets: {} },
+        params:{ period: {}, targets: {} },
 			templateUrl: 'html/forecasting/forecasting-run.html',
 			controller: 'ForecastingRunCtrl'
 		}).state('permissions', {

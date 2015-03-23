@@ -20,6 +20,7 @@ namespace Teleopti.Ccc.DomainTest.Forecasting.Angel.QuickForecastSkillWithOneWor
 			workload.Skill.TimeZone = localTimeZone;
 			workload.Skill.MidnightBreakOffset = TimeSpan.FromHours(2);
 			workload.TemplateWeekCollection.ForEach(x => x.Value.MakeOpen24Hours());
+			workload.SetId(Guid.NewGuid());
 			_workload = workload;
 		}
 

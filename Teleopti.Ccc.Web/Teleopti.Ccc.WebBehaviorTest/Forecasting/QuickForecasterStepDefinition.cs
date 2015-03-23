@@ -82,8 +82,8 @@ namespace Teleopti.Ccc.WebBehaviorTest.Forecasting
 				{
 					var skillDay = allSkillDays.SingleOrDefault(x => x.CurrentDate == dateOnly);
 					skillDay.Should().Not.Be.Null();
-					skillDay.WorkloadDayCollection.SingleOrDefault(x => x.Workload.Id == workloadId)
-						.Should().Not.Be.Null();
+					skillDay.WorkloadDayCollection.SingleOrDefault(x => x.Workload.Id == workloadId).TaskPeriodList.Single().Task.Tasks
+						.Should().Not.Be.EqualTo(0);
 				}
 			});
 		}
@@ -101,8 +101,8 @@ namespace Teleopti.Ccc.WebBehaviorTest.Forecasting
 				{
 					var skillDay = allSkillDays.SingleOrDefault(x => x.CurrentDate == dateOnly);
 					skillDay.Should().Not.Be.Null();
-					skillDay.WorkloadDayCollection.SingleOrDefault(x => x.Workload.Id == workloadId)
-						.Should().Be.Null();
+					skillDay.WorkloadDayCollection.SingleOrDefault(x => x.Workload.Id == workloadId).TaskPeriodList.Single().Task.Tasks
+						.Should().Be.EqualTo(0);
 				}
 			});
 		}
@@ -137,8 +137,14 @@ namespace Teleopti.Ccc.WebBehaviorTest.Forecasting
 			Browser.Interactions.AssertFirstContainsUsingJQuery(".total-accuracy", "%");
 		}
 
-		[Then(@"I should see the forecasting accuracy for '(.*)'")]
-		public void ThenIShouldSeeTheForecastingAccuracyFor(string workload)
+		[Then(@"I should see the forecasting accuracy for skill '(.*)'")]
+		public void ThenIShouldSeeTheForecastingAccuracyForSkill(string skill)
+		{
+			Browser.Interactions.AssertFirstContainsUsingJQuery(".skill:contains(" + skill + ") .skill-accuracy", "%");
+		}
+
+		[Then(@"I should see the forecasting accuracy for workload '(.*)'")]
+		public void ThenIShouldSeeTheForecastingAccuracyForWorkload(string workload)
 		{
 			Browser.Interactions.AssertFirstContainsUsingJQuery(".workload:contains(" + workload + ") .workload-accuracy", "%");
 		}

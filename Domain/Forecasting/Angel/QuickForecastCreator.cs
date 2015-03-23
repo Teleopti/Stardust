@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Linq;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Domain.Repositories;
@@ -24,12 +23,7 @@ namespace Teleopti.Ccc.Domain.Forecasting.Angel
 		{
 			var historicalPeriod = getHistoricalPeriod();
 			var skills = _skillRepository.FindSkillsWithAtLeastOneQueueSource();
-			var workloads = workloadIds.Select(workloadId => (
-				from skill in skills 
-				from workload in skill.WorkloadCollection 
-				where workloadId == workload.Id 
-				select workload).Single());
-			workloads.ForEach(x => _quickForecaster.ForecastForWorkload(x, futurePeriod, historicalPeriod));
+			skills.ForEach(skill => _quickForecaster.ForecastWorkloadsWithinSkill(skill, workloadIds, futurePeriod, historicalPeriod));
 		}
 
 		private DateOnlyPeriod getHistoricalPeriod()

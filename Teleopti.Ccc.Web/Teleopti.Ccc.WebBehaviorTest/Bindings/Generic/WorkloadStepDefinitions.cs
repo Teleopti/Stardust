@@ -19,7 +19,8 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
 			{
 				WorkloadName = workloadName,
 				SkillName = skill,
-				QueueSourceName = queueSource
+				QueueSourceName = queueSource,
+				Open24Hours = true
 			});
 		}
 

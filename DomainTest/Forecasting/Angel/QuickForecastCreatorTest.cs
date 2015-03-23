@@ -32,8 +32,8 @@ namespace Teleopti.Ccc.DomainTest.Forecasting.Angel
 
 			var target = new QuickForecastCreator(quickForecaster, skillRepository, now);
 			target.CreateForecastForWorkloads( futurePeriod,new[] { id1 , id2});
-			quickForecaster.AssertWasCalled(x => x.ForecastForWorkload(workload1, futurePeriod, historicalPeriod));
-			quickForecaster.AssertWasCalled(x => x.ForecastForWorkload(workload2, futurePeriod, historicalPeriod));
+			quickForecaster.AssertWasCalled(x => x.ForecastWorkloadsWithinSkill(skill1, new[] { id1, id2 }, futurePeriod, historicalPeriod));
+			quickForecaster.AssertWasCalled(x => x.ForecastWorkloadsWithinSkill(skill2, new[] { id1, id2 }, futurePeriod, historicalPeriod));
 		}
 	}
 }

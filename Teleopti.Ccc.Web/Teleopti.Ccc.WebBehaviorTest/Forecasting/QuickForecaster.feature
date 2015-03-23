@@ -53,7 +53,7 @@ Scenario: Show message if no historical data for measurement
 	And Quickforecast has succeeded
 	Then I should see a message of no historical data for measurement
 
-Scenario: Show accuracy for workload
+Scenario: Show accuracy
 	Given I have a role with
 	| Field           | Value      |
 	| QuickForecaster | True       |
@@ -64,9 +64,26 @@ Scenario: Show accuracy for workload
 	When I am viewing quick forecast page
 	And I use default forecast period and continue
 	Then I should see the total forecasting accuracy
-	And I should see the forecasting accuracy for 'TheWorkload1'
+	And I should see the forecasting accuracy for skill 'TheSkill1'
+	And I should see the forecasting accuracy for workload 'TheWorkload1'
 
-@Ignore
+Scenario: Forecast one skill
+	Given I have a role with
+	| Field           | Value      |
+	| QuickForecaster | True       |
+	And there is an activity named 'TheActivity1'
+	And there is a skill named 'TheSkill1' with activity 'TheActivity1'
+	And there is queue statistics for 'Queue1'
+	And there is a Workload 'TheWorkload1' with Skill 'TheSkill1' and queuesource 'Queue1'
+	And there is a Workload 'TheWorkload2' with Skill 'TheSkill1' and queuesource 'Queue1'
+	And there is no forecast data
+	When I am viewing quick forecast page
+	And I use default forecast period and continue
+	And I select skill 'TheSkill1'
+	And I choose to forecast the selected targets
+	Then there is forecast data for default period for 'TheWorkload1'
+	And there is forecast data for default period for 'TheWorkload2'
+
 Scenario: Forecast one workload
 	Given I have a role with
 	| Field           | Value      |

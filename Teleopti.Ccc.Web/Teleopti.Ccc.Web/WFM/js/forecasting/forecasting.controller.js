@@ -24,6 +24,20 @@ angular.module('wfm.forecasting', [])
 				
 			};
 
+			$scope.toggleSkill = function (skill) {
+				if (skill.Selected) {
+					skill.Selected = false;
+					angular.forEach(skill.Workloads, function(workload) {
+						workload.Selected = false;
+					});
+				} else {
+					skill.Selected = true;
+					angular.forEach(skill.Workloads, function (workload) {
+						workload.Selected = true;
+					});
+				}
+			};
+
 			$scope.toggleWorkload = function (workload) {
 				if (workload.Selected) {
 					workload.Selected = false;
@@ -36,20 +50,23 @@ angular.module('wfm.forecasting', [])
 				$scope.skillsDisplayed = result;
 			});
 
-			Forecasting.accuracyResult.query().$promise.then(function (result) {
+			Forecasting.accuracyResult.query().$promise.then(function (workloadAccuracies) {
 				var sum = 0;
-				angular.forEach(result, function (workload) {
-					sum += workload.Accuracy;
-					angular.forEach($scope.skillsDisplayed, function (skill) {
-						angular.forEach(skill.Workloads, function (w) {
+				angular.forEach($scope.skillsDisplayed, function (skill) {
+					var sumForSkill = 0;
+					angular.forEach(skill.Workloads, function (w) {
+						angular.forEach(workloadAccuracies, function (workload) {
 							if (workload.WorkloadId === w.Id) {
 								w.Accuracy = workload.Accuracy + '%';
+								sumForSkill += workload.Accuracy;
+								sum += workload.Accuracy;
 							}
 						});
 					});
+					skill.Accuracy = (sumForSkill / skill.Workloads.length).toFixed(1) + '%';
 				});
-				var accuracyForTotal = sum / result.length;
-				$scope.all.Accuracy = accuracyForTotal + '%';
+
+				$scope.all.Accuracy = (sum / workloadAccuracies.length).toFixed(1) + '%';
 			});
 
 			$scope.targets = function () {

@@ -11,6 +11,7 @@ namespace Teleopti.Ccc.TestCommon.TestData.Setups.Configurable
 		public string SkillName { get; set; }
 		public string QueueSourceName { get; set; }
 		public string WorkloadName { get; set; }
+		public bool Open24Hours { get; set; }
 
 		public void Apply(IUnitOfWork uow)
 		{
@@ -20,6 +21,10 @@ namespace Teleopti.Ccc.TestCommon.TestData.Setups.Configurable
 			{
 				var qs = new QueueSourceRepository(uow).LoadAll().Single(x => x.Name.Equals(QueueSourceName));
 				wl.AddQueueSource(qs);
+			}
+			foreach (var dayTemplate in wl.TemplateWeekCollection)
+			{
+				dayTemplate.Value.MakeOpen24Hours();
 			}
 			new WorkloadRepository(uow).Add(wl);
 		}

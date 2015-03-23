@@ -73,7 +73,7 @@ namespace Teleopti.Ccc.TestCommon.FakeData
 
         public static IList<IWorkloadDay> GetWorkloadDaysForTest(DateTime dt, ISkill skill)
         {
-	        return GetWorkloadDaysForTest(dt, skill, false);
+	        return GetWorkloadDaysForTest(dt, skill, true);
         }
 
         //Creates a list of 2 Workload days 1 with sent in Workload and one with random guid

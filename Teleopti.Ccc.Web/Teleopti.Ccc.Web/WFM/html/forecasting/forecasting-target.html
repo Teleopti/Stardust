@@ -24,8 +24,8 @@
 
 <!-- Skill template -->
 <script type="text/ng-template" id="nodes_skill_renderer.html">
-	<div ui-tree-handle>
-		{{skill.Name}}
+	<div ui-tree-handle ng-class="{selected: skill.Selected}" class="skill" ng-click="toggleSkill(skill)">
+		{{skill.Name}} <span class="pull-right skill-accuracy">{{skill.Accuracy}}</span>
 	</div>
 	<ol ui-tree-nodes="" ng-model="skill.Workloads">
 		<li ng-repeat="workload in skill.Workloads" ui-tree-node value='{{workload.Id}}'>
