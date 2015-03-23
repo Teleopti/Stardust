@@ -6,6 +6,7 @@ using System.Data.SqlClient;
 using System.Diagnostics;
 using System.Globalization;
 using System.Linq;
+using System.Threading;
 using NHibernate.Transform;
 using NHibernate.Util;
 using Teleopti.Analytics.Etl.Interfaces.Transformer;
@@ -1806,7 +1807,22 @@ namespace Teleopti.Analytics.Etl.TransformerInfrastructure
 					break;
 			}
 
-			HelperFunctions.ExecuteNonQueryMaintenance(CommandType.StoredProcedure, "dbo.IndexMaintenance", null, connectionString);
+			var retries = 0;
+			bool sqlError;
+			do
+			{
+				try
+				{
+					sqlError = false;
+					HelperFunctions.ExecuteNonQueryMaintenance(CommandType.StoredProcedure, "dbo.IndexMaintenance", null, connectionString);
+				}
+				catch (SqlException)
+				{
+					sqlError = true;
+					retries++;
+					Thread.Sleep(TimeSpan.FromMinutes(1));
+				}
+			} while (sqlError && retries < 2);
 
 			return 0;
 		}
