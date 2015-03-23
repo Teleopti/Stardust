@@ -18,10 +18,16 @@ angular.module('wfm.forecasting', [])
 		'$scope', '$stateParams', '$state', 'Forecasting',
 		function ($scope, $stateParams, $state, Forecasting) {
 			$scope.skillsDisplayed = [];
-			$scope.all = { Name: 'All' };
+			$scope.all = { Name: 'All', Selected: false };
 
-			$scope.toggleAll = function () {
-				
+			$scope.toggleAll = function (selected) {
+				$scope.all.Selected = !selected;
+				angular.forEach($scope.skillsDisplayed, function(skill) {
+					skill.Selected = !selected;
+					angular.forEach(skill.Workloads, function (workload) {
+						workload.Selected = !selected;
+					});
+				});
 			};
 
 			$scope.toggleSkill = function (skill) {

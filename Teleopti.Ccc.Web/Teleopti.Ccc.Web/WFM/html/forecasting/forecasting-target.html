@@ -5,8 +5,8 @@
 			<div ui-tree data-drag-enabled="false">
 				<ol ui-tree-nodes="" ng-model="all">
 					<li ui-tree-node>
-						<div ui-tree-handle>
-							{{all.Name}} <span class="pull-right total-accuracy">{{all.Accuracy}}</span>
+						<div ui-tree-handle ng-class="{selected: all.Selected}" ng-click="toggleAll(all.Selected)">
+							{{all.Name}} <p class="pull-right total-accuracy">{{all.Accuracy}}</p>
 						</div>
 						<ol ui-tree-nodes="" ng-model="skillsDisplayed">
 							<li ng-repeat="skill in skillsDisplayed" ui-tree-node ng-include="'nodes_skill_renderer.html'" value='{{skill.Id}}'></li>
@@ -25,12 +25,12 @@
 <!-- Skill template -->
 <script type="text/ng-template" id="nodes_skill_renderer.html">
 	<div ui-tree-handle ng-class="{selected: skill.Selected}" class="skill" ng-click="toggleSkill(skill)">
-		{{skill.Name}} <span class="pull-right skill-accuracy">{{skill.Accuracy}}</span>
+		{{skill.Name}} <p class="pull-right skill-accuracy">{{skill.Accuracy}}</p>
 	</div>
 	<ol ui-tree-nodes="" ng-model="skill.Workloads">
 		<li ng-repeat="workload in skill.Workloads" ui-tree-node value='{{workload.Id}}'>
 			<div ui-tree-handle ng-class="{selected: workload.Selected}" class="workload" ng-click="toggleWorkload(workload)">
-				{{workload.Name}} <span class="pull-right workload-accuracy">{{workload.Accuracy}}</span>
+				{{workload.Name}} <p class="pull-right workload-accuracy">{{workload.Accuracy}}</p>
 			</div>
 		</li>
 	</ol>
