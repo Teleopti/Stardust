@@ -2615,13 +2615,10 @@
     <Compile Include="Sikuli\Validators\RootValidators\OptimizeAllOptionsOffIntradayBalanceAfterValidator.cs" />
     <Compile Include="Sikuli\Validators\RootValidators\OptimizeAllOptionsOffShiftsWithinDayValidator.cs" />
     <Compile Include="Sikuli\Validators\RootValidators\OptimizeAllOptionsOffDaysOffValidator.cs" />
-    <Compile Include="Sikuli\Validators\OptimizerValidator.cs" />
     <Compile Include="Sikuli\Validators\RootValidators\DeleteAllValidator.cs" />
-    <Compile Include="Sikuli\Validators\OptimizeBlockTeamValidator.cs" />
     <Compile Include="Sikuli\Validators\RootValidators\OptimizeAllOptionsOffIntradayBalanceBeforeValidator.cs" />
     <Compile Include="Sikuli\Validators\AtomicValidators\DurationValidator.cs" />
     <Compile Include="Sikuli\Validators\RootValidators\ScheduleAllOptionsOffValidator.cs" />
-    <Compile Include="Sikuli\Validators\SchedulerValidator.cs" />
     <Compile Include="Sikuli\Validators\SelftestValidators\SelftestAtomicValidator.cs" />
     <Compile Include="Sikuli\Validators\SelftestValidators\SelftestRootValidator.cs" />
     <Compile Include="Sikuli\Validators\SelftestValidators\SelftestWarnValidator.cs" />
