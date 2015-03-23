@@ -14,6 +14,7 @@
 
 		concat: {
 			options: {
+				sourceMap: true,
 				separator: '\r\n'
 			},
 			dist: {
