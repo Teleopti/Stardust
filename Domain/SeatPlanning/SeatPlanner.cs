@@ -76,17 +76,18 @@ namespace Teleopti.Ccc.Domain.SeatPlanning
 			var date = new DateOnly(shiftPeriod.StartDateTime);
 			var team = person.MyTeam(date);
 
-			var existingBooking = _existingSeatBookings.SingleOrDefault(booking => (booking.StartDateTime.Date == date && booking.Person == person));
+			removeExistingBookingForPersonOnThisDay(person, date);
+
+			addBooking(team, new SeatBooking(person, shiftPeriod.StartDateTime, shiftPeriod.EndDateTime));
+		}
+
+		private void removeExistingBookingForPersonOnThisDay (IPerson person, DateOnly date)
+		{
+			var existingBooking = _existingSeatBookings.SingleOrDefault (booking => (booking.StartDateTime.Date == date && booking.Person == person));
 			if (existingBooking != null)
 			{
-				existingBooking.Seat = null;
-				existingBooking.StartDateTime = shiftPeriod.StartDateTime;
-				existingBooking.EndDateTime = shiftPeriod.EndDateTime;
-				addBooking(team, existingBooking);
-			}
-			else
-			{
-				addBooking(team, new SeatBooking(person, shiftPeriod.StartDateTime, shiftPeriod.EndDateTime));
+				_existingSeatBookings.Remove (existingBooking);
+				_seatBookingRepository.Remove (existingBooking);
 			}
 		}
 
