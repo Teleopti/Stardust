@@ -1203,6 +1203,7 @@
     <Content Include="WFM\Gruntfile.js" />
     <Content Include="WFM\html\forecasting\forecasting-target.html" />
     <Content Include="WFM\html\outbound\outbound.html" />
+    <Content Include="WFM\html\people\people.html" />
     <Content Include="WFM\js\forecasting\forecasting.controller.js" />
     <Content Include="WFM\js\forecasting\forecasting.service.js" />
     <Content Include="WFM\js\notifications\notice.controller.js" />
@@ -1210,6 +1211,7 @@
     <Content Include="WFM\js\notifications\notifications.service.js" />
     <Content Include="WFM\js\outbound\outbound.controller.js" />
     <Content Include="WFM\js\outbound\outbound.service.js" />
+    <Content Include="WFM\js\people\people.controller.js" />
     <Content Include="WFM\js\permissions\permissions.controller.js" />
     <Content Include="WFM\js\permissions\permissions.service.js" />
     <Content Include="WFM\js\search\search.controller.js" />
@@ -2083,7 +2085,7 @@ copy "$(ProjectDir)..\..\Domain\FeatureFlags\toggles.txt" "$(TargetDir)FeatureFl
   <Target Name="BeforeBuild">
     <CallTarget Targets="RestoreNodePackageProtractor;RestoreNodePackages;RunGruntBuild" />
   </Target>
-    <!--<Import Project="..\..\.nuget\Microsoft.Bcl.Build.targets" Condition="Exists('..\..\.nuget\Microsoft.Bcl.Build.targets')" />
+  <!--<Import Project="..\..\.nuget\Microsoft.Bcl.Build.targets" Condition="Exists('..\..\.nuget\Microsoft.Bcl.Build.targets')" />
   <Target Name="EnsureBclBuildImported" BeforeTargets="BeforeBuild" Condition="'$(BclBuildImported)' == ''">
     <Error Condition="!Exists('..\..\.nuget\Microsoft.Bcl.Build.targets')" Text="This project references NuGet package(s) that are missing on this computer. Enable NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=317567." HelpKeyword="BCLBUILD2001" />
     <Error Condition="Exists('..\..\.nuget\Microsoft.Bcl.Build.targets')" Text="The build restored NuGet packages. Build the project again to include these packages in the build. For more information, see http://go.microsoft.com/fwlink/?LinkID=317568." HelpKeyword="BCLBUILD2002" />
