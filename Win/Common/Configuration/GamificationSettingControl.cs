@@ -211,6 +211,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 
 		public void Persist()
 		{
+			if (!gamificationSettingRuleWithDifferentThresholdControl.Value.isValidValue) return;
 			using (var uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
 			{
 				var repo = new GamificationSettingRepository(uow);

@@ -7555,6 +7555,24 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Value of gold threshold for Adhrence should be larger than the rest.
+        /// </summary>
+        public static string DoubleTextBoxGoldThresholdForAdherence {
+            get {
+                return ResourceManager.GetString("DoubleTextBoxGoldThresholdForAdherence", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Value of silver threshold for Adhrence should be larger than bronze threshold for Adherence.
+        /// </summary>
+        public static string DoubleTextBoxSilverThresholdForAdherence {
+            get {
+                return ResourceManager.GetString("DoubleTextBoxSilverThresholdForAdherence", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Down.
         /// </summary>
         public static string Down {
@@ -10243,6 +10261,15 @@ namespace Teleopti.Ccc.UserTexts {
         public static string Go {
             get {
                 return ResourceManager.GetString("Go", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Value of gold threshold for answered calls should be lager than the rest.
+        /// </summary>
+        public static string GoldThresholdForAnsweredCallsValue {
+            get {
+                return ResourceManager.GetString("GoldThresholdForAnsweredCallsValue", resourceCulture);
             }
         }
         
@@ -24107,6 +24134,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Value of silver threshold for answered calls should be lager than bronze threshold for answered calls.
+        /// </summary>
+        public static string SilverThresholdForAnsweredCallsValue {
+            get {
+                return ResourceManager.GetString("SilverThresholdForAnsweredCallsValue", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Single.
         /// </summary>
         public static string Single {
@@ -26247,6 +26283,24 @@ namespace Teleopti.Ccc.UserTexts {
         public static string TimeInState {
             get {
                 return ResourceManager.GetString("TimeInState", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Value of gold threshold For AHT should be smaller than the rest.
+        /// </summary>
+        public static string TimeSpanTextBoxGoldThresholdForAHT {
+            get {
+                return ResourceManager.GetString("TimeSpanTextBoxGoldThresholdForAHT", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Value of silver threshold For AHT should be smaller than bronze threshold for AHT.
+        /// </summary>
+        public static string TimeSpanTextBoxSilverThresholdsForAHT {
+            get {
+                return ResourceManager.GetString("TimeSpanTextBoxSilverThresholdsForAHT", resourceCulture);
             }
         }
         

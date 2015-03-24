@@ -12883,4 +12883,22 @@ Reduce the complexity to use these shifts.</value>
     <value>Remove must have</value>
     <comment>"Remove must have prefererences" Former Veto</comment>
   </data>
+  <data name="DoubleTextBoxGoldThresholdForAdherence" xml:space="preserve">
+    <value>Value of gold threshold for Adhrence should be larger than the rest</value>
+  </data>
+  <data name="DoubleTextBoxSilverThresholdForAdherence" xml:space="preserve">
+    <value>Value of silver threshold for Adhrence should be larger than bronze threshold for Adherence</value>
+  </data>
+  <data name="GoldThresholdForAnsweredCallsValue" xml:space="preserve">
+    <value>Value of gold threshold for answered calls should be lager than the rest</value>
+  </data>
+  <data name="SilverThresholdForAnsweredCallsValue" xml:space="preserve">
+    <value>Value of silver threshold for answered calls should be lager than bronze threshold for answered calls</value>
+  </data>
+  <data name="TimeSpanTextBoxGoldThresholdForAHT" xml:space="preserve">
+    <value>Value of gold threshold For AHT should be smaller than the rest</value>
+  </data>
+  <data name="TimeSpanTextBoxSilverThresholdsForAHT" xml:space="preserve">
+    <value>Value of silver threshold For AHT should be smaller than bronze threshold for AHT</value>
+  </data>
 </root>

@@ -130,6 +130,7 @@
 			this.doubleTextBoxGoldThresholdForAdherence.Style = Syncfusion.Windows.Forms.Tools.TextBoxExt.theme.Default;
 			this.doubleTextBoxGoldThresholdForAdherence.TabIndex = 10;
 			this.doubleTextBoxGoldThresholdForAdherence.Text = "0.00";
+			this.doubleTextBoxGoldThresholdForAdherence.Validating += new System.ComponentModel.CancelEventHandler(this.doubleTextBoxGoldThresholdsForAdherence_Validating);
 			this.doubleTextBoxGoldThresholdForAdherence.Validated += new System.EventHandler(this.doubleTextBoxThresholdsForAdherence_Validated);
 			// 
 			// CheckBoxUseBadgeForAnsweredCalls
@@ -342,6 +343,7 @@
 			this.timeSpanTextBoxGoldThresholdForAHT.TimeFormat = Teleopti.Interfaces.Domain.TimeFormatsType.HoursMinutesSeconds;
 			this.timeSpanTextBoxGoldThresholdForAHT.TimeSpanBoxHeight = 20;
 			this.timeSpanTextBoxGoldThresholdForAHT.TimeSpanBoxWidth = 65535;
+			this.timeSpanTextBoxGoldThresholdForAHT.Validating += new System.ComponentModel.CancelEventHandler(this.timeSpanTextBoxGoldThresholdsForAHT_Validating);
 			this.timeSpanTextBoxGoldThresholdForAHT.Validated += new System.EventHandler(this.timeSpanTextBoxThresholdsForAHT_Validated);
 			// 
 			// timeSpanTextBoxSilverThresholdForAHT
@@ -360,6 +362,7 @@
 			this.timeSpanTextBoxSilverThresholdForAHT.TimeFormat = Teleopti.Interfaces.Domain.TimeFormatsType.HoursMinutesSeconds;
 			this.timeSpanTextBoxSilverThresholdForAHT.TimeSpanBoxHeight = 20;
 			this.timeSpanTextBoxSilverThresholdForAHT.TimeSpanBoxWidth = 65535;
+			this.timeSpanTextBoxSilverThresholdForAHT.Validating += new System.ComponentModel.CancelEventHandler(this.timeSpanTextBoxSilverThresholdsForAHT_Validating);
 			this.timeSpanTextBoxSilverThresholdForAHT.Validated += new System.EventHandler(this.timeSpanTextBoxThresholdsForAHT_Validated);
 			// 
 			// timeSpanTextBoxBronzeThresholdForAHT
@@ -398,6 +401,7 @@
 			this.doubleTextBoxSilverThresholdForAdherence.Style = Syncfusion.Windows.Forms.Tools.TextBoxExt.theme.Default;
 			this.doubleTextBoxSilverThresholdForAdherence.TabIndex = 11;
 			this.doubleTextBoxSilverThresholdForAdherence.Text = "0.00";
+			this.doubleTextBoxSilverThresholdForAdherence.Validating += new System.ComponentModel.CancelEventHandler(this.doubleTextBoxSilverThresholdsForAdherence_Validating);
 			this.doubleTextBoxSilverThresholdForAdherence.Validated += new System.EventHandler(this.doubleTextBoxThresholdsForAdherence_Validated);
 			// 
 			// numericUpDownGoldThresholdForAnsweredCalls
@@ -413,6 +417,7 @@
 			this.numericUpDownGoldThresholdForAnsweredCalls.Name = "numericUpDownGoldThresholdForAnsweredCalls";
 			this.numericUpDownGoldThresholdForAnsweredCalls.Size = new System.Drawing.Size(115, 20);
 			this.numericUpDownGoldThresholdForAnsweredCalls.TabIndex = 2;
+			this.numericUpDownGoldThresholdForAnsweredCalls.Validating += new System.ComponentModel.CancelEventHandler(this.numericUpDownGoldThresholdForAnsweredCalls_Validating);
 			this.numericUpDownGoldThresholdForAnsweredCalls.Validated += new System.EventHandler(this.numericUpDownThresholdsForAnsweredCalls_Validated);
 			// 
 			// numericUpDownSilverThresholdForAnsweredCalls
@@ -428,6 +433,7 @@
 			this.numericUpDownSilverThresholdForAnsweredCalls.Name = "numericUpDownSilverThresholdForAnsweredCalls";
 			this.numericUpDownSilverThresholdForAnsweredCalls.Size = new System.Drawing.Size(115, 20);
 			this.numericUpDownSilverThresholdForAnsweredCalls.TabIndex = 3;
+			this.numericUpDownSilverThresholdForAnsweredCalls.Validating += new System.ComponentModel.CancelEventHandler(this.numericUpDownSilverThresholdForAnsweredCalls_Validating);
 			this.numericUpDownSilverThresholdForAnsweredCalls.Validated += new System.EventHandler(this.numericUpDownThresholdsForAnsweredCalls_Validated);
 			// 
 			// GamificationSettingRuleWithDifferentThresholdControl
