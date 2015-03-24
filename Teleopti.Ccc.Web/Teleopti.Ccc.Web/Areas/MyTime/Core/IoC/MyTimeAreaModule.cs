@@ -103,6 +103,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.IoC
 				.CacheMethod(x => x.Get())
 				.As<ISettingsPersisterAndProvider<NameFormatSettings>>();
 			builder.RegisterMbCacheComponent<NameFormatSettingsPersisterAndProvider, ISettingsPersisterAndProvider<NameFormatSettings>>().SingleInstance();
+			builder.RegisterType<NameFormatSettingsPersisterAndProvider>().As<ISettingsPersisterAndProvider<NameFormatSettings>>().SingleInstance();
 
 			builder.RegisterType<CalendarLinkIdGenerator>().As<ICalendarLinkIdGenerator>().SingleInstance();
 			builder.RegisterType<CalendarLinkGenerator>().As<ICalendarLinkGenerator>().SingleInstance();

@@ -39,7 +39,12 @@ namespace Teleopti.Ccc.TestCommon.TestData.Core
 		public IEnumerable<PersonDataFactory> AllPersons()
 		{
 			return _persons.Values;
-		} 
+		}
+
+		protected void RemoveLastPerson()
+		{
+			_persons.Remove(_persons.Keys.Last());
+		}
 
 		protected PersonDataFactory AddPerson(string referenceName, Name actualName)
 		{

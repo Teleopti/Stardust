@@ -30,6 +30,18 @@ Scenario: Change my language
 	And I change language to english
 	Then I should see english text
 
+Scenario: Change my description to last name first name
+	Given I am an agent named first name 'John' last name 'Smith'
+	When I view my regional settings
+	And I change Agent description to last name first name
+	Then I should see name 'Smith John'
+
+Scenario: Change my description to first name last name
+	Given I am an agent named first name 'John' last name 'Smith'
+	When I view my regional settings
+	And I change Agent description to first name last name
+	Then I should see name 'John Smith'
+
 Scenario: Change my password
 	Given I am an agent
 	When I view my password

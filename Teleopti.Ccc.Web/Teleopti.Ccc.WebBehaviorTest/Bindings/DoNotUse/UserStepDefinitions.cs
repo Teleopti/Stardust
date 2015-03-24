@@ -24,6 +24,16 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.DoNotUse
 			DataMaker.Data().Apply(new WorkflowControlSetForUser{Name = "Published"});
 		}
 
+		[Given(@"I am an agent named first name '(.*)' last name '(.*)'")]
+		public void GivenIAmAnAgentNamedFirstNameLastName(string firstName, string lastName)
+		{
+			DataMaker.Data().ApplyPerson(new Agent(), new Name(firstName, lastName));
+			DataMaker.Data().Apply(new SchedulePeriod());
+			DataMaker.Data().Apply(new PersonPeriod(DefaultTeam.Get()));
+			DataMaker.Data().Apply(new WorkflowControlSetConfigurable { Name = "Published", SchedulePublishedToDate = "2030-12-01" });
+			DataMaker.Data().Apply(new WorkflowControlSetForUser { Name = "Published" });
+		}
+
 		[Given(@"I am an agent that has a dayoff today according to my contract")]
 		public void GivenIAmAnAgentThatHasAContractDayOffToday()
 		{

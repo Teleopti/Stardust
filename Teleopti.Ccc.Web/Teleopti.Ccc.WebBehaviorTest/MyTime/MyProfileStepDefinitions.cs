@@ -105,6 +105,26 @@ namespace Teleopti.Ccc.WebBehaviorTest.MyTime
 			Browser.Interactions.SelectOptionByTextUsingJQuery("#CultureUi-Picker", CultureInfo.GetCultureInfo(1033).DisplayName.Substring(0, 3));
 		}
 
+		[When(@"I change Agent description to last name first name")]
+		public void WhenIChangeAgentDescriptionToLastNameFirstName()
+		{
+			Browser.Interactions.SelectOptionByTextUsingJQuery("#CommonAgentName-Picker", "[Efternamn] [Förnamn]");
+		}
+
+		[When(@"I change Agent description to first name last name")]
+		public void WhenIChangeAgentDescriptionToFirstNameLastName()
+		{
+			Browser.Interactions.SelectOptionByTextUsingJQuery("#CommonAgentName-Picker", "[Förnamn] [Efternamn]");
+		}
+
+
+		[Then(@"I should see name '(.*)'")]
+		public void ThenIShouldSeeName(string agentName)
+		{
+			Browser.Interactions.AssertExistsUsingJQuery(string.Format(".user-name:contains('{0}')", agentName));
+		}
+
+
 		[Then(@"I should see US date format"), SetCulture("en-US")]
 		public void ThenIShouldSeeUSDateFormat()
 		{

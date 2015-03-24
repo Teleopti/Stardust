@@ -42,6 +42,16 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data
 			Me().Apply(setup);
 		}
 
+		public void ApplyPerson(IUserSetup setup, Name name)
+		{
+			RemoveLastPerson();
+			AddPerson(name.ToString(), name).Apply(new UserConfigurable
+			{
+				UserName = "temp",
+				Password = DefaultPassword.ThePassword
+			});
+		}
+
 		public void ApplyLater(IDelayedSetup delayedSetup)
 		{
 			_delayedSetups.Add(delayedSetup);
