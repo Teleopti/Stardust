@@ -1573,7 +1573,6 @@
     <Content Include="WFM\css\material-spinner.css" />
     <Content Include="Areas\Reporting\Views\Report\Adherence.cshtml" />
     <Content Include="Areas\Reporting\Views\Report\Empty.cshtml" />
-    <Content Include=".node\kss-node.cmd" />
     <Content Include=".node\package.json" />
     <Content Include=".node\flatten-packages.cmd" />
     <Content Include="WFM\html\forecasting\forecasting-run.html" />
