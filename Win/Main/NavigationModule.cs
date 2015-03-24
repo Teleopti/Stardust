@@ -2,7 +2,9 @@
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Forecasting.Import;
+using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Infrastructure.Foundation;
+using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.Win.Budgeting;
 using Teleopti.Ccc.Win.Forecasting.Forms;
@@ -30,8 +32,8 @@ namespace Teleopti.Ccc.Win.Main
 	    }
 
 	    protected override void Load(ContainerBuilder builder)
-        {
-            builder.RegisterType<MatrixNavigationModel>().As<IMatrixNavigationModel>();
+		 {
+			 builder.RegisterType<MatrixNavigationModel>().As<IMatrixNavigationModel>();
 
 						if (_config.Toggle(Toggles.MultiTenantSSOSupport_StandardReports_15093))
 						{
