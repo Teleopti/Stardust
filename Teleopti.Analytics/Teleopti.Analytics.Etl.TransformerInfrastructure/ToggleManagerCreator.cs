@@ -6,7 +6,7 @@ namespace Teleopti.Analytics.Etl.TransformerInfrastructure
 {
 	public static class ToggleManagerCreator
 	{
-		public static IToggleManager Create(string togglePath)
+		public static IToggleManager Create()
 		{
 			var builder = new ContainerBuilder();
 			var configuration = new IocConfiguration(new IocArgs(), CommonModule.ToggleManagerForIoc());

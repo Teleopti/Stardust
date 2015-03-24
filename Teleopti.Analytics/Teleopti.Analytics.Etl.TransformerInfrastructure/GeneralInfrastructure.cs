@@ -161,8 +161,7 @@ namespace Teleopti.Analytics.Etl.TransformerInfrastructure
 				}
 			}
 
-			var togglePath = ConfigurationManager.AppSettings["FeatureToggle"];
-			var toggleManager = ToggleManagerCreator.Create(togglePath);
+			var toggleManager = ToggleManagerCreator.Create();
 
 			return new BaseConfiguration(culture, intervalLength, timeZone, toggleManager, runIndexMaintenance);
 		}
