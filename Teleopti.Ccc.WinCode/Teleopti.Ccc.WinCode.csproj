@@ -502,6 +502,10 @@
     <Compile Include="Meetings\MeetingMousePositionDecider.cs" />
     <Compile Include="Meetings\MeetingMover.cs" />
     <Compile Include="Meetings\Overview\OverlappingAppointmentsHelper.cs" />
+    <Compile Include="MultipleConfig\AppConfigReader.cs" />
+    <Compile Include="MultipleConfig\ConfigOverrider.cs" />
+    <Compile Include="MultipleConfig\IConfigOverrider.cs" />
+    <Compile Include="MultipleConfig\NoConfigOverrider.cs" />
     <Compile Include="PeopleAdmin\Commands\AddPersonEnableCommand.cs" />
     <Compile Include="PeopleAdmin\Commands\SendInstantMessageCommand.cs" />
     <Compile Include="PeopleAdmin\Commands\SendInstantMessageEnableCommand.cs" />
