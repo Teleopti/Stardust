@@ -58,7 +58,6 @@ Scheduler_IntraIntervalSolver_29845 = true
 MyTimeWeb_FullDayAbsenceConfiguration_30552 = true
 Settings_AlertViaEmailFromSMSLink_30444 = true
 Badge_Leaderboard_30584 = true
-Request_ShiftTradeWithEmptyDays_28926 = true
 MyTeam_Reports_31070 = true
 Schedule_IntraIntervalOptimizer_29846 = true
 MyTimeWeb_AbsenceReport_31011 = true

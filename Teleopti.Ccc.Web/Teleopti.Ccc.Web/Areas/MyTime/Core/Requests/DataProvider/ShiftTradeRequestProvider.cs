@@ -46,17 +46,10 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.DataProvider
 			IEnumerable<IPerson> possibleShiftTradePersons, Paging paging, string timeSortOrder = "")
 		{
 			var personIdList = (from person in possibleShiftTradePersons  where person.Id.HasValue select person.Id.Value).ToList();
-			
-			if (_toggleManager.IsEnabled(Toggles.Request_ShiftTradeWithEmptyDays_28926))
-			{
-				var timeFilterInfo = new TimeFilterInfo() {IsDayOff = true, IsWorkingDay = true, IsEmptyDay = true};
-				return _scheduleDayReadModelFinder.ForPersons(date, personIdList, paging, timeFilterInfo, timeSortOrder);
-			}
-			else
-			{
-				var timeFilterInfo = new TimeFilterInfo() {IsDayOff = true, IsWorkingDay = true, IsEmptyDay = false};
-				return _scheduleDayReadModelFinder.ForPersons(date, personIdList, paging, timeFilterInfo, timeSortOrder);
-			}			
+
+			var timeFilterInfo = new TimeFilterInfo() {IsDayOff = true, IsWorkingDay = true, IsEmptyDay = true};
+			return _scheduleDayReadModelFinder.ForPersons(date, personIdList, paging, timeFilterInfo, timeSortOrder);
+
 		}
 
 		public IEnumerable<IPersonScheduleDayReadModel> RetrieveBulletinTradeSchedules(

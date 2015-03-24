@@ -142,7 +142,6 @@ Scenario: Show possible shift trade when victim has full day absence
 	Then I should not see a possible schedule trade with 'OtherAgent'
 	And I should see a message text saying that no possible shift trades could be found
 
-@OnlyRunIfEnabled('Request_ShiftTradeWithEmptyDays_28926')
 Scenario: Show possible shift trade when victim has no schedule
 	Given I have the role 'Full access to mytime'
 	And I have the workflow control set 'Trade from tomorrow until 30 days forward'
@@ -155,7 +154,6 @@ Scenario: Show possible shift trade when victim has no schedule
 	And the time is '2029-12-27'
 	When I view Add Shift Trade Request for date '2030-01-01'
 	Then I should see a possible schedule trade with 'OtherAgent'
-
 
 Scenario: When I only have access to my own data I can't trade shifts
 	Given I have a role with
