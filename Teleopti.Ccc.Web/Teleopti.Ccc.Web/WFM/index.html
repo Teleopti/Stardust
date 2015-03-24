@@ -112,7 +112,7 @@
 				<div ng-repeat="accordionTitle in ['Outbound']">
 					<div class="sidenav-header accordion-head" ng-click="accordionToggle = !accordionToggle">{{accordionTitle}}</div>
 					<div ng-show="accordionToggle">
-						<div ng-repeat="accordionItem in [{ url: 'outbound', name:'Manage campaigns' }]">
+						<div ng-repeat="accordionItem in [{ url: 'outbound', name:'Campaigns' }]">
 							<div class="wfm-block"><a ui-sref={{accordionItem.url}}>{{accordionItem.name}}</a>
 							</div>
 						</div>
