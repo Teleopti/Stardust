@@ -65,7 +65,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 			person1.SetId(Guid.NewGuid());
 			person2.SetId(Guid.NewGuid());
 			var scheduleReadModels = new[] {new PersonScheduleDayReadModel(), new PersonScheduleDayReadModel()};
-			var timeFilterInfo = new TimeFilterInfo() {IsDayOff = true, IsWorkingDay = true, IsEmptyDay = false};
+			var timeFilterInfo = new TimeFilterInfo() {IsDayOff = true, IsWorkingDay = true, IsEmptyDay = true};
 
 			var paging = new Paging() {Take = 20, Skip = 0};
 
