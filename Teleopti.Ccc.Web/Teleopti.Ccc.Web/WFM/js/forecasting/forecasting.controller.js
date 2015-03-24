@@ -40,8 +40,7 @@ angular.module('wfm.forecasting', [])
 			};
 
 			$scope.toggleWorkload = function (workload) {
-				var isSelected = workload.Selected;
-				workload.Selected = !isSelected;
+				workload.Selected = !workload.Selected;
 			};
 
 			$scope.$watch('skillsDisplayed', function () {
@@ -54,18 +53,10 @@ angular.module('wfm.forecasting', [])
 							allSet = false;
 						}
 					});
-					if (allSetForSkill) {
-						skill.Selected = true;
-					} else {
-						skill.Selected = false;
-					}
+					skill.Selected = allSetForSkill;
 				});
 
-				if (allSet) {
-					$scope.all.Selected = true;
-				} else {
-					$scope.all.Selected = false;
-				}
+				$scope.all.Selected = allSet;
 			}, true);
 
 			$scope.showExplaination = false;
