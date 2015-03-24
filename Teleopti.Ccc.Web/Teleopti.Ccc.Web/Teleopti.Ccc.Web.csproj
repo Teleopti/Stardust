@@ -1202,11 +1202,14 @@
     <Content Include="WFM\css\material.css" />
     <Content Include="WFM\Gruntfile.js" />
     <Content Include="WFM\html\forecasting\forecasting-target.html" />
+    <Content Include="WFM\html\outbound\outbound.html" />
     <Content Include="WFM\js\forecasting\forecasting.controller.js" />
     <Content Include="WFM\js\forecasting\forecasting.service.js" />
     <Content Include="WFM\js\notifications\notice.controller.js" />
     <Content Include="WFM\js\notifications\notifications.controller.js" />
     <Content Include="WFM\js\notifications\notifications.service.js" />
+    <Content Include="WFM\js\outbound\outbound.controller.js" />
+    <Content Include="WFM\js\outbound\outbound.service.js" />
     <Content Include="WFM\js\permissions\permissions.controller.js" />
     <Content Include="WFM\js\permissions\permissions.service.js" />
     <Content Include="WFM\js\search\search.controller.js" />

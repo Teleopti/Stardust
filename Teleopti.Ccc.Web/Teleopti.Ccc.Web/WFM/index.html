@@ -89,23 +89,32 @@
 							</div>
 						</div>
 
-							<div ng-repeat="accordionTitle in ['Carpools']">
-								<div class="bottom-header accordion-head" ng-click="accordionToggle = !accordionToggle">{{accordionTitle}}</div>
-								<div ng-hide="accordionToggle">
+						<div ng-repeat="accordionTitle in ['Carpools']">
+							<div class="bottom-header accordion-head" ng-click="accordionToggle = !accordionToggle">{{accordionTitle}}</div>
+							<div ng-hide="accordionToggle">
 
-									<div ng-repeat="accordionItem in ['Carpool x','Carpool y','Carpool z']">
-										<div class="wfm-checkbox">
-											<input type="checkbox" id="{{accordionItem}}" />
-											<label for="{{accordionItem}}">
-												<span class="wfm-checkbox-toggle"></span>
+								<div ng-repeat="accordionItem in ['Carpool x','Carpool y','Carpool z']">
+									<div class="wfm-checkbox">
+										<input type="checkbox" id="{{accordionItem}}" />
+										<label for="{{accordionItem}}">
+											<span class="wfm-checkbox-toggle"></span>
 											<span class="wfm-checkbox-label">{{accordionItem}}</span>
-											</label>
-										</div>
+										</label>
 									</div>
-
 								</div>
-							</div>
 
+							</div>
+						</div>
+
+					</div>
+				</div>
+			
+				<div ng-repeat="accordionTitle in ['Outbound']">
+					<div class="sidenav-header accordion-head" ng-click="accordionToggle = !accordionToggle">{{accordionTitle}}</div>
+					<div ng-show="accordionToggle">
+						<div ng-repeat="accordionItem in [{ url: 'outbound', name:'Campaign' }]">
+							<div class="wfm-block"><a ui-sref={{accordionItem.url}}>{{accordionItem.name}}</a></div>
+						</div>
 					</div>
 				</div>
 			</section>

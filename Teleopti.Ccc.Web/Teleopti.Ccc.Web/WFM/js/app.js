@@ -12,6 +12,7 @@ var wfm = angular.module('wfm', [
 	'forecastingService',
 	'wfmCtrls',
 	'wfm.permissions',
+	'wfm.outbound',
 	'wfm.forecasting',
 	'wfm.searching',
 	'wfm.notifications',
@@ -40,6 +41,10 @@ wfm.config([
 			url: '/permissions',
 			templateUrl: 'html/permissions/permissions.html',
 			controller: 'PermissionsCtrl'
+		}).state('outbound', {
+			url: '/outbound',
+			templateUrl: 'html/outbound/outbound.html',
+			controller: 'OutboundCtrl'
 		});
 	}
 ]).run([
