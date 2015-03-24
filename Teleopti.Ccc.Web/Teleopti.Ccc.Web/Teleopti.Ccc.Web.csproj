@@ -1212,6 +1212,7 @@
     <Content Include="WFM\js\outbound\outbound.controller.js" />
     <Content Include="WFM\js\outbound\outbound.service.js" />
     <Content Include="WFM\js\people\people.controller.js" />
+    <Content Include="WFM\js\people\people.service.js" />
     <Content Include="WFM\js\permissions\permissions.controller.js" />
     <Content Include="WFM\js\permissions\permissions.service.js" />
     <Content Include="WFM\js\search\search.controller.js" />
