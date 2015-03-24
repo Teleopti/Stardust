@@ -3912,7 +3912,7 @@ Ersätt</value>
     <comment>RequestTypeAbsence</comment>
   </data>
   <data name="Seniority" xml:space="preserve">
-    <value>Erfarenhet</value>
+    <value>Senioritet</value>
     <comment>Seniority</comment>
   </data>
   <data name="Status" xml:space="preserve">
@@ -11429,14 +11429,14 @@ Minska komplexiteten för att kunna använda dessa skift.</value>
     <comment>Text on summary tab on web my report</comment>
   </data>
   <data name="Ranking" xml:space="preserve">
-    <value>Erfarenhetsrankning</value>
+    <value>Senioritetsrangordning</value>
     <comment>Seniority ranking on AgentInfo Fairness tab</comment>
   </data>
   <data name="DayOffPoints" xml:space="preserve">
     <value>Fridagspoäng:</value>
   </data>
   <data name="SeniorityPoints" xml:space="preserve">
-    <value>Erfarenhetspoäng:</value>
+    <value>Senioritetspoäng:</value>
   </data>
   <data name="ShiftCategoryPoints" xml:space="preserve">
     <value>Skiftkategoripoäng:</value>
@@ -11555,10 +11555,10 @@ Minska komplexiteten för att kunna använda dessa skift.</value>
     <value>Köstatistik</value>
   </data>
   <data name="SeniorityRankingAsc" xml:space="preserve">
-    <value>Erfarenhetsrankning stigande</value>
+    <value>Senioritetsrangordning stigande</value>
   </data>
   <data name="SeniorityRankingDesc" xml:space="preserve">
-    <value>Erfarenhetsrankning fallande</value>
+    <value>Senioritetsrangordning fallande</value>
   </data>
   <data name="TimeInAlarm" xml:space="preserve">
     <value>Larmtid</value>
@@ -12090,7 +12090,7 @@ Minska komplexiteten för att kunna använda dessa skift.</value>
     <value>Längst ned</value>
   </data>
   <data name="ManageSenioritySettings" xml:space="preserve">
-    <value>Hantera erfarenhetsinställningar</value>
+    <value>Hantera senioritetsinställningar</value>
   </data>
   <data name="RankShiftCategory" xml:space="preserve">
     <value>Rangordna skiftkategorierna från bäst till sämst</value>
@@ -12151,5 +12151,32 @@ Minska komplexiteten för att kunna använda dessa skift.</value>
   </data>
   <data name="AdherenceSilverThresholdShouldGreaterThanGoldThreshold" xml:space="preserve">
     <value>Silvermedaljtröskelvärdet för följsamheten måste vara lägre än guldmedaljtröskelvärdet.</value>
+  </data>
+  <data name="Invalid" xml:space="preserve">
+    <value>Ogiltig</value>
+  </data>
+  <data name="AddMustHave" xml:space="preserve">
+    <value>Lägg till veto</value>
+  </data>
+  <data name="RemoveMustHave" xml:space="preserve">
+    <value>Ta bort veto</value>
+  </data>
+  <data name="DoubleTextBoxGoldThresholdForAdherence" xml:space="preserve">
+    <value>Guldtröskelvärdet för följsamhet måste vara högre än de övriga</value>
+  </data>
+  <data name="DoubleTextBoxSilverThresholdForAdherence" xml:space="preserve">
+    <value>Silvertröskelvärdet för följsamhet måste vara högre än bronströskelvärdet</value>
+  </data>
+  <data name="GoldThresholdForAnsweredCallsValue" xml:space="preserve">
+    <value>Guldtröskelvärdet för besvarade samtal måste vara högre än de övriga</value>
+  </data>
+  <data name="SilverThresholdForAnsweredCallsValue" xml:space="preserve">
+    <value>Silvertröskelvärdet för besvarade samtal måste vara högre än bronströskelvärdet</value>
+  </data>
+  <data name="TimeSpanTextBoxGoldThresholdForAHT" xml:space="preserve">
+    <value>Guldtröskelvärdet för genomsnittlig behandlingstid måste vara lägre än de övriga</value>
+  </data>
+  <data name="TimeSpanTextBoxSilverThresholdsForAHT" xml:space="preserve">
+    <value>Silvertröskelvärdet för genomsnittlig behandlingstid måste vara lägre än bronströskelvärdet</value>
   </data>
 </root>

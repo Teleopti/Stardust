@@ -4258,8 +4258,8 @@ Accounts</value>
     <comment>AddAnotherLevel</comment>
   </data>
   <data name="AndThenOn" xml:space="preserve">
-    <value>And then on</value>
-    <comment>Used in filter/sort forms with multiple options like: Sort on xxx And then on xxx ...</comment>
+    <value>And then by</value>
+    <comment>Used in filter/sort forms with multiple options like: Sort by xxx And then by xxx ...</comment>
   </data>
   <data name="Approve" xml:space="preserve">
     <value>Approve</value>
@@ -4278,8 +4278,8 @@ Accounts</value>
     <comment>HandleRequests</comment>
   </data>
   <data name="SortOn" xml:space="preserve">
-    <value>Sort On</value>
-    <comment>SortOn</comment>
+    <value>Sort By</value>
+    <comment>Sort By</comment>
   </data>
   <data name="SortOrder" xml:space="preserve">
     <value>Sort Order</value>
@@ -4589,8 +4589,8 @@ deny</value>
     <comment>Keep Number Of Free Weekends</comment>
   </data>
   <data name="KeepWeekEndsTogether" xml:space="preserve">
-    <value>Keep Week Ends Together</value>
-    <comment>Keep Week Ends Together</comment>
+    <value>Keep Weekends Together</value>
+    <comment>Keep Weekends Together</comment>
   </data>
   <data name="MoveMaxDays" xml:space="preserve">
     <value>Move Max Days</value>
@@ -5502,7 +5502,7 @@ Availability</value>
     <comment>used in alarm control</comment>
   </data>
   <data name="GiveAlarmAName" xml:space="preserve">
-    <value>Give the alarmtype a descriptive name</value>
+    <value>Give the alarm type a descriptive name</value>
     <comment>used in alarmcontrol</comment>
   </data>
   <data name="NewAlarm" xml:space="preserve">
@@ -5555,15 +5555,15 @@ Availability</value>
   </data>
   <data name="CannotChangeSystemAlarmType" xml:space="preserve">
     <value>You can not change a system alarm</value>
-    <comment>used in configuration alarmtype</comment>
+    <comment>used in configuration alarm type</comment>
   </data>
   <data name="CannotDeleteSystemAlarmType" xml:space="preserve">
     <value>You can not delete a system alarm</value>
-    <comment>used in configuration alarmtype</comment>
+    <comment>used in configuration alarm type</comment>
   </data>
   <data name="SelectSuitableColor" xml:space="preserve">
     <value>Select a suitable color</value>
-    <comment>used in configuration alarmtype </comment>
+    <comment>used in configuration alarm type </comment>
   </data>
   <data name="CancelingLoadAndCloseProgram" xml:space="preserve">
     <value>Cancelling load and closing application...</value>
@@ -5933,7 +5933,7 @@ Start Date</value>
   </data>
   <data name="StaffingEffect" xml:space="preserve">
     <value>Staffing effect</value>
-    <comment>used in alarmtypes</comment>
+    <comment>used in alarm types</comment>
   </data>
   <data name="OpenBudgetThreeDots" xml:space="preserve">
     <value>Open Budget...</value>
@@ -8364,7 +8364,7 @@ Schedule</value>
     <value>Low</value>
   </data>
   <data name="Optimisation" xml:space="preserve">
-    <value>Optimisation</value>
+    <value>Optimization</value>
   </data>
   <data name="OverStaff" xml:space="preserve">
     <value>Over staff</value>
@@ -8917,12 +8917,12 @@ If this validation error still occurs you must verify that your password follows
     <comment>Current password</comment>
   </data>
   <data name="MoveEndOneIntervalEarlier" xml:space="preserve">
-    <value>Move endtime one interval earlier</value>
-    <comment>Move endtime one interval earlier</comment>
+    <value>Move end time one interval earlier</value>
+    <comment>Move end time one interval earlier</comment>
   </data>
   <data name="MoveEndOneIntervalLater" xml:space="preserve">
-    <value>Move endtime one interval later</value>
-    <comment>Move endtime one interval later</comment>
+    <value>Move end time one interval later</value>
+    <comment>Move end time one interval later</comment>
   </data>
   <data name="MovePeriodOneIntervalEarlier" xml:space="preserve">
     <value>Move period one interval earlier</value>
@@ -8933,12 +8933,12 @@ If this validation error still occurs you must verify that your password follows
     <comment>Move period one interval later</comment>
   </data>
   <data name="MoveStartOneIntervalEarlier" xml:space="preserve">
-    <value>Move starttime one interval earlier</value>
-    <comment>Move starttime one interval earlier</comment>
+    <value>Move start time one interval earlier</value>
+    <comment>Move start time one interval earlier</comment>
   </data>
   <data name="MoveStartOneIntervalLater" xml:space="preserve">
-    <value>Move starttime one interval later</value>
-    <comment>Move starttime one interval later</comment>
+    <value>Move start time one interval later</value>
+    <comment>Move start time one interval later</comment>
   </data>
   <data name="CannotAddPreferenceSelectedItemNotAvailableParameter0" xml:space="preserve">
     <value>The preference cannot be added because the selected item '{0}' not is available anymore.</value>

@@ -7269,7 +7269,7 @@ Datum</value>
     <value>Personen-Auswahl</value>
   </data>
   <data name="ViewPointTimeZone" xml:space="preserve">
-    <value>Standpunkt (Zeitzone)</value>
+    <value>Perspektive (Zeitzone)</value>
   </data>
   <data name="SuperRole" xml:space="preserve">
     <value>Super-Administrator-Rolle</value>
@@ -7838,7 +7838,7 @@ Teleopti R&amp;D</value>
     <value>An...</value>
   </data>
   <data name="InfoTextConflict" xml:space="preserve">
-    <value>Ein anderer Nutzer hat bereits Änderungen vorgenommen. Bitte entscheiden Sie bevor Sie fortfahren. Wenn Sie "OK" klicken, akzeptieren Sie die Änderungen des anderen Nutzers. Beachten Sie bitte hierbei, dass Ihre entsprechenden Änderungen verloren gehen. Wählen Sie "Überschreiben" um Ihre Änderungen zu speichern und die des anderen Nutzers zu löschen.</value>
+    <value>Ein anderer Nutzer hat bereits Änderungen vorgenommen. Bitte entscheiden Sie bevor Sie fortfahren. Wenn Sie "OK" klicken, akzeptieren Sie die Änderungen des anderen Nutzers. Beachten Sie bitte hierbei, dass Ihre entsprechenden Änderungen verloren gehen. Wählen Sie "Überschreiben" um Ihre Änderungen zu speichern und die des anderen Nutzers zu löschen. </value>
   </data>
   <data name="PleaseSaveAgainWhenYouHaveReviewedTheAppliedChanges" xml:space="preserve">
     <value>Bitte nach Überprüfung der Änderungen nochmals speichern.</value>
@@ -11169,7 +11169,7 @@ Sollte dieser Validierungs-Fehler dennoch auftreten, überprüfen Sie bitte dass
     <value>Die Präferenz kann nicht ausgewählt werden, da das ausgewählte Element nicht mehr zur Verfügung steht.</value>
   </data>
   <data name="AbsenceReport" xml:space="preserve">
-    <value>Bericht Abwesenheiten</value>
+    <value>Abwesenheiten melden</value>
   </data>
   <data name="ApplyProductActivationKey" xml:space="preserve">
     <value>Eingabe Product Activation Key</value>
@@ -11253,9 +11253,6 @@ Folgende Optionen und Module sind aktiviert:
   <data name="NewProductActivationKeyDoesNotCoverEnoughActiveAgents" xml:space="preserve">
     <value>Sie haben {0} aktive Agenten, jedoch eine Lizenz für nur {1} Agenten. Sie müssen einen Product Activation Key erhalten, der ausreichend aktive Agenten ermöglicht.</value>
   </data>
-  <data name="InfoTextConflict" xml:space="preserve">
-    <value>Ein anderer Nutzer hat bereits Änderungen vorgenommen. Bitte entscheiden Sie bevor Sie fortfahren. Wenn Sie "OK" klicken, akzeptieren Sie die Änderungen des anderen Nutzers. Beachten Sie bitte hierbei, dass Ihre entsprechenden Änderungen verloren gehen. Wählen Sie "Überschreiben" um Ihre Änderungen zu speichern und die des anderen Nutzers zu löschen. </value>
-  </data>
   <data name="Invalid" xml:space="preserve">
     <value>Ungültig</value>
   </data>
@@ -11279,9 +11276,6 @@ Folgende Optionen und Module sind aktiviert:
   </data>
   <data name="TooManyAgentsIsUsedWarning" xml:space="preserve">
     <value>Sie nutzen mehr Agenten ({0}) als Sie lizensiert haben ({1}). Sie haben {2} Tage um die Agenten zu reduzieren oder einen neuen Product Activation Key mit ausreichend viel lizensierten Agenten hinzuzufügen.</value>
-  </data>
-  <data name="CannotDisplayScheduleWhenShiftTradeStatusIsNew" xml:space="preserve">
-    <value>Dienstplan wird nur angezeigt, wenn der Status des Schichttausches "schwebend" oder "Warte auf Ihre Genehmigung" ist. </value>
   </data>
   <data name="UseBadgeForAnsweredCalls" xml:space="preserve">
     <value>Nutze Badge für beantwortete Anrufe</value>
@@ -11338,10 +11332,10 @@ Folgende Optionen und Module sind aktiviert:
     <value>Der Schwellenwert Silber für Planeinhaltung sollte geringer sein als für Gold. </value>
   </data>
   <data name="AbsencesAvailableForReport" xml:space="preserve">
-    <value>Für Berichte erlaubte Abwesenheiten.</value>
+    <value>Erlaubte Abwesenheiten für Abwesenheitsmeldung.</value>
   </data>
   <data name="AbsenceCanNotBeReported" xml:space="preserve">
-    <value>Abwesenheit darf nicht in Bericht verwendet werden.</value>
+    <value>Abwesenheit kann nicht gemeldet werden.</value>
   </data>
   <data name="ShiftTradeBulletinBoard" xml:space="preserve">
     <value>Pinnwand</value>
@@ -11369,5 +11363,215 @@ Folgende Optionen und Module sind aktiviert:
   </data>
   <data name="OptionWorkingDay" xml:space="preserve">
     <value>Arbeitstag</value>
+  </data>
+  <data name="TeleoptiProductActivationKeyException" xml:space="preserve">
+    <value>Teleopti Product Activation Key Fehler</value>
+  </data>
+  <data name="SwitchToViewPointOfSelectedAgent" xml:space="preserve">
+    <value>Zur Agent-Perspektive wechseln</value>
+  </data>
+  <data name="CalculateBadgeWithRank" xml:space="preserve">
+    <value>Badge Rangfolge</value>
+  </data>
+  <data name="IntraIntervalOptimization" xml:space="preserve">
+    <value>Intra-Intervall Balance</value>
+  </data>
+  <data name="LowestIntraIntervalBalance" xml:space="preserve">
+    <value>Geringste Intra-Intervall Balance</value>
+  </data>
+  <data name="Publish" xml:space="preserve">
+    <value>Veröffentlichen...</value>
+  </data>
+  <data name="PublishSchedulesForColon" xml:space="preserve">
+    <value>Veröffentliche Pläne für:</value>
+  </data>
+  <data name="PublisSchedulesToDateColon" xml:space="preserve">
+    <value>Veröffentliche Pläne bis:</value>
+  </data>
+  <data name="PublishSchedule" xml:space="preserve">
+    <value>Veröffentliche Pläne</value>
+  </data>
+  <data name="StartTimeShouldBeEarlierThanEndTime" xml:space="preserve">
+    <value>Startzeit sollte vor der Endzeit liegen</value>
+  </data>
+  <data name="ReportAbsenceFor" xml:space="preserve">
+    <value>Abwesenheit melden für</value>
+  </data>
+  <data name="NoAgentsAvailableForBulletinBoard" xml:space="preserve">
+    <value>Es ist keine passende Schicht für einen Tausch verfügbar.</value>
+  </data>
+  <data name="FilterOnOpenHours" xml:space="preserve">
+    <value>Nach Öffnungszeit filtern</value>
+  </data>
+  <data name="AbsenceBackToWork" xml:space="preserve">
+    <value>Abwesenheitsrückkehr</value>
+  </data>
+  <data name="Planned" xml:space="preserve">
+    <value>geplant</value>
+  </data>
+  <data name="UpdatingAbsence" xml:space="preserve">
+    <value>Aktualisiere Abwesenheit für</value>
+  </data>
+  <data name="BackToWorkCannotBeGreaterThanAbsenceEnd" xml:space="preserve">
+    <value>Die Zeit der Abwesenheitsrückkehr kann nicht größer als die Abwesenheitszeit sein.</value>
+  </data>
+  <data name="BackToWorkTextPrompt" xml:space="preserve">
+    <value>Früher aus der Abwesenheit rückgekehrt zum: </value>
+  </data>
+  <data name="AnnounceShift" xml:space="preserve">
+    <value>Schichttausch veröffentlichen</value>
+  </data>
+  <data name="ShiftExchangeOfferValidTo" xml:space="preserve">
+    <value>Angebot gültig bis:</value>
+  </data>
+  <data name="AnnounceShiftConditions" xml:space="preserve">
+    <value>Ich suche die folgende Schicht: </value>
+  </data>
+  <data name="AnnounceShiftDateOutPeriod" xml:space="preserve">
+    <value>Das Datum des Schichttausches muss innerhalb der offenen Tauschperiode sein.</value>
+  </data>
+  <data name="AnnounceShiftValidToNotLegal" xml:space="preserve">
+    <value>Das Gültigkeitsdatum muss zwischen heute und dem Tag vor dem angebotenen Schichttausch liegen!</value>
+  </data>
+  <data name="PublishAnnouncementNoAbsence" xml:space="preserve">
+    <value>Ein Schichttausch kann nicht für eine Abwesenheit angeboten werden.</value>
+  </data>
+  <data name="AllTeamMembersMustBeLoaded" xml:space="preserve">
+    <value>Alle Teammitglieder werden geladen</value>
+  </data>
+  <data name="AnnouncementInvalid" xml:space="preserve">
+    <value>Schichttausch-Angebot unültig</value>
+  </data>
+  <data name="AnnouncementInvalidMessage" xml:space="preserve">
+    <value>Ihr Schichttausch-Anegbot von {0} ist ungültig, da Ihre Schicht sich geändert hat.</value>
+  </data>
+  <data name="HasNonMainShiftActivityErrorMessage" xml:space="preserve">
+    <value>Mitarbeiter {0} hat eine persönliche Aktivität, Überstunden oder ein Meeting in der Schicht am {1}</value>
+  </data>
+  <data name="Everyone" xml:space="preserve">
+    <value>Alle</value>
+  </data>
+  <data name="Announcement" xml:space="preserve">
+    <value>Schichttausch-Angebot</value>
+  </data>
+  <data name="AreYouSureYouWantToDeleteGamificationSetting" xml:space="preserve">
+    <value>Sind Sie sicher, dass Sie die '{0}' Gamification-Einstellung löschen wollen?</value>
+  </data>
+  <data name="DeleteGamificationSetting" xml:space="preserve">
+    <value>Gamification-Einstellungen löschen</value>
+  </data>
+  <data name="Gamification" xml:space="preserve">
+    <value>Gamification</value>
+  </data>
+  <data name="NewGamificationSetting" xml:space="preserve">
+    <value>Neue Gamification-Einstellungen</value>
+  </data>
+  <data name="NewBadgeSetting" xml:space="preserve">
+    <value>Neue Badge-Einstellung</value>
+  </data>
+  <data name="RuleWithDifferentThreshold" xml:space="preserve">
+    <value>Andere Schwellenwerte nutzen</value>
+  </data>
+  <data name="ConfirmDeleteRequest" xml:space="preserve">
+    <value>Sind Sie sicher, dass Sie diese Anfrage löschen wollen?</value>
+  </data>
+  <data name="ShiftExchangeAnnouncement" xml:space="preserve">
+    <value>Schichttausch-Angebot</value>
+  </data>
+  <data name="ChooseGamificationSettingToChange" xml:space="preserve">
+    <value>Gamification-Einstellung zur Änderung wählen</value>
+  </data>
+  <data name="EnterGamificationSettingDetails" xml:space="preserve">
+    <value>Gamification-Einstellungen eingeben</value>
+  </data>
+  <data name="GamificationSettingRuleSetsColon" xml:space="preserve">
+    <value>Regel:</value>
+  </data>
+  <data name="LogOnFailedIdentityNotFound" xml:space="preserve">
+    <value>Login fehlgeschlagen! Kein Benutzerkonto verbunden mit {0}.</value>
+  </data>
+  <data name="CannotFindDataSourceWithName" xml:space="preserve">
+    <value>Kann keine Datenquelle mit dem Namen {0} finden.</value>
+  </data>
+  <data name="SetSettingTargets" xml:space="preserve">
+    <value>Gamification-Ziele einstellen</value>
+  </data>
+  <data name="SelectSettingForTeams" xml:space="preserve">
+    <value>Einstellungen für Teams auswählen</value>
+  </data>
+  <data name="Setting" xml:space="preserve">
+    <value>Einstellungen</value>
+  </data>
+  <data name="SeatPlanner" xml:space="preserve">
+    <value>Sitzplatzplanung</value>
+  </data>
+  <data name="StartDateMustBeGreaterThanToday" xml:space="preserve">
+    <value>Startdatum muss größer als heute sein</value>
+  </data>
+  <data name="AnyLocationShouldBeSelected" xml:space="preserve">
+    <value>Ein Standort muss ausgewählt werden</value>
+  </data>
+  <data name="AnyTeamShouldBeSelected" xml:space="preserve">
+    <value>Ein Team muss ausgewählt werden</value>
+  </data>
+  <data name="YouHaveBeenAllocatedSeat" xml:space="preserve">
+    <value>Am {0} sitzen Sie am Platz {1}</value>
+  </data>
+  <data name="YouHaveNotBeenAllocatedSeat" xml:space="preserve">
+    <value>Am {0} wurde kein Platz zugeweisen.</value>
+  </data>
+  <data name="StartDateMustBeEndDateOrSmaller" xml:space="preserve">
+    <value>Startdatum muss gleich Enddatum oder früher sein.</value>
+  </data>
+  <data name="StartDateMustBeTodayOrGreater" xml:space="preserve">
+    <value>Startdatum muss heuter oder später sein.</value>
+  </data>
+  <data name="AnonymousBulletinBoardTrading" xml:space="preserve">
+    <value>Anonyme Schichttauschbörse</value>
+  </data>
+  <data name="Miscellaneous" xml:space="preserve">
+    <value>Verschiedenes</value>
+  </data>
+  <data name="SearchHintForName" xml:space="preserve">
+    <value>Suche Name</value>
+  </data>
+  <data name="SureToMakeShiftTrade" xml:space="preserve">
+    <value>Sind Sie sicher, dass Sie diesen Schichttausch ausführen wollen?</value>
+  </data>
+  <data name="Bottom" xml:space="preserve">
+    <value>Unten</value>
+  </data>
+  <data name="ManageSenioritySettings" xml:space="preserve">
+    <value>Senioritätseinstellungen verwalten</value>
+  </data>
+  <data name="RankShiftCategory" xml:space="preserve">
+    <value>Ordne Schichtkategorie von Gut zu Schlecht</value>
+  </data>
+  <data name="RankWorkingDays" xml:space="preserve">
+    <value>Ordne Arbeitstage von Gut zu Schlecht</value>
+  </data>
+  <data name="Top" xml:space="preserve">
+    <value>Oben</value>
+  </data>
+  <data name="NoAbsenceToRemoveInCurrentShift" xml:space="preserve">
+    <value>Keine Abwesenheit zum Entfernen vorhanden.</value>
+  </data>
+  <data name="AnnouncementTakenByOthers" xml:space="preserve">
+    <value>Diese Schicht wurde bereits von einem anderen gewählt. Bitte wählen Sie eine andere Schicht.</value>
+  </data>
+  <data name="ShowExcelReport" xml:space="preserve">
+    <value>Excel Bericht anzeigen</value>
+  </data>
+  <data name="ShowPDFReport" xml:space="preserve">
+    <value>PDF Bericht anzeigen</value>
+  </data>
+  <data name="ShowWordReport" xml:space="preserve">
+    <value>Word Bericht anzeigen</value>
+  </data>
+  <data name="AddMustHave" xml:space="preserve">
+    <value>Notwendigkeit hinzufügen</value>
+  </data>
+  <data name="RemoveMustHave" xml:space="preserve">
+    <value>Notwendigkeit entfernen</value>
   </data>
 </root>
