@@ -88,7 +88,7 @@ angular.module('wfm.forecasting', [])
 									numberToSkipForThisSkill++;
 									w.Accuracy = '-%';
 								} else {
-									w.Accuracy = workload.Accuracy + '%';
+									w.Accuracy = workload.Accuracy.toFixed(1) + '%';
 									sumForSkill += workload.Accuracy;
 									sum += workload.Accuracy;
 								}
