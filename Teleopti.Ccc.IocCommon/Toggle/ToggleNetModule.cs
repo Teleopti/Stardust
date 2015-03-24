@@ -14,19 +14,19 @@ namespace Teleopti.Ccc.IocCommon.Toggle
 {
 	internal class ToggleNetModule : Module
 	{
-		private readonly IIocConfiguration _configuration;
+		private readonly IocArgs _iocArgs;
 		private const string missingPathToToggle = "Path to toggle file is missing. Please use a valid path (or use a http address to point to the toggle.net service)!";
 		private static readonly ILog logger = LogManager.GetLogger(typeof(ToggleNetModule));
 
-		public ToggleNetModule(IIocConfiguration configuration)
+		public ToggleNetModule(IocArgs iocArgs)
 		{
-			_configuration = configuration;
+			_iocArgs = iocArgs;
 		}
 
 		protected override void Load(ContainerBuilder builder)
 		{
-			var pathToToggle = _configuration.Args().FeatureToggle;
-			var toggleModeArg = _configuration.Args().ToggleMode;
+			var pathToToggle = _iocArgs.FeatureToggle;
+			var toggleModeArg = _iocArgs.ToggleMode;
 
 			if (string.IsNullOrEmpty(pathToToggle))
 			{

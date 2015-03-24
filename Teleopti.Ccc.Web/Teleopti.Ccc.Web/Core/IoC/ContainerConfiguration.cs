@@ -18,7 +18,7 @@ namespace Teleopti.Ccc.Web.Core.IoC
 				CacheLockObjectGenerator = new FixedNumberOfLockObjects(100),
 				DataSourceConfigurationSetter = DataSourceConfigurationSetter.ForWeb()
 			};
-			var configuration = new IocConfiguration(args, CommonModule.ToggleManagerForIoc(new IocConfiguration(args, null)));
+			var configuration = new IocConfiguration(args, CommonModule.ToggleManagerForIoc(args));
 			builder.RegisterModule(new WebAppModule(configuration, httpConfiguration));
 
 			return builder.Build();

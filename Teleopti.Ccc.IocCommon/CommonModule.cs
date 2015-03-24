@@ -45,7 +45,7 @@ namespace Teleopti.Ccc.IocCommon
 			builder.RegisterModule<DateAndTimeModule>();
 			builder.RegisterModule<LogModule>();
 			builder.RegisterModule<JsonSerializationModule>();
-			builder.RegisterModule(new ToggleNetModule(_configuration));
+			builder.RegisterModule(new ToggleNetModule(_configuration.Args()));
 			builder.RegisterModule(new MessageBrokerModule(_configuration));
 			builder.RegisterModule(new RepositoryModule { RepositoryConstructorType = RepositoryConstructorType });
 			builder.RegisterModule<UnitOfWorkModule>();
@@ -68,13 +68,13 @@ namespace Teleopti.Ccc.IocCommon
 
 		public static IToggleManager ToggleManagerForIoc()
 		{
-			return ToggleManagerForIoc(new IocConfiguration(new IocArgs(), null));
+			return ToggleManagerForIoc(new IocArgs());
 		}
 
-		public static IToggleManager ToggleManagerForIoc(IocConfiguration configuration)
+		public static IToggleManager ToggleManagerForIoc(IocArgs iocArgs)
 		{
 			var builder = new ContainerBuilder();
-			builder.RegisterModule(new ToggleNetModule(configuration));
+			builder.RegisterModule(new ToggleNetModule(iocArgs));
 			using (var container = builder.Build())
 				return container.Resolve<IToggleManager>();
 		}
