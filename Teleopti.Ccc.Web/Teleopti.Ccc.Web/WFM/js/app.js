@@ -15,6 +15,7 @@ var wfm = angular.module('wfm', [
 	'wfm.people',
 	'wfm.outbound',
 	'wfm.forecasting',
+	'wfm.forecasting.target',
 	'wfm.searching',
 	'wfm.notifications',
 	'wfm.notice'

@@ -1206,6 +1206,7 @@
     <Content Include="WFM\html\people\people.html" />
     <Content Include="WFM\js\forecasting\forecasting.controller.js" />
     <Content Include="WFM\js\forecasting\forecasting.service.js" />
+    <Content Include="WFM\js\forecasting\forecasting.target.controller.js" />
     <Content Include="WFM\js\notifications\notice.controller.js" />
     <Content Include="WFM\js\notifications\notifications.controller.js" />
     <Content Include="WFM\js\notifications\notifications.service.js" />
