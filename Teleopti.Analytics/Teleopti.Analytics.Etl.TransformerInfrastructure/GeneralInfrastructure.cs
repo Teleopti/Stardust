@@ -8,6 +8,8 @@ using System.Globalization;
 using System.Linq;
 using Teleopti.Analytics.Etl.Interfaces.Common;
 using Teleopti.Ccc.Domain.Analytics;
+using Teleopti.Ccc.Domain.FeatureFlags;
+using Teleopti.Ccc.IocCommon;
 using Teleopti.Interfaces.Domain;
 using log4net;
 
@@ -161,7 +163,7 @@ namespace Teleopti.Analytics.Etl.TransformerInfrastructure
 				}
 			}
 
-			var toggleManager = ToggleManagerCreator.Create();
+			var toggleManager = CommonModule.ToggleManagerForIoc();
 
 			return new BaseConfiguration(culture, intervalLength, timeZone, toggleManager, runIndexMaintenance);
 		}

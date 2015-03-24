@@ -172,7 +172,6 @@
     <Compile Include="DataTableDefinition\TimeZoneInfrastructure.cs" />
     <Compile Include="DataTableDefinition\WorkloadInfrastructure.cs" />
     <Compile Include="DataTableDefinition\WorkloadQueueInfrastructure.cs" />
-    <Compile Include="ToggleManagerCreator.cs" />
   </ItemGroup>
   <ItemGroup>
     <Service Include="{B4F97281-0DBD-4835-9ED8-7DFB966E87FF}" />
