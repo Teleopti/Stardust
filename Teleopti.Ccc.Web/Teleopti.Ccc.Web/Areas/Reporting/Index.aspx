@@ -8,6 +8,14 @@
 	<title></title>
 	<script type="text/javascript" src="../../Content/jquery/jquery-1.10.2.min.js"></script>
 	<script type="text/javascript" src="Content/Scripts/persianDatepicker.min.js"></script>
+	<script type="text/javascript">
+		//ensure report menu is closed
+		$('html').on('click', function () {
+			if (parent) {
+				parent.$('.dropdown').removeClass('open');
+			}
+		});
+	</script>
 	<link href="Content/Styles/persianDatepicker-default.css" rel="stylesheet" />
 	<link href="Content/Styles/Styles.css" rel="stylesheet" />
 	<link href="Content/Styles/calendar.css" rel="stylesheet" />
