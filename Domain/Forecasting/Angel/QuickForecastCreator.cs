@@ -19,6 +19,13 @@ namespace Teleopti.Ccc.Domain.Forecasting.Angel
 			_now = now;
 		}
 
+		public void CreateForecastForAll(DateOnlyPeriod futurePeriod)
+		{
+			var historicalPeriod = getHistoricalPeriod();
+			var skills = _skillRepository.FindSkillsWithAtLeastOneQueueSource();
+			skills.ForEach(skill => _quickForecaster.ForecastAll(skill, futurePeriod, historicalPeriod));
+		}
+
 		public void CreateForecastForWorkloads(DateOnlyPeriod futurePeriod, Guid[] workloadIds)
 		{
 			var historicalPeriod = getHistoricalPeriod();

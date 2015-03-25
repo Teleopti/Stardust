@@ -36,6 +36,23 @@ namespace Teleopti.Ccc.Domain.Forecasting.Angel
 				}
 			}
 		}
+
+		public void ForecastAll(ISkill skill, DateOnlyPeriod futurePeriod, DateOnlyPeriod historicalPeriod)
+		{
+			var skillDays = _fetchAndFillSkillDays.FindRange(futurePeriod, skill);
+
+			foreach (var workload in skill.WorkloadCollection)
+			{
+				var quickForecasterWorkloadParams = new QuickForecasterWorkloadParams
+				{
+					WorkLoad = workload,
+					FuturePeriod = futurePeriod,
+					SkillDays = skillDays,
+					HistoricalPeriod = historicalPeriod
+				};
+				_quickForecasterWorkload.Execute(quickForecasterWorkloadParams);
+			}
+		}
 	}
 
 	public struct QuickForecasterWorkloadParams

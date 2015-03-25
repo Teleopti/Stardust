@@ -52,5 +52,13 @@ namespace Teleopti.Ccc.Web.Areas.Forecasting.Controllers
 			_quickForecastCreator.CreateForecastForWorkloads(futurePeriod, model.Workloads);
 			return Task.FromResult(true);
 		}
+
+		[HttpPost, Route("api/Forecasting/ForecastAll"), UnitOfWork]
+		public virtual Task<bool> ForecastAll(QuickForecastInputModel model)
+		{
+			var futurePeriod = new DateOnlyPeriod(new DateOnly(model.ForecastStart), new DateOnly(model.ForecastEnd));
+			_quickForecastCreator.CreateForecastForAll(futurePeriod);
+			return Task.FromResult(true);
+		}
 	}
 }

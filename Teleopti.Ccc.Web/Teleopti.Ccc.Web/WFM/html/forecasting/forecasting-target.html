@@ -2,56 +2,66 @@
 	<div class="material-block-content" ng-if="showSelection">
 		<div class="row">
 			<div class="col-lg-12">
-				<button class="wfm-btn wfm-btn-primary pull-right apply" ng-class="{'wfm-btn-primary-disabled': !hasOneSelected}" ng-click="nextStep()">Apply</button>
+				<button class="wfm-btn wfm-btn-primary pull-right apply" ng-click="nextStep()">Apply</button>
 				<h4>
 					Select forcasting target(s)
 				</h4>
-				
-			</div>
-			</div>
-			<div>
-				<div class="tree">
-					<div ui-tree data-drag-enabled="false">
-						<ol ui-tree-nodes="" ng-model="all">
-							<li ui-tree-node>
-								<div ui-tree-handle ng-class="{selected: all.Selected}" ng-click="toggleAll(all.Selected)">
-									{{all.Name}} <p class="pull-right total-accuracy">{{all.Accuracy}}</p>
-								</div>
-								<ol ui-tree-nodes="" ng-model="skillsDisplayed">
-									<li ng-repeat="skill in skillsDisplayed" ui-tree-node ng-include="'nodes_skill_renderer.html'" value='{{skill.Id}}'></li>
-								</ol>
-							</li>
-						</ol>
-					</div>
-				</div>
-				<div ng-show="showExplaination">
-					-% Not enough historical data to measure the forecasting method.
-				</div>
 
+			</div>
+		</div>
+		<div>
+			<div class="tree">
+				<div ui-tree data-drag-enabled="false">
+					<ol ui-tree-nodes="" ng-model="all">
+						<li ui-tree-node>
+							<div class="tree-toggle-group">
+								<div class="toggle-handle" ng-class="{open: all.show}" ng-click="all.show = !all.show"><i class="mdi mdi-chevron-right"></i></div>
+								<div ui-tree-handle ng-class="{selected: all.Selected}" ng-click="toggleAll(all.Selected)">
+									{{all.Name}} <i class="pull-right total-accuracy">{{all.Accuracy}}</i>
+								</div>
+							</div>
+							<ol ui-tree-nodes="" ng-model="skillsDisplayed" ng-show="all.show">
+								<li ng-repeat="skill in skillsDisplayed" ui-tree-node ng-include="'nodes_skill_renderer.html'" value='{{skill.Id}}'></li>
+							</ol>
+						</li>
+					</ol>
+				</div>
+			</div>
+			<div ng-show="showExplaination">
+				-% Not enough historical data to measure the forecasting method.
 			</div>
 
 		</div>
 
-		<div ng-if="!showSelection" class="text-center">
-			Wait ! We re crushing data for you :)
-			<div>
-				<svg class="spinner" width="65px" height="65px" viewBox="0 0 66 66" xmlns="http://www.w3.org/2000/svg">
-					<circle class="path" fill="none" stroke-width="6" stroke-linecap="round" cx="33" cy="33" r="30"></circle>
-				</svg>
-			</div>
+	</div>
+
+	<div ng-if="!showSelection" class="text-center">
+		Wait ! We re crushing data for you :)
+		<div>
+			<svg class="spinner" width="65px" height="65px" viewBox="0 0 66 66" xmlns="http://www.w3.org/2000/svg">
+				<circle class="path" fill="none" stroke-width="6" stroke-linecap="round" cx="33" cy="33" r="30"></circle>
+			</svg>
 		</div>
 	</div>
+</div>
 
 <!-- Skill template -->
 <script type="text/ng-template" id="nodes_skill_renderer.html">
-	<div ui-tree-handle ng-class="{selected: skill.Selected}" class="skill" ng-click="toggleSkill(skill)">
-		{{skill.Name}}<p class="pull-right skill-accuracy">{{skill.numberOfSelectedWorkloads}}/{{skill.Workloads.length}} selected {{skill.Accuracy}}</p>
+	<div class="tree-toggle-group">
+		<div class="toggle-handle" ng-class="{open: skill.show}" ng-click="skill.show = !skill.show"><i class="mdi mdi-chevron-right"></i></div>
+		<div ui-tree-handle ng-class="{selected: skill.Selected}" class="skill" ng-click="toggleSkill(skill)">
+			{{skill.Name}}<i class="pull-right skill-accuracy"><b ng-if="skill.numberOfSelectedWorkloads!==0">{{skill.numberOfSelectedWorkloads}}/{{skill.Workloads.length}} selected</b> {{skill.Accuracy}}</i>
+		</div>
 	</div>
-	<ol ui-tree-nodes="" ng-model="skill.Workloads">
+	<ol ui-tree-nodes="" ng-model="skill.Workloads" ng-show="skill.show">
 		<li ng-repeat="workload in skill.Workloads" ui-tree-node value='{{workload.Id}}'>
-			<div ui-tree-handle ng-class="{selected: workload.Selected || skill.Selected}" class="workload" ng-click="toggleWorkload(workload)">
-				{{workload.Name}} <p class="pull-right workload-accuracy">{{workload.Accuracy}}</p>
+			<div class="tree-toggle-group">
+				<div class="toggle-handle" ng-class="{open: false}"><i class="mdi mdi-chevron-right ng-hide"></i></div>
+				<div ui-tree-handle ng-class="{selected: workload.Selected || skill.Selected}" class="workload" ng-click="toggleWorkload(workload)">
+					{{workload.Name}} <i class="pull-right workload-accuracy">{{workload.Accuracy}}</i>
+				</div>
 			</div>
 		</li>
 	</ol>
+
 </script>

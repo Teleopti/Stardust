@@ -71,7 +71,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Forecasting
 		{
 			ScenarioContext.Current.Add("startdate", new DateOnly(DateTime.Parse(Browser.Interactions.GetText("span.startDate"))));
 			ScenarioContext.Current.Add("enddate", new DateOnly(DateTime.Parse(Browser.Interactions.GetText("span.endDate"))));
-			Browser.Interactions.Click(".next-step");
+			Browser.Interactions.Click(".advanced-next-step");
 		}
 
 		[Then(@"there is forecast data for default period for '(.*)'")]
