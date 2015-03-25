@@ -1,4 +1,3 @@
-using System.Configuration;
 using System.Linq;
 using System.Runtime.Caching;
 using Autofac;
@@ -51,22 +50,19 @@ namespace Teleopti.Ccc.IocCommon
 
 		public IocArgs(IAppConfigReader appConfigReader)
 		{
-			FeatureToggle = ConfigurationManager.AppSettings["FeatureToggle"];
-			ToggleMode = ConfigurationManager.AppSettings["ToggleMode"];
-			TenantServer = ConfigurationManager.AppSettings["TenantServer"];
-			ConfigServer = ConfigurationManager.AppSettings["ConfigServer"];
-			ReportServer = ConfigurationManager.AppSettings["ReportServer"];
-			ReportServer = ConfigurationManager.AppSettings["MatrixWebSiteUrl"];
-			PublishEventsToServiceBus = readBoolAppSetting("PublishEventsToServiceBus", true);
+			FeatureToggle = appConfigReader.AppConfig("FeatureToggle");
+			ToggleMode = appConfigReader.AppConfig("ToggleMode");
+			TenantServer = appConfigReader.AppConfig("TenantServer");
+			ConfigServer = appConfigReader.AppConfig("ConfigServer");
+			ReportServer = appConfigReader.AppConfig("ReportServer");
+			ReportServer = appConfigReader.AppConfig("MatrixWebSiteUrl");
+			PublishEventsToServiceBus = readBoolAppSetting(appConfigReader.AppConfig("PublishEventsToServiceBus"), true);
 			DataSourceConfigurationSetter = Infrastructure.NHibernateConfiguration.DataSourceConfigurationSetter.ForWeb();
 			ClearCache = false;
 		}
 
-		
-
-		private bool readBoolAppSetting(string name, bool @default)
+		private static bool readBoolAppSetting(string value, bool @default)
 		{
-			var value = ConfigurationManager.AppSettings[name];
 			if (string.IsNullOrEmpty(value))
 				return @default;
 			bool result;
