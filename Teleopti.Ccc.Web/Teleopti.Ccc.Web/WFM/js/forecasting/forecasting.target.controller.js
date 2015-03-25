@@ -37,15 +37,19 @@ angular.module('wfm.forecasting.target', [])
 
 				$scope.$watch('skillsDisplayed', function() {
 					var allSet = true;
+					$scope.all.numberOfSelectedWorkloads = 0;
+					$scope.all.totalWorkloads = 0;
 					angular.forEach($scope.skillsDisplayed, function(skill) {
 						var allSetForSkill = true;
 						skill.numberOfSelectedWorkloads = 0;
+						$scope.all.totalWorkloads += skill.Workloads.length;
 						angular.forEach(skill.Workloads, function(workload) {
 							if (!workload.Selected) {
 								allSetForSkill = false;
 								allSet = false;
 							} else {
 								skill.numberOfSelectedWorkloads++;
+								$scope.all.numberOfSelectedWorkloads++;
 							}
 						});
 						skill.Selected = allSetForSkill;

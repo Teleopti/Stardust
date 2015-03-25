@@ -17,7 +17,7 @@
 							<div class="tree-toggle-group">
 								<div class="toggle-handle" ng-class="{open: all.show}" ng-click="all.show = !all.show"><i class="mdi mdi-chevron-right"></i></div>
 								<div ui-tree-handle ng-class="{selected: all.Selected}" ng-click="toggleAll(all.Selected)">
-									{{all.Name}} <i class="pull-right total-accuracy">{{all.Accuracy}}</i>
+									{{all.Name}} <i class="pull-right total-accuracy"><b ng-if="all.numberOfSelectedWorkloads!==0">{{all.numberOfSelectedWorkloads}}/{{all.totalWorkloads}} selected</b> {{all.Accuracy}}</i>
 								</div>
 							</div>
 							<ol ui-tree-nodes="" ng-model="skillsDisplayed" ng-show="all.show">
