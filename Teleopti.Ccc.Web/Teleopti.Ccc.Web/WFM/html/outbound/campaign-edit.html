@@ -1,0 +1,142 @@
+﻿<div class="wfm-block material-block material-depth-1">
+	<div class="material-block-header">
+		Campaign Details
+	</div>
+	<div class="material-block-content">
+		<div class="wfm-accordion">
+			<div class="wfm-block">
+				<div class="sub-header accordion-head" ng-click="acToggle1 = !acToggle1">
+					Campaign
+					<strong>{{campaign.name}}</strong> 					
+				</div>
+				<div ng-show="acToggle1">
+					<form name="params" class="form-horizontal wfm-block">
+						<div class="form-group">
+							<label for="name" class="col-sm-2 control-label">Name</label>
+							<div class="col-sm-6">
+								<input type="text" class="form-control" name="name" id="name"
+								       ng-model="campaign.name"
+								       disabled/>
+							</div>
+						</div>
+						<div class="form-group">
+							<label for="skill" class="col-sm-2 control-label">Skill</label>
+							<div class="col-sm-6">
+								<select name="skill" id="skill" class="form-control"
+								        ng-model="params.skill"
+								        ng-options="skill as skill.label for skill in skills"
+								        ng-required></select>
+							</div>
+						</div>
+						<div class="form-group">
+							<label for="callList" class="col-sm-2 control-label">Call List Len</label>
+							<div class="col-sm-6">
+								<input type="number" class="form-control" name="callList" id="callList" placeholder="100"
+								       ng-model="params.callList"
+								       ng-required/>
+							</div>
+						</div>
+						<div class="form-group">
+							<label for="sla" class="col-sm-2 control-label">SLA</label>
+							<div class="col-sm-6">
+								<input type="number" class="form-control" name="sla" id="sla"
+								       ng-model="params.sla"
+								       ng-required/>
+							</div>
+						</div>
+						<div class="form-group">
+							<label for="target" class="col-sm-2 control-label">Target</label>
+							<div class="col-sm-6">
+								<input type="number" class="form-control" name="target" id="target"
+								       ng-model="params.target"
+								       ng-required/>
+							</div>
+						</div>
+						<div class="form-group">
+							<label for="cr" class="col-sm-2 control-label">CR</label>
+							<div class="col-sm-6">
+								<input type="number" class="form-control" name="cr" id="cr"
+								       ng-model="params.cr"
+								       ng-required/>
+							</div>
+						</div>
+						<div class="form-group">
+							<label for="rpcr" class="col-sm-2 control-label">RPCR</label>
+							<div class="col-sm-6">
+								<input type="number" class="form-control" name="rpcr" id="rpcr"
+								       ng-model="params.rpcr"
+								       ng-required/>
+							</div>
+						</div>
+						<div class="form-group">
+							<label for="cAHT" class="col-sm-2 control-label">Connect AHT</label>
+							<div class="col-sm-6">
+								<input type="number" class="form-control" name="cAHT" id="cAHT"
+								       ng-model="params.cAHT"
+								       ng-required/>
+							</div>
+						</div>
+						<div class="form-group">
+							<label for="rpcAHT" class="col-sm-2 control-label">RPC AHT</label>
+							<div class="col-sm-6">
+								<input type="number" class="form-control" name="rpcAHT" id="rpcAHT"
+								       ng-model="params.rpcAHT"
+								       ng-required/>
+							</div>
+						</div>
+						<div class="form-group">
+							<label for="unproductive" class="col-sm-2 control-label">Unproductive</label>
+							<div class="col-sm-6">
+								<input type="number" class="form-control" name="unproductive" id="unproductive"
+								       ng-model="params.unproductive"
+								       ng-required/>
+							</div>
+						</div>
+					</form>
+				</div>
+			</div>
+			<div class="wfm-block">
+				<div class="sub-header accordion-head" ng-click="acToggle2 = !acToggle2">
+					Duration
+					<span ng-show="!acToggle2"> from {{period.startDate | date: format }} to {{period.endDate | date: format }}</span>
+				</div>
+				<div ng-show="acToggle2">
+					<div class="row wfm-block">
+						<div class="col-lg-6">
+							<div class="input-prepend">
+								<label>Start time: <span class="start-date">{{period.startDate | date: format }}</span></label>
+								<datepicker ng-model="period.startDate" show-weeks="true" class="well well-sm"></datepicker>
+							</div>
+						</div>
+						<div class="col-lg-6">
+							<div class="input-prepend">
+								<label>End time: <span class="end-date">{{period.endDate | date: format }}</span></label>
+								<datepicker ng-model="period.endDate" show-weeks="true" class="well well-sm"></datepicker>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="wfm-block">
+				<div class="sub-header accordion-head" ng-click="acToggle3 = !acToggle3">
+					Working Hours
+				</div>
+				<div ng-show="acToggle3">
+					<div class="row toolbar">
+						<form name="workingHours" class="form-horizontal wfm-block" ng-repeat="weekday in ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday']">
+							<div class="form-group">
+								<label for="wh{{weekday}}" class="col-sm-2 control-label">{{weekday}}</label>
+								<div class="col-sm-2">
+									<select name="wh{{weekday}}" id="wh{{weekday}}" class="form-control"
+									        ng-model="wh[weekday]"
+									        ng-options="workingHour as workingHour.label for workingHour in availableWorkingHours"
+									        ng-required></select>
+								</div>
+							</div>
+						</form>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>

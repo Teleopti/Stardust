@@ -1,0 +1,9 @@
+﻿@charset "UTF-8";
+.input-prepend {
+	width: 100%;
+}
+.input-prepend label {
+	display: inline-block;
+	width: 20%;
+}
+ 

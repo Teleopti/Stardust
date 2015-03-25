@@ -9,6 +9,7 @@
 	<link rel="stylesheet" href="vendor/MaterialDesignIcons-0.5.18/MaterialDesignIcons.css" media="all" type="text/css" />
 	<link rel="stylesheet" href="css/main.css">
 	<link rel="stylesheet" href="css/layout.css">
+	<link rel="stylesheet" href="css/outbound.css">
 	
 
 	<script src="node_modules/angular/angular.min.js"></script>
@@ -53,6 +54,17 @@
 					</div>
 				</div>
 
+				<div>
+					<div class="sidenav-header accordion-head" ng-click="accordionToggleOutbound = !accordionToggleOutbound">Outbound</div>
+					<div ng-show="accordionToggleOutbound">
+						<div>
+							<div ng-repeat="accordionItem in [{ url: 'outbound', name:'Campaigns' }]">
+								<div class="wfm-block"><a ui-sref={{accordionItem.url}}>{{accordionItem.name}}</a></div>
+							</div>
+							
+						</div>
+					</div>
+				</div>
 				<div ng-repeat="accordionTitle in ['Schedule']">
 					<div class="sidenav-header accordion-head" ng-click="accordionToggle = !accordionToggle">{{accordionTitle}}</div>
 					<div ng-show="accordionToggle">
