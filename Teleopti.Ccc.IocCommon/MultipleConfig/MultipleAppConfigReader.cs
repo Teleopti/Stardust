@@ -13,10 +13,8 @@
 
 		public string AppConfig(string key)
 		{
-			var overrideSetting = _configOverrider.AppSettings().Settings[key];
-			return overrideSetting == null ?
-				_defaultAppConfigReader.AppConfig(key) :
-				overrideSetting.Value;
+			var overrideSetting = _configOverrider.AppSetting(key);
+			return overrideSetting ?? _defaultAppConfigReader.AppConfig(key);
 		}
 	}
 }

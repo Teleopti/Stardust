@@ -1,23 +1,32 @@
-﻿using System.Configuration;
+﻿using System.Xml;
 
 namespace Teleopti.Ccc.IocCommon.MultipleConfig
 {
 	public class ConfigOverrider : IConfigOverrider
 	{
 		private readonly string _filePath;
-		private System.Configuration.Configuration _overrideConfiguration;
+		private XmlDocument _doc;
 
 		public ConfigOverrider(string filePath)
 		{
 			_filePath = filePath;
 		}
-
-		public AppSettingsSection AppSettings()
+		
+		public string AppSetting(string key)
 		{
-			if (_overrideConfiguration == null)
-				_overrideConfiguration = ConfigurationManager.OpenExeConfiguration(_filePath);
+			makeSureConfigIsRead();
+			var setting = _doc.DocumentElement
+				.SelectSingleNode(string.Format("/appSettings/add[@key='{0}']", key));
+			return setting==null ? null : setting.Attributes["value"].Value;
+		}
 
-			return _overrideConfiguration.AppSettings;
+		private void makeSureConfigIsRead()
+		{
+			if (_doc != null)
+				return;
+
+			_doc = new XmlDocument();
+			_doc.Load(_filePath);
 		}
 	}
 }

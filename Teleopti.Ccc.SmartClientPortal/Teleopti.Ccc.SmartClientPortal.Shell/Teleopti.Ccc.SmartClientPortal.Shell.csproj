@@ -329,6 +329,9 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <None Include="NameOfInstallation.override.config.example">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Include="Resources\TeleoptiWFM.ico" />
     <None Include="Resources\NotifyOK.ico" />
     <None Include="Resources\NotifyWarning.ico" />
