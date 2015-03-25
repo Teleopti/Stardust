@@ -31,7 +31,7 @@ namespace Teleopti.Ccc.WebTest.Core.IoC
 
 		private ILifetimeScope buildContainer()
 		{
-			return buildContainer(CommonModule.ToggleManagerForIoc());
+			return buildContainer(CommonModule.ToggleManagerForIoc(new IocArgs()));
 		}
 
 		private ILifetimeScope buildContainer(IToggleManager toggleManager)

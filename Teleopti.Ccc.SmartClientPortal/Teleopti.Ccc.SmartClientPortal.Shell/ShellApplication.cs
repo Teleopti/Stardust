@@ -161,9 +161,10 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 
 				var builder = new ContainerBuilder();
 
+				var iocArgs = new IocArgs {MessageBrokerListeningEnabled = true};
 				var configuration = new IocConfiguration(
-							new IocArgs { MessageBrokerListeningEnabled = true },
-							CommonModule.ToggleManagerForIoc());
+							iocArgs,
+							CommonModule.ToggleManagerForIoc(iocArgs));
 
 				builder.RegisterModule(
 				new CommonModule(configuration)
@@ -278,8 +279,9 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 			IWriteToFile fileWriter = new WriteStringToFile();
 			IMapiMailMessage message = new MapiMailMessage(string.Empty, string.Empty);
 
+			var iocArgs = new IocArgs();
 			var tempContainerBecauseWeDontHaveAGlobalOneHere = new ContainerBuilder();
-			tempContainerBecauseWeDontHaveAGlobalOneHere.RegisterModule(new CommonModule(new IocConfiguration(new IocArgs(), CommonModule.ToggleManagerForIoc())));
+			tempContainerBecauseWeDontHaveAGlobalOneHere.RegisterModule(new CommonModule(new IocConfiguration(iocArgs, CommonModule.ToggleManagerForIoc(iocArgs))));
 			ExceptionHandlerModel exceptionHandlerModel;
 			using (var container = tempContainerBecauseWeDontHaveAGlobalOneHere.Build())
 			{

@@ -159,7 +159,8 @@ namespace Teleopti.Ccc.Sdk.WcfHost
 		  {
 			  var builder = new ContainerBuilder();
 
-			  var configuration = new IocConfiguration(new IocArgs(), CommonModule.ToggleManagerForIoc());
+			  var iocArgs = new IocArgs();
+			  var configuration = new IocConfiguration(iocArgs, CommonModule.ToggleManagerForIoc(iocArgs));
 			  builder.RegisterModule(new CommonModule(configuration));
 			  builder.RegisterModule(new RuleSetModule(configuration, true));
 			  builder.RegisterModule<EncryptionModule>();

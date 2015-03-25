@@ -1,6 +1,5 @@
 using System;
 using Autofac;
-using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Infrastructure.ApplicationLayer;
 using Teleopti.Ccc.Infrastructure.NHibernateConfiguration;
 using Teleopti.Ccc.Infrastructure.Toggle;
@@ -64,11 +63,6 @@ namespace Teleopti.Ccc.IocCommon
 
 			// move into HangfireModule when that module can be moved to IoCCommon
 			builder.RegisterType<HangfireEventProcessor>().As<IHangfireEventProcessor>().SingleInstance();
-		}
-
-		public static IToggleManager ToggleManagerForIoc()
-		{
-			return ToggleManagerForIoc(new IocArgs());
 		}
 
 		public static IToggleManager ToggleManagerForIoc(IocArgs iocArgs)

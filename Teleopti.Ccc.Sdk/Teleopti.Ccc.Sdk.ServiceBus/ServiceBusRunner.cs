@@ -45,7 +45,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
 			ServicePointManager.ServerCertificateValidationCallback = (sender, certificate, chain, sslPolicyErrors) => true; //ignoreInvalidCertificate
 			ServicePointManager.DefaultConnectionLimit = 50;
 
-			var toggleManager = CommonModule.ToggleManagerForIoc();
+			var toggleManager = CommonModule.ToggleManagerForIoc(new IocArgs());
 			var sharedContainer = new ContainerBuilder().Build();
 			new ContainerConfiguration(sharedContainer, toggleManager).Configure(null);
 

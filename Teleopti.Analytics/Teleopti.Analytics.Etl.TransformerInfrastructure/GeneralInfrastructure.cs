@@ -163,7 +163,7 @@ namespace Teleopti.Analytics.Etl.TransformerInfrastructure
 				}
 			}
 
-			var toggleManager = CommonModule.ToggleManagerForIoc();
+			var toggleManager = CommonModule.ToggleManagerForIoc(new IocArgs());
 
 			return new BaseConfiguration(culture, intervalLength, timeZone, toggleManager, runIndexMaintenance);
 		}
