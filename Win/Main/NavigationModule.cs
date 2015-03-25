@@ -32,11 +32,17 @@ namespace Teleopti.Ccc.Win.Main
 	    protected override void Load(ContainerBuilder builder)
         {
             builder.RegisterType<MatrixNavigationModel>().As<IMatrixNavigationModel>();
-				if (_config.Toggle(Toggles.MultiTenantSSOSupport_StandardReports_15093))
-					builder.Register(c => new ReportUrlConstructor(_config.Args().ReportServer, c.Resolve<IConfigReader>())).As<IReportUrl>().SingleInstance();
-				else
-					builder.Register(c => new ReportUrl(_config.Args().MatrixWebSiteUrl, c.Resolve<ICurrentBusinessUnit>(), c.Resolve<IConfigReader>())).As<IReportUrl>().SingleInstance();
-            builder.RegisterType<MatrixNavigationView>().SingleInstance();
+
+						if (_config.Toggle(Toggles.MultiTenantSSOSupport_StandardReports_15093))
+						{
+							builder.RegisterType<ReportUrlConstructor>().As<IReportUrl>().SingleInstance();
+						}
+						else
+						{
+							builder.RegisterType<ReportUrl>().As<IReportUrl>().SingleInstance();
+						}
+
+						builder.RegisterType<MatrixNavigationView>().SingleInstance();
             builder.RegisterType<ShiftsNavigationPanel>();
             builder.RegisterType<NavigationPanelProvider>().SingleInstance();
             builder.RegisterType<ForecasterNavigator>();

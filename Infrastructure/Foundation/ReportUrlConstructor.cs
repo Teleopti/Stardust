@@ -7,18 +7,16 @@ namespace Teleopti.Ccc.Infrastructure.Foundation
 {
 	public class ReportUrlConstructor : IReportUrl
 	{
-		private readonly string _reportServerPath;
 		private readonly IConfigReader _configReader;
 
-		public ReportUrlConstructor(string reportServerPath, IConfigReader configReader)
+		public ReportUrlConstructor(IConfigReader configReader)
 		{
-			_reportServerPath = reportServerPath;
 			_configReader = configReader;
 		}
 
 		public string Build(string reportId)
 		{
-			var matrixWebsiteUrl = _reportServerPath ?? "/";
+			var matrixWebsiteUrl = _configReader.AppSettings["ReportServer"] ?? "/";
 			if (!matrixWebsiteUrl.EndsWith("/")) matrixWebsiteUrl += "/";
 
 			var url = string.Format(CultureInfo.InvariantCulture, "{0}Reporting/Report/{1}#{2}",

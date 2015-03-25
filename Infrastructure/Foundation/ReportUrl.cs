@@ -8,13 +8,11 @@ namespace Teleopti.Ccc.Infrastructure.Foundation
 {
 	public class ReportUrl : IReportUrl
 	{
-		private readonly string _matrixWebSitePath;
 		private readonly ICurrentBusinessUnit _currentBusinessUnit;
 		private readonly IConfigReader _configReader;
 
-		public ReportUrl(string matrixWebSitePath, ICurrentBusinessUnit currentBusinessUnit, IConfigReader configReader)
+		public ReportUrl(ICurrentBusinessUnit currentBusinessUnit, IConfigReader configReader)
 		{
-			_matrixWebSitePath = matrixWebSitePath;
 			_currentBusinessUnit = currentBusinessUnit;
 			_configReader = configReader;
 		}
@@ -22,7 +20,7 @@ namespace Teleopti.Ccc.Infrastructure.Foundation
 		public string Build(string foreignId)
 		{
 			var businessId = _currentBusinessUnit.Current().Id.GetValueOrDefault();
-			var matrixWebsiteUrl = _matrixWebSitePath ?? "/";
+			var matrixWebsiteUrl = _configReader.AppSettings["MatrixWebSiteUrl"] ?? "/";
 			if (!matrixWebsiteUrl.EndsWith("/")) matrixWebsiteUrl += "/";
 			
 			var url = string.Format(CultureInfo.InvariantCulture, "{0}Selection.aspx?ReportId={1}&BuId={2}",
