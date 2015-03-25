@@ -2,6 +2,7 @@
 using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.IocCommon;
+using Teleopti.Ccc.IocCommon.MultipleConfig;
 using Teleopti.Ccc.Web.Areas.Tenant.Core;
 using Teleopti.Ccc.Web.Core.IoC;
 
@@ -24,8 +25,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Tenant.Core
 		private static IContainer buildContainer()
 		{
 			var builder = new ContainerBuilder();
-			builder.RegisterModule(new WebAppModule(new IocConfiguration(new IocArgs(), null)));
-			//builder.RegisterModule(new CommonModule(new IocConfiguration(new IocArgs(), null)));
+			builder.RegisterModule(new WebAppModule(new IocConfiguration(new IocArgs(new AppConfigReader()), null)));
 
 			return builder.Build();
 		}

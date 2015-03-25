@@ -15,6 +15,7 @@ using Teleopti.Ccc.Infrastructure.NHibernateConfiguration;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.Infrastructure.Web;
 using Teleopti.Ccc.IocCommon;
+using Teleopti.Ccc.IocCommon.MultipleConfig;
 using Teleopti.Interfaces.Infrastructure;
 using log4net;
 using log4net.Config;
@@ -159,7 +160,7 @@ namespace Teleopti.Ccc.Sdk.WcfHost
 		  {
 			  var builder = new ContainerBuilder();
 
-			  var iocArgs = new IocArgs();
+				var iocArgs = new IocArgs(new AppConfigReader());
 			  var configuration = new IocConfiguration(iocArgs, CommonModule.ToggleManagerForIoc(iocArgs));
 			  builder.RegisterModule(new CommonModule(configuration));
 			  builder.RegisterModule(new RuleSetModule(configuration, true));

@@ -4,6 +4,7 @@ using Teleopti.Ccc.Infrastructure.ApplicationLayer;
 using Teleopti.Ccc.Infrastructure.NHibernateConfiguration;
 using Teleopti.Ccc.Infrastructure.Toggle;
 using Teleopti.Ccc.IocCommon.Configuration;
+using Teleopti.Ccc.IocCommon.MultipleConfig;
 using Teleopti.Ccc.IocCommon.Toggle;
 using Teleopti.Interfaces.Infrastructure;
 
@@ -23,7 +24,7 @@ namespace Teleopti.Ccc.IocCommon
 		{
 			return new CommonModule(
 				new IocConfiguration(
-					new IocArgs
+					new IocArgs(new AppConfigReader())
 					{
 						DataSourceConfigurationSetter = DataSourceConfigurationSetter.ForTest()
 					},

@@ -6,6 +6,7 @@ using MbCache.Configuration;
 using MbCache.ProxyImpl.LinFu;
 using Teleopti.Ccc.Infrastructure.NHibernateConfiguration;
 using Teleopti.Ccc.IocCommon.Configuration;
+using Teleopti.Ccc.IocCommon.MultipleConfig;
 
 namespace Teleopti.Ccc.IocCommon
 {
@@ -46,7 +47,7 @@ namespace Teleopti.Ccc.IocCommon
 			}
 		}
 
-		public IocArgs()
+		public IocArgs(IAppConfigReader appConfigReader)
 		{
 			FeatureToggle = ConfigurationManager.AppSettings["FeatureToggle"];
 			ToggleMode = ConfigurationManager.AppSettings["ToggleMode"];

@@ -7,6 +7,7 @@ using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Infrastructure.ApplicationLayer;
 using Teleopti.Ccc.Infrastructure.Toggle;
 using Teleopti.Ccc.IocCommon;
+using Teleopti.Ccc.IocCommon.MultipleConfig;
 using Teleopti.Ccc.IocCommon.Toggle;
 using Teleopti.Ccc.TestCommon;
 
@@ -30,7 +31,7 @@ namespace Teleopti.Ccc.IocCommonTest.Configuration
 		public void ShouldResolveSyncEventPublisher()
 		{
 			var builder = new ContainerBuilder();
-			builder.RegisterModule(new CommonModule(new IocConfiguration(new IocArgs {PublishEventsToServiceBus = false}, new FalseToggleManager())));
+			builder.RegisterModule(new CommonModule(new IocConfiguration(new IocArgs(new AppConfigReader()) { PublishEventsToServiceBus = false }, new FalseToggleManager())));
 			var container = builder.Build();
 
 			container.Resolve<ISyncEventPublisher>().Should().Not.Be.Null();
@@ -88,7 +89,7 @@ namespace Teleopti.Ccc.IocCommonTest.Configuration
 		private ILifetimeScope buildContainer(IToggleManager toggleManager)
 		{
 			var builder = new ContainerBuilder();
-			builder.RegisterModule(new CommonModule(new IocConfiguration(new IocArgs(), toggleManager)));
+			builder.RegisterModule(new CommonModule(new IocConfiguration(new IocArgs(new AppConfigReader()), toggleManager)));
 			builder.RegisterInstance(MockRepository.GenerateMock<IServiceBusSender>()).As<IServiceBusSender>();
 			return builder.Build();
 		}

@@ -6,6 +6,7 @@ using Teleopti.Ccc.Domain.ApplicationLayer.Rta.PulseLoop;
 using Teleopti.Ccc.Infrastructure.Toggle;
 using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.IocCommon.Configuration;
+using Teleopti.Ccc.IocCommon.MultipleConfig;
 using Teleopti.Ccc.Sdk.ServiceBus.AgentBadge;
 
 namespace Teleopti.Ccc.Sdk.ServiceBus.Container
@@ -31,7 +32,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Container
 			var build = new ContainerBuilder();
 			build.RegisterGeneric(typeof(InMemorySagaPersister<>)).As(typeof(ISagaPersister<>));
 
-			build.RegisterModule(new CommonModule(new IocConfiguration(new IocArgs { SharedContainer = sharedContainer }, _toggleManager)));
+			build.RegisterModule(new CommonModule(new IocConfiguration(new IocArgs(new AppConfigReader()) { SharedContainer = sharedContainer }, _toggleManager)));
 
 			build.RegisterModule<ShiftTradeModule>();
 			build.RegisterModule<AuthorizationContainerInstaller>();

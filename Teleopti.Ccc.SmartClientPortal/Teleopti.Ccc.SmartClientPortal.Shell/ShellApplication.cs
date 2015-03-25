@@ -14,6 +14,7 @@ using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Infrastructure.Toggle;
 using Teleopti.Ccc.IocCommon;
+using Teleopti.Ccc.IocCommon.MultipleConfig;
 using Teleopti.Ccc.IocCommon.Toggle;
 using Teleopti.Ccc.SmartClientPortal.Shell.Common.Constants;
 using Teleopti.Ccc.SmartClientPortal.Shell.Common.Library;
@@ -153,15 +154,19 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 			: base(container)
 		{ }
 
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling")]
+
+		private static IAppConfigReader appConfigReader;
+
 		private static IContainer configureContainer()
 		{
+			//TODO: change this one when fixing #32796. Soon!
+			appConfigReader = new AppConfigReader();
 			using (PerformanceOutput.ForOperation("Building Ioc container"))
 			{
 
 				var builder = new ContainerBuilder();
 
-				var iocArgs = new IocArgs {MessageBrokerListeningEnabled = true};
+				var iocArgs = new IocArgs(appConfigReader) { MessageBrokerListeningEnabled = true };
 				var configuration = new IocConfiguration(
 							iocArgs,
 							CommonModule.ToggleManagerForIoc(iocArgs));
@@ -279,7 +284,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 			IWriteToFile fileWriter = new WriteStringToFile();
 			IMapiMailMessage message = new MapiMailMessage(string.Empty, string.Empty);
 
-			var iocArgs = new IocArgs();
+			var iocArgs = new IocArgs(appConfigReader);
 			var tempContainerBecauseWeDontHaveAGlobalOneHere = new ContainerBuilder();
 			tempContainerBecauseWeDontHaveAGlobalOneHere.RegisterModule(new CommonModule(new IocConfiguration(iocArgs, CommonModule.ToggleManagerForIoc(iocArgs))));
 			ExceptionHandlerModel exceptionHandlerModel;

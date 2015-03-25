@@ -5,6 +5,7 @@ using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Infrastructure.NHibernateConfiguration;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.IocCommon;
+using Teleopti.Ccc.IocCommon.MultipleConfig;
 using Teleopti.Ccc.IocCommon.Toggle;
 
 namespace Teleopti.Ccc.IocCommonTest.Configuration
@@ -83,7 +84,7 @@ namespace Teleopti.Ccc.IocCommonTest.Configuration
 		public void RepositoriesWithIncorrectCtorAreNotWired()
 		{
 			var typeThatNoRepoAcceptAsArgument = GetType();
-			var config = new IocConfiguration(new IocArgs { DataSourceConfigurationSetter = DataSourceConfigurationSetter.ForTest() }, new TrueToggleManager());
+			var config = new IocConfiguration(new IocArgs(new AppConfigReader()) { DataSourceConfigurationSetter = DataSourceConfigurationSetter.ForTest() }, new TrueToggleManager());
 			var builder = new ContainerBuilder();
 			builder.RegisterModule(new CommonModule(config) { RepositoryConstructorType = typeThatNoRepoAcceptAsArgument });
 

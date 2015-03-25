@@ -25,6 +25,7 @@ using Teleopti.Ccc.Infrastructure.Toggle;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.Infrastructure.WebReports;
 using Teleopti.Ccc.IocCommon;
+using Teleopti.Ccc.IocCommon.MultipleConfig;
 using Teleopti.Ccc.Secrets.Licensing;
 using Teleopti.Ccc.TestCommon.Web;
 using Teleopti.Ccc.Web.Areas.Anywhere.Controllers;
@@ -82,13 +83,13 @@ namespace Teleopti.Ccc.WebTest.Core.IoC
 
 		private ILifetimeScope buildContainer()
 		{
-			return buildContainer(CommonModule.ToggleManagerForIoc(new IocArgs()));
+			return buildContainer(CommonModule.ToggleManagerForIoc(new IocArgs(new AppConfigReader())));
 		}
 
 		private ILifetimeScope buildContainer(IToggleManager toggleManager)
 		{
 			var builder = new ContainerBuilder();
-			builder.RegisterModule(new WebAppModule(new IocConfiguration(new IocArgs(), toggleManager)));
+			builder.RegisterModule(new WebAppModule(new IocConfiguration(new IocArgs(new AppConfigReader()), toggleManager)));
 			builder.RegisterInstance(MockRepository.GenerateMock<IApplicationData>()).As<IApplicationData>();
 			builder.RegisterInstance(new FakeHttpContext("")).As<HttpContextBase>();
 			return builder.Build();

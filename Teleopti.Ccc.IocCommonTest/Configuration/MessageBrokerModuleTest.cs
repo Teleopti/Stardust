@@ -9,6 +9,7 @@ using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Infrastructure.Toggle;
 using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.IocCommon.Configuration;
+using Teleopti.Ccc.IocCommon.MultipleConfig;
 using Teleopti.Interfaces.MessageBroker.Client;
 using Teleopti.Interfaces.MessageBroker.Client.Composite;
 using Teleopti.Messaging.Client.Http;
@@ -62,7 +63,7 @@ namespace Teleopti.Ccc.IocCommonTest.Configuration
 		[Test]
 		public void ShouldResolveKeepAliveStrategies()
 		{
-			var config = new IocConfiguration(new IocArgs {MessageBrokerListeningEnabled = true}, null);
+			var config = new IocConfiguration(new IocArgs(new AppConfigReader()) { MessageBrokerListeningEnabled = true }, null);
 			using (var container = BuildContainer(config))
 			{
 				container.Resolve<IEnumerable<IConnectionKeepAliveStrategy>>()
@@ -75,7 +76,7 @@ namespace Teleopti.Ccc.IocCommonTest.Configuration
 		public void ShouldNotUseSignalRIfListeningDisabledAndHttpSenderEnabled()
 		{
 			var config = new IocConfiguration(
-				new IocArgs {MessageBrokerListeningEnabled = false},
+				new IocArgs(new AppConfigReader()) { MessageBrokerListeningEnabled = false },
 				ToggleManager(Toggles.Messaging_HttpSender_29205, true)
 				);
 			using (var container = BuildContainer(config))
@@ -89,7 +90,8 @@ namespace Teleopti.Ccc.IocCommonTest.Configuration
 		public void ShouldStillUseSignalRIfListeningDisabledAndHttpSenderDisabled()
 		{
 			var config = new IocConfiguration(
-				new IocArgs { MessageBrokerListeningEnabled = false },
+				new IocArgs(new AppConfigReader()
+					) { MessageBrokerListeningEnabled = false },
 				ToggleManager(Toggles.Messaging_HttpSender_29205, false)
 				);
 			using (var container = BuildContainer(config))
@@ -105,7 +107,7 @@ namespace Teleopti.Ccc.IocCommonTest.Configuration
 			var builder = new ContainerBuilder();
 			builder.RegisterInstance(signalRClient).As<ISignalRClient>();
 			var sharedContainer = builder.Build();
-			using (var container = BuildContainer(new IocConfiguration(new IocArgs{SharedContainer = sharedContainer}, null)))
+			using (var container = BuildContainer(new IocConfiguration(new IocArgs(new AppConfigReader()){SharedContainer = sharedContainer}, null)))
 			{
 				container.Resolve<ISignalRClient>().Should().Be.SameInstanceAs(signalRClient);
 			}
@@ -114,7 +116,7 @@ namespace Teleopti.Ccc.IocCommonTest.Configuration
 		private IContainer BuildContainer()
 		{
 			var builder = new ContainerBuilder();
-			builder.RegisterModule(new CommonModule(new IocConfiguration(new IocArgs(), null)));
+			builder.RegisterModule(new CommonModule(new IocConfiguration(new IocArgs(new AppConfigReader()), null)));
 			return builder.Build();
 		}
 
@@ -128,7 +130,7 @@ namespace Teleopti.Ccc.IocCommonTest.Configuration
 		private static IContainer BuildContainerWithToggle(Toggles toggle, bool value)
 		{
 			var builder = new ContainerBuilder();
-			var config = new IocConfiguration(new IocArgs(), ToggleManager(toggle, value));
+			var config = new IocConfiguration(new IocArgs(new AppConfigReader()), ToggleManager(toggle, value));
 			builder.RegisterModule(new CommonModule(config));
 			return builder.Build();
 		}

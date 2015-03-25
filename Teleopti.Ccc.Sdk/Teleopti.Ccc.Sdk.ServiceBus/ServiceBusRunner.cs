@@ -5,6 +5,7 @@ using Autofac;
 using log4net.Config;
 using Teleopti.Ccc.Infrastructure.Toggle;
 using Teleopti.Ccc.IocCommon;
+using Teleopti.Ccc.IocCommon.MultipleConfig;
 using Teleopti.Ccc.Sdk.ServiceBus.Container;
 using Teleopti.Ccc.Sdk.ServiceBus.Payroll.FormatLoader;
 
@@ -45,7 +46,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
 			ServicePointManager.ServerCertificateValidationCallback = (sender, certificate, chain, sslPolicyErrors) => true; //ignoreInvalidCertificate
 			ServicePointManager.DefaultConnectionLimit = 50;
 
-			var toggleManager = CommonModule.ToggleManagerForIoc(new IocArgs());
+			var toggleManager = CommonModule.ToggleManagerForIoc(new IocArgs(new AppConfigReader()));
 			var sharedContainer = new ContainerBuilder().Build();
 			new ContainerConfiguration(sharedContainer, toggleManager).Configure(null);
 

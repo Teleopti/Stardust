@@ -10,6 +10,7 @@ using Teleopti.Ccc.Domain.ApplicationLayer.Rta.ReadModelUpdaters;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service;
 using Teleopti.Ccc.Infrastructure.NHibernateConfiguration;
 using Teleopti.Ccc.IocCommon;
+using Teleopti.Ccc.IocCommon.MultipleConfig;
 
 namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta
 {
@@ -18,7 +19,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta
 		[Test]
 		public void ShouldResolveAdherencePercentageReadModelUpdater()
 		{
-			using (var container = BuildContainer())
+			using (var container = buildContainer())
 			{
 				container.Resolve<IEnumerable<IHandleEvent<PersonOutOfAdherenceEvent>>>()
 					.Where(x => x is AdherencePercentageReadModelUpdater)
@@ -29,7 +30,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta
 		[Test]
 		public void ShouldCachePersonOrganizationProvider()
 		{
-			using (var container = BuildContainer())
+			using (var container = buildContainer())
 			{
 				var builder = new ContainerBuilder();
 				var reader = MockRepository.GenerateMock<IPersonOrganizationReader>();
@@ -42,10 +43,10 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta
 			}
 		}
 
-		private IContainer BuildContainer()
+		private static IContainer buildContainer()
 		{
 			var builder = new ContainerBuilder();
-			var config = new IocConfiguration(new IocArgs { DataSourceConfigurationSetter = DataSourceConfigurationSetter.ForTest() }, null);
+			var config = new IocConfiguration(new IocArgs(new AppConfigReader()) { DataSourceConfigurationSetter = DataSourceConfigurationSetter.ForTest() }, null);
 			builder.RegisterModule(new CommonModule(config));
 			return builder.Build();
 		}

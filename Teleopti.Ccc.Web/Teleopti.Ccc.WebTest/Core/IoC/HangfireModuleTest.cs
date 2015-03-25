@@ -4,6 +4,7 @@ using SharpTestsEx;
 using Teleopti.Ccc.Infrastructure.ApplicationLayer;
 using Teleopti.Ccc.Infrastructure.Toggle;
 using Teleopti.Ccc.IocCommon;
+using Teleopti.Ccc.IocCommon.MultipleConfig;
 using Teleopti.Ccc.Web.Core.Hangfire;
 
 namespace Teleopti.Ccc.WebTest.Core.IoC
@@ -31,13 +32,13 @@ namespace Teleopti.Ccc.WebTest.Core.IoC
 
 		private ILifetimeScope buildContainer()
 		{
-			return buildContainer(CommonModule.ToggleManagerForIoc(new IocArgs()));
+			return buildContainer(CommonModule.ToggleManagerForIoc(new IocArgs(new AppConfigReader())));
 		}
 
 		private ILifetimeScope buildContainer(IToggleManager toggleManager)
 		{
 			var builder = new ContainerBuilder();
-			var configuration = new IocConfiguration(new IocArgs(), toggleManager);
+			var configuration = new IocConfiguration(new IocArgs(new AppConfigReader()), toggleManager);
 			builder.RegisterModule(new CommonModule(configuration));
 			builder.RegisterModule(new HangfireModule(configuration));
 			return builder.Build();

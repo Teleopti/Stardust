@@ -3,6 +3,7 @@ using Autofac;
 using MbCache.Configuration;
 using Teleopti.Ccc.Infrastructure.NHibernateConfiguration;
 using Teleopti.Ccc.IocCommon;
+using Teleopti.Ccc.IocCommon.MultipleConfig;
 
 namespace Teleopti.Ccc.Web.Core.IoC
 {
@@ -12,7 +13,7 @@ namespace Teleopti.Ccc.Web.Core.IoC
 		{
 			var builder = new ContainerBuilder();
 
-			var args = new IocArgs
+			var args = new IocArgs(new AppConfigReader())
 			{
 				FeatureToggle = featureTogglePath,
 				CacheLockObjectGenerator = new FixedNumberOfLockObjects(100),
