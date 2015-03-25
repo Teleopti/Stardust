@@ -1,5 +1,6 @@
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using System.Configuration;
 using System.Globalization;
 using System.Text;
@@ -9,6 +10,7 @@ using System.Windows.Forms;
 using System.Windows.Markup;
 using Autofac;
 using log4net;
+using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Security.Principal;
@@ -156,14 +158,26 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 
 
 		private static IAppConfigReader appConfigReader;
+		private static void createAppConfigReader()
+		{
+			var overrideConfigReader = new OverrideConfigReader(Environment.CurrentDirectory);
+			var overrides = overrideConfigReader.Overrides();
+			if (overrides.IsEmpty())
+			{
+				appConfigReader = new AppConfigReader();
+			}
+			else
+			{
+				//here do stuff soon
+				appConfigReader = new AppConfigReader();
+			}
+		}
 
 		private static IContainer configureContainer()
 		{
-			//TODO: change this one when fixing #32796. Soon!
-			appConfigReader = new AppConfigReader();
+			createAppConfigReader();
 			using (PerformanceOutput.ForOperation("Building Ioc container"))
 			{
-
 				var builder = new ContainerBuilder();
 
 				var iocArgs = new IocArgs(appConfigReader) { MessageBrokerListeningEnabled = true };
