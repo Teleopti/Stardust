@@ -137,6 +137,7 @@
     <Compile Include="MultipleConfig\FakeAppConfigReader.cs" />
     <Compile Include="MultipleConfig\MultipleAppConfigReaderTest.cs" />
     <Compile Include="MultipleConfig\NoConfigOverrider.cs" />
+    <Compile Include="MultipleConfig\OverrideConfigReaderTest.cs" />
     <Compile Include="Toggle\CustomerTest.cs" />
     <Compile Include="Toggle\DeveloperTest.cs" />
     <Compile Include="Toggle\GeneralTest.cs" />
