@@ -14,7 +14,7 @@
 					<div ui-tree data-drag-enabled="false">
 						<ol ui-tree-nodes="" ng-model="all">
 							<li ui-tree-node>
-								<div ui-tree-handle ng-class="{selected: all.Selected}" ng-click="all.Selected = !all.Selected">
+								<div ui-tree-handle ng-class="{selected: all.Selected}" ng-click="toggleAll(all.Selected)">
 									{{all.Name}} <p class="pull-right total-accuracy">{{all.Accuracy}}</p>
 								</div>
 								<ol ui-tree-nodes="" ng-model="skillsDisplayed">

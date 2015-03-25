@@ -33,7 +33,6 @@ angular.module('wfm.forecasting.target', [])
 
 				$scope.toggleWorkload = function (workload) {
 					workload.Selected = !workload.Selected;
-					
 				};
 
 				$scope.$watch('skillsDisplayed', function() {
@@ -50,14 +49,9 @@ angular.module('wfm.forecasting.target', [])
 							}
 						});
 						skill.Selected = allSetForSkill;
-						
 					});
-
 					$scope.all.Selected = allSet;
-					
 				}, true);
-
-				
 
 				Forecasting.skills.query().$promise.then(function(result) {
 					$scope.skillsDisplayed = result;
