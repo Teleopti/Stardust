@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Configuration;
 using System.Globalization;
+using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Windows;
@@ -169,7 +170,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 			else
 			{
 				//here do stuff soon
-				appConfigReader = new AppConfigReader();
+				appConfigReader = new MultipleAppConfigReader(new AppConfigReader(), new ConfigOverrider(overrides.First().Value));
 			}
 		}
 
