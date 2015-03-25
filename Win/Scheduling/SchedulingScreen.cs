@@ -32,6 +32,7 @@ using Teleopti.Ccc.Infrastructure.Persisters.Schedules;
 using Teleopti.Ccc.Infrastructure.Persisters.WriteProtection;
 using Teleopti.Ccc.Infrastructure.Toggle;
 using Teleopti.Ccc.IocCommon.Configuration;
+using Teleopti.Ccc.IocCommon.MultipleConfig;
 using Teleopti.Ccc.Secrets.Licensing;
 using Teleopti.Ccc.Secrets.WorkShiftCalculator;
 using Teleopti.Ccc.Win.Meetings;
@@ -1539,7 +1540,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 					builder.Append(",");
 			}
 
-			var url = ConfigurationManager.AppSettings["FeatureToggle"] + "Messages#" + builder;
+			var url = _container.Resolve<IAppConfigReader>().AppConfig("FeatureToggle") + "Messages#" + builder;
 			if(url.IsAnUrl())
 				Process.Start(url);
 		}
