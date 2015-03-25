@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.IO;
 using NUnit.Framework;
-using Rhino.Mocks;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain;
 using Teleopti.Ccc.IocCommon.MultipleConfig;
@@ -18,7 +17,7 @@ namespace Teleopti.Ccc.IocCommonTest.MultipleConfig
 			var file = Path.GetTempFileName();
 			using (createFile(file))
 			{
-				var target = new MultipleAppConfigReader(new FakeAppConfigReader(), new ConfigOverrider(file));
+				var target = new MultipleAppConfigReader(new FakeAppConfigReader(), file);
 				target.AppConfig(RandomName.Make())
 					.Should().Be.Null();
 			}
@@ -32,8 +31,7 @@ namespace Teleopti.Ccc.IocCommonTest.MultipleConfig
 			{
 				var key = RandomName.Make();
 				var value = RandomName.Make();
-				var target = new MultipleAppConfigReader(new FakeAppConfigReader(new Dictionary<string, string> {{key, value}}),
-					new ConfigOverrider(file));
+				var target = new MultipleAppConfigReader(new FakeAppConfigReader(new Dictionary<string, string> {{key, value}}), file);
 				target.AppConfig(key)
 					.Should().Be.EqualTo(value);
 			}
@@ -47,11 +45,9 @@ namespace Teleopti.Ccc.IocCommonTest.MultipleConfig
 			var value = RandomName.Make();
 			using (createFile(file, buildOverrideLine(key, value)))
 			{
-				var configOverrider = MockRepository.GenerateStub<IConfigOverrider>();
-				configOverrider.Stub(x => x.AppSetting(key)).Return(value);
 				var target =
 					new MultipleAppConfigReader(
-						new FakeAppConfigReader(new Dictionary<string, string> {{key, value + RandomName.Make()}}), new ConfigOverrider(file));
+						new FakeAppConfigReader(new Dictionary<string, string> {{key, value + RandomName.Make()}}), file);
 				target.AppConfig(key)
 					.Should().Be.EqualTo(value);
 			}

@@ -7,7 +7,7 @@ using Teleopti.Ccc.TestCommon.TestData;
 
 namespace Teleopti.Ccc.IocCommonTest.MultipleConfig
 {
-	public class OverrideConfigReaderTest
+	public class OverrideConfigFilesReaderTest
 	{
 		[Test]
 		public void ShouldFindOneFile()
@@ -19,7 +19,7 @@ namespace Teleopti.Ccc.IocCommonTest.MultipleConfig
 			{
 				File.WriteAllText(filename, "it doesn't matter");
 
-				var target = new OverrideConfigReader(dir);
+				var target = new OverrideConfigFilesReader(dir);
 				target.Overrides()[displayName]
 					.Should().Be.EqualTo(filename);
 			}
@@ -39,7 +39,7 @@ namespace Teleopti.Ccc.IocCommonTest.MultipleConfig
 			{
 				File.WriteAllText(filename, "it doesn't matter");
 
-				var target = new OverrideConfigReader(dir);
+				var target = new OverrideConfigFilesReader(dir);
 				target.Overrides().ContainsKey(displayName)
 					.Should().Be.False();
 			}
@@ -59,7 +59,7 @@ namespace Teleopti.Ccc.IocCommonTest.MultipleConfig
 			{
 				File.WriteAllText(filename1, "it doesn't matter");
 				File.WriteAllText(filename2, "it doesn't matter");
-				var target = new OverrideConfigReader(dir);
+				var target = new OverrideConfigFilesReader(dir);
 				target.Overrides().Count()
 					.Should().Be.EqualTo(2);
 			}

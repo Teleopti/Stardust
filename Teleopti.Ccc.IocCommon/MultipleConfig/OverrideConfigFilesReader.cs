@@ -3,11 +3,11 @@ using System.IO;
 
 namespace Teleopti.Ccc.IocCommon.MultipleConfig
 {
-	public class OverrideConfigReader
+	public class OverrideConfigFilesReader
 	{
 		private readonly string _directory;
 
-		public OverrideConfigReader(string directory)
+		public OverrideConfigFilesReader(string directory)
 		{
 			_directory = directory;
 		}

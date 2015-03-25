@@ -161,7 +161,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 		private static IAppConfigReader appConfigReader;
 		private static void createAppConfigReader()
 		{
-			var overrideConfigReader = new OverrideConfigReader(Environment.CurrentDirectory);
+			var overrideConfigReader = new OverrideConfigFilesReader(Environment.CurrentDirectory);
 			var overrides = overrideConfigReader.Overrides();
 			if (overrides.IsEmpty())
 			{
@@ -170,7 +170,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 			else
 			{
 				//here do stuff soon
-				appConfigReader = new MultipleAppConfigReader(new AppConfigReader(), new ConfigOverrider(overrides.First().Value));
+				appConfigReader = new MultipleAppConfigReader(new AppConfigReader(), overrides.First().Value);
 			}
 		}
 
