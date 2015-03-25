@@ -191,7 +191,6 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 					{
 						RepositoryConstructorType = typeof(IUnitOfWorkFactory)
 					});
-				builder.Register(c => appConfigReader).As<IAppConfigReader>().SingleInstance();
 				builder.RegisterModule(new EncryptionModule());
 				builder.RegisterModule(new EventAggregatorModule());
 				builder.RegisterModule(new StartupModule(configuration));
@@ -213,6 +212,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 				builder.Register(context => context.Resolve<ICurrentUnitOfWorkFactory>().LoggedOnUnitOfWorkFactory()).ExternallyOwned().As<IUnitOfWorkFactory>();
 				builder.RegisterType<CurrentUnitOfWorkFactory>().As<ICurrentUnitOfWorkFactory>().SingleInstance();
 				//////
+				builder.Register(c => appConfigReader).As<IAppConfigReader>().SingleInstance();
 				return builder.Build();
 			}
 		}
