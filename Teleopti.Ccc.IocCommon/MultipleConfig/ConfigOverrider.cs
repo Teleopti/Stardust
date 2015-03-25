@@ -1,11 +1,11 @@
 ﻿using System.Configuration;
 
-namespace Teleopti.Ccc.WinCode.MultipleConfig
+namespace Teleopti.Ccc.IocCommon.MultipleConfig
 {
 	public class ConfigOverrider : IConfigOverrider
 	{
 		private readonly string _filePath;
-		private Configuration _overrideConfiguration;
+		private System.Configuration.Configuration _overrideConfiguration;
 
 		public ConfigOverrider(string filePath)
 		{

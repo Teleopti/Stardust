@@ -491,7 +491,6 @@
     <Compile Include="Meetings\MeetingViewModelTest.cs" />
     <Compile Include="Intraday\StaffingEffectViewAdapterTest.cs" />
     <Compile Include="Meetings\RecurrentDailyMeetingViewModelTest.cs" />
-    <Compile Include="MultipleConfig\AppConfigReaderTest.cs" />
     <Compile Include="Payroll\DefinitionSetPresenterTest.cs" />
     <Compile Include="Payroll\DefinitionSetViewModelTest.cs" />
     <Compile Include="Payroll\ExplorerPresenterTest.cs" />

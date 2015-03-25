@@ -1,6 +1,6 @@
 ﻿using System.Configuration;
 
-namespace Teleopti.Ccc.WinCode.MultipleConfig
+namespace Teleopti.Ccc.IocCommon.MultipleConfig
 {
 	public interface IConfigOverrider
 	{

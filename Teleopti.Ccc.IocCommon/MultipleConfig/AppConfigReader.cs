@@ -1,6 +1,6 @@
 ﻿using Teleopti.Interfaces.Infrastructure;
 
-namespace Teleopti.Ccc.WinCode.MultipleConfig
+namespace Teleopti.Ccc.IocCommon.MultipleConfig
 {
 	public class AppConfigReader
 	{

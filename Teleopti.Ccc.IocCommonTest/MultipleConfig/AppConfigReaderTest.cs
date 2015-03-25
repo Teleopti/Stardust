@@ -3,11 +3,11 @@ using System.Configuration;
 using NUnit.Framework;
 using Rhino.Mocks;
 using SharpTestsEx;
+using Teleopti.Ccc.IocCommon.MultipleConfig;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.TestData;
-using Teleopti.Ccc.WinCode.MultipleConfig;
 
-namespace Teleopti.Ccc.WinCodeTest.MultipleConfig
+namespace Teleopti.Ccc.IocCommonTest.MultipleConfig
 {
 	public class AppConfigReaderTest
 	{
