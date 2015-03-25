@@ -1,5 +1,6 @@
 ﻿using Autofac;
 using Microsoft.AspNet.SignalR.Hubs;
+using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.ResourceCalculation;
@@ -41,7 +42,7 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Core.IoC
 			if (_config.Toggle(Toggles.MultiTenantSSOSupport_StandardReports_15093))
 				builder.Register(c => new ReportUrlConstructor(_config.Args().ReportServer, c.Resolve<IConfigReader>())).As<IReportUrl>().SingleInstance();
 			else
-				builder.RegisterType<ReportUrl>().As<IReportUrl>().SingleInstance();
+				builder.Register(c => new ReportUrl(_config.Args().MatrixWebSiteUrl, c.Resolve<ICurrentBusinessUnit>(), c.Resolve<IConfigReader>())).As<IReportUrl>().SingleInstance();
 			
 			
 			builder.RegisterType<ResourceCalculateSkillCommand>().As<IResourceCalculateSkillCommand>().InstancePerLifetimeScope();

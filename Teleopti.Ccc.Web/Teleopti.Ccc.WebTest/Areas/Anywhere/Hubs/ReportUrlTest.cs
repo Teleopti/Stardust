@@ -30,7 +30,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Hubs
 		{
 			var configReader = new FakeConfigReader();
 			
-			var target = new ReportUrl(_currentBusinessUnit, configReader);
+			var target = new ReportUrl(null, _currentBusinessUnit, configReader);
 			var result = target.Build(foreignId);
 
 			result.Should().Be("/" + urlPart1 + foreignId + urlPart2 + _guid);
@@ -43,7 +43,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Hubs
 			const string matrixUrl = "MatrixUrl";
 			configReader.AppSettings.Add("MatrixWebSiteUrl", matrixUrl);
 
-			var target = new ReportUrl(_currentBusinessUnit, configReader);
+			var target = new ReportUrl(matrixUrl, _currentBusinessUnit, configReader);
 			var result = target.Build(foreignId);
 
 			result.Should().Be(matrixUrl + "/" + urlPart1 + foreignId + urlPart2 + _guid);
@@ -57,7 +57,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Hubs
 			configReader.AppSettings.Add("MatrixWebSiteUrl", matrixUrl);
 			configReader.AppSettings.Add("UseRelativeConfiguration", "true");
 
-			var target = new ReportUrl(_currentBusinessUnit, configReader);
+			var target = new ReportUrl(matrixUrl, _currentBusinessUnit, configReader);
 			var result = target.Build(foreignId);
 
 			result.Should().Be("/TeleoptiWFM/Analytics/" + urlPart1 + foreignId + urlPart2 + _guid);
@@ -70,7 +70,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Hubs
 			const string matrixUrl = "MatrixUrl/";
 			configReader.AppSettings.Add("MatrixWebSiteUrl", matrixUrl);
 
-			var target = new ReportUrl(_currentBusinessUnit, configReader);
+			var target = new ReportUrl(matrixUrl, _currentBusinessUnit, configReader);
 			var result = target.Build(foreignId);
 
 			result.Should().Be(matrixUrl + urlPart1 + foreignId + urlPart2 + _guid);
