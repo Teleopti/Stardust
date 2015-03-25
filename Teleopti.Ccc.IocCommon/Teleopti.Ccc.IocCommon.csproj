@@ -179,9 +179,10 @@
     <Compile Include="Configuration\JsonSerializationModule.cs" />
     <Compile Include="Configuration\ServiceBusModule.cs" />
     <Compile Include="MultipleConfig\AppConfigReader.cs" />
+    <Compile Include="MultipleConfig\MultipleAppConfigReader.cs" />
     <Compile Include="MultipleConfig\ConfigOverrider.cs" />
+    <Compile Include="MultipleConfig\IAppConfigReader.cs" />
     <Compile Include="MultipleConfig\IConfigOverrider.cs" />
-    <Compile Include="MultipleConfig\NoConfigOverrider.cs" />
     <Compile Include="Toggle\FakeToggleManager.cs" />
     <Compile Include="Toggle\FalseToggleManager.cs" />
     <Compile Include="Toggle\ToggleNetModule.cs" />
