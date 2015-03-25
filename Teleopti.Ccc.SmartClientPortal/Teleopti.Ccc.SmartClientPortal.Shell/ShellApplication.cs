@@ -85,6 +85,20 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 				typeof(FrameworkElement),
 				new FrameworkPropertyMetadata(XmlLanguage.GetLanguage(CultureInfo.CurrentCulture.IetfLanguageTag)));
 
+			var testData = new List<string>();
+			string selected = null;
+			if(testData.Any())
+			{
+				using (var preLogonView = new PreLogonScreen(testData))
+				{
+					preLogonView.ShowDialog();
+					if(preLogonView.DialogResult != DialogResult.OK)
+						Application.Exit();
+
+					selected = preLogonView.GetData();
+				}
+			}
+			
 			IContainer container = configureContainer();
 #if (!DEBUG)
 			 //NHibernateProfiler.Initialize();

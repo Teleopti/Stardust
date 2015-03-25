@@ -763,6 +763,12 @@
       <DependentUpon>PersonSelectorViewNew.cs</DependentUpon>
     </Compile>
     <Compile Include="Main\IDummyInterface.cs" />
+    <Compile Include="Main\PreLogonScreen.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Main\PreLogonScreen.Designer.cs">
+      <DependentUpon>PreLogonScreen.cs</DependentUpon>
+    </Compile>
     <Compile Include="Scheduling\BackgroundWorkerWrapper.cs" />
     <Compile Include="Scheduling\PublishScheduleDateView.cs">
       <SubType>Form</SubType>
@@ -2833,6 +2839,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Main\LogonScreens\SelectSdkScreen.resx">
       <DependentUpon>SelectSdkScreen.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Main\PreLogonScreen.resx">
+      <DependentUpon>PreLogonScreen.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Meetings\Overview\CalendarAndTextPanel.resx">
       <DependentUpon>CalendarAndTextPanel.cs</DependentUpon>
