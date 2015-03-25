@@ -31,6 +31,7 @@ Scenario: Show accuracy
 	And I should see the forecasting accuracy for skill 'TheSkill1'
 	And I should see the forecasting accuracy for workload 'TheWorkload1'
 
+@Ignore
 Scenario: Forecast one skill
 	Given I have a role with
 	| Field           | Value      |
@@ -48,7 +49,7 @@ Scenario: Forecast one skill
 	And Forecast has succeeded
 	Then there is forecast data for default period for 'TheWorkload1'
 	And there is forecast data for default period for 'TheWorkload2'
-
+@Ignore
 Scenario: Forecast one workload
 	Given I have a role with
 	| Field           | Value      |
