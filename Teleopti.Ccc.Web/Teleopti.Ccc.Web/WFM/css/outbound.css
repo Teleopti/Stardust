@@ -13,4 +13,19 @@
 	text-align:center; 
     vertical-align:middle;
 }
+.navigate-to.active {
+	cursor: pointer;
+}
+.navigate-to.active path {	
+	fill: #0099FF;
+}
+.navigate-to.active span {
+	color: #0099FF;	
+}
+.navigate-to.inactive path {
+	fill: #E0E0E0;
+}
+.navigate-to.inactive span {
+	color: #E0E0E0;
+}
  

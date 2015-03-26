@@ -47,8 +47,8 @@ outbound.controller('OutboundListCtrl', [
 ]);
 
 outbound.controller('OutboundEditCtrl', [
-	'$scope', '$stateParams', 'OutboundService', 
-	function ($scope, $stateParams, OutboundService) {
+	'$scope', '$stateParams', '$state', 'OutboundService', 
+	function ($scope, $stateParams, $state, OutboundService) {
 	
 		$scope.acToggle1 = true;
 
@@ -79,6 +79,14 @@ outbound.controller('OutboundEditCtrl', [
 
 		$scope.params = {
 			skill: $scope.skills[0]
+		};
+
+		$scope.navigateToSchedule = function() {
+			$state.go('outbound.schedule', { id: $scope.campaign.id });
+		};
+
+		$scope.navigateToConfiguration = function() {
+			$state.go('outbound.edit', { id: $scope.campaign.id });
 		};
 	}
 ]);

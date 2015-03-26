@@ -1,7 +1,26 @@
 ﻿<div class="wfm-block material-block material-depth-1" ng-if="showDetail">
 	<div class="material-block-header">
-		Campaign Details
-	</div>
+		<div class="row">
+			<div class="navigate-to inactive pull-left">
+				<div class="pull-left">
+					<svg width="20" height="20" viewBox="0 0 24 24">
+						<path d="M2,12C2,6.48 6.48,2 12,2C17.52,2 22,6.48 22,12C22,17.52 17.52,22 12,22C6.48,22 2,17.52 2,12M17,12L12,7V10H8V14H12V17L17,12Z" transform="rotate(180, 12, 12)" />
+					</svg>
+				</div>
+				<span>Goto configuration</span>
+			</div>
+			<div class="col-xs-offset-3 col-xs-2">Configuration</div>
+			
+			<div class="navigate-to active pull-right" ng-click="navigateToSchedule()">
+				<div class="pull-right">
+					<svg width="20" height="20" viewBox="0 0 24 24">
+						<path d="M2,12C2,6.48 6.48,2 12,2C17.52,2 22,6.48 22,12C22,17.52 17.52,22 12,22C6.48,22 2,17.52 2,12M17,12L12,7V10H8V14H12V17L17,12Z"/>
+					</svg>
+				</div>
+				<span>Goto schedule</span>
+			</div>			
+		</div>				
+	</div>	
 	<div class="material-block-content">
 		<div class=" wfm-accordion">
 			<div class="wfm-block">
@@ -13,7 +32,7 @@
 				<form name="formParams" class="form-horizontal wfm-block">
 					<div class="form-group">
 						<label for="name" class="col-sm-2 control-label">Name</label>
-						<div class="col-sm-6">
+						<div class="col-sm-4">
 							<input type="text" class="form-control" name="name" id="name"
 								   ng-model="campaign.name"
 								   disabled />
@@ -21,7 +40,7 @@
 					</div>
 					<div class="form-group">
 						<label for="skill" class="col-sm-2 control-label">Skill</label>
-						<div class="col-sm-6">
+						<div class="col-sm-4">
 							<select name="skill" id="skill" class="form-control"
 									ng-model="params.skill"
 									ng-options="skill as skill.label for skill in skills"
@@ -30,7 +49,7 @@
 					</div>
 					<div class="form-group">
 						<label for="callList" class="col-sm-2 control-label">Call List Length</label>
-						<div class="col-sm-6">
+						<div class="col-sm-4">
 							<input type="number" class="form-control" name="callList" id="callList" placeholder="100"
 								   ng-model="params.callList"
 								   ng-required />
@@ -38,7 +57,7 @@
 					</div>
 					<div class="form-group">
 						<label for="sla" class="col-sm-2 control-label">SLA</label>
-						<div class="col-sm-6">
+						<div class="col-sm-4">
 							<input type="number" class="form-control" name="sla" id="sla"
 								   ng-model="params.sla"
 								   ng-required />
@@ -46,7 +65,7 @@
 					</div>
 					<div class="form-group">
 						<label for="target" class="col-sm-2 control-label">Target</label>
-						<div class="col-sm-6">
+						<div class="col-sm-4">
 							<input type="number" class="form-control" name="target" id="target"
 								   ng-model="params.target"
 								   ng-required />
@@ -54,7 +73,7 @@
 					</div>
 					<div class="form-group">
 						<label for="cr" class="col-sm-2 control-label">CR</label>
-						<div class="col-sm-6">
+						<div class="col-sm-4">
 							<input type="number" class="form-control" name="cr" id="cr"
 								   ng-model="params.cr"
 								   ng-required />
@@ -62,7 +81,7 @@
 					</div>
 					<div class="form-group">
 						<label for="rpcr" class="col-sm-2 control-label">RPCR</label>
-						<div class="col-sm-6">
+						<div class="col-sm-4">
 							<input type="number" class="form-control" name="rpcr" id="rpcr"
 								   ng-model="params.rpcr"
 								   ng-required />
@@ -70,7 +89,7 @@
 					</div>
 					<div class="form-group">
 						<label for="cAHT" class="col-sm-2 control-label">Connect AHT</label>
-						<div class="col-sm-6">
+						<div class="col-sm-4">
 							<input type="number" class="form-control" name="cAHT" id="cAHT"
 								   ng-model="params.cAHT"
 								   ng-required />
@@ -78,7 +97,7 @@
 					</div>
 					<div class="form-group">
 						<label for="rpcAHT" class="col-sm-2 control-label">RPC AHT</label>
-						<div class="col-sm-6">
+						<div class="col-sm-4">
 							<input type="number" class="form-control" name="rpcAHT" id="rpcAHT"
 								   ng-model="params.rpcAHT"
 								   ng-required />
@@ -86,7 +105,7 @@
 					</div>
 					<div class="form-group">
 						<label for="unproductive" class="col-sm-2 control-label">Unproductive</label>
-						<div class="col-sm-6">
+						<div class="col-sm-4">
 							<input type="number" class="form-control" name="unproductive" id="unproductive"
 								   ng-model="params.unproductive"
 								   ng-required />

@@ -1202,6 +1202,7 @@
     <Content Include="WFM\css\material.css" />
     <Content Include="WFM\Gruntfile.js" />
     <Content Include="WFM\html\forecasting\forecasting-target.html" />
+    <Content Include="WFM\html\outbound\campaign-schedule.html" />
     <Content Include="WFM\html\outbound\outbound.html" />
     <Content Include="WFM\html\people\people.html" />
     <Content Include="WFM\js\forecasting\forecasting.controller.js" />
