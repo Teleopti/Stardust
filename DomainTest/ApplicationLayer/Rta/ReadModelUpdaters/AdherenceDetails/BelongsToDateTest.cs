@@ -5,6 +5,7 @@ using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta.ReadModelUpdaters;
 using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.TestCommon;
+using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ReadModelUpdaters.AdherenceDetails
 {
@@ -24,7 +25,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ReadModelUpdaters.Adheren
 			{
 				PersonId = personId,
 				StartTime = "2015-02-23 3:00".Utc(),
-				BelongsToDate = "2015-02-22"
+				BelongsToDate = new DateOnly(2015,02,22)
 			});
 
 			Persister.Get(personId, "2015-02-22".Date()).Should().Not.Be.Null();
@@ -39,7 +40,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ReadModelUpdaters.Adheren
 			{
 				PersonId = personId,
 				Timestamp= "2015-02-23 3:00".Utc(),
-				BelongsToDate = "2015-02-22"
+				BelongsToDate = new DateOnly(2015,02,22)
 			});
 
 			Persister.Get(personId, "2015-02-22".Date()).Should().Not.Be.Null();
@@ -54,7 +55,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ReadModelUpdaters.Adheren
 			{
 				PersonId = personId,
 				ShiftEndTime = "2015-02-23 3:00".Utc(),
-				BelongsToDate = "2015-02-22"
+				BelongsToDate = new DateOnly(2015,02,22)
 			});
 
 			Persister.Get(personId, "2015-02-22".Date()).Should().Not.Be.Null();

@@ -282,7 +282,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 			if (PeriodType == SchedulePeriodType.Month)
 				return new DateOnly(DateFrom.Date.AddMonths(Number).AddDays(-1));
 
-			return null;
+			return DateOnly.MinValue;
 		}
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1024:UsePropertiesWhereAppropriate")]

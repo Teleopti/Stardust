@@ -181,20 +181,6 @@ namespace Teleopti.Interfaces.Domain
 		}
 
 		/// <summary>
-		/// Performs an implicit conversion from <see cref="System.String"/> to <see cref="Teleopti.Interfaces.Domain.DateOnly"/>.
-		/// </summary>
-		/// <param name="value">The date only string.</param>
-		/// <returns>The result of the conversion.</returns>
-		/// <remarks>
-		/// Created by: HenryG
-		/// Created date: 2008-11-20
-		/// </remarks>
-		public static implicit operator DateOnly(string value)
-		{
-			return new DateOnly(DateTime.Parse(value, CultureInfo.CurrentCulture));
-		}
-
-		/// <summary>
 		/// Implements the operator &lt;.
 		/// </summary>
 		/// <param name="obj1">The obj1.</param>

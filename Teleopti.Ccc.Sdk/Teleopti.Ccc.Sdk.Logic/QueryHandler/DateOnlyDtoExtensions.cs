@@ -12,7 +12,7 @@ namespace Teleopti.Ccc.Sdk.Logic.QueryHandler
 
 		public static DateOnly? ToNullableDateOnly(this DateOnlyDto dateOnlyDto)
 		{
-			return dateOnlyDto != null ? dateOnlyDto.ToDateOnly() : null;
+			return dateOnlyDto != null ? (DateOnly?)dateOnlyDto.ToDateOnly() : null;
 		}
 
 		public static DateOnlyPeriod ToDateOnlyPeriod(this DateOnlyPeriodDto dateOnlyPeriodDto)

@@ -1,3 +1,4 @@
+using System;
 using System.Globalization;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Infrastructure.Repositories;
@@ -34,7 +35,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.DoNotUse
 			}
 
 			var personAssignmentRepository = new PersonAssignmentRepository(uow);
-			var ass = new PersonAssignment(user, Scenario, Date);
+			var ass = new PersonAssignment(user, Scenario, new DateOnly(DateTime.Parse(Date)));
 			ass.SetDayOff(DayOff);
 			personAssignmentRepository.Add(ass);
 		}

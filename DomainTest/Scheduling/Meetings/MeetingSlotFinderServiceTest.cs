@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using NUnit.Framework;
 using Rhino.Mocks;
 using Teleopti.Ccc.Domain.Common;
@@ -128,12 +127,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Meetings
         {
             _dates.Add(new DateOnly(2009, 02, 02));
             _target.FindSlots(_dates[0], _duration, _startTime, _endTime, null, _persons);
-        }
-
-        [Test, ExpectedException(typeof(ArgumentNullException))]
-        public void VerifyDatesCannotBeNull()
-        {
-            _target.FindSlots(null, _duration, _startTime, _endTime, _dictionary, _persons);
         }
 
         [Test]

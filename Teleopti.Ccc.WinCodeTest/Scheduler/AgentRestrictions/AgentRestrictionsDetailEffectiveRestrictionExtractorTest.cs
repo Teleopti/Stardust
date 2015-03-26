@@ -44,7 +44,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.AgentRestrictions
 		public void Setup()
 		{
 			_mocks = new MockRepository();
-			_schedulingOptions = new RestrictionSchedulingOptions(){UseScheduling = true};
+			_schedulingOptions = new RestrictionSchedulingOptions {UseScheduling = true};
 			_virtualSchedulePeriod = _mocks.StrictMock<IVirtualSchedulePeriod>();
 			_scheduleDayPro = _mocks.StrictMock<IScheduleDayPro>();
 			_restrictionExtractor = _mocks.StrictMock<IRestrictionExtractor>();
@@ -71,13 +71,13 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.AgentRestrictions
 		[Test, ExpectedException(typeof(ArgumentNullException))]
 		public void ShouldThrowExceptionOnNoMatrixPro()
 		{
-			_effectiveRestrictionExtractor.Extract(null, _preferenceCellData, null, _dateTimePeriod, _periodTarget);	
+			_effectiveRestrictionExtractor.Extract(null, _preferenceCellData, DateOnly.MinValue, _dateTimePeriod, _periodTarget);	
 		}
 
 		[Test, ExpectedException(typeof(ArgumentNullException))]
 		public void ShouldThrowExceptionOnNoPreferenceCellData()
 		{
-			_effectiveRestrictionExtractor.Extract(_scheduleMatrixPro, null, null, _dateTimePeriod, _periodTarget);
+			_effectiveRestrictionExtractor.Extract(_scheduleMatrixPro, null, DateOnly.MinValue, _dateTimePeriod, _periodTarget);
 		}
 
 		[Test]

@@ -57,7 +57,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Configurable
 			var trackerType = absence.Tracker != null ? absence.Tracker.GetType() : null; 
 			if (trackerType == Tracker.CreateDayTracker().GetType())
 			{
-				personAbsenceAccount.Add(new AccountDay(FromDate)
+				personAbsenceAccount.Add(new AccountDay(new DateOnly(DateTime.Parse(FromDate)))
 					{
 						Accrued = TimeSpan.Parse(Accrued),
 						BalanceIn = TimeSpan.Parse(BalanceIn),
@@ -67,7 +67,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Configurable
 			}
 			else if (trackerType == Tracker.CreateTimeTracker().GetType())
 			{
-				personAbsenceAccount.Add(new AccountTime(FromDate)
+				personAbsenceAccount.Add(new AccountTime(new DateOnly(DateTime.Parse(FromDate)))
 					{
 						Accrued = getTimeSpanInMinute(Accrued),
 						BalanceIn = getTimeSpanInMinute(BalanceIn),

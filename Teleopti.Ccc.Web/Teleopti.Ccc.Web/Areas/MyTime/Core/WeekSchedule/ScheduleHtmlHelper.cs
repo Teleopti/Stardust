@@ -56,9 +56,9 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule
 		{
 			var jsonResult = new StringBuilder();
 			jsonResult.Append("{");
-			addKeyValuePair("NextPeriod", FormatDate(peroidNavigation.NextPeriod), jsonResult, true, true);
+			addKeyValuePair("NextPeriod", peroidNavigation.NextPeriod, jsonResult, true, true);
 			addKeyValuePair("HasNextPeriod", formatBoolean(peroidNavigation.HasNextPeriod), jsonResult, false, true);
-			addKeyValuePair("PrevPeriod", FormatDate(peroidNavigation.PrevPeriod), jsonResult, true, true);
+			addKeyValuePair("PrevPeriod", peroidNavigation.PrevPeriod, jsonResult, true, true);
 			addKeyValuePair("HasPrevPeriod", formatBoolean(peroidNavigation.HasPrevPeriod), jsonResult, false, true);
 			addKeyValuePair("CanPickPeriod", formatBoolean(peroidNavigation.CanPickPeriod), jsonResult, false, false);
 			jsonResult.Append("}");
