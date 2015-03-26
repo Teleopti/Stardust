@@ -1205,6 +1205,8 @@
     <Content Include="WFM\html\outbound\campaign-schedule.html" />
     <Content Include="WFM\html\outbound\outbound.html" />
     <Content Include="WFM\html\people\people.html" />
+    <Content Include="WFM\html\seatManagement\seatmap.html" />
+    <Content Include="WFM\html\seatManagement\seatplan.html" />
     <Content Include="WFM\js\forecasting\forecasting.controller.js" />
     <Content Include="WFM\js\forecasting\forecasting.service.js" />
     <Content Include="WFM\js\forecasting\forecasting.target.controller.js" />
@@ -1223,6 +1225,10 @@
     <Content Include="WFM\js\resourceplanner\filter.service.js" />
     <Content Include="WFM\js\search\search.controller.js" />
     <Content Include="WFM\js\search\search.service.js" />
+    <Content Include="WFM\js\seatManagement\seatmap.controller.js" />
+    <Content Include="WFM\js\seatManagement\seatplan.controller.js" />
+    <Content Include="WFM\js\seatManagement\seatmap.service.js" />
+    <Content Include="WFM\js\seatManagement\seatplan.service.js" />
     <Content Include="WFM\karma.conf.js" />
     <Content Include="WFM\tests\global\areas.controller.spec.js" />
     <Content Include="WFM\tests\global\notification.controller.spec.js" />

@@ -13,6 +13,8 @@ var wfm = angular.module('wfm', [
 	'outboundService',
 	'restAreasService',
 	'restFilterService',
+	'seatPlanService',
+	'seatMapService',
 	'wfmCtrls',
 	'wfm.permissions',
 	'wfm.people',
@@ -20,6 +22,8 @@ var wfm = angular.module('wfm', [
 	'wfm.forecasting',
 	'wfm.forecasting.target',
 	'wfm.searching',
+	'wfm.seatMap',
+	'wfm.seatPlan',
 	'wfm.notifications',
 	'wfm.notice',
 	'wfm.areas'
@@ -67,6 +71,14 @@ wfm.config([
 			url: '/people',
 			templateUrl: 'html/people/people.html',
 			controller: 'PeopleCtrl'
+		}).state('seatPlan', {
+			url: '/seatPlan',
+			templateUrl: 'html/seatManagement/seatplan.html',
+			controller: 'SeatPlanCtrl'
+		}).state('seatMap', {
+			url: '/seatMap',
+			templateUrl: 'html/seatManagement/seatmap.html',
+			controller: 'SeatMapCtrl'
 		});
 	}
 ]).run([
