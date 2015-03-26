@@ -41,6 +41,7 @@ namespace Teleopti.Ccc.DomainTest.WorkflowControl
             _person.PermissionInformation.SetCulture(new CultureInfo(1033));
             _timeZone = TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time");
             _person.PermissionInformation.SetDefaultTimeZone(_timeZone);
+			createSkill();
         }
 
         [Test]
@@ -86,7 +87,6 @@ namespace Teleopti.Ccc.DomainTest.WorkflowControl
             IAbsence absence = AbsenceFactory.CreateAbsence("Holiday");
             var absenceRequest = GetAbsenceRequest(absence, requestedDateTimePeriod);
             
-            createSkill();
             createSkillDay(requestedDateTimePeriod);
             var stateHolder = SchedulingResultStateHolderFactory.Create(requestedDateTimePeriod, _skill, new List<ISkillDay> { _skillDay });
             stateHolder.Schedules = _dictionary;
@@ -139,7 +139,7 @@ namespace Teleopti.Ccc.DomainTest.WorkflowControl
                                                     .CreateFulltimePersonContractWithWorkingWeekContractSchedule
                                                     (), TeamFactory.CreateSimpleTeam("Test Team"));
 
-            var skill = PersonSkillFactory.CreatePersonSkill("Test Skill1", 0.5).Skill;
+	        var skill = _skill;
             var wl = WorkloadFactory.CreateWorkloadWithFullOpenHours(skill);
            
             foreach (var day in wl.TemplateWeekCollection)
@@ -162,7 +162,6 @@ namespace Teleopti.Ccc.DomainTest.WorkflowControl
 		    var absenceRequest = GetAbsenceRequest(absence, requestedDateTimePeriod);
 		    var date = new DateOnly(2010, 02, 01);
 
-		    createSkill();
 		    createSkillDay(requestedDateTimePeriod);
 		    var stateHolder = SchedulingResultStateHolderFactory.Create(requestedDateTimePeriod, _skill,
 			    new List<ISkillDay> {_skillDay});
@@ -206,7 +205,6 @@ namespace Teleopti.Ccc.DomainTest.WorkflowControl
 			var absenceRequest = GetAbsenceRequest(absence, requestedDateTimePeriod);
 			var date = new DateOnly(2010, 02, 01);
 
-			createSkill();
 			createSkillDay(requestedDateTimePeriod.ChangeEndTime(TimeSpan.FromMinutes(15)));
 			var stateHolder = SchedulingResultStateHolderFactory.Create(requestedDateTimePeriod, _skill, new List<ISkillDay> { _skillDay });
 			stateHolder.Schedules = _dictionary;
@@ -218,6 +216,24 @@ namespace Teleopti.Ccc.DomainTest.WorkflowControl
 			Assert.IsFalse(result.IsValid);
 	    }
 
+		[Test]
+	    public void ShouldValidateWhenNoPersonalSkills()
+	    {
+			var requestedDateTimePeriod = DateTimeFactory.CreateDateTimePeriod(new DateTime(2010, 02, 01, 0, 0, 0, DateTimeKind.Utc), 0);
+			var absence = AbsenceFactory.CreateAbsence("Holiday");
+			var date = new DateOnly(2010, 02, 01);
+			var absenceRequest = _personRequestFactory.CreateAbsenceRequest(absence, requestedDateTimePeriod);
+			var stateHolder = SchedulingResultStateHolderFactory.Create(requestedDateTimePeriod, _skill, new List<ISkillDay> { _skillDay });
+
+			absenceRequest.Person.SetId(Guid.NewGuid());
+			createSkillDay(requestedDateTimePeriod);
+			stateHolder.Schedules = _dictionary;
+			_dictionary.AddTestItem(absenceRequest.Person, GetExpectationsForOneDay(date, absence, requestedDateTimePeriod));
+
+			var result = _target.Validate(absenceRequest, new RequiredForHandlingAbsenceRequest(stateHolder, null, _resourceOptimizationHelper, null, null));
+			Assert.IsTrue(result.IsValid);
+	    }
+
         [Test]
         public void CanValidateWithAgentInDifferentTimeZone()
         {
@@ -226,7 +242,6 @@ namespace Teleopti.Ccc.DomainTest.WorkflowControl
             var absenceRequest = GetAbsenceRequest(absence, requestedDateTimePeriod);
             var date = new DateOnly(2010, 02, 01);
             
-            createSkill();
             createSkillDay(requestedDateTimePeriod);
             var stateHolder = SchedulingResultStateHolderFactory.Create(requestedDateTimePeriod, _skill, new List<ISkillDay> { _skillDay });
             stateHolder.Schedules = _dictionary;
@@ -248,8 +263,7 @@ namespace Teleopti.Ccc.DomainTest.WorkflowControl
             var absenceRequest = GetAbsenceRequest(absence, requestedDateTimePeriod);
             var date = new DateOnly(2010, 02, 01);
             
-            createSkill();
-
+       
             _skillDay = SkillDayFactory.CreateSkillDay(_skill, requestedDateTimePeriod.StartDateTime);
 
             ISkillStaffPeriod skillStaffPeriod = SkillStaffPeriodFactory.CreateSkillStaffPeriod(
@@ -292,8 +306,7 @@ namespace Teleopti.Ccc.DomainTest.WorkflowControl
             var existingLayerWithSameAbsence = new VisualLayer(absence, new DateTimePeriod(new DateTime(2010, 02, 02, 3, 0, 0, DateTimeKind.Utc), new DateTime(2010, 02, 02, 4, 0, 0, DateTimeKind.Utc)),
                                  ActivityFactory.CreateActivity("Phone"), _person);
 
-            createSkill();
-
+       
             _skillDay = SkillDayFactory.CreateSkillDay(_skill, requestedDateTimePeriod.StartDateTime);
 
             ISkillStaffPeriod skillStaffPeriod1 = SkillStaffPeriodFactory.CreateSkillStaffPeriod(
@@ -334,7 +347,6 @@ namespace Teleopti.Ccc.DomainTest.WorkflowControl
 		{
             var requestedDateTimePeriod1 = DateTimeFactory.CreateDateTimePeriod(new DateTime(2010, 02, 01, 0, 0, 0, DateTimeKind.Utc), 1);
             var requestedDateTimePeriod2 = DateTimeFactory.CreateDateTimePeriod(new DateTime(2010, 02, 02, 0, 0, 0, DateTimeKind.Utc), 1);
-			createSkill();
 
 			var skillDay1 = SkillDayFactory.CreateSkillDay(_skill, requestedDateTimePeriod1.StartDateTime);
 
@@ -498,8 +510,6 @@ namespace Teleopti.Ccc.DomainTest.WorkflowControl
             DateTimePeriod requestedDateTimePeriod = DateTimeFactory.CreateDateTimePeriod(new DateTime(2010, 02, 01, 0, 0, 0, DateTimeKind.Utc), 1);
             IAbsence absence = AbsenceFactory.CreateAbsence("Holiday");
             var absenceRequest = GetAbsenceRequest(absence, requestedDateTimePeriod);
-            
-            createSkill();
 
             _skillDay = SkillDayFactory.CreateSkillDay(_skill, requestedDateTimePeriod.StartDateTime);
 

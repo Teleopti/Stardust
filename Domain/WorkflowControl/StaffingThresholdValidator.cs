@@ -66,12 +66,12 @@ namespace Teleopti.Ccc.Domain.WorkflowControl
 	                var sharedRequestPeriod = absenceRequest.Period.Intersection(sharedPeriod.Value);
 	                if (!sharedRequestPeriod.HasValue) continue;
 
-	                foreach (var skill in requiredForHandlingAbsenceRequest.SchedulingResultStateHolder.Skills)
+	                foreach (var skill in skills.Skills)
 	                {
 		                if (skill == null) continue;
-
 		                var skillStaffPeriodList = requiredForHandlingAbsenceRequest.SchedulingResultStateHolder.SkillStaffPeriodHolder.SkillStaffPeriodList(new List<ISkill> { skill }, sharedRequestPeriod.Value);
-		                if (skillStaffPeriodList == null || skillStaffPeriodList.Count == 0)
+		                
+						if (skillStaffPeriodList == null || skillStaffPeriodList.Count == 0)
 		                {
 			                continue;
 		                }
