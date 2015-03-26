@@ -7,7 +7,6 @@ notification.controller('NotificationsCtrl', [
 		$scope.notificationResult = [];
 		NotificationsSvrc.getNotifications.query({ }).$promise.then(function (result) {
 			$scope.notificationResult = result;
-			console.log(result);
 		});
 	}
 ]);
