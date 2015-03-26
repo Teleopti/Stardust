@@ -29,7 +29,7 @@ BEGIN
 	DECLARE @interval_id_out smallint
 	DECLARE @date_from_out smalldatetime
 
-	SELECT @intervals_per_day = COUNT(interval_id) FROM mart.dim_interval
+	SELECT @intervals_per_day = MAX(interval_id) FROM mart.dim_interval
 
 	--interval before last midnight break
 	if @substract>@interval_id
