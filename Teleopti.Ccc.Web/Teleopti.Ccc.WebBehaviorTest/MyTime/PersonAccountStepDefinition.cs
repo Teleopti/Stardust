@@ -40,6 +40,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.MyTime
 		[Then(@"I should see the remaining time is '(.*)'")]
 		public void ThenIShouldSeeTheRemainingTimeIs(string remainingTime)
 		{
+			Browser.Interactions.AssertEventualExists("#absence-personal-account");
 			Browser.Interactions.AssertAnyContains(".remainingTime", remainingTime);
 		}
 
