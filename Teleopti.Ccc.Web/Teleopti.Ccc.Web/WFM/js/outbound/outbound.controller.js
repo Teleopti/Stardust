@@ -47,7 +47,7 @@ outbound.controller('OutboundListCtrl', [
 ]);
 
 outbound.controller('OutboundEditCtrl', [
-	'$scope', '$stateParams', 'OutboundService',
+	'$scope', '$stateParams', 'OutboundService', 
 	function ($scope, $stateParams, OutboundService) {
 	
 		$scope.acToggle1 = true;
@@ -57,9 +57,12 @@ outbound.controller('OutboundEditCtrl', [
 			{ label: "Consultancy", value: "Consultancy" },
 			{ label: "Writing", value: "Writing" }
 		];
-		$scope.availableWorkingHours = [
-			{ label: "Closed", value: "Closed" }
-		];
+
+		$scope.workinghours = [];
+
+		$scope.toggleWorkinghoursInWeekday = function (wd) {
+			// TBD				
+		};
 
 		$scope.$on("outbound.campaigns.updated", function() {
 			$scope.campaign = OutboundService.getCampaignById($stateParams.id);
@@ -79,3 +82,5 @@ outbound.controller('OutboundEditCtrl', [
 		};
 	}
 ]);
+
+

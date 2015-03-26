@@ -6,4 +6,11 @@
 	display: inline-block;
 	width: 20%;
 }
+.wfm-checkbox.wfm-checkbox-inline {
+	width: auto;
+}
+.wfm-table.wfm-table-center td {
+	text-align:center; 
+    vertical-align:middle;
+}
  

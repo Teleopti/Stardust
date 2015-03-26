@@ -4,12 +4,12 @@
 	</div>
 	<div class="material-block-content">
 		<div class=" wfm-accordion">
-		<div class="wfm-block">
-			<div class="sub-header accordion-head" ng-click="acToggle1 = !acToggle1">
-				Campaign
-				<strong>{{campaign.name}}</strong>
-			</div>
-			<div ng-show="acToggle1">
+			<div class="wfm-block">
+				<div class="sub-header accordion-head" ng-click="acToggle1 = !acToggle1">
+					Campaign
+					<strong>{{campaign.name}}</strong>
+				</div>
+				<div ng-show="acToggle1">
 				<form name="formParams" class="form-horizontal wfm-block">
 					<div class="form-group">
 						<label for="name" class="col-sm-2 control-label">Name</label>
@@ -94,49 +94,66 @@
 					</div>
 				</form>
 			</div>
-		</div>
-		<div class="wfm-block">
-			<div class="sub-header accordion-head" ng-click="acToggle2 = !acToggle2">
-				Duration
-				<span ng-show="!acToggle2"> from {{period.startDate | date: format }} to {{period.endDate | date: format }}</span>
 			</div>
-			<div ng-show="acToggle2">
-				<div class="row wfm-block">
-					<div class="col-lg-6">
-						<div class="input-prepend">
-							<label>Start time: <span class="start-date">{{period.startDate | date: format }}</span></label>
-							<datepicker ng-model="period.startDate" show-weeks="true" class="well well-sm"></datepicker>
-						</div>
-					</div>
-					<div class="col-lg-6">
-						<div class="input-prepend">
-							<label>End time: <span class="end-date">{{period.endDate | date: format }}</span></label>
-							<datepicker ng-model="period.endDate" show-weeks="true" class="well well-sm"></datepicker>
-						</div>
-					</div>
+			<div class="wfm-block">
+				<div class="sub-header accordion-head" ng-click="acToggle2 = !acToggle2">
+					Duration
+					<span ng-show="!acToggle2"> from {{period.startDate | date: format }} to {{period.endDate | date: format }}</span>
 				</div>
-			</div>
-		</div>
-		<div class="wfm-block">
-			<div class="sub-header accordion-head" ng-click="acToggle3 = !acToggle3">
-				Working Hours
-			</div>
-			<div ng-show="acToggle3">
-				<div class="row toolbar">
-					<form name="workingHours" class="form-horizontal wfm-block" ng-repeat="weekday in ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday']">
-						<div class="form-group">
-							<label for="wh{{weekday}}" class="col-sm-2 control-label">{{weekday}}</label>
-							<div class="col-sm-2">
-								<select name="wh{{weekday}}" id="wh{{weekday}}" class="form-control"
-										ng-model="wh[weekday]"
-										ng-options="workingHour as workingHour.label for workingHour in availableWorkingHours"
-										ng-required></select>
+				<div ng-show="acToggle2">
+					<div class="row wfm-block">
+						<div class="col-lg-6">
+							<div class="input-prepend">
+								<label>Start time: <span class="start-date">{{period.startDate | date: format }}</span></label>
+								<datepicker ng-model="period.startDate" show-weeks="true" class="well well-sm"></datepicker>
 							</div>
 						</div>
-					</form>
+						<div class="col-lg-6">
+							<div class="input-prepend">
+								<label>End time: <span class="end-date">{{period.endDate | date: format }}</span></label>
+								<datepicker ng-model="period.endDate" show-weeks="true" class="well well-sm"></datepicker>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="wfm-block">
+				<div class="sub-header accordion-head" ng-click="acToggle3 = !acToggle3">
+					Working Hours
+				</div>
+				<div ng-show="acToggle3">
+					<div class="row toolbar">
+						<div class="col-lg-10">
+							<table class="wfm-table wfm-table-center" align="center">
+								<thead>
+									<tr>
+										<th></th>
+										<th ng-repeat-start="weekday in [0,1,2,3,4,5,6]" ng-repeat-end>
+											<div ng-click="toggleWorkinghoursInWeekday(weekday)">
+												{{weekday | showWeekdays}}
+											</div>											
+										</th>
+									</tr>
+								</thead>
+								<tbody>
+									<tr ng-repeat="hoursPick in [0,1, 2, 3, 4, 5,6,7,8,9,10]">
+										<td>{{hoursPick | showWorkinghours }}</td>
+										<td ng-repeat-start="weekday in [0,1,2,3,4,5,6]" ng-repeat-end>
+											<div class="wfm-checkbox wfm-checkbox-inline">
+												<input type="checkbox" id="check_weekday_{{weekday}}_workinghour_{{hoursPick}}" ng-model="$parent.$parent.workinghours[weekday][hoursPick]" />
+												<label for="check_weekday_{{weekday}}_workinghour_{{hoursPick}}">
+													<span class="wfm-checkbox-toggle"></span>
+													<span class="wfm-checkbox-label"></span>
+												</label>
+											</div>
+										</td>
+									</tr>
+								</tbody>
+							</table>
+						</div>
+					</div>
 				</div>
 			</div>
 		</div>
-	</div>
 	</div>
 </div>
