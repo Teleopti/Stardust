@@ -185,6 +185,7 @@
     <Compile Include="AgentBadge\IRunningEtlJobChecker.cs" />
     <Compile Include="AgentBadge\RunningEtlJobChecker.cs" />
     <Compile Include="AutofacServiceBus.cs" />
+    <Compile Include="Payroll\InitializePayrollFormatsToDb.cs" />
     <Compile Include="Rta\FactQueueUpdatedConsumer.cs" />
     <Compile Include="NewAbsenceReportConsumer.cs" />
     <Compile Include="NotificationModule.cs" />
@@ -253,7 +254,6 @@
     <Compile Include="Payroll\FormatLoader\SearchPath.cs" />
     <Compile Include="Payroll\IChannelCreator.cs" />
     <Compile Include="Payroll\IInitializePayrollFormats.cs" />
-    <Compile Include="Payroll\InitializePayrollFormats.cs" />
     <Compile Include="Payroll\IPayrollDataExtractor.cs" />
     <Compile Include="Payroll\IPayrollPeopleLoader.cs" />
     <Compile Include="Payroll\IPersonBusAssembler.cs" />

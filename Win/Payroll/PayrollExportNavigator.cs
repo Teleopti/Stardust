@@ -107,7 +107,7 @@ namespace Teleopti.Ccc.Win.Payroll
 						if (foundNodes.Length > 0) foundNodes[0].Remove();
 
 						IPayrollExport export = _repositoryFactory.CreatePayrollExportRepository(uow).Get(guid);
-						IDeleteTag dTag = export as IDeleteTag;
+						var dTag = export as IDeleteTag;
 
 						if (export == null) continue;
 						if (dTag != null && dTag.IsDeleted)

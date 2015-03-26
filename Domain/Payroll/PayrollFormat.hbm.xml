@@ -1,0 +1,23 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<hibernate-mapping xmlns="urn:nhibernate-mapping-2.2"
+                   assembly="Teleopti.Ccc.Domain"
+                   namespace="Teleopti.Ccc.Domain.Payroll"
+                   default-access="field.camelcase-underscore">
+  <class name="PayrollFormat">
+
+    <id name="Id"
+				type="guid"
+		  access="nosetter.camelcase-underscore"
+				unsaved-value="null">
+      <generator class="guid.comb" />
+    </id>
+    <property name="Name"
+            type="string"
+            length="500"
+            not-null="true"/>
+	  <property name="FormatId"
+            type="guid"
+            not-null="true"/>
+  </class>
+</hibernate-mapping>
+

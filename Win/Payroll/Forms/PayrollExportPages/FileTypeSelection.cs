@@ -1,9 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
+using System.Linq;
 using Syncfusion.Windows.Forms.Tools;
-using Teleopti.Ccc.Infrastructure.Foundation;
-using Teleopti.Ccc.Sdk.ClientProxies;
-using Teleopti.Ccc.Sdk.Common.DataTransferObject;
+using Teleopti.Ccc.Domain.Payroll;
+using Teleopti.Ccc.Infrastructure.Repositories;
+using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.Win.Common;
 using Teleopti.Ccc.WinCode.Common.GuiHelpers;
 using Teleopti.Ccc.WinCode.Common.PropertyPageAndWizard;
@@ -11,97 +11,85 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Win.Payroll.Forms.PayrollExportPages
 {
-    public partial class FileTypeSelection : BaseUserControl, IPropertyPage
-    {
-        public FileTypeSelection()
-        {
-            InitializeComponent();
-            SetColors();
-        }
+	public partial class FileTypeSelection : BaseUserControl, IPropertyPage
+	{
+		public FileTypeSelection()
+		{
+			InitializeComponent();
+			setColors();
+		}
 
-        private void SetColors()
-        {
-            BackColor = ColorHelper.WizardBackgroundColor();
-        }
+		private void setColors()
+		{
+			BackColor = ColorHelper.WizardBackgroundColor();
+		}
 
-        public void Populate(IAggregateRoot aggregateRoot)
-        {
-            IPayrollExport payrollExport = (IPayrollExport) aggregateRoot;
-            treeViewAdvExportType.BeginUpdate();
-            treeViewAdvExportType.Nodes.Clear();
+		public void Populate(IAggregateRoot aggregateRoot)
+		{
+			var payrollExport = (IPayrollExport)aggregateRoot;
+			treeViewAdvExportType.BeginUpdate();
+			treeViewAdvExportType.Nodes.Clear();
+			
+			using (var uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
+			{
+				var rep = new PayrollFormatRepository(uow);
 
-            SdkAuthentication sdkAuthentication = new SdkAuthentication();
-            sdkAuthentication.SetSdkAuthenticationHeader();
+				bool someTreeNodeIsOptioned = false;
 
-            var sdkName = StateHolder.Instance.StateReader.ApplicationScopeData.AppSettings["Sdk"];
+				var payrollFormats = rep.LoadAll();
+				foreach (var payrollFormat in payrollFormats)
+				{
+					var treeNodeAdv = new TreeNodeAdv(payrollFormat.Name);
+					treeViewAdvExportType.Nodes.Add(treeNodeAdv);
+					treeNodeAdv.Tag = payrollFormat;
+					treeNodeAdv.Height = 30;
+					if (payrollFormat.FormatId == payrollExport.PayrollFormatId)
+					{
+						treeNodeAdv.Optioned = true;
+						someTreeNodeIsOptioned = true;
+					}
+				}
+				// Make sure atleast the first one is selected.
+				if (treeViewAdvExportType.Nodes.Count > 0)
+				{
+					if (!someTreeNodeIsOptioned)
+					{
+						treeViewAdvExportType.Nodes[0].Optioned = true;
+					}
+				}
+			}
+			treeViewAdvExportType.EndUpdate();
+		}
 
-	        using (var proxy = Proxy.GetProxy(sdkName))
-            {
-                bool someTreeNodeIsOptioned = false;
+		public bool Depopulate(IAggregateRoot aggregateRoot)
+		{
+			var payrollExport = (IPayrollExport)aggregateRoot;
 
-                ICollection<PayrollFormatDto> payrollFormatDtos = proxy.GetPayrollFormats();
-                foreach (PayrollFormatDto payrollFormatDto in payrollFormatDtos)
-                {
-                    TreeNodeAdv treeNodeAdv = new TreeNodeAdv(payrollFormatDto.Name);
-                    treeViewAdvExportType.Nodes.Add(treeNodeAdv);
-                    treeNodeAdv.Tag = payrollFormatDto;
-                    treeNodeAdv.Height = 30;
-                    if (payrollFormatDto.FormatId == payrollExport.PayrollFormatId)
-                    {
-                        treeNodeAdv.Optioned = true;
-                        someTreeNodeIsOptioned = true;
-                    }
-                }
-                // Make sure atleast the first one is selected.
-                if (treeViewAdvExportType.Nodes.Count > 0)
-                {
-                    if (!someTreeNodeIsOptioned)
-                    {
-                        treeViewAdvExportType.Nodes[0].Optioned = true;
-                    }
-                }
-            }
-            treeViewAdvExportType.EndUpdate();
-        }
+			TreeNodeAdv treeNodeAdv = treeViewAdvExportType.Nodes.Cast<TreeNodeAdv>().FirstOrDefault(node => node.Optioned);
 
-        public bool Depopulate(IAggregateRoot aggregateRoot)
-        {
-            IPayrollExport payrollExport = (IPayrollExport) aggregateRoot;
+			if (treeNodeAdv == null)
+			{
+				return false;
+			}
 
+			var payrollFormat = treeNodeAdv.Tag as PayrollFormat;
+			if (payrollFormat == null)
+			{
+				throw new InvalidOperationException("Node contains invalid or none Payroll Format instance.");
+			}
 
-            TreeNodeAdv treeNodeAdv = null;
-            foreach (TreeNodeAdv node in treeViewAdvExportType.Nodes)
-            {
-                if (node.Optioned)
-                {
-                    treeNodeAdv = node;
-                    break;
-                }
-            }
+			payrollExport.PayrollFormatId = payrollFormat.FormatId;
+			payrollExport.PayrollFormatName = payrollFormat.Name;
+			return true;
+		}
 
-            if (treeNodeAdv == null)
-            {
-                return false;
-            }
+		public void SetEditMode()
+		{
+		}
 
-            PayrollFormatDto payrollFormatDto = treeNodeAdv.Tag as PayrollFormatDto;
-            if (payrollFormatDto == null)
-            {
-                throw new InvalidOperationException("Node contains invalid or none Payroll Format instance.");
-            }
-
-            payrollExport.PayrollFormatId = payrollFormatDto.FormatId;
-            payrollExport.PayrollFormatName = payrollFormatDto.Name;
-            return true;
-        }
-
-        public void SetEditMode()
-        {
-        }
-
-        public string PageName
-        {
-            get { return UserTexts.Resources.FileTypeSelection ; }
-        }
-    }
+		public string PageName
+		{
+			get { return UserTexts.Resources.FileTypeSelection; }
+		}
+	}
 }

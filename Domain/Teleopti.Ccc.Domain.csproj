@@ -811,6 +811,7 @@
     <Compile Include="Optimization\WeeklyRestSolver\VerifyWeeklyRestAroundDayOffSpecification.cs" />
     <Compile Include="Optimization\WeeklyRestSolver\WeeklyRestSolverService.cs" />
     <Compile Include="Aop\ReadModelUnitOfWorkAttribute.cs" />
+    <Compile Include="Payroll\PayrollFormat.cs" />
     <Compile Include="PreserveStack.cs" />
     <Compile Include="Repositories\IJobResultRepository.cs" />
     <Compile Include="Repositories\ISeatBookingRepository.cs" />
@@ -2385,6 +2386,9 @@
     <Folder Include="Properties\" />
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="Payroll\PayrollFormat.hbm.xml">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
     <EmbeddedResource Include="SeatPlanning\SeatBooking.hbm.xml" />
     <EmbeddedResource Include="SeatPlanning\Seat.hbm.xml" />
     <EmbeddedResource Include="SeatPlanning\Location.hbm.xml" />
