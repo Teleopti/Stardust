@@ -3,10 +3,12 @@ using System.Windows.Forms;
 using Autofac;
 using Teleopti.Ccc.Domain.Forecasting.Import;
 using Teleopti.Ccc.Domain.Repositories;
+using Teleopti.Ccc.Infrastructure.ApplicationLayer;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.Win.Forecasting.Forms.ImportForecast;
 using Teleopti.Ccc.Win.Forecasting.Forms.JobHistory;
 using Teleopti.Ccc.Win.Payroll.Forms.PayrollExportPages;
+using Teleopti.Ccc.WinCode.Common.ServiceBus;
 using Teleopti.Ccc.WinCode.Forecasting;
 using Teleopti.Ccc.WinCode.Forecasting.ImportForecast;
 using Teleopti.Ccc.WinCode.Forecasting.ImportForecast.Models;
@@ -26,10 +28,11 @@ namespace Teleopti.Ccc.Win.Forecasting
 
         private static  void importForecastView(ContainerBuilder builder)
         {
-            builder.RegisterType<SendCommandToSdk>().As<ISendCommandToSdk>();
             builder.RegisterType<SaveImportForecastFileCommand>().As<ISaveImportForecastFileCommand>();
             builder.RegisterType<ValidateImportForecastFileCommand>().As<IValidateImportForecastFileCommand>();
-            builder.RegisterType<SdkAuthentication>();
+				builder.RegisterType<ServiceBusSender>()
+				 .As<IServiceBusSender>()
+				 .SingleInstance();
             builder.RegisterType<ImportForecastView>()
                 .As<IImportForecastView>()
                 .OnActivated(e => e.Instance.Presenter = e.Context.Resolve<ImportForecastPresenter>())

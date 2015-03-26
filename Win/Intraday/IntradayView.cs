@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Drawing;
 using System.Globalization;
@@ -8,14 +9,13 @@ using System.Windows.Forms;
 using Microsoft.Practices.Composite.Events;
 using Syncfusion.Windows.Forms.Tools;
 using Teleopti.Ccc.Domain.Common;
-using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.RealTimeAdherence;
 using Teleopti.Ccc.Domain.ResourceCalculation.IntraIntervalAnalyze;
 using Teleopti.Ccc.Domain.Scheduling.Rules;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.Security.Principal;
+using Teleopti.Ccc.Infrastructure.ApplicationLayer;
 using Teleopti.Ccc.Infrastructure.Toggle;
-using Teleopti.Ccc.Sdk.Common.DataTransferObject.Commands;
 using Teleopti.Ccc.UserTexts;
 using Teleopti.Ccc.Win.Common;
 using Teleopti.Ccc.Win.Common.Controls;
@@ -24,10 +24,10 @@ using Teleopti.Ccc.Win.Common.Controls.DateSelection;
 using Teleopti.Ccc.Win.Common.PropertyPageAndWizard;
 using Teleopti.Ccc.Win.ExceptionHandling;
 using Teleopti.Ccc.WinCode.Common;
-using Teleopti.Ccc.WinCode.Forecasting.ImportForecast;
 using Teleopti.Ccc.WinCode.Intraday;
 using Teleopti.Ccc.WpfControls.Controls.Notes;
 using Teleopti.Interfaces.Domain;
+using Teleopti.Interfaces.Messages.General;
 using Cursors = System.Windows.Forms.Cursors;
 using DataSourceException = Teleopti.Ccc.Infrastructure.Foundation.DataSourceException;
 
@@ -38,9 +38,9 @@ namespace Teleopti.Ccc.Win.Intraday
 	{
 		private readonly IEventAggregator _eventAggregator;
 		private readonly IOverriddenBusinessRulesHolder _overriddenBusinessRulesHolder;
-		private readonly ISendCommandToSdk _sendCommandToSdk;
 		private readonly IToggleManager _toggleManager;
 		private readonly IIntraIntervalFinderService _intraIntervalFinderService;
+		private readonly IMessagePopulatingServiceBusSender _messageSender;
 
 		private DateNavigateControl _timeNavigationControl;
 		private GridRowInChartSettingButtons _gridrowInChartSetting;
@@ -50,13 +50,16 @@ namespace Teleopti.Ccc.Win.Intraday
 		private bool _forceClose;
 		private readonly IntradaySettingManager _settingManager;
 
-		public IntradayView(IEventAggregator eventAggregator, IOverriddenBusinessRulesHolder overriddenBusinessRulesHolder, ISendCommandToSdk sendCommandToSdk, IToggleManager toggleManager, IIntraIntervalFinderService intraIntervalFinderService)
+		public IntradayView(IEventAggregator eventAggregator, IOverriddenBusinessRulesHolder overriddenBusinessRulesHolder,
+			IToggleManager toggleManager,
+			IIntraIntervalFinderService intraIntervalFinderService,
+			IMessagePopulatingServiceBusSender messageSender)
 		{
 			_eventAggregator = eventAggregator;
 			_overriddenBusinessRulesHolder = overriddenBusinessRulesHolder;
-			_sendCommandToSdk = sendCommandToSdk;
 			_toggleManager = toggleManager;
 			_intraIntervalFinderService = intraIntervalFinderService;
+			_messageSender = messageSender;
 
 			var authorization = PrincipalAuthorization.Instance();
 
@@ -630,24 +633,26 @@ namespace Teleopti.Ccc.Win.Intraday
 				using (var wizard = new WizardNoRoot<ReforecastModelCollection>(pages))
 				{
 					if (wizard.ShowDialog(this) != DialogResult.OK) return;
-					var dto = new RecalculateForecastOnSkillCollectionCommandDto
-									  {
-										  WorkloadOnSkillSelectionDtos = new List<WorkloadOnSkillSelectionDto>(),
-										  ScenarioId = Presenter.RequestedScenario.Id.GetValueOrDefault()
-									  };
+
+					var principal = TeleoptiPrincipal.CurrentPrincipal;
+					var person = ((IUnsafePerson)principal).Person;
+					var message = new RecalculateForecastOnSkillMessageCollection
+					{
+						MessageCollection = new Collection<RecalculateForecastOnSkillMessage>(),
+						ScenarioId = Presenter.RequestedScenario.Id.GetValueOrDefault(),
+						OwnerPersonId = person.Id.GetValueOrDefault()
+					};
 					foreach (var model in models.ReforecastModels)
 					{
-						dto.WorkloadOnSkillSelectionDtos.Add(
-							 new WorkloadOnSkillSelectionDto
-								  {
-									  SkillId = model.Skill.Id.GetValueOrDefault(),
-									  WorkloadId =
-											model.Workload.Select(w => w.Id.GetValueOrDefault()).
-											ToList(),
+						message.MessageCollection.Add(
+							new RecalculateForecastOnSkillMessage
+							{
+								SkillId = model.Skill.Id.GetValueOrDefault(),
+								WorkloadIds = new Collection<Guid>(model.Workload.Select(w => w.Id.GetValueOrDefault()).ToList())
+							});
 
-								  });
 					}
-					_sendCommandToSdk.ExecuteCommand(dto);
+					_messageSender.Send(message, true);
 				}
 			}
 		}

@@ -922,7 +922,6 @@
     <Compile Include="Forecasting\Forms\ImportForecast\ImportForecastView.Designer.cs">
       <DependentUpon>ImportForecastView.cs</DependentUpon>
     </Compile>
-    <Compile Include="Forecasting\Forms\ImportForecast\SendCommandToSdk.cs" />
     <Compile Include="Forecasting\Forms\JobHistory\JobHistoryDetailedView.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -1213,7 +1212,6 @@
     <Compile Include="Payroll\Forms\PayrollExportPages\PersonsSelectionView.Designer.cs">
       <DependentUpon>PersonsSelectionView.cs</DependentUpon>
     </Compile>
-    <Compile Include="Payroll\Forms\PayrollExportPages\SdkAuthentication.cs" />
     <Compile Include="Payroll\Overtime\ManageMultiplicatorForm.cs">
       <SubType>Form</SubType>
     </Compile>

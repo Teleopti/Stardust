@@ -7,13 +7,14 @@ using System.Linq;
 using System.Windows.Forms;
 using Syncfusion.Windows.Forms.Tools;
 using Teleopti.Ccc.Domain.Collection;
+using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
-using Teleopti.Ccc.Domain.Security.AuthorizationEntities;
 using Teleopti.Ccc.Domain.Security.Principal;
+using Teleopti.Ccc.Infrastructure.ApplicationLayer;
 using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.Infrastructure.Toggle;
@@ -31,7 +32,6 @@ using Teleopti.Ccc.WinCode.Common;
 using Teleopti.Ccc.WinCode.Common.PropertyPageAndWizard;
 using Teleopti.Ccc.WinCode.Forecasting;
 using Teleopti.Ccc.WinCode.Forecasting.ExportPages;
-using Teleopti.Ccc.WinCode.Forecasting.ImportForecast;
 using Teleopti.Ccc.WinCode.Forecasting.QuickForecastPages;
 using Teleopti.Ccc.WinCode.Forecasting.SkillPages;
 using Teleopti.Ccc.WinCode.Forecasting.WorkloadPages;
@@ -49,8 +49,8 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
 		private TreeNodeAdv _lastContextMenuNode;
 		private readonly IJobHistoryViewFactory _jobHistoryViewFactory;
 		private readonly IImportForecastViewFactory _importForecastViewFactory;
-		private readonly ISendCommandToSdk _sendCommandToSdk;
 		private readonly IToggleManager _toggleManager;
+		private readonly IMessagePopulatingServiceBusSender _messageSender;
 		private readonly IRepositoryFactory _repositoryFactory;
 		private readonly IUnitOfWorkFactory _unitOfWorkFactory;
 		private const string assembly = "Teleopti.Ccc.SmartParts";
@@ -101,14 +101,14 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
 			IUnitOfWorkFactory unitOfWorkFactory,
 			IJobHistoryViewFactory jobHistoryViewFactory,
 			IImportForecastViewFactory importForecastViewFactory,
-			ISendCommandToSdk sendCommandToSdk,
-			IToggleManager toggleManager)
+			IToggleManager toggleManager,
+			IMessagePopulatingServiceBusSender messageSender)
 			: this()
 		{
 			_jobHistoryViewFactory = jobHistoryViewFactory;
 			_importForecastViewFactory = importForecastViewFactory;
-			_sendCommandToSdk = sendCommandToSdk;
 			_toggleManager = toggleManager;
+			_messageSender = messageSender;
 			_repositoryFactory = repositoryFactory;
 			_unitOfWorkFactory = unitOfWorkFactory;
 			//splitContainer1.SplitterDistance = splitContainer1.Height - portalSettings.ForecasterActionPaneHeight;
@@ -1248,13 +1248,21 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
 					{
 						if (wizard.ShowDialog(this) == DialogResult.OK)
 						{
-							var dto = wwp.CreateNewStateObj();
-							var everyStep = Convert.ToInt32((1000/dto.WorkloadIds.Count)/3);
-							dto.IncreaseWith = everyStep;
-							var jobId = _sendCommandToSdk.ExecuteCommand(dto).AffectedId.GetValueOrDefault();
+							var message = wwp.CreateServiceBusMessage();
+							var everyStep = Convert.ToInt32((1000/message.WorkloadIds.Count)/3);
+							message.IncreaseWith = everyStep;
+							var period = message.TargetPeriod;
+							var jobResultRep = new JobResultRepository(uow);
+							var jobResult = new JobResult(JobCategory.QuickForecast, period,
+				                              ((IUnsafePerson) TeleoptiPrincipal.CurrentPrincipal).Person, DateTime.UtcNow);
+							jobResultRep.Add(jobResult);
+							var jobId = jobResult.Id.GetValueOrDefault();
+							uow.PersistAll();
+							message.JobId = jobId;
+							_messageSender.Send(message,true);
 							using (
 								var statusDialog =
-									new JobStatusView(new JobStatusModel {JobStatusId = jobId, ProgressMax = everyStep*dto.WorkloadIds.Count*3}))
+									new JobStatusView(new JobStatusModel {JobStatusId = jobId, ProgressMax = everyStep*message.WorkloadIds.Count*3}))
 							{
 								statusDialog.ShowDialog();
 							}
@@ -1381,15 +1389,24 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
 							}
 							else
 							{
-								var dto = model.ExportMultisiteSkillToSkillCommandModel.TransformToDto();
+								var message = model.ExportMultisiteSkillToSkillCommandModel.TransformToServiceBusMessage();
+								using (var uow = _unitOfWorkFactory.CreateAndOpenUnitOfWork())
+								{
+									var jobResultRep = new JobResultRepository(uow);
+									var period = message.Period;
+									var jobResult = new JobResult(JobCategory.MultisiteExport, period,
+																			((IUnsafePerson)TeleoptiPrincipal.CurrentPrincipal).Person, DateTime.UtcNow);
+									jobResultRep.Add(jobResult);
+									message.JobId = jobResult.Id.GetValueOrDefault();
+									uow.PersistAll();
+								}
+								
 								try
 								{
 									pages.SaveSettings();
 									var statusDialog =
-										new JobStatusView(new JobStatusModel {JobStatusId = Guid.NewGuid()});
+										new JobStatusView(new JobStatusModel { JobStatusId = message.JobId });
 									statusDialog.Show(this);
-									statusDialog.SetJobStatusId(
-										_sendCommandToSdk.ExecuteCommand(dto).AffectedId.GetValueOrDefault());
 								}
 								catch (OptimisticLockException)
 								{
