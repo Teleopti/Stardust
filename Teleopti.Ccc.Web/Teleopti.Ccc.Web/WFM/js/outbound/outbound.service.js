@@ -16,21 +16,25 @@ outboundService.factory('OutboundService', ['$rootScope', function($rootScope) {
 
 	var getNextId = function () {
 		maxId += 1;
-		return maxId - 1;
+		return maxId;
 	};
 
 	outboundService.addCampaign = function (campaign) {
 		var newCampaign = angular.copy(campaign);
 		newCampaign.id = getNextId();
 		campaigns.unshift(newCampaign);
-		$rootScope.$broadcast("outbound.campaigns.updated");
+		$rootScope.$broadcast("outbound.campaigns.updated");	
+		return angular.copy(newCampaign);
 	};
 
 	outboundService.deleteCampaign = function(campaign, idx) {
-		if (campaigns[idx].id == campaign.id) {		
-			campaigns.splice(idx, 1);		
-		}
-		$rootScope.$broadcast("outbound.campaigns.updated");
+		if (campaigns[idx].id == campaign.id) {
+			campaigns.splice(idx, 1);
+			$rootScope.$broadcast("outbound.campaigns.updated");
+			return true;
+		} else {
+			return false;
+		}		
 	};
 
 	outboundService.listCampaign = function( campaignFilter) {

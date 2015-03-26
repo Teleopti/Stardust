@@ -3,36 +3,43 @@
 outbound.controller('OutboundListCtrl', [
 	'$scope', '$state', 'OutboundService',
 	function($scope, $state, OutboundService) {
-		$scope.campaigns = OutboundService.listCampaign();
+		
 		$scope.newName = "";
 		$scope.selectedTarget = null;
 		$scope.hideDetail = false;
 
-		$scope.reset = function () {
-			$scope.selectedTarget = null;		
+		$scope.reset = function () {			
+			$scope.newName = "";
 			$scope.form.$setPristine();
 		};
 		
+
+		$scope.campaigns = OutboundService.listCampaign();
+
 		$scope.create = function () {
-			OutboundService.addCampaign({ name: $scope.newName });			
+			var newCampaign = OutboundService.addCampaign({ name: $scope.newName })
+			$scope.campaigns.unshift(newCampaign);
+			$scope.selectedTarget = newCampaign;			
 		};
 
 		$scope.copyNew = function (campaign) {
-			OutboundService.addCampaign({ name: campaign.name + "_Copy" });
+			$scope.campaigns.unshift(OutboundService.addCampaign({ name: campaign.name + "_Copy" }));
 		};
 
 		$scope.update = function(campaign) {
 			OutboundService.updateCampaign(campaign);
 		};
 
-		$scope.show = function(campaign) {
-			$scope.selectedTarget = campaign;
+		$scope.show = function (campaign) {			
+			if (angular.isDefined(campaign)) $scope.selectedTarget = campaign;
 			$state.go('outbound.edit', { id: $scope.selectedTarget.id });
 		};
 
 		$scope.delete = function (campaign, idx) {		
 			if (confirm('Are you sure you want to delete this record?')) {
-				OutboundService.deleteCampaign(campaign, idx);
+				if (OutboundService.deleteCampaign(campaign, idx)) {
+					$scope.campaigns.splice(idx, 1);
+				}
 			}
 		};
 
@@ -56,9 +63,11 @@ outbound.controller('OutboundEditCtrl', [
 
 		$scope.$on("outbound.campaigns.updated", function() {
 			$scope.campaign = OutboundService.getCampaignById($stateParams.id);
+			$scope.showDetail = angular.isDefined($scope.campaign);
 		});
 
 		$scope.campaign = OutboundService.getCampaignById($stateParams.id);
+		$scope.showDetail = angular.isDefined($scope.campaign);
 
 		$scope.period = {
 			startDate: moment().add(1, 'months').startOf('month').toDate(),
@@ -68,6 +77,5 @@ outbound.controller('OutboundEditCtrl', [
 		$scope.params = {
 			skill: $scope.skills[0]
 		};
-
 	}
 ]);
