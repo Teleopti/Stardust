@@ -1,12 +1,23 @@
 ﻿<div>
 	<div class="row">
 		<div class="col-lg-12">
-			<h4>Outbound Campaigns</h4>
+			<h4>Outbound Campaigns</h4>			
+		</div>
+		<div class="col-lg-10">
 			<p>To view existing campaigns and create new campaign</p>
+		</div>
+		<div class="col-lg-2">
+			<div class="wfm-slider">
+				<input type="checkbox" id="slide1" ng-model="hideDetail"  />
+				<label for="slide1">
+					<span class="wfm-slider-label">Hide Detail</span>
+					<span class="wfm-slider-toggle"></span>
+				</label>
+			</div>
 		</div>
 	</div>
 	<div class="row">
-	<div class="col-lg-4">
+	<div ng-class="{'col-lg-4' : !hideDetail , 'col-lg-12': hideDetail   }">
 		<div class="role-nav material-depth-2 container-block">
 			<div class="wfm-block sub-header">Campaigns</div>
 			<div class="wfm-block">
@@ -16,7 +27,6 @@
 						<input type="text" ng-model="newName" placeholder="Create new campaign" class="role-input role"/>
 					</div>
 				</form>
-
 				<div class="input-prepend">
 					<i class="mdi mdi-filter-outline"></i>
 					<input type="text" name="filterRole" ng-model="searchCampaign.name" placeholder="Campaign filter ..."/>
@@ -27,7 +37,7 @@
 					<li ng-repeat="campaign in campaigns | filter:searchCampaign" ng-click="show(campaign)" ng-dblclick="editing = true" ng-class="{'wfm-list-item-selected': selectedTarget && campaign.id == selectedTarget.id}" class="role-btn wfm-block wfm-list-item role">
 						<div class="wfm-leave-behind">
 							<span>
-									<i ng-click="copy(campaign)">
+									<i ng-click="$parent.copyNew(campaign)">
 										<svg style="width: 18px; height: 18px" viewBox="0 0 24 24">
 											<path fill="#555555" d="M19,21H8V7H19M19,5H8A2,2 0 0,0 6,7V21A2,2 0 0,0 8,23H19A2,2 0 0,0 21,21V7A2,2 0 0,0 19,5M16,1H4A2,2 0 0,0 2,3V17H4V3H16V1Z" />
 										</svg>
@@ -43,7 +53,7 @@
 											Edit
 										</md-tooltip>
 									</i>
-									<i ng-click="delete(campaign, $index)">
+									<i ng-click="$parent.delete(campaign, $index)">
 										<svg style="width: 18px; height: 18px" viewBox="0 0 24 24">
 											<path fill="#555555" d="M19,4H15.5L14.5,3H9.5L8.5,4H5V6H19M6,19A2,2 0 0,0 8,21H16A2,2 0 0,0 18,19V7H6V19Z" />
 										</svg>
@@ -53,193 +63,33 @@
 									</i>
 								</span>
 						</div>
-						<span ng-hide="editing">{{campaign.name}}</span>
-						<form ng-show="editing" ng-submit="editing = false; update(campaign)">
-							<input type="text" class="inline-role-name" ng-model="campaign.name" placeholder="Name" ng-required/>
-						</form>
+						<div class="row">
+							<div ng-class="{'col-lg-12': !hideDetail, 'col-lg-4': hideDetail}">
+								<span ng-hide="editing">{{campaign.name}}</span>
+								<form ng-show="editing" ng-submit="editing = false; update(campaign)">
+									<input type="text" class="inline-role-name" ng-model="campaign.name" placeholder="Name" ng-required />
+								</form>
+							</div>
+							<div ng-show="hideDetail">
+								<span class="col-lg-2">{{campaign.period.startDate}}</span>
+								<span class="col-lg-2">{{campaign.period.endDate}}</span>
+							</div>
+						</div>
+						
+						
+						
 					</li>
 				</ul>
 			</div>
 		</div>
 	</div>
 
-	<div class="col-lg-8">
+	<div class="col-lg-8" ng-if="!hideDetail">
 		<div ui-view></div>
 	</div>
 
 
-			<!--<div class="col-lg-8">
-			<div>><i class="mdi mdi-plus"></i>Create new campaign</div
-			<section class="wfm-accordion">
+			
 
-				<div class="wfm-block">
-					<div class="sub-header accordion-head" ng-click="accordionToggle1 = !accordionToggle1">Properties</div>
-					<div ng-show="accordionToggle1">
-
-						<div class="wfm-block">
-
-							<div class="row toolbar">
-								<div class="col-lg-12">
-									<div class="input-prepend">
-										<a> Name </a>
-										<input type="text" name="filterDetails" placeholder="Campaign name" value="Hello World Campaign"/>
-									</div>
-								</div>
-								<div class="col-lg-12">
-									<div class="input-prepend">
-										<a> Skill </a>
-										<input type="text" name="filterDetails" placeholder=""/>
-									</div>
-								</div>
-								<div class="col-lg-12">
-									<div class="input-prepend">
-										<a> Call list </a>
-										<input type="text" name="filterDetails" placeholder=""/>
-									</div>
-								</div>
-								<div class="col-lg-12">
-									<div class="input-prepend">
-										<a> SLA </a>
-										<input type="text" name="filterDetails" placeholder=""/>
-									</div>
-								</div>
-								<div class="col-lg-12">
-									<div class="input-prepend">
-										<a> Target </a>
-										<input type="text" name="filterDetails" placeholder=""/>
-									</div>
-								</div>
-								<div class="col-lg-12">
-									<div class="input-prepend">
-										<a> CR </a>
-										<input type="text" name="filterDetails" placeholder="Connect Rate"/>
-									</div>
-								</div>
-								<div class="col-lg-12">
-									<div class="input-prepend">
-										<a> RPCR </a>
-										<input type="text" name="filterDetails" placeholder="Right Part Connect Rate"/>
-									</div>
-								</div>
-								<div class="col-lg-12">
-									<div class="input-prepend">
-										<a> Connect AHT </a>
-										<input type="text" name="filterDetails" placeholder=""/>
-									</div>
-								</div>
-								<div class="col-lg-12">
-									<div class="input-prepend">
-										<a> RPC AHT </a>
-										<input type="text" name="filterDetails" placeholder=""/>
-									</div>
-								</div>
-								<div class="col-lg-12">
-									<div class="input-prepend">
-										<a> Unproductive </a>
-										<input type="text" name="filterDetails" placeholder=""/>
-									</div>
-								</div>
-
-
-							</div>
-
-						</div>
-					</div>
-				</div>
-				<div class="wfm-block">
-					<div class="sub-header accordion-head" ng-click="accordionToggle3 = !accordionToggle3">Duration</div>
-					<div ng-show="accordionToggle3">
-						<div class="row toolbar">
-							<div class="material-block-header">
-								<h4 class="material-title">Period from 2015-04-01 to 2015-04-30</h4>
-							</div>
-							<div class="material-block-content">
-								<div ng-if="result" ng-class="result.success ? 'success' : 'fail'">
-
-								</div>
-								<div ng-if="!result" class="text-center">
-									<svg class="spinner" width="65px" height="65px" viewBox="0 0 66 66" xmlns="http://www.w3.org/2000/svg">
-										<circle class="path" fill="none" stroke-width="6" stroke-linecap="round" cx="33" cy="33" r="30"></circle>
-									</svg>
-								</div>
-							</div>
-						</div>
-
-					</div>
-				</div>
-				<div class="wfm-block">
-					<div class="sub-header accordion-head" ng-click="accordionToggle2 = !accordionToggle2">Open Hours</div>
-					<div ng-show="accordionToggle2">
-						<div class="row toolbar">
-							<div class="col-lg-12">
-								<div class="input-prepend">
-									<a>Weekday</a>
-									<a>Open hours</a>
-								</div>
-							</div>
-
-							<div class="col-lg-12">
-								<div class="input-prepend">
-									<a>Monday</a>
-									<select>
-										<option>closed</option>
-									</select>
-								</div>
-							</div>
-							<div class="col-lg-12">
-								<div class="input-prepend">
-									<a>Tuesday</a>
-									<select>
-										<option>closed</option>
-									</select>
-								</div>
-							</div>
-							<div class="col-lg-12">
-								<div class="input-prepend">
-									<a>Wednesday</a>
-									<select>
-										<option>closed</option>
-									</select>
-								</div>
-							</div>
-							<div class="col-lg-12">
-								<div class="input-prepend">
-									<a>Thursday</a>
-									<select>
-										<option>closed</option>
-									</select>
-								</div>
-							</div>
-							<div class="col-lg-12">
-								<div class="input-prepend">
-									<a>Friday</a>
-									<select>
-										<option>closed</option>
-									</select>
-								</div>
-							</div>
-							<div class="col-lg-12">
-								<div class="input-prepend">
-									<a>Saturday</a>
-									<select>
-										<option>closed</option>
-									</select>
-								</div>
-							</div>
-							<div class="col-lg-12">
-								<div class="input-prepend">
-									<a>Sunday</a>
-									<select>
-										<option>closed</option>
-									</select>
-								</div>
-							</div>
-
-						</div>
-					</div>
-				</div>
-			</section>
-		</div>-->
-
-		</div>
+		
 </div>

@@ -10,7 +10,7 @@
 					<strong>{{campaign.name}}</strong> 					
 				</div>
 				<div ng-show="acToggle1">
-					<form name="params" class="form-horizontal wfm-block">
+					<form name="formParams" class="form-horizontal wfm-block">
 						<div class="form-group">
 							<label for="name" class="col-sm-2 control-label">Name</label>
 							<div class="col-sm-6">
@@ -29,7 +29,7 @@
 							</div>
 						</div>
 						<div class="form-group">
-							<label for="callList" class="col-sm-2 control-label">Call List Len</label>
+							<label for="callList" class="col-sm-2 control-label">Call List Length</label>
 							<div class="col-sm-6">
 								<input type="number" class="form-control" name="callList" id="callList" placeholder="100"
 								       ng-model="params.callList"

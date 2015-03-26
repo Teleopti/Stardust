@@ -4,13 +4,14 @@ outbound.controller('OutboundListCtrl', [
 	'$scope', '$state',
 	function($scope, $state) {
 		$scope.campaigns = [
-			{ id: 1, name: "March Sales" },
-			{ id: 2, name: "Apirl Sales" },
-			{ id: 3, name: "Chocalate Sales"},
+			{ id: 1, name: "March Sales", period: {startDate: "2015-03-01", endDate: "2015-05-01"} },
+			{ id: 2, name: "Apirl Sales", period: { startDate: "2015-04-01", endDate: "2015-05-01" } },
+			{ id: 3, name: "Chocalate Sales", period: { startDate: "2015-01-01", endDate: "2015-01-07" } },
 		];
 
 		$scope.newName = "";
 		$scope.selectedTarget = null;
+		$scope.hideDetail = false;
 
 		$scope.reset = function () {
 			$scope.selectedTarget = null;
@@ -32,10 +33,11 @@ outbound.controller('OutboundListCtrl', [
 			$scope.newName = "";
 		};
 
-		$scope.copy = function(obj) {
-			var copiedObj = obj.clone();
-			copiedObj.id = getNextId();			
-			$scope.campaigns.push(copiedObj);
+		$scope.copyNew = function (obj) {
+			var copiedObj = angular.copy(obj);
+			copiedObj.id = getNextId();
+			copiedObj.name = copiedObj.name + "_Copy";
+			$scope.campaigns.unshift(copiedObj);
 		};
 
 		$scope.update = function(obj) {
@@ -44,15 +46,17 @@ outbound.controller('OutboundListCtrl', [
 
 		$scope.show = function(obj) {
 			$scope.selectedTarget = obj;
-			console.log("Selected", obj);
 			$state.go('outbound.edit', { id: $scope.selectedTarget.id });
-			console.log("Going to id", $scope.selectedTarget.id);
 		};
 
-		$scope.delete = function(obj, idx) {
+		$scope.delete = function (obj, idx) {
+			console.log(idx);
+			console.log($scope.campaigns[idx]);
 			if (confirm('Are you sure you want to delete this record?')) {
-				if ($scope.campaigns.idx == obj) {
+				if ($scope.campaigns[idx] == obj) {
+					console.log($scope.campaigns);
 					$scope.campaigns.splice(idx, 1);
+					console.log($scope.campaigns);
 				} else {
 					console.log("Unmatched element.");
 				}
