@@ -16,7 +16,7 @@
 			</div>
 		</div>
 	</div>
-	<div class="row">
+	
 	<div ng-class="{'col-lg-4' : !hideDetail , 'col-lg-12': hideDetail   }">
 		<div class="role-nav material-depth-2 container-block">
 			<div class="wfm-block sub-header">Campaigns</div>
@@ -64,7 +64,7 @@
 								</span>
 						</div>
 						<div class="row">
-							<div ng-class="{'col-lg-12': !hideDetail, 'col-lg-4': hideDetail}">
+							<div ng-class="{'col-lg-4': hideDetail}">
 								<span ng-hide="editing">{{campaign.name}}</span>
 								<form ng-show="editing" ng-submit="editing = false; update(campaign)">
 									<input type="text" class="inline-role-name" ng-model="campaign.name" placeholder="Name" ng-required />
@@ -87,9 +87,4 @@
 	<div class="col-lg-8" ng-if="!hideDetail">
 		<div ui-view></div>
 	</div>
-
-
-			
-
-		
 </div>

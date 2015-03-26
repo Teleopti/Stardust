@@ -1,65 +1,38 @@
-﻿var outbound = angular.module('wfm.outbound', []);
+﻿var outbound = angular.module('wfm.outbound', ['outboundService']);
 
 outbound.controller('OutboundListCtrl', [
-	'$scope', '$state',
-	function($scope, $state) {
-		$scope.campaigns = [
-			{ id: 1, name: "March Sales", period: {startDate: "2015-03-01", endDate: "2015-05-01"} },
-			{ id: 2, name: "Apirl Sales", period: { startDate: "2015-04-01", endDate: "2015-05-01" } },
-			{ id: 3, name: "Chocalate Sales", period: { startDate: "2015-01-01", endDate: "2015-01-07" } },
-		];
-
+	'$scope', '$state', 'OutboundService',
+	function($scope, $state, OutboundService) {
+		$scope.campaigns = OutboundService.listCampaign();
 		$scope.newName = "";
 		$scope.selectedTarget = null;
 		$scope.hideDetail = false;
 
 		$scope.reset = function () {
-			$scope.selectedTarget = null;
-			console.log($scope.form);
+			$scope.selectedTarget = null;		
 			$scope.form.$setPristine();
 		};
-
-		var getNextId = function() {
-			var curMaxId = -1;
-			angular.forEach($scope.campaigns, function (v, k) { curMaxId = curMaxId > v.id ? curMaxId : v.id; });
-			return curMaxId < 0 ? 1 : curMaxId + 1;
+		
+		$scope.create = function () {
+			OutboundService.addCampaign({ name: $scope.newName });			
 		};
 
-		$scope.create = function() {			
-			$scope.campaigns.unshift({
-				id: getNextId(),
-				name: $scope.newName
-			});
-			$scope.newName = "";
+		$scope.copyNew = function (campaign) {
+			OutboundService.addCampaign({ name: campaign.name + "_Copy" });
 		};
 
-		$scope.copyNew = function (obj) {
-			var copiedObj = angular.copy(obj);
-			copiedObj.id = getNextId();
-			copiedObj.name = copiedObj.name + "_Copy";
-			$scope.campaigns.unshift(copiedObj);
+		$scope.update = function(campaign) {
+			OutboundService.updateCampaign(campaign);
 		};
 
-		$scope.update = function(obj) {
-
-		};
-
-		$scope.show = function(obj) {
-			$scope.selectedTarget = obj;
+		$scope.show = function(campaign) {
+			$scope.selectedTarget = campaign;
 			$state.go('outbound.edit', { id: $scope.selectedTarget.id });
 		};
 
-		$scope.delete = function (obj, idx) {
-			console.log(idx);
-			console.log($scope.campaigns[idx]);
+		$scope.delete = function (campaign, idx) {		
 			if (confirm('Are you sure you want to delete this record?')) {
-				if ($scope.campaigns[idx] == obj) {
-					console.log($scope.campaigns);
-					$scope.campaigns.splice(idx, 1);
-					console.log($scope.campaigns);
-				} else {
-					console.log("Unmatched element.");
-				}
+				OutboundService.deleteCampaign(campaign, idx);
 			}
 		};
 
@@ -67,14 +40,9 @@ outbound.controller('OutboundListCtrl', [
 ]);
 
 outbound.controller('OutboundEditCtrl', [
-	'$scope', '$stateParams',
-	function ($scope, $stateParams) {
-		$scope.campaigns = [
-			{ id: 1, name: "March Sales" },
-			{ id: 2, name: "Apirl Sales" },
-			{ id: 3, name: "Chocalate Sales" },
-		];
-
+	'$scope', '$stateParams', 'OutboundService',
+	function ($scope, $stateParams, OutboundService) {
+	
 		$scope.acToggle1 = true;
 
 		$scope.skills = [
@@ -82,16 +50,15 @@ outbound.controller('OutboundEditCtrl', [
 			{ label: "Consultancy", value: "Consultancy" },
 			{ label: "Writing", value: "Writing" }
 		];
-
 		$scope.availableWorkingHours = [
 			{ label: "Closed", value: "Closed" }
 		];
 
-		angular.forEach($scope.campaigns, function(v, k) {
-			if (v.id == $stateParams.id) {
-				$scope.campaign = v;
-			}
+		$scope.$on("outbound.campaigns.updated", function() {
+			$scope.campaign = OutboundService.getCampaignById($stateParams.id);
 		});
+
+		$scope.campaign = OutboundService.getCampaignById($stateParams.id);
 
 		$scope.period = {
 			startDate: moment().add(1, 'months').startOf('month').toDate(),

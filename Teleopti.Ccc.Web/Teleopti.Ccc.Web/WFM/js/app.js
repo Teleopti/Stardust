@@ -10,6 +10,7 @@ var wfm = angular.module('wfm', [
 	'restSearchService',
 	'restNotificationService',
 	'forecastingService',
+	'outboundService',
 	'wfmCtrls',
 	'wfm.permissions',
 	'wfm.people',
