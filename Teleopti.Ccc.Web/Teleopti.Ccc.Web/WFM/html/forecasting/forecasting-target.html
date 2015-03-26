@@ -2,9 +2,8 @@
 	<div class="material-block-content" ng-if="showSelection">
 		<div class="row">
 			<div class="col-lg-12">
-				<button class="wfm-btn wfm-btn-primary pull-right apply" ng-click="nextStep()">Apply</button>
 				<h4>
-					Select forcasting target(s)
+					Select forcasting target(s) for period {{period.startDate | date : shortDate}} to {{period.endDate | date : shortDate}}:
 				</h4>
 
 			</div>
@@ -32,11 +31,12 @@
 			</div>
 
 		</div>
-
+		<div>
+			<button class="wfm-btn wfm-btn-primary pull-right apply" ng-click="nextStep()">Apply</button>
+		</div>
 	</div>
 
 	<div ng-if="!showSelection" class="text-center">
-		Wait ! We re crushing data for you :)
 		<div>
 			<svg class="spinner" width="65px" height="65px" viewBox="0 0 66 66" xmlns="http://www.w3.org/2000/svg">
 				<circle class="path" fill="none" stroke-width="6" stroke-linecap="round" cx="33" cy="33" r="30"></circle>

@@ -18,14 +18,14 @@ angular.module('wfm.forecasting', [])
 		}
 	]
 	)
-	.controller('ForecastingRunCtrl', ['$scope', '$stateParams', '$http',
-		function ($scope, $stateParams, $http) {
+	.controller('ForecastingRunCtrl', ['$scope', '$stateParams', '$http', 'Forecasting',
+		function ($scope, $stateParams, $http, Forecasting) {
 
 			$scope.period = $stateParams.period;
 			$scope.targets = $stateParams.targets;
 			$http.post('../api/Forecasting/Forecast', JSON.stringify({ ForecastStart: $scope.period.startDate, ForecastEnd: $scope.period.endDate, Workloads: $scope.targets })).
 				success(function (data, status, headers, config) {
-					$scope.result = { success: true, message: 'You now have an updated forecast in your default scenario, based on last year\'s data.' };
+					$scope.result = { success: true, message: 'You now have an updated forecast for the following workloads in your default scenario, based on last year\'s data:' };
 				}).
 				error(function (data, status, headers, config) {
 					$scope.result = { success: false, message: 'The forecast has failed. Please try again later' };
