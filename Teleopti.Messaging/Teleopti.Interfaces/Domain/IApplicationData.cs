@@ -22,14 +22,7 @@ namespace Teleopti.Interfaces.Domain
 		/// </remarks>
 		IMessageBrokerComposite Messaging { get; }
 
-		/// <summary>
-		/// Gets the application wide settings. This replaces ConfigurationManager.AppSettings, which should not be used
-		/// </summary>
-		/// <value>The app settings.</value>
-		/// <remarks>
-		/// Created by: Klas
-		/// Created date: 2008-12-11
-		/// </remarks>
+		//Do not use this one - should be removed!
 		IDictionary<string, string> AppSettings { get; }
 
 		///<summary>
