@@ -13,7 +13,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Global
 			var target = new ApplicationController(new FakePermissionProvider());
 			var result = target.GetAreas();
 
-			result.Count().Should().Be.EqualTo(3);
+			result.Count().Should().Be.EqualTo(5);
 		}
 
 		[Test]
