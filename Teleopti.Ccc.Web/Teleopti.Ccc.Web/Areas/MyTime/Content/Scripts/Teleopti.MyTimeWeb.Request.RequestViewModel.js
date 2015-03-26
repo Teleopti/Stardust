@@ -11,8 +11,11 @@ Teleopti.MyTimeWeb.Request.RequestViewModel = function RequestViewModel(addReque
 	self.Templates = ["text-request-detail-template", "absence-request-detail-template", "shifttrade-request-detail-template", "shiftexchangeoffer-request-detail-template"];
 	self.IsFullDay = ko.observable(false);
 	self.IsUpdate = ko.observable(false);
-	self.DateFrom = ko.observable(moment().startOf('day'));
-	self.DateTo = ko.observable(moment().startOf('day'));
+
+	var urlDate = Teleopti.MyTimeWeb.Portal.ParseHash().dateHash;
+	self.DateFrom = ko.observable(urlDate ? moment(urlDate).startOf('day') : moment().startOf('day'));
+	self.DateTo = ko.observable(urlDate ? moment(urlDate).startOf('day') : moment().startOf('day'));
+
 	self.PreviousDateTo = ko.observable(moment());
 	self.TimeFromInternal = ko.observable(defaultDateTimes ? defaultDateTimes.defaultStartTime : null);
 	self.TimeToInternal = ko.observable(defaultDateTimes ? defaultDateTimes.defaultEndTime : null);

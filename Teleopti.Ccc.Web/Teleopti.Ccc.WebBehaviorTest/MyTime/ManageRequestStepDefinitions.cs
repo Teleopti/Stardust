@@ -49,10 +49,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.MyTime
 			Browser.Interactions.Javascript(string.Format("$('#Request-add-section .request-new-datefrom').datepicker('set', '{0}');",
 							  dateFrom.ToShortDateString(DataMaker.Data().MyCulture)));
 			Browser.Interactions.Javascript(string.Format("$('#Request-add-section .request-new-dateto').datepicker('set', '{0}');",
-							  dateTo.ToShortDateString(DataMaker.Data().MyCulture)));
-
-
-			//Browser.Interactions.AssertEventualExists("#absence-personal-account");
+							  dateTo.ToShortDateString(DataMaker.Data().MyCulture))); 
 		}
 
 		[When(@"I input overtime availability with")]
