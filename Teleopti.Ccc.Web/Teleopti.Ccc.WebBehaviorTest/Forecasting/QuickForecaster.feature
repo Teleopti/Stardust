@@ -2,7 +2,8 @@
 	In order to create a forecast
 	As a user
 	I want to be able to do a forecast
-	
+
+@Ignore	
 Scenario: Show message if no historical data for measurement
 	Given I have a role with
 	| Field           | Value      |
@@ -17,6 +18,7 @@ Scenario: Show message if no historical data for measurement
 	And I should see no accuracy for skill 'TheSkill1'
 	And I should see no accuracy for workload 'TheWorkload1'
 
+@Ignore
 Scenario: Show accuracy
 	Given I have a role with
 	| Field           | Value      |
