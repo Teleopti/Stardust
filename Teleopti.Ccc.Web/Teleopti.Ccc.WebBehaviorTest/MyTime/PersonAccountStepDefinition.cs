@@ -40,8 +40,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.MyTime
 		[Then(@"I should see the remaining time is '(.*)'")]
 		public void ThenIShouldSeeTheRemainingTimeIs(string remainingTime)
 		{
-			//Browser.Interactions.AssertAnyContains(".remainingTime", remainingTime);
-			Browser.Interactions.AssertEventualFirstContains (".remainingTime", remainingTime);
+			Browser.Interactions.AssertAnyContains(".remainingTime", remainingTime);
 		}
 
 		[Given(@"I see the used time is '(.*)'")]

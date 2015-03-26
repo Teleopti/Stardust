@@ -46,14 +46,13 @@ namespace Teleopti.Ccc.WebBehaviorTest.MyTime
 			Browser.Interactions.TypeTextIntoInputTextUsingJQuery("#Request-add-section .request-new-subject", "The cake is a.. Cake!");
 			Browser.Interactions.TypeTextIntoInputTextUsingJQuery("#Request-add-section .request-new-message", "A message. A very very very short message. Or maybe not.");
 			Browser.Interactions.SelectOptionByTextUsingJQuery("#Request-add-section .request-new-absence", absenceName);
-            
-            //ensure ajax call is completed before continuing
-            Browser.Interactions.AssertJavascriptResultContains("return jQuery.active;","0");
-
 			Browser.Interactions.Javascript(string.Format("$('#Request-add-section .request-new-datefrom').datepicker('set', '{0}');",
 							  dateFrom.ToShortDateString(DataMaker.Data().MyCulture)));
 			Browser.Interactions.Javascript(string.Format("$('#Request-add-section .request-new-dateto').datepicker('set', '{0}');",
 							  dateTo.ToShortDateString(DataMaker.Data().MyCulture)));
+
+
+			Browser.Interactions.AssertEventualExists("#absence-personal-account");
 		}
 
 		[When(@"I input overtime availability with")]
