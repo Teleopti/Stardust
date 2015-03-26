@@ -1,8 +1,333 @@
-﻿<div>
-<div class="row">
-	<div class="col-lg-12">
-		<h4>Manage people</h4>
-		<p>Here you can decide who is allowed to access specific parts of the application</p>
-	</div>
+﻿<style>
+	
+.wfm-table {
+  width: 100%;
+  text-align: left; }
+
+.wfm-table td, th {
+  border: 1px solid #f5f5f5;
+  color: rgba(0, 0, 0, 0.54);
+  padding: 5px; }
+
+.wfm-table th {
+  color: rgba(0, 0, 0, 0.87);
+  background-color: #99d6ff;
+  text-align: center; }
+  .wfm-table th i {
+    float: right; }
+
+.wfm-table .number-cell {
+  text-align: right; }
+
+.wfm-table-multi th:first-child, .wfm-table-multi td:first-child {
+  color: rgba(0, 0, 0, 0.87);
+  font-weight: 600;
+  background-color: #99d6ff; }
+
+.wrapper {
+	margin-top: 10px;
+	margin-bottom: 60px;
+}
+.ng-modal-overlay {
+  /* A dark translucent div that covers the whole screen */
+  position:absolute;
+  z-index:9999;
+  top:0;
+  left:0;
+  width:100%;
+  height:100%;
+  background-color:#000000;
+  opacity: 0.8;
+}
+.ng-modal-dialog {
+  /* A centered div above the overlay with a box shadow. */
+  z-index:10000;
+  position: absolute;
+  width: 100%; /* Default */
+
+  /* Center the dialog */
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  -webkit-transform: translate(-50%, -50%);
+  -moz-transform: translate(-50%, -50%);
+
+  background-color: #fff;
+  box-shadow: 4px 4px 80px #000;
+}
+.ng-modal-dialog-content {
+  padding:10px;
+  text-align: left;
+}
+.ng-modal-close {
+  position: absolute;
+  top: 3px;
+  right: 5px;
+  padding: 5px;
+  cursor: pointer;
+  font-size: 120%;
+  display: inline-block;
+  font-weight: bold;
+  font-family: 'arial', 'sans-serif';
+}
+</style>
+
+
+<div class="wrapper">
+	<select style="position: relative;float: left;height: 34px;margin-right: 63px;">
+		<option>London/Team 1</option>
+		<option>London/Team 2</option>
+		<option>London/Team 3</option>
+	</select>
+
+	<span class="input-group" style="max-width: 294px; float: left;">
+		<span class="input-group-btn">
+			<button id="report-view-date-nav-prev" class="btn btn-default" type="button">
+				<i class="glyphicon glyphicon-chevron-left"></i>
+			</button>
+		</span>
+		<input class="form-control text-center" id="report-view-date-nav-current" value="3-25-2015" type="text" readonly="readonly" />
+		<span class="input-group-btn">
+			<button id="report-view-date-picker" class="btn btn-default moment-datepicker" xdata-bind="datepicker: selectedDate, datepickerOptions: { autoHide: true, format: datePickerFormat() }" type="button">
+				<i class="glyphicon glyphicon-calendar"></i>
+			</button>
+			<button id="report-view-date-nav-next" class="btn btn-default" type="button">
+				<i class="glyphicon glyphicon-chevron-right"></i>
+			</button>
+		</span>
+	</span>
+
+	<span class="people-search" style="float: right; margin-right: 60px;">
+			<i class="mdi mdi-magnify"></i>
+			<input type="text" placeholder="Search ..." class="people-search-text" />
+	</span>
 </div>
+
+
+
+<table class="wfm-table">
+	<thead>
+	<tr>
+		<th>First Name <i class="mdi mdi-menu-up"></i> </th>
+		<th>Last Name</th>
+		<th>Email</th>
+		<th>Phone</th>
+		<th>Emp No.</th>
+	</tr>
+	</thead>
+	<tbody>
+		<tr ng-repeat="person in peopleList" ng-click="toggleModal()">
+			<td>{{person.FirstName}}</td>
+			<td>{{person.LastName}}</td>
+			<td>{{person.Email}}</td>
+			<td>{{person.Phone}}</td>
+			<td>{{person.EmploymentNumber}}</td>
+			<td modal></td>
+		</tr>
+	</tbody>
+</table>
+<modal-dialog show='modalShown' width='1000px' height='500px'>
+	<div id="testModal" class="modalbg">
+		<div class="dialog">
+			<div class="modal-header">
+				<span>
+					<a>
+						<i class="mdi mdi-account"></i>Ashley Andeen
+					</a>
+				</span>
+			</div>
+			<div class="modal-content">
+				<div class="modal-footer">
+					<a href="#close1" title="Close1" class="dismiss wfm-btn wfm-btn-invis-primary">Discard</a>
+					<a href="#close2" title="Close2" class="dismiss wfm-btn wfm-btn-invis-primary">Save</a>
+				</div>
+			</div>
+			<div class="tab-group">
+				<input type="radio" name="tabs" id="tab-1" checked="checked" />
+				<label class="label" for="tab-1">
+					General
+				</label>
+				<section>
+					<div class="tab-container">
+						<table class="wfm-table">
+							<tbody>
+								<tr>
+									<td>
+										<div>
+											<ul class="wfm-list">
+												<li>
+													<i class="mdi-pencil"></i> <strong>General</strong>
+												</li>
+												<li>
+													<span>First Name: </span>
+													<input type="text" value="Ashley"></input>
+												</li>
+												<li>
+													<span>Last Name: </span>
+													<input type="text" value="Andeen"></input>
+												</li>
+												<li>
+													<span>Employee Number: </span>
+													<input type="text" value="1234567"></input>
+												</li>
+											</ul>
+										</div>
+									</td>
+									<td>
+										<div>
+											<ul class="wfm-list">
+												<li>
+													<i class="mdi-pencil"></i> <strong>Contact</strong>
+												</li>
+												<li class="active">
+													<span>Email: </span>
+													<input type="text" value="aa@teleopti.com"></input>
+												</li>
+												<li>
+													<span>Cell Phone: </span>
+													<input type="text" value="1234567"></input>
+												</li>
+											</ul>
+										</div>
+									</td>
+								</tr>
+								<tr>
+									<td>
+										<div>
+											<ul class="wfm-list">
+												<li>
+													<i class="mdi-pencil"></i> <strong>Local & Language</strong>
+												</li>
+												<li>
+													<span>Language: </span>
+													<select>
+														<option>English</option>
+														<option>Chinese</option>
+														<option>Swedish</option>
+													</select>
+												</li>
+												<li>
+													<span>Format: </span>
+													<select>
+														<option>en-US</option>
+														<option>en-GB</option>
+														<option>zh-CN</option>
+													</select>
+												</li>
+												<li>
+													<span>Timezone: </span>
+													<select>
+														<option>UTC+1</option>
+														<option>UTC+8</option>
+														<option>UTC-1</option>
+													</select>
+												</li>
+												<li>
+													<span>Work Week Starts On: </span>
+													<select>
+														<option>Monday</option>
+														<option>Tuesday</option>
+														<option>Wednesday</option>
+														<option>Thursday</option>
+														<option>Friday</option>
+														<option>Saturday</option>
+														<option>Sunday</option>
+													</select>
+												</li>
+											</ul>
+										</div>
+									</td>
+									<td>
+										<div>
+											<ul class="wfm-list">
+												<li>
+													<i class="mdi-pencil"></i> <strong>Others</strong>
+												</li>
+												<div>
+													<span>Roles: </span>
+													<span class="dropdown" tabindex="0" style="width:120px">
+														<span>Agent, Team Leader</span>
+														<div class="inner material-depth-2" style="width:200px">
+															<div class="wfm-checkbox">
+																<input type="checkbox" id="check1" checked="checked" />
+																<label for="check1">
+																	<span class="wfm-checkbox-toggle"></span>
+																	<span class="wfm-checkbox-label">Agent</span>
+																</label>
+															</div>
+															<div class="wfm-checkbox">
+																<input type="checkbox" id="check2" checked="checked" />
+																<label for="check2">
+																	<span class="wfm-checkbox-toggle"></span>
+																	<span class="wfm-checkbox-label">Team Leader</span>
+																</label>
+															</div>
+															<div class="wfm-checkbox">
+																<input type="checkbox" id="check3" />
+																<label for="check3">
+																	<span class="wfm-checkbox-toggle"></span>
+																	<span class="wfm-checkbox-label">Super Administrator</span>
+																</label>
+															</div>
+														</div>
+													</span>
+												</div>
+												<li>
+													<span>Workflow Controlset: </span>
+													<select>
+														<option value="value">Default</option>
+													</select>
+												</li>
+												<li>
+													<span>Leaving Date: </span>
+													<input type="text" value="2020-12-31"></input>
+												</li>
+												<li>
+													<span>Note: </span>
+													<textarea></textarea>
+												</li>
+											</ul>
+										</div>
+									</td>
+								</tr>
+							</tbody>
+						</table>
+					</div>
+				</section>
+				<input type="radio" name="tabs" id="tab-2" />
+				<label class="label" for="tab-2">
+					Person Periods
+				</label>
+				<section>
+					<div class="tab-container">
+						Person Periods
+					</div>
+				</section>
+				<input type="radio" name="tabs" id="tab-3" />
+				<label class="label" for="tab-3">
+					Schedule Periods
+				</label>
+				<section>
+					<div class="tab-container">
+						Schedule Periods
+					</div>
+				</section>
+			</div>
+		</div>
 	</div>
+</modal-dialog>
+
+
+<!--<modal title="Login form" visible="showDetails">
+	<form role="form">
+		<div class="form-group">
+			<label for="email">Email address</label>
+			<input type="email" class="form-control" id="email" placeholder="Enter email" />
+		</div>
+		<div class="form-group">
+			<label for="password">Password</label>
+			<input type="password" class="form-control" id="password" placeholder="Password" />
+		</div>
+		<button type="submit" class="btn btn-default">Submit</button>
+	</form>
+</modal>-->
