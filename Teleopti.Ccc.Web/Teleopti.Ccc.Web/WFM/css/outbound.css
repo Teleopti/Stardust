@@ -2,9 +2,17 @@
 .input-prepend {
 	width: 100%;
 }
-.input-prepend label {
+.input-prepend span {
 	display: inline-block;
-	width: 20%;
+	width: 18%;
+}
+.input-prepend span + input[type='text'] {
+	display: inline-block;
+	width: 65% !important;
+}
+.input-prepend span + select {
+	display: inline-block;
+	width: 65% !important;
 }
 .wfm-checkbox.wfm-checkbox-inline {
 	width: auto;

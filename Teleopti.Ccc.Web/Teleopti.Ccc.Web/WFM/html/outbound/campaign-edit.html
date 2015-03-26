@@ -30,87 +30,49 @@
 				</div>
 				<div ng-show="acToggle1">
 				<form name="formParams" class="form-horizontal wfm-block">
-					<div class="form-group">
-						<label for="name" class="col-sm-2 control-label">Name</label>
-						<div class="col-sm-4">
-							<input type="text" class="form-control" name="name" id="name"
-								   ng-model="campaign.name"
-								   disabled />
-						</div>
+					<div class="input-prepend">
+						<span><strong>Name</strong></span>
+						<input id="name" type="text" ng-model="campaign.name" />
 					</div>
-					<div class="form-group">
-						<label for="skill" class="col-sm-2 control-label">Skill</label>
-						<div class="col-sm-4">
-							<select name="skill" id="skill" class="form-control"
-									ng-model="params.skill"
-									ng-options="skill as skill.label for skill in skills"
-									ng-required></select>
-						</div>
+					<div class="input-prepend">
+						<span><strong>Skill</strong></span>
+						<select name="skill" id="skill" 
+								ng-model="params.skill"
+								ng-options="skill as skill.label for skill in skills"
+								ng-required></select>
 					</div>
-					<div class="form-group">
-						<label for="callList" class="col-sm-2 control-label">Call List Length</label>
-						<div class="col-sm-4">
-							<input type="number" class="form-control" name="callList" id="callList" placeholder="100"
-								   ng-model="params.callList"
-								   ng-required />
-						</div>
+					<div class="input-prepend">
+						<span ><strong>Call-list Len.</strong></span>
+						<input id="callList" type="text" ng-model="params.callList" placeholder="call list length"/>
 					</div>
-					<div class="form-group">
-						<label for="sla" class="col-sm-2 control-label">SLA</label>
-						<div class="col-sm-4">
-							<input type="number" class="form-control" name="sla" id="sla"
-								   ng-model="params.sla"
-								   ng-required />
-						</div>
+					<div class="input-prepend">
+						<span><strong>SLA</strong></span>
+						<input id="sla" type="text" ng-model="params.sla" placeholder="sla" />
 					</div>
-					<div class="form-group">
-						<label for="target" class="col-sm-2 control-label">Target</label>
-						<div class="col-sm-4">
-							<input type="number" class="form-control" name="target" id="target"
-								   ng-model="params.target"
-								   ng-required />
-						</div>
+					<div class="input-prepend">
+						<span><strong>Target</strong></span>
+						<input id="target" type="text" ng-model="params.target" placeholder="target number of calls"/>
 					</div>
-					<div class="form-group">
-						<label for="cr" class="col-sm-2 control-label">CR</label>
-						<div class="col-sm-4">
-							<input type="number" class="form-control" name="cr" id="cr"
-								   ng-model="params.cr"
-								   ng-required />
-						</div>
+					<div class="input-prepend">
+						<span><strong>CR</strong></span>
+						<input id="cr" type="text" ng-model="params.cr" placeholder="connect rate" />
 					</div>
-					<div class="form-group">
-						<label for="rpcr" class="col-sm-2 control-label">RPCR</label>
-						<div class="col-sm-4">
-							<input type="number" class="form-control" name="rpcr" id="rpcr"
-								   ng-model="params.rpcr"
-								   ng-required />
-						</div>
+					<div class="input-prepend">
+						<span><strong>RPCR</strong></span>
+						<input id="target" type="text" ng-model="params.rpcr" placeholder="right party connect rate"/>
 					</div>
-					<div class="form-group">
-						<label for="cAHT" class="col-sm-2 control-label">Connect AHT</label>
-						<div class="col-sm-4">
-							<input type="number" class="form-control" name="cAHT" id="cAHT"
-								   ng-model="params.cAHT"
-								   ng-required />
-						</div>
+					<div class="input-prepend">
+						<span><strong>Connect AHT</strong></span>
+						<input id="cAHT" type="text" ng-model="params.cAHT" placeholder="connect average handle time"/>
 					</div>
-					<div class="form-group">
-						<label for="rpcAHT" class="col-sm-2 control-label">RPC AHT</label>
-						<div class="col-sm-4">
-							<input type="number" class="form-control" name="rpcAHT" id="rpcAHT"
-								   ng-model="params.rpcAHT"
-								   ng-required />
-						</div>
+					<div class="input-prepend">
+						<span><strong>RPC AHT</strong></span>
+						<input id="rpcAHT" type="text" ng-model="params.rpcAHT" placeholder="right party average handle time"/>
 					</div>
-					<div class="form-group">
-						<label for="unproductive" class="col-sm-2 control-label">Unproductive</label>
-						<div class="col-sm-4">
-							<input type="number" class="form-control" name="unproductive" id="unproductive"
-								   ng-model="params.unproductive"
-								   ng-required />
-						</div>
-					</div>
+					<div class="input-prepend">
+						<span><strong>Unproductive</strong></span>
+						<input id="unproductive" type="text" ng-model="params.unproductive" placeholder="unproductive time"  />
+					</div>																													
 				</form>
 			</div>
 			</div>
