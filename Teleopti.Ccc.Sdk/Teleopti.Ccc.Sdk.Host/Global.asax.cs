@@ -216,9 +216,16 @@ namespace Teleopti.Ccc.Sdk.WcfHost
 				builder.RegisterType<AvailableDataSourcesProvider>().As<IAvailableDataSourcesProvider>().SingleInstance();
 
 				if (configuration.Toggle(Toggles.MultiTenancy_SDK_17458))
+			{
 					builder.RegisterType<MultiTenancyAuthenticationFactory>().As<IAuthenticationFactory>().InstancePerLifetimeScope();
+				builder.RegisterType<TenantPeopleSaver>().As<ITenantPeopleSaver>().InstancePerLifetimeScope();
+				builder.RegisterType<TenantDataManager>().As<ITenantDataManager>().InstancePerLifetimeScope();
+			}
 				else
+			{
 					builder.RegisterType<AuthenticationFactory>().As<IAuthenticationFactory>().InstancePerLifetimeScope();
+				builder.RegisterType<EmptyTenantPeopleSaver>().As<ITenantPeopleSaver>().InstancePerLifetimeScope();
+			}
 				
 				builder.RegisterType<LicenseFactory>().InstancePerLifetimeScope();
 				builder.RegisterType<ScheduleFactory>().InstancePerLifetimeScope();

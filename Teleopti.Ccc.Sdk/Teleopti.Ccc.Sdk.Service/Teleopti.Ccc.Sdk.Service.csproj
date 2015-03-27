@@ -194,6 +194,7 @@
     <Compile Include="Factory\ServiceLevelCalculator.cs" />
     <Compile Include="Factory\TeleoptiPayrollExportFactory.cs" />
     <Compile Include="Factory\TeleoptiPayrollExportBuilder.cs" />
+    <Compile Include="Factory\TenantPeopleSaver.cs" />
     <Compile Include="LogOn\PersonInRoleCache.cs" />
     <Compile Include="LogOn\PersonInRoleCacheItem.cs" />
     <Compile Include="SdkCommandHandlersModule.cs" />

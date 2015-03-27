@@ -11,6 +11,7 @@ using System.Reflection;
 using System.Security.Principal;
 using System.ServiceModel;
 using System.Threading;
+using System.Web.Services.Protocols;
 using System.Xml;
 using System.Xml.Linq;
 using Autofac;
@@ -53,6 +54,7 @@ namespace Teleopti.Ccc.Sdk.WcfService
 	{
         private readonly IFactoryProvider _factoryProvider;
         private readonly ILifetimeScope _lifetimeScope;
+	    private readonly ITenantPeopleSaver _tenantPeopleSaver;
         private static readonly object PayrollExportLock = new object();
 		private static readonly ILog Logger = LogManager.GetLogger(typeof (TeleoptiCccSdkService));
 		private readonly IAuthenticationFactory _authenticationFactory;
@@ -61,12 +63,14 @@ namespace Teleopti.Ccc.Sdk.WcfService
         public TeleoptiCccSdkService(IAuthenticationFactory authenticationFactory,
                                         IPayrollResultFactory payrollResultFactory,
             IFactoryProvider factoryProvider,
-            ILifetimeScope lifetimeScope)
+            ILifetimeScope lifetimeScope,
+			  ITenantPeopleSaver tenantPeopleSaver)
         {
             _authenticationFactory = authenticationFactory;
             _payrollResultFactory = payrollResultFactory;
             _factoryProvider = factoryProvider;
             _lifetimeScope = lifetimeScope;
+	        _tenantPeopleSaver = tenantPeopleSaver;
             Logger.Info("Creating new instance of the service.");
         }
 
@@ -792,6 +796,7 @@ namespace Teleopti.Ccc.Sdk.WcfService
 				IPerson newPerson = assembler.DtoToDomainEntity(personDto);
 				repository.Add(newPerson);
 				uow.PersistAll();
+				_tenantPeopleSaver.SaveTenantData(personDto, newPerson.Id.Value,UnitOfWorkFactory.Current.Name);
 			}
 		}
 		public void UpdatePerson(PersonDto personDto)
@@ -807,6 +812,7 @@ namespace Teleopti.Ccc.Sdk.WcfService
 				IPerson person = assembler.DtoToDomainEntity(personDto);
 				repository.Add(person);		
 				uow.PersistAll();
+				_tenantPeopleSaver.SaveTenantData(personDto, person.Id.Value, UnitOfWorkFactory.Current.Name);
 			}
 		}
 
@@ -1847,10 +1853,12 @@ namespace Teleopti.Ccc.Sdk.WcfService
 				{
 				    PersonAssembler personAssembler = (PersonAssembler) _factoryProvider.CreatePersonAssembler();
 				    personAssembler.EnableSaveOrUpdate = true;
-				    personAssembler.DtoToDomainEntity(personDto);
+				    var person = personAssembler.DtoToDomainEntity(personDto);
 					unitOfWork.PersistAll();
+					_tenantPeopleSaver.SaveTenantData(personDto, person.Id.Value, UnitOfWorkFactory.Current.Name);
 				}
 			}
+			
 		}
 
 		/// <summary>
