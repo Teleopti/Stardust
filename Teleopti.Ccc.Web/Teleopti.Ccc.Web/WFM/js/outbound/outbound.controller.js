@@ -33,6 +33,7 @@ outbound.controller('OutboundListCtrl', [
 		$scope.show = function (campaign) {			
 			if (angular.isDefined(campaign)) $scope.selectedTarget = campaign;
 			$state.go('outbound.edit', { id: $scope.selectedTarget.id });
+			$scope.hideDetail = false;
 		};
 
 		$scope.delete = function (campaign, idx) {		
@@ -42,7 +43,6 @@ outbound.controller('OutboundListCtrl', [
 				}
 			}
 		};
-
 	}
 ]);
 
@@ -70,6 +70,7 @@ outbound.controller('OutboundEditCtrl', [
 		});
 
 		$scope.campaign = OutboundService.getCampaignById($stateParams.id);
+
 		$scope.showDetail = angular.isDefined($scope.campaign);
 
 		$scope.period = {
@@ -81,12 +82,26 @@ outbound.controller('OutboundEditCtrl', [
 			skill: $scope.skills[0]
 		};
 
+		$scope.update = function () {		
+			OutboundService.updateCampaign($scope.campaign);
+		};
+
 		$scope.navigateToSchedule = function() {
 			$state.go('outbound.schedule', { id: $scope.campaign.id });
 		};
 
 		$scope.navigateToConfiguration = function() {
 			$state.go('outbound.edit', { id: $scope.campaign.id });
+		};
+
+		$scope.timeRanges = [
+			{startTime: "07:00", endTime : "18:00", selected: false}
+		];
+
+		$scope.toggleTimeRangeSelect = function (selection) {
+			angular.forEach($scope.timeRanges, function(timeRange) {
+				timeRange.selected = (timeRange == selection) ? (!timeRange.selected) : false;
+			});			
 		};
 	}
 ]);

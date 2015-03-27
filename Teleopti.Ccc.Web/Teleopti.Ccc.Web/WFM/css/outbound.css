@@ -21,6 +21,12 @@
 	text-align:center; 
     vertical-align:middle;
 }
+.wfm-dense .wfm-checkbox {
+	padding: 0px !important;
+}
+.wfm-table.wfm-dense td{
+	height: 22px;
+}
 .navigate-to.active {
 	cursor: pointer;
 }
@@ -36,4 +42,8 @@
 .navigate-to.inactive span {
 	color: #E0E0E0;
 }
- 
+.sub-header div.column-label {
+	border-color: white;
+	border-width: 1px;
+	border-right-style: solid;
+}

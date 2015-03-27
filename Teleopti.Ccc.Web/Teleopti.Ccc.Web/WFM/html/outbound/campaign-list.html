@@ -19,49 +19,65 @@
 	
 	<div ng-class="{'col-lg-4' : !hideDetail , 'col-lg-12': hideDetail   }">
 		<div class="role-nav material-depth-2 container-block">
-			<div class="wfm-block sub-header">Campaigns</div>
+			<div class="wfm-block sub-header">
+				<div ng-show="!hideDetail">Campaigns </div>
+				<div class="row" ng-show="hideDetail">
+					<div class="col-lg-4 column-label">
+						<span>Campaign Name</span>
+					</div>
+					<div class="col-lg-2 column-label">
+						<span>Start Date</span>
+					</div>
+					<div class="col-lg-2 column-label">
+						<span>End Date</span>
+					</div>
+					<div class="col-lg-1">
+						<span>Progress</span>
+					</div>
+				</div>
+			</div>
 			<div class="wfm-block">
 				<form name="form" ng-submit="create(); reset(); show();">
 					<div class="input-prepend">
 						<i class="mdi mdi-plus"></i>
 						<input type="text" ng-model="newName" placeholder="Create new campaign" class="role-input role"/>
 					</div>
-				</form>
+				</form>				
 				<div class="input-prepend">
 					<i class="mdi mdi-filter-outline"></i>
-					<input type="text" name="filterRole" ng-model="searchCampaign.name" placeholder="Campaign filter ..."/>
-				</div>
+					<input type="text" name="filterRole" ng-model="searchCampaign.name" placeholder="Campaign filter ..." />
+				</div>						
 			</div>
 			<div id="searchCampaignResult" class="role-container">
-				<ul class="wfm-list">
+				<ul class="wfm-list">					
 					<li ng-repeat="campaign in campaigns | filter:searchCampaign" ng-click="show(campaign)" ng-dblclick="editing = true" ng-class="{'wfm-list-item-selected': selectedTarget && campaign.id == selectedTarget.id}" class="role-btn wfm-block wfm-list-item role">
 						<div class="wfm-leave-behind">
 							<span>
-									<i ng-click="$parent.copyNew(campaign);">
-										<svg style="width: 18px; height: 18px" viewBox="0 0 24 24">
-											<path fill="#555555" d="M19,21H8V7H19M19,5H8A2,2 0 0,0 6,7V21A2,2 0 0,0 8,23H19A2,2 0 0,0 21,21V7A2,2 0 0,0 19,5M16,1H4A2,2 0 0,0 2,3V17H4V3H16V1Z" />
-										</svg>
-										<md-tooltip>
-											Duplicate
-										</md-tooltip>
-									</i>
-									<i ng-click="editing = true">
-										<svg style="width: 18px; height: 18px" viewBox="0 0 24 24">
-											<path fill="#555555" d="M20.71,7.04C21.1,6.65 21.1,6 20.71,5.63L18.37,3.29C18,2.9 17.35,2.9 16.96,3.29L15.12,5.12L18.87,8.87M3,17.25V21H6.75L17.81,9.93L14.06,6.18L3,17.25Z" />
-										</svg>
-										<md-tooltip>
-											Edit
-										</md-tooltip>
-									</i>
-									<i ng-click="$parent.delete(campaign, $index)">
-										<svg style="width: 18px; height: 18px" viewBox="0 0 24 24">
-											<path fill="#555555" d="M19,4H15.5L14.5,3H9.5L8.5,4H5V6H19M6,19A2,2 0 0,0 8,21H16A2,2 0 0,0 18,19V7H6V19Z" />
-										</svg>
-										<md-tooltip>
-											Delete
-										</md-tooltip>
-									</i>
-								</span>
+								<i ng-click="$parent.copyNew(campaign);">
+									<svg style="width: 18px; height: 18px" viewBox="0 0 24 24">
+										<path fill="#555555" d="M19,21H8V7H19M19,5H8A2,2 0 0,0 6,7V21A2,2 0 0,0 8,23H19A2,2 0 0,0 21,21V7A2,2 0 0,0 19,5M16,1H4A2,2 0 0,0 2,3V17H4V3H16V1Z" />
+									</svg>
+									<md-tooltip>
+										Duplicate
+									</md-tooltip>
+								</i>
+								<i ng-click="editing = true">
+									<svg style="width: 18px; height: 18px" viewBox="0 0 24 24">
+										<path fill="#555555" d="M20.71,7.04C21.1,6.65 21.1,6 20.71,5.63L18.37,3.29C18,2.9 17.35,2.9 16.96,3.29L15.12,5.12L18.87,8.87M3,17.25V21H6.75L17.81,9.93L14.06,6.18L3,17.25Z" />
+									</svg>
+									<md-tooltip>
+										Edit
+									</md-tooltip>
+								</i>
+								<i ng-click="$parent.delete(campaign, $index)">
+									<svg style="width: 18px; height: 18px" viewBox="0 0 24 24">
+										<path fill="#555555" d="M19,4H15.5L14.5,3H9.5L8.5,4H5V6H19M6,19A2,2 0 0,0 8,21H16A2,2 0 0,0 18,19V7H6V19Z" />
+									</svg>
+									<md-tooltip>
+										Delete
+									</md-tooltip>
+								</i>
+							</span>
 						</div>
 						<div class="row">
 							<div ng-class="{'col-lg-4': hideDetail}">
@@ -73,11 +89,9 @@
 							<div ng-show="hideDetail">
 								<span class="col-lg-2">{{campaign.period.startDate}}</span>
 								<span class="col-lg-2">{{campaign.period.endDate}}</span>
+								<span class="col-lg-1">{{campaign.params.target}} / {{campaign.params.callList}}</span>
 							</div>
-						</div>
-						
-						
-						
+						</div>																	
 					</li>
 				</ul>
 			</div>

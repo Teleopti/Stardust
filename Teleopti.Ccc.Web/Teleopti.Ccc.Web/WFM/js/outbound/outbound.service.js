@@ -8,7 +8,11 @@ outboundService.factory('OutboundService', ['$rootScope', function($rootScope) {
 
 	var campaigns = [
 			{ id: 1, name: "March Sales", period: { startDate: "2015-03-01", endDate: "2015-05-01" } },
-			{ id: 2, name: "Apirl Sales", period: { startDate: "2015-04-01", endDate: "2015-05-01" } },
+			{
+				id: 2, name: "Apirl Sales",
+				period: { startDate: "2015-04-01", endDate: "2015-05-01" },
+				params: { callList: 500, target : 250 }
+			},
 			{ id: 3, name: "Chocalate Sales", period: { startDate: "2015-01-01", endDate: "2015-01-07" } }
 	];
 
