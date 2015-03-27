@@ -1,77 +1,90 @@
 ﻿<style>
-	
-.wfm-table {
-  width: 100%;
-  text-align: left; }
+	.wfm-table {
+		width: 100%;
+		text-align: left;
+	}
 
-.wfm-table td, th {
-  border: 1px solid #f5f5f5;
-  color: rgba(0, 0, 0, 0.54);
-  padding: 5px; }
+	.wfm-table td, th {
+		border: 1px solid #f5f5f5;
+		color: rgba(0, 0, 0, 0.54);
+		padding: 5px;
+	}
 
-.wfm-table th {
-  color: rgba(0, 0, 0, 0.87);
-  background-color: #99d6ff;
-  text-align: center; }
-  .wfm-table th i {
-    float: right; }
+	.wfm-table th {
+		color: rgba(0, 0, 0, 0.87);
+		background-color: #99d6ff;
+		text-align: center;
+	}
 
-.wfm-table .number-cell {
-  text-align: right; }
+	.wfm-table th i {
+		float: right;
+	}
 
-.wfm-table-multi th:first-child, .wfm-table-multi td:first-child {
-  color: rgba(0, 0, 0, 0.87);
-  font-weight: 600;
-  background-color: #99d6ff; }
+	.wfm-table .number-cell {
+		text-align: right;
+	}
 
-.wrapper {
-	margin-top: 10px;
-	margin-bottom: 60px;
-}
-.ng-modal-overlay {
-  /* A dark translucent div that covers the whole screen */
-  position:absolute;
-  z-index:9999;
-  top:0;
-  left:0;
-  width:100%;
-  height:100%;
-  background-color:#000000;
-  opacity: 0.8;
-}
-.ng-modal-dialog {
-  /* A centered div above the overlay with a box shadow. */
-  z-index:10000;
-  position: absolute;
-  width: 100%; /* Default */
+	.wfm-table-multi th:first-child, .wfm-table-multi td:first-child {
+		color: rgba(0, 0, 0, 0.87);
+		font-weight: 600;
+		background-color: #99d6ff;
+	}
 
-  /* Center the dialog */
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  -webkit-transform: translate(-50%, -50%);
-  -moz-transform: translate(-50%, -50%);
+	.wrapper {
+		margin-top: 10px;
+		margin-bottom: 60px;
+	}
 
-  background-color: #fff;
-  box-shadow: 4px 4px 80px #000;
-}
-.ng-modal-dialog-content {
-  padding:10px;
-  text-align: left;
-}
-.ng-modal-close {
-  position: absolute;
-  top: 3px;
-  right: 5px;
-  padding: 5px;
-  cursor: pointer;
-  font-size: 120%;
-  display: inline-block;
-  font-weight: bold;
-  font-family: 'arial', 'sans-serif';
-}
+	.ng-modal-overlay {
+		/* A dark translucent div that covers the whole screen */
+		position: absolute;
+		z-index: 9999;
+		top: 0;
+		left: 0;
+		width: 100%;
+		height: 100%;
+		background-color: #000000;
+		opacity: 0.8;
+	}
+
+	.ng-modal-dialog {
+		/* A centered div above the overlay with a box shadow. */
+		z-index: 10000;
+		position: absolute;
+		width: 100%; /* Default */
+		/* Center the dialog */
+		top: 50%;
+		left: 50%;
+		transform: translate(-50%, -50%);
+		-webkit-transform: translate(-50%, -50%);
+		-moz-transform: translate(-50%, -50%);
+		background-color: #fff;
+		box-shadow: 4px 4px 80px #000;
+	}
+
+	.ng-modal-dialog-content {
+		padding: 10px;
+		text-align: left;
+	}
+
+	.ng-modal-close {
+		position: absolute;
+		top: 3px;
+		right: 5px;
+		padding: 5px;
+		cursor: pointer;
+		font-size: 120%;
+		display: inline-block;
+		font-weight: bold;
+		font-family: 'arial', 'sans-serif';
+	}
 </style>
 
+<div class="row">
+	<div class="col-lg-12">
+		<h4>Manage people</h4>
+	</div>
+</div>
 
 <div class="wrapper">
 	<select style="position: relative;float: left;height: 34px;margin-right: 63px;">
@@ -98,34 +111,107 @@
 	</span>
 
 	<span class="people-search" style="float: right; margin-right: 60px;">
-			<i class="mdi mdi-magnify"></i>
-			<input type="text" placeholder="Search ..." class="people-search-text" />
+		<i class="mdi mdi-magnify"></i>
+		<input type="text" placeholder="Search ..." class="people-search-text" />
 	</span>
 </div>
 
+<div class="row">
+	<div class="col-lg-3">
+		<div class="role-nav material-depth-2 container-block">
+			<div class="tree">
+				<div class="angular-ui-tree">
+					<ol id="tree-root" class="tree-line angular-ui-tree-nodes">
+						<li class="angular-ui-tree-node">							
+							<div class="tree-toggle-group">
+								<div class="toggle-handle open"><i class="mdi mdi-chevron-right"></i></div>
+								<div class="angular-ui-tree-handle selected">									
+									Business Hierarchy
+								</div>
+							</div>
+							<div class="input-prepend">
+								<i class="mdi mdi-filter-outline"></i>
+								<input type="text" placeholder="Organization filter ..." name="filterRole" tabindex="0" aria-invalid="false">
+							</div>
+							<ol class="angular-ui-tree-nodes">
+								<li class="angular-ui-tree-node">
+									<div class="tree-toggle-group">
+										<div class="toggle-handle open"><i class="mdi mdi-chevron-right"></i></div>
+										<div class="angular-ui-tree-handle">
+											London
+										</div>
+									</div>
+									<ol class="angular-ui-tree-nodes">
+										<li class="angular-ui-tree-node">
+											<div class="tree-toggle-group">
+												<div class="toggle-handle"><i class="mdi mdi-chevron-right"></i></div>
+												<div class="angular-ui-tree-handle">
+													Team Monthly
+												</div>
+											</div>
+										</li>
+										<li class="angular-ui-tree-node">
+											<div class="tree-toggle-group">
+												<div class="toggle-handle"><i class="mdi mdi-chevron-right"></i></div>
+												<div class="angular-ui-tree-handle selected">
+													Team Preference
+												</div>
+											</div>
+										</li>
+									</ol>
+								</li>
+							</ol>
+							<ol class="angular-ui-tree-nodes">
+								<li class="angular-ui-tree-node">
+									<div class="tree-toggle-group">
+										<div class="toggle-handle open"><i class="mdi mdi-chevron-right"></i></div>
+										<div class="angular-ui-tree-handle">
+											Paris
+											<span><i class="mdi mdi-check"></i></span>
+										</div>
+									</div>
+									<ol class="angular-ui-tree-nodes">
+										<li class="angular-ui-tree-node">
+											<div class="tree-toggle-group">
+												<div class="toggle-handle"><i class="mdi mdi-chevron-right"></i></div>
+												<div class="angular-ui-tree-handle">
+													Team One
+												</div>
+											</div>
+										</li>
+									</ol>
+								</li>
+							</ol>
+						</li>
+					</ol>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="col-lg-9">
+		<table class="wfm-table">
+			<thead>
+				<tr>
+					<th>First Name <i class="mdi mdi-menu-up"></i> </th>
+					<th>Last Name</th>
+					<th>Email</th>
+					<th>Phone</th>
+					<th>Emp No.</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr ng-repeat="person in peopleList" ng-click="toggleModal()">
+					<td>{{person.FirstName}}</td>
+					<td>{{person.LastName}}</td>
+					<td>{{person.Email}}</td>
+					<td>{{person.Phone}}</td>
+					<td>{{person.EmploymentNumber}}</td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
+</div>
 
-
-<table class="wfm-table">
-	<thead>
-	<tr>
-		<th>First Name <i class="mdi mdi-menu-up"></i> </th>
-		<th>Last Name</th>
-		<th>Email</th>
-		<th>Phone</th>
-		<th>Emp No.</th>
-	</tr>
-	</thead>
-	<tbody>
-		<tr ng-repeat="person in peopleList" ng-click="toggleModal()">
-			<td>{{person.FirstName}}</td>
-			<td>{{person.LastName}}</td>
-			<td>{{person.Email}}</td>
-			<td>{{person.Phone}}</td>
-			<td>{{person.EmploymentNumber}}</td>
-			<td modal></td>
-		</tr>
-	</tbody>
-</table>
 <modal-dialog show='modalShown' width='1000px' height='500px'>
 	<div id="testModal" class="modalbg">
 		<div class="dialog">
@@ -160,15 +246,15 @@
 												</li>
 												<li>
 													<span>First Name: </span>
-													<input type="text" value="Ashley"></input>
+													<input type="text" value="Ashley" />
 												</li>
 												<li>
 													<span>Last Name: </span>
-													<input type="text" value="Andeen"></input>
+													<input type="text" value="Andeen" />
 												</li>
 												<li>
 													<span>Employee Number: </span>
-													<input type="text" value="1234567"></input>
+													<input type="text" value="1234567" />
 												</li>
 											</ul>
 										</div>
@@ -181,11 +267,11 @@
 												</li>
 												<li class="active">
 													<span>Email: </span>
-													<input type="text" value="aa@teleopti.com"></input>
+													<input type="text" value="aa@teleopti.com" />
 												</li>
 												<li>
 													<span>Cell Phone: </span>
-													<input type="text" value="1234567"></input>
+													<input type="text" value="1234567" />
 												</li>
 											</ul>
 										</div>
@@ -280,7 +366,7 @@
 												</li>
 												<li>
 													<span>Leaving Date: </span>
-													<input type="text" value="2020-12-31"></input>
+													<input type="text" value="2020-12-31" />
 												</li>
 												<li>
 													<span>Note: </span>
@@ -316,18 +402,3 @@
 		</div>
 	</div>
 </modal-dialog>
-
-
-<!--<modal title="Login form" visible="showDetails">
-	<form role="form">
-		<div class="form-group">
-			<label for="email">Email address</label>
-			<input type="email" class="form-control" id="email" placeholder="Enter email" />
-		</div>
-		<div class="form-group">
-			<label for="password">Password</label>
-			<input type="password" class="form-control" id="password" placeholder="Password" />
-		</div>
-		<button type="submit" class="btn btn-default">Submit</button>
-	</form>
-</modal>-->
