@@ -2,6 +2,7 @@
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using Teleopti.Analytics.Etl.Interfaces.Common;
 using Teleopti.Analytics.Etl.Interfaces.Transformer;
 using Teleopti.Ccc.Domain.Security.Principal;
@@ -440,26 +441,24 @@ namespace Teleopti.Analytics.Etl.Transformer
 
         public IList<IScheduleDay> GetSchedulePartPerPersonAndDate(IScheduleDictionary scheduleDictionary)
         {
-            // Extract one schedulepart per each person and date
-            //if (_schedulePartCollection == null)
-            //{
             _schedulePartCollection = new List<IScheduleDay>();
-            DateTimePeriod period = scheduleDictionary.Period.VisiblePeriod;
+            DateOnlyPeriod period = scheduleDictionary.Period.VisiblePeriod.ToDateOnlyPeriod(TimeZoneInfo.Local);
 
-            // Extract one schedulepart per each person and date
             foreach (IPerson person in scheduleDictionary.Keys)
             {
-                foreach (DateTime dateTime in period.DateCollection())
+	            var range = scheduleDictionary[person];
+                foreach (var dateOnly in period.DayCollection())
                 {
-                    var dateOnly = new DateOnly(dateTime);
-                    IScheduleDay schedulePart = scheduleDictionary[person].ScheduledDay(dateOnly);
+					if(dateOnly > person.TerminalDate.GetValueOrDefault(DateOnly.MaxValue))
+						break;
+
+                    IScheduleDay schedulePart = range.ScheduledDay(dateOnly);
                     if (schedulePart != null)
                     {
                         _schedulePartCollection.Add(schedulePart);
                     }
                 }
             }
-            //}
 
             return _schedulePartCollection;
         }

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using NUnit.Framework;
 using Rhino.Mocks;
@@ -334,5 +335,91 @@ namespace Teleopti.Analytics.Etl.TransformerTest
 			_mocks.ReplayAll();
 			_target.UpdateThisTime("Schedules",bu);
 	    }
+
+	    [Test]
+	    public void GetSchedulePartPerPersonAndDateShouldNotReturnSchedulePartAfterLeavingDate()
+	    {
+			var scheduleDictionary = _mocks.StrictMock<IScheduleDictionary>();
+			var personAccountUpdater = _mocks.Stub<IPersonAccountUpdater>();
+		    
+			var period = new ScheduleDateTimePeriod(new DateTimePeriod(2015, 3, 27, 2015, 3, 28));
+		    var p1 = new Person();
+			p1.TerminatePerson(new DateOnly(2015,3,28), personAccountUpdater);
+
+			var p2 = new Person();
+			p2.TerminatePerson(new DateOnly(2015, 3, 27), personAccountUpdater);
+
+			var p3 = new Person();
+
+			var range1 = _mocks.StrictMock<IScheduleRange>();
+		    var scheduleDay1 = _mocks.StrictMock<IScheduleDay>();
+
+			using (_mocks.Record())
+			{
+				Expect.Call(scheduleDictionary.Period).Return(period);
+				Expect.Call(scheduleDictionary.Keys).Return(new Collection<IPerson> {p1, p2, p3});
+				
+				Expect.Call(scheduleDictionary[p1]).Return(range1);
+				Expect.Call(range1.ScheduledDay(new DateOnly(2015, 3, 27))).Return(scheduleDay1);
+				Expect.Call(range1.ScheduledDay(new DateOnly(2015, 3, 28))).Return(scheduleDay1);
+
+				//only one day here
+				Expect.Call(scheduleDictionary[p2]).Return(range1);
+				Expect.Call(range1.ScheduledDay(new DateOnly(2015, 3, 27))).Return(scheduleDay1);
+
+				Expect.Call(scheduleDictionary[p3]).Return(range1);
+				Expect.Call(range1.ScheduledDay(new DateOnly(2015, 3, 27))).Return(scheduleDay1);
+				Expect.Call(range1.ScheduledDay(new DateOnly(2015, 3, 28))).Return(scheduleDay1);
+			}
+
+			using (_mocks.Playback())
+			{
+				var result = _target.GetSchedulePartPerPersonAndDate(scheduleDictionary);
+				Assert.AreEqual(5, result.Count());
+			}
+	    }
+
+		//[Test]
+		//public void GetSchedulePartPerPersonAndDateShouldNotReturnSchedulePartAfterLeavingDateInBrazil()
+		//{
+		//	var scheduleDictionary = _mocks.StrictMock<IScheduleDictionary>();
+		//	var personAccountUpdater = _mocks.Stub<IPersonAccountUpdater>();
+
+		//	var period = new ScheduleDateTimePeriod(new DateTimePeriod(2015, 3, 27, 2015, 3, 28));
+		//	var p1 = new Person();
+		//	p1.TerminatePerson(new DateOnly(2015, 3, 28), personAccountUpdater);
+
+		//	var p2 = new Person();
+		//	p2.TerminatePerson(new DateOnly(2015, 3, 27), personAccountUpdater);
+
+		//	var p3 = new Person();
+
+		//	var range1 = _mocks.StrictMock<IScheduleRange>();
+		//	var scheduleDay1 = _mocks.StrictMock<IScheduleDay>();
+
+		//	using (_mocks.Record())
+		//	{
+		//		Expect.Call(scheduleDictionary.Period).Return(period);
+		//		Expect.Call(scheduleDictionary.Keys).Return(new Collection<IPerson> { p1, p2, p3 });
+
+		//		Expect.Call(scheduleDictionary[p1]).Return(range1);
+		//		Expect.Call(range1.ScheduledDay(new DateOnly(2015, 3, 27))).Return(scheduleDay1);
+		//		Expect.Call(range1.ScheduledDay(new DateOnly(2015, 3, 28))).Return(scheduleDay1);
+
+		//		//only one day here
+		//		Expect.Call(scheduleDictionary[p2]).Return(range1);
+		//		Expect.Call(range1.ScheduledDay(new DateOnly(2015, 3, 27))).Return(scheduleDay1);
+
+		//		Expect.Call(scheduleDictionary[p3]).Return(range1);
+		//		Expect.Call(range1.ScheduledDay(new DateOnly(2015, 3, 27))).Return(scheduleDay1);
+		//		Expect.Call(range1.ScheduledDay(new DateOnly(2015, 3, 28))).Return(scheduleDay1);
+		//	}
+
+		//	using (_mocks.Playback())
+		//	{
+		//		var result = _target.GetSchedulePartPerPersonAndDate(scheduleDictionary);
+		//		Assert.AreEqual(5, result.Count());
+		//	}
+		//}
     }
 }
