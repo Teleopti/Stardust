@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Configuration;
 using System.Globalization;
+using System.Threading;
 using System.Timers;
 using Teleopti.Analytics.Etl.Common;
 using Teleopti.Analytics.Etl.Common.Infrastructure;
@@ -14,7 +15,9 @@ using log4net;
 using log4net.Config;
 using Teleopti.Analytics.Etl.Interfaces.Common;
 using Teleopti.Analytics.Etl.Transformer.Job;
+using Teleopti.Interfaces.Domain;
 using IJobResult = Teleopti.Analytics.Etl.Interfaces.Transformer.IJobResult;
+using Timer = System.Timers.Timer;
 
 namespace Teleopti.Analytics.Etl.ServiceLogic
 {
@@ -84,10 +87,16 @@ namespace Teleopti.Analytics.Etl.ServiceLogic
 				var scheduleToRun = schedulePriority.GetTopPriority(etlJobScheduleCollection, DateTime.Now, _serviceStartTime);
 				if (scheduleToRun == null) return;
 
+				CultureInfo culture = CultureInfo.CurrentCulture;
+				if (configHandler.BaseConfiguration.CultureId.HasValue)
+					culture = CultureInfo.GetCultureInfo(configHandler.BaseConfiguration.CultureId.Value).FixPersianCulture();
+				Thread.CurrentThread.CurrentCulture = culture;
 				IJob jobToRun = JobExtractor.ExtractJobFromSchedule(
 					scheduleToRun, _jobHelper, configHandler.BaseConfiguration.TimeZoneCode,
 					configHandler.BaseConfiguration.IntervalLength.Value, _cube,
-					_pmInstallation, configHandler.BaseConfiguration.ToggleManager,configHandler.BaseConfiguration.RunIndexMaintenance
+					_pmInstallation, configHandler.BaseConfiguration.ToggleManager,
+					configHandler.BaseConfiguration.RunIndexMaintenance,
+					culture
 					);
 				isStopping = !RunJob(jobToRun, scheduleToRun.ScheduleId, rep);
 			}
