@@ -8,19 +8,19 @@ using Teleopti.Interfaces.Messages.General;
 namespace Teleopti.Ccc.WinCode.Forecasting.QuickForecastPages
 {
 	public class QuickForecastWizardPages : AbstractWizardPagesNoRoot<QuickForecastCommandDto>
-	 {
+	{
 		private readonly QuickForecastCommandDto _stateObj;
 
 		public QuickForecastWizardPages(QuickForecastCommandDto stateObj)
 			: base(stateObj)
-		  {
-				_stateObj = stateObj;
-		  }
+		{
+			_stateObj = stateObj;
+		}
 
 		public override QuickForecastCommandDto CreateNewStateObj()
-		  {
-				return _stateObj;
-		  }
+		{
+			return _stateObj;
+		}
 
 		public QuickForecastWorkloadsMessage CreateServiceBusMessage()
 		{
@@ -36,27 +36,22 @@ namespace Teleopti.Ccc.WinCode.Forecasting.QuickForecastPages
 			UseDayOfMonth = _stateObj.UseDayOfMonth
 		};
 		}
-			
-		  public override string Name
-		  {
-				get { return Resources.QuickForecast; }
-		  }
 
-		  public override string WindowText
-		  {
+		public override string Name
+		{
 			get { return Resources.QuickForecast; }
-		  }
-	 }
+		}
+
+		public override string WindowText
+		{
+			get { return Resources.QuickForecast; }
+		}
+	}
 	public static class DateOnlyDtoExtensions
 	{
 		public static DateOnly ToDateOnly(this DateOnlyDto dateOnlyDto)
 		{
 			return new DateOnly(dateOnlyDto.DateTime);
-		}
-
-		public static DateOnly? ToNullableDateOnly(this DateOnlyDto dateOnlyDto)
-		{
-			return dateOnlyDto != null ? dateOnlyDto.ToDateOnly() : null;
 		}
 
 		public static DateOnlyPeriod ToDateOnlyPeriod(this DateOnlyPeriodDto dateOnlyPeriodDto)
