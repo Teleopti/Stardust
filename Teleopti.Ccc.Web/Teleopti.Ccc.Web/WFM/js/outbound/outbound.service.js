@@ -11,12 +11,25 @@ outboundService.factory('OutboundService', ['$rootScope', function($rootScope) {
 			{
 				id: 2, name: "Apirl Sales",
 				period: { startDate: "2015-04-01", endDate: "2015-05-01" },
-				params: { callList: 500, target : 250 }
+				params: {
+					callList: 500,
+					sla: "50%",
+					target: 250,
+					cr: "30%",
+					rpcr: "20%",
+					cAHT: "30 seconds",
+					rpcAHT: "120 seconds",
+					unproductive: "20 seconds"
+				}
 			},
-			{ id: 3, name: "Chocalate Sales", period: { startDate: "2015-01-01", endDate: "2015-01-07" } }
+			{ id: 3, name: "Chocalate Sales", period: { startDate: "2015-01-01", endDate: "2015-01-07" } },
+			{ id: 4, name: "Oct Debt Collection", period: { startDate: "2015-01-01", endDate: "2015-01-07" } },
+			{ id: 5, name: "Nov Debt Collection", period: { startDate: "2015-01-01", endDate: "2015-01-07" } },
+			{ id: 6, name: "Fruit Sales", period: { startDate: "2015-01-01", endDate: "2015-01-07" } },
+			{ id: 7, name: "Game Sales", period: { startDate: "2015-01-01", endDate: "2015-01-07" } }
 	];
 
-	var maxId = 3;
+	var maxId = 7;
 
 	var getNextId = function () {
 		maxId += 1;

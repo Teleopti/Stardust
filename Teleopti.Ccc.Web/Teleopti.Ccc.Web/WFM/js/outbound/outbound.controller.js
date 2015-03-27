@@ -95,13 +95,42 @@ outbound.controller('OutboundEditCtrl', [
 		};
 
 		$scope.timeRanges = [
-			{startTime: "07:00", endTime : "18:00", selected: false}
+			{
+				startTime: new Date(1970, 0, 1, 7, 0, 0),
+				endTime: new Date(1970, 0, 1, 18, 0, 0),				
+				id: 1
+			},
+			{
+				startTime: new Date(1970, 0, 1, 7, 0, 0),
+				endTime: new Date(1970, 0, 1, 11, 0, 0),
+				id: 2
+			},
+			{
+				startTime: new Date(1970, 0, 1, 13, 0, 0),
+				endTime: new Date(1970, 0, 1, 18, 0, 0),
+				id: 3
+			}
+
 		];
 
-		$scope.toggleTimeRangeSelect = function (selection) {
-			angular.forEach($scope.timeRanges, function(timeRange) {
-				timeRange.selected = (timeRange == selection) ? (!timeRange.selected) : false;
-			});			
+		$scope.newTimeRange = {
+			startTime: new Date(1970, 0, 1, 7, 0, 0),
+			endTime: new Date(1970, 0, 1, 18, 0, 0)
+		};
+
+		$scope.curTimeRangeIdMax = 3;
+		$scope.addToTimeRanges = function () {
+			var timeRange = angular.copy($scope.newTimeRange);
+			$scope.curTimeRangeIdMax += 1;
+			timeRange.id = $scope.curTimeRangeIdMax;
+			$scope.timeRanges.push(timeRange);
+
+		};
+
+		$scope.deleteFromTimeRanges = function(timeRange, idx) {
+			if (confirm('Are you sure you want to delete this time range?')) {				
+				$scope.timeRanges.splice(idx, 1);				
+			}
 		};
 	}
 ]);

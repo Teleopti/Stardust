@@ -75,12 +75,12 @@
 							<input id="unproductive" type="text" ng-model="campaign.params.unproductive" placeholder="unproductive time" />
 						</div>
 					</form>
-			</div>
+				</div>
 			</div>
 			<div class="wfm-block">
 				<div class="sub-header accordion-head" ng-click="acToggle2 = !acToggle2">
 					Duration
-					<span ng-show="!acToggle2"> from {{period.startDate | date: format }} to {{period.endDate | date: format }}</span>
+					<span ng-show="!acToggle2"> from <strong>{{period.startDate | date: format }}</strong> to <strong>{{period.endDate | date: format }}</strong></span>
 				</div>
 				<div ng-show="acToggle2">
 					<div class="row wfm-block">
@@ -99,7 +99,7 @@
 					</div>
 				</div>
 			</div>
-			<div class="wfm-block">
+			<div class="wfm-block" ng-if="false">
 				<div class="sub-header accordion-head" ng-click="acToggle3 = !acToggle3">
 					Working Hours
 				</div>
@@ -136,51 +136,131 @@
 					</div>
 				</div>
 			</div>
-			<!--<div class="wfm-block">
+			<div class="wfm-block" ng-if="true">
+				<div class="sub-header accordion-head" ng-click="acToggle5 = !acToggle5">
+					Working Hours
+				</div>
+				<div ng-show="acToggle5">
+					<div class="row toolbar">
+						<div class="col-lg-10">
+							<table class="wfm-table wfm-table-center wfm-dense" align="center">
+								<thead>
+									<tr>
+										<th class="col-lg-4">Weekday</th>
+										<th>
+											From
+										</th>
+										<th>
+											<div>To</div>
+										</th>
+										<th>
+
+										</th>
+									</tr>
+								</thead>
+								<tbody>
+									<tr ng-repeat-start="weekday in [0,1,2,3,4,5,6]" ng-repeat-end>
+										<td>
+											{{weekday | showWeekdays}}
+										</td>
+										<td>
+											<div class="input-prepend">
+												<input id="MondayFrom1" type="time" />
+											</div>
+										</td>
+										<td>
+											<div class="input-prepend">
+												<input id="MondayTo1" type="time" />
+											</div>
+										</td>
+										<td>
+											<div class="wfm-checkbox">
+												<input type="checkbox" id="Monday1" checked="false" />
+												<label for="Monday1">
+													<span class="wfm-checkbox-toggle"></span>
+													<span class="wfm-checkbox-label">Close </span>
+												</label>
+											</div>
+										</td>
+									</tr>
+								</tbody>
+
+							</table>
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<div class="wfm-block" ng-if="true">
 				<div class="sub-header accordion-head" ng-click="acToggle4 = !acToggle4">
 					Working Hours Prototype 2
 				</div>
 				<div ng-show="acToggle4">
-					<div class="row toolbar">					
+					<div class="row toolbar">
 						<div class="wfm-block">
-							<ul class="wfm-list">
-								<li ng-repeat="timeRange in timeRanges" 
-									ng-class="{'wfm-list-item-selected': timeRange.selected}"
-									ng-click="$parent.toggleTimeRangeSelect(timeRange)" 
-									class="role-btn wfm-block wfm-list-item role">																			
-									<div class="wfm-leave-behind">
-										<span>											
-											<i ng-click="editing = true">
-												<svg style="width: 18px; height: 18px" viewBox="0 0 24 24">
-													<path fill="#555555" d="M20.71,7.04C21.1,6.65 21.1,6 20.71,5.63L18.37,3.29C18,2.9 17.35,2.9 16.96,3.29L15.12,5.12L18.87,8.87M3,17.25V21H6.75L17.81,9.93L14.06,6.18L3,17.25Z" />
-												</svg>
-												<md-tooltip>
-													Edit
-												</md-tooltip>
-											</i>
-											<i ng-click="$parent.delete(campaign, $index)">
-												<svg style="width: 18px; height: 18px" viewBox="0 0 24 24">
-													<path fill="#555555" d="M19,4H15.5L14.5,3H9.5L8.5,4H5V6H19M6,19A2,2 0 0,0 8,21H16A2,2 0 0,0 18,19V7H6V19Z" />
-												</svg>
-												<md-tooltip>
-													Delete
-												</md-tooltip>
-											</i>
-										</span>
+							<div class="wfm-block">
+								<div class="row">
+									<div class="col-lg-3 column-label">
+										<span></span>
 									</div>
-									<div class="row">
-										<div class="col-lg-6">
-											<span>{{timeRange.startTime}}</span>
-											<span> - </span>
-											<span>{{timeRange.endTime}}</span>										
+									<div ng-repeat-start="weekday in [0,1,2,3,4,5,6]" ng-repeat-end class="col-lg-1 column-label">
+										<span>{{weekday | showWeekdays}}</span>
+									</div>
+								</div>
+							</div>
+							<div class="wfm-block">
+								<ul class="wfm-list">
+									<li ng-repeat="timeRange in timeRanges"
+										ng-class="{'wfm-list-item-selected': timeRange.selected}"
+										ng-click="$parent.toggleTimeRangeSelect(timeRange)"
+										class="role-btn wfm-block wfm-dense wfm-list-item role">
+										<div class="wfm-leave-behind wfm-leave-behind-1">
+											<span>												
+												<i ng-click="$parent.deleteFromTimeRanges(timeRange, $index)">
+													<svg style="width: 18px; height: 18px" viewBox="0 0 24 24">
+														<path fill="#555555" d="M19,4H15.5L14.5,3H9.5L8.5,4H5V6H19M6,19A2,2 0 0,0 8,21H16A2,2 0 0,0 18,19V7H6V19Z" />
+													</svg>
+													<md-tooltip>
+														Delete
+													</md-tooltip>
+												</i>
+											</span>
 										</div>
+										<div class="row">
+											<div class="col-lg-3">
+												<span>{{timeRange.startTime | date:'hh:mm a'}}</span>
+												<span> - </span>
+												<span>{{timeRange.endTime | date:'hh:mm a'}}</span>
+											</div>
+											<div ng-repeat-start="weekday in [0,1,2,3,4,5,6]" ng-repeat-end class="col-lg-1">
+												<div class="wfm-checkbox wfm-checkbox-inline">
+													<input type="checkbox" id="check_weekday_{{weekday}}_workinghour_{{timeRange.id}}" ng-model="$parent.workinghours[weekday][timeRange.id]" />
+													<label for="check_weekday_{{weekday}}_workinghour_{{timeRange.id}}">
+														<span class="wfm-checkbox-toggle"></span>
+														<span class="wfm-checkbox-label"></span>
+													</label>
+												</div>
+											</div>
+										</div>
+									</li>
+								</ul>
+							</div>
+							<div class="wfm-block">
+								<form name="newTimeRangeForm" ng-submit="">
+									<div class="input-prepend">
+										<i class="mdi mdi-plus" ng-click="addToTimeRanges()"></i>		
+										<input type="time" name="inputNewTimeRangeStart" ng-model="newTimeRange.startTime"
+											   placeholder="HH:mm:ss"  />																		
+										-
+										<input type="time" name="inputNewTimeRangeEnd" ng-model="newTimeRange.endTime"
+											   placeholder="HH:mm:ss" />
 									</div>
-								</li>								
-							</ul>							
-						</div>
+								</form>
+							</div>
 					</div>
 				</div>
-			</div>-->
+			</div>
 		</div>
+		
 	</div>
 </div>

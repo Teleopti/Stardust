@@ -31,7 +31,7 @@
 					<div class="col-lg-2 column-label">
 						<span>End Date</span>
 					</div>
-					<div class="col-lg-1">
+					<div class="col-lg-2">
 						<span>Progress</span>
 					</div>
 				</div>
@@ -44,7 +44,7 @@
 					</div>
 				</form>				
 				<div class="input-prepend">
-					<i class="mdi mdi-filter-outline"></i>
+					<i class="mdi mdi-filter-outline"></i>					
 					<input type="text" name="filterRole" ng-model="searchCampaign.name" placeholder="Campaign filter ..." />
 				</div>						
 			</div>
@@ -89,7 +89,7 @@
 							<div ng-show="hideDetail">
 								<span class="col-lg-2">{{campaign.period.startDate}}</span>
 								<span class="col-lg-2">{{campaign.period.endDate}}</span>
-								<span class="col-lg-1">{{campaign.params.target}} / {{campaign.params.callList}}</span>
+								<span class="col-lg-2">{{campaign.params.target}} / {{campaign.params.callList}}</span>
 							</div>
 						</div>																	
 					</li>
