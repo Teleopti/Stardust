@@ -1,11 +1,52 @@
 ﻿'use strict';
 
-var people = angular.module('wfm.people', ['peopleService']);
+var people = angular.module('wfm.people', []);
 
 people.controller('PeopleCtrl', [
-	'$scope', '$filter', 'PeopleService',
-	function($scope, $filter, peopleSvc) {
-		$scope.peopleList = peopleSvc.peopleList;
+	'$scope', '$filter',
+	function($scope, $filter) {
+		$scope.peopleList = [
+			{
+				"FirstName": "Ada",
+				"LastName": "Clinton",
+				"Phone": "123123123",
+				"Email": "ada@teleopti.com",
+				"EmploymentNumber": "100",
+				"DefaultTimeZone": "W. Europe Standard Time"
+			},
+			{
+				"FirstName": "Ada",
+				"LastName": "Russo",
+				"Phone": "3546364758",
+				"Email": "ada@teleopti.com",
+				"EmploymentNumber": "7999",
+				"DefaultTimeZone": "W. Europe Standard Time"
+			},
+			{
+				"FirstName": "Adam",
+				"LastName": "Bundy",
+				"Phone": "567849369",
+				"Email": "adam@teleopti.com",
+				"EmploymentNumber": "8000",
+				"DefaultTimeZone": "W. Europe Standard Time"
+			},
+			{
+				"FirstName": "Aileen",
+				"LastName": "Broccardo",
+				"Phone": "7934759347593",
+				"Email": "Aileen.Broccardo@insurance.com",
+				"EmploymentNumber": "137956",
+				"DefaultTimeZone": "W. Europe Standard Time"
+			},
+			{
+				"FirstName": "Alfred",
+				"LastName": "Bork",
+				"Phone": "04958204385",
+				"Email": "Alfred.Bork@insurance.com",
+				"EmploymentNumber": "137784",
+				"DefaultTimeZone": "W. Europe Standard Time"
+			}
+		];
 
 		$scope.modalShown = false;
 		$scope.toggleModal = function() {
@@ -13,7 +54,6 @@ people.controller('PeopleCtrl', [
 		};
 	}
 ]);
-
 people.directive('modalDialog', function () {
 	return {
 		restrict: 'E',
