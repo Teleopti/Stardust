@@ -67,6 +67,7 @@ Scenario: View available custom group options
 	| Kontraktsschema/A contract schedule   |
 	| Deltidsprocent/A part time percentage |
 
+	@ignore
 Scenario: View group schedule
 	Given I have the role 'Access to view all group pages'
 	And I have a shift with
