@@ -31,6 +31,7 @@ declare @RequestsKeepUntil datetime
 declare @BatchSize int
 declare @MaxDate datetime
 
+declare @SuperRole uniqueidentifier
 /*
 exec Purge
 */
@@ -42,6 +43,7 @@ select @MessageKeepYears = isnull(Value,100) from PurgeSetting where [Key] = 'Ye
 select @PayrollKeepYears = isnull(Value,100) from PurgeSetting where [Key] = 'YearsToKeepPayroll'
 select @SecurityAuditKeepDays = isnull(Value,30) from PurgeSetting where [Key] = 'DaysToKeepSecurityAudit'
 select @RequestsKeepMonths = isnull(Value,120) from PurgeSetting where [Key] = 'MonthsToKeepRequests'
+set @SuperRole='193AD35C-7735-44D7-AC0C-B8EDA0011E5F'
 
 --Create a KeepUntil
 select @ForecastsKeepUntil = dateadd(year,-1*@ForecastKeepYears,getdate())
@@ -142,10 +144,11 @@ inner join Skill s on ps.Skill = s.Id
 where s.IsDeleted = 1
 
 --Remove roles on deleted persons to prevent them from showing up in Permissions
+--Don't remove permissions for super user because they are deleted
 delete PersonInApplicationRole
 from PersonInApplicationRole piar
 inner join Person p on p.Id = piar.Person
-where p.IsDeleted = 1
+where p.IsDeleted = 1 and piar.ApplicationRole <> @SuperRole
 
 --Remove deleted budget groups from persons
 update PersonPeriod set BudgetGroup = NULL
