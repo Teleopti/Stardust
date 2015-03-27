@@ -71,7 +71,15 @@ namespace Teleopti.Ccc.Domain.RealTimeAdherence
 			Adherence = _adherences.Single(x => x.Text == text).Adherence;
 		}
 
-		public virtual string AdherenceText { get { return _adherences.Single(x => x.Adherence == Adherence).Text; } }
+		public virtual string AdherenceText
+		{
+			get
+			{
+				if (Adherence == null)
+					return string.Empty;
+				return _adherences.Single(x => x.Adherence == Adherence).Text;
+			}
+		}
 
 		public virtual TimeSpan ThresholdTime
         {
