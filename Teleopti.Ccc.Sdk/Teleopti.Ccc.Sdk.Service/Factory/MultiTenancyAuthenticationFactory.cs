@@ -83,7 +83,7 @@ namespace Teleopti.Ccc.Sdk.WcfService.Factory
 		{
 			var model = new LogonModel { UserName = userName, Password = password };
 			//var result = _multiTenancyApplicationLogon.Logon(model, UserAgent);
-			var result = _multiTenancyWindowsLogon.Logon(model, StateHolderReader.Instance.StateReader.ApplicationScopeData,
+			var result = _multiTenancyApplicationLogon.Logon(model, StateHolderReader.Instance.StateReader.ApplicationScopeData,
 				UserAgent);
 			var resultDto = _authenticationResultAssembler.DomainEntityToDto(result);
 
