@@ -8,7 +8,7 @@ CREATE   PROCEDURE [dbo].[p_archive_agent_logg]
 
 WITH EXECUTE AS OWNER
 AS
-
+--Hej
 -- Skapa temptabell
 CREATE TABLE #tmp_a_logg (
 	[queue] [int] NOT NULL ,
