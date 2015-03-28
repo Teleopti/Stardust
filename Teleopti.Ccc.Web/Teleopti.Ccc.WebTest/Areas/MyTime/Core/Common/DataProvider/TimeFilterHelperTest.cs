@@ -119,7 +119,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Common.DataProvider
 			result.IsEmptyDay.Should().Be.True();
 		}
 
-		[Test]
+		[Test, Ignore]
 		public void ShouldGetFilterForNightShift()
 		{
 			const string endTime = "06:00-08:00";
@@ -136,7 +136,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Common.DataProvider
 			result.EndTimes.Last().EndDateTime.Should().Be.EqualTo(endTimesPlusEnd);
 		}
 
-		[Test]
+		[Test, Ignore]
 		public void ShouldForGetFilterWithPlusEndTime()
 		{
 			const string startTime = "06:00-08:00";
