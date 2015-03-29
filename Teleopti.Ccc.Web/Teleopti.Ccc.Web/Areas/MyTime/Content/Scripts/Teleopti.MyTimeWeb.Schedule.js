@@ -18,6 +18,7 @@ if (typeof (Teleopti) === 'undefined') {
 
 Teleopti.MyTimeWeb.Schedule = (function ($) {
 	var timeIndicatorDateTime;
+	var minuteOffsetInMyTimeZone = 0;
 	var scheduleHeight = 668;
 	var timeLineOffset = 110;
 	var pixelToDisplayAll = 38;
@@ -51,12 +52,26 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 	function _initTimeIndicator() {
 		var currentDateTimeStart = new Date(new Date().getTeleoptiTime());
 		_setTimeIndicator(currentDateTimeStart);
-		setInterval(function () {
-			var currentDateTime = new Date(new Date().getTeleoptiTime());
-			if (timeIndicatorDateTime == undefined || currentDateTime.getMinutes() != timeIndicatorDateTime.getMinutes()) {
-				timeIndicatorDateTime = currentDateTime;
-				_setTimeIndicator(timeIndicatorDateTime);
+
+		setInterval(function() {
+
+			var nowInMyTimeZone = new Date(new Date(getUtcNowString()).getTime() + minuteOffsetInMyTimeZone * 60000);
+
+			if (timeIndicatorDateTime == undefined || nowInMyTimeZone.getHours() != timeIndicatorDateTime.getHours()) {
+				ajax.Ajax({
+					url: 'UserData/FetchUserData',
+					dataType: "json",
+					type: 'GET',
+					data: { date: getUtcNowString() },
+					success: function(data) {
+						minuteOffsetInMyTimeZone = data.TimeZoneMinuteOffset;
+						nowInMyTimeZone = new Date(new Date(getUtcNowString()).getTime() + minuteOffsetInMyTimeZone * 60000);
+					}
+				});
 			}
+
+			timeIndicatorDateTime = nowInMyTimeZone;
+			_setTimeIndicator(timeIndicatorDateTime);
 		}, 1000);
 	}
 
@@ -84,7 +99,6 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 		self.nextWeekDate = ko.observable(moment());
 		self.previousWeekDate = ko.observable(moment());
 		self.datePickerFormat = ko.observable();
-
 		self.selectedDate = ko.observable(moment().startOf('day'));
 		
 		self.requestViewModel = ko.observable();
@@ -582,12 +596,29 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 		return null;
 	}
 
+	function getUtcNowString() {
+		
+		var now = new Date();
+		var dateStr = now.getUTCFullYear().toString() + '-' +
+					(now.getUTCMonth() + 1).toString() + '-' +
+					now.getUTCDate().toString() + ' ' +
+					now.getUTCHours().toString() + ':' +
+					now.getUTCMinutes().toString();
+		return dateStr;
+	};
+
 	function _subscribeForChanges() {
 		ajax.Ajax({
 			url: 'UserData/FetchUserData',
 			dataType: "json",
 			type: 'GET',
+			data: {
+				date: getUtcNowString()
+			},
 			success: function (data) {
+				
+				minuteOffsetInMyTimeZone = data.TimeZoneMinuteOffset;
+
 				Teleopti.MyTimeWeb.MessageBroker.AddSubscription({
 					url: data.Url,
 					callback: Teleopti.MyTimeWeb.Schedule.ReloadScheduleListener,
@@ -657,6 +688,7 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 				success: function (data) {
 					_bindData(data);
 					_subscribeForChanges();
+					
 				}
 			});
 		},

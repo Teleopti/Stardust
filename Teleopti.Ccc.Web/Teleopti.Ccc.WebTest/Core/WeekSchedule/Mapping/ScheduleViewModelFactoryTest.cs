@@ -183,11 +183,10 @@ namespace Teleopti.Ccc.WebTest.Core.WeekSchedule.Mapping
 
 			viewModel.TimeLine.First().TimeLineDisplay.Should().Be("01:45");
 			viewModel.TimeLine.ElementAt(1).TimeLineDisplay.Should().Be("02:00");
-			viewModel.TimeLine.ElementAt(2).TimeLineDisplay.Should().Be("02:00");
-			viewModel.TimeLine.ElementAt(3).TimeLineDisplay.Should().Be("03:00");
-			viewModel.TimeLine.ElementAt(4).TimeLineDisplay.Should().Be("04:00");
-			viewModel.TimeLine.ElementAt(5).TimeLineDisplay.Should().Be("05:00");
-			viewModel.TimeLine.ElementAt(6).TimeLineDisplay.Should().Be("06:00");
+			viewModel.TimeLine.ElementAt(2).TimeLineDisplay.Should().Be("03:00");
+			viewModel.TimeLine.ElementAt(3).TimeLineDisplay.Should().Be("04:00");
+			viewModel.TimeLine.ElementAt(4).TimeLineDisplay.Should().Be("05:00");
+			viewModel.TimeLine.ElementAt(5).TimeLineDisplay.Should().Be("06:00");
 			viewModel.TimeLine.Last().TimeLineDisplay.Should().Be("06:15");
 		}
 
