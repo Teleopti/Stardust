@@ -36,7 +36,8 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Asm.Mapping
 									{
 										Hours = createHours(asmZeroLocal, timeZone, culture, dstJudgement),
 										Layers = createAsmLayers(asmZeroLocal, timeZone, culture, layers, dstJudgement),
-										UnreadMessageCount = unreadMessageCount
+										UnreadMessageCount = unreadMessageCount,
+										UserTimeZoneMinuteOffset = (asmZeroLocal - TimeZoneHelper.ConvertToUtc(asmZeroLocal, timeZone)).TotalMinutes
 									};
 		}
 		
@@ -112,10 +113,10 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Asm.Mapping
 		}
 	}
 
-	class DSTJudgement
+	public class DSTJudgement
 	{
-		public bool IsContainsDSTStart;
-		public bool IsContainsDSTEnd;
-		public DateTime DSTMarginPoint;
+		public bool IsContainsDSTStart { get; set; }
+		public bool IsContainsDSTEnd { get; set; }
+		public DateTime DSTMarginPoint { get; set; }
 	};
 }

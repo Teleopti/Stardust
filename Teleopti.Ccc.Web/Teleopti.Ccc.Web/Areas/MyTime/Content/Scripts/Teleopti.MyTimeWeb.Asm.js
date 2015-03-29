@@ -22,6 +22,7 @@ Teleopti.MyTimeWeb.Asm = (function () {
 	var notifyOptions;
 	var ajax = new Teleopti.MyTimeWeb.Ajax();
 	var _settings;
+	var userTimeZoneMinuteOffset = 0;
 
 	function resize() {
 		var innerWidth = document.documentElement.clientWidth || document.body.clientWidth || window.innerWidth;
@@ -29,7 +30,18 @@ Teleopti.MyTimeWeb.Asm = (function () {
 		var targetWidth = 415;
 		var targetHeight = 66;
 		window.resizeBy(targetWidth - innerWidth, targetHeight - innerHeight);
-	}
+	};
+
+	function getUtcNowString() {
+
+		var now = new Date();
+		var dateStr = (now.getUTCMonth() + 1).toString() + '/' +
+					   now.getUTCDate().toString() + '/' +
+					   now.getUTCFullYear().toString() + ' ' +
+					   now.getUTCHours().toString() + ':' +
+					   now.getUTCMinutes().toString();
+		return dateStr;
+	};
 
 	function asmViewModel(yesterday) {
 		var self = this;
@@ -47,9 +59,9 @@ Teleopti.MyTimeWeb.Asm = (function () {
 					self._createLayers(data.Layers);
 					self.unreadMessageCount(data.UnreadMessageCount);
 					$('.asm-outer-canvas').show();
-
+					userTimeZoneMinuteOffset = data.UserTimeZoneMinuteOffset;
 					self.intervalPointer = setInterval(function () {
-						self.now(new Date().getTeleoptiTime());
+						self.now(new Date(new Date(getUtcNowString()).getTime() + userTimeZoneMinuteOffset * 60000));
 					}, 1000 * refreshSeconds);
 				}
 			});
@@ -89,6 +101,7 @@ Teleopti.MyTimeWeb.Asm = (function () {
 			}
 			return null;
 		});
+
 		self.now = ko.observable(new Date().getTeleoptiTime());
 		self.yesterday = ko.observable(yesterday);
 		self.unreadMessageCount = ko.observable(0);
