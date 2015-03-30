@@ -71,9 +71,6 @@ namespace Teleopti.Ccc.WinCode.Main
 			_applicationLogon = applicationLogon;
 			_multiTenancyWindowsLogon = multiTenancyWindowsLogon;
 			_sharedSettingsQuerier = sharedSettingsQuerier;
-			if (ConfigurationManager.AppSettings["GetConfigFromWebService"] != null)
-				_model.GetConfigFromWebService = Convert.ToBoolean(ConfigurationManager.AppSettings["GetConfigFromWebService"],
-					CultureInfo.InvariantCulture);
 			_model.AuthenticationType = AuthenticationTypeOption.Windows;
 		}
 

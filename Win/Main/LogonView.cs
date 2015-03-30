@@ -1,7 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Configuration;
-using System.Deployment.Application;
 using System.Globalization;
 using System.Windows.Forms;
 using Syncfusion.Windows.Forms;
@@ -60,37 +58,14 @@ namespace Teleopti.Ccc.Win.Main
 			Refresh();
 		}
 
-		//public bool InitStateHolder(IMessageBrokerComposite messageBroker, string passwordPolicyString)
-		//{
-		//	if (!LogonInitializeStateHolder.InitApplicationData(_model, messageBroker, _model.SelectedDataSourceContainer.DataSource, passwordPolicyString))
-		//		return showError();
-
-		//	return true;
-		//}
-
 		public bool InitStateHolderWithoutDataSource(IMessageBrokerComposite messageBroker, SharedSettings settings)
 		{
-			if (_model.GetConfigFromWebService)
-			{
-				if (!LogonInitializeStateHolder.InitWithoutDataSource(_model, messageBroker, settings))
-					return showError();
-			}
-			else
-			{
-				var nhibConfPath = ApplicationDeployment.IsNetworkDeployed
-											 ? ApplicationDeployment.CurrentDeployment.DataDirectory
-											 : ConfigurationManager.AppSettings["nhibConfPath"];
-				var useMessageBroker = string.IsNullOrEmpty(ConfigurationManager.AppSettings["MessageBroker"]);
-
-				if (!LogonInitializeStateHolder.GetConfigFromFileSystem(nhibConfPath, useMessageBroker, messageBroker))
-					return showError();
-			}
-			return true;
+			//TODO: tenant - remove this or do not do it again later
+			return LogonInitializeStateHolder.InitWithoutDataSource(_model, messageBroker, settings) || showError();
 		}
 
 		private bool showError()
 		{
-			// ReSharper disable LocalizableElement
 			ShowInTaskbar = true;
 			MessageBox.Show(this,
 			                string.Format(CultureInfo.CurrentCulture,
@@ -98,7 +73,6 @@ namespace Teleopti.Ccc.Win.Main
 			                              LogonInitializeStateHolder.ErrorMessage),
 			                "Configuration error", MessageBoxButtons.OK);
 			return false;
-			// ReSharper restore LocalizableElement
 		}
 
 		private void updatePanel(Control userControl)
