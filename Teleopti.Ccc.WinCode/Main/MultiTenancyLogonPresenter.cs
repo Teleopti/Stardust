@@ -157,6 +157,7 @@ namespace Teleopti.Ccc.WinCode.Main
 
 		private void getSdks()
 		{
+			//TODO: tenant - remove sdk stuff in logon process when win is no longer depended on sdk
 			_view.ClearForm("");
 			var endpoints = _serverEndpointSelector.GetEndpointNames();
 			_model.Sdks = endpoints;
