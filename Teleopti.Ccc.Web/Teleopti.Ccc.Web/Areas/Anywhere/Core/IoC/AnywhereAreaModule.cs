@@ -47,7 +47,9 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Core.IoC
 			}
 			else
 			{
-				builder.RegisterType<ReportUrl>().As<IReportUrl>().SingleInstance();
+				builder.Register(c => new ReportUrl(_config.Args().MatrixWebSiteUrl, c.Resolve<ICurrentBusinessUnit>(), c.Resolve<IConfigReader>()))
+					.As<IReportUrl>()
+					.SingleInstance();
 			}
 			
 			builder.RegisterType<ResourceCalculateSkillCommand>().As<IResourceCalculateSkillCommand>().InstancePerLifetimeScope();
