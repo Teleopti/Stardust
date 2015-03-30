@@ -87,52 +87,19 @@
 </div>
 
 <div class="wrapper">
-	<select style="position: relative;float: left;height: 34px;margin-right: 63px;">
-		<option>London/Team 1</option>
-		<option>London/Team 2</option>
-		<option>London/Team 3</option>
-	</select>
-
-	<span class="input-group" style="max-width: 294px; float: left;">
-		<span class="input-group-btn">
-			<button id="report-view-date-nav-prev" class="btn btn-default" type="button">
-				<i class="glyphicon glyphicon-chevron-left"></i>
-			</button>
-		</span>
-		<input class="form-control text-center" id="report-view-date-nav-current" value="3-25-2015" type="text" readonly="readonly" />
-		<span class="input-group-btn">
-			<button id="report-view-date-picker" class="btn btn-default moment-datepicker" xdata-bind="datepicker: selectedDate, datepickerOptions: { autoHide: true, format: datePickerFormat() }" type="button">
-				<i class="glyphicon glyphicon-calendar"></i>
-			</button>
-			<button id="report-view-date-nav-next" class="btn btn-default" type="button">
-				<i class="glyphicon glyphicon-chevron-right"></i>
-			</button>
-		</span>
-	</span>
-
-	<span class="people-search" style="float: right; margin-right: 60px;">
-		<i class="mdi mdi-magnify"></i>
-		<input type="text" placeholder="Search ..." class="people-search-text" />
-	</span>
-</div>
-
-<div class="row">
 	<div class="col-lg-3">
 		<div class="role-nav material-depth-1 container-block">
 			<div class="tree">
 				<div class="angular-ui-tree">
 					<ol id="tree-root" class="tree-line angular-ui-tree-nodes">
-						<li class="angular-ui-tree-node">							
+						<li class="angular-ui-tree-node">
 							<div class="tree-toggle-group">
 								<div class="toggle-handle open"><i class="mdi mdi-chevron-right"></i></div>
-								<div class="angular-ui-tree-handle selected">									
+								<div class="angular-ui-tree-handle selected">
 									Business Hierarchy
 								</div>
 							</div>
-							<div class="input-prepend">
-								<i class="mdi mdi-filter-outline"></i>
-								<input type="text" placeholder="Organization filter ..." name="filterRole" tabindex="0" aria-invalid="false">
-							</div>
+
 							<ol class="angular-ui-tree-nodes">
 								<li class="angular-ui-tree-node">
 									<div class="tree-toggle-group">
@@ -188,8 +155,11 @@
 			</div>
 		</div>
 	</div>
-	<div class="col-lg-9 material-depth-1">
-		<table class="wfm-table">
+</div>
+
+<div class="wrapper row">
+	<div class="">
+		<table class="wfm-table material-depth-1">
 			<thead>
 				<tr>
 					<th>First Name <i class="mdi mdi-menu-up"></i> </th>
