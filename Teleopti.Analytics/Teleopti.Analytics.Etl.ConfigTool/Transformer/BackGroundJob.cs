@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Configuration;
@@ -8,13 +7,13 @@ using System.Globalization;
 using System.Text;
 using System.Threading;
 using System.Windows.Forms;
+using log4net;
 using Teleopti.Analytics.Etl.Common;
 using Teleopti.Analytics.Etl.Common.Infrastructure;
 using Teleopti.Analytics.Etl.Interfaces.Common;
 using Teleopti.Analytics.Etl.Interfaces.Transformer;
 using Teleopti.Analytics.Etl.Transformer.Job.Steps;
 using Teleopti.Analytics.Etl.TransformerInfrastructure;
-using Teleopti.Interfaces.Domain;
 using IJobResult = Teleopti.Analytics.Etl.Interfaces.Transformer.IJobResult;
 
 namespace Teleopti.Analytics.Etl.ConfigTool.Transformer
@@ -22,6 +21,7 @@ namespace Teleopti.Analytics.Etl.ConfigTool.Transformer
 	class BackGroundJob : IDisposable
 	{
 		private readonly BackgroundWorker _backgroundWorker = new BackgroundWorker();
+		readonly ILog _logger = LogManager.GetLogger(typeof(BackGroundJob));
 		public event EventHandler<AlarmEventArgs> JobStartedRunning;
 		public event EventHandler<AlarmEventArgs> JobStoppedRunning;
 
@@ -39,7 +39,8 @@ namespace Teleopti.Analytics.Etl.ConfigTool.Transformer
 			}
 			else if (e.Error != null)
 			{
-				Trace.WriteLine("Error in Background Worker.");
+				_logger.Error("Background thread exception", e.Error);
+				MessageBox.Show(e.Error.ToString(), "Background thread exception", MessageBoxButtons.OK, MessageBoxIcon.Error);
 			}
 			else
 			{
@@ -51,7 +52,7 @@ namespace Teleopti.Analytics.Etl.ConfigTool.Transformer
 					JobStoppedRunning(sender, new AlarmEventArgs(jobExecutionState.Job));
 					NotifyUser(jobExecutionState);
 				}
-			}
+			}		
 		}
 
 		private static void NotifyUser(JobExecutionState jobExecutionState)
@@ -134,6 +135,7 @@ namespace Teleopti.Analytics.Etl.ConfigTool.Transformer
 		{
 			get { return EtlRunningInformation != null; }
 		}
+
 		public IEtlRunningInformation EtlRunningInformation { get; set; }
 		public IJob Job { get; set; }
 	}
