@@ -21,6 +21,8 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 
 		public void OnAfterInvocation(Exception exception)
 		{
+			if (exception == null)
+				_unitOfWork.PersistAll();
 			_unitOfWork.Dispose();
 		}
 	}

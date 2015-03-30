@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using Autofac;
 using NHibernate;
@@ -106,6 +107,53 @@ namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork
 			// existing beahvior is the HibernateException, although something else would be better
 			//UnitOfWork.Current().Should().Be.Null();
 			Assert.Throws<HibernateException>(() => RepositoryNotValidatingUserLogon.LoadAll());
+		}
+
+		[Test]
+		public void ShouldPersistChanges()
+		{
+			ReadOnlyCollection<IRtaState> stateCollection = null;
+			TheService.Does(uow =>
+			{
+				RepositoryNotValidatingUserLogon.Add(new RtaStateGroup(" ", true, true));
+			});
+			
+			TheService.DoesWithoutBusinessUnitFilter(uow =>
+			{
+				RepositoryNotValidatingUserLogon.LoadAll().Single().AddState("phone", "phone", Guid.NewGuid());
+			});
+
+			TheService.DoesWithoutBusinessUnitFilter(uow =>
+			{
+				stateCollection = RepositoryNotValidatingUserLogon.LoadAll().Single().StateCollection;
+			});
+			stateCollection.Select(x => x.Name).Single().Should().Be("phone");
+		}
+
+		[Test]
+		public void ShouldNotPersistOnException()
+		{
+			ReadOnlyCollection<IRtaState> stateCollection = null;
+			TheService.Does(uow =>
+			{
+				RepositoryNotValidatingUserLogon.Add(new RtaStateGroup(" ", true, true));
+			});
+			try
+			{
+				TheService.DoesWithoutBusinessUnitFilter(uow =>
+				{
+
+					RepositoryNotValidatingUserLogon.LoadAll().Single().AddState("phone", "phone", Guid.NewGuid());
+					throw new Exception("derp!");
+				});
+			}
+			catch { }
+
+			TheService.DoesWithoutBusinessUnitFilter(uow =>
+			{
+				stateCollection = RepositoryNotValidatingUserLogon.LoadAll().Single().StateCollection;
+			});
+			stateCollection.Should().Be.Empty();
 		}
 	}
 
