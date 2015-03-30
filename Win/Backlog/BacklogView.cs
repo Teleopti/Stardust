@@ -264,6 +264,7 @@ namespace Teleopti.Ccc.Win.Backlog
 			var series2 = chart1.Series.Add("Backlog on incoming");
 			var series3 = chart1.Series.Add("Overstaff");
 			var series4 = chart1.Series.Add("Estimated total backlog");
+			var series5 = chart1.Series.Add("Planned time");
 
 			series1.ChartType = SeriesChartType.StackedColumn;
 			series1.XValueType = ChartValueType.Date;
@@ -278,6 +279,10 @@ namespace Teleopti.Ccc.Win.Backlog
 			series4.YAxisType = AxisType.Primary;
 			series4.XValueType = ChartValueType.Date;
 			series4.Color = Color.Red;
+			series5.ChartType = SeriesChartType.Line;
+			series5.YAxisType = AxisType.Primary;
+			series5.XValueType = ChartValueType.Date;
+			series5.Color = Color.Blue;
 
 			for (int i = 1; i < gridControl1.ColCount; i++)
 			{
@@ -295,6 +300,7 @@ namespace Teleopti.Ccc.Win.Backlog
 					series3.Points.Add(datapoint);
 					datapoint = new DataPoint(i, _model.GetScheduledBacklogTimeOnIndex(i, skill).GetValueOrDefault(TimeSpan.Zero).TotalHours);
 					series4.Points.Add(datapoint);
+					
 				}
 				else
 				{
@@ -307,6 +313,9 @@ namespace Teleopti.Ccc.Win.Backlog
 					series3.Points.Add(datapoint);
 					datapoint = new DataPoint(i, _model.GetAccumulatedPlannedBacklogTimeForIndex(i, skill).GetValueOrDefault(TimeSpan.Zero).TotalHours);
 					series4.Points.Add(datapoint);
+					datapoint = new DataPoint(i, _model.GetForecastedForIndex(i, skill).GetValueOrDefault(TimeSpan.Zero).TotalHours);
+					series5.Points.Add(datapoint);
+					//_model.GetForecastedForIndex
 				}
 			}
 		}
