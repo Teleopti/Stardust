@@ -1,8 +1,4 @@
-﻿body {
-	overflow-x: hidden;
-}
-
-.col-md-4, .col-md-8 { /* please bootstrap, don't make any assumption about padding' */
+﻿.col-md-4, .col-md-8 { /* please bootstrap, don't make any assumption about padding' */
 	padding: 0;
 }
 
@@ -92,30 +88,5 @@ label {
 	background-repeat: no-repeat;
 }
 
-.alert-error {
-	color: rgba(0,0,0,0.54)!important;
-	background-color: #ee8f7d;
-	border: none;
-	border-radius: 0;
-}
 
-.alert-success {
-	color: rgba(0,0,0,0.54)!important;
-	background-color: #c2e085;
-	border: none;
-	border-radius: 0;
-}
 
-.alert-info {
-	color: rgba(0,0,0,0.54)!important;
-	background-color: #66c2ff;
-	border: none;
-	border-radius: 0;
-}
-
-.alert-warning {
-	color: rgba(0,0,0,0.54)!important;
-	background-color: #ffc285;
-	border: none;
-	border-radius: 0;
-}
