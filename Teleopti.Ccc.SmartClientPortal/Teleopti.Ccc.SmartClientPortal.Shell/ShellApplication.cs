@@ -85,19 +85,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 				typeof(FrameworkElement),
 				new FrameworkPropertyMetadata(XmlLanguage.GetLanguage(CultureInfo.CurrentCulture.IetfLanguageTag)));
 
-			var testData = new List<string>();
-			string selected = null;
-			if(testData.Any())
-			{
-				using (var preLogonView = new PreLogonScreen(testData))
-				{
-					preLogonView.ShowDialog();
-					if(preLogonView.DialogResult != DialogResult.OK)
-						Application.Exit();
-
-					selected = preLogonView.GetData();
-				}
-			}
+			createAppConfigReader();
 			
 			IContainer container = configureContainer();
 #if (!DEBUG)
@@ -177,20 +165,25 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 		{
 			var overrideConfigReader = new OverrideConfigFilesReader(Environment.CurrentDirectory);
 			var overrides = overrideConfigReader.Overrides();
-			if (overrides.IsEmpty())
+			if (overrides.Any())
 			{
-				appConfigReader = new AppConfigReader();
+				using (var preLogonView = new PreLogonScreen(overrides.Keys))
+				{
+					preLogonView.ShowDialog();
+					if (preLogonView.DialogResult != DialogResult.OK)
+						Application.Exit();
+
+					appConfigReader = new MultipleAppConfigReader(new AppConfigReader(), overrides[preLogonView.GetData()]);
+				}
 			}
 			else
 			{
-				//here do stuff soon
-				appConfigReader = new MultipleAppConfigReader(new AppConfigReader(), overrides.First().Value);
+				appConfigReader = new AppConfigReader();
 			}
 		}
 
 		private static IContainer configureContainer()
 		{
-			createAppConfigReader();
 			using (PerformanceOutput.ForOperation("Building Ioc container"))
 			{
 				var builder = new ContainerBuilder();
