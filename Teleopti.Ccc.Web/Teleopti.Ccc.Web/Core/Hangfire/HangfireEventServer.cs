@@ -14,7 +14,7 @@ namespace Teleopti.Ccc.Web.Core.Hangfire
 		}
 
 		[DisplayName("{0}")]
-		[AutomaticRetry(Attempts = 0)]
+		[AutomaticRetry(Attempts = 3)]
 		public void Process(string displayName, string eventType, string serializedEvent, string handlerType)
 		{
 			_processor.Process(displayName, eventType, serializedEvent, handlerType);
