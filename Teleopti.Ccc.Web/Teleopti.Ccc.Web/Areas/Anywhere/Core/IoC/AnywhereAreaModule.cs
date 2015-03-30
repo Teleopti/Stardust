@@ -41,7 +41,9 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Core.IoC
 
 			if (_config.Toggle(Toggles.MultiTenantSSOSupport_StandardReports_15093))
 			{
-				builder.RegisterType<ReportUrlConstructor>().As<IReportUrl>().SingleInstance();
+				builder.Register(c => new ReportUrlConstructor(_config.Args().ReportServer, c.Resolve<IConfigReader>()))
+					.As<IReportUrl>()
+					.SingleInstance();
 			}
 			else
 			{
