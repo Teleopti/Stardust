@@ -6,7 +6,6 @@ using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers;
 using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.ScheduleProjection;
-using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Interfaces.Domain;
 
@@ -50,7 +49,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Denormalizer
 						{
 							new ProjectionChangedEventScheduleDay
 								{
-									Date = today,
+									Date = today.Date,
 									Shift = new ProjectionChangedEventShift
 										{
 											StartDateTime = period.StartDateTime,
@@ -124,7 +123,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Denormalizer
 							new ProjectionChangedEventScheduleDay
 								{
 									ShortName = "ClosestLayer",
-									Date = today,
+									Date = today.Date,
 									Shift = new ProjectionChangedEventShift
 										{
 											Layers = new Collection<ProjectionChangedEventLayer>

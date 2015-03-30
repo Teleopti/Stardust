@@ -29,8 +29,8 @@ namespace Teleopti.Ccc.Sdk.LogicTest.OldTests
         [SetUp]
         public void Setup()
         {
-			_dateFrom = new DateOnlyDto { DateTime = new DateOnly(2008, 10, 1) };
-			_dateTo = new DateOnlyDto { DateTime = new DateOnly(2008, 10, 3) };
+			_dateFrom = new DateOnlyDto { DateTime = new DateTime(2008, 10, 1) };
+			_dateTo = new DateOnlyDto { DateTime = new DateTime(2008, 10, 3) };
 
             _id = Guid.NewGuid();
 

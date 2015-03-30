@@ -45,7 +45,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.QueryHandler
 					new Rhino.Mocks.Constraints.PredicateConstraint<ReadOnlyGroupPage>(p => p.PageId == readOnlyGroupPage.PageId),
 					Rhino.Mocks.Constraints.Is.Equal(dateOnly)).Return(groupDetailList);
 			
-			var result = target.Handle(new GetGroupsForGroupPageAtDateQueryDto{PageId = readOnlyGroupPage.PageId,QueryDate = new DateOnlyDto{DateTime = dateOnly}});
+			var result = target.Handle(new GetGroupsForGroupPageAtDateQueryDto{PageId = readOnlyGroupPage.PageId,QueryDate = new DateOnlyDto{DateTime = dateOnly.Date}});
 			result.Count.Should().Be.EqualTo(1);
 		}
 	}

@@ -8,7 +8,6 @@ using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Infrastructure.NHibernateConfiguration;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
-using Teleopti.Interfaces.MessageBroker.Client;
 using Teleopti.Interfaces.MessageBroker.Client.Composite;
 using Teleopti.Interfaces.MessageBroker.Events;
 
@@ -49,7 +48,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 				{
 					if (Logger.IsDebugEnabled)
 						Logger.Debug("Sending notification for persisted model IPersonScheduleDayReadModel");
-					_messageBroker.Send(_currentDataSource.CurrentName(), businessUnitId, period.StartDate, period.EndDate,
+					_messageBroker.Send(_currentDataSource.CurrentName(), businessUnitId, period.StartDate.Date, period.EndDate.Date,
 						Guid.Empty, personId, typeof (Person), Guid.Empty, typeof (IPersonScheduleDayReadModel),
 						DomainUpdateType.NotApplicable, null);
 				});
@@ -60,8 +59,8 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 			_currentUnitOfWork.Session().CreateSQLQuery(
 				"DELETE FROM ReadModel.PersonScheduleDay WHERE PersonId=:person AND BelongsToDate BETWEEN :StartDate AND :EndDate")
 			                  .SetGuid("person", personId)
-			                  .SetDateTime("StartDate", period.StartDate)
-			                  .SetDateTime("EndDate", period.EndDate)
+							  .SetDateOnly("StartDate", period.StartDate)
+							  .SetDateOnly("EndDate", period.EndDate)
 			                  .ExecuteUpdate();
 		}
 
@@ -78,7 +77,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 			                  .SetGuid("BusinessUnitId", model.BusinessUnitId)
 			                  .SetParameter("Start", model.Start)
 			                  .SetParameter("End", model.End)
-			                  .SetDateTime("BelongsToDate", model.BelongsToDate)
+							  .SetDateOnly("BelongsToDate", model.BelongsToDate)
 									.SetParameter("IsDayOff", model.IsDayOff)
 			                  .SetParameter("Model", model.Model, NHibernateUtil.Custom(typeof(CompressedString)))
 			                  .ExecuteUpdate();

@@ -67,7 +67,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 		                                                                    DateTimePeriod dateTimePeriod, IScenario scenario)
 		{
 			if (_personAssignment != null)
-				return ScheduleDictionaryForTest.WithPersonAssignment(scenario, _personAssignment.Date, _personAssignment);
+				return ScheduleDictionaryForTest.WithPersonAssignment(scenario, _personAssignment.Date.Date, _personAssignment);
 			return new ScheduleDictionaryForTest(scenario, dateTimePeriod);
 		}
 
@@ -77,14 +77,14 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 		                                                                    IScenario scenario)
 		{
 			if (_personAssignment != null)
-				return ScheduleDictionaryForTest.WithPersonAssignment(scenario, _personAssignment.Date, _personAssignment);
+				return ScheduleDictionaryForTest.WithPersonAssignment(scenario, _personAssignment.Date.Date, _personAssignment);
 			return new ScheduleDictionaryForTest(scenario, period.StartDate.Date, period.EndDate.Date);
 		}
 
 		public IScheduleDictionary FindSchedulesForPersonsOnlyInGivenPeriod(IEnumerable<IPerson> persons, IScheduleDictionaryLoadOptions scheduleDictionaryLoadOptions, DateOnlyPeriod period, IScenario scenario)
 		{
 			if (_personAssignment != null)
-				return ScheduleDictionaryForTest.WithPersonAssignment(scenario, _personAssignment.Date, _personAssignment);
+				return ScheduleDictionaryForTest.WithPersonAssignment(scenario, _personAssignment.Date.Date, _personAssignment);
 			return new ScheduleDictionaryForTest(scenario, period.StartDate.Date, period.EndDate.Date);
 		}
 

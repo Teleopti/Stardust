@@ -217,7 +217,7 @@ namespace Teleopti.Ccc.Win.Payroll.DefinitionSets
         {
             if (e.ColIndex == 1 && e.RowIndex > 0)
             {
-                DateTime selectedDate = ExplorerView.ExplorerPresenter.Model.SelectedDate.Value;
+                var selectedDate = ExplorerView.ExplorerPresenter.Model.SelectedDate.GetValueOrDefault(DateOnly.Today).Date;
                 int widthToReduce = e.Bounds.X;
 
                 DateTime prevDate = selectedDate.Subtract(TimeSpan.FromDays(1));

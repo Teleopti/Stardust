@@ -74,7 +74,7 @@ namespace Teleopti.Ccc.Domain.Scheduling
         public virtual bool BelongsToPeriod(IDateOnlyAsDateTimePeriod dateAndPeriod)
         {
             InParameter.NotNull("dateAndPeriod", dateAndPeriod);
-            return dateAndPeriod.DateOnly.Date == _noteDate;
+            return dateAndPeriod.DateOnly == _noteDate;
         }
 
         public virtual bool BelongsToPeriod(DateOnlyPeriod dateOnlyPeriod)

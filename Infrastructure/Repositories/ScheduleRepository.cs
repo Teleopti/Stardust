@@ -7,7 +7,6 @@ using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Scheduling.Restriction;
-using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
 
@@ -195,8 +194,8 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 															  .Find(period, people));
 					if (!scheduleDictionaryLoadOptions.LoadOnlyPreferensesAndHourlyAvailability)
 					{
-						addPersonAvailabilities(longDateTimePeriod, retDic, people);
-						addPersonRotations(longDateTimePeriod, retDic, people);
+						addPersonAvailabilities(period, retDic, people);
+						addPersonRotations(period, retDic, people);
 					}
 				}
 			}
@@ -262,7 +261,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
             // ugly to be safe to get all
             var loadedPeriod = period.LoadedPeriod();
             var longDateOnlyPeriod = new DateOnlyPeriod(new DateOnly(loadedPeriod.StartDateTime.AddDays(-1)), new DateOnly(loadedPeriod.EndDateTime.AddDays(1)));
-						var longPeriod = new DateTimePeriod(loadedPeriod.StartDateTime.AddDays(-1), loadedPeriod.EndDateTime.AddDays(1));
+	        var longPeriod = new DateTimePeriod(loadedPeriod.StartDateTime.AddDays(-1), loadedPeriod.EndDateTime.AddDays(1));
 
             using(TurnoffPermissionScope.For(scheduleDictionary))
             {
@@ -300,8 +299,8 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
                     addOvertimeAvailability(scheduleDictionary, _repositoryFactory.CreateOvertimeAvailabilityRepository(UnitOfWork).Find(longDateOnlyPeriod, visiblePersons));
 	                if (!scheduleDictionaryLoadOptions.LoadOnlyPreferensesAndHourlyAvailability)
 	                {
-		                addPersonAvailabilities(period.VisiblePeriod, scheduleDictionary, personsInOrganization);
-		                addPersonRotations(period.VisiblePeriod, scheduleDictionary, visiblePersons);
+						addPersonAvailabilities(longDateOnlyPeriod, scheduleDictionary, personsInOrganization);
+						addPersonRotations(longDateOnlyPeriod, scheduleDictionary, visiblePersons);
 	                }
                 }                              
             }
@@ -365,13 +364,14 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
             }
         }
 
-		private void addPersonRotations(DateTimePeriod period, IScheduleDictionary retDic, IEnumerable<IPerson> persons)
+		private void addPersonRotations(DateOnlyPeriod period, IScheduleDictionary retDic, IEnumerable<IPerson> persons)
 		{
-            var rotations = _repositoryFactory.CreatePersonRotationRepository(UnitOfWork).LoadPersonRotationsWithHierarchyData(persons.ToArray(), period.StartDateTime);
+			var people = persons.ToArray();
+			var rotations = _repositoryFactory.CreatePersonRotationRepository(UnitOfWork).LoadPersonRotationsWithHierarchyData(people, period.StartDate).ToArray();
 
-			foreach (var person in persons)
+			foreach (var person in people)
 			{
-				foreach (var dateTime in period.ToDateOnlyPeriod(person.PermissionInformation.DefaultTimeZone()).DayCollection())
+				foreach (var dateTime in period.DayCollection())
 				{
 					var rotationDayRestrictions = person.GetPersonRotationDayRestrictions(rotations, dateTime);
 					foreach (var restriction in rotationDayRestrictions)
@@ -383,13 +383,14 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 			}
 		}
 
-        private void addPersonAvailabilities(DateTimePeriod period, IScheduleDictionary retDic, IEnumerable<IPerson> persons)
+        private void addPersonAvailabilities(DateOnlyPeriod period, IScheduleDictionary retDic, IEnumerable<IPerson> persons)
         {
-            var availabilities = _repositoryFactory.CreatePersonAvailabilityRepository(UnitOfWork).LoadPersonAvailabilityWithHierarchyData(persons.ToArray(), period.StartDateTime);
+	        var people = persons.ToArray();
+	        var availabilities = _repositoryFactory.CreatePersonAvailabilityRepository(UnitOfWork).LoadPersonAvailabilityWithHierarchyData(people, period.StartDate).ToArray();
 
-            foreach (var person in persons)
+            foreach (var person in people)
             {
-                foreach (var dateTime in period.ToDateOnlyPeriod(person.PermissionInformation.DefaultTimeZone()).DayCollection())
+                foreach (var dateTime in period.DayCollection())
                 {
                     var restriction = person.GetPersonAvailabilityDayRestriction(availabilities, dateTime);
 
@@ -473,7 +474,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 
 	    private static bool checkIfPersonLeft(IPerson person, DateTimePeriod period)
 	    {
-		    return person.TerminalDate.HasValue && person.TerminalDate.Value.AddDays(1) < period.EndDateTime;
+		    return person.TerminalDate.HasValue && person.TerminalDate.Value.Date.AddDays(1) < period.EndDateTime;
 	    }
     }    
 }

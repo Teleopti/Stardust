@@ -28,9 +28,9 @@ namespace Teleopti.Ccc.Win.Backlog
 			InitializeComponent();
 			_model = new BacklogModel(container, period);
 			
-			dateTimePicker1.MinDate = _period.StartDate;
-			dateTimePicker1.MaxDate = _period.EndDate.AddDays(1);
-			dateTimePicker1.Value = _period.StartDate;
+			dateTimePicker1.MinDate = _period.StartDate.Date;
+			dateTimePicker1.MaxDate = _period.EndDate.AddDays(1).Date;
+			dateTimePicker1.Value = _period.StartDate.Date;
 			setupGrid();
 		}
 
@@ -286,7 +286,7 @@ namespace Teleopti.Ccc.Win.Backlog
 
 			for (int i = 1; i < gridControl1.ColCount; i++)
 			{
-				var dateOnIndex = _model.GetDateOnIndex(i);
+				var dateOnIndex = _model.GetDateOnIndex(i).Date;
 				var skill = (ISkill) tabControlSkills.SelectedTab.Tag;
 				DataPoint datapoint;
 				if(dateOnIndex < dateTimePicker1.Value)

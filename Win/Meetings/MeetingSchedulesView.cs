@@ -13,7 +13,6 @@ using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Win.Common;
 using Teleopti.Ccc.Win.Common.Controls.Cells;
 using Teleopti.Ccc.Win.Common.Controls.DateSelection;
-using Teleopti.Ccc.WinCode.Common;
 using Teleopti.Ccc.WinCode.Meetings;
 using Teleopti.Ccc.WinCode.Meetings.Interfaces;
 using Teleopti.Ccc.WinCode.Scheduling;
@@ -317,12 +316,12 @@ namespace Teleopti.Ccc.Win.Meetings
 
 		public void SetStartDate(DateOnly startDate)
 		{
-			dateTimePickerAdvStartDate.Value = startDate;
+			dateTimePickerAdvStartDate.Value = startDate.Date;
 		}
 
 		public void SetEndDate(DateOnly endDate)
 		{
-			dateTimePickerAdvEndDate.Value = endDate;
+			dateTimePickerAdvEndDate.Value = endDate.Date;
 		}
 
 		public void SetStartTime(TimeSpan startTime)
@@ -361,7 +360,7 @@ namespace Teleopti.Ccc.Win.Meetings
 
 		public void SetCurrentDate(DateOnly currentDate)
 		{
-			monthCalendarAdvDateSelection.Value = currentDate;
+			monthCalendarAdvDateSelection.Value = currentDate.Date;
 		}
 
 		public void RefreshGrid()
@@ -431,11 +430,11 @@ namespace Teleopti.Ccc.Win.Meetings
 			var frameStyle = new GridBorder(GridBorderStyle.Solid, Color.Gray, GridBorderWeight.Thin);
 			e.Style.Borders.Top = frameStyle;
 			e.Style.Borders.Bottom = frameStyle;
-			if (week.StartDate == (DateTime)e.DateValue)
+			if (week.StartDate.Date == (DateTime)e.DateValue)
 			{
 				e.Style.Borders.Left = frameStyle;
 			}
-			if (week.EndDate == (DateTime)e.DateValue)
+			if (week.EndDate.Date == (DateTime)e.DateValue)
 			{
 				e.Style.Borders.Right = frameStyle;
 			}

@@ -12,7 +12,6 @@ using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Domain.UndoRedo;
 using Teleopti.Ccc.UserTexts;
-using Teleopti.Ccc.WinCode.Common;
 using Teleopti.Ccc.WinCode.Common.Clipboard;
 using Teleopti.Ccc.WinCode.Scheduling.ScheduleSortingCommands;
 using Teleopti.Interfaces.Domain;
@@ -348,7 +347,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
                     if (daySchedule.FullAccess)
                         e.Style.CellTipText = ViewBaseHelper.GetToolTip(daySchedule);
                     //set background color
-                    View.SetCellBackTextAndBackColor(e, localDate.Date, true, false, daySchedule);
+                    View.SetCellBackTextAndBackColor(e, localDate, true, false, daySchedule);
                 }
             }
         }
@@ -387,7 +386,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
                 var localDate = SelectedPeriod.DateOnlyPeriod.StartDate.AddDays(e.ColIndex - (int)ColumnType.StartScheduleColumns);
 
                 e.Style.Text = CultureInfo.CurrentCulture.Calendar.
-                    GetDayOfMonth(localDate).ToString(CultureInfo.CurrentCulture);
+                    GetDayOfMonth(localDate.Date).ToString(CultureInfo.CurrentCulture);
 
                 e.Style.Tag = localDate;
                 e.Style.CellTipText = View.DayHeaderTooltipText(e.Style, localDate);
@@ -546,7 +545,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
             if (!View.TheGrid.Enabled)
                 return;
 
-            if (SelectedPeriod.DateOnlyPeriod.StartDate != DateTime.MinValue)
+            if (SelectedPeriod.DateOnlyPeriod.StartDate > DateOnly.MinValue)
             {
                 if (e.ColIndex > (int)ColumnType.RowHeaderColumn &&
                     e.ColIndex < (int)ColumnType.StartScheduleColumns &&

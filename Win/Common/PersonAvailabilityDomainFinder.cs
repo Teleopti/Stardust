@@ -1,21 +1,13 @@
-#region Imports
-
-using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using Syncfusion.Windows.Forms.Grid;
-using Teleopti.Ccc.Domain.AgentInfo;
 using Teleopti.Ccc.Infrastructure.Repositories;
-using Teleopti.Ccc.Win.PeopleAdmin;
 using Teleopti.Ccc.Win.PeopleAdmin.GuiHelpers;
 using Teleopti.Interfaces.Domain;
 
-#endregion
-
 namespace Teleopti.Ccc.Win.Common
 {
-
     /// <summary>
     /// Represents the domain finder for the person availability.
     /// </summary>
@@ -25,19 +17,10 @@ namespace Teleopti.Ccc.Win.Common
     /// </remarks>
     public class PersonAvailabilityDomainFinder : IDomainFinder
     {
-
-        #region Fields - Instance Member
-
-        private FilteredPeopleHolder _filteredPeopleHolder;
+	    private readonly FilteredPeopleHolder _filteredPeopleHolder;
         private PersonAvailabilityRepository _personAvailabilityRepository;
 
-        #endregion
-
-        #region Properties - Instance Member
-
-        #region Properties - Instance Member - PersonAvailabilityDomainFinder Members
-
-        /// <summary>
+	    /// <summary>
         /// Gets the person rotation repository.
         /// </summary>
         /// <value>The person rotation repository.</value>
@@ -47,29 +30,14 @@ namespace Teleopti.Ccc.Win.Common
         /// </remarks>
         private PersonAvailabilityRepository PersonAvailabilityRepository
         {
-            get
-            {
-                if (_personAvailabilityRepository == null)
-                    _personAvailabilityRepository = new PersonAvailabilityRepository(_filteredPeopleHolder.GetUnitOfWork);
-                return _personAvailabilityRepository;
+            get {
+	            return _personAvailabilityRepository ??
+	                   (_personAvailabilityRepository =
+		                   new PersonAvailabilityRepository(_filteredPeopleHolder.GetUnitOfWork));
             }
         }
 
-        #endregion
-
-        #endregion
-
-        #region Events - Instance Member
-
-        #endregion
-
-        #region Methods - Instance Member
-
-        #region Methods - Instance Member - PersonAvailabilityDomainFinder Members
-
-        #region Methods - Instance Member - PersonAvailabilityDomainFinder Members - Constructors
-
-        /// <summary>
+	    /// <summary>
         /// Initializes a new instance of the <see cref="PersonAvailabilityDomainFinder"/> class.
         /// </summary>
         /// <param name="filteredPeopleHolder">The filtered people holder.</param>
@@ -82,11 +50,7 @@ namespace Teleopti.Ccc.Win.Common
             _filteredPeopleHolder = filteredPeopleHolder;
         }
 
-        #endregion
-
-        #region Methods - Instance Member - PersonAvailabilityDomainFinder Members - Helpers
-
-        /// <summary>
+	    /// <summary>
         /// Gets the sorted person collection.
         /// </summary>
         /// <returns></returns>
@@ -166,20 +130,17 @@ namespace Teleopti.Ccc.Win.Common
             bool isFound = false;
 
             // Gets the data list
-            DateTimePeriod period =
-                new DateTimePeriod(DateTime.SpecifyKind(DateTime.MinValue.AddYears(1800), DateTimeKind.Utc),
-                                   DateTime.SpecifyKind(DateTime.MaxValue, DateTimeKind.Utc));
+            var period = new DateOnlyPeriod(DateOnly.MinValue, DateOnly.MaxValue);
 
             IList<IPerson> containedCollection = new List<IPerson>();
             containedCollection.Add(person);
 
-            ICollection<IPersonAvailability> availabilityCollection =
-                PersonAvailabilityRepository.Find(containedCollection, period) as ICollection<IPersonAvailability>;
+            ICollection<IPersonAvailability> availabilityCollection = PersonAvailabilityRepository.Find(containedCollection, period);
             IOrderedEnumerable<IPersonAvailability> sorted = availabilityCollection.OrderByDescending(n2 =>
                                                              n2.StartDate);
             availabilityCollection = sorted.ToList();
 
-            foreach (PersonAvailability availability in availabilityCollection)
+            foreach (var availability in availabilityCollection)
             {
                 isFound = Find(searchCriteria, availability);
 
@@ -192,7 +153,7 @@ namespace Teleopti.Ccc.Win.Common
 
         private static bool Find(SearchCriteria searchCriteria, IPersonAvailability pesonAvailability)
         {
-            bool isFound = false;
+            bool isFound;
             string searchText = searchCriteria.SearchText;
             CultureInfo currentCulture = CultureInfo.CurrentCulture;
 
@@ -257,13 +218,7 @@ namespace Teleopti.Ccc.Win.Common
             return rowIndex;
         }
 
-        #endregion
-
-        #endregion
-
-        #region IDomainFinder Members
-
-        /// <summary>
+	    /// <summary>
         /// Finds the data on the persistance which meets the given search criteria and
         /// displays the search results on the given grid control.
         /// </summary>
@@ -273,7 +228,7 @@ namespace Teleopti.Ccc.Win.Common
         /// Created by: Savani Nirasha
         /// Created date: 2008-10-22
         /// </remarks>
-        public void Find(Syncfusion.Windows.Forms.Grid.GridControl grid, SearchCriteria searchCriteria)
+        public void Find(GridControl grid, SearchCriteria searchCriteria)
         {
             IList<IPerson> sortedList = getSortedPersonCollection();
 
@@ -298,11 +253,6 @@ namespace Teleopti.Ccc.Win.Common
                 }
             }
         }
-
-        #endregion
-
-        #endregion
-
     }
 
 }

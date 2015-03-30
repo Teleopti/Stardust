@@ -5,7 +5,6 @@ using System.Globalization;
 using System.Windows.Forms;
 using Syncfusion.Windows.Forms.Grid;
 using Syncfusion.Windows.Forms.Tools;
-using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.ResourceCalculation.IntraIntervalAnalyze;
 using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
@@ -360,13 +359,13 @@ namespace Teleopti.Ccc.Win.Meetings
 
 		public void SetStartDate(DateOnly startDate)
 		{
-			dateTimePickerAdvStartDate.Value = startDate;
+			dateTimePickerAdvStartDate.Value = startDate.Date;
 			autoLabelMeetingDate.Text = startDate.ToShortDateString(CultureInfo.CurrentCulture);
 		}
 
 		public void SetEndDate(DateOnly endDate)
 		{
-			dateTimePickerAdvEndDate.Value = endDate;
+			dateTimePickerAdvEndDate.Value = endDate.Date;
 		}
 
 		public void SetStartTime(TimeSpan startTime)
@@ -435,12 +434,12 @@ namespace Teleopti.Ccc.Win.Meetings
 
 		public void SetSearchStartDate(DateOnly startDate)
 		{
-			dateTimePickerAdvStartSlotPeriod.Value = startDate;
+			dateTimePickerAdvStartSlotPeriod.Value = startDate.Date;
 		}
 
 		public void SetSearchEndDate(DateOnly endDate)
 		{
-			dateTimePickerAdvEndSlotPeriod.Value = endDate;
+			dateTimePickerAdvEndSlotPeriod.Value = endDate.Date;
 		}
 
 		public void SetSearchInfo(string searchInfo)

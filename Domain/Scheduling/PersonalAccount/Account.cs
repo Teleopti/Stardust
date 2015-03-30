@@ -111,7 +111,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.PersonalAccount
 
         private DateOnly endDate()
         {
-            DateTime endDate;
+            DateOnly endDate;
             if (Owner == null)
             {
                 endDate = maxEndDate();                
@@ -149,12 +149,12 @@ namespace Teleopti.Ccc.Domain.Scheduling.PersonalAccount
 					endDate = StartDate;
 			}
 
-            return new DateOnly(endDate);
+            return endDate;
         }
 
-        private DateTime maxEndDate()
+        private DateOnly maxEndDate()
         {
-            return StartDate.Date.Add(DefaultMaxPeriodLength);
+            return StartDate.Add(DefaultMaxPeriodLength);
         }
 
         public virtual IPersonAbsenceAccount Owner

@@ -50,7 +50,7 @@ namespace Teleopti.Ccc.Win.Common.Controls.Chart
             }
             using (new UICultureContext(currentCulture))
             {
-                SetChartScale(GridControl.WorkingInterval, GridControl.FirstDateTime, GridControl.LastDateTime,
+                SetChartScale(GridControl.WorkingInterval, GridControl.FirstDate, GridControl.LastDate,
                               GridControl.ChartResolution);
 
                 chartControl1.BeginUpdate();

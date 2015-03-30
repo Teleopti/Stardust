@@ -137,14 +137,14 @@ namespace Teleopti.Ccc.Win.Common.Controls.Chart
         /// Created by: peterwe
         /// Created date: 2008-06-09
         /// </remarks>
-        public DateTime GetDateByColumn(int column, DateTime oldDate)
+        public DateOnly GetDateByColumn(int column, DateOnly oldDate)
         {
-            DateTime returnDate = oldDate;
+            var returnDate = oldDate;
             ITaskOwnerGrid grid = _currentGrid;
             if(grid!=null)
             {
                 var locatedDate = grid.GetLocalCurrentDate(column);
-                if (locatedDate != DateTime.MaxValue)
+                if (locatedDate != DateOnly.MaxValue)
                     returnDate = locatedDate;
             }
             return returnDate;

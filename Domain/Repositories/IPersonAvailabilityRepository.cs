@@ -15,12 +15,12 @@ namespace Teleopti.Ccc.Domain.Repositories
 		/// <param name="persons">The agents.</param>
 		/// <param name="period">The period.</param>
 		/// <returns></returns>
-		ICollection<IPersonAvailability> Find(IEnumerable<IPerson> persons, DateTimePeriod period);
+		ICollection<IPersonAvailability> Find(IEnumerable<IPerson> persons, DateOnlyPeriod period);
 
 		/// <summary>
 		/// Loads availabilities with hierarchy data for persons.
 		/// </summary>
 		/// <returns></returns>
-		IEnumerable<IPersonAvailability> LoadPersonAvailabilityWithHierarchyData(IEnumerable<IPerson> persons, DateTime startDate);
+		IEnumerable<IPersonAvailability> LoadPersonAvailabilityWithHierarchyData(IEnumerable<IPerson> persons, DateOnly startDate);
 	}
 }

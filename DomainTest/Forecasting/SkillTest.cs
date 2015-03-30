@@ -6,7 +6,6 @@ using NUnit.Framework;
 using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.Forecasting.Template;
 using Teleopti.Ccc.Domain.Scheduling;
-using Teleopti.Ccc.Domain.Time;
 using System.Collections.Generic;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
@@ -525,8 +524,8 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
         [Test]
         public void CanApplyTemplateByName()
         {
-            ISkillDay skillDay1 = SkillDayFactory.CreateSkillDay(target, new DateTime(2008, 7, 1, 0, 0, 0, DateTimeKind.Utc));
-            ISkillDay skillDay2 = SkillDayFactory.CreateSkillDay(target, new DateTime(2008, 7, 2, 0, 0, 0, DateTimeKind.Utc));
+            ISkillDay skillDay1 = SkillDayFactory.CreateSkillDay(target, new DateOnly(2008, 7, 1));
+            ISkillDay skillDay2 = SkillDayFactory.CreateSkillDay(target, new DateOnly(2008, 7, 2));
 
             IList<ITemplateSkillDataPeriod> skillDataPeriodCollection = new List<ITemplateSkillDataPeriod>();
             ITemplateSkillDataPeriod skillDataPeriod = new TemplateSkillDataPeriod(

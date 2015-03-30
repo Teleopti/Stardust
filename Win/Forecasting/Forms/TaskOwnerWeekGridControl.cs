@@ -512,7 +512,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
         /// Created by: robink
         /// Created date: 2008-01-25
         /// </remarks>
-        public void GoToDate(DateTime theDate)
+        public void GoToDate(DateOnly theDate)
         {
             if (_turnOffUpdate) return;
             ITaskOwner taskOwnerPeriod = _rowManagerTaskOwner.DataSource.FirstOrDefault(wp =>
@@ -530,12 +530,12 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
             }
         }
 
-        public DateTime GetLocalCurrentDate(int column)
+        public DateOnly GetLocalCurrentDate(int column)
         {
             int count = _rowManagerTaskOwner.DataSource.Count;
             if (count == 0)
-                return DateTime.MaxValue;
-            DateTime returnDate;
+                return DateOnly.MaxValue;
+            DateOnly returnDate;
             if (column > count)
                 returnDate = ((TaskOwnerPeriod)_rowManagerTaskOwner.DataSource[count - 1]).EndDate;
             else if (column <= 0)
@@ -629,14 +629,14 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
             get { return TimeSpan.FromDays(3); }
         }
 
-        public override DateTime FirstDateTime
+        public override DateTime FirstDate
         {
-            get { return _dateTimes.Min(); }
+            get { return _dateTimes.Min().Date; }
         }
 
-        public override DateTime LastDateTime
+        public override DateTime LastDate
         {
-            get { return _dateTimes.Max(); }
+            get { return _dateTimes.Max().Date; }
         }
 
         protected override IDictionary<DateTime, double> GetRowDataForChart(GridRangeInfo gridRangeInfo)

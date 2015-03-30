@@ -54,7 +54,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.SkillPages
 				}
 			}
 
-			DateTime startDateUtc = TimeZoneInfo.ConvertTimeToUtc(SkillDayTemplate.BaseDate, skill.TimeZone);
+			DateTime startDateUtc = TimeZoneInfo.ConvertTimeToUtc(SkillDayTemplate.BaseDate.Date, skill.TimeZone);
 			DateTimePeriod timePeriod = new DateTimePeriod(
 				startDateUtc, startDateUtc.AddDays(1)).MovePeriod(skill.MidnightBreakOffset);
 

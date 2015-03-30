@@ -2,9 +2,9 @@ using System;
 using System.Linq;
 using NHibernate;
 using NHibernate.Transform;
-using Teleopti.Ccc.Domain.ApplicationLayer.Rta;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta.ReadModelUpdaters;
 using Teleopti.Ccc.Infrastructure.LiteUnitOfWork;
+using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Interfaces;
 using Teleopti.Interfaces.Domain;
 
@@ -39,7 +39,7 @@ namespace Teleopti.Ccc.Infrastructure.Rta.Persisters
 				"	:State" +
 				")")
 				.SetGuid("PersonId", model.PersonId)
-				.SetDateTime("BelongsToDate", model.BelongsToDate)
+				.SetDateOnly("BelongsToDate", model.BelongsToDate)
 				.SetParameter("Model", _jsonSerializer.SerializeObject(model.Model), NHibernateUtil.StringClob)
 				.SetParameter("State", _jsonSerializer.SerializeObject(model.State), NHibernateUtil.StringClob)
 				.ExecuteUpdate();
@@ -55,7 +55,7 @@ namespace Teleopti.Ccc.Infrastructure.Rta.Persisters
 				"	PersonId = :PersonId AND " +
 				"	BelongsToDate =:Date")
 				.SetGuid("PersonId", model.PersonId)
-				.SetDateTime("Date", model.BelongsToDate)
+				.SetDateOnly("Date", model.BelongsToDate)
 				.SetParameter("Model", _jsonSerializer.SerializeObject(model.Model), NHibernateUtil.StringClob)
 				.SetParameter("State", _jsonSerializer.SerializeObject(model.State), NHibernateUtil.StringClob)
 				.ExecuteUpdate();
@@ -77,7 +77,7 @@ namespace Teleopti.Ccc.Infrastructure.Rta.Persisters
 				.AddScalar("ModelJson", NHibernateUtil.String)
 				.AddScalar("StateJson", NHibernateUtil.String)
 				.SetGuid("PersonId", personId)
-				.SetDateTime("Date", date)
+				.SetDateOnly("Date", date)
 				.SetResultTransformer(Transformers.AliasToBean(typeof(internalModel)))
 				.List<internalModel>()
 				.FirstOrDefault();
@@ -117,7 +117,7 @@ namespace Teleopti.Ccc.Infrastructure.Rta.Persisters
 				.AddScalar("Date", NHibernateUtil.DateTime)
 				.AddScalar("ModelJson", NHibernateUtil.String)
 				.SetGuid("PersonId", personId)
-				.SetDateTime("Date", date)
+				.SetDateOnly("Date", date)
 				.SetResultTransformer(Transformers.AliasToBean(typeof(internalModel)))
 				.List<internalModel>()
 				.FirstOrDefault();

@@ -21,8 +21,8 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
             return _currentUnitOfWork.Session().CreateSQLQuery(
 				"SELECT PersonId, BelongsToDate AS Date, StartDateTime, EndDateTime, Workday, Label, DisplayColor AS ColorCode, WorkTime AS WorkTimeTicks, ContractTime AS ContractTimeTicks FROM ReadModel.ScheduleDay WHERE PersonId=:personid AND BelongsToDate Between :startdate AND :enddate")
 				.SetGuid("personid", personId)
-				.SetDateTime("startdate", startDate)
-				.SetDateTime("enddate", toDate)
+				.SetDateOnly("startdate", startDate)
+				.SetDateOnly("enddate", toDate)
 				.SetResultTransformer(Transformers.AliasToBean(typeof (ScheduleDayReadModel)))
 				.SetReadOnly(true)
 				.List<ScheduleDayReadModel>();
@@ -33,8 +33,8 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
             _currentUnitOfWork.Session().CreateSQLQuery(
 				"DELETE FROM ReadModel.ScheduleDay WHERE PersonId=:person AND BelongsToDate BETWEEN :StartDate AND :EndDate")
 				.SetGuid("person", personId)
-				.SetDateTime("StartDate", period.StartDate)
-				.SetDateTime("EndDate", period.EndDate)
+				.SetDateOnly("StartDate", period.StartDate)
+				.SetDateOnly("EndDate", period.EndDate)
 				.ExecuteUpdate();
 		}
 
@@ -50,7 +50,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 					.SetBoolean("Workday", model.Workday)
 					.SetString("Label", model.Label)
 					.SetInt32("DisplayColor", model.DisplayColor.ToArgb())
-					.SetDateTime("Date", model.BelongsToDate)
+					.SetDateOnly("Date", model.BelongsToDate)
 					.SetBoolean("NotScheduled", model.NotScheduled)
 					.ExecuteUpdate();
 		}

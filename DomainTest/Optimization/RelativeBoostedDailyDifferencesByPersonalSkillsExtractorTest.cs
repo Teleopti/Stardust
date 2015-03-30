@@ -38,7 +38,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
         [Test]
         public void VerifyValueOneDay()
         {
-            DateOnly day = new DateOnly(new DateOnly(2010, 4, 1));
+            DateOnly day = new DateOnly(2010, 4, 1);
 
             const int numberOfdays = 1;
 
@@ -67,8 +67,8 @@ namespace Teleopti.Ccc.DomainTest.Optimization
         [Test]
         public void VerifyValueMoreDays()
         {
-            DateOnly day1 = new DateOnly(new DateOnly(2010, 4, 1));
-            DateOnly day2 = new DateOnly(new DateOnly(2010, 4, 2));
+            DateOnly day1 = new DateOnly(2010, 4, 1);
+            DateOnly day2 = new DateOnly(2010, 4, 2);
 
             const int numberOfdays = 2;
 

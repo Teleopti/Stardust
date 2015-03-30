@@ -1,12 +1,10 @@
 ﻿using System;
-using System.Drawing;
 using System.Globalization;
 using System.Windows.Forms;
 using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
 using Teleopti.Ccc.UserTexts;
 using Teleopti.Ccc.Win.Common;
 using Teleopti.Ccc.Win.Common.Controls.DateSelection;
-using Teleopti.Ccc.WinCode.Common;
 using Teleopti.Ccc.WinCode.Scheduling;
 using Teleopti.Interfaces.Domain;
 
@@ -18,7 +16,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 		public FilterHourlyAvailabilityView(DateOnly defaultDate, ISchedulerStateHolder schedulerStateHolder)
 		{
 			InitializeComponent();
-			datePicker.Value = defaultDate;
+			datePicker.Value = defaultDate.Date;
 			datePicker.SetCultureInfoSafe(CultureInfo.CurrentCulture);
 			SetTexts();
 			_presenter = new FilterHourlyAvailabilityPresenter(schedulerStateHolder);

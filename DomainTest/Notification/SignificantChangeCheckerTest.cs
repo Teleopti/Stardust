@@ -53,7 +53,7 @@ namespace Teleopti.Ccc.DomainTest.Notification
         {
             var date = DateTime.Today;
             var period = new DateOnlyPeriod(new DateOnly(date), new DateOnly(date.AddDays(2)));
-            _person.WorkflowControlSet = new WorkflowControlSet("mm") { SchedulePublishedToDate = new DateOnly(date.AddDays(7)) };
+            _person.WorkflowControlSet = new WorkflowControlSet("mm") { SchedulePublishedToDate = date.AddDays(7) };
             var newReadModel = new ScheduleDayReadModel
                 {
                     StartDateTime = date.AddDays(1).AddHours(2),
@@ -104,7 +104,7 @@ namespace Teleopti.Ccc.DomainTest.Notification
         {
             var date = DateTime.Today;
             var period = new DateOnlyPeriod(new DateOnly(date.AddDays(1)), new DateOnly(date.AddDays(1)));
-            _person.WorkflowControlSet = new WorkflowControlSet("mm") { SchedulePublishedToDate = new DateOnly(date.AddDays(7)) };
+            _person.WorkflowControlSet = new WorkflowControlSet("mm") { SchedulePublishedToDate = date.AddDays(7) };
             var newReadModel = new ScheduleDayReadModel
                 {
                     StartDateTime = date.AddDays(-1).AddHours(2),
@@ -145,7 +145,7 @@ namespace Teleopti.Ccc.DomainTest.Notification
         {
             var date = DateTime.Today;
             var period = new DateOnlyPeriod(new DateOnly(date.AddDays(1)), new DateOnly(date.AddDays(1)));
-            _person.WorkflowControlSet = new WorkflowControlSet("mm") { SchedulePublishedToDate = new DateOnly(date.AddDays(7)) };
+            _person.WorkflowControlSet = new WorkflowControlSet("mm") { SchedulePublishedToDate = date.AddDays(7) };
             var newReadModel = new ScheduleDayReadModel
                 {
                     StartDateTime = date.AddDays(1).AddHours(2),
@@ -177,7 +177,7 @@ namespace Teleopti.Ccc.DomainTest.Notification
 		public void ShouldReturnNullIfNoPeriodIsNotWithinPublished()
 		{
 			var date = DateTime.Today;
-			_person.WorkflowControlSet = new WorkflowControlSet("mm") { SchedulePublishedToDate = new DateOnly(date.AddDays(7)) };
+			_person.WorkflowControlSet = new WorkflowControlSet("mm") { SchedulePublishedToDate = date.AddDays(7) };
 			var period = new DateOnlyPeriod(new DateOnly(date.AddDays(11)), new DateOnly(date.AddDays(13)));
 			
 			Assert.That(_target.SignificantChangeNotificationMessage(period.StartDate, _person, null).Subject, Is.Empty);
@@ -188,7 +188,7 @@ namespace Teleopti.Ccc.DomainTest.Notification
 		public void ShouldReturnNullIfPublishedToIsBeforeToday()
 		{
 			var date = DateTime.Today;
-			_person.WorkflowControlSet = new WorkflowControlSet("mm") { SchedulePublishedToDate = new DateOnly(date.AddDays(-7)) };
+			_person.WorkflowControlSet = new WorkflowControlSet("mm") { SchedulePublishedToDate = date.AddDays(-7) };
 			var period = new DateOnlyPeriod(new DateOnly(date.AddDays(11)), new DateOnly(date.AddDays(13)));
 
 			Assert.That(_target.SignificantChangeNotificationMessage(period.StartDate, _person, null).Subject, Is.Empty);

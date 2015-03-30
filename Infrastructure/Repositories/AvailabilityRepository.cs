@@ -63,13 +63,13 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
             return ret;
         }
 
-		public IEnumerable<IAvailabilityRotation> LoadAvailabilitiesWithHierarchyData(IEnumerable<IPerson> persons, DateTime startDate)
+		public IEnumerable<IAvailabilityRotation> LoadAvailabilitiesWithHierarchyData(IEnumerable<IPerson> persons, DateOnly startDate)
     	{
 			var retList = new HashSet<IAvailabilityRotation>();
 			foreach (var personsPart in persons.Batch(400))
 			{
 				var tempResult = Session.GetNamedQuery("LoadAvailabilityRotationsWithHierarchyData")
-						.SetDateTime("StartDate", startDate)
+						.SetDateOnly("StartDate", startDate)
 						.SetParameterList("PersonCollection", personsPart)
 						.List<IAvailabilityRotation>();
 				foreach (var rotation in tempResult)

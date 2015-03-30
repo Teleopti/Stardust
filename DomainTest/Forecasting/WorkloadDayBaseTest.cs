@@ -44,7 +44,7 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
 
             _openHours.Add(new TimePeriod(new TimeSpan(9, 0, 0), new TimeSpan(1, 2, 0, 0)));
             
-            _workloadDayBase.Create(new DateOnly(SkillDayTemplate.BaseDate), _workload, _openHours);
+            _workloadDayBase.Create(SkillDayTemplate.BaseDate, _workload, _openHours);
 
             _workloadDayBase.Tasks = 999;
         }
@@ -306,7 +306,7 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
         {
 
             _workloadDayBase = new TestWorkloadDayBase();
-            _workloadDayBase.Create(new DateOnly(SkillDayTemplate.BaseDate), _workload, _openHours);
+            _workloadDayBase.Create(SkillDayTemplate.BaseDate, _workload, _openHours);
 
             foreach (ITemplateTaskPeriod taskPeriod in _workloadDayBase.SortedTaskPeriodList)
             {
@@ -1138,7 +1138,7 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
             WorkloadDayBase workloadDayBase = new TestWorkloadDayBase();
 
             ITask t1 = new Task();
-            var baseDateTime = TimeZoneInfo.ConvertTimeToUtc(SkillDayTemplate.BaseDate, skill.TimeZone);
+            var baseDateTime = TimeZoneInfo.ConvertTimeToUtc(SkillDayTemplate.BaseDate.Date, skill.TimeZone);
             ITemplateTaskPeriod p1 = new TemplateTaskPeriod(
                 t1,
                 new DateTimePeriod(baseDateTime.AddHours(8), baseDateTime.AddHours(26)));
@@ -1169,7 +1169,7 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
             WorkloadDayBase workloadDayBase = new TestWorkloadDayBase();
 
             ITask t1 = new Task();
-            DateTime baseDateTime = TimeZoneInfo.ConvertTimeToUtc(SkillDayTemplate.BaseDate, skill.TimeZone);
+            DateTime baseDateTime = TimeZoneInfo.ConvertTimeToUtc(SkillDayTemplate.BaseDate.Date, skill.TimeZone);
             ITemplateTaskPeriod p1 = new TemplateTaskPeriod(
                 t1,
                 new DateTimePeriod(baseDateTime.AddHours(8), baseDateTime.AddHours(26)));
@@ -1202,7 +1202,7 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
                 openHours.Add(new TimePeriod(new TimeSpan(12, 0, 0), new TimeSpan(1, 2, 0, 0)));
                 openHours.Add(new TimePeriod(new TimeSpan(6, 0, 0), new TimeSpan(9, 0, 0)));
             }
-            workloadDayTemplate.Create(templateName, DateTime.SpecifyKind(date,DateTimeKind.Utc), _workload, openHours);
+            workloadDayTemplate.Create(templateName, DateTime.SpecifyKind(date.Date,DateTimeKind.Utc), _workload, openHours);
             workloadDayTemplate.SetId(Guid.NewGuid());
             if (!_workload.TemplateWeekCollection.Values.Contains(workloadDayTemplate)) _workload.AddTemplate(workloadDayTemplate);
 

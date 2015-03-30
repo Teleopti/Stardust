@@ -34,31 +34,31 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
             _skillDataPeriods1 = new[]
                                     {
                                         new SkillDataPeriod(ServiceAgreement.DefaultValuesEmail(), new SkillPersonData(),
-                                                            new DateTimePeriod(DateTime.SpecifyKind(_dt,DateTimeKind.Utc).Add(TimeSpan.Zero),
-                                                                               DateTime.SpecifyKind(_dt,DateTimeKind.Utc).Add(TimeSpan.FromHours(24))))
+                                                            new DateTimePeriod(DateTime.SpecifyKind(_dt.Date,DateTimeKind.Utc).Add(TimeSpan.Zero),
+                                                                               DateTime.SpecifyKind(_dt.Date,DateTimeKind.Utc).Add(TimeSpan.FromHours(24))))
                                     };
             _skillDataPeriods2 = new[]
                                     {
                                         new SkillDataPeriod(ServiceAgreement.DefaultValuesEmail(), new SkillPersonData(),
-                                                            new DateTimePeriod(DateTime.SpecifyKind(_dt,DateTimeKind.Utc).AddDays(1).Add(TimeSpan.Zero),
-                                                                               DateTime.SpecifyKind(_dt,DateTimeKind.Utc).AddDays(1).Add(TimeSpan.FromHours(24))))
+                                                            new DateTimePeriod(DateTime.SpecifyKind(_dt.Date,DateTimeKind.Utc).AddDays(1).Add(TimeSpan.Zero),
+                                                                               DateTime.SpecifyKind(_dt.Date,DateTimeKind.Utc).AddDays(1).Add(TimeSpan.FromHours(24))))
                                     };
             _skillDataPeriods3 = new[]
                                     {
                                         new SkillDataPeriod(ServiceAgreement.DefaultValuesEmail(), new SkillPersonData(),
-                                                            new DateTimePeriod(DateTime.SpecifyKind(_dt,DateTimeKind.Utc).AddDays(2).Add(TimeSpan.Zero),
-                                                                               DateTime.SpecifyKind(_dt,DateTimeKind.Utc).AddDays(2).Add(TimeSpan.FromHours(24))))
+                                                            new DateTimePeriod(DateTime.SpecifyKind(_dt.Date,DateTimeKind.Utc).AddDays(2).Add(TimeSpan.Zero),
+                                                                               DateTime.SpecifyKind(_dt.Date,DateTimeKind.Utc).AddDays(2).Add(TimeSpan.FromHours(24))))
                                     };
 
             _skill.SetId(Guid.NewGuid());
 
-            _skillDay1 = new SkillDay(_dt, _skill, _scenario, WorkloadDayFactory.GetWorkloadDaysForTest(_dt,_dt, _workload), _skillDataPeriods1);
+            _skillDay1 = new SkillDay(_dt, _skill, _scenario, WorkloadDayFactory.GetWorkloadDaysForTest(_dt.Date,_dt.Date, _workload), _skillDataPeriods1);
             _skillDay1.SetupSkillDay();
 
-            _skillDay2 = new SkillDay(_dt.AddDays(1), _skill, _scenario, WorkloadDayFactory.GetWorkloadDaysForTest(_dt.AddDays(1), _dt.AddDays(1), _workload), _skillDataPeriods2);
+            _skillDay2 = new SkillDay(_dt.AddDays(1), _skill, _scenario, WorkloadDayFactory.GetWorkloadDaysForTest(_dt.AddDays(1).Date, _dt.AddDays(1).Date, _workload), _skillDataPeriods2);
             _skillDay2.SetupSkillDay();
 
-            _skillDay3 = new SkillDay(_dt.AddDays(2), _skill, _scenario, WorkloadDayFactory.GetWorkloadDaysForTest(_dt.AddDays(2), _dt.AddDays(2), _workload), _skillDataPeriods3);
+            _skillDay3 = new SkillDay(_dt.AddDays(2), _skill, _scenario, WorkloadDayFactory.GetWorkloadDaysForTest(_dt.AddDays(2).Date, _dt.AddDays(2).Date, _workload), _skillDataPeriods3);
             _skillDay3.SetupSkillDay();
 
             _calculator = new SkillDayCalculator(_skill, new [] { _skillDay1,_skillDay2,_skillDay3 }, new DateOnlyPeriod(_dt, _dt.AddDays(1)));
@@ -80,7 +80,7 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
         private void AddNewClosedTemplateToAllWorkloads()
         {
             var template = new WorkloadDayTemplate();
-            template.Create("Closed",DateTime.SpecifyKind(_dt,DateTimeKind.Utc),_workload,new List<TimePeriod>());
+            template.Create("Closed",DateTime.SpecifyKind(_dt.Date,DateTimeKind.Utc),_workload,new List<TimePeriod>());
             _workload.AddTemplate(template);
         }
 

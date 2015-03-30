@@ -57,7 +57,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta
 
 		public AdherenceDetailsReadModel Get(Guid personId, DateOnly date)
 		{
-			return _data.Where(r => r.PersonId == personId && r.Date == date)
+			return _data.Where(r => r.PersonId == personId && r.Date == date.Date)
 				.Select(m => JsonConvert.DeserializeObject<AdherenceDetailsReadModel>(JsonConvert.SerializeObject(m)))
 				.FirstOrDefault();
 		}

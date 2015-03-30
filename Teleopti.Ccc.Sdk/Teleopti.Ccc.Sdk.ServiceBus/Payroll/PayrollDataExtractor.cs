@@ -62,7 +62,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Payroll
 				 message.ExportPeriod.ToDateTimePeriod(timeZone);
 			var exportDto = new PayrollExportDto
 									  {
-										  DatePeriod = new DateOnlyPeriodDto { StartDate = new DateOnlyDto { DateTime = message.ExportPeriod.StartDate }, EndDate = new DateOnlyDto { DateTime = message.ExportPeriod.EndDate } },
+										  DatePeriod = new DateOnlyPeriodDto { StartDate = new DateOnlyDto { DateTime = message.ExportPeriod.StartDate.Date }, EndDate = new DateOnlyDto { DateTime = message.ExportPeriod.EndDate.Date } },
 										  Id = payrollExport.Id,
 										  PayrollFormat = new PayrollFormatDto(message.PayrollExportFormatId, string.Empty),
 										  Period =

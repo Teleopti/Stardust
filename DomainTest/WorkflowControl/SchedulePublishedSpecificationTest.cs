@@ -1,4 +1,5 @@
-﻿using NUnit.Framework;
+﻿using System;
+using NUnit.Framework;
 using Rhino.Mocks;
 using Teleopti.Ccc.Domain.WorkflowControl;
 using Teleopti.Interfaces.Domain;
@@ -104,7 +105,7 @@ namespace Teleopti.Ccc.DomainTest.WorkflowControl
                                                                                             DateOnly.Today.AddDays(6)));
             Expect.Call(workflowControlSet.PreferencePeriod).Return(new DateOnlyPeriod(DateOnly.Today.AddDays(6),
                                                                                        DateOnly.Today.AddDays(9))).Repeat.Any();
-            Expect.Call(workflowControlSet.SchedulePublishedToDate).Return(DateOnly.Today.AddDays(-4)).Repeat.Any();
+            Expect.Call(workflowControlSet.SchedulePublishedToDate).Return(DateTime.Today.AddDays(-4)).Repeat.Any();
         }
     }
 }

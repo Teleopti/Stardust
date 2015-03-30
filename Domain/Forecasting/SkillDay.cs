@@ -291,8 +291,8 @@ namespace Teleopti.Ccc.Domain.Forecasting
         {
             SplitSkillDataPeriods(new List<ISkillDataPeriod>(_skillDataPeriodCollection));
 
-            DateTime utcCurrentDate = TimeZoneHelper.ConvertToUtc(_currentDate, _skill.TimeZone);
-            DateTime utcBaseDate = TimeZoneHelper.ConvertToUtc(SkillDayTemplate.BaseDate, _skill.TimeZone);
+            DateTime utcCurrentDate = TimeZoneHelper.ConvertToUtc(_currentDate.Date, _skill.TimeZone);
+            DateTime utcBaseDate = TimeZoneHelper.ConvertToUtc(SkillDayTemplate.BaseDate.Date, _skill.TimeZone);
 
             TimeSpan diff = utcCurrentDate.Subtract(utcBaseDate);
 
@@ -349,12 +349,12 @@ namespace Teleopti.Ccc.Domain.Forecasting
 			initialize();
         }
 
-        private static bool isFirstDayOfDaylightSavingTime(DateTime dateTime)
+        private static bool isFirstDayOfDaylightSavingTime(DateOnly dateTime)
         {
-            dateTime = dateTime.AddHours(12);
-            if (dateTime.IsDaylightSavingTime())
+            var date = dateTime.Date.AddHours(12);
+            if (date.IsDaylightSavingTime())
             {
-                if (!dateTime.AddDays(-1).IsDaylightSavingTime())
+                if (!date.AddDays(-1).IsDaylightSavingTime())
                 {
                     return true;
                 }
@@ -362,11 +362,11 @@ namespace Teleopti.Ccc.Domain.Forecasting
             return false;
         }
 
-        private static bool isLastDayOfDaylightSavingTime(DateTime dateTime)
+        private static bool isLastDayOfDaylightSavingTime(DateOnly dateTime)
         {
-            if (dateTime.IsDaylightSavingTime())
+            if (dateTime.Date.IsDaylightSavingTime())
             {
-                if (!dateTime.AddDays(1).IsDaylightSavingTime())
+                if (!dateTime.AddDays(1).Date.IsDaylightSavingTime())
                 {
                     return true;
                 }

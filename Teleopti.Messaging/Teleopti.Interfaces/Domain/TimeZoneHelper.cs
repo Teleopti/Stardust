@@ -118,8 +118,12 @@ namespace Teleopti.Interfaces.Domain
             DateTime utcStartDateTime = timeZone.SafeConvertTimeToUtc(localStartDateTime);
             DateTime utcEndDateTime = timeZone.SafeConvertTimeToUtc(localEndDateTime);
 
-            DateTimePeriod dateTimePeriod = new DateTimePeriod(utcStartDateTime, utcEndDateTime);
-            return dateTimePeriod;
+            return new DateTimePeriod(utcStartDateTime, utcEndDateTime);
         }
+
+		public static DateTimePeriod NewUtcDateTimePeriodFromLocalDate(DateOnly localStartDateTime, DateOnly localEndDateTime, TimeZoneInfo timeZone)
+		{
+			return NewUtcDateTimePeriodFromLocalDateTime(localStartDateTime.Date,localEndDateTime.Date,timeZone);
+		}
     }
 }

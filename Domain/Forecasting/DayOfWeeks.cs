@@ -61,7 +61,7 @@ namespace Teleopti.Ccc.Domain.Forecasting
         /// </remarks>
         public override double TaskIndex(DateOnly dateTime)
         {
-            int dayNumber = (int)CultureInfo.CurrentCulture.Calendar.GetDayOfWeek(dateTime) + 1;
+            int dayNumber = (int)CultureInfo.CurrentCulture.Calendar.GetDayOfWeek(dateTime.Date) + 1;
 
 
             return PeriodTypeCollection[dayNumber].TaskIndex;
@@ -79,7 +79,7 @@ namespace Teleopti.Ccc.Domain.Forecasting
 
         public override double TalkTimeIndex(DateOnly dateTime)
         {
-            int dayNumber = (int)CultureInfo.CurrentCulture.Calendar.GetDayOfWeek(dateTime) + 1;
+            int dayNumber = (int)CultureInfo.CurrentCulture.Calendar.GetDayOfWeek(dateTime.Date) + 1;
 
 
             return PeriodTypeCollection[dayNumber].TalkTimeIndex;
@@ -96,7 +96,7 @@ namespace Teleopti.Ccc.Domain.Forecasting
         /// </remarks>
         public override double AfterTalkTimeIndex(DateOnly dateTime)
         {
-            int dayNumber = (int)CultureInfo.CurrentCulture.Calendar.GetDayOfWeek(dateTime) + 1;
+            int dayNumber = (int)CultureInfo.CurrentCulture.Calendar.GetDayOfWeek(dateTime.Date) + 1;
 
 
             return PeriodTypeCollection[dayNumber].AfterTalkTimeIndex;
@@ -117,7 +117,7 @@ namespace Teleopti.Ccc.Domain.Forecasting
 
             foreach (TaskOwnerPeriod period in list)
             {
-                int dayNumber = (int)CultureInfo.CurrentCulture.Calendar.GetDayOfWeek(period.CurrentDate) + 1;
+                int dayNumber = (int)CultureInfo.CurrentCulture.Calendar.GetDayOfWeek(period.CurrentDate.Date) + 1;
                 dayOfWeeks.PeriodTypeCollection.Add(dayNumber, new DayOfWeekItem(period, dayOfWeeks));
             }
         }

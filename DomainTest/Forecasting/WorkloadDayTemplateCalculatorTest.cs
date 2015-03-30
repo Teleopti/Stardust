@@ -5,7 +5,6 @@ using NUnit.Framework;
 using Rhino.Mocks;
 using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.Repositories;
-using Teleopti.Ccc.Domain.Time;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Interfaces.Domain;
 
@@ -126,14 +125,14 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
 
             var statisticTask1 = new StatisticTask
             {
-                Interval = startDate,
+                Interval = startDate.Date,
                 StatCalculatedTasks = 20,
                 StatAverageTaskTimeSeconds = 20,
                 StatAverageAfterTaskTimeSeconds = 10
             };
             var statisticTask2 = new StatisticTask
             {
-                Interval = startDate.AddDays(3),
+                Interval = startDate.Date.AddDays(3),
                 StatCalculatedTasks = 30,
                 StatAverageTaskTimeSeconds = 30,
                 StatAverageAfterTaskTimeSeconds = 20
@@ -278,14 +277,14 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
 
             var statisticTask1 = new StatisticTask
             {
-                Interval = startDate,
+                Interval = startDate.Date,
                 StatCalculatedTasks = 20,
                 StatAverageTaskTimeSeconds = 20,
                 StatAverageAfterTaskTimeSeconds = 10
             };
             var statisticTask2 = new StatisticTask
             {
-                Interval = startDate.AddDays(7),
+                Interval = startDate.Date.AddDays(7),
                 StatCalculatedTasks = 30,
                 StatAverageTaskTimeSeconds = 30,
                 StatAverageAfterTaskTimeSeconds = 20

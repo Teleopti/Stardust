@@ -64,7 +64,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.AgentBadge
 				{
 					if (setting == null || !setting.BadgeEnabled)
 					{
-						_serviceBus.DelaySend(DateOnly.Today.AddDays(1), message);
+						_serviceBus.DelaySend(DateTime.Today.AddDays(1), message);
 						if (Logger.IsDebugEnabled)
 						{
 							Logger.DebugFormat(

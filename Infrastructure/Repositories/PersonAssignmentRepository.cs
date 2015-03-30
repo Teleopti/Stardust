@@ -13,9 +13,6 @@ using Teleopti.Ccc.Domain.Collection;
 
 namespace Teleopti.Ccc.Infrastructure.Repositories
 {
-	///<summary>
-	/// Repository for PersonAssignment aggregate
-	///</summary>
 	public class PersonAssignmentRepository : Repository<IPersonAssignment>, IPersonAssignmentRepository, IWriteSideRepositoryTypedId<IPersonAssignment, PersonAssignmentKey>
 	{
 		public PersonAssignmentRepository(IUnitOfWork unitOfWork)
@@ -34,17 +31,6 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 
 		}
 
-		/// <summary>
-		/// Finds the specified persons.
-		/// </summary>
-		/// <param name="persons">The persons.</param>
-		/// <param name="period">The period.</param>
-		/// <param name="scenario">The scenario.</param>
-		/// <returns></returns>
-		/// <remarks>
-		/// Created by: Sumedah
-		/// Created date: 2008-03-06
-		/// </remarks>
 		public ICollection<IPersonAssignment> Find(IEnumerable<IPerson> persons, DateOnlyPeriod period, IScenario scenario)
 		{
 			InParameter.NotNull("persons", persons);
@@ -73,8 +59,8 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 		{
 			return Session.GetNamedQuery("fetchIdAndVersionPersonAssignment")
 			              .SetEntity("scenario", scenario)
-			              .SetDateTime("start", period.StartDate)
-			              .SetDateTime("end", period.EndDate)
+						  .SetDateOnly("start", period.StartDate)
+						  .SetDateOnly("end", period.EndDate)
 										.SetEntity("person", person)
 										.SetResultTransformer(
 											Transformers.AliasToBeanConstructor(typeof(DateScenarioPersonId).GetConstructor(
@@ -112,18 +98,9 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 			        .Add(Restrictions.Between("Date", period.StartDate, period.EndDate));
 		}
 
-		/// <summary>
-		/// Loads the aggregate.
-		/// </summary>
-		/// <param name="id">The id.</param>
-		/// <returns></returns>
-		/// <remarks>
-		/// Created by: rogerkr
-		/// Created date: 2008-06-12
-		/// </remarks>
 		public IPersonAssignment LoadAggregate(Guid id)
 		{
-			IPersonAssignment ass = Session.CreateCriteria(typeof (PersonAssignment))
+			var ass = Session.CreateCriteria(typeof (PersonAssignment))
 			                               .SetFetchMode("ShiftLayers", FetchMode.Join)
 			                               .Add(Restrictions.Eq("Id", id))
 			                               .UniqueResult<IPersonAssignment>();

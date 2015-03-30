@@ -59,7 +59,7 @@ namespace Teleopti.Ccc.Domain.Forecasting
             IDictionary<int,IList<ITaskOwner>> taskOwnerDictionary = new Dictionary<int,IList<ITaskOwner>>();
             foreach (ITaskOwner task in _taskOwnerDays)
             {
-                int currentDay = calendar.GetDayOfMonth(task.CurrentDate);
+                int currentDay = calendar.GetDayOfMonth(task.CurrentDate.Date);
                 int dayOfWeek;
                 int weekIndex = Math.DivRem(currentDay - 1, 7, out dayOfWeek);
 
@@ -117,7 +117,7 @@ namespace Teleopti.Ccc.Domain.Forecasting
             IDictionary<DayOfWeek, IList<ITaskOwner>> taskOwnerDictionary = new Dictionary<DayOfWeek, IList<ITaskOwner>>();
             foreach (ITaskOwner task in _taskOwnerDays)
             {
-                DayOfWeek currentDay = calendar.GetDayOfWeek(task.CurrentDate);
+                DayOfWeek currentDay = task.CurrentDate.DayOfWeek;
 
                 IList<ITaskOwner> taskOwners;
                 if (!taskOwnerDictionary.TryGetValue(currentDay,out taskOwners))
@@ -165,7 +165,7 @@ namespace Teleopti.Ccc.Domain.Forecasting
 
             var currentDate = _taskOwnerDays.Min(tod => tod.CurrentDate);
             var maxDate = _taskOwnerDays.Max(tod => tod.CurrentDate);
-            maxDate = new DateOnly(DateHelper.GetLastDateInMonth(maxDate, calendar));
+            maxDate = new DateOnly(DateHelper.GetLastDateInMonth(maxDate.Date, calendar));
             IDictionary<int, IList<ITaskOwner>> taskOwnerDictionary = new Dictionary<int, IList<ITaskOwner>>();
 
             do
@@ -176,9 +176,9 @@ namespace Teleopti.Ccc.Domain.Forecasting
                                                                 tod.CurrentDate >= taskOwnerPeriod.StartDate &&
                                                                 tod.CurrentDate <= taskOwnerPeriod.EndDate);
 
-                int currentMonth = calendar.GetMonth(currentDate);
+                int currentMonth = calendar.GetMonth(currentDate.Date);
 
-                currentDate = new DateOnly(calendar.AddMonths(currentDate, 1));
+	            currentDate = currentDate.AddMonths(calendar, 1);
                 if (currentTaskOwnerDays.IsEmpty()) continue;
 
                 IList<ITaskOwner> taskOwners;
@@ -194,7 +194,7 @@ namespace Teleopti.Ccc.Domain.Forecasting
 
             int monthsInYear =
                 calendar.GetMonthsInYear(
-                    calendar.GetYear(maxDate));
+                    calendar.GetYear(maxDate.Date));
 
             DateTime dt = calendar.AddYears(calendar.MinSupportedDateTime,1);
             dt = calendar.AddMonths(dt, 1 - calendar.GetMonth(dt));
@@ -222,7 +222,7 @@ namespace Teleopti.Ccc.Domain.Forecasting
 
             taskOwnerPeriodMonths.ForEach(wp => wp.Release());
 
-            return taskOwnerPeriodMonths.OrderBy(t => calendar.GetMonth(t.CurrentDate)).ToList();
+            return taskOwnerPeriodMonths.OrderBy(t => calendar.GetMonth(t.CurrentDate.Date)).ToList();
         }
 
         #endregion
@@ -244,7 +244,7 @@ namespace Teleopti.Ccc.Domain.Forecasting
 
             var currentDate = _taskOwnerDays.Min(tod => tod.CurrentDate);
             var maxDate = _taskOwnerDays.Max(tod => tod.CurrentDate);
-            maxDate = new DateOnly(DateHelper.GetLastDateInMonth(maxDate, CultureInfo.CurrentCulture));
+            maxDate = new DateOnly(DateHelper.GetLastDateInMonth(maxDate.Date, CultureInfo.CurrentCulture));
      
             do
             {
@@ -259,13 +259,13 @@ namespace Teleopti.Ccc.Domain.Forecasting
                 
                 //Only add whole months
                 if (taskOwnerPeriod.TaskOwnerDayCollection.Count == CultureInfo.CurrentCulture.Calendar.GetDaysInMonth(
-                    CultureInfo.CurrentCulture.Calendar.GetYear(currentDate),
-                    CultureInfo.CurrentCulture.Calendar.GetMonth(currentDate)))
+                    CultureInfo.CurrentCulture.Calendar.GetYear(currentDate.Date),
+                    CultureInfo.CurrentCulture.Calendar.GetMonth(currentDate.Date)))
                 {
                     taskOwnerPeriods.Add(taskOwnerPeriod);
                 }
                 
-                currentDate = new DateOnly(CultureInfo.CurrentCulture.Calendar.AddMonths(currentDate, 1));
+                currentDate = new DateOnly(CultureInfo.CurrentCulture.Calendar.AddMonths(currentDate.Date, 1));
             } while (currentDate <= maxDate);
 
             taskOwnerPeriods.ForEach(wp => wp.Release());
@@ -308,7 +308,7 @@ namespace Teleopti.Ccc.Domain.Forecasting
             IList<DayOfWeek> daysOfWeek = DateHelper.GetDaysOfWeek(CultureInfo.CurrentCulture);
             var currentDate = _taskOwnerDays.Min(tod => tod.CurrentDate);
             var maxDate = _taskOwnerDays.Max(tod => tod.CurrentDate);
-            maxDate = new DateOnly(DateHelper.GetLastDateInMonth(maxDate, CultureInfo.CurrentCulture));
+            maxDate = new DateOnly(DateHelper.GetLastDateInMonth(maxDate.Date, CultureInfo.CurrentCulture));
            
             do
             {
@@ -327,7 +327,7 @@ namespace Teleopti.Ccc.Domain.Forecasting
                     taskOwnerPeriods.Add(taskOwnerPeriod);
                 }
 
-                currentDate = new DateOnly(CultureInfo.CurrentCulture.Calendar.AddWeeks(currentDate, 1));
+                currentDate = new DateOnly(CultureInfo.CurrentCulture.Calendar.AddWeeks(currentDate.Date, 1));
             } while (currentDate <= maxDate);
 
             taskOwnerPeriods.ForEach(wp => wp.Release());
@@ -351,7 +351,7 @@ namespace Teleopti.Ccc.Domain.Forecasting
             IDictionary<int,IList<ITaskOwner>> taskOwnerDictionary = new Dictionary<int, IList<ITaskOwner>>();
             foreach (var taskOwnerDay in _taskOwnerDays)
             {
-                int year = calendar.GetYear(taskOwnerDay.CurrentDate);
+                int year = calendar.GetYear(taskOwnerDay.CurrentDate.Date);
 
                 IList<ITaskOwner> taskOwnerDays;
                 if (!taskOwnerDictionary.TryGetValue(year,out taskOwnerDays))

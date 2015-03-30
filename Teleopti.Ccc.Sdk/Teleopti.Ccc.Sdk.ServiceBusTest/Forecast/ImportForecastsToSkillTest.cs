@@ -83,7 +83,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Forecast
                                       JobId = jobId,
                                       ImportMode = ImportForecastsMode.ImportWorkload,
                                       TargetSkillId = skillId,
-                                      Date = dateTime,
+                                      Date = dateTime.Date,
                                       Forecasts = new[]{row},
                                       Timestamp = DateTime.Now
                                   };

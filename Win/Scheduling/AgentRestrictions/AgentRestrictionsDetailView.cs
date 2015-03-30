@@ -138,7 +138,7 @@ namespace Teleopti.Ccc.Win.Scheduling.AgentRestrictions
 			return Presenter.SchedulerState.Schedules[schedulePart.Person].ScheduledDay(schedulePart.DateOnlyAsPeriod.DateOnly);
 		}
 
-		public override Point GetCellPositionForAgentDay(IEntity person, System.DateTime dayDate)
+		public override Point GetCellPositionForAgentDay(IEntity person, DateOnly dayDate)
 		{
 			Point point = new Point(-1, -1);
 
@@ -148,7 +148,7 @@ namespace Teleopti.Ccc.Win.Scheduling.AgentRestrictions
 				{
 					IScheduleDay schedulePart = ViewGrid.Model[i, j].CellValue as IScheduleDay;
 
-					if (schedulePart != null && schedulePart.Period.Contains(dayDate))
+					if (schedulePart != null && schedulePart.Period.Contains(dayDate.Date))
 					{
 						point = new Point(j, i);
 						break;
@@ -183,7 +183,7 @@ namespace Teleopti.Ccc.Win.Scheduling.AgentRestrictions
 			foreach (IScheduleDay schedulePart in schedules)
 			{
 				personsToReload.Add(schedulePart.Person);
-				Point point = GetCellPositionForAgentDay(schedulePart.Person, schedulePart.Period.StartDateTime);
+				Point point = GetCellPositionForAgentDay(schedulePart.Person, schedulePart.DateOnlyAsPeriod.DateOnly);
 
 				if (point.X != -1 && point.Y != -1)
 				{

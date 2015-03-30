@@ -40,7 +40,7 @@ namespace Teleopti.Ccc.Domain.Optimization.WeeklyRestSolver
             if (pAss.Count == 0)
                 return true;
 
-            DateTime endOfPeriodBefore = TimeZoneHelper.ConvertToUtc(extendedWeek.StartDate, personWeek.Person.PermissionInformation.DefaultTimeZone());
+            DateTime endOfPeriodBefore = TimeZoneHelper.ConvertToUtc(extendedWeek.StartDate.Date, personWeek.Person.PermissionInformation.DefaultTimeZone());
 
             var scheduleDayBefore1 = currentSchedules.ScheduledDay(personWeek.Week.StartDate.AddDays(-1));
             var scheduleDayBefore2 = currentSchedules.ScheduledDay(personWeek.Week.StartDate.AddDays(-2));
@@ -58,7 +58,7 @@ namespace Teleopti.Ccc.Domain.Optimization.WeeklyRestSolver
                     if ((nextStartDateTime - endOfPeriodBefore) >= weeklyRest)
                     {
                         // the majority must be in this week
-                        if (endOfPeriodBefore.Add(TimeSpan.FromMinutes(weeklyRest.TotalMinutes / 2.0)) <= personWeek.Week.EndDate.AddDays(1) && nextStartDateTime.Value.Add(TimeSpan.FromMinutes(-weeklyRest.TotalMinutes / 2.0)) > personWeek.Week.StartDate)
+                        if (endOfPeriodBefore.Date.Add(TimeSpan.FromMinutes(weeklyRest.TotalMinutes / 2.0)) <= personWeek.Week.EndDate.Date.AddDays(1) && nextStartDateTime.Value.Add(TimeSpan.FromMinutes(-weeklyRest.TotalMinutes / 2.0)) > personWeek.Week.StartDate.Date)
                             return true;
                     }
                     var end = _workTimeStartEndExtractor.WorkTimeEnd(proj);
@@ -66,7 +66,7 @@ namespace Teleopti.Ccc.Domain.Optimization.WeeklyRestSolver
                         endOfPeriodBefore = end.Value;
                 }
             }
-            DateTime endOfPeriodAfter = TimeZoneHelper.ConvertToUtc(extendedWeek.EndDate.AddDays(1), personWeek.Person.PermissionInformation.DefaultTimeZone());
+            DateTime endOfPeriodAfter = TimeZoneHelper.ConvertToUtc(extendedWeek.EndDate.AddDays(1).Date, personWeek.Person.PermissionInformation.DefaultTimeZone());
 
 
             var scheduleDayAfter1 = currentSchedules.ScheduledDay(personWeek.Week.EndDate.AddDays(1));

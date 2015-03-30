@@ -97,7 +97,7 @@ namespace Teleopti.Ccc.TestCommon.FakeData
 			ret.SetId(Guid.NewGuid());
 			ret.WorkflowControlSet = new WorkflowControlSet
 				{
-					SchedulePublishedToDate = dateOnly
+					SchedulePublishedToDate = dateOnly.Date
 				};
 			return ret;
 		}

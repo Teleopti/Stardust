@@ -75,7 +75,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.QueryHandler
 			}
 			using (mocks.Playback())
 			{
-				var result = target.Handle(new GetValidatedSchedulePartsForPreferenceQueryDto{DateInPeriod = new DateOnlyDto{DateTime = date},Person = personDto,TimeZoneId = "W. Europe Standard Time"});
+				var result = target.Handle(new GetValidatedSchedulePartsForPreferenceQueryDto{DateInPeriod = new DateOnlyDto{DateTime = date.Date},Person = personDto,TimeZoneId = "W. Europe Standard Time"});
 				result.Count.Should().Be.EqualTo(16);
 			}
 		}
@@ -112,7 +112,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.QueryHandler
 				var result =
 					target.Handle(new GetValidatedSchedulePartsForPreferenceQueryDto
 					{
-						DateInPeriod = new DateOnlyDto { DateTime = date },
+						DateInPeriod = new DateOnlyDto { DateTime = date.Date },
 						Person = personDto,
 						TimeZoneId = "W. Europe Standard Time"
 					});

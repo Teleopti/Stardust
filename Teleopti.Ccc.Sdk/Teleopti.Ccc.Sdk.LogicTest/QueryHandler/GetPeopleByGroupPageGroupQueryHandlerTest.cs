@@ -53,7 +53,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.QueryHandler
 			}
 			using (mocks.Playback())
 			{
-				var result = target.Handle(new GetPeopleByGroupPageGroupQueryDto{ GroupPageGroupId = groupPageGroupId, QueryDate = new DateOnlyDto { DateTime = dateOnly } });
+				var result = target.Handle(new GetPeopleByGroupPageGroupQueryDto{ GroupPageGroupId = groupPageGroupId, QueryDate = new DateOnlyDto { DateTime = dateOnly.Date } });
 				result.Count.Should().Be.EqualTo(1);
 			}
 		}

@@ -65,8 +65,8 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ScheduleChangedEventHandlers.
 				{
 					PersonId = _personId,
 					SkillId = _skill.Id.GetValueOrDefault(),
-					StartDate = _date,
-					EndDate = _date,
+					StartDate = _date.Date,
+					EndDate = _date.Date,
 					SkillActive = true,
 					Proficiency = 0.9d,
 					SkillsBefore = new PersonSkillDetail[] {}
@@ -101,8 +101,8 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ScheduleChangedEventHandlers.
 			{
 				PersonId = _personId,
 				SkillId = newSkillId,
-				StartDate = _date,
-				EndDate = _date,
+				StartDate = _date.Date,
+				EndDate = _date.Date,
 				SkillActive = true,
 				Proficiency = 0.8d,
 				SkillsBefore = new[] { new PersonSkillDetail { Active = true, Proficiency = 0.9, SkillId = _skill.Id.GetValueOrDefault() } }

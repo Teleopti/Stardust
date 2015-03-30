@@ -3,8 +3,6 @@ using System.Linq;
 using NUnit.Framework;
 using Rhino.Mocks;
 using SharpTestsEx;
-using Teleopti.Ccc.Domain.Common.Time;
-using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.Forecasting.Angel;
 using Teleopti.Ccc.Domain.Forecasting.Angel.Accuracy;
 using Teleopti.Ccc.Domain.Repositories;
@@ -58,8 +56,8 @@ namespace Teleopti.Ccc.WebTest.Areas.Forecasting.Controllers
 			var workloads = new[] {Guid.NewGuid() };
 			var result = target.Forecast(new QuickForecastInputModel
 			{
-				ForecastStart = expectedFuturePeriod.StartDate,
-				ForecastEnd = expectedFuturePeriod.EndDate,
+				ForecastStart = expectedFuturePeriod.StartDate.Date,
+				ForecastEnd = expectedFuturePeriod.EndDate.Date,
 				Workloads = workloads
 			});
 			result.Result.Should().Be.True();

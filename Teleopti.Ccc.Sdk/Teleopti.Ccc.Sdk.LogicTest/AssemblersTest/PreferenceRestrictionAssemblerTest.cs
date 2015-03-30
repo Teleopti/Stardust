@@ -99,7 +99,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.AssemblersTest
                                                       {
                                                          Activity  = new ActivityDto{Description = _activity.Description.Name,PayrollCode = _activity.PayrollCode, Id = _activity.Id}
                                                       });
-			dto.RestrictionDate = new DateOnlyDto { DateTime = _date };
+			dto.RestrictionDate = new DateOnlyDto { DateTime = _date.Date };
             dto.Person = new PersonDto{Id = _person.Id,Name = _person.Name.ToString()};
             dto.MustHave = _mustHave;
             dto.TemplateName = _templateName;

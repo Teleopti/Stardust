@@ -22,7 +22,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Controllers
 			expected.SetId(Guid.NewGuid());
 			var date = DateOnly.Today;
 			skillRepository.Stub(x => x.FindAllWithSkillDays(new DateOnlyPeriod(date, date))).Return(new[] {expected});
-			dynamic result = target.AvailableSkills(date).Data;
+			dynamic result = target.AvailableSkills(date.Date).Data;
 			dynamic skill = result.Skills[0];
 			((object)skill.Id).Should().Be.EqualTo(expected.Id);
 			((object)skill.Name).Should().Be.EqualTo(expected.Name);

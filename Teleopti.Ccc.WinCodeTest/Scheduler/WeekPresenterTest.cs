@@ -10,7 +10,6 @@ using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
 using Teleopti.Ccc.Domain.Scheduling.Rules;
 using Teleopti.Ccc.Domain.Scheduling.ScheduleTagging;
 using Teleopti.Ccc.Domain.Security.Principal;
-using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.WinCode.Common.Clipboard;
 using Teleopti.Ccc.WinCode.Scheduling;
 using Teleopti.Interfaces.Domain;
@@ -63,8 +62,8 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 
             mocks.ReplayAll();
             var result = WeekPresenter.CreateSpanDictionaryFromSchedule(schedulePart);
-            Assert.AreEqual(11, (int)result[TimeZoneHelper.ConvertFromUtc(_date, timeZoneInfo).Date].ElapsedTime().TotalHours);
-            Assert.AreEqual(TimeSpan.FromHours(7), result[TimeZoneHelper.ConvertFromUtc(_date, timeZoneInfo).Date].StartDateTimeLocal(timeZoneInfo).TimeOfDay);
+            Assert.AreEqual(11, (int)result[new DateOnly(_date)].ElapsedTime().TotalHours);
+            Assert.AreEqual(TimeSpan.FromHours(7), result[new DateOnly(_date)].StartDateTimeLocal(timeZoneInfo).TimeOfDay);
             mocks.VerifyAll();
         }
 
@@ -79,8 +78,8 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
      
             mocks.ReplayAll();
             var result = WeekPresenter.CreateSpanDictionaryFromSchedule(schedulePart);
-            Assert.AreEqual(17, (int)result[TimeZoneHelper.ConvertFromUtc(_date, timeZoneInfo).Date].ElapsedTime().TotalHours);
-            Assert.AreEqual(TimeSpan.FromHours(18), result[TimeZoneHelper.ConvertFromUtc(_date, timeZoneInfo).Date].StartDateTimeLocal(timeZoneInfo).TimeOfDay);
+            Assert.AreEqual(17, (int)result[new DateOnly(_date)].ElapsedTime().TotalHours);
+            Assert.AreEqual(TimeSpan.FromHours(18), result[new DateOnly(_date)].StartDateTimeLocal(timeZoneInfo).TimeOfDay);
             mocks.VerifyAll();
         }
 
@@ -105,8 +104,8 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
             
             mocks.ReplayAll();
             var result = WeekPresenter.CreateSpanDictionaryFromSchedule(schedulePart);
-            Assert.AreEqual(7, (int)result[TimeZoneHelper.ConvertFromUtc(_date, timeZoneInfo).Date].ElapsedTime().TotalHours); //Only first is picked!
-            Assert.AreEqual(TimeSpan.FromHours(18), result[TimeZoneHelper.ConvertFromUtc(_date, timeZoneInfo).Date].StartDateTimeLocal(timeZoneInfo).TimeOfDay);
+            Assert.AreEqual(7, (int)result[new DateOnly(_date)].ElapsedTime().TotalHours); //Only first is picked!
+            Assert.AreEqual(TimeSpan.FromHours(18), result[new DateOnly(_date)].StartDateTimeLocal(timeZoneInfo).TimeOfDay);
             mocks.VerifyAll();
         }
 
@@ -125,8 +124,8 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
             
             mocks.ReplayAll();
             var result = WeekPresenter.CreateSpanDictionaryFromSchedule(schedulePart);
-            Assert.AreEqual(7, (int)result[TimeZoneHelper.ConvertFromUtc(_date, timeZoneInfo).Date].ElapsedTime().TotalHours);
-            Assert.AreEqual(TimeSpan.FromHours(18), result[TimeZoneHelper.ConvertFromUtc(_date, timeZoneInfo).Date].StartDateTimeLocal(timeZoneInfo).TimeOfDay);
+            Assert.AreEqual(7, (int)result[new DateOnly(_date)].ElapsedTime().TotalHours);
+            Assert.AreEqual(TimeSpan.FromHours(18), result[new DateOnly(_date)].StartDateTimeLocal(timeZoneInfo).TimeOfDay);
             mocks.VerifyAll();
         }
 

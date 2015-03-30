@@ -264,7 +264,7 @@ namespace Teleopti.Ccc.DomainTest.WorkflowControl
             var date = new DateOnly(2010, 02, 01);
             
        
-            _skillDay = SkillDayFactory.CreateSkillDay(_skill, requestedDateTimePeriod.StartDateTime);
+            _skillDay = SkillDayFactory.CreateSkillDay(_skill, new DateOnly(requestedDateTimePeriod.StartDateTime));
 
             ISkillStaffPeriod skillStaffPeriod = SkillStaffPeriodFactory.CreateSkillStaffPeriod(
                 requestedDateTimePeriod, new Task(0, TimeSpan.FromSeconds(0), TimeSpan.FromSeconds(0)),
@@ -307,7 +307,7 @@ namespace Teleopti.Ccc.DomainTest.WorkflowControl
                                  ActivityFactory.CreateActivity("Phone"), _person);
 
        
-            _skillDay = SkillDayFactory.CreateSkillDay(_skill, requestedDateTimePeriod.StartDateTime);
+            _skillDay = SkillDayFactory.CreateSkillDay(_skill, new DateOnly(requestedDateTimePeriod.StartDateTime));
 
             ISkillStaffPeriod skillStaffPeriod1 = SkillStaffPeriodFactory.CreateSkillStaffPeriod(
                 requestedDateTimePeriod, new Task(0, TimeSpan.FromSeconds(0), TimeSpan.FromSeconds(0)),
@@ -348,7 +348,7 @@ namespace Teleopti.Ccc.DomainTest.WorkflowControl
             var requestedDateTimePeriod1 = DateTimeFactory.CreateDateTimePeriod(new DateTime(2010, 02, 01, 0, 0, 0, DateTimeKind.Utc), 1);
             var requestedDateTimePeriod2 = DateTimeFactory.CreateDateTimePeriod(new DateTime(2010, 02, 02, 0, 0, 0, DateTimeKind.Utc), 1);
 
-			var skillDay1 = SkillDayFactory.CreateSkillDay(_skill, requestedDateTimePeriod1.StartDateTime);
+			var skillDay1 = SkillDayFactory.CreateSkillDay(_skill, new DateOnly(requestedDateTimePeriod1.StartDateTime));
 
 			var skillStaffPeriod1 = SkillStaffPeriodFactory.CreateSkillStaffPeriod(
 				requestedDateTimePeriod1, new Task(200, TimeSpan.FromSeconds(120), TimeSpan.FromSeconds(140)),
@@ -359,7 +359,7 @@ namespace Teleopti.Ccc.DomainTest.WorkflowControl
 			skillDay1.SetCalculatedStaffCollection(updatedValues1);
             updatedValues1.BatchCompleted();
 
-			var skillDay2 = SkillDayFactory.CreateSkillDay(_skill, requestedDateTimePeriod2.StartDateTime);
+			var skillDay2 = SkillDayFactory.CreateSkillDay(_skill, new DateOnly(requestedDateTimePeriod2.StartDateTime));
 			var skillStaffPeriod2 = SkillStaffPeriodFactory.CreateSkillStaffPeriod(
 				requestedDateTimePeriod2, new Task(0, TimeSpan.FromSeconds(0), TimeSpan.FromSeconds(0)),
 				ServiceAgreement.DefaultValues());
@@ -399,7 +399,7 @@ namespace Teleopti.Ccc.DomainTest.WorkflowControl
 			_skill = SkillFactory.CreateSkill("TunaFish", SkillTypeFactory.CreateSkillType(), 15);
 			_skill.StaffingThresholds = new StaffingThresholds(new Percent(-0.2), new Percent(-0.1), new Percent(), new Percent(0.4));
      
-			var skillDay1 = SkillDayFactory.CreateSkillDay(_skill, requestedDateTimePeriod1.StartDateTime);
+			var skillDay1 = SkillDayFactory.CreateSkillDay(_skill, new DateOnly(requestedDateTimePeriod1.StartDateTime));
 
 			var skillStaffPeriod1 = SkillStaffPeriodFactory.CreateSkillStaffPeriod(
 				requestedDateTimePeriod1, new Task(200, TimeSpan.FromSeconds(120), TimeSpan.FromSeconds(140)),
@@ -410,7 +410,7 @@ namespace Teleopti.Ccc.DomainTest.WorkflowControl
 			skillDay1.SetCalculatedStaffCollection(updatedValues1);
             updatedValues1.BatchCompleted();
 
-			var skillDay2 = SkillDayFactory.CreateSkillDay(_skill, requestedDateTimePeriod2.StartDateTime);
+			var skillDay2 = SkillDayFactory.CreateSkillDay(_skill, new DateOnly(requestedDateTimePeriod2.StartDateTime));
 			var skillStaffPeriod2 = SkillStaffPeriodFactory.CreateSkillStaffPeriod(
 				requestedDateTimePeriod2, new Task(0, TimeSpan.FromSeconds(0), TimeSpan.FromSeconds(0)),
 				ServiceAgreement.DefaultValues());
@@ -443,7 +443,7 @@ namespace Teleopti.Ccc.DomainTest.WorkflowControl
             _skill = SkillFactory.CreateSkill("TunaFish", SkillTypeFactory.CreateSkillType(), 15);
             _skill.StaffingThresholds = new StaffingThresholds(new Percent(-0.2), new Percent(-0.1), new Percent(), new Percent(0.4));
 
-            var skillDay1 = SkillDayFactory.CreateSkillDay(_skill, requestedDateTimePeriod1.StartDateTime);
+            var skillDay1 = SkillDayFactory.CreateSkillDay(_skill, new DateOnly(requestedDateTimePeriod1.StartDateTime));
 
             var skillStaffPeriod1 = SkillStaffPeriodFactory.CreateSkillStaffPeriod(
                 requestedDateTimePeriod1, new Task(200, TimeSpan.FromSeconds(120), TimeSpan.FromSeconds(140)),
@@ -467,7 +467,7 @@ namespace Teleopti.Ccc.DomainTest.WorkflowControl
 
         private void createSkillDay(DateTimePeriod period)
         {
-            _skillDay = SkillDayFactory.CreateSkillDay(_skill, period.StartDateTime);
+            _skillDay = SkillDayFactory.CreateSkillDay(_skill, new DateOnly(period.StartDateTime));
 
             ISkillStaffPeriod skillStaffPeriod = SkillStaffPeriodFactory.CreateSkillStaffPeriod(
                 period, new Task(200, TimeSpan.FromSeconds(120), TimeSpan.FromSeconds(140)),
@@ -511,7 +511,7 @@ namespace Teleopti.Ccc.DomainTest.WorkflowControl
             IAbsence absence = AbsenceFactory.CreateAbsence("Holiday");
             var absenceRequest = GetAbsenceRequest(absence, requestedDateTimePeriod);
 
-            _skillDay = SkillDayFactory.CreateSkillDay(_skill, requestedDateTimePeriod.StartDateTime);
+            _skillDay = SkillDayFactory.CreateSkillDay(_skill, date);
 
             ISkillStaffPeriod skillStaffPeriod = SkillStaffPeriodFactory.CreateSkillStaffPeriod(
                 requestedDateTimePeriod, new Task(0, TimeSpan.FromSeconds(0), TimeSpan.FromSeconds(0)),

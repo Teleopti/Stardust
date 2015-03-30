@@ -56,7 +56,7 @@ namespace Teleopti.Ccc.WinCode.Meetings
             var dateTime = TimeZoneHelper.ConvertFromUtc(pixelConverter.DateTimeFromPosition(mouseCellPosition, _rightToLeft));
             if (dateTime.Date > _meetingViewModel.StartDate.Date)
             {
-                dateTime = _meetingViewModel.StartDate.AddDays(1);
+                dateTime = _meetingViewModel.StartDate.Date.AddDays(1);
                 dateTime = dateTime.Subtract(TimeSpan.FromMinutes(_snapToMinutes));
             }
 

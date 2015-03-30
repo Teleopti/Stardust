@@ -5,7 +5,6 @@ using System.Linq;
 using NUnit.Framework;
 using Rhino.Mocks;
 using Teleopti.Ccc.Domain.Forecasting;
-using Teleopti.Ccc.Domain.Time;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Interfaces.Domain;
@@ -433,7 +432,7 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
         public void CanApplyTemplate()
         {
             DateOnly createDate = new DateOnly(2008, 01, 14);
-            var createLocalDate = TimeZoneInfo.ConvertTimeFromUtc(createDate, _workload.Skill.TimeZone);
+            var createLocalDate = TimeZoneInfo.ConvertTimeFromUtc(createDate.Date, _workload.Skill.TimeZone);
             string templateName = "JULDAGEN";
             IWorkloadDayTemplate workloadDayTemplate = new WorkloadDayTemplate();
 
@@ -686,7 +685,7 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
 
             _openHours = new List<TimePeriod> { new TimePeriod(7, 0, 18, 0) };
             IWorkloadDayTemplate workloadDayTemplate = new WorkloadDayTemplate();
-            workloadDayTemplate.Create(templateName, DateTime.SpecifyKind(createDate, DateTimeKind.Utc), _workload, _openHours);
+            workloadDayTemplate.Create(templateName, DateTime.SpecifyKind(createDate.Date, DateTimeKind.Utc), _workload, _openHours);
             workloadDayTemplate.Tasks = 440;
             workloadDayTemplate.AverageTaskTime = TimeSpan.FromSeconds(120);
             workloadDayTemplate.SetId(Guid.NewGuid());
@@ -763,7 +762,7 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
 
             IList<TimePeriod> openHours = new List<TimePeriod>();
             openHours.Add(new TimePeriod(new TimeSpan(7, 0, 0), new TimeSpan(11, 0, 0)));
-            workloadDayTemplate.Create(templateName, DateTime.SpecifyKind(createDate, DateTimeKind.Utc), _workload, openHours);
+            workloadDayTemplate.Create(templateName, DateTime.SpecifyKind(createDate.Date, DateTimeKind.Utc), _workload, openHours);
             foreach (ITemplateTaskPeriod taskPeriod in workloadDayTemplate.SortedTaskPeriodList)
             {
                 taskPeriod.AverageTaskTime = new TimeSpan(0, 1, 0);
@@ -792,7 +791,7 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
 
             IList<TimePeriod> openHours = new List<TimePeriod>();
             openHours.Add(new TimePeriod(new TimeSpan(7, 0, 0), new TimeSpan(11, 0, 0)));
-            workloadDayTemplate.Create(templateName, DateTime.SpecifyKind(createDate, DateTimeKind.Utc), _workload, openHours);
+            workloadDayTemplate.Create(templateName, DateTime.SpecifyKind(createDate.Date, DateTimeKind.Utc), _workload, openHours);
             foreach (ITemplateTaskPeriod taskPeriod in workloadDayTemplate.TaskPeriodList)
             {
                 taskPeriod.AverageAfterTaskTime = new TimeSpan(0, 1, 0);
@@ -821,7 +820,7 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
 
             IList<TimePeriod> openHours = new List<TimePeriod>();
             openHours.Add(new TimePeriod(new TimeSpan(7, 0, 0), new TimeSpan(11, 0, 0)));
-            workloadDayTemplate.Create(templateName, DateTime.SpecifyKind(createDate, DateTimeKind.Utc), _workload, openHours);
+            workloadDayTemplate.Create(templateName, DateTime.SpecifyKind(createDate.Date, DateTimeKind.Utc), _workload, openHours);
             foreach (ITemplateTaskPeriod taskPeriod in workloadDayTemplate.TaskPeriodList)
             {
                 taskPeriod.AverageAfterTaskTime = new TimeSpan(0, 0, 0);
@@ -847,7 +846,7 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
         {
             _skill.TimeZone = (TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time"));
             IWorkloadDayTemplate template1 = new WorkloadDayTemplate();
-            template1.Create("Template1", DateTime.SpecifyKind(_dt, DateTimeKind.Utc), _workload, new List<TimePeriod>());
+            template1.Create("Template1", DateTime.SpecifyKind(_dt.Date, DateTimeKind.Utc), _workload, new List<TimePeriod>());
             _workloadDay.ApplyTemplate(template1, day => day.Lock(), day => day.Release());
 
             //Assert.IsTrue(_workloadDay.IsClosed);
@@ -1007,7 +1006,7 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
             var createDate = new DateOnly(2008, 01, 14);
 
             IWorkloadDayTemplate workloadDayTemplate = new WorkloadDayTemplate();
-            workloadDayTemplate.Create("Kalle", DateTime.SpecifyKind(createDate, DateTimeKind.Utc), _workload, openHours);
+            workloadDayTemplate.Create("Kalle", DateTime.SpecifyKind(createDate.Date, DateTimeKind.Utc), _workload, openHours);
             _workloadDay.CreateFromTemplate(createDate, _workload, workloadDayTemplate);
 
             Assert.AreEqual(24, _workloadDay.TaskPeriodList.Count);
@@ -1150,7 +1149,7 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
                 openHours.Add(new TimePeriod(new TimeSpan(12, 0, 0), new TimeSpan(1, 2, 0, 0)));
                 openHours.Add(new TimePeriod(new TimeSpan(6, 0, 0), new TimeSpan(9, 0, 0)));
             }
-            workloadDayTemplate.Create(templateName, DateTime.SpecifyKind(createDate, DateTimeKind.Utc), _workload, openHours);
+            workloadDayTemplate.Create(templateName, DateTime.SpecifyKind(createDate.Date, DateTimeKind.Utc), _workload, openHours);
             workloadDayTemplate.SetId(Guid.NewGuid());
             if (!_workload.TemplateWeekCollection.Values.Contains(workloadDayTemplate)) _workload.AddTemplate(workloadDayTemplate);
 

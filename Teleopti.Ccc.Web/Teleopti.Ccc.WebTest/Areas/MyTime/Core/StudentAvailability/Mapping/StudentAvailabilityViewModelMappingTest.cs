@@ -41,8 +41,8 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.StudentAvailability.Mapping
 
 			date = DateOnly.Today;
 			period = new DateOnlyPeriod(date.AddDays(-7), date.AddDays(7).AddDays(-1));
-			firstDisplayedDate = new DateOnly(DateHelper.GetFirstDateInWeek(period.StartDate, CultureInfo.CurrentCulture).AddDays(-7));
-			lastDisplayedDate = new DateOnly(DateHelper.GetLastDateInWeek(period.EndDate, CultureInfo.CurrentCulture).AddDays(7));
+			firstDisplayedDate = DateHelper.GetFirstDateInWeek(period.StartDate, CultureInfo.CurrentCulture.DateTimeFormat.FirstDayOfWeek).AddDays(-7);
+			lastDisplayedDate = DateHelper.GetFirstDateInWeek(period.EndDate, CultureInfo.CurrentCulture.DateTimeFormat.FirstDayOfWeek).AddDays(6).AddDays(7);
 			displayedPeriod = new DateOnlyPeriod(firstDisplayedDate, lastDisplayedDate);
 
 			var virtualSchedulePeriodProvider = MockRepository.GenerateMock<IVirtualSchedulePeriodProvider>();
@@ -112,13 +112,13 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.StudentAvailability.Mapping
 		}
 
 		[Test]
-		public void ShouldFillPeriodSelectaleDateRange()
+		public void ShouldFillPeriodSelectableDateRange()
 		{
 			var sa = Mapper.Map<DateOnly, StudentAvailabilityDomainData>(date);
 			var result = Mapper.Map<StudentAvailabilityDomainData, PeriodSelectionViewModel>(sa);
 
-			result.SelectableDateRange.MinDate.Should().Be.EqualTo(new DateOnly(CultureInfo.CurrentCulture.Calendar.MinSupportedDateTime).ToFixedClientDateOnlyFormat());
-			result.SelectableDateRange.MaxDate.Should().Be.EqualTo(new DateOnly(CultureInfo.CurrentCulture.Calendar.MaxSupportedDateTime).ToFixedClientDateOnlyFormat());
+			result.SelectableDateRange.MinDate.Should().Be.EqualTo(DateOnly.MinValue.ToFixedClientDateOnlyFormat());
+			result.SelectableDateRange.MaxDate.Should().Be.EqualTo(DateOnly.MaxValue.ToFixedClientDateOnlyFormat());
 		}
 
 		[Test]
@@ -147,7 +147,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.StudentAvailability.Mapping
 
 			// get number of weeks for period. Why cant working with weeks ever be easy...
 			var firstDateNotShown = lastDisplayedDate.AddDays(1);
-			var shownTime = firstDateNotShown.Date.Subtract(firstDisplayedDate);
+			var shownTime = firstDateNotShown.Subtract(firstDisplayedDate);
 			var shownDays = shownTime.Days;
 			var shownWeeks = shownDays/7;
 
@@ -211,7 +211,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.StudentAvailability.Mapping
 		[Test]
 		public void ShouldFillDayViewHeaderWithMonthNameForFirstDayOfDisplayedPeriod()
 		{
-			var firstDisplayedDateOnly = new DateOnly(firstDisplayedDate);
+			var firstDisplayedDateOnly = firstDisplayedDate;
 			var input = new StudentAvailabilityDayDomainData(firstDisplayedDateOnly, period, null, studentAvailabilityProvider, null);
 			var result = Mapper.Map<StudentAvailabilityDayDomainData, DayViewModelBase>(input);
 

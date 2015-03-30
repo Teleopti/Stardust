@@ -524,12 +524,12 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 			if(PeriodType == SchedulePeriodType.ChineseMonth)
 			{
 				int daysOff = getDaysOffForChineseMonth(startDate);
-				return (int)endDate.Date.Subtract(startDate).TotalDays + 1 - daysOff;
+				return (int)endDate.Subtract(startDate).TotalDays + 1 - daysOff;
 			}
 
 			if (_daysOff.HasValue) // if days off are overriden
 			{
-				return (int)endDate.Date.Subtract(startDate).TotalDays + 1 - _daysOff.Value;
+				return (int)endDate.Subtract(startDate).TotalDays + 1 - _daysOff.Value;
 			}
 
 			while (startDate <= endDate)

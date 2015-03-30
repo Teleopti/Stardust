@@ -173,7 +173,7 @@ namespace Teleopti.Ccc.Domain.Forecasting
 		/// <value>The updated date.</value>
 		public virtual DateTime UpdatedDate
 		{
-			get { return _updatedDate = _updatedDate == new DateTime() ? SkillDayTemplate.BaseDate : _updatedDate; }
+			get { return _updatedDate = _updatedDate == new DateTime() ? SkillDayTemplate.BaseDate.Date : _updatedDate; }
 			protected set { _updatedDate = value; }
 		}
 

@@ -55,8 +55,8 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
         {
 	        _dateOnlyPeriodDto = new DateOnlyPeriodDto
 	        {
-		        StartDate = new DateOnlyDto {DateTime = DateOnly.Today},
-		        EndDate = new DateOnlyDto {DateTime = DateOnly.Today}
+		        StartDate = new DateOnlyDto {DateTime = DateTime.Today},
+		        EndDate = new DateOnlyDto {DateTime = DateTime.Today}
 	        };
             _personSkillPeriodAssembler =  MockRepository.GenerateMock<IAssembler<IPersonPeriod,PersonSkillPeriodDto>>();
             _unitOfWorkFactory = MockRepository.GenerateMock<IUnitOfWorkFactory>();
@@ -87,8 +87,8 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
 
             _personSkillPeriodDto = new PersonSkillPeriodDto
             {
-                DateFrom = new DateOnlyDto{DateTime = DateOnly.Today},
-				DateTo = new DateOnlyDto { DateTime = DateOnly.Today },
+                DateFrom = new DateOnlyDto{DateTime = DateTime.Today},
+				DateTo = new DateOnlyDto { DateTime = DateTime.Today },
                 Id = Guid.NewGuid(),
                 PersonId = _person.Id.GetValueOrDefault()
             };

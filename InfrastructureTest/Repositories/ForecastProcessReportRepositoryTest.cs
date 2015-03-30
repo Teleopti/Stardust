@@ -6,7 +6,6 @@ using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.Forecasting.Template;
 using Teleopti.Ccc.Domain.Scheduling;
-using Teleopti.Ccc.Domain.Time;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.InfrastructureTest.Helper;
 using Teleopti.Ccc.TestCommon.FakeData;
@@ -68,19 +67,19 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 
         private void CreateWorkloadDayTemplate(DateOnly dateTime)
         {
-            WorkloadDayTemplate templateLongTerm = new WorkloadDayTemplate();
+            var templateLongTerm = new WorkloadDayTemplate();
             IList<TimePeriod> openHours = new List<TimePeriod>();
-            TimePeriod timePeriod = new TimePeriod("12-17");
+            var timePeriod = new TimePeriod("12-17");
             openHours.Add(timePeriod);
-            templateLongTerm.Create(TemplateReference.LongtermTemplateKey, DateTime.SpecifyKind(dateTime,DateTimeKind.Utc), workload, openHours);
+            templateLongTerm.Create(TemplateReference.LongtermTemplateKey, DateTime.SpecifyKind(dateTime.Date,DateTimeKind.Utc), workload, openHours);
 
-            workloadDaysLongTerm = WorkloadDayFactory.GetWorkloadDaysForTest(dateTime, dateTime, workload);
+            workloadDaysLongTerm = WorkloadDayFactory.GetWorkloadDaysForTest(dateTime.Date, dateTime.Date, workload);
 
-            SkillPersonData skillPersonData = new SkillPersonData(0, 0);
+            var skillPersonData = new SkillPersonData(0, 0);
             ISkillDataPeriod skillDataPeriod = new SkillDataPeriod(ServiceAgreement.DefaultValues(), skillPersonData,
                                                                    TimeZoneHelper.NewUtcDateTimePeriodFromLocalDateTime(
-                                                                       _period.StartDate,
-                                                                       _period.EndDate));
+                                                                       _period.StartDate.Date,
+                                                                       _period.EndDate.Date));
 
             workloadDaysLongTerm[0].CreateFromTemplate(dateTime, workload, templateLongTerm);
 

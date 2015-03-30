@@ -332,11 +332,11 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
             Expect.Call(_publicNoteRepository.Find(_longDateOnlyPeriod, peopleInOrganization, _scenario))
                 .Return(_publicNotes);
             Expect.Call(_agentDayScheduleTagRepository.Find(_longDateOnlyPeriod, peopleInOrganization, _scenario)).Return(_agentDayScheduleTags);
-            Expect.Call(_rotationRep.LoadPersonRotationsWithHierarchyData(null, DateTime.MinValue))
-                .Constraints(Rhino.Mocks.Constraints.List.ContainsAll(visiblePeople), Rhino.Mocks.Constraints.Is.Equal(_schedPeriod.VisiblePeriod.StartDateTime))
+			Expect.Call(_rotationRep.LoadPersonRotationsWithHierarchyData(null, DateOnly.MinValue))
+				.Constraints(Rhino.Mocks.Constraints.List.ContainsAll(visiblePeople), Rhino.Mocks.Constraints.Is.Equal(_longDateOnlyPeriod.StartDate))
                 .Return(_rotations);
-            Expect.Call(_availabilityRep.LoadPersonAvailabilityWithHierarchyData(null, DateTime.MinValue))
-                .Constraints(Rhino.Mocks.Constraints.List.ContainsAll(visiblePeople), Rhino.Mocks.Constraints.Is.Equal(_schedPeriod.VisiblePeriod.StartDateTime))
+			Expect.Call(_availabilityRep.LoadPersonAvailabilityWithHierarchyData(null, DateOnly.MinValue))
+				.Constraints(Rhino.Mocks.Constraints.List.ContainsAll(visiblePeople), Rhino.Mocks.Constraints.Is.Equal(_longDateOnlyPeriod.StartDate))
                 .Return(_availabilities);
 						Expect.Call(_prefDayRep.Find(_longDateOnlyPeriod, visiblePeople)).Return(_prefDays);
             Expect.Call(_availabilityDayRep.Find(_longDateOnlyPeriod, visiblePeople)).Return(_studentAvailabilityDays);
@@ -416,11 +416,11 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
             Expect.Call(_publicNoteRepository.Find(_searchPeriod, visiblePeople, _scenario))
                 .Return(_publicNotes);
 						Expect.Call(_agentDayScheduleTagRepository.Find(_searchPeriod, visiblePeople, _scenario)).Return(_agentDayScheduleTags);
-            Expect.Call(_rotationRep.LoadPersonRotationsWithHierarchyData(null, DateTime.MinValue))
-                .Constraints(Rhino.Mocks.Constraints.List.ContainsAll(visiblePeople), Rhino.Mocks.Constraints.Is.Equal(longPeriod.StartDateTime))
+            Expect.Call(_rotationRep.LoadPersonRotationsWithHierarchyData(null, DateOnly.MinValue))
+				.Constraints(Rhino.Mocks.Constraints.List.ContainsAll(visiblePeople), Rhino.Mocks.Constraints.Is.Equal(_searchPeriod.StartDate))
                 .Return(_rotations);
-            Expect.Call(_availabilityRep.LoadPersonAvailabilityWithHierarchyData(null, DateTime.MinValue))
-                .Constraints(Rhino.Mocks.Constraints.List.ContainsAll(visiblePeople), Rhino.Mocks.Constraints.Is.Equal(longPeriod.StartDateTime))
+            Expect.Call(_availabilityRep.LoadPersonAvailabilityWithHierarchyData(null, DateOnly.MinValue))
+                .Constraints(Rhino.Mocks.Constraints.List.ContainsAll(visiblePeople), Rhino.Mocks.Constraints.Is.Equal(_searchPeriod.StartDate))
                 .Return(_availabilities);
 						Expect.Call(_prefDayRep.Find(_searchPeriod, visiblePeople)).Return(_prefDays);
 						Expect.Call(_availabilityDayRep.Find(_searchPeriod, visiblePeople)).Return(_studentAvailabilityDays);
@@ -471,9 +471,6 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
             
             IPersonAvailability availability = new PersonAvailability(person, rotationBase, availabilityStartDate);
             _availabilities.Add(availability);
-
-            //IOvertimeAvailability overtimeAvailability = new OvertimeAvailability(person, availabilityStartDate, TimeSpan.FromHours(8), TimeSpan.FromHours(10));
-            //_availabilities.Add(overtimeAvailability );
         }
 
         [Test]
@@ -514,11 +511,9 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
                 .Return(_assignments);
             Expect.Call(_meetingRepository.Find(_longPeriod, _scenario))
                 .Return(_meetings);
-            Expect.Call(_rotationRep.LoadPersonRotationsWithHierarchyData(null, DateTime.MinValue))
-                .Constraints(Rhino.Mocks.Constraints.List.ContainsAll(visiblePeople), Rhino.Mocks.Constraints.Is.Equal(_schedPeriod.VisiblePeriod.StartDateTime))
+            Expect.Call(_rotationRep.LoadPersonRotationsWithHierarchyData(visiblePeople, _longDateOnlyPeriod.StartDate))
                 .Return(_rotations);
-            Expect.Call(_availabilityRep.LoadPersonAvailabilityWithHierarchyData(null, DateTime.MinValue))
-                .Constraints(Rhino.Mocks.Constraints.List.ContainsAll(visiblePeople), Rhino.Mocks.Constraints.Is.Equal(_schedPeriod.VisiblePeriod.StartDateTime))
+			Expect.Call(_availabilityRep.LoadPersonAvailabilityWithHierarchyData(visiblePeople, _longDateOnlyPeriod.StartDate))
                 .Return(_availabilities);
             Expect.Call(_notesRepository.Find(_longPeriod, _scenario))
                 .Return(_notes);

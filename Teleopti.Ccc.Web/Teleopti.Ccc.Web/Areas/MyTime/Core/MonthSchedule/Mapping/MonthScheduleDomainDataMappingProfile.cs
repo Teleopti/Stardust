@@ -23,9 +23,9 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.MonthSchedule.Mapping
                 .ForMember(d => d.CurrentDate, c => c.MapFrom(s => s))
                 .ForMember(d=>d.Days, c => c.ResolveUsing(s =>
                     {
-                        var firstDate = DateHelper.GetFirstDateInMonth(s, CultureInfo.CurrentCulture);
+                        var firstDate = DateHelper.GetFirstDateInMonth(s.Date, CultureInfo.CurrentCulture);
                         firstDate = DateHelper.GetFirstDateInWeek(firstDate, CultureInfo.CurrentCulture);
-                        var lastDate = DateHelper.GetLastDateInMonth(s, CultureInfo.CurrentCulture);
+                        var lastDate = DateHelper.GetLastDateInMonth(s.Date, CultureInfo.CurrentCulture);
                         lastDate = DateHelper.GetLastDateInWeek(lastDate, CultureInfo.CurrentCulture);
                         var period = new DateOnlyPeriod(new DateOnly(firstDate), new DateOnly(lastDate) );
                         return _scheduleProvider.GetScheduleForPeriod(period).Select(r => new MonthScheduleDayDomainData{ScheduleDay = r});

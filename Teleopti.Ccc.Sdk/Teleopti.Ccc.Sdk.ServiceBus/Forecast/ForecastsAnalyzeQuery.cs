@@ -55,8 +55,8 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Forecast
 
                 var day = new DateOnly(forecastsRow.LocalDateTimeFrom.Subtract(skill.MidnightBreakOffset));
                 workloadDayOpenHours.AddOpenHour(day,
-                                         new TimePeriod(forecastsRow.LocalDateTimeFrom.Subtract(day),
-                                                        forecastsRow.LocalDateTimeTo.Subtract(day)));
+                                         new TimePeriod(forecastsRow.LocalDateTimeFrom.Subtract(day.Date),
+                                                        forecastsRow.LocalDateTimeTo.Subtract(day.Date)));
 
                 result.ForecastFileContainer.AddForecastsRow(day, forecastsRow);
 

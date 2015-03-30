@@ -155,7 +155,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.AssemblersTest
             payrollExportDto.Id = _payrollExportGuid;
             payrollExportDto.PayrollFormat = _payrollFormat;
 	        payrollExportDto.DatePeriod = new DateOnlyPeriodDto
-		        {StartDate = new DateOnlyDto {DateTime = _dateMin}, EndDate = new DateOnlyDto {DateTime = _dateMin}};
+		        {StartDate = new DateOnlyDto {DateTime = _dateMin.Date}, EndDate = new DateOnlyDto {DateTime = _dateMin.Date}};
             payrollExportDto.PersonCollection.Add(new PersonDto{Id=_person.Id,Name = _person.Name.ToString()});
             return payrollExportDto;
         }

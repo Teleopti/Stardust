@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Drawing;
 using Syncfusion.Windows.Forms.Grid;
-using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.WinCode.Backlog;
 using Teleopti.Interfaces.Domain;
 
@@ -23,8 +22,7 @@ namespace Teleopti.Ccc.Win.Backlog
 				return;
 
 			cellInfo.Style.CellValue = _model.GetDateStringForIndex(cellInfo.ColIndex);
-			var cultureInfo = TeleoptiPrincipal.CurrentPrincipal.Regional.Culture;
-			var dayofWeek = cultureInfo.Calendar.GetDayOfWeek(_model.GetDateOnIndex(cellInfo.ColIndex));
+			var dayofWeek = _model.GetDateOnIndex(cellInfo.ColIndex).DayOfWeek;
 			if (dayofWeek == DayOfWeek.Saturday || dayofWeek == DayOfWeek.Sunday)
 				cellInfo.Style.TextColor = Color.Goldenrod;
 		}

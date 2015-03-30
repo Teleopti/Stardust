@@ -23,7 +23,7 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
 
         protected override ISkill CreateInvalidEntityToVerify()
         {
-            DateTime utcDateTime = TimeZoneInfo.ConvertTimeToUtc(SkillDayTemplate.BaseDate, _testSkill.TimeZone);
+            DateTime utcDateTime = TimeZoneInfo.ConvertTimeToUtc(SkillDayTemplate.BaseDate.Date, _testSkill.TimeZone);
             TemplateSkillDataPeriod invalidPeriod = new TemplateSkillDataPeriod(ServiceAgreement.DefaultValues(),
                 new SkillPersonData(8,7), new DateTimePeriod(utcDateTime, utcDateTime.AddDays(1)));
             SkillDayTemplate template = new SkillDayTemplate("invalid", new List<ITemplateSkillDataPeriod> { invalidPeriod });
@@ -33,7 +33,7 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
 
         protected override ISkill CreateValidEntityToVerify()
         {
-            DateTime utcDateTime = TimeZoneInfo.ConvertTimeToUtc(SkillDayTemplate.BaseDate, _testSkill.TimeZone);
+            DateTime utcDateTime = TimeZoneInfo.ConvertTimeToUtc(SkillDayTemplate.BaseDate.Date, _testSkill.TimeZone);
             TemplateSkillDataPeriod validPeriod = new TemplateSkillDataPeriod(ServiceAgreement.DefaultValues(),
                 new SkillPersonData(2, 50), new DateTimePeriod(utcDateTime, utcDateTime.AddDays(1)));
             SkillDayTemplate template = new SkillDayTemplate("valid", new List<ITemplateSkillDataPeriod> { validPeriod });

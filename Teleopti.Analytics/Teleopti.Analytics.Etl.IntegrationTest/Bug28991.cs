@@ -80,7 +80,7 @@ namespace Teleopti.Analytics.Etl.IntegrationTest
 			var personFactory = Data.Person(personName);
 			var leavingDateForUser = new LeavingDateForUser
 				{
-					LeavingDate = new DateOnly(testDate.AddDays(0))
+					LeavingDate = testDate.Date
 				};
 			personFactory.Apply(leavingDateForUser);
 
@@ -150,7 +150,7 @@ namespace Teleopti.Analytics.Etl.IntegrationTest
 			var personFactory = Data.Person(personName);
 			var leavingDateForUser = new LeavingDateForUser
 			{
-				LeavingDate = new DateOnly(testDate.AddDays(0))
+				LeavingDate = testDate.Date
 			};
 			personFactory.Apply(leavingDateForUser);
 

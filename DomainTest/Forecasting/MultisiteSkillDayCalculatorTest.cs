@@ -36,15 +36,9 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
 
             skillDays = new List<ISkillDay>
                             {
-                                SkillDayFactory.CreateSkillDay(skill,
-                                                               DateTime.SpecifyKind(SkillDayTemplate.BaseDate,
-                                                                                    DateTimeKind.Utc)),
-                                SkillDayFactory.CreateSkillDay(skill,
-                                                               DateTime.SpecifyKind(SkillDayTemplate.BaseDate,
-                                                                                    DateTimeKind.Utc).AddDays(1)),
-                                SkillDayFactory.CreateSkillDay(skill,
-                                                               DateTime.SpecifyKind(SkillDayTemplate.BaseDate,
-                                                                                    DateTimeKind.Utc).AddDays(2))
+                                SkillDayFactory.CreateSkillDay(skill, SkillDayTemplate.BaseDate),
+                                SkillDayFactory.CreateSkillDay(skill, SkillDayTemplate.BaseDate.AddDays(1)),
+                                SkillDayFactory.CreateSkillDay(skill, SkillDayTemplate.BaseDate.AddDays(2))
                             };
             
             multisiteDays = new List<IMultisiteDay>
@@ -102,9 +96,7 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
         {
             var skillDaysChild1 = new List<ISkillDay>
                             {
-                                SkillDayFactory.CreateSkillDay(childSkill1,
-                                                               DateTime.SpecifyKind(SkillDayTemplate.BaseDate,
-                                                                                    DateTimeKind.Utc))
+                                SkillDayFactory.CreateSkillDay(childSkill1, SkillDayTemplate.BaseDate)
                             };
 
             target.SetChildSkillDays(childSkill1, skillDaysChild1);
@@ -120,9 +112,7 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
         {
             var skillDaysChild1 = new List<ISkillDay>
                             {
-                                SkillDayFactory.CreateSkillDay(childSkill1,
-                                                               DateTime.SpecifyKind(SkillDayTemplate.BaseDate,
-                                                                                    DateTimeKind.Utc))
+                                SkillDayFactory.CreateSkillDay(childSkill1, SkillDayTemplate.BaseDate)
                             };
 
             target.SetChildSkillDays(childSkill1, skillDaysChild1);
@@ -138,12 +128,8 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
         {
             var skillDaysChild1 = new List<ISkillDay>
                                       {
-                                          SkillDayFactory.CreateSkillDay(childSkill1,
-                                                                         DateTime.SpecifyKind(SkillDayTemplate.BaseDate,
-                                                                                              DateTimeKind.Utc)),
-                                          SkillDayFactory.CreateSkillDay(childSkill1,
-                                                                         DateTime.SpecifyKind(SkillDayTemplate.BaseDate,
-                                                                                              DateTimeKind.Utc).AddDays(1))
+                                          SkillDayFactory.CreateSkillDay(childSkill1, SkillDayTemplate.BaseDate),
+                                          SkillDayFactory.CreateSkillDay(childSkill1, SkillDayTemplate.BaseDate.AddDays(1))
                                       };
 
             target.SetChildSkillDays(childSkill1, skillDaysChild1);
@@ -177,15 +163,11 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
         {
             var skillDaysChild1 = new List<ISkillDay>
                             {
-                                SkillDayFactory.CreateSkillDay(childSkill1,
-                                                               DateTime.SpecifyKind(SkillDayTemplate.BaseDate,
-                                                                                    DateTimeKind.Utc))
+                                SkillDayFactory.CreateSkillDay(childSkill1, SkillDayTemplate.BaseDate)
                             };
             var skillDaysChild2 = new List<ISkillDay>
                             {
-                                SkillDayFactory.CreateSkillDay(childSkill2,
-                                                               DateTime.SpecifyKind(SkillDayTemplate.BaseDate,
-                                                                                    DateTimeKind.Utc))
+                                SkillDayFactory.CreateSkillDay(childSkill2, SkillDayTemplate.BaseDate)
                             };
 
             target.SetChildSkillDays(childSkill1, skillDaysChild1);
@@ -207,9 +189,7 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
         {
             var skillDaysChild1 = new List<ISkillDay>
                             {
-                                SkillDayFactory.CreateSkillDay(childSkill1,
-                                                               DateTime.SpecifyKind(SkillDayTemplate.BaseDate,
-                                                                                    DateTimeKind.Utc))
+                                SkillDayFactory.CreateSkillDay(childSkill1, SkillDayTemplate.BaseDate)
                             };
             target.SetChildSkillDays(childSkill1, skillDaysChild1);
             target.InitializeChildSkills();
@@ -229,13 +209,8 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
         {
             var skillDaysChild1 = new List<ISkillDay>
                             {
-                                SkillDayFactory.CreateSkillDay(childSkill1,
-                                                               DateTime.SpecifyKind(SkillDayTemplate.BaseDate,
-                                                                                    DateTimeKind.Utc)),
-                                                                                    
-                                SkillDayFactory.CreateSkillDay(childSkill1,
-                                                               DateTime.SpecifyKind(SkillDayTemplate.BaseDate.AddDays(1),
-                                                                                    DateTimeKind.Utc))
+                                SkillDayFactory.CreateSkillDay(childSkill1,SkillDayTemplate.BaseDate),
+                                SkillDayFactory.CreateSkillDay(childSkill1,SkillDayTemplate.BaseDate.AddDays(1))
                             };
 
             target.SetChildSkillDays(childSkill1, skillDaysChild1);
@@ -251,10 +226,8 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
         {
             var skillDaysChild1 = new List<ISkillDay>
                                       {
-                                          SkillDayFactory.CreateSkillDay(childSkill1,
-                                                                         skillDays[0].CurrentDate),
-                                          SkillDayFactory.CreateSkillDay(childSkill1,
-                                                                         skillDays[1].CurrentDate)
+                                          SkillDayFactory.CreateSkillDay(childSkill1, skillDays[0].CurrentDate),
+                                          SkillDayFactory.CreateSkillDay(childSkill1, skillDays[1].CurrentDate)
                                       };
 
             target.SetChildSkillDays(childSkill1, skillDaysChild1);
@@ -298,18 +271,18 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
         {
             Percent percentage = target.GetPercentageForInterval(childSkill2,
                                                                  new DateTimePeriod(
-                                                                     DateTime.SpecifyKind(skillDays[0].CurrentDate,DateTimeKind.Utc).AddMinutes(-15),
-                                                                     DateTime.SpecifyKind(skillDays[0].CurrentDate,DateTimeKind.Utc)));
+                                                                     DateTime.SpecifyKind(skillDays[0].CurrentDate.Date,DateTimeKind.Utc).AddMinutes(-15),
+                                                                     DateTime.SpecifyKind(skillDays[0].CurrentDate.Date,DateTimeKind.Utc)));
             Assert.AreEqual(0,percentage.Value);
             percentage = target.GetPercentageForInterval(childSkill2,
                                                                  new DateTimePeriod(
-                                                                     DateTime.SpecifyKind(skillDays[0].CurrentDate,DateTimeKind.Utc),
-                                                                     DateTime.SpecifyKind(skillDays[0].CurrentDate,DateTimeKind.Utc).AddMinutes(15)));
+                                                                     DateTime.SpecifyKind(skillDays[0].CurrentDate.Date,DateTimeKind.Utc),
+                                                                     DateTime.SpecifyKind(skillDays[0].CurrentDate.Date,DateTimeKind.Utc).AddMinutes(15)));
             Assert.AreEqual(0.6,percentage.Value);
             percentage = target.GetPercentageForInterval(childSkill1,
                                                                              new DateTimePeriod(
-                                                                                 DateTime.SpecifyKind(skillDays[0].CurrentDate,DateTimeKind.Utc),
-                                                                                 DateTime.SpecifyKind(skillDays[0].CurrentDate, DateTimeKind.Utc).AddMinutes(15)));
+                                                                                 DateTime.SpecifyKind(skillDays[0].CurrentDate.Date,DateTimeKind.Utc),
+                                                                                 DateTime.SpecifyKind(skillDays[0].CurrentDate.Date, DateTimeKind.Utc).AddMinutes(15)));
             Assert.AreEqual(0.4,percentage.Value);
             percentage = target.GetPercentageForInterval(skill, new DateTimePeriod());
             Assert.AreEqual(1,percentage.Value);
@@ -399,15 +372,11 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
             mocks.ReplayAll();
             var skillDaysChild1 = new List<ISkillDay>
                             {
-                                SkillDayFactory.CreateSkillDay(childSkill1,
-                                                               DateTime.SpecifyKind(SkillDayTemplate.BaseDate,
-                                                                                    DateTimeKind.Utc))
+                                SkillDayFactory.CreateSkillDay(childSkill1, SkillDayTemplate.BaseDate)
                             };
             var skillDaysChild2 = new List<ISkillDay>
                             {
-                                SkillDayFactory.CreateSkillDay(childSkill2,
-                                                               DateTime.SpecifyKind(SkillDayTemplate.BaseDate,
-                                                                                    DateTimeKind.Utc))
+                                SkillDayFactory.CreateSkillDay(childSkill2, SkillDayTemplate.BaseDate)
                             };
 
             target.SetChildSkillDays(childSkill1, skillDaysChild1);

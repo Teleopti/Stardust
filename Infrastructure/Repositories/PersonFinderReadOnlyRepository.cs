@@ -38,7 +38,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
                                                      .SetString("search_type",
                                                                 Enum.GetName(typeof (PersonFinderField),
                                                                              personFinderSearchCriteria.Field))
-                                                     .SetDateTime("leave_after",
+													 .SetDateOnly("leave_after",
                                                                   personFinderSearchCriteria.TerminalDate)
                                                      .SetInt32("start_row", personFinderSearchCriteria.StartRow)
                                                      .SetInt32("end_row", personFinderSearchCriteria.EndRow)

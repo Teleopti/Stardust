@@ -34,7 +34,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.DataProvider
 				BusinessUnitId = _businessUnitProvider.Current().Id.GetValueOrDefault(Guid.Empty),
 				Datasource = _currentDataSource.Current().DataSourceName,
 				AbsenceId = input.AbsenceId,
-				PersonId = (Guid)_loggedOnUser.CurrentUser().Id,
+				PersonId = _loggedOnUser.CurrentUser().Id.GetValueOrDefault(),
 				RequestedDate = input.Date.Date,
 				Timestamp = _now.UtcDateTime()
 			};
@@ -42,7 +42,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.DataProvider
 			return new AbsenceReportViewModel
 			{
 				AbsenceId = input.AbsenceId,
-				ReportedDate = input.Date
+				ReportedDate = input.Date.Date
 			};
 		}
 

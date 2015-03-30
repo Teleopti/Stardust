@@ -90,8 +90,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.WorkShiftFilters
 
 		private void commonExpectCalls()
 		{
-			Expect.Call(_workShift1.ToEditorShift(new DateTime(2009, 1, 1), _timeZoneInfo)).Return(_mainshift1);
-			Expect.Call(_workShift2.ToEditorShift(new DateTime(2009, 1, 1), _timeZoneInfo)).Return(_mainshift2);
+			Expect.Call(_workShift1.ToEditorShift(new DateOnly(2009, 1, 1), _timeZoneInfo)).Return(_mainshift1);
+			Expect.Call(_workShift2.ToEditorShift(new DateOnly(2009, 1, 1), _timeZoneInfo)).Return(_mainshift2);
 			Expect.Call(_workShift1.ProjectionService()).Return(_ps1);
 			Expect.Call(_workShift2.ProjectionService()).Return(_ps2);
 			Expect.Call(_ps1.CreateProjection()).Return(_lc1);
@@ -217,8 +217,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.WorkShiftFilters
 
 			using (_mocks.Record())
 			{
-				Expect.Call(_workShift1.ToEditorShift(new DateTime(2009, 1, 1), _timeZoneInfo)).Return(_mainshift1);
-				Expect.Call(_workShift2.ToEditorShift(new DateTime(2009, 1, 1), _timeZoneInfo)).Return(_mainshift2);
+				Expect.Call(_workShift1.ToEditorShift(new DateOnly(2009, 1, 1), _timeZoneInfo)).Return(_mainshift1);
+				Expect.Call(_workShift2.ToEditorShift(new DateOnly(2009, 1, 1), _timeZoneInfo)).Return(_mainshift2);
 
 				Expect.Call(() => _workShiftMinMaxCalculator.ResetCache()).Repeat.AtLeastOnce();
 				Expect.Call(_workShiftMinMaxCalculator.MinMaxAllowedShiftContractTime(_dateOnly, _matrix1, _scheduleOptions))

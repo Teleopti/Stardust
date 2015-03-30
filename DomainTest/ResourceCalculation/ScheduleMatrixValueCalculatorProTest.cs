@@ -103,7 +103,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 
             DateTime dateTime = new DateTime(2008, 1, 1, 0, 0, 0, DateTimeKind.Utc);
             ISkill skill = SkillFactory.CreateSkill("Skill");
-            ISkillDay skillDay = SkillDayFactory.CreateSkillDay(skill, dateTime);
+            ISkillDay skillDay = SkillDayFactory.CreateSkillDay(skill, new DateOnly(dateTime));
             skillDay.SkillDayCalculator = new SkillDayCalculator(skill, new List<ISkillDay> { skillDay }, period.ToDateOnlyPeriod(skill.TimeZone));
            
             SchedulingResultStateHolder stateHolder = SchedulingResultStateHolderFactory.Create(period, skill, new List<ISkillDay>{ skillDay });

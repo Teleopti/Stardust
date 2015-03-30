@@ -54,8 +54,8 @@ namespace Teleopti.Ccc.Sdk.LogicTest.AssemblersTest
         {
             ShiftTradeSwapDetailDto shiftTradeSwapDetailDto = new ShiftTradeSwapDetailDto
                                                                   {
-																	  DateFrom = new DateOnlyDto { DateTime = _date1 },
-																	  DateTo = new DateOnlyDto { DateTime = _date2 },
+																	  DateFrom = new DateOnlyDto { DateTime = _date1.Date },
+																	  DateTo = new DateOnlyDto { DateTime = _date2.Date },
                                                                       Id = Guid.NewGuid(),
                                                                       PersonFrom = new PersonDto{Id=_person1.Id,Name = _person1.Name.ToString()},
                                                                       PersonTo = new PersonDto { Id = _person2.Id, Name = _person2.Name.ToString() },

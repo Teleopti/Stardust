@@ -84,7 +84,7 @@ namespace Teleopti.Ccc.Sdk.Logic.QueryHandler
 					{
 						foreach (var dateOnly in dateOnlyPeriod.DayCollection())
 						{
-							var skillDayDto = new SkillDayDto { DisplayDate = new DateOnlyDto { DateTime = dateOnly } };
+							var skillDayDto = new SkillDayDto { DisplayDate = new DateOnlyDto { DateTime = dateOnly.Date } };
 
 							IList<ISkillStaffPeriod> skillStaffPeriods =
 								_schedulingResultStateHolder.SkillStaffPeriodHolder.SkillStaffPeriodList(

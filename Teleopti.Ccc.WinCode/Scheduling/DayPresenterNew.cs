@@ -1,4 +1,3 @@
-using System;
 using System.Globalization;
 using System.Linq;
 using Syncfusion.Windows.Forms.Grid;
@@ -8,7 +7,6 @@ using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
 using Teleopti.Ccc.Domain.Scheduling.Rules;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.Security.Principal;
-using Teleopti.Ccc.WinCode.Common;
 using Teleopti.Ccc.WinCode.Common.Clipboard;
 using Teleopti.Interfaces.Domain;
 
@@ -104,7 +102,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
                     DateHelper.WeekNumber(_selectedDate.Date, CultureInfo.CurrentCulture)
                         .ToString(CultureInfo.CurrentCulture);
 
-                View.SetCellBackTextAndBackColor(e, _selectedDate.Date, false, true, null);
+                View.SetCellBackTextAndBackColor(e, _selectedDate, false, true, null);
             }
             else if (e.RowIndex == timeLineHeaderIndex)
             {
@@ -144,7 +142,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
                     if (daySchedule.FullAccess)
                         e.Style.CellTipText = ViewBaseHelper.GetToolTip(daySchedule);
                     //set background color
-                    View.SetCellBackTextAndBackColor(e, _selectedDate.Date, true, false, daySchedule);
+                    View.SetCellBackTextAndBackColor(e, _selectedDate, true, false, daySchedule);
                 }
             }
         }

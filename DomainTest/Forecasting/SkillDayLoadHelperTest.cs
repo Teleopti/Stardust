@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Linq;
 using NUnit.Framework;
 using Rhino.Mocks;
@@ -66,16 +65,16 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
                 
             IList<ISkillDay> skillDays1 = new List<ISkillDay>
                                               { 
-                                                                 SkillDayFactory.CreateSkillDay(multisiteSkill, DateTime.SpecifyKind(_dtp.StartDate,DateTimeKind.Utc)),
-                                                                 SkillDayFactory.CreateSkillDay(multisiteSkill, DateTime.SpecifyKind(_dtp.StartDate,DateTimeKind.Utc).AddDays(1)),
-                                                                 SkillDayFactory.CreateSkillDay(multisiteSkill, DateTime.SpecifyKind(_dtp.StartDate,DateTimeKind.Utc).AddDays(2))
+                                                                 SkillDayFactory.CreateSkillDay(multisiteSkill, _dtp.StartDate),
+                                                                 SkillDayFactory.CreateSkillDay(multisiteSkill, _dtp.StartDate.AddDays(1)),
+                                                                 SkillDayFactory.CreateSkillDay(multisiteSkill, _dtp.StartDate.AddDays(2))
                                                              };
 
             IList<ISkillDay> skillDays2 = new List<ISkillDay>
                                               { 
-                                                                 SkillDayFactory.CreateSkillDay(_skills[0], DateTime.SpecifyKind(_dtp.StartDate,DateTimeKind.Utc)),
-                                                                 SkillDayFactory.CreateSkillDay(_skills[0], DateTime.SpecifyKind(_dtp.StartDate,DateTimeKind.Utc).AddDays(1)),
-                                                                 SkillDayFactory.CreateSkillDay(_skills[0], DateTime.SpecifyKind(_dtp.StartDate,DateTimeKind.Utc).AddDays(2))
+                                                                 SkillDayFactory.CreateSkillDay(_skills[0], _dtp.StartDate),
+                                                                 SkillDayFactory.CreateSkillDay(_skills[0], _dtp.StartDate.AddDays(1)),
+                                                                 SkillDayFactory.CreateSkillDay(_skills[0], _dtp.StartDate.AddDays(2))
                                                              };
 
             var allSkillDays = new List<ISkillDay>(skillDays1);
@@ -116,9 +115,9 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
         {
             IList<ISkillDay> skillDays = new List<ISkillDay>
                                              { 
-                                                                 SkillDayFactory.CreateSkillDay(_skills[0], DateTime.SpecifyKind(_dtp.StartDate,DateTimeKind.Utc)),
-                                                                 SkillDayFactory.CreateSkillDay(_skills[0], DateTime.SpecifyKind(_dtp.StartDate,DateTimeKind.Utc).AddDays(1)),
-                                                                 SkillDayFactory.CreateSkillDay(_skills[0], DateTime.SpecifyKind(_dtp.StartDate,DateTimeKind.Utc).AddDays(2))
+                                                                 SkillDayFactory.CreateSkillDay(_skills[0], _dtp.StartDate),
+                                                                 SkillDayFactory.CreateSkillDay(_skills[0], _dtp.StartDate.AddDays(1)),
+                                                                 SkillDayFactory.CreateSkillDay(_skills[0], _dtp.StartDate.AddDays(2))
                                                              };
 
             Expect.Call(_skillDayRep.FindRange(new DateOnlyPeriod(_dtp.StartDate.AddDays(-8), _dtp.EndDate.AddDays(2)), _skills, _scenario)).Return(skillDays).Repeat.Once();
@@ -159,9 +158,9 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
             var skillToBeLoad = new List<ISkill> {_skills[0], multisiteSkill};
             IList<ISkillDay> skillDays = new List<ISkillDay>
                                              {
-                                                 SkillDayFactory.CreateSkillDay(_skills[0], DateTime.SpecifyKind(_dtp.StartDate,DateTimeKind.Utc).AddDays(1)),
-                                                 SkillDayFactory.CreateSkillDay(multisiteSkill, DateTime.SpecifyKind(_dtp.StartDate,DateTimeKind.Utc)),
-                                                 SkillDayFactory.CreateSkillDay(childSkill,DateTime.SpecifyKind(_dtp.StartDate,DateTimeKind.Utc))
+                                                 SkillDayFactory.CreateSkillDay(_skills[0], _dtp.StartDate.AddDays(1)),
+                                                 SkillDayFactory.CreateSkillDay(multisiteSkill, _dtp.StartDate),
+                                                 SkillDayFactory.CreateSkillDay(childSkill,_dtp.StartDate)
                                              };
             IList<IMultisiteDay> multisiteDays = new List<IMultisiteDay>
                                              {

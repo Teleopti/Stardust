@@ -19,7 +19,7 @@ namespace Teleopti.Ccc.TestCommon.TestData.Analytics
 		{
 			using (var table = dim_date.CreateTable())
 			{
-				table.AddDate(DateId, Date, analyticsDataCulture);
+				table.AddDate(DateId, Date.Date, analyticsDataCulture);
 
 				Bulk.Insert(connection, table);
 

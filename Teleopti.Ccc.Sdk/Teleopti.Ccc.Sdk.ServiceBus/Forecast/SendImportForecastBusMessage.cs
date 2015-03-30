@@ -75,7 +75,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Forecast
                                            Datasource = messageTemplate.Datasource,
                                            JobId = messageTemplate.JobId,
                                            OwnerPersonId = messageTemplate.OwnerPersonId,
-                                           Date = date,
+                                           Date = date.Date,
                                            Timestamp = messageTemplate.Timestamp,
                                            TargetSkillId = messageTemplate.TargetSkillId,
                                            StartOpenHour = openHours.StartTime,

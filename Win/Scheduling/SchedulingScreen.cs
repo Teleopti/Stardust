@@ -1292,7 +1292,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 						if (!selectedSchedules.Any())
 							return;
 
-						var sortedList = selectedSchedules.Select(s => s.DateOnlyAsPeriod.DateOnly).OrderBy(d => d.Date);
+						var sortedList = selectedSchedules.Select(s => s.DateOnlyAsPeriod.DateOnly.Date).OrderBy(d => d);
 
 						var first = sortedList.FirstOrDefault();
 						var last = sortedList.LastOrDefault();
@@ -4513,7 +4513,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			if (skillGridControl is SkillIntradayGridControl)
 			{
 				var skillStaffPeriods = SchedulerState.SchedulingResultState.SkillStaffPeriodHolder.SkillStaffPeriodList(
-					aggregateSkillSkill, TimeZoneHelper.NewUtcDateTimePeriodFromLocalDateTime(_currentIntraDayDate, _currentIntraDayDate.AddDays(1), _schedulerState.TimeZoneInfo));
+					aggregateSkillSkill, TimeZoneHelper.NewUtcDateTimePeriodFromLocalDateTime(_currentIntraDayDate.Date, _currentIntraDayDate.AddDays(1).Date, _schedulerState.TimeZoneInfo));
 				if (_skillIntradayGridControl.Presenter.RowManager != null)
 					_skillIntradayGridControl.Presenter.RowManager.SetDataSource(skillStaffPeriods);
 			}
@@ -4532,14 +4532,14 @@ namespace Teleopti.Ccc.Win.Scheduling
 		private void drawIntraday(ISkill skill, IAggregateSkill aggregateSkillSkill)
 		{
 			IList<ISkillStaffPeriod> skillStaffPeriods;
+			var periodToFind = TimeZoneHelper.NewUtcDateTimePeriodFromLocalDateTime(_currentIntraDayDate.Date, _currentIntraDayDate.AddDays(1).Date, _schedulerState.TimeZoneInfo);
 			if (aggregateSkillSkill.IsVirtual)
 			{
-				SchedulerState.SchedulingResultState.SkillStaffPeriodHolder.SkillStaffPeriodList(aggregateSkillSkill, TimeZoneHelper.NewUtcDateTimePeriodFromLocalDateTime(_currentIntraDayDate, _currentIntraDayDate.AddDays(1), _schedulerState.TimeZoneInfo));
-				skillStaffPeriods = SchedulerState.SchedulingResultState.SkillStaffPeriodHolder.SkillStaffPeriodList(aggregateSkillSkill, TimeZoneHelper.NewUtcDateTimePeriodFromLocalDateTime(_currentIntraDayDate, _currentIntraDayDate.AddDays(1), _schedulerState.TimeZoneInfo));
+				SchedulerState.SchedulingResultState.SkillStaffPeriodHolder.SkillStaffPeriodList(aggregateSkillSkill, periodToFind);
+				skillStaffPeriods = SchedulerState.SchedulingResultState.SkillStaffPeriodHolder.SkillStaffPeriodList(aggregateSkillSkill, periodToFind);
 			}
 			else
 			{
-				DateTimePeriod periodToFind = TimeZoneHelper.NewUtcDateTimePeriodFromLocalDateTime(_currentIntraDayDate, _currentIntraDayDate.AddDays(1), _schedulerState.TimeZoneInfo);
 				skillStaffPeriods = SchedulerState.SchedulingResultState.SkillStaffPeriodHolder.SkillStaffPeriodList(new List<ISkill> { skill }, periodToFind);
 			}
 			if (skillStaffPeriods.Count >= 0)
@@ -4639,7 +4639,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			return 1;
 		}
 
-		private void selectCellFromPersonDate(IPerson person, DateTime localDate)
+		private void selectCellFromPersonDate(IPerson person, DateOnly localDate)
 		{
 			if (_scheduleView != null)
 			{
@@ -5463,7 +5463,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 		{
 			if (_lastModifiedPart != null)
 			{
-				selectCellFromPersonDate(_lastModifiedPart.ModifiedPerson, _lastModifiedPart.ModifiedPeriod.StartDateTimeLocal(_schedulerState.TimeZoneInfo));
+				selectCellFromPersonDate(_lastModifiedPart.ModifiedPerson, new DateOnly(_lastModifiedPart.ModifiedPeriod.StartDateTimeLocal(_schedulerState.TimeZoneInfo)));
 			}
 			refreshView();
 		}

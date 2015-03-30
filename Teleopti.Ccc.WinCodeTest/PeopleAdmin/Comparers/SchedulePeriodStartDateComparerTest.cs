@@ -52,7 +52,7 @@ namespace Teleopti.Ccc.WinCodeTest.PeopleAdmin.Comparers
 		[Test]
 		public void VerifyCompareMethodWithAllNull()
 		{
-            _target = new SchedulePeriodModel(new DateOnly(helper.universalTime3.Date), helper.person, null);
+            _target = new SchedulePeriodModel(helper.universalTime3, helper.person, null);
             _schedulePeriodModel = new SchedulePeriodModel(new DateOnly(helper.universalTime3.Date), helper.person1, null);
 
 			// Calls the compares method

@@ -1,9 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Globalization;
-using System.Reflection;
 using NUnit.Framework;
-using SharpTestsEx;
 using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.Forecasting.Template;
 using Teleopti.Ccc.TestCommon;
@@ -61,8 +59,8 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
             distribution.Add(_childSkill1, new Percent(0.6));
             distribution.Add(_childSkill2, new Percent(0.4));
             MultisitePeriod multisitePeriod = new MultisitePeriod(
-                new DateTimePeriod(DateTime.SpecifyKind(_dt, DateTimeKind.Utc).Add(TimeSpan.FromHours(4)),
-                                   DateTime.SpecifyKind(_dt, DateTimeKind.Utc).Add(TimeSpan.FromHours(19))),
+                new DateTimePeriod(DateTime.SpecifyKind(_dt.Date, DateTimeKind.Utc).Add(TimeSpan.FromHours(4)),
+                                   DateTime.SpecifyKind(_dt.Date, DateTimeKind.Utc).Add(TimeSpan.FromHours(19))),
                 distribution);
 
             _multisitePeriods = new List<IMultisitePeriod> { multisitePeriod };
@@ -195,7 +193,7 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
             IList<ITemplateMultisitePeriod> templateMultisitePeriods = new List<ITemplateMultisitePeriod>();
 
             DateTimePeriod timePeriod = new DateTimePeriod(
-               TimeZoneInfo.ConvertTimeToUtc(SkillDayTemplate.BaseDate, _skill.TimeZone).Add(new TimeSpan(8, 0, 0)),
+               TimeZoneInfo.ConvertTimeToUtc(SkillDayTemplate.BaseDate.Date, _skill.TimeZone).Add(new TimeSpan(8, 0, 0)),
                TimeZoneInfo.ConvertTimeToUtc(SkillDayTemplate.BaseDate.Date.Add(new TimeSpan(22, 0, 0)), _skill.TimeZone));
 
             TemplateMultisitePeriod period =
@@ -264,7 +262,7 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
             IList<ITemplateMultisitePeriod> multisitePeriods2 = new List<ITemplateMultisitePeriod>();
 
             DateTimePeriod timePeriod2 = new DateTimePeriod(
-                TimeZoneInfo.ConvertTimeToUtc(SkillDayTemplate.BaseDate, _skill.TimeZone).Add(new TimeSpan(1, 0, 0)),
+                TimeZoneInfo.ConvertTimeToUtc(SkillDayTemplate.BaseDate.Date, _skill.TimeZone).Add(new TimeSpan(1, 0, 0)),
                 TimeZoneInfo.ConvertTimeToUtc(SkillDayTemplate.BaseDate.Date.Add(new TimeSpan(2, 0, 0)), _skill.TimeZone));
             multisitePeriods2.Add(
                 new TemplateMultisitePeriod(timePeriod2,
@@ -297,7 +295,7 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
             IList<ITemplateMultisitePeriod> multisitePeriods = new List<ITemplateMultisitePeriod>();
 
             DateTimePeriod timePeriod = new DateTimePeriod(
-                TimeZoneInfo.ConvertTimeToUtc(SkillDayTemplate.BaseDate, _skill.TimeZone).Add(new TimeSpan(4, 0, 0)),
+                TimeZoneInfo.ConvertTimeToUtc(SkillDayTemplate.BaseDate.Date, _skill.TimeZone).Add(new TimeSpan(4, 0, 0)),
                 TimeZoneInfo.ConvertTimeToUtc(SkillDayTemplate.BaseDate.Date.Add(new TimeSpan(19, 0, 0)), _skill.TimeZone));
 
             multisitePeriods.Add(
@@ -347,7 +345,7 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
         {
             IList<ITemplateMultisitePeriod> multisitePeriods = new List<ITemplateMultisitePeriod>();
             DateTimePeriod timePeriod = new DateTimePeriod(
-                TimeZoneInfo.ConvertTimeToUtc(SkillDayTemplate.BaseDate, _skill.TimeZone).Add(new TimeSpan(4, 0, 0)),
+                TimeZoneInfo.ConvertTimeToUtc(SkillDayTemplate.BaseDate.Date, _skill.TimeZone).Add(new TimeSpan(4, 0, 0)),
                 TimeZoneInfo.ConvertTimeToUtc(SkillDayTemplate.BaseDate.Date.Add(new TimeSpan(19, 0, 0)),
                                                  _skill.TimeZone));
 
@@ -382,9 +380,9 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
             var skillDataPeriodB = new SkillDataPeriod(serviceAgreement, new SkillPersonData(0,0),timePeriod1215A);
             var list = new List<ISkillDataPeriod> { skillDataPeriodA, skillDataPeriodB };
             _childSkillDays.Clear();
-            _childSkillDays.Add(SkillDayFactory.CreateSkillDay(_childSkill1, new DateTime(2012, 07, 25)));
+            _childSkillDays.Add(SkillDayFactory.CreateSkillDay(_childSkill1, new DateOnly(2012, 07, 25)));
             _childSkillDays[0].SetNewSkillDataPeriodCollection(list);
-            _childSkillDays.Add(SkillDayFactory.CreateSkillDay(_childSkill2, new DateTime(2012, 07, 25)));
+            _childSkillDays.Add(SkillDayFactory.CreateSkillDay(_childSkill2, new DateOnly(2012, 07, 25)));
             _childSkillDays[1].SetNewSkillDataPeriodCollection(list);
             
             _multisitePeriods.Add(new MultisitePeriod(timePeriod1200M, _multisitePeriods[0].Distribution));
@@ -598,9 +596,11 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
         [Test, ExpectedException(typeof(InvalidOperationException))]
         public void VerifyCannotHaveMultiplePeriodsWithSameStartTime()
         {
-            _multisitePeriods.Add(new MultisitePeriod(
-                                    new DateTimePeriod(DateTime.SpecifyKind(_dt, DateTimeKind.Utc).Add(TimeSpan.FromHours(4)), DateTime.SpecifyKind(_dt, DateTimeKind.Utc).Add(TimeSpan.FromHours(17))),
-                                    new Dictionary<IChildSkill, Percent>()));
+	        _multisitePeriods.Add(
+		        new MultisitePeriod(
+			        new DateTimePeriod(DateTime.SpecifyKind(_dt.Date, DateTimeKind.Utc).Add(TimeSpan.FromHours(4)),
+				        DateTime.SpecifyKind(_dt.Date, DateTimeKind.Utc).Add(TimeSpan.FromHours(17))),
+			        new Dictionary<IChildSkill, Percent>()));
             target.SetMultisitePeriodCollection(_multisitePeriods);
         }
 

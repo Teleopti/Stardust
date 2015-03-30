@@ -104,7 +104,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
             IList<ITemplateMultisitePeriod> templateMultisitePeriods = new 
                 List<ITemplateMultisitePeriod>(_multisiteDayTemplate.TemplateMultisitePeriodCollection);
 
-            DateTime baseDateUtc = TimeZoneInfo.ConvertTimeToUtc(SkillDayTemplate.BaseDate, TimeZone);
+            DateTime baseDateUtc = TimeZoneInfo.ConvertTimeToUtc(SkillDayTemplate.BaseDate.Date, TimeZone);
             if (templateMultisitePeriods.Count > 0)
             {
                 IEnumerable<ITemplateMultisitePeriod> sortedList = templateMultisitePeriods.OrderBy(p => p.Period.StartDateTime);

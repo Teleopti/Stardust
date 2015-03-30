@@ -79,7 +79,7 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
             using (mocks.Playback())
             {
                 var theDate = new DateOnly(2010, 9, 21);
-                int monthNumber = CultureInfo.CurrentCulture.Calendar.GetMonth(theDate);
+                int monthNumber = CultureInfo.CurrentCulture.Calendar.GetMonth(theDate.Date);
                 target = new MonthOfYear(taskOwnerPeriod, monthOfYearCreator);
                 target.PeriodTypeCollection.Add(monthNumber, monthPeriod);
 

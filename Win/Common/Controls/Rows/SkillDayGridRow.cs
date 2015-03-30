@@ -51,7 +51,7 @@ namespace Teleopti.Ccc.Win.Common.Controls.Rows
 
         private IEnumerable<ISkillStaffPeriod> getSkillStaffPeriodsForColumn(CellInfo cellInfo)
         {
-            DateTime utcDate = TimeZoneHelper.ConvertToUtc(GetDateFromColumn(cellInfo), _rowManager.TimeZoneInfo);
+            DateTime utcDate = TimeZoneHelper.ConvertToUtc(GetDateFromColumn(cellInfo).Date, _rowManager.TimeZoneInfo);
             IList<ISkillStaffPeriod> skillStaffPeriods;
             if (_rowManager.DataSource[0].TryGetValue(utcDate, out skillStaffPeriods))
                 return skillStaffPeriods;

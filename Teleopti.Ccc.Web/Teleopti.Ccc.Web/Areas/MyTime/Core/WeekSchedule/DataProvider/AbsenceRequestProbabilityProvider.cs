@@ -48,8 +48,8 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.DataProvider
 				var absenceHeadsForDay = .0;
 				if (absenceTimeCollection.Any())
 				{
-					absenceTimeForDay = absenceTimeCollection.First(a => a.Date == dateOnly).AbsenceTime;
-					absenceHeadsForDay = absenceTimeCollection.First(a => a.Date == dateOnly).HeadCounts;
+					absenceTimeForDay = absenceTimeCollection.First(a => a.Date == dateOnly.Date).AbsenceTime;
+					absenceHeadsForDay = absenceTimeCollection.First(a => a.Date == dateOnly.Date).HeadCounts;
 				}
 
 				var allowanceDay = allowanceCollection.Any()

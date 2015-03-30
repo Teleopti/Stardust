@@ -30,7 +30,7 @@ namespace Teleopti.Ccc.WinCode.Grouping
                 _findPersonsModel.FromDate = new DateOnly(_findPersonsView.FromDate);
                 _findPersonsView.ClearDateErrors();
                 _findPersonsView.TextBoxFindEnabled = true;
-                _personIndexBuilder.ChangePeriod(new DateOnlyPeriod(new DateOnly(_findPersonsModel.FromDate), new DateOnly(_findPersonsModel.ToDate)));
+                _personIndexBuilder.ChangePeriod(new DateOnlyPeriod(_findPersonsModel.FromDate, _findPersonsModel.ToDate));
                 _personFinderService.RebuildIndex();
             }
             else
@@ -47,7 +47,7 @@ namespace Teleopti.Ccc.WinCode.Grouping
                 _findPersonsModel.ToDate = new DateOnly(_findPersonsView.ToDate);
                 _findPersonsView.ClearDateErrors();
                 _findPersonsView.TextBoxFindEnabled = true;
-                _personIndexBuilder.ChangePeriod(new DateOnlyPeriod(new DateOnly(_findPersonsModel.FromDate), new DateOnly(_findPersonsModel.ToDate)));
+                _personIndexBuilder.ChangePeriod(new DateOnlyPeriod(_findPersonsModel.FromDate, _findPersonsModel.ToDate));
                 _personFinderService.RebuildIndex();
             }
             else

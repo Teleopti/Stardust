@@ -4,7 +4,6 @@ using TechTalk.SpecFlow;
 using Teleopti.Ccc.TestCommon.TestData.Analytics;
 using Teleopti.Ccc.TestCommon.TestData.Setups.Configurable;
 using Teleopti.Ccc.WebBehaviorTest.Data;
-using Teleopti.Ccc.WebBehaviorTest.Data.Setups.Default;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
@@ -56,7 +55,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
 			for (var i = 0; i < 20; i++)
 			{
 				var date = new DateOnly(i + 2013, 1, 1);
-				var theDay = new SpecificDate {Date = new DateOnly(date), DateId = i};
+				var theDay = new SpecificDate {Date = date, DateId = i};
 				DataMaker.Data().Analytics().Setup(theDay);
 				var bridgeTimeZone = new FillBridgeTimeZoneFromData(theDay, intervals, timeZones, datasource);
 				DataMaker.Data().Analytics().Setup(bridgeTimeZone);

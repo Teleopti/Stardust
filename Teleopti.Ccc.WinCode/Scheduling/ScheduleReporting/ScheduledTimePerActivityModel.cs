@@ -53,7 +53,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling.ScheduleReporting
 				if (activity != null || meetingActivity != null)
                 {
                     DateOnly dateOnly = schedulePart.DateOnlyAsPeriod.DateOnly;
-                    list.Add(new ScheduledTimePerActivityModel { ActivityName = layer.DisplayDescription().Name, ScheduledTime = layer.Period.ElapsedTime().TotalMinutes, ScheduledDate = dateOnly }); 
+                    list.Add(new ScheduledTimePerActivityModel { ActivityName = layer.DisplayDescription().Name, ScheduledTime = layer.Period.ElapsedTime().TotalMinutes, ScheduledDate = dateOnly.Date }); 
                 }
             }
             return list;

@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Globalization;
-using System.Linq;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Security.Authentication;
@@ -93,7 +92,7 @@ namespace Teleopti.Ccc.Sdk.Logic.Assemblers
             TimeZoneInfo timeZone = entity.PermissionInformation.DefaultTimeZone();
             personDto.TimeZoneId = timeZone.Id;
             if (entity.TerminalDate.HasValue)
-				personDto.TerminationDate = new DateOnlyDto { DateTime = entity.TerminalDate.Value };
+				personDto.TerminationDate = new DateOnlyDto { DateTime = entity.TerminalDate.Value.Date };
 
             if (!IgnorePersonPeriods)
             {
@@ -205,8 +204,8 @@ namespace Teleopti.Ccc.Sdk.Logic.Assemblers
             PersonPeriodDto personPeriodDto = new PersonPeriodDto();
 			personPeriodDto.Period = new DateOnlyPeriodDto
 			{
-				StartDate = new DateOnlyDto { DateTime = entity.Period.StartDate },
-				EndDate = new DateOnlyDto { DateTime = entity.Period.EndDate }
+				StartDate = new DateOnlyDto { DateTime = entity.Period.StartDate.Date },
+				EndDate = new DateOnlyDto { DateTime = entity.Period.EndDate.Date }
 			};
             
             personPeriodDto.PersonContract = PersonContractDoToDto(entity.PersonContract);

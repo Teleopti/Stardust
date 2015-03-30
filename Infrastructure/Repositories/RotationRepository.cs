@@ -63,13 +63,13 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
             return retList;
         }
 
-		public IEnumerable<IRotation> LoadRotationsWithHierarchyData(IEnumerable<IPerson> persons, DateTime startDate)
+		public IEnumerable<IRotation> LoadRotationsWithHierarchyData(IEnumerable<IPerson> persons, DateOnly startDate)
 		{
 			var retList = new HashSet<IRotation>();
 			foreach (var personsPart in persons.Batch(400))
 			{
 				var tempResult = Session.GetNamedQuery("LoadRotationsWithHierarchyData")
-						.SetDateTime("StartDate", startDate)
+						.SetDateOnly("StartDate", startDate)
 						.SetParameterList("PersonCollection", personsPart.ToArray())
 						.List<IRotation>();
 				foreach (var rotation in tempResult)

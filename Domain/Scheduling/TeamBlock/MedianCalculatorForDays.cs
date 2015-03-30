@@ -33,7 +33,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 				foreach (var interval in dateOnlyList.Value)
 				{
 					var timeSpanKey = interval.Key.TimeOfDay;
-					if (interval.Key.Date.Equals(baseDate.AddDays(1)))
+					if (new DateOnly(interval.Key).Equals(baseDate.AddDays(1)))
 						timeSpanKey = timeSpanKey.Add(TimeSpan.FromDays(1));
 
 					if(!temp.ContainsKey(timeSpanKey))

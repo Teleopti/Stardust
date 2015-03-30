@@ -99,10 +99,10 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.SkillPages
             var shrinkage = new Percent(shrinkagePercentTextBox.DoubleValue);
             var efficiency = new Percent(efficiencyPercentTextBox.DoubleValue);
 
-            DateTime startDateTime = TimeZoneInfo.ConvertTimeToUtc(SkillDayTemplate.BaseDate, skill.TimeZone);
+            DateTime startDateTime = TimeZoneInfo.ConvertTimeToUtc(SkillDayTemplate.BaseDate.Date, skill.TimeZone);
             startDateTime = startDateTime.Add(skill.MidnightBreakOffset);
 
-            DateTime endDateTime = TimeZoneInfo.ConvertTimeToUtc(SkillDayTemplate.BaseDate.AddDays(1), skill.TimeZone);
+            DateTime endDateTime = TimeZoneInfo.ConvertTimeToUtc(SkillDayTemplate.BaseDate.AddDays(1).Date, skill.TimeZone);
             endDateTime = endDateTime.Add(skill.MidnightBreakOffset);
             var timePeriod = new DateTimePeriod(startDateTime, endDateTime);
 

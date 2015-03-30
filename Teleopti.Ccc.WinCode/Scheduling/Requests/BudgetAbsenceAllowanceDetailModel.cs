@@ -22,7 +22,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling.Requests
             {
                 if (Date == null)
                     return string.Empty;
-                var weekNumber = DateHelper.WeekNumber(Date.Date, CultureInfo.CurrentCulture);
+                var weekNumber = DateHelper.WeekNumber(Date.Date.Date, CultureInfo.CurrentCulture);
                 var week = DateHelper.GetWeekPeriod(Date.Date, CultureInfo.CurrentCulture);
 	            return string.Format(CultureInfo.CurrentCulture, UserTexts.Resources.WeekAbbreviationDot, weekNumber,
 		            week.StartDate.ToShortDateString());

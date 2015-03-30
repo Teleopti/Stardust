@@ -43,8 +43,8 @@ namespace Teleopti.Ccc.Domain.Optimization
 
         private void CreateOuterAndExtendedPeriods(IPerson person)
         {
-            var firstPeriodsFirstDateLocal = new DateOnly(DateHelper.GetFirstDateInWeek(_selectedPeriod.StartDate, person.FirstDayOfWeek));
-            var lastPeriodsLastDateLocal = new DateOnly(DateHelper.GetLastDateInWeek(_selectedPeriod.EndDate, person.FirstDayOfWeek));
+            var firstPeriodsFirstDateLocal = DateHelper.GetFirstDateInWeek(_selectedPeriod.StartDate, person.FirstDayOfWeek);
+            var lastPeriodsLastDateLocal = DateHelper.GetLastDateInWeek(_selectedPeriod.EndDate, person.FirstDayOfWeek);
 
             _fullWeekPeriod = new DateOnlyPeriod(firstPeriodsFirstDateLocal, lastPeriodsLastDateLocal);
             _outerPeriod = new DateOnlyPeriod(_fullWeekPeriod.StartDate.AddDays(-7), _fullWeekPeriod.EndDate.AddDays(7));

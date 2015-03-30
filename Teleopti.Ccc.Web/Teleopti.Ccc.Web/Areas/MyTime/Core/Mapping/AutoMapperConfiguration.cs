@@ -1,10 +1,12 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using AutoMapper;
 using Autofac;
 using Owin;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Web.Core.Startup.Booter;
+using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Mapping
 {
@@ -27,6 +29,9 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Mapping
 			                  		c.AllowNullCollections = true;
 									c.ConstructServicesUsing(_container.Resolve);
 									_profiles.ForEach(c.AddProfile);
+
+									c.CreateMap<DateOnly, DateTime>().ConvertUsing(d => d.Date);
+									c.CreateMap<DateTime, DateOnly>().ConvertUsing(d => new DateOnly(d));
 			                  	});
 			return null;
 		}

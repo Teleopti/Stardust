@@ -53,7 +53,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest
 
 			_scenarioRepository.Stub(x => x.LoadDefaultScenario()).Return(_scenario);
 			_budgetDayRepository.Stub(x => x.Find(null, null, _defaultDatePeriod)).IgnoreArguments().Return(new List<IBudgetDay> { budgetDay });
-			_scheduleProjectionReadOnlyRepository.Stub(x => x.GetNumberOfAbsencesPerDayAndBudgetGroup(budgetGroup.Id.GetValueOrDefault(), new DateOnly(personPeriod.StartDate))).Return(0);
+			_scheduleProjectionReadOnlyRepository.Stub(x => x.GetNumberOfAbsencesPerDayAndBudgetGroup(budgetGroup.Id.GetValueOrDefault(), personPeriod.StartDate)).Return(0);
 
 		    Assert.IsTrue(_target.IsSatisfied(absenceRequest).IsValid);
 	    }
@@ -74,7 +74,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest
 
 			_scenarioRepository.Stub(x => x.LoadDefaultScenario()).Return(_scenario);
 			_budgetDayRepository.Stub(x => x.Find(null, null, _defaultDatePeriod)).IgnoreArguments().Return(new List<IBudgetDay> { budgetDay });
-			_scheduleProjectionReadOnlyRepository.Stub(x => x.GetNumberOfAbsencesPerDayAndBudgetGroup(budgetGroup.Id.GetValueOrDefault(), new DateOnly(personPeriod.StartDate))).Return(1);
+			_scheduleProjectionReadOnlyRepository.Stub(x => x.GetNumberOfAbsencesPerDayAndBudgetGroup(budgetGroup.Id.GetValueOrDefault(), personPeriod.StartDate)).Return(1);
 			
 		    Assert.IsFalse(_target.IsSatisfied(absenceRequest).IsValid);
 	    }

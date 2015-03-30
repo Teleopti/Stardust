@@ -23,7 +23,7 @@ namespace Teleopti.Ccc.Sdk.Logic.Assemblers
                               Id = entity.Id,
                               Person = _personAssembler.DomainEntityToDto(entity.Person),
                               ScheduleNote = entity.GetScheduleNote(new NormalizeText()),
-							  Date = new DateOnlyDto { DateTime = entity.NoteDate }
+							  Date = new DateOnlyDto { DateTime = entity.NoteDate.Date }
                           };
 
             return dto;

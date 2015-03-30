@@ -26,7 +26,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.DoNotUse
 
 		public void Apply(IUnitOfWork uow, IPerson user, CultureInfo cultureInfo)
 		{
-			var date = new DateOnly(DateTime.Parse(Date,SwedishCultureInfo));
+			var date = DateTime.Parse(Date,SwedishCultureInfo);
 			var startTime = user.PermissionInformation.DefaultTimeZone().SafeConvertTimeToUtc(date);
 			var endTime = startTime.AddHours(24);
 			var period = new DateTimePeriod(startTime, endTime);

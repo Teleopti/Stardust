@@ -24,7 +24,7 @@ namespace Teleopti.Ccc.Domain.Notification
 		{
 			var ret = new NotificationMessage();
 			var lang = person.PermissionInformation.UICulture();
-			var endDate = DateOnly.Today.AddDays(14);
+			var endDate = DateTime.Today.AddDays(14);
 
 			var wfc = person.WorkflowControlSet;
 			if (wfc == null)
@@ -41,16 +41,16 @@ namespace Teleopti.Ccc.Domain.Notification
 
 			DateTime? publishedToDate = wfc.SchedulePublishedToDate;
 
-			if (publishedToDate.Value < DateOnly.Today)
+			if (publishedToDate.Value < DateTime.Today)
 			{
 				Logger.Info("No notification will be sent, the schedule is only Published to " + publishedToDate.Value);
 				return ret;
 			}
 
 			if (publishedToDate.Value < endDate)
-			endDate = new DateOnly(publishedToDate.Value);
+			endDate = publishedToDate.Value;
 
-			var period = new DateOnlyPeriod(DateOnly.Today, endDate);
+			var period = new DateOnlyPeriod(DateOnly.Today, new DateOnly(endDate));
 			if (!period.Contains(date))
 			{
 				Logger.Info("No notification will be sent, the schedule is changed on " + date.ToShortDateString(CultureInfo.InvariantCulture) + " and it is not in the period " + period.DateString);

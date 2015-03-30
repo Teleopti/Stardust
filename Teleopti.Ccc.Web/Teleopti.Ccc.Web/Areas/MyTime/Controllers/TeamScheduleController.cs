@@ -1,10 +1,8 @@
 using System;
-using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Net;
 using System.Web.Mvc;
-using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Repositories;
@@ -81,9 +79,9 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 			return Json(
 				new
 				{
-					NowYear = calendar.GetYear(_now.LocalDateOnly()),
-					NowMonth = calendar.GetMonth(_now.LocalDateOnly()),
-					NowDay = calendar.GetDayOfMonth(_now.LocalDateOnly()),
+					NowYear = calendar.GetYear(_now.LocalDateTime()),
+					NowMonth = calendar.GetMonth(_now.LocalDateTime()),
+					NowDay = calendar.GetDayOfMonth(_now.LocalDateTime()),
 					DateTimeFormat = _loggedOnUser.CurrentUser().PermissionInformation.Culture().DateTimeFormat.ShortDatePattern
 				},
 				JsonRequestBehavior.AllowGet);

@@ -44,7 +44,7 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.Controls.Columns
 
                 DateOnly? value = _propertyReflector.GetValue(dataItem, _bindingProperty) as DateOnly?;
                 DateTime? dateTimeValue = null;
-                if (value.HasValue) dateTimeValue = value.Value;
+                if (value.HasValue) dateTimeValue = value.Value.Date;
                 e.Style.CellValue = dateTimeValue;
 
                 PeopleAdminHelper.GrayColumn(_propertyReflector, dataItem, e);

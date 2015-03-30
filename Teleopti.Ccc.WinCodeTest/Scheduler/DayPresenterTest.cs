@@ -118,7 +118,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
         {
             target.SelectedPeriod = new DateOnlyPeriodAsDateTimePeriod(new DateOnlyPeriod(2008, 11, 26,2008, 11, 26),TeleoptiPrincipal.CurrentPrincipal.Regional.TimeZone);
             var date = new DateTime(2008, 11, 26, 13, 00, 00, DateTimeKind.Utc);
-            target.TimelineSpan[date.Date] = target.SelectedPeriod.Period();
+            target.TimelineSpan[new DateOnly(date.Date)] = target.SelectedPeriod.Period();
             target.Now = date;
 
             using (mocks.Record())
@@ -128,7 +128,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
             
             using (mocks.Playback())
             {
-                int x = target.GetNowPosition(new Rectangle(100, 100, 80, 80), date.Date);
+                int x = target.GetNowPosition(new Rectangle(100, 100, 80, 80), new DateOnly(date.Date));
                 Assert.AreEqual(100 + 46, x);
             }
         }
@@ -138,7 +138,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
         {
             target.SelectedPeriod = new DateOnlyPeriodAsDateTimePeriod(new DateOnlyPeriod(2008, 11, 26,2008, 11, 26),TeleoptiPrincipal.CurrentPrincipal.Regional.TimeZone);
             var date = new DateTime(2008, 11, 26, 13, 00, 00, DateTimeKind.Utc);
-            target.TimelineSpan[date.Date] = target.SelectedPeriod.Period();
+            target.TimelineSpan[new DateOnly(date.Date)] = target.SelectedPeriod.Period();
             target.Now = date;
 
             using (mocks.Record())
@@ -148,7 +148,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 
             using (mocks.Playback())
             {
-                int x = target.GetNowPosition(new Rectangle(100, 100, 80, 80), date.Date);
+                int x = target.GetNowPosition(new Rectangle(100, 100, 80, 80), new DateOnly(date.Date));
                 Assert.AreEqual(180 - 47, x);
             }
         }

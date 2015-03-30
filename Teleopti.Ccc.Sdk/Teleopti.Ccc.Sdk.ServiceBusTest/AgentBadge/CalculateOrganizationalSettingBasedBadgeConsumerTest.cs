@@ -3,13 +3,11 @@ using System.Collections.Generic;
 using NUnit.Framework;
 using Rhino.Mocks;
 using Rhino.ServiceBus;
-using Rhino.ServiceBus.DataStructures;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.SystemSetting.GlobalSetting;
-using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.Infrastructure.Toggle;
 using Teleopti.Ccc.Sdk.ServiceBus.AgentBadge;
 using Teleopti.Ccc.TestCommon.FakeData;
@@ -116,11 +114,11 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.AgentBadge
 			teamSettingsRepository.Stub(x => x.FindAllTeamGamificationSettingsSortedByTeam())
 				.Return(new[] {new TeamGamificationSetting {Team = team, GamificationSetting = newSetting}});
 
-			var calculationDate = TimeZoneInfo.ConvertTime(now.LocalDateOnly().AddDays(-1), TimeZoneInfo.Local, timezone);
+			var calculationDate = TimeZoneInfo.ConvertTime(now.LocalDateTime().AddDays(-1), TimeZoneInfo.Local, timezone);
 			var message = new CalculateBadgeMessage
 			{
 				TimeZoneCode = timezone.Id,
-				CalculationDate = new DateOnly(calculationDate)
+				CalculationDate = calculationDate
 			};
 		
 			target.Consume(message);
@@ -180,11 +178,11 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.AgentBadge
 			teamSettingsRepository.Stub(x => x.FindAllTeamGamificationSettingsSortedByTeam())
 				.Return(new[] {new TeamGamificationSetting {Team = team, GamificationSetting = deletedSetting}});
 
-			var calculationDate = TimeZoneInfo.ConvertTime(now.LocalDateOnly().AddDays(-1), TimeZoneInfo.Local, timezone);
+			var calculationDate = TimeZoneInfo.ConvertTime(now.LocalDateTime().AddDays(-1), TimeZoneInfo.Local, timezone);
 			var message = new CalculateBadgeMessage
 			{
 				TimeZoneCode = timezone.Id,
-				CalculationDate = new DateOnly(calculationDate)
+				CalculationDate = calculationDate
 			};
 		
 			target.Consume(message);
@@ -231,11 +229,11 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.AgentBadge
 				AnsweredCallsBadgeEnabled = false
 			};
 
-			var calculationDate = TimeZoneInfo.ConvertTime(now.LocalDateOnly().AddDays(-1), TimeZoneInfo.Local, timezone);
+			var calculationDate = TimeZoneInfo.ConvertTime(now.LocalDateTime().AddDays(-1), TimeZoneInfo.Local, timezone);
 			var message = new CalculateBadgeMessage
 			{
 				TimeZoneCode = timezone.Id,
-				CalculationDate = new DateOnly(calculationDate)
+				CalculationDate = calculationDate
 			};
 
 			target.Consume(message);
@@ -288,11 +286,11 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.AgentBadge
 			teamSettingsRepository.Stub(x => x.FindAllTeamGamificationSettingsSortedByTeam())
 				.Return(new[] { new TeamGamificationSetting { Team = team, GamificationSetting = newSetting } });
 
-			var calculationDate = TimeZoneInfo.ConvertTime(now.LocalDateOnly().AddDays(-1), TimeZoneInfo.Local, timezone);
+			var calculationDate = TimeZoneInfo.ConvertTime(now.LocalDateTime().AddDays(-1), TimeZoneInfo.Local, timezone);
 			var message = new CalculateBadgeMessage
 			{
 				TimeZoneCode = timezone.Id,
-				CalculationDate = new DateOnly(calculationDate)
+				CalculationDate = calculationDate
 			};
 
 			target.Consume(message);

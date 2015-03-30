@@ -5,10 +5,8 @@ using NUnit.Framework;
 using Rhino.Mocks;
 using Teleopti.Ccc.Domain.AgentInfo;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
-using Teleopti.Ccc.Domain.Time;
 using System.Globalization;
 using Teleopti.Ccc.Domain.Common;
-using Teleopti.Ccc.DomainTest.Helper;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Interfaces.Domain;
@@ -25,8 +23,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
         private SchedulePeriod _periodWeek;
         private SchedulePeriod _periodMonth;
 		private SchedulePeriod _periodChineseMonth;
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1823:AvoidUnusedPrivateFields")]
-        private SchedulePeriod _periodException;
         private TimeSpan _avgWorkTimePerDay;
         private IPerson _person1;
         private IPerson _person2;
@@ -120,24 +116,24 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
         [Test]
         public void CanReturnCorrectWeekPeriod()
         {
-            DateOnly startPeriod1 = new DateOnly(2008, 12, 29);//Monday
-            DateOnly startPeriod2 = new DateOnly(2009, 1, 5);
-            DateOnly startPeriod3 = new DateOnly(2009, 1, 26);
+            var startPeriod1 = new DateOnly(2008, 12, 29);//Monday
+            var startPeriod2 = new DateOnly(2009, 1, 5);
+            var startPeriod3 = new DateOnly(2009, 1, 26);
 
-            ISchedulePeriod weekPeriod1 = new SchedulePeriod(startPeriod1, SchedulePeriodType.Week, 2); 
+            var weekPeriod1 = new SchedulePeriod(startPeriod1, SchedulePeriodType.Week, 2); 
             _normalPerson.AddSchedulePeriod(weekPeriod1);
-            ISchedulePeriod weekPeriod2 = new SchedulePeriod(startPeriod2, SchedulePeriodType.Week, 1);
+            var weekPeriod2 = new SchedulePeriod(startPeriod2, SchedulePeriodType.Week, 1);
             _normalPerson.AddSchedulePeriod(weekPeriod2);
-            ISchedulePeriod weekPeriod3 = new SchedulePeriod(startPeriod3, SchedulePeriodType.Week, 1); 
+            var weekPeriod3 = new SchedulePeriod(startPeriod3, SchedulePeriodType.Week, 1); 
             _normalPerson.AddSchedulePeriod(weekPeriod3);
-            DateOnly expectedDate = new DateOnly(2009,1,12);
-            DateOnly requestdDateTime = new DateOnly(2009, 1, 15);
-            DateOnly periodStart =
+            var expectedDate = new DateOnly(2009,1,12);
+            var requestdDateTime = new DateOnly(2009, 1, 15);
+            var periodStart =
                 _normalPerson.SchedulePeriod(requestdDateTime).GetSchedulePeriod(requestdDateTime).Value.StartDate;
             Assert.AreEqual(weekPeriod1, _normalPerson.SchedulePeriod(new DateOnly(2008, 12, 31)));
             Assert.AreEqual(weekPeriod2, _normalPerson.SchedulePeriod(new DateOnly(2009, 1, 5)));
             Assert.AreEqual(weekPeriod2, _normalPerson.SchedulePeriod(new DateOnly(2009, 1, 13)));
-            Assert.AreEqual(expectedDate, new DateOnly(periodStart));
+            Assert.AreEqual(expectedDate, periodStart);
             Assert.AreEqual(weekPeriod3, _normalPerson.SchedulePeriod(new DateOnly(2009, 3, 6)));
         }
 
@@ -522,7 +518,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
         [Test, ExpectedException(typeof(ArgumentOutOfRangeException))]
         public void VerifyNumberGreaterThanZeroInConstructor()
         {
-            _periodException = new SchedulePeriod(new DateOnly(), SchedulePeriodType.Day, 0);
+            var periodException = new SchedulePeriod(new DateOnly(), SchedulePeriodType.Day, 0);
         }
 
         [Test]

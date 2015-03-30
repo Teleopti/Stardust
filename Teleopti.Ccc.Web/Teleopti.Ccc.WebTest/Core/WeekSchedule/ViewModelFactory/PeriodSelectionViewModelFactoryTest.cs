@@ -1,5 +1,4 @@
-﻿using System.Globalization;
-using NUnit.Framework;
+﻿using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Web.Areas.MyTime.Core;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.ViewModelFactory;
@@ -29,10 +28,8 @@ namespace Teleopti.Ccc.WebTest.Core.WeekSchedule.ViewModelFactory
 			result.SelectedDateRange.MinDate.Should().Be.EqualTo(new DateOnly(2011, 5, 16).ToFixedClientDateOnlyFormat());
 			result.SelectedDateRange.MaxDate.Should().Be.EqualTo(new DateOnly(2011, 5, 22).ToFixedClientDateOnlyFormat());
 
-		  	result.SelectableDateRange.MinDate.Should().Be.EqualTo(
-				new DateOnly(CultureInfo.CurrentCulture.Calendar.MinSupportedDateTime).ToFixedClientDateOnlyFormat());
-		  	result.SelectableDateRange.MaxDate.Should().Be.EqualTo(
-				new DateOnly(CultureInfo.CurrentCulture.Calendar.MaxSupportedDateTime).ToFixedClientDateOnlyFormat());
+		  	result.SelectableDateRange.MinDate.Should().Be.EqualTo(DateOnly.MinValue.ToFixedClientDateOnlyFormat());
+		  	result.SelectableDateRange.MaxDate.Should().Be.EqualTo(DateOnly.MaxValue.ToFixedClientDateOnlyFormat());
 
 		  }
 	 }

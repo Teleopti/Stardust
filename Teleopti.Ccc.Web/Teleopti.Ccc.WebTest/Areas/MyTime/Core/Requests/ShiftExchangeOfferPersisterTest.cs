@@ -39,7 +39,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Requests
 					new ShiftExchangeOfferForm
 					{
 						OfferValidTo = new DateTime(2028, 12, 23),
-						Date = date,
+						Date = date.Date,
 						StartTime = TimeSpan.FromHours(8),
 						EndTime = TimeSpan.FromHours(9.25),
 						WishShiftType = ShiftExchangeLookingForDay.WorkingShift
@@ -80,7 +80,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Requests
 					new ShiftExchangeOfferForm
 					{
 						OfferValidTo = new DateTime(2028, 12, 23),
-						Date = date,
+						Date = date.Date,
 						WishShiftType = ShiftExchangeLookingForDay.EmptyDay
 					},
 					ShiftExchangeOfferStatus.Pending);
@@ -116,7 +116,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Requests
 					new ShiftExchangeOfferForm
 					{
 						OfferValidTo = new DateTime(2028, 12, 23),
-						Date = date,
+						Date = date.Date,
 						WishShiftType = ShiftExchangeLookingForDay.DayOff
 					},
 					ShiftExchangeOfferStatus.Pending);
@@ -152,7 +152,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Requests
 					new ShiftExchangeOfferForm
 					{
 						OfferValidTo = new DateTime(2028, 12, 23),
-						Date = date,
+						Date = date.Date,
 						WishShiftType = ShiftExchangeLookingForDay.DayOff
 					},
 					ShiftExchangeOfferStatus.Pending);
@@ -187,7 +187,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Requests
 					new ShiftExchangeOfferForm
 					{
 						OfferValidTo = new DateTime(2028, 12, 23),
-						Date = date,
+						Date = date.Date,
 						WishShiftType = ShiftExchangeLookingForDay.DayOffOrEmptyDay
 					},
 					ShiftExchangeOfferStatus.Pending);

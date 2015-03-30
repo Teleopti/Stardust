@@ -3,14 +3,12 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using Syncfusion.Windows.Forms.Grid;
-using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
 using Teleopti.Ccc.Infrastructure.Toggle;
 using Teleopti.Ccc.Win.Common;
 using Teleopti.Ccc.Win.Common.Controls;
 using Teleopti.Ccc.Win.Forecasting.Forms;
-using Teleopti.Ccc.WinCode.Common;
 using Teleopti.Ccc.WinCode.Common.Chart;
 using Teleopti.Ccc.WinCode.Common.Rows;
 using Teleopti.Interfaces.Domain;
@@ -100,7 +98,7 @@ namespace Teleopti.Ccc.Win.Scheduling.SkillResult
         /// Created by: robink
         /// Created date: 2008-01-31
         /// </remarks>
-        public void GoToDate(DateTime theDate)
+        public void GoToDate(DateOnly theDate)
         {
             if (DateChanged != null)
             {
@@ -113,7 +111,7 @@ namespace Teleopti.Ccc.Win.Scheduling.SkillResult
             _presenter.SetRowVisibility(key, enabled);
         }
 
-        public DateTime GetLocalCurrentDate(int column)
+        public DateOnly GetLocalCurrentDate(int column)
         {
             throw new NotImplementedException();
         }

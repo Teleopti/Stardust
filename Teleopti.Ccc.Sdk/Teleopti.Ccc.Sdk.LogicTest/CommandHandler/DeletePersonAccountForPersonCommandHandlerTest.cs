@@ -26,7 +26,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
         private IPerson _person;
         private IAbsence _absence;
         private static readonly DateOnly _startDate = new DateOnly(2012, 1, 1);
-		private readonly DateOnlyDto _dateOnydto = new DateOnlyDto { DateTime = _startDate };
+		private readonly DateOnlyDto _dateOnydto = new DateOnlyDto { DateTime = _startDate.Date };
         private DeletePersonAccountForPersonCommandDto _deletePersonAccountForPersonCommandDto;
         private ICurrentUnitOfWorkFactory _currentUnitOfWorkFactory;
 	    private ITraceableRefreshService _traceableRefreshService;

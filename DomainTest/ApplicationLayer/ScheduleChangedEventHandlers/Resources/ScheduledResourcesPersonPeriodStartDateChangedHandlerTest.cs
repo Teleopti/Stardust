@@ -74,14 +74,14 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ScheduleChangedEventHandlers.
 			_target.Handle(new PersonPeriodStartDateChangedEvent
 				{
 					PersonId = _personId,
-					OldStartDate = _date,
-					NewStartDate = _date.AddDays(2),
+					OldStartDate = _date.Date,
+					NewStartDate = _date.Date.AddDays(2),
 					PersonPeriodsBefore = new[]
 						{
 							new PersonPeriodDetail
 								{
-									StartDate = _date,
-									EndDate = _date,
+									StartDate = _date.Date,
+									EndDate = _date.Date,
 									PersonSkillDetails =
 										new[] {new PersonSkillDetail {Active = true, Proficiency = 0.9, SkillId = _skill.Id.GetValueOrDefault()}}
 								}
@@ -90,8 +90,8 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ScheduleChangedEventHandlers.
 						{
 							new PersonPeriodDetail
 								{
-									StartDate = _date.AddDays(2),
-									EndDate = _date.AddDays(2),
+									StartDate = _date.Date.AddDays(2),
+									EndDate = _date.Date.AddDays(2),
 									PersonSkillDetails =
 										new[] {new PersonSkillDetail {Active = true, Proficiency = 0.9, SkillId = _skill.Id.GetValueOrDefault()}}
 								}

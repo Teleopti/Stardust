@@ -18,8 +18,8 @@ namespace Teleopti.Ccc.Sdk.Logic.Assemblers
             personAccountDto.TrackingDescription = entity.Owner.Absence.Name;
 			personAccountDto.Period = new DateOnlyPeriodDto
 			{
-				StartDate = new DateOnlyDto { DateTime = entity.Period().StartDate },
-				EndDate = new DateOnlyDto { DateTime = entity.Period().EndDate }
+				StartDate = new DateOnlyDto { DateTime = entity.Period().StartDate.Date },
+				EndDate = new DateOnlyDto { DateTime = entity.Period().EndDate.Date }
 			};
             personAccountDto.Remaining = entity.Remaining.Ticks;
             personAccountDto.BalanceOut = entity.BalanceOut.Ticks;

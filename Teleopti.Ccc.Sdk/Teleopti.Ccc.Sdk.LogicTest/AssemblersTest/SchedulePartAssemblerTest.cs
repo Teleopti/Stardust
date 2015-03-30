@@ -115,7 +115,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.AssemblersTest
             DateOnly date = new DateOnly(1900,1,1);
             SchedulePartDto dto = new SchedulePartDto
                                       {
-										  Date = new DateOnlyDto { DateTime = date },
+										  Date = new DateOnlyDto { DateTime = date.Date },
                                           TimeZoneId = TimeZoneInfo.Utc.Id,
                                           PersonId = Guid.NewGuid(),
                                           PersonDayOff = new PersonDayOffDto()
@@ -174,7 +174,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.AssemblersTest
         public void VerifyNoDayOffDoesNothingButClearsPersonDayOffs()
         {
             DateOnly date = new DateOnly(1900, 1, 1);
-			SchedulePartDto dto = new SchedulePartDto { Date = new DateOnlyDto { DateTime = date }, TimeZoneId = TimeZoneInfo.Utc.Id, PersonId = Guid.NewGuid() };
+			SchedulePartDto dto = new SchedulePartDto { Date = new DateOnlyDto { DateTime = date.Date }, TimeZoneId = TimeZoneInfo.Utc.Id, PersonId = Guid.NewGuid() };
 
             IScheduleDictionary dic = mocks.StrictMock<IScheduleDictionary>();
             IScheduleRange range = mocks.StrictMock<IScheduleRange>();

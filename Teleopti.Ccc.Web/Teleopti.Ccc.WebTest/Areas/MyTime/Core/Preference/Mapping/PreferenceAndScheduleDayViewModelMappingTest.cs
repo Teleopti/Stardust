@@ -70,7 +70,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Preference.Mapping
 		[Test]
 		public void ShouldMapDate()
 		{
-			var scheduleDay = new StubFactory().ScheduleDayStub(DateOnly.Today);
+			var scheduleDay = new StubFactory().ScheduleDayStub(DateTime.Today);
 
 			var result = Mapper.Map<IScheduleDay, PreferenceAndScheduleDayViewModel>(scheduleDay);
 
@@ -80,7 +80,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Preference.Mapping
 		[Test]
 		public void ShouldMapPreferenceViewModel()
 		{
-			var scheduleDay = new StubFactory().ScheduleDayStub(DateOnly.Today);
+			var scheduleDay = new StubFactory().ScheduleDayStub(DateTime.Today);
 			var preferenceRestriction = new PreferenceRestriction();
 			preferenceRestriction.DayOffTemplate = new DayOffTemplate(new Description("DO"));
 			var preferenceDay = new PreferenceDay(new Person(), DateOnly.Today, preferenceRestriction);
@@ -98,7 +98,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Preference.Mapping
 		[Test]
 		public void ShouldMapDayOffViewModel()
 		{
-			var scheduleDay = new StubFactory().ScheduleDayStub(DateOnly.Today, SchedulePartView.DayOff,
+			var scheduleDay = new StubFactory().ScheduleDayStub(DateTime.Today, SchedulePartView.DayOff,
 			                                                    PersonAssignmentFactory.CreateAssignmentWithDayOff(
 				                                                    new Scenario("s"), new Person(), DateOnly.Today,
 				                                                    new DayOffTemplate(new Description("DO"))));
@@ -114,7 +114,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Preference.Mapping
 		{
 			var stubs = new StubFactory();
 			var absence = stubs.PersonAbsenceStub("Illness");
-			var scheduleDay = new StubFactory().ScheduleDayStub(DateOnly.Today, SchedulePartView.FullDayAbsence, absence);
+			var scheduleDay = new StubFactory().ScheduleDayStub(DateTime.Today, SchedulePartView.FullDayAbsence, absence);
 
 			var result = Mapper.Map<IScheduleDay, PreferenceAndScheduleDayViewModel>(scheduleDay);
 
@@ -132,7 +132,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Preference.Mapping
 			var projection = MockRepository.GenerateMock<IVisualLayerCollection>();
 			projection.Stub(x => x.ContractTime()).Return(contractTime);
 
-			var scheduleDay = new StubFactory().ScheduleDayStub(DateOnly.Today, SchedulePartView.FullDayAbsence, absence);
+			var scheduleDay = new StubFactory().ScheduleDayStub(DateTime.Today, SchedulePartView.FullDayAbsence, absence);
 
 			_projectionProvider.Stub(x => x.Projection(scheduleDay)).Return(projection);
 
@@ -149,7 +149,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Preference.Mapping
 			var personAssignment = new PersonAssignment(new Person(), new Scenario("s"), new DateOnly(2000,1,1));
 			personAssignment.AddActivity(new Activity("sdf"), new DateTimePeriod(2000, 1, 1, 2000, 1, 2));
 			personAssignment.SetShiftCategory(new ShiftCategory("shiftCategory"));
-			var scheduleDay = new StubFactory().ScheduleDayStub(DateOnly.Today, SchedulePartView.MainShift, personAssignment);
+			var scheduleDay = new StubFactory().ScheduleDayStub(DateTime.Today, SchedulePartView.MainShift, personAssignment);
 
 			var result = Mapper.Map<IScheduleDay, PreferenceAndScheduleDayViewModel>(scheduleDay);
 
@@ -164,7 +164,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Preference.Mapping
 			var projection = MockRepository.GenerateMock<IVisualLayerCollection>();
 			projection.Stub(x => x.ContractTime()).Return(contractTime);
 			var personAssignment = new PersonAssignment(new Person(), new Scenario("s"), new DateOnly(2000,1,1));
-			var scheduleDay = new StubFactory().ScheduleDayStub(DateOnly.Today, SchedulePartView.MainShift, personAssignment);
+			var scheduleDay = new StubFactory().ScheduleDayStub(DateTime.Today, SchedulePartView.MainShift, personAssignment);
 			_projectionProvider.Stub(x => x.Projection(scheduleDay)).Return(projection);
 
 			var result = Mapper.Map<IScheduleDay, PreferenceAndScheduleDayViewModel>(scheduleDay);
@@ -180,7 +180,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Preference.Mapping
 			var projection = MockRepository.GenerateMock<IVisualLayerCollection>();
 			projection.Stub(x => x.ContractTime()).Return(contractTime);
 			var personAssignment = new PersonAssignment(new Person(), new Scenario("s"), new DateOnly(2000, 1, 1));
-			var scheduleDay = new StubFactory().ScheduleDayStub(DateOnly.Today, SchedulePartView.MainShift, personAssignment);
+			var scheduleDay = new StubFactory().ScheduleDayStub(DateTime.Today, SchedulePartView.MainShift, personAssignment);
 			_projectionProvider.Stub(x => x.Projection(scheduleDay)).Return(projection);
 
 			var result = Mapper.Map<IScheduleDay, PreferenceAndScheduleDayViewModel>(scheduleDay);
@@ -195,7 +195,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Preference.Mapping
 			var stubs = new StubFactory();
 			var period = new DateTimePeriod(new DateTime(2012, 2, 21, 7, 0, 0, DateTimeKind.Utc), new DateTime(2012, 2, 21, 16, 0, 0, DateTimeKind.Utc));
 			var personAssignment = stubs.PersonAssignmentStub(period);
-			var scheduleDay = new StubFactory().ScheduleDayStub(DateOnly.Today, SchedulePartView.MainShift, personAssignment);
+			var scheduleDay = new StubFactory().ScheduleDayStub(DateTime.Today, SchedulePartView.MainShift, personAssignment);
 
 			var result = Mapper.Map<IScheduleDay, PreferenceAndScheduleDayViewModel>(scheduleDay);
 
@@ -206,7 +206,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Preference.Mapping
 		[Test]
 		public void ShouldFlagFeedbackIfInsidePeriodAndNotScheduled()
 		{
-			var scheduleDay = new StubFactory().ScheduleDayStub(DateOnly.Today);
+			var scheduleDay = new StubFactory().ScheduleDayStub(DateTime.Today);
 			scheduleDay.Stub(x => x.IsScheduled()).Return(false);
 
 			var result = Mapper.Map<IScheduleDay, PreferenceAndScheduleDayViewModel>(scheduleDay);
@@ -217,7 +217,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Preference.Mapping
 		[Test]
 		public void ShouldNotFlagFeedbackIfScheduled()
 		{
-			var scheduleDay = new StubFactory().ScheduleDayStub(DateOnly.Today);
+			var scheduleDay = new StubFactory().ScheduleDayStub(DateTime.Today);
 			scheduleDay.Stub(x => x.IsScheduled()).Return(true);
 
 			var result = Mapper.Map<IScheduleDay, PreferenceAndScheduleDayViewModel>(scheduleDay);
@@ -229,7 +229,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Preference.Mapping
 		public void ShouldMapDayOffStyleClassName()
 		{
 			var stubs = new StubFactory();
-			var scheduleDay = stubs.ScheduleDayStub(DateOnly.Today, SchedulePartView.DayOff, PersonAssignmentFactory.CreateAssignmentWithDayOff());
+			var scheduleDay = stubs.ScheduleDayStub(DateTime.Today, SchedulePartView.DayOff, PersonAssignmentFactory.CreateAssignmentWithDayOff());
 
 			var result = Mapper.Map<IScheduleDay, PreferenceAndScheduleDayViewModel>(scheduleDay);
 
@@ -241,7 +241,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Preference.Mapping
 		public void ShouldMapContractDayOffStyleClassName()
 		{
 			var stubs = new StubFactory();
-			var scheduleDay = stubs.ScheduleDayStub(DateOnly.Today, SchedulePartView.ContractDayOff, PersonAssignmentFactory.CreateAssignmentWithDayOff());
+			var scheduleDay = stubs.ScheduleDayStub(DateTime.Today, SchedulePartView.ContractDayOff, PersonAssignmentFactory.CreateAssignmentWithDayOff());
 
 			var result = Mapper.Map<IScheduleDay, PreferenceAndScheduleDayViewModel>(scheduleDay);
 
@@ -253,7 +253,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Preference.Mapping
 		{
 			var stubs = new StubFactory();
 			var personAbsence = stubs.PersonAbsenceStub(new DateTimePeriod(), stubs.AbsenceLayerStub(stubs.AbsenceStub(Color.DarkMagenta)));
-			var scheduleDay = stubs.ScheduleDayStub(DateOnly.Today, SchedulePartView.FullDayAbsence, personAbsence);
+			var scheduleDay = stubs.ScheduleDayStub(DateTime.Today, SchedulePartView.FullDayAbsence, personAbsence);
 
 			var result = Mapper.Map<IScheduleDay, PreferenceAndScheduleDayViewModel>(scheduleDay);
 
@@ -265,7 +265,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Preference.Mapping
 		{
 			var stubs = new StubFactory();
 			var personAssignment = stubs.PersonAssignmentStub(new DateTimePeriod(), stubs.ShiftCategoryStub(Color.Coral));
-			var scheduleDay = stubs.ScheduleDayStub(DateOnly.Today, SchedulePartView.MainShift, personAssignment);
+			var scheduleDay = stubs.ScheduleDayStub(DateTime.Today, SchedulePartView.MainShift, personAssignment);
 
 			var result = Mapper.Map<IScheduleDay, PreferenceAndScheduleDayViewModel>(scheduleDay);
 
@@ -285,7 +285,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Preference.Mapping
 			meeting.Stub(x => x.Period).Return(new DateTimePeriod(now.ToUniversalTime(), now.ToUniversalTime().AddHours(1)));
 			meeting.Stub(x => x.Optional).Return(true);
 
-			var scheduleDay = stubs.ScheduleDayStub(DateOnly.Today);
+			var scheduleDay = stubs.ScheduleDayStub(DateTime.Today);
 			scheduleDay.Stub(x => x.PersonMeetingCollection()).Return(meetings);
 
 			var result = Mapper.Map<IScheduleDay, PreferenceAndScheduleDayViewModel>(scheduleDay);
@@ -308,7 +308,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Preference.Mapping
 			activityLayer.Stub(x => x.Payload).Return(payload);
 			activityLayer.Stub(x => x.Period).Return(new DateTimePeriod(now.ToUniversalTime(), now.ToUniversalTime().AddHours(1)));
 
-			var scheduleDay = stubs.ScheduleDayStub(DateOnly.Today);
+			var scheduleDay = stubs.ScheduleDayStub(DateTime.Today);
 			personAssignment.Stub(x => x.PersonalActivities()).Return(new List<IPersonalShiftLayer>{activityLayer});
 			scheduleDay.Stub(x => x.PersonAssignment()).Return(personAssignment);
 
@@ -318,6 +318,5 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Preference.Mapping
 			result.PersonalShifts.First().Subject.Should().Be("activity");
 			result.PersonalShifts.First().TimeSpan.Should().Be(now.ToShortTimeString() + " - " + now.AddHours(1).ToShortTimeString());
 		}
-
 	}
 }

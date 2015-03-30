@@ -18,7 +18,7 @@ namespace Teleopti.Ccc.WinCode.Budgeting.Models
             get
             {
                 var date = BudgetDays.First().BudgetDay.Day;
-                var weekNumber = DateHelper.WeekNumber(date, CultureInfo.CurrentCulture);
+                var weekNumber = DateHelper.WeekNumber(date.Date, CultureInfo.CurrentCulture);
                 var week = DateHelper.GetWeekPeriod(date, CultureInfo.CurrentCulture);
 	            return string.Format(CultureInfo.CurrentCulture, UserTexts.Resources.WeekAbbreviationDot, weekNumber,
 		            week.StartDate.ToShortDateString());
@@ -31,7 +31,7 @@ namespace Teleopti.Ccc.WinCode.Budgeting.Models
             {
                 var date = BudgetDays.First().BudgetDay.Day;
                 return string.Format(CultureInfo.CurrentCulture, "{0} {1}", Month,
-                                     CultureInfo.CurrentCulture.Calendar.GetYear(date));
+                                     CultureInfo.CurrentCulture.Calendar.GetYear(date.Date));
             }
         }
     }

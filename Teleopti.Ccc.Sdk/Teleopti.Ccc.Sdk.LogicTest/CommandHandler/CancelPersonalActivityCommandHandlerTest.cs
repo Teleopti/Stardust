@@ -4,7 +4,6 @@ using Rhino.Mocks;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Scheduling;
-using Teleopti.Ccc.Domain.Scheduling.ScheduleTagging;
 using Teleopti.Ccc.Sdk.Common.DataTransferObject;
 using Teleopti.Ccc.Sdk.Common.DataTransferObject.Commands;
 using Teleopti.Ccc.Sdk.Logic;
@@ -32,7 +31,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
 		private Activity _activity;
 		private IScenario _scenario;
 		private static DateTime _startDate = new DateTime(2012, 1, 1, 0, 0, 0, DateTimeKind.Utc);
-		private readonly DateOnlyDto _dateOnlydto = new DateOnlyDto { DateTime = new DateOnly(_startDate) };
+		private readonly DateOnlyDto _dateOnlydto = new DateOnlyDto { DateTime = _startDate.Date };
 		private readonly DateTimePeriodDto _periodDto = new DateTimePeriodDto
 		                                                	{
 		                                                		UtcStartTime = _startDate,

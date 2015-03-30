@@ -59,7 +59,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
             {
                 var skillDayRepository = _repositoryFactory.CreateSkillDayRepository(uow);
                 var lastSkillDayDate = skillDayRepository.FindLastSkillDayDate(workload, scenario);
-                dateOnlyPeriod = new DateOnlyPeriod(lastSkillDayDate, new DateOnly(CultureInfo.CurrentCulture.Calendar.AddMonths(lastSkillDayDate, 6)));
+                dateOnlyPeriod = new DateOnlyPeriod(lastSkillDayDate, new DateOnly(CultureInfo.CurrentCulture.Calendar.AddMonths(lastSkillDayDate.Date, 6)));
             }
             return dateOnlyPeriod;
         }

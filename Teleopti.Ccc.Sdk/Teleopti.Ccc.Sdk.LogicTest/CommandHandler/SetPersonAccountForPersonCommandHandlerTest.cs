@@ -28,7 +28,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
         private IAbsence _absence;
         private static readonly DateTime _startDate = new DateTime(2012, 1, 1, 0, 0, 0, DateTimeKind.Utc);
         private readonly DateOnly _dateOnly = new DateOnly(_startDate);
-		private readonly DateOnlyDto _dateOnlydto = new DateOnlyDto { DateTime = new DateOnly(_startDate) };
+		private readonly DateOnlyDto _dateOnlydto = new DateOnlyDto { DateTime = _startDate.Date };
         private SetPersonAccountForPersonCommandDto _setPersonAccountForPersonCommandDto;
         private ICurrentUnitOfWorkFactory _currentUnitOfWorkFactory;
         private ITraceableRefreshService _tracesableRefreshService;

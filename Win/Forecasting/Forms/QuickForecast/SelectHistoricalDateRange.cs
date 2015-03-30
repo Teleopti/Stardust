@@ -46,8 +46,8 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.QuickForecast
         {
 	        stateObj.StatisticPeriod = new DateOnlyPeriodDto
 		        {
-			        StartDate = new DateOnlyDto {DateTime = HistoricalFromTo.WorkPeriodStart},
-			        EndDate = new DateOnlyDto {DateTime = HistoricalFromTo.WorkPeriodEnd}
+			        StartDate = new DateOnlyDto {DateTime = HistoricalFromTo.WorkPeriodStart.Date},
+			        EndDate = new DateOnlyDto {DateTime = HistoricalFromTo.WorkPeriodEnd.Date}
 		        };
             return true;	
         }

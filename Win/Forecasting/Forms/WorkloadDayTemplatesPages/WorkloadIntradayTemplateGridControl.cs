@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using Syncfusion.Windows.Forms.Grid;
 using Teleopti.Ccc.Domain.Forecasting;
-using Teleopti.Ccc.Win.Common.Controls;
 using Teleopti.Ccc.Win.Common.Controls.Rows;
 using Teleopti.Ccc.WinCode.Common.Chart;
 using Teleopti.Ccc.WinCode.Common.GuiHelpers;
@@ -96,7 +95,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.WorkloadDayTemplatesPages
             if (Owner != null)
             {
                 TaskOwnerDay = TaskOwnerHelper.TaskOwnerDays
-                    .FirstOrDefault(t => t.CurrentDate.Date == Owner.CurrentDay);
+                    .FirstOrDefault(t => t.CurrentDate == Owner.CurrentDay);
             }
             if (TaskOwnerDay == null)
                 return;
@@ -118,7 +117,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.WorkloadDayTemplatesPages
             {
                 Intervals.Clear();
             }
-            RowManagerTemplateTaskPeriod.BaseDate = TaskOwnerDay.CurrentDate;
+            RowManagerTemplateTaskPeriod.BaseDate = TaskOwnerDay.CurrentDate.Date;
             RowManagerTemplateTaskPeriod.SetDataSource(templateTaskPeriods);
         }
 

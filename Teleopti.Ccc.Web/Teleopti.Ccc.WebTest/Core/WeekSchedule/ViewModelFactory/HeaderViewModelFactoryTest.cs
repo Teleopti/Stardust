@@ -55,7 +55,7 @@ namespace Teleopti.Ccc.WebTest.Core.WeekSchedule.ViewModelFactory
 		  {
 				using (mocks.Record())
 				{
-					var firstDayOfWeek = new DateOnly(DateHelper.GetFirstDateInWeek(dateOnly, CultureInfo.CurrentCulture));
+					var firstDayOfWeek = DateHelper.GetFirstDateInWeek(dateOnly, CultureInfo.CurrentCulture.DateTimeFormat.FirstDayOfWeek);
 				Expect.Call(scheduleDay.DateOnlyAsPeriod).Return(new DateOnlyAsDateTimePeriod(firstDayOfWeek, timeZone));
 				}
 				using (mocks.Playback())

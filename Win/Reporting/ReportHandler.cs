@@ -15,7 +15,6 @@ using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.OnlineReporting;
 using Teleopti.Ccc.Win.ExceptionHandling;
 using Teleopti.Ccc.Win.Scheduling;
-using Teleopti.Ccc.WinCode.Common;
 using Teleopti.Ccc.WinCode.Presentation;
 using Teleopti.Ccc.WinCode.Reporting;
 using Teleopti.Ccc.WinCode.Scheduling;
@@ -157,8 +156,8 @@ namespace Teleopti.Ccc.Win.Reporting
 					var targetTime = ViewBaseHelper.CalculateTargetTime(virtualSchedulePeriods, stateHolder.SchedulingResultState, false);
 
 					detailData.PersonName = stateHolder.CommonAgentName(personSchedulePeriods.Key);
-					detailData.PeriodFrom = schedulePeriod.DateOnlyPeriod.StartDate;
-					detailData.PeriodTo = schedulePeriod.DateOnlyPeriod.EndDate;
+					detailData.PeriodFrom = schedulePeriod.DateOnlyPeriod.StartDate.Date;
+					detailData.PeriodTo = schedulePeriod.DateOnlyPeriod.EndDate.Date;
 					if (targetTime.HasValue) detailData.TargetTime = targetTime.Value.TotalMinutes;
 					detailData.TargetDayOffs = ViewBaseHelper.CalculateTargetDaysOff(virtualSchedulePeriods);
 					detailData.ScheduledTime = ViewBaseHelper.CurrentContractTime(stateHolder.Schedules[personSchedulePeriods.Key], period).TotalMinutes;

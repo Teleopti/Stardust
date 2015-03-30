@@ -592,7 +592,7 @@ namespace Teleopti.Ccc.DomainTest.Common
             Assert.IsNotNull(_target.Period(dateOnly));
             Assert.AreEqual(1, _target.PersonPeriods(new DateOnlyPeriod(dateTime, dateTime)).Count);
 
-            _target.TerminatePerson(new DateOnly(dateTime1), _personAccountUpdater);
+            _target.TerminatePerson(dateTime1, _personAccountUpdater);
 
             Assert.IsNull(_target.Period(dateOnly));
             Assert.AreEqual(0, _target.PersonPeriods(new DateOnlyPeriod(dateTime1, dateTime1)).Count);

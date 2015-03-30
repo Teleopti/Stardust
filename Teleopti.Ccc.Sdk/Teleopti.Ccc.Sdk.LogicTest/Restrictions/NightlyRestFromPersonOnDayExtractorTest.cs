@@ -35,7 +35,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.Restrictions
 		public void ShouldReturnNightlyRestFromWorkTimeDirective()
 		{
 			var dateOnly = new DateOnly(2011, 9, 1);
-			var dateOnlyDto = new DateOnlyDto { DateTime = dateOnly };
+			var dateOnlyDto = new DateOnlyDto { DateTime = dateOnly.Date };
 			Expect.Call(_person.Period(dateOnly)).Return(_period);
 			Expect.Call(_period.PersonContract).Return(_personContract);
 			Expect.Call(_personContract.Contract).Return(_contract);

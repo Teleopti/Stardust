@@ -53,8 +53,8 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.QuickForecast
         {
 	        stateObj.TemplatePeriod = new DateOnlyPeriodDto
 		        {
-			        StartDate = new DateOnlyDto {DateTime = TemplatesDatesFromTo.WorkPeriodStart},
-			        EndDate = new DateOnlyDto {DateTime = TemplatesDatesFromTo.WorkPeriodEnd}
+			        StartDate = new DateOnlyDto {DateTime = TemplatesDatesFromTo.WorkPeriodStart.Date},
+			        EndDate = new DateOnlyDto {DateTime = TemplatesDatesFromTo.WorkPeriodEnd.Date}
 		        };
 			stateObj.SmoothingStyle = (int)comboBoxSmoothing.SelectedValue;
             return true;	

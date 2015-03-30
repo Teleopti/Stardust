@@ -111,7 +111,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ReadModelUpdaters
 			{
 				model = new AdherenceDetailsReadModel
 				{
-					Date = date,
+					Date = date.Date,
 					PersonId = personId,
 					State = new AdherenceDetailsReadModelState()
 				};

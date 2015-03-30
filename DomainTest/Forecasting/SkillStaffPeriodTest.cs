@@ -4,9 +4,7 @@ using System.Reflection;
 using NUnit.Framework;
 using Rhino.Mocks;
 using SharpTestsEx;
-using Teleopti.Ccc.Domain.Calculation;
 using Teleopti.Ccc.Domain.Forecasting;
-using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Interfaces.Domain;
 
@@ -52,7 +50,7 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
             _populationStatisticsCalculatedValues = new PopulationStatisticsCalculatedValues(0,0);
 		    
 			_skill = SkillFactory.CreateSkill("name", SkillTypeFactory.CreateSkillType(), 15);
-		    _skillDay = SkillDayFactory.CreateSkillDay(_skill, DateTime.Now);
+		    _skillDay = SkillDayFactory.CreateSkillDay(_skill, DateOnly.Today);
 			_target.SetSkillDay(_skillDay);
 
 			_intraIntervalSamples = new List<int> {1, 2};
@@ -132,7 +130,7 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
 			payload.Shrinkage = new Percent(0.3);
 
 			ISkillDay skillDayPhone =
-				SkillDayFactory.CreateSkillDay(SkillFactory.CreateSkill("Phone", SkillTypeFactory.CreateSkillType(), 60), new DateTime(2009, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc));
+				SkillDayFactory.CreateSkillDay(SkillFactory.CreateSkill("Phone", SkillTypeFactory.CreateSkillType(), 60), new DateOnly(2009, 1, 1));
 			_target.SetSkillDay(skillDayPhone);
 
 			//without shrinkage, shrinkage toggle off
@@ -193,7 +191,7 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
         {
             //Email and other except phone
 			ISkillDay skillDayEmail =
-				SkillDayFactory.CreateSkillDay(SkillFactory.CreateSkill("Email", SkillTypeFactory.CreateSkillTypeEmail(), 60), new DateTime(2009, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc));
+				SkillDayFactory.CreateSkillDay(SkillFactory.CreateSkill("Email", SkillTypeFactory.CreateSkillTypeEmail(), 60), new DateOnly(2009, 1, 1));
 			_target.SetSkillDay(skillDayEmail);
             _target.PickResources65();
 
@@ -230,7 +228,7 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
                                                                     Percent.Value *
                                                                 100);
             ISkillDay skillDayPhone =
-                SkillDayFactory.CreateSkillDay(SkillFactory.CreateSkill("Phone", SkillTypeFactory.CreateSkillType(), 60), new DateTime(2009, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc));
+                SkillDayFactory.CreateSkillDay(SkillFactory.CreateSkill("Phone", SkillTypeFactory.CreateSkillType(), 60), new DateOnly(2009, 1, 1));
             _target.SetSkillDay(skillDayPhone);
             Assert.AreEqual(new Percent(serviceLevel), _target.EstimatedServiceLevel);
         }

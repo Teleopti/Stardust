@@ -44,7 +44,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.NonBlendSkill
 		{
 			var dateTime = new DateTime(2010, 10, 10, 8, 0, 0, DateTimeKind.Utc);
 			var dateTimePeriod = new DateTimePeriod(dateTime, dateTime.AddHours(1));
-			ISkillDay skillDay = SkillDayFactory.CreateSkillDay(_skill, dateTime);
+			ISkillDay skillDay = SkillDayFactory.CreateSkillDay(_skill, new DateOnly(dateTime));
 			ISkillStaffPeriod skillStaffPeriod1 = SkillStaffPeriodFactory.CreateSkillStaffPeriod(_skill, dateTime, 60, 20, 20);
 			
 			skillStaffPeriod1.SetSkillDay(skillDay);
@@ -79,8 +79,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.NonBlendSkill
             var dateTimePeriod = new DateTimePeriod(dateTime, dateTime.AddHours(1));
             var skill2 = SkillFactory.CreateNonBlendSkill("skillTwo");
             skill2.Activity = _activity;
-            ISkillDay skillDay = SkillDayFactory.CreateSkillDay(_skill, dateTime);
-            ISkillDay skillDay2 = SkillDayFactory.CreateSkillDay(skill2, dateTime);
+            ISkillDay skillDay = SkillDayFactory.CreateSkillDay(_skill, new DateOnly(dateTime));
+            ISkillDay skillDay2 = SkillDayFactory.CreateSkillDay(skill2, new DateOnly(dateTime));
             
             ISkillStaffPeriod skillStaffPeriod1 = SkillStaffPeriodFactory.CreateSkillStaffPeriod(_skill, dateTime, 60, 20, 20);
             ISkillStaffPeriod skillStaffPeriod2 = SkillStaffPeriodFactory.CreateSkillStaffPeriod(skill2, dateTime, 60, 10, 10);
@@ -121,7 +121,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.NonBlendSkill
         {
             var dateTime = new DateTime(2010, 10, 10, 8, 0, 0, DateTimeKind.Utc);
             var dateTimePeriod = new DateTimePeriod(dateTime, dateTime.AddHours(1));
-            ISkillDay skillDay = SkillDayFactory.CreateSkillDay(_skill, dateTime);
+            ISkillDay skillDay = SkillDayFactory.CreateSkillDay(_skill, new DateOnly(dateTime));
             ISkillStaffPeriod skillStaffPeriod1 = SkillStaffPeriodFactory.CreateSkillStaffPeriod(_skill, dateTime, 60, 20, 20);
 
 			skillStaffPeriod1.SetSkillDay(skillDay);
@@ -154,7 +154,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.NonBlendSkill
 		{
 			var dateTime = new DateTime(2010, 10, 10, 8, 0, 0, DateTimeKind.Utc);
 			var dateTimePeriod = new DateTimePeriod(dateTime, dateTime.AddHours(1));
-			ISkillDay skillDay = SkillDayFactory.CreateSkillDay(_skill, dateTime);
+			ISkillDay skillDay = SkillDayFactory.CreateSkillDay(_skill, new DateOnly(dateTime));
 			ISkillStaffPeriod skillStaffPeriod1 = SkillStaffPeriodFactory.CreateSkillStaffPeriod(_skill, dateTime, 60, 20, 20);
 
 			skillStaffPeriod1.SetSkillDay(skillDay);
@@ -185,7 +185,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.NonBlendSkill
 		{
 			var dateTime = new DateTime(2010, 10, 10, 8, 0, 0, DateTimeKind.Utc);
 			var dateTimePeriod = new DateTimePeriod(dateTime, dateTime.AddHours(1));
-			ISkillDay skillDay = SkillDayFactory.CreateSkillDay(_skill, dateTime);
+			ISkillDay skillDay = SkillDayFactory.CreateSkillDay(_skill, new DateOnly(dateTime));
 			ISkillStaffPeriod skillStaffPeriod1 = SkillStaffPeriodFactory.CreateSkillStaffPeriod(_skill, dateTime, 60, 20, 20);
 
 			skillStaffPeriod1.SetSkillDay(skillDay);

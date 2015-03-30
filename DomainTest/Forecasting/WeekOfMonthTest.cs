@@ -79,7 +79,7 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
             using (mocks.Playback())
             {
                 var theDate = new DateOnly(2010, 9, 21);
-                int weekNumber = WeekOfMonthItem.WeekIndex(CultureInfo.CurrentCulture.Calendar.GetDayOfMonth(theDate));
+                int weekNumber = WeekOfMonthItem.WeekIndex(CultureInfo.CurrentCulture.Calendar.GetDayOfMonth(theDate.Date));
                 target = new WeekOfMonth(taskOwnerPeriod, weekOfMonthCreator);
                 target.PeriodTypeCollection.Add(weekNumber, monthPeriod);
 

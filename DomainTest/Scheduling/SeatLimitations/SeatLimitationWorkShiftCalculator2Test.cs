@@ -5,7 +5,6 @@ using Rhino.Mocks;
 using Teleopti.Ccc.Domain.AgentInfo;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Scheduling.SeatLimitation;
-using Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftCalculation;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Interfaces.Domain;
 
@@ -37,7 +36,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.SeatLimitations
 		{
 			DateTime dateTime = new DateTime(2010, 10, 10, 8, 0, 0, DateTimeKind.Utc);
 			DateTimePeriod dateTimePeriod = new DateTimePeriod(dateTime, dateTime.AddHours(1));
-			ISkillDay skillDay = SkillDayFactory.CreateSkillDay(_skill, dateTime);
+			ISkillDay skillDay = SkillDayFactory.CreateSkillDay(_skill, new DateOnly(dateTime));
 			ISkillStaffPeriod skillStaffPeriod1 = SkillStaffPeriodFactory.CreateSkillStaffPeriod(_skill, dateTime, 60, 20, 20);
 			skillStaffPeriod1.Payload.CalculatedUsedSeats = 5;
 			skillStaffPeriod1.Payload.MaxSeats = 5;
@@ -71,7 +70,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.SeatLimitations
 		{
 			DateTime dateTime = new DateTime(2010, 10, 10, 8, 0, 0, DateTimeKind.Utc);
 			DateTimePeriod dateTimePeriod = new DateTimePeriod(dateTime, dateTime.AddHours(1));
-			ISkillDay skillDay = SkillDayFactory.CreateSkillDay(_skill, dateTime);
+			ISkillDay skillDay = SkillDayFactory.CreateSkillDay(_skill, new DateOnly(dateTime));
 			ISkillStaffPeriod skillStaffPeriod1 = SkillStaffPeriodFactory.CreateSkillStaffPeriod(_skill, dateTime, 60, 20, 20);
 			skillStaffPeriod1.Payload.CalculatedUsedSeats = 5;
 			skillStaffPeriod1.Payload.MaxSeats = 5;
@@ -104,7 +103,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.SeatLimitations
 		{
 			DateTime dateTime = new DateTime(2010, 10, 10, 8, 0, 0, DateTimeKind.Utc);
 			DateTimePeriod dateTimePeriod = new DateTimePeriod(dateTime, dateTime.AddHours(1));
-			ISkillDay skillDay = SkillDayFactory.CreateSkillDay(_skill, dateTime);
+			ISkillDay skillDay = SkillDayFactory.CreateSkillDay(_skill, new DateOnly(dateTime));
 			ISkillStaffPeriod skillStaffPeriod1 = SkillStaffPeriodFactory.CreateSkillStaffPeriod(_skill, dateTime, 60, 20, 20);
 			skillStaffPeriod1.Payload.CalculatedUsedSeats = 4;
 			skillStaffPeriod1.Payload.MaxSeats = 5;
@@ -138,7 +137,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.SeatLimitations
 		{
 			DateTime dateTime = new DateTime(2010, 10, 10, 8, 0, 0, DateTimeKind.Utc);
 			DateTimePeriod dateTimePeriod = new DateTimePeriod(dateTime, dateTime.AddHours(1));
-			ISkillDay skillDay = SkillDayFactory.CreateSkillDay(_skill, dateTime);
+			ISkillDay skillDay = SkillDayFactory.CreateSkillDay(_skill, new DateOnly(dateTime));
 			ISkillStaffPeriod skillStaffPeriod1 = SkillStaffPeriodFactory.CreateSkillStaffPeriod(_skill, dateTime, 60, 20, 20);
 			skillStaffPeriod1.Payload.CalculatedUsedSeats = 5;
 			skillStaffPeriod1.Payload.MaxSeats = 5;
@@ -168,7 +167,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.SeatLimitations
 		{
 			DateTime dateTime = new DateTime(2010, 10, 10, 8, 0, 0, DateTimeKind.Utc);
 			DateTimePeriod dateTimePeriod = new DateTimePeriod(dateTime, dateTime.AddHours(1));
-			ISkillDay skillDay = SkillDayFactory.CreateSkillDay(_skill, dateTime);
+			ISkillDay skillDay = SkillDayFactory.CreateSkillDay(_skill, new DateOnly(dateTime));
 			ISkillStaffPeriod skillStaffPeriod1 = SkillStaffPeriodFactory.CreateSkillStaffPeriod(_skill, dateTime, 60, 20, 20);
 			skillStaffPeriod1.Payload.CalculatedUsedSeats = 5;
 			skillStaffPeriod1.Payload.MaxSeats = 5;

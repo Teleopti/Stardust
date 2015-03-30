@@ -2,8 +2,6 @@ using System;
 using System.Collections.Generic;
 using NHibernate.Impl;
 using NHibernate.Transform;
-using Teleopti.Ccc.Domain.ApplicationLayer.Rta;
-using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
@@ -41,7 +39,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 		{
 			return ((NHibernateUnitOfWork)_unitOfWork.Current()).Session.CreateSQLQuery(
 				"exec ReadModel.LoadPersonForScheduleSearch @scheduleDate=:scheduleDate, @teamIdList=:teamIdList,@businessUnitId=:businessUnitId, @name=:name ")
-													  .SetDateTime("scheduleDate", shiftTradeDate)
+													  .SetDateOnly("scheduleDate", shiftTradeDate)
 													  .SetString("teamIdList", string.Join(",", teamIdList))
 													  .SetString("name", name)
 													  .SetGuid("businessUnitId", getBusinessUnitId())

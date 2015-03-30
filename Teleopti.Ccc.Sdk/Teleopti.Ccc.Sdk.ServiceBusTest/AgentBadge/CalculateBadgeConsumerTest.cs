@@ -107,11 +107,11 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.AgentBadge
 					AnsweredCallsBadgeEnabled = true
 				});
 
-			var calculationDate = TimeZoneInfo.ConvertTime(now.LocalDateOnly().AddDays(-1), TimeZoneInfo.Local, timezone);
+			var calculationDate = TimeZoneInfo.ConvertTime(now.LocalDateTime().AddDays(-1), TimeZoneInfo.Local, timezone);
 			var message = new CalculateBadgeMessage
 			{
 				TimeZoneCode = timezone.Id,
-				CalculationDate = new DateOnly(calculationDate)
+				CalculationDate = calculationDate
 			};
 		
 			target.Consume(message);
@@ -156,11 +156,11 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.AgentBadge
 				BadgeEnabled = false
 			});
 
-			var calculationDate = TimeZoneInfo.ConvertTime(now.LocalDateOnly().AddDays(-1), TimeZoneInfo.Local, timezone);
+			var calculationDate = TimeZoneInfo.ConvertTime(now.LocalDateTime().AddDays(-1), TimeZoneInfo.Local, timezone);
 			var message = new CalculateBadgeMessage
 			{
 				TimeZoneCode = timezone.Id,
-				CalculationDate = new DateOnly(calculationDate)
+				CalculationDate = calculationDate
 			};
 
 			target.Consume(message);

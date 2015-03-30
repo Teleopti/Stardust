@@ -77,7 +77,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Overtime
 
 			if (aggregateSkill != null)
 			{
-				var aggregatedSkillStaffPeriods = skillStaffPeriods(aggregateSkill, dateOnly, timeZoneInfo);
+				var aggregatedSkillStaffPeriods = skillStaffPeriods(aggregateSkill, dateOnly.Date, timeZoneInfo);
 				double? result = SkillStaffPeriodHelper.SkillDayRootMeanSquare(aggregatedSkillStaffPeriods);
 				if (result.HasValue)
 					return result.Value;
@@ -121,10 +121,10 @@ namespace Teleopti.Ccc.Domain.Scheduling.Overtime
 			return ret;
 		}
 
-		private IEnumerable<ISkillStaffPeriod> skillStaffPeriods(IAggregateSkill aggregateSkill, DateOnly dateOnly, TimeZoneInfo timeZoneInfo)
+		private IEnumerable<ISkillStaffPeriod> skillStaffPeriods(IAggregateSkill aggregateSkill, DateTime date, TimeZoneInfo timeZoneInfo)
 		{
-			_schedulingResultStateHolder.SkillStaffPeriodHolder.SkillStaffPeriodList(aggregateSkill, TimeZoneHelper.NewUtcDateTimePeriodFromLocalDateTime(dateOnly, dateOnly.AddDays(1), timeZoneInfo));
-			return _schedulingResultStateHolder.SkillStaffPeriodHolder.SkillStaffPeriodList(aggregateSkill, TimeZoneHelper.NewUtcDateTimePeriodFromLocalDateTime(dateOnly, dateOnly.AddDays(1), timeZoneInfo));
+			_schedulingResultStateHolder.SkillStaffPeriodHolder.SkillStaffPeriodList(aggregateSkill, TimeZoneHelper.NewUtcDateTimePeriodFromLocalDateTime(date, date.AddDays(1), timeZoneInfo));
+			return _schedulingResultStateHolder.SkillStaffPeriodHolder.SkillStaffPeriodList(aggregateSkill, TimeZoneHelper.NewUtcDateTimePeriodFromLocalDateTime(date, date.AddDays(1), timeZoneInfo));
 		}
 	}
 }

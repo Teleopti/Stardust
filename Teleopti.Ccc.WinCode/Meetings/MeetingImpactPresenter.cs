@@ -139,8 +139,8 @@ namespace Teleopti.Ccc.WinCode.Meetings
 
 		public void SetPeriodAndLoadSchedulesWhenNeeded(DateOnly dateOnly, int daysForward)
 		{
-			var endDate = new DateOnly(dateOnly.AddDays(daysForward));
-			_currentPeriod = TimeZoneHelper.NewUtcDateTimePeriodFromLocalDateTime(dateOnly, endDate, _timeZone.Value);
+			var endDate = dateOnly.AddDays(daysForward);
+			_currentPeriod = TimeZoneHelper.NewUtcDateTimePeriodFromLocalDateTime(dateOnly.Date, endDate.Date, _timeZone.Value);
 			SetPeriodAndLoadSchedulesWhenNeeded(_currentPeriod);
 		}
 

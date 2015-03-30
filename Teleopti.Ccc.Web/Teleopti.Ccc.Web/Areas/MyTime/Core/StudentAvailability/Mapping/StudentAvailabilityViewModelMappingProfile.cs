@@ -69,7 +69,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.StudentAvailability.Mapping
 						var firstDateOfWeek = s.DisplayedPeriod.StartDate;
 						while (firstDateOfWeek < s.DisplayedPeriod.EndDate)
 						{
-							firstDatesOfWeeks.Add(new DateOnly(firstDateOfWeek));
+							firstDatesOfWeeks.Add(firstDateOfWeek);
 							firstDateOfWeek = firstDateOfWeek.AddDays(7);
 						}
 						var mappingDatas = firstDatesOfWeeks.Select(d =>
@@ -85,7 +85,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.StudentAvailability.Mapping
 				.ForMember(d => d.Days, c => c.ResolveUsing(s =>
 					{
 						var dates = s.FirstDateOfWeek.DateRange(7);
-						var dateOnlys = dates.Select(d => new DateOnly(d));
+						var dateOnlys = dates.Select(d => d);
 						var mappingDatas = dateOnlys.Select(d =>
 						                                    new StudentAvailabilityDayDomainData(d, s.Period, s.Person, _studentAvailabilityProvider(), s.ScheduleDays));
 						return mappingDatas.ToArray();
@@ -115,7 +115,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.StudentAvailability.Mapping
 					{
 						if (s.Date.Day.Equals(1))
 							return CultureInfo.CurrentCulture.DateTimeFormat.GetMonthName(s.Date.Month);
-						if (s.Date.Date.Equals(s.DisplayedPeriod.StartDate))
+						if (s.Date.Equals(s.DisplayedPeriod.StartDate))
 							return CultureInfo.CurrentCulture.DateTimeFormat.GetMonthName(s.Date.Month);
 						return string.Empty;
 					}))
@@ -128,8 +128,8 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.StudentAvailability.Mapping
 				.ForMember(d => d.PeriodNavigation, c => c.MapFrom(s => s))
 				.ForMember(d => d.SelectableDateRange, c => c.MapFrom(s => new PeriodDateRangeViewModel
 					{
-						MinDate = new DateOnly(CultureInfo.CurrentCulture.Calendar.MinSupportedDateTime).ToFixedClientDateOnlyFormat(),
-						MaxDate = new DateOnly(CultureInfo.CurrentCulture.Calendar.MaxSupportedDateTime).ToFixedClientDateOnlyFormat()
+						MinDate = DateOnly.MinValue.ToFixedClientDateOnlyFormat(),
+						MaxDate = DateOnly.MaxValue.ToFixedClientDateOnlyFormat()
 					}))
 				.ForMember(d => d.SelectedDateRange, c => c.MapFrom(s => new PeriodDateRangeViewModel
 					{

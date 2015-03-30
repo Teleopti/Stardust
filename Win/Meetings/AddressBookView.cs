@@ -328,7 +328,7 @@ namespace Teleopti.Ccc.Win.Meetings
 
 		public void SetCurrentDate(DateOnly startDate)
 		{
-			dateTimePickerAdvtDate.Value = startDate;
+			dateTimePickerAdvtDate.Value = startDate.Date;
 		}
 
 		public void SetRequiredParticipants(string requiredParticipants)

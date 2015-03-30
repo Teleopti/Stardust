@@ -23,8 +23,8 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
             return _unitOfWorkFactory.Session().CreateSQLQuery(
                     "exec ReadModel.LoadOrganizationForSelector @type=:type,  @ondate=:ondate,@enddate=:enddate, @bu=:bu, @users=:users, @culture=:culture")
                     .SetString("type", "Organization")
-                    .SetDateTime("ondate", dateOnlyPeriod.StartDate)
-                    .SetDateTime("enddate",dateOnlyPeriod.EndDate )
+					.SetDateOnly("ondate", dateOnlyPeriod.StartDate)
+					.SetDateOnly("enddate", dateOnlyPeriod.EndDate)
                     .SetGuid("bu",
                             ((ITeleoptiIdentity)TeleoptiPrincipal.CurrentPrincipal.Identity).BusinessUnit.Id.GetValueOrDefault())
                     .SetBoolean("users", loadUsers)
@@ -40,8 +40,8 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
             return _unitOfWorkFactory.Session().CreateSQLQuery(
                     "exec ReadModel.LoadOrganizationForSelector @type=:type,  @ondate=:ondate,@enddate=:enddate, @bu=:bu, @users=:users, @culture=:culture")
                     .SetString("type", loadType.ToString())
-                    .SetDateTime("ondate", dateOnlyPeriod.StartDate)
-                    .SetDateTime("enddate", dateOnlyPeriod.EndDate)
+					.SetDateOnly("ondate", dateOnlyPeriod.StartDate)
+					.SetDateOnly("enddate", dateOnlyPeriod.EndDate)
                     .SetGuid("bu",
                             ((ITeleoptiIdentity)TeleoptiPrincipal.CurrentPrincipal.Identity).BusinessUnit.Id.GetValueOrDefault())
                     .SetBoolean("users", false)
@@ -59,7 +59,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
                     .SetGuid("tabid", value)
                     .SetGuid("bu",
                             ((ITeleoptiIdentity)TeleoptiPrincipal.CurrentPrincipal.Identity).BusinessUnit.Id.GetValueOrDefault())
-                    .SetDateTime("ondate", onDate)
+					.SetDateOnly("ondate", onDate)
                     .SetInt32("culture", cultureId)
                     .SetResultTransformer(Transformers.AliasToBean(typeof(PersonSelectorUserDefined)))
                     .SetReadOnly(true)

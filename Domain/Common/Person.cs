@@ -2,9 +2,7 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
-using Domain;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
-using Teleopti.Ccc.Domain.ApplicationLayer.Rta;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta.PulseLoop;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common.EntityBaseTypes;
@@ -134,7 +132,7 @@ namespace Teleopti.Ccc.Domain.Common
 			AddEvent(new PersonTeamChangedEvent
 				{
 					PersonId = Id.GetValueOrDefault(),
-					StartDate = personPeriod.StartDate,
+					StartDate = personPeriod.StartDate.Date,
 					OldTeam = teamBefore,
 					NewTeam = teamAfter
 				});
@@ -161,8 +159,8 @@ namespace Teleopti.Ccc.Domain.Common
 				{
 					PersonId = Id.GetValueOrDefault(),
 					SkillId = personSkill.Skill.Id.GetValueOrDefault(),
-					StartDate = personPeriod.StartDate,
-					EndDate = personPeriod.EndDate(),
+					StartDate = personPeriod.StartDate.Date,
+					EndDate = personPeriod.EndDate().Date,
 					Proficiency = personSkill.SkillPercentage.Value,
 					SkillActive = personSkill.Active,
 					SkillsBefore = skillsBefore
@@ -183,7 +181,7 @@ namespace Teleopti.Ccc.Domain.Common
 			AddEvent(new PersonSkillResetEvent
 			{
 				PersonId = Id.GetValueOrDefault(),
-				StartDate = personPeriod.StartDate,
+				StartDate = personPeriod.StartDate.Date,
 				SkillsBefore = skillsBefore
 			});
 		}
@@ -238,8 +236,8 @@ namespace Teleopti.Ccc.Domain.Common
 				{
 					PersonId = Id.GetValueOrDefault(),
 					SkillId = skill.Id.GetValueOrDefault(),
-					StartDate = personPeriod.StartDate,
-					EndDate = personPeriod.EndDate(),
+					StartDate = personPeriod.StartDate.Date,
+					EndDate = personPeriod.EndDate().Date,
 					SkillsBefore = skillsBefore
 				});
 		}
@@ -260,8 +258,8 @@ namespace Teleopti.Ccc.Domain.Common
 				{
 					PersonId = Id.GetValueOrDefault(),
 					SkillId = skill.Id.GetValueOrDefault(),
-					StartDate = personPeriod.StartDate,
-					EndDate = personPeriod.EndDate(),
+					StartDate = personPeriod.StartDate.Date,
+					EndDate = personPeriod.EndDate().Date,
 					SkillsBefore = skillsBefore
 				});
 		}
@@ -280,8 +278,8 @@ namespace Teleopti.Ccc.Domain.Common
 					{
 						PersonId = Id.GetValueOrDefault(),
 						SkillId = skill.Id.GetValueOrDefault(),
-						StartDate = personPeriod.StartDate,
-						EndDate = personPeriod.EndDate(),
+						StartDate = personPeriod.StartDate.Date,
+						EndDate = personPeriod.EndDate().Date,
 						Proficiency = personSkill.SkillPercentage.Value,
 						SkillActive = personSkill.Active,
 						SkillsBefore = skillsBefore
@@ -304,8 +302,8 @@ namespace Teleopti.Ccc.Domain.Common
 					{
 						PersonId = Id.GetValueOrDefault(),
 						SkillId = skill.Id.GetValueOrDefault(),
-						StartDate = personPeriod.StartDate,
-						EndDate = personPeriod.EndDate(),
+						StartDate = personPeriod.StartDate.Date,
+						EndDate = personPeriod.EndDate().Date,
 						SkillsBefore = skillsBefore,
 						ProficiencyAfter = proficiency.Value
 					});
@@ -466,8 +464,8 @@ namespace Teleopti.Ccc.Domain.Common
 					p =>
 					new PersonPeriodDetail
 						{
-							StartDate = p.StartDate,
-							EndDate = p.EndDate(),
+							StartDate = p.StartDate.Date,
+							EndDate = p.EndDate().Date,
 							TeamId = p.Team.Id.GetValueOrDefault(),
 							PersonSkillDetails = gatherSkillDetails(p)
 						}).ToList();
@@ -567,19 +565,19 @@ namespace Teleopti.Ccc.Domain.Common
             TimeSpan minVal = TimeSpan.MaxValue;
 
             //get list with periods where startdate is less than inparam date
-            IList<ISchedulePeriod> periods = PersonSchedulePeriodCollection.Where(s => s.DateFrom <= dateOnly.Date
+            IList<ISchedulePeriod> periods = PersonSchedulePeriodCollection.Where(s => s.DateFrom <= dateOnly
                 || (s.DateFrom.Date == dateOnly.Date)).ToList();
 
             //find period
             foreach (ISchedulePeriod p in periods)
             {
-                if ((p.DateFrom.Date == dateOnly.Date))
+                if ((p.DateFrom == dateOnly))
                 {
                     // Latest period is startdate equal to given date.
                     return p;
                 }
                 //get diff between inpara and startdate
-                TimeSpan diff = dateOnly.Date.Subtract(p.DateFrom);
+                TimeSpan diff = dateOnly.Subtract(p.DateFrom);
 
                 //check against smallest diff and check that inparam is greater than startdate
                 if (diff < minVal && diff.TotalMinutes >= 0)

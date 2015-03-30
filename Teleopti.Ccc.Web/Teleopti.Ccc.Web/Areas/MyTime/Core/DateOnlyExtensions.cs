@@ -1,4 +1,3 @@
-using System;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Web.Areas.MyTime.Core
@@ -9,7 +8,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core
 
 		public static string ToFixedClientDateOnlyFormat(this DateOnly instance)
 		{
-			return (((DateTime)instance).ToString(FixedClientDateOnlyFormat));
+			return instance.Date.ToString(FixedClientDateOnlyFormat);
 		}
 	}
 }

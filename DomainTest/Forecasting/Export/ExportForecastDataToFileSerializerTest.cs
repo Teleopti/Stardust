@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using NUnit.Framework;
 using Teleopti.Ccc.Domain.Forecasting;
@@ -28,9 +27,9 @@ namespace Teleopti.Ccc.DomainTest.Forecasting.Export
             _scenario = ScenarioFactory.CreateScenarioAggregate("test scenario", true);
             _skill = SkillFactory.CreateSkill("Test Skill");
             
-            _skillDay1 = SkillDayFactory.CreateSkillDay(_skill, new DateTime(2012, 09, 14));
-            _skillDay2 = SkillDayFactory.CreateSkillDay(_skill, new DateTime(2012, 09, 15));
-            _skillDay3 = SkillDayFactory.CreateSkillDay(_skill, new DateTime(2012, 09, 16));
+            _skillDay1 = SkillDayFactory.CreateSkillDay(_skill, new DateOnly(2012, 09, 14));
+            _skillDay2 = SkillDayFactory.CreateSkillDay(_skill, new DateOnly(2012, 09, 15));
+            _skillDay3 = SkillDayFactory.CreateSkillDay(_skill, new DateOnly(2012, 09, 16));
 
             _skillDaysList = new List<ISkillDay> {_skillDay1, _skillDay2, _skillDay3};
             _period = new DateOnlyPeriod(new DateOnly(2012, 09, 14), new DateOnly(2012, 09, 14));

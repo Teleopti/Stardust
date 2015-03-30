@@ -31,7 +31,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.DoNotUse
 			absenceInContractTime.InContractTime = true;
 			new AbsenceRepository(uow).Add(absenceInContractTime);
 
-			var date = new DateOnly(DateTime.Parse(Date, swedishCulture));
+			var date = DateTime.Parse(Date, swedishCulture);
 			var startTime = user.PermissionInformation.DefaultTimeZone().SafeConvertTimeToUtc(date);
 			var endTime = startTime.AddHours(24);
 			var period = new DateTimePeriod(startTime, endTime);

@@ -3,14 +3,12 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Reflection;
-using System.Threading;
 using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.Forecasting.Template;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Scheduling;
-using Teleopti.Ccc.Domain.Time;
 using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
@@ -323,9 +321,9 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
         public void VerifyWorkloadDaysParentAreSet()
         {
             var dateTime = new DateOnly(_date);
-            DateTimePeriod dateTimePeriod = TimeZoneHelper.NewUtcDateTimePeriodFromLocalDateTime(dateTime, dateTime.AddDays(1));
+            DateTimePeriod dateTimePeriod = TimeZoneHelper.NewUtcDateTimePeriodFromLocalDate(dateTime, dateTime.AddDays(1),TimeZoneHelper.CurrentSessionTimeZone);
             
-            IList<IWorkloadDay> workloadDays = WorkloadDayFactory.GetWorkloadDaysForTest(dateTime, dateTime, _workload);
+            IList<IWorkloadDay> workloadDays = WorkloadDayFactory.GetWorkloadDaysForTest(_date, _date, _workload);
             SkillPersonData skillPersonData = new SkillPersonData(0, 0);
             ISkillDataPeriod skillDataPeriod = new SkillDataPeriod(ServiceAgreement.DefaultValues(), skillPersonData,
                                                                    TimeZoneHelper.NewUtcDateTimePeriodFromLocalDateTime(
@@ -430,7 +428,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
                 new SkillDataPeriod(
                     ServiceAgreement.DefaultValues(),
                     new SkillPersonData(2, 5),
-                    DateTimeFactory.CreateDateTimePeriod(DateTime.SpecifyKind(skillDate,DateTimeKind.Utc), 1).ChangeEndTime(TimeSpan.FromHours(-12))));
+                    DateTimeFactory.CreateDateTimePeriod(DateTime.SpecifyKind(skillDate.Date,DateTimeKind.Utc), 1).ChangeEndTime(TimeSpan.FromHours(-12))));
             skillDataPeriods.Add(
                 new SkillDataPeriod(
                     skillDataPeriods[0].ServiceAgreement,

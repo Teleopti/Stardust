@@ -2,9 +2,9 @@
 using System.Linq;
 using NHibernate;
 using NHibernate.Transform;
-using Teleopti.Ccc.Domain.ApplicationLayer.Rta;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta.ReadModelUpdaters;
 using Teleopti.Ccc.Infrastructure.LiteUnitOfWork;
+using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Interfaces;
 using Teleopti.Interfaces.Domain;
 
@@ -94,7 +94,7 @@ namespace Teleopti.Ccc.Infrastructure.Rta.Persisters
 				.AddScalar("ShiftHasEnded", NHibernateUtil.Boolean)
 				.AddScalar("StateJson", NHibernateUtil.StringClob)
 				.SetGuid("PersonId", personId)
-				.SetDateTime("Date", date)
+				.SetDateOnly("Date", date)
 				.SetResultTransformer(Transformers.AliasToBean(typeof (getModel)))
 				.List<getModel>()
 				.SingleOrDefault();
@@ -140,7 +140,7 @@ namespace Teleopti.Ccc.Infrastructure.Rta.Persisters
 				.AddScalar("TimeOutOfAdherence", NHibernateUtil.TimeSpan)
 				.AddScalar("ShiftHasEnded", NHibernateUtil.Boolean)
 				.SetGuid("PersonId", personId)
-				.SetDateTime("Date", date)
+				.SetDateOnly("Date", date)
 				.SetResultTransformer(Transformers.AliasToBean(typeof (AdherencePercentageReadModel)))
 				.List<AdherencePercentageReadModel>()
 				.SingleOrDefault();

@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Globalization;
+﻿using System.Collections.Generic;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Forecasting
@@ -105,7 +103,7 @@ namespace Teleopti.Ccc.Domain.Forecasting
         }
         private void calculateEndPoint(double changeFactor)
         {
-            DateTime start = CultureInfo.CurrentCulture.Calendar.MinSupportedDateTime.AddDays(1000);
+            DateOnly start = DateOnly.MinValue;
             double changePercent = CalculateStartDayFactor(start, start.AddDays(_end.Key), new Percent(changeFactor));
 
             _end = new KeyValuePair<int, double>(_end.Key, _start.Value * changePercent);
@@ -178,7 +176,7 @@ namespace Teleopti.Ccc.Domain.Forecasting
         /// Created by: zoet
         /// Created date: 2008-04-24
         /// </remarks>
-        public static double CalculateStartDayFactor(DateTime startTrendPeriod, DateTime startForecastPeriod, Percent trendDayFactor)
+        public static double CalculateStartDayFactor(DateOnly startTrendPeriod, DateOnly startForecastPeriod, Percent trendDayFactor)
         {
             double value = trendDayFactor.Value;
             int dateDiff = startForecastPeriod.Subtract(startTrendPeriod).Days;

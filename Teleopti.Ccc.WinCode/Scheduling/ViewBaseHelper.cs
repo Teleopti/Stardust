@@ -326,11 +326,11 @@ namespace Teleopti.Ccc.WinCode.Scheduling
         /// </remarks>
         public static Dictionary<int, DateOnly> AddWeekDates(DateOnlyPeriod selectedPeriod)
         {
-            Dictionary<int, DateOnly> firstDateOfWeek = new Dictionary<int, DateOnly>();
+            var firstDateOfWeek = new Dictionary<int, DateOnly>();
             
             foreach (var day in selectedPeriod.DayCollection())
             {
-                var weekNumber = DateHelper.WeekNumber(day, CultureInfo.CurrentCulture);
+                var weekNumber = DateHelper.WeekNumber(day.Date, CultureInfo.CurrentCulture);
                 if (!firstDateOfWeek.ContainsKey(weekNumber))
                 {
                     firstDateOfWeek.Add(weekNumber, day);
@@ -775,10 +775,10 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 
 			foreach (var schedulePeriod in persons.Select(person => person.PhysicalSchedulePeriods(period)).SelectMany(schedulePeriods => schedulePeriods))
 			{
-				if (schedulePeriod.DateFrom.Date < min)
+				if (schedulePeriod.DateFrom < min)
 					min = schedulePeriod.DateFrom;
 
-				if (schedulePeriod.RealDateTo().Date > max)
+				if (schedulePeriod.RealDateTo() > max)
 					max = schedulePeriod.RealDateTo();
 			}
 

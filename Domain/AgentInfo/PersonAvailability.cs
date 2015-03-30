@@ -93,10 +93,10 @@ namespace Teleopti.Ccc.Domain.AgentInfo
 
         public virtual IAvailabilityDay GetAvailabilityDay(DateOnly currentDate)
         {
-            if (currentDate < _startDate.Date)
+            if (currentDate < _startDate)
                 throw new ArgumentOutOfRangeException("currentDate", currentDate, "Date must not be less than start date");
             
-            int dateDiff = currentDate.Date.Subtract(_startDate.Date).Days;
+            int dateDiff = currentDate.Subtract(_startDate).Days;
             return _availability.FindAvailabilityDay(dateDiff + StartDay);
         }
 

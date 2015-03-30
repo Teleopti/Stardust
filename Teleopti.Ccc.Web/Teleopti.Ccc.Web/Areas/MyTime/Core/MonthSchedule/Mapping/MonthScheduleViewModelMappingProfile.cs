@@ -23,6 +23,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.MonthSchedule.Mapping
 
 			CreateMap<MonthScheduleDomainData, MonthScheduleViewModel>()
 				.ForMember(d => d.ScheduleDays, c => c.MapFrom(s => s.Days))
+				.ForMember(d => d.CurrentDate, c => c.ResolveUsing(s => s.CurrentDate.Date))
 				.ForMember(d => d.FixedDate, c => c.MapFrom(s => s.CurrentDate.ToFixedClientDateOnlyFormat()))
 				.ForMember(d => d.DayHeaders,
 				           c =>
@@ -37,7 +38,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.MonthSchedule.Mapping
 
 
 			CreateMap<MonthScheduleDayDomainData, MonthDayViewModel>()
-				.ForMember(d => d.Date, c => c.MapFrom(s => s.ScheduleDay.DateOnlyAsPeriod.DateOnly))
+				.ForMember(d => d.Date, c => c.ResolveUsing(s => s.ScheduleDay.DateOnlyAsPeriod.DateOnly))
 				.ForMember(d => d.FixedDate,
 				           c => c.MapFrom(s => s.ScheduleDay.DateOnlyAsPeriod.DateOnly.ToFixedClientDateOnlyFormat()))
 				.ForMember(d => d.Absence, c => c.ResolveUsing(s =>

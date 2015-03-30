@@ -34,6 +34,6 @@ namespace Teleopti.Ccc.Domain.Repositories
 		/// <param name="persons"></param>
 		/// <param name="startDate"></param>
 		/// <returns></returns>
-		IEnumerable<IPersonRotation> LoadPersonRotationsWithHierarchyData(IEnumerable<IPerson> persons, DateTime startDate);
+		IEnumerable<IPersonRotation> LoadPersonRotationsWithHierarchyData(IEnumerable<IPerson> persons, DateOnly startDate);
     }
 }

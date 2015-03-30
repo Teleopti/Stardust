@@ -23,7 +23,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
                                      where !((IDeleteTag) personSkill.Skill).IsDeleted & personSkill.Active
                                      select personSkill.Skill).ToList();
 
-            var scheduleDayUtc = TimeZoneHelper.ConvertToUtc(scheduleDateOnly,
+            var scheduleDayUtc = TimeZoneHelper.ConvertToUtc(scheduleDateOnly.Date,
 																  currentSchedulePeriod.Person.PermissionInformation.DefaultTimeZone());
             var period = new DateTimePeriod(scheduleDayUtc, scheduleDayUtc.AddDays(2));
             return _schedulingResultStateHolder.SkillStaffPeriodHolder.SkillStaffDataPerActivity(period, skills);
@@ -44,7 +44,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 		if(maxSeatSkills.IsEmpty())
 			return new Dictionary<ISkill, ISkillStaffPeriodDictionary>();
 
-			var scheduleDayUtc = TimeZoneHelper.ConvertToUtc(scheduleDateOnly,
+			var scheduleDayUtc = TimeZoneHelper.ConvertToUtc(scheduleDateOnly.Date,
 																  currentSchedulePeriod.Person.PermissionInformation.DefaultTimeZone());
 			var period = new DateTimePeriod(scheduleDayUtc, scheduleDayUtc.AddDays(2));
 
@@ -63,7 +63,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
             if (nonBlendSkills.IsEmpty())
                 return new Dictionary<ISkill, ISkillStaffPeriodDictionary>();
 
-            var scheduleDayUtc = TimeZoneHelper.ConvertToUtc(scheduleDateOnly,
+            var scheduleDayUtc = TimeZoneHelper.ConvertToUtc(scheduleDateOnly.Date,
                                                                   currentSchedulePeriod.Person.PermissionInformation.DefaultTimeZone());
             var period = new DateTimePeriod(scheduleDayUtc, scheduleDayUtc.AddDays(2));
 

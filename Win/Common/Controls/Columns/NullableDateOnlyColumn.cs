@@ -41,7 +41,7 @@ namespace Teleopti.Ccc.Win.Common.Controls.Columns
 
                 DateOnly? value = _propertyReflector.GetValue(dataItem, BindingProperty) as DateOnly?;
                 DateTime? dateTimeValue = null;
-                if (value.HasValue) dateTimeValue = value.Value;
+                if (value.HasValue) dateTimeValue = value.Value.Date;
                 e.Style.CellValue = dateTimeValue;
 
                 OnCellDisplayChanged(dataItem, e);

@@ -6,12 +6,10 @@ using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.Auditing;
 using Teleopti.Ccc.Domain.Repositories;
-using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.Infrastructure.Repositories.Audit;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
-using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.UserTexts;
 using Teleopti.Interfaces.Domain;
 
@@ -146,8 +144,8 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories.Audit
 			{
 				AuditType = Resources.AuditingReportDeleted,
 				ShiftType = Resources.AuditingReportShift,
-				ScheduleStart = TimeZoneHelper.ConvertFromUtc(PersonAssignment.Date, regional.TimeZone),
-				ScheduleEnd = TimeZoneHelper.ConvertFromUtc(PersonAssignment.Date.AddDays(1), regional.TimeZone),
+				ScheduleStart = TimeZoneHelper.ConvertFromUtc(PersonAssignment.Date.Date, regional.TimeZone),
+				ScheduleEnd = TimeZoneHelper.ConvertFromUtc(PersonAssignment.Date.Date.AddDays(1), regional.TimeZone),
 				Detail = string.Empty,
 				ModifiedAt = TimeZoneInfo.ConvertTimeFromUtc(PersonAssignment.UpdatedOn.Value, regional.TimeZone),
 				ModifiedBy = PersonAssignment.UpdatedBy.Name.ToString(NameOrderOption.FirstNameLastName),
@@ -223,8 +221,8 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories.Audit
 				ModifiedAt = TimeZoneInfo.ConvertTimeFromUtc(PersonAssignment.UpdatedOn.Value, regional.TimeZone),
 				ModifiedBy = PersonAssignment.UpdatedBy.Name.ToString(NameOrderOption.FirstNameLastName),
 				ScheduledAgent = PersonAssignment.Person.Name.ToString(NameOrderOption.FirstNameLastName),
-				ScheduleStart = TimeZoneHelper.ConvertFromUtc(PersonAssignment.Date, regional.TimeZone),
-				ScheduleEnd = TimeZoneHelper.ConvertFromUtc(PersonAssignment.Date.AddDays(1), regional.TimeZone)
+				ScheduleStart = TimeZoneHelper.ConvertFromUtc(PersonAssignment.Date.Date, regional.TimeZone),
+				ScheduleEnd = TimeZoneHelper.ConvertFromUtc(PersonAssignment.Date.Date.AddDays(1), regional.TimeZone)
 			};
 
 			using (var uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())

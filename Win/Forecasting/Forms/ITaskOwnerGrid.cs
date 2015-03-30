@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using Teleopti.Ccc.WinCode.Common.Rows;
+using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Win.Forecasting.Forms
 {
@@ -10,8 +11,8 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
         bool HasColumns { get; }
         void RefreshGrid();
         AbstractDetailView Owner { get; set;}
-        void GoToDate(DateTime theDate);
-        DateTime GetLocalCurrentDate(int column);
+        void GoToDate(DateOnly theDate);
+        DateOnly GetLocalCurrentDate(int column);
         IDictionary<int,GridRow> EnabledChartGridRows{ get;}
         ReadOnlyCollection<GridRow> AllGridRows { get; }
         int MainHeaderRow{ get;}

@@ -17,7 +17,7 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
         private IMultisiteDayTemplate target;
         private IList<ITemplateMultisitePeriod> _multisitePeriods;
         private string _name;
-        private DateTime _dt = DateTime.SpecifyKind(SkillDayTemplate.BaseDate, DateTimeKind.Utc);
+        private DateTime _dt = DateTime.SpecifyKind(SkillDayTemplate.BaseDate.Date, DateTimeKind.Utc);
         private int _versionNumber = 43;
 
         [SetUp]

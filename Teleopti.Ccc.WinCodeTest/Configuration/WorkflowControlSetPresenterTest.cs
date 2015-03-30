@@ -804,7 +804,7 @@ namespace Teleopti.Ccc.WinCodeTest.Configuration
 				var expected1 = new DateOnlyPeriod(new DateOnly(2010, 7, 1), new DateOnly(2010, 7, 31));
                 _target.SetPreferencePeriod(expected1);
                 _target.SetStudentAvailabilityPeriod(expected1);
-                _target.SetPublishedToDate(new DateOnly(2010, 5, 31));
+                _target.SetPublishedToDate(new DateTime(2010, 5, 31));
 
 				var expected2 = new DateOnlyPeriod(new DateOnly(DateHelper.MinSmallDateTime), new DateOnly(2010, 5, 31));
 

@@ -117,7 +117,7 @@ namespace Teleopti.Ccc.DomainTest.Forecasting.Template
             SkillPersonData skillPersonData = new SkillPersonData(11, 27);
 
             DateTimePeriod timePeriod = new DateTimePeriod(
-                TimeZoneHelper.ConvertToUtc(SkillDayTemplate.BaseDate, _skill.TimeZone).Add(new TimeSpan(4, 0, 0)),
+                TimeZoneHelper.ConvertToUtc(SkillDayTemplate.BaseDate.Date, _skill.TimeZone).Add(new TimeSpan(4, 0, 0)),
                 TimeZoneHelper.ConvertToUtc(SkillDayTemplate.BaseDate.Date.Add(new TimeSpan(19, 0, 0)), _skill.TimeZone));
 
             TemplateSkillDataPeriod templateSkilldataPeriod = new TemplateSkillDataPeriod(

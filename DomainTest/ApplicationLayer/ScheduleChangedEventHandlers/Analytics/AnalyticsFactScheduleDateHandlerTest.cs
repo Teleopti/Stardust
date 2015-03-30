@@ -41,8 +41,8 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ScheduleChangedEventHandlers.
 			_repository = MockRepository.GenerateMock<IAnalyticsScheduleRepository>();
 			_dimDateList = new List<KeyValuePair<DateOnly, int>>
 			{
-				new KeyValuePair<DateOnly, int>(new DateOnly(new DateOnly(2014, 12, 3)), firstDateId),
-				new KeyValuePair<DateOnly, int>(new DateOnly(new DateOnly(2014, 12, 4)), secondDateId)
+				new KeyValuePair<DateOnly, int>(new DateOnly(2014, 12, 3), firstDateId),
+				new KeyValuePair<DateOnly, int>(new DateOnly(2014, 12, 4), secondDateId)
 			};
 			_repository.Stub(x => x.Dates()).Return(_dimDateList);
 			_target = new AnalyticsFactScheduleDateHandler(_repository);
@@ -72,7 +72,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ScheduleChangedEventHandlers.
 		[Test]
 		public void ShouldReturnNullWhenShiftStartUtcDateIdNotFound()
 		{
-			var analyticsFactScheduleDate = _target.Handle(new DateOnly(1974, 12, 27), _shiftEndDateUtc, _shiftStartDateLocal, _layer, _scheduleChangeTime, minutesPerInterval);
+			var analyticsFactScheduleDate = _target.Handle(new DateTime(1974, 12, 27), _shiftEndDateUtc, _shiftStartDateLocal, _layer, _scheduleChangeTime, minutesPerInterval);
 			Assert.Null(analyticsFactScheduleDate);
 		}
 

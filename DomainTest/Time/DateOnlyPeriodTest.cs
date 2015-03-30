@@ -40,8 +40,8 @@ namespace Teleopti.Ccc.DomainTest.Time
         [Test]
         public void VerifyToDateTimePeriod()
         {
-            DateTime startDate =  TimeZoneHelper.ConvertToUtc(_start,_timeZoneInfo);
-            DateTime endDate = TimeZoneHelper.ConvertToUtc(_end.AddDays(1), _timeZoneInfo);
+            DateTime startDate =  TimeZoneHelper.ConvertToUtc(_start.Date,_timeZoneInfo);
+            DateTime endDate = TimeZoneHelper.ConvertToUtc(_end.AddDays(1).Date, _timeZoneInfo);
             DateTimePeriod dateTimePeriod = _period.ToDateTimePeriod(_timeZoneInfo);
             Assert.AreEqual(startDate, dateTimePeriod.StartDateTime);
             Assert.AreEqual(endDate, dateTimePeriod.EndDateTime);

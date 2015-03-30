@@ -501,7 +501,7 @@ namespace Teleopti.Ccc.Domain.Forecasting
         {
             get
             {
-                var currentUtcDate = TimeZoneHelper.ConvertToUtc(_currentDate, _workload.Skill.TimeZone);
+                var currentUtcDate = TimeZoneHelper.ConvertToUtc(_currentDate.Date, _workload.Skill.TimeZone);
                 DateTime start = currentUtcDate;
                 DateTime end = currentUtcDate;
                 if (_taskPeriodList.Count > 0)

@@ -175,7 +175,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping
 						return new ShiftExchangeOfferRequestViewModel
 						{
 							WishShiftType = offer.DayType.ToString(),
-							ValidTo = offer.ValidTo
+							ValidTo = offer.ValidTo.Date
 						};
 					}
 					

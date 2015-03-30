@@ -220,7 +220,7 @@ namespace Teleopti.Ccc.Win.Payroll
 				{
 					PayrollExportId = payrollExport.Id.GetValueOrDefault(Guid.Empty),
 					OwnerPersonId = ((IUnsafePerson)TeleoptiPrincipal.CurrentPrincipal).Person.Id.GetValueOrDefault(Guid.Empty),
-					ExportPeriod = new DateOnlyPeriod(new DateOnly(payrollExport.Period.StartDate), new DateOnly(payrollExport.Period.EndDate)),
+					ExportPeriod = payrollExport.Period,
 					PayrollExportFormatId = payrollExport.PayrollFormatId,
 					PayrollResultId = payrollResultId
 				};

@@ -131,12 +131,12 @@ namespace Teleopti.Ccc.Win.Meetings
 
 		public void SetStartDate(DateOnly startDate)
 		{
-			dateTimePickerAdvStartDate.Value = startDate;
+			dateTimePickerAdvStartDate.Value = startDate.Date;
 		}
 
 		public void SetEndDate(DateOnly endDate)
 		{
-			dateTimePickerAdvEndDate.Value = endDate;
+			dateTimePickerAdvEndDate.Value = endDate.Date;
 			
 		}
 
@@ -186,15 +186,15 @@ namespace Teleopti.Ccc.Win.Meetings
 
 		public void OnMeetingDatesChanged()
 		{
-			dateTimePickerAdvStartDate.Value = _presenter.Model.StartDate;
-			dateTimePickerAdvEndDate.Value = _presenter.Model.EndDate;
+			dateTimePickerAdvStartDate.Value = _presenter.Model.StartDate.Date;
+			dateTimePickerAdvEndDate.Value = _presenter.Model.EndDate.Date;
 		}
 
 		public void OnMeetingTimeChanged()
 		{
 			outlookTimePickerStartTime.SetTimeValue(_presenter.Model.StartTime);
 			outlookTimePickerEndTime.SetTimeValue(_presenter.Model.EndTime);
-			dateTimePickerAdvEndDate.Value = _presenter.Model.EndDate;
+			dateTimePickerAdvEndDate.Value = _presenter.Model.EndDate.Date;
 			//outlookTimePickerStartTime.TextChanged += outlookTimePickerStartTime_TextChanged;
 		}
 

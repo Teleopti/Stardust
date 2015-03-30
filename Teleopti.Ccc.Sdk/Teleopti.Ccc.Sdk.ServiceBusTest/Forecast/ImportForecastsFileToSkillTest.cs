@@ -8,15 +8,12 @@ using Teleopti.Ccc.Domain.Forecasting.Export;
 using Teleopti.Ccc.Domain.Forecasting.ForecastsFile;
 using Teleopti.Ccc.Domain.Forecasting.Import;
 using Teleopti.Ccc.Domain.Repositories;
-using Teleopti.Ccc.Domain.Time;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.Sdk.ServiceBus.Forecast;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
-using Teleopti.Interfaces.MessageBroker.Client;
 using Teleopti.Interfaces.MessageBroker.Client.Composite;
-using Teleopti.Interfaces.MessageBroker.Events;
 using Teleopti.Interfaces.Messages.General;
 
 namespace Teleopti.Ccc.Sdk.ServiceBusTest.Forecast
@@ -105,7 +102,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Forecast
                 Expect.Call(queryResult.ForecastFileContainer).Return(forecasts);
                 Expect.Call(() => _feedback.SetJobResult(_jobResult, _messageBroker));
                 Expect.Call(() => _serviceBus.Send()).Constraints(
-                    Rhino.Mocks.Constraints.Is.Matching<Object[]>(a => ((OpenAndSplitTargetSkill)a[0]).Date == dateTime));
+                    Rhino.Mocks.Constraints.Is.Matching<Object[]>(a => ((OpenAndSplitTargetSkill)a[0]).Date == dateTime.Date));
             }
             using (_mocks.Playback())
             {

@@ -1,16 +1,10 @@
-#region Imports
-
-using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using Syncfusion.Windows.Forms.Grid;
 using Teleopti.Ccc.Infrastructure.Repositories;
-using Teleopti.Ccc.Win.PeopleAdmin;
 using Teleopti.Ccc.Win.PeopleAdmin.GuiHelpers;
 using Teleopti.Interfaces.Domain;
-
-#endregion
 
 namespace Teleopti.Ccc.Win.Common
 {
@@ -23,29 +17,10 @@ namespace Teleopti.Ccc.Win.Common
     /// </remarks>
     public class PersonRotationDomainFinder : IDomainFinder
     {
-
-        #region Fields - Instance Member
-
-        private FilteredPeopleHolder _filteredPeopleHolder;
+	    private readonly FilteredPeopleHolder _filteredPeopleHolder;
         private PersonRotationRepository _personRotationRepository;
 
-        #endregion
-
-        #region Properties - Instance Member
-
-        #region Properties - Instance Member - PersonRotationDomainFinder Members
-
-        #endregion
-
-        #endregion
-
-        #region Methods - Instance Member
-
-        #region Methods - Instance Member - PersonRotationDomainFinder Members
-
-        #region Methods - Instance Member - PersonRotationDomainFinder Members - Constructors
-
-        /// <summary>
+	    /// <summary>
         /// Initializes a new instance of the <see cref="PersonRotationDomainFinder"/> class.
         /// </summary>
         /// <param name="filteredPeopleHolder">The filtered people holder.</param>
@@ -58,11 +33,7 @@ namespace Teleopti.Ccc.Win.Common
             _filteredPeopleHolder = filteredPeopleHolder;
         }
 
-        #endregion
-
-        #region Methods - Instance Member - PersonRotationDomainFinder Members -  Helpers
-
-        private bool IsPersonAlreadyDisplayed(IPerson person)
+	    private bool IsPersonAlreadyDisplayed(IPerson person)
         {
             return _filteredPeopleHolder.FilteredPersonCollection.Contains(person);
         }
@@ -168,21 +139,13 @@ namespace Teleopti.Ccc.Win.Common
 
         private PersonRotationRepository PersonRotationRepository
         {
-            get
-            {
-                if (_personRotationRepository == null)
-                    _personRotationRepository = new PersonRotationRepository(_filteredPeopleHolder.GetUnitOfWork);
-                return _personRotationRepository;
+            get {
+	            return _personRotationRepository ??
+	                   (_personRotationRepository = new PersonRotationRepository(_filteredPeopleHolder.GetUnitOfWork));
             }
         }
 
-        #endregion
-
-        #endregion
-
-        #region IDomainFinder Members
-
-        /// <summary>
+	    /// <summary>
         /// Finds the data on the persistance which meets the given search criteria and
         /// displays the search results on the given grid control.
         /// </summary>
@@ -192,7 +155,7 @@ namespace Teleopti.Ccc.Win.Common
         /// Created by: Savani Nirasha
         /// Created date: 2008-10-21
         /// </remarks>
-        public void Find(Syncfusion.Windows.Forms.Grid.GridControl grid, SearchCriteria searchCriteria)
+        public void Find(GridControl grid, SearchCriteria searchCriteria)
         {
             IList<IPerson> sortedList = getSortedPersonCollection();
 
@@ -217,9 +180,5 @@ namespace Teleopti.Ccc.Win.Common
                 }
             }
         }
-
-        #endregion
-
-        #endregion
     }
 }

@@ -26,7 +26,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta
 
 		public AdherenceDetailsReadModel Read(Guid personId, DateOnly date)
 		{
-			return _data.SingleOrDefault(r => r.PersonId == personId && r.Date == date);
+			return _data.SingleOrDefault(r => r.PersonId == personId && r.Date == date.Date);
 		}
 	}
 }

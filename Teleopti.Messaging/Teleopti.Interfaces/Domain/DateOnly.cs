@@ -125,6 +125,16 @@ namespace Teleopti.Interfaces.Domain
 			set { _internalDateTime = new DateTime(value.Year, value.Month, value.Day, 0, 0, 0, 0, value.Kind); }
 		}
 
+		public TimeSpan Subtract(DateOnly other)
+		{
+			return _internalDateTime.Subtract(other._internalDateTime);
+		}
+
+		public DateOnly AddMonths(Calendar calendar, int months)
+		{
+			return new DateOnly(calendar.AddMonths(_internalDateTime, months));
+		}
+
 		/// <summary>
 		/// Gets the max value.
 		/// </summary>
@@ -167,20 +177,6 @@ namespace Teleopti.Interfaces.Domain
 		#region operators
 
 		/// <summary>
-		/// Performs an implicit conversion from <see cref="Teleopti.Interfaces.Domain.DateOnly"/> to <see cref="System.DateTime"/>.
-		/// </summary>
-		/// <param name="dateOnly">The date only.</param>
-		/// <returns>The result of the conversion.</returns>
-		/// <remarks>
-		/// Created by: micke
-		/// Created date: 2008-10-18
-		/// </remarks>
-		public static implicit operator DateTime(DateOnly dateOnly)
-		{
-			return dateOnly.Date;
-		}
-
-		/// <summary>
 		/// Implements the operator &lt;.
 		/// </summary>
 		/// <param name="obj1">The obj1.</param>
@@ -201,11 +197,10 @@ namespace Teleopti.Interfaces.Domain
 		/// <param name="obj1">The obj1.</param>
 		/// <param name="obj2">The obj2.</param>
 		/// <returns>The result of the operator.</returns>
-		/// /// 
 		/// <remarks>
 		///  Created by: Ola
 		///  Created date: 2009-03-18    
-		/// /// </remarks>
+		/// </remarks>
 		public static bool operator <=(DateOnly obj1, DateOnly obj2)
 		{
 			return obj1.Date <= obj2.Date;
@@ -217,15 +212,15 @@ namespace Teleopti.Interfaces.Domain
 		/// <param name="obj1">The obj1.</param>
 		/// <param name="obj2">The obj2.</param>
 		/// <returns>The result of the operator.</returns>
-		/// /// 
 		/// <remarks>
 		///  Created by: Ola
 		///  Created date: 2009-03-18    
-		/// /// </remarks>
+		/// </remarks>
 		public static bool operator >=(DateOnly obj1, DateOnly obj2)
 		{
 			return obj1.Date >= obj2.Date;
 		}
+
 		/// <summary>
 		/// Implements the operator &gt;.
 		/// </summary>
@@ -424,6 +419,11 @@ namespace Teleopti.Interfaces.Domain
 		public string ToShortDateString(IFormatProvider cultureInfo)
 		{
 			return _internalDateTime.ToString("d", cultureInfo);
+		}
+
+		public DateOnly Add(TimeSpan timeSpan)
+		{
+			return new DateOnly(_internalDateTime.Add(timeSpan));
 		}
 	}
 

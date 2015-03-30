@@ -50,7 +50,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Denormalizer
 			var model = new ScheduleDayReadModel();
 			var denormalizedScheduleDay = new ProjectionChangedEventScheduleDay
 			{
-				Date = dateOnlyPeriod.StartDate,
+				Date = dateOnlyPeriod.StartDate.Date,
 				Shift = new ProjectionChangedEventShift
 				{
 					StartDateTime = period.StartDateTime,
@@ -81,7 +81,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Denormalizer
 			var model = new ScheduleDayReadModel();
 			var denormalizedScheduleDay = new ProjectionChangedEventScheduleDay
 			{
-				Date = dateOnlyPeriod.StartDate,
+				Date = dateOnlyPeriod.StartDate.Date,
 				Shift = new ProjectionChangedEventShift
 				{
 					StartDateTime = period.StartDateTime,

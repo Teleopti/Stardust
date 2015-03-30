@@ -760,7 +760,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 		{
 			var result = Session.CreateSQLQuery(
 				"exec dbo.DoesPersonHaveExternalLogOn @now=:now, @person=:person")
-			                    .SetDateTime("now", dateTime)
+								.SetDateOnly("now", dateTime)
 								.SetGuid("person", personId)
 			                    .List();
 			return result.Count > 0;

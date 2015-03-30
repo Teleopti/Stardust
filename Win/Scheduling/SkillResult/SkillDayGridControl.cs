@@ -8,12 +8,10 @@ using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
-using Teleopti.Ccc.Infrastructure.Toggle;
 using Teleopti.Ccc.UserTexts;
 using Teleopti.Ccc.Win.Common.Controls;
 using Teleopti.Ccc.Win.Common.Controls.Cells;
 using Teleopti.Ccc.Win.Common.Controls.Rows;
-using Teleopti.Ccc.WinCode.Common;
 using Teleopti.Ccc.WinCode.Common.Rows;
 using Teleopti.Interfaces.Domain;
 
@@ -27,7 +25,6 @@ namespace Teleopti.Ccc.Win.Scheduling.SkillResult
         private const int cellWidth = 55;
         private const string settingName = "SchedulerSkillDayGridAndChart";
         private RowManagerScheduler<SkillDayGridRow, IDictionary<DateTime,IList<ISkillStaffPeriod>>> _rowManager;
-        //todo :(    -> guihelper is there for a reason
         private static readonly Color ColorCells = Color.AntiqueWhite;
         private IList<DateOnly> _dates;
 
@@ -111,8 +108,8 @@ namespace Teleopti.Ccc.Win.Scheduling.SkillResult
 
             if (e.RowIndex == 1 && e.ColIndex > 0)
             {
-                if(e.Style.Tag is DateTime)
-                    WeekendOrWeekday(e, (DateTime)e.Style.Tag, false, true);
+                if(e.Style.Tag is DateOnly)
+                    WeekendOrWeekday(e, (DateOnly)e.Style.Tag, false, true);
             }
             
             e.Handled = true;
@@ -131,7 +128,7 @@ namespace Teleopti.Ccc.Win.Scheduling.SkillResult
         	DateOnly baseDate = dates.Count > 0 ? dates.First() : DateOnly.MinValue;
 
         	_rowManager = new RowManagerScheduler<SkillDayGridRow, IDictionary<DateTime, IList<ISkillStaffPeriod>>>(
-        		this, new List<IntervalDefinition>(), 15, schedulerStateHolder) {BaseDate = baseDate};
+        		this, new List<IntervalDefinition>(), 15, schedulerStateHolder) {BaseDate = baseDate.Date};
 
         	SkillDayGridRow gridRow;
 			if (skill.SkillType.ForecastSource == ForecastSource.MaxSeatSkill)
@@ -314,7 +311,7 @@ namespace Teleopti.Ccc.Win.Scheduling.SkillResult
             return returnDictionary;
         }
 
-        public void WeekendOrWeekday(GridQueryCellInfoEventArgs e, DateTime date, bool backColor, bool textColor)
+        public void WeekendOrWeekday(GridQueryCellInfoEventArgs e, DateOnly date, bool backColor, bool textColor)
         {
             if (DateHelper.IsWeekend(date, CultureInfo.CurrentCulture))
             {

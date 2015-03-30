@@ -35,8 +35,8 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping
 						}
 						return trackerType;
 					}))
-				.ForMember(d => d.PeriodStart, o => o.MapFrom(m => TimeZoneInfo.ConvertTimeFromUtc(m.StartDate, _userTimeZone.Invoke().TimeZone())))
-				.ForMember(d => d.PeriodEnd, o => o.MapFrom(m => TimeZoneInfo.ConvertTimeFromUtc(m.Period().EndDate, _userTimeZone.Invoke().TimeZone())))
+				.ForMember(d => d.PeriodStart, o => o.MapFrom(m => TimeZoneInfo.ConvertTimeFromUtc(m.StartDate.Date, _userTimeZone.Invoke().TimeZone())))
+				.ForMember(d => d.PeriodEnd, o => o.MapFrom(m => TimeZoneInfo.ConvertTimeFromUtc(m.Period().EndDate.Date, _userTimeZone.Invoke().TimeZone())))
 				.ForMember(d => d.Accrued, o => o.MapFrom(m => convertTimeSpanToString(m.Accrued, m.Owner.Absence.Tracker)))
 				.ForMember(d => d.Used, o => o.MapFrom(m =>  convertTimeSpanToString(m.LatestCalculatedBalance, m.Owner.Absence.Tracker)))
 				.ForMember(d => d.Remaining, o => o.MapFrom(m => convertTimeSpanToString(m.Remaining, m.Owner.Absence.Tracker)));

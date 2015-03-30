@@ -5,7 +5,6 @@ using System.Globalization;
 using Syncfusion.Windows.Forms.Grid;
 using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
 using Teleopti.Ccc.Domain.Scheduling.Rules;
-using Teleopti.Ccc.WinCode.Common;
 using Teleopti.Ccc.WinCode.Common.Clipboard;
 using Teleopti.Ccc.WinCode.Scheduling.Panels;
 using Teleopti.Interfaces.Domain;
@@ -25,7 +24,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
         {
         }
 
-        public int GetNowPosition(Rectangle bounds, DateTime localDate)
+        public int GetNowPosition(Rectangle bounds, DateOnly localDate)
         {
             DateTimePeriod period = TimelineSpan[localDate];
             var calculator = new LengthToTimeCalculator(period, bounds.Width);
@@ -38,9 +37,9 @@ namespace Teleopti.Ccc.WinCode.Scheduling
             return SelectedPeriod.DateOnlyPeriod.StartDate.AddDays(column - (int)ColumnType.StartScheduleColumns);
         }
 
-        public int GetColumnFromLocalDate(DateTime now)
+        public int GetColumnFromLocalDate(DateOnly now)
         {
-            return (int)(now.Date - SelectedPeriod.DateOnlyPeriod.StartDate).TotalDays + (int)ColumnType.StartScheduleColumns ;       
+            return (int)(now.Subtract(SelectedPeriod.DateOnlyPeriod.StartDate).TotalDays) + (int)ColumnType.StartScheduleColumns;
         }
 
         /// <summary>
@@ -65,7 +64,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
                 e.Style.Text = localDate.ToShortDateString(CultureInfo.CurrentCulture);
                 e.Style.Tag = localDate;
                 e.Style.CellTipText =
-                    DateHelper.WeekNumber(localDate, CultureInfo.CurrentCulture)
+                    DateHelper.WeekNumber(localDate.Date, CultureInfo.CurrentCulture)
                         .ToString(CultureInfo.CurrentCulture);
 
                 View.SetCellBackTextAndBackColor(e, localDate, false, true, null);
@@ -104,17 +103,14 @@ namespace Teleopti.Ccc.WinCode.Scheduling
                     totalScheduleRange.ScheduledDayCollection(new DateOnlyPeriod(periodLocalStart, periodLocalEnd));
                 foreach (var scheduleDay in scheduleDays)
                 {
-
-                    DateTime startDateTimeLocal;
-                    DateTime endDateTimeLocal;
-					IList<IPersonAssignment> personAssignmentCollection = new List<IPersonAssignment>();
+	                IList<IPersonAssignment> personAssignmentCollection = new List<IPersonAssignment>();
 					if(scheduleDay.PersonAssignment() != null)
 						personAssignmentCollection.Add(scheduleDay.PersonAssignment());
 
                     foreach (IPersonAssignment ag in personAssignmentCollection)
                     {
                         //find earliest start
-                        startDateTimeLocal = ag.Period.LocalStartDateTime;
+                        DateTime startDateTimeLocal = ag.Period.LocalStartDateTime;
                         if (start.ContainsKey(startDateTimeLocal.Date))
                         {
                             if (startDateTimeLocal <= start[startDateTimeLocal.Date])
@@ -130,8 +126,8 @@ namespace Teleopti.Ccc.WinCode.Scheduling
                         //find latest end
                         if (end.ContainsKey(startDateTimeLocal.Date))
                         {
-                            endDateTimeLocal = ag.Period.LocalEndDateTime;
-                            if (endDateTimeLocal >= end[startDateTimeLocal.Date])
+	                        DateTime endDateTimeLocal = ag.Period.LocalEndDateTime;
+	                        if (endDateTimeLocal >= end[startDateTimeLocal.Date])
                             {
                                 //add one extra hour to end time
                                 end[startDateTimeLocal.Date] = endDateTimeLocal;
@@ -147,7 +143,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
             }
 
             //loop each day in our selection and add timeline for each day to dictionary
-            for (DateTime currentDate = periodLocalStart; currentDate <= periodLocalEnd; currentDate = currentDate.AddDays(1))
+            for (var currentDate = periodLocalStart; currentDate <= periodLocalEnd; currentDate = currentDate.AddDays(1))
             {
                 DateTime startDateTime;
                 DateTime endDateTime;
@@ -169,7 +165,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
                 endDateTime = endDateTime.AddMinutes(-endDateTime.Minute).AddHours(1);
 
                 DateTimePeriod dp = TimeZoneHelper.NewUtcDateTimePeriodFromLocalDateTime(startDateTime,endDateTime);
-                TimelineSpan.Add(currentDate.Date, dp);
+                TimelineSpan.Add(currentDate, dp);
             }
         }
     }

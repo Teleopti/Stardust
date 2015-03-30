@@ -58,7 +58,7 @@ namespace Teleopti.Ccc.Sdk.WcfService.Factory
                         {
                             var multiplicatorDataDto = new MultiplicatorDataDto
                                                            {
-                                                               Date = dateOnly,
+                                                               Date = dateOnly.Date,
                                                                ActualDate =
                                                                    layer.Period.StartDateTimeLocal(scheduleDay.TimeZone)
                                                                    .Date,

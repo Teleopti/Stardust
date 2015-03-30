@@ -44,11 +44,11 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.BackToLegalShift
 				Expect.Call(_shiftProjectionCacheManager.ShiftProjectionCachesFromRuleSetBag(new DateOnly(), TimeZoneInfo.Utc,
 					_ruleSetBag, false, true)).Return(new List<IShiftProjectionCache> {_shiftProjectionCache});
 				Expect.Call(_shiftProjectionCache.TheWorkShift).Return(_workShift);
-				Expect.Call(_workShift.ToEditorShift(new DateTime(), TimeZoneInfo.Utc))
+				Expect.Call(_workShift.ToEditorShift(new DateOnly(), TimeZoneInfo.Utc))
 					.Return(editableShift);
 
 				Expect.Call(_shiftProjectionCache.TheWorkShift).Return(_workShift);
-				Expect.Call(_workShift.ToEditorShift(new DateTime(), TimeZoneInfo.Utc))
+				Expect.Call(_workShift.ToEditorShift(new DateOnly(), TimeZoneInfo.Utc))
 					.Return(editableShift);
 				Expect.Call(_scheduleDayEquator.MainShiftEquals(editableShift, editableShift)).Return(true);
 			}
@@ -68,11 +68,11 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.BackToLegalShift
 				Expect.Call(_shiftProjectionCacheManager.ShiftProjectionCachesFromRuleSetBag(new DateOnly(), TimeZoneInfo.Utc,
 					_ruleSetBag, false, true)).Return(new List<IShiftProjectionCache> { _shiftProjectionCache });
 				Expect.Call(_shiftProjectionCache.TheWorkShift).Return(_workShift);
-				Expect.Call(_workShift.ToEditorShift(new DateTime(), TimeZoneInfo.Utc))
+				Expect.Call(_workShift.ToEditorShift(new DateOnly(), TimeZoneInfo.Utc))
 					.Return(editableShift);
 
 				Expect.Call(_shiftProjectionCache.TheWorkShift).Return(_workShift);
-				Expect.Call(_workShift.ToEditorShift(new DateTime(), TimeZoneInfo.Utc))
+				Expect.Call(_workShift.ToEditorShift(new DateOnly(), TimeZoneInfo.Utc))
 					.Return(editableShift);
 				Expect.Call(_scheduleDayEquator.MainShiftEquals(editableShift, editableShift)).Return(false);
 			}

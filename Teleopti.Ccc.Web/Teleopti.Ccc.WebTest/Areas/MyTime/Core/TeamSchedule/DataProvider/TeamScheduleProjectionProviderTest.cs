@@ -41,7 +41,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.TeamSchedule.DataProvider
 		public void ShouldReturnProjectionLayerColor()
 		{
 			var stubs = new StubFactory();
-			var scheduleDay = stubs.ScheduleDayStub(DateOnly.Today);
+			var scheduleDay = stubs.ScheduleDayStub(DateTime.Today);
 			var projection = stubs.ProjectionStub(new[] { stubs.VisualLayerStub(Color.Red) });
 
 			var projectionProvider = MockRepository.GenerateMock<IProjectionProvider>();
@@ -59,7 +59,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.TeamSchedule.DataProvider
 		public void ShouldReturnProjectionLayerPeriod()
 		{
 			var stubs = new StubFactory();
-			var scheduleDay = stubs.ScheduleDayStub(DateOnly.Today);
+			var scheduleDay = stubs.ScheduleDayStub(DateTime.Today);
 			var startTime = new DateTime(2011, 1, 2, 8, 0, 0, DateTimeKind.Utc);
 			var endTime = new DateTime(2011, 1, 2, 17, 0, 0, DateTimeKind.Utc);
 			var period = new DateTimePeriod(startTime, endTime);
@@ -83,7 +83,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.TeamSchedule.DataProvider
 			const string activityName = "Phone";
 			
 			var stubs = new StubFactory();
-			var scheduleDay = stubs.ScheduleDayStub(DateOnly.Today);
+			var scheduleDay = stubs.ScheduleDayStub(DateTime.Today);
 			var layer = stubs.VisualLayerStub(activityName);
 
 			var projection = stubs.ProjectionStub(new[] { layer });
@@ -103,7 +103,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.TeamSchedule.DataProvider
 		public void ShouldProjectDayOff()
 		{
 			var dayOff = PersonAssignmentFactory.CreateAssignmentWithDayOff();
-			var scheduleDay = new StubFactory().ScheduleDayStub(DateOnly.Today, SchedulePartView.DayOff, dayOff);
+			var scheduleDay = new StubFactory().ScheduleDayStub(DateTime.Today, SchedulePartView.DayOff, dayOff);
 
 			var target = new TeamScheduleProjectionProvider(MockRepository.GenerateMock<IProjectionProvider>());
 
@@ -123,7 +123,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.TeamSchedule.DataProvider
 			var layer = stubs.VisualLayerStub(period);
 			var projection = stubs.ProjectionStub(new[] { layer });
 			var dayOff = PersonAssignmentFactory.CreateAssignmentWithDayOff();
-			var scheduleDay = new StubFactory().ScheduleDayStub(DateOnly.Today, SchedulePartView.DayOff, dayOff);
+			var scheduleDay = new StubFactory().ScheduleDayStub(DateTime.Today, SchedulePartView.DayOff, dayOff);
 
 			var projectionProvider = MockRepository.GenerateMock<IProjectionProvider>();
 

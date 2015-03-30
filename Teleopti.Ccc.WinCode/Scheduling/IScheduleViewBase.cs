@@ -10,7 +10,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
     {
         int ColHeaders { get; }
         int RowHeaders { get; }
-        void SetCellBackTextAndBackColor(GridQueryCellInfoEventArgs e, DateTime dateTime, bool backColor, bool textColor, IScheduleDay schedulePart);
+        void SetCellBackTextAndBackColor(GridQueryCellInfoEventArgs e, DateOnly dateTime, bool backColor, bool textColor, IScheduleDay schedulePart);
         string DayHeaderTooltipText(GridStyleInfo gridStyle,DateOnly currentDate);
         bool IsRightToLeft { get; }
         bool IsOverviewColumnsHidden { get; }

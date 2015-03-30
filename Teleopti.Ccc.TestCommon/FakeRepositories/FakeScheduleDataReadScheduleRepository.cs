@@ -82,7 +82,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 		                                                                    IScenario scenario)
 		{
 			//var thisPeriod = _data.First().Period; // max period?
-			return ScheduleDictionaryForTest.WithScheduleDataForManyPeople(scenario, new DateTimePeriod(period.StartDate, period.EndDate), _data);
+			return ScheduleDictionaryForTest.WithScheduleDataForManyPeople(scenario, TimeZoneHelper.NewUtcDateTimePeriodFromLocalDate(period.StartDate, period.EndDate, TimeZoneInfo.Utc), _data);
 		}
 
 		public IScheduleRange ScheduleRangeBasedOnAbsence(DateTimePeriod period, IScenario scenario, IPerson person, IAbsence absence)

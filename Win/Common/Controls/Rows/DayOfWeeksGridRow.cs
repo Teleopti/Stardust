@@ -1,7 +1,6 @@
 ﻿using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.WinCode.Common;
 using System.Collections.Generic;
-using System.Globalization;
 using Teleopti.Ccc.WinCode.Common.Rows;
 using Teleopti.Interfaces.Domain;
 
@@ -39,7 +38,7 @@ namespace Teleopti.Ccc.Win.Common.Controls.Rows
 
         private IPeriodType GetObjectAtPosition(int columnIndex)
         {
-            int dayNumber = (int)CultureInfo.CurrentCulture.Calendar.GetDayOfWeek(_dateTimes[columnIndex - 1]) + 1;
+            int dayNumber = (int)_dateTimes[columnIndex - 1].DayOfWeek + 1;
             return _rowManager.DataSource[0].PeriodTypeCollection[dayNumber];
         }
 

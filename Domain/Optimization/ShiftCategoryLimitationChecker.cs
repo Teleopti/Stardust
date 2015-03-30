@@ -40,7 +40,7 @@ namespace Teleopti.Ccc.Domain.Optimization
                 IList<DateOnly> datesWithCategory;
                 if (shiftCategoryLimitation.Weekly)
                 {
-                    var firstDateInPeriodLocal = new DateOnly(DateHelper.GetFirstDateInWeek(dateOnly, person.FirstDayOfWeek));
+                    var firstDateInPeriodLocal = DateHelper.GetFirstDateInWeek(dateOnly, person.FirstDayOfWeek);
                     var dateOnlyWeek = new DateOnlyPeriod(firstDateInPeriodLocal, firstDateInPeriodLocal.AddDays(6));
                     if (IsShiftCategoryOverOrAtWeekLimit(shiftCategoryLimitation, ScheduleDictionary[person], dateOnlyWeek,
                                                          out datesWithCategory))

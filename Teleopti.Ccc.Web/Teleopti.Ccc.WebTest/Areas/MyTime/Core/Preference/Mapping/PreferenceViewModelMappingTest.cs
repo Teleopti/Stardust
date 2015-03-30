@@ -171,11 +171,11 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Preference.Mapping
 		{
 			data.SelectedDate = DateOnly.Today;
 			data.Period = new DateOnlyPeriod(data.SelectedDate.AddDays(-7), data.SelectedDate.AddDays(7).AddDays(-1));
-			var firstDisplayedDate = new DateOnly(DateHelper.GetFirstDateInWeek(data.Period.StartDate, CultureInfo.CurrentCulture).AddDays(-7));
-			var lastDisplayedDate = new DateOnly(DateHelper.GetLastDateInWeek(data.Period.EndDate, CultureInfo.CurrentCulture).AddDays(7));
+			var firstDisplayedDate = new DateOnly(DateHelper.GetFirstDateInWeek(data.Period.StartDate.Date, CultureInfo.CurrentCulture).AddDays(-7));
+			var lastDisplayedDate = new DateOnly(DateHelper.GetLastDateInWeek(data.Period.EndDate.Date, CultureInfo.CurrentCulture).AddDays(7));
 			// get number of weeks for period. Why cant working with weeks ever be easy...
 			var firstDateNotShown = lastDisplayedDate.AddDays(1);
-			var shownTime = firstDateNotShown.Date.Subtract(firstDisplayedDate);
+			var shownTime = firstDateNotShown.Subtract(firstDisplayedDate);
 			var shownWeeks = shownTime.Days / 7;
 
 			var result = Mapper.Map<PreferenceDomainData, PreferenceViewModel>(data);
@@ -243,7 +243,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Preference.Mapping
 		[Test]
 		public void ShouldFillDayViewHeaderWithMonthNameForFirstDayOfDisplayedPeriod()
 		{
-			var firstDisplayedDate = new DateOnly(DateHelper.GetFirstDateInWeek(data.Period.StartDate, CultureInfo.CurrentCulture).AddDays(-7));
+			var firstDisplayedDate = new DateOnly(DateHelper.GetFirstDateInWeek(data.Period.StartDate.Date, CultureInfo.CurrentCulture).AddDays(-7));
 
 			var result = Mapper.Map<PreferenceDomainData, PreferenceViewModel>(data);
 

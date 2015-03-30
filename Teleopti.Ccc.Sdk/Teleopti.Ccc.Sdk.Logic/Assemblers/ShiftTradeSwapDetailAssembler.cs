@@ -18,8 +18,8 @@ namespace Teleopti.Ccc.Sdk.Logic.Assemblers
                 shiftTradeSwapDetailDto.Id = entity.Id;
                 shiftTradeSwapDetailDto.PersonFrom = PersonAssembler.DomainEntityToDto(entity.PersonFrom);
                 shiftTradeSwapDetailDto.PersonTo = PersonAssembler.DomainEntityToDto(entity.PersonTo);
-				shiftTradeSwapDetailDto.DateFrom = new DateOnlyDto { DateTime = entity.DateFrom };
-				shiftTradeSwapDetailDto.DateTo = new DateOnlyDto { DateTime = entity.DateTo };
+				shiftTradeSwapDetailDto.DateFrom = new DateOnlyDto { DateTime = entity.DateFrom.Date };
+				shiftTradeSwapDetailDto.DateTo = new DateOnlyDto { DateTime = entity.DateTo.Date };
                 shiftTradeSwapDetailDto.SchedulePartFrom =
                     SchedulePartAssembler.DomainEntityToDto(entity.SchedulePartFrom);
                 shiftTradeSwapDetailDto.SchedulePartTo =

@@ -31,8 +31,8 @@ namespace Teleopti.Ccc.Win.Grouping
 
         public void Initialize()
         {
-            _view.FromDate = _model.FromDate;
-            _view.ToDate = _model.ToDate;
+            _view.FromDate = _model.FromDate.Date;
+            _view.ToDate = _model.ToDate.Date;
         }
 
         public void ToDateChanged()

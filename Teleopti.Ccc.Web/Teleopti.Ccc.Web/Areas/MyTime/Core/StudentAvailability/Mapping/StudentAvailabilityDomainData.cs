@@ -25,9 +25,9 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.StudentAvailability.Mapping
 		{
 			get
 			{
-				var startDate = DateHelper.GetFirstDateInWeek(Period.StartDate, CultureInfo.CurrentCulture).AddDays(-7);
-				var endDate = DateHelper.GetLastDateInWeek(Period.EndDate, CultureInfo.CurrentCulture).AddDays(7);
-				return new DateOnlyPeriod(new DateOnly(startDate), new DateOnly(endDate));
+				var startDate = DateHelper.GetFirstDateInWeek(Period.StartDate, CultureInfo.CurrentCulture.DateTimeFormat.FirstDayOfWeek).AddDays(-7);
+				var endDate = DateHelper.GetFirstDateInWeek(Period.EndDate, CultureInfo.CurrentCulture.DateTimeFormat.FirstDayOfWeek).AddDays(6).AddDays(7);
+				return new DateOnlyPeriod(startDate, endDate);
 			}
 		}
 
@@ -93,9 +93,9 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.StudentAvailability.Mapping
 		{
 			get
 			{
-				var startDate = DateHelper.GetFirstDateInWeek(Period.StartDate, CultureInfo.CurrentCulture).AddDays(-7);
-				var endDate = DateHelper.GetLastDateInWeek(Period.EndDate, CultureInfo.CurrentCulture).AddDays(7);
-				return new DateOnlyPeriod(new DateOnly(startDate), new DateOnly(endDate));
+				var startDate = DateHelper.GetFirstDateInWeek(Period.StartDate, CultureInfo.CurrentCulture.DateTimeFormat.FirstDayOfWeek).AddDays(-7);
+				var endDate = DateHelper.GetFirstDateInWeek(Period.EndDate, CultureInfo.CurrentCulture.DateTimeFormat.FirstDayOfWeek).AddDays(6).AddDays(7);
+				return new DateOnlyPeriod(startDate, endDate);
 			}
 		}
 	}

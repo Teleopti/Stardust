@@ -43,7 +43,7 @@ namespace Teleopti.Ccc.Win.Common.Controls.Rows
             if (cellInfo.ColIndex < cellInfo.RowHeaderCount) return;
 
             cellInfo.Style.BaseStyle = "Header";
-            DateTime dateTime = GetCurrentDateTime(cellInfo.ColIndex, cellInfo.RowHeaderCount);
+            var dateTime = GetCurrentDateTime(cellInfo.ColIndex, cellInfo.RowHeaderCount).Date;
             switch (_dateHeaderType)
             {
                 case DateHeaderType.Date:

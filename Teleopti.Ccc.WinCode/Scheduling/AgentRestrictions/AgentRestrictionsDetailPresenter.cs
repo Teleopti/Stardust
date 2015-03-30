@@ -46,7 +46,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling.AgentRestrictions
 				//"--Veckodag--";
 				_model.DetailData().TryGetValue(e.ColIndex - 1, out preferenceCellData);
 				if (preferenceCellData == null) e.Style.CellValue = string.Empty;
-				else e.Style.CellValue = TeleoptiPrincipal.CurrentPrincipal.Regional.Culture.DateTimeFormat.GetDayName(TeleoptiPrincipal.CurrentPrincipal.Regional.Culture.Calendar.GetDayOfWeek(preferenceCellData.TheDate));	
+				else e.Style.CellValue = TeleoptiPrincipal.CurrentPrincipal.Regional.Culture.DateTimeFormat.GetDayName(TeleoptiPrincipal.CurrentPrincipal.Regional.Culture.Calendar.GetDayOfWeek(preferenceCellData.TheDate.Date));	
 				
 				return;
 			}
@@ -141,7 +141,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling.AgentRestrictions
 			    if (preferenceCellData.WeeklyMin < weekMin) weekMin = preferenceCellData.WeeklyMin;
                 if (preferenceCellData.EmploymentType.Equals(EmploymentType.HourlyStaff)) haveFullTimePersonPeriod = false;
                 
-				weekNumber = myCal.GetWeekOfYear(preferenceCellData.TheDate, myCwr, myFirstDow);
+				weekNumber = myCal.GetWeekOfYear(preferenceCellData.TheDate.Date, myCwr, myFirstDow);
 			}
 			var weekIsLegal = minTime <= weekMax;
             if (weekIsLegal && haveFullTimePersonPeriod &&  SchedulerState.SchedulingResultState.UseMinWeekWorkTime) weekIsLegal = maxTime >= weekMin;

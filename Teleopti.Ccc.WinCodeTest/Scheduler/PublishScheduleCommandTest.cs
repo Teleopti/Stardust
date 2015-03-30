@@ -1,9 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using NUnit.Framework;
 using Rhino.Mocks;
 using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
-using Teleopti.Ccc.WinCode.Common;
 using Teleopti.Ccc.WinCode.Scheduling;
 using Teleopti.Interfaces.Domain;
 
@@ -17,7 +15,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 		private IWorkflowControlSet _workflowControlSet;
 		private IList<IWorkflowControlSet> _workflowControlSets;
 		private IList<IWorkflowControlSet> _modifiedWorkflowControlSets;
-		private DateTime _publishToDate;
+		private DateOnly _publishToDate;
 		private ICommonStateHolder _commonStateHolder;
 		
 		[SetUp]
@@ -27,7 +25,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 			_workflowControlSet = _mock.StrictMock<IWorkflowControlSet>();
 			_workflowControlSets = new List<IWorkflowControlSet> { _workflowControlSet };
 			_modifiedWorkflowControlSets = new List<IWorkflowControlSet>();
-			_publishToDate = new DateTime(2014, 1 ,1 );
+			_publishToDate = new DateOnly(2014, 1 ,1 );
 			_commonStateHolder = _mock.StrictMock<ICommonStateHolder>();
 			_target = new PublishScheduleCommand(_workflowControlSets, _publishToDate, _commonStateHolder);	
 		}
@@ -39,7 +37,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 			{
 				Expect.Call(_commonStateHolder.WorkflowControlSets).Return(_workflowControlSets);
 				Expect.Call(_workflowControlSet.Equals(_workflowControlSet)).Return(true);
-				Expect.Call(() => _workflowControlSet.SchedulePublishedToDate = _publishToDate);
+				Expect.Call(() => _workflowControlSet.SchedulePublishedToDate = _publishToDate.Date);
 				Expect.Call(_commonStateHolder.ModifiedWorkflowControlSets).Return(_modifiedWorkflowControlSets);
 			}
 

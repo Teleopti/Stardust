@@ -13,7 +13,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Sche
 			ret.ContractTimeTicks = schedule.ContractTime.Ticks;
 			ret.WorkTimeTicks = schedule.WorkTime.Ticks;
 			ret.PersonId = person.Id.GetValueOrDefault();
-			ret.Date = new DateOnly(schedule.Date);
+			ret.Date = schedule.Date.Date;
 
 			if (schedule.Shift != null)
 			{

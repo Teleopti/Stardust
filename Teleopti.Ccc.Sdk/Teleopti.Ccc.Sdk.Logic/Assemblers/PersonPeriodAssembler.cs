@@ -21,7 +21,7 @@ namespace Teleopti.Ccc.Sdk.Logic.Assemblers
 			var personPeriodDto = new PersonPeriodDetailDto();
 			
 			personPeriodDto.PersonId = entity.Parent.Id.GetValueOrDefault(Guid.Empty);
-			personPeriodDto.StartDate = new DateOnlyDto { DateTime = entity.StartDate };
+			personPeriodDto.StartDate = new DateOnlyDto { DateTime = entity.StartDate.Date };
 			personPeriodDto.Team = new TeamDto { Id = team.Id, Description = team.Description.Name, SiteAndTeam = team.SiteAndTeam };
 			personPeriodDto.Note = entity.Note;
 			personPeriodDto.ContractId = entity.PersonContract.Contract.Id.GetValueOrDefault(Guid.Empty);

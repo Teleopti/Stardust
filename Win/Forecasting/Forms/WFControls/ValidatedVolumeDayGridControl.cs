@@ -170,7 +170,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.WFControls
         {
             if (_rowManagerDayOfWeeks.DataSource.Count == 0) return null;
 
-            int dayNumber = (int)CultureInfo.CurrentCulture.Calendar.GetDayOfWeek(taskOwner.CurrentDate) + 1;
+            int dayNumber = (int)taskOwner.CurrentDate.DayOfWeek + 1;
             IPeriodType periodTypeValue = _rowManagerDayOfWeeks.DataSource[0].PeriodTypeCollection[dayNumber];
             return periodTypeValue;
         }
@@ -503,7 +503,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.WFControls
         /// <param name="date">The date.</param>
         /// <param name="backColor">if set to <c>true</c> [back color].</param>
         /// <param name="textColor">if set to <c>true</c> [text color].</param>
-        private void weekendOrWeekday(GridStyleInfo gridStyleInfo, DateTime date, bool backColor, bool textColor)
+        private void weekendOrWeekday(GridStyleInfo gridStyleInfo, DateOnly date, bool backColor, bool textColor)
         {
             if (DateHelper.IsWeekend(date, CultureInfo.CurrentCulture))
             {
@@ -522,7 +522,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.WFControls
             }
 
             IOutlier outlier;
-            if (_outliers.TryGetValue(new DateOnly(date),out outlier))
+            if (_outliers.TryGetValue(date,out outlier))
             {
                 gridStyleInfo.CellTipText = outlier.Description.Name;
                 gridStyleInfo.BackColor = ColorHelper.GridControlOutlierColor();
@@ -557,25 +557,25 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.WFControls
             get { return TimeSpan.FromDays(1); }
         }
 
-        public override DateTime FirstDateTime
-        {
-            get
-            {
-                if (_dateTimes.IsEmpty())
-                    return DateOnly.Today;
-
-                return _dateTimes.Min();
-            }
-        }
-
-        public override DateTime LastDateTime
+        public override DateTime FirstDate
         {
             get
             {
                 if (_dateTimes.IsEmpty())
                     return DateTime.Today;
 
-                return _dateTimes.Max();
+                return _dateTimes.Min().Date;
+            }
+        }
+
+        public override DateTime LastDate
+        {
+            get
+            {
+                if (_dateTimes.IsEmpty())
+                    return DateTime.Today;
+
+                return _dateTimes.Max().Date;
             }
         }
 
@@ -605,8 +605,8 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.WFControls
                     cellValue = (double)cellValueAsObject;
 
                 var key = _dateTimes[i - RowHeaderCount];
-                if (!keyValueCollection.ContainsKey(key))
-                keyValueCollection.Add(key, cellValue);
+                if (!keyValueCollection.ContainsKey(key.Date))
+                keyValueCollection.Add(key.Date, cellValue);
             }
 
             return keyValueCollection;

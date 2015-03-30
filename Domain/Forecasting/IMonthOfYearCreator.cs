@@ -18,7 +18,7 @@ namespace Teleopti.Ccc.Domain.Forecasting
 
             foreach (TaskOwnerPeriod period in list)
             {
-                int monthNumber = CultureInfo.CurrentCulture.Calendar.GetMonth(period.CurrentDate);
+                int monthNumber = CultureInfo.CurrentCulture.Calendar.GetMonth(period.CurrentDate.Date);
                 monthOfYear.PeriodTypeCollection.Add(monthNumber, new MonthOfYearItem(period, monthOfYear));
             }
         }

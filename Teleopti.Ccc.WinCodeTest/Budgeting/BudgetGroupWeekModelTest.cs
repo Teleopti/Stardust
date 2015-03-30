@@ -608,8 +608,8 @@ namespace Teleopti.Ccc.WinCodeTest.Budgeting
         {
 	        var result = string.Format(CultureInfo.CurrentUICulture, "{0} {1}",
 		        CultureInfo.CurrentUICulture.DateTimeFormat.GetMonthName(
-			        CultureInfo.CurrentUICulture.Calendar.GetMonth(budgetDays.First().BudgetDay.Day)),
-		        CultureInfo.CurrentUICulture.Calendar.GetYear(budgetDays.First().BudgetDay.Day));
+			        CultureInfo.CurrentUICulture.Calendar.GetMonth(budgetDays.First().BudgetDay.Day.Date)),
+		        CultureInfo.CurrentUICulture.Calendar.GetYear(budgetDays.First().BudgetDay.Day.Date));
 
             //"June 2010"
             target.MonthYear.Should().Be.EqualTo(result);

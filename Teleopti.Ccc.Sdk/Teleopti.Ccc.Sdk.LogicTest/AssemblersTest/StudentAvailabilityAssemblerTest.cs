@@ -78,7 +78,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.AssemblersTest
             
             StudentAvailabilityDayDto dto = new StudentAvailabilityDayDto();
             dto.Person = new PersonDto{Id = _person.Id,Name = _person.Name.ToString()};
-			dto.RestrictionDate = new DateOnlyDto { DateTime = _dateOnly };
+			dto.RestrictionDate = new DateOnlyDto { DateTime = _dateOnly.Date };
             dto.NotAvailable = true;
             
             using (_mocks.Record())
@@ -99,7 +99,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.AssemblersTest
         {
             StudentAvailabilityDayDto dto = new StudentAvailabilityDayDto();
             dto.Person = new PersonDto { Id = _person.Id, Name = _person.Name.ToString() };
-			dto.RestrictionDate = new DateOnlyDto { DateTime = _dateOnly };
+			dto.RestrictionDate = new DateOnlyDto { DateTime = _dateOnly.Date };
             StudentAvailabilityRestrictionDto restrictionDto = new StudentAvailabilityRestrictionDto();
 
             var startLimitation = new StartTimeLimitation(new TimeSpan(5, 0, 0), null);

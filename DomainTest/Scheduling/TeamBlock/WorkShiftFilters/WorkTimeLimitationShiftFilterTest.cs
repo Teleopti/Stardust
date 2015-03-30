@@ -84,8 +84,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.WorkShiftFilters
 
 			using (_mocks.Record())
 			{
-				Expect.Call(_workShift1.ToEditorShift(new DateTime(2009, 1, 1), _timeZoneInfo)).Return(mainshift1);
-				Expect.Call(_workShift2.ToEditorShift(new DateTime(2009, 1, 1), _timeZoneInfo)).Return(mainshift2);
+				Expect.Call(_workShift1.ToEditorShift(new DateOnly(2009, 1, 1), _timeZoneInfo)).Return(mainshift1);
+				Expect.Call(_workShift2.ToEditorShift(new DateOnly(2009, 1, 1), _timeZoneInfo)).Return(mainshift2);
 				Expect.Call(_workShift1.ProjectionService()).Return(ps1);
 				Expect.Call(_workShift2.ProjectionService()).Return(ps2);
 				Expect.Call(ps1.CreateProjection()).Return(lc1);

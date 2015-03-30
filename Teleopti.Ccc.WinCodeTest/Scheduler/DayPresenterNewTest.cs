@@ -26,7 +26,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
         private GridlockManager gridlockManager;
         private ClipHandler<IScheduleDay> clipHandlerSchedulePart;
         private ISchedulerStateHolder schedulerState;
-        private readonly DateTime _date = new DateTime(2008, 11, 04, 0, 0, 0, DateTimeKind.Utc);
+        private readonly DateOnly _date = new DateOnly(2008, 11, 04);
         private IOverriddenBusinessRulesHolder _overriddenBusinessRulesHolder;
         private IScheduleDayChangeCallback _scheduleDayChangeCallback;
         private IDayPresenterScaleCalculator _scaleCalculator;

@@ -31,8 +31,8 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 
             return ((NHibernateUnitOfWork) uow).Session.CreateSQLQuery(
                 "exec ReadModel.LoadBudgetAllowanceReadModel @BudgetGroupId	= :budgetGroupId, @ScenarioId = :scenarioId, @DateFrom = :StartDate, @DateTo = :EndDate")
-                                               .SetDateTime("StartDate", period.StartDate)
-                                               .SetDateTime("EndDate", period.EndDate)
+											   .SetDateOnly("StartDate", period.StartDate)
+											   .SetDateOnly("EndDate", period.EndDate)
                                                .SetGuid("budgetGroupId", budgetGroup.Id.GetValueOrDefault())
                                                .SetGuid("scenarioId", scenario.Id.GetValueOrDefault())
                                                .SetResultTransformer(Transformers.AliasToBean(typeof (PayloadWorkTime)))
@@ -49,8 +49,8 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
                 "DELETE FROM ReadModel.ScheduleProjectionReadOnly WHERE BelongsToDate BETWEEN :StartDate AND :EndDate AND ScenarioId=:scenario AND PersonId=:person")
                                         .SetGuid("person", personId)
                                         .SetGuid("scenario", scenarioId)
-                                        .SetDateTime("StartDate", period.StartDate)
-                                        .SetDateTime("EndDate", period.EndDate)
+										.SetDateOnly("StartDate", period.StartDate)
+										.SetDateOnly("EndDate", period.EndDate)
                                         .ExecuteUpdate();
         }
 
@@ -73,7 +73,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
                                         .SetString("ShortName", layer.ShortName)
                                         .SetString("PayrollCode", string.Empty)
                                         .SetInt32("DisplayColor", layer.DisplayColor)
-                                        .SetDateTime("Date", belongsToDate)
+										.SetDateOnly("Date", belongsToDate)
                                         .SetDateTime("InsertedOn", DateTime.UtcNow)
                                         .ExecuteUpdate();
         }
@@ -115,7 +115,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 				"SELECT PayloadId,StartDateTime,EndDateTime,WorkTime,Name,ShortName,DisplayColor,PayrollCode,ContractTime FROM ReadModel.ScheduleProjectionReadOnly WHERE ScenarioId=:ScenarioId AND PersonId=:PersonId AND BelongsToDate=:Date")
 										.SetGuid("ScenarioId", scenarioId)
 										.SetGuid("PersonId", personId)
-										.SetDateTime("Date", date)
+										.SetDateOnly("Date", date)
                                         .SetResultTransformer(new AliasToBeanResultTransformer(typeof(IntermediateProjectionChangedEventLayer)))
                                         .List<IntermediateProjectionChangedEventLayer>().Select(t => t.ToLayer());
 	    }
@@ -194,8 +194,8 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
                 "SELECT PayloadId,StartDateTime,EndDateTime,WorkTime,Name,ShortName,DisplayColor,PayrollCode,ContractTime FROM ReadModel.ScheduleProjectionReadOnly WHERE ScenarioId=:ScenarioId AND PersonId=:PersonId AND BelongsToDate>=:DateFrom AND BelongsToDate<=:DateTo")
 										.SetGuid("ScenarioId", scenarioId)
 										.SetGuid("PersonId", personId)
-										.SetDateTime("DateFrom", datePeriod.StartDate)
-										.SetDateTime("DateTo", datePeriod.EndDate)
+										.SetDateOnly("DateFrom", datePeriod.StartDate)
+										.SetDateOnly("DateTo", datePeriod.EndDate)
 										.SetResultTransformer(new AliasToBeanResultTransformer(typeof(IntermediateProjectionChangedEventLayer)))
 										.List<IntermediateProjectionChangedEventLayer>().Select(t => t.ToLayer());
 		}
@@ -229,7 +229,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
                                     group by BelongsToDate";
 
             var queryResult = ((NHibernateUnitOfWork)uow).Session.CreateSQLQuery(query)
-                                                          .SetDateTime("currentDate", currentDate)
+														  .SetDateOnly("currentDate", currentDate)
                                                           .SetGuid("budgetGroupId", budgetGroupId)
                                                           .SetResultTransformer(Transformers.AliasToBean(typeof(AbsenceRequestInfo)))
                                                           .List<AbsenceRequestInfo>();

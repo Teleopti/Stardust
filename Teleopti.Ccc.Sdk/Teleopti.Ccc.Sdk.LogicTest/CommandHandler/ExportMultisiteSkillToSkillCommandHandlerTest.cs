@@ -1,18 +1,14 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ServiceModel;
 using NUnit.Framework;
 using Rhino.Mocks;
-using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Infrastructure.ApplicationLayer;
-using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.Sdk.Common.DataTransferObject;
 using Teleopti.Ccc.Sdk.Common.DataTransferObject.Commands;
-using Teleopti.Ccc.Sdk.Logic;
 using Teleopti.Ccc.Sdk.Logic.CommandHandler;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
@@ -34,8 +30,8 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
         private readonly DateOnlyPeriodDto _periodDto = new DateOnlyPeriodDto
                                                         {
                                                             Id = Guid.NewGuid(),
-															StartDate = new DateOnlyDto { DateTime = new DateOnly(new DateTime(2012, 1, 1, 0, 0, 0, DateTimeKind.Utc)) },
-															EndDate = new DateOnlyDto { DateTime = new DateOnly(new DateTime(2012, 1, 2, 0, 0, 0, DateTimeKind.Utc)) }
+															StartDate = new DateOnlyDto { DateTime = new DateTime(2012, 1, 1) },
+															EndDate = new DateOnlyDto { DateTime = new DateTime(2012, 1, 2) }
                                                         };
 
         private ExportMultisiteSkillToSkillCommandDto _exportMultisiteSkillToSkillCommandDto;

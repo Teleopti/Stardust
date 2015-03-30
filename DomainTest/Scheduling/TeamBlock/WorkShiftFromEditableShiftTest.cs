@@ -37,7 +37,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 			workShift = _target.Convert(shiftToConvert, new DateOnly(2006, 12, 31), _timeZoneInfo);
 			Assert.AreEqual(expectedPeriod, workShift.Projection.Period());
 
-			var convertedBack = workShift.ToEditorShift(new DateOnly(2007, 1, 1).Date, _timeZoneInfo);
+			var convertedBack = workShift.ToEditorShift(new DateOnly(2007, 1, 1), _timeZoneInfo);
 			Assert.AreSame(shiftToConvert.ShiftCategory, convertedBack.ShiftCategory);
 			Assert.IsTrue(equator.MainShiftEquals(shiftToConvert, convertedBack));
 		}

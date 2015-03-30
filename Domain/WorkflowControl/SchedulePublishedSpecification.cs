@@ -35,7 +35,7 @@ namespace Teleopti.Ccc.Domain.WorkflowControl
             }
             if ((_scheduleVisibleReasons & ScheduleVisibleReasons.Published) == ScheduleVisibleReasons.Published)
             {
-                if (_workflowControlSet.SchedulePublishedToDate.HasValue && _workflowControlSet.SchedulePublishedToDate.Value.AddDays(1) > obj)
+                if (_workflowControlSet.SchedulePublishedToDate.HasValue && new DateOnly(_workflowControlSet.SchedulePublishedToDate.Value).AddDays(1) > obj)
                 {
                     return true;
                 }

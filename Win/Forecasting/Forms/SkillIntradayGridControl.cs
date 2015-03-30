@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using Syncfusion.Windows.Forms.Grid;
-using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Win.Common.Controls;
 using Teleopti.Ccc.Win.Common.Controls.Rows;
@@ -368,9 +367,9 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
             }
             if (TaskOwnerDay != null)
             {
-                _rowManagerSkillStaffPeriod.BaseDate = TaskOwnerDay.CurrentDate;
-                _rowManagerSkillDataPeriod.BaseDate = TaskOwnerDay.CurrentDate;
-                _rowManagerMultisitePeriod.BaseDate = TaskOwnerDay.CurrentDate;
+                _rowManagerSkillStaffPeriod.BaseDate = TaskOwnerDay.CurrentDate.Date;
+                _rowManagerSkillDataPeriod.BaseDate = TaskOwnerDay.CurrentDate.Date;
+                _rowManagerMultisitePeriod.BaseDate = TaskOwnerDay.CurrentDate.Date;
                 GridRows[0] = new DateHeaderGridRow(DateHeaderType.Date, new List<DateOnly> { TaskOwnerDay.CurrentDate });
                 GridRows[1] = new DateHeaderGridRow(DateHeaderType.WeekdayName, new List<DateOnly> { TaskOwnerDay.CurrentDate });
             }

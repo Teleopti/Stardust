@@ -1,11 +1,8 @@
 ﻿using System;
-using System.Dynamic;
 using NUnit.Framework;
 using Rhino.Mocks;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.PersonScheduleDayReadModel;
-using Teleopti.Ccc.Domain.Common;
-using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Security;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
@@ -13,9 +10,7 @@ using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Domain.SystemSetting.GlobalSetting;
 using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.TestCommon.FakeData;
-using Teleopti.Ccc.Web.Areas.MyTime.Core.Settings;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.ShareCalendar;
-using Teleopti.Ccc.Web.Areas.Start.Core.Authentication.DataProvider;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
 
@@ -58,8 +53,8 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.ShareCalendar
 
             var calendarTransformer = MockRepository.GenerateMock<ICalendarTransformer>();
 	    
-            var scheduledTo = DateOnly.Today.AddDays(181);
-		    var person = PersonFactory.CreatePersonWithSchedulePublishedToDate(scheduledTo);
+            var scheduledTo = DateTime.Today.AddDays(181);
+		    var person = PersonFactory.CreatePersonWithSchedulePublishedToDate(new DateOnly(scheduledTo));
 			_personRepository.Stub(x => x.Get(person.Id.GetValueOrDefault())).Return(person);
 		    var models = new[]
 		    {
@@ -192,7 +187,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.ShareCalendar
 			var startDate = DateOnly.Today.AddDays(-60);
 			personScheduleDayReadModelFinder.Stub(x => x.ForPerson(startDate, publishedToDate, person.Id.GetValueOrDefault())).Return(new PersonScheduleDayReadModel[] { });
 
-			target.GetScheduleDays(calendarlinkid,_unitOfWork,publishedToDate);
+			target.GetScheduleDays(calendarlinkid,_unitOfWork, publishedToDate.Date);
 
 			personScheduleDayReadModelFinder.AssertWasNotCalled(x => x.ForPerson(startDate, DateOnly.Today.AddDays(180), person.Id.GetValueOrDefault()));
 			personScheduleDayReadModelFinder.AssertWasCalled(x => x.ForPerson(startDate, publishedToDate, person.Id.GetValueOrDefault()));

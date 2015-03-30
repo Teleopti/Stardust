@@ -72,7 +72,7 @@ namespace Teleopti.Ccc.Win.Common.Controls.Cells
             bool first = true;
             bool isRightToLeft = Grid.IsRightToLeft();
 
-            DateTime currentMonthStart = DateHelper.GetFirstDateInMonth(timePeriod.StartDate, CultureInfo.CurrentCulture);
+            DateTime currentMonthStart = DateHelper.GetFirstDateInMonth(timePeriod.StartDate.Date, CultureInfo.CurrentCulture);
             do
             {
                 string time = currentMonthStart.ToString(CultureInfo.CurrentUICulture.DateTimeFormat.YearMonthPattern,CultureInfo.CurrentUICulture);
@@ -103,7 +103,7 @@ namespace Teleopti.Ccc.Win.Common.Controls.Cells
                     g.DrawLine(new Pen(Color.Black, 1), (int)(cellRectangle.Left + xStart), (int)(cellRectangle.Top + dispDateSize.Height + 1),
                                (int)(cellRectangle.Left + xStart), cellRectangle.Bottom);
                 }
-            } while (currentMonthStart<timePeriod.EndDate);
+            } while (currentMonthStart<timePeriod.EndDate.Date);
         }
     }
 }

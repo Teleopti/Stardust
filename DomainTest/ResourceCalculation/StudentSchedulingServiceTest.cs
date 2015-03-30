@@ -467,8 +467,8 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
             {
                 var lst = _studentSchedulingService.GetAllDates(parts);
                 Assert.AreEqual(2, lst.Count);
-                Assert.AreEqual(new DateOnly( date1), lst[0]);
-                Assert.AreEqual(new DateOnly(date2), lst[1]);
+                Assert.AreEqual(date1, lst[0]);
+                Assert.AreEqual(date2, lst[1]);
             }
         }
 

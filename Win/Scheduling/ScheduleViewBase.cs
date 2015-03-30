@@ -484,7 +484,7 @@ namespace Teleopti.Ccc.Win.Scheduling
         //return tip for a day header
         public virtual string DayHeaderTooltipText(GridStyleInfo gridStyle,DateOnly currentDate)
         {
-            return gridStyle.CellTipText = string.Concat(CultureInfo.CurrentUICulture.DateTimeFormat.GetDayName(CultureInfo.CurrentUICulture.Calendar.GetDayOfWeek(currentDate)), " ",
+            return gridStyle.CellTipText = string.Concat(CultureInfo.CurrentUICulture.DateTimeFormat.GetDayName(CultureInfo.CurrentUICulture.Calendar.GetDayOfWeek(currentDate.Date)), " ",
                currentDate.ToShortDateString(CultureInfo.CurrentCulture));
         }
 
@@ -514,7 +514,7 @@ namespace Teleopti.Ccc.Win.Scheduling
             }
         }
 
-        public void SetCellBackTextAndBackColor(GridQueryCellInfoEventArgs e, DateTime dateTime, bool backColor, bool textColor, IScheduleDay schedulePart)
+        public void SetCellBackTextAndBackColor(GridQueryCellInfoEventArgs e, DateOnly dateTime, bool backColor, bool textColor, IScheduleDay schedulePart)
         {
             Color backGroundColor = _grid.BackColor;
             Color backGroundHolidayColor = _colorHolidayCell;
@@ -1162,7 +1162,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 
             foreach (IScheduleDay part in scheduleParts)
             {
-                Point point = GetCellPositionForAgentDay(part.Person, part.DateOnlyAsPeriod.DateOnly.Date);
+                Point point = GetCellPositionForAgentDay(part.Person, part.DateOnlyAsPeriod.DateOnly);
 
                 if (point.Y > 0 && point.X > 0)
                 {
@@ -1311,7 +1311,7 @@ namespace Teleopti.Ccc.Win.Scheduling
             return retRow;
         }
 
-        public int GetColumnForDate(DateTime date)
+        public int GetColumnForDate(DateOnly date)
         {
 			var dayView = this as DayViewNew;
 			if (dayView != null) 
@@ -1343,7 +1343,7 @@ namespace Teleopti.Ccc.Win.Scheduling
             return retCol;
         }
 
-        public virtual Point GetCellPositionForAgentDay(IEntity person, DateTime dayDate)
+        public virtual Point GetCellPositionForAgentDay(IEntity person, DateOnly dayDate)
         {
             return new Point(GetColumnForDate(dayDate), GetRowForAgent(person));
         }
@@ -1449,7 +1449,9 @@ namespace Teleopti.Ccc.Win.Scheduling
                 int row = GetRowForAgent(person);
                 _grid.RefreshRange(GridRangeInfo.Cell(row, (int)ColumnType.RowHeaderColumn + 1), true);
                 //loop for all days in period
-                for (DateTime date = period.StartDateTime; date < period.EndDateTime; date = date.AddDays(1))
+	            var endDate = new DateOnly(period.EndDateTime);
+	            var startDate = new DateOnly(period.StartDateTime);
+	            for (var date = startDate; date < endDate; date = date.AddDays(1))
                 {
                     int column = GetColumnForDate(date);
                     if (column >= 0 && row >= 0)

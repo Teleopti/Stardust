@@ -20,7 +20,7 @@ namespace Teleopti.Ccc.DomainTest.Forecasting.Angel
 			var futurePeriod = new DateOnlyPeriod(2015, 1, 1, 2015, 2, 1);
 			var historicalPeriod = new DateOnlyPeriod(2014, 1, 1, 2014, 12, 31);
 			var fetchAndFillSkillDays = MockRepository.GenerateMock<IFetchAndFillSkillDays>();
-			var skillDay = SkillDayFactory.CreateSkillDay(skill1, new DateTime(2015, 1, 3));
+			var skillDay = SkillDayFactory.CreateSkillDay(skill1, new DateOnly(2015, 1, 3));
 			skillDay.Skill.WorkloadCollection.ForEach(w => w.SetId(Guid.NewGuid()));
 			var skillDays = new[] {skillDay};
 			fetchAndFillSkillDays.Stub(x => x.FindRange(futurePeriod, skill1)).Return(skillDays);
@@ -56,7 +56,7 @@ namespace Teleopti.Ccc.DomainTest.Forecasting.Angel
 			var futurePeriod = new DateOnlyPeriod(2015, 1, 1, 2015, 2, 1);
 			var historicalPeriod = new DateOnlyPeriod(2014, 1, 1, 2014, 12, 31);
 			var fetchAndFillSkillDays = MockRepository.GenerateMock<IFetchAndFillSkillDays>();
-			var skillDay = SkillDayFactory.CreateSkillDay(skill1, new DateTime(2015, 1, 3));
+			var skillDay = SkillDayFactory.CreateSkillDay(skill1, new DateOnly(2015, 1, 3));
 			skillDay.Skill.WorkloadCollection.ForEach(w => w.SetId(Guid.NewGuid()));
 			var skillDays = new[] { skillDay };
 			fetchAndFillSkillDays.Stub(x => x.FindRange(futurePeriod, skill1)).Return(skillDays);

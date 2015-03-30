@@ -435,13 +435,13 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.SeasonPages
         }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1065:DoNotRaiseExceptionsInUnexpectedLocations")]
-        public override DateTime FirstDateTime
+        public override DateTime FirstDate
         {
             get { throw new NotImplementedException(); }
         }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1065:DoNotRaiseExceptionsInUnexpectedLocations")]
-        public override DateTime LastDateTime
+        public override DateTime LastDate
         {
             get { throw new NotImplementedException(); }
         }

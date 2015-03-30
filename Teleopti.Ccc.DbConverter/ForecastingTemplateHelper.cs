@@ -140,7 +140,7 @@ namespace Teleopti.Ccc.DBConverter
                 IWorkloadDayTemplate dayTemplate = templateList[dayOfWeek];
                 foreach (TemplateTaskPeriod taskPeriod in dayTemplate.TaskPeriodList)
                 {
-                    int interval = (int)(taskPeriod.Period.StartDateTime.Subtract(dayTemplate.CurrentDate).TotalMinutes / dayTemplate.Workload.Skill.DefaultResolution);
+                    int interval = (int)(taskPeriod.Period.StartDateTime.Subtract(dayTemplate.CurrentDate.Date).TotalMinutes / dayTemplate.Workload.Skill.DefaultResolution);
                     DataRow[] workloadDefaultRow = workloadDefaultTemplateTable.Select(
                                     string.Format(CultureInfo.CurrentCulture, selectionFilter, i, interval));
 
@@ -197,7 +197,7 @@ namespace Teleopti.Ccc.DBConverter
         public static IList<ITemplateSkillDataPeriod> CreateSkillDataPeriodList(ISkill owningSkill, int intervalLength)
         {
             IList<ITemplateSkillDataPeriod> skillDataPeriodList = new List<ITemplateSkillDataPeriod>();
-            DateTime baseDate = TimeZoneInfo.ConvertTimeToUtc(SkillDayTemplate.BaseDate, owningSkill.TimeZone);
+            DateTime baseDate = TimeZoneInfo.ConvertTimeToUtc(SkillDayTemplate.BaseDate.Date, owningSkill.TimeZone);
             DateTime endDate = baseDate.AddDays(1);
             TimeSpan step = TimeSpan.FromMinutes(intervalLength);
             for (DateTime currentDateTime = baseDate; currentDateTime < endDate; currentDateTime = currentDateTime.Add(step))

@@ -794,7 +794,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
 		{
 			int column = (int)Math.Round(GridChartManager.GetIntervalValueForChartPoint(_chartControl, e.Point));
 
-			_currentLocalDate = new DateOnly(_gridChartManager.GetDateByColumn(column, _currentLocalDate.Date));
+			_currentLocalDate = _gridChartManager.GetDateByColumn(column, _currentLocalDate);
 			_timeNavigationControl.SetSelectedDate(_currentLocalDate);
 		}
 
@@ -973,7 +973,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
 			_scenario = scenario;
 			_longterm = longterm;
 			_currentLocalDate = dateTimePeriod.StartDate;
-			_currentLocalDateTime = _currentLocalDate;
+			_currentLocalDateTime = _currentLocalDate.Date;
 
 			ribbonControlAdv1.TabGroups[0].Name = UserTexts.Resources.Templates;
 			toolStripTabItemMultisite.Visible = false;
@@ -1264,7 +1264,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
 				detailView.ShowTab(e.NewWorkingInterval);
 			}
 
-			_currentLocalDate = new DateOnly(e.NewStartDate);
+			_currentLocalDate = e.NewStartDate;
 			_currentLocalDateTime = e.NewStartDate.Date.Add(e.NewTimeOfDay);
 			_timeNavigationControl.SetSelectedDate(_currentLocalDate);
 			_noChangesRightNow = false;

@@ -30,8 +30,8 @@ namespace Teleopti.Ccc.Domain.AgentInfo.Requests
 		private bool areAllDetailsOutsidePeriod(IShiftTradeRequest shiftTrade)
 		{
 			return shiftTrade.ShiftTradeSwapDetails.All(
-				d => _loadedPeriod.StartDateTime <= d.DateFrom && 
-				     _loadedPeriod.EndDateTime >= d.DateTo);
+				d => _loadedPeriod.StartDateTime <= d.DateFrom.Date && 
+				     _loadedPeriod.EndDateTime >= d.DateTo.Date);
 		}
 	}
 }

@@ -543,14 +543,14 @@ namespace Teleopti.Ccc.Domain.Forecasting
             switch (_typeOfTaskOwnerPeriod)
             {
                 case TaskOwnerPeriodType.Month:
-                    returnDate = new DateOnly(DateHelper.GetLastDateInMonth(CurrentDate, CultureInfo.CurrentCulture));
+                    returnDate = new DateOnly(DateHelper.GetLastDateInMonth(CurrentDate.Date, CultureInfo.CurrentCulture));
                     break;
                 case TaskOwnerPeriodType.Other:
                     if (_taskOwnerDayCollection.Count > 0)
                         returnDate = _taskOwnerDayCollection.Max(wd => wd.CurrentDate);
                     break;
                 case TaskOwnerPeriodType.Week:
-                    returnDate = new DateOnly(DateHelper.GetLastDateInWeek(CurrentDate, CultureInfo.CurrentCulture));
+                    returnDate = new DateOnly(DateHelper.GetLastDateInWeek(CurrentDate.Date, CultureInfo.CurrentCulture));
                     break;
             }
 
@@ -572,14 +572,14 @@ namespace Teleopti.Ccc.Domain.Forecasting
             switch (_typeOfTaskOwnerPeriod)
             {
                 case TaskOwnerPeriodType.Month:
-                    returnDate = new DateOnly(DateHelper.GetFirstDateInMonth(CurrentDate, CultureInfo.CurrentCulture));
+                    returnDate = new DateOnly(DateHelper.GetFirstDateInMonth(CurrentDate.Date, CultureInfo.CurrentCulture));
                     break;
                 case TaskOwnerPeriodType.Other:
                     if (_taskOwnerDayCollection.Count > 0)
                         returnDate = _taskOwnerDayCollection.Min(wd => wd.CurrentDate);
                     break;
                 case TaskOwnerPeriodType.Week:
-                    returnDate = new DateOnly(DateHelper.GetFirstDateInWeek(CurrentDate, CultureInfo.CurrentCulture));
+                    returnDate = new DateOnly(DateHelper.GetFirstDateInWeek(CurrentDate.Date, CultureInfo.CurrentCulture));
                     break;
             }
 

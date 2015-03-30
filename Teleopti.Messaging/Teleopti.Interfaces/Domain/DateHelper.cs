@@ -95,11 +95,11 @@ namespace Teleopti.Interfaces.Domain
         /// <param name="date"></param>
         /// <param name="cult"></param>
         /// <returns></returns>
-        public static bool IsWeekend(DateTime date, CultureInfo cult)
+        public static bool IsWeekend(DateOnly date, CultureInfo cult)
         {
 			//data collected from http://en.wikipedia.org/wiki/Workweek_and_weekend
 
-			var day = cult.Calendar.GetDayOfWeek(date);
+			var day = date.DayOfWeek;
 			switch (cult.LCID)
 			{
 				case 5121:	// Algeria
@@ -257,6 +257,16 @@ namespace Teleopti.Interfaces.Domain
             return theDate.AddDays(-differenceAsDays);
         }
 
+		public static DateOnly GetFirstDateInWeek(DateOnly theDate, DayOfWeek workweekStartsAt)
+		{
+			var currentDayOfWeek = (int)theDate.DayOfWeek;
+
+			int differenceAsDays = currentDayOfWeek - (int)workweekStartsAt;
+			if (differenceAsDays < 0) differenceAsDays += 7;
+
+			return theDate.AddDays(-differenceAsDays);
+		}
+
         /// <summary>
         /// Gets the last date in week.
         /// </summary>
@@ -282,6 +292,11 @@ namespace Teleopti.Interfaces.Domain
         {
             return GetFirstDateInWeek(theDate, workweekStartsAt).AddDays(6);
         }
+
+		public static DateOnly GetLastDateInWeek(DateOnly theDate, DayOfWeek workweekStartsAt)
+		{
+			return GetFirstDateInWeek(theDate, workweekStartsAt).AddDays(6);
+		}
 
         /// <summary>
         /// Gets the week period using the the TimeZone and Culture.

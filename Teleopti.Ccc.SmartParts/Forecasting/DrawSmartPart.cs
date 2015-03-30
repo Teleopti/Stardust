@@ -118,21 +118,20 @@ namespace Teleopti.Ccc.SmartParts.Forecasting
             if (periods.Count > 0 && StateHolderReader.IsInitialized && StateHolderReader.Instance.StateReader.IsLoggedIn)
             {
                 var startDate = period.StartDate;
-                Calendar calendar =
-                    TeleoptiPrincipal.CurrentPrincipal.Regional.Culture.Calendar;
-                int totalDays = calendar.GetDaysInYear(calendar.GetYear(startDate));
+                Calendar calendar = TeleoptiPrincipal.CurrentPrincipal.Regional.Culture.Calendar;
+                int totalDays = calendar.GetDaysInYear(calendar.GetYear(startDate.Date));
                 double unitOfDraw = drawProperties.DrawingWidth / (totalDays * 1.0);
 
                 Color color = DefaultColor;
 
                 foreach (var timePeriod in periods)
                 {
-                    DateTime startTime = timePeriod.StartDate;
-                    int pointX = Convert.ToInt32(drawProperties.ProgressStartPosition + (startTime - startDate).Days * unitOfDraw);
+                    var startTime = timePeriod.StartDate;
+                    int pointX = Convert.ToInt32(drawProperties.ProgressStartPosition + (startTime.Subtract(startDate)).Days * unitOfDraw);
 
                     int width =
                         Convert.ToInt32(
-                            (timePeriod.EndDate - startTime).
+                            (timePeriod.EndDate.Subtract(startTime)).
                                 Days * unitOfDraw);
 
                     if (width > 0)
@@ -156,17 +155,17 @@ namespace Teleopti.Ccc.SmartParts.Forecasting
             ToolTipInfo toolTipInfo = new ToolTipInfo();
             if (periods.Count > 0)
             {
-                DateTime endDate = period.EndDate;
-                DateTime startDate = period.StartDate;
-                int totalDays = (endDate - startDate).Days + 1;
+                var endDate = period.EndDate;
+                var startDate = period.StartDate;
+                int totalDays = endDate.Subtract(startDate).Days + 1;
                 double unitOfDraw = drawPositionAndWidth.DrawingWidth / (totalDays * 1.0);
 
                 foreach (var timePeriod in periods)
                 {
-                    DateTime startTime = timePeriod.StartDate;
-                    DateTime endTime = timePeriod.EndDate;
-                    double start = drawPositionAndWidth.ProgressStartPosition + (startTime - startDate).Days * unitOfDraw;
-                    double end = (timePeriod.EndDate - startTime).Days * unitOfDraw + start;
+                    var startTime = timePeriod.StartDate;
+                    var endTime = timePeriod.EndDate;
+                    double start = drawPositionAndWidth.ProgressStartPosition + (startTime.Subtract(startDate)).Days * unitOfDraw;
+                    double end = (timePeriod.EndDate.Subtract(startTime)).Days * unitOfDraw + start;
 
                     if (mouseX >= start && mouseX <= end)
                     {

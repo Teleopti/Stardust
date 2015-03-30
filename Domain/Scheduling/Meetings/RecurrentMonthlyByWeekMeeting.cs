@@ -16,10 +16,10 @@ namespace Teleopti.Ccc.Domain.Scheduling.Meetings
             IList<DateOnly> listToReturn = new List<DateOnly>();
             if (_weekOfMonth == WeekNumber.Last)
             {
-                DateTime currentDate = DateHelper.GetFirstDateInMonth(startDate, calendar);
-                for (; currentDate < endDate; currentDate = calendar.AddMonths(currentDate,IncrementCount))
+                var currentDate = new DateOnly(DateHelper.GetFirstDateInMonth(startDate.Date, calendar));
+                for (; currentDate < endDate; currentDate = new DateOnly(calendar.AddMonths(currentDate.Date,IncrementCount)))
                 {
-                    DateTime lastDateInMonth = DateHelper.GetLastDateInMonth(currentDate, calendar);
+                    DateTime lastDateInMonth = DateHelper.GetLastDateInMonth(currentDate.Date, calendar);
                     do
                     {
                         lastDateInMonth = calendar.AddDays(lastDateInMonth, -1);
@@ -31,11 +31,11 @@ namespace Teleopti.Ccc.Domain.Scheduling.Meetings
             else
             {
                 int addDaysForWeekNumber = GetDaysToAddForWeekNumber(_weekOfMonth);
-                DateTime currentDate = DateHelper.GetFirstDateInMonth(startDate, calendar);
-                for (; currentDate < endDate; currentDate = calendar.AddMonths(currentDate, IncrementCount))
+                var currentDate = new DateOnly(DateHelper.GetFirstDateInMonth(startDate.Date, calendar));
+                for (; currentDate < endDate; currentDate = new DateOnly(calendar.AddMonths(currentDate.Date, IncrementCount)))
                 {
                     int dayCount = (_weekOfMonth==WeekNumber.First) ? 0 : 1;
-                    DateTime startingDay = calendar.AddDays(currentDate, addDaysForWeekNumber);
+                    DateTime startingDay = calendar.AddDays(currentDate.Date, addDaysForWeekNumber);
                     do
                     {
                         startingDay = calendar.AddDays(startingDay, dayCount);

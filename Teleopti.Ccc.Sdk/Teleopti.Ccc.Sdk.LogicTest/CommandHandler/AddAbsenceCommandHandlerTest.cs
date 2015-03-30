@@ -95,7 +95,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
                                                Period = _periodDto,
                                                AbsenceId = _absence.Id.GetValueOrDefault(),
                                                PersonId = _person.Id.GetValueOrDefault(),
-											   Date = new DateOnlyDto { DateTime = _startDate },
+											   Date = new DateOnlyDto { DateTime = _startDate.Date },
                                                ScheduleTagId = Guid.NewGuid()
 
                                            };
@@ -135,7 +135,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
 				Period = _periodDto,
 				AbsenceId = _absence.Id.GetValueOrDefault(),
 				PersonId = _person.Id.GetValueOrDefault(),
-				Date = new DateOnlyDto { DateTime = _startDate },
+				Date = new DateOnlyDto { DateTime = _startDate.Date },
                 ScheduleTagId = Guid.NewGuid(),
 				ScenarioId = scenarioId
 			};

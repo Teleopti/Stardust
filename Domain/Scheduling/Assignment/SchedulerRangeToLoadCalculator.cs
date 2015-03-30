@@ -125,7 +125,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 
             if (maxPeriod.HasValue)
             {
-                lastPeriodsLastDate = DateHelper.GetLastDateInWeek(maxPeriod.Value.EndDate, culture);
+                lastPeriodsLastDate = DateHelper.GetLastDateInWeek(maxPeriod.Value.EndDate.Date, culture);
             }
             else
             {
@@ -144,7 +144,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
                     new DateOnly(TimeZoneHelper.ConvertFromUtc(_requestedDateTimePeriod.StartDateTime, timeZoneInfo)));
             if (minPeriod.HasValue)
             {
-                firstPeriodsFirstDate = DateHelper.GetFirstDateInWeek(minPeriod.Value.StartDate, culture);
+                firstPeriodsFirstDate = DateHelper.GetFirstDateInWeek(minPeriod.Value.StartDate.Date, culture);
             }
             else
             {

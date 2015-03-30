@@ -167,7 +167,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.SeasonPages
             _chartControl.Legend.Visible = true;
             foreach (TaskOwnerPeriod taskOwnerPeriod in taskOwnerPeriods)
             {
-                int year = CultureInfo.CurrentCulture.Calendar.GetYear(taskOwnerPeriod.CurrentDate);
+                int year = CultureInfo.CurrentCulture.Calendar.GetYear(taskOwnerPeriod.CurrentDate.Date);
                 chartSeries = new ChartSeries(string.Concat(_taskTypeName, " ", year.ToString(CultureInfo.CurrentCulture)), ChartSeriesType.Line);
                 chartSeries.Style.Border.Width = 2f;
                 _chartControl.Series.Add(chartSeries);

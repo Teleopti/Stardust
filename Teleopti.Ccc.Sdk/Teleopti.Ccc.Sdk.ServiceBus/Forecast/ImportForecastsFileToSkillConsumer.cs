@@ -11,9 +11,7 @@ using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
-using Teleopti.Interfaces.MessageBroker.Client;
 using Teleopti.Interfaces.MessageBroker.Client.Composite;
-using Teleopti.Interfaces.MessageBroker.Events;
 using Teleopti.Interfaces.Messages.General;
 
 namespace Teleopti.Ccc.Sdk.ServiceBus.Forecast
@@ -158,7 +156,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Forecast
                                            Datasource = message.Datasource,
                                            JobId = message.JobId,
                                            OwnerPersonId = message.OwnerPersonId,
-                                           Date = date,
+                                           Date = date.Date,
                                            Timestamp = message.Timestamp,
                                            TargetSkillId = message.TargetSkillId,
                                            StartOpenHour = openHours.StartTime,

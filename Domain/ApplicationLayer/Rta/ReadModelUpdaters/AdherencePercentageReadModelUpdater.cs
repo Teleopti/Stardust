@@ -103,7 +103,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ReadModelUpdaters
 			{
 				model = new AdherencePercentageReadModel
 				{
-					Date = date,
+					Date = date.Date,
 					PersonId = personId,
 					LastTimestamp = readModelState.Timestamp,
 					State = new[] {readModelState}

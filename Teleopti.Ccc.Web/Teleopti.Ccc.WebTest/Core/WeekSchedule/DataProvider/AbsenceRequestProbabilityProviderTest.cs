@@ -44,7 +44,7 @@ namespace Teleopti.Ccc.WebTest.Core.WeekSchedule.DataProvider
 			absenceTimeProvider.Stub(x => x.GetAbsenceTimeForPeriod(weekButNoWeek))
 				.Return(new List<IAbsenceAgents>
 				{
-					new AbsenceAgents {HeadCounts = 2, Date = weekButNoWeek.StartDate}
+					new AbsenceAgents {HeadCounts = 2, Date = weekButNoWeek.StartDate.Date}
 				});
 
 			var ret = target.GetAbsenceRequestProbabilityForPeriod(weekButNoWeek);
@@ -70,7 +70,7 @@ namespace Teleopti.Ccc.WebTest.Core.WeekSchedule.DataProvider
 			absenceTimeProvider.Stub(x => x.GetAbsenceTimeForPeriod(weekButNoWeek))
 				.Return(new List<IAbsenceAgents>
 				{
-					new AbsenceAgents {HeadCounts = 2, Date = weekButNoWeek.StartDate}
+					new AbsenceAgents {HeadCounts = 2, Date = weekButNoWeek.StartDate.Date}
 				});
 
 			var ret = target.GetAbsenceRequestProbabilityForPeriod(weekButNoWeek);
@@ -96,7 +96,7 @@ namespace Teleopti.Ccc.WebTest.Core.WeekSchedule.DataProvider
 			absenceTimeProvider.Stub(x => x.GetAbsenceTimeForPeriod(weekButNoWeek))
 				.Return(new List<IAbsenceAgents>
 				{
-					new AbsenceAgents {HeadCounts = 2, Date = weekButNoWeek.StartDate}
+					new AbsenceAgents {HeadCounts = 2, Date = weekButNoWeek.StartDate.Date}
 				});
 
 			var ret = target.GetAbsenceRequestProbabilityForPeriod(weekButNoWeek);
@@ -122,7 +122,7 @@ namespace Teleopti.Ccc.WebTest.Core.WeekSchedule.DataProvider
 			absenceTimeProvider.Stub(x => x.GetAbsenceTimeForPeriod(weekButNoWeek))
 				.Return(new List<IAbsenceAgents>
 				{
-					new AbsenceAgents {HeadCounts = 2, Date = weekButNoWeek.StartDate}
+					new AbsenceAgents {HeadCounts = 2, Date = weekButNoWeek.StartDate.Date}
 				});
 
 			var ret = target.GetAbsenceRequestProbabilityForPeriod(weekButNoWeek);
@@ -148,7 +148,7 @@ namespace Teleopti.Ccc.WebTest.Core.WeekSchedule.DataProvider
 			absenceTimeProvider.Stub(x => x.GetAbsenceTimeForPeriod(weekButNoWeek))
 				.Return(new List<IAbsenceAgents>
 				{
-					new AbsenceAgents {AbsenceTime = TimeSpan.FromHours(16).TotalMinutes, Date = weekButNoWeek.StartDate}
+					new AbsenceAgents {AbsenceTime = TimeSpan.FromHours(16).TotalMinutes, Date = weekButNoWeek.StartDate.Date}
 				});
 
 			var ret = target.GetAbsenceRequestProbabilityForPeriod(weekButNoWeek);
@@ -174,7 +174,7 @@ namespace Teleopti.Ccc.WebTest.Core.WeekSchedule.DataProvider
 			absenceTimeProvider.Stub(x => x.GetAbsenceTimeForPeriod(weekButNoWeek))
 				.Return(new List<IAbsenceAgents>
 				{
-					new AbsenceAgents {AbsenceTime = TimeSpan.FromHours(8).TotalMinutes, Date = weekButNoWeek.StartDate}
+					new AbsenceAgents {AbsenceTime = TimeSpan.FromHours(8).TotalMinutes, Date = weekButNoWeek.StartDate.Date}
 				});
 
 			var ret = target.GetAbsenceRequestProbabilityForPeriod(weekButNoWeek);
@@ -200,7 +200,7 @@ namespace Teleopti.Ccc.WebTest.Core.WeekSchedule.DataProvider
 			absenceTimeProvider.Stub(x => x.GetAbsenceTimeForPeriod(weekButNoWeek))
 				.Return(new List<IAbsenceAgents>
 				{
-					new AbsenceAgents {AbsenceTime = TimeSpan.FromHours(24).TotalMinutes, Date = weekButNoWeek.StartDate}
+					new AbsenceAgents {AbsenceTime = TimeSpan.FromHours(24).TotalMinutes, Date = weekButNoWeek.StartDate.Date}
 				});
 
 			var ret = target.GetAbsenceRequestProbabilityForPeriod(weekButNoWeek);

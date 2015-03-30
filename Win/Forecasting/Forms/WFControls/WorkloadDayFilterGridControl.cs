@@ -213,13 +213,13 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.WFControls
 			e.Handled = true;
 		}
 
-		private void formatCell(GridStyleInfo gridStyleInfo, DateTime dateTime)
+		private void formatCell(GridStyleInfo gridStyleInfo, DateOnly dateTime)
 		{
 			bool headerCell = (gridStyleInfo.BaseStyle == "Header");
-            weekendOrWeekday(gridStyleInfo, TimeZoneInfo.ConvertTimeFromUtc(dateTime, _timeZone), !headerCell, headerCell);
+            weekendOrWeekday(gridStyleInfo, dateTime, !headerCell, headerCell);
 		}
 
-		private void weekendOrWeekday(GridStyleInfo gridStyleInfo, DateTime date, bool backColor, bool textColor)
+		private void weekendOrWeekday(GridStyleInfo gridStyleInfo, DateOnly date, bool backColor, bool textColor)
 		{
 			if (DateHelper.IsWeekend(date, CultureInfo.CurrentCulture))
 			{
@@ -238,7 +238,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.WFControls
 			}
 
 			Outlier outlier;
-			if (_outliers.TryGetValue(new DateOnly(date), out outlier))
+			if (_outliers.TryGetValue(date, out outlier))
 			{
 				gridStyleInfo.CellTipText = outlier.Description.Name;
 				gridStyleInfo.BackColor = ColorHelper.GridControlOutlierColor();
@@ -354,7 +354,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.WFControls
 			get { return _templateIndex; }
 		}
 
-		public override DateTime FirstDateTime
+		public override DateTime FirstDate
 		{
 			get
 			{
@@ -362,7 +362,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.WFControls
 			}
 		}
 
-		public override DateTime LastDateTime
+		public override DateTime LastDate
 		{
 			get
 			{

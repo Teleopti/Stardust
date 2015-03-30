@@ -128,12 +128,12 @@ namespace Teleopti.Ccc.Win.Meetings
 
 		public void SetStartDate(DateOnly startDate)
 		{
-			dateTimePickerAdvStart.Value = startDate;
+			dateTimePickerAdvStart.Value = startDate.Date;
 		}
 
 		public void SetRecurringEndDate(DateOnly endDate)
 		{
-			dateTimePickerAdvEnd.Value = endDate;
+			dateTimePickerAdvEnd.Value = endDate.Date;
 		}
 
 		public void SetRecurringOption(RecurrentMeetingType recurrentMeetingType)

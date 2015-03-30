@@ -331,7 +331,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.Restrictions
             var baseDate = new DateTime(2009, 2, 1);
             var validatedSchedulePartDto = new ValidatedSchedulePartDto
                                                {
-												   DateOnly = new DateOnlyDto { DateTime = new DateOnly(baseDate) }
+												   DateOnly = new DateOnlyDto { DateTime = baseDate.Date }
                                                };
             IList<ValidatedSchedulePartDto> partsOrg = new List<ValidatedSchedulePartDto>{validatedSchedulePartDto};
 

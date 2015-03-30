@@ -96,7 +96,7 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.Mapping
 		public void ShouldMapLayers()
 		{
 			var persons = new[] { new Person() };
-			var scheduleDay = new StubFactory().ScheduleDayStub(DateOnly.Today, persons.Single());
+			var scheduleDay = new StubFactory().ScheduleDayStub(DateTime.Today, persons.Single());
 			var teamScheduleProjection = new TeamScheduleProjection(new[] { new TeamScheduleLayer() }, DateTime.MaxValue);
 
 			personProvider.Stub(x => x.GetPermittedPersonsForGroup(DateOnly.Today, Guid.Empty, DefinedRaptorApplicationFunctionPaths.ViewSchedules)).Return(persons);
@@ -115,8 +115,8 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.Mapping
 			var persons = new[] { new Person(), new Person() };
 			var scheduleDays = new[]
 			                   	{
-			                   		stubs.ScheduleDayStub(DateOnly.MinValue, persons.ElementAt(0)),
-			                   		stubs.ScheduleDayStub(DateOnly.MinValue, persons.ElementAt(1))
+			                   		stubs.ScheduleDayStub(DateHelper.MinSmallDateTime, persons.ElementAt(0)),
+			                   		stubs.ScheduleDayStub(DateHelper.MinSmallDateTime, persons.ElementAt(1))
 			                   	};
 			var eveningProjection = new TeamScheduleProjection { SortDate = DateTime.Now.Date.AddHours(20) };
 			var morningProjection = new TeamScheduleProjection { SortDate = DateTime.Now.Date.AddHours(7) };
@@ -136,7 +136,7 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.Mapping
 		public void ShouldMapDisplayTimePeriodToQuartersHour()
 		{
 			var persons = new[] { new Person() };
-			var scheduleDay = new StubFactory().ScheduleDayStub(DateOnly.Today, persons.Single());
+			var scheduleDay = new StubFactory().ScheduleDayStub(DateTime.Today, persons.Single());
 			var startTime = new DateTime(2012, 1, 1, 8, 0, 0, DateTimeKind.Utc);
 			var endTime = new DateTime(2012, 1, 1, 17, 0, 0, DateTimeKind.Utc);
 			var period = new DateTimePeriod(startTime, endTime);
@@ -162,7 +162,7 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.Mapping
 		public void ShouldMapDisplayTimePeriodFromQuartersToHour()
 		{
 			var persons = new[] { new Person() };
-			var scheduleDay = new StubFactory().ScheduleDayStub(DateOnly.Today, persons.Single());
+			var scheduleDay = new StubFactory().ScheduleDayStub(DateTime.Today, persons.Single());
 			var startTime = new DateTime(2012, 1, 1, 8, 15, 0, DateTimeKind.Utc);
 			var endTime = new DateTime(2012, 1, 1, 17, 15, 0, DateTimeKind.Utc);
 			var period = new DateTimePeriod(startTime, endTime);
@@ -188,7 +188,7 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.Mapping
 		public void ShouldMapDisplayTimeRoundToWholeQuarters()
 		{
 			var persons = new[] { new Person() };
-			var scheduleDay = new StubFactory().ScheduleDayStub(DateOnly.Today, persons.Single());
+			var scheduleDay = new StubFactory().ScheduleDayStub(DateTime.Today, persons.Single());
 			var startTime = new DateTime(2012, 1, 1, 8, 55, 0, DateTimeKind.Utc);
 			var endTime = new DateTime(2012, 1, 1, 17, 5, 0, DateTimeKind.Utc);
 			var period = new DateTimePeriod(startTime, endTime);
@@ -240,7 +240,7 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.Mapping
 		public void ShouldMapHasDayOffUnderAbsence()
 		{
 			var persons = new[] { new Person() };
-			var scheduleDay = new StubFactory().ScheduleDayStub(DateOnly.Today, persons.Single(),SchedulePartView.ContractDayOff, PersonAssignmentFactory.CreateAssignmentWithDayOff(), null, null);
+			var scheduleDay = new StubFactory().ScheduleDayStub(DateTime.Today, persons.Single(),SchedulePartView.ContractDayOff, PersonAssignmentFactory.CreateAssignmentWithDayOff(), null, null);
 
 			personProvider.Stub(x => x.GetPermittedPersonsForGroup(DateOnly.Today, Guid.Empty, DefinedRaptorApplicationFunctionPaths.ViewSchedules)).Return(persons);
 			scheduleProvider.Stub(x => x.GetScheduleForPersons(DateOnly.Today, persons)).Return(new[] { scheduleDay });

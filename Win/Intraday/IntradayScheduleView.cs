@@ -76,7 +76,7 @@ namespace Teleopti.Ccc.Win.Intraday
             return string.Empty;
         }
 
-        public void SetCellBackTextAndBackColor(GridQueryCellInfoEventArgs e, DateTime dateTime, bool backColor, bool textColor, IScheduleDay schedulePart)
+        public void SetCellBackTextAndBackColor(GridQueryCellInfoEventArgs e, DateOnly dateTime, bool backColor, bool textColor, IScheduleDay schedulePart)
         {
             
         }

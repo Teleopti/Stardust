@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using NUnit.Framework;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.ResourceCalculation;
-using Teleopti.Ccc.DomainTest.Helper;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Interfaces.Domain;
 
@@ -92,7 +91,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 
             DateOnly theDate2 = new DateOnly(2008, 1, 2);
             IWorkShiftFinderResult result2 = new WorkShiftFinderResult(_person, theDate2);
-            holder.AddResults(new List<IWorkShiftFinderResult> { result2 }, theDate2);
+            holder.AddResults(new List<IWorkShiftFinderResult> { result2 }, theDate2.Date);
 
             Assert.IsNotNull(holder.GetResults(true));
             Assert.AreEqual(1,holder.GetResults(true).Count);
@@ -110,7 +109,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
             DateOnly theDate2 = new DateOnly(2008, 1, 2);
             IWorkShiftFinderResult result2 = new WorkShiftFinderResult(_person, theDate2) {Successful = true};
 
-            holder.AddResults(new List<IWorkShiftFinderResult> { result2 }, theDate2);
+            holder.AddResults(new List<IWorkShiftFinderResult> { result2 }, theDate2.Date);
 
             Assert.IsNotNull(holder.GetResults(true));
             Assert.AreEqual(1, holder.GetResults(true).Count);
@@ -131,14 +130,14 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
             DateOnly theDate2 = new DateOnly(2008, 1, 2);
             IWorkShiftFinderResult result2 = new WorkShiftFinderResult(_person, theDate2) {Successful = true};
 
-            holder.AddResults(new List<IWorkShiftFinderResult> { result2 }, theDate2);
+            holder.AddResults(new List<IWorkShiftFinderResult> { result2 }, theDate2.Date);
 
             Assert.IsTrue(holder.LastResultIsSuccessful);
 
             DateOnly theDate3 = new DateOnly(2008, 1, 3);
             IWorkShiftFinderResult result3 = new WorkShiftFinderResult(_person, theDate3) {Successful = false};
 
-            holder.AddResults(new List<IWorkShiftFinderResult> { result3 }, theDate3);
+            holder.AddResults(new List<IWorkShiftFinderResult> { result3 }, theDate3.Date);
 
             Assert.IsFalse(holder.LastResultIsSuccessful);
 

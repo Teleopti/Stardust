@@ -65,7 +65,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
             if(!AllowAlterBetween.HasValue)
                 return null;
 
-            DateTime dt = TimeZoneHelper.ConvertToUtc(dateOnly, timeZoneInfo);
+            DateTime dt = TimeZoneHelper.ConvertToUtc(dateOnly.Date, timeZoneInfo);
             DateTimePeriod period = new DateTimePeriod(dt.Add(AllowAlterBetween.Value.StartTime), dt.Add(AllowAlterBetween.Value.EndTime));
             
             return period;

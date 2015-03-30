@@ -10,7 +10,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 	{
 		void SetDate(DateOnly date);
 		void SetWorkflowControlSets(IList<IWorkflowControlSet> workflowControlSets);
-		DateTime PublishScheduleTo { get; }
+		DateOnly PublishScheduleTo { get; }
 		IList<IWorkflowControlSet> WorkflowControlSets { get; }
 		void DisableOk();
 	}

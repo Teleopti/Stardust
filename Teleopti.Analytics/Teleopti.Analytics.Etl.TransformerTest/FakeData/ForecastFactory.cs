@@ -52,7 +52,7 @@ namespace Teleopti.Analytics.Etl.TransformerTest.FakeData
 
 
 	        var skillDay = new SkillDay(dt, skill, scenario,
-	                                    WorkloadDayFactory.GetWorkloadDaysForTest(dt, skill, true),
+	                                    WorkloadDayFactory.GetWorkloadDaysForTest(dt.Date, skill, true),
 	                                    new List<ISkillDataPeriod>());
 
             return skillDay;

@@ -42,7 +42,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 		[HttpGet]
 		public JsonResult GetAbsence(DateOnly date)
 		{
-			return Json(_viewModelFactory.CreateViewModel(_loggedOnUser.CurrentUser().Id.GetValueOrDefault(), date), JsonRequestBehavior.AllowGet);
+			return Json(_viewModelFactory.CreateViewModel(_loggedOnUser.CurrentUser().Id.GetValueOrDefault(), date.Date), JsonRequestBehavior.AllowGet);
 		}
 
 		[HttpGet]

@@ -167,7 +167,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
             if (_skillDayTemplate == null) return;
             IList<ITemplateSkillDataPeriod> templateSkillDataPeriods = new List<ITemplateSkillDataPeriod>(_skillDayTemplate.TemplateSkillDataPeriodCollection);
 
-            DateTime baseDateUtc = TimeZoneInfo.ConvertTimeToUtc(SkillDayTemplate.BaseDate, TimeZone);
+            DateTime baseDateUtc = TimeZoneInfo.ConvertTimeToUtc(SkillDayTemplate.BaseDate.Date, TimeZone);
             if (templateSkillDataPeriods.Count > 0)
             {
                 IEnumerable<ITemplateSkillDataPeriod> sortedList = templateSkillDataPeriods.OrderBy(p => p.Period.StartDateTime.Ticks);

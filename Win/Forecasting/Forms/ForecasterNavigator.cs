@@ -1444,8 +1444,8 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
 			if (!savedSettings.Period.Equals(new DateOnlyPeriod()))
 				model.ExportMultisiteSkillToSkillCommandModel.Period = new DateOnlyPeriodDto
 				{
-					StartDate = new DateOnlyDto {DateTime = savedSettings.Period.StartDate},
-					EndDate = new DateOnlyDto {DateTime = savedSettings.Period.EndDate}
+					StartDate = new DateOnlyDto {DateTime = savedSettings.Period.StartDate.Date},
+					EndDate = new DateOnlyDto {DateTime = savedSettings.Period.EndDate.Date}
 				};
 		}
 

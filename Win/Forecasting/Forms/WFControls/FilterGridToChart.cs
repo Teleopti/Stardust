@@ -5,7 +5,6 @@ using System.Drawing.Drawing2D;
 using System.Drawing.Text;
 using System.Linq;
 using System.Windows.Forms;
-using Syncfusion.Drawing;
 using Syncfusion.Windows.Forms.Chart;
 using Syncfusion.Windows.Forms.Grid;
 using System.Globalization;
@@ -56,7 +55,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.WFControls
     		}
     		using (new UICultureContext(currentCulture))
     		{
-    			SetChartScale(GridControl.FirstDateTime, GridControl.LastDateTime,
+    			SetChartScale(GridControl.FirstDate, GridControl.LastDate,
     			              GridControl.ChartResolution);
     			chartControl1.BeginUpdate();
     			if (Enum.IsDefined(typeof (DayOfWeek), GridControl.TemplateIndex))

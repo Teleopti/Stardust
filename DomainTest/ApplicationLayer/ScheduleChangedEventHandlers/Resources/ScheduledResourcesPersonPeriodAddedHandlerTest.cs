@@ -91,8 +91,8 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ScheduleChangedEventHandlers.
 					PersonPeriodsBefore = new[]{
 							new PersonPeriodDetail
 								{
-									StartDate = _date,
-									EndDate = _date.AddDays(10),
+									StartDate = _date.Date,
+									EndDate = _date.Date.AddDays(10),
 									PersonSkillDetails =
 										new[] {new PersonSkillDetail {Active = true, Proficiency = 0.95, SkillId = _skill.Id.GetValueOrDefault()}}
 								}},
@@ -100,15 +100,15 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ScheduleChangedEventHandlers.
 						{
 							new PersonPeriodDetail
 								{
-									StartDate = _date,
-									EndDate = _date.AddDays(2),
+									StartDate = _date.Date,
+									EndDate = _date.Date.AddDays(2),
 									PersonSkillDetails =
 										new[] {new PersonSkillDetail {Active = true, Proficiency = 0.95, SkillId = _skill.Id.GetValueOrDefault()}}
 								},
 							new PersonPeriodDetail
 								{
-									StartDate = _date.AddDays(2),
-									EndDate = _date.AddDays(10),
+									StartDate = _date.Date.AddDays(2),
+									EndDate = _date.Date.AddDays(10),
 									PersonSkillDetails =
 										new[] {new PersonSkillDetail {Active = true, Proficiency = 0.9, SkillId = _skill.Id.GetValueOrDefault()}}
 								}

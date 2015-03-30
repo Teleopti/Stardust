@@ -149,7 +149,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 				var teamProvider = MockRepository.GenerateMock<ITeamProvider>();
 
 				var now = MockRepository.GenerateMock<INow>();
-				now.Stub(x => x.UtcDateTime()).Return(date);
+				now.Stub(x => x.UtcDateTime()).Return(date.Date);
 
 				teamProvider.Stub(x => x.GetPermittedTeams(date, raptorMytimewebViewbadgeleaderboard)).Return(PermittedTeams(team));
 

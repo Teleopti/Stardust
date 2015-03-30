@@ -112,8 +112,8 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.SeasonPages
 			  _chartControl.Series.Clear();
 			  _chartControl.Series.Capacity = count;
 			_chartControl.PrimaryXAxis.DateTimeRange =
-				new ChartDateTimeRange(_currentHistoricPeriod.TaskOwnerDayCollection[0].CurrentDate,
-										_currentHistoricPeriod.TaskOwnerDayCollection[count - 1].CurrentDate, 10,
+				new ChartDateTimeRange(_currentHistoricPeriod.TaskOwnerDayCollection[0].CurrentDate.Date,
+										_currentHistoricPeriod.TaskOwnerDayCollection[count - 1].CurrentDate.Date, 10,
 										ChartDateTimeIntervalType.Days);
 		  }
 
@@ -127,14 +127,14 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.SeasonPages
 				_currentHistoricPeriodSeries.Clear();
 				_chartControl.Series.Clear();
 				IList<double> doubles = new List<double>();
-				DateTime currentDate = DateTime.MinValue;
+				DateOnly currentDate = DateOnly.MinValue;
 				int currentChartSerie = -1;
 
 
 				foreach (ITaskOwner taskOwner in _currentHistoricPeriod.TaskOwnerDayCollection)
 				{
 					 ChartPoint chartPoint =
-						  new ChartPoint(taskOwner.CurrentDate, taskOwner.TotalStatisticCalculatedTasks);
+						  new ChartPoint(taskOwner.CurrentDate.Date, taskOwner.TotalStatisticCalculatedTasks);
 					 
 					 if (currentDate.AddDays(2) < taskOwner.CurrentDate)
 					 {
@@ -151,7 +151,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.SeasonPages
 				// ErikS: BUG: 26483
 				// Writing out labels manually since syncfusion doesnt
 				if (doubles.Count > 0 && doubles.Count % 10 == 0)
-					_chartControl.PrimaryXAxis.Labels.Add(new ChartAxisLabel(taskOwner.CurrentDate, "d"));
+					_chartControl.PrimaryXAxis.Labels.Add(new ChartAxisLabel(taskOwner.CurrentDate.Date, "d"));
 				}
 
 				ChartSeries chartSeriesTrend = calculateChartSeriesTrend(doubles);
@@ -191,15 +191,15 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.SeasonPages
 				_chartControl.Series.Add(chartSeriesTrend);
 
 				int count = _currentHistoricPeriod.TaskOwnerDayCollection.Count;
-				DateTime startDate = _currentHistoricPeriod.TaskOwnerDayCollection[0].CurrentDate;
-				DateTime endDate = _currentHistoricPeriod.TaskOwnerDayCollection[count - 1].CurrentDate;
+				var startDate = _currentHistoricPeriod.TaskOwnerDayCollection[0].CurrentDate;
+				var endDate = _currentHistoricPeriod.TaskOwnerDayCollection[count - 1].CurrentDate;
 
 				ChartPoint chartPointStart =
-					 new ChartPoint(startDate, _volumeTrend.Start.Value);
+					 new ChartPoint(startDate.Date, _volumeTrend.Start.Value);
 				chartSeriesTrend.Points.Add(chartPointStart);
 
 				ChartPoint chartPointEnd =
-					 new ChartPoint(endDate, _volumeTrend.End.Value);
+					 new ChartPoint(endDate.Date, _volumeTrend.End.Value);
 				chartSeriesTrend.Points.Add(chartPointEnd);
 				return chartSeriesTrend;
 		  }
@@ -219,15 +219,15 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.SeasonPages
 				_chartControl.Series.Add(chartSeriesTrend);
 
 				int count = _currentHistoricPeriod.TaskOwnerDayCollection.Count;
-				DateTime startDate = _currentHistoricPeriod.TaskOwnerDayCollection[0].CurrentDate;
-				DateTime endDate = _currentHistoricPeriod.TaskOwnerDayCollection[count - 1].CurrentDate;
+				var startDate = _currentHistoricPeriod.TaskOwnerDayCollection[0].CurrentDate;
+				var endDate = _currentHistoricPeriod.TaskOwnerDayCollection[count - 1].CurrentDate;
 
 				ChartPoint chartPointStart =
-								new ChartPoint(startDate, _volumeTrend.Start.Value);
+								new ChartPoint(startDate.Date, _volumeTrend.Start.Value);
 				chartSeriesTrend.Points.Add(chartPointStart);
 
 				ChartPoint chartPointEnd =
-								new ChartPoint(endDate, _volumeTrend.End.Value);
+								new ChartPoint(endDate.Date, _volumeTrend.End.Value);
 				chartSeriesTrend.Points.Add(chartPointEnd);
 
 				//Hmm... clear and reset to get the trend line on top?!?

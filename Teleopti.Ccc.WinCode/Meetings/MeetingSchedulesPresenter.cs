@@ -10,7 +10,6 @@ using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
 using Teleopti.Ccc.Domain.Scheduling.Meetings;
-using Teleopti.Ccc.WinCode.Common;
 using Teleopti.Ccc.WinCode.Meetings.Interfaces;
 using Teleopti.Ccc.WinCode.Scheduling;
 using Teleopti.Ccc.WinCode.Scheduling.Panels;
@@ -150,8 +149,8 @@ namespace Teleopti.Ccc.WinCode.Meetings
 					 for (var i = 0; i < 7; i++)
 					 {
 						  DateOnly weekDates = week.StartDate;
-						  var nextDate = new DateOnly(weekDates.AddDays(i));
-						  dates.Add(new DateOnly(nextDate));
+						  var nextDate = weekDates.AddDays(i);
+						  dates.Add(nextDate);
 					 }
 
 					 TimeSpan start = _view.SetSuggestListStartTime;
@@ -294,7 +293,7 @@ namespace Teleopti.Ccc.WinCode.Meetings
 					if(start != DateTime.MaxValue) return new DateTimePeriod(start,end);
 				}
 
-				return TimeZoneHelper.NewUtcDateTimePeriodFromLocalDateTime(Model.StartDate, Model.StartDate.AddDays(1), _schedulerStateHolder.TimeZoneInfo);
+				return TimeZoneHelper.NewUtcDateTimePeriodFromLocalDate(Model.StartDate, Model.StartDate.AddDays(1), _schedulerStateHolder.TimeZoneInfo);
 		  }
 
 		  public static IPerson GetPerson(EntityContainer<IPerson> personViewModel)

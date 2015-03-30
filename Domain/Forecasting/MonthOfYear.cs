@@ -58,7 +58,7 @@ namespace Teleopti.Ccc.Domain.Forecasting
         /// </remarks>
         public override double TaskIndex(DateOnly dateTime)
         {
-            int monthNumber = CultureInfo.CurrentCulture.Calendar.GetMonth(dateTime);
+            int monthNumber = CultureInfo.CurrentCulture.Calendar.GetMonth(dateTime.Date);
             return PeriodTypeCollection[monthNumber].TaskIndex;
         }
 
@@ -73,7 +73,7 @@ namespace Teleopti.Ccc.Domain.Forecasting
         /// </remarks>
         public override double TalkTimeIndex(DateOnly dateTime)
         {
-            int monthNumber = CultureInfo.CurrentCulture.Calendar.GetMonth(dateTime);
+            int monthNumber = CultureInfo.CurrentCulture.Calendar.GetMonth(dateTime.Date);
             return PeriodTypeCollection[monthNumber].TalkTimeIndex;
         }
 
@@ -88,7 +88,7 @@ namespace Teleopti.Ccc.Domain.Forecasting
         /// </remarks>
         public override double AfterTalkTimeIndex(DateOnly dateTime)
         {
-            int monthNumber = CultureInfo.CurrentCulture.Calendar.GetMonth(dateTime);
+            int monthNumber = CultureInfo.CurrentCulture.Calendar.GetMonth(dateTime.Date);
             return PeriodTypeCollection[monthNumber].AfterTalkTimeIndex;
         }
     }

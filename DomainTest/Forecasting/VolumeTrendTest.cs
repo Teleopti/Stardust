@@ -102,8 +102,8 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
         [Test]
         public void CanCalculateTrendFactorForStartDayInApplyPeriod()
         {
-            DateTime startTrendPeriod = new DateTime(2007, 1, 1);
-            DateTime startForecastPeriod = new DateTime(2007, 2, 1);
+			var startTrendPeriod = new DateOnly(2007, 1, 1);
+			var startForecastPeriod = new DateOnly(2007, 2, 1);
             double value = _trendDayFactor.Value * (1d / 365d);
             int diff = startForecastPeriod.Subtract(startTrendPeriod).Days;
             double expectedStartValue = (value * diff) + 1;

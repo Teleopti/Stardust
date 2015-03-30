@@ -4,7 +4,6 @@ using System.Globalization;
 using System.Linq;
 using System.Windows.Forms;
 using log4net;
-using Syncfusion.Drawing;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Infrastructure.Foundation;
@@ -13,7 +12,6 @@ using Teleopti.Ccc.Win.Common.Controls.Chart;
 using Teleopti.Ccc.Win.Common.Controls.DateSelection;
 using Teleopti.Ccc.Win.ExceptionHandling;
 using Teleopti.Ccc.Win.Forecasting.Forms.WFControls;
-using Teleopti.Ccc.WinCode.Common.GuiHelpers;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Win.Forecasting.Forms.SeasonPages
@@ -154,7 +152,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.SeasonPages
             _owner.Presenter.InitializeOutliersByWorkDate();
             if (_owner.UseTrend)
             {
-                DateTime historicalStartDate = _currentHistoricPeriod.StartDate;
+                var historicalStartDate = _currentHistoricPeriod.StartDate;
 
                 double trendStartDayFactor =
                     VolumeTrend.CalculateStartDayFactor(historicalStartDate,

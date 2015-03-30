@@ -45,8 +45,8 @@ namespace Teleopti.Ccc.Domain.Forecasting
             {
                 var localDate = _taskOwnerDays.TaskOwnerDayCollection[0].CurrentDate;
                 _daysInMonth = CultureInfo.CurrentCulture.Calendar.GetDaysInMonth(
-                    CultureInfo.CurrentCulture.Calendar.GetYear(localDate),
-                    CultureInfo.CurrentCulture.Calendar.GetMonth(localDate));
+                    CultureInfo.CurrentCulture.Calendar.GetYear(localDate.Date),
+                    CultureInfo.CurrentCulture.Calendar.GetMonth(localDate.Date));
             }
 
             _totalTasks = _taskOwnerDays.TotalStatisticCalculatedTasks;

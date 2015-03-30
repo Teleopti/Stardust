@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Globalization;
-using Microsoft.SqlServer.Server;
 using TechTalk.SpecFlow;
 using TechTalk.SpecFlow.Assist;
 using Teleopti.Ccc.Domain.Collection;
@@ -254,7 +253,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.MyTime
 
 		private void calendarShouldDisplayPeriod(DateOnlyPeriod displayedPeriod)
 		{
-			calendarShouldRangeBetween(displayedPeriod.StartDate, displayedPeriod.EndDate);
+			calendarShouldRangeBetween(displayedPeriod.StartDate.Date, displayedPeriod.EndDate.Date);
 		}
 
 		private void calendarShouldRangeBetween(DateTime firstDateDisplayed, DateTime lastDateDisplayed)

@@ -11,20 +11,13 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 {
 	public class FakeSeatBookingRepository : ISeatBookingRepository, IEnumerable<ISeatBooking>
 	{
-
 		private readonly IList<ISeatBooking> _seatBookings = new List<ISeatBooking>();
-
-
-		public FakeSeatBookingRepository() 
-		{
-		}
 
 		public void Has(ISeatBooking booking)
 		{
 			_seatBookings.Add(booking);
 		}
 
-		
 		public void Add (ISeatBooking entity)
 		{
 			_seatBookings.Add (entity);
@@ -61,32 +54,28 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 		}
 
 		public IUnitOfWork UnitOfWork { get; private set; }
-		//ISeatBooking ILoadAggregateByTypedId<ISeatBooking, Guid>.LoadAggregate (Guid id)
-		//{
-		//	return LoadAggregate (id);
-		//}
-
+		
 		public ISeatBooking LoadAggregate (Guid id)
 		{
 			throw new NotImplementedException();
 		}
 
-		public IList<ISeatBooking> LoadSeatBookingsForDateOnlyPeriod (DateOnly start, DateOnly end)
+		public IList<ISeatBooking> LoadSeatBookingsForDateOnlyPeriod (DateOnlyPeriod period)
 		{
 			return _seatBookings
-				.Where(booking => (booking.StartDateTime.Date >= start
-					&& booking.EndDateTime.Date <= end)).ToList();
+				.Where(booking => (booking.StartDateTime.Date >= period.StartDate.Date
+					&& booking.EndDateTime.Date <= period.StartDate.Date)).ToList();
 		}
 
 		public ISeatBooking LoadSeatBookingForPerson (DateOnly date, IPerson person)
 		{
-			return _seatBookings.SingleOrDefault(booking => (booking.StartDateTime.Date == date && booking.Person == person));
+			return _seatBookings.SingleOrDefault(booking => (booking.StartDateTime.Date == date.Date && booking.Person == person));
 		}
 
 		public IList<ISeatBooking> LoadSeatBookingsForDay (DateOnly date)
 		{
 			return _seatBookings
-				.Where(booking => (booking.StartDateTime.Date == date)).ToList();
+				.Where(booking => (booking.StartDateTime.Date == date.Date)).ToList();
 		}
 
 		public void RemoveSeatBookingsForSeats (IEnumerable<ISeat> seats)

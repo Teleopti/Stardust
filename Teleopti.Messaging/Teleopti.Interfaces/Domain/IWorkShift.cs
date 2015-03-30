@@ -41,7 +41,7 @@ namespace Teleopti.Interfaces.Domain
         /// Created by: rogerkr
         /// Created date: 2009-03-02
         /// </remarks>
-		IEditableShift ToEditorShift(DateTime localMainShiftBaseDate, TimeZoneInfo localTimeZoneInfo);
+		IEditableShift ToEditorShift(DateOnly localMainShiftBaseDate, TimeZoneInfo localTimeZoneInfo);
 
         /// <summary>
         /// Convert the workshift datetime period to timeperiod.

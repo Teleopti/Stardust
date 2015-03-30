@@ -38,7 +38,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TimeLayer
             if (givenDate.DayOfWeek != DayOfWeek)
                 throw new ArgumentException("Day of week for date givenDate correspond to this instance day of week", "givenDate");
 
-            DateTime localMidnight = givenDate;
+            var localMidnight = givenDate.Date;
             return
                 TimeZoneHelper.NewUtcDateTimePeriodFromLocalDateTime(
                     localMidnight.Add(Period.StartTime),

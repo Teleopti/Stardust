@@ -41,7 +41,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling.AgentRestrictions
 			
 			preferenceCellData.TheDate = dateOnly;
 			preferenceCellData.SchedulePart = scheduleDay;
-			preferenceCellData.Enabled = loadedPeriod.Contains(dateOnly) && scheduleMatrixPro.SchedulePeriod.DateOnlyPeriod.Contains(dateOnly);
+			preferenceCellData.Enabled = loadedPeriod.Contains(dateOnly.Date) && scheduleMatrixPro.SchedulePeriod.DateOnlyPeriod.Contains(dateOnly);
 			preferenceCellData.PeriodTarget = periodTarget;
 			preferenceCellData.SchedulingOption = _schedulingOptions;
 

@@ -86,11 +86,10 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.SkillPages
             Percent shrinkage = new Percent(percentTextBox1.DoubleValue);
             Percent efficiency = new Percent(efficiencyPercentTextBox1.DoubleValue);
 
-            DateTime startDateTime = TimeZoneInfo.ConvertTimeToUtc(SkillDayTemplate.BaseDate, skill.TimeZone);
+            DateTime startDateTime = TimeZoneInfo.ConvertTimeToUtc(SkillDayTemplate.BaseDate.Date, skill.TimeZone);
             startDateTime = startDateTime.Add(skill.MidnightBreakOffset);
 
-            DateTime endDateTime = TimeZoneInfo.ConvertTimeToUtc(
-                SkillDayTemplate.BaseDate.AddDays(1), skill.TimeZone);
+            DateTime endDateTime = TimeZoneInfo.ConvertTimeToUtc(SkillDayTemplate.BaseDate.AddDays(1).Date, skill.TimeZone);
             endDateTime = endDateTime.Add(skill.MidnightBreakOffset);
             DateTimePeriod timePeriod = new DateTimePeriod(startDateTime, endDateTime);
 

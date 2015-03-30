@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using NUnit.Framework;
 using Rhino.Mocks;
-using Teleopti.Ccc.Domain.Calculation;
 using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.TestCommon.FakeData;
@@ -293,7 +292,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
             IWorkload workload = WorkloadFactory.CreateWorkload(skill);
 
             startDateLocal = new DateOnly(2008, 1, 2);
-            DateTime startDate = TimeZoneInfo.ConvertTimeToUtc(startDateLocal, skill.TimeZone);
+            DateTime startDate = TimeZoneInfo.ConvertTimeToUtc(startDateLocal.Date, skill.TimeZone);
 
             SkillPersonData skillPersonData = new SkillPersonData(1, 99);
             TimeSpan interval = TimeSpan.FromMinutes(15);
@@ -337,7 +336,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
 
         private List<ISkillStaffPeriod> GetPeriodlist()
         {
-			var skillDay = SkillDayFactory.CreateSkillDay(_skill, DateTime.Now);
+			var skillDay = SkillDayFactory.CreateSkillDay(_skill, DateOnly.Today);
 
 			IStaffingCalculatorServiceFacade svc = _mocks.StrictMock<IStaffingCalculatorServiceFacade>();
             ServiceLevel level1 = new ServiceLevel(new Percent(1), TimeSpan.FromDays(4).TotalSeconds);

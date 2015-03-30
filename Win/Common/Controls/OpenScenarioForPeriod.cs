@@ -121,9 +121,9 @@ namespace Teleopti.Ccc.Win.Common.Controls
 				}
 				else
 				{
-					_setting.StartDate = selectedDates[0].StartDate;
-					_setting.EndDate = selectedDates[0].EndDate;
-					_setting.ScenarioId = Scenario.Id.Value;
+					_setting.StartDate = selectedDates[0].StartDate.Date;
+					_setting.EndDate = selectedDates[0].EndDate.Date;
+					_setting.ScenarioId = Scenario.Id.GetValueOrDefault();
 					_setting.NoShrinkage = !_shrinkage;
 					_setting.NoCalculation = !_calculation;
 					_setting.NoValidation = !_validation;

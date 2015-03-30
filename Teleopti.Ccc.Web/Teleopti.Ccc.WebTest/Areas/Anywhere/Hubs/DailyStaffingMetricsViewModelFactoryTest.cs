@@ -47,7 +47,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Hubs
 			stateHolder.Stub(x => x.SkillDays).Return(new Dictionary<ISkill, IList<ISkillDay>> {{skill, new List<ISkillDay> {skillDay}}});
 
 			var factory = new DailyStaffingMetricsViewModelFactory(skillRepository, calculateSkillCommand, currentScenario, stateHolder, optimizationHelper);
-			var result = factory.CreateViewModel(skillId, dateTime);
+			var result = factory.CreateViewModel(skillId, dateTime.Date);
 
 			result.ForecastedHours.Should().Be.EqualTo(2.5);
 			calculateSkillCommand.AssertWasCalled(
@@ -87,7 +87,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Hubs
 			stateHolder.Stub(x => x.SkillDays).Return(new Dictionary<ISkill, IList<ISkillDay>> { { skill, new List<ISkillDay> { skillDay } } });
 
 			var factory = new DailyStaffingMetricsViewModelFactory(skillRepository, calculateSkillCommand, currentScenario, stateHolder, optimizationHelper);
-			var result = factory.CreateViewModel(skillId, dateTime);
+			var result = factory.CreateViewModel(skillId, dateTime.Date);
 
 			var scheduledHours = SkillStaffPeriodHelper.ScheduledHours(skillDay.SkillStaffPeriodCollection);
 
@@ -123,7 +123,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Hubs
 			stateHolder.Stub(x => x.SkillDays).Return(new Dictionary<ISkill, IList<ISkillDay>> { { skill, new List<ISkillDay> { skillDay } } });
 
 			var factory = new DailyStaffingMetricsViewModelFactory(skillRepository, calculateSkillCommand, currentScenario, stateHolder, optimizationHelper);
-			var result = factory.CreateViewModel(skillId, dateTime);
+			var result = factory.CreateViewModel(skillId, dateTime.Date);
 
 			var relativeDifference = SkillStaffPeriodHelper.RelativeDifferenceForDisplay(skillDay.SkillStaffPeriodCollection);
 
@@ -159,7 +159,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Hubs
 			stateHolder.Stub(x => x.SkillDays).Return(new Dictionary<ISkill, IList<ISkillDay>> { { skill, new List<ISkillDay> { skillDay } } });
 
 			var factory = new DailyStaffingMetricsViewModelFactory(skillRepository, calculateSkillCommand, currentScenario, stateHolder, optimizationHelper);
-			var result = factory.CreateViewModel(skillId, dateTime);
+			var result = factory.CreateViewModel(skillId, dateTime.Date);
 
 			var absoluteDifference = SkillStaffPeriodHelper.AbsoluteDifference(skillDay.SkillStaffPeriodCollection, false, false).Value;
 
@@ -199,7 +199,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Hubs
 			stateHolder.Stub(x => x.SkillDays).Return(new Dictionary<ISkill, IList<ISkillDay>> { { skill, new List<ISkillDay> { skillDay } } });
 
 			var factory = new DailyStaffingMetricsViewModelFactory(skillRepository, calculateSkillCommand, currentScenario, stateHolder, optimizationHelper);
-			var result = factory.CreateViewModel(skillId, dateTime);
+			var result = factory.CreateViewModel(skillId, dateTime.Date);
 
 			var estimatedServiceLevel = SkillStaffPeriodHelper.EstimatedServiceLevel(skillDay.SkillStaffPeriodCollection).Value;
 

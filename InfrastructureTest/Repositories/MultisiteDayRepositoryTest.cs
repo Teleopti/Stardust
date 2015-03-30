@@ -25,7 +25,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
         private ISkillType _skillType;
         private IActivity _activity;
         private IMultisiteSkill _skill;
-        private DateTime _date = new DateTime(2008, 1, 8, 0, 0, 0, DateTimeKind.Utc);
+        private DateOnly _date = new DateOnly(2008, 1, 8);
         private IChildSkill _childSkill;
 
         /// <summary>
@@ -63,14 +63,14 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
             IList<IMultisitePeriod> multisitePeriods = new List<IMultisitePeriod>();
             multisitePeriods.Add(
                 new MultisitePeriod(
-                    DateTimeFactory.CreateDateTimePeriod(DateTime.SpecifyKind(_date,DateTimeKind.Utc), 1).ChangeEndTime(TimeSpan.FromHours(-12)),
+                    DateTimeFactory.CreateDateTimePeriod(DateTime.SpecifyKind(_date.Date,DateTimeKind.Utc), 1).ChangeEndTime(TimeSpan.FromHours(-12)),
                     distributions));
             multisitePeriods.Add(
                 new MultisitePeriod(
                     multisitePeriods[0].Period.ChangeStartTime(TimeSpan.FromHours(12)),
                     distributions));
 
-            IMultisiteDay multisiteDay = new MultisiteDay(new DateOnly(_date), _skill, _scenario);
+            IMultisiteDay multisiteDay = new MultisiteDay(_date, _skill, _scenario);
             multisiteDay.SetMultisitePeriodCollection(multisitePeriods);
 
             _date = _date.AddDays(1);
@@ -134,9 +134,8 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
         [Test]
         public void VerifyGetAllMultisiteDaysWork()
         {
-            MultisiteDayRepository multisiteDayRepository = new MultisiteDayRepository(UnitOfWork);
-            var dateOnly = new DateOnly(_date);
-            ICollection<IMultisiteDay> multisiteDays = multisiteDayRepository.GetAllMultisiteDays(new DateOnlyPeriod(dateOnly,dateOnly.AddDays(1)), new List<IMultisiteDay>(), _skill, _scenario);
+            var multisiteDayRepository = new MultisiteDayRepository(UnitOfWork);
+            var multisiteDays = multisiteDayRepository.GetAllMultisiteDays(new DateOnlyPeriod(_date,_date.AddDays(1)), new List<IMultisiteDay>(), _skill, _scenario);
             Assert.AreEqual(2, multisiteDays.Count);
             Assert.IsNotNull(multisiteDays.ElementAt(0).Id);
             Assert.IsNotNull(multisiteDays.ElementAt(1).Id);
@@ -152,10 +151,8 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
         [Test]
         public void VerifyGetAllMultisiteDaysWorkWithoutAddingToRepository()
         {
-            MultisiteDayRepository multisiteDayRepository = new MultisiteDayRepository(UnitOfWork);
-            var dateOnly = new DateOnly(_date);
-            ICollection<IMultisiteDay> multisiteDays =
-                multisiteDayRepository.GetAllMultisiteDays(new DateOnlyPeriod(dateOnly, dateOnly.AddDays(1)),
+            var multisiteDayRepository = new MultisiteDayRepository(UnitOfWork);
+            var multisiteDays = multisiteDayRepository.GetAllMultisiteDays(new DateOnlyPeriod(_date, _date.AddDays(1)),
                                                            new List<IMultisiteDay>(), _skill, _scenario, false);
             Assert.AreEqual(2, multisiteDays.Count);
             Assert.IsNull(multisiteDays.ElementAt(0).Id);

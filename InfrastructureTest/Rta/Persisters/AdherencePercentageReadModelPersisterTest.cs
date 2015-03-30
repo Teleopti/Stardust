@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using NUnit.Framework;
 using SharpTestsEx;
-using Teleopti.Ccc.Domain.ApplicationLayer.Rta;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta.ReadModelUpdaters;
 using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.TestCommon;
@@ -24,7 +23,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.Persisters
 			var personId = Guid.NewGuid();
 			Target.Persist(new AdherencePercentageReadModel
 			{
-				Date = "2012-08-29".Date(),
+				Date = new DateTime(2012,08,29),
 				PersonId = personId,
 				TimeInAdherence = "17".Minutes(),
 				TimeOutOfAdherence = "28".Minutes(),
@@ -51,12 +50,12 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.Persisters
 			var personId = Guid.NewGuid();
 			Target.Persist(new AdherencePercentageReadModel
 			{
-				Date = "2012-08-29".Date(),
+				Date = new DateTime(2012, 08, 29),
 				PersonId = personId
 			});
 			Target.Persist(new AdherencePercentageReadModel
 			{
-				Date = "2012-08-30".Date(),
+				Date = new DateTime(2012, 08, 30),
 				PersonId = personId
 			});
 
@@ -75,7 +74,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.Persisters
 			var personId = Guid.NewGuid();
 			Target.Persist(new AdherencePercentageReadModel
 			{
-				Date = "2012-08-29".Date(),
+				Date = new DateTime(2012, 08, 29),
 				PersonId = personId,
 				LastTimestamp = "2012-08-29 8:00".Utc(),
 				TimeInAdherence = "0".Minutes(),
@@ -83,7 +82,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.Persisters
 			});
 			Target.Persist(new AdherencePercentageReadModel
 			{
-				Date = "2012-08-29".Date(),
+				Date = new DateTime(2012, 08, 29),
 				PersonId = personId,
 				LastTimestamp = "2012-08-29 8:15".Utc(),
 				TimeInAdherence = "17".Minutes(),
@@ -105,7 +104,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.Persisters
 			var personId = Guid.NewGuid();
 			Target.Persist(new AdherencePercentageReadModel
 			{
-				Date = "2012-08-29".Date(),
+				Date = new DateTime(2012, 08, 29),
 				PersonId = personId
 			});
 
@@ -120,14 +119,14 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.Persisters
 			var personId = Guid.NewGuid();
 			Target.Persist(new AdherencePercentageReadModel
 			{
-				Date = "2012-08-29".Date(),
+				Date = new DateTime(2012, 08, 29),
 				PersonId = personId,
 				IsLastTimeInAdherence = false,
 				LastTimestamp = "2012-08-29 8:00".Utc()
 			});
 			Target.Persist(new AdherencePercentageReadModel
 			{
-				Date = "2012-08-29".Date(),
+				Date = new DateTime(2012, 08, 29),
 				PersonId = personId
 			});
 
@@ -160,7 +159,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.Persisters
 			var personId = Guid.NewGuid();
 			Target.Persist(new AdherencePercentageReadModel
 			{
-				Date = "2012-08-29".Date(),
+				Date = new DateTime(2012, 08, 29),
 				PersonId = personId,
 				TimeInAdherence = "17".Minutes(),
 				TimeOutOfAdherence = "28".Minutes(),
@@ -189,7 +188,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.Persisters
 			
 			Assert.DoesNotThrow(() => Target.Persist(new AdherencePercentageReadModel
 			{
-				Date = "2012-08-29".Date(),
+				Date = new DateTime(2012, 08, 29),
 				PersonId = personId,
 				TimeInAdherence = "17".Minutes(),
 				TimeOutOfAdherence = "28".Minutes(),

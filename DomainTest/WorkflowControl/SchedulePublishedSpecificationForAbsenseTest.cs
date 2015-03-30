@@ -83,8 +83,7 @@ namespace Teleopti.Ccc.DomainTest.WorkflowControl
 		public void ShouldAbsenceStartInPreferencePeriodMeansPublished()
 		{
 			PublishedScheduleData data = null;
-			DateTimePeriod absencePeriodInPreferencePeriod =
-				new DateTimePeriod(_periodStartDate.AddDays(1), _periodStartDate.AddDays(2));
+			var absencePeriodInPreferencePeriod = new DateTimePeriod(_periodStartDate.AddDays(1).Date, _periodStartDate.AddDays(2).Date);
 			using (_mocks.Record())
 			{
 				SetInnerPreferencePeriod();
@@ -106,8 +105,7 @@ namespace Teleopti.Ccc.DomainTest.WorkflowControl
 		public void ShouldAbsenceStartBeforePreferencePeriodAlsoMeansPublished()
 		{
 			PublishedScheduleData data = null;
-			DateTimePeriod absencePeriodStartBeforePreferencePeriod =
-				new DateTimePeriod(_periodStartDate.AddDays(-1), _periodStartDate.AddDays(1));
+			var absencePeriodStartBeforePreferencePeriod = new DateTimePeriod(_periodStartDate.AddDays(-1).Date, _periodStartDate.AddDays(1).Date);
 			using (_mocks.Record())
 			{
 				SetInnerPreferencePeriod();
@@ -129,8 +127,7 @@ namespace Teleopti.Ccc.DomainTest.WorkflowControl
 		public void ShouldAbsenceEndAfterPreferencePeriodAlsoMeansPublished()
 		{
 			PublishedScheduleData data = null;
-			DateTimePeriod absencePeriodEndAfterPreferencePeriod =
-				new DateTimePeriod(_periodStartDate.AddDays(-1), _periodStartDate.AddDays(1));
+			var absencePeriodEndAfterPreferencePeriod = new DateTimePeriod(_periodStartDate.AddDays(-1).Date, _periodStartDate.AddDays(1).Date);
 			using (_mocks.Record())
 			{
 				SetInnerPreferencePeriod();

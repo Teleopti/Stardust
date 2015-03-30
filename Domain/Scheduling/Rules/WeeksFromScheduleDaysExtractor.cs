@@ -21,7 +21,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Rules
             {
                 var person = day.Person;
                 var dayDateOnly = day.DateOnlyAsPeriod.DateOnly;
-                var firstDateInPeriodLocal = new DateOnly(DateHelper.GetFirstDateInWeek(dayDateOnly, person.FirstDayOfWeek));
+                var firstDateInPeriodLocal = DateHelper.GetFirstDateInWeek(dayDateOnly, person.FirstDayOfWeek);
                 var period = new DateOnlyPeriod(firstDateInPeriodLocal, firstDateInPeriodLocal.AddDays(6));
                 personWeeks.Add(new PersonWeek(day.Person, period));
 

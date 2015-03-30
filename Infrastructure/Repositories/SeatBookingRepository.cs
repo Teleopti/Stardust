@@ -1,6 +1,4 @@
-﻿
-
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using NHibernate.Linq;
@@ -36,27 +34,20 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 
 		public ISeatBooking LoadSeatBookingForPerson(DateOnly date, IPerson person)
 		{
-			return Session.Query<ISeatBooking>().SingleOrDefault(booking => (booking.StartDateTime.Date == date && booking.Person == person));
+			return Session.Query<ISeatBooking>().SingleOrDefault(booking => (booking.StartDateTime.Date == date.Date && booking.Person == person));
 		}
 
-		public IList<ISeatBooking> LoadSeatBookingsForDateOnlyPeriod(DateOnly start, DateOnly end)
+		public IList<ISeatBooking> LoadSeatBookingsForDateOnlyPeriod(DateOnlyPeriod period)
 		{
 			return Session.Query<ISeatBooking>()
-				.Where(booking => (booking.StartDateTime.Date >= start
-					&& booking.EndDateTime.Date <= end)).ToList();
-		}
-
-		public IList<ISeatBooking> LoadSeatBookingsForPeriod(DateTime start, DateTime end)
-		{
-			return Session.Query<ISeatBooking>()
-				.Where(booking => (booking.StartDateTime >= start
-					&& booking.EndDateTime <= end)).ToList();
+				.Where(booking => booking.StartDateTime.Date >= period.StartDate.Date
+					&& booking.EndDateTime.Date <= period.EndDate.Date).ToList();
 		}
 
 		public IList<ISeatBooking> LoadSeatBookingsForDay(DateOnly date)
 		{
 			return Session.Query<ISeatBooking>()
-				.Where(booking => (booking.StartDateTime.Date == date)).ToList();
+				.Where(booking => booking.StartDateTime.Date == date.Date).ToList();
 		}
 
 		public void RemoveSeatBookingsForSeats(IEnumerable<ISeat>seats)

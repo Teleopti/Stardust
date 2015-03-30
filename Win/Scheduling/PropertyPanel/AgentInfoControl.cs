@@ -50,7 +50,7 @@ namespace Teleopti.Ccc.Win.Scheduling.PropertyPanel
 	    private IList<IGroupPageLight> _groupPages;
 	    private IGroupPagePerDate _groupPagePerDate;
 	    private bool _mbCacheDisabled;
-	    private IGroupPageLight _lastSelectedGroupPage = null;
+	    private IGroupPageLight _lastSelectedGroupPage;
 
         public AgentInfoControl()
         {
@@ -728,7 +728,7 @@ namespace Teleopti.Ccc.Win.Scheduling.PropertyPanel
 		    if (!period.HasValue)
 			    return true;
 		    var periodValue = period.Value;
-		    return (periodValue.StartDate == DateTime.MinValue && periodValue.EndDate == DateTime.MinValue);
+		    return (periodValue.StartDate == DateOnly.MinValue && periodValue.EndDate == DateOnly.MinValue);
 	    }
 
 	    private static ListViewItem createAndAddItem(ListView listView, string itemText, string subItemText, int indent)

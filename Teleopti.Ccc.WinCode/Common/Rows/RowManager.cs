@@ -11,7 +11,6 @@ namespace Teleopti.Ccc.WinCode.Common.Rows
         private IList<IntervalDefinition> _intervals;
         private int _intervalLength;
         private readonly WeakReference _grid;
-        private DateTime _baseDate;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="RowManager&lt;T, Y&gt;"/> class.
@@ -38,11 +37,7 @@ namespace Teleopti.Ccc.WinCode.Common.Rows
         /// Created by: robink
         /// Created date: 2008-03-26
         /// </remarks>
-        public DateTime BaseDate
-        {
-            get { return _baseDate; }
-            set { _baseDate = value; }
-        }
+        public DateTime BaseDate { get; set; }
 
         /// <summary>
         /// Gets the time zone info.

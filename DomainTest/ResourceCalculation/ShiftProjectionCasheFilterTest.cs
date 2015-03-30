@@ -31,7 +31,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
         private IEffectiveRestriction _effectiveRestriction;
         private IWorkShiftFinderResult _finderResult;
         private MockRepository _mocks;
-        private TimeZoneInfo _TimeZoneInfo;
+        private TimeZoneInfo _timeZoneInfo;
         private IScheduleRange _scheduleRange;
         private IScheduleDay _part;
         private IPersonAssignment _personAssignment;
@@ -44,7 +44,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
         {
             _mocks = new MockRepository();
             _dateOnly = new DateOnly(2009, 2, 2);
-            _TimeZoneInfo = (TimeZoneInfo.FindSystemTimeZoneById("Atlantic Standard Time"));
+            _timeZoneInfo = (TimeZoneInfo.FindSystemTimeZoneById("Atlantic Standard Time"));
             _effectiveRestriction = new EffectiveRestriction(
                 new StartTimeLimitation(new TimeSpan(8, 0, 0), new TimeSpan(10, 0, 0)),
                 new EndTimeLimitation(new TimeSpan(15, 0, 0), new TimeSpan(18, 0, 0)),
@@ -174,7 +174,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
         [Test]
         public void CanFilterOnEffectiveRestrictionAndNotAllowedShiftCategories()
         {
-            var ret = _target.FilterOnRestrictionAndNotAllowedShiftCategories(_dateOnly, _TimeZoneInfo, GetCashes(), _effectiveRestriction, new List<IShiftCategory>(), _finderResult);
+            var ret = _target.FilterOnRestrictionAndNotAllowedShiftCategories(_dateOnly, _timeZoneInfo, GetCashes(), _effectiveRestriction, new List<IShiftCategory>(), _finderResult);
             Assert.AreEqual(0, ret.Count);
         }
 
@@ -192,12 +192,12 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
             ws2.LayerCollection.Add(new WorkShiftActivityLayer(breakActivity, breakPeriod.MovePeriod(new TimeSpan(1, 0, 0))));
             IList<IWorkShift> listOfWorkShifts = new List<IWorkShift> { ws1, ws2 };
 
-            _TimeZoneInfo = (TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time"));
+            _timeZoneInfo = (TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time"));
             var casheList = new List<IShiftProjectionCache>();
             foreach (IWorkShift shift in listOfWorkShifts)
             {
                 var cache = new ShiftProjectionCache(shift, _personalShiftMeetingTimeChecker);
-                cache.SetDate(_dateOnly, _TimeZoneInfo);
+                cache.SetDate(_dateOnly, _timeZoneInfo);
                 casheList.Add(cache);
             }
 
@@ -206,7 +206,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
                                                                                   new EndTimeLimitation(),
                                                                                   new WorkTimeLimitation(), null, null, null,
                                                                                   activityRestrictions);
-            var ret = ShiftProjectionCacheFilter.FilterOnActivityRestrictions(_dateOnly, _TimeZoneInfo, casheList, effectiveRestriction, _finderResult);
+            var ret = ShiftProjectionCacheFilter.FilterOnActivityRestrictions(_dateOnly, _timeZoneInfo, casheList, effectiveRestriction, _finderResult);
             Assert.AreEqual(2, ret.Count);
 
             var activityRestriction = new ActivityRestriction(breakActivity)
@@ -220,20 +220,20 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
                                                                                   new WorkTimeLimitation(), null, null, null,
                                                                                   activityRestrictions);
 
-            ret = ShiftProjectionCacheFilter.FilterOnActivityRestrictions(_dateOnly, _TimeZoneInfo, casheList, effectiveRestriction, _finderResult);
+            ret = ShiftProjectionCacheFilter.FilterOnActivityRestrictions(_dateOnly, _timeZoneInfo, casheList, effectiveRestriction, _finderResult);
             Assert.AreEqual(0, ret.Count);
         }
 
         [Test]
         public void CanFilterOnEffectiveRestriction()
         {
-            var ret = _target.FilterOnRestrictionTimeLimits(_dateOnly, _TimeZoneInfo, GetCashes(), _effectiveRestriction, _finderResult);
+            var ret = _target.FilterOnRestrictionTimeLimits(_dateOnly, _timeZoneInfo, GetCashes(), _effectiveRestriction, _finderResult);
             Assert.IsNotNull(ret);
         }
         [Test]
         public void CanFilterOnRestrictionTimeLimitsWithEmptyList()
         {
-            var ret = _target.FilterOnRestrictionTimeLimits(_dateOnly, _TimeZoneInfo, new List<IShiftProjectionCache>(), _effectiveRestriction, _finderResult);
+            var ret = _target.FilterOnRestrictionTimeLimits(_dateOnly, _timeZoneInfo, new List<IShiftProjectionCache>(), _effectiveRestriction, _finderResult);
             Assert.IsNotNull(ret);
         }
 
@@ -291,8 +291,8 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 
             using (_mocks.Record())
             {
-                Expect.Call(_workShift1.ToEditorShift(new DateTime(2009, 1, 1), _TimeZoneInfo)).Return(mainshift1);
-                Expect.Call(_workShift2.ToEditorShift(new DateTime(2009, 1, 1), _TimeZoneInfo)).Return(mainshift2);
+                Expect.Call(_workShift1.ToEditorShift(new DateOnly(2009, 1, 1), _timeZoneInfo)).Return(mainshift1);
+                Expect.Call(_workShift2.ToEditorShift(new DateOnly(2009, 1, 1), _timeZoneInfo)).Return(mainshift2);
                 Expect.Call(_workShift1.ProjectionService()).Return(ps1);
                 Expect.Call(_workShift2.ProjectionService()).Return(ps2);
                 Expect.Call(ps1.CreateProjection()).Return(lc1);
@@ -309,10 +309,10 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
             using (_mocks.Playback())
             {
                 c1 = new ShiftProjectionCache(_workShift1, _personalShiftMeetingTimeChecker);
-                c1.SetDate(new DateOnly(2009, 1, 1), _TimeZoneInfo);
+                c1.SetDate(new DateOnly(2009, 1, 1), _timeZoneInfo);
                 shifts.Add(c1);
                 c2 = new ShiftProjectionCache(_workShift2, _personalShiftMeetingTimeChecker);
-                c2.SetDate(new DateOnly(2009, 1, 1), _TimeZoneInfo);
+                c2.SetDate(new DateOnly(2009, 1, 1), _timeZoneInfo);
                 shifts.Add(c2);
                 retShifts = _target.FilterOnRestrictionMinMaxWorkTime(shifts, _effectiveRestriction, new WorkShiftFinderResultForTest());
 
@@ -337,8 +337,8 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
             var minMaxcontractTime = new MinMax<TimeSpan>(new TimeSpan(7, 0, 0), new TimeSpan(8, 0, 0));
             using (_mocks.Record())
             {
-                Expect.Call(_workShift1.ToEditorShift(new DateTime(2009, 1, 1), _TimeZoneInfo)).Return(mainshift1);
-                Expect.Call(_workShift2.ToEditorShift(new DateTime(2009, 1, 1), _TimeZoneInfo)).Return(mainshift2);
+                Expect.Call(_workShift1.ToEditorShift(new DateOnly(2009, 1, 1), _timeZoneInfo)).Return(mainshift1);
+                Expect.Call(_workShift2.ToEditorShift(new DateOnly(2009, 1, 1), _timeZoneInfo)).Return(mainshift2);
                 Expect.Call(_workShift1.ProjectionService()).Return(ps1);
                 Expect.Call(_workShift2.ProjectionService()).Return(ps2);
                 Expect.Call(ps1.CreateProjection()).Return(lc1);
@@ -355,10 +355,10 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
             using (_mocks.Playback())
             {
                 c1 = new ShiftProjectionCache(_workShift1, _personalShiftMeetingTimeChecker);
-                c1.SetDate(new DateOnly(2009, 1, 1), _TimeZoneInfo);
+                c1.SetDate(new DateOnly(2009, 1, 1), _timeZoneInfo);
                 shifts.Add(c1);
                 c2 = new ShiftProjectionCache(_workShift2, _personalShiftMeetingTimeChecker);
-                c2.SetDate(new DateOnly(2009, 1, 1), _TimeZoneInfo);
+                c2.SetDate(new DateOnly(2009, 1, 1), _timeZoneInfo);
                 shifts.Add(c2);
                 retShifts = _target.FilterOnContractTime(minMaxcontractTime, shifts, new WorkShiftFinderResultForTest());
 
@@ -516,8 +516,8 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 
             using (_mocks.Record())
             {
-                Expect.Call(_workShift1.ToEditorShift(new DateTime(2009, 1, 1), _TimeZoneInfo)).Return(mainshift1);
-                Expect.Call(_workShift2.ToEditorShift(new DateTime(2009, 1, 1), _TimeZoneInfo)).Return(mainshift2);
+                Expect.Call(_workShift1.ToEditorShift(new DateOnly(2009, 1, 1), _timeZoneInfo)).Return(mainshift1);
+                Expect.Call(_workShift2.ToEditorShift(new DateOnly(2009, 1, 1), _timeZoneInfo)).Return(mainshift2);
                 Expect.Call(mainshift1.ProjectionService()).Return(ps1);
                 Expect.Call(mainshift2.ProjectionService()).Return(ps2);
                 Expect.Call(ps1.CreateProjection()).Return(lc1);
@@ -534,10 +534,10 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
             using (_mocks.Playback())
             {
                 c1 = new ShiftProjectionCache(_workShift1, _personalShiftMeetingTimeChecker);
-                c1.SetDate(new DateOnly(2009, 1, 1), _TimeZoneInfo);
+                c1.SetDate(new DateOnly(2009, 1, 1), _timeZoneInfo);
                 shifts.Add(c1);
                 c2 = new ShiftProjectionCache(_workShift2, _personalShiftMeetingTimeChecker);
-                c2.SetDate(new DateOnly(2009, 1, 1), _TimeZoneInfo);
+                c2.SetDate(new DateOnly(2009, 1, 1), _timeZoneInfo);
                 shifts.Add(c2);
                 retShifts = _target.FilterOnStartAndEndTime(scheduleDayPeriod, shifts, new WorkShiftFinderResultForTest());
 
@@ -579,7 +579,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
             foreach (IWorkShift shift in tmpList)
             {
                 var cache = new ShiftProjectionCache(shift, _personalShiftMeetingTimeChecker);
-                cache.SetDate(_dateOnly, _TimeZoneInfo);
+                cache.SetDate(_dateOnly, _timeZoneInfo);
                 retList.Add(cache);
             }
             return retList;

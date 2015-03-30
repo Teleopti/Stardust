@@ -586,10 +586,7 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.GuiHelpers
 		public void LoadPersonAvailabilities(IList<IPerson> persons, PersonAvailabilityRepository personAvailabilityRep)
 		{
 			// Gets the data list
-			var period =
-				 new DateTimePeriod(DateTime.SpecifyKind(DateTime.MinValue.AddYears(1800), DateTimeKind.Utc),
-										  DateTime.SpecifyKind(DateTime.MaxValue, DateTimeKind.Utc));
-
+			var period = new DateOnlyPeriod(DateOnly.MinValue,DateOnly.MaxValue);
 
 			if (_filteredPersonCollection != null && _availabilityCollection.Count > 0)
 			{
@@ -1462,7 +1459,7 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.GuiHelpers
 				//if the today is larger than the largest item in the collection 
 				//or smaller than the smallest item in the collection, there is no point in having the current item.
 				//therefore null is returned.
-				if (personRotationCollection[personRotationCollection.Count - 1].StartDate.Date > SelectedDate)
+				if (personRotationCollection[personRotationCollection.Count - 1].StartDate > SelectedDate)
 				{
 					return null;
 				}
@@ -1487,7 +1484,7 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.GuiHelpers
 				//if the today is larger than the largest item in the collection 
 				//or smaller than the smallest item in the collection, there is no point in having the current item.
 				//therefore null is returned.
-				if (personAvailabilityCollection[personAvailabilityCollection.Count - 1].StartDate.Date > SelectedDate)
+				if (personAvailabilityCollection[personAvailabilityCollection.Count - 1].StartDate > SelectedDate)
 				{
 					return null;
 				}
@@ -1495,7 +1492,7 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.GuiHelpers
 				//than today, should be the current person rotation.
 				foreach (IPersonAvailability availability in personAvailabilityCollection)
 				{
-					if (availability.StartDate.Date <= SelectedDate)
+					if (availability.StartDate <= SelectedDate)
 						return availability;
 				}
 				return null;
@@ -1507,7 +1504,7 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.GuiHelpers
 		{
 			IRotation rotation = GetDefaultRotation;
 
-			var selectedDate = new DateOnly(PeopleAdminHelper.GetFirstDayOfWeek(selectedDateTime));
+			var selectedDate = new DateOnly(PeopleAdminHelper.GetFirstDayOfWeek(selectedDateTime.Date));
 
 			if (rotation != null)
 				return new PersonRotation(person, rotation, selectedDate, 0);

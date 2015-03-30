@@ -68,7 +68,7 @@ namespace Teleopti.Ccc.Sdk.Logic.Restrictions
 			    var dto = new ValidatedSchedulePartDto
 				    {
 					    MustHave = mustHave,
-					    DateOnly = new DateOnlyDto {DateTime = dateOnly},
+					    DateOnly = new DateOnlyDto {DateTime = dateOnly.Date},
 					    IsInsidePeriod = schedulePeriod.Contains(dateOnly),
 					    PeriodTargetInMinutes = periodTargetInMinutes,
 					    PeriodDayOffsTarget = periodDayOffsTarget,
@@ -231,7 +231,7 @@ namespace Teleopti.Ccc.Sdk.Logic.Restrictions
                                   {
                                       IsPreferenceEditable = false,
                                       IsStudentAvailabilityEditable = false,
-									  DateOnly = new DateOnlyDto { DateTime = new DateOnly(parts[0].DateOnly.DateTime.AddDays(-1)) },
+									  DateOnly = new DateOnlyDto { DateTime = parts[0].DateOnly.DateTime.AddDays(-1) },
                                       LegalState = true,
                                       PeriodTargetInMinutes = parts[0].PeriodTargetInMinutes
                                   };

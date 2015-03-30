@@ -41,7 +41,7 @@ namespace Teleopti.Ccc.WebTest.Core.WeekSchedule
 			var dateOnly = DateOnly.Today;
 
 			var result = helper.Schedule().FormatDate(dateOnly);
-			result.Should().Be.EqualTo(((DateTime) dateOnly).ToString("yyyy-MM-dd"));
+			result.Should().Be.EqualTo(dateOnly.Date.ToString("yyyy-MM-dd"));
 		}
 
 		[Test]
@@ -50,7 +50,7 @@ namespace Teleopti.Ccc.WebTest.Core.WeekSchedule
 			var dateOnly = DateOnly.Today;
 
 			var result = helper.Schedule().FormatDate(dateOnly);
-			result.Should().Be.EqualTo(((DateTime) dateOnly).ToString("yyyy-MM-dd"));
+			result.Should().Be.EqualTo(dateOnly.Date.ToString("yyyy-MM-dd"));
 		}
 
 		[Test]

@@ -74,7 +74,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Core
 			_personSchedule.PersonId = personId;
 			_person1.WorkflowControlSet = _workflowControlSet;
 			// set the date before the publish date
-			_workflowControlSet.SchedulePublishedToDate = _date.AddDays(-2);
+			_workflowControlSet.SchedulePublishedToDate = _date.AddDays(-2).Date;
 
 			_target = new PublishedScheduleSpecification(_persons, _date);
 
@@ -94,7 +94,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Core
 				_personSchedule.PersonId = personId;
 				_person1.WorkflowControlSet = _workflowControlSet;
 				// set the date after the publish date
-				_workflowControlSet.SchedulePublishedToDate = _date.AddDays(2);
+				_workflowControlSet.SchedulePublishedToDate = _date.AddDays(2).Date;
 			}
 			using (_mock.Playback())
 			{
@@ -116,7 +116,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Core
 					.Return(personId);
 				_personSchedule.PersonId = personId;
 				_person1.WorkflowControlSet = _workflowControlSet;
-				_workflowControlSet.SchedulePublishedToDate = _date;
+				_workflowControlSet.SchedulePublishedToDate = _date.Date;
 			}
 			using (_mock.Playback())
 			{

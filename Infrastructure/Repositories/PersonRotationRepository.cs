@@ -21,7 +21,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
         {
         }
 
-		public IEnumerable<IPersonRotation> LoadPersonRotationsWithHierarchyData(IEnumerable<IPerson> persons, DateTime startDate)
+		public IEnumerable<IPersonRotation> LoadPersonRotationsWithHierarchyData(IEnumerable<IPerson> persons, DateOnly startDate)
 		{
 			var rep2 = new RotationRepository(UnitOfWork);
 			rep2.LoadRotationsWithHierarchyData(persons,startDate);

@@ -40,7 +40,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.StudentAvailability.Mapping
 		[Test]
 		public void ShouldMapDate()
 		{
-			var scheduleDay = new StubFactory().ScheduleDayStub(DateOnly.Today);
+			var scheduleDay = new StubFactory().ScheduleDayStub(DateTime.Today);
 
 			var result = Mapper.Map<IScheduleDay, StudentAvailabilityAndScheduleDayViewModel>(scheduleDay);
 
@@ -51,7 +51,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.StudentAvailability.Mapping
 		public void ShouldMapPreferenceViewModel()
 		{
 			
-			var scheduleDay = new StubFactory().ScheduleDayStub(DateOnly.Today);
+			var scheduleDay = new StubFactory().ScheduleDayStub(DateTime.Today);
 			var studentAvailabilityRestriction = new StudentAvailabilityRestriction();
 			var studentAvailabilityDay=new StudentAvailabilityDay(new Person(), DateOnly.Today, new List<IStudentAvailabilityRestriction> {studentAvailabilityRestriction});
 			var personRestrictionCollection =
@@ -67,7 +67,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.StudentAvailability.Mapping
 		[Test]
 		public void ShouldAllowMultipleStudentAvailabilityDayLoaded()
 		{
-			var scheduleDay = new StubFactory().ScheduleDayStub(DateOnly.Today);
+			var scheduleDay = new StubFactory().ScheduleDayStub(DateTime.Today);
 			var studentAvailabilityRestriction = new StudentAvailabilityRestriction();
 			var studentAvailabilityDay1 = new StudentAvailabilityDay(new Person(), DateOnly.Today, new List<IStudentAvailabilityRestriction> { studentAvailabilityRestriction });
 			var studentAvailabilityDay2 = new StudentAvailabilityDay(new Person(), DateOnly.Today, new List<IStudentAvailabilityRestriction> { studentAvailabilityRestriction });

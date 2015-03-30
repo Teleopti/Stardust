@@ -112,7 +112,7 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
         {
             target.TypeOfTaskOwnerPeriod = TaskOwnerPeriodType.Week;
             target = new TaskOwnerPeriod(target.CurrentDate,
-                                         WorkloadDayFactory.GetWorkloadDaysForTest(target.StartDate, target.EndDate,
+                                         WorkloadDayFactory.GetWorkloadDaysForTest(target.StartDate.Date, target.EndDate.Date,
                                                                                     _workload).OfType
                                              <ITaskOwner>().ToList(), target.TypeOfTaskOwnerPeriod);
 
@@ -146,7 +146,7 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
         [Test]
         public void VerifyChangingToSameWorkloadTypeWorks()
         {
-            target.AddRange(WorkloadDayFactory.GetWorkloadDaysWithoutContentForTest(target.StartDate, target.EndDate, _workload).OfType<ITaskOwner>());
+            target.AddRange(WorkloadDayFactory.GetWorkloadDaysWithoutContentForTest(target.StartDate.Date, target.EndDate.Date, _workload).OfType<ITaskOwner>());
             target.TypeOfTaskOwnerPeriod = TaskOwnerPeriodType.Month;
             Assert.AreEqual(TaskOwnerPeriodType.Month, target.TypeOfTaskOwnerPeriod);
             Assert.AreEqual(31, target.TaskOwnerDayCollection.Count);
@@ -155,7 +155,7 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
         [Test]
         public void VerifyClear()
         {
-            target.AddRange(WorkloadDayFactory.GetWorkloadDaysWithoutContentForTest(target.StartDate, target.EndDate,  _workload).OfType<ITaskOwner>());
+            target.AddRange(WorkloadDayFactory.GetWorkloadDaysWithoutContentForTest(target.StartDate.Date, target.EndDate.Date,  _workload).OfType<ITaskOwner>());
             Assert.AreEqual(31, target.TaskOwnerDayCollection.Count);
             target.Clear();
             Assert.AreEqual(0,target.TaskOwnerDayCollection.Count);
@@ -171,7 +171,7 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
         [Test]
         public void VerifyWorkloadDayCollectionWorks()
         {
-            target.AddRange(WorkloadDayFactory.GetWorkloadDaysWithoutContentForTest(target.StartDate, target.EndDate,  _workload).OfType<ITaskOwner>());
+            target.AddRange(WorkloadDayFactory.GetWorkloadDaysWithoutContentForTest(target.StartDate.Date, target.EndDate.Date,  _workload).OfType<ITaskOwner>());
             Assert.AreEqual(31, target.TaskOwnerDayCollection.Count);
         }
 
@@ -191,12 +191,12 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
             {
                 Thread.CurrentThread.CurrentCulture = ci;
                 target = new TaskOwnerPeriod(currentDate,null,TaskOwnerPeriodType.Month);
-                target.AddRange(WorkloadDayFactory.GetWorkloadDaysWithoutContentForTest(target.StartDate, target.EndDate,_workload).OfType<ITaskOwner>());
+                target.AddRange(WorkloadDayFactory.GetWorkloadDaysWithoutContentForTest(target.StartDate.Date, target.EndDate.Date,_workload).OfType<ITaskOwner>());
                 Assert.AreEqual(
                     ci.Calendar.GetDaysInMonth(
-                        ci.Calendar.GetYear(currentDate),
-                        ci.Calendar.GetMonth(currentDate),
-                        ci.Calendar.GetEra(currentDate)), target.TaskOwnerDayCollection.Count);
+                        ci.Calendar.GetYear(currentDate.Date),
+                        ci.Calendar.GetMonth(currentDate.Date),
+                        ci.Calendar.GetEra(currentDate.Date)), target.TaskOwnerDayCollection.Count);
             }
         }
 
@@ -542,7 +542,7 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
         [Test]
         public void VerifyChangingChildsUpdatesValues()
         {
-            target = new TaskOwnerPeriod(target.CurrentDate, WorkloadDayFactory.GetWorkloadDaysForTest(target.CurrentDate, target.CurrentDate.AddDays(1), _workload).OfType<ITaskOwner>().ToList(), TaskOwnerPeriodType.Other);
+            target = new TaskOwnerPeriod(target.CurrentDate, WorkloadDayFactory.GetWorkloadDaysForTest(target.CurrentDate.Date, target.CurrentDate.Date.AddDays(1), _workload).OfType<ITaskOwner>().ToList(), TaskOwnerPeriodType.Other);
 
             Assert.AreEqual(61d, Math.Round(target.Tasks,0));
 
@@ -584,7 +584,7 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
             target.TypeOfTaskOwnerPeriod = TaskOwnerPeriodType.Other;
             target.CurrentDate = startDate;
             target = new TaskOwnerPeriod(target.CurrentDate,
-                                         WorkloadDayFactory.GetWorkloadDaysWithoutContentForTest(startDate, endDate,
+                                         WorkloadDayFactory.GetWorkloadDaysWithoutContentForTest(startDate.Date, endDate.Date,
                                                                                    _workload).OfType
                                              <ITaskOwner>().ToList(), target.TypeOfTaskOwnerPeriod);
 
@@ -604,7 +604,7 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
         public void VerifyOneWorkloadDayCanHaveTwoWorkloadPeriodsAsOwners()
         {
             target.AddRange(
-                WorkloadDayFactory.GetWorkloadDaysForTest(target.StartDate, target.EndDate, 
+                WorkloadDayFactory.GetWorkloadDaysForTest(target.StartDate.Date, target.EndDate.Date, 
                                                                         _workload).OfType<ITaskOwner>());
 
             TaskOwnerHelper workloadPeriodHelper = new TaskOwnerHelper(target.TaskOwnerDayCollection);
@@ -1133,7 +1133,7 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
         {
             //945 * 120% = 1134
             target = new TaskOwnerPeriod(target.CurrentDate,
-                                         WorkloadDayFactory.GetWorkloadDaysForTest(target.StartDate, target.EndDate,
+                                         WorkloadDayFactory.GetWorkloadDaysForTest(target.StartDate.Date, target.EndDate.Date,
                                                       _workload).OfType<ITaskOwner>(), target.TypeOfTaskOwnerPeriod);
             Assert.AreEqual(945d, Math.Round(target.Tasks, 0));
             Assert.AreEqual(945d, Math.Round(target.TotalTasks, 0));
@@ -1147,7 +1147,7 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
         {
             //945 * 120% = 1134
             target = new TaskOwnerPeriod(target.CurrentDate,
-                                         WorkloadDayFactory.GetWorkloadDaysForTest(target.StartDate, target.EndDate,
+                                         WorkloadDayFactory.GetWorkloadDaysForTest(target.StartDate.Date, target.EndDate.Date,
                                                       _workload).OfType<ITaskOwner>(), target.TypeOfTaskOwnerPeriod);
             Assert.AreEqual(945d, Math.Round(target.Tasks, 0));
             Assert.AreEqual(945d, Math.Round(target.TotalTasks, 0));
@@ -1184,7 +1184,7 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
         [Test]
         public void VerifyCampaignTimesCanBeSet()
         {
-            target = new TaskOwnerPeriod(target.CurrentDate, WorkloadDayFactory.GetWorkloadDaysForTest(target.CurrentDate, target.CurrentDate.AddDays(1), _workload).OfType<ITaskOwner>().ToList(), TaskOwnerPeriodType.Other);
+            target = new TaskOwnerPeriod(target.CurrentDate, WorkloadDayFactory.GetWorkloadDaysForTest(target.CurrentDate.Date, target.CurrentDate.Date.AddDays(1), _workload).OfType<ITaskOwner>().ToList(), TaskOwnerPeriodType.Other);
             target.TaskOwnerDayCollection[0].AverageTaskTime = TimeSpan.FromSeconds(40);
             target.TaskOwnerDayCollection[1].AverageTaskTime = TimeSpan.FromSeconds(40);
             target.TaskOwnerDayCollection[0].AverageAfterTaskTime = TimeSpan.FromSeconds(80);
@@ -1212,7 +1212,7 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
         [Test]
         public void VerifyCampaignCanBeSetWithClosedDays()
         {
-            target = new TaskOwnerPeriod(target.CurrentDate, WorkloadDayFactory.GetWorkloadDaysForTest(target.CurrentDate, target.CurrentDate.AddDays(1),  _workload).OfType<ITaskOwner>().ToList(), TaskOwnerPeriodType.Other);
+            target = new TaskOwnerPeriod(target.CurrentDate, WorkloadDayFactory.GetWorkloadDaysForTest(target.CurrentDate.Date, target.CurrentDate.Date.AddDays(1),  _workload).OfType<ITaskOwner>().ToList(), TaskOwnerPeriodType.Other);
             target.TaskOwnerDayCollection[0].AverageTaskTime = TimeSpan.FromSeconds(40);
             target.TaskOwnerDayCollection[1].AverageTaskTime = TimeSpan.FromSeconds(40);
             target.TaskOwnerDayCollection[0].AverageAfterTaskTime = TimeSpan.FromSeconds(80);
@@ -1382,7 +1382,7 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
         [Test]
         public void VerifyForecastedIncomingDemand()
         {
-            var dt = DateTime.SpecifyKind(currentDate, DateTimeKind.Utc);
+            var dt = DateTime.SpecifyKind(currentDate.Date, DateTimeKind.Utc);
             DateTimePeriod dtp = new DateTimePeriod(dt, dt.AddMinutes(15));
 
             SkillDay skillDay1 = new SkillDay(currentDate,_skill,_scenario,new List<IWorkloadDay>(), new List<ISkillDataPeriod>());
@@ -1427,7 +1427,7 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
         [Test]
         public void VerifyForecastedIncomingDemandWithShrinkage()
         {
-            DateTime dt = DateTime.SpecifyKind(currentDate, DateTimeKind.Utc);
+            DateTime dt = DateTime.SpecifyKind(currentDate.Date, DateTimeKind.Utc);
             DateTimePeriod dtp = new DateTimePeriod(dt, dt.AddMinutes(15));
             SkillDay skillDay1 = new SkillDay(currentDate, _skill, _scenario, new List<IWorkloadDay>(), new List<ISkillDataPeriod>());
             SkillDay skillDay2 = new SkillDay(currentDate.AddDays(1), _skill, _scenario, new List<IWorkloadDay>(), new List<ISkillDataPeriod>());
@@ -1469,7 +1469,7 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
         {
             //945 * 120% = 1134
             target = new TaskOwnerPeriod(target.CurrentDate,
-                                         WorkloadDayFactory.GetWorkloadDaysForTest(target.StartDate, target.EndDate,
+                                         WorkloadDayFactory.GetWorkloadDaysForTest(target.StartDate.Date, target.EndDate.Date,
                                                       _workload).OfType<ITaskOwner>(), target.TypeOfTaskOwnerPeriod);
             var partTarget = new TaskOwnerPeriod(target.TaskOwnerDayCollection[8].CurrentDate,
                                                  new List<ITaskOwner>

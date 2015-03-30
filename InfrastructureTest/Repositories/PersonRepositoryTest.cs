@@ -783,7 +783,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			skillWithValidDays.Activity=act;
 			skillWithValidDays.TimeZone = (TimeZoneInfo.Local);
 			PersistAndRemoveFromUnitOfWork(skillWithValidDays);
-			ISkillDay skillDayValid = SkillDayFactory.CreateSkillDay(skillWithValidDays, new DateTime(2000, 1, 6, 0, 0, 0, DateTimeKind.Utc), scenOk);
+			ISkillDay skillDayValid = SkillDayFactory.CreateSkillDay(skillWithValidDays, new DateOnly(2000, 1, 6), scenOk);
 			PersistAndRemoveFromUnitOfWork(skillWithValidDays.WorkloadCollection);
 			PersistAndRemoveFromUnitOfWork(skillDayValid);
 
@@ -812,10 +812,10 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			PersistAndRemoveFromUnitOfWork(act);
 			ISkillType skType = SkillTypeFactory.CreateSkillType();
 			PersistAndRemoveFromUnitOfWork(skType);
-			ISkill skillWithValidDays = new Skill("skillWithValidDays", "sdf", Color.Red, 10, skType) { Activity = act, TimeZone = (TimeZoneInfo.Local) };
-			ISkill skillWithNonValidDays = new Skill("skillWithNonValidDays", "sdf", Color.Red, 10, skType) { Activity = act, TimeZone = (TimeZoneInfo.Local) };
-			ISkill skillWithNoDays = new Skill("skillWithNonValidDays", "sdf", Color.Red, 10, skType) { Activity = act, TimeZone = (TimeZoneInfo.Local) };
-			ISkill deletedSkill = new Skill("deletedSkill", "sdf", Color.Red, 10, skType) { Activity = act, TimeZone = (TimeZoneInfo.Local) };
+			ISkill skillWithValidDays = new Skill("skillWithValidDays", "sdf", Color.Red, 10, skType) { Activity = act, TimeZone = TimeZoneInfo.Local };
+			ISkill skillWithNonValidDays = new Skill("skillWithNonValidDays", "sdf", Color.Red, 10, skType) { Activity = act, TimeZone = TimeZoneInfo.Local };
+			ISkill skillWithNoDays = new Skill("skillWithNonValidDays", "sdf", Color.Red, 10, skType) { Activity = act, TimeZone = TimeZoneInfo.Local };
+			ISkill deletedSkill = new Skill("deletedSkill", "sdf", Color.Red, 10, skType) { Activity = act, TimeZone = TimeZoneInfo.Local };
 			((IDeleteTag)deletedSkill).SetDeleted();
 
 			PersistAndRemoveFromUnitOfWork(skillWithNoDays);
@@ -823,9 +823,9 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			PersistAndRemoveFromUnitOfWork(skillWithNonValidDays);
 			PersistAndRemoveFromUnitOfWork(deletedSkill);
 
-			ISkillDay skillDayValid = SkillDayFactory.CreateSkillDay(skillWithValidDays, new DateTime(2000, 1, 6, 0, 0, 0, DateTimeKind.Utc), scen);
-			ISkillDay skillDayNonValid = SkillDayFactory.CreateSkillDay(skillWithNonValidDays, new DateTime(2002, 1, 6, 0, 0, 0, DateTimeKind.Utc), scen);
-			ISkillDay skillDayNonValid2 = SkillDayFactory.CreateSkillDay(deletedSkill, new DateTime(2000, 1, 6, 0, 0, 0, DateTimeKind.Utc), scen);
+			ISkillDay skillDayValid = SkillDayFactory.CreateSkillDay(skillWithValidDays, new DateOnly(2000, 1, 6), scen);
+			ISkillDay skillDayNonValid = SkillDayFactory.CreateSkillDay(skillWithNonValidDays, new DateOnly(2002, 1, 6), scen);
+			ISkillDay skillDayNonValid2 = SkillDayFactory.CreateSkillDay(deletedSkill, new DateOnly(2000, 1, 6), scen);
 
 			PersistAndRemoveFromUnitOfWork(scen);
 			PersistAndRemoveFromUnitOfWork(skillWithValidDays.WorkloadCollection);
@@ -889,16 +889,16 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			PersistAndRemoveFromUnitOfWork(act);
 			ISkillType skType = SkillTypeFactory.CreateSkillType();
 			PersistAndRemoveFromUnitOfWork(skType);
-			ISkill skillWithValidDays1 = new Skill("skillWithValidDays1", "sdf", Color.Red, 10, skType) { Activity = act, TimeZone = (TimeZoneInfo.Local) };
-			ISkill skillWithValidDays2 = new Skill("skillWithValidDays2", "sdf", Color.Red, 10, skType) { Activity = act, TimeZone = (TimeZoneInfo.Local) };
+			ISkill skillWithValidDays1 = new Skill("skillWithValidDays1", "sdf", Color.Red, 10, skType) { Activity = act, TimeZone = TimeZoneInfo.Local };
+			ISkill skillWithValidDays2 = new Skill("skillWithValidDays2", "sdf", Color.Red, 10, skType) { Activity = act, TimeZone = TimeZoneInfo.Local };
 
 
 			PersistAndRemoveFromUnitOfWork(skillWithValidDays1);
 			PersistAndRemoveFromUnitOfWork(skillWithValidDays2);
 
-			ISkillDay skillDayValid1 = SkillDayFactory.CreateSkillDay(skillWithValidDays1, new DateTime(2000, 1, 6, 0, 0, 0, DateTimeKind.Utc), scen);
-			ISkillDay skillDayValid2 = SkillDayFactory.CreateSkillDay(skillWithValidDays2, new DateTime(2000, 1, 2, 0, 0, 0, DateTimeKind.Utc), scen);
-			ISkillDay skillDayValid3 = SkillDayFactory.CreateSkillDay(skillWithValidDays2, new DateTime(2000, 1, 6, 0, 0, 0, DateTimeKind.Utc), scen);
+			ISkillDay skillDayValid1 = SkillDayFactory.CreateSkillDay(skillWithValidDays1, new DateOnly(2000, 1, 6), scen);
+			ISkillDay skillDayValid2 = SkillDayFactory.CreateSkillDay(skillWithValidDays2, new DateOnly(2000, 1, 2), scen);
+			ISkillDay skillDayValid3 = SkillDayFactory.CreateSkillDay(skillWithValidDays2, new DateOnly(2000, 1, 6), scen);
 
 
 			PersistAndRemoveFromUnitOfWork(scen);

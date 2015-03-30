@@ -67,8 +67,8 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.QuickForecast
         {
 			stateObj.TargetPeriod = new DateOnlyPeriodDto
 			{
-				StartDate = new DateOnlyDto { DateTime = TargetFromTo.WorkPeriodStart },
-				EndDate = new DateOnlyDto { DateTime = TargetFromTo.WorkPeriodEnd }
+				StartDate = new DateOnlyDto { DateTime = TargetFromTo.WorkPeriodStart.Date },
+				EndDate = new DateOnlyDto { DateTime = TargetFromTo.WorkPeriodEnd.Date }
 			};
 			stateObj.ScenarioId = ((IScenario)comboBoxScenario.SelectedItem).Id.GetValueOrDefault();
 		    stateObj.UseDayOfMonth = checkBoxUseDayOfMonth.Checked;

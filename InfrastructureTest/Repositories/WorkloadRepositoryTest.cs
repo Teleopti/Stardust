@@ -109,7 +109,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
             IWorkload secondWorkload = WorkloadFactory.CreateWorkload("second",_skill);
             DateOnly startDate = new DateOnly(2008, 2, 8);
             DateOnlyPeriod period = new DateOnlyPeriod(startDate, startDate);
-            ISkillDay skillDay = SkillDayFactory.CreateSkillDay(_skill, DateTime.SpecifyKind(startDate,DateTimeKind.Utc), firstWorkload, secondWorkload);
+            ISkillDay skillDay = SkillDayFactory.CreateSkillDay(_skill, DateTime.SpecifyKind(startDate.Date,DateTimeKind.Utc), firstWorkload, secondWorkload);
             SkillDayCalculator skillDayCalculator = new SkillDayCalculator(_skill, new List<ISkillDay>{skillDay}, period);
 
             Assert.IsNotNull(skillDay.SkillDayCalculator);

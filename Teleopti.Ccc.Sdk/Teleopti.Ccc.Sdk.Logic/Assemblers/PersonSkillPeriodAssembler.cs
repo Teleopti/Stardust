@@ -12,8 +12,8 @@ namespace Teleopti.Ccc.Sdk.Logic.Assemblers
 	            {
 		            Id = entity.Id,
 		            PersonId = entity.Parent.Id.GetValueOrDefault(Guid.Empty),
-		            DateFrom = new DateOnlyDto {DateTime = entity.StartDate},
-		            DateTo = new DateOnlyDto {DateTime = entity.EndDate()}
+		            DateFrom = new DateOnlyDto {DateTime = entity.StartDate.Date},
+		            DateTo = new DateOnlyDto {DateTime = entity.EndDate().Date}
 	            };
 
 	        foreach (var personSkill in entity.PersonSkillCollection)

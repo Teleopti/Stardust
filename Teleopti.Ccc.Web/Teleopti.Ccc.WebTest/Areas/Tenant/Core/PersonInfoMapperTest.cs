@@ -64,7 +64,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Tenant.Core
 		{
 			var terminalDate = DateOnly.Today;
 			var target = new PersonInfoMapper(MockRepository.GenerateMock<IFindTenantByNameQuery>());
-			var result = target.Map(new PersonInfoModel { TerminalDate = terminalDate});
+			var result = target.Map(new PersonInfoModel { TerminalDate = terminalDate.Date});
 			result.TerminalDate.Should().Be.EqualTo(terminalDate);
 		}
 

@@ -33,7 +33,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
         private IActivity _activity;
         private IScenario _scenario;
         private static DateOnly _startDate = new DateOnly(2012, 1, 1);
-		private readonly DateOnlyDto _dateOnyldto = new DateOnlyDto { DateTime = _startDate };
+		private readonly DateOnlyDto _dateOnyldto = new DateOnlyDto { DateTime = _startDate.Date };
         private readonly DateTimePeriodDto _periodDto = new DateTimePeriodDto
         {
             UtcStartTime = new DateTime(2012, 1, 1, 0, 0, 0, DateTimeKind.Utc),

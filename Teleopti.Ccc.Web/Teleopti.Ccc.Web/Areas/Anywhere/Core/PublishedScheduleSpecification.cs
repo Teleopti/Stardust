@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.Specification;
 using Teleopti.Interfaces.Domain;
@@ -32,7 +31,7 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Core
 			if (workflowControlSet == null)
 				return false;
 			return workflowControlSet.SchedulePublishedToDate.HasValue &&
-			       workflowControlSet.SchedulePublishedToDate.Value >= date;
+			       workflowControlSet.SchedulePublishedToDate.Value >= date.Date;
 		}
 	}
 }

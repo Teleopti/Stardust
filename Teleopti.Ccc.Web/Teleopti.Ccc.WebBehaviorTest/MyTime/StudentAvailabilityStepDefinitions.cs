@@ -129,10 +129,10 @@ namespace Teleopti.Ccc.WebBehaviorTest.MyTime
 			calendarShouldRangeBetween(displayedPeriod.StartDate, displayedPeriod.EndDate);
 		}
 
-		private void calendarShouldRangeBetween(DateTime firstDateDisplayed, DateTime lastDateDisplayed)
+		private void calendarShouldRangeBetween(DateOnly firstDateDisplayed, DateOnly lastDateDisplayed)
 		{
-			Browser.Interactions.AssertNotExistsUsingJQuery(CalendarCells.DateSelector(firstDateDisplayed), CalendarCells.DateSelector(firstDateDisplayed.AddDays(-1)));
-			Browser.Interactions.AssertNotExistsUsingJQuery(CalendarCells.DateSelector(lastDateDisplayed), CalendarCells.DateSelector(lastDateDisplayed.AddDays(1)));
+			Browser.Interactions.AssertNotExistsUsingJQuery(CalendarCells.DateSelector(firstDateDisplayed.Date), CalendarCells.DateSelector(firstDateDisplayed.AddDays(-1).Date));
+			Browser.Interactions.AssertNotExistsUsingJQuery(CalendarCells.DateSelector(lastDateDisplayed.Date), CalendarCells.DateSelector(lastDateDisplayed.AddDays(1).Date));
 		}
 	}
 }

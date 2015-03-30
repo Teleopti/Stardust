@@ -145,16 +145,16 @@ namespace Teleopti.Ccc.Domain.Time
             switch(type)
             {
                 case PeriodScaleUnitType.Days:
-                    dateTime = new DateOnly(CultureInfo.CurrentCulture.Calendar.AddDays(startingDateTime, numberOf));
+                    dateTime = new DateOnly(CultureInfo.CurrentCulture.Calendar.AddDays(startingDateTime.Date, numberOf));
                     break;
                 case PeriodScaleUnitType.Weeks:
-                    dateTime = new DateOnly(CultureInfo.CurrentCulture.Calendar.AddWeeks(startingDateTime, numberOf));
+                    dateTime = new DateOnly(CultureInfo.CurrentCulture.Calendar.AddWeeks(startingDateTime.Date, numberOf));
                     break;
                 case PeriodScaleUnitType.Months:
-                    dateTime = new DateOnly(CultureInfo.CurrentCulture.Calendar.AddMonths(startingDateTime, numberOf));
+                    dateTime = new DateOnly(CultureInfo.CurrentCulture.Calendar.AddMonths(startingDateTime.Date, numberOf));
                     break;
                 case PeriodScaleUnitType.Years:
-                    dateTime = new DateOnly(CultureInfo.CurrentCulture.Calendar.AddYears(startingDateTime, numberOf));
+                    dateTime = new DateOnly(CultureInfo.CurrentCulture.Calendar.AddYears(startingDateTime.Date, numberOf));
                     break;
             }
             return dateTime;

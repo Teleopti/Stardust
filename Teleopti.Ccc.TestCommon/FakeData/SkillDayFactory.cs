@@ -10,13 +10,13 @@ namespace Teleopti.Ccc.TestCommon.FakeData
 {
     public static class SkillDayFactory
     {
-        public static ISkillDay CreateSkillDay(DateTime dt)
+        public static ISkillDay CreateSkillDay(DateOnly dt)
         {
             ISkill skill = new Skill("skill1", "skill1", Color.FromArgb(255), 15, SkillTypeFactory.CreateSkillType());
             return CreateSkillDay(skill, dt);
         }
 
-        public static ISkillDay CreateSkillDay(ISkill skill, DateTime dt, IScenario scenario)
+        public static ISkillDay CreateSkillDay(ISkill skill, DateOnly dt, IScenario scenario)
         {
             IList<ISkillDataPeriod> skillDataPeriods = new List<ISkillDataPeriod>();
             skillDataPeriods.Add(
@@ -27,15 +27,14 @@ namespace Teleopti.Ccc.TestCommon.FakeData
                                 new Percent(0.5),
                                 new Percent(0.7)),
                                 new SkillPersonData(),
-                                TimeZoneHelper.NewUtcDateTimePeriodFromLocalDateTime(dt.Add(TimeSpan.FromHours(4)), dt.Add(TimeSpan.FromHours(19)),skill.TimeZone)));
+                                TimeZoneHelper.NewUtcDateTimePeriodFromLocalDateTime(dt.Date.Add(TimeSpan.FromHours(4)), dt.Date.Add(TimeSpan.FromHours(19)),skill.TimeZone)));
 
             if (!skill.Id.HasValue) skill.SetId(Guid.NewGuid());
 
-            var date = new DateOnly(TimeZoneHelper.ConvertFromUtc(dt, skill.TimeZone));
-            return new SkillDay(date, skill, scenario, WorkloadDayFactory.GetWorkloadDaysForTest(dt, skill), skillDataPeriods);
+            return new SkillDay(dt, skill, scenario, WorkloadDayFactory.GetWorkloadDaysForTest(dt.Date, skill), skillDataPeriods);
         }
 
-        public static ISkillDay CreateSkillDay(ISkill skill, DateTime dt)
+        public static ISkillDay CreateSkillDay(ISkill skill, DateOnly dt)
         {
             return CreateSkillDay(skill, dt, ScenarioFactory.CreateScenarioAggregate());
         }
@@ -93,15 +92,15 @@ namespace Teleopti.Ccc.TestCommon.FakeData
             return new SkillStaffPeriodDictionary(skill) { { skillStaffPeriod.Period, skillStaffPeriod } };
         }
 
-    	public static TaskOwnerHelper GenerateStatistics(DateTime startDate, IWorkload workload)
+    	public static TaskOwnerHelper GenerateStatistics(DateOnly startDate, IWorkload workload)
         {
             IList<IStatisticTask> statisticTasks = new List<IStatisticTask>();
             IList<IWorkloadDay> workloadDays = new List<IWorkloadDay>();
-            startDate = DateTime.SpecifyKind(startDate, DateTimeKind.Utc);
+            var currentDate = DateTime.SpecifyKind(startDate.Date, DateTimeKind.Utc);
 
             for (int i = 0; i < 24; i++)
             {
-                DateTime date = startDate.AddMonths(i);
+                DateTime date = currentDate.AddMonths(i);
 
                 StatisticTask statisticTask1 = new StatisticTask();
                 if (i > 6)
@@ -148,14 +147,14 @@ namespace Teleopti.Ccc.TestCommon.FakeData
             return period;
         }
 
-        public static TaskOwnerHelper GenerateMockedStatistics(DateTime startDate, IWorkload workload)
+        public static TaskOwnerHelper GenerateMockedStatistics(DateOnly startDate, IWorkload workload)
         {
             IList<IWorkloadDay> workloadDays = new List<IWorkloadDay>();
-            startDate = DateTime.SpecifyKind(startDate, DateTimeKind.Utc);
+            var currentDate = DateTime.SpecifyKind(startDate.Date, DateTimeKind.Utc);
 
             for (int i = 0; i < 24; i++)
             {
-                DateTime date = startDate.AddMonths(i);
+                DateTime date = currentDate.AddMonths(i);
             
                 IWorkloadDay workloadDay = new WorkloadDay();
                 workloadDay.Create(new DateOnly(date),workload,new List<TimePeriod>{new TimePeriod(8,0,8,15)});

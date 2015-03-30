@@ -8,11 +8,11 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.ViewModelFactory
 	{
 		public PeriodSelectionViewModel CreateModel(DateOnly dateOnly)
 		{
-			var firstDateInWeek = DateHelper.GetFirstDateInWeek(dateOnly, CultureInfo.CurrentCulture);
-			var lastDateInWeek = DateHelper.GetLastDateInWeek(dateOnly, CultureInfo.CurrentCulture);
+			var firstDateInWeek = DateHelper.GetFirstDateInWeek(dateOnly, CultureInfo.CurrentCulture.DateTimeFormat.FirstDayOfWeek);
+			var lastDateInWeek = firstDateInWeek.AddDays(6);
 			var firstDayNextWeek = lastDateInWeek.AddDays(1);
 			var lastDayPreviousWeek = firstDateInWeek.AddDays(-1);
-			var week = new DateOnlyPeriod(new DateOnly(firstDateInWeek), new DateOnly(lastDateInWeek));
+			var week = new DateOnlyPeriod(firstDateInWeek, lastDateInWeek);
 			
 			return new PeriodSelectionViewModel
 			       	{
@@ -24,20 +24,20 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.ViewModelFactory
 			       					CanPickPeriod = false,
 			       					HasNextPeriod = true,
 			       					HasPrevPeriod = true,
-			       					NextPeriod = new DateOnly(firstDayNextWeek).ToFixedClientDateOnlyFormat(),
-			       					PrevPeriod = new DateOnly(lastDayPreviousWeek).ToFixedClientDateOnlyFormat()
+			       					NextPeriod = firstDayNextWeek.ToFixedClientDateOnlyFormat(),
+			       					PrevPeriod = lastDayPreviousWeek.ToFixedClientDateOnlyFormat()
 			       				},
 			       		SelectableDateRange =
 			       			new PeriodDateRangeViewModel
 			       				{
-			       					MinDate = new DateOnly(CultureInfo.CurrentCulture.Calendar.MinSupportedDateTime).ToFixedClientDateOnlyFormat(),
-									MaxDate = new DateOnly(CultureInfo.CurrentCulture.Calendar.MaxSupportedDateTime).ToFixedClientDateOnlyFormat()
+			       					MinDate = DateOnly.MinValue.ToFixedClientDateOnlyFormat(),
+									MaxDate = DateOnly.MaxValue.ToFixedClientDateOnlyFormat()
 			       				},
 			       		SelectedDateRange =
 			       			new PeriodDateRangeViewModel
 			       				{
-									MinDate = new DateOnly(firstDateInWeek).ToFixedClientDateOnlyFormat(),
-									MaxDate = new DateOnly(lastDateInWeek).ToFixedClientDateOnlyFormat(),
+									MinDate = firstDateInWeek.ToFixedClientDateOnlyFormat(),
+									MaxDate = lastDateInWeek.ToFixedClientDateOnlyFormat(),
 			       				}
 			       	};
 		}

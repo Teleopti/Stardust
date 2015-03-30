@@ -411,7 +411,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
         {
             ISkill skill = CreateAggregateWithCorrectBusinessUnit();
             ISkillDayTemplate skillDay = skill.TemplateWeekCollection[0];
-            skillDay.SetSkillDataPeriodCollection(new List<ITemplateSkillDataPeriod> { new TemplateSkillDataPeriod(ServiceAgreement.DefaultValues(), new SkillPersonData(), DateTimeFactory.CreateDateTimePeriod(DateTime.SpecifyKind(SkillDayTemplate.BaseDate, DateTimeKind.Utc), 0)) });
+            skillDay.SetSkillDataPeriodCollection(new List<ITemplateSkillDataPeriod> { new TemplateSkillDataPeriod(ServiceAgreement.DefaultValues(), new SkillPersonData(), DateTimeFactory.CreateDateTimePeriod(DateTime.SpecifyKind(SkillDayTemplate.BaseDate.Date, DateTimeKind.Utc), 0)) });
             
             Assert.AreEqual(1, skillDay.TemplateSkillDataPeriodCollection.Count);
 

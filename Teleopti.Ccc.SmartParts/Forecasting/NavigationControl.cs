@@ -53,11 +53,11 @@ namespace Teleopti.Ccc.SmartParts.Forecasting
                 var culture =
                     TeleoptiPrincipal.CurrentPrincipal.Regional.Culture;
                 _previousDate = DateOnly.Today;
-                int dayOfYear = culture.Calendar.GetDayOfYear(_previousDate);
-                _previousDate = new DateOnly(culture.Calendar.AddDays(_previousDate, -dayOfYear + 1));
-                _nextDate = new DateOnly(culture.Calendar.AddYears(_previousDate,1));
-                _nextDate = new DateOnly(culture.Calendar.AddDays(_nextDate, -1));
-                autoLabelYear.Text = culture.Calendar.GetYear(_nextDate).ToString(culture);
+                int dayOfYear = culture.Calendar.GetDayOfYear(_previousDate.Date);
+                _previousDate = new DateOnly(culture.Calendar.AddDays(_previousDate.Date, -dayOfYear + 1));
+                _nextDate = new DateOnly(culture.Calendar.AddYears(_previousDate.Date,1));
+                _nextDate = new DateOnly(culture.Calendar.AddDays(_nextDate.Date, -1));
+                autoLabelYear.Text = culture.Calendar.GetYear(_nextDate.Date).ToString(culture);
             }
         }
 
@@ -67,9 +67,9 @@ namespace Teleopti.Ccc.SmartParts.Forecasting
             {
                 var culture =
                     TeleoptiPrincipal.CurrentPrincipal.Regional.Culture;
-                _nextDate = new DateOnly(culture.Calendar.AddYears(_nextDate,1));
-                _previousDate = new DateOnly(culture.Calendar.AddYears(_previousDate, 1));
-                autoLabelYear.Text = culture.Calendar.GetYear(_nextDate).ToString(culture);
+                _nextDate = new DateOnly(culture.Calendar.AddYears(_nextDate.Date,1));
+                _previousDate = new DateOnly(culture.Calendar.AddYears(_previousDate.Date, 1));
+                autoLabelYear.Text = culture.Calendar.GetYear(_nextDate.Date).ToString(culture);
                 RaiseValueChanged();
             }
         }
@@ -80,9 +80,9 @@ namespace Teleopti.Ccc.SmartParts.Forecasting
             {
                 var culture =
                     TeleoptiPrincipal.CurrentPrincipal.Regional.Culture;
-                _nextDate = new DateOnly(culture.Calendar.AddYears(_nextDate, -1));
-                _previousDate = new DateOnly(culture.Calendar.AddYears(_previousDate, -1));
-                autoLabelYear.Text = culture.Calendar.GetYear(_nextDate).ToString(culture);
+                _nextDate = new DateOnly(culture.Calendar.AddYears(_nextDate.Date, -1));
+                _previousDate = new DateOnly(culture.Calendar.AddYears(_previousDate.Date, -1));
+                autoLabelYear.Text = culture.Calendar.GetYear(_nextDate.Date).ToString(culture);
                 RaiseValueChanged();
             }
         }

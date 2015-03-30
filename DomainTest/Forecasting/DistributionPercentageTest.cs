@@ -27,7 +27,7 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
 
         protected override ISkill CreateInvalidEntityToVerify()
         {
-			DateTime utcDateTime = _testSkill.TimeZone.SafeConvertTimeToUtc(SkillDayTemplate.BaseDate);
+			DateTime utcDateTime = _testSkill.TimeZone.SafeConvertTimeToUtc(SkillDayTemplate.BaseDate.Date);
             IChildSkill child = SkillFactory.CreateChildSkill("test1", _testSkill);
             Percent percentage = new Percent(0.4);
             TemplateMultisitePeriod invalidPeriod = new TemplateMultisitePeriod(
@@ -41,7 +41,7 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
 
         protected override ISkill CreateValidEntityToVerify()
         {
-			DateTime utcDateTime = _testSkill.TimeZone.SafeConvertTimeToUtc(SkillDayTemplate.BaseDate);
+			DateTime utcDateTime = _testSkill.TimeZone.SafeConvertTimeToUtc(SkillDayTemplate.BaseDate.Date);
             IChildSkill child1 = SkillFactory.CreateChildSkill("test1", _testSkill);
             Percent percentage1 = new Percent(0.4);
             IChildSkill child2 = SkillFactory.CreateChildSkill("test2", _testSkill);

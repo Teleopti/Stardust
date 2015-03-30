@@ -38,7 +38,7 @@ namespace Teleopti.Ccc.Sdk.WcfService.Factory
 
                 dto.PersonId = person.Id.Value;
                 if (person.PersonWriteProtection.PersonWriteProtectedDate.HasValue)
-					dto.WriteProtectedToDate = new DateOnlyDto { DateTime = person.PersonWriteProtection.PersonWriteProtectedDate.Value };
+					dto.WriteProtectedToDate = new DateOnlyDto { DateTime = person.PersonWriteProtection.PersonWriteProtectedDate.Value.Date };
 
                 return dto;
             }

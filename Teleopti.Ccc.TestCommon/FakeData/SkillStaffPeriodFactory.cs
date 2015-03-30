@@ -1,26 +1,17 @@
 ﻿using System;
 using System.Reflection;
 using Rhino.Mocks;
-using Teleopti.Ccc.Domain.Calculation;
 using Teleopti.Ccc.Domain.Forecasting;
-using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.TestCommon.FakeData
 {
     public static class SkillStaffPeriodFactory
     {
-        /// <summary>
-        /// Creates a skill staff period.
-        /// </summary>
-        /// <param name="period">The period.</param>
-        /// <param name="task">The task.</param>
-        /// <param name="serviceAgreement">The service agreement.</param>
-        /// <returns></returns>
         public static SkillStaffPeriod CreateSkillStaffPeriod(DateTimePeriod period, ITask task, ServiceAgreement serviceAgreement)
         {
 			var staffPeriod = new SkillStaffPeriod(period, task, serviceAgreement, new StaffingCalculatorServiceFacade(true));
-			staffPeriod.SetSkillDay(SkillDayFactory.CreateSkillDay(SkillFactory.CreateSkill("skill"),period.StartDateTime));
+			staffPeriod.SetSkillDay(SkillDayFactory.CreateSkillDay(SkillFactory.CreateSkill("skill"),new DateOnly(period.StartDateTime)));
 	        return staffPeriod;
         }
 
@@ -36,7 +27,7 @@ namespace Teleopti.Ccc.TestCommon.FakeData
 			SkillStaffPeriod skillStaffPeriod =
 				new SkillStaffPeriod(new DateTimePeriod(dateTime, dateTime.AddMinutes(lengthInMinutes)), new Task(),
 									 ServiceAgreement.DefaultValues(), skill.SkillType.StaffingCalculatorService);
-			skillStaffPeriod.SetSkillDay(SkillDayFactory.CreateSkillDay(SkillFactory.CreateSkill("skill"),dateTime));
+			skillStaffPeriod.SetSkillDay(SkillDayFactory.CreateSkillDay(SkillFactory.CreateSkill("skill"),new DateOnly(dateTime)));
 			skillStaffPeriod.CalculateStaff();
 			skillStaffPeriod.IsAvailable = true;
 
@@ -52,7 +43,7 @@ namespace Teleopti.Ccc.TestCommon.FakeData
             SkillStaffPeriod skillStaffPeriod =
                 new SkillStaffPeriod(new DateTimePeriod(dateTime, dateTime.AddMinutes(15)), new Task(),
                                      ServiceAgreement.DefaultValues(), skill.SkillType.StaffingCalculatorService);
-			skillStaffPeriod.SetSkillDay(SkillDayFactory.CreateSkillDay(skill, dateTime));
+			skillStaffPeriod.SetSkillDay(SkillDayFactory.CreateSkillDay(skill, new DateOnly(dateTime)));
             skillStaffPeriod.CalculateStaff();
             skillStaffPeriod.IsAvailable = true;
 
@@ -91,30 +82,17 @@ namespace Teleopti.Ccc.TestCommon.FakeData
             return skillStaffPeriod;
         }
 
-
-        /// <summary>
-        /// Creates a skill staff period.
-        /// </summary>
-        /// <returns></returns>
         public static ISkillStaffPeriod CreateSkillStaffPeriod()
         {
             DateTimePeriod period = new DateTimePeriod();
 
             Task task = new Task(200, TimeSpan.FromSeconds(60), TimeSpan.FromSeconds(10));
 
-            ServiceAgreement sa =
-                new ServiceAgreement(new ServiceLevel(new Percent(0.9), 30),
-                                     new Percent(0.7), new Percent(0.95));
+            ServiceAgreement sa = new ServiceAgreement(new ServiceLevel(new Percent(0.9), 30), new Percent(0.7), new Percent(0.95));
 
             return CreateSkillStaffPeriod(period, task, sa);
         }
 
-        /// <summary>
-        /// Sets the forecasted incoming demand property.
-        /// </summary>
-        /// <param name="skillStaffPeriod">The skill staff period.</param>
-        /// <param name="value">The value.</param>
-        /// <returns></returns>
         public static SkillStaffPeriod InjectForecastedIncomingDemand(SkillStaffPeriod skillStaffPeriod, double value)
         {
             ISkillStaff tLayer = skillStaffPeriod.Payload;

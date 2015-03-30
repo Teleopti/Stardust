@@ -9,7 +9,6 @@ using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Infrastructure.Foundation;
-using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.WinCode.Budgeting.Models;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
@@ -44,7 +43,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling.Requests
         private IList<double> _allowanceCollection;
         private IList<double> _totalAllowanceCollection;
         private IEnumerable<PayloadWorkTime> _usedAbsences;
-        private DateTime _selectedDate;
+        private DateOnly _selectedDate;
         private IList<double> _fteCollection;
         
         public RequestAllowanceModel(IUnitOfWorkFactory unitOfWorkFactory,
@@ -65,7 +64,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling.Requests
 
         public string WeekName { get; set; }
 
-        public DateOnly SelectedDate { get { return new DateOnly(_selectedDate); } }
+        public DateOnly SelectedDate { get { return _selectedDate; } }
 
         public DateOnlyPeriod VisibleWeek { get; private set; }
 
@@ -248,7 +247,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling.Requests
         
         private static string getWeekHeader(DateOnly date, DateOnlyPeriod week)
         {
-            var weekNumber = DateHelper.WeekNumber(date, CultureInfo.CurrentCulture);
+            var weekNumber = DateHelper.WeekNumber(date.Date, CultureInfo.CurrentCulture);
 	        return string.Format(CultureInfo.CurrentCulture, UserTexts.Resources.WeekAbbreviationDot, weekNumber,
 		        week.StartDate.ToShortDateString());
         }

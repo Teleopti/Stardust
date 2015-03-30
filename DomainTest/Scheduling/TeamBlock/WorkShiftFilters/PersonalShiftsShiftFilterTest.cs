@@ -8,7 +8,6 @@ using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftFilters;
-using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Interfaces.Domain;
 
@@ -58,6 +57,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.WorkShiftFilters
 			_personAssignment = _mocks.StrictMock<IPersonAssignment>();
 
 			var currentDate = new DateTime(2013, 3, 1, 0, 0, 0, DateTimeKind.Utc);
+			var currentDateOnly = new DateOnly(currentDate);
 			var phone = ActivityFactory.CreateActivity("phone");
 			phone.AllowOverwrite = true;
 			phone.InWorkTime = true;
@@ -83,7 +83,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.WorkShiftFilters
 				Expect.Call(_part.PersonAssignment()).Return(_personAssignment).Repeat.AtLeastOnce();
 				Expect.Call(_personAssignment.PersonalActivities()).Return(new []{new PersonalShiftLayer(new Activity("sdf"), period)}).Repeat.AtLeastOnce();
 				Expect.Call(c1.TheMainShift).Return(editableShift);
-				Expect.Call(c1.SchedulingDate).Return(currentDate);
+				Expect.Call(c1.SchedulingDate).Return(currentDateOnly);
 				Expect.Call(meeting.Period).Return(period2).Repeat.AtLeastOnce();
 				Expect.Call(_personalShiftMeetingTimeChecker.CheckTimeMeeting(editableShift, meetings)).IgnoreArguments().Return(true);
 				Expect.Call(_personalShiftMeetingTimeChecker.CheckTimePersonAssignment(editableShift, _personAssignment)).IgnoreArguments()
@@ -108,6 +108,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.WorkShiftFilters
 			var meeting = _mocks.StrictMock<IPersonMeeting>();
 			var meetings = new ReadOnlyCollection<IPersonMeeting>(new List<IPersonMeeting> { meeting });
 			var currentDate = new DateTime(2013, 3, 1, 0, 0, 0, DateTimeKind.Utc);
+			var currentDateOnly = new DateOnly(currentDate);
 			var phone = ActivityFactory.CreateActivity("phone");
 			phone.AllowOverwrite = true;
 			phone.InWorkTime = true;
@@ -125,7 +126,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.WorkShiftFilters
 				Expect.Call(_part.PersonAssignment()).Return(null).Repeat.AtLeastOnce();
 				Expect.Call(meeting.Period).Return(period).Repeat.AtLeastOnce();
 				Expect.Call(shiftProjectionCache.MainShiftProjection).Return(layerCollection).Repeat.AtLeastOnce();
-				Expect.Call(shiftProjectionCache.SchedulingDate).Return(currentDate);
+				Expect.Call(shiftProjectionCache.SchedulingDate).Return(currentDateOnly);
 				Expect.Call(shiftProjectionCache.TheMainShift).Return(editableShift);
 				Expect.Call(_personalShiftMeetingTimeChecker.CheckTimeMeeting(editableShift, meetings)).IgnoreArguments().Return(true);
 			}

@@ -73,7 +73,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
             IList<ITaskOwner> daysToReturn = new List<ITaskOwner>();
             foreach (ITaskOwner taskOwner in taskOwnerList)
             {
-                DateTime taskOwnerDate = taskOwner.CurrentDate;
+                var taskOwnerDate = taskOwner.CurrentDate;
                 IValidatedVolumeDay existingValidatedVolumeDay = existingValidatedVolumeDays.FirstOrDefault(e => e.VolumeDayDate == taskOwnerDate);
                 if (existingValidatedVolumeDay == null)
                 {

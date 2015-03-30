@@ -16,7 +16,6 @@ using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Win.Scheduling;
 using Teleopti.Ccc.WinCode.Common;
 using Teleopti.Ccc.WinCode.Common.Clipboard;
-using Teleopti.Ccc.WinCode.Common.GuiHelpers;
 using Teleopti.Ccc.WinCode.Scheduling;
 using Teleopti.Interfaces.Domain;
 using Clipboard = System.Windows.Clipboard;
@@ -484,14 +483,15 @@ namespace Teleopti.Ccc.Win.Common
             Dictionary<IPerson, DateOnly> personAndDate = new Dictionary<IPerson, DateOnly>();
             foreach (Clip<ExtractedSchedule> clip in clipHandler.ClipList)
             {
-                IPerson person = clip.ClipValue.Person;
+				var person = clip.ClipValue.Person;
+				var period = clip.ClipValue.Period.ToDateOnlyPeriod(person.PermissionInformation.DefaultTimeZone());
                 if (!personAndDate.ContainsKey(person))
                 {
-                    personAndDate.Add(person, new DateOnly(clip.ClipValue.Period.EndDateTime.Date));
+	                personAndDate.Add(person, period.EndDate);
                 }
-                else if (personAndDate[person] < clip.ClipValue.Period.StartDateTime)
+                else if (personAndDate[person] < period.StartDate)
                 {
-                    personAndDate[person] = new DateOnly(clip.ClipValue.Period.EndDateTime.Date);
+                    personAndDate[person] = period.EndDate;
                 }
             }
             return changeAndPersistPeople(personAndDate);
@@ -518,8 +518,9 @@ namespace Teleopti.Ccc.Win.Common
             lockManager.ClearWriteProtected();
             foreach (Clip<ExtractedSchedule> clip in clipHandler.ClipList)
             {
-                DateOnly? writeProtectUntil = clip.ClipValue.Person.PersonWriteProtection.WriteProtectedUntil();
-                if (writeProtectUntil.HasValue && writeProtectUntil.Value >= clip.ClipValue.Period.EndDateTime.Date)
+				var writeProtectUntil = clip.ClipValue.Person.PersonWriteProtection.WriteProtectedUntil();
+				var period = clip.ClipValue.Period.ToDateOnlyPeriod(clip.ClipValue.Person.PermissionInformation.DefaultTimeZone());
+                if (writeProtectUntil.HasValue && writeProtectUntil.Value >= period.EndDate)
                 {
                     lockManager.AddLock(clip.ClipValue, LockType.WriteProtected);
                 }

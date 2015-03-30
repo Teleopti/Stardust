@@ -183,7 +183,7 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
                 Math.Round(target.TotalDayItemCollection.First(d => dateCurrent1 == d.CurrentDate).TaskIndex, 4),
                 Math.Round(target.TotalDayItemCollection.First(d => dateCurrent2 == d.CurrentDate).TaskIndex, 4));
 
-            outlier1.AddDate(new DateOnly(TimeZoneInfo.ConvertTimeFromUtc(dateCurrent2, _timeZone)));
+            outlier1.AddDate(new DateOnly(TimeZoneInfo.ConvertTimeFromUtc(dateCurrent2.Date, _timeZone)));
             target.RecalculateOutlier(outlier1);
 
             Assert.AreEqual(
@@ -206,7 +206,7 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
 
             target.Create(historicalDepth, _taskOwnerCollection, volumes, outliers, 1, 1, false, workload);
 
-            outlier1.AddDate(new DateOnly(TimeZoneInfo.ConvertTimeFromUtc(dateCurrent2, _timeZone)));
+            outlier1.AddDate(new DateOnly(TimeZoneInfo.ConvertTimeFromUtc(dateCurrent2.Date, _timeZone)));
 			((IWorkloadDayBase)_taskOwnerCollection.First(d => dateCurrent2 == d.CurrentDate)).Close();
 
 			target.RecalculateOutlier(outlier1);

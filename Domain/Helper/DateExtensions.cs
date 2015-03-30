@@ -34,4 +34,12 @@ namespace Teleopti.Ccc.Domain.Helper
 			return dateTime.ToShortTimeString(culture.GetCulture());
 		}
 	}
+
+	public static class CalendarExtensions
+	{
+		public static int GetMonth(this Calendar calendar, DateOnly date)
+		{
+			return calendar.GetMonth(date.Date);
+		}
+	}
 }

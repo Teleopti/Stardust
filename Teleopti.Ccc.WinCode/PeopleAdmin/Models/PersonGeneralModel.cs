@@ -10,7 +10,6 @@ using Teleopti.Ccc.Domain.Security.AuthorizationEntities;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Domain.WorkflowControl;
 using Teleopti.Ccc.Infrastructure.Foundation;
-using Teleopti.Ccc.Infrastructure.MultiTenancy;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Client;
 using Teleopti.Interfaces.Domain;
 
@@ -52,7 +51,7 @@ namespace Teleopti.Ccc.WinCode.PeopleAdmin.Models
 				_tenantData.ApplicationLogonName = ContainedEntity.ApplicationAuthenticationInfo.ApplicationLogOnName;
 				_tenantData.Password = ContainedEntity.ApplicationAuthenticationInfo.Password;
 			}
-			_tenantData.TerminalDate = ContainedEntity.TerminalDate;
+			_tenantData.TerminalDate = ContainedEntity.TerminalDate.HasValue ? ContainedEntity.TerminalDate.Value.Date : (DateTime?)null;
 		}
 
 		public TenantAuthenticationData TenantData
@@ -298,13 +297,16 @@ namespace Teleopti.Ccc.WinCode.PeopleAdmin.Models
 			{
 				var terminateDate = value;
 
-				if (terminateDate != null)
+				if (terminateDate.HasValue)
+				{
 					ContainedEntity.TerminatePerson(terminateDate.Value, _personAccountUpdater);
+					_tenantData.TerminalDate = terminateDate.Value.Date;
+				}
 				else
 				{
 					ContainedEntity.ActivatePerson(_personAccountUpdater);
+					_tenantData.TerminalDate = null;
 				}
-				_tenantData.TerminalDate = value;
 				_tenantData.Changed = true;
 			}
 

@@ -20,7 +20,7 @@ namespace Teleopti.Ccc.Sdk.Logic.Assemblers
         {
             var dto = _restrictionAssembler.DomainEntityToDto(entity.Restriction);
             dto.Person = _personAssembler.DomainEntityToDto(entity.Person);
-			dto.RestrictionDate = new DateOnlyDto { DateTime = entity.RestrictionDate };
+			dto.RestrictionDate = new DateOnlyDto { DateTime = entity.RestrictionDate.Date };
             dto.MustHave = entity.Restriction.MustHave;
             dto.TemplateName = entity.TemplateName;
             dto.Id = entity.Id;

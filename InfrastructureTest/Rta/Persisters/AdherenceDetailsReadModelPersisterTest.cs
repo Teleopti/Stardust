@@ -2,7 +2,6 @@
 using System.Linq;
 using NUnit.Framework;
 using SharpTestsEx;
-using Teleopti.Ccc.Domain.ApplicationLayer.Rta;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta.ReadModelUpdaters;
 using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.TestCommon;
@@ -23,7 +22,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.Persisters
 
 			Target.Add(new AdherenceDetailsReadModel
 			{
-				Date = "2014-11-19".Date(),
+				Date = new DateTime(2014,11,19),
 				PersonId = personId,
 				Model = new AdherenceDetailsModel
 				{
@@ -65,13 +64,13 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.Persisters
 			var personId = Guid.NewGuid();
 			Target.Add(new AdherenceDetailsReadModel
 			{
-				Date = "2014-11-19".Date(),
+				Date = new DateTime(2014, 11, 19),
 				PersonId = personId,
 			});
 
 			Target.Update(new AdherenceDetailsReadModel
 			{
-				Date = "2014-11-19".Date(),
+				Date = new DateTime(2014, 11, 19),
 				PersonId = personId,
 				Model = new AdherenceDetailsModel
 				{
@@ -114,7 +113,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.Persisters
 
 			Target.Add(new AdherenceDetailsReadModel
 			{
-				Date = "2014-11-19".Date(),
+				Date = new DateTime(2014, 11, 19),
 				PersonId = personId,
 				Model = new AdherenceDetailsModel
 				{
@@ -142,12 +141,12 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.Persisters
 
 			Target.Add(new AdherenceDetailsReadModel
 			{
-				Date = "2014-11-19".Date(),
+				Date = new DateTime(2014, 11, 19),
 				PersonId = personId,
 			});
 			Target.Add(new AdherenceDetailsReadModel
 			{
-				Date = "2014-11-20".Date(),
+				Date = new DateTime(2014, 11, 20),
 				PersonId = personId,
 			});
 
@@ -166,13 +165,13 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.Persisters
 			var personId = Guid.NewGuid();
 			Target.Add(new AdherenceDetailsReadModel
 			{
-				Date = "2014-11-19".Date(),
+				Date = new DateTime(2014, 11, 19),
 				PersonId = personId,
 			});
 
 			Target.Update(new AdherenceDetailsReadModel
 			{
-				Date = "2014-11-19".Date(),
+				Date = new DateTime(2014, 11, 19),
 				PersonId = personId,
 				Model = new AdherenceDetailsModel
 				{
@@ -215,7 +214,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.Persisters
 
 			Target.Add(new AdherenceDetailsReadModel
 			{
-				Date = "2014-11-19".Date(),
+				Date = new DateTime(2014, 11, 19),
 				PersonId = personId,
 				Model = new AdherenceDetailsModel
 				{
@@ -240,13 +239,13 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.Persisters
 			var personId = Guid.NewGuid();
 			Target.Add(new AdherenceDetailsReadModel
 			{
-				Date = "2014-11-19".Date(),
+				Date = new DateTime(2014, 11, 19),
 				PersonId = personId,
 			});
 
 			Target.Update(new AdherenceDetailsReadModel
 			{
-				Date = "2014-11-19".Date(),
+				Date = new DateTime(2014, 11, 19),
 				PersonId = personId,
 				Model = new AdherenceDetailsModel
 				{
@@ -272,7 +271,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.Persisters
 
 			Target.Add(new AdherenceDetailsReadModel
 			{
-				Date = "2014-11-19".Date(),
+				Date = new DateTime(2014, 11, 19),
 				PersonId = personId,
 				Model = new AdherenceDetailsModel
 				{

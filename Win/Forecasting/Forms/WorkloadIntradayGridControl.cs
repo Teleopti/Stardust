@@ -267,7 +267,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
             if (Owner != null)
             {
                 TaskOwnerDay = TaskOwnerHelper.TaskOwnerDays
-                    .FirstOrDefault(t => t.CurrentDate.Date == Owner.CurrentDay);
+                    .FirstOrDefault(t => t.CurrentDate == Owner.CurrentDay);
             }
             if (TaskOwnerDay == null)
                 return;
@@ -289,7 +289,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
             {
                 Intervals.Clear();
             }
-            _rowManagerTemplateTaskPeriod.BaseDate = TaskOwnerDay.CurrentDate;
+            _rowManagerTemplateTaskPeriod.BaseDate = TaskOwnerDay.CurrentDate.Date;
             _rowManagerTemplateTaskPeriod.SetDataSource(templateTaskPeriods);
             if (TaskOwnerDay is IWorkloadDay)
             {

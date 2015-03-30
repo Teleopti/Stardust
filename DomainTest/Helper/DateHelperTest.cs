@@ -20,13 +20,13 @@ namespace Teleopti.Ccc.DomainTest.Helper
         private readonly DateTime _maxSmallDateTime = DateHelper.MaxSmallDateTime; 
         private string _ok = string.Empty;
 
-		readonly DateTime _monday = new DateTime(2015, 1, 5);
-		readonly DateTime _tuesday = new DateTime(2015, 1, 6);
-		readonly DateTime _wendnesday = new DateTime(2015, 1, 7);
-		readonly DateTime _thursday = new DateTime(2015, 1, 8);
-		readonly DateTime _friday = new DateTime(2015, 1, 9);
-		readonly DateTime _saturday = new DateTime(2015, 1, 10);
-		readonly DateTime _sunday = new DateTime(2015, 1, 11);
+		private readonly DateOnly _monday = new DateOnly(2015, 1, 5);
+		private readonly DateOnly _tuesday = new DateOnly(2015, 1, 6);
+		private readonly DateOnly _wendnesday = new DateOnly(2015, 1, 7);
+		private readonly DateOnly _thursday = new DateOnly(2015, 1, 8);
+		private readonly DateOnly _friday = new DateOnly(2015, 1, 9);
+		private readonly DateOnly _saturday = new DateOnly(2015, 1, 10);
+		private readonly DateOnly _sunday = new DateOnly(2015, 1, 11);
 
 		[SetUp]
 		public void Setup()
@@ -75,9 +75,9 @@ namespace Teleopti.Ccc.DomainTest.Helper
         [Test]
         public void CheckReturnWeekendIsCorrect()
         {
-            DateTime dateWorkday = new DateTime(2007, 11, 22);
-            DateTime dateWeekend1 = new DateTime(2007, 11, 24);
-            DateTime dateWeekend2 = new DateTime(2007, 11, 25);
+			var dateWorkday = new DateOnly(2007, 11, 22);
+			var dateWeekend1 = new DateOnly(2007, 11, 24);
+			var dateWeekend2 = new DateOnly(2007, 11, 25);
 
             Assert.IsFalse(DateHelper.IsWeekend(dateWorkday, _cult));
             Assert.IsTrue(DateHelper.IsWeekend(dateWeekend1, _cult));

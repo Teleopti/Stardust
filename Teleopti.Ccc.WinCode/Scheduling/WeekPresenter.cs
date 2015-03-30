@@ -2,7 +2,6 @@
 using System.Linq;
 using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
 using Teleopti.Ccc.Domain.Scheduling.Rules;
-using Teleopti.Ccc.WinCode.Common;
 using Teleopti.Ccc.WinCode.Common.Clipboard;
 using Teleopti.Interfaces.Domain;
 
@@ -18,7 +17,6 @@ namespace Teleopti.Ccc.WinCode.Scheduling
         {
         }
 
-        //return timespan dictionary
         public static DateDateTimePeriodDictionary CreateSpanDictionaryFromSchedule(IScheduleDay schedulePart)
         {
             var timelineSpan = new DateDateTimePeriodDictionary();
@@ -57,7 +55,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
             end = end.AddMinutes(-end.Minute).AddHours(1);
 
             var dp = new DateTimePeriod(TimeZoneHelper.ConvertToUtc(start, schedulePart.TimeZone), TimeZoneHelper.ConvertToUtc(end, schedulePart.TimeZone));
-            timelineSpan.Add(schedulePart.Period.StartDateTimeLocal(schedulePart.TimeZone).Date, dp);
+            timelineSpan.Add(new DateOnly(schedulePart.Period.StartDateTimeLocal(schedulePart.TimeZone)), dp);
 
             return timelineSpan;
         }

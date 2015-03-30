@@ -1,10 +1,8 @@
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using NUnit.Framework;
 using Teleopti.Ccc.Domain.AgentInfo;
 using Teleopti.Ccc.Domain.Scheduling.Restriction;
-using Teleopti.Ccc.Domain.Scheduling.Restrictions;
 using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.TestCommon.FakeData;
@@ -13,9 +11,6 @@ using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.InfrastructureTest.Repositories
 {
-    ///<summary>
-    /// Tests PersonAvailabilityRepository
-    ///</summary>
     [TestFixture]
     [Category("LongRunning")]
     public class PersonAvailabilityRepositoryTest : RepositoryTest<IPersonAvailability>
@@ -73,14 +68,13 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 
             IPerson person = PersonFactory.CreatePerson("p");
             PersistAndRemoveFromUnitOfWork(person);
-            TimeZoneInfo timeZone = person.PermissionInformation.DefaultTimeZone();
-
-            var thePeriod = DateTimeFactory.CreateDateTimePeriod(
-                TimeZoneInfo.ConvertTimeToUtc(DateTime.SpecifyKind(org.StartDate, DateTimeKind.Unspecified), timeZone), 1);
+            
+            var thePeriod = new DateOnlyPeriod(org.StartDate, org.StartDate);
             ICollection<IPersonAvailability> result = new PersonAvailabilityRepository(UnitOfWork).Find(new List<IPerson>{org.Person},thePeriod);
             Assert.AreEqual(1,result.Count);
 
-            result = new PersonAvailabilityRepository(UnitOfWork).Find(new List<IPerson> { org.Person }, thePeriod.MovePeriod(TimeSpan.FromDays(2)));
+	        result = new PersonAvailabilityRepository(UnitOfWork).Find(new List<IPerson> {org.Person},
+		        new DateOnlyPeriod(thePeriod.StartDate.AddDays(1), thePeriod.EndDate.AddDays(1)));
             Assert.AreEqual(0, result.Count);
 
             result = new PersonAvailabilityRepository(UnitOfWork).Find(new List<IPerson> { person }, thePeriod);

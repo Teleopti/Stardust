@@ -472,7 +472,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ViewModels
 			Reader.Has(new AdherenceDetailsReadModel
 			{
 				PersonId = person.Id.Value,
-				Date = "2015-02-23".Date(),
+				Date = new DateTime(2015,02,23),
 				Model = new AdherenceDetailsModel
 				{
 					Activities = new[]

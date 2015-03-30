@@ -103,7 +103,7 @@ namespace Teleopti.Ccc.Domain.Forecasting
             var firstDate = sortedWorkloadDays[0].CurrentDate;
             foreach (ITaskOwner day in sortedWorkloadDays)
             {
-                int days = (int)day.CurrentDate.Date.Subtract(firstDate).TotalDays;
+                int days = (int)day.CurrentDate.Subtract(firstDate).TotalDays;
                 var trendFactor = startDayTrendFactor * Math.Pow(dayTrendFactor, days);
 
                 var wlDay = day as WorkloadDay;

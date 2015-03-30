@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using NUnit.Framework;
 using Teleopti.Ccc.Domain.Forecasting;
-using Teleopti.Ccc.Domain.Time;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Interfaces.Domain;
 
@@ -41,7 +40,7 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
             WeekOfMonth weekOfMonth =
                 new WeekOfMonth(
                     new TaskOwnerPeriod(_dateInMonth,
-                                        WorkloadDayFactory.GetWorkloadDaysForTest(_dateInMonth, _dateInMonth, _workload)
+                                        WorkloadDayFactory.GetWorkloadDaysForTest(_dateInMonth.Date, _dateInMonth.Date, _workload)
                                             .OfType<ITaskOwner>(), TaskOwnerPeriodType.Other), new WeekOfMonthCreator());
 
             Assert.AreEqual(5, weekOfMonth.PeriodTypeCollection.Count);

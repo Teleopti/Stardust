@@ -60,7 +60,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.QueryHandler
 			}
 			using (mocks.Playback())
 			{
-				var result = target.Handle(new GetPeopleForShiftTradeByGroupPageGroupQueryDto{ GroupPageGroupId = groupPageGroupId, QueryDate = new DateOnlyDto { DateTime = dateOnly }, PersonId = queryPersonId});
+				var result = target.Handle(new GetPeopleForShiftTradeByGroupPageGroupQueryDto{ GroupPageGroupId = groupPageGroupId, QueryDate = new DateOnlyDto { DateTime = dateOnly.Date }, PersonId = queryPersonId});
 				result.Count.Should().Be.EqualTo(1);
 			}
 		}

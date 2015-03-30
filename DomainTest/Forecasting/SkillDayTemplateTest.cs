@@ -15,7 +15,7 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
         private ISkillDayTemplate target;
         private IList<ITemplateSkillDataPeriod> _skillDataPeriods;
         private string _name;
-        private DateTime _dt = DateTime.SpecifyKind(SkillDayTemplate.BaseDate, DateTimeKind.Utc);
+        private DateTime _dt = DateTime.SpecifyKind(SkillDayTemplate.BaseDate.Date, DateTimeKind.Utc);
         private const int _versionNumber = 43;
 
         [SetUp]

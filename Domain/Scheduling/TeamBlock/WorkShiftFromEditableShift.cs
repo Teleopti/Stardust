@@ -19,7 +19,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 			foreach (var editableShiftLayer in mainShift.LayerCollection)
 			{
 				var periodStart = editableShiftLayer.Period;
-				var currentDateDiff = periodStart.ToDateOnlyPeriod(timeZoneInfo).StartDate.Date.Subtract(currentDate);
+				var currentDateDiff = periodStart.ToDateOnlyPeriod(timeZoneInfo).StartDate.Subtract(currentDate);
 				if (currentDateDiff < baseDateAdjustment)baseDateAdjustment = currentDateDiff;
 			}
 

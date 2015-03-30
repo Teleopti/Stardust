@@ -37,7 +37,7 @@ namespace Teleopti.Ccc.Domain.SeatPlanning
 		public void CreateSeatPlan(SeatMapLocation rootSeatMapLocation, ICollection<ITeam> teams, DateOnlyPeriod period, TrackedCommandInfo trackedCommandInfo)
 		{
 			var people = getPeople(teams, period);
-			_existingSeatBookings = _seatBookingRepository.LoadSeatBookingsForDateOnlyPeriod(period.StartDate, period.EndDate);
+			_existingSeatBookings = _seatBookingRepository.LoadSeatBookingsForDateOnlyPeriod(period);
 			groupBookings(period, people);
 			loadExistingSeatBookings(rootSeatMapLocation);
 			allocateSeats(new SeatAllocator(rootSeatMapLocation));
@@ -83,7 +83,7 @@ namespace Teleopti.Ccc.Domain.SeatPlanning
 
 		private void removeExistingBookingForPersonOnThisDay (IPerson person, DateOnly date)
 		{
-			var existingBooking = _existingSeatBookings.SingleOrDefault (booking => (booking.StartDateTime.Date == date && booking.Person == person));
+			var existingBooking = _existingSeatBookings.SingleOrDefault (booking => (new DateOnly(booking.StartDateTime) == date && booking.Person == person));
 			if (existingBooking != null)
 			{
 				_existingSeatBookings.Remove (existingBooking);

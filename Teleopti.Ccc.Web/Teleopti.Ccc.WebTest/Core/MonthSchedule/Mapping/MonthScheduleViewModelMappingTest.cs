@@ -27,7 +27,12 @@ namespace Teleopti.Ccc.WebTest.Core.MonthSchedule.Mapping
 		{
 			_projectionProvider = MockRepository.GenerateMock<IProjectionProvider>();
 			Mapper.Reset();
-			Mapper.Initialize(c => c.AddProfile(new MonthScheduleViewModelMappingProfile(_projectionProvider)));
+			Mapper.Initialize(c =>
+			{
+				c.AddProfile(new MonthScheduleViewModelMappingProfile(_projectionProvider));
+				c.CreateMap<DateOnly, DateTime>().ConvertUsing(d => d.Date);
+				c.CreateMap<DateTime, DateOnly>().ConvertUsing(d => new DateOnly(d));
+			});
 		}
 
 		[Test]

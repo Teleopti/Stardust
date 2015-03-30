@@ -72,7 +72,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
             _employPersonCommandDto = new EmployPersonCommandDto
             {
                 Person = _personDto,
-				Period = new DateOnlyPeriodDto { StartDate = new DateOnlyDto { DateTime = _dateOnlyPeriod.StartDate }, EndDate = new DateOnlyDto { DateTime = _dateOnlyPeriod .EndDate} },
+				Period = new DateOnlyPeriodDto { StartDate = new DateOnlyDto { DateTime = _dateOnlyPeriod.StartDate.Date }, EndDate = new DateOnlyDto { DateTime = _dateOnlyPeriod .EndDate.Date} },
                 PersonContract = _personContractDto,
                 Team = _teamDto
             };

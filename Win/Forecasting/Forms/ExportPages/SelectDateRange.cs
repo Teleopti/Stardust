@@ -45,8 +45,8 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.ExportPages
 		{
 			stateObj.ExportMultisiteSkillToSkillCommandModel.Period = new DateOnlyPeriodDto
 				{
-					StartDate = new DateOnlyDto {DateTime = reportDateFromToSelector1.WorkPeriodStart},
-					EndDate = new DateOnlyDto {DateTime = reportDateFromToSelector1.WorkPeriodEnd}
+					StartDate = new DateOnlyDto {DateTime = reportDateFromToSelector1.WorkPeriodStart.Date},
+					EndDate = new DateOnlyDto {DateTime = reportDateFromToSelector1.WorkPeriodEnd.Date}
 				};
 			return true;	
 		}

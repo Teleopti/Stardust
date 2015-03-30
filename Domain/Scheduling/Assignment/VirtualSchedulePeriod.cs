@@ -69,7 +69,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
             TimeSpan minVal = TimeSpan.MaxValue;
 
             //get list with periods where startdate is less than inparam date
-            IList<ISchedulePeriod> periods = person.PersonSchedulePeriodCollection.Where(s => s.DateFrom <= dateOnly.Date
+            IList<ISchedulePeriod> periods = person.PersonSchedulePeriodCollection.Where(s => s.DateFrom <= dateOnly
                 || (s.DateFrom.Date == dateOnly.Date)).ToList();
 
             //find period
@@ -81,7 +81,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
                     return p;
                 }
                 //get diff between inpara and startdate
-                TimeSpan diff = dateOnly.Date.Subtract(p.DateFrom);
+                TimeSpan diff = dateOnly.Subtract(p.DateFrom);
 
                 //check against smallest diff and check that inparam is greater than startdate
                 if (diff < minVal && diff.TotalMinutes >= 0)

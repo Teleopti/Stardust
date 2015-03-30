@@ -13,17 +13,17 @@ namespace Teleopti.Ccc.Domain.Scheduling.Meetings
         {
             IList<DateOnly> meetingDays = new List<DateOnly>();
             Calendar calendar = CultureInfo.CurrentCulture.Calendar;
-            DateOnly firstDayOfMonth = new DateOnly(DateHelper.GetFirstDateInMonth(startDate, calendar));
+            DateOnly firstDayOfMonth = new DateOnly(DateHelper.GetFirstDateInMonth(startDate.Date, calendar));
 
             for (int monthCount = 0; ; monthCount += IncrementCount)
             {
                 DateOnly firstDayOfCurrentMonth =
-                    new DateOnly(calendar.AddMonths(firstDayOfMonth,
+                    new DateOnly(calendar.AddMonths(firstDayOfMonth.Date,
                                                                                                     monthCount));
                 if (firstDayOfCurrentMonth>endDate) break;
 
                 int dayInCurrentMonth = _dayInMonth;
-                int daysInCurrentMonth = calendar.GetDaysInMonth(calendar.GetYear(firstDayOfCurrentMonth),calendar.GetMonth(firstDayOfCurrentMonth));
+                int daysInCurrentMonth = calendar.GetDaysInMonth(calendar.GetYear(firstDayOfCurrentMonth.Date),calendar.GetMonth(firstDayOfCurrentMonth.Date));
                 if (daysInCurrentMonth < dayInCurrentMonth)
                     dayInCurrentMonth = daysInCurrentMonth;
 

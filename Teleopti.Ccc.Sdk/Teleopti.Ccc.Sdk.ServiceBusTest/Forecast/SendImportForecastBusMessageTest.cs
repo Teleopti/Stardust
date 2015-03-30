@@ -61,7 +61,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Forecast
                 Expect.Call(queryResult.WorkloadDayOpenHours).Return(openHours);
                 Expect.Call(queryResult.ForecastFileContainer).Return(forecasts);
                 Expect.Call(() => _serviceBus.Send()).Constraints(
-                    Rhino.Mocks.Constraints.Is.Matching<Object[]>(a => ((OpenAndSplitTargetSkill) a[0]).Date == dateOnly));
+                    Rhino.Mocks.Constraints.Is.Matching<Object[]>(a => ((OpenAndSplitTargetSkill) a[0]).Date == dateOnly.Date));
             }
             using (_mocks.Playback())
             {

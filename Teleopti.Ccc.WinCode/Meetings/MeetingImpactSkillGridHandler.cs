@@ -88,14 +88,14 @@ namespace Teleopti.Ccc.WinCode.Meetings
             if (skill != null)
             {
                 var currentIntradayDate = _meetingImpactView.StartDate;
-
+				var periodToFind = TimeZoneHelper.NewUtcDateTimePeriodFromLocalDateTime(currentIntradayDate.Date, currentIntradayDate.AddDays(1).Date, _schedulerStateHolder.TimeZoneInfo);
+                    
                 if (skill.IsVirtual)
                 {
-                    _skillStaffPeriods = SchedulingResultStateHolder().SkillStaffPeriodHolder.SkillStaffPeriodList(skill, TimeZoneHelper.NewUtcDateTimePeriodFromLocalDateTime(currentIntradayDate, currentIntradayDate.AddDays(1), _schedulerStateHolder.TimeZoneInfo));
+                    _skillStaffPeriods = SchedulingResultStateHolder().SkillStaffPeriodHolder.SkillStaffPeriodList(skill, periodToFind);
                 }
                 else
                 {
-                    var periodToFind = TimeZoneHelper.NewUtcDateTimePeriodFromLocalDateTime(currentIntradayDate, currentIntradayDate.AddDays(1), _schedulerStateHolder.TimeZoneInfo);
                     _skillStaffPeriods = SchedulingResultStateHolder().SkillStaffPeriodHolder.SkillStaffPeriodList(new List<ISkill> { skill }, periodToFind);
                 }
                 if (_skillStaffPeriods.Count >= 0)

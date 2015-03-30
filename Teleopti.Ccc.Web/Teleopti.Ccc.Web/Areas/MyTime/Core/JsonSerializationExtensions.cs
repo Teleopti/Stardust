@@ -87,7 +87,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core
 			{
 				if (obj is DateOnly)
 				{
-					return ((DateTime) (DateOnly) obj).ToString(clientFixedDateOnlyPattern);
+					return ((DateOnly) obj).Date.ToString(clientFixedDateOnlyPattern);
 				}
 				return obj;
 			}

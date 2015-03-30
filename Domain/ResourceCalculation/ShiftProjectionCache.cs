@@ -19,10 +19,10 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
     {
         private IEditableShift _mainShift;
         private readonly IWorkShift _workShift;
-        private  DateTime _schedulingDate;
+	    private DateOnly _schedulingDate;
         private TimeSpan? _workShiftProjectionContractTime;
         private DateTimePeriod? _workShiftProjectionPeriod;
-        private  IVisualLayerCollection _mainshiftProjection;
+	    private IVisualLayerCollection _mainshiftProjection;
         private TimeZoneInfo _localTimeZoneInfo;
         private DayOfWeek _dayOfWeek;
     	private readonly IPersonalShiftMeetingTimeChecker _personalShiftMeetingTimeChecker;
@@ -45,7 +45,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
                 _localTimeZoneInfo = localTimeZoneInfo;
                 _schedulingDate = schedulingDate;
                 _dayOfWeek = SchedulingDate.DayOfWeek;
-                _mainShift = _workShift.ToEditorShift(schedulingDate.Date, localTimeZoneInfo);
+                _mainShift = _workShift.ToEditorShift(schedulingDate, localTimeZoneInfo);
                 _mainshiftProjection = null;
             }
             
@@ -160,7 +160,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 			}
     	}
 
-	    public DateTime SchedulingDate
+	    public DateOnly SchedulingDate
 	    {
 		    get { return _schedulingDate; }
 	    }

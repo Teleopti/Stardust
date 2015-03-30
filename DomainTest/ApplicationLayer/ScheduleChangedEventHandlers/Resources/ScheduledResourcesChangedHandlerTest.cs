@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using NUnit.Framework;
 using Rhino.Mocks;
 using Teleopti.Ccc.Domain.ApplicationLayer;
@@ -7,12 +6,10 @@ using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers;
 using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Resources;
 using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.ScheduleProjection;
-using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Interfaces.Domain;
-using Teleopti.Interfaces.MessageBroker.Client;
 using Teleopti.Interfaces.MessageBroker.Client.Composite;
 using Teleopti.Interfaces.MessageBroker.Events;
 
@@ -76,7 +73,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ScheduleChangedEventHandlers.
 							{
 								new ProjectionChangedEventScheduleDay
 									{
-										Date = _date,
+										Date = _date.Date,
 										Shift = new ProjectionChangedEventShift
 											{
 												Layers = new[]
@@ -131,7 +128,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ScheduleChangedEventHandlers.
 							{
 								new ProjectionChangedEventScheduleDay
 									{
-										Date = _date
+										Date = _date.Date
 									}
 							}
 				});
@@ -168,7 +165,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ScheduleChangedEventHandlers.
 							{
 								new ProjectionChangedEventScheduleDay
 									{
-										Date = _date
+										Date = _date.Date
 									}
 							}
 			});
@@ -196,7 +193,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ScheduleChangedEventHandlers.
 							{
 								new ProjectionChangedEventScheduleDay
 									{
-										Date = _date,
+										Date = _date.Date,
 										Shift = new ProjectionChangedEventShift
 											{
 												Layers = new[]
@@ -235,7 +232,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ScheduleChangedEventHandlers.
 							{
 								new ProjectionChangedEventScheduleDay
 									{
-										Date = _date,
+										Date = _date.Date,
 										Shift = new ProjectionChangedEventShift
 											{
 												Layers = new[]
@@ -269,7 +266,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ScheduleChangedEventHandlers.
 							{
 								new ProjectionChangedEventScheduleDay
 									{
-										Date = _date,
+										Date = _date.Date,
 										Shift = new ProjectionChangedEventShift
 											{
 												Layers = new[]
@@ -312,7 +309,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ScheduleChangedEventHandlers.
 							{
 								new ProjectionChangedEventScheduleDay
 									{
-										Date = _date,
+										Date = _date.Date,
 										Shift = new ProjectionChangedEventShift
 											{
 												Layers = new[]

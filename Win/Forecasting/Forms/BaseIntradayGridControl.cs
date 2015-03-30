@@ -608,7 +608,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
         /// Created by: robink
         /// Created date: 2008-01-25
         /// </remarks>
-        public void GoToDate(DateTime theDate)
+        public void GoToDate(DateOnly theDate)
         {
             if (_taskOwnerDay == null ||
                 _taskOwnerDay.CurrentDate != theDate)
@@ -617,19 +617,19 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
             }
         }
 
-        public DateTime GetLocalCurrentDate(int column)
+        public DateOnly GetLocalCurrentDate(int column)
         {
             int count = _intervals.Count;
             if (count == 0)
-                return DateTime.MaxValue;
-            DateTime returnDate;
+                return DateOnly.MaxValue;
+            DateOnly returnDate;
             if (count == 0 && _intervals.Count == 0) return TaskOwnerDay.CurrentDate;//the f**cked up stuff downstairs is fixed by this 
             if (column > count)
-                returnDate = TaskOwnerDay.CurrentDate.Date.Add(_intervals[count - 1].TimeSpan);
+                returnDate = TaskOwnerDay.CurrentDate.Add(_intervals[count - 1].TimeSpan);
             else if (column <= Cols.HeaderCount)
-                returnDate = TaskOwnerDay.CurrentDate.Date.Add(_intervals[0].TimeSpan);
+                returnDate = TaskOwnerDay.CurrentDate.Add(_intervals[0].TimeSpan);
             else
-                returnDate = TaskOwnerDay.CurrentDate.Date.Add(_intervals[column - (Cols.HeaderCount + 1)].TimeSpan);//this is f**cked up when grid & chart is zero - why they are is another question
+                returnDate = TaskOwnerDay.CurrentDate.Add(_intervals[column - (Cols.HeaderCount + 1)].TimeSpan);//this is f**cked up when grid & chart is zero - why they are is another question
 
             return returnDate;
         }
@@ -739,11 +739,11 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
             get { return TimeSpan.FromMinutes(60); }
         }
 
-        public override DateTime FirstDateTime
+        public override DateTime FirstDate
         {
             get
             {
-                if (_intervals.Count == 0) return SkillDayTemplate.BaseDate;
+                if (_intervals.Count == 0) return SkillDayTemplate.BaseDate.Date;
                 if (_taskOwnerDay != null)
                 {
                     return TimeZoneInfo.ConvertTimeFromUtc(_intervals[0].DateTime, _timeZone);
@@ -754,11 +754,11 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
             }
         }
 
-        public override DateTime LastDateTime
+        public override DateTime LastDate
         {
             get
             {
-                if (_intervals.Count == 0) return SkillDayTemplate.BaseDate;
+                if (_intervals.Count == 0) return SkillDayTemplate.BaseDate.Date;
                 if (_taskOwnerDay != null)
                 {
                     return TimeZoneInfo.ConvertTimeFromUtc(_intervals.Last().DateTime.Add(ChartResolution), _timeZone);

@@ -52,9 +52,9 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.DoNotUse
 			var virtualSchedulePeriod = VirtualSchedulePeriodForDate(date);
 			var startDate = virtualSchedulePeriod.DateOnlyPeriod.StartDate;
 			var endDate = virtualSchedulePeriod.DateOnlyPeriod.EndDate;
-			var displayedStartDate = DateHelper.GetFirstDateInWeek(startDate, _cultureInfo).AddDays(-7);
-			var displayedEndDate = DateHelper.GetLastDateInWeek(endDate, _cultureInfo).AddDays(7);
-			return new DateOnlyPeriod(new DateOnly(displayedStartDate), new DateOnly(displayedEndDate));
+			var displayedStartDate = DateHelper.GetFirstDateInWeek(startDate, _cultureInfo.DateTimeFormat.FirstDayOfWeek).AddDays(-7);
+			var displayedEndDate = DateHelper.GetFirstDateInWeek(endDate, _cultureInfo.DateTimeFormat.FirstDayOfWeek).AddDays(6).AddDays(7);
+			return new DateOnlyPeriod(displayedStartDate, displayedEndDate);
 		}
 	}
 }

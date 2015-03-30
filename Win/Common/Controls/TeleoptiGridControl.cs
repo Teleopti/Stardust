@@ -86,8 +86,8 @@ namespace Teleopti.Ccc.Win.Common.Controls
 
 		public virtual WorkingInterval WorkingInterval { get { return WorkingInterval.Day; } }
 		public virtual TimeSpan ChartResolution { get { return TimeSpan.FromHours(1); } }
-		public virtual DateTime FirstDateTime { get { return DateTime.MinValue; } }
-		public virtual DateTime LastDateTime { get { return DateTime.MinValue; } }
+		public virtual DateTime FirstDate { get { return DateHelper.MinSmallDateTime; } }
+		public virtual DateTime LastDate { get { return DateHelper.MinSmallDateTime; } }
 
 		public TeleoptiGridControl()
 		{

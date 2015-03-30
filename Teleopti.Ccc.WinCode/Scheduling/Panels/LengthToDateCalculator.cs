@@ -9,7 +9,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling.Panels
         private readonly double _length;
         private DateOnlyPeriod _period;
         
-        private static int DiffInDays(DateOnly start,DateTime end)
+        private static int DiffInDays(DateOnly start,DateOnly end)
         {
             return (int)end.Subtract(start).TotalDays;
         }

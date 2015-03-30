@@ -25,11 +25,11 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
                            select o.Period.EndDateTime).Max();
 
 	        var minTime = minDateTime.TimeOfDay;
-	        int minDayOffset = (int)minDateTime.Date.Subtract(skillDayDate).TotalDays;
+	        int minDayOffset = (int)new DateOnly(minDateTime).Subtract(skillDayDate).TotalDays;
 	        minTime = minTime.Add(TimeSpan.FromDays(minDayOffset));
 
 	        var maxTime = maxDateTime.TimeOfDay;
-	        int maxDayOffset = (int) maxDateTime.Date.Subtract(skillDayDate).TotalDays;
+	        int maxDayOffset = (int)new DateOnly(maxDateTime).Subtract(skillDayDate).TotalDays;
 	        maxTime = maxTime.Add(TimeSpan.FromDays(maxDayOffset));
     
             return new TimePeriod(minTime, maxTime);

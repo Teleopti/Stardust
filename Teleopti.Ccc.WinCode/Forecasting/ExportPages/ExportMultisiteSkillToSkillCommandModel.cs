@@ -6,7 +6,6 @@ using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Sdk.Common.DataTransferObject;
 using Teleopti.Ccc.Sdk.Common.DataTransferObject.Commands;
 using Teleopti.Ccc.WinCode.Forecasting.QuickForecastPages;
-using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Messages.General;
 
 namespace Teleopti.Ccc.WinCode.Forecasting.ExportPages
@@ -62,8 +61,8 @@ namespace Teleopti.Ccc.WinCode.Forecasting.ExportPages
 			MultisiteSkillSelectionModels = new List<MultisiteSkillSelectionModel>();
 			Period = new DateOnlyPeriodDto
 				{
-					StartDate = new DateOnlyDto { DateTime = DateOnly.Today },
-					EndDate = new DateOnlyDto { DateTime = DateOnly.Today.AddDays(30) }
+					StartDate = new DateOnlyDto { DateTime = DateTime.Today },
+					EndDate = new DateOnlyDto { DateTime = DateTime.Today.AddDays(30) }
 				};
 		}
 

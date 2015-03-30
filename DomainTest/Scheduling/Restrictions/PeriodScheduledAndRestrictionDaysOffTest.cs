@@ -1,14 +1,11 @@
 using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using NUnit.Framework;
 using Rhino.Mocks;
 using Teleopti.Ccc.Domain.AgentInfo;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Scheduling;
-using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Scheduling.Restrictions;
-using Teleopti.Ccc.Domain.Time;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Interfaces.Domain;
@@ -46,16 +43,16 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Restrictions
     		var personAssignment = PersonAssignmentFactory.CreateAssignmentWithMainShift(_person,
     		                                                                         new DateTimePeriod(2013, 1, 1, 2013, 1, 1));
 
-        	_scheduleDay1 = stubs.ScheduleDayStub(DateOnly.Today, _person, SchedulePartView.DayOff, PersonAssignmentFactory.CreateAssignmentWithDayOff());
+        	_scheduleDay1 = stubs.ScheduleDayStub(DateTime.Today, _person, SchedulePartView.DayOff, PersonAssignmentFactory.CreateAssignmentWithDayOff());
 			_scheduleDay1.Stub(x => x.RestrictionCollection()).Return(restrictions);
 			_scheduleDay1.Stub(x => x.IsScheduled()).Return(true);
-			_scheduleDay2 = stubs.ScheduleDayStub(DateOnly.Today, _person, SchedulePartView.ContractDayOff, personAssignment);
+			_scheduleDay2 = stubs.ScheduleDayStub(DateTime.Today, _person, SchedulePartView.ContractDayOff, personAssignment);
 			_scheduleDay2.Stub(x => x.RestrictionCollection()).Return(restrictions);
 			_scheduleDay2.Stub(x => x.IsScheduled()).Return(true);
-			_scheduleDay3 = stubs.ScheduleDayStub(DateOnly.Today, _person, SchedulePartView.MainShift, personAssignment);
+			_scheduleDay3 = stubs.ScheduleDayStub(DateTime.Today, _person, SchedulePartView.MainShift, personAssignment);
 			_scheduleDay3.Stub(x => x.RestrictionCollection()).Return(restrictions);
 			_scheduleDay3.Stub(x => x.IsScheduled()).Return(true);
-			_scheduleDay4 = stubs.ScheduleDayStub(DateOnly.Today, _person);
+			_scheduleDay4 = stubs.ScheduleDayStub(DateTime.Today, _person);
 			_scheduleDay4.Stub(x => x.RestrictionCollection()).Return(restrictions);
 			_scheduleDay4.Stub(x => x.IsScheduled()).Return(false);
 
@@ -123,7 +120,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Restrictions
 			preferenceRestriction.Stub(x => x.DayOffTemplate).Return(null).Repeat.Any();
 			preferenceRestriction.Stub(x => x.Absence).Return(new Absence()).Repeat.Any();
 
-			var scheduleDay = new StubFactory().ScheduleDayStub(DateOnly.Today, _person);
+			var scheduleDay = new StubFactory().ScheduleDayStub(DateTime.Today, _person);
 			scheduleDay.Stub(x => x.RestrictionCollection()).Return(new IRestrictionBase[] { preferenceRestriction, rotationRestriction });
 			scheduleDay.Stub(x => x.IsScheduled()).Return(false);
 

@@ -1,14 +1,12 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Diagnostics;
 using System.Globalization;
 using NUnit.Framework;
 using Rhino.Mocks;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Scheduling;
-using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Scheduling.Restriction;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
@@ -130,10 +128,10 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
 			virtualSchedulePeriod.Stub(x => x.AverageWorkTimePerDay).Return(TimeSpan.FromHours(8));
 
 			var dayOffPreferenceRestriction = new PreferenceRestriction {DayOffTemplate = new DayOffTemplate(new Description())};
-			var scheduleDayWithDayOffPreference = new StubFactory().ScheduleDayStub(DateOnly.Today);
+			var scheduleDayWithDayOffPreference = new StubFactory().ScheduleDayStub(DateTime.Today);
 			scheduleDayWithDayOffPreference.Stub(x => x.RestrictionCollection()).Return(new[] {dayOffPreferenceRestriction});
 
-			var scheduleDay = new StubFactory().ScheduleDayStub(DateOnly.Today.AddDays(1));
+			var scheduleDay = new StubFactory().ScheduleDayStub(DateTime.Today.AddDays(1));
 
 			var scheduleDays = new[] { scheduleDayWithDayOffPreference, scheduleDay };
 
@@ -154,10 +152,10 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
 			virtualSchedulePeriod.Stub(x => x.AverageWorkTimePerDay).Return(TimeSpan.FromHours(8));
 
 			var absencePreferenceRestriction = new PreferenceRestriction { Absence = new Absence() };
-			var scheduleDayWithAbsencePreference = new StubFactory().ScheduleDayStub(DateOnly.Today);
+			var scheduleDayWithAbsencePreference = new StubFactory().ScheduleDayStub(DateTime.Today);
 			scheduleDayWithAbsencePreference.Stub(x => x.RestrictionCollection()).Return(new[] { absencePreferenceRestriction });
 
-			var scheduleDay = new StubFactory().ScheduleDayStub(DateOnly.Today.AddDays(1));
+			var scheduleDay = new StubFactory().ScheduleDayStub(DateTime.Today.AddDays(1));
 
 			var scheduleDays = new[] { scheduleDayWithAbsencePreference, scheduleDay };
 
@@ -181,10 +179,10 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
 
 			var dayOffPreferenceRestriction = new PreferenceRestriction { DayOffTemplate = dayOffTemplate };
 			var dayOff = PersonAssignmentFactory.CreateAssignmentWithDayOff(new Scenario("scenario"), new Person(), DateOnly.Today.AddDays(1), new DayOffTemplate());
-			var scheduleDayWithDayOffPreference = new StubFactory().ScheduleDayStub(DateOnly.Today, SchedulePartView.DayOff, dayOff);
+			var scheduleDayWithDayOffPreference = new StubFactory().ScheduleDayStub(DateTime.Today, SchedulePartView.DayOff, dayOff);
 			scheduleDayWithDayOffPreference.Stub(x => x.RestrictionCollection()).Return(new[] { dayOffPreferenceRestriction });
 
-			var scheduleDay = new StubFactory().ScheduleDayStub(DateOnly.Today.AddDays(1));
+			var scheduleDay = new StubFactory().ScheduleDayStub(DateTime.Today.AddDays(1));
 
 			var scheduleDays = new[] { scheduleDayWithDayOffPreference, scheduleDay };
 

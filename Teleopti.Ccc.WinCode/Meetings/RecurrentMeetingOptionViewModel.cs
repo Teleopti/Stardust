@@ -62,7 +62,7 @@ namespace Teleopti.Ccc.WinCode.Meetings
                                                                   new RecurrentMonthlyByDayMeeting {IncrementCount = IncrementCount});
                     recurrentMonthlyByDayMeetingViewModel.DayInMonth =
                         System.Globalization.CultureInfo.CurrentCulture.Calendar.GetDayOfMonth(
-                            MeetingViewModel.StartDate);
+                            MeetingViewModel.StartDate.Date);
                     viewModel = recurrentMonthlyByDayMeetingViewModel;
                     break;
                 case RecurrentMeetingType.MonthlyByWeek:

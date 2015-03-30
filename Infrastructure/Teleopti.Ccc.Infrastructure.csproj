@@ -260,6 +260,7 @@
     <Compile Include="MultiTenancy\Client\TenantDataManager.cs" />
     <Compile Include="NHibernateConfiguration\SecondLevelCache.cs" />
     <Compile Include="Persisters\WorkflowControlSetPublishDatePersister.cs" />
+    <Compile Include="Repositories\IQueryExtensions.cs" />
     <Compile Include="Repositories\PayrollFormatRepository.cs" />
     <Compile Include="Repositories\SeatBookingRepository.cs" />
     <Compile Include="Rta\CacheInvalidator.cs" />

@@ -46,8 +46,8 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
             distribution.Add(_childSkill1, new Percent(0.6));
             distribution.Add(_childSkill2, new Percent(0.4));
             MultisitePeriod multisitePeriod = new MultisitePeriod(
-                new DateTimePeriod(DateTime.SpecifyKind(_dt, DateTimeKind.Utc).Add(TimeSpan.FromHours(4)),
-                                   DateTime.SpecifyKind(_dt, DateTimeKind.Utc).Add(TimeSpan.FromHours(19))),
+                new DateTimePeriod(DateTime.SpecifyKind(_dt.Date, DateTimeKind.Utc).Add(TimeSpan.FromHours(4)),
+                                   DateTime.SpecifyKind(_dt.Date, DateTimeKind.Utc).Add(TimeSpan.FromHours(19))),
                 distribution);
 
             _multisitePeriods = new List<IMultisitePeriod> { multisitePeriod };

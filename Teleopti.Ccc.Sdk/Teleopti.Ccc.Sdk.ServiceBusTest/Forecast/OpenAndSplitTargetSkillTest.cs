@@ -4,14 +4,11 @@ using Rhino.Mocks;
 using Rhino.ServiceBus;
 using Teleopti.Ccc.Domain.Forecasting.Export;
 using Teleopti.Ccc.Domain.Repositories;
-using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.Sdk.ServiceBus.Forecast;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
-using Teleopti.Interfaces.MessageBroker.Client;
 using Teleopti.Interfaces.MessageBroker.Client.Composite;
-using Teleopti.Interfaces.MessageBroker.Events;
 using Teleopti.Interfaces.Messages.General;
 
 namespace Teleopti.Ccc.Sdk.ServiceBusTest.Forecast
@@ -66,7 +63,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Forecast
                 Expect.Call(_skillRepository.Get(skillId)).Return(skill);
                 Expect.Call(()=>_command.Execute(skill, new DateOnlyPeriod(dateTime,dateTime),new[]{new TimePeriod(8,0,17,0)}));
                 Expect.Call(() => _serviceBus.Send()).Constraints(
-                    Rhino.Mocks.Constraints.Is.Matching<Object[]>(a => ((ImportForecastsToSkill)a[0]).Date == dateTime));
+                    Rhino.Mocks.Constraints.Is.Matching<Object[]>(a => ((ImportForecastsToSkill)a[0]).Date == dateTime.Date));
             }
             using (_mocks.Playback())
             {
@@ -75,7 +72,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Forecast
                                       JobId = jobId,
                                       ImportMode = ImportForecastsMode.ImportWorkload,
                                       TargetSkillId = skillId,
-                                      Date = dateTime,
+                                      Date = dateTime.Date,
                                       StartOpenHour = TimeSpan.FromHours(8),
                                       EndOpenHour = TimeSpan.FromHours(17),
                                       Timestamp = DateTime.Now

@@ -127,7 +127,6 @@
 			this.dateTimePickerAdv1.TabIndex = 0;
 			this.dateTimePickerAdv1.ThemedChildControls = true;
 			this.dateTimePickerAdv1.ThemesEnabled = true;
-			this.dateTimePickerAdv1.UseCurrentCulture = true;
 			this.dateTimePickerAdv1.Value = new System.DateTime(2008, 6, 9, 0, 0, 0, 0);
 			// 
 			// buttonAdv1

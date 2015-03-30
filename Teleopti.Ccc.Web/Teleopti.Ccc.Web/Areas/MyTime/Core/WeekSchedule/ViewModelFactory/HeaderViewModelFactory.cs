@@ -35,7 +35,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.ViewModelFactory
 
         private static bool firstDayOfWeek(DateOnly date)
         {
-        	return (date == DateHelper.GetFirstDateInWeek(date, CultureInfo.CurrentCulture));
+        	return (date == DateHelper.GetFirstDateInWeek(date, CultureInfo.CurrentCulture.DateTimeFormat.FirstDayOfWeek));
         }
 
         private static bool firstDayOfMonth(int dayOfMonth)

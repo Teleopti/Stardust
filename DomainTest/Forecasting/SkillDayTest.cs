@@ -9,7 +9,6 @@ using Rhino.Mocks;
 using Teleopti.Ccc.Domain.Common.EntityBaseTypes;
 using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.Forecasting.Template;
-using Teleopti.Ccc.Domain.Time;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Interfaces.Domain;
@@ -42,12 +41,12 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
                         new Percent(0.5),
                         new Percent(0.7)),
                     new SkillPersonData(),
-                    new DateTimePeriod(DateTime.SpecifyKind(_dt, DateTimeKind.Utc).Add(TimeSpan.FromHours(4)),
-                                       DateTime.SpecifyKind(_dt, DateTimeKind.Utc).Add(TimeSpan.FromHours(19)))));
+                    new DateTimePeriod(DateTime.SpecifyKind(_dt.Date, DateTimeKind.Utc).Add(TimeSpan.FromHours(4)),
+                                       DateTime.SpecifyKind(_dt.Date, DateTimeKind.Utc).Add(TimeSpan.FromHours(19)))));
 
             _skill.SetId(Guid.NewGuid());
 
-            _skillDay = new SkillDay(_dt, _skill, _scenario, WorkloadDayFactory.GetWorkloadDaysForTest(_dt, _skill), _skillDataPeriods);
+            _skillDay = new SkillDay(_dt, _skill, _scenario, WorkloadDayFactory.GetWorkloadDaysForTest(_dt.Date, _skill), _skillDataPeriods);
             _skillDay.SetupSkillDay();
             _calculator = new SkillDayCalculator(_skill, new List<ISkillDay> { _skillDay }, new DateOnlyPeriod(_dt,_dt.AddDays(1)));
         }
@@ -115,7 +114,7 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
         [ExpectedException(typeof(ArgumentNullException))]
         public void VerifyNullAsSkillGivesException()
         {
-            _skillDay = new SkillDay(_dt, null, _scenario, WorkloadDayFactory.GetWorkloadDaysForTest(_dt, _skill), _skillDataPeriods);
+            _skillDay = new SkillDay(_dt, null, _scenario, WorkloadDayFactory.GetWorkloadDaysForTest(_dt.Date, _skill), _skillDataPeriods);
         }
 
         /// <summary>
@@ -129,7 +128,7 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
         [ExpectedException(typeof(ArgumentNullException))]
         public void VerifyNullAsScenarioGivesException()
         {
-            _skillDay = new SkillDay(_dt, _skill, null, WorkloadDayFactory.GetWorkloadDaysForTest(_dt, _skill), _skillDataPeriods);
+            _skillDay = new SkillDay(_dt, _skill, null, WorkloadDayFactory.GetWorkloadDaysForTest(_dt.Date, _skill), _skillDataPeriods);
         }
 
         [Test]
@@ -137,7 +136,7 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
         public void VerifySkillInWorkloadDayMustBeSameAsinSkillDay()
         {
             Skill newSkill = new Skill("skill1", "skill1", Color.Red, 15, SkillTypeFactory.CreateSkillType());
-            _skillDay = new SkillDay(_dt, newSkill, _scenario, WorkloadDayFactory.GetWorkloadDaysForTest(_dt, _skill), _skillDataPeriods);
+            _skillDay = new SkillDay(_dt, newSkill, _scenario, WorkloadDayFactory.GetWorkloadDaysForTest(_dt.Date, _skill), _skillDataPeriods);
         }
 
         [Test]
@@ -145,7 +144,7 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
         public void VerifyDateInWorkloadDayMustBeSameAsinSkillDay()
         {
             var dt = new DateOnly(2007, 1, 2);
-            _skillDay = new SkillDay(dt, _skill, _scenario, WorkloadDayFactory.GetWorkloadDaysForTest(_dt, _skill), _skillDataPeriods);
+            _skillDay = new SkillDay(dt, _skill, _scenario, WorkloadDayFactory.GetWorkloadDaysForTest(_dt.Date, _skill), _skillDataPeriods);
         }
 
         [Test]
@@ -227,7 +226,7 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
         [Test]
         public void VerifyAddWorkloadDayWorks()
         {
-            IList<IWorkloadDay> workloadDaysToAdd = WorkloadDayFactory.GetWorkloadDaysForTest(_dt, _skill);
+            IList<IWorkloadDay> workloadDaysToAdd = WorkloadDayFactory.GetWorkloadDaysForTest(_dt.Date, _skill);
 
             Assert.AreEqual(2, _skillDay.WorkloadDayCollection.Count);
             _skillDay.AddWorkloadDay(workloadDaysToAdd[0]);
@@ -391,7 +390,7 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
             IList<ITemplateSkillDataPeriod> templateSkillDataPeriods = new List<ITemplateSkillDataPeriod>();
 
             DateTimePeriod timePeriod = new DateTimePeriod(
-               TimeZoneHelper.ConvertToUtc(SkillDayTemplate.BaseDate, _skill.TimeZone).Add(new TimeSpan(8, 0, 0)),
+               TimeZoneHelper.ConvertToUtc(SkillDayTemplate.BaseDate.Date, _skill.TimeZone).Add(new TimeSpan(8, 0, 0)),
                TimeZoneHelper.ConvertToUtc(SkillDayTemplate.BaseDate.Date.Add(new TimeSpan(22, 0, 0)), _skill.TimeZone));
 
 
@@ -414,7 +413,7 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
             IList<ITemplateSkillDataPeriod> skillDataPeriods = new List<ITemplateSkillDataPeriod>();
 
             DateTimePeriod timePeriod = new DateTimePeriod(
-             TimeZoneHelper.ConvertToUtc(SkillDayTemplate.BaseDate, _skill.TimeZone).Add(new TimeSpan(4, 0, 0)),
+             TimeZoneHelper.ConvertToUtc(SkillDayTemplate.BaseDate.Date, _skill.TimeZone).Add(new TimeSpan(4, 0, 0)),
              TimeZoneHelper.ConvertToUtc(SkillDayTemplate.BaseDate.Date.Add(new TimeSpan(19, 0, 0)), _skill.TimeZone));
 
             skillDataPeriods.Add(
@@ -446,7 +445,7 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
             SkillPersonData skillPersonData = new SkillPersonData(12, 23);
             
             DateTimePeriod timePeriod = new DateTimePeriod(
-             TimeZoneHelper.ConvertToUtc(SkillDayTemplate.BaseDate, _skill.TimeZone).Add(new TimeSpan(4, 0, 0)),
+             TimeZoneHelper.ConvertToUtc(SkillDayTemplate.BaseDate.Date, _skill.TimeZone).Add(new TimeSpan(4, 0, 0)),
              TimeZoneHelper.ConvertToUtc(SkillDayTemplate.BaseDate.Date.Add(new TimeSpan(19, 0, 0)), _skill.TimeZone));
 
             skillDataPeriods.Add(
@@ -547,7 +546,7 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
             SkillPersonData skillPersonData = new SkillPersonData(11, 27);
 
             DateTimePeriod timePeriod = new DateTimePeriod(
-             TimeZoneHelper.ConvertToUtc(SkillDayTemplate.BaseDate, _skill.TimeZone).Add(new TimeSpan(4, 0, 0)),
+             TimeZoneHelper.ConvertToUtc(SkillDayTemplate.BaseDate.Date, _skill.TimeZone).Add(new TimeSpan(4, 0, 0)),
              TimeZoneHelper.ConvertToUtc(SkillDayTemplate.BaseDate.Date.Add(new TimeSpan(19, 0, 0)), _skill.TimeZone));
 
             TemplateSkillDataPeriod templateSkilldataPeriod = new TemplateSkillDataPeriod(
@@ -996,7 +995,7 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
             Assert.AreEqual(60, _skillDay.SkillStaffPeriodCollection.Count);
 
             ISkillStaffPeriod skillStaffPeriod = SkillStaffPeriodFactory.CreateSkillStaffPeriod(
-                new DateTimePeriod(DateTime.SpecifyKind(_dt, DateTimeKind.Utc), DateTime.SpecifyKind(_dt.Date.AddHours(6),DateTimeKind.Utc)),
+                new DateTimePeriod(DateTime.SpecifyKind(_dt.Date, DateTimeKind.Utc), DateTime.SpecifyKind(_dt.Date.AddHours(6),DateTimeKind.Utc)),
                 new Task(200, TimeSpan.FromSeconds(120), TimeSpan.FromSeconds(140)),
                 ServiceAgreement.DefaultValues());
 
@@ -1028,7 +1027,7 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
             Assert.AreNotEqual(140d, _skillDay.TotalAverageAfterTaskTime.TotalSeconds);
 
             ISkillStaffPeriod skillStaffPeriod = SkillStaffPeriodFactory.CreateSkillStaffPeriod(
-                new DateTimePeriod(DateTime.SpecifyKind(_dt, DateTimeKind.Utc), DateTime.SpecifyKind(_dt.Date.AddHours(6), DateTimeKind.Utc)),
+                new DateTimePeriod(DateTime.SpecifyKind(_dt.Date, DateTimeKind.Utc), DateTime.SpecifyKind(_dt.Date.AddHours(6), DateTimeKind.Utc)),
                 new Task(200, TimeSpan.FromSeconds(120), TimeSpan.FromSeconds(140)),
                 ServiceAgreement.DefaultValues());
 
@@ -1056,7 +1055,7 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
             Assert.AreNotEqual(140d, _skillDay.TotalAverageAfterTaskTime.TotalSeconds);
 
             ISkillStaffPeriod skillStaffPeriod = SkillStaffPeriodFactory.CreateSkillStaffPeriod(
-                new DateTimePeriod(DateTime.SpecifyKind(_dt, DateTimeKind.Utc), DateTime.SpecifyKind(_dt.Date.AddHours(6), DateTimeKind.Utc)),
+                new DateTimePeriod(DateTime.SpecifyKind(_dt.Date, DateTimeKind.Utc), DateTime.SpecifyKind(_dt.Date.AddHours(6), DateTimeKind.Utc)),
                 new Task(0, TimeSpan.FromSeconds(120), TimeSpan.FromSeconds(140)),
                 ServiceAgreement.DefaultValues());
 
@@ -1356,7 +1355,7 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
         [Test]
         public void VerifyNoneEntityClone()
         {
-            _skillDay = new SkillDay(_dt, _skill, _scenario, WorkloadDayFactory.GetWorkloadDaysForTest(_dt, _skill), _skillDataPeriods);
+            _skillDay = new SkillDay(_dt, _skill, _scenario, WorkloadDayFactory.GetWorkloadDaysForTest(_dt.Date, _skill), _skillDataPeriods);
             typeof(Entity).GetField("_id", BindingFlags.NonPublic | BindingFlags.Instance).SetValue(_skillDay, Guid.NewGuid());
 
             _calculator = new SkillDayCalculator(_skill, new List<ISkillDay> { _skillDay }, new DateOnlyPeriod());
@@ -1412,9 +1411,9 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
                                 new Percent(0.5),
                                 new Percent(0.7)),
                                 new SkillPersonData(),
-                                new DateTimePeriod(DateTime.SpecifyKind(createDate,DateTimeKind.Utc), DateTime.SpecifyKind(createDate.Date.Add(TimeSpan.FromHours(24)),DateTimeKind.Utc))));
+                                new DateTimePeriod(DateTime.SpecifyKind(createDate.Date,DateTimeKind.Utc), DateTime.SpecifyKind(createDate.Date.Add(TimeSpan.FromHours(24)),DateTimeKind.Utc))));
 
-            ISkillDay skillDay = new SkillDay(createDate, _skill, _scenario, WorkloadDayFactory.GetWorkloadDaysForTest(createDate, _skill), skillDataPeriods);
+            ISkillDay skillDay = new SkillDay(createDate, _skill, _scenario, WorkloadDayFactory.GetWorkloadDaysForTest(createDate.Date, _skill), skillDataPeriods);
             skillDay.SetupSkillDay();
             skillDay.SkillDayCalculator = new SkillDayCalculator(_skill, new List<ISkillDay> { skillDay }, new DateOnlyPeriod(createDate, createDate.AddDays(1)));
 
@@ -1442,9 +1441,9 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
                                 new Percent(0.5),
                                 new Percent(0.7)),
                                 new SkillPersonData(),
-                                new DateTimePeriod(DateTime.SpecifyKind(createDate, DateTimeKind.Utc), DateTime.SpecifyKind(createDate.Date.Add(TimeSpan.FromHours(24)), DateTimeKind.Utc))));
+                                new DateTimePeriod(DateTime.SpecifyKind(createDate.Date, DateTimeKind.Utc), DateTime.SpecifyKind(createDate.Date.Add(TimeSpan.FromHours(24)), DateTimeKind.Utc))));
 
-            ISkillDay skillDay = new SkillDay(createDate, _skill, _scenario, WorkloadDayFactory.GetWorkloadDaysForTest(createDate, _skill), skillDataPeriods);
+            ISkillDay skillDay = new SkillDay(createDate, _skill, _scenario, WorkloadDayFactory.GetWorkloadDaysForTest(createDate.Date, _skill), skillDataPeriods);
             skillDay.SetupSkillDay();
             skillDay.SkillDayCalculator = new SkillDayCalculator(_skill, new List<ISkillDay> { skillDay }, new DateOnlyPeriod(createDate,createDate));
 
@@ -1478,7 +1477,7 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
                             createDate.Date.Add(_skill.MidnightBreakOffset).Add(TimeSpan.FromHours(24)),
                             DateTimeKind.Utc))));
 
-            ISkillDay skillDay = new SkillDay(createDate, _skill, _scenario, WorkloadDayFactory.GetWorkloadDaysForTest(createDate, _skill), skillDataPeriods);
+            ISkillDay skillDay = new SkillDay(createDate, _skill, _scenario, WorkloadDayFactory.GetWorkloadDaysForTest(createDate.Date, _skill), skillDataPeriods);
             skillDay.SetupSkillDay();
             skillDay.SkillDayCalculator = new SkillDayCalculator(_skill, new List<ISkillDay> { skillDay }, new DateOnlyPeriod(createDate,createDate));
 
@@ -1494,7 +1493,7 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
         {
             const string name = "<SOME>";
             ServiceAgreement serviceAgreement = ServiceAgreement.DefaultValues();
-            DateTime startDateUtc = TimeZoneInfo.ConvertTimeToUtc(SkillDayTemplate.BaseDate, _skill.TimeZone);
+            DateTime startDateUtc = TimeZoneInfo.ConvertTimeToUtc(SkillDayTemplate.BaseDate.Date, _skill.TimeZone);
             DateTimePeriod timePeriod = new DateTimePeriod(
                 startDateUtc, startDateUtc.AddDays(1)).MovePeriod(_skill.MidnightBreakOffset);
             ITemplateSkillDataPeriod templateSkillDataPeriod = new TemplateSkillDataPeriod(serviceAgreement,

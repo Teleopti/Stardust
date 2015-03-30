@@ -50,7 +50,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ViewModels
 			Reader.Has(new AdherencePercentageReadModel
 			{
 				PersonId = personId,
-				Date = "2014-12-24".Date()
+				Date = new DateTime(2014,12,24)
 			});
 			
 			var result = Target.Build(personId);
@@ -66,7 +66,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ViewModels
 			Reader.Has(new AdherencePercentageReadModel
 			{
 				PersonId = personId,
-				Date = "2014-12-24".Date(),
+				Date = new DateTime(2014,12,24),
 				TimeInAdherence = "74".Minutes(),
 				TimeOutOfAdherence = "74".Minutes(),
 				LastTimestamp = "2014-12-24 15:00".Utc(),
@@ -85,7 +85,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ViewModels
 			Reader.Has(new AdherencePercentageReadModel
 			{
 				PersonId = personId,
-				Date = "2014-12-24".Date(),
+				Date = new DateTime(2014, 12, 24),
 				TimeInAdherence = "12".Minutes(),
 				TimeOutOfAdherence = "0".Minutes(),
 				LastTimestamp = "2014-12-24 15:00".Utc(),
@@ -104,7 +104,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ViewModels
 			Reader.Has(new AdherencePercentageReadModel
 			{
 				PersonId = personId,
-				Date = "2014-12-24".Date(),
+				Date = new DateTime(2014, 12, 24),
 				TimeInAdherence = "0".Minutes(),
 				TimeOutOfAdherence = "12".Minutes(),
 				LastTimestamp = "2014-12-24 15:00".Utc(),
@@ -133,7 +133,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ViewModels
 			Reader.Has(new AdherencePercentageReadModel
 			{
 				PersonId = personId,
-				Date = "2014-12-24".Date(),
+				Date = new DateTime(2014, 12, 24),
 				TimeInAdherence = "0".Minutes(),
 				TimeOutOfAdherence = "60".Minutes(),
 				LastTimestamp = "2014-12-24 10:00".Utc(),
@@ -153,7 +153,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ViewModels
 			Reader.Has(new AdherencePercentageReadModel
 			{
 				PersonId = personId,
-				Date = "2014-12-24".Date(),
+				Date = new DateTime(2014, 12, 24),
 				TimeInAdherence = "60".Minutes(),
 				TimeOutOfAdherence = "0".Minutes(),
 				LastTimestamp = "2014-12-24 10:00".Utc(),
@@ -173,7 +173,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ViewModels
 			Reader.Has(new AdherencePercentageReadModel
 			{
 				PersonId = personId,
-				Date = "2014-12-24".Date(),
+				Date = new DateTime(2014, 12, 24),
 				TimeInAdherence = "60".Minutes(),
 				TimeOutOfAdherence = "60".Minutes(),
 				ShiftHasEnded = true,
@@ -194,7 +194,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ViewModels
 			Reader.Has(new AdherencePercentageReadModel
 			{
 				PersonId = personId,
-				Date = "2014-12-24".Date(),
+				Date = new DateTime(2014, 12, 24),
 				TimeInAdherence = "1".Minutes(),
 				LastTimestamp = "2014-12-24 14:00".Utc()
 			});
@@ -214,7 +214,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ViewModels
 			Reader.Has(new AdherencePercentageReadModel
 			{
 				PersonId = personId,
-				Date = "2014-12-24".Date(),
+				Date = new DateTime(2014, 12, 24),
 				TimeInAdherence = "1".Minutes(),
 				LastTimestamp = "2014-12-24 14:00".Utc()
 			});
@@ -235,8 +235,8 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ViewModels
 			Now.Is("2015-02-24 09:00");
 			Reader.Has(new AdherencePercentageReadModel
 			{
-				PersonId = person.Id.Value,
-				Date = "2015-02-23".Date(),
+				PersonId = person.Id.GetValueOrDefault(),
+				Date = new DateTime(2015, 02, 23),
 				TimeInAdherence = "1".Minutes(),
 				LastTimestamp = "2015-02-24 09:00".Utc()
 			});
@@ -255,7 +255,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ViewModels
 			Reader.Has(new AdherencePercentageReadModel
 			{
 				PersonId = personId,
-				Date = "2014-12-24".Date()
+				Date = new DateTime(2014, 12, 24),
 			});
 
 			var result = Target.Build(personId);

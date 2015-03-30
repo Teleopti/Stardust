@@ -222,7 +222,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.SeasonPages
             e.Handled = true;
         }
 
-        private void formatCell(GridStyleInfo gridStyleInfo, DateTime dateTime)
+        private void formatCell(GridStyleInfo gridStyleInfo, DateOnly dateTime)
         {
             bool headerCell = (gridStyleInfo.BaseStyle == "Header");
             weekendOrWeekday(gridStyleInfo, dateTime, !headerCell, headerCell);
@@ -275,7 +275,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.SeasonPages
                 else
                     cellValue = (double)cellValueAsObject;
 
-                keyValueCollection.Add(_dateTimes[i - RowHeaderCount], cellValue);
+                keyValueCollection.Add(_dateTimes[i - RowHeaderCount].Date, cellValue);
             }
 
             return keyValueCollection;
@@ -291,7 +291,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.SeasonPages
             get
             {
                 int days;
-                TimeSpan diff = LastDateTime.Subtract(FirstDateTime);
+                TimeSpan diff = LastDate.Subtract(FirstDate);
                 if ((int)diff.TotalDays / 20 > 5)
                     days = (int)diff.TotalDays / 20;
                 else
@@ -300,17 +300,17 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.SeasonPages
             }
         }
 
-        public override DateTime FirstDateTime
+        public override DateTime FirstDate
         {
-            get { return _dateTimes.Min(); }
+            get { return _dateTimes.Min().Date; }
         }
 
-        public override DateTime LastDateTime
+        public override DateTime LastDate
         {
-            get { return _dateTimes.Max(); }
+            get { return _dateTimes.Max().Date; }
         }
 
-        private void weekendOrWeekday(GridStyleInfo gridStyleInfo, DateTime date, bool backColor, bool textColor)
+        private void weekendOrWeekday(GridStyleInfo gridStyleInfo, DateOnly date, bool backColor, bool textColor)
         {
             if (DateHelper.IsWeekend(date, CultureInfo.CurrentCulture))
             {
@@ -329,7 +329,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.SeasonPages
             }
 
             IOutlier outlier;
-            if (_outliers.TryGetValue(new DateOnly(date),out outlier))
+            if (_outliers.TryGetValue(date,out outlier))
             {
                 gridStyleInfo.CellTipText = outlier.Description.Name;
                 gridStyleInfo.BackColor = ColorHelper.GridControlOutlierColor();

@@ -131,7 +131,7 @@ namespace Teleopti.Ccc.Domain.WorkflowControl
 			return denyReason;
 		}
 
-		private DateTime earlierOpenDate = DateTime.MaxValue;
+		private DateOnly earlierOpenDate = DateOnly.MaxValue;
 		private bool isNextOpenPeriod(IAbsenceRequestOpenPeriod absenceRequestOpenPeriod)
 		{
 			var dateToCheck = absenceRequestOpenPeriod.OpenForRequestsPeriod.StartDate;
@@ -149,7 +149,7 @@ namespace Teleopti.Ccc.Domain.WorkflowControl
 			return start > _openAbsenceRequestPeriodExtractor.ViewpointDate;
 		}
 
-		private DateTime earlierDate = DateTime.MaxValue;
+		private DateOnly earlierDate = DateOnly.MaxValue;
 		private bool isNextPeriod(IAbsenceRequestOpenPeriod absenceRequestOpenPeriod)
 		{
 			var dateToCheck = absenceRequestOpenPeriod.GetPeriod(_openAbsenceRequestPeriodExtractor.ViewpointDate).StartDate;

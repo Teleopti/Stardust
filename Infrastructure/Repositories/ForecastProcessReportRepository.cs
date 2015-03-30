@@ -19,8 +19,8 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
             {
                 dates = session(uow).GetNamedQuery("ValidationReport")
                             .SetEntity("workload", workload)
-                            .SetDateTime("startDate", period.StartDate)
-                            .SetDateTime("endDate", period.EndDate)
+							.SetDateOnly("startDate", period.StartDate)
+							.SetDateOnly("endDate", period.EndDate)
                             .List<DateOnly>();
             }
 
@@ -40,16 +40,16 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
                 budgetDates = session(uow).GetNamedQuery("BudgetReport")
                             .SetEntity("workload", workload)
                             .SetEntity("scenario", scenario)
-                            .SetDateTime("startDate", period.StartDate)
-                            .SetDateTime("endDate", period.EndDate)
+							.SetDateOnly("startDate", period.StartDate)
+							.SetDateOnly("endDate", period.EndDate)
                             .SetString("longtermKey", TemplateReference.LongtermTemplateKey)
                             .List<DateOnly>();
 
                 detailedDates = session(uow).GetNamedQuery("DetailReport")
                             .SetEntity("workload", workload)
                             .SetEntity("scenario", scenario)
-                            .SetDateTime("startDate", period.StartDate)
-                            .SetDateTime("endDate", period.EndDate)
+							.SetDateOnly("startDate", period.StartDate)
+							.SetDateOnly("endDate", period.EndDate)
                             .SetString("longtermKey", TemplateReference.LongtermTemplateKey)
                             .List<DateOnly>();
             }
@@ -67,14 +67,14 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
                 dates = session(uow).GetNamedQuery("DetailReport")
                             .SetEntity("workload", workload)
                             .SetEntity("scenario", scenario)
-                            .SetDateTime("startDate", period.StartDate)
-                            .SetDateTime("endDate", period.EndDate)
+							.SetDateOnly("startDate", period.StartDate)
+							.SetDateOnly("endDate", period.EndDate)
                             .SetString("longtermKey", TemplateReference.LongtermTemplateKey)
                             .List<DateOnly>();
             }
 
             var periods = new DatesToPeriod().Convert(dates);
-            ForecastProcessReport forecasterReport = new ForecastProcessReport(periods);
+            var forecasterReport = new ForecastProcessReport(periods);
             return new List<IForecastProcessReport> {forecasterReport};
         }
 

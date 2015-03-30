@@ -63,11 +63,11 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Preference.Mapping
 				.ForMember(d => d.Weeks, o => o.ResolveUsing(s =>
 				                                        	{
 				                                        		var firstDatesOfWeeks = new List<DateOnly>();
-				                                        		var firstDateOfWeek = new DateOnly(DateHelper.GetFirstDateInWeek(s.Period.StartDate, CultureInfo.CurrentCulture).AddDays(-7));
-				                                        		var lastDisplayedDate = new DateOnly(DateHelper.GetLastDateInWeek(s.Period.EndDate, CultureInfo.CurrentCulture).AddDays(7));
+				                                        		var firstDateOfWeek = DateHelper.GetFirstDateInWeek(s.Period.StartDate, CultureInfo.CurrentCulture.DateTimeFormat.FirstDayOfWeek).AddDays(-7);
+				                                        		var lastDisplayedDate = DateHelper.GetFirstDateInWeek(s.Period.EndDate, CultureInfo.CurrentCulture.DateTimeFormat.FirstDayOfWeek).AddDays(6).AddDays(7);
 				                                        		while (firstDateOfWeek < lastDisplayedDate)
 				                                        		{
-				                                        			firstDatesOfWeeks.Add(new DateOnly(firstDateOfWeek));
+				                                        			firstDatesOfWeeks.Add(firstDateOfWeek);
 				                                        			firstDateOfWeek = firstDateOfWeek.AddDays(7);
 				                                        		}
 
@@ -149,7 +149,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Preference.Mapping
 				.ForMember(d => d.DayNumber, o => o.MapFrom(s => s.Date.Day))
 				.ForMember(d => d.DayDescription, o => o.ResolveUsing(s =>
 				                                                 	{
-				                                                 		var firstDisplayDate = new DateOnly(DateHelper.GetFirstDateInWeek(s.Period.StartDate, CultureInfo.CurrentCulture).AddDays(-7));
+				                                                 		var firstDisplayDate = DateHelper.GetFirstDateInWeek(s.Period.StartDate, CultureInfo.CurrentCulture.DateTimeFormat.FirstDayOfWeek).AddDays(-7);
 				                                                 		if (s.Date.Day == 1 || s.Date == firstDisplayDate)
 				                                                 			return CultureInfo.CurrentCulture.DateTimeFormat.GetMonthName(s.Date.Month);
 				                                                 		return string.Empty;

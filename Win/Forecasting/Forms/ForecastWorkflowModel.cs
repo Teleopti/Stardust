@@ -186,7 +186,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
                 _workPeriod = period;
             }
 
-            _compareHistoricPeriod = new DateOnlyPeriod(new DateOnly(CultureInfo.CurrentCulture.Calendar.AddMonths(_latestValidateDay, -2)), _latestValidateDay);
+            _compareHistoricPeriod = new DateOnlyPeriod(new DateOnly(CultureInfo.CurrentCulture.Calendar.AddMonths(_latestValidateDay.Date, -2)), _latestValidateDay);
         }
 
         public void InitializeValidatedVolumeDays()

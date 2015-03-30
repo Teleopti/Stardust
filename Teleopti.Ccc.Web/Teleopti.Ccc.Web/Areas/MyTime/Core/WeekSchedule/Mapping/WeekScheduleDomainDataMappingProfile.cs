@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using AutoMapper;
@@ -48,7 +47,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.Mapping
 				.ConvertUsing(s =>
 								{
 									var date = s;
-									var firstDayOfWeek = new DateOnly(DateHelper.GetFirstDateInWeek(date, CultureInfo.CurrentCulture));
+									var firstDayOfWeek = DateHelper.GetFirstDateInWeek(date, CultureInfo.CurrentCulture.DateTimeFormat.FirstDayOfWeek);
 									var week = new DateOnlyPeriod(firstDayOfWeek, firstDayOfWeek.AddDays(6));
 									var weekWithPreviousDay = new DateOnlyPeriod(firstDayOfWeek.AddDays(-1), firstDayOfWeek.AddDays(6));
 
@@ -97,10 +96,6 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.Mapping
 													{
 														var startTime = period.Value.TimePeriod(_userTimeZone.TimeZone()).StartTime;
 														var endTime = period.Value.TimePeriod(_userTimeZone.TimeZone()).EndTime;
-                                                        //if (endTime.Days > startTime.Days && x.DateOnlyAsPeriod.DateOnly != firstDayOfWeek.AddDays(-1))
-                                                        //    lateEnd = new TimeSpan(23, 59, 59);
-                                                        //else
-                                                        //    lateEnd = endTime.Days == 1 ? endTime.Add(new TimeSpan(-1, 0, 0, 0)) : endTime;
                                                         
                                                         //for the day before current week, only if end time crosses midnihgt, 
                                                         //then it is a valid end time to be carried over to first week day (endTime.Days == 1)
@@ -126,12 +121,6 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.Mapping
 													var overtimeAvailabilityStart = overtimeAvailability.StartTime.Value;
 													var overtimeAvailabilityEnd = overtimeAvailability.EndTime.Value;
 													
-                                                    //if (overtimeAvailabilityEnd.Days > overtimeAvailabilityStart.Days && x.DateOnlyAsPeriod.DateOnly != firstDayOfWeek.AddDays(-1))
-                                                    //    lateEndOvertimeAvailability = new TimeSpan(23, 59, 59);
-                                                    //else
-                                                    //    lateEndOvertimeAvailability = overtimeAvailabilityEnd.Days == 1 ? overtimeAvailabilityEnd.Add(new TimeSpan(-1, 0, 0, 0)) : overtimeAvailabilityEnd;
-                                                    
-                                                    
                                                     //for the day before current week, only if end time of OT Availability crosses midnight (ie., overtimeAvailabilityEnd.Days == 1), 
                                                     //then it is a valid end time to be carried over to the first week day 
                                                     if (x.DateOnlyAsPeriod.DateOnly == firstDayOfWeek.AddDays(-1) && overtimeAvailabilityEnd.Days == 1)
@@ -165,21 +154,21 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.Mapping
 
 									var minMaxTime = new TimePeriod(early, late);
 
-									var days = (from day in firstDayOfWeek.Date.DateRange(7)
+									var days = (from day in firstDayOfWeek.DateRange(7)
 												let scheduleDay = scheduleDays.SingleOrDefault(d => d.DateOnlyAsPeriod.DateOnly == day)
 												let scheduleYesterday = scheduleDays.SingleOrDefault(d => d.DateOnlyAsPeriod.DateOnly == day.AddDays(-1))
 												let projection = scheduleDay == null ? null : _projectionProvider.Projection(scheduleDay)
 												let projectionYesterday = scheduleYesterday == null ? null : _projectionProvider.Projection(scheduleYesterday)
 												let overtimeAvailability = scheduleDay == null || scheduleDay.OvertimeAvailablityCollection() == null ? null : scheduleDay.OvertimeAvailablityCollection().FirstOrDefault()
 												let overtimeAvailabilityYesterday = scheduleYesterday == null || scheduleYesterday.OvertimeAvailablityCollection() == null ? null : scheduleYesterday.OvertimeAvailablityCollection().FirstOrDefault()
-												let personRequestsForDay = personRequests == null ? null : (from i in personRequests where TimeZoneInfo.ConvertTimeFromUtc(i.Request.Period.StartDateTime, _userTimeZone.TimeZone()).Date == day select i).ToArray()
+												let personRequestsForDay = personRequests == null ? null : (from i in personRequests where TimeZoneInfo.ConvertTimeFromUtc(i.Request.Period.StartDateTime, _userTimeZone.TimeZone()).Date == day.Date select i).ToArray()
 												let availabilityForDay = requestProbability != null && requestProbability.First(a => a.Date == day).Availability
 												let probabilityClass = requestProbability == null ? "" : requestProbability.First(a => a.Date == day).CssClass
 												let probabilityText = requestProbability == null ? "" : requestProbability.First(a => a.Date == day).Text
 												
 												select new WeekScheduleDayDomainData
 														{
-															Date = new DateOnly(day),
+															Date = day,
 															PersonRequests = personRequestsForDay,
 															Projection = projection,
 															ProjectionYesterday = projectionYesterday,

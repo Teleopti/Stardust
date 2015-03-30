@@ -63,7 +63,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
 
 		private void initializeMultisiteDayTemplateFromMultisiteDay(IMultisiteDay multisiteDay)
 		{
-			var baseDateUtc = TimeZoneInfo.ConvertTimeToUtc(SkillDayTemplate.BaseDate, _multisiteSkill.TimeZone);
+			var baseDateUtc = TimeZoneInfo.ConvertTimeToUtc(SkillDayTemplate.BaseDate.Date, _multisiteSkill.TimeZone);
 			var templateMultisitePeriod = multisiteDay.MultisitePeriodCollection.Select(
 				multisitePeriod => new TemplateMultisitePeriod(getBaseDateTimePeriod(multisitePeriod.Period, ref baseDateUtc), multisitePeriod.Distribution)).Cast<ITemplateMultisitePeriod>().ToList();
 			_multisiteDayTemplate.SetMultisitePeriodCollection(templateMultisitePeriod);
@@ -96,7 +96,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
 
 		private DateTimePeriod initializeTimePeriod()
 		{
-			var startDateUtc = TimeZoneInfo.ConvertTimeToUtc(SkillDayTemplate.BaseDate, _multisiteSkill.TimeZone);
+			var startDateUtc = TimeZoneInfo.ConvertTimeToUtc(SkillDayTemplate.BaseDate.Date, _multisiteSkill.TimeZone);
 			return new DateTimePeriod(startDateUtc,startDateUtc.AddDays(1)).MovePeriod(_multisiteSkill.MidnightBreakOffset);
 		}
 

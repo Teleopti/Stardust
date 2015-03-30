@@ -25,7 +25,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 
 		public void SetDate(DateOnly date)
 		{
-			datePicker.Value = date;
+			datePicker.Value = date.Date;
 		}
 
 		public void SetWorkflowControlSets(IList<IWorkflowControlSet> workflowControlSets)
@@ -57,7 +57,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			Hide();
 		}
 
-		public DateTime PublishScheduleTo
+		public DateOnly PublishScheduleTo
 		{
 			get { return _presenter.PublishToDate; }
 		}

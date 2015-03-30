@@ -141,7 +141,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Common.DataProvider
 		public void GetAbsenceTimeForPeriod_WhenThereAreDifferentBudgetGroupsDuringThePeriod_ShouldUseTheBudgetGroupThatsConnectedToTheDate()
 		{
 			var anotherBudgetGroup = new BudgetGroup();
-			var nextStart = new DateOnly(_period.StartDate.AddDays(2));
+			var nextStart = _period.StartDate.AddDays(2);
 			var personPeriodWithAnotherBudgetGroup = PersonPeriodFactory.CreatePersonPeriod(nextStart);
 
 			personPeriodWithAnotherBudgetGroup.BudgetGroup = anotherBudgetGroup;
@@ -173,12 +173,11 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Common.DataProvider
 		}
 
 
-		#region helpers
 		private static IEnumerable<PayloadWorkTime> createlistWithPayloadWorkTimesForEachDateWithUsedAbsenceOf(long totalContractTimeForEachDay,DateOnlyPeriod period)
 		{
-			return period.DayCollection().Select(d => new PayloadWorkTime()
+			return period.DayCollection().Select(d => new PayloadWorkTime
 				                                          {
-					                                          BelongsToDate = d, 
+					                                          BelongsToDate = d.Date, 
 															  TotalContractTime = totalContractTimeForEachDay
 				                                          });
 
@@ -198,8 +197,5 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Common.DataProvider
 				Assert.That(absenceCount.AbsenceTime, Is.EqualTo(0), "Should be zero absence per day");
 			}
 		}
-
-		#endregion
-
 	}
 }

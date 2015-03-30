@@ -940,7 +940,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
         /// Created by: robink
         /// Created date: 2008-01-25
         /// </remarks>
-        public void GoToDate(DateTime theDate)
+        public void GoToDate(DateOnly theDate)
         {
             if (_turnOffUpdate) return;
             ITaskOwner taskOwner = _rowManagerTaskOwner.DataSource.FirstOrDefault(wd => wd.CurrentDate == theDate);
@@ -963,13 +963,13 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
             return Selections.Ranges[0].Top;
         }
 
-        public DateTime GetLocalCurrentDate(int column)
+        public DateOnly GetLocalCurrentDate(int column)
         {
             if (column > int.MaxValue) throw new ArgumentOutOfRangeException("column");
 
             int count = _rowManagerTaskOwner.DataSource.Count;
             if (count == 0)
-                return DateTime.MaxValue;
+                return DateOnly.MaxValue;
             column = Math.Min(column, count); //Get count if column is larger than actual number of items
             column = Math.Max(column, ColHeaderCount); //Get 1 if column is less than 1
 
@@ -1048,7 +1048,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
         /// <param name="date">The date.</param>
         /// <param name="backColor">if set to <c>true</c> [back color].</param>
         /// <param name="textColor">if set to <c>true</c> [text color].</param>
-        private void weekendOrWeekday(GridStyleInfo gridStyleInfo, DateTime date, bool backColor, bool textColor)
+        private void weekendOrWeekday(GridStyleInfo gridStyleInfo, DateOnly date, bool backColor, bool textColor)
         {
             if (DateHelper.IsWeekend(date, CultureInfo.CurrentCulture))
             {
@@ -1067,7 +1067,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
             }
 
             IOutlier outlier;
-            if (_outliers.TryGetValue(new DateOnly(date), out outlier))
+            if (_outliers.TryGetValue(date, out outlier))
             {
                 gridStyleInfo.CellTipText = outlier.Description.Name;
                 gridStyleInfo.BackColor = ColorHelper.GridControlOutlierColor();
@@ -1083,14 +1083,14 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
             get { return TimeSpan.FromDays(1); }
         }
 
-        public override DateTime FirstDateTime
+        public override DateTime FirstDate
         {
-            get { return _rowManagerTaskOwner.DataSource.First().CurrentDate; }
+            get { return _rowManagerTaskOwner.DataSource.First().CurrentDate.Date; }
         }
 
-        public override DateTime LastDateTime
+        public override DateTime LastDate
         {
-            get { return _rowManagerTaskOwner.DataSource.Last().CurrentDate; }
+            get { return _rowManagerTaskOwner.DataSource.Last().CurrentDate.Date; }
         }
 
         protected override IDictionary<DateTime, double> GetRowDataForChart(GridRangeInfo gridRangeInfo)

@@ -905,8 +905,7 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.Views
 				}
 				else
 				{
-					FilteredPeopleHolder.DeleteSchedulePeriod(i - 1,
-															  new DateOnly(FilteredPeopleHolder.SelectedDate));
+					FilteredPeopleHolder.DeleteSchedulePeriod(i - 1, FilteredPeopleHolder.SelectedDate);
 
 					FilteredPeopleHolder.GetParentSchedulePeriodWhenUpdated(i - 1);
 					Grid.InvalidateRange(

@@ -5,7 +5,6 @@ using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
 using Teleopti.Ccc.UserTexts;
 using Teleopti.Ccc.Win.Common;
 using Teleopti.Ccc.Win.Common.Controls.DateSelection;
-using Teleopti.Ccc.WinCode.Common;
 using Teleopti.Ccc.WinCode.Scheduling;
 using Teleopti.Interfaces.Domain;
 
@@ -19,7 +18,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			InitializeComponent();
 			outlookTimePickerFrom.EnableNull = false;
 			outlookTimePickerTo.EnableNull = false;
-			datePicker.Value = defaultDate;
+			datePicker.Value = defaultDate.Date;
 			datePicker.SetCultureInfoSafe(CultureInfo.CurrentCulture);
 			SetTexts();
 			_presenter = new FilterOvertimeAvailabilityPresenter(schedulerStateHolder);

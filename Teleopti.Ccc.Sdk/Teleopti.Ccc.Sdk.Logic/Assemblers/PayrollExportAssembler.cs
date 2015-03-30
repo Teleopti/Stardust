@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Linq;
 using System.Reflection;
-using Teleopti.Ccc.Domain.Common.EntityBaseTypes;
 using Teleopti.Ccc.Domain.Payroll;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Security.Principal;
@@ -35,8 +34,8 @@ namespace Teleopti.Ccc.Sdk.Logic.Assemblers
             dto.Period = _dateTimePeriodAssembler.DomainEntityToDto(entity.Period.ToDateTimePeriod(timeZone));
 	        dto.DatePeriod = new DateOnlyPeriodDto
 		        {
-			        StartDate = new DateOnlyDto {DateTime = entity.Period.StartDate},
-			        EndDate = new DateOnlyDto {DateTime = entity.Period.EndDate}
+			        StartDate = new DateOnlyDto {DateTime = entity.Period.StartDate.Date},
+			        EndDate = new DateOnlyDto {DateTime = entity.Period.EndDate.Date}
 		        };
             dto.TimeZoneId = timeZone.Id;
             dto.Name = entity.Name;

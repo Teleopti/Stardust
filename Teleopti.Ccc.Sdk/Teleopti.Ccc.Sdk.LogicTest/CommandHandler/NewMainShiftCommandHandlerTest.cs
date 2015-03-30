@@ -31,7 +31,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
         private IMessageBrokerEnablerFactory _messageBrokerEnablerFactory;
         private NewMainShiftCommandHandler _target;
         private static DateTime _startDate = new DateTime(2012, 1, 1, 0, 0, 0, DateTimeKind.Utc);
-		private readonly DateOnlyDto _dateOnlydto = new DateOnlyDto { DateTime = new DateOnly(_startDate) };
+		private readonly DateOnlyDto _dateOnlydto = new DateOnlyDto { DateTime = _startDate.Date };
         private IPerson _person;
         private IScenario _scenario;
         private IShiftCategory _shiftCategory;

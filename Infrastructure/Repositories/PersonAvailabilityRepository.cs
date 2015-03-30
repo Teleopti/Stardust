@@ -18,7 +18,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 		{
 		}
 
-		public IEnumerable<IPersonAvailability> LoadPersonAvailabilityWithHierarchyData(IEnumerable<IPerson> persons, DateTime startDate)
+		public IEnumerable<IPersonAvailability> LoadPersonAvailabilityWithHierarchyData(IEnumerable<IPerson> persons, DateOnly startDate)
 		{
 			var rep2 = new AvailabilityRepository(UnitOfWork);
 			rep2.LoadAvailabilitiesWithHierarchyData(persons,startDate);
@@ -40,7 +40,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 		}
 
 		public ICollection<IPersonAvailability> Find(IEnumerable<IPerson> persons,
-												   DateTimePeriod period)
+												   DateOnlyPeriod period)
 		{
 			InParameter.NotNull("persons", persons);
 
@@ -48,7 +48,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 			foreach (var personBatch in persons.Batch(400))
 			{
 				personAvailabilites.AddRange(Session.CreateCriteria(typeof(PersonAvailability))
-					.Add(Restrictions.Between("StartDate", period.StartDateTime, period.EndDateTime))
+					.Add(Restrictions.Between("StartDate", period.StartDate, period.EndDate))
 					.Add(Restrictions.In("Person", personBatch.ToArray()))
 					.List<IPersonAvailability>());
 			}

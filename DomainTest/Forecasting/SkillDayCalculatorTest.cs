@@ -24,15 +24,9 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
             skill = SkillFactory.CreateSkill("My skill");
             skillDays = new List<ISkillDay>
                             {
-                                SkillDayFactory.CreateSkillDay(skill,
-                                                               DateTime.SpecifyKind(SkillDayTemplate.BaseDate,
-                                                                                    DateTimeKind.Utc)),
-                                SkillDayFactory.CreateSkillDay(skill,
-                                                               DateTime.SpecifyKind(SkillDayTemplate.BaseDate,
-                                                                                    DateTimeKind.Utc).AddDays(1)),
-                                SkillDayFactory.CreateSkillDay(skill,
-                                                               DateTime.SpecifyKind(SkillDayTemplate.BaseDate,
-                                                                                    DateTimeKind.Utc).AddDays(2))
+                                SkillDayFactory.CreateSkillDay(skill, SkillDayTemplate.BaseDate),
+                                SkillDayFactory.CreateSkillDay(skill, SkillDayTemplate.BaseDate.AddDays(1)),
+                                SkillDayFactory.CreateSkillDay(skill, SkillDayTemplate.BaseDate.AddDays(2))
                             };
             _visiblePeriod = new DateOnlyPeriod(skillDays[0].CurrentDate, skillDays[2].CurrentDate);
 

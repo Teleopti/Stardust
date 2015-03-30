@@ -10,7 +10,6 @@ using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.Win.Common;
 using Teleopti.Ccc.Win.Common.Controls;
 using Teleopti.Ccc.Win.Forecasting.Forms;
-using Teleopti.Ccc.WinCode.Common;
 using Teleopti.Ccc.WinCode.Common.Chart;
 using Teleopti.Ccc.WinCode.Common.Rows;
 using Teleopti.Interfaces.Domain;
@@ -100,12 +99,12 @@ namespace Teleopti.Ccc.Win.Scheduling.SkillResult
 			Refresh();
 		}
 
-		public void GoToDate(DateTime theDate)
+		public void GoToDate(DateOnly theDate)
 		{
 			RefreshGrid();
 		}
 
-		public DateTime GetLocalCurrentDate(int column)
+		public DateOnly GetLocalCurrentDate(int column)
 		{
 			throw new NotImplementedException();
 		}
