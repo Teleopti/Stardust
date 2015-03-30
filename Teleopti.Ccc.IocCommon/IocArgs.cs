@@ -55,7 +55,7 @@ namespace Teleopti.Ccc.IocCommon
 			TenantServer = appConfigReader.AppConfig("TenantServer");
 			ConfigServer = appConfigReader.AppConfig("ConfigServer");
 			ReportServer = appConfigReader.AppConfig("ReportServer");
-			ReportServer = appConfigReader.AppConfig("MatrixWebSiteUrl");
+			MatrixWebSiteUrl = appConfigReader.AppConfig("MatrixWebSiteUrl");
 			PublishEventsToServiceBus = readBoolAppSetting(appConfigReader.AppConfig("PublishEventsToServiceBus"), true);
 			DataSourceConfigurationSetter = Infrastructure.NHibernateConfiguration.DataSourceConfigurationSetter.ForWeb();
 			ClearCache = false;
