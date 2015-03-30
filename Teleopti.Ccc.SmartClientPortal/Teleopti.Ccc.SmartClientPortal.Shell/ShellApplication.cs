@@ -85,7 +85,8 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 				typeof(FrameworkElement),
 				new FrameworkPropertyMetadata(XmlLanguage.GetLanguage(CultureInfo.CurrentCulture.IetfLanguageTag)));
 
-			createAppConfigReader();
+			if(!createAppConfigReader())
+				return;
 			
 			IContainer container = configureContainer();
 #if (!DEBUG)
@@ -161,7 +162,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 
 
 		private static IAppConfigReader appConfigReader;
-		private static void createAppConfigReader()
+		private static bool createAppConfigReader()
 		{
 			var overrideConfigReader = new OverrideConfigFilesReader(Environment.CurrentDirectory);
 			var overrides = overrideConfigReader.Overrides();
@@ -171,7 +172,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 				{
 					preLogonView.ShowDialog();
 					if (preLogonView.DialogResult != DialogResult.OK)
-						Application.Exit();
+						return false;
 
 					appConfigReader = new MultipleAppConfigReader(new AppConfigReader(), overrides[preLogonView.GetData()]);
 				}
@@ -180,6 +181,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 			{
 				appConfigReader = new AppConfigReader();
 			}
+			return true;
 		}
 
 		private static IContainer configureContainer()
