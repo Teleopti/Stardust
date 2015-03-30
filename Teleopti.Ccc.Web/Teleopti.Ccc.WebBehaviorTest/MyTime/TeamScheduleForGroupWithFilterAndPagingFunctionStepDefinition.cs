@@ -157,6 +157,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.MyTime
 		[When(@"The schedules have been populated")]
 		public void GivenTheSchedulesHaveBeenPopulated()
 		{
+			Browser.Interactions.AssertExists("#existsWhenLoadingStarts");
 			Browser.Interactions.AssertExists("#existsWhenLoadingFinishes");
 		}
 
@@ -179,6 +180,11 @@ namespace Teleopti.Ccc.WebBehaviorTest.MyTime
 			Browser.Interactions.AssertEventualExists("#Team-Picker option");
 			IOpenTheTeamPicker();
 			Select2Box.SelectItemByText("Team-Picker", optionText);
+			
+			Browser.Interactions.AssertExists("#existsWhenLoadingStarts");
+			Browser.Interactions.AssertExists("#existsWhenLoadingFinishes");
+
+			Browser.Interactions.SelectOptionByTextUsingJQuery("#Team-Picker", optionText);
 		}
 
 		[When(@"I select something in the team picker")]
