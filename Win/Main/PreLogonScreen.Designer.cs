@@ -34,8 +34,8 @@
 			this.pictureBox2 = new System.Windows.Forms.PictureBox();
 			this.buttonLogOnOK = new Syncfusion.Windows.Forms.ButtonAdv();
 			this.panel1 = new System.Windows.Forms.Panel();
-			this.labelChooseSDK = new System.Windows.Forms.Label();
 			this.comboBoxAdvSDKList = new Syncfusion.Windows.Forms.Tools.ComboBoxAdv();
+			this.labelChooseSDK = new System.Windows.Forms.Label();
 			((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
 			((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).BeginInit();
 			this.panel1.SuspendLayout();
@@ -89,20 +89,6 @@
 			this.panel1.Size = new System.Drawing.Size(285, 148);
 			this.panel1.TabIndex = 7;
 			// 
-			// labelChooseSDK
-			// 
-			this.labelChooseSDK.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-			this.labelChooseSDK.AutoSize = true;
-			this.labelChooseSDK.BackColor = System.Drawing.Color.Transparent;
-			this.labelChooseSDK.Font = new System.Drawing.Font("Segoe UI", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-			this.labelChooseSDK.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(153)))), ((int)(((byte)(255)))));
-			this.labelChooseSDK.Location = new System.Drawing.Point(0, 0);
-			this.labelChooseSDK.Name = "labelChooseSDK";
-			this.labelChooseSDK.Size = new System.Drawing.Size(101, 25);
-			this.labelChooseSDK.TabIndex = 37;
-			this.labelChooseSDK.Text = "Select SDK";
-			// 
 			// comboBoxAdvSDKList
 			// 
 			this.comboBoxAdvSDKList.BackColor = System.Drawing.Color.White;
@@ -114,6 +100,20 @@
 			this.comboBoxAdvSDKList.Name = "comboBoxAdvSDKList";
 			this.comboBoxAdvSDKList.Size = new System.Drawing.Size(223, 23);
 			this.comboBoxAdvSDKList.TabIndex = 38;
+			// 
+			// labelChooseSDK
+			// 
+			this.labelChooseSDK.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+			this.labelChooseSDK.AutoSize = true;
+			this.labelChooseSDK.BackColor = System.Drawing.Color.Transparent;
+			this.labelChooseSDK.Font = new System.Drawing.Font("Segoe UI", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			this.labelChooseSDK.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(153)))), ((int)(((byte)(255)))));
+			this.labelChooseSDK.Location = new System.Drawing.Point(0, 0);
+			this.labelChooseSDK.Name = "labelChooseSDK";
+			this.labelChooseSDK.Size = new System.Drawing.Size(184, 25);
+			this.labelChooseSDK.TabIndex = 37;
+			this.labelChooseSDK.Text = "Select Configuration";
 			// 
 			// PreLogonScreen
 			// 
