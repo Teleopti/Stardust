@@ -56,7 +56,7 @@ namespace Teleopti.Ccc.Win.Main
             builder.RegisterType<PortalSettingsProvider>().SingleInstance();
             builder.RegisterType<BudgetGroupGroupNavigatorView>();
             builder.RegisterType<BudgetGroupNavigatorModel>();
-            builder.RegisterType<PerformanceManagerNavigator>();
+            builder.Register(c => new PerformanceManagerNavigator(_config.Args().MatrixWebSiteUrl));
             builder.RegisterType<PayrollExportNavigator>();
             builder.RegisterType<ShiftsNavigationPanel>();
             builder.RegisterType<PeopleNavigator>();

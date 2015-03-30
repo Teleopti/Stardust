@@ -3,7 +3,6 @@ using System.Diagnostics;
 using System.Globalization;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.Security.Principal;
-using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.Win.Common;
 using Teleopti.Interfaces.Domain;
 
@@ -11,9 +10,12 @@ namespace Teleopti.Ccc.Win.PerformanceManager
 {
     public partial class PerformanceManagerNavigator : AbstractNavigator
     {
-        public PerformanceManagerNavigator()
+	    private readonly string _matrixWebSiteUrl;
+
+	    public PerformanceManagerNavigator(string matrixWebSiteUrl)
         {
-            InitializeComponent();
+				_matrixWebSiteUrl = matrixWebSiteUrl;
+				InitializeComponent();
 
             if (!DesignMode)
             {
@@ -50,7 +52,7 @@ namespace Teleopti.Ccc.Win.PerformanceManager
 
             var proc = new Process {EnableRaisingEvents = false, StartInfo = {FileName = "iexplore.exe"}};
 
-			var matrixUrl = StateHolder.Instance.StateReader.ApplicationScopeData.AppSettings["MatrixWebSiteUrl"] + "/PmContainer.aspx?pm=1&forceformslogin={0}&buid={1}";
+			var matrixUrl = _matrixWebSiteUrl + "/PmContainer.aspx?pm=1&forceformslogin={0}&buid={1}";
 			matrixUrl = string.Format(CultureInfo.CurrentCulture, matrixUrl, forceFormsLogin, bUnitID);
 			proc.StartInfo.Arguments = string.Format(CultureInfo.CurrentCulture, matrixUrl, forceFormsLogin, bUnitID);
             //proc.Start();
