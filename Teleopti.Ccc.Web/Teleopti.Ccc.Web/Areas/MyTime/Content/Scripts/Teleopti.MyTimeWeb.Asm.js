@@ -44,6 +44,7 @@ Teleopti.MyTimeWeb.Asm = (function () {
 	};
 
 	function asmViewModel(yesterday) {
+		
 		var self = this;
 		self.intervalPointer = null;
 
@@ -106,7 +107,8 @@ Teleopti.MyTimeWeb.Asm = (function () {
 		self.yesterday = ko.observable(yesterday);
 		self.unreadMessageCount = ko.observable(0);
 		self.canvasPosition = ko.computed(function () {
-			var msSinceStart = self.now() - self.yesterday().getTime();
+			var now = new Date(self.now());
+			var msSinceStart = (now.getHours() * 60 * 60 + now.getMinutes() * 60 + now.getSeconds() + 24 * 60 * 60) * 1000;
 			var hoursSinceStart = msSinceStart / 1000 / 60 / 60;
 			return -(pixelPerHours * hoursSinceStart) + 'px';
 		});
