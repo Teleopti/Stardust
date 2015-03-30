@@ -6,6 +6,7 @@ var wfm = angular.module('wfm', [
 	'ui.tree',
 	'ngMaterial',
 	'angularMoment',
+	'pascalprecht.translate',
 	'restService',
 	'restSearchService',
 	'restNotificationService',
@@ -29,7 +30,7 @@ var wfm = angular.module('wfm', [
 	'wfm.areas'
 ]);
 wfm.config([
-	'$stateProvider', '$urlRouterProvider', function($stateProvider, $urlRouterProvider) {
+	'$stateProvider', '$urlRouterProvider', '$translateProvider', function ($stateProvider, $urlRouterProvider, $translateProvider) {
 		$urlRouterProvider.otherwise("forecasting");
 		$stateProvider.state('main', {
 			url: '/',
@@ -80,9 +81,12 @@ wfm.config([
 			templateUrl: 'html/seatManagement/seatmap.html',
 			controller: 'SeatMapCtrl'
 		});
+
+		$translateProvider.useUrlLoader('../api/Global/Language');
+		$translateProvider.preferredLanguage('en');
 	}
 ]).run([
-	'$rootScope', '$http', '$state', function($rootScope, $http, $state) {
+	'$rootScope', '$http', '$state', '$translate', function ($rootScope, $http, $state, $translate) {
 		var timeout = Date.now() + 10000;
 
 		var checkCurrentUser = function() {
@@ -119,6 +123,7 @@ wfm.config([
 		var startContext = checkCurrentUser();
 		startContext.error(userNotAuthenticatedHandler);
 		startContext.success(function (data) {
+			$translate.use(data.Language);
 			increaseTimeout();
 
 			var ab1 = new ABmetrics();
