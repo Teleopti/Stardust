@@ -19,8 +19,7 @@ namespace Teleopti.Ccc.Infrastructure.Foundation
 		{
 			request.AllowAutoRedirect = false;
 			request.Method = "POST";
-			request.ContentType = "application/json; charset=utf-8";
-			request.ContentLength = json.Length;
+			request.ContentType = "application/json";
 
 			using (var requestWriter = new StreamWriter(request.GetRequestStream()))
 			{
