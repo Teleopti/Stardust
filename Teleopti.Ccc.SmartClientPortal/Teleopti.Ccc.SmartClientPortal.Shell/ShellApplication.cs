@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Configuration;
 using System.Globalization;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading;
@@ -164,7 +165,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 		private static IAppConfigReader appConfigReader;
 		private static bool createAppConfigReader()
 		{
-			var overrideConfigReader = new OverrideConfigFilesReader(Environment.CurrentDirectory);
+			var overrideConfigReader = new OverrideConfigFilesReader(Path.GetDirectoryName(Application.ExecutablePath));
 			var overrides = overrideConfigReader.Overrides();
 			if (overrides.Any())
 			{
