@@ -35,7 +35,7 @@
 
 					viewModel.fill(data);
 
-					if (resources.RTA_RtaLastStatesOverview_27789 && !resources.RTA_NoBroker_31237)
+					if (!resources.RTA_NoBroker_31237)
 						loadCurrentData();
 
 					if (resources.RTA_DrilldownToAllAgentsInOneTeam_25234) {

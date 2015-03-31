@@ -172,7 +172,6 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Controllers
 					MyTeam_MakeTeamScheduleConsistent_31897 = _toggles.IsEnabled(Toggles.MyTeam_MakeTeamScheduleConsistent_31897),
 
 					RTA_ViewAgentsForMultipleTeams_28967 = _toggles.IsEnabled(Toggles.RTA_ViewAgentsForMultipleTeams_28967),
-					RTA_RtaLastStatesOverview_27789 = _toggles.IsEnabled(Toggles.RTA_RtaLastStatesOverview_27789),
 					RTA_MonitorMultipleBusinessUnits_28348 = _toggles.IsEnabled(Toggles.RTA_MonitorMultipleBusinessUnits_28348),
 					RTA_DrilldownToAllAgentsInOneTeam_25234 = _toggles.IsEnabled(Toggles.RTA_DrilldownToAllAgentsInOneTeam_25234),
 

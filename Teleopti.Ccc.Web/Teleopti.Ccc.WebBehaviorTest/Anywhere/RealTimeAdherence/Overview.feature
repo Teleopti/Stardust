@@ -3,24 +3,6 @@
 	As a real time analyst
 	I want to see which parts of the organization currently not adhering to the schedule
 
-@OnlyRunIfDisabled('RTA_RtaLastStatesOverview_27789')
-Scenario: Show site
-	Given the time is '2014-01-21 13:00'
-	And I have a role with
-	| Field                                  | Value             |
-	| Name                                   | Real time analyst |
-	| Access to real time adherence overview | True              |
-	And there is a site named 'London'
-	And there is a team named 'Red' on site 'London'
-	And Guy London has a person period with
-	| Field      | Value      |
-	| Team       | Red      |
-	| Start Date | 2014-01-01 |
-	When I view Real time adherence overview
-	Then I should see the site 'London'
-	And I should see the overlay 'waiting three dots'
-
-@OnlyRunIfEnabled('RTA_RtaLastStatesOverview_27789')
 Scenario: Show site without always loading status
 	Given the time is '2014-01-21 13:00'
 	And I have a role with
@@ -36,24 +18,6 @@ Scenario: Show site without always loading status
 	When I view Real time adherence overview
 	Then I should see the site 'London'
 
-@OnlyRunIfDisabled('RTA_RtaLastStatesOverview_27789')
-Scenario: Show team
-	Given the time is '2014-01-21 13:00'
-	And I have a role with
-	| Field                                  | Value             |
-	| Name                                   | Real time analyst |
-	| Access to real time adherence overview | True              |
-	And there is a site named 'London'
-	And there is a team named 'Red' on site 'London'
-	And Guy Red has a person period with
-	| Field      | Value      |
-	| Team       | Red      |
-	| Start Date | 2014-01-01 |
-	When I view Real time adherence for site 'London'
-	Then I should see the team 'Red'
-	And I should see the overlay 'waiting three dots'
-
-@OnlyRunIfEnabled('RTA_RtaLastStatesOverview_27789')
 Scenario: Show team without always loading status
 	Given the time is '2014-01-21 13:00'
 	And I have a role with
@@ -196,7 +160,6 @@ Scenario: Should be able to go to Real time adherence overview
 	When I view Anywhere
 	Then I should see Real time adherence overview in the menu
 
-@OnlyRunIfEnabled('RTA_RtaLastStatesOverview_27789')
 Scenario: View current state of sum of employees not adhering to schedule for each site
 	Given I have a role with
 	| Field                                  | Value             |
@@ -249,7 +212,6 @@ Scenario: View current state of sum of employees not adhering to schedule for ea
 	Then I should see site 'Paris' with 1 of 1 employees out of adherence
 	And I should see site 'London' with 0 of 1 employees out of adherence
 
-@OnlyRunIfEnabled('RTA_RtaLastStatesOverview_27789')
 Scenario: View current state of sum of employees not adhering to schedule for each team within a site
 	Given I have a role with
 	| Field                                  | Value             |
