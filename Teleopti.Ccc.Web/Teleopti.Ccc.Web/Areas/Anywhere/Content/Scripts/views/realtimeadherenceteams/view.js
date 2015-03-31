@@ -38,13 +38,6 @@
 					if (!resources.RTA_NoBroker_31237)
 						loadCurrentData();
 
-					if (resources.RTA_DrilldownToAllAgentsInOneTeam_25234) {
-						for (var i = 0; i < viewModel.teams().length; i++) {
-							var team = viewModel.teams()[i];
-							team.canOpenTeam(true);
-						}
-					}
-
 					if (resources.RTA_ViewAgentsForMultipleTeams_28967) {
 						viewModel.agentStatesForMultipleTeams(true);
 					}

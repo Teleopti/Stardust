@@ -33,7 +33,6 @@
 		Settings_SetAgentDescription_23257,
 		Settings_AlertViaEmailFromSMSLink_30444,
 
-		RTA_DrilldownToAllAgentsInOneTeam_25234,
 		RTA_MonitorMultipleBusinessUnits_28348,
 		RTA_ChangeScheduleInAgentStateView_29934,
 		RTA_SeePercentageAdherenceForOneAgent_30783,

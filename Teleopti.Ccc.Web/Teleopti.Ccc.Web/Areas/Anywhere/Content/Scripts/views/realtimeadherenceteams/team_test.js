@@ -23,7 +23,6 @@
 				};
 
 				var teamviewmodel = team();
-				teamviewmodel.canOpenTeam(true);
 				teamviewmodel.openTeam();
 
 				assert.isFalse(hasNeverBeenCalled);

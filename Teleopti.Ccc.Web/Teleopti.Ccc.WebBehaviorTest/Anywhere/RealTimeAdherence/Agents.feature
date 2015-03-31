@@ -13,7 +13,6 @@ Scenario: Should not be able to see agents if not permitted
 	When I try to view real time adherence for team 'Red'
 	Then I should see a message that I have no permission for this function
 
-@OnlyRunIfEnabled('RTA_DrilldownToAllAgentsInOneTeam_25234')
 Scenario: Should be able to see current states of all agents
 	Given there is an activity named 'Phone'
 	And there is an activity named 'Lunch'
@@ -95,7 +94,6 @@ Scenario: Should be able to see current states of all agents
 		| Alarm Color              | Green              |
 
 @ignore
-@OnlyRunIfEnabled('RTA_DrilldownToAllAgentsInOneTeam_25234')
 Scenario: Should be able to see state updates of all agents
 	Given there is an activity named 'Phone'
 	And there is an activity named 'Lunch'
@@ -176,7 +174,6 @@ Scenario: Should be able to see state updates of all agents
 		| Alarm Time               | 0:15:00       |
 		| Alarm Color              | Green         |
 
-@OnlyRunIfEnabled('RTA_DrilldownToAllAgentsInOneTeam_25234')
 Scenario: Should be able to see all agents of the team with or without state updates
 	Given there is an activity named 'Phone'
 	And there is an activity named 'Lunch'

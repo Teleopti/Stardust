@@ -17,7 +17,7 @@
 					<!-- ko if: $root.agentStatesForMultipleTeams -->
 					<input class="checkbox" type="checkbox" data-bind="checked: $root.teamsToOpen, attr:{value: Id, name : Name}" />
 					<!-- /ko -->
-					<div data-bind="click: openTeam, css: { drilldown: canOpenTeam }">
+					<div class="drilldown" data-bind="click: openTeam">
 						<!-- ko ifnot: hasBeenUpdated -->
 						<div class="overlay">
 							<h1 data-bind="text: $root.resources.WaitingThreeDots"></h1>
