@@ -25,7 +25,9 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 		[Scope(Feature = "Buster test")]
 		public void ThenIShouldSeeAllTestsPassBuster()
 		{
-			Browser.Interactions.AssertNotExists(".success", ".failure");
+			Browser.Interactions.AssertExists(".stats.success");
+			Browser.Interactions.AssertFirstContains(".stats", "0 failures");
+			Browser.Interactions.AssertFirstContains(".stats", "0 errors");
 		}
 
 	}

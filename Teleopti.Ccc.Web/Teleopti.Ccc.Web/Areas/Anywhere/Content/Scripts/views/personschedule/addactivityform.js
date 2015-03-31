@@ -134,7 +134,13 @@ define([
 		
 		this.DefaultStart = ko.computed(function () {
 
-			var now = moment(new Date(new Date().getTeleoptiTime()));
+			// PLEASE STOP USING getTeleoptiTime in Anywhere!
+			if (new Date().getTeleoptiTime) {
+				var now = moment(new Date(new Date().getTeleoptiTime()));
+			} else {
+				var now = moment(new Date(new Date().getTime()));
+			}
+
 			var nowInUserTimeZone = now.tz(timezoneCurrent.IanaTimeZone());
 			var start;
 			if (self.ShiftStart() < nowInUserTimeZone && nowInUserTimeZone < self.ShiftEnd()) {
