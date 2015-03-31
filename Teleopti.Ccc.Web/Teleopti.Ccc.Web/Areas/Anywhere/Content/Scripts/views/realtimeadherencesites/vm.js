@@ -25,7 +25,6 @@
 			that.resources = resources;
 			that.sites = ko.observableArray();
 			that.sitesToOpen = ko.observableArray();
-			that.agentStatesForMultipleSites = ko.observable();
 			that.monitorMultipleBusinessUnits = ko.observable();
 			that.BusinessUnitId = ko.observable();
 
@@ -86,9 +85,6 @@
 
 						if (!resources.RTA_NoBroker_31237)
 							loadCurrentData();
-
-						if (resources.RTA_ViewAgentsForMultipleTeams_28967)
-							that.agentStatesForMultipleSites(true);
 
 						if (resources.RTA_MonitorMultipleBusinessUnits_28348)
 							that.monitorMultipleBusinessUnits(true);

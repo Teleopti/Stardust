@@ -1,22 +1,16 @@
 ﻿<div class="container realtimeadherencesites">
 
-	<!-- ko if: agentStatesForMultipleSites-->
 	<div class="row">
-		<!-- ko if: agentStatesForMultipleSites-->
 		<div class="col-md-4 pull-right">
 			<button class="btn btn-xs open btn-default pull-right" data-bind="click: openSelectedSites">Open selected sites</button>
 		</div>
-		<!-- /ko -->
 	</div>
-	<!-- /ko -->
 	<br />
 		<div class="row" data-bind="foreach: sites">
 			<div data-bind="if: NumberOfAgents > 0">
 				<div class="col-md-4">
 					<div class="well well-sm site">
-						<!-- ko if: $root.agentStatesForMultipleSites -->
 						<input class="checkbox" type="checkbox" data-bind="checked: $root.sitesToOpen, attr:{value: Id, name : Name}" />
-						<!-- /ko -->
 						<div data-bind="click: openSite">
 							<!-- ko ifnot: hasBeenUpdated -->
 							<div class="overlay">

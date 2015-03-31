@@ -31,7 +31,6 @@
 			};
 
 			that.teamsToOpen = ko.observableArray();
-			that.agentStatesForMultipleTeams = ko.observable();
 			that.SetViewOptions = function(options) {
 				that.BusinessUnitId(options.buid);
 				that.rootURI('#realtimeadherencesites/' + that.BusinessUnitId());

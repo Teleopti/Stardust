@@ -32,7 +32,6 @@ Scheduler_ShowIntadayESLWithShrinkage_21874 = true
 MyReport_AgentQueueMetrics_22254 = true
 MyTeam_MoveActivity_25206 = true
 Request_ShiftTradeRequestForMoreDays_20918 = true
-RTA_ViewAgentsForMultipleTeams_28967 = true
 Request_GiveCommentWhenDenyOrApproveShiftTradeRequest_28341 = true
 Request_SeePossibleShiftTradesFromAllTeams_28770 = true
 Request_FilterPossibleShiftTradeByTime_24560 = true

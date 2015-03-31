@@ -48,7 +48,6 @@
 		MyTeam_Reports_31070,
 		MyTeam_AbsenceBackToWork_31478,
 
-		RTA_ViewAgentsForMultipleTeams_28967,
 		RTA_NotifyViaSMS_31567,
 
 		MyTimeWeb_AgentBadge_28913,

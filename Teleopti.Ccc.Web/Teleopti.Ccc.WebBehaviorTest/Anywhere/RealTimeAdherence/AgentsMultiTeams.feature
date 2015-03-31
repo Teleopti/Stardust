@@ -3,7 +3,6 @@
 	As a real time analyst
 	I want to see who is currently not adhering to the schedule
 	
-@OnlyRunIfEnabled('RTA_ViewAgentsForMultipleTeams_28967')
 Scenario: Should be able to see agents for multiple sites
 	Given there is a site named 'Paris'
 	And there is a team named 'Team Paris' on site 'Paris'
@@ -29,7 +28,6 @@ Scenario: Should be able to see agents for multiple sites
 	Then I should see real time agent name for 'Pierre Baldi'
 	And I should see real time agent name for 'Ashley Andeen'
 
-@OnlyRunIfEnabled('RTA_ViewAgentsForMultipleTeams_28967')
 Scenario: Should be able to see agents for multiple teams
 	Given there is a site named 'Stockholm'
 	And there is a team named 'Täby' on site 'Stockholm'

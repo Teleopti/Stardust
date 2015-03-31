@@ -87,26 +87,21 @@
 
 			if (options.id === 'MultipleTeams') {
 				subscriptions.unsubscribeAdherence();
-				if (resources.RTA_ViewAgentsForMultipleTeams_28967) {
-					var teams = amplify.store('MultipleTeams');
-					for (var i = 0; i < teams.length; i++) {
-						populateViewModel(teams[i]);
-					}
+				var teams = amplify.store('MultipleTeams');
+				for (var i = 0; i < teams.length; i++) {
+					populateViewModel(teams[i]);
 				}
 			} else if (options.id === 'MultipleSites') {
-				if (resources.RTA_ViewAgentsForMultipleTeams_28967) {
-					var sites = amplify.store('MultipleSites');
-					for (var site = 0; site < sites.length; site++) {
-						ajax.ajax({
-							url: "Teams/ForSite?siteId=" + sites[site],
-							success: function (data) {
-								for (var teamInSite = 0; teamInSite < data.length; teamInSite++) {
-									populateViewModel(data[teamInSite].Id);
-								}
+				var sites = amplify.store('MultipleSites');
+				for (var site = 0; site < sites.length; site++) {
+					ajax.ajax({
+						url: "Teams/ForSite?siteId=" + sites[site],
+						success: function(data) {
+							for (var teamInSite = 0; teamInSite < data.length; teamInSite++) {
+								populateViewModel(data[teamInSite].Id);
 							}
-						});
-					}
-
+						}
+					});
 				}
 			} else {
 				populateViewModel(options.id);

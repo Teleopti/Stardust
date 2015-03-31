@@ -38,9 +38,6 @@
 					if (!resources.RTA_NoBroker_31237)
 						loadCurrentData();
 
-					if (resources.RTA_ViewAgentsForMultipleTeams_28967) {
-						viewModel.agentStatesForMultipleTeams(true);
-					}
 				}
 			});
 
