@@ -512,7 +512,7 @@
     <Compile Include="Forecasting\Angel\ForecastingAccuracy.cs" />
     <Compile Include="Forecasting\Angel\ForecastingTargetMerger.cs" />
     <Compile Include="Forecasting\Angel\Accuracy\ForecastingWeightedMeanAbsolutePercentageError.cs" />
-    <Compile Include="Forecasting\Angel\ForecastMethod.cs" />
+    <Compile Include="Forecasting\Angel\TeleoptiClassic.cs" />
     <Compile Include="Forecasting\Angel\Future\ForecastVolumeApplier.cs" />
     <Compile Include="Forecasting\Angel\Future\FutureData.cs" />
     <Compile Include="Forecasting\Angel\Future\IFutureData.cs" />

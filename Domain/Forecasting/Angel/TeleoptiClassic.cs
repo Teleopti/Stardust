@@ -4,11 +4,11 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Forecasting.Angel
 {
-	public class ForecastMethod : IForecastMethod
+	public class TeleoptiClassic : IForecastMethod
 	{
 		private readonly IIndexVolumes _indexVolumes;
 
-		public ForecastMethod(IIndexVolumes indexVolumes)
+		public TeleoptiClassic(IIndexVolumes indexVolumes)
 		{
 			_indexVolumes = indexVolumes;
 		}

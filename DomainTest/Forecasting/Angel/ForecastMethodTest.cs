@@ -49,7 +49,7 @@ namespace Teleopti.Ccc.DomainTest.Forecasting.Angel
 	[TestFixture]
 	public class ForecastMethodTest
 	{
-        private ForecastMethod target;
+        private TeleoptiClassic target;
         private TaskOwnerPeriod historicalData;
 		private double _averageTasks;
 
@@ -70,7 +70,7 @@ namespace Teleopti.Ccc.DomainTest.Forecasting.Angel
 
 			_averageTasks = historicalData.TotalStatisticCalculatedTasks / historicalData.TaskOwnerDayCollection.Count;
 
-			target = new ForecastMethod(indexVolumes);
+			target = new TeleoptiClassic(indexVolumes);
 		}
 
 		[Test]

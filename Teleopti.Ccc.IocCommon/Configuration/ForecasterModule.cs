@@ -29,7 +29,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<IndexVolumes>()
 				.SingleInstance()
 				.As<IIndexVolumes>();
-			builder.RegisterType<ForecastMethod>()
+			builder.RegisterType<TeleoptiClassic>()
 				.SingleInstance()
 				.As<IForecastMethod>();
 			builder.RegisterType<QuickForecasterWorkload>()
