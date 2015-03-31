@@ -237,6 +237,7 @@
     <Compile Include="Rta\RtaLoadExternalLogOnProcTest.cs" />
     <Compile Include="Repositories\BusinessUnitFilterOverriderTest.cs" />
     <Compile Include="Rta\RtaRepositoryTest.cs" />
+    <Compile Include="Scheduling\PlanningPeriod\PlanningPeriodModelPersisterTest.cs" />
     <Compile Include="Toggle\ApplicationFunctionFeatureFlagTest.cs" />
     <Compile Include="Toggle\TogglesActiveTest.cs" />
     <Compile Include="Licensing\CheckLicenseExistsTest.cs" />
