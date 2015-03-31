@@ -5,6 +5,6 @@ namespace Teleopti.Ccc.Web.Areas.SeatPlanner.Core.Providers
 {
 	public interface ILocationHierarchyProvider
 	{
-		LocationViewModel Get (string path);
+		LocationViewModel Get ();
 	}
 }

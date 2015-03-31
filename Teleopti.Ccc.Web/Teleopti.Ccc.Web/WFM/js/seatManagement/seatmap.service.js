@@ -1,10 +1,11 @@
 ﻿'use strict';
 
-var seatMapService = angular.module('seatMapService', []);
-seatMapService.factory('SeatMapService', ['$rootScope', function($rootScope) {
+angular.module('seatMapService', ['ngResource'])
+	.factory('SeatMapService', ['$rootScope', '$resource', function ($rootScope, $resource) {
 
-	var seatMapService = {};
-	return seatMapService;
+		var seatMapService = {};
+		return seatMapService;
 
-}]);
+	}]);
+
 

@@ -3,8 +3,8 @@
 	<div>
 		<h1>Seat Plan</h1>
 	</div>
-	
-	<div class="notice warning">Not indicative of UI Design - just a port of existing prototype for now.</div>
+
+	<div class="alert-warning">Not indicative of UI Design - just a port of existing prototype for now.</div>
 
 	<div class="material-block-content">
 
@@ -27,33 +27,62 @@
 
 		<div class="tree">
 			<div ui-tree data-drag-enabled="false">
-				<ol ui-tree-nodes="" ng-model="Locations" id="tree-root" class="tree-line" toggle-focus>
-					<li ng-repeat="node in Locations | filter:searchLocations" ui-tree-node ng-include="'nodes_renderer.html'"></li>
+				<ol ui-tree-nodes="" ng-model="locations" id="tree-root" class="tree-line" toggle-focus>
+					<li ng-repeat="node in locations | filter:searchLocations" ui-tree-node ng-include="'locations_renderer.html'"></li>
+				</ol>
+			</div>
+		</div>
+		
+		
+		<div class="input-prepend">
+			<i class="mdi mdi-filter-outline"></i>
+			<input type="text" name="filterTeams" ng-model="searchTeams" placeholder="Teams filter ..." />
+		</div>
+
+		<div class="tree">
+			<div ui-tree data-drag-enabled="false">
+				<ol ui-tree-nodes="" ng-model="teams" id="tree-root" class="tree-line" toggle-focus>
+					<li ng-repeat="node in teams | filter:searchTeams" ui-tree-node ng-include="'teams_renderer.html'"></li>
 				</ol>
 			</div>
 		</div>
 
 		<div>
-			<button class="wfm-btn wfm-btn-primary next-step" ng-click="nextStep(period)">Plan Seats...</button>
+			<button class="wfm-btn wfm-btn-primary next-step" ng-click="addSeatPlan()">Plan Seats...</button>
 		</div>
 	</div>
 
-		<div class="clearfix"></div>
+	<div class="clearfix"></div>
 
 </div>
 
 
-<script type="text/ng-template" id="nodes_renderer.html">
+<script type="text/ng-template" id="locations_renderer.html">
 	<div class="tree-toggle-group">
-		<div class="toggle-handle" ng-class="{open: node.show}" ng-click="node.show = !node.show"><i ng-show="node.children.length > 0" class="mdi mdi-chevron-right"></i></div>
-		<div ui-tree-handle ng-class="{selected: node.selected}" ng-click="selectLocationNode(node)" ng-hide="checked">
-			{{node.name}}
+		<div class="toggle-handle" ng-class="{open: node.show}" ng-click="node.show = !node.show"><i ng-show="node.Children.length > 0" class="mdi mdi-chevron-right"></i></div>
+		<div ui-tree-handle ng-class="{selected: node.selected}" ng-click="node.selected = !node.selected" ng-hide="checked">
+			{{getLocationDisplayText(node)}}
 			<span><i class="mdi mdi-check"></i></span>
 		</div>
 	</div>
 
-	<ol ui-tree-nodes="" ng-model="node.children" ng-show="node.show">
-		<li ng-repeat="node in node.children | filter:searchLocations" ui-tree-node ng-include="'nodes_renderer.html'">
+	<ol ui-tree-nodes="" ng-model="node.Children" ng-show="node.show">
+		<li ng-repeat="node in node.Children | filter:searchLocations" ui-tree-node ng-include="'locations_renderer.html'">
+		</li>
+	</ol>
+</script>
+
+<script type="text/ng-template" id="teams_renderer.html">
+	<div class="tree-toggle-group">
+		<div class="toggle-handle" ng-class="{open: node.show}" ng-click="node.show = !node.show"><i ng-show="node.Children.length > 0" class="mdi mdi-chevron-right"></i></div>
+		<div ui-tree-handle ng-class="{selected: node.selected}" ng-click="selectTeam(node)" ng-hide="checked">
+			{{getTeamDisplayText(node)}}
+			<span><i class="mdi mdi-check"></i></span>
+		</div>
+	</div>
+
+	<ol ui-tree-nodes="" ng-model="node.Children" ng-show="node.show">
+		<li ng-repeat="node in node.Children | filter:searchLocations" ui-tree-node ng-include="'teams_renderer.html'">
 		</li>
 	</ol>
 </script>

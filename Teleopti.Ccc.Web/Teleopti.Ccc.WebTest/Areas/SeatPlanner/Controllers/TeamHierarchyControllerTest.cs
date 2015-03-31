@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using NUnit.Framework;
 using Rhino.Mocks;
 using SharpTestsEx;
@@ -11,7 +9,6 @@ using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Infrastructure.Rta;
 using Teleopti.Ccc.TestCommon.FakeData;
-using Teleopti.Ccc.Web.Areas.Anywhere.Controllers;
 using Teleopti.Ccc.Web.Areas.SeatPlanner.Controllers;
 using Teleopti.Ccc.Web.Areas.SeatPlanner.Core.Providers;
 using Teleopti.Ccc.Web.Areas.SeatPlanner.Core.ViewModels;
@@ -59,9 +56,9 @@ namespace Teleopti.Ccc.WebTest.Areas.SeatPlanner.Controllers
 			var result = target.Get() as dynamic;
 			var businessUnitWithSitesViewModel = result as BusinessUnitWithSitesViewModel;
 			businessUnitWithSitesViewModel.Should().Not.Be.Null();
-			var siteViewModel = businessUnitWithSitesViewModel.Sites.SingleOrDefault(x => x.Id == site.Id.ToString());
+			var siteViewModel = businessUnitWithSitesViewModel.Children.SingleOrDefault(x => x.Id == site.Id.ToString());
 			siteViewModel.Should().Not.Be.Null();
-			var teamViewModel = siteViewModel.Teams.SingleOrDefault (x => x.Id == team.Id.ToString());
+			var teamViewModel = siteViewModel.Children.SingleOrDefault (x => x.Id == team.Id.ToString());
 			teamViewModel.Should().Not.Be.Null();
 		}
 

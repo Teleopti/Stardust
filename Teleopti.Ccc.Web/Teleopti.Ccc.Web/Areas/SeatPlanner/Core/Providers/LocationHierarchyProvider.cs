@@ -16,7 +16,7 @@ namespace Teleopti.Ccc.Web.Areas.SeatPlanner.Core.Providers
 			_seatMapLocationRepository = seatMapLocationRepository;
 		}
 
-		public LocationViewModel Get(string path)
+		public LocationViewModel Get()
 		{
 
 			LocationViewModel locationViewModel = null;

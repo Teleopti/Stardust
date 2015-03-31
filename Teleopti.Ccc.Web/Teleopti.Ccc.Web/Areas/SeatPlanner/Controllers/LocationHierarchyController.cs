@@ -1,8 +1,8 @@
-﻿using System.Web.Hosting;
-using System.Web.Http;
+﻿using System.Web.Http;
 using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Web.Areas.SeatPlanner.Core.Providers;
+using Teleopti.Ccc.Web.Areas.SeatPlanner.Core.ViewModels;
 using Teleopti.Ccc.Web.Filters;
 
 namespace Teleopti.Ccc.Web.Areas.SeatPlanner.Controllers
@@ -17,11 +17,10 @@ namespace Teleopti.Ccc.Web.Areas.SeatPlanner.Controllers
 			_locationHierarchyProvider = locationHierarchyProvider;
 		}
 
-		[UnitOfWork, Route("SeatPlanner/LocationHierarchy/Get"), HttpGet]
-		public virtual object Get()
+		[UnitOfWork, Route("api/SeatPlanner/Locations"), HttpGet]
+		public virtual LocationViewModel Get()
 		{
-			 var path = HostingEnvironment.MapPath("~/Areas/SeatPlanner/Content/Temp/Locations.txt");
-			return _locationHierarchyProvider.Get (path);
+			return _locationHierarchyProvider.Get ();
 		}
 	}
 }

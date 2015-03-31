@@ -491,6 +491,7 @@
     <Compile Include="Areas\SeatPlanner\Controllers\SeatMapCommandController.cs" />
     <Compile Include="Areas\SeatPlanner\Controllers\SeatMapController.cs" />
     <Compile Include="Areas\SeatPlanner\Controllers\SeatPlanCommandController.cs" />
+    <Compile Include="Areas\SeatPlanner\Controllers\SeatPlanController.cs" />
     <Compile Include="Areas\SeatPlanner\Core\Providers\ILocationHierarchyProvider.cs" />
     <Compile Include="Areas\SeatPlanner\Core\Providers\ISeatMapProvider.cs" />
     <Compile Include="Areas\SeatPlanner\Core\Providers\LocationHierarchyProvider.cs" />
@@ -1225,7 +1226,11 @@
     <Content Include="WFM\js\resourceplanner\filter.service.js" />
     <Content Include="WFM\js\search\search.controller.js" />
     <Content Include="WFM\js\search\search.service.js" />
+    <Content Include="WFM\js\seatManagement\_modules.js" />
+    <Content Include="WFM\js\seatManagement\seatmapcanvas.directive.js" />
     <Content Include="WFM\js\seatManagement\seatmap.controller.js" />
+    <Content Include="WFM\html\seatManagement\seatmapcanvas.html" />
+    <Content Include="WFM\js\seatManagement\seatmapcanvasutils.service.js" />
     <Content Include="WFM\js\seatManagement\seatplan.controller.js" />
     <Content Include="WFM\js\seatManagement\seatmap.service.js" />
     <Content Include="WFM\js\seatManagement\seatplan.service.js" />
@@ -1628,6 +1633,9 @@
     <Content Include="WFM\vendor\angular-material\themes\yellow-theme.css" />
     <Content Include="WFM\vendor\angular-ui-tree\angular-ui-tree.min.css" />
     <Content Include="WFM\vendor\angular-ui-tree\angular-ui-tree.min.js" />
+    <Content Include="WFM\vendor\fabricjs\fabric.js" />
+    <Content Include="WFM\vendor\fabricjs\fabric.min.js" />
+    <Content Include="WFM\vendor\fabricjs\fabricjs_viewport.js" />
     <Content Include="WFM\vendor\hammerjs\.gitignore" />
     <Content Include="WFM\vendor\hammerjs\hammer.js" />
     <Content Include="WFM\vendor\hammerjs\hammer.min.js" />

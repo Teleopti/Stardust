@@ -2,6 +2,7 @@
 using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Web.Areas.SeatPlanner.Core.Providers;
+using Teleopti.Ccc.Web.Areas.SeatPlanner.Core.ViewModels;
 using Teleopti.Ccc.Web.Filters;
 
 namespace Teleopti.Ccc.Web.Areas.SeatPlanner.Controllers
@@ -16,9 +17,9 @@ namespace Teleopti.Ccc.Web.Areas.SeatPlanner.Controllers
 		{
 			_teamsProvider = teamsProvider;
 		}
-		
-		[UnitOfWork, Route("SeatPlanner/TeamHierarchy/Get"), HttpGet]
-		public virtual object Get()
+
+		[UnitOfWork, Route("api/SeatPlanner/Teams"), HttpGet]
+		public virtual BusinessUnitWithSitesViewModel Get()
 		{
 			return _teamsProvider.GetTeamHierarchy();
 

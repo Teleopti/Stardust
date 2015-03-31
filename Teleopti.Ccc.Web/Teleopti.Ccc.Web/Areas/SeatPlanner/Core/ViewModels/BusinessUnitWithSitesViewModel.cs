@@ -6,7 +6,7 @@ namespace Teleopti.Ccc.Web.Areas.SeatPlanner.Core.ViewModels
 	{
 		private List<SiteViewModelWithTeams> _sites = new List<SiteViewModelWithTeams>();
 
-		public List<SiteViewModelWithTeams> Sites
+		public List<SiteViewModelWithTeams> Children
 		{
 			get { return _sites; }
 			set { _sites = value; }

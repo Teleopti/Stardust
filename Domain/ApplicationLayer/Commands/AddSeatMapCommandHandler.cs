@@ -72,7 +72,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Commands
 				locationsToDelete = from childLocation in parentSeatMapLocation.ChildLocations
 				where command.ChildLocations.All (child => child.Id != childLocation.Id)
 				select childLocation;
-
 			}
 
 			locationsToDelete.ToList().ForEach (deleteSeatMapAndLocation);
@@ -80,6 +79,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Commands
 
 		private void deleteSeatMapAndLocation(SeatMapLocation seatMapLocation)
 		{
+			deleteSeatsAndBookingsFromLocation (seatMapLocation, seatMapLocation.Seats);
 			seatMapLocation.ParentLocation.ChildLocations.Remove (seatMapLocation);
 			_seatMapLocationRepository.Remove(seatMapLocation);
 		}
@@ -103,12 +103,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Commands
 
 		private void deleteRemovedSeats(AddSeatMapCommand command, SeatMapLocation seatMapLocation)
 		{
-			deleteSeatsFromLocation(command, seatMapLocation);
-			seatMapLocation.ChildLocations.ForEach (childLocation => deleteRemovedSeats (command, childLocation));
-		}
-
-		private void deleteSeatsFromLocation (AddSeatMapCommand command, SeatMapLocation seatMapLocation)
-		{
 			IEnumerable<ISeat> seatsToDelete;
 
 			if (command.Seats == null)
@@ -123,6 +117,11 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Commands
 						select seat).ToList();
 			}
 
+			deleteSeatsAndBookingsFromLocation(seatMapLocation, seatsToDelete);
+		}
+
+		private void deleteSeatsAndBookingsFromLocation (SeatMapLocation seatMapLocation, IEnumerable<ISeat> seatsToDelete)
+		{
 			_seatBookingRepository.RemoveSeatBookingsForSeats (seatsToDelete);
 			seatsToDelete.ToList().ForEach (seat => seatMapLocation.Seats.Remove (seat));
 		}

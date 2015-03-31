@@ -61,14 +61,14 @@ namespace Teleopti.Ccc.Web.Areas.SeatPlanner.Core.Providers
 
 				siteViewModels.Add(siteViewModel);
 				var teamViewModels = getTeamsForSite(site);
-				siteViewModel.Teams.AddRange(teamViewModels);
+				siteViewModel.Children.AddRange(teamViewModels);
 			}
 
 			return new BusinessUnitWithSitesViewModel()
 			{
 				Id = currentBusinessUnit.Id ?? Guid.Empty,
 				Name = currentBusinessUnit.Name,
-				Sites = siteViewModels
+				Children = siteViewModels
 			};
 
 		}

@@ -12,6 +12,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Commands
 		public DateTime StartDate { get; set; }
 		public DateTime EndDate { get; set; }
 		public TrackedCommandInfo TrackedCommandInfo { get; set; }
+
+		// Robtodo: needed anymore??
 		public IList<string> ValidationResult { get; set; }
 		public bool IsValid()
 		{
