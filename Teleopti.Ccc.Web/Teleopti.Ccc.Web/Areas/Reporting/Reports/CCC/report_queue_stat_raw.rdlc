@@ -6,13 +6,10 @@
         <TablixBody>
           <TablixColumns>
             <TablixColumn>
-              <Width>5cm</Width>
+              <Width>5.94886cm</Width>
             </TablixColumn>
             <TablixColumn>
-              <Width>14.96311cm</Width>
-            </TablixColumn>
-            <TablixColumn>
-              <Width>6.87652cm</Width>
+              <Width>21.04982cm</Width>
             </TablixColumn>
           </TablixColumns>
           <TablixRows>
@@ -49,10 +46,9 @@
                         <PaddingBottom>2pt</PaddingBottom>
                       </Style>
                     </Textbox>
-                    <ColSpan>3</ColSpan>
+                    <ColSpan>2</ColSpan>
                   </CellContents>
                 </TablixCell>
-                <TablixCell />
                 <TablixCell />
               </TablixCells>
             </TablixRow>
@@ -89,7 +85,6 @@
                         <PaddingTop>2pt</PaddingTop>
                       </Style>
                     </Textbox>
-                    <rd:Selected>true</rd:Selected>
                   </CellContents>
                 </TablixCell>
                 <TablixCell>
@@ -122,11 +117,8 @@
                         <PaddingTop>2pt</PaddingTop>
                       </Style>
                     </Textbox>
-                    <ColSpan>2</ColSpan>
-                    <rd:Selected>true</rd:Selected>
                   </CellContents>
                 </TablixCell>
-                <TablixCell />
               </TablixCells>
             </TablixRow>
             <TablixRow>
@@ -162,7 +154,6 @@
                         <PaddingTop>2pt</PaddingTop>
                       </Style>
                     </Textbox>
-                    <rd:Selected>true</rd:Selected>
                   </CellContents>
                 </TablixCell>
                 <TablixCell>
@@ -195,11 +186,8 @@
                         <PaddingTop>2pt</PaddingTop>
                       </Style>
                     </Textbox>
-                    <ColSpan>2</ColSpan>
-                    <rd:Selected>true</rd:Selected>
                   </CellContents>
                 </TablixCell>
-                <TablixCell />
               </TablixCells>
             </TablixRow>
             <TablixRow>
@@ -235,7 +223,6 @@
                         <PaddingTop>2pt</PaddingTop>
                       </Style>
                     </Textbox>
-                    <rd:Selected>true</rd:Selected>
                   </CellContents>
                 </TablixCell>
                 <TablixCell>
@@ -268,11 +255,8 @@
                         <PaddingTop>2pt</PaddingTop>
                       </Style>
                     </Textbox>
-                    <ColSpan>2</ColSpan>
-                    <rd:Selected>true</rd:Selected>
                   </CellContents>
                 </TablixCell>
-                <TablixCell />
               </TablixCells>
             </TablixRow>
             <TablixRow>
@@ -308,7 +292,6 @@
                         <PaddingTop>2pt</PaddingTop>
                       </Style>
                     </Textbox>
-                    <rd:Selected>true</rd:Selected>
                   </CellContents>
                 </TablixCell>
                 <TablixCell>
@@ -341,11 +324,8 @@
                         <PaddingTop>2pt</PaddingTop>
                       </Style>
                     </Textbox>
-                    <ColSpan>2</ColSpan>
-                    <rd:Selected>true</rd:Selected>
                   </CellContents>
                 </TablixCell>
-                <TablixCell />
               </TablixCells>
             </TablixRow>
             <TablixRow>
@@ -381,7 +361,6 @@
                         <PaddingTop>2pt</PaddingTop>
                       </Style>
                     </Textbox>
-                    <rd:Selected>true</rd:Selected>
                   </CellContents>
                 </TablixCell>
                 <TablixCell>
@@ -414,11 +393,8 @@
                         <PaddingTop>2pt</PaddingTop>
                       </Style>
                     </Textbox>
-                    <ColSpan>2</ColSpan>
-                    <rd:Selected>true</rd:Selected>
                   </CellContents>
                 </TablixCell>
-                <TablixCell />
               </TablixCells>
             </TablixRow>
             <TablixRow>
@@ -454,7 +430,6 @@
                         <PaddingTop>2pt</PaddingTop>
                       </Style>
                     </Textbox>
-                    <rd:Selected>true</rd:Selected>
                   </CellContents>
                 </TablixCell>
                 <TablixCell>
@@ -486,11 +461,8 @@
                         <PaddingTop>2pt</PaddingTop>
                       </Style>
                     </Textbox>
-                    <ColSpan>2</ColSpan>
-                    <rd:Selected>true</rd:Selected>
                   </CellContents>
                 </TablixCell>
-                <TablixCell />
               </TablixCells>
             </TablixRow>
           </TablixRows>
@@ -499,55 +471,47 @@
           <TablixMembers>
             <TablixMember />
             <TablixMember />
-            <TablixMember />
           </TablixMembers>
         </TablixColumnHierarchy>
         <TablixRowHierarchy>
           <TablixMembers>
             <TablixMember>
-              <KeepWithGroup>Before</KeepWithGroup>
               <KeepTogether>true</KeepTogether>
             </TablixMember>
             <TablixMember>
               <Visibility>
                 <ToggleItem>textbox46</ToggleItem>
               </Visibility>
-              <KeepWithGroup>Before</KeepWithGroup>
               <KeepTogether>true</KeepTogether>
             </TablixMember>
             <TablixMember>
               <Visibility>
                 <ToggleItem>textbox46</ToggleItem>
               </Visibility>
-              <KeepWithGroup>Before</KeepWithGroup>
               <KeepTogether>true</KeepTogether>
             </TablixMember>
             <TablixMember>
               <Visibility>
                 <ToggleItem>textbox46</ToggleItem>
               </Visibility>
-              <KeepWithGroup>Before</KeepWithGroup>
               <KeepTogether>true</KeepTogether>
             </TablixMember>
             <TablixMember>
               <Visibility>
                 <ToggleItem>textbox46</ToggleItem>
               </Visibility>
-              <KeepWithGroup>Before</KeepWithGroup>
               <KeepTogether>true</KeepTogether>
             </TablixMember>
             <TablixMember>
               <Visibility>
                 <ToggleItem>textbox46</ToggleItem>
               </Visibility>
-              <KeepWithGroup>Before</KeepWithGroup>
               <KeepTogether>true</KeepTogether>
             </TablixMember>
             <TablixMember>
               <Visibility>
                 <Hidden>=IIf(IsNothing(Fields!hide_time_zone.Value) , True, IIf(Fields!hide_time_zone.Value = True, True, False))</Hidden>
               </Visibility>
-              <KeepWithGroup>Before</KeepWithGroup>
               <KeepTogether>true</KeepTogether>
             </TablixMember>
           </TablixMembers>
@@ -555,7 +519,7 @@
         <KeepTogether>true</KeepTogether>
         <DataSetName>DataSet1</DataSetName>
         <Height>4.1cm</Height>
-        <Width>26.83963cm</Width>
+        <Width>26.99868cm</Width>
         <Style />
       </Tablix>
       <Tablix Name="table2">
@@ -565,7 +529,7 @@
               <Width>2.01864cm</Width>
             </TablixColumn>
             <TablixColumn>
-              <Width>2.77566cm</Width>
+              <Width>2.41623cm</Width>
             </TablixColumn>
             <TablixColumn>
               <Width>1.51399cm</Width>
@@ -601,13 +565,13 @@
               <Width>1.5cm</Width>
             </TablixColumn>
             <TablixColumn>
-              <Width>1.5cm</Width>
+              <Width>1.5717cm</Width>
             </TablixColumn>
             <TablixColumn>
               <Width>1.75001cm</Width>
             </TablixColumn>
             <TablixColumn>
-              <Width>1.76632cm</Width>
+              <Width>1.62575cm</Width>
             </TablixColumn>
             <TablixColumn>
               <Width>1.5cm</Width>
@@ -3696,14 +3660,14 @@
         <DataSetName>DataSet1</DataSetName>
         <Top>4.5675cm</Top>
         <Height>3.75001cm</Height>
-        <Width>27.4283cm</Width>
+        <Width>27cm</Width>
         <ZIndex>1</ZIndex>
         <Style />
       </Tablix>
       <Line Name="line3">
         <Top>4.385cm</Top>
         <Height>0cm</Height>
-        <Width>27.25cm</Width>
+        <Width>27cm</Width>
         <ZIndex>2</ZIndex>
         <Style>
           <Border>
@@ -3868,9 +3832,9 @@
               </Style>
             </Paragraph>
           </Paragraphs>
-          <Top>0.12367cm</Top>
+          <Top>0.14111cm</Top>
           <Height>0.50265cm</Height>
-          <Width>27.5cm</Width>
+          <Width>27cm</Width>
           <Style>
             <PaddingLeft>2pt</PaddingLeft>
             <PaddingRight>2pt</PaddingRight>
