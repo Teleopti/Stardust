@@ -1166,6 +1166,7 @@
     <Content Include="Areas\Anywhere\Content\Scripts\views\realtimeadherenceagents\vm_test.js" />
     <Content Include="Areas\MyTime\Content\Scripts\Teleopti.MyTimeWeb.TeamScheduleUtility.js" />
     <Content Include="Areas\MyTime\Content\Scripts\Teleopti.MyTimeWeb.TeamScheduleViewModel.js" />
+    <Content Include="Areas\Reporting\images\icon-show.png" />
     <Content Include="Areas\Reporting\images\icon.doc.png" />
     <Content Include="Areas\Reporting\images\icon_show.gif" />
     <Content Include="Areas\Reporting\images\next.gif" />

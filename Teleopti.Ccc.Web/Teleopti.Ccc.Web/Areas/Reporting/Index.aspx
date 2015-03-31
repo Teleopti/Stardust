@@ -44,7 +44,7 @@
 						<asp:ImageButton Style="float: left;" formtarget="_blank" OnClick="ButtonShowClickPdf" ID="buttonShowPdf" Width="48" Height="48" ImageUrl="images/filetype_pdf.png" ToolTip='' runat="server" />
 					</div>
                     <div style="float:left; width: 25%">
-						<asp:ImageButton Style="float:right; " formtarget="_blank" OnClick="ButtonShowClickImage" ID="buttonShowImage" Width="47" Height="48" ImageUrl="images/icon_show.gif" ToolTip='' runat="server" />
+						<asp:ImageButton Style="float:right; " formtarget="_blank" OnClick="ButtonShowClickImage" ID="buttonShowImage" Width="48" Height="48" ImageUrl="images/icon-show.png" ToolTip='' runat="server" />
 					</div>
 				</div>
 			</div>

@@ -26,7 +26,7 @@
 				</div>
 				<div style="float: right; width: 69%">
 					<div style="float: left; width: 33%;">
-						<asp:ImageButton Style="float: right;margin-right: 25px" OnClick="buttonShowTheReport" ID="buttonShowReport" ImageUrl="images/icon_show.gif" ToolTip='Show report' runat="server" />
+						<asp:ImageButton Style="float: right;margin-right: 25px" OnClick="buttonShowTheReport" ID="buttonShowReport" Width="48" Height="48" ImageUrl="images/icon-show.png" ToolTip='Show report' runat="server" />
 					</div>				
 				</div>
 			</div>
