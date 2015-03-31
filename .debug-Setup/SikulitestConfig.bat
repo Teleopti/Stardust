@@ -43,16 +43,10 @@ ECHO %commonFolder% >>%logFile%
 
 COPY "c:\XmlSetAttribute.exe" %commonFolder%\XmlSetAttribute.exe
 
-SLEEP 3
 
 SET nodePath=configuration/appSettings/add[@key='GetConfigFromWebService']
 SET attributeName=value
 SET attributeValue=false
-%commonFolder%\XmlSetAttribute.exe %configPath% %nodePath% %attributeName% %attributeValue%
-
-SET nodePath=configuration/appSettings/add[@key='nhibconfpath']
-SET attributeName=value
-SET attributeValue=%ROOTDIR%\nhib
 %commonFolder%\XmlSetAttribute.exe %configPath% %nodePath% %attributeName% %attributeValue%
 
 SET nodePath=configuration/appSettings/add[@key='FeatureToggle']
