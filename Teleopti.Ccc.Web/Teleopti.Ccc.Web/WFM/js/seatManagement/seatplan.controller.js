@@ -32,26 +32,24 @@ angular.module('wfm.seatPlan')
 
 		$scope.addSeatPlan = function() {
 			var selectedTeams = [];
-			if ($scope.teams.length > 0) {
-				var node = $scope.teams[0];
-				getSelectedTeams(node, selectedTeams);
+			if (this.teams.length > 0) {
+				getSelectedTeams(this.teams[0], selectedTeams);
 			}
 
 			var selectedLocations = [];
-			if ($scope.locations.length > 0) {
-				var node = $scope.locations[0];
-				getSelectedLocations(node, selectedLocations);
+			if (this.locations.length > 0) {
+				getSelectedLocations(this.locations[0], selectedLocations);
 			}
 
 			var addSeatPlanCommand = {
-				StartDate: $scope.period.startDate,
-				EndDate: $scope.period.endDate,
+				StartDate: this.period.startDate,
+				EndDate: this.period.endDate,
 				Teams: selectedTeams,
 				Locations: selectedLocations
 			};
 
 			SeatPlanService.seatPlan.add(addSeatPlanCommand).$promise.then(function (result) {
-				NoticeCtrl.triggerCallbacks();
+				alert('seat plan submitted');
 			});
 		};
 
@@ -67,7 +65,7 @@ angular.module('wfm.seatPlan')
 
 			if (node.Children) {
 				for (var i in node.Children) {
-					$scope.getSelectedTeams(node.Children[i], teams);
+					getSelectedTeams(node.Children[i], teams);
 				}
 			}
 		};
@@ -78,7 +76,7 @@ angular.module('wfm.seatPlan')
 			}
 			if (node.Children) {
 				for (var i in node.Children) {
-					$scope.getSelectedLocations(node.Children[i], locations);
+					getSelectedLocations(node.Children[i], locations);
 				}
 			}
 
