@@ -37,7 +37,7 @@ namespace Teleopti.Ccc.DomainTest.Forecasting.Angel.Accuracy
 			var currentScenario = MockRepository.GenerateStub<ICurrentScenario>();
 			currentScenario.Stub(x => x.Current()).Return(DefaultScenario);
 
-			var quickForecasterWorkloadEvaluator = new QuickForecastWorkloadEvaluator(new HistoricalData(dailyStatistics, validatedVolumeDayRepository), new ForecastMethod(new IndexVolumes()), new ForecastingWeightedMeanAbsolutePercentageError());
+			var quickForecasterWorkloadEvaluator = new QuickForecastWorkloadEvaluator(new HistoricalData(dailyStatistics), new ForecastMethod(new IndexVolumes()), new ForecastingWeightedMeanAbsolutePercentageError());
 			var target = new QuickForecastSkillEvaluator(quickForecasterWorkloadEvaluator);
 			var measurementResult = target.Measure(Workload.Skill, HistoricalPeriod);
 
