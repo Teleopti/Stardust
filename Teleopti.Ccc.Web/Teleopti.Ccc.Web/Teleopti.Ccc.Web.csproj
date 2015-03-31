@@ -429,6 +429,7 @@
     <Compile Include="Areas\Global\AreaWithPermissionPath.cs" />
     <Compile Include="Areas\Forecasting\Controllers\SkillViewModel.cs" />
     <Compile Include="Areas\Forecasting\Controllers\WorkloadViewModel.cs" />
+    <Compile Include="Areas\Global\LanguageController.cs" />
     <Compile Include="Areas\Global\NotificationsController.cs" />
     <Compile Include="Areas\Global\WfmAreaRegistration.cs" />
     <Compile Include="Areas\Global\UserController.cs" />

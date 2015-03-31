@@ -2,18 +2,16 @@
 describe('AreasCtrl', function() {
 	var $q,
 	    $rootScope,
-	    $httpBackend,
-	    $translate;
+	    $httpBackend;
 
 	beforeEach( module('wfm'));
 
-	beforeEach(inject(function (_$httpBackend_, _$q_, _$rootScope_, _$translate_) {
+	beforeEach(inject(function (_$httpBackend_, _$q_, _$rootScope_) {
 		$q = _$q_;
 		$rootScope = _$rootScope_;
 		$httpBackend = _$httpBackend_;
 		$httpBackend.expectGET("../api/Global/Language?lang=en").respond(200, { "meta": { "code": 200, "errors": null }, "response": { "allowed": false } });
 		$httpBackend.expectGET("../api/Global/User/CurrentUser").respond(200, { "meta": { "code": 200, "errors": null }, "response": { "allowed": false } });
-		$translate = _$translate_;
 	}));
 
 	it('not null', inject(function($controller) {

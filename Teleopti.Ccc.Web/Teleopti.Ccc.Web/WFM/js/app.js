@@ -123,6 +123,7 @@ wfm.config([
 		var startContext = checkCurrentUser();
 		startContext.error(userNotAuthenticatedHandler);
 		startContext.success(function (data) {
+			$translate.fallbackLanguage('en');
 			$translate.use(data.Language);
 			increaseTimeout();
 

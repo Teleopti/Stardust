@@ -32,7 +32,7 @@
 												<path fill="#555555" d="M19,21H8V7H19M19,5H8A2,2 0 0,0 6,7V21A2,2 0 0,0 8,23H19A2,2 0 0,0 21,21V7A2,2 0 0,0 19,5M16,1H4A2,2 0 0,0 2,3V17H4V3H16V1Z" />
 											</svg>
 											<md-tooltip>
-												Duplicate
+												{{'Duplicate' | translate}}
 											</md-tooltip>
 										</i>
 										<i ng-click="editing = true">
@@ -55,7 +55,7 @@
 								</div>
 								<span ng-hide="editing">{{role.DescriptionText}}</span>
 								<form ng-show="editing" ng-submit="editing = false; updateRole(role)">
-									<input type="text" class="inline-role-name" ng-model="role.DescriptionText" placeholder="Name" ng-required />
+									<input type="text" class="inline-role-name" ng-model="role.DescriptionText" placeholder="{{'Name' | translate}}" ng-required />
 								</form>
 							</li>
 						</ul>
@@ -67,8 +67,8 @@
 			<div class="col-lg-8">
 				<article class="tab-group wfm-toggle-group material-depth-2">
 					<input type="radio" name="perms-tabs" ng-model="roleDetails" ng-value="'functionsAvailable'" id="tab-1" />
-					<label class="label" for="tab-1">
-						{{'Functions' | translate}}
+					<label class="label" for="tab-1" translate style="text-transform: capitalize">
+						Functions
 					</label>
 
 					<section>
@@ -78,7 +78,7 @@
 									<div class="col-lg-6">
 										<div class="input-prepend">
 											<i class="mdi mdi-filter-outline"></i>
-											<input type="text" name="filterDetails" ng-model="searchPermissions" placeholder="Permissions filter ..." />
+											<input type="text" name="filterDetails" ng-model="searchPermissions" placeholder="{{'PermissionsFilterThreeDots' | translate}}" />
 										</div>
 									</div>
 									<div class="col-lg-3">
@@ -112,8 +112,8 @@
 						</div>
 					</section>
 					<input type="radio" name="perms-tabs" ng-model="roleDetails" ng-value="'dataAvailable'" id="tab-2" />
-					<label class="label" for="tab-2">
-						{{'Data' | translate}}
+					<label class="label" for="tab-2" translate>
+						Data
 					</label>
 					<section>
 						<div class="tab-container">

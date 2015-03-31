@@ -12901,4 +12901,12 @@ Reduce the complexity to use these shifts.</value>
   <data name="TimeSpanTextBoxSilverThresholdsForAHT" xml:space="preserve">
     <value>Value of silver threshold For AHT should be smaller than bronze threshold for AHT</value>
   </data>
+  <data name="Duplicate" xml:space="preserve">
+    <value>Duplicate</value>
+    <comment>Duplicate on the web</comment>
+  </data>
+  <data name="PermissionsFilterThreeDots" xml:space="preserve">
+    <value>Permissions filter...</value>
+    <comment>Permissions filter on the web</comment>
+  </data>
 </root>
