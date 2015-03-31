@@ -58,6 +58,24 @@ namespace Teleopti.Ccc.Web.Areas.Reporting {
         protected global::System.Web.UI.WebControls.Label labelPermissionDenied;
         
         /// <summary>
+        /// buttonShowWord control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.ImageButton buttonShowWord;
+        
+        /// <summary>
+        /// buttonShowExcel control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.ImageButton buttonShowExcel;
+        
+        /// <summary>
         /// buttonShowPdf control.
         /// </summary>
         /// <remarks>
@@ -74,23 +92,5 @@ namespace Teleopti.Ccc.Web.Areas.Reporting {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.ImageButton buttonShowImage;
-        
-        /// <summary>
-        /// buttonShowExcel control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.ImageButton buttonShowExcel;
-        
-        /// <summary>
-        /// buttonShowWord control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.ImageButton buttonShowWord;
     }
 }
