@@ -12,8 +12,7 @@ namespace Teleopti.Ccc.DomainTest.Forecasting.Angel.Accuracy
 	{
 		protected override void Assert(ForecastingAccuracy[] measurementResult)
 		{
-			measurementResult.First().CanForecast.Should().Be.EqualTo(true);
-			measurementResult.First().Accuracy.Should().Be.EqualTo(Double.NaN);
+			measurementResult.First().Accuracies.Should().Be.Empty();
 		}
 
 		protected override DateOnlyPeriod HistoricalPeriod

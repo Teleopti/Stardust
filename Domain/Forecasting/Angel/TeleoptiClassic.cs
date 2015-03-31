@@ -13,6 +13,11 @@ namespace Teleopti.Ccc.Domain.Forecasting.Angel
 			_indexVolumes = indexVolumes;
 		}
 
+		public ForecastMethodType Id
+		{
+			get { return ForecastMethodType.TeleoptiClassic; }
+		}
+
 		public IList<IForecastingTarget> Forecast(TaskOwnerPeriod historicalData, DateOnlyPeriod futurePeriod)
 		{
 			var volumes = _indexVolumes.Create(historicalData);

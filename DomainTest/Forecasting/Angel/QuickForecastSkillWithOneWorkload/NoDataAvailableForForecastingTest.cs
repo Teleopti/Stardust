@@ -10,8 +10,7 @@ namespace Teleopti.Ccc.DomainTest.Forecasting.Angel.QuickForecastSkillWithOneWor
 	{
 		protected override void Assert(ForecastingAccuracy[] measurementResult)
 		{
-			measurementResult.First().CanForecast.Should().Be.EqualTo(false);
-			measurementResult.First().Accuracy.Should().Be.EqualTo(Double.NaN);
+			measurementResult.First().Accuracies.Should().Be.Empty();
 		}
 	}
 }

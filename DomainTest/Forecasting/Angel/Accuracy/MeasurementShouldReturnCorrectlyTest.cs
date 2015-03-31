@@ -29,7 +29,7 @@ namespace Teleopti.Ccc.DomainTest.Forecasting.Angel.Accuracy
 		protected override void Assert(ForecastingAccuracy[] measurementResult)
 		{
 			measurementResult.First().WorkloadId.Should().Be.EqualTo(Workload.Id.Value);
-			measurementResult.First().Accuracy.Should().Be.EqualTo(100 - Math.Round((11d - 9d)/11d*100, 1));
+			measurementResult.First().Accuracies.Single().Number.Should().Be.EqualTo(100 - Math.Round((11d - 9d)/11d*100, 1));
 		}
 	}
 }

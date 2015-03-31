@@ -28,9 +28,6 @@ namespace Teleopti.Ccc.DomainTest.Forecasting.Angel.QuickForecastSkillWithOneWor
 		[Test]
 		public void DoTheTest()
 		{
-			var validatedVolumeDayRepository = MockRepository.GenerateStub<IValidatedVolumeDayRepository>();
-			validatedVolumeDayRepository.Stub(x => x.FindRange(HistoricalPeriod, Workload)).Return(ValidatedVolumeDays().ToList());
-
 			var statisticRepository = MockRepository.GenerateStub<IStatisticRepository>();
 			statisticRepository.Stub(
 				x => x.LoadSpecificDates(Workload.QueueSourceCollection, HistoricalPeriod.ToDateTimePeriod(SkillTimeZoneInfo()))).Return(StatisticTasks().ToArray());
@@ -75,11 +72,6 @@ namespace Teleopti.Ccc.DomainTest.Forecasting.Angel.QuickForecastSkillWithOneWor
 		}
 
 		protected virtual IEnumerable<StatisticTask> StatisticTasks()
-		{
-			yield break;
-		}
-
-		protected virtual IEnumerable<IValidatedVolumeDay> ValidatedVolumeDays()
 		{
 			yield break;
 		}

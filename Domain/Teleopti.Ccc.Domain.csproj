@@ -506,12 +506,16 @@
     <Compile Include="DayOffPlanning\TuiCaseSolver.cs" />
     <Compile Include="DistributedLock\IDistributedLockAcquirer.cs" />
     <Compile Include="ETL\RunningEtlJob.cs" />
+    <Compile Include="Forecasting\Angel\Accuracy\ForecastMethodProvider.cs" />
+    <Compile Include="Forecasting\Angel\Accuracy\IForecastMethodProvider.cs" />
+    <Compile Include="Forecasting\Angel\Accuracy\MethodAccuracy.cs" />
     <Compile Include="Forecasting\Angel\AverageStatistics.cs" />
     <Compile Include="Forecasting\Angel\Accuracy\ForecastingMeanAbsolutePercentageDeviation.cs" />
     <Compile Include="Forecasting\Angel\Accuracy\ForecastingSymmetricMeanAbsolutePercentageError.cs" />
     <Compile Include="Forecasting\Angel\ForecastingAccuracy.cs" />
     <Compile Include="Forecasting\Angel\ForecastingTargetMerger.cs" />
     <Compile Include="Forecasting\Angel\Accuracy\ForecastingWeightedMeanAbsolutePercentageError.cs" />
+    <Compile Include="Forecasting\Angel\ForecastMethodType.cs" />
     <Compile Include="Forecasting\Angel\TeleoptiClassic.cs" />
     <Compile Include="Forecasting\Angel\Future\ForecastVolumeApplier.cs" />
     <Compile Include="Forecasting\Angel\Future\FutureData.cs" />

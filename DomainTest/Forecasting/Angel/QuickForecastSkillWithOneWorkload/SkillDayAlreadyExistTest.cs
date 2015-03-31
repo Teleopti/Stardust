@@ -12,16 +12,15 @@ namespace Teleopti.Ccc.DomainTest.Forecasting.Angel.QuickForecastSkillWithOneWor
 	{
 		private const int newExpectedNumberOfTasks = 48;
 
-		protected override IEnumerable<IValidatedVolumeDay> ValidatedVolumeDays()
+		protected override IEnumerable<StatisticTask> StatisticTasks()
 		{
-			var historialWorkloadDay = new WorkloadDay();
-			historialWorkloadDay.Create(HistoricalPeriod.StartDate, Workload, new TimePeriod[] { });
-			yield return new ValidatedVolumeDay(Workload, HistoricalPeriod.StartDate)
+			var startDateOnHistoricalPeriod = HistoricalPeriod.ToDateTimePeriod(SkillTimeZoneInfo()).StartDateTime.AddHours(12);
+			return new[]
 			{
-				TaskOwner = historialWorkloadDay,
-				ValidatedTasks = newExpectedNumberOfTasks
+				new StatisticTask {Interval = startDateOnHistoricalPeriod, StatOfferedTasks = newExpectedNumberOfTasks},
 			};
 		}
+
 
 		protected override ICollection<ISkillDay> CurrentSkillDays()
 		{

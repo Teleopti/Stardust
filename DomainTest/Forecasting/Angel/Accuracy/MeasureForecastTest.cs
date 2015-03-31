@@ -26,9 +26,6 @@ namespace Teleopti.Ccc.DomainTest.Forecasting.Angel.Accuracy
 		[Test]
 		public void DoTheTest()
 		{
-			var validatedVolumeDayRepository = MockRepository.GenerateStub<IValidatedVolumeDayRepository>();
-			validatedVolumeDayRepository.Stub(x => x.FindRange(HistoricalPeriod, Workload)).Return(ValidatedVolumeDays().ToList());
-
 			var statisticRepository = MockRepository.GenerateStub<IStatisticRepository>();
 			statisticRepository.Stub(
 				x => x.LoadSpecificDates(Workload.QueueSourceCollection, HistoricalPeriod.ToDateTimePeriod(SkillTimeZoneInfo()))).Return(StatisticTasks().ToArray());
@@ -37,7 +34,7 @@ namespace Teleopti.Ccc.DomainTest.Forecasting.Angel.Accuracy
 			var currentScenario = MockRepository.GenerateStub<ICurrentScenario>();
 			currentScenario.Stub(x => x.Current()).Return(DefaultScenario);
 
-			var quickForecasterWorkloadEvaluator = new QuickForecastWorkloadEvaluator(new HistoricalData(dailyStatistics), new TeleoptiClassic(new IndexVolumes()), new ForecastingWeightedMeanAbsolutePercentageError());
+			var quickForecasterWorkloadEvaluator = new QuickForecastWorkloadEvaluator(new HistoricalData(dailyStatistics), new ForecastingWeightedMeanAbsolutePercentageError(), new ForecastMethodProvider(new IndexVolumes()));
 			var target = new QuickForecastSkillEvaluator(quickForecasterWorkloadEvaluator);
 			var measurementResult = target.Measure(Workload.Skill, HistoricalPeriod);
 
@@ -97,4 +94,6 @@ namespace Teleopti.Ccc.DomainTest.Forecasting.Angel.Accuracy
 
 		protected abstract void Assert(ForecastingAccuracy[] measurementResult);
 	}
+
+	
 }
