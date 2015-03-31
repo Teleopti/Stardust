@@ -436,18 +436,18 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.DoNotUse
 			DataMaker.Person(userName).Apply(new HawaiiTimeZone());
 		}
 
+		[Given(@"'?(I)'? am located in [iI]stanbul")]
+		[Given(@"'?(.*)'? is located in [iI]stanbul")]
+		public void GivenIAmLocatedInIstanbul(string userName)
+		{
+			DataMaker.Person(userName).Apply(new HawaiiTimeZone());
+		}
+
 		[Given(@"'?(I)'? am located in [sS]tockholm")]
 		[Given(@"'?(.*)'? is located in [sS]tockholm")]
 		public void GivenIAmLocatedInStockholm(string userName)
 		{
 			DataMaker.Person(userName).Apply(new StockholmTimeZone());
-		}
-
-		[Given(@"(.*) am located in '(.*)'")]
-		[Given(@"(.*) is located in '(.*)'")]
-		public void GivenIsLocatedIn(string name,string location)
-		{
-			DataMaker.Person(name).Apply(new UserTimeZoneFor(location));
 		}
 
 		[Given(@"I have an existing text request")]

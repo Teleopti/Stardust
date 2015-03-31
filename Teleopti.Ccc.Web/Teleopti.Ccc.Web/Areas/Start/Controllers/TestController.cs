@@ -189,6 +189,23 @@ namespace Teleopti.Ccc.Web.Areas.Start.Controllers
 			return View("Message", viewModel);
 		}
 
+		public ViewResult SetCurrentTime2(string time)
+		{
+			invalidateRtaCache();
+
+			var dateSet = DateTime.Parse(time);
+			updateIocNow(dateSet);
+
+			var viewModel = new TestMessageViewModel
+			{
+				Title = "Time changed on server!",
+				Message = "Time is set to " + dateSet + " in UTC"
+			};
+			ViewBag.SetTime = "hello";
+
+			return View("Message", viewModel);
+		}
+
 		public ViewResult CheckFeature(string featureName)
 		{
 			var result = false;

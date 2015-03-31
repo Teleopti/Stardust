@@ -34,7 +34,7 @@ Background:
 Scenario: Timeline for agent in other time zone
 	Given I have the role 'Anywhere Team Green'
 	And I am located in Stockholm
-	And 'John King' is located in 'Istanbul'
+	And 'John King' is located in Istanbul
 	And 'John King' has a shift with
 	| Field          | Value            |
 	| Shift category | Day              |
@@ -75,7 +75,7 @@ Scenario: Add activity default times for agent in other time zone
 	Given I have the role 'Anywhere Team Green'
 	And I am located in Stockholm
 	And the time is '2013-11-18 12:05'
-	And 'John King' is located in 'Istanbul'
+	And 'John King' is located in Istanbul
 	And 'John King' has a shift with
 	| Field          | Value            |
 	| Shift category | Day              |
@@ -91,7 +91,7 @@ Scenario: Add activity default times for agent in other time zone
 Scenario: Add activity times changed for agent in other time zone
 	Given I have the role 'Anywhere Team Green'
 	And I am located in Stockholm
-	And 'John King' is located in 'Istanbul'
+	And 'John King' is located in Istanbul
 	And 'John King' has a shift with
 	| Field          | Value            |
 	| Shift category | Day              |
@@ -128,7 +128,7 @@ Scenario: Add intraday absence default times for agent in other time zone
 	Given I have the role 'Anywhere Team Green'
 	And I am located in Stockholm
 	And the time is '2013-11-17 12:00'
-	And 'John King' is located in 'Istanbul'
+	And 'John King' is located in Istanbul
 	And 'John King' has a shift with
 	| Field          | Value            |
 	| Shift category | Day              |
@@ -144,7 +144,7 @@ Scenario: Add intraday absence default times for agent in other time zone
 Scenario: Add intraday absence times changed for agent in other time zone
 	Given I have the role 'Anywhere Team Green'
 	And I am located in Stockholm
-	And 'John King' is located in 'Istanbul'
+	And 'John King' is located in Istanbul
 	And 'John King' has a shift with
 	| Field          | Value            |
 	| Shift category | Day              |
@@ -181,7 +181,7 @@ Scenario: Move activity default time for agent in other time zone
 	Given I have the role 'Anywhere Team Green'
 	And I am located in Stockholm
 	And the time is '2013-11-18 12:05'
-	And 'John King' is located in 'Istanbul'
+	And 'John King' is located in Istanbul
 	And 'John King' has a shift with
 	| Field            | Value            |
 	| Shift category   | Day              |
@@ -204,7 +204,7 @@ Scenario: Move activity default time for agent in other time zone
 	Scenario: Move activity time changed for agent in other time zone
 	Given I have the role 'Anywhere Team Green'
 	And I am located in Stockholm
-	And 'John King' is located in 'Istanbul'
+	And 'John King' is located in Istanbul
 	And 'John King' has a shift with
 	| Field            | Value            |
 	| Shift category   | Day              |
@@ -254,7 +254,7 @@ Scenario: Move activity times not displayed in other time zone
 Scenario: Absence to remove is also displayed in other time zone
 	Given I have the role 'Anywhere Team Green'
 	And I am located in Stockholm
-	And 'John King' is located in 'Istanbul'
+	And 'John King' is located in Istanbul
 	And 'John King' has an absence with
 	| Field      | Value            |
 	| Name       | Dentist          |

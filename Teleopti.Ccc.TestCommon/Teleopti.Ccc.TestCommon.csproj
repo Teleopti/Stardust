@@ -177,6 +177,7 @@
     <Compile Include="TestData\Setups\Configurable\ShiftExchangeOfferConfigurable.cs" />
     <Compile Include="TestData\Setups\Configurable\QueueSourceConfigurable.cs" />
     <Compile Include="TestData\Setups\Configurable\WorkloadConfigurable.cs" />
+    <Compile Include="TestData\Setups\Specific\IstanbulTimeZone.cs" />
     <Compile Include="ThreadCulture.cs" />
     <Compile Include="DatabaseHelper.cs" />
     <Compile Include="DummyContextPopulator.cs" />
@@ -387,7 +388,6 @@
     <Compile Include="TestData\Setups\Specific\SwedishCulture.cs" />
     <Compile Include="TestData\Setups\Specific\USCulture.cs" />
     <Compile Include="TestData\Setups\Configurable\UserConfigurable.cs" />
-    <Compile Include="TestData\Setups\Specific\UserTimeZoneFor.cs" />
     <Compile Include="TestData\Setups\Specific\UtcTimeZone.cs" />
     <Compile Include="UsedInTestState.cs" />
     <Compile Include="Web\FakeHttpContext.cs" />

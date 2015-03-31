@@ -66,11 +66,10 @@ namespace Teleopti.Ccc.TestCommon.FakeData
 			return TimeZoneInfo.FindSystemTimeZoneById("AUS Eastern Standard Time");
 		}
 
-		public static TimeZoneInfo TimeZone(string timeZone)
+		public static TimeZoneInfo IstanbulTimeZoneInfo()
 		{
-			var timeZones = TimeZoneInfo.GetSystemTimeZones();
-			var ret = timeZones.FirstOrDefault(t => t.DisplayName == timeZone) ?? timeZones.FirstOrDefault(t => t.DisplayName.Contains(timeZone));
-			return ret;
+			return TimeZoneInfo.FindSystemTimeZoneById("Turkey Standard Time");
 		}
+
     }
 }

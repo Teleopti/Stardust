@@ -37,8 +37,8 @@ Background:
 	
 Scenario: Agent returns to work one day earlier than planned absence
 	Given I have the role 'Anywhere Team Green'
-	And 'I' am located in 'Stockholm'
-	And 'Pierre Baldi' is located in 'Stockholm'
+	And I am located in Stockholm
+	And 'Pierre Baldi' is located in Stockholm
 	And 'Pierre Baldi' has a shift with
 	| Field          | Value            |
 	| Shift category | Day              |

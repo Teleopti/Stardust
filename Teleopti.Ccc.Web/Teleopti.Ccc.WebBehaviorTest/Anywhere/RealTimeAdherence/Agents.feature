@@ -24,7 +24,6 @@ Scenario: Should be able to see current states of all agents
 	 | Access to team                         | Red         |
 	 | Access to real time adherence overview | True        |
 	And there is a datasouce with id 6
-	And I am located in 'London'
 	And there is an external logon named 'Pierre Baldi' with datasource 6
 	And Pierre Baldi has a person period with
 	 | Field          | Value        |
@@ -93,7 +92,6 @@ Scenario: Should be able to see current states of all agents
 		| Alarm Time	| 0:15:00 |
 		| Alarm Color              | Green              |
 
-@ignore
 Scenario: Should be able to see state updates of all agents
 	Given there is an activity named 'Phone'
 	And there is an activity named 'Lunch'
@@ -105,7 +103,6 @@ Scenario: Should be able to see state updates of all agents
 	 | Access to team                         | Red         |
 	 | Access to real time adherence overview | True        |
 	And there is a datasouce with id 6
-	And I am located in 'London'
 	And there is an external logon named 'Pierre Baldi' with datasource 6
 	And Pierre Baldi has a person period with
 	 | Field          | Value        |
@@ -148,8 +145,8 @@ Scenario: Should be able to see state updates of all agents
 	| Alarm Color     | Red          |
 	| Name            | Not adhering |
 	| Staffing effect | -1           |
-	When I view real time adherence for team 'Red'
 	And the time is '2014-01-21 12:30:00'
+	When I view real time adherence for team 'Red'
 	And 'Pierre Baldi' sets his phone state to 'Pause' on datasource 6
 	And 'Ashley Andeen' sets his phone state to 'Ready' on datasource 6
 	And the time is '2014-01-21 12:45:00'
@@ -185,7 +182,6 @@ Scenario: Should be able to see all agents of the team with or without state upd
 	 | Access to team                         | Red         |
 	 | Access to real time adherence overview | True        |
 	And there is a datasouce with id 6
-	And I am located in 'London'
 	And there is an external logon named 'Pierre Baldi' with datasource 6
 	And Pierre Baldi has a person period with
 	 | Field          | Value        |
