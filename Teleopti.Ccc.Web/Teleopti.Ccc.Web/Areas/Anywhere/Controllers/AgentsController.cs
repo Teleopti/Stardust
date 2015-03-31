@@ -85,8 +85,7 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Controllers
 								SiteId = team.Site.Id.ToString(),
 								SiteName = team.Site.Description.Name,
 								TeamId = team.Id.ToString(),
-								TeamName = team.Description.Name,
-								TimeZoneOffsetMinutes = _userTimeZone.TimeZone().GetUtcOffset(_date.UtcDateTime()).TotalMinutes
+								TeamName = team.Description.Name
 							});
 			return Json(agents, JsonRequestBehavior.AllowGet);
 		}

@@ -10,7 +10,6 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Core
 		public string TeamName { get; set; }
 		public string SiteId { get; set; }
 		public string SiteName { get; set; }
-		public double TimeZoneOffsetMinutes { get; set; }
 	}
 
 	public class AgentStateViewModel

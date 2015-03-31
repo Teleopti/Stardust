@@ -111,7 +111,6 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Controllers
 				SiteName = site.Description.Name,
 				TeamId = teamId.ToString(),
 				TeamName = team.Description.Name,
-				TimeZoneOffsetMinutes = userTimeZone.TimeZone().GetUtcOffset(DateTime.Now).TotalMinutes
 			};
 			var result = target.ForTeam(teamId).Data as IEnumerable<AgentViewModel>;
 
@@ -123,7 +122,6 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Controllers
 			Assert.That(result.Single().SiteName, Is.EqualTo(expected.SiteName));
 			Assert.That(result.Single().TeamId, Is.EqualTo(expected.TeamId));
 			Assert.That(result.Single().TeamName, Is.EqualTo(expected.TeamName));
-			Assert.That(result.Single().TimeZoneOffsetMinutes, Is.EqualTo(expected.TimeZoneOffsetMinutes));
 		}
 
 		[Test]

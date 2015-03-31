@@ -45,11 +45,11 @@
                 that.State(data.State);
                 that.Activity(data.Activity);
                 that.NextActivity(data.NextActivity);
-                that.NextActivityStartTime(data.NextActivityStartTime ? that.getDateTimeFormat(moment.utc(data.NextActivityStartTime).add(data.TimeZoneOffset, 'minutes')) : '');
+                that.NextActivityStartTime(data.NextActivityStartTime ? that.getDateTimeFormat(moment.utc(data.NextActivityStartTime).add(resources.TimeZoneOffsetMinutes, 'minutes')) : '');
 				that.EnteredCurrentAlarm(data.StateStart);
                 that.refreshAlarmTime();
 
-                that.AlarmStart(data.AlarmStart ? moment.utc(data.AlarmStart).add(data.TimeZoneOffset, 'minutes').format(resources.FixedDateTimeWithSecondsFormatForMoment) : '');
+                that.AlarmStart(data.AlarmStart ? moment.utc(data.AlarmStart).add(resources.TimeZoneOffsetMinutes, 'minutes').format(resources.FixedDateTimeWithSecondsFormatForMoment) : '');
 
                 if (that.shouldWaitWithUpdatingAlarm()) {
                     that.HaveNewAlarm = true;

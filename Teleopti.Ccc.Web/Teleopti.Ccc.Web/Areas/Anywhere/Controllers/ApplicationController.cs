@@ -2,6 +2,7 @@ using System;
 using System.Globalization;
 using System.Web.Mvc;
 using Newtonsoft.Json;
+using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
@@ -13,6 +14,7 @@ using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.Web.Areas.Anywhere.Core;
 using Teleopti.Ccc.Web.Core;
 using Teleopti.Ccc.Web.Filters;
+using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.Web.Areas.Anywhere.Controllers
@@ -23,13 +25,24 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Controllers
 		private readonly ICurrentTeleoptiPrincipal _currentTeleoptiPrincipal;
 		private readonly IIanaTimeZoneProvider _ianaTimeZoneProvider;
 		private readonly IToggleManager _toggles;
+		private readonly IUserTimeZone _userTimeZone;
+		private readonly INow _now;
 
-		public ApplicationController(IPrincipalAuthorization principalAuthorization, ICurrentTeleoptiPrincipal currentTeleoptiPrincipal, IIanaTimeZoneProvider ianaTimeZoneProvider, IToggleManager toggles)
+		public ApplicationController(
+			IPrincipalAuthorization principalAuthorization, 
+			ICurrentTeleoptiPrincipal currentTeleoptiPrincipal, 
+			IIanaTimeZoneProvider ianaTimeZoneProvider, 
+			IToggleManager toggles,
+			IUserTimeZone userTimeZone,
+			INow now
+			)
 		{
 			_principalAuthorization = principalAuthorization;
 			_currentTeleoptiPrincipal = currentTeleoptiPrincipal;
 			_ianaTimeZoneProvider = ianaTimeZoneProvider;
 			_toggles = toggles;
+			_userTimeZone = userTimeZone;
+			_now = now;
 		}
 
 		public ViewResult Index()
@@ -67,7 +80,8 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Controllers
 		}
 
 		[HttpGet, OutputCache(Duration = 0, NoStore = true)]
-		public ActionResult Resources()
+		[UnitOfWork]
+		public virtual ActionResult Resources()
 		{
 			var path = Request.MapPath("~/Areas/Anywhere/Content/Translation/TranslationTemplate.txt");
 			var template = System.IO.File.ReadAllText(path);
@@ -160,6 +174,8 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Controllers
 					DateFormatForMoment = DateAndTimeFormatExtensions.DateFormatForMoment(),
 					DateTimeFormatForMoment = DateAndTimeFormatExtensions.DateTimeFormatForMoment(),
 					TimeFormatForMoment = DateAndTimeFormatExtensions.TimeFormatForMoment(),
+
+					TimeZoneOffsetMinutes = _userTimeZone.TimeZone().GetUtcOffset(_now.UtcDateTime()).TotalMinutes,
 
 					LanguageCode = CultureInfo.CurrentCulture.IetfLanguageTag,
 					FirstDayOfWeek = (int)CultureInfo.CurrentCulture.DateTimeFormat.FirstDayOfWeek,

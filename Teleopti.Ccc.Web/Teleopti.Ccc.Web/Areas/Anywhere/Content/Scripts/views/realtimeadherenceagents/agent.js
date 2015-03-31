@@ -10,9 +10,7 @@
     			that.SiteName = data.SiteName;
     			that.TeamId = data.TeamId;
     			that.TeamName = data.TeamName;
-    			that.TimeZoneOffset = data.TimeZoneOffsetMinutes;
 		    };
-
 			
     		return that;
     	};
