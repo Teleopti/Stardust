@@ -1,6 +1,6 @@
 namespace Teleopti.Ccc.WebBehaviorTest.Core.Navigation
 {
-	public class FakeClientTimeForAllJsDateObjectsCreatedAsUtcSoTheActualTimeFromGetTimeVaryDependengingOnBrowserTimeZone : INavigationInterceptor, IFakeClientTimeMethod
+	public class DONTUSE_FakeClientTimeForAllJsDateObjectsCreatedAsUtcSoTheActualTimeFromGetTimeVaryDependengingOnBrowserTimeZone : INavigationInterceptor, IFakeClientTimeMethod
 	{
 		public void Before(GotoArgs args)
 		{

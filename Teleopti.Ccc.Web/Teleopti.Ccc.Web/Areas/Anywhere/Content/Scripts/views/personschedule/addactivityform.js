@@ -134,7 +134,9 @@ define([
 		
 		this.DefaultStart = ko.computed(function () {
 
-			// PLEASE STOP USING getTeleoptiTime in Anywhere!
+			// Please stop using getTeleoptiTime in Anywhere!
+			// The Date constructor is already faked correctly, using sinon method
+			// That goes from js unit tests and behavior tests both
 			if (new Date().getTeleoptiTime) {
 				var now = moment(new Date(new Date().getTeleoptiTime()));
 			} else {

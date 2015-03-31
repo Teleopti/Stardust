@@ -207,12 +207,13 @@
     <Compile Include="Core\BrowserDriver\BrowserInteractionsUrlExtensions.cs" />
     <Compile Include="Core\BrowserDriver\NoBrowserActivator.cs" />
     <Compile Include="Core\BrowserDriver\NoBrowserInteractions.cs" />
-    <Compile Include="Core\Navigation\FakeClientTimeForAllJsDateObjectsCreatedAsUtcSoTheActualTimeFromGetTimeVaryDependengingOnBrowserTimeZone.cs" />
+    <Compile Include="Core\Navigation\DONTUSE_FakeClientTimeForAllJsDateObjectsCreatedAsUtcSoTheActualTimeFromGetTimeVaryDependengingOnBrowserTimeZone.cs" />
     <Compile Include="Core\Navigation\FakeClientTimeUsingSinonProvenWay.cs" />
     <Compile Include="Core\Navigation\FakeTimeUsingMyTimeMethod.cs" />
     <Compile Include="Core\Http.cs" />
     <Compile Include="Core\Navigation\ApplicationStartupTimeout.cs" />
     <Compile Include="Core\Navigation\BustCache.cs" />
+    <Compile Include="Core\Navigation\DONTUSE_FakeClientTimeUsingLegacyMyTimeMethodButWithUTC.cs" />
     <Compile Include="Core\Navigation\GotoArgs.cs" />
     <Compile Include="Core\Navigation\IFakeClientTimeMethod.cs" />
     <Compile Include="Core\Navigation\INavigationInterceptor.cs" />

@@ -1,12 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
 using System.Web;
 using log4net;
-using NUnit.Framework;
 using Teleopti.Ccc.Domain.Collection;
-using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.WebBehaviorTest.Data;
 
 namespace Teleopti.Ccc.WebBehaviorTest.Core.Navigation
@@ -23,9 +20,10 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core.Navigation
 			_interceptors.Add(u => true, new ApplicationStartupTimeout());
 			_interceptors.Add(u => u == "", new BustCache());
 			_interceptors.Add(u => u == "MyTime#Requests/Index", new BustCache());
-			_interceptors.Add(u => u.Contains("/Anywhere#realtimeadherenceagents"), new FakeClientTimeForAllJsDateObjectsCreatedAsUtcSoTheActualTimeFromGetTimeVaryDependengingOnBrowserTimeZone());
+			_interceptors.Add(u => u.Contains("/Anywhere#realtimeadherenceagents"), new DONTUSE_FakeClientTimeForAllJsDateObjectsCreatedAsUtcSoTheActualTimeFromGetTimeVaryDependengingOnBrowserTimeZone());
 			_interceptors.Add(u => u.Contains("/Anywhere#teamschedule"), new FakeClientTimeUsingSinonProvenWay());
 			_interceptors.Add(u => u.Contains("/Anywhere#personschedule"), new FakeClientTimeUsingSinonProvenWay());
+			_interceptors.Add(u => u.Contains("/Anywhere#personschedule"), new DONTUSE_FakeClientTimeUsingLegacyMyTimeMethodButWithUTC());
 			_interceptors.Add(u => u.Contains("/Anywhere#realtimeadherence"), new FakeClientTimeUsingSinonProvenWay());
 			_interceptors.Add(u => u.Contains("/Anywhere#manageadherence"), new WaitUntilHangfireQueueIsProcessed());
 			_interceptors.Add(u => u.Contains("/MyTime/Asm"), new FakeTimeUsingMyTimeMethod());
