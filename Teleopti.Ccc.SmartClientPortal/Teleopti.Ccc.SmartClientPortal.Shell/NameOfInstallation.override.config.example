@@ -8,9 +8,9 @@ Here you can/should set installation specific app settings, see example below.
 -->
 
 <appSettings>
-	<add key="FeatureToggle" value="http://something1"/>
-	<add key="TenantServer" value="http://something2"/>
-	<add key="ReportServer" value="http://something3"/>
-	<add key="ConfigServer" value="http://something4"/>
-	<add key="MatrixWebSiteUrl" value="http://something5"/>
+	<add key="FeatureToggle" value="http://TheServer/TeleoptiWFM/Web/"/>
+	<add key="TenantServer" value="http://TheServer/TeleoptiWFM/Web/"/>
+	<add key="ReportServer" value="http://TheServer/TeleoptiWFM/Web/"/>
+	<add key="ConfigServer" value="http://TheServer/TeleoptiWFM/Web/"/>
+	<add key="MatrixWebSiteUrl" value="http://TheServer/TeleoptiWFM/Analytics/"/>
 </appSettings>
