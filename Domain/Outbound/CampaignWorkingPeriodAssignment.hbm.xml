@@ -1,0 +1,22 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<hibernate-mapping xmlns="urn:nhibernate-mapping-2.2"
+                   assembly="Teleopti.Ccc.Domain"
+                   namespace="Teleopti.Ccc.Domain.Outbound"
+                   default-access="field.camelcase-underscore">
+	<class name="CampaignWorkingPeriodAssignment" table="OutboundCampaignWorkingPeriodAssignment">
+		<id name="Id"
+				  type="guid"
+		  				access="nosetter.camelcase-underscore"
+        unsaved-value="null">
+			<generator class="guid.comb" />
+		</id>
+		
+		<property name="WeekdayIndex"
+							 type="System.DayOfWeek" />
+
+		<many-to-one name="Parent"
+							 class="Teleopti.Ccc.Domain.CampaignWorkingPeriod"
+							 not-null="true"
+							 foreign-key="FK_OutboundCampaignWorkingPeriod_OutboundCampaignWorkingPeriodAssignment"/>
+	</class>
+</hibernate-mapping>

@@ -1529,6 +1529,7 @@
     </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="Outbound\" />
     <Folder Include="Properties\" />
   </ItemGroup>
   <ItemGroup>

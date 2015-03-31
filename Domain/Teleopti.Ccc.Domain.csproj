@@ -808,6 +808,9 @@
     <Compile Include="Optimization\WeeklyRestSolver\VerifyWeeklyRestAroundDayOffSpecification.cs" />
     <Compile Include="Optimization\WeeklyRestSolver\WeeklyRestSolverService.cs" />
     <Compile Include="Aop\ReadModelUnitOfWorkAttribute.cs" />
+    <Compile Include="Outbound\Campaign.cs" />
+    <Compile Include="Outbound\CampaignWorkingPeriod.cs" />
+    <Compile Include="Outbound\CampaignWorkingPeriodAssignment.cs" />
     <Compile Include="Payroll\PayrollFormat.cs" />
     <Compile Include="PreserveStack.cs" />
     <Compile Include="Repositories\IJobResultRepository.cs" />
@@ -1997,7 +2000,9 @@
     <EmbeddedResource Include="Common\ContractSchedule.hbm.xml" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Common\ContractScheduleWeek.hbm.xml" />
+    <EmbeddedResource Include="Common\ContractScheduleWeek.hbm.xml">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Forecasting\SkillDataPeriod.hbm.xml" />
@@ -2020,10 +2025,14 @@
     <EmbeddedResource Include="Forecasting\SkillDay.hbm.xml" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="AgentInfo\PersonPeriod.hbm.xml" />
+    <EmbeddedResource Include="AgentInfo\PersonPeriod.hbm.xml">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="AgentInfo\PersonSkill.hbm.xml" />
+    <EmbeddedResource Include="AgentInfo\PersonSkill.hbm.xml">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Scheduling\Assignment\MainShiftLayer.hbm.xml" />
@@ -2056,7 +2065,9 @@
     <EmbeddedResource Include="Forecasting\ValidatedVolumeDay.hbm.xml" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Scheduling\ShiftCreator\ActivityExtender.hbm.xml" />
+    <EmbeddedResource Include="Scheduling\ShiftCreator\ActivityExtender.hbm.xml">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Scheduling\ShiftCreator\AutoPositionedActivityExtender.hbm.xml" />
@@ -2114,7 +2125,9 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="AgentInfo\Requests\Request.hbm.xml" />
+    <EmbeddedResource Include="AgentInfo\Requests\Request.hbm.xml">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="AgentInfo\Requests\AbsenceRequest.hbm.xml" />
@@ -2383,6 +2396,9 @@
     <Folder Include="Properties\" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Outbound\Campaign.hbm.xml" />
+    <Content Include="Outbound\CampaignWorkingPeriod.hbm.xml" />
+    <Content Include="Outbound\CampaignWorkingPeriodAssignment.hbm.xml" />
     <EmbeddedResource Include="Payroll\PayrollFormat.hbm.xml">
       <SubType>Designer</SubType>
     </EmbeddedResource>

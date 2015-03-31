@@ -194,6 +194,7 @@
     <Compile Include="MultiTenancy\Server\NHibernate\TenantUnitOfWorkManagerTest.cs" />
     <Compile Include="MultiTenancy\Server\PersistPersonInfoTest.cs" />
     <Compile Include="PrincipalAndStateTestAttribute.cs" />
+    <Compile Include="Repositories\OutboundCampaignRepositoryTest.cs" />
     <Compile Include="Repositories\PayrollFormatRepositoryTest.cs" />
     <Compile Include="Repositories\SeatBookingRepositoryTest.cs" />
     <Compile Include="RestoreDatabaseAfterTestAttribute.cs" />
