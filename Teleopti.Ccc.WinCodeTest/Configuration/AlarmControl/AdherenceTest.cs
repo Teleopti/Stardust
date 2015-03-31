@@ -122,6 +122,18 @@ namespace Teleopti.Ccc.WinCodeTest.Configuration.AlarmControl
 
 			alarmType.Adherence.Should().Be(Adherence.Neutral);
 		}
+
+		[Test]
+		public void ShouldUpdateEmpty()
+		{
+			var alarmType = new AlarmType { Adherence = Adherence.In };
+			var target = new AlarmControlPresenter(new IAlarmType[] { alarmType }, new FakeView(), new[] { new AdherenceColumn() });
+			var adherence = target.Columns.Single(x => x.Text == Resources.Adherence);
+
+			target.SaveCellInfo(this, new GridSaveCellInfoEventArgs(1, adherence.Index, new GridStyleInfo { CellValue = string.Empty }, new StyleModifyType()));
+
+			alarmType.Adherence.Should().Be(null);
+		}
 	}
 
 	public class FakeView : IAlarmControlView

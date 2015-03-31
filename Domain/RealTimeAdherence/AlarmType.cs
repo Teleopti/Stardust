@@ -68,7 +68,8 @@ namespace Teleopti.Ccc.Domain.RealTimeAdherence
 
 		public virtual void SetAdherenceByText(string text)
 		{
-			Adherence = _adherences.Single(x => x.Text == text).Adherence;
+			var adherenceWithText = _adherences.SingleOrDefault(x => x.Text == text);
+			Adherence = adherenceWithText == null ? (Adherence?) null : adherenceWithText.Adherence;
 		}
 
 		public virtual string AdherenceText
