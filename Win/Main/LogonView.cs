@@ -1,5 +1,7 @@
 using System;
 using System.Collections.Generic;
+using System.Configuration;
+using System.Deployment.Application;
 using System.Globalization;
 using System.Windows.Forms;
 using Syncfusion.Windows.Forms;
@@ -60,8 +62,20 @@ namespace Teleopti.Ccc.Win.Main
 
 		public bool InitStateHolderWithoutDataSource(IMessageBrokerComposite messageBroker, SharedSettings settings)
 		{
-			//TODO: tenant - remove this or do not do it again later
-			return LogonInitializeStateHolder.InitWithoutDataSource(_model, messageBroker, settings) || showError();
+			if (_model.GetConfigFromWebService)
+			{
+				if (!LogonInitializeStateHolder.InitWithoutDataSource(_model, messageBroker, settings))
+					return showError();
+			}
+			else
+			{
+				//used by sikuli
+				var useMessageBroker = string.IsNullOrEmpty(ConfigurationManager.AppSettings["MessageBroker"]);
+
+				if (!LogonInitializeStateHolder.GetConfigFromFileSystem(Environment.CurrentDirectory, useMessageBroker, messageBroker))
+					return showError();
+			}
+			return true;
 		}
 
 		private bool showError()

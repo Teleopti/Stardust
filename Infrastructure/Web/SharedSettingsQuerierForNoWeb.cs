@@ -4,7 +4,7 @@
 	{
 		public SharedSettings GetSharedSettings()
 		{
-			return new SharedSettings();
+			return null;
 		}
 	}
 }

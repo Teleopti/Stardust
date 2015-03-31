@@ -102,5 +102,19 @@ namespace Teleopti.Ccc.WinCode.Main
 
 			return true;
 		}
+
+		public static bool GetConfigFromFileSystem(string nhibConfPath, bool messageBrokerDisabled, IMessageBrokerComposite messageBroker)
+		{
+			new InitializeApplication(
+				new DataSourcesFactory(new EnversConfiguration(), new List<IMessageSender>(),
+										DataSourceConfigurationSetter.ForDesktop(), new CurrentHttpContext(), () => messageBroker),
+				messageBroker
+				)
+			{
+				MessageBrokerDisabled = messageBrokerDisabled
+			}.Start(new StateManager(), nhibConfPath, new LoadPasswordPolicyService(nhibConfPath),
+						  new ConfigurationManagerWrapper(), true);
+			return true;
+		}
 	}
 }
