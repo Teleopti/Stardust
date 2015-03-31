@@ -25,7 +25,6 @@
 			that.resources = resources;
 			that.sites = ko.observableArray();
 			that.sitesToOpen = ko.observableArray();
-			that.monitorMultipleBusinessUnits = ko.observable();
 			that.BusinessUnitId = ko.observable();
 
 			var siteForId = function (id) {
@@ -85,9 +84,6 @@
 
 						if (!resources.RTA_NoBroker_31237)
 							loadCurrentData();
-
-						if (resources.RTA_MonitorMultipleBusinessUnits_28348)
-							that.monitorMultipleBusinessUnits(true);
 
 					}
 				});

@@ -39,7 +39,6 @@ Portal_NewLandingpage_29415 = true
 Show_StaticPageOnNoInternet_29415 = false
 Preference_PreferenceAlertWhenMinOrMaxHoursBroken_25635 = true
 MyTimeWeb_AgentBadge_28913 = true
-RTA_MonitorMultipleBusinessUnits_28348 = true
 Scheduler_TeamBlockMoveTimeBetweenDays_22407 = true
 Scheduler_TeamBlockAdhereWithMaxSeatRule_23419 = true
 RTA_ChangeScheduleInAgentStateView_29934 = true
