@@ -440,7 +440,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.DoNotUse
 		[Given(@"'?(.*)'? is located in [iI]stanbul")]
 		public void GivenIAmLocatedInIstanbul(string userName)
 		{
-			DataMaker.Person(userName).Apply(new HawaiiTimeZone());
+			DataMaker.Person(userName).Apply(new IstanbulTimeZone());
 		}
 
 		[Given(@"'?(I)'? am located in [sS]tockholm")]
