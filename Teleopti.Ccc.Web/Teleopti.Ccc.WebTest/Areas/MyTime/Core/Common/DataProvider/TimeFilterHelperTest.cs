@@ -133,11 +133,10 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Common.DataProvider
 			const string startTime = "06:00-08:00";
 			var result = _filterHelper.GetFilter(_testDate, startTime, "", false, false);
 
-			var endutcTimeStart = new DateTime(2015, 3, 1, 23, 0, 0, DateTimeKind.Utc);
-			var endutcTimeEnd = new DateTime(2015, 3, 3, 23, 0, 0, DateTimeKind.Utc);
+			var utcTime = new DateTime(2015, 3, 2, 0, 0, 0, DateTimeKind.Utc);
 
-			result.EndTimes.First().StartDateTime.Should().Be.EqualTo(endutcTimeStart);
-			result.EndTimes.First().EndDateTime.Should().Be.EqualTo(endutcTimeEnd);
+			result.EndTimes.First().StartDateTime.Should().Be.EqualTo(utcTime.AddHours(-1));
+			result.EndTimes.First().EndDateTime.Should().Be.EqualTo(utcTime.AddDays(1).AddHours(23));
 		}
 	}
 }
