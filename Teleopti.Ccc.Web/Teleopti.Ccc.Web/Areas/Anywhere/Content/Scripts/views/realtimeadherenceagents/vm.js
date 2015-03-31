@@ -39,7 +39,6 @@
 			that.siteURI = ko.observable();
 			that.filter = ko.observable();
 			that.groupId = ko.observable();
-			that.changeScheduleAvailable = ko.observable(false);
 			that.BusinessUnitId = ko.observable();
 			that.rootURI = ko.observable();
 			that.agentAdherenceEnabled = ko.observable(false);

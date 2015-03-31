@@ -111,7 +111,6 @@
 				viewModel.permissionAddActivity(data.IsAddActivityAvailable);
 			});
 
-			viewModel.changeScheduleAvailable(resources.RTA_ChangeScheduleInAgentStateView_29934);
 			viewModel.agentAdherenceEnabled(resources.RTA_SeePercentageAdherenceForOneAgent_30783);
 			viewModel.agentAdherenceDetailsEnabled(resources.RTA_SeeAdherenceDetailsForOneAgent_31285);
 			viewModel.notifyViaSMSEnabled(resources.RTA_NotifyViaSMS_31567);
