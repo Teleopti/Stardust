@@ -78,6 +78,83 @@
 		font-weight: bold;
 		font-family: 'arial', 'sans-serif';
 	}
+
+	.tab-group {
+  width: 100%;
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-flex-wrap: wrap;
+  -ms-flex-wrap: wrap;
+  flex-wrap: wrap;
+  -webkit-box-align: center;
+  -webkit-align-items: center;
+  -ms-flex-align: center;
+  align-items: center;
+  -webkit-box-pack: center;
+  -webkit-justify-content: center;
+  -ms-flex-pack: center;
+  justify-content: center;
+  overflow: hidden; }
+  .tab-group input[type=radio] {
+    display: none; }
+  .tab-group input[type=radio]:checked + .label {
+    font-weight: bold !important;
+    border-bottom: 3px solid #ec38a3; }
+  .tab-group input[type=radio]:checked + .label + section {
+    display: block; }
+  .tab-group .label {
+    color: rgba(0, 0, 0, 0.87);
+    padding: 5px !important;
+    position: relative;
+    cursor: pointer;
+    z-index: 2;
+    -webkit-box-ordinal-group: 0;
+    -webkit-order: -1;
+    -ms-flex-order: -1;
+    order: -1;
+    -webkit-box-flex: 1;
+    -webkit-flex-grow: 1;
+    -ms-flex-positive: 1;
+    flex-grow: 1;
+    font-weight: normal;
+    /*overrides bootstrap*/
+    min-width: 100px !important;
+    border-bottom: 3px solid #66c2ff;
+    background-color: #66c2ff;
+    text-align: center;
+    transition: all 0.5s ease-in-out;
+    border-radius: 0 !important;
+    /*overrides bootstrap*/
+    margin-bottom: 0 !important;
+    /*overrides bootstrap*/
+    font-size: 100% !important;
+    /*overrides bootstrap*/ }
+  .tab-group section {
+    display: none;
+    position: relative;
+    z-index: 1;
+    width: 100%;
+    overflow: hidden; }
+.material-depth-1, .layout-container .content, .wfm-btn-default, .wfm-btn-primary, .wfm-fab, .dropdown .inner ul, .sidenav-toggle .sidenav-wrapper {
+  box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.26); }
+.wfm-block, .angular-ui-tree-handle, select, .wfm-radio, .wfm-checkbox, .dropdown .inner li, .tab-group .tab-container {
+  padding: 5px;
+  width: 100%; }
+.dropdown {
+  position: relative; }
+  .dropdown .inner ul {
+    padding-left: 0;
+    width: 25%;
+    list-style: none;
+    position: absolute;
+    background: #ffffff; }
+  .dropdown .inner li {
+    border-top: 1px solid rgba(0, 0, 0, 0.06);
+    cursor: pointer; }
+    .dropdown .inner li:hover {
+      background: #99d6ff; }
 </style>
 
 <div class="row">
@@ -182,7 +259,7 @@
 	</div>
 </div>
 
-<modal-dialog show='modalShown' width='1000px' height='500px'>
+<modal-dialog show='modalShown' width='1000px' height='580px'>
 	<div id="testModal" class="modalbg">
 		<div class="dialog">
 			<div class="modal-header">
@@ -301,8 +378,8 @@
 											<span class="col-lg-5" >Roles: </span>
 											
 											<span class="dropdown col-lg-7" tabindex="0" style="width: 200px; z-index: 1">
-												<span >Agent, Team Leader</span>
-												<div class="inner material-depth-2" style="width: 200px;">
+												<span class="context-trigger" ng-click="contextTrigger1 = !contextTrigger1">Agent, Team Leader</span>
+												<div class="inner right material-depth-2" ng-show="contextTrigger1" ng-cloak style="width: 200px;">
 													<div class="wfm-checkbox">
 														<input type="checkbox" id="check1" checked="checked" />
 														<label for="check1">
@@ -347,7 +424,7 @@
 						</div>
 					</div>
 				</section>
-				<input type="radio" name="tabs" id="tab-2" />
+				<input type="radio" name="tabs" id="tab-2"/>
 				<label class="label" for="tab-2">
 					Person Periods
 				</label>
@@ -356,7 +433,7 @@
 						Person Periods
 					</div>
 				</section>
-				<input type="radio" name="tabs" id="tab-3" />
+				<input type="radio" name="tabs" id="tab-3"/>
 				<label class="label" for="tab-3">
 					Schedule Periods
 				</label>
