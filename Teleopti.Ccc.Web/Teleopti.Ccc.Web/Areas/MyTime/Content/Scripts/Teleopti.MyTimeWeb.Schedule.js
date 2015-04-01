@@ -481,10 +481,8 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 		self.minutes = ko.observable(timeline.Time.TotalMinutes);
 		var timeFromMinutes = moment().startOf('day').add('minutes', self.minutes());
 
-		self.time = ko.observable(timeFromMinutes.format('H:mm'));
-		if (timelineCulture == "en-US") {
-			self.time(timeFromMinutes.format('h A'));
-		}
+		self.time = ko.observable(timeline.TimeLineDisplay);
+
 		self.timeText = self.time() + "\ntotalMinutes" + self.minutes();
 
 		self.topPosition = ko.computed(function () {

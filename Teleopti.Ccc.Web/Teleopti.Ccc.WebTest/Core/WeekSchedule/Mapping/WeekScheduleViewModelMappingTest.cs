@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Drawing;
 using System.Globalization;
 using System.Linq;
@@ -10,8 +9,8 @@ using Rhino.Mocks;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.AgentInfo.Requests;
 using Teleopti.Ccc.Domain.Common;
+using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Domain.Helper;
-using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Restriction;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.TestCommon;
@@ -38,6 +37,9 @@ namespace Teleopti.Ccc.WebTest.Core.WeekSchedule.Mapping
 		private IScheduleColorProvider scheduleColorProvider;
 		private IPermissionProvider permissionProvider;
 		private ILoggedOnUser loggedOnUser;
+		private INow now;
+		private IUserTimeZone userTimeZone;
+
 
 		[SetUp]
 		public void Setup()
@@ -48,6 +50,8 @@ namespace Teleopti.Ccc.WebTest.Core.WeekSchedule.Mapping
 			scheduleColorProvider = MockRepository.GenerateMock<IScheduleColorProvider>();
 			permissionProvider = MockRepository.GenerateMock<IPermissionProvider>();
 			loggedOnUser = MockRepository.GenerateMock<ILoggedOnUser>();
+			now = MockRepository.GenerateMock<INow>();
+			userTimeZone = MockRepository.GenerateMock<IUserTimeZone>();
 
 			Mapper.Reset();
 			Mapper.Initialize(c =>
@@ -59,7 +63,9 @@ namespace Teleopti.Ccc.WebTest.Core.WeekSchedule.Mapping
 			                  		             	() => headerViewModelFactory,
 			                  		             	() => scheduleColorProvider,
 			                  		             	() => permissionProvider,
-													() => loggedOnUser
+													() => loggedOnUser,
+													() => now,
+													() => userTimeZone
  			                  		             	));
 			                  		c.AddProfile(new CommonViewModelMappingProfile());
 									c.AddProfile(new OvertimeAvailabilityViewModelMappingProfile());
@@ -88,7 +94,7 @@ namespace Teleopti.Ccc.WebTest.Core.WeekSchedule.Mapping
 			var domainData = new WeekScheduleDayDomainData{
 					MinMaxTime = minMaxTime
 				};
-			var periodViewModels = new[] { new PeriodViewModel(), };
+			var periodViewModels = new[] { new PeriodViewModel() };
 
 			periodViewModelFactory.Stub(
 				x => x.CreatePeriodViewModels(Arg<IEnumerable<IVisualLayer>>.Is.Anything, Arg<TimePeriod>.Is.Anything,
@@ -162,7 +168,7 @@ namespace Teleopti.Ccc.WebTest.Core.WeekSchedule.Mapping
 
 			var result = Mapper.Map<WeekScheduleDayDomainData, DayViewModel>(domainData);
 
-			result.Availability.Should().Be.EqualTo((bool)domainData.Availability);
+			result.Availability.Should().Be.EqualTo(domainData.Availability);
 		}
 
 		[Test]
@@ -406,7 +412,9 @@ namespace Teleopti.Ccc.WebTest.Core.WeekSchedule.Mapping
 		public void ShouldMapTimeLine()
 		{
 			loggedOnUser.Stub(x => x.CurrentUser().PermissionInformation.Culture()).Return(CultureInfo.GetCultureInfo("sv-SE"));
-			var domainData = new WeekScheduleDomainData()
+			userTimeZone.Stub(x => x.TimeZone()).Return(TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time"));
+
+			var domainData = new WeekScheduleDomainData
 			{
 				MinMaxTime = new TimePeriod(8, 30, 17, 30)
 			};
@@ -425,7 +433,7 @@ namespace Teleopti.Ccc.WebTest.Core.WeekSchedule.Mapping
 		public void ShouldMapTimeLineCulture()
 		{
 			loggedOnUser.Stub(x => x.CurrentUser().PermissionInformation.Culture()).Return(CultureInfo.GetCultureInfo("sv-SE"));
-			var domainData = new WeekScheduleDomainData()
+			var domainData = new WeekScheduleDomainData
 			{
 				MinMaxTime = new TimePeriod(8, 30, 17, 30)
 			};
@@ -435,9 +443,43 @@ namespace Teleopti.Ccc.WebTest.Core.WeekSchedule.Mapping
 		}
 
 		[Test]
+		public void ShouldMapTimeLineForDstStartDate()
+		{
+			var timePointCount = getDstChangeTimePointCount(new DateTime(2015, 03, 29));
+			timePointCount.Should().Be.EqualTo(0);
+		}
+
+		[Test]
+		public void ShouldMapTimeLineForDstEndDate()
+		{
+			var timePointCount = getDstChangeTimePointCount(new DateTime(2015, 10, 25));
+			timePointCount.Should().Be.EqualTo(2);
+		}
+
+		private int getDstChangeTimePointCount(DateTime dstChangeDate)
+		{
+			IPerson person = new Person();
+			person.PermissionInformation.SetCulture(CultureInfo.GetCultureInfo("sv-SE"));
+			loggedOnUser.Stub(x => x.CurrentUser()).Return(person);
+			// (UTC+01:00) Amsterdam, Berlin, Bern, Rome, Stockholm, Vienna
+			userTimeZone.Stub(x => x.TimeZone()).Return(TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time"));
+			now.Stub(x => x.LocalDateTime()).Return(dstChangeDate);
+
+			var domainData = new WeekScheduleDomainData
+			{
+				MinMaxTime = new TimePeriod(00, 30, 07, 30)
+			};
+
+			var result = Mapper.Map<WeekScheduleDomainData, WeekScheduleViewModel>(domainData);
+
+			return result.TimeLine.Count(x => x.TimeLineDisplay == "02:00");
+		}
+
+
+		[Test]
 		public void ShouldMapAsmPermission()
 		{
-			var domainData = new WeekScheduleDomainData()
+			var domainData = new WeekScheduleDomainData
 			{
 				AsmPermission = true
 			};
@@ -479,7 +521,7 @@ namespace Teleopti.Ccc.WebTest.Core.WeekSchedule.Mapping
 		[Test]
 		public void ShouldMapIsCurrentWeek()
 		{
-			var domainData = new WeekScheduleDomainData()
+			var domainData = new WeekScheduleDomainData
 			{
 				IsCurrentWeek = true
 			};

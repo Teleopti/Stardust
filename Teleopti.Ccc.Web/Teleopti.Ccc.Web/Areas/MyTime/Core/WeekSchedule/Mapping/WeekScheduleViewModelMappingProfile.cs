@@ -4,6 +4,7 @@ using System.Globalization;
 using System.Linq;
 using AutoMapper;
 using Teleopti.Ccc.Domain.AgentInfo.Requests;
+using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider;
@@ -24,8 +25,17 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.Mapping
 		private readonly Func<IScheduleColorProvider> _scheduleColorProvider;
 		private readonly Func<IPermissionProvider> _permissionProvider;
 		private readonly Func<ILoggedOnUser> _loggedOnUser;
+		private readonly Func<INow> _now;
+		private readonly Func<IUserTimeZone> _userTimeZone;
 
-		public WeekScheduleViewModelMappingProfile(Func<IMappingEngine> mapper, Func<IPeriodSelectionViewModelFactory> periodSelectionViewModelFactory, Func<IPeriodViewModelFactory> periodViewModelFactory, Func<IHeaderViewModelFactory> headerViewModelFactory, Func<IScheduleColorProvider> scheduleColorProvider, Func<IPermissionProvider> permissionProvider, Func<ILoggedOnUser> loggedOnUser)
+		public WeekScheduleViewModelMappingProfile(Func<IMappingEngine> mapper,
+			Func<IPeriodSelectionViewModelFactory> periodSelectionViewModelFactory,
+			Func<IPeriodViewModelFactory> periodViewModelFactory,
+			Func<IHeaderViewModelFactory> headerViewModelFactory,
+			Func<IScheduleColorProvider> scheduleColorProvider,
+			Func<IPermissionProvider> permissionProvider,
+			Func<ILoggedOnUser> loggedOnUser, Func<INow> now,
+			Func<IUserTimeZone> userTimeZone)
 		{
 			_mapper = mapper;
 			_periodSelectionViewModelFactory = periodSelectionViewModelFactory;
@@ -34,6 +44,8 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.Mapping
 			_scheduleColorProvider = scheduleColorProvider;
 			_permissionProvider = permissionProvider;
 			_loggedOnUser = loggedOnUser;
+			_now = now;
+			_userTimeZone = userTimeZone;
 		}
 		
 		protected override void Configure()
@@ -62,13 +74,19 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.Mapping
 						.Distinct()
 						;
 
+					var culture = _loggedOnUser.Invoke().CurrentUser().PermissionInformation.Culture();
+					var timezone = _userTimeZone.Invoke().TimeZone();
+					var zeroTimeInUtc = TimeZoneHelper.ConvertToUtc(_now().LocalDateTime().Date, timezone);
+
 					var diff = endTime - startTime;
 					return (from t in times
-							select new TimeLineViewModel
-									 {
-										 PositionPercentage = diff == TimeSpan.Zero ? 0 : (decimal)(t - startTime).Ticks / diff.Ticks,
-										 Time = t
-									 }).ToArray();
+						select new TimeLineViewModel
+						{
+							Time = t,
+							TimeLineDisplay = TimeZoneInfo.ConvertTimeFromUtc(zeroTimeInUtc.Add(t), timezone)
+								.ToString(culture.DateTimeFormat.ShortTimePattern),
+							PositionPercentage = diff == TimeSpan.Zero ? 0 : (decimal) (t - startTime).Ticks/diff.Ticks
+						}).ToArray();
 				}))
 				.ForMember(d => d.RequestPermission, c => c.ResolveUsing(s => new RequestPermission
 				{
