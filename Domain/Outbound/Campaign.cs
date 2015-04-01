@@ -29,7 +29,7 @@ namespace Teleopti.Ccc.Domain.Outbound
 		private DateOnly _startDate;
 		private DateOnly _endDate;
 		private CampaignStatus _campaignStatus;
-		private IList<CampaignWorkingPeriod> _campaignWorkingPeriods;
+		private IEnumerable<CampaignWorkingPeriod> _campaignWorkingPeriods;
 		private bool _isDeleted;
 
 		public virtual string Name 
@@ -106,7 +106,7 @@ namespace Teleopti.Ccc.Domain.Outbound
 			set { _campaignStatus = value; }
 		}
 
-		public virtual IList<CampaignWorkingPeriod> CampaignWorkingPeriods
+		public virtual IEnumerable<CampaignWorkingPeriod> CampaignWorkingPeriods
 		{
 			get { return _campaignWorkingPeriods; }
 			set { _campaignWorkingPeriods = value; }

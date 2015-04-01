@@ -6,7 +6,7 @@
 	<class name="CampaignWorkingPeriod">
 		<id name="Id"
         type="guid"
-		  				access="nosetter.camelcase-underscore"
+		  	access="nosetter.camelcase-underscore"
         unsaved-value="null">
 			<generator class="guid.comb" />
 		</id>
@@ -14,11 +14,11 @@
 		<many-to-one name="Parent" 
 								 class="Campaign"
 								 access="property"
-								 not-null="true"
-								 foreign-key="FK_OutboundCampaignWorking_OutboundCampaignWorkingPeriod"/>
+								 not-null="true"/>
 
-		<set name="CampaignWorkingPeriodAssignments">
-			<key column="Id" not-null="true"/>
+		<set name="CampaignWorkingPeriodAssignments"
+				 cascade="all-delete-orphan">
+			<key column="OutboundCampaignWorkingPeriod" />
 			<one-to-many class="CampaignWorkingPeriodAssignment"/>
 		</set>
 

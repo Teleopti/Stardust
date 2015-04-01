@@ -23,8 +23,6 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 	[Category("LongRunning")]
 	class OutboundCampaignRepositoryTest : RepositoryTest<Campaign>
 	{
-
-		private IPerson _user;
 		private SkillType _skillType;
 		private ISkill _skill;
 		private IActivity _activity;
@@ -56,7 +54,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 				UnproductiveTime = 30,
 				StartDate = DateOnly.Today,
 				EndDate = DateOnly.Today,
-				CampaignStatus = Domain.Outbound.CampaignStatus.Draft,
+				CampaignStatus = CampaignStatus.Draft,
 				CampaignWorkingPeriods = new List<CampaignWorkingPeriod>(),				
 			};
 
@@ -73,5 +71,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 		{
 			return new OutboundCampaignRepository(unitOfWork);
 		}
+
+
 	}
 }

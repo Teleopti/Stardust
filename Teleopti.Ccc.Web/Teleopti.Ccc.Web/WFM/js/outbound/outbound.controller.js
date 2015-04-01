@@ -86,8 +86,8 @@ outbound.controller('OutboundEditCtrl', [
 			OutboundService.updateCampaign($scope.campaign);
 		};
 
-		$scope.navigateToSchedule = function() {
-			$state.go('outbound.schedule', { id: $scope.campaign.id });
+		$scope.navigateToForecasting = function() {
+			$state.go('outbound.forecasting', { id: $scope.campaign.id });
 		};
 
 		$scope.navigateToConfiguration = function() {

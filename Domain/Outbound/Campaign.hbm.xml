@@ -65,9 +65,8 @@
 							not-null="true"/>
 
 		<set name="CampaignWorkingPeriods"
-				 inverse="true"
-				 access="field">
-			<key column="Id" not-null="true"/>
+				 inverse="true">
+			<key column="OutboundCampaign"/>
 			<one-to-many class="CampaignWorkingPeriod"/>				
 		</set>
 	
@@ -79,6 +78,10 @@
 		<property name="UpdatedOn"
 								type="UtcDateTime"
 								not-null="true"/>
+		
+		<property name="IsDeleted"
+							type="boolean"
+							not-null="true"/>
 
 		<many-to-one name="BusinessUnit"
 					class="Teleopti.Ccc.Domain.Common.BusinessUnit"

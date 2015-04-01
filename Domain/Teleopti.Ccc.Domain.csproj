@@ -1963,7 +1963,9 @@
     <Service Include="{B4F97281-0DBD-4835-9ED8-7DFB966E87FF}" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="AgentInfo\Team.hbm.xml" />
+    <EmbeddedResource Include="AgentInfo\Team.hbm.xml">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Forecasting\Skill.hbm.xml" />
@@ -2230,7 +2232,9 @@
     <None Include="Common\Groupings.cd" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Payroll\PayrollExport.hbm.xml" />
+    <EmbeddedResource Include="Payroll\PayrollExport.hbm.xml">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Payroll\PayrollResult.hbm.xml">
@@ -2264,7 +2268,9 @@
     <EmbeddedResource Include="Scheduling\Restriction\RotationRestriction.hbm.xml" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Scheduling\Activity.hbm.xml" />
+    <EmbeddedResource Include="Scheduling\Activity.hbm.xml">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Scheduling\Restriction\AvailabilityRotation.hbm.xml" />
@@ -2396,9 +2402,15 @@
     <Folder Include="Properties\" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Outbound\Campaign.hbm.xml" />
-    <EmbeddedResource Include="Outbound\CampaignWorkingPeriod.hbm.xml" />
-    <EmbeddedResource Include="Outbound\CampaignWorkingPeriodAssignment.hbm.xml" />
+    <EmbeddedResource Include="Outbound\Campaign.hbm.xml">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Outbound\CampaignWorkingPeriod.hbm.xml">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Outbound\CampaignWorkingPeriodAssignment.hbm.xml">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
     <EmbeddedResource Include="Payroll\PayrollFormat.hbm.xml">
       <SubType>Designer</SubType>
     </EmbeddedResource>

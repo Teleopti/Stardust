@@ -16,7 +16,6 @@
 
 		<many-to-one name="Parent"
 							 class="CampaignWorkingPeriod"
-							 not-null="true"
-							 foreign-key="FK_OutboundCampaignWorkingPeriod_OutboundCampaignWorkingPeriodAssignment"/>
+							 not-null="true"/>
 	</class>
 </hibernate-mapping>
