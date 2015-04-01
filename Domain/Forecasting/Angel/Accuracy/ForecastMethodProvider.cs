@@ -2,9 +2,9 @@ namespace Teleopti.Ccc.Domain.Forecasting.Angel.Accuracy
 {
 	public class ForecastMethodProvider : IForecastMethodProvider
 	{
-		private readonly IndexVolumes _indexVolumes;
+		private readonly IIndexVolumes _indexVolumes;
 
-		public ForecastMethodProvider(IndexVolumes indexVolumes)
+		public ForecastMethodProvider(IIndexVolumes indexVolumes)
 		{
 			_indexVolumes = indexVolumes;
 		}

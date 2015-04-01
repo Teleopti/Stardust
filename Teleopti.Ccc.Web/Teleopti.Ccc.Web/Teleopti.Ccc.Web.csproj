@@ -427,8 +427,6 @@
     <Compile Include="Areas\Anywhere\Core\TeamViewModel.cs" />
     <Compile Include="Areas\Global\ApplicationController.cs" />
     <Compile Include="Areas\Global\AreaWithPermissionPath.cs" />
-    <Compile Include="Areas\Forecasting\Controllers\SkillViewModel.cs" />
-    <Compile Include="Areas\Forecasting\Controllers\WorkloadViewModel.cs" />
     <Compile Include="Areas\Global\LanguageController.cs" />
     <Compile Include="Areas\Global\NotificationsController.cs" />
     <Compile Include="Areas\Global\WfmAreaRegistration.cs" />

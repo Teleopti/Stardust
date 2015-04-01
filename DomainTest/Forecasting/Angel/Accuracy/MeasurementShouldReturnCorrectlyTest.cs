@@ -26,10 +26,10 @@ namespace Teleopti.Ccc.DomainTest.Forecasting.Angel.Accuracy
 			return new[] {statisticTasks1, statisticTasks2};
 		}
 
-		protected override void Assert(ForecastingAccuracy[] measurementResult)
+		protected override void Assert(SkillAccuracy measurementResult)
 		{
-			measurementResult.First().WorkloadId.Should().Be.EqualTo(Workload.Id.Value);
-			measurementResult.First().Accuracies.Single().Number.Should().Be.EqualTo(100 - Math.Round((11d - 9d)/11d*100, 1));
+			measurementResult.Workloads.First().Id.Should().Be.EqualTo(Workload.Id.Value);
+			measurementResult.Workloads.First().Accuracies.Single().Number.Should().Be.EqualTo(100 - Math.Round((11d - 9d)/11d*100, 1));
 		}
 	}
 }

@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.Forecasting.Angel.Historical;
 using Teleopti.Interfaces.Domain;
@@ -9,20 +8,20 @@ namespace Teleopti.Ccc.Domain.Forecasting.Angel.Accuracy
 	{
 		private readonly IHistoricalData _historicalData;
 		private readonly IForecastingMeasurer _forecastingMeasurer;
-		private readonly ForecastMethodProvider _forecastMethodProvider;
+		private readonly IForecastMethodProvider _forecastMethodProvider;
 
-		public QuickForecastWorkloadEvaluator(IHistoricalData historicalData, IForecastingMeasurer forecastingMeasurer, ForecastMethodProvider forecastMethodProvider)
+		public QuickForecastWorkloadEvaluator(IHistoricalData historicalData, IForecastingMeasurer forecastingMeasurer, IForecastMethodProvider forecastMethodProvider)
 		{
 			_historicalData = historicalData;
 			_forecastingMeasurer = forecastingMeasurer;
 			_forecastMethodProvider = forecastMethodProvider;
 		}
 
-		public ForecastingAccuracy Measure(IWorkload workload, DateOnlyPeriod historicalPeriod)
+		public WorkloadAccuracy Measure(IWorkload workload, DateOnlyPeriod historicalPeriod)
 		{
 			var historicalData = _historicalData.Fetch(workload, historicalPeriod);
 			if (!historicalData.TaskOwnerDayCollection.Any())
-				return new ForecastingAccuracy {WorkloadId = workload.Id.Value, Accuracies = new List<MethodAccuracy>()};
+				return new WorkloadAccuracy { Id = workload.Id.Value, Name = workload.Name, Accuracies = new MethodAccuracy[] { } };
 
 			var oneYearBack = new DateOnly(historicalData.EndDate.Date.AddYears(-1));
 			var lastYearData = new TaskOwnerPeriod(DateOnly.MinValue,
@@ -31,20 +30,18 @@ namespace Teleopti.Ccc.Domain.Forecasting.Angel.Accuracy
 				historicalData.TaskOwnerDayCollection.Where(x => x.CurrentDate <= oneYearBack), TaskOwnerPeriodType.Other);
 
 			if (!yearBeforeLastYearData.TaskOwnerDayCollection.Any())
-				return new ForecastingAccuracy {WorkloadId = workload.Id.Value, Accuracies = new List<MethodAccuracy>()};
+				return new WorkloadAccuracy { Id = workload.Id.Value, Name = workload.Name, Accuracies = new MethodAccuracy[] { } };
 
-			var result = new ForecastingAccuracy {WorkloadId = workload.Id.Value, Accuracies = new List<MethodAccuracy>()};
+			var result = new WorkloadAccuracy { Id = workload.Id.Value, Name = workload.Name};
 			var methods = _forecastMethodProvider.All();
-			foreach (var forecastMethod in methods)
-			{
-				var forecastingMeasureTarget = forecastMethod.Forecast(yearBeforeLastYearData,
-					new DateOnlyPeriod(oneYearBack, historicalData.EndDate));
-				result.Accuracies.Add(new MethodAccuracy
+			result.Accuracies = (from forecastMethod in methods
+				let forecastingMeasureTarget =
+					forecastMethod.Forecast(yearBeforeLastYearData, new DateOnlyPeriod(oneYearBack, historicalData.EndDate))
+				select new MethodAccuracy
 				{
 					Number = _forecastingMeasurer.Measure(forecastingMeasureTarget, lastYearData.TaskOwnerDayCollection),
 					MethodId = forecastMethod.Id
-				});
-			}
+				}).ToArray();
 			return result;
 		}
 	}

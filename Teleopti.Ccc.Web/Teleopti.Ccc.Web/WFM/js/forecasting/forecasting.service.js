@@ -6,7 +6,7 @@ forecastingService.service('Forecasting', ['$resource', function ($resource) {
 		get: { method: 'GET', params: {}, isArray: true }
 	});
 
-	this.accuracyResult = $resource('../api/Forecasting/MeasureForecast', {}, {
+	this.measureForecastMethod = $resource('../api/Forecasting/MeasureForecastMethod', {}, {
 		get: { method: 'GET', params: {}, isArray: true }
 	});
 

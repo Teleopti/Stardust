@@ -8,9 +8,9 @@ namespace Teleopti.Ccc.DomainTest.Forecasting.Angel.QuickForecastSkillWithOneWor
 {
 	public class NoDataAvailableForForecastingTest : MeasureForecastTest
 	{
-		protected override void Assert(ForecastingAccuracy[] measurementResult)
+		protected override void Assert(SkillAccuracy measurementResult)
 		{
-			measurementResult.First().Accuracies.Should().Be.Empty();
+			measurementResult.Workloads.First().Accuracies.Should().Be.Empty();
 		}
 	}
 }

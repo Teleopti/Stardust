@@ -4,6 +4,6 @@ namespace Teleopti.Ccc.Domain.Forecasting.Angel.Accuracy
 {
 	public interface IQuickForecastWorkloadEvaluator
 	{
-		ForecastingAccuracy Measure(IWorkload workload, DateOnlyPeriod historicalPeriod);
+		WorkloadAccuracy Measure(IWorkload workload, DateOnlyPeriod historicalPeriod);
 	}
 }

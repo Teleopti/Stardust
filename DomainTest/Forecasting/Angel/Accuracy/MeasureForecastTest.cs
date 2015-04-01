@@ -57,7 +57,7 @@ namespace Teleopti.Ccc.DomainTest.Forecasting.Angel.Accuracy
 		{
 			get
 			{
-				var workload = _workload ?? (_workload = WorkloadFactory.CreateWorkloadWithFullOpenHours(SkillFactory.CreateSkill("_")));
+				var workload = _workload ?? (_workload = WorkloadFactory.CreateWorkloadWithFullOpenHours(SkillFactory.CreateSkillWithId("_")));
 				if (!workload.Id.HasValue)
 					workload.SetId(Guid.NewGuid());
 				return workload;
@@ -92,7 +92,7 @@ namespace Teleopti.Ccc.DomainTest.Forecasting.Angel.Accuracy
 			return skillDayRepository;
 		}
 
-		protected abstract void Assert(ForecastingAccuracy[] measurementResult);
+		protected abstract void Assert(SkillAccuracy measurementResult);
 	}
 
 	

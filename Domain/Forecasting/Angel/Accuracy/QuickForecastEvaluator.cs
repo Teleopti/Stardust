@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Interfaces.Domain;
@@ -18,16 +19,11 @@ namespace Teleopti.Ccc.Domain.Forecasting.Angel.Accuracy
 			_now = now;
 		}
 
-		public ForecastingAccuracy[] MeasureForecastForAllSkills()
+		public IEnumerable<SkillAccuracy> MeasureForecastForAllSkills()
 		{
 			var historicalPeriod = getHistoricalPeriod();
 			var skills = _skillRepository.FindSkillsWithAtLeastOneQueueSource();
-			var list = new List<ForecastingAccuracy>();
-			foreach (var skill in skills)
-			{
-				list.AddRange(_quickForecastSkillEvaluator.Measure(skill, historicalPeriod));
-			}
-			return list.ToArray();
+			return skills.Select(skill => _quickForecastSkillEvaluator.Measure(skill, historicalPeriod)).ToList();
 		}
 
 		private DateOnlyPeriod getHistoricalPeriod()

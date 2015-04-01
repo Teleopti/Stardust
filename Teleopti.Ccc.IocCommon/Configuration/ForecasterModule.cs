@@ -17,9 +17,9 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<ForecastingWeightedMeanAbsolutePercentageError>()
 				.SingleInstance()
 				.As<IForecastingMeasurer>();
-			builder.RegisterType<QuickForecastEvaluator>()
+			builder.RegisterType<ForecastMethodProvider>()
 				.SingleInstance()
-				.As<IQuickForecastEvaluator>();
+				.As<IForecastMethodProvider>();
 			builder.RegisterType<QuickForecastSkillEvaluator>()
 				.SingleInstance()
 				.As<IQuickForecastSkillEvaluator>();
@@ -59,6 +59,9 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<QuickForecastCreator>()
 				.SingleInstance()
 				.As<IQuickForecastCreator>();
+			builder.RegisterType<QuickForecastEvaluator>()
+				.SingleInstance()
+				.As<IQuickForecastEvaluator>();
 			builder.RegisterType<ForecastVolumeApplier>()
 				.SingleInstance()
 				.As<IForecastVolumeApplier>();

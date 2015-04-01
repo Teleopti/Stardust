@@ -5,8 +5,8 @@ using System.Web.Http;
 using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.Forecasting.Angel;
 using Teleopti.Ccc.Domain.Forecasting.Angel.Accuracy;
-using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
+using Teleopti.Ccc.Web.Areas.Start.Controllers;
 using Teleopti.Ccc.Web.Filters;
 using Teleopti.Interfaces.Domain;
 
@@ -16,33 +16,18 @@ namespace Teleopti.Ccc.Web.Areas.Forecasting.Controllers
 	public class ForecastController : ApiController
 	{
 		private readonly IQuickForecastEvaluator _quickForecastEvaluator;
-		private readonly ISkillRepository _skillRepository;
 		private readonly IQuickForecastCreator _quickForecastCreator;
 
-		public ForecastController(IQuickForecastEvaluator quickForecastEvaluator, ISkillRepository skillRepository, IQuickForecastCreator quickForecastCreator)
+		public ForecastController(IQuickForecastEvaluator quickForecastEvaluator, IQuickForecastCreator quickForecastCreator)
 		{
 			_quickForecastEvaluator = quickForecastEvaluator;
-			_skillRepository = skillRepository;
 			_quickForecastCreator = quickForecastCreator;
 		}
 
-		[HttpGet, Route("api/Forecasting/MeasureForecast"), UnitOfWork]
-		public virtual Task<ForecastingAccuracy[]> MeasureForecast()
+		[UnitOfWork, HttpGet, Route("api/Forecasting/MeasureForecastMethod")]
+		public virtual Task<IEnumerable<SkillAccuracy>> MeasureForecastMethod()
 		{
 			return Task.FromResult(_quickForecastEvaluator.MeasureForecastForAllSkills());
-		}
-
-		[UnitOfWork, Route("api/Forecasting/Skills"), HttpGet]
-		public virtual IEnumerable<SkillViewModel> Skills()
-		{
-			var skills = _skillRepository.FindSkillsWithAtLeastOneQueueSource();
-			return skills.Select(
-				skill => new SkillViewModel
-				{
-					Id = skill.Id.Value,
-					Name = skill.Name,
-					Workloads = skill.WorkloadCollection.Select(x => new WorkloadViewModel {Id = x.Id.Value, Name = x.Name}).ToArray()
-				});
 		}
 
 		[HttpPost, Route("api/Forecasting/Forecast"), UnitOfWork]

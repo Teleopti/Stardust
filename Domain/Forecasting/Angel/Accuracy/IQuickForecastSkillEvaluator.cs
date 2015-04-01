@@ -4,6 +4,6 @@ namespace Teleopti.Ccc.Domain.Forecasting.Angel.Accuracy
 {
 	public interface IQuickForecastSkillEvaluator
 	{
-		ForecastingAccuracy[] Measure(ISkill skill, DateOnlyPeriod historicalPeriod);
+		SkillAccuracy Measure(ISkill skill, DateOnlyPeriod historicalPeriod);
 	}
 }

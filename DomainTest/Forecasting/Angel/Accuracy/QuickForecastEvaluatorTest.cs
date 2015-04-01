@@ -19,7 +19,9 @@ namespace Teleopti.Ccc.DomainTest.Forecasting.Angel.Accuracy
 		{
 			var skillRepository = MockRepository.GenerateMock<ISkillRepository>();
 			var skill1 = SkillFactory.CreateSkillWithWorkloadAndSources();
+			skill1.SetId(Guid.NewGuid());
 			var skill2 = SkillFactory.CreateSkillWithWorkloadAndSources();
+			skill2.SetId(Guid.NewGuid());
 			skillRepository.Stub(x => x.FindSkillsWithAtLeastOneQueueSource()).Return(new[] { skill1, skill2 });
 
 			var quickForecastSkillEvaluator = MockRepository.GenerateMock<IQuickForecastSkillEvaluator>();
@@ -31,28 +33,48 @@ namespace Teleopti.Ccc.DomainTest.Forecasting.Angel.Accuracy
 			var workload1 = Guid.NewGuid();
 			var workload2 = Guid.NewGuid();
 			var workload3 = Guid.NewGuid();
-			quickForecastSkillEvaluator.Stub(x => x.Measure(skill1, historicalPeriod)).Return(new[] { 
-				new ForecastingAccuracy
+			quickForecastSkillEvaluator.Stub(x => x.Measure(skill1, historicalPeriod)).Return(new SkillAccuracy()
 			{
-				Accuracies = new[] { new MethodAccuracy { Number = 2.3 } }, WorkloadId = workload1
-			}, new ForecastingAccuracy
-			{
-				Accuracies = new[] { new MethodAccuracy { Number = 2.4 } }, WorkloadId = workload2
-			} });
-			quickForecastSkillEvaluator.Stub(x => x.Measure(skill2, historicalPeriod)).Return(new[]
-			{
-				new ForecastingAccuracy { Accuracies = new[] { new MethodAccuracy { Number = 3.4 } }, WorkloadId = workload3 }
+				Id = skill1.Id.Value,
+				Name = skill1.Name,
+				Workloads = new []{new WorkloadAccuracy
+				{
+					Id = workload1,
+					Name = "work1",
+					Accuracies = new []{new MethodAccuracy { Number = 2.3 }}
+				}, new WorkloadAccuracy
+				{
+					Id = workload2,
+					Name = "work2",
+					Accuracies = new []{new MethodAccuracy { Number = 2.4 }}
+				}}
 			});
-
+			quickForecastSkillEvaluator.Stub(x => x.Measure(skill2, historicalPeriod)).Return(new SkillAccuracy()
+			{
+				Id = skill2.Id.Value,
+				Name = skill2.Name,
+				Workloads = new[]{new WorkloadAccuracy
+				{
+					Id = workload3,
+					Name = "work3",
+					Accuracies = new []{new MethodAccuracy { Number = 3.4 }}
+				}}
+			});
+			
 
 			var target = new QuickForecastEvaluator(quickForecastSkillEvaluator, skillRepository, now);
 			var result = target.MeasureForecastForAllSkills();
-			result[0].Accuracies.Single().Number.Should().Be.EqualTo(2.3);
-			result[0].WorkloadId.Should().Be.EqualTo(workload1);
-			result[1].Accuracies.Single().Number.Should().Be.EqualTo(2.4);
-			result[1].WorkloadId.Should().Be.EqualTo(workload2);
-			result[2].Accuracies.Single().Number.Should().Be.EqualTo(3.4);
-			result[2].WorkloadId.Should().Be.EqualTo(workload3);
+			result.First().Id.Should().Be.EqualTo(skill1.Id.Value);
+			result.First().Name.Should().Be.EqualTo(skill1.Name);
+			result.First().Workloads.First().Id.Should().Be.EqualTo(workload1);
+			result.First().Workloads.First().Name.Should().Be.EqualTo("work1");
+			result.First().Workloads.First().Accuracies.Single().Number.Should().Be.EqualTo(2.3);
+			result.First().Workloads.Last().Id.Should().Be.EqualTo(workload2);
+			result.First().Workloads.Last().Name.Should().Be.EqualTo("work2");
+			result.First().Workloads.Last().Accuracies.Single().Number.Should().Be.EqualTo(2.4);
+			result.Last().Workloads.First().Id.Should().Be.EqualTo(workload3);
+			result.Last().Workloads.First().Name.Should().Be.EqualTo("work3");
+			result.Last().Workloads.First().Accuracies.Single().Number.Should().Be.EqualTo(3.4);
 		}
 	}
 }

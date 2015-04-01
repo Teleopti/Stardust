@@ -57,12 +57,11 @@ angular.module('wfm.forecasting.target', [])
 					$scope.all.Selected = allSet;
 				}, true);
 
-				Forecasting.skills.query().$promise.then(function(result) {
+				Forecasting.measureForecastMethod.query().$promise.then(function (result) {
 					$scope.skillsDisplayed = result;
 					angular.forEach($scope.skillsDisplayed, function (skill) {
 						skill.show = true;
 					});
-
 				});
 
 				//Forecasting.accuracyResult.query().$promise.then(function(workloadAccuracies) {
