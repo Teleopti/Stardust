@@ -6,12 +6,10 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 	public class AdherenceEventPublisher : IAdherenceEventPublisher
 	{
 		private readonly IRtaDecoratingEventPublisher _eventPublisher;
-		private readonly IShouldPublishUnknownEvent _shouldPublishUnknown;
 
-		public AdherenceEventPublisher(IRtaDecoratingEventPublisher	eventPublisher, IShouldPublishUnknownEvent shouldPublishUnknown)
+		public AdherenceEventPublisher(IRtaDecoratingEventPublisher	eventPublisher)
 		{
 			_eventPublisher = eventPublisher;
-			_shouldPublishUnknown = shouldPublishUnknown;
 		}
 
 		public void Publish(StateInfo info, DateTime time, AdherenceState toAdherence)
@@ -43,18 +41,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 			if (toAdherence == AdherenceState.Neutral)
 			{
 				_eventPublisher.Publish(info, new PersonNeutralAdherenceEvent
-				{
-					PersonId = info.PersonId,
-					Timestamp = time,
-					BusinessUnitId = info.BusinessUnitId,
-					TeamId = info.TeamId,
-					SiteId = info.SiteId
-				});
-			}
-
-			if (_shouldPublishUnknown.ShouldPublish() && toAdherence == AdherenceState.Unknown)
-			{
-				_eventPublisher.Publish(info, new PersonUnknownAdherenceEvent
 				{
 					PersonId = info.PersonId,
 					Timestamp = time,

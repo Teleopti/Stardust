@@ -190,7 +190,6 @@
     <Compile Include="ApplicationLayer\Events\PersonTeamChangedEvent.cs" />
     <Compile Include="ApplicationLayer\Events\PersonTerminatedEvent.cs" />
     <Compile Include="ApplicationLayer\AdherencePercentageReadModelUpdatedMessage.cs" />
-    <Compile Include="ApplicationLayer\Events\PersonUnknownAdherenceEvent.cs" />
     <Compile Include="ApplicationLayer\Events\ScheduledResourcesChangedEvent.cs" />
     <Compile Include="ApplicationLayer\ICurrentEventPublisher.cs" />
     <Compile Include="ApplicationLayer\IEventPopulatingPublisher.cs" />
@@ -203,7 +202,6 @@
     <Compile Include="ApplicationLayer\Commands\RemovePersonAbsenceCommandHandler.cs" />
     <Compile Include="ApplicationLayer\Events\PersonAbsenceRemovedEvent.cs" />
     <Compile Include="ApplicationLayer\Commands\MoveActivityCommandHandler.cs" />
-    <Compile Include="ApplicationLayer\Rta\Service\ShouldSendUnknownEvent.cs" />
     <Compile Include="ApplicationLayer\Rta\ViewModelBuilders\AdherencePercentageViewModel.cs" />
     <Compile Include="ApplicationLayer\Rta\Service\ActivityEventPublisher.cs" />
     <Compile Include="ApplicationLayer\Rta\Service\ActualAgentStateExtension.cs" />

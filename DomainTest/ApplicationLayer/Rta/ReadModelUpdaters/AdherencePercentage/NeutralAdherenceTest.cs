@@ -70,40 +70,5 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ReadModelUpdaters.Adheren
 			Persister.PersistedModel.IsLastTimeInAdherence.Should().Be(null);
 		}
 
-		[Test]
-		public void ShouldHandleUnknownAdherenceEvent()
-		{
-			var personId = Guid.NewGuid();
-			Target.Handle(new PersonUnknownAdherenceEvent
-			{
-				PersonId = personId
-			});
-
-			Persister.PersistedModel.Should().Not.Be.Null();
-		}
-
-		[Test]
-		public void ShouldNotConsiderTimeInUnknownAdherence()
-		{
-			var personId = Guid.NewGuid();
-
-			Target.Handle(new PersonUnknownAdherenceEvent
-			{
-				PersonId = personId,
-				Timestamp = "2016-03-16 08:00".Utc()
-			});
-			Target.Handle(new PersonInAdherenceEvent
-			{
-				PersonId = personId,
-				Timestamp = "2016-03-16 09:00".Utc()
-			});
-			Target.Handle(new PersonOutOfAdherenceEvent
-			{
-				PersonId = personId,
-				Timestamp = "2016-03-16 10:00".Utc()
-			});
-
-			Persister.PersistedModel.TimeInAdherence.Should().Be("60".Minutes());
-		}
 	}
 }
