@@ -295,6 +295,9 @@
     <Compile Include="Auditing\AuditSettingTest.cs" />
     <Compile Include="Auditing\RevisionTest.cs" />
     <Compile Include="Backlog\BacklogSkillTest.cs" />
+    <Compile Include="Backlog\FlatDistributionSetterTest.cs" />
+    <Compile Include="Backlog\IncomingTaskTest.cs" />
+    <Compile Include="Backlog\TimeDistributorTest.cs" />
     <Compile Include="Budgeting\BudgetCalculatorTest.cs" />
     <Compile Include="Budgeting\BudgetDayCalculationsTest.cs" />
     <Compile Include="Budgeting\BudgetDayTest.cs" />

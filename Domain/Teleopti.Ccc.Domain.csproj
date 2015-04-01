@@ -386,8 +386,11 @@
     <Compile Include="Auditing\ScheduleAuditingReportData.cs" />
     <Compile Include="Backlog\BacklogSkill.cs" />
     <Compile Include="Backlog\BackLogSkillLoader.cs" />
+    <Compile Include="Backlog\FlatDistributionSetter.cs" />
     <Compile Include="Backlog\IncomingTask.cs" />
+    <Compile Include="Backlog\IncomingTaskFactory.cs" />
     <Compile Include="Backlog\TaskDay.cs" />
+    <Compile Include="Backlog\TimeDistributor.cs" />
     <Compile Include="Budgeting\AllowanceCalculator.cs" />
     <Compile Include="Budgeting\BudgetCalculator.cs" />
     <Compile Include="Budgeting\BudgetDay.cs" />

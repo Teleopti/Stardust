@@ -5,7 +5,13 @@ namespace Teleopti.Ccc.Domain.Backlog
 	public class TaskDay
 	{
 		private TimeSpan _time;
-		private PlannedTimeTypeEnum _plannedTimeType = PlannedTimeTypeEnum.Actual;
+		private PlannedTimeTypeEnum _plannedTimeType = PlannedTimeTypeEnum.Calculated;
+		private TimeSpan? _actualBacklog;
+		public void SetTime(TimeSpan time, PlannedTimeTypeEnum plannedTimeType)
+		{
+			_time = time;
+			_plannedTimeType = plannedTimeType;
+		}
 
 		public TimeSpan Time
 		{
@@ -17,18 +23,32 @@ namespace Teleopti.Ccc.Domain.Backlog
 			get { return _plannedTimeType; }
 		}
 
-		public void SetTime(TimeSpan time, PlannedTimeTypeEnum plannedTimeType)
+		public void SetActualBacklog(int numberOfTasks, TimeSpan averageWorkTimePerTask)
 		{
-			_time = time;
-			_plannedTimeType = plannedTimeType;
+			_actualBacklog = new TimeSpan(numberOfTasks*averageWorkTimePerTask.Ticks);
+		}
+
+		public TimeSpan? ActualBacklog
+		{
+			get { return _actualBacklog; }
+		}
+
+		public void Close()
+		{
+			_plannedTimeType = PlannedTimeTypeEnum.Closed;
+		}
+
+		public void ClearTime()
+		{
+			throw new NotImplementedException();
 		}
 	}
 
 	public enum PlannedTimeTypeEnum
 	{
-		Actual,
  		Scheduled,
-		Planned,
-		Manual
+		Calculated,
+		Manual,
+		Closed
 	}
 }
