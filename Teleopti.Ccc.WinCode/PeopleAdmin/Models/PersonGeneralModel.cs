@@ -239,6 +239,9 @@ namespace Teleopti.Ccc.WinCode.PeopleAdmin.Models
 				{
 					ContainedEntity.ApplicationAuthenticationInfo = null;
 					_isValid = true;
+					_tenantData.ApplicationLogonName = "";
+					_tenantData.Password = "";
+					_tenantData.Changed = true;
 					return;
 				}
 				if (ContainedEntity.ApplicationAuthenticationInfo == null)
