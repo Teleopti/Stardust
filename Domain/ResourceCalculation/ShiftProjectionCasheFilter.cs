@@ -379,10 +379,10 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 
             var filteredList = new List<IShiftProjectionCache>();
             var meetings = part.PersonMeetingCollection();
-            var personAssignment = part.PersonAssignment();
+            var personAssignment = part.PersonAssignment(true);
             var cnt = shiftList.Count;
 
-	        if (meetings.Count == 0 && personAssignment==null)
+	        if (meetings.Count == 0 && !personAssignment.PersonalActivities().Any())
 		        return shiftList;
 
             foreach (var shift in shiftList)
@@ -392,25 +392,23 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
                     continue;
                 filteredList.Add(shift);
             }
+
             finderResult.AddFilterResults(new WorkShiftFilterResult(UserTexts.Resources.AfterCheckingAgainstActivities,
                                                                     cnt, filteredList.Count));
 
             return filteredList;
         }
 
-        private static bool isActivityIntersectedWithMeetingOrPersonalShift(IPersonAssignment personAssignment,
-                                                                            IEnumerable<IPersonMeeting> meetings, IVisualLayer layer)
-        {
-            if (meetings.Any(x => x.Period.Intersect(layer.Period)))
-                return true;
+	    private static bool isActivityIntersectedWithMeetingOrPersonalShift(IPersonAssignment personAssignment,
+		    IEnumerable<IPersonMeeting> meetings, IVisualLayer layer)
+	    {
+		    if (meetings.Any(x => x.Period.Intersect(layer.Period)))
+			    return true;
 
-					if (personAssignment != null)
-					{
-						if (personAssignment.PersonalActivities().Any(l => l.Period.Intersect(layer.Period)))
-							return true;
-					}
+		    if (personAssignment.PersonalActivities().Any(l => l.Period.Intersect(layer.Period)))
+			    return true;
 
-            return false;
-        }
+		    return false;
+	    }
     }
 }

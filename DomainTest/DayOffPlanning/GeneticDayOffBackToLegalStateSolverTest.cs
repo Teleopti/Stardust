@@ -29,24 +29,24 @@ namespace Teleopti.Ccc.DomainTest.DayOffPlanning
 			_dayOffOptimizationLegalStateValidatorListCreator = new DayOffOptimizationLegalStateValidatorListCreator(_daysOffPreferences, new OfficialWeekendDays(), new BitArray(28+14), new MinMax<int>(7,28+7));
 		}
 
-		[Test]
-		public void ShouldWorkForThis()
-		{
-			_daysOffPreferences.UseDaysOffPerWeek = true;
-			_daysOffPreferences.DaysOffPerWeekValue = new MinMax<int>(1, 2);
-			_daysOffPreferences.UseConsecutiveDaysOff = true;
-			_daysOffPreferences.ConsecutiveDaysOffValue = new MinMax<int>(1, 3);
-			_daysOffPreferences.UseConsecutiveWorkdays = true;
-			_daysOffPreferences.ConsecutiveWorkdaysValue = new MinMax<int>(1, 5);
-			_daysOffPreferences.UseFullWeekendsOff = true;
-			_daysOffPreferences.FullWeekendsOffValue = new MinMax<int>(3, 3);
-			_daysOffPreferences.UseWeekEndDaysOff = true;
-			_daysOffPreferences.WeekEndDaysOffValue = new MinMax<int>(6, 6);
-			var validators = _dayOffOptimizationLegalStateValidatorListCreator.BuildActiveValidatorList();
-			var result = _target.Execute(28, 8, validators);
-			Assert.That(result.Count > 0);
-			Debug.Print(result.Count.ToString());
-		}
+		//[Test]
+		//public void ShouldWorkForThis()
+		//{
+		//	_daysOffPreferences.UseDaysOffPerWeek = true;
+		//	_daysOffPreferences.DaysOffPerWeekValue = new MinMax<int>(1, 2);
+		//	_daysOffPreferences.UseConsecutiveDaysOff = true;
+		//	_daysOffPreferences.ConsecutiveDaysOffValue = new MinMax<int>(1, 3);
+		//	_daysOffPreferences.UseConsecutiveWorkdays = true;
+		//	_daysOffPreferences.ConsecutiveWorkdaysValue = new MinMax<int>(1, 6);
+		//	_daysOffPreferences.UseFullWeekendsOff = true;
+		//	_daysOffPreferences.FullWeekendsOffValue = new MinMax<int>(3, 3);
+		//	_daysOffPreferences.UseWeekEndDaysOff = true;
+		//	_daysOffPreferences.WeekEndDaysOffValue = new MinMax<int>(6, 6);
+		//	var validators = _dayOffOptimizationLegalStateValidatorListCreator.BuildActiveValidatorList();
+		//	var result = _target.Execute(28, 8, validators);
+		//	Assert.That(result.Count > 0);
+		//	Debug.Print(result.Count.ToString());
+		//}
 
 		[Test]
 		public void xx()
