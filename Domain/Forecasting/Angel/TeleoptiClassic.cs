@@ -4,21 +4,57 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Forecasting.Angel
 {
-	public class TeleoptiClassic : IForecastMethod
+	public class LinearTrend
+	{
+		public static readonly DateOnly StartDate = new DateOnly(2000, 1, 1);
+
+		public double A { get; set; }
+		public double B { get; set; }
+	}
+
+	public interface ILinearRegressionTrend
+	{
+		LinearTrend CalculateTrend(TaskOwnerPeriod historicalData);
+	}
+
+	public class TeleoptiClassicWithTrend : TeleoptiClassicBase
+	{
+		private readonly ILinearRegressionTrend _linearRegressionTrend;
+
+		public TeleoptiClassicWithTrend(IIndexVolumes indexVolumes, ILinearRegressionTrend linearRegressionTrend) : base(indexVolumes)
+		{
+			_linearRegressionTrend = linearRegressionTrend;
+		}
+
+		public override IList<IForecastingTarget> Forecast(TaskOwnerPeriod historicalData, DateOnlyPeriod futurePeriod)
+		{
+			var trend = _linearRegressionTrend.CalculateTrend(historicalData);
+			var forecastWithoutTrend = base.Forecast(historicalData, futurePeriod);
+			foreach (var forecastingTarget in forecastWithoutTrend)
+			{
+				forecastingTarget.Tasks += forecastingTarget.CurrentDate.Subtract(LinearTrend.StartDate).Days*trend.A + trend.B;
+			}
+			return forecastWithoutTrend;
+		}
+
+		public override ForecastMethodType Id {
+			get
+			{
+				return ForecastMethodType.TeleoptiClassicWithTrend;
+			}
+		}
+	}
+
+	public abstract class TeleoptiClassicBase : IForecastMethod
 	{
 		private readonly IIndexVolumes _indexVolumes;
 
-		public TeleoptiClassic(IIndexVolumes indexVolumes)
+		protected TeleoptiClassicBase(IIndexVolumes indexVolumes)
 		{
 			_indexVolumes = indexVolumes;
 		}
 
-		public ForecastMethodType Id
-		{
-			get { return ForecastMethodType.TeleoptiClassic; }
-		}
-
-		public IList<IForecastingTarget> Forecast(TaskOwnerPeriod historicalData, DateOnlyPeriod futurePeriod)
+		public virtual IList<IForecastingTarget> Forecast(TaskOwnerPeriod historicalData, DateOnlyPeriod futurePeriod)
 		{
 			var volumes = _indexVolumes.Create(historicalData);
 			var averageStatistics = new AverageStatistics();
@@ -74,6 +110,21 @@ namespace Teleopti.Ccc.Domain.Forecasting.Angel
 			totalDayItem.TaskIndex = currentTotalTaskIndex;
 			totalDayItem.TalkTimeIndex = currentTalkTimeIndex;
 			totalDayItem.AfterTalkTimeIndex = currentAfterTalkTimeIndex;
+		}
+
+		public abstract ForecastMethodType Id { get; }
+	}
+
+
+	public class TeleoptiClassic : TeleoptiClassicBase
+	{
+		public TeleoptiClassic(IIndexVolumes indexVolumes):base(indexVolumes)
+		{
+		}
+
+		public override ForecastMethodType Id
+		{
+			get { return ForecastMethodType.TeleoptiClassic; }
 		}
 	}
 }
