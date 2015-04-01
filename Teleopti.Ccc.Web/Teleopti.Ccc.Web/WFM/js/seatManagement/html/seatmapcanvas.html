@@ -1,0 +1,28 @@
+﻿<div class="row">
+	
+	
+	<div class="pull-right">
+		<button class="btn btn-primary" ng-click="vm.toggleEditMode()" ng-show="!vm.allowEdit">
+			<i class="mdi small mdi-lock-outline" aria-hidden="true"></i>
+		</button>
+		<button class="btn btn-primary" ng-click="vm.toggleEditMode()" ng-show="vm.allowEdit">
+			<i class="mdi small mdi-lock-unlock-outline" aria-hidden="true"></i>
+		</button>
+	</div>
+	
+	<md-slider md-discrete ng-model="myDiscreteValue" step="10" min="10" max="130">
+	</md-slider>
+
+	<div class="col-sm-12" style="min-height: 800px; margin-top: 10px">
+		<canvas id="c" style="border:1px solid #ccc; width:auto"></canvas>
+	</div>
+	<!--<div class="mapLoadingSpinner" data-bind="visible : Loading">
+			<svg class="spinner " width="65px" height="65px" viewBox="0 0 66 66" xmlns="http://www.w3.org/2000/svg">
+				<circle class="path" fill="none" stroke-width="6" stroke-linecap="round" cx="33" cy="33" r="30"></circle>
+			</svg>
+		</div>-->
+	<div class="mapControls">
+		<button class="mapNavButton btn btn-sm btn-default rotate45" data-toggle="button" ng-click="vm.toggleMoveMode()"><span class="glyphicon glyphicon-fullscreen" aria-hidden="true"></span></button>
+		<input style="width: 36%;" orient="vertical" id="zoomSlider" min="0.1" max="5" value="1" step=".05" type="range" />
+	</div>
+</div>

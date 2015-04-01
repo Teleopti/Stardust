@@ -1,7 +1,7 @@
 ﻿'use strict';
 
-angular.module('seatMapService', ['ngResource'])
-	.factory('SeatMapService', ['$rootScope', '$resource', function ($rootScope, $resource) {
+angular.module('wfm.seatMap')
+	.factory('seatMapService', ['$resource', function ($resource) {
 
 		var seatMapService = {};
 		return seatMapService;

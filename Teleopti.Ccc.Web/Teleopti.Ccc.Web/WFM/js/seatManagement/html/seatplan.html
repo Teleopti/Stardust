@@ -9,26 +9,26 @@
 	<div class="material-block-content">
 
 		<div style="display:inline-block; min-height:290px;">
-			<h5>From <span class="startDate">{{period.startDate | date : format}}</span></h5>
+			<h5>From <span class="startDate">{{seatplan.period.startDate | date : format}}</span></h5>
 
-			<datepicker ng-model="period.startDate" show-weeks="true" class="well well-sm"></datepicker>
+			<datepicker ng-model="seatplan.period.startDate" show-weeks="true" class="well well-sm"></datepicker>
 		</div>
 
 		<div style="display:inline-block; min-height:290px;">
-			<h5>To  <span class="endDate">{{period.endDate | date : format}}</span></h5>
+			<h5>To  <span class="endDate">{{seatplan.period.endDate | date : format}}</span></h5>
 
-			<datepicker ng-model="period.endDate" min-date="period.startDate" show-weeks="true" class="well well-sm"></datepicker>
+			<datepicker ng-model="seatplan.period.endDate" min-date="seatplan.period.startDate" show-weeks="true" class="well well-sm"></datepicker>
 		</div>
 
-		<div class="input-prepend">
+		<divs class="input-prepend">
 			<i class="mdi mdi-filter-outline"></i>
 			<input type="text" name="filterLocations" ng-model="searchLocations" placeholder="Locations filter ..." />
-		</div>
+		</divs>
 
-		<div class="tree">
+		<div class="tree" style="height:190px;">
 			<div ui-tree data-drag-enabled="false">
-				<ol ui-tree-nodes="" ng-model="locations" id="tree-root" class="tree-line" toggle-focus>
-					<li ng-repeat="node in locations | filter:searchLocations" ui-tree-node ng-include="'locations_renderer.html'"></li>
+				<ol ui-tree-nodes="" ng-model="seatplan.locations" id="tree-root" class="tree-line" toggle-focus>
+					<li ng-repeat="node in seatplan.locations | filter:searchLocations" ui-tree-node ng-include="'locations_renderer.html'"></li>
 				</ol>
 			</div>
 		</div>
@@ -39,16 +39,16 @@
 			<input type="text" name="filterTeams" ng-model="searchTeams" placeholder="Teams filter ..." />
 		</div>
 
-		<div class="tree">
-			<div ui-tree data-drag-enabled="false">
-				<ol ui-tree-nodes="" ng-model="teams" id="tree-root" class="tree-line" toggle-focus>
-					<li ng-repeat="node in teams | filter:searchTeams" ui-tree-node ng-include="'teams_renderer.html'"></li>
-				</ol>
-			</div>
+		<div class="tree" style="height:190px;">
+			<div ui-tree data-drag-enabled=" false">
+			<ol ui-tree-nodes="" ng-model="seatplan.teams" id="tree-root" class="tree-line" toggle-focus>
+				<li ng-repeat="node in seatplan.teams | filter:searchTeams" ui-tree-node ng-include="'teams_renderer.html'"></li>
+			</ol>
+		</div>
 		</div>
 
 		<div>
-			<button class="wfm-btn wfm-btn-primary next-step" ng-click="addSeatPlan()">Plan Seats...</button>
+			<button class="wfm-btn wfm-btn-primary next-step" ng-click="seatplan.addSeatPlan()">Plan Seats...</button>
 		</div>
 	</div>
 
@@ -60,8 +60,8 @@
 <script type="text/ng-template" id="locations_renderer.html">
 	<div class="tree-toggle-group">
 		<div class="toggle-handle" ng-class="{open: node.show}" ng-click="node.show = !node.show"><i ng-show="node.Children.length > 0" class="mdi mdi-chevron-right"></i></div>
-		<div ui-tree-handle ng-class="{selected: node.selected}" ng-click="node.selected = !node.selected" ng-hide="checked">
-			{{getLocationDisplayText(node)}}
+		<div ui-tree-handle ng-class="{selected: node.selected}" ng-click="seatplan.selectLocation(node)" ng-hide="checked">
+			{{seatplan.getLocationDisplayText(node)}}
 			<span><i class="mdi mdi-check"></i></span>
 		</div>
 	</div>
@@ -75,8 +75,8 @@
 <script type="text/ng-template" id="teams_renderer.html">
 	<div class="tree-toggle-group">
 		<div class="toggle-handle" ng-class="{open: node.show}" ng-click="node.show = !node.show"><i ng-show="node.Children.length > 0" class="mdi mdi-chevron-right"></i></div>
-		<div ui-tree-handle ng-class="{selected: node.selected}" ng-click="selectTeam(node)" ng-hide="checked">
-			{{getTeamDisplayText(node)}}
+		<div ui-tree-handle ng-class="{selected: node.selected}" ng-click="seatplan.selectTeam(node)" ng-hide="checked">
+			{{seatplan.getTeamDisplayText(node)}}
 			<span><i class="mdi mdi-check"></i></span>
 		</div>
 	</div>

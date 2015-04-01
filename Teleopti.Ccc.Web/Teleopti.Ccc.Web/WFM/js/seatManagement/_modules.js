@@ -1,2 +1,2 @@
-﻿angular.module('wfm.seatMap', ['seatMapService']);
-angular.module('wfm.seatPlan', ['seatPlanService']);
+﻿angular.module('wfm.seatMap', []);
+angular.module('wfm.seatPlan', []);

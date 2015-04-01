@@ -1,8 +1,16 @@
 ﻿
 angular.module('wfm.seatMap')
-	.factory('seatMapCanvasUtilsService', ['$rootScope', '$resource', function ($rootScope, $resource) {
+	.factory('seatMapCanvasUtilsService', [function () {
 
 		var seatMapCanvasUtilsService = {};
+
+		seatMapCanvasUtilsService.setupCanvas=function(canvas) {
+			canvas.isGrabMode = false;
+			//Performance related toggles
+			//self.canvas.skipTargetFind = true;
+			canvas.renderOnAddRemove = true;
+			canvas.stateful = false;
+		}
 
 		seatMapCanvasUtilsService.resize = function (canvas) {
 			var container = canvas.wrapperEl.parentElement;
@@ -15,6 +23,13 @@ angular.module('wfm.seatMap')
 			canvas.isGrabMode ? $("canvas").css("cursor", "move") : $("canvas").css("cursor", "pointer");
 		};
 
+		seatMapCanvasUtilsService.hasActiveGroup = function (canvas) {
+			if (canvas) {
+				return canvas.getActiveGroup() != null;
+			}
+			return false;
+		};
+	
 		seatMapCanvasUtilsService.ScaleImage = function (canvas, image) {
 
 			var ratio = canvas.height / image.height;
@@ -50,7 +65,7 @@ angular.module('wfm.seatMap')
 
 		};
 
-		seatMapCanvasUtilsService.SetSelectionMode = function (canvas, allowSelection) {
+		seatMapCanvasUtilsService.setSelectionMode = function (canvas, allowSelection) {
 			var canvasObjects = canvas.getObjects();
 			canvas.selection = allowSelection;
 			for (var idx in canvasObjects) {

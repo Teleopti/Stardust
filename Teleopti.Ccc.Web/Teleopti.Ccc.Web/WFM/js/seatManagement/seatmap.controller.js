@@ -1,16 +1,13 @@
 ﻿'use strict';
 
 angular.module('wfm.seatMap')
-	.controller('SeatMapCtrl', [
-		'$scope', '$state', 'SeatMapService',
-		function($scope, $state, SeatMapService) {
+	.controller('SeatMapCtrl', ['seatMapService',
+	function (seatMapService) {
 
-			//$scope.vars
-			//$scope.functionname = function (){};
+		var vm = this;
 
+	}]);
 
-		}
-]);
 
 
 

@@ -1,60 +1,69 @@
 ﻿'use strict';
 
 angular.module('wfm.seatPlan')
-	.controller('SeatPlanCtrl', ['$scope', '$state', 'SeatPlanService',
-	function ($scope, $state, SeatPlanService) {
+	.controller('SeatPlanCtrl', ['seatPlanService',
+	function (seatPlanService) {
+
+		var vm = this;
 
 		var startDate = moment().add(1, 'months').startOf('month').toDate();
 		var endDate = moment().add(2, 'months').startOf('month').toDate();
-		$scope.period = { startDate: startDate, endDate: endDate };
-		$scope.locations = [];
-		$scope.teams = [];
-		
-		$scope.locations.push(SeatPlanService.locations.get());
-		$scope.teams.push(SeatPlanService.teams.get());
 
-		$scope.getLocationDisplayText = function (location) {
+		vm.period = { startDate: startDate, endDate: endDate };
+		vm.locations = [];
+		vm.teams = [];
+
+		vm.locations.push(seatPlanService.locations.get());
+		vm.teams.push(seatPlanService.teams.get());
+
+		vm.getLocationDisplayText = function (location) {
 			if (location.Name == undefined) {
 				return "No Locations available.";
 			}
 			return location.Name + " (seats: {0})".replace("{0}", location.Seats.length);
-			
+
 		};
 
-		$scope.getTeamDisplayText = function (teamHierarchyNode) {
+		vm.getTeamDisplayText = function (teamHierarchyNode) {
 			if (teamHierarchyNode.NumberOfAgents) {
 				return teamHierarchyNode.Name + " (agents: {0})".replace("{0}", teamHierarchyNode.NumberOfAgents);
 			} else {
 				return teamHierarchyNode.Name;
 			}
-			
+
 		};
 
-		$scope.addSeatPlan = function() {
+		vm.addSeatPlan = function () {
 			var selectedTeams = [];
-			if (this.teams.length > 0) {
-				getSelectedTeams(this.teams[0], selectedTeams);
+			if (vm.teams.length > 0) {
+				getSelectedTeams(vm.teams[0], selectedTeams);
 			}
 
 			var selectedLocations = [];
-			if (this.locations.length > 0) {
-				getSelectedLocations(this.locations[0], selectedLocations);
+			if (vm.locations.length > 0) {
+				getSelectedLocations(vm.locations[0], selectedLocations);
 			}
 
 			var addSeatPlanCommand = {
-				StartDate: this.period.startDate,
-				EndDate: this.period.endDate,
+				StartDate: vm.period.startDate,
+				EndDate: vm.period.endDate,
 				Teams: selectedTeams,
 				Locations: selectedLocations
 			};
 
-			SeatPlanService.seatPlan.add(addSeatPlanCommand).$promise.then(function (result) {
+			//seatPlanService.seatPlan.add(addSeatPlanCommand).$promise.then(function (result) {
+			seatPlanService.addSeatPlan(addSeatPlanCommand).$promise.then(function (result) {
+				//Robtodo:notice on successful submit
 				alert('seat plan submitted');
 			});
 		};
 
-		$scope.selectTeam = function(team) {
-			team.selected = team.NumberOfAgents && team.NumberOfAgents>0 ? !team.selected : team.selected;
+		vm.selectTeam = function (team) {
+			team.selected = team.NumberOfAgents && team.NumberOfAgents > 0 ? !team.selected : team.selected;
+		};
+
+		vm.selectLocation = function (location) {
+			location.selected = location.Seats && location.Seats.length > 0 ? !location.selected : location.selected;
 		};
 
 		function getSelectedTeams(node, teams) {

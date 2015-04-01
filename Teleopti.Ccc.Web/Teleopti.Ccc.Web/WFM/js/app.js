@@ -14,8 +14,6 @@ var wfm = angular.module('wfm', [
 	'outboundService',
 	'restAreasService',
 	'restFilterService',
-	'seatPlanService',
-	'seatMapService',
 	'wfmCtrls',
 	'wfm.permissions',
 	'wfm.people',
@@ -74,12 +72,12 @@ wfm.config([
 			controller: 'PeopleCtrl'
 		}).state('seatPlan', {
 			url: '/seatPlan',
-			templateUrl: 'html/seatManagement/seatplan.html',
-			controller: 'SeatPlanCtrl'
+			templateUrl: 'js/seatManagement/html/seatplan.html',
+			controller: 'SeatPlanCtrl as seatplan'
 		}).state('seatMap', {
 			url: '/seatMap',
-			templateUrl: 'html/seatManagement/seatmap.html',
-			controller: 'SeatMapCtrl'
+			templateUrl: 'js/seatManagement/html/seatmap.html',
+			controller: 'SeatMapCtrl as seatmap'
 		});
 
 		$translateProvider.useUrlLoader('../api/Global/Language');

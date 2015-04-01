@@ -1,22 +1,26 @@
 ﻿'use strict';
 
-var seatPlanService = angular.module('seatPlanService', ['ngResource']);
-seatPlanService.factory('SeatPlanService', ['$rootScope','$resource', function ($rootScope, $resource) {
+angular.module('wfm.seatPlan')
+	.factory('seatPlanService', ['$resource', function ($resource) {
 
-	var seatPlanService = {};
-	
-	seatPlanService.locations = $resource('../api/SeatPlanner/Locations', {}, {
-		get: { method: 'GET', params: {}, isArray: false }
-	});
+		var seatPlanService = {};
+		
+		seatPlanService.addSeatPlan = function (seatPlanCommand) {
+			return seatPlanService.seatPlan.add(seatPlanCommand);
+		}
 
-	seatPlanService.teams = $resource('../api/SeatPlanner/Teams', {}, {
-		get: { method: 'GET', params: {}, isArray: false }
-	});
-	
-	seatPlanService.seatPlan = $resource('../api/SeatPlanner/SeatPlan', {}, {
-		add: { method: 'POST', params: { Teams: {}, Locations: {}, StartDate: {}, EndDate: {} }, isArray: false }
-	});
+		seatPlanService.locations = $resource('../api/SeatPlanner/Locations', {}, {
+			get: { method: 'GET', params: {}, isArray: false }
+		});
 
-	return seatPlanService;
+		seatPlanService.teams = $resource('../api/SeatPlanner/Teams', {}, {
+			get: { method: 'GET', params: {}, isArray: false }
+		});
 
-}]);
+		seatPlanService.seatPlan = $resource('../api/SeatPlanner/SeatPlan', {}, {
+			add: { method: 'POST', params: { Teams: {}, Locations: {}, StartDate: {}, EndDate: {} }, isArray: false }
+		});
+
+		return seatPlanService;
+
+	}]);
