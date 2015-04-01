@@ -59,25 +59,25 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ViewModelBuilders
 
 		private int? percent(AdherenceDetailsModel model, ActivityAdherence activity)
 		{
-			var activityEnded = model.ShiftEndTime.HasValue || !model.Activities.Last().Equals(activity);
-			if (!activity.TimeInAdherence.HasValue && !activity.TimeOutOfAdherence.HasValue) 
-				return null;
+			var secondsInAdherence = activity.TimeInAdherence.GetValueOrDefault().TotalSeconds;
+			var secondsOutOfAdherence = activity.TimeOutOfAdherence.GetValueOrDefault().TotalSeconds;
 
-			var secondsInAdherence = Convert.ToDouble(activity.TimeInAdherence.GetValueOrDefault().TotalSeconds);
-			var secondsOutOfAdherence = Convert.ToDouble(activity.TimeOutOfAdherence.GetValueOrDefault().TotalSeconds);
-			if (!activityEnded)
+			var ongoingActivity = !model.ShiftEndTime.HasValue && model.Activities.Last().Equals(activity);
+			var hasAdherence = model.LastAdherence.HasValue;
+			if (ongoingActivity && hasAdherence)
 			{
-				var lastTimestamp = model.LastUpdate ?? DateTime.MinValue;
-				var secondsFromLastUpdate = _now.UtcDateTime().Subtract(lastTimestamp).TotalSeconds;
-				if (model.LastAdherence.HasValue)
-				{
-					if (model.LastAdherence.Value)
-						secondsInAdherence += secondsFromLastUpdate;
-					else
-						secondsOutOfAdherence += secondsFromLastUpdate;
-				}
+				var secondsFromLastUpdate = _now.UtcDateTime()
+					.Subtract(model.LastUpdate.GetValueOrDefault())
+					.TotalSeconds;
+				if (model.LastAdherence.Value)
+					secondsInAdherence += secondsFromLastUpdate;
+				else
+					secondsOutOfAdherence += secondsFromLastUpdate;
 			}
+
 			var total = secondsInAdherence + secondsOutOfAdherence;
+			if (total.Equals(0))
+				return null;
 
 			return (int) (secondsInAdherence/total*100);
 		}

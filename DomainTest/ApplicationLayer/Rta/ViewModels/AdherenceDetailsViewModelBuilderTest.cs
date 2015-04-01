@@ -144,6 +144,34 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ViewModels
 		}
 
 		[Test]
+		public void ShouldBuildSingleResultWithNullWhenNoAdherence()
+		{
+			var personId = Guid.NewGuid();
+			Now.Is("2014-11-20 9:00");
+			Reader.Has(new AdherenceDetailsReadModel
+			{
+				PersonId = personId,
+				Date = "2014-11-20".Utc(),
+				Model = new AdherenceDetailsModel
+				{
+					Activities = new[]
+					{
+						new ActivityAdherence
+						{
+							StartTime = "2014-11-20 8:00".Utc(),
+							TimeInAdherence = TimeSpan.FromMinutes(0),
+							TimeOutOfAdherence = TimeSpan.FromMinutes(0),
+						}
+					}
+				}
+			});
+
+			var result = Target.Build(personId);
+
+			result.Single().AdherencePercent.Should().Be(null);
+		}
+
+		[Test]
 		public void ShouldBuildPercentAdherenceForEachActivity()
 		{
 			var personId = Guid.NewGuid();
