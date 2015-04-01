@@ -51,7 +51,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ViewModelBuilders
 			var secondsOutOfAdherence = model.TimeOutOfAdherence.TotalSeconds;
 
 			var ongoingShift = !model.ShiftHasEnded;
-			if (ongoingShift)
+			var inNeutralAdherence = !model.IsLastTimeInAdherence.HasValue;
+			if (ongoingShift && !inNeutralAdherence)
 			{
 				var secondsFromLastUpdate = _now.UtcDateTime()
 					.Subtract(model.LastTimestamp.GetValueOrDefault())

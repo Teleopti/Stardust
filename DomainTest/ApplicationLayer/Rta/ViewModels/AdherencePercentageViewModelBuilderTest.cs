@@ -283,5 +283,25 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ViewModels
 			result.Should().Not.Be.Null();
 		}
 
+		[Test]
+		public void ShouldNotAddTimeWhenCurrentlyInNeutralAdherence()
+		{
+			var personId = Guid.NewGuid();
+			Now.Is("2014-12-24 11:00");
+			Reader.Has(new AdherencePercentageReadModel
+			{
+				PersonId = personId,
+				Date = "2014-12-24".Utc(),
+				TimeInAdherence = "30".Minutes(),
+				TimeOutOfAdherence = "30".Minutes(),
+				LastTimestamp = "2014-12-24 10:00".Utc(),
+				IsLastTimeInAdherence = null
+			});
+
+			var result = Target.Build(personId);
+
+			result.AdherencePercent.Should().Be.EqualTo(50);
+		}
+
 	}
 }
