@@ -21,8 +21,7 @@
 			
 		<many-to-one name="Skill"
 								 class="Teleopti.Ccc.Domain.Forecasting.Skill"
-								 not-null="true"
-								 foreign-key="FK_OutboundCampaign_Skill"/>
+								 not-null="true"/>
 		
 		<property name="CallListLen"
 							type="int"
@@ -72,8 +71,7 @@
 	
 		<many-to-one name="UpdatedBy"
 								 class="Teleopti.Ccc.Domain.Common.Person"
-								 not-null="true"
-								 foreign-key="FK_SeatBooking_Person_UpdatedBy"/>
+								 not-null="true"/>
 
 		<property name="UpdatedOn"
 								type="UtcDateTime"
@@ -86,7 +84,7 @@
 		<many-to-one name="BusinessUnit"
 					class="Teleopti.Ccc.Domain.Common.BusinessUnit"
 					access="nosetter.camelcase-underscore"
-					not-null="true" foreign-key="FK_OutboundCampaign_BusinessUnit"/>
+					not-null="true"/>
 
 		<filter name="businessUnitFilter"
 						condition=":businessUnitParameter = BusinessUnit" />

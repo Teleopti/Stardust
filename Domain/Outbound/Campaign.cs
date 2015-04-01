@@ -22,8 +22,8 @@ namespace Teleopti.Ccc.Domain.Outbound
 		private int _connectAverageHandlingTime;
 		private int _rightPartyAverageHandlingTime;
 		private int _unproductiveTime;
-		private DateOnly _startDate;
-		private DateOnly _endDate;
+		private DateOnly? _startDate;
+		private DateOnly? _endDate;
 		private CampaignStatus _campaignStatus;
 		private IEnumerable<CampaignWorkingPeriod> _campaignWorkingPeriods;
 		private bool _isDeleted;
@@ -84,13 +84,13 @@ namespace Teleopti.Ccc.Domain.Outbound
 			set { _unproductiveTime = value; }
 		}
 
-		public virtual DateOnly StartDate
+		public virtual DateOnly? StartDate
 		{
 			get { return _startDate; }
 			set { _startDate= value; }
 		}
 
-		public virtual DateOnly EndDate
+		public virtual DateOnly? EndDate
 		{
 			get { return _endDate; }
 			set { _endDate= value; }
