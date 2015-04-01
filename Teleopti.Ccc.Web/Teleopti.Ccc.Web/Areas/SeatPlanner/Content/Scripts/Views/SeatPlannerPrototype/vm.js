@@ -72,8 +72,8 @@ define([
 		this.MapTeamsToTreeNode = function (site) {
 
 			var teams = [];
-			for (var i = 0, len = site.Teams.length; i < len; i++) {
-				var team = site.Teams[i];
+			for (var i = 0, len = site.Children.length; i < len; i++) {
+				var team = site.Children[i];
 				var teamTreeNode = { id: team.Id, name: team.Name + " (Agents: " + team.NumberOfAgents + ")", children: [], payload: team };
 				teams.push(teamTreeNode);
 			}
@@ -93,7 +93,7 @@ define([
 
 		this.MapTeamHierarchyToTreeNodes = function (teamHierarchy) {
 			var businessUnit = teamHierarchy;
-			var siteNodes = self.MapSitesToTreeNodes(businessUnit.Sites);
+			var siteNodes = self.MapSitesToTreeNodes(businessUnit.Children);
 			var businessUnitTreeNode = { id: businessUnit.Id, name: businessUnit.Name, children: siteNodes, payload: null };
 			return businessUnitTreeNode;
 		}

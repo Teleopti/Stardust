@@ -21,7 +21,7 @@ define([
 
 	var loadSeatMap = function (callback, id) {
 		ajax.ajax({
-			url: "SeatPlanner/SeatMap/Get?id=" + id,
+			url: "SeatPlanner/SeatMap/GetOld?id=" + id,
 			success: callback
 		});
 	};

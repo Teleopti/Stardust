@@ -2,9 +2,9 @@
 angular.module('wfm.seatMap')
 	.factory('seatMapCanvasUtilsService', [function () {
 
-		var seatMapCanvasUtilsService = {};
+		var utils = {};
 
-		seatMapCanvasUtilsService.setupCanvas=function(canvas) {
+		utils.setupCanvas=function(canvas) {
 			canvas.isGrabMode = false;
 			//Performance related toggles
 			//self.canvas.skipTargetFind = true;
@@ -12,25 +12,25 @@ angular.module('wfm.seatMap')
 			canvas.stateful = false;
 		}
 
-		seatMapCanvasUtilsService.resize = function (canvas) {
+		utils.resize = function (canvas) {
 			var container = canvas.wrapperEl.parentElement;
 			canvas.setHeight($(container).height());
 			canvas.setWidth(container.clientWidth);
 		};
 
-		seatMapCanvasUtilsService.toggleMoveMode = function (canvas) {
+		utils.toggleMoveMode = function (canvas) {
 			canvas.isGrabMode = !canvas.isGrabMode;
 			canvas.isGrabMode ? $("canvas").css("cursor", "move") : $("canvas").css("cursor", "pointer");
 		};
 
-		seatMapCanvasUtilsService.hasActiveGroup = function (canvas) {
+		utils.hasActiveGroup = function (canvas) {
 			if (canvas) {
 				return canvas.getActiveGroup() != null;
 			}
 			return false;
 		};
 	
-		seatMapCanvasUtilsService.ScaleImage = function (canvas, image) {
+		utils.ScaleImage = function (canvas, image) {
 
 			var ratio = canvas.height / image.height;
 			image.set({
@@ -40,7 +40,7 @@ angular.module('wfm.seatMap')
 
 		};
 
-		seatMapCanvasUtilsService.DrawGrid = function (canvas) {
+		utils.DrawGrid = function (canvas) {
 			var grid = 30;
 
 			for (var i = 0; i < (canvas.width / grid) ; i++) {
@@ -65,7 +65,7 @@ angular.module('wfm.seatMap')
 
 		};
 
-		seatMapCanvasUtilsService.setSelectionMode = function (canvas, allowSelection) {
+		utils.setSelectionMode = function (canvas, allowSelection) {
 			var canvasObjects = canvas.getObjects();
 			canvas.selection = allowSelection;
 			for (var idx in canvasObjects) {
@@ -79,12 +79,12 @@ angular.module('wfm.seatMap')
 
 		};
 
-		seatMapCanvasUtilsService.GetObjectsByType = function (canvas, type) {
+		utils.getObjectsByType = function (canvas, type) {
 			var canvasObjects = canvas.getObjects();
 			var objectsArray = new Array();
 
-			for (obj in canvasObjects) {
-				var foundObjs = self.GetObjectsOfTypeFromCanvasObject(canvasObjects[obj], type);
+			for (var obj in canvasObjects) {
+				var foundObjs = utils.getObjectsOfTypeFromCanvasObject(canvasObjects[obj], type);
 				if (foundObjs != null) {
 					for (var idx in foundObjs) {
 						objectsArray.push(foundObjs[idx]);
@@ -94,7 +94,7 @@ angular.module('wfm.seatMap')
 			return objectsArray;
 		};
 
-		seatMapCanvasUtilsService.GetObjectsOfTypeFromCanvasObject = function (obj, type) {
+		utils.getObjectsOfTypeFromCanvasObject = function (obj, type) {
 
 			if (!obj) {
 				return null;
@@ -103,13 +103,13 @@ angular.module('wfm.seatMap')
 				return [obj];
 			}
 			if (obj.get('type') == 'group') {
-				return self.GetObjectsOfTypeFromGroup(obj, type);
+				return utils.getObjectsOfTypeFromGroup(obj, type);
 			}
 
 			return null;
 		};
 
-		seatMapCanvasUtilsService.GetObjectsOfTypeFromGroup = function (group, type) {
+		utils.getObjectsOfTypeFromGroup = function (group, type) {
 
 			var groupObjects = group.getObjects();
 			var objs = [];
@@ -118,7 +118,7 @@ angular.module('wfm.seatMap')
 					objs.push(groupObjects[i]);
 				} else {
 					if (groupObjects[i].get('type') == 'group') {
-						var subObjs = self.GetObjectsOfTypeFromGroup(groupObjects[i], type);
+						var subObjs = utils.getObjectsOfTypeFromGroup(groupObjects[i], type);
 						for (var idx in subObjs) {
 							objs.push(subObjs[idx]);
 						}
@@ -128,7 +128,7 @@ angular.module('wfm.seatMap')
 			return objs;
 		}
 
-		seatMapCanvasUtilsService.GetFirstObjectOfTypeFromCanvasObject = function (obj, type) {
+		utils.getFirstObjectOfTypeFromCanvasObject = function (obj, type) {
 
 			if (!obj) {
 				return null;
@@ -149,35 +149,35 @@ angular.module('wfm.seatMap')
 			return null;
 		};
 
-		seatMapCanvasUtilsService.ClearCanvas = function (canvas) {
+		utils.clearCanvas = function (canvas) {
 			if (canvas != null) {
 				canvas.setBackgroundImage(null);
 				canvas.clear();
 			}
 		}
 
-		seatMapCanvasUtilsService.LoadSeatMap = function (canvas, data, allowSelection, callback) {
+		utils.loadSeatMap = function (canvas, data, allowSelection, callback) {
 
-			self.ClearCanvas(canvas);
+			utils.clearCanvas(canvas);
 
 			var seatPriority = 0;
 			var json = data.SeatMapJsonData;
 			canvas.loadFromJSON(json, function () {
 				canvas.renderAll();
-				var allSeats = self.GetObjectsByType(canvas, 'seat');
+				var allSeats = utils.getObjectsByType(canvas, 'seat');
 				for (var loadedSeat in allSeats) {
 					if (allSeats[loadedSeat].priority > seatPriority) {
 						seatPriority = allSeats[loadedSeat].priority;
 					}
 				}
-				self.SetSelectionMode(canvas, allowSelection);
+				utils.setSelectionMode(canvas, allowSelection);
 				data.seatPriority = seatPriority;
 				callback(data);
 			});
 
 		};
 
-		return seatMapCanvasUtilsService;
+		return utils;
 
 	}]);
 

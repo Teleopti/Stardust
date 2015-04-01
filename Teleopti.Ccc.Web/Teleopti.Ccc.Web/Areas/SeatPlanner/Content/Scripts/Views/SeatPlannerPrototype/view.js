@@ -28,7 +28,7 @@ define([
 
 	var loadSitesAndTeams = function (callback) {
 		ajax.ajax({
-			url: "SeatPlanner/TeamHierarchy/Get",
+			url: "SeatPlanner/TeamHierarchy/GetOld",
 			success: callback
 		});
 	};
@@ -36,7 +36,7 @@ define([
 
 	var loadLocations = function(callback) {
 		ajax.ajax({
-			url: "SeatPlanner/LocationHierarchy/Get",
+			url: "SeatPlanner/LocationHierarchy/GetOld",
 			success: callback
 		});
 	};

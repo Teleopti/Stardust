@@ -468,7 +468,6 @@
 		}
 
 		// Add Objects
-		//rw ported
 		this.AddImage = function (imageName) {
 			fabric.Image.fromURL('Areas/SeatPlanner/Content/Images/' + imageName, function (image) {
 				image.set({

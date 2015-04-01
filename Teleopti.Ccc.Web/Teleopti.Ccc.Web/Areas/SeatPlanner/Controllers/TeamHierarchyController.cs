@@ -25,6 +25,13 @@ namespace Teleopti.Ccc.Web.Areas.SeatPlanner.Controllers
 
 		}
 
+		[UnitOfWork, Route("SeatPlanner/TeamHierarchy/GetOld"), HttpGet]
+		public virtual BusinessUnitWithSitesViewModel GetOld()
+		{
+			return _teamsProvider.GetTeamHierarchy();
+
+		}
+
 
 	}
 }

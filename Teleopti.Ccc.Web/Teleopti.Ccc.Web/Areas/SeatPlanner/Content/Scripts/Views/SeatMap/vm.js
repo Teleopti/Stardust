@@ -131,7 +131,7 @@
 			self.Loading(true);
 
 			ajax.ajax({
-				url: "SeatPlanner/SeatMap/Get?id=" + id,
+				url: "SeatPlanner/SeatMap/GetOld?id=" + id,
 				success: function (data) {
 					self.LoadSeatMap(data);
 				}

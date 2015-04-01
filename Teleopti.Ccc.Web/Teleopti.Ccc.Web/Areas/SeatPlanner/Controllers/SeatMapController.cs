@@ -17,10 +17,17 @@ namespace Teleopti.Ccc.Web.Areas.SeatPlanner.Controllers
 			_seatMapProvider = seatMapProvider;
 		}
 
-		[UnitOfWork, Route("SeatPlanner/SeatMap/Get"), HttpGet]
+		[UnitOfWork, Route("api/SeatPlanner/SeatMap"), HttpGet]
 		public virtual object Get(Guid? id)
 		{
 			return _seatMapProvider.Get (id);
+		}
+
+		//Robtodo: remove after prototype is removed
+		[UnitOfWork, Route("SeatPlanner/SeatMap/GetOld"), HttpGet]
+		public virtual object GetOld(Guid? id)
+		{
+			return _seatMapProvider.Get(id);
 		}
 	}
 }

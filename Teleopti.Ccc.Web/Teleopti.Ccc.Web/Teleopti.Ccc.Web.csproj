@@ -1237,6 +1237,8 @@
     <Content Include="WFM\js\seatManagement\images\seat.svg" />
     <Content Include="WFM\js\seatManagement\images\seatAndDesk.svg" />
     <Content Include="WFM\js\seatManagement\images\seats.svg" />
+    <Content Include="WFM\js\seatManagement\location.js" />
+    <Content Include="WFM\js\seatManagement\seat.js" />
     <Content Include="WFM\js\seatManagement\seatmapcanvasedit.service.js" />
     <Content Include="WFM\js\seatManagement\_modules.js" />
     <Content Include="WFM\js\seatManagement\seatmapcanvas.directive.js" />
