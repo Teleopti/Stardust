@@ -15,7 +15,7 @@
 							 type="System.DayOfWeek" />
 
 		<many-to-one name="Parent"
-							 class="Teleopti.Ccc.Domain.CampaignWorkingPeriod"
+							 class="CampaignWorkingPeriod"
 							 not-null="true"
 							 foreign-key="FK_OutboundCampaignWorkingPeriod_OutboundCampaignWorkingPeriodAssignment"/>
 	</class>

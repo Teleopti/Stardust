@@ -19,18 +19,20 @@
 
 		<set name="CampaignWorkingPeriodAssignments">
 			<key column="Id" not-null="true"/>
-			<one-to-many class="CampaignWokringPeriodAssignment"/>
+			<one-to-many class="CampaignWorkingPeriodAssignment"/>
 		</set>
-		
-		<component name="TimePeriod" class="Teleopti.Interfaces.Domain.TimePeriod, Teleopti.Interfaces">			
-				<property name="StartTime"
+
+		<component name="TimePeriod" class="Teleopti.Interfaces.Domain.TimePeriod, Teleopti.Interfaces">
+			<component name="period" access="field">
+				<property name="Minimum"
 									column="StartTime"
 									not-null="true"
 									type="TimeSpan" />
-				<property name="EndTime"
-									column="EndTime"
+				<property name="Maximum"
+									column="MaximumLength"
 									not-null="true"
-									type="TimeSpan" />			
-		</component>		
+									type="TimeSpan" />
+			</component>
+		</component>	
 	</class>	
 </hibernate-mapping>

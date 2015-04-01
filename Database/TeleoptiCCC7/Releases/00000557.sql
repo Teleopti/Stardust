@@ -17,8 +17,8 @@ CREATE TABLE dbo.OutboundCampaign
 	ConnectAverageHandlingTime int NOT NULL,
 	RightPartyAverageHandlingTime int NOT NULL,
 	UnproductiveTime int NOT NULL DEFAULT 0,
-	StartDateTime datetime NULL,
-	EndDateTime datetime NULL,
+	StartDate datetime NULL,
+	EndDate datetime NULL,
 	CampaignStatus int NOT NULL,
 	BusinessUnit uniqueidentifier NOT NULL,
 	UpdatedBy uniqueidentifier NOT NULL,
@@ -58,8 +58,8 @@ CREATE TABLE dbo.OutboundCampaignWorkingPeriod
 (
 	Id uniqueidentifier NOT NULL,
 	OutboundCampaign uniqueidentifier NOT NULL,
-	StartTime time NOT NULL,
-	EndTime time NOT NULL	
+	StartTime BIGINT NOT NULL,
+	EndTime BIGINT NOT NULL	
 )
 GO
 

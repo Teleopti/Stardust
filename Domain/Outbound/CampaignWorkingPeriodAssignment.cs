@@ -9,7 +9,12 @@ namespace Teleopti.Ccc.Domain.Outbound
 {
 	public class CampaignWorkingPeriodAssignment : AggregateEntity
 	{
-		public virtual DayOfWeek WeekdayIndex { get; set; }
-		
+		private DayOfWeek _weekdayIndex;
+
+		public virtual DayOfWeek WeekdayIndex
+		{
+			get { return _weekdayIndex; }
+			set { _weekdayIndex = value; }
+		}
 	}
 }

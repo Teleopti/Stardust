@@ -225,8 +225,14 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
             {
                 rep.Add(root);
                 Session.Flush();
+
+
+	            var curAll = rep.LoadAll();
+
                 rep.Remove(root);
                 Session.Flush();
+
+				var curAll2 = rep.LoadAll();
                 Assert.IsFalse(rep.LoadAll().Contains(root));                
             }
         }

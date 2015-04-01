@@ -2396,9 +2396,9 @@
     <Folder Include="Properties\" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Outbound\Campaign.hbm.xml" />
-    <Content Include="Outbound\CampaignWorkingPeriod.hbm.xml" />
-    <Content Include="Outbound\CampaignWorkingPeriodAssignment.hbm.xml" />
+    <EmbeddedResource Include="Outbound\Campaign.hbm.xml" />
+    <EmbeddedResource Include="Outbound\CampaignWorkingPeriod.hbm.xml" />
+    <EmbeddedResource Include="Outbound\CampaignWorkingPeriodAssignment.hbm.xml" />
     <EmbeddedResource Include="Payroll\PayrollFormat.hbm.xml">
       <SubType>Designer</SubType>
     </EmbeddedResource>
