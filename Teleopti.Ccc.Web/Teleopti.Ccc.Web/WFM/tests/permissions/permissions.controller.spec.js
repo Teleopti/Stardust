@@ -10,8 +10,8 @@ describe('PermissionsCtrl', function () {
 		$q = _$q_;
 		$rootScope = _$rootScope_;
 		$httpBackend = _$httpBackend_;
-		$httpBackend.expectGET("../api/Global/Language?lang=en").respond(200, { "meta": { "code": 200, "errors": null }, "response": { "allowed": false } });
-		$httpBackend.expectGET("../api/Global/User/CurrentUser").respond(200, { "meta": { "code": 200, "errors": null }, "response": { "allowed": false } });
+		$httpBackend.expectGET("../api/Global/Language?lang=en").respond(200, 'mock');
+		$httpBackend.expectGET("../api/Global/User/CurrentUser").respond(200, 'mock');
 	}));
 
 	var mockPermissionsService = {

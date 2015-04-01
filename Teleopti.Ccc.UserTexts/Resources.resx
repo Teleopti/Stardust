@@ -12901,12 +12901,40 @@ Reduce the complexity to use these shifts.</value>
   <data name="TimeSpanTextBoxSilverThresholdsForAHT" xml:space="preserve">
     <value>Value of silver threshold For AHT should be smaller than bronze threshold for AHT</value>
   </data>
+  <data name="CreateNewRole" xml:space="preserve">
+    <value>Create new role</value>
+    <comment>Create new role</comment>
+  </data>
+  <data name="DataFilterThreeDots" xml:space="preserve">
+    <value>Data filter...</value>
+    <comment>Data filter on the web</comment>
+  </data>
   <data name="Duplicate" xml:space="preserve">
     <value>Duplicate</value>
     <comment>Duplicate on the web</comment>
   </data>
+  <data name="ManagePermissions" xml:space="preserve">
+    <value>Manage permissions</value>
+    <comment>Manage permissions header on the web</comment>
+  </data>
+  <data name="ManagePermissionsIntro" xml:space="preserve">
+    <value>Here you can decide who is allowed to access specific parts of the application</value>
+    <comment>Manage permissions introductory text on the web</comment>
+  </data>
+  <data name="NotSelectedItems" xml:space="preserve">
+    <value>Disabled items</value>
+    <comment>Not selected items filter on the web</comment>
+  </data>
   <data name="PermissionsFilterThreeDots" xml:space="preserve">
     <value>Permissions filter...</value>
     <comment>Permissions filter on the web</comment>
+  </data>
+  <data name="RoleFilterThreeDots" xml:space="preserve">
+    <value>Role filter...</value>
+    <comment>Role filter on the web</comment>
+  </data>
+  <data name="SelectedItems" xml:space="preserve">
+    <value>Enabled items</value>
+    <comment>Selected items filter on the web</comment>
   </data>
 </root>

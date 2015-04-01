@@ -12,7 +12,7 @@
 		<div class="navbar-right">
 			<span ng-controller="SearchCtrl">
 				<i class="mdi mdi-magnify"></i>
-				<input type="text" placeholder="Search ..." ng-model="keyword" ng-change="searchKeyword()" class="global-search" />
+				<input type="text" placeholder="{{'SearchThreeDots' | translate}}" ng-model="keyword" ng-change="searchKeyword()" class="global-search" />
 				<div class="search-results material-depth-2">
 					<ul class="wfm-list">
 						<li class="animate-repeat" ng-repeat="item in searchResult">{{item.FirstName}}</li>

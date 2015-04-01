@@ -5761,6 +5761,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Create new role.
+        /// </summary>
+        public static string CreateNewRole {
+            get {
+                return ResourceManager.GetString("CreateNewRole", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Create Payroll Export.
         /// </summary>
         public static string CreatePayrollExport {
@@ -6164,6 +6173,15 @@ namespace Teleopti.Ccc.UserTexts {
         public static string DataColon {
             get {
                 return ResourceManager.GetString("DataColon", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Data filter....
+        /// </summary>
+        public static string DataFilterThreeDots {
+            get {
+                return ResourceManager.GetString("DataFilterThreeDots", resourceCulture);
             }
         }
         
@@ -12948,6 +12966,24 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Manage permissions.
+        /// </summary>
+        public static string ManagePermissions {
+            get {
+                return ResourceManager.GetString("ManagePermissions", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Here you can decide who is allowed to access specific parts of the application.
+        /// </summary>
+        public static string ManagePermissionsIntro {
+            get {
+                return ResourceManager.GetString("ManagePermissionsIntro", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Manage Real Time Adherence.
         /// </summary>
         public static string ManageRTA {
@@ -16287,6 +16323,15 @@ namespace Teleopti.Ccc.UserTexts {
         public static string NotSelectedActivities {
             get {
                 return ResourceManager.GetString("NotSelectedActivities", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Disabled items.
+        /// </summary>
+        public static string NotSelectedItems {
+            get {
+                return ResourceManager.GetString("NotSelectedItems", resourceCulture);
             }
         }
         
@@ -21118,6 +21163,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Role filter....
+        /// </summary>
+        public static string RoleFilterThreeDots {
+            get {
+                return ResourceManager.GetString("RoleFilterThreeDots", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Roles.
         /// </summary>
         public static string Roles {
@@ -22534,6 +22588,15 @@ namespace Teleopti.Ccc.UserTexts {
         public static string SelectedFileDestinationIsTooLong {
             get {
                 return ResourceManager.GetString("SelectedFileDestinationIsTooLong", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Enabled items.
+        /// </summary>
+        public static string SelectedItems {
+            get {
+                return ResourceManager.GetString("SelectedItems", resourceCulture);
             }
         }
         

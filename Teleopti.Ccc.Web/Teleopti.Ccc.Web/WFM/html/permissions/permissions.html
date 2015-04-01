@@ -1,8 +1,8 @@
 ﻿<div>
 	<div class="row">
 		<div class="col-lg-12">
-			<h4>Manage permissions</h4>
-			<p>Here you can decide who is allowed to access specific parts of the application</p>
+			<h4 translate>ManagePermissions</h4>
+			<p translate>ManagePermissionsIntro</p>
 		</div>
 	</div>
 		<div class="row">
@@ -13,13 +13,13 @@
 						<form ng-submit="createRole(); reset()">
 							<div class="input-prepend">
 								<i class="mdi mdi-plus"></i>
-								<input type="text" ng-model="roleName" placeholder="Create new role" class="role-input role" />
+								<input type="text" ng-model="roleName" placeholder="{{'CreateNewRole' | translate}}" class="role-input role" />
 							</div>
 						</form>
 
 						<div class="input-prepend">
 							<i class="mdi mdi-filter-outline"></i>
-							<input type="text" name="filterRole" ng-model="searchRoles.DescriptionText" placeholder="Role filter ..." />
+							<input type="text" name="filterRole" ng-model="searchRoles.DescriptionText" placeholder="{{'RoleFilterThreeDots' | translate}}" />
 						</div>
 					</div>
 					<div id="searchRoleResults" class="role-container">
@@ -85,7 +85,7 @@
 										<div class="wfm-slider">
 											<input type="checkbox" id="slide1" ng-model="checked" ng-click="node.show = true" />
 											<label for="slide1">
-												<span class="wfm-slider-label">Selected rows</span>
+												<span class="wfm-slider-label" translate>SelectedItems</span>
 												<span class="wfm-slider-toggle"></span>
 											</label>
 										</div>
@@ -94,7 +94,7 @@
 										<div class="wfm-slider">
 											<input type="checkbox" id="slide2" />
 											<label for="slide2">
-												<span class="wfm-slider-label">Unselected rows</span>
+												<span class="wfm-slider-label" translate>NotSelectedItems</span>
 												<span class="wfm-slider-toggle"></span>
 											</label>
 										</div>
@@ -123,14 +123,14 @@
 									<div class="col-lg-6">
 										<div class="input-prepend">
 											<i class="mdi mdi-filter-outline"></i>
-											<input type="text" name="filterDetails" ng-model="searchData" placeholder="Data filter ..." />
+											<input type="text" name="filterDetails" ng-model="searchData" placeholder="{{'DataFilterThreeDots' | translate}}" />
 										</div>
 									</div>
 									<div class="col-lg-3">
 										<div class="wfm-slider">
 											<input type="checkbox" id="slide3" />
 											<label for="slide3">
-												<span class="wfm-slider-label">Selected rows</span>
+												<span class="wfm-slider-label" translate>SelectedItems</span>
 												<span class="wfm-slider-toggle"></span>
 											</label>
 										</div>
@@ -139,7 +139,7 @@
 										<div class="wfm-slider">
 											<input type="checkbox" id="slide4" />
 											<label for="slide4">
-												<span class="wfm-slider-label">Unselected rows</span>
+												<span class="wfm-slider-label" translate>NotSelectedItems</span>
 												<span class="wfm-slider-toggle"></span>
 											</label>
 										</div>
