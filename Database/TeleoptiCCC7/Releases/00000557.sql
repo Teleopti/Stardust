@@ -28,7 +28,7 @@ CREATE TABLE dbo.OutboundCampaign
 GO
 
 ALTER TABLE dbo.OutboundCampaign ADD CONSTRAINT
-	PK_OutbouondCampaign PRIMARY KEY CLUSTERED 
+	PK_OutboundCampaign PRIMARY KEY CLUSTERED 
 	(
 	Id
 	)
@@ -64,17 +64,17 @@ CREATE TABLE dbo.OutboundCampaignWorkingPeriod
 GO
 
 ALTER TABLE dbo.OutboundCampaignWorkingPeriod ADD CONSTRAINT
-	PK_CampaignWorkingHourPeriod PRIMARY KEY CLUSTERED 
+	PK_OutboundCampaignWorkingPeriod PRIMARY KEY CLUSTERED 
 	(
 	Id
 	)
 GO
 
-ALTER TABLE [dbo].[OutboundCampaignWorkingPeriod]  WITH CHECK ADD  CONSTRAINT [FK_OutboundCampaignWorking_OutboundCampaignWorkingPeriod] FOREIGN KEY([OutboundCampaign])
+ALTER TABLE [dbo].[OutboundCampaignWorkingPeriod]  WITH CHECK ADD  CONSTRAINT [FK_OutboundCampaignWorkingPeriod_OutboundCampaign] FOREIGN KEY([OutboundCampaign])
 REFERENCES [dbo].[OutboundCampaign] ([Id])
 GO
 
-ALTER TABLE [dbo].[OutboundCampaignWorkingPeriod] CHECK CONSTRAINT [FK_OutboundCampaignWorking_OutboundCampaignWorkingPeriod]
+ALTER TABLE [dbo].[OutboundCampaignWorkingPeriod] CHECK CONSTRAINT [FK_OutboundCampaignWorkingPeriod_OutboundCampaign]
 GO
 
 
@@ -94,9 +94,9 @@ ALTER TABLE dbo.OutboundCampaignWorkingPeriodAssignment ADD CONSTRAINT
 	)
 GO
 
-ALTER TABLE [dbo].[OutboundCampaignWorkingPeriodAssignment]  WITH CHECK ADD  CONSTRAINT [FK_OutboundCampaignWorkingPeriod_OutboundCampaignWorkingPeriodAssignment] FOREIGN KEY([OutboundCampaignWorkingPeriod])
+ALTER TABLE [dbo].[OutboundCampaignWorkingPeriodAssignment]  WITH CHECK ADD  CONSTRAINT [FK_OutboundCampaignWorkingPeriodAssignment_OutboundCampaignWorkingPeriod] FOREIGN KEY([OutboundCampaignWorkingPeriod])
 REFERENCES [dbo].[OutboundCampaignWorkingPeriod] ([Id])
 GO
 
-ALTER TABLE [dbo].[OutboundCampaignWorkingPeriodAssignment] CHECK CONSTRAINT [FK_OutboundCampaignWorkingPeriod_OutboundCampaignWorkingPeriodAssignment]
+ALTER TABLE [dbo].[OutboundCampaignWorkingPeriodAssignment] CHECK CONSTRAINT [FK_OutboundCampaignWorkingPeriodAssignment_OutboundCampaignWorkingPeriod]
 GO
