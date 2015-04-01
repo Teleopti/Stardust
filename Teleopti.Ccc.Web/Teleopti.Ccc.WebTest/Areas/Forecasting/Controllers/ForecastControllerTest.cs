@@ -16,23 +16,6 @@ namespace Teleopti.Ccc.WebTest.Areas.Forecasting.Controllers
 	public class ForecastControllerTest
 	{
 		[Test]
-		public void ShouldGetSkillsAndWorkloads()
-		{
-			var quickForecastEvaluator = MockRepository.GenerateMock<IQuickForecastEvaluator>();
-			var skillRepository = MockRepository.GenerateMock<ISkillRepository>();
-			var skill1 = SkillFactory.CreateSkillWithWorkloadAndSources();
-			skill1.SetId(Guid.NewGuid());
-			skillRepository.Stub(x => x.FindSkillsWithAtLeastOneQueueSource()).Return(new[] {skill1});
-			var target = new ForecastController(quickForecastEvaluator, null);
-			var skills = target.Skills();
-			skills.Single().Id.Should().Be.EqualTo(skill1.Id.Value);
-			skills.Single().Name.Should().Be.EqualTo(skill1.Name);
-			var workload = skill1.WorkloadCollection.Single();
-			skills.Single().Workloads.Single().Id.Should().Be.EqualTo(workload.Id.Value);
-			skills.Single().Workloads.Single().Name.Should().Be.EqualTo(workload.Name);
-		}
-
-		[Test]
 		public void ShouldMeasureForecast()
 		{
 			var quickForecastEvaluator = MockRepository.GenerateMock<IQuickForecastEvaluator>();
@@ -71,7 +54,6 @@ namespace Teleopti.Ccc.WebTest.Areas.Forecasting.Controllers
 
 			skills.Result.Single().Workloads.Single().Accuracies.Single().Number.Should().Be.EqualTo(90.2);
 			skills.Result.Single().Workloads.Single().Accuracies.Single().MethodId.Should().Be.EqualTo(ForecastMethodType.TeleoptiClassic);
-
 		}
 
 		[Test]

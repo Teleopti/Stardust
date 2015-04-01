@@ -10,7 +10,6 @@ angular.module('wfm.forecasting.target', [])
 				$scope.showExplaination = false;
 				$scope.hasOneSelected = false;
 				$scope.selectedIds = [];
-
 				
 
 				$scope.toggleAll = function(selected) {
@@ -63,42 +62,6 @@ angular.module('wfm.forecasting.target', [])
 						skill.show = true;
 					});
 				});
-
-				//Forecasting.accuracyResult.query().$promise.then(function(workloadAccuracies) {
-				//	var sum = 0;
-				//	var numberOfWorkloadsToSkip = 0;
-				//	angular.forEach($scope.skillsDisplayed, function(skill) {
-				//		var sumForSkill = 0;
-				//		var numberToSkipForThisSkill = 0;
-				//		angular.forEach(skill.Workloads, function(w) {
-				//			angular.forEach(workloadAccuracies, function(workload) {
-				//				if (workload.WorkloadId === w.Id) {
-				//					if (workload.Accuracy === 'NaN') {
-				//						numberOfWorkloadsToSkip++;
-				//						numberToSkipForThisSkill++;
-				//						w.Accuracy = '-%';
-				//					} else {
-				//						w.Accuracy = workload.Accuracy.toFixed(1) + '%';
-				//						sumForSkill += workload.Accuracy;
-				//						sum += workload.Accuracy;
-				//					}
-				//				}
-				//			});
-				//		});
-				//		if (skill.Workloads.length - numberToSkipForThisSkill === 0) {
-				//			skill.Accuracy = '-%';
-				//		} else {
-				//			skill.Accuracy = (sumForSkill / (skill.Workloads.length - numberToSkipForThisSkill)).toFixed(1) + '%';
-				//		}
-				//	});
-				//	if (workloadAccuracies.length - numberOfWorkloadsToSkip === 0) {
-				//		$scope.all.Accuracy = '-%';
-				//	} else {
-				//		$scope.all.Accuracy = (sum / (workloadAccuracies.length - numberOfWorkloadsToSkip)).toFixed(1) + '%';
-				//	}
-				//	$scope.showExplaination = (numberOfWorkloadsToSkip !== 0);
-				//	$scope.showSelection = true;
-				//});
 
 				$scope.targets = function() {
 					var result = [];
