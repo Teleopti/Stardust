@@ -20,7 +20,7 @@ namespace Teleopti.Ccc.WebTest.Filters
 			dependencyResolver.Stub(x => x.GetServices(Arg<Type>.Is.Anything)).Return(new object[] { });
 		}
 
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Reliability", "CA2000:Dispose objects before losing scope"), Test]
+		[Test]
 		public void ShouldExecuteTaskMethod()
 		{
 			var taskInvokted = false;
@@ -70,7 +70,7 @@ namespace Teleopti.Ccc.WebTest.Filters
 			Assert.That(() => controller.AsyncManager.OutstandingOperations.Count, Is.EqualTo(0).After(1000, 10));
 		}
 
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Reliability", "CA2000:Dispose objects before losing scope"), Test]
+		[Test]
 		public void ShouldCopyThreadCulture()
 		{
 			CultureInfo threadCulture = null;
@@ -92,23 +92,24 @@ namespace Teleopti.Ccc.WebTest.Filters
 			Assert.That(() => threadUICulture, Is.EqualTo(CultureInfo.GetCultureInfo("fi-FI")).After(1000, 10));
 		}
 
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Reliability", "CA2000:Dispose objects before losing scope"), Test]
+		[Test]
 		public void ShouldCopyThreadPrincipal()
 		{
 			// this is actually done automatically. the same does not apply for culture though.
-			IPrincipal principal = null;
-			Thread.CurrentPrincipal = new TestPrincipal();
+			IPrincipal actual = null;
+			var expected = new TestPrincipal();
+			Thread.CurrentPrincipal = expected;
 			SetupDependencyResolver();
 			var target = new AsyncTaskAttribute();
 			var filterTester = new FilterTester();
 			filterTester.UseController(new TestTaskController(c =>
 			                                                  	{
-			                                                  		principal = Thread.CurrentPrincipal;
+			                                                  		actual = Thread.CurrentPrincipal;
 			                                                  	}));
 
 			filterTester.InvokeFilter(target);
 
-			Assert.That(() => principal.GetType(), Is.EqualTo(typeof(TestPrincipal)).After(1000, 10));
+			Assert.That(() => actual, Is.SameAs(expected).After(1000, 10));
 		}
 
 		private class TestTaskController : AsyncController, FilterTester.ITestController
