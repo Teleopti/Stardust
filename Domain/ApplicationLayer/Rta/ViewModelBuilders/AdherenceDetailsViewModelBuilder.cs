@@ -63,11 +63,11 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ViewModelBuilders
 			var secondsOutOfAdherence = activity.TimeOutOfAdherence.GetValueOrDefault().TotalSeconds;
 
 			var ongoingActivity = !model.ShiftEndTime.HasValue && model.Activities.Last().Equals(activity);
-			var hasAdherence = model.LastAdherence.HasValue;
-			if (ongoingActivity && hasAdherence)
+			var notNeutralAdherence = model.LastAdherence.HasValue;
+			if (ongoingActivity && notNeutralAdherence)
 			{
 				var secondsFromLastUpdate = _now.UtcDateTime()
-					.Subtract(model.LastUpdate.GetValueOrDefault())
+					.Subtract(model.LastUpdate)
 					.TotalSeconds;
 				if (model.LastAdherence.Value)
 					secondsInAdherence += secondsFromLastUpdate;

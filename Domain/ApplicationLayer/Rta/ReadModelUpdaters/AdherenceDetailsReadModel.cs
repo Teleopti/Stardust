@@ -22,7 +22,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ReadModelUpdaters
 		public DateTime? ShiftEndTime { get; set; }
 		public DateTime? ActualEndTime { get; set; }
 		public bool? LastAdherence { get; set; }
-		public DateTime? LastUpdate { get; set; }
+		public DateTime LastUpdate { get; set; }
 	}
 
 	public class ActivityAdherence

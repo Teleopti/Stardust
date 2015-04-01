@@ -117,7 +117,6 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.Persisters
 				PersonId = personId,
 				Model = new AdherenceDetailsModel
 				{
-					LastUpdate = null,
 					Activities = new[]
 					{
 						new ActivityAdherence
@@ -129,7 +128,6 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.Persisters
 			});
 
 			var model = Target.Get(personId, "2014-11-19".Date());
-			model.Model.LastUpdate.Should().Be(null);
 			var detail = model.Model.Activities.First();
 			detail.ActualStartTime.Should().Be(null);
 		}
@@ -175,7 +173,6 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.Persisters
 				PersonId = personId,
 				Model = new AdherenceDetailsModel
 				{
-					LastUpdate = null,
 					LastAdherence = true,
 					Activities = new[]
 					{
@@ -189,7 +186,6 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.Persisters
 
 			var model = Target.Get(personId, "2014-11-19".Date());
 			model.Model.Activities.First().ActualStartTime.Should().Be(null);
-			model.Model.LastUpdate.Should().Be(null);
 		}
 
 		[Test]
