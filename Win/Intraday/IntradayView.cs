@@ -77,6 +77,8 @@ namespace Teleopti.Ccc.Win.Intraday
 
 			if (authorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.IntradayReForecasting))
 				toolStripExChangeForecast.Visible = true;
+
+			toolStripStatusLabelLastUpdate.Click += ToolStripStatusLabelLastUpdateOnClick;
 		}
 
 		public IntradayPresenter Presenter { get; set; }
@@ -230,20 +232,41 @@ namespace Teleopti.Ccc.Win.Intraday
 			teleoptiToolStripGalleryViews.Items.Add(defaultItem);
 		}
 
-		private void presenterExternalAgentStateReceived(object sender, EventArgs e)
+		private Exception ExternalAgentStateReceivedEventArgsException;
+
+		private void presenterExternalAgentStateReceived(object sender, IntradayPresenter.ExternalAgentStateReceivedEventArgs e)
 		{
 			if (InvokeRequired)
-				BeginInvoke(new EventHandler(presenterExternalAgentStateReceived), sender, e);
+				BeginInvoke(new EventHandler<IntradayPresenter.ExternalAgentStateReceivedEventArgs>(presenterExternalAgentStateReceived), sender, e);
 			else
 			{
 				if ((int)_lastUpdateUtc.TimeOfDay.TotalSeconds == (int)DateTime.UtcNow.TimeOfDay.TotalSeconds)
 					return; //To avoid updates that doesn't change the content
 
 				_lastUpdateUtc = DateTime.UtcNow;
-				toolStripStatusLabelLastUpdate.Text = string.Format(CultureInfo.CurrentCulture,
-																					 Resources.LastUpdateColonParameter0,
-																					 TimeZoneHelper.ConvertFromUtc(DateTime.UtcNow).
-																						  ToLongTimeString());
+
+				ExternalAgentStateReceivedEventArgsException = e.Exception;
+				if (e.Exception != null)
+				{
+					toolStripStatusLabelLastUpdate.Text = Resources.Error;
+				}
+				else
+				{
+					toolStripStatusLabelLastUpdate.Text = string.Format(CultureInfo.CurrentCulture,
+						Resources.LastUpdateColonParameter0,
+						TimeZoneHelper.ConvertFromUtc(DateTime.UtcNow).
+							ToLongTimeString());
+				}
+			}
+		}
+
+		private void ToolStripStatusLabelLastUpdateOnClick(object o, EventArgs e)
+		{
+			if (ExternalAgentStateReceivedEventArgsException == null)
+				return;
+			using (var view = new SimpleExceptionHandlerView(ExternalAgentStateReceivedEventArgsException, Resources.Error, Resources.UnableToConnectRemoteService))
+			{
+				view.ShowDialog();
 			}
 		}
 
