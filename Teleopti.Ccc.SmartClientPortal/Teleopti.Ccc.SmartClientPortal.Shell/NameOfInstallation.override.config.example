@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?> 
 <!--
 To run desktop client against multiple installations,
-add [nameOfInstallation].override.config file(s) in desktops bin/[debug|release] folder.
+add [nameOfInstallation].override.config file(s) in same folder as Teleopti.Ccc.SmartClientPortalShell.exe.
 Here you can/should set installation specific app settings, see example below.
 
 "nameOfInstallation" will be shown as a name to the end user when (s)he chooses what installation to use
