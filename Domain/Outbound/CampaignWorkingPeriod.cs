@@ -1,10 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Domain;
+﻿using System.Collections.Generic;
 using Teleopti.Ccc.Domain.Common.EntityBaseTypes;
+using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Outbound
 {
