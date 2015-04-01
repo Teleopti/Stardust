@@ -7,7 +7,7 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta
 {
-	public class FakeAdherencePercentageReadModelPersister : IAdherencePercentageReadModelPersister 
+	public class FakeAdherencePercentageReadModelPersister : IAdherencePercentageReadModelPersister, IAdherencePercentageReadModelReader
 	{
 		private readonly IList<AdherencePercentageReadModel> _data = new List<AdherencePercentageReadModel>();
 
@@ -47,6 +47,11 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta
 		public void Clear()
 		{
 			_data.Clear();
+		}
+
+		public AdherencePercentageReadModel Read(DateOnly date, Guid personId)
+		{
+			return Get(date, personId);
 		}
 	}
 }

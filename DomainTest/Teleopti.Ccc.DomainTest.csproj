@@ -213,6 +213,7 @@
     <Compile Include="ApplicationLayer\Rta\ReadModelUpdaters\AdherencePercentage\UnorderedEventsTest.cs" />
     <Compile Include="ApplicationLayer\Rta\AdherenceTestAttribute.cs" />
     <Compile Include="ApplicationLayer\Rta\Service\PersonUnknownAdherenceEventTest.cs" />
+    <Compile Include="ApplicationLayer\Rta\FullTests\InconsistentPercentage32862.cs" />
     <Compile Include="ApplicationLayer\Rta\ViewModels\AdherenceDetailsViewModelBuilderTest.cs" />
     <Compile Include="ApplicationLayer\Rta\ViewModels\AdherencePercentageViewModelBuilderTest.cs" />
     <Compile Include="ApplicationLayer\Rta\Service\AlarmMappingTest.cs" />

@@ -32,6 +32,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 			_person = person;
 			_stateMapper = stateMapper;
 
+
 			_adherence = new Lazy<AdherenceState>(() => adherenceFor(agentState.CurrentState()));
 			_adherenceForPreviousState = new Lazy<AdherenceState>(() => adherenceFor(agentState.PreviousState()));
 			_adherenceForPreviousStateAndCurrentActivity = new Lazy<AdherenceState>(() => adherenceFor(agentState.PreviousState().StateCode, agentState.CurrentState().ActivityId));

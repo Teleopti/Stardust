@@ -7,7 +7,7 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta
 {
-	public class FakeAdherenceDetailsReadModelPersister : IAdherenceDetailsReadModelPersister
+	public class FakeAdherenceDetailsReadModelPersister : IAdherenceDetailsReadModelPersister, IAdherenceDetailsReadModelReader
 	{
 		private readonly IList<AdherenceDetailsReadModel> _data = new List<AdherenceDetailsReadModel>();
 
@@ -62,5 +62,9 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta
 				.FirstOrDefault();
 		}
 
+		public AdherenceDetailsReadModel Read(Guid personId, DateOnly date)
+		{
+			return Get(personId, date);
+		}
 	}
 }

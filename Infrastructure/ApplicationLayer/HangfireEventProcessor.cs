@@ -34,7 +34,7 @@ namespace Teleopti.Ccc.Infrastructure.ApplicationLayer
 			var publishTo = handlers.Single(o => ProxyUtil.GetUnproxiedType(o) == handlerT);
 			using (_distributedLockAcquirer.LockForTypeOf(publishTo))
 			{
-				new SyncPublishToSingleHandler(publishTo).Publish(@event);
+				new SyncPublishTo(publishTo).Publish(@event);
 			}
 		}
 	}
