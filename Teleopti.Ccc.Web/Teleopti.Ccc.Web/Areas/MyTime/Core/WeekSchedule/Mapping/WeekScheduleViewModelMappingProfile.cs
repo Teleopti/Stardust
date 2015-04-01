@@ -27,8 +27,16 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.Mapping
 		private readonly Func<ILoggedOnUser> _loggedOnUser;
 		private readonly IToggleManager _toggleManager;
 		private readonly Func<INow> _now;
+		private readonly Func<IUserTimeZone> _userTimeZone;
 
-		public WeekScheduleViewModelMappingProfile(Func<IMappingEngine> mapper, Func<IPeriodSelectionViewModelFactory> periodSelectionViewModelFactory, Func<IPeriodViewModelFactory> periodViewModelFactory, Func<IHeaderViewModelFactory> headerViewModelFactory, Func<IScheduleColorProvider> scheduleColorProvider, Func<ILoggedOnUser> loggedOnUser, Func<INow> now, IToggleManager toggleManager)
+		public WeekScheduleViewModelMappingProfile(Func<IMappingEngine> mapper,
+			Func<IPeriodSelectionViewModelFactory> periodSelectionViewModelFactory,
+			Func<IPeriodViewModelFactory> periodViewModelFactory,
+			Func<IHeaderViewModelFactory> headerViewModelFactory,
+			Func<IScheduleColorProvider> scheduleColorProvider,
+			Func<ILoggedOnUser> loggedOnUser, Func<INow> now,
+			IToggleManager toggleManager,
+			Func<IUserTimeZone> userTimeZone)
 		{
 			_mapper = mapper;
 			_periodSelectionViewModelFactory = periodSelectionViewModelFactory;
@@ -38,6 +46,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.Mapping
 			_loggedOnUser = loggedOnUser;
 			_now = now;
 			_toggleManager = toggleManager;
+			_userTimeZone = userTimeZone;
 		}
 		
 		protected override void Configure()
@@ -66,16 +75,19 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.Mapping
 						.Distinct()
 						;
 
-					var diff = endTime - startTime;
 					var culture = _loggedOnUser.Invoke().CurrentUser().PermissionInformation.Culture();
-					
+					var timezone = _userTimeZone.Invoke().TimeZone();
+					var zeroTimeInUtc = TimeZoneHelper.ConvertToUtc(_now().LocalDateTime().Date, timezone);
+
+					var diff = endTime - startTime;
 					return (from t in times
-							select new TimeLineViewModel
-									 {
-										 PositionPercentage = diff == TimeSpan.Zero ? 0 : (decimal)(t - startTime).Ticks / diff.Ticks,
-										 TimeLineDisplay = DateTime.Today.Add(t).ToString(culture.DateTimeFormat.ShortTimePattern),
-										 Time = t
-									 }).ToArray();
+						select new TimeLineViewModel
+						{
+							Time = t,
+							TimeLineDisplay = TimeZoneInfo.ConvertTimeFromUtc(zeroTimeInUtc.Add(t), timezone)
+								.ToString(culture.DateTimeFormat.ShortTimePattern),
+							PositionPercentage = diff == TimeSpan.Zero ? 0 : (decimal) (t - startTime).Ticks/diff.Ticks
+						}).ToArray();
 				}))
 				.ForMember(d => d.RequestPermission, c => c.ResolveUsing(s => new RequestPermission
 				{
