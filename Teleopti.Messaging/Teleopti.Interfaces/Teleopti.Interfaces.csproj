@@ -814,6 +814,7 @@
     <Compile Include="Domain\IWorkShiftBackToLegalStateServicePro.cs" />
     <Compile Include="Infrastructure\IsNotDeadCodeAttribute.cs" />
     <Compile Include="Infrastructure\MessageBrokerException.cs" />
+    <Compile Include="IPlanningPeriod.cs" />
     <Compile Include="IPossibleStartEndCategory.cs" />
     <Compile Include="Domain\IValidatedRequest.cs" />
     <Compile Include="MessageBroker\Client\IMessageBrokerUrl.cs" />

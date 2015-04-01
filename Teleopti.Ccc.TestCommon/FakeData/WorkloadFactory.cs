@@ -18,7 +18,7 @@ namespace Teleopti.Ccc.TestCommon.FakeData
         {
             IWorkload workload = new Workload(skill);
             workload.Description = "desc from factory";
-            workload.Name = "name from factory";
+			   workload.Name = "name from factory";
             return workload;
         }
 

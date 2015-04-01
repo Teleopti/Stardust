@@ -692,6 +692,7 @@
     <Compile Include="Scheduling\Overtime\OvertimeSkillIntervalDataTest.cs" />
     <Compile Include="Scheduling\Overtime\OvertimeSkillStaffPeriodToSkillIntervalDataMapperTest.cs" />
     <Compile Include="Scheduling\Overtime\ScheduleOvertimeServiceTest.cs" />
+    <Compile Include="Scheduling\PlanningPeriodTest.cs" />
     <Compile Include="Scheduling\Rules\MinWeekWorkTimeRuleToggle31992OffTest.cs" />
     <Compile Include="Scheduling\Rules\NonMainShiftActivityRuleTest.cs" />
     <Compile Include="Scheduling\Rules\MinWeekWorkTimeRuleTest.cs" />

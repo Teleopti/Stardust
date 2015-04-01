@@ -186,7 +186,6 @@
     <Compile Include="Forecasting\IDrawSmartPart.cs" />
     <Compile Include="Forecasting\IDrawPositionAndWidth.cs" />
     <Compile Include="Forecasting\ISmartPartModel.cs" />
-    <Compile Include="Forecasting\NamedEntity.cs" />
     <Compile Include="Forecasting\TemplateSmartPart.cs">
       <SubType>UserControl</SubType>
     </Compile>
