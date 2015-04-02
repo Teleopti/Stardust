@@ -91,7 +91,7 @@ namespace Teleopti.Ccc.Domain.AgentInfo.Requests
             var request = Request;
             if (request != null && message != _message)
             {
-                request.TextForNotification = message.Length > 255 ? message.Substring(0, 255) : message;
+				request.TextForNotification = message.Length > messageLength ? message.Substring(0, messageLength) : message;
                 //Need to set this to make the message to be sent
             }
 

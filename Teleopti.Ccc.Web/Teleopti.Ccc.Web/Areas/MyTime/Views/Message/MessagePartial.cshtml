@@ -16,7 +16,7 @@
 						<div class="header" data-bind="click: toggleSelected" style="cursor: pointer">
 							<span class="displaynone" data-bind="text: messageId"></span>
 							<div>
-								<h4 class="title" data-bind="text: title" />
+								<h4 class="title request-data-subject" data-bind="text: title" />
 							</div>
 							<div>
 								<div>
@@ -59,7 +59,7 @@
 						<div class="detail-form" data-bind="visible: isSelected">
 							<hr />
 							<div>
-								<span class="message-text" data-bind="text: message"></span>
+								<span class="message-text request-data-subject" data-bind="text: message"></span>
 							</div>
 							<div class="dialogue">
 								<!-- ko foreach: dialogueMessages -->
