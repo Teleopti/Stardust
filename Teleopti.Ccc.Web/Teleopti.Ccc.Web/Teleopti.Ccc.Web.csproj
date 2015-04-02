@@ -448,8 +448,9 @@
     <Compile Include="Areas\MyTime\Core\WeekSchedule\DataProvider\AbsenceRequestProbability.cs" />
     <Compile Include="Areas\MyTime\Core\WeekSchedule\DataProvider\IAbsenceRequestProbability.cs" />
     <Compile Include="Areas\MyTime\Core\WeekSchedule\DataProvider\IAbsenceRequestProbabilityProvider.cs" />
+    <Compile Include="Areas\Outbound\core\Campaign\DataProvider\OutboundCampaignPersister.cs" />
     <Compile Include="Areas\Outbound\core\Campaign\Mapping\IOutboundCampaignMapper.cs" />
-    <Compile Include="Areas\Outbound\core\Campaign\ViewModelFactory\CampaignViewModelFactory.cs" />
+    <Compile Include="Areas\Outbound\core\IoC\OutboundAreaModule.cs" />
     <Compile Include="Areas\Outbound\Models\CampaignViewModel.cs" />
     <Compile Include="Areas\Outbound\Controllers\OutboundController.cs" />
     <Compile Include="Areas\Outbound\core\Campaign\DataProvider\IOutboundCampaignPersister.cs" />
@@ -2025,6 +2026,7 @@
   <ItemGroup>
     <Folder Include="Areas\Mart\Views\Shared\" />
     <Folder Include="Areas\MyTime\Core\BadgeLeaderBoardReport\DataProvider\" />
+    <Folder Include="Areas\Outbound\core\Campaign\ViewModelFactory\" />
     <Folder Include="Areas\PerformanceTool\Content\Templates\" />
     <Folder Include="Areas\SeatPlanner\Views\LocationHierarchy\" />
     <Folder Include="Areas\SSO\Views\Authentication\" />

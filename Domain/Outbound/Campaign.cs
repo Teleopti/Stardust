@@ -28,6 +28,29 @@ namespace Teleopti.Ccc.Domain.Outbound
 		private IEnumerable<CampaignWorkingPeriod> _campaignWorkingPeriods;
 		private bool _isDeleted;
 
+		public Campaign()
+		{
+			
+		}
+
+		public Campaign(string name)
+			:this()
+		{
+			_name = name;
+			_callListLen = 100;
+			_targetRate = 50;
+			_skill = null;
+			_connectRate = 20;
+			_rightPartyConnectRate = 20;
+			_connectAverageHandlingTime = 30;
+			_rightPartyAverageHandlingTime = 120;
+			_unproductiveTime = 30;
+			_startDate = DateOnly.Today;
+			_endDate = DateOnly.Today;
+			_campaignStatus = CampaignStatus.Draft;
+			_campaignWorkingPeriods = new List<CampaignWorkingPeriod>();
+		}
+
 		public virtual string Name 
 		{
 			get { return _name; }

@@ -35,9 +35,8 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 
 		protected override Campaign CreateAggregateWithCorrectBusinessUnit()
 		{
-			var campaign = new Campaign()
+			var campaign = new Campaign("Sept Sales")
 			{
-				Name = "Sept Sales",
 				CallListLen = 100,
 				TargetRate = 50,
 				Skill = _skill,

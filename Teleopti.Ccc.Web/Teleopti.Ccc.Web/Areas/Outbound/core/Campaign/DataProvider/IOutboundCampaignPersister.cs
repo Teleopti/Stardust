@@ -1,12 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
+﻿using Teleopti.Ccc.Web.Areas.Outbound.Models;
 
 namespace Teleopti.Ccc.Web.Areas.Outbound.core.Campaign.DataProvider
 {
 	public interface IOutboundCampaignPersister
 	{
-		//Persist(OutboundCampaignF campaign);
+		CampaignViewModel Persist(string name);
 	}
 }

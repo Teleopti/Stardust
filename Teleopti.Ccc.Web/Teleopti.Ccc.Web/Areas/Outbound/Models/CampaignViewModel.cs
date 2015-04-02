@@ -8,7 +8,7 @@ namespace Teleopti.Ccc.Web.Areas.Outbound.Models
 	{
 		public string Id;
 		public string Name;
-		public SkillViewModel Skills;  
+		public IEnumerable<SkillViewModel> Skills;  
 		public int CallListLen;
 		public int TargetRate;
 		public int ConnectRate;
@@ -16,16 +16,15 @@ namespace Teleopti.Ccc.Web.Areas.Outbound.Models
 		public int ConnectAverageHandlingTime;
 		public int RightPartyAverageHandlingTime;
 		public int UnproductiveTime;
-		public DateOnly StartDate;
-		public DateOnly EndDate;
+		public DateOnly? StartDate;
+		public DateOnly? EndDate;
 		public CampaignStatus CampaignStatus;
-		public  IEnumerable<CampaignWorkingPeriod> CampaignWorkingPeriods
-		public bool IsDeleted;
+		public IEnumerable<CampaignWorkingPeriod> CampaignWorkingPeriods;		
 	}
 
 	public struct SkillViewModel
 	{
-		public int Id;
+		public string Id;
 		public string SkillName;
 		public bool IsSelected;
 	}
