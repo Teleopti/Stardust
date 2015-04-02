@@ -45,7 +45,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Rta
 		{
 		}
 
-		public void Initialize(string tenant)
+		public void Initialize()
 		{
 		}
 	}

@@ -49,7 +49,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Synchronization
 				StateCode = "break"
 			});
 
-			Target.Initialize("Teleopti WFM");
+			Target.Initialize();
 
 			TeamOutOfAdherenceReadModel.Get(teamId).Count.Should().Be(3);
 			SiteOutOfAdherenceReadModel.Get(siteId).Count.Should().Be(1);

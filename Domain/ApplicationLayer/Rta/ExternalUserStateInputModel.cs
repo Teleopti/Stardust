@@ -13,7 +13,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta
 		public bool IsLoggedOn { get; set; }
 		public DateTime BatchId { get; set; }
 		public bool IsSnapshot { get; set; }
-		public string Tenant { get; set; }
 	}
 
 	public static class ExternalUserStateInputModelExtensions

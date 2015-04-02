@@ -18,10 +18,10 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 		private readonly Lazy<DateTime> _shiftEndTimeForPreviousActivity;
 		private readonly Lazy<DateOnly?> _belongsToDate;
 
-		public ScheduleInfo(IDatabaseReader databaseReader, Guid personId, DateTime currentTime, string tenant)
+		public ScheduleInfo(IDatabaseReader databaseReader, Guid personId, DateTime currentTime)
 		{
 			_currentTime = currentTime;
-			_scheduleLayers = new Lazy<IEnumerable<ScheduleLayer>>(() => databaseReader.GetCurrentSchedule(personId, tenant));
+			_scheduleLayers = new Lazy<IEnumerable<ScheduleLayer>>(() => databaseReader.GetCurrentSchedule(personId));
 			_currentActivity = new Lazy<ScheduleLayer>(() => activityForTime(currentTime));
 			_nextActivityInShift = new Lazy<ScheduleLayer>(nextAdjecentActivityToCurrent);
 			_currentShiftStartTime = new Lazy<DateTime>(() => startTimeOfShift(_currentActivity.Value));

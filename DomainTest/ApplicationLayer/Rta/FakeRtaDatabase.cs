@@ -218,7 +218,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta
 
 
 
-		public IList<ScheduleLayer> GetCurrentSchedule(Guid personId, string tenant)
+		public IList<ScheduleLayer> GetCurrentSchedule(Guid personId)
 		{
 			var layers = from l in _schedules
 						 where l.PersonId == personId
@@ -231,17 +231,17 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta
 			return new UtcTimeZone().TimeZone();
 		}
 
-		public ConcurrentDictionary<string, IEnumerable<ResolvedPerson>> ExternalLogOns(string tenant)
+		public ConcurrentDictionary<string, IEnumerable<ResolvedPerson>> ExternalLogOns()
 		{
 			return new ConcurrentDictionary<string, IEnumerable<ResolvedPerson>>(_externalLogOns);
 		}
 
-		public ConcurrentDictionary<string, int> Datasources(string tenant)
+		public ConcurrentDictionary<string, int> Datasources()
 		{
 			return new ConcurrentDictionary<string, int>(_datasources);
 		}
 
-		public void PersistActualAgentReadModel(AgentStateReadModel model, string tenant)
+		public void PersistActualAgentReadModel(AgentStateReadModel model)
 		{
 			AgentStateReadModelReader.Has(model);
 			PersistedAgentStateReadModel = model;

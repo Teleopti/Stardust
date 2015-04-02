@@ -29,7 +29,7 @@ namespace Teleopti.Ccc.Infrastructure.Rta
 			_now = now;
 		}
 
-		public IList<ScheduleLayer> GetCurrentSchedule(Guid personId, string tenant)
+		public IList<ScheduleLayer> GetCurrentSchedule(Guid personId)
 		{
 			var utcDate = _now.UtcDateTime().Date;
 			const string query = @"SELECT PayloadId,StartDateTime,EndDateTime,rta.Name,rta.ShortName,DisplayColor, BelongsToDate 
@@ -38,7 +38,7 @@ namespace Teleopti.Ccc.Infrastructure.Rta
 											AND BelongsToDate BETWEEN @StartDate AND @EndDate";
 
 			var layers = new List<ScheduleLayer>();
-			using (var connection = _databaseConnectionFactory.CreateConnection(_databaseConnectionStringHandler.AppConnectionString(tenant)))
+			using (var connection = _databaseConnectionFactory.CreateConnection(_databaseConnectionStringHandler.AppConnectionString()))
 			{
 				var command = connection.CreateCommand();
 				command.CommandType = CommandType.Text;
@@ -67,10 +67,10 @@ namespace Teleopti.Ccc.Infrastructure.Rta
 			return layers.OrderBy(l => l.EndDateTime).ToList();
 		}
 
-		public ConcurrentDictionary<string, IEnumerable<ResolvedPerson>> ExternalLogOns(string tenant)
+		public ConcurrentDictionary<string, IEnumerable<ResolvedPerson>> ExternalLogOns()
 		{
 			var dictionary = new ConcurrentDictionary<string, IEnumerable<ResolvedPerson>>();
-			using (var connection = _databaseConnectionFactory.CreateConnection(_databaseConnectionStringHandler.AppConnectionString(tenant)))
+			using (var connection = _databaseConnectionFactory.CreateConnection(_databaseConnectionStringHandler.AppConnectionString()))
 			{
 				var command = connection.CreateCommand();
 				command.CommandType = CommandType.StoredProcedure;
@@ -108,10 +108,10 @@ namespace Teleopti.Ccc.Infrastructure.Rta
 			return dictionary;
 		}
 
-		public ConcurrentDictionary<string, int> Datasources(string tenant)
+		public ConcurrentDictionary<string, int> Datasources()
 		{
 			var dictionary = new ConcurrentDictionary<string, int>();
-			using (var connection = _databaseConnectionFactory.CreateConnection(_databaseConnectionStringHandler.DataStoreConnectionString(tenant)))
+			using (var connection = _databaseConnectionFactory.CreateConnection(_databaseConnectionStringHandler.DataStoreConnectionString()))
 			{
 				var command = connection.CreateCommand();
 				command.CommandType = CommandType.StoredProcedure;

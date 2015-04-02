@@ -20,9 +20,8 @@ namespace Teleopti.Ccc.Web.Core.Startup
 
 		public Task Execute(IAppBuilder application)
 		{
-			//todo: tenant how to solve this?? foreach datasource????
-			_initializor.Initialize("Teleopti WFM");
-			_synchronizer.Initialize("Teleopti WFM");
+			_initializor.Initialize();
+			_synchronizer.Initialize();
 			return null;
 		}
 	}

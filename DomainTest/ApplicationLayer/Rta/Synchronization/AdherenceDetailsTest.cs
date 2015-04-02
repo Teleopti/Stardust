@@ -43,7 +43,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Synchronization
 				StateCode = "phone"
 			});
 
-			Target.Initialize("Teleopti WFM");
+			Target.Initialize();
 
 			Persister.Get(personId, new DateOnly("2015-01-08 12:00".Utc())).Model.Activities.Single().StartTime
 				.Should().Be("2015-01-08 11:00".Utc());
@@ -71,7 +71,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Synchronization
 				Model = null
 			});
 
-			Target.Initialize("Teleopti WFM");
+			Target.Initialize();
 
 			Persister.Get(personId, new DateOnly("2015-01-08 12:00".Utc())).Model.Should().Be.Null();
 		}

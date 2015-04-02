@@ -6,6 +6,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 	{
 		void InvalidateAll();
 		void Invalidate();
-		void InvalidateSchedules(Guid personId, string tenant);
+		void InvalidateSchedules(Guid personId);
 	}
 }

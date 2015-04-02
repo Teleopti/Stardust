@@ -40,7 +40,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service.Aggregator
 			{
 				PersonId = person1,
 				StaffingEffect = -1
-			}, "Teleopti WFM");
+			});
 			Now.Is("2014-10-20 9:00");
 
 			Target.Initialize("Teleopti WFM");
@@ -71,7 +71,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service.Aggregator
 			{
 				PersonId = person1,
 				StaffingEffect = -1
-			}, "Teleopti WFM");
+			});
 			Now.Is("2014-10-20 9:00");
 
 			Target.Initialize("Teleopti WFM");

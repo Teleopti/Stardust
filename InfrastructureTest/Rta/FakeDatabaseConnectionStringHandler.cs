@@ -5,12 +5,12 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta
 {
 	public class FakeDatabaseConnectionStringHandler : IDatabaseConnectionStringHandler
 	{
-		public string AppConnectionString(string tenant)
+		public string AppConnectionString()
 		{
 			return ConnectionStringHelper.ConnectionStringUsedInTests;
 		}
 
-		public string DataStoreConnectionString(string tenant)
+		public string DataStoreConnectionString()
 		{
 			return ConnectionStringHelper.ConnectionStringUsedInTestsMatrix;
 		}

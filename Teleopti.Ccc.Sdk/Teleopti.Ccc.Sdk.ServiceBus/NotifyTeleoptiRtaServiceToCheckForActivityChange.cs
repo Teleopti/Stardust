@@ -15,10 +15,10 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
             _channelCreator = channelCreator;
         }
 
-        public void CheckForActivityChange(Guid personId, Guid businessUnitId, DateTime timestamp, string dataSource)
+        public void CheckForActivityChange(Guid personId, Guid businessUnitId, DateTime timestamp)
         {
             var channel = _channelCreator.CreateChannel<ITeleoptiRtaService>();
-            channel.GetUpdatedScheduleChange(personId, businessUnitId, timestamp, dataSource);
+            channel.GetUpdatedScheduleChange(personId, businessUnitId, timestamp);
         }
     }
 }

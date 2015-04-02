@@ -52,7 +52,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta
 				PersonId = personId
 			};
 			new DatabaseWriter(new DatabaseConnectionFactory(), new FakeDatabaseConnectionStringHandler())
-				.PersistActualAgentReadModel(state, "Teleopti WFM");
+				.PersistActualAgentReadModel(state);
 			var result = target.LoadForTeam(teamId);
 
 			result.Single().PersonId.Should().Be(personId);
@@ -69,9 +69,9 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta
 			var state2 = new AgentStateReadModelForTest { TeamId =teamId, PersonId = personId2};
 			var state3 = new AgentStateReadModelForTest { TeamId =Guid.Empty, PersonId = personId3};
 			var dbWritter = new DatabaseWriter(new DatabaseConnectionFactory(), new FakeDatabaseConnectionStringHandler());
-			dbWritter.PersistActualAgentReadModel(state1, "Teleopti WFM");
-			dbWritter.PersistActualAgentReadModel(state2, "Teleopti WFM");
-			dbWritter.PersistActualAgentReadModel(state3, "Teleopti WFM");
+			dbWritter.PersistActualAgentReadModel(state1);
+			dbWritter.PersistActualAgentReadModel(state2);
+			dbWritter.PersistActualAgentReadModel(state3);
 
 			var result = target.LoadForTeam(teamId);
 
@@ -90,7 +90,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta
 				Adherence = (int) AdherenceState.Out
 			};
 			new DatabaseWriter(new DatabaseConnectionFactory(), new FakeDatabaseConnectionStringHandler())
-				.PersistActualAgentReadModel(state, "Teleopti WFM");
+				.PersistActualAgentReadModel(state);
 
 			target.Load(new[] {personId}).Single().Adherence.Should().Be(AdherenceState.Out);
 			target.LoadForTeam(teamId).Single().Adherence.Should().Be(AdherenceState.Out);

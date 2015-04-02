@@ -68,9 +68,9 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 
 			_config.Args().CacheBuilder
 				.For<DatabaseReader>()
-				.CacheMethod(x => x.GetCurrentSchedule(Guid.NewGuid(), ""))
-				.CacheMethod(x => x.Datasources(""))
-				.CacheMethod(x => x.ExternalLogOns(""))
+				.CacheMethod(x => x.GetCurrentSchedule(Guid.NewGuid()))
+				.CacheMethod(x => x.Datasources())
+				.CacheMethod(x => x.ExternalLogOns())
 				.As<IDatabaseReader>();
 			builder.RegisterMbCacheComponent<DatabaseReader, IDatabaseReader>();
 
@@ -136,8 +136,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterMbCacheComponent<PersonOrganizationProvider, IPersonOrganizationProvider>().SingleInstance();
 
 			//messy for now
-			// TODO :tenant no hardcoded datasource
-			builder.Register(c => new PersonOrganizationReader(c.Resolve<INow>(), c.Resolve<IDatabaseConnectionStringHandler>().AppConnectionString("Teleopti WFM")))
+			builder.Register(c => new PersonOrganizationReader(c.Resolve<INow>(), c.Resolve<IDatabaseConnectionStringHandler>().AppConnectionString()))
 				.SingleInstance().As<IPersonOrganizationReader>();
 		}
 	}

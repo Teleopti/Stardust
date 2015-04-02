@@ -7,7 +7,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service.Aggregator
 	public interface IAdherenceAggregator
 	{
 		void Aggregate(IAdherenceAggregatorInfo state);
-		void Initialize(string tenant);
+		void Initialize();
 	}
 
 	public class NoAggregation : IAdherenceAggregator
@@ -16,7 +16,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service.Aggregator
 		{
 		}
 
-		public void Initialize(string tenant)
+		public void Initialize()
 		{
 		}
 	}
@@ -52,9 +52,9 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service.Aggregator
 			aggregate(state, true);
 		}
 
-		public void Initialize(string tenant)
+		public void Initialize()
 		{
-			foreach (var actualAgentState in _agentStateReadModelReader.GetActualAgentStates(tenant))
+			foreach (var actualAgentState in _agentStateReadModelReader.GetActualAgentStates())
 			{
 				PersonOrganizationData person;
 				if (!_personOrganizationProvider.PersonOrganizationData().TryGetValue(actualAgentState.PersonId, out person))

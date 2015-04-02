@@ -21,8 +21,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 			IAgentStateMessageSender messageSender, 
 			IAdherenceAggregator adherenceAggregator,
 			Func<AgentState> previousState,
-			Func<ScheduleInfo, RtaProcessContext, AgentState> currentState, 
-			string tenant
+			Func<ScheduleInfo, RtaProcessContext, AgentState> currentState 
 			)
 		{
 			_previousState = previousState;
@@ -36,7 +35,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 			AgentStateReadModelUpdater = agentStateReadModelUpdater ?? new DontUpdateAgentStateReadModel();
 			MessageSender = messageSender ?? new NoMessagge();
 			AdherenceAggregator = adherenceAggregator ?? new NoAggregation();
-			Tenant = tenant;
 		}
 
 		public ExternalUserStateInputModel Input { get; private set; }
@@ -46,7 +44,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 		public IAgentStateReadModelUpdater AgentStateReadModelUpdater { get; private set; }
 		public IAgentStateMessageSender MessageSender { get; private set; }
 		public IAdherenceAggregator AdherenceAggregator { get; private set; }
-		public string Tenant { get; private set; }
 
 		public AgentState PreviousState(ScheduleInfo scheduleInfo)
 		{

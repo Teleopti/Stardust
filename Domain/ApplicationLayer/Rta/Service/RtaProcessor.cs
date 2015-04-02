@@ -31,12 +31,12 @@
 			var person = context.Person;
 			var input = context.Input;
 
-			var scheduleInfo = new ScheduleInfo(_databaseReader, context.Person.PersonId, context.CurrentTime, context.Tenant);
+			var scheduleInfo = new ScheduleInfo(_databaseReader, context.Person.PersonId, context.CurrentTime);
 			var agentStateInfo = new AgentStateInfo(() => context.PreviousState(scheduleInfo), () => context.CurrentState(scheduleInfo));
 			var adherenceInfo = new AdherenceInfo(input, person, agentStateInfo, scheduleInfo, _stateMapper);
 			var info = new StateInfo(person, agentStateInfo, scheduleInfo, adherenceInfo);
 			
-			context.AgentStateReadModelUpdater.Update(info, context.Tenant);
+			context.AgentStateReadModelUpdater.Update(info);
 			context.MessageSender.Send(info);
 			context.AdherenceAggregator.Aggregate(info);
 			_shiftEventPublisher.Publish(info);

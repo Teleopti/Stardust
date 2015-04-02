@@ -54,7 +54,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Synchronization
 				StateCode = "state"
 			});
 
-			var initialize = Execute.OnAnotherThread(() => Target.Initialize("Teleopti WFM"));
+			var initialize = Execute.OnAnotherThread(() => Target.Initialize());
 			Handler.InHandler.WaitOne(TimeSpan.FromSeconds(1));
 			var systemTask = Task.Factory.StartNew(() =>
 			{

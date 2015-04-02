@@ -267,7 +267,6 @@
     <Compile Include="Repositories\PlanningPeriodRepository.cs" />
     <Compile Include="Repositories\SeatBookingRepository.cs" />
     <Compile Include="Rta\CacheInvalidator.cs" />
-    <Compile Include="Rta\MultiTenancyDatabaseConnectionStringHandler.cs" />
     <Compile Include="Rta\Persisters\AdherenceDetailsReadModelPersister.cs" />
     <Compile Include="Rta\Persisters\AdherencePercentageReadModelPersister.cs" />
     <Compile Include="Repositories\SeatMapLocationRepository.cs" />

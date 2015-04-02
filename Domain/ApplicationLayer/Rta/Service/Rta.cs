@@ -16,7 +16,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 		int SaveStateBatch(IEnumerable<ExternalUserStateInputModel> states);
 		int SaveStateSnapshot(IEnumerable<ExternalUserStateInputModel> states);
 		void CheckForActivityChange(CheckForActivityChangeInputModel input);
-		void Initialize(string tenant);
+		void Initialize();
 	}
 
 	public class Rta : IRta
@@ -140,7 +140,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 			Log.InfoFormat("Message verified and validated from sender for UserCode: {0}, StateCode: {1}. (MessageId = {2})", input.UserCode, input.StateCode, messageId);
 
 			int dataSourceId;
-			if (!_dataSourceResolver.TryResolveId(input.SourceId, input.Tenant, out dataSourceId))
+			if (!_dataSourceResolver.TryResolveId(input.SourceId, out dataSourceId))
 			{
 				Log.WarnFormat("No data source available for source id = {0}. Event will not be handled before data source is set up.", input.SourceId);
 				return 0;
@@ -181,7 +181,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 		{
 			Log.InfoFormat("Recieved message from servicebus to check schedule for Person: {0}, BusinessUnit: {1}", input.PersonId, input.BusinessUnitId);
 
-			_rtaDataHandler.CheckForActivityChange(input.PersonId, input.BusinessUnitId, input.DataSource);
+			_rtaDataHandler.CheckForActivityChange(input.PersonId, input.BusinessUnitId);
 		}
 
 		private static void verifyBatchNotTooLarge(IEnumerable<ExternalUserStateInputModel> externalUserStateBatch)
@@ -191,9 +191,9 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 			throw new BatchTooBigException("Incoming batch too large. Please lower the number of user states in a batch to below 50.");
 		}
 
-		public void Initialize(string tenant)
+		public void Initialize()
 		{
-			_rtaDataHandler.Initialize(tenant);
+			_rtaDataHandler.Initialize();
 		}
 	}
 
