@@ -43,7 +43,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service.Aggregator
 			});
 			Now.Is("2014-10-20 9:00");
 
-			Target.Initialize("Teleopti WFM");
+			Target.Initialize();
 			Target.SaveState(state);
 
 			Sender.LastTeamNotification.DeserializeBindaryData<TeamAdherenceMessage>().OutOfAdherence.Should().Be(2);
@@ -74,7 +74,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service.Aggregator
 			});
 			Now.Is("2014-10-20 9:00");
 
-			Target.Initialize("Teleopti WFM");
+			Target.Initialize();
 
 			Sender.AllNotifications.Should().Be.Empty();
 		}
@@ -82,9 +82,9 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service.Aggregator
 		[Test]
 		public void ShouldNotSendMessageWhenSomeoneHasLeftTheOrganization()
 		{
-			Database.PersistActualAgentReadModel(new AgentStateReadModel { PersonId = Guid.NewGuid() }, "Teleopti WFM");
+			Database.PersistActualAgentReadModel(new AgentStateReadModel { PersonId = Guid.NewGuid() });
 
-			Target.Initialize("Teleopti WFM");
+			Target.Initialize();
 
 			Sender.AllNotifications.Should().Be.Empty();
 		}
