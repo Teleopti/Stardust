@@ -244,7 +244,9 @@
     <Compile Include="Areas\MyTime\Core\Common\DataProvider\LeaderboardSettingBasedBadgeProviderTest.cs" />
     <Compile Include="Areas\Permissions\OrganizationSelectionControllerTest.cs" />
     <Compile Include="Areas\Permissions\RolesControllerTest.cs" />
+    <Compile Include="Areas\ResourcePlanner\FakeMissingForecastProvider.cs" />
     <Compile Include="Areas\ResourcePlanner\FilterControllerTest.cs" />
+    <Compile Include="Areas\ResourcePlanner\MissingForecastProviderTest.cs" />
     <Compile Include="Areas\ResourcePlanner\PlanningPeriodControllerTest.cs" />
     <Compile Include="Areas\Rta\ExternalUserStateWebModelForTest.cs" />
     <Compile Include="Areas\Rta\StateControllerTest.cs" />

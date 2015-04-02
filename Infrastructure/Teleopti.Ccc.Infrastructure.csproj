@@ -260,6 +260,7 @@
     <Compile Include="MultiTenancy\Client\TenantDataManager.cs" />
     <Compile Include="NHibernateConfiguration\SecondLevelCache.cs" />
     <Compile Include="Persisters\WorkflowControlSetPublishDatePersister.cs" />
+    <Compile Include="Repositories\ExistingForecastRepository.cs" />
     <Compile Include="Repositories\IQueryExtensions.cs" />
     <Compile Include="Repositories\IOutboundCampaignRepository.cs" />
     <Compile Include="Repositories\OutboundCampaignRepository.cs" />

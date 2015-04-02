@@ -821,6 +821,7 @@
     <Compile Include="Outbound\CampaignWorkingPeriodAssignment.cs" />
     <Compile Include="Payroll\PayrollFormat.cs" />
     <Compile Include="PreserveStack.cs" />
+    <Compile Include="Repositories\IExistingForecastRepository.cs" />
     <Compile Include="Repositories\IJobResultRepository.cs" />
     <Compile Include="Repositories\ISeatBookingRepository.cs" />
     <Compile Include="Repositories\ISeatMapLocationRepository.cs" />
@@ -871,6 +872,7 @@
     <Compile Include="Scheduling\BackToLegalShift\LegalShiftDecider.cs" />
     <Compile Include="Scheduling\DoNothingScheduleDayChangeCallBack.cs" />
     <Compile Include="Scheduling\IMatrixUnselectedDaysLocker.cs" />
+    <Compile Include="Scheduling\INextPlanningPeriodProvider.cs" />
     <Compile Include="Scheduling\IScheduleDifferenceSaver.cs" />
     <Compile Include="Scheduling\Legacy\Commands\BackToLegalShiftCommand.cs" />
     <Compile Include="Scheduling\Legacy\Commands\ClassicScheduleCommand.cs" />
@@ -917,6 +919,7 @@
     <Compile Include="Scheduling\Legacy\Commands\TeamBlockScheduleCommand.cs" />
     <Compile Include="Scheduling\Legacy\Commands\WeeklyRestSolverCommand.cs" />
     <Compile Include="Scheduling\MatrixUnselectedDaysLocker.cs" />
+    <Compile Include="Scheduling\NextPlanningPeriodProvider.cs" />
     <Compile Include="Scheduling\Overtime\AdjustOvertimeLengthBasedOnAvailability.cs" />
     <Compile Include="Scheduling\Overtime\AnalyzePersonAccordingToAvailability.cs" />
     <Compile Include="Scheduling\Overtime\CalculateBestOvertime.cs" />
@@ -2196,7 +2199,9 @@
     <EmbeddedResource Include="AgentInfo\Requests\ShiftTradeRequest.hbm.xml" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Forecasting\ForecastProcessReport.hbm.xml" />
+    <EmbeddedResource Include="Forecasting\ForecastProcessReport.hbm.xml">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="AgentInfo\Requests\TextRequest.hbm.xml" />

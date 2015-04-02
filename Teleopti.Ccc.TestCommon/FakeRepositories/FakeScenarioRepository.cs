@@ -70,7 +70,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 
 		public IScenario LoadDefaultScenario()
 		{
-			throw new NotImplementedException();
+			return _scenario;
 		}
 
 		public IScenario LoadDefaultScenario(IBusinessUnit businessUnit)

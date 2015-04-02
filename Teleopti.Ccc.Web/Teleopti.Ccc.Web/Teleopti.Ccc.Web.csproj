@@ -490,6 +490,10 @@
     <Compile Include="Areas\ResourcePlanner\FilterController.cs" />
     <Compile Include="Areas\ResourcePlanner\FilterGroup.cs" />
     <Compile Include="Areas\ResourcePlanner\FilterItem.cs" />
+    <Compile Include="Areas\ResourcePlanner\ResourcePlannnerModule.cs" />
+    <Compile Include="Areas\ResourcePlanner\IMissingForecastProvider.cs" />
+    <Compile Include="Areas\ResourcePlanner\MissingForecastModel.cs" />
+    <Compile Include="Areas\ResourcePlanner\MissingForecastProvider.cs" />
     <Compile Include="Areas\ResourcePlanner\PlanningPeriodController.cs" />
     <Compile Include="Areas\ResourcePlanner\PlanningPeriodModel.cs" />
     <Compile Include="Areas\Rta\Controllers\SyncController.cs" />

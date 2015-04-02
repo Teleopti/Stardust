@@ -35,7 +35,7 @@
     select wldb.CurrentDate from WorkloadDay wldb
                                 inner join wldb.Parent sdb 
                                 where wldb.Workload = :workload
-                                and wldb.TemplateReference.TemplateName <> :longtermKey
+                                and (wldb.TemplateReference.TemplateName is null OR wldb.TemplateReference.TemplateName <> :longtermKey)
                                 and wldb.CurrentDate between :startDate and :endDate
                                 and sdb.Scenario = :scenario
     ]]>
@@ -45,4 +45,23 @@
     <query-param name="endDate" type="datetime"/>
     <query-param name="longtermKey" type="string"/>
   </query>
+
+	<sql-query name="ExistingForecast">
+		<![CDATA[
+    select sk.Name as Name, sk.Id as Id, sdb.SkillDayDate as CurrentDate from Skill sk
+																left join SkillDay sdb on (sk.Id=sdb.Skill) and (sdb.SkillDayDate between :startDate and :endDate) and (sdb.Scenario = :scenario) 
+																left join WorkloadDay wld on (wld.Parent = sdb.Id) and (wld.TemplateName is null OR wld.TemplateName <> :longtermKey)
+																left join WorkloadDayBase wldb on wld.WorkloadDayBase = wldb.Id
+                                where sk.IsDeleted = 0 
+																and sk.BusinessUnit = :businessUnit
+																group by sk.Name, sk.Id, sdb.SkillDayDate
+
+															
+    ]]>
+		<query-param name="scenario" type="Teleopti.Ccc.Domain.Common.Scenario"/>
+		<query-param name="businessUnit" type="Teleopti.Ccc.Domain.Common.BusinessUnit"/>
+		<query-param name="startDate" type="datetime"/>
+		<query-param name="endDate" type="datetime"/>
+		<query-param name="longtermKey" type="string"/>
+	</sql-query>
 </hibernate-mapping>
