@@ -202,6 +202,8 @@
     <Compile Include="ApplicationLayer\Commands\RemovePersonAbsenceCommandHandler.cs" />
     <Compile Include="ApplicationLayer\Events\PersonAbsenceRemovedEvent.cs" />
     <Compile Include="ApplicationLayer\Commands\MoveActivityCommandHandler.cs" />
+    <Compile Include="ApplicationLayer\Rta\Service\IScheduleLoader.cs" />
+    <Compile Include="ApplicationLayer\Rta\Service\ScheduleLoader.cs" />
     <Compile Include="ApplicationLayer\Rta\ViewModelBuilders\AdherencePercentageViewModel.cs" />
     <Compile Include="ApplicationLayer\Rta\Service\ActivityEventPublisher.cs" />
     <Compile Include="ApplicationLayer\Rta\Service\ActualAgentStateExtension.cs" />

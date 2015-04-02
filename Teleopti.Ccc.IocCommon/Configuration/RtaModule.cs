@@ -63,12 +63,17 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 				.AsImplemented();
 			builder.RegisterConcreteMbCacheComponent<AlarmMappingLoader>().As<IAlarmMappingLoader>().ApplyAspects();
 			builder.RegisterConcreteMbCacheComponent<StateMappingLoader>().As<IStateMappingLoader>().ApplyAspects();
-			
+
 			builder.RegisterType<StateCodeAdder>().As<IStateCodeAdder>().SingleInstance().ApplyAspects();
 
 			_config.Args().CacheBuilder
-				.For<DatabaseReader>()
+				.For<ScheduleLoader>()
 				.CacheMethod(x => x.GetCurrentSchedule(Guid.NewGuid()))
+				.As<IScheduleLoader>();
+			builder.RegisterMbCacheComponent<ScheduleLoader, IScheduleLoader>();
+
+			_config.Args().CacheBuilder
+				.For<DatabaseReader>()
 				.CacheMethod(x => x.Datasources())
 				.CacheMethod(x => x.ExternalLogOns())
 				.As<IDatabaseReader>();
@@ -128,7 +133,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			{
 				builder.RegisterType<ByStaffingEffect>().As<IAppliedAdherence>();
 			}
-			
+
 			_config.Args().CacheBuilder
 				.For<PersonOrganizationProvider>()
 				.CacheMethod(svc => svc.PersonOrganizationData())
