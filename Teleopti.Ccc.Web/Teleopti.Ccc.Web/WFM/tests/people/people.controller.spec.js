@@ -31,7 +31,7 @@ describe("PeopleCtrl", function () {
 	it("should show agent by search function", inject(function ($controller) {
 		var scope = $rootScope.$new();
 
-		$controller("PeopleCtrl", { $scope: scope, SearchSvrc: mockSearchService });
+		$controller("PeopleCtrl", { $scope: scope, PeopleSearch: mockSearchService });
 
 		scope.keyword = "ashley";
 		scope.searchKeyword();

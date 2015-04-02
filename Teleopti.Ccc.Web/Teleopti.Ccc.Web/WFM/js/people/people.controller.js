@@ -1,9 +1,9 @@
 ﻿'use strict';
 
 
-angular.module('wfm.people', ['peopleService', 'restSearchService'])
+angular.module('wfm.people', ['peopleService', 'peopleSearchService'])
 	.controller('PeopleCtrl', [
-	'$scope', '$filter', '$state', 'SearchSvrc',
+	'$scope', '$filter', '$state', 'PeopleSearch',
 	function ($scope, $filter, $state, SearchSvrc) {
 		$scope.searchResult = [];
 		$scope.keyword = '';

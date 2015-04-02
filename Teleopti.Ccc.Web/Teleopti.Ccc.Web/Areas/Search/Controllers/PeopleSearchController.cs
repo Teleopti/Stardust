@@ -9,19 +9,19 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Web.Areas.Search.Controllers
 {
-	public class SearchController : ApiController
+	public class PeopleSearchController : ApiController
 	{
 		private readonly IPersonFinderReadOnlyRepository _searchRepository;
 		private readonly IPermissionProvider _permissionProvider;
 
-		public SearchController(IPersonFinderReadOnlyRepository searchRepository, IPermissionProvider permissionProvider)
+		public PeopleSearchController(IPersonFinderReadOnlyRepository searchRepository, IPermissionProvider permissionProvider)
 		{
 			_searchRepository = searchRepository;
 			_permissionProvider = permissionProvider;
 		}
 
 		[UnitOfWork]
-		[HttpGet,Route("api/Search/Global")]
+		[HttpGet,Route("api/Search/People")]
 		public virtual IHttpActionResult GetResult(string keyword)
 		{
 			var search = new PersonFinderSearchCriteria(PersonFinderField.All, keyword, 20, DateOnly.MinValue, 0, 0);

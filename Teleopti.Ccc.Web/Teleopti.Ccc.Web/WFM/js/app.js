@@ -14,6 +14,7 @@ var wfm = angular.module('wfm', [
 	'outboundService',
 	'restAreasService',
 	'restFilterService',
+	'peopleSearchService',
 	'wfmCtrls',
 	'wfm.permissions',
 	'wfm.people',
