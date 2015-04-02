@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using SharpTestsEx;
@@ -9,7 +9,7 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.DomainTest.Forecasting.Angel.Accuracy
 {
-	public class MeasurementShouldReturnCorrectlyTest : MeasureForecastTest
+	public class MeasurementShouldPickTheBestMethodTest : MeasureForecastTest
 	{
 		protected override DateOnlyPeriod HistoricalPeriod
 		{
@@ -24,16 +24,14 @@ namespace Teleopti.Ccc.DomainTest.Forecasting.Angel.Accuracy
 		{
 			var statisticTasks1 = new StatisticTask { Interval = HistoricalPeriod.StartDate.Date, StatOfferedTasks = 9 };
 			var statisticTasks2 = new StatisticTask { Interval = HistoricalPeriod.EndDate.Date, StatOfferedTasks = 11 };
-			return new[] {statisticTasks1, statisticTasks2};
+			return new[] { statisticTasks1, statisticTasks2 };
 		}
 
 		protected override void Assert(SkillAccuracy measurementResult)
 		{
 			measurementResult.Workloads.First().Id.Should().Be.EqualTo(Workload.Id.Value);
-			measurementResult.Workloads.First().Accuracies.First().MethodId.Should().Be.EqualTo(ForecastMethodType.TeleoptiClassic);
-			measurementResult.Workloads.First().Accuracies.First().Number.Should().Be.EqualTo(100 - Math.Round((11d - 9d)/11d*100, 1));
-			measurementResult.Workloads.First().Accuracies.Second().MethodId.Should().Be.EqualTo(ForecastMethodType.TeleoptiClassicWithTrend);
-			measurementResult.Workloads.First().Accuracies.Second().Number.Should().Be.EqualTo(100 - Math.Round(((11d - (9d + 1 * HistoricalPeriod.EndDate.Subtract(LinearTrend.StartDate).Days + 2))) / 11d * 100, 1));
+			measurementResult.Workloads.First().Accuracies.First().IsSelected.Should().Be.False();
+			measurementResult.Workloads.First().Accuracies.Second().IsSelected.Should().Be.True();
 		}
 	}
 }

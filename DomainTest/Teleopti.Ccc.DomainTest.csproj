@@ -385,6 +385,7 @@
     <Compile Include="Forecasting\Angel\Accuracy\ForecastingSymmetricMeanAbsolutePercentageErrorTest.cs" />
     <Compile Include="Forecasting\Angel\Accuracy\ForecastingWeightedMeanAbsolutePercentageErrorTest.cs" />
     <Compile Include="Forecasting\Angel\Accuracy\LinearRegressionTrendTest.cs" />
+    <Compile Include="Forecasting\Angel\Accuracy\MeasurementShouldPickTheBestMethodTest.cs" />
     <Compile Include="Forecasting\Angel\IndexVolumesFactory.cs" />
     <Compile Include="Forecasting\Angel\TeleoptiClassicTest.cs" />
     <Compile Include="Forecasting\Angel\Accuracy\ForecastingMeanAbsolutePercentageDeviationTest.cs" />

@@ -4,5 +4,6 @@ namespace Teleopti.Ccc.Domain.Forecasting.Angel.Accuracy
 	{
 		public double Number { get; set; }
 		public ForecastMethodType MethodId { get; set; }
+		public bool IsSelected { get; set; }
 	}
 }

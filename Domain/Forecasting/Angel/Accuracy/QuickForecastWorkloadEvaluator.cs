@@ -34,14 +34,16 @@ namespace Teleopti.Ccc.Domain.Forecasting.Angel.Accuracy
 
 			var result = new WorkloadAccuracy { Id = workload.Id.Value, Name = workload.Name};
 			var methods = _forecastMethodProvider.All();
-			result.Accuracies = (from forecastMethod in methods
-				let forecastingMeasureTarget =
-					forecastMethod.Forecast(yearBeforeLastYearData, new DateOnlyPeriod(oneYearBack, historicalData.EndDate))
+			var list = (from forecastMethod in methods
+				let forecastingMeasureTarget = forecastMethod.Forecast(yearBeforeLastYearData, new DateOnlyPeriod(oneYearBack, historicalData.EndDate))
 				select new MethodAccuracy
 				{
-					Number = _forecastingMeasurer.Measure(forecastingMeasureTarget, lastYearData.TaskOwnerDayCollection),
-					MethodId = forecastMethod.Id
-				}).ToArray();
+					Number = _forecastingMeasurer.Measure(forecastingMeasureTarget, lastYearData.TaskOwnerDayCollection), MethodId = forecastMethod.Id
+				}).ToList();
+			var bestMethod = list.OrderByDescending(x => x.Number).First();
+			bestMethod.IsSelected = true;
+
+			result.Accuracies = list.ToArray();
 			return result;
 		}
 	}
