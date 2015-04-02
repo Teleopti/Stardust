@@ -384,7 +384,9 @@
     <Compile Include="FeatureFlags\AllTogglesTest.cs" />
     <Compile Include="Forecasting\Angel\Accuracy\ForecastingSymmetricMeanAbsolutePercentageErrorTest.cs" />
     <Compile Include="Forecasting\Angel\Accuracy\ForecastingWeightedMeanAbsolutePercentageErrorTest.cs" />
-    <Compile Include="Forecasting\Angel\ForecastMethodTest.cs" />
+    <Compile Include="Forecasting\Angel\Accuracy\LinearRegressionTrendTest.cs" />
+    <Compile Include="Forecasting\Angel\IndexVolumesFactory.cs" />
+    <Compile Include="Forecasting\Angel\TeleoptiClassicTest.cs" />
     <Compile Include="Forecasting\Angel\Accuracy\ForecastingMeanAbsolutePercentageDeviationTest.cs" />
     <Compile Include="Forecasting\Angel\ForecastingTargetMergerTest.cs" />
     <Compile Include="Forecasting\Angel\Historical\HistoricalDataTest.cs" />
@@ -410,6 +412,7 @@
     <Compile Include="Forecasting\Angel\QuickForecastSkillWithOneWorkload\OnlyStatisticsTest.cs" />
     <Compile Include="Forecasting\Angel\QuickForecastSkillWithOneWorkload\QuickForecastTest.cs" />
     <Compile Include="Forecasting\Angel\QuickForecastSkillWithOneWorkload\SkillDayAlreadyExistTest.cs" />
+    <Compile Include="Forecasting\Angel\TeleoptiClassicWithTrendTest.cs" />
     <Compile Include="Forecasting\DayInMonthIndex\DayInMonthCreatorTest.cs" />
     <Compile Include="Forecasting\DayInMonthIndex\DayInMonthHelperTest.cs" />
     <Compile Include="Forecasting\DayInMonthIndex\DayInMonthTest.cs" />

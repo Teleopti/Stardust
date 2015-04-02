@@ -4,6 +4,7 @@ using Teleopti.Ccc.Domain.Forecasting.Angel.Accuracy;
 using Teleopti.Ccc.Domain.Forecasting.Angel.Future;
 using Teleopti.Ccc.Domain.Forecasting.Angel.Historical;
 using Teleopti.Ccc.Domain.Forecasting.Angel.LegacyWrappers;
+using Teleopti.Ccc.Infrastructure.Forecasting.Angel;
 
 namespace Teleopti.Ccc.IocCommon.Configuration
 {
@@ -20,6 +21,9 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<ForecastMethodProvider>()
 				.SingleInstance()
 				.As<IForecastMethodProvider>();
+			builder.RegisterType<LinearRegressionTrend>()
+				.SingleInstance()
+				.As<ILinearRegressionTrend>();
 			builder.RegisterType<QuickForecastSkillEvaluator>()
 				.SingleInstance()
 				.As<IQuickForecastSkillEvaluator>();

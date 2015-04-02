@@ -18,11 +18,14 @@ namespace Teleopti.Ccc.Infrastructure.Forecasting.Angel
 				ylist.Add(taskOwner.TotalStatisticCalculatedTasks);
 			}
 
+			if (xlist.Count < 2 || ylist.Count < 2)
+				return LinearTrend.NoLinearTrend;
+
 			var tuple = Fit.Line(xlist.ToArray(), ylist.ToArray());
 			return new LinearTrend
 			{
-				A = tuple.Item1,
-				B = tuple.Item2
+				Slope = tuple.Item2,
+				Intercept = tuple.Item1
 			};
 		}
 	}

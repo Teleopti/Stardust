@@ -512,6 +512,10 @@
     <Compile Include="Forecasting\Angel\AverageStatistics.cs" />
     <Compile Include="Forecasting\Angel\Accuracy\ForecastingMeanAbsolutePercentageDeviation.cs" />
     <Compile Include="Forecasting\Angel\Accuracy\ForecastingSymmetricMeanAbsolutePercentageError.cs" />
+    <Compile Include="Forecasting\Angel\ILinearRegressionTrend.cs" />
+    <Compile Include="Forecasting\Angel\LinearTrend.cs" />
+    <Compile Include="Forecasting\Angel\TeleoptiClassicBase.cs" />
+    <Compile Include="Forecasting\Angel\TeleoptiClassicWithTrend.cs" />
     <Compile Include="Forecasting\Angel\WorkloadAccuracy.cs" />
     <Compile Include="Forecasting\Angel\ForecastingTargetMerger.cs" />
     <Compile Include="Forecasting\Angel\Accuracy\ForecastingWeightedMeanAbsolutePercentageError.cs" />

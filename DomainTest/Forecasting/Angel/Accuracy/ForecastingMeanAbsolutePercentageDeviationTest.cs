@@ -8,14 +8,6 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.DomainTest.Forecasting.Angel.Accuracy
 {
-	public class LinearRegressionTrendTest
-	{
-		[Test]
-		public void ShouldCalculateTrend()
-		{
-		}
-	}
-
 	public class ForecastingMeanAbsolutePercentageDeviationTest
 	{
 		[Test]
