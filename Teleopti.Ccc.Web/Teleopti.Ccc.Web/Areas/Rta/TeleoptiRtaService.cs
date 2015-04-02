@@ -69,13 +69,13 @@ namespace Teleopti.Ccc.Web.Areas.Rta
 			});
 		}
 
-		public void GetUpdatedScheduleChange(Guid personId, Guid businessUnitId, DateTime timestamp, string tenant)
+		public void GetUpdatedScheduleChange(Guid personId, Guid businessUnitId, DateTime timestamp, string dataSource)
 		{
 			_rta.CheckForActivityChange(new CheckForActivityChangeInputModel
 			{
 				PersonId = personId,
 				BusinessUnitId = businessUnitId, 
-				Tenant = tenant
+				DataSource = dataSource
 			});
 		}
 

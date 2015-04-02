@@ -19,7 +19,7 @@ namespace Teleopti.Ccc.Rta.WebService
 		int SaveBatchExternalUserState(string authenticationKey, string platformTypeId, string sourceId, ICollection<ExternalUserState> externalUserStateBatch);
 
 		[OperationContract]
-		void GetUpdatedScheduleChange(Guid personId, Guid businessUnitId, DateTime timestamp, string tenant);
+		void GetUpdatedScheduleChange(Guid personId, Guid businessUnitId, DateTime timestamp, string dataSource);
 	}
 
 	[DataContract, Serializable]
