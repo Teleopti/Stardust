@@ -4,25 +4,25 @@
 		text-align: left;
 	}
 
-	.wfm-table td, th {
-		border: 1px solid #f5f5f5;
-		color: rgba(0, 0, 0, 0.54);
-		padding: 5px;
-	}
+		.wfm-table td, th {
+			border: 1px solid #f5f5f5;
+			color: rgba(0, 0, 0, 0.54);
+			padding: 5px;
+		}
 
-	.wfm-table th {
-		color: rgba(0, 0, 0, 0.87);
-		background-color: #99d6ff;
-		text-align: center;
-	}
+		.wfm-table th {
+			color: rgba(0, 0, 0, 0.87);
+			background-color: #99d6ff;
+			text-align: center;
+		}
 
-	.wfm-table th i {
-		float: right;
-	}
+			.wfm-table th i {
+				float: right;
+			}
 
-	.wfm-table .number-cell {
-		text-align: right;
-	}
+		.wfm-table .number-cell {
+			text-align: right;
+		}
 
 	.wfm-table-multi th:first-child, .wfm-table-multi td:first-child {
 		color: rgba(0, 0, 0, 0.87);
@@ -80,158 +80,112 @@
 	}
 
 	.tab-group {
-  width: 100%;
-  display: -webkit-box;
-  display: -webkit-flex;
-  display: -ms-flexbox;
-  display: flex;
-  -webkit-flex-wrap: wrap;
-  -ms-flex-wrap: wrap;
-  flex-wrap: wrap;
-  -webkit-box-align: center;
-  -webkit-align-items: center;
-  -ms-flex-align: center;
-  align-items: center;
-  -webkit-box-pack: center;
-  -webkit-justify-content: center;
-  -ms-flex-pack: center;
-  justify-content: center;
-  overflow: hidden; }
-  .tab-group input[type=radio] {
-    display: none; }
-  .tab-group input[type=radio]:checked + .label {
-    font-weight: bold !important;
-    border-bottom: 3px solid #ec38a3; }
-  .tab-group input[type=radio]:checked + .label + section {
-    display: block; }
-  .tab-group .label {
-    color: rgba(0, 0, 0, 0.87);
-    padding: 5px !important;
-    position: relative;
-    cursor: pointer;
-    z-index: 2;
-    -webkit-box-ordinal-group: 0;
-    -webkit-order: -1;
-    -ms-flex-order: -1;
-    order: -1;
-    -webkit-box-flex: 1;
-    -webkit-flex-grow: 1;
-    -ms-flex-positive: 1;
-    flex-grow: 1;
-    font-weight: normal;
-    /*overrides bootstrap*/
-    min-width: 100px !important;
-    border-bottom: 3px solid #66c2ff;
-    background-color: #66c2ff;
-    text-align: center;
-    transition: all 0.5s ease-in-out;
-    border-radius: 0 !important;
-    /*overrides bootstrap*/
-    margin-bottom: 0 !important;
-    /*overrides bootstrap*/
-    font-size: 100% !important;
-    /*overrides bootstrap*/ }
-  .tab-group section {
-    display: none;
-    position: relative;
-    z-index: 1;
-    width: 100%;
-    overflow: hidden; }
-.material-depth-1, .layout-container .content, .wfm-btn-default, .wfm-btn-primary, .wfm-fab, .dropdown .inner ul, .sidenav-toggle .sidenav-wrapper {
-  box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.26); }
-.wfm-block, .angular-ui-tree-handle, select, .wfm-radio, .wfm-checkbox, .dropdown .inner li, .tab-group .tab-container {
-  padding: 5px;
-  width: 100%; }
-.dropdown {
-  position: relative; }
-  .dropdown .inner ul {
-    padding-left: 0;
-    width: 25%;
-    list-style: none;
-    position: absolute;
-    background: #ffffff; }
-  .dropdown .inner li {
-    border-top: 1px solid rgba(0, 0, 0, 0.06);
-    cursor: pointer; }
-    .dropdown .inner li:hover {
-      background: #99d6ff; }
+		width: 100%;
+		display: -webkit-box;
+		display: -webkit-flex;
+		display: -ms-flexbox;
+		display: flex;
+		-webkit-flex-wrap: wrap;
+		-ms-flex-wrap: wrap;
+		flex-wrap: wrap;
+		-webkit-box-align: center;
+		-webkit-align-items: center;
+		-ms-flex-align: center;
+		align-items: center;
+		-webkit-box-pack: center;
+		-webkit-justify-content: center;
+		-ms-flex-pack: center;
+		justify-content: center;
+		overflow: hidden;
+	}
+
+		.tab-group input[type=radio] {
+			display: none;
+		}
+
+			.tab-group input[type=radio]:checked + .label {
+				font-weight: bold !important;
+				border-bottom: 3px solid #ec38a3;
+			}
+
+				.tab-group input[type=radio]:checked + .label + section {
+					display: block;
+				}
+
+		.tab-group .label {
+			color: rgba(0, 0, 0, 0.87);
+			padding: 5px !important;
+			position: relative;
+			cursor: pointer;
+			z-index: 2;
+			-webkit-box-ordinal-group: 0;
+			-webkit-order: -1;
+			-ms-flex-order: -1;
+			order: -1;
+			-webkit-box-flex: 1;
+			-webkit-flex-grow: 1;
+			-ms-flex-positive: 1;
+			flex-grow: 1;
+			font-weight: normal;
+			/*overrides bootstrap*/
+			min-width: 100px !important;
+			border-bottom: 3px solid #66c2ff;
+			background-color: #66c2ff;
+			text-align: center;
+			transition: all 0.5s ease-in-out;
+			border-radius: 0 !important;
+			/*overrides bootstrap*/
+			margin-bottom: 0 !important;
+			/*overrides bootstrap*/
+			font-size: 100% !important;
+			/*overrides bootstrap*/
+		}
+
+		.tab-group section {
+			display: none;
+			position: relative;
+			z-index: 1;
+			width: 100%;
+			overflow: hidden;
+		}
+
+	.material-depth-1, .layout-container .content, .wfm-btn-default, .wfm-btn-primary, .wfm-fab, .dropdown .inner ul, .sidenav-toggle .sidenav-wrapper {
+		box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.26);
+	}
+
+	.wfm-block, .angular-ui-tree-handle, select, .wfm-radio, .wfm-checkbox, .dropdown .inner li, .tab-group .tab-container {
+		padding: 5px;
+		width: 100%;
+	}
+
+	.dropdown {
+		position: relative;
+	}
+
+		.dropdown .inner ul {
+			padding-left: 0;
+			width: 25%;
+			list-style: none;
+			position: absolute;
+			background: #ffffff;
+		}
+
+		.dropdown .inner li {
+			border-top: 1px solid rgba(0, 0, 0, 0.06);
+			cursor: pointer;
+		}
+
+			.dropdown .inner li:hover {
+				background: #99d6ff;
+			}
 </style>
 
-<div class="row">
-	<div class="col-lg-12">
-		<h4>Manage people</h4>
-	</div>
-</div>
-
-<div class="wrapper">
-	<div class="col-lg-3">
-		<div class="role-nav material-depth-1 container-block">
-			<div class="tree">
-				<div class="angular-ui-tree">
-					<ol id="tree-root" class="tree-line angular-ui-tree-nodes">
-						<li class="angular-ui-tree-node">
-							<div class="tree-toggle-group">
-								<div class="toggle-handle open"><i class="mdi mdi-chevron-right"></i></div>
-								<div class="angular-ui-tree-handle selected">
-									Business Hierarchy
-								</div>
-							</div>
-
-							<ol class="angular-ui-tree-nodes">
-								<li class="angular-ui-tree-node">
-									<div class="tree-toggle-group">
-										<div class="toggle-handle open"><i class="mdi mdi-chevron-right"></i></div>
-										<div class="angular-ui-tree-handle">
-											London
-										</div>
-									</div>
-									<ol class="angular-ui-tree-nodes">
-										<li class="angular-ui-tree-node">
-											<div class="tree-toggle-group">
-												<div class="toggle-handle"><i class="mdi mdi-chevron-right"></i></div>
-												<div class="angular-ui-tree-handle">
-													Team Monthly
-												</div>
-											</div>
-										</li>
-										<li class="angular-ui-tree-node">
-											<div class="tree-toggle-group">
-												<div class="toggle-handle"><i class="mdi mdi-chevron-right"></i></div>
-												<div class="angular-ui-tree-handle selected">
-													Team Preference
-												</div>
-											</div>
-										</li>
-									</ol>
-								</li>
-							</ol>
-							<ol class="angular-ui-tree-nodes">
-								<li class="angular-ui-tree-node">
-									<div class="tree-toggle-group">
-										<div class="toggle-handle open"><i class="mdi mdi-chevron-right"></i></div>
-										<div class="angular-ui-tree-handle">
-											Paris
-											<span><i class="mdi mdi-check"></i></span>
-										</div>
-									</div>
-									<ol class="angular-ui-tree-nodes">
-										<li class="angular-ui-tree-node">
-											<div class="tree-toggle-group">
-												<div class="toggle-handle"><i class="mdi mdi-chevron-right"></i></div>
-												<div class="angular-ui-tree-handle">
-													Team One
-												</div>
-											</div>
-										</li>
-									</ol>
-								</li>
-							</ol>
-						</li>
-					</ol>
-				</div>
-			</div>
-		</div>
-	</div>
+<div xclass="material-depth-1">
+	<span xng-controller="SearchCtrl">
+		<input type="text" placeholder="Search ..." ng-model="keyword" class="global-search" style="
+    height: 44px;" />
+		<button class="wfm-btn wfm-btn-primary" ng-click="searchKeyword()"><i class="mdi mdi-magnify"></i></button>
+	</span>
 </div>
 
 <div class="wrapper row">
@@ -241,17 +195,18 @@
 				<tr>
 					<th>First Name <i class="mdi mdi-menu-up"></i> </th>
 					<th>Last Name</th>
+					<th>Emp No.</th>
 					<th>Email</th>
 					<th>Phone</th>
-					<th>Emp No.</th>
+					
 				</tr>
 			</thead>
 			<tbody>
-				<tr ng-repeat="person in peopleList" ng-click="toggleModal()">
+				<tr ng-repeat="person in searchResult" ng-click="toggleModal()">
 					<td>{{person.FirstName}}</td>
 					<td>{{person.LastName}}</td>
-					<td>{{person.Email}}</td>
-					<td>{{person.Phone}}</td>
+					<!--<td>{{person.Email}}</td>
+					<td>{{person.Phone}}</td>-->
 					<td>{{person.EmploymentNumber}}</td>
 				</tr>
 			</tbody>
@@ -310,7 +265,7 @@
 										<li>
 											<i class="mdi mdi-pencil"></i> <strong>Contact</strong>
 										</li>
-										<li >
+										<li>
 											<span class="col-lg-5">Email: </span>
 											<input class="col-lg-7" type="text" value="aa@teleopti.com" />
 										</li>
@@ -375,8 +330,8 @@
 											<i class="mdi mdi-pencil"></i> <strong>Others</strong>
 										</li>
 										<div class="col-lg-12">
-											<span class="col-lg-5" >Roles: </span>
-											
+											<span class="col-lg-5">Roles: </span>
+
 											<span class="dropdown col-lg-7" tabindex="0" style="width: 200px; z-index: 1">
 												<span class="context-trigger" ng-click="contextTrigger1 = !contextTrigger1">Agent, Team Leader</span>
 												<div class="inner right material-depth-2" ng-show="contextTrigger1" ng-cloak style="width: 200px;">
@@ -424,7 +379,7 @@
 						</div>
 					</div>
 				</section>
-				<input type="radio" name="tabs" id="tab-2"/>
+				<input type="radio" name="tabs" id="tab-2" />
 				<label class="label" for="tab-2">
 					Person Periods
 				</label>
@@ -433,7 +388,7 @@
 						Person Periods
 					</div>
 				</section>
-				<input type="radio" name="tabs" id="tab-3"/>
+				<input type="radio" name="tabs" id="tab-3" />
 				<label class="label" for="tab-3">
 					Schedule Periods
 				</label>

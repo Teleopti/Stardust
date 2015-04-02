@@ -1,20 +1,28 @@
 ﻿'use strict';
 
-var people = angular.module('wfm.people', ['peopleService']);
 
-people.controller('PeopleCtrl', [
-	'$scope', '$filter', 'PeopleService',
-	function($scope, $filter, peopleSvc) {
-		$scope.peopleList = peopleSvc.peopleList;
-
-		$scope.modalShown = false;
-		$scope.toggleModal = function() {
-			$scope.modalShown = !$scope.modalShown;
+angular.module('wfm.people', ['peopleService'])
+	.controller('PeopleCtrl', [
+	'$scope', '$filter', '$state', 'SearchSvrc',
+	function ($scope, $filter, $state, SearchSvrc) {
+		$scope.searchResult = [];
+		$scope.keyword = '';
+		$scope.searchKeyword = function () {
+			SearchSvrc.search.query({ keyword: $scope.keyword }).$promise.then(function (result) {
+				$scope.searchResult = result;
+				console.log($scope.searchResult);
+			});
 		};
-	}
-]);
 
-people.directive('modalDialog', function () {
+
+			$scope.modalShown = false;
+			$scope.toggleModal = function() {
+				$scope.modalShown = !$scope.modalShown;
+			};
+
+	}
+	])
+	.directive('modalDialog', function () {
 	return {
 		restrict: 'E',
 		scope: {
