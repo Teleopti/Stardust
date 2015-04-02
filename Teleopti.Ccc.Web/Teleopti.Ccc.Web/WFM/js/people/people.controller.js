@@ -1,7 +1,7 @@
 ﻿'use strict';
 
 
-angular.module('wfm.people', ['peopleService'])
+angular.module('wfm.people', ['peopleService', 'restSearchService'])
 	.controller('PeopleCtrl', [
 	'$scope', '$filter', '$state', 'SearchSvrc',
 	function ($scope, $filter, $state, SearchSvrc) {
@@ -14,14 +14,11 @@ angular.module('wfm.people', ['peopleService'])
 			});
 		};
 
-
-			$scope.modalShown = false;
-			$scope.toggleModal = function() {
-				$scope.modalShown = !$scope.modalShown;
-			};
-
-	}
-	])
+		$scope.modalShown = false;
+		$scope.toggleModal = function() {
+			$scope.modalShown = !$scope.modalShown;
+		};
+	}])
 	.directive('modalDialog', function () {
 	return {
 		restrict: 'E',

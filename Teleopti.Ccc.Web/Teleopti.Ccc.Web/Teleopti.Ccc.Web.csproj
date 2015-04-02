@@ -1932,6 +1932,7 @@
     <Content Include="WFM\vendor\MaterialDesignIcons-0.5.18\MaterialDesignIcons.eot" />
     <Content Include="WFM\vendor\MaterialDesignIcons-0.5.18\MaterialDesignIcons.ttf" />
     <Content Include="WFM\vendor\MaterialDesignIcons-0.5.18\MaterialDesignIcons.woff" />
+    <Content Include="WFM\tests\people\people.controller.spec.js" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config">
