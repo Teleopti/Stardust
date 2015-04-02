@@ -23,11 +23,11 @@ angular.module('wfm.forecasting', [])
 
 			$scope.period = $stateParams.period;
 			$scope.targets = $stateParams.targets;
-			var workloadIds = [];
+			var workloads = [];
 			angular.forEach($stateParams.targets, function (workload) {
-				workloadIds.push(workload.Id);
+				workloads.push({ WorkloadId: workload.Id, ForecastMethodId: workload.SelectedMethod });
 			});
-			$http.post('../api/Forecasting/Forecast', JSON.stringify({ ForecastStart: $scope.period.startDate, ForecastEnd: $scope.period.endDate, Workloads: workloadIds })).
+			$http.post('../api/Forecasting/Forecast', JSON.stringify({ ForecastStart: $scope.period.startDate, ForecastEnd: $scope.period.endDate, Workloads: workloads })).
 				success(function (data, status, headers, config) {
 					$scope.result = { success: true, message: 'You now have an updated forecast for the following workloads in your default scenario, based on last year\'s data:' };
 				}).

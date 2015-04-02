@@ -67,8 +67,16 @@ angular.module('wfm.forecasting.target', [])
 					var result = [];
 					angular.forEach($scope.skillsDisplayed, function (skill) {
 						angular.forEach(skill.Workloads, function(workload) {
-							if (workload.Selected)
-								result.push({ Id: workload.Id, Name: workload.Name});
+							if (workload.Selected) {
+								var selectedMethod = -1;
+								angular.forEach(workload.Accuracies, function (accuracy) {
+									if (accuracy.IsSelected) {
+										selectedMethod = accuracy.MethodId;
+									}
+								});
+								result.push({ Id: workload.Id, Name: workload.Name, SelectedMethod: selectedMethod });
+							}
+								
 						});
 					});
 					$scope.hasOneSelected = (result.length > 0);
