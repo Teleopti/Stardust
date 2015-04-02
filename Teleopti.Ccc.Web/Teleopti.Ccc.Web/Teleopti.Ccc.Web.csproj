@@ -493,6 +493,7 @@
     <Compile Include="Areas\ResourcePlanner\PlanningPeriodController.cs" />
     <Compile Include="Areas\ResourcePlanner\PlanningPeriodModel.cs" />
     <Compile Include="Areas\Rta\Controllers\SyncController.cs" />
+    <Compile Include="Areas\Search\Controllers\PeopleSearchController.cs" />
     <Compile Include="Areas\Search\Controllers\SearchController.cs" />
     <Compile Include="Areas\SeatPlanner\Controllers\LocationHierarchyController.cs" />
     <Compile Include="Areas\SeatPlanner\Controllers\SeatMapCommandController.cs" />
@@ -1228,6 +1229,7 @@
     <Content Include="WFM\js\outbound\outbound.service.js" />
     <Content Include="WFM\js\people\people.controller.js" />
     <Content Include="WFM\js\people\people.service.js" />
+    <Content Include="WFM\js\people\peopleSearch.service.js" />
     <Content Include="WFM\js\permissions\permissions.controller.js" />
     <Content Include="WFM\js\permissions\permissions.service.js" />
     <Content Include="WFM\js\resourceplanner\filter.service.js" />
