@@ -31,7 +31,7 @@ namespace Teleopti.Ccc.DomainTest.Forecasting.Angel
 			workload2.SetId(Guid.NewGuid());
 			
 			var target = new QuickForecaster(quickForecasterWorkload, fetchAndFillSkillDays);
-			target.ForecastWorkloadsWithinSkill(skill1, new []{workload1.Id.Value}, futurePeriod, historicalPeriod);
+			target.ForecastWorkloadsWithinSkill(skill1, new[] { new ForecastWorkloadInput {WorkloadId = workload1.Id.Value, ForecastMethodId = ForecastMethodType.TeleoptiClassic} }, futurePeriod, historicalPeriod);
 			quickForecasterWorkload.AssertWasCalled(x => x.Execute(new QuickForecasterWorkloadParams
 			{
 				FuturePeriod = futurePeriod,

@@ -17,20 +17,22 @@ namespace Teleopti.Ccc.Domain.Forecasting.Angel
 			_fetchAndFillSkillDays = fetchAndFillSkillDays;
 		}
 
-		public void ForecastWorkloadsWithinSkill(ISkill skill, Guid[] workloadIds, DateOnlyPeriod futurePeriod, DateOnlyPeriod historicalPeriod)
+		public void ForecastWorkloadsWithinSkill(ISkill skill, ForecastWorkloadInput[] workloads, DateOnlyPeriod futurePeriod, DateOnlyPeriod historicalPeriod)
 		{
 			var skillDays = _fetchAndFillSkillDays.FindRange(futurePeriod, skill);
-			
+
 			foreach (var workload in skill.WorkloadCollection)
 			{
-				if (workloadIds.Contains(workload.Id.Value))
+				var workloadInput = workloads.SingleOrDefault(x => x.WorkloadId == workload.Id.Value);
+				if (workloadInput!=null)
 				{
 					var quickForecasterWorkloadParams = new QuickForecasterWorkloadParams
 					{
 						WorkLoad = workload,
 						FuturePeriod = futurePeriod,
 						SkillDays = skillDays,
-						HistoricalPeriod = historicalPeriod
+						HistoricalPeriod = historicalPeriod,
+						ForecastMethodId = workloadInput.ForecastMethodId
 					};
 					_quickForecasterWorkload.Execute(quickForecasterWorkloadParams);
 				}
@@ -61,5 +63,6 @@ namespace Teleopti.Ccc.Domain.Forecasting.Angel
 		public DateOnlyPeriod FuturePeriod { get; set; }
 		public ICollection<ISkillDay> SkillDays { get; set; }
 		public DateOnlyPeriod HistoricalPeriod { get; set; }
+		public ForecastMethodType ForecastMethodId { get; set; }
 	}
 }

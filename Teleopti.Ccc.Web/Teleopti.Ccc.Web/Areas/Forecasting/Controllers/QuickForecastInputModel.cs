@@ -1,4 +1,5 @@
 ﻿using System;
+using Teleopti.Ccc.Domain.Forecasting.Angel;
 
 namespace Teleopti.Ccc.Web.Areas.Forecasting.Controllers
 {
@@ -6,6 +7,6 @@ namespace Teleopti.Ccc.Web.Areas.Forecasting.Controllers
 	{
 		public DateTime ForecastStart { get; set; }
 		public DateTime ForecastEnd { get; set; }
-		public Guid[] Workloads { get; set; }
+		public ForecastWorkloadInput[] Workloads { get; set; }
 	}
 }

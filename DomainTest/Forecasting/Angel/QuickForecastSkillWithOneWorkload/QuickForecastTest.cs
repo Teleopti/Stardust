@@ -6,6 +6,7 @@ using Rhino.Mocks;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.Forecasting.Angel;
+using Teleopti.Ccc.Domain.Forecasting.Angel.Accuracy;
 using Teleopti.Ccc.Domain.Forecasting.Angel.Future;
 using Teleopti.Ccc.Domain.Forecasting.Angel.Historical;
 using Teleopti.Ccc.Domain.Repositories;
@@ -39,11 +40,11 @@ namespace Teleopti.Ccc.DomainTest.Forecasting.Angel.QuickForecastSkillWithOneWor
 			currentScenario.Stub(x => x.Current()).Return(DefaultScenario);
 
 			var futureData =new FutureData();
-			var quickForecasterWorkload = new QuickForecasterWorkload(new HistoricalData(dailyStatistics), futureData, new TeleoptiClassic(new IndexVolumes()), new ForecastingTargetMerger());
+			var quickForecasterWorkload = new QuickForecasterWorkload(new HistoricalData(dailyStatistics), futureData, new ForecastMethodProvider(new IndexVolumes(), null), new ForecastingTargetMerger());
 			var target = new QuickForecaster(quickForecasterWorkload,
 				new FetchAndFillSkillDays(SkillDayRepository(skillDays), currentScenario,
 					new SkillDayRepository(MockRepository.GenerateStrictMock<ICurrentUnitOfWork>())));
-			target.ForecastWorkloadsWithinSkill(Workload.Skill, new[] { Workload.Id.Value}, FuturePeriod, HistoricalPeriod);
+			target.ForecastWorkloadsWithinSkill(Workload.Skill, new[] { new ForecastWorkloadInput { WorkloadId = Workload.Id.Value, ForecastMethodId = ForecastMethodType.TeleoptiClassic} }, FuturePeriod, HistoricalPeriod);
 
 			Assert(skillDays);
 		}

@@ -19,5 +19,18 @@ namespace Teleopti.Ccc.Domain.Forecasting.Angel.Accuracy
 				new TeleoptiClassicWithTrend(_indexVolumes, _linearRegressionTrend)
 			};
 		}
+
+		public IForecastMethod Get(ForecastMethodType forecastMethodType)
+		{
+			switch (forecastMethodType)
+			{
+				case ForecastMethodType.TeleoptiClassic:
+					return new TeleoptiClassic(_indexVolumes);
+				case ForecastMethodType.TeleoptiClassicWithTrend:
+					return new TeleoptiClassicWithTrend(_indexVolumes, _linearRegressionTrend);
+				default:
+					return null;
+			}
+		}
 	}
 }

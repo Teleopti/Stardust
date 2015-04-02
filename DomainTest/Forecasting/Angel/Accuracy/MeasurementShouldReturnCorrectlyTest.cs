@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using SharpTestsEx;
+using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.Forecasting.Angel;
 using Teleopti.Interfaces.Domain;
@@ -29,7 +30,8 @@ namespace Teleopti.Ccc.DomainTest.Forecasting.Angel.Accuracy
 		protected override void Assert(SkillAccuracy measurementResult)
 		{
 			measurementResult.Workloads.First().Id.Should().Be.EqualTo(Workload.Id.Value);
-			measurementResult.Workloads.First().Accuracies.Single().Number.Should().Be.EqualTo(100 - Math.Round((11d - 9d)/11d*100, 1));
+			measurementResult.Workloads.First().Accuracies.First().Number.Should().Be.EqualTo(100 - Math.Round((11d - 9d)/11d*100, 1));
+			measurementResult.Workloads.First().Accuracies.Second().Number.Should().Be.EqualTo(100 - Math.Round(((11d - (9d + 1*HistoricalPeriod.EndDate.Subtract(LinearTrend.StartDate).Days + 2)))/11d*100, 1));
 		}
 	}
 }

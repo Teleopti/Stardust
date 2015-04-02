@@ -9,6 +9,7 @@ using Teleopti.Ccc.Domain.Forecasting.Angel;
 using Teleopti.Ccc.Domain.Forecasting.Angel.Accuracy;
 using Teleopti.Ccc.Domain.Forecasting.Angel.Historical;
 using Teleopti.Ccc.Domain.Repositories;
+using Teleopti.Ccc.Infrastructure.Forecasting.Angel;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Interfaces.Domain;
 
@@ -34,7 +35,9 @@ namespace Teleopti.Ccc.DomainTest.Forecasting.Angel.Accuracy
 			var currentScenario = MockRepository.GenerateStub<ICurrentScenario>();
 			currentScenario.Stub(x => x.Current()).Return(DefaultScenario);
 
-			var quickForecasterWorkloadEvaluator = new QuickForecastWorkloadEvaluator(new HistoricalData(dailyStatistics), new ForecastingWeightedMeanAbsolutePercentageError(), new ForecastMethodProvider(new IndexVolumes(), MockRepository.GenerateMock<ILinearRegressionTrend>()));
+			var linearRegressionTrend = MockRepository.GenerateMock<ILinearRegressionTrend>();
+			linearRegressionTrend.Stub(x => x.CalculateTrend(null)).IgnoreArguments().Return(new LinearTrend {Slope = 1, Intercept = 2});
+			var quickForecasterWorkloadEvaluator = new QuickForecastWorkloadEvaluator(new HistoricalData(dailyStatistics), new ForecastingWeightedMeanAbsolutePercentageError(), new ForecastMethodProvider(new IndexVolumes(), linearRegressionTrend));
 			var target = new QuickForecastSkillEvaluator(quickForecasterWorkloadEvaluator);
 			var measurementResult = target.Measure(Workload.Skill, HistoricalPeriod);
 

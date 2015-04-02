@@ -64,7 +64,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Forecasting.Controllers
 			var quickForecastCreator = MockRepository.GenerateMock<IQuickForecastCreator>();
 			
 			var target = new ForecastController(null, quickForecastCreator);
-			var workloads = new[] {Guid.NewGuid() };
+			var workloads = new[] {new ForecastWorkloadInput {WorkloadId = Guid.NewGuid()}};
 			var result = target.Forecast(new QuickForecastInputModel
 			{
 				ForecastStart = expectedFuturePeriod.StartDate.Date,
@@ -75,6 +75,5 @@ namespace Teleopti.Ccc.WebTest.Areas.Forecasting.Controllers
 			quickForecastCreator.AssertWasCalled(x => x.CreateForecastForWorkloads(expectedFuturePeriod, workloads));
 		}
 	}
-
 
 }
