@@ -19,6 +19,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.FullTests
 {
 	[RtaTest]
 	[TestFixture]
+	[Ignore]
 	[Toggle(Toggles.RTA_SeeAdherenceDetailsForOneAgent_31285)]
 	[Toggle(Toggles.RTA_SeePercentageAdherenceForOneAgent_30783)]
 	[Toggle(Toggles.RTA_NeutralAdherence_30930)]
@@ -59,17 +60,17 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.FullTests
 				.WithSchedule(personId, admin, "2015-03-31 5:00", "2015-03-31 5:15")
 				.WithAlarm("ready", phone, 0, Adherence.In)
 				.WithAlarm("ready", admin, 0, Adherence.Neutral)
+				.WithAlarm(null, phone, 0, Adherence.Out)
+				.WithAlarm("ready", null, 0, Adherence.Out)
 				;
 
-			Now.Is("2015-03-31 4:45:02");
-			Target.CheckForActivityChange(personId, businessUnitId);
-			Now.Is("2015-03-31 4:45:10");
+			Now.Is("2015-03-31 4:44:55");
 			Target.SaveState(new ExternalUserStateForTest
 			{
 				UserCode = "user",
 				StateCode = "ready"
 			});
-			Now.Is("2015-03-31 5:00:05");
+			Now.Is("2015-03-31 4:45:10");
 			Target.CheckForActivityChange(personId, businessUnitId);
 			Now.Is("2015-03-31 5:00:15");
 			Target.SaveState(new ExternalUserStateForTest
@@ -80,12 +81,12 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.FullTests
 			Now.Is("2015-03-31 5:15:28");
 			Target.CheckForActivityChange(personId, businessUnitId);
 
-			Details.Details.First().TimeInAdherence.Value.TotalSeconds.Should().Be((15 * 60) - 10);
-			Details.Details.First().TimeOutOfAdherence.HasValue.Should().Be.False();
-			Details.Details.Second().TimeInAdherence.HasValue.Should().Be.False();
-			Details.Details.Second().TimeOutOfAdherence.HasValue.Should().Be.False();
+			Details.Details.First().TimeInAdherence.GetValueOrDefault().TotalSeconds.Should().Be(15 * 60);
+			Details.Details.First().TimeOutOfAdherence.GetValueOrDefault().TotalSeconds.Should().Be(0);
+			Details.Details.Second().TimeInAdherence.GetValueOrDefault().TotalSeconds.Should().Be(0);
+			Details.Details.Second().TimeOutOfAdherence.GetValueOrDefault().TotalSeconds.Should().Be(0);
 			Details.Model.ActualEndTime.Should().Be(null);
-			Percentage.PersistedModel.TimeInAdherence.TotalSeconds.Should().Be((15 * 60) - 10);
+			Percentage.PersistedModel.TimeInAdherence.TotalSeconds.Should().Be(15 * 60);
 			Percentage.PersistedModel.TimeOutOfAdherence.TotalSeconds.Should().Be(0);
 			Percentage.PersistedModel.ShiftHasEnded.Should().Be(true);
 		}
@@ -105,17 +106,16 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.FullTests
 				.WithAlarm("ready", phone, 0, Adherence.In)
 				.WithAlarm("ready", admin, 0, Adherence.Neutral)
 				.WithAlarm(null, phone, 0, Adherence.Out)
+				.WithAlarm("ready", null, 0, Adherence.Out)
 				;
 
-			Now.Is("2015-03-31 4:45:02");
-			Target.CheckForActivityChange(personId, businessUnitId);
-			Now.Is("2015-03-31 4:45:09");
+			Now.Is("2015-03-31 4:44:55");
 			Target.SaveState(new ExternalUserStateForTest
 			{
 				UserCode = "user",
 				StateCode = "ready"
 			});
-			Now.Is("2015-03-31 5:00:05");
+			Now.Is("2015-03-31 4:45:10");
 			Target.CheckForActivityChange(personId, businessUnitId);
 			Now.Is("2015-03-31 5:00:15");
 			Target.SaveState(new ExternalUserStateForTest
@@ -126,8 +126,8 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.FullTests
 			Now.Is("2015-03-31 5:15:28");
 			Target.CheckForActivityChange(personId, businessUnitId);
 
-			PercentageView.Build(personId).AdherencePercent.Should().Be(99);
-			DetailsView.Build(personId).First().AdherencePercent.Should().Be(99);
+			DetailsView.Build(personId).First().AdherencePercent.Should().Be(100);
+			PercentageView.Build(personId).AdherencePercent.Should().Be(100);
 		}
 
 	}
