@@ -247,7 +247,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta
 			PersistedAgentStateReadModel = model;
 		}
 
-		public IEnumerable<PersonOrganizationData> PersonOrganizationData(string tenant)
+		public IEnumerable<PersonOrganizationData> PersonOrganizationData()
 		{
 			return _personOrganizationData;
 		}

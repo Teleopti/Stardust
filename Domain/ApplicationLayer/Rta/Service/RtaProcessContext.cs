@@ -27,7 +27,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 		{
 			_previousState = previousState;
 			_currentState = currentState;
-			if (!personOrganizationProvider.PersonOrganizationData(tenant).TryGetValue(personId, out _person))
+			if (!personOrganizationProvider.PersonOrganizationData().TryGetValue(personId, out _person))
 				return;
 			_person.BusinessUnitId = businessUnitId;
 

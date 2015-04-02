@@ -4,6 +4,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 {
 	public interface IPersonOrganizationReader
 	{
-		IEnumerable<PersonOrganizationData> PersonOrganizationData(string tenant);
+		IEnumerable<PersonOrganizationData> PersonOrganizationData();
 	}
 }

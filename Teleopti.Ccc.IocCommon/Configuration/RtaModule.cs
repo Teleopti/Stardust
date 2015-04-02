@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Runtime.Remoting.Messaging;
 using Autofac;
+using Teleopti.Ccc.Domain.ApplicationLayer.Rta;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta.ReadModelUpdaters;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service.Aggregator;
@@ -7,6 +9,7 @@ using Teleopti.Ccc.Domain.ApplicationLayer.Rta.ViewModelBuilders;
 using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Infrastructure.Aop;
 using Teleopti.Ccc.Infrastructure.Rta;
+using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.IocCommon.Configuration
 {
@@ -128,11 +131,14 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			
 			_config.Args().CacheBuilder
 				.For<PersonOrganizationProvider>()
-				.CacheMethod(svc => svc.PersonOrganizationData(""))
+				.CacheMethod(svc => svc.PersonOrganizationData())
 				.As<IPersonOrganizationProvider>();
 			builder.RegisterMbCacheComponent<PersonOrganizationProvider, IPersonOrganizationProvider>().SingleInstance();
 
-			builder.RegisterType<PersonOrganizationReader>().As<IPersonOrganizationReader>().SingleInstance();
+			//messy for now
+			// TODO :tenant no hardcoded datasource
+			builder.Register(c => new PersonOrganizationReader(c.Resolve<INow>(), c.Resolve<IDatabaseConnectionStringHandler>().AppConnectionString("Teleopti WFM")))
+				.SingleInstance().As<IPersonOrganizationReader>();
 		}
 	}
 

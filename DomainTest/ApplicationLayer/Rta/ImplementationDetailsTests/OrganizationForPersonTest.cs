@@ -17,9 +17,9 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ImplementationDetailsTest
 			var personOrganizationReader = MockRepository.GenerateStub<IPersonOrganizationReader>();
 			var target = new OrganizationForPerson(new PersonOrganizationProvider(personOrganizationReader));
 
-			personOrganizationReader.Stub(x => x.PersonOrganizationData("")).Return(new[] { new PersonOrganizationData { PersonId = personId, SiteId = siteId } });
+			personOrganizationReader.Stub(x => x.PersonOrganizationData()).Return(new[] { new PersonOrganizationData { PersonId = personId, SiteId = siteId } });
 
-			var result = target.GetOrganization(personId, "");
+			var result = target.GetOrganization(personId);
 			result.SiteId.Should().Be(siteId);
 		}
 
@@ -31,9 +31,9 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ImplementationDetailsTest
 			var personOrganizationReader = MockRepository.GenerateStub<IPersonOrganizationReader>();
 			var target = new OrganizationForPerson(new PersonOrganizationProvider(personOrganizationReader));
 
-			personOrganizationReader.Stub(x => x.PersonOrganizationData("")).Return(new[] { new PersonOrganizationData { PersonId = personId, TeamId = teamId } });
+			personOrganizationReader.Stub(x => x.PersonOrganizationData()).Return(new[] { new PersonOrganizationData { PersonId = personId, TeamId = teamId } });
 
-			var result = target.GetOrganization(personId, "");
+			var result = target.GetOrganization(personId);
 			result.TeamId.Should().Be(teamId);
 		}
 	}
