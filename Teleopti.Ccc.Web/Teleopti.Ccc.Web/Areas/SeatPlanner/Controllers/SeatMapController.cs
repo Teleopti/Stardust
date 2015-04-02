@@ -3,6 +3,7 @@ using System.Web.Http;
 using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Web.Areas.SeatPlanner.Core.Providers;
+using Teleopti.Ccc.Web.Areas.SeatPlanner.Core.ViewModels;
 using Teleopti.Ccc.Web.Filters;
 
 namespace Teleopti.Ccc.Web.Areas.SeatPlanner.Controllers
@@ -18,9 +19,16 @@ namespace Teleopti.Ccc.Web.Areas.SeatPlanner.Controllers
 		}
 
 		[UnitOfWork, Route("api/SeatPlanner/SeatMap"), HttpGet]
-		public virtual object Get(Guid? id)
+		public virtual LocationViewModel Get(Guid? id)
 		{
 			return _seatMapProvider.Get (id);
+		}
+
+
+		[UnitOfWork, Route("api/SeatPlanner/SeatMap"), HttpGet]
+		public virtual LocationViewModel Get()
+		{
+			return _seatMapProvider.Get(null);
 		}
 
 		//Robtodo: remove after prototype is removed

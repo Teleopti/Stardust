@@ -6,7 +6,7 @@ angular.module('wfm.seatMap')
 		var editService = {};
 
 		editService.AddImage = function (canvas, imageName) {
-			fabric.Image.fromURL('../Areas/SeatPlanner/Content/Images/' + imageName, function (image) {
+			fabric.Image.fromURL('js/seatManagement/Images/' + imageName, function (image) {
 				image.set({
 					left: 400,
 					top: 400

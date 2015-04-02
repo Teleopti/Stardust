@@ -1,5 +1,10 @@
 ﻿<div class="row">
-	
+	<div class="pull-left">
+		<ol class="breadcrumb" ng-repeat="breadcrumb in vm.breadcrumbs">
+			<li><a href="#" ng-click="vm.HandleBreadcrumbClick()">{{breadcrumb.Name}}</a></li>
+		</ol>
+		
+	</div>
 	
 	<div class="pull-right">
 		<button class="btn btn-primary" ng-click="vm.toggleEditMode()" ng-show="!vm.allowEdit">
@@ -9,11 +14,8 @@
 			<i class="mdi small mdi-lock-unlock-outline" aria-hidden="true"></i>
 		</button>
 	</div>
-	
-	<md-slider md-discrete ng-model="myDiscreteValue" step="10" min="10" max="130">
-	</md-slider>
-
-	<div class="col-sm-12" style="min-height: 800px; margin-top: 10px">
+		
+	<div class="col-sm-12" style="min-height: 800px; margin-top: 10px" keypressevents>
 		<canvas id="c" style="border:1px solid #ccc; width:auto"></canvas>
 	</div>
 	<!--<div class="mapLoadingSpinner" data-bind="visible : Loading">

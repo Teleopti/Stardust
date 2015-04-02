@@ -1,24 +1,5 @@
 ﻿'use strict';
 
-
-angular.module('wfm.seatMap')
-	.directive('keypressEvents', ['$document', '$rootScope',
-	  function ($document, $rootScope) {
-	  	return {
-	  		restrict: 'A',
-	  		link: function () {
-	  			$document.bind('keypress', function (e) {
-	  				console.log('Got keypress:', e.which);
-	  				$rootScope.$broadcast('keypress', e);
-	  				$rootScope.$broadcast('keypress:' + e.which, e);
-	  			});
-	  		}
-	  	};
-	  }
-	]);
-
-
-
 (function () {
 
 	var directive = function () {
@@ -51,6 +32,7 @@ angular.module('wfm.seatMap')
 		var vm = this;
 		var canvas = new fabric.CanvasWithViewport('c');
 
+		vm.breadcrumbs = [];
 		vm.allowEdit = false;
 		vm.seatMapId = null;
 		vm.parentId = null;
@@ -99,7 +81,7 @@ angular.module('wfm.seatMap')
 		};
 
 		function loadSeatMapFromId(id) {
-			seatMapService.seatMap.query(id).$promise.then(function (data) {
+			seatMapService.seatMap.get({ id: id }).$promise.then(function (data) {
 				loadSeatMap(data);
 			});
 		}
@@ -124,7 +106,7 @@ angular.module('wfm.seatMap')
 			//Robtodo: data has seatPriority, Id etc..
 
 			//canvasEditor.LoadExistingSeatMapData(data);
-			//self.breadcrumb(data.BreadcrumbInfo);
+			self.breadcrumbs=data.BreadcrumbInfo;
 
 			//self.Loading(false);
 			//self.ResetZoom();
