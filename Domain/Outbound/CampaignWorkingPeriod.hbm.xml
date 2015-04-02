@@ -3,7 +3,7 @@
                    assembly="Teleopti.Ccc.Domain"
                    namespace="Teleopti.Ccc.Domain.Outbound"
                    default-access="field.camelcase-underscore">
-	<class name="CampaignWorkingPeriod">
+	<class name="CampaignWorkingPeriod" table="OutboundCampaignWorkingPeriod">
 		<id name="Id"
         type="guid"
 		  	access="nosetter.camelcase-underscore"
@@ -12,12 +12,15 @@
 		</id>
 		
 		<many-to-one name="Parent" 
+								 column="OutboundCampaign"
 								 class="Campaign"
 								 access="property"
 								 not-null="true"/>
 
 		<set name="CampaignWorkingPeriodAssignments"
-				 cascade="all-delete-orphan">
+				 cascade="all-delete-orphan"
+				 inverse="true"
+			>
 			<key column="OutboundCampaignWorkingPeriod" />
 			<one-to-many class="CampaignWorkingPeriodAssignment"/>
 		</set>
@@ -29,7 +32,7 @@
 									not-null="true"
 									type="TimeSpan" />
 				<property name="Maximum"
-									column="MaximumLength"
+									column="EndTime"
 									not-null="true"
 									type="TimeSpan" />
 			</component>

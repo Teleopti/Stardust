@@ -11,11 +11,12 @@
 			<generator class="guid.comb" />
 		</id>
 		
-		<property name="WeekdayIndex"
+		<property name="WeekdayIndex" 
 							 type="System.DayOfWeek" />
 
 		<many-to-one name="Parent"
-							 class="CampaignWorkingPeriod"
-							 not-null="true"/>
+								 column="OutboundCampaignWorkingPeriod"
+								 class="CampaignWorkingPeriod"
+							   not-null="true"/>
 	</class>
 </hibernate-mapping>

@@ -53,18 +53,19 @@
 
 		<property name="StartDate"
 							type="Teleopti.Ccc.Infrastructure.NHibernateConfiguration.DateOnlyMappingType, Teleopti.Ccc.Infrastructure"
-							not-null="true" />
+							not-null="false" />
 
 		<property name="EndDate"
 							type="Teleopti.Ccc.Infrastructure.NHibernateConfiguration.DateOnlyMappingType, Teleopti.Ccc.Infrastructure"
-							not-null="true" />
+							not-null="false" />
 		
 		<property name="CampaignStatus"
 							type="int"
 							not-null="true"/>
 
 		<set name="CampaignWorkingPeriods"
-				 inverse="true">
+				 inverse="true"
+				 >
 			<key column="OutboundCampaign"/>
 			<one-to-many class="CampaignWorkingPeriod"/>				
 		</set>

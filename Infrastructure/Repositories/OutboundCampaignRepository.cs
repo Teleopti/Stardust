@@ -1,4 +1,8 @@
-﻿using Teleopti.Ccc.Domain.Repositories;
+﻿using System;
+using NHibernate;
+using NHibernate.Criterion;
+using NHibernate.Transform;
+using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Interfaces.Infrastructure;
 using Campaign = Teleopti.Ccc.Domain.Outbound.Campaign;
 
@@ -23,6 +27,16 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 
 		protected void SetRepositoryFactory(IRepositoryFactory repositoryFactory)
 		{
+		}
+
+		public Campaign GetInFull(Guid id)
+		{
+			return Session.CreateCriteria(typeof (Campaign))
+				.SetFetchMode("CampaignWorkingPeriods", FetchMode.Join)
+				.SetFetchMode("CampaignWorkingPeriods.CampaignWorkingPeriodAssignments", FetchMode.Join)
+				.Add(Restrictions.Eq("Id", id))				
+				.SetResultTransformer(Transformers.DistinctRootEntity)				
+				.UniqueResult<Campaign>();
 		}
 	}
 }
