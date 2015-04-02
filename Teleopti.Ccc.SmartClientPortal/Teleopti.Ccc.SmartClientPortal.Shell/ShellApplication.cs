@@ -22,6 +22,7 @@ using Teleopti.Ccc.IocCommon.MultipleConfig;
 using Teleopti.Ccc.IocCommon.Toggle;
 using Teleopti.Ccc.SmartClientPortal.Shell.Common.Constants;
 using Teleopti.Ccc.SmartClientPortal.Shell.Common.Library;
+using Teleopti.Ccc.SmartClientPortal.Shell.ConfigurationSections;
 using Teleopti.Ccc.Win.Forecasting;
 using log4net.Config;
 using Microsoft.Practices.CompositeUI;
@@ -165,22 +166,21 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 		private static IAppConfigReader appConfigReader;
 		private static bool createAppConfigReader()
 		{
-			var overrideConfigReader = new OverrideConfigFilesReader(Path.GetDirectoryName(Application.ExecutablePath));
-			var overrides = overrideConfigReader.Overrides();
-			if (overrides.Any())
+			var appSettingsOverrides = ServerInstallations.FetchServerInstallations();
+			if (appSettingsOverrides.IsEmpty())
 			{
-				using (var preLogonView = new PreLogonScreen(overrides.Keys))
+				appConfigReader = new AppConfigReader();
+			}
+			else
+			{
+				using (var preLogonView = new PreLogonScreen(appSettingsOverrides.Keys))
 				{
 					preLogonView.ShowDialog();
 					if (preLogonView.DialogResult != DialogResult.OK)
 						return false;
 
-					appConfigReader = new MultipleAppConfigReader(new AppConfigReader(), overrides[preLogonView.GetData()]);
+					appConfigReader = new AppConfigOverrider(new AppConfigReader(), appSettingsOverrides[preLogonView.GetData()]);
 				}
-			}
-			else
-			{
-				appConfigReader = new AppConfigReader();
 			}
 			return true;
 		}

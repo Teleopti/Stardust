@@ -259,6 +259,11 @@
     <Compile Include="Common\Services\IEntityTranslator.cs" />
     <Compile Include="Common\Services\IEntityTranslatorService.cs" />
     <Compile Include="Common\Services\IWorkspaceLocatorService.cs" />
+    <Compile Include="ConfigurationSections\AppSettingOverride.cs" />
+    <Compile Include="ConfigurationSections\Installation.cs" />
+    <Compile Include="ConfigurationSections\InstallationCollection.cs" />
+    <Compile Include="ConfigurationSections\OverrideCollection.cs" />
+    <Compile Include="ConfigurationSections\ServerInstallations.cs" />
     <Compile Include="Controls\ModulePanelItem.cs">
       <SubType>UserControl</SubType>
     </Compile>
