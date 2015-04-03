@@ -25,9 +25,10 @@ namespace Teleopti.Ccc.Web.Areas.Search.Controllers
 
 		[UnitOfWork]
 		[HttpGet, Route("api/Search/People")]
-		public virtual IHttpActionResult GetResult(string keyword)
+		public virtual IHttpActionResult GetResult(string keyword, int pageSize, int currentPageIndex)
 		{
-			var search = new PersonFinderSearchCriteria(PersonFinderField.All, keyword, 20, DateOnly.MinValue, 0, 0);
+			var search = new PersonFinderSearchCriteria(PersonFinderField.All, keyword, pageSize, DateOnly.Today, 0, 0);
+		    search.CurrentPage = currentPageIndex;
 			_searchRepository.Find(search);
 			var permittedPersonList =
 				search.DisplayRows.Where(
