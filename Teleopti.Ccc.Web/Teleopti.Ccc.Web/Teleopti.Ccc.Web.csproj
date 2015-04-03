@@ -734,6 +734,7 @@
     <Compile Include="Core\MachineKeyCookieTransform.cs" />
     <Compile Include="Core\MachineKeySessionSecurityTokenHandler.cs" />
     <Compile Include="Core\MessageBroker\SubscriptionFiller.cs" />
+    <Compile Include="Core\NameValidator.cs" />
     <Compile Include="Core\PersonNameProvider.cs" />
     <Compile Include="Core\RelativeWSFederationAuthenticationModule.cs" />
     <Compile Include="Core\RequestContext\Cookie\AbstractCookieDataProvider.cs" />

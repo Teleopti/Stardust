@@ -1,4 +1,6 @@
-﻿using NUnit.Framework;
+﻿using System.Net.Http;
+using System.Web.Http.Results;
+using NUnit.Framework;
 using Rhino.Mocks;
 using SharpTestsEx;
 using Teleopti.Ccc.Web.Areas.Outbound.Controllers;
@@ -25,10 +27,22 @@ namespace Teleopti.Ccc.WebTest.Areas.Outbound.Controllers
 			var expectedCampaignViewModel = new CampaignViewModel();
 			_outboundCampaignPersister.Stub(x => x.Persist(campaignName)).Return(expectedCampaignViewModel);
 
-			var target = new OutboundController(_outboundCampaignPersister);
-			var viewModel = target.CreateCampaign(campaignName);
+			var target = new OutboundController(_outboundCampaignPersister) {Request = new HttpRequestMessage()};
+			var result = target.CreateCampaign(campaignName);
 
-			viewModel.Result.Should().Be.SameInstanceAs(expectedCampaignViewModel);	
+			var contentResult = (CreatedNegotiatedContentResult<CampaignViewModel>)result;
+			contentResult.Content.Should().Be.SameInstanceAs(expectedCampaignViewModel);
+		}
+
+		[Test]
+		public void ShouldNotCreateCampaignWhenGivenNameIsTooLong()
+		{
+			var campaignName = "MyCampaign".PadRight(256, 'a');
+
+			var target = new OutboundController(_outboundCampaignPersister) { Request = new HttpRequestMessage() };
+			var result = target.CreateCampaign(campaignName);
+
+			result.Should().Be.OfType<BadRequestErrorMessageResult>();
 		}
 	}
 }

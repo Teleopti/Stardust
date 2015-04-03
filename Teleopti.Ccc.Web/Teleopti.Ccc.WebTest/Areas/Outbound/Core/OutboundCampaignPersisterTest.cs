@@ -2,7 +2,6 @@
 using NUnit.Framework;
 using Rhino.Mocks;
 using SharpTestsEx;
-using Teleopti.Ccc.Domain.Outbound;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.TestCommon.FakeData;
@@ -21,7 +20,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Outbound.Core
 		[SetUp]
 		public void Setup()
 		{
-			
+			_outboundCampaignRepository = MockRepository.GenerateMock<IOutboundCampaignRepository>();
 			_skillRepository = MockRepository.GenerateMock<ISkillRepository>();
 			var skillType = SkillTypeFactory.CreateSkillType();
 			_skillList = new List<ISkill> { SkillFactory.CreateSkill("sdfsdf", skillType, 15) };
@@ -30,21 +29,18 @@ namespace Teleopti.Ccc.WebTest.Areas.Outbound.Core
 		[Test]
 		public void ShouldStoreCampaign()
 		{
-			_outboundCampaignRepository = MockRepository.GenerateStrictMock<IOutboundCampaignRepository>();
 			var target = new OutboundCampaignPersister(_outboundCampaignRepository, _skillRepository);
-
-
 			_skillRepository.Stub(x => x.LoadAll()).Return(_skillList);
-			_outboundCampaignRepository.Stub(x => x.Add(new Campaign("test"))).IgnoreArguments();
-
+			
 			target.Persist("test");
+
+			_outboundCampaignRepository.AssertWasCalled(x => x.Add(null), o => o.IgnoreArguments());
 		}
 
 		[Test]
 		public void ShouldGetCampaignViewModel()
 		{
-			var expectedName = "myCampaign";
-			_outboundCampaignRepository = MockRepository.GenerateMock<IOutboundCampaignRepository>();
+			const string expectedName = "myCampaign";
 			var target = new OutboundCampaignPersister(_outboundCampaignRepository, _skillRepository);
 			_skillRepository.Stub(x => x.LoadAll()).Return(_skillList);
 
