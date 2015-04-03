@@ -7,29 +7,23 @@
 			<p>To view existing campaigns and create new campaign</p>
 		</div>
 		<div class="col-lg-2">
-			<div class="wfm-slider">
-				<input type="checkbox" id="slide1" ng-model="hideDetail"  />
-				<label for="slide1">
-					<span class="wfm-slider-label">Hide Detail</span>
-					<span class="wfm-slider-toggle"></span>
-				</label>
-			</div>
+			<md-checkbox id="slide1" ng-model="hideDetail"><span translate>HideDetails</span></md-checkbox>
 		</div>
 	</div>
 	
 	<div ng-class="{'col-lg-4' : !hideDetail , 'col-lg-12': hideDetail   }">
 		<div class="role-nav material-depth-2 container-block">
 			<div class="wfm-block sub-header">
-				<div ng-show="!hideDetail">Campaigns </div>
+				<div ng-show-animate="!hideDetail" >Campaigns </div>
 				<div class="row" ng-show="hideDetail">
 					<div class="col-lg-4 column-label">
-						<span>Campaign Name</span>
+						<span translate>Name</span>
 					</div>
 					<div class="col-lg-2 column-label">
-						<span>Start Date</span>
+						<span translate>Start</span>
 					</div>
 					<div class="col-lg-2 column-label">
-						<span>End Date</span>
+						<span translate>End</span>
 					</div>
 					<div class="col-lg-2">
 						<span>Progress</span>
