@@ -182,9 +182,10 @@
 
 <div xclass="material-depth-1">
 	<span xng-controller="SearchCtrl">
-		<input type="text" placeholder="Search ..." ng-model="keyword" class="global-search" style="
+		<input type="text" placeholder="{{'Search' | translate}}..." ng-model="keyword" class="global-search" style="
     height: 44px;" />
 		<button class="wfm-btn wfm-btn-primary" ng-click="searchKeyword()"><i class="mdi mdi-magnify"></i></button>
+		
 	</span>
 </div>
 
@@ -193,10 +194,10 @@
 		<table class="wfm-table material-depth-1">
 			<thead>
 				<tr>
-					<th>First Name <i class="mdi mdi-menu-up"></i> </th>
-					<th>Last Name</th>
-					<th>Emp No.</th>
-					<th>Email</th>
+					<th translate>FirstName <i class="mdi mdi-menu-up"></i> </th>
+					<th translate>LastName</th>
+					<th translate>EmployeeNo</th>
+					<th translate>Email</th>
 				</tr>
 			</thead>
 			<tbody>
