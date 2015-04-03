@@ -4,6 +4,7 @@ using System.Linq;
 using System.Web.Http.Results;
 using NUnit.Framework;
 using Rhino.Mocks;
+using SharpTestsEx;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.TestCommon.FakeData;
@@ -57,6 +58,26 @@ namespace Teleopti.Ccc.WebTest.Areas.Search
 			first.EmploymentNumber.Equals("1011");
 			first.PersonId.Equals(personId);
 			first.Email.Equals("ashley.andeen@abc.com");
+		}
+
+		[Test]
+		public void ShouldSearchForPeopleWithNoPermission()
+		{
+			var personId = Guid.NewGuid();
+			var searchRepository = MockRepository.GenerateMock<IPersonFinderReadOnlyRepository>();
+			var personRepository = MockRepository.GenerateMock<IPersonRepository>();
+			var personFinderDisplayRow = new PersonFinderDisplayRow { FirstName = "Ashley", LastName = "Andeen", EmploymentNumber = "1011", PersonId = personId, RowNumber = 1 };
+
+			searchRepository.Stub(x => x.Find(null)).Callback(new Func<IPersonFinderSearchCriteria, bool>(c =>
+			{
+				c.SetRow(1, personFinderDisplayRow);
+				return true;
+			}));
+			personRepository.Stub(x => x.FindPeople(new List<Guid>())).IgnoreArguments().Return(new List<IPerson>());
+
+			var target = new PeopleSearchController(searchRepository, personRepository, new FakeNoPermissionProvider());
+			var result = (OkNegotiatedContentResult<IEnumerable<PeopleSummary>>)target.GetResult("ashley");
+			result.Content.Should().Be.Empty();
 		}
 	}
 }
