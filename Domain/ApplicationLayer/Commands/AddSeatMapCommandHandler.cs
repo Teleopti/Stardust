@@ -8,7 +8,7 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.Commands
 {
-	public class AddSeatMapCommandHandler : IHandleCommand<AddSeatMapCommand>
+	public class AddSeatMapCommandHandler : IHandleCommand<SaveSeatMapCommand>
 	{
 		private readonly IWriteSideRepository<ISeatMapLocation> _seatMapLocationRepository;
 		private readonly IBusinessUnitRepository _businessUnitRepository;
@@ -23,7 +23,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Commands
 			_seatBookingRepository = seatBookingRepository;
 		}
 
-		public void Handle(AddSeatMapCommand command)
+		public void Handle(SaveSeatMapCommand command)
 		{
 			var seatMap = command.Id.HasValue ? updateExistingSeatMap(command) : createNewRootSeatMap(command);
 			deleteRemovedSeats(command, seatMap);
@@ -31,7 +31,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Commands
 			updateSeats (command, seatMap);
 		}
 
-		private SeatMapLocation updateExistingSeatMap (AddSeatMapCommand command)
+		private SeatMapLocation updateExistingSeatMap (SaveSeatMapCommand command)
 		{
 			var seatMap = _seatMapLocationRepository.LoadAggregate(command.Id.Value) as SeatMapLocation;
 			if (seatMap != null)
@@ -41,7 +41,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Commands
 			return seatMap;
 		}
 
-		private SeatMapLocation createNewRootSeatMap(AddSeatMapCommand command)
+		private SeatMapLocation createNewRootSeatMap(SaveSeatMapCommand command)
 		{
 			var currentBusinessUnit = _businessUnitRepository.Get (_currentBusinessUnit.Current().Id.GetValueOrDefault());
 			var seatMapLocation = new SeatMapLocation();
@@ -50,13 +50,13 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Commands
 			return seatMapLocation;
 		}
 
-		private void updateChildSeatMaps (AddSeatMapCommand command, SeatMapLocation parentSeatMapLocation)
+		private void updateChildSeatMaps (SaveSeatMapCommand command, SeatMapLocation parentSeatMapLocation)
 		{
 			deleteRemovedChildSeatMaps(command, parentSeatMapLocation);
 			createChildSeatMaps(command, parentSeatMapLocation);
 		}
 
-		private void deleteRemovedChildSeatMaps(AddSeatMapCommand command, SeatMapLocation parentSeatMapLocation)
+		private void deleteRemovedChildSeatMaps(SaveSeatMapCommand command, SeatMapLocation parentSeatMapLocation)
 		{
 			if (parentSeatMapLocation.ChildLocations == null) return;
 
@@ -84,7 +84,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Commands
 			_seatMapLocationRepository.Remove(seatMapLocation);
 		}
 		
-		private void createChildSeatMaps (AddSeatMapCommand command, SeatMapLocation parentSeatMapLocation)
+		private void createChildSeatMaps (SaveSeatMapCommand command, SeatMapLocation parentSeatMapLocation)
 		{
 			if (command.ChildLocations == null) return;
 
@@ -96,12 +96,12 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Commands
 			}
 		}
 
-		private void updateSeats(AddSeatMapCommand command, SeatMapLocation seatMapLocation)
+		private void updateSeats(SaveSeatMapCommand command, SeatMapLocation seatMapLocation)
 		{
 			createSeats(command, seatMapLocation);
 		}
 
-		private void deleteRemovedSeats(AddSeatMapCommand command, SeatMapLocation seatMapLocation)
+		private void deleteRemovedSeats(SaveSeatMapCommand command, SeatMapLocation seatMapLocation)
 		{
 			IEnumerable<ISeat> seatsToDelete;
 
@@ -126,7 +126,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Commands
 			seatsToDelete.ToList().ForEach (seat => seatMapLocation.Seats.Remove (seat));
 		}
 
-		private static void createSeats(AddSeatMapCommand command, SeatMapLocation seatMapLocation)
+		private static void createSeats(SaveSeatMapCommand command, SeatMapLocation seatMapLocation)
 		{
 			if (command.Seats == null) return;
 

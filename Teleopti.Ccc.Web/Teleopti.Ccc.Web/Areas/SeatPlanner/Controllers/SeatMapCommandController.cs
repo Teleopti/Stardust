@@ -24,7 +24,7 @@ namespace Teleopti.Ccc.Web.Areas.SeatPlanner.Controllers
 		[UnitOfWork]
 		//RobTodo: Check Permissions
 		//[AddFullDayAbsencePermission]
-		public virtual JsonResult AddSeatMap(AddSeatMapCommand command)
+		public virtual JsonResult AddSeatMap(SaveSeatMapCommand command)
 		{
 			if (command.TrackedCommandInfo != null)
 				command.TrackedCommandInfo.OperatedPersonId = _loggedOnUser.CurrentUser().Id.Value;

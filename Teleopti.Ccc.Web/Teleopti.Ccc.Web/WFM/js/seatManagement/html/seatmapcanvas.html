@@ -1,30 +1,123 @@
-﻿<div class="row">
-	<div class="pull-left">
-		<ol class="breadcrumb" ng-repeat="breadcrumb in vm.breadcrumbs">
-			<li><a href="#" ng-click="vm.HandleBreadcrumbClick()">{{breadcrumb.Name}}</a></li>
-		</ol>
-		
+﻿
+<div class="row">
+
+
+	<!--<md-slider flex md-discrete min="0" max="100" aria-label="rating"></md-slider>-->
+	<div class="pull-left" style="width: 100%;">
+
+		<span class="breadbin" ng-animate="'animate'" ng-repeat="breadcrumb in vm.breadcrumbs">
+
+			<a ng-if="!$last" href="" ng-click="vm.handleBreadcrumbClick(breadcrumb.Id)">{{breadcrumb.Name}} ></a>
+			<span ng-if="$last">{{breadcrumb.Name}}</span>
+		</span>
+		<p />
+		<div>
+			<button ng-if="vm.allowEdit" class="wfm-btn wfm-btn-default" ng-click="vm.save()">
+				<i class="mdi mdi-play"></i>
+				<md-tooltip>
+					Save Changes
+				</md-tooltip>
+			</button>
+
+			<button class="wfm-btn wfm-btn-default" ng-click="vm.toggleEditMode()">
+				<i ng-if="!vm.allowEdit" class="mdi small mdi-pencil" aria-hidden="true"></i>
+				<i ng-if="vm.allowEdit" class="mdi small mdi-stop" aria-hidden="true"></i>
+				<md-tooltip ng-if="!vm.allowEdit">
+					Edit Seat Map
+				</md-tooltip>
+				<md-tooltip ng-if="vm.allowEdit">
+					Cancel Changes
+				</md-tooltip>
+			</button>
+			<div ng-if="vm.allowEdit">
+				<button class="wfm-btn wfm-btn-default" ng-click="vm.addSeat()">
+					<i class="mdi small mdi-plus"></i>
+					<md-tooltip>
+						Add Seats
+					</md-tooltip>
+				</button>
+
+				<button class="wfm-btn wfm-btn-default" ng-click="vm.group()">
+					<i class="mdi small mdi-airplane "></i>
+					<md-tooltip>
+						Group Selected Items
+					</md-tooltip>
+				</button>
+				<button class="wfm-btn wfm-btn-default" ng-click="vm.ungroup()">
+					<i class="mdi small mdi-television "></i>
+					<md-tooltip>
+						Ungroup Items
+					</md-tooltip>
+				</button>
+				<button class="wfm-btn wfm-btn-default" ng-click="vm.sendToBack()">
+					<i class="mdi small mdi-arrange-send-to-back"></i>
+					<md-tooltip>
+						Send to Back
+					</md-tooltip>
+				</button>
+				<button class="wfm-btn wfm-btn-default" ng-click="vm.sendBackward()">
+					<i class="mdi small mdi-arrange-send-backward "></i>
+					<md-tooltip>
+						Move Back 
+					</md-tooltip>
+				</button>
+				<button class="wfm-btn wfm-btn-default" ng-click="vm.bringForward()">
+					<i class="mdi small mdi-arrange-bring-forward"></i>
+					<md-tooltip>
+						Move Forwards
+					</md-tooltip>
+				</button>
+				<button class="wfm-btn wfm-btn-default" ng-click="vm.bringToFront()">
+					<i class="mdi small mdi-arrange-bring-to-front "></i>
+					<md-tooltip>
+						Bring to Front
+					</md-tooltip>
+				</button>
+				<button class="wfm-btn wfm-btn-default" ng-click="vm.alignLeft()">
+					<i class="mdi small mdi-format-align-left"></i>
+					<md-tooltip>
+						Align Left
+					</md-tooltip>
+				</button>
+				<button class="wfm-btn wfm-btn-default" ng-click="vm.alignRight()">
+					<i class="mdi small mdi-format-align-right "></i>
+					<md-tooltip>
+						Align Right
+					</md-tooltip>
+				</button>
+				<button class="wfm-btn wfm-btn-default" ng-click="vm.alignTop()">
+					<i class="mdi small mdi-border-top"></i>
+					<md-tooltip>
+						Align Top
+					</md-tooltip>
+				</button>
+				<button class="wfm-btn wfm-btn-default" ng-click="vm.alignBottom()">
+					<i class="mdi small mdi-border-bottom"></i>
+					<md-tooltip>
+						Align Bottom
+					</md-tooltip>
+				</button>
+				
+			</div>
+		</div>
+
 	</div>
-	
-	<div class="pull-right">
-		<button class="btn btn-primary" ng-click="vm.toggleEditMode()" ng-show="!vm.allowEdit">
-			<i class="mdi small mdi-lock-outline" aria-hidden="true"></i>
-		</button>
-		<button class="btn btn-primary" ng-click="vm.toggleEditMode()" ng-show="vm.allowEdit">
-			<i class="mdi small mdi-lock-unlock-outline" aria-hidden="true"></i>
-		</button>
+
+
+	<div class="col-sm-12 wfm-block material-depth-1" style="height: 630px; margin-top: 10px">
+		<canvas ng-show="!vm.isLoading" id="c" style="width:auto"></canvas>
+		<md-progress-circular ng-show="vm.isLoading" style="position: absolute;left: 50%;top: 50%;margin-left: -32px;margin-top: -32px;" md-mode=" indeterminate"></md-progress-circular>
+
 	</div>
-		
-	<div class="col-sm-12" style="min-height: 800px; margin-top: 10px" keypressevents>
-		<canvas id="c" style="border:1px solid #ccc; width:auto"></canvas>
-	</div>
+
+
 	<!--<div class="mapLoadingSpinner" data-bind="visible : Loading">
 			<svg class="spinner " width="65px" height="65px" viewBox="0 0 66 66" xmlns="http://www.w3.org/2000/svg">
 				<circle class="path" fill="none" stroke-width="6" stroke-linecap="round" cx="33" cy="33" r="30"></circle>
 			</svg>
 		</div>-->
 	<div class="mapControls">
-		<button class="mapNavButton btn btn-sm btn-default rotate45" data-toggle="button" ng-click="vm.toggleMoveMode()"><span class="glyphicon glyphicon-fullscreen" aria-hidden="true"></span></button>
-		<input style="width: 36%;" orient="vertical" id="zoomSlider" min="0.1" max="5" value="1" step=".05" type="range" />
-	</div>
+			<button class="mapNavButton btn btn-sm btn-default rotate45" data-toggle="button" ng-click="vm.toggleMoveMode()"><span class="glyphicon glyphicon-fullscreen" aria-hidden="true"></span></button>
+			<input style="width: 36%;" orient="vertical" id="zoomSlider" min="0.1" max="5" value="1" step=".05" type="range" />
+		</div>
 </div>

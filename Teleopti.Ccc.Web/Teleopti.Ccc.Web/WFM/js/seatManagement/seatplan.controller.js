@@ -54,7 +54,7 @@ angular.module('wfm.seatPlan')
 			//seatPlanService.seatPlan.add(addSeatPlanCommand).$promise.then(function (result) {
 			seatPlanService.addSeatPlan(addSeatPlanCommand).$promise.then(function (result) {
 				//Robtodo:notice on successful submit
-				alert('seat plan submitted');
+				displaySuccessNotification("Seat Plan Saved");
 			});
 		};
 

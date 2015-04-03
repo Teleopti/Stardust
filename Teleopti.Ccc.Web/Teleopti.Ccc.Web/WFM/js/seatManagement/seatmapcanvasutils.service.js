@@ -1,19 +1,22 @@
 ﻿
 angular.module('wfm.seatMap')
-	.factory('seatMapCanvasUtilsService', [function () {
+	.factory('seatMapCanvasUtilsService', ['seatMapService', function (seatMapService) {
 
 		var utils = {};
 
-		utils.setupCanvas=function(canvas) {
+		utils.setupCanvas = function (canvas) {
 			canvas.isGrabMode = false;
+
 			//Performance related toggles
 			//self.canvas.skipTargetFind = true;
 			canvas.renderOnAddRemove = true;
 			canvas.stateful = false;
+
 		}
 
 		utils.resize = function (canvas) {
 			var container = canvas.wrapperEl.parentElement;
+			//Robtodo: do properly
 			canvas.setHeight($(container).height());
 			canvas.setWidth(container.clientWidth);
 		};
@@ -29,7 +32,7 @@ angular.module('wfm.seatMap')
 			}
 			return false;
 		};
-	
+
 		utils.ScaleImage = function (canvas, image) {
 
 			var ratio = canvas.height / image.height;
@@ -149,6 +152,19 @@ angular.module('wfm.seatMap')
 			return null;
 		};
 
+		utils.getHighestSeatPriority = function (canvas) {
+			var seatObjects = utils.getObjectsByType(canvas, 'seat');
+			var highestPriority = 0;
+			for (var i in seatObjects) {
+				var seat = seatObjects[i];
+				if (seat.priority > highestPriority) {
+					highestPriority = seat.priority;
+				}
+			}
+			return highestPriority;
+		};
+
+
 		utils.clearCanvas = function (canvas) {
 			if (canvas != null) {
 				canvas.setBackgroundImage(null);
@@ -156,7 +172,12 @@ angular.module('wfm.seatMap')
 			}
 		}
 
-		utils.loadSeatMap = function (canvas, data, allowSelection, callback) {
+
+		utils.loadSeatMapData = function (canvas, data, allowEdit, callbackSuccess, callbackFailure) {
+
+			if (data == null) {
+				callbackFailure();
+			}
 
 			utils.clearCanvas(canvas);
 
@@ -170,12 +191,21 @@ angular.module('wfm.seatMap')
 						seatPriority = allSeats[loadedSeat].priority;
 					}
 				}
-				utils.setSelectionMode(canvas, allowSelection);
+				utils.setSelectionMode(canvas, allowEdit);
 				data.seatPriority = seatPriority;
-				callback(data);
+				callbackSuccess(data);
 			});
 
+
 		};
+
+		utils.loadSeatMap = function (id, canvas, allowEdit, callbackSuccess, callbackFailure) {
+			seatMapService.seatMap.get({ id: id }).$promise.then(function (data) {
+				utils.loadSeatMapData(canvas, data, allowEdit, callbackSuccess, callbackFailure);
+			});
+		}
+
+
 
 		return utils;
 

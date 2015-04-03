@@ -10,13 +10,15 @@ fabric.Seat = fabric.util.createClass(fabric.Image, {
 		this.set('id', options.id);
 		this.set('name', options.name);
 		this.set('priority', options.priority);
+		//this.set('isNew', options.isNew);
 	},
 
 	toObject: function () {
 		return fabric.util.object.extend(this.callSuper('toObject'), {
 			id: this.get('id'),
 			name: this.get('name'),
-			priority: this.get('priority')
+			priority: this.get('priority'),
+			//isNew: this.get('isNew')
 		});
 	},
 

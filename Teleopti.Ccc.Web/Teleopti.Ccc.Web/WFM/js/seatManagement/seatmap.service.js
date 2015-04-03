@@ -5,9 +5,10 @@ angular.module('wfm.seatMap')
 		var seatMapService = {};
 
 		seatMapService.seatMap = $resource('../api/SeatPlanner/SeatMap', {}, {
-			get: { method: 'GET', params: {}, isArray: false }
+			get: { method: 'GET', params: {}, isArray: false },
+			save: { method: 'POST', params: { Id: {}, Location: {}, SeatMapData: {}, TrackedCommandInfo: {}, ChildLocations: [], Seats: [] }, isArray: false }
 		});
-
+		
 		return seatMapService;
 	}]);
 

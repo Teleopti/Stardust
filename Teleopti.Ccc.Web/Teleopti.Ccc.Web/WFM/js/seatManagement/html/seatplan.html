@@ -1,13 +1,12 @@
 ﻿
 <div ui-view>
+	<div class="alert-warning">Not indicative of UI Design - just a port of existing prototype for now.</div>
 	<div>
 		<h1>Seat Plan</h1>
 	</div>
-
-	<div class="alert-warning">Not indicative of UI Design - just a port of existing prototype for now.</div>
-
+	
 	<div class="material-block-content">
-
+		
 		<div style="display:inline-block; min-height:290px;">
 			<h5>From <span class="startDate">{{seatplan.period.startDate | date : format}}</span></h5>
 
@@ -20,20 +19,20 @@
 			<datepicker ng-model="seatplan.period.endDate" min-date="seatplan.period.startDate" show-weeks="true" class="well well-sm"></datepicker>
 		</div>
 
-		<divs class="input-prepend">
+		<div class="input-prepend">
 			<i class="mdi mdi-filter-outline"></i>
 			<input type="text" name="filterLocations" ng-model="searchLocations" placeholder="Locations filter ..." />
-		</divs>
+		</div>
 
 		<div class="tree" style="height:190px;">
 			<div ui-tree data-drag-enabled="false">
-				<ol ui-tree-nodes="" ng-model="seatplan.locations" id="tree-root" class="tree-line" toggle-focus>
-					<li ng-repeat="node in seatplan.locations | filter:searchLocations" ui-tree-node ng-include="'locations_renderer.html'"></li>
+				<ol ui-tree-nodes="" ng-model="seatplan.locations" id="tree-root-locations" class="tree-line" toggle-focus>
+					<li ng-repeat="node in seatplan.locations | filter:searchLocations" ui-tree-node ng-include=" 'locations_renderer.html' "></li>
 				</ol>
 			</div>
 		</div>
-		
-		
+
+		<p></p>
 		<div class="input-prepend">
 			<i class="mdi mdi-filter-outline"></i>
 			<input type="text" name="filterTeams" ng-model="searchTeams" placeholder="Teams filter ..." />
@@ -41,10 +40,10 @@
 
 		<div class="tree" style="height:190px;">
 			<div ui-tree data-drag-enabled=" false">
-			<ol ui-tree-nodes="" ng-model="seatplan.teams" id="tree-root" class="tree-line" toggle-focus>
-				<li ng-repeat="node in seatplan.teams | filter:searchTeams" ui-tree-node ng-include="'teams_renderer.html'"></li>
-			</ol>
-		</div>
+				<ol ui-tree-nodes="" ng-model="seatplan.teams" id="tree-root-teams" class="tree-line" toggle-focus>
+					<li ng-repeat="node in seatplan.teams | filter:searchTeams" ui-tree-node ng-include="'teams_renderer.html'"></li>
+				</ol>
+			</div>
 		</div>
 
 		<div>
