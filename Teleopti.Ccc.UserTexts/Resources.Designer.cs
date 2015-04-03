@@ -18374,6 +18374,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Role.
+        /// </summary>
+        public static string PersonFinderFieldRole {
+            get {
+                return ResourceManager.GetString("PersonFinderFieldRole", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Shift Bag.
         /// </summary>
         public static string PersonFinderFieldShiftBag {

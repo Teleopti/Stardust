@@ -12937,4 +12937,8 @@ Reduce the complexity to use these shifts.</value>
     <value>Enabled items</value>
     <comment>Selected items filter on the web</comment>
   </data>
+  <data name="PersonFinderFieldRole" xml:space="preserve">
+    <value>Role</value>
+    <comment>used when searching for persons based on role</comment>
+  </data>
 </root>

@@ -71,3 +71,9 @@ INNER JOIN Team t ON pp.Team = t.Id
 INNER JOIN Site s ON s.Id = t.Site
 WHERE t.IsDeleted = 0 AND s.IsDeleted = 0
 
+UPDATE [ReadModel].[FindPerson]
+SET SearchValue = DescriptionText
+FROM [ReadModel].[FindPerson] INNER JOIN 
+ApplicationRole ar ON ar.Id = SearchValueId 
+INNER JOIN #ids on #ids.id = SearchValueId
+WHERE ar.IsDeleted = 0

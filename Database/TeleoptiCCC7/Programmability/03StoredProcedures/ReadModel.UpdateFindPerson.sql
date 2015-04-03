@@ -135,6 +135,13 @@ INNER JOIN Skill s ON ps.Skill = s.Id
 WHERE p.IsDeleted = 0 AND Active = 1 AND  s.IsDeleted = 0
 AND p.Id NOT IN(SELECT PersonId FROM [ReadModel].[FindPerson] WHERE SearchType = 'Skill')
 
+INSERT [ReadModel].[FindPerson]
+SELECT DISTINCT p.Id,FirstName, LastName, EmploymentNumber, p.Note, TerminalDate, ar.DescriptionText, 'Role', NULL, NULL, NULL, ar.Id  
+FROM Person p
+INNER JOIN PersonInApplicationRole pa ON pa.Person = p.Id
+INNER JOIN ApplicationRole ar ON ar.Id = pa.ApplicationRole
+WHERE ar.IsDeleted = 0
+
 DECLARE @date DATETIME
 SELECT @date = CONVERT(DATETIME, CONVERT(varchar(10), GETDATE(), 101))
 
