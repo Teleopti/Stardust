@@ -197,17 +197,14 @@
 					<th>Last Name</th>
 					<th>Emp No.</th>
 					<th>Email</th>
-					<th>Phone</th>
-					
 				</tr>
 			</thead>
 			<tbody>
 				<tr ng-repeat="person in searchResult" ng-click="toggleModal()">
 					<td>{{person.FirstName}}</td>
 					<td>{{person.LastName}}</td>
-					<!--<td>{{person.Email}}</td>
-					<td>{{person.Phone}}</td>-->
 					<td>{{person.EmploymentNumber}}</td>
+					<td>{{person.Email}}</td>
 				</tr>
 			</tbody>
 		</table>
