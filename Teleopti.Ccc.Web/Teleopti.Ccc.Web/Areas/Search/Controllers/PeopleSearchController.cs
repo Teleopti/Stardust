@@ -5,6 +5,7 @@ using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Portal.DataProvider;
+using Teleopti.Ccc.Web.Areas.Search.Models;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Web.Areas.Search.Controllers
@@ -13,21 +14,38 @@ namespace Teleopti.Ccc.Web.Areas.Search.Controllers
 	{
 		private readonly IPersonFinderReadOnlyRepository _searchRepository;
 		private readonly IPermissionProvider _permissionProvider;
+		private readonly IPersonRepository _personRepository;
 
-		public PeopleSearchController(IPersonFinderReadOnlyRepository searchRepository, IPermissionProvider permissionProvider)
+		public PeopleSearchController(IPersonFinderReadOnlyRepository searchRepository, IPersonRepository personRepository, IPermissionProvider permissionProvider)
 		{
 			_searchRepository = searchRepository;
+			_personRepository = personRepository;
 			_permissionProvider = permissionProvider;
 		}
 
 		[UnitOfWork]
-		[HttpGet,Route("api/Search/People")]
+		[HttpGet, Route("api/Search/People")]
 		public virtual IHttpActionResult GetResult(string keyword)
 		{
 			var search = new PersonFinderSearchCriteria(PersonFinderField.All, keyword, 20, DateOnly.MinValue, 0, 0);
 			_searchRepository.Find(search);
-
-			return Ok(search.DisplayRows.Where(r => r.RowNumber>0 && _permissionProvider.HasOrganisationDetailPermission(DefinedRaptorApplicationFunctionPaths.OpenPersonAdminPage, DateOnly.Today, r)));
+			var permittedPersonList =
+				search.DisplayRows.Where(
+					r =>
+						r.RowNumber > 0 &&
+						_permissionProvider.HasOrganisationDetailPermission(DefinedRaptorApplicationFunctionPaths.OpenPersonAdminPage,
+							DateOnly.Today, r));
+			var personIdList = permittedPersonList.Select(x => x.PersonId);
+			var peopleList = _personRepository.FindPeople(personIdList);
+			var result = peopleList.Select(x => new PeopleSummary
+			{
+				FirstName = x.Name.FirstName,
+				LastName = x.Name.LastName,
+				EmploymentNumber = x.EmploymentNumber,
+				PersonId = x.Id.Value,
+				Email = x.Email
+			});
+			return Ok(result);
 		}
 	}
 }

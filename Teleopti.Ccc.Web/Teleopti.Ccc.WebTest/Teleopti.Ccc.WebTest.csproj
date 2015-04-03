@@ -251,6 +251,7 @@
     <Compile Include="Areas\Rta\ExternalUserStateWebModelForTest.cs" />
     <Compile Include="Areas\Rta\StateControllerTest.cs" />
     <Compile Include="Areas\Rta\RtaAreaModuleTest.cs" />
+    <Compile Include="Areas\Search\PeopleSearchControllerTest .cs" />
     <Compile Include="Areas\Search\SearchControllerTest.cs" />
     <Compile Include="Areas\SeatPlanner\Controllers\LocationHierarchyControllerTest.cs" />
     <Compile Include="Areas\SeatPlanner\Controllers\SeatMapControllerTest.cs" />
