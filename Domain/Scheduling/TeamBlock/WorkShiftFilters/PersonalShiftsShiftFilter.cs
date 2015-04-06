@@ -45,7 +45,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftFilters
 						continue;
 
 					var mainShift = shiftProjectionCache.TheMainShift;
-					var movedShift = mainShift.MoveTo(new DateOnly(shiftProjectionCache.SchedulingDate.Date), dateOnly);
+					var movedShift = mainShift.MoveTo(shiftProjectionCache.SchedulingDate, dateOnly);
 
 					if (!_personalShiftMeetingTimeChecker.CheckTimeMeeting(movedShift, meetings))
 						continue;

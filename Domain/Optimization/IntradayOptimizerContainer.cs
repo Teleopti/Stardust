@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.UserTexts;
 using Teleopti.Interfaces.Domain;
@@ -11,27 +12,42 @@ namespace Teleopti.Ccc.Domain.Optimization
     /// - Order the list of IntradayOptimizers
     /// - Manages the list of IntradayOptimizers according to the result of Optimizers
     /// </summary>
-    public class IntradayOptimizerContainer : IScheduleOptimizationService
+    public class IntradayOptimizerContainer
     {
         private readonly IList<IIntradayOptimizer2> _optimizers;
-        private bool _cancelMe;
+	    private readonly IDailyValueByAllSkillsExtractor _dailyValueByAllSkillsExtractor;
+	    private bool _cancelMe;
 		private ResourceOptimizerProgressEventArgs _progressEvent;
 
-        public IntradayOptimizerContainer(IList<IIntradayOptimizer2> optimizers)
+        public IntradayOptimizerContainer(IList<IIntradayOptimizer2> optimizers, IDailyValueByAllSkillsExtractor dailyValueByAllSkillsExtractor)
         {
-            _optimizers = optimizers;
+	        _optimizers = optimizers;
+	        _dailyValueByAllSkillsExtractor = dailyValueByAllSkillsExtractor;
         }
 
-        public event EventHandler<ResourceOptimizerProgressEventArgs> ReportProgress;
+	    public event EventHandler<ResourceOptimizerProgressEventArgs> ReportProgress;
 
-        public void Execute()
+		public void Execute(DateOnlyPeriod period, TargetValueOptions targetValueOptions)
         {
 			_progressEvent = null;
 
             if (_cancelMe)
                 return;
 
-            executeOptimizersWhileActiveFound(_optimizers);
+			IEnumerable<IIntradayOptimizer2> shuffledOptimizers = _optimizers.GetRandom(_optimizers.Count, true);
+	        var log = new List<string>();
+			foreach (var batchOptimizers in shuffledOptimizers.Batch(100))
+			{
+				var valueBefore = _dailyValueByAllSkillsExtractor.ValueForPeriod(period, targetValueOptions);
+				executeOptimizersWhileActiveFound(batchOptimizers);
+				var valueAfter = _dailyValueByAllSkillsExtractor.ValueForPeriod(period, targetValueOptions);
+				var logPost = DateTime.Now.ToLongTimeString() + " " + (valueBefore - valueAfter);
+				log.Add(logPost);
+			}
+	        foreach (var post in log)
+	        {
+		        Debug.Print(post);
+	        }
         }
 
         public void OnReportProgress(string message)

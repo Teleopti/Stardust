@@ -8,32 +8,36 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Optimization
 {
-	public class DailyValueByAllSkillsExtractor
+	public interface IDailyValueByAllSkillsExtractor
 	{
-		private readonly IAdvancedPreferences _advancedPreferences;
+		double ValueForPeriod(DateOnlyPeriod period, TargetValueOptions targetValueOptions);
+		IList<double?> Values(DateOnlyPeriod period, TargetValueOptions targetValueOptions);
+		double? DayValue(DateOnly scheduleDay, TargetValueOptions targetValueOptions);
+	}
+
+	public class DailyValueByAllSkillsExtractor : IDailyValueByAllSkillsExtractor
+	{
 	    private readonly ISkillStaffPeriodToSkillIntervalDataMapper _skillStaffPeriodToSkillIntervalDataMapper;
 	    private readonly ISkillIntervalDataDivider _skillIntervalDataDivider;
 	    private readonly ISkillIntervalDataAggregator _skillIntervalDataAggregator;
 		private readonly ISchedulingResultStateHolder _stateholder;
 
-		public DailyValueByAllSkillsExtractor(IAdvancedPreferences advancedPreferences,
-	                                                       ISkillStaffPeriodToSkillIntervalDataMapper
+		public DailyValueByAllSkillsExtractor(ISkillStaffPeriodToSkillIntervalDataMapper
 		                                                       skillStaffPeriodToSkillIntervalDataMapper,
 	                                                       ISkillIntervalDataDivider skillIntervalDataDivider,
 															ISkillIntervalDataAggregator skillIntervalDataAggregator,
 			ISchedulingResultStateHolder stateholder)
 	    {
-		    _advancedPreferences = advancedPreferences;
 		    _skillStaffPeriodToSkillIntervalDataMapper = skillStaffPeriodToSkillIntervalDataMapper;
 		    _skillIntervalDataDivider = skillIntervalDataDivider;
 		    _skillIntervalDataAggregator = skillIntervalDataAggregator;
 			_stateholder = stateholder;
 	    }
 
-		public double ValueForPeriod(DateOnlyPeriod period)
+		public double ValueForPeriod(DateOnlyPeriod period, TargetValueOptions targetValueOptions)
 		{
 			double total = 0;
-			foreach (var value in Values(period))
+			foreach (var value in Values(period, targetValueOptions))
 			{
 				if(value.HasValue)
 				total += value.Value;
@@ -42,20 +46,20 @@ namespace Teleopti.Ccc.Domain.Optimization
 			return total;
 		}
 
-	    public IList<double?> Values(DateOnlyPeriod period)
+		public IList<double?> Values(DateOnlyPeriod period, TargetValueOptions targetValueOptions)
         {
             IList<double?> ret = new List<double?>();
 
             foreach (var dateOnly in period.DayCollection())
             {
-                double? value = DayValue(dateOnly);
+                double? value = DayValue(dateOnly, targetValueOptions);
                 ret.Add(value);
             }
 
             return ret;
         }
 
-        public double? DayValue(DateOnly scheduleDay)
+        public double? DayValue(DateOnly scheduleDay, TargetValueOptions targetValueOptions)
         {
             IList<double> intradayRelativePersonnelDeficits =
                 getIntradayRelativePersonnelDeficits(scheduleDay);
@@ -64,7 +68,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 
             if (intradayRelativePersonnelDeficits.Any())
             {
-				switch (_advancedPreferences.TargetValueCalculation)
+				switch (targetValueOptions)
 				{
 					case TargetValueOptions.StandardDeviation:
 						result = Calculation.Variances.StandardDeviation(intradayRelativePersonnelDeficits);

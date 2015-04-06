@@ -39,17 +39,14 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 
         public void SetDate(DateOnly schedulingDate, TimeZoneInfo localTimeZoneInfo)
         {
-
             if (SchedulingDate != schedulingDate || !_localTimeZoneInfo.Equals(localTimeZoneInfo))
             {
                 _localTimeZoneInfo = localTimeZoneInfo;
                 _schedulingDate = schedulingDate;
                 _dayOfWeek = SchedulingDate.DayOfWeek;
-                _mainShift = _workShift.ToEditorShift(schedulingDate, localTimeZoneInfo);
+	            _mainShift = null;
                 _mainshiftProjection = null;
-            }
-            
-            
+            }           
         }
         /// <summary>
         /// Gets the main shift.
@@ -62,7 +59,12 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
         /// /// </remarks>
         public IEditableShift TheMainShift
         {
-            get { return _mainShift; }
+	        get
+	        {
+		        if (_mainShift == null)
+					_mainShift = _workShift.ToEditorShift(_schedulingDate, _localTimeZoneInfo);
+				return _mainShift;
+	        }
         }
         /// <summary>
         /// Gets the work shift.
@@ -75,7 +77,8 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
         /// /// </remarks>
         public IWorkShift TheWorkShift
         {
-            get { return _workShift; }
+	        get
+	        { return _workShift; }
         }
 
         public TimeSpan WorkShiftProjectionContractTime
@@ -112,7 +115,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
             get
             {
                 if (_mainshiftProjection == null)
-                    _mainshiftProjection = _mainShift.ProjectionService().CreateProjection();
+                    _mainshiftProjection = TheMainShift.ProjectionService().CreateProjection();
                 return _mainshiftProjection;
             }
         }
@@ -131,10 +134,10 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
                 return true;
             }
 
-			if (meetings.Count > 0 && !_personalShiftMeetingTimeChecker.CheckTimeMeeting(_mainShift, meetings))
+			if (meetings.Count > 0 && !_personalShiftMeetingTimeChecker.CheckTimeMeeting(TheMainShift, meetings))
 				return false;
 
-			if (personAssignment != null && !_personalShiftMeetingTimeChecker.CheckTimePersonAssignment(_mainShift, personAssignment))
+			if (personAssignment != null && !_personalShiftMeetingTimeChecker.CheckTimePersonAssignment(TheMainShift, personAssignment))
 				return false;
 
             return true;
@@ -142,7 +145,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 
         public int ShiftCategoryDayOfWeekJusticeValue
         {
-            get { return _mainShift.ShiftCategory.DayOfWeekJusticeValues[_dayOfWeek]; }
+			get { return TheMainShift.ShiftCategory.DayOfWeekJusticeValues[_dayOfWeek]; }
         }
 
     	public TimeSpan WorkShiftStartTime

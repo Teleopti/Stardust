@@ -23,8 +23,8 @@ namespace Teleopti.Ccc.Domain.Forecasting
         private bool _isAggregate;
         private double _aggregatedFStaff;
         private double _aggregatedCalculatedResources;
-	    private Percent _estimatedServiceLevel;
-        private Percent _estimatedServiceLevelShrinkage; 
+	    private Percent? _estimatedServiceLevel;
+        private Percent? _estimatedServiceLevelShrinkage; 
         private IPeriodDistribution _periodDistribution;
 
 	    private static readonly object Locker = new object();
@@ -121,7 +121,11 @@ namespace Teleopti.Ccc.Domain.Forecasting
                 {
                     if (_isAggregate)
 							  return ((IAggregateSkillStaffPeriod)this).AggregatedEstimatedServiceLevel;
-                    return _estimatedServiceLevel;
+
+					if (!_estimatedServiceLevel.HasValue)
+						CalculateEstimatedServiceLevel();
+
+                    return _estimatedServiceLevel.Value;
                 }
             } 
         }
@@ -134,7 +138,11 @@ namespace Teleopti.Ccc.Domain.Forecasting
                 {
                     if (_isAggregate)
                         return ((IAggregateSkillStaffPeriod)this).AggregatedEstimatedServiceLevel;
-                    return _estimatedServiceLevelShrinkage;
+
+					if (!_estimatedServiceLevelShrinkage.HasValue)
+						CalculateEstimatedServiceLevel();
+
+					return _estimatedServiceLevelShrinkage.Value;
                 }
             }
         }
@@ -368,7 +376,7 @@ namespace Teleopti.Ccc.Domain.Forecasting
 
                 _estimatedServiceLevel = new Percent(ScheduledAgentsIncoming / Payload.ForecastedIncomingDemand);
                 // this case the shrinkage is already calculated in ForecastedIncomingDemand, so the following is ok
-                _estimatedServiceLevelShrinkage = _estimatedServiceLevel;
+                _estimatedServiceLevelShrinkage = EstimatedServiceLevel;
             }
             else
             {
@@ -624,6 +632,9 @@ namespace Teleopti.Ccc.Domain.Forecasting
 
         public void PickResources65()
         {
+	        _estimatedServiceLevel = null;
+	        _estimatedServiceLevelShrinkage = null;
+
             SkillStaff thisSkillStaff = (SkillStaff)Payload;
 
             if (SortedSegmentCollection.Count == 1)
@@ -653,7 +664,6 @@ namespace Teleopti.Ccc.Domain.Forecasting
                     if (ownerNotBookedResource <= 0)
                         continue;
 
-
                     if (diff >= ownerNotBookedResource)
                         diff = ownerNotBookedResource;
 
@@ -661,8 +671,6 @@ namespace Teleopti.Ccc.Domain.Forecasting
                     xSegment.BookedResource65 = diff;
                 }
             }
-
-            CalculateEstimatedServiceLevel();
         }
 
         public ISkillStaffPeriod IntersectingResult(DateTimePeriod period)

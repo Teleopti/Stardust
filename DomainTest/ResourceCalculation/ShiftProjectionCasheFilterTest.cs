@@ -291,8 +291,6 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 
             using (_mocks.Record())
             {
-                Expect.Call(_workShift1.ToEditorShift(new DateOnly(2009, 1, 1), _timeZoneInfo)).Return(mainshift1);
-                Expect.Call(_workShift2.ToEditorShift(new DateOnly(2009, 1, 1), _timeZoneInfo)).Return(mainshift2);
                 Expect.Call(_workShift1.ProjectionService()).Return(ps1);
                 Expect.Call(_workShift2.ProjectionService()).Return(ps2);
                 Expect.Call(ps1.CreateProjection()).Return(lc1);
@@ -337,8 +335,6 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
             var minMaxcontractTime = new MinMax<TimeSpan>(new TimeSpan(7, 0, 0), new TimeSpan(8, 0, 0));
             using (_mocks.Record())
             {
-                Expect.Call(_workShift1.ToEditorShift(new DateOnly(2009, 1, 1), _timeZoneInfo)).Return(mainshift1);
-                Expect.Call(_workShift2.ToEditorShift(new DateOnly(2009, 1, 1), _timeZoneInfo)).Return(mainshift2);
                 Expect.Call(_workShift1.ProjectionService()).Return(ps1);
                 Expect.Call(_workShift2.ProjectionService()).Return(ps2);
                 Expect.Call(ps1.CreateProjection()).Return(lc1);

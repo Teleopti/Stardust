@@ -83,6 +83,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 
 
 			var schedulingOptions = new SchedulingOptionsCreator().CreateSchedulingOptions(optimizationPreferences);
+			var stateHolder = schedulerStateHolder.SchedulingResultState;
 
 			IList<IScheduleMatrixPro> allMatrixes = new List<IScheduleMatrixPro>();
 			switch (optimizationMethodBackToLegalState)
@@ -95,8 +96,10 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 						optimizerOriginalPreferences.SchedulingOptions,
 						daysOffPreferences);
 
-					var optimizationHelperWin = new ResourceOptimizationHelperWin(schedulerStateHolder, _personSkillProvider, _intraIntraIntervalFinderService);
-					optimizationHelperWin.ResourceCalculateMarkedDays(null, optimizerOriginalPreferences.SchedulingOptions.ConsiderShortBreaks, true);
+					var optimizationHelperWin = new ResourceOptimizationHelperWin(schedulerStateHolder, _personSkillProvider,
+						_intraIntraIntervalFinderService);
+					optimizationHelperWin.ResourceCalculateMarkedDays(null,
+						optimizerOriginalPreferences.SchedulingOptions.ConsiderShortBreaks, true);
 					IList<IScheduleMatrixPro> matrixList = _matrixListFactory.CreateMatrixList(selectedSchedules, selectedPeriod);
 
 
@@ -110,36 +113,46 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 						allMatrixes);
 					break;
 				case false:
-					var extractor = new PersonListExtractorFromScheduleParts(selectedSchedules);
-					var selectedPersons = extractor.ExtractPersons().ToList();
+					var personExtractor = new PersonListExtractorFromScheduleParts(selectedSchedules);
+					var selectedPersons = personExtractor.ExtractPersons().ToList();
 					var resourceCalculateDelayer = new ResourceCalculateDelayer(_resourceOptimizationHelper, 1,
 						true,
 						schedulingOptions.ConsiderShortBreaks);
 					var tagSetter = new ScheduleTagSetter(schedulingOptions.TagToUseOnScheduling);
-					var rollbackService = new SchedulePartModifyAndRollbackService(schedulerStateHolder.SchedulingResultState,
+					var rollbackService = new SchedulePartModifyAndRollbackService(stateHolder,
 						_scheduleDayChangeCallback,
 						tagSetter);
-					if (optimizationPreferences.Extra.UseTeamBlockOption || optimizationPreferences.Extra.UseTeams)
+
+					var minutesPerInterval = 15;
+
+					if (stateHolder.Skills.Any())
 					{
+						minutesPerInterval = stateHolder.Skills.Min(s => s.DefaultResolution);
+					}
 
+					var extractor = new ScheduleProjectionExtractor(_personSkillProvider, minutesPerInterval);
+					var resources = extractor.CreateRelevantProjectionList(stateHolder.Schedules);
+					using (new ResourceCalculationContext<IResourceCalculationDataContainerWithSingleOperation>(resources))
+					{
+						if (optimizationPreferences.Extra.UseTeamBlockOption || optimizationPreferences.Extra.UseTeams)
+						{
+							_teamBlockOptimizationCommand.Execute(backgroundWorker, selectedPeriod, selectedPersons, optimizationPreferences,
+								rollbackService, tagSetter, schedulingOptions, resourceCalculateDelayer, selectedSchedules);
 
-						_teamBlockOptimizationCommand.Execute(backgroundWorker, selectedPeriod, selectedPersons, optimizationPreferences,
-							rollbackService, tagSetter, schedulingOptions, resourceCalculateDelayer, selectedSchedules);
+							break;
+						}
+
+						// we need it here for fairness opt. for example
+						groupPagePerDateHolder.GroupPersonGroupPagePerDate = groupPagePerDateHolder.ShiftCategoryFairnessGroupPagePerDate;
+						scheduleOptimizerHelper.ReOptimize(backgroundWorker, selectedSchedules, schedulingOptions);
+
+						allMatrixes = _matrixListFactory.CreateMatrixListAll(selectedPeriod);
+						runWeeklyRestSolver(optimizationPreferences, schedulingOptions, selectedPeriod, allMatrixes, selectedPersons,
+							rollbackService, resourceCalculateDelayer, backgroundWorker);
 
 						break;
 					}
-
-					// we need it here for fairness opt. for example
-					groupPagePerDateHolder.GroupPersonGroupPagePerDate = groupPagePerDateHolder.ShiftCategoryFairnessGroupPagePerDate;
-					scheduleOptimizerHelper.ReOptimize(backgroundWorker, selectedSchedules, schedulingOptions);
-					allMatrixes = _matrixListFactory.CreateMatrixListAll(selectedPeriod);
-
-					runWeeklyRestSolver(optimizationPreferences, schedulingOptions, selectedPeriod, allMatrixes, selectedPersons, rollbackService, resourceCalculateDelayer, backgroundWorker);
-
-					break;
 			}
-
-
 			schedulerStateHolder.SchedulingResultState.SkipResourceCalculation = lastCalculationState;
 		}
 

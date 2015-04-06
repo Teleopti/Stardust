@@ -342,7 +342,8 @@ namespace Teleopti.Ccc.WinCode.Autofac
 				: c.Resolve<MinWeekWorkTimeRuleToggle31992Off>())
 				.As<IMinWeekWorkTimeRule>();
 
-			//IOvertimeRelativeDifferenceCalculator
+			builder.RegisterType<DailyValueByAllSkillsExtractor>().As<IDailyValueByAllSkillsExtractor>();
+			//IDailyValueByAllSkillsExtractor
 		}
 
 		private void registerMoveTimeOptimizationClasses(ContainerBuilder builder)

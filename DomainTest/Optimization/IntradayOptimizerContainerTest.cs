@@ -19,57 +19,42 @@ namespace Teleopti.Ccc.DomainTest.Optimization
         private IPerson _person = PersonFactory.CreatePerson();
         private bool _eventExecuted;
 	    private int _timesExecuted;
+	    private IDailyValueByAllSkillsExtractor _dailyValueByAllSkillsExtractor;
+	    private DateOnlyPeriod _period;
+	    private TargetValueOptions _targetValueOptions;
 
-        [SetUp]
+	    [SetUp]
         public void Setup()
         {
             _mocks = new MockRepository();
             _optimizer1 = _mocks.StrictMock<IIntradayOptimizer2>();
             _optimizer2 = _mocks.StrictMock<IIntradayOptimizer2>();
             _optimizerList = new List<IIntradayOptimizer2> { _optimizer1, _optimizer2 };
-            _target = new IntradayOptimizerContainer(_optimizerList);
+		    _dailyValueByAllSkillsExtractor = _mocks.StrictMultiMock<IDailyValueByAllSkillsExtractor>();
+            _target = new IntradayOptimizerContainer(_optimizerList, _dailyValueByAllSkillsExtractor);
 	        _timesExecuted = 0;
+		    _period = new DateOnlyPeriod();
+		    _targetValueOptions = TargetValueOptions.StandardDeviation;
         }
-
-        //[Test]
-        //public void VerifyExecuteOneIteration()
-        //{
-        //    using (_mocks.Record())
-        //    {
-        //        Expect.Call(_optimizer1.Execute()).Return(false);
-        //        Expect.Call(_optimizer2.Execute()).Return(false);
-
-        //        Expect.Call(_optimizer1.RestrictionsOverMax()).Return(true).Repeat.Any();
-        //        Expect.Call(_optimizer2.RestrictionsOverMax()).Return(true).Repeat.Any();
-
-        //        Expect.Call(_optimizer1.ContainerOwner).Return(_person).Repeat.Any();
-        //        Expect.Call(_optimizer2.ContainerOwner).Return(_person).Repeat.Any();
-        //    }
-        //    using (_mocks.Playback())
-        //    {
-        //        _target.Execute();
-        //    }
-        //}
 
         [Test]
         public void VerifyReportProgressEventExecuted()
         {
-            _target.ReportProgress += new System.EventHandler<ResourceOptimizerProgressEventArgs>(_target_ReportProgress);
+            _target.ReportProgress += _target_ReportProgress;
             using (_mocks.Record())
             {
+				Expect.Call(_dailyValueByAllSkillsExtractor.ValueForPeriod(_period, _targetValueOptions)).Return(3);
                 Expect.Call(_optimizer1.Execute()).Return(false);
                 Expect.Call(_optimizer2.Execute()).Return(false);
 
-                //Expect.Call(_optimizer1.RestrictionsOverMax()).Return(true).Repeat.Any();
-                //Expect.Call(_optimizer2.RestrictionsOverMax()).Return(true).Repeat.Any();
-
                 Expect.Call(_optimizer1.ContainerOwner).Return(_person).Repeat.Any();
                 Expect.Call(_optimizer2.ContainerOwner).Return(_person).Repeat.Any();
+				Expect.Call(_dailyValueByAllSkillsExtractor.ValueForPeriod(_period, _targetValueOptions)).Return(2);
             }
             using (_mocks.Playback())
             {
-                _target.Execute();
-                _target.ReportProgress -= new System.EventHandler<ResourceOptimizerProgressEventArgs>(_target_ReportProgress);
+				_target.Execute(_period, _targetValueOptions);
+                _target.ReportProgress -= _target_ReportProgress;
                 Assert.IsTrue(_eventExecuted);
             }
         }
@@ -80,14 +65,16 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 			_target.ReportProgress += targetReportProgress2;
 			using (_mocks.Record())
 			{
+				Expect.Call(_dailyValueByAllSkillsExtractor.ValueForPeriod(_period, _targetValueOptions)).Return(3);
 				Expect.Call(_optimizer1.Execute()).Return(false).Repeat.Any();
 				Expect.Call(_optimizer2.Execute()).Return(false).Repeat.Any();
 				Expect.Call(_optimizer1.ContainerOwner).Return(_person).Repeat.Any();
 				Expect.Call(_optimizer2.ContainerOwner).Return(_person).Repeat.Any();
+				Expect.Call(_dailyValueByAllSkillsExtractor.ValueForPeriod(_period, _targetValueOptions)).Return(2);
 			}
 			using (_mocks.Playback())
 			{
-				_target.Execute();
+				_target.Execute(_period, _targetValueOptions);
 				Assert.AreEqual(1, _timesExecuted);
 				_target.ReportProgress -= targetReportProgress2;
 			}
@@ -110,6 +97,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
         {
             using (_mocks.Record())
             {
+				Expect.Call(_dailyValueByAllSkillsExtractor.ValueForPeriod(_period, _targetValueOptions)).Return(3);
                 Expect.Call(_optimizer1.Execute()).Return(true);
                 Expect.Call(_optimizer2.Execute()).Return(true);
                 
@@ -118,15 +106,13 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 
                 Expect.Call(_optimizer1.Execute()).Return(false);
 
-                //Expect.Call(_optimizer1.RestrictionsOverMax()).Return(true).Repeat.Any();
-                //Expect.Call(_optimizer2.RestrictionsOverMax()).Return(true).Repeat.Any();
-
                 Expect.Call(_optimizer1.ContainerOwner).Return(_person).Repeat.Any();
                 Expect.Call(_optimizer2.ContainerOwner).Return(_person).Repeat.Any();
+				Expect.Call(_dailyValueByAllSkillsExtractor.ValueForPeriod(_period, _targetValueOptions)).Return(2);
             }
             using (_mocks.Playback())
             {
-                _target.Execute();
+				_target.Execute(_period, _targetValueOptions);
             }
         }
     }

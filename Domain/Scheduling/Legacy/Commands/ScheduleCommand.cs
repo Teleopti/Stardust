@@ -77,23 +77,33 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 			{
 				schedulingOptions.OnlyShiftsWhenUnderstaffed = false;
 
-				if (schedulingOptions.UseBlock || schedulingOptions.UseTeam)
+				var minutesPerInterval = 15;
+				if (schedulerStateHolder.SchedulingResultState.Skills.Count > 0)
 				{
-					var resourceCalculateDelayer = new ResourceCalculateDelayer(_resourceOptimizationHelper, 1, true,
-						schedulingOptions.ConsiderShortBreaks);
-
-					ISchedulePartModifyAndRollbackService rollbackService =
-						new SchedulePartModifyAndRollbackService(schedulerStateHolder.SchedulingResultState,
-							_scheduleDayChangeCallback,
-							new ScheduleTagSetter(schedulingOptions.TagToUseOnScheduling));
-					scheduleOptimizerHelper.WorkShiftFinderResultHolder =
-						_teamBlockScheduleCommand.Execute(schedulingOptions, backgroundWorker, selectedPersons, selectedScheduleDays,
-							rollbackService, resourceCalculateDelayer);
+					minutesPerInterval = schedulerStateHolder.SchedulingResultState.Skills.Min(s => s.DefaultResolution);
 				}
-				else
+				var extractor = new ScheduleProjectionExtractor(_personSkillProvider, minutesPerInterval);
+				var resources = extractor.CreateRelevantProjectionList(schedulerStateHolder.Schedules);
+				using (new ResourceCalculationContext<IResourceCalculationDataContainerWithSingleOperation>(resources))
 				{
-					_classicScheduleCommand.Execute(schedulingOptions, backgroundWorker, scheduleOptimizerHelper, selectedScheduleDays,
-						schedulerStateHolder);
+					if (schedulingOptions.UseBlock || schedulingOptions.UseTeam)
+					{
+						var resourceCalculateDelayer = new ResourceCalculateDelayer(_resourceOptimizationHelper, 1, true,
+							schedulingOptions.ConsiderShortBreaks);
+
+						ISchedulePartModifyAndRollbackService rollbackService =
+							new SchedulePartModifyAndRollbackService(schedulerStateHolder.SchedulingResultState,
+								_scheduleDayChangeCallback,
+								new ScheduleTagSetter(schedulingOptions.TagToUseOnScheduling));
+						scheduleOptimizerHelper.WorkShiftFinderResultHolder =
+							_teamBlockScheduleCommand.Execute(schedulingOptions, backgroundWorker, selectedPersons, selectedScheduleDays,
+								rollbackService, resourceCalculateDelayer);
+					}
+					else
+					{
+						_classicScheduleCommand.Execute(schedulingOptions, backgroundWorker, scheduleOptimizerHelper, selectedScheduleDays,
+							schedulerStateHolder);
+					}
 				}
 			}
 			else

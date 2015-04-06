@@ -206,8 +206,10 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
         public void VerifyCanCreateSkillStaffPeriodListForVirtualSkill()
         {
             MockRepository mocks = new MockRepository();
-            ISkill skill1 = mocks.StrictMock<ISkill>();
-            ISkill skill2 = mocks.StrictMock<ISkill>();
+	        ISkill skill1 = SkillFactory.CreateSkill("skill1");
+	        skill1.DefaultResolution = 15;
+            ISkill skill2 = SkillFactory.CreateSkill("skill2");
+			skill2.DefaultResolution = 60;
             IAggregateSkill aggregateSkillSkill = mocks.StrictMock<IAggregateSkill>();
             ISkillDay skillDay1 = mocks.StrictMock<ISkillDay>();
             ISkillDay skillDay2 = mocks.StrictMock<ISkillDay>();
@@ -239,17 +241,13 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 
             IDictionary<ISkill, IList<ISkillDay>> skillDaysDictionary = new Dictionary<ISkill, IList<ISkillDay>> { { skill1, skillDays1 }, { skill2, skillDays2 } };
 
-            StaffingThresholds tresholds = new StaffingThresholds();
-
             using (mocks.Record())
             {
-                Expect.Call(skill1.DefaultResolution).Return(15).Repeat.AtLeastOnce();
-                Expect.Call(skill2.DefaultResolution).Return(60).Repeat.AtLeastOnce();
                 Expect.Call(skillDay1.SkillStaffPeriodCollection).Return(readOnlySkillStaffPeriods1).Repeat.AtLeastOnce();
                 Expect.Call(skillDay2.SkillStaffPeriodCollection).Return(readOnlySkillStaffPeriods2).Repeat.AtLeastOnce();
                 Expect.Call(skillDay1.Skill).Return(skill1).Repeat.AtLeastOnce();
-                Expect.Call(skill1.StaffingThresholds).Return(tresholds).Repeat.AtLeastOnce();
                 Expect.Call(aggregateSkillSkill.AggregateSkills).Return(aggregatedSkills).Repeat.AtLeastOnce();
+
             }
 
             using (mocks.Playback())
@@ -279,8 +277,10 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 		public void ShouldCreateSkillStaffPeriodListWithCorrectFStaffForVirtualSkillWithDifferentOpenHours()
 		{
 			var mocks = new MockRepository();
-			var skill1 = mocks.StrictMock<ISkill>();
-			var skill2 = mocks.StrictMock<ISkill>();
+			var skill1 = SkillFactory.CreateSkill("skill1");
+			skill1.DefaultResolution = 15;
+			var skill2 = SkillFactory.CreateSkill("skill2");
+			skill2.DefaultResolution = 60;
 			var aggregateSkillSkill = mocks.StrictMock<IAggregateSkill>();
 			var skillDay1 = mocks.StrictMock<ISkillDay>();
 			var skillDay2 = mocks.StrictMock<ISkillDay>();
@@ -318,16 +318,11 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 
 			IDictionary<ISkill, IList<ISkillDay>> skillDaysDictionary = new Dictionary<ISkill, IList<ISkillDay>> { { skill1, skillDays1 }, { skill2, skillDays2 } };
 
-			var tresholds = new StaffingThresholds();
-
 			using (mocks.Record())
 			{
-				Expect.Call(skill1.DefaultResolution).Return(15).Repeat.AtLeastOnce();
-				Expect.Call(skill2.DefaultResolution).Return(60).Repeat.AtLeastOnce();
 				Expect.Call(skillDay1.SkillStaffPeriodCollection).Return(readOnlySkillStaffPeriods1).Repeat.AtLeastOnce();
 				Expect.Call(skillDay2.SkillStaffPeriodCollection).Return(readOnlySkillStaffPeriods2).Repeat.AtLeastOnce();
 				Expect.Call(skillDay1.Skill).Return(skill1).Repeat.AtLeastOnce();
-				Expect.Call(skill1.StaffingThresholds).Return(tresholds).Repeat.AtLeastOnce();
 				Expect.Call(aggregateSkillSkill.AggregateSkills).Return(aggregatedSkills).Repeat.AtLeastOnce();
 			}
 
@@ -553,7 +548,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 
             using (mocks.Record())
             {
-                Expect.Call(skillDay1.Skill).Return(skill1);
+	            Expect.Call(skillDay1.Skill).Return(skill1).Repeat.AtLeastOnce();
                 Expect.Call(skillDay1.SkillStaffPeriodCollection).Return(readOnlySkillStaffPeriods1).Repeat.AtLeastOnce();
                 Expect.Call(aggregateSkillSkill.AggregateSkills).Return(aggregatedSkills).Repeat.AtLeastOnce();
             }

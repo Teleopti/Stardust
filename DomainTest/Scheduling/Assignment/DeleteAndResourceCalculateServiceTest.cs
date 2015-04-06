@@ -68,5 +68,38 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 
 			Assert.AreEqual(2, ret.Count);
 		}
+
+		[Test]
+		public void ShouldNotCalculateNextDayIfFoundInTheDateList()
+		{
+			_list = new List<IScheduleDay> {_part1, _part2};
+			IDateOnlyAsDateTimePeriod dateOnlyAsDateTimePeriod1 = _mocks.StrictMock<IDateOnlyAsDateTimePeriod>();
+			IDateOnlyAsDateTimePeriod dateOnlyAsDateTimePeriod2 = _mocks.StrictMock<IDateOnlyAsDateTimePeriod>();
+			using (_mocks.Record())
+			{
+				Expect.Call(_deleteSchedulePartService.Delete(_list, _rollbackService)).Return(_list);
+				Expect.Call(_part1.DateOnlyAsPeriod).Return(dateOnlyAsDateTimePeriod1);
+				Expect.Call(_part2.DateOnlyAsPeriod).Return(dateOnlyAsDateTimePeriod2);
+				Expect.Call(dateOnlyAsDateTimePeriod1.DateOnly).Return(new DateOnly(2012, 1, 1));
+				Expect.Call(dateOnlyAsDateTimePeriod2.DateOnly).Return(new DateOnly(2012, 1, 2));
+				Expect.Call(
+					() =>
+						_resourceOptimizationHelper.ResourceCalculateDate(new DateOnly(2012, 1, 1), true, true));
+				Expect.Call(
+					() =>
+						_resourceOptimizationHelper.ResourceCalculateDate(new DateOnly(2012, 1, 2), true, true));
+				Expect.Call(
+					() =>
+						_resourceOptimizationHelper.ResourceCalculateDate(new DateOnly(2012, 1, 3), true, true));
+			}
+			IList<IScheduleDay> ret;
+
+			using (_mocks.Playback())
+			{
+				ret = _target.DeleteWithResourceCalculation(_list, _rollbackService, true);
+			}
+
+			Assert.AreEqual(2, ret.Count);
+		}
 	}
 }
