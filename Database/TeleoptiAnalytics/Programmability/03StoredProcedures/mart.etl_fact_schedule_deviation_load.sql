@@ -56,6 +56,7 @@ DECLARE @min_date_id int
 DECLARE @business_unit_id int
 DECLARE @scenario_id int
 DECLARE @scenario_code uniqueidentifier
+DECLARE @minutes_outside_shift int
 DECLARE @intervals_outside_shift int
 declare @interval_length_minutes int 
 
@@ -134,8 +135,9 @@ CREATE TABLE #stg_schedule_changed(
 
 --get the number of intervals outside shift to consider for adherence calc
 SELECT @interval_length_minutes = 1440/COUNT(*) from mart.dim_interval 
+SELECT @minutes_outside_shift = value FROM mart.sys_configuration WHERE [KEY]='AdherenceMinutesOutsideShift'  
 
-SELECT @intervals_outside_shift = value/@interval_length_minutes FROM mart.sys_configuration WHERE [KEY]='AdherenceMinutesOutsideShift'  
+SELECT @intervals_outside_shift = ISNULL(@minutes_outside_shift,120)/@interval_length_minutes 
 
 /*Remove timestamp from datetime*/
 SET	@start_date = convert(smalldatetime,floor(convert(decimal(18,8),@start_date )))
