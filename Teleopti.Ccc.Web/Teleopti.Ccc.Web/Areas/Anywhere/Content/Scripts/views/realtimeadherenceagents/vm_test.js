@@ -266,6 +266,8 @@
 				assert.equals(vm.urlForChangingSchedule({ PersonId: function () { return "personId"; } }), expectedUrl);
 			},
 
+
+
 			"filtering:": {
 				" should only display matching agents": function () {
 					var agent1 = { PersonId: "guid1", Name: "Kurt" },
@@ -441,12 +443,13 @@
 				"should display agents matching time searchwords": function () {
 					var agent1 = { PersonId: "guid1", Name: "Kurt"},
 						agent2 = { PersonId: "guid2", Name: "Glen"},
-						agent1State = { PersonId: "guid1", NextActivity: "Lunch", NextActivityStartTime: moment().format() },
-						agent2State = { PersonId: "guid2", NextActivity: "Lunch", NextActivityStartTime: moment().add('m', 8).format() };
+						agent1State = { PersonId: "guid1", NextActivity: "Lunch", NextActivityStartTime: moment.utc('2014-01-21 13:45').format() },
+						agent2State = { PersonId: "guid2", NextActivity: "Lunch", NextActivityStartTime: moment.utc('2014-01-21 13:00').format() };
 					var vm = viewModel();
 					vm.fillAgents([agent1, agent2]);
 					vm.fillAgentsStates([agent1State, agent2State]);
-					vm.filter(moment().format("mm"));
+
+					vm.filter('13:45');
 
 					assert.equals(vm.filteredAgents().length, 1);
 					assert.equals(vm.filteredAgents()[0].Name(), "Kurt");
