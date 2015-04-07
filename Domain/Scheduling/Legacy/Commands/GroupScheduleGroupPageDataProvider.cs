@@ -58,8 +58,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 						{
 							using (_disableDeletedFilter.Disable())
 							{
-								_contractCollection =
-								_repositoryFactory.CreateContractRepository(uow.Uow).LoadAll();
+								_contractCollection = _repositoryFactory.CreateContractRepository(uow.Uow).LoadAll();
 							}
 						}
 					}

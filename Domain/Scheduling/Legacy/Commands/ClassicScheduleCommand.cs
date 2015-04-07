@@ -25,7 +25,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 		}
 
 		public void Execute(ISchedulingOptions schedulingOptions, IBackgroundWorkerWrapper backgroundWorker,
-			IScheduleOptimizerHelper scheduleOptimizerHelper, IList<IScheduleDay> selectedSchedules,
+			IRequiredScheduleHelper requiredScheduleOptimizerHelper, IList<IScheduleDay> selectedSchedules,
 			ISchedulerStateHolder schedulerStateHolder)
 		{
 			var selectedPeriod = _optimizerHelper.GetSelectedPeriod(selectedSchedules);
@@ -50,29 +50,29 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 			if (daysOnlyHelper.DaysOnly)
 			{
 				if (schedulingOptions.PreferencesDaysOnly || schedulingOptions.UsePreferencesMustHaveOnly)
-					scheduleOptimizerHelper.ScheduleSelectedPersonDays(selectedSchedules, matrixesOfSelectedScheduleDays,
+					requiredScheduleOptimizerHelper.ScheduleSelectedPersonDays(selectedSchedules, matrixesOfSelectedScheduleDays,
 						allMatrixesOfSelectedPersons, true, backgroundWorker,
 						daysOnlyHelper.PreferenceOnlyOptions);
 
 				if (schedulingOptions.RotationDaysOnly)
-					scheduleOptimizerHelper.ScheduleSelectedPersonDays(selectedSchedules, matrixesOfSelectedScheduleDays,
+					requiredScheduleOptimizerHelper.ScheduleSelectedPersonDays(selectedSchedules, matrixesOfSelectedScheduleDays,
 						allMatrixesOfSelectedPersons, true, backgroundWorker,
 						daysOnlyHelper.RotationOnlyOptions);
 
 				if (schedulingOptions.AvailabilityDaysOnly)
-					scheduleOptimizerHelper.ScheduleSelectedPersonDays(selectedSchedules, matrixesOfSelectedScheduleDays,
+					requiredScheduleOptimizerHelper.ScheduleSelectedPersonDays(selectedSchedules, matrixesOfSelectedScheduleDays,
 						allMatrixesOfSelectedPersons, true, backgroundWorker,
 						daysOnlyHelper.AvailabilityOnlyOptions);
 
 				if (daysOnlyHelper.UsePreferencesWithNoDaysOnly || daysOnlyHelper.UseRotationsWithNoDaysOnly ||
 				    daysOnlyHelper.UseAvailabilityWithNoDaysOnly || schedulingOptions.UseStudentAvailability)
-					scheduleOptimizerHelper.ScheduleSelectedPersonDays(selectedSchedules, matrixesOfSelectedScheduleDays,
+					requiredScheduleOptimizerHelper.ScheduleSelectedPersonDays(selectedSchedules, matrixesOfSelectedScheduleDays,
 						allMatrixesOfSelectedPersons, true, backgroundWorker,
 						daysOnlyHelper.NoOnlyOptions);
 
 			}
 			else
-				scheduleOptimizerHelper.ScheduleSelectedPersonDays(selectedSchedules, matrixesOfSelectedScheduleDays,
+				requiredScheduleOptimizerHelper.ScheduleSelectedPersonDays(selectedSchedules, matrixesOfSelectedScheduleDays,
 					allMatrixesOfSelectedPersons, true, backgroundWorker,
 					schedulingOptions);
 

@@ -124,6 +124,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 		private ScheduleViewBase _scheduleView;
 		private RequestView _requestView;
 		private ScheduleOptimizerHelper _scheduleOptimizerHelper;
+		private readonly IRequiredScheduleHelper _requiredScheduleHelper;
 		private readonly IVirtualSkillHelper _virtualSkillHelper;
 		private SchedulerMeetingHelper _schedulerMeetingHelper;
 		private readonly IGridlockManager _gridLockManager;
@@ -333,6 +334,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			_groupPagePerDateHolder = _container.Resolve<IGroupPagePerDateHolder>();
 			_schedulerState = _container.Resolve<ISchedulerStateHolder>();
 			_groupPagesProvider = _container.Resolve<ISchedulerGroupPagesProvider>();
+			_requiredScheduleHelper = _container.Resolve<IRequiredScheduleHelper>();
 
 			_schedulerState.SetRequestedScenario(loadScenario);
 			_schedulerState.RequestedPeriod = new DateOnlyPeriodAsDateTimePeriod(loadingPeriod, TeleoptiPrincipal.CurrentPrincipal.Regional.TimeZone);
@@ -2945,7 +2947,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			_undoRedo.CreateBatch(Resources.UndoRedoScheduling);
 			var argument = (SchedulingAndOptimizeArgument)e.Argument;
 			var scheduleDays = argument.SelectedScheduleDays;
-			var selectedPeriod = new OptimizerHelperHelper().GetSelectedPeriod(scheduleDays);
+			var selectedPeriod = new InnerOptimizerHelperHelper().GetSelectedPeriod(scheduleDays);
 			turnOffCalculateMinMaxCacheIfNeeded(_optimizerOriginalPreferences.SchedulingOptions);
 			AdvanceLoggingService.LogSchedulingInfo(_optimizerOriginalPreferences.SchedulingOptions,
 			                                        scheduleDays.Select(x => x.Person).Distinct().Count(),
@@ -2967,7 +2969,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			{
 				var scheduleCommand = _container.Resolve<ScheduleCommand>();
 				scheduleCommand.Execute(_optimizerOriginalPreferences, new BackgroundWorkerWrapper(_backgroundWorkerScheduling), _schedulerState,
-										argument.SelectedScheduleDays, _groupPagePerDateHolder, _scheduleOptimizerHelper,
+										argument.SelectedScheduleDays, _groupPagePerDateHolder, _requiredScheduleHelper,
 										_optimizationPreferences);
 			}
 			
@@ -3178,7 +3180,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 
 			var scheduleDays = argument.SelectedScheduleDays;
 
-			var selectedPeriod = new OptimizerHelperHelper().GetSelectedPeriod(scheduleDays);
+			var selectedPeriod = new InnerOptimizerHelperHelper().GetSelectedPeriod(scheduleDays);
 
 			IList<IScheduleMatrixPro> matrixesOfSelectedScheduleDays = _container.Resolve<IMatrixListFactory>().CreateMatrixList(scheduleDays, selectedPeriod);
 			if (matrixesOfSelectedScheduleDays.Count == 0)
@@ -3248,7 +3250,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			_undoRedo.CreateBatch(Resources.UndoRedoReOptimize);
 			var argument = (SchedulingAndOptimizeArgument)e.Argument;
 			var scheduleDays = argument.SelectedScheduleDays;
-			var selectedPeriod = new OptimizerHelperHelper().GetSelectedPeriod(scheduleDays);
+			var selectedPeriod = new InnerOptimizerHelperHelper().GetSelectedPeriod(scheduleDays);
 			var dateOnlyList = selectedPeriod.DayCollection();
 			_schedulerState.SchedulingResultState.SkillDaysOnDateOnly(dateOnlyList);
 			var optimizerPreferences = _container.Resolve<IOptimizationPreferences>();
@@ -3343,7 +3345,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			}
 
 			var toggleManager = _container.Resolve<IToggleManager>();
-			_scheduleOptimizerHelper = new ScheduleOptimizerHelper(_container, optimizerHelper, toggleManager);
+			_scheduleOptimizerHelper = new ScheduleOptimizerHelper(_container, optimizerHelper, toggleManager, _requiredScheduleHelper);
 
 			if (!_schedulerState.SchedulingResultState.SkipResourceCalculation && !_teamLeaderMode)
 			{

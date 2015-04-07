@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using NUnit.Framework;
@@ -53,6 +54,12 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 		public void VerifyBusinessUnitCollection()
 		{
             var expected = ((ITeleoptiIdentity)TeleoptiPrincipal.CurrentPrincipal.Identity).BusinessUnit;
+			var repository = MockRepository.GenerateMock<IBusinessUnitRepository>();
+
+			commonMocks();
+			_repositoryFactory.Stub(x => x.CreateBusinessUnitRepository(_uow)).Return(repository);
+			repository.Stub(x => x.Get(expected.Id.GetValueOrDefault())).Return(expected);
+			repository.Stub(x => x.LoadHierarchyInformation(expected)).Return(expected);
 
 			Assert.AreEqual(expected, _target.BusinessUnitCollection.FirstOrDefault());
 		}
@@ -62,11 +69,11 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 		{
 			var repository = MockRepository.GenerateMock<IContractRepository>();
 
-				commonMocks();
-				_repositoryFactory.Stub(x => x.CreateContractRepository(_uow)).Return(repository);
-				repository.Stub(x => x.LoadAll()).Return(new List<IContract>());
+			commonMocks();
+			_repositoryFactory.Stub(x => x.CreateContractRepository(_uow)).Return(repository);
+			repository.Stub(x => x.LoadAll()).Return(new List<IContract>());
 
-				Assert.IsNull(_target.ContractCollection.FirstOrDefault());
+			Assert.IsNull(_target.ContractCollection.FirstOrDefault());
 		}
 
 		[Test]
@@ -117,7 +124,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 			var repository = MockRepository.GenerateMock<IGroupPageRepository>();
 			var dic = MockRepository.GenerateMock<IScheduleDictionary>();
 
-			_unitOfWorkFactory.Stub(x => x.CreateAndOpenUnitOfWork()).Return(_uow);
+			commonMocks();
 			_resultHolder.Stub(x => x.Schedules).Return(dic).Repeat.Twice();
 			dic.Stub(x => x.Keys).Return(new List<IPerson>()).Repeat.Twice();
 			_repositoryFactory.Stub(x => x.CreateGroupPageRepository(_uow)).Return(repository);
@@ -131,7 +138,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 		public void VerifySkillCollection()
 		{
 			var repository = MockRepository.GenerateMock<ISkillRepository>();
-			_unitOfWorkFactory.Stub(x => x.CreateAndOpenUnitOfWork()).Return(_uow);
+			commonMocks();
 			_repositoryFactory.Stub(x => x.CreateSkillRepository(_uow)).Return(repository);
 			repository.Stub(x => x.LoadAll()).Return(new List<ISkill>());
 
@@ -168,6 +175,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 
 		private void commonMocks()
 		{
+			_unitOfWorkFactory.Stub(x => x.CurrentUnitOfWork()).Throw(new Exception("Error, no current uow!"));
 			_unitOfWorkFactory.Stub(x => x.CreateAndOpenUnitOfWork()).Return(_uow);
 			_disableDeletedFilter.Stub(x => x.Disable()).Return(_uow);
 		}

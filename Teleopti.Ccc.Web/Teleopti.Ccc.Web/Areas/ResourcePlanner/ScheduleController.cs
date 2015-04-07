@@ -55,12 +55,13 @@ namespace Teleopti.Ccc.Web.Areas.ResourcePlanner
 		private readonly IPersonRepository _personRepository;
 		private readonly IScheduleRepository _scheduleRepository;
 		private readonly IDayOffTemplateRepository _dayOffTemplateRepository;
+		private readonly IPersonAbsenceAccountRepository _personAbsenceAccountRepository;
 		private readonly IPeopleAndSkillLoaderDecider _decider;
 		private readonly ICurrentTeleoptiPrincipal _principal;
 		private readonly IDisableDeletedFilter _disableDeletedFilter;
 		private readonly ICurrentUnitOfWorkFactory _currentUnitOfWorkFactory;
 
-		public ScheduleController(IScenarioRepository scenarioRepository, ISkillDayLoadHelper skillDayLoadHelper, ISkillRepository skillRepository, IPersonRepository personRepository, IScheduleRepository scheduleRepository, IDayOffTemplateRepository dayOffTemplateRepository, IPeopleAndSkillLoaderDecider decider, ICurrentTeleoptiPrincipal principal, IDisableDeletedFilter disableDeletedFilter, ICurrentUnitOfWorkFactory currentUnitOfWorkFactory)
+		public ScheduleController(IScenarioRepository scenarioRepository, ISkillDayLoadHelper skillDayLoadHelper, ISkillRepository skillRepository, IPersonRepository personRepository, IScheduleRepository scheduleRepository, IDayOffTemplateRepository dayOffTemplateRepository, IPersonAbsenceAccountRepository personAbsenceAccountRepository, IPeopleAndSkillLoaderDecider decider, ICurrentTeleoptiPrincipal principal, IDisableDeletedFilter disableDeletedFilter, ICurrentUnitOfWorkFactory currentUnitOfWorkFactory)
 		{
 			_scenarioRepository = scenarioRepository;
 			_skillDayLoadHelper = skillDayLoadHelper;
@@ -68,6 +69,7 @@ namespace Teleopti.Ccc.Web.Areas.ResourcePlanner
 			_personRepository = personRepository;
 			_scheduleRepository = scheduleRepository;
 			_dayOffTemplateRepository = dayOffTemplateRepository;
+			_personAbsenceAccountRepository = personAbsenceAccountRepository;
 			_decider = decider;
 			_principal = principal;
 			_disableDeletedFilter = disableDeletedFilter;
@@ -129,7 +131,7 @@ namespace Teleopti.Ccc.Web.Areas.ResourcePlanner
 				effectiveRestrictionCreator,
 				new ScheduleService(
 					new WorkShiftFinderService(stateHolder, new PreSchedulingStatusChecker(),
-						new ShiftProjectionCacheFilter(new LongestPeriodForAssignmentCalculator(), new PersonalShiftAndMeetingFilter()),
+						new ShiftProjectionCacheFilter(new LongestPeriodForAssignmentCalculator(), new PersonalShiftAndMeetingFilter(), new NotOverWritableActivitiesShiftFilter(stateHolder)),
 						new PersonSkillPeriodsDataHolderManager(stateHolder),
 						shiftProjectionCacheManager,
 						new WorkShiftCalculatorsManager(workShiftCalculator,
@@ -168,7 +170,8 @@ namespace Teleopti.Ccc.Web.Areas.ResourcePlanner
 
 			var schedulerStateHolder = new SchedulerStateHolder(scenario,new DateOnlyPeriodAsDateTimePeriod(period,timeZone),allPeople,_disableDeletedFilter,stateHolder);
 			schedulerStateHolder.LoadCommonState(_currentUnitOfWorkFactory.LoggedOnUnitOfWorkFactory().CurrentUnitOfWork(), new RepositoryFactory());
-			
+			stateHolder.AllPersonAccounts = _personAbsenceAccountRepository.FindByUsers(selectedPeople);
+
 			var groupPageDataProvider = new GroupScheduleGroupPageDataProvider(schedulerStateHolder,new RepositoryFactory(), _currentUnitOfWorkFactory.LoggedOnUnitOfWorkFactory(), _disableDeletedFilter);
 			var scheduleDayEquator = new ScheduleDayEquator(new EditableShiftMapper());
 			var groupPersonSkillAggregator = new GroupPersonSkillAggregator();
@@ -332,6 +335,23 @@ namespace Teleopti.Ccc.Web.Areas.ResourcePlanner
 			EventHandler<SchedulingServiceBaseEventArgs> schedulingServiceOnDayScheduled = (sender, args) => daysScheduled++;
 			schedulingService.DayScheduled += schedulingServiceOnDayScheduled;
 
+			var scheduleService =
+				new ScheduleService(
+					new WorkShiftFinderService(stateHolder, new PreSchedulingStatusChecker(),
+						new ShiftProjectionCacheFilter(new LongestPeriodForAssignmentCalculator(), new PersonalShiftAndMeetingFilter(),
+							new NotOverWritableActivitiesShiftFilter(stateHolder)), new PersonSkillPeriodsDataHolderManager(stateHolder),
+						shiftProjectionCacheManager,
+						new WorkShiftCalculatorsManager(new WorkShiftCalculator(),
+							new NonBlendWorkShiftCalculator(new NonBlendSkillImpactOnPeriodForProjection(), new WorkShiftCalculator(),
+								personSkillProvider)), workShiftMinMaxCalculator,
+						new FairnessAndMaxSeatCalculatorsManager(stateHolder,
+							new ShiftCategoryFairnessManager(stateHolder,
+								new GroupShiftCategoryFairnessCreator(groupPagePerDateHolder, stateHolder),
+								new ShiftCategoryFairnessCalculator()), new ShiftCategoryFairnessShiftValueCalculator(),
+							new FairnessValueCalculator(), new SeatLimitationWorkShiftCalculator2(new SeatImpactOnPeriodForProjection())),
+						new ShiftLengthDecider(new DesiredShiftLengthCalculator(new SchedulePeriodTargetTimeCalculator()))),
+					new ScheduleMatrixListCreator(stateHolder), new ShiftCategoryLimitationChecker(stateHolder),
+					effectiveRestrictionCreator);
 			command.Execute(new OptimizerOriginalPreferences(new SchedulingOptions
 			{
 				UseAvailability = true,
@@ -340,12 +360,32 @@ namespace Teleopti.Ccc.Web.Areas.ResourcePlanner
 				UseStudentAvailability = true,
 				DayOffTemplate = _dayOffTemplateRepository.FindAllDayOffsSortByDescription()[0],
 				ScheduleEmploymentType = ScheduleEmploymentType.FixedStaff,
-				GroupPageForShiftCategoryFairness = new GroupPageLight { Key = "Main", Name = UserTexts.Resources.Main },
+				GroupPageForShiftCategoryFairness = new GroupPageLight {Key = "Main", Name = UserTexts.Resources.Main},
 				TagToUseOnScheduling = NullScheduleTag.Instance
-			}), new FakeBackgroundWorker(), schedulerStateHolder, allSchedules, groupPagePerDateHolder, null, new OptimizationPreferences());
+			}), new FakeBackgroundWorker(), schedulerStateHolder, allSchedules, groupPagePerDateHolder,
+				new RequiredScheduleHelper(
+					new SchedulePeriodListShiftCategoryBackToLegalStateService(stateHolder,
+						new ScheduleMatrixValueCalculatorProFactory(), new ScheduleFairnessCalculator(stateHolder),
+						new ScheduleDayService(scheduleService, deleteSchedulePartService, resourceOptimizationHelper,
+							effectiveRestrictionCreator, schedulePartModifyAndRollbackService),
+						resourceCalculationOnlyScheduleDayChangeCallback),
+					new RuleSetBagsOfGroupOfPeopleCanHaveShortBreak(new RuleSetBagsOfGroupOfPeopleCanHaveShortBreakLoader()),
+					stateHolder, schedulingService, null, new OptimizationPreferences(), scheduleService, resourceOptimizationHelper,
+					new GridlockManager(),
+					new DaysOffSchedulingService(
+						new AbsencePreferenceScheduler(effectiveRestrictionCreator, schedulePartModifyAndRollbackService,
+							new AbsencePreferenceFullDayLayerCreator()),
+						new DayOffScheduler(new DayOffsInPeriodCalculator(stateHolder), effectiveRestrictionCreator,
+							schedulePartModifyAndRollbackService, new ScheduleDayAvailableForDayOffSpecification(),
+							hasContractDayOffDefinition),
+						new MissingDaysOffScheduler(new BestSpotForAddingDayOffFinder(), new MatrixDataListInSteadyState(),
+							new MatrixDataListCreator(scheduleDayDataMapper),
+							new MatrixDataWithToFewDaysOff(new DayOffsInPeriodCalculator(stateHolder)))), new WorkShiftFinderResultHolder(),
+					resourceCalculationOnlyScheduleDayChangeCallback, scheduleDayEquator, matrixListFactory),
+				new OptimizationPreferences());
 			schedulingService.DayScheduled -= schedulingServiceOnDayScheduled;
 
-			return Ok(new SchedulingResultModel());
+			return Ok(new SchedulingResultModel{DaysScheduled = daysScheduled});
 		}
 	}
 

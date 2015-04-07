@@ -68,6 +68,7 @@ namespace Teleopti.Ccc.WinCode.Autofac
 			builder.RegisterModule(new RuleSetModule(_configuration, true));
 			builder.RegisterType<DisableDeletedFilter>().As<IDisableDeletedFilter>().SingleInstance();
 			builder.RegisterType<InnerOptimizerHelperHelper>().As<IOptimizerHelperHelper>().SingleInstance();
+			builder.RegisterType<RequiredScheduleHelper>().As<IRequiredScheduleHelper>().InstancePerLifetimeScope();
 			builder.RegisterType<ScheduleCommandToggle>().As<IScheduleCommandToggle>().SingleInstance();
 
 			builder.RegisterModule<WeeklyRestSolverModule>();

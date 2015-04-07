@@ -48,7 +48,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 
 		public void Execute(IOptimizerOriginalPreferences optimizerOriginalPreferences, IBackgroundWorkerWrapper backgroundWorker,
 			ISchedulerStateHolder schedulerStateHolder, IList<IScheduleDay> selectedScheduleDays,
-			IGroupPagePerDateHolder groupPagePerDateHolder, IScheduleOptimizerHelper scheduleOptimizerHelper,
+			IGroupPagePerDateHolder groupPagePerDateHolder, IRequiredScheduleHelper requiredScheduleOptimizerHelper,
 			IOptimizationPreferences optimizationPreferences)
 		{
 			setThreadCulture();
@@ -95,20 +95,20 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 							new SchedulePartModifyAndRollbackService(schedulerStateHolder.SchedulingResultState,
 								_scheduleDayChangeCallback,
 								new ScheduleTagSetter(schedulingOptions.TagToUseOnScheduling));
-						scheduleOptimizerHelper.WorkShiftFinderResultHolder =
+						requiredScheduleOptimizerHelper.WorkShiftFinderResultHolder =
 							_teamBlockScheduleCommand.Execute(schedulingOptions, backgroundWorker, selectedPersons, selectedScheduleDays,
 								rollbackService, resourceCalculateDelayer);
 					}
 					else
 					{
-						_classicScheduleCommand.Execute(schedulingOptions, backgroundWorker, scheduleOptimizerHelper, selectedScheduleDays,
+						_classicScheduleCommand.Execute(schedulingOptions, backgroundWorker, requiredScheduleOptimizerHelper, selectedScheduleDays,
 							schedulerStateHolder);
 					}
 				}
 			}
 			else
 			{
-				scheduleOptimizerHelper.ScheduleSelectedStudents(selectedScheduleDays, backgroundWorker, schedulingOptions);
+				requiredScheduleOptimizerHelper.ScheduleSelectedStudents(selectedScheduleDays, backgroundWorker, schedulingOptions);
 			}
 
 			//shiftcategorylimitations
@@ -130,7 +130,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 					if (matrixesOfSelectedScheduleDays.Count == 0)
 						return;
 
-					scheduleOptimizerHelper.RemoveShiftCategoryBackToLegalState(matrixesOfSelectedScheduleDays, backgroundWorker,
+					requiredScheduleOptimizerHelper.RemoveShiftCategoryBackToLegalState(matrixesOfSelectedScheduleDays, backgroundWorker,
 						optimizationPreferences,
 						schedulingOptions,
 						selectedPeriod, allMatrixes);

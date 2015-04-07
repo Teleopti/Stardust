@@ -5,7 +5,6 @@ using System.Windows.Forms;
 using Syncfusion.Windows.Forms;
 using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
 using Teleopti.Ccc.Win.Scheduling.ScheduleReporting;
-using Teleopti.Ccc.WinCode.Common;
 using Teleopti.Ccc.WinCode.Scheduling;
 using Teleopti.Ccc.WinCode.Scheduling.ScheduleReporting;
 using Teleopti.Interfaces.Domain;
@@ -86,7 +85,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 				}
 			}
 
-			var period = new OptimizerHelperHelper().GetSelectedPeriod(selection);
+			var period = new InnerOptimizerHelperHelper().GetSelectedPeriod(selection);
 
 			if (model.Team)
 				ScheduleToPdfManager.ExportShiftPerDayTeamViewGraphical(_culture, personDic, period,

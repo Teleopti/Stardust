@@ -28,7 +28,7 @@ namespace Teleopti.Ccc.WebTest.Areas.ResourcePlanner
 			var target = new ScheduleController(new FakeScenarioRepository(scenario),
 				MockRepository.GenerateMock<ISkillDayLoadHelper>(), MockRepository.GenerateMock<ISkillRepository>(),
 				personRepository, MockRepository.GenerateMock<IScheduleRepository>(),
-				MockRepository.GenerateMock<IDayOffTemplateRepository>(),
+				MockRepository.GenerateMock<IDayOffTemplateRepository>(), MockRepository.GenerateMock<IPersonAbsenceAccountRepository>(),
 				MockRepository.GenerateMock<IPeopleAndSkillLoaderDecider>(),
 				new FakeCurrentTeleoptiPrincipal(new TeleoptiPrincipal(new TeleoptiIdentity("", null, null, null),
 					PersonFactory.CreatePerson(new Name("Anna", "Andersson"), TimeZoneInfo.Utc))),
