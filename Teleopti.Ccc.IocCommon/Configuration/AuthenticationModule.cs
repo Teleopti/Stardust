@@ -8,6 +8,7 @@ using Teleopti.Ccc.Domain.Security.Authentication;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.Security.AuthorizationEntities;
 using Teleopti.Ccc.Domain.Security.Principal;
+using Teleopti.Ccc.Infrastructure.Config;
 using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.Infrastructure.Toggle;
@@ -54,14 +55,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<CheckBruteForce>()
 				.As<ICheckBruteForce>()
 				.SingleInstance();
-			builder.Register<IPasswordPolicy>(c =>
-							{
-								if (c.Resolve<IApplicationData>().LoadPasswordPolicyService == null)
-									return new DummyPasswordPolicy();
-								return new PasswordPolicy(c.Resolve<ILoadPasswordPolicyService>());
-							})
-			.As<IPasswordPolicy>()
-			.SingleInstance();
+			builder.RegisterType<PasswordPolicy>().As<IPasswordPolicy>().SingleInstance();
 			builder.RegisterType<RoleToPrincipalCommand>().As<IRoleToPrincipalCommand>().InstancePerDependency();
 			builder.RegisterType<FunctionsForRoleProvider>().As<IFunctionsForRoleProvider>().InstancePerDependency();
 			builder.RegisterType<LicensedFunctionsProvider>().As<ILicensedFunctionsProvider>().SingleInstance();
@@ -77,7 +71,12 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 				.As<IApplicationData>().SingleInstance()
 				.ExternallyOwned();
 
-			builder.Register(c => c.Resolve<IApplicationData>().LoadPasswordPolicyService).As<ILoadPasswordPolicyService>().SingleInstance();
+			builder.Register(c =>
+			{
+				var passwordPolicyService = c.Resolve<IApplicationData>().LoadPasswordPolicyService;
+				return passwordPolicyService ?? new ThrowingLoadPasswordPolicyService();
+			}).As<ILoadPasswordPolicyService>().SingleInstance();
+
 			builder.RegisterType<ModifyPassword>().As<IModifyPassword>().SingleInstance();
 			builder.RegisterType<CurrentTeleoptiPrincipal>()
 				.As<ICurrentTeleoptiPrincipal>()
