@@ -47,9 +47,8 @@ namespace Teleopti.Ccc.WebBehaviorTest.Forecasting
 		{
 			Browser.Interactions.ClickContaining(".skill", skill);
 			Browser.Interactions.AssertExistsUsingJQuery(".skill:contains('" + skill + "').selected");
-			Browser.Interactions.AssertExistsUsingJQuery(".skill~ ol .workload:first.selected");
-			Browser.Interactions.AssertExistsUsingJQuery(".skill~ ol .workload:last.selected");
-
+			Browser.Interactions.AssertExistsUsingJQuery(".workload:first.selected");
+			Browser.Interactions.AssertExistsUsingJQuery(".workload:last.selected");
 		}
 
 		[When(@"I select workload '(.*)'")]
@@ -65,13 +64,20 @@ namespace Teleopti.Ccc.WebBehaviorTest.Forecasting
 			Browser.Interactions.Click(".apply");
 		}
 
+		[When(@"I use default forecast period and forecast for all")]
+		public void WhenIUseDefaultForecastPeriodAndForecastForAll()
+		{
+			ScenarioContext.Current.Add("startdate", new DateOnly(DateTime.Parse(Browser.Interactions.GetText("span.startDate"))));
+			ScenarioContext.Current.Add("enddate", new DateOnly(DateTime.Parse(Browser.Interactions.GetText("span.endDate"))));
+			Browser.Interactions.Click(".next-step-all");
+		}
 
-		[When(@"I use default forecast period and continue")]
+		[When(@"I use default forecast period and continue with advanced")]
 		public void WhenIClickQuickforecaster()
 		{
 			ScenarioContext.Current.Add("startdate", new DateOnly(DateTime.Parse(Browser.Interactions.GetText("span.startDate"))));
 			ScenarioContext.Current.Add("enddate", new DateOnly(DateTime.Parse(Browser.Interactions.GetText("span.endDate"))));
-			Browser.Interactions.Click(".advanced-next-step");
+			Browser.Interactions.Click(".next-step-advanced");
 		}
 
 		[Then(@"there is forecast data for default period for '(.*)'")]

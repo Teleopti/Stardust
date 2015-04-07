@@ -8,11 +8,11 @@ angular.module('wfm.forecasting', [])
 			var endDate = moment().add(2, 'months').startOf('month').toDate();
 			$scope.period = { startDate: startDate, endDate: endDate }; //use moment to get first day of next month
 
-			$scope.expressNextStep = function (period) {
+			$scope.nextStepAll = function (period) {
 				$state.go('forecasting.runall', { period: period });
 			};
 
-			$scope.advancedNextStep = function (period) {
+			$scope.nextStepAdvanced = function (period) {
 				$state.go('forecasting.target', { period: period });
 			};
 		}
