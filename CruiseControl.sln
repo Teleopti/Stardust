@@ -133,8 +133,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Teleopti.Ccc.TestCommon", "
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Teleopti.Analytics.Etl.ServiceLogic", "Teleopti.Analytics\Teleopti.Analytics.Etl.ServiceLogic\Teleopti.Analytics.Etl.ServiceLogic.csproj", "{05CD04D6-F77B-4965-84E5-4860318CF602}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Teleopti.Ccc.Sdk.Client", "Teleopti.Ccc.Sdk\Teleopti.Ccc.Sdk.Client\Teleopti.Ccc.Sdk.Client.csproj", "{FE264E1E-50FF-4A59-A297-AD9A565C632C}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ClickOnceSign", "WISE\tools\ClickOnceSign\ClickOnceSign\ClickOnceSign.csproj", "{5BB36BB7-6F2B-4CC9-B863-16AA4D642C4D}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Teleopti.Ccc.Web", "Teleopti.Ccc.Web\Teleopti.Ccc.Web\Teleopti.Ccc.Web.csproj", "{0A5EBAA1-BDC2-4997-873F-4FA43E3BC275}"
@@ -877,18 +875,6 @@ Global
 		{05CD04D6-F77B-4965-84E5-4860318CF602}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
 		{05CD04D6-F77B-4965-84E5-4860318CF602}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{05CD04D6-F77B-4965-84E5-4860318CF602}.Release|x86.ActiveCfg = Release|Any CPU
-		{FE264E1E-50FF-4A59-A297-AD9A565C632C}.Debug|.NET.ActiveCfg = Debug|Any CPU
-		{FE264E1E-50FF-4A59-A297-AD9A565C632C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{FE264E1E-50FF-4A59-A297-AD9A565C632C}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{FE264E1E-50FF-4A59-A297-AD9A565C632C}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
-		{FE264E1E-50FF-4A59-A297-AD9A565C632C}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
-		{FE264E1E-50FF-4A59-A297-AD9A565C632C}.Debug|x86.ActiveCfg = Debug|Any CPU
-		{FE264E1E-50FF-4A59-A297-AD9A565C632C}.Release|.NET.ActiveCfg = Release|Any CPU
-		{FE264E1E-50FF-4A59-A297-AD9A565C632C}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{FE264E1E-50FF-4A59-A297-AD9A565C632C}.Release|Any CPU.Build.0 = Release|Any CPU
-		{FE264E1E-50FF-4A59-A297-AD9A565C632C}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
-		{FE264E1E-50FF-4A59-A297-AD9A565C632C}.Release|Mixed Platforms.Build.0 = Release|Any CPU
-		{FE264E1E-50FF-4A59-A297-AD9A565C632C}.Release|x86.ActiveCfg = Release|Any CPU
 		{5BB36BB7-6F2B-4CC9-B863-16AA4D642C4D}.Debug|.NET.ActiveCfg = Debug|Any CPU
 		{5BB36BB7-6F2B-4CC9-B863-16AA4D642C4D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{5BB36BB7-6F2B-4CC9-B863-16AA4D642C4D}.Debug|Any CPU.Build.0 = Debug|Any CPU
