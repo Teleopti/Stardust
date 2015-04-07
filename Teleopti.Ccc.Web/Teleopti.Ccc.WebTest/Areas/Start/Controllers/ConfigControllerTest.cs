@@ -1,19 +1,24 @@
 ﻿using NUnit.Framework;
+using Rhino.Mocks;
 using SharpTestsEx;
 using Teleopti.Ccc.Web.Areas.Start.Controllers;
+using Teleopti.Ccc.Web.Areas.Start.Core.Config;
 
 namespace Teleopti.Ccc.WebTest.Areas.Start.Controllers
 {
 	[TestFixture]
 	public class ConfigControllerTest
 	{
-		private ConfigController _target;
-
 		[Test]
-		public void ShouldGetSomething()
+		public void ShouldGetSharedSettings()
 		{
-			_target = new ConfigController();
-			_target.SharedSettings().Should().Not.Be.Null();
+			var expected = new SharedSettings();
+			var factory = MockRepository.GenerateMock<ISharedSettingsFactory>();
+			factory.Expect(x => x.Create()).Return(expected);
+			var target = new ConfigController(factory);
+			var result = (SharedSettings)target.SharedSettings().Data;
+
+			result.Should().Be.SameInstanceAs(expected);
 		}
 	}
 

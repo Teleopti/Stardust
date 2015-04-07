@@ -515,6 +515,9 @@
     <Compile Include="Areas\SSO\Core\ISsoAuthenticator.cs" />
     <Compile Include="Areas\Start\Controllers\ConfigController.cs" />
     <Compile Include="Areas\Start\Core\Authentication\Services\ILogLogonAttempt.cs" />
+    <Compile Include="Areas\Start\Core\Config\ISharedSettingsFactory.cs" />
+    <Compile Include="Areas\Start\Core\Config\SharedSettings.cs" />
+    <Compile Include="Areas\Start\Core\Config\SharedSettingsFactory.cs" />
     <Compile Include="Areas\Tenant\Core\DataSourceConfiguration.cs" />
     <Compile Include="Areas\Tenant\Core\DataSourceConfigurationProviderUsingNhibFiles.cs" />
     <Compile Include="Areas\Tenant\Core\IDataSourceConfigurationProvider.cs" />
