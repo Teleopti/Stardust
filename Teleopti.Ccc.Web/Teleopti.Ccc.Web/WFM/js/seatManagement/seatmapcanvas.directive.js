@@ -10,7 +10,6 @@
 			bindToController: true,
 			templateUrl: "js/seatManagement/html/seatmapcanvas.html",
 			link: linkFunction
-
 		};
 	};
 
@@ -31,6 +30,8 @@
 		vm.allowEdit = false;
 		vm.seatMapId = null;
 		vm.parentId = null;
+		vm.newLocationName = '';
+		vm.fileCallbackFunction = null;
 
 		init();
 
@@ -50,22 +51,51 @@
 			canvasEditor.addSeat(canvas, false);
 		};
 
+		vm.addImage = function() {
+			vm.showFileDialog = true;
+			vm.fileCallbackFunction = vm.addChosenImage;
+		};
+
+		vm.addChosenImage = function(image) {
+			vm.showFileDialog = false;
+			canvasEditor.addImage(canvas, image);
+		};
+
+		vm.setBackgroundImage = function() {
+			vm.showFileDialog = true;
+			vm.fileCallbackFunction = vm.setChosenBackgroundImage;
+		};
+
+		vm.setChosenBackgroundImage = function (image) {
+			vm.showFileDialog = false;
+			canvasEditor.setBackgroundImage(canvas, image);
+		};
+		
+		vm.addLocation = function () {
+			vm.newLocationName = '';
+			vm.showLocationDialog = true;
+		};
+
+		vm.addNamedLocation = function() {
+			vm.showLocationDialog = false;
+			canvasEditor.addLocation(canvas, vm.newLocationName);
+		};
+
+		vm.showLocationDialog = false;
+
 		vm.save = saveData;
 
 		vm.handleBreadcrumbClick = function (id) {
 			canvasUtils.loadSeatMap(id, canvas, vm.allowEdit, onLoadSeatMapSuccess, onLoadSeatMapFailure);
 		};
 
-		//vm.group = function() {
-		//	canvasEditor.group(canvas);
-		//};
+		vm.group = function() {
+			canvasEditor.group(canvas);
+		};
 
-		vm.group = callFunctionWithCanvas(canvasEditor.group);
-		vm.ungroup = callFunctionWithCanvas(canvasEditor.ungroup);
-			//function() {
-			//canvasEditor.ungroup(canvas);
-		//};
-
+		vm.ungroup = function() {
+			canvasEditor.ungroup(canvas);
+		};
 
 		vm.sendToBack = function() {
 			canvasEditor.sendToBack(canvas);
@@ -99,11 +129,6 @@
 			canvasEditor.alignBottom(canvas);
 		};
 
-
-		function callFunctionWithCanvas( funct ) {
-			funct(canvas);
-		}
-
 		function init() {
 			canvasUtils.setSelectionMode(canvas, vm.allowEdit);
 			canvasUtils.setupCanvas(canvas);
@@ -114,6 +139,7 @@
 			});
 
 			resize();
+
 			createListenersKeyboard();
 			canvasUtils.loadSeatMap(null, canvas, vm.allowEdit, onLoadSeatMapSuccess, onLoadSeatMapFailure);
 		};
@@ -123,7 +149,7 @@
 		};
 
 		function resize() {
-			canvasUtils.resize(canvas);
+			canvasUtils.resize(canvas,vm.element);
 		};
 
 		//Robtodo: refactor - use $document and perhaps move to edit service.
@@ -159,6 +185,7 @@
 			vm.parentId = data.ParentId;
 			vm.seatMapId = data.Id;
 			vm.breadcrumbs = data.BreadcrumbInfo;
+			vm.seatPriority = data.seatPriority;
 
 			//self.ResetZoom();
 			//self.CacheObjectsAsImages();
@@ -187,7 +214,6 @@
 
 		function onSaveSuccess() {
 			alert('saved');
-
 			//Robtodo: Success Message
 			vm.allowEdit = false;
 			refreshSeatMap();
@@ -197,11 +223,12 @@
 			var childLocations = [];
 			var locations = canvasUtils.getObjectsByType(canvas, 'location');
 			for (var i in locations) {
+				var location = locations[i];
 				childLocations.push(
 				{
-					Id: locations[i].id,
-					Name: locations[i].name,
-					IsNew: locations[i].isNew
+					Id: location.id,
+					Name: location.name,
+					IsNew: (location.isNew === undefined) ? false : true
 				});
 			}
 			return childLocations;

@@ -42,7 +42,7 @@ namespace Teleopti.Ccc.WebTest.Areas.SeatPlanner.Controllers
 
 			_seatMapLocationRepository.Stub(x => x.LoadAggregate(seatMapLocation.Id.Value)).Return(seatMapLocation);
 
-			var result = _seatMapController.Get(seatMapLocation.Id) as LocationViewModel;
+			var result = _seatMapController.Get(seatMapLocation.Id);
 
 			Assert.True(result.GetType() == typeof(LocationViewModel));
 			Assert.True(result.Id == seatMapLocation.Id);

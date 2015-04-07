@@ -14,10 +14,14 @@ angular.module('wfm.seatMap')
 		}
 
 		utils.resize = function (canvas) {
-			var container = canvas.wrapperEl.parentElement;
-			//Robtodo: do properly
-			canvas.setHeight($(container).height());
-			canvas.setWidth(container.clientWidth);
+			
+			//Robtodo: review hack
+			var container = $('#seatmapcanvas')[0];
+			var resizedAncestor = container.parentElement.parentElement.parentElement;
+			var top = $('#seatmapcanvas').position().top-560;
+		
+			canvas.setHeight(resizedAncestor.clientHeight-top);
+			canvas.setWidth(resizedAncestor.clientWidth);
 		};
 
 		utils.toggleMoveMode = function (canvas) {
@@ -102,14 +106,13 @@ angular.module('wfm.seatMap')
 				return [obj];
 			}
 			if (obj.get('type') == 'group') {
-				utils.getObjectsOfTypeFromGroup(obj, type);
+				return utils.getObjectsOfTypeFromGroup(obj, type);
 			}
 
 			return null;
 		};
 
 		utils.getObjectsOfTypeFromGroup = function (group, type) {
-
 			var groupObjects = group.getObjects();
 			var objs = [];
 			for (var i in groupObjects) {
@@ -149,6 +152,7 @@ angular.module('wfm.seatMap')
 		};
 
 		utils.getHighestSeatPriority = function (canvas) {
+
 			var seatObjects = utils.getObjectsByType(canvas, 'seat');
 			var highestPriority = 0;
 			for (var i in seatObjects) {
@@ -159,7 +163,6 @@ angular.module('wfm.seatMap')
 			}
 			return highestPriority;
 		};
-
 
 		utils.clearCanvas = function (canvas) {
 			if (canvas != null) {

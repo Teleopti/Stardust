@@ -1672,6 +1672,10 @@
     <Content Include="WFM\vendor\MaterialDesignIcons-0.5.18\license.txt" />
     <Content Include="WFM\vendor\MaterialDesignIcons-0.5.18\MaterialDesignIcons.css" />
     <Content Include="WFM\vendor\MaterialDesignIcons-0.5.18\MaterialDesignIcons.html" />
+    <Content Include="WFM\vendor\ng-image-input-with-preview\ng-image-input-with-preview.css" />
+    <Content Include="WFM\vendor\ng-image-input-with-preview\ng-image-input-with-preview.js" />
+    <Content Include="WFM\vendor\ng-image-input-with-preview\ng-image-input-with-preview.min.css" />
+    <Content Include="WFM\vendor\ng-image-input-with-preview\ng-image-input-with-preview.min.js" />
     <Content Include="WFM\vendor\ui-bootstrap.min.js" />
     <Content Include="Content\amplify\amplify.min.js" />
     <Content Include="Content\bootstrap-timepicker\css\bootstrap-timepicker.css" />
