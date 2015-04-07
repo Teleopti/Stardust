@@ -41,7 +41,7 @@
 			   { code: 'AUX3', loggedon: true },
 			   { code: 'AUX4', loggedon: true },
 			   { code: 'AUX5' , loggedon : true },
-			   { code: 'LOG OFF' , loggedon : false }
+			   { code: 'OFF' , loggedon : true }
 			];
 		}
 	}
