@@ -153,15 +153,6 @@ namespace Teleopti.Interfaces.Domain
 														   DateOnly dateOnly, IList<IShiftProjectionCache> shiftList, 
     	                                                   IWorkShiftFinderResult finderResult);
 
-        /// <summary>
-        /// Filter on activities which cannot be overwritten by meetings and personal shifts
-        /// </summary>
-        /// <param name="shiftList"></param>
-        /// <param name="part"></param>
-        /// <param name="finderResult"></param>
-        /// <returns></returns>
-        IList<IShiftProjectionCache> FilterOnNotOverWritableActivities(IList<IShiftProjectionCache> shiftList,
-                                                                    IScheduleDay part,
-                                                                    IWorkShiftFinderResult finderResult);
+        
     }
 }

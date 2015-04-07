@@ -14,13 +14,15 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
     {
 	    private readonly ILongestPeriodForAssignmentCalculator _rules;
 	    private readonly IPersonalShiftAndMeetingFilter _personalShiftAndMeetingFilter;
+	    private readonly INotOverWritableActivitiesShiftFilter _notOverWritableActivitiesShiftFilter;
 	    private readonly CultureInfo _culture;
 
-        public ShiftProjectionCacheFilter(ILongestPeriodForAssignmentCalculator rules, IPersonalShiftAndMeetingFilter personalShiftAndMeetingFilter)
+        public ShiftProjectionCacheFilter(ILongestPeriodForAssignmentCalculator rules, IPersonalShiftAndMeetingFilter personalShiftAndMeetingFilter, INotOverWritableActivitiesShiftFilter notOverWritableActivitiesShiftFilter)
         {
 	        _culture = TeleoptiPrincipal.CurrentPrincipal.Regional.Culture;
         	_rules = rules;
 	        _personalShiftAndMeetingFilter = personalShiftAndMeetingFilter;
+	        _notOverWritableActivitiesShiftFilter = notOverWritableActivitiesShiftFilter;
         }
 
     	public IList<IShiftProjectionCache> FilterOnRestrictionAndNotAllowedShiftCategories(DateOnly scheduleDayDateOnly, TimeZoneInfo agentTimeZone, 
@@ -348,10 +350,10 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 
             shiftList = FilterOnBusinessRules(current, shiftList, dateToSchedule, finderResult);
 
-            var dayPart = current.ScheduledDay(dateToSchedule);
-            
-            shiftList = FilterOnNotOverWritableActivities(shiftList, dayPart, finderResult);
+	        shiftList = _notOverWritableActivitiesShiftFilter.Filter(dateToSchedule, current.Person, shiftList,
+		        finderResult);
 
+			var dayPart = current.ScheduledDay(dateToSchedule);
 	        shiftList = _personalShiftAndMeetingFilter.Filter(shiftList, dayPart, finderResult);
 
 	        return shiftList;
@@ -370,45 +372,5 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
             }
             return shiftList;
         }
-
-        public IList<IShiftProjectionCache> FilterOnNotOverWritableActivities(IList<IShiftProjectionCache> shiftList, IScheduleDay part, IWorkShiftFinderResult finderResult)
-        {
-            if (shiftList == null) throw new ArgumentNullException("shiftList");
-            if (part == null) throw new ArgumentNullException("part");
-            if (finderResult == null) throw new ArgumentNullException("finderResult");
-
-            var filteredList = new List<IShiftProjectionCache>();
-            var meetings = part.PersonMeetingCollection();
-            var personAssignment = part.PersonAssignment(true);
-            var cnt = shiftList.Count;
-
-	        if (meetings.Count == 0 && !personAssignment.PersonalActivities().Any())
-		        return shiftList;
-
-            foreach (var shift in shiftList)
-            {
-                if (shift.MainShiftProjection.Any(x => !((VisualLayer) x).HighestPriorityActivity.AllowOverwrite &&
-                                                       isActivityIntersectedWithMeetingOrPersonalShift(personAssignment, meetings, x)))
-                    continue;
-                filteredList.Add(shift);
-            }
-
-            finderResult.AddFilterResults(new WorkShiftFilterResult(UserTexts.Resources.AfterCheckingAgainstActivities,
-                                                                    cnt, filteredList.Count));
-
-            return filteredList;
-        }
-
-	    private static bool isActivityIntersectedWithMeetingOrPersonalShift(IPersonAssignment personAssignment,
-		    IEnumerable<IPersonMeeting> meetings, IVisualLayer layer)
-	    {
-		    if (meetings.Any(x => x.Period.Intersect(layer.Period)))
-			    return true;
-
-		    if (personAssignment.PersonalActivities().Any(l => l.Period.Intersect(layer.Period)))
-			    return true;
-
-		    return false;
-	    }
     }
 }

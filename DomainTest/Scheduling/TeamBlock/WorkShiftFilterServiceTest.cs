@@ -265,15 +265,16 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 				Expect.Call(_effectiveRestrictionShiftFilter.Filter(_schedulingOptions, effectiveRestriction, _finderResult))
 				      .Return(true);
 				Expect.Call(_shiftProjectionCacheManager.ShiftProjectionCachesFromRuleSetBag(_dateOnly, null, null, false, false)).IgnoreArguments().Return(caches);
+				Expect.Call(_shiftCategoryRestrictionShiftFilter.Filter(effectiveRestriction.ShiftCategory, caches, _finderResult)).Return(null);
 				Expect.Call(_commonMainShiftFilter.Filter(null, effectiveRestriction)).Return(null);
                 Expect.Call(_mainShiftOptimizeActivitiesSpecificationShiftFilter.Filter(null, _schedulingOptions.MainShiftOptimizeActivitySpecification)).Return(null);
-                Expect.Call(_shiftCategoryRestrictionShiftFilter.Filter(effectiveRestriction.ShiftCategory, null, _finderResult)).Return(null);
+                
                 Expect.Call(_disallowedShiftCategoriesShiftFilter.Filter(_schedulingOptions.NotAllowedShiftCategories, null, _finderResult)).Return(null);
 				Expect.Call(_activityRestrictionsShiftFilter.Filter(_dateOnly, _person, null, effectiveRestriction, _finderResult)).Return(null);
 				Expect.Call(_timeLimitsRestrictionShiftFilter.Filter(_dateOnly, _person, null, effectiveRestriction, _finderResult))
                       .Return(null);
                 Expect.Call(_workTimeLimitationShiftFilter.Filter(null, effectiveRestriction, _finderResult)).Return(null);
-				Expect.Call(_contractTimeShiftFilter.Filter(_dateOnly, new List<IScheduleMatrixPro> {_matrix}, caches,
+				Expect.Call(_contractTimeShiftFilter.Filter(_dateOnly, new List<IScheduleMatrixPro> {_matrix}, null,
 				                                            _schedulingOptions, _finderResult)).Return(caches);
 				Expect.Call(_notOverWritableActivitiesShiftFilter.Filter(_dateOnly, _person, null, _finderResult)).Return(null);
 				Expect.Call(_personalShiftsShiftFilter.Filter(_dateOnly, _person, null, _finderResult)).Return(null);
@@ -308,15 +309,16 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 				Expect.Call(_effectiveRestrictionShiftFilter.Filter(_schedulingOptions, effectiveRestriction, _finderResult))
 				      .Return(true);
 				Expect.Call(_shiftProjectionCacheManager.ShiftProjectionCachesFromRuleSetBag(_dateOnly, null, null, false, false)).IgnoreArguments().Return(caches);
+				Expect.Call(_shiftCategoryRestrictionShiftFilter.Filter(effectiveRestriction.ShiftCategory, caches, _finderResult)).Return(null);
 				Expect.Call(_commonMainShiftFilter.Filter(null, effectiveRestriction)).Return(null);
                 Expect.Call(_mainShiftOptimizeActivitiesSpecificationShiftFilter.Filter(null, _schedulingOptions.MainShiftOptimizeActivitySpecification)).Return(null);
-                Expect.Call(_shiftCategoryRestrictionShiftFilter.Filter(effectiveRestriction.ShiftCategory, null, _finderResult)).Return(null);
+                
                 Expect.Call(_disallowedShiftCategoriesShiftFilter.Filter(_schedulingOptions.NotAllowedShiftCategories, null, _finderResult)).Return(null);
 				Expect.Call(_activityRestrictionsShiftFilter.Filter(_dateOnly, _person, null, effectiveRestriction, _finderResult)).Return(null);
 				Expect.Call(_timeLimitsRestrictionShiftFilter.Filter(_dateOnly, _person, null, effectiveRestriction, _finderResult))
                       .Return(null);
                 Expect.Call(_workTimeLimitationShiftFilter.Filter(null, effectiveRestriction, _finderResult)).Return(null);
-                Expect.Call(_contractTimeShiftFilter.Filter(_dateOnly, new List<IScheduleMatrixPro> { _matrix }, caches,
+                Expect.Call(_contractTimeShiftFilter.Filter(_dateOnly, new List<IScheduleMatrixPro> { _matrix }, null,
                                                             _schedulingOptions, _finderResult)).Return(caches);
 				Expect.Call(_notOverWritableActivitiesShiftFilter.Filter(_dateOnly, _person, null, _finderResult)).Return(null);
 				Expect.Call(_personalShiftsShiftFilter.Filter(_dateOnly, _person, null, _finderResult)).Return(null);

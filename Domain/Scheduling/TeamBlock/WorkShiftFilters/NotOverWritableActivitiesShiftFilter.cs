@@ -33,10 +33,10 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftFilters
 
 			var filteredList = new List<IShiftProjectionCache>();
 			var meetings = part.PersonMeetingCollection();
-			var personAssignment = part.PersonAssignment();
+			var personAssignment = part.PersonAssignment(true);
 			var cnt = shiftList.Count;
 
-			if (meetings.Count == 0 && personAssignment == null)
+			if (meetings.Count == 0 && !personAssignment.PersonalActivities().Any())
 				return shiftList;
 
 			foreach (var shift in shiftList)
@@ -54,17 +54,15 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftFilters
 		}
 
 		private static bool isActivityIntersectedWithMeetingOrPersonalShift(IPersonAssignment personAssignment,
-		                                                                    IEnumerable<IPersonMeeting> meetings,
-		                                                                    IVisualLayer layer)
+			IEnumerable<IPersonMeeting> meetings,
+			IVisualLayer layer)
 		{
 			if (meetings.Any(x => x.Period.Intersect(layer.Period)))
 				return true;
 
-			if (personAssignment != null)
-			{
-				if (personAssignment.PersonalActivities().Any(l => l.Period.Intersect(layer.Period)))
-					return true;
-			}
+			if (personAssignment.PersonalActivities().Any(l => l.Period.Intersect(layer.Period)))
+				return true;
+
 			return false;
 		}
 	}
