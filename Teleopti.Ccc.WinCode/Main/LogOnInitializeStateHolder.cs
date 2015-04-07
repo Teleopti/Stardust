@@ -97,8 +97,7 @@ namespace Teleopti.Ccc.WinCode.Main
 					MessageBrokerDisabled = messageBrokerDisabled
 				};
 
-			initializer.Start(new StateManager(), appSettings, Enumerable.Empty<string>(), passwordPolicyService);
-
+			initializer.Start(new StateManager(), appSettings, passwordPolicyService);
 
 			return true;
 		}
