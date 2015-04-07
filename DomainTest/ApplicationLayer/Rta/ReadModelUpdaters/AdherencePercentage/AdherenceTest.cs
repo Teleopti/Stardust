@@ -214,55 +214,5 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ReadModelUpdaters.Adheren
 
 			Persister.PersistedModel.TimeOutOfAdherence.Should().Be("2".Seconds());
 		}
-
-		[Test]
-		public void ShouldUpdateAdherenceTimesWhenShiftEnds()
-		{
-			var personId = Guid.NewGuid();
-
-			Target.Handle(new PersonInAdherenceEvent
-			{
-				PersonId = personId,
-				Timestamp = "2014-10-13 15:00".Utc()
-			});
-			Target.Handle(new PersonOutOfAdherenceEvent
-			{
-				PersonId = personId,
-				Timestamp = "2014-10-13 16:00".Utc()
-			});
-			Target.Handle(new PersonShiftEndEvent
-			{
-				PersonId = personId,
-				ShiftEndTime = "2014-10-13 17:00".Utc()
-			});
-
-			Persister.PersistedModel.TimeOutOfAdherence.Should().Be("60".Minutes());
-			Persister.PersistedModel.TimeInAdherence.Should().Be("60".Minutes());
-		}
-
-		[Test]
-		public void ShouldStopUpdatingAdherenceTimesWhenShiftEnded()
-		{
-			var personId = Guid.NewGuid();
-
-			Target.Handle(new PersonInAdherenceEvent
-			{
-				PersonId = personId,
-				Timestamp = "2014-10-13 16:00".Utc()
-			});
-			Target.Handle(new PersonShiftEndEvent
-			{
-				PersonId = personId,
-				ShiftEndTime = "2014-10-13 17:00".Utc()
-			});
-			Target.Handle(new PersonInAdherenceEvent
-			{
-				PersonId = personId,
-				Timestamp = "2014-10-13 17:30".Utc()
-			});
-
-			Persister.PersistedModel.TimeOutOfAdherence.Should().Be(TimeSpan.Zero);
-			Persister.PersistedModel.TimeInAdherence.Should().Be("60".Minutes());
-		}
 	}
 }

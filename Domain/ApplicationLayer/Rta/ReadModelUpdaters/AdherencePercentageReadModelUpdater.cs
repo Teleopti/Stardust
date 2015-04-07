@@ -9,6 +9,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ReadModelUpdaters
 	public class AdherencePercentageReadModelUpdater :
 		IHandleEvent<PersonInAdherenceEvent>,
 		IHandleEvent<PersonOutOfAdherenceEvent>,
+		IHandleEvent<PersonNeutralAdherenceEvent>,
+		IHandleEvent<PersonShiftStartEvent>,
 		IHandleEvent<PersonShiftEndEvent>,
 		IInitializeble
 	{
@@ -23,6 +25,20 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ReadModelUpdaters
 		public virtual bool Initialized()
 		{
 			return _persister.HasData();
+		}
+
+		[ReadModelUnitOfWork]
+		public virtual void Handle(PersonShiftStartEvent @event)
+		{
+			handleEvent(
+				@event.PersonId,
+				@event.BelongsToDate,
+				new AdherencePercentageReadModelState
+				{
+					Timestamp = @event.ShiftStartTime,
+					ShiftStarted = true
+				},
+				m => { });
 		}
 
 		[ReadModelUnitOfWork]
@@ -116,6 +132,15 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ReadModelUpdaters
 			{
 				if (previous != null)
 				{
+					if (current.ShiftStarted.GetValueOrDefault())
+					{
+						model.TimeInAdherence = TimeSpan.Zero;
+						model.TimeOutOfAdherence = TimeSpan.Zero;
+						current.InAdherence = previous.InAdherence;
+						previous = current;
+						continue;
+					}
+
 					var timeDifferenceBetweenCurrentAndPrevious = current.Timestamp - previous.Timestamp;
 					if (previous.InAdherence.HasValue)
 					{
@@ -130,5 +155,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ReadModelUpdaters
 				previous = current;
 			}
 		}
+
 	}
 }

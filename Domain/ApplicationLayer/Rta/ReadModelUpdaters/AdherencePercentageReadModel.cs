@@ -23,6 +23,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ReadModelUpdaters
 	{
 		public DateTime Timestamp { get; set; }
 		public bool? InAdherence { get; set; }
+		public bool? ShiftStarted { get; set; }
 		public bool? ShiftEnded { get; set; }
 	}
 
