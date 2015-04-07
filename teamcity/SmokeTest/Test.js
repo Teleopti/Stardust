@@ -37,6 +37,7 @@ client.setValue('#Username-input', 'demo')
 	.click('#Signin-button')
 	.waitForExist('.user-name', 120000, false, function(err, res, response) {
 		if (err || !res) {
+			log('failed to sign in. ' + res);
 			closeAndThrow('failed to sign in. ' + err);
 		}
 		log('sign in succeeded');
