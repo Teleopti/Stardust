@@ -555,26 +555,9 @@
 					vm.SelectAgent("guid1");
 					vm.fillAgentsStates([{ PersonId: "guid1" }]);
 
-					assert.equals(vm.agentStates()[0].HistoricalAdherence(), 21);
+					assert.equals(vm.agentStates()[0].HistoricalAdherence(), '21%');
 				},
-
-				"should only fetch historical adherence for the agentstate that is selected": function () {
-					var vm = viewModel(function (callback) {
-						callback({
-							AdherencePercent: 12
-						});
-					});
-					vm.fillAgents([
-						{ PersonId: "guid1" },
-						{ PersonId: "guid2" }
-					]);
-					var historicalAdherenceForSecondAgentBeforeSelectingFirstAgent = vm.agentStates()[1].HistoricalAdherence();
-
-					vm.SelectAgent("guid1");
-
-					assert.equals(vm.agentStates()[1].HistoricalAdherence(), historicalAdherenceForSecondAgentBeforeSelectingFirstAgent);
-				},
-
+				
 				"should fetch the historical adherence for correct person when selected": function () {
 					var vm = viewModel(function (callback) {
 						callback({
@@ -586,7 +569,7 @@
 
 					vm.SelectAgent("guid1");
 
-					assert.equals(vm.getSelectedAgentState()[0].HistoricalAdherence(), 12);
+					assert.equals(vm.getSelectedAgentState()[0].HistoricalAdherence(), '12%');
 				},
 
 				"should only fetch historical data if agentAdherence is enabled": function () {
