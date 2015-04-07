@@ -82,14 +82,6 @@ namespace Teleopti.Ccc.Infrastructure.MultiTenancy.Client
 			var dataSourceCfg = result.DataSourceConfiguration;
 
 			logonModel.SelectedDataSourceContainer = getDataSorce(dataSourceName, dataSourceCfg, applicationData);
-			// if null error
-			if (logonModel.SelectedDataSourceContainer == null)
-				return new AuthenticationResult
-				{
-					Successful = false,
-					HasMessage = true,
-					Message = string.Format(Resources.CannotFindDataSourceWithName, dataSourceName)
-				};
 
 			using (var uow = logonModel.SelectedDataSourceContainer.DataSource.Application.CreateAndOpenUnitOfWork())
 			{
