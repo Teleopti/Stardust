@@ -1212,10 +1212,9 @@
     <Content Include="Areas\SeatPlanner\Content\Styles\Site.css" />
     <Content Include="Areas\SeatPlanner\Content\Templates\Dashboard\view.html" />
     <Content Include="Areas\SeatPlanner\Content\Templates\SeatMap\view.html" />
-    <Content Include="WFM\css\layout.css" />
+    <None Include="WFM\css\_layout.scss" />
     <Content Include="WFM\css\main.css" />
-    <Content Include="WFM\css\material.css" />
-    <Content Include="WFM\css\outbound.css" />
+    <None Include="WFM\css\_outbound.scss" />
     <Content Include="WFM\Gruntfile.js" />
     <Content Include="WFM\html\forecasting\forecasting-target.html" />
     <Content Include="WFM\html\outbound\campaign-forecasting.html" />
@@ -1616,7 +1615,6 @@
     <Content Include="Areas\Anywhere\Content\Templates\menu.html" />
     <Content Include="Areas\Anywhere\Content\Templates\teamschedule\view.html" />
     <Content Include="Areas\Anywhere\Content\Translation\TranslationTemplate.txt" />
-    <Content Include="WFM\css\animation.css" />
     <Content Include="WFM\css\material-spinner.css" />
     <Content Include="Areas\Reporting\Views\Report\Adherence.cshtml" />
     <Content Include="Areas\Reporting\Views\Report\Empty.cshtml" />
