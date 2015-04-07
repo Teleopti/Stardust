@@ -12941,4 +12941,8 @@ Reduce the complexity to use these shifts.</value>
     <value>Role</value>
     <comment>used when searching for persons based on role</comment>
   </data>
+  <data name="NoGamificationSetting" xml:space="preserve">
+    <value>No gamification setting</value>
+    <comment>Haven't set any setting for the gamification</comment>
+  </data>
 </root>

@@ -101,15 +101,15 @@ namespace Teleopti.Ccc.WinCode.Common.Configuration
 			{
 				foreach (var settingModel in _teamGamificationSettingList)
 				{
-					if (!settingModel.Id.HasValue && settingModel.GamificationSetting.Description.Name != "NullGameSetting")
+					if (!settingModel.Id.HasValue && settingModel.GamificationSetting.Description.Name != "No gamification setting")
 					{
 						_teamSettingRepository.Add(settingModel.ContainedEntity);
 					}
-					else if (settingModel.Id.HasValue && settingModel.GamificationSetting.Description.Name != "NullGameSetting")
+					else if (settingModel.Id.HasValue && settingModel.GamificationSetting.Description.Name != "No gamification setting")
 					{
 						uow.Merge(settingModel.ContainedEntity);
 					}
-					else if (settingModel.Id.HasValue && settingModel.GamificationSetting.Description.Name == "NullGameSetting")
+					else if (settingModel.Id.HasValue && settingModel.GamificationSetting.Description.Name == "No gamification setting")
 					{
 						_teamSettingRepository.Remove(settingModel.ContainedOriginalEntity);
 					}

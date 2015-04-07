@@ -9,7 +9,7 @@ namespace Teleopti.Ccc.WinCode.Common.Configuration
     {
         private readonly IGamificationSettingRepository _gamificationSettingRepository;
 		private IList<IGamificationSetting> _gamificationSettingCollection;
-		public static readonly IGamificationSetting NullGamificationSetting = new GamificationSetting("NullGameSetting");
+		public static readonly IGamificationSetting NullGamificationSetting = new GamificationSetting("No gamification setting");
 
 		public GamificationSettingProvider(IGamificationSettingRepository gamificationSettingRepository)
         {
