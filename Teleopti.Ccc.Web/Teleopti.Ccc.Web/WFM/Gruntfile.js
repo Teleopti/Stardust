@@ -4,10 +4,18 @@
 	grunt.initConfig({
 		watch: {
 			dev: {
-				files: ['css/*.css', 'js/**/*.js'],
-				tasks: ['uglify'],
+				files: ['css/style.scss', 'js/**/*.js'],
+				tasks: ['uglify', 'sass'],
 				options: {
 					spawn: false,
+				}
+			},
+		},
+
+		sass: {
+			dist: {
+				files: {
+					'dist/style.css': ['css/style.scss']
 				}
 			}
 		},
@@ -34,8 +42,9 @@
 	grunt.loadNpmTasks('grunt-contrib-watch');
 	grunt.loadNpmTasks('grunt-contrib-uglify');
 	grunt.loadNpmTasks('grunt-http-download');
+	grunt.loadNpmTasks('grunt-sass');
 
 	// Default task(s).
 	grunt.registerTask('default', ['watch:dev']); // this task watchs
-	grunt.registerTask('dist', ['uglify', 'download']); // this task is kind of package
+	grunt.registerTask('dist', ['uglify', 'download', 'sass']); // this task is kind of package
 };

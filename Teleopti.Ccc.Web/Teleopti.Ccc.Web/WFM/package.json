@@ -23,5 +23,8 @@
     "grunt-http-download": "^0.1.0",
     "jasmine-core": "^2.2.0",
     "moment": "^2.8.3"
+  },
+  "devDependencies": {
+    "grunt-sass": "^0.18.1"
   }
 }

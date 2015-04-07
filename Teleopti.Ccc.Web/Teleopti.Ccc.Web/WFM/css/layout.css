@@ -13,6 +13,11 @@ ul {
 	right: 0;
 }
 
+.current-nav{
+	background-color:#003466;
+	color:$white;
+}
+
 .layout-container {
 	padding-top: 50px;
 }
@@ -27,8 +32,8 @@ ul {
 	opacity: 0;
 }
 
-#slide1:checked ~ .angular-ui-tree-handle.selected{
-	display: none;
+.toggle-handle {
+	cursor: pointer;
 }
 
 label {
