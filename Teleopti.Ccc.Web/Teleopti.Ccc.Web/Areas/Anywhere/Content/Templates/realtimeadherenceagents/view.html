@@ -67,12 +67,12 @@
 								<!-- ko if: $root.agentAdherenceDetailsEnabled -->
 								<a class="btn" data-bind="attr: { href: $root.urlForAdherenceDetails($data)}">
 									<span data-bind="text: $root.resources.Adherence"></span>
-									<span class="historical-adherence" data-bind="text: HistoricalAdherence"></span>%
+									<span class="historical-adherence" data-bind="text: HistoricalAdherence"></span>
 								</a>
 								<!-- /ko -->
 								<!-- ko ifnot: $root.agentAdherenceDetailsEnabled -->
 								<span data-bind="text: $root.resources.Adherence"></span>
-								<span class="historical-adherence" data-bind="text: HistoricalAdherence"></span>%
+								<span class="historical-adherence" data-bind="text: HistoricalAdherence"></span>
 								<!-- /ko -->
 								<div class="last-updated">
 									<span data-bind="text: $root.resources.LastUpdated"></span>

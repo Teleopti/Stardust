@@ -207,8 +207,8 @@
 				deselectAllAgentsExcept(agentStateClicked);
 				if (that.agentAdherenceEnabled()) {
 					fetchHistoricalAdherence(function (data) {
-						agentStateClicked.DisplayAdherencePercentage(data.AdherencePercent != undefined);
-						agentStateClicked.HistoricalAdherence(data.AdherencePercent);
+						agentStateClicked.DisplayAdherencePercentage(data.AdherencePercent != undefined || data.LastTimestamp != undefined);
+						agentStateClicked.HistoricalAdherence(data.AdherencePercent == undefined ? '-' : data.AdherencePercent + '%');
 						agentStateClicked.LastAdherenceUpdate(data.LastTimestamp);
 					}, agentStateClicked.PersonId());
 				}
