@@ -58,5 +58,6 @@ namespace Teleopti.Ccc.Infrastructure.Web
 		public string MessageBroker { get; set; }
 		public string MessageBrokerLongPolling { get; set; }
 		public string RtaPollingInterval { get; set; }
+		public string PasswordPolicy { get; set; }
 	}
 }
