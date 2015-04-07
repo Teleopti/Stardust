@@ -56,7 +56,7 @@ angular.module('wfm.forecasting.target', [])
 					$scope.all.Selected = allSet;
 				}, true);
 
-				Forecasting.measureForecastMethod.query().$promise.then(function (result) {
+				Forecasting.skills.query().$promise.then(function (result) {
 					$scope.skillsDisplayed = result;
 					angular.forEach($scope.skillsDisplayed, function (skill) {
 						skill.show = true;
@@ -67,16 +67,8 @@ angular.module('wfm.forecasting.target', [])
 					var result = [];
 					angular.forEach($scope.skillsDisplayed, function (skill) {
 						angular.forEach(skill.Workloads, function(workload) {
-							if (workload.Selected) {
-								var selectedMethod = -1;
-								angular.forEach(workload.Accuracies, function (accuracy) {
-									if (accuracy.IsSelected) {
-										selectedMethod = accuracy.MethodId;
-									}
-								});
-								result.push({ Id: workload.Id, Name: workload.Name, SelectedMethod: selectedMethod });
-							}
-								
+							if (workload.Selected)
+								result.push({ Id: workload.Id, Name: workload.Name });
 						});
 					});
 					$scope.hasOneSelected = (result.length > 0);

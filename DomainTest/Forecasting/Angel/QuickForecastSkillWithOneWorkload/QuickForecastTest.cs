@@ -4,12 +4,14 @@ using System.Linq;
 using NUnit.Framework;
 using Rhino.Mocks;
 using Teleopti.Ccc.Domain.Common;
+using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.Forecasting.Angel;
 using Teleopti.Ccc.Domain.Forecasting.Angel.Accuracy;
 using Teleopti.Ccc.Domain.Forecasting.Angel.Future;
 using Teleopti.Ccc.Domain.Forecasting.Angel.Historical;
 using Teleopti.Ccc.Domain.Repositories;
+using Teleopti.Ccc.Infrastructure.Forecasting.Angel;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Interfaces.Domain;
@@ -31,7 +33,9 @@ namespace Teleopti.Ccc.DomainTest.Forecasting.Angel.QuickForecastSkillWithOneWor
 		{
 			var statisticRepository = MockRepository.GenerateStub<IStatisticRepository>();
 			statisticRepository.Stub(
-				x => x.LoadSpecificDates(Workload.QueueSourceCollection, HistoricalPeriod.ToDateTimePeriod(SkillTimeZoneInfo()))).Return(StatisticTasks().ToArray());
+				x => x.LoadSpecificDates(Workload.QueueSourceCollection, HistoricalPeriodForForecast.ToDateTimePeriod(SkillTimeZoneInfo()))).Return(StatisticTasks().ToArray());
+			statisticRepository.Stub(
+				x => x.LoadSpecificDates(Workload.QueueSourceCollection, HistoricalPeriodForMeasurement.ToDateTimePeriod(SkillTimeZoneInfo()))).Return(StatisticTasksForMeasurement().ToArray());
 			var dailyStatistics = new DailyStatisticsAggregator(statisticRepository);
 
 			var skillDays = CurrentSkillDays();
@@ -40,25 +44,31 @@ namespace Teleopti.Ccc.DomainTest.Forecasting.Angel.QuickForecastSkillWithOneWor
 			currentScenario.Stub(x => x.Current()).Return(DefaultScenario);
 
 			var futureData =new FutureData();
-			var quickForecasterWorkload = new QuickForecasterWorkload(new HistoricalData(dailyStatistics), futureData, new ForecastMethodProvider(new IndexVolumes(), null), new ForecastingTargetMerger());
+			var historicalData = new HistoricalData(dailyStatistics);
+			var quickForecasterWorkload = new QuickForecasterWorkload(historicalData, futureData, new ForecastMethodProvider(new IndexVolumes(), null), new ForecastingTargetMerger());
 			var target = new QuickForecaster(quickForecasterWorkload,
 				new FetchAndFillSkillDays(SkillDayRepository(skillDays), currentScenario,
-					new SkillDayRepository(MockRepository.GenerateStrictMock<ICurrentUnitOfWork>())));
-			target.ForecastWorkloadsWithinSkill(Workload.Skill, new[] { new ForecastWorkloadInput { WorkloadId = Workload.Id.Value, ForecastMethodId = ForecastMethodType.TeleoptiClassic} }, FuturePeriod, HistoricalPeriod);
+					new SkillDayRepository(MockRepository.GenerateStrictMock<ICurrentUnitOfWork>())), new QuickForecastWorkloadEvaluator(historicalData, new ForecastingWeightedMeanAbsolutePercentageError(), new ForecastMethodProvider(new IndexVolumes(), new LinearRegressionTrend())));
+			target.ForecastWorkloadsWithinSkill(Workload.Skill, new[] { new ForecastWorkloadInput { WorkloadId = Workload.Id.Value, ForecastMethodId = ForecastMethodType.TeleoptiClassic } }, FuturePeriod, HistoricalPeriodForForecast, HistoricalPeriodForMeasurement);
 
 			Assert(skillDays);
 		}
 
 		protected IScenario DefaultScenario { get; private set; }
 
-		protected virtual DateOnlyPeriod HistoricalPeriod
+		protected virtual DateOnlyPeriod HistoricalPeriodForForecast
 		{
 			get { return new DateOnlyPeriod(2000, 1, 1, 2000, 1, 1); }
 		}
 
+		protected virtual DateOnlyPeriod HistoricalPeriodForMeasurement
+		{
+			get { return new DateOnlyPeriod(1999, 1, 1, 2000, 1, 1); }
+		}
+
 		protected virtual DateOnlyPeriod FuturePeriod
 		{
-			get { return new DateOnlyPeriod(HistoricalPeriod.StartDate.AddDays(7), HistoricalPeriod.EndDate.AddDays(7)); }
+			get { return new DateOnlyPeriod(HistoricalPeriodForForecast.StartDate.AddDays(7), HistoricalPeriodForForecast.EndDate.AddDays(7)); }
 		}
 
 		protected virtual IWorkload Workload
@@ -75,6 +85,13 @@ namespace Teleopti.Ccc.DomainTest.Forecasting.Angel.QuickForecastSkillWithOneWor
 		protected virtual IEnumerable<StatisticTask> StatisticTasks()
 		{
 			yield break;
+		}
+
+		protected virtual IEnumerable<StatisticTask> StatisticTasksForMeasurement()
+		{
+			var statisticTasks = StatisticTasks().ToList();
+			statisticTasks.Add(new StatisticTask { Interval = HistoricalPeriodForMeasurement.StartDate.Date, StatOfferedTasks = 9 });
+			return statisticTasks;
 		}
 
 		private ICollection<ISkillDay> _currentSkillDays;

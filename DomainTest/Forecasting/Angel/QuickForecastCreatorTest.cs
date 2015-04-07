@@ -28,7 +28,8 @@ namespace Teleopti.Ccc.DomainTest.Forecasting.Angel
 			var futurePeriod = new DateOnlyPeriod();
 			var now = new Now();
 			var nowDate = now.LocalDateOnly();
-			var historicalPeriod = new DateOnlyPeriod(new DateOnly(nowDate.Date.AddYears(-1)), nowDate);
+			var historicalPeriodForForecast = new DateOnlyPeriod(new DateOnly(nowDate.Date.AddYears(-1)), nowDate);
+			var historicalPeriodForMeasurement = new DateOnlyPeriod(new DateOnly(nowDate.Date.AddYears(-2)), nowDate);
 
 			var target = new QuickForecastCreator(quickForecaster, skillRepository, now);
 			var forecastWorkloadInputs = new[]
@@ -45,8 +46,8 @@ namespace Teleopti.Ccc.DomainTest.Forecasting.Angel
 				}
 			};
 			target.CreateForecastForWorkloads(futurePeriod, forecastWorkloadInputs);
-			quickForecaster.AssertWasCalled(x => x.ForecastWorkloadsWithinSkill(skill1, forecastWorkloadInputs, futurePeriod, historicalPeriod));
-			quickForecaster.AssertWasCalled(x => x.ForecastWorkloadsWithinSkill(skill2, forecastWorkloadInputs, futurePeriod, historicalPeriod));
+			quickForecaster.AssertWasCalled(x => x.ForecastWorkloadsWithinSkill(skill1, forecastWorkloadInputs, futurePeriod, historicalPeriodForForecast, historicalPeriodForMeasurement));
+			quickForecaster.AssertWasCalled(x => x.ForecastWorkloadsWithinSkill(skill2, forecastWorkloadInputs, futurePeriod, historicalPeriodForForecast, historicalPeriodForMeasurement));
 		}
 
 		[Test]

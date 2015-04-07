@@ -28,7 +28,7 @@ namespace Teleopti.Ccc.DomainTest.Forecasting.Angel.Accuracy
 		{
 			var statisticRepository = MockRepository.GenerateStub<IStatisticRepository>();
 			statisticRepository.Stub(
-				x => x.LoadSpecificDates(Workload.QueueSourceCollection, HistoricalPeriod.ToDateTimePeriod(SkillTimeZoneInfo()))).Return(StatisticTasks().ToArray());
+				x => x.LoadSpecificDates(Workload.QueueSourceCollection, HistoricalPeriodForMeasurement.ToDateTimePeriod(SkillTimeZoneInfo()))).Return(StatisticTasks().ToArray());
 			var dailyStatistics = new DailyStatisticsAggregator(statisticRepository);
 
 			var currentScenario = MockRepository.GenerateStub<ICurrentScenario>();
@@ -38,21 +38,25 @@ namespace Teleopti.Ccc.DomainTest.Forecasting.Angel.Accuracy
 			linearRegressionTrend.Stub(x => x.CalculateTrend(null)).IgnoreArguments().Return(new LinearTrend {Slope = 1, Intercept = 2});
 			var quickForecasterWorkloadEvaluator = new QuickForecastWorkloadEvaluator(new HistoricalData(dailyStatistics), new ForecastingWeightedMeanAbsolutePercentageError(), new ForecastMethodProvider(new IndexVolumes(), linearRegressionTrend));
 			var target = new QuickForecastSkillEvaluator(quickForecasterWorkloadEvaluator);
-			var measurementResult = target.Measure(Workload.Skill, HistoricalPeriod);
+			var measurementResult = target.Measure(Workload.Skill, HistoricalPeriodForMeasurement);
 
 			Assert(measurementResult);
 		}
 
 		protected IScenario DefaultScenario { get; private set; }
 
-		protected virtual DateOnlyPeriod HistoricalPeriod
+		protected virtual DateOnlyPeriod HistoricalPeriodForMeasurement
 		{
-			get { return new DateOnlyPeriod(2000, 1, 1, 2000, 1, 1); }
+			get
+			{
+				var date = new DateTime(2000, 1, 1);
+				return new DateOnlyPeriod(new DateOnly(date.AddYears(-1)), new DateOnly(date));
+			}
 		}
 
 		protected virtual DateOnlyPeriod FuturePeriod
 		{
-			get { return new DateOnlyPeriod(HistoricalPeriod.StartDate.AddDays(7), HistoricalPeriod.EndDate.AddDays(7)); }
+			get { return new DateOnlyPeriod(HistoricalPeriodForMeasurement.StartDate.AddDays(7), HistoricalPeriodForMeasurement.EndDate.AddDays(7)); }
 		}
 
 		protected virtual IWorkload Workload

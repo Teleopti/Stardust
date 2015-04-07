@@ -9,14 +9,14 @@ namespace Teleopti.Ccc.DomainTest.Forecasting.Angel.QuickForecastSkillWithOneWor
 {
 	public class AggregateStatisticTasksForTwoDaysTest : QuickForecastTest
 	{
-		protected override DateOnlyPeriod HistoricalPeriod
+		protected override DateOnlyPeriod HistoricalPeriodForForecast
 		{
 			get { return new DateOnlyPeriod(2000,1,1,2000,1,2); }
 		}
 
 		protected override IEnumerable<StatisticTask> StatisticTasks()
 		{
-			var startDateOnHistoricalPeriod = HistoricalPeriod.ToDateTimePeriod(SkillTimeZoneInfo()).StartDateTime.AddHours(12);
+			var startDateOnHistoricalPeriod = HistoricalPeriodForForecast.ToDateTimePeriod(SkillTimeZoneInfo()).StartDateTime.AddHours(12);
 			return new[]
 			{
 				new StatisticTask {Interval = startDateOnHistoricalPeriod, StatOfferedTasks = 6},

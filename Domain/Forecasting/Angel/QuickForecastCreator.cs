@@ -21,22 +21,27 @@ namespace Teleopti.Ccc.Domain.Forecasting.Angel
 
 		public void CreateForecastForAll(DateOnlyPeriod futurePeriod)
 		{
-			var historicalPeriod = getHistoricalPeriod();
 			var skills = _skillRepository.FindSkillsWithAtLeastOneQueueSource();
-			skills.ForEach(skill => _quickForecaster.ForecastAll(skill, futurePeriod, historicalPeriod));
+			skills.ForEach(skill => _quickForecaster.ForecastAll(skill, futurePeriod, getHistoricalPeriodForForecast()));
 		}
 
 		public void CreateForecastForWorkloads(DateOnlyPeriod futurePeriod, ForecastWorkloadInput[] workloads)
 		{
-			var historicalPeriod = getHistoricalPeriod();
 			var skills = _skillRepository.FindSkillsWithAtLeastOneQueueSource();
-			skills.ForEach(skill => _quickForecaster.ForecastWorkloadsWithinSkill(skill, workloads, futurePeriod, historicalPeriod));
+			skills.ForEach(skill => _quickForecaster.ForecastWorkloadsWithinSkill(skill, workloads, futurePeriod, getHistoricalPeriodForForecast(), getHistoricalPeriodForMeasurement()));
 		}
 
-		private DateOnlyPeriod getHistoricalPeriod()
+		private DateOnlyPeriod getHistoricalPeriodForForecast()
 		{
 			var nowDate = _now.LocalDateOnly();
 			var historicalPeriod = new DateOnlyPeriod(new DateOnly(nowDate.Date.AddYears(-1)), nowDate);
+			return historicalPeriod;
+		}
+
+		private DateOnlyPeriod getHistoricalPeriodForMeasurement()
+		{
+			var nowDate = _now.LocalDateOnly();
+			var historicalPeriod = new DateOnlyPeriod(new DateOnly(nowDate.Date.AddYears(-2)), nowDate);
 			return historicalPeriod;
 		}
 	}

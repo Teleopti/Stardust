@@ -20,7 +20,7 @@ namespace Teleopti.Ccc.DomainTest.Forecasting.Angel.QuickForecastSkillWithOneWor
 
 		protected override IEnumerable<StatisticTask> StatisticTasks()
 		{
-			var startDateOnHistoricalPeriod = HistoricalPeriod.ToDateTimePeriod(SkillTimeZoneInfo()).StartDateTime.AddHours(12);
+			var startDateOnHistoricalPeriod = HistoricalPeriodForForecast.ToDateTimePeriod(SkillTimeZoneInfo()).StartDateTime.AddHours(12);
 			return new[]
 			{
 				new StatisticTask {Interval = startDateOnHistoricalPeriod, StatOfferedTasks = 6},

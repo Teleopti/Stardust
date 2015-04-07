@@ -26,7 +26,7 @@ namespace Teleopti.Ccc.DomainTest.Forecasting.Angel.QuickForecastSkillWithOneWor
 
 		protected override IWorkload Workload { get { return _workload; }}
 
-		protected override DateOnlyPeriod HistoricalPeriod
+		protected override DateOnlyPeriod HistoricalPeriodForForecast
 		{
 			get { return new DateOnlyPeriod(2000, 1, 1, 2000, 1, 2); }
 		}
