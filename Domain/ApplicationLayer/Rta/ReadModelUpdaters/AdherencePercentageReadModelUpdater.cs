@@ -124,26 +124,21 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ReadModelUpdaters
 		
 		private static void calculate(AdherencePercentageReadModel model)
 		{
-			model.TimeInAdherence = TimeSpan.Zero;
-			model.TimeOutOfAdherence = TimeSpan.Zero;
 			AdherencePercentageReadModelState previous = null;
+			resetAdherence(model);
 			model.State = model.State.OrderBy(x => x.Timestamp).ToArray();
 			foreach (var current in model.State)
 			{
 				if (previous != null)
 				{
-					if (current.ShiftStarted.GetValueOrDefault())
+					if (current.ShiftStarted.GetValueOrDefault(false))
 					{
-						model.TimeInAdherence = TimeSpan.Zero;
-						model.TimeOutOfAdherence = TimeSpan.Zero;
+						resetAdherence(model);
 						current.InAdherence = previous.InAdherence;
-						previous = current;
-						continue;
 					}
-
-					var timeDifferenceBetweenCurrentAndPrevious = current.Timestamp - previous.Timestamp;
-					if (previous.InAdherence.HasValue)
+					else if (previous.InAdherence.HasValue)
 					{
+						var timeDifferenceBetweenCurrentAndPrevious = current.Timestamp - previous.Timestamp;
 						if (previous.InAdherence.Value)
 							model.TimeInAdherence += timeDifferenceBetweenCurrentAndPrevious;
 						if (!previous.InAdherence.Value)
@@ -156,5 +151,10 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ReadModelUpdaters
 			}
 		}
 
+		private static void resetAdherence(AdherencePercentageReadModel model)
+		{
+			model.TimeInAdherence = TimeSpan.Zero;
+			model.TimeOutOfAdherence = TimeSpan.Zero;
+		}
 	}
 }
