@@ -24,35 +24,10 @@ namespace Teleopti.Ccc.WinCode.Main
 	public static class LogonInitializeStateHolder
 	{
 		public static string ErrorMessage = string.Empty;
-		private static readonly ILog Logger = LogManager.GetLogger(typeof(LogonInitializeStateHolder));
 
 		public static bool InitWithoutDataSource(ILogonModel model, IMessageBrokerComposite messageBroker, SharedSettings settings)
 		{
-			string passwordPolicyString;
-			using (var proxy = Proxy.GetProxy(model.SelectedSdk))
-			{
-				using (PerformanceOutput.ForOperation("Getting config from web service"))
-				{
-					try
-					{
-						passwordPolicyString = proxy.GetPasswordPolicy();
-					}
-					catch (TimeoutException timeoutException)
-					{
-						Logger.Error("Configuration could not be retrieved from due to a timeout.", timeoutException);
-						ErrorMessage = timeoutException.Message;
-						return false;
-					}
-					catch (CommunicationException exception)
-					{
-						Logger.Error("Configuration could not be retrieved from server.", exception);
-						ErrorMessage = exception.Message;
-						return false;
-					}
-				}
-			}
-
-			var passwordPolicyDocument = XDocument.Parse(passwordPolicyString);
+			var passwordPolicyDocument = XDocument.Parse(settings.PasswordPolicy);
 			var passwordPolicyService = new LoadPasswordPolicyService(passwordPolicyDocument);
 
 			var appsett = ConfigurationManager.AppSettings;
