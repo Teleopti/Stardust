@@ -18,6 +18,7 @@ namespace Teleopti.Ccc.Domain.AgentInfo.Requests
                                  IPersonRequest, IDeleteTag, IPushMessageWhenRootAltered
     {
         private const int messageLength = 2000;
+        private const int messageTipLength = 255;
         private readonly IPerson _person;
         private string _message;
         private int requestStatus = 3;
@@ -91,7 +92,7 @@ namespace Teleopti.Ccc.Domain.AgentInfo.Requests
             var request = Request;
             if (request != null && message != _message)
             {
-				request.TextForNotification = message.Length > messageLength ? message.Substring(0, messageLength) : message;
+				request.TextForNotification = message.Length > messageTipLength ? message.Substring(0, messageTipLength - 3) + "..." : message;
                 //Need to set this to make the message to be sent
             }
 

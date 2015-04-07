@@ -501,7 +501,7 @@ namespace Teleopti.Ccc.DomainTest.AgentInfo.Requests
             }
         }
 
-        [Test, Ignore]
+        [Test]
         public void ShouldTruncateMessageWhenSendingPushMessage()
         {
             string pushMessageText = "a".PadRight(500, 'a');
