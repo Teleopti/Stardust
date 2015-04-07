@@ -11,7 +11,6 @@ angular.module('wfm.seatMap')
 			//self.canvas.skipTargetFind = true;
 			canvas.renderOnAddRemove = true;
 			canvas.stateful = false;
-
 		}
 
 		utils.resize = function (canvas) {
@@ -33,17 +32,16 @@ angular.module('wfm.seatMap')
 			return false;
 		};
 
-		utils.ScaleImage = function (canvas, image) {
+		utils.scaleImage = function (canvas, image) {
 
 			var ratio = canvas.height / image.height;
 			image.set({
 				scaleY: ratio,
 				scaleX: ratio
 			});
-
 		};
 
-		utils.DrawGrid = function (canvas) {
+		utils.drawGrid = function (canvas) {
 			var grid = 30;
 
 			for (var i = 0; i < (canvas.width / grid) ; i++) {
@@ -77,9 +75,7 @@ angular.module('wfm.seatMap')
 				canvasObjects[idx].hasControls = allowSelection;
 				canvasObjects[idx].hasRotatingPoint = allowSelection;
 				canvasObjects[idx].hasBorders = allowSelection;
-
 			}
-
 		};
 
 		utils.getObjectsByType = function (canvas, type) {
@@ -106,7 +102,7 @@ angular.module('wfm.seatMap')
 				return [obj];
 			}
 			if (obj.get('type') == 'group') {
-				return utils.getObjectsOfTypeFromGroup(obj, type);
+				utils.getObjectsOfTypeFromGroup(obj, type);
 			}
 
 			return null;
@@ -172,6 +168,11 @@ angular.module('wfm.seatMap')
 			}
 		}
 
+		utils.loadSeatMap = function (id, canvas, allowEdit, callbackSuccess, callbackFailure) {
+			seatMapService.seatMap.get({ id: id }).$promise.then(function (data) {
+				utils.loadSeatMapData(canvas, data, allowEdit, callbackSuccess, callbackFailure);
+			});
+		};
 
 		utils.loadSeatMapData = function (canvas, data, allowEdit, callbackSuccess, callbackFailure) {
 
@@ -196,16 +197,7 @@ angular.module('wfm.seatMap')
 				callbackSuccess(data);
 			});
 
-
 		};
-
-		utils.loadSeatMap = function (id, canvas, allowEdit, callbackSuccess, callbackFailure) {
-			seatMapService.seatMap.get({ id: id }).$promise.then(function (data) {
-				utils.loadSeatMapData(canvas, data, allowEdit, callbackSuccess, callbackFailure);
-			});
-		}
-
-
 
 		return utils;
 

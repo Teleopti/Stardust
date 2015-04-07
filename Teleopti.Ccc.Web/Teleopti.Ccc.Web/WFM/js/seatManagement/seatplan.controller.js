@@ -51,10 +51,9 @@ angular.module('wfm.seatPlan')
 				Locations: selectedLocations
 			};
 
-			//seatPlanService.seatPlan.add(addSeatPlanCommand).$promise.then(function (result) {
 			seatPlanService.addSeatPlan(addSeatPlanCommand).$promise.then(function (result) {
 				//Robtodo:notice on successful submit
-				displaySuccessNotification("Seat Plan Saved");
+				//displaySuccessNotification("Seat Plan Saved");
 			});
 		};
 

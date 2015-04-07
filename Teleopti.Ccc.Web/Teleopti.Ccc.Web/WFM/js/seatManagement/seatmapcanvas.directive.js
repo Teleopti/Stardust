@@ -52,18 +52,19 @@
 
 		vm.save = saveData;
 
-
 		vm.handleBreadcrumbClick = function (id) {
 			canvasUtils.loadSeatMap(id, canvas, vm.allowEdit, onLoadSeatMapSuccess, onLoadSeatMapFailure);
 		};
 
-		vm.group = function() {
-			canvasEditor.group(canvas);
-		};
+		//vm.group = function() {
+		//	canvasEditor.group(canvas);
+		//};
 
-		vm.ungroup = function() {
-			canvasEditor.ungroup(canvas);
-		};
+		vm.group = callFunctionWithCanvas(canvasEditor.group);
+		vm.ungroup = callFunctionWithCanvas(canvasEditor.ungroup);
+			//function() {
+			//canvasEditor.ungroup(canvas);
+		//};
 
 
 		vm.sendToBack = function() {
@@ -97,6 +98,11 @@
 		vm.alignBottom = function () {
 			canvasEditor.alignBottom(canvas);
 		};
+
+
+		function callFunctionWithCanvas( funct ) {
+			funct(canvas);
+		}
 
 		function init() {
 			canvasUtils.setSelectionMode(canvas, vm.allowEdit);
