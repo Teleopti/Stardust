@@ -1,4 +1,6 @@
-﻿namespace Teleopti.Ccc.Web.Areas.Start.Core.Config
+﻿using Teleopti.Ccc.Infrastructure.Web;
+
+namespace Teleopti.Ccc.Web.Areas.Start.Core.Config
 {
 	public interface ISharedSettingsFactory
 	{

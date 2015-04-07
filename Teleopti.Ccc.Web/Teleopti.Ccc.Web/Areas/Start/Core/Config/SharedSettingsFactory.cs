@@ -1,4 +1,5 @@
 ﻿using Teleopti.Ccc.Domain.Security;
+using Teleopti.Ccc.Infrastructure.Web;
 using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.Web.Areas.Start.Core.Config
