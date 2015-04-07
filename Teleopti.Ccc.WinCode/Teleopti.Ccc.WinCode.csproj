@@ -491,7 +491,6 @@
     <Compile Include="Main\LogonLicenseChecker.cs" />
     <Compile Include="Main\LogonMatrix.cs" />
     <Compile Include="Main\MultiTenancyLogonPresenter.cs" />
-    <Compile Include="Main\ServerEndpointSelector.cs" />
     <Compile Include="Meetings\Commands\AddMeetingFromPanelCommand.cs" />
     <Compile Include="Meetings\Commands\FetchMeetingForCurrentUserChangeCommand.cs" />
     <Compile Include="Meetings\Commands\OpenMeetingsOverviewCommand.cs" />

@@ -1,19 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Configuration;
 using System.Linq;
-using System.ServiceModel;
 using System.Xml.Linq;
 using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.Security.Authentication;
 using Teleopti.Ccc.Infrastructure.ApplicationLayer;
 using Teleopti.Ccc.Infrastructure.NHibernateConfiguration;
 using Teleopti.Ccc.Infrastructure.Web;
-using Teleopti.Ccc.Sdk.ClientProxies;
 using Teleopti.Ccc.WinCode.Common.ServiceBus;
 using Teleopti.Ccc.WinCode.Services;
-using log4net;
-using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Infrastructure.Config;
 using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
@@ -33,7 +28,6 @@ namespace Teleopti.Ccc.WinCode.Main
 			var appsett = ConfigurationManager.AppSettings;
 			
 			var appSettings = appsett.Keys.Cast<string>().ToDictionary(key => key, key => appsett[key]);
-			appSettings.Add("Sdk", model.SelectedSdk);
 
 			if (!appsett.AllKeys.Contains("Queue")) appSettings.Add("Queue", settings.Queue);
 			if (!appsett.AllKeys.Contains("MessageBroker")) appSettings.Add("MessageBroker", settings.MessageBroker);

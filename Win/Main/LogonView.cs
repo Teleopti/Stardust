@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Configuration;
-using System.Deployment.Application;
 using System.Globalization;
 using System.Windows.Forms;
 using Syncfusion.Windows.Forms;
@@ -32,7 +31,6 @@ namespace Teleopti.Ccc.Win.Main
 		{
 			_logonSteps = new List<ILogonStep>
 				{
-					new SelectSdkScreen(this, _model),
 					new SelectDatasourceScreen(this, _model),
 					new LoginScreen(this, _model),
 					new SelectBuScreen(this, _model)

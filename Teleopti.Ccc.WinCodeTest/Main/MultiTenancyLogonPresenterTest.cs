@@ -24,7 +24,6 @@ namespace Teleopti.Ccc.WinCodeTest.Main
 		private ILoginInitializer _initializer;
 		private ILogOnOff _logOnOff;
 		private MultiTenancyLogonPresenter _target;
-		private IServerEndpointSelector _endPointSelector;
 		private IMultiTenancyApplicationLogon _appLogon;
 		private IMultiTenancyWindowsLogon _winLogon;
 		private IMessageBrokerComposite _mBroker;
@@ -37,13 +36,12 @@ namespace Teleopti.Ccc.WinCodeTest.Main
 			_model = new LogonModel();
 			_initializer = MockRepository.GenerateMock<ILoginInitializer>();
 			_logOnOff = MockRepository.GenerateMock<ILogOnOff>();
-			_endPointSelector = MockRepository.GenerateMock<IServerEndpointSelector>();
 			_appLogon = MockRepository.GenerateMock<IMultiTenancyApplicationLogon>();
 			_winLogon = MockRepository.GenerateMock<IMultiTenancyWindowsLogon>();
 			_mBroker = MockRepository.GenerateMock<IMessageBrokerComposite>();
 			_sharedSettingsQuerier = MockRepository.GenerateMock<ISharedSettingsQuerier>();
 			_target = new MultiTenancyLogonPresenter(_view, _model, _initializer,  _logOnOff,
-				_endPointSelector, _mBroker, _appLogon, _winLogon, _sharedSettingsQuerier);
+				_mBroker, _appLogon, _winLogon, _sharedSettingsQuerier);
 			_model.AuthenticationType = AuthenticationTypeOption.Application;
 		}
 
@@ -54,26 +52,6 @@ namespace Teleopti.Ccc.WinCodeTest.Main
 			_target.Start();
 		}
 
-		[Test]
-		public void ShouldLoadAvailableSdksOnStepOne()
-		{
-			_view.Stub(x => x.ClearForm("")).IgnoreArguments();
-			_endPointSelector.Stub(x => x.GetEndpointNames()).Return(new List<string> { "local", "local2" });
-			_view.Stub(x => x.ShowStep(false));
-			_target.CurrentStep = LoginStep.SelectSdk;
-			_target.Initialize();
-		}
-
-		[Test]
-		public void ShouldGoToDataSourcesIfOneSdk()
-		{
-			_view.Stub(x => x.ClearForm("")).IgnoreArguments();
-			_endPointSelector.Stub(x => x.GetEndpointNames()).Return(new List<string> { "local" });
-			_view.Stub(x => x.ShowStep(false));
-			_sharedSettingsQuerier.Stub(x => x.GetSharedSettings()).Return(new SharedSettings());
-			_target.CurrentStep = LoginStep.SelectSdk;
-			_target.Initialize();
-		}
 
 		[Test]
 		public void ShouldNotReloadSdkOnBackFromDataSources()
@@ -222,7 +200,6 @@ namespace Teleopti.Ccc.WinCodeTest.Main
 			var bu2 = new BusinessUnit("Bu two");
 			_model.SelectedDataSourceContainer = dataSourceContainer;
 
-			//_winLogon.Stub(x => x.Logon(_model, MultiTenancyLogonPresenter.UserAgent)).Return(new AuthenticationResult { Successful = true }).IgnoreArguments();
 			dataSourceContainer.Stub(x => x.AvailableBusinessUnitProvider).Return(buProvider);
 			buProvider.Stub(x => x.AvailableBusinessUnits()).Return(new List<IBusinessUnit> { bu, bu2 });
 			_view.Stub(x => x.ShowStep(true));
@@ -235,7 +212,6 @@ namespace Teleopti.Ccc.WinCodeTest.Main
 		public void ShouldGoToAppLoginIfWindowsFails()
 		{
 			_model.AuthenticationType = AuthenticationTypeOption.Windows;
-			//_winLogon.Stub(x => x.Logon(_model, MultiTenancyLogonPresenter.UserAgent)).Return(new AuthenticationResult { Successful = false, HasMessage = true,Message = "ajajaj"}).IgnoreArguments();
 			_view.Stub(x => x.ShowStep(true));
 
 			_target.CurrentStep = LoginStep.SelectLogonType;
@@ -249,7 +225,6 @@ namespace Teleopti.Ccc.WinCodeTest.Main
 		public void ShouldGoToDatasourceStepIfWebException()
 		{
 			_model.AuthenticationType = AuthenticationTypeOption.Windows;
-			//_winLogon.Stub(x => x.Logon(_model, MultiTenancyLogonPresenter.UserAgent)).Throw(new WebException("shit")).IgnoreArguments();
 			_view.Stub(x => x.ShowStep(false));
 
 			_target.CurrentStep = LoginStep.SelectLogonType;
@@ -262,12 +237,11 @@ namespace Teleopti.Ccc.WinCodeTest.Main
 		{
 			var dataSourceContainer = new DataSourceContainer(null, null, null, AuthenticationTypeOption.Windows);
 			_model.AuthenticationType = AuthenticationTypeOption.Windows;
-			_endPointSelector.Stub(x => x.GetEndpointNames()).Return(new List<string> { "local" });
 			_winLogon.Stub( x => x.CheckWindowsIsPossible()).Return(false);
 
 			_model.SelectedDataSourceContainer = dataSourceContainer;
 			_view.Stub(x => x.ShowStep(false));
-			_target.CurrentStep = LoginStep.SelectSdk;
+			_target.CurrentStep = LoginStep.SelectLogonType;
 			_target.OkbuttonClicked();
 			_target.CurrentStep.Should().Be(LoginStep.Login);
 			_model.AuthenticationType.Should().Be.EqualTo(AuthenticationTypeOption.Application);

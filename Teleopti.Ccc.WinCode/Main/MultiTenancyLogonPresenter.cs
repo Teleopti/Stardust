@@ -30,12 +30,10 @@ namespace Teleopti.Ccc.WinCode.Main
 
 	public enum LoginStep
 	{
-		SelectSdk = 0,
-		SelectLogonType = 1,
-		Login = 2,
-		SelectBu = 3,
-		Loading = 4, // not used
-		Ready = 5 // not used
+		SelectLogonType = 0,
+		Login = 1,
+		SelectBu = 2,
+		Loading = 3
 	}
 
 	public class MultiTenancyLogonPresenter : ILogonPresenter
@@ -44,7 +42,6 @@ namespace Teleopti.Ccc.WinCode.Main
 		private readonly ILogonModel _model;
 		private readonly ILoginInitializer _initializer;
 		private readonly ILogOnOff _logOnOff;
-		private readonly IServerEndpointSelector _serverEndpointSelector;
 		private readonly IMessageBrokerComposite _messageBroker;
 		private readonly IMultiTenancyApplicationLogon _applicationLogon;
 		private readonly IMultiTenancyWindowsLogon _multiTenancyWindowsLogon;
@@ -55,7 +52,6 @@ namespace Teleopti.Ccc.WinCode.Main
 		public MultiTenancyLogonPresenter(ILogonView view, LogonModel model,
 			ILoginInitializer initializer,
 			ILogOnOff logOnOff,
-			IServerEndpointSelector serverEndpointSelector,
 			IMessageBrokerComposite messageBroker,
 			IMultiTenancyApplicationLogon applicationLogon,
 			IMultiTenancyWindowsLogon multiTenancyWindowsLogon,
@@ -66,7 +62,6 @@ namespace Teleopti.Ccc.WinCode.Main
 			_model = model;
 			_initializer = initializer;
 			_logOnOff = logOnOff;
-			_serverEndpointSelector = serverEndpointSelector;
 			_messageBroker = messageBroker;
 			_applicationLogon = applicationLogon;
 			_multiTenancyWindowsLogon = multiTenancyWindowsLogon;
@@ -81,13 +76,13 @@ namespace Teleopti.Ccc.WinCode.Main
 
 		public bool Start()
 		{
-			CurrentStep = LoginStep.SelectSdk;
+			CurrentStep = LoginStep.SelectLogonType;
 			return _view.StartLogon(_messageBroker);
 		}
 
 		public void Initialize()
 		{
-			getSdks();
+			getLogonType();
 		}
 
 		public void OkbuttonClicked()
@@ -105,8 +100,6 @@ namespace Teleopti.Ccc.WinCode.Main
 		{
 			switch (CurrentStep)
 			{
-				case LoginStep.SelectSdk:
-					return _model.SelectedSdk != null;
 				case LoginStep.SelectLogonType:
 					return checkAndReportDataSources();
 				case LoginStep.Login:
@@ -136,10 +129,6 @@ namespace Teleopti.Ccc.WinCode.Main
 		{
 			switch (CurrentStep)
 			{
-				case LoginStep.SelectSdk:
-					if (!goingBack)
-						getSdks();
-					break;
 				case LoginStep.SelectLogonType:
 					getLogonType();
 					break;
@@ -153,23 +142,6 @@ namespace Teleopti.Ccc.WinCode.Main
 					initApplication();
 					break;
 			}
-		}
-
-		private void getSdks()
-		{
-			//TODO: tenant - remove sdk stuff in logon process when win is no longer depended on sdk
-			_view.ClearForm("");
-			var endpoints = _serverEndpointSelector.GetEndpointNames();
-			_model.Sdks = endpoints;
-			if (endpoints.Count == 1)
-			{
-				_model.SelectedSdk = endpoints[0];
-				CurrentStep++;
-				getLogonType();
-			}
-
-
-			_view.ShowStep(false);
 		}
 
 		private void getLogonType()

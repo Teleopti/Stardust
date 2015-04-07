@@ -1080,12 +1080,6 @@
     <Compile Include="Main\LogonScreens\SelectDatasourceScreen.Designer.cs">
       <DependentUpon>SelectDatasourceScreen.cs</DependentUpon>
     </Compile>
-    <Compile Include="Main\LogonScreens\SelectSdkScreen.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="Main\LogonScreens\SelectSdkScreen.Designer.cs">
-      <DependentUpon>SelectSdkScreen.cs</DependentUpon>
-    </Compile>
     <Compile Include="Main\MainModule.cs" />
     <Compile Include="Main\NavigationModule.cs" />
     <Compile Include="Main\NavigationPanelProvider.cs" />
@@ -2834,9 +2828,6 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Main\LogonScreens\SelectDatasourceScreen.resx">
       <DependentUpon>SelectDatasourceScreen.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Main\LogonScreens\SelectSdkScreen.resx">
-      <DependentUpon>SelectSdkScreen.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Main\PreLogonScreen.resx">
       <DependentUpon>PreLogonScreen.cs</DependentUpon>
