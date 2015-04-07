@@ -150,14 +150,10 @@
 
 		function onLoadSeatMapSuccess(data) {
 
-			//Robtodo: data has seatPriority, Id etc..
-
 			vm.parentId = data.ParentId;
 			vm.seatMapId = data.Id;
-			//canvasEditor.LoadExistingSeatMapData(data);
 			vm.breadcrumbs = data.BreadcrumbInfo;
 
-			//self.Loading(false);
 			//self.ResetZoom();
 			//self.CacheObjectsAsImages();
 			vm.isLoading = false;

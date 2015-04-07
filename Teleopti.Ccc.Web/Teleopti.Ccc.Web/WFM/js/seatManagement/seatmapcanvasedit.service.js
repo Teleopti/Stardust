@@ -3,8 +3,26 @@
 angular.module('wfm.seatMap')
 	.factory('seatMapCanvasEditService', ['seatMapCanvasUtilsService', 'seatMapService', function (utils, seatMapService) {
 
+		var editService = {
 
-		var onKeyDownHandler = function (canvas, event) {
+			addImage: addImage,
+			addSeat: addSeat,
+			onKeyDownHandler: onKeyDownHandler,
+			save: save,
+			group: groupActiveObjects,
+			ungroup: ungroupActiveObjects,
+			sendToBack: sendToBack,
+			sendBackward: sendBackward,
+			bringForward: bringForward,
+			bringToFront: bringToFront,
+			alignLeft: alignLeft,
+			alignRight: alignRight,
+			alignTop: alignTop,
+			alignBottom: alignBottom,
+
+		};
+
+		function onKeyDownHandler (canvas, event) {
 			//event.preventDefault();
 			var key = window.event ? window.event.keyCode : event.keyCode;
 
@@ -29,7 +47,7 @@ angular.module('wfm.seatMap')
 			}
 		};
 
-		var copy = function (canvas) {
+		function copy(canvas) {
 			if (utils.hasActiveGroup(canvas)) {
 				// selected separate objects
 				editService.copiedGroup = canvas.getActiveGroup();
@@ -40,7 +58,7 @@ angular.module('wfm.seatMap')
 			};
 		};
 
-		var paste = function (canvas) {
+		function paste(canvas) {
 			if (editService.copiedGroup) {
 				cloneSelectedItems(canvas, editService.copiedGroup);
 			} else if (editService.copiedObject) {
@@ -48,7 +66,7 @@ angular.module('wfm.seatMap')
 			}
 		};
 
-		var remove = function (canvas) {
+		function remove (canvas) {
 			var activeObject = canvas.getActiveObject(),
 				activeGroup = canvas.getActiveGroup();
 
@@ -62,7 +80,7 @@ angular.module('wfm.seatMap')
 			}
 		};
 
-		var removeObjectAndTidyReferences = function (canvas, obj) {
+		function removeObjectAndTidyReferences (canvas, obj) {
 
 			if (obj.get('type') == 'group') {
 				var objectsInGroup = obj.getObjects();
@@ -75,7 +93,7 @@ angular.module('wfm.seatMap')
 			//canvas.renderAll();
 		};
 
-		var cloneObject = function (canvas, objectToClone) {
+		function cloneObject (canvas, objectToClone) {
 
 			objectToClone.clone(function (obj) {
 				pasteObject(canvas, obj);
@@ -83,7 +101,7 @@ angular.module('wfm.seatMap')
 			});
 		};
 
-		var cloneSelectedItems = function (canvas, cloneGroup) {
+		function cloneSelectedItems (canvas, cloneGroup) {
 
 			canvas.deactivateAll();
 
@@ -103,7 +121,7 @@ angular.module('wfm.seatMap')
 			}
 		};
 
-		var afterCloneOfSelectedItems = function (canvas, childObjects) {
+		function afterCloneOfSelectedItems (canvas, childObjects) {
 
 			var group = new fabric.Group(childObjects.reverse(), {
 				canvas: canvas
@@ -121,7 +139,7 @@ angular.module('wfm.seatMap')
 			canvas.add(obj);
 		};
 
-		var updateSeatDataOnPaste = function (obj, seatPriority) {
+		function updateSeatDataOnPaste (obj, seatPriority) {
 			if (obj.type == 'group') {
 				for (var i = 0; i < obj._objects.length; i++) {
 					var childObj = obj._objects[i];
@@ -140,7 +158,7 @@ angular.module('wfm.seatMap')
 			}
 		}
 
-		var getTemporaryId = function () {
+		function getTemporaryId () {
 
 			function s4() {
 				return Math.floor((1 + Math.random()) * 0x10000)
@@ -152,7 +170,7 @@ angular.module('wfm.seatMap')
 		};
 
 
-		var addImage = function (canvas, imageName) {
+		function addImage (canvas, imageName) {
 			fabric.Image.fromURL('js/SeatManagement/Images/' + imageName, function (image) {
 				image.set({
 					left: 400,
@@ -163,7 +181,7 @@ angular.module('wfm.seatMap')
 			});
 		};
 
-		var addSeat = function (canvas, withDesk) {
+		function addSeat (canvas, withDesk) {
 
 			var seatPriority = utils.getHighestSeatPriority(canvas) + 1;
 
@@ -189,7 +207,7 @@ angular.module('wfm.seatMap')
 			});
 		};
 
-		var addText = function (canvas, text) {
+		function addText (canvas, text) {
 			var textSample = new fabric.IText(text.slice(0, text.length), {
 				left: 400,
 				top: 300,
@@ -210,23 +228,23 @@ angular.module('wfm.seatMap')
 
 		// Layers
 
-		var sendBackward = function (canvas) {
+		function sendBackward (canvas) {
 			actionOnActiveObject(canvas, function (obj) { canvas.sendBackwards(obj); });
 		};
 
-		var sendToBack = function (canvas) {
+		function sendToBack (canvas) {
 			actionOnActiveObject(canvas, function (obj) { canvas.sendToBack(obj); });
 		};
 
-		var bringForward = function (canvas) {
+		function bringForward (canvas) {
 			actionOnActiveObject(canvas, function (obj) { canvas.bringForward(obj); });
 		};
 
-		var bringToFront = function (canvas) {
+		function bringToFront (canvas) {
 			actionOnActiveObject(canvas, function (obj) { canvas.bringToFront(obj); });
 		};
 
-		var actionOnActiveObject = function (canvas, func) {
+		function actionOnActiveObject (canvas, func) {
 			var activeObject = canvas.getActiveObject();
 			if (activeObject) {
 				func(activeObject);
@@ -235,7 +253,7 @@ angular.module('wfm.seatMap')
 
 		//Grouping
 
-		var groupActiveObjects = function (canvas) {
+		function groupActiveObjects (canvas) {
 			var activeGroup = canvas.getActiveGroup();
 			if (activeGroup) {
 				var objectsInGroup = activeGroup.getObjects();
@@ -251,14 +269,14 @@ angular.module('wfm.seatMap')
 			}
 		};
 
-		var ungroupActiveObjects = function (canvas) {
+		function ungroupActiveObjects (canvas) {
 			var activeObject = canvas.getActiveObject();
 			if (activeObject && activeObject._objects) {
 				ungroupObjects(canvas, activeObject);
 			}
 		};
 
-		var ungroupObjects = function (canvas, group) {
+		function ungroupObjects (canvas, group) {
 			var items = group._objects;
 			// translate the group-relative coordinates to canvas relative ones
 			group._restoreObjectsState();
@@ -271,15 +289,15 @@ angular.module('wfm.seatMap')
 
 		//Alignment, Spacing Rotation and Flip
 
-		var alignLeft = function (canvas) {
+		function alignLeft (canvas) {
 			alignHorizontal(canvas, true);
 		};
 
-		var alignRight = function (canvas) {
+		function alignRight (canvas) {
 			alignHorizontal(canvas, false);
 		};
 
-		var alignHorizontal = function (canvas, leftAlign) {
+		function alignHorizontal (canvas, leftAlign) {
 			var activeGroup = canvas.getActiveGroup();
 			if (activeGroup) {
 				var left = 0;
@@ -307,15 +325,15 @@ angular.module('wfm.seatMap')
 			}
 		}
 
-		var alignTop = function (canvas) {
+		function alignTop (canvas) {
 			alignVertical(canvas, true);
 		};
 
-		var alignBottom = function (canvas) {
+		function alignBottom (canvas) {
 			alignVertical(canvas, false);
 		};
 
-		var alignVertical = function (canvas, topAlign) {
+		function alignVertical (canvas, topAlign) {
 			var activeGroup = canvas.getActiveGroup();
 			if (activeGroup) {
 				var top = 0;
@@ -341,47 +359,13 @@ angular.module('wfm.seatMap')
 				canvas.renderAll();
 			}
 		};
-		var save = function (seatMapSaveCommand, saveCallback) {
+
+		function save (seatMapSaveCommand, saveCallback) {
 			seatMapService.seatMap.save(seatMapSaveCommand).$promise.then(function (data) {
 				saveCallback(data);
 			});
 
 		};
-
-		var editService = {
-			
-			addImage : addImage,
-			addSeat : addSeat,
-			onKeyDownHandler : onKeyDownHandler,
-			save : save,
-			group : groupActiveObjects,
-			ungroup : ungroupActiveObjects,
-			sendToBack : sendToBack,
-			sendBackward : sendBackward,
-			bringForward : bringForward,
-			bringToFront : bringToFront,
-			alignLeft: alignLeft,
-			alignRight : alignRight,
-			alignTop: alignTop,
-			alignBottom: alignBottom,
-
-
-		};
-
-		//editService.addImage = addImage;
-		//editService.addSeat = addSeat;
-		//editService.onKeyDownHandler = onKeyDownHandler;
-		//editService.save = save;
-		//editService.group = groupActiveObjects;
-		//editService.ungroup = ungroupActiveObjects;
-		//editService.sendToBack = sendToBack;
-		//editService.sendBackward = sendBackward;
-		//editService.bringForward = bringForward;
-		//editService.bringToFront = bringToFront;
-		//editService.alignLeft= alignLeft;
-		//editService.alignRight = alignRight;
-		//editService.alignTop= alignTop;
-		//editService.alignBottom= alignBottom;
 
 		return editService;
 

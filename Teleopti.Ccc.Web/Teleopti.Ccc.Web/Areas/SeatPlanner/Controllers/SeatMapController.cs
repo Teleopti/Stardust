@@ -20,13 +20,18 @@ namespace Teleopti.Ccc.Web.Areas.SeatPlanner.Controllers
 		private ICommandDispatcher _commandDispatcher;
 		private ILoggedOnUser _loggedOnUser;
 
+		public SeatMapController()
+		{
+
+		}
+		
 		public SeatMapController(ISeatMapProvider seatMapProvider,ICommandDispatcher commandDispatcher, ILoggedOnUser loggedOnUser)
 		{
 			_commandDispatcher = commandDispatcher;
 			_loggedOnUser = loggedOnUser;
 			_seatMapProvider = seatMapProvider;
 		}
-
+		
 		[UnitOfWork, Route("api/SeatPlanner/SeatMap"), HttpGet]
 		public virtual LocationViewModel Get(Guid? id)
 		{
