@@ -890,6 +890,7 @@
     <Compile Include="Scheduling\Legacy\Commands\GroupPageCreator.cs" />
     <Compile Include="Scheduling\Legacy\Commands\GroupPageFactory.cs" />
     <Compile Include="Scheduling\Legacy\Commands\GroupPersonBuilderForOptimizationFactory.cs" />
+    <Compile Include="Scheduling\Legacy\Commands\GroupScheduleGroupPageDataProvider.cs" />
     <Compile Include="Scheduling\Legacy\Commands\ICommonStateHolder.cs" />
     <Compile Include="Scheduling\Legacy\Commands\IDisableDeletedFilter.cs" />
     <Compile Include="Scheduling\Legacy\Commands\IExtendReduceDaysOffHelper.cs" />
@@ -900,6 +901,7 @@
     <Compile Include="Scheduling\Legacy\Commands\IGroupScheduleGroupPageDataProvider.cs" />
     <Compile Include="Scheduling\Legacy\Commands\IIntraIntervalOptimizationCommand.cs" />
     <Compile Include="Scheduling\Legacy\Commands\IMatrixListFactory.cs" />
+    <Compile Include="Scheduling\Legacy\Commands\InnerOptimizerHelperHelper.cs" />
     <Compile Include="Scheduling\Legacy\Commands\IntraIntervalOptimizationCommand.cs" />
     <Compile Include="Scheduling\Legacy\Commands\IOptimizerHelperHelper.cs" />
     <Compile Include="Scheduling\Legacy\Commands\IResourceOptimizationHelperWin.cs" />

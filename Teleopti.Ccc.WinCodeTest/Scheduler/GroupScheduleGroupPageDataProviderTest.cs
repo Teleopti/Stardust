@@ -6,9 +6,7 @@ using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
 using Teleopti.Ccc.Domain.Security.Principal;
-using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.TestCommon.FakeData;
-using Teleopti.Ccc.WinCode.Scheduling;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
 
@@ -18,7 +16,6 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 	public class GroupScheduleGroupPageDataProviderTest
 	{
 		private GroupScheduleGroupPageDataProvider _target;
-		private MockRepository _mocks;
 		private ISchedulerStateHolder _stateHolder;
 		private IRepositoryFactory _repositoryFactory;
 		private IUnitOfWorkFactory _unitOfWorkFactory;
@@ -27,100 +24,73 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 		private IPerson _person1;
 		private IPerson _person2;
 	    private IPersonAccountUpdater _personAccountUpdater;
+		private IDisableDeletedFilter _disableDeletedFilter;
+		private IList<IPerson> _people;
 
-	    [SetUp]
+		[SetUp]
 		public void Setup()
 	    {
-            _mocks = new MockRepository();
-	        _personAccountUpdater = _mocks.DynamicMock<IPersonAccountUpdater>();
-	        var persons = new List<IPerson>();
+			_people = new List<IPerson>();
 			_person1 = PersonFactory.CreatePerson();
-            _person2 = PersonFactory.CreatePerson();
+			_person2 = PersonFactory.CreatePerson();
 			_person2.TerminatePerson(new DateOnly(2005, 1, 1), new PersonAccountUpdaterDummy());
-            _resultHolder = _mocks.StrictMock<ISchedulingResultStateHolder>();
-            _repositoryFactory = _mocks.StrictMock<IRepositoryFactory>();
-			_unitOfWorkFactory = _mocks.StrictMock<IUnitOfWorkFactory>();
-			_uow = _mocks.StrictMock<IUnitOfWork>();
+			
+			_personAccountUpdater = MockRepository.GenerateMock<IPersonAccountUpdater>();
+			_resultHolder = MockRepository.GenerateMock<ISchedulingResultStateHolder>();
+			_repositoryFactory = MockRepository.GenerateMock<IRepositoryFactory>();
+			_disableDeletedFilter = MockRepository.GenerateMock<IDisableDeletedFilter>();
+			_unitOfWorkFactory = MockRepository.GenerateMock<IUnitOfWorkFactory>();
+			_uow = MockRepository.GenerateMock<IUnitOfWork>();
             
-            Expect.Call(_resultHolder.PersonsInOrganization).Return(persons);
-            _mocks.ReplayAll();
+            _resultHolder.Stub(x => x.PersonsInOrganization).Return(_people);
+
             _stateHolder = new SchedulerStateHolder(ScenarioFactory.CreateScenarioAggregate(), new DateOnlyPeriodAsDateTimePeriod(new DateOnlyPeriod(),
-				TeleoptiPrincipal.CurrentPrincipal.Regional.TimeZone), new List<IPerson> { _person1, _person2 }, new DisableDeletedFilter(new FixedCurrentUnitOfWork(_uow)), _resultHolder);
-			_target = new GroupScheduleGroupPageDataProvider(_stateHolder, _repositoryFactory, _unitOfWorkFactory);
-            _mocks.BackToRecordAll();
+				TeleoptiPrincipal.CurrentPrincipal.Regional.TimeZone), new List<IPerson> { _person1, _person2 }, _disableDeletedFilter, _resultHolder);
+			_target = new GroupScheduleGroupPageDataProvider(_stateHolder, _repositoryFactory, _unitOfWorkFactory, _disableDeletedFilter);
 		}
 
 		[Test]
 		public void VerifyBusinessUnitCollection()
 		{
-			using (_mocks.Record())
-			{
-				
-			}
-
             var expected = ((ITeleoptiIdentity)TeleoptiPrincipal.CurrentPrincipal.Identity).BusinessUnit;
 
-			using (_mocks.Playback())
-			{
-				Assert.AreEqual(expected, _target.BusinessUnitCollection.FirstOrDefault());
-			}
+			Assert.AreEqual(expected, _target.BusinessUnitCollection.FirstOrDefault());
 		}
 
 		[Test]
 		public void VerifyContractCollection()
 		{
-			var repository = _mocks.StrictMock<IContractRepository>();
-			using (_mocks.Record())
-			{
+			var repository = MockRepository.GenerateMock<IContractRepository>();
+
 				commonMocks();
-				Expect.Call(_repositoryFactory.CreateContractRepository(_uow)).Return(repository);
-				Expect.Call(repository.LoadAll()).Return(new List<IContract>());
-			}
+				_repositoryFactory.Stub(x => x.CreateContractRepository(_uow)).Return(repository);
+				repository.Stub(x => x.LoadAll()).Return(new List<IContract>());
 
-			object expected = null;
-
-			using (_mocks.Playback())
-			{
-				Assert.AreEqual(expected, _target.ContractCollection.FirstOrDefault());
-			}
+				Assert.IsNull(_target.ContractCollection.FirstOrDefault());
 		}
 
 		[Test]
 		public void VerifyContractScheduleCollection()
 		{
-			var repository = _mocks.StrictMock<IContractScheduleRepository>();
-			using (_mocks.Record())
-			{
-				commonMocks();
-				Expect.Call(_repositoryFactory.CreateContractScheduleRepository(_uow)).Return(repository);
-				Expect.Call(repository.LoadAll()).Return(new List<IContractSchedule>());
-			}
+			var repository = MockRepository.GenerateMock<IContractScheduleRepository>();
 
-			object expected = null;
+			commonMocks();
+			_repositoryFactory.Stub(x => x.CreateContractScheduleRepository(_uow)).Return(repository);
+			repository.Stub(x => x.LoadAll()).Return(new List<IContractSchedule>());
 
-			using (_mocks.Playback())
-			{
-				Assert.AreEqual(expected, _target.ContractScheduleCollection.FirstOrDefault());
-			}
+			Assert.IsNull(_target.ContractScheduleCollection.FirstOrDefault());
 		}
 
 		[Test]
 		public void VerifyPartTimePercentageCollection()
 		{
-			var repository = _mocks.StrictMock<IPartTimePercentageRepository>();
-			using (_mocks.Record())
-			{
-				commonMocks();
-				Expect.Call(_repositoryFactory.CreatePartTimePercentageRepository(_uow)).Return(repository);
-				Expect.Call(repository.LoadAll()).Return(new List<IPartTimePercentage>());
-			}
+			var repository = MockRepository.GenerateMock<IPartTimePercentageRepository>();
 
-			object expected = null;
+			commonMocks();
+			_repositoryFactory.Stub(x => x.CreatePartTimePercentageRepository(_uow)).Return(repository);
+			repository.Stub(x => x.LoadAll()).Return(new List<IPartTimePercentage>());
 
-			using (_mocks.Playback())
-			{
-				Assert.AreEqual(expected, _target.PartTimePercentageCollection.FirstOrDefault());
-			}
+			Assert.IsNull(_target.PartTimePercentageCollection.FirstOrDefault());
 		}
 
 		[Test]
@@ -132,74 +102,49 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 		[Test]
 		public void VerifyRuleSetBagCollection()
 		{
-			var repository = _mocks.StrictMock<IRuleSetBagRepository>();
-			using (_mocks.Record())
-			{
-				commonMocks();
-				Expect.Call(_repositoryFactory.CreateRuleSetBagRepository(_uow)).Return(repository);
-				Expect.Call(repository.LoadAll()).Return(new List<IRuleSetBag>());
-			}
+			var repository = MockRepository.GenerateMock<IRuleSetBagRepository>();
 
-			object expected = null;
+			commonMocks();
+			_repositoryFactory.Stub(x => x.CreateRuleSetBagRepository(_uow)).Return(repository);
+			repository.Stub(x => x.LoadAll()).Return(new List<IRuleSetBag>());
 
-			using (_mocks.Playback())
-			{
-				Assert.AreEqual(expected, _target.RuleSetBagCollection.FirstOrDefault());
-			}
+			Assert.IsNull(_target.RuleSetBagCollection.FirstOrDefault());
 		}
 
 		[Test]
 		public void VerifyUserDefinedGroupings()
 		{
-			var repository = _mocks.StrictMock<IGroupPageRepository>();
-            var dic = _mocks.StrictMock<IScheduleDictionary>();
-			using (_mocks.Record())
-			{
-				Expect.Call(_unitOfWorkFactory.CreateAndOpenUnitOfWork()).Return(_uow);
-                Expect.Call(_resultHolder.Schedules).Return(dic).Repeat.Twice();
-                Expect.Call(dic.Keys).Return(new List<IPerson>()).Repeat.Twice();
-				Expect.Call(() => _uow.Reassociate(new List<IPerson>()));
-				Expect.Call(_repositoryFactory.CreateGroupPageRepository(_uow)).Return(repository);
-				Expect.Call(repository.LoadAllGroupPageWhenPersonCollectionReAssociated()).Return(new List<IGroupPage>());
-				Expect.Call(() => _uow.Dispose());
+			var repository = MockRepository.GenerateMock<IGroupPageRepository>();
+			var dic = MockRepository.GenerateMock<IScheduleDictionary>();
 
-			}
+			_unitOfWorkFactory.Stub(x => x.CreateAndOpenUnitOfWork()).Return(_uow);
+			_resultHolder.Stub(x => x.Schedules).Return(dic).Repeat.Twice();
+			dic.Stub(x => x.Keys).Return(new List<IPerson>()).Repeat.Twice();
+			_repositoryFactory.Stub(x => x.CreateGroupPageRepository(_uow)).Return(repository);
+			repository.Stub(x => x.LoadAllGroupPageWhenPersonCollectionReAssociated()).Return(new List<IGroupPage>());
 
-			using (_mocks.Playback())
-			{
-				Assert.AreEqual(0, _target.UserDefinedGroupings.Count());
-			}
+			Assert.AreEqual(0, _target.UserDefinedGroupings.Count());
+			_uow.AssertWasCalled(x => x.Reassociate(new List<IPerson>()));
 		}
 
-		
+		[Test]
+		public void VerifySkillCollection()
+		{
+			var repository = MockRepository.GenerateMock<ISkillRepository>();
+			_unitOfWorkFactory.Stub(x => x.CreateAndOpenUnitOfWork()).Return(_uow);
+			_repositoryFactory.Stub(x => x.CreateSkillRepository(_uow)).Return(repository);
+			repository.Stub(x => x.LoadAll()).Return(new List<ISkill>());
 
-        [Test]
-        public void VerifySkillCollection()
-        {
-            var repository = _mocks.StrictMock<ISkillRepository>();
-            using (_mocks.Record())
-            {
-                Expect.Call(_unitOfWorkFactory.CreateAndOpenUnitOfWork()).Return(_uow);
-                Expect.Call(_repositoryFactory.CreateSkillRepository(_uow)).Return(repository);
-                Expect.Call(repository.LoadAll()).Return(new List<ISkill>());
-                Expect.Call(() => _uow.Dispose());
-            }
-
-            object expected = null;
-
-            using (_mocks.Playback())
-            {
-                Assert.AreEqual(expected, _target.SkillCollection.FirstOrDefault());
-            }
-        }
+			Assert.IsNull(_target.SkillCollection.FirstOrDefault());
+		}
 
 		[Test]
 		public void ShouldRemoveUnloadedPersonsFromGroupPages()
 		{
-			var dic = _mocks.StrictMock<IScheduleDictionary>();
-			var person = _mocks.StrictMock<IPerson>();
-			var person2 = _mocks.StrictMock<IPerson>();
-			var person3 = _mocks.StrictMock<IPerson>();
+			var dic = MockRepository.GenerateMock<IScheduleDictionary>();
+			var person = MockRepository.GenerateMock<IPerson>();
+			var person2 = MockRepository.GenerateMock<IPerson>();
+			var person3 = MockRepository.GenerateMock<IPerson>();
 			ICollection<IPerson> keys = new List<IPerson> {person3};
 
 			var groupPage = new GroupPage("root");
@@ -212,22 +157,19 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 			childGroup.AddPerson(person3);
 			
 			rootPersonGroup.AddChildGroup(childGroup);
-			Expect.Call(_stateHolder.Schedules).Return(dic);
-			Expect.Call(dic.Keys).Return(keys);
-			_mocks.ReplayAll();
+			_resultHolder.Stub(x => x.Schedules).Return(dic);
+			dic.Stub(x => x.Keys).Return(keys);
+
 			_target.RemoveNotLoadedPersonsFromCollection(new List<IGroupPage>{groupPage});
 			Assert.That(rootPersonGroup.PersonCollection,Is.Empty);
 			Assert.That(childGroup.PersonCollection.Contains(person3));
 			Assert.That(childGroup.PersonCollection.Contains(person2),Is.False);
-			_mocks.VerifyAll();
 		}
 
 		private void commonMocks()
 		{
-			Expect.Call(_unitOfWorkFactory.CreateAndOpenUnitOfWork()).Return(_uow);
-			Expect.Call(_uow.DisableFilter(QueryFilter.Deleted)).Return(_uow);
-
-			Expect.Call(() => _uow.Dispose()).Repeat.Twice();
+			_unitOfWorkFactory.Stub(x => x.CreateAndOpenUnitOfWork()).Return(_uow);
+			_disableDeletedFilter.Stub(x => x.Disable()).Return(_uow);
 		}
 
 		[Test]
@@ -236,16 +178,17 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 			var person1 = PersonFactory.CreatePerson("ittan");
 			var person2 = PersonFactory.CreatePerson("tvåan");
 			var person3 = PersonFactory.CreatePerson("trean");
-			var persons = new List<IPerson> {person1, person2, person3,};
-			Expect.Call(_resultHolder.PersonsInOrganization).Return(persons);
-		    
-            _mocks.ReplayAll();
+			
+			_people.Clear();
+			_people.Add(person1);
+			_people.Add(person2);
+			_people.Add(person3);
+			
             person2.TerminatePerson(new DateOnly(2015, 1, 1), _personAccountUpdater);
             person3.TerminatePerson(new DateOnly(2005, 1, 1), _personAccountUpdater);
 
 			var result = _target.AllLoadedPersons;
 			Assert.That(result.Count(),Is.EqualTo(3));
-			_mocks.VerifyAll();
 		}
 	}
 }

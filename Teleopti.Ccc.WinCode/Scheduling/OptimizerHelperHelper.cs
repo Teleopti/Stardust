@@ -1,23 +1,17 @@
-using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using Autofac;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.DayOffPlanning;
 using Teleopti.Ccc.Domain.Optimization;
-using Teleopti.Ccc.Domain.Optimization.MatrixLockers;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
-using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
 using Teleopti.Ccc.Secrets.DayOffPlanning;
-using Teleopti.Ccc.WinCode.Common;
-using Teleopti.Interfaces;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.WinCode.Scheduling
 {
-	public class OptimizerHelperHelper : IOptimizerHelperHelper
+	public class OptimizerHelperHelper
 	{
 		public void ScheduleBlankSpots(
 			IEnumerable<IScheduleMatrixOriginalStateContainer> matrixOriginalStateContainers,
@@ -57,127 +51,12 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 			}
 		}
 
-		public void LockDaysForIntradayOptimization(IList<IScheduleMatrixPro> matrixList, DateOnlyPeriod selectedPeriod)
-		{
-			IMatrixOvertimeLocker matrixOvertimeLocker = new MatrixOvertimeLocker(matrixList);
-			matrixOvertimeLocker.Execute();
-			IMatrixNoMainShiftLocker noMainShiftLocker = new MatrixNoMainShiftLocker(matrixList);
-			noMainShiftLocker.Execute();
-			var matrixUnselectedDaysLocker = new MatrixUnselectedDaysLocker(matrixList, selectedPeriod);
-			matrixUnselectedDaysLocker.Execute();
-		}
-
-		public void LockDaysForDayOffOptimization(IList<IScheduleMatrixPro> matrixList, IRestrictionExtractor restrictionExtractor, IOptimizationPreferences optimizationPreferences, DateOnlyPeriod selectedPeriod)
-		{
-			var schedulingOptionsCreator = new SchedulingOptionsCreator();
-			var schedulingOptions = schedulingOptionsCreator.CreateSchedulingOptions(optimizationPreferences);
-
-			//Not needed anymore i think, 
-			IMatrixRestrictionLocker restrictionLocker = new MatrixRestrictionLocker(schedulingOptions, restrictionExtractor);
-			foreach (IScheduleMatrixPro scheduleMatrixPro in matrixList)
-				lockRestrictionDaysInMatrix(scheduleMatrixPro, restrictionLocker);
-			IMatrixMeetingDayLocker meetingDayLocker = new MatrixMeetingDayLocker(matrixList);
-			meetingDayLocker.Execute();
-			IMatrixPersonalShiftLocker personalShiftLocker = new MatrixPersonalShiftLocker(matrixList);
-			personalShiftLocker.Execute();
-			IMatrixOvertimeLocker matrixOvertimeLocker = new MatrixOvertimeLocker(matrixList);
-			matrixOvertimeLocker.Execute();
-			IMatrixNoMainShiftLocker noMainShiftLocker = new MatrixNoMainShiftLocker(matrixList);
-			noMainShiftLocker.Execute();
-			IMatrixShiftsNotAvailibleLocker matrixShiftsNotAvailibleLocker = new MatrixShiftsNotAvailibleLocker();
-			matrixShiftsNotAvailibleLocker.Execute(matrixList);
-			var matrixUnselectedDaysLocker = new MatrixUnselectedDaysLocker(matrixList, selectedPeriod);
-			matrixUnselectedDaysLocker.Execute();
-
-			var matrixKeepActivityLocker = new MatrixKeepActivityLocker(matrixList, optimizationPreferences.Shifts.SelectedActivities);
-			matrixKeepActivityLocker.Execute();
-		}
-
-		private static void lockRestrictionDaysInMatrix(IScheduleMatrixPro matrix, IMatrixRestrictionLocker locker)
-		{
-			IList<DateOnly> daysToLock = locker.Execute(matrix);
-			foreach (var dateOnly in daysToLock)
-			{
-				matrix.LockPeriod(new DateOnlyPeriod(dateOnly, dateOnly));
-			}
-		}
-
-		public IPeriodValueCalculator CreatePeriodValueCalculator(IAdvancedPreferences advancedPreferences,
-			IScheduleResultDataExtractor dataExtractor)
-		{
-			IPeriodValueCalculatorProvider calculatorProvider = new PeriodValueCalculatorProvider();
-			return calculatorProvider.CreatePeriodValueCalculator(advancedPreferences, dataExtractor);
-		}
-
-		public IScheduleResultDataExtractor CreateAllSkillsDataExtractor(
-			IAdvancedPreferences advancedPreferences,
-			DateOnlyPeriod selectedPeriod,
-			ISchedulingResultStateHolder stateHolder)
-		{
-			IScheduleResultDataExtractorProvider dataExtractorProvider = new ScheduleResultDataExtractorProvider();
-			IScheduleResultDataExtractor allSkillsDataExtractor = dataExtractorProvider.CreateAllSkillsDataExtractor(selectedPeriod, stateHolder, advancedPreferences);
-			return allSkillsDataExtractor;
-		}
-
 		public IScheduleResultDataExtractor CreatePersonalSkillsDataExtractor(
 			IAdvancedPreferences advancedPreferences,
 			IScheduleMatrixPro scheduleMatrix)
 		{
 			IScheduleResultDataExtractorProvider dataExtractorProvider = new ScheduleResultDataExtractorProvider();
 			return dataExtractorProvider.CreatePersonalSkillDataExtractor(scheduleMatrix, advancedPreferences);
-		}
-
-		public DateOnlyPeriod GetSelectedPeriod(IEnumerable<IScheduleDay> scheduleDays)
-		{
-			if (scheduleDays == null) throw new ArgumentNullException("scheduleDays");
-			DateOnly minDate = DateOnly.MaxValue;
-			DateOnly maxDate = DateOnly.MinValue;
-			foreach (var scheduleDay in scheduleDays)
-			{
-				if (scheduleDay.DateOnlyAsPeriod.DateOnly < minDate)
-					minDate = scheduleDay.DateOnlyAsPeriod.DateOnly;
-
-				if (scheduleDay.DateOnlyAsPeriod.DateOnly > maxDate)
-					maxDate = scheduleDay.DateOnlyAsPeriod.DateOnly;
-			}
-
-			return new DateOnlyPeriod(minDate, maxDate);
-		}
-
-		/// <summary>
-		/// Get the ISchedulePart list contained in the clips. This method creates a list of the ISchedulePart objects
-		/// that are contained in the grid. Filters out those that are null, or if does not have the ISchedulePart type.
-		/// </summary>
-		/// <remarks>
-		/// This method is used to get the selected objects in a grid.
-		/// </remarks>
-		public ReadOnlyCollection<IScheduleDay> ContainedSchedulePartList(IEnumerable<Clip> clipList)
-		{
-			Func<IList<IScheduleDay>> clipObjectListFilter = delegate
-			{
-				IList<IScheduleDay> result = new List<IScheduleDay>();
-				foreach (Clip clip in clipList)
-				{
-					if (clip != null && clip.ClipObject != null)
-					{
-						var clipObject = clip.ClipObject as IScheduleDay;
-						if (clipObject != null)
-							result.Add(clipObject);
-					}
-				}
-				return result;
-			};
-			return new ReadOnlyCollection<IScheduleDay>(clipObjectListFilter());
-		}
-
-		public IEnumerable<IDayOffDecisionMaker> CreateDecisionMakers(
-			ILockableBitArray scheduleMatrixArray,
-			IOptimizationPreferences optimizerPreferences, IComponentContext container)
-		{
-			IDayOffOptimizationDecisionMakerFactory dayOffOptimizationDecisionMakerFactory =
-				container.Resolve<IDayOffOptimizationDecisionMakerFactory>();
-
-			return dayOffOptimizationDecisionMakerFactory.CreateDecisionMakers(scheduleMatrixArray, optimizerPreferences);
 		}
 
 		public void SetConsiderShortBreaks(IEnumerable<IPerson> persons, DateOnlyPeriod period, IReschedulingPreferences options, IComponentContext container)

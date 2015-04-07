@@ -2,10 +2,8 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using NHibernate.Criterion;
 using Teleopti.Ccc.Domain.Auditing;
 using Teleopti.Ccc.Domain.Collection;
-using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Interfaces.Domain;
@@ -153,12 +151,12 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 
 		public ICollection<IPerson> FindPeopleInOrganizationLight(DateOnlyPeriod period)
 		{
-			throw new NotImplementedException();
+			return _persons.Where(p => p.PersonPeriods(period).Count > 0).ToArray();
 		}
 
 		public ICollection<IPerson> FindPeople(IEnumerable<Guid> peopleId)
 		{
-			return _persons.Where(x => peopleId.Any(id => id.Equals(x.Id.Value))).ToArray();
+			return _persons.Where(x => peopleId.Any(id => id == x.Id.GetValueOrDefault())).ToArray();
 		}
 
 		public ICollection<IPerson> FindPeople(IEnumerable<IPerson> people)

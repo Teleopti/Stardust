@@ -1,35 +1,36 @@
 using System;
 using System.Collections.Generic;
 using Teleopti.Ccc.Domain.Repositories;
-using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
 using Teleopti.Ccc.Domain.Security.Principal;
-using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
 
-namespace Teleopti.Ccc.WinCode.Scheduling
+namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 {
 	public class GroupScheduleGroupPageDataProvider : IGroupScheduleGroupPageDataProvider
     {
         private readonly ISchedulerStateHolder _stateHolder;
         private readonly IRepositoryFactory _repositoryFactory;
         private readonly IUnitOfWorkFactory _unitOfWorkFactory;
+		private readonly IDisableDeletedFilter _disableDeletedFilter;
 
-        private IList<IContract> _contractCollection;
+		private IList<IContract> _contractCollection;
         private IList<IContractSchedule> _contractScheduleCollection;
         private IList<IPartTimePercentage> _partTimePercentageCollection;
         private IList<IRuleSetBag> _ruleSetBagCollection;
         private IList<IGroupPage> _groupPageCollection;
+        private IList<IBusinessUnit> _businessUnitCollection;
         private IList<ISkill> _skillCollection;
         private IList<IPerson> _personCollection;
 		private IList<IPerson> _allPersons;
 		private readonly object _lockObject = new Object();
 
-		public GroupScheduleGroupPageDataProvider(ISchedulerStateHolder stateHolder, IRepositoryFactory repositoryFactory, IUnitOfWorkFactory unitOfWorkFactory)
+		public GroupScheduleGroupPageDataProvider(ISchedulerStateHolder stateHolder, IRepositoryFactory repositoryFactory, IUnitOfWorkFactory unitOfWorkFactory, IDisableDeletedFilter disableDeletedFilter)
         {
             _stateHolder = stateHolder;
             _repositoryFactory = repositoryFactory;
             _unitOfWorkFactory = unitOfWorkFactory;
+			_disableDeletedFilter = disableDeletedFilter;
         }
 
         public IEnumerable<IPerson> PersonCollection
@@ -53,12 +54,12 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 	            {
 					if (_contractCollection == null)
 					{
-						using (IUnitOfWork uow = _unitOfWorkFactory.CreateAndOpenUnitOfWork())
+						using (var uow = maybeDisposableUnitOfWork.Create(_unitOfWorkFactory))
 						{
-							using (uow.DisableFilter(QueryFilter.Deleted))
+							using (_disableDeletedFilter.Disable())
 							{
 								_contractCollection =
-								_repositoryFactory.CreateContractRepository(uow).LoadAll();
+								_repositoryFactory.CreateContractRepository(uow.Uow).LoadAll();
 							}
 						}
 					}
@@ -76,12 +77,12 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 	            {
 					if (_contractScheduleCollection == null)
 					{
-						using (IUnitOfWork uow = _unitOfWorkFactory.CreateAndOpenUnitOfWork())
+						using (var uow = maybeDisposableUnitOfWork.Create(_unitOfWorkFactory))
 						{
-							using (uow.DisableFilter(QueryFilter.Deleted))
+							using (_disableDeletedFilter.Disable())
 							{
 								_contractScheduleCollection =
-								_repositoryFactory.CreateContractScheduleRepository(uow).LoadAll();
+								_repositoryFactory.CreateContractScheduleRepository(uow.Uow).LoadAll();
 							}
 						}
 					}
@@ -99,12 +100,12 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 	            {
 					if (_partTimePercentageCollection == null)
 					{
-						using (IUnitOfWork uow = _unitOfWorkFactory.CreateAndOpenUnitOfWork())
+						using (var uow = maybeDisposableUnitOfWork.Create(_unitOfWorkFactory))
 						{
-							using (uow.DisableFilter(QueryFilter.Deleted))
+							using (_disableDeletedFilter.Disable())
 							{
 								_partTimePercentageCollection =
-								_repositoryFactory.CreatePartTimePercentageRepository(uow).LoadAll();
+								_repositoryFactory.CreatePartTimePercentageRepository(uow.Uow).LoadAll();
 							}
 						}
 					}
@@ -122,12 +123,12 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 	            {
 					if (_ruleSetBagCollection == null)
 					{
-						using (IUnitOfWork uow = _unitOfWorkFactory.CreateAndOpenUnitOfWork())
+						using (var uow = maybeDisposableUnitOfWork.Create(_unitOfWorkFactory))
 						{
-							using (uow.DisableFilter(QueryFilter.Deleted))
+							using (_disableDeletedFilter.Disable())
 							{
 								_ruleSetBagCollection =
-								_repositoryFactory.CreateRuleSetBagRepository(uow).LoadAll();
+								_repositoryFactory.CreateRuleSetBagRepository(uow.Uow).LoadAll();
 							}
 						}
 					}
@@ -145,10 +146,10 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 	            {
 					if (_groupPageCollection == null)
 					{
-						using (IUnitOfWork uow = _unitOfWorkFactory.CreateAndOpenUnitOfWork())
+						using (var uow = maybeDisposableUnitOfWork.Create(_unitOfWorkFactory))
 						{
-							uow.Reassociate(_stateHolder.Schedules.Keys);
-							IGroupPageRepository groupPageRepository = _repositoryFactory.CreateGroupPageRepository(uow);
+							uow.Uow.Reassociate(_stateHolder.Schedules.Keys);
+							IGroupPageRepository groupPageRepository = _repositoryFactory.CreateGroupPageRepository(uow.Uow);
 							_groupPageCollection = new List<IGroupPage>(groupPageRepository.LoadAllGroupPageWhenPersonCollectionReAssociated());
 						}
 						RemoveNotLoadedPersonsFromCollection(_groupPageCollection);
@@ -206,7 +207,24 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 		
         public IEnumerable<IBusinessUnit> BusinessUnitCollection
         {
-            get { yield return ((ITeleoptiIdentity)TeleoptiPrincipal.CurrentPrincipal.Identity).BusinessUnit; }
+	        get
+			{
+				lock (_lockObject)
+				{
+					if (_businessUnitCollection == null)
+					{
+						using (var uow = maybeDisposableUnitOfWork.Create(_unitOfWorkFactory))
+						{
+							var repository = _repositoryFactory.CreateBusinessUnitRepository(uow.Uow);
+							var businessUnit = repository.Get(((ITeleoptiIdentity) TeleoptiPrincipal.CurrentPrincipal.Identity).BusinessUnit.Id.GetValueOrDefault());
+							businessUnit = repository.LoadHierarchyInformation(businessUnit);
+							_businessUnitCollection = new List<IBusinessUnit>{businessUnit};
+						}
+					}
+				}
+
+				return _businessUnitCollection;
+	        }
         }
 
 		public DateOnlyPeriod SelectedPeriod
@@ -223,9 +241,9 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 	            {
 					if (_skillCollection == null)
 					{
-						using (IUnitOfWork uow = _unitOfWorkFactory.CreateAndOpenUnitOfWork())
+						using (var uow = maybeDisposableUnitOfWork.Create(_unitOfWorkFactory))
 						{
-							_skillCollection = _repositoryFactory.CreateSkillRepository(uow).LoadAll();
+							_skillCollection = _repositoryFactory.CreateSkillRepository(uow.Uow).LoadAll();
 						}
 					}
 	            }
@@ -247,6 +265,57 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 				
                 return _allPersons;
             }
+		}
+
+		interface IDisposableWithUow : IDisposable
+		{
+			IUnitOfWork Uow { get; }
+		}
+
+		static class maybeDisposableUnitOfWork
+		{
+			public static IDisposableWithUow Create(IUnitOfWorkFactory unitOfWorkFactory)
+			{
+				try
+				{
+					return new emptyDisposable(unitOfWorkFactory.CurrentUnitOfWork());
+				}
+				catch (Exception)
+				{
+					return new disposableUnitOfWork(unitOfWorkFactory.CreateAndOpenUnitOfWork());
+				}
+			}
+
+			class disposableUnitOfWork : IDisposableWithUow
+			{
+				public disposableUnitOfWork(IUnitOfWork unitOfWork)
+				{
+					Uow = unitOfWork;
+				}
+
+				public void Dispose()
+				{
+					Uow.Dispose();
+					Uow = null;
+				}
+
+				public IUnitOfWork Uow { get; private set; }
+			}
+
+			class emptyDisposable : IDisposableWithUow
+			{
+				public emptyDisposable(IUnitOfWork unitOfWork)
+				{
+					Uow = unitOfWork;
+				}
+
+				public void Dispose()
+				{
+					Uow = null;
+				}
+
+				public IUnitOfWork Uow { get; private set; }
+			}
 		}
     }
 }
