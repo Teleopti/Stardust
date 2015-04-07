@@ -156,8 +156,8 @@ namespace Teleopti.Ccc.WebTest.Core.IoC
 				.Should().Not.Be.Null();
 		}
 
-		[Test, Ignore("Och då fungerar ju inte denna heller")]
-		public void ShouldRegisterTenantController()
+		[Test]
+		public void ShouldRegisterAuthenticateController()
 		{
 			requestContainer.Resolve<AuthenticateController>()
 				.Should().Not.Be.Null();
