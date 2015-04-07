@@ -23,12 +23,12 @@ namespace Teleopti.Ccc.WebTest.Areas.Outbound.Controllers
 		[Test]
 		public void ShouldGetCampaignViewModel()
 		{
-			const string campaignName = "myCampaign";
+			var campaignForm = new CampaignForm() {Name = "myCampaign"};
 			var expectedCampaignViewModel = new CampaignViewModel();
-			_outboundCampaignPersister.Stub(x => x.Persist(campaignName)).Return(expectedCampaignViewModel);
+			_outboundCampaignPersister.Stub(x => x.Persist(campaignForm.Name)).Return(expectedCampaignViewModel);
 
 			var target = new OutboundController(_outboundCampaignPersister) {Request = new HttpRequestMessage()};
-			var result = target.CreateCampaign(campaignName);
+			var result = target.CreateCampaign(campaignForm);
 
 			var contentResult = (CreatedNegotiatedContentResult<CampaignViewModel>)result;
 			contentResult.Content.Should().Be.SameInstanceAs(expectedCampaignViewModel);
@@ -37,10 +37,10 @@ namespace Teleopti.Ccc.WebTest.Areas.Outbound.Controllers
 		[Test]
 		public void ShouldNotCreateCampaignWhenGivenNameIsTooLong()
 		{
-			var campaignName = "MyCampaign".PadRight(256, 'a');
+			var campaignForm = new CampaignForm() { Name = "myCampaign".PadRight(256, 'a') };
 
 			var target = new OutboundController(_outboundCampaignPersister) { Request = new HttpRequestMessage() };
-			var result = target.CreateCampaign(campaignName);
+			var result = target.CreateCampaign(campaignForm);
 
 			result.Should().Be.OfType<BadRequestErrorMessageResult>();
 		}

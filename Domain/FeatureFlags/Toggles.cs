@@ -80,8 +80,7 @@
 		MultiTenantSSOSupport_StandardReports_15093,
 		MultiTenancy_SDK_17458,
 		MultiTenancy_People_32113,
-		Wfm_MinimumScaffolding_32659,
-		Wfm_Outbound_32696
+		Wfm_MinimumScaffolding_32659
 		// ReSharper restore InconsistentNaming
 	}
 }

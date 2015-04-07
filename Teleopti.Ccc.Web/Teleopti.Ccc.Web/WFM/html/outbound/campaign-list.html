@@ -75,9 +75,9 @@
 						</div>
 						<div class="row">
 							<div ng-class="{'col-lg-4': hideDetail}">
-								<span ng-hide="editing">{{campaign.name}}</span>
+								<span ng-hide="editing">{{campaign.Name}}</span>
 								<form ng-show="editing" ng-submit="editing = false; update(campaign)">
-									<input type="text" class="inline-role-name" ng-model="campaign.name" placeholder="Name" ng-required />
+									<input type="text" class="inline-role-name" ng-model="campaign.Name" placeholder="Name" ng-required />
 								</form>
 							</div>
 							<div ng-show="hideDetail">

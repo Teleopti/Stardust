@@ -15,6 +15,7 @@ using Teleopti.Ccc.Web.Areas.Forecasting.Core.IoC;
 using Teleopti.Ccc.Web.Areas.Mart.Core.IoC;
 using Teleopti.Ccc.Web.Areas.Messages.Core.Ioc;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.IoC;
+using Teleopti.Ccc.Web.Areas.Outbound.core.IoC;
 using Teleopti.Ccc.Web.Areas.PerformanceTool.Core.IoC;
 using Teleopti.Ccc.Web.Areas.ResourcePlanner;
 using Teleopti.Ccc.Web.Areas.Rta;
@@ -98,6 +99,7 @@ namespace Teleopti.Ccc.Web.Core.IoC
 			builder.RegisterModule(new ConfigurationSettingsReader());
 			builder.RegisterModule<TenantModule>();
 			builder.RegisterModule<SeatPlannerAreaModule>();
+			builder.RegisterModule<OutboundAreaModule>();
 		}
 	}
 }

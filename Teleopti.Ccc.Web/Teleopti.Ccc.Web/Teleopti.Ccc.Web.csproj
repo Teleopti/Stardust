@@ -1232,7 +1232,8 @@
     <Content Include="WFM\js\notifications\notifications.service.js" />
     <Content Include="WFM\js\outbound\outbound.controller.js" />
     <Content Include="WFM\js\outbound\outbound.filter.js" />
-    <Content Include="WFM\js\outbound\outbound.service.js" />
+    <Content Include="WFM\js\outbound\outbound.service .js" />
+    <Content Include="WFM\tests\outbound\outbound.service.mock.js" />
     <Content Include="WFM\js\people\people.controller.js" />
     <Content Include="WFM\js\people\people.service.js" />
     <Content Include="WFM\js\people\peopleSearch.service.js" />
@@ -1264,6 +1265,8 @@
     <Content Include="WFM\karma.conf.js" />
     <Content Include="WFM\tests\global\areas.controller.spec.js" />
     <Content Include="WFM\tests\global\notification.controller.spec.js" />
+    <Content Include="WFM\tests\outbound\outbound.controller.spec.js" />
+    <Content Include="WFM\tests\outbound\outbound.service.spec.js" />
     <Content Include="WFM\tests\permissions\permissions.controller.spec.js" />
     <Content Include="Areas\Reporting\Content\Scripts\persianDatepicker.min.js" />
     <Content Include="Areas\Reporting\Content\Scripts\reportController.js" />

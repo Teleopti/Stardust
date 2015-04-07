@@ -7,6 +7,11 @@ using Teleopti.Ccc.Web.Filters;
 
 namespace Teleopti.Ccc.Web.Areas.Outbound.Controllers
 {
+	public struct CampaignForm
+	{
+		public string Name { get; set; }
+	}
+
 	[ApplicationFunctionApi(DefinedRaptorApplicationFunctionPaths.OpenForecasterPage)]
 	public class OutboundController : ApiController
 	{
@@ -21,10 +26,10 @@ namespace Teleopti.Ccc.Web.Areas.Outbound.Controllers
 		}
 
 		[HttpPost, Route("api/Outbound/Campaign"), UnitOfWork]
-		public virtual IHttpActionResult CreateCampaign([FromBody]string name)
+		public virtual IHttpActionResult CreateCampaign([FromBody]CampaignForm campaignForm)
 		{
-			if (NameValidator.DescriptionIsInvalid(name)) return BadRequest(GivenDescriptionIsInvalidErrorMessage);
-			var campaignVm = _outboundCampaignPersister.Persist(name);
+			if (NameValidator.DescriptionIsInvalid(campaignForm.Name)) return BadRequest(GivenDescriptionIsInvalidErrorMessage);
+			var campaignVm = _outboundCampaignPersister.Persist(campaignForm.Name);
 
 			return Created(Request.RequestUri + "/" + campaignVm.Id, campaignVm);
 		}

@@ -1,8 +1,8 @@
 ﻿'use strict';
 
-var outboundService =  angular.module('outboundService', []);
+var outboundService =  angular.module('outboundServiceMock', []);
 
-outboundService.factory('OutboundService', ['$rootScope', function($rootScope) {
+outboundService.factory('outboundServiceMock', ['$rootScope', function ($rootScope) {
 
 	var outboundService = {};
 
