@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Web.Http.Results;
 using NUnit.Framework;
 using Rhino.Mocks;
 using SharpTestsEx;
@@ -9,7 +8,6 @@ using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.Web.Areas.Search.Controllers;
-using Teleopti.Ccc.Web.Areas.Search.Models;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.WebTest.Areas.Search
@@ -49,10 +47,10 @@ namespace Teleopti.Ccc.WebTest.Areas.Search
             personRepository.Stub(x => x.FindPeople(new List<Guid> { personId })).IgnoreArguments().Return(new List<IPerson> { person });
 
             var target = new PeopleSearchController(searchRepository, personRepository, new FakePermissionProvider());
-            var result = target.GetResult("Ashley", 1, 1);
-            var peopleList = result as OkNegotiatedContentResult<IEnumerable<PeopleSummary>>;
-            Assert.NotNull(peopleList);
-            var first = peopleList.Content.First();
+
+			var result = ((dynamic)target).GetResult("Ashley", 10, 1);
+			var peopleList = (IEnumerable<dynamic>)result.Content;
+			var first = peopleList.First();
             first.FirstName.Equals("Ashley");
             first.LastName.Equals("Andeen");
             first.EmploymentNumber.Equals("1011");
@@ -76,8 +74,10 @@ namespace Teleopti.Ccc.WebTest.Areas.Search
             personRepository.Stub(x => x.FindPeople(new List<Guid>())).IgnoreArguments().Return(new List<IPerson>());
 
             var target = new PeopleSearchController(searchRepository, personRepository, new FakeNoPermissionProvider());
-            var result = (OkNegotiatedContentResult<IEnumerable<PeopleSummary>>)target.GetResult("ashley", 1, 1);
-            result.Content.Should().Be.Empty();
+
+			var result = ((dynamic)target).GetResult("Ashley", 10, 1);
+			var peopleList = (IEnumerable<dynamic>)result.Content;
+            peopleList.Should().Be.Empty();
         }
     }
 }

@@ -5,7 +5,6 @@ using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Portal.DataProvider;
-using Teleopti.Ccc.Web.Areas.Search.Models;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Web.Areas.Search.Controllers
@@ -38,7 +37,7 @@ namespace Teleopti.Ccc.Web.Areas.Search.Controllers
 							DateOnly.Today, r));
 			var personIdList = permittedPersonList.Select(x => x.PersonId);
 			var peopleList = _personRepository.FindPeople(personIdList);
-			var result = peopleList.Select(x => new PeopleSummary
+			var result = peopleList.Select(x => new
 			{
 				FirstName = x.Name.FirstName,
 				LastName = x.Name.LastName,
