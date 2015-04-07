@@ -13,7 +13,6 @@ var wfm = angular.module('wfm', [
 	'forecastingService',
 	'outboundService',
 	'restAreasService',
-	'restFilterService',
 	'peopleSearchService',
 	'wfmCtrls',
 	'wfm.permissions',
@@ -21,6 +20,7 @@ var wfm = angular.module('wfm', [
 	'wfm.outbound',
 	'wfm.forecasting',
 	'wfm.forecasting.target',
+	'wfm.resourceplanner',
 	'wfm.searching',
 	'wfm.seatMap',
 	'wfm.seatPlan',
@@ -51,6 +51,10 @@ wfm.config([
 			params: { period: {} },
 			templateUrl: 'html/forecasting/forecasting-run.html',
 			controller: 'ForecastingRunAllCtrl'
+		}).state('resourceplanner', {
+			url: '/resourceplanner',
+			templateUrl: 'js/resourceplanner/resourceplanner.html',
+			controller: 'ResourceplannerCtrl'
 		}).state('permissions', {
 			url: '/permissions',
 			templateUrl: 'html/permissions/permissions.html',

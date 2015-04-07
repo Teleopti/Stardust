@@ -15,7 +15,7 @@ namespace Teleopti.Ccc.Web.Areas.Global
 		private static readonly IEnumerable<AreaWithPermissionPath> _areaWithPermissionPaths = new List<AreaWithPermissionPath>
 		{
 			new AreaWithPermissionPath(DefinedRaptorApplicationFunctionPaths.OpenForecasterPage,() => UserTexts.Resources.OpenForecaster,"forecasting"),
-			new AreaWithPermissionPath(DefinedRaptorApplicationFunctionPaths.OpenSchedulePage,() => UserTexts.Resources.OpenSchedulePage,"permissions", new Link{href = "api/ResourcePlanner/Filter",rel = "filters"}),
+			new AreaWithPermissionPath(DefinedRaptorApplicationFunctionPaths.OpenSchedulePage,() => UserTexts.Resources.OpenSchedulePage,"resourceplanner", new Link{href = "api/ResourcePlanner/Filter",rel = "filters"}),
 			new AreaWithPermissionPath(DefinedRaptorApplicationFunctionPaths.OpenPermissionPage,() => UserTexts.Resources.OpenPermissionPage,"permissions"),
 			new AreaWithPermissionPath(DefinedRaptorApplicationFunctionPaths.OpenForecasterPage,() => "Outbound","outbound"),
 			new AreaWithPermissionPath(DefinedRaptorApplicationFunctionPaths.OpenPersonAdminPage,() => "People","people"),
