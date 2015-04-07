@@ -71,9 +71,7 @@ namespace Teleopti.Ccc.Win.Main
 			{
 				//used by sikuli
 				var useMessageBroker = string.IsNullOrEmpty(ConfigurationManager.AppSettings["MessageBroker"]);
-
-				if (!LogonInitializeStateHolder.GetConfigFromFileSystem(Environment.CurrentDirectory, useMessageBroker, messageBroker))
-					return showError();
+				LogonInitializeStateHolder.GetConfigFromFileSystem(Environment.CurrentDirectory, useMessageBroker, messageBroker);
 			}
 			return true;
 		}
