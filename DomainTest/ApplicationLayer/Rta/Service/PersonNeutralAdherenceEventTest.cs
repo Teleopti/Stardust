@@ -107,8 +107,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 
 			Publisher.PublishedEvents.OfType<PersonNeutralAdherenceEvent>().Should().Be.Empty();
 		}
-
-
+		
 		[Test]
 		public void ShouldNotPublishIfStillNeutralAdherence()
 		{
@@ -136,6 +135,32 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 			{
 				UserCode = "usercode",
 				StateCode = "admin2"
+			});
+
+			Publisher.PublishedEvents.OfType<PersonNeutralAdherenceEvent>().Should().Have.Count.EqualTo(1);
+		}
+
+
+		[Test]
+		public void ShouldPublishWhenAlarmMappingIsMissing()
+		{
+			var personId = Guid.NewGuid();
+			var phone = Guid.NewGuid();
+			Database
+				.WithUser("usercode", personId)
+				.WithSchedule(personId, phone, "2015-03-19 8:00", "2015-03-19 9:00")
+				.WithAlarm("phone", phone, 0, Adherence.In)
+				;
+			Now.Is("2015-03-19 8:01");
+			Target.SaveState(new ExternalUserStateForTest
+			{
+				UserCode = "usercode",
+				StateCode = "phone"
+			});
+			Target.SaveState(new ExternalUserStateForTest
+			{
+				UserCode = "usercode",
+				StateCode = "someOtherCode"
 			});
 
 			Publisher.PublishedEvents.OfType<PersonNeutralAdherenceEvent>().Should().Have.Count.EqualTo(1);
@@ -195,7 +220,5 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 			@event.BusinessUnitId.Should().Be(businessUnitId);
 			@event.Datasource.Should().Be("datasource");
 		}
-
 	}
-
 }

@@ -38,7 +38,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 				});
 			}
 
-			if (toAdherence == AdherenceState.Neutral)
+			if (toAdherence == AdherenceState.Neutral ||
+				toAdherence == AdherenceState.Unknown)
 			{
 				_eventPublisher.Publish(info, new PersonNeutralAdherenceEvent
 				{
