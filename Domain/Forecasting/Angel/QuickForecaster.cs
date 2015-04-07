@@ -35,25 +35,27 @@ namespace Teleopti.Ccc.Domain.Forecasting.Angel
 						FuturePeriod = futurePeriod,
 						SkillDays = skillDays,
 						HistoricalPeriod = historicalPeriodForForecast,
-						ForecastMethodId = workloadAccuracy.Accuracies.Length == 0 ? ForecastMethodType.TeleoptiClassic : workloadAccuracy.Accuracies.Single(x => x.IsSelected).MethodId
+						ForecastMethodId = (workloadAccuracy == null || workloadAccuracy.Accuracies.Length == 0) ? ForecastMethodType.TeleoptiClassic : workloadAccuracy.Accuracies.Single(x => x.IsSelected).MethodId
 					};
 					_quickForecasterWorkload.Execute(quickForecasterWorkloadParams);
 				}
 			}
 		}
 
-		public void ForecastAll(ISkill skill, DateOnlyPeriod futurePeriod, DateOnlyPeriod historicalPeriod)
+		public void ForecastAll(ISkill skill, DateOnlyPeriod futurePeriod, DateOnlyPeriod historicalPeriodForForecast, DateOnlyPeriod historicalPeriodForMeasurement)
 		{
 			var skillDays = _fetchAndFillSkillDays.FindRange(futurePeriod, skill);
 
 			foreach (var workload in skill.WorkloadCollection)
 			{
+				var workloadAccuracy = _quickForecastWorkloadEvaluator.Measure(workload, historicalPeriodForMeasurement);
 				var quickForecasterWorkloadParams = new QuickForecasterWorkloadParams
 				{
 					WorkLoad = workload,
 					FuturePeriod = futurePeriod,
 					SkillDays = skillDays,
-					HistoricalPeriod = historicalPeriod
+					HistoricalPeriod = historicalPeriodForForecast,
+					ForecastMethodId = (workloadAccuracy == null || workloadAccuracy.Accuracies.Length == 0) ? ForecastMethodType.TeleoptiClassic : workloadAccuracy.Accuracies.Single(x => x.IsSelected).MethodId
 				};
 				_quickForecasterWorkload.Execute(quickForecasterWorkloadParams);
 			}

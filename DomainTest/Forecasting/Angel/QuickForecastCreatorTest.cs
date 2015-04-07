@@ -62,12 +62,13 @@ namespace Teleopti.Ccc.DomainTest.Forecasting.Angel
 			var futurePeriod = new DateOnlyPeriod();
 			var now = new Now();
 			var nowDate = now.LocalDateOnly();
-			var historicalPeriod = new DateOnlyPeriod(new DateOnly(nowDate.Date.AddYears(-1)), nowDate);
+			var historicalPeriodForForecast = new DateOnlyPeriod(new DateOnly(nowDate.Date.AddYears(-1)), nowDate);
+			var historicalPeriodForMeasurement = new DateOnlyPeriod(new DateOnly(nowDate.Date.AddYears(-2)), nowDate);
 
 			var target = new QuickForecastCreator(quickForecaster, skillRepository, now);
 			target.CreateForecastForAll(futurePeriod);
-			quickForecaster.AssertWasCalled(x => x.ForecastAll(skill1, futurePeriod, historicalPeriod));
-			quickForecaster.AssertWasCalled(x => x.ForecastAll(skill2, futurePeriod, historicalPeriod));
+			quickForecaster.AssertWasCalled(x => x.ForecastAll(skill1, futurePeriod, historicalPeriodForForecast, historicalPeriodForMeasurement));
+			quickForecaster.AssertWasCalled(x => x.ForecastAll(skill2, futurePeriod, historicalPeriodForForecast, historicalPeriodForMeasurement));
 		}
 	}
 }
