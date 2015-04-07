@@ -17,13 +17,12 @@ namespace Teleopti.Ccc.WebTest.Areas.Tenant.Core
 			var identityUserQuery = MockRepository.GenerateMock<IIdentityUserQuery>();
 			
 			identityUserQuery.Stub(x => x.FindUserData("nonExisting")).Return(null);
-			var target = new IdentityAuthentication(identityUserQuery, MockRepository.GenerateMock<IDataSourceConfigurationProvider>(), null);
+			var target = new IdentityAuthentication(identityUserQuery, MockRepository.GenerateMock<IDataSourceConfigurationProvider>());
 			var res = target.Logon("nonExisting");
 			
 			res.Success.Should().Be.False();
 			res.FailReason.Should().Be.EqualTo(string.Format(Resources.LogOnFailedIdentityNotFound, "nonExisting"));
 		}
-
 		
 		[Test]
 		public void ShouldSucceedIfValidCredentials()
@@ -38,14 +37,13 @@ namespace Teleopti.Ccc.WebTest.Areas.Tenant.Core
 			nhibHandler.Stub(x => x.ForTenant(queryResult.Tenant)).Return(datasourceConfiguration); 
 			findIdentityQuery.Expect(x => x.FindUserData(identity)).Return(queryResult);
 			pwPolicyLoader.Expect(x => x.DocumentAsString).Return("somepolicy");
-			var target = new IdentityAuthentication(findIdentityQuery, nhibHandler, pwPolicyLoader);
+			var target = new IdentityAuthentication(findIdentityQuery, nhibHandler);
 			var res = target.Logon(identity);
 
 			res.Success.Should().Be.True();
 			res.Tenant.Should().Be.EqualTo(queryResult.Tenant);
 			res.PersonId.Should().Be.EqualTo(queryResult.Id);
 			res.DataSourceConfiguration.Should().Be.SameInstanceAs(datasourceConfiguration);
-			res.PasswordPolicy.Should().Be.EqualTo("somepolicy");
 		}
 
 		[Test]
@@ -59,7 +57,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Tenant.Core
 			nhibHandler.Stub(x => x.ForTenant(queryResult.Tenant)).Return(null);
 			findIdentityQuery.Expect(x => x.FindUserData(identity)).Return(queryResult);
 
-			var target = new IdentityAuthentication(findIdentityQuery, nhibHandler, null);
+			var target = new IdentityAuthentication(findIdentityQuery, nhibHandler);
 			var res = target.Logon(identity);
 			
 			res.Success.Should().Be.False();

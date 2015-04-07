@@ -8,7 +8,6 @@ using Teleopti.Ccc.Infrastructure.MultiTenancy.Server;
 using Teleopti.Ccc.UserTexts;
 using Teleopti.Ccc.Web.Areas.Tenant.Core;
 using Teleopti.Interfaces.Domain;
-using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.WebTest.Areas.Tenant.Core
 {
@@ -25,7 +24,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Tenant.Core
 			findApplicationQuery.Expect(x => x.FindUserData(userName)).Return(passwordPolicyForUser);
 
 			var target = new ApplicationAuthentication(findApplicationQuery, new PasswordVerifier(new OneWayEncryption(), () => new DummyPasswordPolicy(), new Now()),
-				new SuccessfulPasswordPolicy(), new DataSourceConfigurationProviderFake(),null);
+				new SuccessfulPasswordPolicy(), new DataSourceConfigurationProviderFake());
 			target.Logon(userName, "invalidPassword");
 			target.Logon(userName, "invalidPassword");
 
@@ -46,7 +45,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Tenant.Core
 			pwPolicy.Expect(x => x.InvalidAttemptWindow).Return(TimeSpan.FromHours(1));
 
 			var target = new ApplicationAuthentication(findApplicationQuery, new PasswordVerifier(new OneWayEncryption(), () => pwPolicy, new Now()),
-				new SuccessfulPasswordPolicy(), new DataSourceConfigurationProviderFake(),null);
+				new SuccessfulPasswordPolicy(), new DataSourceConfigurationProviderFake());
 			target.Logon(userName, "invalidPassword");
 			passwordPolicyForUser.IsLocked.Should().Be.False();
 			target.Logon(userName, "invalidPassword");
@@ -61,14 +60,13 @@ namespace Teleopti.Ccc.WebTest.Areas.Tenant.Core
 			var personInfo = new PersonInfo();
 			personInfo.SetPassword(EncryptPassword.ToDbFormat(password));
 			var findApplicationQuery = MockRepository.GenerateMock<IApplicationUserQuery>();
-			var pwPolicyLoader = MockRepository.GenerateMock<ILoadPasswordPolicyService>();
 			var passwordPolicyForUser = new PasswordPolicyForUser(personInfo);
 			findApplicationQuery.Expect(x => x.FindUserData(userName)).Return(passwordPolicyForUser);
 			var pwPolicy = MockRepository.GenerateStub<IPasswordPolicy>();
 			pwPolicy.Expect(x => x.MaxAttemptCount).Return(1);
 
 			var target = new ApplicationAuthentication(findApplicationQuery, new PasswordVerifier(new OneWayEncryption(), () => pwPolicy, new Now()),
-				new SuccessfulPasswordPolicy(), new DataSourceConfigurationProviderFake(), pwPolicyLoader);
+				new SuccessfulPasswordPolicy(), new DataSourceConfigurationProviderFake());
 			target.Logon(userName, "invalidPassword");
 			passwordPolicyForUser.InvalidAttempts.Should().Be.EqualTo(1);
 			target.Logon(userName, password);
@@ -84,7 +82,6 @@ namespace Teleopti.Ccc.WebTest.Areas.Tenant.Core
 			var personInfo = new PersonInfo();
 			personInfo.SetPassword(EncryptPassword.ToDbFormat(password));
 			var findApplicationQuery = MockRepository.GenerateMock<IApplicationUserQuery>();
-			var pwPolicyLoader = MockRepository.GenerateMock<ILoadPasswordPolicyService>();
 			var passwordPolicyForUser = new PasswordPolicyForUser(personInfo);
 			findApplicationQuery.Expect(x => x.FindUserData(userName)).Return(passwordPolicyForUser);
 			var pwPolicy = MockRepository.GenerateStub<IPasswordPolicy>();
@@ -92,7 +89,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Tenant.Core
 			pwPolicy.Expect(x => x.InvalidAttemptWindow).Return(TimeSpan.FromHours(1));
 
 			var target = new ApplicationAuthentication(findApplicationQuery, new PasswordVerifier(new OneWayEncryption(), () => pwPolicy, new Now()),
-				new SuccessfulPasswordPolicy(), new DataSourceConfigurationProviderFake(), pwPolicyLoader);
+				new SuccessfulPasswordPolicy(), new DataSourceConfigurationProviderFake());
 			target.Logon(userName, "invalidPassword");
 			target.Logon(userName, "invalidPassword");
 			passwordPolicyForUser.InvalidAttempts.Should().Be.EqualTo(2);
@@ -101,7 +98,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Tenant.Core
 			var inTwoHours = MockRepository.GenerateMock<INow>();
 			inTwoHours.Expect(x => inTwoHours.UtcDateTime()).Return(DateTime.Now.AddHours(2));
 			var target2 = new ApplicationAuthentication(findApplicationQuery, new PasswordVerifier(new OneWayEncryption(), () => pwPolicy, inTwoHours),
-				new SuccessfulPasswordPolicy(), MockRepository.GenerateMock<IDataSourceConfigurationProvider>(),pwPolicyLoader);
+				new SuccessfulPasswordPolicy(), MockRepository.GenerateMock<IDataSourceConfigurationProvider>());
 			target2.Logon(userName, "invalidPassword");
 			passwordPolicyForUser.InvalidAttempts.Should().Be.EqualTo(1);
 		}
@@ -113,7 +110,6 @@ namespace Teleopti.Ccc.WebTest.Areas.Tenant.Core
 			const string password = "somePassword";
 
 			var findApplicationQuery = MockRepository.GenerateMock<IApplicationUserQuery>();
-			var pwPolicyLoader = MockRepository.GenerateMock<ILoadPasswordPolicyService>();
 			var personInfo = new PersonInfo();
 			personInfo.SetPassword(EncryptPassword.ToDbFormat(password));
 			var passwordPolicy = new PasswordPolicyForUser(personInfo);
@@ -121,7 +117,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Tenant.Core
 			findApplicationQuery.Expect(x => x.FindUserData(userName)).Return(passwordPolicy);
 
 			var target = new ApplicationAuthentication(findApplicationQuery, new PasswordVerifier(new OneWayEncryption(), () => new DummyPasswordPolicy(), new Now()),
-				new SuccessfulPasswordPolicy(), new DataSourceConfigurationProviderFake(), pwPolicyLoader);
+				new SuccessfulPasswordPolicy(), new DataSourceConfigurationProviderFake());
 			var res = target.Logon(userName, password);
 
 			res.Success.Should().Be.False();
@@ -140,7 +136,6 @@ namespace Teleopti.Ccc.WebTest.Areas.Tenant.Core
 			var passwordPolicyForUser = new PasswordPolicyForUser(personInfo);
 			var theUserDetail = new UserDetail(null);
 			var findApplicationQuery = MockRepository.GenerateMock<IApplicationUserQuery>();
-			var pwPolicyLoader = MockRepository.GenerateMock<ILoadPasswordPolicyService>();
 			findApplicationQuery.Expect(x => x.FindUserData(userName)).Return(passwordPolicyForUser);
 			var convertDataToOldUserDetailDomain = MockRepository.GenerateMock<IConvertDataToOldUserDetailDomain>();
 			convertDataToOldUserDetailDomain.Expect(
@@ -150,7 +145,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Tenant.Core
 				.Return(new AuthenticationResult { HasMessage = true, Message = "THEMESSAGE", Successful = true, PasswordExpired = false });
 
 			var target = new ApplicationAuthentication(findApplicationQuery, new PasswordVerifier(new OneWayEncryption(), () => new DummyPasswordPolicy(), new Now()),
-				new PasswordPolicyCheck(convertDataToOldUserDetailDomain, checkPasswordChange), new DataSourceConfigurationProviderFake(),pwPolicyLoader);
+				new PasswordPolicyCheck(convertDataToOldUserDetailDomain, checkPasswordChange), new DataSourceConfigurationProviderFake());
 
 			var res = target.Logon(userName, password);
 			res.Success.Should().Be.True();
@@ -169,7 +164,6 @@ namespace Teleopti.Ccc.WebTest.Areas.Tenant.Core
 			var passwordPolicyForUser = new PasswordPolicyForUser(personInfo);
 			var theUserDetail = new UserDetail(null);
 			var findApplicationQuery = MockRepository.GenerateMock<IApplicationUserQuery>();
-			var pwPolicyLoader = MockRepository.GenerateMock<ILoadPasswordPolicyService>();
 			findApplicationQuery.Expect(x => x.FindUserData(userName)).Return(passwordPolicyForUser);
 			var convertDataToOldUserDetailDomain = MockRepository.GenerateMock<IConvertDataToOldUserDetailDomain>();
 			convertDataToOldUserDetailDomain.Expect(
@@ -179,7 +173,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Tenant.Core
 				.Return(new AuthenticationResult { HasMessage = true, Message = "THEMESSAGE", Successful = false, PasswordExpired = true});
 
 			var target = new ApplicationAuthentication(findApplicationQuery, new PasswordVerifier(new OneWayEncryption(), () => new DummyPasswordPolicy(), new Now()),
-				new PasswordPolicyCheck(convertDataToOldUserDetailDomain, checkPasswordChange), new DataSourceConfigurationProviderFake(),pwPolicyLoader);
+				new PasswordPolicyCheck(convertDataToOldUserDetailDomain, checkPasswordChange), new DataSourceConfigurationProviderFake());
 
 			var res = target.Logon(userName, password);
 			res.Success.Should().Be.False();
@@ -199,7 +193,6 @@ namespace Teleopti.Ccc.WebTest.Areas.Tenant.Core
 			var passwordPolicyForUser = new PasswordPolicyForUser(personInfo);
 			var theUserDetail = new UserDetail(null);
 			var findApplicationQuery = MockRepository.GenerateMock<IApplicationUserQuery>();
-			var pwPolicyLoader = MockRepository.GenerateMock<ILoadPasswordPolicyService>();
 			findApplicationQuery.Expect(x => x.FindUserData(userName)).Return(passwordPolicyForUser);
 			var convertDataToOldUserDetailDomain = MockRepository.GenerateMock<IConvertDataToOldUserDetailDomain>();
 			convertDataToOldUserDetailDomain.Expect(
@@ -209,7 +202,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Tenant.Core
 				.Return(new AuthenticationResult { HasMessage = true, Message = "THEMESSAGE", Successful = false });
 
 			var target = new ApplicationAuthentication(findApplicationQuery, new PasswordVerifier(new OneWayEncryption(), () => new DummyPasswordPolicy(), new Now()),
-				new PasswordPolicyCheck(convertDataToOldUserDetailDomain, checkPasswordChange), new DataSourceConfigurationProviderFake(),pwPolicyLoader);
+				new PasswordPolicyCheck(convertDataToOldUserDetailDomain, checkPasswordChange), new DataSourceConfigurationProviderFake());
 
 			var res = target.Logon(userName, password);
 			res.Success.Should().Be.False();

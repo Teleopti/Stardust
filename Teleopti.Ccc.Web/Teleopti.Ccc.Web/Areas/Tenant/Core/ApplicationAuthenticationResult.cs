@@ -10,6 +10,5 @@ namespace Teleopti.Ccc.Web.Areas.Tenant.Core
 		public string Tenant { get; set; }
 		public DataSourceConfiguration DataSourceConfiguration { get; set; }
 		public bool PasswordExpired { get; set; }
-		public string PasswordPolicy { get; set; }
 	}
 }

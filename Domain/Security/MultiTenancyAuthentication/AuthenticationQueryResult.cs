@@ -10,8 +10,6 @@ namespace Teleopti.Ccc.Domain.Security.MultiTenancyAuthentication
 		public Guid PersonId { get; set; }
 		public string Tenant { get; set; }
 		public DataSourceConfig DataSourceConfiguration { get; set; }
-		public string PasswordPolicy { get; set; }
-		//public string DataSource { get; set; }
 	}
 
 	public class DataSourceConfig
