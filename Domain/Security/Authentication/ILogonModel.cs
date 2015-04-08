@@ -7,7 +7,6 @@ namespace Teleopti.Ccc.Domain.Security.Authentication
 	{
 		bool GetConfigFromWebService { get; set; }
 		IDataSourceContainer SelectedDataSourceContainer { get; set; }
-		IList<string> Sdks { get; set; }
 		IList<IBusinessUnit> AvailableBus { get; set; }
 		IBusinessUnit SelectedBu { get; set; }
 		string UserName { get; set; }
@@ -26,7 +25,6 @@ namespace Teleopti.Ccc.Domain.Security.Authentication
 		}
 		public bool GetConfigFromWebService { get; set; }
 		public IDataSourceContainer SelectedDataSourceContainer { get; set; }
-		public IList<string> Sdks { get; set; }
 		public IList<IBusinessUnit> AvailableBus { get; set; }
 		public IBusinessUnit SelectedBu { get; set; }
 		public string UserName { get; set; }

@@ -1,15 +1,11 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Configuration;
 using System.Globalization;
 using System.Linq;
 using System.Net;
 using System.Windows.Forms;
-using Syncfusion.Windows.Forms.Tools;
 using Teleopti.Ccc.Domain.Infrastructure;
 using Teleopti.Ccc.Domain.Security.Authentication;
-using Teleopti.Ccc.Domain.Security.MultiTenancyAuthentication;
-using Teleopti.Ccc.Infrastructure.MultiTenancy;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Client;
 using Teleopti.Ccc.Infrastructure.Web;
 using Teleopti.Ccc.UserTexts;
@@ -23,7 +19,7 @@ namespace Teleopti.Ccc.WinCode.Main
 		void OkbuttonClicked();
 		void BackButtonClicked();
 		void Initialize();
-		void GetDataForCurrentStep(bool goingBack);
+		void GetDataForCurrentStep();
 		bool Start();
 		LoginStep CurrentStep { get; set; }
 	}
@@ -93,7 +89,7 @@ namespace Teleopti.Ccc.WinCode.Main
 				if (CurrentStep == LoginStep.Login && _model.AuthenticationType == AuthenticationTypeOption.Windows)
 					CurrentStep++;
 			}
-			GetDataForCurrentStep(false);
+			GetDataForCurrentStep();
 		}
 
 		private bool checkModel()
@@ -101,17 +97,12 @@ namespace Teleopti.Ccc.WinCode.Main
 			switch (CurrentStep)
 			{
 				case LoginStep.SelectLogonType:
-					return checkAndReportDataSources();
+					return true;
 				case LoginStep.Login:
 					return _model.HasValidLogin();
 				case LoginStep.SelectBu:
 					return _model.SelectedBu != null;
 			}
-			return true;
-		}
-
-		private bool checkAndReportDataSources()
-		{
 			return true;
 		}
 
@@ -122,10 +113,10 @@ namespace Teleopti.Ccc.WinCode.Main
 				 _model.SelectedDataSourceContainer.AuthenticationTypeOption == AuthenticationTypeOption.Windows)
 				CurrentStep--;
 
-			GetDataForCurrentStep(true);
+			GetDataForCurrentStep();
 		}
 
-		public void GetDataForCurrentStep(bool goingBack)
+		public void GetDataForCurrentStep()
 		{
 			switch (CurrentStep)
 			{

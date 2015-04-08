@@ -79,8 +79,7 @@ namespace Teleopti.Ccc.Win.Main
 			ShowInTaskbar = true;
 			MessageBox.Show(this,
 			                string.Format(CultureInfo.CurrentCulture,
-			                              "The system configuration could not be loaded from the server. Review error message and log files to troubleshoot this error.\n\n{0}",
-			                              LogonInitializeStateHolder.ErrorMessage),
+			                              "The system configuration could not be loaded from the server. Review error message and log files to troubleshoot this error."),
 			                "Configuration error", MessageBoxButtons.OK);
 			return false;
 		}
