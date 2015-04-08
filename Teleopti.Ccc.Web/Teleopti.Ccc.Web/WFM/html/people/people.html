@@ -178,16 +178,16 @@
 			.dropdown .inner li:hover {
 				background: #99d6ff;
 			}
-            .wfm-list .active {
-                border-left: 3px solid #ffffff;
-  border-bottom: 3px solid #ec38a3;
-  background-color: #ffffff;
-}
+	.wfm-list li.active, .ui-grid-menu-items li.active {
+		border-left: 3px solid #ffffff;
+		border-bottom: 3px solid #ec38a3;
+		background-color: #ffffff;
+	}
 </style>
 
 <div xclass="material-depth-1">
 	<span xng-controller="SearchCtrl">
-		<input type="text" placeholder="{{'Search' | translate}}..." ng-model="keyword" class="global-search" style="
+		<input type="text" placeholder="{{'Search' | translate}}..." ng-model="keyword" ng-keydown="$event.which === 13 && searchKeyword()" class="global-search" style="
     height: 44px;" />
 		<button class="wfm-btn wfm-btn-primary" ng-click="searchKeyword()"><i class="mdi mdi-magnify"></i></button>
 		
