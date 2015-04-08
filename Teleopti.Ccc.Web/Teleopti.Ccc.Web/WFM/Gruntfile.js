@@ -11,7 +11,7 @@
 				}
 			},
 			test: {
-				files: ['tests/**/*.js'],
+				files: ['tests/**/*.js', 'js/**/*.js'],
 				tasks:['karma'],
 			}
 		},
