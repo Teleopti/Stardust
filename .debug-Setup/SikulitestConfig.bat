@@ -28,6 +28,7 @@ if not exist "%configFilesFolder%" mkdir "%configFilesFolder%"
 echo ..\..\..\Teleopti.Ccc.SmartClientPortal\Teleopti.Ccc.SmartClientPortal.Shell\bin\%configuration%\Teleopti.Ccc.SmartClientPortal.Shell.exe.config,BuildArtifacts\AppRaptor.config>%buildServerConfigFiles%
 echo %ROOTDIR%\nhib\FixMyConfig.nhib.xml,BuildArtifacts\TeleoptiCCC7.nhib.xml>>%buildServerConfigFiles%
 echo %ROOTDIR%\nhib\authentication.json,BuildArtifacts\authentication.json>>%buildServerConfigFiles%
+echo %ROOTDIR%\nhib\configserver.json,BuildArtifacts\configserver.json>>%buildServerConfigFiles%
 
 ::Run supportTool to replace all config
 "%ROOTDIR%\Teleopti.Support.Tool\bin\%configuration%\Teleopti.Support.Tool.exe" -MOTest
@@ -55,7 +56,7 @@ SET attributeValue=%ROOTDIR%\nhib\authentication.json
 
 SET nodePath=configuration/appSettings/add[@key='ConfigServer']
 SET attributeName=value
-SET attributeValue=%ROOTDIR%\nhib\config.json
+SET attributeValue=%ROOTDIR%\nhib\configserver.json
 %commonFolder%\XmlSetAttribute.exe %configPath% %nodePath% %attributeName% %attributeValue%
 
 ENDLOCAL
