@@ -61,9 +61,9 @@ namespace Teleopti.Ccc.Win.Scheduling
 		private void InitializeComponent()
         {
 			this.components = new System.ComponentModel.Container();
-			Syncfusion.Windows.Forms.Tools.ToolStripTabGroup toolStripTabGroup1 = new Syncfusion.Windows.Forms.Tools.ToolStripTabGroup();
-			Syncfusion.Windows.Forms.Tools.ToolStripTabGroup toolStripTabGroup2 = new Syncfusion.Windows.Forms.Tools.ToolStripTabGroup();
-			Syncfusion.Windows.Forms.Tools.ToolStripTabGroup toolStripTabGroup3 = new Syncfusion.Windows.Forms.Tools.ToolStripTabGroup();
+			Syncfusion.Windows.Forms.Tools.ToolStripTabGroup toolStripTabGroup4 = new Syncfusion.Windows.Forms.Tools.ToolStripTabGroup();
+			Syncfusion.Windows.Forms.Tools.ToolStripTabGroup toolStripTabGroup5 = new Syncfusion.Windows.Forms.Tools.ToolStripTabGroup();
+			Syncfusion.Windows.Forms.Tools.ToolStripTabGroup toolStripTabGroup6 = new Syncfusion.Windows.Forms.Tools.ToolStripTabGroup();
 			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(SchedulingScreen));
 			this.statusStrip1 = new System.Windows.Forms.StatusStrip();
 			this.toolStripSpinningProgressControl1 = new Teleopti.Ccc.Win.Common.Controls.SpinningProgress.ToolStripSpinningProgressControl();
@@ -89,7 +89,6 @@ namespace Teleopti.Ccc.Win.Scheduling
 			this.toolStripMenuItemDeleteSpecial = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItem1 = new System.Windows.Forms.ToolStripSeparator();
 			this.ToolStripMenuItemAddActivity = new System.Windows.Forms.ToolStripMenuItem();
-			this.toolStripMenuItemNotifyAgent = new System.Windows.Forms.ToolStripMenuItem();
 			this.ToolStripMenuItemAddPersonalActivity = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItemAddOverTime = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItemInsertAbsence = new System.Windows.Forms.ToolStripMenuItem();
@@ -167,6 +166,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			this.ToolStripMenuItemExportToPDFShiftsPerDay = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItemChangeTagRM = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItemPublish = new System.Windows.Forms.ToolStripMenuItem();
+			this.toolStripMenuItemNotifyAgent = new System.Windows.Forms.ToolStripMenuItem();
 			this.contextMenuStripResultView = new System.Windows.Forms.ContextMenuStrip(this.components);
 			this.ToolStripMenuItemDay = new System.Windows.Forms.ToolStripMenuItem();
 			this.ToolStripMenuItemIntraday = new System.Windows.Forms.ToolStripMenuItem();
@@ -384,14 +384,14 @@ namespace Teleopti.Ccc.Win.Scheduling
 			// toolStripSpinningProgressControl1
 			// 
 			this.toolStripSpinningProgressControl1.ActiveSegmentColor = System.Drawing.Color.FromArgb(((int)(((byte)(22)))), ((int)(((byte)(165)))), ((int)(((byte)(220)))));
-			this.toolStripSpinningProgressControl1.BehindTransitionSegmentIsActive = true;
+			this.toolStripSpinningProgressControl1.BehindTransitionSegmentIsActive = false;
 			this.toolStripSpinningProgressControl1.InactiveSegmentColor = System.Drawing.Color.White;
 			this.toolStripSpinningProgressControl1.Name = "ToolStripSpinningProgress";
 			this.toolStripSpinningProgressControl1.Padding = new System.Windows.Forms.Padding(5, 0, 0, 0);
 			this.SetShortcut(this.toolStripSpinningProgressControl1, System.Windows.Forms.Keys.None);
 			this.toolStripSpinningProgressControl1.Size = new System.Drawing.Size(25, 24);
 			this.toolStripSpinningProgressControl1.Text = "toolStripSpinningProgressControl1";
-			this.toolStripSpinningProgressControl1.TransitionSegment = 2;
+			this.toolStripSpinningProgressControl1.TransitionSegment = 11;
 			this.toolStripSpinningProgressControl1.TransitionSegmentColor = System.Drawing.Color.SkyBlue;
 			this.toolStripSpinningProgressControl1.Visible = false;
 			// 
@@ -537,10 +537,10 @@ namespace Teleopti.Ccc.Win.Scheduling
             this.xxExportToolStripMenuItem,
             this.toolStripMenuItemChangeTagRM,
             this.toolStripMenuItemPublish,
-			this.toolStripMenuItemNotifyAgent});
+            this.toolStripMenuItemNotifyAgent});
 			this.contextMenuViews.MetroColor = System.Drawing.Color.FromArgb(((int)(((byte)(204)))), ((int)(((byte)(236)))), ((int)(((byte)(249)))));
 			this.contextMenuViews.Name = "contextMenuStrip1";
-			this.contextMenuViews.Size = new System.Drawing.Size(306, 644);
+			this.contextMenuViews.Size = new System.Drawing.Size(306, 666);
 			this.contextMenuViews.Style = Syncfusion.Windows.Forms.Tools.ContextMenuStripEx.ContextMenuStyle.Metro;
 			this.contextMenuViews.Opening += new System.ComponentModel.CancelEventHandler(this.contextMenuViews_Opening);
 			// 
@@ -640,14 +640,6 @@ namespace Teleopti.Ccc.Win.Scheduling
 			this.ToolStripMenuItemAddActivity.Size = new System.Drawing.Size(305, 22);
 			this.ToolStripMenuItemAddActivity.Text = "xxAddActivityThreeDots";
 			this.ToolStripMenuItemAddActivity.Click += new System.EventHandler(this.toolStripMenuItemAddActivityClick);
-			// 
-			// toolStripMenuItemNotifyAgent
-			// 
-			this.toolStripMenuItemNotifyAgent.Name = "toolStripMenuItemNotifyAgent";
-			this.SetShortcut(this.toolStripMenuItemNotifyAgent, System.Windows.Forms.Keys.None);
-			this.toolStripMenuItemNotifyAgent.Size = new System.Drawing.Size(305, 22);
-			this.toolStripMenuItemNotifyAgent.Text = "xxNotifyAgent";
-			this.toolStripMenuItemNotifyAgent.Click += new System.EventHandler(this.toolStripMenuItemNotifyAgentClick);
 			// 
 			// ToolStripMenuItemAddPersonalActivity
 			// 
@@ -753,7 +745,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			this.toolStripMenuItemLoggedOnUserTimeZone.CheckState = System.Windows.Forms.CheckState.Checked;
 			this.toolStripMenuItemLoggedOnUserTimeZone.Name = "toolStripMenuItemLoggedOnUserTimeZone";
 			this.SetShortcut(this.toolStripMenuItemLoggedOnUserTimeZone, System.Windows.Forms.Keys.None);
-			this.toolStripMenuItemLoggedOnUserTimeZone.Size = new System.Drawing.Size(110, 22);
+			this.toolStripMenuItemLoggedOnUserTimeZone.Size = new System.Drawing.Size(152, 22);
 			this.toolStripMenuItemLoggedOnUserTimeZone.Text = "qwerty";
 			this.toolStripMenuItemLoggedOnUserTimeZone.Click += new System.EventHandler(this.toolStripMenuItemLoggedOnUserTimeZone_Click);
 			this.toolStripMenuItemLoggedOnUserTimeZone.MouseUp += new System.Windows.Forms.MouseEventHandler(this.toolStripMenuItemLoggedOnUserTimeZoneMouseUp);
@@ -1328,6 +1320,14 @@ namespace Teleopti.Ccc.Win.Scheduling
 			this.toolStripMenuItemPublish.Text = "xxPublish";
 			this.toolStripMenuItemPublish.Click += new System.EventHandler(this.publishToolStripMenuItemClick);
 			// 
+			// toolStripMenuItemNotifyAgent
+			// 
+			this.toolStripMenuItemNotifyAgent.Name = "toolStripMenuItemNotifyAgent";
+			this.SetShortcut(this.toolStripMenuItemNotifyAgent, System.Windows.Forms.Keys.None);
+			this.toolStripMenuItemNotifyAgent.Size = new System.Drawing.Size(305, 22);
+			this.toolStripMenuItemNotifyAgent.Text = "xxNotifyAgent";
+			this.toolStripMenuItemNotifyAgent.Click += new System.EventHandler(this.toolStripMenuItemNotifyAgentClick);
+			// 
 			// contextMenuStripResultView
 			// 
 			this.contextMenuStripResultView.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
@@ -1413,21 +1413,21 @@ namespace Teleopti.Ccc.Win.Scheduling
 			this.ribbonControlAdv1.Size = new System.Drawing.Size(1235, 146);
 			this.ribbonControlAdv1.SystemText.QuickAccessCustomizeCaptionText = "Customize QuickAccess Toolbar";
 			this.ribbonControlAdv1.SystemText.QuickAccessDialogDropDownName = "";
-			toolStripTabGroup1.Color = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(128)))), ((int)(((byte)(0)))));
-			toolStripTabGroup1.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-			toolStripTabGroup1.Name = "toolStripTabGroupShiftEditor";
-			toolStripTabGroup1.Visible = true;
-			toolStripTabGroup2.Color = System.Drawing.Color.Blue;
-			toolStripTabGroup2.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-			toolStripTabGroup2.Name = "toolStripTabGroupMainGrid";
-			toolStripTabGroup2.Visible = true;
-			toolStripTabGroup3.Color = System.Drawing.Color.FromArgb(((int)(((byte)(192)))), ((int)(((byte)(192)))), ((int)(((byte)(255)))));
-			toolStripTabGroup3.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-			toolStripTabGroup3.Name = "toolStripTabGroupShiftEditor2";
-			toolStripTabGroup3.Visible = true;
-			this.ribbonControlAdv1.TabGroups.Add(toolStripTabGroup1);
-			this.ribbonControlAdv1.TabGroups.Add(toolStripTabGroup2);
-			this.ribbonControlAdv1.TabGroups.Add(toolStripTabGroup3);
+			toolStripTabGroup4.Color = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(128)))), ((int)(((byte)(0)))));
+			toolStripTabGroup4.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			toolStripTabGroup4.Name = "toolStripTabGroupShiftEditor";
+			toolStripTabGroup4.Visible = true;
+			toolStripTabGroup5.Color = System.Drawing.Color.Blue;
+			toolStripTabGroup5.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			toolStripTabGroup5.Name = "toolStripTabGroupMainGrid";
+			toolStripTabGroup5.Visible = true;
+			toolStripTabGroup6.Color = System.Drawing.Color.FromArgb(((int)(((byte)(192)))), ((int)(((byte)(192)))), ((int)(((byte)(255)))));
+			toolStripTabGroup6.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			toolStripTabGroup6.Name = "toolStripTabGroupShiftEditor2";
+			toolStripTabGroup6.Visible = true;
+			this.ribbonControlAdv1.TabGroups.Add(toolStripTabGroup4);
+			this.ribbonControlAdv1.TabGroups.Add(toolStripTabGroup5);
+			this.ribbonControlAdv1.TabGroups.Add(toolStripTabGroup6);
 			this.ribbonControlAdv1.TabIndex = 5;
 			this.ribbonControlAdv1.TitleAlignment = Syncfusion.Windows.Forms.Tools.TextAlignment.Center;
 			this.ribbonControlAdv1.TitleColor = System.Drawing.Color.FromArgb(((int)(((byte)(59)))), ((int)(((byte)(59)))), ((int)(((byte)(59)))));

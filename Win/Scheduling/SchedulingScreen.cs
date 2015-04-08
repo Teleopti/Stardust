@@ -5543,7 +5543,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 
 			foreach (TimeZoneInfo info in _schedulerState.DetectedTimeZoneInfos)
 			{
-				if (info != _schedulerState.TimeZoneInfo)
+				if (!info.Equals(_schedulerState.TimeZoneInfo))
 				{
 					var item = new ToolStripMenuItem(info.DisplayName);
 					item.Tag = info;
