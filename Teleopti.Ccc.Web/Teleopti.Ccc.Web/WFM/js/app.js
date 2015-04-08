@@ -10,6 +10,7 @@ var wfm = angular.module('wfm', [
 	'restService',
 	'restSearchService',
 	'restNotificationService',
+	'restResourcePlannerService',
 	'forecastingService',
 	'outboundService',
 	'restAreasService',

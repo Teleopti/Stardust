@@ -1638,6 +1638,7 @@
     <Content Include="WFM\js\ABmetrics.min.js" />
     <Content Include="WFM\js\app.js" />
     <Content Include="WFM\js\wfm.controller.js" />
+    <Content Include="WFM\tests\resourceplanner\resourceplanner.controller.spec.js" />
     <Content Include="WFM\vendor\angular-animate\angular-animate.js" />
     <Content Include="WFM\vendor\angular-animate\angular-animate.min.js" />
     <Content Include="WFM\vendor\angular-aria\angular-aria.js" />

@@ -13,14 +13,16 @@
 			Forecasts are missing for these skills
 		</div>
 
-		<div>
-			<div class="accordion-head" ng-click="accordionToggle1 = !accordionToggle1">Telephony <i class="mdi mdi-chevron-down"></i><span class="pull-right">15 issues</span></div>
-			<div class="acc-content" ng-cloak ng-show="accordionToggle1">
-				<div class="wfm-block">Missing forecast from 2015.05.01 to 2015.05.02</div>
-			</div>
-
-			<div class="accordion-head" ng-click="accordionToggle2 = !accordionToggle2">Chat<i class="mdi mdi-chevron-down"></i></div>
-
-		</div>
+		<ul>
+			<li>
+				<div class="wfm-accordion-head" ng-click="accordionToggle1 = !accordionToggle1">Telephony <i class="mdi mdi-chevron-down"></i><span class="pull-right">15 issues</span></div>
+				<div class="wfm-accordion-content" ng-cloak ng-show="accordionToggle1">
+					<div class="wfm-block">Missing forecast from 2015.05.01 to 2015.05.02</div>
+				</div>
+			</li>
+			<li>
+				<div class="wfm-accordion-head" ng-click="accordionToggle2 = !accordionToggle2">Chat<i class="mdi mdi-chevron-down"></i></div>
+			</li>
+		</ul>
 	</div>
 </div>
