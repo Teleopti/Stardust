@@ -19,7 +19,7 @@ namespace Teleopti.Ccc.WebTest.Areas.ResourcePlanner
 	public class ScheduleControllerTest
 	{
 		[Test, Explicit("WIP")]
-		public async void ShouldScheduleFixedStaff()
+		public void ShouldScheduleFixedStaff()
 		{
 			var scenario = ScenarioFactory.CreateScenario("Default", true, true);
 			var period = new DateOnlyPeriod(2015,5,1,2015,5,31);
