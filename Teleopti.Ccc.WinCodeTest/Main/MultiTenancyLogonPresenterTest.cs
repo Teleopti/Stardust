@@ -235,18 +235,12 @@ namespace Teleopti.Ccc.WinCodeTest.Main
 		[Test]
 		public void ShouldGoDirectToApplicationIfWindowsNotPossible()
 		{
-			var dataSourceContainer = new DataSourceContainer(null, null, null, AuthenticationTypeOption.Windows);
 			_model.AuthenticationType = AuthenticationTypeOption.Windows;
 			_winLogon.Stub( x => x.CheckWindowsIsPossible()).Return(false);
 
-			_model.SelectedDataSourceContainer = dataSourceContainer;
-			_view.Stub(x => x.ShowStep(false));
-			_target.CurrentStep = LoginStep.SelectLogonType;
-			_target.OkbuttonClicked();
+			_target.Initialize();
 			_target.CurrentStep.Should().Be(LoginStep.Login);
 			_model.AuthenticationType.Should().Be.EqualTo(AuthenticationTypeOption.Application);
 		}
 	}
-
-
 }
