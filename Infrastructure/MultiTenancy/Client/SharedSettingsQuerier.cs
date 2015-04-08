@@ -1,10 +1,9 @@
 ﻿using System.Net.Http;
-using System.Threading.Tasks;
 using Newtonsoft.Json;
 using Teleopti.Ccc.Domain.Security;
 using Teleopti.Interfaces.Infrastructure;
 
-namespace Teleopti.Ccc.Infrastructure.Web
+namespace Teleopti.Ccc.Infrastructure.MultiTenancy.Client
 {
 	public interface ISharedSettingsQuerier
 	{

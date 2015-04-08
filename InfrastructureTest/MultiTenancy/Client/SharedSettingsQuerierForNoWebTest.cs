@@ -2,6 +2,7 @@
 using System.IO;
 using NUnit.Framework;
 using SharpTestsEx;
+using Teleopti.Ccc.Infrastructure.MultiTenancy.Client;
 using Teleopti.Ccc.Infrastructure.Web;
 
 namespace Teleopti.Ccc.InfrastructureTest.MultiTenancy.Client

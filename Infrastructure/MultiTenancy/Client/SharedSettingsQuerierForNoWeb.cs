@@ -1,7 +1,7 @@
 ﻿using System.IO;
 using Newtonsoft.Json;
 
-namespace Teleopti.Ccc.Infrastructure.Web
+namespace Teleopti.Ccc.Infrastructure.MultiTenancy.Client
 {
 	public class SharedSettingsQuerierForNoWeb : ISharedSettingsQuerier
 	{
