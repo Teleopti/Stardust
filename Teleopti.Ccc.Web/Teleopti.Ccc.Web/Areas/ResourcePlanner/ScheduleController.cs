@@ -77,7 +77,7 @@ namespace Teleopti.Ccc.Web.Areas.ResourcePlanner
 		}
 
 		[HttpPost, Route("api/ResourcePlanner/Schedule/FixedStaff"), Authorize, UnitOfWork]
-		public virtual async Task<IHttpActionResult> FixedStaff([FromBody]FixedStaffSchedulingInput input)
+		public virtual IHttpActionResult FixedStaff([FromBody]FixedStaffSchedulingInput input)
 		{
 			var period = new DateOnlyPeriod(new DateOnly(input.StartDate), new DateOnly(input.EndDate));
 			var scenario = _scenarioRepository.LoadDefaultScenario();
