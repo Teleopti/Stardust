@@ -43,12 +43,6 @@ ECHO %commonFolder% >>%logFile%
 
 COPY "c:\XmlSetAttribute.exe" %commonFolder%\XmlSetAttribute.exe
 
-
-SET nodePath=configuration/appSettings/add[@key='GetConfigFromWebService']
-SET attributeName=value
-SET attributeValue=false
-%commonFolder%\XmlSetAttribute.exe %configPath% %nodePath% %attributeName% %attributeValue%
-
 SET nodePath=configuration/appSettings/add[@key='FeatureToggle']
 SET attributeName=value
 SET attributeValue=%ROOTDIR%\Domain\FeatureFlags\toggles.txt
