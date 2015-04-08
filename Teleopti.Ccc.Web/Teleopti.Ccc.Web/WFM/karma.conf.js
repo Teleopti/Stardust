@@ -31,6 +31,7 @@ module.exports = function(config) {
 		'vendor/angular-material/angular-material.min.js',
 		'vendor/fabricjs/fabric.min.js',
 		'vendor/fabricjs/fabricjs_viewport.js',
+		'vendor/ng-image-input-with-preview/ng-image-input-with-preview.js',
 		'js/ABmetrics.min.js',
 		'dist/main.min.js',
 		'tests/**/*.js',
