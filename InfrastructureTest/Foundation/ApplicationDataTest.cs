@@ -10,6 +10,7 @@ using SharpTestsEx;
 using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.TestCommon.FakeData;
+using Teleopti.Ccc.TestCommon.TestData;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
 using Teleopti.Interfaces.MessageBroker.Client.Composite;
@@ -44,7 +45,39 @@ namespace Teleopti.Ccc.InfrastructureTest.Foundation
                                     };
         }
 
-        [Test]
+		[Test]
+		public void MakeSureDataSourceExistsShouldAddIfNotExist()
+		{
+			var dataSourcesFactory = MockRepository.GenerateMock<IDataSourcesFactory>();
+			var dataSourceName = RandomName.Make();
+			var appNhibConf = new Dictionary<string, string>();
+			var statisticConnString = RandomName.Make();
+			var dataSource = new FakeDataSource{DataSourceName = dataSourceName};
+			dataSourcesFactory.Expect(x => x.Create(appNhibConf, statisticConnString)).Return(dataSource);
+			var target = new ApplicationData(new Dictionary<string, string>(), Enumerable.Empty<IDataSource>(), null, null, dataSourcesFactory);
+			target.DataSource(dataSourceName).Should().Be.EqualTo(null);
+			target.MakeSureDataSourceExists(dataSourceName, appNhibConf, statisticConnString);
+			target.DataSource(dataSourceName).Should().Be.SameInstanceAs(dataSource);
+		}
+
+		[Test]
+		public void MakeSureDataSourceExistsShouldNotAddIfExist()
+		{
+			var dataSourcesFactory = MockRepository.GenerateMock<IDataSourcesFactory>();
+			var dataSourceName = RandomName.Make();
+			var appNhibConf = new Dictionary<string, string>();
+			var statisticConnString = RandomName.Make();
+			var dataSource = new FakeDataSource { DataSourceName = dataSourceName };
+			dataSourcesFactory.Expect(x => x.Create(appNhibConf, statisticConnString)).Return(dataSource);
+			var target = new ApplicationData(new Dictionary<string, string>(), new[]{dataSource}, null, null, dataSourcesFactory);
+			target.DataSource(dataSourceName).Should().Be.SameInstanceAs(dataSource);
+			target.MakeSureDataSourceExists(dataSourceName, appNhibConf, statisticConnString);
+
+			target.DataSource(dataSourceName).Should().Be.SameInstanceAs(dataSource);
+			dataSourcesFactory.AssertWasNotCalled(x=> x.Create(appNhibConf, statisticConnString));
+		}
+
+		[Test]
         public void VerifyApplicationDataCanBeSet()
         {
             IMessageBrokerComposite messBroker = mocks.StrictMock<IMessageBrokerComposite>();

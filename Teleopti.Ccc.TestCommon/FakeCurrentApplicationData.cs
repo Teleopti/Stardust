@@ -1,14 +1,12 @@
 using System;
 using System.Collections.Generic;
 using Teleopti.Ccc.Domain;
-using Teleopti.Ccc.Domain.Security.Authentication;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
 using Teleopti.Interfaces.MessageBroker.Client.Composite;
 
 namespace Teleopti.Ccc.TestCommon
 {
-	
 	public class FakeCurrentApplicationData:ICurrentApplicationData, IApplicationData
 	{
 		public void Dispose()
@@ -25,8 +23,7 @@ namespace Teleopti.Ccc.TestCommon
 		public IDictionary<string, string> AppSettings { get; private set; }
 		public ILoadPasswordPolicyService LoadPasswordPolicyService { get; private set; }
 
-		public IDataSource CreateAndAddDataSource(string dataSourceName, IDictionary<string, string> applicationNhibConfiguration,
-			string analyticsConnectionString)
+		public void MakeSureDataSourceExists(string dataSourceName, IDictionary<string, string> applicationNhibConfiguration, string analyticsConnectionString)
 		{
 			throw new NotImplementedException();
 		}

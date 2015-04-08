@@ -75,23 +75,21 @@ namespace Teleopti.Ccc.Infrastructure.Foundation
 			}
 		}
 
-		//TODO: if this should be kept - make it thread safe if/when other clients than desktop is using it
-		public IDataSource CreateAndAddDataSource(string dataSourceName, IDictionary<string, string> applicationNhibConfiguration, string analyticsConnectionString)
+		private readonly object addDataSourceLocker = new object();
+		public void MakeSureDataSourceExists(string dataSourceName, IDictionary<string, string> applicationNhibConfiguration, string analyticsConnectionString)
 		{
-			var dataSource = existingDataSource(dataSourceName);
+			var dataSource = DataSource(dataSourceName);
 			if (dataSource != null)
-				return dataSource;
-
-			applicationNhibConfiguration[NHibernate.Cfg.Environment.SessionFactoryName] = dataSourceName;
-
-			var newDataSource =  _dataSourcesFactory.Create(applicationNhibConfiguration, analyticsConnectionString);
-			//_registeredDataSourceCollection.Add(newDataSource);
-			return newDataSource;
-		}
-
-		private IDataSource existingDataSource(string datasourceName)
-		{
-			return _registeredDataSourceCollection.FirstOrDefault(dataSource => dataSource.DataSourceName.Equals(datasourceName));
+				return;
+			lock (addDataSourceLocker)
+			{
+				dataSource = DataSource(dataSourceName);
+				if (dataSource != null)
+					return;
+				applicationNhibConfiguration[NHibernate.Cfg.Environment.SessionFactoryName] = dataSourceName;
+				var newDataSource = _dataSourcesFactory.Create(applicationNhibConfiguration, analyticsConnectionString);
+				_registeredDataSourceCollection.Add(newDataSource);
+			}
 		}
 
 		public void DoOnAllTenants_AvoidUsingThis(Action<IDataSource> actionOnTenant)

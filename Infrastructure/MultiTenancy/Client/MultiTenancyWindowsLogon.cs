@@ -127,9 +127,8 @@ namespace Teleopti.Ccc.Infrastructure.MultiTenancy.Client
 
 		private IDataSourceContainer getDataSorce(string dataSourceName, DataSourceConfig nhibConfig, IApplicationData applicationData)
 		{
-			var datasource = applicationData.CreateAndAddDataSource(dataSourceName, nhibConfig.ApplicationNHibernateConfig, nhibConfig.AnalyticsConnectionString);
-
-			return new DataSourceContainer(datasource, _repositoryFactory, null, AuthenticationTypeOption.Application);
+			applicationData.MakeSureDataSourceExists(dataSourceName, nhibConfig.ApplicationNHibernateConfig, nhibConfig.AnalyticsConnectionString);
+			return new DataSourceContainer(applicationData.DataSource(dataSourceName), _repositoryFactory, null, AuthenticationTypeOption.Application);
 		}
 	}
 }

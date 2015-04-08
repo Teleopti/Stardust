@@ -30,7 +30,7 @@ namespace Teleopti.Interfaces.Domain
 		///</summary>
 		ILoadPasswordPolicyService LoadPasswordPolicyService { get; }
 
-		IDataSource CreateAndAddDataSource(string dataSourceName, IDictionary<string, string> applicationNhibConfiguration, string analyticsConnectionString);
+		void MakeSureDataSourceExists(string dataSourceName, IDictionary<string, string> applicationNhibConfiguration, string analyticsConnectionString);
 		void DoOnAllTenants_AvoidUsingThis(Action<IDataSource> actionOnTenant);
 	}
 }
