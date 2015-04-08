@@ -1,8 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using NUnit.Framework;
 using Rhino.Mocks;
-using Rhino.Mocks.Interfaces;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling.DayOffScheduling;
 using Teleopti.Ccc.Domain.Scheduling.Restrictions;
@@ -30,7 +28,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.DayOffScheduling
 			_absencePreferenceScheduler = _mocks.StrictMock<IAbsencePreferenceScheduler>();
 			_dayOffScheduler = _mocks.StrictMock<IDayOffScheduler>();
 			_missingDaysOffScheduler = _mocks.StrictMock<IMissingDaysOffScheduler>();
-			_target = new DaysOffSchedulingService(_absencePreferenceScheduler, _dayOffScheduler, _missingDaysOffScheduler);
+			_target = new DaysOffSchedulingService(()=>_absencePreferenceScheduler, ()=>_dayOffScheduler, ()=>_missingDaysOffScheduler);
 			_rollbackService = _mocks.StrictMock<ISchedulePartModifyAndRollbackService>();
 			_matrixList = new List<IScheduleMatrixPro>();
 			_schedulingOptions = new SchedulingOptions();

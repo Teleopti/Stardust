@@ -1,9 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Globalization;
 using System.Linq;
 using Teleopti.Ccc.Domain.Common;
-using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftFilters;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Interfaces.Domain;
@@ -15,14 +13,14 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 	    private readonly ILongestPeriodForAssignmentCalculator _rules;
 	    private readonly IPersonalShiftAndMeetingFilter _personalShiftAndMeetingFilter;
 	    private readonly INotOverWritableActivitiesShiftFilter _notOverWritableActivitiesShiftFilter;
-	    private readonly CultureInfo _culture;
+	    private readonly ICurrentTeleoptiPrincipal _currentIdentity;
 
-        public ShiftProjectionCacheFilter(ILongestPeriodForAssignmentCalculator rules, IPersonalShiftAndMeetingFilter personalShiftAndMeetingFilter, INotOverWritableActivitiesShiftFilter notOverWritableActivitiesShiftFilter)
+        public ShiftProjectionCacheFilter(ILongestPeriodForAssignmentCalculator rules, IPersonalShiftAndMeetingFilter personalShiftAndMeetingFilter, INotOverWritableActivitiesShiftFilter notOverWritableActivitiesShiftFilter, ICurrentTeleoptiPrincipal currentIdentity)
         {
-	        _culture = TeleoptiPrincipal.CurrentPrincipal.Regional.Culture;
         	_rules = rules;
 	        _personalShiftAndMeetingFilter = personalShiftAndMeetingFilter;
 	        _notOverWritableActivitiesShiftFilter = notOverWritableActivitiesShiftFilter;
+	        _currentIdentity = currentIdentity;
         }
 
     	public IList<IShiftProjectionCache> FilterOnRestrictionAndNotAllowedShiftCategories(DateOnly scheduleDayDateOnly, TimeZoneInfo agentTimeZone, 
@@ -190,7 +188,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
             }
 			finderResult.AddFilterResults(
                 new WorkShiftFilterResult(
-                    string.Format(_culture,
+                    string.Format(_currentIdentity.Current().Regional.Culture,
                                   UserTexts.Resources.FilterOnPersonalPeriodLimitationsWithParams,
                                   validPeriod.LocalStartDateTime, validPeriod.LocalEndDateTime), cntBefore,
                     workShiftsWithinPeriod.Count));
@@ -253,7 +251,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
                     workShiftsWithinMinMax.Add(proj);
             }
 			finderResult.AddFilterResults(
-                new WorkShiftFilterResult(string.Format(_culture, UserTexts.Resources.FilterOnContractTimeLimitationsWithParams, validMinMax.Minimum, validMinMax.Maximum),
+				new WorkShiftFilterResult(string.Format(_currentIdentity.Current().Regional.Culture, UserTexts.Resources.FilterOnContractTimeLimitationsWithParams, validMinMax.Minimum, validMinMax.Maximum),
                                           cntBefore, workShiftsWithinMinMax.Count));
 
             return workShiftsWithinMinMax;
@@ -274,7 +272,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
                         workShiftsWithinMinMax.Add(proj);
                 }
 				finderResult.AddFilterResults(
-                new WorkShiftFilterResult(string.Format(_culture, UserTexts.Resources.FilterOnWorkTimeLimitationsWithParams, restriction.WorkTimeLimitation.StartTimeString, restriction.WorkTimeLimitation.EndTimeString),
+				new WorkShiftFilterResult(string.Format(_currentIdentity.Current().Regional.Culture, UserTexts.Resources.FilterOnWorkTimeLimitationsWithParams, restriction.WorkTimeLimitation.StartTimeString, restriction.WorkTimeLimitation.EndTimeString),
                                           shiftList.Count, workShiftsWithinMinMax.Count));
             }
             else

@@ -227,7 +227,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 					if (!schedulePart.IsScheduled())
 					{
 						DateTime schedulingTime = DateTime.Now;
-						IWorkShiftCalculationResultHolder cache;
+						WorkShiftFinderServiceResult cache;
 						using (PerformanceOutput.ForOperation("Finding the best shift"))
 						{
 							IScheduleMatrixPro matrix = _scheduleMatrixListCreator.CreateMatrixListFromScheduleParts(
@@ -238,14 +238,14 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 								schedulePart, schedulingOptions);
 							cache = finderService.FindBestShift(schedulePart, schedulingOptions, matrix, effectiveRestriction, null);
 						}
-						var result = finderService.FinderResult;
+						var result = cache.FinderResult;
 						_allResults.AddResults(new List<IWorkShiftFinderResult> { result }, schedulingTime);
 
-						if (cache == null)
+						if (cache.ResultHolder == null)
 							return null;
 
 						result.Successful = true;
-						return cache.ShiftProjection.TheMainShift;
+						return cache.ResultHolder.ShiftProjection.TheMainShift;
 					}
 			}
 			return null;

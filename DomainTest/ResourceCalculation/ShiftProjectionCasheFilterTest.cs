@@ -9,6 +9,7 @@ using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Restriction;
 using Teleopti.Ccc.Domain.Scheduling.Restrictions;
 using Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftFilters;
+using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Interfaces.Domain;
 
@@ -50,7 +51,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
             _rules = _mocks.StrictMock<ILongestPeriodForAssignmentCalculator>();
 	        _personalShiftAndMeetingFilter = _mocks.StrictMock<IPersonalShiftAndMeetingFilter>();
 	        _notOverWritableActivitiesShiftFilter = _mocks.StrictMock<INotOverWritableActivitiesShiftFilter>();
-			_target = new ShiftProjectionCacheFilter(_rules, _personalShiftAndMeetingFilter, _notOverWritableActivitiesShiftFilter);
+			_target = new ShiftProjectionCacheFilter(_rules, _personalShiftAndMeetingFilter, _notOverWritableActivitiesShiftFilter, new CurrentTeleoptiPrincipal());
             _scheduleRange = _mocks.StrictMock<IScheduleRange>();
             _scheduleDictionary = _mocks.StrictMock<IScheduleDictionary>();
         	_personalShiftMeetingTimeChecker = _mocks.StrictMock<IPersonalShiftMeetingTimeChecker>();

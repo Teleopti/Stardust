@@ -1,20 +1,23 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Optimization
 {
     public class ScheduleMatrixListCreator : IScheduleMatrixListCreator
     {
-        private readonly ISchedulingResultStateHolder _stateHolder;
+        private readonly Func<ISchedulingResultStateHolder> _stateHolder;
+	    private readonly IUniqueSchedulePartExtractor _uniqueSchedulePartExtractor;
 
-        public ScheduleMatrixListCreator(ISchedulingResultStateHolder stateHolder)
+	    public ScheduleMatrixListCreator(Func<ISchedulingResultStateHolder> stateHolder, IUniqueSchedulePartExtractor uniqueSchedulePartExtractor)
         {
-            _stateHolder = stateHolder;
+	        _stateHolder = stateHolder;
+	        _uniqueSchedulePartExtractor = uniqueSchedulePartExtractor;
         }
 
-        public IList<IScheduleMatrixPro> CreateMatrixListFromScheduleParts(IEnumerable<IScheduleDay> scheduleDays)
+	    public IList<IScheduleMatrixPro> CreateMatrixListFromScheduleParts(IEnumerable<IScheduleDay> scheduleDays)
         {
-            IEnumerable<ISchedulePartExtractor> extractors = new UniqueSchedulePartExtractor().ExtractUniqueScheduleParts(scheduleDays);
+            IEnumerable<ISchedulePartExtractor> extractors = _uniqueSchedulePartExtractor.ExtractUniqueScheduleParts(scheduleDays);
             IList<IScheduleMatrixPro> matrixes = new List<IScheduleMatrixPro>();
             foreach (var schedulePartExtractor in extractors)
             {
@@ -25,7 +28,7 @@ namespace Teleopti.Ccc.Domain.Optimization
                 IFullWeekOuterWeekPeriodCreator fullWeekOuterWeekPeriodCreator =
                     new FullWeekOuterWeekPeriodCreator(actualSchedulePeriod,
                                                        currentPerson);
-                matrixes.Add(new ScheduleMatrixPro(_stateHolder,
+                matrixes.Add(new ScheduleMatrixPro(_stateHolder(),
                                                    fullWeekOuterWeekPeriodCreator,
                                                    schedulePeriod));
             }

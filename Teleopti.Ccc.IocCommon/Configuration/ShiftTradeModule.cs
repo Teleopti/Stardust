@@ -1,5 +1,6 @@
 ﻿using Autofac;
 using Teleopti.Ccc.Domain.AgentInfo.Requests;
+using Teleopti.Ccc.Domain.Optimization;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.WorkflowControl.ShiftTrades;
 using Teleopti.Interfaces.Domain;
@@ -18,6 +19,8 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 
 			builder.RegisterType<ShiftTradeDateSpecification>().As<IShiftTradeSpecification>();
 			builder.RegisterType<ShiftTradeTargetTimeSpecification>().As<IShiftTradeSpecification>();
+			builder.RegisterType<UniqueSchedulePartExtractor>().As<IUniqueSchedulePartExtractor>().SingleInstance();
+			builder.RegisterType<ScheduleMatrixListCreator>().As<IScheduleMatrixListCreator>().SingleInstance();
 			builder.RegisterType<ShiftTradeAbsenceSpecification>().As<IShiftTradeSpecification>();
 			builder.RegisterType<ShiftTradePersonalActivitySpecification>().As<IShiftTradeSpecification>();
 			builder.RegisterType<ShiftTradeMeetingSpecification>().As<IShiftTradeSpecification>();

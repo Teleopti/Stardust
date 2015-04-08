@@ -166,7 +166,7 @@ namespace Teleopti.Ccc.WinCode.Autofac
 			builder.RegisterType<AbsencePreferenceScheduler>().As<IAbsencePreferenceScheduler>().InstancePerLifetimeScope();
 			builder.RegisterType<AbsencePreferenceFullDayLayerCreator>()
 				.As<IAbsencePreferenceFullDayLayerCreator>()
-				.InstancePerLifetimeScope();
+				.SingleInstance();
 			builder.RegisterType<DayOffScheduler>().As<IDayOffScheduler>().InstancePerLifetimeScope();
 			builder.RegisterType<ScheduleDayAvailableForDayOffSpecification>()
 				.As<IScheduleDayAvailableForDayOffSpecification>()

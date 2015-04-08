@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
@@ -8,20 +9,18 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 {
 	public class DayOffsInPeriodCalculator : IDayOffsInPeriodCalculator
 	{
-	    private readonly ISchedulingResultStateHolder _resultStateHolder;
+	    private readonly Func<ISchedulingResultStateHolder> _resultStateHolder;
 	    
-		public DayOffsInPeriodCalculator(ISchedulingResultStateHolder resultStateHolder)
+		public DayOffsInPeriodCalculator(Func<ISchedulingResultStateHolder> resultStateHolder)
 		{
 		    _resultStateHolder = resultStateHolder;		    
 		}
-
-        private IScheduleDictionary ScheduleDictionary { get { return _resultStateHolder.Schedules; } }
 
 		public IList<IScheduleDay> CountDayOffsOnPeriod(IVirtualSchedulePeriod virtualSchedulePeriod)
 		{
 			IList<IScheduleDay> dayOffDays = new List<IScheduleDay>();
 
-			var range = ScheduleDictionary[virtualSchedulePeriod.Person];
+			var range = _resultStateHolder().Schedules[virtualSchedulePeriod.Person];
 			foreach (var scheduleDay in range.ScheduledDayCollection(virtualSchedulePeriod.DateOnlyPeriod))
 			{
 				SchedulePartView significant = scheduleDay.SignificantPart();
@@ -32,7 +31,6 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 			return dayOffDays;
 		}
 
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
 		public bool HasCorrectNumberOfDaysOff(IVirtualSchedulePeriod virtualSchedulePeriod, out int targetDaysOff, out IList<IScheduleDay> dayOffsNow)
 		{
 			var contract = virtualSchedulePeriod.Contract;
@@ -55,40 +53,34 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 			return false;
 		}
 
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
         public bool OutsideOrAtMinimumTargetDaysOff(IVirtualSchedulePeriod virtualSchedulePeriod)
         {
             var contract = virtualSchedulePeriod.Contract;
             var employmentType = contract.EmploymentType;
-            int targetDaysOff;
-			IList<IScheduleDay> dayOffsNow;
 
-            if (employmentType == EmploymentType.HourlyStaff)
+	        if (employmentType == EmploymentType.HourlyStaff)
             {
                 return false;
             }
 
-            targetDaysOff = virtualSchedulePeriod.DaysOff();
-            dayOffsNow = CountDayOffsOnPeriod(virtualSchedulePeriod);
+            int targetDaysOff = virtualSchedulePeriod.DaysOff();
+            IList<IScheduleDay> dayOffsNow = CountDayOffsOnPeriod(virtualSchedulePeriod);
 
             return (dayOffsNow.Count <= targetDaysOff - contract.NegativeDayOffTolerance);
         }
 
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
         public bool OutsideOrAtMaximumTargetDaysOff(IVirtualSchedulePeriod virtualSchedulePeriod)
         {
             var contract = virtualSchedulePeriod.Contract;
             var employmentType = contract.EmploymentType;
-            int targetDaysOff;
-			IList<IScheduleDay> dayOffsNow;
 
-            if (employmentType == EmploymentType.HourlyStaff)
+	        if (employmentType == EmploymentType.HourlyStaff)
             {
                 return false;
             }
 
-            targetDaysOff = virtualSchedulePeriod.DaysOff();
-            dayOffsNow = CountDayOffsOnPeriod(virtualSchedulePeriod);
+            int targetDaysOff = virtualSchedulePeriod.DaysOff();
+            IList<IScheduleDay> dayOffsNow = CountDayOffsOnPeriod(virtualSchedulePeriod);
 
             return (dayOffsNow.Count >= targetDaysOff + contract.PositiveDayOffTolerance);
         }

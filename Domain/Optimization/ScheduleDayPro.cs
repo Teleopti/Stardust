@@ -11,17 +11,10 @@ namespace Teleopti.Ccc.Domain.Optimization
     /// </remarks>
     public class ScheduleDayPro : IScheduleDayPro
     {
+	    private readonly DateOnly _day;
+        private readonly IScheduleMatrixPro _scheduleMatrix;
 
-        #region Variables
-
-        private DateOnly _day;
-        private IScheduleMatrixPro _scheduleMatrix;
-
-        #endregion
-
-        #region Constructor
-
-        /// <summary>
+	    /// <summary>
         /// Initializes a new instance of the <see cref="ScheduleDayPro"/> class.
         /// </summary>
         /// <param name="day">The day.</param>
@@ -33,11 +26,7 @@ namespace Teleopti.Ccc.Domain.Optimization
             _scheduleMatrix = scheduleMatrix; 
         }
 
-        #endregion
-
-        #region Interface
-
-        public DateOnly Day
+	    public DateOnly Day
         {
             get { return _day; }
         }
@@ -64,8 +53,5 @@ namespace Teleopti.Ccc.Domain.Optimization
         {
             return ActiveScheduleRange.ScheduledDay(Day);
         }
-
-        #endregion
-
     }
 }

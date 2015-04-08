@@ -36,7 +36,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 		    _scheduleDayPro2 = _mocks.StrictMock<IScheduleDayPro>();
 		    _scheduleDay = _mocks.StrictMock<IScheduleDay>();
 			_absencePreferenceFullDayLayerCreator = _mocks.StrictMock<IAbsencePreferenceFullDayLayerCreator>();
-			_target = new AbsencePreferenceScheduler(_effectiveRestrictionCreator,_rollBackService, _absencePreferenceFullDayLayerCreator);
+			_target = new AbsencePreferenceScheduler(_effectiveRestrictionCreator,()=>_rollBackService, _absencePreferenceFullDayLayerCreator);
 		}
 
        [Test]

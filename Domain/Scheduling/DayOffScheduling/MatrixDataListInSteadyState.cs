@@ -11,7 +11,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.DayOffScheduling
 
 	public class MatrixDataListInSteadyState : IMatrixDataListInSteadyState
 	{
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
 		public bool IsListInSteadyState(IList<IMatrixData> matrixDataList)
 		{
 			IMatrixData masterMatrix = matrixDataList[0];

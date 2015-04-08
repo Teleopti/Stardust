@@ -38,7 +38,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.DayOffScheduling
 			_hasContractDayOffDefinition = hasContractDayOffDefinition;
 		}
 
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "3")]
 		public void DayOffScheduling(IList<IScheduleMatrixPro> matrixList, IList<IScheduleMatrixPro> matrixListAll, ISchedulePartModifyAndRollbackService rollbackService, ISchedulingOptions schedulingOptions)
         {
             using (PerformanceOutput.ForOperation("Inital assignment of days off"))
@@ -48,7 +47,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.DayOffScheduling
             }
         }
 
-		private void addDaysOff(IEnumerable<IScheduleMatrixPro> matrixList, ISchedulingOptions schedulingOptions)//, IEnumerable<DateOnly> dates, IEnumerable<IPerson> persons)
+		private void addDaysOff(IEnumerable<IScheduleMatrixPro> matrixList, ISchedulingOptions schedulingOptions)
         {
            
             foreach (var scheduleMatrixPro in matrixList)
@@ -93,7 +92,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.DayOffScheduling
 
                 int targetDaysOff;
 
-				IList<IScheduleDay> dayOffDays = new List<IScheduleDay>();
+				IList<IScheduleDay> dayOffDays;
 	            var hasCorrectNumberOfDaysOff = _dayOffsInPeriodCalculator.HasCorrectNumberOfDaysOff(schedulePeriod, out targetDaysOff, out dayOffDays);
 
 				if (hasCorrectNumberOfDaysOff && dayOffDays.Count > 0)

@@ -9,8 +9,9 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 {
     public class PersonSkillPeriodsDataHolderManager : IPersonSkillPeriodsDataHolderManager
     {
-        private readonly ISchedulingResultStateHolder _schedulingResultStateHolder;
-        public PersonSkillPeriodsDataHolderManager(ISchedulingResultStateHolder schedulingResultStateHolder)
+        private readonly Func<ISchedulingResultStateHolder> _schedulingResultStateHolder;
+
+        public PersonSkillPeriodsDataHolderManager(Func<ISchedulingResultStateHolder> schedulingResultStateHolder)
         {
             _schedulingResultStateHolder = schedulingResultStateHolder;
         }
@@ -26,10 +27,9 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
             var scheduleDayUtc = TimeZoneHelper.ConvertToUtc(scheduleDateOnly.Date,
 																  currentSchedulePeriod.Person.PermissionInformation.DefaultTimeZone());
             var period = new DateTimePeriod(scheduleDayUtc, scheduleDayUtc.AddDays(2));
-            return _schedulingResultStateHolder.SkillStaffPeriodHolder.SkillStaffDataPerActivity(period, skills);
+            return _schedulingResultStateHolder().SkillStaffPeriodHolder.SkillStaffDataPerActivity(period, skills);
         }
 
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "1")]
         public IDictionary<ISkill, ISkillStaffPeriodDictionary> GetPersonMaxSeatSkillSkillStaffPeriods(DateOnly scheduleDateOnly, IVirtualSchedulePeriod currentSchedulePeriod)
         {
             var site = currentSchedulePeriod.Person.Period(scheduleDateOnly).Team.Site;
@@ -49,10 +49,9 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 			var period = new DateTimePeriod(scheduleDayUtc, scheduleDayUtc.AddDays(2));
 
 
-			return _schedulingResultStateHolder.SkillStaffPeriodHolder.SkillStaffPeriodDictionary(maxSeatSkills, period);
+			return _schedulingResultStateHolder().SkillStaffPeriodHolder.SkillStaffPeriodDictionary(maxSeatSkills, period);
 		}
 
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "1")]
         public IDictionary<ISkill, ISkillStaffPeriodDictionary> GetPersonNonBlendSkillSkillStaffPeriods(DateOnly scheduleDateOnly, IVirtualSchedulePeriod currentSchedulePeriod)
         {
             var personPeriod = currentSchedulePeriod.Person.Period(scheduleDateOnly);
@@ -68,7 +67,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
             var period = new DateTimePeriod(scheduleDayUtc, scheduleDayUtc.AddDays(2));
 
 
-            return _schedulingResultStateHolder.SkillStaffPeriodHolder.SkillStaffPeriodDictionary(nonBlendSkills, period);
+            return _schedulingResultStateHolder().SkillStaffPeriodHolder.SkillStaffPeriodDictionary(nonBlendSkills, period);
         }
     }
 }

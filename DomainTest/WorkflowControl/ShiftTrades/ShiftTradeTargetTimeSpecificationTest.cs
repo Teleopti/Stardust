@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using NUnit.Framework;
 using Rhino.Mocks;
 using Teleopti.Ccc.Domain.AgentInfo.Requests;
+using Teleopti.Ccc.Domain.Optimization;
 using Teleopti.Ccc.Domain.WorkflowControl;
 using Teleopti.Ccc.Domain.WorkflowControl.ShiftTrades;
 using Teleopti.Ccc.TestCommon.FakeData;
@@ -31,7 +32,7 @@ namespace Teleopti.Ccc.DomainTest.WorkflowControl.ShiftTrades
             _mocks = new MockRepository();
             _stateHolder = _mocks.StrictMock<ISchedulingResultStateHolder>();
             _targetTimeTimeCalculator = _mocks.StrictMock<ISchedulePeriodTargetTimeCalculator>();
-            _target = new ShiftTradeTargetTimeSpecification(_stateHolder, _targetTimeTimeCalculator);
+            _target = new ShiftTradeTargetTimeSpecification(new ScheduleMatrixListCreator(()=> _stateHolder, new UniqueSchedulePartExtractor()), _targetTimeTimeCalculator);
             _part1 = _mocks.StrictMock<IScheduleDay>();
             _part2 = _mocks.StrictMock<IScheduleDay>();
             _dic = _mocks.StrictMock<IScheduleDictionary>();
@@ -41,7 +42,7 @@ namespace Teleopti.Ccc.DomainTest.WorkflowControl.ShiftTrades
 
         }
 
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling"), Test]
+        [Test]
         public void VerifyReturnsTrueIfAllInternalIsTrue()
         {
             IPerson person1 = PersonFactory.CreatePerson("P1");
@@ -90,7 +91,7 @@ namespace Teleopti.Ccc.DomainTest.WorkflowControl.ShiftTrades
             }
         }
 
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling"), Test]
+        [Test]
         public void VerifyReturnsFalseIfAnyInternalIsFalse()
         {
             IPerson person1 = PersonFactory.CreatePerson("P1");

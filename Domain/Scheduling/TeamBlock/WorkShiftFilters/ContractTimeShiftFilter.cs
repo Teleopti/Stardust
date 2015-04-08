@@ -15,9 +15,9 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftFilters
 	
 	public class ContractTimeShiftFilter : IContractTimeShiftFilter
 	{
-		private readonly IWorkShiftMinMaxCalculator _workShiftMinMaxCalculator;
+		private readonly Func<IWorkShiftMinMaxCalculator> _workShiftMinMaxCalculator;
 
-		public ContractTimeShiftFilter(IWorkShiftMinMaxCalculator workShiftMinMaxCalculator)
+		public ContractTimeShiftFilter(Func<IWorkShiftMinMaxCalculator> workShiftMinMaxCalculator)
 		{
 			_workShiftMinMaxCalculator = workShiftMinMaxCalculator;
 		}
@@ -37,8 +37,8 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftFilters
 			
 		    foreach (var matrix in matrixList)
 			{
-				_workShiftMinMaxCalculator.ResetCache();
-				var minMax = _workShiftMinMaxCalculator.MinMaxAllowedShiftContractTime(dateOnly, matrix, schedulingOptions);
+				_workShiftMinMaxCalculator().ResetCache();
+				var minMax = _workShiftMinMaxCalculator().MinMaxAllowedShiftContractTime(dateOnly, matrix, schedulingOptions);
 				if (minMax.HasValue)
 				{
 					if (minMax.Value.Minimum == TimeSpan.Zero && minMax.Value.Maximum == TimeSpan.Zero)

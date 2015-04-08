@@ -4,7 +4,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 {
 	public class HasContractDayOffDefinition : IHasContractDayOffDefinition
 	{
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
 		public bool IsDayOff(IScheduleDay scheduleDay)
 		{
 			var dateOnlyAsPeriod = scheduleDay.DateOnlyAsPeriod;

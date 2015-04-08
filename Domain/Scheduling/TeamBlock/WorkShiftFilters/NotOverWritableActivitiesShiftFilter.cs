@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.ResourceCalculation;
@@ -14,9 +15,9 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftFilters
 	
 	public class NotOverWritableActivitiesShiftFilter : INotOverWritableActivitiesShiftFilter
 	{
-		private readonly ISchedulingResultStateHolder _resultStateHolder;
+		private readonly Func<ISchedulingResultStateHolder> _resultStateHolder;
 
-		public NotOverWritableActivitiesShiftFilter(ISchedulingResultStateHolder resultStateHolder)
+		public NotOverWritableActivitiesShiftFilter(Func<ISchedulingResultStateHolder> resultStateHolder)
 		{
 			_resultStateHolder = resultStateHolder;
 		}
@@ -29,7 +30,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftFilters
 			if (finderResult == null) return null;
 			
 			if (shiftList.Count == 0) return shiftList;
-			var part = _resultStateHolder.Schedules[person].ScheduledDay(dateToSchedule);
+			var part = _resultStateHolder().Schedules[person].ScheduledDay(dateToSchedule);
 
 			var filteredList = new List<IShiftProjectionCache>();
 			var meetings = part.PersonMeetingCollection();

@@ -10,7 +10,7 @@ namespace Teleopti.Ccc.Domain.Optimization
     {
         public IEnumerable<ISchedulePartExtractor> ExtractUniqueScheduleParts(IEnumerable<IScheduleDay> schedulePartList)
         {
-            HashSet<ISchedulePartExtractor> uniqueExtractorList = new HashSet<ISchedulePartExtractor>();
+            var uniqueExtractorList = new HashSet<ISchedulePartExtractor>();
             foreach (var schedulePart in schedulePartList)
             {
                 ISchedulePartExtractor extractor = new SchedulePartExtractor(schedulePart);

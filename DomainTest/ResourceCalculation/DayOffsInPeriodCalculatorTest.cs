@@ -19,7 +19,6 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 		private IScheduleDay _scheduleDay;
 		private DateOnly _date1;
 		private DateOnly _date3;
-		private DateOnly _date2;
 		private DateOnlyPeriod _dateOnlyPeriod;
 		private IVirtualSchedulePeriod _virtualSchedulePeriod;
 	    private ISchedulingResultStateHolder _stateHolder;
@@ -31,13 +30,12 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 		    _stateHolder = _mocks.StrictMock<ISchedulingResultStateHolder>();
 			_dictionary = _mocks.StrictMock<IScheduleDictionary>();
 			_virtualSchedulePeriod = _mocks.StrictMock<IVirtualSchedulePeriod>();
-            _target = new DayOffsInPeriodCalculator(_stateHolder);
+            _target = new DayOffsInPeriodCalculator(()=>_stateHolder);
 			_range = _mocks.StrictMock<IScheduleRange>();
 			_person = _mocks.StrictMock<IPerson>();
 			_scheduleDay = _mocks.StrictMock<IScheduleDay>();
 			_date1 = new DateOnly(2010,10,4);
 			_date3 = new DateOnly(2010,10,6);
-			_date2 = new DateOnly(2010, 1, 1);
 			_dateOnlyPeriod = new DateOnlyPeriod(_date1, _date3);
 		}
 		

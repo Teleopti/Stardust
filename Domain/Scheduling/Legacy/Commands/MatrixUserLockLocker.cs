@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
@@ -10,9 +11,9 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 
     public class MatrixUserLockLocker : IMatrixUserLockLocker
     {
-        private readonly IGridlockManager _gridlockManager;
+        private readonly Func<IGridlockManager> _gridlockManager;
 
-        public MatrixUserLockLocker(IGridlockManager gridlockManager)
+        public MatrixUserLockLocker(Func<IGridlockManager> gridlockManager)
         {
             _gridlockManager = gridlockManager;
         }
@@ -23,7 +24,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
             foreach (var matrix in scheduleMatrixes)
             {
 
-	            setUserLockedDaysInMatrix(matrix, selectedPeriod, _gridlockManager);
+	            setUserLockedDaysInMatrix(matrix, selectedPeriod, _gridlockManager());
             }
         }
 

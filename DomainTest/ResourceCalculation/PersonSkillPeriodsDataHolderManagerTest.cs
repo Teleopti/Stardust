@@ -26,7 +26,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
         {
             _mocks = new MockRepository();
             _schedulingResultStateHolder = _mocks.StrictMock<ISchedulingResultStateHolder>();
-            _target = new PersonSkillPeriodsDataHolderManager(_schedulingResultStateHolder);
+            _target = new PersonSkillPeriodsDataHolderManager(()=>_schedulingResultStateHolder);
             _skillStafPeriodHolder = _mocks.StrictMock<ISkillStaffPeriodHolder>();
             _schedulePeriod = _mocks.StrictMock<IVirtualSchedulePeriod>();
             _theDictionary = _mocks.StrictMock<IDictionary<IActivity, IDictionary<DateTime, ISkillStaffPeriodDataHolder>>>();    

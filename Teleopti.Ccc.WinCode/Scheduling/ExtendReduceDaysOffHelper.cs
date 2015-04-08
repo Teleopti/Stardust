@@ -119,7 +119,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 				IWorkShiftBackToLegalStateServicePro workShiftBackToLegalStateService =
 					_optimizerHelper.CreateWorkShiftBackToLegalStateServicePro(_container);
 
-				IDayOffsInPeriodCalculator dayOffsInPeriodCalculator = new DayOffsInPeriodCalculator(schedulerStateHolder.SchedulingResultState);
+				IDayOffsInPeriodCalculator dayOffsInPeriodCalculator = new DayOffsInPeriodCalculator(()=>schedulerStateHolder.SchedulingResultState);
 
 				IList<IDayOffTemplate> displayList = schedulerStateHolder.CommonStateHolder.ActiveDayOffs.ToList();
 

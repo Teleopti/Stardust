@@ -4,7 +4,6 @@ using Rhino.Mocks;
 using Teleopti.Ccc.Domain.AgentInfo;
 using Teleopti.Ccc.Domain.Optimization;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
-using Teleopti.Ccc.Domain.Time;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Interfaces.Domain;
 using System.Collections.Generic;
@@ -29,7 +28,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
             _mockRepository = new MockRepository();
             _schedulingResultStateHolder = _mockRepository.StrictMock<ISchedulingResultStateHolder>();
             _scheduleDictionary = _mockRepository.StrictMock<IScheduleDictionary>();
-            _target = new ScheduleMatrixListCreator(_schedulingResultStateHolder);
+            _target = new ScheduleMatrixListCreator(()=>_schedulingResultStateHolder, new UniqueSchedulePartExtractor());
             setupPersons(); 
         }
 

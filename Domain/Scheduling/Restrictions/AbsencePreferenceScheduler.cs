@@ -13,14 +13,14 @@ namespace Teleopti.Ccc.Domain.Scheduling.Restrictions
 	public class AbsencePreferenceScheduler : IAbsencePreferenceScheduler
 	{
 		private readonly IEffectiveRestrictionCreator _effectiveRestrictionCreator;
-		private readonly ISchedulePartModifyAndRollbackService _schedulePartModifyAndRollbackService;
+		private readonly Func<ISchedulePartModifyAndRollbackService> _schedulePartModifyAndRollbackService;
 		private readonly IAbsencePreferenceFullDayLayerCreator _absencePreferenceFullDayLayerCreator;
 		private SchedulingServiceBaseEventArgs _progressEvent;
 
 		public event EventHandler<SchedulingServiceBaseEventArgs> DayScheduled;
 
 		public AbsencePreferenceScheduler(IEffectiveRestrictionCreator effectiveRestrictionCreator,
-			ISchedulePartModifyAndRollbackService schedulePartModifyAndRollbackService,
+			Func<ISchedulePartModifyAndRollbackService> schedulePartModifyAndRollbackService,
 			IAbsencePreferenceFullDayLayerCreator absencePreferenceFullDayLayerCreator)
 		{
 			_effectiveRestrictionCreator = effectiveRestrictionCreator;
@@ -47,7 +47,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Restrictions
                     if (effectiveRestriction == null || effectiveRestriction.Absence == null) continue;
 	                var layer = _absencePreferenceFullDayLayerCreator.Create(part, effectiveRestriction.Absence);
                     part.CreateAndAddAbsence(layer);
-                    _schedulePartModifyAndRollbackService.Modify(part);
+                    _schedulePartModifyAndRollbackService().Modify(part);
 
 					var eventArgs = new SchedulingServiceSuccessfulEventArgs(part);
                     OnDayScheduled(eventArgs);

@@ -82,7 +82,7 @@ namespace Teleopti.Ccc.Domain.Scheduling
         {
             using (PerformanceOutput.ForOperation("SchedulePersonOnDay"))
             {
-                IWorkShiftCalculationResultHolder cache;
+                WorkShiftFinderServiceResult cache;
                 if (schedulePart.IsScheduled())
                 {
                     return true;
@@ -117,24 +117,25 @@ namespace Teleopti.Ccc.Domain.Scheduling
                     cache = _finderService.FindBestShift(schedulePart, schedulingOptions, matrix, effectiveRestriction, possibleStartEndCategory);
                 }
 
-                if (cache == null)
+                if (cache.ResultHolder == null)
                 {
-                    if (!_finderResults.Contains(_finderService.FinderResult.PersonDateKey))
+                    if (!_finderResults.Contains(cache.FinderResult.PersonDateKey))
                     {
-                        _finderResults.Add(_finderService.FinderResult.PersonDateKey, _finderService.FinderResult);
+                        _finderResults.Add(cache.FinderResult.PersonDateKey, cache.FinderResult);
                     }
                     return false;
                 }
 
-					 if (_finderResults.Contains(_finderService.FinderResult.PersonDateKey))
-					 {
-					 	var res = (WorkShiftFinderResult)_finderResults[_finderService.FinderResult.PersonDateKey];
-					 	res.Successful = true;
-					 }
-                schedulePart.AddMainShift(cache.ShiftProjection.TheMainShift);
+	            if (_finderResults.Contains(cache.FinderResult.PersonDateKey))
+	            {
+		            var res = (WorkShiftFinderResult) _finderResults[cache.FinderResult.PersonDateKey];
+		            res.Successful = true;
+	            }
+
+	            schedulePart.AddMainShift(cache.ResultHolder.ShiftProjection.TheMainShift);
                 rollbackService.Modify(schedulePart);
 
-            	resourceCalculateDelayer.CalculateIfNeeded(scheduleDateOnly, cache.ShiftProjection.WorkShiftProjectionPeriod);
+            	resourceCalculateDelayer.CalculateIfNeeded(scheduleDateOnly, cache.ResultHolder.ShiftProjection.WorkShiftProjectionPeriod);
 
                 return true;
             }

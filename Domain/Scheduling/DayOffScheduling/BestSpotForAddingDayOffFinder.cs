@@ -10,7 +10,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.DayOffScheduling
 
 	public class BestSpotForAddingDayOffFinder : IBestSpotForAddingDayOffFinder
 	{
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
 		public DateOnly? Find(IList<IScheduleDayData> dataList)
 		{
 			for (int jumpIndex = 0; jumpIndex < 7; jumpIndex++)
