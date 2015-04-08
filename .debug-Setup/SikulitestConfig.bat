@@ -53,15 +53,5 @@ SET attributeName=value
 SET attributeValue=%ROOTDIR%\nhib\authentication.json
 %commonFolder%\XmlSetAttribute.exe %configPath% %nodePath% %attributeName% %attributeValue%
 
-SET nodePath=configuration/system.serviceModel/bindings/basicHttpBinding/binding/security
-SET attributeName=mode
-SET attributeValue=TransportCredentialOnly
-%commonFolder%\XmlSetAttribute.exe %configPath% %nodePath% %attributeName% %attributeValue%
-
-SET nodePath=configuration/system.serviceModel/bindings/basicHttpBinding/binding/security/transport
-SET attributeName=clientCredentialType
-SET attributeValue=Ntlm
-%commonFolder%\XmlSetAttribute.exe %configPath% %nodePath% %attributeName% %attributeValue%
-
 ENDLOCAL
 GOTO:EOF
