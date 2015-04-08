@@ -63,7 +63,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ReadModelUpdaters
 				{
 					incrementLastUpdate(s, @event.StartTime);
 					addActivity(s, @event.StartTime, @event.Name);
-					addAdherence(s, @event.StartTime, adherenceFor(@event));
+					addAdherence(s, @event.StartTime, adherenceFor(@event), false);
 				});
 		}
 
@@ -77,7 +77,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ReadModelUpdaters
 				s =>
 				{
 					incrementLastUpdate(s, @event.Timestamp);
-					addAdherence(s, @event.Timestamp, adherenceFor(@event));
+					addAdherence(s, @event.Timestamp, adherenceFor(@event), true);
 					if (s.ShiftEndTime.HasValue)
 						if (!s.FirstStateChangeOutOfAdherenceWithLastActivity.HasValue)
 							if (!@event.InOrNeutralAdherenceWithPreviousActivity)
@@ -147,7 +147,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ReadModelUpdaters
 				.ToArray();
 		}
 
-		private void addAdherence(AdherenceDetailsReadModelState model, DateTime time, AdherenceState adherence)
+		private void addAdherence(AdherenceDetailsReadModelState model, DateTime time, AdherenceState adherence, bool stateChanged)
 		{
 			model.Adherence = model.Adherence
 				.Concat(new[]
@@ -156,6 +156,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ReadModelUpdaters
 					{
 						Time = time,
 						Adherence = adherence,
+						StateChanged = stateChanged
 					}
 				})
 				.OrderBy(x => x.Time)
@@ -263,7 +264,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ReadModelUpdaters
 				if (adherenceBefore != null)
 				{
 					if (fromOutToInOrNeutralAdherence(adherenceBefore.Adherence, adherenceChange.Adherence))
-						return adherenceBefore.Time;
+						return adherenceBefore.StateChanged ? adherenceBefore.Time : adherenceChange.Time;
 
 					if (fromInToNeutralAdherence(adherenceBefore.Adherence, adherenceChange.Adherence))
 						return adherenceChange.Time;
@@ -275,7 +276,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ReadModelUpdaters
 				if (adherenceAfter != null)
 				{
 					if (fromOutToInOrNeutralAdherence(adherenceChange.Adherence, adherenceAfter.Adherence))
-						return adherenceAfter.Time;
+						return adherenceAfter.StateChanged ? adherenceAfter.Time : (DateTime?) null;
 
 					if (fromNeutralToInAdherence(adherenceChange.Adherence, adherenceAfter.Adherence))
 						return adherenceAfter.Time;

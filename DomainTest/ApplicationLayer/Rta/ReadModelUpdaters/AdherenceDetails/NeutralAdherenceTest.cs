@@ -5,6 +5,7 @@ using SharpTestsEx;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta.ReadModelUpdaters;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service;
+using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.TestCommon.IoC;
@@ -344,8 +345,27 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ReadModelUpdaters.Adheren
 
 			Persister.Details.Last().ActualStartTime.Should().Be("2014-11-17 9:00".Utc());
 		}
+		
+		[Test]
+		public void ShouldSetActualStartTimeWhenNoStateChange()
+		{
+			var personId = Guid.NewGuid();
 
-
+			Target.Handle(new PersonActivityStartEvent
+			{
+				PersonId = personId,
+				StartTime = "2015-04-07 10:00".Utc(),
+				Adherence = AdherenceState.Out
+			});
+			Target.Handle(new PersonActivityStartEvent
+			{
+				PersonId = personId,
+				StartTime = "2015-04-07 10:15".Utc(),
+				Adherence = AdherenceState.Neutral
+			});
+			Persister.Details.First().ActualStartTime.Should().Be(null);
+			Persister.Details.Second().ActualStartTime.Should().Be("2015-04-07 10:15".Utc());
+		}
 
 		[Test]
 		public void ShouldNotSetTimeInAdherenceWhenOnlyInUnknown()
