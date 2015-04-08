@@ -46,7 +46,7 @@ namespace Teleopti.Ccc.Win.Main
 			currentStep.SetBackButtonVisible(showBackButton);
 			
 			Refresh();
-			((UserControl) currentStep).Focus();
+			//((UserControl) currentStep).Focus();
 		}
 
 		public void ClearForm(string labelText)

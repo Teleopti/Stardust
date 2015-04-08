@@ -43,7 +43,6 @@ namespace Teleopti.Ccc.Win.Main.LogonScreens
 			this.buttonLogOnOK.Appearance = Syncfusion.Windows.Forms.ButtonAppearance.Metro;
 			this.buttonLogOnOK.BackColor = System.Drawing.Color.White;
 			this.buttonLogOnOK.BeforeTouchSize = new System.Drawing.Size(35, 35);
-			this.buttonLogOnOK.DialogResult = System.Windows.Forms.DialogResult.OK;
 			this.buttonLogOnOK.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
 			this.buttonLogOnOK.Font = new System.Drawing.Font("Segoe UI", 8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
 			this.buttonLogOnOK.ForeColor = System.Drawing.Color.White;
