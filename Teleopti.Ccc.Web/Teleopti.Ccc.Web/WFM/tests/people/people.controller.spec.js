@@ -16,13 +16,17 @@ describe("PeopleCtrl", function () {
 
 	var mockSearchService = {
 		search: {
-			query: function () {
-				var queryDeferred = $q.defer();
-				queryDeferred.resolve([{
-					FirstName: "Ashley",
-					LastName: "Andeen",
-					EmploymentNumber: "12345"
-				}]);
+			query: function() {
+			var queryDeferred = $q.defer();
+				queryDeferred.resolve({
+					People: [
+						{
+							FirstName: "Ashley",
+							LastName: "Andeen",
+							EmploymentNumber: "12345"
+						}
+					]
+				});
 				return { $promise: queryDeferred.promise };
 			}
 		}

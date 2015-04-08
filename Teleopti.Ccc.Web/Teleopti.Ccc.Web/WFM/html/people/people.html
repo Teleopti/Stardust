@@ -178,6 +178,11 @@
 			.dropdown .inner li:hover {
 				background: #99d6ff;
 			}
+            .wfm-list .active {
+                border-left: 3px solid #ffffff;
+  border-bottom: 3px solid #ec38a3;
+  background-color: #ffffff;
+}
 </style>
 
 <div xclass="material-depth-1">
@@ -191,24 +196,43 @@
 
 <div class="wrapper row">
 	<div class="">
-		<table class="wfm-table material-depth-1">
-			<thead>
-				<tr>
-					<th translate>FirstName <i class="mdi mdi-menu-up"></i> </th>
-					<th translate>LastName</th>
-					<th translate>EmployeeNo</th>
-					<th translate>Email</th>
-				</tr>
-			</thead>
-			<tbody>
-				<tr ng-repeat="person in searchResult" ng-click="toggleModal()">
-					<td>{{person.FirstName}}</td>
-					<td>{{person.LastName}}</td>
-					<td>{{person.EmploymentNumber}}</td>
-					<td>{{person.Email}}</td>
-				</tr>
-			</tbody>
-		</table>
+        <table class="wfm-table material-depth-1 table-striped table-condensed table-hover">
+            <thead>
+                <tr>
+                    <th translate>FirstName <i class="mdi mdi-menu-up"></i> </th>
+                    <th translate>LastName</th>
+                    <th translate>EmployeeNo</th>
+                    <th translate>Email</th>
+                </tr>
+            </thead>
+            <tfoot>
+            <td colspan="6">
+                <div class="pagination pull-right">
+                    <ul class="wfm-list row">
+                        <li style="display: inline-block" ng-class="{disabled: currentPageIndex == 1}">
+                            <a href ng-click="prevPage()">« Prev</a>
+                        </li>
+                        <li style="display: inline-block" ng-repeat="n in range(totalPages)"
+                            ng-class="{active: n == currentPageIndex}"
+                            ng-click="setPage()">
+                            <a href ng-bind="n">1</a>
+                        </li>
+                        <li style="display: inline-block" ng-class="{disabled: currentPageIndex == totalPages}">
+                            <a href ng-click="nextPage()">Next »</a>
+                        </li>
+                    </ul>
+                </div>
+            </td>
+            </tfoot>
+            <tbody>
+                <tr ng-repeat="person in searchResult" ng-click="toggleModal()">
+                    <td>{{person.FirstName}}</td>
+                    <td>{{person.LastName}}</td>
+                    <td>{{person.EmploymentNumber}}</td>
+                    <td>{{person.Email}}</td>
+                </tr>
+            </tbody>
+        </table>
 	</div>
 </div>
 

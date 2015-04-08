@@ -27,7 +27,7 @@ namespace Teleopti.Ccc.Web.Areas.Search.Controllers
 		public virtual IHttpActionResult GetResult(string keyword, int pageSize, int currentPageIndex)
 		{
 			var search = new PersonFinderSearchCriteria(PersonFinderField.All, keyword, pageSize, DateOnly.Today, 0, 0);
-		    search.CurrentPage = currentPageIndex;
+			search.CurrentPage = currentPageIndex;
 			_searchRepository.Find(search);
 			var permittedPersonList =
 				search.DisplayRows.Where(
@@ -37,7 +37,7 @@ namespace Teleopti.Ccc.Web.Areas.Search.Controllers
 							DateOnly.Today, r));
 			var personIdList = permittedPersonList.Select(x => x.PersonId);
 			var peopleList = _personRepository.FindPeople(personIdList);
-			var result = peopleList.Select(x => new
+			var resultPeople = peopleList.Select(x => new 
 			{
 				FirstName = x.Name.FirstName,
 				LastName = x.Name.LastName,
@@ -45,6 +45,12 @@ namespace Teleopti.Ccc.Web.Areas.Search.Controllers
 				PersonId = x.Id.Value,
 				Email = x.Email
 			});
+			var result = new 
+			{
+				People = resultPeople,
+				CurrentPage = currentPageIndex,
+				TotalPages = search.TotalPages
+			};
 			return Ok(result);
 		}
 	}

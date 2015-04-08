@@ -49,7 +49,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Search
             var target = new PeopleSearchController(searchRepository, personRepository, new FakePermissionProvider());
 
 			var result = ((dynamic)target).GetResult("Ashley", 10, 1);
-			var peopleList = (IEnumerable<dynamic>)result.Content;
+			var peopleList = (IEnumerable<dynamic>)result.Content.People;
 			var first = peopleList.First();
             first.FirstName.Equals("Ashley");
             first.LastName.Equals("Andeen");
@@ -76,7 +76,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Search
             var target = new PeopleSearchController(searchRepository, personRepository, new FakeNoPermissionProvider());
 
 			var result = ((dynamic)target).GetResult("Ashley", 10, 1);
-			var peopleList = (IEnumerable<dynamic>)result.Content;
+			var peopleList = (IEnumerable<dynamic>)result.Content.People;
             peopleList.Should().Be.Empty();
         }
     }

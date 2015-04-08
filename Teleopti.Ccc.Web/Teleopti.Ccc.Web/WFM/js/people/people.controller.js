@@ -34,47 +34,53 @@
 					"</div>" +
 					"</div>"
 			};
-		})
-		.directive('whenScrollEnds', function () {
-			return {
-				restrict: "A",
-				link: function (scope, element, attrs) {
-					var visibleHeight = element.height();
-					var threshold = 100;
-					console.log("visibleHeight", visibleHeight);
-					element.scroll(function () {
-						var scrollableHeight = element.prop('scrollHeight');
-						var hiddenContentHeight = scrollableHeight - visibleHeight;
-						console.log("scrollableHeight", scrollableHeight);
-						console.log("hiddenContentHeight", hiddenContentHeight);
-					    console.log("element.scrollTop()", element.scrollTop());
-					    console.log("hiddenContentHeight - element.scrollTop()", hiddenContentHeight - element.scrollTop());
-						if (hiddenContentHeight - element.scrollTop() <= threshold) {
-							// Scroll is almost at the bottom. Loading more rows
-							scope.$apply(attrs.whenScrollEnds);
-						}
-					});
-				}
-			};
 		});
 
 	function PeopleController($scope, $filter, $state, SearchSvrc) {
 	    $scope.searchResult = [];
-	    $scope.pageSize = 5;
-		$scope.keyword = '';
+	    $scope.pageSize = 20;
+	    $scope.keyword = '';
+	    $scope.totalPages = 0;
+	    $scope.currentPageIndex = 1;
 		$scope.searchKeyword = function () {
-		    SearchSvrc.search.query({ keyword: $scope.keyword, pageSize: $scope.pageSize, currentPageIndex: ($scope.searchResult.length / $scope.pageSize + 1) }).$promise.then(function (result) {
-				$scope.searchResult = result;
-				console.log($scope.searchResult);
+		    SearchSvrc.search.query({ keyword: $scope.keyword, pageSize: $scope.pageSize, currentPageIndex: $scope.currentPageIndex }).$promise.then(function (result) {
+		        $scope.searchResult = result.People;
+		        $scope.totalPages = result.TotalPages;
 			});
 		};
 
-	    $scope.searchKeyword();
+		$scope.range = function (start, end) {
+		    var ret = [];
+		    if (!end) {
+		        end = start;
+		        start = 1;
+		    }
+		    for (var i = start; i < end; i++) {
+		        ret.push(i);
+		    }
+		    return ret;
+		};
 
-		//$scope.modalShown = false;
-		//$scope.toggleModal = function () {
-		//	$scope.modalShown = !$scope.modalShown;
-		//};
+		$scope.prevPage = function () {
+		    if ($scope.currentPageIndex > 1) {
+		        $scope.currentPageIndex--;
+		        $scope.searchKeyword();
+		    }
+		};
+
+		$scope.nextPage = function () {
+		    if ($scope.currentPageIndex < $scope.totalPages) {
+		        $scope.currentPageIndex++;
+		        $scope.searchKeyword();
+		    }
+		};
+
+		$scope.setPage = function () {
+		    $scope.currentPageIndex = this.n;
+		    $scope.searchKeyword();
+		};
+
+	    $scope.searchKeyword();
 	}
 
 })();
