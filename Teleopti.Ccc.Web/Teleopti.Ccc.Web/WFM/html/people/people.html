@@ -185,9 +185,9 @@
 	}
 </style>
 
-<div xclass="material-depth-1">
-	<span xng-controller="SearchCtrl">
-		<input type="text" placeholder="{{'Search' | translate}}..." ng-model="keyword" ng-keydown="$event.which === 13 && searchKeyword()" class="global-search" style="
+<div>
+	<span>
+		<input type="text" placeholder="{{'Search for Name, Role, Skill, Contract, Organization, ContractSchedule, PartTimePercentage, ShiftBag, BudgetGroup' | translate}}" ng-model="keyword" ng-keydown="$event.which === 13 && searchKeyword()" class="global-search" style="
     height: 44px;" />
 		<button class="wfm-btn wfm-btn-primary" ng-click="searchKeyword()"><i class="mdi mdi-magnify"></i></button>
 		
