@@ -35,7 +35,7 @@ namespace Teleopti.Ccc.WebTest.Areas.ResourcePlanner
 				MockRepository.GenerateMock<IDisableDeletedFilter>(), MockRepository.GenerateMock<ICurrentUnitOfWorkFactory>());
 			var result =
 				(OkNegotiatedContentResult<SchedulingResultModel>)
-					await
+					
 						target.FixedStaff(new FixedStaffSchedulingInput {StartDate = period.StartDate.Date, EndDate = period.EndDate.Date});
 
 			result.Content.DaysScheduled.Should().Be.EqualTo(1);
