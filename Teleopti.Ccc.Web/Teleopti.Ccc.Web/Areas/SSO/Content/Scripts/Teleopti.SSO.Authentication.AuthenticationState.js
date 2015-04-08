@@ -100,21 +100,27 @@ Teleopti.SSO.Authentication.AuthenticationState = function (data) {
 		authenticationModel = options.data;
 
 		var error = function (jqXHR, textStatus, errorThrown) {
-			if (jqXHR.status == 400) {
+			if (jqXHR.status === 400) {
 				var response = $.parseJSON(jqXHR.responseText);
 				options.errormessage(response.Errors[0]);
 				return;
 			}
 			try {
 				var json = JSON.parse(jqXHR.responseText);
-				$('#Exception-message').text(json.Message);
-				$('#Exception-div').show();
+				$('#body-inner').html('<h2>Error: ' + jqXHR.status + '</h2>');
+				$('#dialog-modal-header').text(errorThrown);
+				$('#dialog-modal-body').html(json.Message);
+				$('#dialog-modal').modal({
+					show: true
+				});
 			}
 			catch (e) {
 				$('#body-inner').html('<h2>Error: ' + jqXHR.status + '</h2>');
 				$('#dialog-modal-header').text(errorThrown);
 				$('#dialog-modal-body').html(jqXHR.responseText);
-				$('#dialog-modal').modal('show');
+				$('#dialog-modal').modal({
+					show: true
+				});
 			}
 		};
 
