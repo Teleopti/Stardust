@@ -85,7 +85,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers
 							if (projection.HasLayers)
 								eventScheduleDay.IsFullDayAbsence = true;
 							break;
-						case SchedulePartView.None:
+						default:
 							eventScheduleDay.ShortName = "";
 							eventScheduleDay.NotScheduled = true;
 							break;

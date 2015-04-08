@@ -62,7 +62,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Anal
 					shiftCategoryId = getCategory(scheduleDay.ShiftCategoryId);
 
 				var dayCount = _factScheduleDayCountHandler.Handle(scheduleDay, personPart, scenarioId, shiftCategoryId);
-				_analyticsScheduleRepository.PersistFactScheduleDayCountRow(dayCount);
+				if(dayCount != null)
+					_analyticsScheduleRepository.PersistFactScheduleDayCountRow(dayCount);
 
 				var agentDaySchedule = _factScheduleHandler.AgentDaySchedule(scheduleDay, personPart, @event.Timestamp, shiftCategoryId, scenarioId);
 				if (agentDaySchedule == null)

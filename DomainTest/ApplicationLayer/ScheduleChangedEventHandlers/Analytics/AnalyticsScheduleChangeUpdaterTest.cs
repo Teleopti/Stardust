@@ -221,5 +221,34 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ScheduleChangedEventHandlers.
 
 			_analyticsScheduleRepository.AssertWasCalled(x => x.PersistFactScheduleDayCountRow(dayCount));
 		}
+
+		[Test]
+		public void ShouldBeTolerantAndNotTryToPersistIfDayCountIsNull()
+		{
+			var scheduleDay = new ProjectionChangedEventScheduleDay
+			{
+				DayOff = new ProjectionChangedEventDayOff(),
+				PersonPeriodId = Guid.NewGuid()
+			};
+			var scenario = new AnalyticsGeneric { Code = Guid.NewGuid(), Id = 6 };
+			var @event = new ProjectionChangedEvent
+			{
+				ScheduleDays = new Collection<ProjectionChangedEventScheduleDay> { scheduleDay },
+				ScenarioId = scenario.Code
+			};
+
+			var personPart = new AnalyticsFactSchedulePerson();
+			const int dateId = 0;
+
+			_analyticsScheduleRepository.Stub(x => x.Scenarios()).Return(new List<IAnalyticsGeneric> { scenario });
+
+			_dateHandler.Stub(x => x.MapDateId(Arg<DateOnly>.Is.Anything, out Arg<int>.Out(dateId).Dummy)).Return(true);
+			_personHandler.Stub(x => x.Handle(scheduleDay.PersonPeriodId)).Return(personPart);
+			_scheduleDayCountHandler.Stub(x => x.Handle(scheduleDay, personPart, scenario.Id, -1)).Return(null);
+
+			_target.Handle(@event);
+
+			_analyticsScheduleRepository.AssertWasNotCalled(x => x.PersistFactScheduleDayCountRow(null));
+		}
 	}
 }
