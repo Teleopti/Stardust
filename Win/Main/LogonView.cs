@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Configuration;
 using System.Globalization;
 using System.Windows.Forms;
 using Syncfusion.Windows.Forms;
@@ -47,7 +46,6 @@ namespace Teleopti.Ccc.Win.Main
 			currentStep.SetBackButtonVisible(showBackButton);
 			
 			Refresh();
-
 		}
 
 		public void ClearForm(string labelText)
@@ -132,20 +130,10 @@ namespace Teleopti.Ccc.Win.Main
 			return ViewBase.ShowYesNoMessage(this, text, caption, defaultButton);
 		}
 
-		public void ShowWarningMessage(string message, string caption)
-		{
-			MessageDialogs.ShowWarning(this, message, caption);
-		}
-
 		public void ButtonLogOnOkClick(object sender, EventArgs e)
 		{
 			_logonSteps[(int) Presenter.CurrentStep].GetData();
 			Presenter.OkbuttonClicked();
-		}
-
-		public void ButtonLogOnCancelClick(object sender, EventArgs e)
-		{
-			Exit(DialogResult.Cancel);
 		}
 
 		public void BtnBackClick(object sender, EventArgs e)
@@ -172,7 +160,6 @@ namespace Teleopti.Ccc.Win.Main
 				case Keys.Enter:
 					if (shouldGoFoward)
 						ButtonLogOnOkClick(this, EventArgs.Empty);
-
 					break;
 			}
 		}

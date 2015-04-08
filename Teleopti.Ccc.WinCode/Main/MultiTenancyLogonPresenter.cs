@@ -1,7 +1,4 @@
-﻿using System;
-using System.Configuration;
-using System.Globalization;
-using System.Linq;
+﻿using System.Linq;
 using System.Net;
 using System.Windows.Forms;
 using Teleopti.Ccc.Domain.Infrastructure;

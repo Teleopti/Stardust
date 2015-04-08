@@ -14,13 +14,10 @@ namespace Teleopti.Ccc.WinCode.Main
 		void ClearForm(string labelText);
 		void Exit(DialogResult result);
 		void ShowErrorMessage(string message, string caption);
-		void ShowWarningMessage(string message, string caption);
 		DialogResult ShowYesNoMessage(string text, string caption, MessageBoxDefaultButton defaultButton);
 		void HandleKeyPress(Message msg, Keys keyData, bool b);
 		void ButtonLogOnOkClick(object sender, EventArgs e);
-		void ButtonLogOnCancelClick(object sender, EventArgs e);
 		void BtnBackClick(object sender, EventArgs e);
-		//bool InitStateHolder(IMessageBrokerComposite messageBroker, string passwordPolicyString);
 		bool InitStateHolderWithoutDataSource(IMessageBrokerComposite messageBroker, SharedSettings settings);
 	}
 }
