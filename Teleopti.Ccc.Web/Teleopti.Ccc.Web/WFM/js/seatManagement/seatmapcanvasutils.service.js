@@ -5,21 +5,25 @@ angular.module('wfm.seatMap')
 		var utils = {};
 		utils.setupCanvas = function (canvas) {
 			canvas.isGrabMode = false;
-
-			//Performance related toggles
-			//self.canvas.skipTargetFind = true;
 			canvas.renderOnAddRemove = true;
 			canvas.stateful = false;
 		}
 
-		utils.resize = function (canvas) {
+		utils.resize = function (canvas, toolbarVisible) {
 
-			var container = $('[ui-view]')[0];
-			var resizedAncestor = container;
-			var top = $('#seatmapcanvas').offset().top;
+			//Robtodo: revisit, fabric canvas wrappers are a pain!
+			var resizedAncestor = $('[ui-view]')[0];
+			var canvasParent = $('#c');
+			var top = canvasParent.offset().top;
+			var left = canvasParent.position().left;
+			var padding = 30;
+			var heightAddition = 0;
+			if (!toolbarVisible) {
+				heightAddition += $('#seatMapToolbar')[0].clientHeight + padding;
 
-			canvas.setHeight(resizedAncestor.clientHeight - top);
-			canvas.setWidth(resizedAncestor.clientWidth - 30);
+			}
+			canvas.setHeight((resizedAncestor.clientHeight - top) + heightAddition);
+			canvas.setWidth((resizedAncestor.clientWidth - left)-padding);
 		};
 
 		utils.toggleMoveMode = function (canvas) {

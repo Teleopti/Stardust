@@ -4,14 +4,13 @@
 	<div>
 
 		<span class="breadbin" ng-animate="'animate'" ng-repeat="breadcrumb in vm.breadcrumbs">
-
-			<a ng-if="!$last" href="" ng-click="vm.handleBreadcrumbClick(breadcrumb.Id)">{{breadcrumb.Name}} ></a>
+			<a ng-if="!$last" href="" ng-click="vm.handleBreadcrumbClick(breadcrumb.Id)">{{breadcrumb.Name}}</a>
 			<span ng-if="$last">{{breadcrumb.Name}}</span>
 		</span>
 		<p />
 
-		<div>
-			<div ng-if="vm.allowEdit">
+		<div id="seatMapToolbar">
+			<div ng-show="vm.allowEdit">
 
 				<button class="wfm-btn wfm-btn-default" ng-click="vm.addSeat()">
 					<i class="mdi small mdi-plus"></i>
@@ -22,7 +21,7 @@
 				<button class="wfm-btn wfm-btn-default" ng-click="vm.addLocation()">
 					<i class="mdi small mdi-account-plus"></i>
 					<md-tooltip>
-						
+
 						Add Location
 					</md-tooltip>
 				</button>

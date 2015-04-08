@@ -17,16 +17,16 @@
 		.directive('seatmapCanvas', directive);
 
 	function linkFunction(scope, element, attributes, vm) {
-		//vm.xxx
 		vm.readonly = 'readonly' in attributes;
-
+		window.resize(vm.resize);
+		
 	};
 
 	seatMapCanvasDirectiveController.$inject = [
-		'$scope', '$document', '$window', 'seatMapCanvasUtilsService', 'seatMapCanvasEditService'
+		'$scope', '$document', '$window', 'seatMapCanvasUtilsService', 'seatMapCanvasEditService', 'growl'
 	];
 
-	function seatMapCanvasDirectiveController($scope, $document, $window, canvasUtils, canvasEditor) {
+	function seatMapCanvasDirectiveController($scope, $document, $window, canvasUtils, canvasEditor, growl) {
 
 		var vm = this;
 		var canvas = new fabric.CanvasWithViewport('c');
@@ -51,7 +51,6 @@
 			if (vm.readonly) {
 				return;
 			}
-
 			vm.allowEdit = !vm.allowEdit;
 			canvasUtils.setSelectionMode(canvas, vm.allowEdit);
 			if (!vm.allowEdit) {
@@ -97,6 +96,8 @@
 		vm.showLocationDialog = false;
 
 		vm.save = saveData;
+
+		vm.resize = resize;
 
 		vm.handleBreadcrumbClick = function (id) {
 			vm.isLoading = true;
@@ -144,13 +145,14 @@
 		};
 
 		function init() {
+
+			fabric.Object.prototype.transparentCorners = false;
+			fabric.Object.prototype.lockScalingFlip = true;
+			fabric.Object.prototype.hasBorders = false;
+
 			canvasUtils.setSelectionMode(canvas, vm.allowEdit);
 			canvasUtils.setupCanvas(canvas);
 			setupHandleLocationClick();
-
-			$(document).ready(function () {
-				$(window).resize(resize);
-			});
 
 			resize();
 
@@ -165,7 +167,7 @@
 		};
 
 		function resize() {
-			canvasUtils.resize(canvas,vm.element);
+			canvasUtils.resize(canvas, vm.allowEdit);
 		};
 
 		//Robtodo: refactor - use $document and perhaps move to edit service.
@@ -237,8 +239,13 @@
 		};
 
 		function onSaveSuccess() {
-			alert('saved');
-			//Robtodo: Success Message
+			
+			growl.success("<i class='mdi mdi-thumb-up'></i> Seat map saved successfully.", {
+				ttl: 5000,
+				disableCountDown: true
+			});
+
+
 			vm.allowEdit = false;
 			refreshSeatMap();
 		};
