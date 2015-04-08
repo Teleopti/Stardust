@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using NUnit.Framework;
 using Rhino.Mocks;
@@ -61,7 +62,7 @@ namespace Teleopti.Ccc.WebTest.Core.Portal.DataProvider
 		public void ShouldReturnReportsWhenOnlyHasReportPermission()
 		{
 			_principalAuthorization.Expect(x => x.IsPermitted(DefinedRaptorApplicationFunctionPaths.MyReportWeb)).Return(false);
-			var reportList = new List<IApplicationFunction> { new ApplicationFunction("Report CA")};
+			var reportList = new List<IApplicationFunction> { new ApplicationFunction("Report CA") { ForeignId = Guid.NewGuid().ToString() } };
 
 			_reportsProvider.Expect(x => x.GetReports()).Return(reportList);
 
@@ -75,9 +76,9 @@ namespace Teleopti.Ccc.WebTest.Core.Portal.DataProvider
 		public void ShouldReturnSortedReportsWhenHasReportPermission()
 		{
 			_principalAuthorization.Expect(x => x.IsPermitted(DefinedRaptorApplicationFunctionPaths.MyReportWeb)).Return(false);
-			var reportList = new List<IApplicationFunction> { new ApplicationFunction("Report CA"),
-				new ApplicationFunction("Report CB"),
-			new ApplicationFunction("Report Aa") };
+			var reportList = new List<IApplicationFunction> { new ApplicationFunction("Report CA"){ForeignId = Guid.NewGuid().ToString()},
+				new ApplicationFunction("Report CB"){ForeignId = Guid.NewGuid().ToString()},
+			new ApplicationFunction("Report Aa"){ForeignId = Guid.NewGuid().ToString()} };
 
 			_reportsProvider.Expect(x => x.GetReports()).Return(reportList);
 
@@ -93,7 +94,7 @@ namespace Teleopti.Ccc.WebTest.Core.Portal.DataProvider
 		public void ShouldReturnReportsWhenHasReportPermissionAndMyReport()
 		{
 			_principalAuthorization.Expect(x => x.IsPermitted(DefinedRaptorApplicationFunctionPaths.MyReportWeb)).Return(true);
-			var reportList = new List<IApplicationFunction> { new ApplicationFunction("ResReportQueueStatistics"), new ApplicationFunction("ResReportAgentStatistics") };
+			var reportList = new List<IApplicationFunction> { new ApplicationFunction("ResReportQueueStatistics") { ForeignId = Guid.NewGuid().ToString() }, new ApplicationFunction("ResReportAgentStatistics") { ForeignId = Guid.NewGuid().ToString() } };
 
 			_reportsProvider.Expect(x => x.GetReports()).Return(reportList);
 
