@@ -1,12 +1,10 @@
 ﻿<div class="row col-lg-12">
-	<div>
-		<h4>Next planning period will be from 2015.05.01 to 2015.05.31</h4>
-	</div>
-	<div class="row">
+	<div ng-show="!planningPeriod.$resolved">
 		<md-progress-linear md-mode="indeterminate"></md-progress-linear>
 		<p>Checking forecasting requirements</p>
 	</div>
-	<div class="row">
+	<div class="row" ng-show="planningPeriod.$resolved">
+		<h4>Next planning period will be from {{planningPeriod.StartDate | date:"MM/dd/yyyy"}} to {{planningPeriod.EndDate | date:"MM/dd/yyyy"}}</h4>
 		<p>Those requirements are missing to be able to schedule the next planning period:</p>
 
 		<div>
@@ -14,14 +12,14 @@
 		</div>
 
 		<ul class="wfm-accordion material-depth-2">
-			<li>
-				<div class="wfm-accordion-head" ng-click="accordionToggle1 = !accordionToggle1">Telephony <i ng-class="{'toggle-icon-open':accordionToggle1}" class="mdi mdi-chevron-down"></i><span class="pull-right">15 issues</span></div>
-				<div class="wfm-accordion-content" ng-cloak ng-show="accordionToggle1">
-					Missing forecast from 2015.05.01 to 2015.05.02
+			<li ng-repeat="skill in planningPeriod.Skills">
+				<div class="wfm-accordion-head" ng-click="skill.toggle = !skill.toggle">
+					{{skill.SkillName}} <i ng-class="{'toggle-icon-open':skill.toggle}" class="mdi mdi-chevron-down"></i>
+					<span class="pull-right">{{skill.MissingRanges.length}} issues</span>
 				</div>
-			</li>
-			<li>
-				<div class="wfm-accordion-head" ng-click="accordionToggle2 = !accordionToggle2">Chat</div>
+				<div class="wfm-accordion-content" ng-cloak ng-show="skill.toggle">
+					<div ng-repeat="range in skill.MissingRanges">Missing forecast from {{range.StartDate | date:"MM/dd/yyyy"}} to {{range.EndDate | date:"MM/dd/yyyy"}}</div>
+				</div>
 			</li>
 		</ul>
 	</div>

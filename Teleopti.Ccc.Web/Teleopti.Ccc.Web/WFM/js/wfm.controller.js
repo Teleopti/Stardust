@@ -1,10 +1,11 @@
-'use strict';
+(function() {
+	'use strict';
 
-var wfmCtrls = angular.module('wfmCtrls', []);
+	var wfmCtrls = angular.module('wfmCtrls', []);
 
-wfmCtrls.controller('MainCtrl', [
-		'$scope', '$translate'
-	],
-	function($scope, $translate) {
-	}
-);
+	wfmCtrls.controller('MainCtrl', [
+			'$scope', '$translate',
+		function($scope, $translate) {
+		}]
+	);
+})();

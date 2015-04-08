@@ -18,11 +18,7 @@ describe('ResourceplannerCtrl', function() {
 		var scope = $rootScope.$new();
 		var mockResourcePlannerSvrc = {
 			getPlanningPeriod: {
-				query: function() {
-					var queryDeferred = $q.defer();
-					queryDeferred.resolve({});
-					return { $promise: queryDeferred.promise };
-				}
+				query: function() {}
 			}
 		};
 
@@ -35,16 +31,12 @@ describe('ResourceplannerCtrl', function() {
 		var mockResourcePlannerSvrc = {
 			getPlanningPeriod: {
 				query: function() {
-					var queryDeferred = $q.defer();
-					var result = { StartDate: new Date(20150501), EndDate: new Date(20150531), Id: 'someguid' };
-					queryDeferred.resolve(result);
-					return { $promise: queryDeferred.promise };
+					return { StartDate: new Date(20150501), EndDate: new Date(20150531), Id: 'someguid' };
 				}
 			}
 		};
 
 		$controller('ResourceplannerCtrl', { $scope: scope, ResourcePlannerSvrc: mockResourcePlannerSvrc });
-		scope.$digest();
 		expect(scope.planningPeriod.StartDate).toEqual(new Date(20150501));
 		expect(scope.planningPeriod.EndDate).toEqual(new Date(20150531));
 		expect(scope.planningPeriod.Id).toEqual('someguid');
@@ -54,9 +46,8 @@ describe('ResourceplannerCtrl', function() {
 		var scope = $rootScope.$new();
 		var mockResourcePlannerSvrc = {
 			getPlanningPeriod: {
-				query: function() {
-					var queryDeferred = $q.defer();
-					var result = {
+				query: function() {	
+					return {
 						Skills: [
 							{
 								SkillName: 'Phone',
@@ -67,14 +58,12 @@ describe('ResourceplannerCtrl', function() {
 							}
 						]
 					};
-					queryDeferred.resolve(result);
-					return { $promise: queryDeferred.promise };
 				}
 			}
 		};
 
 		$controller('ResourceplannerCtrl', { $scope: scope, ResourcePlannerSvrc: mockResourcePlannerSvrc });
-		scope.$digest();
+
 		expect(scope.planningPeriod.Skills[0].SkillName).toEqual('Phone');
 		expect(scope.planningPeriod.Skills[0].MissingRanges.length).toEqual(2);
 	}));
