@@ -22334,6 +22334,24 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Seat map.
+        /// </summary>
+        public static string SeatMap {
+            get {
+                return ResourceManager.GetString("SeatMap", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Seat plan.
+        /// </summary>
+        public static string SeatPlan {
+            get {
+                return ResourceManager.GetString("SeatPlan", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Seat Planner.
         /// </summary>
         public static string SeatPlanner {

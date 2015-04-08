@@ -12945,4 +12945,12 @@ Reduce the complexity to use these shifts.</value>
     <value>No gamification setting</value>
     <comment>Haven't set any setting for the gamification</comment>
   </data>
+  <data name="SeatMap" xml:space="preserve">
+    <value>Seat map</value>
+    <comment>Name of Seat Map page</comment>
+  </data>
+  <data name="SeatPlan" xml:space="preserve">
+    <value>Seat plan</value>
+    <comment>Name of Seat Plan page</comment>
+  </data>
 </root>

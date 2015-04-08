@@ -18,7 +18,7 @@
 
 	function linkFunction(scope, element, attributes, vm) {
 		//vm.xxx
-
+		vm.readonly = 'readonly' in attributes;
 
 	};
 
@@ -33,6 +33,7 @@
 
 		vm.isLoading = true;
 		vm.breadcrumbs = [];
+		vm.readonly = false;
 		vm.allowEdit = false;
 		vm.seatMapId = null;
 		vm.parentId = null;
@@ -45,10 +46,16 @@
 			canvasUtils.toggleMoveMode(canvas);
 		};
 
+
 		vm.toggleEditMode = function () {
+			if (vm.readonly) {
+				return;
+			}
+
 			vm.allowEdit = !vm.allowEdit;
 			canvasUtils.setSelectionMode(canvas, vm.allowEdit);
 			if (!vm.allowEdit) {
+				
 				refreshSeatMap();
 			}
 		};
@@ -92,6 +99,7 @@
 		vm.save = saveData;
 
 		vm.handleBreadcrumbClick = function (id) {
+			vm.isLoading = true;
 			canvasUtils.loadSeatMap(id, canvas, vm.allowEdit, onLoadSeatMapSuccess, onLoadSeatMapNoSeatMapJson);
 		};
 
@@ -147,10 +155,12 @@
 			resize();
 
 			createListenersKeyboard();
+			vm.isLoading = true;
 			canvasUtils.loadSeatMap(null, canvas, vm.allowEdit, onLoadSeatMapSuccess, onLoadSeatMapNoSeatMapJson);
 		};
 
 		function refreshSeatMap() {
+			vm.isLoading = true;
 			canvasUtils.loadSeatMap(vm.seatMapId, canvas, vm.allowEdit, onLoadSeatMapSuccess, onLoadSeatMapNoSeatMapJson);
 		};
 
@@ -182,7 +192,7 @@
 		};
 
 		function loadSeatMapOnLocationClick(location) {
-
+			vm.isLoading = true;
 			canvasUtils.loadSeatMap(location.id, canvas, vm.allowEdit, onLoadSeatMapSuccess, onLoadSeatMapNoSeatMapJson);
 		};
 

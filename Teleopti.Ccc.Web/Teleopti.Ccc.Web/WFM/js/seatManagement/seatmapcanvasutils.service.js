@@ -170,23 +170,21 @@ angular.module('wfm.seatMap')
 		}
 
 		utils.loadSeatMap = function (id, canvas, allowEdit, callbackSuccess, callbackNoJson) {
+			utils.clearCanvas(canvas);
 			seatMapService.seatMap.get({ id: id }).$promise.then(function (data) {
-				utils.loadSeatMapData(canvas, data, allowEdit, callbackSuccess, callbackNoJson);
+				loadSeatMapData(canvas, data, allowEdit, callbackSuccess, callbackNoJson);
 			});
 		};
 
-		utils.loadSeatMapData = function (canvas, data, allowEdit, callbackSuccess, callbackNoJson) {
+		function loadSeatMapData (canvas, data, allowEdit, callbackSuccess, callbackNoJson) {
 
 			if (data == null) {
 				callbackNoJson(null);
 				return;
 			}
-
-			utils.clearCanvas(canvas);
-
+			
 			var seatPriority = 0;
 			var json = data.SeatMapJsonData;
-			console.log(json);
 			
 			if (hasNoObjects(json)) {
 				data.seatPriority = seatPriority;
@@ -210,9 +208,12 @@ angular.module('wfm.seatMap')
 
 		function hasNoObjects(json) {
 
+			if (!json) {
+				return true;
+			}
+
 			var parsed = JSON.parse(json);
 			if (parsed != null && parsed.objects) {
-				console.log(parsed.objects.length);
 				return (parsed.objects.length == 0 &&
 					(!parsed.backgroundImage));
 			}

@@ -106,38 +106,40 @@
 	</div>
 
 	<div id="seatmapcanvas" style="position: relative; margin-top: 20px;">
-		<div style="top: -25px; right: 10px; z-index: 2; position: absolute;">
-			<button class="wfm-fab big info" ng-click="vm.toggleEditMode()">
-				<i ng-if="!vm.allowEdit" class="mdi mdi-pencil" aria-hidden="true"></i>
-				<i ng-if="vm.allowEdit" class="mdi mdi-close" aria-hidden="true"></i>
-				<md-tooltip ng-if="!vm.allowEdit">
-					Edit Seat Map
-				</md-tooltip>
-				<md-tooltip ng-if="vm.allowEdit">
-					Cancel Changes
-				</md-tooltip>
-			</button>
+		
+		
+		<div ng-if="!vm.readonly">
 
-			<button ng-if="vm.allowEdit" class="wfm-fab big success" ng-click="vm.save()">
-				<i class="mdi mdi-check"></i>
-				<md-tooltip>
-					Save Changes
-				</md-tooltip>
-			</button>
+			<div style="top: -25px; right: 10px; z-index: 2; position: absolute;">
+				<button class="wfm-fab big " ng-class="{'warning': vm.allowEdit, 'info' : !vm.allowEdit}" ng-click="vm.toggleEditMode()">
+					<i ng-if="!vm.allowEdit" class="mdi mdi-pencil" aria-hidden="true"></i>
+					<i ng-if="vm.allowEdit" class="mdi mdi-close" aria-hidden="true"></i>
+					<md-tooltip ng-if="!vm.allowEdit">
+						Edit Seat Map
+					</md-tooltip>
+					<md-tooltip ng-if="vm.allowEdit">
+						Cancel Changes
+					</md-tooltip>
+				</button>
+
+				<button ng-if="vm.allowEdit" class="wfm-fab big success" ng-click="vm.save()">
+					<i class="mdi mdi-check"></i>
+					<md-tooltip>
+						Save Changes
+					</md-tooltip>
+				</button>
+			</div>
 		</div>
 
 		<div style="width:100%;" class="wfm-block material-depth-2">
-			<canvas ng-show="!vm.isLoading" id="c"></canvas>
-			<md-progress-circular ng-show="vm.isLoading" style="position: absolute;left: 50%;top: 50%;margin-left: -32px;margin-top: -32px;" md-mode=" indeterminate"></md-progress-circular>
+			<canvas id="c"></canvas>
+			<div ng-show="vm.isLoading" style="position: absolute;left: 50%;top: 50%;margin-left: -32px;margin-top: -62px;">
+				<md-progress-circular md-mode="indeterminate"></md-progress-circular>
+			</div>
 		</div>
 
 	</div>
-
-	<!--<div class="mapControls">
-		<button class="mapNavButton btn btn-sm btn-default rotate45" data-toggle="button" ng-click="vm.toggleMoveMode()"><span class="glyphicon glyphicon-fullscreen" aria-hidden="true"></span></button>
-		<input style="width: 36%;" orient="vertical" id="zoomSlider" min="0.1" max="5" value="1" step=".05" type="range" />
-	</div>-->
-
+	
 	<div class="modal-box">
 		<div ng-cloak ng-show="vm.showLocationDialog">
 			<div class="modalbg">
