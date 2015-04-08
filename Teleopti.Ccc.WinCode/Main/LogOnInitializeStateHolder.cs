@@ -18,7 +18,7 @@ namespace Teleopti.Ccc.WinCode.Main
 {
 	public static class LogonInitializeStateHolder
 	{
-		public static bool InitWithoutDataSource(ILogonModel model, IMessageBrokerComposite messageBroker, SharedSettings settings)
+		public static bool InitWithoutDataSource(LogonModel model, IMessageBrokerComposite messageBroker, SharedSettings settings)
 		{
 			var passwordPolicyDocument = XDocument.Parse(settings.PasswordPolicy);
 			var passwordPolicyService = new LoadPasswordPolicyService(passwordPolicyDocument);

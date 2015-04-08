@@ -3,20 +3,7 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Security.Authentication
 {
-	public interface ILogonModel
-	{
-		bool GetConfigFromWebService { get; set; }
-		IDataSourceContainer SelectedDataSourceContainer { get; set; }
-		IList<IBusinessUnit> AvailableBus { get; set; }
-		IBusinessUnit SelectedBu { get; set; }
-		string UserName { get; set; }
-		string Password { get; set; }
-		bool HasValidLogin();
-		AuthenticationTypeOption AuthenticationType { get; set; }
-		string Warning { get; set; }
-	}
-
-	public class LogonModel : ILogonModel
+	public class LogonModel
 	{
 		public LogonModel()
 		{

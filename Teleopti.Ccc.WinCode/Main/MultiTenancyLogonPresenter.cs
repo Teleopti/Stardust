@@ -35,7 +35,7 @@ namespace Teleopti.Ccc.WinCode.Main
 	public class MultiTenancyLogonPresenter : ILogonPresenter
 	{
 		private readonly ILogonView _view;
-		private readonly ILogonModel _model;
+		private readonly LogonModel _model;
 		private readonly ILoginInitializer _initializer;
 		private readonly ILogOnOff _logOnOff;
 		private readonly IMessageBrokerComposite _messageBroker;

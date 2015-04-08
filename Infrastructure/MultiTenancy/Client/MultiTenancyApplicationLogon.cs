@@ -66,7 +66,7 @@ namespace Teleopti.Ccc.Infrastructure.MultiTenancy.Client
 		//	};
 		//}
 
-		public AuthenticationResult Logon(ILogonModel logonModel, IApplicationData applicationData, string userAgent)
+		public AuthenticationResult Logon(LogonModel logonModel, IApplicationData applicationData, string userAgent)
 		{
 			var result = _authenticationQuerier.TryApplicationLogon(new ApplicationLogonClientModel{UserName = logonModel.UserName, Password = logonModel.Password}, userAgent);
 			if (!result.Success)

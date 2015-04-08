@@ -1,8 +1,6 @@
-﻿using NHibernate.Cfg;
-using Teleopti.Ccc.Domain.Repositories;
+﻿using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Security.Authentication;
 using Teleopti.Ccc.Domain.Security.MultiTenancyAuthentication;
-using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.UserTexts;
 using Teleopti.Interfaces.Domain;
 
@@ -11,7 +9,7 @@ namespace Teleopti.Ccc.Infrastructure.MultiTenancy.Client
 	public interface IMultiTenancyWindowsLogon
 	{
 		//AuthenticationResult Logon(ILogonModel logonModel, string userAgent);
-		AuthenticationResult Logon(ILogonModel logonModel, IApplicationData applicationData, string userAgent);
+		AuthenticationResult Logon(LogonModel logonModel, IApplicationData applicationData, string userAgent);
 		bool CheckWindowsIsPossible();
 	}
 
@@ -78,7 +76,7 @@ namespace Teleopti.Ccc.Infrastructure.MultiTenancy.Client
 		//	};
 		//}
 
-		public AuthenticationResult Logon(ILogonModel logonModel, IApplicationData applicationData, string userAgent)
+		public AuthenticationResult Logon(LogonModel logonModel, IApplicationData applicationData, string userAgent)
 		{
 			var userId = _windowsUserProvider.UserName;
 			var domain = _windowsUserProvider.DomainName;
