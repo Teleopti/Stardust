@@ -1,6 +1,5 @@
 ﻿(function() {
 	'use strict';
-
 	angular.module('wfm.resourceplanner', [])
 		.controller('ResourceplannerCtrl', [
 			'$scope', 'ResourcePlannerSvrc', function($scope, ResourcePlannerSvrc) {
@@ -14,12 +13,4 @@
 				});
 			}
 		]);
-
-	angular.module('restResourcePlannerService', ['ngResource']).service('ResourcePlannerSvrc', [
-		'$resource', function($resource) {
-			this.getPlanningPeriod = $resource('../api/PlanningPeriod', {}, {
-				query: { method: 'GET', params: {}, isArray: true }
-			});
-		}
-	]);
 })();
