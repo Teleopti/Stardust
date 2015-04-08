@@ -4,6 +4,7 @@ using NUnit.Framework;
 using Rhino.Mocks;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.Collection;
+using Teleopti.Ccc.Domain.Outbound;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.Web.Areas.Outbound.core.Campaign.Mapping;
@@ -28,16 +29,15 @@ namespace Teleopti.Ccc.WebTest.Areas.Outbound.Core.Campaign.Mapping
 			var skill2 = SkillFactory.CreateSkillWithId("skill2");
 			var skill3 = SkillFactory.CreateSkillWithId("skill3");
 
-
 			_skills = new List<ISkill> {skill1, skill2, skill3};
 			_selectedSkill = skill1;
 
 			_campaign = new Domain.Outbound.Campaign("myCampaign", _selectedSkill);
+			_campaign.AddWorkingPeriod(new CampaignWorkingPeriod(){TimePeriod = new TimePeriod()});
 			_skillRepository = MockRepository.GenerateMock<ISkillRepository>();
 			_campaigns = new List<Domain.Outbound.Campaign> { _campaign };
 			_skillRepository.Stub(x => x.LoadAll()).Return(_skills);
 			_target = new OutboundCampaignViewModelMapper(_skillRepository);
-
 		}
 
 		[Test]
@@ -159,19 +159,19 @@ namespace Teleopti.Ccc.WebTest.Areas.Outbound.Core.Campaign.Mapping
 			var result = _target.Map(_campaigns);
 			result.First().CampaignStatus.Should().Be.EqualTo(_campaign.CampaignStatus);
 		}
-	
-		//[Test]
-		//public void ShouldMapCampaignWorkingPeriodId()
-		//{
-		//	var result = _target.Map(_campaigns);
-		//	result.First().CampaignWorkingPeriods.First().Id.Should().Be.EqualTo(_campaign.CampaignWorkingPeriods.First().Id);
-		//}	
-		
-		//[Test]
-		//public void ShouldMapCampaignWorkingPeriodTimePeriod()
-		//{
-		//	var result = _target.Map(_campaigns);
-		//	result.First().CampaignWorkingPeriods.First().WorkingPeriod.Should().Be.EqualTo(_campaign.CampaignWorkingPeriods.First().TimePeriod);
-		//}
+
+		[Test]
+		public void ShouldMapCampaignWorkingPeriodId()
+		{
+			var result = _target.Map(_campaigns);
+			result.First().CampaignWorkingPeriods.First().Id.Should().Be.EqualTo(_campaign.CampaignWorkingPeriods.First().Id);
+		}
+
+		[Test]
+		public void ShouldMapCampaignWorkingPeriodTimePeriod()
+		{
+			var result = _target.Map(_campaigns);
+			result.First().CampaignWorkingPeriods.First().WorkingPeriod.Should().Be.EqualTo(_campaign.CampaignWorkingPeriods.First().TimePeriod);
+		}
 	}
 }
