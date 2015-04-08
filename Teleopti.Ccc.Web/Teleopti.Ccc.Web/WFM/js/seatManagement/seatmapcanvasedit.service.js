@@ -154,8 +154,6 @@ angular.module('wfm.seatMap')
 					obj.isNew = true;
 					obj.set('priority', seatPriority);
 					obj.set('id', getTemporaryId());
-					//ROBTODO!
-					//self.newSeats.push(obj);
 				}
 			}
 		}
@@ -188,6 +186,14 @@ angular.module('wfm.seatMap')
 		};
 
 		function setBackgroundImage(canvas, image) {
+
+
+			if (image == null) {
+				canvas.backgroundImage = 0;
+				canvas.renderAll();
+				return;
+			}
+
 			fabric.Image.fromObject(image, function (img) {
 				utils.scaleImage(canvas, img);
 				canvas.setBackgroundImage(img);

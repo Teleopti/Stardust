@@ -1,7 +1,7 @@
 ﻿
 <div>
 	
-	<div id="seatmapcanvas">
+	<div>
 
 		<span class="breadbin" ng-animate="'animate'" ng-repeat="breadcrumb in vm.breadcrumbs">
 
@@ -105,11 +105,11 @@
 
 	</div>
 
-	<div style="position: relative;">
+	<div id="seatmapcanvas" style="position: relative; margin-top: 20px;">
 		<div style="top: -25px; right: 10px; z-index: 2; position: absolute;">
-			<button class="wfm-fab" ng-click="vm.toggleEditMode()">
+			<button class="wfm-fab big info" ng-click="vm.toggleEditMode()">
 				<i ng-if="!vm.allowEdit" class="mdi mdi-pencil" aria-hidden="true"></i>
-				<i ng-if="vm.allowEdit" class="mdi mdi-stop" aria-hidden="true"></i>
+				<i ng-if="vm.allowEdit" class="mdi mdi-close" aria-hidden="true"></i>
 				<md-tooltip ng-if="!vm.allowEdit">
 					Edit Seat Map
 				</md-tooltip>
@@ -118,18 +118,19 @@
 				</md-tooltip>
 			</button>
 
-			<button ng-if="vm.allowEdit" class="wfm-fab" ng-click="vm.save()">
-				<i class="mdi mdi-play"></i>
+			<button ng-if="vm.allowEdit" class="wfm-fab big success" ng-click="vm.save()">
+				<i class="mdi mdi-check"></i>
 				<md-tooltip>
 					Save Changes
 				</md-tooltip>
 			</button>
 		</div>
 
-		<div style="margin-top: 20px;" class="wfm-block material-depth-2">
+		<div style="width:100%;" class="wfm-block material-depth-2">
 			<canvas ng-show="!vm.isLoading" id="c"></canvas>
 			<md-progress-circular ng-show="vm.isLoading" style="position: absolute;left: 50%;top: 50%;margin-left: -32px;margin-top: -32px;" md-mode=" indeterminate"></md-progress-circular>
 		</div>
+
 	</div>
 
 	<!--<div class="mapControls">

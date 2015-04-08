@@ -18,7 +18,13 @@
 
 	function linkFunction(scope, element, attributes, vm) {
 		//vm.xxx
+
+
 	};
+
+	seatMapCanvasDirectiveController.$inject = [
+		'$scope', '$document', '$window', 'seatMapCanvasUtilsService', 'seatMapCanvasEditService'
+	];
 
 	function seatMapCanvasDirectiveController($scope, $document, $window, canvasUtils, canvasEditor) {
 
@@ -86,7 +92,7 @@
 		vm.save = saveData;
 
 		vm.handleBreadcrumbClick = function (id) {
-			canvasUtils.loadSeatMap(id, canvas, vm.allowEdit, onLoadSeatMapSuccess, onLoadSeatMapFailure);
+			canvasUtils.loadSeatMap(id, canvas, vm.allowEdit, onLoadSeatMapSuccess, onLoadSeatMapNoSeatMapJson);
 		};
 
 		vm.group = function() {
@@ -141,11 +147,11 @@
 			resize();
 
 			createListenersKeyboard();
-			canvasUtils.loadSeatMap(null, canvas, vm.allowEdit, onLoadSeatMapSuccess, onLoadSeatMapFailure);
+			canvasUtils.loadSeatMap(null, canvas, vm.allowEdit, onLoadSeatMapSuccess, onLoadSeatMapNoSeatMapJson);
 		};
 
 		function refreshSeatMap() {
-			canvasUtils.loadSeatMap(vm.seatMapId, canvas, vm.allowEdit, onLoadSeatMapSuccess, onLoadSeatMapFailure);
+			canvasUtils.loadSeatMap(vm.seatMapId, canvas, vm.allowEdit, onLoadSeatMapSuccess, onLoadSeatMapNoSeatMapJson);
 		};
 
 		function resize() {
@@ -177,7 +183,7 @@
 
 		function loadSeatMapOnLocationClick(location) {
 
-			canvasUtils.loadSeatMap(location.id, canvas, vm.allowEdit, onLoadSeatMapSuccess, onLoadSeatMapFailure);
+			canvasUtils.loadSeatMap(location.id, canvas, vm.allowEdit, onLoadSeatMapSuccess, onLoadSeatMapNoSeatMapJson);
 		};
 
 		function onLoadSeatMapSuccess(data) {
@@ -193,7 +199,15 @@
 			$scope.$apply(); // required to update bindings
 		};
 
-		function onLoadSeatMapFailure() {
+		function onLoadSeatMapNoSeatMapJson(data) {
+
+			if (data) {
+				vm.parentId = data.ParentId;
+				vm.seatMapId = data.Id;
+				vm.breadcrumbs = data.BreadcrumbInfo;
+				vm.seatPriority = data.seatPriority;
+			}
+
 			vm.isLoading = false;
 			//		//self.ResetZoom();
 		};
@@ -251,9 +265,6 @@
 		};
 	};
 
-	seatMapCanvasDirectiveController.$inject = [
-		'$scope', '$document', '$window', 'seatMapCanvasUtilsService', 'seatMapCanvasEditService'
-	];
-
+	
 }());
 
