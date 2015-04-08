@@ -37,10 +37,10 @@ client.setValue('#Username-input', 'demo')
 	.click('#Signin-button')
 	.waitForExist('.user-name', 120000, false, function(err, res, response) {
 		if (err || !res) {
-			log('failed to sign in. ' + res);
+			log('failed to sign in. res: ' + res);
 			closeAndThrow('failed to sign in. ' + err);
 		}
-		log('sign in succeeded');
+		log('sign in succeeded:' + res);
 	});
 log('navigate to health check');
 client.url(process.env.UrlToTest + '/HealthCheck')
