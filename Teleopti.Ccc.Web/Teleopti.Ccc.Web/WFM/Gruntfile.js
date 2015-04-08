@@ -10,6 +10,16 @@
 					spawn: false,
 				}
 			},
+			test: {
+				files: ['tests/**/*.js'],
+				tasks:['karma'],
+			}
+		},
+
+		karma: {
+			unit: {
+				configFile: 'karma.conf.js',
+			}
 		},
 
 		sass: {
@@ -43,8 +53,10 @@
 	grunt.loadNpmTasks('grunt-contrib-uglify');
 	grunt.loadNpmTasks('grunt-http-download');
 	grunt.loadNpmTasks('grunt-sass');
+	grunt.loadNpmTasks('grunt-karma');
 
 	// Default task(s).
 	grunt.registerTask('default', ['watch:dev']); // this task watchs
+	grunt.registerTask('unitTest', ['watch:test']); // this task watchs
 	grunt.registerTask('dist', ['uglify', 'download', 'sass']); // this task is kind of package
 };
