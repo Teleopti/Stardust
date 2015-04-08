@@ -26,7 +26,7 @@
 		<![CDATA[
 select p from PersonInfo_OldSchema p
 where p.Identity = :identity
-and (p.TerminalDate is null or p.TerminalDate>getdate())
+and (p.TerminalDate is null or p.TerminalDate >= convert(date,getdate()))
 ]]>
 	</query>
 
@@ -34,7 +34,7 @@ and (p.TerminalDate is null or p.TerminalDate>getdate())
 		<![CDATA[
 select pi from PersonInfo_OldSchema pi
 where pi.ApplicationLogonName=:userName
-and (pi.TerminalDate is null or pi.TerminalDate>getdate())
+and (pi.TerminalDate is null or pi.TerminalDate >= convert(date,getdate()))
 ]]>
 	</query>
 </hibernate-mapping>

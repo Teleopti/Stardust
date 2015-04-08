@@ -82,6 +82,17 @@ namespace Teleopti.Ccc.InfrastructureTest.MultiTenancy.Server
 		}
 
 		[Test]
+		public void UserOnTerminateDateShouldSucceed()
+		{
+			var personInDatabase = Session.Get<Person>(personId);
+			personInDatabase.TerminatePerson(new DateOnly(DateTime.Today), new PersonAccountUpdaterDummy());
+			PersistAndRemoveFromUnitOfWork(personInDatabase);
+
+			target.FindUserData(correctUserName)
+				.Should().Be.OfType<PasswordPolicyForUser>();
+		}
+
+		[Test]
 		public void DeletedUserShouldFail()
 		{
 			var personInDatabase = Session.Get<Person>(personId);
