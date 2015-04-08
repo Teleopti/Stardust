@@ -9,7 +9,6 @@ namespace Teleopti.Ccc.Domain.Security.Authentication
 		{
 			AuthenticationType = AuthenticationTypeOption.Windows;
 		}
-		public bool GetConfigFromWebService { get; set; }
 		public IDataSourceContainer SelectedDataSourceContainer { get; set; }
 		public IList<IBusinessUnit> AvailableBus { get; set; }
 		public IBusinessUnit SelectedBu { get; set; }

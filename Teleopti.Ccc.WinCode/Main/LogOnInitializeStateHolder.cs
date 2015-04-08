@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Configuration;
 using System.Linq;
 using System.Xml.Linq;
@@ -20,8 +21,17 @@ namespace Teleopti.Ccc.WinCode.Main
 	{
 		public static bool InitWithoutDataSource(LogonModel model, IMessageBrokerComposite messageBroker, SharedSettings settings)
 		{
-			var passwordPolicyDocument = XDocument.Parse(settings.PasswordPolicy);
-			var passwordPolicyService = new LoadPasswordPolicyService(passwordPolicyDocument);
+			LoadPasswordPolicyService passwordPolicyService;
+			if (settings.PasswordPolicy == null)
+			{
+				//to be able start desktop app without shared setting server
+				passwordPolicyService = new LoadPasswordPolicyService(Environment.CurrentDirectory);
+			}
+			else
+			{
+				var passwordPolicyDocument = XDocument.Parse(settings.PasswordPolicy);
+				passwordPolicyService = new LoadPasswordPolicyService(passwordPolicyDocument);
+			}
 
 			var appsett = ConfigurationManager.AppSettings;
 			
@@ -67,19 +77,6 @@ namespace Teleopti.Ccc.WinCode.Main
 			initializer.Start(new StateManager(), appSettings, passwordPolicyService);
 
 			return true;
-		}
-
-		public static void GetConfigFromFileSystem(string nhibConfPath, bool messageBrokerDisabled, IMessageBrokerComposite messageBroker)
-		{
-			new InitializeApplication(
-				new DataSourcesFactory(new EnversConfiguration(), new List<IMessageSender>(),
-										DataSourceConfigurationSetter.ForDesktop(), new CurrentHttpContext(), () => messageBroker),
-				messageBroker
-				)
-			{
-				MessageBrokerDisabled = messageBrokerDisabled
-			}.Start(new StateManager(), nhibConfPath, new LoadPasswordPolicyService(nhibConfPath),
-						  new ConfigurationManagerWrapper(), true);
 		}
 	}
 }

@@ -60,18 +60,7 @@ namespace Teleopti.Ccc.Win.Main
 
 		public bool InitStateHolderWithoutDataSource(IMessageBrokerComposite messageBroker, SharedSettings settings)
 		{
-			if (_model.GetConfigFromWebService)
-			{
-				if (!LogonInitializeStateHolder.InitWithoutDataSource(_model, messageBroker, settings))
-					return showError();
-			}
-			else
-			{
-				//used by sikuli
-				var useMessageBroker = string.IsNullOrEmpty(ConfigurationManager.AppSettings["MessageBroker"]);
-				LogonInitializeStateHolder.GetConfigFromFileSystem(Environment.CurrentDirectory, useMessageBroker, messageBroker);
-			}
-			return true;
+			return LogonInitializeStateHolder.InitWithoutDataSource(_model, messageBroker, settings) || showError();
 		}
 
 		private bool showError()
