@@ -40,7 +40,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			}
 			else
 			{
-				builder.Register(c => new SharedSettingsQuerierForNoWeb())
+				builder.Register(c => new SharedSettingsQuerierForNoWeb(configServer))
 					.As<ISharedSettingsQuerier>()
 					.SingleInstance();
 			}
