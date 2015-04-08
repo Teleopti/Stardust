@@ -23,9 +23,9 @@ namespace Teleopti.Ccc.Domain.Scheduling.Restrictions
 
             foreach (var scheduleDay in scheduleDays)
             {
-                _restrictionExtractor.Extract(scheduleDay);
+                var result = _restrictionExtractor.Extract(scheduleDay);
   
-                if(_restrictionExtractor.PreferenceList.Any())
+                if(result.PreferenceList.Any())
                     restrictedDays.Add(scheduleDay);
             }
 
@@ -41,9 +41,9 @@ namespace Teleopti.Ccc.Domain.Scheduling.Restrictions
 
             foreach (var scheduleDay in scheduleDays)
             {
-                _restrictionExtractor.Extract(scheduleDay);
+                var result = _restrictionExtractor.Extract(scheduleDay);
 
-                if (_restrictionExtractor.PreferenceList.Any(restriction => restriction.MustHave))
+                if (result.PreferenceList.Any(restriction => restriction.MustHave))
                 {
                     restrictedDays.Add(scheduleDay);
                 }
@@ -61,9 +61,9 @@ namespace Teleopti.Ccc.Domain.Scheduling.Restrictions
 
             foreach (var scheduleDay in scheduleDays)
             {
-                _restrictionExtractor.Extract(scheduleDay);
+                var result = _restrictionExtractor.Extract(scheduleDay);
 
-                foreach (var restriction in _restrictionExtractor.PreferenceList)
+                foreach (var restriction in result.PreferenceList)
                 {
                     if (restriction.Absence != null && !restrictedDays.Contains(scheduleDay))
                         restrictedDays.Add(scheduleDay);
@@ -82,9 +82,9 @@ namespace Teleopti.Ccc.Domain.Scheduling.Restrictions
 
             foreach (var scheduleDay in scheduleDays)
             {
-                _restrictionExtractor.Extract(scheduleDay);
+                var result = _restrictionExtractor.Extract(scheduleDay);
 
-                foreach (var restriction in _restrictionExtractor.PreferenceList)
+                foreach (var restriction in result.PreferenceList)
                 {
                     if(restriction.DayOffTemplate != null && !restrictedDays.Contains(scheduleDay))
                         restrictedDays.Add(scheduleDay);
@@ -104,9 +104,9 @@ namespace Teleopti.Ccc.Domain.Scheduling.Restrictions
 
             foreach (var scheduleDay in scheduleDays)
             {
-                _restrictionExtractor.Extract(scheduleDay);
+                var result = _restrictionExtractor.Extract(scheduleDay);
 
-                foreach (var restriction in _restrictionExtractor.PreferenceList)
+                foreach (var restriction in result.PreferenceList)
                 {
                     if(restriction.ShiftCategory != null && !restrictedDays.Contains(scheduleDay))
                         restrictedDays.Add(scheduleDay);
@@ -116,7 +116,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.Restrictions
             return restrictedDays;
         }
 
-
         public IScheduleDay RestrictionFulfilled(ICheckerRestriction restrictionChecker, IScheduleDay scheduleDay)
         {
             if(restrictionChecker == null)
@@ -124,7 +123,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.Restrictions
 
             return restrictionChecker.CheckPreference(scheduleDay) == PermissionState.Satisfied ? scheduleDay : null;
         }
-
 
 		public IScheduleDay RestrictionFulfilledAbsence(ICheckerRestriction restrictionChecker, IScheduleDay scheduleDay)
         {
@@ -141,7 +139,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.Restrictions
 
 			return restrictionChecker.CheckPreferenceDayOff(scheduleDay) == PermissionState.Satisfied ? scheduleDay : null;
         }
-
 
 		public IScheduleDay RestrictionFulfilledShift(ICheckerRestriction restrictionChecker, IScheduleDay scheduleDay)
         {

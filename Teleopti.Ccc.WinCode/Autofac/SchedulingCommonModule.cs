@@ -152,7 +152,6 @@ namespace Teleopti.Ccc.WinCode.Autofac
 			builder.RegisterType<PeriodDistributionService>().As<IPeriodDistributionService>().SingleInstance();
 
 			builder.RegisterType<NonBlendSkillCalculator>().As<INonBlendSkillCalculator>().InstancePerLifetimeScope();
-			builder.RegisterType<RestrictionExtractor>().As<IRestrictionExtractor>().InstancePerDependency();
 			builder.RegisterType<SchedulePeriodTargetTimeCalculator>()
 				.As<ISchedulePeriodTargetTimeCalculator>()
 				.InstancePerLifetimeScope();
@@ -325,10 +324,12 @@ namespace Teleopti.Ccc.WinCode.Autofac
 			builder.RegisterType<OvertimeSkillIntervalDataDivider>().As<IOvertimeSkillIntervalDataDivider>();
 			builder.RegisterType<OvertimeSkillStaffPeriodToSkillIntervalDataMapper>()
 				.As<IOvertimeSkillStaffPeriodToSkillIntervalDataMapper>();
-			builder.RegisterType<ProjectionProvider>().As<IProjectionProvider>();
-			builder.RegisterType<NightlyRestRule>().As<IAssignmentPeriodRule>();
-			builder.RegisterType<ScheduleMatrixLockableBitArrayConverterEx>().As<IScheduleMatrixLockableBitArrayConverterEx>();
-			builder.RegisterType<RestrictionExtractor>().As<IRestrictionExtractor>();
+			builder.RegisterType<ProjectionProvider>().As<IProjectionProvider>().SingleInstance();
+			builder.RegisterType<NightlyRestRule>().As<IAssignmentPeriodRule>().SingleInstance();
+			builder.RegisterType<ScheduleMatrixLockableBitArrayConverterEx>().As<IScheduleMatrixLockableBitArrayConverterEx>().SingleInstance();
+			builder.RegisterType<RestrictionExtractor>().As<IRestrictionExtractor>().SingleInstance();
+			builder.RegisterType<RestrictionCombiner>().As<IRestrictionCombiner>().SingleInstance();
+			builder.RegisterType<RestrictionRetrievalOperation>().As<IRestrictionRetrievalOperation>().SingleInstance();
 			builder.RegisterType<EffectiveRestrictionCreator30393>().As<EffectiveRestrictionCreator30393>();
 			builder.RegisterType<EffectiveRestrictionCreator>().As<EffectiveRestrictionCreator>();
 			builder.Register(c => c.Resolve<IToggleManager>().IsEnabled(Toggles.Scheduler_SudentAvailabilityForFixedStaff_30393)

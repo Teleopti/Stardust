@@ -21,14 +21,16 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Restrictions
         private IDayOffTemplate _dayOffTemplate;
         private IShiftCategory _shiftCategory;
         private IAbsence _absence;
+	    private IExtractedRestrictionResult _extractedRestrictionResult;
 
-        [SetUp]
+	    [SetUp]
         public void Setup()
         {
             _mock = new MockRepository();
             _scheduleDay = _mock.StrictMock<IScheduleDay>();
             _scheduleDays = new List<IScheduleDay> { _scheduleDay };
             _restrictionExtractor = _mock.StrictMock<IRestrictionExtractor>();
+	        _extractedRestrictionResult = _mock.StrictMock<IExtractedRestrictionResult>();
             _restrictionChecker = _mock.StrictMock<ICheckerRestriction>();
             _target = new ScheduleDayPreferenceRestrictionExtractor(_restrictionExtractor);
             _preferenceRestriction = _mock.StrictMock<IPreferenceRestriction>();
@@ -43,8 +45,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Restrictions
         {
             using(_mock.Record())
             {
-                Expect.Call(() => _restrictionExtractor.Extract(_scheduleDay));
-                Expect.Call(_restrictionExtractor.PreferenceList).Return(_preferenceRestrictions);
+                Expect.Call(_restrictionExtractor.Extract(_scheduleDay)).Return(_extractedRestrictionResult);
+                Expect.Call(_extractedRestrictionResult.PreferenceList).Return(_preferenceRestrictions);
             }
 
             using(_mock.Playback())
@@ -60,8 +62,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Restrictions
         {
             using(_mock.Record())
             {
-                Expect.Call(() => _restrictionExtractor.Extract(_scheduleDay));
-                Expect.Call(_restrictionExtractor.PreferenceList).Return(_preferenceRestrictions);
+                Expect.Call(_restrictionExtractor.Extract(_scheduleDay)).Return(_extractedRestrictionResult);
+                Expect.Call(_extractedRestrictionResult.PreferenceList).Return(_preferenceRestrictions);
                 Expect.Call(_preferenceRestriction.MustHave).Return(true);
             }
 
@@ -78,8 +80,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Restrictions
         {
             using(_mock.Record())
             {
-                Expect.Call(() => _restrictionExtractor.Extract(_scheduleDay));
-                Expect.Call(_restrictionExtractor.PreferenceList).Return(_preferenceRestrictions);
+                Expect.Call(_restrictionExtractor.Extract(_scheduleDay)).Return(_extractedRestrictionResult);
+                Expect.Call(_extractedRestrictionResult.PreferenceList).Return(_preferenceRestrictions);
                 Expect.Call(_preferenceRestriction.DayOffTemplate).Return(_dayOffTemplate);
             }
 
@@ -96,8 +98,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Restrictions
         {
             using(_mock.Record())
             {
-                Expect.Call(() => _restrictionExtractor.Extract(_scheduleDay));
-                Expect.Call(_restrictionExtractor.PreferenceList).Return(_preferenceRestrictions);
+                Expect.Call(_restrictionExtractor.Extract(_scheduleDay)).Return(_extractedRestrictionResult);
+                Expect.Call(_extractedRestrictionResult.PreferenceList).Return(_preferenceRestrictions);
                 Expect.Call(_preferenceRestriction.Absence).Return(_absence);
             }
 
@@ -114,8 +116,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Restrictions
         {
             using(_mock.Record())
             {
-                Expect.Call(() => _restrictionExtractor.Extract(_scheduleDay));
-                Expect.Call(_restrictionExtractor.PreferenceList).Return(_preferenceRestrictions);
+                Expect.Call(_restrictionExtractor.Extract(_scheduleDay)).Return(_extractedRestrictionResult);
+                Expect.Call(_extractedRestrictionResult.PreferenceList).Return(_preferenceRestrictions);
                 Expect.Call(_preferenceRestriction.ShiftCategory).Return(_shiftCategory);
             }
 

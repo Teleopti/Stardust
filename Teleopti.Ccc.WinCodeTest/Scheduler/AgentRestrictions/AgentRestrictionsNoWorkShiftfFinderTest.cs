@@ -21,6 +21,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.AgentRestrictions
 		private IPersonPeriod _personPeriod;
 		private IRuleSetBag _ruleSetBag;
 		private IWorkShiftWorkTime _workShiftWorkTime;
+		private IExtractedRestrictionResult _extractedRestrictionResult;
 
 		[SetUp]
 		public void Setup()
@@ -36,6 +37,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.AgentRestrictions
 			_personPeriod = _mock.StrictMock<IPersonPeriod>();
 			_ruleSetBag = _mock.StrictMock<IRuleSetBag>();
 			_workShiftWorkTime = _mock.StrictMock<IWorkShiftWorkTime>();
+			_extractedRestrictionResult = _mock.StrictMock<IExtractedRestrictionResult>();
 			_finder = new AgentRestrictionsNoWorkShiftfFinder(_restrictionExtractor, _workShiftWorkTime);	
 		}
 
@@ -50,8 +52,8 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.AgentRestrictions
 				Expect.Call(_dateOnlyAsDateTimePeriod.DateOnly).Return(_dateOnly);
 				Expect.Call(_person.Period(_dateOnly)).Return(_personPeriod);
 				Expect.Call(_personPeriod.RuleSetBag).Return(_ruleSetBag);
-				Expect.Call(() => _restrictionExtractor.Extract(_scheduleDay));
-				Expect.Call(_restrictionExtractor.CombinedRestriction(_schedulingOptions)).Return(_effectiveRestriction);
+				Expect.Call(_restrictionExtractor.Extract(_scheduleDay)).Return(_extractedRestrictionResult);
+				Expect.Call(_extractedRestrictionResult.CombinedRestriction(_schedulingOptions)).Return(_effectiveRestriction);
 				Expect.Call(_ruleSetBag.MinMaxWorkTime(_workShiftWorkTime, _dateOnly, _effectiveRestriction)).Return(null);
 				Expect.Call(_effectiveRestriction.IsRestriction).Return(true);
 				Expect.Call(_effectiveRestriction.DayOffTemplate).Return(null);
@@ -95,8 +97,8 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.AgentRestrictions
 				Expect.Call(_dateOnlyAsDateTimePeriod.DateOnly).Return(_dateOnly);
 				Expect.Call(_person.Period(_dateOnly)).Return(_personPeriod);
 				Expect.Call(_personPeriod.RuleSetBag).Return(_ruleSetBag);
-				Expect.Call(() => _restrictionExtractor.Extract(_scheduleDay));
-				Expect.Call(_restrictionExtractor.CombinedRestriction(_schedulingOptions)).Return(null);
+				Expect.Call(_restrictionExtractor.Extract(_scheduleDay)).Return(_extractedRestrictionResult);
+				Expect.Call(_extractedRestrictionResult.CombinedRestriction(_schedulingOptions)).Return(null);
 			}
 
 			using (_mock.Playback())
@@ -137,8 +139,8 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.AgentRestrictions
 				Expect.Call(_dateOnlyAsDateTimePeriod.DateOnly).Return(_dateOnly);
 				Expect.Call(_person.Period(_dateOnly)).Return(_personPeriod);
 				Expect.Call(_personPeriod.RuleSetBag).Return(_ruleSetBag);
-				Expect.Call(() => _restrictionExtractor.Extract(_scheduleDay));
-				Expect.Call(_restrictionExtractor.CombinedRestriction(_schedulingOptions)).Return(_effectiveRestriction);
+				Expect.Call(_restrictionExtractor.Extract(_scheduleDay)).Return(_extractedRestrictionResult);
+				Expect.Call(_extractedRestrictionResult.CombinedRestriction(_schedulingOptions)).Return(_effectiveRestriction);
 				Expect.Call(_ruleSetBag.MinMaxWorkTime(_workShiftWorkTime, _dateOnly, _effectiveRestriction)).Return(new WorkTimeMinMax());
 			}
 
@@ -161,8 +163,8 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.AgentRestrictions
 				Expect.Call(_dateOnlyAsDateTimePeriod.DateOnly).Return(_dateOnly);
 				Expect.Call(_person.Period(_dateOnly)).Return(_personPeriod);
 				Expect.Call(_personPeriod.RuleSetBag).Return(_ruleSetBag);
-				Expect.Call(() => _restrictionExtractor.Extract(_scheduleDay));
-				Expect.Call(_restrictionExtractor.CombinedRestriction(_schedulingOptions)).Return(_effectiveRestriction);
+				Expect.Call(_restrictionExtractor.Extract(_scheduleDay)).Return(_extractedRestrictionResult);
+				Expect.Call(_extractedRestrictionResult.CombinedRestriction(_schedulingOptions)).Return(_effectiveRestriction);
 				Expect.Call(_ruleSetBag.MinMaxWorkTime(_workShiftWorkTime, _dateOnly, _effectiveRestriction)).Return(null);
 				Expect.Call(_effectiveRestriction.IsRestriction).Return(false);
 			}
@@ -185,8 +187,8 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.AgentRestrictions
 				Expect.Call(_dateOnlyAsDateTimePeriod.DateOnly).Return(_dateOnly);
 				Expect.Call(_person.Period(_dateOnly)).Return(_personPeriod);
 				Expect.Call(_personPeriod.RuleSetBag).Return(_ruleSetBag);
-				Expect.Call(() => _restrictionExtractor.Extract(_scheduleDay));
-				Expect.Call(_restrictionExtractor.CombinedRestriction(_schedulingOptions)).Return(_effectiveRestriction);
+				Expect.Call(_restrictionExtractor.Extract(_scheduleDay)).Return(_extractedRestrictionResult);
+				Expect.Call(_extractedRestrictionResult.CombinedRestriction(_schedulingOptions)).Return(_effectiveRestriction);
 				Expect.Call(_ruleSetBag.MinMaxWorkTime(_workShiftWorkTime, _dateOnly, _effectiveRestriction)).Return(null);
 				Expect.Call(_effectiveRestriction.IsRestriction).Return(true);
 				Expect.Call(_effectiveRestriction.DayOffTemplate).Return(new DayOffTemplate(new Description("dayOffTemplate")));
@@ -210,8 +212,8 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.AgentRestrictions
 				Expect.Call(_dateOnlyAsDateTimePeriod.DateOnly).Return(_dateOnly);
 				Expect.Call(_person.Period(_dateOnly)).Return(_personPeriod);
 				Expect.Call(_personPeriod.RuleSetBag).Return(_ruleSetBag);
-				Expect.Call(() => _restrictionExtractor.Extract(_scheduleDay));
-				Expect.Call(_restrictionExtractor.CombinedRestriction(_schedulingOptions)).Return(_effectiveRestriction);
+				Expect.Call(_restrictionExtractor.Extract(_scheduleDay)).Return(_extractedRestrictionResult);
+				Expect.Call(_extractedRestrictionResult.CombinedRestriction(_schedulingOptions)).Return(_effectiveRestriction);
 				Expect.Call(_ruleSetBag.MinMaxWorkTime(_workShiftWorkTime, _dateOnly, _effectiveRestriction)).Return(null);
 				Expect.Call(_effectiveRestriction.IsRestriction).Return(true);
 				Expect.Call(_effectiveRestriction.DayOffTemplate).Return(null);

@@ -39,6 +39,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.AgentRestrictions
 		private TimeSpan _periodTarget;
 		private IPersonalShiftRestrictionCombiner _personalShiftRestrictionCombiner;
 		private IMeetingRestrictionCombiner _meetingRestrictionCombiner;
+		private IExtractedRestrictionResult _extractedRestrictionResult;
 
 		[SetUp]
 		public void Setup()
@@ -48,6 +49,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.AgentRestrictions
 			_virtualSchedulePeriod = _mocks.StrictMock<IVirtualSchedulePeriod>();
 			_scheduleDayPro = _mocks.StrictMock<IScheduleDayPro>();
 			_restrictionExtractor = _mocks.StrictMock<IRestrictionExtractor>();
+			_extractedRestrictionResult = _mocks.StrictMock<IExtractedRestrictionResult>();
 			_scheduleMatrixPro = _mocks.StrictMock<IScheduleMatrixPro>();
 			_workShiftWorkTime = _mocks.StrictMock<IWorkShiftWorkTime>();
 			_personalShiftRestrictionCombiner = _mocks.StrictMock<IPersonalShiftRestrictionCombiner>();
@@ -101,9 +103,9 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.AgentRestrictions
 				Expect.Call(_scheduleMatrixPro.SchedulePeriod).Return(_virtualSchedulePeriod);
 				Expect.Call(_virtualSchedulePeriod.DateOnlyPeriod).Return(dateOnlyPeriod);
 				Expect.Call(_scheduleMatrixPro.Person).Return(_person).Repeat.AtLeastOnce();
-				Expect.Call(() => _restrictionExtractor.Extract(_person, dateOnly));
-				Expect.Call(_restrictionExtractor.CombinedRestriction(_schedulingOptions)).Return(_effectiveRestriction);
-				Expect.Call(_restrictionExtractor.PreferenceList).Return(new List<IPreferenceRestriction>()).Repeat.Twice();
+				Expect.Call(_restrictionExtractor.Extract(part)).Return(_extractedRestrictionResult);
+				Expect.Call(_extractedRestrictionResult.CombinedRestriction(_schedulingOptions)).Return(_effectiveRestriction);
+				Expect.Call(_extractedRestrictionResult.PreferenceList).Return(new List<IPreferenceRestriction>()).Repeat.Twice();
 				Expect.Call(_effectiveRestriction.IsRestriction).Return(false);
 				Expect.Call(_effectiveRestriction.Absence).Return(absence).Repeat.AtLeastOnce();
 				Expect.Call(_effectiveRestriction.StartTimeLimitation).Return(new StartTimeLimitation());
@@ -142,9 +144,9 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.AgentRestrictions
 				Expect.Call(_scheduleMatrixPro.SchedulePeriod).Return(_virtualSchedulePeriod);
 				Expect.Call(_virtualSchedulePeriod.DateOnlyPeriod).Return(dateOnlyPeriod);
 				Expect.Call(_scheduleMatrixPro.Person).Return(_person).Repeat.AtLeastOnce();
-				Expect.Call(() => _restrictionExtractor.Extract(_person, dateOnly));
-				Expect.Call(_restrictionExtractor.CombinedRestriction(_schedulingOptions)).Return(_effectiveRestriction);
-				Expect.Call(_restrictionExtractor.PreferenceList).Return(new List<IPreferenceRestriction>()).Repeat.Twice();
+				Expect.Call(_restrictionExtractor.Extract(part)).Return(_extractedRestrictionResult);
+				Expect.Call(_extractedRestrictionResult.CombinedRestriction(_schedulingOptions)).Return(_effectiveRestriction);
+				Expect.Call(_extractedRestrictionResult.PreferenceList).Return(new List<IPreferenceRestriction>()).Repeat.Twice();
 				Expect.Call(_personalShiftRestrictionCombiner.Combine(part, _effectiveRestriction)).Return(_effectiveRestriction);
 				Expect.Call(_meetingRestrictionCombiner.Combine(part, _effectiveRestriction)).Return(_effectiveRestriction);
 			}
@@ -186,9 +188,9 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.AgentRestrictions
 				Expect.Call(_scheduleMatrixPro.SchedulePeriod).Return(_virtualSchedulePeriod);
 				Expect.Call(_virtualSchedulePeriod.DateOnlyPeriod).Return(dateOnlyPeriod);
 				Expect.Call(_scheduleMatrixPro.Person).Return(_person).Repeat.AtLeastOnce();
-				Expect.Call(() => _restrictionExtractor.Extract(_person, dateOnly));
-				Expect.Call(_restrictionExtractor.CombinedRestriction(_schedulingOptions)).Return(_effectiveRestriction);
-				Expect.Call(_restrictionExtractor.PreferenceList).Return(new List<IPreferenceRestriction>()).Repeat.Twice();
+				Expect.Call(_restrictionExtractor.Extract(part)).Return(_extractedRestrictionResult);
+				Expect.Call(_extractedRestrictionResult.CombinedRestriction(_schedulingOptions)).Return(_effectiveRestriction);
+				Expect.Call(_extractedRestrictionResult.PreferenceList).Return(new List<IPreferenceRestriction>()).Repeat.Twice();
 				Expect.Call(_personalShiftRestrictionCombiner.Combine(part, _effectiveRestriction)).Return(_effectiveRestriction);
 				Expect.Call(_meetingRestrictionCombiner.Combine(part, _effectiveRestriction)).Return(_effectiveRestriction);
 			}
@@ -222,9 +224,9 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.AgentRestrictions
 				Expect.Call(_scheduleMatrixPro.SchedulePeriod).Return(_virtualSchedulePeriod);
 				Expect.Call(_virtualSchedulePeriod.DateOnlyPeriod).Return(dateOnlyPeriod);
 				Expect.Call(_scheduleMatrixPro.Person).Return(_person).Repeat.AtLeastOnce();
-				Expect.Call(() => _restrictionExtractor.Extract(_person, dateOnly));
-				Expect.Call(_restrictionExtractor.CombinedRestriction(_schedulingOptions)).Return(_effectiveRestriction);
-				Expect.Call(_restrictionExtractor.PreferenceList).Return(new List<IPreferenceRestriction>()).Repeat.Twice();
+				Expect.Call(_restrictionExtractor.Extract(part)).Return(_extractedRestrictionResult);
+				Expect.Call(_extractedRestrictionResult.CombinedRestriction(_schedulingOptions)).Return(_effectiveRestriction);
+				Expect.Call(_extractedRestrictionResult.PreferenceList).Return(new List<IPreferenceRestriction>()).Repeat.Twice();
 				Expect.Call(_personalShiftRestrictionCombiner.Combine(part, _effectiveRestriction)).Return(_effectiveRestriction);
 				Expect.Call(_meetingRestrictionCombiner.Combine(part, _effectiveRestriction)).Return(_effectiveRestriction);
 			}

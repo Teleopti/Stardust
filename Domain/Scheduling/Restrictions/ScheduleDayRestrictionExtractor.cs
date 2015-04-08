@@ -16,16 +16,15 @@ namespace Teleopti.Ccc.Domain.Scheduling.Restrictions
 
         public IList<IScheduleDay> AllRestrictedDays(IList<IScheduleDay> scheduleDays)
         {
-            if(scheduleDays == null)
-                throw new ArgumentNullException("scheduleDays");
+            if(scheduleDays == null) throw new ArgumentNullException("scheduleDays");
 
             IList<IScheduleDay> restrictedDays = new List<IScheduleDay>();
 
             foreach (var scheduleDay in scheduleDays)
             {
-                _restrictionExtractor.Extract(scheduleDay);
+                var result = _restrictionExtractor.Extract(scheduleDay);
 
-                if(_restrictionExtractor.PreferenceList.Any() || _restrictionExtractor.RotationList.Any() || _restrictionExtractor.StudentAvailabilityList.Any() || _restrictionExtractor.AvailabilityList.Any())
+                if(result.PreferenceList.Any() || result.RotationList.Any() || result.StudentAvailabilityList.Any() || result.AvailabilityList.Any())
                     restrictedDays.Add(scheduleDay);  
             }
 

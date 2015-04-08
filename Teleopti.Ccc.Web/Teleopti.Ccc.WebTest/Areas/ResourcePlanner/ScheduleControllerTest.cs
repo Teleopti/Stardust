@@ -7,6 +7,7 @@ using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
 using Teleopti.Ccc.Domain.Security.Principal;
+using Teleopti.Ccc.Infrastructure.Toggle;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
@@ -32,7 +33,7 @@ namespace Teleopti.Ccc.WebTest.Areas.ResourcePlanner
 				MockRepository.GenerateMock<IPeopleAndSkillLoaderDecider>(),
 				new FakeCurrentTeleoptiPrincipal(new TeleoptiPrincipal(new TeleoptiIdentity("", null, null, null),
 					PersonFactory.CreatePerson(new Name("Anna", "Andersson"), TimeZoneInfo.Utc))),
-				MockRepository.GenerateMock<IDisableDeletedFilter>(), MockRepository.GenerateMock<ICurrentUnitOfWorkFactory>());
+				MockRepository.GenerateMock<IDisableDeletedFilter>(), MockRepository.GenerateMock<ICurrentUnitOfWorkFactory>(), MockRepository.GenerateMock<IToggleManager>(), MockRepository.GenerateMock<IRestrictionExtractor>());
 			var result =
 				(OkNegotiatedContentResult<SchedulingResultModel>)
 					

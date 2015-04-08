@@ -19,8 +19,8 @@ namespace Teleopti.Ccc.WinCode.Scheduling.AgentRestrictions
 		private readonly IWorkShiftWorkTime _workShiftWorkTime;
 		private readonly IRestrictionExtractor _restrictionExtractor;
 		private readonly RestrictionSchedulingOptions _schedulingOptions;
-		private IPersonalShiftRestrictionCombiner _personalShiftRestrictionCombiner;
-		private IMeetingRestrictionCombiner _meetingRestrictionCombiner;
+		private readonly IPersonalShiftRestrictionCombiner _personalShiftRestrictionCombiner;
+		private readonly IMeetingRestrictionCombiner _meetingRestrictionCombiner;
 
 		public AgentRestrictionsDetailEffectiveRestrictionExtractor(IWorkShiftWorkTime workShiftWorkTime, IRestrictionExtractor restrictionExtractor, RestrictionSchedulingOptions schedulingOptions, IPersonalShiftRestrictionCombiner personalShiftRestrictionCombiner, IMeetingRestrictionCombiner meetingRestrictionCombiner)
 		{
@@ -45,8 +45,8 @@ namespace Teleopti.Ccc.WinCode.Scheduling.AgentRestrictions
 			preferenceCellData.PeriodTarget = periodTarget;
 			preferenceCellData.SchedulingOption = _schedulingOptions;
 
-			_restrictionExtractor.Extract(scheduleMatrixPro.Person, dateOnly);
-			var totalRestriction = _restrictionExtractor.CombinedRestriction(_schedulingOptions);
+			var result = _restrictionExtractor.Extract(scheduleDay);
+			var totalRestriction = result.CombinedRestriction(_schedulingOptions);
 
 			totalRestriction = _personalShiftRestrictionCombiner.Combine(scheduleDay, totalRestriction);
 			totalRestriction = _meetingRestrictionCombiner.Combine(scheduleDay, totalRestriction);
@@ -61,9 +61,9 @@ namespace Teleopti.Ccc.WinCode.Scheduling.AgentRestrictions
 
 			SetTotalRestriction(scheduleDay, totalRestriction, preferenceCellData);
 
-			preferenceCellData.MustHavePreference = _restrictionExtractor.PreferenceList.Any(restriction => restriction.MustHave);
+			preferenceCellData.MustHavePreference = result.PreferenceList.Any(restriction => restriction.MustHave);
 
-			foreach (var restriction in _restrictionExtractor.PreferenceList)
+			foreach (var restriction in result.PreferenceList)
 			{
 				if (restriction.WorkTimeLimitation.HasValue() || restriction.StartTimeLimitation.HasValue() || restriction.EndTimeLimitation.HasValue() || restriction.ActivityRestrictionCollection.Count > 0)
 				{

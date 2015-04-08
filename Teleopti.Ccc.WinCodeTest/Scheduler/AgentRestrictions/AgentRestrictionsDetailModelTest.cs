@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using Teleopti.Ccc.WinCode.Scheduling;
 using Teleopti.Ccc.WinCode.Scheduling.AgentRestrictions;
 using NUnit.Framework;
@@ -17,7 +16,6 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.AgentRestrictions
 		private IScheduleMatrixPro _scheduleMatrixPro;
 		private MockRepository _mocks;
 		private DateTimePeriod _period;
-		private IRestrictionExtractor _restrictionExtractor;
 		private RestrictionSchedulingOptions _schedulingOptions;
 		private IAgentRestrictionsDetailEffectiveRestrictionExtractor _effectiveRestrictionExtractor;
 		private IPreferenceNightRestChecker _preferenceNightRestChecker;
@@ -30,7 +28,6 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.AgentRestrictions
 			_model = new AgentRestrictionsDetailModel(_period);
 			_mocks = new MockRepository();
 			_scheduleMatrixPro = _mocks.StrictMock<IScheduleMatrixPro>();
-			_restrictionExtractor = _mocks.StrictMock<IRestrictionExtractor>();
 			_schedulingOptions = new RestrictionSchedulingOptions {UseScheduling = true};
 			_effectiveRestrictionExtractor = _mocks.StrictMock<IAgentRestrictionsDetailEffectiveRestrictionExtractor>();
 			_preferenceNightRestChecker = _mocks.StrictMock<IPreferenceNightRestChecker>();
@@ -54,7 +51,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.AgentRestrictions
 
 			using(_mocks.Playback())
 			{
-				_model.LoadDetails(_scheduleMatrixPro, _restrictionExtractor, _schedulingOptions, _effectiveRestrictionExtractor, TimeSpan.FromHours(40), _preferenceNightRestChecker);
+				_model.LoadDetails(_scheduleMatrixPro, _schedulingOptions, _effectiveRestrictionExtractor, TimeSpan.FromHours(40), _preferenceNightRestChecker);
 			}
 
 			Assert.AreEqual(2, _model.DetailData().Count);

@@ -22,9 +22,9 @@ namespace Teleopti.Ccc.Domain.Scheduling.Restrictions
 
             foreach (var scheduleDay in scheduleDays)
             {
-	            _restrictionExtractor.Extract(scheduleDay);
+	            var result = _restrictionExtractor.Extract(scheduleDay);
 
-	            if (_restrictionExtractor.RotationList.Any(
+	            if (result.RotationList.Any(
 					rotRestriction => rotRestriction.StartTimeLimitation.HasValue() 
 					|| rotRestriction.EndTimeLimitation.HasValue() 
 					|| rotRestriction.WorkTimeLimitation.HasValue() 
@@ -48,9 +48,9 @@ namespace Teleopti.Ccc.Domain.Scheduling.Restrictions
 
             foreach (var scheduleDay in scheduleDays)
             {
-                _restrictionExtractor.Extract(scheduleDay);
+                var result = _restrictionExtractor.Extract(scheduleDay);
 
-                foreach (var restriction in _restrictionExtractor.RotationList)
+                foreach (var restriction in result.RotationList)
                 {
                     if(restriction.DayOffTemplate != null && !restrictedDays.Contains(scheduleDay))
                         restrictedDays.Add(scheduleDay);
@@ -70,9 +70,9 @@ namespace Teleopti.Ccc.Domain.Scheduling.Restrictions
 
             foreach (var scheduleDay in scheduleDays)
             {
-                _restrictionExtractor.Extract(scheduleDay);
+                var result = _restrictionExtractor.Extract(scheduleDay);
 
-                foreach (var restriction in _restrictionExtractor.RotationList)
+                foreach (var restriction in result.RotationList)
                 {
                     if(restriction.ShiftCategory != null && !restrictedDays.Contains(scheduleDay))
                         restrictedDays.Add(scheduleDay);

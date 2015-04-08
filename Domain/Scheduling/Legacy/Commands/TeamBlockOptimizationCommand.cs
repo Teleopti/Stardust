@@ -26,7 +26,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 		private readonly ILockableBitArrayChangesTracker _lockableBitArrayChangesTracker;
 		private readonly ILockableBitArrayFactory _lockableBitArrayFactory;
 		private readonly IMatrixListFactory _matrixListFactory;
-		private readonly IRestrictionExtractor _restrictionExtractor;
 		private readonly ISafeRollbackAndResourceCalculation _safeRollbackAndResourceCalculation;
 		private readonly IScheduleResultDataExtractorProvider _scheduleResultDataExtractorProvider;
 		private readonly ISchedulerStateHolder _schedulerStateHolder;
@@ -68,7 +67,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 			ITeamBlockSteadyStateValidator teamBlockSteadyStateValidator,
 			ITeamBlockMaxSeatChecker teamBlockMaxSeatChecker,
 			ITeamBlockIntradayDecisionMaker teamBlockIntradayDecisionMaker,
-			IRestrictionExtractor restrictionExtractor,
 			IMatrixListFactory matrixListFactory,
 			ITeamBlockSchedulingOptions teamBlockScheudlingOptions,
 			IDailyTargetValueCalculatorForTeamBlock dailyTargetValueCalculatorForTeamBlock,
@@ -99,7 +97,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 			_teamBlockSteadyStateValidator = teamBlockSteadyStateValidator;
 			_teamBlockMaxSeatChecker = teamBlockMaxSeatChecker;
 			_teamBlockIntradayDecisionMaker = teamBlockIntradayDecisionMaker;
-			_restrictionExtractor = restrictionExtractor;
 			_matrixListFactory = matrixListFactory;
 			_teamBlockScheudlingOptions = teamBlockScheudlingOptions;
 			_dailyTargetValueCalculatorForTeamBlock = dailyTargetValueCalculatorForTeamBlock;
@@ -156,8 +153,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 				var rollbackServiceWithoutResourceCalculation =
 					new SchedulePartModifyAndRollbackService(_schedulerStateHolder.SchedulingResultState,
 						new DoNothingScheduleDayChangeCallBack(), tagSetter);
-				_optimizerHelper.LockDaysForDayOffOptimization(allMatrixes, _restrictionExtractor,
-					optimizationPreferences, selectedPeriod);
+				_optimizerHelper.LockDaysForDayOffOptimization(allMatrixes, optimizationPreferences, selectedPeriod);
 
 				_equalNumberOfCategoryFairness.ReportProgress += resourceOptimizerPersonOptimized;
 				_equalNumberOfCategoryFairness.Execute(allMatrixes, selectedPeriod, selectedPersons, schedulingOptions,
@@ -232,8 +228,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 			IResourceCalculateDelayer resourceCalculateDelayer)
 		{
 
-			_optimizerHelper.LockDaysForDayOffOptimization(allMatrixes, _restrictionExtractor,
-				optimizationPreferences, selectedPeriod);
+			_optimizerHelper.LockDaysForDayOffOptimization(allMatrixes, optimizationPreferences, selectedPeriod);
 
 			ISmartDayOffBackToLegalStateService dayOffBackToLegalStateService
 				= new SmartDayOffBackToLegalStateService(

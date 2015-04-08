@@ -22,12 +22,14 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Restrictions
         private IPersonPeriod _personPeriod;
         private IPersonContract _personContract;
         private IContract _contract;
+	    private IExtractedRestrictionResult _extractedRestrictionResult;
 
-        [SetUp]
+	    [SetUp]
         public void Setup()
         {
             _mock = new MockRepository();
             _restrictionExtractor = _mock.StrictMock<IRestrictionExtractor>();
+	        _extractedRestrictionResult = _mock.StrictMock<IExtractedRestrictionResult>();
             _target = new ScheduleDayStudentAvailabilityRestrictionExtractor(_restrictionExtractor);
             _scheduleDay = _mock.StrictMock<IScheduleDay>();
             _scheduleDays = new List<IScheduleDay>{_scheduleDay};
@@ -46,8 +48,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Restrictions
         {
             using(_mock.Record())
             {
-                Expect.Call(() => _restrictionExtractor.Extract(_scheduleDay));
-                Expect.Call(_restrictionExtractor.StudentAvailabilityList).Return(new List<IStudentAvailabilityDay>());
+                Expect.Call(_restrictionExtractor.Extract(_scheduleDay)).Return(_extractedRestrictionResult);
+                Expect.Call(_extractedRestrictionResult.StudentAvailabilityList).Return(new List<IStudentAvailabilityDay>());
                 Expect.Call(_scheduleDay.Person).Return(_person);
                 Expect.Call(_scheduleDay.DateOnlyAsPeriod).Return(_dateOnlyAsDateTimePeriod);
                 Expect.Call(_dateOnlyAsDateTimePeriod.DateOnly).Return(new DateOnly());
@@ -69,8 +71,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Restrictions
         {
             using (_mock.Record())
             {
-                Expect.Call(() => _restrictionExtractor.Extract(_scheduleDay));
-                Expect.Call(_restrictionExtractor.StudentAvailabilityList).Return(new List<IStudentAvailabilityDay>());
+                Expect.Call(_restrictionExtractor.Extract(_scheduleDay)).Return(_extractedRestrictionResult);
+                Expect.Call(_extractedRestrictionResult.StudentAvailabilityList).Return(new List<IStudentAvailabilityDay>());
                 Expect.Call(_scheduleDay.Person).Return(_person);
                 Expect.Call(_scheduleDay.DateOnlyAsPeriod).Return(_dateOnlyAsDateTimePeriod);
                 Expect.Call(_dateOnlyAsDateTimePeriod.DateOnly).Return(new DateOnly());
@@ -89,8 +91,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Restrictions
         {
             using(_mock.Record())
             {
-                Expect.Call(() => _restrictionExtractor.Extract(_scheduleDay));
-                Expect.Call(_restrictionExtractor.StudentAvailabilityList).Return(_studentAvailabilityDays);
+                Expect.Call(_restrictionExtractor.Extract(_scheduleDay)).Return(_extractedRestrictionResult);
+                Expect.Call(_extractedRestrictionResult.StudentAvailabilityList).Return(_studentAvailabilityDays);
             }
 
             using(_mock.Playback())

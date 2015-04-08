@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 using System.Web.Http;
 using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.Common;
@@ -39,7 +38,6 @@ using Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftFilters;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.Infrastructure.Toggle;
-using Teleopti.Ccc.IocCommon.Toggle;
 using Teleopti.Ccc.Secrets.WorkShiftCalculator;
 using Teleopti.Ccc.Secrets.WorkShiftPeriodValueCalculator;
 using Teleopti.Interfaces.Domain;
@@ -60,8 +58,10 @@ namespace Teleopti.Ccc.Web.Areas.ResourcePlanner
 		private readonly ICurrentTeleoptiPrincipal _principal;
 		private readonly IDisableDeletedFilter _disableDeletedFilter;
 		private readonly ICurrentUnitOfWorkFactory _currentUnitOfWorkFactory;
+		private readonly IToggleManager _toggleManager;
+		private readonly IRestrictionExtractor _restrictionExtractor;
 
-		public ScheduleController(IScenarioRepository scenarioRepository, ISkillDayLoadHelper skillDayLoadHelper, ISkillRepository skillRepository, IPersonRepository personRepository, IScheduleRepository scheduleRepository, IDayOffTemplateRepository dayOffTemplateRepository, IPersonAbsenceAccountRepository personAbsenceAccountRepository, IPeopleAndSkillLoaderDecider decider, ICurrentTeleoptiPrincipal principal, IDisableDeletedFilter disableDeletedFilter, ICurrentUnitOfWorkFactory currentUnitOfWorkFactory)
+		public ScheduleController(IScenarioRepository scenarioRepository, ISkillDayLoadHelper skillDayLoadHelper, ISkillRepository skillRepository, IPersonRepository personRepository, IScheduleRepository scheduleRepository, IDayOffTemplateRepository dayOffTemplateRepository, IPersonAbsenceAccountRepository personAbsenceAccountRepository, IPeopleAndSkillLoaderDecider decider, ICurrentTeleoptiPrincipal principal, IDisableDeletedFilter disableDeletedFilter, ICurrentUnitOfWorkFactory currentUnitOfWorkFactory, IToggleManager toggleManager, IRestrictionExtractor restrictionExtractor)
 		{
 			_scenarioRepository = scenarioRepository;
 			_skillDayLoadHelper = skillDayLoadHelper;
@@ -74,6 +74,8 @@ namespace Teleopti.Ccc.Web.Areas.ResourcePlanner
 			_principal = principal;
 			_disableDeletedFilter = disableDeletedFilter;
 			_currentUnitOfWorkFactory = currentUnitOfWorkFactory;
+			_toggleManager = toggleManager;
+			_restrictionExtractor = restrictionExtractor;
 		}
 
 		[HttpPost, Route("api/ResourcePlanner/Schedule/FixedStaff"), Authorize, UnitOfWork]
@@ -103,8 +105,7 @@ namespace Teleopti.Ccc.Web.Areas.ResourcePlanner
 
 			var stateHolder = new SchedulingResultStateHolder(allPeople,_scheduleRepository.FindSchedulesForPersons(new ScheduleDateTimePeriod(dateTimePeriod,selectedPeople,new SchedulerRangeToLoadCalculator(dateTimePeriod)), scenario,new PersonsInOrganizationProvider(allPeople), new ScheduleDictionaryLoadOptions(true,false,false), selectedPeople), forecast);
 			var personSkillProvider = new PersonSkillProvider();
-			var restrictionExtractor = new RestrictionExtractor(stateHolder);
-			var effectiveRestrictionCreator = new EffectiveRestrictionCreator(restrictionExtractor);
+			var effectiveRestrictionCreator = new EffectiveRestrictionCreator(_restrictionExtractor);
 			var resourceCalculationOnlyScheduleDayChangeCallback = new ResourceCalculationOnlyScheduleDayChangeCallback();
 			var scheduleTagSetter = new ScheduleTagSetter(NullScheduleTag.Instance);
 			var schedulePartModifyAndRollbackService = new SchedulePartModifyAndRollbackService(stateHolder, resourceCalculationOnlyScheduleDayChangeCallback,
@@ -114,11 +115,8 @@ namespace Teleopti.Ccc.Web.Areas.ResourcePlanner
 			var hasContractDayOffDefinition = new HasContractDayOffDefinition();
 			var resourceOptimizationHelper = new ResourceOptimizationHelper(stateHolder,new OccupiedSeatCalculator(), new NonBlendSkillCalculator(), personSkillProvider, new PeriodDistributionService(), _principal, new IntraIntervalFinderService(new SkillDayIntraIntervalFinder(new IntraIntervalFinder(), new SkillActivityCountCollector(new SkillActivityCounter()), new FullIntervalFinder())));
 			var shiftCreatorService = new ShiftCreatorService(new CreateWorkShiftsFromTemplate());
-			var workShiftWorkTime = new WorkShiftWorkTime(
-				new RuleSetProjectionService(shiftCreatorService));
-			var workShiftMinMaxCalculator = new WorkShiftMinMaxCalculator(
-				new PossibleMinMaxWorkShiftLengthExtractor(restrictionExtractor,
-					workShiftWorkTime),
+			var workShiftWorkTime = new WorkShiftWorkTime(new RuleSetProjectionService(shiftCreatorService));
+			var workShiftMinMaxCalculator = new WorkShiftMinMaxCalculator(new PossibleMinMaxWorkShiftLengthExtractor(_restrictionExtractor, workShiftWorkTime),
 				new SchedulePeriodTargetTimeCalculator(), new WorkShiftWeekMinMaxCalculator());
 			var groupPagePerDateHolder = new GroupPagePerDateHolder();
 			var ruleSetProjectionEntityService = new RuleSetProjectionEntityService(shiftCreatorService);
@@ -301,8 +299,8 @@ namespace Teleopti.Ccc.Web.Areas.ResourcePlanner
 							dayOffMaxFlexCalculator), contractWeeklyRestForPersonWeek)),
 				schedulerStateHolder,
 				groupPersonBuilderForOptimizationFactory,
-				new ScheduleCommandToggle(new TrueToggleManager()));
-			var innerOptimizerHelperHelper = new InnerOptimizerHelperHelper();
+				new ScheduleCommandToggle(_toggleManager));
+			var innerOptimizerHelperHelper = new InnerOptimizerHelperHelper(_restrictionExtractor);
 			var teamMatrixChecker = new TeamMatrixChecker();
 			var matrixDataListCreator = new MatrixDataListCreator(scheduleDayDataMapper);
 			var command = new ScheduleCommand(personSkillProvider, groupPageCreator,

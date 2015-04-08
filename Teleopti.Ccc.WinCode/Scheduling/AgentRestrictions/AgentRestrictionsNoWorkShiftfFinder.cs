@@ -28,8 +28,8 @@ namespace Teleopti.Ccc.WinCode.Scheduling.AgentRestrictions
 			var ruleSetBag = personPeriod.RuleSetBag;
 			if (ruleSetBag == null) return true;
 
-			_restrictionExtractor.Extract(scheduleDay);
-			var effectiveRestriction = _restrictionExtractor.CombinedRestriction(schedulingOptions);
+			var result = _restrictionExtractor.Extract(scheduleDay);
+			var effectiveRestriction = result.CombinedRestriction(schedulingOptions);
 			if (effectiveRestriction == null)
 				return true;
 

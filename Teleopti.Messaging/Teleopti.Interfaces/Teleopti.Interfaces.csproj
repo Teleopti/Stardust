@@ -144,6 +144,7 @@
     <Compile Include="Domain\IAgentBadgeWithRankTransaction.cs" />
     <Compile Include="Domain\IAgentBadgeWithRankTransactionRepository.cs" />
     <Compile Include="Domain\IAgentBadgeWithRankRepository.cs" />
+    <Compile Include="Domain\IExtractedRestrictionResult.cs" />
     <Compile Include="Domain\IForecastingTarget.cs" />
     <Compile Include="Domain\IGamificationSetting.cs" />
     <Compile Include="Domain\INotificationClient.cs" />
@@ -151,6 +152,7 @@
     <Compile Include="Domain\INotificationMessage.cs" />
     <Compile Include="Domain\INotificationSender.cs" />
     <Compile Include="Domain\IQueueStatsModel.cs" />
+    <Compile Include="Domain\IRestrictionExtractor.cs" />
     <Compile Include="Domain\ISeat.cs" />
     <Compile Include="Domain\ISeatBooking.cs" />
     <Compile Include="Domain\ISeatMapLocation.cs" />
@@ -344,7 +346,6 @@
     <Compile Include="Domain\IScheduleTagSetter.cs" />
     <Compile Include="Domain\IPersonSkillPeriodsDataHolderManager.cs" />
     <Compile Include="Domain\IDayOffLegalStateValidator.cs" />
-    <Compile Include="Domain\IRestrictionExtractor.cs" />
     <Compile Include="Domain\IRuleSetProjectionEntityService.cs" />
     <Compile Include="Domain\ISchedulePeriodShiftCategoryBackToLegalStateServiceBuilder.cs" />
     <Compile Include="Domain\ISchedulePartExtractor.cs" />

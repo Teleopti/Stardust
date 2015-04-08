@@ -1,10 +1,12 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Linq;
 using NUnit.Framework;
 using Rhino.Mocks;
 using Teleopti.Ccc.Domain.DayOffPlanning;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling;
+using Teleopti.Ccc.Domain.Scheduling.Restrictions;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.DomainTest.DayOffPlanning
@@ -19,25 +21,23 @@ namespace Teleopti.Ccc.DomainTest.DayOffPlanning
         private IScheduleMatrixPro _matrix;
         private DateOnly _dayToCheck;
         private IScheduleDay _schedulePart;
-        private IRotationRestriction _rotationRestriction;
-        private IAvailabilityRestriction _availabilityRestriction;
-        private IPreferenceRestriction _preferenceRestriction;
 
         [SetUp]
         public void Setup()
         {
             _mocks = new MockRepository();
             _mocks.StrictMock<ISchedulingResultStateHolder>();
-            _schedulingOptions = new SchedulingOptions();
-            _schedulingOptions.UseAvailability = false;
-            _schedulingOptions.UseRotations = false;
-            _schedulingOptions.UseAvailability = false;
-            _schedulingOptions.UseStudentAvailability = false;
-            _schedulingOptions.UsePreferencesMustHaveOnly = false;
-            _schedulingOptions.UsePreferences = false;
-			_extractor = _mocks.StrictMock<IRestrictionExtractor>();
+            _schedulingOptions = new SchedulingOptions
+            {
+	            UseAvailability = false,
+	            UseRotations = false,
+	            UseStudentAvailability = false,
+	            UsePreferencesMustHaveOnly = false,
+	            UsePreferences = false
+            };
+	        _extractor = _mocks.StrictMock<IRestrictionExtractor>();
 			_matrix = _mocks.StrictMock<IScheduleMatrixPro>();
-            _target = new MatrixRestrictionLocker(_schedulingOptions, _extractor);
+            _target = new MatrixRestrictionLocker(_extractor);
             _dayToCheck = new DateOnly(2010, 1, 1);
 			_schedulePart = _mocks.StrictMock<IScheduleDay>();
         }
@@ -45,71 +45,91 @@ namespace Teleopti.Ccc.DomainTest.DayOffPlanning
         [Test]
         public void VerifyGetLockedIfRotationRestrictionIsDayOffAndDayOffIsScheduled()
         {
+			var rotationRestriction = _mocks.StrictMock<IRotationRestriction>();
             using(_mocks.Record())
             {
-                mockExpectationsForAll();
-                rotationExpectationsForAll();
-                Expect.Call(_rotationRestriction.DayOffTemplate).Return(new DayOffTemplate(new Description("hej"))).Repeat.Once();
+				mockExpectationsForAll(new ExtractedRestrictionResult(new RestrictionCombiner(), new List<IRotationRestriction> { rotationRestriction },
+						Enumerable.Empty<IAvailabilityRestriction>(), Enumerable.Empty<IPreferenceRestriction>(),
+						Enumerable.Empty<IStudentAvailabilityDay>()));
+				
+				Expect.Call(rotationRestriction.IsRestriction()).Return(true).Repeat.Once();
+                Expect.Call(rotationRestriction.DayOffTemplate).Return(new DayOffTemplate(new Description("hej"))).Repeat.Once();
                 Expect.Call(_schedulePart.SignificantPart()).Return(SchedulePartView.DayOff).Repeat.Once();
             }
             IList<DateOnly> result;
             using (_mocks.Playback())
-            {
-                result = _target.Execute(_matrix);
+			{
+				_schedulingOptions.UseRotations = true;
+                result = _target.Execute(_matrix,_schedulingOptions);
             }
             Assert.AreEqual(_dayToCheck, result[0]);
         }
 
         [Test]
         public void VerifyNotGetLockedIfRotationRestrictionIsDayOffAndShiftIsScheduled()
-        {
+		{
+			var rotationRestriction = _mocks.StrictMock<IRotationRestriction>();
             using (_mocks.Record())
             {
-                mockExpectationsForAll();
-                rotationExpectationsForAll();
-                Expect.Call(_rotationRestriction.DayOffTemplate).Return(new DayOffTemplate(new Description("hej"))).Repeat.Once();
+				mockExpectationsForAll(new ExtractedRestrictionResult(new RestrictionCombiner(), new List<IRotationRestriction> { rotationRestriction },
+						Enumerable.Empty<IAvailabilityRestriction>(), Enumerable.Empty<IPreferenceRestriction>(),
+						Enumerable.Empty<IStudentAvailabilityDay>()));
+
+				Expect.Call(rotationRestriction.IsRestriction()).Return(true).Repeat.Once();
+                Expect.Call(rotationRestriction.DayOffTemplate).Return(new DayOffTemplate(new Description("hej"))).Repeat.Once();
                 Expect.Call(_schedulePart.SignificantPart()).Return(SchedulePartView.MainShift).Repeat.Once();
             }
             IList<DateOnly> result;
             using (_mocks.Playback())
             {
-                result = _target.Execute(_matrix);
+				_schedulingOptions.UseRotations = true;
+                result = _target.Execute(_matrix,_schedulingOptions);
             }
             Assert.AreEqual(0, result.Count);
         }
 
         [Test]
         public void VerifyNotLockedIfRotationRestrictionIsShiftAndScheduledWithDayOff()
-        {
+		{
+			var rotationRestriction = _mocks.StrictMock<IRotationRestriction>();
             using (_mocks.Record())
             {
-                mockExpectationsForAll();
-                rotationExpectationsForAll();
-                Expect.Call(_rotationRestriction.DayOffTemplate).Return(null).Repeat.Once();
+				mockExpectationsForAll(new ExtractedRestrictionResult(new RestrictionCombiner(), new List<IRotationRestriction> { rotationRestriction },
+						Enumerable.Empty<IAvailabilityRestriction>(), Enumerable.Empty<IPreferenceRestriction>(),
+						Enumerable.Empty<IStudentAvailabilityDay>()));
+
+				Expect.Call(rotationRestriction.IsRestriction()).Return(true).Repeat.Once();
+                Expect.Call(rotationRestriction.DayOffTemplate).Return(null).Repeat.Once();
                 Expect.Call(_schedulePart.SignificantPart()).Return(SchedulePartView.DayOff).Repeat.Once();
             }
             IList<DateOnly> result;
             using (_mocks.Playback())
-            {
-                result = _target.Execute(_matrix);
+			{
+				_schedulingOptions.UseRotations = true;
+                result = _target.Execute(_matrix,_schedulingOptions);
             }
             Assert.AreEqual(0, result.Count);
         }
 
         [Test]
         public void VerifyGetLockedIfRotationRestrictionIsShiftAndScheduledWithShift()
-        {
+		{
+			var rotationRestriction = _mocks.StrictMock<IRotationRestriction>();
             using (_mocks.Record())
             {
-                mockExpectationsForAll();
-                rotationExpectationsForAll();
-                Expect.Call(_rotationRestriction.DayOffTemplate).Return(null).Repeat.Once();
+				mockExpectationsForAll(new ExtractedRestrictionResult(new RestrictionCombiner(), new List<IRotationRestriction> { rotationRestriction },
+						Enumerable.Empty<IAvailabilityRestriction>(), Enumerable.Empty<IPreferenceRestriction>(),
+						Enumerable.Empty<IStudentAvailabilityDay>()));
+
+				Expect.Call(rotationRestriction.IsRestriction()).Return(true).Repeat.Once();
+                Expect.Call(rotationRestriction.DayOffTemplate).Return(null).Repeat.Once();
                 Expect.Call(_schedulePart.SignificantPart()).Return(SchedulePartView.MainShift).Repeat.Once();
             }
             IList<DateOnly> result;
             using (_mocks.Playback())
-            {
-                result = _target.Execute(_matrix);
+			{
+				_schedulingOptions.UseRotations = true;
+                result = _target.Execute(_matrix, _schedulingOptions);
             }
             Assert.AreEqual(_dayToCheck, result[0]);
         }
@@ -117,53 +137,68 @@ namespace Teleopti.Ccc.DomainTest.DayOffPlanning
         [Test]
         public void VerifyGetLockedIfAvailabilityRestrictionIsDayOffAndDayOffIsScheduled()
         {
-            using (_mocks.Record())
+			var availabilityRestriction = _mocks.StrictMock<IAvailabilityRestriction>();
+			using (_mocks.Record())
             {
-                mockExpectationsForAll();
-                availabilityExpectationsForAll();
-                Expect.Call(_availabilityRestriction.NotAvailable).Return(true).Repeat.Any();
+				mockExpectationsForAll(new ExtractedRestrictionResult(new RestrictionCombiner(), Enumerable.Empty<IRotationRestriction>(),
+						new List<IAvailabilityRestriction> { availabilityRestriction }, Enumerable.Empty<IPreferenceRestriction>(),
+						Enumerable.Empty<IStudentAvailabilityDay>()));
+				
+				Expect.Call(availabilityRestriction.IsRestriction()).Return(true).Repeat.Once();
+				Expect.Call(availabilityRestriction.NotAvailable).Return(true).Repeat.Any();
                 Expect.Call(_schedulePart.SignificantPart()).Return(SchedulePartView.DayOff).Repeat.Any();
             }
             IList<DateOnly> result;
             using (_mocks.Playback())
             {
-                result = _target.Execute(_matrix);
+				_schedulingOptions.UseAvailability = true;
+				result = _target.Execute(_matrix, _schedulingOptions);
             }
             Assert.AreEqual(_dayToCheck, result[0]);
         }
 
         [Test]
         public void VerifyNotGetLockedIfAvailabilityRestrictionIsDayOffAndShiftIsScheduled()
-        {
-            using (_mocks.Record())
-            {
-                mockExpectationsForAll();
-                availabilityExpectationsForAll();
-                Expect.Call(_availabilityRestriction.NotAvailable).Return(true).Repeat.Any();
+		{
+			var availabilityRestriction = _mocks.StrictMock<IAvailabilityRestriction>();
+			using (_mocks.Record())
+			{
+				mockExpectationsForAll(new ExtractedRestrictionResult(new RestrictionCombiner(), Enumerable.Empty<IRotationRestriction>(),
+						new List<IAvailabilityRestriction> { availabilityRestriction }, Enumerable.Empty<IPreferenceRestriction>(),
+						Enumerable.Empty<IStudentAvailabilityDay>()));
+
+				Expect.Call(availabilityRestriction.IsRestriction()).Return(true).Repeat.Once();
+                Expect.Call(availabilityRestriction.NotAvailable).Return(true).Repeat.Any();
                 Expect.Call(_schedulePart.SignificantPart()).Return(SchedulePartView.MainShift).Repeat.Any();
             }
             IList<DateOnly> result;
             using (_mocks.Playback())
             {
-                result = _target.Execute(_matrix);
+				_schedulingOptions.UseAvailability = true;
+				result = _target.Execute(_matrix, _schedulingOptions);
             }
             Assert.AreEqual(0, result.Count);
         }
 
         [Test]
         public void VerifyNotLockedIfAvailabilityRestrictionIsShiftAndScheduledWithDayOff()
-        {
-            using (_mocks.Record())
-            {
-                mockExpectationsForAll();
-                availabilityExpectationsForAll();
-                Expect.Call(_availabilityRestriction.NotAvailable).Return(false).Repeat.Any();
+		{
+			var availabilityRestriction = _mocks.StrictMock<IAvailabilityRestriction>();
+			using (_mocks.Record())
+			{
+				mockExpectationsForAll(new ExtractedRestrictionResult(new RestrictionCombiner(), Enumerable.Empty<IRotationRestriction>(),
+						new List<IAvailabilityRestriction> { availabilityRestriction }, Enumerable.Empty<IPreferenceRestriction>(),
+						Enumerable.Empty<IStudentAvailabilityDay>()));
+
+				Expect.Call(availabilityRestriction.IsRestriction()).Return(true).Repeat.Once();
+                Expect.Call(availabilityRestriction.NotAvailable).Return(false).Repeat.Any();
                 Expect.Call(_schedulePart.SignificantPart()).Return(SchedulePartView.DayOff).Repeat.Any();
             }
             IList<DateOnly> result;
             using (_mocks.Playback())
             {
-                result = _target.Execute(_matrix);
+				_schedulingOptions.UseAvailability = true;
+				result = _target.Execute(_matrix, _schedulingOptions);
             }
             Assert.AreEqual(0, result.Count);
         }
@@ -171,17 +206,23 @@ namespace Teleopti.Ccc.DomainTest.DayOffPlanning
         [Test]
         public void VerifyGetLockedIfPreferenceIsDayOffAndScheduledWithDayOff()
         {
-            using (_mocks.Record())
+			var preferenceRestriction = _mocks.StrictMock<IPreferenceRestriction>();
+			using (_mocks.Record())
             {
-                mockExpectationsForAll();
-                preferenceExpectationsForAll();
-                Expect.Call(_preferenceRestriction.DayOffTemplate).Return(new DayOffTemplate(new Description("hej"))).Repeat.Any();
+				mockExpectationsForAll(new ExtractedRestrictionResult(new RestrictionCombiner(), Enumerable.Empty<IRotationRestriction>(),
+						Enumerable.Empty<IAvailabilityRestriction>(), new List<IPreferenceRestriction> { preferenceRestriction },
+						Enumerable.Empty<IStudentAvailabilityDay>()));
+
+				Expect.Call(preferenceRestriction.IsRestriction()).Return(true).Repeat.Any();
+				Expect.Call(preferenceRestriction.MustHave).Return(false).Repeat.Any();
+                Expect.Call(preferenceRestriction.DayOffTemplate).Return(new DayOffTemplate(new Description("hej"))).Repeat.Any();
                 Expect.Call(_schedulePart.SignificantPart()).Return(SchedulePartView.DayOff).Repeat.Any();
             }
             IList<DateOnly> result;
             using (_mocks.Playback())
-            {
-                result = _target.Execute(_matrix);
+			{
+				_schedulingOptions.UsePreferences = true;
+                result = _target.Execute(_matrix, _schedulingOptions);
             }
             Assert.AreEqual(_dayToCheck, result[0]);
         }
@@ -189,71 +230,95 @@ namespace Teleopti.Ccc.DomainTest.DayOffPlanning
 		[Test]
 		public void VerifyGetLockedIfPreferenceIsDayOffAndScheduledWithVacationOnContractDayOff()
 		{
+			var preferenceRestriction = _mocks.StrictMock<IPreferenceRestriction>();
 			using (_mocks.Record())
 			{
-				mockExpectationsForAll();
-				preferenceExpectationsForAll();
-				Expect.Call(_preferenceRestriction.DayOffTemplate).Return(new DayOffTemplate(new Description("hej"))).Repeat.Any();
+				mockExpectationsForAll(new ExtractedRestrictionResult(new RestrictionCombiner(), Enumerable.Empty<IRotationRestriction>(),
+						Enumerable.Empty<IAvailabilityRestriction>(), new List<IPreferenceRestriction> { preferenceRestriction },
+						Enumerable.Empty<IStudentAvailabilityDay>()));
+
+				Expect.Call(preferenceRestriction.IsRestriction()).Return(true).Repeat.Any();
+				Expect.Call(preferenceRestriction.MustHave).Return(false).Repeat.Any();
+				Expect.Call(preferenceRestriction.DayOffTemplate).Return(new DayOffTemplate(new Description("hej"))).Repeat.Any();
 				Expect.Call(_schedulePart.SignificantPart()).Return(SchedulePartView.ContractDayOff).Repeat.Any();
 			}
 			IList<DateOnly> result;
 			using (_mocks.Playback())
 			{
-				result = _target.Execute(_matrix);
+				_schedulingOptions.UsePreferences = true;
+				result = _target.Execute(_matrix, _schedulingOptions);
 			}
 			Assert.AreEqual(_dayToCheck, result[0]);
 		}
 
         [Test]
         public void VerifyNotGetLockedIfPreferenceIsDayOffAndScheduledWithShift()
-        {
-            using (_mocks.Record())
-            {
-                mockExpectationsForAll();
-                preferenceExpectationsForAll();
-                Expect.Call(_preferenceRestriction.DayOffTemplate).Return(new DayOffTemplate(new Description("hej"))).Repeat.Any();
+		{
+			var preferenceRestriction = _mocks.StrictMock<IPreferenceRestriction>();
+			using (_mocks.Record())
+			{
+				mockExpectationsForAll(new ExtractedRestrictionResult(new RestrictionCombiner(), Enumerable.Empty<IRotationRestriction>(),
+						Enumerable.Empty<IAvailabilityRestriction>(), new List<IPreferenceRestriction> { preferenceRestriction },
+						Enumerable.Empty<IStudentAvailabilityDay>()));
+
+				Expect.Call(preferenceRestriction.IsRestriction()).Return(true).Repeat.Any();
+				Expect.Call(preferenceRestriction.MustHave).Return(false).Repeat.Any();
+                Expect.Call(preferenceRestriction.DayOffTemplate).Return(new DayOffTemplate(new Description("hej"))).Repeat.Any();
                 Expect.Call(_schedulePart.SignificantPart()).Return(SchedulePartView.MainShift).Repeat.Any();
             }
             IList<DateOnly> result;
             using (_mocks.Playback())
-            {
-                result = _target.Execute(_matrix);
+			{
+				_schedulingOptions.UsePreferences = true;
+                result = _target.Execute(_matrix, _schedulingOptions);
             }
             Assert.AreEqual(0, result.Count);
         }
 
         [Test]
         public void VerifyGetLockedIfPreferenceIsShiftAndScheduledWithShift()
-        {
-            using (_mocks.Record())
-            {
-                mockExpectationsForAll();
-                preferenceExpectationsForAll();
-                Expect.Call(_preferenceRestriction.DayOffTemplate).Return(null).Repeat.Any();
+		{
+			var preferenceRestriction = _mocks.StrictMock<IPreferenceRestriction>();
+			using (_mocks.Record())
+			{
+				mockExpectationsForAll(new ExtractedRestrictionResult(new RestrictionCombiner(), Enumerable.Empty<IRotationRestriction>(),
+						Enumerable.Empty<IAvailabilityRestriction>(), new List<IPreferenceRestriction> { preferenceRestriction },
+						Enumerable.Empty<IStudentAvailabilityDay>()));
+
+				Expect.Call(preferenceRestriction.IsRestriction()).Return(true).Repeat.Any();
+				Expect.Call(preferenceRestriction.MustHave).Return(false).Repeat.Any();
+                Expect.Call(preferenceRestriction.DayOffTemplate).Return(null).Repeat.Any();
                 Expect.Call(_schedulePart.SignificantPart()).Return(SchedulePartView.MainShift).Repeat.Any();
             }
             IList<DateOnly> result;
             using (_mocks.Playback())
-            {
-                result = _target.Execute(_matrix);
+			{
+				_schedulingOptions.UsePreferences = true;
+                result = _target.Execute(_matrix, _schedulingOptions);
             }
             Assert.AreEqual(_dayToCheck, result[0]);
         }
 
         [Test]
         public void VerifyNotGetLockedIfPreferenceIsShiftAndScheduledWithDayOff()
-        {
-            using (_mocks.Record())
-            {
-                mockExpectationsForAll();
-                preferenceExpectationsForAll();
-                Expect.Call(_preferenceRestriction.DayOffTemplate).Return(null).Repeat.Any();
+		{
+			var preferenceRestriction = _mocks.StrictMock<IPreferenceRestriction>();
+			using (_mocks.Record())
+			{
+				mockExpectationsForAll(new ExtractedRestrictionResult(new RestrictionCombiner(), Enumerable.Empty<IRotationRestriction>(),
+						Enumerable.Empty<IAvailabilityRestriction>(), new List<IPreferenceRestriction> { preferenceRestriction },
+						Enumerable.Empty<IStudentAvailabilityDay>()));
+
+				Expect.Call(preferenceRestriction.IsRestriction()).Return(true).Repeat.Any();
+				Expect.Call(preferenceRestriction.MustHave).Return(false).Repeat.Any();
+                Expect.Call(preferenceRestriction.DayOffTemplate).Return(null).Repeat.Any();
                 Expect.Call(_schedulePart.SignificantPart()).Return(SchedulePartView.DayOff).Repeat.Any();
             }
             IList<DateOnly> result;
             using (_mocks.Playback())
-            {
-                result = _target.Execute(_matrix);
+			{
+				_schedulingOptions.UsePreferences = true;
+                result = _target.Execute(_matrix,_schedulingOptions);
             }
             Assert.AreEqual(0, result.Count);
         }
@@ -277,7 +342,7 @@ namespace Teleopti.Ccc.DomainTest.DayOffPlanning
             IAvailabilityRestriction available = _mocks.StrictMock<IAvailabilityRestriction>();
 
             _schedulingOptions.UseAvailability = true;
-            _target = new MatrixRestrictionLocker(_schedulingOptions, _extractor);
+            _target = new MatrixRestrictionLocker(_extractor);
 
             DateOnly expectedDateOnly = new DateOnly(2001, 01, 01);
 
@@ -286,34 +351,31 @@ namespace Teleopti.Ccc.DomainTest.DayOffPlanning
                 Expect.Call(_matrix.UnlockedDays)
                     .Return(new ReadOnlyCollection<IScheduleDayPro>(new List<IScheduleDayPro> { day1, day2, day3, day4 }));
 
-                Expect.Call(day1.DaySchedulePart())
-                    .Return(dayOff);
-                Expect.Call(day2.DaySchedulePart())
-                    .Return(dayOff);
-                Expect.Call(day3.DaySchedulePart())
-                    .Return(mainShift);
-                Expect.Call(day4.DaySchedulePart())
-                    .Return(mainShift);
+                Expect.Call(day1.DaySchedulePart()).Return(dayOff);
+                Expect.Call(day2.DaySchedulePart()).Return(dayOff);
+                Expect.Call(day3.DaySchedulePart()).Return(mainShift);
+                Expect.Call(day4.DaySchedulePart()).Return(mainShift);
 
-                Expect.Call(dayOff.SignificantPart())
-                    .Return(SchedulePartView.DayOff).Repeat.AtLeastOnce();
-                Expect.Call(mainShift.SignificantPart())
-                    .Return(SchedulePartView.MainShift).Repeat.AtLeastOnce();
+                Expect.Call(dayOff.SignificantPart()).Return(SchedulePartView.DayOff).Repeat.AtLeastOnce();
+                Expect.Call(mainShift.SignificantPart()).Return(SchedulePartView.MainShift).Repeat.AtLeastOnce();
 
-                Expect.Call(() => _extractor.Extract(dayOff));
-                Expect.Call(() => _extractor.Extract(dayOff));
-                Expect.Call(() => _extractor.Extract(mainShift));
-                Expect.Call(() => _extractor.Extract(mainShift));
-
-                Expect.Call(_extractor.AvailabilityList)
-                    .Return(new List<IAvailabilityRestriction> {notAvailable});
-                Expect.Call(_extractor.AvailabilityList)
-                    .Return(new List<IAvailabilityRestriction> { available });
-                Expect.Call(_extractor.AvailabilityList)
-                    .Return(new List<IAvailabilityRestriction> { notAvailable });
-                Expect.Call(_extractor.AvailabilityList)
-                    .Return(new List<IAvailabilityRestriction> { available });
-
+	            Expect.Call(_extractor.Extract(dayOff))
+		            .Return(new ExtractedRestrictionResult(new RestrictionCombiner(), Enumerable.Empty<IRotationRestriction>(),
+						new List<IAvailabilityRestriction> { notAvailable }, Enumerable.Empty<IPreferenceRestriction>(),
+			            Enumerable.Empty<IStudentAvailabilityDay>()));
+	            Expect.Call(_extractor.Extract(dayOff))
+		            .Return(new ExtractedRestrictionResult(new RestrictionCombiner(), Enumerable.Empty<IRotationRestriction>(),
+						new List<IAvailabilityRestriction> { available }, Enumerable.Empty<IPreferenceRestriction>(),
+			            Enumerable.Empty<IStudentAvailabilityDay>()));
+				Expect.Call(_extractor.Extract(mainShift))
+		            .Return(new ExtractedRestrictionResult(new RestrictionCombiner(), Enumerable.Empty<IRotationRestriction>(),
+						new List<IAvailabilityRestriction> { notAvailable }, Enumerable.Empty<IPreferenceRestriction>(),
+			            Enumerable.Empty<IStudentAvailabilityDay>()));
+				Expect.Call(_extractor.Extract(mainShift))
+		            .Return(new ExtractedRestrictionResult(new RestrictionCombiner(), Enumerable.Empty<IRotationRestriction>(),
+						new List<IAvailabilityRestriction> { available }, Enumerable.Empty<IPreferenceRestriction>(),
+			            Enumerable.Empty<IStudentAvailabilityDay>()));
+                
                 Expect.Call(notAvailable.IsRestriction())
                     .Return(true).Repeat.AtLeastOnce();
                 Expect.Call(available.IsRestriction())
@@ -336,46 +398,25 @@ namespace Teleopti.Ccc.DomainTest.DayOffPlanning
             }
             using (_mocks.Playback())
             {
-                IList<DateOnly> result = _target.Execute(_matrix);
+                IList<DateOnly> result = _target.Execute(_matrix,_schedulingOptions);
                 Assert.AreEqual(1, result.Count);
                 Assert.AreEqual(expectedDateOnly, result[0]);
             }
         }
 
-        private void mockExpectationsForAll()
+        private void mockExpectationsForAll(IExtractedRestrictionResult extractedRestrictionResult)
         {
-			IScheduleDayPro scheduleDayPro = _mocks.StrictMock<IScheduleDayPro>();
-            IList<IScheduleDayPro> unlockedDays = new List<IScheduleDayPro>{scheduleDayPro};
+			var scheduleDayPro = _mocks.StrictMock<IScheduleDayPro>();
+            var unlockedDays = new List<IScheduleDayPro>{scheduleDayPro};
             Expect.Call(_matrix.UnlockedDays).Return(new ReadOnlyCollection<IScheduleDayPro>(unlockedDays)).Repeat.Any();
             Expect.Call(scheduleDayPro.DaySchedulePart()).Return(_schedulePart).Repeat.Any();
-            _extractor.Extract(_schedulePart);
-            LastCall.Repeat.Any();
+            Expect.Call(_extractor.Extract(_schedulePart)).Return(extractedRestrictionResult).Repeat.Any();
             Expect.Call(scheduleDayPro.Day).Return(_dayToCheck).Repeat.Any();
         }
 
-        private void rotationExpectationsForAll()
+        private void p2referenceExpectationsForAll()
         {
-            _schedulingOptions.UseRotations = true;
-			_rotationRestriction = _mocks.StrictMock<IRotationRestriction>();
-            Expect.Call(_extractor.RotationList).Return(new List<IRotationRestriction> { _rotationRestriction }).Repeat.Any();
-            Expect.Call(_rotationRestriction.IsRestriction()).Return(true).Repeat.Once();
-        }
-
-        private void availabilityExpectationsForAll()
-        {
-            _schedulingOptions.UseAvailability = true;
-            _availabilityRestriction = _mocks.StrictMock<IAvailabilityRestriction>();
-            Expect.Call(_extractor.AvailabilityList).Return(new List<IAvailabilityRestriction> { _availabilityRestriction }).Repeat.Any();
-            Expect.Call(_availabilityRestriction.IsRestriction()).Return(true).Repeat.Once();
-        }
-
-        private void preferenceExpectationsForAll()
-        {
-            _schedulingOptions.UsePreferences = true;
-			_preferenceRestriction = _mocks.StrictMock<IPreferenceRestriction>();
-            Expect.Call(_extractor.PreferenceList).Return(new List<IPreferenceRestriction> { _preferenceRestriction }).Repeat.Any();
-            Expect.Call(_preferenceRestriction.IsRestriction()).Return(true).Repeat.Any();
-            Expect.Call(_preferenceRestriction.MustHave).Return(false).Repeat.Any();
+            
         }
     }
 }

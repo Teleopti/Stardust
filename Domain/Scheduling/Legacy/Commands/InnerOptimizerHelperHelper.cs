@@ -9,6 +9,13 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 {
 	public class InnerOptimizerHelperHelper : IOptimizerHelperHelper
 	{
+		private readonly IRestrictionExtractor _restrictionExtractor;
+
+		public InnerOptimizerHelperHelper(IRestrictionExtractor restrictionExtractor)
+		{
+			_restrictionExtractor = restrictionExtractor;
+		}
+
 		public DateOnlyPeriod GetSelectedPeriod(IEnumerable<IScheduleDay> scheduleDays)
 		{
 			if (scheduleDays == null) throw new ArgumentNullException("scheduleDays");
@@ -26,15 +33,15 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 			return new DateOnlyPeriod(minDate, maxDate);
 		}
 
-		public void LockDaysForDayOffOptimization(IList<IScheduleMatrixPro> matrixList, IRestrictionExtractor restrictionExtractor, IOptimizationPreferences optimizationPreferences, DateOnlyPeriod selectedPeriod)
+		public void LockDaysForDayOffOptimization(IList<IScheduleMatrixPro> matrixList, IOptimizationPreferences optimizationPreferences, DateOnlyPeriod selectedPeriod)
 		{
 			var schedulingOptionsCreator = new SchedulingOptionsCreator();
 			var schedulingOptions = schedulingOptionsCreator.CreateSchedulingOptions(optimizationPreferences);
 
 			//Not needed anymore i think, 
-			IMatrixRestrictionLocker restrictionLocker = new MatrixRestrictionLocker(schedulingOptions, restrictionExtractor);
+			IMatrixRestrictionLocker restrictionLocker = new MatrixRestrictionLocker(_restrictionExtractor);
 			foreach (IScheduleMatrixPro scheduleMatrixPro in matrixList)
-				lockRestrictionDaysInMatrix(scheduleMatrixPro, restrictionLocker);
+				lockRestrictionDaysInMatrix(scheduleMatrixPro, restrictionLocker, schedulingOptions);
 			IMatrixMeetingDayLocker meetingDayLocker = new MatrixMeetingDayLocker(matrixList);
 			meetingDayLocker.Execute();
 			IMatrixPersonalShiftLocker personalShiftLocker = new MatrixPersonalShiftLocker(matrixList);
@@ -62,9 +69,9 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 			matrixUnselectedDaysLocker.Execute();
 		}
 
-		private static void lockRestrictionDaysInMatrix(IScheduleMatrixPro matrix, IMatrixRestrictionLocker locker)
+		private static void lockRestrictionDaysInMatrix(IScheduleMatrixPro matrix, IMatrixRestrictionLocker locker, ISchedulingOptions schedulingOptions)
 		{
-			IList<DateOnly> daysToLock = locker.Execute(matrix);
+			IList<DateOnly> daysToLock = locker.Execute(matrix, schedulingOptions);
 			foreach (var dateOnly in daysToLock)
 			{
 				matrix.LockPeriod(new DateOnlyPeriod(dateOnly, dateOnly));

@@ -37,8 +37,8 @@ namespace Teleopti.Ccc.Domain.DayOffPlanning.Scheduling
 
 			if (_extractedLengths[dateOnly] == null)
 			{
-				_restrictionExtractor.Extract(matrix.GetScheduleDayByKey(dateOnly).DaySchedulePart());
-				IEffectiveRestriction restriction = _restrictionExtractor.CombinedRestriction(schedulingOptions);
+				var result = _restrictionExtractor.Extract(matrix.GetScheduleDayByKey(dateOnly).DaySchedulePart());
+				IEffectiveRestriction restriction = result.CombinedRestriction(schedulingOptions);
 
 				IWorkTimeMinMax ret = null;
 				var person = matrix.Person;

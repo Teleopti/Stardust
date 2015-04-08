@@ -1,10 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
 using System.Windows.Forms;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Security.Principal;
@@ -18,7 +13,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 	{
 		private readonly IPerson _sourcePerson;
 		private readonly DateOnly _dateOnly;
-		private IAvailableHourlyEmployeeFinder _finder;
+		private readonly IAvailableHourlyEmployeeFinder _finder;
 
 		public FindMatchingNew()
 		{
@@ -27,11 +22,11 @@ namespace Teleopti.Ccc.Win.Scheduling
 				SetTexts();
 		}
 
-		public FindMatchingNew(IPerson sourcePerson, DateOnly dateOnly, ISchedulingResultStateHolder stateHolder, ICollection<IPerson> filteredPersons) : this()
+		public FindMatchingNew(IRestrictionExtractor restrictionExtractor, IPerson sourcePerson, DateOnly dateOnly, ISchedulingResultStateHolder stateHolder, ICollection<IPerson> filteredPersons) : this()
 		{
 			_sourcePerson = sourcePerson;
 			_dateOnly = dateOnly;
-            _finder = new AvailableHourlyEmployeeFinder(sourcePerson, dateOnly, stateHolder, filteredPersons);
+            _finder = new AvailableHourlyEmployeeFinder(restrictionExtractor, sourcePerson, dateOnly, stateHolder, filteredPersons);
 		}
 
 		public IPerson Selected()

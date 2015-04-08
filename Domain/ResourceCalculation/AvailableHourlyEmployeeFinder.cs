@@ -2,8 +2,6 @@ using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
-using Teleopti.Ccc.Domain.Scheduling.Restrictions;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.ResourceCalculation
@@ -65,13 +63,15 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 
 	public class AvailableHourlyEmployeeFinder :IAvailableHourlyEmployeeFinder
 	{
+		private readonly IRestrictionExtractor _restrictionExtractor;
 		private readonly IPerson _sourcePerson;
 		private readonly DateOnly _dateOnly;
 	    private readonly ISchedulingResultStateHolder _resultStateHolder;
 	    private readonly ICollection<IPerson> _filteredPersons;
 
-		public AvailableHourlyEmployeeFinder(IPerson sourcePerson, DateOnly dateOnly, ISchedulingResultStateHolder resultStateHolder, ICollection<IPerson> filteredPersons)
+		public AvailableHourlyEmployeeFinder(IRestrictionExtractor restrictionExtractor, IPerson sourcePerson, DateOnly dateOnly, ISchedulingResultStateHolder resultStateHolder, ICollection<IPerson> filteredPersons)
 		{
+			_restrictionExtractor = restrictionExtractor;
 			_sourcePerson = sourcePerson;
 			_dateOnly = dateOnly;
 		    _resultStateHolder = resultStateHolder;
@@ -85,7 +85,6 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 			if (source.SignificantPart() != SchedulePartView.MainShift)
 				return new List<AvailableHourlyEmployeeFinderResult>(ret);
 
-	        //Parallel.ForEach(_filteredPersons, person => runOnePerson(person, ret));
 	        foreach (var person in _filteredPersons)
 	        {
 		        runOnePerson(person, ret);
@@ -100,11 +99,13 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 				return;
 			if (!isHourly(person))
 				return;
-			if (isScheduled(person))
+
+			var targetScheduleDay = _resultStateHolder.Schedules[person].ScheduledDay(_dateOnly); 
+			if (isScheduled(targetScheduleDay))
 				return;
 
-			var result = new AvailableHourlyEmployeeFinderResult(person, hasMatchingAvailibility(person),
-																 availabilityTimes(person), workTimesYesterday(person), workTimesTomorrow(person),
+			var result = new AvailableHourlyEmployeeFinderResult(person, hasMatchingAvailibility(targetScheduleDay),
+																 availabilityTimes(targetScheduleDay), workTimesYesterday(person), workTimesTomorrow(person),
 			                                                     nightRest(person));
 			ret.Add(result);
 		}
@@ -127,20 +128,19 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 			return tomorrow.ProjectionService().CreateProjection().Period().Value.TimePeriodLocal().ToShortTimeString();
 		}
 
-		private string availabilityTimes(IPerson person)
+		private string availabilityTimes(IScheduleDay targetScheduleDay)
 		{
-			IRestrictionExtractor restrictionExtractor = new RestrictionExtractor(_resultStateHolder);
-			restrictionExtractor.Extract(person, _dateOnly);
-			if (!restrictionExtractor.StudentAvailabilityList.Any())
+			var result = _restrictionExtractor.Extract(targetScheduleDay);
+			if (!result.StudentAvailabilityList.Any())
 				return string.Empty;
 
-			var availability = restrictionExtractor.StudentAvailabilityList.First().RestrictionCollection[0];
+			var availability = result.StudentAvailabilityList.First().RestrictionCollection[0];
 			return availability.StartTimeLimitation.StartTimeString + " - " + availability.EndTimeLimitation.EndTimeString;
 		}
 
-		private bool isScheduled(IPerson person)
+		private bool isScheduled(IScheduleDay scheduleDay)
 		{
-            return _resultStateHolder.Schedules[person].ScheduledDay(_dateOnly).IsScheduled();
+            return scheduleDay.IsScheduled();
 		}
 
 		private bool isHourly(IPerson person)
@@ -154,11 +154,10 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 			return true;
 		}
 
-		private bool hasMatchingAvailibility(IPerson person)
+		private bool hasMatchingAvailibility(IScheduleDay targetScheduleDay)
 		{
-			IRestrictionExtractor restrictionExtractor = new RestrictionExtractor(_resultStateHolder);
-			restrictionExtractor.Extract(person, _dateOnly);
-			if (!restrictionExtractor.StudentAvailabilityList.Any())
+			var result = _restrictionExtractor.Extract(targetScheduleDay);
+			if (!result.StudentAvailabilityList.Any())
 				return false;
 
             IScheduleDay sourceScheduleDay = _resultStateHolder.Schedules[_sourcePerson].ScheduledDay(_dateOnly);
@@ -167,12 +166,12 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 				return false;
 
 			DateTimePeriod period = visualLayerCollection.Period().Value;
-			TimeZoneInfo tzInfo = person.PermissionInformation.DefaultTimeZone();
+			TimeZoneInfo tzInfo = targetScheduleDay.Person.PermissionInformation.DefaultTimeZone();
 			DateTime baseDate = _dateOnly.Date;
 			TimeSpan startTime = period.StartDateTimeLocal(tzInfo).Subtract(baseDate);
 			TimeSpan endTime = period.EndDateTimeLocal(tzInfo).Subtract(baseDate);
 
-			foreach (IStudentAvailabilityDay studentAvailabilityDay in restrictionExtractor.StudentAvailabilityList)
+			foreach (IStudentAvailabilityDay studentAvailabilityDay in result.StudentAvailabilityList)
 			{
 				foreach (IStudentAvailabilityRestriction restriction in studentAvailabilityDay.RestrictionCollection)
 				{
@@ -209,11 +208,6 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 
 		private bool nightRestFromYesterday(IPerson person, TimeSpan nightlyRest, DateTimePeriod sourceDayPeriod)
 		{
-			//IRestrictionExtractor restrictionExtractor = new RestrictionExtractor(_resultStateHolder);
-			//restrictionExtractor.Extract(person, _dateOnly);
-			//if (!restrictionExtractor.StudentAvailabilityList.Any())
-			//	return true;
-
 			var scheduleDay = _resultStateHolder.Schedules[person].ScheduledDay(_dateOnly.AddDays(-1));
 			if (!scheduleDay.IsScheduled())
 				return true;

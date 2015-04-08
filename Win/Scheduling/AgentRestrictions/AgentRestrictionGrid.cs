@@ -10,7 +10,6 @@ using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
 using Teleopti.Ccc.Domain.Scheduling.Restrictions;
 using Teleopti.Ccc.Win.Common;
 using Teleopti.Ccc.Win.Common.Controls.Cells;
-using Teleopti.Ccc.WinCode.Common;
 using Teleopti.Ccc.WinCode.Scheduling;
 using Teleopti.Ccc.WinCode.Scheduling.AgentRestrictions;
 using Teleopti.Interfaces.Domain;
@@ -38,6 +37,7 @@ namespace Teleopti.Ccc.Win.Scheduling.AgentRestrictions
 		private bool _moveToDate;
 		private bool _clearSelection;
 		private IAgentRestrictionsNoWorkShiftfFinder _agentRestrictionsNoWorkShiftfFinder;
+		private IRestrictionExtractor _restrictionExtractor;
 
 		private delegate void GridDelegate();
 
@@ -72,6 +72,8 @@ namespace Teleopti.Ccc.Win.Scheduling.AgentRestrictions
 			_availableDrawer = new AgentRestrictionsAvailableDrawer();
 		
 			_model = new AgentRestrictionsModel();
+			_restrictionExtractor = new RestrictionExtractor(new RestrictionCombiner(),
+				new RestrictionRetrievalOperation());
 			_presenter = new AgentRestrictionsPresenter(this, _model, _warningDrawer, _loadingDrawer, _notAvailableDrawer, _availableDrawer);
 
 			AllowSelection = GridSelectionFlags.Cell;
@@ -125,8 +127,7 @@ namespace Teleopti.Ccc.Win.Scheduling.AgentRestrictions
 		{
 			if (displayRow == null) return;
 
-			IRestrictionExtractor restrictionExtractor = new RestrictionExtractor(_stateHolder.SchedulingResultState);
-			_detailView.LoadDetails(displayRow.Matrix, restrictionExtractor, _schedulingOptions, displayRow.ContractTargetTime);
+			_detailView.LoadDetails(displayRow.Matrix, _restrictionExtractor, _schedulingOptions, displayRow.ContractTargetTime);
 
 			var displayRowArgs = new AgentDisplayRowEventArgs(displayRow, false, _clearSelection);
 			_clearSelection = false;
@@ -298,8 +299,7 @@ namespace Teleopti.Ccc.Win.Scheduling.AgentRestrictions
 			if (displayRow == null) return;
 			displayRow.State = AgentRestrictionDisplayRowState.Loading;
 
-			IRestrictionExtractor restrictionExtractor = new RestrictionExtractor(_stateHolder.SchedulingResultState);
-			IPossibleMinMaxWorkShiftLengthExtractor possibleMinMaxWorkShiftLengthExtractor = new PossibleMinMaxWorkShiftLengthExtractor(restrictionExtractor, _workShiftWorkTime);
+			IPossibleMinMaxWorkShiftLengthExtractor possibleMinMaxWorkShiftLengthExtractor = new PossibleMinMaxWorkShiftLengthExtractor(_restrictionExtractor, _workShiftWorkTime);
 			ISchedulePeriodTargetTimeCalculator schedulePeriodTargetTimeCalculator = new SchedulePeriodTargetTimeCalculator();
 			IWorkShiftWeekMinMaxCalculator workShiftWeekMinMaxCalculator = new WorkShiftWeekMinMaxCalculator();
 			IWorkShiftMinMaxCalculator workShiftMinMaxCalculator = new WorkShiftMinMaxCalculator(possibleMinMaxWorkShiftLengthExtractor, schedulePeriodTargetTimeCalculator,workShiftWeekMinMaxCalculator);
@@ -315,7 +315,7 @@ namespace Teleopti.Ccc.Win.Scheduling.AgentRestrictions
 			if (IsDisposed || IsDisposing) return;
 			if(displayRow.Equals(CurrentDisplayRow))
 			{
-				_detailView.LoadDetails(displayRow.Matrix, restrictionExtractor, _schedulingOptions, displayRow.ContractTargetTime);
+				_detailView.LoadDetails(displayRow.Matrix, _restrictionExtractor, _schedulingOptions, displayRow.ContractTargetTime);
 				var displayRowArgs = new AgentDisplayRowEventArgs(displayRow, _moveToDate, false);
 				_moveToDate = false;
 				OnSelectedAgentIsReady(displayRowArgs);

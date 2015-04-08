@@ -5,10 +5,9 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.WinCode.Scheduling.AgentRestrictions
 {
-	[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1040:AvoidEmptyInterfaces")]
 	public interface IAgentRestrictionsDetailModel
 	{
-		void LoadDetails(IScheduleMatrixPro scheduleMatrixPro, IRestrictionExtractor restrictionExtractor, RestrictionSchedulingOptions schedulingOptions,  IAgentRestrictionsDetailEffectiveRestrictionExtractor effectiveRestrictionExtractor, TimeSpan periodTarget, IPreferenceNightRestChecker preferenceNightRestChecker);
+		void LoadDetails(IScheduleMatrixPro scheduleMatrixPro, RestrictionSchedulingOptions schedulingOptions,  IAgentRestrictionsDetailEffectiveRestrictionExtractor effectiveRestrictionExtractor, TimeSpan periodTarget, IPreferenceNightRestChecker preferenceNightRestChecker);
 		Dictionary<int, IPreferenceCellData> DetailData();
 	}
 
@@ -24,8 +23,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling.AgentRestrictions
 			_loadedPeriod = loadedPeriod;
 		}
 
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "5"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "3"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
-		public void LoadDetails(IScheduleMatrixPro scheduleMatrixPro, IRestrictionExtractor restrictionExtractor, RestrictionSchedulingOptions schedulingOptions, IAgentRestrictionsDetailEffectiveRestrictionExtractor effectiveRestrictionExtractor, TimeSpan periodTarget, IPreferenceNightRestChecker preferenceNightRestChecker)
+		public void LoadDetails(IScheduleMatrixPro scheduleMatrixPro, RestrictionSchedulingOptions schedulingOptions, IAgentRestrictionsDetailEffectiveRestrictionExtractor effectiveRestrictionExtractor, TimeSpan periodTarget, IPreferenceNightRestChecker preferenceNightRestChecker)
 		{
 			lock (_lock)
 			{

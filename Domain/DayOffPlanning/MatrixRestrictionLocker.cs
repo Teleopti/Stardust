@@ -20,58 +20,56 @@ namespace Teleopti.Ccc.Domain.DayOffPlanning
     /// </summary>
     public interface IMatrixRestrictionLocker
     {
-        /// <summary>
-        /// Returns the days with restrictions
-        /// </summary>
-        /// <param name="matrix">The matrix.</param>
-        /// <returns></returns>
-        IList<DateOnly> Execute(IScheduleMatrixPro matrix);
+	    /// <summary>
+	    /// Returns the days with restrictions
+	    /// </summary>
+	    /// <param name="matrix">The matrix.</param>
+	    /// <param name="schedulingOptions">The scheduling options.</param>
+	    /// <returns></returns>
+	    IList<DateOnly> Execute(IScheduleMatrixPro matrix, ISchedulingOptions schedulingOptions);
     }
 
     public class MatrixRestrictionLocker : IMatrixRestrictionLocker
     {
-        private readonly ISchedulingOptions _schedulingOptions;
         private readonly IRestrictionExtractor _extractor;
 
-        public MatrixRestrictionLocker(ISchedulingOptions schedulingOptions, 
-            IRestrictionExtractor extractor)
+        public MatrixRestrictionLocker(IRestrictionExtractor extractor)
         {
-            _schedulingOptions = schedulingOptions;
             _extractor = extractor;
         }
 
-        public IList<DateOnly> Execute(IScheduleMatrixPro matrix)
+        public IList<DateOnly> Execute(IScheduleMatrixPro matrix, ISchedulingOptions schedulingOptions)
         {
-            List<DateOnly> ret = new List<DateOnly>();
+            var ret = new List<DateOnly>();
             foreach (IScheduleDayPro scheduleDayPro in matrix.UnlockedDays)
             {
                 IScheduleDay daySchedulePart = scheduleDayPro.DaySchedulePart();
-                _extractor.Extract(daySchedulePart);
+                var result = _extractor.Extract(daySchedulePart);
                 SchedulePartView significantPart = daySchedulePart.SignificantPart();
 
-                if (_schedulingOptions.UseRotations)
+                if (schedulingOptions.UseRotations)
                 {
-                    if(lockRotations(significantPart))
+                    if(lockRotations(significantPart,result))
                         ret.Add(scheduleDayPro.Day);
                 }
 
-                if (_schedulingOptions.UseAvailability)
+                if (schedulingOptions.UseAvailability)
                 {
-                    if (lockAvailability(significantPart))
+                    if (lockAvailability(significantPart, result))
                         ret.Add(scheduleDayPro.Day);
                 }
 
-                if (_schedulingOptions.UsePreferencesMustHaveOnly)
+                if (schedulingOptions.UsePreferencesMustHaveOnly)
                 {
-                    if (lockPreferences(significantPart, true))
+                    if (lockPreferences(significantPart, result, true))
                         ret.Add(scheduleDayPro.Day);
 
                 }
                 else
                 {
-                    if (_schedulingOptions.UsePreferences)
+                    if (schedulingOptions.UsePreferences)
                     {
-                        if (lockPreferences(significantPart, false))
+                        if (lockPreferences(significantPart, result, false))
                             ret.Add(scheduleDayPro.Day);
                     }
                 }
@@ -80,9 +78,9 @@ namespace Teleopti.Ccc.Domain.DayOffPlanning
             return ret;
         }
 
-        private bool lockRotations(SchedulePartView significantPart)
+        private bool lockRotations(SchedulePartView significantPart, IExtractedRestrictionResult extractedRestrictionResult)
         {
-            IList<IRotationRestriction> list = new List<IRotationRestriction>(_extractor.RotationList);
+            IList<IRotationRestriction> list = new List<IRotationRestriction>(extractedRestrictionResult.RotationList);
             if (list.Count > 0)
             {
                 IRotationRestriction restriction = list[0];
@@ -94,9 +92,9 @@ namespace Teleopti.Ccc.Domain.DayOffPlanning
             return false;
         }
 
-        private bool lockAvailability(SchedulePartView significantPart)
+		private bool lockAvailability(SchedulePartView significantPart, IExtractedRestrictionResult extractedRestrictionResult)
         {
-            IList<IAvailabilityRestriction> list = new List<IAvailabilityRestriction>(_extractor.AvailabilityList);
+            IList<IAvailabilityRestriction> list = new List<IAvailabilityRestriction>(extractedRestrictionResult.AvailabilityList);
             if (list.Count > 0)
             {
                 IAvailabilityRestriction restriction = list[0];
@@ -112,9 +110,9 @@ namespace Teleopti.Ccc.Domain.DayOffPlanning
             return false;
         }
 
-        private bool lockPreferences(SchedulePartView significantPart, bool mustHaveOnly)
+		private bool lockPreferences(SchedulePartView significantPart, IExtractedRestrictionResult extractedRestrictionResult, bool mustHaveOnly)
         {
-            IList<IPreferenceRestriction> list = new List<IPreferenceRestriction>(_extractor.PreferenceList);
+            IList<IPreferenceRestriction> list = new List<IPreferenceRestriction>(extractedRestrictionResult.PreferenceList);
             if (list.Count > 0)
             {
                 IPreferenceRestriction restriction = list[0];

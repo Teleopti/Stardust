@@ -22,12 +22,14 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Restrictions
         private IDayOffTemplate _dayOffTemplate;
         private IShiftCategory _shiftCategory;
         private ICheckerRestriction _restrictionChecker;
+	    private IExtractedRestrictionResult _extractedRestrictionResult;
 
-        [SetUp]
+	    [SetUp]
         public void Setup()
         {
             _mock = new MockRepository();
             _restrictionExtractor = _mock.StrictMock<IRestrictionExtractor>();
+	        _extractedRestrictionResult = _mock.StrictMock<IExtractedRestrictionResult>();
             _target = new ScheduleDayRotationRestrictionExtractor(_restrictionExtractor);
             _scheduleDay = _mock.StrictMock<IScheduleDay>();
             _scheduleDays = new List<IScheduleDay>{_scheduleDay};
@@ -44,8 +46,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Restrictions
 	        var startTimeLimitation = new StartTimeLimitation(TimeSpan.FromHours(10), TimeSpan.FromHours(11));
             using(_mock.Record())
             {
-                Expect.Call(() => _restrictionExtractor.Extract(_scheduleDay));
-                Expect.Call(_restrictionExtractor.RotationList).Return(_rotationRestrictions);
+                Expect.Call(_restrictionExtractor.Extract(_scheduleDay)).Return(_extractedRestrictionResult);
+                Expect.Call(_extractedRestrictionResult.RotationList).Return(_rotationRestrictions);
 	            Expect.Call(_rotationRestriction.StartTimeLimitation).Return(startTimeLimitation);
             }
 
@@ -65,8 +67,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Restrictions
 			
 			using (_mock.Record())
 			{
-				Expect.Call(() => _restrictionExtractor.Extract(_scheduleDay));
-				Expect.Call(_restrictionExtractor.RotationList).Return(_rotationRestrictions);
+				Expect.Call(_restrictionExtractor.Extract(_scheduleDay)).Return(_extractedRestrictionResult);
+				Expect.Call(_extractedRestrictionResult.RotationList).Return(_rotationRestrictions);
 				Expect.Call(_rotationRestriction.StartTimeLimitation).Return(startTimeLimitation);
 				Expect.Call(_rotationRestriction.EndTimeLimitation).Return(endTimeLimitation);
 			}
@@ -88,8 +90,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Restrictions
 
 			using (_mock.Record())
 			{
-				Expect.Call(() => _restrictionExtractor.Extract(_scheduleDay));
-				Expect.Call(_restrictionExtractor.RotationList).Return(_rotationRestrictions);
+				Expect.Call(_restrictionExtractor.Extract(_scheduleDay)).Return(_extractedRestrictionResult);
+				Expect.Call(_extractedRestrictionResult.RotationList).Return(_rotationRestrictions);
 				Expect.Call(_rotationRestriction.StartTimeLimitation).Return(startTimeLimitation);
 				Expect.Call(_rotationRestriction.EndTimeLimitation).Return(endTimeLimitation);
 				Expect.Call(_rotationRestriction.WorkTimeLimitation).Return(workTimeLimitation);
@@ -112,8 +114,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Restrictions
 
 			using (_mock.Record())
 			{
-				Expect.Call(() => _restrictionExtractor.Extract(_scheduleDay));
-				Expect.Call(_restrictionExtractor.RotationList).Return(_rotationRestrictions);
+				Expect.Call(_restrictionExtractor.Extract(_scheduleDay)).Return(_extractedRestrictionResult);
+				Expect.Call(_extractedRestrictionResult.RotationList).Return(_rotationRestrictions);
 				Expect.Call(_rotationRestriction.StartTimeLimitation).Return(startTimeLimitation);
 				Expect.Call(_rotationRestriction.EndTimeLimitation).Return(endTimeLimitation);
 				Expect.Call(_rotationRestriction.WorkTimeLimitation).Return(workTimeLimitation);
@@ -137,8 +139,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Restrictions
 
 			using (_mock.Record())
 			{
-				Expect.Call(() => _restrictionExtractor.Extract(_scheduleDay));
-				Expect.Call(_restrictionExtractor.RotationList).Return(_rotationRestrictions);
+				Expect.Call(_restrictionExtractor.Extract(_scheduleDay)).Return(_extractedRestrictionResult);
+				Expect.Call(_extractedRestrictionResult.RotationList).Return(_rotationRestrictions);
 				Expect.Call(_rotationRestriction.StartTimeLimitation).Return(startTimeLimitation);
 				Expect.Call(_rotationRestriction.EndTimeLimitation).Return(endTimeLimitation);
 				Expect.Call(_rotationRestriction.WorkTimeLimitation).Return(workTimeLimitation);
@@ -163,8 +165,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Restrictions
 
 			using (_mock.Record())
 			{
-				Expect.Call(() => _restrictionExtractor.Extract(_scheduleDay));
-				Expect.Call(_restrictionExtractor.RotationList).Return(_rotationRestrictions);
+				Expect.Call(_restrictionExtractor.Extract(_scheduleDay)).Return(_extractedRestrictionResult);
+				Expect.Call(_extractedRestrictionResult.RotationList).Return(_rotationRestrictions);
 				Expect.Call(_rotationRestriction.StartTimeLimitation).Return(startTimeLimitation);
 				Expect.Call(_rotationRestriction.EndTimeLimitation).Return(endTimeLimitation);
 				Expect.Call(_rotationRestriction.WorkTimeLimitation).Return(workTimeLimitation);
@@ -184,8 +186,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Restrictions
         {
             using(_mock.Record())
             {
-                Expect.Call(() => _restrictionExtractor.Extract(_scheduleDay));
-                Expect.Call(_restrictionExtractor.RotationList).Return(_rotationRestrictions);
+                Expect.Call(_restrictionExtractor.Extract(_scheduleDay)).Return(_extractedRestrictionResult);
+                Expect.Call(_extractedRestrictionResult.RotationList).Return(_rotationRestrictions);
                 Expect.Call(_rotationRestriction.DayOffTemplate).Return(_dayOffTemplate);
             }
 
@@ -202,8 +204,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Restrictions
         {
             using(_mock.Record())
             {
-                Expect.Call(() => _restrictionExtractor.Extract(_scheduleDay));
-                Expect.Call(_restrictionExtractor.RotationList).Return(_rotationRestrictions);
+                Expect.Call(_restrictionExtractor.Extract(_scheduleDay)).Return(_extractedRestrictionResult);
+                Expect.Call(_extractedRestrictionResult.RotationList).Return(_rotationRestrictions);
                 Expect.Call(_rotationRestriction.ShiftCategory).Return(_shiftCategory);
             }
 

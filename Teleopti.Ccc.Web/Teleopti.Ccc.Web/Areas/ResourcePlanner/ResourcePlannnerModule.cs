@@ -1,8 +1,10 @@
 ﻿using Autofac;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
+using Teleopti.Ccc.Domain.Scheduling.Restrictions;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
+using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.Web.Areas.ResourcePlanner
@@ -23,6 +25,15 @@ namespace Teleopti.Ccc.Web.Areas.ResourcePlanner
 			builder.RegisterType<DisableDeletedFilter>()
 				.SingleInstance()
 				.As<IDisableDeletedFilter>();
+			builder.RegisterType<RestrictionCombiner>()
+				.SingleInstance()
+				.As<IRestrictionCombiner>();
+			builder.RegisterType<RestrictionRetrievalOperation>()
+				.SingleInstance()
+				.As<IRestrictionRetrievalOperation>();
+			builder.RegisterType<RestrictionExtractor>()
+				.SingleInstance()
+				.As<IRestrictionExtractor>();
 		}
 	}
 }

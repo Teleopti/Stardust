@@ -22,9 +22,9 @@ namespace Teleopti.Ccc.Domain.Scheduling.Restrictions
 
             foreach (var scheduleDay in scheduleDays)
             {
-                _restrictionExtractor.Extract(scheduleDay);
+                var result = _restrictionExtractor.Extract(scheduleDay);
 
-                foreach (var availabilityRestriction in _restrictionExtractor.AvailabilityList)
+                foreach (var availabilityRestriction in result.AvailabilityList)
                 {
                     if (availabilityRestriction.NotAvailable && !restrictedDays.Contains(scheduleDay))
                         restrictedDays.Add(scheduleDay);
@@ -43,9 +43,9 @@ namespace Teleopti.Ccc.Domain.Scheduling.Restrictions
 
             foreach (var scheduleDay in scheduleDays)
             {
-                _restrictionExtractor.Extract(scheduleDay);
+                var result = _restrictionExtractor.Extract(scheduleDay);
 
-                foreach (var availabilityRestriction in _restrictionExtractor.AvailabilityList)
+                foreach (var availabilityRestriction in result.AvailabilityList)
                 {
                     if(!availabilityRestriction.NotAvailable && !restrictedDays.Contains(scheduleDay))
                         restrictedDays.Add(scheduleDay);

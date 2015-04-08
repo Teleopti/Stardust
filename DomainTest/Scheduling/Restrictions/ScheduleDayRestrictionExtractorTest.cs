@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using NUnit.Framework;
 using Rhino.Mocks;
 using Teleopti.Ccc.Domain.Scheduling.Restrictions;
@@ -47,8 +48,9 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Restrictions
         {
             using(_mock.Record())
             {
-                Expect.Call(() => _restrictionExtractor.Extract(_scheduleDay));
-                Expect.Call(_restrictionExtractor.PreferenceList).Return(_preferenceRestrictions);
+                Expect.Call(_restrictionExtractor.Extract(_scheduleDay)).Return(new ExtractedRestrictionResult(new RestrictionCombiner(), Enumerable.Empty<IRotationRestriction>(),
+						Enumerable.Empty<IAvailabilityRestriction>(), _preferenceRestrictions,
+						Enumerable.Empty<IStudentAvailabilityDay>()));
             }
 
             using(_mock.Playback())
@@ -63,9 +65,9 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Restrictions
         {
             using (_mock.Record())
             {
-                Expect.Call(() => _restrictionExtractor.Extract(_scheduleDay));
-                Expect.Call(_restrictionExtractor.PreferenceList).Return(new List<IPreferenceRestriction>());
-                Expect.Call(_restrictionExtractor.RotationList).Return(_rotationRestrictions);
+				Expect.Call(_restrictionExtractor.Extract(_scheduleDay)).Return(new ExtractedRestrictionResult(new RestrictionCombiner(), _rotationRestrictions,
+						Enumerable.Empty<IAvailabilityRestriction>(), Enumerable.Empty<IPreferenceRestriction>(),
+						Enumerable.Empty<IStudentAvailabilityDay>()));
             }
 
             using (_mock.Playback())
@@ -80,10 +82,9 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Restrictions
         {
             using (_mock.Record())
             {
-                Expect.Call(() => _restrictionExtractor.Extract(_scheduleDay));
-                Expect.Call(_restrictionExtractor.PreferenceList).Return(new List<IPreferenceRestriction>());
-                Expect.Call(_restrictionExtractor.RotationList).Return(new List<IRotationRestriction>());
-                Expect.Call(_restrictionExtractor.StudentAvailabilityList).Return(_studentAvailabilityRestrictions);
+				Expect.Call(_restrictionExtractor.Extract(_scheduleDay)).Return(new ExtractedRestrictionResult(new RestrictionCombiner(), Enumerable.Empty<IRotationRestriction>(),
+						Enumerable.Empty<IAvailabilityRestriction>(), Enumerable.Empty<IPreferenceRestriction>(),
+						_studentAvailabilityRestrictions));
             }
 
             using (_mock.Playback())
@@ -98,11 +99,9 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Restrictions
         {
             using (_mock.Record())
             {
-                Expect.Call(() => _restrictionExtractor.Extract(_scheduleDay));
-                Expect.Call(_restrictionExtractor.PreferenceList).Return(new List<IPreferenceRestriction>());
-                Expect.Call(_restrictionExtractor.RotationList).Return(new List<IRotationRestriction>());
-                Expect.Call(_restrictionExtractor.StudentAvailabilityList).Return(new List<IStudentAvailabilityDay>());
-                Expect.Call(_restrictionExtractor.AvailabilityList).Return(_availabilityRestrictions);
+				Expect.Call(_restrictionExtractor.Extract(_scheduleDay)).Return(new ExtractedRestrictionResult(new RestrictionCombiner(), Enumerable.Empty<IRotationRestriction>(),
+						_availabilityRestrictions, Enumerable.Empty<IPreferenceRestriction>(),
+						Enumerable.Empty<IStudentAvailabilityDay>()));
             }
 
             using (_mock.Playback())
@@ -117,11 +116,9 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Restrictions
         {
             using (_mock.Record())
             {
-                Expect.Call(() => _restrictionExtractor.Extract(_scheduleDay));
-                Expect.Call(_restrictionExtractor.PreferenceList).Return(new List<IPreferenceRestriction>());
-                Expect.Call(_restrictionExtractor.RotationList).Return(new List<IRotationRestriction>());
-                Expect.Call(_restrictionExtractor.StudentAvailabilityList).Return(new List<IStudentAvailabilityDay>());
-                Expect.Call(_restrictionExtractor.AvailabilityList).Return(new List<IAvailabilityRestriction>());
+				Expect.Call(_restrictionExtractor.Extract(_scheduleDay)).Return(new ExtractedRestrictionResult(new RestrictionCombiner(), Enumerable.Empty<IRotationRestriction>(),
+						Enumerable.Empty<IAvailabilityRestriction>(), Enumerable.Empty<IPreferenceRestriction>(),
+						Enumerable.Empty<IStudentAvailabilityDay>()));
             }
 
             using (_mock.Playback())

@@ -5,9 +5,8 @@ using System.Linq;
 using NUnit.Framework;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.SeatPlanning;
-using Teleopti.Ccc.TestCommon.FakeData;
 
-namespace SeatPlanner
+namespace Teleopti.Ccc.DomainTest.SeatPlanning
 {
 	public class SeatAllocatorTests
 	{

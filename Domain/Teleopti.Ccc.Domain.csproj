@@ -1054,6 +1054,8 @@
     <Compile Include="Scheduling\Overtime\OvertimeSkillIntervalDataDivider.cs" />
     <Compile Include="Scheduling\Overtime\OvertimeSkillStaffPeriodToSkillIntervalDataMapper.cs" />
     <Compile Include="Scheduling\Restrictions\EffectiveRestrictionCreator30393.cs" />
+    <Compile Include="Scheduling\Restrictions\ExtractedRestrictionResult.cs" />
+    <Compile Include="Scheduling\Restrictions\RestrictionExtractor.cs" />
     <Compile Include="Scheduling\Rules\MinWeekWorkTimeRuleToggle31992Off.cs" />
     <Compile Include="Scheduling\Rules\NonMainShiftActivityRule.cs" />
     <Compile Include="Scheduling\Rules\MinWeekWorkTimeRule.cs" />
@@ -1377,7 +1379,6 @@
     <Compile Include="Scheduling\Restrictions\ScheduleDayRestrictionExtractor.cs" />
     <Compile Include="Scheduling\Restrictions\PeriodScheduledAndRestrictionDaysOff.cs" />
     <Compile Include="Scheduling\Restrictions\RestrictionChecker.cs" />
-    <Compile Include="Scheduling\Restrictions\RestrictionExtractor.cs" />
     <Compile Include="Scheduling\Restrictions\RotationSpecification.cs" />
     <Compile Include="Scheduling\Restrictions\ScheduleDayRotationRestrictionExtractor.cs" />
     <Compile Include="Scheduling\Restrictions\ScheduleDayStudentAvailabilityRestrictionExtractor.cs" />

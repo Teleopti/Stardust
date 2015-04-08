@@ -35,36 +35,38 @@ namespace Teleopti.Ccc.DomainTest.DayOffPlanning.Scheduling
     	private IVirtualSchedulePeriod _virtualSchedulePeriod;
         private ISchedulingOptions _schedulingOptions;
 
-        [SetUp]
-        public void Setup()
-        {
-            _mocks = new MockRepository();
-            _restrictionExctractor = _mocks.StrictMock<IRestrictionExtractor>();
-            _matrix = _mocks.StrictMock<IScheduleMatrixPro>();
-            _scheduleDayPro0 = _mocks.StrictMock<IScheduleDayPro>();
-            _scheduleDayPro1 = _mocks.StrictMock<IScheduleDayPro>();
-            _scheduleDayPro2 = _mocks.StrictMock<IScheduleDayPro>();
-            _scheduleDayPro3 = _mocks.StrictMock<IScheduleDayPro>();
-            _scheduleDayPro4 = _mocks.StrictMock<IScheduleDayPro>();
-            _scheduleDayPro5 = _mocks.StrictMock<IScheduleDayPro>();
-            _scheduleDayPro6 = _mocks.StrictMock<IScheduleDayPro>();
-            _schedulePartEmpty = _mocks.StrictMock<IScheduleDay>();
-            _person = PersonFactory.CreatePersonWithPersonPeriod(DateOnly.MinValue, new List<ISkill>());
-            _ruleSetBag = _mocks.StrictMock<IRuleSetBag>();
-            _person.Period(DateOnly.MinValue).RuleSetBag = _ruleSetBag;
-            _person.AddSchedulePeriod(SchedulePeriodFactory.CreateSchedulePeriod(new DateOnly(2010, 8, 2)));
-        	_virtualSchedulePeriod = _person.VirtualSchedulePeriod((new DateOnly(2010, 8, 2)));
-            var start = new StartTimeLimitation();
-            var end = new EndTimeLimitation();
-            var time = new WorkTimeLimitation();
-            _extractedRestriction = new EffectiveRestriction(start, end, time, null, null, null, new List<IActivityRestriction>());
-				_workShiftWorkTime = new WorkShiftWorkTime(new RuleSetProjectionService(new ShiftCreatorService(new CreateWorkShiftsFromTemplate())));
-            _schedulingOptions = new SchedulingOptions();
+	    [SetUp]
+	    public void Setup()
+	    {
+		    _mocks = new MockRepository();
+		    _restrictionExctractor = _mocks.StrictMock<IRestrictionExtractor>();
+		    _matrix = _mocks.StrictMock<IScheduleMatrixPro>();
+		    _scheduleDayPro0 = _mocks.StrictMock<IScheduleDayPro>();
+		    _scheduleDayPro1 = _mocks.StrictMock<IScheduleDayPro>();
+		    _scheduleDayPro2 = _mocks.StrictMock<IScheduleDayPro>();
+		    _scheduleDayPro3 = _mocks.StrictMock<IScheduleDayPro>();
+		    _scheduleDayPro4 = _mocks.StrictMock<IScheduleDayPro>();
+		    _scheduleDayPro5 = _mocks.StrictMock<IScheduleDayPro>();
+		    _scheduleDayPro6 = _mocks.StrictMock<IScheduleDayPro>();
+		    _schedulePartEmpty = _mocks.StrictMock<IScheduleDay>();
+		    _person = PersonFactory.CreatePersonWithPersonPeriod(DateOnly.MinValue, new List<ISkill>());
+		    _ruleSetBag = _mocks.StrictMock<IRuleSetBag>();
+		    _person.Period(DateOnly.MinValue).RuleSetBag = _ruleSetBag;
+		    _person.AddSchedulePeriod(SchedulePeriodFactory.CreateSchedulePeriod(new DateOnly(2010, 8, 2)));
+		    _virtualSchedulePeriod = _person.VirtualSchedulePeriod((new DateOnly(2010, 8, 2)));
+		    var start = new StartTimeLimitation();
+		    var end = new EndTimeLimitation();
+		    var time = new WorkTimeLimitation();
+		    _extractedRestriction = new EffectiveRestriction(start, end, time, null, null, null,
+			    new List<IActivityRestriction>());
+		    _workShiftWorkTime =
+			    new WorkShiftWorkTime(new RuleSetProjectionService(new ShiftCreatorService(new CreateWorkShiftsFromTemplate())));
+		    _schedulingOptions = new SchedulingOptions();
 
-				_target = new PossibleMinMaxWorkShiftLengthExtractor(_restrictionExctractor, _workShiftWorkTime);
-        }
+		    _target = new PossibleMinMaxWorkShiftLengthExtractor(_restrictionExctractor, _workShiftWorkTime);
+	    }
 
-        [Test]
+	    [Test]
         public void ShouldBeAKeyForEveryFullWeeksDateInMatrix()
         {
             using (_mocks.Record())
@@ -120,35 +122,29 @@ namespace Teleopti.Ccc.DomainTest.DayOffPlanning.Scheduling
 
         private void matrixMock2()
         {
+	        var extractedRestrictionResult = _mocks.StrictMock<IExtractedRestrictionResult>();
             IWorkTimeMinMax wtMinMax = new WorkTimeMinMax();
             wtMinMax.WorkTimeLimitation = new WorkTimeLimitation(TimeSpan.FromHours(7), TimeSpan.FromHours(9));
 
             IList<IScheduleDayPro> scheduleDayPros = createFullWeekList();
-            Expect.Call(_matrix.FullWeeksPeriodDays).Return(new ReadOnlyCollection<IScheduleDayPro>(scheduleDayPros))
-                .Repeat.Any();
+            Expect.Call(_matrix.FullWeeksPeriodDays).Return(new ReadOnlyCollection<IScheduleDayPro>(scheduleDayPros)).Repeat.Any();
 
-            IList<IScheduleDay> scheduleDays = createScheduleDayList();
+			IList<IScheduleDay> scheduleDays = createScheduleDayList();
             for (int i = 0; i < 7; i++)
             {
                 Expect.Call(scheduleDayPros[i].Day).Return(new DateOnly(2010, 8, 2).AddDays(i)).Repeat.Any();
-                Expect.Call(_matrix.GetScheduleDayByKey(new DateOnly(2010, 8, 2).AddDays(i))).Return(scheduleDayPros[i]).
-                    Repeat.Any();
+                Expect.Call(_matrix.GetScheduleDayByKey(new DateOnly(2010, 8, 2).AddDays(i))).Return(scheduleDayPros[i]).Repeat.Any();
                 Expect.Call(scheduleDayPros[i].DaySchedulePart()).Return(scheduleDays[i]).Repeat.Any();
-                
-                
-                //Expect.Call(_ruleSetBag.MinMaxWorkTime(_ruleSetProjectionService, new DateOnly(2010, 8, 2).AddDays(i),
-                //                                       _extractedRestriction)).Return(wtMinMax).Repeat.Once();
             }
-            Expect.Call(() => _restrictionExctractor.Extract(scheduleDays[0])).Repeat.Once();
-            Expect.Call(_restrictionExctractor.CombinedRestriction(_schedulingOptions)).Return(
-                    _extractedRestriction).Repeat.Once();
 
-            Expect.Call(_matrix.Person).Return(_person).Repeat.Any();
-
+			Expect.Call(_restrictionExctractor.Extract(scheduleDays[0])).Return(extractedRestrictionResult);
+			Expect.Call(extractedRestrictionResult.CombinedRestriction(_schedulingOptions)).Return(_extractedRestriction);
+			Expect.Call(_matrix.Person).Return(_person).Repeat.Any();
         }
 
         private void matrixMock(bool noShiftInBag)
         {
+	        var extractedRestrictionResult = _mocks.StrictMock<IExtractedRestrictionResult>();
             IWorkTimeMinMax wtMinMax = new WorkTimeMinMax();
             wtMinMax.WorkTimeLimitation = new WorkTimeLimitation(TimeSpan.FromHours(7),TimeSpan.FromHours(9));
 
@@ -166,8 +162,8 @@ namespace Teleopti.Ccc.DomainTest.DayOffPlanning.Scheduling
                 Expect.Call(_matrix.GetScheduleDayByKey(new DateOnly(2010, 8, 2).AddDays(i))).Return(scheduleDayPros[i]).
                     Repeat.Any();
                 Expect.Call(scheduleDayPros[i].DaySchedulePart()).Return(scheduleDays[i]).Repeat.Any();
-                Expect.Call(() => _restrictionExctractor.Extract(scheduleDays[i])).Repeat.Once();
-                Expect.Call(_restrictionExctractor.CombinedRestriction(_schedulingOptions)).Return(
+                Expect.Call(_restrictionExctractor.Extract(scheduleDays[i])).Return(extractedRestrictionResult).Repeat.Once();
+                Expect.Call(extractedRestrictionResult.CombinedRestriction(_schedulingOptions)).Return(
                     _extractedRestriction).Repeat.Once();
 					 Expect.Call(_ruleSetBag.MinMaxWorkTime(_workShiftWorkTime, new DateOnly(2010, 8, 2).AddDays(i),
                                                        _extractedRestriction)).Return(wtMinMax).Repeat.Once();

@@ -47,6 +47,7 @@ namespace Teleopti.Ccc.Win.Scheduling.PropertyPanel
 	    private readonly DateOnlyPeriod _dateOnlyPeriod;
 	    private readonly DateOnlyPeriod _requestedPeriod;
 	    private readonly IToggleManager _toggleManager;
+	    private readonly IRestrictionExtractor _restrictionExtractor;
 	    private IList<IGroupPageLight> _groupPages;
 	    private IGroupPagePerDate _groupPagePerDate;
 	    private bool _mbCacheDisabled;
@@ -63,7 +64,7 @@ namespace Teleopti.Ccc.Win.Scheduling.PropertyPanel
         }
 
 	    public AgentInfoControl(IWorkShiftWorkTime workShiftWorkTime, ISchedulerGroupPagesProvider groupPagesProvider,
-	                            ILifetimeScope container, DateOnlyPeriod dateOnlyPeriod, DateOnlyPeriod requestedPeriod, IToggleManager toggleManager)
+	                            ILifetimeScope container, DateOnlyPeriod dateOnlyPeriod, DateOnlyPeriod requestedPeriod, IToggleManager toggleManager, IRestrictionExtractor restrictionExtractor)
 		    : this()
 	    {
 		    _workShiftWorkTime = workShiftWorkTime;
@@ -72,6 +73,7 @@ namespace Teleopti.Ccc.Win.Scheduling.PropertyPanel
 		    _dateOnlyPeriod = dateOnlyPeriod;
 		    _requestedPeriod = requestedPeriod;
 		    _toggleManager = toggleManager;
+		    _restrictionExtractor = restrictionExtractor;
 	    }
 
 	    public bool MbCacheDisabled
@@ -252,8 +254,7 @@ namespace Teleopti.Ccc.Win.Scheduling.PropertyPanel
 
         private void updateRestrictionData(IPerson person, DateOnly dateOnly, ISchedulingResultStateHolder state)
         {
-            var extractor = new RestrictionExtractor(state);
-            extractor.Extract(person, dateOnly);
+            var result = _restrictionExtractor.Extract(state.Schedules[person].ScheduledDay(dateOnly));
             listViewRestrictions.Items.Clear();
 
             var item = new ListViewItem(person.Name.ToString(NameOrderOption.FirstNameLastName));
@@ -292,12 +293,12 @@ namespace Teleopti.Ccc.Win.Scheduling.PropertyPanel
 			createAndAddItem(listViewRestrictions, "", "", 0);
 
             createAndAddItem(listViewRestrictions, Resources.Availability, "", 1);
-            handleAvailabilities(extractor.AvailabilityList);
+            handleAvailabilities(result.AvailabilityList);
 
             createAndAddItem(listViewRestrictions, Resources.Rotations, "", 1);
-            handleRotations(extractor.RotationList);
+            handleRotations(result.RotationList);
             createAndAddItem(listViewRestrictions, Resources.StudentAvailability, "", 1);
-            handleStudentAvailability(extractor.StudentAvailabilityList.FirstOrDefault());
+            handleStudentAvailability(result.StudentAvailabilityList.FirstOrDefault());
 
 	        if (PrincipalAuthorization.Instance().IsPermitted(DefinedRaptorApplicationFunctionPaths.ModifyAvailabilities))
 	        {
@@ -307,7 +308,7 @@ namespace Teleopti.Ccc.Win.Scheduling.PropertyPanel
 	        }
 
 	        createAndAddItem(listViewRestrictions, Resources.Preference, "", 1);
-            handlePreferences(extractor.PreferenceList);
+            handlePreferences(result.PreferenceList);
             createAndAddItem(listViewRestrictions, Resources.ShiftCategoryLimitations, "", 1);
             handleShiftCategoryLimitations(person, dateOnly);
 

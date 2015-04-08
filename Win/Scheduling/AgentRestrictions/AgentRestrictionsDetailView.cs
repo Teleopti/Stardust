@@ -106,11 +106,12 @@ namespace Teleopti.Ccc.Win.Scheduling.AgentRestrictions
 		{
 			if(schedulingOptions == null) throw new ArgumentNullException("schedulingOptions");
 
-			var personalShiftRestrictionCombiner = new PersonalShiftRestrictionCombiner(new RestrictionCombiner());
-			var meetingRestrictionCombinder = new MeetingRestrictionCombiner(new RestrictionCombiner());
+			var restrictionCombiner = new RestrictionCombiner();
+			var personalShiftRestrictionCombiner = new PersonalShiftRestrictionCombiner(restrictionCombiner);
+			var meetingRestrictionCombinder = new MeetingRestrictionCombiner(restrictionCombiner);
 			IAgentRestrictionsDetailEffectiveRestrictionExtractor effectiveRestrictionExtractor = new AgentRestrictionsDetailEffectiveRestrictionExtractor(_workShiftWorkTime, restrictionExtractor, schedulingOptions, personalShiftRestrictionCombiner, meetingRestrictionCombinder);
 			var preferenceNightRestChecker = new PreferenceNightRestChecker();
-			_model.LoadDetails(scheduleMatrixPro, restrictionExtractor, schedulingOptions, effectiveRestrictionExtractor, periodTarget, preferenceNightRestChecker);
+			_model.LoadDetails(scheduleMatrixPro, schedulingOptions, effectiveRestrictionExtractor, periodTarget, preferenceNightRestChecker);
 			_useScheduling = schedulingOptions.UseScheduling;
 		}
 

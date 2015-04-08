@@ -14,9 +14,8 @@ namespace Teleopti.Ccc.Domain.Scheduling.Restrictions
 
 		public virtual IEffectiveRestriction GetEffectiveRestriction(IScheduleDay part, ISchedulingOptions options)
 		{
-		    
-		    _extractor.Extract(part);
-		    IEffectiveRestriction ret = _extractor.CombinedRestriction(options);
+		    var result = _extractor.Extract(part);
+		    IEffectiveRestriction ret = result.CombinedRestriction(options);
 
 			if (ret == null)
 				return null;

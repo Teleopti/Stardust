@@ -6,6 +6,7 @@ using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Scheduling.Restriction;
+using Teleopti.Ccc.Domain.Scheduling.Restrictions;
 using Teleopti.Ccc.Domain.Scheduling.Rules;
 using Teleopti.Ccc.Domain.Scheduling.ScheduleTagging;
 using Teleopti.Ccc.TestCommon.FakeData;
@@ -42,7 +43,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 			_sourcePerson = PersonFactory.CreatePersonWithGuid("source", "source");
 			IList<IPerson> filteredPersons = new List<IPerson> {_sourcePerson};
 			_date = new DateOnly(2011,1,5);
-            _target = new AvailableHourlyEmployeeFinder(_sourcePerson, _date, _stateHolder, filteredPersons);
+            _target = new AvailableHourlyEmployeeFinder(new RestrictionExtractor(new RestrictionCombiner(), new RestrictionRetrievalOperation()),  _sourcePerson, _date, _stateHolder, filteredPersons);
 			IScheduleParameters scheduleParameters = new ScheduleParameters(_scenario, _sourcePerson, _dtp);
 			IScheduleRange range = new ScheduleRange(_dic, scheduleParameters);
 			_dic.AddTestItem(_sourcePerson, range);
@@ -71,7 +72,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 			IPerson extraPerson = createExtraPerson(restriction);
 
 			IList<IPerson> filteredPersons = new List<IPerson> { _sourcePerson, fixedPerson, extraPerson };
-			_target = new AvailableHourlyEmployeeFinder(_sourcePerson, _date, _stateHolder, filteredPersons);
+			_target = new AvailableHourlyEmployeeFinder(new RestrictionExtractor(new RestrictionCombiner(), new RestrictionRetrievalOperation()), _sourcePerson, _date, _stateHolder, filteredPersons);
 
             Expect.Call(_stateHolder.Schedules).Return(_dic).Repeat.AtLeastOnce();
             _mocks.ReplayAll();
@@ -96,7 +97,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 			schedulePerson(extraPerson);
 
 			IList<IPerson> filteredPersons = new List<IPerson> { _sourcePerson, extraPerson, extraPerson2 };
-            _target = new AvailableHourlyEmployeeFinder(_sourcePerson, _date, _stateHolder, filteredPersons);
+			_target = new AvailableHourlyEmployeeFinder(new RestrictionExtractor(new RestrictionCombiner(), new RestrictionRetrievalOperation()), _sourcePerson, _date, _stateHolder, filteredPersons);
             Expect.Call(_stateHolder.Schedules).Return(_dic).Repeat.AtLeastOnce();
             _mocks.ReplayAll();
 
@@ -124,7 +125,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 			IPerson extraPerson2 = createExtraPerson(restriction);
 			
 			IList<IPerson> filteredPersons = new List<IPerson> { _sourcePerson, extraPerson, extraPerson2, extraPerson3 };
-            _target = new AvailableHourlyEmployeeFinder(_sourcePerson, _date, _stateHolder, filteredPersons);
+			_target = new AvailableHourlyEmployeeFinder(new RestrictionExtractor(new RestrictionCombiner(), new RestrictionRetrievalOperation()), _sourcePerson, _date, _stateHolder, filteredPersons);
 
             Expect.Call(_stateHolder.Schedules).Return(_dic).Repeat.AtLeastOnce();
             _mocks.ReplayAll();
@@ -142,7 +143,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 			scheduleExtraPerson(extraPerson);
 			IList<IPerson> filteredPersons = new List<IPerson> { _sourcePerson, extraPerson };
 
-			_target = new AvailableHourlyEmployeeFinder(_sourcePerson, _date, _stateHolder, filteredPersons);
+			_target = new AvailableHourlyEmployeeFinder(new RestrictionExtractor(new RestrictionCombiner(), new RestrictionRetrievalOperation()), _sourcePerson, _date, _stateHolder, filteredPersons);
 
 			using (_mocks.Record())
 			{

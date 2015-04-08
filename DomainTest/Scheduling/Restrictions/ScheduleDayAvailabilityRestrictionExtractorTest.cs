@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using NUnit.Framework;
 using Teleopti.Ccc.Domain.Scheduling.Restrictions;
 using Rhino.Mocks;
@@ -35,8 +36,9 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Restrictions
         {
             using(_mock.Record())
             {
-                Expect.Call(() => _restrictionExtractor.Extract(_scheduleDay));
-                Expect.Call(_restrictionExtractor.AvailabilityList).Return(_availabilityRestrictions);
+				Expect.Call(_restrictionExtractor.Extract(_scheduleDay)).Return(new ExtractedRestrictionResult(new RestrictionCombiner(), Enumerable.Empty<IRotationRestriction>(),
+						_availabilityRestrictions, Enumerable.Empty<IPreferenceRestriction>(),
+						Enumerable.Empty<IStudentAvailabilityDay>()));
                 Expect.Call(_availabilityRestriction.NotAvailable).Return(true);    
             }
 
@@ -52,8 +54,9 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Restrictions
         {
             using(_mock.Record())
             {
-                Expect.Call(() => _restrictionExtractor.Extract(_scheduleDay));
-                Expect.Call(_restrictionExtractor.AvailabilityList).Return(_availabilityRestrictions);
+				Expect.Call(_restrictionExtractor.Extract(_scheduleDay)).Return(new ExtractedRestrictionResult(new RestrictionCombiner(), Enumerable.Empty<IRotationRestriction>(),
+						_availabilityRestrictions, Enumerable.Empty<IPreferenceRestriction>(),
+						Enumerable.Empty<IStudentAvailabilityDay>()));
                 Expect.Call(_availabilityRestriction.NotAvailable).Return(false);
             }
 

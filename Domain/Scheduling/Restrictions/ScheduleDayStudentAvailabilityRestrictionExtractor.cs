@@ -23,9 +23,9 @@ namespace Teleopti.Ccc.Domain.Scheduling.Restrictions
 
             foreach (var scheduleDay in scheduleDays)
             {
-                _restrictionExtractor.Extract(scheduleDay);
+                var result = _restrictionExtractor.Extract(scheduleDay);
 
-                if (_restrictionExtractor.StudentAvailabilityList.Count() != 0) continue;
+                if (result.StudentAvailabilityList.Any()) continue;
 
                 var personPeriod = scheduleDay.Person.Period(scheduleDay.DateOnlyAsPeriod.DateOnly);
 
@@ -46,9 +46,8 @@ namespace Teleopti.Ccc.Domain.Scheduling.Restrictions
 
             foreach (var scheduleDay in scheduleDays)
             {
-                _restrictionExtractor.Extract(scheduleDay);
-
-                if (_restrictionExtractor.StudentAvailabilityList.Count() == 0) continue;
+                var result = _restrictionExtractor.Extract(scheduleDay);
+                if (!result.StudentAvailabilityList.Any()) continue;
 
                 restrictedDays.Add(scheduleDay);
             }

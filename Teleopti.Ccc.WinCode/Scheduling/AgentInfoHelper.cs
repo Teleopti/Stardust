@@ -238,7 +238,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
             ISchedulePeriodTargetTimeCalculator schedulePeriodTargetTimeCalculator =
                        new SchedulePeriodTargetTimeCalculator(); //Out
 
-            IRestrictionExtractor restrictionExtractor = new RestrictionExtractor(_stateHolder);
+            var restrictionExtractor = new RestrictionExtractor(new RestrictionCombiner(), new RestrictionRetrievalOperation());
 
             IPossibleMinMaxWorkShiftLengthExtractor possibleMinMaxWorkShiftLengthExtractor =
 					 new PossibleMinMaxWorkShiftLengthExtractor(restrictionExtractor, _workShiftWorkTime);

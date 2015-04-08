@@ -534,8 +534,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 			ISchedulingOptions schedulingOptions, DateOnlyPeriod selectedPeriod, IOptimizationPreferences optimizationPreferences)
 		{
 			var matrixListForFairness = _container.Resolve<IMatrixListFactory>().CreateMatrixListAll(selectedPeriod);
-			var restrictionExtractor = _container.Resolve<IRestrictionExtractor>();
-			_optimizerHelperHelper.LockDaysForDayOffOptimization(matrixListForFairness, restrictionExtractor, optimizationPreferences, selectedPeriod);
+			_optimizerHelperHelper.LockDaysForDayOffOptimization(matrixListForFairness, optimizationPreferences, selectedPeriod);
 			var rollbackService = new SchedulePartModifyAndRollbackService(_stateHolder, new DoNothingScheduleDayChangeCallBack(), tagSetter);
 
 			var equalNumberOfCategoryFairnessService = _container.Resolve<IEqualNumberOfCategoryFairnessService>();
@@ -652,7 +651,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 
 			IList<IScheduleMatrixPro> matrixList = matrixContainerList.Select(container => container.ScheduleMatrix).ToList();
 
-			_optimizerHelperHelper.LockDaysForDayOffOptimization(matrixList, _container.Resolve<IRestrictionExtractor>(), _container.Resolve<IOptimizationPreferences>(), selectedPeriod);
+			_optimizerHelperHelper.LockDaysForDayOffOptimization(matrixList, _container.Resolve<IOptimizationPreferences>(), selectedPeriod);
 
 			var e = new ResourceOptimizerProgressEventArgs(0, 0, Resources.DaysOffBackToLegalState + Resources.ThreeDots);
 			resourceOptimizerPersonOptimized(this, e);

@@ -170,8 +170,10 @@ namespace Teleopti.Ccc.Win.Scheduling
 		private readonly ContextMenuStrip _contextMenuSkillGrid = new ContextMenuStrip();
 		private readonly IOptimizerOriginalPreferences _optimizerOriginalPreferences;
 		private readonly IOptimizationPreferences _optimizationPreferences;
+		private readonly IOptimizerHelperHelper _innerOptimizerHelper;
 		private readonly IGroupPagePerDateHolder _groupPagePerDateHolder;
 		private readonly IBudgetPermissionService _budgetPermissionService;
+		private readonly IRestrictionExtractor _restrictionExtractor;
 		private readonly ICollection<IPerson> _personsToValidate = new HashSet<IPerson>();
 		private readonly ICollection<IPerson> _restrictionPersonsToReload = new HashSet<IPerson>();
 		private readonly BackgroundWorker _backgroundWorkerValidatePersons = new BackgroundWorker();
@@ -335,6 +337,8 @@ namespace Teleopti.Ccc.Win.Scheduling
 			_schedulerState = _container.Resolve<ISchedulerStateHolder>();
 			_groupPagesProvider = _container.Resolve<ISchedulerGroupPagesProvider>();
 			_requiredScheduleHelper = _container.Resolve<IRequiredScheduleHelper>();
+			_innerOptimizerHelper = _container.Resolve<IOptimizerHelperHelper>();
+			_restrictionExtractor = _container.Resolve<IRestrictionExtractor>();
 
 			_schedulerState.SetRequestedScenario(loadScenario);
 			_schedulerState.RequestedPeriod = new DateOnlyPeriodAsDateTimePeriod(loadingPeriod, TeleoptiPrincipal.CurrentPrincipal.Regional.TimeZone);
@@ -1549,139 +1553,139 @@ namespace Teleopti.Ccc.Win.Scheduling
 
 		private void toolStripMenuItemLockAllRestrictionsMouseUp(object sender, MouseEventArgs e)
 		{
-			var executer = new LockExecuter(_grid, _schedulerState, LockManager, this);
+			var executer = new LockExecuter(_grid, _restrictionExtractor, LockManager, this);
 			executer.LockAllRestrictions(e.Button);
 		}
 
 		private void toolStripMenuItemAllPreferencesMouseUp(object sender, MouseEventArgs e)
 		{
-			var executer = new LockExecuter(_grid, _schedulerState, LockManager, this);
+			var executer = new LockExecuter(_grid, _restrictionExtractor, LockManager, this);
 			executer.AllPreferences(e.Button);
 		}
 
 		private void toolStripMenuItemAllDaysOffMouseUp(object sender, MouseEventArgs e)
 		{
-			var executer = new LockExecuter(_grid, _schedulerState, LockManager, this);
+			var executer = new LockExecuter(_grid, _restrictionExtractor, LockManager, this);
 			executer.AllDaysOff(e.Button);
 		}
 
 		private void toolStripMenuItemAllShiftsPreferencesMouseUp(object sender, MouseEventArgs e)
 		{
-			var executer = new LockExecuter(_grid, _schedulerState, LockManager, this);
+			var executer = new LockExecuter(_grid, _restrictionExtractor, LockManager, this);
 			executer.AllShiftsPreferences(e.Button);
 		}
 
 		private void toolStripMenuItemAllMustHaveMouseUp(object sender, MouseEventArgs e)
 		{
-			var executer = new LockExecuter(_grid, _schedulerState, LockManager, this);
+			var executer = new LockExecuter(_grid, _restrictionExtractor, LockManager, this);
 			executer.AllMustHave(e.Button);
 		}
 
 		private void toolStripMenuItemAllFulfilledMustHaveMouseUp(object sender, MouseEventArgs e)
 		{
-			var executer = new LockExecuter(_grid, _schedulerState, LockManager, this);
+			var executer = new LockExecuter(_grid, _restrictionExtractor, LockManager, this);
 			executer.AllFulfilledMustHave(e.Button);
 		}
 
 		private void toolStripMenuItemAllFulFilledPreferencesMouseUp(object sender, MouseEventArgs e)
 		{
-			var executer = new LockExecuter(_grid, _schedulerState, LockManager, this);
+			var executer = new LockExecuter(_grid, _restrictionExtractor, LockManager, this);
 			executer.AllFulfilledPreferences(e.Button);
 		}
 
 		private void toolStripMenuItemAllAbsencePreferenceMouseUp(object sender, MouseEventArgs e)
 		{
-			var executer = new LockExecuter(_grid, _schedulerState, LockManager, this);
+			var executer = new LockExecuter(_grid, _restrictionExtractor, LockManager, this);
 			executer.AllAbsencePreference(e.Button);
 		}
 
 		private void toolStripMenuItemAllFulFilledAbsencesPreferencesMouseUp(object sender, MouseEventArgs e)
 		{
-			var executer = new LockExecuter(_grid, _schedulerState, LockManager, this);
+			var executer = new LockExecuter(_grid, _restrictionExtractor, LockManager, this);
 			executer.AllFulfilledAbsencesPreferences(e.Button);
 		}
 
 		private void toolStripMenuItemAllFulFilledDaysOffPreferencesMouseUp(object sender, MouseEventArgs e)
 		{
-			var executer = new LockExecuter(_grid, _schedulerState, LockManager, this);
+			var executer = new LockExecuter(_grid, _restrictionExtractor, LockManager, this);
 			executer.AllFulfilledDaysOffPreferences(e.Button);
 		}
 
 		private void toolStripMenuItemAllFulFilledShiftsPreferencesMouseUp(object sender, MouseEventArgs e)
 		{
-			var executer = new LockExecuter(_grid, _schedulerState, LockManager, this);
+			var executer = new LockExecuter(_grid, _restrictionExtractor, LockManager, this);
 			executer.AllFulfilledShiftsPreferences(e.Button);
 		}
 
 		private void toolStripMenuItemAllRotationsMouseUp(object sender, MouseEventArgs e)
 		{
-			var executer = new LockExecuter(_grid, _schedulerState, LockManager, this);
+			var executer = new LockExecuter(_grid, _restrictionExtractor, LockManager, this);
 			executer.AllRotations(e.Button);
 		}
 
 		private void toolStripMenuItemAllDaysOffRotationsMouseUp(object sender, MouseEventArgs e)
 		{
-			var executer = new LockExecuter(_grid, _schedulerState, LockManager, this);
+			var executer = new LockExecuter(_grid, _restrictionExtractor, LockManager, this);
 			executer.AllDaysOffRotations(e.Button);
 		}
 
 		private void toolStripMenuItemAllShiftsRotationsMouseUp(object sender, MouseEventArgs e)
 		{
-			var executer = new LockExecuter(_grid, _schedulerState, LockManager, this);
+			var executer = new LockExecuter(_grid, _restrictionExtractor, LockManager, this);
 			executer.AllShiftsRotations(e.Button);
 		}
 
 		private void toolStripMenuItemAllFulFilledRotationsMouseUp(object sender, MouseEventArgs e)
 		{
-			var executer = new LockExecuter(_grid, _schedulerState, LockManager, this);
+			var executer = new LockExecuter(_grid, _restrictionExtractor, LockManager, this);
 			executer.AllFulfilledRotations(e.Button);
 		}
 
 		private void toolStripMenuItemAllFulFilledDaysOffRotationsMouseUp(object sender, MouseEventArgs e)
 		{
-			var executer = new LockExecuter(_grid, _schedulerState, LockManager, this);
+			var executer = new LockExecuter(_grid, _restrictionExtractor, LockManager, this);
 			executer.AllFulfilledDaysOffRotations(e.Button);
 		}
 
 		private void toolStripMenuItemAllFulFilledShiftsRotationsMouseUp(object sender, MouseEventArgs e)
 		{
-			var executer = new LockExecuter(_grid, _schedulerState, LockManager, this);
+			var executer = new LockExecuter(_grid, _restrictionExtractor, LockManager, this);
 			executer.AllFulfilledShiftsRotations(e.Button);
 		}
 
 		private void toolStripMenuItemAllUnavailableStudentAvailabilityMouseUp(object sender, MouseEventArgs e)
 		{
-			var executer = new LockExecuter(_grid, _schedulerState, LockManager, this);
+			var executer = new LockExecuter(_grid, _restrictionExtractor, LockManager, this);
 			executer.AllUnavailableStudentAvailability(e.Button);
 		}
 
 		private void toolStripMenuItemAllAvailableStudentAvailabilityMouseUp(object sender, MouseEventArgs e)
 		{
-			var executer = new LockExecuter(_grid, _schedulerState, LockManager, this);
+			var executer = new LockExecuter(_grid, _restrictionExtractor, LockManager, this);
 			executer.AllAvailableStudentAvailability(e.Button);
 		}
 
 		private void toolStripMenuItemAllFulFilledStudentAvailabilityMouseUp(object sender, MouseEventArgs e)
 		{
-			var executer = new LockExecuter(_grid, _schedulerState, LockManager, this);
+			var executer = new LockExecuter(_grid, _restrictionExtractor, LockManager, this);
 			executer.AllFulfilledStudentAvailability(e.Button);
 		}
 
 		private void toolStripMenuItemAllUnavailableAvailabilityMouseUp(object sender, MouseEventArgs e)
 		{
-			var executer = new LockExecuter(_grid, _schedulerState, LockManager, this);
+			var executer = new LockExecuter(_grid, _restrictionExtractor, LockManager, this);
 			executer.AllUnavailableAvailability(e.Button);
 		}
 
 		private void ToolStripMenuItemAllAvailableAvailabilityMouseUp(object sender, MouseEventArgs e)
 		{
-			var executer = new LockExecuter(_grid, _schedulerState, LockManager, this);
+			var executer = new LockExecuter(_grid, _restrictionExtractor, LockManager, this);
 			executer.AllAvailableAvailability(e.Button);
 		}
 
 		private void toolStripMenuItemAllFulFilledAvailabilityMouseUp(object sender, MouseEventArgs e)
 		{
-			var executer = new LockExecuter(_grid, _schedulerState, LockManager, this);
+			var executer = new LockExecuter(_grid, _restrictionExtractor, LockManager, this);
 			executer.AllFulfilledAvailability(e.Button);
 		}
 
@@ -2947,7 +2951,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			_undoRedo.CreateBatch(Resources.UndoRedoScheduling);
 			var argument = (SchedulingAndOptimizeArgument)e.Argument;
 			var scheduleDays = argument.SelectedScheduleDays;
-			var selectedPeriod = new InnerOptimizerHelperHelper().GetSelectedPeriod(scheduleDays);
+			var selectedPeriod = _innerOptimizerHelper.GetSelectedPeriod(scheduleDays);
 			turnOffCalculateMinMaxCacheIfNeeded(_optimizerOriginalPreferences.SchedulingOptions);
 			AdvanceLoggingService.LogSchedulingInfo(_optimizerOriginalPreferences.SchedulingOptions,
 			                                        scheduleDays.Select(x => x.Person).Distinct().Count(),
@@ -3180,7 +3184,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 
 			var scheduleDays = argument.SelectedScheduleDays;
 
-			var selectedPeriod = new InnerOptimizerHelperHelper().GetSelectedPeriod(scheduleDays);
+			var selectedPeriod = _innerOptimizerHelper.GetSelectedPeriod(scheduleDays);
 
 			IList<IScheduleMatrixPro> matrixesOfSelectedScheduleDays = _container.Resolve<IMatrixListFactory>().CreateMatrixList(scheduleDays, selectedPeriod);
 			if (matrixesOfSelectedScheduleDays.Count == 0)
@@ -3250,7 +3254,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			_undoRedo.CreateBatch(Resources.UndoRedoReOptimize);
 			var argument = (SchedulingAndOptimizeArgument)e.Argument;
 			var scheduleDays = argument.SelectedScheduleDays;
-			var selectedPeriod = new InnerOptimizerHelperHelper().GetSelectedPeriod(scheduleDays);
+			var selectedPeriod = _innerOptimizerHelper.GetSelectedPeriod(scheduleDays);
 			var dateOnlyList = selectedPeriod.DayCollection();
 			_schedulerState.SchedulingResultState.SkillDaysOnDateOnly(dateOnlyList);
 			var optimizerPreferences = _container.Resolve<IOptimizationPreferences>();
@@ -4037,7 +4041,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			var outerPeriod = new DateOnlyPeriod(requestedPeriod.StartDate.AddDays(-7), requestedPeriod.EndDate.AddDays(7));
 
 			var toggleManager = _container.Resolve<IToggleManager>();
-			_agentInfoControl = new AgentInfoControl(_workShiftWorkTime, _groupPagesProvider, _container, outerPeriod, requestedPeriod, toggleManager);
+			_agentInfoControl = new AgentInfoControl(_workShiftWorkTime, _groupPagesProvider, _container, outerPeriod, requestedPeriod, toggleManager, _restrictionExtractor);
 			schedulerSplitters1.InsertAgentInfoControl(_agentInfoControl, _schedulerState,
 				_container.Resolve<IEffectiveRestrictionCreator>(), maxCalculatMinMaxCacheEnries);
 
@@ -5704,6 +5708,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 		}
 
 		private DateTime _lastclickLabels;
+
 		private void toolStripButtonShowTexts_Click(object sender, EventArgs e)
 		{
 			// fix for bug in syncfusion that shoots click event twice on buttons in quick access
@@ -5997,7 +6002,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 		private void findMatching(IScheduleDay selected)
 		{
 			using (
-				var form = new FindMatchingNew(selected.Person, selected.DateOnlyAsPeriod.DateOnly,
+				var form = new FindMatchingNew(_restrictionExtractor, selected.Person, selected.DateOnlyAsPeriod.DateOnly,
 																			 _schedulerState.SchedulingResultState, _schedulerState.FilteredPersonDictionary.Values)
 				)
 			{

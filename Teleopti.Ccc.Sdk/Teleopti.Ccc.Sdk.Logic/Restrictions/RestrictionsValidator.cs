@@ -80,9 +80,9 @@ namespace Teleopti.Ccc.Sdk.Logic.Restrictions
 				    };
 
 			    IScheduleDay scheduleDay = stateHolder.Schedules[person].ScheduledDay(dateOnly);
-			    var restrictionExtractor = new RestrictionExtractor(stateHolder);
-			    restrictionExtractor.Extract(scheduleDay);
-			    IEffectiveRestriction effectiveRestriction = restrictionExtractor.CombinedRestriction(new SchedulingOptions
+			    var restrictionExtractor = new RestrictionExtractor(new RestrictionCombiner(), new RestrictionRetrievalOperation());
+			    var restrictionResult = restrictionExtractor.Extract(scheduleDay);
+				IEffectiveRestriction effectiveRestriction = restrictionResult.CombinedRestriction(new SchedulingOptions
 					    {
 						    UseRotations = false,
 						    UsePreferences = true,
