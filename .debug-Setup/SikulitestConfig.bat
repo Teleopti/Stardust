@@ -53,5 +53,10 @@ SET attributeName=value
 SET attributeValue=%ROOTDIR%\nhib\authentication.json
 %commonFolder%\XmlSetAttribute.exe %configPath% %nodePath% %attributeName% %attributeValue%
 
+SET nodePath=configuration/appSettings/add[@key='ConfigServer']
+SET attributeName=value
+SET attributeValue=%ROOTDIR%\nhib\config.json
+%commonFolder%\XmlSetAttribute.exe %configPath% %nodePath% %attributeName% %attributeValue%
+
 ENDLOCAL
 GOTO:EOF
