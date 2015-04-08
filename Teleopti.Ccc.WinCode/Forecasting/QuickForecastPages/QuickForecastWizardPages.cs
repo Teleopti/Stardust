@@ -1,5 +1,6 @@
-﻿using Teleopti.Ccc.Sdk.Common.DataTransferObject;
-using Teleopti.Ccc.Sdk.Common.DataTransferObject.Commands;
+﻿using System;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using Teleopti.Ccc.UserTexts;
 using Teleopti.Ccc.WinCode.Common.PropertyPageAndWizard;
 using Teleopti.Interfaces.Domain;
@@ -7,17 +8,17 @@ using Teleopti.Interfaces.Messages.General;
 
 namespace Teleopti.Ccc.WinCode.Forecasting.QuickForecastPages
 {
-	public class QuickForecastWizardPages : AbstractWizardPagesNoRoot<QuickForecastCommandDto>
+	public class QuickForecastWizardPages : AbstractWizardPagesNoRoot<QuickForecastModel>
 	{
-		private readonly QuickForecastCommandDto _stateObj;
+		private readonly QuickForecastModel _stateObj;
 
-		public QuickForecastWizardPages(QuickForecastCommandDto stateObj)
+		public QuickForecastWizardPages(QuickForecastModel stateObj)
 			: base(stateObj)
 		{
 			_stateObj = stateObj;
 		}
 
-		public override QuickForecastCommandDto CreateNewStateObj()
+		public override QuickForecastModel CreateNewStateObj()
 		{
 			return _stateObj;
 		}
@@ -26,11 +27,11 @@ namespace Teleopti.Ccc.WinCode.Forecasting.QuickForecastPages
 		{
 			return new QuickForecastWorkloadsMessage
 		{
-			StatisticPeriod = _stateObj.StatisticPeriod.ToDateOnlyPeriod(),
-			TargetPeriod = _stateObj.TargetPeriod.ToDateOnlyPeriod(),
+			StatisticPeriod = _stateObj.StatisticPeriod,
+			TargetPeriod = _stateObj.TargetPeriod,
 			ScenarioId = _stateObj.ScenarioId,
 			SmoothingStyle = _stateObj.SmoothingStyle,
-			TemplatePeriod = _stateObj.TemplatePeriod.ToDateOnlyPeriod(),
+			TemplatePeriod = _stateObj.TemplatePeriod,
 			WorkloadIds = _stateObj.WorkloadIds,
 			IncreaseWith = _stateObj.IncreaseWith,
 			UseDayOfMonth = _stateObj.UseDayOfMonth
@@ -47,16 +48,50 @@ namespace Teleopti.Ccc.WinCode.Forecasting.QuickForecastPages
 			get { return Resources.QuickForecast; }
 		}
 	}
-	public static class DateOnlyDtoExtensions
+
+	public class QuickForecastModel
 	{
-		public static DateOnly ToDateOnly(this DateOnlyDto dateOnlyDto)
+		public QuickForecastModel()
 		{
-			return new DateOnly(dateOnlyDto.DateTime);
+			WorkloadIds = new Collection<Guid>();
+			SmoothingStyle = 5;
+			StatisticPeriod = new DateOnlyPeriod
+			(
+				new DateOnly(DateTime.Today.AddYears(-2) ),
+				new DateOnly(DateTime.Today.AddDays(-1) )
+			);
+			var start = DateTime.Today.AddMonths(1);
+			start = new DateTime(start.Year, start.Month, 1);
+			var end = start.AddMonths(3).AddDays(-1);
+			TargetPeriod = new DateOnlyPeriod
+			(
+				new DateOnly(start),
+				new DateOnly(end)
+			);
+
+			TemplatePeriod = new DateOnlyPeriod
+			(
+				new DateOnly(DateTime.Today.AddMonths(-3).AddDays(-1) ),
+				new DateOnly (DateTime.Today.AddDays(-1) )
+			);
 		}
 
-		public static DateOnlyPeriod ToDateOnlyPeriod(this DateOnlyPeriodDto dateOnlyPeriodDto)
-		{
-			return new DateOnlyPeriod(dateOnlyPeriodDto.StartDate.ToDateOnly(), dateOnlyPeriodDto.EndDate.ToDateOnly());
-		}
+		public Guid ScenarioId { get; set; }
+
+		public DateOnlyPeriod StatisticPeriod { get; set; }
+
+		public DateOnlyPeriod TargetPeriod { get; set; }
+
+		public bool UpdateStandardTemplates { get; set; }
+
+		public int SmoothingStyle { get; set; }
+
+		public DateOnlyPeriod TemplatePeriod { get; set; }
+
+		public ICollection<Guid> WorkloadIds { get; set; }
+
+		public int IncreaseWith { get; set; }
+
+		public bool UseDayOfMonth { get; set; }
 	}
 }

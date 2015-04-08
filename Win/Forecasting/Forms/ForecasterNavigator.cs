@@ -19,8 +19,6 @@ using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.Infrastructure.Toggle;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
-using Teleopti.Ccc.Sdk.Common.DataTransferObject;
-using Teleopti.Ccc.Sdk.Common.DataTransferObject.Commands;
 using Teleopti.Ccc.UserTexts;
 using Teleopti.Ccc.Win.Common;
 using Teleopti.Ccc.Win.Common.Controls;
@@ -1240,11 +1238,11 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
 				var skills = skillRep.FindAllWithWorkloadAndQueues();
 				skills = skills.Except(skills.OfType<IChildSkill>()).ToList();
 				var quickForecastPages = PropertyPagesHelper.GetQuickForecastPages(skills);
-				var model = new QuickForecastCommandDto {WorkloadIds = getWorkloadIds(treeViewSkills.SelectedNode)};
+				var model = new QuickForecastModel {WorkloadIds = getWorkloadIds(treeViewSkills.SelectedNode)};
 				using (var wwp = new QuickForecastWizardPages(model))
 				{
 					wwp.Initialize(quickForecastPages);
-					using (var wizard = new WizardNoRoot<QuickForecastCommandDto>(wwp))
+					using (var wizard = new WizardNoRoot<QuickForecastModel>(wwp))
 					{
 						if (wizard.ShowDialog(this) == DialogResult.OK)
 						{
@@ -1442,11 +1440,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
 			settingProvider.TransformSerializableToSelectionModels().ForEach(
 				model.ExportMultisiteSkillToSkillCommandModel.MultisiteSkillSelectionModels.Add);
 			if (!savedSettings.Period.Equals(new DateOnlyPeriod()))
-				model.ExportMultisiteSkillToSkillCommandModel.Period = new DateOnlyPeriodDto
-				{
-					StartDate = new DateOnlyDto {DateTime = savedSettings.Period.StartDate.Date},
-					EndDate = new DateOnlyDto {DateTime = savedSettings.Period.EndDate.Date}
-				};
+				model.ExportMultisiteSkillToSkillCommandModel.Period = savedSettings.Period;
 		}
 
 		private void toolStripMenuItemJobHistoryClick(object sender, EventArgs e)

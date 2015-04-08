@@ -14,7 +14,7 @@ namespace Teleopti.Ccc.WinCode.Forecasting.ExportPages
             ParentSkill = Skill.ParentSkill.Name;
             ChildSkillMapping = childSkillMapping;
 
-            var v = ChildSkillMapping.Where(m => m.SourceSkill.Id.Equals(Skill.Id));
+            var v = ChildSkillMapping.Where(m => m.SourceSkill.Equals(Skill.Id)).ToList();
 
             if (v.IsEmpty()) return;
             TargetBu = v.First().TargetBuName;

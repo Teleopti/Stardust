@@ -3,9 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.Forecasting.Export;
 using Teleopti.Ccc.Domain.Security.Principal;
-using Teleopti.Ccc.Sdk.Common.DataTransferObject;
-using Teleopti.Ccc.Sdk.Common.DataTransferObject.Commands;
-using Teleopti.Ccc.WinCode.Forecasting.QuickForecastPages;
+using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Messages.General;
 
 namespace Teleopti.Ccc.WinCode.Forecasting.ExportPages
@@ -54,16 +52,16 @@ namespace Teleopti.Ccc.WinCode.Forecasting.ExportPages
 	public class ExportMultisiteSkillToSkillCommandModel
 	{
 		public ICollection<MultisiteSkillSelectionModel> MultisiteSkillSelectionModels { get; private set; }
-		public DateOnlyPeriodDto Period { get; set; }
+		public DateOnlyPeriod Period { get; set; }
 
 		public ExportMultisiteSkillToSkillCommandModel()
 		{
 			MultisiteSkillSelectionModels = new List<MultisiteSkillSelectionModel>();
-			Period = new DateOnlyPeriodDto
-				{
-					StartDate = new DateOnlyDto { DateTime = DateTime.Today },
-					EndDate = new DateOnlyDto { DateTime = DateTime.Today.AddDays(30) }
-				};
+			Period = new DateOnlyPeriod
+				(
+					new DateOnly( DateTime.Today.Date),
+					new DateOnly(DateTime.Today.AddDays(30))
+				);
 		}
 
 		public bool HasChildSkillMappings
@@ -74,53 +72,27 @@ namespace Teleopti.Ccc.WinCode.Forecasting.ExportPages
 			}
 		}
 
-		public ExportMultisiteSkillToSkillCommandDto TransformToDto()
-		{
-			var exportMultisiteSkillToSkillCommandDto = new ExportMultisiteSkillToSkillCommandDto();
-			exportMultisiteSkillToSkillCommandDto.Period = Period;
-
-			foreach (var multisiteSkillSelectionModel in MultisiteSkillSelectionModels)
-			{
-				var multisiteSkillSelectionDto = new MultisiteSkillSelectionDto();
-				multisiteSkillSelectionDto.MultisiteSkill = multisiteSkillSelectionModel.MultisiteSkillModel.SkillDto;
-
-				foreach (var childSkillMappingModel in multisiteSkillSelectionModel.ChildSkillMappingModels)
-				{
-					var childSkillMappingDto = new ChildSkillMappingDto
-					{
-						SourceSkill = childSkillMappingModel.SourceSkill,
-						TargetSkill = childSkillMappingModel.TargetSkill
-					};
-					multisiteSkillSelectionDto.ChildSkillMapping.Add(childSkillMappingDto);
-				}
-				exportMultisiteSkillToSkillCommandDto.MultisiteSkillSelection.Add(multisiteSkillSelectionDto);
-			}
-
-			return exportMultisiteSkillToSkillCommandDto;
-		}
-
 		public ExportMultisiteSkillsToSkill TransformToServiceBusMessage()
 		{
-			var command = TransformToDto();
 			var message = new ExportMultisiteSkillsToSkill
 			{
 				OwnerPersonId =
 					 ((IUnsafePerson)TeleoptiPrincipal.CurrentPrincipal).Person.Id.GetValueOrDefault(
 						  Guid.Empty),
-				Period = command.Period.ToDateOnlyPeriod()
+				Period = Period
 			};
 
-			foreach (var multisiteSkillSelection in command.MultisiteSkillSelection)
+			foreach (var multisiteSkillSelection in MultisiteSkillSelectionModels)
 			{
 				var selection = new MultisiteSkillSelection();
-				selection.MultisiteSkillId = multisiteSkillSelection.MultisiteSkill.Id.GetValueOrDefault();
+				selection.MultisiteSkillId = multisiteSkillSelection.MultisiteSkillModel.Id;
 
-				foreach (var childSkillMappingDto in multisiteSkillSelection.ChildSkillMapping)
+				foreach (var childSkillMappingModel in multisiteSkillSelection.ChildSkillMappingModels)
 				{
 					var childSkillMapping = new ChildSkillSelection
 					{
-						SourceSkillId = childSkillMappingDto.SourceSkill.Id.GetValueOrDefault(),
-						TargetSkillId = childSkillMappingDto.TargetSkill.Id.GetValueOrDefault()
+						SourceSkillId = childSkillMappingModel.SourceSkill,
+						TargetSkillId = childSkillMappingModel.TargetSkill
 					};
 					selection.ChildSkillSelections.Add(childSkillMapping);
 				}
@@ -129,4 +101,5 @@ namespace Teleopti.Ccc.WinCode.Forecasting.ExportPages
 			return message;
 		}
 	}
+
 }

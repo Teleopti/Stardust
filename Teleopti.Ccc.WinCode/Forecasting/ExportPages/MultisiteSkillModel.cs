@@ -1,5 +1,4 @@
 ﻿using System;
-using Teleopti.Ccc.Sdk.Common.DataTransferObject;
 
 namespace Teleopti.Ccc.WinCode.Forecasting.ExportPages
 {
@@ -7,11 +6,9 @@ namespace Teleopti.Ccc.WinCode.Forecasting.ExportPages
     {
         public MultisiteSkillModel(Guid id)
         {
-            SkillDto = new SkillDto { Id = id };
             Id = id;
         }
 
-        public SkillDto SkillDto { get; set; }
         public Guid Id { get; set; }
     }
 }

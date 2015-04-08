@@ -63,7 +63,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.ExportPages
 					var selectedSkill = mapDestinationBuSkill.SelectedSkill();
 					if (selectedSkill == null)
 					{
-						var childSkillMappingModel= model.ChildSkillMapping.Where(m => m.SourceSkill.Id.Equals(model.Skill.Id)).FirstOrDefault();
+						var childSkillMappingModel= model.ChildSkillMapping.Where(m => m.SourceSkill.Equals(model.Skill.Id)).FirstOrDefault();
 						if (childSkillMappingModel != null)
 						{
 							model.ChildSkillMapping.Remove(childSkillMappingModel);
@@ -74,12 +74,12 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.ExportPages
 					else
 					{
 						//If exists in list, dont do anything
-						var models = model.ChildSkillMapping.Where(s => s.SourceSkill.Id.Equals(model.Skill.Id));
+						var models = model.ChildSkillMapping.Where(s => s.SourceSkill.Equals(model.Skill.Id)).ToList();
 
 						if (!models.IsEmpty())
 							model.ChildSkillMapping.Remove(models.First());
 
-						if (model.ChildSkillMapping.Any(m => m.TargetSkill.Id.Equals(selectedSkill.Id))) return;
+						if (model.ChildSkillMapping.Any(m => m.TargetSkill.Equals(selectedSkill.Id))) return;
 
 						var mappingModel = new ChildSkillMappingModel(model.Skill.Id.GetValueOrDefault(),
 																	  selectedSkill.Id.GetValueOrDefault(),
@@ -149,10 +149,12 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.ExportPages
 			gridControlDestination.GridBoundColumns.Add(new GridBoundColumn() { MappingName = "TargetBu", HeaderText =  Resources.TargetBusinessUnit});
 			gridControlDestination.GridBoundColumns.Add(new GridBoundColumn() { MappingName = "TargetSkill", HeaderText = Resources.TargetSkill });
 			
-			var button = new GridBoundColumn(){MappingName = "Map",HeaderText = " "};
-			button.StyleInfo.CellType = "PushButton";
-			button.StyleInfo.Description = "...";
-			button.StyleInfo.HorizontalAlignment = GridHorizontalAlignment.Right;
+			var button = new GridBoundColumn
+			{
+				MappingName = "Map",
+				HeaderText = " ",
+				StyleInfo = {CellType = "PushButton", Description = "...", HorizontalAlignment = GridHorizontalAlignment.Right}
+			};
 			gridControlDestination.CellButtonClicked += gridCellButtonClicked;
 
 			gridControlDestination.GridBoundColumns.Add(button);

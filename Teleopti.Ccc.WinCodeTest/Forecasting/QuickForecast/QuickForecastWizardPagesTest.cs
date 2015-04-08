@@ -1,5 +1,4 @@
 ﻿using NUnit.Framework;
-using Teleopti.Ccc.Sdk.Common.DataTransferObject.Commands;
 using Teleopti.Ccc.WinCode.Forecasting.QuickForecastPages;
 
 namespace Teleopti.Ccc.WinCodeTest.Forecasting.QuickForecast
@@ -8,12 +7,12 @@ namespace Teleopti.Ccc.WinCodeTest.Forecasting.QuickForecast
 	public class QuickForecastWizardPagesTest
 	{
 		private QuickForecastWizardPages _target;
-		private QuickForecastCommandDto _model;
+		private QuickForecastModel _model;
 
 		[SetUp]
 		public void Setup()
 		{
-			_model = new QuickForecastCommandDto();
+			_model = new QuickForecastModel();
 			_target = new QuickForecastWizardPages(_model);
 		}
 

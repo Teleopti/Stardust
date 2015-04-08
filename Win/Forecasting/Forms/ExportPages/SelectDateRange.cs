@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using Teleopti.Ccc.Sdk.Common.DataTransferObject;
 using Teleopti.Ccc.UserTexts;
 using Teleopti.Ccc.Win.Common;
 using Teleopti.Ccc.WinCode.Common.GuiHelpers;
@@ -37,18 +36,18 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.ExportPages
 			base.OnLoad(e);
 
 			var exportModel = _stateObj.ExportMultisiteSkillToSkillCommandModel;
-			reportDateFromToSelector1.WorkPeriodStart = new DateOnly(exportModel.Period.StartDate.DateTime);
-			reportDateFromToSelector1.WorkPeriodEnd = new DateOnly(exportModel.Period.EndDate.DateTime);
+			reportDateFromToSelector1.WorkPeriodStart =exportModel.Period.StartDate;
+			reportDateFromToSelector1.WorkPeriodEnd = exportModel.Period.EndDate;
 		}
 
 		public bool Depopulate(ExportSkillModel stateObj)
 		{
-			stateObj.ExportMultisiteSkillToSkillCommandModel.Period = new DateOnlyPeriodDto
-				{
-					StartDate = new DateOnlyDto {DateTime = reportDateFromToSelector1.WorkPeriodStart.Date},
-					EndDate = new DateOnlyDto {DateTime = reportDateFromToSelector1.WorkPeriodEnd.Date}
-				};
-			return true;	
+			stateObj.ExportMultisiteSkillToSkillCommandModel.Period = new DateOnlyPeriod
+				(
+				reportDateFromToSelector1.WorkPeriodStart,
+				reportDateFromToSelector1.WorkPeriodEnd
+				);
+			return true;
 		}
 
 		public void SetEditMode()

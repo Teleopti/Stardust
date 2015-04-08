@@ -21,19 +21,19 @@ namespace Teleopti.Ccc.WinCode.Common.PropertyPageAndWizard
 			set { _owningForm = value; }
 		}
 
-        public void ChangePages(IEnumerable<IPropertyPageNoRoot<T>> newPages)
-        {
-            var indexOfPage = _propertyPages.IndexOf(_currentPage);
-            _propertyPages.Clear();
-            _propertyPages.AddRange(newPages);
-            _currentPage = _propertyPages[indexOfPage];
+		public void ChangePages(IEnumerable<IPropertyPageNoRoot<T>> newPages)
+		{
+			var indexOfPage = _propertyPages.IndexOf(_currentPage);
+			_propertyPages.Clear();
+			_propertyPages.AddRange(newPages);
+			_currentPage = _propertyPages[indexOfPage];
 
-            var pageListChanged = PageListChanged;
-            if (pageListChanged!=null)
-            {
-                pageListChanged(this, EventArgs.Empty);
-            }
-        }
+			var pageListChanged = PageListChanged;
+			if (pageListChanged != null)
+			{
+				pageListChanged(this, EventArgs.Empty);
+			}
+		}
 
 		public virtual Size MinimumSize
 		{
@@ -46,15 +46,15 @@ namespace Teleopti.Ccc.WinCode.Common.PropertyPageAndWizard
 		public abstract T CreateNewStateObj();
 
 		public abstract string Name { get; }
-	    
-        public void Save()
-        {
-            CurrentPage.Depopulate(_stateObj);
-        }
 
-	    public event EventHandler PageListChanged;
+		public void Save()
+		{
+			CurrentPage.Depopulate(_stateObj);
+		}
 
-	    public abstract string WindowText { get; }
+		public event EventHandler PageListChanged;
+
+		public abstract string WindowText { get; }
 
 		protected AbstractPropertyPagesNoRoot(T stateObj)
 		{
@@ -64,23 +64,23 @@ namespace Teleopti.Ccc.WinCode.Common.PropertyPageAndWizard
 		public void Initialize(IList<IPropertyPageNoRoot<T>> pages)
 		{
 			InParameter.NotNull("pages", pages);
-            _propertyPages = new List<IPropertyPageNoRoot<T>>(pages);
+			_propertyPages = new List<IPropertyPageNoRoot<T>>(pages);
 		}
 
 		public ReadOnlyCollection<IPropertyPageNoRoot<T>> Pages
 		{
 			get
 			{
-                return new ReadOnlyCollection<IPropertyPageNoRoot<T>>(_propertyPages);
+				return new ReadOnlyCollection<IPropertyPageNoRoot<T>>(_propertyPages);
 			}
 		}
 
-        public IPropertyPageNoRoot<T> FirstPage
+		public IPropertyPageNoRoot<T> FirstPage
 		{
 			get { return _propertyPages[0]; }
 		}
 
-        public IPropertyPageNoRoot<T> CurrentPage
+		public IPropertyPageNoRoot<T> CurrentPage
 		{
 			get
 			{
@@ -93,15 +93,15 @@ namespace Teleopti.Ccc.WinCode.Common.PropertyPageAndWizard
 			set { _currentPage = value; }
 		}
 
-        public IPropertyPageNoRoot<T> PreviousPage()
-        {
-            CurrentPage = FindMyPreviousPage(CurrentPage);
-            CurrentPage.Populate(StateObj);
+		public IPropertyPageNoRoot<T> PreviousPage()
+		{
+			CurrentPage = FindMyPreviousPage(CurrentPage);
+			CurrentPage.Populate(StateObj);
 
-            return CurrentPage;
-        }
+			return CurrentPage;
+		}
 
-	    public IPropertyPageNoRoot<T> NextPage()
+		public IPropertyPageNoRoot<T> NextPage()
 		{
 			if (CurrentPage.Depopulate(StateObj))
 			{
@@ -120,7 +120,7 @@ namespace Teleopti.Ccc.WinCode.Common.PropertyPageAndWizard
 		{
 			return (CurrentPage == _propertyPages[_propertyPages.Count - 1]);
 		}
-        
+
 		public String[] GetPageNames()
 		{
 			return _propertyPages
@@ -141,17 +141,17 @@ namespace Teleopti.Ccc.WinCode.Common.PropertyPageAndWizard
 			protected set { _stateObj = value; }
 		}
 
-        public IPropertyPageNoRoot<T> FindMyNextPage(IPropertyPageNoRoot<T> propertyPage)
+		public IPropertyPageNoRoot<T> FindMyNextPage(IPropertyPageNoRoot<T> propertyPage)
 		{
-			return findPageByOffset(propertyPage,1);
+			return findPageByOffset(propertyPage, 1);
 		}
 
-        public IPropertyPageNoRoot<T> FindMyPreviousPage(IPropertyPageNoRoot<T> propertyPage)
+		public IPropertyPageNoRoot<T> FindMyPreviousPage(IPropertyPageNoRoot<T> propertyPage)
 		{
 			return findPageByOffset(propertyPage, -1);
 		}
 
-        private IPropertyPageNoRoot<T> findPageByOffset(IPropertyPageNoRoot<T> propertyPage, int offset)
+		private IPropertyPageNoRoot<T> findPageByOffset(IPropertyPageNoRoot<T> propertyPage, int offset)
 		{
 			int myIndex = _propertyPages.IndexOf(propertyPage);
 			var page = _propertyPages.ElementAtOrDefault(myIndex + offset);
@@ -160,7 +160,7 @@ namespace Teleopti.Ccc.WinCode.Common.PropertyPageAndWizard
 			return page;
 		}
 
-        public IPropertyPageNoRoot<T> ShowPage(IPropertyPageNoRoot<T> propertyPage)
+		public IPropertyPageNoRoot<T> ShowPage(IPropertyPageNoRoot<T> propertyPage)
 		{
 			bool okToSwitchPage = true;
 			if (_currentPage != null)
@@ -188,7 +188,7 @@ namespace Teleopti.Ccc.WinCode.Common.PropertyPageAndWizard
 			GC.SuppressFinalize(this);
 		}
 
-        protected virtual void Dispose(bool disposing)
+		protected virtual void Dispose(bool disposing)
 		{
 			if (disposing)
 			{
@@ -197,7 +197,7 @@ namespace Teleopti.Ccc.WinCode.Common.PropertyPageAndWizard
 				{
 					_owningForm.Dispose();
 				}
-			 
+
 				//Free all intialized pages
 				if (_propertyPages != null)
 				{

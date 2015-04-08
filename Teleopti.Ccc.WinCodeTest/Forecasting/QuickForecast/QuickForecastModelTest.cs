@@ -1,17 +1,17 @@
 ﻿using NUnit.Framework;
-using Teleopti.Ccc.Sdk.Common.DataTransferObject.Commands;
+using Teleopti.Ccc.WinCode.Forecasting.QuickForecastPages;
 
 namespace Teleopti.Ccc.WinCodeTest.Forecasting.QuickForecast
 {
 	[TestFixture]
 	public class QuickForecastModelTest
 	{
-		private QuickForecastCommandDto _target;
+		private QuickForecastModel _target;
 
 		[SetUp]
 		public void Setup()
 		{
-			_target = new QuickForecastCommandDto();
+			_target = new QuickForecastModel();
 		}
 
 		[Test]

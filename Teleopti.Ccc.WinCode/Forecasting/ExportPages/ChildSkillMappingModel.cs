@@ -1,5 +1,4 @@
 ﻿using System;
-using Teleopti.Ccc.Sdk.Common.DataTransferObject;
 
 namespace Teleopti.Ccc.WinCode.Forecasting.ExportPages
 {
@@ -7,8 +6,8 @@ namespace Teleopti.Ccc.WinCode.Forecasting.ExportPages
     {
         public ChildSkillMappingModel(Guid sourceSkillId, Guid targetSkillId, string targetBuName, string targetSkillName)
         {
-            SourceSkill = new SkillDto { Id = sourceSkillId };
-            TargetSkill = new SkillDto { Id = targetSkillId };
+            SourceSkill = sourceSkillId;
+            TargetSkill = targetSkillId;
             TargetBuName = targetBuName;
             TargetSkillName = targetSkillName;
         }
@@ -16,7 +15,7 @@ namespace Teleopti.Ccc.WinCode.Forecasting.ExportPages
         public string TargetSkillName { get; set; }
         public string TargetBuName { get; set; }
 
-        public SkillDto TargetSkill { get; set; }
-        public SkillDto SourceSkill { get; set; }
+        public Guid TargetSkill { get; set; }
+        public Guid SourceSkill { get; set; }
     }
 }

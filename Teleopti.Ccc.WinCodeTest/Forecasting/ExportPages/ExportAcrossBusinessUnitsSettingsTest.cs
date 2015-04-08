@@ -1,8 +1,4 @@
-using System.Collections.Generic;
-using System.Linq;
 using NUnit.Framework;
-using Teleopti.Ccc.Sdk.Common.DataTransferObject;
-using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.WinCode.Forecasting.ExportPages;
 using Teleopti.Interfaces.Domain;
 

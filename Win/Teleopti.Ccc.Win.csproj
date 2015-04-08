@@ -3145,16 +3145,8 @@
       <Name>Teleopti.Ccc.OnlineReporting</Name>
     </ProjectReference>
     <ProjectReference Include="..\Teleopti.Ccc.Sdk\Teleopti.Ccc.Sdk.ClientProxies\Teleopti.Ccc.Sdk.ClientProxies.csproj">
-      <Project>{6116FC80-2475-447E-A90A-14B4DB59E2A7}</Project>
+      <Project>{6116fc80-2475-447e-a90a-14b4db59e2a7}</Project>
       <Name>Teleopti.Ccc.Sdk.ClientProxies</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Teleopti.Ccc.Sdk\Teleopti.Ccc.Sdk.Common\Teleopti.Ccc.Sdk.Common.csproj">
-      <Project>{43BE4B89-AF3F-439E-9C44-58AE0672E410}</Project>
-      <Name>Teleopti.Ccc.Sdk.Common</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Teleopti.Ccc.Sdk\Teleopti.Ccc.Sdk.Logic\Teleopti.Ccc.Sdk.Logic.csproj">
-      <Project>{1277112D-B11A-4358-AF9A-8C9C7A5E701E}</Project>
-      <Name>Teleopti.Ccc.Sdk.Logic</Name>
     </ProjectReference>
     <ProjectReference Include="..\Teleopti.Ccc.SmartClientPortal\Teleopti.Common.UI.SmartPartControls\Teleopti.Common.UI.SmartPartControls.csproj">
       <Project>{92d88c7b-2401-4bc2-8f89-b919dbc6d143}</Project>

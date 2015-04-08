@@ -44,9 +44,9 @@ namespace Teleopti.Ccc.WinCode.Forecasting.ExportPages
             {
                 _exportAcrossBusinessUnitsSettingsProvider.TransformToSerializableModel(
                     _stateObj.ExportMultisiteSkillToSkillCommandModel.MultisiteSkillSelectionModels);
-                _exportAcrossBusinessUnitsSettingsProvider.ExportAcrossBusinessUnitsSettings.Period =
-                    new DateOnlyPeriod(new DateOnly(_stateObj.ExportMultisiteSkillToSkillCommandModel.Period.StartDate.DateTime),
-                                       new DateOnly(_stateObj.ExportMultisiteSkillToSkillCommandModel.Period.EndDate.DateTime));
+	            _exportAcrossBusinessUnitsSettingsProvider.ExportAcrossBusinessUnitsSettings.Period =
+		            _stateObj.ExportMultisiteSkillToSkillCommandModel.Period;
+                    
                 _exportAcrossBusinessUnitsSettingsProvider.Save();
             }
         }
