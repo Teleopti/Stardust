@@ -16,7 +16,6 @@ namespace Teleopti.Ccc.WinCode.Main
 		void OkbuttonClicked();
 		void BackButtonClicked();
 		void Initialize();
-		void GetDataForCurrentStep();
 		bool Start();
 		LoginStep CurrentStep { get; set; }
 	}
@@ -83,7 +82,7 @@ namespace Teleopti.Ccc.WinCode.Main
 				if (CurrentStep == LoginStep.Login && _model.AuthenticationType == AuthenticationTypeOption.Windows)
 					CurrentStep++;
 			}
-			GetDataForCurrentStep();
+			dataForCurrentStep();
 		}
 
 		private bool checkModel()
@@ -107,10 +106,10 @@ namespace Teleopti.Ccc.WinCode.Main
 				 _model.SelectedDataSourceContainer.AuthenticationTypeOption == AuthenticationTypeOption.Windows)
 				CurrentStep--;
 
-			GetDataForCurrentStep();
+			dataForCurrentStep();
 		}
 
-		public void GetDataForCurrentStep()
+		private void dataForCurrentStep()
 		{
 			switch (CurrentStep)
 			{
