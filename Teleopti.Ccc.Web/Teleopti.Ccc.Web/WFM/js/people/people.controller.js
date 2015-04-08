@@ -49,16 +49,25 @@
 			});
 		};
 
-		$scope.range = function (start, end) {
-		    var ret = [];
-		    if (!end) {
-		        end = start;
-		        start = 1;
-		    }
-		    for (var i = start; i < end; i++) {
-		        ret.push(i);
-		    }
-		    return ret;
+		$scope.range = function(start, end) {
+			var displayPageCount = 5;
+			var ret = [];
+			if (!end) {
+				end = start;
+				start = 1;
+			}
+
+			var leftBoundary = start;
+			var rightBoundary = end;
+			if (end - start > displayPageCount) {
+				var currentPageIndex = $scope.currentPageIndex;
+				leftBoundary = currentPageIndex - Math.floor(displayPageCount / 2) > 1 ? currentPageIndex - Math.floor(displayPageCount / 2) : 1;
+				rightBoundary = currentPageIndex + Math.floor(displayPageCount / 2) > end ? end : currentPageIndex + Math.floor(displayPageCount / 2);
+			}
+			for (var i = leftBoundary; i <= rightBoundary ; i++) {
+				ret.push(i);
+			}
+			return ret;
 		};
 
 		$scope.prevPage = function () {
