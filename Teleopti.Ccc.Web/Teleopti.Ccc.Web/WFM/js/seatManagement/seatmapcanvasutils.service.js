@@ -17,10 +17,10 @@ angular.module('wfm.seatMap')
 			
 			//Robtodo: review hack
 			var container = $('#seatmapcanvas')[0];
-			var resizedAncestor = container.parentElement.parentElement.parentElement;
-			var top = $('#seatmapcanvas').position().top-560;
+			var resizedAncestor = container.parentElement.parentElement;
+			var top = $('#seatmapcanvas').position().top + 60;
 		
-			canvas.setHeight(resizedAncestor.clientHeight-top);
+			canvas.setHeight(resizedAncestor.clientHeight - top);
 			canvas.setWidth(resizedAncestor.clientWidth);
 		};
 

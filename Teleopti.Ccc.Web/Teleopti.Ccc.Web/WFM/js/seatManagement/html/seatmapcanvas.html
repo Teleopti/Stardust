@@ -107,7 +107,7 @@
 
 	<div style="position: relative;">
 		<div style="top: -25px; right: 10px; z-index: 2; position: absolute;">
-			<button class="wfm-fab default" ng-click="vm.toggleEditMode()">
+			<button class="wfm-fab" ng-click="vm.toggleEditMode()">
 				<i ng-if="!vm.allowEdit" class="mdi mdi-pencil" aria-hidden="true"></i>
 				<i ng-if="vm.allowEdit" class="mdi mdi-stop" aria-hidden="true"></i>
 				<md-tooltip ng-if="!vm.allowEdit">
@@ -118,7 +118,7 @@
 				</md-tooltip>
 			</button>
 
-			<button ng-if="vm.allowEdit" class="wfm-fab default" ng-click="vm.save()">
+			<button ng-if="vm.allowEdit" class="wfm-fab" ng-click="vm.save()">
 				<i class="mdi mdi-play"></i>
 				<md-tooltip>
 					Save Changes
@@ -126,7 +126,7 @@
 			</button>
 		</div>
 
-		<div style="margin-top: 20px;">
+		<div style="margin-top: 20px;" class="wfm-block material-depth-2">
 			<canvas ng-show="!vm.isLoading" id="c"></canvas>
 			<md-progress-circular ng-show="vm.isLoading" style="position: absolute;left: 50%;top: 50%;margin-left: -32px;margin-top: -32px;" md-mode=" indeterminate"></md-progress-circular>
 		</div>
