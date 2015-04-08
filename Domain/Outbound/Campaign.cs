@@ -33,14 +33,13 @@ namespace Teleopti.Ccc.Domain.Outbound
 			_campaignWorkingPeriods = new HashSet<CampaignWorkingPeriod>();
 		}
 
-
-		public Campaign(string name)
+		public Campaign(string name, ISkill skill)
 			:this()
 		{
 			_name = name;
 			_callListLen = 100;
 			_targetRate = 50;
-			_skill = null;
+			_skill = skill;
 			_connectRate = 20;
 			_rightPartyConnectRate = 20;
 			_connectAverageHandlingTime = 30;

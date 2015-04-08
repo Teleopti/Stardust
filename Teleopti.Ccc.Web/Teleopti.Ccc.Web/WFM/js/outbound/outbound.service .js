@@ -2,9 +2,13 @@
 
 var outboundService = angular.module('outboundService', ['ngResource']);
 
-outboundService.factory('OutboundService', ['$rootScope', '$resource', function ($rootScope, $resource) {
+outboundService.factory('OutboundService', ['$rootScope', '$resource', function($rootScope, $resource) {
 
-	var Campaign = $resource('../api/Outbound/Campaign');
+	var Campaign = $resource('../api/Outbound/Campaign', {},
+	{
+		get: { method: 'GET', params: {}, isArray: true }
+		
+	});
 
 	var outboundService = {};
 
@@ -18,8 +22,7 @@ outboundService.factory('OutboundService', ['$rootScope', '$resource', function 
 	};
 
 	outboundService.listCampaign = function (campaignFilter) {
-		console.log(Campaign.query());
-		return Campaign.query(campaignFilter);
+		return Campaign.get(campaignFilter);
 	};
 
 	outboundService.getCampaignById = function(id) {

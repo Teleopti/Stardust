@@ -240,6 +240,7 @@
     <Compile Include="Areas\Global\UserControllerTest.cs" />
     <Compile Include="Areas\Outbound\Controllers\OutboundControllerTest.cs" />
     <Compile Include="Areas\Outbound\Core\OutboundCampaignPersisterTest.cs" />
+    <Compile Include="Areas\Outbound\Core\Campaign\Mapping\OutboundCampaignViewModelMapperTests.cs" />
     <Compile Include="Areas\Permissions\ApplicationFunctionsControllerTest.cs" />
     <Compile Include="Areas\MyTime\Core\Common\DataProvider\LeaderboardSettingBasedBadgeProviderTest.cs" />
     <Compile Include="Areas\Permissions\OrganizationSelectionControllerTest.cs" />
@@ -602,6 +603,7 @@
     </None>
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="Areas\Outbound\Models\" />
     <Folder Include="Core\Hangfire\" />
     <Folder Include="Core\WeekSchedule\Mapping\" />
     <Folder Include="Properties\" />

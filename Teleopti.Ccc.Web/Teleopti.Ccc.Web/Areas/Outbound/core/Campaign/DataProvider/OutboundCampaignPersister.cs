@@ -18,16 +18,25 @@ namespace Teleopti.Ccc.Web.Areas.Outbound.core.Campaign.DataProvider
 		}
 
 		public CampaignViewModel Persist(string name)
-		{
-			var campaign = new Domain.Outbound.Campaign(name);
+		{			
 			var skills = _skillRepository.LoadAll();
-			campaign.Skill = skills.FirstOrDefault();
+			var campaign = new Domain.Outbound.Campaign(name, skills.FirstOrDefault());
 			_outboundCampaignRepository.Add(campaign);
 
 			var skillVMs = new List<SkillViewModel>();
+			var isFirst = true;
 			foreach (var skill in skills)
 			{
-				var vm = new SkillViewModel() { Id = skill.Id.ToString(), IsSelected = false, SkillName = skill.Description };
+				SkillViewModel vm;
+				if (isFirst)
+				{
+					vm = new SkillViewModel() { Id = skill.Id, IsSelected = true, SkillName = skill.Description };
+					isFirst = false;
+				}
+				else
+				{
+					vm = new SkillViewModel() { Id = skill.Id, IsSelected = false, SkillName = skill.Description };
+				}
 				skillVMs.Add(vm);
 			}
 
@@ -46,7 +55,6 @@ namespace Teleopti.Ccc.Web.Areas.Outbound.core.Campaign.DataProvider
 				StartDate = campaign.StartDate,
 				EndDate = campaign.EndDate,
 				CampaignStatus = campaign.CampaignStatus,
-				CampaignWorkingPeriods = campaign.CampaignWorkingPeriods,
 			};
 			
 		}

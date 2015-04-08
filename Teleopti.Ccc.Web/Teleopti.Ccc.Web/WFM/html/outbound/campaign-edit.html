@@ -26,7 +26,7 @@
 			<div class="wfm-block">
 				<div class="sub-header accordion-head" ng-click="acToggle1 = !acToggle1">
 					Campaign
-					<strong>{{campaign.name}}</strong>
+					<strong>{{campaign.Name}}</strong>
 				</div>
 				<div ng-show="acToggle1">
 					<form name="formParams" class="form-horizontal wfm-block" ng-submit="update()">
@@ -44,35 +44,31 @@
 						</div>
 						<div class="input-prepend">
 							<span><strong>Call-list Len.</strong></span>
-							<input id="callList" type="text" ng-model="campaign.params.callList" placeholder="call list length" />
+							<input id="callList" type="text" ng-model="campaign.CallListLen" placeholder="call list length" />
 						</div>
 						<div class="input-prepend">
 							<span><strong>SLA</strong></span>
-							<input id="sla" type="text" ng-model="campaign.params.sla" placeholder="sla" />
-						</div>
-						<div class="input-prepend">
-							<span><strong>Target</strong></span>
-							<input id="target" type="text" ng-model="campaign.params.target" placeholder="target number of calls" />
+							<input id="sla" type="text" ng-model="campaign.TargetRate" placeholder="sla" />
 						</div>
 						<div class="input-prepend">
 							<span><strong>CR</strong></span>
-							<input id="cr" type="text" ng-model="campaign.params.cr" placeholder="connect rate" />
+							<input id="cr" type="text" ng-model="campaign.ConnectRate" placeholder="connect rate" />
 						</div>
 						<div class="input-prepend">
 							<span><strong>RPCR</strong></span>
-							<input id="target" type="text" ng-model="campaign.params.rpcr" placeholder="right party connect rate" />
+							<input id="target" type="text" ng-model="campaign.RightPartyConnectRate" placeholder="right party connect rate" />
 						</div>
 						<div class="input-prepend">
 							<span><strong>Connect AHT</strong></span>
-							<input id="cAHT" type="text" ng-model="campaign.params.cAHT" placeholder="connect average handle time" />
+							<input id="cAHT" type="text" ng-model="campaign.ConnectAverageHandlingTime" placeholder="connect average handle time" />
 						</div>
 						<div class="input-prepend">
 							<span><strong>RPC AHT</strong></span>
-							<input id="rpcAHT" type="text" ng-model="campaign.params.rpcAHT" placeholder="right party average handle time" />
+							<input id="rpcAHT" type="text" ng-model="campaign.RightPartyAverageHandlingTime" placeholder="right party average handle time" />
 						</div>
 						<div class="input-prepend">
 							<span><strong>Unproductive</strong></span>
-							<input id="unproductive" type="text" ng-model="campaign.params.unproductive" placeholder="unproductive time" />
+							<input id="unproductive" type="text" ng-model="campaign.UnproductiveTime" placeholder="unproductive time" />
 						</div>
 					</form>
 				</div>

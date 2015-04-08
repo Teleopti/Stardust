@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using Teleopti.Ccc.Domain.Outbound;
 using Teleopti.Interfaces.Domain;
@@ -19,12 +20,18 @@ namespace Teleopti.Ccc.Web.Areas.Outbound.Models
 		public DateOnly? StartDate;
 		public DateOnly? EndDate;
 		public CampaignStatus CampaignStatus;
-		public IEnumerable<CampaignWorkingPeriod> CampaignWorkingPeriods;		
+		public IEnumerable<CampaignWorkingPeriodViewModel> CampaignWorkingPeriods;		
 	}
 
-	public struct SkillViewModel
+	public class CampaignWorkingPeriodViewModel
 	{
-		public string Id;
+		public Guid? Id;
+		public TimePeriod WorkingPeriod;
+	}
+
+	public class SkillViewModel
+	{
+		public Guid? Id;
 		public string SkillName;
 		public bool IsSelected;
 	}

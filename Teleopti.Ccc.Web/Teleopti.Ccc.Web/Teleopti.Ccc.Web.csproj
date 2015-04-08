@@ -450,7 +450,9 @@
     <Compile Include="Areas\MyTime\Core\WeekSchedule\DataProvider\IAbsenceRequestProbabilityProvider.cs" />
     <Compile Include="Areas\Outbound\core\Campaign\DataProvider\OutboundCampaignPersister.cs" />
     <Compile Include="Areas\Outbound\core\Campaign\Mapping\IOutboundCampaignMapper.cs" />
+    <Compile Include="Areas\Outbound\core\Campaign\Mapping\IOutboundCampaignViewModelMapper.cs" />
     <Compile Include="Areas\Outbound\core\IoC\OutboundAreaModule.cs" />
+    <Compile Include="Areas\Outbound\core\Campaign\Mapping\OutboundCampaignViewModelMapper.cs" />
     <Compile Include="Areas\Outbound\Models\CampaignViewModel.cs" />
     <Compile Include="Areas\Outbound\Controllers\OutboundController.cs" />
     <Compile Include="Areas\Outbound\core\Campaign\DataProvider\IOutboundCampaignPersister.cs" />
@@ -1219,7 +1221,9 @@
     <None Include="WFM\css\_outbound.scss" />
     <Content Include="WFM\Gruntfile.js" />
     <Content Include="WFM\html\forecasting\forecasting-target.html" />
+    <Content Include="WFM\html\outbound\campaign-edit.html" />
     <Content Include="WFM\html\outbound\campaign-forecasting.html" />
+    <Content Include="WFM\html\outbound\campaign-list.html" />
     <Content Include="WFM\html\outbound\outbound.html" />
     <Content Include="WFM\html\people\people.html" />
     <Content Include="WFM\js\forecasting\forecasting.controller.js" />

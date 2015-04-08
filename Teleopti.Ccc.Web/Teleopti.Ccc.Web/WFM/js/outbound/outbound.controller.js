@@ -17,7 +17,7 @@ outbound.controller('OutboundListCtrl', [
 		$scope.campaigns = OutboundService.listCampaign();
 
 		$scope.create = function () {
-			var newCampaign = OutboundService.addCampaign({ name: $scope.newName })
+			var newCampaign = OutboundService.addCampaign({ name: $scope.newName });
 			$scope.campaigns.unshift(newCampaign);
 			$scope.selectedTarget = newCampaign;			
 		};
