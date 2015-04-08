@@ -5530,7 +5530,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 		{
 			foreach (ToolStripMenuItem downItem in toolStripMenuItemViewPointTimeZone.DropDownItems)
 			{
-				downItem.Checked = (_schedulerState.TimeZoneInfo == downItem.Tag);
+				downItem.Checked = (_schedulerState.TimeZoneInfo.Equals(downItem.Tag));
 			}
 		}
 
