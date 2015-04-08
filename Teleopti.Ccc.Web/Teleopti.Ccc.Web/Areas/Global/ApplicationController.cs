@@ -38,7 +38,7 @@ namespace Teleopti.Ccc.Web.Areas.Global
 		{
 			return 
 				_areaWithPermissionPaths.Where(a => _permissionProvider.HasApplicationFunctionPermission(a.Path) && isPathEnabled(a.Path))
-					.Select(a => new { Name = a.Name(), a.InternalName, _links = a.Links.ToArray() });
+					.Select(a => new { Name = a.Name(), a.InternalName, _links = a.Links.ToArray() }).ToArray();
 		}
 
 		private bool isPathEnabled(string path)
