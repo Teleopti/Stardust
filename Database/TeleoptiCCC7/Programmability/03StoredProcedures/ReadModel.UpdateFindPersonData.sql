@@ -72,7 +72,10 @@ INNER JOIN Site s ON s.Id = t.Site
 WHERE t.IsDeleted = 0 AND s.IsDeleted = 0
 
 UPDATE [ReadModel].[FindPerson]
-SET SearchValue = DescriptionText
+SET SearchValue = CASE SUBSTRING( ar.DescriptionText ,1 , 2 )
+WHEN  'xx'    THEN ar.Name
+ ELSE ar.DescriptionText
+ END
 FROM [ReadModel].[FindPerson] INNER JOIN 
 ApplicationRole ar ON ar.Id = SearchValueId 
 INNER JOIN #ids on #ids.id = SearchValueId
