@@ -143,8 +143,7 @@ namespace Teleopti.Ccc.WinCode.Main
 				if (!_view.InitStateHolderWithoutDataSource(_messageBroker, settings))
 					CurrentStep--; //?
 			}
-			_model.WindowsIsPossible = _multiTenancyWindowsLogon.CheckWindowsIsPossible();
-			if (!_model.WindowsIsPossible)
+			if (!_multiTenancyWindowsLogon.CheckWindowsIsPossible())
 			{
 				_model.AuthenticationType = AuthenticationTypeOption.Application;
 				CurrentStep++;
