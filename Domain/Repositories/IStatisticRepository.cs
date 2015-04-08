@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Data;
 using Teleopti.Ccc.Domain.ETL;
 using Teleopti.Ccc.Domain.Security.AuthorizationEntities;
@@ -130,5 +131,6 @@ namespace Teleopti.Ccc.Domain.Repositories
 		IEnumerable<RunningEtlJob> GetRunningEtlJobs();
 
 		IEnumerable<ForecastActualDifferNotification> ForecastActualDifferNotifications();
+		ICollection<IStatisticTask> LoadHourlyStatisticForSpecificDates(ICollection<IQueueSource> sources, DateTimePeriod period);
 	}
 }

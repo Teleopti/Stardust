@@ -28,7 +28,7 @@ namespace Teleopti.Ccc.DomainTest.Forecasting.Angel.Accuracy
 		{
 			var statisticRepository = MockRepository.GenerateStub<IStatisticRepository>();
 			statisticRepository.Stub(
-				x => x.LoadSpecificDates(Workload.QueueSourceCollection, HistoricalPeriodForMeasurement.ToDateTimePeriod(SkillTimeZoneInfo()))).Return(StatisticTasks().ToArray());
+				x => x.LoadHourlyStatisticForSpecificDates(Workload.QueueSourceCollection, HistoricalPeriodForMeasurement.ToDateTimePeriod(SkillTimeZoneInfo()))).Return(StatisticTasks().ToArray());
 			var dailyStatistics = new DailyStatisticsAggregator(statisticRepository);
 
 			var currentScenario = MockRepository.GenerateStub<ICurrentScenario>();

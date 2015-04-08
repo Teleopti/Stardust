@@ -17,7 +17,7 @@ namespace Teleopti.Ccc.Domain.Forecasting.Angel.Historical
 
 		public IEnumerable<DailyStatistic> LoadDailyStatistics(IWorkload workload, DateOnlyPeriod dateRange)
 		{
-			var statisticTasks = _statisticRepository.LoadSpecificDates(workload.QueueSourceCollection,
+			var statisticTasks = _statisticRepository.LoadHourlyStatisticForSpecificDates(workload.QueueSourceCollection,
 				dateRange.ToDateTimePeriod(workload.Skill.TimeZone));
 
 			var calculator = new QueueStatisticsCalculator(workload.QueueAdjustments);

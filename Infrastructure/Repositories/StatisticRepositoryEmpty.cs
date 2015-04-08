@@ -41,6 +41,11 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
             return new List<IStatisticTask>();
         }
 
+		public ICollection<IStatisticTask> LoadHourlyStatisticForSpecificDates(ICollection<IQueueSource> sources, DateTimePeriod period)
+		{
+			return new List<IStatisticTask>();
+		}
+
         /// <summary>
         /// Stub for loading matrix reports. 
         /// Note: It will return null, instead of an empty list.

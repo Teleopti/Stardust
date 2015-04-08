@@ -33,9 +33,9 @@ namespace Teleopti.Ccc.DomainTest.Forecasting.Angel.QuickForecastSkillWithOneWor
 		{
 			var statisticRepository = MockRepository.GenerateStub<IStatisticRepository>();
 			statisticRepository.Stub(
-				x => x.LoadSpecificDates(Workload.QueueSourceCollection, HistoricalPeriodForForecast.ToDateTimePeriod(SkillTimeZoneInfo()))).Return(StatisticTasks().ToArray());
+				x => x.LoadHourlyStatisticForSpecificDates(Workload.QueueSourceCollection, HistoricalPeriodForForecast.ToDateTimePeriod(SkillTimeZoneInfo()))).Return(StatisticTasks().ToArray());
 			statisticRepository.Stub(
-				x => x.LoadSpecificDates(Workload.QueueSourceCollection, HistoricalPeriodForMeasurement.ToDateTimePeriod(SkillTimeZoneInfo()))).Return(StatisticTasksForMeasurement().ToArray());
+				x => x.LoadHourlyStatisticForSpecificDates(Workload.QueueSourceCollection, HistoricalPeriodForMeasurement.ToDateTimePeriod(SkillTimeZoneInfo()))).Return(StatisticTasksForMeasurement().ToArray());
 			var dailyStatistics = new DailyStatisticsAggregator(statisticRepository);
 
 			var skillDays = CurrentSkillDays();

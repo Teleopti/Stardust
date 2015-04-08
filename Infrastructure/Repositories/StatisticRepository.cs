@@ -93,7 +93,31 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
             }
         }
 
-        public ICollection<IActiveAgentCount> LoadActiveAgentCount(ISkill skill, DateTimePeriod period)
+		public ICollection<IStatisticTask> LoadHourlyStatisticForSpecificDates(ICollection<IQueueSource> sources, DateTimePeriod period)
+		{
+			if (sources.Count == 0) return new List<IStatisticTask>();
+
+			ICollection<IStatisticTask> statisticTasks = new Collection<IStatisticTask>();
+
+			using (IStatelessUnitOfWork uow = StatisticUnitOfWorkFactory().CreateAndOpenStatelessUnitOfWork())
+			{
+				foreach (var source in sources.Batch(500))
+				{
+					string queueList = buildStringQueueList(source);
+					IQuery query = createHourlyStatisticQuery(uow, period, queueList);
+					query.SetTimeout(1200);
+
+					foreach (var item in query.List<IStatisticTask>())
+					{
+						statisticTasks.Add(item);
+					}
+				}
+
+				return statisticTasks;
+			}
+		}
+
+	    public ICollection<IActiveAgentCount> LoadActiveAgentCount(ISkill skill, DateTimePeriod period)
         {
             using (IStatelessUnitOfWork uow = StatisticUnitOfWorkFactory().CreateAndOpenStatelessUnitOfWork())
             {
@@ -101,7 +125,6 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
                 return query.List<IActiveAgentCount>();
             }
         }
-
         
         public void PersistFactQueues(DataTable queueDataTable)
         {
@@ -124,6 +147,21 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
                 .QueueMartId.ToString(CultureInfo.InvariantCulture)).ToArray());
         }
 
+		private IQuery createHourlyStatisticQuery(IStatelessUnitOfWork uow, DateTimePeriod date, string queueList)
+		{
+			return session(uow).CreateSQLQuery("exec mart.raptor_queue_statistics_load @DateFrom=:DateFrom,@DateTo=:DateTo, @QueueList=:QueueList")
+				.AddScalar("StatAverageTaskTimeSeconds", NHibernateUtil.Double)
+				.AddScalar("StatAverageAfterTaskTimeSeconds", NHibernateUtil.Double)
+				.AddScalar("StatOfferedTasks", NHibernateUtil.Double)
+				.AddScalar("StatAnsweredTasks", NHibernateUtil.Double)
+				.AddScalar("Interval", NHibernateUtil.DateTime)
+				.SetReadOnly(true)
+				.SetString("DateFrom", date.StartDateTime.ToString(CultureInfo.InvariantCulture))
+				.SetString("DateTo", date.EndDateTime.ToString(CultureInfo.InvariantCulture))
+				.SetString("QueueList", queueList)
+				.SetResultTransformer(Transformers.AliasToBean(typeof(StatisticTask)));
+		}
+
         private static IQuery createQuery(IStatelessUnitOfWork uow, DateTimePeriod date, string queueList)
         {
             return session(uow).CreateSQLQuery("exec mart.raptor_statistics_load @DateFrom=:DateFrom,@DateTo=:DateTo, @QueueList=:QueueList")
@@ -131,18 +169,18 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
                 .AddScalar("StatAverageAfterTaskTimeSeconds", NHibernateUtil.Double)
                 .AddScalar("StatOfferedTasks", NHibernateUtil.Double)
                 .AddScalar("StatAnsweredTasks", NHibernateUtil.Double)
-                .AddScalar("StatAbandonedTasks", NHibernateUtil.Double)
+				.AddScalar("StatAbandonedTasks", NHibernateUtil.Double)
 
-                .AddScalar("StatAbandonedShortTasks", NHibernateUtil.Double)
-                .AddScalar("StatAbandonedTasksWithinSL", NHibernateUtil.Double)
-                .AddScalar("StatAnsweredTasksWithinSL", NHibernateUtil.Double)
-                .AddScalar("StatOverflowOutTasks", NHibernateUtil.Double)
-                .AddScalar("StatOverflowInTasks", NHibernateUtil.Double)
-                .AddScalar("StatAverageQueueTimeSeconds", NHibernateUtil.Int32)
-                .AddScalar("StatAverageHandleTimeSeconds", NHibernateUtil.Double)
-                .AddScalar("StatAverageTimeToAbandonSeconds", NHibernateUtil.Int32)
-                .AddScalar("StatAverageTimeLongestInQueueAnsweredSeconds", NHibernateUtil.Int32)
-                .AddScalar("StatAverageTimeLongestInQueueAbandonedSeconds", NHibernateUtil.Int32)
+				.AddScalar("StatAbandonedShortTasks", NHibernateUtil.Double)
+				.AddScalar("StatAbandonedTasksWithinSL", NHibernateUtil.Double)
+				.AddScalar("StatAnsweredTasksWithinSL", NHibernateUtil.Double)
+				.AddScalar("StatOverflowOutTasks", NHibernateUtil.Double)
+				.AddScalar("StatOverflowInTasks", NHibernateUtil.Double)
+				.AddScalar("StatAverageQueueTimeSeconds", NHibernateUtil.Int32)
+				.AddScalar("StatAverageHandleTimeSeconds", NHibernateUtil.Double)
+				.AddScalar("StatAverageTimeToAbandonSeconds", NHibernateUtil.Int32)
+				.AddScalar("StatAverageTimeLongestInQueueAnsweredSeconds", NHibernateUtil.Int32)
+				.AddScalar("StatAverageTimeLongestInQueueAbandonedSeconds", NHibernateUtil.Int32)
 
 
 
@@ -358,7 +396,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 			 }
 	    }
 
-		public IEnumerable<RunningEtlJob> GetRunningEtlJobs()
+	    public IEnumerable<RunningEtlJob> GetRunningEtlJobs()
 		{
 		    using (var uow = StatisticUnitOfWorkFactory().CreateAndOpenStatelessUnitOfWork())
 		    {
