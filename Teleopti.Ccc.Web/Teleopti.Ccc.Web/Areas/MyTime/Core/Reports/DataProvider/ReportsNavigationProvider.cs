@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
@@ -59,6 +60,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Reports.DataProvider
 				{
 					Url = _reportUrl.Build(applicationFunction.ForeignId),
 					Title = applicationFunction.LocalizedFunctionDescription,
+					Id = new Guid(applicationFunction.ForeignId)
 				});
 			}
 			return reportsList;

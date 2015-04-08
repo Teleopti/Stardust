@@ -58,30 +58,16 @@ namespace Teleopti.Ccc.Web.Areas.Reporting
 					return;
 				ParameterSelector.ReportId = ReportId;
 
-				if (ParameterSelector.IsReportPermissionGranted)
-				{
-					var commonReports = new CommonReports(ParameterSelector.ConnectionString, ParameterSelector.ReportId);
-					Guid groupPageComboBoxControlCollectionId = commonReports.GetGroupPageComboBoxControlCollectionId();
-					string groupPageComboBoxControlCollectionIdName = string.Format("ParameterSelector$Drop{0}", groupPageComboBoxControlCollectionId);
+				var commonReports = new CommonReports(ParameterSelector.ConnectionString, ParameterSelector.ReportId);
+				Guid groupPageComboBoxControlCollectionId = commonReports.GetGroupPageComboBoxControlCollectionId();
+				string groupPageComboBoxControlCollectionIdName = string.Format("ParameterSelector$Drop{0}", groupPageComboBoxControlCollectionId);
 
-					GroupPageCode = string.IsNullOrEmpty(Request.Form.Get(groupPageComboBoxControlCollectionIdName))
-												? Selector.BusinessHierarchyCode
-												: new Guid(Request.Form.Get(groupPageComboBoxControlCollectionIdName));
-					ParameterSelector.GroupPageCode = GroupPageCode;
-					commonReports.LoadReportInfo();
-					Page.Header.Title = commonReports.Name;
-					//labelRepCaption.Text = commonReports.Name;
-				}
-				else
-				{
-					// User do not have permission on report
-					buttonShowReport.Visible = false;
-					labelPermissionDenied.Visible = true;
-					ParameterSelector.Visible = false;
-					labelPermissionDenied.Text = Resources.ResPermissionDenied;
-					Page.Header.Title = Resources.ResPermissionDenied;
-				}
-				
+				GroupPageCode = string.IsNullOrEmpty(Request.Form.Get(groupPageComboBoxControlCollectionIdName))
+											? Selector.BusinessHierarchyCode
+											: new Guid(Request.Form.Get(groupPageComboBoxControlCollectionIdName));
+				ParameterSelector.GroupPageCode = GroupPageCode;
+				commonReports.LoadReportInfo();
+				Page.Header.Title = commonReports.Name;
 			}
 		}
 

@@ -26,7 +26,7 @@
 		<asp:ScriptManager ID="ScriptManager1" EnablePartialRendering="true" runat="server" EnableScriptGlobalization="true" EnableScriptLocalization="true" />
 		<div class="Panel">
 			<div class="DetailsView" style="height: 80%; overflow: auto">
-				<Analytics:Selector LabelWidth="30%" List1Width="75%" ID="ParameterSelector" name="ParameterSelector" runat="server" OnInit="Selector_OnInit"></Analytics:Selector>
+				<Analytics:Selector LabelWidth="30%" List1Width="75%" ID="ParameterSelector" name="ParameterSelector" runat="server" OnInit="Selector_OnInit" SkipPermissions="true"></Analytics:Selector>
 				<div style="float: left; width: 29%">
 					<asp:ValidationSummary ID="ValidationSummary1" runat="server" ForeColor="Red" />
 					<asp:Label ID="labelPermissionDenied" runat="server" ForeColor="Red" Font-Size="Large" Visible="false"></asp:Label>

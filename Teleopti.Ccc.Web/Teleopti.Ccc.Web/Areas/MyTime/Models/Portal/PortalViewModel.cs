@@ -42,6 +42,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Models.Portal
 		public string Url { get; set; }
 		public bool IsWebReport { get; set; }
 		public bool IsDivider { get; set; }
+		public Guid Id { get; set; }
 	}
 	public class PreferenceOption : Option, IPreferenceOption
 	{

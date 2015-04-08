@@ -1218,6 +1218,7 @@
     <Content Include="Areas\SeatPlanner\Content\Styles\Site.css" />
     <Content Include="Areas\SeatPlanner\Content\Templates\Dashboard\view.html" />
     <Content Include="Areas\SeatPlanner\Content\Templates\SeatMap\view.html" />
+    <Content Include="Areas\Reporting\Views\Report\NoPermission.cshtml" />
     <None Include="WFM\css\_layout.scss" />
     <Content Include="WFM\css\main.css" />
     <None Include="WFM\css\_outbound.scss" />
@@ -2120,7 +2121,7 @@
     <VisualStudio>
       <FlavorProperties GUID="{349c5851-65df-11da-9384-00065b846f21}">
         <WebProjectProperties>
-          <UseIIS>True</UseIIS>
+          <UseIIS>False</UseIIS>
           <AutoAssignPort>False</AutoAssignPort>
           <DevelopmentServerPort>52858</DevelopmentServerPort>
           <DevelopmentServerVPath>/</DevelopmentServerVPath>

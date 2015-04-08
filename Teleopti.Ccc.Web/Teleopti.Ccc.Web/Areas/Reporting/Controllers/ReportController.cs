@@ -1,6 +1,8 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Configuration;
 using System.Globalization;
+using System.Linq;
 using System.Threading;
 using System.Web.Mvc;
 using Teleopti.Ccc.Domain.Security.Principal;
@@ -25,6 +27,10 @@ namespace Teleopti.Ccc.Web.Areas.Reporting.Controllers
 			if (id == null)
 				return View("Empty");
 			var reportsItems = _reportsNavigationProvider.GetNavigationItems();
+
+			var guids = reportsItems.Select(item => item.Id).ToList();
+			if(!guids.Contains(id.Value))
+				return View("NoPermission");
 
 			var commonReports =
 				new CommonReports(

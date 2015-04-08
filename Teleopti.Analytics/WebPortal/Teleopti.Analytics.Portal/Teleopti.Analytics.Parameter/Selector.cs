@@ -60,7 +60,7 @@ namespace Teleopti.Analytics.Parameters
 			get { return ReportTexts.Resources.MissingValueErrorMessage; } //"xxDu har inte angett något i";;
 		}
 
-
+		public bool SkipPermissions { get; set; }
 
 		//ola 2005-12-20 lagt till så man kan skicka in en arraylist av parameter
 		// som ska användas till FÖRSTA kontrollen.
@@ -236,6 +236,7 @@ namespace Teleopti.Analytics.Parameters
 		{
 			get
 			{
+				if (SkipPermissions) return true;
 				if (_reader == null)
 				{
 					_reader = new Reader(ConnectionString, userReportParams.LangId);
