@@ -89,8 +89,6 @@ namespace Teleopti.Ccc.WinCode.Main
 		{
 			switch (CurrentStep)
 			{
-				case LoginStep.SelectLogonType:
-					return true;
 				case LoginStep.Login:
 					return _model.HasValidLogin();
 				case LoginStep.SelectBu:
