@@ -33,7 +33,9 @@ Background:
 	| Field                    | Value     |
 	| Name                     | No access |
 	| Access to mytime web     | false     |
-	| Access to admin web	   | false     |
+	| Access to admin web      | false     |
+	| Access to matrix reports | false     |
+
 
 Scenario: Sign in with a user with multiple business units by user name
 	Given I have the role 'Role for business unit 1'
@@ -67,6 +69,7 @@ Scenario: Sign in with wrong password should give me an informative error
 	When I sign in by user name and wrong password
 	Then I should see a log on error 'LogOnFailedInvalidUserNameOrPassword'
 
+@ignore
 Scenario: Sign in without permission
 	Given I have the role 'No access'
 	And I am viewing the sign in page
