@@ -33,14 +33,18 @@
 				xmlhttp.onreadystatechange = function () {
 					if (xmlhttp.readyState == 4) {
 						if (xmlhttp.status == 200) {
-							isWfmEnabled = xmlhttp.responseText;
+							if (xmlhttp.responseText.length > 0) {
+								var result = JSON.parse(xmlhttp.responseText);
+								isWfmEnabled = result.IsEnabled;
+							} else {
+								isWfmEnabled = false;
+							}
+							toggleLaunchWfm(isWfmEnabled);
 						} 
 					}
 				};
-
 				xmlhttp.open("GET", "Web/ToggleHandler/IsEnabled?toggle=Wfm_MinimumScaffolding_32659", true);
 				xmlhttp.send();
-				toggleLaunchWfm(isWfmEnabled);
 			};
 
 			function toggleLaunchWfm(isEnabled) {
