@@ -38,12 +38,15 @@ define([
 			ko.utils.arrayForEach(data.People, function(item) {
 				vm.Receivers.push({ Name: item.Name, Id: item.Id });
 			});
+			vm.DisplayContent(true);
 		},
 		error: function (data) {
 			if (data.status === 403) {
 				vm.ErrorMessage(resources.InsufficientPermission);
+				vm.DisplayContent(false);
 			} else {
 				vm.ErrorMessage(data.statusText);
+				vm.DisplayContent(true);
 			}
 		}
 	});

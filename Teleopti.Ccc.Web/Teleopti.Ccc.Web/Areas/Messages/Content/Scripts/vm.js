@@ -51,12 +51,11 @@ define([
 					self.StatusText(self.Resources.Sent);
 					self.StatusClass("label-success");
 					self.ErrorMessage("");
-					self.DisplayContent(true);
+					
 				},
 				error: function (data) {
 					if (data.status === 403) {
 						self.ErrorMessage(resources.InsufficientPermission);
-						self.DisplayContent(false);
 					} else {
 						self.ErrorMessage(data.statusText);
 					}
