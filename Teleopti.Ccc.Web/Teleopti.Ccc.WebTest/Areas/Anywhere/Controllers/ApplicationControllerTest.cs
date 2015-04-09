@@ -5,10 +5,12 @@ using System.Web.Routing;
 using NUnit.Framework;
 using Rhino.Mocks;
 using SharpTestsEx;
+using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Security.Authentication;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.IocCommon.Toggle;
+using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.Web;
 using Teleopti.Ccc.Web.Areas.Anywhere.Controllers;
@@ -23,6 +25,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Controllers
 		private IPrincipalAuthorization authorization;
 		private ICurrentTeleoptiPrincipal currentTeleoptiPrincipal;
 		private IIanaTimeZoneProvider ianaTimeZoneProvider;
+		private ICurrentDataSource currentDataSource;
 
 		[SetUp]
 		public void Setup()
@@ -30,7 +33,8 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Controllers
 			authorization = MockRepository.GenerateMock<IPrincipalAuthorization>();
 			currentTeleoptiPrincipal = MockRepository.GenerateMock<ICurrentTeleoptiPrincipal>();
 			ianaTimeZoneProvider = MockRepository.GenerateMock<IIanaTimeZoneProvider>();
-			target = new ApplicationController(authorization, currentTeleoptiPrincipal, ianaTimeZoneProvider, new FakeToggleManager(), new UtcTimeZone(), new Now());
+			currentDataSource = new FakeCurrentDatasource("ds1");
+			target = new ApplicationController(authorization, currentTeleoptiPrincipal, ianaTimeZoneProvider, new FakeToggleManager(), new UtcTimeZone(), new Now(), currentDataSource);
 		}
 
 		[TearDown]
@@ -96,6 +100,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Controllers
 			((object)content.IsRemoveAbsenceAvailable).Should().Be.EqualTo(true);
 			((object)content.IsAddActivityAvailable).Should().Be.EqualTo(true);
 			((object)content.IsMoveActivityAvailable).Should().Be.EqualTo(true);
+			((object)content.IsSmsLinkAvailable).Should().Be.EqualTo(false);
 		}
 
 		[Test]

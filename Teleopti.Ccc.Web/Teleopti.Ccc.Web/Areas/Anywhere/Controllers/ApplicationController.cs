@@ -3,6 +3,7 @@ using System.Globalization;
 using System.Web.Mvc;
 using Newtonsoft.Json;
 using Teleopti.Ccc.Domain.Aop;
+using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
@@ -27,15 +28,9 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Controllers
 		private readonly IToggleManager _toggles;
 		private readonly IUserTimeZone _userTimeZone;
 		private readonly INow _now;
+		private readonly ICurrentDataSource _currentDataSource;
 
-		public ApplicationController(
-			IPrincipalAuthorization principalAuthorization, 
-			ICurrentTeleoptiPrincipal currentTeleoptiPrincipal, 
-			IIanaTimeZoneProvider ianaTimeZoneProvider, 
-			IToggleManager toggles,
-			IUserTimeZone userTimeZone,
-			INow now
-			)
+		public ApplicationController(IPrincipalAuthorization principalAuthorization, ICurrentTeleoptiPrincipal currentTeleoptiPrincipal, IIanaTimeZoneProvider ianaTimeZoneProvider, IToggleManager toggles, IUserTimeZone userTimeZone, INow now, ICurrentDataSource currentDataSource)
 		{
 			_principalAuthorization = principalAuthorization;
 			_currentTeleoptiPrincipal = currentTeleoptiPrincipal;
@@ -43,6 +38,7 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Controllers
 			_toggles = toggles;
 			_userTimeZone = userTimeZone;
 			_now = now;
+			_currentDataSource = currentDataSource;
 		}
 
 		public ViewResult Index()
@@ -69,13 +65,18 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Controllers
 		[HttpGet, OutputCache(NoStore = true, Duration = 0)]
 		public JsonResult Permissions()
 		{
+			var isSmsLinkAvailable = DefinedLicenseDataFactory.HasLicense(_currentDataSource.CurrentName()) &&
+									  DefinedLicenseDataFactory.GetLicenseActivator(_currentDataSource.CurrentName()).EnabledLicenseOptionPaths.Contains(
+										  DefinedLicenseOptionPaths.TeleoptiCccSmsLink);
+
 			return Json(new
 			{
 				IsAddFullDayAbsenceAvailable = _principalAuthorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.AddFullDayAbsence),
 				IsAddIntradayAbsenceAvailable = _principalAuthorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.AddIntradayAbsence),
 				IsRemoveAbsenceAvailable = _principalAuthorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.RemoveAbsence),
 				IsAddActivityAvailable = _principalAuthorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.AddActivity),
-				IsMoveActivityAvailable = _principalAuthorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.MoveActivity)
+				IsMoveActivityAvailable = _principalAuthorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.MoveActivity),
+				IsSmsLinkAvailable = isSmsLinkAvailable
 			}, JsonRequestBehavior.AllowGet);
 		}
 

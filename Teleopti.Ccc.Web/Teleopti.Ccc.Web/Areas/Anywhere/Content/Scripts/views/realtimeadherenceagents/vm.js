@@ -27,6 +27,7 @@
 			var that = {};
 			that.Resources = resources;
 			that.permissionAddActivity = ko.observable();
+			that.permissionSendMessage = ko.observable(false);
 
 			var fetchHistoricalAdherence = historicalAdherenceServercall || getadherence.ServerCall;
 

@@ -109,11 +109,12 @@
 
 			permissions.get().done(function (data) {
 				viewModel.permissionAddActivity(data.IsAddActivityAvailable);
+				viewModel.permissionSendMessage(data.IsSmsLinkAvailable);
 			});
 
 			viewModel.agentAdherenceEnabled(resources.RTA_SeePercentageAdherenceForOneAgent_30783);
 			viewModel.agentAdherenceDetailsEnabled(resources.RTA_SeeAdherenceDetailsForOneAgent_31285);
-			viewModel.notifyViaSMSEnabled(resources.RTA_NotifyViaSMS_31567);
+			viewModel.notifyViaSMSEnabled(resources.RTA_NotifyViaSMS_31567 && viewModel.permissionSendMessage());
 		},
 		dispose: function (options) {
 			subscriptions.unsubscribeAdherence();
