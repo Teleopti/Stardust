@@ -180,6 +180,28 @@ angular.module('wfm.seatMap')
 			});
 		};
 
+		utils.resetZoom = function(canvas) {
+			canvas.setZoom();
+		};
+
+		utils.zoom = function(canvas, value) {
+			canvas.setZoom(value);
+		};
+
+		utils.scrollZooming = function($window,canvas, isScrollListening, data) {
+			var e = $window.event;
+
+			if (isScrollListening) {
+				e.preventDefault();
+				if (e.wheelDelta == 120) data.zoomValue = Math.max(data.min, Math.min(data.max, ((data.zoomValue > 1) ? data.zoomValue * 1.1 : data.zoomValue + data.step)));
+				if (e.wheelDelta == -120) data.zoomValue = Math.max(data.min, Math.min(data.max, ((data.zoomValue > 1) ? data.zoomValue * 0.9 : data.zoomValue - data.step)));
+
+				utils.zoom(canvas,data.zoomValue);
+			}
+			
+			return data.zoomValue;
+		};
+
 		function loadSeatMapData (canvas, data, allowEdit, callbackSuccess, callbackNoJson) {
 
 			if (data == null) {

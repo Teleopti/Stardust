@@ -39,6 +39,8 @@
 		vm.parentId = null;
 		vm.newLocationName = '';
 		vm.fileCallbackFunction = null;
+		vm.scrollListen = false;
+		vm.zoomData = { min: 0.1, max: 5, step: 0.05, zoomValue:1};
 
 		init();
 
@@ -46,6 +48,9 @@
 			canvasUtils.toggleMoveMode(canvas);
 		};
 
+		vm.isMoveMode = function() {
+			return canvas.isGrabMode; 
+		};
 
 		vm.toggleEditMode = function () {
 			if (vm.readonly) {
@@ -144,6 +149,10 @@
 			canvasEditor.alignBottom(canvas);
 		};
 
+		vm.zoom = function () {
+			canvasUtils.zoom(canvas, vm.zoomData.zoomValue);
+		};
+
 		function init() {
 
 			fabric.Object.prototype.transparentCorners = false;
@@ -159,6 +168,12 @@
 			createListenersKeyboard();
 			vm.isLoading = true;
 			canvasUtils.loadSeatMap(null, canvas, vm.allowEdit, onLoadSeatMapSuccess, onLoadSeatMapNoSeatMapJson);
+		
+			$window.addEventListener('mousewheel', scrollZooming, false);
+		};
+
+		function scrollZooming() {
+			vm.zoomData.zoomValue = canvasUtils.scrollZooming($window, canvas, vm.scrollListen, vm.zoomData);
 		};
 
 		function refreshSeatMap() {
