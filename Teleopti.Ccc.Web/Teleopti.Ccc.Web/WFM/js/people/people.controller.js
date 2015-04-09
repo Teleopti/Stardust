@@ -45,6 +45,7 @@
 		$scope.searchKeyword = function () {
 		    SearchSvrc.search.query({ keyword: $scope.keyword, pageSize: $scope.pageSize, currentPageIndex: $scope.currentPageIndex }).$promise.then(function (result) {
 		        $scope.searchResult = result.People;
+		        $scope.optionalColumns = result.OptionalColumns;
 		        $scope.totalPages = result.TotalPages;
 			});
 		};

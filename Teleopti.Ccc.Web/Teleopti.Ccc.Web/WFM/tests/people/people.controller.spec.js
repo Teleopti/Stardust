@@ -23,9 +23,15 @@ describe("PeopleCtrl", function () {
 						{
 							FirstName: "Ashley",
 							LastName: "Andeen",
-							EmploymentNumber: "12345"
+							EmploymentNumber: "12345",
+                            OptionalColumnValues: [
+                            {
+                                "Key": "CellPhone",
+                                "Value": "123456"
+                            }]
 						}
-					]
+					],
+                    OptionalColumns:["CellPhone"]
 				});
 				return { $promise: queryDeferred.promise };
 			}
@@ -43,5 +49,9 @@ describe("PeopleCtrl", function () {
 
 		expect(scope.searchResult.length).toEqual(1);
 		expect(scope.searchResult[0].FirstName).toEqual("Ashley");
+		expect(scope.optionalColumns.length).toEqual(1);
+		expect(scope.optionalColumns[0]).toEqual("CellPhone");
+		expect(scope.searchResult[0].OptionalColumnValues[0].Key).toEqual("CellPhone");
+		expect(scope.searchResult[0].OptionalColumnValues[0].Value).toEqual("123456");
 	}));
 });

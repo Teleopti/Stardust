@@ -187,8 +187,8 @@
 
 <div>
 	<span>
-		<input type="text" placeholder="{{'Search for Name, Role, Skill, Contract, Organization, ContractSchedule, PartTimePercentage, ShiftBag, BudgetGroup' | translate}}" ng-model="keyword" ng-keydown="$event.which === 13 && searchKeyword()" class="global-search" style="
-    height: 44px;" />
+		<input type="text" placeholder="{{'Name,Role,Skill,Contract,Organization,ContractSchedule,PartTimePercentage,ShiftBag,BudgetGroup' | translate}}" ng-model="keyword" ng-keydown="$event.which === 13 && searchKeyword()" class="global-search" style="
+    height: 44px; width: 80%" />
 		<button class="wfm-btn wfm-btn-primary" ng-click="searchKeyword()"><i class="mdi mdi-magnify"></i></button>
 		
 	</span>
@@ -203,6 +203,7 @@
                     <th translate>LastName</th>
                     <th translate>EmployeeNo</th>
                     <th translate>Email</th>
+                    <th ng-repeat="column in optionalColumns">{{column}}</th>
                 </tr>
             </thead>
             <tfoot>
@@ -230,6 +231,9 @@
                     <td>{{person.LastName}}</td>
                     <td>{{person.EmploymentNumber}}</td>
                     <td>{{person.Email}}</td>
+                    <td ng-repeat="optionalColumnValue in person.OptionalColumnValues">
+                        {{optionalColumnValue.Value}}
+                    </td>
                 </tr>
             </tbody>
         </table>
