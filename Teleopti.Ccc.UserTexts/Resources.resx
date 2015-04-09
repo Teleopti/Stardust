@@ -12953,4 +12953,29 @@ Reduce the complexity to use these shifts.</value>
     <value>Seat plan</value>
     <comment>Name of Seat Plan page</comment>
   </data>
+  <data name="CheckingForecastingRequirements" xml:space="preserve">
+    <value>Checking forecasting requirements</value>
+    <comment>resource planner validation message</comment>
+  </data>
+  <data name="IssuesText" xml:space="preserve">
+    <value>issues</value>
+  </data>
+  <data name="MissingForecastFrom" xml:space="preserve">
+    <value>Missing forecast from</value>
+    <comment>missing forecast message in planning period</comment>
+  </data>
+  <data name="MissingSkills" xml:space="preserve">
+    <value>Forecasts are missing for these skills</value>
+    <comment>missing forecast for skill message</comment>
+  </data>
+  <data name="NextPlanningPeriodMessage" xml:space="preserve">
+    <value>Next planning period will be from</value>
+  </data>
+  <data name="PlanningPeriodMissingMessage" xml:space="preserve">
+    <value>Those requirements are missing to be able to schedule the next planning period:</value>
+    <comment>header for missing planning period validation</comment>
+  </data>
+  <data name="ToText" xml:space="preserve">
+    <value>to</value>
+  </data>
 </root>
