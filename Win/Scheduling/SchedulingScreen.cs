@@ -248,6 +248,18 @@ namespace Teleopti.Ccc.Win.Scheduling
 			
 			//if it disappears again in the designer
 			ribbonControlAdv1.QuickPanelVisible = true;
+			
+		}
+
+		private void checkSmsLinkLicense(IToggleManager toggleManager)
+		{
+			var dataSource = UnitOfWorkFactory.CurrentUnitOfWorkFactory().LoggedOnUnitOfWorkFactory().Name;
+			var toggleEnabled = toggleManager.IsEnabled(Toggles.RTA_NotifyViaSMS_31567);
+			var hasLicense = DefinedLicenseDataFactory.HasLicense(dataSource) &&
+			         DefinedLicenseDataFactory.GetLicenseActivator(dataSource)
+				         .EnabledLicenseOptionPaths.Contains(
+					         DefinedLicenseOptionPaths.TeleoptiCccSmsLink);
+			toolStripMenuItemNotifyAgent.Visible = hasLicense && toggleEnabled;
 		}
 
 		private void setMenuItemsHardToLeftToRight()
@@ -366,7 +378,6 @@ namespace Teleopti.Ccc.Win.Scheduling
 			toolStripProgressBar1.Maximum = loadingPeriod.DayCount() + 5;
 			toolStripProgressBar1.Step = 1;
 
-			toolStripMenuItemNotifyAgent.Visible = _container.Resolve<IToggleManager>().IsEnabled(Toggles.RTA_NotifyViaSMS_31567);
 
 			GridHelper.GridStyle(_grid);
 
@@ -439,6 +450,8 @@ namespace Teleopti.Ccc.Win.Scheduling
 
 			_permissionHelper = new SchedulingScreenPermissionHelper();
             _cutPasteHandlerFactory = new CutPasteHandlerFactory(this, () => _scheduleView, deleteFromSchedulePart, checkPastePermissions, pasteFromClipboard, enablePasteOperation);
+
+			checkSmsLinkLicense(toggleManager);
 		}
 
 		//flytta ut till modul
