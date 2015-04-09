@@ -7,20 +7,22 @@
 		</div>
 	</div>
 	<div class="material-block-content">
-		<div style="display:inline-block; min-height:290px;">
-			<h5>From <span class="startDate">{{period.startDate | date : format}}</span></h5>
-
-			<datepicker ng-model="period.startDate" show-weeks="true" class="well well-sm"></datepicker>
+		<div class="wfm-datepicker-wrap">
+			<div class="sub-header">
+				From <span class="startDate">{{period.startDate | date : format}}</span>
+			</div>
+			<datepicker ng-model="period.startDate" show-weeks="true" class="wfm-datepicker"></datepicker>
 		</div>
 
-		<div style="display:inline-block; min-height:290px;">
-			<h5>To  <span class="endDate">{{period.endDate | date : format}}</span></h5>
-
-			<datepicker ng-model="period.endDate" min-date="period.startDate" show-weeks="true" class="well well-sm"></datepicker>
+		<div class="wfm-datepicker-wrap">
+			<div class="sub-header">
+				From <span class="endDate">{{period.endDate | date : format}}</span>
+			</div>
+			<datepicker ng-model="period.endDate" min-date="period.startDate" show-weeks="true" class="wfm-datepicker"></datepicker>
 		</div>
 		<div>
 			<button class="wfm-btn wfm-btn-primary next-step-all" ng-click="nextStepAll(period)">Forecast for all</button>
-			<button class="wfm-btn wfm-btn-primary next-step-advanced" ng-click="nextStepAdvanced(period)">Advanced</button>
+			<button class="wfm-btn wfm-btn-default next-step-advanced" ng-click="nextStepAdvanced(period)">Advanced</button>
 		</div>
 	</div>
 	<div class="clearfix"></div>

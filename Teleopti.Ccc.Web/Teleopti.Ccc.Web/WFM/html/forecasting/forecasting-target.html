@@ -1,14 +1,11 @@
 <div ui-view>
 	<div class="material-block-content" ng-if="showSelection">
-		<div class="row">
-			<div class="col-lg-12">
-				<h4>
-					Select forcasting target(s) for period {{period.startDate | date : shortDate}} to {{period.endDate | date : shortDate}}:
-				</h4>
-
-			</div>
+		<div class="row col-lg-12">
+			<button class="wfm-btn wfm-btn-default" ng-click="back()">Back</button>
+			<button class="wfm-btn apply pull-right" ng-class="{'wfm-btn-primary-disabled': !hasOneSelected(), 'wfm-btn-primary':hasOneSelected()}" ng-click="nextStep()">Apply</button>
+			<h4>Select forcasting target(s) for period {{period.startDate | date : shortDate}} to {{period.endDate | date : shortDate}}:</h4>
 		</div>
-		<div>
+		<div class="row col-lg-12">
 			<div class="tree">
 				<div ui-tree data-drag-enabled="false">
 					<ol ui-tree-nodes="" ng-model="all">
@@ -29,11 +26,8 @@
 			<div ng-show="showExplaination">
 				-% Not enough historical data to measure the forecasting method.
 			</div>
-
 		</div>
-		<div>
-			<button class="wfm-btn wfm-btn-primary pull-right apply" ng-click="nextStep()">Apply</button>
-		</div>
+		
 	</div>
 
 	<div ng-if="!showSelection" class="text-center">

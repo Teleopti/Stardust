@@ -6,10 +6,13 @@ angular.module('wfm.forecasting.target', [])
 			function($scope, $stateParams, $state, Forecasting) {
 				$scope.showSelection = true;
 				$scope.skillsDisplayed = [];
-				$scope.all = { Name: 'All', Selected: false, show: true };
+				$scope.all = { Name: 'All', Selected: false, show: true, numberOfSelectedWorkloads: 0 };
 				$scope.showExplaination = false;
-				$scope.hasOneSelected = false;
 				$scope.selectedIds = [];
+
+				$scope.hasOneSelected = function() {
+					return $scope.all.numberOfSelectedWorkloads !== 0;
+				};
 				
 
 				$scope.toggleAll = function(selected) {
@@ -71,12 +74,16 @@ angular.module('wfm.forecasting.target', [])
 								result.push({ Id: workload.Id, Name: workload.Name });
 						});
 					});
-					$scope.hasOneSelected = (result.length > 0);
 					return result;
 				};
 
-				$scope.nextStep = function() {
-					$state.go('forecasting.run', { period: $stateParams.period, targets: $scope.targets() });
+				$scope.nextStep = function () {
+					if ($scope.hasOneSelected())
+						$state.go('forecasting.run', { period: $stateParams.period, targets: $scope.targets() });
+				};
+
+				$scope.back = function () {
+					$state.go('forecasting');
 				};
 			}
 		]
