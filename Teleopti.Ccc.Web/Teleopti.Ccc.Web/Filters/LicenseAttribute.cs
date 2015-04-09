@@ -9,9 +9,9 @@ namespace Teleopti.Ccc.Web.Filters
 	{
 		private readonly string[] _licenses;
 
-		public LicenseAttribute(params string[] licenses)
+		public LicenseAttribute(string license)
 		{
-			_licenses = licenses;
+			_licenses = new []{license};
 			Order = 3;
 		}
 
