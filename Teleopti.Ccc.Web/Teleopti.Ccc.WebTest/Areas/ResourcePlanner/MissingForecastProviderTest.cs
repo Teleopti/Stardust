@@ -144,5 +144,26 @@ namespace Teleopti.Ccc.WebTest.Areas.ResourcePlanner
 
 			missingForecast.Should().Be.Empty();
 		}
+
+		[Test]
+		public void ShouldReturnSortedSkills()
+		{
+			var range = new DateOnlyPeriod(2015, 5, 1, 2015, 5, 31);
+			var scenario = ScenarioFactory.CreateScenario("Default", true, false);
+			var existingForecastsRepository = MockRepository.GenerateMock<IExistingForecastRepository>();
+			existingForecastsRepository.Stub(x => x.ExistingForecastForAllSkills(range, scenario))
+				.Return(new List<Tuple<string, IEnumerable<DateOnlyPeriod>>>
+				{
+					new Tuple<string, IEnumerable<DateOnlyPeriod>>("Direct Sales", new DateOnlyPeriod[] {}),
+					new Tuple<string, IEnumerable<DateOnlyPeriod>>("A skill", new DateOnlyPeriod[] {})
+				}
+				);
+
+			var target = new MissingForecastProvider(new FakeScenarioRepository(scenario), existingForecastsRepository);
+			var missingForecast = target.GetMissingForecast(range);
+
+			missingForecast.First().SkillName.Should().Be("A skill");
+			missingForecast.Last().SkillName.Should().Be("Direct Sales");
+		}
 	}
 }

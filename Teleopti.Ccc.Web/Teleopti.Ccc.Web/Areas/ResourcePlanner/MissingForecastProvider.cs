@@ -29,7 +29,7 @@ namespace Teleopti.Ccc.Web.Areas.ResourcePlanner
 					SkillName = x.Item1,
 					MissingRanges =
 						x.Item2.Select(y => new MissingForecastRange(){StartDate = y.StartDate.Date,EndDate = y.EndDate.Date}) .ToArray()
-				});
+				}).OrderBy(x => x.SkillName);
 		}
 
 		private IEnumerable<DateOnlyPeriod> inverse(DateOnlyPeriod range, IEnumerable<DateOnlyPeriod> raster)
