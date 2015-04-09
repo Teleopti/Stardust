@@ -16,13 +16,13 @@ describe('OutboundListCtrl', function () {
 		$httpBackend.expectGET("../api/Global/User/CurrentUser").respond(200, 'mock');
 	}));
 
-	it('creates a campaign in the list', inject(function ($controller, outboundServiceMock) {
-		var scope = $rootScope.$new();
+	//it('creates a campaign in the list', inject(function ($controller, outboundServiceMock) {
+	//	var scope = $rootScope.$new();
 
-		$controller('OutboundListCtrl', { $scope: scope, OutboundService: outboundServiceMock });
+	//	$controller('OutboundListCtrl', { $scope: scope, OutboundService: outboundServiceMock });
 
-		scope.create();
+	//	scope.create();
 
-		expect(scope.campaigns.length).toEqual(8);
-	}));
+	//	expect(scope.campaigns.length).toEqual(8);
+	//}));
 });
