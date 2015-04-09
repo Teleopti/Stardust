@@ -13,19 +13,22 @@ outbound.controller('OutboundListCtrl', [
 			$scope.form.$setPristine();
 		};
 		
-
 		$scope.campaigns = OutboundService.listCampaign();
-
+	
 		$scope.create = function () {
-			var newCampaign = OutboundService.addCampaign({ name: $scope.newName });
-			$scope.campaigns.unshift(newCampaign);
-			$scope.selectedTarget = newCampaign;			
+			OutboundService.addCampaign({ name: $scope.newName }, function(_newCampaign_) {
+				$scope.show(_newCampaign_);
+			});			
 		};
 
 		$scope.copyNew = function (campaign) {
-			$scope.campaigns.unshift(OutboundService.addCampaign({ name: campaign.name + "_Copy" }));
+			OutboundService.addCampaign({ name: campaign.name + "_Copy" }, function(_newCampaign_) {
+				$scope.show(_newCampaign_);
+			});
 		};
 
+
+		// TBD: 
 		$scope.update = function(campaign) {
 			OutboundService.updateCampaign(campaign);
 		};
@@ -38,9 +41,7 @@ outbound.controller('OutboundListCtrl', [
 
 		$scope.delete = function (campaign, idx) {		
 			if (confirm('Are you sure you want to delete this record?')) {
-				if (OutboundService.deleteCampaign(campaign, idx)) {
-					$scope.campaigns.splice(idx, 1);
-				}
+				OutboundService.deleteCampaign(campaign, idx);
 			}
 		};
 	}
@@ -49,89 +50,28 @@ outbound.controller('OutboundListCtrl', [
 outbound.controller('OutboundEditCtrl', [
 	'$scope', '$stateParams', '$state', 'OutboundService', 
 	function ($scope, $stateParams, $state, OutboundService) {
-	
-		$scope.acToggle1 = true;
-
-		$scope.skills = [
-			{ label: "Phone", value: "Phone" },
-			{ label: "Consultancy", value: "Consultancy" },
-			{ label: "Writing", value: "Writing" }
-		];
-
-		$scope.workinghours = [];
-
-		$scope.toggleWorkinghoursInWeekday = function (wd) {
-			// TBD				
-		};
-
-		$scope.$on("outbound.campaigns.updated", function() {
-			$scope.campaign = OutboundService.getCampaignById($stateParams.Id);
-			$scope.showDetail = angular.isDefined($scope.campaign);
-		});
-
+					
 		$scope.campaign = OutboundService.getCampaignById($stateParams.Id);
 
+		angular.forEach($scope.campaign.Skills, function(skill) {
+			if (skill.IsSelected) $scope.campaign.SelectedSkill = skill;
+		});
+		
 		$scope.showDetail = angular.isDefined($scope.campaign);
-
-		$scope.period = {
-			startDate: moment().add(1, 'months').startOf('month').toDate(),
-			endDate: moment().add(2, 'months').startOf('month').toDate()
-		};
-
-		$scope.params = {
-			skill: $scope.skills[0]
-		};
 
 		$scope.update = function () {		
 			OutboundService.updateCampaign($scope.campaign);
 		};
 
 		$scope.navigateToForecasting = function() {
-			$state.go('outbound.forecasting', { id: $scope.campaign.id });
+			$state.go('outbound.forecasting', { Id: $scope.campaign.Id });
 		};
 
 		$scope.navigateToConfiguration = function() {
-			$state.go('outbound.edit', { id: $scope.campaign.id });
+			$state.go('outbound.edit', { Id: $scope.campaign.Id });
 		};
 
-		$scope.timeRanges = [
-			{
-				startTime: new Date(1970, 0, 1, 7, 0, 0),
-				endTime: new Date(1970, 0, 1, 18, 0, 0),				
-				id: 1
-			},
-			{
-				startTime: new Date(1970, 0, 1, 7, 0, 0),
-				endTime: new Date(1970, 0, 1, 11, 0, 0),
-				id: 2
-			},
-			{
-				startTime: new Date(1970, 0, 1, 13, 0, 0),
-				endTime: new Date(1970, 0, 1, 18, 0, 0),
-				id: 3
-			}
-
-		];
-
-		$scope.newTimeRange = {
-			startTime: new Date(1970, 0, 1, 7, 0, 0),
-			endTime: new Date(1970, 0, 1, 18, 0, 0)
-		};
-
-		$scope.curTimeRangeIdMax = 3;
-		$scope.addToTimeRanges = function () {
-			var timeRange = angular.copy($scope.newTimeRange);
-			$scope.curTimeRangeIdMax += 1;
-			timeRange.id = $scope.curTimeRangeIdMax;
-			$scope.timeRanges.push(timeRange);
-
-		};
-
-		$scope.deleteFromTimeRanges = function(timeRange, idx) {
-			if (confirm('Are you sure you want to delete this time range?')) {				
-				$scope.timeRanges.splice(idx, 1);				
-			}
-		};
+		
 	}
 ]);
 

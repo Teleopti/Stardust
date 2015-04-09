@@ -33,13 +33,13 @@
 						<input type="submit" style="position: absolute; left: -9999px" />
 						<div class="input-prepend">
 							<span><strong>Name</strong></span>
-							<input id="name" type="text" ng-model="campaign.name" ng-required/>
+							<input id="name" type="text" ng-model="campaign.Name" ng-required/>
 						</div>
 						<div class="input-prepend">
 							<span><strong>Skill</strong></span>
 							<select name="skill" id="skill"
-									ng-model="params.skill"
-									ng-options="skill as skill.label for skill in skills"
+									ng-model="campaign.SelectedSkill"
+									ng-options="Skill as Skill.SkillName for Skill in campaign.Skills"
 									ng-required></select>
 						</div>
 						<div class="input-prepend">

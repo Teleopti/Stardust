@@ -15,10 +15,6 @@ using Teleopti.Ccc.Web.Filters;
 
 namespace Teleopti.Ccc.Web.Areas.Outbound.Controllers
 {
-	public struct CampaignForm
-	{
-		public string Name { get; set; }
-	}
 
 	[ApplicationFunctionApi(DefinedRaptorApplicationFunctionPaths.OpenForecasterPage)]
 	public class OutboundController : ApiController
@@ -60,6 +56,18 @@ namespace Teleopti.Ccc.Web.Areas.Outbound.Controllers
 		{
 			var campaign = _outboundCampaignRepository.GetInFull(Id);
 			return _outboundCampaignViewModelMapper.Map(campaign);			
+		}
+
+		[HttpPut, Route("api/Outbound/Campaign/{Id}"), UnitOfWork]
+		public virtual IHttpActionResult UpdateCampaign(Guid Id, CampaignForm campaignForm)
+		{			
+			campaignForm.Id = Id;
+			var campaign = _outboundCampaignPersister.Persist(campaignForm);
+			if (campaign == null)
+			{
+				return BadRequest();
+			}
+			return Ok(_outboundCampaignViewModelMapper.Map(campaign));
 		}
 	}
 }
