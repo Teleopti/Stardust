@@ -35,6 +35,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Search
             var person = PersonFactory.CreatePersonWithGuid("Ashley", "Andeen");
             person.Email = "ashley.andeen@abc.com";
             var personId = person.Id.Value;
+            person.TerminatePerson(new DateOnly(2015, 4, 9), MockRepository.GenerateMock<IPersonAccountUpdater>());
             var personFinderDisplayRow = new PersonFinderDisplayRow
             {
                 FirstName = "Ashley",
@@ -72,6 +73,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Search
             first.EmploymentNumber.Equals("1011");
             first.PersonId.Equals(personId);
             first.Email.Equals("ashley.andeen@abc.com");
+            first.LeavingDate.Equals("2015-04-09");
             var optionalColumnValues = (IEnumerable<KeyValuePair<string, string>>)first.OptionalColumnValues;
             optionalColumnValues.First().Key.Equals("CellPhone");
             optionalColumnValues.First().Value.Equals("123456");
@@ -97,3 +99,4 @@ namespace Teleopti.Ccc.WebTest.Areas.Search
         }
     }
 }
+

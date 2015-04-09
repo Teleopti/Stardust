@@ -24,6 +24,7 @@ describe("PeopleCtrl", function () {
 							FirstName: "Ashley",
 							LastName: "Andeen",
 							EmploymentNumber: "12345",
+                            LeavingDate: "2015-04-09",
                             OptionalColumnValues: [
                             {
                                 "Key": "CellPhone",
