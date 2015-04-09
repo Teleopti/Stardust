@@ -5,14 +5,17 @@ using System.Globalization;
 using System.Linq;
 using System.Threading;
 using System.Web.Mvc;
+using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.UserTexts;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Reports.DataProvider;
 using Teleopti.Ccc.Web.Areas.Reporting.Core;
 using Teleopti.Ccc.Web.Areas.Reporting.Models;
+using Teleopti.Ccc.Web.Filters;
 
 namespace Teleopti.Ccc.Web.Areas.Reporting.Controllers
 {
+	[ApplicationFunction(DefinedRaptorApplicationFunctionPaths.AccessToReports)]
 	public class ReportController : Controller
 	{
 		private readonly IReportsNavigationProvider _reportsNavigationProvider;

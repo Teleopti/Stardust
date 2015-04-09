@@ -203,7 +203,7 @@
                     <th translate>LastName</th>
                     <th translate>EmployeeNo</th>
                     <th translate>Email</th>
-                    <th translate>LeavingDate</th>
+                    <th translate>TerminalDate</th>
                     <th ng-repeat="column in optionalColumns">{{column}}</th>
                 </tr>
             </thead>
@@ -212,7 +212,7 @@
                 <div class="pagination pull-right">
                     <ul class="wfm-list row">
                         <li style="display: inline-block" ng-class="{disabled: currentPageIndex == 1}">
-                            <a href ng-click="prevPage()">« Prev</a>
+                            <a href ng-click="prevPage()" translate>Previous</a>
                         </li>
                         <li style="display: inline-block" ng-repeat="n in range(totalPages)"
                             ng-class="{active: n == currentPageIndex}"
@@ -220,7 +220,7 @@
                             <a href ng-bind="n">1</a>
                         </li>
                         <li style="display: inline-block" ng-class="{disabled: currentPageIndex == totalPages}">
-                            <a href ng-click="nextPage()">Next »</a>
+                            <a href ng-click="nextPage()" translate>Next</a>
                         </li>
                     </ul>
                 </div>
