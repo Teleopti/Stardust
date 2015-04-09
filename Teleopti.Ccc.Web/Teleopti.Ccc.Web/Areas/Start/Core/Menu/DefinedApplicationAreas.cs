@@ -42,13 +42,6 @@ namespace Teleopti.Ccc.Web.Areas.Start.Core.Menu
 				Area = "WFM",
 				Name = "WFM"
 			}
-			,
-			new ApplicationArea
-			{
-				ApplicationFunctionPath = DefinedRaptorApplicationFunctionPaths.AccessToReports,
-				Area = "Reporting",
-				Name = "Reporting"
-			}
 		};
 
 		private static string GetMenuText(string applicationFunctionPath)
