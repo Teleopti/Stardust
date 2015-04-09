@@ -65,7 +65,7 @@ wfm.config([
 			templateUrl: 'html/outbound/campaign-list.html',
 			controller: 'OutboundListCtrl'
 		}).state('outbound.edit', {
-			url: '/campaign/:id',
+			url: '/campaign/:Id',
 			templateUrl: 'html/outbound/campaign-edit.html',
 			controller: 'OutboundEditCtrl'
 		}).state('outbound.forecasting', {

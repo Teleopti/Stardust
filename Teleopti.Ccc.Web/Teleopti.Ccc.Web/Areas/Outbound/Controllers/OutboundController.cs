@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Web.Http;
@@ -52,6 +53,13 @@ namespace Teleopti.Ccc.Web.Areas.Outbound.Controllers
 			var campaignViewModels = _outboundCampaignViewModelMapper.Map(campaigns);
 
 			return campaignViewModels.ToArray();
+		}
+
+		[HttpGet, Route("api/Outbound/Campaign/{Id}"), UnitOfWork]
+		public virtual CampaignViewModel Get(Guid Id)
+		{
+			var campaign = _outboundCampaignRepository.GetInFull(Id);
+			return _outboundCampaignViewModelMapper.Map(campaign);			
 		}
 	}
 }
