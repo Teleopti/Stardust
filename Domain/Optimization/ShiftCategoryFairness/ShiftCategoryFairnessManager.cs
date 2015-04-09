@@ -1,3 +1,4 @@
+using System;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Optimization.ShiftCategoryFairness
@@ -9,11 +10,11 @@ namespace Teleopti.Ccc.Domain.Optimization.ShiftCategoryFairness
 
     public class ShiftCategoryFairnessManager : IShiftCategoryFairnessManager
     {
-        private readonly ISchedulingResultStateHolder _schedulingResultStateHolder;
+        private readonly Func<ISchedulingResultStateHolder> _schedulingResultStateHolder;
         private readonly IGroupShiftCategoryFairnessCreator _groupShiftCategoryFairnessCreator;
         private readonly IShiftCategoryFairnessCalculator _fairnessCalculator;
 
-        public ShiftCategoryFairnessManager(ISchedulingResultStateHolder schedulingResultStateHolder, IGroupShiftCategoryFairnessCreator groupShiftCategoryFairnessCreator,
+        public ShiftCategoryFairnessManager(Func<ISchedulingResultStateHolder> schedulingResultStateHolder, IGroupShiftCategoryFairnessCreator groupShiftCategoryFairnessCreator,
             IShiftCategoryFairnessCalculator fairnessCalculator)
         {
             _schedulingResultStateHolder = schedulingResultStateHolder;
@@ -21,19 +22,11 @@ namespace Teleopti.Ccc.Domain.Optimization.ShiftCategoryFairness
             _fairnessCalculator = fairnessCalculator;
         }
 
-        private IScheduleDictionary ScheduleDictionary
-        {
-            get { return _schedulingResultStateHolder.Schedules; }
-        }
-
         public IShiftCategoryFairnessFactors GetFactorsForPersonOnDate(IPerson person, DateOnly dateOnly)
         {
-			var personFairness = ScheduleDictionary[person].CachedShiftCategoryFairness();
+			var personFairness = _schedulingResultStateHolder().Schedules[person].CachedShiftCategoryFairness();
 			var groupFairness = _groupShiftCategoryFairnessCreator.CalculateGroupShiftCategoryFairness(person, dateOnly);
 
-			//bool useShiftCategoryFairness = false;
-			//if (person.WorkflowControlSet != null)
-			//    useShiftCategoryFairness = person.WorkflowControlSet.UseShiftCategoryFairness;
 			return _fairnessCalculator.ShiftCategoryFairnessFactors(groupFairness, personFairness);
         }
     }

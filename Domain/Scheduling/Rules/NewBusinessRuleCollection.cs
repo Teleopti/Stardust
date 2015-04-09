@@ -35,10 +35,10 @@ namespace Teleopti.Ccc.Domain.Scheduling.Rules
             var ret = new NewBusinessRuleCollection
                           {
 								new NewShiftCategoryLimitationRule(
-								new ShiftCategoryLimitationChecker(schedulingResultStateHolder),
+								new ShiftCategoryLimitationChecker(()=>schedulingResultStateHolder),
                                 new VirtualSchedulePeriodExtractor()),
 								new WeekShiftCategoryLimitationRule(
-                                new ShiftCategoryLimitationChecker(schedulingResultStateHolder),
+                                new ShiftCategoryLimitationChecker(()=>schedulingResultStateHolder),
 								new VirtualSchedulePeriodExtractor(), new WeeksFromScheduleDaysExtractor()),
 								new NewNightlyRestRule(new WorkTimeStartEndExtractor()),
 								new NewMaxWeekWorkTimeRule(

@@ -85,7 +85,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 					periodValueCalculatorProvider.CreatePeriodValueCalculator(_optimizerPreferences.Advanced, personalSkillsDataExtractor);
 
 				IDeleteSchedulePartService deleteSchedulePartService =
-					new DeleteSchedulePartService(_schedulingResultStateHolder);
+					new DeleteSchedulePartService(()=>_schedulingResultStateHolder);
 
 				IOccupiedSeatCalculator occupiedSeatCalculator =
 					new OccupiedSeatCalculator();
@@ -94,7 +94,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 					new NonBlendSkillCalculator();
 
 				IResourceOptimizationHelper resourceOptimizationHelper =
-					new ResourceOptimizationHelper(_schedulingResultStateHolder, occupiedSeatCalculator, nonBlendSkillCalculator, _personSkillProvider, new PeriodDistributionService(), _currentTeleoptiPrincipal, _intraIntervalFinderService);
+					new ResourceOptimizationHelper(()=>_schedulingResultStateHolder, occupiedSeatCalculator, nonBlendSkillCalculator, ()=>_personSkillProvider, new PeriodDistributionService(), _currentTeleoptiPrincipal, _intraIntervalFinderService);
 
 				IScheduleMatrixOriginalStateContainer workShiftContainer = _workShiftContainerList[index];
 

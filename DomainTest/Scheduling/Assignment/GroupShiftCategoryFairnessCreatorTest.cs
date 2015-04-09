@@ -4,7 +4,6 @@ using NUnit.Framework;
 using Rhino.Mocks;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Optimization.ShiftCategoryFairness;
-using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.ResourceCalculation.GroupScheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.TestCommon.FakeData;
@@ -64,7 +63,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
             _shiftCategoryFairnessHolder = new ShiftCategoryFairnessHolder(shiftDictionary, new FairnessValueResult());
             _anotherShiftCategoryFairnessHolder = new ShiftCategoryFairnessHolder(anotherShiftDictionary, new FairnessValueResult());
 
-            _target = new GroupShiftCategoryFairnessCreator(new GroupPagePerDateHolder { ShiftCategoryFairnessGroupPagePerDate = _groupPagePerDate }, _stateHolder);
+            _target = new GroupShiftCategoryFairnessCreator(()=>new GroupPagePerDateHolder { ShiftCategoryFairnessGroupPagePerDate = _groupPagePerDate }, ()=>_stateHolder);
         }
 
         [Test]

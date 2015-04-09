@@ -4,7 +4,7 @@ using Teleopti.Ccc.Domain.Optimization.WeeklyRestSolver;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Scheduling.Rules;
 
-namespace Teleopti.Ccc.WinCode.Autofac
+namespace Teleopti.Ccc.IocCommon.Configuration
 {
 	public class WeeklyRestSolverModule : Module
 	{

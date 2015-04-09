@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
@@ -6,7 +7,6 @@ using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.Optimization;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.ResourceCalculation.GroupScheduling;
-using Teleopti.Ccc.Domain.ResourceCalculation.IntraIntervalAnalyze;
 using Teleopti.Ccc.Domain.Scheduling.ScheduleTagging;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.UserTexts;
@@ -16,7 +16,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 {
 	public class OptimizationCommand
 	{
-		private readonly IPersonSkillProvider _personSkillProvider;
+		private readonly Func<IPersonSkillProvider> _personSkillProvider;
 		private readonly IGroupPageCreator _groupPageCreator;
 		private readonly IGroupScheduleGroupPageDataProvider _groupScheduleGroupPageDataProvider;
 		private readonly IResourceOptimizationHelper _resourceOptimizationHelper;
@@ -24,18 +24,18 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 		private readonly ITeamBlockOptimizationCommand _teamBlockOptimizationCommand;
 		private readonly IMatrixListFactory _matrixListFactory;
 		private readonly IWeeklyRestSolverCommand _weeklyRestSolverCommand;
-		private readonly IIntraIntervalFinderService _intraIntraIntervalFinderService;
 		private readonly IOptimizerHelperHelper _optimizerHelper;
+		private readonly Func<IResourceOptimizationHelperExtended> _resourceOptimizationHelperExtended;
 
-		public OptimizationCommand(IPersonSkillProvider personSkillProvider, IGroupPageCreator groupPageCreator,
+		public OptimizationCommand(Func<IPersonSkillProvider> personSkillProvider, IGroupPageCreator groupPageCreator,
 			IGroupScheduleGroupPageDataProvider groupScheduleGroupPageDataProvider,
 			IResourceOptimizationHelper resourceOptimizationHelper,
 			IScheduleDayChangeCallback scheduleDayChangeCallback,
 			ITeamBlockOptimizationCommand teamBlockOptimizationCommand,
 			IMatrixListFactory matrixListFactory,
 			IWeeklyRestSolverCommand weeklyRestSolverCommand,
-			IIntraIntervalFinderService intraIntraIntervalFinderService,
-			IOptimizerHelperHelper optimizerHelper)
+			IOptimizerHelperHelper optimizerHelper,
+			Func<IResourceOptimizationHelperExtended> resourceOptimizationHelperExtended)
 		{
 			_personSkillProvider = personSkillProvider;
 			_groupPageCreator = groupPageCreator;
@@ -45,8 +45,8 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 			_teamBlockOptimizationCommand = teamBlockOptimizationCommand;
 			_matrixListFactory = matrixListFactory;
 			_weeklyRestSolverCommand = weeklyRestSolverCommand;
-			_intraIntraIntervalFinderService = intraIntraIntervalFinderService;
 			_optimizerHelper = optimizerHelper;
+			_resourceOptimizationHelperExtended = resourceOptimizationHelperExtended;
 		}
 
 		public void Execute(IOptimizerOriginalPreferences optimizerOriginalPreferences, IBackgroundWorkerWrapper backgroundWorker,
@@ -60,8 +60,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 			schedulerStateHolder.SchedulingResultState.SkipResourceCalculation = false;
 			if (lastCalculationState)
 			{
-				var optimizationHelperWin = new ResourceOptimizationHelperWin(schedulerStateHolder, _personSkillProvider, _intraIntraIntervalFinderService);
-				optimizationHelperWin.ResourceCalculateAllDays(backgroundWorker, true);
+				_resourceOptimizationHelperExtended().ResourceCalculateAllDays(backgroundWorker, true);
 			}
 			var selectedSchedules = selectedScheduleDays;
 			var selectedPeriod = _optimizerHelper.GetSelectedPeriod(selectedSchedules);
@@ -96,9 +95,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 						optimizerOriginalPreferences.SchedulingOptions,
 						daysOffPreferences);
 
-					var optimizationHelperWin = new ResourceOptimizationHelperWin(schedulerStateHolder, _personSkillProvider,
-						_intraIntraIntervalFinderService);
-					optimizationHelperWin.ResourceCalculateMarkedDays(null,
+					_resourceOptimizationHelperExtended().ResourceCalculateMarkedDays(null,
 						optimizerOriginalPreferences.SchedulingOptions.ConsiderShortBreaks, true);
 					IList<IScheduleMatrixPro> matrixList = _matrixListFactory.CreateMatrixList(selectedSchedules, selectedPeriod);
 
@@ -130,7 +127,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 						minutesPerInterval = stateHolder.Skills.Min(s => s.DefaultResolution);
 					}
 
-					var extractor = new ScheduleProjectionExtractor(_personSkillProvider, minutesPerInterval);
+					var extractor = new ScheduleProjectionExtractor(_personSkillProvider(), minutesPerInterval);
 					var resources = extractor.CreateRelevantProjectionList(stateHolder.Schedules);
 					using (new ResourceCalculationContext<IResourceCalculationDataContainerWithSingleOperation>(resources))
 					{

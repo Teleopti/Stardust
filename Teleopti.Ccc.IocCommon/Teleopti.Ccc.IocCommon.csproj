@@ -147,12 +147,19 @@
       <Link>GlobalAssemblyInfo.cs</Link>
     </Compile>
     <Compile Include="Configuration\AspectsModule.cs" />
+    <Compile Include="Configuration\BackToLegalShiftModule.cs" />
+    <Compile Include="Configuration\EqualNumberOfCategoryFairnessModule.cs" />
     <Compile Include="Configuration\ForecasterModule.cs" />
+    <Compile Include="Configuration\IntraIntervalOptimizationServiceModule.cs" />
+    <Compile Include="Configuration\IntraIntervalSolverServiceModule.cs" />
     <Compile Include="Configuration\ReadModelUnitOfWorkModule.cs" />
     <Compile Include="Configuration\EventPublisherModule.cs" />
     <Compile Include="Configuration\RtaModule.cs" />
+    <Compile Include="Configuration\ScheduleOvertimeModule.cs" />
+    <Compile Include="Configuration\SchedulingCommonModule.cs" />
     <Compile Include="Configuration\TenantClientModule.cs" />
     <Compile Include="Configuration\DistributedLockModule.cs" />
+    <Compile Include="Configuration\WeeklyRestSolverModule.cs" />
     <Compile Include="IIocConfiguration.cs" />
     <Compile Include="IocConfiguration.cs" />
     <Compile Include="IocArgs.cs" />

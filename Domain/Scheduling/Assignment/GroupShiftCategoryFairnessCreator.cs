@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using Teleopti.Ccc.Domain.Optimization.ShiftCategoryFairness;
 using Teleopti.Ccc.Domain.ResourceCalculation.GroupScheduling;
 using Teleopti.Interfaces.Domain;
@@ -7,25 +8,21 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 {
     public class GroupShiftCategoryFairnessCreator : IGroupShiftCategoryFairnessCreator
     {
-        private readonly IGroupPagePerDateHolder _groupPagePerDateHolder;
-        private readonly ISchedulingResultStateHolder _resultStateHolder;
+        private readonly Func<IGroupPagePerDateHolder> _groupPagePerDateHolder;
+        private readonly Func<ISchedulingResultStateHolder> _resultStateHolder;
         
-        public GroupShiftCategoryFairnessCreator(IGroupPagePerDateHolder groupPagePerDateHolder, ISchedulingResultStateHolder resultStateHolder)
+        public GroupShiftCategoryFairnessCreator(Func<IGroupPagePerDateHolder> groupPagePerDateHolder, Func<ISchedulingResultStateHolder> resultStateHolder)
         {
             _groupPagePerDateHolder = groupPagePerDateHolder;
             _resultStateHolder = resultStateHolder;
         }
 
-        private IScheduleDictionary ScheduleDictionary
-        { get { return _resultStateHolder.Schedules; } }
-
         public IShiftCategoryFairnessHolder CalculateGroupShiftCategoryFairness(IPerson person, DateOnly dateOnly)
         {
-            IGroupPage groupPage = _groupPagePerDateHolder.ShiftCategoryFairnessGroupPagePerDate.GetGroupPageByDate(dateOnly);
+            IGroupPage groupPage = _groupPagePerDateHolder().ShiftCategoryFairnessGroupPagePerDate.GetGroupPageByDate(dateOnly);
             return CalculateGroupShiftCategoryFairness(groupPage, person, dateOnly);
         }
 
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
         public IShiftCategoryFairnessHolder CalculateGroupShiftCategoryFairness(IGroupPage groupPage, IPerson person, DateOnly dateOnly)
         {
             var rootGroups = groupPage.RootGroupCollection;
@@ -43,7 +40,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 					continue;
                 if (!member.VirtualSchedulePeriod(dateOnly).IsValid)
                     continue;
-                IScheduleRange range = ScheduleDictionary[member];
+				IScheduleRange range = _resultStateHolder().Schedules[member];
                 IShiftCategoryFairnessHolder fairnessHolder = range.CachedShiftCategoryFairness();
                 groupFairnessHolder = groupFairnessHolder.Add(fairnessHolder);
             }

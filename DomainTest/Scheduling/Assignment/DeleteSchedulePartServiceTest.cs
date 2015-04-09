@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.ComponentModel;
 using NUnit.Framework;
 using Rhino.Mocks;
@@ -7,7 +6,6 @@ using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Scheduling.Rules;
 using Teleopti.Ccc.Domain.Scheduling.ScheduleTagging;
 using Teleopti.Interfaces.Domain;
-
 
 namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 {
@@ -36,7 +34,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
         {
             _mocks = new MockRepository();
             _schedulingResultStateHolder = _mocks.StrictMock<ISchedulingResultStateHolder>();
-            _deleteService = new DeleteSchedulePartService(_schedulingResultStateHolder);
+            _deleteService = new DeleteSchedulePartService(()=>_schedulingResultStateHolder);
         	_rollbackService = _mocks.StrictMock<ISchedulePartModifyAndRollbackService>();
 			_part1 = _mocks.StrictMock<IScheduleDay>();
 			_part2 = _mocks.StrictMock<IScheduleDay>();

@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Interfaces.Domain;
@@ -11,11 +12,11 @@ namespace Teleopti.Ccc.Domain.Optimization
         private readonly INightRestWhiteSpotSolver _solver;
     	private readonly IDeleteAndResourceCalculateService _deleteAndResourceCalculateService;
         private readonly IScheduleService _scheduleService;
-        private readonly IWorkShiftFinderResultHolder _workShiftFinderResultHolder;
+        private readonly Func<IWorkShiftFinderResultHolder> _workShiftFinderResultHolder;
     	private readonly IResourceCalculateDelayer _resourceCalculateDelayer;
 
     	public NightRestWhiteSpotSolverService(INightRestWhiteSpotSolver solver, IDeleteAndResourceCalculateService deleteAndResourceCalculateService, 
-			IScheduleService scheduleService, IWorkShiftFinderResultHolder workShiftFinderResultHolder,
+			IScheduleService scheduleService, Func<IWorkShiftFinderResultHolder> workShiftFinderResultHolder,
 			IResourceCalculateDelayer resourceCalculateDelayer)
         {
             _solver = solver;
@@ -52,7 +53,7 @@ namespace Teleopti.Ccc.Domain.Optimization
             {
                 if (!daysInConsideration.Contains(dateOnly)) continue;
                 daysInConsideration.Remove(dateOnly );
-                _workShiftFinderResultHolder.Clear(person, dateOnly);
+                _workShiftFinderResultHolder().Clear(person, dateOnly);
                 if (_scheduleService.SchedulePersonOnDay(matrix.GetScheduleDayByKey(dateOnly).DaySchedulePart(), schedulingOptions, _resourceCalculateDelayer, null, schedulePartModifyAndRollbackService))
                 {
                     success = true;

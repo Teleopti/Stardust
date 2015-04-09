@@ -28,7 +28,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
             _skillList.Add(_skill1);
 	        var maxSeatSkill = SkillFactory.CreateSkill("hej", new SkillTypePhone(new Description(), ForecastSource.MaxSeatSkill), 15);
 			_skillList.Add(maxSeatSkill);
-            _target = new SchedulingStateHolderAllSkillExtractor(_stateHolder);
+            _target = new SchedulingStateHolderAllSkillExtractor(()=>_stateHolder);
         }
 
         [Test]

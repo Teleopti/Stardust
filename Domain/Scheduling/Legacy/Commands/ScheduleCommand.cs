@@ -1,10 +1,10 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.ResourceCalculation.GroupScheduling;
-using Teleopti.Ccc.Domain.ResourceCalculation.IntraIntervalAnalyze;
 using Teleopti.Ccc.Domain.Scheduling.ScheduleTagging;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Interfaces.Domain;
@@ -13,26 +13,28 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 {
 	public class ScheduleCommand
 	{
-		private readonly IPersonSkillProvider _personSkillProvider;
+		private readonly Func<IPersonSkillProvider> _personSkillProvider;
 		private readonly IGroupPageCreator _groupPageCreator;
 		private readonly IGroupScheduleGroupPageDataProvider _groupScheduleGroupPageDataProvider;
 		private readonly IResourceOptimizationHelper _resourceOptimizationHelper;
-		private readonly IScheduleDayChangeCallback _scheduleDayChangeCallback;
+		private readonly Func<IScheduleDayChangeCallback> _scheduleDayChangeCallback;
 		private readonly ITeamBlockScheduleCommand _teamBlockScheduleCommand;
 		private readonly ClassicScheduleCommand _classicScheduleCommand;
 		private readonly IMatrixListFactory _matrixListFactory;
-		private readonly IIntraIntervalFinderService _intraIntervalFinderService;
 		private readonly IOptimizerHelperHelper _optimizerHelper;
+		private readonly Func<IWorkShiftFinderResultHolder> _workShiftFinderResultHolder;
+		private readonly Func<IResourceOptimizationHelperExtended> _resourceOptimizationHelperExtended;
 
-		public ScheduleCommand(IPersonSkillProvider personSkillProvider, IGroupPageCreator groupPageCreator,
+		public ScheduleCommand(Func<IPersonSkillProvider> personSkillProvider, IGroupPageCreator groupPageCreator,
 			IGroupScheduleGroupPageDataProvider groupScheduleGroupPageDataProvider,
 			IResourceOptimizationHelper resourceOptimizationHelper,
-			IScheduleDayChangeCallback scheduleDayChangeCallback,
+			Func<IScheduleDayChangeCallback> scheduleDayChangeCallback,
 			ITeamBlockScheduleCommand teamBlockScheduleCommand,
 			ClassicScheduleCommand classicScheduleCommand,
 			IMatrixListFactory matrixListFactory,
-			IIntraIntervalFinderService intraIntervalFinderService,
-			IOptimizerHelperHelper optimizerHelper)
+			IOptimizerHelperHelper optimizerHelper,
+			Func<IWorkShiftFinderResultHolder> workShiftFinderResultHolder,
+			Func<IResourceOptimizationHelperExtended> resourceOptimizationHelperExtended)
 		{
 			_personSkillProvider = personSkillProvider;
 			_groupPageCreator = groupPageCreator;
@@ -42,8 +44,9 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 			_teamBlockScheduleCommand = teamBlockScheduleCommand;
 			_classicScheduleCommand = classicScheduleCommand;
 			_matrixListFactory = matrixListFactory;
-			_intraIntervalFinderService = intraIntervalFinderService;
 			_optimizerHelper = optimizerHelper;
+			_workShiftFinderResultHolder = workShiftFinderResultHolder;
+			_resourceOptimizationHelperExtended = resourceOptimizationHelperExtended;
 		}
 
 		public void Execute(IOptimizerOriginalPreferences optimizerOriginalPreferences, IBackgroundWorkerWrapper backgroundWorker,
@@ -58,8 +61,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 			schedulerStateHolder.SchedulingResultState.SkipResourceCalculation = false;
 			if (lastCalculationState)
 			{
-				var optimizationHelperWin = new ResourceOptimizationHelperWin(schedulerStateHolder, _personSkillProvider, _intraIntervalFinderService);
-				optimizationHelperWin.ResourceCalculateAllDays(backgroundWorker, true);
+				_resourceOptimizationHelperExtended().ResourceCalculateAllDays(backgroundWorker, true);
 			}
 
 			//set to false for first scheduling and then use it for RemoveShiftCategoryBackToLegalState
@@ -82,7 +84,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 				{
 					minutesPerInterval = schedulerStateHolder.SchedulingResultState.Skills.Min(s => s.DefaultResolution);
 				}
-				var extractor = new ScheduleProjectionExtractor(_personSkillProvider, minutesPerInterval);
+				var extractor = new ScheduleProjectionExtractor(_personSkillProvider(), minutesPerInterval);
 				var resources = extractor.CreateRelevantProjectionList(schedulerStateHolder.Schedules);
 				using (new ResourceCalculationContext<IResourceCalculationDataContainerWithSingleOperation>(resources))
 				{
@@ -93,11 +95,11 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 
 						ISchedulePartModifyAndRollbackService rollbackService =
 							new SchedulePartModifyAndRollbackService(schedulerStateHolder.SchedulingResultState,
-								_scheduleDayChangeCallback,
+								_scheduleDayChangeCallback(),
 								new ScheduleTagSetter(schedulingOptions.TagToUseOnScheduling));
-						requiredScheduleOptimizerHelper.WorkShiftFinderResultHolder =
-							_teamBlockScheduleCommand.Execute(schedulingOptions, backgroundWorker, selectedPersons, selectedScheduleDays,
-								rollbackService, resourceCalculateDelayer);
+						_workShiftFinderResultHolder().Clear();
+						_workShiftFinderResultHolder().AddResults(_teamBlockScheduleCommand.Execute(schedulingOptions, backgroundWorker, selectedPersons, selectedScheduleDays,
+								rollbackService, resourceCalculateDelayer).GetResults(),DateTime.Today);
 					}
 					else
 					{

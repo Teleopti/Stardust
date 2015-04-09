@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using NUnit.Framework;
 using Rhino.Mocks;
 using Teleopti.Ccc.Domain.Optimization;
@@ -33,7 +31,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
             _skillStaffPeriod2 = _mock.StrictMock<ISkillStaffPeriod>();
             _skillStaffPeriodHolder = _mock.StrictMock<ISkillStaffPeriodHolder>();
             _stateHolder = _mock.StrictMock<ISchedulingResultStateHolder>();
-            _target = new DailySkillForecastAndScheduledValueCalculator(_stateHolder);
+            _target = new DailySkillForecastAndScheduledValueCalculator(()=>_stateHolder);
         }
 
         [Test]

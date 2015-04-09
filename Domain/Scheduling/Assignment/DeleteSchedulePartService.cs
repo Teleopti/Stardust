@@ -22,9 +22,9 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
     /// </summary>
     public class DeleteSchedulePartService : IDeleteSchedulePartService
     {
-        private readonly ISchedulingResultStateHolder _scheduleResultStateHolder;
+        private readonly Func<ISchedulingResultStateHolder> _scheduleResultStateHolder;
 
-        public DeleteSchedulePartService(ISchedulingResultStateHolder scheduleResultStateHolder)
+        public DeleteSchedulePartService(Func<ISchedulingResultStateHolder> scheduleResultStateHolder)
         {
             _scheduleResultStateHolder = scheduleResultStateHolder;
         }
@@ -50,7 +50,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 					rollbackService.Modify(scheduleDay);
             	}
 
-                returnList.Add(_scheduleResultStateHolder.Schedules[part.Person].ReFetch(part));
+                returnList.Add(_scheduleResultStateHolder().Schedules[part.Person].ReFetch(part));
             }
 
             return returnList;
@@ -81,7 +81,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 					rollbackService.Modify(scheduleDay, newBusinessRuleCollection);
 				}
 
-				returnList.Add(_scheduleResultStateHolder.Schedules[part.Person].ReFetch(part));
+				returnList.Add(_scheduleResultStateHolder().Schedules[part.Person].ReFetch(part));
 			}
 
 			return returnList;
@@ -133,13 +133,14 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
                 if (backgroundWorker.CancellationPending)
                     return returnList;
             }
-            _scheduleResultStateHolder.Schedules.Modify(ScheduleModifier.Scheduler, cloneList,
+	        var scheduleDictionary = _scheduleResultStateHolder().Schedules;
+	        scheduleDictionary.Modify(ScheduleModifier.Scheduler, cloneList,
                                                         businessRuleCollection, scheduleDayChangeCallback,
                                                         tagSetter);
 
             foreach (IScheduleDay scheduleDay in cloneList)
             {
-                returnList.Add(_scheduleResultStateHolder.Schedules[scheduleDay.Person].ReFetch(scheduleDay));
+                returnList.Add(scheduleDictionary[scheduleDay.Person].ReFetch(scheduleDay));
             }
 
             return returnList;
@@ -147,7 +148,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 
     	private IScheduleDay preparePart(DeleteOption options, IScheduleDay part)
         {
-            IScheduleDay clonePart = _scheduleResultStateHolder.Schedules[part.Person].ReFetch(part);
+            IScheduleDay clonePart = _scheduleResultStateHolder().Schedules[part.Person].ReFetch(part);
 
             if (options.MainShift)
                 clonePart.DeleteMainShift(clonePart);

@@ -1522,7 +1522,6 @@
     <Compile Include="Scheduling\FilterOvertimeAvailabilityView.Designer.cs">
       <DependentUpon>FilterOvertimeAvailabilityView.cs</DependentUpon>
     </Compile>
-    <Compile Include="Scheduling\DayOffOptimizationDecisionMakerFactory.cs" />
     <Compile Include="Scheduling\ExportToPdf.cs" />
     <Compile Include="Scheduling\ExportToPdfGraphical.cs" />
     <Compile Include="Scheduling\FindMatchingNew.cs">

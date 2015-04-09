@@ -6,18 +6,13 @@ namespace Teleopti.Ccc.Domain.Optimization
 {
     public class ShiftCategoryLimitationChecker : IShiftCategoryLimitationChecker
     {
-        private readonly ISchedulingResultStateHolder _resultStateHolder;
+        private readonly Func<ISchedulingResultStateHolder> _resultStateHolder;
         
-        private ShiftCategoryLimitationChecker(){}
-
-        public ShiftCategoryLimitationChecker(ISchedulingResultStateHolder resultStateHolder) :this()
+        public ShiftCategoryLimitationChecker(Func<ISchedulingResultStateHolder> resultStateHolder)
         {
             _resultStateHolder = resultStateHolder;
         }
 
-        private IScheduleDictionary ScheduleDictionary { get { return _resultStateHolder.Schedules; } }
-
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1800:DoNotCastUnnecessarily")]
         public void SetBlockedShiftCategories(ISchedulingOptions optimizerPreferences, IPerson person, DateOnly dateOnly)
         {
             optimizerPreferences.NotAllowedShiftCategories.Clear();
@@ -42,14 +37,14 @@ namespace Teleopti.Ccc.Domain.Optimization
                 {
                     var firstDateInPeriodLocal = DateHelper.GetFirstDateInWeek(dateOnly, person.FirstDayOfWeek);
                     var dateOnlyWeek = new DateOnlyPeriod(firstDateInPeriodLocal, firstDateInPeriodLocal.AddDays(6));
-                    if (IsShiftCategoryOverOrAtWeekLimit(shiftCategoryLimitation, ScheduleDictionary[person], dateOnlyWeek,
+                    if (IsShiftCategoryOverOrAtWeekLimit(shiftCategoryLimitation, _resultStateHolder().Schedules[person], dateOnlyWeek,
                                                          out datesWithCategory))
                         optimizerPreferences.NotAllowedShiftCategories.Add(shiftCategoryLimitation.ShiftCategory);
                 }
                 else
                 {
                     DateOnlyPeriod period = schedulePeriod.DateOnlyPeriod;
-                    if (IsShiftCategoryOverOrAtPeriodLimit(shiftCategoryLimitation, period, ScheduleDictionary[person],
+                    if (IsShiftCategoryOverOrAtPeriodLimit(shiftCategoryLimitation, period, _resultStateHolder().Schedules[person],
                                                            out datesWithCategory))
                         optimizerPreferences.NotAllowedShiftCategories.Add(shiftCategoryLimitation.ShiftCategory);
                 }

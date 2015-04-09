@@ -19,7 +19,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.DayOffScheduling
     {
         private readonly IAbsencePreferenceScheduler _absencePreferenceScheduler;
 	    private readonly ITeamDayOffScheduler _teamDayOffScheduler;
-        //private readonly ITeamBlockMissingDaysOffScheduler _missingDaysOffScheduler;
         private readonly ITeamBlockMissingDayOffHandler _missingDaysOffScheduler;
         private bool _cancelMe;
 		private SchedulingServiceBaseEventArgs _progressEvent;

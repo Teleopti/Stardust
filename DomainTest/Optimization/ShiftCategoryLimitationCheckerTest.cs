@@ -36,7 +36,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
             _mocks = new MockRepository();
             _stateHolder = _mocks.StrictMock<ISchedulingResultStateHolder>();
 			_dic = _mocks.DynamicMock<IScheduleDictionary>();
-            _target = new ShiftCategoryLimitationChecker(_stateHolder);
+            _target = new ShiftCategoryLimitationChecker(()=>_stateHolder);
             _dateTimePeriod = new DateTimePeriod(2010,1,1,2010,1,2);
             _person = PersonFactory.CreatePerson();
             _person.PermissionInformation.SetDefaultTimeZone((TimeZoneInfo.Utc));

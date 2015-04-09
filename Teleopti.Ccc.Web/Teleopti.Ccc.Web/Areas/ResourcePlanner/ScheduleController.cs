@@ -114,7 +114,7 @@ namespace Teleopti.Ccc.Web.Areas.ResourcePlanner
 			var workShiftCalculator = new WorkShiftCalculator();
 			var dayOffsInPeriodCalculator = new DayOffsInPeriodCalculator(()=>stateHolder);
 			var hasContractDayOffDefinition = new HasContractDayOffDefinition();
-			var resourceOptimizationHelper = new ResourceOptimizationHelper(stateHolder,new OccupiedSeatCalculator(), new NonBlendSkillCalculator(), personSkillProvider, new PeriodDistributionService(), _principal, new IntraIntervalFinderService(new SkillDayIntraIntervalFinder(new IntraIntervalFinder(), new SkillActivityCountCollector(new SkillActivityCounter()), new FullIntervalFinder())));
+			var resourceOptimizationHelper = new ResourceOptimizationHelper(()=>stateHolder,new OccupiedSeatCalculator(), new NonBlendSkillCalculator(), ()=>personSkillProvider, new PeriodDistributionService(), _principal, new IntraIntervalFinderService(new SkillDayIntraIntervalFinder(new IntraIntervalFinder(), new SkillActivityCountCollector(new SkillActivityCounter()), new FullIntervalFinder())));
 			var shiftCreatorService = new ShiftCreatorService(new CreateWorkShiftsFromTemplate());
 			var workShiftWorkTime = new WorkShiftWorkTime(new RuleSetProjectionService(shiftCreatorService));
 			var workShiftMinMaxCalculator = new WorkShiftMinMaxCalculator(new PossibleMinMaxWorkShiftLengthExtractor(_restrictionExtractor, workShiftWorkTime),
@@ -130,36 +130,39 @@ namespace Teleopti.Ccc.Web.Areas.ResourcePlanner
 			var scheduleMatrixListCreator = new ScheduleMatrixListCreator(()=>stateHolder,uniqueSchedulePartExtractor);
 			var shiftProjectionCacheFilter = new ShiftProjectionCacheFilter(new LongestPeriodForAssignmentCalculator(), new PersonalShiftAndMeetingFilter(),
 				new NotOverWritableActivitiesShiftFilter(()=>stateHolder),_principal);
+			var workShiftCalculatorsManager = new WorkShiftCalculatorsManager(workShiftCalculator,
+				new NonBlendWorkShiftCalculator(new NonBlendSkillImpactOnPeriodForProjection(), workShiftCalculator));
+			var workShiftFinderService = new WorkShiftFinderService(()=>stateHolder, ()=>new PreSchedulingStatusChecker(),
+				shiftProjectionCacheFilter,
+				new PersonSkillPeriodsDataHolderManager(()=>stateHolder),
+				shiftProjectionCacheManager,
+				workShiftCalculatorsManager,
+				()=>workShiftMinMaxCalculator,
+				new FairnessAndMaxSeatCalculatorsManager(()=>stateHolder,
+					new ShiftCategoryFairnessManager(()=>stateHolder,
+						new GroupShiftCategoryFairnessCreator(()=>groupPagePerDateHolder, ()=>stateHolder),
+						new ShiftCategoryFairnessCalculator()), new ShiftCategoryFairnessShiftValueCalculator(),
+					new FairnessValueCalculator(), new SeatLimitationWorkShiftCalculator2(new SeatImpactOnPeriodForProjection())),
+				new ShiftLengthDecider(new DesiredShiftLengthCalculator(new SchedulePeriodTargetTimeCalculator())));
+			var scheduleService = new ScheduleService(
+				workShiftFinderService,
+				scheduleMatrixListCreator, new ShiftCategoryLimitationChecker(()=>stateHolder),
+				effectiveRestrictionCreator);
+			var daysOffSchedulingService = new DaysOffSchedulingService(
+				()=>new AbsencePreferenceScheduler(effectiveRestrictionCreator,
+					()=>schedulePartModifyAndRollbackService, new AbsencePreferenceFullDayLayerCreator()),
+				()=>new DayOffScheduler(dayOffsInPeriodCalculator,
+					effectiveRestrictionCreator,
+					()=>schedulePartModifyAndRollbackService, new ScheduleDayAvailableForDayOffSpecification(),
+					hasContractDayOffDefinition),
+				()=>new MissingDaysOffScheduler(new BestSpotForAddingDayOffFinder(), new MatrixDataListInSteadyState(),
+					new MatrixDataListCreator(
+						new ScheduleDayDataMapper(effectiveRestrictionCreator,
+							hasContractDayOffDefinition)), new MatrixDataWithToFewDaysOff(dayOffsInPeriodCalculator)));
 			var schedulingService = new FixedStaffSchedulingService(stateHolder, dayOffsInPeriodCalculator,
 				effectiveRestrictionCreator,
-				new ScheduleService(
-					new WorkShiftFinderService(()=>stateHolder, new PreSchedulingStatusChecker(),
-						shiftProjectionCacheFilter,
-						new PersonSkillPeriodsDataHolderManager(()=>stateHolder),
-						shiftProjectionCacheManager,
-						new WorkShiftCalculatorsManager(workShiftCalculator,
-							new NonBlendWorkShiftCalculator(new NonBlendSkillImpactOnPeriodForProjection(), workShiftCalculator,
-								personSkillProvider)),
-						()=>workShiftMinMaxCalculator,
-						new FairnessAndMaxSeatCalculatorsManager(stateHolder,
-							new ShiftCategoryFairnessManager(stateHolder,
-								new GroupShiftCategoryFairnessCreator(groupPagePerDateHolder, stateHolder),
-								new ShiftCategoryFairnessCalculator()), new ShiftCategoryFairnessShiftValueCalculator(),
-							new FairnessValueCalculator(), new SeatLimitationWorkShiftCalculator2(new SeatImpactOnPeriodForProjection())),
-						new ShiftLengthDecider(new DesiredShiftLengthCalculator(new SchedulePeriodTargetTimeCalculator()))),
-					scheduleMatrixListCreator, new ShiftCategoryLimitationChecker(stateHolder),
-					effectiveRestrictionCreator),
-				new DaysOffSchedulingService(
-					()=>new AbsencePreferenceScheduler(effectiveRestrictionCreator,
-						()=>schedulePartModifyAndRollbackService, new AbsencePreferenceFullDayLayerCreator()),
-					()=>new DayOffScheduler(dayOffsInPeriodCalculator,
-						effectiveRestrictionCreator,
-						schedulePartModifyAndRollbackService, new ScheduleDayAvailableForDayOffSpecification(),
-						hasContractDayOffDefinition),
-					()=>new MissingDaysOffScheduler(new BestSpotForAddingDayOffFinder(), new MatrixDataListInSteadyState(),
-						new MatrixDataListCreator(
-							new ScheduleDayDataMapper(effectiveRestrictionCreator,
-								hasContractDayOffDefinition)), new MatrixDataWithToFewDaysOff(dayOffsInPeriodCalculator))),
+				scheduleService,
+				daysOffSchedulingService,
 				resourceOptimizationHelper);
 
 			var allSchedules = new List<IScheduleDay>();
@@ -196,7 +199,7 @@ namespace Teleopti.Ccc.Web.Areas.ResourcePlanner
 					new TeamBlockIncludedWorkShiftRuleFilter(), new RuleSetSkillActivityChecker(), groupPersonSkillAggregator),
 				shiftProjectionCacheManager, new RuleSetPersonalSkillsActivityFilter(new RuleSetSkillActivityChecker()),
 				new DisallowedShiftProjectionCashesFilter());
-			var deleteSchedulePartService = new DeleteSchedulePartService(stateHolder);
+			var deleteSchedulePartService = new DeleteSchedulePartService(()=>stateHolder);
 			var skillResolutionProvider = new SkillResolutionProvider();
 			var gridlockManager = new GridlockManager();
 			var matrixListFactory = new MatrixListFactory(()=>schedulerStateHolder,scheduleMatrixListCreator, new MatrixUserLockLocker(()=>gridlockManager), new MatrixNotPermittedLocker(new PrincipalAuthorization(new CurrentTeleoptiPrincipal())));
@@ -262,14 +265,14 @@ namespace Teleopti.Ccc.Web.Areas.ResourcePlanner
 			var workTimeStartEndExtractor = new WorkTimeStartEndExtractor();
 			var contractWeeklyRestForPersonWeek = new ContractWeeklyRestForPersonWeek();
 			var groupPageCreator = new GroupPageCreator(new GroupPageFactory());
-			var groupPersonBuilderForOptimizationFactory = new GroupPersonBuilderForOptimizationFactory(groupPageDataProvider, groupPagePerDateHolder,
-				schedulerStateHolder, groupPageCreator);
+			var groupPersonBuilderForOptimizationFactory = new GroupPersonBuilderForOptimizationFactory(groupPageDataProvider, ()=>groupPagePerDateHolder,
+				()=>schedulerStateHolder, groupPageCreator,_principal);
 			var teamBlockInfoFactory = new TeamBlockInfoFactory(new DynamicBlockFinder(), new TeamMemberTerminationOnBlockSpecification());
 			var dayOffMaxFlexCalculator = new DayOffMaxFlexCalculator(workTimeStartEndExtractor);
 			var weeklyRestSolverCommand = new WeeklyRestSolverCommand(
 				teamBlockInfoFactory,
 				teamBlockSchedulingOptions,
-				new WeeklyRestSolverService(new WeeksFromScheduleDaysExtractor(),
+				()=>new WeeklyRestSolverService(new WeeksFromScheduleDaysExtractor(),
 					new EnsureWeeklyRestRule(workTimeStartEndExtractor,
 						dayOffMaxFlexCalculator), contractWeeklyRestForPersonWeek,
 					new DayOffToTimeSpanExtractor(new ExtractDayOffFromGivenWeek(),
@@ -301,58 +304,47 @@ namespace Teleopti.Ccc.Web.Areas.ResourcePlanner
 					new BrokenWeekCounterForAPerson(new WeeksFromScheduleDaysExtractor(),
 						new EnsureWeeklyRestRule(workTimeStartEndExtractor,
 							dayOffMaxFlexCalculator), contractWeeklyRestForPersonWeek)),
-				schedulerStateHolder,
+				()=>schedulerStateHolder,
 				groupPersonBuilderForOptimizationFactory,
 				new ScheduleCommandToggle(_toggleManager));
 			var innerOptimizerHelperHelper = new InnerOptimizerHelperHelper(_restrictionExtractor);
 			var teamMatrixChecker = new TeamMatrixChecker();
 			var matrixDataListCreator = new MatrixDataListCreator(scheduleDayDataMapper);
-			var command = new ScheduleCommand(personSkillProvider, groupPageCreator,
-				groupPageDataProvider, resourceOptimizationHelper, resourceCalculationOnlyScheduleDayChangeCallback,
-				new TeamBlockScheduleCommand(schedulingService, schedulerStateHolder,
-					resourceCalculationOnlyScheduleDayChangeCallback,
+			var command = new ScheduleCommand(() => personSkillProvider, groupPageCreator,
+				groupPageDataProvider, resourceOptimizationHelper, () => resourceCalculationOnlyScheduleDayChangeCallback,
+				new TeamBlockScheduleCommand(schedulingService, () => schedulerStateHolder,
+					() => resourceCalculationOnlyScheduleDayChangeCallback,
 					groupPersonBuilderForOptimizationFactory,
 					new AdvanceDaysOffSchedulingService(
-						new AbsencePreferenceScheduler(effectiveRestrictionCreator, ()=>schedulePartModifyAndRollbackService,
+						new AbsencePreferenceScheduler(effectiveRestrictionCreator, () => schedulePartModifyAndRollbackService,
 							new AbsencePreferenceFullDayLayerCreator()),
-						new TeamDayOffScheduler(new DayOffsInPeriodCalculator(()=>stateHolder), effectiveRestrictionCreator,
+						new TeamDayOffScheduler(new DayOffsInPeriodCalculator(() => stateHolder), effectiveRestrictionCreator,
 							new HasContractDayOffDefinition(),
-							matrixDataListCreator, stateHolder, new ScheduleDayAvailableForDayOffSpecification()),
+							matrixDataListCreator, () => stateHolder, new ScheduleDayAvailableForDayOffSpecification()),
 						new TeamBlockMissingDayOffHandler(new BestSpotForAddingDayOffFinder(),
-							matrixDataListCreator, new MatrixDataWithToFewDaysOff(new DayOffsInPeriodCalculator(()=>stateHolder)),
+							matrixDataListCreator, new MatrixDataWithToFewDaysOff(new DayOffsInPeriodCalculator(() => stateHolder)),
 							new SplitSchedulePeriodToWeekPeriod(), new ValidNumberOfDayOffInAWeekSpecification())),
 					matrixListFactory,
 					teamBlockInfoFactory,
 					new SafeRollbackAndResourceCalculation(resourceOptimizationHelper),
-					workShiftMinMaxCalculator,
-					teamBlockSteadyStateValidator, new TeamBlockMaxSeatChecker(stateHolder),
-					teamBlockSchedulingOptions, new TeamBlockSchedulingCompletionChecker(),teamBlockScheduler,weeklyRestSolverCommand, teamMatrixChecker,innerOptimizerHelperHelper),
+					() => workShiftMinMaxCalculator,
+					teamBlockSteadyStateValidator, new TeamBlockMaxSeatChecker(() => stateHolder),
+					teamBlockSchedulingOptions, new TeamBlockSchedulingCompletionChecker(), teamBlockScheduler, weeklyRestSolverCommand,
+					teamMatrixChecker, innerOptimizerHelperHelper),
 				new ClassicScheduleCommand(matrixListFactory, weeklyRestSolverCommand,
-					resourceCalculationOnlyScheduleDayChangeCallback, resourceOptimizationHelper, innerOptimizerHelperHelper),
-				matrixListFactory,
-				new IntraIntervalFinderService(new SkillDayIntraIntervalFinder(new IntraIntervalFinder(),
-					new SkillActivityCountCollector(new SkillActivityCounter()), new FullIntervalFinder())), innerOptimizerHelperHelper);
+					() => resourceCalculationOnlyScheduleDayChangeCallback, () => resourceOptimizationHelper,
+					innerOptimizerHelperHelper),
+				matrixListFactory, innerOptimizerHelperHelper, () => new WorkShiftFinderResultHolder(),
+				() =>
+					new ResourceOptimizationHelperExtended(() => schedulerStateHolder, new OccupiedSeatCalculator(),
+						new NonBlendSkillCalculator(), () => personSkillProvider, new PeriodDistributionService(), _principal,
+						new IntraIntervalFinderService(new SkillDayIntraIntervalFinder(new IntraIntervalFinder(),
+							new SkillActivityCountCollector(new SkillActivityCounter()), new FullIntervalFinder()))));
 
 			var daysScheduled = 0;
 			EventHandler<SchedulingServiceBaseEventArgs> schedulingServiceOnDayScheduled = (sender, args) => daysScheduled++;
 			schedulingService.DayScheduled += schedulingServiceOnDayScheduled;
 
-			var scheduleService =
-				new ScheduleService(
-					new WorkShiftFinderService(()=>stateHolder, new PreSchedulingStatusChecker(),
-						shiftProjectionCacheFilter, new PersonSkillPeriodsDataHolderManager(()=>stateHolder),
-						shiftProjectionCacheManager,
-						new WorkShiftCalculatorsManager(new WorkShiftCalculator(),
-							new NonBlendWorkShiftCalculator(new NonBlendSkillImpactOnPeriodForProjection(), new WorkShiftCalculator(),
-								personSkillProvider)), ()=>workShiftMinMaxCalculator,
-						new FairnessAndMaxSeatCalculatorsManager(stateHolder,
-							new ShiftCategoryFairnessManager(stateHolder,
-								new GroupShiftCategoryFairnessCreator(groupPagePerDateHolder, stateHolder),
-								new ShiftCategoryFairnessCalculator()), new ShiftCategoryFairnessShiftValueCalculator(),
-							new FairnessValueCalculator(), new SeatLimitationWorkShiftCalculator2(new SeatImpactOnPeriodForProjection())),
-						new ShiftLengthDecider(new DesiredShiftLengthCalculator(new SchedulePeriodTargetTimeCalculator()))),
-					scheduleMatrixListCreator, new ShiftCategoryLimitationChecker(stateHolder),
-					effectiveRestrictionCreator);
 			command.Execute(new OptimizerOriginalPreferences(new SchedulingOptions
 			{
 				UseAvailability = true,
@@ -371,17 +363,9 @@ namespace Teleopti.Ccc.Web.Areas.ResourcePlanner
 							effectiveRestrictionCreator, schedulePartModifyAndRollbackService),
 						resourceCalculationOnlyScheduleDayChangeCallback),
 					new RuleSetBagsOfGroupOfPeopleCanHaveShortBreak(new RuleSetBagsOfGroupOfPeopleCanHaveShortBreakLoader()),
-					stateHolder, schedulingService, null, new OptimizationPreferences(), scheduleService, resourceOptimizationHelper,
+					()=>stateHolder, schedulingService, null, ()=>new OptimizationPreferences(), scheduleService, resourceOptimizationHelper,
 					gridlockManager,
-					new DaysOffSchedulingService(
-						()=>new AbsencePreferenceScheduler(effectiveRestrictionCreator, ()=>schedulePartModifyAndRollbackService,
-							new AbsencePreferenceFullDayLayerCreator()),
-						()=>new DayOffScheduler(new DayOffsInPeriodCalculator(()=>stateHolder), effectiveRestrictionCreator,
-							schedulePartModifyAndRollbackService, new ScheduleDayAvailableForDayOffSpecification(),
-							hasContractDayOffDefinition),
-						()=>new MissingDaysOffScheduler(new BestSpotForAddingDayOffFinder(), new MatrixDataListInSteadyState(),
-							new MatrixDataListCreator(scheduleDayDataMapper),
-							new MatrixDataWithToFewDaysOff(new DayOffsInPeriodCalculator(()=>stateHolder)))), new WorkShiftFinderResultHolder(),
+					daysOffSchedulingService, ()=>new WorkShiftFinderResultHolder(),
 					resourceCalculationOnlyScheduleDayChangeCallback, scheduleDayEquator, matrixListFactory),
 				new OptimizationPreferences());
 			schedulingService.DayScheduled -= schedulingServiceOnDayScheduled;

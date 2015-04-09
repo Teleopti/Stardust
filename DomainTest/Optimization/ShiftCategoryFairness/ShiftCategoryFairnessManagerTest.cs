@@ -25,7 +25,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.ShiftCategoryFairness
             _stateHolder = _mocks.StrictMock<ISchedulingResultStateHolder>();
             _groupCreator = _mocks.StrictMock<IGroupShiftCategoryFairnessCreator>();
             _fairnessCalc = _mocks.StrictMock<IShiftCategoryFairnessCalculator>();
-            _target = new ShiftCategoryFairnessManager(_stateHolder, _groupCreator, _fairnessCalc);
+            _target = new ShiftCategoryFairnessManager(()=>_stateHolder, _groupCreator, _fairnessCalc);
             _person = new Person();
 
         }
@@ -35,7 +35,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.ShiftCategoryFairness
         {
 			var range = _mocks.StrictMock<IScheduleRange>();
 			var dateOnly = new DateOnly(2011, 4, 19);
-			var fairness = new Domain.Optimization.ShiftCategoryFairness.ShiftCategoryFairnessHolder();
+			var fairness = new ShiftCategoryFairnessHolder();
 			var factors = _mocks.StrictMock<IShiftCategoryFairnessFactors>();
 			Expect.Call(_stateHolder.Schedules).Return(_dic);
 			Expect.Call(_dic[_person]).Return(range);

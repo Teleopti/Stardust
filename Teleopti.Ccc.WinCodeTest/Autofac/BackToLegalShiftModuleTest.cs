@@ -3,6 +3,7 @@ using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.Scheduling.BackToLegalShift;
 using Teleopti.Ccc.IocCommon;
+using Teleopti.Ccc.IocCommon.Configuration;
 using Teleopti.Ccc.IocCommon.MultipleConfig;
 using Teleopti.Ccc.WinCode.Autofac;
 

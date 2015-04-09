@@ -11,13 +11,17 @@ namespace Teleopti.Ccc.Win.Common.Controls.Rows
     {
         private readonly RowManagerScheduler<SkillDayGridRow, IDictionary<DateTime, IList<ISkillStaffPeriod>>> _rowManager;
         private readonly ISkill _skill;
+	    private readonly DailyBoostedSkillForecastAndScheduledValueCalculator _calculator;
 
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1006:DoNotNestGenericTypesInMemberSignatures")]
+	    [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1006:DoNotNestGenericTypesInMemberSignatures")]
         public SkillDayGridRowBoostedRelativeDifference(RowManagerScheduler<SkillDayGridRow, IDictionary<DateTime, IList<ISkillStaffPeriod>>> rowManager, string cellType, string displayMember, string rowHeaderText, ISkill skill)
             : base(rowManager, cellType, displayMember, rowHeaderText)
         {
             _rowManager = rowManager;
             _skill = skill;
+
+			_calculator =
+				new DailyBoostedSkillForecastAndScheduledValueCalculator(() => _rowManager.SchedulerStateHolder.SchedulingResultState);
         }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
@@ -55,8 +59,6 @@ namespace Teleopti.Ccc.Win.Common.Controls.Rows
             if (!skillStaffPeriodList.Any())
                 return null;
 
-            var calculator =
-                new DailyBoostedSkillForecastAndScheduledValueCalculator(_rowManager.SchedulerStateHolder.SchedulingResultState);
             ForecastScheduleValuePair ret;
             if(_skill.IsVirtual)
             {
@@ -64,7 +66,7 @@ namespace Teleopti.Ccc.Win.Common.Controls.Rows
                 double tweakedBoostedDailyScheduled = 0;
                 foreach (var aggregateSkill in _skill.AggregateSkills)
                 {
-                    ret = calculator.CalculateDailyForecastAndScheduleDataForSkill(aggregateSkill, GetDateFromColumn(cellInfo));
+                    ret = _calculator.CalculateDailyForecastAndScheduleDataForSkill(aggregateSkill, GetDateFromColumn(cellInfo));
                     dailyForecast += ret.ForecastValue;
                     tweakedBoostedDailyScheduled += ret.ScheduleValue;
                 }
@@ -73,7 +75,7 @@ namespace Teleopti.Ccc.Win.Common.Controls.Rows
                 return (tweakedBoostedDailyScheduled / dailyForecast) * 100;
             }
 
-            ret = calculator.CalculateDailyForecastAndScheduleDataForSkill(_skill, GetDateFromColumn(cellInfo));
+            ret = _calculator.CalculateDailyForecastAndScheduleDataForSkill(_skill, GetDateFromColumn(cellInfo));
             if (ret.ForecastValue == 0)
                 return null;
             return (ret.ScheduleValue/ret.ForecastValue) * 100;

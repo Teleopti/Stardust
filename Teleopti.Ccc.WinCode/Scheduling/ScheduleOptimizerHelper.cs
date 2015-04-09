@@ -30,7 +30,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 {
 	public class ScheduleOptimizerHelper : IScheduleOptimizerHelper
 	{
-		private IWorkShiftFinderResultHolder _allResults;
+		private Func<IWorkShiftFinderResultHolder> _allResults;
 		private IBackgroundWorkerWrapper _backgroundWorker;
 		private readonly ILifetimeScope _container;
 		private readonly OptimizerHelperHelper _optimizerHelper;
@@ -38,12 +38,12 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 		private readonly IRequiredScheduleHelper _requiredScheduleHelper;
 		private readonly IExtendReduceTimeHelper _extendReduceTimeHelper;
 		private readonly IExtendReduceDaysOffHelper _extendReduceDaysOffHelper;
-		private readonly ISchedulingResultStateHolder _stateHolder;
-		private readonly IScheduleDayChangeCallback _scheduleDayChangeCallback;
+		private readonly Func<ISchedulingResultStateHolder> _stateHolder;
+		private readonly Func<IScheduleDayChangeCallback> _scheduleDayChangeCallback;
 		private readonly IResourceOptimizationHelper _resourceOptimizationHelper;
 		private readonly IScheduleMatrixListCreator _scheduleMatrixListCreator;
-		private readonly ISchedulerStateHolder _schedulerStateHolder;
-		private readonly IPersonSkillProvider _personSkillProvider;
+		private readonly Func<ISchedulerStateHolder> _schedulerStateHolder;
+		private readonly Func<IPersonSkillProvider> _personSkillProvider;
 		private ResourceOptimizerProgressEventArgs _progressEvent;
 		private readonly IDayOffOptimizationDecisionMakerFactory _dayOffOptimizationDecisionMakerFactory;
 		private readonly IOptimizerHelperHelper _optimizerHelperHelper;
@@ -53,16 +53,16 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 			_container = container;
 			_optimizerHelper = optimizerHelper;
 			_toggleManager = toggleManager;
-			_requiredScheduleHelper = requiredScheduleHelper;
+			_requiredScheduleHelper = requiredScheduleHelper; 
+			_allResults = () => _container.Resolve<IWorkShiftFinderResultHolder>();
 			_extendReduceTimeHelper = new ExtendReduceTimeHelper(_container);
-			_extendReduceDaysOffHelper = new ExtendReduceDaysOffHelper(_container,optimizerHelper);
-			_stateHolder = _container.Resolve<ISchedulingResultStateHolder>();
-			_schedulerStateHolder = _container.Resolve<ISchedulerStateHolder>();
-			_scheduleDayChangeCallback = _container.Resolve<IScheduleDayChangeCallback>();
-			_allResults = _container.Resolve<IWorkShiftFinderResultHolder>();
+			_extendReduceDaysOffHelper = new ExtendReduceDaysOffHelper(_container,optimizerHelper,_allResults);
+			_schedulerStateHolder = () => _container.Resolve<ISchedulerStateHolder>(); 
+			_stateHolder = () => _schedulerStateHolder().SchedulingResultState;
+			_scheduleDayChangeCallback = ()=>_container.Resolve<IScheduleDayChangeCallback>();
 			_resourceOptimizationHelper = _container.Resolve<IResourceOptimizationHelper>();
 			_scheduleMatrixListCreator = _container.Resolve<IScheduleMatrixListCreator>();
-			_personSkillProvider = _container.Resolve<IPersonSkillProvider>();
+			_personSkillProvider = ()=>_container.Resolve<IPersonSkillProvider>();
 			_optimizerHelperHelper = _container.Resolve<IOptimizerHelperHelper>();
 			_dayOffOptimizationDecisionMakerFactory = container.Resolve<IDayOffOptimizationDecisionMakerFactory>();
 		}
@@ -73,11 +73,11 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 		{
 			ISchedulePartModifyAndRollbackService rollbackService =
 				new SchedulePartModifyAndRollbackService(
-					_stateHolder,
-					_scheduleDayChangeCallback,
+					_stateHolder(),
+					_scheduleDayChangeCallback(),
 					new ScheduleTagSetter(optimizerPreferences.General.ScheduleTag));
 
-			IIntradayDecisionMaker decisionMaker = new IntradayDecisionMaker();
+			var decisionMaker = _container.Resolve<IIntradayDecisionMaker>();
 			var scheduleService = _container.Resolve<IScheduleService>();
 
 			var scheduleMatrixLockableBitArrayConverterEx =
@@ -90,8 +90,8 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 				scheduleService,
 				optimizerPreferences,
 				rollbackService,
-				_stateHolder,
-				_personSkillProvider,
+				_stateHolder(),
+				_personSkillProvider(),
 				new CurrentTeleoptiPrincipal(),
 				scheduleMatrixLockableBitArrayConverterEx,
 				_container.Resolve<ISkillStaffPeriodToSkillIntervalDataMapper>(),
@@ -117,11 +117,11 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 		{
 
 			ISchedulePartModifyAndRollbackService rollbackService =
-				new SchedulePartModifyAndRollbackService(_stateHolder, _scheduleDayChangeCallback,
+				new SchedulePartModifyAndRollbackService(_stateHolder(), _scheduleDayChangeCallback(),
 					new ScheduleTagSetter(optimizerPreferences.General.ScheduleTag));
 
 			IScheduleResultDataExtractor allSkillsDataExtractor =
-				_optimizerHelperHelper.CreateAllSkillsDataExtractor(optimizerPreferences.Advanced, selectedPeriod, _stateHolder);
+				_optimizerHelperHelper.CreateAllSkillsDataExtractor(optimizerPreferences.Advanced, selectedPeriod, _stateHolder());
 			IPeriodValueCalculator periodValueCalculator =
 				_optimizerHelperHelper.CreatePeriodValueCalculator(optimizerPreferences.Advanced, allSkillsDataExtractor);
 
@@ -139,8 +139,8 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 					scheduleService,
 					optimizerPreferences,
 					rollbackService,
-					_stateHolder,
-					_personSkillProvider,
+					_stateHolder(),
+					_personSkillProvider(),
 					new CurrentTeleoptiPrincipal(),
 					scheduleMatrixLockableBitArrayConverterEx,
 					_container.Resolve<IEffectiveRestrictionCreator>(),
@@ -166,14 +166,14 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 
 			ISchedulePartModifyAndRollbackService rollbackService =
 				new SchedulePartModifyAndRollbackService(
-					_stateHolder,
-					_scheduleDayChangeCallback,
+					_stateHolder(),
+					_scheduleDayChangeCallback(),
 					new ScheduleTagSetter(optimizerPreferences.General.ScheduleTag));
 
 			ISchedulePartModifyAndRollbackService rollbackServiceDayOffConflict =
 				new SchedulePartModifyAndRollbackService(
-					_stateHolder,
-					_scheduleDayChangeCallback,
+					_stateHolder(),
+					_scheduleDayChangeCallback(),
 					new ScheduleTagSetter(optimizerPreferences.General.ScheduleTag));
 
 			IList<IDayOffOptimizerContainer> optimizerContainers = new List<IDayOffOptimizerContainer>();
@@ -194,7 +194,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 			}
 
 			IScheduleResultDataExtractor allSkillsDataExtractor =
-				_optimizerHelperHelper.CreateAllSkillsDataExtractor(optimizerPreferences.Advanced, selectedPeriod, _stateHolder);
+				_optimizerHelperHelper.CreateAllSkillsDataExtractor(optimizerPreferences.Advanced, selectedPeriod, _stateHolder());
 			IPeriodValueCalculator periodValueCalculator =
 				_optimizerHelperHelper.CreatePeriodValueCalculator(optimizerPreferences.Advanced, allSkillsDataExtractor);
 
@@ -239,7 +239,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 							cache = finderService.FindBestShift(schedulePart, schedulingOptions, matrix, effectiveRestriction, null);
 						}
 						var result = cache.FinderResult;
-						_allResults.AddResults(new List<IWorkShiftFinderResult> { result }, schedulingTime);
+						_allResults().AddResults(new List<IWorkShiftFinderResult> { result }, schedulingTime);
 
 						if (cache.ResultHolder == null)
 							return null;
@@ -253,12 +253,12 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 
 		public IWorkShiftFinderResultHolder WorkShiftFinderResultHolder
 		{
-			get { return _allResults; }
+			get { return _allResults(); }
 		}
 
 		public void ResetWorkShiftFinderResults()
 		{
-			_allResults.Clear();
+			_allResults().Clear();
 		}
 
 		public void GetBackToLegalState(IList<IScheduleMatrixPro> matrixList,
@@ -275,7 +275,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 			foreach (IScheduleMatrixPro scheduleMatrix in matrixList)
 			{
 				ISchedulePartModifyAndRollbackService schedulePartModifyAndRollbackService =
-					new SchedulePartModifyAndRollbackService(schedulerStateHolder.SchedulingResultState, _scheduleDayChangeCallback,
+					new SchedulePartModifyAndRollbackService(schedulerStateHolder.SchedulingResultState, _scheduleDayChangeCallback(),
 						new ScheduleTagSetter(schedulingOptions.TagToUseOnScheduling));
 				IWorkShiftBackToLegalStateServicePro workShiftBackToLegalStateServicePro =
 					_optimizerHelper.CreateWorkShiftBackToLegalStateServicePro(_container);
@@ -300,7 +300,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 		{
 			if (schedulingOptions == null) throw new ArgumentNullException("schedulingOptions");
 
-			_allResults = new WorkShiftFinderResultHolder();
+			_allResults = ()=>new WorkShiftFinderResultHolder();
 			_backgroundWorker = backgroundWorker;
 			var optimizerPreferences = _container.Resolve<IOptimizationPreferences>();
 
@@ -344,7 +344,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 							backToLegalStateSolverContainer,
 							dayOffTemplate,
 							daysOffPreferences,
-							_scheduleDayChangeCallback,
+							_scheduleDayChangeCallback(),
 							new ScheduleTagSetter(schedulingOptions.TagToUseOnScheduling),
 							scheduleMatrixLockableBitArrayConverterEx);
 
@@ -362,7 +362,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 						    overLimitCounts.StudentAvailabilitiesOverLimit > 0 ||
 						    optimizationLimits.MoveMaxDaysOverLimit())
 						{
-							var rollbackService = new SchedulePartModifyAndRollbackService(_stateHolder, _scheduleDayChangeCallback,
+							var rollbackService = new SchedulePartModifyAndRollbackService(_stateHolder(), _scheduleDayChangeCallback(),
 								new ScheduleTagSetter(
 									KeepOriginalScheduleTag.Instance));
 							rollbackMatrixChanges(originalStateContainer, rollbackService);
@@ -454,7 +454,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 					if (_progressEvent == null || !_progressEvent.UserCancel)
 					{
 						_extendReduceTimeHelper.RunExtendReduceTimeOptimization(optimizerPreferences, _backgroundWorker,
-							selectedDays, _stateHolder,
+							selectedDays, _stateHolder(),
 							selectedPeriod,
 							matrixOriginalStateContainerListForMoveMax);
 						continuedStep = true;
@@ -468,7 +468,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 					if (_progressEvent == null || !_progressEvent.UserCancel)
 					{
 						_extendReduceDaysOffHelper.RunExtendReduceDayOffOptimization(optimizerPreferences, _backgroundWorker,
-							selectedDays, _schedulerStateHolder,
+							selectedDays, _schedulerStateHolder(),
 							selectedPeriod,
 							matrixOriginalStateContainerListForMoveMax);
 						continuedStep = true;
@@ -535,12 +535,12 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 		{
 			var matrixListForFairness = _container.Resolve<IMatrixListFactory>().CreateMatrixListAll(selectedPeriod);
 			_optimizerHelperHelper.LockDaysForDayOffOptimization(matrixListForFairness, optimizationPreferences, selectedPeriod);
-			var rollbackService = new SchedulePartModifyAndRollbackService(_stateHolder, new DoNothingScheduleDayChangeCallBack(), tagSetter);
+			var rollbackService = new SchedulePartModifyAndRollbackService(_stateHolder(), new DoNothingScheduleDayChangeCallBack(), tagSetter);
 
 			var equalNumberOfCategoryFairnessService = _container.Resolve<IEqualNumberOfCategoryFairnessService>();
 			equalNumberOfCategoryFairnessService.ReportProgress += resourceOptimizerPersonOptimized;
 			equalNumberOfCategoryFairnessService.Execute(matrixListForFairness, selectedPeriod, selectedPersons,
-				schedulingOptions, _schedulerStateHolder.Schedules, rollbackService,
+				schedulingOptions, _schedulerStateHolder().Schedules, rollbackService,
 				optimizationPreferences, true, true);
 			equalNumberOfCategoryFairnessService.ReportProgress -= resourceOptimizerPersonOptimized;
 
@@ -550,12 +550,12 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 			var teamBlockDayOffFairnessOptimizationService = _container.Resolve<ITeamBlockDayOffFairnessOptimizationServiceFacade>();
 			teamBlockDayOffFairnessOptimizationService.ReportProgress += resourceOptimizerPersonOptimized;
 			teamBlockDayOffFairnessOptimizationService.Execute(matrixListForFairness, selectedPeriod, selectedPersons, schedulingOptions,
-				_schedulerStateHolder.Schedules, rollbackService, optimizationPreferences, true, _stateHolder.SeniorityWorkDayRanks);
+				_schedulerStateHolder().Schedules, rollbackService, optimizationPreferences, true, _stateHolder().SeniorityWorkDayRanks);
 			teamBlockDayOffFairnessOptimizationService.ReportProgress -= resourceOptimizerPersonOptimized;
 
 			var teamBlockSeniorityFairnessOptimizationService = _container.Resolve<ITeamBlockSeniorityFairnessOptimizationService>();
 			teamBlockSeniorityFairnessOptimizationService.ReportProgress += resourceOptimizerPersonOptimized;
-			teamBlockSeniorityFairnessOptimizationService.Execute(matrixListForFairness, selectedPeriod, selectedPersons, schedulingOptions, _stateHolder.ShiftCategories.ToList(), _schedulerStateHolder.Schedules, rollbackService, optimizationPreferences, true);
+			teamBlockSeniorityFairnessOptimizationService.Execute(matrixListForFairness, selectedPeriod, selectedPersons, schedulingOptions, _stateHolder().ShiftCategories.ToList(), _schedulerStateHolder().Schedules, rollbackService, optimizationPreferences, true);
 			teamBlockSeniorityFairnessOptimizationService.ReportProgress -= resourceOptimizerPersonOptimized;
 		}
 
@@ -564,10 +564,10 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 			var args = new ResourceOptimizerProgressEventArgs(0, 0, LanguageResourceHelper.Translate("XXCollectingData"));
 			_backgroundWorker.ReportProgress(1, args);
 			var allMatrixes = _container.Resolve<IMatrixListFactory>().CreateMatrixListAll(selectedPeriod);
-			var rollbackService = new SchedulePartModifyAndRollbackService(_stateHolder, _scheduleDayChangeCallback, tagSetter);
+			var rollbackService = new SchedulePartModifyAndRollbackService(_stateHolder(), _scheduleDayChangeCallback(), tagSetter);
 			var resourceCalculateDelayer = new ResourceCalculateDelayer(_resourceOptimizationHelper, 1, true, schedulingOptions.ConsiderShortBreaks);
 			var intraIntervalOptimizationCommand = _container.Resolve<IIntraIntervalOptimizationCommand>();
-			intraIntervalOptimizationCommand.Execute(schedulingOptions, selectedPeriod, selectedDays, _schedulerStateHolder.SchedulingResultState, allMatrixes, rollbackService, resourceCalculateDelayer, _backgroundWorker);
+			intraIntervalOptimizationCommand.Execute(schedulingOptions, selectedPeriod, selectedDays, _schedulerStateHolder().SchedulingResultState, allMatrixes, rollbackService, resourceCalculateDelayer, _backgroundWorker);
 		}
 
 		private IList<IScheduleMatrixOriginalStateContainer> createMatrixContainerList(IEnumerable<IScheduleMatrixPro> matrixList)
@@ -627,7 +627,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 
 				// we create a rollback service and do the changes and check for the case that not all white spots can be scheduled
 				ISchedulePartModifyAndRollbackService rollbackService =
-					new SchedulePartModifyAndRollbackService(_stateHolder, _scheduleDayChangeCallback, new ScheduleTagSetter(KeepOriginalScheduleTag.Instance));
+					new SchedulePartModifyAndRollbackService(_stateHolder(), _scheduleDayChangeCallback(), new ScheduleTagSetter(KeepOriginalScheduleTag.Instance));
 				foreach (
 					IScheduleMatrixOriginalStateContainer matrixOriginalStateContainer in scheduleMatrixOriginalStateContainerList)
 				{
@@ -657,7 +657,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 			resourceOptimizerPersonOptimized(this, e);
 
 			// to make sure we are in legal state before we can do day off optimization
-			IList<IDayOffTemplate> displayList = _schedulerStateHolder.CommonStateHolder.ActiveDayOffs.ToList();
+			IList<IDayOffTemplate> displayList = _schedulerStateHolder().CommonStateHolder.ActiveDayOffs.ToList();
 			((List<IDayOffTemplate>)displayList).Sort(new DayOffTemplateSorter());
 			var schedulingOptions = new SchedulingOptionsCreator().CreateSchedulingOptions(optimizerPreferences);
 			DaysOffBackToLegalState(matrixContainerList, _backgroundWorker,
@@ -667,7 +667,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 				_optimizerHelper.CreateWorkShiftBackToLegalStateServicePro(_container);
 
 			ISchedulePartModifyAndRollbackService rollbackService =
-				new SchedulePartModifyAndRollbackService(_stateHolder, _scheduleDayChangeCallback, new ScheduleTagSetter(schedulingOptions.TagToUseOnScheduling));
+				new SchedulePartModifyAndRollbackService(_stateHolder(), _scheduleDayChangeCallback(), new ScheduleTagSetter(schedulingOptions.TagToUseOnScheduling));
 			foreach (var matrixOriginalStateContainer in matrixContainerList)
 			{
 				rollbackService.ClearModificationCollection();
@@ -713,7 +713,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 				scheduleService);
 
 			// we create a rollback service and do the changes and check for the case that not all white spots can be scheduled
-			rollbackService = new SchedulePartModifyAndRollbackService(_stateHolder, _scheduleDayChangeCallback, new ScheduleTagSetter(KeepOriginalScheduleTag.Instance));
+			rollbackService = new SchedulePartModifyAndRollbackService(_stateHolder(), _scheduleDayChangeCallback(), new ScheduleTagSetter(KeepOriginalScheduleTag.Instance));
 			foreach (IScheduleMatrixOriginalStateContainer matrixContainer in validMatrixContainerList)
 			{
 				if (!matrixContainer.IsFullyScheduled())
@@ -811,7 +811,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 			INightRestWhiteSpotSolverService nightRestWhiteSpotSolverService =
 				new NightRestWhiteSpotSolverService(new NightRestWhiteSpotSolver(),
 					deleteAndResourceCalculateService,
-					scheduleService, WorkShiftFinderResultHolder,
+					scheduleService, ()=>WorkShiftFinderResultHolder,
 					resourceCalculateDelayer);
 			var mainShiftOptimizeActivitySpecificationSetter = new MainShiftOptimizeActivitySpecificationSetter();
 			var dailySkillForecastAndScheduledValueCalculator = new DailySkillForecastAndScheduledValueCalculator(_stateHolder);

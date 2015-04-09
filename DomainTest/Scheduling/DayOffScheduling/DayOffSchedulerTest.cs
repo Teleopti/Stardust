@@ -56,7 +56,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.DayOffScheduling
 			_scheduleAvailableForDayOffSpecification = _mocks.StrictMock<IScheduleDayAvailableForDayOffSpecification>();
 			_hasContractDayOffDefinition = _mocks.StrictMock<IHasContractDayOffDefinition>();
 			_target = new DayOffScheduler(_dayOffsInPeriodCalculator, _effectiveRestrictionCreator,
-										  _schedulePartModifyAndRollbackService, _scheduleAvailableForDayOffSpecification,
+										  ()=>_schedulePartModifyAndRollbackService, _scheduleAvailableForDayOffSpecification,
 										  _hasContractDayOffDefinition);
 
 

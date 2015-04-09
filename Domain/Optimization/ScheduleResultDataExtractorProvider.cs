@@ -24,12 +24,12 @@ namespace Teleopti.Ccc.Domain.Optimization
             ISkillExtractor skillExtractor = new ScheduleMatrixPersonalSkillExtractor(scheduleMatrix);
             if (optimizerPreferences.UseTweakedValues)
             {
-                var dailySkillForecastAndScheduledValueCalculator = new DailyBoostedSkillForecastAndScheduledValueCalculator(scheduleMatrix.SchedulingStateHolder);
+                var dailySkillForecastAndScheduledValueCalculator = new DailyBoostedSkillForecastAndScheduledValueCalculator(()=>scheduleMatrix.SchedulingStateHolder);
                 return new RelativeBoostedDailyDifferencesByPersonalSkillsExtractor(scheduleMatrix, dailySkillForecastAndScheduledValueCalculator, skillExtractor);
             }
             else
             {
-                var dailySkillForecastAndScheduledValueCalculator = new DailySkillForecastAndScheduledValueCalculator(scheduleMatrix.SchedulingStateHolder);
+                var dailySkillForecastAndScheduledValueCalculator = new DailySkillForecastAndScheduledValueCalculator(()=>scheduleMatrix.SchedulingStateHolder);
                 return new RelativeDailyDifferencesByPersonalSkillsExtractor(scheduleMatrix, dailySkillForecastAndScheduledValueCalculator, skillExtractor);
             }
         }
@@ -37,16 +37,16 @@ namespace Teleopti.Ccc.Domain.Optimization
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "2"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
 		public IScheduleResultDataExtractor CreateAllSkillsDataExtractor(DateOnlyPeriod selectedPeriod, ISchedulingResultStateHolder stateHolder, IAdvancedPreferences optimizerPreferences)
         {
-            ISkillExtractor allSkillExtractor = new SchedulingStateHolderAllSkillExtractor(stateHolder);
+            ISkillExtractor allSkillExtractor = new SchedulingStateHolderAllSkillExtractor(()=>stateHolder);
             IDailySkillForecastAndScheduledValueCalculator dailySkillForecastAndScheduledValueCalculator;
             if (optimizerPreferences.UseTweakedValues)
             {
-                dailySkillForecastAndScheduledValueCalculator = new DailyBoostedSkillForecastAndScheduledValueCalculator(stateHolder);
+                dailySkillForecastAndScheduledValueCalculator = new DailyBoostedSkillForecastAndScheduledValueCalculator(()=>stateHolder);
                 return new RelativeBoostedDailyDifferencesByAllSkillsExtractor(selectedPeriod,
                                                                                dailySkillForecastAndScheduledValueCalculator,
                                                                                allSkillExtractor);
             }
-            dailySkillForecastAndScheduledValueCalculator = new DailySkillForecastAndScheduledValueCalculator(stateHolder);
+            dailySkillForecastAndScheduledValueCalculator = new DailySkillForecastAndScheduledValueCalculator(()=>stateHolder);
             return new RelativeDailyDifferencesByAllSkillsExtractor(
                 selectedPeriod,
                 dailySkillForecastAndScheduledValueCalculator,

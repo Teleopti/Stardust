@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Optimization
@@ -8,9 +9,9 @@ namespace Teleopti.Ccc.Domain.Optimization
     /// </summary>
     public class SchedulingStateHolderAllSkillExtractor : ISkillExtractor
     {
-        private readonly ISchedulingResultStateHolder _stateHolder;
+        private readonly Func<ISchedulingResultStateHolder> _stateHolder;
 
-        public SchedulingStateHolderAllSkillExtractor(ISchedulingResultStateHolder stateHolder)
+        public SchedulingStateHolderAllSkillExtractor(Func<ISchedulingResultStateHolder> stateHolder)
         {
             _stateHolder = stateHolder;
         }
@@ -18,7 +19,7 @@ namespace Teleopti.Ccc.Domain.Optimization
         public IEnumerable<ISkill> ExtractSkills()
         {
             IList<ISkill> ret = new List<ISkill>();
-	        foreach (var visibleSkill in _stateHolder.VisibleSkills)
+	        foreach (var visibleSkill in _stateHolder().VisibleSkills)
 	        {
 		        if (visibleSkill.SkillType.ForecastSource != ForecastSource.MaxSeatSkill)
 					ret.Add(visibleSkill);

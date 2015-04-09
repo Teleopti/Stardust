@@ -13,7 +13,6 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
         private IScheduleDay _schedulePart;
         private IWorkShiftFinderResult _finderResult;
 
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
         public bool CheckStatus(IScheduleDay schedulePart, IWorkShiftFinderResult finderResult, ISchedulingOptions schedulingOptions)
         {
             _schedulePart = schedulePart;
@@ -21,7 +20,6 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
             _validPeriod = schedulePart.DateOnlyAsPeriod.Period();
             _scheduleDayUtc = _validPeriod.StartDateTime;
 
-            //TimeZoneInfo timeZoneInfo = Person.PermissionInformation.DefaultTimeZone();
             _scheduleDateOnly = schedulePart.DateOnlyAsPeriod.DateOnly;
            
             _currentSchedulePeriod = schedulePart.Person.VirtualSchedulePeriod(_scheduleDateOnly);

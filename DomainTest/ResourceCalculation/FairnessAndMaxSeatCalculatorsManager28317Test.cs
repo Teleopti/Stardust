@@ -45,7 +45,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 			_fairnessValueCalculator = _mock.StrictMock<IFairnessValueCalculator>();
 			_seatLimitationWorkShiftCalculator = _mock.StrictMock<ISeatLimitationWorkShiftCalculator2>();
 			_target = new FairnessAndMaxSeatCalculatorsManager28317(
-				_resultStateHolder, _shiftCategoryFairnessManager, 
+				()=>_resultStateHolder, _shiftCategoryFairnessManager, 
 				_categoryFairnessShiftValueCalculator, 
 				_fairnessValueCalculator, _seatLimitationWorkShiftCalculator);
 			_person = _mock.StrictMock<IPerson>();

@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using Teleopti.Ccc.Domain.GroupPageCreator;
 using Teleopti.Ccc.Domain.Optimization;
@@ -10,30 +11,33 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 	public class GroupPersonBuilderForOptimizationFactory : IGroupPersonBuilderForOptimizationFactory
 	{
 		private readonly IGroupScheduleGroupPageDataProvider _groupScheduleGroupPageDataProvider;
-		private readonly IGroupPagePerDateHolder _groupPagePerDateHolder;
-		private readonly ISchedulerStateHolder _schedulerStateHolder;
+		private readonly Func<IGroupPagePerDateHolder> _groupPagePerDateHolder;
+		private readonly Func<ISchedulerStateHolder> _schedulerStateHolder;
 		private readonly IGroupPageCreator _groupPageCreator;
+		private readonly ICurrentTeleoptiPrincipal _currentTeleoptiPrincipal;
 
 		public GroupPersonBuilderForOptimizationFactory(IGroupScheduleGroupPageDataProvider groupScheduleGroupPageDataProvider,
-			IGroupPagePerDateHolder groupPagePerDateHolder,
-			ISchedulerStateHolder schedulerStateHolder,
-			IGroupPageCreator groupPageCreator)
+			Func<IGroupPagePerDateHolder> groupPagePerDateHolder,
+			Func<ISchedulerStateHolder> schedulerStateHolder,
+			IGroupPageCreator groupPageCreator,
+			ICurrentTeleoptiPrincipal currentTeleoptiPrincipal)
 		{
 			_groupScheduleGroupPageDataProvider = groupScheduleGroupPageDataProvider;
 			_groupPagePerDateHolder = groupPagePerDateHolder;
 			_schedulerStateHolder = schedulerStateHolder;
 			_groupPageCreator = groupPageCreator;
+			_currentTeleoptiPrincipal = currentTeleoptiPrincipal;
 		}
 
 		public IGroupPersonBuilderForOptimization Create(ISchedulingOptions schedulingOptions)
 		{
-
-			if (_schedulerStateHolder.LoadedPeriod != null)
+			var schedulerStateHolder = _schedulerStateHolder();
+			if (schedulerStateHolder.LoadedPeriod != null)
 			{
 				IList<DateOnly> dates =
-					_schedulerStateHolder.LoadedPeriod.Value.ToDateOnlyPeriod(TeleoptiPrincipal.CurrentPrincipal.Regional.TimeZone).
+					schedulerStateHolder.LoadedPeriod.Value.ToDateOnlyPeriod(_currentTeleoptiPrincipal.Current().Regional.TimeZone).
 						DayCollection();
-				_groupPagePerDateHolder.GroupPersonGroupPagePerDate =
+				_groupPagePerDateHolder().GroupPersonGroupPagePerDate =
 					_groupPageCreator.CreateGroupPagePerDate(dates,
 						_groupScheduleGroupPageDataProvider,
 						schedulingOptions.GroupOnGroupPageForTeamBlockPer,
@@ -41,8 +45,8 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 			}
 
 			IGroupPersonBuilderForOptimization groupPersonBuilderForOptimization =
-				new GroupPersonBuilderForOptimization(_schedulerStateHolder.SchedulingResultState,
-					_groupPagePerDateHolder, new GroupCreator());
+				new GroupPersonBuilderForOptimization(schedulerStateHolder.SchedulingResultState,
+					_groupPagePerDateHolder(), new GroupCreator());
 			return groupPersonBuilderForOptimization;
 		}
 	}

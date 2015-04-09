@@ -2,7 +2,7 @@
 using Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization;
 using Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.EqualNumberOfCategory;
 
-namespace Teleopti.Ccc.WinCode.Autofac
+namespace Teleopti.Ccc.IocCommon.Configuration
 {
 	public class EqualNumberOfCategoryFairnessModule : Module
 	{

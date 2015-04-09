@@ -21,17 +21,15 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 	{
 		private readonly ILifetimeScope _container;
 		private readonly OptimizerHelperHelper _optimizerHelper;
-		private IBackgroundWorkerWrapper _backgroundWorker;
-		private readonly IWorkShiftFinderResultHolder _allResults;
+		private readonly Func<IWorkShiftFinderResultHolder> _allResults;
 
-		public ExtendReduceDaysOffHelper(ILifetimeScope container, OptimizerHelperHelper optimizerHelper)
+		public ExtendReduceDaysOffHelper(ILifetimeScope container, OptimizerHelperHelper optimizerHelper, Func<IWorkShiftFinderResultHolder> allResults)
 		{
 			_container = container;
 			_optimizerHelper = optimizerHelper;
-			_allResults = _container.Resolve<IWorkShiftFinderResultHolder>();
+			_allResults = allResults;
 		}
 
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "1"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "3"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling")]
 		public void RunExtendReduceDayOffOptimization(IOptimizationPreferences optimizerPreferences,
 			IBackgroundWorkerWrapper backgroundWorker, IList<IScheduleDay> selectedDays,
 			ISchedulerStateHolder schedulerStateHolder,
@@ -41,15 +39,12 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 			if (backgroundWorker.CancellationPending)
 				return;
 
-			_backgroundWorker = backgroundWorker;
-
 			IList<IScheduleMatrixPro> matrixList = _container.Resolve<IMatrixListFactory>().CreateMatrixList(selectedDays, selectedPeriod);
 			lockDaysForExtendReduceOptimization(matrixList, selectedPeriod, optimizerPreferences.Shifts.SelectedActivities);
 
 			IList<IScheduleMatrixOriginalStateContainer> originalStateListForScheduleTag = createMatrixContainerList(matrixList);
 
-			IScheduleResultDataExtractorProvider dataExtractorProvider =
-				_container.Resolve<IScheduleResultDataExtractorProvider>();
+			var dataExtractorProvider = _container.Resolve<IScheduleResultDataExtractorProvider>();
 
 			IScheduleResultDataExtractor allSkillsDataExtractor = dataExtractorProvider.CreateAllSkillsDataExtractor(selectedPeriod, schedulerStateHolder.SchedulingResultState, optimizerPreferences.Advanced);
 
@@ -113,7 +108,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 
 				INightRestWhiteSpotSolverService nightRestWhiteSpotSolverService =
 					new NightRestWhiteSpotSolverService(new NightRestWhiteSpotSolver(),
-						new DeleteAndResourceCalculateService(new DeleteSchedulePartService(schedulerStateHolder.SchedulingResultState), resourceOptimizationHelper),
+						new DeleteAndResourceCalculateService(new DeleteSchedulePartService(()=>schedulerStateHolder.SchedulingResultState), resourceOptimizationHelper),
 						scheduleServiceForFlexibleAgents, _allResults, resourceCalculateDelayer);
 
 				IWorkShiftBackToLegalStateServicePro workShiftBackToLegalStateService =
@@ -167,10 +162,18 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 				optimizers.Add(optimizer);
 			}
 
-			extendReduceDaysOffOptimizerService.ReportProgress += extendReduceDaysoffOptimizerService_ReportProgress;
+			EventHandler<ResourceOptimizerProgressEventArgs> optimizerServiceOnReportProgress = (sender, e) =>
+			{
+				if (backgroundWorker.CancellationPending)
+				{
+					e.Cancel = true;
+					e.UserCancel = true;
+				}
+				backgroundWorker.ReportProgress(1, e);
+			};
+			extendReduceDaysOffOptimizerService.ReportProgress += optimizerServiceOnReportProgress;
 			extendReduceDaysOffOptimizerService.Execute(optimizers);
-			extendReduceDaysOffOptimizerService.ReportProgress -= extendReduceDaysoffOptimizerService_ReportProgress;
-
+			extendReduceDaysOffOptimizerService.ReportProgress -= optimizerServiceOnReportProgress;
 		}
 
 		private static void lockDaysForExtendReduceOptimization(IList<IScheduleMatrixPro> matrixList, DateOnlyPeriod selectedPeriod, IList<IActivity> keepActivities )
@@ -194,16 +197,6 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 				matrixList.Select(matrixPro => new ScheduleMatrixOriginalStateContainer(matrixPro, scheduleDayEquator))
 					.Cast<IScheduleMatrixOriginalStateContainer>().ToList();
 			return result;
-		}
-
-		void extendReduceDaysoffOptimizerService_ReportProgress(object sender, ResourceOptimizerProgressEventArgs e)
-		{
-			if (_backgroundWorker.CancellationPending)
-			{
-				e.Cancel = true;
-				e.UserCancel = true;
-			}
-			_backgroundWorker.ReportProgress(1, e);
 		}
 	}
 }

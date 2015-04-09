@@ -41,7 +41,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
             _shiftCatFairnessManager = _mocks.StrictMock<IShiftCategoryFairnessManager>();
             _options = new SchedulingOptions{ScheduleEmploymentType = ScheduleEmploymentType.FixedStaff,
                 WorkShiftLengthHintOption = WorkShiftLengthHintOption.AverageWorkTime, UserOptionMaxSeatsFeature = MaxSeatsFeatureOptions.ConsiderMaxSeatsAndDoNotBreak};
-            _target = new FairnessAndMaxSeatCalculatorsManager(_stateHolder, _shiftCatFairnessManager,
+            _target = new FairnessAndMaxSeatCalculatorsManager(()=>_stateHolder, _shiftCatFairnessManager,
                 _shiftCategoryFairnessShiftValueCalculator, _fairnessValueCalculator,_seatLimitationWorkShiftCalculator);
 
             _shiftCategoryFairnessFactors = _mocks.StrictMock<IShiftCategoryFairnessFactors>();

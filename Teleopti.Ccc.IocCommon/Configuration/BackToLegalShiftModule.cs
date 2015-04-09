@@ -1,7 +1,7 @@
 ﻿using Autofac;
 using Teleopti.Ccc.Domain.Scheduling.BackToLegalShift;
 
-namespace Teleopti.Ccc.WinCode.Autofac
+namespace Teleopti.Ccc.IocCommon.Configuration
 {
 	public class BackToLegalShiftModule : Module
 	{

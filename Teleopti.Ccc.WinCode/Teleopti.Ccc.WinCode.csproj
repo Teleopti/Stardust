@@ -230,13 +230,7 @@
       <Link>GlobalAssemblyInfo.cs</Link>
     </Compile>
     <Compile Include="Autofac\AutofacServiceBus.cs" />
-    <Compile Include="Autofac\BackToLegalShiftModule.cs" />
-    <Compile Include="Autofac\EqualNumberOfCategoryFairnessModule.cs" />
-    <Compile Include="Autofac\IntraIntervalOptimizationServiceModule.cs" />
-    <Compile Include="Autofac\IntraIntervalSolverServiceModule.cs" />
-    <Compile Include="Autofac\ScheduleOvertimeModule.cs" />
-    <Compile Include="Autofac\SchedulingCommonModule.cs" />
-    <Compile Include="Autofac\WeeklyRestSolverModule.cs" />
+    <Compile Include="Autofac\SecretSchedulingCommonModule.cs" />
     <Compile Include="Backlog\BacklogModel.cs" />
     <Compile Include="Backlog\BacklogProductPlanTask.cs" />
     <Compile Include="Backlog\BacklogScheduledTask.cs" />
@@ -472,7 +466,6 @@
     <Compile Include="Grouping\Commands\LoadOrganizationCommand.cs" />
     <Compile Include="Grouping\Commands\LoadUserDefinedTabsCommand.cs" />
     <Compile Include="Grouping\PersonSelectorPresenter.cs" />
-    <Compile Include="Grouping\SchedulerGroupPagesProvider.cs" />
     <Compile Include="Intraday\DayLayerModel.cs" />
     <Compile Include="Intraday\DayLayerModelComparer.cs" />
     <Compile Include="Intraday\DispatcherWrapper.cs" />
@@ -615,7 +608,6 @@
     <Compile Include="Scheduling\AgentRestrictions\AgentRestrictionsDisplayRow.cs" />
     <Compile Include="Scheduling\AgentRestrictions\AgentRestrictionsDisplayRowCreator.cs" />
     <Compile Include="Scheduling\AgentRestrictions\AgentRestrictionsModel.cs" />
-    <Compile Include="Scheduling\AgentRestrictions\AgentRestrictionsNoWorkShiftfFinder.cs" />
     <Compile Include="Scheduling\AgentRestrictions\AgentRestrictionsPreferencePainterDecider.cs" />
     <Compile Include="Scheduling\AgentRestrictions\AgentRestrictionsPresenter.cs" />
     <Compile Include="Scheduling\AgentRestrictions\AgentRestrictionsSchedulePainterDecider.cs" />
@@ -667,7 +659,6 @@
     <Compile Include="Scheduling\ScheduleReporting\ScheduledTimePerActivityModel.cs" />
     <Compile Include="Scheduling\Requests\HandlePersonRequestComparer.cs" />
     <Compile Include="Scheduling\Restriction\OvertimeAvailabilityCreator.cs" />
-    <Compile Include="Scheduling\SchedulerStateScheduleDayChangedCallback.cs" />
     <Compile Include="Scheduling\ScheduleSortingCommands\SortBySeniorityRankingCommandBase.cs" />
     <Compile Include="Scheduling\ScheduleSortingCommands\SortBySeniorityRankingDescendingCommand.cs" />
     <Compile Include="Scheduling\ScheduleSortingCommands\SortBySeniorityRankingAscendingCommand.cs" />

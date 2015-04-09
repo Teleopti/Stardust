@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using Teleopti.Ccc.Domain.Optimization;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.ResourceCalculation.IntraIntervalAnalyze;
@@ -103,10 +102,10 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 				INonBlendSkillCalculator nonBlendSkillCalculator = new NonBlendSkillCalculator();
 
 				IDeleteSchedulePartService deleteSchedulePartService =
-					new DeleteSchedulePartService(_schedulingResultStateHolder);
+					new DeleteSchedulePartService(()=>_schedulingResultStateHolder);
 				IResourceOptimizationHelper resourceOptimizationHelper =
-					new ResourceOptimizationHelper(_schedulingResultStateHolder,
-                                                   new OccupiedSeatCalculator(), nonBlendSkillCalculator, _personSkillProvider, new PeriodDistributionService(), _currentTeleoptiPrincipal, _intraIntervalFinderService);
+					new ResourceOptimizationHelper(()=>_schedulingResultStateHolder,
+                                                   new OccupiedSeatCalculator(), nonBlendSkillCalculator, ()=>_personSkillProvider, new PeriodDistributionService(), _currentTeleoptiPrincipal, _intraIntervalFinderService);
 
 
 				IScheduleMatrixOriginalStateContainer workShiftStateContainer = _workShiftStateContainerList[index];

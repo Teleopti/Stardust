@@ -5,7 +5,7 @@ using Teleopti.Ccc.UserTexts;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
 
-namespace Teleopti.Ccc.WinCode.Grouping
+namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 {
 	public interface ISchedulerGroupPagesProvider
 	{

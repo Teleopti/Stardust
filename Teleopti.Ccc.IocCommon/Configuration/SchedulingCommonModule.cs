@@ -32,22 +32,14 @@ using Teleopti.Ccc.Domain.Scheduling.TeamBlock.SkillInterval;
 using Teleopti.Ccc.Domain.Scheduling.TeamBlock.Specification;
 using Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftCalculation;
 using Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftFilters;
-using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.Infrastructure.Toggle;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
-using Teleopti.Ccc.IocCommon;
-using Teleopti.Ccc.IocCommon.Configuration;
-using Teleopti.Ccc.Secrets.DayOffPlanning;
-using Teleopti.Ccc.Secrets.WorkShiftCalculator;
-using Teleopti.Ccc.Secrets.WorkShiftPeriodValueCalculator;
-using Teleopti.Ccc.WinCode.Grouping;
-using Teleopti.Ccc.WinCode.Scheduling;
-using Teleopti.Ccc.WinCode.Scheduling.AgentRestrictions;
+using Teleopti.Interfaces;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
 
-namespace Teleopti.Ccc.WinCode.Autofac
+namespace Teleopti.Ccc.IocCommon.Configuration
 {
 	public class SchedulingCommonModule : Module
 	{
@@ -65,7 +57,20 @@ namespace Teleopti.Ccc.WinCode.Autofac
 			builder.RegisterModule<BackToLegalShiftModule>();
 			builder.RegisterModule<ScheduleOvertimeModule>();
 
-			builder.RegisterModule(new RuleSetModule(_configuration, true));
+			builder.RegisterType<ClassicScheduleCommand>().As<ClassicScheduleCommand>().InstancePerLifetimeScope();
+			builder.RegisterType<ScheduleCommand>().As<ScheduleCommand>().InstancePerLifetimeScope();
+			builder.RegisterType<OptimizationCommand>().As<OptimizationCommand>().InstancePerLifetimeScope();
+			builder.RegisterType<DayOffOptimizationDecisionMakerFactory>().As<IDayOffOptimizationDecisionMakerFactory>();
+			builder.RegisterType<ScheduleOvertimeCommand>().As<IScheduleOvertimeCommand>();
+			builder.RegisterType<TeamBlockMoveTimeBetweenDaysCommand>().As<ITeamBlockMoveTimeBetweenDaysCommand>();
+			builder.RegisterType<GroupPersonBuilderForOptimizationFactory>().As<IGroupPersonBuilderForOptimizationFactory>();
+			builder.RegisterType<MatrixListFactory>().As<IMatrixListFactory>();
+			builder.RegisterType<TeamBlockScheduleCommand>().As<ITeamBlockScheduleCommand>();
+			builder.RegisterType<TeamBlockOptimizationCommand>().As<ITeamBlockOptimizationCommand>();
+			builder.RegisterType<WeeklyRestSolverCommand>().As<IWeeklyRestSolverCommand>();
+			builder.RegisterType<BackToLegalShiftCommand>().As<BackToLegalShiftCommand>();
+			builder.RegisterType<IntraIntervalOptimizationCommand>().As<IIntraIntervalOptimizationCommand>();
+
 			builder.RegisterType<DisableDeletedFilter>().As<IDisableDeletedFilter>().SingleInstance();
 			builder.RegisterType<InnerOptimizerHelperHelper>().As<IOptimizerHelperHelper>().SingleInstance();
 			builder.RegisterType<RequiredScheduleHelper>().As<IRequiredScheduleHelper>().InstancePerLifetimeScope();
@@ -78,7 +83,6 @@ namespace Teleopti.Ccc.WinCode.Autofac
 			builder.RegisterType<OverriddenBusinessRulesHolder>().As<IOverriddenBusinessRulesHolder>().InstancePerLifetimeScope();
 			builder.RegisterType<SchedulingResultStateHolder>().As<ISchedulingResultStateHolder>().InstancePerLifetimeScope();
 			builder.RegisterType<PreSchedulingStatusChecker>().As<IPreSchedulingStatusChecker>().InstancePerLifetimeScope();
-			builder.RegisterType<CurrentTeleoptiPrincipal>().As<ICurrentTeleoptiPrincipal>().InstancePerLifetimeScope();
 			
 			builder.RegisterType<SeatLimitationWorkShiftCalculator2>()
 				.As<ISeatLimitationWorkShiftCalculator2>()
@@ -103,7 +107,6 @@ namespace Teleopti.Ccc.WinCode.Autofac
 			builder.RegisterType<RuleSetDeletedShiftCategoryChecker>()
 				.As<IRuleSetDeletedShiftCategoryChecker>()
 				.InstancePerLifetimeScope();
-			builder.RegisterType<WorkShiftCalculator>().As<IWorkShiftCalculator>().InstancePerLifetimeScope();
 			builder.RegisterType<FairnessValueCalculator>().As<IFairnessValueCalculator>().InstancePerLifetimeScope();
 			builder.RegisterType<WorkShiftCalculatorsManager>().As<IWorkShiftCalculatorsManager>().InstancePerLifetimeScope();
 
@@ -285,13 +288,13 @@ namespace Teleopti.Ccc.WinCode.Autofac
 			builder.RegisterType<HasContractDayOffDefinition>().As<IHasContractDayOffDefinition>().InstancePerDependency();
 			builder.RegisterType<ScheduleDayDataMapper>().As<IScheduleDayDataMapper>().InstancePerDependency();
 			builder.RegisterType<MatrixDataListCreator>().As<IMatrixDataListCreator>().InstancePerDependency();
+			builder.RegisterType<UniqueSchedulePartExtractor>().As<IUniqueSchedulePartExtractor>().SingleInstance();
 			builder.RegisterType<MatrixDataWithToFewDaysOff>().As<IMatrixDataWithToFewDaysOff>().InstancePerDependency();
 			builder.RegisterType<MissingDaysOffScheduler>().As<IMissingDaysOffScheduler>().InstancePerDependency();
 			builder.RegisterType<TeamDayOffScheduler>().As<ITeamDayOffScheduler>().InstancePerDependency();
 			builder.RegisterType<DaysOffSchedulingService>().As<IDaysOffSchedulingService>().InstancePerDependency();
 
 			builder.RegisterType<ScheduleResultDataExtractorProvider>().As<IScheduleResultDataExtractorProvider>();
-			builder.RegisterType<DayOffBackToLegalStateFunctions>().As<IDayOffBackToLegalStateFunctions>();
 			builder.RegisterType<TrueFalseRandomizer>().As<ITrueFalseRandomizer>();
 			builder.RegisterType<OfficialWeekendDays>().As<IOfficialWeekendDays>();
 			builder.RegisterType<CMSBOneFreeWeekendMax5WorkingDaysDecisionMaker>().As<IDayOffDecisionMaker>();
@@ -508,7 +511,6 @@ namespace Teleopti.Ccc.WinCode.Autofac
 
 		private static void registerWorkShiftSelector(ContainerBuilder builder)
 		{
-			builder.RegisterType<WorkShiftPeriodValueCalculator>().As<IWorkShiftPeriodValueCalculator>();
 			builder.RegisterType<WorkShiftLengthValueCalculator>().As<IWorkShiftLengthValueCalculator>();
 			builder.RegisterType<WorkShiftValueCalculator>().As<IWorkShiftValueCalculator>();
 			builder.RegisterType<EqualWorkShiftValueDecider>().As<IEqualWorkShiftValueDecider>();
@@ -565,8 +567,6 @@ namespace Teleopti.Ccc.WinCode.Autofac
 			   ? (IDisallowedShiftProjectionCashesFilter)c.Resolve<DisallowedShiftProjectionCashesFilter>()
 			   : c.Resolve<DisallowedShiftProjectionCashesFilter29846Off>())
 				   .As<IDisallowedShiftProjectionCashesFilter>();
-
-			//IDisallowedShiftProjectionCashesFilter
 		}
 	}
 }

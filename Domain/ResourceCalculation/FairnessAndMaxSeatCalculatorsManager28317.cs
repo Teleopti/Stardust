@@ -12,7 +12,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 		private readonly IShiftCategoryFairnessShiftValueCalculator _categoryFairnessShiftValueCalculator;
 		private readonly ISeatLimitationWorkShiftCalculator2 _seatLimitationWorkShiftCalculator;
 
-		public FairnessAndMaxSeatCalculatorsManager28317(ISchedulingResultStateHolder resultStateHolder,
+		public FairnessAndMaxSeatCalculatorsManager28317(Func<ISchedulingResultStateHolder> resultStateHolder,
 			IShiftCategoryFairnessManager shiftCategoryFairnessManager,
 			IShiftCategoryFairnessShiftValueCalculator categoryFairnessShiftValueCalculator,
 			IFairnessValueCalculator fairnessValueCalculator,

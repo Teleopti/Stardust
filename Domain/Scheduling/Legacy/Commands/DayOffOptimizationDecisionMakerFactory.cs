@@ -1,17 +1,14 @@
-﻿
-
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.DayOffPlanning;
 using Teleopti.Ccc.Domain.Optimization;
 using Teleopti.Interfaces;
 using Teleopti.Interfaces.Domain;
 
-namespace Teleopti.Ccc.Win.Scheduling
+namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 {
 	public class DayOffOptimizationDecisionMakerFactory : IDayOffOptimizationDecisionMakerFactory
 	{
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "1")]
 		public IEnumerable<IDayOffDecisionMaker> CreateDecisionMakers(
 			ILockableBitArray scheduleMatrixArray,
 			IOptimizationPreferences optimizerPreferences)

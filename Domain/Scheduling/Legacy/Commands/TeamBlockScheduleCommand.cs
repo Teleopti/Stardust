@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.Helper;
@@ -13,14 +14,14 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 	public class TeamBlockScheduleCommand : ITeamBlockScheduleCommand
 	{
 		private readonly IFixedStaffSchedulingService _fixedStaffSchedulingService;
-		private readonly ISchedulerStateHolder _schedulerStateHolder;
-		private readonly IScheduleDayChangeCallback _scheduleDayChangeCallback;
+		private readonly Func<ISchedulerStateHolder> _schedulerStateHolder;
+		private readonly Func<IScheduleDayChangeCallback> _scheduleDayChangeCallback;
 		private readonly IGroupPersonBuilderForOptimizationFactory _groupPersonBuilderForOptimizationFactory;
 		private readonly IAdvanceDaysOffSchedulingService _advanceDaysOffSchedulingService;
 		private readonly IMatrixListFactory _matrixListFactory;
 		private readonly ITeamBlockInfoFactory _teamBlockInfoFactory;
 		private readonly ISafeRollbackAndResourceCalculation _safeRollbackAndResourceCalculation;
-		private readonly IWorkShiftMinMaxCalculator _workShiftMinMaxCalculator;
+		private readonly Func<IWorkShiftMinMaxCalculator> _workShiftMinMaxCalculator;
 		private readonly ITeamBlockSteadyStateValidator _teamBlockSteadyStateValidator;
 		private readonly ITeamBlockMaxSeatChecker _teamBlockMaxSeatChecker;
 		private IBackgroundWorkerWrapper _backgroundWorker;
@@ -34,14 +35,14 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 		private readonly IOptimizerHelperHelper _optimizerHelper;
 
 		public TeamBlockScheduleCommand(IFixedStaffSchedulingService fixedStaffSchedulingService,
-			ISchedulerStateHolder schedulerStateHolder,
-			IScheduleDayChangeCallback scheduleDayChangeCallback,
+			Func<ISchedulerStateHolder> schedulerStateHolder,
+			Func<IScheduleDayChangeCallback> scheduleDayChangeCallback,
 			IGroupPersonBuilderForOptimizationFactory groupPersonBuilderForOptimizationFactory,
 			IAdvanceDaysOffSchedulingService advanceDaysOffSchedulingService,
 			IMatrixListFactory matrixListFactory,
 			ITeamBlockInfoFactory teamBlockInfoFactory,
 			ISafeRollbackAndResourceCalculation safeRollbackAndResourceCalculation,
-			IWorkShiftMinMaxCalculator workShiftMinMaxCalculator,
+			Func<IWorkShiftMinMaxCalculator> workShiftMinMaxCalculator,
 			ITeamBlockSteadyStateValidator teamBlockSteadyStateValidator,
 			ITeamBlockMaxSeatChecker teamBlockMaxSeatChecker,
 			ITeamBlockSchedulingOptions teamBlockSchedulingOptions,
@@ -79,7 +80,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 				return new WorkShiftFinderResultHolder();
 
 			var schedulePartModifyAndRollbackServiceForContractDaysOff =
-				new SchedulePartModifyAndRollbackService(_schedulerStateHolder.SchedulingResultState, _scheduleDayChangeCallback,
+				new SchedulePartModifyAndRollbackService(_schedulerStateHolder().SchedulingResultState, _scheduleDayChangeCallback(),
 					new ScheduleTagSetter(schedulingOptions.TagToUseOnScheduling));
 
 			var groupPersonBuilderForOptimization = _groupPersonBuilderForOptimizationFactory.Create(schedulingOptions);
@@ -105,7 +106,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 			var workShiftFinderResultHolder = advanceSchedulingService.ScheduleSelected(allVisibleMatrixes, selectedPeriod,
 				matrixesOfSelectedScheduleDays.Select(x => x.Person).Distinct().ToList(),
 				rollbackService, resourceCalculateDelayer,
-				_schedulerStateHolder.SchedulingResultState);
+				_schedulerStateHolder().SchedulingResultState);
 			advanceSchedulingService.DayScheduled -= schedulingServiceDayScheduled;
 
 			_weeklyRestSolverCommand.Execute(schedulingOptions, null, selectedPersons, rollbackService, resourceCalculateDelayer,
@@ -144,7 +145,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 					teamInfoFactory,
 					_teamBlockScheduler,
 					_safeRollbackAndResourceCalculation,
-					_workShiftMinMaxCalculator,
+					_workShiftMinMaxCalculator(),
 					_teamBlockMaxSeatChecker,
 					validatedTeamBlockExtractor,
 					_teamMatrixChecker);

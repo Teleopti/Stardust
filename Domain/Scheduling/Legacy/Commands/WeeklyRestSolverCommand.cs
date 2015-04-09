@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Helper;
@@ -12,16 +13,15 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 	{
 		private readonly ITeamBlockInfoFactory _teamBlockInfoFactory;
 		private readonly ITeamBlockSchedulingOptions _teamBlockSchedulingOptions;
-		private readonly IWeeklyRestSolverService _weeklyRestSolverService;
-		private readonly ISchedulerStateHolder _schedulerStateHolder;
+		private readonly Func<IWeeklyRestSolverService> _weeklyRestSolverService;
+		private readonly Func<ISchedulerStateHolder> _schedulerStateHolder;
 		private readonly IGroupPersonBuilderForOptimizationFactory _groupPersonBuilderForOptimizationFactory;
 		private readonly IScheduleCommandToggle _toggleManager;
 		private IBackgroundWorkerWrapper _backgroundWorker;
-		private ResourceOptimizerProgressEventArgs _progressEvent;
 
 		public WeeklyRestSolverCommand(ITeamBlockInfoFactory teamBlockInfoFactory,
-			ITeamBlockSchedulingOptions teamBlockSchedulingOptions, IWeeklyRestSolverService weeklyRestSolverService,
-			ISchedulerStateHolder schedulerStateHolder,
+			ITeamBlockSchedulingOptions teamBlockSchedulingOptions, Func<IWeeklyRestSolverService> weeklyRestSolverService,
+			Func<ISchedulerStateHolder> schedulerStateHolder,
 			IGroupPersonBuilderForOptimizationFactory groupPersonBuilderForOptimizationFactory, IScheduleCommandToggle toggleManager)
 		{
 			_teamBlockInfoFactory = teamBlockInfoFactory;
@@ -37,30 +37,23 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 			if (!_toggleManager.IsEnabled(Toggles.Scheduler_WeeklyRestRuleSolver_27108))
 				return;
 
-			_progressEvent = null;
 			_backgroundWorker = backgroundWorker;
 			var groupPersonBuilderForOptimization = _groupPersonBuilderForOptimizationFactory.Create(schedulingOptions);
 			var teamInfoFactory = new TeamInfoFactory(groupPersonBuilderForOptimization);
 			var teamBlockGenerator = new TeamBlockGenerator(teamInfoFactory, _teamBlockInfoFactory,
 				_teamBlockSchedulingOptions);
 
-			_weeklyRestSolverService.ResolvingWeek += resolvingWeek;
-			_weeklyRestSolverService.Execute(selectedPersons, selectedPeriod, teamBlockGenerator,
-				rollbackService, resourceCalculateDelayer, _schedulerStateHolder.SchedulingResultState, allVisibleMatrixes,
+			EventHandler<ResourceOptimizerProgressEventArgs> onResolvingWeek = (sender, e) =>
+			{
+				e.Cancel = _backgroundWorker.CancellationPending;
+				_backgroundWorker.ReportProgress(1, e);
+			};
+			var weeklyRestSolverService = _weeklyRestSolverService();
+			weeklyRestSolverService.ResolvingWeek += onResolvingWeek;
+			weeklyRestSolverService.Execute(selectedPersons, selectedPeriod, teamBlockGenerator,
+				rollbackService, resourceCalculateDelayer, _schedulerStateHolder().SchedulingResultState, allVisibleMatrixes,
 				optimizationPreferences, schedulingOptions);
-			_weeklyRestSolverService.ResolvingWeek -= resolvingWeek;
-		}
-
-
-		private void resolvingWeek(object sender, ResourceOptimizerProgressEventArgs e)
-		{
-			e.Cancel = _backgroundWorker.CancellationPending;
-			_backgroundWorker.ReportProgress(1, e);
-
-			if (_progressEvent != null && _progressEvent.UserCancel)
-				return;
-
-			_progressEvent = e;
+			weeklyRestSolverService.ResolvingWeek -= onResolvingWeek;
 		}
 	}
 }

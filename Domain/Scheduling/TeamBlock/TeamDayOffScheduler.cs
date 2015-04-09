@@ -26,7 +26,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 		private readonly IEffectiveRestrictionCreator _effectiveRestrictionCreator;
 		private readonly IHasContractDayOffDefinition _hasContractDayOffDefinition;
 		private readonly IMatrixDataListCreator _matrixDataListCreator;
-		private readonly ISchedulingResultStateHolder _schedulingResultStateHolder;
+		private readonly Func<ISchedulingResultStateHolder> _schedulingResultStateHolder;
 		private readonly IScheduleDayAvailableForDayOffSpecification _scheduleDayAvailableForDayOffSpecification;
 		private SchedulingServiceBaseEventArgs _progressEvent;
 
@@ -37,7 +37,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 			IEffectiveRestrictionCreator effectiveRestrictionCreator,
 			IHasContractDayOffDefinition hasContractDayOffDefinition,
 			 IMatrixDataListCreator matrixDataListCreator,
-			 ISchedulingResultStateHolder schedulingResultStateHolder,
+			 Func<ISchedulingResultStateHolder> schedulingResultStateHolder,
 			IScheduleDayAvailableForDayOffSpecification scheduleDayAvailableForDayOffSpecification)
 		{
 			_dayOffsInPeriodCalculator = dayOffsInPeriodCalculator;
@@ -124,7 +124,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 
 		private IEffectiveRestriction getMatrixOfOneTeam(IEnumerable<IScheduleMatrixPro> matrixListAll, ISchedulingOptions schedulingOptions, Group group, DateOnly scheduleDate, out List<IScheduleMatrixPro> matrixesOfOneTeam, IPerson person)
 	    {
-	        var scheduleDictionary = _schedulingResultStateHolder.Schedules;
+	        var scheduleDictionary = _schedulingResultStateHolder().Schedules;
 			var groupMembers = group.GroupMembers.ToList();
 			var restriction = _effectiveRestrictionCreator.GetEffectiveRestrictionForSinglePerson( person,
 	                                                                               scheduleDate, schedulingOptions,

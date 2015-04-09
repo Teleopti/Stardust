@@ -3,7 +3,7 @@ using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Scheduling.Overtime;
 using Teleopti.Ccc.Infrastructure.Toggle;
 
-namespace Teleopti.Ccc.WinCode.Autofac
+namespace Teleopti.Ccc.IocCommon.Configuration
 {
 	public class ScheduleOvertimeModule : Module
 	{

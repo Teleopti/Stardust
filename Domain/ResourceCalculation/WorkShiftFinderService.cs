@@ -17,12 +17,12 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
         private readonly IShiftProjectionCacheManager _shiftProjectionCacheManager;
         private readonly IWorkShiftCalculatorsManager _workShiftCalculatorsManager;
         private readonly Func<ISchedulingResultStateHolder> _resultStateHolder;
-        private readonly IPreSchedulingStatusChecker _preSchedulingStatusChecker;
+        private readonly Func<IPreSchedulingStatusChecker> _preSchedulingStatusChecker;
         private readonly Func<IWorkShiftMinMaxCalculator> _workShiftMinMaxCalculator;
         private readonly IFairnessAndMaxSeatCalculatorsManager _fairnessAndMaxSeatCalculatorsManager;
     	private readonly IShiftLengthDecider _shiftLengthDecider;
 
-	    public WorkShiftFinderService(Func<ISchedulingResultStateHolder> resultStateHolder, IPreSchedulingStatusChecker preSchedulingStatusChecker
+	    public WorkShiftFinderService(Func<ISchedulingResultStateHolder> resultStateHolder, Func<IPreSchedulingStatusChecker> preSchedulingStatusChecker
             , IShiftProjectionCacheFilter shiftProjectionCacheFilter, IPersonSkillPeriodsDataHolderManager personSkillPeriodsDataHolderManager,  
             IShiftProjectionCacheManager shiftProjectionCacheManager ,  IWorkShiftCalculatorsManager workShiftCalculatorsManager,  
             Func<IWorkShiftMinMaxCalculator> workShiftMinMaxCalculator, IFairnessAndMaxSeatCalculatorsManager fairnessAndMaxSeatCalculatorsManager,
@@ -45,7 +45,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 			var scheduleDateOnly = schedulePart.DateOnlyAsPeriod.DateOnly;
             var person = schedulePart.Person;
 			var finderResult = new WorkShiftFinderResult(person, scheduleDateOnly);
-            var status = _preSchedulingStatusChecker.CheckStatus(schedulePart, finderResult, schedulingOptions);
+            var status = _preSchedulingStatusChecker().CheckStatus(schedulePart, finderResult, schedulingOptions);
             
             if (!status) return new WorkShiftFinderServiceResult(null,finderResult);
 

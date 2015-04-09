@@ -66,7 +66,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 			_scheduleDayAvailableForDayOffSpecification = _mocks.StrictMock<IScheduleDayAvailableForDayOffSpecification>();
 			_target = new TeamDayOffScheduler(_dayOffsInPeriodCalculator, _effectiveRestrictionCreator,
 			                                  _hasContractDayOffDefinition, _matrixDataListCreator,
-			                                  _schedulingResultStateHolder, _scheduleDayAvailableForDayOffSpecification);
+			                                  ()=>_schedulingResultStateHolder, _scheduleDayAvailableForDayOffSpecification);
 			_person1 = PersonFactory.CreatePerson();
 			_selectedPersons = new List<IPerson>{_person1};
 			_matrixData1 = _mocks.StrictMock<IMatrixData>();

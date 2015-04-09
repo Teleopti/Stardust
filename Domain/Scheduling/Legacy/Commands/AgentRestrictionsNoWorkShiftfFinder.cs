@@ -1,6 +1,6 @@
 ﻿using Teleopti.Interfaces.Domain;
 
-namespace Teleopti.Ccc.WinCode.Scheduling.AgentRestrictions
+namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 {
 	public interface IAgentRestrictionsNoWorkShiftfFinder
 	{

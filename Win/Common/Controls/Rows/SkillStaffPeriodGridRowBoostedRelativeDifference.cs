@@ -1,5 +1,4 @@
 using System;
-using Syncfusion.Windows.Forms.Grid;
 using Teleopti.Ccc.Domain.Optimization;
 using Teleopti.Ccc.WinCode.Common.Rows;
 using Teleopti.Interfaces.Domain;
@@ -10,12 +9,15 @@ namespace Teleopti.Ccc.Win.Common.Controls.Rows
     {
         private readonly RowManagerScheduler<SkillStaffPeriodGridRowScheduler, ISkillStaffPeriod> _rowManager;
         private readonly ISkill _skill;
+	    private readonly DailyBoostedSkillForecastAndScheduledValueCalculator calculator;
 
-        public SkillStaffPeriodGridRowBoostedRelativeDifference(RowManagerScheduler<SkillStaffPeriodGridRowScheduler, ISkillStaffPeriod> rowManager, string cellType, string displayMember, string rowHeaderText, ISkill skill)
+	    public SkillStaffPeriodGridRowBoostedRelativeDifference(RowManagerScheduler<SkillStaffPeriodGridRowScheduler, ISkillStaffPeriod> rowManager, string cellType, string displayMember, string rowHeaderText, ISkill skill)
 			: base(rowManager, cellType, displayMember, rowHeaderText)
         {
             _rowManager = rowManager;
             _skill = skill;
+
+			calculator = new DailyBoostedSkillForecastAndScheduledValueCalculator(() => _rowManager.SchedulerStateHolder.SchedulingResultState);
         }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
@@ -43,7 +45,6 @@ namespace Teleopti.Ccc.Win.Common.Controls.Rows
             ISkillStaffPeriod skillStaffPeriod = GetObjectAtPosition(cellInfo.ColIndex, rowHeaders);
             if (skillStaffPeriod != null)
             {
-                var calculator = new DailyBoostedSkillForecastAndScheduledValueCalculator(_rowManager.SchedulerStateHolder.SchedulingResultState);
                 skillStaffPeriod.RelativeBoostedDifferenceForDisplayOnly = calculator.CalculateSkillStaffPeriod(_skill, skillStaffPeriod);
             }
             

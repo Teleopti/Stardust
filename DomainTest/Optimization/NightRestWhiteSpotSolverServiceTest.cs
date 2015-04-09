@@ -35,7 +35,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
             _person = PersonFactory.CreatePerson();
             _schedulingOptions = new SchedulingOptions();
         	_resourceCalculateDelayer = _mocks.StrictMock<IResourceCalculateDelayer>();
-			_target = new NightRestWhiteSpotSolverService(_solver, _deleteAndResourceCalculateService, _scheduleService, new WorkShiftFinderResultHolder(), _resourceCalculateDelayer);
+			_target = new NightRestWhiteSpotSolverService(_solver, _deleteAndResourceCalculateService, _scheduleService, ()=>new WorkShiftFinderResultHolder(), _resourceCalculateDelayer);
         }
 
         [Test]

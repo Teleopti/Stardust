@@ -70,7 +70,7 @@ namespace Teleopti.Ccc.Web.Core.IoC
 			
 			builder.RegisterModule<PerformanceToolAreaModule>();
 			builder.RegisterModule<ForecastingAreaModule>();
-			builder.RegisterModule<ResourcePlannerModule>();
+			builder.RegisterModule(new ResourcePlannerModule(_configuration));
 
 			builder.RegisterModule(new HangfireModule(_configuration));
 

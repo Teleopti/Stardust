@@ -6,7 +6,6 @@ using Rhino.Mocks;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Security.AuthorizationEntities;
-using Teleopti.Ccc.Secrets.WorkShiftCalculator;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Interfaces;
 using Teleopti.Interfaces.Domain;
@@ -73,7 +72,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
             _fairnessAndMaxSeatCalculatorsManager = _mocks.StrictMock<IFairnessAndMaxSeatCalculatorsManager>();
             _schedulingOptions = new SchedulingOptions();
         	_shiftLengthDecider = _mocks.StrictMock<IShiftLengthDecider>();
-			_target = new WorkShiftFinderService(()=>_stateHolder, _preSchedulingStatusChecker,
+			_target = new WorkShiftFinderService(()=>_stateHolder, ()=>_preSchedulingStatusChecker,
                _shiftProjectionCacheFilter, _personSkillPeriodsDataHolderManager,
                _shiftProjectionCacheManager, _calculatorManager, ()=>_workShiftMinMaxCalculator, _fairnessAndMaxSeatCalculatorsManager,
 			   _shiftLengthDecider);

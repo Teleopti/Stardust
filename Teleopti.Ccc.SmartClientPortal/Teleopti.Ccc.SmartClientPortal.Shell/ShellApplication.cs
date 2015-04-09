@@ -201,22 +201,24 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 					{
 						RepositoryConstructorType = typeof(IUnitOfWorkFactory)
 					});
-				builder.RegisterModule(new EncryptionModule());
-				builder.RegisterModule(new EventAggregatorModule());
+				builder.RegisterModule<EncryptionModule>();
+				builder.RegisterModule<EventAggregatorModule>();
 				builder.RegisterModule(new StartupModule(configuration));
 				builder.RegisterModule(new NavigationModule(configuration));
-				builder.RegisterModule(new BudgetModule());
+				builder.RegisterModule<BudgetModule>();
 				builder.RegisterModule<IntradayModule>();
 				builder.RegisterModule<ForecasterModule>();
-				builder.RegisterModule(new PersonAccountModule());
-				builder.RegisterModule(new ScheduleScreenRefresherModule());
-				builder.RegisterModule(new MeetingOverviewModule());
-				builder.RegisterModule(new SchedulingServiceModule());
-				builder.RegisterModule(new ShiftsModule());
+				builder.RegisterModule<PersonAccountModule>();
+				builder.RegisterModule<ScheduleScreenRefresherModule>();
+				builder.RegisterModule<MeetingOverviewModule>();
+				builder.RegisterModule<SchedulingServiceModule>();
+				builder.RegisterModule<SecretSchedulingCommonModule>();
+				builder.RegisterModule(new RuleSetModule(configuration, true));
+				builder.RegisterModule<ShiftsModule>();
 				builder.RegisterModule(new PersonSelectorModule(configuration));
-				builder.RegisterModule(new PermissionsModule());
-				builder.RegisterModule(new RequestHistoryModule());
-				builder.RegisterModule(new MainModule());
+				builder.RegisterModule<PermissionsModule>();
+				builder.RegisterModule<RequestHistoryModule>();
+				builder.RegisterModule<MainModule>();
 				builder.RegisterModule(new SchedulingCommonModule(configuration));
 				//hack to get old behavior work
 				builder.Register(context => context.Resolve<ICurrentUnitOfWorkFactory>().LoggedOnUnitOfWorkFactory()).ExternallyOwned().As<IUnitOfWorkFactory>();

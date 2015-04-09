@@ -16,13 +16,13 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 
     public class FairnessAndMaxSeatCalculatorsManager : IFairnessAndMaxSeatCalculatorsManager
     {
-        private readonly ISchedulingResultStateHolder _resultStateHolder;
+        private readonly Func<ISchedulingResultStateHolder> _resultStateHolder;
         private readonly IShiftCategoryFairnessManager _shiftCategoryFairnessManager;
         private readonly IShiftCategoryFairnessShiftValueCalculator _categoryFairnessShiftValueCalculator;
         private readonly IFairnessValueCalculator _fairnessValueCalculator;
         private readonly ISeatLimitationWorkShiftCalculator2 _seatLimitationWorkShiftCalculator;
 
-        public FairnessAndMaxSeatCalculatorsManager(ISchedulingResultStateHolder resultStateHolder,
+        public FairnessAndMaxSeatCalculatorsManager(Func<ISchedulingResultStateHolder> resultStateHolder,
                                     IShiftCategoryFairnessManager shiftCategoryFairnessManager,
                                     IShiftCategoryFairnessShiftValueCalculator categoryFairnessShiftValueCalculator,
                                     IFairnessValueCalculator fairnessValueCalculator,
@@ -122,13 +122,13 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 
         protected IScheduleDictionary ScheduleDictionary
         {
-            get { return _resultStateHolder.Schedules; }
+            get { return _resultStateHolder().Schedules; }
         }
 
         protected int getMaxFairnessOnShiftCategories()
         {
             int result = 0;
-            foreach (var shiftCategory in _resultStateHolder.ShiftCategories)
+            foreach (var shiftCategory in _resultStateHolder().ShiftCategories)
             {
                 int temp = shiftCategory.MaxOfJusticeValues();
                 if (temp > result)

@@ -1,11 +1,10 @@
+using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.ResourceCalculation.IntraIntervalAnalyze;
-using Teleopti.Ccc.Domain.Scheduling.NonBlendSkill;
-using Teleopti.Ccc.Domain.Scheduling.SeatLimitation;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Interfaces.Domain;
 
@@ -14,18 +13,15 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 	/// <summary>
 	/// HelperClass for calculating resources
 	/// </summary>
-	/// <remarks>
-	/// Created from OptimizerHelper
-	/// I think it should be refact. and moved to Domain
-	/// </remarks>
-	public class ResourceOptimizationHelperWin : ResourceOptimizationHelper, IResourceOptimizationHelperWin
+	public class ResourceOptimizationHelperExtended : ResourceOptimizationHelper, IResourceOptimizationHelperExtended
 	{
-		private readonly ISchedulerStateHolder _stateHolder;
-		private readonly IPersonSkillProvider _personSkillProvider = new PersonSkillProvider();
+		private readonly Func<ISchedulerStateHolder> _stateHolder;
+		private readonly Func<IPersonSkillProvider> _personSkillProvider;
+
 		private ResourceOptimizerProgressEventArgs _progressEvent;
 
 		/// <summary>
-		/// Initializes a new instance of the <see cref="ResourceOptimizationHelperWin"/> class.
+		/// Initializes a new instance of the <see cref="ResourceOptimizationHelperExtended"/> class.
 		/// </summary>
 		/// <param name="stateHolder">The state holder.</param>
 		/// <param name="personSkillProvider"></param>
@@ -34,8 +30,8 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 		/// Created by: henrika
 		/// Created date: 2008-05-27
 		/// </remarks>
-		public ResourceOptimizationHelperWin(ISchedulerStateHolder stateHolder, IPersonSkillProvider personSkillProvider, IIntraIntervalFinderService intraIntervalFinderService)
-			: base(stateHolder.SchedulingResultState, new OccupiedSeatCalculator(), new NonBlendSkillCalculator(), personSkillProvider, new PeriodDistributionService(), new CurrentTeleoptiPrincipal(), intraIntervalFinderService)
+		public ResourceOptimizationHelperExtended(Func<ISchedulerStateHolder> stateHolder, IOccupiedSeatCalculator occupiedSeatCalculator, INonBlendSkillCalculator nonBlendSkillCalculator, Func<IPersonSkillProvider> personSkillProvider, IPeriodDistributionService periodDistributionService, ICurrentTeleoptiPrincipal currentTeleoptiPrincipal, IIntraIntervalFinderService intraIntervalFinderService)
+			: base(()=>stateHolder().SchedulingResultState, occupiedSeatCalculator, nonBlendSkillCalculator, personSkillProvider, periodDistributionService, currentTeleoptiPrincipal, intraIntervalFinderService)
 		{
 			_stateHolder = stateHolder;
 			_personSkillProvider = personSkillProvider;
@@ -44,16 +40,17 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 		public void ResourceCalculateAllDays(IBackgroundWorkerWrapper backgroundWorker, bool useOccupancyAdjustment)
 		{
 			_progressEvent = null;
-			if (!_stateHolder.SchedulingResultState.Skills.Any()) return;
+			var stateHolder = _stateHolder();
+			if (!stateHolder.SchedulingResultState.Skills.Any()) return;
 
-			var period = new DateOnlyPeriod(_stateHolder.RequestedPeriod.DateOnlyPeriod.StartDate.AddDays(-10), _stateHolder.RequestedPeriod.DateOnlyPeriod.EndDate.AddDays(2));
-			var extractor = new ScheduleProjectionExtractor(_personSkillProvider, _stateHolder.SchedulingResultState.Skills.Min(s => s.DefaultResolution));
-			var resources = extractor.CreateRelevantProjectionList(_stateHolder.Schedules, period.ToDateTimePeriod(_stateHolder.TimeZoneInfo));
+			var period = new DateOnlyPeriod(stateHolder.RequestedPeriod.DateOnlyPeriod.StartDate.AddDays(-10), stateHolder.RequestedPeriod.DateOnlyPeriod.EndDate.AddDays(2));
+			var extractor = new ScheduleProjectionExtractor(_personSkillProvider(), stateHolder.SchedulingResultState.Skills.Min(s => s.DefaultResolution));
+			var resources = extractor.CreateRelevantProjectionList(stateHolder.Schedules, period.ToDateTimePeriod(stateHolder.TimeZoneInfo));
 			backgroundWorker.ReportProgress(1);
 			using (new ResourceCalculationContext<IResourceCalculationDataContainerWithSingleOperation>(resources))
 			{
-				resourceCalculateDays(backgroundWorker, useOccupancyAdjustment, _stateHolder.ConsiderShortBreaks,
-					_stateHolder.RequestedPeriod.DateOnlyPeriod.DayCollection());
+				resourceCalculateDays(backgroundWorker, useOccupancyAdjustment, stateHolder.ConsiderShortBreaks,
+					stateHolder.RequestedPeriod.DateOnlyPeriod.DayCollection());
 			}
 		}
 
@@ -68,17 +65,18 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 		public void ResourceCalculateMarkedDays(IBackgroundWorkerWrapper backgroundWorker, bool considerShortBreaks, bool useOccupancyAdjustment)
 		{
 			_progressEvent = null;
-			if (!_stateHolder.DaysToRecalculate.Any()) return;
-			if (!_stateHolder.SchedulingResultState.Skills.Any()) return;
+			var stateHolder = _stateHolder();
+			if (!stateHolder.DaysToRecalculate.Any()) return;
+			if (!stateHolder.SchedulingResultState.Skills.Any()) return;
 
-			var period = new DateOnlyPeriod(_stateHolder.DaysToRecalculate.Min().AddDays(-1), _stateHolder.DaysToRecalculate.Max());
-			var extractor = new ScheduleProjectionExtractor(_personSkillProvider, _stateHolder.SchedulingResultState.Skills.Min(s => s.DefaultResolution));
-			var resources = extractor.CreateRelevantProjectionList(_stateHolder.Schedules, period.ToDateTimePeriod(_stateHolder.TimeZoneInfo));
+			var period = new DateOnlyPeriod(stateHolder.DaysToRecalculate.Min().AddDays(-1), stateHolder.DaysToRecalculate.Max());
+			var extractor = new ScheduleProjectionExtractor(_personSkillProvider(), stateHolder.SchedulingResultState.Skills.Min(s => s.DefaultResolution));
+			var resources = extractor.CreateRelevantProjectionList(stateHolder.Schedules, period.ToDateTimePeriod(stateHolder.TimeZoneInfo));
 			using (new ResourceCalculationContext<IResourceCalculationDataContainerWithSingleOperation>(resources))
 			{
 				resourceCalculateDays(backgroundWorker, useOccupancyAdjustment, considerShortBreaks,
-					_stateHolder.DaysToRecalculate.ToList());
-				_stateHolder.ClearDaysToRecalculate();
+					stateHolder.DaysToRecalculate.ToList());
+				stateHolder.ClearDaysToRecalculate();
 			}
 		}
 

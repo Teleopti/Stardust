@@ -34,7 +34,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
             _skillStaffPeriodHolder = _mock.StrictMock<ISkillStaffPeriodHolder>();
             _stateHolder = _mock.StrictMock<ISchedulingResultStateHolder>();
             _skillStaff = _mock.StrictMock<ISkillStaff>();
-            _target = new DailyBoostedSkillForecastAndScheduledValueCalculator(_stateHolder);
+            _target = new DailyBoostedSkillForecastAndScheduledValueCalculator(()=>_stateHolder);
         }
 
         [Test]

@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.Helper;
@@ -11,11 +12,11 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 	{
 		private readonly IMatrixListFactory _matrixListFactory;
 		private readonly IWeeklyRestSolverCommand _weeklyRestSolverCommand;
-		private readonly IScheduleDayChangeCallback _scheduleDayChangeCallback;
-		private readonly IResourceOptimizationHelper _resourceOptimizationHelper;
+		private readonly Func<IScheduleDayChangeCallback> _scheduleDayChangeCallback;
+		private readonly Func<IResourceOptimizationHelper> _resourceOptimizationHelper;
 		private readonly IOptimizerHelperHelper _optimizerHelper;
 
-		public ClassicScheduleCommand(IMatrixListFactory matrixListFactory, IWeeklyRestSolverCommand weeklyRestSolverCommand, IScheduleDayChangeCallback scheduleDayChangeCallback, IResourceOptimizationHelper resourceOptimizationHelper, IOptimizerHelperHelper optimizerHelper)
+		public ClassicScheduleCommand(IMatrixListFactory matrixListFactory, IWeeklyRestSolverCommand weeklyRestSolverCommand, Func<IScheduleDayChangeCallback> scheduleDayChangeCallback, Func<IResourceOptimizationHelper> resourceOptimizationHelper, IOptimizerHelperHelper optimizerHelper)
 		{
 			_matrixListFactory = matrixListFactory;
 			_weeklyRestSolverCommand = weeklyRestSolverCommand;
@@ -82,11 +83,11 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 
 		private void runWeeklyRestSolver(ISchedulingOptions schedulingOptions, IList<IScheduleDay> selectedSchedules, ISchedulerStateHolder schedulerStateHolder, DateOnlyPeriod selectedPeriod, IBackgroundWorkerWrapper backgroundWorker)
 		{
-			var resourceCalculateDelayer = new ResourceCalculateDelayer(_resourceOptimizationHelper, 1, true,
+			var resourceCalculateDelayer = new ResourceCalculateDelayer(_resourceOptimizationHelper(), 1, true,
 				schedulingOptions.ConsiderShortBreaks);
 			ISchedulePartModifyAndRollbackService rollbackService =
 				new SchedulePartModifyAndRollbackService(schedulerStateHolder.SchedulingResultState,
-					_scheduleDayChangeCallback,
+					_scheduleDayChangeCallback(),
 					new ScheduleTagSetter(schedulingOptions.TagToUseOnScheduling));
 			var selectedPersons = selectedSchedules.Select(x => x.Person).Distinct().ToList();
 			_weeklyRestSolverCommand.Execute(schedulingOptions, null, selectedPersons, rollbackService, resourceCalculateDelayer,

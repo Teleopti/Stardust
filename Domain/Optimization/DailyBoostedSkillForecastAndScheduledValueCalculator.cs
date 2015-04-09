@@ -8,9 +8,9 @@ namespace Teleopti.Ccc.Domain.Optimization
 {
     public class DailyBoostedSkillForecastAndScheduledValueCalculator : IDailySkillForecastAndScheduledValueCalculator
     {
-        private readonly ISchedulingResultStateHolder _schedulingStateHolder;
+        private readonly Func<ISchedulingResultStateHolder> _schedulingStateHolder;
 
-        public DailyBoostedSkillForecastAndScheduledValueCalculator(ISchedulingResultStateHolder schedulingStateHolder)
+        public DailyBoostedSkillForecastAndScheduledValueCalculator(Func<ISchedulingResultStateHolder> schedulingStateHolder)
         {
             _schedulingStateHolder = schedulingStateHolder;
         }
@@ -36,7 +36,7 @@ namespace Teleopti.Ccc.Domain.Optimization
             DateTimePeriod dateTimePeriod = CreateDateTimePeriodFromScheduleDay(scheduleDay);
 
             IList<ISkillStaffPeriod> skillStaffPeriods =
-                _schedulingStateHolder.SkillStaffPeriodHolder.SkillStaffPeriodList(new List<ISkill> { skill }, dateTimePeriod);
+                _schedulingStateHolder().SkillStaffPeriodHolder.SkillStaffPeriodList(new List<ISkill> { skill }, dateTimePeriod);
             if (skillStaffPeriods == null || skillStaffPeriods.Count == 0)
                 return new ReadOnlyCollection<ForecastScheduleValuePair>(result);
 
@@ -59,7 +59,7 @@ namespace Teleopti.Ccc.Domain.Optimization
             else
             {
                 IList<ISkillStaffPeriod> skillStaffPeriods =
-                _schedulingStateHolder.SkillStaffPeriodHolder.SkillStaffPeriodList(new List<ISkill>(skill.AggregateSkills), skillStaffPeriod.Period);
+                _schedulingStateHolder().SkillStaffPeriodHolder.SkillStaffPeriodList(new List<ISkill>(skill.AggregateSkills), skillStaffPeriod.Period);
                 foreach (var staffPeriod in skillStaffPeriods)
                 {
                     var thisSkill = CalculateSkillStaffPeriodForecastAndScheduledValue(staffPeriod.SkillDay.Skill, staffPeriod);

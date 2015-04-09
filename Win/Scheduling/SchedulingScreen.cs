@@ -2,7 +2,6 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Configuration;
 using System.Diagnostics;
 using System.Drawing;
 using System.Globalization;
@@ -16,14 +15,12 @@ using Autofac.Core;
 using MbCache.Core;
 using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Infrastructure;
-using Teleopti.Ccc.Domain.Optimization.IntraIntervalOptimization;
 using Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.Seniority;
 using Teleopti.Ccc.Domain.ResourceCalculation.IntraIntervalAnalyze;
 using Teleopti.Ccc.Domain.Scheduling.BackToLegalShift;
 using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
 using Teleopti.Ccc.Domain.Scheduling.Meetings;
 using Teleopti.Ccc.Domain.Scheduling.ScheduleTagging;
-using Teleopti.Ccc.Domain.Scheduling.TeamBlock;
 using Teleopti.Ccc.Domain.Security.AuthorizationEntities;
 using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.Infrastructure.Persisters.Account;
@@ -43,7 +40,6 @@ using Teleopti.Ccc.Win.Scheduling.PropertyPanel;
 using Teleopti.Ccc.Win.Scheduling.SchedulingScreenInternals;
 using Teleopti.Ccc.Win.Scheduling.SkillResult;
 using Teleopti.Ccc.Win.Sikuli;
-using Teleopti.Ccc.Win.Sikuli.Helpers;
 using Teleopti.Ccc.WinCode.Grouping;
 using Teleopti.Ccc.WinCode.Scheduling.ShiftCategoryDistribution;
 using Teleopti.Interfaces.MessageBroker.Events;
@@ -174,6 +170,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 		private readonly IGroupPagePerDateHolder _groupPagePerDateHolder;
 		private readonly IBudgetPermissionService _budgetPermissionService;
 		private readonly IRestrictionExtractor _restrictionExtractor;
+		private readonly IResourceOptimizationHelperExtended _optimizationHelperExtended;
 		private readonly ICollection<IPerson> _personsToValidate = new HashSet<IPerson>();
 		private readonly ICollection<IPerson> _restrictionPersonsToReload = new HashSet<IPerson>();
 		private readonly BackgroundWorker _backgroundWorkerValidatePersons = new BackgroundWorker();
@@ -351,6 +348,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			_requiredScheduleHelper = _container.Resolve<IRequiredScheduleHelper>();
 			_innerOptimizerHelper = _container.Resolve<IOptimizerHelperHelper>();
 			_restrictionExtractor = _container.Resolve<IRestrictionExtractor>();
+			_optimizationHelperExtended = _container.Resolve<IResourceOptimizationHelperExtended>();
 
 			_schedulerState.SetRequestedScenario(loadScenario);
 			_schedulerState.RequestedPeriod = new DateOnlyPeriodAsDateTimePeriod(loadingPeriod, TeleoptiPrincipal.CurrentPrincipal.Regional.TimeZone);
@@ -2067,8 +2065,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 		private void _backgroundWorkerResourceCalculator_DoWork(object sender, DoWorkEventArgs e)
 		{
 			setThreadCulture();
-			var optimizationHelperWin = new ResourceOptimizationHelperWin(SchedulerState, _container.Resolve<IPersonSkillProvider>(), _container.Resolve<IIntraIntervalFinderService>());
-			optimizationHelperWin.ResourceCalculateMarkedDays(new BackgroundWorkerWrapper(_backgroundWorkerResourceCalculator), SchedulerState.ConsiderShortBreaks, true);
+			_optimizationHelperExtended.ResourceCalculateMarkedDays(new BackgroundWorkerWrapper(_backgroundWorkerResourceCalculator), SchedulerState.ConsiderShortBreaks, true);
 		}
 
 		private void validateAllPersons()
@@ -2686,7 +2683,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 		    var argument = (Tuple<DeleteOption, IList<IScheduleDay>>) e.Argument;
 			var list = argument.Item2;
 			_undoRedo.CreateBatch(string.Format(CultureInfo.CurrentCulture, Resources.UndoRedoDeleteSchedules, list.Count));
-			var deleteService = new DeleteSchedulePartService(SchedulerState.SchedulingResultState);
+			var deleteService = new DeleteSchedulePartService(()=>SchedulerState.SchedulingResultState);
 			ISchedulePartModifyAndRollbackService rollbackService = new SchedulePartModifyAndRollbackService(SchedulerState.SchedulingResultState, new SchedulerStateScheduleDayChangedCallback(new ResourceCalculateDaysDecider(), SchedulerState), new ScheduleTagSetter(_defaultScheduleTag));
 			if (!list.IsEmpty())
 			{
@@ -3186,8 +3183,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			_schedulerState.SchedulingResultState.SkipResourceCalculation = false;
 			if (lastCalculationState)
 			{
-				var optimizationHelperWin = new ResourceOptimizationHelperWin(SchedulerState, _container.Resolve<IPersonSkillProvider>(), _container.Resolve<IIntraIntervalFinderService>());
-				optimizationHelperWin.ResourceCalculateAllDays(new BackgroundWorkerWrapper(_backgroundWorkerOvertimeScheduling), true);
+				_optimizationHelperExtended.ResourceCalculateAllDays(new BackgroundWorkerWrapper(_backgroundWorkerOvertimeScheduling), true);
 			}
 
 			_totalScheduled = 0;
@@ -3367,8 +3363,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			if (!_schedulerState.SchedulingResultState.SkipResourceCalculation && !_teamLeaderMode)
 			{
 				backgroundWorkerLoadData.ReportProgress(1, LanguageResourceHelper.Translate("XXCalculatingResourcesDotDotDot"));
-				var optimizationHelperWin = new ResourceOptimizationHelperWin(SchedulerState, _container.Resolve<IPersonSkillProvider>(), _container.Resolve<IIntraIntervalFinderService>());
-				optimizationHelperWin.ResourceCalculateAllDays(new BackgroundWorkerWrapper(backgroundWorkerLoadData), true);
+				_optimizationHelperExtended.ResourceCalculateAllDays(new BackgroundWorkerWrapper(backgroundWorkerLoadData), true);
 			}
 
 			if (e.Cancel)

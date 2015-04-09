@@ -879,9 +879,11 @@
     <Compile Include="Scheduling\IMatrixUnselectedDaysLocker.cs" />
     <Compile Include="Scheduling\INextPlanningPeriodProvider.cs" />
     <Compile Include="Scheduling\IScheduleDifferenceSaver.cs" />
+    <Compile Include="Scheduling\Legacy\Commands\AgentRestrictionsNoWorkShiftfFinder.cs" />
     <Compile Include="Scheduling\Legacy\Commands\BackToLegalShiftCommand.cs" />
     <Compile Include="Scheduling\Legacy\Commands\ClassicScheduleCommand.cs" />
     <Compile Include="Scheduling\Legacy\Commands\CommonStateHolder.cs" />
+    <Compile Include="Scheduling\Legacy\Commands\DayOffOptimizationDecisionMakerFactory.cs" />
     <Compile Include="Scheduling\Legacy\Commands\DaysOnlyHelper.cs" />
     <Compile Include="Scheduling\Legacy\Commands\Gridlock.cs" />
     <Compile Include="Scheduling\Legacy\Commands\GridlockDictionary.cs" />
@@ -904,7 +906,7 @@
     <Compile Include="Scheduling\Legacy\Commands\InnerOptimizerHelperHelper.cs" />
     <Compile Include="Scheduling\Legacy\Commands\IntraIntervalOptimizationCommand.cs" />
     <Compile Include="Scheduling\Legacy\Commands\IOptimizerHelperHelper.cs" />
-    <Compile Include="Scheduling\Legacy\Commands\IResourceOptimizationHelperWin.cs" />
+    <Compile Include="Scheduling\Legacy\Commands\IResourceOptimizationHelperExtended.cs" />
     <Compile Include="Scheduling\Legacy\Commands\IScheduleCommandToggle.cs" />
     <Compile Include="Scheduling\Legacy\Commands\IScheduleOptimizerHelper.cs" />
     <Compile Include="Scheduling\Legacy\Commands\IScheduleOvertimeCommand.cs" />
@@ -917,10 +919,12 @@
     <Compile Include="Scheduling\Legacy\Commands\MatrixListFactory.cs" />
     <Compile Include="Scheduling\Legacy\Commands\MatrixUserLockLocker.cs" />
     <Compile Include="Scheduling\Legacy\Commands\OptimizationCommand.cs" />
-    <Compile Include="Scheduling\Legacy\Commands\ResourceOptimizationHelperWin.cs" />
+    <Compile Include="Scheduling\Legacy\Commands\ResourceOptimizationHelperExtended.cs" />
     <Compile Include="Scheduling\Legacy\Commands\ScheduleCommand.cs" />
     <Compile Include="Scheduling\Legacy\Commands\ScheduleOvertimeCommand.cs" />
+    <Compile Include="Scheduling\Legacy\Commands\SchedulerGroupPagesProvider.cs" />
     <Compile Include="Scheduling\Legacy\Commands\SchedulerStateHolder.cs" />
+    <Compile Include="Scheduling\Legacy\Commands\SchedulerStateScheduleDayChangedCallback.cs" />
     <Compile Include="Scheduling\Legacy\Commands\TeamBlockMoveTimeBetweenDaysCommand.cs" />
     <Compile Include="Scheduling\Legacy\Commands\TeamBlockOptimizationCommand.cs" />
     <Compile Include="Scheduling\Legacy\Commands\TeamBlockScheduleCommand.cs" />

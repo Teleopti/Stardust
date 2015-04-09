@@ -32,9 +32,9 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 			_personSkillProvider = _mocks.DynamicMock<IPersonSkillProvider>();
 			_periodDistributionService = _mocks.DynamicMock<IPeriodDistributionService>();
 			_intraIntervalFinderService = _mocks.StrictMock<IIntraIntervalFinderService>();
-			_target = new ResourceOptimizationHelper(_stateHolder, _occupiedSeatCalculator,
+			_target = new ResourceOptimizationHelper(()=>_stateHolder, _occupiedSeatCalculator,
 													 new NonBlendSkillCalculator(),
-														 _personSkillProvider, _periodDistributionService,
+														 ()=>_personSkillProvider, _periodDistributionService,
 														 new CurrentTeleoptiPrincipal(),
 														 _intraIntervalFinderService);
 		}

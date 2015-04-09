@@ -18,7 +18,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.DayOffScheduling
 	{
 		private readonly IDayOffsInPeriodCalculator _dayOffsInPeriodCalculator;
 		private readonly IEffectiveRestrictionCreator _effectiveRestrictionCreator;
-		private readonly ISchedulePartModifyAndRollbackService _schedulePartModifyAndRollbackService;
+		private readonly Func<ISchedulePartModifyAndRollbackService> _schedulePartModifyAndRollbackService;
 		private readonly IScheduleDayAvailableForDayOffSpecification _scheduleDayAvailableForDayOffSpecification;
 		private readonly IHasContractDayOffDefinition _hasContractDayOffDefinition;
 
@@ -27,7 +27,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.DayOffScheduling
 		public DayOffScheduler(
             IDayOffsInPeriodCalculator dayOffsInPeriodCalculator,
 			IEffectiveRestrictionCreator effectiveRestrictionCreator, 
-			ISchedulePartModifyAndRollbackService schedulePartModifyAndRollbackService, 
+			Func<ISchedulePartModifyAndRollbackService> schedulePartModifyAndRollbackService, 
             IScheduleDayAvailableForDayOffSpecification scheduleDayAvailableForDayOffSpecification,
 			IHasContractDayOffDefinition hasContractDayOffDefinition)
 		{
@@ -65,11 +65,11 @@ namespace Teleopti.Ccc.Domain.Scheduling.DayOffScheduling
                     try
                     {
                         part.CreateAndAddDayOff(effectiveRestriction.DayOffTemplate);
-                        _schedulePartModifyAndRollbackService.Modify(part);
+                        _schedulePartModifyAndRollbackService().Modify(part);
                     }
                     catch (DayOffOutsideScheduleException)
                     {
-                        _schedulePartModifyAndRollbackService.Rollback();
+                        _schedulePartModifyAndRollbackService().Rollback();
                     }
 
                     var eventArgs = new SchedulingServiceBaseEventArgs(part, true);

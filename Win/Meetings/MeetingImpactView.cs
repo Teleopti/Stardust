@@ -37,8 +37,7 @@ namespace Teleopti.Ccc.Win.Meetings
 		private readonly TransparentMeetingMeetingControl _transparentMeetingMeetingControl;
 		private readonly MeetingStateHolderLoaderHelper _meetingStateHolderLoaderHelper;
 		private readonly IToggleManager _toggleManager;
-		private readonly IIntraIntervalFinderService _intraIntervalFinderService;
-
+		
 		public MeetingImpactView()
 		{
 			InitializeComponent();
@@ -49,7 +48,6 @@ namespace Teleopti.Ccc.Win.Meetings
 			: this()
 		{
 			_toggleManager = toggleManager;
-			_intraIntervalFinderService = intraIntervalFinderService;
 			_transparentMeetingMeetingControl = new TransparentMeetingMeetingControl();
 			_skillIntradayGridControl = new SkillIntradayGridControl("MeetingSkillIntradayGridAndChart", _toggleManager);
 
@@ -64,12 +62,12 @@ namespace Teleopti.Ccc.Win.Meetings
 			var slotCalculator = new MeetingSlotImpactCalculator(schedulerStateHolder.SchedulingResultState, new AllLayersAreInWorkTimeSpecification());
 			var slotFinder = new BestSlotForMeetingFinder(slotCalculator);
 			var personSkillProvider = new PersonSkillProvider();
-			var optimizationHelperWin = new ResourceOptimizationHelper(schedulerStateHolder.SchedulingResultState,
+			var optimizationHelperWin = new ResourceOptimizationHelper(()=>schedulerStateHolder.SchedulingResultState,
 																	   new OccupiedSeatCalculator(),
 																	   new NonBlendSkillCalculator(),
-																	   personSkillProvider, new PeriodDistributionService(), 
+																	   ()=>personSkillProvider, new PeriodDistributionService(), 
 																		new CurrentTeleoptiPrincipal(),
-																		_intraIntervalFinderService);
+																		intraIntervalFinderService);
 			var decider = new PeopleAndSkillLoaderDecider(new PersonRepository(UnitOfWorkFactory.Current));
 			var gridHandler = new MeetingImpactSkillGridHandler(this, meetingViewModel, schedulerStateHolder,
 																UnitOfWorkFactory.Current, decider);
