@@ -12183,4 +12183,31 @@ Minska komplexiteten för att kunna använda dessa skift.</value>
     <value>Roll</value>
     <comment>used when searching for persons based on role</comment>
   </data>
+  <data name="CreateNewRole" xml:space="preserve">
+    <value>Skapa ny roll</value>
+  </data>
+  <data name="DataFilterThreeDots" xml:space="preserve">
+    <value>Datafilter...</value>
+  </data>
+  <data name="ManagePermissions" xml:space="preserve">
+    <value>Hantera rättigheter</value>
+  </data>
+  <data name="ManagePermissionsIntro" xml:space="preserve">
+    <value>Här kan du styra vem som har rättighet att använda olika delar av applikationen.</value>
+  </data>
+  <data name="NotSelectedItems" xml:space="preserve">
+    <value>Inaktiverade objekt</value>
+  </data>
+  <data name="PermissionsFilterThreeDots" xml:space="preserve">
+    <value>Rättighetsfilter...</value>
+  </data>
+  <data name="RoleFilterThreeDots" xml:space="preserve">
+    <value>Rollfilter...</value>
+  </data>
+  <data name="SelectedItems" xml:space="preserve">
+    <value>Aktiverade objekt</value>
+  </data>
+  <data name="NoGamificationSetting" xml:space="preserve">
+    <value>Ingen spelifieringsinställning</value>
+  </data>
 </root>
