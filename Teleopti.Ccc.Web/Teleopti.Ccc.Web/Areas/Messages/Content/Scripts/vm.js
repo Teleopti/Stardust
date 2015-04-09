@@ -20,6 +20,8 @@ define([
 			return self.ErrorMessage() && self.ErrorMessage().length != 0;
 		});
 
+		self.DisplayContent = ko.observable(false);
+
 		self.Receivers = ko.observableArray();
 		self.Subject = ko.observable("");
 		self.Message = ko.observable("");
@@ -28,7 +30,7 @@ define([
 		self.DisplaySendMessage = ko.observable(true);
 
 		self.IsMessageEmpty = ko.computed(function() {
-			return self.Subject().length == 0 && self.Message().length == 0;
+			return self.Subject().length === 0 && self.Message().length === 0;
 		});
 
 		self.StatusText = ko.observable();
@@ -49,9 +51,15 @@ define([
 					self.StatusText(self.Resources.Sent);
 					self.StatusClass("label-success");
 					self.ErrorMessage("");
+					self.DisplayContent(true);
 				},
 				error: function (data) {
-					self.ErrorMessage(data.statusText);
+					if (data.status === 403) {
+						self.ErrorMessage(resources.InsufficientPermission);
+						self.DisplayContent(false);
+					} else {
+						self.ErrorMessage(data.statusText);
+					}
 				}
 			});
 

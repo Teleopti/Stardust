@@ -10,7 +10,6 @@ namespace Teleopti.Ccc.WebTest.Filters
 	[TestFixture]
 	public class ApplicationFunctionAttributeTest
 	{
-
 		[Test]
 		public void ShouldSetErrorPartialViewWithAjaxRequestWhenNoPermission()
 		{

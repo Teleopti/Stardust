@@ -969,6 +969,7 @@
     <Compile Include="Filters\IAuthenticationModule.cs" />
     <Compile Include="Filters\ISessionAuthenticationModule.cs" />
     <Compile Include="Filters\KeyBasedAuthenticationAttribute.cs" />
+    <Compile Include="Filters\LicenseAttribute.cs" />
     <Compile Include="Filters\SessionAuthenticationModule.cs" />
     <Compile Include="Models\Shared\Link.cs" />
     <Compile Include="Areas\Start\Controllers\MenuController.cs" />

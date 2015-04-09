@@ -38,6 +38,7 @@ namespace Teleopti.Ccc.Web.Areas.Messages.Controllers
 
 		[UnitOfWorkAction]
 		[HttpGet]
+		[License(DefinedLicenseOptionPaths.TeleoptiCccSmsLink)]
 		public JsonResult GetPersons(string ids)
 	    {
 			try
@@ -58,6 +59,7 @@ namespace Teleopti.Ccc.Web.Areas.Messages.Controllers
 
 	    [UnitOfWorkAction]
 	    [HttpPost]
+		[License(DefinedLicenseOptionPaths.TeleoptiCccSmsLink)]
 		public JsonResult SendMessage(Guid[] receivers, string subject, string body)
 	    {
 			var persons = _personRepository.FindPeople(receivers).ToArray();
@@ -101,7 +103,8 @@ namespace Teleopti.Ccc.Web.Areas.Messages.Controllers
 				UserTexts.Resources.Message,
 				UserTexts.Resources.StatusColon,
 				UserTexts.Resources.Sent,
-				UserTexts.Resources.Pending
+				UserTexts.Resources.Pending,
+				UserTexts.Resources.InsufficientPermission
 
 			}, Formatting.Indented);
 

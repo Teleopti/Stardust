@@ -459,6 +459,7 @@
     <Compile Include="Filters\CustomHttpActionDescriptorForTest.cs" />
     <Compile Include="Filters\IdentityProviderProviderTest.cs" />
     <Compile Include="Filters\KeyBasedAuthenticationAttributeTest.cs" />
+    <Compile Include="Filters\LicenseAttributeTest.cs" />
     <Compile Include="MappingProfileForProbing.cs" />
     <Compile Include="Areas\MyTime\Core\HtmlHelperExtensionTest.cs" />
     <Compile Include="Areas\Start\Core\HtmlHelperExtensionTest.cs" />

@@ -1,10 +1,12 @@
 
 define([
     'knockout',
+	'resources',
     'vm',
 	'ajax'
 ], function (
     ko,
+	resources,
     viewmodel,
 	ajax
 	) {
@@ -37,7 +39,13 @@ define([
 				vm.Receivers.push({ Name: item.Name, Id: item.Id });
 			});
 		},
-		error: function(data) { vm.ErrorMessage(data.statusText); }
+		error: function (data) {
+			if (data.status === 403) {
+				vm.ErrorMessage(resources.InsufficientPermission);
+			} else {
+				vm.ErrorMessage(data.statusText);
+			}
+		}
 	});
 });
 
