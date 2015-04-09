@@ -24,8 +24,9 @@ var closeAndThrow = function(msg){
 };	
 
 client.init();
-log('navigate to url ' + process.env.UrlToTest);
-client.url(process.env.UrlToTest)
+var webUrl = process.env.UrlToTest + '/Web';
+log('navigate to url ' + webUrl);
+client.url(webUrl)
 	.waitForExist('#Username-input', 60000, false, function(err, res, response) {
 		if (err || !res) {
 			closeAndThrow('failed to navigate to sign in page. ' + err);
@@ -43,7 +44,7 @@ client.setValue('#Username-input', 'demo')
 		log('sign in succeeded:' + res);
 	});
 log('navigate to health check');
-client.url(process.env.UrlToTest + '/HealthCheck')
+client.url(webUrl + '/HealthCheck')
 	.waitForExist(".services li span", 600000, false, function(err, res, response) {
 		if (err || !res) {
 			closeAndThrow('service bus isnot up and running after trying 10 minutes. ' + err);
