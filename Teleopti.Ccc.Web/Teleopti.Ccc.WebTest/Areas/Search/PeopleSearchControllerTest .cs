@@ -19,6 +19,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Search
         private IPersonRepository personRepository;
         private PeopleSearchController target;
         private IOptionalColumnRepository optionalColumnRepository;
+
         [SetUp]
         public void Setup()
         {
@@ -27,12 +28,11 @@ namespace Teleopti.Ccc.WebTest.Areas.Search
             optionalColumnRepository = MockRepository.GenerateMock<IOptionalColumnRepository>();
             target = new PeopleSearchController(searchRepository, personRepository, new FakePermissionProvider(), optionalColumnRepository);
         }
+
         [Test]
         public void ShouldSearchForPeople()
         {
-            var field = PersonFinderField.Skill;
-            string keyword = null;
-            var person = PersonFactory.CreatePersonWithGuid("Ashley", "Andeen");
+	        var person = PersonFactory.CreatePersonWithGuid("Ashley", "Andeen");
             person.Email = "ashley.andeen@abc.com";
             var personId = person.Id.Value;
             person.TerminatePerson(new DateOnly(2015, 4, 9), MockRepository.GenerateMock<IPersonAccountUpdater>());
@@ -47,9 +47,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Search
 
             searchRepository.Stub(x => x.Find(null)).Callback(new Func<IPersonFinderSearchCriteria, bool>(c =>
             {
-                field = c.Field;
-                keyword = c.SearchValue;
-                c.SetRow(1, personFinderDisplayRow);
+	            c.SetRow(1, personFinderDisplayRow);
                 return true;
             }));
             personRepository.Stub(x => x.FindPeople(new List<Guid> { personId })).IgnoreArguments().Return(new List<IPerson> { person });
@@ -79,6 +77,44 @@ namespace Teleopti.Ccc.WebTest.Areas.Search
             optionalColumnValues.First().Value.Equals("123456");
         }
 
+	    [Test]
+	    public void ShouldSortPeopleByLastName()
+	    {
+			var person = PersonFactory.CreatePersonWithGuid("Ashley", "Andeen");
+		    var personSec = PersonFactory.CreatePersonWithGuid("Abc", "Bac");
+
+			var personFinderDisplayRow = new PersonFinderDisplayRow
+			{
+				FirstName = "Ashley",
+				LastName = "Andeen",
+				EmploymentNumber = "1011",
+				PersonId = person.Id.GetValueOrDefault(),
+				RowNumber = 1
+			};
+
+			var personFinderDisplayRow2 = new PersonFinderDisplayRow
+			{
+				FirstName = "Abc",
+				LastName = "Bac",
+				EmploymentNumber = "1012",
+				PersonId = personSec.Id.GetValueOrDefault(),
+				RowNumber = 2
+			};
+			searchRepository.Stub(x => x.Find(null)).Callback(new Func<IPersonFinderSearchCriteria, bool>(c =>
+			{
+				c.SetRow(1, personFinderDisplayRow);
+				c.SetRow(2, personFinderDisplayRow2);
+				return true;
+			}));
+			personRepository.Stub(x => x.FindPeople(new[] { person.Id.GetValueOrDefault(), personSec.Id.GetValueOrDefault() })).IgnoreArguments().Return(new List<IPerson> { person });
+			optionalColumnRepository.Stub(x => x.GetOptionalColumns<Person>()).Return(new List<IOptionalColumn> ());
+
+			var result = ((dynamic)target).GetResult("a", 10, 1);
+
+			var peopleList = (IEnumerable<dynamic>)result.Content.People;
+		    peopleList.First().FirstName.Equals("Ashley");
+			peopleList.Last().FirstName.Equals("Abc");
+	    }
         [Test]
         public void ShouldSearchForPeopleWithNoPermission()
         {

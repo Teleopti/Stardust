@@ -31,7 +31,7 @@ namespace Teleopti.Ccc.Web.Areas.Search.Controllers
         public virtual IHttpActionResult GetResult(string keyword, int pageSize, int currentPageIndex)
         {
             var optionalColumnCollection = _optionalColumnRepository.GetOptionalColumns<Person>();
-            var search = new PersonFinderSearchCriteria(PersonFinderField.All, keyword, pageSize, DateOnly.Today, 0, 0);
+			var search = new PersonFinderSearchCriteria(PersonFinderField.All, keyword, pageSize, DateOnly.Today, 1, 1);
             search.CurrentPage = currentPageIndex;
             _searchRepository.Find(search);
             var permittedPersonList =
@@ -56,7 +56,7 @@ namespace Teleopti.Ccc.Web.Areas.Search.Controllers
                     var value = columnValue == null ? "" : columnValue.Description;
                     return new KeyValuePair<string, string>(c.Name, value);
                 })
-            });
+			}).OrderBy(p=>p.LastName);
             var result = new
             {
                 People = resultPeople,
