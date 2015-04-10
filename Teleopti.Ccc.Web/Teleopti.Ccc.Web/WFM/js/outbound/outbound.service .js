@@ -46,8 +46,9 @@ outboundService.service('OutboundService', ['$resource', function( $resource) {
 	self.updateCampaign = function (campaign) {
 		campaign.$update();
 	};
-
-	self.deleteCampaign = function (campaign, idx) {
-		// TBD
+	
+	self.deleteCampaign = function (campaign) {	
+		Campaign.remove({ Id: campaign.Id });
+		self.campaigns.splice(self.campaigns.indexOf(campaign), 1);
 	};
 }]);

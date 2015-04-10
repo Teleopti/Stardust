@@ -69,5 +69,12 @@ namespace Teleopti.Ccc.Web.Areas.Outbound.Controllers
 			}
 			return Ok(_outboundCampaignViewModelMapper.Map(campaign));
 		}
+
+		[HttpDelete, Route("api/Outbound/Campaign/{Id}"), UnitOfWork]
+		public virtual void Remove(Guid Id)
+		{
+			var campaign = _outboundCampaignRepository.Get(Id);
+			_outboundCampaignRepository.Remove(campaign);		
+		}
 	}
 }

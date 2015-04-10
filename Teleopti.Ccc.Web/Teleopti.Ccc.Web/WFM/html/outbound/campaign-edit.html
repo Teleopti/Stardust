@@ -43,15 +43,15 @@
 									ng-required></select>
 						</div>
 						<div class="input-prepend">
-							<span><strong>Call-list Len.</strong></span>
+							<span><strong>Call List Length</strong></span>
 							<input id="callList" type="text" ng-model="campaign.CallListLen" placeholder="call list length" />
 						</div>
 						<div class="input-prepend">
-							<span><strong>SLA</strong></span>
+							<span><strong>Target Rate</strong></span>
 							<input id="sla" type="text" ng-model="campaign.TargetRate" placeholder="sla" />
 						</div>
 						<div class="input-prepend">
-							<span><strong>CR</strong></span>
+							<span><strong>Connect Rate</strong></span>
 							<input id="cr" type="text" ng-model="campaign.ConnectRate" placeholder="connect rate" />
 						</div>
 						<div class="input-prepend">
@@ -67,7 +67,7 @@
 							<input id="rpcAHT" type="text" ng-model="campaign.RightPartyAverageHandlingTime" placeholder="right party average handle time" />
 						</div>
 						<div class="input-prepend">
-							<span><strong>Unproductive</strong></span>
+							<span><strong>Unproductive Time</strong></span>
 							<input id="unproductive" type="text" ng-model="campaign.UnproductiveTime" placeholder="unproductive time" />
 						</div>
 					</form>
@@ -76,22 +76,20 @@
 		<div class="wfm-block">
 			<div class="sub-header accordion-head" ng-click="acToggle2 = !acToggle2">
 				Duration
-				<span ng-show="!acToggle2"> from <strong>{{period.startDate | date: format }}</strong> to <strong>{{period.endDate | date: format }}</strong></span>
+				<span ng-show="!acToggle2"> from <strong>{{campaign.StartDate.Date | date: format }}</strong> to <strong>{{campaign.EndDate.Date | date: format }}</strong></span>
 			</div>
 			<div ng-show="acToggle2">
 				<div class="row wfm-block">
 					<div class="col-lg-6">
 						<div>
-							<p>Start time: <strong class="start-date">{{period.startDate | date: format }}</strong>
-							</p>
-							<datepicker ng-model="period.startDate" show-weeks="true" class="well well-sm"></datepicker>
+							<p>Start time: <strong class="start-date">{{campaign.StartDate.Date | date: format }}</strong></p>
+							<datepicker ng-model="campaign.StartDate.Date" show-weeks="true" class="well well-sm"></datepicker>
 						</div>
 					</div>
 					<div class="col-lg-6">
 						<div>
-							<p>End time: <strong class="end-date">{{period.endDate | date: format }}</strong>
-							</p>
-							<datepicker ng-model="period.endDate" show-weeks="true" class="well well-sm"></datepicker>
+								<p>End time: <strong class="end-date">{{campaign.EndDate.Date | date: format }}</strong></p>
+								<datepicker ng-model="campaign.EndDate.Date" show-weeks="true" class="well well-sm"></datepicker>
 						</div>
 					</div>
 				</div>
