@@ -28,6 +28,12 @@
 		
 		<!-- Protractor install command -->
 		<NpmInstallProtractorCmd>"$(NpmCmd)" update -g protractor -save-dev</NpmInstallProtractorCmd>
+		
+		<!-- Karma install command -->
+		<NpmInstallKarmaCmd>"$(NpmCmd)" update -g karma -save-dev</NpmInstallKarmaCmd>
+
+		<!-- Karma cli install command -->
+		<NpmInstallKarmaCliCmd>"$(NpmCmd)" update -g karma-cli -save-dev</NpmInstallKarmaCliCmd>
 
 		<!-- grunt-cli install command -->
 		<NpmInstallGruntCliCmd>"$(NpmCmd)" install -g grunt-cli@0.1.13 -save-dev</NpmInstallGruntCliCmd>
@@ -35,8 +41,12 @@
 
 	<!-- Runs NPM command -->
 	<Target Name="RestoreNodePackages">
+		<Exec Command="$(NpmInstallKarmaCmd)" ContinueOnError="false" WorkingDirectory="$(MSBuildProjectDirectory)\WFM" />
+		<Exec Command="$(NpmInstallKarmaCliCmd)" ContinueOnError="false" WorkingDirectory="$(MSBuildProjectDirectory)\WFM" />
+
 		<Message Text="Restore Node Packages Command: $(NpmInstallCmd) /w WorkingDirectory: $(MSBuildProjectDirectory)\WFM" Importance="high" />
 		<Exec Command="$(NpmInstallCmd)" ContinueOnError="false" WorkingDirectory="$(MSBuildProjectDirectory)\WFM" />
+
 		<Message Text="Install Flatten Node Packages Command: $(NpmInstallFlattenPackages) /w WorkingDirectory: $(MSBuildProjectDirectory)\WFM" Importance="high" />
 		<Exec Command="$(NpmInstallFlattenPackages)" ContinueOnError="false" WorkingDirectory="$(NodeDir)" />
 		<Message Text="Flatten Node Packages Command: $(NpmFlattenCmd) /w WorkingDirectory: $(MSBuildProjectDirectory)\WFM" Importance="high" />
