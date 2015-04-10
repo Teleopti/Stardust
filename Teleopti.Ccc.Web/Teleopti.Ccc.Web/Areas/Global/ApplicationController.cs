@@ -25,6 +25,7 @@ namespace Teleopti.Ccc.Web.Areas.Global
 			new AreaWithPermissionPath(DefinedRaptorApplicationFunctionPaths.OpenPersonAdminPage,() => "People","people"),
 			new AreaWithPermissionPath(DefinedRaptorApplicationFunctionPaths.SeatPlanner,() => UserTexts.Resources.SeatPlan,"seatPlan"),
 			new AreaWithPermissionPath(DefinedRaptorApplicationFunctionPaths.SeatPlanner,() => UserTexts.Resources.SeatMap,"seatMap"),
+			new AreaWithPermissionPath(DefinedRaptorApplicationFunctionPaths.RealTimeAdherenceOverview,() => UserTexts.Resources.RealTimeAdherenceOverview,"rta"),
 		};
 
 		public ApplicationController(IPermissionProvider permissionProvider, IToggleManager toggleManager)

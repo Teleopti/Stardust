@@ -15,6 +15,7 @@ var wfm = angular.module('wfm', [
 	'outboundService',
 	'restAreasService',
 	'peopleSearchService',
+	'restRtaService',
 	'wfmCtrls',
 	'wfm.permissions',
 	'wfm.people',
@@ -27,7 +28,8 @@ var wfm = angular.module('wfm', [
 	'wfm.seatPlan',
 	'wfm.notifications',
 	'wfm.notice',
-	'wfm.areas'
+	'wfm.areas',
+	'wfm.rta'
 ]);
 wfm.config([
 	'$stateProvider', '$urlRouterProvider', '$translateProvider', function ($stateProvider, $urlRouterProvider, $translateProvider) {
@@ -84,6 +86,10 @@ wfm.config([
 			url: '/seatMap',
 			templateUrl: 'js/seatManagement/html/seatmap.html',
 			controller: 'SeatMapCtrl as seatmap'
+		}).state('rta', {
+			url: '/rta',
+			templateUrl: 'js/rta/html/rta.html',
+			controller: 'RtaCtrl'
 		});
 
 		$translateProvider.useUrlLoader('../api/Global/Language');
