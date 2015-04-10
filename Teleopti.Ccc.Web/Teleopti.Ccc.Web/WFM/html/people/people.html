@@ -188,7 +188,7 @@
 
 <div>
 	<span>
-		<input type="text" placeholder="{{'Name,Role,Skill,Contract,Organization,ContractSchedule,PartTimePercentage,ShiftBag,BudgetGroup' | translate}}"
+		<input type="text" placeholder="{{'Name' | translate}},{{'EmployeeNo' | translate}},{{'Role' | translate}},{{'Skill' | translate}},{{'Contract' | translate}},{{'PersonFinderFieldOrganization' | translate}},{{'ContractSchedule' | translate}},{{'PartTimePercentage' | translate}},{{'PersonFinderFieldShiftBag' | translate}},{{'BudgetGroup' | translate}}"
 			   ng-model="keyword" ng-keydown="$event.which === 13 && searchKeyword()" ng-change="validateSearchKeywordChanged()"
 			   class="global-search" style="height: 44px; width: 50%" />
 		<button class="wfm-btn wfm-btn-primary" ng-click="searchKeyword()"><i class="mdi mdi-magnify"></i></button>
