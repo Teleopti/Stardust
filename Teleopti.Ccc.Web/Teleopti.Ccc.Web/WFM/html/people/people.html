@@ -203,6 +203,7 @@
 					<th translate>FirstName <i class="mdi mdi-menu-up"></i> </th>
 					<th translate>LastName</th>
 					<th translate>EmployeeNo</th>
+                    <th translate>Team</th>
 					<th translate>Email</th>
 					<th translate>LeavingDate</th>
 					<th ng-repeat="column in optionalColumns">{{column}}</th>
@@ -232,6 +233,7 @@
 					<td>{{person.FirstName}}</td>
 					<td>{{person.LastName}}</td>
 					<td>{{person.EmploymentNumber}}</td>
+                    <td>{{person.Team}}</td>
 					<td>{{person.Email}}</td>
 					<td>{{person.LeavingDate}}</td>
 					<td ng-repeat="optionalColumnValue in person.OptionalColumnValues">

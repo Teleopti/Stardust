@@ -4,6 +4,7 @@ using System.Linq;
 using NUnit.Framework;
 using Rhino.Mocks;
 using SharpTestsEx;
+using Teleopti.Ccc.Domain.AgentInfo;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Infrastructure.Repositories;
@@ -33,7 +34,12 @@ namespace Teleopti.Ccc.WebTest.Areas.Search
         [Test]
         public void ShouldSearchForPeople()
         {
-	        var person = PersonFactory.CreatePersonWithGuid("Ashley", "Andeen");
+	        var person = PersonFactory.CreatePersonWithPersonPeriodFromTeam(DateOnly.Today,
+		        new Team
+		        {
+			        Description = new Description("TestTeam")
+		        });
+			person.Name = new Name("Ashley", "Andeen");
             person.Email = "ashley.andeen@abc.com";
             var personId = person.Id.Value;
             person.TerminatePerson(new DateOnly(2015, 4, 9), MockRepository.GenerateMock<IPersonAccountUpdater>());
@@ -67,6 +73,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Search
             optionalColumns.Count().Equals(1);
             optionalColumns.First().Equals("CellPhone");
             var first = peopleList.First();
+	        first.Team.Equals("TestTeam");
             first.FirstName.Equals("Ashley");
             first.LastName.Equals("Andeen");
             first.EmploymentNumber.Equals("1011");
@@ -116,6 +123,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Search
 		    peopleList.First().FirstName.Equals("Ashley");
 			peopleList.Last().FirstName.Equals("Abc");
 	    }
+
         [Test]
         public void ShouldSearchForPeopleWithNoPermission()
         {

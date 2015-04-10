@@ -68,7 +68,8 @@ namespace Teleopti.Ccc.Web.Areas.Search.Controllers
                     var columnValue = x.GetColumnValue(c);
                     var value = columnValue == null ? "" : columnValue.Description;
                     return new KeyValuePair<string, string>(c.Name, value);
-                })
+                }),
+				Team = x.MyTeam(currentDate) == null ? "" : x.MyTeam(currentDate).SiteAndTeam
 			}).OrderBy(p=>p.LastName);
             var result = new
             {
