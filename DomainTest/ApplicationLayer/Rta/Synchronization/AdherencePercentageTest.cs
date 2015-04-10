@@ -6,6 +6,7 @@ using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service;
+using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.IoC;
 using Teleopti.Interfaces.Domain;
 
@@ -32,7 +33,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Synchronization
 			var phone = Guid.NewGuid();
 			Now.Is("2015-01-08 11:00");
 			Database
-				.WithDefaultsFromState(new ExternalUserStateForTest())
 				.WithSchedule(personId, phone, "2015-01-08 11:00", "2015-01-08 13:00")
 				.WithAlarm("phone", phone, 0)
 				.WithUser("user", personId)
@@ -47,6 +47,26 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Synchronization
 			Target.Initialize();
 
 			Persister.Get(new DateOnly("2015-01-08".Utc()), personId).Should().Not.Be.Null();
+		}
+
+		[Test]
+		// This happens when RTA_EventStreamInitialization_31237 is turned on and agents are not scheduled
+		// Resulting in crash at startup when Updater tries to fetch readmodel with DateTime.MinValue
+		public void ShouldNotInitializeWhenNoOngoingShift()
+		{
+			var personId = Guid.NewGuid();
+			var businessUnitId = Guid.NewGuid();
+			Now.Is("2015-04-10 8:00");
+			Database
+				.WithSchedule(personId, Guid.NewGuid(), "2015-04-10 8:00", "2015-04-10 17:00")
+				.WithUser("user", personId, businessUnitId, null, null);
+			Rta.CheckForActivityChange(personId, businessUnitId);
+			Persister.Clear();
+			Now.Is("2015-04-11 8:00");
+
+			Target.Initialize();
+
+			Persister.PersistedModels.Should().Be.Empty();
 		}
 	}
 }

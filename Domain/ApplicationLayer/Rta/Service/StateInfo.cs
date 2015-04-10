@@ -21,8 +21,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 			_currentState = new Lazy<AgentState>(agentState.CurrentState);
 		}
 
-		public bool IsScheduled { get { return _currentState.Value.ActivityId != null; } }
-		public bool WasScheduled { get { return _previousState.Value.ActivityId != null; } }
+		public bool IsScheduled { get { return _currentState.Value.ActivityId != null && CurrentActivity != null; } }
+		public bool WasScheduled { get { return _previousState.Value.ActivityId != null && PreviousActivity != null; } }
 
 		public ScheduleLayer CurrentActivity { get { return _scheduleInfo.CurrentActivity(); } }
 		public ScheduleLayer PreviousActivity { get { return _scheduleInfo.PreviousActivity(); } }
