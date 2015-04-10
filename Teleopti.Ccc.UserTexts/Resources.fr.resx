@@ -3046,7 +3046,7 @@
     <value>Filtrer équipes</value>
   </data>
   <data name="ManageMultisiteDistributions" xml:space="preserve">
-    <value>Gérer distributuions multisite</value>
+    <value>Gérer distribution multisite</value>
   </data>
   <data name="ListOfValues" xml:space="preserve">
     <value>Liste de règles d'horaires</value>
@@ -6829,7 +6829,7 @@
     <value>Modifier la description agent commun pour le format d 'exports planning</value>
   </data>
   <data name="LogOn" xml:space="preserve">
-    <value>Connecter</value>
+    <value>Identifiant</value>
   </data>
   <data name="PersonRotationError" xml:space="preserve">
     <value>Erreur rotation personne</value>
@@ -8480,7 +8480,7 @@ Si cette erreur de validation persiste vous devez vérifier que votre mot de pas
     <value>Absence Journée Complète</value>
   </data>
   <data name="InsufficientPermissionForWeb" xml:space="preserve">
-    <value>Vous n'avez pas la permission d'accéder le portail web</value>
+    <value>Vous n'avez pas la permission d'accéder au portail web</value>
   </data>
   <data name="SchedulePeriodTypeChineseMonth" xml:space="preserve">
     <value>Mois 7-8</value>
@@ -9505,7 +9505,7 @@ Réduisez la complexité pour utiliser ces horaires.</value>
     <value>Enregistrer les prévisions dans un autre scénario</value>
   </data>
   <data name="SaveToSpace" xml:space="preserve">
-    <value>Enregistrer sous</value>
+    <value>Enregistrer sous </value>
   </data>
   <data name="FilteredResults" xml:space="preserve">
     <value>Résultats filtrés</value>
@@ -9963,5 +9963,59 @@ Ces options sont actives:
   </data>
   <data name="NeutralAdherence" xml:space="preserve">
     <value>Neutre</value>
+  </data>
+  <data name="MaximumNumberOfReportRowsReached" xml:space="preserve">
+    <value>Nombre maximum de rangées de rapport atteint</value>
+  </data>
+  <data name="NarrowToSeeAll" xml:space="preserve">
+    <value>Réduisez les critères pour pouvoir voir toutes les données</value>
+  </data>
+  <data name="AddMustHave" xml:space="preserve">
+    <value>Ajouter Doit Avoir</value>
+  </data>
+  <data name="RemoveMustHave" xml:space="preserve">
+    <value>Supprimer Doit Avoir</value>
+  </data>
+  <data name="DoubleTextBoxGoldThresholdForAdherence" xml:space="preserve">
+    <value>La valeur du seuil or pour l'adhérence doit être plus élevée que le reste.</value>
+  </data>
+  <data name="DoubleTextBoxSilverThresholdForAdherence" xml:space="preserve">
+    <value>La valeur du seuil argent pour l'adhérence doit être plus élevée que le seuil bronze.</value>
+  </data>
+  <data name="GoldThresholdForAnsweredCallsValue" xml:space="preserve">
+    <value>La valeur du seuil or pour les appels répondus doit être plus élevée que le reste.</value>
+  </data>
+  <data name="TimeSpanTextBoxGoldThresholdForAHT" xml:space="preserve">
+    <value>La valeur du seuil d'or pour la DMT doit être inférieure au reste.</value>
+  </data>
+  <data name="TimeSpanTextBoxSilverThresholdsForAHT" xml:space="preserve">
+    <value>La valeur du seuil argent pour la DMT doit être inférieure à la valeur du seuil bronze.</value>
+  </data>
+  <data name="CreateNewRole" xml:space="preserve">
+    <value>Créer un nouveau rôle</value>
+  </data>
+  <data name="DataFilterThreeDots" xml:space="preserve">
+    <value>Filtre données...</value>
+  </data>
+  <data name="Duplicate" xml:space="preserve">
+    <value>Duplicata</value>
+  </data>
+  <data name="ManagePermissions" xml:space="preserve">
+    <value>Gérer les permissions</value>
+  </data>
+  <data name="ManagePermissionsIntro" xml:space="preserve">
+    <value>Ici vous pouvez décider qui a la permission d'accéder des parties spécifiques de l'application.</value>
+  </data>
+  <data name="NotSelectedItems" xml:space="preserve">
+    <value>Objets désactivés</value>
+  </data>
+  <data name="PermissionsFilterThreeDots" xml:space="preserve">
+    <value>Filtre permissions...</value>
+  </data>
+  <data name="RoleFilterThreeDots" xml:space="preserve">
+    <value>Filtre rôle...</value>
+  </data>
+  <data name="SelectedItems" xml:space="preserve">
+    <value>Objets activés</value>
   </data>
 </root>

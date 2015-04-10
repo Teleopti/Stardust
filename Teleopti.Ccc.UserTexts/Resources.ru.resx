@@ -11508,4 +11508,163 @@ Teleopti R&amp;D</value>
   <data name="OptionWorkingDay" xml:space="preserve">
     <value>Рабочий день</value>
   </data>
+  <data name="DeleteGamificationSetting" xml:space="preserve">
+    <value>Удалить настройку геймификации</value>
+  </data>
+  <data name="RuleWithDifferentThreshold" xml:space="preserve">
+    <value>Использовать разные цели</value>
+  </data>
+  <data name="LogOnFailedIdentityNotFound" xml:space="preserve">
+    <value>Не удалось войти в систему! Отсутствует учетная запись для {0}.</value>
+  </data>
+  <data name="CannotFindDataSourceWithName" xml:space="preserve">
+    <value>Невозможно найти источник данных с именем: {0}</value>
+  </data>
+  <data name="SetSettingTargets" xml:space="preserve">
+    <value>Установить цели геймификации</value>
+  </data>
+  <data name="SelectSettingForTeams" xml:space="preserve">
+    <value>Выбор настроек для групп</value>
+  </data>
+  <data name="Setting" xml:space="preserve">
+    <value>Настройка</value>
+  </data>
+  <data name="SeatPlanner" xml:space="preserve">
+    <value>Планировщик рабочих мест</value>
+  </data>
+  <data name="StartDateMustBeGreaterThanToday" xml:space="preserve">
+    <value>Дата начала должна быть больше, чем сегодняшняя</value>
+  </data>
+  <data name="AnyLocationShouldBeSelected" xml:space="preserve">
+    <value>Необходимо выбрать расположение</value>
+  </data>
+  <data name="AnyTeamShouldBeSelected" xml:space="preserve">
+    <value>Необходимо выбрать группу</value>
+  </data>
+  <data name="YouHaveBeenAllocatedSeat" xml:space="preserve">
+    <value>На {0} вам было выделено место {1}.</value>
+  </data>
+  <data name="YouHaveNotBeenAllocatedSeat" xml:space="preserve">
+    <value>На {0} вам не было выделено место.</value>
+  </data>
+  <data name="StartDateMustBeEndDateOrSmaller" xml:space="preserve">
+    <value>Дата начала должна быть </value>
+  </data>
+  <data name="StartDateMustBeTodayOrGreater" xml:space="preserve">
+    <value>Дата начала должна быть сегодняшней или позднее</value>
+  </data>
+  <data name="AnonymousBulletinBoardTrading" xml:space="preserve">
+    <value>Анонимный обмен</value>
+  </data>
+  <data name="Miscellaneous" xml:space="preserve">
+    <value>Смешанный</value>
+  </data>
+  <data name="SearchHintForName" xml:space="preserve">
+    <value>Поиск по имени</value>
+  </data>
+  <data name="SureToMakeShiftTrade" xml:space="preserve">
+    <value>Вы действительно хотите обменять смены?</value>
+  </data>
+  <data name="LockBulletinBoardTrading" xml:space="preserve">
+    <value>Первый отклик</value>
+  </data>
+  <data name="Bottom" xml:space="preserve">
+    <value>Низ</value>
+  </data>
+  <data name="ManageSenioritySettings" xml:space="preserve">
+    <value>Управление настройками приоритетности</value>
+  </data>
+  <data name="NoAbsenceToRemoveInCurrentShift" xml:space="preserve">
+    <value>В текущей смене нет отсутствия для удаления.</value>
+  </data>
+  <data name="AnnouncementTakenByOthers" xml:space="preserve">
+    <value>Эта смена уже занята кем-то, выберите другую смену на доске обменов.</value>
+  </data>
+  <data name="ShowExcelReport" xml:space="preserve">
+    <value>Показать отчет Excel</value>
+  </data>
+  <data name="ShowPDFReport" xml:space="preserve">
+    <value>Показать отчет PDF</value>
+  </data>
+  <data name="ShowWordReport" xml:space="preserve">
+    <value>Показать отчет Word</value>
+  </data>
+  <data name="DayOffValueColon" xml:space="preserve">
+    <value>Значение выходного:</value>
+  </data>
+  <data name="ShiftCategoryValueColon" xml:space="preserve">
+    <value>Значение категории смены:</value>
+  </data>
+  <data name="InAdherence" xml:space="preserve">
+    <value>Соблюдение</value>
+  </data>
+  <data name="NeutralAdherence" xml:space="preserve">
+    <value>Нейтрально</value>
+  </data>
+  <data name="MaximumNumberOfReportRowsReached" xml:space="preserve">
+    <value>Достигнуто максимальное количество строк отчета</value>
+  </data>
+  <data name="NarrowToSeeAll" xml:space="preserve">
+    <value>Сократите критерии, чтобы просмотреть все данные</value>
+  </data>
+  <data name="AddMustHave" xml:space="preserve">
+    <value>Добавить обязательное пожелание</value>
+  </data>
+  <data name="RemoveMustHave" xml:space="preserve">
+    <value>Удалить обязательное пожелание</value>
+  </data>
+  <data name="DoubleTextBoxGoldThresholdForAdherence" xml:space="preserve">
+    <value>Значение порога золотого уровня для соблюдения графика должно быть больше, чем пороги других уровней</value>
+  </data>
+  <data name="DoubleTextBoxSilverThresholdForAdherence" xml:space="preserve">
+    <value>Значение порога серебряного уровня для соблюдения графика должно быть больше, чем порог бронзового уровня</value>
+  </data>
+  <data name="GoldThresholdForAnsweredCallsValue" xml:space="preserve">
+    <value>Значение порога золотого уровня для отвеченных звонков должно быть больше, чем пороги других уровней</value>
+  </data>
+  <data name="SilverThresholdForAnsweredCallsValue" xml:space="preserve">
+    <value>Значение порога серебряного уровня для отвеченных звонков должно быть больше, чем порог бронзового уровня</value>
+  </data>
+  <data name="TimeSpanTextBoxGoldThresholdForAHT" xml:space="preserve">
+    <value>Значение порога золотого уровня для AHT должно быть больше, чем пороги других уровней</value>
+  </data>
+  <data name="TimeSpanTextBoxSilverThresholdsForAHT" xml:space="preserve">
+    <value>Значение порога серебряного уровня для AHT должно быть больше, чем порог бронзового уровня</value>
+  </data>
+  <data name="CreateNewRole" xml:space="preserve">
+    <value>Создать новую роль</value>
+  </data>
+  <data name="DataFilterThreeDots" xml:space="preserve">
+    <value>Фильтр данных...</value>
+  </data>
+  <data name="ManagePermissions" xml:space="preserve">
+    <value>Управление правами доступа</value>
+  </data>
+  <data name="ManagePermissionsIntro" xml:space="preserve">
+    <value>Здесь вы определяете у кого есть доступ к различным частям приложения</value>
+  </data>
+  <data name="NotSelectedItems" xml:space="preserve">
+    <value>Отключенные параметры</value>
+  </data>
+  <data name="PermissionsFilterThreeDots" xml:space="preserve">
+    <value>Фильтр по правам доступа...</value>
+  </data>
+  <data name="RoleFilterThreeDots" xml:space="preserve">
+    <value>Фильтр по ролям...</value>
+  </data>
+  <data name="SelectedItems" xml:space="preserve">
+    <value>Включенные параметры</value>
+  </data>
+  <data name="RuleWithRatioConvertor" xml:space="preserve">
+    <value>Использовать коэффициент</value>
+  </data>
+  <data name="RankShiftCategory" xml:space="preserve">
+    <value>Степень категории смены от лучшей к худшей</value>
+  </data>
+  <data name="RankWorkingDays" xml:space="preserve">
+    <value>Степень рабочего дня от лучшей к худшей</value>
+  </data>
+  <data name="Top" xml:space="preserve">
+    <value>Верх</value>
+  </data>
 </root>
