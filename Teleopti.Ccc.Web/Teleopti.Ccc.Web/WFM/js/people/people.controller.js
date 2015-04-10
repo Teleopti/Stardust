@@ -1,8 +1,7 @@
 ﻿(function () {
 	'use strict';
 
-
-    angular.module('wfm.people', ['peopleService', 'peopleSearchService'])
+	angular.module('wfm.people', ['peopleService', 'peopleSearchService'])
         .constant('chunkSize', 50)
 		.controller('PeopleCtrl', [
 			'$scope', '$filter', '$state', 'PeopleSearch', PeopleController
@@ -21,7 +20,7 @@
 						scope.dialogStyle.width = attrs.width;
 					if (attrs.height)
 						scope.dialogStyle.height = attrs.height;
-					scope.hideModal = function (){ 
+					scope.hideModal = function () {
 						scope.show = false;
 					};
 				},
@@ -37,20 +36,30 @@
 		});
 
 	function PeopleController($scope, $filter, $state, SearchSvrc) {
-	    $scope.searchResult = [];
-	    $scope.pageSize = 20;
-	    $scope.keyword = '';
-	    $scope.totalPages = 0;
-	    $scope.currentPageIndex = 1;
+		$scope.searchResult = [];
+		$scope.pageSize = 20;
+		$scope.keyword = '';
+		$scope.totalPages = 0;
+		$scope.currentPageIndex = 1;
+		$scope.searchKeywordChanged = false;
+
+		$scope.validateSearchKeywordChanged = function () {
+			$scope.searchKeywordChanged = true;
+		};
+
 		$scope.searchKeyword = function () {
-		    SearchSvrc.search.query({ keyword: $scope.keyword, pageSize: $scope.pageSize, currentPageIndex: $scope.currentPageIndex }).$promise.then(function (result) {
-		        $scope.searchResult = result.People;
-		        $scope.optionalColumns = result.OptionalColumns;
-		        $scope.totalPages = result.TotalPages;
+			if ($scope.searchKeywordChanged) {
+				$scope.currentPageIndex = 1;
+			}
+			SearchSvrc.search.query({ keyword: $scope.keyword, pageSize: $scope.pageSize, currentPageIndex: $scope.currentPageIndex }).$promise.then(function (result) {
+				$scope.searchResult = result.People;
+				$scope.optionalColumns = result.OptionalColumns;
+				$scope.totalPages = result.TotalPages;
+				$scope.searchKeywordChanged = false;
 			});
 		};
 
-		$scope.range = function(start, end) {
+		$scope.range = function (start, end) {
 			var displayPageCount = 5;
 			var ret = [];
 			if (!end) {
@@ -68,29 +77,29 @@
 			for (var i = leftBoundary; i <= rightBoundary ; i++) {
 				ret.push(i);
 			}
+
 			return ret;
 		};
 
 		$scope.prevPage = function () {
-		    if ($scope.currentPageIndex > 1) {
-		        $scope.currentPageIndex--;
-		        $scope.searchKeyword();
-		    }
+			if ($scope.currentPageIndex > 1) {
+				$scope.currentPageIndex--;
+				$scope.searchKeyword();
+			}
 		};
 
 		$scope.nextPage = function () {
-		    if ($scope.currentPageIndex < $scope.totalPages) {
-		        $scope.currentPageIndex++;
-		        $scope.searchKeyword();
-		    }
+			if ($scope.currentPageIndex < $scope.totalPages) {
+				$scope.currentPageIndex++;
+				$scope.searchKeyword();
+			}
 		};
 
 		$scope.setPage = function () {
-		    $scope.currentPageIndex = this.n;
-		    $scope.searchKeyword();
+			$scope.currentPageIndex = this.n;
+			$scope.searchKeyword();
 		};
 
-	    $scope.searchKeyword();
+		$scope.searchKeyword();
 	}
-
 })();
