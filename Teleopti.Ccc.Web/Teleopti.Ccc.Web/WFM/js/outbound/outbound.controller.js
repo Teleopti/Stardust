@@ -32,7 +32,7 @@ outbound.controller('OutboundListCtrl', [
 			OutboundService.updateCampaign(campaign);
 		};
 
-		$scope.show = function(campaign) {
+		$scope.show = function (campaign) {
 			if (angular.isDefined(campaign)) $scope.selectedTarget = campaign;
 			$state.go('outbound.edit', { Id: $scope.selectedTarget.Id });
 			$scope.hideDetail = false;
@@ -52,8 +52,10 @@ outbound.controller('OutboundEditCtrl', [
 	function ($scope, $stateParams, $state, OutboundService) {			
 		$scope.campaign = (angular.isDefined($stateParams.Id) && $stateParams.Id != "")?OutboundService.getCampaignById($stateParams.Id): null;
 
-		angular.forEach($scope.campaign.Skills, function (skill) {
-			if (skill.IsSelected) $scope.campaign.SelectedSkill = skill;
+		angular.forEach($scope.campaign.Skills, function (skill) {			
+			if (skill.IsSelected) {
+				$scope.campaign.SelectedSkill = skill;
+			}
 		});
 		
 		$scope.showDetail = angular.isDefined($scope.campaign) && ($scope.campaign != null);

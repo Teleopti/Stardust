@@ -35,7 +35,7 @@ outboundService.service('OutboundService', ['$resource', function( $resource) {
 	self.getCampaignById = function( Id) {	
 		var matched = self.campaigns.filter(function(campaign) { return campaign.Id === Id });
 		if (matched.length === 0) {
-			var fetched = Campaign.get({ Id: Id });
+			var fetched = Campaign.get({ Id: Id });		
 			self.campaigns.push(fetched);
 			return fetched;
 		} else {

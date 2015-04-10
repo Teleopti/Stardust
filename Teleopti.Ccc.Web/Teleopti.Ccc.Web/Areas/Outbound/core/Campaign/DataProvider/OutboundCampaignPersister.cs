@@ -52,12 +52,12 @@ namespace Teleopti.Ccc.Web.Areas.Outbound.core.Campaign.DataProvider
 				SkillViewModel vm;
 				if (isFirst)
 				{
-					vm = new SkillViewModel() { Id = skill.Id, IsSelected = true, SkillName = skill.Description };
+					vm = new SkillViewModel() { Id = skill.Id, IsSelected = true, SkillName = skill.Name };
 					isFirst = false;
 				}
 				else
 				{
-					vm = new SkillViewModel() { Id = skill.Id, IsSelected = false, SkillName = skill.Description };
+					vm = new SkillViewModel() { Id = skill.Id, IsSelected = false, SkillName = skill.Name };
 				}
 				skillVMs.Add(vm);
 			}
