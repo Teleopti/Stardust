@@ -7,6 +7,7 @@ using SharpTestsEx;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Infrastructure.Repositories;
+using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.Web.Areas.Search.Controllers;
 using Teleopti.Interfaces.Domain;
@@ -26,7 +27,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Search
             searchRepository = MockRepository.GenerateMock<IPersonFinderReadOnlyRepository>();
             personRepository = MockRepository.GenerateMock<IPersonRepository>();
             optionalColumnRepository = MockRepository.GenerateMock<IOptionalColumnRepository>();
-            target = new PeopleSearchController(searchRepository, personRepository, new FakePermissionProvider(), optionalColumnRepository);
+            target = new PeopleSearchController(searchRepository, personRepository, new FakePermissionProvider(), optionalColumnRepository, new FakeLoggedOnUser());
         }
 
         [Test]

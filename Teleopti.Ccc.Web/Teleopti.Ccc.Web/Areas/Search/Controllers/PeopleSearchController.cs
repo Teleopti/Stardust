@@ -4,6 +4,7 @@ using System.Web.Http;
 using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Repositories;
+using Teleopti.Ccc.Domain.Security.Authentication;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Portal.DataProvider;
@@ -17,21 +18,33 @@ namespace Teleopti.Ccc.Web.Areas.Search.Controllers
         private readonly IPermissionProvider _permissionProvider;
         private readonly IPersonRepository _personRepository;
         private readonly IOptionalColumnRepository _optionalColumnRepository;
+	    private readonly ILoggedOnUser _loggonUser;
 
-        public PeopleSearchController(IPersonFinderReadOnlyRepository searchRepository, IPersonRepository personRepository, IPermissionProvider permissionProvider, IOptionalColumnRepository optionalColumnRepository)
+		public PeopleSearchController(IPersonFinderReadOnlyRepository searchRepository, IPersonRepository personRepository, IPermissionProvider permissionProvider, IOptionalColumnRepository optionalColumnRepository, ILoggedOnUser loggonUser)
         {
             _searchRepository = searchRepository;
             _personRepository = personRepository;
             _permissionProvider = permissionProvider;
             _optionalColumnRepository = optionalColumnRepository;
+	        _loggonUser = loggonUser;
         }
 
         [UnitOfWork]
         [HttpGet, Route("api/Search/People")]
         public virtual IHttpActionResult GetResult(string keyword, int pageSize, int currentPageIndex)
         {
-            var optionalColumnCollection = _optionalColumnRepository.GetOptionalColumns<Person>();
-			var search = new PersonFinderSearchCriteria(PersonFinderField.All, keyword, pageSize, DateOnly.Today, 1, 1);
+	        var currentDate = DateOnly.Today;
+			var myTeam = _loggonUser.CurrentUser().MyTeam(currentDate);
+	        var optionalColumnCollection = _optionalColumnRepository.GetOptionalColumns<Person>();
+	        var searchType = PersonFinderField.All;
+
+	        if (string.IsNullOrEmpty(keyword) && myTeam != null)
+	        {
+		        keyword = myTeam.Description.Name;
+		        searchType = PersonFinderField.Organization;
+	        }
+
+			var search = new PersonFinderSearchCriteria(searchType, keyword, pageSize, currentDate, 1, 1);
             search.CurrentPage = currentPageIndex;
             _searchRepository.Find(search);
             var permittedPersonList =
