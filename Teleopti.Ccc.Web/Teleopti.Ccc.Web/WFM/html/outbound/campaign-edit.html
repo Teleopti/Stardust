@@ -35,13 +35,13 @@
 							<span><strong>Name</strong></span>
 							<input id="name" type="text" ng-model="campaign.Name" ng-required/>
 						</div>
-						<div class="input-prepend">
+						<!--<div class="input-prepend">
 							<span><strong>Skill</strong></span>
 							<select name="skill" id="skill"
 									ng-model="campaign.SelectedSkill"
 									ng-options="Skill as Skill.SkillName for Skill in campaign.Skills"
 									ng-required></select>
-						</div>
+						</div>-->
 						<div class="input-prepend">
 							<span><strong>Call List Length</strong></span>
 							<input id="callList" type="text" ng-model="campaign.CallListLen" placeholder="call list length" />
@@ -115,12 +115,12 @@
 							</div>
 							<div class="wfm-block">
 								<ul class="wfm-list">
-									<li ng-repeat="timeRange in timeRanges"
+									<li ng-repeat="WorkingPeriod in campaign.CampaignWorkingPeriods"
 										ng-class="{'wfm-list-item-selected': timeRange.selected}"
 										ng-click="$parent.toggleTimeRangeSelect(timeRange)"
-										class="role-btn wfm-block wfm-dense wfm-list-item role">
-										<div class="wfm-leave-behind wfm-leave-behind-1">
-											<span>												
+										class="role-btn wfm-block wfm-dense">
+										<!--<div class="wfm-leave-behind wfm-leave-behind-1">
+											<span>
 												<i ng-click="$parent.deleteFromTimeRanges(timeRange, $index)">
 													<svg style="width: 18px; height: 18px" viewBox="0 0 24 24">
 														<path fill="#555555" d="M19,4H15.5L14.5,3H9.5L8.5,4H5V6H19M6,19A2,2 0 0,0 8,21H16A2,2 0 0,0 18,19V7H6V19Z" />
@@ -130,17 +130,17 @@
 													</md-tooltip>
 												</i>
 											</span>
-										</div>
+										</div>-->
 										<div class="row">
 											<div class="col-lg-3">
-												<span>{{timeRange.startTime | date:'hh:mm a'}}</span>
+												<span>{{WorkingPeriod.WorkingPeriod.period._minimum}}</span>
 												<span> - </span>
-												<span>{{timeRange.endTime | date:'hh:mm a'}}</span>
+												<span>{{WorkingPeriod.WorkingPeriod.period._maximum}}</span>
 											</div>
-											<div ng-repeat-start="weekday in [0,1,2,3,4,5,6]" ng-repeat-end class="col-lg-1">
+											<div ng-repeat-start="WeekDay in WorkingPeriod.ExpandedWorkingPeriodAssignments" ng-repeat-end class="col-lg-1">
 												<div class="wfm-checkbox wfm-checkbox-inline">
-													<input type="checkbox" id="check_weekday_{{weekday}}_workinghour_{{timeRange.id}}" ng-model="$parent.workinghours[weekday][timeRange.id]" />
-													<label for="check_weekday_{{weekday}}_workinghour_{{timeRange.id}}">
+													<input type="checkbox" id="check_weekday_{{WeekDay.WeekDay}}_workinghour_{{WorkingPeriod.Id}}" ng-checked="WeekDay.Checked" ng-click="$parent.$parent.toggleWorkingPeriodAssignment(WorkingPeriod, WeekDay)" />
+													<label for="check_weekday_{{WeekDay.WeekDay}}_workinghour_{{WorkingPeriod.Id}}">
 														<span class="wfm-checkbox-toggle"></span>
 														<span class="wfm-checkbox-label"></span>
 													</label>

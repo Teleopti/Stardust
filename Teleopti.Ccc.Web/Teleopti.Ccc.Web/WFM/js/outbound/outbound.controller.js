@@ -51,7 +51,7 @@ outbound.controller('OutboundEditCtrl', [
 	'$scope', '$stateParams', '$state', 'OutboundService', 
 	function ($scope, $stateParams, $state, OutboundService) {			
 		$scope.campaign = (angular.isDefined($stateParams.Id) && $stateParams.Id != "")?OutboundService.getCampaignById($stateParams.Id): null;
-
+		
 		angular.forEach($scope.campaign.Skills, function (skill) {			
 			if (skill.IsSelected) {
 				$scope.campaign.SelectedSkill = skill;
@@ -71,5 +71,13 @@ outbound.controller('OutboundEditCtrl', [
 		$scope.navigateToConfiguration = function() {
 			$state.go('outbound.edit', { Id: $scope.campaign.Id });
 		};		
+		$scope.toggleWorkingPeriodAssignment = function(WorkingPeriod, WeekDay) {
+			if (WeekDay.Checked) {
+				OutboundService.deleteWorkingPeriodAssignment($scope.campaign, WorkingPeriod, WeekDay);
+			} else {
+				OutboundService.addWorkingPeriodAssignment($scope.campaign, WorkingPeriod, WeekDay);
+			}
+		};
+
 	}
 ]);
