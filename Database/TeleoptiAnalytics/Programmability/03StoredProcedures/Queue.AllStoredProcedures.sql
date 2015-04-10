@@ -333,6 +333,7 @@ BEGIN
     DECLARE @QueueId int;
 	DECLARE @DiscardedQueueId int;
 	DECLARE @TimeoutQueueId int;
+	DECLARE @ErrorQueueId int;
         
     EXEC Queue.GetAndAddQueue @Endpoint,@Queue,null,@QueueId=@QueueId OUTPUT;
 	
@@ -351,6 +352,24 @@ BEGIN
 	INNER JOIN Queue.Queues q
 	ON m.QueueId = q.QueueId
 	AND q.QueueId = @DiscardedQueueId
+
+	--Move error messages
+	SELECT @ErrorQueueId = QueueId
+	FROM Queue.Queues
+	WHERE [Endpoint] = @Endpoint 
+	AND [ParentQueueId] = @QueueId
+	AND QueueName = N'Errors'
+
+	IF @ErrorQueueId IS NOT NULL
+	BEGIN
+		DELETE FROM Queue.Messages
+		OUTPUT deleted.* INTO [Queue].[MessagesPurged](MessageId, QueueId, CreatedAt, ProcessingUntil, ExpiresAt, Processed, Headers, Payload, ProcessedCount)
+		FROM Queue.Messages	m
+		INNER JOIN Queue.Queues q
+		ON m.QueueId = q.QueueId
+		AND q.QueueId = @ErrorQueueId
+		AND CreatedAt < DATEADD(d,-3,GetUtcDate())
+	END
 
 	----Move timeout messages
 	--SELECT @TimeoutQueueId = QueueId
