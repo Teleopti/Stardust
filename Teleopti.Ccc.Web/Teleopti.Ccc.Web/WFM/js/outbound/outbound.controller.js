@@ -27,8 +27,6 @@ outbound.controller('OutboundListCtrl', [
 			});
 		};
 
-
-		// TBD: 
 		$scope.update = function(campaign) {
 			OutboundService.updateCampaign(campaign);
 		};
@@ -39,10 +37,8 @@ outbound.controller('OutboundListCtrl', [
 			$scope.hideDetail = false;
 		};
 
-		$scope.delete = function (campaign, idx) {		
-			if (confirm('Are you sure you want to delete this record?')) {
-				OutboundService.deleteCampaign(campaign, idx);
-			}
+		$scope.delete = function (campaign, idx) {					
+			OutboundService.deleteCampaign(campaign, idx);			
 		};
 	}
 ]);

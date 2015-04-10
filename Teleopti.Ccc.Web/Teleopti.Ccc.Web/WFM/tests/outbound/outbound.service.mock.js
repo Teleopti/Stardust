@@ -2,7 +2,7 @@
 
 var outboundService =  angular.module('outboundServiceMock', []);
 
-outboundService.factory('outboundServiceMock', ['$rootScope', function ($rootScope) {
+outboundService.factory('outboundServiceMock', function () {
 
 	var outboundService = {};
 
@@ -36,18 +36,16 @@ outboundService.factory('outboundServiceMock', ['$rootScope', function ($rootSco
 		return maxId;
 	};
 
-	outboundService.addCampaign = function (campaign) {
+	outboundService.addCampaign = function (campaign, successCb, errorCb) {
 		var newCampaign = angular.copy(campaign);
 		newCampaign.id = getNextId();
-		campaigns.unshift(newCampaign);
-		$rootScope.$broadcast("outbound.campaigns.updated");	
-		return angular.copy(newCampaign);
+		campaigns.unshift(newCampaign);			
+		return newCampaign;
 	};
 
 	outboundService.deleteCampaign = function(campaign, idx) {
 		if (campaigns[idx].id == campaign.id) {
-			campaigns.splice(idx, 1);
-			$rootScope.$broadcast("outbound.campaigns.updated");
+			campaigns.splice(idx, 1);		
 			return true;
 		} else {
 			return false;
@@ -55,12 +53,12 @@ outboundService.factory('outboundServiceMock', ['$rootScope', function ($rootSco
 	};
 
 	outboundService.listCampaign = function( campaignFilter) {
-		return angular.copy(campaigns);
+		return campaigns;
 	};
 
 	outboundService.getCampaignById = function(id) {
 		for (var i = 0; i < campaigns.length; i ++) {
-			if (campaigns[i].id == id) return angular.copy(campaigns[i]);
+			if (campaigns[i].id == id) return campaigns[i];
 		}
 	};
 
@@ -72,13 +70,10 @@ outboundService.factory('outboundServiceMock', ['$rootScope', function ($rootSco
 				break;
 			}
 		}
-
 		if (idx >= 0) {
-			campaigns.splice(idx, 1, angular.copy(campaign));
-		}
-
-		$rootScope.$broadcast("outbound.campaigns.updated");
+			campaigns.splice(idx, 1, campaign);
+		}		
 	};
 
 	return outboundService;
-}]);
+});
