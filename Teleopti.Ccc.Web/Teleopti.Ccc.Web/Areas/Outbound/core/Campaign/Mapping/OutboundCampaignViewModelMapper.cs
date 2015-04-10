@@ -66,7 +66,7 @@ namespace Teleopti.Ccc.Web.Areas.Outbound.core.Campaign.Mapping
 
 		public IEnumerable<CampaignViewModel> Map(IEnumerable<Campaign> campaigns)
 		{
-			return campaigns.Select( Map);
+			return campaigns.Select(Map);
 		}
 	}
 }

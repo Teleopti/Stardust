@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using NUnit.Framework;
 using Rhino.Mocks;
@@ -13,7 +14,7 @@ using Teleopti.Interfaces.Domain;
 namespace Teleopti.Ccc.WebTest.Areas.Outbound.Core.Campaign.Mapping
 {
 	[TestFixture]
-	class OutboundCampaignViewModelMapperTests
+	internal class OutboundCampaignViewModelMapperTests
 	{
 		private ISkillRepository _skillRepository;
 		private IEnumerable<Domain.Outbound.Campaign> _campaigns;
@@ -33,9 +34,11 @@ namespace Teleopti.Ccc.WebTest.Areas.Outbound.Core.Campaign.Mapping
 			_selectedSkill = skill1;
 
 			_campaign = new Domain.Outbound.Campaign("myCampaign", _selectedSkill);
-			_campaign.AddWorkingPeriod(new CampaignWorkingPeriod(){TimePeriod = new TimePeriod()});
+			var workingPeriod = new CampaignWorkingPeriod() {TimePeriod = new TimePeriod()};
+			workingPeriod.AddAssignment(new CampaignWorkingPeriodAssignment(){WeekdayIndex = DayOfWeek.Monday});
+			_campaign.AddWorkingPeriod(workingPeriod);
 			_skillRepository = MockRepository.GenerateMock<ISkillRepository>();
-			_campaigns = new List<Domain.Outbound.Campaign> { _campaign };
+			_campaigns = new List<Domain.Outbound.Campaign> {_campaign};
 			_skillRepository.Stub(x => x.LoadAll()).Return(_skills);
 			_target = new OutboundCampaignViewModelMapper(_skillRepository);
 		}
@@ -61,7 +64,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Outbound.Core.Campaign.Mapping
 			var targetSkills = result.First().Skills;
 
 			targetSkills.Count().Should().Be.EqualTo(_skills.Count);
-		}	
+		}
 
 		[Test]
 		public void ShouldMapSkillId()
@@ -70,8 +73,8 @@ namespace Teleopti.Ccc.WebTest.Areas.Outbound.Core.Campaign.Mapping
 			var targetSkill = result.First().Skills.First();
 
 			targetSkill.Id.Should().Be.EqualTo(_skills.First().Id);
-		}		
-		
+		}
+
 		[Test]
 		public void ShouldMapSkillName()
 		{
@@ -87,7 +90,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Outbound.Core.Campaign.Mapping
 			var result = _target.Map(_campaigns);
 			var targetSkills = result.First().Skills;
 
-			targetSkills.ForEach(x=> x.IsSelected.Should().Be.EqualTo( x.Id == _selectedSkill.Id));
+			targetSkills.ForEach(x => x.IsSelected.Should().Be.EqualTo(x.Id == _selectedSkill.Id));
 		}
 
 		[Test]
@@ -138,21 +141,21 @@ namespace Teleopti.Ccc.WebTest.Areas.Outbound.Core.Campaign.Mapping
 			var result = _target.Map(_campaigns);
 			result.First().UnproductiveTime.Should().Be.EqualTo(_campaign.UnproductiveTime);
 		}
-	
+
 		[Test]
 		public void ShouldMapStartDate()
 		{
 			var result = _target.Map(_campaigns);
 			result.First().StartDate.Should().Be.EqualTo(_campaign.StartDate);
 		}
-		
+
 		[Test]
 		public void ShouldMapEndDate()
 		{
 			var result = _target.Map(_campaigns);
 			result.First().EndDate.Should().Be.EqualTo(_campaign.EndDate);
-		}		
-		
+		}
+
 		[Test]
 		public void ShouldMapCampaignStatus()
 		{
@@ -171,7 +174,34 @@ namespace Teleopti.Ccc.WebTest.Areas.Outbound.Core.Campaign.Mapping
 		public void ShouldMapCampaignWorkingPeriodTimePeriod()
 		{
 			var result = _target.Map(_campaigns);
-			result.First().CampaignWorkingPeriods.First().WorkingPeriod.Should().Be.EqualTo(_campaign.CampaignWorkingPeriods.First().TimePeriod);
+			result.First()
+				.CampaignWorkingPeriods.First()
+				.WorkingPeriod.Should()
+				.Be.EqualTo(_campaign.CampaignWorkingPeriods.First().TimePeriod);
+		}
+
+		[Test]
+		public void ShouldMapCampaignWorkingPeriodAssignmentsCount()
+		{
+			var result = _target.Map(_campaigns);
+			var assignments = result.First().CampaignWorkingPeriods.First().WorkingPeroidAssignments;
+			assignments.Count().Should().Be.EqualTo(_campaign.CampaignWorkingPeriods.First().CampaignWorkingPeriodAssignments.Count);
+		}			
+		
+		[Test]
+		public void ShouldMapCampaignWorkingPeriodAssignmentId()
+		{
+			var result = _target.Map(_campaigns);
+			var assignment = result.First().CampaignWorkingPeriods.First().WorkingPeroidAssignments.First();
+			assignment.Id.Should().Be.EqualTo(_campaign.CampaignWorkingPeriods.First().CampaignWorkingPeriodAssignments.First().Id);
+		}		
+		
+		[Test]
+		public void ShouldMapCampaignWorkingPeriodAssignmentWeekday()
+		{
+			var result = _target.Map(_campaigns);
+			var assignment = result.First().CampaignWorkingPeriods.First().WorkingPeroidAssignments.First();
+			assignment.WeekDay.Should().Be.EqualTo(_campaign.CampaignWorkingPeriods.First().CampaignWorkingPeriodAssignments.First().WeekdayIndex);
 		}
 	}
 }
