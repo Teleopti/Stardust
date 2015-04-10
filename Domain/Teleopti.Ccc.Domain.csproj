@@ -885,6 +885,7 @@
     <Compile Include="Scheduling\Legacy\Commands\CommonStateHolder.cs" />
     <Compile Include="Scheduling\Legacy\Commands\DayOffOptimizationDecisionMakerFactory.cs" />
     <Compile Include="Scheduling\Legacy\Commands\DaysOnlyHelper.cs" />
+    <Compile Include="Scheduling\Legacy\Commands\NoBackgroundWorker.cs" />
     <Compile Include="Scheduling\Legacy\Commands\Gridlock.cs" />
     <Compile Include="Scheduling\Legacy\Commands\GridlockDictionary.cs" />
     <Compile Include="Scheduling\Legacy\Commands\GridlockManager.cs" />
@@ -1335,7 +1336,7 @@
     <Compile Include="Optimization\ScheduleMatrixPro.cs" />
     <Compile Include="Optimization\RemoveShiftCategoryOnBestDateService.cs" />
     <Compile Include="ResourceCalculation\ShiftProjectionCacheManager.cs" />
-    <Compile Include="ResourceCalculation\ShiftProjectionCasheFilter.cs" />
+    <Compile Include="ResourceCalculation\ShiftProjectionCacheFilter.cs" />
     <Compile Include="ResourceCalculation\SkillStaffPeriodHolder.cs" />
     <Compile Include="ResourceCalculation\SwapAndModifyService.cs" />
     <Compile Include="ResourceCalculation\WorkShiftFinderResultHolder.cs" />

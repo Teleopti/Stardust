@@ -7,7 +7,6 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.IocCommon.Configuration
 {
-	//has a dependency to ISchedulingResultStateHolder that should be more than nice to get rid of
 	public class ShiftTradeModule : Module
 	{
 		protected override void Load(ContainerBuilder builder)
@@ -20,7 +19,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<ShiftTradeDateSpecification>().As<IShiftTradeSpecification>();
 			builder.RegisterType<ShiftTradeTargetTimeSpecification>().As<IShiftTradeSpecification>();
 			builder.RegisterType<UniqueSchedulePartExtractor>().As<IUniqueSchedulePartExtractor>().SingleInstance();
-			builder.RegisterType<ScheduleMatrixListCreator>().As<IScheduleMatrixListCreator>().SingleInstance();
+			builder.RegisterType<ScheduleMatrixListCreator>().As<IScheduleMatrixListCreator>().InstancePerLifetimeScope();
 			builder.RegisterType<ShiftTradeAbsenceSpecification>().As<IShiftTradeSpecification>();
 			builder.RegisterType<ShiftTradePersonalActivitySpecification>().As<IShiftTradeSpecification>();
 			builder.RegisterType<ShiftTradeMeetingSpecification>().As<IShiftTradeSpecification>();

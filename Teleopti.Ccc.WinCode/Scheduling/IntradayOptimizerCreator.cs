@@ -1,15 +1,10 @@
 ﻿using System.Collections.Generic;
 using Teleopti.Ccc.Domain.Optimization;
-using Teleopti.Ccc.Domain.ResourceCalculation;
-using Teleopti.Ccc.Domain.ResourceCalculation.IntraIntervalAnalyze;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
-using Teleopti.Ccc.Domain.Scheduling.NonBlendSkill;
 using Teleopti.Ccc.Domain.Scheduling.Restrictions;
 using Teleopti.Ccc.Domain.Scheduling.Rules;
-using Teleopti.Ccc.Domain.Scheduling.SeatLimitation;
 using Teleopti.Ccc.Domain.Scheduling.TeamBlock;
-using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.WinCode.Scheduling
@@ -23,15 +18,13 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 		private readonly IOptimizationPreferences _optimizerPreferences;
 		private readonly ISchedulePartModifyAndRollbackService _rollbackService;
 		private readonly ISchedulingResultStateHolder _schedulingResultStateHolder;
-		private readonly IPersonSkillProvider _personSkillProvider;
-		private readonly ICurrentTeleoptiPrincipal _currentTeleoptiPrincipal;
 		private readonly IScheduleMatrixLockableBitArrayConverterEx _scheduleMatrixLockableBitArrayConverterEx;
 		private readonly ISkillStaffPeriodToSkillIntervalDataMapper _skillStaffPeriodToSkillIntervalDataMapper;
 		private readonly ISkillIntervalDataDivider _skillIntervalDataDivider;
 		private readonly ISkillIntervalDataAggregator _skillIntervalDataAggregator;
 		private readonly IEffectiveRestrictionCreator _effectiveRestrictionCreator;
-		private readonly IIntraIntervalFinderService _intraIntervalFinderService;
 		private readonly IMinWeekWorkTimeRule _minWeekWorkTimeRule;
+		private readonly IResourceOptimizationHelper _resourceOptimizationHelper;
 
 		public IntradayOptimizer2Creator(
 			IList<IScheduleMatrixOriginalStateContainer> scheduleMatrixContainerList,
@@ -41,15 +34,13 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 			IOptimizationPreferences optimizerPreferences,
 			ISchedulePartModifyAndRollbackService rollbackService,
 			ISchedulingResultStateHolder schedulingResultStateHolder,
-			IPersonSkillProvider personSkillProvider,
-			ICurrentTeleoptiPrincipal currentTeleoptiPrincipal,
 			IScheduleMatrixLockableBitArrayConverterEx scheduleMatrixLockableBitArrayConverterEx,
 			ISkillStaffPeriodToSkillIntervalDataMapper skillStaffPeriodToSkillIntervalDataMapper,
 			ISkillIntervalDataDivider skillIntervalDataDivider,
 			ISkillIntervalDataAggregator skillIntervalDataAggregator,
 			IEffectiveRestrictionCreator effectiveRestrictionCreator,
-			IIntraIntervalFinderService intraIntervalFinderService,
-			IMinWeekWorkTimeRule minWeekWorkTimeRule)
+			IMinWeekWorkTimeRule minWeekWorkTimeRule,
+			IResourceOptimizationHelper resourceOptimizationHelper)
 		{
 			_scheduleMatrixContainerList = scheduleMatrixContainerList;
 			_workShiftStateContainerList = workShiftContainerList;
@@ -58,22 +49,19 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 			_optimizerPreferences = optimizerPreferences;
 			_rollbackService = rollbackService;
 			_schedulingResultStateHolder = schedulingResultStateHolder;
-			_personSkillProvider = personSkillProvider;
-			_currentTeleoptiPrincipal = currentTeleoptiPrincipal;
 			_scheduleMatrixLockableBitArrayConverterEx = scheduleMatrixLockableBitArrayConverterEx;
 			_skillStaffPeriodToSkillIntervalDataMapper = skillStaffPeriodToSkillIntervalDataMapper;
 			_skillIntervalDataDivider = skillIntervalDataDivider;
 			_skillIntervalDataAggregator = skillIntervalDataAggregator;
 			_effectiveRestrictionCreator = effectiveRestrictionCreator;
-			_intraIntervalFinderService = intraIntervalFinderService;
 			_minWeekWorkTimeRule = minWeekWorkTimeRule;
+			_resourceOptimizationHelper = resourceOptimizationHelper;
 		}
 
 		/// <summary>
 		/// Creates the list of optimizers.
 		/// </summary>
 		/// <returns></returns>
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling")]
 		public IList<IIntradayOptimizer2> Create()
 		{
 			IList<IIntradayOptimizer2> result = new List<IIntradayOptimizer2>();
@@ -99,15 +87,9 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 				                                                                                                           _skillIntervalDataDivider,
 				                                                                                                           _skillIntervalDataAggregator);
 
-				INonBlendSkillCalculator nonBlendSkillCalculator = new NonBlendSkillCalculator();
-
 				IDeleteSchedulePartService deleteSchedulePartService =
 					new DeleteSchedulePartService(()=>_schedulingResultStateHolder);
-				IResourceOptimizationHelper resourceOptimizationHelper =
-					new ResourceOptimizationHelper(()=>_schedulingResultStateHolder,
-                                                   new OccupiedSeatCalculator(), nonBlendSkillCalculator, ()=>_personSkillProvider, new PeriodDistributionService(), _currentTeleoptiPrincipal, _intraIntervalFinderService);
-
-
+				
 				IScheduleMatrixOriginalStateContainer workShiftStateContainer = _workShiftStateContainerList[index];
 
 				var restrictionChecker = new RestrictionChecker();
@@ -119,8 +101,8 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 				IMainShiftOptimizeActivitySpecificationSetter mainShiftOptimizeActivitySpecificationSetter = new MainShiftOptimizeActivitySpecificationSetter();
 
 				var schedulingOptions = schedulingOptionsCreator.CreateSchedulingOptions(_optimizerPreferences);
-				var deleteAndResourceCalculateService = new DeleteAndResourceCalculateService(deleteSchedulePartService, resourceOptimizationHelper);
-				var resourceCalculateDelayer = new ResourceCalculateDelayer(resourceOptimizationHelper, 1, true, schedulingOptions.ConsiderShortBreaks);
+				var deleteAndResourceCalculateService = new DeleteAndResourceCalculateService(deleteSchedulePartService, _resourceOptimizationHelper);
+				var resourceCalculateDelayer = new ResourceCalculateDelayer(_resourceOptimizationHelper, 1, true, schedulingOptions.ConsiderShortBreaks);
 
 				IIntradayOptimizer2 optimizer =
 					new IntradayOptimizer2(
@@ -131,7 +113,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 						_scheduleService,
 						_optimizerPreferences,
 						_rollbackService,
-						resourceOptimizationHelper,
+						_resourceOptimizationHelper,
 						_effectiveRestrictionCreator,
 						optimizationLimits,
 						workShiftStateContainer,

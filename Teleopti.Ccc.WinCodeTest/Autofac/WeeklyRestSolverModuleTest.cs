@@ -21,6 +21,8 @@ namespace Teleopti.Ccc.WinCodeTest.Autofac
 			_containerBuilder = new ContainerBuilder();
 			_containerBuilder.RegisterModule(new CommonModule(configuration));
 			_containerBuilder.RegisterModule(new SchedulingCommonModule(configuration));
+			_containerBuilder.RegisterModule(new RuleSetModule(configuration,true));
+			_containerBuilder.RegisterModule(new SecretSchedulingCommonModule());
 		}
 
 		[Test]

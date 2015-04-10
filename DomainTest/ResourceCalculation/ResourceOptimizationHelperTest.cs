@@ -6,6 +6,7 @@ using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.ResourceCalculation.IntraIntervalAnalyze;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
+using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
 using Teleopti.Ccc.Domain.Scheduling.NonBlendSkill;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Interfaces.Domain;
@@ -22,17 +23,19 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 		private IPersonSkillProvider _personSkillProvider;
 		private IPeriodDistributionService _periodDistributionService;
 		private IIntraIntervalFinderService _intraIntervalFinderService;
+		private ISchedulerStateHolder _schedulerStateHolder;
 
 		[SetUp]
 		public void Setup()
 		{
 			_mocks = new MockRepository();
 			_stateHolder = _mocks.StrictMock<ISchedulingResultStateHolder>();
+			_schedulerStateHolder = _mocks.StrictMock<ISchedulerStateHolder>();
 			_occupiedSeatCalculator = _mocks.StrictMock<IOccupiedSeatCalculator>();
 			_personSkillProvider = _mocks.DynamicMock<IPersonSkillProvider>();
 			_periodDistributionService = _mocks.DynamicMock<IPeriodDistributionService>();
 			_intraIntervalFinderService = _mocks.StrictMock<IIntraIntervalFinderService>();
-			_target = new ResourceOptimizationHelper(()=>_stateHolder, _occupiedSeatCalculator,
+			_target = new ResourceOptimizationHelper(()=>_schedulerStateHolder, _occupiedSeatCalculator,
 													 new NonBlendSkillCalculator(),
 														 ()=>_personSkillProvider, _periodDistributionService,
 														 new CurrentTeleoptiPrincipal(),
@@ -47,7 +50,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 												  IProjectionService service2, IProjectionService service3,
 												  ISkillSkillStaffPeriodExtendedDictionary skillStaffPeriodDictionary)
 		{
-			Expect.Call(_stateHolder.Schedules).Return(dictionary);
+			Expect.Call(_schedulerStateHolder.Schedules).Return(dictionary);
 			dictionary.ExtractAllScheduleData(extractor, period);
 			LastCall.IgnoreArguments();
 
@@ -92,6 +95,8 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 
 			using (_mocks.Record())
 			{
+				Expect.Call(_schedulerStateHolder.SchedulingResultState).Return(_stateHolder).Repeat.AtLeastOnce();
+				Expect.Call(_schedulerStateHolder.TimeZoneInfo).Return(TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time")).Repeat.AtLeastOnce();
 				Expect.Call(_stateHolder.SkipResourceCalculation).Return(false).Repeat.Any();
 				expectsForVerifyCalculateDay(skill1, skillStaffPeriodHolder, dictionary, extractor, period, skills, service1,
 											 visualLayerCollection, service2, service3, skillStaffPeriodDictionary);
@@ -120,6 +125,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 
 			using (_mocks.Record())
 			{
+				Expect.Call(_schedulerStateHolder.SchedulingResultState).Return(_stateHolder).Repeat.AtLeastOnce();
 				Expect.Call(_stateHolder.SkipResourceCalculation).Return(true).Repeat.Any();
 				Expect.Call(_stateHolder.TeamLeaderMode).Return(false).Repeat.Any();
 			}
@@ -191,6 +197,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 		{
 			using (_mocks.Record())
 			{
+				Expect.Call(_schedulerStateHolder.SchedulingResultState).Return(_stateHolder).Repeat.AtLeastOnce();
 				Expect.Call(_stateHolder.SkipResourceCalculation).Return(false).Repeat.Any();
 				Expect.Call(_stateHolder.TeamLeaderMode).Return(false).Repeat.Any();
 				Expect.Call(_stateHolder.Skills).Return(new List<ISkill>());

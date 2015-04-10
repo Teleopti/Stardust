@@ -4,15 +4,15 @@ using System.Linq;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.ResourceCalculation.IntraIntervalAnalyze;
+using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.ResourceCalculation
 {
-	// This class is registered in servicebus and sdk as well
 	public class ResourceOptimizationHelper : IResourceOptimizationHelper
 	{
-		private readonly Func<ISchedulingResultStateHolder> _stateHolder;
+		private readonly Func<ISchedulerStateHolder> _stateHolder;
 		private readonly IOccupiedSeatCalculator _occupiedSeatCalculator;
 		private readonly INonBlendSkillCalculator _nonBlendSkillCalculator;
 		private readonly Func<IPersonSkillProvider> _personSkillProvider;
@@ -21,7 +21,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 		private readonly IIntraIntervalFinderService _intraIntervalFinderService;
 
 
-		public ResourceOptimizationHelper(Func<ISchedulingResultStateHolder> stateHolder,
+		public ResourceOptimizationHelper(Func<ISchedulerStateHolder> stateHolder,
 			IOccupiedSeatCalculator occupiedSeatCalculator,
 			INonBlendSkillCalculator nonBlendSkillCalculator,
 			Func<IPersonSkillProvider> personSkillProvider,
@@ -45,13 +45,14 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 
 		private void resourceCalculateDate(DateOnly localDate, bool useOccupancyAdjustment, bool considerShortBreaks)
 		{
-			if (_stateHolder().TeamLeaderMode)
+			var stateHolder = _stateHolder();
+			if (stateHolder.SchedulingResultState.TeamLeaderMode)
 				return;
 
-			if (_stateHolder().SkipResourceCalculation)
+			if (stateHolder.SchedulingResultState.SkipResourceCalculation)
 				return;
 
-			if (_stateHolder().Skills.Count.Equals(0))
+			if (stateHolder.SchedulingResultState.Skills.Count.Equals(0))
 				return;
 
 			using (PerformanceOutput.ForOperation("ResourceCalculate " + localDate.ToShortDateString()))
@@ -64,17 +65,17 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 			    }
 			    else
 			    {
-			        var extractor = new ScheduleProjectionExtractor(_personSkillProvider(), _stateHolder().Skills.Min(s => s.DefaultResolution));
-			        relevantProjections = extractor.CreateRelevantProjectionList(_stateHolder().Schedules,
+			        var extractor = new ScheduleProjectionExtractor(_personSkillProvider(), stateHolder.SchedulingResultState.Skills.Min(s => s.DefaultResolution));
+			        relevantProjections = extractor.CreateRelevantProjectionList(stateHolder.Schedules,
 			                                                                     TimeZoneHelper.NewUtcDateTimePeriodFromLocalDateTime(
-			                                                                         localDate.AddDays(-1).Date, localDate.AddDays(1).Date));
+			                                                                         localDate.AddDays(-1).Date, localDate.AddDays(1).Date, stateHolder.TimeZoneInfo));
 			        context = new ResourceCalculationContext<IResourceCalculationDataContainerWithSingleOperation>(relevantProjections);
 			    }
 
 				
 				ResourceCalculateDate(relevantProjections, localDate, useOccupancyAdjustment, considerShortBreaks);
 
-				_intraIntervalFinderService.Execute(_stateHolder(), localDate, relevantProjections);
+				_intraIntervalFinderService.Execute(stateHolder.SchedulingResultState, localDate, relevantProjections);
 				
 
                 if (context != null)
@@ -95,7 +96,8 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 		{
 			var timePeriod = getPeriod(localDate);
 			var ordinarySkills = new List<ISkill>();
-			foreach (var skill in _stateHolder().Skills)
+			var schedulerStateHolder = _stateHolder();
+			foreach (var skill in schedulerStateHolder.SchedulingResultState.Skills)
 			{
 				if (skill.SkillType.ForecastSource != ForecastSource.NonBlendSkill &&
 				    skill.SkillType.ForecastSource != ForecastSource.MaxSeatSkill)
@@ -103,10 +105,10 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 			}
 
 			var relevantSkillStaffPeriods =
-				CreateSkillSkillStaffDictionaryOnSkills(_stateHolder().SkillStaffPeriodHolder.SkillSkillStaffPeriodDictionary,
+				CreateSkillSkillStaffDictionaryOnSkills(schedulerStateHolder.SchedulingResultState.SkillStaffPeriodHolder.SkillSkillStaffPeriodDictionary,
 				                                        ordinarySkills, timePeriod);
 
-			var schedulingResultService = new SchedulingResultService(relevantSkillStaffPeriods, _stateHolder().Skills,
+			var schedulingResultService = new SchedulingResultService(relevantSkillStaffPeriods, schedulerStateHolder.SchedulingResultState.Skills,
 			                                                          relevantProjections, useOccupancyAdjustment, _personSkillProvider());
 
 			schedulingResultService.SchedulingResult(timePeriod);
@@ -121,13 +123,14 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 
 		private void calculateMaxSeatsAndNonBlend(IResourceCalculationDataContainer relevantProjections, DateOnly localDate, DateTimePeriod timePeriod)
 		{
-			var maxSeatSkills = _stateHolder().Skills.Where(skill => skill.SkillType.ForecastSource == ForecastSource.MaxSeatSkill).ToList();
-			ISkillSkillStaffPeriodExtendedDictionary relevantSkillStaffPeriods = CreateSkillSkillStaffDictionaryOnSkills(_stateHolder().SkillStaffPeriodHolder.SkillSkillStaffPeriodDictionary,
+			var schedulingResultStateHolder = _stateHolder().SchedulingResultState;
+			var maxSeatSkills = schedulingResultStateHolder.Skills.Where(skill => skill.SkillType.ForecastSource == ForecastSource.MaxSeatSkill).ToList();
+			ISkillSkillStaffPeriodExtendedDictionary relevantSkillStaffPeriods = CreateSkillSkillStaffDictionaryOnSkills(schedulingResultStateHolder.SkillStaffPeriodHolder.SkillSkillStaffPeriodDictionary,
 			                                                                                                             maxSeatSkills, timePeriod);
 			_occupiedSeatCalculator.Calculate(localDate, relevantProjections, relevantSkillStaffPeriods);
 			
-			var nonBlendSkills = _stateHolder().Skills.Where(skill => skill.SkillType.ForecastSource == ForecastSource.NonBlendSkill).ToList();
-			relevantSkillStaffPeriods = CreateSkillSkillStaffDictionaryOnSkills(_stateHolder().SkillStaffPeriodHolder.SkillSkillStaffPeriodDictionary, nonBlendSkills, timePeriod);
+			var nonBlendSkills = schedulingResultStateHolder.Skills.Where(skill => skill.SkillType.ForecastSource == ForecastSource.NonBlendSkill).ToList();
+			relevantSkillStaffPeriods = CreateSkillSkillStaffDictionaryOnSkills(schedulingResultStateHolder.SkillStaffPeriodHolder.SkillSkillStaffPeriodDictionary, nonBlendSkills, timePeriod);
 			_nonBlendSkillCalculator.Calculate(localDate, relevantProjections, relevantSkillStaffPeriods, false);
 		}
 

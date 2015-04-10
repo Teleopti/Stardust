@@ -6,6 +6,7 @@ using Rhino.Mocks;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
+using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.WinCode.Scheduling.ScheduleSortingCommands;
@@ -27,7 +28,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.ScheduleSortingCommands
         {
             _mocks = new MockRepository();
             _resultStateHolder = _mocks.StrictMock<ISchedulingResultStateHolder>();
-			_stateHolder = new SchedulerStateHolder(_resultStateHolder, _mocks.StrictMock<IDisableDeletedFilter>());
+			_stateHolder = new SchedulerStateHolder(_resultStateHolder, _mocks.StrictMock<ICommonStateHolder>(), new CurrentTeleoptiPrincipal());
             _scheduleDictionary = _mocks.StrictMock<IScheduleDictionary>();
         }
 

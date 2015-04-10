@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling.ScheduleTagging;
 using Teleopti.Interfaces.Domain;
@@ -7,18 +8,18 @@ namespace Teleopti.Ccc.Domain.Optimization
 {
     public class SchedulePeriodListShiftCategoryBackToLegalStateService : ISchedulePeriodListShiftCategoryBackToLegalStateService
     {
-        private readonly ISchedulingResultStateHolder _stateHolder;
+        private readonly Func<ISchedulingResultStateHolder> _stateHolder;
         private readonly IScheduleMatrixValueCalculatorProFactory _scheduleMatrixValueCalculatorProFactory;
         private readonly IScheduleFairnessCalculator _fairnessCalculator;
     	private readonly IScheduleDayService _scheduleDayService;
-        private readonly IScheduleDayChangeCallback _scheduleDayChangeCallback;
+        private readonly Func<IScheduleDayChangeCallback> _scheduleDayChangeCallback;
 
         public SchedulePeriodListShiftCategoryBackToLegalStateService(
-            ISchedulingResultStateHolder stateHolder,
+            Func<ISchedulingResultStateHolder> stateHolder,
             IScheduleMatrixValueCalculatorProFactory scheduleMatrixValueCalculatorProFactory, 
             IScheduleFairnessCalculator fairnessCalculator, 
 			IScheduleDayService scheduleDayService,
-            IScheduleDayChangeCallback scheduleDayChangeCallback)
+            Func<IScheduleDayChangeCallback> scheduleDayChangeCallback)
         {
             _stateHolder = stateHolder;
             _scheduleMatrixValueCalculatorProFactory = scheduleMatrixValueCalculatorProFactory;
@@ -27,7 +28,6 @@ namespace Teleopti.Ccc.Domain.Optimization
             _scheduleDayChangeCallback = scheduleDayChangeCallback;
         }
 
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
 		public void Execute(IList<IScheduleMatrixPro> scheduleMatrixList, ISchedulingOptions schedulingOptions, IOptimizationPreferences optimizationPreferences)
         {
             IScheduleMatrixValueCalculatorPro scheduleMatrixValueCalculator =
@@ -35,7 +35,7 @@ namespace Teleopti.Ccc.Domain.Optimization
                     _scheduleMatrixValueCalculatorProFactory,
                     scheduleMatrixList,
 					optimizationPreferences, 
-                    _stateHolder, 
+                    _stateHolder(), 
                     _fairnessCalculator);
 
             ISchedulePeriodShiftCategoryBackToLegalStateServiceBuilder schedulePeriodBackToLegalStateServiceBuilder =
@@ -45,7 +45,7 @@ namespace Teleopti.Ccc.Domain.Optimization
             foreach (IScheduleMatrixPro matrix in scheduleMatrixList)
             {
             	ISchedulePartModifyAndRollbackService schedulePartModifyAndRollbackService =
-            		new SchedulePartModifyAndRollbackService(_stateHolder,_scheduleDayChangeCallback, new ScheduleTagSetter(KeepOriginalScheduleTag.Instance));
+            		new SchedulePartModifyAndRollbackService(_stateHolder(),_scheduleDayChangeCallback(), new ScheduleTagSetter(KeepOriginalScheduleTag.Instance));
                 ISchedulePeriodShiftCategoryBackToLegalStateService schedulePeriodBackToLegalStateService =
 					schedulePeriodBackToLegalStateServiceBuilder.Build(matrix, schedulePartModifyAndRollbackService);
                 schedulePeriodBackToLegalStateService.Execute(matrix.SchedulePeriod, schedulingOptions);
@@ -57,8 +57,7 @@ namespace Teleopti.Ccc.Domain.Optimization
         {
             return new SchedulePeriodShiftCategoryBackToLegalStateServiceBuilder(
                                     scheduleMatrixValueCalculator,
-									_scheduleDayService
-                                    );
+									()=>_scheduleDayService);
         }
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "1"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]

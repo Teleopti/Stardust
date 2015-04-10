@@ -2,11 +2,8 @@
 using NUnit.Framework;
 using Rhino.Mocks;
 using Teleopti.Ccc.Domain.Optimization;
-using Teleopti.Ccc.Domain.ResourceCalculation;
-using Teleopti.Ccc.Domain.ResourceCalculation.IntraIntervalAnalyze;
 using Teleopti.Ccc.Domain.Scheduling.Rules;
 using Teleopti.Ccc.Domain.Scheduling.TeamBlock;
-using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.WinCode.Scheduling;
 using Teleopti.Interfaces.Domain;
 
@@ -31,13 +28,12 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 		private IScheduleMatrixOriginalStateContainer _workShiftContainer2;
 		private IScheduleMatrixPro _matrix1;
 		private IScheduleMatrixPro _matrix2;
-		private IPersonSkillProvider _personSkillProvider;
 		private ISkillStaffPeriodToSkillIntervalDataMapper _skillStaffPeriodToSkillIntervalDataMapper;
 		private ISkillIntervalDataDivider _skillIntervalDataDivider;
 		private ISkillIntervalDataAggregator _skillIntervalDataAggregator;
 		private IScheduleMatrixLockableBitArrayConverterEx _scheduleMatrixLockableBitArrayConverterEx;
 		private IEffectiveRestrictionCreator _effectiveRestrictionCreator;
-		private IIntraIntervalFinderService _intraIntervalFinderService;
+		private IResourceOptimizationHelper _resourceOptimizationHelper;
 		private IMinWeekWorkTimeRule _minWeekWorkTimeRule;
 
 		[SetUp]
@@ -58,13 +54,12 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 			_schedulingResultStateHolder = _mocks.StrictMock<ISchedulingResultStateHolder>();
 
 			_rollbackService = _mocks.StrictMock<ISchedulePartModifyAndRollbackService>();
-			_personSkillProvider = new PersonSkillProvider();
 			_skillStaffPeriodToSkillIntervalDataMapper = _mocks.StrictMock<ISkillStaffPeriodToSkillIntervalDataMapper>();
 			_skillIntervalDataDivider = _mocks.StrictMock<ISkillIntervalDataDivider>();
 			_skillIntervalDataAggregator = _mocks.StrictMock<ISkillIntervalDataAggregator>();
 			_scheduleMatrixLockableBitArrayConverterEx = _mocks.StrictMock<IScheduleMatrixLockableBitArrayConverterEx>();
 			_effectiveRestrictionCreator = _mocks.StrictMock<IEffectiveRestrictionCreator>();
-			_intraIntervalFinderService = _mocks.StrictMock<IIntraIntervalFinderService>();
+			_resourceOptimizationHelper = _mocks.StrictMock<IResourceOptimizationHelper>();
 			_minWeekWorkTimeRule = _mocks.StrictMock<IMinWeekWorkTimeRule>();
 
 			_target = new IntradayOptimizer2Creator(_scheduleMatrixContainerList,
@@ -74,14 +69,13 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 			                                        optimizerPreferences,
 			                                        _rollbackService,
 			                                        _schedulingResultStateHolder,
-			                                        _personSkillProvider, _mocks.DynamicMock<ICurrentTeleoptiPrincipal>(),
-													_scheduleMatrixLockableBitArrayConverterEx,
+			                                        _scheduleMatrixLockableBitArrayConverterEx,
 													_skillStaffPeriodToSkillIntervalDataMapper,
 												   _skillIntervalDataDivider,
 												   _skillIntervalDataAggregator,
 												   _effectiveRestrictionCreator,
-												   _intraIntervalFinderService,
-												   _minWeekWorkTimeRule);
+												   _minWeekWorkTimeRule,
+												   _resourceOptimizationHelper);
 		}
 
 		[Test]

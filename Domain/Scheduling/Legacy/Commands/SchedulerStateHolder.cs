@@ -28,11 +28,11 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 		private IScenario _requestedScenario;
 		private readonly IList<IPersonRequest> _workingPersonRequests = new List<IPersonRequest>();
 		private ShiftTradeRequestStatusCheckerWithSchedule _shiftTradeRequestStatusChecker;
-		private TimeZoneInfo _timeZoneInfo = TeleoptiPrincipal.CurrentPrincipal.Regional.TimeZone;
+		private TimeZoneInfo _timeZoneInfo;
 		private CommonNameDescriptionSetting _commonNameDescription = new CommonNameDescriptionSetting();
 		private CommonNameDescriptionSettingScheduleExport _commonNameDescriptionScheduleExport = new CommonNameDescriptionSettingScheduleExport();
 		private DefaultSegment _defaultSegment = new DefaultSegment();
-		private readonly CommonStateHolder _commonStateHolder;
+		private readonly ICommonStateHolder _commonStateHolder;
         private IDictionary<Guid, IPerson> _filteredAgents;
 		private IDictionary<Guid, IPerson> _filteredPersonsOvertimeAvailability;
 		private IDictionary<Guid, IPerson> _filteredPersonsHourlyAvailability;
@@ -48,6 +48,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 
 		public SchedulerStateHolder(IScenario loadScenario, IDateOnlyPeriodAsDateTimePeriod loadPeriod, IEnumerable<IPerson> allPermittedPersons, IDisableDeletedFilter disableDeleteFilter, ISchedulingResultStateHolder schedulingResultStateHolder)
 		{
+			_timeZoneInfo = TeleoptiPrincipal.CurrentPrincipal.Regional.TimeZone;
 			_requestedScenario = loadScenario;
 			_commonStateHolder = new CommonStateHolder(disableDeleteFilter);
 			RequestedPeriod = loadPeriod;
@@ -57,10 +58,11 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 			ResetFilteredPersonsOvertimeAvailability();
 		}
 
-		public SchedulerStateHolder(ISchedulingResultStateHolder schedulingResultStateHolder, IDisableDeletedFilter disableDeleteFilter)
+		public SchedulerStateHolder(ISchedulingResultStateHolder schedulingResultStateHolder, ICommonStateHolder commonStateHolder, ICurrentTeleoptiPrincipal currentTeleoptiPrincipal)
 		{
 			_schedulingResultState = schedulingResultStateHolder;
-			_commonStateHolder = new CommonStateHolder(disableDeleteFilter);
+			_timeZoneInfo = currentTeleoptiPrincipal.Current().Regional.TimeZone;
+			_commonStateHolder = commonStateHolder;
 			_allPermittedPersons = new List<IPerson>();
 			ResetFilteredPersonsOvertimeAvailability();
 		}

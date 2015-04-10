@@ -1,9 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Linq;
-using System.Text;
+﻿using System.Collections.Generic;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
+using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Optimization.WeeklyRestSolver
@@ -35,10 +32,8 @@ namespace Teleopti.Ccc.Domain.Optimization.WeeklyRestSolver
 				return;
 
             var deleteOption = new DeleteOption { Default = true };
-            using (var bgWorker = new BackgroundWorker())
-            {
-                _deleteSchedulePartService.Delete(new List<IScheduleDay> { scheduleDayToDelete }, deleteOption, rollbackService, bgWorker);
-            }
+
+			_deleteSchedulePartService.Delete(new List<IScheduleDay> { scheduleDayToDelete }, deleteOption, rollbackService, new NoBackgroundWorker());
         }
 
 

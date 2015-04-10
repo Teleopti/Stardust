@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.Common;
+using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
 using Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftFilters;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Interfaces.Domain;
@@ -14,13 +15,15 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 	    private readonly IPersonalShiftAndMeetingFilter _personalShiftAndMeetingFilter;
 	    private readonly INotOverWritableActivitiesShiftFilter _notOverWritableActivitiesShiftFilter;
 	    private readonly ICurrentTeleoptiPrincipal _currentIdentity;
+	    private readonly Func<ISchedulerStateHolder> _schedulerStateHolder;
 
-        public ShiftProjectionCacheFilter(ILongestPeriodForAssignmentCalculator rules, IPersonalShiftAndMeetingFilter personalShiftAndMeetingFilter, INotOverWritableActivitiesShiftFilter notOverWritableActivitiesShiftFilter, ICurrentTeleoptiPrincipal currentIdentity)
+	    public ShiftProjectionCacheFilter(ILongestPeriodForAssignmentCalculator rules, IPersonalShiftAndMeetingFilter personalShiftAndMeetingFilter, INotOverWritableActivitiesShiftFilter notOverWritableActivitiesShiftFilter, ICurrentTeleoptiPrincipal currentIdentity, Func<ISchedulerStateHolder> schedulerStateHolder)
         {
         	_rules = rules;
 	        _personalShiftAndMeetingFilter = personalShiftAndMeetingFilter;
 	        _notOverWritableActivitiesShiftFilter = notOverWritableActivitiesShiftFilter;
 	        _currentIdentity = currentIdentity;
+	        _schedulerStateHolder = schedulerStateHolder;
         }
 
     	public IList<IShiftProjectionCache> FilterOnRestrictionAndNotAllowedShiftCategories(DateOnly scheduleDayDateOnly, TimeZoneInfo agentTimeZone, 
@@ -153,7 +156,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 
                 if (restriction.StartTimeLimitation.StartTime.HasValue || restriction.EndTimeLimitation.EndTime.HasValue)
                 {
-                    var validPeriod = new DateTimePeriod(TimeZoneHelper.ConvertToUtc(scheduleDayDateOnly.Date.Add(startStart), agentTimeZone), TimeZoneHelper.ConvertToUtc(scheduleDayDateOnly.Date.Add(endEnd), agentTimeZone));
+                    var validPeriod = TimeZoneHelper.NewUtcDateTimePeriodFromLocalDateTime(scheduleDayDateOnly.Date.Add(startStart), scheduleDayDateOnly.Date.Add(endEnd), agentTimeZone);
                     workShiftsWithinPeriod = FilterOnDateTimePeriod(workShiftsWithinPeriod, validPeriod, finderResult);
                 }
 
@@ -186,11 +189,13 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
                     }
                 }
             }
-			finderResult.AddFilterResults(
+	        var regional = _currentIdentity.Current().Regional;
+	        var currentTimeZone = _schedulerStateHolder().TimeZoneInfo;
+	        finderResult.AddFilterResults(
                 new WorkShiftFilterResult(
-                    string.Format(_currentIdentity.Current().Regional.Culture,
+                    string.Format(regional.Culture,
                                   UserTexts.Resources.FilterOnPersonalPeriodLimitationsWithParams,
-                                  validPeriod.LocalStartDateTime, validPeriod.LocalEndDateTime), cntBefore,
+                                  validPeriod.StartDateTimeLocal(currentTimeZone), validPeriod.EndDateTimeLocal(currentTimeZone)), cntBefore,
                     workShiftsWithinPeriod.Count));
 
             return workShiftsWithinPeriod;

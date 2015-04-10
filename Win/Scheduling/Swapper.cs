@@ -45,7 +45,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 
 			ISwapRawService swapRawService = new SwapRawService(PrincipalAuthorization.Instance());
 			ISchedulePartModifyAndRollbackService schedulePartModifyAndRollbackService = new SchedulePartModifyAndRollbackService(_schedulerState.SchedulingResultState,
-														 new SchedulerStateScheduleDayChangedCallback(new ResourceCalculateDaysDecider(), _schedulerState), new ScheduleTagSetter(_defaultScheduleTag));
+														 new SchedulerStateScheduleDayChangedCallback(new ResourceCalculateDaysDecider(), ()=>_schedulerState), new ScheduleTagSetter(_defaultScheduleTag));
 
 			_undoRedo.CreateBatch(Resources.UndoRedoPaste);
 
@@ -103,7 +103,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 		{
 			ISwapServiceNew swapService = new SwapServiceNew();
 			//var swapAndModifyService = new SwapAndModifyService(swapService);
-			var swapAndModifyServiceNew = new SwapAndModifyServiceNew(swapService, new SchedulerStateScheduleDayChangedCallback(new ResourceCalculateDaysDecider(), _schedulerState));
+			var swapAndModifyServiceNew = new SwapAndModifyServiceNew(swapService, new SchedulerStateScheduleDayChangedCallback(new ResourceCalculateDaysDecider(), ()=>_schedulerState));
 
 			IList<IScheduleDay> selectedSchedules = _scheduleView.SelectedSchedules();
 			if (selectedSchedules.Count > 1)

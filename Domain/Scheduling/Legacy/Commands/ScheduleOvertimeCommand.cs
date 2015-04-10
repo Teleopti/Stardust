@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.Collection;
@@ -11,13 +12,13 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 {
 	public class ScheduleOvertimeCommand : IScheduleOvertimeCommand
 	{
-		private readonly ISchedulerStateHolder _schedulerState;
-		private readonly ISchedulingResultStateHolder _schedulingResultStateHolder;
+		private readonly Func<ISchedulerStateHolder> _schedulerState;
+		private readonly Func<ISchedulingResultStateHolder> _schedulingResultStateHolder;
 		private readonly IScheduleOvertimeService _scheduleOvertimeService;
 		private IBackgroundWorkerWrapper _backgroundWorker;
 		private SchedulingServiceBaseEventArgs _progressEvent;
 
-		public ScheduleOvertimeCommand(ISchedulerStateHolder schedulerState, ISchedulingResultStateHolder schedulingResultStateHolder, IScheduleOvertimeService scheduleOvertimeService)
+		public ScheduleOvertimeCommand(Func<ISchedulerStateHolder> schedulerState, Func<ISchedulingResultStateHolder> schedulingResultStateHolder, IScheduleOvertimeService scheduleOvertimeService)
 		{
 			_schedulerState = schedulerState;
 			_schedulingResultStateHolder = schedulingResultStateHolder;
@@ -41,10 +42,10 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 					var locks = gridlockManager.Gridlocks(person, dateOnly);
 					if (locks != null && locks.Count != 0) continue;
 
-					var scheduleDay = _schedulingResultStateHolder.Schedules[person].ScheduledDay(dateOnly);
+					var scheduleDay = _schedulingResultStateHolder().Schedules[person].ScheduledDay(dateOnly);
 					var rules = NewBusinessRuleCollection.Minimum();
 					IScheduleTagSetter scheduleTagSetter = new ScheduleTagSetter(overtimePreferences.ScheduleTag);
-					_scheduleOvertimeService.SchedulePersonOnDay(scheduleDay, overtimePreferences, resourceCalculateDelayer, dateOnly, rules, scheduleTagSetter, _schedulerState.TimeZoneInfo);
+					_scheduleOvertimeService.SchedulePersonOnDay(scheduleDay, overtimePreferences, resourceCalculateDelayer, dateOnly, rules, scheduleTagSetter, _schedulerState().TimeZoneInfo);
 
 					OnDayScheduled(new SchedulingServiceSuccessfulEventArgs(scheduleDay));
 				}

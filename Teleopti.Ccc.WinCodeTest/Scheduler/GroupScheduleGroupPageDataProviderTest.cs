@@ -27,6 +27,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 	    private IPersonAccountUpdater _personAccountUpdater;
 		private IDisableDeletedFilter _disableDeletedFilter;
 		private IList<IPerson> _people;
+		private ICurrentUnitOfWorkFactory _currentUnitOfWorkFactory;
 
 		[SetUp]
 		public void Setup()
@@ -40,14 +41,16 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 			_resultHolder = MockRepository.GenerateMock<ISchedulingResultStateHolder>();
 			_repositoryFactory = MockRepository.GenerateMock<IRepositoryFactory>();
 			_disableDeletedFilter = MockRepository.GenerateMock<IDisableDeletedFilter>();
+			_currentUnitOfWorkFactory = MockRepository.GenerateMock<ICurrentUnitOfWorkFactory>();
 			_unitOfWorkFactory = MockRepository.GenerateMock<IUnitOfWorkFactory>();
 			_uow = MockRepository.GenerateMock<IUnitOfWork>();
             
             _resultHolder.Stub(x => x.PersonsInOrganization).Return(_people);
+			_currentUnitOfWorkFactory.Stub(x => x.LoggedOnUnitOfWorkFactory()).Return(_unitOfWorkFactory);
 
             _stateHolder = new SchedulerStateHolder(ScenarioFactory.CreateScenarioAggregate(), new DateOnlyPeriodAsDateTimePeriod(new DateOnlyPeriod(),
 				TeleoptiPrincipal.CurrentPrincipal.Regional.TimeZone), new List<IPerson> { _person1, _person2 }, _disableDeletedFilter, _resultHolder);
-			_target = new GroupScheduleGroupPageDataProvider(_stateHolder, _repositoryFactory, _unitOfWorkFactory, _disableDeletedFilter);
+			_target = new GroupScheduleGroupPageDataProvider(()=>_stateHolder, _repositoryFactory, _currentUnitOfWorkFactory, _disableDeletedFilter);
 		}
 
 		[Test]

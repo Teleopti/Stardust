@@ -23,7 +23,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
     /// </summary>
     public class PeriodOffsetCalculator : IPeriodOffsetCalculator
     {
-
         /// <summary>
         /// Calculates offset (timechange) between the source and the target period.
         /// </summary>

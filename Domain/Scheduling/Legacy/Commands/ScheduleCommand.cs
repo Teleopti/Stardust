@@ -11,7 +11,15 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 {
-	public class ScheduleCommand
+	public interface IScheduleCommand
+	{
+		void Execute(IOptimizerOriginalPreferences optimizerOriginalPreferences, IBackgroundWorkerWrapper backgroundWorker,
+			ISchedulerStateHolder schedulerStateHolder, IList<IScheduleDay> selectedScheduleDays,
+			IGroupPagePerDateHolder groupPagePerDateHolder, IRequiredScheduleHelper requiredScheduleOptimizerHelper,
+			IOptimizationPreferences optimizationPreferences);
+	}
+
+	public class ScheduleCommand : IScheduleCommand
 	{
 		private readonly Func<IPersonSkillProvider> _personSkillProvider;
 		private readonly IGroupPageCreator _groupPageCreator;

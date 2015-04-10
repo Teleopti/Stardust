@@ -1,8 +1,8 @@
-﻿
-
+﻿using System;
 using System.Collections.Generic;
 using System.Globalization;
 using Teleopti.Ccc.Domain.ResourceCalculation;
+using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftFilters
@@ -14,6 +14,13 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftFilters
 
 	public class PersonalShiftAndMeetingFilter : IPersonalShiftAndMeetingFilter
 	{
+		private readonly Func<ISchedulerStateHolder> _schedulerStateHolder;
+
+		public PersonalShiftAndMeetingFilter(Func<ISchedulerStateHolder> schedulerStateHolder)
+		{
+			_schedulerStateHolder = schedulerStateHolder;
+		}
+
 		public IList<IShiftProjectionCache> Filter(IList<IShiftProjectionCache> shiftList, IScheduleDay schedulePart, IWorkShiftFinderResult finderResult)
 		{
 			if (shiftList.Count == 0)
@@ -36,11 +43,12 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftFilters
 						workShiftsWithinPeriod.Add(proj);
 					}
 				}
+				var currentTimeZone = _schedulerStateHolder().TimeZoneInfo;
 				finderResult.AddFilterResults(
 					new WorkShiftFilterResult(
 						string.Format(CultureInfo.InvariantCulture,
 									  UserTexts.Resources.FilterOnPersonalPeriodLimitationsWithParams,
-									  period.Value.LocalStartDateTime, period.Value.LocalEndDateTime), cntBefore,
+									  period.Value.StartDateTimeLocal(currentTimeZone), period.Value.EndDateTimeLocal(currentTimeZone)), cntBefore,
 						workShiftsWithinPeriod.Count));
 
 				return workShiftsWithinPeriod;

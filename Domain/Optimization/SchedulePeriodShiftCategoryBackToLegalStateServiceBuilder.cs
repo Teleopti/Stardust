@@ -1,4 +1,4 @@
-﻿using Teleopti.Ccc.Domain.Scheduling.Assignment;
+﻿using System;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Optimization
@@ -6,11 +6,11 @@ namespace Teleopti.Ccc.Domain.Optimization
     public class SchedulePeriodShiftCategoryBackToLegalStateServiceBuilder : ISchedulePeriodShiftCategoryBackToLegalStateServiceBuilder
     {
         private readonly IScheduleMatrixValueCalculatorPro _scheduleMatrixValueCalculator;
-        private readonly IScheduleDayService _scheduleDayService;
+        private readonly Func<IScheduleDayService> _scheduleDayService;
 
         public SchedulePeriodShiftCategoryBackToLegalStateServiceBuilder(
             IScheduleMatrixValueCalculatorPro scheduleMatrixValueCalculator,
-            IScheduleDayService scheduleDayService
+            Func<IScheduleDayService> scheduleDayService
             )
         {
             _scheduleMatrixValueCalculator = scheduleMatrixValueCalculator;
@@ -22,12 +22,12 @@ namespace Teleopti.Ccc.Domain.Optimization
         {
             
             IRemoveShiftCategoryOnBestDateService removeShiftCategoryOnBestDateService =
-                BuildRemoveShiftCategoryOnBestDateService(scheduleMatrix, _scheduleMatrixValueCalculator, _scheduleDayService);
+                BuildRemoveShiftCategoryOnBestDateService(scheduleMatrix, _scheduleMatrixValueCalculator, _scheduleDayService());
             IRemoveShiftCategoryBackToLegalService removeShiftCategoryBackToLegalService =
                 BuildRemoveShiftCategoryBackToLegalService(removeShiftCategoryOnBestDateService,
                                                            scheduleMatrix);
             ISchedulePeriodShiftCategoryBackToLegalStateService schedulePeriodBackToLegalStateService =
-                BuildSchedulePeriodBackToLegalStateService(removeShiftCategoryBackToLegalService, _scheduleDayService);
+                BuildSchedulePeriodBackToLegalStateService(removeShiftCategoryBackToLegalService, _scheduleDayService());
             return schedulePeriodBackToLegalStateService;
         }
 
@@ -53,21 +53,6 @@ namespace Teleopti.Ccc.Domain.Optimization
             IScheduleMatrixPro scheduleMatrix)
         {
             return new RemoveShiftCategoryBackToLegalService(removeShiftCategoryBackToLegalService, scheduleMatrix);
-        }
-
-        public virtual IScheduleDayService CreateScheduleService(
-            IScheduleService scheduleService,
-            IDeleteSchedulePartService deleteSchedulePartService,
-            IResourceOptimizationHelper resourceOptimizationHelper, 
-			IEffectiveRestrictionCreator effectiveRestrictionCreator,
-			ISchedulePartModifyAndRollbackService schedulePartModifyAndRollbackService)
-        {
-            return new ScheduleDayService(
-                scheduleService,
-                deleteSchedulePartService,
-                resourceOptimizationHelper, 
-				effectiveRestrictionCreator,
-				schedulePartModifyAndRollbackService);
         }
     }
 }

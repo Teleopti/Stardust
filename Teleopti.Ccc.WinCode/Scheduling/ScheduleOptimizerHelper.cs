@@ -10,7 +10,6 @@ using Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.EqualNumbe
 using Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.Seniority;
 using Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.SeniorityDaysOff;
 using Teleopti.Ccc.Domain.ResourceCalculation;
-using Teleopti.Ccc.Domain.ResourceCalculation.IntraIntervalAnalyze;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
@@ -18,7 +17,6 @@ using Teleopti.Ccc.Domain.Scheduling.Restrictions;
 using Teleopti.Ccc.Domain.Scheduling.Rules;
 using Teleopti.Ccc.Domain.Scheduling.ScheduleTagging;
 using Teleopti.Ccc.Domain.Scheduling.TeamBlock;
-using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Infrastructure.Toggle;
 using Teleopti.Ccc.Secrets.DayOffPlanning;
 using Teleopti.Ccc.UserTexts;
@@ -43,7 +41,6 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 		private readonly IResourceOptimizationHelper _resourceOptimizationHelper;
 		private readonly IScheduleMatrixListCreator _scheduleMatrixListCreator;
 		private readonly Func<ISchedulerStateHolder> _schedulerStateHolder;
-		private readonly Func<IPersonSkillProvider> _personSkillProvider;
 		private ResourceOptimizerProgressEventArgs _progressEvent;
 		private readonly IDayOffOptimizationDecisionMakerFactory _dayOffOptimizationDecisionMakerFactory;
 		private readonly IOptimizerHelperHelper _optimizerHelperHelper;
@@ -62,7 +59,6 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 			_scheduleDayChangeCallback = ()=>_container.Resolve<IScheduleDayChangeCallback>();
 			_resourceOptimizationHelper = _container.Resolve<IResourceOptimizationHelper>();
 			_scheduleMatrixListCreator = _container.Resolve<IScheduleMatrixListCreator>();
-			_personSkillProvider = ()=>_container.Resolve<IPersonSkillProvider>();
 			_optimizerHelperHelper = _container.Resolve<IOptimizerHelperHelper>();
 			_dayOffOptimizationDecisionMakerFactory = container.Resolve<IDayOffOptimizationDecisionMakerFactory>();
 		}
@@ -91,15 +87,13 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 				optimizerPreferences,
 				rollbackService,
 				_stateHolder(),
-				_personSkillProvider(),
-				new CurrentTeleoptiPrincipal(),
 				scheduleMatrixLockableBitArrayConverterEx,
 				_container.Resolve<ISkillStaffPeriodToSkillIntervalDataMapper>(),
 				_container.Resolve<ISkillIntervalDataDivider>(),
 				_container.Resolve<ISkillIntervalDataAggregator>(),
 				_container.Resolve<IEffectiveRestrictionCreator>(),
-				_container.Resolve<IIntraIntervalFinderService>(),
-				_container.Resolve<IMinWeekWorkTimeRule>());
+				_container.Resolve<IMinWeekWorkTimeRule>(),
+				_container.Resolve<IResourceOptimizationHelper>());
 
 			IList<IIntradayOptimizer2> optimizers = creator.Create();
 			var service = new IntradayOptimizerContainer(optimizers, _container.Resolve<IDailyValueByAllSkillsExtractor>());
@@ -140,12 +134,10 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 					optimizerPreferences,
 					rollbackService,
 					_stateHolder(),
-					_personSkillProvider(),
-					new CurrentTeleoptiPrincipal(),
 					scheduleMatrixLockableBitArrayConverterEx,
 					_container.Resolve<IEffectiveRestrictionCreator>(),
-					_container.Resolve<IIntraIntervalFinderService>(),
-					_container.Resolve<IMinWeekWorkTimeRule>());
+					_container.Resolve<IMinWeekWorkTimeRule>(),
+					_container.Resolve<IResourceOptimizationHelper>());
 
 			IList<IMoveTimeOptimizer> optimizers = creator.Create();
 			IScheduleOptimizationService service = new MoveTimeOptimizerContainer(optimizers, periodValueCalculator);

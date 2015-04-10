@@ -95,7 +95,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 
 
                 DateTime firstPeriodsFirstDateLocal = getFirstPeriodsFirstDateLocal(minSchedulePeriod, culture, timeZoneInfo);
-                //DateTime justiceStart = _requestedDateTimePeriod.LocalStartDateTime.AddDays(_justiceValue);
                 //always load at least one week before
                 if (_justiceValue > -7)
                     _justiceValue = -7;

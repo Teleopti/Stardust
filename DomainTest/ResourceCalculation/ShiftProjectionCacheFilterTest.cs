@@ -6,6 +6,7 @@ using SharpTestsEx;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling;
+using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
 using Teleopti.Ccc.Domain.Scheduling.Restriction;
 using Teleopti.Ccc.Domain.Scheduling.Restrictions;
 using Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftFilters;
@@ -15,7 +16,7 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 {
-    [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling"), TestFixture]
+    [TestFixture]
     public class ShiftProjectionCacheFilterTest
     {
         private ShiftProjectionCacheFilter _target;
@@ -41,7 +42,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
         {
             _mocks = new MockRepository();
             _dateOnly = new DateOnly(2009, 2, 2);
-            _timeZoneInfo = (TimeZoneInfo.FindSystemTimeZoneById("Atlantic Standard Time"));
+            _timeZoneInfo = TimeZoneInfo.FindSystemTimeZoneById("Atlantic Standard Time");
             _effectiveRestriction = new EffectiveRestriction(
                 new StartTimeLimitation(new TimeSpan(8, 0, 0), new TimeSpan(10, 0, 0)),
                 new EndTimeLimitation(new TimeSpan(15, 0, 0), new TimeSpan(18, 0, 0)),
@@ -51,7 +52,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
             _rules = _mocks.StrictMock<ILongestPeriodForAssignmentCalculator>();
 	        _personalShiftAndMeetingFilter = _mocks.StrictMock<IPersonalShiftAndMeetingFilter>();
 	        _notOverWritableActivitiesShiftFilter = _mocks.StrictMock<INotOverWritableActivitiesShiftFilter>();
-			_target = new ShiftProjectionCacheFilter(_rules, _personalShiftAndMeetingFilter, _notOverWritableActivitiesShiftFilter, new CurrentTeleoptiPrincipal());
+			_target = new ShiftProjectionCacheFilter(_rules, _personalShiftAndMeetingFilter, _notOverWritableActivitiesShiftFilter, new CurrentTeleoptiPrincipal(), ()=>new SchedulerStateHolder(new SchedulingResultStateHolder(), new CommonStateHolder(null), new CurrentTeleoptiPrincipal()));
             _scheduleRange = _mocks.StrictMock<IScheduleRange>();
             _scheduleDictionary = _mocks.StrictMock<IScheduleDictionary>();
         	_personalShiftMeetingTimeChecker = _mocks.StrictMock<IPersonalShiftMeetingTimeChecker>();
@@ -187,7 +188,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
             ws2.LayerCollection.Add(new WorkShiftActivityLayer(breakActivity, breakPeriod.MovePeriod(new TimeSpan(1, 0, 0))));
             IList<IWorkShift> listOfWorkShifts = new List<IWorkShift> { ws1, ws2 };
 
-            _timeZoneInfo = (TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time"));
+            _timeZoneInfo = TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time");
             var casheList = new List<IShiftProjectionCache>();
             foreach (IWorkShift shift in listOfWorkShifts)
             {

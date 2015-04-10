@@ -40,7 +40,6 @@ using Teleopti.Ccc.Win.Scheduling.PropertyPanel;
 using Teleopti.Ccc.Win.Scheduling.SchedulingScreenInternals;
 using Teleopti.Ccc.Win.Scheduling.SkillResult;
 using Teleopti.Ccc.Win.Sikuli;
-using Teleopti.Ccc.WinCode.Grouping;
 using Teleopti.Ccc.WinCode.Scheduling.ShiftCategoryDistribution;
 using Teleopti.Interfaces.MessageBroker.Events;
 using log4net;
@@ -2684,10 +2683,10 @@ namespace Teleopti.Ccc.Win.Scheduling
 			var list = argument.Item2;
 			_undoRedo.CreateBatch(string.Format(CultureInfo.CurrentCulture, Resources.UndoRedoDeleteSchedules, list.Count));
 			var deleteService = new DeleteSchedulePartService(()=>SchedulerState.SchedulingResultState);
-			ISchedulePartModifyAndRollbackService rollbackService = new SchedulePartModifyAndRollbackService(SchedulerState.SchedulingResultState, new SchedulerStateScheduleDayChangedCallback(new ResourceCalculateDaysDecider(), SchedulerState), new ScheduleTagSetter(_defaultScheduleTag));
+			ISchedulePartModifyAndRollbackService rollbackService = new SchedulePartModifyAndRollbackService(SchedulerState.SchedulingResultState, new SchedulerStateScheduleDayChangedCallback(new ResourceCalculateDaysDecider(), ()=>SchedulerState), new ScheduleTagSetter(_defaultScheduleTag));
 			if (!list.IsEmpty())
 			{
-				deleteService.Delete(list, argument.Item1, rollbackService, _backgroundWorkerDelete, NewBusinessRuleCollection.AllForDelete(SchedulerState.SchedulingResultState));
+				deleteService.Delete(list, argument.Item1, rollbackService, new BackgroundWorkerWrapper(_backgroundWorkerDelete), NewBusinessRuleCollection.AllForDelete(SchedulerState.SchedulingResultState));
 			}
 
 			_undoRedo.CommitBatch();
@@ -2981,7 +2980,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			}
 			else
 			{
-				var scheduleCommand = _container.Resolve<ScheduleCommand>();
+				var scheduleCommand = _container.Resolve<IScheduleCommand>();
 				scheduleCommand.Execute(_optimizerOriginalPreferences, new BackgroundWorkerWrapper(_backgroundWorkerScheduling), _schedulerState,
 										argument.SelectedScheduleDays, _groupPagePerDateHolder, _requiredScheduleHelper,
 										_optimizationPreferences);
@@ -4179,7 +4178,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			var isRestrictionView = level == ZoomLevel.RestrictionView;
 			SchedulerRibbonHelper.EnableRibbonControls(toolStripExClipboard, toolStripExEdit2, toolStripExActions, toolStripExLocks, toolStripButtonFilterAgents, toolStripMenuItemLock, toolStripMenuItemLoggedOnUserTimeZone, isRestrictionView);
 
-			var callback = new SchedulerStateScheduleDayChangedCallback(new ResourceCalculateDaysDecider(), SchedulerState);
+			var callback = new SchedulerStateScheduleDayChangedCallback(new ResourceCalculateDaysDecider(), ()=>SchedulerState);
 			switch (level)
 			{
 				case ZoomLevel.DayView:
@@ -4384,7 +4383,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			var selectedSchedules = _scheduleView.SelectedSchedules();
 			var uowFactory = UnitOfWorkFactory.Current;
 			var scheduleRepository = new ScheduleRepository(uowFactory);
-			using (var exportForm = new ExportToScenarioResultView(uowFactory, scheduleRepository, new MoveDataBetweenSchedules(allNewRules, new SchedulerStateScheduleDayChangedCallback(new ResourceCalculateDaysDecider(), SchedulerState)),
+			using (var exportForm = new ExportToScenarioResultView(uowFactory, scheduleRepository, new MoveDataBetweenSchedules(allNewRules, new SchedulerStateScheduleDayChangedCallback(new ResourceCalculateDaysDecider(), ()=>SchedulerState)),
 															_schedulerMessageBrokerHandler,
 															_scheduleView.AllSelectedPersons(selectedSchedules),
 															selectedSchedules,
@@ -4803,7 +4802,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 		            _schedulerState.RequestedScenario, _requestPresenter,
 		            _handleBusinessRuleResponse, _personRequestAuthorizationChecker, businessRules,
 		            _overriddenBusinessRulesHolder,
-		            new SchedulerStateScheduleDayChangedCallback (new ResourceCalculateDaysDecider(), SchedulerState),
+		            new SchedulerStateScheduleDayChangedCallback (new ResourceCalculateDaysDecider(), ()=>SchedulerState),
 		            globalSettingRepository);
 
 		        IList<PersonRequestViewModel> selectedRequestList = new List<PersonRequestViewModel>() {obj.Value.Request};
@@ -4850,7 +4849,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 		            _schedulerState.RequestedScenario, _requestPresenter,
 		            _handleBusinessRuleResponse,
 		            _personRequestAuthorizationChecker, allNewBusinessRules, _overriddenBusinessRulesHolder,
-		            new SchedulerStateScheduleDayChangedCallback (new ResourceCalculateDaysDecider(), SchedulerState),
+		            new SchedulerStateScheduleDayChangedCallback (new ResourceCalculateDaysDecider(), ()=>SchedulerState),
 		            globalSettingRepository);
 
 		        var selectedAdapters = new List<PersonRequestViewModel>() {eventParameters.Value.Request};
@@ -5307,7 +5306,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 		            new ApprovePersonRequestCommand (this, _schedulerState.Schedules, _schedulerState.RequestedScenario,
 		                _requestPresenter, _handleBusinessRuleResponse,
 		                _personRequestAuthorizationChecker, allNewBusinessRules, _overriddenBusinessRulesHolder,
-		                new SchedulerStateScheduleDayChangedCallback (new ResourceCalculateDaysDecider(), SchedulerState),
+		                new SchedulerStateScheduleDayChangedCallback (new ResourceCalculateDaysDecider(), ()=>SchedulerState),
 		                globalSettingRepository), _requestView.SelectedAdapters());
 		    }
 
@@ -5342,7 +5341,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 		            _schedulerState.RequestedScenario, _requestPresenter,
 		            _handleBusinessRuleResponse, _personRequestAuthorizationChecker, businessRules,
 		            _overriddenBusinessRulesHolder,
-		            new SchedulerStateScheduleDayChangedCallback (new ResourceCalculateDaysDecider(), SchedulerState), globalSettingRepository));
+		            new SchedulerStateScheduleDayChangedCallback (new ResourceCalculateDaysDecider(), ()=>SchedulerState), globalSettingRepository));
 		    }
 		    if (_requestView != null)
 				_requestView.NeedUpdate = true;
@@ -6053,7 +6052,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 					historyDay.Add(data);
 				}
 
-				var schedulePartModifyAndRollbackService = new SchedulePartModifyAndRollbackService(SchedulerState.SchedulingResultState, new SchedulerStateScheduleDayChangedCallback(new ResourceCalculateDaysDecider(), SchedulerState), new ScheduleTagSetter(_defaultScheduleTag));
+				var schedulePartModifyAndRollbackService = new SchedulePartModifyAndRollbackService(SchedulerState.SchedulingResultState, new SchedulerStateScheduleDayChangedCallback(new ResourceCalculateDaysDecider(), ()=>SchedulerState), new ScheduleTagSetter(_defaultScheduleTag));
 				schedulePartModifyAndRollbackService.Modify(historyDay);
 				updateShiftEditor();
 			}

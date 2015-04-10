@@ -2,10 +2,7 @@
 using NUnit.Framework;
 using Rhino.Mocks;
 using Teleopti.Ccc.Domain.Optimization;
-using Teleopti.Ccc.Domain.ResourceCalculation;
-using Teleopti.Ccc.Domain.ResourceCalculation.IntraIntervalAnalyze;
 using Teleopti.Ccc.Domain.Scheduling.Rules;
-using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.WinCode.Scheduling;
 using Teleopti.Interfaces.Domain;
 
@@ -30,9 +27,8 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 		private IScheduleMatrixOriginalStateContainer _workShiftContainer2;
 		private IScheduleMatrixPro _matrix1;
 		private IScheduleMatrixPro _matrix2;
-		private IPersonSkillProvider _personSkillProvider;
 		private IEffectiveRestrictionCreator _effectiveRestrictionCreator;
-		private IIntraIntervalFinderService _intraIntervalFinderService;
+		private IResourceOptimizationHelper _resourceOptimizationHelper;
 		private IMinWeekWorkTimeRule _minWeekWorkTimeRule;
 
 
@@ -54,9 +50,8 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 			IOptimizationPreferences optimizerPreferences = new OptimizationPreferences();
 			_rollbackService = _mocks.StrictMock<ISchedulePartModifyAndRollbackService>();
 			_schedulingResultStateHolder = _mocks.StrictMock<ISchedulingResultStateHolder>();
-			_personSkillProvider = new PersonSkillProvider();
 			_effectiveRestrictionCreator = _mocks.StrictMock<IEffectiveRestrictionCreator>();
-			_intraIntervalFinderService = _mocks.StrictMock<IIntraIntervalFinderService>();
+			_resourceOptimizationHelper = _mocks.StrictMock<IResourceOptimizationHelper>();
 			_minWeekWorkTimeRule = _mocks.StrictMock<IMinWeekWorkTimeRule>();
 			_target = new MoveTimeOptimizerCreator(_scheduleMatrixOriginalStateContainerList,
 												   _workShiftOriginalStateContainerList,
@@ -65,12 +60,10 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 												   optimizerPreferences,
 												   _rollbackService,
 												   _schedulingResultStateHolder,
-												   _personSkillProvider, 
-												   new CurrentTeleoptiPrincipal(),
 												   new ScheduleMatrixLockableBitArrayConverterEx(),
 												   _effectiveRestrictionCreator,
-												   _intraIntervalFinderService,
-												   _minWeekWorkTimeRule);
+												   _minWeekWorkTimeRule,
+												   _resourceOptimizationHelper);
 		}
 
 		[Test]

@@ -194,7 +194,7 @@ namespace Teleopti.Ccc.Win.Intraday
 			_owner.AddControlHelpContext(tabSkillData);
 
 			_scheduleView = new IntradayScheduleView(_skillIntradayGridControl, _owner, _presenter.SchedulerStateHolder, _gridLockManager, SchedulePartFilter.None, _clipHandlerSchedule,
-				 _overriddenBusinessRulesHolder, new SchedulerStateScheduleDayChangedCallback(new ResourceCalculateDaysDecider(), _schedulerStateHolder), NullScheduleTag.Instance);
+				 _overriddenBusinessRulesHolder, new SchedulerStateScheduleDayChangedCallback(new ResourceCalculateDaysDecider(), ()=>_schedulerStateHolder), NullScheduleTag.Instance);
 
 			wpfShiftEditor1.LoadFromStateHolder(_presenter.SchedulerStateHolder.CommonStateHolder);
 			wpfShiftEditor1.CommitChanges += shiftEditorCommitChanges;

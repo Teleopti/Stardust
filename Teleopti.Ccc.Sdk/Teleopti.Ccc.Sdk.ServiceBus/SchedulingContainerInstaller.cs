@@ -1,17 +1,14 @@
 ﻿using System;
 using Autofac;
-using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Notification;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.ResourceCalculation.IntraIntervalAnalyze;
 using Teleopti.Ccc.Domain.Scheduling;
+using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
 using Teleopti.Ccc.Domain.Scheduling.NonBlendSkill;
 using Teleopti.Ccc.Domain.Scheduling.SeatLimitation;
 using Teleopti.Ccc.Domain.Security.Principal;
-using Teleopti.Ccc.Infrastructure.Persisters;
 using Teleopti.Ccc.Infrastructure.Repositories;
-using Teleopti.Ccc.Infrastructure.Toggle;
-using Teleopti.Ccc.Sdk.Common.Contracts;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
 
@@ -20,10 +17,12 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
     public class SchedulingContainerInstaller : Module
     {
 		[ThreadStatic]private static ISchedulingResultStateHolder schedulingResultStateHolder;
+		[ThreadStatic]private static ISchedulerStateHolder schedulerStateHolder;
 
 		protected override void Load(ContainerBuilder builder)
 		{
 			builder.Register(getSchedulingResultStateHolder).As<ISchedulingResultStateHolder>().InstancePerDependency().ExternallyOwned();
+			builder.Register(getSchedulerStateHolder).As<ISchedulerStateHolder>().InstancePerDependency().ExternallyOwned();
 
 			builder.RegisterType<SwapService>().As<ISwapService>();
 			builder.RegisterType<SwapAndModifyService>().As<ISwapAndModifyService>();
@@ -51,6 +50,11 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
 		private static ISchedulingResultStateHolder getSchedulingResultStateHolder(IComponentContext componentContext)
 		{
 			return schedulingResultStateHolder ?? (schedulingResultStateHolder = new SchedulingResultStateHolder());
+		}
+
+		private static ISchedulerStateHolder getSchedulerStateHolder(IComponentContext componentContext)
+		{
+			return schedulerStateHolder ?? (schedulerStateHolder = new SchedulerStateHolder(componentContext.Resolve<ISchedulingResultStateHolder>(),componentContext.Resolve<ICommonStateHolder>(),componentContext.Resolve<ICurrentTeleoptiPrincipal>()));
 		}
     }
 }

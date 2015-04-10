@@ -4,8 +4,6 @@ using System.Globalization;
 using System.Linq;
 using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.ResourceCalculation;
-using Teleopti.Ccc.Domain.ResourceCalculation.IntraIntervalAnalyze;
-using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
@@ -13,33 +11,21 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 	/// <summary>
 	/// HelperClass for calculating resources
 	/// </summary>
-	public class ResourceOptimizationHelperExtended : ResourceOptimizationHelper, IResourceOptimizationHelperExtended
+	public class ResourceOptimizationHelperExtended : IResourceOptimizationHelperExtended
 	{
+		private readonly IResourceOptimizationHelper _basicHelper;
 		private readonly Func<ISchedulerStateHolder> _stateHolder;
 		private readonly Func<IPersonSkillProvider> _personSkillProvider;
 
-		private ResourceOptimizerProgressEventArgs _progressEvent;
-
-		/// <summary>
-		/// Initializes a new instance of the <see cref="ResourceOptimizationHelperExtended"/> class.
-		/// </summary>
-		/// <param name="stateHolder">The state holder.</param>
-		/// <param name="personSkillProvider"></param>
-		/// <param name="intraIntervalFinderService"></param>
-		/// <remarks>
-		/// Created by: henrika
-		/// Created date: 2008-05-27
-		/// </remarks>
-		public ResourceOptimizationHelperExtended(Func<ISchedulerStateHolder> stateHolder, IOccupiedSeatCalculator occupiedSeatCalculator, INonBlendSkillCalculator nonBlendSkillCalculator, Func<IPersonSkillProvider> personSkillProvider, IPeriodDistributionService periodDistributionService, ICurrentTeleoptiPrincipal currentTeleoptiPrincipal, IIntraIntervalFinderService intraIntervalFinderService)
-			: base(()=>stateHolder().SchedulingResultState, occupiedSeatCalculator, nonBlendSkillCalculator, personSkillProvider, periodDistributionService, currentTeleoptiPrincipal, intraIntervalFinderService)
+		public ResourceOptimizationHelperExtended(IResourceOptimizationHelper basicHelper, Func<ISchedulerStateHolder> stateHolder, Func<IPersonSkillProvider> personSkillProvider)
 		{
+			_basicHelper = basicHelper;
 			_stateHolder = stateHolder;
 			_personSkillProvider = personSkillProvider;
 		}
 
 		public void ResourceCalculateAllDays(IBackgroundWorkerWrapper backgroundWorker, bool useOccupancyAdjustment)
 		{
-			_progressEvent = null;
 			var stateHolder = _stateHolder();
 			if (!stateHolder.SchedulingResultState.Skills.Any()) return;
 
@@ -58,13 +44,12 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 		{
 			using (PerformanceOutput.ForOperation("PrepareAndCalculateDate " + date.ToShortDateString(CultureInfo.CurrentCulture)))
 			{
-				ResourceCalculateDate(date, useOccupancyAdjustment, considerShortBreaks);
+				_basicHelper.ResourceCalculateDate(date, useOccupancyAdjustment, considerShortBreaks);
 			}
 		}
 
 		public void ResourceCalculateMarkedDays(IBackgroundWorkerWrapper backgroundWorker, bool considerShortBreaks, bool useOccupancyAdjustment)
 		{
-			_progressEvent = null;
 			var stateHolder = _stateHolder();
 			if (!stateHolder.DaysToRecalculate.Any()) return;
 			if (!stateHolder.SchedulingResultState.Skills.Any()) return;
@@ -99,9 +84,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 					{
 						return;
 					}
-
-					if (_progressEvent != null && _progressEvent.UserCancel) return;
-					_progressEvent = progress;
 				}
 			}
 		}

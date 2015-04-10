@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
-using System.ComponentModel;
 using Teleopti.Ccc.Domain.DayOffPlanning;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
+using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
 using Teleopti.Ccc.Domain.Scheduling.ScheduleTagging;
 using Teleopti.Ccc.Secrets.WorkShiftCalculator;
 using Teleopti.Interfaces.Domain;
@@ -182,10 +182,7 @@ namespace Teleopti.Ccc.Domain.Optimization
             var scheduleDayPro = _matrixConverter.SourceMatrix.GetScheduleDayByKey(dateOnly);
             var scheduleDay = scheduleDayPro.DaySchedulePart();
 
-            using (var bgWorker = new BackgroundWorker())
-            {
-                _deleteService.Delete(new List<IScheduleDay> { scheduleDay }, deleteOption, _rollbackService, bgWorker);
-            }
+	        _deleteService.Delete(new List<IScheduleDay> {scheduleDay}, deleteOption, _rollbackService, new NoBackgroundWorker());
         }
 
         private bool tryScheduleDay(DateOnly day, ISchedulingOptions schedulingOptions, WorkShiftLengthHintOption workShiftLengthHintOption)

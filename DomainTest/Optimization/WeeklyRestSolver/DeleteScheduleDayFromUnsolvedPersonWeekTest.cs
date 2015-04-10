@@ -1,9 +1,9 @@
 ﻿using System.Collections.Generic;
-using System.ComponentModel;
 using NUnit.Framework;
 using Rhino.Mocks;
 using Teleopti.Ccc.Domain.Optimization.WeeklyRestSolver;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
+using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.DomainTest.Optimization.WeeklyRestSolver
@@ -44,7 +44,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.WeeklyRestSolver
 	            Expect.Call(_scheduleDayIsLockedSpecification.IsSatisfy(scheduleDay, _scheduleMatrixPro))
 		            .Return(false);
                 Expect.Call(_deleteSchedulePartService.Delete(scheduleDayList, deleteOption, rollbackService,
-                    new BackgroundWorker())).IgnoreArguments();
+                    new NoBackgroundWorker())).IgnoreArguments();
             }
             using (_mock.Playback())
             {

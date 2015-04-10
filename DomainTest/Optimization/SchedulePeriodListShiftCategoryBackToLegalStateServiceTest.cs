@@ -33,11 +33,11 @@ namespace Teleopti.Ccc.DomainTest.Optimization
             _scheduleMatrixValueCalculatorFactory = _mockRepository.StrictMock<IScheduleMatrixValueCalculatorProFactory>();
         	_scheduleService = _mockRepository.StrictMock<IScheduleDayService>();
             _target = new SchedulePeriodListShiftCategoryBackToLegalStateService(
-                _stateHolder,
+                ()=>_stateHolder,
                 _scheduleMatrixValueCalculatorFactory,
 				_scheduleFairnessCalculator,
 				_scheduleService,
-                _scheduleDayChangeCallback);
+                ()=>_scheduleDayChangeCallback);
         }
 
         [Test]
@@ -57,17 +57,16 @@ namespace Teleopti.Ccc.DomainTest.Optimization
             var scheduleMatrixPro = _mockRepository.StrictMock<IScheduleMatrixPro>();
             var schedulePeriod = _mockRepository.StrictMock<IVirtualSchedulePeriod>();
 			var scheduleService = _mockRepository.StrictMock<IScheduleDayService>();
-        	//var schedulePartModifyAndRollbackService = _mockRepository.StrictMock<ISchedulePartModifyAndRollbackService>();
             
             _scheduleMatrixList.Add(scheduleMatrixPro);
             _scheduleMatrixList.Add(scheduleMatrixPro);
             _scheduleMatrixList.Add(scheduleMatrixPro);
 
             var target = new SchedulePeriodListShiftCategoryBackToLegalStateService(
-                _stateHolder,
+                ()=>_stateHolder,
                 _scheduleMatrixValueCalculatorFactory,
                 _scheduleFairnessCalculator,
-                scheduleService, _scheduleDayChangeCallback);
+                scheduleService, ()=>_scheduleDayChangeCallback);
 
             int iteration = _scheduleMatrixList.Count;
 
@@ -119,10 +118,10 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 
 
             _target = new SchedulePeriodListShiftCategoryBackToLegalStateService(
-                _stateHolder,
+                ()=>_stateHolder,
                 _scheduleMatrixValueCalculatorFactory,
                 _scheduleFairnessCalculator,
-                _scheduleService, _scheduleDayChangeCallback);
+                _scheduleService, ()=>_scheduleDayChangeCallback);
 
             using (_mockRepository.Record())
             {

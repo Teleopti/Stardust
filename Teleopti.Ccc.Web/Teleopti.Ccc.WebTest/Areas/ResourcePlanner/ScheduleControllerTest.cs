@@ -5,9 +5,11 @@ using Rhino.Mocks;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.Repositories;
+using Teleopti.Ccc.Domain.ResourceCalculation;
+using Teleopti.Ccc.Domain.ResourceCalculation.GroupScheduling;
 using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
+using Teleopti.Ccc.Domain.Scheduling.ScheduleTagging;
 using Teleopti.Ccc.Domain.Security.Principal;
-using Teleopti.Ccc.Infrastructure.Toggle;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
@@ -29,15 +31,21 @@ namespace Teleopti.Ccc.WebTest.Areas.ResourcePlanner
 			var target = new ScheduleController(new FakeScenarioRepository(scenario),
 				MockRepository.GenerateMock<ISkillDayLoadHelper>(), MockRepository.GenerateMock<ISkillRepository>(),
 				personRepository, MockRepository.GenerateMock<IScheduleRepository>(),
-				MockRepository.GenerateMock<IDayOffTemplateRepository>(), MockRepository.GenerateMock<IPersonAbsenceAccountRepository>(),
+				MockRepository.GenerateMock<IDayOffTemplateRepository>(),
+				MockRepository.GenerateMock<IPersonAbsenceAccountRepository>(),
 				MockRepository.GenerateMock<IPeopleAndSkillLoaderDecider>(),
 				new FakeCurrentTeleoptiPrincipal(new TeleoptiPrincipal(new TeleoptiIdentity("", null, null, null),
 					PersonFactory.CreatePerson(new Name("Anna", "Andersson"), TimeZoneInfo.Utc))),
-				MockRepository.GenerateMock<IDisableDeletedFilter>(), MockRepository.GenerateMock<ICurrentUnitOfWorkFactory>(), MockRepository.GenerateMock<IToggleManager>(), MockRepository.GenerateMock<IRestrictionExtractor>());
+				MockRepository.GenerateMock<ICurrentUnitOfWorkFactory>(),
+				() => MockRepository.GenerateMock<IFixedStaffSchedulingService>(),
+				() => MockRepository.GenerateMock<IScheduleCommand>(),
+				() =>
+					new SchedulerStateHolder(new SchedulingResultStateHolder(), MockRepository.GenerateMock<ICommonStateHolder>(), new CurrentTeleoptiPrincipal()),
+				MockRepository.GenerateMock<IRequiredScheduleHelper>(), () => new GroupPagePerDateHolder(),
+				() => new ScheduleTagSetter(NullScheduleTag.Instance));
 			var result =
 				(OkNegotiatedContentResult<SchedulingResultModel>)
-					
-						target.FixedStaff(new FixedStaffSchedulingInput {StartDate = period.StartDate.Date, EndDate = period.EndDate.Date});
+					target.FixedStaff(new FixedStaffSchedulingInput {StartDate = period.StartDate.Date, EndDate = period.EndDate.Date});
 
 			result.Content.DaysScheduled.Should().Be.EqualTo(1);
 		}

@@ -1,16 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
+using Teleopti.Ccc.Domain.Helper;
+using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 {
     public interface IDeleteSchedulePartService
     {
-        IList<IScheduleDay> Delete(IList<IScheduleDay> list, DeleteOption options, ISchedulePartModifyAndRollbackService rollbackService, BackgroundWorker backgroundWorker);
+        IList<IScheduleDay> Delete(IList<IScheduleDay> list, DeleteOption options, ISchedulePartModifyAndRollbackService rollbackService, IBackgroundWorkerWrapper backgroundWorker);
         IList<IScheduleDay> Delete(IList<IScheduleDay> list, ISchedulePartModifyAndRollbackService rollbackService);
 
-        IList<IScheduleDay> Delete(IList<IScheduleDay> list, DeleteOption options, BackgroundWorker backgroundWorker,
+        IList<IScheduleDay> Delete(IList<IScheduleDay> list, DeleteOption options, IBackgroundWorkerWrapper backgroundWorker,
                                    IScheduleDayChangeCallback scheduleDayChangeCallback, IScheduleTagSetter tagSetter, INewBusinessRuleCollection businessRuleCollection);
 
     	IList<IScheduleDay> Delete(IList<IScheduleDay> list, ISchedulePartModifyAndRollbackService rollbackService,
@@ -29,8 +30,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
             _scheduleResultStateHolder = scheduleResultStateHolder;
         }
 
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "2"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "1"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
-        public IList<IScheduleDay> Delete(IList<IScheduleDay> list, DeleteOption options, ISchedulePartModifyAndRollbackService rollbackService, BackgroundWorker backgroundWorker)
+        public IList<IScheduleDay> Delete(IList<IScheduleDay> list, DeleteOption options, ISchedulePartModifyAndRollbackService rollbackService, IBackgroundWorkerWrapper backgroundWorker)
         {
             IList<IScheduleDay> returnList = new List<IScheduleDay>();
             if (backgroundWorker == null)
@@ -54,11 +54,9 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
             }
 
             return returnList;
-
         }
 
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "2"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "1"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
-		public IList<IScheduleDay> Delete(IList<IScheduleDay> list, DeleteOption options, ISchedulePartModifyAndRollbackService rollbackService, BackgroundWorker backgroundWorker, INewBusinessRuleCollection newBusinessRuleCollection)
+		public IList<IScheduleDay> Delete(IList<IScheduleDay> list, DeleteOption options, ISchedulePartModifyAndRollbackService rollbackService, IBackgroundWorkerWrapper backgroundWorker, INewBusinessRuleCollection newBusinessRuleCollection)
 		{
 			InParameter.ListCannotBeEmpty("list", list);
 			IList<IScheduleDay> returnList = new List<IScheduleDay>();
@@ -67,15 +65,12 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 
 			foreach (IScheduleDay part in list)
 			{
-
-
 				var clonePart = preparePart(options, part);
 				IList<IScheduleDay> cloneList = new List<IScheduleDay> { clonePart };
 
 				if (backgroundWorker.CancellationPending)
 					return returnList;
 
-				//modify the original schedules
 				foreach (IScheduleDay scheduleDay in cloneList)
 				{
 					rollbackService.Modify(scheduleDay, newBusinessRuleCollection);
@@ -90,39 +85,21 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 
 		public IList<IScheduleDay> Delete(IList<IScheduleDay> list, ISchedulePartModifyAndRollbackService rollbackService, DeleteOption deleteOption)
 		{
-			var bgWorker = new BackgroundWorker();
-			IList<IScheduleDay> retList;
-			try
-			{
-				retList = Delete(list, deleteOption, rollbackService, bgWorker);
-			}
-			finally
-			{
-				bgWorker.Dispose();
-			}
+			var bgWorker = new NoBackgroundWorker();
+			IList<IScheduleDay> retList = Delete(list, deleteOption, rollbackService, bgWorker);
 
 			return retList;
 		}
         public IList<IScheduleDay> Delete(IList<IScheduleDay> list, ISchedulePartModifyAndRollbackService rollbackService)
         {
             var deleteOption = new DeleteOption {Default = true};
-            var bgWorker = new BackgroundWorker();
-            IList<IScheduleDay> retList;
-            try
-            {
-                retList = Delete(list, deleteOption, rollbackService, bgWorker);
-            }
-            finally
-            {
-                bgWorker.Dispose();
-            }
-            
-            return retList;
+            var bgWorker = new NoBackgroundWorker();
+	        IList<IScheduleDay> retList = Delete(list, deleteOption, rollbackService, bgWorker);
+
+	        return retList;
         }
 
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "2"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
-        public IList<IScheduleDay> Delete(IList<IScheduleDay> list, DeleteOption options, BackgroundWorker backgroundWorker,
-            IScheduleDayChangeCallback scheduleDayChangeCallback, IScheduleTagSetter tagSetter, INewBusinessRuleCollection businessRuleCollection)
+		public IList<IScheduleDay> Delete(IList<IScheduleDay> list, DeleteOption options, IBackgroundWorkerWrapper backgroundWorker, IScheduleDayChangeCallback scheduleDayChangeCallback, IScheduleTagSetter tagSetter, INewBusinessRuleCollection businessRuleCollection)
         {
             IList<IScheduleDay> cloneList = new List<IScheduleDay>();
             IList<IScheduleDay> returnList = new List<IScheduleDay>();

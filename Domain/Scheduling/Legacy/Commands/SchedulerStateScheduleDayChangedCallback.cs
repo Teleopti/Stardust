@@ -1,3 +1,4 @@
+using System;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Optimization;
 using Teleopti.Interfaces.Domain;
@@ -7,11 +8,11 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
     public class SchedulerStateScheduleDayChangedCallback : IScheduleDayChangeCallback
     {
         private readonly IResourceCalculateDaysDecider _resourceCalculateDaysDecider;
-        private readonly ISchedulerStateHolder _schedulerStateHolder;
+        private readonly Func<ISchedulerStateHolder> _schedulerStateHolder;
 
         private IScheduleDay _dayBefore;
 
-        public SchedulerStateScheduleDayChangedCallback(IResourceCalculateDaysDecider resourceCalculateDaysDecider, ISchedulerStateHolder schedulerStateHolder)
+        public SchedulerStateScheduleDayChangedCallback(IResourceCalculateDaysDecider resourceCalculateDaysDecider, Func<ISchedulerStateHolder> schedulerStateHolder)
         {
             _resourceCalculateDaysDecider = resourceCalculateDaysDecider;
             _schedulerStateHolder = schedulerStateHolder;
@@ -44,7 +45,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
         private void markDaysToRecalculate(IScheduleDay partAfter)
         {
             _resourceCalculateDaysDecider.DecideDates(partAfter, _dayBefore).ForEach(
-                _schedulerStateHolder.MarkDateToBeRecalculated);
+                _schedulerStateHolder().MarkDateToBeRecalculated);
         }
     }
 }

@@ -257,7 +257,7 @@ namespace Teleopti.Ccc.Win.Scheduling.AgentRestrictions
 			ISchedulePartModifyAndRollbackService rollbackService =
 				new SchedulePartModifyAndRollbackService(Presenter.SchedulerState.SchedulingResultState,
 														 new SchedulerStateScheduleDayChangedCallback(
-															 new ResourceCalculateDaysDecider(), Presenter.SchedulerState),
+															 new ResourceCalculateDaysDecider(), ()=>Presenter.SchedulerState),
 														 new ScheduleTagSetter(defaultScheduleTag));
 
 			var options = new DeleteOption { Preference = true, StudentAvailability = true };

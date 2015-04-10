@@ -1,6 +1,8 @@
+using System;
 using System.Collections.Generic;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.ResourceCalculation;
+using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Interfaces.Domain;
 
@@ -13,6 +15,13 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftFilters
 
 	public class ValidDateTimePeriodShiftFilter : IValidDateTimePeriodShiftFilter
 	{
+		private readonly Func<ISchedulerStateHolder> _schedulerStateHolder;
+
+		public ValidDateTimePeriodShiftFilter(Func<ISchedulerStateHolder> schedulerStateHolder)
+		{
+			_schedulerStateHolder = schedulerStateHolder;
+		}
+
 		public IList<IShiftProjectionCache> Filter(IList<IShiftProjectionCache> shiftList, DateTimePeriod validPeriod, IWorkShiftFinderResult finderResult)
 		{
 			if (shiftList == null) return null;
@@ -31,11 +40,12 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftFilters
 					}
 				}
 			}
+			var currentTimeZone = _schedulerStateHolder().TimeZoneInfo;
 			finderResult.AddFilterResults(
 				new WorkShiftFilterResult(
 					string.Format(TeleoptiPrincipal.CurrentPrincipal.Regional.Culture,
 								  UserTexts.Resources.FilterOnPersonalPeriodLimitationsWithParams,
-								  validPeriod.LocalStartDateTime, validPeriod.LocalEndDateTime), cntBefore,
+								  validPeriod.StartDateTimeLocal(currentTimeZone), validPeriod.EndDateTimeLocal(currentTimeZone)), cntBefore,
 					workShiftsWithinPeriod.Count));
 
 			return workShiftsWithinPeriod;

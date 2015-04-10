@@ -945,7 +945,7 @@
     <Compile Include="ResourceCalculation\ScheduleMatrixValueCalculatorProTest.cs" />
     <Compile Include="Optimization\RemoveShiftCategoryOnBestDateServiceTest.cs" />
     <Compile Include="ResourceCalculation\ShiftProjectionCacheManagerTest.cs" />
-    <Compile Include="ResourceCalculation\ShiftProjectionCasheFilterTest.cs" />
+    <Compile Include="ResourceCalculation\ShiftProjectionCacheFilterTest.cs" />
     <Compile Include="ResourceCalculation\SkillStaffPeriodHelperTest.cs" />
     <Compile Include="ResourceCalculation\FurnessEvaluatorTestSetZeroValues.cs" />
     <Compile Include="ResourceCalculation\ResourceOptimizerPreferencesTest.cs" />

@@ -9,9 +9,9 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 {
 	public class GroupScheduleGroupPageDataProvider : IGroupScheduleGroupPageDataProvider
     {
-        private readonly ISchedulerStateHolder _stateHolder;
+        private readonly Func<ISchedulerStateHolder> _stateHolder;
         private readonly IRepositoryFactory _repositoryFactory;
-        private readonly IUnitOfWorkFactory _unitOfWorkFactory;
+        private readonly ICurrentUnitOfWorkFactory _unitOfWorkFactory;
 		private readonly IDisableDeletedFilter _disableDeletedFilter;
 
 		private IList<IContract> _contractCollection;
@@ -25,7 +25,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 		private IList<IPerson> _allPersons;
 		private readonly object _lockObject = new Object();
 
-		public GroupScheduleGroupPageDataProvider(ISchedulerStateHolder stateHolder, IRepositoryFactory repositoryFactory, IUnitOfWorkFactory unitOfWorkFactory, IDisableDeletedFilter disableDeletedFilter)
+		public GroupScheduleGroupPageDataProvider(Func<ISchedulerStateHolder> stateHolder, IRepositoryFactory repositoryFactory, ICurrentUnitOfWorkFactory unitOfWorkFactory, IDisableDeletedFilter disableDeletedFilter)
         {
             _stateHolder = stateHolder;
             _repositoryFactory = repositoryFactory;
@@ -39,7 +39,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 	            lock (_lockObject)
 	            {
 					if (_personCollection == null)
-						_personCollection = new List<IPerson>(_stateHolder.AllPermittedPersons);
+						_personCollection = new List<IPerson>(_stateHolder().AllPermittedPersons);
 	            }
                 
                 return _personCollection;
@@ -147,7 +147,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 					{
 						using (var uow = maybeDisposableUnitOfWork.Create(_unitOfWorkFactory))
 						{
-							uow.Uow.Reassociate(_stateHolder.Schedules.Keys);
+							uow.Uow.Reassociate(_stateHolder().Schedules.Keys);
 							IGroupPageRepository groupPageRepository = _repositoryFactory.CreateGroupPageRepository(uow.Uow);
 							_groupPageCollection = new List<IGroupPage>(groupPageRepository.LoadAllGroupPageWhenPersonCollectionReAssociated());
 						}
@@ -162,7 +162,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 		public void RemoveNotLoadedPersonsFromCollection(IEnumerable<IGroupPage> groupPages)
 		{
 			if(groupPages == null) return;
-			var keys = _stateHolder.Schedules.Keys;
+			var keys = _stateHolder().Schedules.Keys;
 			foreach (var groupPage in groupPages)
 			{
 				foreach (var rootGroupPage in groupPage.RootGroupCollection)
@@ -258,7 +258,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 				{
 					if (_allPersons == null)
 					{
-						_allPersons = new List<IPerson>(_stateHolder.SchedulingResultState.PersonsInOrganization);
+						_allPersons = new List<IPerson>(_stateHolder().SchedulingResultState.PersonsInOrganization);
 					}
 				}
 				
@@ -273,15 +273,15 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 
 		static class maybeDisposableUnitOfWork
 		{
-			public static IDisposableWithUow Create(IUnitOfWorkFactory unitOfWorkFactory)
+			public static IDisposableWithUow Create(ICurrentUnitOfWorkFactory unitOfWorkFactory)
 			{
 				try
 				{
-					return new emptyDisposable(unitOfWorkFactory.CurrentUnitOfWork());
+					return new emptyDisposable(unitOfWorkFactory.LoggedOnUnitOfWorkFactory().CurrentUnitOfWork());
 				}
 				catch (Exception)
 				{
-					return new disposableUnitOfWork(unitOfWorkFactory.CreateAndOpenUnitOfWork());
+					return new disposableUnitOfWork(unitOfWorkFactory.LoggedOnUnitOfWorkFactory().CreateAndOpenUnitOfWork());
 				}
 			}
 

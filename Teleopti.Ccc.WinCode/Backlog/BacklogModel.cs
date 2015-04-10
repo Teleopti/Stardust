@@ -40,7 +40,7 @@ namespace Teleopti.Ccc.WinCode.Backlog
 			var lifetimeScope = componentContext.Resolve<ILifetimeScope>();
 			ILifetimeScope container = lifetimeScope.BeginLifetimeScope();
 			_resourceOptimizationHelper = container.Resolve<IResourceOptimizationHelper>();
-			_stateHolder = new SchedulerStateHolder(container.Resolve<ISchedulingResultStateHolder>(), container.Resolve<IDisableDeletedFilter>());
+			_stateHolder = container.Resolve<ISchedulerStateHolder>();
 		}
 
 		public IList<ISkillMap_DEV> SkillMappings

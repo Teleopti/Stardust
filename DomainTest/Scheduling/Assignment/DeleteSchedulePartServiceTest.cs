@@ -1,8 +1,8 @@
 ﻿using System.Collections.Generic;
-using System.ComponentModel;
 using NUnit.Framework;
 using Rhino.Mocks;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
+using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
 using Teleopti.Ccc.Domain.Scheduling.Rules;
 using Teleopti.Ccc.Domain.Scheduling.ScheduleTagging;
 using Teleopti.Interfaces.Domain;
@@ -27,7 +27,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
         private IPerson _person;
         private IScheduleRange _scheduleRange1;
     	private ISchedulePartModifyAndRollbackService _rollbackService;
-        private BackgroundWorker _backgroundWorker;
+        private NoBackgroundWorker _backgroundWorker;
         
         [SetUp]
         public void Setup()
@@ -44,13 +44,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 			_scheduleDictionary = _mocks.StrictMock<IScheduleDictionary>();
 			_person = _mocks.StrictMock<IPerson>();
 			_scheduleRange1 = _mocks.StrictMock<IScheduleRange>();
-            _backgroundWorker = new BackgroundWorker();
-        }
-
-        [TearDown]
-        public  void Teardown()
-        {
-            _backgroundWorker.Dispose();
+            _backgroundWorker = new NoBackgroundWorker();
         }
 
 		[Test]
@@ -201,11 +195,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
                 Expect.Call(_part2.Person).Return(_person).Repeat.AtLeastOnce();
                 Expect.Call(_scheduleRange1.ReFetch(_part2)).Return(_part3).Repeat.AtLeastOnce();
                 LastCall.IgnoreArguments();
-				//Expect.Call(() => _rollbackService.Modify(_part1)).Repeat.AtLeastOnce();
-				//Expect.Call(() => _rollbackService.Modify(_part2)).Repeat.AtLeastOnce();
 				Expect.Call(() => _rollbackService.Modify(_part3)).Repeat.AtLeastOnce();
-
-
             }
 
             using (_mocks.Playback())
