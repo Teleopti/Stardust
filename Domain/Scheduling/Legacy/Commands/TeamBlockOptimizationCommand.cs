@@ -188,6 +188,11 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 				rollbackServiceWithResourceCalculation, allMatrixes,
 				_schedulingOptionsCreator.CreateSchedulingOptions(optimizationPreferences));
 
+			//run twice to se if it will solve the problem detected by sikuli tests
+			solveWeeklyRestViolations(selectedPeriod, selectedPersons, optimizationPreferences, resourceCalculateDelayer,
+				rollbackServiceWithResourceCalculation, allMatrixes,
+				_schedulingOptionsCreator.CreateSchedulingOptions(optimizationPreferences));
+
 		}
 
 		private void optimizeMoveTimeBetweenDays(IBackgroundWorkerWrapper backgroundWorker, DateOnlyPeriod selectedPeriod,
