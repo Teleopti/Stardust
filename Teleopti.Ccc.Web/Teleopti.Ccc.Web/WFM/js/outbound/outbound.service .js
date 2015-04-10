@@ -2,20 +2,19 @@
 
 var outboundService = angular.module('outboundService', ['ngResource']);
 
-outboundService.factory('OutboundService', ['$resource', function( $resource) {
+outboundService.service('OutboundService', ['$resource', function( $resource) {
 
+	var self = this;
 	var Campaign = $resource('../api/Outbound/Campaign/:Id', { Id: '@Id'}, {
 		update: { method: 'PUT' }
 	});
 
-	var outboundService = { campaigns: []};
+	self.campaigns  = [];
 
-	outboundService.addCampaign = function (campaign, successCb, errorCb) {
-		var self = this;
+	self.addCampaign = function (campaign, successCb, errorCb) {		
 		var newCampaign = new Campaign(campaign);
-
 		newCampaign.$save( 
-			function() {
+			function () {				
 				if (angular.isDefined(successCb))
 					successCb(newCampaign);				
 			}, 
@@ -28,13 +27,12 @@ outboundService.factory('OutboundService', ['$resource', function( $resource) {
 		return newCampaign;
 	};
 
-	outboundService.listCampaign = function (campaignFilter) {							
-		self.campaigns = Campaign.query();			
+	self.listCampaign = function (campaignFilter) {	
+		self.campaigns = Campaign.query();
 		return self.campaigns;
 	};
 
-	outboundService.getCampaignById = function( Id) {
-		var self = this;
+	self.getCampaignById = function( Id) {	
 		var matched = self.campaigns.filter(function(campaign) { return campaign.Id === Id });
 		if (matched.length === 0) {
 			var fetched = Campaign.get({ Id: Id });
@@ -45,13 +43,11 @@ outboundService.factory('OutboundService', ['$resource', function( $resource) {
 		}
 	};
 
-	outboundService.updateCampaign = function (campaign) {
+	self.updateCampaign = function (campaign) {
 		campaign.$update();
 	};
 
-	outboundService.deleteCampaign = function (campaign, idx) {
-
+	self.deleteCampaign = function (campaign, idx) {
+		// TBD
 	};
-
-	return outboundService;
 }]);
