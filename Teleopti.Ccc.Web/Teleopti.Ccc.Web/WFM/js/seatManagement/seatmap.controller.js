@@ -6,6 +6,7 @@ angular.module('wfm.seatMap')
 
 		var vm = this;
 
+		
 	}]);
 
 

@@ -4,57 +4,56 @@
 	<div>
 		<h1>Seat Plan</h1>
 	</div>
-	
-	<div class="material-block-content">
-		
-		<div style="display:inline-block; min-height:290px;">
-			<h5>From <span class="startDate">{{seatplan.period.startDate | date : format}}</span></h5>
 
-			<datepicker ng-model="seatplan.period.startDate" show-weeks="true" class="well well-sm"></datepicker>
+	<div class="wfm-datepicker-wrap">
+		<div class="sub-header">
+			From <span class="startDate">{{seatplan.period.startDate | date : format}}</span>
 		</div>
 
-		<div style="display:inline-block; min-height:290px;">
-			<h5>To  <span class="endDate">{{seatplan.period.endDate | date : format}}</span></h5>
+		<datepicker class="wfm-datepicker" ng-model="seatplan.period.startDate" show-weeks="true"></datepicker>
+	</div>
 
-			<datepicker ng-model="seatplan.period.endDate" min-date="seatplan.period.startDate" show-weeks="true" class="well well-sm"></datepicker>
+	<div class="wfm-datepicker-wrap">
+		<div class="sub-header">
+			To  <span class="endDate">{{seatplan.period.endDate | date : format}}</span>
 		</div>
+		<datepicker class="wfm-datepicker" ng-model="seatplan.period.endDate" min-date="seatplan.period.startDate" show-weeks="true"></datepicker>
+	</div>
+	<p/>
 
-		<div class="input-prepend">
-			<i class="mdi mdi-filter-outline"></i>
-			<input type="text" name="filterLocations" ng-model="searchLocations" placeholder="Locations filter ..." />
-		</div>
+	<div class="input-prepend">
+		<i class="mdi mdi-filter-outline"></i>
+		<input type="text" name="filterLocations" ng-model="searchLocations" placeholder="Locations filter ..." />
+	</div>
 
-		<div class="tree" style="height:190px;">
-			<div ui-tree data-drag-enabled="false">
-				<ol ui-tree-nodes="" ng-model="seatplan.locations" id="tree-root-locations" class="tree-line" toggle-focus>
-					<li ng-repeat="node in seatplan.locations | filter:searchLocations" ui-tree-node ng-include=" 'locations_renderer.html' "></li>
-				</ol>
-			</div>
-		</div>
-
-		<p></p>
-		<div class="input-prepend">
-			<i class="mdi mdi-filter-outline"></i>
-			<input type="text" name="filterTeams" ng-model="searchTeams" placeholder="Teams filter ..." />
-		</div>
-
-		<div class="tree" style="height:190px;">
-			<div ui-tree data-drag-enabled=" false">
-				<ol ui-tree-nodes="" ng-model="seatplan.teams" id="tree-root-teams" class="tree-line" toggle-focus>
-					<li ng-repeat="node in seatplan.teams | filter:searchTeams" ui-tree-node ng-include="'teams_renderer.html'"></li>
-				</ol>
-			</div>
-		</div>
-
-		<div>
-			<button class="wfm-btn wfm-btn-primary next-step" ng-click="seatplan.addSeatPlan()">Plan Seats...</button>
+	<div class="tree" style="height:190px;">
+		<div ui-tree data-drag-enabled="false">
+			<ol ui-tree-nodes="" ng-model="seatplan.locations" id="tree-root-locations" class="tree-line" toggle-focus>
+				<li ng-repeat="node in seatplan.locations | filter:searchLocations" ui-tree-node ng-include=" 'locations_renderer.html' "></li>
+			</ol>
 		</div>
 	</div>
 
-	<div class="clearfix"></div>
+	<p></p>
+	<div class="input-prepend">
+		<i class="mdi mdi-filter-outline"></i>
+		<input type="text" name="filterTeams" ng-model="searchTeams" placeholder="Teams filter ..." />
+	</div>
 
+	<div class="tree" style="height:190px;">
+		<div ui-tree data-drag-enabled=" false">
+			<ol ui-tree-nodes="" ng-model="seatplan.teams" id="tree-root-teams" class="tree-line" toggle-focus>
+				<li ng-repeat="node in seatplan.teams | filter:searchTeams" ui-tree-node ng-include="'teams_renderer.html'"></li>
+			</ol>
+		</div>
+	</div>
+
+	<div>
+		<button class="wfm-btn wfm-btn-primary next-step" ng-click="seatplan.addSeatPlan()">Plan Seats...</button>
+	</div>
 </div>
 
+<div class="clearfix"></div>
 
 <script type="text/ng-template" id="locations_renderer.html">
 	<div class="tree-toggle-group">

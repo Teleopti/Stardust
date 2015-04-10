@@ -1222,9 +1222,13 @@
     <Content Include="Areas\SeatPlanner\Content\Templates\Dashboard\view.html" />
     <Content Include="Areas\SeatPlanner\Content\Templates\SeatMap\view.html" />
     <Content Include="Areas\Reporting\Views\Report\NoPermission.cshtml" />
+    <Content Include="WFM\js\seatManagement\html\filedialog.html" />
+    <Content Include="WFM\vendor\ng-mfb\mfb.css.map" />
+    <Content Include="WFM\css\_mfb.scss" />
     <None Include="WFM\css\_layout.scss" />
     <Content Include="WFM\css\main.css" />
     <None Include="WFM\css\_outbound.scss" />
+    <Content Include="WFM\vendor\ng-mfb\mfb.css" />
     <Content Include="WFM\Gruntfile.js" />
     <Content Include="WFM\html\forecasting\forecasting-target.html" />
     <Content Include="WFM\html\outbound\campaign-edit.html" />
@@ -1246,6 +1250,8 @@
     <Content Include="WFM\js\resourceplanner\resourceplanner.controller.js" />
     <Content Include="WFM\js\resourceplanner\resourceplanner.html" />
     <Content Include="WFM\js\resourceplanner\resourceplanner.service.js" />
+    <Content Include="WFM\vendor\ng-mfb\mfb.directive.js" />
+    <Content Include="WFM\js\seatManagement\seatmapcanvas.controller.js" />
     <Content Include="WFM\tests\outbound\outbound.service.mock.js" />
     <Content Include="WFM\js\people\people.controller.js" />
     <Content Include="WFM\js\people\people.service.js" />
@@ -1966,6 +1972,7 @@
     <Content Include="WFM\vendor\MaterialDesignIcons-0.5.18\MaterialDesignIcons.woff" />
     <Content Include="WFM\tests\people\people.controller.spec.js" />
     <Content Include="WFM\css\style.scss" />
+    <Content Include="WFM\vendor\ng-mfb\mfb.scss" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config">

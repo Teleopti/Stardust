@@ -10,20 +10,16 @@ angular.module('wfm.seatMap')
 		}
 
 		utils.resize = function (canvas, toolbarVisible) {
-
-			//Robtodo: revisit, fabric canvas wrappers are a pain!
-			var resizedAncestor = $('[ui-view]')[0];
-			var canvasParent = $('#c');
-			var top = canvasParent.offset().top;
-			var left = canvasParent.position().left;
-			var padding = 30;
-			var heightAddition = 0;
-			if (!toolbarVisible) {
-				heightAddition += $('#seatMapToolbar')[0].clientHeight + padding;
-
+			var viewPortHeight = $(document)[0].documentElement.clientHeight ;  
+			var width = $('[ui-view]')[0].clientWidth - $('#c').position().left - 30; // 30 = padding
+			var heightReduction = 150; // no reliable element to base this off
+			
+			if (toolbarVisible) {
+				heightReduction += $('#seatMapToolbar')[0].clientHeight + 62;
 			}
-			canvas.setHeight((resizedAncestor.clientHeight - top) + heightAddition);
-			canvas.setWidth((resizedAncestor.clientWidth - left)-padding);
+
+			canvas.setHeight((viewPortHeight - heightReduction));
+			canvas.setWidth(width);
 		};
 
 		utils.toggleMoveMode = function (canvas) {
@@ -180,8 +176,8 @@ angular.module('wfm.seatMap')
 			});
 		};
 
-		utils.resetZoom = function(canvas) {
-			canvas.setZoom();
+		utils.resetPosition = function (canvas) {
+			canvas.resetPosition();
 		};
 
 		utils.zoom = function(canvas, value) {
@@ -251,4 +247,5 @@ angular.module('wfm.seatMap')
 		return utils;
 
 	}]);
+
 

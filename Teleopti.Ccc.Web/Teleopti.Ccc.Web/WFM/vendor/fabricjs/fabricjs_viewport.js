@@ -107,6 +107,10 @@
       return this.zoom = newZoom;
     };
 
+    Viewport.prototype.resetPosition = function () {
+    	this.position = new fabric.Point(0, 0);
+    };
+
     Viewport.prototype._adjustPositionAfterZoom = function(newZoom) {
       var height, width;
       width = this.canvas.width;
@@ -186,6 +190,11 @@
     CanvasWithViewport.prototype.setZoom = function(zoom) {
       this.viewport.setZoom(zoom);
       return this.renderAll();
+    };
+
+    CanvasWithViewport.prototype.resetPosition = function () {
+    	this.viewport.resetPosition();
+    	return this.renderAll();
     };
 
     CanvasWithViewport.prototype._onMouseMoveInGrabMode = function(e) {

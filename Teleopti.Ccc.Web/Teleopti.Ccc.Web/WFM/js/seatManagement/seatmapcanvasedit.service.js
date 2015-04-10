@@ -8,6 +8,7 @@ angular.module('wfm.seatMap')
 			addImage: addImage,
 			setBackgroundImage: setBackgroundImage,
 			addSeat: addSeat,
+			addText : addText,
 			addLocation:addLocation,
 			onKeyDownHandler: onKeyDownHandler,
 			save: save,
@@ -21,7 +22,9 @@ angular.module('wfm.seatMap')
 			alignRight: alignRight,
 			alignTop: alignTop,
 			alignBottom: alignBottom,
-
+			rotate45: rotate45,
+			spaceActiveGroupVertical: spaceActiveGroupVertical,
+			spaceActiveGroupHorizontal: spaceActiveGroupHorizontal
 		};
 
 		function onKeyDownHandler(canvas, event) {
@@ -40,6 +43,9 @@ angular.module('wfm.seatMap')
 						event.preventDefault();
 						paste(canvas);
 					}
+					break;
+				case 45: // insert
+					addSeat(canvas, false);
 					break;
 				case 46: // delete
 					remove(canvas);
@@ -124,7 +130,6 @@ angular.module('wfm.seatMap')
 		};
 
 		function afterCloneOfSelectedItems(canvas, childObjects) {
-
 			var group = new fabric.Group(childObjects.reverse(), {
 				canvas: canvas
 			});
@@ -142,10 +147,11 @@ angular.module('wfm.seatMap')
 		};
 
 		function updateSeatDataOnPaste(obj, seatPriority) {
+			console.log(obj.type);
 			if (obj.type == 'group') {
 				for (var i = 0; i < obj._objects.length; i++) {
 					var childObj = obj._objects[i];
-					updateSeatDataOnPaste(childObj, seatPriority);
+					seatPriority = updateSeatDataOnPaste(childObj, seatPriority);
 				}
 
 			} else {
@@ -156,6 +162,8 @@ angular.module('wfm.seatMap')
 					obj.set('id', getTemporaryId());
 				}
 			}
+
+			return seatPriority;
 		}
 
 		function getTemporaryId() {
@@ -395,6 +403,87 @@ angular.module('wfm.seatMap')
 				canvas.renderAll();
 			}
 		};
+
+		function rotate45(canvas) {
+			if (canvas.getActiveGroup()) {
+				canvas.getActiveGroup().forEachObject(function (o) { rotateObject(canvas, o, 45); });
+			} else {
+				rotateObject(canvas, canvas.getActiveObject(), 45);
+			}
+		};
+
+		 var rotateObject = function(canvas, obj, angleOffset) {
+			var resetOrigin = false;
+
+			if (!obj) return;
+
+			var angle = obj.getAngle() + angleOffset;
+
+			if ((obj.originX !== 'center' || obj.originY !== 'center') && obj.centeredRotation) {
+				obj.setOriginToCenter && obj.setOriginToCenter();
+				resetOrigin = true;
+			}
+
+			angle = angle > 360 ? 45 : angle < 0 ? 325 : angle;
+
+			obj.setAngle(angle).setCoords();
+
+			if (resetOrigin) {
+				obj.setCenterToOrigin && obj.setCenterToOrigin();
+			}
+
+			canvas.renderAll();
+
+		 };
+
+		 function spaceActiveGroupHorizontal (canvas) {
+		 	if (canvas.getActiveGroup()) {
+		 		spaceGroupEvenlyHorizontal(canvas, canvas.getActiveGroup().objects);
+		 	}
+		 }
+
+		 var spaceGroupEvenlyHorizontal = function (canvas, objects) {
+		 	if (objects) {
+		 		var left = 0;
+		 		var offset = 20;
+		 		var maxRange = objects.length - 1;
+		 		for (var i = maxRange; i > -1; i--) {
+		 			var o = objects[i];
+		 			if (i == maxRange) {
+		 				left = o.left;
+		 			} else {
+		 				left += o.width + offset;
+		 				o.setLeft(left);
+		 			}
+		 		};
+		 		canvas.renderAll();
+		 	}
+		 };
+
+		 function spaceActiveGroupVertical (canvas) {
+		 	if (canvas.getActiveGroup()) {
+		 		spaceGroupEvenlyVertical(canvas, canvas.getActiveGroup().objects);
+		 	}
+		 };
+
+		 var spaceGroupEvenlyVertical = function (canvas, objects) {
+		 	if (objects) {
+		 		var top = 0;
+		 		var offset = 20;
+		 		var maxRange = objects.length - 1;
+		 		for (var i = maxRange; i > -1; i--) {
+		 			var o = objects[i];
+		 			if (i == maxRange) {
+		 				top = o.top;
+		 			} else {
+		 				top += o.height + offset;
+		 				o.setTop(top);
+		 			}
+		 		};
+		 		canvas.renderAll();
+		 	}
+		 };
+
 
 		function save(seatMapSaveCommand, saveCallback) {
 			seatMapService.seatMap.save(seatMapSaveCommand).$promise.then(function (data) {

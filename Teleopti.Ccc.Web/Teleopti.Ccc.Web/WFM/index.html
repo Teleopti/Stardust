@@ -1,101 +1,103 @@
 ﻿<!DOCTYPE html>
 <html ng-app="wfm">
-	<head lang="en">
-		<meta charset="UTF-8">
-		<title>WFM</title>
-		<link rel="stylesheet" href="node_modules/bootstrap/dist/css/bootstrap.min.css">
-		<link rel="stylesheet" href="css/material-spinner.css">
-		<link rel="stylesheet" href="vendor/angular-ui-tree/angular-ui-tree.min.css">
-		<link rel="stylesheet" href="vendor/angular-material/angular-material.min.css">
-		<link rel="stylesheet" href="vendor/MaterialDesignIcons-0.5.18/MaterialDesignIcons.css" media="all" type="text/css" />
-		<link rel="stylesheet" href="css/main.css">
-		<link rel="stylesheet" href="dist/style.css">
+<head lang="en">
+	<meta charset="UTF-8">
+	<title>WFM</title>
+	<link rel="stylesheet" href="node_modules/bootstrap/dist/css/bootstrap.min.css">
+	<link rel="stylesheet" href="css/material-spinner.css">
+	<link rel="stylesheet" href="vendor/angular-ui-tree/angular-ui-tree.min.css">
+	<link rel="stylesheet" href="vendor/angular-material/angular-material.min.css">
+	<link rel="stylesheet" href="vendor/MaterialDesignIcons-0.5.18/MaterialDesignIcons.css" media="all" type="text/css" />
+	<link rel="stylesheet" href="css/main.css">
+	<link rel="stylesheet" href="vendor/ng-mfb/mfb.css">
+	<link rel="stylesheet" href="dist/style.css">
 
-		<script src="node_modules/angular/angular.min.js"></script>
-		<script src="node_modules/angular-ui-router/release/angular-ui-router.min.js"></script>
-		<script src="node_modules/angular-resource/angular-resource.min.js"></script>
-		<script src="node_modules/angular-translate/dist/angular-translate.min.js"></script>
-		<script src="node_modules/angular-translate/dist/angular-translate-loader-url/angular-translate-loader-url.min.js"></script>
-		<script src="vendor/ui-bootstrap.min.js"></script>
-		<script src="node_modules/moment/min/moment-with-locales.min.js"></script>
-		<script src="node_modules/angular-moment/angular-moment.min.js"></script>
-		<script src="vendor/angular-ui-tree/angular-ui-tree.min.js"></script>
-		<script src="vendor/angular-aria/angular-aria.min.js"></script>
-		<script src="vendor/angular-animate/angular-animate.min.js"></script>
-		<script src="vendor/hammerjs/hammer.min.js"></script>
-		<script src="vendor/angular-material/angular-material.min.js"></script>
-		<script src="js/ABmetrics.min.js"></script>
-	
-		<script src="vendor/angular-growl.js"></script>
-		<script src="vendor/fabricjs/fabric.min.js"></script>
-		<script src="vendor/fabricjs/fabricjs_viewport.js"></script>
-		<script src="vendor/ng-image-input-with-preview/ng-image-input-with-preview.js"></script>
-		
-		<script src="dist/main.min.js"></script>
+	<script src="node_modules/angular/angular.min.js"></script>
+	<script src="node_modules/angular-ui-router/release/angular-ui-router.min.js"></script>
+	<script src="node_modules/angular-resource/angular-resource.min.js"></script>
+	<script src="node_modules/angular-translate/dist/angular-translate.min.js"></script>
+	<script src="node_modules/angular-translate/dist/angular-translate-loader-url/angular-translate-loader-url.min.js"></script>
+	<script src="vendor/ui-bootstrap.min.js"></script>
+	<script src="node_modules/moment/min/moment-with-locales.min.js"></script>
+	<script src="node_modules/angular-moment/angular-moment.min.js"></script>
+	<script src="vendor/angular-ui-tree/angular-ui-tree.min.js"></script>
+	<script src="vendor/angular-aria/angular-aria.min.js"></script>
+	<script src="vendor/angular-animate/angular-animate.min.js"></script>
+	<script src="vendor/hammerjs/hammer.min.js"></script>
+	<script src="vendor/angular-material/angular-material.min.js"></script>
+	<script src="js/ABmetrics.min.js"></script>
 
-	</head>
-	<body>
-		<div ng-include="'html/nav.html'" class="material-depth-1 navbar navbar-default navbar-static-top " role="navigation"></div>
-		<div class="layout-container">
-			<div class="sidenav material-depth-1 left" ng-hide="toggleLeftSide">
-			
-				<section class="wfm-accordion" ng-controller="AreasCtrl" data-ng-init="loadAreas()">
-					<!--Refactor me -->
-					<div ng-repeat="accordionTitle in areas">
-						<a ui-sref={{accordionTitle.InternalName}}><div class="sidenav-header accordion-head" ng-click="accordionToggle = !accordionToggle">{{accordionTitle.Name}}</div></a>
-					</div>
-				</section>
-			</div>
+	<script src="vendor/angular-growl.js"></script>
+	<script src="vendor/fabricjs/fabric.min.js"></script>
+	<script src="vendor/fabricjs/fabricjs_viewport.js"></script>
+	<script src="vendor/ng-mfb/mfb.directive.js"></script>
+	<script src="vendor/ng-image-input-with-preview/ng-image-input-with-preview.js"></script>
 
-			<div class="sidenav-toggle">
-				<div class="sidenav-wrapper left">
-					<input type="checkbox" id="nav-left" ng-model="toggleLeftSide" />
-					<label for="nav-left">
-						<i class="mdi mdi-rewind"></i>
-					</label>
-				</div>
-			</div>
-			<div class="container content material-depth-1 material-block" ui-view></div>
-			<!--move this to a smart place -->
-			<div ng-controller="NoticeCtrl" class="growl-wrapper">
-				<div class="container-fluid">
-					<div class="row">
-						<div class="col-md-12">
-							<div growl></div>
-						</div>
-					</div>
-				</div>
-			</div>
+	<script src="dist/main.min.js"></script>
 
-			<div class="sidenav-toggle">
-				<div class="sidenav-wrapper right">
-					<input type="checkbox" id="nav-right" ng-model="toggleRightSide" />
-					<label for="nav-right">
-						<i class="mdi mdi-fast-forward"></i>
-					</label>
+</head>
+<body>
+	<div ng-include="'html/nav.html'" class="material-depth-1 navbar navbar-default navbar-static-top " role="navigation"></div>
+	<div class="layout-container">
+		<div class="sidenav material-depth-1 left" ng-hide="toggleLeftSide">
+
+			<section class="wfm-accordion" ng-controller="AreasCtrl" data-ng-init="loadAreas()">
+				<!--Refactor me -->
+				<div ng-repeat="accordionTitle in areas">
+					<a ui-sref={{accordionTitle.InternalName}}><div class="sidenav-header accordion-head" ng-click="accordionToggle = !accordionToggle">{{accordionTitle.Name}}</div></a>
 				</div>
+			</section>
+		</div>
+
+		<div class="sidenav-toggle">
+			<div class="sidenav-wrapper left">
+				<input type="checkbox" id="nav-left" ng-model="toggleLeftSide" />
+				<label for="nav-left">
+					<i class="mdi mdi-rewind"></i>
+				</label>
 			</div>
-			<div class="sidenav material-depth-1 right" ng-hide="toggleRightSide" ng-controller="NotificationsCtrl">
-				<div>
-					<a href="#"><div class="wfm-block sidenav-header">Notifications</div></a>
-					<ul class="notification-list" ng-repeat="item in notificationResult">
-						<li><i class="mdi mdi-alert-circle"></i>{{item.JobCategory}} '{{item.Status}}' at {{item.Timestamp | date:'HH:mm'}}</li>
-					</ul>
-				</div>
-				<div>
-					<div class="wfm-block sidenav-header">Something</div>
-				</div>
-				<div class="help-widget">
-					<div class="wfm-block sidenav-header">Help</div>
-					<div class="help-text">
-						<h4>This is the main permissions view.</h4>
-						Click on something to learn more about it.
-					</div>
-					<div class="tile-footer">
-						<button class="wfm-btn wfm-btn-invis-primary">go to wiki</button>
+		</div>
+		<div class="container content material-depth-1 material-block" ui-view></div>
+		<!--move this to a smart place -->
+		<div ng-controller="NoticeCtrl" class="growl-wrapper">
+			<div class="container-fluid">
+				<div class="row">
+					<div class="col-md-12">
+						<div growl></div>
 					</div>
 				</div>
 			</div>
 		</div>
-	</body>
+
+		<div class="sidenav-toggle">
+			<div class="sidenav-wrapper right">
+				<input type="checkbox" id="nav-right" ng-model="toggleRightSide" />
+				<label for="nav-right">
+					<i class="mdi mdi-fast-forward"></i>
+				</label>
+			</div>
+		</div>
+		<div class="sidenav material-depth-1 right" ng-hide="toggleRightSide" ng-controller="NotificationsCtrl">
+			<div>
+				<a href="#"><div class="wfm-block sidenav-header">Notifications</div></a>
+				<ul class="notification-list" ng-repeat="item in notificationResult">
+					<li><i class="mdi mdi-alert-circle"></i>{{item.JobCategory}} '{{item.Status}}' at {{item.Timestamp | date:'HH:mm'}}</li>
+				</ul>
+			</div>
+			<div>
+				<div class="wfm-block sidenav-header">Something</div>
+			</div>
+			<div class="help-widget">
+				<div class="wfm-block sidenav-header">Help</div>
+				<div class="help-text">
+					<h4>This is the main permissions view.</h4>
+					Click on something to learn more about it.
+				</div>
+				<div class="tile-footer">
+					<button class="wfm-btn wfm-btn-invis-primary">go to wiki</button>
+				</div>
+			</div>
+		</div>
+	</div>
+</body>
 </html>

@@ -1,42 +1,71 @@
-﻿
-<div>
-	
-	<div>
+﻿<style>
 
-		<span class="breadbin" ng-animate="'animate'" ng-repeat="breadcrumb in vm.breadcrumbs">
-			<a ng-if="!$last" href="" ng-click="vm.handleBreadcrumbClick(breadcrumb.Id)">{{breadcrumb.Name}}</a>
+a.mfb-component__button--main {
+  outline: 0;
+}
+
+.mfb-component--tr{
+  animation: fromTop 1.3s 1;
+  -webkit-animation: fromTop 1.3s 1;
+}
+.fadein {
+	animation: fadeIn 1.3s 1;
+  -webkit-animation: fadeIn 1.3s 1;
+}
+
+@keyframes fromTop {
+  0% {
+	transform: translateY(-250px);
+  }
+  100% {
+	transform: translateY(0);
+  }
+}
+@-webkit-keyframes fromTop {
+  0% {
+	transform: translateY(-250px);
+  }
+  100% {
+	transform: translateY(0);
+  }
+}
+
+@-webkit-keyframes fadeIn {
+  0% {
+	opacity: 0;
+  }
+
+  100% {
+	opacity: 1;
+  }
+}
+
+@keyframes fadeIn {
+  0% {
+	opacity: 0;
+  }
+
+  100% {
+	opacity: 1;
+  }
+}
+							
+</style>
+
+
+<div>
+
+	<div position="absolute">
+
+		<span ng-show="!vm.isLoading" class="breadbin fadein" ng-repeat="breadcrumb in vm.breadcrumbs">
+			<a ng-if="!$last" href="" ng-click="vm.handleBreadcrumbClick(breadcrumb.Id)">{{breadcrumb.Name}} ></a>
 			<span ng-if="$last">{{breadcrumb.Name}}</span>
 		</span>
 		<p />
 
 		<div id="seatMapToolbar">
-			<div ng-show="vm.allowEdit">
 
-				<button class="wfm-btn wfm-btn-default" ng-click="vm.addSeat()">
-					<i class="mdi small mdi-plus"></i>
-					<md-tooltip>
-						Add Seat
-					</md-tooltip>
-				</button>
-				<button class="wfm-btn wfm-btn-default" ng-click="vm.addLocation()">
-					<i class="mdi small mdi-account-plus"></i>
-					<md-tooltip>
-
-						Add Location
-					</md-tooltip>
-				</button>
-				<button class="wfm-btn wfm-btn-default" ng-click="vm.addImage()">
-					<i class="mdi small mdi-file-image"></i>
-					<md-tooltip>
-						Add Image
-					</md-tooltip>
-				</button>
-				<button class="wfm-btn wfm-btn-default" ng-click="vm.setBackgroundImage()">
-					<i class="mdi small mdi-file-image-box"></i>
-					<md-tooltip>
-						Set Background Image
-					</md-tooltip>
-				</button>
+			<div ng-show="vm.isInEditMode">
 
 				<button class="wfm-btn wfm-btn-default" ng-click="vm.group()">
 					<i class="mdi small mdi-airplane "></i>
@@ -98,35 +127,61 @@
 						Align Bottom
 					</md-tooltip>
 				</button>
+				<button class="wfm-btn wfm-btn-default" ng-click="vm.rotate45()">
+					<i class="mdi small mdi-rotate-right"></i>
+					<md-tooltip>
+						Rotate
+					</md-tooltip>
+				</button>
+				<button class="wfm-btn wfm-btn-default" ng-click="vm.spaceActiveGroupVertical()">
+					<i class="mdi small  mdi-unfold-more"></i>
+					<md-tooltip>
+						Space Vertically
+					</md-tooltip>
+				</button>
+				<button class="wfm-btn wfm-btn-default" ng-click="vm.spaceActiveGroupHorizontal()">
+					<i class="mdi small  mdi-unfold-more" style="  -webkit-transform: rotate(90deg);-moz-transform: rotate(90deg);-o-transform: rotate(90deg);-ms-transform: rotate(90deg);transform: rotate(90deg);"></i>
+					<md-tooltip>
+						Spave Horizontally
+					</md-tooltip>
+				</button>
 
 			</div>
 		</div>
 	</div>
 
 	<div id="seatmapcanvas" style="position: relative; margin-top: 20px;">
-		
-		<div ng-if="!vm.readonly">
 
-			<div style="top: -25px; right: 10px; z-index: 2; position: absolute;">
-				<button class="wfm-fab big " ng-class="{'warning': vm.allowEdit, 'info' : !vm.allowEdit}" ng-click="vm.toggleEditMode()">
-					<i ng-if="!vm.allowEdit" class="mdi mdi-pencil" aria-hidden="true"></i>
-					<i ng-if="vm.allowEdit" class="mdi mdi-close" aria-hidden="true"></i>
-					<md-tooltip ng-if="!vm.allowEdit">
-						Edit Seat Map
-					</md-tooltip>
-					<md-tooltip ng-if="vm.allowEdit">
+
+		<div ng-if="!vm.readonly" style="position: relative;">
+
+			<nav mfb-menu position="{{vm.chosen.position}}" effect="{{vm.chosen.effect}}" style=" top: -45px; right: 0px; z-index: 2; position: absolute;"
+				 active-icon="mdi-check" resting-icon="mdi-pencil"
+				 ng-mouseenter=" hovered()" ng-mouseleave="hovered()"
+				 callback="vm.editButtonClick()"
+				 label=""
+				 resting-label ="Edit Seat Map"
+				 active-label = "Save Seat Map"
+				 toggling-method="{{vm.chosen.method}}" menu-state="vm.menuState">
+				<button mfb-button icon="{{button.icon}}" ng-click="vm.floatingButtonClick(button.action)"
+						label="{{button.label}}" ng-repeat="button in vm.buttons"></button>
+
+			</nav>
+
+
+			<div style="top: -25px; right: 85px; z-index: 2; position: absolute;">
+				<button ng-show="vm.isInEditMode" class="wfm-fab big warning" ng-click="vm.toggleEditMode()">
+					<i class="mdi mdi-close" aria-hidden="true"></i>
+					<md-tooltip>
 						Cancel Changes
 					</md-tooltip>
 				</button>
 
-				<button ng-if="vm.allowEdit" class="wfm-fab big success" ng-click="vm.save()">
-					<i class="mdi mdi-check"></i>
-					<md-tooltip>
-						Save Changes
-					</md-tooltip>
-				</button>
+				
 			</div>
+
 		</div>
+
 
 		<div style="width:100%;" class="wfm-block material-depth-2">
 			<canvas id="c" ng-mouseenter="vm.scrollListen = true" ng-mouseleave="vm.scrollListen = false"></canvas>
@@ -135,15 +190,15 @@
 			</div>
 		</div>
 		
-		<div style="position: absolute; bottom: 0px;height: 47px;margin-left: 1px">
-			<button ng-class="{info:!vm.isMoveMode(),success:vm.isMoveMode()}" style="float:left;" class="wfm-fab mini " ng-click="vm.toggleMoveMode()">
-				<i style="margin: auto" class="mdi mdi-gamepad"></i>
+		<div style="position: absolute; bottom: 0px;margin-left: 1px">
+			<button ng-class="{info:!vm.isMoveMode(),success:vm.isMoveMode()}" style="float:left;" class="wfm-fab mini  " ng-click="vm.toggleMoveMode()">
+				<i style="margin: auto;" class="mdi mdi-gamepad"></i>
 			</button>
 			<md-slider style="width:200px; margin-left:40px;" ng-model="vm.zoomData.zoomValue" min="0.1" max="5" step="0.05" ng-change="vm.zoom()"></md-slider>
 		</div>
 
 	</div>
-	
+
 	<div class="modal-box">
 		<div ng-cloak ng-show="vm.showLocationDialog">
 			<div class="modalbg">
@@ -152,7 +207,9 @@
 						Add Location
 					</div>
 					<div class="modal-inner-content">
+						<br/>
 						<input type="text" ng-model="vm.newLocationName" placeholder="Name..." />
+						<br />
 					</div>
 					<div class="modal-footer">
 						<aside>
@@ -165,43 +222,7 @@
 		</div>
 	</div>
 
-	<div class="modal-box">
-		<div ng-cloak ng-show="vm.showFileDialog">
-			<div class="modalbg">
-				<div class="dialog">
-					<div class="modal-header">
-						Load Image
-					</div>
-					<div class="modal-inner-content">
-						<form name="myForm" style="max-height:600px; padding:10px;">
-							<input type="file" name="myImage" image-with-preview
-								   ng-model="image"
-								   accept="image/*"
-								   dimensions="height < 2000 && width < 4000">
-
-							<span class="error" ng-show="myForm.myImage.$error.image">
-								Not a JPEG, SVG or a PNG!
-							</span>
-							<span class="error" ng-show="myForm.myImage.$error.dimensions">
-								Invalid dimensions! Expecting a image smaller than 2000x4000.
-							</span>
-							<img class="material-depth-1" style="max-width: 100%; max-height: 540px; padding:10px; margin-top: 10px; margin-bottom:10px; display: block; margin-left: auto;margin-right: auto;" ng-show="image.src" ng-src="{{image.src}}" />
-
-						</form>
-					</div>
-					<div class="modal-footer">
-						<aside>
-							<a ng-click="vm.showFileDialog = false" class="wfm-btn wfm-btn-invis-primary">DISMISS</a>
-							<a class="wfm-btn wfm-btn-invis-primary" ng-click="vm.fileCallbackFunction(image)">CHOOSE</a>
-						</aside>
-					</div>
-				</div>
-			</div>
-		</div>
-	</div>
-
-
-
+	<file-Dialog></file-Dialog>
 
 </div>
 

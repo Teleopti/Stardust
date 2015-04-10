@@ -1836,8 +1836,8 @@ fabric.Collection = {
 
         scroll = fabric.util.getScrollLeftTop(element, upperCanvasEl);
 
-    return {
-      x: pointerX(event) + scroll.left,
+	  return {
+		  x: pointerX(event) + scroll.left,
       y: pointerY(event) + scroll.top
     };
   }
