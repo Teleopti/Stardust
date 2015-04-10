@@ -21,6 +21,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Search
         private IPersonRepository personRepository;
         private PeopleSearchController target;
         private IOptionalColumnRepository optionalColumnRepository;
+	    private ILoggedOnUser loggedOnUser;
 
         [SetUp]
         public void Setup()
@@ -28,7 +29,8 @@ namespace Teleopti.Ccc.WebTest.Areas.Search
             searchRepository = MockRepository.GenerateMock<IPersonFinderReadOnlyRepository>();
             personRepository = MockRepository.GenerateMock<IPersonRepository>();
             optionalColumnRepository = MockRepository.GenerateMock<IOptionalColumnRepository>();
-            target = new PeopleSearchController(searchRepository, personRepository, new FakePermissionProvider(), optionalColumnRepository, new FakeLoggedOnUser());
+	        loggedOnUser = new FakeLoggedOnUser();
+            target = new PeopleSearchController(searchRepository, personRepository, new FakePermissionProvider(), optionalColumnRepository, loggedOnUser);
         }
 
         [Test]
@@ -142,6 +144,44 @@ namespace Teleopti.Ccc.WebTest.Areas.Search
             var peopleList = (IEnumerable<dynamic>)result.Content.People;
             peopleList.Should().Be.Empty();
         }
+
+	    [Test]
+	    public void ShouldReturnMyTeamMembersByDefault()
+	    {
+		    var currentUser = loggedOnUser.CurrentUser();
+			currentUser.SetId(new Guid());
+		    currentUser.Name = new Name("firstName", "lastName");
+		    var person = PersonFactory.CreatePersonWithGuid("Ashley", "Andeen");
+
+		    var team = TeamFactory.CreateTeam("MyTeam", "MySite");
+		    currentUser.AddPersonPeriod(new PersonPeriod(DateOnly.Today.AddDays(-1),
+			    PersonContractFactory.CreatePersonContract(), team));
+
+		    var personFinderDisplayRow = new PersonFinderDisplayRow
+		    {
+			    FirstName = currentUser.Name.FirstName,
+			    LastName = currentUser.Name.LastName,
+			    EmploymentNumber = "1011",
+			    PersonId = currentUser.Id.Value,
+			    RowNumber = 1
+		    };
+
+		    searchRepository.Stub(x => x.Find(null)).Callback(new Func<IPersonFinderSearchCriteria, bool>(c =>
+		    {
+			    c.SetRow(1, personFinderDisplayRow);
+			    return true;
+		    }));
+		    personRepository.Stub(x => x.FindPeople(new List<Guid>()))
+			    .IgnoreArguments()
+			    .Return(new List<IPerson> {currentUser});
+		    optionalColumnRepository.Stub(x => x.GetOptionalColumns<Person>()).Return(new List<IOptionalColumn>());
+
+		    var result = ((dynamic) target).GetResult("", 10, 1);
+		    var peopleList = (IEnumerable<dynamic>) result.Content.People;
+		    peopleList.Should().Not.Be.Empty();
+		    peopleList.First().FirstName.Equals(currentUser.Name.FirstName);
+		    peopleList.Where(x => x.FirstName == person.Name.FirstName).Should().Be.Empty();
+	    }
     }
 }
 
