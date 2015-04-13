@@ -204,6 +204,8 @@ Try
     #Get customer specific config from BlobStorage
     CopyFileFromBlobStorage -destinationFolder "$SupportToolFolder" -filename "$settingsFile"
     CopyFileFromBlobStorage -destinationFolder "$SupportToolFolder" -filename "*.key"
+    CopyFileFromBlobStorage -destinationFolder "$directory\..\..\sitesroot\3\bin\FeatureFlags" -filename "toggles.txt"
+    CopyFileFromBlobStorage -destinationFolder "$directory\..\..\sitesroot\5\bin\FeatureFlags" -filename "toggles.txt"
 
 	$DatasourcesPath="$directory\..\Services\ETL\Service"
 
