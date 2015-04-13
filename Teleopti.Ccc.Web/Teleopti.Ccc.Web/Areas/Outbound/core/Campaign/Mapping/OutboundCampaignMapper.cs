@@ -12,20 +12,20 @@ namespace Teleopti.Ccc.Web.Areas.Outbound.core.Campaign.Mapping
 			_outboundCampaignRepository = outboundCampaignRepository;
 		}
 
-		public Domain.Outbound.Campaign Map(CampaignForm form)
+		public Domain.Outbound.Campaign Map(CampaignViewModel campaignViewModel)
 		{
-			var campaign = _outboundCampaignRepository.Get(form.Id.Value);
+			var campaign = _outboundCampaignRepository.Get(campaignViewModel.Id.Value);
 			if (campaign == null) return null;
-			campaign.Name = form.Name;
-			campaign.CallListLen = form.CallListLen;
-			campaign.TargetRate = form.TargetRate;
-			campaign.ConnectRate = form.ConnectRate;
-			campaign.RightPartyAverageHandlingTime = form.RightPartyAverageHandlingTime;
-			campaign.ConnectAverageHandlingTime = form.ConnectAverageHandlingTime;
-			campaign.RightPartyConnectRate = form.RightPartyConnectRate;
-			campaign.UnproductiveTime = form.UnproductiveTime;
-			//campaign.StartDate = form.DurationStart;
-			//campaign.EndDate = form.DurationEnd;
+			campaign.Name = campaignViewModel.Name;
+			campaign.CallListLen = campaignViewModel.CallListLen;
+			campaign.TargetRate = campaignViewModel.TargetRate;
+			campaign.ConnectRate = campaignViewModel.ConnectRate;
+			campaign.RightPartyAverageHandlingTime = campaignViewModel.RightPartyAverageHandlingTime;
+			campaign.ConnectAverageHandlingTime = campaignViewModel.ConnectAverageHandlingTime;
+			campaign.RightPartyConnectRate = campaignViewModel.RightPartyConnectRate;
+			campaign.UnproductiveTime = campaignViewModel.UnproductiveTime;
+			campaign.StartDate = campaignViewModel.StartDate;
+			campaign.EndDate = campaignViewModel.EndDate;
 			return campaign;
 		}
 	}

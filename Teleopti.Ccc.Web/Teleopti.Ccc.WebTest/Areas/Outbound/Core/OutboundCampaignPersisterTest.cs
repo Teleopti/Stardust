@@ -20,7 +20,6 @@ namespace Teleopti.Ccc.WebTest.Areas.Outbound.Core
 		private ISkillRepository _skillRepository;
 		private IOutboundCampaignMapper _outboundCampaignMapper;
 		private IOutboundCampaignViewModelMapper _outboundCampaignViewModelMapper;
-		private CampaignForm _campaignForm;
 		
 		[SetUp]
 		public void Setup()
@@ -29,8 +28,6 @@ namespace Teleopti.Ccc.WebTest.Areas.Outbound.Core
 			_skillRepository = MockRepository.GenerateMock<ISkillRepository>();
 			_outboundCampaignMapper = MockRepository.GenerateMock<IOutboundCampaignMapper>();
 			_outboundCampaignViewModelMapper = MockRepository.GenerateMock<IOutboundCampaignViewModelMapper>();
-
-			_campaignForm = new CampaignForm() {Name = "test"};
 		}
 
 		[Test]
@@ -42,9 +39,8 @@ namespace Teleopti.Ccc.WebTest.Areas.Outbound.Core
 			var target = new OutboundCampaignPersister(_outboundCampaignRepository, _skillRepository, null, _outboundCampaignViewModelMapper);
 			_skillRepository.Stub(x => x.LoadAll()).Return(skillList);
 			_outboundCampaignViewModelMapper.Stub(x => x.Map(new Domain.Outbound.Campaign())).IgnoreArguments().Return(expectedVM);
-			_campaignForm.Id = null;
 
-			var result = target.Persist(_campaignForm);
+			var result = target.Persist("test");
 
 			_outboundCampaignRepository.AssertWasCalled(x => x.Add(null), o => o.IgnoreArguments());
 			result.Should().Be.SameInstanceAs(expectedVM);
@@ -53,16 +49,14 @@ namespace Teleopti.Ccc.WebTest.Areas.Outbound.Core
 		[Test]
 		public void ShouldUpdateCampaign()
 		{
-			var expectedVM = new CampaignViewModel();
-			var target = new OutboundCampaignPersister(_outboundCampaignRepository, null, _outboundCampaignMapper, _outboundCampaignViewModelMapper);
-			_campaignForm.Id = new Guid();
-			var campaign = new Domain.Outbound.Campaign();
-			_outboundCampaignMapper.Stub(x => x.Map(_campaignForm)).Return(campaign);
-			_outboundCampaignViewModelMapper.Stub(x => x.Map(campaign)).Return(expectedVM);
+			var campaignVM = new CampaignViewModel {Id = new Guid()};
+			var target = new OutboundCampaignPersister(_outboundCampaignRepository, null, _outboundCampaignMapper, null);
+			var expectedCampaign = new Domain.Outbound.Campaign();
+			_outboundCampaignMapper.Stub(x => x.Map(campaignVM)).Return(expectedCampaign);
 
-			var result = target.Persist(_campaignForm);
+			var result = target.Persist(campaignVM);
 
-			result.Should().Be.SameInstanceAs(expectedVM);
+			result.Should().Be.SameInstanceAs(expectedCampaign);
 		}
 	}
 }

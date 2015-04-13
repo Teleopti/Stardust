@@ -7,7 +7,7 @@ namespace Teleopti.Ccc.Web.Areas.Outbound.Models
 {
 	public class CampaignViewModel
 	{
-		public string Id;
+		public Guid? Id;
 		public string Name;
 		public IEnumerable<SkillViewModel> Skills;  
 		public int CallListLen;

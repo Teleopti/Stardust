@@ -5,7 +5,7 @@ var outboundService = angular.module('outboundService', ['ngResource']);
 outboundService.service('OutboundService', ['$resource', function( $resource) {
 
 	var self = this;
-	var Campaign = $resource('../api/Outbound/Campaign/:Id', { Id: '@Id'}, {
+	var Campaign = $resource('../api/Outbound/Campaign', { }, {
 		update: { method: 'PUT' }
 	});
 

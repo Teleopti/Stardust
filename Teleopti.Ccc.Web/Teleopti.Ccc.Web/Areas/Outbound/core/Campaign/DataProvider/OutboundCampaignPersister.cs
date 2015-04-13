@@ -25,22 +25,25 @@ namespace Teleopti.Ccc.Web.Areas.Outbound.core.Campaign.DataProvider
 			_outboundCampaignViewModelMapper = outboundCampaignViewModelMapper;
 		}
 
-		public CampaignViewModel Persist(CampaignForm form)
+		public CampaignViewModel Persist(string name)
 		{
-			Campaign campaign;
-
-			if (form.Id.HasValue)
-			{
-				campaign =  _outboundCampaignMapper.Map(form);
-			}
-			else
-			{
-				var skills = _skillRepository.LoadAll();
-				campaign = new Campaign(form.Name, skills.FirstOrDefault());
-				_outboundCampaignRepository.Add(campaign);
-			}
+			var skills = _skillRepository.LoadAll();
+			var campaign = new Campaign(name, skills.FirstOrDefault());
+			_outboundCampaignRepository.Add(campaign);
 
 			return _outboundCampaignViewModelMapper.Map(campaign);
+		}
+
+		public Campaign Persist(CampaignViewModel campaignViewModel)
+		{
+			Campaign campaign = null;
+
+			if (campaignViewModel.Id.HasValue)
+			{
+				campaign = _outboundCampaignMapper.Map(campaignViewModel);
+			}
+
+			return campaign;
 		}
 	}
 }

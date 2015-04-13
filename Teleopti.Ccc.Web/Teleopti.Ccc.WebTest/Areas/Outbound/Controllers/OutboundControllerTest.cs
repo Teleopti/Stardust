@@ -34,7 +34,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Outbound.Controllers
 		{
 			var campaignForm = new CampaignForm() {Name = "myCampaign"};
 			var expectedCampaignViewModel = new CampaignViewModel();
-			_outboundCampaignPersister.Stub(x => x.Persist(campaignForm)).Return(expectedCampaignViewModel);
+			_outboundCampaignPersister.Stub(x => x.Persist(campaignForm.Name)).Return(expectedCampaignViewModel);
 
 			var target = new OutboundController(_outboundCampaignPersister, null, null) {Request = new HttpRequestMessage()};
 			var result = target.CreateCampaign(campaignForm);

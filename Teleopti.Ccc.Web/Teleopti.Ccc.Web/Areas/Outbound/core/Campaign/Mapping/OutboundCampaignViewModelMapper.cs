@@ -47,7 +47,7 @@ namespace Teleopti.Ccc.Web.Areas.Outbound.core.Campaign.Mapping
 
 			var campaignVm = new CampaignViewModel
 			{
-				Id = campaign.Id.ToString(),
+				Id = campaign.Id,
 				Name = campaign.Name,
 				Skills = skillVMs,
 				CallListLen = campaign.CallListLen,

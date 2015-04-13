@@ -47,7 +47,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Outbound.Core.Campaign.Mapping
 		public void ShouldMapId()
 		{
 			var result = _target.Map(_campaigns);
-			result.First().Id.Should().Be.EqualTo(_campaign.Id.ToString());
+			result.First().Id.Should().Be.EqualTo(_campaign.Id);
 		}
 
 		[Test]
