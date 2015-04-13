@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Configuration;
 using System.Linq;
+using System.Net.Http;
 using System.Reflection;
 using System.Web.Mvc;
 using DotNetOpenAuth.OpenId;
@@ -47,6 +48,11 @@ namespace Teleopti.Ccc.Web.Areas.SSO.Controllers
 		public ActionResult Provider()
 		{
 			logger.Debug("Start of the OpenIdController.Provider()");
+			if (isHeadRequest())
+			{
+				logger.Debug("Found HEAD-request");
+				return new EmptyResult();
+			}
 			var request = _openIdProvider.GetRequest();
 			if (request != null)
 			{
@@ -69,6 +75,11 @@ namespace Teleopti.Ccc.Web.Areas.SSO.Controllers
 			}
 			return new EmptyResult();
 
+		}
+
+		private bool isHeadRequest()
+		{
+			return Request.HttpMethod.Equals(HttpMethod.Head.Method, StringComparison.InvariantCultureIgnoreCase);
 		}
 
 		public ViewResult SignIn()

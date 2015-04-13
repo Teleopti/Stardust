@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Configuration;
 using System.Linq;
+using System.Net.Http;
 using System.Reflection;
 using System.Web.Mvc;
 using DotNetOpenAuth.Messaging;
@@ -47,6 +48,11 @@ namespace Teleopti.Ccc.Web.WindowsIdentityProvider.Controllers
 		public ActionResult Provider()
 		{
 			logger.Info("Start of the OpenIdController.Provider()");
+			if (isHeadRequest())
+			{
+				logger.Debug("Found HEAD-request");
+				return new EmptyResult();
+			}
 			var request = _openIdProvider.GetRequest();
 
 			// handles request from site
@@ -59,6 +65,11 @@ namespace Teleopti.Ccc.Web.WindowsIdentityProvider.Controllers
 			_providerEndpointWrapper.PendingRequest = (IHostProcessedRequest)request;
 
 			return SignIn();
+		}
+
+		private bool isHeadRequest()
+		{
+			return Request.HttpMethod.Equals(HttpMethod.Head.Method, StringComparison.InvariantCultureIgnoreCase);
 		}
 
 		public ViewResult SignIn()
