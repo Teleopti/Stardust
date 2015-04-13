@@ -77,7 +77,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 				gridListControlDefaultSearch.MultiColumn = true;
 
 				gridListControlDefaultSearch.Grid.ColHiddenEntries.Add(new GridColHidden(0));
-				gridListControlDefaultSearch.Grid.ColHiddenEntries.Add(new GridColHidden(6));
+				gridListControlDefaultSearch.Grid.ColHiddenEntries.Add(new GridColHidden(4));
 
 				if (_persons.Count > 0)
 				{
@@ -129,7 +129,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			gridListControl.MultiColumn = true;
 
 			gridListControl.Grid.ColHiddenEntries.Add(new GridColHidden(0));
-			gridListControl.Grid.ColHiddenEntries.Add(new GridColHidden(6));
+			gridListControl.Grid.ColHiddenEntries.Add(new GridColHidden(4));
 
 			if (_userSelectedPersonList.Count > 0)
 				gridListControl.SetSelected(0, true);
@@ -163,18 +163,6 @@ namespace Teleopti.Ccc.Win.Scheduling
 			}
 
 			if (e.RowIndex <= 0 && e.ColIndex == 3)
-			{
-				e.Style.Text = UserTexts.Resources.LogOn;
-				e.Handled = true;
-			}
-
-			if (e.RowIndex <= 0 && e.ColIndex == 4)
-			{
-				e.Style.Text = UserTexts.Resources.ApplicationLogon;
-				e.Handled = true;
-			}
-
-			if (e.RowIndex <= 0 && e.ColIndex == 5)
 			{
 				e.Style.Text = UserTexts.Resources.Email;
 				e.Handled = true;
@@ -226,7 +214,6 @@ namespace Teleopti.Ccc.Win.Scheduling
 						person.Name.ToString(NameOrderOption.LastNameFirstName).ToLower(cultureInfo).Replace(",", "").Contains(lowerSearchText) ||
 						person.Name.ToString(NameOrderOption.FirstNameLastName).ToLower(cultureInfo).Contains(lowerSearchText) ||
 						person.EmploymentNumber.ToLower(cultureInfo).Contains(lowerSearchText) ||
-						person.ApplicationAuthenticationInfo != null && person.ApplicationAuthenticationInfo.ApplicationLogOnName.ToLower(cultureInfo).Contains(lowerSearchText) || 
 						person.Email.ToLower(cultureInfo).Contains(lowerSearchText ) ||
 						person.AuthenticationInfo != null && person.AuthenticationInfo.Identity.ToLower(cultureInfo).Contains(lowerSearchText)
 						
@@ -446,28 +433,6 @@ namespace Teleopti.Ccc.Win.Scheduling
 		public string EmploymentNumber
 		{
 			get { return _person.EmploymentNumber; }
-		}
-
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
-		public string LogOn
-		{
-			get
-			{
-				if (_person.AuthenticationInfo != null)
-					return _person.AuthenticationInfo.Identity;
-				return string.Empty;
-			}
-		}
-
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
-		public string ApplicationLogOnName
-		{
-			get
-			{
-				if (_person.ApplicationAuthenticationInfo!=null)
-					return  _person.ApplicationAuthenticationInfo.ApplicationLogOnName;
-				return string.Empty;
-			}
 		}
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]

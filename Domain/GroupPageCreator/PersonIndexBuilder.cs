@@ -59,8 +59,7 @@ namespace Teleopti.Ccc.Domain.GroupPageCreator
                     if (period.PersonContract != null)
                         if (period.PersonContract.PartTimePercentage != null)
                             sb.Append(period.PersonContract.PartTimePercentage.Description + delim);
-                    //if (period.BudgetGroup != null)
-                    //    sb.Append(period.BudgetGroup.Name + delim);
+                    
                     sb.Append(period.Note);
                     if (period.RuleSetBag != null)
                         sb.Append(period.RuleSetBag.Description + delim);
@@ -75,14 +74,7 @@ namespace Teleopti.Ccc.Domain.GroupPageCreator
                 sb.Append(person.Email + delim);
                 sb.Append(person.EmploymentNumber + delim);
                 sb.Append(person.Note + delim);
-                if (person.PermissionInformation != null)
-                {
-                    if (person.AuthenticationInfo != null)
-                        sb.Append(person.AuthenticationInfo.Identity + delim);
-                    if (person.ApplicationAuthenticationInfo != null)
-                        sb.Append(person.ApplicationAuthenticationInfo.ApplicationLogOnName + delim);
-                }
-
+                
                 ret.Add(person, sb.ToString());
             }
             return ret;
