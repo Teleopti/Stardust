@@ -205,7 +205,7 @@
 					<th translate>EmployeeNo</th>
                     <th translate>Team</th>
 					<th translate>Email</th>
-					<th translate>LeavingDate</th>
+					<!--<th translate>LeavingDate</th>-->
 					<th ng-repeat="column in optionalColumns">{{column}}</th>
 				</tr>
 			</thead>
@@ -235,7 +235,7 @@
 					<td>{{person.EmploymentNumber}}</td>
                     <td>{{person.Team}}</td>
 					<td>{{person.Email}}</td>
-					<td>{{person.LeavingDate}}</td>
+					<!--<td>{{person.LeavingDate}}</td>-->
 					<td ng-repeat="optionalColumnValue in person.OptionalColumnValues">
 						{{optionalColumnValue.Value}}
 					</td>

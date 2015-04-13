@@ -81,7 +81,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Search
             first.EmploymentNumber.Equals("1011");
             first.PersonId.Equals(personId);
             first.Email.Equals("ashley.andeen@abc.com");
-            first.LeavingDate.Equals("2015-04-09");
+			//first.LeavingDate.Equals("2015-04-09");
             var optionalColumnValues = (IEnumerable<KeyValuePair<string, string>>)first.OptionalColumnValues;
             optionalColumnValues.First().Key.Equals("CellPhone");
             optionalColumnValues.First().Value.Equals("123456");

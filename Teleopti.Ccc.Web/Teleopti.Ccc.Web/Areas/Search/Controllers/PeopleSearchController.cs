@@ -62,7 +62,7 @@ namespace Teleopti.Ccc.Web.Areas.Search.Controllers
                 EmploymentNumber = x.EmploymentNumber,
                 PersonId = x.Id.Value,
                 Email = x.Email,
-                LeavingDate = x.TerminalDate == null ? "" : x.TerminalDate.Value.ToShortDateString(),
+                // LeavingDate = x.TerminalDate == null ? "" : x.TerminalDate.Value.ToShortDateString(),
                 OptionalColumnValues = optionalColumnCollection.Select(c =>
                 {
                     var columnValue = x.GetColumnValue(c);
