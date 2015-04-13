@@ -157,11 +157,6 @@ namespace Teleopti.Ccc.ApplicationConfig.Common
 			LogOn(argument, databaseHandler, defaultAggregateRoot.BusinessUnit);
 			return defaultAggregateRoot;
 		}
-
-		public static bool CheckRaptorCompatibility()
-		{
-			return DBConverter.DatabaseConvert.CheckRaptorCompatibility();
-		}
 	}
 
 	internal class DummyLicensedFunctionsProvider : ILicensedFunctionsProvider
