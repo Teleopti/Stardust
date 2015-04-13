@@ -77,7 +77,7 @@ namespace Teleopti.Ccc.Web.Areas.Outbound.Controllers
 		{
 			var campaign = _outboundCampaignRepository.Get(Id);
 			if (campaign == null)
-				return BadRequest();
+				return NotFound();
 
 			_outboundCampaignRepository.Remove(campaign);
 			return Ok();
