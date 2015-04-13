@@ -189,6 +189,10 @@ Try
     $SupportToolFolder = $directory + "\..\Tools\SupportTools"
     $settingsFile = "settings.txt"
     $fullPathsettingsFile =  $SupportToolFolder + "\" + $settingsFile
+	
+	$togglesFile = "toggles.txt"
+	$fullPathTogglesFileForWeb =  "$directory\..\..\sitesroot\3\bin\FeatureFlags\" + $togglesFile
+	$fullPathTogglesFileForRta =  "$directory\..\..\sitesroot\5\bin\FeatureFlags\" + $togglesFile
 
     $DataSourceName = TeleoptiDriveMapProperty-get -name "DataSourceName"
     
@@ -200,12 +204,21 @@ Try
 	if (Test-Path "$fullPathsettingsFile") {
 		Remove-Item "$fullPathsettingsFile"
 	}
+	
+	Remove-Item "$fullPathTogglesFileForWeb"
+	if (Test-Path "$fullPathTogglesFileForWeb") {
+		Remove-Item "$fullPathTogglesFileForWeb"
+	}
+	Remove-Item "$fullPathTogglesFileForRta"
+	if (Test-Path "$fullPathTogglesFileForRta") {
+		Remove-Item "$fullPathTogglesFileForRta"
+	}
 
     #Get customer specific config from BlobStorage
     CopyFileFromBlobStorage -destinationFolder "$SupportToolFolder" -filename "$settingsFile"
     CopyFileFromBlobStorage -destinationFolder "$SupportToolFolder" -filename "*.key"
-    CopyFileFromBlobStorage -destinationFolder "$directory\..\..\sitesroot\3\bin\FeatureFlags" -filename "toggles.txt"
-    CopyFileFromBlobStorage -destinationFolder "$directory\..\..\sitesroot\5\bin\FeatureFlags" -filename "toggles.txt"
+    CopyFileFromBlobStorage -destinationFolder "$directory\..\..\sitesroot\3\bin\FeatureFlags" -filename "$togglesFile"
+    CopyFileFromBlobStorage -destinationFolder "$directory\..\..\sitesroot\5\bin\FeatureFlags" -filename "$togglesFile"
 
 	$DatasourcesPath="$directory\..\Services\ETL\Service"
 
