@@ -220,11 +220,13 @@ namespace Teleopti.Ccc.Sdk.WcfHost
 					builder.RegisterType<MultiTenancyAuthenticationFactory>().As<IAuthenticationFactory>().InstancePerLifetimeScope();
 				builder.RegisterType<TenantPeopleSaver>().As<ITenantPeopleSaver>().InstancePerLifetimeScope();
 				builder.RegisterType<TenantDataManager>().As<ITenantDataManager>().InstancePerLifetimeScope();
+				builder.RegisterType<GetPayrollResultById.MultiTenancyPayrollLogon>().As<GetPayrollResultById.IPayrollLogon>().InstancePerLifetimeScope();
 			}
 				else
 			{
 					builder.RegisterType<AuthenticationFactory>().As<IAuthenticationFactory>().InstancePerLifetimeScope();
 				builder.RegisterType<EmptyTenantPeopleSaver>().As<ITenantPeopleSaver>().InstancePerLifetimeScope();
+				builder.RegisterType<GetPayrollResultById.PayrollLogon>().As<GetPayrollResultById.IPayrollLogon>().InstancePerLifetimeScope();
 			}
 				
 				builder.RegisterType<LicenseFactory>().InstancePerLifetimeScope();
