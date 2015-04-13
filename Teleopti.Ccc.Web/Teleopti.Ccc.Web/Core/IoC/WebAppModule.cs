@@ -26,6 +26,7 @@ using Teleopti.Ccc.Web.Areas.Tenant.Core;
 using Teleopti.Ccc.Web.Core.Hangfire;
 using Teleopti.Ccc.Web.Core.RequestContext.Initialize;
 using Teleopti.Ccc.Web.Core.Startup;
+using Teleopti.Ccc.Web.Areas.People.Core.IoC;
 
 namespace Teleopti.Ccc.Web.Core.IoC
 {
@@ -100,6 +101,7 @@ namespace Teleopti.Ccc.Web.Core.IoC
 			builder.RegisterModule<TenantModule>();
 			builder.RegisterModule<SeatPlannerAreaModule>();
 			builder.RegisterModule<OutboundAreaModule>();
+			builder.RegisterModule<PeopleAreaModule>();
 		}
 	}
 }
