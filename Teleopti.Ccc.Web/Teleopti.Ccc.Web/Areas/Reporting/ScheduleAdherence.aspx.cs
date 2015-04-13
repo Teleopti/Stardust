@@ -1030,8 +1030,8 @@ namespace Teleopti.Ccc.Web.Areas.Reporting
 		private void ChangeDateParameter(int dayCount)
 		{
 			CheckParametersCollection();
-
-			_sqlParameterList[0].Value = ((DateTime)_sqlParameterList[0].Value).AddDays(dayCount);
+			dateOffset.Value = (Convert.ToInt32(dateOffset.Value) + dayCount).ToString();
+			_sqlParameterList[0].Value = ((DateTime)_sqlParameterList[0].Value).AddDays(Convert.ToDouble(dateOffset.Value));
 			_parameterTextList[0] = ((DateTime)_sqlParameterList[0].Value).ToShortDateString();
 
 			CreateReport();

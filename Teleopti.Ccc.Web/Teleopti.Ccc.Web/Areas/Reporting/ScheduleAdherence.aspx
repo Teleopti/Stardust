@@ -14,6 +14,7 @@
 </head>
 <body class="ReportBody">
 	<form id="aspnetForm" style="margin-top: 10px" runat="server">
+		<asp:HiddenField ID="dateOffset" Value="0" runat="server"/>
 	<asp:ImageButton ID="buttonShowSelection" Visible="False" alt="Show selection" runat="server" onclick="showSelection" src="images/down.png" /><asp:ImageButton ID="buttonHideSelection" alt="Hide selection" runat="server" onclick="hideSelection" src="images/up.png" />
 		<asp:ScriptManager ID="ScriptManager1" EnablePartialRendering="true" runat="server" EnableScriptGlobalization="true" EnableScriptLocalization="true" />
 	<asp:Panel ID="selectionPanel" runat="server">
