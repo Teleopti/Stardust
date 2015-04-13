@@ -151,20 +151,12 @@ namespace Teleopti.Ccc.ApplicationConfig.Common
             get { return _cultureInfo; }
         }
 
-        public int DefaultResolution
-        {
-            get { return _defaultResolution; }
-        }
 
         public bool UseIntegratedSecurity
         {
             get { return _useIntegratedSecurity; }
         }
 
-        public bool OnlyRunMergeDefaultResolution
-        {
-            get { return _onlyRunMergeDefaultResolution; }
-        }
 
         #endregion
 

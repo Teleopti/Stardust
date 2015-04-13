@@ -62,7 +62,6 @@ namespace Teleopti.Ccc.ApplicationConfigTest.Common
             Assert.AreEqual(DateTime.Parse("2006-12-01", CultureInfo.CurrentCulture), _target.ToDate);
             Assert.AreEqual("BusinessUnit", _target.BusinessUnit);
             Assert.AreEqual("kn-IN", _target.CultureInfo.ToString());
-            Assert.AreEqual(15, _target.DefaultResolution);
             Assert.IsFalse(_target.UseIntegratedSecurity);
         }
 

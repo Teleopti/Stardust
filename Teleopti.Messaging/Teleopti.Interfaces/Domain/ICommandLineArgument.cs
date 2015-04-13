@@ -148,26 +148,6 @@ namespace Teleopti.Interfaces.Domain
         /// Created date: 2009-01-28
         /// </remarks>
         CultureInfo CultureInfo { get; }
-        /// <summary>
-        /// Gets the default resolution.
-        /// </summary>
-        /// <value>The default resolution.</value>
-        /// <remarks>
-        /// Created by: peterwe
-        /// Created date: 2009-01-28
-        /// </remarks>
-        int DefaultResolution { get; }
-        /// <summary>
-        /// Gets a value indicating whether [only run merge default resolution].
-        /// </summary>
-        /// <value>
-        /// 	<c>true</c> if [only run merge default resolution]; otherwise, <c>false</c>.
-        /// </value>
-        /// <remarks>
-        /// Created by: Henryg
-        /// Created date: 2009-11-16
-        /// </remarks>
-        bool OnlyRunMergeDefaultResolution { get; }
 
     	///<summary>
     	/// The user name for the new admin user.
