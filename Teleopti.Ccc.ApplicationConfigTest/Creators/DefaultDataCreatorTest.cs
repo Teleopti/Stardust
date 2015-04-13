@@ -2,9 +2,9 @@
 using System.Globalization;
 using NHibernate;
 using NUnit.Framework;
+using Teleopti.Ccc.ApplicationConfig;
 using Teleopti.Ccc.ApplicationConfig.Common;
 using Teleopti.Ccc.ApplicationConfig.Creators;
-using Teleopti.Ccc.DatabaseConverter;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Security.AuthorizationEntities;
 using Teleopti.Ccc.Domain.Time;

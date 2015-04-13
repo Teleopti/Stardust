@@ -1,8 +1,8 @@
 ﻿using NHibernate;
 using NUnit.Framework;
+using Teleopti.Ccc.ApplicationConfig;
 using Teleopti.Ccc.ApplicationConfig.Common;
 using Teleopti.Ccc.ApplicationConfig.Creators;
-using Teleopti.Ccc.DatabaseConverter;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Interfaces.Domain;

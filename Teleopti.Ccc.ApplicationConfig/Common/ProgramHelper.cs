@@ -6,7 +6,6 @@ using System.Reflection;
 using System.Text;
 using System.Threading;
 using Teleopti.Ccc.ApplicationConfig.Creators;
-using Teleopti.Ccc.DatabaseConverter;
 using Teleopti.Ccc.Domain.Security;
 using Teleopti.Ccc.Domain.Security.Authentication;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;

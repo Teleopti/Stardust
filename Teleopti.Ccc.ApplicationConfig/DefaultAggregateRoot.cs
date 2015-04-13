@@ -1,6 +1,6 @@
 ﻿using Teleopti.Interfaces.Domain;
 
-namespace Teleopti.Ccc.DatabaseConverter
+namespace Teleopti.Ccc.ApplicationConfig
 {
     /// <summary>
     /// Default roots used by converter

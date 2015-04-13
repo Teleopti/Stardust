@@ -136,6 +136,7 @@
     <Compile Include="Creators\ScenarioCreator.cs" />
     <Compile Include="Creators\SetChangeInfoCommand.cs" />
     <Compile Include="Creators\SkillTypeCreator.cs" />
+    <Compile Include="DefaultAggregateRoot.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Common\DatabaseHandler.cs" />
     <Compile Include="Creators\ApplicationRoleCreator.cs" />

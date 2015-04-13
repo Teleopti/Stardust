@@ -125,10 +125,6 @@
     <Content Include="Common\Test.xml" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\DataBaseConverter\Teleopti.Ccc.DataBaseConversionTools.csproj">
-      <Project>{E42304EB-5261-48BE-A3AE-4D7C4B565FD7}</Project>
-      <Name>Teleopti.Ccc.DataBaseConversionTools</Name>
-    </ProjectReference>
     <ProjectReference Include="..\Domain\Teleopti.Ccc.Domain.csproj">
       <Project>{ADD1BCDC-CFBB-4632-8FB5-4FF3BD04F666}</Project>
       <Name>Teleopti.Ccc.Domain</Name>
