@@ -140,15 +140,6 @@ namespace Teleopti.Interfaces.Domain
         /// </remarks>
         string DestinationConnectionString { get; }
         /// <summary>
-        /// Gets a value indicating whether [convert mode].
-        /// </summary>
-        /// <value><c>true</c> if [convert mode]; otherwise, <c>false</c>.</value>
-        /// <remarks>
-        /// Created by: peterwe
-        /// Created date: 2009-01-28
-        /// </remarks>
-        bool ConvertMode { get; }
-        /// <summary>
         /// Gets the culture info.
         /// </summary>
         /// <value>The culture info.</value>

@@ -1,7 +1,6 @@
 using System;
 using System.Data.SqlClient;
 using System.Globalization;
-using Teleopti.Ccc.Domain.Time;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.ApplicationConfig.Common
@@ -21,7 +20,6 @@ namespace Teleopti.Ccc.ApplicationConfig.Common
         private DateTime _toDate;
         private string _businessUnit;
         private string[] _argumentCollection;
-        private bool _convertMode;
         private CultureInfo _cultureInfo = CultureInfo.GetCultureInfo("en-US"); //en-US = standard
         private int _defaultResolution;
         private bool _useIntegratedSecurity;
@@ -148,11 +146,6 @@ namespace Teleopti.Ccc.ApplicationConfig.Common
             }
         }
 
-        public bool ConvertMode
-        {
-            get { return _convertMode; }
-        }
-
         public CultureInfo CultureInfo
         {
             get { return _cultureInfo; }
@@ -219,9 +212,6 @@ namespace Teleopti.Ccc.ApplicationConfig.Common
                         break;
                     case "-BU":  // BusinessUnit Name.
                         _businessUnit = switchValue;
-                        break;
-                    case "-CO":  // Convert.
-                        _convertMode = true;
                         break;
                     case "-CU":  // Culture.
                         _cultureInfo = CultureInfo.GetCultureInfo(switchValue);
