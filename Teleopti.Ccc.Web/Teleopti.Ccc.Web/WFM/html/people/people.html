@@ -205,13 +205,13 @@
 					<th translate>EmployeeNo</th>
 					<th translate>Team</th>
 					<th translate>Email</th>
-					<!--<th translate>LeavingDate</th>-->
+					<th translate>LeavingDate</th>
 					<th ng-repeat="column in optionalColumns">{{column}}</th>
 				</tr>
 			</thead>
 			<tfoot>
 				<tr>
-					<td colspan="{{5+optionalColumns.length}}">
+					<td colspan="{{6+optionalColumns.length}}">
 						<div class="pagination pull-right">
 							<ul class="wfm-list row">
 								<li style="display: inline-block" ng-class="{disabled: currentPageIndex == 1}">
@@ -237,7 +237,7 @@
 					<td>{{person.EmploymentNumber}}</td>
 					<td>{{person.Team}}</td>
 					<td>{{person.Email}}</td>
-					<!--<td>{{person.LeavingDate}}</td>-->
+					<td>{{person.LeavingDate}}</td>
 					<td ng-repeat="optionalColumnValue in person.OptionalColumnValues">
 						{{optionalColumnValue.Value}}
 					</td>
