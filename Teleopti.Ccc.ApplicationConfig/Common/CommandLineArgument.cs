@@ -22,7 +22,6 @@ namespace Teleopti.Ccc.ApplicationConfig.Common
         private string[] _argumentCollection;
         private CultureInfo _cultureInfo = CultureInfo.GetCultureInfo("en-US"); //en-US = standard
         private bool _useIntegratedSecurity;
-        private bool _onlyRunMergeDefaultResolution;
     	private string _newUserName;
     	private string _newUserPassword;
 
@@ -207,14 +206,8 @@ namespace Teleopti.Ccc.ApplicationConfig.Common
                     case "-CU":  // Culture.
                         _cultureInfo = CultureInfo.GetCultureInfo(switchValue);
                         break;
-                    case "-DR": // Force merge of Default Resolution to n.
-                        _defaultResolution = Convert.ToInt32(switchValue, CultureInfo.CurrentCulture);
-                        break;
                     case "-EE":
                         _useIntegratedSecurity = true;
-                        break;
-                    case "-OM": // Only run merge of default resolution.
-                        _onlyRunMergeDefaultResolution = true;
                         break;
 					case "-NA":
                 		_newUserName = switchValue;
