@@ -21,7 +21,6 @@ namespace Teleopti.Ccc.ApplicationConfig.Common
         private string _businessUnit;
         private string[] _argumentCollection;
         private CultureInfo _cultureInfo = CultureInfo.GetCultureInfo("en-US"); //en-US = standard
-        private int _defaultResolution;
         private bool _useIntegratedSecurity;
         private bool _onlyRunMergeDefaultResolution;
     	private string _newUserName;
