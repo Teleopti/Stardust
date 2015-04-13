@@ -451,6 +451,7 @@
     <Compile Include="Areas\Outbound\core\Campaign\DataProvider\OutboundCampaignPersister.cs" />
     <Compile Include="Areas\Outbound\core\Campaign\Mapping\IOutboundCampaignMapper.cs" />
     <Compile Include="Areas\Outbound\core\Campaign\Mapping\IOutboundCampaignViewModelMapper.cs" />
+    <Compile Include="Areas\Outbound\core\Campaign\Mapping\OutboundCampaignMapper.cs" />
     <Compile Include="Areas\Outbound\core\IoC\OutboundAreaModule.cs" />
     <Compile Include="Areas\Outbound\core\Campaign\Mapping\OutboundCampaignViewModelMapper.cs" />
     <Compile Include="Areas\Outbound\Models\CampaignForm.cs" />

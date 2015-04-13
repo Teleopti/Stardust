@@ -4,6 +4,6 @@ namespace Teleopti.Ccc.Web.Areas.Outbound.core.Campaign.Mapping
 {
 	public interface IOutboundCampaignMapper
 	{
-		//Campaign Map(CampaignViewModel);
+		Domain.Outbound.Campaign Map(CampaignForm form);
 	}
 }

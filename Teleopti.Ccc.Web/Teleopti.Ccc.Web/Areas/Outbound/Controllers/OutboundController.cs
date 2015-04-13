@@ -37,7 +37,9 @@ namespace Teleopti.Ccc.Web.Areas.Outbound.Controllers
 		public virtual IHttpActionResult CreateCampaign([FromBody]CampaignForm campaignForm)
 		{
 			if (NameValidator.DescriptionIsInvalid(campaignForm.Name)) return BadRequest(GivenDescriptionIsInvalidErrorMessage);
-			var campaignVm = _outboundCampaignPersister.Persist(campaignForm.Name);
+
+			campaignForm.Id = null;
+			var campaignVm = _outboundCampaignPersister.Persist(campaignForm);
 
 			return Created(Request.RequestUri + "/" + campaignVm.Id, campaignVm);
 		}		
@@ -52,22 +54,22 @@ namespace Teleopti.Ccc.Web.Areas.Outbound.Controllers
 		}
 
 		[HttpGet, Route("api/Outbound/Campaign/{Id}"), UnitOfWork]
-		public virtual CampaignViewModel Get(Guid Id)
+		public virtual CampaignViewModel Get(Guid id)
 		{
-			var campaign = _outboundCampaignRepository.GetInFull(Id);
+			var campaign = _outboundCampaignRepository.Get(id);
 			return _outboundCampaignViewModelMapper.Map(campaign);			
 		}
 
 		[HttpPut, Route("api/Outbound/Campaign/{Id}"), UnitOfWork]
-		public virtual IHttpActionResult UpdateCampaign(Guid Id, CampaignForm campaignForm)
+		public virtual IHttpActionResult UpdateCampaign(Guid id, CampaignForm campaignForm)
 		{			
-			campaignForm.Id = Id;
-			var campaign = _outboundCampaignPersister.Persist(campaignForm);
-			if (campaign == null)
+			campaignForm.Id = id;
+			var campaignVM = _outboundCampaignPersister.Persist(campaignForm);
+			if (campaignVM == null)
 			{
 				return BadRequest();
 			}
-			return Ok(_outboundCampaignViewModelMapper.Map(campaign));
+			return Ok(campaignVM);
 		}
 
 		[HttpDelete, Route("api/Outbound/Campaign/{Id}"), UnitOfWork]

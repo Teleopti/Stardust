@@ -18,6 +18,8 @@ namespace Teleopti.Ccc.Web.Areas.Outbound.core.Campaign.Mapping
 
 		public CampaignViewModel Map(Campaign campaign)
 		{
+			if (campaign == null) return null;
+
 			var skills = _skillRepository.LoadAll();
 			var skillVMs = new List<SkillViewModel>();
 			foreach (var skill in skills)

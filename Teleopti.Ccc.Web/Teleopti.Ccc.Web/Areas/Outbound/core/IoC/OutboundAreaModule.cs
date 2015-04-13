@@ -10,6 +10,7 @@ namespace Teleopti.Ccc.Web.Areas.Outbound.core.IoC
 		{
 			builder.RegisterType<OutboundCampaignPersister>().As<IOutboundCampaignPersister>().SingleInstance();
 			builder.RegisterType<OutboundCampaignViewModelMapper>().As<IOutboundCampaignViewModelMapper>().SingleInstance();
+			builder.RegisterType<OutboundCampaignMapper>().As<IOutboundCampaignMapper>().SingleInstance();
 		}
 	}
 }
