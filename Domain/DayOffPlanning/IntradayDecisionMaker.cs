@@ -1,37 +1,32 @@
 using System.Collections.Generic;
+using Teleopti.Ccc.Domain.Optimization;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.DayOffPlanning
 {
     public class IntradayDecisionMaker : IIntradayDecisionMaker
     {
+	    private readonly IScheduleMatrixLockableBitArrayConverterEx _matrixConverter;
 
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "2"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "1")]
-		public DateOnly? Execute(ILockableBitArray lockableBitArray, IScheduleResultDataExtractor dataExtractor, IScheduleMatrixPro matrix)
-		{
+	    public IntradayDecisionMaker(IScheduleMatrixLockableBitArrayConverterEx matrixConverter)
+	    {
+		    _matrixConverter = matrixConverter;
+	    }
+
+	    /// <summary>
+        /// Gets and returns the working day with the highest standard deviation.
+        /// </summary>
+        /// <returns></returns>
+        public DateOnly? Execute(IScheduleMatrixPro matrix, IScheduleResultDataExtractor dataExtractor)
+        {
+            ILockableBitArray bitArray = _matrixConverter.Convert(matrix, false, false);
+
 			IList<double?> values = dataExtractor.Values();
 
-			int? indexOfHighestStandardDeviation = getIndexOfWorkdayWithHighestValue(lockableBitArray, values);
+			int? indexOfHighestStandardDeviation = getIndexOfWorkdayWithHighestValue(bitArray, values);
 			if (!indexOfHighestStandardDeviation.HasValue)
 				return null;
 			return matrix.FullWeeksPeriodDays[indexOfHighestStandardDeviation.Value].Day;
-		}
-        /// <summary>
-        /// Gets and returns the working day with the highest standard deviation.
-        /// </summary>
-        /// <param name="matrixConverter">The matrix converter.</param>
-        /// <param name="dataExtractor">The data extractor.</param>
-        /// <returns></returns>
-        public DateOnly? Execute(IScheduleMatrixLockableBitArrayConverter matrixConverter, IScheduleResultDataExtractor dataExtractor)
-        {
-            IScheduleMatrixPro matrix = matrixConverter.SourceMatrix;
-            ILockableBitArray bitArray = matrixConverter.Convert(false, false);
-            IList<double?> values = dataExtractor.Values();
-
-            int? indexOfHighestStandardDeviation = getIndexOfWorkdayWithHighestValue(bitArray, values);
-            if (!indexOfHighestStandardDeviation.HasValue)
-                return null;
-            return matrix.FullWeeksPeriodDays[indexOfHighestStandardDeviation.Value].Day;
         }
 
         private static int? getIndexOfWorkdayWithHighestValue(ILockableBitArray lockableBitArray, IList<double?> values)

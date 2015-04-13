@@ -6,6 +6,7 @@ using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.Repositories;
+using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
 using Teleopti.Ccc.Domain.Scheduling.Meetings;
 using Teleopti.Ccc.Domain.Security.Principal;
@@ -107,7 +108,11 @@ namespace Teleopti.Ccc.WinCode.Meetings
         {
             var persons = _model.Meeting.MeetingPersons.Select(meetingPerson => meetingPerson.Person).ToList();
 
-            if (_schedulerStateHolder != null && persons.Any(person => !_schedulerStateHolder.AllPermittedPersons.Contains(person))) {_schedulerStateHolder = null;}
+	        if (_schedulerStateHolder != null &&
+	            persons.Any(person => !_schedulerStateHolder.AllPermittedPersons.Contains(person)))
+	        {
+		        _schedulerStateHolder = null;
+	        }
 
             if (_schedulerStateHolder == null)
             {
@@ -119,7 +124,7 @@ namespace Teleopti.Ccc.WinCode.Meetings
                 var availablePersons = _schedulerStateHolder.SchedulingResultState.PersonsInOrganization;
                 _schedulerStateHolder = new SchedulerStateHolder(_schedulerStateHolder.RequestedScenario,
                                                                  _schedulerStateHolder.RequestedPeriod,
-																 availablePersons, new DisableDeletedFilter(new CurrentUnitOfWork(CurrentUnitOfWorkFactory.Make())));
+																 availablePersons, new DisableDeletedFilter(new CurrentUnitOfWork(CurrentUnitOfWorkFactory.Make())),new SchedulingResultStateHolder());
                 _schedulerStateHolder.SchedulingResultState.PersonsInOrganization = new List<IPerson>(availablePersons);
             }
 
@@ -147,7 +152,7 @@ namespace Teleopti.Ccc.WinCode.Meetings
             var requestedPeriod =
                 new DateOnlyPeriod(_model.StartDate.AddDays(-1), _model.RecurringEndDate.AddDays(2));
 			_schedulerStateHolder = new SchedulerStateHolder(_model.Meeting.Scenario, new DateOnlyPeriodAsDateTimePeriod(requestedPeriod, Model.TimeZone),
-															 new List<IPerson>(), _disableDeletedFilter);
+															 new List<IPerson>(), _disableDeletedFilter, new SchedulingResultStateHolder());
                                         
             var stateLoader = new SchedulerStateLoader(
                                                     _schedulerStateHolder,

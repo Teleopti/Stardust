@@ -12,8 +12,6 @@ namespace Teleopti.Ccc.Domain.DayOffPlanning
 
     public class LockableBitArrayChangesTracker : ILockableBitArrayChangesTracker
     {
-
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "2")]
         public IList<DateOnly> DaysOffRemoved(ILockableBitArray workingBitArray, ILockableBitArray originalBitArray, IScheduleMatrixPro matrix, bool considerWeekBefore)
         {
             var movedDays = new List<DateOnly>();
@@ -34,7 +32,6 @@ namespace Teleopti.Ccc.Domain.DayOffPlanning
             return movedDays;
         }
 
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "2")]
         public IList<DateOnly> DaysOffAdded(ILockableBitArray workingBitArray, ILockableBitArray originalBitArray, IScheduleMatrixPro matrix, bool considerWeekBefore)
         {
             var movedDays = new List<DateOnly>();
@@ -68,22 +65,6 @@ namespace Teleopti.Ccc.Domain.DayOffPlanning
             return removed;
         }
 
-        //public static IList<int> DayOffIndexChanges(ILockableBitArray workingBitArray, ILockableBitArray originalBitArray)
-        //{
-        //    IList<int> movedDays = new List<int>();
-
-        //    for (int i = 0; i < workingBitArray.Count; i++)
-        //    {
-        //        if (!workingBitArray[i] && originalBitArray[i]
-        //            || workingBitArray[i] && !originalBitArray[i])
-        //        {
-        //            movedDays.Add(i);
-        //        }
-        //    }
-        //    return movedDays;
-        //}
-
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "1"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
         public static IList<int> DayOffRemovedIndexChanges(ILockableBitArray workingBitArray, ILockableBitArray originalBitArray)
         {
             IList<int> movedDays = new List<int>();
@@ -98,7 +79,6 @@ namespace Teleopti.Ccc.Domain.DayOffPlanning
             return movedDays;
         }
 
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "1"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
         public static IList<int> DayOffAddedIndexChanges(ILockableBitArray workingBitArray, ILockableBitArray originalBitArray)
         {
             IList<int> movedDays = new List<int>();

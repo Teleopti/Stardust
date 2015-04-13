@@ -60,7 +60,6 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 												   optimizerPreferences,
 												   _rollbackService,
 												   _schedulingResultStateHolder,
-												   new ScheduleMatrixLockableBitArrayConverterEx(),
 												   _effectiveRestrictionCreator,
 												   _minWeekWorkTimeRule,
 												   _resourceOptimizationHelper);

@@ -11,12 +11,10 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
         private IDictionary<ISkill, IList<ISkillDay>> _skillDays;
         private readonly IList<ISkill> _skills = new List<ISkill>();
         private SkillStaffPeriodHolder _skillStaffPeriodHolder;
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public ICollection<IPerson> PersonsInOrganization { get; set; }
         public IScheduleDictionary Schedules { get; set; }
         public bool SkipResourceCalculation { get; set; }
 		public bool UseValidation { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public IDictionary<IPerson, IPersonAccountCollection> AllPersonAccounts { get; set; }
 
 		public bool TeamLeaderMode { get; set; }
@@ -26,10 +24,17 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
         {
             PersonsInOrganization = new List<IPerson>();
         }
-        
+
+		public SchedulingResultStateHolder(ICollection<IPerson> personsInOrganization, IScheduleDictionary schedules, IDictionary<ISkill, IList<ISkillDay>> skillDays)
+			: this()
+		{
+			PersonsInOrganization = personsInOrganization;
+			Schedules = schedules;
+			_skillDays = skillDays;
+		}
+
         public IEnumerable<IShiftCategory> ShiftCategories { get; set; }
 
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
 		public IList<IOptionalColumn> OptionalColumns { get; set; } 
 
         public ISkillStaffPeriodHolder SkillStaffPeriodHolder
@@ -43,7 +48,6 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
             }
         }
 
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public IDictionary<ISkill, IList<ISkillDay>> SkillDays
         {
             get { return _skillDays; }
@@ -52,15 +56,6 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
                 _skillDays = value;
                 _skillStaffPeriodHolder = null;
             }
-        }
-
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1006:DoNotNestGenericTypesInMemberSignatures")]
-        public SchedulingResultStateHolder(ICollection<IPerson> personsInOrganization, IScheduleDictionary schedules, IDictionary<ISkill, IList<ISkillDay>> skillDays)
-            : this()
-        {
-            PersonsInOrganization = personsInOrganization;
-            Schedules = schedules;
-            _skillDays = skillDays;
         }
 
         /// <summary>

@@ -5,7 +5,6 @@ namespace Teleopti.Ccc.Domain.Optimization
 {
     public class RuleSetBagsOfGroupOfPeopleCanHaveShortBreakLoader : IRuleSetBagsOfGroupOfPeopleCanHaveShortBreakLoader
     {
-
         public IWorkRuleSetExtractorForGroupOfPeople CreateWorkRuleSetExtractor(IEnumerable<IPerson> persons)
         {
             return new WorkRuleSetExtractorForGroupOfPeople(persons);

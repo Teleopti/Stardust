@@ -1,4 +1,5 @@
-﻿using Teleopti.Interfaces.Domain;
+﻿using System;
+using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 {
@@ -20,9 +21,9 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 	public class TeamDayOffModifier : ITeamDayOffModifier
 	{
 		private readonly IResourceOptimizationHelper _resourceOptimizationHelper;
-		private readonly ISchedulingResultStateHolder _stateHolder;
+		private readonly Func<ISchedulingResultStateHolder> _stateHolder;
 
-		public TeamDayOffModifier(IResourceOptimizationHelper resourceOptimizationHelper, ISchedulingResultStateHolder stateHolder)
+		public TeamDayOffModifier(IResourceOptimizationHelper resourceOptimizationHelper, Func<ISchedulingResultStateHolder> stateHolder)
 		{
 			_resourceOptimizationHelper = resourceOptimizationHelper;
 			_stateHolder = stateHolder;
@@ -44,7 +45,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 		                               IPerson person, DateOnly dateOnly, IDayOffTemplate dayOffTemplate,
 		                               bool resourceCalculate)
 		{
-			IScheduleDictionary scheduleDictionary = _stateHolder.Schedules;
+			IScheduleDictionary scheduleDictionary = _stateHolder().Schedules;
 			IScheduleRange range = scheduleDictionary[person];
 			IScheduleDay scheduleDay = range.ScheduledDay(dateOnly);
 			scheduleDay.DeleteMainShift(scheduleDay);
@@ -68,7 +69,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 		public void RemoveDayOffForMember(ISchedulePartModifyAndRollbackService schedulePartModifyAndRollbackService,
 										  IPerson person, DateOnly dateOnly)
 		{
-			IScheduleDictionary scheduleDictionary = _stateHolder.Schedules;
+			IScheduleDictionary scheduleDictionary = _stateHolder().Schedules;
 			IScheduleRange range = scheduleDictionary[person];
 			IScheduleDay scheduleDay = range.ScheduledDay(dateOnly);
 			scheduleDay.DeleteDayOff();

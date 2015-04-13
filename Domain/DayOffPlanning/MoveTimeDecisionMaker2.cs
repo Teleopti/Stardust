@@ -1,14 +1,22 @@
 using System;
 using System.Collections.Generic;
+using Teleopti.Ccc.Domain.Optimization;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.DayOffPlanning
 {
     public class MoveTimeDecisionMaker2 : IMoveTimeDecisionMaker
     {
-        public IList<DateOnly> Execute(IScheduleMatrixLockableBitArrayConverter matrixConverter, IScheduleResultDataExtractor dataExtractor)
+	    private readonly IScheduleMatrixLockableBitArrayConverterEx _matrixConverter;
+
+	    public MoveTimeDecisionMaker2(IScheduleMatrixLockableBitArrayConverterEx matrixConverter)
+	    {
+		    _matrixConverter = matrixConverter;
+	    }
+
+	    public IList<DateOnly> Execute(IScheduleMatrixPro matrix, IScheduleResultDataExtractor dataExtractor)
         {
-            return makeDecision(matrixConverter.Convert(false, false), matrixConverter.SourceMatrix, dataExtractor);
+            return makeDecision(_matrixConverter.Convert(matrix, false, false), matrix, dataExtractor);
         }
 
         private static IList<DateOnly> makeDecision(ILockableBitArray lockableBitArray, IScheduleMatrixPro matrix,

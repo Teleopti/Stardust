@@ -18,7 +18,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 
     public class FixedStaffSchedulingService : IFixedStaffSchedulingService
     {
-	    private readonly ISchedulingResultStateHolder _schedulingResultStateHolder;
+	    private readonly Func<ISchedulingResultStateHolder> _schedulingResultStateHolder;
 	    private readonly IDayOffsInPeriodCalculator _dayOffsInPeriodCalculator;
 	    private readonly IEffectiveRestrictionCreator _effectiveRestrictionCreator;
 	    private readonly IScheduleService _scheduleService;
@@ -30,9 +30,8 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 
         public event EventHandler<SchedulingServiceBaseEventArgs> DayScheduled;
 
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "4")]
 		public FixedStaffSchedulingService(
-            ISchedulingResultStateHolder schedulingResultStateHolder,
+            Func<ISchedulingResultStateHolder> schedulingResultStateHolder,
 			IDayOffsInPeriodCalculator dayOffsInPeriodCalculator, 
             IEffectiveRestrictionCreator effectiveRestrictionCreator,
 			IScheduleService scheduleService, 
@@ -69,7 +68,6 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
             _scheduleService.ClearFinderResults();
         }
 
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "1")]
 		public bool DoTheScheduling(IList<IScheduleDay> selectedParts, ISchedulingOptions schedulingOptions, bool useOccupancyAdjustment, bool breakIfPersonCannotSchedule, ISchedulePartModifyAndRollbackService rollbackService)
         {
         	var result = true;
@@ -87,6 +85,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 
 				var dates = GetAllDates(personDateDictionary);
 				var initialPersons = personDateDictionary.Keys;
+				var stateHolder = _schedulingResultStateHolder();
 		    foreach (DateOnly date in dates)
 		    {
 		        var persons = initialPersons.ToList();
@@ -94,7 +93,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 
 		        while (person != null)
 		        {
-		            IScheduleDay schedulePart = _schedulingResultStateHolder.Schedules[person].ScheduledDay(date);
+			        IScheduleDay schedulePart = stateHolder.Schedules[person].ScheduledDay(date);
 		            if (!schedulePart.IsScheduled())
 		            {
 		                var virtualSchedulePeriod = person.VirtualSchedulePeriod(date);

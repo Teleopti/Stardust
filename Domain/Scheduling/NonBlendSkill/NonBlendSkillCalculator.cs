@@ -5,7 +5,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.NonBlendSkill
 {
 	public class NonBlendSkillCalculator : INonBlendSkillCalculator
 	{
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "2")]
         public void Calculate(DateOnly day, IResourceCalculationDataContainer relevantProjections, ISkillSkillStaffPeriodExtendedDictionary relevantSkillStaffPeriods, bool addToEarlierResult)
 		{
 			foreach (KeyValuePair<ISkill, ISkillStaffPeriodDictionary> pair in relevantSkillStaffPeriods)

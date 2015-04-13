@@ -81,12 +81,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 			IList<ISmartDayOffBackToLegalStateSolverContainer> solverContainers = new List<ISmartDayOffBackToLegalStateSolverContainer>();
 			foreach (var matrixOriginalStateContainer in matrixOriginalStateContainers)
 			{
-				IScheduleMatrixLockableBitArrayConverter bitArrayConverter =
-					new ScheduleMatrixLockableBitArrayConverter(matrixOriginalStateContainer.ScheduleMatrix, scheduleMatrixLockableBitArrayConverterEx);
-
-				ILockableBitArray bitArray = bitArrayConverter.Convert(daysOffPreferences.ConsiderWeekBefore,
-					daysOffPreferences.ConsiderWeekAfter);
-
+				ILockableBitArray bitArray = scheduleMatrixLockableBitArrayConverterEx.Convert(matrixOriginalStateContainer.ScheduleMatrix, daysOffPreferences.ConsiderWeekBefore, daysOffPreferences.ConsiderWeekAfter);
 				IDayOffBackToLegalStateFunctions functions = new DayOffBackToLegalStateFunctions(bitArray);
 				IDayOffDecisionMaker cmsbOneFreeWeekendMax5WorkingDaysDecisionMaker = new CMSBOneFreeWeekendMax5WorkingDaysDecisionMaker(new OfficialWeekendDays(), new TrueFalseRandomizer());
 				ISmartDayOffBackToLegalStateService solverService = new SmartDayOffBackToLegalStateService(functions, daysOffPreferences, 20, cmsbOneFreeWeekendMax5WorkingDaysDecisionMaker);
@@ -108,11 +103,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 			if (backToLegalStateSolverContainer.Result)
 			{
 				IScheduleMatrixPro matrix = backToLegalStateSolverContainer.MatrixOriginalStateContainer.ScheduleMatrix;
-				IScheduleMatrixLockableBitArrayConverter bitArrayConverter =
-					new ScheduleMatrixLockableBitArrayConverter(matrix, scheduleMatrixLockableBitArrayConverterEx);
-
-				ILockableBitArray doArray = bitArrayConverter.Convert(daysOffPreferences.ConsiderWeekBefore,
-					daysOffPreferences.ConsiderWeekAfter);
+				ILockableBitArray doArray = scheduleMatrixLockableBitArrayConverterEx.Convert(matrix, daysOffPreferences.ConsiderWeekBefore, daysOffPreferences.ConsiderWeekAfter);
 
 				int bitArrayToMatrixOffset = 0;
 				if (!daysOffPreferences.ConsiderWeekBefore)

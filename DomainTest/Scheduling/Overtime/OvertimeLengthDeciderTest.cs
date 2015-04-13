@@ -52,7 +52,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Overtime
             _overtimePeriodValueMapper = new OvertimePeriodValueMapper();
 			_overtimeSpecifiedPeriod = new MinMax<TimeSpan>(TimeSpan.Zero, TimeSpan.FromDays(1).Add(TimeSpan.FromHours(6)));
             _target = new OvertimeLengthDecider(_skillResolutionProvider, _overtimeSkillStaffPeriodToSkillIntervalDataMapper,
-                                                _overtimeSkillIntervalDataDivider, _schedulingResultStateHolder, 
+                                                _overtimeSkillIntervalDataDivider, ()=>_schedulingResultStateHolder, 
 												_calculateBestOvertime, _overtimePeriodValueMapper,
 												_overtimeSkillIntervalDataAggregator);
         }

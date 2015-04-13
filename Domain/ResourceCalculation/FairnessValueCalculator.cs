@@ -5,13 +5,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 {
     public class FairnessValueCalculator : IFairnessValueCalculator
     {
-        private double _maxFairnessPoint;
-        private double _averageFairnessPointTotal;
-        private double _averageFairnessPointAgent;
-        private double _maxShiftValue;
-
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "4")]
-		public double CalculateFairnessValue(
+        public double CalculateFairnessValue(
             double shiftValue, 
             double shiftCategoryFairnessPoint, 
             double maxFairnessPoint, 
@@ -20,38 +14,33 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
             double maxShiftValue,
 			ISchedulingOptions schedulingOptions)
         {
-            _maxFairnessPoint = maxFairnessPoint > 0 ? maxFairnessPoint : 1;
-            _averageFairnessPointTotal = totalFairness;
-            _averageFairnessPointAgent = agentFairness.FairnessPointsPerShift;
-            _maxShiftValue = maxShiftValue;
-            return this.totalFairness(shiftValue, shiftCategoryFairnessPoint, schedulingOptions);
-        }
-
-        private double totalFairness(double shiftValue, double shiftCategoryFairnessPoint, ISchedulingOptions schedulingOptions)
-        {
+            var positiveMaxFairnessPoint = maxFairnessPoint > 0 ? maxFairnessPoint : 1;
+            var averageFairnessPointTotal = totalFairness;
+            var averageFairnessPointAgent = agentFairness.FairnessPointsPerShift;
+            
 			double percentFairnessPart = (1 - schedulingOptions.Fairness.Value) * shiftValue;
-            double shiftCategoryFairnessPart = shiftCategoryFairness(shiftCategoryFairnessPoint);
+            double shiftCategoryFairnessPart = shiftCategoryFairness(differenceFromAverage(shiftCategoryFairnessPoint,averageFairnessPointTotal,averageFairnessPointAgent), positiveMaxFairnessPoint);
 
             return percentFairnessPart +
-				   schedulingOptions.Fairness.Value * Math.Abs(_maxShiftValue) * shiftCategoryFairnessPart;
+				   schedulingOptions.Fairness.Value * Math.Abs(maxShiftValue) * shiftCategoryFairnessPart;
         }
 
-        private double shiftCategoryFairness(double shiftCategoryFairnessPoint)
+		private double shiftCategoryFairness(double differenceFromAverage, double maxFairnessPoint)
         {
-            return 1 - differenceFromAverage(shiftCategoryFairnessPoint) / (2 * _maxFairnessPoint);
+            return 1 - differenceFromAverage / (2 * maxFairnessPoint);
         }
 
-        private double differenceFromAverage(double shiftCategoryFairnessPoint)
+		private double differenceFromAverage(double shiftCategoryFairnessPoint, double averageFairnessPointTotal, double averageFairnessPointAgent)
         {
             double ret;
-            double differenceAgent = _averageFairnessPointTotal - _averageFairnessPointAgent;
+            double differenceAgent = averageFairnessPointTotal - averageFairnessPointAgent;
             if (differenceAgent >= 0)
             {
-                ret = Math.Ceiling(_averageFairnessPointTotal + differenceAgent);
+                ret = Math.Ceiling(averageFairnessPointTotal + differenceAgent);
             }
             else
             {
-                ret = Math.Floor(_averageFairnessPointTotal + differenceAgent);
+                ret = Math.Floor(averageFairnessPointTotal + differenceAgent);
             }
             return Math.Abs(ret - shiftCategoryFairnessPoint);
         }

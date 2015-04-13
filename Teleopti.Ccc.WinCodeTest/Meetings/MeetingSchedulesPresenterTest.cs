@@ -7,6 +7,7 @@ using NUnit.Framework;
 using Rhino.Mocks;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Common.Time;
+using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
 using Teleopti.Ccc.Domain.Scheduling.Meetings;
@@ -50,7 +51,7 @@ namespace Teleopti.Ccc.WinCodeTest.Meetings
             _scenario = _mocks.StrictMock<IScenario>();
             _rangeProjectionService = _mocks.StrictMock<IRangeProjectionService>();
             _schedulerStateLoader = _mocks.DynamicMock<ISchedulerStateLoader>();
-			_schedulerStateHolder = new SchedulerStateHolder(_scenario, new DateOnlyPeriodAsDateTimePeriod(_period, _timeZone), new List<IPerson> { _person }, _mocks.DynamicMock<IDisableDeletedFilter>());
+			_schedulerStateHolder = new SchedulerStateHolder(_scenario, new DateOnlyPeriodAsDateTimePeriod(_period, _timeZone), new List<IPerson> { _person }, _mocks.DynamicMock<IDisableDeletedFilter>(), new SchedulingResultStateHolder());
 		    _schedulerStateHolder.TimeZoneInfo = _timeZone;
             _meetingSlotFinderService = _mocks.StrictMock<IMeetingSlotFinderService>();
 

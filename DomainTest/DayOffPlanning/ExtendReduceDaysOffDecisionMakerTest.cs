@@ -3,6 +3,7 @@ using System.Collections.ObjectModel;
 using NUnit.Framework;
 using Rhino.Mocks;
 using Teleopti.Ccc.Domain.DayOffPlanning;
+using Teleopti.Ccc.Domain.Optimization;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.DomainTest.DayOffPlanning
@@ -12,7 +13,7 @@ namespace Teleopti.Ccc.DomainTest.DayOffPlanning
     {
         private IExtendReduceDaysOffDecisionMaker _target;
         private MockRepository _mocks;
-        private IScheduleMatrixLockableBitArrayConverter _bitArrayConverter;
+        private IScheduleMatrixLockableBitArrayConverterEx _bitArrayConverter;
         private IScheduleResultDataExtractor _scheduleResultDataExtractor;
         private IDayOffLegalStateValidator _validator;
         private IList<IDayOffLegalStateValidator> _validators;
@@ -29,9 +30,9 @@ namespace Teleopti.Ccc.DomainTest.DayOffPlanning
         [SetUp]
         public void Setup()
         {
-            _mocks = new MockRepository();
-            _target = new ExtendReduceDaysOffDecisionMaker();
-            _bitArrayConverter = _mocks.StrictMock<IScheduleMatrixLockableBitArrayConverter>();
+			_mocks = new MockRepository();
+			_bitArrayConverter = _mocks.StrictMock<IScheduleMatrixLockableBitArrayConverterEx>();
+            _target = new ExtendReduceDaysOffDecisionMaker(_bitArrayConverter);
             _scheduleResultDataExtractor = _mocks.StrictMock<IScheduleResultDataExtractor>();
             _validator = _mocks.StrictMock<IDayOffLegalStateValidator>();
             _validators = new List<IDayOffLegalStateValidator> { _validator };
@@ -64,7 +65,7 @@ namespace Teleopti.Ccc.DomainTest.DayOffPlanning
 
             using (_mocks.Playback())
             {
-                result = _target.Execute(_bitArrayConverter, _scheduleResultDataExtractor, _validators);
+                result = _target.Execute(_matrix, _scheduleResultDataExtractor, _validators);
             }
 
             Assert.AreEqual(new DateOnly(2012, 2, 2), result.DayToLengthen);
@@ -91,7 +92,7 @@ namespace Teleopti.Ccc.DomainTest.DayOffPlanning
 
             using (_mocks.Playback())
             {
-                result = _target.Execute(_bitArrayConverter, _scheduleResultDataExtractor, _validators);
+                result = _target.Execute(_matrix, _scheduleResultDataExtractor, _validators);
             }
 
             Assert.AreEqual(new DateOnly(2012, 2, 4), result.DayToLengthen);
@@ -117,7 +118,7 @@ namespace Teleopti.Ccc.DomainTest.DayOffPlanning
 
             using (_mocks.Playback())
             {
-                result = _target.Execute(_bitArrayConverter, _scheduleResultDataExtractor, _validators);
+                result = _target.Execute(_matrix, _scheduleResultDataExtractor, _validators);
             }
 
             Assert.IsNull(result.DayToLengthen);
@@ -142,7 +143,7 @@ namespace Teleopti.Ccc.DomainTest.DayOffPlanning
 
             using (_mocks.Playback())
             {
-                result = _target.Execute(_bitArrayConverter, _scheduleResultDataExtractor, _validators);
+                result = _target.Execute(_matrix, _scheduleResultDataExtractor, _validators);
             }
 
             Assert.AreEqual(new DateOnly(2012, 2, 1), result.DayToLengthen);
@@ -165,47 +166,16 @@ namespace Teleopti.Ccc.DomainTest.DayOffPlanning
 
             using (_mocks.Playback())
             {
-                result = _target.Execute(_bitArrayConverter, _scheduleResultDataExtractor, _validators);
+                result = _target.Execute(_matrix, _scheduleResultDataExtractor, _validators);
             }
 
             Assert.IsNull(result.DayToLengthen);
             Assert.IsNull(result.DayToShorten);
         }
 
-        //[Test]
-        //public void ShouldRetryFindDayToLengthenIfNotDayToLengthenHasValueAndAlsoDayToShortenHasValue()
-        //{
-        //    _bitArray.Set(1, true);
-        //    _bitArray.Set(4, true);
-        //    _bitArray.Set(6, true);
-
-        //    var x = _bitArray.ToLongBitArray();
-        //    using (_mocks.Record())
-        //    {
-        //        commonMocks();
-        //        Expect.Call(_validator.IsValid(_bitArray.ToLongBitArray(), 7)).IgnoreArguments().Return(false).Repeat.Times(7);
-        //        Expect.Call(_validator.IsValid(_bitArray.ToLongBitArray(), 11)).Return(true);
-        //        Expect.Call(_scheduleResultDataExtractor.Values()).Return(standardList());
-        //        Expect.Call(_matrix.FullWeeksPeriodDays).Return(
-        //            new ReadOnlyCollection<IScheduleDayPro>(fullWeekPeriodDays()))
-        //            .Repeat.AtLeastOnce();
-        //    }
-
-        //    ExtendReduceTimeDecisionMakerResult result;
-
-        //    using (_mocks.Playback())
-        //    {
-        //        result = _target.Execute(_bitArrayConverter, _scheduleResultDataExtractor, _validators);
-        //    }
-
-        //    Assert.AreEqual(new DateOnly(2012, 2, 5), result.DayToLengthen);
-        //    Assert.AreEqual(new DateOnly(2012, 2, 3), result.DayToShorten);
-        //}
-
         private void commonMocks()
         {
-            Expect.Call(_bitArrayConverter.SourceMatrix).Return(_matrix).Repeat.Any();
-            Expect.Call(_bitArrayConverter.Convert(false, false)).Return(_bitArray).Repeat.Any();
+            Expect.Call(_bitArrayConverter.Convert(_matrix, false, false)).Return(_bitArray).Repeat.Any();
             Expect.Call(_scheduleDayPro1.Day).Return(new DateOnly(2012, 2, 1)).Repeat.Any();
             Expect.Call(_scheduleDayPro2.Day).Return(new DateOnly(2012, 2, 2)).Repeat.Any();
             Expect.Call(_scheduleDayPro3.Day).Return(new DateOnly(2012, 2, 3)).Repeat.Any();

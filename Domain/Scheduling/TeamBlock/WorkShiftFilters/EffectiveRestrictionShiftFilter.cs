@@ -10,7 +10,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftFilters
 	
 	public class EffectiveRestrictionShiftFilter : IEffectiveRestrictionShiftFilter
 	{
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "2")]
 		public bool Filter(ISchedulingOptions schedulingOptions, IEffectiveRestriction effectiveRestriction, IWorkShiftFinderResult finderResult)
 		{
 			if (schedulingOptions == null) return false;

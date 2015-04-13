@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using Teleopti.Ccc.Domain.GroupPageCreator;
 using Teleopti.Ccc.Domain.ResourceCalculation.GroupScheduling;
 using Teleopti.Interfaces.Domain;
@@ -12,12 +13,12 @@ namespace Teleopti.Ccc.Domain.Optimization
 
 	public class GroupPersonBuilderForOptimization : IGroupPersonBuilderForOptimization
 	{
-		private readonly ISchedulingResultStateHolder _resultStateHolder;
-		private readonly IGroupPagePerDateHolder _groupPagePerDateHolder;
+		private readonly Func<ISchedulingResultStateHolder> _resultStateHolder;
+		private readonly Func<IGroupPagePerDateHolder> _groupPagePerDateHolder;
 		private readonly IGroupCreator _groupCreator;
 
-		public GroupPersonBuilderForOptimization(ISchedulingResultStateHolder resultStateHolder, 
-			IGroupPagePerDateHolder groupPagePerDateHolder, IGroupCreator groupCreator)
+		public GroupPersonBuilderForOptimization(Func<ISchedulingResultStateHolder> resultStateHolder, 
+			Func<IGroupPagePerDateHolder> groupPagePerDateHolder, IGroupCreator groupCreator)
 		{
 			_resultStateHolder = resultStateHolder;
 			_groupPagePerDateHolder = groupPagePerDateHolder;
@@ -26,8 +27,8 @@ namespace Teleopti.Ccc.Domain.Optimization
 
 		public Group BuildGroup(IPerson person, DateOnly dateOnly)
 		{
-			var pageOnDate = _groupPagePerDateHolder.GroupPersonGroupPagePerDate.GetGroupPageByDate(dateOnly);
-			var allPermittedPersons = _resultStateHolder.PersonsInOrganization;
+			var pageOnDate = _groupPagePerDateHolder().GroupPersonGroupPagePerDate.GetGroupPageByDate(dateOnly);
+			var allPermittedPersons = _resultStateHolder().PersonsInOrganization;
 			var group = _groupCreator.CreateGroupForPerson(person, pageOnDate, allPermittedPersons.ToList());
 
 			return group;

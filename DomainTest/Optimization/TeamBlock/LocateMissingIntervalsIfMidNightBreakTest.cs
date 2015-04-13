@@ -42,7 +42,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock
             _skillStaffPeriod4 = _mock.StrictMock<ISkillStaffPeriod>();
             _schedulingResultStateHolder = _mock.StrictMock<ISchedulingResultStateHolder>();
             _timeZoneInfo = _tz;
-            _target = new LocateMissingIntervalsIfMidNightBreak(_schedulingResultStateHolder);
+            _target = new LocateMissingIntervalsIfMidNightBreak(()=>_schedulingResultStateHolder);
         }
 
        [Test]

@@ -41,7 +41,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.WorkShiftFilters
 			_resultStateHolder = _mocks.StrictMock<ISchedulingResultStateHolder>();
 			_finderResult = new WorkShiftFinderResult(_person, _dateOnly);
 			_personalShiftMeetingTimeChecker = _mocks.StrictMock<IPersonalShiftMeetingTimeChecker>();
-			_target = new PersonalShiftsShiftFilter(_resultStateHolder, _personalShiftMeetingTimeChecker);
+			_target = new PersonalShiftsShiftFilter(()=>_resultStateHolder, _personalShiftMeetingTimeChecker);
 		}
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling"), Test]

@@ -73,7 +73,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
             _schedulingOptions = new SchedulingOptions();
         	_shiftLengthDecider = _mocks.StrictMock<IShiftLengthDecider>();
 			_target = new WorkShiftFinderService(()=>_stateHolder, ()=>_preSchedulingStatusChecker,
-               _shiftProjectionCacheFilter, _personSkillPeriodsDataHolderManager,
+               _shiftProjectionCacheFilter, ()=>_personSkillPeriodsDataHolderManager,
                _shiftProjectionCacheManager, _calculatorManager, ()=>_workShiftMinMaxCalculator, _fairnessAndMaxSeatCalculatorsManager,
 			   _shiftLengthDecider);
 			_possibleStartEndCategory =new PossibleStartEndCategory();

@@ -12,10 +12,10 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftFilters
 	
 	public class PersonalShiftsShiftFilter : IPersonalShiftsShiftFilter
 	{
-		private readonly ISchedulingResultStateHolder _resultStateHolder;
+		private readonly Func<ISchedulingResultStateHolder> _resultStateHolder;
 		private readonly IPersonalShiftMeetingTimeChecker _personalShiftMeetingTimeChecker;
 
-		public PersonalShiftsShiftFilter(ISchedulingResultStateHolder resultStateHolder, IPersonalShiftMeetingTimeChecker personalShiftMeetingTimeChecker)
+		public PersonalShiftsShiftFilter(Func<ISchedulingResultStateHolder> resultStateHolder, IPersonalShiftMeetingTimeChecker personalShiftMeetingTimeChecker)
 		{
 			_resultStateHolder = resultStateHolder;
 			_personalShiftMeetingTimeChecker = personalShiftMeetingTimeChecker;
@@ -27,7 +27,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftFilters
 			if (shiftList == null) return null;
 			if (shiftList.Count == 0) return shiftList;
 
-			var schedulePart = _resultStateHolder.Schedules[person].ScheduledDay(dateOnly);
+			var schedulePart = _resultStateHolder().Schedules[person].ScheduledDay(dateOnly);
 			TimePeriod? period = getMaximumPeriodForPersonalShiftsAndMeetings(schedulePart);
 			if (period.HasValue)
 			{

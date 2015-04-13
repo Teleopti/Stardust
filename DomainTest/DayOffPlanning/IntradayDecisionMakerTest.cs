@@ -3,6 +3,7 @@ using System.Collections.ObjectModel;
 using NUnit.Framework;
 using Rhino.Mocks;
 using Teleopti.Ccc.Domain.DayOffPlanning;
+using Teleopti.Ccc.Domain.Optimization;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.DomainTest.DayOffPlanning
@@ -12,7 +13,7 @@ namespace Teleopti.Ccc.DomainTest.DayOffPlanning
     {
         private IntradayDecisionMaker _target;
         private MockRepository _mocks;
-        private IScheduleMatrixLockableBitArrayConverter _matrixConverter;
+        private IScheduleMatrixLockableBitArrayConverterEx _matrixConverter;
         private IScheduleResultDataExtractor _dataExtractor;
         private IScheduleMatrixPro _scheduleMatrix;
         private IList<double?> _values;
@@ -45,11 +46,11 @@ namespace Teleopti.Ccc.DomainTest.DayOffPlanning
         [SetUp]
         public void Setup()
         {
-            _mocks = new MockRepository();
-            _target = new IntradayDecisionMaker();
+			_mocks = new MockRepository();
+			_matrixConverter = _mocks.StrictMock<IScheduleMatrixLockableBitArrayConverterEx>();
+            _target = new IntradayDecisionMaker(_matrixConverter);
 
             _scheduleMatrix = _mocks.StrictMock<IScheduleMatrixPro>();
-            _matrixConverter = _mocks.StrictMock<IScheduleMatrixLockableBitArrayConverter>();
             _dataExtractor = _mocks.StrictMock<IScheduleResultDataExtractor>();
             _values = new List<double?> { 20, 10, 30, 0 };
 
@@ -88,47 +89,18 @@ namespace Teleopti.Ccc.DomainTest.DayOffPlanning
             {
                 simpleMatrixExpectations();
 
-                Expect.Call(_matrixConverter.SourceMatrix).Return(_scheduleMatrix).Repeat.Any();
-                Expect.Call(_matrixConverter.Convert(false, false)).Return(bitArray).Repeat.Any();
+                Expect.Call(_matrixConverter.Convert(_scheduleMatrix, false, false)).Return(bitArray).Repeat.Any();
                 Expect.Call(_dataExtractor.Values()).Return(_values).Repeat.Any();
             }
 
             // day counterparts are > febr 9, 10, 11, 12
-            DateOnly? result = _target.Execute(_matrixConverter, _dataExtractor);
+			DateOnly? result = _target.Execute(_scheduleMatrix, _dataExtractor);
 
             DateOnly expected = new DateOnly(2010, 02, 11);
 
             Assert.IsTrue(result.HasValue);
             Assert.AreEqual(expected, result.Value);
         }
-
-        //[Test]
-        //public void SimpleLockedTest()
-        //{
-
-        //    ILockableBitArray bitArray = createBitArray();
-        //    bitArray.Lock(1, true);
-        //    bitArray.Lock(4, true);
-
-        //    using (_mocks.Record())
-        //    {
-        //        simpleMatrixExpectations();
-
-        //        Expect.Call(_matrixConverter.SourceMatrix).Return(_scheduleMatrix).Repeat.Any();
-        //        Expect.Call(_matrixConverter.Convert(false, false)).Return(bitArray).Repeat.Any();
-        //        Expect.Call(_dataExtractor.Values()).Return(_values).Repeat.Any();
-        //    }
-
-        //    // day counterparts are > febr 9, 10, 11, 12
-        //    IList<DateOnly> result = _target.Execute(_matrixConverter, _dataExtractor);
-        //    Assert.AreEqual(2, result.Count);
-
-        //    DateOnly mostUnderStaffingDay = new DateOnly(2010, 02, 10);
-        //    DateOnly mostOverStaffingDay = new DateOnly(2010, 02, 11);
-
-        //    Assert.AreEqual(mostUnderStaffingDay, result[0]);
-        //    Assert.AreEqual(mostOverStaffingDay, result[1]);
-        //}
 
         private void simpleMatrixExpectations()
         {

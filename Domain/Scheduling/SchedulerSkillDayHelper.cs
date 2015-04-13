@@ -1,42 +1,38 @@
 using System.Collections.Generic;
 using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.Repositories;
+using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Scheduling
 {
     public interface ISchedulerSkillDayHelper
     {
-        void AddSkillDaysToStateHolder(ForecastSource forecastSource, int demand);
+		void AddSkillDaysToStateHolder(DateOnlyPeriod datePeriod, ForecastSource forecastSource, int demand);
     }
 
     public class SchedulerSkillDayHelper : ISchedulerSkillDayHelper
     {
-        private readonly ISchedulingResultStateHolder _schedulingResultStateHolder;
-        private readonly DateOnlyPeriod _dateTimePeriod;
+        private readonly ISchedulerStateHolder _schedulerStateHolder;
         private readonly ISkillDayRepository _skillDayRepository;
-        private readonly IScenario _scenario;
 
-        public SchedulerSkillDayHelper(ISchedulingResultStateHolder schedulingResultStateHolder, DateOnlyPeriod dateTimePeriod,
-                ISkillDayRepository skillDayRepository, IScenario scenario)
+        public SchedulerSkillDayHelper(ISchedulerStateHolder schedulerStateHolder, ISkillDayRepository skillDayRepository)
         {
-            _schedulingResultStateHolder = schedulingResultStateHolder;
-            _dateTimePeriod = dateTimePeriod;
+            _schedulerStateHolder = schedulerStateHolder;
             _skillDayRepository = skillDayRepository;
-            _scenario = scenario;
         }
 
-        public void AddSkillDaysToStateHolder(ForecastSource forecastSource, int demand)
+        public void AddSkillDaysToStateHolder(DateOnlyPeriod datePeriod, ForecastSource forecastSource, int demand)
         {
-            var theSkillDays = _schedulingResultStateHolder.SkillDays;
+            var theSkillDays = _schedulerStateHolder.SchedulingResultState.SkillDays;
             // TODO remove first
-            foreach (var skill in _schedulingResultStateHolder.Skills)
+            foreach (var skill in _schedulerStateHolder.SchedulingResultState.Skills)
             {
                 if (skill.SkillType.ForecastSource == forecastSource)
                 {
                     ICollection<ISkillDay> skillDays =
-                    _skillDayRepository.GetAllSkillDays(_dateTimePeriod, new List<ISkillDay>(), skill,
-                                                       _scenario, _ => {});
+                    _skillDayRepository.GetAllSkillDays(datePeriod, new List<ISkillDay>(), skill,
+                                                       _schedulerStateHolder.RequestedScenario, _ => {});
                     foreach (ISkillDay skillDay in skillDays)
                     {
                         var sDay = skillDay as IMaxSeatSkillDay;
@@ -59,7 +55,7 @@ namespace Teleopti.Ccc.Domain.Scheduling
                 }
             }
 
-            _schedulingResultStateHolder.SkillDays = theSkillDays;
+            _schedulerStateHolder.SchedulingResultState.SkillDays = theSkillDays;
         }
     }
 }

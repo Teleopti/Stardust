@@ -16,7 +16,6 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 		private readonly IOptimizationPreferences _optimizerPreferences;
 		private readonly ISchedulePartModifyAndRollbackService _rollbackService;
 		private readonly ISchedulingResultStateHolder _schedulingResultStateHolder;
-		private readonly IScheduleMatrixLockableBitArrayConverterEx _scheduleMatrixLockableBitArrayConverterEx;
 		private readonly IEffectiveRestrictionCreator _effectiveRestrictionCreator;
 		private readonly IMinWeekWorkTimeRule _minWeekWorkTimeRule;
 		private readonly IResourceOptimizationHelper _resourceOptimizationHelper;
@@ -29,7 +28,6 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 			IOptimizationPreferences optimizerPreferences,
 			ISchedulePartModifyAndRollbackService rollbackService,
 			ISchedulingResultStateHolder schedulingResultStateHolder,
-			IScheduleMatrixLockableBitArrayConverterEx scheduleMatrixLockableBitArrayConverterEx,
 			IEffectiveRestrictionCreator effectiveRestrictionCreator,
 			IMinWeekWorkTimeRule minWeekWorkTimeRule,
 			IResourceOptimizationHelper resourceOptimizationHelper)
@@ -41,7 +39,6 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 			_optimizerPreferences = optimizerPreferences;
 			_rollbackService = rollbackService;
 			_schedulingResultStateHolder = schedulingResultStateHolder;
-			_scheduleMatrixLockableBitArrayConverterEx = scheduleMatrixLockableBitArrayConverterEx;
 			_effectiveRestrictionCreator = effectiveRestrictionCreator;
 			_minWeekWorkTimeRule = minWeekWorkTimeRule;
 			_resourceOptimizationHelper = resourceOptimizationHelper;
@@ -61,9 +58,6 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 				IScheduleMatrixOriginalStateContainer scheduleMatrixContainer = _scheduleMatrixContainerList[index];
 
 				IScheduleMatrixPro scheduleMatrixPro = scheduleMatrixContainer.ScheduleMatrix;
-
-				IScheduleMatrixLockableBitArrayConverter matrixConverter =
-					new ScheduleMatrixLockableBitArrayConverter(scheduleMatrixPro, _scheduleMatrixLockableBitArrayConverterEx);
 
 				IScheduleResultDataExtractorProvider dataExtractorProvider = new ScheduleResultDataExtractorProvider();
 				IScheduleResultDataExtractor personalSkillsDataExtractor = dataExtractorProvider.CreatePersonalSkillDataExtractor(scheduleMatrixPro, _optimizerPreferences.Advanced);
@@ -91,7 +85,6 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 						periodValueCalculator,
 						personalSkillsDataExtractor,
 						_decisionMaker,
-						matrixConverter,
 						_scheduleService,
 						_optimizerPreferences,
 						_rollbackService,
@@ -101,7 +94,8 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 						workShiftContainer,
 						optimizationLimits,
 						schedulingOptionsCreator,
-						mainShiftOptimizeActivitySpecificationSetter);
+						mainShiftOptimizeActivitySpecificationSetter,
+						scheduleMatrixPro);
 
 				result.Add(optimizer);
 			}

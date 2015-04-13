@@ -21,7 +21,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 		private readonly ISkillIntervalDataAggregator _intervalDataAggregator;
 		private readonly IDayIntervalDataCalculator _dayIntervalDataCalculator;
 		private readonly ISkillStaffPeriodToSkillIntervalDataMapper _skillStaffPeriodToSkillIntervalDataMapper;
-		private readonly ISchedulingResultStateHolder _schedulingResultStateHolder;
+		private readonly Func<ISchedulingResultStateHolder> _schedulingResultStateHolder;
 		private readonly IGroupPersonSkillAggregator _groupPersonSkillAggregator;
 		private readonly ILocateMissingIntervalsIfMidNightBreak _locateMissingIntervalsIfMidNightBreak;
 		private readonly IFilterOutIntervalsAfterMidNight _filterOutIntervalsAfterMidNight;
@@ -33,7 +33,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 			ISkillIntervalDataDivider intervalDataDivider,
 			ISkillIntervalDataAggregator intervalDataAggregator, IDayIntervalDataCalculator dayIntervalDataCalculator,
 			ISkillStaffPeriodToSkillIntervalDataMapper skillStaffPeriodToSkillIntervalDataMapper,
-			ISchedulingResultStateHolder schedulingResultStateHolder, IGroupPersonSkillAggregator groupPersonSkillAggregator,
+			Func<ISchedulingResultStateHolder> schedulingResultStateHolder, IGroupPersonSkillAggregator groupPersonSkillAggregator,
 			ILocateMissingIntervalsIfMidNightBreak locateMissingIntervalsIfMidNightBreak,
 			IFilterOutIntervalsAfterMidNight filterOutIntervalsAfterMidNight, IMaxSeatSkillAggregator maxSeatSkillAggregator,
 			IExtractIntervalsVoilatingMaxSeat extractIntervalsVoilatingMaxSeat,
@@ -91,7 +91,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 		private IDictionary<DateTime, IntervalLevelMaxSeatInfo> getAggregatedIntervalLevelInfo(ITeamBlockInfo teamBlockInfo, DateOnly baseDatePointer)
 		{
 			return _extractIntervalsVoilatingMaxSeat.IdentifyIntervalsWithBrokenMaxSeats(teamBlockInfo,
-				_schedulingResultStateHolder,
+				_schedulingResultStateHolder(),
 				TimeZoneGuard.Instance.TimeZone, baseDatePointer);
 		}
 
@@ -101,7 +101,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 			var result = new Dictionary<DateOnly, IList<ISkillIntervalData>>();
 
 
-			var skillDays = _schedulingResultStateHolder.SkillDaysOnDateOnly(dateOnlyList);
+			var skillDays = _schedulingResultStateHolder().SkillDaysOnDateOnly(dateOnlyList);
 
 			foreach (var skillDay in skillDays)
 			{

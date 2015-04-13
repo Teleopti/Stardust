@@ -331,7 +331,6 @@
     <Compile Include="Domain\IScheduleDictionaryLoadOptions.cs" />
     <Compile Include="Domain\IScheduleHistoryRepository.cs" />
     <Compile Include="Domain\IScheduleMatrixListCreator.cs" />
-    <Compile Include="Domain\IScheduleMatrixLockableBitArrayConverter.cs" />
     <Compile Include="Domain\IScheduleMatrixOriginalStateContainer.cs" />
     <Compile Include="Domain\IScheduleOptimizationService.cs" />
     <Compile Include="Domain\ISchedulePeriodListShiftCategoryBackToLegalStateService.cs" />

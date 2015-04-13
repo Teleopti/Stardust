@@ -1,28 +1,31 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using Teleopti.Ccc.Domain.Optimization;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.DayOffPlanning
 {
     public interface IExtendReduceDaysOffDecisionMaker
     {
-        ExtendReduceTimeDecisionMakerResult Execute(IScheduleMatrixLockableBitArrayConverter matrixConverter,
-                                                    IScheduleResultDataExtractor dataExtractor, IList<IDayOffLegalStateValidator> validatorList);
+		ExtendReduceTimeDecisionMakerResult Execute(IScheduleMatrixPro matrix, IScheduleResultDataExtractor dataExtractor, IList<IDayOffLegalStateValidator> validatorList);
 
         bool ValidateArray(ILockableBitArray array, IList<IDayOffLegalStateValidator> validatorList);
     }
 
     public class ExtendReduceDaysOffDecisionMaker : IExtendReduceDaysOffDecisionMaker
     {
+	    private readonly IScheduleMatrixLockableBitArrayConverterEx _matrixConverter;
 
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "1"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
-        public ExtendReduceTimeDecisionMakerResult Execute(IScheduleMatrixLockableBitArrayConverter matrixConverter,
-                                                           IScheduleResultDataExtractor dataExtractor, IList<IDayOffLegalStateValidator> validatorList)
+	    public ExtendReduceDaysOffDecisionMaker(IScheduleMatrixLockableBitArrayConverterEx matrixConverter)
+		{
+			_matrixConverter = matrixConverter;
+		}
+
+	    public ExtendReduceTimeDecisionMakerResult Execute(IScheduleMatrixPro matrix, IScheduleResultDataExtractor dataExtractor, IList<IDayOffLegalStateValidator> validatorList)
         {
             var result = new ExtendReduceTimeDecisionMakerResult();
 
-            IScheduleMatrixPro matrix = matrixConverter.SourceMatrix;
-            ILockableBitArray bitArray = matrixConverter.Convert(false, false);
+            ILockableBitArray bitArray = _matrixConverter.Convert(matrix, false, false);
             IList<double?> values = dataExtractor.Values();
 
             int? dayToLengthen = findDayToLenghten(bitArray, values, validatorList);
@@ -119,7 +122,6 @@ namespace Teleopti.Ccc.Domain.DayOffPlanning
             return -1*x.Value.CompareTo(y.Value);
         }
 
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
         public bool ValidateArray(ILockableBitArray array, IList<IDayOffLegalStateValidator> validatorList)
         {
             BitArray longBitArray = array.ToLongBitArray();
@@ -149,5 +151,4 @@ namespace Teleopti.Ccc.Domain.DayOffPlanning
             return true;
         }
     }
-
 }

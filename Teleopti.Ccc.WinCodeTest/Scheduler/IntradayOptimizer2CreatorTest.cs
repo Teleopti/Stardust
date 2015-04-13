@@ -31,7 +31,6 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 		private ISkillStaffPeriodToSkillIntervalDataMapper _skillStaffPeriodToSkillIntervalDataMapper;
 		private ISkillIntervalDataDivider _skillIntervalDataDivider;
 		private ISkillIntervalDataAggregator _skillIntervalDataAggregator;
-		private IScheduleMatrixLockableBitArrayConverterEx _scheduleMatrixLockableBitArrayConverterEx;
 		private IEffectiveRestrictionCreator _effectiveRestrictionCreator;
 		private IResourceOptimizationHelper _resourceOptimizationHelper;
 		private IMinWeekWorkTimeRule _minWeekWorkTimeRule;
@@ -57,7 +56,6 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 			_skillStaffPeriodToSkillIntervalDataMapper = _mocks.StrictMock<ISkillStaffPeriodToSkillIntervalDataMapper>();
 			_skillIntervalDataDivider = _mocks.StrictMock<ISkillIntervalDataDivider>();
 			_skillIntervalDataAggregator = _mocks.StrictMock<ISkillIntervalDataAggregator>();
-			_scheduleMatrixLockableBitArrayConverterEx = _mocks.StrictMock<IScheduleMatrixLockableBitArrayConverterEx>();
 			_effectiveRestrictionCreator = _mocks.StrictMock<IEffectiveRestrictionCreator>();
 			_resourceOptimizationHelper = _mocks.StrictMock<IResourceOptimizationHelper>();
 			_minWeekWorkTimeRule = _mocks.StrictMock<IMinWeekWorkTimeRule>();
@@ -69,7 +67,6 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 			                                        optimizerPreferences,
 			                                        _rollbackService,
 			                                        _schedulingResultStateHolder,
-			                                        _scheduleMatrixLockableBitArrayConverterEx,
 													_skillStaffPeriodToSkillIntervalDataMapper,
 												   _skillIntervalDataDivider,
 												   _skillIntervalDataAggregator,

@@ -111,8 +111,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 					}
 					else
 					{
-						_classicScheduleCommand.Execute(schedulingOptions, backgroundWorker, requiredScheduleOptimizerHelper, selectedScheduleDays,
-							schedulerStateHolder);
+						_classicScheduleCommand.Execute(schedulingOptions, backgroundWorker, requiredScheduleOptimizerHelper, selectedScheduleDays);
 					}
 				}
 			}

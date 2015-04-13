@@ -180,7 +180,7 @@ namespace Teleopti.Ccc.WinCodeTest.Meetings
                                                                                           _person,
                                                                                           _requiredPerson,
                                                                                           _optionalPerson
-                                                                                      }, new DisableDeletedFilter(new DummyCurrentUnitOfWork()));
+                                                                                      }, new DisableDeletedFilter(new DummyCurrentUnitOfWork()), new SchedulingResultStateHolder());
             _target = new MeetingComposerPresenter(_view, _model, new DisableDeletedFilter(new DummyCurrentUnitOfWork()), schedulerStateHolder);
             _view.SetRecurrentMeetingActive(true);
 
@@ -549,7 +549,7 @@ namespace Teleopti.Ccc.WinCodeTest.Meetings
                                                                                           _person,
                                                                                           _requiredPerson,
                                                                                           _optionalPerson
-                                                                                      }, new DisableDeletedFilter(new DummyCurrentUnitOfWork()));
+                                                                                      }, new DisableDeletedFilter(new DummyCurrentUnitOfWork()), new SchedulingResultStateHolder());
 			_target = new MeetingComposerPresenterForTest(_view, _model, schedulerStateHolder, _unitOfWorkFactory,
 														  _repositoryFactory);
 			_target.TrySave();
@@ -566,7 +566,7 @@ namespace Teleopti.Ccc.WinCodeTest.Meetings
                                                                                           _person,
                                                                                           _requiredPerson,
                                                                                           _optionalPerson
-                                                                                      }, new DisableDeletedFilter(new DummyCurrentUnitOfWork()));
+                                                                                      }, new DisableDeletedFilter(new DummyCurrentUnitOfWork()), new SchedulingResultStateHolder());
             _target = new MeetingComposerPresenterForTest(_view, _model, schedulerStateHolder, _unitOfWorkFactory,
                                                           _repositoryFactory);
 

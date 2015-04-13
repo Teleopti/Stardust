@@ -3,6 +3,7 @@ using Microsoft.Practices.Composite.Events;
 using NUnit.Framework;
 using Rhino.Mocks;
 using Teleopti.Ccc.Domain.Common;
+using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
 using Teleopti.Ccc.Domain.Security.AuthorizationEntities;
@@ -53,7 +54,7 @@ namespace Teleopti.Ccc.WinCodeTest.Common
             _scenario = MockRepository.GenerateMock<IScenario>();
 		    _skill = SkillFactory.CreateSkill("Phone");
 
-			_schedulerState = new SchedulerStateHolder(_scenario, new DateOnlyPeriodAsDateTimePeriod(_requestedPeriod, TimeZoneInfoFactory.UtcTimeZoneInfo()), _permittedPeople, new DisableDeletedFilter(new FixedCurrentUnitOfWork(_uow)));
+			_schedulerState = new SchedulerStateHolder(_scenario, new DateOnlyPeriodAsDateTimePeriod(_requestedPeriod, TimeZoneInfoFactory.UtcTimeZoneInfo()), _permittedPeople, new DisableDeletedFilter(new FixedCurrentUnitOfWork(_uow)), new SchedulingResultStateHolder());
 
             target = new SchedulingResultLoader(_schedulerState, _repositoryFactory, _eventAggregator, _lazyManager, _peopleAndSkillLoaderDecider, _peopleLoader, _skillDayLoadHelper, _resourceOptimizationHelper, _loadScheduleByPersonSpecification);
         }

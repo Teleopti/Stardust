@@ -1,22 +1,28 @@
 ﻿using System.Collections.Generic;
+using Teleopti.Ccc.Domain.Optimization;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.DayOffPlanning
 {
     public interface IExtendReduceTimeDecisionMaker
     {
-        ExtendReduceTimeDecisionMakerResult Execute(IScheduleMatrixLockableBitArrayConverter matrixConverter, IScheduleResultDataExtractor dataExtractor);
+		ExtendReduceTimeDecisionMakerResult Execute(IScheduleMatrixPro matrix, IScheduleResultDataExtractor dataExtractor);
     }
 
     public class ExtendReduceTimeDecisionMaker : IExtendReduceTimeDecisionMaker
     {
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "1"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
-        public ExtendReduceTimeDecisionMakerResult Execute(IScheduleMatrixLockableBitArrayConverter matrixConverter, IScheduleResultDataExtractor dataExtractor)
+	    private readonly IScheduleMatrixLockableBitArrayConverterEx _matrixConverter;
+
+	    public ExtendReduceTimeDecisionMaker(IScheduleMatrixLockableBitArrayConverterEx matrixConverter)
+		{
+			_matrixConverter = matrixConverter;
+		}
+
+	    public ExtendReduceTimeDecisionMakerResult Execute(IScheduleMatrixPro matrix, IScheduleResultDataExtractor dataExtractor)
         {
             var result = new ExtendReduceTimeDecisionMakerResult();
 
-            IScheduleMatrixPro matrix = matrixConverter.SourceMatrix;
-            ILockableBitArray bitArray = matrixConverter.Convert(false, false);
+            ILockableBitArray bitArray = _matrixConverter.Convert(matrix, false, false);
             IList<double?> values = dataExtractor.Values();
 
             int? dayToLengthen = findDayToLenghten(bitArray, values);

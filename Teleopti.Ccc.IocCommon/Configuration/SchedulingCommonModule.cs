@@ -43,13 +43,6 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 {
 	public class SchedulingCommonModule : Module
 	{
-		private readonly IIocConfiguration _configuration;
-
-		public SchedulingCommonModule(IIocConfiguration configuration)
-		{
-			_configuration = configuration;
-		}
-
 		protected override void Load(ContainerBuilder builder)
 		{
 			builder.RegisterModule<IntraIntervalOptimizationServiceModule>();
@@ -57,22 +50,22 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterModule<BackToLegalShiftModule>();
 			builder.RegisterModule<ScheduleOvertimeModule>();
 
-			builder.RegisterType<ClassicScheduleCommand>().As<ClassicScheduleCommand>().InstancePerLifetimeScope();
+			builder.RegisterType<ClassicScheduleCommand>().InstancePerLifetimeScope();
 			builder.RegisterType<ScheduleCommand>().As<IScheduleCommand>().InstancePerLifetimeScope();
-			builder.RegisterType<OptimizationCommand>().As<OptimizationCommand>().InstancePerLifetimeScope();
-			builder.RegisterType<DayOffOptimizationDecisionMakerFactory>().As<IDayOffOptimizationDecisionMakerFactory>();
+			builder.RegisterType<OptimizationCommand>().InstancePerLifetimeScope();
+			builder.RegisterType<DayOffOptimizationDecisionMakerFactory>().As<IDayOffOptimizationDecisionMakerFactory>().SingleInstance();
 			builder.RegisterType<ScheduleOvertimeCommand>().As<IScheduleOvertimeCommand>();
 			builder.RegisterType<TeamBlockMoveTimeBetweenDaysCommand>().As<ITeamBlockMoveTimeBetweenDaysCommand>();
 			builder.RegisterType<GroupPersonBuilderForOptimizationFactory>().As<IGroupPersonBuilderForOptimizationFactory>();
-			builder.RegisterType<MatrixListFactory>().As<IMatrixListFactory>();
+			builder.RegisterType<MatrixListFactory>().As<IMatrixListFactory>().InstancePerLifetimeScope();
 			builder.RegisterType<TeamBlockScheduleCommand>().As<ITeamBlockScheduleCommand>();
 			builder.RegisterType<TeamBlockOptimizationCommand>().As<ITeamBlockOptimizationCommand>();
 			builder.RegisterType<WeeklyRestSolverCommand>().As<IWeeklyRestSolverCommand>();
-			builder.RegisterType<BackToLegalShiftCommand>().As<BackToLegalShiftCommand>();
+			builder.RegisterType<BackToLegalShiftCommand>();
 			builder.RegisterType<IntraIntervalOptimizationCommand>().As<IIntraIntervalOptimizationCommand>();
 
-			builder.RegisterType<DisableDeletedFilter>().As<IDisableDeletedFilter>().InstancePerLifetimeScope();
-			builder.RegisterType<InnerOptimizerHelperHelper>().As<IOptimizerHelperHelper>().InstancePerLifetimeScope();
+			builder.RegisterType<DisableDeletedFilter>().As<IDisableDeletedFilter>().SingleInstance();
+			builder.RegisterType<InnerOptimizerHelperHelper>().As<IOptimizerHelperHelper>().SingleInstance();
 			builder.RegisterType<ResourceOptimizationHelperExtended>().As<IResourceOptimizationHelperExtended>().InstancePerLifetimeScope();
 			builder.RegisterType<RequiredScheduleHelper>().As<IRequiredScheduleHelper>().InstancePerLifetimeScope();
 			builder.RegisterType<ScheduleCommandToggle>().As<IScheduleCommandToggle>().InstancePerLifetimeScope();
@@ -88,34 +81,34 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			
 			builder.RegisterType<SeatLimitationWorkShiftCalculator2>()
 				.As<ISeatLimitationWorkShiftCalculator2>()
-				.InstancePerLifetimeScope();
+				.SingleInstance();
 			builder.RegisterType<SeatImpactOnPeriodForProjection>()
 				.As<ISeatImpactOnPeriodForProjection>()
-				.InstancePerLifetimeScope();
+				.SingleInstance();
 			builder.RegisterType<LongestPeriodForAssignmentCalculator>()
 				.As<ILongestPeriodForAssignmentCalculator>()
-				.InstancePerLifetimeScope();
+				.SingleInstance();
 			builder.RegisterType<PersonSkillPeriodsDataHolderManager>()
 				.As<IPersonSkillPeriodsDataHolderManager>()
 				.InstancePerLifetimeScope();
 			builder.RegisterType<ShiftCategoryFairnessShiftValueCalculator>()
 				.As<IShiftCategoryFairnessShiftValueCalculator>()
-				.InstancePerLifetimeScope();
-			builder.RegisterType<ShiftProjectionCacheManager>().As<IShiftProjectionCacheManager>().InstancePerLifetimeScope();
+				.SingleInstance();
+			builder.RegisterType<ShiftProjectionCacheManager>().As<IShiftProjectionCacheManager>().SingleInstance();
 			builder.RegisterType<ShiftFromMasterActivityService>()
 				.As<IShiftFromMasterActivityService>()
-				.InstancePerLifetimeScope();
-			builder.RegisterType<RuleSetDeletedActivityChecker>().As<IRuleSetDeletedActivityChecker>().InstancePerLifetimeScope();
+				.SingleInstance();
+			builder.RegisterType<RuleSetDeletedActivityChecker>().As<IRuleSetDeletedActivityChecker>().SingleInstance();
 			builder.RegisterType<RuleSetDeletedShiftCategoryChecker>()
 				.As<IRuleSetDeletedShiftCategoryChecker>()
-				.InstancePerLifetimeScope();
-			builder.RegisterType<FairnessValueCalculator>().As<IFairnessValueCalculator>().InstancePerLifetimeScope();
-			builder.RegisterType<WorkShiftCalculatorsManager>().As<IWorkShiftCalculatorsManager>().InstancePerLifetimeScope();
+				.SingleInstance();
+			builder.RegisterType<FairnessValueCalculator>().As<IFairnessValueCalculator>().SingleInstance();
+			builder.RegisterType<WorkShiftCalculatorsManager>().As<IWorkShiftCalculatorsManager>().SingleInstance();
 
 			builder.RegisterType<FairnessAndMaxSeatCalculatorsManager28317>()
-				.As<FairnessAndMaxSeatCalculatorsManager28317>();
+				.InstancePerLifetimeScope();
 			builder.RegisterType<FairnessAndMaxSeatCalculatorsManager>()
-				.As<FairnessAndMaxSeatCalculatorsManager>();
+				.InstancePerLifetimeScope();
 			builder.Register(c => c.Resolve<IToggleManager>().IsEnabled(Toggles.Scheduler_HidePointsFairnessSystem_28317)
 				? (IFairnessAndMaxSeatCalculatorsManager) c.Resolve<FairnessAndMaxSeatCalculatorsManager28317>()
 				: c.Resolve<FairnessAndMaxSeatCalculatorsManager>())
@@ -124,61 +117,47 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<SchedulerStateScheduleDayChangedCallback>()
 				.As<IScheduleDayChangeCallback>()
 				.InstancePerLifetimeScope();
-			builder.RegisterType<ResourceCalculateDaysDecider>().As<IResourceCalculateDaysDecider>().InstancePerLifetimeScope();
+			builder.RegisterType<ResourceCalculateDaysDecider>().As<IResourceCalculateDaysDecider>().SingleInstance();
 			builder.RegisterType<PeopleAndSkillLoaderDecider>().As<IPeopleAndSkillLoaderDecider>().InstancePerLifetimeScope();
 			builder.RegisterType<OptimizationPreferences>().As<IOptimizationPreferences>().InstancePerLifetimeScope();
 			builder.RegisterType<DayOffPlannerRules>().As<IDayOffPlannerRules>().InstancePerLifetimeScope();
-			builder.RegisterType<NonBlendWorkShiftCalculator>().As<INonBlendWorkShiftCalculator>().InstancePerLifetimeScope();
+			builder.RegisterType<NonBlendWorkShiftCalculator>().As<INonBlendWorkShiftCalculator>().SingleInstance();
 			builder.RegisterType<NonBlendSkillImpactOnPeriodForProjection>()
 				.As<INonBlendSkillImpactOnPeriodForProjection>()
-				.InstancePerLifetimeScope();
+				.SingleInstance();
 			builder.RegisterType<ShiftCategoryFairnessManager>().As<IShiftCategoryFairnessManager>().InstancePerLifetimeScope();
 			builder.RegisterType<GroupShiftCategoryFairnessCreator>()
 				.As<IGroupShiftCategoryFairnessCreator>()
 				.InstancePerLifetimeScope();
 			builder.RegisterType<ShiftCategoryFairnessCalculator>()
 				.As<IShiftCategoryFairnessCalculator>()
-				.InstancePerLifetimeScope();
+				.SingleInstance();
 			builder.RegisterType<GroupPagePerDateHolder>().As<IGroupPagePerDateHolder>().InstancePerLifetimeScope();
-			builder.RegisterType<DesiredShiftLengthCalculator>().As<IDesiredShiftLengthCalculator>().
-				InstancePerLifetimeScope();
-			builder.RegisterType<ShiftLengthDecider>().As<IShiftLengthDecider>().InstancePerLifetimeScope();
+			builder.RegisterType<DesiredShiftLengthCalculator>().As<IDesiredShiftLengthCalculator>().SingleInstance();
+			builder.RegisterType<ShiftLengthDecider>().As<IShiftLengthDecider>().SingleInstance();
 			builder.RegisterType<WorkShiftFinderService>().As<IWorkShiftFinderService>().InstancePerLifetimeScope();
 
-			builder.RegisterType<SeatImpactOnPeriodForProjection>()
-				.As<ISeatImpactOnPeriodForProjection>()
-				.InstancePerLifetimeScope();
 			builder.RegisterType<SkillVisualLayerCollectionDictionaryCreator>()
 				.As<ISkillVisualLayerCollectionDictionaryCreator>()
-				.InstancePerLifetimeScope();
-			builder.RegisterType<OccupiedSeatCalculator>().As<IOccupiedSeatCalculator>().InstancePerLifetimeScope();
+				.SingleInstance();
+			builder.RegisterType<OccupiedSeatCalculator>().As<IOccupiedSeatCalculator>().SingleInstance();
 			builder.RegisterType<ResourceOptimizationHelper>().As<IResourceOptimizationHelper>().InstancePerLifetimeScope();
 			builder.RegisterType<PersonSkillProvider>().As<IPersonSkillProvider>().InstancePerLifetimeScope();
-			builder.RegisterType<PeriodDistributionService>().As<IPeriodDistributionService>().InstancePerLifetimeScope();
+			builder.RegisterType<PeriodDistributionService>().As<IPeriodDistributionService>().SingleInstance();
 
-			builder.RegisterType<NonBlendSkillCalculator>().As<INonBlendSkillCalculator>().InstancePerLifetimeScope();
-			builder.RegisterType<SchedulePeriodTargetTimeCalculator>()
-				.As<ISchedulePeriodTargetTimeCalculator>()
-				.InstancePerLifetimeScope();
+			builder.RegisterType<NonBlendSkillCalculator>().As<INonBlendSkillCalculator>().SingleInstance();
+			builder.RegisterType<SchedulePeriodTargetTimeCalculator>().As<ISchedulePeriodTargetTimeCalculator>().SingleInstance();
 			builder.RegisterType<ScheduleMatrixListCreator>().As<IScheduleMatrixListCreator>().InstancePerLifetimeScope();
-			builder.RegisterType<ShiftCategoryLimitationChecker>()
-				.As<IShiftCategoryLimitationChecker>()
-				.InstancePerLifetimeScope();
-			builder.RegisterType<SchedulePartModifyAndRollbackService>()
-				.As<ISchedulePartModifyAndRollbackService>()
-				.InstancePerLifetimeScope();
+			builder.RegisterType<ShiftCategoryLimitationChecker>().As<IShiftCategoryLimitationChecker>().InstancePerLifetimeScope();
+			builder.RegisterType<SchedulePartModifyAndRollbackService>().As<ISchedulePartModifyAndRollbackService>().InstancePerLifetimeScope();
 			builder.RegisterType<ScheduleService>().As<IScheduleService>().InstancePerLifetimeScope();
 			builder.RegisterType<AbsencePreferenceScheduler>().As<IAbsencePreferenceScheduler>().InstancePerLifetimeScope();
-			builder.RegisterType<AbsencePreferenceFullDayLayerCreator>()
-				.As<IAbsencePreferenceFullDayLayerCreator>()
-				.SingleInstance();
+			builder.RegisterType<AbsencePreferenceFullDayLayerCreator>().As<IAbsencePreferenceFullDayLayerCreator>().SingleInstance();
 			builder.RegisterType<DayOffScheduler>().As<IDayOffScheduler>().InstancePerLifetimeScope();
-			builder.RegisterType<ScheduleDayAvailableForDayOffSpecification>()
-				.As<IScheduleDayAvailableForDayOffSpecification>()
-				.InstancePerLifetimeScope();
+			builder.RegisterType<ScheduleDayAvailableForDayOffSpecification>().As<IScheduleDayAvailableForDayOffSpecification>().SingleInstance();
 
 			builder.RegisterType<DayOffsInPeriodCalculator>().As<IDayOffsInPeriodCalculator>().InstancePerLifetimeScope();
-			builder.RegisterType<EffectiveRestrictionCreator>().As<IEffectiveRestrictionCreator>().InstancePerLifetimeScope();
+			builder.RegisterType<EffectiveRestrictionCreator>().As<IEffectiveRestrictionCreator>().SingleInstance();
 			builder.RegisterInstance(new ScheduleTagSetter(NullScheduleTag.Instance)).As<IScheduleTagSetter>().SingleInstance();
 			builder.RegisterType<FixedStaffSchedulingService>().As<IFixedStaffSchedulingService>().InstancePerLifetimeScope();
 
@@ -190,105 +169,68 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 
 
 			builder.RegisterType<AdvanceDaysOffSchedulingService>().As<IAdvanceDaysOffSchedulingService>();
-			builder.RegisterType<SkillResolutionProvider>().As<ISkillResolutionProvider>().InstancePerLifetimeScope();
-			builder.RegisterType<SkillIntervalDataDivider>().As<ISkillIntervalDataDivider>().InstancePerLifetimeScope();
-			builder.RegisterType<SkillStaffPeriodToSkillIntervalDataMapper>()
-				.As<ISkillStaffPeriodToSkillIntervalDataMapper>()
-				.InstancePerLifetimeScope();
-			builder.RegisterType<SkillIntervalDataSkillFactorApplier>()
-				.As<ISkillIntervalDataSkillFactorApplier>()
-				.InstancePerLifetimeScope();
-			builder.RegisterType<SkillIntervalDataAggregator>().As<ISkillIntervalDataAggregator>().InstancePerLifetimeScope();
+			builder.RegisterType<SkillResolutionProvider>().As<ISkillResolutionProvider>().SingleInstance();
+			builder.RegisterType<SkillIntervalDataDivider>().As<ISkillIntervalDataDivider>().SingleInstance();
+			builder.RegisterType<SkillStaffPeriodToSkillIntervalDataMapper>().As<ISkillStaffPeriodToSkillIntervalDataMapper>().SingleInstance();
+			builder.RegisterType<SkillIntervalDataSkillFactorApplier>().As<ISkillIntervalDataSkillFactorApplier>().SingleInstance();
+			builder.RegisterType<SkillIntervalDataAggregator>().As<ISkillIntervalDataAggregator>().SingleInstance();
 			builder.RegisterType<DayIntervalDataCalculator>().As<IDayIntervalDataCalculator>().InstancePerLifetimeScope();
 			builder.RegisterType<DeleteSchedulePartService>().As<IDeleteSchedulePartService>().InstancePerLifetimeScope();
-			builder.RegisterType<DeleteAndResourceCalculateService>()
-				.As<IDeleteAndResourceCalculateService>()
-				.InstancePerLifetimeScope();
+			builder.RegisterType<DeleteAndResourceCalculateService>().As<IDeleteAndResourceCalculateService>().InstancePerLifetimeScope();
 			builder.RegisterType<ScheduleDayService>().As<IScheduleDayService>().InstancePerLifetimeScope();
-			builder.RegisterType<IntervalDataMedianCalculator>().As<IIntervalDataCalculator>().InstancePerLifetimeScope();
+			builder.RegisterType<IntervalDataMedianCalculator>().As<IIntervalDataCalculator>().SingleInstance();
 			builder.RegisterType<RestrictionAggregator>().As<IRestrictionAggregator>().InstancePerLifetimeScope();
 			builder.RegisterType<WorkShiftFilterService>().As<IWorkShiftFilterService>().InstancePerLifetimeScope();
 			builder.RegisterType<ScheduleRestrictionExtractor>().As<IScheduleRestrictionExtractor>().InstancePerLifetimeScope();
-			builder.RegisterType<SuggestedShiftRestrictionExtractor>()
-				.As<ISuggestedShiftRestrictionExtractor>()
-				.InstancePerLifetimeScope();
-			builder.RegisterType<ScheduleDayEquator>().As<IScheduleDayEquator>().InstancePerLifetimeScope();
+			builder.RegisterType<SuggestedShiftRestrictionExtractor>().As<ISuggestedShiftRestrictionExtractor>().SingleInstance();
+			builder.RegisterType<ScheduleDayEquator>().As<IScheduleDayEquator>().SingleInstance();
 
 			builder.RegisterType<WorkShiftFinderResultHolder>().As<IWorkShiftFinderResultHolder>().InstancePerLifetimeScope();
 
-			builder.RegisterType<WorkShiftWeekMinMaxCalculator>().As<IWorkShiftWeekMinMaxCalculator>().InstancePerLifetimeScope();
-			builder.RegisterType<PossibleMinMaxWorkShiftLengthExtractor>()
-				.As<IPossibleMinMaxWorkShiftLengthExtractor>()
-				.InstancePerDependency();
+			builder.RegisterType<WorkShiftWeekMinMaxCalculator>().As<IWorkShiftWeekMinMaxCalculator>().SingleInstance();
+			builder.RegisterType<PossibleMinMaxWorkShiftLengthExtractor>().As<IPossibleMinMaxWorkShiftLengthExtractor>().InstancePerDependency();
 			builder.RegisterType<WorkShiftMinMaxCalculator>().As<IWorkShiftMinMaxCalculator>().InstancePerDependency();
-			builder.RegisterType<SchedulePeriodTargetTimeCalculator>()
-				.As<ISchedulePeriodTargetTimeCalculator>()
-				.InstancePerLifetimeScope();
-			builder.RegisterType<WorkShiftBackToLegalStateBitArrayCreator>()
-				.As<IWorkShiftBackToLegalStateBitArrayCreator>()
-				.InstancePerDependency();
+			builder.RegisterType<WorkShiftBackToLegalStateBitArrayCreator>().As<IWorkShiftBackToLegalStateBitArrayCreator>().SingleInstance();
 
-			builder.RegisterType<ScheduleMatrixLockableBitArrayConverter>()
-				.As<IScheduleMatrixLockableBitArrayConverter>()
-				.InstancePerLifetimeScope();
-			builder.RegisterType<ScheduleResultDataExtractorProvider>()
-				.As<IScheduleResultDataExtractorProvider>()
-				.InstancePerLifetimeScope();
+			builder.RegisterType<ScheduleResultDataExtractorProvider>().As<IScheduleResultDataExtractorProvider>().SingleInstance();
 			builder.RegisterType<SchedulingStateHolderAllSkillExtractor>().InstancePerDependency();
-			builder.RegisterType<DailySkillForecastAndScheduledValueCalculator>()
-				.As<IDailySkillForecastAndScheduledValueCalculator>()
-				.InstancePerDependency();
+			builder.RegisterType<DailySkillForecastAndScheduledValueCalculator>().As<IDailySkillForecastAndScheduledValueCalculator>().InstancePerDependency();
 
-			builder.RegisterType<RuleSetBagsOfGroupOfPeopleCanHaveShortBreakLoader>()
-				.As<IRuleSetBagsOfGroupOfPeopleCanHaveShortBreakLoader>()
-				.InstancePerLifetimeScope();
-			builder.RegisterType<RuleSetBagsOfGroupOfPeopleCanHaveShortBreak>()
-				.As<IRuleSetBagsOfGroupOfPeopleCanHaveShortBreak>()
-				.InstancePerLifetimeScope();
+			builder.RegisterType<RuleSetBagsOfGroupOfPeopleCanHaveShortBreakLoader>().As<IRuleSetBagsOfGroupOfPeopleCanHaveShortBreakLoader>().SingleInstance();
+			builder.RegisterType<RuleSetBagsOfGroupOfPeopleCanHaveShortBreak>().As<IRuleSetBagsOfGroupOfPeopleCanHaveShortBreak>().SingleInstance();
 			builder.RegisterType<GridlockManager>().As<IGridlockManager>().InstancePerLifetimeScope();
 			builder.RegisterType<MatrixUserLockLocker>().As<IMatrixUserLockLocker>().InstancePerLifetimeScope();
-			builder.RegisterType<MatrixNotPermittedLocker>().As<IMatrixNotPermittedLocker>();
+			builder.RegisterType<MatrixNotPermittedLocker>().As<IMatrixNotPermittedLocker>().SingleInstance();
 			builder.RegisterType<ScheduleFairnessCalculator>().As<IScheduleFairnessCalculator>().InstancePerLifetimeScope();
-			builder.RegisterType<ScheduleMatrixValueCalculatorProFactory>()
-				.As<IScheduleMatrixValueCalculatorProFactory>()
-				.InstancePerLifetimeScope();
-			builder.RegisterType<SchedulePeriodListShiftCategoryBackToLegalStateService>()
-				.As<ISchedulePeriodListShiftCategoryBackToLegalStateService>()
-				.InstancePerLifetimeScope();
-			builder.RegisterType<WorkShiftLegalStateDayIndexCalculator>()
-				.As<IWorkShiftLegalStateDayIndexCalculator>()
-				.InstancePerDependency();
+			builder.RegisterType<ScheduleMatrixValueCalculatorProFactory>().As<IScheduleMatrixValueCalculatorProFactory>().SingleInstance();
+			builder.RegisterType<SchedulePeriodListShiftCategoryBackToLegalStateService>().As<ISchedulePeriodListShiftCategoryBackToLegalStateService>().InstancePerLifetimeScope();
+			builder.RegisterType<WorkShiftLegalStateDayIndexCalculator>().As<IWorkShiftLegalStateDayIndexCalculator>().SingleInstance();
 
-			builder.RegisterType<WorkTimeStartEndExtractor>().As<IWorkTimeStartEndExtractor>().InstancePerLifetimeScope();
+			builder.RegisterType<WorkTimeStartEndExtractor>().As<IWorkTimeStartEndExtractor>().SingleInstance();
 			builder.RegisterType<DayOffOptimizerValidator>().As<IDayOffOptimizerValidator>().InstancePerLifetimeScope();
 			builder.RegisterType<NewDayOffRule>().As<INewDayOffRule>().InstancePerLifetimeScope();
 
-			builder.RegisterType<EffectiveRestrictionCreator>().As<IEffectiveRestrictionCreator>().InstancePerLifetimeScope();
+			builder.RegisterType<EffectiveRestrictionCreator>().As<IEffectiveRestrictionCreator>().SingleInstance();
 
 			builder.RegisterType<SchedulerGroupPagesProvider>().As<ISchedulerGroupPagesProvider>().InstancePerLifetimeScope();
 
-			builder.RegisterType<GroupScheduleGroupPageDataProvider>()
-				.As<IGroupScheduleGroupPageDataProvider>()
-				.InstancePerLifetimeScope();
-			builder.RegisterType<GroupPageCreator>().As<IGroupPageCreator>().InstancePerLifetimeScope();
-			builder.RegisterType<GroupPageFactory>().As<IGroupPageFactory>().InstancePerLifetimeScope();
-			builder.RegisterType<GroupCreator>().As<IGroupCreator>().InstancePerLifetimeScope();
+			builder.RegisterType<GroupScheduleGroupPageDataProvider>().As<IGroupScheduleGroupPageDataProvider>().InstancePerLifetimeScope();
+			builder.RegisterType<GroupPageCreator>().As<IGroupPageCreator>().SingleInstance();
+			builder.RegisterType<GroupPageFactory>().As<IGroupPageFactory>().SingleInstance();
+			builder.RegisterType<GroupCreator>().As<IGroupCreator>().SingleInstance();
 			builder.RegisterType<SwapServiceNew>().As<ISwapServiceNew>();
-			builder.RegisterType<GroupPersonBuilderForOptimization>()
-				.As<IGroupPersonBuilderForOptimization>()
-				.InstancePerLifetimeScope();
+			builder.RegisterType<GroupPersonBuilderForOptimization>().As<IGroupPersonBuilderForOptimization>().InstancePerLifetimeScope();
 			builder.RegisterType<SingleSkillDictionary>().As<ISingleSkillDictionary>().InstancePerLifetimeScope();
-			builder.RegisterType<EditableShiftMapper>().As<IEditableShiftMapper>();
-			builder.RegisterType<MaxMovedDaysOverLimitValidator>().As<IMaxMovedDaysOverLimitValidator>();
+			builder.RegisterType<EditableShiftMapper>().As<IEditableShiftMapper>().SingleInstance();
+			builder.RegisterType<MaxMovedDaysOverLimitValidator>().As<IMaxMovedDaysOverLimitValidator>().SingleInstance();
 			builder.RegisterType<TeamBlockRestrictionOverLimitValidator>().As<ITeamBlockRestrictionOverLimitValidator>();
 			builder.RegisterType<TeamBlockOptimizationLimits>().As<ITeamBlockOptimizationLimits>();
 
 			//ITeamBlockRestrictionOverLimitValidator
-			builder.RegisterType<BestSpotForAddingDayOffFinder>().As<IBestSpotForAddingDayOffFinder>().
-				InstancePerDependency();
-			builder.RegisterType<MatrixDataListInSteadyState>().As<IMatrixDataListInSteadyState>().InstancePerDependency();
-			builder.RegisterType<HasContractDayOffDefinition>().As<IHasContractDayOffDefinition>().InstancePerDependency();
-			builder.RegisterType<ScheduleDayDataMapper>().As<IScheduleDayDataMapper>().InstancePerDependency();
+			builder.RegisterType<BestSpotForAddingDayOffFinder>().As<IBestSpotForAddingDayOffFinder>().SingleInstance();
+			builder.RegisterType<MatrixDataListInSteadyState>().As<IMatrixDataListInSteadyState>().SingleInstance();
+			builder.RegisterType<HasContractDayOffDefinition>().As<IHasContractDayOffDefinition>().SingleInstance();
+			builder.RegisterType<ScheduleDayDataMapper>().As<IScheduleDayDataMapper>().SingleInstance();
 			builder.RegisterType<MatrixDataListCreator>().As<IMatrixDataListCreator>().InstancePerDependency();
 			builder.RegisterType<UniqueSchedulePartExtractor>().As<IUniqueSchedulePartExtractor>().SingleInstance();
 			builder.RegisterType<MatrixDataWithToFewDaysOff>().As<IMatrixDataWithToFewDaysOff>().InstancePerDependency();
@@ -296,14 +238,14 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<TeamDayOffScheduler>().As<ITeamDayOffScheduler>().InstancePerDependency();
 			builder.RegisterType<DaysOffSchedulingService>().As<IDaysOffSchedulingService>().InstancePerDependency();
 
-			builder.RegisterType<ScheduleResultDataExtractorProvider>().As<IScheduleResultDataExtractorProvider>();
-			builder.RegisterType<TrueFalseRandomizer>().As<ITrueFalseRandomizer>();
-			builder.RegisterType<OfficialWeekendDays>().As<IOfficialWeekendDays>();
-			builder.RegisterType<CMSBOneFreeWeekendMax5WorkingDaysDecisionMaker>().As<IDayOffDecisionMaker>();
-			builder.RegisterType<SchedulingOptionsCreator>().As<ISchedulingOptionsCreator>();
-			builder.RegisterType<LockableBitArrayChangesTracker>().As<ILockableBitArrayChangesTracker>();
+			builder.RegisterType<ScheduleResultDataExtractorProvider>().As<IScheduleResultDataExtractorProvider>().SingleInstance();
+			builder.RegisterType<TrueFalseRandomizer>().As<ITrueFalseRandomizer>().SingleInstance();
+			builder.RegisterType<OfficialWeekendDays>().As<IOfficialWeekendDays>().SingleInstance();
+			builder.RegisterType<CMSBOneFreeWeekendMax5WorkingDaysDecisionMaker>().As<IDayOffDecisionMaker>().SingleInstance();
+			builder.RegisterType<SchedulingOptionsCreator>().As<ISchedulingOptionsCreator>().SingleInstance();
+			builder.RegisterType<LockableBitArrayChangesTracker>().As<ILockableBitArrayChangesTracker>().SingleInstance();
 
-			builder.RegisterType<DaysOffLegalStateValidatorsFactory>().As<IDaysOffLegalStateValidatorsFactory>();
+			builder.RegisterType<DaysOffLegalStateValidatorsFactory>().As<IDaysOffLegalStateValidatorsFactory>().SingleInstance();
 			//IDaysOffLegalStateValidatorsFactory
 
 			registerWorkShiftFilters(builder);
@@ -313,22 +255,21 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			registerTeamBlockIntradayOptimizerService(builder);
 			registerTeamBlockSchedulingService(builder);
 
-			builder.RegisterType<AgentRestrictionsNoWorkShiftfFinder>().As<IAgentRestrictionsNoWorkShiftfFinder>();
+			builder.RegisterType<AgentRestrictionsNoWorkShiftfFinder>().As<IAgentRestrictionsNoWorkShiftfFinder>().InstancePerLifetimeScope();
 			registerFairnessOptimizationService(builder);
 			registerDayOffFairnessOptimizationService(builder);
 			registerMoveTimeOptimizationClasses(builder);
 
-			builder.RegisterType<AnalyzePersonAccordingToAvailability>().As<IAnalyzePersonAccordingToAvailability>();
-			builder.RegisterType<AdjustOvertimeLengthBasedOnAvailability>();
-			builder.RegisterType<OvertimeSkillIntervalDataAggregator>().As<IOvertimeSkillIntervalDataAggregator>();
-			builder.RegisterType<OvertimePeriodValueMapper>();
-			builder.RegisterType<MergeOvertimeSkillIntervalData>().As<IMergeOvertimeSkillIntervalData>();
+			builder.RegisterType<AnalyzePersonAccordingToAvailability>().As<IAnalyzePersonAccordingToAvailability>().SingleInstance();
+			builder.RegisterType<AdjustOvertimeLengthBasedOnAvailability>().SingleInstance();
+			builder.RegisterType<OvertimeSkillIntervalDataAggregator>().As<IOvertimeSkillIntervalDataAggregator>().SingleInstance();
+			builder.RegisterType<OvertimePeriodValueMapper>().SingleInstance();
+			builder.RegisterType<MergeOvertimeSkillIntervalData>().As<IMergeOvertimeSkillIntervalData>().SingleInstance();
 			
 			builder.RegisterType<OvertimeLengthDecider>().As<IOvertimeLengthDecider>();
 			builder.RegisterType<OvertimeSkillIntervalData>().As<IOvertimeSkillIntervalData>();
-			builder.RegisterType<OvertimeSkillIntervalDataDivider>().As<IOvertimeSkillIntervalDataDivider>();
-			builder.RegisterType<OvertimeSkillStaffPeriodToSkillIntervalDataMapper>()
-				.As<IOvertimeSkillStaffPeriodToSkillIntervalDataMapper>();
+			builder.RegisterType<OvertimeSkillIntervalDataDivider>().As<IOvertimeSkillIntervalDataDivider>().SingleInstance();
+			builder.RegisterType<OvertimeSkillStaffPeriodToSkillIntervalDataMapper>().As<IOvertimeSkillStaffPeriodToSkillIntervalDataMapper>().SingleInstance();
 			builder.RegisterType<ProjectionProvider>().As<IProjectionProvider>().SingleInstance();
 			builder.RegisterType<NightlyRestRule>().As<IAssignmentPeriodRule>().SingleInstance();
 			builder.RegisterType<ScheduleMatrixLockableBitArrayConverterEx>().As<IScheduleMatrixLockableBitArrayConverterEx>().SingleInstance();
@@ -355,19 +296,18 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 
 		private void registerMoveTimeOptimizationClasses(ContainerBuilder builder)
 		{
-			builder.RegisterType<ValidateFoundMovedDaysSpecification>().As<IValidateFoundMovedDaysSpecification>();
-			builder.RegisterType<DayValueUnlockedIndexSorter>().As<IDayValueUnlockedIndexSorter>();
+			builder.RegisterType<ValidateFoundMovedDaysSpecification>().As<IValidateFoundMovedDaysSpecification>().SingleInstance();
+			builder.RegisterType<DayValueUnlockedIndexSorter>().As<IDayValueUnlockedIndexSorter>().SingleInstance();
 			builder.RegisterType<TeamBlockMoveTimeDescisionMaker>().As<ITeamBlockMoveTimeDescisionMaker>();
 
 			builder.RegisterType<TeamBlockMoveTimeBetweenDaysService>().As<ITeamBlockMoveTimeBetweenDaysService>();
 			builder.RegisterType<TeamBlockMoveTimeOptimizer>().As<ITeamBlockMoveTimeOptimizer>();
-			builder.RegisterType<LockUnSelectedInTeamBlock>().As<ILockUnSelectedInTeamBlock>();
+			builder.RegisterType<LockUnSelectedInTeamBlock>().As<ILockUnSelectedInTeamBlock>().SingleInstance();
 		}
 
 		private void registerDayOffFairnessOptimizationService(ContainerBuilder builder)
 		{
-			builder.RegisterType<TeamBlockDayOffFairnessOptimizationServiceFacade>()
-				.As<TeamBlockDayOffFairnessOptimizationServiceFacade>();
+			builder.RegisterType<TeamBlockDayOffFairnessOptimizationServiceFacade>();
 			builder.RegisterType<TeamBlockDayOffFairnessOptimizationServiceFacadeSeniorityTurnedOff>()
 				.As<TeamBlockDayOffFairnessOptimizationServiceFacadeSeniorityTurnedOff>();
 			builder.Register(c => c.Resolve<IToggleManager>().IsEnabled(Toggles.Scheduler_Seniority_24331)
@@ -378,61 +318,60 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<WeekDayPoints>().As<IWeekDayPoints>();
 			builder.RegisterType<DayOffStep1>().As<IDayOffStep1>();
 			builder.RegisterType<DayOffStep2>().As<IDayOffStep2>();
-			builder.RegisterType<SeniorTeamBlockLocator>().As<ISeniorTeamBlockLocator>();
+			builder.RegisterType<SeniorTeamBlockLocator>().As<ISeniorTeamBlockLocator>().SingleInstance();
 			builder.RegisterType<DescisionMakerToSwapTeamBlock>().As<IDescisionMakerToSwapTeamBlock>();
 			builder.RegisterType<SeniorityCalculatorForTeamBlock>().As<ISeniorityCalculatorForTeamBlock>();
-			builder.RegisterType<TeamBlockLocatorWithHighestPoints>().As<ITeamBlockLocatorWithHighestPoints>();
-			builder.RegisterType<WeekDayPointCalculatorForTeamBlock>().As<IWeekDayPointCalculatorForTeamBlock>();
+			builder.RegisterType<TeamBlockLocatorWithHighestPoints>().As<ITeamBlockLocatorWithHighestPoints>().SingleInstance();
+			builder.RegisterType<WeekDayPointCalculatorForTeamBlock>().As<IWeekDayPointCalculatorForTeamBlock>().SingleInstance();
 			builder.RegisterType<TeamBlockDayOffSwapper>().As<ITeamBlockDayOffSwapper>();
 			builder.RegisterType<TeamBlockDayOffDaySwapper>().As<ITeamBlockDayOffDaySwapper>();
-			builder.RegisterType<JuniorTeamBlockExtractor>().As<IJuniorTeamBlockExtractor>();
-			builder.RegisterType<SuitableDayOffSpotDetector>().As<ISuitableDayOffSpotDetector>();
+			builder.RegisterType<JuniorTeamBlockExtractor>().As<IJuniorTeamBlockExtractor>().SingleInstance();
+			builder.RegisterType<SuitableDayOffSpotDetector>().As<ISuitableDayOffSpotDetector>().SingleInstance();
 			builder.RegisterType<TeamBlockDayOffDaySwapDecisionMaker>().As<ITeamBlockDayOffDaySwapDecisionMaker>();
-			builder.RegisterType<RankedPersonBasedOnStartDate>().As<IRankedPersonBasedOnStartDate>();
-			builder.RegisterType<PersonStartDateFromPersonPeriod>().As<IPersonStartDateFromPersonPeriod>();
-			builder.RegisterType<SuitableDayOffsToGiveAway>().As<ISuitableDayOffsToGiveAway>();
+			builder.RegisterType<RankedPersonBasedOnStartDate>().As<IRankedPersonBasedOnStartDate>().SingleInstance();
+			builder.RegisterType<PersonStartDateFromPersonPeriod>().As<IPersonStartDateFromPersonPeriod>().SingleInstance();
+			builder.RegisterType<SuitableDayOffsToGiveAway>().As<ISuitableDayOffsToGiveAway>().SingleInstance();
 			builder.RegisterType<PostSwapValidationForTeamBlock>().As<IPostSwapValidationForTeamBlock>();
 			builder.RegisterType<PersonDayOffPointsCalculator>().As<IPersonDayOffPointsCalculator>();
-			builder.RegisterType<PersonShiftCategoryPointCalculator>().As<IPersonShiftCategoryPointCalculator>();
+			builder.RegisterType<PersonShiftCategoryPointCalculator>().As<IPersonShiftCategoryPointCalculator>().SingleInstance();
 		}
 
 		private void registerFairnessOptimizationService(ContainerBuilder builder)
 		{
-			builder.RegisterType<TeamBlockSeniorityValidator>().As<ITeamBlockSeniorityValidator>();
-			builder.RegisterType<TeamBlockPeriodValidator>().As<ITeamBlockPeriodValidator>();
-			builder.RegisterType<TeamBlockSeniorityFairnessOptimizationService>()
-				.As<ITeamBlockSeniorityFairnessOptimizationService>();
+			builder.RegisterType<TeamBlockSeniorityValidator>().As<ITeamBlockSeniorityValidator>().SingleInstance();
+			builder.RegisterType<TeamBlockPeriodValidator>().As<ITeamBlockPeriodValidator>().SingleInstance();
+			builder.RegisterType<TeamBlockSeniorityFairnessOptimizationService>().As<ITeamBlockSeniorityFairnessOptimizationService>();
 			builder.RegisterType<ConstructTeamBlock>().As<IConstructTeamBlock>();
-			builder.RegisterType<ShiftCategoryPoints>().As<IShiftCategoryPoints>();
-			builder.RegisterType<ShiftCategoryPointExtractor>().As<IShiftCategoryPointExtractor>();
-			builder.RegisterType<SeniorityExtractor>().As<ISeniorityExtractor>();
+			builder.RegisterType<ShiftCategoryPoints>().As<IShiftCategoryPoints>().SingleInstance();
+			builder.RegisterType<ShiftCategoryPointExtractor>().As<IShiftCategoryPointExtractor>().SingleInstance();
+			builder.RegisterType<SeniorityExtractor>().As<ISeniorityExtractor>().SingleInstance();
 			builder.RegisterType<DetermineTeamBlockPriority>().As<IDetermineTeamBlockPriority>();
 			builder.RegisterType<TeamBlockSwapValidator>().As<ITeamBlockSwapValidator>();
 			builder.RegisterType<TeamBlockSwapDayValidator>().As<ITeamBlockSwapDayValidator>();
 			builder.RegisterType<TeamBlockSwap>().As<ITeamBlockSwap>();
 			builder.RegisterType<TeamBlockLockValidator>().As<ITeamBlockLockValidator>();
 			builder.RegisterType<SeniorityTeamBlockSwapValidator>().As<ISeniorityTeamBlockSwapValidator>();
-			builder.RegisterType<DayOffRulesValidator>().As<IDayOffRulesValidator>();
+			builder.RegisterType<DayOffRulesValidator>().As<IDayOffRulesValidator>().SingleInstance();
 			builder.RegisterType<SeniorityTeamBlockSwapper>().As<ISeniorityTeamBlockSwapper>();
 
 			//ITeamBlockSameTimeZoneValidator
 
 			//common
-			builder.RegisterType<TeamBlockPeriodValidator>().As<ITeamBlockPeriodValidator>();
-			builder.RegisterType<TeamMemberCountValidator>().As<ITeamMemberCountValidator>();
-			builder.RegisterType<TeamBlockContractTimeValidator>().As<ITeamBlockContractTimeValidator>();
-			builder.RegisterType<TeamBlockSameSkillValidator>().As<ITeamBlockSameSkillValidator>();
-			builder.RegisterType<TeamBlockPersonsSkillChecker>().As<ITeamBlockPersonsSkillChecker>();
-			builder.RegisterType<TeamBlockSameRuleSetBagValidator>().As<ITeamBlockSameRuleSetBagValidator>();
-			builder.RegisterType<TeamBlockSameTimeZoneValidator>().As<ITeamBlockSameTimeZoneValidator>();
+			builder.RegisterType<TeamBlockPeriodValidator>().As<ITeamBlockPeriodValidator>().SingleInstance();
+			builder.RegisterType<TeamMemberCountValidator>().As<ITeamMemberCountValidator>().SingleInstance();
+			builder.RegisterType<TeamBlockContractTimeValidator>().As<ITeamBlockContractTimeValidator>().SingleInstance();
+			builder.RegisterType<TeamBlockSameSkillValidator>().As<ITeamBlockSameSkillValidator>().SingleInstance();
+			builder.RegisterType<TeamBlockPersonsSkillChecker>().As<ITeamBlockPersonsSkillChecker>().SingleInstance();
+			builder.RegisterType<TeamBlockSameRuleSetBagValidator>().As<ITeamBlockSameRuleSetBagValidator>().SingleInstance();
+			builder.RegisterType<TeamBlockSameTimeZoneValidator>().As<ITeamBlockSameTimeZoneValidator>().SingleInstance();
 		}
 
 		private static void registerTeamBlockCommon(ContainerBuilder builder)
 		{
 			builder.RegisterType<LocateMissingIntervalsIfMidNightBreak>().As<ILocateMissingIntervalsIfMidNightBreak>();
-			builder.RegisterType<FilterOutIntervalsAfterMidNight>().As<IFilterOutIntervalsAfterMidNight>();
-			builder.RegisterType<GroupPersonSkillAggregator>().As<IGroupPersonSkillAggregator>();
-			builder.RegisterType<DynamicBlockFinder>().As<IDynamicBlockFinder>();
+			builder.RegisterType<FilterOutIntervalsAfterMidNight>().As<IFilterOutIntervalsAfterMidNight>().SingleInstance();
+			builder.RegisterType<GroupPersonSkillAggregator>().As<IGroupPersonSkillAggregator>().SingleInstance();
+			builder.RegisterType<DynamicBlockFinder>().As<IDynamicBlockFinder>().SingleInstance();
 			builder.RegisterType<TeamBlockInfoFactory>().As<ITeamBlockInfoFactory>();
 			builder.RegisterType<TeamInfoFactory>().As<ITeamInfoFactory>();
 			builder.RegisterType<SafeRollbackAndResourceCalculation>().As<ISafeRollbackAndResourceCalculation>();
@@ -444,9 +383,9 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<TeamBlockMaxSeatChecker>().As<ITeamBlockMaxSeatChecker>();
 			builder.RegisterType<DailyTargetValueCalculatorForTeamBlock>().As<IDailyTargetValueCalculatorForTeamBlock>();
 			builder.RegisterType<NightlyRestRestrictionForTeamBlock>().As<INightlyRestRestrictionForTeamBlock>();
-			builder.RegisterType<MedianCalculatorForDays>().As<IMedianCalculatorForDays>();
-			builder.RegisterType<TwoDaysIntervalGenerator>().As<ITwoDaysIntervalGenerator>();
-			builder.RegisterType<MedianCalculatorForSkillInterval>().As<IMedianCalculatorForSkillInterval>();
+			builder.RegisterType<MedianCalculatorForDays>().As<IMedianCalculatorForDays>().SingleInstance();
+			builder.RegisterType<TwoDaysIntervalGenerator>().As<ITwoDaysIntervalGenerator>().SingleInstance();
+			builder.RegisterType<MedianCalculatorForSkillInterval>().As<IMedianCalculatorForSkillInterval>().SingleInstance();
 			builder.RegisterType<SkillIntervalDataOpenHour>().As<ISkillIntervalDataOpenHour>();
 			builder.RegisterType<SameOpenHoursInTeamBlockSpecification>().As<ISameOpenHoursInTeamBlockSpecification>();
 			builder.RegisterType<SameEndTimeTeamSpecification>().As<ISameEndTimeTeamSpecification>();
@@ -454,8 +393,8 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<SameShiftCategoryTeamSpecification>().As<ISameShiftCategoryTeamSpecification>();
 			builder.RegisterType<SameStartTimeBlockSpecification>().As<ISameStartTimeBlockSpecification>();
 			builder.RegisterType<SameStartTimeTeamSpecification>().As<ISameStartTimeTeamSpecification>();
-			builder.RegisterType<SameShiftBlockSpecification>().As<ISameShiftBlockSpecification>();
-			builder.RegisterType<ValidSampleDayPickerFromTeamBlock>().As<IValidSampleDayPickerFromTeamBlock>();
+			builder.RegisterType<SameShiftBlockSpecification>().As<ISameShiftBlockSpecification>().SingleInstance();
+			builder.RegisterType<ValidSampleDayPickerFromTeamBlock>().As<IValidSampleDayPickerFromTeamBlock>().SingleInstance();
 			builder.RegisterType<TeamBlockSchedulingOptions>().As<ITeamBlockSchedulingOptions>();
 			builder.RegisterType<TeamBlockRoleModelSelector>().As<ITeamBlockRoleModelSelector>();
 			builder.RegisterType<TeamBlockSchedulingCompletionChecker>().As<ITeamBlockSchedulingCompletionChecker>();
@@ -464,14 +403,14 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<TeamRestrictionAggregator>().As<ITeamRestrictionAggregator>();
 			builder.RegisterType<BlockRestrictionAggregator>().As<IBlockRestrictionAggregator>();
 			builder.RegisterType<TeamBlockMissingDaysOffScheduler>().As<ITeamBlockMissingDaysOffScheduler>();
-			builder.RegisterType<TeamMatrixChecker>().As<ITeamMatrixChecker>();
+			builder.RegisterType<TeamMatrixChecker>().As<ITeamMatrixChecker>().SingleInstance();
 			//ITeamMatrixChecker
 
-			builder.RegisterType<TeamMemberTerminationOnBlockSpecification>().As<ITeamMemberTerminationOnBlockSpecification>();
+			builder.RegisterType<TeamMemberTerminationOnBlockSpecification>().As<ITeamMemberTerminationOnBlockSpecification>().SingleInstance();
 			builder.RegisterType<TeamBlockMissingDayOffHandler>().As<ITeamBlockMissingDayOffHandler>();
-			builder.RegisterType<BestSpotForAddingDayOffFinder>().As<IBestSpotForAddingDayOffFinder>();
-			builder.RegisterType<SplitSchedulePeriodToWeekPeriod>();
-			builder.RegisterType<ValidNumberOfDayOffInAWeekSpecification>().As<IValidNumberOfDayOffInAWeekSpecification>();
+			builder.RegisterType<BestSpotForAddingDayOffFinder>().As<IBestSpotForAddingDayOffFinder>().SingleInstance();
+			builder.RegisterType<SplitSchedulePeriodToWeekPeriod>().SingleInstance();
+			builder.RegisterType<ValidNumberOfDayOffInAWeekSpecification>().As<IValidNumberOfDayOffInAWeekSpecification>().SingleInstance();
 			builder.RegisterType<TeamScheduling>().As<ITeamScheduling>();
 			builder.RegisterType<TeamBlockSingleDayScheduler>().As<ITeamBlockSingleDayScheduler>();
 			builder.RegisterType<TeamBlockScheduler>().As<TeamBlockScheduler>();
@@ -491,9 +430,9 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<CreateSkillIntervalDatasPerActivtyForDate>().As<ICreateSkillIntervalDatasPerActivtyForDate>();
 			builder.RegisterType<CalculateAggregatedDataForActivtyAndDate>().As<ICalculateAggregatedDataForActivtyAndDate>();
 			builder.RegisterType<CreateSkillIntervalDataPerDateAndActivity>().As<ICreateSkillIntervalDataPerDateAndActivity>();
-			builder.RegisterType<OpenHourForDate>().As<IOpenHourForDate>();
+			builder.RegisterType<OpenHourForDate>().As<IOpenHourForDate>().SingleInstance();
 			builder.RegisterType<ActivityIntervalDataCreator>().As<IActivityIntervalDataCreator>();
-			builder.RegisterType<WorkShiftFromEditableShift>().As<IWorkShiftFromEditableShift>();
+			builder.RegisterType<WorkShiftFromEditableShift>().As<IWorkShiftFromEditableShift>().SingleInstance();
 			builder.RegisterType<FirstShiftInTeamBlockFinder>().As<IFirstShiftInTeamBlockFinder>();
 			builder.RegisterType<TeamBlockOpenHoursValidator>().As<ITeamBlockOpenHoursValidator>();
 			//IFirstShiftInTeamBlockFinder
@@ -501,69 +440,65 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 
 		private static void registerTeamBlockIntradayOptimizerService(ContainerBuilder builder)
 		{
-			builder.RegisterType<TeamBlockIntradayDecisionMaker>().As<ITeamBlockIntradayDecisionMaker>();
-			builder.RegisterType<RelativeDailyValueCalculatorForTeamBlock>().As<IRelativeDailyValueCalculatorForTeamBlock>();
+			builder.RegisterType<TeamBlockIntradayDecisionMaker>().As<ITeamBlockIntradayDecisionMaker>().SingleInstance();
+			builder.RegisterType<RelativeDailyValueCalculatorForTeamBlock>().As<IRelativeDailyValueCalculatorForTeamBlock>().SingleInstance();
 		}
 
 		private static void registerTeamBlockDayOffOptimizerService(ContainerBuilder builder)
 		{
-			builder.RegisterType<LockableBitArrayFactory>().As<ILockableBitArrayFactory>();
+			builder.RegisterType<LockableBitArrayFactory>().As<ILockableBitArrayFactory>().SingleInstance();
 			builder.RegisterType<TeamDayOffModifier>().As<ITeamDayOffModifier>();
 		}
 
 		private static void registerWorkShiftSelector(ContainerBuilder builder)
 		{
-			builder.RegisterType<WorkShiftLengthValueCalculator>().As<IWorkShiftLengthValueCalculator>();
+			builder.RegisterType<WorkShiftLengthValueCalculator>().As<IWorkShiftLengthValueCalculator>().SingleInstance();
 			builder.RegisterType<WorkShiftValueCalculator>().As<IWorkShiftValueCalculator>();
-			builder.RegisterType<EqualWorkShiftValueDecider>().As<IEqualWorkShiftValueDecider>();
+			builder.RegisterType<EqualWorkShiftValueDecider>().As<IEqualWorkShiftValueDecider>().SingleInstance();
 			builder.RegisterType<WorkShiftSelector>().As<IWorkShiftSelector>();
-			builder.RegisterType<VisualLayerToBaseDateMapper>().As<IVisualLayerToBaseDateMapper>();
-			builder.RegisterType<MaxSeatsCalculationForTeamBlock>().As<IMaxSeatsCalculationForTeamBlock>();
-			builder.RegisterType<MaxSeatInformationGeneratorBasedOnIntervals>()
-				.As<IMaxSeatInformationGeneratorBasedOnIntervals>();
-			builder.RegisterType<MaxSeatSkillAggregator>().As<IMaxSeatSkillAggregator>();
-			builder.RegisterType<MaxSeatInformationGeneratorBasedOnIntervals>()
-				.As<IMaxSeatInformationGeneratorBasedOnIntervals>();
+			builder.RegisterType<VisualLayerToBaseDateMapper>().As<IVisualLayerToBaseDateMapper>().SingleInstance();
+			builder.RegisterType<MaxSeatsCalculationForTeamBlock>().As<IMaxSeatsCalculationForTeamBlock>().SingleInstance();
+			builder.RegisterType<MaxSeatInformationGeneratorBasedOnIntervals>().As<IMaxSeatInformationGeneratorBasedOnIntervals>();
+			builder.RegisterType<MaxSeatSkillAggregator>().As<IMaxSeatSkillAggregator>().SingleInstance();
+			builder.RegisterType<MaxSeatInformationGeneratorBasedOnIntervals>().As<IMaxSeatInformationGeneratorBasedOnIntervals>();
 			builder.RegisterType<MaxSeatsSpecificationDictionaryExtractor>().As<IMaxSeatsSpecificationDictionaryExtractor>();
-			builder.RegisterType<IsMaxSeatsReachedOnSkillStaffPeriodSpecification>()
-				.As<IIsMaxSeatsReachedOnSkillStaffPeriodSpecification>();
+			builder.RegisterType<IsMaxSeatsReachedOnSkillStaffPeriodSpecification>().As<IIsMaxSeatsReachedOnSkillStaffPeriodSpecification>().SingleInstance();
 			builder.RegisterType<IntervalLevelMaxSeatInfo>();
-			builder.RegisterType<MaxSeatBoostingFactorCalculator>();
-			builder.RegisterType<PullTargetValueFromSkillIntervalData>();
+			builder.RegisterType<MaxSeatBoostingFactorCalculator>().SingleInstance();
+			builder.RegisterType<PullTargetValueFromSkillIntervalData>().SingleInstance();
 			builder.RegisterType<ExtractIntervalsVoilatingMaxSeat>().As<IExtractIntervalsVoilatingMaxSeat>();
 		}
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling")]
 		private static void registerWorkShiftFilters(ContainerBuilder builder)
 		{
-			builder.RegisterType<ActivityRestrictionsShiftFilter>().As<IActivityRestrictionsShiftFilter>();
+			builder.RegisterType<ActivityRestrictionsShiftFilter>().As<IActivityRestrictionsShiftFilter>().SingleInstance();
 			builder.RegisterType<BusinessRulesShiftFilter>().As<IBusinessRulesShiftFilter>();
-			builder.RegisterType<CommonMainShiftFilter>().As<ICommonMainShiftFilter>();
+			builder.RegisterType<CommonMainShiftFilter>().As<ICommonMainShiftFilter>().SingleInstance();
 			builder.RegisterType<ContractTimeShiftFilter>().As<IContractTimeShiftFilter>();
-			builder.RegisterType<DisallowedShiftCategoriesShiftFilter>().As<IDisallowedShiftCategoriesShiftFilter>();
-			builder.RegisterType<EarliestEndTimeLimitationShiftFilter>().As<IEarliestEndTimeLimitationShiftFilter>();
-			builder.RegisterType<EffectiveRestrictionShiftFilter>().As<IEffectiveRestrictionShiftFilter>();
-			builder.RegisterType<LatestStartTimeLimitationShiftFilter>().As<ILatestStartTimeLimitationShiftFilter>();
-			builder.RegisterType<MainShiftOptimizeActivitiesSpecificationShiftFilter>()
-				.As<IMainShiftOptimizeActivitiesSpecificationShiftFilter>();
+			builder.RegisterType<DisallowedShiftCategoriesShiftFilter>().As<IDisallowedShiftCategoriesShiftFilter>().SingleInstance();
+			builder.RegisterType<EarliestEndTimeLimitationShiftFilter>().As<IEarliestEndTimeLimitationShiftFilter>().SingleInstance();
+			builder.RegisterType<EffectiveRestrictionShiftFilter>().As<IEffectiveRestrictionShiftFilter>().SingleInstance();
+			builder.RegisterType<LatestStartTimeLimitationShiftFilter>().As<ILatestStartTimeLimitationShiftFilter>().SingleInstance();
+			builder.RegisterType<MainShiftOptimizeActivitiesSpecificationShiftFilter>().As<IMainShiftOptimizeActivitiesSpecificationShiftFilter>().SingleInstance();
 			builder.RegisterType<NotOverWritableActivitiesShiftFilter>().As<INotOverWritableActivitiesShiftFilter>();
 			builder.RegisterType<PersonalShiftsShiftFilter>().As<IPersonalShiftsShiftFilter>();
-			builder.RegisterType<RuleSetPersonalSkillsActivityFilter>().As<IRuleSetPersonalSkillsActivityFilter>();
-			builder.RegisterType<ShiftCategoryRestrictionShiftFilter>().As<IShiftCategoryRestrictionShiftFilter>();
+			builder.RegisterType<RuleSetPersonalSkillsActivityFilter>().As<IRuleSetPersonalSkillsActivityFilter>().SingleInstance();
+			builder.RegisterType<ShiftCategoryRestrictionShiftFilter>().As<IShiftCategoryRestrictionShiftFilter>().SingleInstance();
 			builder.RegisterType<ValidDateTimePeriodShiftFilter>().As<IValidDateTimePeriodShiftFilter>();
 			builder.RegisterType<TimeLimitsRestrictionShiftFilter>().As<ITimeLimitsRestrictionShiftFilter>();
-			builder.RegisterType<WorkTimeLimitationShiftFilter>().As<IWorkTimeLimitationShiftFilter>();
-			builder.RegisterType<CommonActivityFilter>().As<ICommonActivityFilter>();
+			builder.RegisterType<WorkTimeLimitationShiftFilter>().As<IWorkTimeLimitationShiftFilter>().SingleInstance();
+			builder.RegisterType<CommonActivityFilter>().As<ICommonActivityFilter>().SingleInstance();
 			builder.RegisterType<RuleSetAccordingToAccessabilityFilter>().As<IRuleSetAccordingToAccessabilityFilter>();
-			builder.RegisterType<TeamBlockRuleSetBagExtractor>().As<ITeamBlockRuleSetBagExtractor>();
-			builder.RegisterType<TeamBlockIncludedWorkShiftRuleFilter>().As<ITeamBlockIncludedWorkShiftRuleFilter>();
-			builder.RegisterType<RuleSetSkillActivityChecker>().As<IRuleSetSkillActivityChecker>();
+			builder.RegisterType<TeamBlockRuleSetBagExtractor>().As<ITeamBlockRuleSetBagExtractor>().SingleInstance();
+			builder.RegisterType<TeamBlockIncludedWorkShiftRuleFilter>().As<ITeamBlockIncludedWorkShiftRuleFilter>().SingleInstance();
+			builder.RegisterType<RuleSetSkillActivityChecker>().As<IRuleSetSkillActivityChecker>().SingleInstance();
 			builder.RegisterType<PersonalShiftAndMeetingFilter>().As<IPersonalShiftAndMeetingFilter>();
-			builder.RegisterType<PersonalShiftMeetingTimeChecker>().As<IPersonalShiftMeetingTimeChecker>();
+			builder.RegisterType<PersonalShiftMeetingTimeChecker>().As<IPersonalShiftMeetingTimeChecker>().SingleInstance();
 			
 
-			builder.RegisterType<DisallowedShiftProjectionCashesFilter>().As<DisallowedShiftProjectionCashesFilter>();
-			builder.RegisterType<DisallowedShiftProjectionCashesFilter29846Off>().As<DisallowedShiftProjectionCashesFilter29846Off>();
+			builder.RegisterType<DisallowedShiftProjectionCashesFilter>().As<DisallowedShiftProjectionCashesFilter>().SingleInstance();
+			builder.RegisterType<DisallowedShiftProjectionCashesFilter29846Off>().As<DisallowedShiftProjectionCashesFilter29846Off>().SingleInstance();
 
 			builder.Register(c => c.Resolve<IToggleManager>().IsEnabled(Toggles.Schedule_IntraIntervalOptimizer_29846)
 			   ? (IDisallowedShiftProjectionCashesFilter)c.Resolve<DisallowedShiftProjectionCashesFilter>()

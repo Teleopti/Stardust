@@ -13,7 +13,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
     {
         private DayOffOptimizer _target;
         private MockRepository _mocks;
-        private IScheduleMatrixLockableBitArrayConverter _converter;
+        private IScheduleMatrixLockableBitArrayConverterEx _converter;
         private IDayOffDecisionMaker _decisionMaker;
         private IScheduleResultDataExtractor _dataExtractor;
         private IDaysOffPreferences _daysOffPreferences;
@@ -25,7 +25,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
         public void Setup()
         {
             _mocks = new MockRepository();
-            _converter = _mocks.StrictMock<IScheduleMatrixLockableBitArrayConverter>();
+            _converter = _mocks.StrictMock<IScheduleMatrixLockableBitArrayConverterEx>();
             _decisionMaker = _mocks.StrictMock<IDayOffDecisionMaker>();
             _dataExtractor = _mocks.StrictMock<IScheduleResultDataExtractor>();
             _daysOffPreferences = new DaysOffPreferences();
@@ -48,7 +48,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 
                 // not essetial to the test logic
                 Expect.Call(_scheduleMatrix.Person).Return(new Person()).Repeat.AtLeastOnce();
-                Expect.Call(_converter.Convert(false, false)).Return(bitArray).Repeat.AtLeastOnce();
+                Expect.Call(_converter.Convert(_scheduleMatrix, false, false)).Return(bitArray).Repeat.AtLeastOnce();
                 Expect.Call(_dataExtractor.Values()).Return(new List<double?> { 1, 2 }).Repeat.Once();
             }
             using (_mocks.Playback())

@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using Teleopti.Ccc.Domain.Scheduling;
-using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
@@ -13,9 +11,9 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 
     public class LocateMissingIntervalsIfMidNightBreak : ILocateMissingIntervalsIfMidNightBreak
     {
-        private readonly ISchedulingResultStateHolder _schedulingResultStateHolder;
+        private readonly Func<ISchedulingResultStateHolder> _schedulingResultStateHolder;
 
-        public LocateMissingIntervalsIfMidNightBreak(ISchedulingResultStateHolder schedulingResultStateHolder)
+        public LocateMissingIntervalsIfMidNightBreak(Func<ISchedulingResultStateHolder> schedulingResultStateHolder)
         {
             _schedulingResultStateHolder = schedulingResultStateHolder;
         }
@@ -27,7 +25,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
             {
                 var previousDay = dateOnly.AddDays(-1);
                 //TimeZoneInfo timeZone = TimeZoneGuard.Instance.TimeZone;
-                var skillDays = _schedulingResultStateHolder.SkillDaysOnDateOnly(new DateOnly[] { previousDay });
+                var skillDays = _schedulingResultStateHolder().SkillDaysOnDateOnly(new DateOnly[] { previousDay });
                 foreach (var skillDay in skillDays)
                 {
                     if (skillDay.Skill != skill) continue;

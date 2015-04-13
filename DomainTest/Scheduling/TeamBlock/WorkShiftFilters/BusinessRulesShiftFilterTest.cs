@@ -31,7 +31,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.WorkShiftFilters
 
 			_mocks.StrictMock<IScheduleDictionary>();
 			_personalShiftMeetingTimeChecker = _mocks.StrictMock<IPersonalShiftMeetingTimeChecker>();
-			_target = new BusinessRulesShiftFilter(_resultStateHolder, _validDateTimePeriodShiftFilter,
+			_target = new BusinessRulesShiftFilter(()=>_resultStateHolder, _validDateTimePeriodShiftFilter,
 			                                       _longestPeriodForAssignmentCalculator);
 		}
 		

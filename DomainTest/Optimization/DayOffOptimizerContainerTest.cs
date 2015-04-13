@@ -14,7 +14,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
     {
         private DayOffOptimizerContainer _target;
         private MockRepository _mocks;
-        private IScheduleMatrixLockableBitArrayConverter _converter;
+        private IScheduleMatrixLockableBitArrayConverterEx _converter;
         private IDayOffDecisionMaker _decisionMaker;
         private IScheduleResultDataExtractor _dataExtractor;
         private IDaysOffPreferences _daysOffPreferences;
@@ -26,7 +26,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
         public void Setup()
         {
             _mocks = new MockRepository();
-            _converter = _mocks.StrictMock<IScheduleMatrixLockableBitArrayConverter>();
+            _converter = _mocks.StrictMock<IScheduleMatrixLockableBitArrayConverterEx>();
             _decisionMaker = _mocks.StrictMock<IDayOffDecisionMaker>();
             _dataExtractor = _mocks.StrictMock<IScheduleResultDataExtractor>();
             _daysOffPreferences = new DaysOffPreferences();
@@ -38,7 +38,6 @@ namespace Teleopti.Ccc.DomainTest.Optimization
         [Test]
         public void VerifyOwner()
         {
-
             IPerson owner = PersonFactory.CreatePerson();
             using (_mocks.Record())
             {
@@ -50,11 +49,8 @@ namespace Teleopti.Ccc.DomainTest.Optimization
                 _target = createTarget();
                 Assert.AreEqual(owner, _target.Owner);
             }
-
         }
 
-
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling")]
         [Test]
         public void VerifyExecuteFirstGroupSuccessful()
         {
@@ -67,7 +63,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 
             using (_mocks.Record())
             {
-                Expect.Call(_converter.Convert(false, false)).Return(bitArrayBeforeMove).Repeat.Times(2);
+                Expect.Call(_converter.Convert(_matrix, false, false)).Return(bitArrayBeforeMove).Repeat.Times(2);
                 Expect.Call(_dataExtractor.Values()).Return(new List<double?> { 1, 2 }).Repeat.Times(1);
                 Expect.Call(_decisionMaker.Execute(bitArrayBeforeMove, new List<double?> { 1, 2 })).IgnoreArguments().Return(true).Repeat.Any();
                 Expect.Call(_matrix.Person).Return(new Person()).Repeat.Any();
@@ -87,7 +83,6 @@ namespace Teleopti.Ccc.DomainTest.Optimization
             Assert.IsTrue(result);
         }
 
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling")]
         [Test]
         public void VerifyExecuteFirstTwoGroupUnsuccessfulThirdGroupSuccessful()
         {
@@ -100,7 +95,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 
             using (_mocks.Record())
             {
-                Expect.Call(_converter.Convert(false, false)).Return(bitArrayBeforeMove).Repeat.Times(6);
+                Expect.Call(_converter.Convert(_matrix, false, false)).Return(bitArrayBeforeMove).Repeat.Times(6);
                 Expect.Call(_dataExtractor.Values()).Return(new List<double?> { 1, 2 }).Repeat.Times(3);
                 Expect.Call(_decisionMaker.Execute(bitArrayBeforeMove, new List<double?> { 1, 2 })).IgnoreArguments().Return(false).Repeat.Once();
                 Expect.Call(_decisionMaker.Execute(bitArrayBeforeMove, new List<double?> { 1, 2 })).IgnoreArguments().Return(false).Repeat.Once();
@@ -122,7 +117,6 @@ namespace Teleopti.Ccc.DomainTest.Optimization
             Assert.IsTrue(result);
         }
 
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling")]
         [Test]
         public void VerifyExecuteAllGroupUnsuccessful()
         {
@@ -135,7 +129,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 
             using (_mocks.Record())
             {
-                Expect.Call(_converter.Convert(false, false)).Return(bitArrayBeforeMove).Repeat.Times(6);
+                Expect.Call(_converter.Convert(_matrix, false, false)).Return(bitArrayBeforeMove).Repeat.Times(6);
                 Expect.Call(_dataExtractor.Values()).Return(new List<double?> { 1, 2 }).Repeat.Times(3);
                 Expect.Call(_decisionMaker.Execute(bitArrayBeforeMove, new List<double?> { 1, 2 })).IgnoreArguments().Return(false).Repeat.Once();
                 Expect.Call(_decisionMaker.Execute(bitArrayBeforeMove, new List<double?> { 1, 2 })).IgnoreArguments().Return(false).Repeat.Once();

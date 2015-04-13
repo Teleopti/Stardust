@@ -11,7 +11,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 
 	public class LockUnSelectedInTeamBlock : ILockUnSelectedInTeamBlock
 	{
-		public  void Lock(ITeamBlockInfo teamBlockInfo, IList<IPerson> selectedPersons, DateOnlyPeriod selectedPeriod)
+		public void Lock(ITeamBlockInfo teamBlockInfo, IList<IPerson> selectedPersons, DateOnlyPeriod selectedPeriod)
 		{
 			var blockInfo = teamBlockInfo.BlockInfo;
 			blockInfo.ClearLocks();

@@ -24,7 +24,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
             _resultStateHolder = _mocks.StrictMock<ISchedulingResultStateHolder>();
             _dic = _mocks.StrictMock<IScheduleDictionary>();
             _range = _mocks.StrictMock<IScheduleRange>();
-            _target = new ScheduleFairnessCalculator(_resultStateHolder);
+            _target = new ScheduleFairnessCalculator(()=>_resultStateHolder);
         }
 
         [Test]

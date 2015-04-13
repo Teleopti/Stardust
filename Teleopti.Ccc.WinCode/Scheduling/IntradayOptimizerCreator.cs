@@ -18,7 +18,6 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 		private readonly IOptimizationPreferences _optimizerPreferences;
 		private readonly ISchedulePartModifyAndRollbackService _rollbackService;
 		private readonly ISchedulingResultStateHolder _schedulingResultStateHolder;
-		private readonly IScheduleMatrixLockableBitArrayConverterEx _scheduleMatrixLockableBitArrayConverterEx;
 		private readonly ISkillStaffPeriodToSkillIntervalDataMapper _skillStaffPeriodToSkillIntervalDataMapper;
 		private readonly ISkillIntervalDataDivider _skillIntervalDataDivider;
 		private readonly ISkillIntervalDataAggregator _skillIntervalDataAggregator;
@@ -34,7 +33,6 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 			IOptimizationPreferences optimizerPreferences,
 			ISchedulePartModifyAndRollbackService rollbackService,
 			ISchedulingResultStateHolder schedulingResultStateHolder,
-			IScheduleMatrixLockableBitArrayConverterEx scheduleMatrixLockableBitArrayConverterEx,
 			ISkillStaffPeriodToSkillIntervalDataMapper skillStaffPeriodToSkillIntervalDataMapper,
 			ISkillIntervalDataDivider skillIntervalDataDivider,
 			ISkillIntervalDataAggregator skillIntervalDataAggregator,
@@ -49,7 +47,6 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 			_optimizerPreferences = optimizerPreferences;
 			_rollbackService = rollbackService;
 			_schedulingResultStateHolder = schedulingResultStateHolder;
-			_scheduleMatrixLockableBitArrayConverterEx = scheduleMatrixLockableBitArrayConverterEx;
 			_skillStaffPeriodToSkillIntervalDataMapper = skillStaffPeriodToSkillIntervalDataMapper;
 			_skillIntervalDataDivider = skillIntervalDataDivider;
 			_skillIntervalDataAggregator = skillIntervalDataAggregator;
@@ -68,13 +65,9 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 
 			for (int index = 0; index < _scheduleMatrixContainerList.Count; index++)
 			{
-
 				IScheduleMatrixOriginalStateContainer originalStateContainer = _scheduleMatrixContainerList[index];
 
 				IScheduleMatrixPro scheduleMatrix = originalStateContainer.ScheduleMatrix;
-
-				IScheduleMatrixLockableBitArrayConverter matrixConverter =
-					new ScheduleMatrixLockableBitArrayConverter(scheduleMatrix, _scheduleMatrixLockableBitArrayConverterEx);
 
 				IScheduleResultDailyValueCalculator dailyValueCalculator = new RelativeDailyValueByPersonalSkillsExtractor(scheduleMatrix,
 				                                                                                                           _optimizerPreferences.Advanced,
@@ -109,7 +102,6 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 						dailyValueCalculator,
 						personalSkillsDataExtractor,
 						_decisionMaker,
-						matrixConverter,
 						_scheduleService,
 						_optimizerPreferences,
 						_rollbackService,
@@ -120,7 +112,8 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 						schedulingOptionsCreator,
 						mainShiftOptimizeActivitySpecificationSetter,
 						deleteAndResourceCalculateService,
-						resourceCalculateDelayer);
+						resourceCalculateDelayer,
+						scheduleMatrix);
 
 				result.Add(optimizer);
 			}

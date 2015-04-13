@@ -84,7 +84,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock
 				_intervalDataAggregator,
 				_dayIntervalDataCalculator,
 				_skillStaffPeriodToSkillIntervalDataMapper,
-				_schedulingResultStateHolder,
+				()=>_schedulingResultStateHolder,
 				_groupPersonSkillAggregator, _locateMissingIntervalsIfMidNightBreak, _filterOutIntervalsAfterMidNight,
 				_maxSeatSkillAggregator, _extractIntervalsVoilatingMaxSeat, _pullTargetValueFromSkillIntervalData);
 

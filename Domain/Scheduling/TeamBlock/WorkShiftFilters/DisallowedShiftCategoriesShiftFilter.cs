@@ -12,7 +12,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftFilters
 	
 	public class DisallowedShiftCategoriesShiftFilter : IDisallowedShiftCategoriesShiftFilter
 	{
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Globalization", "CA1303:Do not pass literals as localized parameters", MessageId = "Teleopti.Ccc.Domain.ResourceCalculation.WorkShiftFilterResult.#ctor(System.String,System.Int32,System.Int32)")]
         public IList<IShiftProjectionCache> Filter(IList<IShiftCategory> categories, IList<IShiftProjectionCache> shiftList, IWorkShiftFinderResult finderResult)
         {
 	        if (shiftList == null) return null;

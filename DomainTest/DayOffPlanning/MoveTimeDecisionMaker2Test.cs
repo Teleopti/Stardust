@@ -4,6 +4,7 @@ using System.Collections.ObjectModel;
 using NUnit.Framework;
 using Rhino.Mocks;
 using Teleopti.Ccc.Domain.DayOffPlanning;
+using Teleopti.Ccc.Domain.Optimization;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.DomainTest.DayOffPlanning
@@ -15,7 +16,7 @@ namespace Teleopti.Ccc.DomainTest.DayOffPlanning
         private MockRepository _mocks;
 
         private IScheduleMatrixPro _scheduleMatrix;
-        private IScheduleMatrixLockableBitArrayConverter _matrixConverter;
+        private IScheduleMatrixLockableBitArrayConverterEx _matrixConverter;
         private IScheduleResultDataExtractor _dataExtractor;
         private IList<double?> _values;
         private IScheduleDayPro _scheduleDayPro0201Mon;
@@ -47,11 +48,11 @@ namespace Teleopti.Ccc.DomainTest.DayOffPlanning
         [SetUp]
         public void Setup()
         {
-            _mocks = new MockRepository();
-            _target = new MoveTimeDecisionMaker2();
+			_mocks = new MockRepository();
+			_matrixConverter = _mocks.StrictMock<IScheduleMatrixLockableBitArrayConverterEx>();
+            _target = new MoveTimeDecisionMaker2(_matrixConverter);
 
             _scheduleMatrix = _mocks.StrictMock<IScheduleMatrixPro>();
-            _matrixConverter = _mocks.StrictMock<IScheduleMatrixLockableBitArrayConverter>();
             _dataExtractor = _mocks.StrictMock<IScheduleResultDataExtractor>();
             _values = new List<double?> { -20, -10, 10, 30 };
 
@@ -95,13 +96,12 @@ namespace Teleopti.Ccc.DomainTest.DayOffPlanning
             {
                 simpleMatrixExpectations();
 
-                Expect.Call(_matrixConverter.SourceMatrix).Return(_scheduleMatrix).Repeat.Any();
-                Expect.Call(_matrixConverter.Convert(false, false)).Return(bitArray).Repeat.Any();
+                Expect.Call(_matrixConverter.Convert(_scheduleMatrix, false, false)).Return(bitArray).Repeat.Any();
                 Expect.Call(_dataExtractor.Values()).Return(_values).Repeat.Any();
             }
 
             // day counterparts are > febr 9, 10, 11, 12
-            IList<DateOnly> result = _target.Execute(_matrixConverter, _dataExtractor);
+            IList<DateOnly> result = _target.Execute(_scheduleMatrix, _dataExtractor);
             Assert.AreEqual(2, result.Count);
 
             DateOnly mostUnderStaffingDay = new DateOnly(2010, 02, 9);
@@ -119,13 +119,12 @@ namespace Teleopti.Ccc.DomainTest.DayOffPlanning
             using (_mocks.Record())
             {
                 simpleMatrixExpectations();
-                Expect.Call(_matrixConverter.SourceMatrix).Return(_scheduleMatrix).Repeat.Any();
-                Expect.Call(_matrixConverter.Convert(false, false)).Return(bitArray).Repeat.Any();
+                Expect.Call(_matrixConverter.Convert(_scheduleMatrix, false, false)).Return(bitArray).Repeat.Any();
                 Expect.Call(_dataExtractor.Values()).Return(values).Repeat.Any();
             }
 
             // day counterparts are > febr 9, 10, 11, 12
-            var result = _target.Execute(_matrixConverter, _dataExtractor);
+            var result = _target.Execute(_scheduleMatrix, _dataExtractor);
             Assert.AreEqual(2, result.Count);
             Assert.AreNotEqual(result[0], result[1]);
         }
@@ -142,13 +141,12 @@ namespace Teleopti.Ccc.DomainTest.DayOffPlanning
             {
                 simpleMatrixExpectations();
 
-                Expect.Call(_matrixConverter.SourceMatrix).Return(_scheduleMatrix).Repeat.Any();
-                Expect.Call(_matrixConverter.Convert(false, false)).Return(bitArray).Repeat.Any();
+                Expect.Call(_matrixConverter.Convert(_scheduleMatrix, false, false)).Return(bitArray).Repeat.Any();
                 Expect.Call(_dataExtractor.Values()).Return(_values).Repeat.Any();
             }
 
             // day counterparts are > febr 9, 10, 11, 12
-            IList<DateOnly> result = _target.Execute(_matrixConverter, _dataExtractor);
+            IList<DateOnly> result = _target.Execute(_scheduleMatrix, _dataExtractor);
             Assert.AreEqual(2, result.Count);
 
             DateOnly mostUnderStaffingDay = new DateOnly(2010, 02, 10);
@@ -239,13 +237,12 @@ namespace Teleopti.Ccc.DomainTest.DayOffPlanning
                 Expect.Call(_scheduleDayPro0211Thu.DaySchedulePart()).Return(_schedulePartShortMainShift).Repeat.Any();
                 Expect.Call(_scheduleDayPro0212Fri.DaySchedulePart()).Return(_schedulePartDayOff).Repeat.Any();
 
-                Expect.Call(_matrixConverter.SourceMatrix).Return(_scheduleMatrix).Repeat.Any();
-                Expect.Call(_matrixConverter.Convert(false, false)).Return(bitArray).Repeat.Any();
+                Expect.Call(_matrixConverter.Convert(_scheduleMatrix, false, false)).Return(bitArray).Repeat.Any();
                 Expect.Call(_dataExtractor.Values()).Return(_values).Repeat.Any();
             }
 
             // day counterparts are > febr 9, 10, 11, 12
-            IList<DateOnly> result = _target.Execute(_matrixConverter, _dataExtractor);
+            IList<DateOnly> result = _target.Execute(_scheduleMatrix, _dataExtractor);
             Assert.AreEqual(2, result.Count);
 
             DateOnly mostUnderStaffingDay = new DateOnly(2010, 02, 10);
@@ -270,13 +267,12 @@ namespace Teleopti.Ccc.DomainTest.DayOffPlanning
                 Expect.Call(_scheduleDayPro0211Thu.DaySchedulePart()).Return(_schedulePartShortMainShift).Repeat.Any();
                 Expect.Call(_scheduleDayPro0212Fri.DaySchedulePart()).Return(_schedulePartLongMainShift).Repeat.Any();
 
-                Expect.Call(_matrixConverter.SourceMatrix).Return(_scheduleMatrix).Repeat.Any();
-                Expect.Call(_matrixConverter.Convert(false, false)).Return(bitArray).Repeat.Any();
+                Expect.Call(_matrixConverter.Convert(_scheduleMatrix, false, false)).Return(bitArray).Repeat.Any();
                 Expect.Call(_dataExtractor.Values()).Return(_values).Repeat.Any();
             }
 
             // day counterparts are > febr 9, 10, 11, 12
-            IList<DateOnly> result = _target.Execute(_matrixConverter, _dataExtractor);
+            IList<DateOnly> result = _target.Execute(_scheduleMatrix, _dataExtractor);
             Assert.AreEqual(2, result.Count);
 
             DateOnly mostUnderStaffingDay = new DateOnly(2010, 02, 09);

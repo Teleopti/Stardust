@@ -13,11 +13,11 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftFilters
 
 	public class BusinessRulesShiftFilter : IBusinessRulesShiftFilter
 	{
-		private readonly ISchedulingResultStateHolder _resultStateHolder;
+		private readonly Func<ISchedulingResultStateHolder> _resultStateHolder;
 		private readonly IValidDateTimePeriodShiftFilter _validDateTimePeriodShiftFilter;
 		private readonly ILongestPeriodForAssignmentCalculator _longestPeriodForAssignmentCalculator;
 
-		public BusinessRulesShiftFilter(ISchedulingResultStateHolder resultStateHolder,
+		public BusinessRulesShiftFilter(Func<ISchedulingResultStateHolder> resultStateHolder,
 		                                IValidDateTimePeriodShiftFilter validDateTimePeriodShiftFilter,
 		                                ILongestPeriodForAssignmentCalculator longestPeriodForAssignmentCalculator)
 		{
@@ -40,7 +40,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftFilters
 			                                                 person.PermissionInformation.DefaultTimeZone());
 			DateTimePeriod? returnPeriod = new DateTimePeriod(approxUtc.AddDays(-2), approxUtc.AddDays(2));
 
-			var scheduleRange = _resultStateHolder.Schedules[person];
+			var scheduleRange = _resultStateHolder().Schedules[person];
 			var newRulePeriod = _longestPeriodForAssignmentCalculator.PossiblePeriod(scheduleRange, dateToCheck);
 			if (!newRulePeriod.HasValue)
 			{

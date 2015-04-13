@@ -170,6 +170,8 @@ namespace Teleopti.Ccc.Win.Scheduling
 		private readonly IBudgetPermissionService _budgetPermissionService;
 		private readonly IRestrictionExtractor _restrictionExtractor;
 		private readonly IResourceOptimizationHelperExtended _optimizationHelperExtended;
+		private readonly ISkillDayLoadHelper _skillDayLoadHelper;
+		private readonly ISkillDayRepository _skillDayRepository;
 		private readonly ICollection<IPerson> _personsToValidate = new HashSet<IPerson>();
 		private readonly ICollection<IPerson> _restrictionPersonsToReload = new HashSet<IPerson>();
 		private readonly BackgroundWorker _backgroundWorkerValidatePersons = new BackgroundWorker();
@@ -348,6 +350,8 @@ namespace Teleopti.Ccc.Win.Scheduling
 			_innerOptimizerHelper = _container.Resolve<IOptimizerHelperHelper>();
 			_restrictionExtractor = _container.Resolve<IRestrictionExtractor>();
 			_optimizationHelperExtended = _container.Resolve<IResourceOptimizationHelperExtended>();
+			_skillDayLoadHelper = _container.Resolve<ISkillDayLoadHelper>();
+			_skillDayRepository = _container.Resolve<ISkillDayRepository>();
 
 			_schedulerState.SetRequestedScenario(loadScenario);
 			_schedulerState.RequestedPeriod = new DateOnlyPeriodAsDateTimePeriod(loadingPeriod, TeleoptiPrincipal.CurrentPrincipal.Regional.TimeZone);
@@ -3394,15 +3398,13 @@ namespace Teleopti.Ccc.Win.Scheduling
 			}
 
 			_lastSaved = DateTime.Now;
-			
 		}
 
-		private void createMaxSeatSkills(ISkillDayRepository skillDayRepository)
+		private void createMaxSeatSkills()
 		{
-			var extendedPeriod = new DateOnlyPeriod(SchedulerState.RequestedPeriod.DateOnlyPeriod.StartDate.AddDays(-8), SchedulerState.RequestedPeriod.DateOnlyPeriod.EndDate.AddDays(8));
 			var maxSeatSitesExtractor = new MaxSeatSitesExtractor(SchedulerState.AllPermittedPersons);
 			var createSkillsFromMaxSeatSites = new CreateSkillsFromMaxSeatSites(SchedulerState.SchedulingResultState);
-			var schedulerSkillDayHelper = new SchedulerSkillDayHelper(SchedulerState.SchedulingResultState, extendedPeriod, skillDayRepository, SchedulerState.RequestedScenario);
+			var schedulerSkillDayHelper = new SchedulerSkillDayHelper(SchedulerState, _skillDayRepository);
 			var createPersonalSkillsFromMaxSeatSites = new CreatePersonalSkillsFromMaxSeatSites();
 			var maxSeatSkillCreator = new MaxSeatSkillCreator(maxSeatSitesExtractor, createSkillsFromMaxSeatSites, createPersonalSkillsFromMaxSeatSites, schedulerSkillDayHelper, SchedulerState.SchedulingResultState.PersonsInOrganization);
 			maxSeatSkillCreator.CreateMaxSeatSkills(SchedulerState.RequestedPeriod.DateOnlyPeriod);
@@ -4569,13 +4571,10 @@ namespace Teleopti.Ccc.Win.Scheduling
 			if (_teamLeaderMode) return;
 			using (PerformanceOutput.ForOperation("Loading skill days"))
 			{
-				ISkillDayRepository skillDayRepository = new SkillDayRepository(uow);
-				IMultisiteDayRepository multisiteDayRepository = new MultisiteDayRepository(uow);
-				stateHolder.SchedulingResultState.SkillDays = new SkillDayLoadHelper(skillDayRepository, multisiteDayRepository).
-					LoadSchedulerSkillDays(
+				stateHolder.SchedulingResultState.SkillDays = _skillDayLoadHelper.LoadSchedulerSkillDays(
 						new DateOnlyPeriod(stateHolder.RequestedPeriod.DateOnlyPeriod.StartDate.AddDays(-8), stateHolder.RequestedPeriod.DateOnlyPeriod.EndDate.AddDays(8)), stateHolder.SchedulingResultState.Skills, stateHolder.RequestedScenario);
 
-				createMaxSeatSkills(skillDayRepository);
+				createMaxSeatSkills();
 				IList<ISkillStaffPeriod> skillStaffPeriods = stateHolder.SchedulingResultState.SkillStaffPeriodHolder.SkillStaffPeriodList(stateHolder.SchedulingResultState.Skills, stateHolder.LoadedPeriod.Value);
 
 				foreach (ISkillStaffPeriod period in skillStaffPeriods)

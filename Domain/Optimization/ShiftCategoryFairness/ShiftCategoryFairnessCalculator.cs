@@ -16,9 +16,6 @@ namespace Teleopti.Ccc.Domain.Optimization.ShiftCategoryFairness
 
 	public class ShiftCategoryFairnessCalculator : IShiftCategoryFairnessCalculator
 	{
-
-
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
 		public IShiftCategoryFairnessFactors ShiftCategoryFairnessFactors(
 			IShiftCategoryFairnessHolder groupCategoryFairnessHolder,
 			IShiftCategoryFairnessHolder personCategoryFairnessHolder)

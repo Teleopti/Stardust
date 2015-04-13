@@ -20,7 +20,7 @@ namespace Teleopti.Ccc.WinCodeTest.Autofac
 			var configuration = new IocConfiguration(new IocArgs(new AppConfigReader()), null);
 			_containerBuilder = new ContainerBuilder();
 			_containerBuilder.RegisterModule(new CommonModule(configuration));
-			_containerBuilder.RegisterModule(new SchedulingCommonModule(configuration));
+			_containerBuilder.RegisterModule(new SchedulingCommonModule());
 		}
 
 		[Test]

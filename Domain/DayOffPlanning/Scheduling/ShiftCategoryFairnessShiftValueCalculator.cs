@@ -3,10 +3,8 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.DayOffPlanning.Scheduling
 {
-
     public class ShiftCategoryFairnessShiftValueCalculator : IShiftCategoryFairnessShiftValueCalculator
     {
-        
         private static Percent percentFairness(ISchedulingOptions schedulingOptions)
         {
         	return schedulingOptions.Fairness;

@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.Optimization;
 using Teleopti.Ccc.Domain.Scheduling.Restrictions;
@@ -13,13 +14,13 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.Restriction
 	public class BlockRestrictionAggregator : IBlockRestrictionAggregator
 	{
 		private readonly IEffectiveRestrictionCreator _effectiveRestrictionCreator;
-		private readonly ISchedulingResultStateHolder _schedulingResultStateHolder;
+		private readonly Func<ISchedulingResultStateHolder> _schedulingResultStateHolder;
 		private readonly IScheduleDayEquator _scheduleDayEquator;
 		private readonly IAssignmentPeriodRule _nightlyRestRule;
 		private readonly ITeamBlockSchedulingOptions _teamBlockSchedulingOptions;
 
 		public BlockRestrictionAggregator(IEffectiveRestrictionCreator effectiveRestrictionCreator,
-			ISchedulingResultStateHolder schedulingResultStateHolder,
+			Func<ISchedulingResultStateHolder> schedulingResultStateHolder,
 			IScheduleDayEquator scheduleDayEquator,
 			IAssignmentPeriodRule nightlyRestRule,
 			ITeamBlockSchedulingOptions teamBlockSchedulingOptions)
@@ -33,7 +34,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.Restriction
 
 		public IEffectiveRestriction Aggregate(IPerson person, ITeamBlockInfo teamBlockInfo, ISchedulingOptions schedulingOptions, IShiftProjectionCache roleModel)
 		{
-			var scheduleDictionary = _schedulingResultStateHolder.Schedules;
+			var scheduleDictionary = _schedulingResultStateHolder().Schedules;
 			var timeZone = person.PermissionInformation.DefaultTimeZone();
 			var matrixes = teamBlockInfo.TeamInfo.MatrixesForMemberAndPeriod(person, teamBlockInfo.BlockInfo.BlockPeriod).ToList();
 			var dateOnlyList = teamBlockInfo.BlockInfo.BlockPeriod.DayCollection();

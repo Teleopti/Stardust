@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.TeamBlock;
@@ -20,13 +21,12 @@ namespace Teleopti.Ccc.Domain.Optimization
 	    private readonly ISkillStaffPeriodToSkillIntervalDataMapper _skillStaffPeriodToSkillIntervalDataMapper;
 	    private readonly ISkillIntervalDataDivider _skillIntervalDataDivider;
 	    private readonly ISkillIntervalDataAggregator _skillIntervalDataAggregator;
-		private readonly ISchedulingResultStateHolder _stateholder;
+		private readonly Func<ISchedulingResultStateHolder> _stateholder;
 
-		public DailyValueByAllSkillsExtractor(ISkillStaffPeriodToSkillIntervalDataMapper
-		                                                       skillStaffPeriodToSkillIntervalDataMapper,
+		public DailyValueByAllSkillsExtractor(ISkillStaffPeriodToSkillIntervalDataMapper skillStaffPeriodToSkillIntervalDataMapper,
 	                                                       ISkillIntervalDataDivider skillIntervalDataDivider,
 															ISkillIntervalDataAggregator skillIntervalDataAggregator,
-			ISchedulingResultStateHolder stateholder)
+			Func<ISchedulingResultStateHolder> stateholder)
 	    {
 		    _skillStaffPeriodToSkillIntervalDataMapper = skillStaffPeriodToSkillIntervalDataMapper;
 		    _skillIntervalDataDivider = skillIntervalDataDivider;
@@ -91,7 +91,8 @@ namespace Teleopti.Ccc.Domain.Optimization
         // todo: move to extractor methods
         private IList<double> getIntradayRelativePersonnelDeficits(DateOnly scheduleDay)
         {
-			IEnumerable<ISkill> activeSkills = _stateholder.VisibleSkills;
+	        var stateHolder = _stateholder();
+	        IEnumerable<ISkill> activeSkills = stateHolder.VisibleSkills;
 			var minResolution = 15;
 			if (activeSkills.Any())
 				minResolution = activeSkills.Min(skill => skill.DefaultResolution);
@@ -105,7 +106,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 			foreach (var skill in activeSkills)
 			{
 				IList<ISkillStaffPeriod> personsSkillStaffPeriods =
-				_stateholder.SkillStaffPeriodHolder.SkillStaffPeriodList(new[] { skill }, dateTimePeriod);
+				stateHolder.SkillStaffPeriodHolder.SkillStaffPeriodList(new[] { skill }, dateTimePeriod);
 
 				if (!personsSkillStaffPeriods.Any())
 					continue;

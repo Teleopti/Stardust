@@ -14,7 +14,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.SeatLimitation
 
 	public class SeatImpactOnPeriodForProjection : ISeatImpactOnPeriodForProjection
 	{
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "1"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
         public double CalculatePeriod(ISkillStaffPeriod skillStaffPeriod, IList<IVisualLayerCollection> shiftList)
 		{
 			var skill = skillStaffPeriod.SkillDay.Skill;
@@ -34,7 +33,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.SeatLimitation
 			return result;
 		}
 
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
         public double CalculatePeriod(ISkillStaffPeriod skillStaffPeriod, IVisualLayerCollection shift)
 		{
 			return calculateShift(skillStaffPeriod, shift);

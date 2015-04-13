@@ -15,8 +15,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.Restriction
 
     public class SuggestedShiftRestrictionExtractor : ISuggestedShiftRestrictionExtractor
     {
-        [SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0"),
-         SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "1")]
         public IEffectiveRestriction Extract(IShiftProjectionCache shift, ISchedulingOptions schedulingOptions)
         {
             var startTimeLimitation = new StartTimeLimitation();

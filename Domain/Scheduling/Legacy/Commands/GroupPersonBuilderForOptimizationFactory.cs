@@ -45,8 +45,8 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 			}
 
 			IGroupPersonBuilderForOptimization groupPersonBuilderForOptimization =
-				new GroupPersonBuilderForOptimization(schedulerStateHolder.SchedulingResultState,
-					_groupPagePerDateHolder(), new GroupCreator());
+				new GroupPersonBuilderForOptimization(()=>schedulerStateHolder.SchedulingResultState,
+					_groupPagePerDateHolder, new GroupCreator());
 			return groupPersonBuilderForOptimization;
 		}
 	}

@@ -8,6 +8,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Overtime
     {
         IList<IOvertimeSkillIntervalData> SplitSkillIntervalData(IList<IOvertimeSkillIntervalData> skillIntervalDataList, int resolution);
     }
+
     public class OvertimeSkillIntervalDataDivider : IOvertimeSkillIntervalDataDivider
     {
         public IList<IOvertimeSkillIntervalData> SplitSkillIntervalData(IList<IOvertimeSkillIntervalData> skillIntervalDataList, int resolution)

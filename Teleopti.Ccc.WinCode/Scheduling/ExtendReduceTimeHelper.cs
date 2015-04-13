@@ -95,9 +95,8 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 				IPeriodValueCalculator personalSkillsPeriodValueCalculator =
 					periodValueCalculatorProvider.CreatePeriodValueCalculator(optimizerPreferences.Advanced, personalSkillsDataExtractor);
 
-				IExtendReduceTimeDecisionMaker decisionMaker = new ExtendReduceTimeDecisionMaker();
-				IScheduleMatrixLockableBitArrayConverter bitArrayConverter = new ScheduleMatrixLockableBitArrayConverter(scheduleMatrixPro, scheduleMatrixLockableBitArrayConverterEx);
-
+				IExtendReduceTimeDecisionMaker decisionMaker = new ExtendReduceTimeDecisionMaker(scheduleMatrixLockableBitArrayConverterEx);
+				
 				ICheckerRestriction restrictionChecker = new RestrictionChecker();
 				IOptimizationOverLimitByRestrictionDecider optimizerOverLimitDecider = new OptimizationOverLimitByRestrictionDecider(restrictionChecker, optimizerPreferences, originalStateListForScheduleTag[i]);
 
@@ -112,7 +111,6 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 					personalSkillsPeriodValueCalculator,
 					personalSkillsDataExtractor,
 					decisionMaker,
-					bitArrayConverter,
 					scheduleServiceForFlexibleAgents,
 					optimizerPreferences,
 					schedulePartModifyAndRollbackService,
@@ -123,8 +121,8 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 					originalStateListForScheduleTag[i],
 					optimizationLimits,
 					schedulingOptions,
-					mainShiftOptimizeActivitySpecificationSetter
-					);
+					mainShiftOptimizeActivitySpecificationSetter,
+					scheduleMatrixPro);
 
 				optimizers.Add(optimizer);
 			}

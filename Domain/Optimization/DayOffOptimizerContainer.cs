@@ -8,7 +8,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 
     public class DayOffOptimizerContainer : IDayOffOptimizerContainer
     {
-        private readonly IScheduleMatrixLockableBitArrayConverter _converter;
+        private readonly IScheduleMatrixLockableBitArrayConverterEx _converter;
         private readonly IList<IDayOffDecisionMaker> _decisionMakers;
         private readonly IScheduleResultDataExtractor _scheduleResultDataExtractor;
         private readonly IDaysOffPreferences _daysOffPreferences;
@@ -17,7 +17,7 @@ namespace Teleopti.Ccc.Domain.Optimization
         private readonly IDayOffDecisionMakerExecuter _dayOffDecisionMakerExecuter;
 
 
-        public DayOffOptimizerContainer(IScheduleMatrixLockableBitArrayConverter converter,
+        public DayOffOptimizerContainer(IScheduleMatrixLockableBitArrayConverterEx converter,
             IEnumerable<IDayOffDecisionMaker> decisionMakers,
             IScheduleResultDataExtractor scheduleResultDataExtractor,
             IDaysOffPreferences daysOffPreferences,

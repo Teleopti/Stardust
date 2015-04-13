@@ -44,6 +44,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 		private ResourceOptimizerProgressEventArgs _progressEvent;
 		private readonly IDayOffOptimizationDecisionMakerFactory _dayOffOptimizationDecisionMakerFactory;
 		private readonly IOptimizerHelperHelper _optimizerHelperHelper;
+		private readonly IScheduleMatrixLockableBitArrayConverterEx _bitArrayConverter;
 
 		public ScheduleOptimizerHelper(ILifetimeScope container, OptimizerHelperHelper optimizerHelper, IToggleManager toggleManager, IRequiredScheduleHelper requiredScheduleHelper)
 		{
@@ -60,6 +61,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 			_resourceOptimizationHelper = _container.Resolve<IResourceOptimizationHelper>();
 			_scheduleMatrixListCreator = _container.Resolve<IScheduleMatrixListCreator>();
 			_optimizerHelperHelper = _container.Resolve<IOptimizerHelperHelper>();
+			_bitArrayConverter = _container.Resolve<IScheduleMatrixLockableBitArrayConverterEx>();
 			_dayOffOptimizationDecisionMakerFactory = container.Resolve<IDayOffOptimizationDecisionMakerFactory>();
 		}
 
@@ -73,11 +75,8 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 					_scheduleDayChangeCallback(),
 					new ScheduleTagSetter(optimizerPreferences.General.ScheduleTag));
 
-			var decisionMaker = new IntradayDecisionMaker();
+			var decisionMaker = new IntradayDecisionMaker(_bitArrayConverter);
 			var scheduleService = _container.Resolve<IScheduleService>();
-
-			var scheduleMatrixLockableBitArrayConverterEx =
-				_container.Resolve<IScheduleMatrixLockableBitArrayConverterEx>();
 
 			IIntradayOptimizer2Creator creator = new IntradayOptimizer2Creator(
 				matrixContainerList,
@@ -87,7 +86,6 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 				optimizerPreferences,
 				rollbackService,
 				_stateHolder(),
-				scheduleMatrixLockableBitArrayConverterEx,
 				_container.Resolve<ISkillStaffPeriodToSkillIntervalDataMapper>(),
 				_container.Resolve<ISkillIntervalDataDivider>(),
 				_container.Resolve<ISkillIntervalDataAggregator>(),
@@ -119,12 +117,9 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 			IPeriodValueCalculator periodValueCalculator =
 				_optimizerHelperHelper.CreatePeriodValueCalculator(optimizerPreferences.Advanced, allSkillsDataExtractor);
 
-			IMoveTimeDecisionMaker decisionMaker = new MoveTimeDecisionMaker2();
+			IMoveTimeDecisionMaker decisionMaker = new MoveTimeDecisionMaker2(_bitArrayConverter);
 
 			var scheduleService = _container.Resolve<IScheduleService>();
-
-			var scheduleMatrixLockableBitArrayConverterEx =
-				_container.Resolve<IScheduleMatrixLockableBitArrayConverterEx>();
 
 			IMoveTimeOptimizerCreator creator =
 				new MoveTimeOptimizerCreator(scheduleMatrixOriginalStateContainerList,
@@ -134,7 +129,6 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 					optimizerPreferences,
 					rollbackService,
 					_stateHolder(),
-					scheduleMatrixLockableBitArrayConverterEx,
 					_container.Resolve<IEffectiveRestrictionCreator>(),
 					_container.Resolve<IMinWeekWorkTimeRule>(),
 					_container.Resolve<IResourceOptimizationHelper>());
@@ -765,13 +759,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 			IWorkShiftBackToLegalStateServicePro workShiftBackToLegalStateService =
 				_optimizerHelper.CreateWorkShiftBackToLegalStateServicePro(_container);
 
-			var scheduleMatrixLockableBitArrayConverterEx =
-				_container.Resolve<IScheduleMatrixLockableBitArrayConverterEx>();
-
-			IScheduleMatrixLockableBitArrayConverter scheduleMatrixArrayConverter =
-				new ScheduleMatrixLockableBitArrayConverter(scheduleMatrix, scheduleMatrixLockableBitArrayConverterEx);
-			ILockableBitArray scheduleMatrixArray =
-				scheduleMatrixArrayConverter.Convert(daysOffPreferences.ConsiderWeekBefore, daysOffPreferences.ConsiderWeekAfter);
+			ILockableBitArray scheduleMatrixArray = _bitArrayConverter.Convert(scheduleMatrix, daysOffPreferences.ConsiderWeekBefore, daysOffPreferences.ConsiderWeekAfter);
 
 			// create decisionmakers
 			var decisionMakers = _dayOffOptimizationDecisionMakerFactory.CreateDecisionMakers(scheduleMatrixArray, optimizerPreferences);
@@ -832,7 +820,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 					dayOffOptimizerPreMoveResultPredictor);
 
 			IDayOffOptimizerContainer optimizerContainer =
-				new DayOffOptimizerContainer(scheduleMatrixArrayConverter,
+				new DayOffOptimizerContainer(_bitArrayConverter,
 					decisionMakers,
 					scheduleResultDataExtractor,
 					daysOffPreferences,

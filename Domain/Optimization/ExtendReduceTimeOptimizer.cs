@@ -19,7 +19,6 @@ namespace Teleopti.Ccc.Domain.Optimization
         private readonly IPeriodValueCalculator _periodValueCalculator;
         private readonly IScheduleResultDataExtractor _personalSkillsDataExtractor;
         private readonly IExtendReduceTimeDecisionMaker _decisionMaker;
-        private readonly IScheduleMatrixLockableBitArrayConverter _matrixConverter;
         private readonly IScheduleService _scheduleServiceForFlexibleAgents;
         private readonly IOptimizationPreferences _optimizerPreferences;
         private readonly ISchedulePartModifyAndRollbackService _rollbackService;
@@ -31,12 +30,12 @@ namespace Teleopti.Ccc.Domain.Optimization
 	    private readonly IOptimizationLimits _optimizationLimits;
         private readonly ISchedulingOptions _schedulingOptions;
     	private readonly IMainShiftOptimizeActivitySpecificationSetter _mainShiftOptimizeActivitySpecificationSetter;
+	    private readonly IScheduleMatrixPro _matrix;
 
-    	public ExtendReduceTimeOptimizer(
+	    public ExtendReduceTimeOptimizer(
             IPeriodValueCalculator periodValueCalculator,
             IScheduleResultDataExtractor personalSkillsDataExtractor,
             IExtendReduceTimeDecisionMaker decisionMaker,
-            IScheduleMatrixLockableBitArrayConverter matrixConverter,
             IScheduleService scheduleServiceForFlexibleAgents,
             IOptimizationPreferences optimizerPreferences,
             ISchedulePartModifyAndRollbackService rollbackService,
@@ -47,12 +46,12 @@ namespace Teleopti.Ccc.Domain.Optimization
             IScheduleMatrixOriginalStateContainer originalStateContainerForTagChange,
  			IOptimizationLimits optimizationLimits,
             ISchedulingOptions schedulingOptions,
-			IMainShiftOptimizeActivitySpecificationSetter mainShiftOptimizeActivitySpecificationSetter)
+			IMainShiftOptimizeActivitySpecificationSetter mainShiftOptimizeActivitySpecificationSetter,
+			IScheduleMatrixPro matrix)
         {
             _periodValueCalculator = periodValueCalculator;
             _personalSkillsDataExtractor = personalSkillsDataExtractor;
             _decisionMaker = decisionMaker;
-            _matrixConverter = matrixConverter;
             _scheduleServiceForFlexibleAgents = scheduleServiceForFlexibleAgents;
             _optimizerPreferences = optimizerPreferences;
             _rollbackService = rollbackService;
@@ -64,18 +63,19 @@ namespace Teleopti.Ccc.Domain.Optimization
     		_optimizationLimits = optimizationLimits;
             _schedulingOptions = schedulingOptions;
         	_mainShiftOptimizeActivitySpecificationSetter = mainShiftOptimizeActivitySpecificationSetter;
+    		_matrix = matrix;
         }
 
         public bool Execute()
         {
-	        var lastOverLimitCount = _optimizationLimits.OverLimitsCounts(_matrixConverter.SourceMatrix);
+	        var lastOverLimitCount = _optimizationLimits.OverLimitsCounts(_matrix);
 
             if (daysOverMax())
                 return false;
 
             bool sucess = false;
 
-            ExtendReduceTimeDecisionMakerResult daysToBeRescheduled = _decisionMaker.Execute(_matrixConverter, _personalSkillsDataExtractor);
+            ExtendReduceTimeDecisionMakerResult daysToBeRescheduled = _decisionMaker.Execute(_matrix, _personalSkillsDataExtractor);
 
             if (!daysToBeRescheduled.DayToLengthen.HasValue && !daysToBeRescheduled.DayToShorten.HasValue)
                 return false;
@@ -84,7 +84,7 @@ namespace Teleopti.Ccc.Domain.Optimization
             {
                 DateOnly dateOnly = daysToBeRescheduled.DayToLengthen.Value;
 
-                if (rescheduleAndCheckPeriodValue(WorkShiftLengthHintOption.Long, _schedulingOptions, dateOnly, _matrixConverter.SourceMatrix, lastOverLimitCount))
+                if (rescheduleAndCheckPeriodValue(WorkShiftLengthHintOption.Long, _schedulingOptions, dateOnly, _matrix, lastOverLimitCount))
                     sucess = true;
             }
 
@@ -92,7 +92,7 @@ namespace Teleopti.Ccc.Domain.Optimization
             {
                 DateOnly dateOnly = daysToBeRescheduled.DayToShorten.Value;
 
-                if (rescheduleAndCheckPeriodValue(WorkShiftLengthHintOption.Short, _schedulingOptions, dateOnly, _matrixConverter.SourceMatrix, lastOverLimitCount))
+                if (rescheduleAndCheckPeriodValue(WorkShiftLengthHintOption.Short, _schedulingOptions, dateOnly, _matrix, lastOverLimitCount))
                     sucess = true;
             }
 
@@ -101,7 +101,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 
         public IPerson Owner
         {
-            get { return _matrixConverter.SourceMatrix.Person; }
+            get { return _matrix.Person; }
         }
 
         private bool rescheduleAndCheckPeriodValue(
@@ -138,13 +138,13 @@ namespace Teleopti.Ccc.Domain.Optimization
                 return false;
             }
 
-	        if (_optimizationLimits.HasOverLimitExceeded(lastOverLimitResults, _matrixConverter.SourceMatrix))
+	        if (_optimizationLimits.HasOverLimitExceeded(lastOverLimitResults, _matrix))
 	        {
 				rollbackAndResourceCalculate(dateOnly);
 				return true;   
 	        }
 
-			var minWorkTimePerWeekOk = _optimizationLimits.ValidateMinWorkTimePerWeek(_matrixConverter.SourceMatrix);
+			var minWorkTimePerWeekOk = _optimizationLimits.ValidateMinWorkTimePerWeek(_matrix);
 
 			if (!minWorkTimePerWeekOk)
 			{
@@ -165,9 +165,9 @@ namespace Teleopti.Ccc.Domain.Optimization
 
         private void rollbackAndResourceCalculate(DateOnly dateOnly)
         {
-            IScheduleDay scheduleDayBefore = (IScheduleDay) _matrixConverter.SourceMatrix.GetScheduleDayByKey(dateOnly).DaySchedulePart().Clone();
+            IScheduleDay scheduleDayBefore = (IScheduleDay) _matrix.GetScheduleDayByKey(dateOnly).DaySchedulePart().Clone();
             _rollbackService.Rollback();
-            IScheduleDay scheduleDayAfter = (IScheduleDay) _matrixConverter.SourceMatrix.GetScheduleDayByKey(dateOnly).DaySchedulePart().Clone();
+            IScheduleDay scheduleDayAfter = (IScheduleDay) _matrix.GetScheduleDayByKey(dateOnly).DaySchedulePart().Clone();
             IList<DateOnly> days = _decider.DecideDates(scheduleDayAfter, scheduleDayBefore);
 
             foreach (var date in days)
@@ -179,7 +179,7 @@ namespace Teleopti.Ccc.Domain.Optimization
         private void deleteDay(DateOnly dateOnly)
         {
             var deleteOption = new DeleteOption { Default = true };
-            var scheduleDayPro = _matrixConverter.SourceMatrix.GetScheduleDayByKey(dateOnly);
+            var scheduleDayPro = _matrix.GetScheduleDayByKey(dateOnly);
             var scheduleDay = scheduleDayPro.DaySchedulePart();
 
 	        _deleteService.Delete(new List<IScheduleDay> {scheduleDay}, deleteOption, _rollbackService, new NoBackgroundWorker());
@@ -187,7 +187,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 
         private bool tryScheduleDay(DateOnly day, ISchedulingOptions schedulingOptions, WorkShiftLengthHintOption workShiftLengthHintOption)
         {
-            IScheduleDayPro scheduleDay = _matrixConverter.SourceMatrix.GetScheduleDayByKey(day);
+            IScheduleDayPro scheduleDay = _matrix.GetScheduleDayByKey(day);
             schedulingOptions.WorkShiftLengthHintOption = workShiftLengthHintOption;
             var effectiveRestriction = _effectiveRestrictionCreator.GetEffectiveRestriction(scheduleDay.DaySchedulePart(), schedulingOptions);
 

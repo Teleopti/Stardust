@@ -6,7 +6,6 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 {
-    
     public interface ITwoDaysIntervalGenerator
     {
 	    Dictionary<DateOnly, Dictionary<DateTime, ISkillIntervalData>> GenerateTwoDaysInterval(IDictionary<DateOnly, IList<ISkillIntervalData>> dayIntervalData);

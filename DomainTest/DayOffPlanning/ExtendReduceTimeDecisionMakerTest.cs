@@ -3,6 +3,7 @@ using System.Collections.ObjectModel;
 using NUnit.Framework;
 using Rhino.Mocks;
 using Teleopti.Ccc.Domain.DayOffPlanning;
+using Teleopti.Ccc.Domain.Optimization;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.DomainTest.DayOffPlanning
@@ -12,7 +13,6 @@ namespace Teleopti.Ccc.DomainTest.DayOffPlanning
     {
         private IExtendReduceTimeDecisionMaker _target;
         private MockRepository _mocks;
-        private IScheduleMatrixLockableBitArrayConverter _scheduleMatrixLockableBitArrayConverter;
         private IScheduleResultDataExtractor _scheduleResultDataExtractor;
         private IScheduleMatrixPro _matrix;
         private ILockableBitArray _lockableBitArray;
@@ -23,13 +23,14 @@ namespace Teleopti.Ccc.DomainTest.DayOffPlanning
         private IScheduleDayPro _scheduleDayPro4;
         private IScheduleDayPro _scheduleDayPro5;
         private IList<IScheduleDayPro> _days;
-            
-        [SetUp]
+	    private IScheduleMatrixLockableBitArrayConverterEx _bitArrayConverter;
+
+	    [SetUp]
         public void Setup()
-        {
-            _target = new ExtendReduceTimeDecisionMaker();
-            _mocks = new MockRepository();
-            _scheduleMatrixLockableBitArrayConverter = _mocks.StrictMock<IScheduleMatrixLockableBitArrayConverter>();
+	    {
+			_mocks = new MockRepository();
+			_bitArrayConverter = _mocks.StrictMock<IScheduleMatrixLockableBitArrayConverterEx>();
+            _target = new ExtendReduceTimeDecisionMaker(_bitArrayConverter);
             _scheduleResultDataExtractor = _mocks.StrictMock<IScheduleResultDataExtractor>();
             _matrix = _mocks.StrictMock<IScheduleMatrixPro>();
             _lockableBitArray = new LockableBitArray(5, false, false, null);
@@ -54,7 +55,7 @@ namespace Teleopti.Ccc.DomainTest.DayOffPlanning
 
             using(_mocks.Playback())
             {
-                result = _target.Execute(_scheduleMatrixLockableBitArrayConverter, _scheduleResultDataExtractor);
+                result = _target.Execute(_matrix, _scheduleResultDataExtractor);
             }
 
             Assert.AreEqual(new DateOnly(2011, 1, 4), result.DayToLengthen.Value);
@@ -74,7 +75,7 @@ namespace Teleopti.Ccc.DomainTest.DayOffPlanning
 
             using (_mocks.Playback())
             {
-                result = _target.Execute(_scheduleMatrixLockableBitArrayConverter, _scheduleResultDataExtractor);
+                result = _target.Execute(_matrix, _scheduleResultDataExtractor);
             }
 
             Assert.AreEqual(new DateOnly(2011, 1, 4), result.DayToLengthen.Value);
@@ -94,7 +95,7 @@ namespace Teleopti.Ccc.DomainTest.DayOffPlanning
 
             using (_mocks.Playback())
             {
-                result = _target.Execute(_scheduleMatrixLockableBitArrayConverter, _scheduleResultDataExtractor);
+                result = _target.Execute(_matrix, _scheduleResultDataExtractor);
             }
 
             Assert.AreEqual(new DateOnly(2011, 1, 2), result.DayToLengthen.Value);
@@ -114,7 +115,7 @@ namespace Teleopti.Ccc.DomainTest.DayOffPlanning
 
             using (_mocks.Playback())
             {
-                result = _target.Execute(_scheduleMatrixLockableBitArrayConverter, _scheduleResultDataExtractor);
+                result = _target.Execute(_matrix, _scheduleResultDataExtractor);
             }
 
             Assert.IsFalse(result.DayToLengthen.HasValue);
@@ -139,7 +140,7 @@ namespace Teleopti.Ccc.DomainTest.DayOffPlanning
 
             using (_mocks.Playback())
             {
-                result = _target.Execute(_scheduleMatrixLockableBitArrayConverter, _scheduleResultDataExtractor);
+                result = _target.Execute(_matrix, _scheduleResultDataExtractor);
             }
 
             Assert.IsFalse(result.DayToLengthen.HasValue);
@@ -148,8 +149,7 @@ namespace Teleopti.Ccc.DomainTest.DayOffPlanning
 
         private void commonMocks()
         {
-            Expect.Call(_scheduleMatrixLockableBitArrayConverter.SourceMatrix).Return(_matrix);
-            Expect.Call(_scheduleMatrixLockableBitArrayConverter.Convert(false, false)).Return(_lockableBitArray);
+            Expect.Call(_bitArrayConverter.Convert(_matrix, false, false)).Return(_lockableBitArray);
             Expect.Call(_scheduleResultDataExtractor.Values()).Return(_data).Repeat.AtLeastOnce();
             Expect.Call(_matrix.FullWeeksPeriodDays).Return(new ReadOnlyCollection<IScheduleDayPro>(_days)).Repeat.Any();
             Expect.Call(_scheduleDayPro1.Day).Return(new DateOnly(2011, 1, 1)).Repeat.Any();

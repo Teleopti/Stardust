@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 using Teleopti.Ccc.Domain.Scheduling.TeamBlock.Specification;
 using Teleopti.Interfaces.Domain;
 

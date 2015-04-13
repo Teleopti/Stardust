@@ -13,11 +13,11 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 	}
 	public class SchedulerGroupPagesProvider : ISchedulerGroupPagesProvider
 	{
-		private readonly IUnitOfWorkFactory _unitOfWorkFactory;
+		private readonly ICurrentUnitOfWorkFactory _unitOfWorkFactory;
 		private IList<IUserDefinedTabLight> _userDefined;
-		private IPersonSelectorReadOnlyRepository _personSelectorReadOnlyRepository;
+		private readonly IPersonSelectorReadOnlyRepository _personSelectorReadOnlyRepository;
 
-		public SchedulerGroupPagesProvider(IUnitOfWorkFactory unitOfWorkFactory, IPersonSelectorReadOnlyRepository personSelectorReadOnlyRepository)
+		public SchedulerGroupPagesProvider(ICurrentUnitOfWorkFactory unitOfWorkFactory, IPersonSelectorReadOnlyRepository personSelectorReadOnlyRepository)
 		{
 			_unitOfWorkFactory = unitOfWorkFactory;
 			_personSelectorReadOnlyRepository = personSelectorReadOnlyRepository;
@@ -36,7 +36,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 
 			if (_userDefined == null)
 			{
-				using (_unitOfWorkFactory.CreateAndOpenUnitOfWork())
+				using (_unitOfWorkFactory.LoggedOnUnitOfWorkFactory().CreateAndOpenUnitOfWork())
 				{
 					_userDefined = _personSelectorReadOnlyRepository.GetUserDefinedTabs();
 				}

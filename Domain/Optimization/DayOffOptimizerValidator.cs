@@ -21,7 +21,7 @@ namespace Teleopti.Ccc.Domain.Optimization
             var scheduleDayPro = scheduleMatrixPro.GetScheduleDayByKey(dateOnly);
             var scheduleDays = new List<IScheduleDay> { scheduleDayPro.DaySchedulePart() };
             
-            return _dayOffRule.Validate(dictionary, scheduleDays).Count() <= 0;
+            return !_dayOffRule.Validate(dictionary, scheduleDays).Any();
         }
     }
 }

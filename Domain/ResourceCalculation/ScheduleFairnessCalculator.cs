@@ -1,3 +1,4 @@
+using System;
 using System.Linq;
 using Teleopti.Interfaces.Domain;
 
@@ -5,22 +6,22 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 {
     public class ScheduleFairnessCalculator : IScheduleFairnessCalculator
     {
-        private readonly ISchedulingResultStateHolder _resultStateHolder;
+        private readonly Func<ISchedulingResultStateHolder> _resultStateHolder;
         
-        public ScheduleFairnessCalculator(ISchedulingResultStateHolder resultStateHolder)
+        public ScheduleFairnessCalculator(Func<ISchedulingResultStateHolder> resultStateHolder)
         {
             _resultStateHolder = resultStateHolder;
         }
 
         public double PersonFairness(IPerson person)
         {
-            double totalValue = _resultStateHolder.Schedules.FairnessPoints().FairnessPointsPerShift;
+            double totalValue = _resultStateHolder().Schedules.FairnessPoints().FairnessPointsPerShift;
             return calcPersonFainess(person, totalValue);
         }
 
         public double ScheduleFairness()
         {
-            var scheduleDictionary = _resultStateHolder.Schedules;
+            var scheduleDictionary = _resultStateHolder().Schedules;
             double totalValue = scheduleDictionary.FairnessPoints().FairnessPointsPerShift;
 
 	        var values = scheduleDictionary.Keys.Select(p => calcPersonFainess(p, totalValue)).ToArray();
@@ -29,7 +30,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 
         private double calcPersonFainess(IPerson person, double totalValue)
         {
-            double personValue = _resultStateHolder.Schedules[person].FairnessPoints().FairnessPointsPerShift;
+            double personValue = _resultStateHolder().Schedules[person].FairnessPoints().FairnessPointsPerShift;
 
             if (personValue == 0)
                 return 1d;

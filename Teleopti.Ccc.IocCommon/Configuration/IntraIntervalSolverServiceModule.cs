@@ -9,13 +9,13 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 	{
 		protected override void Load(ContainerBuilder builder)
 		{
-			builder.RegisterType<IntraIntervalFinder>().As<IIntraIntervalFinder>();
-			builder.RegisterType<SkillDayIntraIntervalFinder>().As<ISkillDayIntraIntervalFinder>();
-			builder.RegisterType<IntraIntervalFinderService>().As<IntraIntervalFinderService>();
-			builder.RegisterType<IntraIntervalFinderServiceToggle29845Off>().As<IntraIntervalFinderServiceToggle29845Off>();
-			builder.RegisterType<SkillActivityCounter>().As<ISkillActivityCounter>();
-			builder.RegisterType<SkillActivityCountCollector>().As<ISkillActivityCountCollector>();
-			builder.RegisterType<FullIntervalFinder>().As<IFullIntervalFinder>();
+			builder.RegisterType<IntraIntervalFinder>().As<IIntraIntervalFinder>().SingleInstance();
+			builder.RegisterType<SkillDayIntraIntervalFinder>().As<ISkillDayIntraIntervalFinder>().SingleInstance();
+			builder.RegisterType<IntraIntervalFinderService>().SingleInstance();
+			builder.RegisterType<IntraIntervalFinderServiceToggle29845Off>().SingleInstance();
+			builder.RegisterType<SkillActivityCounter>().As<ISkillActivityCounter>().SingleInstance();
+			builder.RegisterType<SkillActivityCountCollector>().As<ISkillActivityCountCollector>().SingleInstance();
+			builder.RegisterType<FullIntervalFinder>().As<IFullIntervalFinder>().SingleInstance();
 
 			builder.Register(c => c.Resolve<IToggleManager>().IsEnabled(Toggles.Scheduler_IntraIntervalSolver_29845)
 			   ? (IIntraIntervalFinderService)c.Resolve<IntraIntervalFinderService>()

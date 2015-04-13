@@ -38,7 +38,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.Restriction
 			_schedulingResultStateHolder = _mocks.StrictMock<ISchedulingResultStateHolder>();
 			_teamBlockSchedulingOptions = new TeamBlockSchedulingOptions();
 			_effectiveRestrictionCreator = _mocks.StrictMock<IEffectiveRestrictionCreator>();
-			_target = new TeamRestrictionAggregator(_effectiveRestrictionCreator, _schedulingResultStateHolder,
+			_target = new TeamRestrictionAggregator(_effectiveRestrictionCreator, ()=>_schedulingResultStateHolder,
 			                                        _teamBlockSchedulingOptions);
 			_dateOnly = new DateOnly(2013, 11, 12);
 			_person1 = PersonFactory.CreatePersonWithValidVirtualSchedulePeriod(PersonFactory.CreatePerson("bill"), _dateOnly);

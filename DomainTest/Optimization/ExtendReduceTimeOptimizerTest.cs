@@ -18,7 +18,6 @@ namespace Teleopti.Ccc.DomainTest.Optimization
         private IPeriodValueCalculator _periodValueCalculator;
         private IScheduleResultDataExtractor _dataExtractor;
         private IExtendReduceTimeDecisionMaker _decisionMaker;
-        private IScheduleMatrixLockableBitArrayConverter _scheduleMatrixLockableBitArrayConverter;
         private IScheduleService _scheduleService;
         private ISchedulePartModifyAndRollbackService _rollbackService;
         private IDeleteSchedulePartService _deleteService;
@@ -47,7 +46,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 			_periodValueCalculator = _mocks.StrictMock<IPeriodValueCalculator>();
 			_dataExtractor = _mocks.Stub<IScheduleResultDataExtractor>();
 			_decisionMaker = _mocks.StrictMock<IExtendReduceTimeDecisionMaker>();
-			_scheduleMatrixLockableBitArrayConverter = _mocks.StrictMock<IScheduleMatrixLockableBitArrayConverter>();
+			_matrix = _mocks.StrictMock<IScheduleMatrixPro>();
 			_scheduleService = _mocks.StrictMock<IScheduleService>();
 			_rollbackService = _mocks.Stub<ISchedulePartModifyAndRollbackService>();
 			_deleteService = _mocks.Stub<IDeleteSchedulePartService>();
@@ -64,7 +63,6 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 				_periodValueCalculator,
 				_dataExtractor,
 				_decisionMaker,
-				_scheduleMatrixLockableBitArrayConverter,
 				_scheduleService,
 				_optimizerPreferences,
 				_rollbackService,
@@ -75,9 +73,9 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 				_originalStateContainerForTagChange,
 				_optimizationLimits,
 				_schedulingOptions,
-				_mainShiftOptimizeActivitySpecificationSetter);
+				_mainShiftOptimizeActivitySpecificationSetter,
+				_matrix);
 
-			_matrix = _mocks.StrictMock<IScheduleMatrixPro>();
 			_scheduleDayPro1 = _mocks.StrictMock<IScheduleDayPro>();
 			_scheduleDayPro2 = _mocks.StrictMock<IScheduleDayPro>();
 			_scheduleDay1 = _mocks.StrictMock<IScheduleDay>();
@@ -240,12 +238,9 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 
             using (_mocks.Record())
             {
-				Expect.Call(_scheduleMatrixLockableBitArrayConverter.SourceMatrix).Return(_matrix);
-	            Expect.Call(_optimizationLimits.OverLimitsCounts(_matrix)).Return(_overLimtitesResult);
+				Expect.Call(_optimizationLimits.OverLimitsCounts(_matrix)).Return(_overLimtitesResult);
 	            Expect.Call(_optimizationLimits.MoveMaxDaysOverLimit()).Return(false).Repeat.AtLeastOnce();
-
-                Expect.Call(_decisionMaker.Execute(_scheduleMatrixLockableBitArrayConverter, _dataExtractor))
-                    .Return(decisionMakerResult);
+                Expect.Call(_decisionMaker.Execute(_matrix, _dataExtractor)).Return(decisionMakerResult);
             }
 
             bool result;
@@ -264,9 +259,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
             IPerson person = PersonFactory.CreatePerson();
             using (_mocks.Record())
             {
-                Expect.Call(_scheduleMatrixLockableBitArrayConverter.SourceMatrix).Return(_matrix);
                 Expect.Call(_matrix.Person).Return(person);
-
             }
 
             using (_mocks.Playback())
@@ -281,12 +274,10 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 		{
 			Expect.Call(_optimizationLimits.OverLimitsCounts(_matrix)).Return(_overLimtitesResult);
 
-            Expect.Call(_decisionMaker.Execute(_scheduleMatrixLockableBitArrayConverter, _dataExtractor))
+            Expect.Call(_decisionMaker.Execute(_matrix, _dataExtractor))
                 .Return(decisionMakerResult);
             Expect.Call(_periodValueCalculator.PeriodValue(IterationOperationOption.WorkShiftOptimization))
                 .Return(40);
-            Expect.Call(_scheduleMatrixLockableBitArrayConverter.SourceMatrix)
-                .Return(_matrix).Repeat.Any();
             Expect.Call(_matrix.GetScheduleDayByKey(decisionMakerResult.DayToLengthen.Value))
                 .Return(_scheduleDayPro1).Repeat.Any();
             Expect.Call(_matrix.GetScheduleDayByKey(decisionMakerResult.DayToShorten.Value))

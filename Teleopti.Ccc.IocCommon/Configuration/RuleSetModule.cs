@@ -22,12 +22,8 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 
 		protected override void Load(ContainerBuilder builder)
 		{
-			builder.RegisterType<CreateWorkShiftsFromTemplate>()
-				.As<ICreateWorkShiftsFromTemplate>()
-				.SingleInstance();
-			builder.RegisterType<ShiftCreatorService>()
-				.As<IShiftCreatorService>()
-				.SingleInstance();
+			builder.RegisterType<CreateWorkShiftsFromTemplate>().As<ICreateWorkShiftsFromTemplate>().SingleInstance();
+			builder.RegisterType<ShiftCreatorService>().As<IShiftCreatorService>().SingleInstance();
 			if (_perLifetimeScope)
 			{
 				builder.RegisterMbCacheComponent<RuleSetProjectionService, IRuleSetProjectionService>()

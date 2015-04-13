@@ -18,12 +18,10 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
             _gridlockManager = gridlockManager;
         }
 
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "1"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
-		public void Execute(IEnumerable<IScheduleMatrixPro> scheduleMatrixes, DateOnlyPeriod selectedPeriod)
+        public void Execute(IEnumerable<IScheduleMatrixPro> scheduleMatrixes, DateOnlyPeriod selectedPeriod)
         {
             foreach (var matrix in scheduleMatrixes)
             {
-
 	            setUserLockedDaysInMatrix(matrix, selectedPeriod, _gridlockManager());
             }
         }

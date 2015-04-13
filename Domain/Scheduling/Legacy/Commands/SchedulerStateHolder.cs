@@ -6,7 +6,6 @@ using Teleopti.Ccc.Domain.AgentInfo.Requests;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Repositories;
-using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Domain.Specification;
@@ -42,10 +41,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 		private bool _filterOnHourlyAvailability;
 		private readonly HashSet<TimeZoneInfo> _detectedTimeZoneInfos = new HashSet<TimeZoneInfo>();
 
-		public SchedulerStateHolder(IScenario loadScenario, IDateOnlyPeriodAsDateTimePeriod loadPeriod, IEnumerable<IPerson> allPermittedPersons, IDisableDeletedFilter disableDeleteFilter)
-			: this(loadScenario, loadPeriod, allPermittedPersons, disableDeleteFilter, new SchedulingResultStateHolder())
-		{ }
-
 		public SchedulerStateHolder(IScenario loadScenario, IDateOnlyPeriodAsDateTimePeriod loadPeriod, IEnumerable<IPerson> allPermittedPersons, IDisableDeletedFilter disableDeleteFilter, ISchedulingResultStateHolder schedulingResultStateHolder)
 		{
 			_timeZoneInfo = TeleoptiPrincipal.CurrentPrincipal.Regional.TimeZone;
@@ -66,8 +61,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 			_allPermittedPersons = new List<IPerson>();
 			ResetFilteredPersonsOvertimeAvailability();
 		}
-
-
 
 		public void SetRequestedScenario(IScenario scenario)
 		{

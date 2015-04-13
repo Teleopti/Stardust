@@ -11,9 +11,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 
     public class DynamicBlockFinder : IDynamicBlockFinder
     {
-
-	    [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods",
-		    MessageId = "1")]
 	    public IBlockInfo ExtractBlockInfo(DateOnly blockOnDate, ITeamInfo teamInfo, BlockFinderType blockType,
 		    bool singleAgentTeam)
 	    {

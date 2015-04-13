@@ -8,7 +8,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 {
     public interface ISkillIntervalDataAggregator
     {
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1006:DoNotNestGenericTypesInMemberSignatures")]
         IList<ISkillIntervalData> AggregateSkillIntervalData(IList<IList<ISkillIntervalData>> multipleSkillIntervalDataList);
 
 	    ISkillIntervalData AggregateTwoIntervals(ISkillIntervalData skillIntervalData1,

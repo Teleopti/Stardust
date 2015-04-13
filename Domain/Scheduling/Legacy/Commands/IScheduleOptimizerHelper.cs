@@ -33,7 +33,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 		private readonly ISchedulePeriodListShiftCategoryBackToLegalStateService _shiftCategoryBackToLegalState;
 		private readonly IRuleSetBagsOfGroupOfPeopleCanHaveShortBreak _ruleSetBagsOfGroupOfPeopleCanHaveShortBreak;
 		private readonly Func<ISchedulingResultStateHolder> _resultStateHolder;
-		private readonly IFixedStaffSchedulingService _fixedStaffSchedulingService;
+		private readonly Func<IFixedStaffSchedulingService> _fixedStaffSchedulingService;
 		private readonly IStudentSchedulingService _studentSchedulingService;
 		private readonly Func<IOptimizationPreferences> _optimizationPreferences;
 		private readonly IScheduleService _scheduleService;
@@ -45,7 +45,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 		private readonly IScheduleDayEquator _scheduleDayEquator;
 		private readonly IMatrixListFactory _matrixListFactory;
 
-		public RequiredScheduleHelper(ISchedulePeriodListShiftCategoryBackToLegalStateService shiftCategoryBackToLegalState, IRuleSetBagsOfGroupOfPeopleCanHaveShortBreak ruleSetBagsOfGroupOfPeopleCanHaveShortBreak, Func<ISchedulingResultStateHolder> resultStateHolder, IFixedStaffSchedulingService fixedStaffSchedulingService, IStudentSchedulingService studentSchedulingService, Func<IOptimizationPreferences> optimizationPreferences, IScheduleService scheduleService, IResourceOptimizationHelper resourceOptimizationHelper, IGridlockManager gridlockManager, IDaysOffSchedulingService daysOffSchedulingService, Func<IWorkShiftFinderResultHolder> workShiftFinderResultHolder,IScheduleDayChangeCallback scheduleDayChangeCallback, IScheduleDayEquator scheduleDayEquator, IMatrixListFactory matrixListFactory)
+		public RequiredScheduleHelper(ISchedulePeriodListShiftCategoryBackToLegalStateService shiftCategoryBackToLegalState, IRuleSetBagsOfGroupOfPeopleCanHaveShortBreak ruleSetBagsOfGroupOfPeopleCanHaveShortBreak, Func<ISchedulingResultStateHolder> resultStateHolder, Func<IFixedStaffSchedulingService> fixedStaffSchedulingService, IStudentSchedulingService studentSchedulingService, Func<IOptimizationPreferences> optimizationPreferences, IScheduleService scheduleService, IResourceOptimizationHelper resourceOptimizationHelper, IGridlockManager gridlockManager, IDaysOffSchedulingService daysOffSchedulingService, Func<IWorkShiftFinderResultHolder> workShiftFinderResultHolder,IScheduleDayChangeCallback scheduleDayChangeCallback, IScheduleDayEquator scheduleDayEquator, IMatrixListFactory matrixListFactory)
 		{
 			_shiftCategoryBackToLegalState = shiftCategoryBackToLegalState;
 			_ruleSetBagsOfGroupOfPeopleCanHaveShortBreak = ruleSetBagsOfGroupOfPeopleCanHaveShortBreak;
@@ -107,15 +107,15 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 			var tagSetter = new ScheduleTagSetter(schedulingOptions.TagToUseOnScheduling);
 			tagSetter.ChangeTagToSet(schedulingOptions.TagToUseOnScheduling);
 
-			_fixedStaffSchedulingService.ClearFinderResults();
-			var _backgroundWorker = backgroundWorker;
+			var fixedStaffSchedulingService = _fixedStaffSchedulingService();
+			fixedStaffSchedulingService.ClearFinderResults();
 			var sendEventEvery = schedulingOptions.RefreshRate;
 			var scheduledCount = 0;
-			SchedulingServiceBaseEventArgs _progressEventScheduling = null;
+			SchedulingServiceBaseEventArgs progressEventScheduling = null;
 
 			EventHandler<SchedulingServiceBaseEventArgs> onDayScheduled = (sender, e) =>
 			{
-				if (_backgroundWorker.CancellationPending)
+				if (backgroundWorker.CancellationPending)
 				{
 					e.Cancel = true;
 				}
@@ -123,17 +123,17 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 					scheduledCount++;
 				if (scheduledCount >= sendEventEvery)
 				{
-					_backgroundWorker.ReportProgress(1, e);
+					backgroundWorker.ReportProgress(1, e);
 					scheduledCount = 0;
 
-					if (_progressEventScheduling != null && _progressEventScheduling.UserCancel)
+					if (progressEventScheduling != null && progressEventScheduling.UserCancel)
 						return;
 
-					_progressEventScheduling = e;
+					progressEventScheduling = e;
 				}
 			};
 
-			_fixedStaffSchedulingService.DayScheduled += onDayScheduled;
+			fixedStaffSchedulingService.DayScheduled += onDayScheduled;
 			DateTime schedulingTime = DateTime.Now;
 			IDeleteAndResourceCalculateService deleteAndResourceCalculateService =
 				new DeleteAndResourceCalculateService(new DeleteSchedulePartService(_resultStateHolder), _resourceOptimizationHelper);
@@ -181,13 +181,13 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 							scheduleMatrixOriginalStateContainer.ScheduleMatrix.LockPeriod(new DateOnlyPeriod(day.Day, day.Day));
 					}
 				}
-				_fixedStaffSchedulingService.DoTheScheduling(unlockedSchedules, schedulingOptions, useOccupancyAdjustment, false,
+				fixedStaffSchedulingService.DoTheScheduling(unlockedSchedules, schedulingOptions, useOccupancyAdjustment, false,
 					rollbackService);
-				_allResults().AddResults(_fixedStaffSchedulingService.FinderResults, schedulingTime);
-				_fixedStaffSchedulingService.FinderResults.Clear();
+				_allResults().AddResults(fixedStaffSchedulingService.FinderResults, schedulingTime);
+				fixedStaffSchedulingService.FinderResults.Clear();
 
 				var progressChangeEvent = new TeleoptiProgressChangeMessage(Resources.TryingToResolveUnscheduledDaysDotDotDot);
-				_backgroundWorker.ReportProgress(0, progressChangeEvent);
+				backgroundWorker.ReportProgress(0, progressChangeEvent);
 				foreach (var scheduleMatrixOriginalStateContainer in originalStateContainers)
 				{
 					int iterations = 0;
@@ -195,18 +195,18 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 						nightRestWhiteSpotSolverService.Resolve(scheduleMatrixOriginalStateContainer.ScheduleMatrix, schedulingOptions,
 							rollbackService) && iterations < 10)
 					{
-						if (_backgroundWorker.CancellationPending)
+						if (backgroundWorker.CancellationPending)
 							break;
 
-						if (_progressEventScheduling != null && _progressEventScheduling.UserCancel)
+						if (progressEventScheduling != null && progressEventScheduling.UserCancel)
 							break;
 
 						iterations++;
 					}
-					if (_backgroundWorker.CancellationPending)
+					if (backgroundWorker.CancellationPending)
 						break;
 
-					if (_progressEventScheduling != null && _progressEventScheduling.UserCancel)
+					if (progressEventScheduling != null && progressEventScheduling.UserCancel)
 						break;
 				}
 
@@ -215,7 +215,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 					schedulePartModifyAndRollbackServiceForContractDaysOff.Rollback();
 
 			}
-			_fixedStaffSchedulingService.DayScheduled -= onDayScheduled;
+			fixedStaffSchedulingService.DayScheduled -= onDayScheduled;
 		}
 
 		public void ScheduleSelectedStudents(IList<IScheduleDay> allSelectedSchedules, IBackgroundWorkerWrapper backgroundWorker,

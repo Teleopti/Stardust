@@ -26,7 +26,7 @@ namespace Teleopti.Ccc.Web.Areas.ResourcePlanner
 				.SingleInstance()
 				.As<INextPlanningPeriodProvider>();
 
-			builder.RegisterModule(new SchedulingCommonModule(_configuration));
+			builder.RegisterModule(new SchedulingCommonModule());
 			builder.RegisterType<WorkShiftCalculator>().As<IWorkShiftCalculator>().InstancePerLifetimeScope();
 			builder.RegisterType<DayOffBackToLegalStateFunctions>().As<IDayOffBackToLegalStateFunctions>();
 			builder.RegisterType<WorkShiftPeriodValueCalculator>().As<IWorkShiftPeriodValueCalculator>();

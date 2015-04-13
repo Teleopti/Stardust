@@ -7,7 +7,6 @@ namespace Teleopti.Ccc.Domain.DayOffPlanning.Scheduling
 {
     public class WorkShiftWeekMinMaxCalculator : IWorkShiftWeekMinMaxCalculator
     {
-        
         public bool IsInLegalState(int weekIndex, IDictionary<DateOnly, MinMax<TimeSpan>> possibleMinMaxWorkShiftLengths, IScheduleMatrixPro matrix)
         {
 			int weekCount = matrix.FullWeeksPeriodDays.Count / 7;
@@ -29,7 +28,6 @@ namespace Teleopti.Ccc.Domain.DayOffPlanning.Scheduling
             return true;
         }
 
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "3")]
         public TimeSpan CorrectionDiff(int weekIndex, IDictionary<DateOnly, MinMax<TimeSpan>> possibleMinMaxWorkShiftLengths, DateOnly? dayToSchedule, IScheduleMatrixPro matrix)
         {
             var contract = matrix.SchedulePeriod.Contract;

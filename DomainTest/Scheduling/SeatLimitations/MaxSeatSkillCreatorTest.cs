@@ -40,17 +40,19 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.SeatLimitations
         public void ShouldGetMaxSeatSitesAndPersonsAndCreateSkills()
         {
             var sites = new HashSet<ISite> {new Site("sajt")};
-            Expect.Call(_maxSeatSitesExtractor.MaxSeatSites(_dateOnlyPeriod)).Return(sites);
+			var extendedDatePeriod = new DateOnlyPeriod(_dateOnlyPeriod.StartDate.AddDays(-8), _dateOnlyPeriod.EndDate.AddDays(8));
+			
+			Expect.Call(_maxSeatSitesExtractor.MaxSeatSites(_dateOnlyPeriod)).Return(sites);
             Expect.Call(() => _createSkillsFromMaxSeatSites.CreateSkillList(sites));
             
             Expect.Call(() =>_createPersonalSkillsFromMaxSeatSites.Process(_dateOnlyPeriod, _persons));
-            Expect.Call(() => _schedulerSkillDayHelper.AddSkillDaysToStateHolder(ForecastSource.MaxSeatSkill, 0));
+	        Expect.Call(
+		        () => _schedulerSkillDayHelper.AddSkillDaysToStateHolder(
+			        extendedDatePeriod,
+			        ForecastSource.MaxSeatSkill, 0));
             _mocks.ReplayAll();
             _target.CreateMaxSeatSkills(_dateOnlyPeriod);
             _mocks.VerifyAll();
         }
     }
-
-    
-
 }

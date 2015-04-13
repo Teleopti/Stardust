@@ -16,7 +16,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Overtime
         private readonly ISkillResolutionProvider _skillResolutionProvider;
         private readonly IOvertimeSkillStaffPeriodToSkillIntervalDataMapper _overtimeSkillStaffPeriodToSkillIntervalDataMapper;
         private readonly IOvertimeSkillIntervalDataDivider _overtimeSkillIntervalDataDivider;
-        private readonly ISchedulingResultStateHolder _schedulingResultStateHolder;
+        private readonly Func<ISchedulingResultStateHolder> _schedulingResultStateHolder;
         private readonly ICalculateBestOvertime _calculateBestOvertime;
         private readonly IOvertimeSkillIntervalDataAggregator _overtimeSkillIntervalDataAggregator;
 
@@ -24,7 +24,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Overtime
         public OvertimeLengthDecider(ISkillResolutionProvider skillResolutionProvider,
                                      IOvertimeSkillStaffPeriodToSkillIntervalDataMapper overtimeSkillStaffPeriodToSkillIntervalDataMapper,
                                      IOvertimeSkillIntervalDataDivider overtimeSkillIntervalDataDivider,
-                                     ISchedulingResultStateHolder schedulingResultStateHolder, ICalculateBestOvertime calculateBestOvertime, OvertimePeriodValueMapper overtimePeriodValueMapper, 
+                                     Func<ISchedulingResultStateHolder> schedulingResultStateHolder, ICalculateBestOvertime calculateBestOvertime, OvertimePeriodValueMapper overtimePeriodValueMapper, 
                                      IOvertimeSkillIntervalDataAggregator overtimeSkillIntervalDataAggregator
 			)
         {
@@ -45,7 +45,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Overtime
             if (skills.Count == 0) return result;
             var minimumResolution = _skillResolutionProvider.MinimumResolution(skills);
 			var nextDayDateOnly = dateOnly.AddDays(1);
-            var skillDays = _schedulingResultStateHolder.SkillDaysOnDateOnly(new List<DateOnly> { dateOnly, nextDayDateOnly });
+            var skillDays = _schedulingResultStateHolder().SkillDaysOnDateOnly(new List<DateOnly> { dateOnly, nextDayDateOnly });
             if (skillDays == null) return result;
             
             var overtimeSkillIntervalDataList = createOvertimeSkillIntervalDataList(skills, skillDays, minimumResolution);

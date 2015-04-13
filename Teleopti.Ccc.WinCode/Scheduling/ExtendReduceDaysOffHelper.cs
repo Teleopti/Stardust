@@ -95,11 +95,8 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 					periodValueCalculatorProvider.CreatePeriodValueCalculator(optimizerPreferences.Advanced, personalSkillsDataExtractor);
 
 
-				IExtendReduceDaysOffDecisionMaker decisionMaker = new ExtendReduceDaysOffDecisionMaker();
-				IScheduleMatrixLockableBitArrayConverter bitArrayConverter = new ScheduleMatrixLockableBitArrayConverter(scheduleMatrixPro, scheduleMatrixLockableBitArrayConverterEx);
-				ILockableBitArray bitArray =
-					bitArrayConverter.Convert(optimizerPreferences.DaysOff.ConsiderWeekBefore,
-						optimizerPreferences.DaysOff.ConsiderWeekAfter);
+				IExtendReduceDaysOffDecisionMaker decisionMaker = new ExtendReduceDaysOffDecisionMaker(scheduleMatrixLockableBitArrayConverterEx);
+				ILockableBitArray bitArray = scheduleMatrixLockableBitArrayConverterEx.Convert(scheduleMatrixPro, optimizerPreferences.DaysOff.ConsiderWeekBefore, optimizerPreferences.DaysOff.ConsiderWeekAfter);
 				var daysOffLegalStateValidatorsFactory = _container.Resolve<IDaysOffLegalStateValidatorsFactory>();
 				var validators = daysOffLegalStateValidatorsFactory.CreateLegalStateValidators(bitArray,
 					optimizerPreferences);
@@ -140,7 +137,6 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 					personalSkillsPeriodValueCalculator,
 					personalSkillsDataExtractor,
 					decisionMaker,
-					bitArrayConverter,
 					scheduleServiceForFlexibleAgents,
 					optimizerPreferences,
 					schedulePartModifyAndRollbackService,
@@ -157,7 +153,8 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 					dayOffOptimizerValidator,
 					optimizationLimits,
 					schedulingOptionsCreator,
-					mainShiftOptimizeActivitySpecificationSetter);
+					mainShiftOptimizeActivitySpecificationSetter,
+					scheduleMatrixPro);
 
 				optimizers.Add(optimizer);
 			}

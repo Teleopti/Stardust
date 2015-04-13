@@ -27,7 +27,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 			return arrayFromList(matrix, matrix.OuterWeeksPeriodDays, true, true);
 		}
 
-		private ILockableBitArray arrayFromList(IScheduleMatrixPro matrix, IList<IScheduleDayPro> list, bool useWeekBefore, bool useWeekAfter)
+		private static ILockableBitArray arrayFromList(IScheduleMatrixPro matrix, IList<IScheduleDayPro> list, bool useWeekBefore, bool useWeekAfter)
 		{
 			ILockableBitArray ret = new LockableBitArray(list.Count, useWeekBefore, useWeekAfter, null);
 			int index = 0;

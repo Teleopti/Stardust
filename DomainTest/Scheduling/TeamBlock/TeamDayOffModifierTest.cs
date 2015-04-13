@@ -36,7 +36,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 			_mocks = new MockRepository();
 			_resourceOptimizationHelper = _mocks.StrictMock<IResourceOptimizationHelper>();
 			_stateHolder = _mocks.StrictMock<ISchedulingResultStateHolder>();
-			_target = new TeamDayOffModifier(_resourceOptimizationHelper, _stateHolder);
+			_target = new TeamDayOffModifier(_resourceOptimizationHelper, ()=>_stateHolder);
 			_rollbackService = _mocks.StrictMock<ISchedulePartModifyAndRollbackService>();
 			_person1 = PersonFactory.CreatePersonWithValidVirtualSchedulePeriod(new Person(), DateOnly.MinValue);
 			_person2 = PersonFactory.CreatePersonWithValidVirtualSchedulePeriod(new Person(), DateOnly.MinValue);

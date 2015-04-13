@@ -5,6 +5,7 @@ using System.Linq;
 using Autofac;
 using Microsoft.Practices.Composite.Events;
 using Teleopti.Ccc.Domain.Common;
+using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.Security.AuthorizationEntities;
@@ -113,7 +114,7 @@ namespace Teleopti.Ccc.Win.Reporting
 				new PartTimePercentageRepository(unitOfWork).LoadAll();
 				var persons = rep.FindPeopleTeamSiteSchedulePeriodWorkflowControlSet(period);
 
-				return new SchedulerStateHolder(Scenario, new DateOnlyPeriodAsDateTimePeriod(period, TeleoptiPrincipal.CurrentPrincipal.Regional.TimeZone), persons, new DisableDeletedFilter(new FixedCurrentUnitOfWork(unitOfWork)));
+				return new SchedulerStateHolder(Scenario, new DateOnlyPeriodAsDateTimePeriod(period, TeleoptiPrincipal.CurrentPrincipal.Regional.TimeZone), persons, new DisableDeletedFilter(new FixedCurrentUnitOfWork(unitOfWork)), new SchedulingResultStateHolder());
 			}
 		}
 

@@ -16,6 +16,7 @@ using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.RealTimeAdherence;
 using Teleopti.Ccc.Domain.Repositories;
+using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
@@ -76,7 +77,7 @@ namespace Teleopti.Ccc.WinCodeTest.Intraday
 					_unitOfWorkFactory = MockRepository.GenerateMock<IUnitOfWorkFactory>();
 					_repositoryFactory = MockRepository.GenerateMock<IRepositoryFactory>();
 					_scheduleDictionarySaver = MockRepository.GenerateMock<IScheduleDifferenceSaver>();
-					_schedulerStateHolder = new SchedulerStateHolder(_scenario, new DateOnlyPeriodAsDateTimePeriod(_period, TeleoptiPrincipal.CurrentPrincipal.Regional.TimeZone), _persons, MockRepository.GenerateMock<IDisableDeletedFilter>());
+					_schedulerStateHolder = new SchedulerStateHolder(_scenario, new DateOnlyPeriodAsDateTimePeriod(_period, TeleoptiPrincipal.CurrentPrincipal.Regional.TimeZone), _persons, MockRepository.GenerateMock<IDisableDeletedFilter>(), new SchedulingResultStateHolder());
 					_statisticRepository = MockRepository.GenerateMock<IStatisticRepository>();
 					_agentStateReadModelReader = MockRepository.GenerateMock<IAgentStateReadModelReader>();
 					_differenceService = MockRepository.GenerateMock<IDifferenceCollectionService<IPersistableScheduleData>>();
@@ -99,7 +100,7 @@ namespace Teleopti.Ccc.WinCodeTest.Intraday
         public void VerifyHandlesDateIfTodayIsIncludedInSelection()
         {
             _schedulingResultLoader = MockRepository.GenerateMock<ISchedulingResultLoader>();
-			_schedulingResultLoader.Stub(x => x.SchedulerState).Return(new SchedulerStateHolder(_scenario, new DateOnlyPeriodAsDateTimePeriod(_periodNow, TeleoptiPrincipal.CurrentPrincipal.Regional.TimeZone), _persons, new DisableDeletedFilter(new DummyCurrentUnitOfWork()))).Repeat.AtLeastOnce();
+			_schedulingResultLoader.Stub(x => x.SchedulerState).Return(new SchedulerStateHolder(_scenario, new DateOnlyPeriodAsDateTimePeriod(_periodNow, TeleoptiPrincipal.CurrentPrincipal.Regional.TimeZone), _persons, new DisableDeletedFilter(new DummyCurrentUnitOfWork()), new SchedulingResultStateHolder())).Repeat.AtLeastOnce();
 
             _target = new IntradayPresenter(_view, _schedulingResultLoader, _messageBroker, _rtaStateHolder, _eventAggregator,
 																						_scheduleDictionarySaver, _unitOfWorkFactory, 

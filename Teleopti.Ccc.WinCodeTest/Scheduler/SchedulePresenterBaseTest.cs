@@ -8,6 +8,7 @@ using NUnit.Framework;
 using Rhino.Mocks;
 using Syncfusion.Windows.Forms.Grid;
 using Teleopti.Ccc.Domain.Common;
+using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
@@ -69,7 +70,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
             _gridlockManager = new GridlockManager();
             _clipHandlerSchedulePart = new ClipHandler<IScheduleDay>();
             _period = new DateOnlyPeriod(2009, 2, 2, 2009, 3, 1);
-			_schedulerState = new SchedulerStateHolder(_scenario, new DateOnlyPeriodAsDateTimePeriod(_period, TeleoptiPrincipal.CurrentPrincipal.Regional.TimeZone), new List<IPerson>(), _mocks.DynamicMock<IDisableDeletedFilter>());
+			_schedulerState = new SchedulerStateHolder(_scenario, new DateOnlyPeriodAsDateTimePeriod(_period, TeleoptiPrincipal.CurrentPrincipal.Regional.TimeZone), new List<IPerson>(), _mocks.DynamicMock<IDisableDeletedFilter>(), new SchedulingResultStateHolder());
             _overriddenBusinessRulesHolder = new OverriddenBusinessRulesHolder();
 
             createMockObjects();

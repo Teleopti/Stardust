@@ -880,7 +880,6 @@
     <Compile Include="Optimization\DayOffOptimizerTest.cs" />
     <Compile Include="Optimization\RmsPeriodValueCalculatorTest.cs" />
     <Compile Include="Optimization\RelativeDailyDifferencesByPersonalSkillsExtractorTest.cs" />
-    <Compile Include="Optimization\ScheduleMatrixLockableBitArrayConverterTest.cs" />
     <Compile Include="Forecasting\ActiveAgentCountTest.cs" />
     <Compile Include="Forecasting\DayHasBelowMinAgentsTest.cs" />
     <Compile Include="Forecasting\DayHasAboveMaxAgentsTest.cs" />
