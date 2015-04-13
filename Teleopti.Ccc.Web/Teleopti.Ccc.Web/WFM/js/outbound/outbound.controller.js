@@ -58,7 +58,7 @@ outbound.controller('OutboundEditCtrl', [
 			}
 		});
 		
-		$scope.showDetail = angular.isDefined($scope.campaign) && ($scope.campaign != null);
+		$scope.showCampaignDetail = angular.isDefined($scope.campaign) && ($scope.campaign != null);
 
 		$scope.update = function () {		
 			OutboundService.updateCampaign($scope.campaign);
