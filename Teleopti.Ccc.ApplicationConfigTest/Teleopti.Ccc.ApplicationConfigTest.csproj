@@ -141,10 +141,6 @@
       <Project>{ABE4F614-595C-4A28-AD45-62B86FFD5109}</Project>
       <Name>Teleopti.Ccc.ApplicationConfig</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Teleopti.Ccc.DbConverter\Teleopti.Ccc.DbConverter.csproj">
-      <Project>{A1338CDB-D557-4D78-9296-3789488EC8A7}</Project>
-      <Name>Teleopti.Ccc.DbConverter</Name>
-    </ProjectReference>
     <ProjectReference Include="..\Teleopti.Ccc.TestCommon\Teleopti.Ccc.TestCommon.csproj">
       <Project>{68A028B6-864C-4969-8830-9C3C6BD56A98}</Project>
       <Name>Teleopti.Ccc.TestCommon</Name>

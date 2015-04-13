@@ -77,8 +77,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Teleopti.Ccc.ApplicationCon
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Teleopti.Ccc.ApplicationConfigTest", "Teleopti.Ccc.ApplicationConfigTest\Teleopti.Ccc.ApplicationConfigTest.csproj", "{7F0AE264-0844-460C-B46C-68BF9DAB6B8E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Teleopti.Ccc.DbConverter", "Teleopti.Ccc.DbConverter\Teleopti.Ccc.DbConverter.csproj", "{A1338CDB-D557-4D78-9296-3789488EC8A7}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Teleopti.Ccc.Sdk.ClientProxies", "Teleopti.Ccc.Sdk\Teleopti.Ccc.Sdk.ClientProxies\Teleopti.Ccc.Sdk.ClientProxies.csproj", "{6116FC80-2475-447E-A90A-14B4DB59E2A7}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Teleopti.Analytics.Etl.PerformanceManagerProxy", "Teleopti.Analytics\Teleopti.Analytics.Etl.PerformanceManagerProxy\Teleopti.Analytics.Etl.PerformanceManagerProxy.csproj", "{AE2DE329-7681-40C4-BE16-7382280E2BC6}"
@@ -565,20 +563,6 @@ Global
 		{7F0AE264-0844-460C-B46C-68BF9DAB6B8E}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
 		{7F0AE264-0844-460C-B46C-68BF9DAB6B8E}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{7F0AE264-0844-460C-B46C-68BF9DAB6B8E}.Release|x86.ActiveCfg = Release|Any CPU
-		{A1338CDB-D557-4D78-9296-3789488EC8A7}.Debug|.NET.ActiveCfg = Debug|Any CPU
-		{A1338CDB-D557-4D78-9296-3789488EC8A7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{A1338CDB-D557-4D78-9296-3789488EC8A7}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{A1338CDB-D557-4D78-9296-3789488EC8A7}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
-		{A1338CDB-D557-4D78-9296-3789488EC8A7}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
-		{A1338CDB-D557-4D78-9296-3789488EC8A7}.Debug|x86.ActiveCfg = Debug|x86
-		{A1338CDB-D557-4D78-9296-3789488EC8A7}.Debug|x86.Build.0 = Debug|x86
-		{A1338CDB-D557-4D78-9296-3789488EC8A7}.Release|.NET.ActiveCfg = Release|Any CPU
-		{A1338CDB-D557-4D78-9296-3789488EC8A7}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{A1338CDB-D557-4D78-9296-3789488EC8A7}.Release|Any CPU.Build.0 = Release|Any CPU
-		{A1338CDB-D557-4D78-9296-3789488EC8A7}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
-		{A1338CDB-D557-4D78-9296-3789488EC8A7}.Release|Mixed Platforms.Build.0 = Release|Any CPU
-		{A1338CDB-D557-4D78-9296-3789488EC8A7}.Release|x86.ActiveCfg = Release|x86
-		{A1338CDB-D557-4D78-9296-3789488EC8A7}.Release|x86.Build.0 = Release|x86
 		{6116FC80-2475-447E-A90A-14B4DB59E2A7}.Debug|.NET.ActiveCfg = Debug|Any CPU
 		{6116FC80-2475-447E-A90A-14B4DB59E2A7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{6116FC80-2475-447E-A90A-14B4DB59E2A7}.Debug|Any CPU.Build.0 = Debug|Any CPU
