@@ -73,10 +73,14 @@ namespace Teleopti.Ccc.Web.Areas.Outbound.Controllers
 		}
 
 		[HttpDelete, Route("api/Outbound/Campaign/{Id}"), UnitOfWork]
-		public virtual void Remove(Guid Id)
+		public virtual IHttpActionResult Remove(Guid Id)
 		{
 			var campaign = _outboundCampaignRepository.Get(Id);
-			_outboundCampaignRepository.Remove(campaign);		
+			if (campaign == null)
+				return BadRequest();
+
+			_outboundCampaignRepository.Remove(campaign);
+			return Ok();
 		}
 	}
 }
