@@ -7,15 +7,15 @@
 			<p>To view existing campaigns and create new campaign</p>
 		</div>
 		<div class="col-lg-2">
-			<md-checkbox id="slide1" ng-model="hideDetail"><span translate>HideDetails</span></md-checkbox>
+			<md-checkbox id="slide1" ng-model="showMoreHeaderFields"><span translate>showMoreHeaderFields</span></md-checkbox>
 		</div>
 	</div>
 	
-	<div ng-class="{'col-lg-4' : !hideDetail , 'col-lg-12': hideDetail   }">
+	<div ng-class="{'col-lg-4' : !showMoreHeaderFields , 'col-lg-12': showMoreHeaderFields   }">
 		<div class="role-nav material-depth-2 container-block">
 			<div class="wfm-block sub-header">
-				<div ng-show-animate="!hideDetail" >Campaigns </div>
-				<div class="row" ng-show="hideDetail">
+				<div ng-show-animate="!showMoreHeaderFields">Campaigns </div>
+				<div class="row" ng-show="showMoreHeaderFields">
 					<div class="col-lg-4 column-label">
 						<span translate>Name</span>
 					</div>
@@ -34,16 +34,16 @@
 				<form name="form" ng-submit="create(); reset();">
 					<div class="input-prepend">
 						<i class="mdi mdi-plus"></i>
-						<input type="text" ng-model="newName" placeholder="Create new campaign" class="role-input role"/>
+						<input type="text" ng-model="newName" placeholder="Create new campaign" class="role-input role" />
 					</div>
-				</form>				
+				</form>
 				<div class="input-prepend">
-					<i class="mdi mdi-filter-outline"></i>					
+					<i class="mdi mdi-filter-outline"></i>
 					<input type="text" name="filterRole" ng-model="searchCampaign.name" placeholder="Campaign filter ..." />
-				</div>						
+				</div>
 			</div>
 			<div id="searchCampaignResult" class="role-container">
-				<ul class="wfm-list">					
+				<ul class="wfm-list">
 					<li ng-repeat="campaign in campaigns | filter:searchCampaign" ng-click="show(campaign)" ng-dblclick="editing = true" ng-class="{'wfm-list-item-selected': selectedTarget && campaign.Id == selectedTarget.Id}" class="role-btn wfm-block wfm-list-item role">
 						<div class="wfm-leave-behind">
 							<span>
@@ -74,25 +74,25 @@
 							</span>
 						</div>
 						<div class="row">
-							<div ng-class="{'col-lg-4': hideDetail}">
+							<div ng-class="{'col-lg-4': showMoreHeaderFields}">
 								<span ng-hide="editing">{{campaign.Name}}</span>
 								<form ng-show="editing" ng-submit="editing = false; update(campaign)">
 									<input type="text" class="inline-role-name" ng-model="campaign.Name" placeholder="Name" ng-required />
 								</form>
 							</div>
-							<div ng-show="hideDetail">
+							<div ng-show="showMoreHeaderFields">
 								<span class="col-lg-2">{{campaign.period.startDate}}</span>
 								<span class="col-lg-2">{{campaign.period.endDate}}</span>
 								<span class="col-lg-2">{{campaign.params.target}} / {{campaign.params.callList}}</span>
 							</div>
-						</div>																	
+						</div>
 					</li>
 				</ul>
 			</div>
 		</div>
 	</div>
 
-	<div class="col-lg-8" ng-if="!hideDetail">
+	<div class="col-lg-8" ng-if="!showMoreHeaderFields">
 		<div ui-view></div>
 	</div>
 </div>

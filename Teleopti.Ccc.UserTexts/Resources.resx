@@ -12978,4 +12978,8 @@ Reduce the complexity to use these shifts.</value>
   <data name="ToText" xml:space="preserve">
     <value>to</value>
   </data>
+  <data name="showMoreHeaderFields" xml:space="preserve">
+    <value>More header fields</value>
+    <comment>Shows more header row fields.</comment>
+  </data>
 </root>

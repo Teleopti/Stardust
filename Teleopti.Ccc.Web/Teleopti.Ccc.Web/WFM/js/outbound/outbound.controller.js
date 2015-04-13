@@ -8,7 +8,7 @@ outbound.controller('OutboundListCtrl', [
 
 		$scope.newName = "";
 		$scope.selectedTarget = null;
-		$scope.hideDetail = false;
+		$scope.showMoreHeaderFields= false;
 
 		$scope.reset = function() {
 			$scope.newName = "";
@@ -35,7 +35,7 @@ outbound.controller('OutboundListCtrl', [
 		$scope.show = function (campaign) {
 			if (angular.isDefined(campaign)) $scope.selectedTarget = campaign;
 			$state.go('outbound.edit', { Id: $scope.selectedTarget.Id });
-			$scope.hideDetail = false;
+			$scope.showMoreHeaderFields = false;
 		};
 		
 		$scope.delete = function(campaign) {
