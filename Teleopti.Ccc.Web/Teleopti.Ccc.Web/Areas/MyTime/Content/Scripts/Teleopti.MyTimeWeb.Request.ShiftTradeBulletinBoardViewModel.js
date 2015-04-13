@@ -82,6 +82,13 @@ Teleopti.MyTimeWeb.Request.ShiftTradeBulletinBoardViewModel = function(ajax) {
 		}
 	});
 
+	self.checkMessageLength = function(data,event) {
+		var text = $(event.target)[0].value;
+		if (text.length > 2000) {
+			self.message(text.substr(0, 2000));
+		}
+	};
+
 	self.isRequestedDateValid = function (date) {
 		if (date.diff(self.openPeriodStartDate()) < 0) {
 			return false;

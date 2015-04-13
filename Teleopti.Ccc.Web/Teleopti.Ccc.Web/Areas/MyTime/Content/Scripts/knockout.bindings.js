@@ -170,9 +170,4 @@ ko.bindingHandlers.selected = {
     }
 };
 
-ko.bindingHandlers.limitCharacters = {
-    update: function (element, valueAccessor, allBindingsAccessor, viewModel) {
-        element.value = element.value.substr(0, valueAccessor());
-        allBindingsAccessor().value(element.value.substr(0, valueAccessor()));
-    }
-};
+

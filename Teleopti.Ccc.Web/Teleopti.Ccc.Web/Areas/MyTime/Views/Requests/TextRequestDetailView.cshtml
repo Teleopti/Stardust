@@ -8,7 +8,7 @@
     </div>
     <div class="form-group">
         <!-- ko if: IsEditable -->
-            <textarea class="form-control request-edit-message" placeholder="@Resources.Message" data-bind="value: Message, valueUpdate: 'afterkeydown', limitCharacters: 2000" />
+            <textarea class="form-control request-edit-message" placeholder="@Resources.Message" data-bind="value: Message, valueUpdate: 'afterkeydown', event:{change: checkMessageLength}" />
         <!-- /ko -->
     </div>
 <div class="row form-group">

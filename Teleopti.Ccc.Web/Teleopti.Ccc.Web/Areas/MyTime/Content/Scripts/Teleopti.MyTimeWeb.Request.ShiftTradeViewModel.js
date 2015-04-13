@@ -68,6 +68,14 @@ Teleopti.MyTimeWeb.Request.ShiftTradeViewModel = function(ajax) {
 
 	self.subject = ko.observable();
 	self.message = ko.observable();
+	
+	self.checkMessageLength = function (data, event) {
+		var text = $(event.target)[0].value;
+		if (text.length > 2000) {
+			self.message(text.substr(0, 2000));
+		}
+	};
+
 
 	self.getDateWithFormat = function () {
 		return self.requestedDateInternal().format(self.DatePickerFormat());

@@ -58,6 +58,14 @@ Teleopti.MyTimeWeb.Request.ShiftTradeRequestDetailViewModel = function (ajax) {
 	}
 
 	self.UpdatedMessage = ko.observable();
+
+	self.checkMessageLength = function(data, event) {
+		var text = $(event.target)[0].value;
+		if (text.length > 2000) {
+			self.Message(text.substr(0, 2000));
+		}
+	};
+	
 	self.PrefixAgentNameToMessage = function () {
 
 		var existingMsg = self.Message();
