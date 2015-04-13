@@ -51,7 +51,11 @@
 			if ($scope.searchKeywordChanged) {
 				$scope.currentPageIndex = 1;
 			}
-			SearchSvrc.search.query({ keyword: $scope.keyword, pageSize: $scope.pageSize, currentPageIndex: $scope.currentPageIndex }).$promise.then(function (result) {
+			SearchSvrc.search.query({
+				keyword: $scope.keyword,
+				pageSize: $scope.pageSize,
+				currentPageIndex: $scope.currentPageIndex
+			}).$promise.then(function (result) {
 				$scope.searchResult = result.People;
 				$scope.optionalColumns = result.OptionalColumns;
 				$scope.totalPages = result.TotalPages;
