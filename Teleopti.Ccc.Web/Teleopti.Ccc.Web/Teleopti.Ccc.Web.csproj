@@ -1695,9 +1695,10 @@
     <Content Include="WFM\vendor\hammerjs\.gitignore" />
     <Content Include="WFM\vendor\hammerjs\hammer.js" />
     <Content Include="WFM\vendor\hammerjs\hammer.min.js" />
-    <Content Include="WFM\vendor\MaterialDesignIcons-0.5.18\license.txt" />
-    <Content Include="WFM\vendor\MaterialDesignIcons-0.5.18\MaterialDesignIcons.css" />
-    <Content Include="WFM\vendor\MaterialDesignIcons-0.5.18\MaterialDesignIcons.html" />
+    <Content Include="WFM\vendor\MaterialDesignIcons\css\materialdesignicons.css" />
+    <Content Include="WFM\vendor\MaterialDesignIcons\css\materialdesignicons.min.css" />
+    <Content Include="WFM\vendor\MaterialDesignIcons\fonts\materialdesignicons-webfont.svg" />
+    <Content Include="WFM\vendor\MaterialDesignIcons\license.txt" />
     <Content Include="WFM\vendor\ng-image-input-with-preview\ng-image-input-with-preview.css" />
     <Content Include="WFM\vendor\ng-image-input-with-preview\ng-image-input-with-preview.js" />
     <Content Include="WFM\vendor\ng-image-input-with-preview\ng-image-input-with-preview.min.css" />
@@ -1975,12 +1976,20 @@
       <SubType>Designer</SubType>
     </Content>
     <None Include="Properties\PublishProfiles\Local iis.pubxml" />
-    <Content Include="WFM\vendor\MaterialDesignIcons-0.5.18\MaterialDesignIcons.eot" />
-    <Content Include="WFM\vendor\MaterialDesignIcons-0.5.18\MaterialDesignIcons.ttf" />
-    <Content Include="WFM\vendor\MaterialDesignIcons-0.5.18\MaterialDesignIcons.woff" />
     <Content Include="WFM\tests\people\people.controller.spec.js" />
     <Content Include="WFM\css\style.scss" />
     <Content Include="WFM\vendor\ng-mfb\mfb.scss" />
+    <Content Include="WFM\vendor\MaterialDesignIcons\fonts\materialdesignicons-webfont.eot" />
+    <Content Include="WFM\vendor\MaterialDesignIcons\fonts\materialdesignicons-webfont.ttf" />
+    <Content Include="WFM\vendor\MaterialDesignIcons\fonts\materialdesignicons-webfont.woff" />
+    <Content Include="WFM\vendor\MaterialDesignIcons\fonts\materialdesignicons-webfont.woff2" />
+    <Content Include="WFM\vendor\MaterialDesignIcons\css\materialdesignicons.css.map" />
+    <Content Include="WFM\vendor\MaterialDesignIcons\css\materialdesignicons.min.css.map" />
+    <Content Include="WFM\vendor\MaterialDesignIcons\scss\materialdesignicons.scss" />
+    <Content Include="WFM\vendor\MaterialDesignIcons\scss\_core.scss" />
+    <Content Include="WFM\vendor\MaterialDesignIcons\scss\_icons.scss" />
+    <Content Include="WFM\vendor\MaterialDesignIcons\scss\_path.scss" />
+    <Content Include="WFM\vendor\MaterialDesignIcons\scss\_variables.scss" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config">

@@ -22,7 +22,7 @@
 		<link rel="stylesheet" href="Content/select2/select2-bootstrap.css"/>
 		<link rel="stylesheet" href="Content/bootstrap-timepicker/css/bootstrap-timepicker.css" />
 		<link rel="stylesheet" href="WFM/css/material-spinner.css"/>
-		<link rel="stylesheet" href="WFM/vendor/MaterialDesignIcons-0.5.18/MaterialDesignIcons.css" />
+		<link rel="stylesheet" href="WFM/vendor/MaterialDesignIcons/css/materialdesignicons.css" />
 		<link rel="stylesheet" href="Areas/SeatPlanner/Content/Styles/bootstrapXL.css" />
 		<link rel="stylesheet" href="Areas/SeatPlanner/Content/Styles/TreeList/TreeList.css" />
 		<link rel="stylesheet" href="Areas/SeatPlanner/Content/Styles/Site.css" />
