@@ -35,8 +35,7 @@ module.exports = function(config) {
 		'vendor/ng-image-input-with-preview/ng-image-input-with-preview.js',
 		'js/ABmetrics.min.js',
 		'dist/main.min.js',
-		'tests/**/*.js',
-		'tests/*.js'
+		'tests/**/*.js'
 	],
 
 
