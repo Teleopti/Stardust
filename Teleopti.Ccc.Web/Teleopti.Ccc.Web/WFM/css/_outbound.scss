@@ -50,3 +50,6 @@
 .wfm-list li:hover > .wfm-leave-behind.wfm-leave-behind-1 {
   width: 40px; 
 }
+.wfm-list li:hover .wfm-checkbox-toggle:after {
+	background-color: white;
+}

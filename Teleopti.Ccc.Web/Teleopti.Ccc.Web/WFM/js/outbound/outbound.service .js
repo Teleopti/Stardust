@@ -2,45 +2,28 @@
 
 var outboundService = angular.module('outboundService', ['ngResource']);
 
-outboundService.service('OutboundService', ['$resource', function( $resource) {
+outboundService.service('OutboundService', ['$resource', '$filter', function( $resource, $filter) {
 
 	var self = this;
 	var Campaign = $resource('../api/Outbound/Campaign/:Id', { Id: '@Id' }, {
 		update: { method: 'PUT' }
 	});
 
-	var CampaignWorkingPeriodAssignment = $resource('../api/Outbound/Capmaign/:Id/WorkingPeriod/:WorkingPeriodId/Assignment/:AssignmentId', {
-		Id: '@CampaignId',
-		WorkingPeriodId: '@WorkingPeriodId',
-		AssignmentId: '@AssignmentId'
+	var CampaignWorkingPeriod = $resource('../api/Outbound/Campaign/:CampaignId/WorkingPeriod/:WorkingPeriodId', {
+		CampaignId: '@CampaignId',
+		WorkingPeriodId: '@WorkingPeriodId'
+	}, {
+		update: { method: 'PUT' }
 	});
 
-
-	var expandWorkingPeriod = function (workingPeriod) {
-		var assignments = workingPeriod.WorkingPeroidAssignments;
-		if (!angular.isDefined(workingPeriod.ExpandedWorkingPeriodAssignments) || workingPeriod.ExpandedWorkingPeriodAssignments.length != 7) {
-			var expandedAssignments = [];
-			for (var i = 0; i < 7; i++) {
-				var assigned = assignments.filter(function(x) { return x.WeekDay == i; });
-				if (assigned.length == 0) {
-					expandedAssignments.push({ WeekDay: i, Checked: false });
-				} else {
-					expandedAssignments.push(angular.extend(assigned[0], { Checked: true }));
-				}
-			}
-			workingPeriod.ExpandedWorkingPeriodAssignments = expandedAssignments;
-		} else {
-			angular.forEach(workingPeriod.ExpandedWorkingPeriodAssignments, function(expandedAssignment) {
-				var assigned = assignments.filter(function (x) { return x.WeekDay == expandedAssignment.WeekDay; });
-				if (assigned.length == 0) {
-					expandedAssignment.Checked = false;
-					delete expandedAssignment.Id;
-				} else {
-					expandedAssignment.Checked = true;
-					expandedAssignment.Id = assigned[0].Id;
-				}
-			});
-		}		
+	var expandWorkingPeriod = function(workingPeriod) {
+		var assignments = angular.isDefined(workingPeriod.WorkingPeroidAssignments)? workingPeriod.WorkingPeroidAssignments : [];
+		var expandedAssignments = [];
+		for (var i = 0; i < 7; i++) {
+			var assigned = assignments.filter(function(x) { return x.WeekDay == i; });
+			expandedAssignments.push({ WeekDay: i, Checked: assigned.length > 0 });
+		}
+		workingPeriod.ExpandedWorkingPeriodAssignments = expandedAssignments;
 	};
 
 	self.campaigns  = [];
@@ -91,27 +74,42 @@ outboundService.service('OutboundService', ['$resource', function( $resource) {
 		self.campaigns.splice(self.campaigns.indexOf(campaign), 1);
 	}
 
+	self.addWorkingPeriod = function (campaign, workingPeriod) {
+		var newWorkingPeriod = new CampaignWorkingPeriod();
+		newWorkingPeriod.CampaignId = campaign.Id;
+		newWorkingPeriod.StartTime = $filter('date')(workingPeriod.StartTime, 'HH:mm');
+		newWorkingPeriod.EndTime = $filter('date')(workingPeriod.EndTime, 'HH:mm');
+		newWorkingPeriod.WorkingPeriod = { period: {
+			_minimum: $filter('date')(workingPeriod.StartTime, 'HH:mm:ss'),
+			_maximum: $filter('date')(workingPeriod.EndTime, 'HH:mm:ss')				
+		}};
+
+		console.log(newWorkingPeriod);
+		newWorkingPeriod.$save(function () {		
+			expandWorkingPeriod(newWorkingPeriod);
+			campaign.CampaignWorkingPeriods.push(newWorkingPeriod);
+		});				
+	};
+
+	self.deleteWorkingPeriod = function (campaign, workingPeriod) {
+		console.log({ CampaignId: campaign.Id, WorkingPeriodId: workingPeriod.Id });
+		CampaignWorkingPeriod.remove({ CampaignId: campaign.Id, WorkingPeriodId: workingPeriod.Id });
+		campaign.CampaignWorkingPeriods.splice(campaign.CampaignWorkingPeriods.indexOf(workingPeriod), 1);
+	}
+
 	self.addWorkingPeriodAssignment = function (campaign, workingPeriod, weekDay) {
-		var assignment = new CampaignWorkingPeriodAssignment(angular.extend(weekDay, {
+		CampaignWorkingPeriod.update({
 			CampaignId: campaign.Id,
-			WorkingPeriodId: workingPeriod.Id
-		}));
-		assignment.$save(function() {
-			weekDay.Id = assignment.Id;
-			weekDay.Checked = true;
-		});		
+			WeekDay: weekDay.WeekDay,
+			CampaignWorkingPeriods: [workingPeriod.Id]
+		});
 	};
 
 	self.deleteWorkingPeriodAssignment = function(campaign, workingPeriod, weekDay) {
-
-		CampaignWorkingPeriodAssignment.delete({
+		CampaignWorkingPeriod.update({
 			CampaignId: campaign.Id,
-			WorkingPeriodId: workingPeriod.Id,
-			AssignmentId: weekDay.Id
-		}, function() {
-			weekDay.Checked = false;
-			delete weekDay.Id;
-		});
-
+			WeekDay: weekDay.WeekDay,
+			CampaignWorkingPeriods: []
+		});		
 	};
 }]);

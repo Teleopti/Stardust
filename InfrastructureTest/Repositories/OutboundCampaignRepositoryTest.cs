@@ -60,7 +60,6 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 		{
 			loadedAggregateFromDatabase.Name.Should().Be.EqualTo("Sept Sales");
 			
-
 		}
 
 		protected override Repository<Campaign> TestRepository(IUnitOfWork unitOfWork)
@@ -73,8 +72,6 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 		{
 			var campaign = CreateAggregateWithCorrectBusinessUnit();
 
-			PersistAndRemoveFromUnitOfWork(campaign);
-
 			campaign.AddWorkingPeriod(new CampaignWorkingPeriod
 			{
 				TimePeriod = new TimePeriod(TimeSpan.FromHours(8), TimeSpan.FromHours(17)),
@@ -82,7 +79,6 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 
 			foreach (var workingPeriod in campaign.CampaignWorkingPeriods)
 			{
-				PersistAndRemoveFromUnitOfWork(workingPeriod);
 
 				var assignment = new CampaignWorkingPeriodAssignment
 				{
@@ -90,9 +86,8 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 				};
 
 				workingPeriod.AddAssignment(assignment);
-				PersistAndRemoveFromUnitOfWork(assignment);
 			}
-
+			PersistAndRemoveFromUnitOfWork(campaign);
 			return campaign;
 		}
 
@@ -102,7 +97,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			var campaign = CreateCampaignWithWorkingPeriodAndAssignment();
 			var repository = new OutboundCampaignRepository(UnitOfWork);
 
-			var loadedCampagin = repository.GetInFull(campaign.Id.GetValueOrDefault());
+			var loadedCampagin = repository.Get(campaign.Id.GetValueOrDefault());
 
 			loadedCampagin.CampaignWorkingPeriods.Count().Should().Be.EqualTo(1);
 			loadedCampagin.CampaignWorkingPeriods.First().TimePeriod.Should().Be.EqualTo(
@@ -118,19 +113,52 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 		}
 
 		[Test]
+		public void CanAddWorkingPeriodToCampaign()
+		{
+			var campaign = CreateCampaignWithWorkingPeriodAndAssignment();
+			var repository = new OutboundCampaignRepository(UnitOfWork);
+			var loadedCampagin = repository.Get(campaign.Id.GetValueOrDefault());
+
+			var workingPeriod = new CampaignWorkingPeriod
+			{
+				TimePeriod = new TimePeriod(TimeSpan.FromHours(8), TimeSpan.FromHours(17))
+			};
+			loadedCampagin.AddWorkingPeriod(workingPeriod);
+			PersistAndRemoveFromUnitOfWork(loadedCampagin);
+
+			var reloadedCampaign = repository.Get(campaign.Id.GetValueOrDefault());
+			reloadedCampaign.CampaignWorkingPeriods.Count().Should().Be.EqualTo(2);
+		}
+
+		[Test]
+		public void CanRemoveWorkingPeriodFromCampaign()
+		{
+			var campaign = CreateCampaignWithWorkingPeriodAndAssignment();
+			var repository = new OutboundCampaignRepository(UnitOfWork);
+			var loadedCampagin = repository.Get(campaign.Id.GetValueOrDefault());
+
+			var workingPeriod = loadedCampagin.CampaignWorkingPeriods.First();
+			loadedCampagin.RemoveWorkingPeriod(workingPeriod);
+			PersistAndRemoveFromUnitOfWork(loadedCampagin);
+
+			var reloadedCampaign = repository.Get(campaign.Id.GetValueOrDefault());
+			reloadedCampaign.CampaignWorkingPeriods.Count().Should().Be.EqualTo(0);
+		}
+
+		[Test]
 		public void CanRemoveWorkingPeriodAssignmentFromCampaign()
 		{
 			var campaign = CreateCampaignWithWorkingPeriodAndAssignment();
 
 			var repository = new OutboundCampaignRepository(UnitOfWork);
 
-			var loadedCampagin = repository.GetInFull(campaign.Id.GetValueOrDefault());
+			var loadedCampagin = repository.Get(campaign.Id.GetValueOrDefault());
 
 			var assignment = loadedCampagin.CampaignWorkingPeriods.First().CampaignWorkingPeriodAssignments.First();
 			loadedCampagin.CampaignWorkingPeriods.First().RemoveAssignment(assignment);
-			PersistAndRemoveFromUnitOfWork(assignment);
+			PersistAndRemoveFromUnitOfWork(loadedCampagin);
 
-			var reloadedCampaign = repository.GetInFull(campaign.Id.GetValueOrDefault());
+			var reloadedCampaign = repository.Get(campaign.Id.GetValueOrDefault());
 
 			reloadedCampaign.CampaignWorkingPeriods.First().CampaignWorkingPeriodAssignments.Count().Should()
 				.Be.EqualTo(0);
@@ -143,13 +171,13 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 
 			var repository = new OutboundCampaignRepository(UnitOfWork);
 
-			var loadedCampaign = repository.GetInFull(campaign.Id.GetValueOrDefault());
+			var loadedCampaign = repository.Get(campaign.Id.GetValueOrDefault());
 			var assignment = new CampaignWorkingPeriodAssignment {WeekdayIndex = DayOfWeek.Friday};
 			loadedCampaign.CampaignWorkingPeriods.First().AddAssignment(assignment);
 
 			PersistAndRemoveFromUnitOfWork(loadedCampaign);
 
-			var reloadedCampaign = repository.GetInFull(campaign.Id.GetValueOrDefault());
+			var reloadedCampaign = repository.Get(campaign.Id.GetValueOrDefault());
 
 			reloadedCampaign.Should().Be.EqualTo(loadedCampaign);
 
@@ -163,7 +191,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 		{
 			var campaign = CreateCampaignWithWorkingPeriodAndAssignment();
 			var repository = new OutboundCampaignRepository(UnitOfWork);
-			var loadedCampaign = repository.GetInFull(campaign.Id.GetValueOrDefault());
+			var loadedCampaign = repository.Get(campaign.Id.GetValueOrDefault());
 			var assignment = new CampaignWorkingPeriodAssignment { WeekdayIndex = DayOfWeek.Monday };
 			loadedCampaign.CampaignWorkingPeriods.First().AddAssignment(assignment);			
 		}

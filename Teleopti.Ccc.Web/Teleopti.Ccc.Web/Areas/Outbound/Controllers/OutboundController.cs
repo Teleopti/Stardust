@@ -80,5 +80,41 @@ namespace Teleopti.Ccc.Web.Areas.Outbound.Controllers
 			_outboundCampaignRepository.Remove(campaign);
 			return Ok();
 		}
+
+		[HttpPut, Route("api/Outbound/Campaign/{Id}/WorkingPeriod"), UnitOfWork]
+		public virtual IHttpActionResult UpdateCampaignWorkingPeriodAssignment(Guid Id, CampaignWorkingPeriodAssignmentForm form)
+		{
+			form.CampaignId = Id;
+			var campaign = _outboundCampaignPersister.Persist(form);
+			if (campaign == null)
+			{
+				return BadRequest();
+			}
+			return Ok();
+		}
+
+		[HttpDelete, Route("api/Outbound/Campaign/{Id}/WorkingPeriod/{CampaignWorkingPeriodId}"), UnitOfWork]
+		public virtual void Remove(Guid Id, Guid CampaignWorkingPeriodId)
+		{
+			var campaign = _outboundCampaignRepository.Get(Id);
+			var targets = campaign.CampaignWorkingPeriods.Where(x => CampaignWorkingPeriodId == x.Id).ToList();
+			foreach (var target in targets)
+			{
+				campaign.RemoveWorkingPeriod(target);
+			}			
+		}
+
+		[HttpPost, Route("api/Outbound/Campaign/{Id}/WorkingPeriod"), UnitOfWork]
+		public virtual IHttpActionResult UpdateCampaignWorkingPeriodAssignment(Guid Id, CampaignWorkingPeriodForm form)
+		{
+			form.CampaignId = Id;
+			var campaignWorkingPeriod = _outboundCampaignPersister.Persist(form);
+			if (campaignWorkingPeriod == null)
+			{
+				return BadRequest();
+			}
+			return Ok(_outboundCampaignViewModelMapper.Map(campaignWorkingPeriod));
+		}
+
 	}
 }

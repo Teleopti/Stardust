@@ -6,6 +6,5 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 {
 	public interface IOutboundCampaignRepository : IRepository<Campaign>
 	{
-		Campaign GetInFull(Guid id);
 	}
 }

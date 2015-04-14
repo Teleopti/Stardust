@@ -6,7 +6,7 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Outbound
 {
-	public class CampaignWorkingPeriod : AggregateEntity, IEquatable<CampaignWorkingPeriod>
+	public class CampaignWorkingPeriod : AggregateEntity
 	{
 		private TimePeriod _timePeriod;
 		private ISet<CampaignWorkingPeriodAssignment> _campaignWorkingPeriodAssignments;
@@ -52,15 +52,6 @@ namespace Teleopti.Ccc.Domain.Outbound
 			}
 		}
 
-		
-		public virtual bool Equals(CampaignWorkingPeriod other)
-		{
-			if (other.Id.HasValue && Id.HasValue)
-			{
-				return other.Id.Value == Id.Value;
-			}
-			return false;
-		}
 	}
 }
 

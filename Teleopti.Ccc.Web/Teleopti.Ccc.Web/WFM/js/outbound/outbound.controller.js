@@ -48,15 +48,17 @@ outbound.controller('OutboundListCtrl', [
 ]);
 
 outbound.controller('OutboundEditCtrl', [
-	'$scope', '$stateParams', '$state', 'OutboundService', 
-	function ($scope, $stateParams, $state, OutboundService) {			
+	'$scope', '$stateParams', '$state', '$filter', 'OutboundService', 
+	function ($scope, $stateParams, $state, $filter, OutboundService) {			
 		$scope.campaign = (angular.isDefined($stateParams.Id) && $stateParams.Id != "")?OutboundService.getCampaignById($stateParams.Id): null;
-		
-		angular.forEach($scope.campaign.Skills, function (skill) {			
-			if (skill.IsSelected) {
-				$scope.campaign.SelectedSkill = skill;
-			}
-		});
+		$scope.newWorkingPeriod = { StartTime: null, EndTime: null };
+
+		//angular.forEach($scope.campaign.Skills, function (skill) {			
+		//	if (skill.IsSelected) {
+		//		$scope.campaign.SelectedSkill = skill;
+		//	}
+		//});
+
 		
 		$scope.showCampaignDetail = angular.isDefined($scope.campaign) && ($scope.campaign != null);
 
@@ -70,14 +72,39 @@ outbound.controller('OutboundEditCtrl', [
 
 		$scope.navigateToConfiguration = function() {
 			$state.go('outbound.edit', { Id: $scope.campaign.Id });
-		};		
-		$scope.toggleWorkingPeriodAssignment = function(WorkingPeriod, WeekDay) {
+		};
+
+		var clearConflictWorkingPeriodAssignments = function (WorkingPeriod, WeekDay) {
+			angular.forEach($scope.campaign.CampaignWorkingPeriods, function (workingPeriod) {
+				workingPeriod.ExpandedWorkingPeriodAssignments[WeekDay.WeekDay].Checked =
+					workingPeriod == WorkingPeriod;
+			});
+		};
+
+		$scope.toggleWorkingPeriodAssignment = function (WorkingPeriod, WeekDay) {			
 			if (WeekDay.Checked) {
-				OutboundService.deleteWorkingPeriodAssignment($scope.campaign, WorkingPeriod, WeekDay);
+				clearConflictWorkingPeriodAssignments(WorkingPeriod, WeekDay);
+				OutboundService.addWorkingPeriodAssignment($scope.campaign, WorkingPeriod, WeekDay);				
 			} else {
-				OutboundService.addWorkingPeriodAssignment($scope.campaign, WorkingPeriod, WeekDay);
+				OutboundService.deleteWorkingPeriodAssignment($scope.campaign, WorkingPeriod, WeekDay);				
 			}
 		};
 
+		$scope.addWorkingPeriod = function () {
+			OutboundService.addWorkingPeriod($scope.campaign, angular.copy($scope.newWorkingPeriod) );
+		};
+
+		$scope.deleteWorkingPeriod = function(workingPeriod) {
+			OutboundService.deleteWorkingPeriod($scope.campaign, workingPeriod);
+		};
+
+		$scope.resetWorkingPeriodForm = function () {
+			$scope.newWorkingPeriod = { StartTime: null, EndTime: null };
+			//$scope.newWorkingPeriodForm.$setPristine();
+		};
+
+		$scope.toggleWorkingPeriodSelect = function(workingPeriod) {
+			workingPeriod.selected = ! workingPeriod.selected;
+		};
 	}
 ]);

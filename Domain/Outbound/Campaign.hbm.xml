@@ -65,6 +65,7 @@
 
 		<set name="CampaignWorkingPeriods"
 				 inverse="true"
+				 cascade="all-delete-orphan"
 				 >
 			<key column="OutboundCampaign"/>
 			<one-to-many class="CampaignWorkingPeriod"/>				
