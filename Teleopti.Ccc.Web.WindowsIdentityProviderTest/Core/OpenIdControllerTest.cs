@@ -1,5 +1,4 @@
 using System;
-using System.Net.Http;
 using System.Web;
 using System.Web.Mvc;
 using System.Web.Routing;
@@ -60,7 +59,7 @@ namespace Teleopti.Ccc.Web.WindowsIdentityProviderTest.Core
 			openIdProviderWapper.Stub(x => x.GetRequest()).Return(request);
 			httpContext.Stub(x => x.Request).Return(httpRequest);
 			currentHttpContext.Stub(x => x.Current()).Return(httpContext);
-			httpRequest.Stub(x => x.HttpMethod).Return(HttpMethod.Get.Method);
+			httpRequest.Stub(x => x.HttpMethod).Return("GET");
 			providerEndpointWrapper.Expect(x => x.PendingRequest).PropertyBehavior();
 
 			var target = new OpenIdController(openIdProviderWapper, null, currentHttpContext, providerEndpointWrapper);
@@ -84,7 +83,7 @@ namespace Teleopti.Ccc.Web.WindowsIdentityProviderTest.Core
 			openIdProviderWapper.Stub(x => x.GetRequest()).Return(request);
 			httpContext.Stub(x => x.Request).Return(httpRequest);
 			currentHttpContext.Stub(x => x.Current()).Return(httpContext);
-			httpRequest.Stub(x => x.HttpMethod).Return(HttpMethod.Head.Method);
+			httpRequest.Stub(x => x.HttpMethod).Return("HEAD");
 			providerEndpointWrapper.Expect(x => x.PendingRequest).PropertyBehavior();
 
 			var target = new OpenIdController(openIdProviderWapper, null, currentHttpContext, providerEndpointWrapper);
@@ -108,7 +107,7 @@ namespace Teleopti.Ccc.Web.WindowsIdentityProviderTest.Core
 
 			httpContext.Stub(x => x.Request).Return(httpRequest);
 			currentHttpContext.Stub(x => x.Current()).Return(httpContext);
-			httpRequest.Stub(x => x.HttpMethod).Return(HttpMethod.Get.Method);
+			httpRequest.Stub(x => x.HttpMethod).Return("GET");
 			request.Stub(x => x.IsResponseReady).Return(true);
 			openIdProviderWapper.Stub(x => x.GetRequest()).Return(request);
 			openIdProviderWapper.Stub(x => x.PrepareResponse(request)).Return(outgoingWebResponse);

@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Configuration;
 using System.Linq;
-using System.Net.Http;
 using System.Reflection;
 using System.Web.Mvc;
 using DotNetOpenAuth.Messaging;
@@ -69,7 +68,7 @@ namespace Teleopti.Ccc.Web.WindowsIdentityProvider.Controllers
 
 		private bool isHeadRequest()
 		{
-			return _currentHttpContext.Current().Request.HttpMethod.Equals(HttpMethod.Head.Method, StringComparison.InvariantCultureIgnoreCase);
+			return _currentHttpContext.Current().Request.HttpMethod.Equals("HEAD", StringComparison.InvariantCultureIgnoreCase);
 		}
 
 		public ViewResult SignIn()
