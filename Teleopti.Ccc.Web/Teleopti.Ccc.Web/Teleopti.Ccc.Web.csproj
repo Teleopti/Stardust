@@ -249,11 +249,20 @@
     <Compile Include="..\..\Teleopti.Ccc.Web.Broker\ActionThrottle.cs">
       <Link>Core\MessageBroker\ActionThrottle.cs</Link>
     </Compile>
+    <Compile Include="..\..\Teleopti.Ccc.Web.Broker\BackportableHub.cs">
+      <Link>Core\MessageBroker\BackportableHub.cs</Link>
+    </Compile>
     <Compile Include="..\..\Teleopti.Ccc.Web.Broker\IActionScheduler.cs">
       <Link>Core\MessageBroker\IActionScheduler.cs</Link>
     </Compile>
     <Compile Include="..\..\Teleopti.Ccc.Web.Broker\IBeforeSubscribe.cs">
       <Link>Core\MessageBroker\IBeforeSubscribe.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Teleopti.Ccc.Web.Broker\MessageBrokerController.cs">
+      <Link>Core\MessageBroker\MessageBrokerController.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Teleopti.Ccc.Web.Broker\MessageBrokerServer.cs">
+      <Link>Core\MessageBroker\MessageBrokerServer.cs</Link>
     </Compile>
     <Compile Include="..\..\Teleopti.Ccc.Web.Broker\SubscriptionFiller.cs">
       <Link>Core\MessageBroker\SubscriptionFiller.cs</Link>
@@ -327,9 +336,6 @@
     </Compile>
     <Compile Include="..\..\Teleopti.Ccc.Web.Broker\SignalRConfiguration.cs">
       <Link>Core\MessageBroker\SignalRConfiguration.cs</Link>
-    </Compile>
-    <Compile Include="..\..\Teleopti.Ccc.Web.Broker\TestableHub.cs">
-      <Link>Core\MessageBroker\TestableHub.cs</Link>
     </Compile>
     <Compile Include="..\..\Teleopti.Ccc.Web.Broker\TimeoutSettings.cs">
       <Link>Core\MessageBroker\TimeoutSettings.cs</Link>

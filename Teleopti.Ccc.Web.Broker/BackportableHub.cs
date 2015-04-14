@@ -3,6 +3,11 @@ using Microsoft.AspNet.SignalR.Hubs;
 
 namespace Teleopti.Ccc.Web.Broker
 {
+	public class BackportableHub : TestableHub
+	{
+		
+	}
+
 	//from https://github.com/SignalR/SignalR/pull/1127
 	// this is just so that Clients is an interface that can be stubbed out
 	// this will make this class obsolete: 
