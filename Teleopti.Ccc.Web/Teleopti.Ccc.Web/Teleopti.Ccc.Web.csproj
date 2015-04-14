@@ -374,6 +374,9 @@
     <Compile Include="..\..\Teleopti.Ccc.Web.Broker\ActionThrottle.cs">
       <Link>Core\MessageBroker\ActionThrottle.cs</Link>
     </Compile>
+    <Compile Include="..\..\Teleopti.Ccc.Web.Broker\BackportableHub.cs">
+      <Link>Core\MessageBroker\BackportableHub.cs</Link>
+    </Compile>
     <Compile Include="..\..\Teleopti.Ccc.Web.Broker\IActionScheduler.cs">
       <Link>Core\MessageBroker\IActionScheduler.cs</Link>
     </Compile>
@@ -388,9 +391,6 @@
     </Compile>
     <Compile Include="..\..\Teleopti.Ccc.Web.Broker\SubscriptionPassThrough.cs">
       <Link>Core\MessageBroker\SubscriptionPassThrough.cs</Link>
-    </Compile>
-    <Compile Include="..\..\Teleopti.Ccc.Web.Broker\TestableHub.cs">
-      <Link>Core\MessageBroker\TestableHub.cs</Link>
     </Compile>
     <Compile Include="Areas\Anywhere\Controllers\AdherenceController.cs" />
     <Compile Include="Areas\Anywhere\Core\GetSiteAdherence.cs" />
