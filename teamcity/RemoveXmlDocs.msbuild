@@ -7,7 +7,7 @@
 		<NugetPackageFolder>$(WorkingDirectory)\packages</NugetPackageFolder> 
 	</PropertyGroup>
 	<ItemGroup>
-		<AllExesAndDlls Include="$(WorkingDirectory)\**\*.dll;$(WorkingDirectory)\**\.*.exe" />
+		<AllExesAndDlls Include="$(WorkingDirectory)\**\*.dll;$(WorkingDirectory)\**\*.exe" />
 		<AllXmlFiles Include="$(WorkingDirectory)\**\*.xml" Exclude="$(NugetPackageFolder)\**\*.*" />
 	</ItemGroup>
 	
