@@ -23,6 +23,7 @@ namespace Teleopti.Ccc.Web.Areas.Outbound.core.Campaign.DataProvider
 			_skillRepository = skillRepository;
 			_outboundCampaignMapper = outboundCampaignMapper;
 			_outboundCampaignViewModelMapper = outboundCampaignViewModelMapper;
+			
 		}
 
 		public CampaignViewModel Persist(string name)
@@ -36,12 +37,15 @@ namespace Teleopti.Ccc.Web.Areas.Outbound.core.Campaign.DataProvider
 
 		public Campaign Persist(CampaignViewModel campaignViewModel)
 		{
+			var skills = _skillRepository.LoadAll();
 			Campaign campaign = null;
 
 			if (campaignViewModel.Id.HasValue)
 			{
 				campaign = _outboundCampaignMapper.Map(campaignViewModel);
 			}
+
+			if (campaign != null) campaign.Skill = skills.First(x => x.Id.Equals(campaignViewModel.Skills.First(t => t.IsSelected).Id));
 
 			return campaign;
 		}
