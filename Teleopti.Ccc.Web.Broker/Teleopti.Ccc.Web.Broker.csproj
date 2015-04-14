@@ -165,7 +165,7 @@
     <Compile Include="SignalRConfiguration.cs" />
     <Compile Include="Startup.cs" />
     <Compile Include="SubscriptionPassThrough.cs" />
-    <Compile Include="TestableHub.cs" />
+    <Compile Include="BackportableHub.cs" />
     <Compile Include="TimeoutSettings.cs" />
   </ItemGroup>
   <ItemGroup>
