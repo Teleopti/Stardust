@@ -6,12 +6,14 @@ using Microsoft.AspNet.SignalR;
 using Microsoft.AspNet.SignalR.Hubs;
 using NUnit.Framework;
 using Rhino.Mocks;
-using SharpTestsEx;
+using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Web.Broker;
 using Teleopti.Interfaces.MessageBroker;
 
 namespace Teleopti.Ccc.WebTest.Core.MessageBroker
 {
+	[TestFixture]
+	[Ignore]
 	public class MessageBrokerControllerTest
 	{
 		[Test]

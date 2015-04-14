@@ -10,6 +10,7 @@ using log4net;
 namespace Teleopti.Ccc.WebTest.Core.MessageBroker
 {
 	[TestFixture]
+	[Ignore]
 	public class MessageBrokerHubTest
 	{
 		[Test]
