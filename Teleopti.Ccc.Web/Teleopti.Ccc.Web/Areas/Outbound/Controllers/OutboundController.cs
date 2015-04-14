@@ -53,14 +53,14 @@ namespace Teleopti.Ccc.Web.Areas.Outbound.Controllers
 		}
 
 		[HttpGet, Route("api/Outbound/Campaign/{Id}"), UnitOfWork]
-		public virtual CampaignViewModel Get(Guid id)
+		public virtual CampaignViewModel Get(Guid Id)
 		{
-			var campaign = _outboundCampaignRepository.Get(id);
+			var campaign = _outboundCampaignRepository.Get(Id);
 			return _outboundCampaignViewModelMapper.Map(campaign);			
 		}
 
-		[HttpPut, Route("api/Outbound/Campaign"), UnitOfWork]
-		public virtual IHttpActionResult UpdateCampaign(CampaignViewModel campaignViewModel)
+		[HttpPut, Route("api/Outbound/Campaign/{Id}"), UnitOfWork]
+		public virtual IHttpActionResult UpdateCampaign(Guid Id, CampaignViewModel campaignViewModel)
 		{
 			var campaign = _outboundCampaignPersister.Persist(campaignViewModel);
 			if (campaign == null)

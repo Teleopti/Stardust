@@ -5,7 +5,7 @@ var outboundService = angular.module('outboundService', ['ngResource']);
 outboundService.service('OutboundService', ['$resource', function( $resource) {
 
 	var self = this;
-	var Campaign = $resource('../api/Outbound/Campaign', { }, {
+	var Campaign = $resource('../api/Outbound/Campaign/:Id', { Id: '@Id' }, {
 		update: { method: 'PUT' }
 	});
 
@@ -33,7 +33,7 @@ outboundService.service('OutboundService', ['$resource', function( $resource) {
 	};
 
 	self.getCampaignById = function( Id) {	
-		var matched = self.campaigns.filter(function(campaign) { return campaign.Id === Id });
+		var matched = self.campaigns.filter(function(campaign) { return campaign.Id === Id; });
 		if (matched.length === 0) {
 			var fetched = Campaign.get({ Id: Id });		
 			self.campaigns.push(fetched);
