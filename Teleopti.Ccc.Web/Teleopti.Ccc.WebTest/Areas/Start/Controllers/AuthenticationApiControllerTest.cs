@@ -89,7 +89,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Start.Controllers
 			var log = MockRepository.GenerateMock<ILogLogonAttempt>();
 			var target = new AuthenticationApiController(MockRepository.GenerateMock<IBusinessUnitsViewModelFactory>(), identityLogon, log, MockRepository.GenerateMock<IWebLogOn>());
 			identityLogon.Stub(x => x.LogonIdentityUser()).Return(result);
-			log.Expect(x => x.SaveAuthenticateResult(string.Empty, result));
+			log.Expect(x => x.SaveAuthenticateResult(string.Empty, result.PersonId(), result.Successful));
 			target.Logon(Guid.NewGuid());
 
 			identityLogon.AssertWasCalled(x => x.LogonIdentityUser());

@@ -17,12 +17,11 @@ namespace Teleopti.Ccc.WebTest.Areas.Tenant.Core
 			var loginAttemptModelFactory = MockRepository.GenerateMock<ILoginAttemptModelFactory>();
 			var persister = MockRepository.GenerateMock<IPersistLogonAttempt>();
 			const string userName = "username";
-			var authResult = new AuthenticateResult{Person=null};
 			var loginAttemptModel = new LoginAttemptModel();
-			loginAttemptModelFactory.Expect(x => x.Create(userName, null, authResult.Successful)).Return(loginAttemptModel);
+			loginAttemptModelFactory.Expect(x => x.Create(userName, null, false)).Return(loginAttemptModel);
 
 			var target = new LogTenancyLogonAttempt(loginAttemptModelFactory, persister);
-			target.SaveAuthenticateResult(userName, authResult);
+			target.SaveAuthenticateResult(userName, null, false);
 
 			persister.AssertWasCalled(x=> x.SaveLoginAttempt(loginAttemptModel));
 		}
@@ -33,14 +32,12 @@ namespace Teleopti.Ccc.WebTest.Areas.Tenant.Core
 			var loginAttemptModelFactory = MockRepository.GenerateMock<ILoginAttemptModelFactory>();
 			var persister = MockRepository.GenerateMock<IPersistLogonAttempt>();
 			const string userName = "username";
-			var person = new Person();
-			person.SetId(Guid.NewGuid());
-			var authResult = new AuthenticateResult { Person = person };
+			var personId = Guid.NewGuid();
 			var loginAttemptModel = new LoginAttemptModel();
-			loginAttemptModelFactory.Expect(x => x.Create(userName, person.Id.Value, authResult.Successful)).Return(loginAttemptModel);
+			loginAttemptModelFactory.Expect(x => x.Create(userName, personId, true)).Return(loginAttemptModel);
 
 			var target = new LogTenancyLogonAttempt(loginAttemptModelFactory, persister);
-			target.SaveAuthenticateResult(userName, authResult);
+			target.SaveAuthenticateResult(userName, personId, true);
 
 			persister.AssertWasCalled(x => x.SaveLoginAttempt(loginAttemptModel));
 		}

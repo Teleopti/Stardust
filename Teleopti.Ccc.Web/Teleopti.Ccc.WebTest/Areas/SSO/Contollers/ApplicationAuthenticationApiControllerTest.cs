@@ -9,7 +9,6 @@ using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Security;
 using Teleopti.Ccc.Domain.Security.Authentication;
 using Teleopti.Ccc.Infrastructure.Foundation;
-using Teleopti.Ccc.Infrastructure.MultiTenancy;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Server;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.UserTexts;
@@ -243,15 +242,15 @@ namespace Teleopti.Ccc.WebTest.Areas.SSO.Contollers
 			(result.Data as ModelStateResult).Errors.Single().Should().Be(Resources.InvalidUserNameOrPassword);
 		}
 
-		private ILogLogonAttempt shouldNotBeLogged()
+		private static ILogLogonAttempt shouldNotBeLogged()
 		{
 			return null;
 		}
 
-		private ILogLogonAttempt shouldBeLogged(string userName, AuthenticateResult result)
+		private static ILogLogonAttempt shouldBeLogged(string userName, AuthenticateResult result)
 		{
 			var mock = MockRepository.GenerateMock<ILogLogonAttempt>();
-			mock.Expect(x => x.SaveAuthenticateResult(userName, result));
+			mock.Expect(x => x.SaveAuthenticateResult(userName, result.PersonId(), result.Successful));
 			return mock;
 		}
 	}

@@ -30,10 +30,9 @@ namespace Teleopti.Ccc.WebTest.Areas.Start.Controllers
 		[Test]
 		public void ShouldSaveResult()
 		{
-			var expectedResult = new AuthenticateResult();
+			var authResult = new AuthenticateResult();
 			const string userName = "sdfsdfsd";
 			var logLogResult = MockRepository.GenerateMock<ILogLogonAttempt>();
-			logLogResult.Expect(x => x.SaveAuthenticateResult(userName, expectedResult));
 
 			var target = new ApplicationAuthenticationModel(null, logLogResult)
 			{
@@ -41,7 +40,8 @@ namespace Teleopti.Ccc.WebTest.Areas.Start.Controllers
 				UserName = userName
 			};
 			
-			target.SaveAuthenticateResult(expectedResult);
+			target.SaveAuthenticateResult(authResult);
+			logLogResult.AssertWasCalled(x => x.SaveAuthenticateResult(userName, authResult.PersonId(), authResult.Successful));
 		}
 	}
 }

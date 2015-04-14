@@ -23,7 +23,7 @@ namespace Teleopti.Ccc.Web.Areas.SSO.Models
 
 		public void SaveAuthenticateResult(AuthenticateResult result)
 		{
-			_logLogonAttempt.SaveAuthenticateResult(UserName, result);
+			_logLogonAttempt.SaveAuthenticateResult(UserName, result.PersonId(), result.Successful);
 		}
 	}
 }

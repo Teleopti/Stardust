@@ -1,7 +1,9 @@
-﻿namespace Teleopti.Ccc.Web.Areas.Start.Core.Authentication.Services
+﻿using System;
+
+namespace Teleopti.Ccc.Web.Areas.Start.Core.Authentication.Services
 {
 	public interface ILogLogonAttempt
 	{
-		void SaveAuthenticateResult(string userName, AuthenticateResult result);
+		void SaveAuthenticateResult(string userName, Guid? personId, bool successful);
 	}
 }

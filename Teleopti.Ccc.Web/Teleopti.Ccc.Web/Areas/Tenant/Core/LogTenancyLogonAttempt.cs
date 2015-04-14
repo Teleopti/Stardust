@@ -1,4 +1,5 @@
-﻿using Teleopti.Ccc.Infrastructure.MultiTenancy.Server;
+﻿using System;
+using Teleopti.Ccc.Infrastructure.MultiTenancy.Server;
 using Teleopti.Ccc.Web.Areas.Start.Core.Authentication.Services;
 
 namespace Teleopti.Ccc.Web.Areas.Tenant.Core
@@ -14,12 +15,9 @@ namespace Teleopti.Ccc.Web.Areas.Tenant.Core
 			_persister = persister;
 		}
 
-		public void SaveAuthenticateResult(string userName, AuthenticateResult result)
+		public void SaveAuthenticateResult(string userName, Guid? personId, bool successful)
 		{
-			var personId = result.Person == null ? null : result.Person.Id;
-			var model = _loginAttemptModelFactory.Create(userName, personId, result.Successful);
-
-			_persister.SaveLoginAttempt(model);
+			_persister.SaveLoginAttempt(_loginAttemptModelFactory.Create(userName, personId, successful));
 		}
 	}
 }

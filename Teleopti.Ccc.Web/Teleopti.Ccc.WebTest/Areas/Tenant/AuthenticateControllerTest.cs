@@ -101,8 +101,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Tenant
 
 			target.ApplicationLogon((new ApplicationLogonModel { UserName = userName, Password = password }));
 
-			//ignore AuthenticateResult arg due to hack for now
-			logger.AssertWasCalled(x => x.SaveAuthenticateResult(Arg<string>.Is.Equal(userName), Arg<AuthenticateResult>.Is.Anything));
+			logger.AssertWasCalled(x => x.SaveAuthenticateResult(userName, serviceResult.PersonId, serviceResult.Success));
 		}
 
 		[Test]
@@ -117,8 +116,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Tenant
 
 			target.IdentityLogon(new IdentityLogonModel { Identity = identity });
 
-			//TODO: tenant - ignore AuthenticateResult arg due to hack for now
-			logger.AssertWasCalled(x => x.SaveAuthenticateResult(Arg<string>.Is.Equal(identity), Arg<AuthenticateResult>.Is.Anything));
+			logger.AssertWasCalled(x => x.SaveAuthenticateResult(identity, serviceResult.PersonId, serviceResult.Success));
 		}
 	}
 }

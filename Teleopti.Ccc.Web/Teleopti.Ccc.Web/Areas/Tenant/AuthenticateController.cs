@@ -1,5 +1,4 @@
 ﻿using System.Web.Mvc;
-using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Server.NHibernate;
 using Teleopti.Ccc.Web.Areas.Start.Core.Authentication.Services;
 using Teleopti.Ccc.Web.Areas.Tenant.Core;
@@ -28,8 +27,7 @@ namespace Teleopti.Ccc.Web.Areas.Tenant
 		public virtual JsonResult ApplicationLogon(ApplicationLogonModel applicationLogonModel)
 		{
 			var res = _applicationAuthentication.Logon(applicationLogonModel.UserName, applicationLogonModel.Password);
-			var authResult = hackForNow_whenRemovingOldCodeWeDontNeedAuthenticateResultHere_ButWeCanChangeTheInterfaceToAcceptPrimitives(res);
-			_logLogonAttempt.SaveAuthenticateResult(applicationLogonModel.UserName, authResult);
+			_logLogonAttempt.SaveAuthenticateResult(applicationLogonModel.UserName, res.PersonId, res.Success);
 			return Json(res);
 		}
 
@@ -38,17 +36,8 @@ namespace Teleopti.Ccc.Web.Areas.Tenant
 		public virtual JsonResult IdentityLogon(IdentityLogonModel identityLogonModel)
 		{
 			var res = _identityAuthentication.Logon(identityLogonModel.Identity);
-			var authResult = hackForNow_whenRemovingOldCodeWeDontNeedAuthenticateResultHere_ButWeCanChangeTheInterfaceToAcceptPrimitives(res);
-			_logLogonAttempt.SaveAuthenticateResult(identityLogonModel.Identity, authResult);
+			_logLogonAttempt.SaveAuthenticateResult(identityLogonModel.Identity, res.PersonId, res.Success);
 			return Json(res);
-		}
-
-		//TODO: tenant - this should be removed
-		private static AuthenticateResult hackForNow_whenRemovingOldCodeWeDontNeedAuthenticateResultHere_ButWeCanChangeTheInterfaceToAcceptPrimitives(ApplicationAuthenticationResult res)
-		{
-			var tempPerson = new Person();
-			tempPerson.SetId(res.PersonId);
-			return new AuthenticateResult {Person = tempPerson, Successful = res.Success};
 		}
 	}
 }
