@@ -45,7 +45,6 @@ namespace Teleopti.Ccc.Infrastructure.Foundation
 				IDataSource dataSource;
 				if (dataSourcesFactory.TryCreate(element, out dataSource))
 				{
-					dataSource.AuthenticationTypeOption = AuthenticationTypeOption.Application | AuthenticationTypeOption.Windows;
 					dataSources.Add(dataSource);
 				}
 			}

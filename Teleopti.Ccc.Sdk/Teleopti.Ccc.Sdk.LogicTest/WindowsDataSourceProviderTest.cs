@@ -45,7 +45,6 @@ namespace Teleopti.Ccc.Sdk.LogicTest
 			unitOfWorkFactory.Stub(x => x.CreateAndOpenUnitOfWork()).Return(unitOfWork);
 			dataSource.Stub(x => x.Application).Return(unitOfWorkFactory);
 			personRepository.Stub(x => x.TryFindIdentityAuthenticatedPerson(@"toptinet\robink", out person)).OutRef(foundPerson).Return(true);
-			dataSource.Stub(x => x.AuthenticationTypeOption).Return(AuthenticationTypeOption.Windows);
 			unitOfWork.Stub(x => x.Dispose());
 
 			var dataSources = target.DataSourceList();
@@ -63,7 +62,6 @@ namespace Teleopti.Ccc.Sdk.LogicTest
 		{
 			var dataSource = MockRepository.GenerateStrictMock<IDataSource>();
 			availableDataSourcesProvider.Stub(x => x.AvailableDataSources()).Return(new List<IDataSource> { dataSource });
-			dataSource.Stub(x => x.AuthenticationTypeOption).Return(AuthenticationTypeOption.Application);
 			target.DataSourceList().Should().Be.Empty();
 		}
 	}

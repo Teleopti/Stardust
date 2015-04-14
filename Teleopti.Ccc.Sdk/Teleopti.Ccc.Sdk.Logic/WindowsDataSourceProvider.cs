@@ -24,9 +24,6 @@ namespace Teleopti.Ccc.Sdk.Logic
 			var availableDataSources = _availableDataSourcesProvider.AvailableDataSources();
 			foreach (IDataSource availableDataSource in availableDataSources)
 			{
-				if ((availableDataSource.AuthenticationTypeOption & AuthenticationTypeOption.Windows) !=
-					AuthenticationTypeOption.Windows) continue;
-
 				bool availableForUser;
 				IPerson person;
 				var domainName = _windowsUserProvider.DomainName;

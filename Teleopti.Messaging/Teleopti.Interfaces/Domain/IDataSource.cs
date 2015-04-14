@@ -10,6 +10,5 @@ namespace Teleopti.Interfaces.Domain
 		IReadModelUnitOfWorkFactory ReadModel { get; }
     	string DataSourceName { get; }
         void ResetStatistic();
-		AuthenticationTypeOption AuthenticationTypeOption { get; set; }
     }
 }

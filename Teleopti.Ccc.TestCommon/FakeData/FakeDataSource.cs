@@ -15,8 +15,6 @@ namespace Teleopti.Ccc.TestCommon.FakeData
 		{
 			throw new NotImplementedException();
 		}
-		public string OriginalFileName { get; set; }
-		public AuthenticationTypeOption AuthenticationTypeOption { get; set; }
 
 		public void Dispose()
 		{
