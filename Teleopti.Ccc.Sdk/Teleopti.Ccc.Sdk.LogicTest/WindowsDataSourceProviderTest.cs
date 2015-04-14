@@ -2,7 +2,6 @@
 using System.Linq;
 using NUnit.Framework;
 using Rhino.Mocks;
-using SharpTestsEx;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Security.Authentication;
 using Teleopti.Ccc.Sdk.Logic;
@@ -54,15 +53,6 @@ namespace Teleopti.Ccc.Sdk.LogicTest
 			Assert.AreEqual(AuthenticationTypeOption.Windows, container.AuthenticationTypeOption);
 			Assert.AreEqual(repositoryFactory, container.RepositoryFactory);
 			Assert.AreEqual(foundPerson, container.User);
-
-		}
-
-		[Test]
-		public void ShouldOnlyReturnDataSourceGivenWindowsAuthenticationIsPossible()
-		{
-			var dataSource = MockRepository.GenerateStrictMock<IDataSource>();
-			availableDataSourcesProvider.Stub(x => x.AvailableDataSources()).Return(new List<IDataSource> { dataSource });
-			target.DataSourceList().Should().Be.Empty();
 		}
 	}
 }
