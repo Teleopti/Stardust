@@ -1,8 +1,8 @@
 ﻿'use strict';
 
 angular.module('wfm.seatPlan')
-	.controller('SeatPlanCtrl', ['seatPlanService',
-	function (seatPlanService) {
+	.controller('SeatPlanCtrl', ['seatPlanService','growl','$scope',
+	function (seatPlanService, growl,$scope) {
 
 		var vm = this;
 
@@ -51,10 +51,19 @@ angular.module('wfm.seatPlan')
 				Locations: selectedLocations
 			};
 
-			seatPlanService.addSeatPlan(addSeatPlanCommand).$promise.then(function (result) {
-				//Robtodo:notice on successful submit
-				//displaySuccessNotification("Seat Plan Saved");
-			});
+			if (selectedTeams.length == 0 || selectedLocations.length == 0) {
+
+				onSelectedTeamsLocationsEmpty("teams or locations are unselected");
+
+			} else {
+
+				seatPlanService.addSeatPlan(addSeatPlanCommand).$promise.then(function(result) {
+					//Robtodo:notice on successful submit
+					//displaySuccessNotification("Seat Plan Saved");
+					onSuccessAddSeatPlan("Seat plan added successfully");
+				});
+
+			}
 		};
 
 		vm.selectTeam = function (team) {
@@ -88,6 +97,20 @@ angular.module('wfm.seatPlan')
 				}
 			}
 
+		};
+
+		function onSuccessAddSeatPlan(message) {
+			growl.success("<i class='mdi mdi-thumb-up'></i> "+message+".", {
+				ttl: 5000,
+				disableCountDown: true
+			});
+		};
+
+		function onSelectedTeamsLocationsEmpty(message) {
+			growl.error("<i class='mdi  mdi-alert-octagon'></i> " + message + ".", {
+				ttl: 5000,
+				disableCountDown: true
+			});
 		};
 
 	}]
