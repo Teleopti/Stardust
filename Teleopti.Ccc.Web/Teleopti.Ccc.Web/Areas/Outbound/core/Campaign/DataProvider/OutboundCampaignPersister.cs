@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using NHibernate;
 using Teleopti.Ccc.Domain.Outbound;
@@ -28,24 +29,6 @@ namespace Teleopti.Ccc.Web.Areas.Outbound.core.Campaign.DataProvider
 			_outboundCampaignMapper = outboundCampaignMapper;
 			_outboundCampaignViewModelMapper = outboundCampaignViewModelMapper;
 			
-		}
-
-		public Campaign Persist(CampaignForm form)
-		{
-			if (form.Id.HasValue)
-			{
-				var campaign = _outboundCampaignRepository.Get(form.Id.Value);
-				if (campaign == null) return null;
-				campaign.Name = form.Name;
-				return campaign;
-			}
-			else
-			{
-				var skills = _skillRepository.LoadAll();
-				var campaign = new Campaign(form.Name, skills.FirstOrDefault());
-				_outboundCampaignRepository.Add(campaign);
-				return campaign;
-			}			
 		}
 
 		public CampaignViewModel Persist(string name)
