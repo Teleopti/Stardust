@@ -26,11 +26,7 @@ namespace Teleopti.Ccc.Win.Sikuli
 
 		private static TestDuration _timer;
 
-		public static bool InteractiveMode
-		{
-			get { return StateHolderReader.Instance.StateReader.SessionScopeData.TestMode; }
-			private set { StateHolderReader.Instance.StateReader.SessionScopeData.TestMode = value; }
-		}
+		public static bool InteractiveMode { get; private set; }
 
 		public static void SetInteractiveMode(bool mode)
 		{

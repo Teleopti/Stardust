@@ -1,14 +1,10 @@
 using System;
-using System.ComponentModel;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.Infrastructure.Foundation
 {
-    /// <summary>
-    /// Data for logged on User
-    /// </summary>
     public class SessionData : ISessionData
     {
         private TimeZoneInfo _timeZone;
@@ -29,14 +25,6 @@ namespace Teleopti.Ccc.Infrastructure.Foundation
         }
 
         public bool MickeMode { get; set; }
-
-		#region Sikuli
-
-		public bool TestMode { get; set; }
-
-		public string SikuliValidator { get; set; }
-
-		#endregion
 
 		public object Clip { get; set; }
 
