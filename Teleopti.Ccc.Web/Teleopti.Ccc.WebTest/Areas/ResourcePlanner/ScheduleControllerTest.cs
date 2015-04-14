@@ -33,6 +33,7 @@ namespace Teleopti.Ccc.WebTest.Areas.ResourcePlanner
 				personRepository, MockRepository.GenerateMock<IScheduleRepository>(),
 				MockRepository.GenerateMock<IDayOffTemplateRepository>(),
 				MockRepository.GenerateMock<IPersonAbsenceAccountRepository>(),
+				MockRepository.GenerateMock<IActivityRepository>(),
 				MockRepository.GenerateMock<IPeopleAndSkillLoaderDecider>(),
 				new FakeCurrentTeleoptiPrincipal(new TeleoptiPrincipal(new TeleoptiIdentity("", null, null, null),
 					PersonFactory.CreatePerson(new Name("Anna", "Andersson"), TimeZoneInfo.Utc))),

@@ -31,6 +31,7 @@ namespace Teleopti.Ccc.Web.Areas.ResourcePlanner
 		private readonly IScheduleRepository _scheduleRepository;
 		private readonly IDayOffTemplateRepository _dayOffTemplateRepository;
 		private readonly IPersonAbsenceAccountRepository _personAbsenceAccountRepository;
+		private readonly IActivityRepository _activityRepository;
 		private readonly IPeopleAndSkillLoaderDecider _decider;
 		private readonly ICurrentTeleoptiPrincipal _principal;
 		private readonly ICurrentUnitOfWorkFactory _currentUnitOfWorkFactory;
@@ -41,7 +42,7 @@ namespace Teleopti.Ccc.Web.Areas.ResourcePlanner
 		private readonly Func<IGroupPagePerDateHolder> _groupPagePerDateHolder;
 		private readonly Func<IScheduleTagSetter> _scheduleTagSetter;
 
-		public ScheduleController(IScenarioRepository scenarioRepository, ISkillDayLoadHelper skillDayLoadHelper, ISkillRepository skillRepository, IPersonRepository personRepository, IScheduleRepository scheduleRepository, IDayOffTemplateRepository dayOffTemplateRepository, IPersonAbsenceAccountRepository personAbsenceAccountRepository, IPeopleAndSkillLoaderDecider decider, ICurrentTeleoptiPrincipal principal, ICurrentUnitOfWorkFactory currentUnitOfWorkFactory, Func<IFixedStaffSchedulingService> fixedStaffSchedulingService, Func<IScheduleCommand> scheduleCommand, Func<ISchedulerStateHolder> schedulerStateHolder, IRequiredScheduleHelper requiredScheduleHelper, Func<IGroupPagePerDateHolder> groupPagePerDateHolder, Func<IScheduleTagSetter> scheduleTagSetter)
+		public ScheduleController(IScenarioRepository scenarioRepository, ISkillDayLoadHelper skillDayLoadHelper, ISkillRepository skillRepository, IPersonRepository personRepository, IScheduleRepository scheduleRepository, IDayOffTemplateRepository dayOffTemplateRepository, IPersonAbsenceAccountRepository personAbsenceAccountRepository, IActivityRepository activityRepository, IPeopleAndSkillLoaderDecider decider, ICurrentTeleoptiPrincipal principal, ICurrentUnitOfWorkFactory currentUnitOfWorkFactory, Func<IFixedStaffSchedulingService> fixedStaffSchedulingService, Func<IScheduleCommand> scheduleCommand, Func<ISchedulerStateHolder> schedulerStateHolder, IRequiredScheduleHelper requiredScheduleHelper, Func<IGroupPagePerDateHolder> groupPagePerDateHolder, Func<IScheduleTagSetter> scheduleTagSetter)
 		{
 			_scenarioRepository = scenarioRepository;
 			_skillDayLoadHelper = skillDayLoadHelper;
@@ -50,6 +51,7 @@ namespace Teleopti.Ccc.Web.Areas.ResourcePlanner
 			_scheduleRepository = scheduleRepository;
 			_dayOffTemplateRepository = dayOffTemplateRepository;
 			_personAbsenceAccountRepository = personAbsenceAccountRepository;
+			_activityRepository = activityRepository;
 			_decider = decider;
 			_principal = principal;
 			_currentUnitOfWorkFactory = currentUnitOfWorkFactory;
@@ -67,6 +69,8 @@ namespace Teleopti.Ccc.Web.Areas.ResourcePlanner
 			var period = new DateOnlyPeriod(new DateOnly(input.StartDate), new DateOnly(input.EndDate));
 			var scenario = _scenarioRepository.LoadDefaultScenario();
 			var timeZone = _principal.Current().Regional.TimeZone;
+
+			makeSureActivitiesAreLoaded();
 			var allPeople = _personRepository.FindPeopleInOrganizationLight(period).ToList();
 			var selectedPeople =
 				allPeople.Where(
@@ -134,6 +138,11 @@ namespace Teleopti.Ccc.Web.Areas.ResourcePlanner
 			_fixedStaffSchedulingService().DayScheduled -= schedulingServiceOnDayScheduled;
 
 			return Ok(new SchedulingResultModel{DaysScheduled = daysScheduled});
+		}
+
+		private void makeSureActivitiesAreLoaded()
+		{
+			_activityRepository.LoadAll();
 		}
 	}
 

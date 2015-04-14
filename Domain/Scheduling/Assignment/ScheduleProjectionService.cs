@@ -8,14 +8,14 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 {
 	public class ScheduleProjectionService : IProjectionService
 	{
-		private readonly Lazy<IActivity> _fakeActivity = new Lazy<IActivity>(() => new Activity("Fake activity")
+		private static readonly Lazy<IActivity> _fakeActivity = new Lazy<IActivity>(() => new Activity("Fake activity")
 			{
 				InWorkTime = true,
 				InPaidTime = true,
 				InContractTime = true
 			});
 
-		private readonly Lazy<IActivity> _fakeActivityNotInContractTime =
+		private static readonly Lazy<IActivity> _fakeActivityNotInContractTime =
 			new Lazy<IActivity>(() => new Activity("Fake not in contract activity")
 				{
 					InWorkTime = false,
@@ -23,7 +23,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 					InContractTime = false
 				});
 
-		private readonly TimeSpan fakeLayerStart = new TimeSpan(8, 0, 0);
+		private static readonly TimeSpan fakeLayerStart = new TimeSpan(8, 0, 0);
 
 		/// <summary>
 		/// I deeply regret that scheduleDay was injected to ctor instead of passed to CreateProjection...
