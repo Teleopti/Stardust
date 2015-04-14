@@ -45,9 +45,14 @@ namespace Teleopti.Ccc.Web.Areas.Reporting
 			}
 		}
 
-
 		protected void Selector_OnInit(object sender, EventArgs e)
 		{
+			if (!Request.IsAuthenticated)
+			{
+				if (!Guid.TryParse(Request.QueryString["REPORTID"], out ReportId))
+					return;
+				Response.Redirect(string.Format("/Reporting/Report/{0}#{1}", ReportId, ReportId));
+			}
 			var princip = Thread.CurrentPrincipal;
 			var person = ((TeleoptiPrincipalCacheable)princip).Person;
 			var id = person.Id;
@@ -61,7 +66,6 @@ namespace Teleopti.Ccc.Web.Areas.Reporting
 			ParameterSelector.UserCode = id.GetValueOrDefault();
 			ParameterSelector.BusinessUnitCode = bu.GetValueOrDefault();
 			ParameterSelector.LanguageId = ((TeleoptiPrincipalCacheable)princip).Person.PermissionInformation.UICulture().LCID;
-
 		}
 
 		protected override void OnLoadComplete(EventArgs e)
