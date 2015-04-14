@@ -91,7 +91,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 			var originalShift = _workShiftOriginalStateContainer.OldPeriodDaysState[dateToBeRemoved].GetEditorShift();
 			if (originalShift == null) return false;
 
-			_mainShiftOptimizeActivitySpecificationSetter.SetSpecification(schedulingOptions, _optimizerPreferences, originalShift, dateToBeRemoved);
+			_mainShiftOptimizeActivitySpecificationSetter.SetMainShiftOptimizeActivitySpecification(schedulingOptions, _optimizerPreferences, originalShift, dateToBeRemoved);
 
             _rollbackService.ClearModificationCollection();
 

@@ -307,7 +307,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 			Expect.Call(_scheduleDay2.GetEditorShift()).Return(EditableShiftFactory.CreateEditorShiftWithThreeActivityLayers()).
 				Repeat.Any();
 			Expect.Call(
-				() => _mainShiftOptimizeActivitySpecificationSetter.SetSpecification(null, null, null, DateOnly.MinValue))
+				() => _mainShiftOptimizeActivitySpecificationSetter.SetMainShiftOptimizeActivitySpecification(null, null, null, DateOnly.MinValue))
 				.IgnoreArguments().Repeat.Twice();
         }
 

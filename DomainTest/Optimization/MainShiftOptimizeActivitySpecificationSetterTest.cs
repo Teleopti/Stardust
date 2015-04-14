@@ -41,7 +41,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 			var minShiftOptimizeActivitySpecification = schedulingOptions.MainShiftOptimizeActivitySpecification;
 			Assert.AreEqual(typeof(All<IEditableShift>), minShiftOptimizeActivitySpecification.GetType());
 
-			_target.SetSpecification(schedulingOptions, _optimizationPreferences, _mainShift, DateOnly.MinValue);
+			_target.SetMainShiftOptimizeActivitySpecification(schedulingOptions, _optimizationPreferences, _mainShift, DateOnly.MinValue);
 
 			IOptimizerActivitiesPreferences optimizerActivitiesPreferences = new OptimizerActivitiesPreferences();
 			optimizerActivitiesPreferences.KeepShiftCategory = _optimizationPreferences.Shifts.KeepShiftCategories;

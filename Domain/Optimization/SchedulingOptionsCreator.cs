@@ -1,6 +1,5 @@
 ﻿using Teleopti.Ccc.Domain.GroupPageCreator;
 using Teleopti.Ccc.Domain.ResourceCalculation;
-using Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftCalculation;
 using Teleopti.Ccc.UserTexts;
 using Teleopti.Interfaces.Domain;
 
@@ -40,11 +39,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 
             schedulingOptions.UseShiftCategoryLimitations = optimizationPreferences.General.UseShiftCategoryLimitations;
 
-            // schedulingOptions.ShiftCategory
-
             schedulingOptions.RefreshRate = optimizationPreferences.Advanced.RefreshScreenInterval;
-
-            //schedulingOptions.OnlyShiftsWhenUnderstaffed = 
 
             schedulingOptions.Fairness = new Percent(optimizationPreferences.Extra.FairnessValue);
             schedulingOptions.GroupPageForShiftCategoryFairness = optimizationPreferences.Extra.GroupPageOnCompareWith;

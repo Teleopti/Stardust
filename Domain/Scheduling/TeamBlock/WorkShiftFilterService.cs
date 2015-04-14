@@ -220,9 +220,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
             }
 
             shiftList = _commonMainShiftFilter.Filter(shiftList, effectiveRestriction);
-			shiftList = _mainShiftOptimizeActivitiesSpecificationShiftFilter.Filter(shiftList,
-																					schedulingOptions
-																						.MainShiftOptimizeActivitySpecification);
+			shiftList = _mainShiftOptimizeActivitiesSpecificationShiftFilter.Filter(shiftList, schedulingOptions.MainShiftOptimizeActivitySpecification);
 
 			
 			shiftList = _disallowedShiftCategoriesShiftFilter.Filter(schedulingOptions.NotAllowedShiftCategories, shiftList,

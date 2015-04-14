@@ -114,7 +114,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 		        .Repeat.AtLeastOnce();
 			Expect.Call(
 				() =>
-				_mainShiftOptimizeActivitySpecificationSetter.SetSpecification(_schedulingOptions, _optimizerPreferences,
+				_mainShiftOptimizeActivitySpecificationSetter.SetMainShiftOptimizeActivitySpecification(_schedulingOptions, _optimizerPreferences,
 																			   null, _removedDate)).IgnoreArguments();
 
 	        Expect.Call(_optimizationLimits.OverLimitsCounts(_scheduleMatrix)).Return(_overLimitCounts);
@@ -189,7 +189,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
                 Expect.Call(_workShiftOriginalStateContainer.OldPeriodDaysState[_removedDate].GetEditorShift()).Return(new EditableShift(new ShiftCategory("xx"))).Repeat.AtLeastOnce();
 				Expect.Call(
 					() =>
-					_mainShiftOptimizeActivitySpecificationSetter.SetSpecification(_schedulingOptions, _optimizerPreferences,
+					_mainShiftOptimizeActivitySpecificationSetter.SetMainShiftOptimizeActivitySpecification(_schedulingOptions, _optimizerPreferences,
 																				   null, _removedDate)).IgnoreArguments();
 
 	            Expect.Call(_optimizationLimits.OverLimitsCounts(_scheduleMatrix)).Return(_overLimitCounts);
@@ -301,7 +301,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 				Expect.Call(_workShiftOriginalStateContainer.OldPeriodDaysState[_removedDate].GetEditorShift()).Return(new EditableShift(new ShiftCategory("xx"))).Repeat.AtLeastOnce();
 				Expect.Call(
 					() =>
-					_mainShiftOptimizeActivitySpecificationSetter.SetSpecification(_schedulingOptions, _optimizerPreferences,
+					_mainShiftOptimizeActivitySpecificationSetter.SetMainShiftOptimizeActivitySpecification(_schedulingOptions, _optimizerPreferences,
 																				   null, _removedDate)).IgnoreArguments();
 
 	            Expect.Call(_optimizationLimits.OverLimitsCounts(_scheduleMatrix)).Return(_overLimitCounts);
@@ -368,7 +368,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 				Expect.Call(_workShiftOriginalStateContainer.OldPeriodDaysState[_removedDate].GetEditorShift()).Return(new EditableShift(new ShiftCategory("xx"))).Repeat.AtLeastOnce();
 				Expect.Call(
 					() =>
-					_mainShiftOptimizeActivitySpecificationSetter.SetSpecification(_schedulingOptions, _optimizerPreferences,
+					_mainShiftOptimizeActivitySpecificationSetter.SetMainShiftOptimizeActivitySpecification(_schedulingOptions, _optimizerPreferences,
 																				   null, _removedDate)).IgnoreArguments();
 
 	            Expect.Call(_optimizationLimits.OverLimitsCounts(_scheduleMatrix)).Return(_overLimitCounts);

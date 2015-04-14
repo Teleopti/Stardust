@@ -6,28 +6,39 @@ namespace Teleopti.Ccc.Domain.Optimization
 {
 	public interface IMainShiftOptimizeActivitySpecificationSetter
 	{
-		void SetSpecification(ISchedulingOptions schedulingOptions, IOptimizationPreferences optimizationPreferences, IEditableShift mainShift, DateOnly viewDate);
+		void SetMainShiftOptimizeActivitySpecification(ISchedulingOptions schedulingOptions, IOptimizationPreferences optimizationPreferences, IEditableShift mainShift, DateOnly viewDate);
 	}
 
 	public class MainShiftOptimizeActivitySpecificationSetter : IMainShiftOptimizeActivitySpecificationSetter
 	{
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "1"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
-		public void SetSpecification(ISchedulingOptions schedulingOptions, IOptimizationPreferences optimizationPreferences, IEditableShift mainShift, DateOnly viewDate)
+		public void SetMainShiftOptimizeActivitySpecification(ISchedulingOptions schedulingOptions, IOptimizationPreferences optimizationPreferences, IEditableShift mainShift, DateOnly viewDate)
 		{
-			if (optimizationPreferences == null)
-				return;
-
 			if (schedulingOptions == null)
 				return;
 
-			schedulingOptions.MainShiftOptimizeActivitySpecification = null;
+			IOptimizerActivitiesPreferences optimizerActivitiesPreferences = CreateOptimizerActivitiesPreferences(optimizationPreferences);
+
+			if (optimizerActivitiesPreferences == null)
+				return;
+
+			schedulingOptions.MainShiftOptimizeActivitySpecification =
+				new MainShiftOptimizeActivitiesSpecification(optimizerActivitiesPreferences, mainShift, viewDate,
+															 StateHolderReader.Instance.StateReader.SessionScopeData.TimeZone);
+
+		}
+
+		public IOptimizerActivitiesPreferences CreateOptimizerActivitiesPreferences(IOptimizationPreferences optimizationPreferences)
+		{
+			if (optimizationPreferences == null)
+				return null;
 
 			var shiftPreferences = optimizationPreferences.Shifts;
 
 			if (!shiftPreferences.KeepActivityLength && !shiftPreferences.AlterBetween && !shiftPreferences.KeepEndTimes &&
-			    !shiftPreferences.KeepShiftCategories && !shiftPreferences.KeepStartTimes &&
-			    shiftPreferences.SelectedActivities.Count == 0)
-				return;
+				!shiftPreferences.KeepShiftCategories && !shiftPreferences.KeepStartTimes &&
+				shiftPreferences.SelectedActivities.Count == 0)
+				return null;
 
 			IOptimizerActivitiesPreferences optimizerActivitiesPreferences = new OptimizerActivitiesPreferences();
 			optimizerActivitiesPreferences.KeepShiftCategory = optimizationPreferences.Shifts.KeepShiftCategories;
@@ -45,9 +56,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 				optimizerActivitiesPreferences.DoNotAlterLengthOfActivity = shiftPreferences.ActivityToKeepLengthOn;
 			}
 
-			schedulingOptions.MainShiftOptimizeActivitySpecification =
-				new MainShiftOptimizeActivitiesSpecification(optimizerActivitiesPreferences, mainShift, viewDate,
-				                                             StateHolderReader.Instance.StateReader.SessionScopeData.TimeZone);
+			return optimizerActivitiesPreferences;
 
 		}
 	}
