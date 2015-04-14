@@ -64,7 +64,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<BackToLegalShiftCommand>();
 			builder.RegisterType<IntraIntervalOptimizationCommand>().As<IIntraIntervalOptimizationCommand>();
 
-			builder.RegisterType<DisableDeletedFilter>().As<IDisableDeletedFilter>().InstancePerLifetimeScope();
+			builder.RegisterType<DisableDeletedFilter>().As<IDisableDeletedFilter>().SingleInstance();
 			builder.RegisterType<InnerOptimizerHelperHelper>().As<IOptimizerHelperHelper>().InstancePerLifetimeScope();
 			builder.RegisterType<ResourceOptimizationHelperExtended>().As<IResourceOptimizationHelperExtended>().InstancePerLifetimeScope();
 			builder.RegisterType<RequiredScheduleHelper>().As<IRequiredScheduleHelper>().InstancePerLifetimeScope();
@@ -273,9 +273,9 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<ProjectionProvider>().As<IProjectionProvider>().InstancePerLifetimeScope();
 			builder.RegisterType<NightlyRestRule>().As<IAssignmentPeriodRule>().InstancePerLifetimeScope();
 			builder.RegisterType<ScheduleMatrixLockableBitArrayConverterEx>().As<IScheduleMatrixLockableBitArrayConverterEx>().InstancePerLifetimeScope();
-			builder.RegisterType<RestrictionExtractor>().As<IRestrictionExtractor>().InstancePerLifetimeScope();
-			builder.RegisterType<RestrictionCombiner>().As<IRestrictionCombiner>().InstancePerLifetimeScope();
-			builder.RegisterType<RestrictionRetrievalOperation>().As<IRestrictionRetrievalOperation>().InstancePerLifetimeScope();
+			builder.RegisterType<RestrictionExtractor>().As<IRestrictionExtractor>().SingleInstance();
+			builder.RegisterType<RestrictionCombiner>().As<IRestrictionCombiner>().SingleInstance();
+			builder.RegisterType<RestrictionRetrievalOperation>().As<IRestrictionRetrievalOperation>().SingleInstance();
 			builder.RegisterType<EffectiveRestrictionCreator30393>().As<EffectiveRestrictionCreator30393>();
 			builder.RegisterType<EffectiveRestrictionCreator>().As<EffectiveRestrictionCreator>();
 			builder.Register(c => c.Resolve<IToggleManager>().IsEnabled(Toggles.Scheduler_SudentAvailabilityForFixedStaff_30393)
