@@ -34,7 +34,7 @@ module.exports = function(config) {
 		'vendor/ng-mfb/mfb.directive.js',
 		'vendor/ng-image-input-with-preview/ng-image-input-with-preview.js',
 		'js/ABmetrics.min.js',
-		'dist/main.min.js',
+		'dist/main.min.js', 
 		'tests/**/*.js'
 	],
 
