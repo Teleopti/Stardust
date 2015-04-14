@@ -20,6 +20,11 @@ namespace Teleopti.Ccc.TestCommon.FakeData
             return CreateShiftCategory(name,Color.DeepSkyBlue.ToString());
         }
 
+		public static ShiftCategory CreateShiftCategory()
+		{
+			return CreateShiftCategory("shiftCategory");
+		}
+
         public static ShiftCategory CreateShiftCategory(string name, string displayColor)
         {
             if (name == null)

@@ -56,6 +56,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.IntraIntervalOptimization
 		private IList<IWorkShiftCalculationResultHolder> _workShiftCalculationResultHolders;
 		private IWorkShiftCalculationResultHolder _workShiftCalculationResultHolder;
 		private IMainShiftOptimizeActivitySpecificationSetter _mainShiftOptimizeActivitySpecificationSetter;
+		private IEditableShift _editableShift;
 		private double _limit;
 		
 
@@ -108,6 +109,8 @@ namespace Teleopti.Ccc.DomainTest.Optimization.IntraIntervalOptimization
 			_workShiftCalculationResultHolder = new WorkShiftCalculationResult();
 			_workShiftCalculationResultHolder.ShiftProjection = _shiftProjectionCache;
 
+			_editableShift = new EditableShift(ShiftCategoryFactory.CreateShiftCategory());
+
 			_limit = 0.7999;
 		}
 
@@ -129,6 +132,10 @@ namespace Teleopti.Ccc.DomainTest.Optimization.IntraIntervalOptimization
 				Expect.Call(() => _rollbackService.ClearModificationCollection());
 				
 				Expect.Call(_scheduleRange.ScheduledDay(_dateOnly)).Return(_scheduleDay);
+
+				Expect.Call(_scheduleDay.GetEditorShift()).Return(_editableShift);
+				Expect.Call(() => _mainShiftOptimizeActivitySpecificationSetter.SetMainShiftOptimizeActivitySpecification(_schedulingOptions,
+						_optimizationPreferences, _editableShift, _dateOnly));
 				
 				Expect.Call(() => _deleteAndResourceCalculateService.DeleteWithResourceCalculation(_scheduleDayList, _rollbackService, true));
 
@@ -175,6 +182,10 @@ namespace Teleopti.Ccc.DomainTest.Optimization.IntraIntervalOptimization
 
 				Expect.Call(_scheduleRange.ScheduledDay(_dateOnly)).Return(_scheduleDay);
 
+				Expect.Call(_scheduleDay.GetEditorShift()).Return(_editableShift);
+				Expect.Call(() => _mainShiftOptimizeActivitySpecificationSetter.SetMainShiftOptimizeActivitySpecification(_schedulingOptions,
+						_optimizationPreferences, _editableShift, _dateOnly));
+
 				Expect.Call(() => _deleteAndResourceCalculateService.DeleteWithResourceCalculation(_scheduleDayList, _rollbackService, true));
 
 				Expect.Call(_schedulingResultStateHolder.SkillDaysOnDateOnly(new List<DateOnly> { _dateOnly })).Return(_skillDays);
@@ -217,6 +228,10 @@ namespace Teleopti.Ccc.DomainTest.Optimization.IntraIntervalOptimization
 				Expect.Call(_schedulingResultStateHolder.Schedules[_person]).Return(_scheduleRange);
 
 				Expect.Call(() => _rollbackService.ClearModificationCollection());
+
+				Expect.Call(_scheduleDay.GetEditorShift()).Return(_editableShift);
+				Expect.Call(() => _mainShiftOptimizeActivitySpecificationSetter.SetMainShiftOptimizeActivitySpecification(_schedulingOptions,
+						_optimizationPreferences, _editableShift, _dateOnly));
 
 				Expect.Call(_scheduleRange.ScheduledDay(_dateOnly)).Return(_scheduleDay);
 				
@@ -262,6 +277,10 @@ namespace Teleopti.Ccc.DomainTest.Optimization.IntraIntervalOptimization
 				Expect.Call(_schedulingResultStateHolder.Schedules[_person]).Return(_scheduleRange);
 
 				Expect.Call(() => _rollbackService.ClearModificationCollection());
+
+				Expect.Call(_scheduleDay.GetEditorShift()).Return(_editableShift);
+				Expect.Call(() => _mainShiftOptimizeActivitySpecificationSetter.SetMainShiftOptimizeActivitySpecification(_schedulingOptions,
+						_optimizationPreferences, _editableShift, _dateOnly));
 
 				Expect.Call(_scheduleRange.ScheduledDay(_dateOnly)).Return(_scheduleDay);
 
