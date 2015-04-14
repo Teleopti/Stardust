@@ -2,21 +2,15 @@
 using System.Linq;
 using System.Web.Http;
 using Teleopti.Ccc.Domain.Aop;
-using Teleopti.Ccc.Domain.Common;
-using Teleopti.Ccc.Domain.Repositories;
-using Teleopti.Ccc.Domain.Security.Authentication;
-using Teleopti.Ccc.Domain.Security.AuthorizationData;
-using Teleopti.Ccc.Infrastructure.Repositories;
-using Teleopti.Ccc.Web.Areas.MyTime.Core.Portal.DataProvider;
 using Teleopti.Ccc.Web.Areas.People.Core.Providers;
-using Teleopti.Ccc.Web.Areas.People.Core.ViewModels;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Web.Areas.Search.Controllers
 {
 	public class PeopleSearchController : ApiController
 	{
-		private IPeopleSearchProvider _searchProvider;
+		private readonly IPeopleSearchProvider _searchProvider;
+
 		public PeopleSearchController(IPeopleSearchProvider searchProvider)
 		{
 			_searchProvider = searchProvider;
@@ -26,8 +20,8 @@ namespace Teleopti.Ccc.Web.Areas.Search.Controllers
 		[HttpGet, Route("api/Search/People")]
 		public virtual IHttpActionResult GetResult(string keyword, int pageSize, int currentPageIndex)
 		{
-			DateOnly currentDate = DateOnly.Today;
-			PeopleSummaryModel peopleList = _searchProvider.SearchPeople(keyword, pageSize, currentPageIndex, currentDate);
+			var currentDate = DateOnly.Today;
+			var peopleList = _searchProvider.SearchPeople(keyword, pageSize, currentPageIndex, currentDate);
 			var resultPeople = peopleList.People.Select(x => new
 			{
 				FirstName = x.Name.FirstName,
@@ -44,6 +38,7 @@ namespace Teleopti.Ccc.Web.Areas.Search.Controllers
 				}),
 				Team = x.MyTeam(currentDate) == null ? "" : x.MyTeam(currentDate).SiteAndTeam
 			}).OrderBy(p => p.LastName);
+
 			var result = new
 			{
 				People = resultPeople,

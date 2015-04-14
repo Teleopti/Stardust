@@ -200,12 +200,12 @@
 		<table class="wfm-table material-depth-1 table-striped table-condensed table-hover">
 			<thead>
 				<tr>
-					<th translate>FirstName <i class="mdi mdi-menu-up"></i> </th>
-					<th translate>LastName</th>
-					<th translate>EmployeeNo</th>
-					<th translate>Team</th>
-					<th translate>Email</th>
-					<th translate>LeavingDate</th>
+					<th>{{'FirstName' | translate}} <i class="mdi mdi-menu-up"></i> </th>
+					<th>{{'LastName' | translate}}</th>
+					<th>{{'EmployeeNo' | translate}}</th>
+					<th>{{'Team' | translate}}</th>
+					<th>{{'Email' | translate}}</th>
+					<th>{{'LeavingDate' | translate}}</th>
 					<th ng-repeat="column in optionalColumns">{{column}}</th>
 				</tr>
 			</thead>
@@ -215,15 +215,15 @@
 						<div class="pagination pull-right">
 							<ul class="wfm-list row">
 								<li style="display: inline-block" ng-class="{disabled: currentPageIndex == 1}">
-									<a href ng-click="prevPage()">« Prev</a>
+									<a href="" ng-click="prevPage()">« Prev</a>
 								</li>
 								<li style="display: inline-block" ng-repeat="n in range(totalPages)"
 									ng-class="{active: n == currentPageIndex}"
 									ng-click="setPage()">
-									<a href ng-bind="n">1</a>
+									<a href="" ng-bind="n">1</a>
 								</li>
 								<li style="display: inline-block" ng-class="{disabled: currentPageIndex == totalPages}">
-									<a href ng-click="nextPage()">Next »</a>
+									<a href="" ng-click="nextPage()">Next »</a>
 								</li>
 							</ul>
 						</div>
