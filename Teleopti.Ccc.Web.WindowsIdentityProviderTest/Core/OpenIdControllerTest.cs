@@ -1,4 +1,5 @@
 using System;
+using System.Net.Http;
 using System.Web;
 using System.Web.Mvc;
 using System.Web.Routing;
@@ -46,17 +47,23 @@ namespace Teleopti.Ccc.Web.WindowsIdentityProviderTest.Core
 		}
 
 		[Test]
-		public void ShouldTriggerWindowsAuthorizationWhenResponseIsnotReady()
+		public void ShouldTriggerWindowsAuthorizationWhenResponseIsNotReady()
 		{
 			var openIdProviderWapper = MockRepository.GenerateMock<IOpenIdProviderWrapper>();
 			var request = MockRepository.GenerateMock<IAuthenticationRequest>();
+			var providerEndpointWrapper = MockRepository.GenerateMock<IProviderEndpointWrapper>();
+			var httpRequest = MockRepository.GenerateStub<HttpRequestBase>();
+			var httpContext = MockRepository.GenerateStub<HttpContextBase>();
+			var currentHttpContext = MockRepository.GenerateMock<ICurrentHttpContext>();
+
 			request.Stub(x => x.IsResponseReady).Return(false);
 			openIdProviderWapper.Stub(x => x.GetRequest()).Return(request);
-
-			var providerEndpointWrapper = MockRepository.GenerateMock<IProviderEndpointWrapper>();
+			httpContext.Stub(x => x.Request).Return(httpRequest);
+			currentHttpContext.Stub(x => x.Current()).Return(httpContext);
+			httpRequest.Stub(x => x.HttpMethod).Return(HttpMethod.Get.Method);
 			providerEndpointWrapper.Expect(x => x.PendingRequest).PropertyBehavior();
 
-			var target = new OpenIdController(openIdProviderWapper, null, null, providerEndpointWrapper);
+			var target = new OpenIdController(openIdProviderWapper, null, currentHttpContext, providerEndpointWrapper);
 			var result = (ViewResult)target.Provider();
 
 			providerEndpointWrapper.PendingRequest.Should().Be.SameInstanceAs(request);
@@ -64,18 +71,48 @@ namespace Teleopti.Ccc.Web.WindowsIdentityProviderTest.Core
 		}
 
 		[Test]
+		public void ShouldHandleHeadRequest()
+		{
+			var openIdProviderWapper = MockRepository.GenerateMock<IOpenIdProviderWrapper>();
+			var request = MockRepository.GenerateMock<IAuthenticationRequest>();
+			var providerEndpointWrapper = MockRepository.GenerateMock<IProviderEndpointWrapper>();
+			var httpRequest = MockRepository.GenerateStub<HttpRequestBase>();
+			var httpContext = MockRepository.GenerateStub<HttpContextBase>();
+			var currentHttpContext = MockRepository.GenerateMock<ICurrentHttpContext>();
+
+			request.Stub(x => x.IsResponseReady).Return(false);
+			openIdProviderWapper.Stub(x => x.GetRequest()).Return(request);
+			httpContext.Stub(x => x.Request).Return(httpRequest);
+			currentHttpContext.Stub(x => x.Current()).Return(httpContext);
+			httpRequest.Stub(x => x.HttpMethod).Return(HttpMethod.Head.Method);
+			providerEndpointWrapper.Expect(x => x.PendingRequest).PropertyBehavior();
+
+			var target = new OpenIdController(openIdProviderWapper, null, currentHttpContext, providerEndpointWrapper);
+			var result = target.Provider();
+
+			(result is EmptyResult).Should().Be.True();
+		}
+
+		[Test]
 		public void ProviderShouldSimplyRespondIfTheResponseIsReady()
 		{
 			var openIdProviderWapper = MockRepository.GenerateMock<IOpenIdProviderWrapper>();
 			var currentHttpContext = MockRepository.GenerateMock<ICurrentHttpContext>();
+			
 			var request = MockRepository.GenerateMock<IAuthenticationRequest>();
-			request.Stub(x => x.IsResponseReady).Return(true);
-			openIdProviderWapper.Stub(x => x.GetRequest()).Return(request);
+			var httpRequest = MockRepository.GenerateStub<HttpRequestBase>();
+			var httpContext = MockRepository.GenerateStub<HttpContextBase>();
 			var outgoingWebResponse = MockRepository.GenerateMock<OutgoingWebResponse>();
-			openIdProviderWapper.Stub(x => x.PrepareResponse(request)).Return(outgoingWebResponse);
 			var windowsAccountProvider = MockRepository.GenerateMock<IWindowsAccountProvider>();
 			var providerEndpointWrapper = MockRepository.GenerateMock<IProviderEndpointWrapper>();
 
+			httpContext.Stub(x => x.Request).Return(httpRequest);
+			currentHttpContext.Stub(x => x.Current()).Return(httpContext);
+			httpRequest.Stub(x => x.HttpMethod).Return(HttpMethod.Get.Method);
+			request.Stub(x => x.IsResponseReady).Return(true);
+			openIdProviderWapper.Stub(x => x.GetRequest()).Return(request);
+			openIdProviderWapper.Stub(x => x.PrepareResponse(request)).Return(outgoingWebResponse);
+			
 			var target = new OpenIdController(openIdProviderWapper, windowsAccountProvider, currentHttpContext, providerEndpointWrapper);
 			target.Provider();
 
@@ -88,6 +125,11 @@ namespace Teleopti.Ccc.Web.WindowsIdentityProviderTest.Core
 		{
 			var openIdProviderWapper = MockRepository.GenerateMock<IOpenIdProviderWrapper>();
 			var request = MockRepository.GenerateMock<IAuthenticationRequest>();
+			var httpResponse = MockRepository.GenerateStub<HttpResponseBase>();
+			var httpRequest = MockRepository.GenerateStub<HttpRequestBase>();
+			var currentHttpContext = MockRepository.GenerateMock<ICurrentHttpContext>();
+			var httpContext = MockRepository.GenerateStub<HttpContextBase>();
+			
 			request.Expect(x => x.IsAuthenticated).PropertyBehavior();
 			request.Expect(x => x.LocalIdentifier).PropertyBehavior();
 			request.Expect(x => x.IsReturnUrlDiscoverable(null)).IgnoreArguments().Return(RelyingPartyDiscoveryResult.Success);
@@ -96,12 +138,8 @@ namespace Teleopti.Ccc.Web.WindowsIdentityProviderTest.Core
 			var windowsAccountProvider = MockRepository.GenerateMock<IWindowsAccountProvider>();
 			windowsAccountProvider.Stub(x => x.RetrieveWindowsAccount()).Return(new WindowsAccount("domainName", "user.Name"));
 
-			var httpResponse = MockRepository.GenerateStub<HttpResponseBase>();
 			httpResponse.Stub(x => x.ApplyAppPathModifier("~/OpenId/AskUser/domainName%23user%24%24%24Name")).Return("/OpenId/AskUser/domainName#user$$$Name");
-			var httpRequest = MockRepository.GenerateStub<HttpRequestBase>();
 			httpRequest.Stub(x => x.Url).Return(new Uri("http://mock"));
-			var currentHttpContext = MockRepository.GenerateMock<ICurrentHttpContext>();
-			var httpContext = MockRepository.GenerateStub<HttpContextBase>();
 			httpContext.Stub(x => x.Response).Return(httpResponse);
 			httpContext.Stub(x => x.Request).Return(httpRequest);
 			currentHttpContext.Stub(x => x.Current()).Return(httpContext);
