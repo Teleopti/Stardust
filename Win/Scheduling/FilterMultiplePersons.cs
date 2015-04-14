@@ -214,8 +214,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 						person.Name.ToString(NameOrderOption.LastNameFirstName).ToLower(cultureInfo).Replace(",", "").Contains(lowerSearchText) ||
 						person.Name.ToString(NameOrderOption.FirstNameLastName).ToLower(cultureInfo).Contains(lowerSearchText) ||
 						person.EmploymentNumber.ToLower(cultureInfo).Contains(lowerSearchText) ||
-						person.Email.ToLower(cultureInfo).Contains(lowerSearchText ) ||
-						person.AuthenticationInfo != null && person.AuthenticationInfo.Identity.ToLower(cultureInfo).Contains(lowerSearchText)
+						person.Email.ToLower(cultureInfo).Contains(lowerSearchText ) 
 						
 					 select person).ToList();
 

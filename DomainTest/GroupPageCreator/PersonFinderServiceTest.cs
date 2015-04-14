@@ -71,20 +71,6 @@ namespace Teleopti.Ccc.DomainTest.GroupPageCreator
         }
 
         [Test]
-        public void ShouldNotFindPerson()
-        {
-            //Exposure of a bug 
-            var applicationFunction = ApplicationFunctionFactory.CreateApplicationFunction("dontknow?");
-            var per = PersonFactory.CreatePersonWithIdentityPermissionInfo("tommy");
-            per.ApplicationAuthenticationInfo = new ApplicationAuthenticationInfo
-                                                    {ApplicationLogOnName = "pa", Password = "pass"};
-            per.AuthenticationInfo.Identity = "a";
-            var isolatedtarget = new PersonFinderService(new PersonIndexBuilder(applicationFunction, new List<IPerson>{per}, new DateOnlyPeriod(2010, 1, 1, 2011, 1, 1)));
-            var result = isolatedtarget.Find("apa");
-            result.Count.Should().Be.EqualTo(0);
-        }
-
-        [Test]
         public void ShouldBeAbleToRebuildIndex()
         {
             var snubbe = new Person() {Name = new Name("Rågge", "Bågge")};
