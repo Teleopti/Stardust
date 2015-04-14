@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using NUnit.Framework;
 using Rhino.Mocks;
+using Teleopti.Ccc.Domain.Optimization;
 using Teleopti.Ccc.Domain.Optimization.IntraIntervalOptimization;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
@@ -20,6 +21,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.IntraIntervalOptimization
 		private ITeamBlockScheduler _teamBlockScheduler;
 		private ISkillStaffPeriodEvaluator _skillStaffPeriodEvaluator;
 		private ISchedulingOptions _schedulingOptions;
+		private IOptimizationPreferences _optimizationPreferences;
 		private ISchedulePartModifyAndRollbackService _rollbackService;
 		private ISchedulingResultStateHolder _schedulingResultStateHolder;
 		private IPerson _person;
@@ -53,6 +55,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.IntraIntervalOptimization
 		private IList<ISkillStaffPeriod> _skillStaffPeriodsAfter;
 		private IList<IWorkShiftCalculationResultHolder> _workShiftCalculationResultHolders;
 		private IWorkShiftCalculationResultHolder _workShiftCalculationResultHolder;
+		private IMainShiftOptimizeActivitySpecificationSetter _mainShiftOptimizeActivitySpecificationSetter;
 		private double _limit;
 		
 
@@ -69,8 +72,10 @@ namespace Teleopti.Ccc.DomainTest.Optimization.IntraIntervalOptimization
 			_shiftProjectionIntraIntervalBestFitCalculator =_mock.StrictMultiMock<IShiftProjectionIntraIntervalBestFitCalculator>();
 			_teamScheduling = _mock.StrictMock<ITeamScheduling>();
 			_skillDayIntraIntervalIssueExtractor =_mock.StrictMock<ISkillDayIntraIntervalIssueExtractor>();
-			_target = new IntraIntervalOptimizer(_teamInfoFactory, _teamBlockInfoFactory, _teamBlockScheduler, _skillStaffPeriodEvaluator, _deleteAndResourceCalculateService, _intraIntervalIssueCalculator, _teamScheduling, _shiftProjectionIntraIntervalBestFitCalculator, _skillDayIntraIntervalIssueExtractor);
+			_mainShiftOptimizeActivitySpecificationSetter = _mock.StrictMock<IMainShiftOptimizeActivitySpecificationSetter>();
+			_target = new IntraIntervalOptimizer(_teamInfoFactory, _teamBlockInfoFactory, _teamBlockScheduler, _skillStaffPeriodEvaluator, _deleteAndResourceCalculateService, _intraIntervalIssueCalculator, _teamScheduling, _shiftProjectionIntraIntervalBestFitCalculator, _skillDayIntraIntervalIssueExtractor, _mainShiftOptimizeActivitySpecificationSetter);
 			_schedulingOptions = new SchedulingOptions();
+			_optimizationPreferences = new OptimizationPreferences();
 			_rollbackService = _mock.StrictMock<ISchedulePartModifyAndRollbackService>();
 			_schedulingResultStateHolder = _mock.StrictMock<ISchedulingResultStateHolder>();
 			_person = PersonFactory.CreatePerson("person");
@@ -146,7 +151,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.IntraIntervalOptimization
 
 			using (_mock.Playback())
 			{
-				var result = _target.Optimize(_schedulingOptions, _rollbackService, _schedulingResultStateHolder, _person, _dateOnly, _allScheduleMatrixPros, _resourceCalculateDelayer, _skill, _issusesBefore, false);
+				var result = _target.Optimize(_schedulingOptions, _optimizationPreferences, _rollbackService, _schedulingResultStateHolder, _person, _dateOnly, _allScheduleMatrixPros, _resourceCalculateDelayer, _skill, _issusesBefore, false);
 				Assert.AreEqual(_issusesAfter, result);
 			}
 		}
@@ -191,7 +196,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.IntraIntervalOptimization
 
 			using (_mock.Playback())
 			{
-				var result = _target.Optimize(_schedulingOptions, _rollbackService, _schedulingResultStateHolder, _person, _dateOnly, _allScheduleMatrixPros, _resourceCalculateDelayer, _skill, _issusesBefore, true);
+				var result = _target.Optimize(_schedulingOptions, _optimizationPreferences, _rollbackService, _schedulingResultStateHolder, _person, _dateOnly, _allScheduleMatrixPros, _resourceCalculateDelayer, _skill, _issusesBefore, true);
 				Assert.AreEqual(_issusesAfter, result);
 			}
 		}
@@ -236,7 +241,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.IntraIntervalOptimization
 
 			using (_mock.Playback())
 			{
-				var result = _target.Optimize(_schedulingOptions, _rollbackService, _schedulingResultStateHolder, _person, _dateOnly, _allScheduleMatrixPros, _resourceCalculateDelayer, _skill, _issusesBefore, false);
+				var result = _target.Optimize(_schedulingOptions, _optimizationPreferences, _rollbackService, _schedulingResultStateHolder, _person, _dateOnly, _allScheduleMatrixPros, _resourceCalculateDelayer, _skill, _issusesBefore, false);
 				Assert.AreEqual(_issusesBefore, result);
 			}
 		}
@@ -284,7 +289,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.IntraIntervalOptimization
 
 			using (_mock.Playback())
 			{
-				var result = _target.Optimize(_schedulingOptions, _rollbackService, _schedulingResultStateHolder, _person, _dateOnly, _allScheduleMatrixPros, _resourceCalculateDelayer, _skill, _issusesBefore, false);
+				var result = _target.Optimize(_schedulingOptions, _optimizationPreferences, _rollbackService, _schedulingResultStateHolder, _person, _dateOnly, _allScheduleMatrixPros, _resourceCalculateDelayer, _skill, _issusesBefore, false);
 				Assert.AreEqual(_issusesBefore, result);
 			}
 		}

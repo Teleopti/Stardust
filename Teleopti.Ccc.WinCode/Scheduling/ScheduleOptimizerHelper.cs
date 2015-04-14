@@ -494,7 +494,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 					recalculateIfContinuedStep(continuedStep, selectedPeriod);
 					if (_progressEvent == null || !_progressEvent.UserCancel)
 					{
-						runIntraInterval(schedulingOptions, selectedPeriod, selectedDays, tagSetter);
+						runIntraInterval(schedulingOptions, optimizerPreferences, selectedPeriod, selectedDays, tagSetter);
 					}
 				}
 
@@ -545,7 +545,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 			teamBlockSeniorityFairnessOptimizationService.ReportProgress -= resourceOptimizerPersonOptimized;
 		}
 
-		private void runIntraInterval(ISchedulingOptions schedulingOptions, DateOnlyPeriod selectedPeriod, IList<IScheduleDay> selectedDays, IScheduleTagSetter tagSetter)
+		private void runIntraInterval(ISchedulingOptions schedulingOptions, IOptimizationPreferences optimizationPreferences, DateOnlyPeriod selectedPeriod, IList<IScheduleDay> selectedDays, IScheduleTagSetter tagSetter)
 		{
 			var args = new ResourceOptimizerProgressEventArgs(0, 0, LanguageResourceHelper.Translate("XXCollectingData"));
 			_backgroundWorker.ReportProgress(1, args);
@@ -553,7 +553,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 			var rollbackService = new SchedulePartModifyAndRollbackService(_stateHolder(), _scheduleDayChangeCallback(), tagSetter);
 			var resourceCalculateDelayer = new ResourceCalculateDelayer(_resourceOptimizationHelper, 1, true, schedulingOptions.ConsiderShortBreaks);
 			var intraIntervalOptimizationCommand = _container.Resolve<IIntraIntervalOptimizationCommand>();
-			intraIntervalOptimizationCommand.Execute(schedulingOptions, selectedPeriod, selectedDays, _schedulerStateHolder().SchedulingResultState, allMatrixes, rollbackService, resourceCalculateDelayer, _backgroundWorker);
+			intraIntervalOptimizationCommand.Execute(schedulingOptions, optimizationPreferences, selectedPeriod, selectedDays, _schedulerStateHolder().SchedulingResultState, allMatrixes, rollbackService, resourceCalculateDelayer, _backgroundWorker);
 		}
 
 		private IList<IScheduleMatrixOriginalStateContainer> createMatrixContainerList(IEnumerable<IScheduleMatrixPro> matrixList)

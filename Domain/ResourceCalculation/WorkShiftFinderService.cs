@@ -84,7 +84,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
             return new WorkShiftFinderServiceResult(result,finderResult);
         }
 
-        private IWorkShiftCalculationResultHolder findBestMainShift(
+        private IWorkShiftCalculationResultHolder findHighestValueMainShift(
             DateOnly dateOnly,  
             IList<IShiftProjectionCache> shiftProjectionCaches,
 			IWorkShiftCalculatorSkillStaffPeriodData dataHolders, 
@@ -244,7 +244,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
                 var nonBlendPeriods = personSkillPeriodsDataHolderManager.GetPersonNonBlendSkillSkillStaffPeriods(dateOnly, virtualSchedulePeriod);
                 var dataholder = personSkillPeriodsDataHolderManager.GetPersonSkillPeriodsDataHolderDictionary(dateOnly, virtualSchedulePeriod);
 
-				result = findBestMainShift(dateOnly, shiftList, new WorkShiftCalculatorSkillStaffPeriodData(dataholder), maxSeatPeriods, nonBlendPeriods, virtualSchedulePeriod, schedulingOptions, workShiftFinderResult);
+				result = findHighestValueMainShift(dateOnly, shiftList, new WorkShiftCalculatorSkillStaffPeriodData(dataholder), maxSeatPeriods, nonBlendPeriods, virtualSchedulePeriod, schedulingOptions, workShiftFinderResult);
             }
 
             return result;

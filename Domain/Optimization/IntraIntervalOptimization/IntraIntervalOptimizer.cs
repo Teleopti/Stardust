@@ -9,7 +9,7 @@ namespace Teleopti.Ccc.Domain.Optimization.IntraIntervalOptimization
 {
 	public interface IIntraIntervalOptimizer
 	{
-		IIntraIntervalIssues Optimize(ISchedulingOptions schedulingOptions, ISchedulePartModifyAndRollbackService rollbackService, ISchedulingResultStateHolder schedulingResultStateHolder, IPerson person, DateOnly dateOnly, IList<IScheduleMatrixPro> allScheduleMatrixPros, IResourceCalculateDelayer resourceCalculateDelayer, ISkill skill, IIntraIntervalIssues intervalIssuesBefore, bool checkDayAfter);
+		IIntraIntervalIssues Optimize(ISchedulingOptions schedulingOptions, IOptimizationPreferences optimizationPreferences, ISchedulePartModifyAndRollbackService rollbackService, ISchedulingResultStateHolder schedulingResultStateHolder, IPerson person, DateOnly dateOnly, IList<IScheduleMatrixPro> allScheduleMatrixPros, IResourceCalculateDelayer resourceCalculateDelayer, ISkill skill, IIntraIntervalIssues intervalIssuesBefore, bool checkDayAfter);
 	}
 
 	public class IntraIntervalOptimizer : IIntraIntervalOptimizer
@@ -23,6 +23,7 @@ namespace Teleopti.Ccc.Domain.Optimization.IntraIntervalOptimization
 		private readonly ITeamScheduling _teamScheduling;
 		private readonly IShiftProjectionIntraIntervalBestFitCalculator _shiftProjectionIntraIntervalBestFitCalculator;
 		private readonly ISkillDayIntraIntervalIssueExtractor _skillDayIntraIntervalIssueExtractor;
+		private readonly IMainShiftOptimizeActivitySpecificationSetter _mainShiftOptimizeActivitySpecificationSetter;
 		
 		public IntraIntervalOptimizer(ITeamInfoFactory teamInfoFactory, ITeamBlockInfoFactory teamBlockInfoFactory,
 			ITeamBlockScheduler teamBlockScheduler,
@@ -31,7 +32,8 @@ namespace Teleopti.Ccc.Domain.Optimization.IntraIntervalOptimization
 			IIntraIntervalIssueCalculator intraIntervalIssueCalculator,
 			ITeamScheduling  teamScheduling,
 			IShiftProjectionIntraIntervalBestFitCalculator shiftProjectionIntraIntervalBestFitCalculator,
-			ISkillDayIntraIntervalIssueExtractor skillDayIntraIntervalIssueExtractor)
+			ISkillDayIntraIntervalIssueExtractor skillDayIntraIntervalIssueExtractor,
+			IMainShiftOptimizeActivitySpecificationSetter mainShiftOptimizeActivitySpecificationSetter)
 		{
 			_teamInfoFactory = teamInfoFactory;
 			_teamBlockInfoFactory = teamBlockInfoFactory;
@@ -42,9 +44,10 @@ namespace Teleopti.Ccc.Domain.Optimization.IntraIntervalOptimization
 			_teamScheduling = teamScheduling;
 			_shiftProjectionIntraIntervalBestFitCalculator = shiftProjectionIntraIntervalBestFitCalculator;
 			_skillDayIntraIntervalIssueExtractor = skillDayIntraIntervalIssueExtractor;
+			_mainShiftOptimizeActivitySpecificationSetter = mainShiftOptimizeActivitySpecificationSetter;
 		}
 
-		public IIntraIntervalIssues Optimize(ISchedulingOptions schedulingOptions,
+		public IIntraIntervalIssues Optimize(ISchedulingOptions schedulingOptions, IOptimizationPreferences optimizationPreferences,
 			ISchedulePartModifyAndRollbackService rollbackService, ISchedulingResultStateHolder schedulingResultStateHolder,
 			IPerson person, DateOnly dateOnly, IList<IScheduleMatrixPro> allScheduleMatrixPros,
 			IResourceCalculateDelayer resourceCalculateDelayer, ISkill skill, IIntraIntervalIssues intervalIssuesBefore, bool checkDayAfter)
@@ -56,8 +59,11 @@ namespace Teleopti.Ccc.Domain.Optimization.IntraIntervalOptimization
 			var totalScheduleRange = schedulingResultStateHolder.Schedules[person];
 
 			rollbackService.ClearModificationCollection();
-			
+
 			var daySchedule = totalScheduleRange.ScheduledDay(dateOnly);
+			var originalMainShift = daySchedule.GetEditorShift();
+			_mainShiftOptimizeActivitySpecificationSetter.SetMainShiftOptimizeActivitySpecification(schedulingOptions, optimizationPreferences, originalMainShift, dateOnly);
+
 			_deleteAndResourceCalculateService.DeleteWithResourceCalculation(new List<IScheduleDay> { daySchedule }, rollbackService, true);
 
 			var skillDaysOnDay = schedulingResultStateHolder.SkillDaysOnDateOnly(new List<DateOnly> { dateOnly });
@@ -72,6 +78,8 @@ namespace Teleopti.Ccc.Domain.Optimization.IntraIntervalOptimization
 			
 			var bestFit = _shiftProjectionIntraIntervalBestFitCalculator.GetShiftProjectionCachesSortedByBestIntraIntervalFit(listResources, totalSkillStaffPeriods, skill, limit);
 
+
+
 			if (bestFit == null)
 			{
 				rollbackService.Rollback();
@@ -80,6 +88,7 @@ namespace Teleopti.Ccc.Domain.Optimization.IntraIntervalOptimization
 			}
 		
 			var shiftProjectionCacheBestFit = bestFit.ShiftProjection;
+
 			_teamScheduling.ExecutePerDayPerPerson(person, dateOnly, teamBlock, shiftProjectionCacheBestFit, rollbackService, resourceCalculateDelayer);
 
 			daySchedule = totalScheduleRange.ScheduledDay(dateOnly);

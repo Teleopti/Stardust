@@ -25,7 +25,10 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
         private bool _preferencesDaysOnly;
 
 		private ISpecification<IEditableShift> _mainShiftOptimizeActivitySpecification;
-        public bool UseMinimumPersons { get; set; }
+
+		public IOptimizerActivitiesPreferences OptimizerActivitiesPreferences { get; set; }
+
+	    public bool UseMinimumPersons { get; set; }
         public bool UseMaximumPersons { get; set; }
         public bool OnlyShiftsWhenUnderstaffed { get; set; }
         public ScheduleEmploymentType ScheduleEmploymentType { get; set; }
@@ -83,7 +86,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
     		get
     		{
 				if(_mainShiftOptimizeActivitySpecification == null)
-					return  new All<IEditableShift>();
+					return new All<IEditableShift>();
 
     			return _mainShiftOptimizeActivitySpecification;
     		}

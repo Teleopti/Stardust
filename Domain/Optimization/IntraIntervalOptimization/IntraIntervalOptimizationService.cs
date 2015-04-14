@@ -7,7 +7,7 @@ namespace Teleopti.Ccc.Domain.Optimization.IntraIntervalOptimization
 {
 	public interface IIntraIntervalOptimizationService
 	{
-		void Execute(ISchedulingOptions schedulingOptions, DateOnlyPeriod selectedPeriod, IList<IScheduleDay> selectedSchedules, ISchedulingResultStateHolder schedulingResultStateHolder, IList<IScheduleMatrixPro> allScheduleMatrixPros, ISchedulePartModifyAndRollbackService rollbackService, IResourceCalculateDelayer resourceCalculateDelayer);
+		void Execute(ISchedulingOptions schedulingOptions, IOptimizationPreferences optimizationPreferences, DateOnlyPeriod selectedPeriod, IList<IScheduleDay> selectedSchedules, ISchedulingResultStateHolder schedulingResultStateHolder, IList<IScheduleMatrixPro> allScheduleMatrixPros, ISchedulePartModifyAndRollbackService rollbackService, IResourceCalculateDelayer resourceCalculateDelayer);
 		event EventHandler<ResourceOptimizerProgressEventArgs> ReportProgress;
 	}
 
@@ -30,7 +30,8 @@ namespace Teleopti.Ccc.Domain.Optimization.IntraIntervalOptimization
 			_intraIntervalIssueCalculator = intraIntervalIssueCalculator;
 		}
 
-		public void Execute(ISchedulingOptions schedulingOptions, DateOnlyPeriod selectedPeriod, IList<IScheduleDay> selectedSchedules, ISchedulingResultStateHolder schedulingResultStateHolder, IList<IScheduleMatrixPro> allScheduleMatrixPros, ISchedulePartModifyAndRollbackService rollbackService, IResourceCalculateDelayer resourceCalculateDelayer)
+		public void Execute(ISchedulingOptions schedulingOptions, IOptimizationPreferences optimizationPreferences, DateOnlyPeriod selectedPeriod, IList<IScheduleDay> selectedSchedules,
+			ISchedulingResultStateHolder schedulingResultStateHolder, IList<IScheduleMatrixPro> allScheduleMatrixPros, ISchedulePartModifyAndRollbackService rollbackService, IResourceCalculateDelayer resourceCalculateDelayer)
 		{
 			var personHashSet = new HashSet<IPerson>();
 			var cultureInfo = TeleoptiPrincipal.CurrentPrincipal.Regional.Culture;
@@ -75,7 +76,7 @@ namespace Teleopti.Ccc.Domain.Optimization.IntraIntervalOptimization
 						var affect = affectIssue(scheduleDay, intervalIssuesBefore.IssuesOnDay);
 						if(!affect) continue;
 						
-						var intervalIssuesAfter = _intraIntervalOptimizer.Optimize(schedulingOptions, rollbackService, schedulingResultStateHolder, person, dateOnly, allScheduleMatrixPros, resourceCalculateDelayer, skill, intervalIssuesBefore, false);
+						var intervalIssuesAfter = _intraIntervalOptimizer.Optimize(schedulingOptions, optimizationPreferences, rollbackService, schedulingResultStateHolder, person, dateOnly, allScheduleMatrixPros, resourceCalculateDelayer, skill, intervalIssuesBefore, false);
 
 						OnReportProgress(string.Concat("(", intervalIssuesAfter.IssuesOnDay.Count, "/", intervalIssuesAfter.IssuesOnDayAfter.Count, ")"));
 
@@ -99,7 +100,7 @@ namespace Teleopti.Ccc.Domain.Optimization.IntraIntervalOptimization
 						var affect = affectIssue(scheduleDay, intervalIssuesBefore.IssuesOnDayAfter);
 						if (!affect) continue;
 
-						var intervalIssuesAfter = _intraIntervalOptimizer.Optimize(schedulingOptions, rollbackService, schedulingResultStateHolder, person, dateOnly, allScheduleMatrixPros, resourceCalculateDelayer, skill, intervalIssuesBefore, true);
+						var intervalIssuesAfter = _intraIntervalOptimizer.Optimize(schedulingOptions, optimizationPreferences, rollbackService, schedulingResultStateHolder, person, dateOnly, allScheduleMatrixPros, resourceCalculateDelayer, skill, intervalIssuesBefore, true);
 
 						OnReportProgress(string.Concat("(", intervalIssuesAfter.IssuesOnDay.Count, "/", intervalIssuesAfter.IssuesOnDayAfter.Count, ")"));
 
@@ -145,12 +146,14 @@ namespace Teleopti.Ccc.Domain.Optimization.IntraIntervalOptimization
 
 	public class IntraIntervalOptimizationServiceToggle29846Off : IIntraIntervalOptimizationService
 	{
-		public event EventHandler<ResourceOptimizerProgressEventArgs> ReportProgress;
-		public void Execute(ISchedulingOptions schedulingOptions, DateOnlyPeriod selectedPeriod, IList<IScheduleDay> selectedSchedules, ISchedulingResultStateHolder schedulingResultStateHolder, IList<IScheduleMatrixPro> allScheduleMatrixPros, ISchedulePartModifyAndRollbackService rollbackService, IResourceCalculateDelayer resourceCalculateDelayer)
+		public void Execute(ISchedulingOptions schedulingOptions, IOptimizationPreferences optimizationPreferences,
+			DateOnlyPeriod selectedPeriod, IList<IScheduleDay> selectedSchedules, ISchedulingResultStateHolder schedulingResultStateHolder,
+			IList<IScheduleMatrixPro> allScheduleMatrixPros, ISchedulePartModifyAndRollbackService rollbackService,
+			IResourceCalculateDelayer resourceCalculateDelayer)
 		{
-				
 		}
 
+		public event EventHandler<ResourceOptimizerProgressEventArgs> ReportProgress;
 		public void OnReportProgress(string message)
 		{
 			var handler = ReportProgress;

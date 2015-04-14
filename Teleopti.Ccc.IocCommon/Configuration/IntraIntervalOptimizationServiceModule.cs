@@ -1,5 +1,6 @@
 ﻿using Autofac;
 using Teleopti.Ccc.Domain.FeatureFlags;
+using Teleopti.Ccc.Domain.Optimization;
 using Teleopti.Ccc.Domain.Optimization.IntraIntervalOptimization;
 using Teleopti.Ccc.Infrastructure.Toggle;
 
@@ -19,6 +20,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<ShiftProjectionCacheIntraIntervalValueCalculator>().As<IShiftProjectionCacheIntraIntervalValueCalculator>().SingleInstance();
 			builder.RegisterType<ShiftProjectionIntraIntervalBestFitCalculator>().As<IShiftProjectionIntraIntervalBestFitCalculator>().SingleInstance();
 			builder.RegisterType<SkillStaffPeriodIntraIntervalPeriodFinder>().As<ISkillStaffPeriodIntraIntervalPeriodFinder>().SingleInstance();
+			builder.RegisterType<MainShiftOptimizeActivitySpecificationSetter>().As<IMainShiftOptimizeActivitySpecificationSetter>();
 
 			builder.Register(c => c.Resolve<IToggleManager>().IsEnabled(Toggles.Schedule_IntraIntervalOptimizer_29846)
 			   ? (IIntraIntervalOptimizationService)c.Resolve<IntraIntervalOptimizationService>()

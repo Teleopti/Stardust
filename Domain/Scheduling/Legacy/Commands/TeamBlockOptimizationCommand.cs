@@ -182,7 +182,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 
 			if (optimizationPreferences.General.OptimizationStepIntraInterval)
 			{
-				_intraIntervalOptimizationCommand.Execute(schedulingOptions, selectedPeriod, selectedSchedules, _schedulerStateHolder().SchedulingResultState, allMatrixes, rollbackServiceWithResourceCalculation, resourceCalculateDelayer, _backgroundWorker);
+				_intraIntervalOptimizationCommand.Execute(schedulingOptions, optimizationPreferences, selectedPeriod, selectedSchedules, _schedulerStateHolder().SchedulingResultState, allMatrixes, rollbackServiceWithResourceCalculation, resourceCalculateDelayer, _backgroundWorker);
 			}
 
 			solveWeeklyRestViolations(selectedPeriod, selectedPersons, optimizationPreferences, resourceCalculateDelayer,
