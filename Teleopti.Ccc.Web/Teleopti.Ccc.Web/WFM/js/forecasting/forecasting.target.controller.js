@@ -234,7 +234,7 @@ angular.module('wfm.forecasting.target', ['n3-line-chart'])
 					series: [
 					  {
 					  	y: "val_0",
-					  	label: "This",
+					  	label: "Historical data",
 					  	type: "line",
 					  	color: "#bcbd22",
 					  	axis: "y",
@@ -242,11 +242,11 @@ angular.module('wfm.forecasting.target', ['n3-line-chart'])
 					  	visible: true,
 					  	dotSize: 2,
 					  	id: "series_0",
-					  	drawDots: true
+					  	drawDots: false
 					  },
 					  {
 					  	y: "val_1",
-					  	label: "Is",
+					  	label: "Teleopti Classic",
 					  	type: "line",
 					  	color: "#17becf",
 					  	axis: "y",
@@ -254,12 +254,11 @@ angular.module('wfm.forecasting.target', ['n3-line-chart'])
 					  	id: "series_1",
 					  	thickness: "1px",
 					  	dotSize: 2,
-					  	drawDots: true,
-					  	lineMode: undefined
+					  	drawDots: false
 					  },
 					  {
 					  	y: "val_2",
-					  	label: "Awesome",
+					  	label: "Teleopti Classic with Trend",
 					  	color: "#9467bd",
 					  	axis: "y",
 					  	type: "line",
@@ -267,7 +266,7 @@ angular.module('wfm.forecasting.target', ['n3-line-chart'])
 					  	visible: true,
 					  	dotSize: 2,
 					  	id: "series_2",
-					  	drawDots: true
+					  	drawDots: false
 					  }
 					],
 					tooltip: { mode: "scrubber" },
