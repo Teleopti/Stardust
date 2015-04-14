@@ -1232,7 +1232,6 @@
     <Content Include="WFM\js\seatManagement\html\filedialog.html" />
     <Content Include="WFM\vendor\ng-mfb\mfb.css.map" />
     <Content Include="WFM\css\_mfb.scss" />
-    <Content Include=".node\flatten-global-packages.cmd" />
     <None Include="WFM\css\_layout.scss" />
     <Content Include="WFM\css\main.css" />
     <None Include="WFM\css\_outbound.scss" />

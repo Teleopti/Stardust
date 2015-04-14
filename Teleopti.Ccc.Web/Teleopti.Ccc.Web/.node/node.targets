@@ -26,9 +26,6 @@
 		<NpmFlattenCmd>$(NodeDir)flatten-packages</NpmFlattenCmd>
 		<NpmInstallFlattenPackages>"$(NpmCmd)" install -g flatten-packages@0.1.4 -save-dev</NpmInstallFlattenPackages>
 		
-		<!-- NPM flatten global command -->
-		<NpmFlattenGlobalCmd>$(NodeDir)flatten-global-packages</NpmFlattenGlobalCmd>
-		
 		<!-- Protractor install command -->
 		<NpmInstallProtractorCmd>"$(NpmCmd)" update -g protractor -save-dev</NpmInstallProtractorCmd>
 		
@@ -52,13 +49,8 @@
 
 		<Message Text="Install Flatten Node Packages Command: $(NpmInstallFlattenPackages) /w WorkingDirectory: $(MSBuildProjectDirectory)\WFM" Importance="high" />
 		<Exec Command="$(NpmInstallFlattenPackages)" ContinueOnError="false" WorkingDirectory="$(NodeDir)" />
-		
-		<Message Text="Flatten Global Node Packages Command: $(NpmFlattenGlobalCmd) /w WorkingDirectory: $(MSBuildProjectDirectory)\WFM" Importance="high" />
-		<Exec Command="$(NpmFlattenGlobalCmd)" ContinueOnError="false" WorkingDirectory="$(MSBuildProjectDirectory)\WFM" />
-		
 		<Message Text="Flatten Node Packages Command: $(NpmFlattenCmd) /w WorkingDirectory: $(MSBuildProjectDirectory)\WFM" Importance="high" />
 		<Exec Command="$(NpmFlattenCmd)" ContinueOnError="false" WorkingDirectory="$(MSBuildProjectDirectory)\WFM" />
-		
 		<Message Text="HACK! Removing directory to get below 260 characters" Importance="high" />
 		<Exec Command="rmdir /S /Q $(MSBuildProjectDirectory)\WFM\node_modules\node-sass\test" />
 	</Target>
