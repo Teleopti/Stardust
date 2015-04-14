@@ -1,0 +1,12 @@
+﻿.workload {
+	position: relative
+}
+
+.forecasting-chart-line {
+	position:absolute;
+	right: 40px;
+}
+
+.forecasting-chart-line:hover {
+	color: white;
+}
