@@ -202,11 +202,11 @@
 				<tr>
 					<th>{{'FirstName' | translate}} <i class="mdi mdi-menu-up"></i> </th>
 					<th>{{'LastName' | translate}}</th>
-					<th>{{'EmployeeNo' | translate}}</th>
 					<th>{{'Team' | translate}}</th>
 					<th>{{'Email' | translate}}</th>
-					<th>{{'LeavingDate' | translate}}</th>
+					<th>{{'EmployeeNo' | translate}}</th>
 					<th ng-repeat="column in optionalColumns">{{column}}</th>
+					<th>{{'LeavingDate' | translate}}</th>
 				</tr>
 			</thead>
 			<tfoot>
@@ -234,13 +234,13 @@
 				<tr ng-repeat="person in searchResult" ng-click="toggleModal()">
 					<td>{{person.FirstName}}</td>
 					<td>{{person.LastName}}</td>
-					<td>{{person.EmploymentNumber}}</td>
 					<td>{{person.Team}}</td>
 					<td>{{person.Email}}</td>
-					<td>{{person.LeavingDate}}</td>
+					<td>{{person.EmploymentNumber}}</td>
 					<td ng-repeat="optionalColumnValue in person.OptionalColumnValues">
 						{{optionalColumnValue.Value}}
 					</td>
+					<td>{{person.LeavingDate}}</td>
 				</tr>
 			</tbody>
 		</table>
