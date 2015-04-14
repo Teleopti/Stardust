@@ -17,7 +17,8 @@ namespace Teleopti.Ccc.Web.Areas.People.Core.Providers
 		private readonly IOptionalColumnRepository _optionalColumnRepository;
 		private readonly ILoggedOnUser _loggonUser;
 
-		public PeopleSearchProvider(IPersonFinderReadOnlyRepository searchRepository,
+		public PeopleSearchProvider(
+			IPersonFinderReadOnlyRepository searchRepository,
 			IPersonRepository personRepository,
 			IPermissionProvider permissionProvider,
 			IOptionalColumnRepository optionalColumnRepository,
@@ -39,7 +40,7 @@ namespace Teleopti.Ccc.Web.Areas.People.Core.Providers
 			if (string.IsNullOrEmpty(keyword) && myTeam != null)
 			{
 				keyword = myTeam.Description.Name;
-				searchType = PersonFinderField.Organization;
+				searchType = PersonFinderField.All;
 			}
 
 			var search = new PersonFinderSearchCriteria(searchType, keyword, pageSize, currentDate, 1, 1)

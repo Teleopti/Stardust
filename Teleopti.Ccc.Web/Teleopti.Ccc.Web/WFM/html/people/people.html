@@ -196,55 +196,53 @@
 </div>
 
 <div class="wrapper row">
-	<div class="">
-		<table class="wfm-table material-depth-1 table-striped table-condensed table-hover">
-			<thead>
-				<tr>
-					<th>{{'FirstName' | translate}} <i class="mdi mdi-menu-up"></i> </th>
-					<th>{{'LastName' | translate}}</th>
-					<th>{{'Team' | translate}}</th>
-					<th>{{'Email' | translate}}</th>
-					<th>{{'EmployeeNo' | translate}}</th>
-					<th ng-repeat="column in optionalColumns">{{column}}</th>
-					<th>{{'TerminalDate' | translate}}</th>
-				</tr>
-			</thead>
-			<tfoot>
-				<tr>
-					<td colspan="{{6+optionalColumns.length}}">
-						<div class="pagination pull-right">
-							<ul class="wfm-list row">
-								<li style="display: inline-block" ng-class="{disabled: currentPageIndex == 1}">
-									<a href="" ng-click="prevPage()">« Prev</a>
-								</li>
-								<li style="display: inline-block" ng-repeat="n in range(totalPages)"
-									ng-class="{active: n == currentPageIndex}"
-									ng-click="setPage()">
-									<a href="" ng-bind="n">1</a>
-								</li>
-								<li style="display: inline-block" ng-class="{disabled: currentPageIndex == totalPages}">
-									<a href="" ng-click="nextPage()">Next »</a>
-								</li>
-							</ul>
-						</div>
-					</td>
-				</tr>
-			</tfoot>
-			<tbody>
-				<tr ng-repeat="person in searchResult" ng-click="toggleModal()">
-					<td>{{person.FirstName}}</td>
-					<td>{{person.LastName}}</td>
-					<td>{{person.Team}}</td>
-					<td>{{person.Email}}</td>
-					<td>{{person.EmploymentNumber}}</td>
-					<td ng-repeat="optionalColumnValue in person.OptionalColumnValues">
-						{{optionalColumnValue.Value}}
-					</td>
-					<td>{{person.LeavingDate}}</td>
-				</tr>
-			</tbody>
-		</table>
-	</div>
+	<table class="wfm-table material-depth-1 table-striped table-condensed table-hover">
+		<thead>
+			<tr>
+				<th>{{'FirstName' | translate}} <i class="mdi mdi-menu-up"></i> </th>
+				<th>{{'LastName' | translate}}</th>
+				<th>{{'Team' | translate}}</th>
+				<th>{{'Email' | translate}}</th>
+				<th>{{'EmployeeNo' | translate}}</th>
+				<th ng-repeat="column in optionalColumns">{{column}}</th>
+				<th>{{'TerminalDate' | translate}}</th>
+			</tr>
+		</thead>
+		<tfoot>
+			<tr>
+				<td colspan="{{6+optionalColumns.length}}">
+					<div class="pagination pull-right">
+						<ul class="wfm-list row">
+							<li style="display: inline-block" ng-class="{disabled: currentPageIndex == 1}">
+								<a href="" ng-click="prevPage()">« Prev</a>
+							</li>
+							<li style="display: inline-block" ng-repeat="n in range(totalPages)"
+								ng-class="{active: n == currentPageIndex}"
+								ng-click="setPage()">
+								<a href="" ng-bind="n">1</a>
+							</li>
+							<li style="display: inline-block" ng-class="{disabled: currentPageIndex == totalPages}">
+								<a href="" ng-click="nextPage()">Next »</a>
+							</li>
+						</ul>
+					</div>
+				</td>
+			</tr>
+		</tfoot>
+		<tbody>
+			<tr ng-repeat="person in searchResult" ng-click="toggleModal()">
+				<td>{{person.FirstName}}</td>
+				<td>{{person.LastName}}</td>
+				<td>{{person.Team}}</td>
+				<td>{{person.Email}}</td>
+				<td>{{person.EmploymentNumber}}</td>
+				<td ng-repeat="optionalColumnValue in person.OptionalColumnValues">
+					{{optionalColumnValue.Value}}
+				</td>
+				<td>{{person.LeavingDate}}</td>
+			</tr>
+		</tbody>
+	</table>
 </div>
 
 <modal-dialog show='modalShown' width='1000px' height='580px'>

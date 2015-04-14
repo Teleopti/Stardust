@@ -1,7 +1,8 @@
 ﻿'use strict';
 
-var peopleService = angular.module('peopleService', []);
-peopleService.service('PeopleService', ['$rootScope', function ($rootScope) {
+angular
+	.module('peopleService', [])
+	.service('PeopleService', ['$rootScope', function ($rootScope) {
 	var peopleService = {};
 
 	peopleService.peopleList = [
