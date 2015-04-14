@@ -1710,7 +1710,10 @@
     <Content Include="WFM\vendor\ng-image-input-with-preview\ng-image-input-with-preview.js" />
     <Content Include="WFM\vendor\ng-image-input-with-preview\ng-image-input-with-preview.min.css" />
     <Content Include="WFM\vendor\ng-image-input-with-preview\ng-image-input-with-preview.min.js" />
-    <Content Include="WFM\vendor\ui-bootstrap.min.js" />
+    <Content Include="WFM\vendor\ui-bootstrap-custom-build\ui-bootstrap-custom-0.12.1.js" />
+    <Content Include="WFM\vendor\ui-bootstrap-custom-build\ui-bootstrap-custom-0.12.1.min.js" />
+    <Content Include="WFM\vendor\ui-bootstrap-custom-build\ui-bootstrap-custom-tpls-0.12.1.js" />
+    <Content Include="WFM\vendor\ui-bootstrap-custom-build\ui-bootstrap-custom-tpls-0.12.1.min.js" />
     <Content Include="Content\amplify\amplify.min.js" />
     <Content Include="Content\bootstrap-timepicker\css\bootstrap-timepicker.css" />
     <Content Include="Content\bootstrap-timepicker\css\bootstrap-timepicker.min.css" />
