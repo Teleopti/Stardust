@@ -44,9 +44,14 @@ namespace Teleopti.Ccc.InfrastructureTest.Persisters.Schedules
 
 		private void makeTarget()
 		{
+			Target = CreateTarget();
+		}
+
+		protected virtual IScheduleRangePersister CreateTarget()
+		{
 			var currUnitOfWork = new CurrentUnitOfWork(CurrentUnitOfWorkFactory.Make());
 			var scheduleRep = new ScheduleRepository(currUnitOfWork);
-			Target = new ScheduleRangePersister(CurrentUnitOfWorkFactory.Make(),
+			return new ScheduleRangePersister(CurrentUnitOfWorkFactory.Make(),
 				new DifferenceEntityCollectionService<IPersistableScheduleData>(),
 				ConflictCollector(),
 				new ScheduleDifferenceSaver(scheduleRep),

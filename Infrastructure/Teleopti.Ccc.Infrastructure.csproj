@@ -265,6 +265,7 @@
     <Compile Include="MultiTenancy\Server\TenantAndPersonId.cs" />
     <Compile Include="MultiTenancy\Client\TenantDataManager.cs" />
     <Compile Include="NHibernateConfiguration\SecondLevelCache.cs" />
+    <Compile Include="Persisters\Schedules\CurrentUnitOfWorkScheduleRangePersister.cs" />
     <Compile Include="Persisters\WorkflowControlSetPublishDatePersister.cs" />
     <Compile Include="Repositories\ExistingForecastRepository.cs" />
     <Compile Include="Repositories\IQueryExtensions.cs" />

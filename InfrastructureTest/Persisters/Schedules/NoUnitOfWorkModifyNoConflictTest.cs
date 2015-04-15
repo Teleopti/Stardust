@@ -1,0 +1,52 @@
+﻿using System;
+using System.Collections.Generic;
+using SharpTestsEx;
+using Teleopti.Ccc.Domain.Collection;
+using Teleopti.Ccc.Domain.Scheduling.Assignment;
+using Teleopti.Ccc.Infrastructure.Persisters.Schedules;
+using Teleopti.Ccc.Infrastructure.Repositories;
+using Teleopti.Ccc.Infrastructure.UnitOfWork;
+using Teleopti.Interfaces.Domain;
+
+namespace Teleopti.Ccc.InfrastructureTest.Persisters.Schedules
+{
+	public class NoUnitOfWorkModifyNoConflictTest : ScheduleRangeConflictTest
+	{
+		private readonly DateOnly date = new DateOnly(2001, 1, 1);
+
+		protected override IEnumerable<IPersistableScheduleData> Given()
+		{
+			return new[] { new PersonAssignment(Person, Scenario, date) };
+		}
+
+		protected override void WhenOtherHasChanged(IScheduleRange othersScheduleRange)
+		{
+		}
+
+		protected override IScheduleRangePersister CreateTarget()
+		{
+			var currUnitOfWork = new CurrentUnitOfWork(CurrentUnitOfWorkFactory.Make());
+			var scheduleRep = new ScheduleRepository(currUnitOfWork);
+			return new CurrentUnitOfWorkScheduleRangePersister(new DifferenceEntityCollectionService<IPersistableScheduleData>(),
+				ConflictCollector(),
+				new ScheduleDifferenceSaver(scheduleRep));
+		}
+
+		protected override void WhenImChanging(IScheduleRange myScheduleRange)
+		{
+			var start = new DateTime(2001, 1, 1, 10, 0, 0, DateTimeKind.Utc);
+			var day = myScheduleRange.ScheduledDay(date);
+			day.CreateAndAddActivity(Activity, new DateTimePeriod(start, start.AddHours(2)), ShiftCategory);
+			DoModify(day);
+		}
+
+		protected override void Then(IEnumerable<PersistConflict> conflicts)
+		{
+			conflicts.Should().Be.Empty();
+		}
+
+		protected override void Then(IScheduleRange myScheduleRange)
+		{
+		}
+	}
+}

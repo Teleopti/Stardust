@@ -194,6 +194,7 @@
     <Compile Include="MultiTenancy\Server\PersistLogonAttemptTest.cs" />
     <Compile Include="MultiTenancy\Server\NHibernate\TenantUnitOfWorkManagerTest.cs" />
     <Compile Include="MultiTenancy\Server\PersistPersonInfoTest.cs" />
+    <Compile Include="Persisters\Schedules\NoUnitOfWorkModifyNoConflictTest.cs" />
     <Compile Include="PrincipalAndStateTestAttribute.cs" />
     <Compile Include="Repositories\ExistingForecastRepositoryTest.cs" />
     <Compile Include="Repositories\OutboundCampaignRepositoryTest.cs" />

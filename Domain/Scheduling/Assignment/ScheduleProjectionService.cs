@@ -23,7 +23,8 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 					InContractTime = false
 				});
 
-		private static readonly TimeSpan fakeLayerStart = new TimeSpan(8, 0, 0);
+		private static readonly TimeSpan fakeLayerStart = TimeSpan.FromHours(8);
+		private static readonly VisualLayerFactory _visualLayerFactory = new VisualLayerFactory();
 
 		/// <summary>
 		/// I deeply regret that scheduleDay was injected to ctor instead of passed to CreateProjection...
@@ -129,7 +130,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 
 			var start = dateAndPeriod.Period().StartDateTime.Add(fakeLayerStart);
 			var end = start.AddTicks(length);
-			return new VisualLayerFactory().CreateShiftSetupLayer(act, new DateTimePeriod(start, end), ScheduleDay.Person);
+			return _visualLayerFactory.CreateShiftSetupLayer(act, new DateTimePeriod(start, end), ScheduleDay.Person);
 		}
 
 		private void addMeetingToProjectionService(VisualLayerProjectionService projectionService, IEnumerable<IVisualLayer> assignmentProjection)
@@ -146,7 +147,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 		private static IEnumerable<IVisualLayer> createMeetingProjection(IPersonMeeting personMeeting, IEnumerable<IVisualLayer> assignmentProjection)
 		{
 			var retList = new List<IVisualLayer>();
-			var layerFactory = new VisualLayerFactory();
+			var layerFactory = _visualLayerFactory;
 			foreach (var visualLayer in assignmentProjection)
 			{
 				var intersectPeriod = visualLayer.Period.Intersection(personMeeting.Period);
@@ -164,7 +165,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 		{
 			foreach (var personAbsence in ScheduleDay.PersonAbsenceCollection(true))
 			{
-				var layerFactory = new VisualLayerFactory(); 
+				var layerFactory = _visualLayerFactory; 
 				foreach (var visualLayer in assignmentProjection)
 				{
 					var intersectPeriod = visualLayer.Period.Intersection(personAbsence.Period);

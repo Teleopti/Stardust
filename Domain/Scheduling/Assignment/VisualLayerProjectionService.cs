@@ -17,13 +17,12 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
     {
         private readonly IPerson _person;
         private readonly ILayerCollection<IPayload> _layerCollectionOriginal;
-        private readonly IVisualLayerFactory _standardVisualLayerFactory;
+	    private static readonly IVisualLayerFactory _standardVisualLayerFactory = new VisualLayerFactory();
 
         public VisualLayerProjectionService(IPerson person)
         {
             _person = person;
             _layerCollectionOriginal = new LayerCollection<IPayload>();
-            _standardVisualLayerFactory = new VisualLayerFactory();
         }
 
 			public void Add(IEnumerable<ILayer<IActivity>> layers, IVisualLayerFactory visualLayerFactory)

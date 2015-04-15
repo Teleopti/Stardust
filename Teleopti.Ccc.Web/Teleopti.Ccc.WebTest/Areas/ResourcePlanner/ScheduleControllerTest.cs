@@ -10,6 +10,7 @@ using Teleopti.Ccc.Domain.ResourceCalculation.GroupScheduling;
 using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
 using Teleopti.Ccc.Domain.Scheduling.ScheduleTagging;
 using Teleopti.Ccc.Domain.Security.Principal;
+using Teleopti.Ccc.Infrastructure.Persisters.Schedules;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
@@ -44,7 +45,8 @@ namespace Teleopti.Ccc.WebTest.Areas.ResourcePlanner
 					new SchedulerStateHolder(new SchedulingResultStateHolder(), MockRepository.GenerateMock<ICommonStateHolder>(), new CurrentTeleoptiPrincipal()),
 				()=>MockRepository.GenerateMock<IRequiredScheduleHelper>(), () => new GroupPagePerDateHolder(),
 				() => new ScheduleTagSetter(NullScheduleTag.Instance),
-				()=> new PersonSkillProvider());
+				()=> new PersonSkillProvider(),
+				MockRepository.GenerateMock<IScheduleRangePersister>());
 			var result =
 				(OkNegotiatedContentResult<SchedulingResultModel>)
 					target.FixedStaff(new FixedStaffSchedulingInput {StartDate = period.StartDate.Date, EndDate = period.EndDate.Date});

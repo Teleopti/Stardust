@@ -16,6 +16,7 @@ using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
 using Teleopti.Ccc.Domain.Scheduling.ScheduleTagging;
 using Teleopti.Ccc.Domain.Security.Principal;
+using Teleopti.Ccc.Infrastructure.Persisters.Schedules;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
@@ -41,9 +42,10 @@ namespace Teleopti.Ccc.Web.Areas.ResourcePlanner
 		private readonly Func<IRequiredScheduleHelper> _requiredScheduleHelper;
 		private readonly Func<IGroupPagePerDateHolder> _groupPagePerDateHolder;
 		private readonly Func<IScheduleTagSetter> _scheduleTagSetter;
+		private readonly IScheduleRangePersister _persister;
 		private readonly Func<IPersonSkillProvider> _personSkillProvider;
 
-		public ScheduleController(IScenarioRepository scenarioRepository, ISkillDayLoadHelper skillDayLoadHelper, ISkillRepository skillRepository, IPersonRepository personRepository, IScheduleRepository scheduleRepository, IDayOffTemplateRepository dayOffTemplateRepository, IPersonAbsenceAccountRepository personAbsenceAccountRepository, IActivityRepository activityRepository, Func<IPeopleAndSkillLoaderDecider> decider, ICurrentTeleoptiPrincipal principal, ICurrentUnitOfWorkFactory currentUnitOfWorkFactory, Func<IFixedStaffSchedulingService> fixedStaffSchedulingService, Func<IScheduleCommand> scheduleCommand, Func<ISchedulerStateHolder> schedulerStateHolder, Func<IRequiredScheduleHelper> requiredScheduleHelper, Func<IGroupPagePerDateHolder> groupPagePerDateHolder, Func<IScheduleTagSetter> scheduleTagSetter, Func<IPersonSkillProvider> personSkillProvider)
+		public ScheduleController(IScenarioRepository scenarioRepository, ISkillDayLoadHelper skillDayLoadHelper, ISkillRepository skillRepository, IPersonRepository personRepository, IScheduleRepository scheduleRepository, IDayOffTemplateRepository dayOffTemplateRepository, IPersonAbsenceAccountRepository personAbsenceAccountRepository, IActivityRepository activityRepository, Func<IPeopleAndSkillLoaderDecider> decider, ICurrentTeleoptiPrincipal principal, ICurrentUnitOfWorkFactory currentUnitOfWorkFactory, Func<IFixedStaffSchedulingService> fixedStaffSchedulingService, Func<IScheduleCommand> scheduleCommand, Func<ISchedulerStateHolder> schedulerStateHolder, Func<IRequiredScheduleHelper> requiredScheduleHelper, Func<IGroupPagePerDateHolder> groupPagePerDateHolder, Func<IScheduleTagSetter> scheduleTagSetter, Func<IPersonSkillProvider> personSkillProvider, IScheduleRangePersister persister)
 		{
 			_scenarioRepository = scenarioRepository;
 			_skillDayLoadHelper = skillDayLoadHelper;
@@ -63,6 +65,7 @@ namespace Teleopti.Ccc.Web.Areas.ResourcePlanner
 			_groupPagePerDateHolder = groupPagePerDateHolder;
 			_scheduleTagSetter = scheduleTagSetter;
 			_personSkillProvider = personSkillProvider;
+			_persister = persister;
 		}
 
 		[HttpPost, Route("api/ResourcePlanner/Schedule/FixedStaff"), Authorize, UnitOfWork]
@@ -72,7 +75,7 @@ namespace Teleopti.Ccc.Web.Areas.ResourcePlanner
 			var scenario = _scenarioRepository.LoadDefaultScenario();
 			var timeZone = _principal.Current().Regional.TimeZone;
 
-			makeSureActivitiesAreLoaded();
+			makeSurePrereqsAreLoaded();
 			var allPeople = _personRepository.FindPeopleInOrganizationLight(period).ToList();
 			var selectedPeople =
 				allPeople.Where(
@@ -141,7 +144,13 @@ namespace Teleopti.Ccc.Web.Areas.ResourcePlanner
 				new OptimizationPreferences());
 			_fixedStaffSchedulingService().DayScheduled -= schedulingServiceOnDayScheduled;
 
-			return Ok(new SchedulingResultModel{DaysScheduled = daysScheduled});
+			var conflicts = new List<PersistConflict>();
+			foreach (var schedule in schedulerStateHolder.Schedules)
+			{
+				conflicts.AddRange(_persister.Persist(schedule.Value));
+			}
+
+			return Ok(new SchedulingResultModel{DaysScheduled = daysScheduled, ConflictCount = conflicts.Count()});
 		}
 
 		private void initializePersonSkillProviderBeforeAccessingItFromOtherThreads(DateOnlyPeriod period, List<IPerson> allPeople)
@@ -151,9 +160,10 @@ namespace Teleopti.Ccc.Web.Areas.ResourcePlanner
 			allPeople.ForEach(p => dayCollection.ForEach(d => provider.SkillsOnPersonDate(p, d)));
 		}
 
-		private void makeSureActivitiesAreLoaded()
+		private void makeSurePrereqsAreLoaded()
 		{
 			_activityRepository.LoadAll();
+			_dayOffTemplateRepository.LoadAll();
 		}
 	}
 
