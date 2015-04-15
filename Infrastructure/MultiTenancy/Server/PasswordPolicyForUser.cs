@@ -16,9 +16,9 @@ namespace Teleopti.Ccc.Infrastructure.MultiTenancy.Server
 		}
 		protected PasswordPolicyForUser() { }
 
-		public virtual DateTime LastPasswordChange { get; protected set; }
-		public virtual DateTime InvalidAttemptsSequenceStart { get; protected set; }
-		public virtual int InvalidAttempts { get; protected set; }
+		public virtual DateTime LastPasswordChange { get; set; }
+		public virtual DateTime InvalidAttemptsSequenceStart { get; set; }
+		public virtual int InvalidAttempts { get; set; }
 		public virtual bool IsLocked { get; protected set; }
 		public virtual PersonInfo PersonInfo { get; protected set; }
 

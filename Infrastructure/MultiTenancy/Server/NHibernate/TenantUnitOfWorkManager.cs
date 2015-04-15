@@ -44,6 +44,7 @@ namespace Teleopti.Ccc.Infrastructure.MultiTenancy.Server.NHibernate
 				"Teleopti.Ccc.Infrastructure.MultiTenancy.Server.PersonInfo_OldSchema.hbm.xml",
 				"Teleopti.Ccc.Infrastructure.MultiTenancy.Server.PersonInfo.hbm.xml",
 				"Teleopti.Ccc.Infrastructure.MultiTenancy.Server.PasswordPolicyForUser_OldSchema.hbm.xml",
+				"Teleopti.Ccc.Infrastructure.MultiTenancy.Server.PasswordPolicyForUser.hbm.xml",
 				"Teleopti.Ccc.Infrastructure.MultiTenancy.Server.Tenant_OldSchema.hbm.xml",
 				"Teleopti.Ccc.Infrastructure.MultiTenancy.Server.Tenant.hbm.xml"
 			}, typeof (TenantUnitOfWorkManager).Assembly);

@@ -14,4 +14,20 @@
 		<property name="ApplicationLogonName"/>
 		<property name="Password"/>
 	</class>
+
+	<query name="identityUserQuery">
+		<![CDATA[
+select p from PersonInfo p
+where p.Identity = :identity
+and (p.TerminalDate is null or p.TerminalDate >= convert(date,getdate()))
+]]>
+	</query>
+
+	<query name="applicationUserQuery">
+		<![CDATA[
+select pi from PersonInfo pi
+where pi.ApplicationLogonName=:userName
+and (pi.TerminalDate is null or pi.TerminalDate >= convert(date,getdate()))
+]]>
+	</query>
 </hibernate-mapping>

@@ -10,11 +10,74 @@ using Teleopti.Ccc.InfrastructureTest.Helper;
 using Teleopti.Ccc.InfrastructureTest.UnitOfWork;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
+using Teleopti.Ccc.TestCommon.TestData;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.InfrastructureTest.MultiTenancy.Server
 {
 	public class IdentityUserQueryTest : DatabaseTestWithoutTransaction
+	{
+		private Guid personId;
+		private string correctIdentity;
+		private IIdentityUserQuery target;
+		private TenantUnitOfWorkManager _tenantUnitOfWorkManager;
+
+		[Test]
+		public void ShouldFindPersonId()
+		{
+			var result = target.FindUserData(correctIdentity);
+			result.Id.Should().Be.EqualTo(personId);
+		}
+
+		[Test]
+		public void ShouldFindTenant()
+		{
+			var result = target.FindUserData(correctIdentity);
+			result.Tenant.Should().Be.EqualTo(Tenant.DefaultName);
+		}
+
+
+		[Test]
+		public void NonExistingUserShouldFail()
+		{
+			var result = target.FindUserData("incorrectUserName");
+			result.Should().Be.Null();
+		}
+
+		[Test]
+		public void TerminatedUserShouldFail()
+		{
+			var personInDatabase = _tenantUnitOfWorkManager.CurrentSession().Get<PersonInfo>(personId);
+			personInDatabase.TerminalDate = DateOnly.Today.AddDays(-2);
+
+
+			target.FindUserData(correctIdentity)
+				.Should().Be.Null();
+		}
+
+		[SetUp]
+		public void Setup_WillBeChangedWhenMovedAwayFromUnitOfWork()
+		{
+			correctIdentity = RandomName.Make();
+			_tenantUnitOfWorkManager = TenantUnitOfWorkManager.CreateInstanceForTest(ConnectionStringHelper.ConnectionStringUsedInTests);
+			var tenant = new FindTenantByNameQuery(_tenantUnitOfWorkManager).Find(Tenant.DefaultName);
+			var pInfo = new PersonInfo(tenant);
+			pInfo.SetIdentity(correctIdentity);
+			var personInfoPersister = new PersistPersonInfo(_tenantUnitOfWorkManager);
+			personInfoPersister.Persist(pInfo);
+			personId = pInfo.Id;
+			_tenantUnitOfWorkManager.CurrentSession().Flush();
+			target = new IdentityUserQuery(_tenantUnitOfWorkManager);
+		}
+
+		[TearDown]
+		public void Teardown_WillBeChangedWhenMovedAwayFromUnitOfWork()
+		{
+			_tenantUnitOfWorkManager.Dispose();
+		}
+	}
+
+	public class IdentityUserQueryTest_OldSchema_RemoveWhenToggleIsGone : DatabaseTestWithoutTransaction
 	{
 		private Guid personId;
 		private string correctIdentity;
@@ -77,7 +140,7 @@ namespace Teleopti.Ccc.InfrastructureTest.MultiTenancy.Server
 				personId = personInDatabase.Id.Value;
 			}
 			_tenantUnitOfWorkManager = TenantUnitOfWorkManager.CreateInstanceForTest(ConnectionStringHelper.ConnectionStringUsedInTests);
-			target = new IdentityUserQuery(_tenantUnitOfWorkManager);
+			target = new IdentityUserQuery_OldSchema(_tenantUnitOfWorkManager);
 		}
 
 		[TearDown]

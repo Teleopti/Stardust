@@ -13,7 +13,59 @@ using Teleopti.Ccc.TestCommon.TestData;
 
 namespace Teleopti.Ccc.InfrastructureTest.MultiTenancy.Server
 {
-	public class ApplicationUserTenantQueryTest : DatabaseTestWithoutTransaction
+	public class ApplicationUserTenantQueryTest
+	{
+		private Guid personId;
+		private string correctUserName;
+		private IApplicationUserTenantQuery target;
+		private TenantUnitOfWorkManager _tenantUnitOfWorkManager;
+
+		[Test]
+		public void ShouldFindPersonId()
+		{
+			var result = target.Find(correctUserName);
+			result.Id.Should().Be.EqualTo(personId);
+		}
+
+		[Test]
+		public void ShouldFindTenant()
+		{
+			var result = target.Find(correctUserName);
+			result.Tenant.Should().Be.EqualTo(Tenant.DefaultName);
+		}
+
+		[Test]
+		public void ShouldReturnNullIfNotFound()
+		{
+			target.Find("not existing")
+				.Should().Be.Null();
+		}
+
+
+		[SetUp]
+		public void Setup_WillBeChangedWhenMovedAwayFromUnitOfWork()
+		{
+			correctUserName = RandomName.Make();
+			_tenantUnitOfWorkManager = TenantUnitOfWorkManager.CreateInstanceForTest(ConnectionStringHelper.ConnectionStringUsedInTests);
+			var tenant = new FindTenantByNameQuery(_tenantUnitOfWorkManager).Find(Tenant.DefaultName);
+			var pInfo = new PersonInfo(tenant);
+			pInfo.SetApplicationLogonName(correctUserName);
+			pInfo.SetPassword(RandomName.Make());
+			var personInfoPersister = new PersistPersonInfo(_tenantUnitOfWorkManager);
+			personInfoPersister.Persist(pInfo);
+			personId = pInfo.Id;
+			_tenantUnitOfWorkManager.CurrentSession().Flush();
+			target = new ApplicationUserTenantQuery(_tenantUnitOfWorkManager);
+		}
+
+		[TearDown]
+		public void Clean()
+		{
+			_tenantUnitOfWorkManager.Dispose();
+		}
+	}
+
+	public class ApplicationUserTenantQueryTest_OldSchema_RemoveMeWhenToggleIsGone : DatabaseTestWithoutTransaction
 	{
 		private Guid personId;
 		private string correctUserName;
@@ -70,7 +122,7 @@ namespace Teleopti.Ccc.InfrastructureTest.MultiTenancy.Server
 				personId = personInDatabase.Id.Value;
 			}
 			_tenantUnitOfWorkManager = TenantUnitOfWorkManager.CreateInstanceForTest(ConnectionStringHelper.ConnectionStringUsedInTests);
-			target = new ApplicationUserTenantQuery(_tenantUnitOfWorkManager);
+			target = new ApplicationUserTenantQuery_OldSchema(_tenantUnitOfWorkManager);
 		}
 	}
 }
