@@ -55,7 +55,7 @@
 					<div class="pagination pull-right">
 						<ul>
 							<li class="pagination-item" ng-class="{disabled: currentPageIndex == 1}">
-								<a href="" ng-click="prevPage()">« Prev</a>
+								<a href="" ng-click="prevPage()"><i class="mdi mdi-chevron-double-left"></i>{{'RepViewerPreviousPage'| translate}}</a>
 							</li>
 							<li class="pagination-item" ng-repeat="n in range(totalPages)"
 							    ng-class="{active: n == currentPageIndex}"
@@ -63,7 +63,7 @@
 								<a href="" ng-bind="n">1</a>
 							</li>
 							<li class="pagination-item" ng-class="{disabled: currentPageIndex == totalPages}">
-								<a href="" ng-click="nextPage()">Next »</a>
+								<a href="" ng-click="nextPage()">{{'RepViewerNextPage'| translate}} <i class="mdi mdi-chevron-double-right"></i></a>
 							</li>
 						</ul>
 					</div>
