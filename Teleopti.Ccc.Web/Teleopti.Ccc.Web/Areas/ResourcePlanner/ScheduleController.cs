@@ -32,17 +32,18 @@ namespace Teleopti.Ccc.Web.Areas.ResourcePlanner
 		private readonly IDayOffTemplateRepository _dayOffTemplateRepository;
 		private readonly IPersonAbsenceAccountRepository _personAbsenceAccountRepository;
 		private readonly IActivityRepository _activityRepository;
-		private readonly IPeopleAndSkillLoaderDecider _decider;
+		private readonly Func<IPeopleAndSkillLoaderDecider> _decider;
 		private readonly ICurrentTeleoptiPrincipal _principal;
 		private readonly ICurrentUnitOfWorkFactory _currentUnitOfWorkFactory;
 		private readonly Func<IFixedStaffSchedulingService> _fixedStaffSchedulingService;
 		private readonly Func<IScheduleCommand> _scheduleCommand;
 		private readonly Func<ISchedulerStateHolder> _schedulerStateHolder;
-		private readonly IRequiredScheduleHelper _requiredScheduleHelper;
+		private readonly Func<IRequiredScheduleHelper> _requiredScheduleHelper;
 		private readonly Func<IGroupPagePerDateHolder> _groupPagePerDateHolder;
 		private readonly Func<IScheduleTagSetter> _scheduleTagSetter;
+		private readonly Func<IPersonSkillProvider> _personSkillProvider;
 
-		public ScheduleController(IScenarioRepository scenarioRepository, ISkillDayLoadHelper skillDayLoadHelper, ISkillRepository skillRepository, IPersonRepository personRepository, IScheduleRepository scheduleRepository, IDayOffTemplateRepository dayOffTemplateRepository, IPersonAbsenceAccountRepository personAbsenceAccountRepository, IActivityRepository activityRepository, IPeopleAndSkillLoaderDecider decider, ICurrentTeleoptiPrincipal principal, ICurrentUnitOfWorkFactory currentUnitOfWorkFactory, Func<IFixedStaffSchedulingService> fixedStaffSchedulingService, Func<IScheduleCommand> scheduleCommand, Func<ISchedulerStateHolder> schedulerStateHolder, IRequiredScheduleHelper requiredScheduleHelper, Func<IGroupPagePerDateHolder> groupPagePerDateHolder, Func<IScheduleTagSetter> scheduleTagSetter)
+		public ScheduleController(IScenarioRepository scenarioRepository, ISkillDayLoadHelper skillDayLoadHelper, ISkillRepository skillRepository, IPersonRepository personRepository, IScheduleRepository scheduleRepository, IDayOffTemplateRepository dayOffTemplateRepository, IPersonAbsenceAccountRepository personAbsenceAccountRepository, IActivityRepository activityRepository, Func<IPeopleAndSkillLoaderDecider> decider, ICurrentTeleoptiPrincipal principal, ICurrentUnitOfWorkFactory currentUnitOfWorkFactory, Func<IFixedStaffSchedulingService> fixedStaffSchedulingService, Func<IScheduleCommand> scheduleCommand, Func<ISchedulerStateHolder> schedulerStateHolder, Func<IRequiredScheduleHelper> requiredScheduleHelper, Func<IGroupPagePerDateHolder> groupPagePerDateHolder, Func<IScheduleTagSetter> scheduleTagSetter, Func<IPersonSkillProvider> personSkillProvider)
 		{
 			_scenarioRepository = scenarioRepository;
 			_skillDayLoadHelper = skillDayLoadHelper;
@@ -61,6 +62,7 @@ namespace Teleopti.Ccc.Web.Areas.ResourcePlanner
 			_requiredScheduleHelper = requiredScheduleHelper;
 			_groupPagePerDateHolder = groupPagePerDateHolder;
 			_scheduleTagSetter = scheduleTagSetter;
+			_personSkillProvider = personSkillProvider;
 		}
 
 		[HttpPost, Route("api/ResourcePlanner/Schedule/FixedStaff"), Authorize, UnitOfWork]
@@ -82,11 +84,13 @@ namespace Teleopti.Ccc.Web.Areas.ResourcePlanner
 									pp.PersonContract.Contract.EmploymentType != EmploymentType.HourlyStaff)).ToList();
 			var allSkills = _skillRepository.FindAllWithSkillDays(period);
 			var dateTimePeriod = period.ToDateTimePeriod(timeZone);
+			initializePersonSkillProviderBeforeAccessingItFromOtherThreads(period, allPeople);
 
-			_decider.Execute(scenario, dateTimePeriod, selectedPeople);
+			var loaderDecider = _decider();
+			loaderDecider.Execute(scenario, dateTimePeriod, selectedPeople);
 
-			_decider.FilterSkills(allSkills);
-			_decider.FilterPeople(allPeople);
+			loaderDecider.FilterSkills(allSkills);
+			loaderDecider.FilterPeople(allPeople);
 
 			var forecast = _skillDayLoadHelper.LoadSchedulerSkillDays(period, allSkills, scenario);
 
@@ -133,11 +137,18 @@ namespace Teleopti.Ccc.Web.Areas.ResourcePlanner
 				GroupPageForShiftCategoryFairness = new GroupPageLight {Key = "Main", Name = UserTexts.Resources.Main},
 				TagToUseOnScheduling = NullScheduleTag.Instance
 			}), new NoBackgroundWorker(), schedulerStateHolder, allSchedules, _groupPagePerDateHolder(),
-				_requiredScheduleHelper,
+				_requiredScheduleHelper(),
 				new OptimizationPreferences());
 			_fixedStaffSchedulingService().DayScheduled -= schedulingServiceOnDayScheduled;
 
 			return Ok(new SchedulingResultModel{DaysScheduled = daysScheduled});
+		}
+
+		private void initializePersonSkillProviderBeforeAccessingItFromOtherThreads(DateOnlyPeriod period, List<IPerson> allPeople)
+		{
+			var provider = _personSkillProvider();
+			var dayCollection = period.DayCollection();
+			allPeople.ForEach(p => dayCollection.ForEach(d => provider.SkillsOnPersonDate(p, d)));
 		}
 
 		private void makeSureActivitiesAreLoaded()

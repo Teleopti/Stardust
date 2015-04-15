@@ -34,7 +34,7 @@ namespace Teleopti.Ccc.WebTest.Areas.ResourcePlanner
 				MockRepository.GenerateMock<IDayOffTemplateRepository>(),
 				MockRepository.GenerateMock<IPersonAbsenceAccountRepository>(),
 				MockRepository.GenerateMock<IActivityRepository>(),
-				MockRepository.GenerateMock<IPeopleAndSkillLoaderDecider>(),
+				()=>MockRepository.GenerateMock<IPeopleAndSkillLoaderDecider>(),
 				new FakeCurrentTeleoptiPrincipal(new TeleoptiPrincipal(new TeleoptiIdentity("", null, null, null),
 					PersonFactory.CreatePerson(new Name("Anna", "Andersson"), TimeZoneInfo.Utc))),
 				MockRepository.GenerateMock<ICurrentUnitOfWorkFactory>(),
@@ -42,8 +42,9 @@ namespace Teleopti.Ccc.WebTest.Areas.ResourcePlanner
 				() => MockRepository.GenerateMock<IScheduleCommand>(),
 				() =>
 					new SchedulerStateHolder(new SchedulingResultStateHolder(), MockRepository.GenerateMock<ICommonStateHolder>(), new CurrentTeleoptiPrincipal()),
-				MockRepository.GenerateMock<IRequiredScheduleHelper>(), () => new GroupPagePerDateHolder(),
-				() => new ScheduleTagSetter(NullScheduleTag.Instance));
+				()=>MockRepository.GenerateMock<IRequiredScheduleHelper>(), () => new GroupPagePerDateHolder(),
+				() => new ScheduleTagSetter(NullScheduleTag.Instance),
+				()=> new PersonSkillProvider());
 			var result =
 				(OkNegotiatedContentResult<SchedulingResultModel>)
 					target.FixedStaff(new FixedStaffSchedulingInput {StartDate = period.StartDate.Date, EndDate = period.EndDate.Date});

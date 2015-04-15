@@ -165,7 +165,7 @@ namespace Teleopti.Ccc.Win.Common
             return personSkillString.ToString();
         }
 
-        private static string GetPersonExternalLogOnNames(IList<IExternalLogOn> personExternalLogOnCollection)
+        private static string GetPersonExternalLogOnNames(IEnumerable<IExternalLogOn> personExternalLogOnCollection)
         {
             StringBuilder personExternalLogOnNameString = new StringBuilder();
 
