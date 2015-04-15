@@ -17,7 +17,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 			if (schedulingOptions == null)
 				return;
 
-			IOptimizerActivitiesPreferences optimizerActivitiesPreferences = CreateOptimizerActivitiesPreferences(optimizationPreferences);
+			IOptimizerActivitiesPreferences optimizerActivitiesPreferences = createOptimizerActivitiesPreferences(optimizationPreferences);
 
 			if (optimizerActivitiesPreferences == null)
 				return;
@@ -28,7 +28,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 
 		}
 
-		public IOptimizerActivitiesPreferences CreateOptimizerActivitiesPreferences(IOptimizationPreferences optimizationPreferences)
+		private IOptimizerActivitiesPreferences createOptimizerActivitiesPreferences(IOptimizationPreferences optimizationPreferences)
 		{
 			if (optimizationPreferences == null)
 				return null;

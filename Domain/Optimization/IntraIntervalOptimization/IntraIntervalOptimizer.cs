@@ -61,6 +61,7 @@ namespace Teleopti.Ccc.Domain.Optimization.IntraIntervalOptimization
 			rollbackService.ClearModificationCollection();
 
 			var daySchedule = totalScheduleRange.ScheduledDay(dateOnly);
+			//New bug introduced here
 			var originalMainShift = daySchedule.GetEditorShift();
 			_mainShiftOptimizeActivitySpecificationSetter.SetMainShiftOptimizeActivitySpecification(schedulingOptions, optimizationPreferences, originalMainShift, dateOnly);
 
