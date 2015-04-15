@@ -65,9 +65,9 @@ namespace Teleopti.Ccc.WebTest.Areas.People.Providers
 
 			var optionalColumn = new OptionalColumn("CellPhone");
 			optionalColumnRepository.Stub(x => x.GetOptionalColumns<Person>()).Return(new List<IOptionalColumn>()
-            {
-                optionalColumn
-            });
+			{
+				optionalColumn
+			});
 
 			var optionalColumnValue = new OptionalColumnValue("123456");
 			person.AddOptionalColumnValue(optionalColumnValue, optionalColumn);

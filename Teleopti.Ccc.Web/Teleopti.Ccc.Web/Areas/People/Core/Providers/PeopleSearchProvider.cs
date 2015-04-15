@@ -40,7 +40,7 @@ namespace Teleopti.Ccc.Web.Areas.People.Core.Providers
 			if (string.IsNullOrEmpty(keyword) && myTeam != null)
 			{
 				keyword = myTeam.Description.Name;
-				searchType = PersonFinderField.All;
+				searchType = PersonFinderField.Organization;
 			}
 
 			var search = new PersonFinderSearchCriteria(searchType, keyword, pageSize, currentDate, 1, 1)
