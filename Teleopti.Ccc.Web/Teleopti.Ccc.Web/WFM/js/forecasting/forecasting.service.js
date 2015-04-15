@@ -10,5 +10,4 @@ forecastingService.service('Forecasting', ['$resource', function ($resource) {
 	this.measureForecastMethod = $resource('../api/Forecasting/MeasureForecastMethod', {}, {
 		get: { method: 'GET', params: {}, isArray: true }
 	});
-
 }]);

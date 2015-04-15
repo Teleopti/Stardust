@@ -508,6 +508,7 @@
     <Compile Include="ETL\RunningEtlJob.cs" />
     <Compile Include="Forecasting\Angel\Accuracy\ForecastMethodProvider.cs" />
     <Compile Include="Forecasting\Angel\Accuracy\IForecastMethodProvider.cs" />
+    <Compile Include="Forecasting\Angel\Accuracy\IHistoricalPeriodProvider.cs" />
     <Compile Include="Forecasting\Angel\Accuracy\MethodAccuracy.cs" />
     <Compile Include="Forecasting\Angel\AverageStatistics.cs" />
     <Compile Include="Forecasting\Angel\Accuracy\ForecastingMeanAbsolutePercentageDeviation.cs" />

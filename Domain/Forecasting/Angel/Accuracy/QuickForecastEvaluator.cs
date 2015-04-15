@@ -1,8 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Domain.Repositories;
-using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Forecasting.Angel.Accuracy
 {
@@ -10,27 +8,20 @@ namespace Teleopti.Ccc.Domain.Forecasting.Angel.Accuracy
 	{
 		private readonly IQuickForecastSkillEvaluator _quickForecastSkillEvaluator;
 		private readonly ISkillRepository _skillRepository;
-		private readonly INow _now;
+		private readonly IHistoricalPeriodProvider _historicalPeriodProvider;
 
-		public QuickForecastEvaluator(IQuickForecastSkillEvaluator quickForecastSkillEvaluator, ISkillRepository skillRepository, INow now)
+		public QuickForecastEvaluator(IQuickForecastSkillEvaluator quickForecastSkillEvaluator, ISkillRepository skillRepository, IHistoricalPeriodProvider historicalPeriodProvider)
 		{
 			_quickForecastSkillEvaluator = quickForecastSkillEvaluator;
 			_skillRepository = skillRepository;
-			_now = now;
+			_historicalPeriodProvider = historicalPeriodProvider;
 		}
 
 		public IEnumerable<SkillAccuracy> MeasureForecastForAllSkills()
 		{
-			var historicalPeriod = getHistoricalPeriod();
+			var historicalPeriod = _historicalPeriodProvider.PeriodForEvaluate();
 			var skills = _skillRepository.FindSkillsWithAtLeastOneQueueSource();
 			return skills.Select(skill => _quickForecastSkillEvaluator.Measure(skill, historicalPeriod)).ToList();
-		}
-
-		private DateOnlyPeriod getHistoricalPeriod()
-		{
-			var nowDate = _now.LocalDateOnly();
-			var historicalPeriod = new DateOnlyPeriod(new DateOnly(nowDate.Date.AddYears(-2)), nowDate);
-			return historicalPeriod;
 		}
 	}
 }

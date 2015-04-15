@@ -66,6 +66,15 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<ForecastVolumeApplier>()
 				.SingleInstance()
 				.As<IForecastVolumeApplier>();
+			builder.RegisterType<PreForecaster>()
+				.SingleInstance()
+				.As<IPreForecaster>();
+			builder.RegisterType<HistoricalPeriodProvider>()
+				.SingleInstance()
+				.As<IHistoricalPeriodProvider>();
+			builder.RegisterType<PreForecastWorkload>()
+				.SingleInstance()
+				.As<IPreForecastWorkload>();
 		}
 	}
 }

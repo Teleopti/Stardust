@@ -55,31 +55,35 @@
 					{{workload.Name}}
 					<i class="pull-right workload-accuracy">{{workload.Accuracy}}</i>
 					<span><i class="mdi mdi-check"></i></span>
-					<i class="mdi mdi-chart-line forecasting-chart-line" ng-click="modalLaunch = true; $event.stopPropagation();"></i>
-					<div ng-cloak class="modal-box" ng-click="$event.stopPropagation()">
-						<div ng-cloak ng-show="modalLaunch">
-							<div class="modalbg">
-								<div class="dialog">
-									<div class="modal-header">
-										{{workload.Name}}
-									</div>
-									<div class="modal-inner-content">
-										<div class="wfm-block">
-											<linechart data="data" options="options" mode="" width="1000" height="500"></linechart>
-										</div>
-									</div>
-									<div class="modal-footer">
-										<aside>
-											<a ng-click="modalLaunch = false" class="wfm-btn wfm-btn-invis-primary">Cancel</a>
-											<a class="wfm-btn wfm-btn-invis-primary">Ok</a>
-										</aside>
-									</div>
-								</div>
-							</div>
-						</div>
-					</div>
+					<i class="mdi mdi-chart-line forecasting-chart-line" ng-click="openModal(workload);$event.stopPropagation();"></i>
+					<div ng-include="'forecasting-chart.html'"></div>
 				</div>
 			</div>
 		</li>
 	</ol>
+</script>
+
+<script type="text/ng-template" id="forecasting-chart.html">
+	<div ng-cloak class="modal-box" ng-click="$event.stopPropagation()">
+		<div ng-cloak ng-show="workload.modalLaunch">
+			<div class="modalbg">
+				<div class="dialog">
+					<div class="modal-header">
+						{{workload.Name}}
+					</div>
+					<div class="modal-inner-content">
+						<div class="wfm-block">
+							<linechart data="data" options="options" mode="" width="1000" height="500"></linechart>
+						</div>
+					</div>
+					<div class="modal-footer">
+						<aside>
+							<a ng-click="workload.modalLaunch = false" class="wfm-btn wfm-btn-invis-primary">Cancel</a>
+							<a class="wfm-btn wfm-btn-invis-primary">Ok</a>
+						</aside>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
 </script>

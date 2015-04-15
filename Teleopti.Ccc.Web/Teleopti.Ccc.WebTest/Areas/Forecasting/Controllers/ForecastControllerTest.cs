@@ -23,7 +23,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Forecasting.Controllers
 			var skill1 = SkillFactory.CreateSkillWithWorkloadAndSources();
 			skill1.SetId(Guid.NewGuid());
 			skillRepository.Stub(x => x.FindSkillsWithAtLeastOneQueueSource()).Return(new[] {skill1});
-			var target = new ForecastController(quickForecastEvaluator, null, skillRepository);
+			var target = new ForecastController(quickForecastEvaluator, null, skillRepository, null);
 			var skills = target.Skills();
 			skills.Single().Id.Should().Be.EqualTo(skill1.Id.Value);
 			skills.Single().Name.Should().Be.EqualTo(skill1.Name);
@@ -60,7 +60,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Forecasting.Controllers
 						}
 					}
 				});
-			var target = new ForecastController(quickForecastEvaluator, null, null);
+			var target = new ForecastController(quickForecastEvaluator, null, null, null);
 
 			var skills = target.MeasureForecastMethod();
 
@@ -72,6 +72,21 @@ namespace Teleopti.Ccc.WebTest.Areas.Forecasting.Controllers
 			skills.Result.Single().Workloads.Single().Accuracies.Single().Number.Should().Be.EqualTo(90.2);
 			skills.Result.Single().Workloads.Single().Accuracies.Single().MethodId.Should().Be.EqualTo(ForecastMethodType.TeleoptiClassic);
 		}
+
+		[Test]
+		public void ShouldPreForecastForWorkload()
+		{
+			var skillRepository = MockRepository.GenerateMock<ISkillRepository>();
+			var skill1 = SkillFactory.CreateSkillWithWorkloadAndSources();
+			skill1.SetId(Guid.NewGuid());
+			skillRepository.Stub(x => x.FindSkillsWithAtLeastOneQueueSource()).Return(new[] { skill1 });
+			var workload = skill1.WorkloadCollection.Single();
+
+			var target = new ForecastController(null, null, null, MockRepository.GenerateMock<IPreForecaster>());
+
+			var result = target.PreForecast(workload.Id.Value);
+		}
 	}
+
 
 }

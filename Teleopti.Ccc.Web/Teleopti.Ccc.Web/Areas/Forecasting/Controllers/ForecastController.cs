@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -5,6 +6,8 @@ using System.Web.Http;
 using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.Forecasting.Angel;
 using Teleopti.Ccc.Domain.Forecasting.Angel.Accuracy;
+using Teleopti.Ccc.Domain.Forecasting.Angel.Future;
+using Teleopti.Ccc.Domain.Forecasting.Angel.Historical;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Web.Filters;
@@ -18,12 +21,14 @@ namespace Teleopti.Ccc.Web.Areas.Forecasting.Controllers
 		private readonly IQuickForecastEvaluator _quickForecastEvaluator;
 		private readonly IQuickForecastCreator _quickForecastCreator;
 		private readonly ISkillRepository _skillRepository;
+		private readonly IPreForecaster _preForecaster;
 
-		public ForecastController(IQuickForecastEvaluator quickForecastEvaluator, IQuickForecastCreator quickForecastCreator, ISkillRepository skillRepository)
+		public ForecastController(IQuickForecastEvaluator quickForecastEvaluator, IQuickForecastCreator quickForecastCreator, ISkillRepository skillRepository, IPreForecaster preForecaster)
 		{
 			_quickForecastEvaluator = quickForecastEvaluator;
 			_quickForecastCreator = quickForecastCreator;
 			_skillRepository = skillRepository;
+			_preForecaster = preForecaster;
 		}
 
 		[UnitOfWork, Route("api/Forecasting/Skills"), HttpGet]
@@ -45,6 +50,12 @@ namespace Teleopti.Ccc.Web.Areas.Forecasting.Controllers
 			return Task.FromResult(_quickForecastEvaluator.MeasureForecastForAllSkills());
 		}
 
+		[UnitOfWork, HttpGet, Route("api/Forecasting/PreForecast")]
+		public virtual Task<WorkloadForecastingViewModel> PreForecast(PreForecastInputModel model)
+		{
+			return Task.FromResult(_preForecaster.MeasureAndForecast(model));
+		}
+
 		[HttpPost, Route("api/Forecasting/Forecast"), UnitOfWork]
 		public virtual Task<bool> Forecast(QuickForecastInputModel model)
 		{
@@ -61,4 +72,13 @@ namespace Teleopti.Ccc.Web.Areas.Forecasting.Controllers
 			return Task.FromResult(true);
 		}
 	}
+
+	
+
+	
+
+	
+
+
+	
 }
