@@ -64,7 +64,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 		{
 			return _seatBookings
 				.Where(booking => (booking.StartDateTime.Date >= period.StartDate.Date
-					&& booking.EndDateTime.Date <= period.StartDate.Date)).ToList();
+					&& booking.EndDateTime.Date <= period.EndDate.Date)).ToList();
 		}
 
 		public ISeatBooking LoadSeatBookingForPerson (DateOnly date, IPerson person)

@@ -37,7 +37,10 @@ namespace Teleopti.Ccc.Domain.SeatPlanning
 		public void CreateSeatPlan(SeatMapLocation rootSeatMapLocation, ICollection<ITeam> teams, DateOnlyPeriod period, TrackedCommandInfo trackedCommandInfo)
 		{
 			var people = getPeople(teams, period);
-			_existingSeatBookings = _seatBookingRepository.LoadSeatBookingsForDateOnlyPeriod(period);
+			
+			var bookingPeriodWithSurroundingDays = new DateOnlyPeriod(period.StartDate.AddDays(-1),period.EndDate.AddDays (1));
+
+			_existingSeatBookings = _seatBookingRepository.LoadSeatBookingsForDateOnlyPeriod(bookingPeriodWithSurroundingDays);
 			groupBookings(period, people);
 			loadExistingSeatBookings(rootSeatMapLocation);
 			allocateSeats(new SeatAllocator(rootSeatMapLocation));
@@ -83,7 +86,8 @@ namespace Teleopti.Ccc.Domain.SeatPlanning
 
 		private void removeExistingBookingForPersonOnThisDay (IPerson person, DateOnly date)
 		{
-			var existingBooking = _existingSeatBookings.SingleOrDefault (booking => (new DateOnly(booking.StartDateTime) == date && booking.Person == person));
+			var existingBooking = _existingSeatBookings.SingleOrDefault(
+				booking => (new DateOnly(booking.StartDateTime) == date && booking.Person == person));
 			if (existingBooking != null)
 			{
 				_existingSeatBookings.Remove (existingBooking);
@@ -119,10 +123,15 @@ namespace Teleopti.Ccc.Domain.SeatPlanning
 		
 		private void allocateSeats(SeatAllocator seatAllocator)
 		{
+			var seatBookingsByDateAndTeam = new List<SeatBookingRequest>();
 			var bookings = _bookingsByTeam.Select(group => group.Value).ToArray();
-			var bookingRequests = bookings.Select(bookingList => new SeatBookingRequest(bookingList.ToArray()));
-			
-			seatAllocator.AllocateSeats(bookingRequests.ToArray());
+
+			foreach (var bookingsByDate in bookings.Select (bookingList => bookingList.GroupBy (booking => booking.StartDateTime)))
+			{
+				seatBookingsByDateAndTeam.AddRange(bookingsByDate.Select(dateGroup => new SeatBookingRequest(dateGroup.ToArray())));
+			}
+
+			seatAllocator.AllocateSeats(seatBookingsByDateAndTeam.ToArray());
 
 			foreach (var booking in bookings)
 			{
@@ -136,25 +145,31 @@ namespace Teleopti.Ccc.Domain.SeatPlanning
 		{
 			foreach (var booking in seatBookings)
 			{
-				var date = booking.Date;
+				var date = new DateOnly(booking.StartDateTime.Date);
 				var lang = Thread.CurrentThread.CurrentUICulture;
 				//Robtodo: revisit seat name display...how/should we use seat.Name?
 				var description = booking.Seat != null
 					? String.Format(Resources.YouHaveBeenAllocatedSeat, date.ToShortDateString(lang), ((SeatMapLocation)booking.Seat.Parent).Name + " Seat #" + booking.Seat.Priority)
 					: String.Format(Resources.YouHaveNotBeenAllocatedSeat, date.ToShortDateString(lang));
 
-				var existingNote = _publicNoteRepository.Find(date, booking.Person, _scenario);
-				if (existingNote != null)
-				{
-					_publicNoteRepository.Remove(existingNote);
-				}
-				var publicNote = new PublicNote(booking.Person,
-													date,
-													_scenario,
-													description);
-
-				_publicNoteRepository.Add(publicNote);
+				tempStoreBookingInfoInPublicNote(date, booking, description);
 			}
+		}
+
+		//Robtodo: WIP: Temporary mechanism to store booking information
+		private void tempStoreBookingInfoInPublicNote (DateOnly date, ISeatBooking booking, string description)
+		{
+			var existingNote = _publicNoteRepository.Find (date, booking.Person, _scenario);
+			if (existingNote != null)
+			{
+				_publicNoteRepository.Remove (existingNote);
+			}
+			var publicNote = new PublicNote (booking.Person,
+				date,
+				_scenario,
+				description);
+
+			_publicNoteRepository.Add (publicNote);
 		}
 	}
 }

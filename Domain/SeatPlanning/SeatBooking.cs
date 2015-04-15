@@ -23,7 +23,6 @@ namespace Teleopti.Ccc.Domain.SeatPlanning
 		}
 		public virtual ISeat Seat { get; set; }
 		public virtual IPerson Person { get; set; }
-		public virtual DateOnly Date { get{ return new DateOnly(StartDateTime);} }
 		
 		public virtual DateTime StartDateTime
 		{

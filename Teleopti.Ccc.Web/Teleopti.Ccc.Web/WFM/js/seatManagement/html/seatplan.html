@@ -80,7 +80,7 @@
 	</div>
 
 	<ol ui-tree-nodes="" ng-model="node.Children" ng-show="node.show">
-		<li ng-repeat="node in node.Children | filter:searchLocations" ui-tree-node ng-include="'teams_renderer.html'">
+		<li ng-repeat="node in node.Children | filter:searchTeams" ui-tree-node ng-include="'teams_renderer.html'">
 		</li>
 	</ol>
 </script>

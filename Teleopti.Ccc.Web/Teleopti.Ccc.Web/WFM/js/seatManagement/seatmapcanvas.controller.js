@@ -39,7 +39,6 @@
 			setupHandleLocationClick();
 
 			angular.element($window).bind('resize', function () {
-				//vm.resize();
 				resize();
 			});
 

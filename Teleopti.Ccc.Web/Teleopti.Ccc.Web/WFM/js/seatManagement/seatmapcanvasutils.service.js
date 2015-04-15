@@ -12,7 +12,7 @@ angular.module('wfm.seatMap')
 		utils.resize = function (canvas, toolbarVisible) {
 			var viewPortHeight = $(document)[0].documentElement.clientHeight ;  
 			var width = $('[ui-view]')[0].clientWidth - $('#c').position().left - 30; // 30 = padding
-			var heightReduction = 150; // no reliable element to base this off
+			var heightReduction = 135; // no reliable element to base this off
 			
 			if (toolbarVisible) {
 				heightReduction += $('#seatMapToolbar')[0].clientHeight + 62;

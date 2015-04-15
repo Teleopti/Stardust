@@ -7,7 +7,7 @@ namespace Teleopti.Interfaces.Domain
 		IPerson Person { get; set; }
 		DateTime StartDateTime { get; set; }
 		DateTime EndDateTime { get; set; }
-		DateOnly Date { get; }
+		
 		ISeat Seat { get; set; }
 		bool Intersects (ISeatBooking booking);
 		bool Intersects (DateTimePeriod period);

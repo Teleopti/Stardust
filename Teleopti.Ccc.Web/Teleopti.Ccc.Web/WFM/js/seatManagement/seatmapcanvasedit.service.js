@@ -187,9 +187,7 @@ angular.module('wfm.seatMap')
 				});
 
 				canvas.add(img);
-
 				img.setCoords();
-
 				canvas.renderAll();
 			});
 			
