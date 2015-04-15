@@ -6,8 +6,6 @@ CREATE TABLE [Tenant].[PasswordPolicyForUser](
 	[IsLocked] [bit] NOT NULL,
 	[InvalidAttempts] [int] NOT NULL,
 	[Person] [uniqueidentifier] NOT NULL)
-
-	USE [main_clone_DemoSales_TeleoptiCCC7]
 GO
 
 ALTER TABLE  [Tenant].[PasswordPolicyForUser] ADD  CONSTRAINT [PK_PasswordPolicyForUser] PRIMARY KEY NONCLUSTERED 
