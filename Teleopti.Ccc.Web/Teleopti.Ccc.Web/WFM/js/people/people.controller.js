@@ -59,8 +59,16 @@ function PeopleController($scope, $filter, $state, SearchSvrc) {
 			$scope.searchResult = result.People;
 			$scope.optionalColumns = result.OptionalColumns;
 			$scope.totalPages = result.TotalPages;
+			$scope.keyword = $scope.defautKeyword();
 			$scope.searchKeywordChanged = false;
 		});
+	};
+
+	$scope.defautKeyword = function() {
+		if ($scope.keyword == '' && $scope.searchResult.length > 0) {
+			return $scope.searchResult[0].Team;
+		}
+		return $scope.keyword;
 	};
 
 	$scope.range = function (start, end) {
