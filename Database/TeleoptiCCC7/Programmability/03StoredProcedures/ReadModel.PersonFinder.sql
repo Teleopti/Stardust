@@ -68,6 +68,7 @@ SELECT @dynamicSQL=''
 
 -- Get searchString into temptable
 SELECT @search_string = REPLACE(@search_string,' ', ',') --separated by space from client
+SELECT @search_string = REPLACE(@search_string,'%', '[%]') --make '%' valuable search value
 INSERT INTO #strings
 SELECT * FROM dbo.SplitStringString(@search_string)
 
