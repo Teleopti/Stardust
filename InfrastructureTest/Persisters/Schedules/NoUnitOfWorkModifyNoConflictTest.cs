@@ -1,7 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
+using Rhino.Mocks;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.Collection;
+using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Infrastructure.Persisters.Schedules;
 using Teleopti.Ccc.Infrastructure.Repositories;
@@ -25,11 +28,9 @@ namespace Teleopti.Ccc.InfrastructureTest.Persisters.Schedules
 
 		protected override IScheduleRangePersister CreateTarget()
 		{
-			var currUnitOfWork = new CurrentUnitOfWork(CurrentUnitOfWorkFactory.Make());
-			var scheduleRep = new ScheduleRepository(currUnitOfWork);
 			return new CurrentUnitOfWorkScheduleRangePersister(new DifferenceEntityCollectionService<IPersistableScheduleData>(),
 				ConflictCollector(),
-				new ScheduleDifferenceSaver(scheduleRep));
+				MockRepository.GenerateMock<IScheduleDifferenceSaver>());
 		}
 
 		protected override void WhenImChanging(IScheduleRange myScheduleRange)
@@ -46,6 +47,19 @@ namespace Teleopti.Ccc.InfrastructureTest.Persisters.Schedules
 		}
 
 		protected override void Then(IScheduleRange myScheduleRange)
+		{
+			Action fakeSavedToDb = myScheduleRange.TakeSnapshot;
+			fakeSavedToDb();
+		}
+
+		protected override IScheduleRangeConflictCollector ConflictCollector()
+		{
+			var conflictCollector = MockRepository.GenerateMock<IScheduleRangeConflictCollector>();
+			conflictCollector.Stub(x => x.GetConflicts(null, null)).IgnoreArguments().Return(Enumerable.Empty<PersistConflict>());
+			return conflictCollector;
+		}
+
+		public override void ReassociateDataFor(IPerson person)
 		{
 		}
 	}
