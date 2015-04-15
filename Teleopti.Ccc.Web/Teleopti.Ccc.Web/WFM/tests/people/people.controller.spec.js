@@ -1,8 +1,8 @@
 ﻿'use strict';
 describe("PeopleCtrl", function () {
 	var $q,
-	    $rootScope,
-	    $httpBackend;
+		$rootScope,
+		$httpBackend;
 
 	beforeEach(module('wfm'));
 
@@ -24,16 +24,16 @@ describe("PeopleCtrl", function () {
 							FirstName: "Ashley",
 							LastName: "Andeen",
 							EmploymentNumber: "12345",
-                            LeavingDate: "2015-04-09",
-                            OptionalColumnValues: [
-                            {
-                                "Key": "CellPhone",
-                                "Value": "123456"
-                            }],
+							LeavingDate: "2015-04-09",
+							OptionalColumnValues: [
+							{
+								"Key": "CellPhone",
+								"Value": "123456"
+							}],
 							Team: "Paris/Team 1"
 						}
 					],
-                    OptionalColumns:["CellPhone"]
+					OptionalColumns:["CellPhone"]
 				});
 				return { $promise: queryDeferred.promise };
 			}
