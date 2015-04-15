@@ -231,6 +231,7 @@
     <Compile Include="MultiTenancy\Client\ITenantServerConfiguration.cs" />
     <Compile Include="MultiTenancy\Client\TenantAuthenticationData.cs" />
     <Compile Include="MultiTenancy\Client\TenantServerConfiguration.cs" />
+    <Compile Include="MultiTenancy\Server\TenantCheckPasswordChange.cs" />
     <Compile Include="MultiTenancy\Server\DeletePersonInfo.cs" />
     <Compile Include="MultiTenancy\Server\FindTenantAndPersonIdForIdentity.cs" />
     <Compile Include="MultiTenancy\Server\FindTenantByNameQuery.cs" />
@@ -633,7 +634,7 @@
   <ItemGroup>
     <Content Include="Config\PolicyForPassword.xml" />
     <EmbeddedResource Include="MultiTenancy\Server\PersonInfo_OldSchema.hbm.xml" />
-    <EmbeddedResource Include="MultiTenancy\Server\PasswordPolicyForUser_OldSchema.hbm.xml" />
+    <EmbeddedResource Include="MultiTenancy\Server\PasswordPolicyForUser.hbm.xml" />
     <EmbeddedResource Include="MultiTenancy\Server\Tenant_OldSchema.hbm.xml" />
     <EmbeddedResource Include="MultiTenancy\Server\PersonInfo.hbm.xml">
       <SubType>Designer</SubType>

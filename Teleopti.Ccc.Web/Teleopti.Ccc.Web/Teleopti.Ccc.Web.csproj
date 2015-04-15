@@ -557,9 +557,7 @@
     <Compile Include="Areas\SeatPlanner\Core\ViewModels\SiteViewModelWithTeams.cs" />
     <Compile Include="Areas\SeatPlanner\Core\ViewModels\TeamViewModel.cs" />
     <Compile Include="Areas\SeatPlanner\SeatPlannerAreaRegistration.cs" />
-    <Compile Include="Areas\Tenant\Core\ConvertDataToOldUserDetailDomain.cs" />
     <Compile Include="Areas\Tenant\Core\HttpRequestUserAgent.cs" />
-    <Compile Include="Areas\Tenant\Core\IConvertDataToOldUserDetailDomain.cs" />
     <Compile Include="Areas\Tenant\Core\IdentityAuthentication.cs" />
     <Compile Include="Areas\Tenant\Core\IHttpRequestUserAgent.cs" />
     <Compile Include="Areas\Tenant\Core\ILoginAttemptModelFactory.cs" />

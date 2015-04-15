@@ -1,23 +1,19 @@
-﻿using Teleopti.Ccc.Domain.Security.Authentication;
-using Teleopti.Ccc.Infrastructure.MultiTenancy.Server;
+﻿using Teleopti.Ccc.Infrastructure.MultiTenancy.Server;
 
 namespace Teleopti.Ccc.Web.Areas.Tenant.Core
 {
 	public class PasswordPolicyCheck : IPasswordPolicyCheck
 	{
-		private readonly IConvertDataToOldUserDetailDomain _convertDataToOldUserDetailDomain;
-		private readonly ICheckPasswordChange _checkPasswordChange;
+		private readonly ITenantCheckPasswordChange _checkPasswordChange;
 
-		public PasswordPolicyCheck(IConvertDataToOldUserDetailDomain convertDataToOldUserDetailDomain, ICheckPasswordChange checkPasswordChange)
+		public PasswordPolicyCheck(ITenantCheckPasswordChange checkPasswordChange)
 		{
-			_convertDataToOldUserDetailDomain = convertDataToOldUserDetailDomain;
 			_checkPasswordChange = checkPasswordChange;
 		}
 
 		public ApplicationAuthenticationResult Verify(PasswordPolicyForUser passwordPolicyForUser)
 		{
-			var userDetail = _convertDataToOldUserDetailDomain.Convert(passwordPolicyForUser);
-			var res = _checkPasswordChange.Check(userDetail);
+			var res = _checkPasswordChange.Check(passwordPolicyForUser);
 			if (res.Successful && res.Message == null)
 			{
 				return null;
