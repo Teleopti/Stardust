@@ -75,7 +75,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 					_scheduleDayChangeCallback(),
 					new ScheduleTagSetter(optimizerPreferences.General.ScheduleTag));
 
-			var decisionMaker = new IntradayDecisionMaker(_bitArrayConverter);
+			var decisionMaker = _container.Resolve<IIntradayDecisionMaker>();
 			var scheduleService = _container.Resolve<IScheduleService>();
 
 			IIntradayOptimizer2Creator creator = new IntradayOptimizer2Creator(
