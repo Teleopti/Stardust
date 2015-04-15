@@ -11,7 +11,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Commands
 	public class AddSeatPlanCommandHandler : IHandleCommand<AddSeatPlanCommand>
 	{
 		
-		private readonly IScenario _scenario;
+		private readonly ICurrentScenario _scenario;
 		private readonly IScheduleRepository _scheduleRepository;
 		private readonly ITeamRepository _teamRepository;
 		private readonly IPersonRepository _personRepository;
@@ -19,7 +19,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Commands
 		private readonly ISeatMapLocationRepository _seatMapLocationRepository;
 		private readonly ISeatBookingRepository _seatBookingRepository;
 
-		public AddSeatPlanCommandHandler(IScheduleRepository scheduleRepository, ITeamRepository teamRepository, IPersonRepository personRepository, IScenario scenario, IPublicNoteRepository publicNoteRepository, ISeatMapLocationRepository seatMapLocationRepository, ISeatBookingRepository seatBookingRepository)
+		public AddSeatPlanCommandHandler(IScheduleRepository scheduleRepository, ITeamRepository teamRepository, IPersonRepository personRepository, ICurrentScenario scenario, IPublicNoteRepository publicNoteRepository, ISeatMapLocationRepository seatMapLocationRepository, ISeatBookingRepository seatBookingRepository)
 		{
 			_scenario = scenario;
 			_publicNoteRepository = publicNoteRepository;
@@ -41,7 +41,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Commands
 
 			var period = new DateOnlyPeriod(new DateOnly(command.StartDate), new DateOnly(command.EndDate));
 			var teams = _teamRepository.FindTeams (command.Teams);
-			var seatPlanner = new SeatPlanner(_scenario, _publicNoteRepository, _personRepository, _scheduleRepository, _seatBookingRepository);
+			var seatPlanner = new SeatPlanner(_scenario.Current(), _publicNoteRepository, _personRepository, _scheduleRepository, _seatBookingRepository);
 
 			seatPlanner.CreateSeatPlan (rootLocation, teams, period, command.TrackedCommandInfo);
 

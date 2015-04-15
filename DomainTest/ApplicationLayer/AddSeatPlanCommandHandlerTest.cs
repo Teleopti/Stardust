@@ -4,6 +4,7 @@ using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.AgentInfo;
 using Teleopti.Ccc.Domain.ApplicationLayer.Commands;
+using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.SeatPlanning;
@@ -17,13 +18,13 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 	[TestFixture]
 	internal class AddSeatPlanCommandHandlerTest
 	{
-		private IScenario _currentScenario;
+		private ICurrentScenario _currentScenario;
 		private FakeSeatBookingRepository _seatBookingRepository;
 
 		[SetUp]
 		public void SetUp()
 		{
-			_currentScenario = new FakeCurrentScenario().Current();
+			_currentScenario = new FakeCurrentScenario();
 			_seatBookingRepository = new FakeSeatBookingRepository();
 		}
 
@@ -38,11 +39,11 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 
 			var person = PersonFactory.CreatePersonWithPersonPeriodFromTeam(new DateOnly(startDate), team);
 			var personAssignment = PersonAssignmentFactory.CreateAssignmentWithMainShift(
-				_currentScenario,
+				_currentScenario.Current(),
 				person,
 				new DateTimePeriod(startDate, endDate));
 
-			var note = new PublicNote(person, new DateOnly(startDate), _currentScenario, "Original Note");
+			var note = new PublicNote(person, new DateOnly(startDate), _currentScenario.Current(), "Original Note");
 			var publicNoteRepository = new FakePublicNoteRepository(note);
 
 			var seatMapLocation = new SeatMapLocation() { Name = "Location" };
@@ -87,13 +88,13 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 			team.SetId(Guid.NewGuid());
 
 			var person = PersonFactory.CreatePersonWithPersonPeriodFromTeam(new DateOnly(startDate), team);
-			var personAssignment = PersonAssignmentFactory.CreateAssignmentWithMainShift(_currentScenario, person,
+			var personAssignment = PersonAssignmentFactory.CreateAssignmentWithMainShift(_currentScenario.Current(), person,
 				new DateTimePeriod(startDate, startDate.AddHours(8)));
 
-			var personAssignment2 = PersonAssignmentFactory.CreateAssignmentWithMainShift(_currentScenario, person,
+			var personAssignment2 = PersonAssignmentFactory.CreateAssignmentWithMainShift(_currentScenario.Current(), person,
 				new DateTimePeriod(startDate.AddDays(1), startDate.AddDays(1).AddHours(8)));
 
-			var personAssignment3 = PersonAssignmentFactory.CreateAssignmentWithMainShift(_currentScenario, person,
+			var personAssignment3 = PersonAssignmentFactory.CreateAssignmentWithMainShift(_currentScenario.Current(), person,
 				new DateTimePeriod(endDate, endDate.AddHours(8)));
 
 			var seatMapLocation = new SeatMapLocation() { Name = "Location" };
@@ -134,7 +135,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 
 			var person = PersonFactory.CreatePersonWithPersonPeriodFromTeam(new DateOnly(startDate), team);
 			var personAssignment = PersonAssignmentFactory.CreateAssignmentWithMainShift(
-				_currentScenario,
+				_currentScenario.Current(),
 				person,
 				new DateTimePeriod(startDate, endDate));
 
@@ -193,11 +194,11 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 			var person2 = PersonFactory.CreatePersonWithPersonPeriodFromTeam(new DateOnly(startDate), team2);
 			var person3 = PersonFactory.CreatePersonWithPersonPeriodFromTeam(new DateOnly(startDate), team2);
 
-			var personAssignment = PersonAssignmentFactory.CreateAssignmentWithMainShift(_currentScenario, person,
+			var personAssignment = PersonAssignmentFactory.CreateAssignmentWithMainShift(_currentScenario.Current(), person,
 				new DateTimePeriod(startDate, endDate));
-			var personAssignment2 = PersonAssignmentFactory.CreateAssignmentWithMainShift(_currentScenario, person2,
+			var personAssignment2 = PersonAssignmentFactory.CreateAssignmentWithMainShift(_currentScenario.Current(), person2,
 				new DateTimePeriod(startDate, endDate));
-			var personAssignment3 = PersonAssignmentFactory.CreateAssignmentWithMainShift(_currentScenario, person3,
+			var personAssignment3 = PersonAssignmentFactory.CreateAssignmentWithMainShift(_currentScenario.Current(), person3,
 				new DateTimePeriod(startDate, endDate));
 
 			var rootLocation = new SeatMapLocation() { Name = "RootLocation" };
@@ -267,17 +268,17 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 			var person5 = PersonFactory.CreatePersonWithPersonPeriodFromTeam(new DateOnly(startDateDay1), team2);
 			var person6 = PersonFactory.CreatePersonWithPersonPeriodFromTeam(new DateOnly(startDateDay1), team2);
 
-			var assignmentPerson1Day1 = PersonAssignmentFactory.CreateAssignmentWithMainShift(_currentScenario, person,
+			var assignmentPerson1Day1 = PersonAssignmentFactory.CreateAssignmentWithMainShift(_currentScenario.Current(), person,
 				new DateTimePeriod(startDateDay1, endDateDay1));
-			var assignmentPerson2Day1 = PersonAssignmentFactory.CreateAssignmentWithMainShift(_currentScenario,
+			var assignmentPerson2Day1 = PersonAssignmentFactory.CreateAssignmentWithMainShift(_currentScenario.Current(),
 				person2, new DateTimePeriod(startDateDay1, endDateDay1));
-			var assignmentPerson3Day1 = PersonAssignmentFactory.CreateAssignmentWithMainShift(_currentScenario,
+			var assignmentPerson3Day1 = PersonAssignmentFactory.CreateAssignmentWithMainShift(_currentScenario.Current(),
 				person3, new DateTimePeriod(startDateDay1, endDateDay1));
-			var assignmentPerson4Day1 = PersonAssignmentFactory.CreateAssignmentWithMainShift(_currentScenario,
+			var assignmentPerson4Day1 = PersonAssignmentFactory.CreateAssignmentWithMainShift(_currentScenario.Current(),
 				person4, new DateTimePeriod(startDateDay1, endDateDay1));
-			var assignmentPerson5Day1 = PersonAssignmentFactory.CreateAssignmentWithMainShift(_currentScenario,
+			var assignmentPerson5Day1 = PersonAssignmentFactory.CreateAssignmentWithMainShift(_currentScenario.Current(),
 				person5, new DateTimePeriod(startDateDay1, endDateDay1));
-			var assignmentPerson6Day1 = PersonAssignmentFactory.CreateAssignmentWithMainShift(_currentScenario,
+			var assignmentPerson6Day1 = PersonAssignmentFactory.CreateAssignmentWithMainShift(_currentScenario.Current(),
 				person6, new DateTimePeriod(startDateDay1, endDateDay1));
 
 			var rootLocation = new SeatMapLocation() { Name = "RootLocation" };
@@ -370,30 +371,30 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 			var person5 = PersonFactory.CreatePersonWithPersonPeriodFromTeam(new DateOnly(startDateDay1), team2);
 			var person6 = PersonFactory.CreatePersonWithPersonPeriodFromTeam(new DateOnly(startDateDay1), team2);
 
-			var assignmentPerson1Day1 = PersonAssignmentFactory.CreateAssignmentWithMainShift(_currentScenario, person,
+			var assignmentPerson1Day1 = PersonAssignmentFactory.CreateAssignmentWithMainShift(_currentScenario.Current(), person,
 				new DateTimePeriod(startDateDay1, endDateDay1));
-			var assignmentPerson2Day1 = PersonAssignmentFactory.CreateAssignmentWithMainShift(_currentScenario,
+			var assignmentPerson2Day1 = PersonAssignmentFactory.CreateAssignmentWithMainShift(_currentScenario.Current(),
 				person2, new DateTimePeriod(startDateDay1, endDateDay1));
-			var assignmentPerson3Day1 = PersonAssignmentFactory.CreateAssignmentWithMainShift(_currentScenario,
+			var assignmentPerson3Day1 = PersonAssignmentFactory.CreateAssignmentWithMainShift(_currentScenario.Current(),
 				person3, new DateTimePeriod(startDateDay1, endDateDay1));
-			var assignmentPerson4Day1 = PersonAssignmentFactory.CreateAssignmentWithMainShift(_currentScenario,
+			var assignmentPerson4Day1 = PersonAssignmentFactory.CreateAssignmentWithMainShift(_currentScenario.Current(),
 				person4, new DateTimePeriod(startDateDay1, endDateDay1));
-			var assignmentPerson5Day1 = PersonAssignmentFactory.CreateAssignmentWithMainShift(_currentScenario,
+			var assignmentPerson5Day1 = PersonAssignmentFactory.CreateAssignmentWithMainShift(_currentScenario.Current(),
 				person5, new DateTimePeriod(startDateDay1, endDateDay1));
-			var assignmentPerson6Day1 = PersonAssignmentFactory.CreateAssignmentWithMainShift(_currentScenario,
+			var assignmentPerson6Day1 = PersonAssignmentFactory.CreateAssignmentWithMainShift(_currentScenario.Current(),
 				person6, new DateTimePeriod(startDateDay1, endDateDay1));
 
-			var assignmentPerson1Day2 = PersonAssignmentFactory.CreateAssignmentWithMainShift(_currentScenario, person,
+			var assignmentPerson1Day2 = PersonAssignmentFactory.CreateAssignmentWithMainShift(_currentScenario.Current(), person,
 				new DateTimePeriod(startDateDay2, endDateDay2));
-			var assignmentPerson2Day2 = PersonAssignmentFactory.CreateAssignmentWithMainShift(_currentScenario,
+			var assignmentPerson2Day2 = PersonAssignmentFactory.CreateAssignmentWithMainShift(_currentScenario.Current(),
 				person2, new DateTimePeriod(startDateDay2, endDateDay2));
-			var assignmentPerson3Day2 = PersonAssignmentFactory.CreateAssignmentWithMainShift(_currentScenario,
+			var assignmentPerson3Day2 = PersonAssignmentFactory.CreateAssignmentWithMainShift(_currentScenario.Current(),
 				person3, new DateTimePeriod(startDateDay2, endDateDay2));
-			var assignmentPerson4Day2 = PersonAssignmentFactory.CreateAssignmentWithMainShift(_currentScenario,
+			var assignmentPerson4Day2 = PersonAssignmentFactory.CreateAssignmentWithMainShift(_currentScenario.Current(),
 				person4, new DateTimePeriod(startDateDay2, endDateDay2));
-			var assignmentPerson5Day2 = PersonAssignmentFactory.CreateAssignmentWithMainShift(_currentScenario,
+			var assignmentPerson5Day2 = PersonAssignmentFactory.CreateAssignmentWithMainShift(_currentScenario.Current(),
 				person5, new DateTimePeriod(startDateDay2, endDateDay2));
-			var assignmentPerson6Day2 = PersonAssignmentFactory.CreateAssignmentWithMainShift(_currentScenario,
+			var assignmentPerson6Day2 = PersonAssignmentFactory.CreateAssignmentWithMainShift(_currentScenario.Current(),
 				person6, new DateTimePeriod(startDateDay2, endDateDay2));
 
 			var rootLocation = new SeatMapLocation() { Name = "RootLocation" };
@@ -470,7 +471,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 
 			var person = PersonFactory.CreatePersonWithPersonPeriodFromTeam(new DateOnly(startDate), team);
 			var person2 = PersonFactory.CreatePersonWithPersonPeriodFromTeam(new DateOnly(endDate), team);
-			var personAssignment = PersonAssignmentFactory.CreateAssignmentWithMainShift(_currentScenario,
+			var personAssignment = PersonAssignmentFactory.CreateAssignmentWithMainShift(_currentScenario.Current(),
 				person, new DateTimePeriod(
 					startDate,
 					assignmentEndDateTime));
@@ -535,7 +536,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 			existingSeatBooking.SetId(Guid.NewGuid());
 			_seatBookingRepository.Add(existingSeatBooking);
 
-			var personAssignment = PersonAssignmentFactory.CreateAssignmentWithMainShift(_currentScenario,
+			var personAssignment = PersonAssignmentFactory.CreateAssignmentWithMainShift(_currentScenario.Current(),
 				person, new DateTimePeriod(
 					date,
 					date.AddHours(8)));
@@ -578,7 +579,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 
 			var person = PersonFactory.CreatePersonWithPersonPeriodFromTeam(new DateOnly(date), team);
 			var person2 = PersonFactory.CreatePersonWithPersonPeriodFromTeam(new DateOnly(date), team);
-			var personAssignment = PersonAssignmentFactory.CreateAssignmentWithMainShift(_currentScenario,
+			var personAssignment = PersonAssignmentFactory.CreateAssignmentWithMainShift(_currentScenario.Current(),
 				person, new DateTimePeriod(
 					assignmentEndDateTime.AddHours(-6),
 					assignmentEndDateTime));
@@ -633,7 +634,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 
 			var person = PersonFactory.CreatePersonWithPersonPeriodFromTeam(new DateOnly(date), team);
 			var person2 = PersonFactory.CreatePersonWithPersonPeriodFromTeam(new DateOnly(date), team);
-			var personAssignment = PersonAssignmentFactory.CreateAssignmentWithMainShift(_currentScenario,
+			var personAssignment = PersonAssignmentFactory.CreateAssignmentWithMainShift(_currentScenario.Current(),
 				person, new DateTimePeriod(
 					date,
 					date.AddHours (8)));
