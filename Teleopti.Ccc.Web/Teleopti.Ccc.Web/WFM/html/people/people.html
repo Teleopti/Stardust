@@ -1,205 +1,46 @@
 ﻿<style>
-	.wfm-table {
-		width: 100%;
-		text-align: left;
-	}
-
-		.wfm-table td, th {
-			border: 1px solid #f5f5f5;
-			color: rgba(0, 0, 0, 0.54);
-			padding: 5px;
-		}
-
-		.wfm-table th {
-			color: rgba(0, 0, 0, 0.87);
-			background-color: #99d6ff;
-			text-align: center;
-		}
-
-			.wfm-table th i {
-				float: right;
-			}
-
-		.wfm-table .number-cell {
-			text-align: right;
-		}
-
-	.wfm-table-multi th:first-child, .wfm-table-multi td:first-child {
-		color: rgba(0, 0, 0, 0.87);
-		font-weight: 600;
-		background-color: #99d6ff;
-	}
-
-	.wrapper {
-		margin-top: 10px;
-		margin-bottom: 60px;
-	}
-
-	.ng-modal-overlay {
-		/* A dark translucent div that covers the whole screen */
-		position: absolute;
-		z-index: 9999;
-		top: 0;
-		left: 0;
-		width: 100%;
-		height: 100%;
-		background-color: #000000;
-		opacity: 0.8;
-	}
-
-	.ng-modal-dialog {
-		/* A centered div above the overlay with a box shadow. */
-		z-index: 10000;
-		position: absolute;
-		width: 100%; /* Default */
-		/* Center the dialog */
-		top: 50%;
-		left: 50%;
-		transform: translate(-50%, -50%);
-		-webkit-transform: translate(-50%, -50%);
-		-moz-transform: translate(-50%, -50%);
-		background-color: #fff;
-		box-shadow: 4px 4px 80px #000;
-	}
-
-	.ng-modal-dialog-content {
-		padding: 10px;
-		text-align: left;
-	}
-
-	.ng-modal-close {
-		position: absolute;
-		top: 3px;
-		right: 5px;
-		padding: 5px;
-		cursor: pointer;
-		font-size: 120%;
+	.pagination-item {
 		display: inline-block;
-		font-weight: bold;
-		font-family: 'arial', 'sans-serif';
+	}
+	.pagination li.disabled a{
+	color:rgba(0,0,0,0.26);
+	pointer-events: none;
+	}
+	.pagination li.disabled {
+		cursor: not-allowed;
+	}
+	.pagination li.active {
+		background-color: rgba(0,0,0,0.06);
+
+	}
+	.pagination li {
+		padding: 10px;
+		cursor: pointer;
+		background-color: white;
 	}
 
-	.tab-group {
-		width: 100%;
-		display: -webkit-box;
-		display: -webkit-flex;
-		display: -ms-flexbox;
-		display: flex;
-		-webkit-flex-wrap: wrap;
-		-ms-flex-wrap: wrap;
-		flex-wrap: wrap;
-		-webkit-box-align: center;
-		-webkit-align-items: center;
-		-ms-flex-align: center;
-		align-items: center;
-		-webkit-box-pack: center;
-		-webkit-justify-content: center;
-		-ms-flex-pack: center;
-		justify-content: center;
-		overflow: hidden;
-	}
-
-		.tab-group input[type=radio] {
-			display: none;
-		}
-
-			.tab-group input[type=radio]:checked + .label {
-				font-weight: bold !important;
-				border-bottom: 3px solid #ec38a3;
-			}
-
-				.tab-group input[type=radio]:checked + .label + section {
-					display: block;
-				}
-
-		.tab-group .label {
-			color: rgba(0, 0, 0, 0.87);
-			padding: 5px !important;
-			position: relative;
-			cursor: pointer;
-			z-index: 2;
-			-webkit-box-ordinal-group: 0;
-			-webkit-order: -1;
-			-ms-flex-order: -1;
-			order: -1;
-			-webkit-box-flex: 1;
-			-webkit-flex-grow: 1;
-			-ms-flex-positive: 1;
-			flex-grow: 1;
-			font-weight: normal;
-			/*overrides bootstrap*/
-			min-width: 100px !important;
-			border-bottom: 3px solid #66c2ff;
-			background-color: #66c2ff;
-			text-align: center;
-			transition: all 0.5s ease-in-out;
-			border-radius: 0 !important;
-			/*overrides bootstrap*/
-			margin-bottom: 0 !important;
-			/*overrides bootstrap*/
-			font-size: 100% !important;
-			/*overrides bootstrap*/
-		}
-
-		.tab-group section {
-			display: none;
-			position: relative;
-			z-index: 1;
-			width: 100%;
-			overflow: hidden;
-		}
-
-	.material-depth-1, .layout-container .content, .wfm-btn-default, .wfm-btn-primary, .wfm-fab, .dropdown .inner ul, .sidenav-toggle .sidenav-wrapper {
-		box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.26);
-	}
-
-	.wfm-block, .angular-ui-tree-handle, select, .wfm-radio, .wfm-checkbox, .dropdown .inner li, .tab-group .tab-container {
-		padding: 5px;
-		width: 100%;
-	}
-
-	.dropdown {
-		position: relative;
-	}
-
-		.dropdown .inner ul {
-			padding-left: 0;
-			width: 25%;
-			list-style: none;
-			position: absolute;
-			background: #ffffff;
-		}
-
-		.dropdown .inner li {
-			border-top: 1px solid rgba(0, 0, 0, 0.06);
-			cursor: pointer;
-		}
-
-			.dropdown .inner li:hover {
-				background: #99d6ff;
-			}
-
-	.wfm-list li.active, .ui-grid-menu-items li.active {
-		border-left: 3px solid #ffffff;
-		border-bottom: 3px solid #ec38a3;
-		background-color: #ffffff;
-	}
 </style>
-
-<div>
-	<span>
-		<input type="text" placeholder="{{'Name' | translate}},{{'EmployeeNo' | translate}},{{'Role' | translate}},{{'Skill' | translate}},{{'Contract' | translate}},{{'PersonFinderFieldOrganization' | translate}},{{'ContractSchedule' | translate}},{{'PartTimePercentage' | translate}},{{'PersonFinderFieldShiftBag' | translate}},{{'BudgetGroup' | translate}}"
-			   ng-model="keyword" ng-keydown="$event.which === 13 && searchKeyword()" ng-change="validateSearchKeywordChanged()"
-			   class="global-search" style="height: 44px; width: 50%" />
-		<button class="wfm-btn wfm-btn-primary" ng-click="searchKeyword()"><i class="mdi mdi-magnify"></i></button>
-	</span>
+<div class="row">
+	<div class="col-lg-12">
+		<h4 translate>ManagePeople</h4>
+		<p translate>Here you can search for people by name, employment number, role, contract, skill, contract schedule, part time percentage, shift bag or budget group.</p>
+	</div>
+</div>
+<div class="row">
+	<div class="col-md-4">
+		<div class="input-prepend people-search">
+			<i class="mdi mdi-magnify"></i>
+			<input type="text" placeholder="{{'Search'|translate}}..." xplaceholder="{{'Name' | translate}},{{'EmployeeNo' | translate}},{{'Role' | translate}},{{'Skill' | translate}},{{'Contract' | translate}},{{'PersonFinderFieldOrganization' | translate}},{{'ContractSchedule' | translate}},{{'PartTimePercentage' | translate}},{{'PersonFinderFieldShiftBag' | translate}},{{'BudgetGroup' | translate}}"
+				   ng-model="keyword" ng-keydown="$event.which === 13 && searchKeyword()" ng-change="validateSearchKeywordChanged()" />
+		</div>
+	</div>
 </div>
 
 <div class="wrapper row">
-	<table class="wfm-table material-depth-1 table-striped table-condensed table-hover">
+	<table class="wfm-table material-depth-1 table-striped table-condensed table-hover" >
 		<thead>
 			<tr>
-				<th>{{'FirstName' | translate}} <i class="mdi mdi-menu-up"></i> </th>
+				<th>{{'FirstName' | translate}} </th>
 				<th>{{'LastName' | translate}}</th>
 				<th>{{'Team' | translate}}</th>
 				<th>{{'Email' | translate}}</th>
@@ -212,16 +53,16 @@
 			<tr>
 				<td colspan="{{6+optionalColumns.length}}">
 					<div class="pagination pull-right">
-						<ul class="wfm-list row">
-							<li style="display: inline-block" ng-class="{disabled: currentPageIndex == 1}">
+						<ul>
+							<li class="pagination-item" ng-class="{disabled: currentPageIndex == 1}">
 								<a href="" ng-click="prevPage()">« Prev</a>
 							</li>
-							<li style="display: inline-block" ng-repeat="n in range(totalPages)"
-								ng-class="{active: n == currentPageIndex}"
-								ng-click="setPage()">
+							<li class="pagination-item" ng-repeat="n in range(totalPages)"
+							    ng-class="{active: n == currentPageIndex}"
+							    ng-click="setPage()">
 								<a href="" ng-bind="n">1</a>
 							</li>
-							<li style="display: inline-block" ng-class="{disabled: currentPageIndex == totalPages}">
+							<li class="pagination-item" ng-class="{disabled: currentPageIndex == totalPages}">
 								<a href="" ng-click="nextPage()">Next »</a>
 							</li>
 						</ul>

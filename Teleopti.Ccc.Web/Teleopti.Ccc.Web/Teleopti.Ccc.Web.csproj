@@ -1998,6 +1998,7 @@
     <Content Include="WFM\vendor\MaterialDesignIcons\scss\_icons.scss" />
     <Content Include="WFM\vendor\MaterialDesignIcons\scss\_path.scss" />
     <Content Include="WFM\vendor\MaterialDesignIcons\scss\_variables.scss" />
+    <Content Include="WFM\css\_people.scss" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config">
