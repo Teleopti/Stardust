@@ -8,7 +8,9 @@ angular.module('wfm.seatMap')
 			addImage: addImage,
 			setBackgroundImage: setBackgroundImage,
 			addSeat: addSeat,
-			addText : addText,
+			remove: remove,
+			addText: addText,
+			flip: flip,
 			addLocation:addLocation,
 			onKeyDownHandler: onKeyDownHandler,
 			save: save,
@@ -490,6 +492,16 @@ angular.module('wfm.seatMap')
 				saveCallback(data);
 			});
 
+		};
+
+		
+		function flip(canvas, flipToggleName) {
+			if (canvas.getActiveGroup()) {
+				canvas.getActiveGroup().toggle(flipToggleName);
+			} else {
+				canvas.getActiveObject().toggle(flipToggleName);
+			}
+			canvas.renderAll();
 		};
 
 		return editService;

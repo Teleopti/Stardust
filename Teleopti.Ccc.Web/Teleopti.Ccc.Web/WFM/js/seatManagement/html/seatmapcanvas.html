@@ -67,6 +67,12 @@ a.mfb-component__button--main {
 
 			<div ng-show="vm.isInEditMode">
 
+				<button class="wfm-btn wfm-btn-default" ng-click="vm.delete()">
+					<i class="mdi small mdi-close "></i>
+					<md-tooltip>
+						Delete Selected Items
+					</md-tooltip>
+				</button>
 				<button class="wfm-btn wfm-btn-default" ng-click="vm.group()">
 					<i class="mdi small mdi-airplane "></i>
 					<md-tooltip>
@@ -116,13 +122,13 @@ a.mfb-component__button--main {
 					</md-tooltip>
 				</button>
 				<button class="wfm-btn wfm-btn-default" ng-click="vm.alignTop()">
-					<i class="mdi small mdi-border-top"></i>
+					<i class="mdi small mdi-format-align-left" style="-webkit-transform: rotate(90deg);-moz-transform: rotate(90deg);-o-transform: rotate(90deg);-ms-transform: rotate(90deg);transform: rotate(90deg);"></i>
 					<md-tooltip>
 						Align Top
 					</md-tooltip>
 				</button>
 				<button class="wfm-btn wfm-btn-default" ng-click="vm.alignBottom()">
-					<i class="mdi small mdi-border-bottom"></i>
+					<i class="mdi small mdi-format-align-right" style="-webkit-transform: rotate(90deg);-moz-transform: rotate(90deg);-o-transform: rotate(90deg);-ms-transform: rotate(90deg);transform: rotate(90deg);"></i>
 					<md-tooltip>
 						Align Bottom
 					</md-tooltip>
@@ -140,12 +146,23 @@ a.mfb-component__button--main {
 					</md-tooltip>
 				</button>
 				<button class="wfm-btn wfm-btn-default" ng-click="vm.spaceActiveGroupHorizontal()">
-					<i class="mdi small  mdi-unfold-more" style="  -webkit-transform: rotate(90deg);-moz-transform: rotate(90deg);-o-transform: rotate(90deg);-ms-transform: rotate(90deg);transform: rotate(90deg);"></i>
+					<i class="mdi small  mdi-unfold-more" style="-webkit-transform: rotate(90deg);-moz-transform: rotate(90deg);-o-transform: rotate(90deg);-ms-transform: rotate(90deg);transform: rotate(90deg);"></i>
 					<md-tooltip>
 						Spave Horizontally
 					</md-tooltip>
 				</button>
-
+				<button class="wfm-btn wfm-btn-default" ng-click="vm.flipX()">
+					<i class="mdi small mdi-swap-horizontal"></i>
+					<md-tooltip>
+						Flip Horizontal
+					</md-tooltip>
+				</button>
+				<button class="wfm-btn wfm-btn-default" ng-click="vm.flipY()">
+					<i class="mdi small mdi-swap-vertical"></i>
+					<md-tooltip>
+						Flip Vertically
+					</md-tooltip>
+				</button>
 			</div>
 		</div>
 	</div>
@@ -192,13 +209,12 @@ a.mfb-component__button--main {
 		
 		<div style="position: absolute; bottom: 0px;margin-left: 1px">
 			<button ng-class="{info:!vm.isMoveMode(),success:vm.isMoveMode()}" style="float:left;" class="wfm-fab mini  " ng-click="vm.toggleMoveMode()">
-				<i style="margin: auto;" class="mdi mdi-gamepad"></i>
+				<i style="padding-bottom: 8px" class="mdi mdi-gamepad"></i>
 			</button>
-			<md-slider style="width:200px; margin-left:40px;" ng-model="vm.zoomData.zoomValue" min="0.1" max="5" step="0.05" ng-change="vm.zoom()"></md-slider>
+			<md-slider style="width:200px; margin-left:40px;" ng-model="vm.zoomData.zoomValue" min="{{vm.zoomData.min}}" max="{{vm.zoomData.max}}" step="{{vm.zoomData.step}}" ng-change="vm.zoom()"></md-slider>
 		</div>
 
 	</div>
-
 	<div class="modal-box">
 		<div ng-cloak ng-show="vm.showLocationDialog">
 			<div class="modalbg">

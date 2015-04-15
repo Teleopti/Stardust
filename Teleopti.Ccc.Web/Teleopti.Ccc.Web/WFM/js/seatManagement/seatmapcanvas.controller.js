@@ -185,6 +185,19 @@
 			vm.toggleEditMode();
 		}
 
+		vm.delete = function() {
+			canvasEditor.remove(canvas);
+		};
+
+		vm.flipX = function () {
+			canvasEditor.flip(canvas, 'flipX');
+		}
+
+		vm.flipY = function () {
+			canvasEditor.flip(canvas, 'flipY');
+		}
+
+
 		vm.menuState = 'closed';
 
 		vm.floatingButtonClick = function (action) {
