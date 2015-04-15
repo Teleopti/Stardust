@@ -263,6 +263,7 @@
     <Compile Include="Areas\Start\Controllers\ConfigControllerTest.cs" />
     <Compile Include="Areas\Start\Core\Config\SharedSettingsFactoryTest.cs" />
     <Compile Include="Areas\Tenant\Core\ApplicationAuthenticationPasswordPolicesTest.cs" />
+    <Compile Include="Areas\Tenant\Core\TenantCheckPasswordChangeTest.cs" />
     <Compile Include="Areas\Tenant\Core\DataSourceConfigurationProviderFake.cs" />
     <Compile Include="Areas\Tenant\Core\DataSourceConfigurationProviderUsingNhibFilesTest.cs" />
     <Compile Include="Areas\Tenant\Core\EncryptPassword.cs" />

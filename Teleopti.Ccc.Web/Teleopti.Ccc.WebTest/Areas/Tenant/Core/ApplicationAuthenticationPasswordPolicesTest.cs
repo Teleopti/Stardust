@@ -124,7 +124,6 @@ namespace Teleopti.Ccc.WebTest.Areas.Tenant.Core
 			res.FailReason.Should().Be.EqualTo(Resources.LogOnFailedAccountIsLocked);
 		}
 
-		//TODO: tenant, rewrite the setup when password policy is utbruten!
 		[Test]
 		public void PasswordThatWillExpireSoonShouldSuccedButHaveFailReasonSet()
 		{
@@ -134,18 +133,15 @@ namespace Teleopti.Ccc.WebTest.Areas.Tenant.Core
 			var personInfo = new PersonInfo(new Infrastructure.MultiTenancy.Server.Tenant(tenant)) { Id = Guid.NewGuid()};
 			personInfo.SetPassword(EncryptPassword.ToDbFormat(password));
 			var passwordPolicyForUser = new PasswordPolicyForUser(personInfo);
-			var theUserDetail = new UserDetail(null);
 			var findApplicationQuery = MockRepository.GenerateMock<IApplicationUserQuery>();
 			findApplicationQuery.Expect(x => x.FindUserData(userName)).Return(passwordPolicyForUser);
-			var convertDataToOldUserDetailDomain = MockRepository.GenerateMock<IConvertDataToOldUserDetailDomain>();
-			convertDataToOldUserDetailDomain.Expect(
-				x => x.Convert(passwordPolicyForUser)).Return(theUserDetail);
-			var checkPasswordChange = MockRepository.GenerateMock<ICheckPasswordChange>();
-			checkPasswordChange.Expect(x => x.Check(theUserDetail))
+			
+			var checkPasswordChange = MockRepository.GenerateMock<ITenantCheckPasswordChange>();
+			checkPasswordChange.Expect(x => x.Check(passwordPolicyForUser))
 				.Return(new AuthenticationResult { HasMessage = true, Message = "THEMESSAGE", Successful = true, PasswordExpired = false });
 
 			var target = new ApplicationAuthentication(findApplicationQuery, new PasswordVerifier(new OneWayEncryption(), () => new DummyPasswordPolicy(), new Now()),
-				new PasswordPolicyCheck(convertDataToOldUserDetailDomain, checkPasswordChange), new DataSourceConfigurationProviderFake());
+				new PasswordPolicyCheck(checkPasswordChange), new DataSourceConfigurationProviderFake());
 
 			var res = target.Logon(userName, password);
 			res.Success.Should().Be.True();
@@ -153,7 +149,6 @@ namespace Teleopti.Ccc.WebTest.Areas.Tenant.Core
 			res.Tenant.Should().Be.EqualTo(tenant);
 		}
 
-		//TODO: tenant, rewrite the setup when password policy is utbruten!
 		[Test]
 		public void ExpiredUserShouldSetPropertyOnResult()
 		{
@@ -162,18 +157,14 @@ namespace Teleopti.Ccc.WebTest.Areas.Tenant.Core
 			var personInfo = new PersonInfo { Id = Guid.NewGuid()};
 			personInfo.SetPassword(EncryptPassword.ToDbFormat(password));
 			var passwordPolicyForUser = new PasswordPolicyForUser(personInfo);
-			var theUserDetail = new UserDetail(null);
 			var findApplicationQuery = MockRepository.GenerateMock<IApplicationUserQuery>();
 			findApplicationQuery.Expect(x => x.FindUserData(userName)).Return(passwordPolicyForUser);
-			var convertDataToOldUserDetailDomain = MockRepository.GenerateMock<IConvertDataToOldUserDetailDomain>();
-			convertDataToOldUserDetailDomain.Expect(
-				x => x.Convert(passwordPolicyForUser)).Return(theUserDetail);
-			var checkPasswordChange = MockRepository.GenerateMock<ICheckPasswordChange>();
-			checkPasswordChange.Expect(x => x.Check(theUserDetail))
+			var checkPasswordChange = MockRepository.GenerateMock<ITenantCheckPasswordChange>();
+			checkPasswordChange.Expect(x => x.Check(passwordPolicyForUser))
 				.Return(new AuthenticationResult { HasMessage = true, Message = "THEMESSAGE", Successful = false, PasswordExpired = true});
 
 			var target = new ApplicationAuthentication(findApplicationQuery, new PasswordVerifier(new OneWayEncryption(), () => new DummyPasswordPolicy(), new Now()),
-				new PasswordPolicyCheck(convertDataToOldUserDetailDomain, checkPasswordChange), new DataSourceConfigurationProviderFake());
+				new PasswordPolicyCheck(checkPasswordChange), new DataSourceConfigurationProviderFake());
 
 			var res = target.Logon(userName, password);
 			res.Success.Should().Be.False();
@@ -181,8 +172,6 @@ namespace Teleopti.Ccc.WebTest.Areas.Tenant.Core
 			res.FailReason.Should().Be.EqualTo("THEMESSAGE");
 		}
 
-
-		//TODO: tenant, rewrite the setup when password policy is utbruten!
 		[Test]
 		public void PasswordPolicyShouldBeChecked()
 		{
@@ -191,18 +180,14 @@ namespace Teleopti.Ccc.WebTest.Areas.Tenant.Core
 			var personInfo = new PersonInfo { Id = Guid.NewGuid() };
 			personInfo.SetPassword(EncryptPassword.ToDbFormat(password));
 			var passwordPolicyForUser = new PasswordPolicyForUser(personInfo);
-			var theUserDetail = new UserDetail(null);
 			var findApplicationQuery = MockRepository.GenerateMock<IApplicationUserQuery>();
 			findApplicationQuery.Expect(x => x.FindUserData(userName)).Return(passwordPolicyForUser);
-			var convertDataToOldUserDetailDomain = MockRepository.GenerateMock<IConvertDataToOldUserDetailDomain>();
-			convertDataToOldUserDetailDomain.Expect(
-				x => x.Convert(passwordPolicyForUser)).Return(theUserDetail);
-			var checkPasswordChange = MockRepository.GenerateMock<ICheckPasswordChange>();
-			checkPasswordChange.Expect(x => x.Check(theUserDetail))
+			var checkPasswordChange = MockRepository.GenerateMock<ITenantCheckPasswordChange>();
+			checkPasswordChange.Expect(x => x.Check(passwordPolicyForUser))
 				.Return(new AuthenticationResult { HasMessage = true, Message = "THEMESSAGE", Successful = false });
 
 			var target = new ApplicationAuthentication(findApplicationQuery, new PasswordVerifier(new OneWayEncryption(), () => new DummyPasswordPolicy(), new Now()),
-				new PasswordPolicyCheck(convertDataToOldUserDetailDomain, checkPasswordChange), new DataSourceConfigurationProviderFake());
+				new PasswordPolicyCheck( checkPasswordChange), new DataSourceConfigurationProviderFake());
 
 			var res = target.Logon(userName, password);
 			res.Success.Should().Be.False();
