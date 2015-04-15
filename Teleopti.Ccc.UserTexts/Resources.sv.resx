@@ -12210,4 +12210,19 @@ Minska komplexiteten för att kunna använda dessa skift.</value>
   <data name="NoGamificationSetting" xml:space="preserve">
     <value>Ingen spelifieringsinställning</value>
   </data>
+  <data name="Duplicate" xml:space="preserve">
+    <value>Skapa kopia</value>
+  </data>
+  <data name="MissingForecastFrom" xml:space="preserve">
+    <value>Saknar prognos från </value>
+  </data>
+  <data name="MissingSkills" xml:space="preserve">
+    <value>Prognos saknas för dessa kompetenser</value>
+  </data>
+  <data name="NextPlanningPeriodMessage" xml:space="preserve">
+    <value>Nästa planeringsperiod är från</value>
+  </data>
+  <data name="ToText" xml:space="preserve">
+    <value>till</value>
+  </data>
 </root>
