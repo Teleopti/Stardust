@@ -12982,4 +12982,8 @@ Reduce the complexity to use these shifts.</value>
     <value>More header fields</value>
     <comment>Shows more header row fields.</comment>
   </data>
+  <data name="AdherenceCannotBeEmpty" xml:space="preserve">
+    <value>Adherence can not be empty</value>
+    <comment>used in alarm control</comment>
+  </data>
 </root>

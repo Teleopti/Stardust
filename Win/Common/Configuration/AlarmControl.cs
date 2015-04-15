@@ -4,6 +4,7 @@ using System.ComponentModel;
 using System.Drawing;
 using System.Linq;
 using System.Windows.Forms;
+using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.RealTimeAdherence;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
@@ -103,6 +104,8 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 				if(!alarmTypeValuesAreOk(type)) return;
 				_alarmTypeRepository.Add(type);
 			}
+			if (!_decorators.IsNullOrEmpty())
+				_alarmTypes.ForEach(checkAdherenceType);
 		}
 
 		private bool alarmTypeValuesAreOk(IAlarmType type)
@@ -123,6 +126,12 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 				return false;
 			}
 			return true;
+		}
+
+		private static void checkAdherenceType(IAlarmType alarmType)
+		{
+			if (!alarmType.Adherence.HasValue)
+				throw new ValidationException(Resources.AdherenceCannotBeEmpty);
 		}
 
 		public void Unload()
