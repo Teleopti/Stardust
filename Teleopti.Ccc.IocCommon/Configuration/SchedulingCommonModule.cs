@@ -68,7 +68,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<InnerOptimizerHelperHelper>().As<IOptimizerHelperHelper>().InstancePerLifetimeScope();
 			builder.RegisterType<ResourceOptimizationHelperExtended>().As<IResourceOptimizationHelperExtended>().InstancePerLifetimeScope();
 			builder.RegisterType<RequiredScheduleHelper>().As<IRequiredScheduleHelper>().InstancePerLifetimeScope();
-			builder.RegisterType<ScheduleCommandToggle>().As<IScheduleCommandToggle>().InstancePerLifetimeScope();
+			builder.RegisterType<ScheduleCommandToggle>().As<IScheduleCommandToggle>().SingleInstance();
 			builder.RegisterType<CommonStateHolder>().As<ICommonStateHolder>().InstancePerLifetimeScope();
 
 			builder.RegisterModule<WeeklyRestSolverModule>();
@@ -143,7 +143,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<OccupiedSeatCalculator>().As<IOccupiedSeatCalculator>().InstancePerLifetimeScope();
 			builder.RegisterType<ResourceOptimizationHelper>().As<IResourceOptimizationHelper>().InstancePerLifetimeScope();
 			builder.RegisterType<PersonSkillProvider>().As<IPersonSkillProvider>().InstancePerLifetimeScope();
-			builder.RegisterType<PeriodDistributionService>().As<IPeriodDistributionService>().InstancePerLifetimeScope();
+			builder.RegisterType<PeriodDistributionService>().As<IPeriodDistributionService>().SingleInstance();
 
 			builder.RegisterType<NonBlendSkillCalculator>().As<INonBlendSkillCalculator>().InstancePerLifetimeScope();
 			builder.RegisterType<SchedulePeriodTargetTimeCalculator>().As<ISchedulePeriodTargetTimeCalculator>().InstancePerLifetimeScope();
