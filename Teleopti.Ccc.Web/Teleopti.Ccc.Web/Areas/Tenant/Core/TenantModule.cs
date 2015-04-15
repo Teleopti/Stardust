@@ -1,12 +1,21 @@
 ﻿using Autofac;
+using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Server;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Server.NHibernate;
+using Teleopti.Ccc.IocCommon;
 using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.Web.Areas.Tenant.Core
 {
 	public class TenantModule : Module
 	{
+		private readonly IIocConfiguration _configuration;
+
+		public TenantModule(IIocConfiguration configuration)
+		{
+			_configuration = configuration;
+		}
+
 		private const string tenancyConnectionStringKey = "Tenancy";
 
 		protected override void Load(ContainerBuilder builder)
@@ -15,7 +24,16 @@ namespace Teleopti.Ccc.Web.Areas.Tenant.Core
 			builder.RegisterType<IdentityAuthentication>().As<IIdentityAuthentication>().SingleInstance();
 			builder.RegisterType<ApplicationUserQuery>().As<IApplicationUserQuery>().SingleInstance();
 			builder.RegisterType<ApplicationUserTenantQuery>().As<IApplicationUserTenantQuery>().SingleInstance();
-			builder.RegisterType<IdentityUserQuery>().As<IIdentityUserQuery>().SingleInstance();
+			if (_configuration.Toggle(Toggles.MultiTenancy_LogonUseNewSchema_33049))
+			{
+				builder.RegisterType<IdentityUserQuery>().As<IIdentityUserQuery>().SingleInstance();
+				builder.RegisterType<ApplicationUserTenantQuery>().As<IApplicationUserTenantQuery>().SingleInstance();
+			}
+			else
+			{
+				builder.RegisterType<IdentityUserQuery_OldSchema>().As<IIdentityUserQuery>().SingleInstance();
+				builder.RegisterType<ApplicationUserTenantQuery_OldSchema>().As<IApplicationUserTenantQuery>().SingleInstance();
+			}
 			builder.RegisterType<FindTenantAndPersonIdForIdentity>().As<IFindTenantAndPersonIdForIdentity>().SingleInstance();
 			builder.RegisterType<PasswordPolicyCheck>().As<IPasswordPolicyCheck>().SingleInstance();
 			builder.RegisterType<ConvertDataToOldUserDetailDomain>().As<IConvertDataToOldUserDetailDomain>().SingleInstance();
