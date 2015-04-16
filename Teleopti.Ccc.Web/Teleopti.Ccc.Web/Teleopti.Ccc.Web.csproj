@@ -1234,6 +1234,7 @@
     <Content Include="Areas\SeatPlanner\Content\Templates\Dashboard\view.html" />
     <Content Include="Areas\SeatPlanner\Content\Templates\SeatMap\view.html" />
     <Content Include="Areas\Reporting\Views\Report\NoPermission.cshtml" />
+    <Content Include="WFM\js\outbound\outbound.directive.js" />
     <Content Include="WFM\js\seatManagement\html\filedialog.html" />
     <Content Include="WFM\vendor\ng-mfb\mfb.css.map" />
     <Content Include="WFM\css\_mfb.scss" />

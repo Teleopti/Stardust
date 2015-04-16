@@ -63,7 +63,7 @@
 										Edit
 									</md-tooltip>
 								</i>
-								<i ng-click="$parent.delete(campaign, $index)">
+								<i ng-click="modalLaunch1 = !modalLaunch1">
 									<svg style="width: 18px; height: 18px" viewBox="0 0 24 24">
 										<path fill="#555555" d="M19,4H15.5L14.5,3H9.5L8.5,4H5V6H19M6,19A2,2 0 0,0 8,21H16A2,2 0 0,0 18,19V7H6V19Z" />
 									</svg>
@@ -72,6 +72,26 @@
 									</md-tooltip>
 								</i>
 							</span>
+						</div>
+						<div ng-cloak class="modal-box">
+							<div ng-cloak ng-show="modalLaunch1">
+								<div class="modalbg">
+									<div class="dialog">
+										<div class="modal-header">
+											Delete campaign
+										</div>
+										<div class="modal-inner-content">
+											<div class="wfm-block">Are you sure you want to delete this campaign?</div>
+										</div>
+										<div class="modal-footer">
+											<aside>
+												<a ng-click="modalLaunch1 = !modalLaunch1" class="wfm-btn wfm-btn-invis-primary">DISMISS</a>
+												<a ng-click="$parent.delete(campaign, $index)" class=" wfm-btn wfm-btn-invis-primary">AGREE</a>
+											</aside>
+										</div>
+									</div>
+								</div>
+							</div>
 						</div>
 						<div class="row">
 							<div ng-class="{'col-lg-4': showMoreHeaderFields}">

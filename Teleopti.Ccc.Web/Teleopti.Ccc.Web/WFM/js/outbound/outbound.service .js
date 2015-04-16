@@ -59,8 +59,8 @@ outboundService.service('OutboundService', ['$resource', '$filter', function( $r
 				campaign = angular.extend(campaign, fetched, { IsFull: true });
 				angular.forEach(campaign.CampaignWorkingPeriods, function (period) {
 					expandWorkingPeriod(period);
-				});		
-			});						
+				});
+			});	
 		}
 		return campaign;
 	};
