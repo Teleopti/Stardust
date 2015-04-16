@@ -51,7 +51,7 @@ namespace Teleopti.Ccc.Web.Areas.Reporting
 			{
 				if (!Guid.TryParse(Request.QueryString["REPORTID"], out ReportId))
 					return;
-				Response.Redirect(string.Format("/Reporting/Report/{0}#{1}", ReportId, ReportId));
+				Response.Redirect(string.Format("~/Reporting/Report/{0}#{1}", ReportId, ReportId));
 			}
 			var princip = Thread.CurrentPrincipal;
 			var person = ((TeleoptiPrincipalCacheable)princip).Person;
