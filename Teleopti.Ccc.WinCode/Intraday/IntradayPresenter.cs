@@ -126,18 +126,6 @@ namespace Teleopti.Ccc.WinCode.Intraday
                                                     period.EndDateTime);
         }
 
-        private void handleIncomingExternalEvent(object state)
-        {
-            var stateBytes = state as byte[];
-            if (stateBytes == null)
-                return;
-            IActualAgentState agentState = JsonConvert.DeserializeObject<ActualAgentState>(Encoding.UTF8.GetString(stateBytes));
-
-            Logger.DebugFormat("Externalstate received: State {0}, PersonId {1}, State start {2}", agentState.State, agentState.PersonId, agentState.StateStart);
-            _rtaStateHolder.SetActualAgentState(agentState);
-            if (ExternalAgentStateReceived != null) ExternalAgentStateReceived.Invoke(this, EventArgs.Empty);
-        }
-
         public ISchedulerStateHolder SchedulerStateHolder
         {
             get { return _schedulingResultLoader.SchedulerState; }
@@ -281,23 +269,34 @@ namespace Teleopti.Ccc.WinCode.Intraday
 
         private void loadExternalAgentStates()
         {
-			if (ExternalAgentStateReceived != null) ExternalAgentStateReceived.Invoke(this, EventArgs.Empty);
-            var statisticRepository = _repositoryFactory.CreateStatisticRepository();
-            using (PerformanceOutput.ForOperation("Read and collect agent states"))
-            {
-                var tmp = statisticRepository.LoadActualAgentState(_rtaStateHolder.FilteredPersons);
-                foreach (var actualAgentState in tmp)
-                {
-					// if we have recieved an RTA event that is more recent than what we get from DB
-	                IActualAgentState outState;
-	                if (_rtaStateHolder.ActualAgentStates.TryGetValue(actualAgentState.PersonId, out outState))
-		                _rtaStateHolder.SetActualAgentState(outState.ReceivedTime > actualAgentState.ReceivedTime
-			                                                    ? outState
-			                                                    : actualAgentState);
-	                else
-		                _rtaStateHolder.SetActualAgentState(actualAgentState);
-                }
-            }
+	        try
+	        {
+		        var statisticRepository = _repositoryFactory.CreateStatisticRepository();
+		        using (PerformanceOutput.ForOperation("Read and collect agent states"))
+		        {
+			        var tmp = statisticRepository.LoadActualAgentState(_rtaStateHolder.FilteredPersons);
+			        foreach (var actualAgentState in tmp)
+			        {
+				        // if we have recieved an RTA event that is more recent than what we get from DB
+				        IActualAgentState outState;
+				        if (_rtaStateHolder.ActualAgentStates.TryGetValue(actualAgentState.PersonId, out outState))
+					        _rtaStateHolder.SetActualAgentState(outState.ReceivedTime > actualAgentState.ReceivedTime
+						        ? outState
+						        : actualAgentState);
+				        else
+					        _rtaStateHolder.SetActualAgentState(actualAgentState);
+			        }
+		        }
+			}
+			catch (Exception e)
+			{
+				if (ExternalAgentStateReceived != null)
+					ExternalAgentStateReceived.Invoke(this, new ExternalAgentStateReceivedEventArgs
+					{
+						Exception = e
+					});
+				throw;
+			}
         }
 
         private void initializeRtaStateHolder()
@@ -425,7 +424,12 @@ namespace Teleopti.Ccc.WinCode.Intraday
 			get { return SchedulerStateHolder.RequestedScenario; }
 		}
 
-        public event EventHandler ExternalAgentStateReceived;
+		public class ExternalAgentStateReceivedEventArgs : EventArgs
+		{
+			public Exception Exception;
+		}
+
+		public event EventHandler<ExternalAgentStateReceivedEventArgs> ExternalAgentStateReceived;
 		
         public IDayLayerViewModel CreateDayLayerViewModel()
         {

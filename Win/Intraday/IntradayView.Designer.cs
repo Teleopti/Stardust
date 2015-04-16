@@ -31,7 +31,7 @@ namespace Teleopti.Ccc.Win.Intraday
                 }
                 if (Presenter!=null)
                 {
-                    Presenter.ExternalAgentStateReceived -= presenter_ExternalAgentStateReceived;
+                    Presenter.ExternalAgentStateReceived -= presenterExternalAgentStateReceived;
                     Presenter.Dispose();
                     Presenter = null;
                 }

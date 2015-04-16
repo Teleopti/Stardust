@@ -68,6 +68,8 @@ namespace Teleopti.Ccc.Win.Intraday
 
 			if (authorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.IntradayReForecasting))
 				toolStripExChangeForecast.Visible = true;
+
+			toolStripStatusLabelLastUpdate.Click += ToolStripStatusLabelLastUpdateOnClick;
         }
 
         public IntradayPresenter Presenter { get; set; }
@@ -221,23 +223,42 @@ namespace Teleopti.Ccc.Win.Intraday
             teleoptiToolStripGalleryViews.Items.Add(defaultItem);
         }
 
-        #region events
-        private void presenter_ExternalAgentStateReceived(object sender, EventArgs e)
+	    private Exception ExternalAgentStateReceivedEventArgsException;
+
+		private void presenterExternalAgentStateReceived(object sender, IntradayPresenter.ExternalAgentStateReceivedEventArgs e)
         {
             if (InvokeRequired)
-                BeginInvoke(new EventHandler(presenter_ExternalAgentStateReceived), sender, e);
-            else
+				BeginInvoke(new EventHandler<IntradayPresenter.ExternalAgentStateReceivedEventArgs>(presenterExternalAgentStateReceived), sender, e);
+			else
             {
                 if ((int) _lastUpdateUtc.TimeOfDay.TotalSeconds == (int) DateTime.UtcNow.TimeOfDay.TotalSeconds)
                     return; //To avoid updates that doesn't change the content
 
                 _lastUpdateUtc = DateTime.UtcNow;
-                toolStripStatusLabelLastUpdate.Text = string.Format(CultureInfo.CurrentCulture,
-                                                                    Resources.LastUpdateColonParameter0,
-                                                                    TimeZoneHelper.ConvertFromUtc(DateTime.UtcNow).
-                                                                        ToLongTimeString());
+				ExternalAgentStateReceivedEventArgsException = e.Exception;
+				if (e.Exception != null)
+				{
+					toolStripStatusLabelLastUpdate.Text = Resources.Error;
+				}
+				else
+				{
+					toolStripStatusLabelLastUpdate.Text = string.Format(CultureInfo.CurrentCulture,
+						Resources.LastUpdateColonParameter0,
+						TimeZoneHelper.ConvertFromUtc(DateTime.UtcNow).
+							ToLongTimeString());
+				}
             }
         }
+
+		private void ToolStripStatusLabelLastUpdateOnClick(object o, EventArgs e)
+		{
+			if (ExternalAgentStateReceivedEventArgsException == null)
+				return;
+			using (var view = new SimpleExceptionHandlerView(ExternalAgentStateReceivedEventArgsException, Resources.Error, Resources.UnableToConnectRemoteService))
+			{
+				view.ShowDialog();
+			}
+		}
 
         private void timeNavigationControl_SelectedDateChanged(object sender, CustomEventArgs<DateOnly> e)
         {
@@ -413,8 +434,6 @@ namespace Teleopti.Ccc.Win.Intraday
             }
         }
 
-        #endregion
-
         public void DisableSave()
         {
             toolStripButtonQuickAccessSave.Enabled = false;
@@ -532,7 +551,7 @@ namespace Teleopti.Ccc.Win.Intraday
             _intradayViewContent = new IntradayViewContent(Presenter, this, _eventAggregator, Presenter.SchedulerStateHolder, _settingManager, _overriddenBusinessRulesHolder);
             _intradayViewContent.RightToLeft = RightToLeft; //To solve error with wrong dock labels running RTL
             _timeNavigationControl.SetSelectedDate(Presenter.IntradayDate);
-            Presenter.ExternalAgentStateReceived += presenter_ExternalAgentStateReceived;
+			Presenter.ExternalAgentStateReceived += presenterExternalAgentStateReceived;
             _eventAggregator.GetEvent<IntradayLoadProgress>().Publish(Resources.LoadingLayoutsThreeDots);
             InitializeGallery();
             toolStripTabItemHome.Checked = true;
