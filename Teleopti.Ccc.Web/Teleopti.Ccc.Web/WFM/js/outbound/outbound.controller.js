@@ -39,10 +39,8 @@ outbound.controller('OutboundListCtrl', [
 		};
 		
 		$scope.delete = function(campaign) {
-			if (confirm('Are you sure you want to delete this record?')) {
-				OutboundService.deleteCampaign(campaign);
-				$state.go('outbound.edit', { Id: null });
-			};
+			OutboundService.deleteCampaign(campaign);
+			$state.go('outbound.edit', { Id: null });
 		}
 	}		
 ]);
