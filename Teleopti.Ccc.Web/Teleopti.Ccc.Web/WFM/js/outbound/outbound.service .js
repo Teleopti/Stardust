@@ -26,7 +26,15 @@ outboundService.service('OutboundService', ['$resource', '$filter', function( $r
 		workingPeriod.ExpandedWorkingPeriodAssignments = expandedAssignments;
 	};
 
-	self.campaigns  = [];
+	self.campaigns = [];
+	self.currentCampaignId = null;
+
+	self.getCurrentCampaign = function() {
+		if (self.currentCampaignId == null) return null;
+		var matched = self.campaigns.filter(function (campaign) { return campaign.Id == self.currentCampaignId; });
+		if (matched.length == 0) return null;
+		else return matched[0];
+	};
 
 	self.addCampaign = function (campaign, successCb, errorCb) {		
 		var newCampaign = new Campaign(campaign);
@@ -44,15 +52,23 @@ outboundService.service('OutboundService', ['$resource', '$filter', function( $r
 		return newCampaign;
 	};
 
-	self.listCampaign = function (campaignFilter) {	
-		self.campaigns = Campaign.query();		
+	self.listCampaign = function (campaignFilter, successCb, errorCb) {	
+		self.campaigns = Campaign.query({}, 
+			function() {
+				if (angular.isDefined(successCb))
+					successCb();
+			},
+			function(data) {
+				if (angular.isDefined(errorCb))
+					errorCb(data);
+			});		
 		return self.campaigns;
 	};
 
-	self.getCampaignById = function( Id) {	
+	self.getCampaignById = function (Id) {
+		self.currentCampaignId = Id;
 		var matched = self.campaigns.filter(function(campaign) { return campaign.Id === Id; });
 		if (matched.length === 0) return null;
-
 		var campaign = matched[0];
 		if (! (angular.isDefined(campaign.IsFull) && campaign.IsFull)) {
 			var fetched = Campaign.get({ Id: Id }, function() {
@@ -61,7 +77,7 @@ outboundService.service('OutboundService', ['$resource', '$filter', function( $r
 					expandWorkingPeriod(period);
 				});
 			});	
-		}
+		}	
 		return campaign;
 	};
 
@@ -84,7 +100,6 @@ outboundService.service('OutboundService', ['$resource', '$filter', function( $r
 			_maximum: $filter('date')(workingPeriod.EndTime, 'HH:mm:ss')				
 		}};
 
-		console.log(newWorkingPeriod);
 		newWorkingPeriod.$save(function () {		
 			expandWorkingPeriod(newWorkingPeriod);
 			campaign.CampaignWorkingPeriods.push(newWorkingPeriod);
@@ -92,7 +107,6 @@ outboundService.service('OutboundService', ['$resource', '$filter', function( $r
 	};
 
 	self.deleteWorkingPeriod = function (campaign, workingPeriod) {
-		console.log({ CampaignId: campaign.Id, WorkingPeriodId: workingPeriod.Id });
 		CampaignWorkingPeriod.remove({ CampaignId: campaign.Id, WorkingPeriodId: workingPeriod.Id });
 		campaign.CampaignWorkingPeriods.splice(campaign.CampaignWorkingPeriods.indexOf(workingPeriod), 1);
 	}

@@ -15,7 +15,10 @@ outbound.controller('OutboundListCtrl', [
 			$scope.form.$setPristine();
 		};
 
-		$scope.campaigns = OutboundService.listCampaign();
+		$scope.campaigns = OutboundService.listCampaign({}, function() {
+			$scope.selectedTarget = OutboundService.getCurrentCampaign();
+			$scope.$broadcast('outbound.campaigns.loaded');		
+		});
 
 		$scope.create = function() {
 			OutboundService.addCampaign({ name: $scope.newName }, function(_newCampaign_) {
@@ -51,6 +54,14 @@ outbound.controller('OutboundEditCtrl', [
 		$scope.campaign = (angular.isDefined($stateParams.Id) && $stateParams.Id != "")?OutboundService.getCampaignById($stateParams.Id): null;
 		$scope.newWorkingPeriod = { StartTime: null, EndTime: null };
 
+		$scope.showCampaignDetail = angular.isDefined($scope.campaign) && ($scope.campaign != null);
+
+
+		$scope.$on('outbound.campaigns.loaded', function () {
+			$scope.campaign = (angular.isDefined($stateParams.Id) && $stateParams.Id != "") ? OutboundService.getCampaignById($stateParams.Id) : null;
+			$scope.showCampaignDetail = angular.isDefined($scope.campaign) && ($scope.campaign != null);
+		});
+
 		//angular.forEach($scope.campaign.Skills, function (skill) {			
 		//	if (skill.IsSelected) {
 		//		$scope.campaign.SelectedSkill = skill;
@@ -58,8 +69,7 @@ outbound.controller('OutboundEditCtrl', [
 		//});
 
 		
-		$scope.showCampaignDetail = angular.isDefined($scope.campaign) && ($scope.campaign != null);
-
+		
 		$scope.update = function () {		
 			OutboundService.updateCampaign($scope.campaign);
 		};
