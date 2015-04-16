@@ -38,11 +38,20 @@ client.setValue('#Username-input', 'demo')
 	.click('#Signin-button')
 	.waitForExist('.user-name', 120000, false, function(err, res, response) {
 		if (err || !res) {
-			log('failed to sign in. res: ' + res);
-			closeAndThrow('failed to sign in. ' + err);
+			log('failed to sign in first time. res: ' + res);
+			client.pause(5000);
+			client.url(webUrl)
+				.waitForExist('.user-name', 120000, false, function(err, res, response) {
+					if (err || !res) {
+						log('failed to sign in second time. res: ' + res);
+						closeAndThrow('failed to sign in. ' + err);
+					}
+				});
+			log('sign in succeeded second time:' + res);
 		}
-		log('sign in succeeded:' + res);
+		log('sign in succeeded first time:' + res);
 	});
+
 log('navigate to health check');
 client.url(webUrl + '/HealthCheck')
 	.waitForExist(".services li span", 600000, false, function(err, res, response) {
