@@ -15,7 +15,7 @@
 			<li ng-repeat="skill in planningPeriod.Skills">
 				<div class="wfm-accordion-head" ng-click="skill.toggle = !skill.toggle">
 					{{skill.SkillName}} <i ng-class="{'toggle-icon-open':skill.toggle}" class="mdi mdi-chevron-down"></i>
-					<span class="pull-right">{{skill.MissingRanges.length}} {{'IssuesText' | translate }}</span>
+					<span class="pull-right" class="text-muted">{{skill.MissingRanges.length}} {{'IssuesText' | translate }}</span>
 				</div>
 				<div class="wfm-accordion-content" ng-cloak ng-show="skill.toggle">
 					<div ng-repeat="range in skill.MissingRanges">{{'MissingForecastFrom' | translate }} {{range.StartDate | date:"MM/dd/yyyy"}} {{'ToText' | translate}} {{range.EndDate | date:"MM/dd/yyyy"}}</div>

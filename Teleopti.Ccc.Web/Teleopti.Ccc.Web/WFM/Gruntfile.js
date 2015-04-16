@@ -4,7 +4,7 @@
 	grunt.initConfig({
 		watch: {
 			dev: {
-				files: ['css/style.scss', 'js/**/*.js'],
+				files: ['css/*.scss', 'js/**/*.js'],
 				tasks: ['uglify', 'sass'],
 				options: {
 					spawn: false,
