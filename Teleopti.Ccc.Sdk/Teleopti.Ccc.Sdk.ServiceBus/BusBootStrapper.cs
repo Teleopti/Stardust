@@ -12,6 +12,7 @@ using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.IocCommon.Configuration;
 using Teleopti.Ccc.Sdk.ServiceBus.Notification;
+using Teleopti.Interfaces;
 
 namespace Teleopti.Ccc.Sdk.ServiceBus
 {

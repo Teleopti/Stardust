@@ -2,10 +2,12 @@
 using Teleopti.Ccc.AgentPortalCode.Helper;
 using Teleopti.Ccc.Sdk.Common.DataTransferObject;
 using Teleopti.Interfaces.Domain;
+using Teleopti.Interfaces.MessageBroker.Client.Composite;
 using Teleopti.Interfaces.MessageBroker.Core;
 using Teleopti.Interfaces.MessageBroker.Events;
+using Teleopti.Messaging.Client;
+using Teleopti.Messaging.Client.SignalR;
 using Teleopti.Messaging.Exceptions;
-using Teleopti.Messaging.SignalR;
 
 namespace Teleopti.Ccc.AgentPortalCode.Foundation.StateHandlers
 {
@@ -22,7 +24,7 @@ namespace Teleopti.Ccc.AgentPortalCode.Foundation.StateHandlers
         private string _connectionString;
         private static readonly object _locker = new object();
         private readonly IState _state;
-        private IMessageBroker _messageBroker;
+        private IMessageBrokerComposite _messageBroker;
 
         /// <summary>
         /// Gets the instance.
@@ -71,7 +73,7 @@ namespace Teleopti.Ccc.AgentPortalCode.Foundation.StateHandlers
         /// Created by: Sumedah
         /// Created date: 2008-08-22
         /// </remarks>
-        public IMessageBroker MessageBroker
+        public IMessageBrokerComposite MessageBroker
         {
             get { return _messageBroker; }
 
@@ -136,12 +138,12 @@ namespace Teleopti.Ccc.AgentPortalCode.Foundation.StateHandlers
         	Uri serverUrl;
         	if (Uri.TryCreate(_connectionString,UriKind.Absolute,out serverUrl))
         	{
-        		var broker = SignalBroker.Make(new DummyFilterManager());
-        		broker.ConnectionString = _connectionString;
+				MessageBrokerContainerDontUse.Configure(_connectionString, new IConnectionKeepAliveStrategy[] { }, new DummyFilterManager());
+				var broker = MessageBrokerContainerDontUse.CompositeClient();
 				_messageBroker = broker;
 
         		var useLongPolling = State.SessionScopeData.AppSettings.GetSettingValue("MessageBrokerLongPolling", bool.Parse);
-				_messageBroker.StartMessageBroker(useLongPolling);
+				_messageBroker.StartBrokerService(useLongPolling);
         	}
         }
 

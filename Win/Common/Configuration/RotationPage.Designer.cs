@@ -19,8 +19,8 @@
                 if (_gridHelper!=null) _gridHelper.Dispose();
                 if (_messageBroker != null)
                 {
-                    _messageBroker.UnregisterEventSubscription(MessageBrokerDayOffMessage);
-                    _messageBroker.UnregisterEventSubscription(MessageBrokerShiftCategoryMessage);
+                    _messageBroker.UnregisterSubscription(MessageBrokerDayOffMessage);
+                    _messageBroker.UnregisterSubscription(MessageBrokerShiftCategoryMessage);
                 }
             }
             base.Dispose(disposing);

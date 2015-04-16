@@ -264,7 +264,6 @@
     <Compile Include="NHibernateConfiguration\DateOnlyMappingTypeTest.cs" />
     <Compile Include="Foundation\LogOnOffTest.cs" />
     <Compile Include="Foundation\DataSourceExceptionTest.cs" />
-    <Compile Include="Foundation\InitializeApplicationTest.cs" />
     <Compile Include="Foundation\LazyLoadingManagerTest.cs" />
     <Compile Include="Foundation\MatrixRaptorExternalLogOnSynchronizationTest.cs" />
     <Compile Include="Foundation\MatrixRaptorQueueSynchronizationTest.cs" />

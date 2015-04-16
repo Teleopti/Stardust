@@ -6,6 +6,7 @@ using Rhino.Mocks;
 using SharpTestsEx;
 using Teleopti.Ccc.Web.Core.RequestContext;
 using Teleopti.Ccc.Web.Core.Startup.InitializeApplication;
+using Teleopti.Interfaces.MessageBroker.Client.Composite;
 using Teleopti.Interfaces.MessageBroker.Events;
 
 namespace Teleopti.Ccc.WebTest.Core.Startup
@@ -18,13 +19,13 @@ namespace Teleopti.Ccc.WebTest.Core.Startup
 		{
 			var currentHttpContext = CurrentHttpContext("http://my.url.com", "/app/");
 			var settings = MockRepository.GenerateMock<ISettings>();
-			var messageBroker = MockRepository.GenerateMock<IMessageBroker>();
-			messageBroker.Stub(x => x.ConnectionString).PropertyBehavior();
+			var messageBroker = MockRepository.GenerateMock<IMessageBrokerComposite>();
+			messageBroker.Stub(x => x.ServerUrl).PropertyBehavior();
 			var target = new MessageBrokerTask(messageBroker, currentHttpContext, settings);
 
 			target.Execute();
 
-			messageBroker.ConnectionString.Should().Be("http://my.url.com/app/");
+			messageBroker.ServerUrl.Should().Be("http://my.url.com/app/");
 		}
 
 		[Test]
@@ -33,27 +34,27 @@ namespace Teleopti.Ccc.WebTest.Core.Startup
 			var currentHttpContext = CurrentHttpContext("http://my.url.com", "/app/");
 			var settings = MockRepository.GenerateMock<ISettings>();
 			settings.Stub(x => x.MessageBroker()).Return("http://my.broker.com/path/");
-			var messageBroker = MockRepository.GenerateMock<IMessageBroker>();
-			messageBroker.Stub(x => x.ConnectionString).PropertyBehavior();
+			var messageBroker = MockRepository.GenerateMock<IMessageBrokerComposite>();
+			messageBroker.Stub(x => x.ServerUrl).PropertyBehavior();
 			var target = new MessageBrokerTask(messageBroker, currentHttpContext, settings);
 
 			target.Execute();
 
-			messageBroker.ConnectionString.Should().Be(@"http://my.broker.com/path/");
+			messageBroker.ServerUrl.Should().Be(@"http://my.broker.com/path/");
 		}
 
 		[Test]
 		public void ShouldStartMessageBroker()
 		{
 			var currentHttpContext = CurrentHttpContext("http://localhost", "/");
-			var messageBroker = MockRepository.GenerateMock<IMessageBroker>();
+			var messageBroker = MockRepository.GenerateMock<IMessageBrokerComposite>();
 			var settings = MockRepository.GenerateMock<ISettings>();
 			settings.Stub(x => x.MessageBrokerLongPolling()).Return("true");
 			var target = new MessageBrokerTask(messageBroker, currentHttpContext, settings);
 
 			Task.WaitAll(target.Execute());
 
-			messageBroker.AssertWasCalled(x => x.StartMessageBroker(true));
+			messageBroker.AssertWasCalled(x => x.StartBrokerService(true));
 		}
 
 		private static ICurrentHttpContext CurrentHttpContext(string url, string applicationPath)

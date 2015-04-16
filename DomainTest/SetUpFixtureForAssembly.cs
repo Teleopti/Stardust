@@ -14,6 +14,7 @@ using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
+using Teleopti.Interfaces.MessageBroker.Client.Composite;
 using Teleopti.Interfaces.MessageBroker.Events;
 using Configuration=NHibernate.Cfg.Configuration;
 
@@ -50,7 +51,7 @@ namespace Teleopti.Ccc.DomainTest
             cfg.SetProperties(ret);
             cfg.AddAssembly("Teleopti.Ccc.Domain");
 
-            applicationData = StateHolderProxyHelper.CreateApplicationData(mocks.StrictMock<IMessageBroker>());
+            applicationData = StateHolderProxyHelper.CreateApplicationData(mocks.StrictMock<IMessageBrokerComposite>());
             loggedOnPerson = StateHolderProxyHelper.CreateLoggedOnPerson();
             sessionData = StateHolderProxyHelper.CreateSessionData(loggedOnPerson, applicationData, BusinessUnitFactory.BusinessUnitUsedInTest);
 

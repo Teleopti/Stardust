@@ -10,6 +10,7 @@ using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Infrastructure.NHibernateConfiguration;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
+using Teleopti.Interfaces.MessageBroker.Client.Composite;
 using Teleopti.Interfaces.MessageBroker.Events;
 
 namespace Teleopti.Ccc.Infrastructure.UnitOfWork
@@ -98,7 +99,7 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 
 		public string ConnectionString { get; private set; }
 
-		protected virtual IUnitOfWork MakeUnitOfWork(ISession session, IMessageBroker messaging, NHibernateFilterManager filterManager, TransactionIsolationLevel isolationLevel, IInitiatorIdentifier initiator)
+		protected virtual IUnitOfWork MakeUnitOfWork(ISession session, IMessageBrokerComposite messaging, NHibernateFilterManager filterManager, TransactionIsolationLevel isolationLevel, IInitiatorIdentifier initiator)
 		{
 			return new NHibernateUnitOfWork(session,
 			                                messaging,
@@ -122,7 +123,7 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 			return CreateAndOpenUnitOfWork(StateHolderReader.Instance.StateReader.ApplicationScopeData.Messaging, TransactionIsolationLevel.Default, initiator);
 		}
 
-		public IUnitOfWork CreateAndOpenUnitOfWork(IMessageBroker messageBroker, TransactionIsolationLevel isolationLevel, IInitiatorIdentifier initiator)
+		public IUnitOfWork CreateAndOpenUnitOfWork(IMessageBrokerComposite messageBroker, TransactionIsolationLevel isolationLevel, IInitiatorIdentifier initiator)
 		{
 			var identity = Thread.CurrentPrincipal.Identity as ITeleoptiIdentity;
 			var buId = (identity !=null && identity.BusinessUnit!=null) ? identity.BusinessUnit.Id.GetValueOrDefault() : Guid.Empty;

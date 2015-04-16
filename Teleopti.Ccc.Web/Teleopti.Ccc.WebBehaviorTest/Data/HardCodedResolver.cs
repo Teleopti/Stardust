@@ -14,23 +14,25 @@ using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Interfaces.Domain;
+using Teleopti.Interfaces.MessageBroker.Client.Composite;
 using Teleopti.Interfaces.MessageBroker.Events;
-using Teleopti.Messaging.SignalR;
+using Teleopti.Messaging.Client;
+using Teleopti.Messaging.Client.SignalR;
 
 namespace Teleopti.Ccc.WebBehaviorTest.Data
 {
 
 	public class HardCodedResolver : IResolve
 	{
-		private static IMessageBrokerSender _messageBroker;
+		private static IMessageBrokerComposite _messageBroker;
 
-		private IMessageBrokerSender messageBroker()
+		private IMessageBrokerComposite messageBroker()
 		{
 			if (_messageBroker == null)
 			{
-				var broker = new SignalBroker(MessageFilterManager.Instance, new IConnectionKeepAliveStrategy[] { }, new Time(new Now()));
-				broker.ConnectionString = TestSiteConfigurationSetup.Url.ToString();
-				broker.StartMessageBroker();
+				MessageBrokerContainerDontUse.Configure(TestSiteConfigurationSetup.Url.ToString(), new IConnectionKeepAliveStrategy[] { }, null);
+				var broker = MessageBrokerContainerDontUse.CompositeClient();
+				broker.StartBrokerService();
 				_messageBroker = broker;
 			}
 			return _messageBroker;

@@ -68,12 +68,12 @@ namespace Teleopti.Ccc.AgentPortal.AgentScheduleMessenger
         public void UnregisterMessageBrokerSubscriptions()
         {
             if (StateHolder.Instance.MessageBroker != null &&
-                StateHolder.Instance.MessageBroker.IsConnected)
+                StateHolder.Instance.MessageBroker.IsAlive)
             {
                 try
                 {
-                    StateHolder.Instance.MessageBroker.UnregisterEventSubscription(OnEventMessageHandler);
-                    StateHolder.Instance.MessageBroker.UnregisterEventSubscription(OnEventMessageHandler);
+                    StateHolder.Instance.MessageBroker.UnregisterSubscription(OnEventMessageHandler);
+					StateHolder.Instance.MessageBroker.UnregisterSubscription(OnEventMessageHandler);
                 }
                 catch (RemotingException exp)
                 {
@@ -86,15 +86,15 @@ namespace Teleopti.Ccc.AgentPortal.AgentScheduleMessenger
         private void RegisterForMessageBrokerEvents()
         {
             if (StateHolder.Instance.MessageBroker != null &&
-                StateHolder.Instance.MessageBroker.IsConnected)
+				StateHolder.Instance.MessageBroker.IsAlive)
             {
                 try
                 {
                 	var referenceId = StateHolder.Instance.State.SessionScopeData.LoggedOnPerson.Id.GetValueOrDefault();
                 	var businessUnitId = StateHolder.Instance.State.SessionScopeData.BusinessUnit.Id.GetValueOrDefault();
                 	var datasource = StateHolder.Instance.State.SessionScopeData.DataSource.Name;
-					StateHolder.Instance.MessageBroker.RegisterEventSubscription(datasource,businessUnitId, OnEventMessageHandler, referenceId, typeof(IPerson), typeof(IScheduleChangedInDefaultScenario));
-					StateHolder.Instance.MessageBroker.RegisterEventSubscription(datasource,businessUnitId, OnEventMessageHandler, referenceId, typeof(IPerson), typeof(IPushMessageDialogue));
+					StateHolder.Instance.MessageBroker.RegisterSubscription(datasource,businessUnitId, OnEventMessageHandler, referenceId, typeof(IPerson), typeof(IScheduleChangedInDefaultScenario));
+					StateHolder.Instance.MessageBroker.RegisterSubscription(datasource, businessUnitId, OnEventMessageHandler, referenceId, typeof(IPerson), typeof(IPushMessageDialogue));
                 }
                 catch (RemotingException e)
                 {

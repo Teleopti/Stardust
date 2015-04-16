@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using Teleopti.Interfaces.Infrastructure;
+using Teleopti.Interfaces.MessageBroker.Client.Composite;
 using Teleopti.Interfaces.MessageBroker.Events;
 
 namespace Teleopti.Interfaces.Domain
@@ -24,7 +25,7 @@ namespace Teleopti.Interfaces.Domain
 		/// Created by: rogerkr
 		/// Created date: 2008-06-10
 		/// </remarks>
-		IMessageBroker Messaging { get; }
+		IMessageBrokerComposite Messaging { get; }
 
 		/// <summary>
 		/// Gets the application wide settings. This replaces ConfigurationManager.AppSettings, which should not be used

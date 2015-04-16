@@ -2,6 +2,7 @@ using System;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Interfaces.Domain;
+using Teleopti.Interfaces.MessageBroker.Client.Composite;
 using Teleopti.Interfaces.MessageBroker.Events;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Resources
@@ -10,10 +11,10 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Reso
 		IScheduledResourcesReadModelUpdater
 	{
 		private readonly IScheduledResourcesReadModelPersister _persister;
-		private readonly IMessageBrokerSender _messageBroker;
+		private readonly IMessageCreator _messageBroker;
 		private readonly IEventSyncronization _eventSyncronization;
 
-		public ScheduledResourcesReadModelUpdater(IScheduledResourcesReadModelPersister persister, IMessageBrokerSender messageBroker, IEventSyncronization eventSyncronization)
+		public ScheduledResourcesReadModelUpdater(IScheduledResourcesReadModelPersister persister, IMessageCreator messageBroker, IEventSyncronization eventSyncronization)
 		{
 			_persister = persister;
 			_messageBroker = messageBroker;
@@ -26,7 +27,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Reso
 			action.Invoke(actions);
 			_eventSyncronization.WhenDone(() =>
 				{
-					_messageBroker.SendEventMessage(dataSource, businessUnitId, actions.LowestDateTime, actions.HighestDateTime, Guid.Empty, Guid.Empty, typeof(IScheduledResourcesReadModel), DomainUpdateType.NotApplicable, null);
+					_messageBroker.Send(dataSource, businessUnitId, actions.LowestDateTime, actions.HighestDateTime, Guid.Empty, Guid.Empty, typeof(IScheduledResourcesReadModel), DomainUpdateType.NotApplicable, null);
 				});
 		}
 

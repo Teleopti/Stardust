@@ -79,7 +79,7 @@ namespace Teleopti.Ccc.SmartParts.Payroll
         {
             if (SmartPartEnvironment.MessageBroker != null)
             {
-                SmartPartEnvironment.MessageBroker.UnregisterEventSubscription(OnProgressChanged);
+                SmartPartEnvironment.MessageBroker.UnregisterSubscription(OnProgressChanged);
             }
             SmartPartEnvironment.SmartPartWorkspace.GridSize = _normalGridsize;   
         }

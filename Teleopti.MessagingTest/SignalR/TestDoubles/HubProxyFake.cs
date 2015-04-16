@@ -6,8 +6,8 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Interfaces.MessageBroker;
-using Teleopti.Messaging.SignalR;
-using Teleopti.Messaging.SignalR.Wrappers;
+using Teleopti.Messaging.Client.SignalR;
+using Teleopti.Messaging.Client.SignalR.Wrappers;
 using Subscription = Microsoft.AspNet.SignalR.Client.Hubs.Subscription;
 
 namespace Teleopti.MessagingTest.SignalR.TestDoubles

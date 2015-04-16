@@ -7,7 +7,6 @@ using Teleopti.Ccc.IocCommon.Configuration;
 using Teleopti.Ccc.Rta.Interfaces;
 using Teleopti.Ccc.Rta.Server.Resolvers;
 using Teleopti.Interfaces.MessageBroker.Client;
-using Teleopti.Messaging.SignalR;
 
 namespace Teleopti.Ccc.Rta.Server
 {
@@ -45,8 +44,8 @@ namespace Teleopti.Ccc.Rta.Server
 			builder.RegisterType<ActualAgentAssembler>().As<IActualAgentAssembler>();
 			builder.RegisterType<RtaDataHandler>().As<IRtaDataHandler>();
 			builder.RegisterType<AlarmMapper>().As<IAlarmMapper>();
-			builder.Register(c => new RecreateOnNoPingReply(TimeSpan.FromMinutes(1))).As<IConnectionKeepAliveStrategy>();
-			builder.Register(c => new RestartOnClosed(TimeSpan.Zero)).As<IConnectionKeepAliveStrategy>();
+			//builder.Register(c => new RecreateOnNoPingReply(TimeSpan.FromMinutes(1))).As<IConnectionKeepAliveStrategy>();
+			//builder.Register(c => new RestartOnClosed(TimeSpan.Zero)).As<IConnectionKeepAliveStrategy>();
 			builder.RegisterType<CurrentAndNextLayerExtractor>().As<ICurrentAndNextLayerExtractor>().SingleInstance();
 			builder.RegisterType<DataSourceResolver>().As<IDataSourceResolver>();
 			builder.RegisterType<PersonResolver>().As<IPersonResolver>();

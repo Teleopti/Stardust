@@ -1,8 +1,8 @@
 using System;
 using System.Threading.Tasks;
 using Microsoft.AspNet.SignalR.Client.Hubs;
-using Teleopti.Messaging.SignalR;
-using Teleopti.Messaging.SignalR.Wrappers;
+using Teleopti.Messaging.Client.SignalR;
+using Teleopti.Messaging.Client.SignalR.Wrappers;
 
 namespace Teleopti.MessagingTest.SignalR.TestDoubles
 {

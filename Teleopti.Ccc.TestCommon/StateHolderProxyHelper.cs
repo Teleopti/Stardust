@@ -15,8 +15,10 @@ using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
+using Teleopti.Interfaces.MessageBroker.Client.Composite;
 using Teleopti.Interfaces.MessageBroker.Events;
-using Teleopti.Messaging.SignalR;
+using Teleopti.Messaging.Client;
+using Teleopti.Messaging.Client.SignalR;
 
 namespace Teleopti.Ccc.TestCommon
 {
@@ -41,7 +43,9 @@ namespace Teleopti.Ccc.TestCommon
 			ConfigurationManager.AppSettings.AllKeys.ToList().ForEach(
 				name => appSettings.Add(name, ConfigurationManager.AppSettings[name]));
 
-			var applicationData = new ApplicationData(appSettings, new[] { dataSource }, SignalBroker.MakeForTest(MessageFilterManager.Instance), null);
+			MessageBrokerContainerDontUse.Configure(null, new IConnectionKeepAliveStrategy[] { }, MessageFilterManager.Instance);
+			var signalBroker = MessageBrokerContainerDontUse.CompositeClient();
+			var applicationData = new ApplicationData(appSettings, new[] { dataSource }, signalBroker, null);
 			var sessionData = CreateSessionData(person, applicationData, businessUnit, principalContext);
 
 			var state = new FakeState { ApplicationScopeData = applicationData, SessionScopeData = sessionData, IsLoggedIn = true };
@@ -158,7 +162,7 @@ namespace Teleopti.Ccc.TestCommon
         }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Reliability", "CA2000:Dispose objects before losing scope")]
-        public static IApplicationData CreateApplicationData(IMessageBroker messageBroker)
+		public static IApplicationData CreateApplicationData(IMessageBrokerComposite messageBroker)
         {
             IDictionary<string, string> appSettings = new Dictionary<string, string>();
             ConfigurationManager.AppSettings.AllKeys.ToList().ForEach(

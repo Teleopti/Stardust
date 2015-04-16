@@ -20,6 +20,7 @@ using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.WinCode.Common;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
+using Teleopti.Interfaces.MessageBroker.Client.Composite;
 using Teleopti.Interfaces.MessageBroker.Events;
 using System.Windows.Forms;
 
@@ -33,7 +34,7 @@ namespace Teleopti.Ccc.WinCode.Intraday
         private ISchedulingResultLoader _schedulingResultLoader;
         private readonly IRepositoryFactory _repositoryFactory;
 		private readonly IDifferenceCollectionService<IPersistableScheduleData> _differenceService;
-	    private IMessageBroker _messageBroker;
+		private IMessageListener _messageBroker;
         private string _chartIntradayDescription = string.Empty;
         private DateOnly _intradayDate;
         private IRtaStateHolder _rtaStateHolder;
@@ -52,7 +53,7 @@ namespace Teleopti.Ccc.WinCode.Intraday
 	    private readonly IPoller _poller;
         public IntradayPresenter(IIntradayView view,
             ISchedulingResultLoader schedulingResultLoader,
-            IMessageBroker messageBroker,
+			IMessageListener messageBroker,
             IRtaStateHolder rtaStateHolder,
             IEventAggregator eventAggregator,
 						IScheduleDifferenceSaver scheduleDictionarySaver,
@@ -342,10 +343,10 @@ namespace Teleopti.Ccc.WinCode.Intraday
         public void UnregisterMessageBrokerEvents()
         {
             if (_messageBroker == null) return;
-            _messageBroker.UnregisterEventSubscription(OnEventForecastDataMessageHandler);
-            _messageBroker.UnregisterEventSubscription(OnEventScheduleMessageHandler);
-            _messageBroker.UnregisterEventSubscription(OnEventStatisticMessageHandler);
-            _messageBroker.UnregisterEventSubscription(OnEventMeetingMessageHandler);
+            _messageBroker.UnregisterSubscription(OnEventForecastDataMessageHandler);
+            _messageBroker.UnregisterSubscription(OnEventScheduleMessageHandler);
+            _messageBroker.UnregisterSubscription(OnEventStatisticMessageHandler);
+            _messageBroker.UnregisterSubscription(OnEventMeetingMessageHandler);
         }
 
         public void Save()

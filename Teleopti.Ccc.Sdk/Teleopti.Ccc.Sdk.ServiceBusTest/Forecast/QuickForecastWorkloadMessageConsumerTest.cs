@@ -13,6 +13,7 @@ using Teleopti.Ccc.Sdk.ServiceBus.Forecast;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
+using Teleopti.Interfaces.MessageBroker.Client.Composite;
 using Teleopti.Interfaces.MessageBroker.Events;
 using Teleopti.Interfaces.Messages.General;
 
@@ -31,7 +32,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Forecast
 		private IUnitOfWorkFactory _unitOfWorkFactory;
 		private IJobResultRepository _jobResultRep;
 		private IJobResultFeedback _jobResultFeedback;
-		private IMessageBroker _messBroker;
+		private IMessageBrokerComposite _messBroker;
 		private IWorkloadDayHelper _workloadDayHelper;
 		private IUnitOfWork _unitOfWork;
 		private Guid _jobId;
@@ -56,7 +57,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Forecast
 			_unitOfWorkFactory = MockRepository.GenerateMock<IUnitOfWorkFactory>();
 			_jobResultRep = MockRepository.GenerateMock<IJobResultRepository>();
 			_jobResultFeedback = MockRepository.GenerateMock<IJobResultFeedback>();
-			_messBroker = MockRepository.GenerateMock<IMessageBroker>();
+			_messBroker = MockRepository.GenerateMock<IMessageBrokerComposite>();
 			_workloadDayHelper = MockRepository.GenerateMock<IWorkloadDayHelper>();
 			_statisticHelper = MockRepository.GenerateMock<IStatisticHelper>();
 			_forecastClassesCreator = MockRepository.GenerateMock<IForecastClassesCreator>();

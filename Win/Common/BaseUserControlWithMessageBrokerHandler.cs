@@ -40,7 +40,7 @@ namespace Teleopti.Ccc.Win.Common
 
         public void UnregisterMessageBrokerEvent()
         {
-            StateHolder.Instance.StateReader.ApplicationScopeData.Messaging.UnregisterEventSubscription(OnEventMessageHandler);
+            StateHolder.Instance.StateReader.ApplicationScopeData.Messaging.UnregisterSubscription(OnEventMessageHandler);
         }
 
         

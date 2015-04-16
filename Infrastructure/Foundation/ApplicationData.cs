@@ -5,6 +5,7 @@ using System.Globalization;
 using System.Linq;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
+using Teleopti.Interfaces.MessageBroker.Client.Composite;
 using Teleopti.Interfaces.MessageBroker.Events;
 
 namespace Teleopti.Ccc.Infrastructure.Foundation
@@ -15,11 +16,11 @@ namespace Teleopti.Ccc.Infrastructure.Foundation
 	public class ApplicationData : IApplicationData
 	{
 		private readonly IList<IDataSource> _registeredDataSourceCollection;
-		private readonly IMessageBroker _messageBroker;
+		private readonly IMessageBrokerComposite _messageBroker;
 		private readonly ILoadPasswordPolicyService _loadPasswordPolicyService;
 		private bool disposed;
 
-		public ApplicationData(IDictionary<string, string> appSettings, IEnumerable<IDataSource> registeredDataSources, IMessageBroker messageBroker, ILoadPasswordPolicyService loadPasswordPolicyService)
+		public ApplicationData(IDictionary<string, string> appSettings, IEnumerable<IDataSource> registeredDataSources, IMessageBrokerComposite messageBroker, ILoadPasswordPolicyService loadPasswordPolicyService)
 		{
 			InParameter.NotNull("appSettings", appSettings);
 			InParameter.NotNull("registeredDataSources", registeredDataSources);
@@ -33,7 +34,7 @@ namespace Teleopti.Ccc.Infrastructure.Foundation
 		}
 
 		public ApplicationData(IDictionary<string, string> appSettings, IDataSource registeredDataSources,
-									  IMessageBroker messageBroker)
+									  IMessageBrokerComposite messageBroker)
 		{
 			InParameter.NotNull("appSettings", appSettings);
 			InParameter.NotNull("registeredDataSources", registeredDataSources);
@@ -69,7 +70,7 @@ namespace Teleopti.Ccc.Infrastructure.Foundation
 			get { return _registeredDataSourceCollection; }
 		}
 
-		public IMessageBroker Messaging
+		public IMessageBrokerComposite Messaging
 		{
 			get { return _messageBroker; }
 		}
@@ -107,7 +108,6 @@ namespace Teleopti.Ccc.Infrastructure.Foundation
 			}
 			if (Messaging != null)
 			{
-				Messaging.StopMessageBroker();
 				Messaging.Dispose();
 			}
 		}

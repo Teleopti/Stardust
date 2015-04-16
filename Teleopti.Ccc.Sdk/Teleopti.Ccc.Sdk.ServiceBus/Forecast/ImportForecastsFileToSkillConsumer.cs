@@ -11,6 +11,7 @@ using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
+using Teleopti.Interfaces.MessageBroker.Client.Composite;
 using Teleopti.Interfaces.MessageBroker.Events;
 using Teleopti.Interfaces.Messages.General;
 
@@ -25,7 +26,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Forecast
         private readonly IForecastsFileContentProvider _contentProvider;
         private readonly IForecastsAnalyzeQuery _analyzeQuery;
         private readonly IJobResultFeedback _feedback;
-        private readonly IMessageBroker _messageBroker;
+		private readonly IMessageBrokerComposite _messageBroker;
         private readonly IServiceBus _serviceBus;
 
         public ImportForecastsFileToSkillConsumer(ICurrentUnitOfWorkFactory unitOfWorkFactory,
@@ -35,7 +36,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Forecast
             IForecastsFileContentProvider contentProvider,
             IForecastsAnalyzeQuery analyzeQuery,
             IJobResultFeedback feedback,
-            IMessageBroker messageBroker,
+			IMessageBrokerComposite messageBroker,
             IServiceBus serviceBus)
         {
             _unitOfWorkFactory = unitOfWorkFactory;

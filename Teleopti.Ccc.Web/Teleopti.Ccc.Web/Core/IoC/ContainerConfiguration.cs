@@ -27,6 +27,7 @@ using Teleopti.Ccc.Web.Core.Aop.Core;
 using Teleopti.Ccc.Web.Core.RequestContext;
 using Teleopti.Ccc.Web.Core.RequestContext.Initialize;
 using Teleopti.Ccc.Web.Core.Startup;
+using Teleopti.Interfaces;
 
 namespace Teleopti.Ccc.Web.Core.IoC
 {

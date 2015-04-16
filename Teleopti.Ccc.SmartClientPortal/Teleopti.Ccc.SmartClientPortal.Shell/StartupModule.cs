@@ -8,6 +8,7 @@ using Teleopti.Ccc.Win.Common.Controls.OutlookControls.Workspaces;
 using Teleopti.Ccc.Win.Main;
 using Teleopti.Ccc.WinCode.Main;
 using Teleopti.Interfaces.Domain;
+using Teleopti.Interfaces.MessageBroker.Client.Composite;
 using Teleopti.Interfaces.MessageBroker.Events;
 
 namespace Teleopti.Ccc.SmartClientPortal.Shell
@@ -26,7 +27,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 		           .SingleInstance();
 		    builder.RegisterType<CheckMessageBroker>().As<ISystemCheck>();
 		    builder.Register(c => StateHolderReader.Instance.StateReader.ApplicationScopeData.Messaging).As
-			    <IMessageBroker>().ExternallyOwned();
+			    <IMessageBrokerComposite>().ExternallyOwned();
 		    builder.RegisterType<SystemCheckerValidator>();
 		    builder.RegisterType<OutlookPanelContentWorker>();
 		    builder.RegisterType<NewOutlookBarWorkspace>();

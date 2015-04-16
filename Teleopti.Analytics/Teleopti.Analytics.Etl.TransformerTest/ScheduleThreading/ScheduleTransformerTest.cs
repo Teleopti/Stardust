@@ -29,7 +29,7 @@ namespace Teleopti.Analytics.Etl.TransformerTest.ScheduleThreading
 															 "Data Source=SSAS_Server;Initial Catalog=SSAS_DB", "false",
 															 CultureInfo.CurrentCulture);
 
-			jobParameters.Helper = new JobHelper(new RaptorRepositoryForTest(), null,null);
+			jobParameters.Helper = new JobHelper(new RaptorRepositoryForTest(), null, null, null);
 			
 			var transformer = new ScheduleTransformer();   
 

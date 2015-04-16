@@ -12,6 +12,7 @@ using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
+using Teleopti.Interfaces.MessageBroker.Client.Composite;
 using Teleopti.Interfaces.MessageBroker.Events;
 
 #endregion
@@ -45,7 +46,7 @@ namespace Teleopti.Ccc.WinCodeTest
             dataSources.Add(new DataSource(UnitOfWorkFactoryFactory.CreateUnitOfWorkFactory("for test"), null, null));
 
             loggedOnPerson = StateHolderProxyHelper.CreateLoggedOnPerson();
-            applicationData = new ApplicationData(appSettings, new ReadOnlyCollection<IDataSource>(dataSources), mocks.StrictMock<IMessageBroker>(), null);
+            applicationData = new ApplicationData(appSettings, new ReadOnlyCollection<IDataSource>(dataSources), mocks.StrictMock<IMessageBrokerComposite>(), null);
             SessionData = StateHolderProxyHelper.CreateSessionData(loggedOnPerson, applicationData, BusinessUnitFactory.BusinessUnitUsedInTest);
 
             IState stateMock = mocks.StrictMock<IState>();

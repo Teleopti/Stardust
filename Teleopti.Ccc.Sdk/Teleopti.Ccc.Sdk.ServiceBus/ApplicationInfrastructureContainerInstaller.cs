@@ -13,6 +13,7 @@ using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.Sdk.ServiceBus.Forecast;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
+using Teleopti.Interfaces.MessageBroker.Client.Composite;
 using Teleopti.Interfaces.MessageBroker.Events;
 
 namespace Teleopti.Ccc.Sdk.ServiceBus
@@ -24,11 +25,13 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
 		protected override void Load(ContainerBuilder builder)
 		{
 			builder.RegisterType<BusStartup>().As<IServiceBusAware>().SingleInstance();
+
 			builder.Register(c => StateHolderReader.Instance.StateReader.ApplicationScopeData.Messaging)
-				.As<IMessageBroker>()
-				.As<IMessageBrokerSender>()
-				.As<IMessageBrokerListener>()
+				.As<IMessageBrokerComposite>()
+				.As<IMessageCreator>()
+				.As<IMessageListener>()
 				.ExternallyOwned();
+
 			builder.Register(c => StateHolderReader.Instance.StateReader.ApplicationScopeData).As<IApplicationData>().ExternallyOwned();
 			builder.Register(c => UnitOfWorkFactoryContainer.Current).As<ICurrentUnitOfWorkFactory>().ExternallyOwned();
 			builder.RegisterType<CurrentUnitOfWork>().As<ICurrentUnitOfWork>().SingleInstance();

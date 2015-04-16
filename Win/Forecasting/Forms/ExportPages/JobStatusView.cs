@@ -3,6 +3,7 @@ using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.Win.Common;
 using Teleopti.Interfaces.Domain;
+using Teleopti.Interfaces.MessageBroker.Client.Composite;
 using Teleopti.Interfaces.MessageBroker.Events;
 using Teleopti.Messaging.Coders;
 
@@ -100,10 +101,10 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.ExportPages
     {
 		private IJobStatusView _view;
 		private readonly JobStatusModel _model;
-		private IMessageBroker _messageBroker;
+		private IMessageBrokerComposite _messageBroker;
 		private readonly JobResultProgressDecoder _decoder = new JobResultProgressDecoder();
 
-		public JobStatusPresenter(IJobStatusView view, JobStatusModel model, IMessageBroker messageBroker)
+		public JobStatusPresenter(IJobStatusView view, JobStatusModel model, IMessageBrokerComposite messageBroker)
 		{
 			_view = view;
 			_model = model;
@@ -137,7 +138,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.ExportPages
 		{
 			if (disposing)
 			{
-				_messageBroker.UnregisterEventSubscription(handleIncomingJobStatus);
+				_messageBroker.UnregisterSubscription(handleIncomingJobStatus);
 				_messageBroker = null;
 				_view = null;
 			}

@@ -2,6 +2,7 @@
 using System.Drawing;
 using System.Linq;
 using Teleopti.Ccc.Domain.Repositories;
+using Teleopti.Interfaces;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.PersonScheduleDayReadModel
 {

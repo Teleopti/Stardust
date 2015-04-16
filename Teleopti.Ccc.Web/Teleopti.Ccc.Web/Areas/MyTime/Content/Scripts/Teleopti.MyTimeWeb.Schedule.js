@@ -546,7 +546,7 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 
 	function _subscribeForChanges() {
 		ajax.Ajax({
-			url: 'MessageBroker/FetchUserData',
+			url: 'UserData/FetchUserData',
 			dataType: "json",
 			type: 'GET',
 			success: function (data) {

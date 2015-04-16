@@ -47,7 +47,7 @@ Teleopti.MyTimeWeb.AsmMessage = (function ($) {
 
 	function _listenForEvents(callbackForMessages) {
 		ajax.Ajax({
-			url: 'MessageBroker/FetchUserData',
+			url: 'UserData/FetchUserData',
 			dataType: "json",
 			type: 'GET',
 			success: function (data) {

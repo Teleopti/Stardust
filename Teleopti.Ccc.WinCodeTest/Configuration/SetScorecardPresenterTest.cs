@@ -7,6 +7,7 @@ using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.WinCode.Common.Configuration;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
+using Teleopti.Interfaces.MessageBroker.Client.Composite;
 using Teleopti.Interfaces.MessageBroker.Events;
 
 namespace Teleopti.Ccc.WinCodeTest.Configuration
@@ -21,7 +22,7 @@ namespace Teleopti.Ccc.WinCodeTest.Configuration
         private ISetScorecardView _view;
         private SetScorecardPresenter _target;
         private ISiteProvider _siteProvider;
-        private IMessageBrokerListener _messageBroker;
+        private IMessageListener _messageBroker;
         private MethodInfo _onSiteEvent;
         private MethodInfo _onScorecardEvent;
         private MethodInfo _onTeamEvent;
@@ -35,7 +36,7 @@ namespace Teleopti.Ccc.WinCodeTest.Configuration
             _scorecardProvider = _mocks.StrictMock<IScorecardProvider>();
             _siteProvider = _mocks.StrictMock<ISiteProvider>();
             _view = _mocks.StrictMock<ISetScorecardView>();
-            _messageBroker = _mocks.StrictMock<IMessageBrokerListener>();
+			_messageBroker = _mocks.StrictMock<IMessageListener>();
             _target = new SetScorecardPresenter(_view, _unitOfWork, _messageBroker, _scorecardProvider, _siteProvider, _teamProvider);
 
             _onSiteEvent = _target.GetType().GetMethod("OnSiteEvent", BindingFlags.Instance | BindingFlags.NonPublic);
@@ -59,21 +60,21 @@ namespace Teleopti.Ccc.WinCodeTest.Configuration
                 Expect.Call(() => _view.SetSelectedSite(site));
                 Expect.Call(
                     () =>
-                    _messageBroker.RegisterEventSubscription(
+                    _messageBroker.RegisterSubscription(
 						identity.DataSource.DataSourceName,identity.BusinessUnit.Id.GetValueOrDefault(),
                         (EventHandler<EventMessageArgs>)
                         Delegate.CreateDelegate(typeof (EventHandler<EventMessageArgs>), _target, _onScorecardEvent),
                         typeof (IScorecard)));
                 Expect.Call(
                     () =>
-                    _messageBroker.RegisterEventSubscription(
+                    _messageBroker.RegisterSubscription(
 					identity.DataSource.DataSourceName, identity.BusinessUnit.Id.GetValueOrDefault(),
                         (EventHandler<EventMessageArgs>)
                         Delegate.CreateDelegate(typeof (EventHandler<EventMessageArgs>), _target, _onTeamEvent),
                         typeof (ITeam)));
                 Expect.Call(
                     () =>
-                    _messageBroker.RegisterEventSubscription(
+                    _messageBroker.RegisterSubscription(
 					identity.DataSource.DataSourceName, identity.BusinessUnit.Id.GetValueOrDefault(),
                         (EventHandler<EventMessageArgs>)
                         Delegate.CreateDelegate(typeof (EventHandler<EventMessageArgs>), _target, _onSiteEvent),
@@ -223,11 +224,11 @@ namespace Teleopti.Ccc.WinCodeTest.Configuration
         {
             using (_mocks.Record())
             {
-                Expect.Call(() => _messageBroker.UnregisterEventSubscription((EventHandler<EventMessageArgs>)
+                Expect.Call(() => _messageBroker.UnregisterSubscription((EventHandler<EventMessageArgs>)
                         Delegate.CreateDelegate(typeof(EventHandler<EventMessageArgs>), _target, _onScorecardEvent)));
-                Expect.Call(() => _messageBroker.UnregisterEventSubscription((EventHandler<EventMessageArgs>)
+                Expect.Call(() => _messageBroker.UnregisterSubscription((EventHandler<EventMessageArgs>)
                         Delegate.CreateDelegate(typeof(EventHandler<EventMessageArgs>), _target, _onSiteEvent)));
-                Expect.Call(() => _messageBroker.UnregisterEventSubscription((EventHandler<EventMessageArgs>)
+                Expect.Call(() => _messageBroker.UnregisterSubscription((EventHandler<EventMessageArgs>)
                         Delegate.CreateDelegate(typeof(EventHandler<EventMessageArgs>), _target, _onTeamEvent)));
             }
             using (_mocks.Playback())
@@ -276,7 +277,7 @@ namespace Teleopti.Ccc.WinCodeTest.Configuration
                 _mocks.BackToRecord(_messageBroker);
                 using (_mocks.Record())
                 {
-                    Expect.Call(()=> _messageBroker.UnregisterEventSubscription(null)).IgnoreArguments().Repeat.Times(3);
+                    Expect.Call(()=> _messageBroker.UnregisterSubscription(null)).IgnoreArguments().Repeat.Times(3);
                 }
                 using (_mocks.Playback())
                 {

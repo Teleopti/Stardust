@@ -11,8 +11,19 @@ namespace Teleopti.Interfaces.MessageBroker
 	[Serializable]
 	public class Subscription
 	{
-		private static readonly StringCollection TypesWithException = new StringCollection {typeof(IActualAgentState).Name};
-		private static readonly StringCollection TypesWithBusinessUnitException = new StringCollection {typeof(IStatisticTask).Name};
+		// DO NOT USE THIS, PLEASE MAKE SURE THE SUBSCRIPTION DOES NOT CONTAIN THE DATASOURCE INSTEAD!
+		private static readonly StringCollection TypesWithDatasourceException = new StringCollection
+		{
+			typeof (IActualAgentState).Name,
+			"SiteAdherenceMessage",
+			"TeamAdherenceMessage",
+			"AgentsAdherenceMessage"
+		};
+		// DO NOT USE THIS, PLEASE MAKE SURE THE SUBSCRIPTION DOES NOT CONTAIN THE BUSINESSUNIT INSTEAD!
+		private static readonly StringCollection TypesWithBusinessUnitException = new StringCollection
+		{
+			typeof(IStatisticTask).Name
+		};
 
 		/// <summary>
 		/// Separator used for message broker subscriptions
@@ -156,13 +167,13 @@ namespace Teleopti.Interfaces.MessageBroker
 
 		private string excludeDatasourceForCertainTypes()
 		{
-			return TypesWithException.Contains(DomainType) ? null : DataSource;
+			return TypesWithDatasourceException.Contains(DomainType) ? null : DataSource;
 		}
 
 		private string excludeBusinessUnitForCertainTypes()
 		{
 			var emptyId = IdToString(Guid.Empty);
-			return (TypesWithBusinessUnitException.Contains(DomainType) || (TypesWithException.Contains(DomainType) && emptyId.Equals(DomainId))) ? emptyId : BusinessUnitId;
+			return (TypesWithBusinessUnitException.Contains(DomainType) || (TypesWithDatasourceException.Contains(DomainType) && emptyId.Equals(DomainId))) ? emptyId : BusinessUnitId;
 		}
 	}
 }

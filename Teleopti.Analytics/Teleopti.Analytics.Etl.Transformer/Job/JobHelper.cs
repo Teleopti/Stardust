@@ -6,7 +6,8 @@ using Teleopti.Analytics.Etl.TransformerInfrastructure;
 using Teleopti.Ccc.Domain.Security;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.MessageBroker.Client;
-using Teleopti.Messaging.SignalR;
+using Teleopti.Messaging.Client;
+using Teleopti.Messaging.Client.SignalR;
 using IRaptorRepository = Teleopti.Analytics.Etl.Interfaces.Transformer.IRaptorRepository;
 
 namespace Teleopti.Analytics.Etl.Transformer.Job
@@ -16,23 +17,30 @@ namespace Teleopti.Analytics.Etl.Transformer.Job
         private IRaptorRepository _repository;
         private ILogOnHelper _logHelp;
         private IMessageSender _messageSender;
+	    private ISignalRClient _messageClient;
 
-        protected JobHelper(ILogOnHelper logOnHelper, IMessageSender messageSender)
+		protected JobHelper(ILogOnHelper logOnHelper, ISignalRClient messageClient, IMessageSender messageSender)
         {
             _logHelp = logOnHelper;
-            _messageSender = messageSender;
+			_messageClient = messageClient;
+			_messageSender = messageSender;
         }
 
         public JobHelper()
         {
 			_logHelp = new LogOnHelper(SuperUser.UserName, SuperUser.Password, ConfigurationManager.AppSettings["nhibConfPath"]);
-            _messageSender = SignalSender.MakeForEtl(ConfigurationManager.AppSettings["MessageBroker"]);
-        }
+			MessageBrokerContainerDontUse.Configure(
+				ConfigurationManager.AppSettings["MessageBroker"],
+				new IConnectionKeepAliveStrategy[] { },
+				null);
+			_messageSender = MessageBrokerContainerDontUse.Sender();
+			_messageClient = MessageBrokerContainerDontUse.SignalRClient();
+		}
 
-        public JobHelper(IRaptorRepository repository, IMessageSender messageSender, ILogOnHelper logOnHelper) : this(logOnHelper, messageSender)
-        {
-            _repository = repository;
-        }
+		public JobHelper(IRaptorRepository repository, ISignalRClient messageClient, IMessageSender messageSender, ILogOnHelper logOnHelper) : this(logOnHelper, messageClient, messageSender)
+		{
+			_repository = repository;
+		}
 
         public IList<IBusinessUnit> BusinessUnitCollection
         {
@@ -47,6 +55,11 @@ namespace Teleopti.Analytics.Etl.Transformer.Job
         public IMessageSender MessageSender
         {
             get { return _messageSender; }
+        }
+
+		public ISignalRClient MessageClient
+        {
+            get { return _messageClient; }
         }
 
         public bool LogOnTeleoptiCccDomain(IBusinessUnit businessUnit)

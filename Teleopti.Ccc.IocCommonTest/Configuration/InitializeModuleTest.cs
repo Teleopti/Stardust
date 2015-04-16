@@ -8,8 +8,9 @@ using SharpTestsEx;
 using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.Infrastructure.NHibernateConfiguration;
 using Teleopti.Ccc.IocCommon.Configuration;
+using Teleopti.Interfaces;
 using Teleopti.Interfaces.Infrastructure;
-using Teleopti.Messaging.SignalR;
+using Teleopti.Messaging.Client.SignalR;
 
 namespace Teleopti.Ccc.IocCommonTest.Configuration
 {
@@ -26,6 +27,8 @@ namespace Teleopti.Ccc.IocCommonTest.Configuration
 			containerBuilder = new ContainerBuilder();
 			containerBuilder.RegisterModule(new DateAndTimeModule());
 			containerBuilder.RegisterModule(new InitializeModule(dataSourceConfigurationSetter));
+			containerBuilder.RegisterType<NewtonsoftJsonSerializer>().As<IJsonSerializer>().SingleInstance();
+			containerBuilder.RegisterType<NewtonsoftJsonDeserializer>().As<IJsonDeserializer>().SingleInstance();
 		}
 
 		[Test]

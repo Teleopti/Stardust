@@ -121,6 +121,7 @@
       <HintPath>..\packages\MbCache.2.4\lib\net40\MbCache.ProxyImpl.LinFu.dll</HintPath>
     </Reference>
     <Reference Include="System" />
+    <Reference Include="System.Configuration" />
     <Reference Include="System.Core">
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
     </Reference>

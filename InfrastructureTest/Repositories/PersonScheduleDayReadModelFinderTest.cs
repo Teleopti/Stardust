@@ -8,6 +8,7 @@ using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.InfrastructureTest.Helper;
 using Teleopti.Interfaces.Domain;
+using Teleopti.Interfaces.MessageBroker.Client.Composite;
 using Teleopti.Interfaces.MessageBroker.Events;
 
 namespace Teleopti.Ccc.InfrastructureTest.Repositories
@@ -116,7 +117,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 		private void clearReadModel(Guid personId, Guid businessUnitId, DateTime date)
 		{
 			var persister = new PersonScheduleDayReadModelPersister(CurrentUnitOfWork.Make(),
-																	MockRepository.GenerateMock<IMessageBroker>(),
+																	MockRepository.GenerateMock<IMessageBrokerComposite>(),
 																	MockRepository.GenerateMock<ICurrentDataSource>());
 
 			persister.UpdateReadModels(new DateOnlyPeriod(new DateOnly(date), new DateOnly(date)), personId, businessUnitId, null, false);
@@ -136,7 +137,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			};
 
 			var persister = new PersonScheduleDayReadModelPersister(CurrentUnitOfWork.Make(),
-			                                                        MockRepository.GenerateMock<IMessageBroker>(),
+			                                                        MockRepository.GenerateMock<IMessageBrokerComposite>(),
 			                                                        MockRepository.GenerateMock<ICurrentDataSource>());
 
 			persister.UpdateReadModels(new DateOnlyPeriod(new DateOnly(date), new DateOnly(date)), personId, businessUnitId, new[] { model }, false);

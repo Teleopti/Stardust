@@ -13,6 +13,7 @@ using Teleopti.Ccc.WinCode.Settings;
 using Teleopti.Interfaces.Domain;
 using System.Collections.Specialized;
 using Teleopti.Interfaces.Infrastructure;
+using Teleopti.Interfaces.MessageBroker.Client.Composite;
 using Teleopti.Interfaces.MessageBroker.Events;
 
 namespace Teleopti.Ccc.WinCode.Common.Configuration
@@ -25,7 +26,7 @@ namespace Teleopti.Ccc.WinCode.Common.Configuration
 		private readonly List<StateGroupActivityAlarmModel> _stateGroupActivityAlarms = new List<StateGroupActivityAlarmModel>();
 		private readonly IList<StateGroupActivityAlarmModel> _stateGroupActivityAlarmsToRemove = new List<StateGroupActivityAlarmModel>();
 		private readonly IStateGroupActivityAlarmRepository _stateGroupActivityAlarmRepository;
-		private readonly IMessageBroker _messageBroker;
+		private readonly IMessageListener _messageBroker;
 		private IManageAlarmSituationView _manageAlarmSituationView;
 		private readonly IRtaStateGroupRepository _rtaStateGroupRepository;
 		private readonly IActivityRepository _activityRepository;
@@ -34,7 +35,7 @@ namespace Teleopti.Ccc.WinCode.Common.Configuration
 
 		private readonly object StateGroupLock = new object();
 
-		public ManageAlarmSituationPresenter(IUnitOfWorkFactory unitOfWorkFactory, IAlarmTypeRepository alarmTypeRepository, IRtaStateGroupRepository rtaStateGroupRepository, IActivityRepository activityRepository, IStateGroupActivityAlarmRepository stateGroupActivityAlarmRepository, IMessageBroker messageBroker, IManageAlarmSituationView manageAlarmSituationView)
+		public ManageAlarmSituationPresenter(IUnitOfWorkFactory unitOfWorkFactory, IAlarmTypeRepository alarmTypeRepository, IRtaStateGroupRepository rtaStateGroupRepository, IActivityRepository activityRepository, IStateGroupActivityAlarmRepository stateGroupActivityAlarmRepository, IMessageListener messageBroker, IManageAlarmSituationView manageAlarmSituationView)
 		{
 			_unitOfWorkFactory = unitOfWorkFactory;
 			_alarmTypeRepository = alarmTypeRepository;
@@ -453,9 +454,9 @@ namespace Teleopti.Ccc.WinCode.Common.Configuration
 		{
 			if (_messageBroker != null)
 			{
-				_messageBroker.UnregisterEventSubscription(OnActivityEvent);
-				_messageBroker.UnregisterEventSubscription(OnAlarmEvent);
-				_messageBroker.UnregisterEventSubscription(OnRtaStateGroupEvent);
+				_messageBroker.UnregisterSubscription(OnActivityEvent);
+				_messageBroker.UnregisterSubscription(OnAlarmEvent);
+				_messageBroker.UnregisterSubscription(OnRtaStateGroupEvent);
 			}
 			_manageAlarmSituationView = null;
 		}

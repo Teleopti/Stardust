@@ -7,6 +7,7 @@ using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
+using Teleopti.Interfaces.MessageBroker.Client.Composite;
 using Teleopti.Interfaces.MessageBroker.Events;
 using Teleopti.Messaging.Events;
 
@@ -21,10 +22,10 @@ namespace Teleopti.Ccc.Infrastructure.Foundation
     /// </remarks>
     public class NotifyMessageBroker
     {
-        private readonly IMessageBroker _messageBroker;
+        private readonly IMessageBrokerComposite _messageBroker;
 	    private readonly EventMessageFactory _eventMessageFactory;
 
-	    public NotifyMessageBroker(IMessageBroker messageBroker)
+		public NotifyMessageBroker(IMessageBrokerComposite messageBroker)
         {
 	        _messageBroker = messageBroker;
 	        _eventMessageFactory = new EventMessageFactory();
@@ -32,7 +33,7 @@ namespace Teleopti.Ccc.Infrastructure.Foundation
 
 	    public void Notify(Guid moduleId, IEnumerable<IRootChangeInfo> rootModifications)
         {
-            if (_messageBroker==null || !_messageBroker.IsConnected) return;
+            if (_messageBroker==null || !_messageBroker.IsAlive) return;
             
 			var eventMessages = new List<IEventMessage>();
             foreach (var change in rootModifications)
@@ -77,7 +78,7 @@ namespace Teleopti.Ccc.Infrastructure.Foundation
 						}
 					}
 				}
-            	_messageBroker.SendEventMessages(dataSourceName, businessUnitId, eventMessages.ToArray());
+            	_messageBroker.Send(dataSourceName, businessUnitId, eventMessages.ToArray());
             }
         }
 

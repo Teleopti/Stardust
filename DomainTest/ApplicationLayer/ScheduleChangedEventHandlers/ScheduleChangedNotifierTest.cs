@@ -5,6 +5,7 @@ using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Interfaces.Domain;
+using Teleopti.Interfaces.MessageBroker.Client.Composite;
 using Teleopti.Interfaces.MessageBroker.Events;
 
 namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ScheduleChangedEventHandlers
@@ -15,7 +16,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ScheduleChangedEventHandlers
 		[Test]
 		public void ShouldSendBrokerMessageOnScheduleChange()
 		{
-			var broker = MockRepository.GenerateMock<IMessageBrokerSender>();
+			var broker = MockRepository.GenerateMock<IMessageCreator>();
 			var handler = new ScheduleChangedNotifier(broker);
 
 			var message = new ScheduleChangedEvent
@@ -30,7 +31,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ScheduleChangedEventHandlers
 				};
 			handler.Handle(message);
 
-			broker.AssertWasCalled(x => x.SendEventMessage(
+			broker.AssertWasCalled(x => x.Send(
 				message.Datasource,
 				message.BusinessUnitId,
 				message.StartDateTime,
@@ -47,7 +48,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ScheduleChangedEventHandlers
 		[Test]
 		public void ShouldNotSendBrokerMessageOnScheduleChangeOnInitialLoad()
 		{
-			var broker = MockRepository.GenerateMock<IMessageBrokerSender>();
+			var broker = MockRepository.GenerateMock<IMessageCreator>();
 			var handler = new ScheduleChangedNotifier(broker);
 
 			var message = new ScheduleChangedEvent
@@ -63,7 +64,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ScheduleChangedEventHandlers
 			};
 			handler.Handle(message);
 
-			broker.AssertWasNotCalled(x => x.SendEventMessage(
+			broker.AssertWasNotCalled(x => x.Send(
 				message.Datasource,
 				message.BusinessUnitId,
 				message.StartDateTime,

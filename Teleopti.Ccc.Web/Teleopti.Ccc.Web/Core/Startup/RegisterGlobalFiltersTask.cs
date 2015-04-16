@@ -5,6 +5,7 @@ using System.Web.Mvc;
 using Teleopti.Ccc.Web.Areas.MyTime.Controllers;
 using Teleopti.Ccc.Web.Areas.SSO.Controllers;
 using Teleopti.Ccc.Web.Areas.Start.Controllers;
+using Teleopti.Ccc.Web.Broker;
 using Teleopti.Ccc.Web.Core.Startup.Booter;
 using Teleopti.Ccc.Web.Filters;
 
@@ -38,7 +39,8 @@ namespace Teleopti.Ccc.Web.Core.Startup
 																		typeof(ShareCalendarController),
 																		typeof(UrlController),
 																		typeof(TestController),
-																		typeof(OpenIdController)
+																		typeof(OpenIdController),
+																		typeof (MessageBrokerController)
 			                                                    	}));
 			filters.Add(new CheckStartupResultAttribute());
 		}

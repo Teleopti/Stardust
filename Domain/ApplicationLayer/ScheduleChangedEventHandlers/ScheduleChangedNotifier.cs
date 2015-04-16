@@ -1,15 +1,16 @@
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Interfaces.Domain;
+using Teleopti.Interfaces.MessageBroker.Client.Composite;
 using Teleopti.Interfaces.MessageBroker.Events;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers
 {
 	public class ScheduleChangedNotifier : IHandleEvent<ScheduleChangedEvent>
 	{
-		private readonly IMessageBrokerSender _broker;
+		private readonly IMessageCreator _broker;
 
-		public ScheduleChangedNotifier(IMessageBrokerSender broker)
+		public ScheduleChangedNotifier(IMessageCreator broker)
 		{
 			_broker = broker;
 		}
@@ -18,7 +19,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers
 		{
 			if (@event.SkipDelete) return;
 
-			_broker.SendEventMessage(
+			_broker.Send(
 				@event.Datasource,
 				@event.BusinessUnitId,
 				@event.StartDateTime,

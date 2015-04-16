@@ -601,6 +601,8 @@
     <Compile Include="Domain\ILogWriter.cs" />
     <Compile Include="Domain\WorkTimeSource.cs" />
     <Compile Include="IDayOffOptimizationDecisionMakerFactory.cs" />
+    <Compile Include="IJsonDeserializer.cs" />
+    <Compile Include="IJsonSerializer.cs" />
     <Compile Include="IMapiMailMessage.cs" />
     <Compile Include="Domain\ISchedulePeriodTargetTimeCalculator.cs" />
     <Compile Include="Infrastructure\DomainObjectNotInFilterException.cs" />
@@ -756,7 +758,14 @@
     <Compile Include="Infrastructure\MessageBrokerException.cs" />
     <Compile Include="IPossibleStartEndCategory.cs" />
     <Compile Include="Domain\IValidatedRequest.cs" />
-    <Compile Include="MessageBroker\Client\IMessageSender.cs" />
+    <Compile Include="MessageBroker\Client\Composite\IMessageBrokerComposite.cs" />
+    <Compile Include="MessageBroker\Client\Composite\IMessageCreator.cs" />
+    <Compile Include="MessageBroker\Client\Composite\IMessageListener.cs" />
+    <Compile Include="MessageBroker\Client\IMessageBrokerUrl.cs" />
+    <Compile Include="MessageBroker\Client\IMessageSender.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="MessageBroker\Client\ISignalRClient.cs" />
     <Compile Include="MessageBroker\Core\Consts.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -766,15 +775,25 @@
     <Compile Include="MessageBroker\Core\IMessageFilterManager.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="MessageBroker\Events\DomainUpdateType.cs" />
-    <Compile Include="MessageBroker\Events\EventMessageArgs.cs" />
-    <Compile Include="MessageBroker\Events\IEventMessage.cs" />
-    <Compile Include="MessageBroker\Events\IMessageBroker.cs" />
-    <Compile Include="MessageBroker\Events\IEventMessageFactory.cs" />
-    <Compile Include="MessageBroker\Events\IMessageBrokerListener.cs" />
-    <Compile Include="MessageBroker\Events\IMessageBrokerSender.cs" />
-    <Compile Include="MessageBroker\Notification.cs" />
-    <Compile Include="MessageBroker\Subscription.cs" />
+    <Compile Include="MessageBroker\Events\DomainUpdateType.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="MessageBroker\Events\EventMessageArgs.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="MessageBroker\Events\IEventMessage.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="MessageBroker\Events\IEventMessageFactory.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="MessageBroker\Events\TrackingMessage.cs" />
+    <Compile Include="MessageBroker\Notification.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="MessageBroker\Subscription.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="Messages\Denormalize\ScheduleChanged.cs" />
     <Compile Include="Messages\Denormalize\DenormalizeScheduleProjection.cs" />
     <Compile Include="Messages\Denormalize\GroupPageChangedMessage.cs" />
@@ -803,6 +822,7 @@
     <Compile Include="Domain\UnderstaffingDetails.cs" />
     <Compile Include="Messages\Rta\BusinessUnitInfo.cs" />
     <Compile Include="ReadModel\IScheduleChangedReadModel.cs" />
+    <Compile Include="ToStringSerializer.cs" />
   </ItemGroup>
   <ItemGroup>
     <CodeAnalysisDictionary Include="..\..\CodeAnalysisDictionary.xml">

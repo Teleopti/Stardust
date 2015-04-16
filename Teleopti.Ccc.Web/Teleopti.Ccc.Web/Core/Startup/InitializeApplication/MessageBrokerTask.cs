@@ -4,6 +4,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Teleopti.Ccc.Web.Core.RequestContext;
 using Teleopti.Ccc.Web.Core.Startup.Booter;
+using Teleopti.Interfaces.MessageBroker.Client.Composite;
 using Teleopti.Interfaces.MessageBroker.Events;
 
 namespace Teleopti.Ccc.Web.Core.Startup.InitializeApplication
@@ -11,11 +12,11 @@ namespace Teleopti.Ccc.Web.Core.Startup.InitializeApplication
 	[TaskPriority(5)]
 	public class MessageBrokerTask : IBootstrapperTask
 	{
-		private readonly IMessageBroker _messageBroker;
+		private readonly IMessageBrokerComposite _messageBroker;
 		private readonly ICurrentHttpContext _currentHttpContext;
 		private readonly ISettings _settings;
 
-		public MessageBrokerTask(IMessageBroker messageBroker, ICurrentHttpContext currentHttpContext, ISettings settings)
+		public MessageBrokerTask(IMessageBrokerComposite messageBroker, ICurrentHttpContext currentHttpContext, ISettings settings)
 		{
 			_messageBroker = messageBroker;
 			_currentHttpContext = currentHttpContext;
@@ -24,11 +25,11 @@ namespace Teleopti.Ccc.Web.Core.Startup.InitializeApplication
 
 		public Task Execute()
 		{
-			_messageBroker.ConnectionString = ConnectionString();
+			_messageBroker.ServerUrl = ConnectionString();
 			bool useLongPolling;
-			return bool.TryParse(_settings.MessageBrokerLongPolling(), out useLongPolling) 
-				? Task.Factory.StartNew(() => _messageBroker.StartMessageBroker(useLongPolling)) 
-				: Task.Factory.StartNew(() => _messageBroker.StartMessageBroker(true));
+			return bool.TryParse(_settings.MessageBrokerLongPolling(), out useLongPolling)
+				? Task.Factory.StartNew(() => _messageBroker.StartBrokerService(useLongPolling))
+				: Task.Factory.StartNew(() => _messageBroker.StartBrokerService(true));
 		}
 
 		private string ConnectionString()

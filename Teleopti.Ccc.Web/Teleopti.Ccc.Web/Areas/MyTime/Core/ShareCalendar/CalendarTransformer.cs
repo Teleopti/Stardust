@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using DDay.iCal;
 using DDay.iCal.Serialization.iCalendar;
 using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.PersonScheduleDayReadModel;
+using Teleopti.Interfaces;
 
 namespace Teleopti.Ccc.Web.Areas.MyTime.Core.ShareCalendar
 {

@@ -24,7 +24,7 @@ namespace Teleopti.Analytics.Etl.TransformerTest.Job.Steps
             _mocks = new MockRepository();
             _raptorRepository = _mocks.StrictMock<IRaptorRepository>();
             _licenseUpdater = _mocks.StrictMock<ILicenseStatusUpdater>();
-            _jobParameters.Helper = new JobHelper(_raptorRepository, null, null);
+			_jobParameters.Helper = new JobHelper(_raptorRepository, null, null, null);
             _target = new LicenseCheckJobStep(_jobParameters);
         }
 

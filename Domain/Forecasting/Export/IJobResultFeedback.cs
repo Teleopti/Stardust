@@ -1,5 +1,6 @@
 ﻿using System;
 using Teleopti.Interfaces.Domain;
+using Teleopti.Interfaces.MessageBroker.Client.Composite;
 using Teleopti.Interfaces.MessageBroker.Events;
 
 namespace Teleopti.Ccc.Domain.Forecasting.Export
@@ -55,7 +56,7 @@ namespace Teleopti.Ccc.Domain.Forecasting.Export
         /// <param name="exception">Exception details for the information if available.</param>
         void Info(string message, Exception exception);
 
-		void SetJobResult(IJobResult jobResult, IMessageBroker messageBroker);
+		void SetJobResult(IJobResult jobResult, IMessageBrokerComposite messageBroker);
 
         void ChangeTotalProgress(int totalPercentage);
         Guid JobId();

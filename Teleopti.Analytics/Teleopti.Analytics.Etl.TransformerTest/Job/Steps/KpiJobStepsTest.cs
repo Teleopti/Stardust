@@ -16,7 +16,7 @@ namespace Teleopti.Analytics.Etl.TransformerTest.Job.Steps
         [SetUp]
         public void Setup()
         {
-            _jobParameters.Helper = new JobHelper(raptorRepository, null,null);
+            _jobParameters.Helper = new JobHelper(raptorRepository, null,null, null);
         }
 
         private readonly IJobParameters _jobParameters = JobParametersFactory.SimpleParameters(false);

@@ -111,7 +111,7 @@ namespace Teleopti.Ccc.WebTest.Core.IoC
 		[Test]
 		public void ShouldRegisterMessageBrokerController()
 		{
-			requestContainer.Resolve<MessageBrokerController>()
+			requestContainer.Resolve<UserDataController>()
 				.Should().Not.Be.Null();
 		}
 

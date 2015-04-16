@@ -439,7 +439,7 @@
     <Compile Include="Areas\MobileReports\Models\Report\ReportTableRowViewModel.cs" />
     <Compile Include="Areas\MobileReports\Models\Domain\DefinedReportInformation.cs" />
     <Compile Include="Areas\MyTime\Controllers\AsmController.cs" />
-    <Compile Include="Areas\MyTime\Controllers\MessageBrokerController.cs" />
+    <Compile Include="Areas\MyTime\Controllers\UserDataController.cs" />
     <Compile Include="Areas\MyTime\Core\Preference\Mapping\PreferenceAndScheduleDayViewModelMappingProfile.cs" />
     <Compile Include="Areas\MyTime\Models\Preference\AbsenceDayViewModel.cs" />
     <Compile Include="Areas\MyTime\Models\Message\MessagesInformationViewModel.cs" />

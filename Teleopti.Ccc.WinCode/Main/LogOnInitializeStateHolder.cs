@@ -13,13 +13,13 @@ using Teleopti.Ccc.Sdk.ClientProxies;
 using Teleopti.Ccc.WinCode.Common.ServiceBus;
 using Teleopti.Ccc.WinCode.Services;
 using Teleopti.Interfaces.Domain;
-using Teleopti.Messaging.SignalR;
 using log4net;
 using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.Security;
 using Teleopti.Ccc.Infrastructure.Config;
 using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
+using Teleopti.Messaging.Client;
 
 namespace Teleopti.Ccc.WinCode.Main
 {
@@ -34,7 +34,7 @@ namespace Teleopti.Ccc.WinCode.Main
 			new InitializeApplication(
 				new DataSourcesFactory(new EnversConfiguration(), new List<IMessageSender>(),
 				                       DataSourceConfigurationSetter.ForDesktop()),
-				SignalBroker.Make(MessageFilterManager.Instance)
+				MessageBrokerContainerDontUse.CompositeClient()
 				) {
 					MessageBrokerDisabled = messageBrokerDisabled
 				}.Start(new StateManager(), nhibConfPath, new LoadPasswordPolicyService(nhibConfPath),
@@ -103,7 +103,7 @@ namespace Teleopti.Ccc.WinCode.Main
                                                           new PersonChangedMessageSender(eventPublisher),
                                                           new PersonPeriodChangedMessageSender(eventPublisher)
 												      }, DataSourceConfigurationSetter.ForDesktop()),
-					SignalBroker.Make(MessageFilterManager.Instance))
+					MessageBrokerContainerDontUse.CompositeClient())
         			{
         				MessageBrokerDisabled = messageBrokerDisabled
         			};

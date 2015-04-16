@@ -5,6 +5,7 @@ using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
+using Teleopti.Interfaces.MessageBroker.Client.Composite;
 using Teleopti.Interfaces.MessageBroker.Events;
 using BusinessUnitFactory=Teleopti.Analytics.Etl.TransformerTest.FakeData.BusinessUnitFactory;
 
@@ -29,7 +30,7 @@ namespace Teleopti.Analytics.Etl.TransformerTest
             _bu = BusinessUnitFactory.CreateSimpleBusinessUnit("bu1");
             _bu.SetId(Guid.NewGuid());
 
-            applicationData = StateHolderProxyHelper.CreateApplicationData(mocks.StrictMock<IMessageBroker>());
+            applicationData = StateHolderProxyHelper.CreateApplicationData(mocks.StrictMock<IMessageBrokerComposite>());
             loggedOnPerson = StateHolderProxyHelper.CreateLoggedOnPerson();
             sessionData = StateHolderProxyHelper.CreateSessionData(loggedOnPerson, applicationData, _bu);
 

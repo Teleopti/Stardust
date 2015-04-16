@@ -16,6 +16,7 @@ using Teleopti.Ccc.WinCode.Common.Configuration;
 using Teleopti.Ccc.WinCode.Intraday;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
+using Teleopti.Interfaces.MessageBroker.Client.Composite;
 using Teleopti.Interfaces.MessageBroker.Events;
 
 namespace Teleopti.Ccc.WinCodeTest.Configuration
@@ -28,14 +29,14 @@ namespace Teleopti.Ccc.WinCodeTest.Configuration
 		private IAlarmTypeRepository _alarmTypeRepository;
 		private IRtaStateGroupRepository _rtaStateGroupRepository;
 		private IStateGroupActivityAlarmRepository _stateGroupActvityAlarmRepository;
-		private IMessageBroker _messageBroker;
+		private IMessageBrokerComposite _messageBroker;
 		private IManageAlarmSituationView _manageAlarmSituationView;
 		private IUnitOfWorkFactory _unitOfWorkFactory;
 
 		[SetUp]
 		public void CreateManageSituationPresenter()
 		{
-			_messageBroker = MockRepository.GenerateMock<IMessageBroker>();
+			_messageBroker = MockRepository.GenerateMock<IMessageBrokerComposite>();
 			_activityRepository = MockRepository.GenerateMock<IActivityRepository>();
 			_alarmTypeRepository = MockRepository.GenerateMock<IAlarmTypeRepository>();
 			_rtaStateGroupRepository = MockRepository.GenerateMock<IRtaStateGroupRepository>();

@@ -23,6 +23,7 @@ using Teleopti.Ccc.WinCode.Common;
 using Teleopti.Ccc.WinCode.Intraday;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
+using Teleopti.Interfaces.MessageBroker.Client.Composite;
 using Teleopti.Interfaces.MessageBroker.Events;
 using Teleopti.Messaging.Events;
 
@@ -36,7 +37,7 @@ namespace Teleopti.Ccc.WinCodeTest.Intraday
         private readonly DateOnlyPeriod _periodNow = new DateOnlyPeriod(DateOnly.Today, DateOnly.Today.AddDays(1));
         private IList<IPerson> _persons;
         private IIntradayView _view;
-        private IMessageBroker _messageBroker;
+        private IMessageBrokerComposite _messageBroker;
         private IRtaStateHolder _rtaStateHolder;
         private IUnitOfWorkFactory _unitOfWorkFactory;
         private ISchedulingResultLoader _schedulingResultLoader;
@@ -61,7 +62,7 @@ namespace Teleopti.Ccc.WinCodeTest.Intraday
 					_scenario = ScenarioFactory.CreateScenarioAggregate();
 					_persons = new List<IPerson> { PersonFactory.CreatePerson() };
 					_schedulingResultLoader = MockRepository.GenerateMock<ISchedulingResultLoader>();
-					_messageBroker = MockRepository.GenerateMock<IMessageBroker>();
+					_messageBroker = MockRepository.GenerateMock<IMessageBrokerComposite>();
 					_rtaStateHolder = MockRepository.GenerateMock<IRtaStateHolder>();
 					_unitOfWorkFactory = MockRepository.GenerateMock<IUnitOfWorkFactory>();
 					_repositoryFactory = MockRepository.GenerateMock<IRepositoryFactory>();
@@ -104,10 +105,10 @@ namespace Teleopti.Ccc.WinCodeTest.Intraday
 		{
 			_target.UnregisterMessageBrokerEvents();
 
-			_messageBroker.AssertWasCalled(x => x.UnregisterEventSubscription(_target.OnEventForecastDataMessageHandler));
-			_messageBroker.AssertWasCalled(x => x.UnregisterEventSubscription(_target.OnEventMeetingMessageHandler));
-			_messageBroker.AssertWasCalled(x => x.UnregisterEventSubscription(_target.OnEventScheduleMessageHandler));
-			_messageBroker.AssertWasCalled(x => x.UnregisterEventSubscription(_target.OnEventStatisticMessageHandler));
+			_messageBroker.AssertWasCalled(x => x.UnregisterSubscription(_target.OnEventForecastDataMessageHandler));
+			_messageBroker.AssertWasCalled(x => x.UnregisterSubscription(_target.OnEventMeetingMessageHandler));
+			_messageBroker.AssertWasCalled(x => x.UnregisterSubscription(_target.OnEventScheduleMessageHandler));
+			_messageBroker.AssertWasCalled(x => x.UnregisterSubscription(_target.OnEventStatisticMessageHandler));
 		}
 
         [Test]

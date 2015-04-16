@@ -9,6 +9,7 @@ using Teleopti.Ccc.Sdk.ServiceBus.Forecast;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
+using Teleopti.Interfaces.MessageBroker.Client.Composite;
 using Teleopti.Interfaces.MessageBroker.Events;
 using Teleopti.Interfaces.Messages.General;
 
@@ -24,7 +25,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Forecast
 		private MockRepository mocks;
 		private IJobResultRepository jobResultRepository;
 		private IJobResultFeedback jobResultFeedback;
-		private IMessageBroker messageBroker;
+		private IMessageBrokerComposite messageBroker;
 
 		[SetUp]
 		public void Setup()
@@ -35,7 +36,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Forecast
 			jobResultRepository = mocks.DynamicMock<IJobResultRepository>();
 			skillRepository = mocks.DynamicMock<ISkillRepository>();
 			jobResultFeedback = mocks.DynamicMock<IJobResultFeedback>();
-			messageBroker = mocks.DynamicMock<IMessageBroker>();
+			messageBroker = mocks.DynamicMock<IMessageBrokerComposite>();
 			command = mocks.DynamicMock<IMultisiteForecastToSkillCommand>();
 			target = new ExportMultisiteSkillToSkillConsumer(unitOfWorkFactory, skillRepository, jobResultRepository, command, jobResultFeedback, messageBroker);
 		}

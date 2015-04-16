@@ -19,6 +19,7 @@ using Teleopti.Ccc.WinCode.Common.GuiHelpers;
 using Teleopti.Ccc.WinCode.Settings;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
+using Teleopti.Interfaces.MessageBroker.Client.Composite;
 using Teleopti.Interfaces.MessageBroker.Events;
 using Rotation = Teleopti.Ccc.Domain.Scheduling.Restriction.Rotation;
 
@@ -44,7 +45,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 		private SFGridColumnGridHelper<RotationRestrictionView> _gridHelper;
 		private SFGridColumnBase<RotationRestrictionView> _lateEndTimeColumn;
 		private SFGridColumnBase<RotationRestrictionView> _lateStartTimeColumn;
-		private IMessageBroker _messageBroker;
+		private IMessageBrokerComposite _messageBroker;
 		private List<RotationRestrictionView> _restrictionViewList = new List<RotationRestrictionView>();
 		private List<IRotation> _rotationList;
 		private SFGridDropDownColumn<RotationRestrictionView, IShiftCategory> _shiftCategoriesColumn;
@@ -147,8 +148,8 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 		private void UnregisterMessageBrooker()
 		{
 			if (_messageBroker == null) return;
-			_messageBroker.UnregisterEventSubscription(MessageBrokerDayOffMessage);
-			_messageBroker.UnregisterEventSubscription(MessageBrokerShiftCategoryMessage);
+			((IMessageListener) _messageBroker).UnregisterSubscription(MessageBrokerDayOffMessage);
+			((IMessageListener) _messageBroker).UnregisterSubscription(MessageBrokerShiftCategoryMessage);
 			_messageBroker = null;
 		}
 

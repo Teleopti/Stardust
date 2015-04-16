@@ -1,21 +1,23 @@
 ﻿using Teleopti.Interfaces.Domain;
+using Teleopti.Interfaces.MessageBroker.Client;
+using Teleopti.Interfaces.MessageBroker.Client.Composite;
 using Teleopti.Interfaces.MessageBroker.Events;
 
 namespace Teleopti.Ccc.Infrastructure.SystemCheck
 {
     public class CheckMessageBroker : ISystemCheck
     {
-        private readonly IMessageBroker _messageBroker;
+		private readonly IMessageBrokerComposite _messageBroker;
 
-        public CheckMessageBroker(IMessageBroker messageBroker)
+		public CheckMessageBroker(IMessageBrokerComposite messageBroker)
         {
             _messageBroker = messageBroker;
         }
 
         public bool IsRunningOk()
         {
-            return string.IsNullOrEmpty(_messageBroker.ConnectionString) ||
-                   _messageBroker.IsConnected;
+            return string.IsNullOrEmpty(_messageBroker.ServerUrl) ||
+                   _messageBroker.IsAlive;
         }
 
         public string WarningText

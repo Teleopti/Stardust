@@ -12,6 +12,7 @@ using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Interfaces.Domain;
+using Teleopti.Interfaces.MessageBroker.Client.Composite;
 using Teleopti.Interfaces.MessageBroker.Events;
 
 namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ScheduleChangedEventHandlers.Resources
@@ -26,7 +27,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ScheduleChangedEventHandlers.
 		private IScheduleProjectionReadOnlyRepository _scheduleProjectionRepository;
 		private IPublishEventsFromEventHandlers _bus;
 		private ControllableEventSyncronization _eventSyncronization;
-		private IMessageBrokerSender _messageBroker;
+		private IMessageCreator _messageBroker;
 		private ISkill _skill;
 		private IPerson _person;
 		
@@ -44,7 +45,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ScheduleChangedEventHandlers.
 			_bus = MockRepository.GenerateMock<IPublishEventsFromEventHandlers>();
 			_scheduleProjectionRepository = MockRepository.GenerateMock<IScheduleProjectionReadOnlyRepository>();
 			_eventSyncronization = new ControllableEventSyncronization();
-			_messageBroker = MockRepository.GenerateMock<IMessageBrokerSender>();
+			_messageBroker = MockRepository.GenerateMock<IMessageCreator>();
 
 			_skill = SkillFactory.CreateSkill("Phone");
 			_skill.Activity.SetId(Guid.NewGuid());
@@ -94,11 +95,11 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ScheduleChangedEventHandlers.
 
 			_target.Handle(@event);
 
-			_messageBroker.AssertWasNotCalled(x => x.SendEventMessage("datasource", @event.BusinessUnitId, period.StartDateTime, period.EndDateTime, Guid.Empty, Guid.Empty, typeof(IScheduledResourcesReadModel), DomainUpdateType.NotApplicable, null), o => o.Repeat.Times(0));
+			_messageBroker.AssertWasNotCalled(x => x.Send("datasource", @event.BusinessUnitId, period.StartDateTime, period.EndDateTime, Guid.Empty, Guid.Empty, typeof(IScheduledResourcesReadModel), DomainUpdateType.NotApplicable, null), o => o.Repeat.Times(0));
 
 			_eventSyncronization.RunNow();
 
-			_messageBroker.AssertWasCalled(x => x.SendEventMessage("datasource", @event.BusinessUnitId, period.StartDateTime, period.EndDateTime, Guid.Empty, Guid.Empty, typeof(IScheduledResourcesReadModel), DomainUpdateType.NotApplicable, null), o => o.Repeat.Once());
+			_messageBroker.AssertWasCalled(x => x.Send("datasource", @event.BusinessUnitId, period.StartDateTime, period.EndDateTime, Guid.Empty, Guid.Empty, typeof(IScheduledResourcesReadModel), DomainUpdateType.NotApplicable, null), o => o.Repeat.Once());
 		}
 
 		[Test]

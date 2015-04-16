@@ -3,11 +3,12 @@ using System.Net;
 using System.Threading.Tasks;
 using Microsoft.AspNet.SignalR.Client;
 using Microsoft.AspNet.SignalR.Client.Transports;
-using Teleopti.Messaging.SignalR;
-using Teleopti.Messaging.SignalR.Wrappers;
+using Teleopti.Messaging.Client.SignalR;
+using Teleopti.Messaging.Client.SignalR.Wrappers;
 
 namespace Teleopti.MessagingTest.SignalR.TestDoubles
 {
+	[CLSCompliant(false)]
 	public class HubConnectionMock :IHubConnectionWrapper
 	{
 		private readonly IHubProxyWrapper _proxy;

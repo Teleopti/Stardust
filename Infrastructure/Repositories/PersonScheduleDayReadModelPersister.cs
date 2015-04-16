@@ -7,6 +7,7 @@ using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Infrastructure.NHibernateConfiguration;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
+using Teleopti.Interfaces.MessageBroker.Client.Composite;
 using Teleopti.Interfaces.MessageBroker.Events;
 
 namespace Teleopti.Ccc.Infrastructure.Repositories
@@ -14,10 +15,10 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 	public class PersonScheduleDayReadModelPersister : IPersonScheduleDayReadModelPersister
 	{
 		private readonly ICurrentUnitOfWork _currentUnitOfWork;
-		private readonly IMessageBrokerSender _messageBroker;
+		private readonly IMessageCreator _messageBroker;
 		private readonly ICurrentDataSource _currentDataSource;
 
-		public PersonScheduleDayReadModelPersister(ICurrentUnitOfWork currentUnitOfWork, IMessageBrokerSender messageBroker, ICurrentDataSource currentDataSource)
+		public PersonScheduleDayReadModelPersister(ICurrentUnitOfWork currentUnitOfWork, IMessageCreator messageBroker, ICurrentDataSource currentDataSource)
 		{
 			_currentUnitOfWork = currentUnitOfWork;
 			_messageBroker = messageBroker;
@@ -33,7 +34,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 				readModels.ForEach(saveReadModel);
 
 			if (!initialLoad)
-				_currentUnitOfWork.Current().AfterSuccessfulTx(() => _messageBroker.SendEventMessage(_currentDataSource.CurrentName(), businessUnitId, period.StartDate, period.EndDate, Guid.Empty, personId, typeof(Person), Guid.Empty, typeof(IPersonScheduleDayReadModel), DomainUpdateType.NotApplicable, null));
+				_currentUnitOfWork.Current().AfterSuccessfulTx(() => _messageBroker.Send(_currentDataSource.CurrentName(), businessUnitId, period.StartDate, period.EndDate, Guid.Empty, personId, typeof(Person), Guid.Empty, typeof(IPersonScheduleDayReadModel), DomainUpdateType.NotApplicable, null));
 		}
 
 		private void clearPeriodForPerson(DateOnlyPeriod period, Guid personId)

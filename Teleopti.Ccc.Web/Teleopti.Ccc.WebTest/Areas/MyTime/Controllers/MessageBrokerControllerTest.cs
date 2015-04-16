@@ -22,7 +22,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			var userDataFactory = MockRepository.GenerateMock<IUserDataFactory>();
 			userDataFactory.Expect(fac => fac.CreateViewModel()).Return(expected);
 
-			using (var controller = new MessageBrokerController(userDataFactory))
+			using (var controller = new UserDataController(userDataFactory))
 			{
 				var model = controller.FetchUserData();
 				model.Data.Should().Be.SameInstanceAs(expected);

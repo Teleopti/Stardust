@@ -841,14 +841,14 @@ namespace Teleopti.Ccc.AgentPortal.Main
         private void RegisterForMessageBrokerEvents()
         {
             if (StateHolder.Instance.MessageBroker != null &&
-                StateHolder.Instance.MessageBroker.IsConnected)
+                StateHolder.Instance.MessageBroker.IsAlive)
             {
                 try
                 {
                 	var details = StateHolder.Instance.State.SessionScopeData;
-                	StateHolder.Instance.MessageBroker.RegisterEventSubscription(details.DataSource.Name,
+                	StateHolder.Instance.MessageBroker.RegisterSubscription(details.DataSource.Name,
                 	                                                             details.BusinessUnit.Id.GetValueOrDefault(), OnEventMessageHandler, typeof(IPushMessageDialogue));
-					StateHolder.Instance.MessageBroker.RegisterEventSubscription(details.DataSource.Name,
+					StateHolder.Instance.MessageBroker.RegisterSubscription(details.DataSource.Name,
 																				 details.BusinessUnit.Id.GetValueOrDefault(), OnEventMessageHandler, typeof(IPersonRequest));
                 }
                 catch (RemotingException e)
@@ -873,11 +873,11 @@ namespace Teleopti.Ccc.AgentPortal.Main
 
         public void UnregisterMessageBrokerSubscriptions()
         {
-            if (StateHolder.Instance.MessageBroker != null && StateHolder.Instance.MessageBroker.IsConnected)
+            if (StateHolder.Instance.MessageBroker != null && StateHolder.Instance.MessageBroker.IsAlive)
             {
                 try
                 {
-                    StateHolder.Instance.MessageBroker.UnregisterEventSubscription(OnEventMessageHandler);
+                    StateHolder.Instance.MessageBroker.UnregisterSubscription(OnEventMessageHandler);
                 }
                 catch (RemotingException exp)
                 {

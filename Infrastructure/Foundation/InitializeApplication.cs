@@ -9,6 +9,7 @@ using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
+using Teleopti.Interfaces.MessageBroker.Client.Composite;
 using Teleopti.Interfaces.MessageBroker.Events;
 using Teleopti.Messaging.Exceptions;
 using System.Xml.XPath;
@@ -24,7 +25,7 @@ namespace Teleopti.Ccc.Infrastructure.Foundation
 		private static readonly ILog log = LogManager.GetLogger(typeof (InitializeApplication));
         private readonly IList<string> _unavailableDataSources = new List<string>();
 	    
-		public InitializeApplication(IDataSourcesFactory dataSourcesFactory, IMessageBroker messageBroker)
+		public InitializeApplication(IDataSourcesFactory dataSourcesFactory, IMessageBrokerComposite messageBroker)
 		{
 			DataSourcesFactory = dataSourcesFactory;
 			MessageBroker = messageBroker;
@@ -32,7 +33,7 @@ namespace Teleopti.Ccc.Infrastructure.Foundation
 		}
 
 		public IDataSourcesFactory DataSourcesFactory { get; private set; }
-		public IMessageBroker MessageBroker { get; private set; }
+		public IMessageBrokerComposite MessageBroker { get; private set; }
 		public bool MessageBrokerDisabled { get; set; }
 	    
         public IEnumerable<string> UnavailableDataSources
@@ -167,8 +168,8 @@ namespace Teleopti.Ccc.Infrastructure.Foundation
 						if (Uri.TryCreate(messageBrokerConnection, UriKind.Absolute, out serverUrl))
 						{
 							var useLongPolling = appSettings.GetSettingValue("MessageBrokerLongPolling", bool.Parse);
-							MessageBroker.ConnectionString = messageBrokerConnection;
-							MessageBroker.StartMessageBroker(useLongPolling);
+							MessageBroker.ServerUrl = messageBrokerConnection;
+							MessageBroker.StartBrokerService(useLongPolling);
 						}
 					}
 

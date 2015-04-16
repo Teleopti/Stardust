@@ -14,6 +14,7 @@ using Teleopti.Ccc.WinCode.Common.GuiHelpers;
 using Teleopti.Ccc.WinCode.Settings;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
+using Teleopti.Interfaces.MessageBroker.Client.Composite;
 using Teleopti.Interfaces.MessageBroker.Events;
 
 namespace Teleopti.Ccc.Win.Common.Configuration
@@ -30,7 +31,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 		private const short ItemDiffernce = 1;                      
 		private List<IContract> _contractList;
         private readonly IDictionary<EmploymentType, string> _employmentTypeList = new Dictionary<EmploymentType, string>();
-        private readonly IMessageBroker _messageBroker = StateHolderReader.Instance.StateReader.ApplicationScopeData.Messaging;
+        private readonly IMessageBrokerComposite _messageBroker = StateHolderReader.Instance.StateReader.ApplicationScopeData.Messaging;
 
 		public IUnitOfWork UnitOfWork { get; private set; }
 
@@ -71,7 +72,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
         public void Unload()
         {
             // Disposes or flag anything possible.
-            _messageBroker.UnregisterEventSubscription(refreshMultiplicatorDefinitionSet);
+            _messageBroker.UnregisterSubscription(refreshMultiplicatorDefinitionSet);
             timeSpanTextBoxPlanningMin.Validated -= TimeSpanTextBoxPlanningMinValidated;
             timeSpanTextBoxPlanningMax.Validated -= TimeSpanTextBoxPlanningMaxValidated;
             _contractList = null;

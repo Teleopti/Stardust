@@ -4,6 +4,7 @@ using System.Linq;
 using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
+using Teleopti.Interfaces.MessageBroker.Client.Composite;
 using Teleopti.Interfaces.MessageBroker.Events;
 
 namespace Teleopti.Ccc.WinCode.Common.Configuration
@@ -12,14 +13,14 @@ namespace Teleopti.Ccc.WinCode.Common.Configuration
     {
         private readonly ISetScorecardView _view;
         private readonly IUnitOfWork _unitOfWork;
-		private readonly IMessageBrokerListener _messageBroker;
+		private readonly IMessageListener _messageBroker;
         private readonly IScorecardProvider _scorecardProvider;
         private readonly ISiteProvider _siteProvider;
         private readonly ITeamProvider _teamProvider;
         private readonly Guid _messageBrokerInstance = Guid.NewGuid();
         private ISite _selectedSite;
 
-        public SetScorecardPresenter(ISetScorecardView view, IUnitOfWork unitOfWork, IMessageBrokerListener messageBroker, IScorecardProvider scorecardProvider, ISiteProvider siteProvider, ITeamProvider teamProvider)
+		public SetScorecardPresenter(ISetScorecardView view, IUnitOfWork unitOfWork, IMessageListener messageBroker, IScorecardProvider scorecardProvider, ISiteProvider siteProvider, ITeamProvider teamProvider)
         {
             _view = view;
             _unitOfWork = unitOfWork;
@@ -107,9 +108,9 @@ namespace Teleopti.Ccc.WinCode.Common.Configuration
         {
             if (_messageBroker != null)
             {
-                _messageBroker.UnregisterEventSubscription(OnTeamEvent);
-                _messageBroker.UnregisterEventSubscription(OnSiteEvent);
-                _messageBroker.UnregisterEventSubscription(OnScorecardEvent);
+                _messageBroker.UnregisterSubscription(OnTeamEvent);
+				_messageBroker.UnregisterSubscription(OnSiteEvent);
+				_messageBroker.UnregisterSubscription(OnScorecardEvent);
             }
         }
 

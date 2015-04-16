@@ -14,7 +14,6 @@ using Teleopti.Ccc.Infrastructure.ApplicationLayer;
 using Teleopti.Ccc.Infrastructure.NHibernateConfiguration;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Interfaces.Infrastructure;
-using Teleopti.Messaging.SignalR;
 using log4net;
 using log4net.Config;
 using Teleopti.Ccc.Domain.Security.Authentication;
@@ -31,6 +30,7 @@ using Teleopti.Ccc.Sdk.WcfHost.Ioc;
 using Teleopti.Ccc.Sdk.WcfService;
 using Teleopti.Ccc.Sdk.WcfService.Factory;
 using Teleopti.Interfaces.Domain;
+using Teleopti.Messaging.Client;
 
 namespace Teleopti.Ccc.Sdk.WcfHost
 {
@@ -68,6 +68,8 @@ namespace Teleopti.Ccc.Sdk.WcfHost
 
             Logger.InfoFormat("The Application is starting. {0}", _sitePath);
 
+	        var messageBroker = MessageBrokerContainerDontUse.CompositeClient();
+
 			var busSender = new ServiceBusSender();
 	        var eventPublisher = new ServiceBusEventPublisher(busSender, new EventContextPopulator(new CurrentIdentity(), new CurrentInitiatorIdentifier(CurrentUnitOfWork.Make())));
 	        var initializeApplication =
@@ -84,16 +86,15 @@ namespace Teleopti.Ccc.Sdk.WcfHost
 					                               new PersonPeriodChangedMessageSender(eventPublisher)
 				                               },
 			                               DataSourceConfigurationSetter.ForSdk()),
-			        SignalBroker.Make(MessageFilterManager.Instance)) {MessageBrokerDisabled = messageBrokerDisabled()};
+					messageBroker) { MessageBrokerDisabled = messageBrokerDisabled() };
             string sitePath = Global.sitePath();
             initializeApplication.Start(new SdkState(), sitePath, new LoadPasswordPolicyService(sitePath), new ConfigurationManagerWrapper(), true);
-            var messageBroker = initializeApplication.MessageBroker;
 
             var messageBrokerEnabled = !messageBrokerDisabled();
             var messageBrokerReceiveDisabled = !messageBrokerReceiveEnabled();
             if (messageBrokerEnabled && messageBrokerReceiveDisabled)
                 if (messageBroker != null)
-                    messageBroker.StopMessageBroker();
+                    messageBroker.Dispose();
 
             var container = buildIoc();
             AutofacHostFactory.Container = container.Build();

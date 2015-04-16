@@ -5,10 +5,10 @@ using System.Threading;
 using Autofac;
 using Autofac.Integration.Wcf;
 using MbCache.Configuration;
-using Teleopti.Ccc.IocCommon.Configuration;
-using Teleopti.Ccc.Rta.Server;
 using log4net;
 using log4net.Config;
+using Teleopti.Ccc.IocCommon.Configuration;
+using Teleopti.Ccc.Rta.Server;
 
 namespace Teleopti.Ccc.Rta.WebService
 {

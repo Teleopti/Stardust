@@ -7,6 +7,7 @@ using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
+using Teleopti.Interfaces.MessageBroker.Client.Composite;
 using Teleopti.Interfaces.MessageBroker.Events;
 using Teleopti.Interfaces.Messages.General;
 
@@ -19,14 +20,14 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Forecast
         private readonly ISkillRepository _skillRepository;
         private readonly IJobResultRepository _jobResultRepository;
         private readonly IJobResultFeedback _feedback;
-        private readonly IMessageBroker _messageBroker;
+		private readonly IMessageBrokerComposite _messageBroker;
 
         public ImportForecastsToSkillConsumer(ICurrentUnitOfWorkFactory unitOfWorkFactory,
             ISaveForecastToSkillCommand saveForecastToSkillCommand,
             ISkillRepository skillRepository,
             IJobResultRepository jobResultRepository,
             IJobResultFeedback feedback,
-            IMessageBroker messageBroker)
+			IMessageBrokerComposite messageBroker)
         {
             _unitOfWorkFactory = unitOfWorkFactory;
             _saveForecastToSkillCommand = saveForecastToSkillCommand;

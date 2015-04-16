@@ -14,6 +14,7 @@ using Teleopti.Ccc.Sdk.ServiceBus.Forecast;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
+using Teleopti.Interfaces.MessageBroker.Client.Composite;
 using Teleopti.Interfaces.MessageBroker.Events;
 using Teleopti.Interfaces.Messages.General;
 
@@ -29,7 +30,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Forecast
         private IJobResultRepository _jobResultRepository;
         private IImportForecastsRepository _importForecastsRepository;
         private IJobResultFeedback _feedback;
-        private IMessageBroker _messageBroker;
+		private IMessageBrokerComposite _messageBroker;
         private IServiceBus _serviceBus;
         private IForecastsFileContentProvider _contentProvider;
         private TimeZoneInfo _timeZone;
@@ -48,7 +49,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Forecast
             _importForecastsRepository = _mocks.StrictMock<IImportForecastsRepository>();
             _contentProvider = _mocks.StrictMock<IForecastsFileContentProvider>();
             _feedback = _mocks.DynamicMock<IJobResultFeedback>();
-            _messageBroker = _mocks.StrictMock<IMessageBroker>();
+			_messageBroker = _mocks.StrictMock<IMessageBrokerComposite>();
             _serviceBus = _mocks.StrictMock<IServiceBus>();
             _timeZone = (TimeZoneInfo.Utc);
             _unitOfWork = _mocks.DynamicMock<IUnitOfWork>();

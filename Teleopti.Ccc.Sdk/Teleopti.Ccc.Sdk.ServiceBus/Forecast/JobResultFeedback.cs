@@ -4,6 +4,7 @@ using log4net;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Forecasting.Export;
 using Teleopti.Interfaces.Domain;
+using Teleopti.Interfaces.MessageBroker.Client.Composite;
 using Teleopti.Interfaces.MessageBroker.Events;
 using Teleopti.Messaging.Coders;
 
@@ -12,7 +13,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Forecast
     public class JobResultFeedback : IJobResultFeedback
     {
 	    private readonly ICurrentUnitOfWorkFactory _unitOfWorkFactory;
-	    private IMessageBroker _messageBroker;
+		private IMessageBrokerComposite _messageBroker;
         private IJobResult _jobResult;
         private JobResultProgressEncoder _jobResultProgressEncoder;
         private static readonly ILog Logger = LogManager.GetLogger(typeof(JobResultFeedback));
@@ -22,7 +23,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Forecast
 		    _unitOfWorkFactory = unitOfWorkFactory;
 	    }
 
-	    public void SetJobResult(IJobResult jobResult,IMessageBroker messageBroker)
+		public void SetJobResult(IJobResult jobResult, IMessageBrokerComposite messageBroker)
         {
         	_messageBroker = messageBroker;
             _jobResult = jobResult;
@@ -61,7 +62,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Forecast
 
         private void sendMessage(byte[] binaryData)
         {
-	        _messageBroker.SendEventMessage(_unitOfWorkFactory.LoggedOnUnitOfWorkFactory().Name,
+	        _messageBroker.Send(_unitOfWorkFactory.LoggedOnUnitOfWorkFactory().Name,
 		        ((IBelongsToBusinessUnit) _jobResult).BusinessUnit.Id.GetValueOrDefault
 			        (), DateTime.UtcNow, DateTime.UtcNow, Guid.Empty, Guid.Empty,
 		        typeof (IJobResultProgress), DomainUpdateType.NotApplicable, binaryData);
