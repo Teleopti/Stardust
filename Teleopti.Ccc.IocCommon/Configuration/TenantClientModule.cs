@@ -1,5 +1,6 @@
 ﻿using Autofac;
 using Teleopti.Ccc.Domain.Common;
+using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Security;
 using Teleopti.Ccc.Domain.Security.MultiTenancyAuthentication;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Client;
@@ -43,6 +44,14 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 				builder.Register(c => new SharedSettingsQuerierForNoWeb(configServer))
 					.As<ISharedSettingsQuerier>()
 					.SingleInstance();
+			}
+			if (_configuration.Toggle(Toggles.MultiTenancy_LogonUseNewSchema_33049))
+			{
+				builder.RegisterType<ChangeUserPassword>().As<IChangeUserPassword>().SingleInstance();
+			}
+			else
+			{
+				builder.RegisterType<EmptyChangeUserPassword>().As<IChangeUserPassword>().SingleInstance();
 			}
 		}
 

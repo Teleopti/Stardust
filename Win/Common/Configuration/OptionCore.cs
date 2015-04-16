@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using Autofac;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
@@ -251,9 +252,16 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 
 	public class MyProfileSettingPagesProvider : ISettingPagesProvider
 	{
+		private readonly IComponentContext _container;
+
+		public MyProfileSettingPagesProvider(IComponentContext container)
+		{
+			_container = container;
+		}
+
 		public IList<ISettingPage> CreateSettingPages()
 		{
-			var allSupportedPages = new List<ISettingPage> { new ChangePasswordControl() };
+			var allSupportedPages = new List<ISettingPage> { new ChangePasswordControl(_container) };
 			return allSupportedPages;
 		}
 	}

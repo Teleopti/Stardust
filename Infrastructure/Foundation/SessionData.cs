@@ -5,29 +5,31 @@ using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.Infrastructure.Foundation
 {
-    public class SessionData : ISessionData
-    {
-        private TimeZoneInfo _timeZone;
-        
-        public SessionData()
-        {
-            _timeZone = TeleoptiPrincipal.CurrentPrincipal.Regional.TimeZone;
-        }
+	public class SessionData : ISessionData
+	{
+		private TimeZoneInfo _timeZone;
 
-        public TimeZoneInfo TimeZone
-        {
-            get { return _timeZone; }
-            set
-            {
-                InParameter.NotNull("TimeZone", value);
-                _timeZone = value;
-            }
-        }
+		public SessionData()
+		{
+			_timeZone = TeleoptiPrincipal.CurrentPrincipal.Regional.TimeZone;
+		}
 
-        public bool MickeMode { get; set; }
+		public TimeZoneInfo TimeZone
+		{
+			get { return _timeZone; }
+			set
+			{
+				InParameter.NotNull("TimeZone", value);
+				_timeZone = value;
+			}
+		}
+
+		public bool MickeMode { get; set; }
 
 		public object Clip { get; set; }
 
-        public AuthenticationTypeOption AuthenticationTypeOption { get; set; }
-    }
+		public AuthenticationTypeOption AuthenticationTypeOption { get; set; }
+
+		public string UserName { get; set; }
+	}
 }

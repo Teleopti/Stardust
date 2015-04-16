@@ -181,6 +181,7 @@
     <Compile Include="Bugs\BugShiftExchangeInvalidUpdate.cs" />
     <Compile Include="DistributedLock\DistributedLockTest.cs" />
     <Compile Include="Foundation\CouldNotCreateTransactionExceptionTest.cs" />
+    <Compile Include="MultiTenancy\Client\ChangeUserPasswordTest.cs" />
     <Compile Include="MultiTenancy\Client\SharedSettingsQuerierForNoWebTest.cs" />
     <Compile Include="MultiTenancy\Client\TenantDataManagerTest.cs" />
     <Compile Include="MultiTenancy\Client\TenantServerConfigurationTest.cs" />

@@ -599,7 +599,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 			{
 				using (IUnitOfWork unitOfWork = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
 				{
-					var settings = new OptionDialog(new OptionCore(new MyProfileSettingPagesProvider()));
+					var settings = new OptionDialog(new OptionCore(new MyProfileSettingPagesProvider(_container)));
 					settings.SetUnitOfWork(unitOfWork);
 					settings.Page(typeof(ChangePasswordControl));
 					settings.ShowDialog();

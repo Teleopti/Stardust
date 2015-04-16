@@ -255,6 +255,7 @@ namespace Teleopti.Ccc.WinCode.Main
 			_logOnOff.LogOn(_model.SelectedDataSourceContainer.DataSource, _model.SelectedDataSourceContainer.User, businessUnit);
 
 			StateHolderReader.Instance.StateReader.SessionScopeData.AuthenticationTypeOption = _model.AuthenticationType;
+			StateHolderReader.Instance.StateReader.SessionScopeData.UserName = _model.UserName;
 		}
 	}
 }

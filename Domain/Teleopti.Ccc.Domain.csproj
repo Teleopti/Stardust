@@ -1620,7 +1620,10 @@
     <Compile Include="Security\ModifyPassword.cs" />
     <Compile Include="Security\MultiTenancyAuthentication\ApplicationLogonClientModel.cs" />
     <Compile Include="Security\MultiTenancyAuthentication\AuthenticationQueryResult.cs" />
+    <Compile Include="Security\MultiTenancyAuthentication\ChangePasswordInput.cs" />
+    <Compile Include="Security\MultiTenancyAuthentication\ChangeUserPasswordResult.cs" />
     <Compile Include="Security\MultiTenancyAuthentication\IAuthenticationQuerier.cs" />
+    <Compile Include="Security\MultiTenancyAuthentication\IChangeUserPassword.cs" />
     <Compile Include="Security\MultiTenancyAuthentication\IdentityLogonClientModel.cs" />
     <Compile Include="Security\NhibConfigDecryption.cs" />
     <Compile Include="Security\OneWayEncryption.cs">

@@ -227,6 +227,7 @@
     <Compile Include="LiteUnitOfWork\ReadModelUnitOfWorkFactory.cs" />
     <Compile Include="LiteUnitOfWork\ReadModelUnitOfWorkState.cs" />
     <Compile Include="MultiTenancy\Client\AuthenticationFromFileQuerier.cs" />
+    <Compile Include="MultiTenancy\Client\ChangeUserPassword.cs" />
     <Compile Include="MultiTenancy\Client\ITenantDataManager.cs" />
     <Compile Include="MultiTenancy\Client\ITenantServerConfiguration.cs" />
     <Compile Include="MultiTenancy\Client\TenantAuthenticationData.cs" />

@@ -1,5 +1,7 @@
 ﻿using System;
+using Autofac;
 using Teleopti.Ccc.Domain.Security;
+using Teleopti.Ccc.Domain.Security.MultiTenancyAuthentication;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
@@ -15,16 +17,16 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 	/// </summary>
 	public partial class ChangePasswordControl : BaseUserControl, ISettingPage, IChangePasswordView, ICheckBeforeClosing
 	{
+		private readonly IComponentContext _container;
 		private ChangePasswordPresenter _presenter;
 		private bool _canClose;
 
-		/// <summary>
-		/// Manually initialze control components. Calls when OptionDialog contructor.
-		/// </summary>
-		/// <remarks>
-		/// Created by: Aruna Priyankara Wickrama
-		/// Created date: 2008-04-07
-		/// </remarks>
+		public ChangePasswordControl(IComponentContext container)
+		{
+			_container = container;
+			InitializeComponent();
+		}
+
 		public void InitializeDialogControl()
 		{
 			setColors();
@@ -45,27 +47,18 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 														 StateHolderReader.Instance.StateReader.ApplicationScopeData.
 															 LoadPasswordPolicyService),
 													 UnitOfWorkFactory.Current,
-													 new RepositoryFactory(), new OneWayEncryption());
+													 new RepositoryFactory(), new OneWayEncryption(), _container.Resolve<IChangeUserPassword>());
 			_presenter.Initialize();
 			labelSubHeader2.Text = string.Concat(labelSubHeader2.Text, " ",
 												 ((IUnsafePerson)TeleoptiPrincipal.CurrentPrincipal).Person.Name);
 		}
 
-		/// <summary>
-		/// Saves the changes to the repository
-		/// </summary>
 		public void  SaveChanges()
 		{
 			_presenter.Save();
 		}
 
-		/// <summary>
-		/// Initializes the contract control.
-		/// </summary>
-		public ChangePasswordControl()
-		{
-			InitializeComponent();
-		}
+		
 
 		/// <summary>
 		/// Sets the unit of work
