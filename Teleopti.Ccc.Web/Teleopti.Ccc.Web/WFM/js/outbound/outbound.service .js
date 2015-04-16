@@ -81,12 +81,28 @@ outboundService.service('OutboundService', ['$resource', '$filter', function( $r
 		return campaign;
 	};
 
-	self.updateCampaign = function (campaign) {
-		campaign.$update();
+	self.updateCampaign = function(campaign, successCb, errorCb) {
+		campaign.$update(
+			function() {
+				if (angular.isDefined(successCb))
+					successCb();
+			},
+			function(data) {
+				if (angular.isDefined(errorCb))
+					errorCb(data);
+			});
 	};
 	
-	self.deleteCampaign = function (campaign) {	
-		Campaign.remove({ Id: campaign.Id });
+	self.deleteCampaign = function (campaign, successCb, errorCb) {
+		Campaign.remove({ Id: campaign.Id },
+			function() {
+				if (angular.isDefined(successCb))
+					successCb();
+			},
+			function (data) {
+				if (angular.isDefined(errorCb))
+					errorCb(data);
+			});
 		self.campaigns.splice(self.campaigns.indexOf(campaign), 1);
 	}
 

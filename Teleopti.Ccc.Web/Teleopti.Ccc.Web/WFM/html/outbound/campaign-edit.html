@@ -21,106 +21,100 @@
 			</div>			
 		</div>				
 	</div>
-<div class="material-block-content">
-	<div class=" wfm-accordion">
-		<div class="wfm-block">
-			<div class="sub-header accordion-head" ng-click="acToggle1 = !acToggle1">
-				Campaign
-				<strong>{{campaign.Name}}</strong>
-			</div>
-			<div ng-show="acToggle1">
-				<form name="formParams" class="form-horizontal wfm-block input-group" ng-submit="update()">
-					<input type="submit" style="position: absolute; left: -9999px"/>
-					<div class="input-prepend input-group-item">
-						<span><strong>Name</strong></span>
-						<input id="name" type="text" ng-model="campaign.Name" ng-required />
-					</div>
-					<!--<div class="input-prepend">
-						<span><strong>Skill</strong></span>
-						<select name="skill" id="skill"
-						        ng-model="campaign.SelectedSkill"
-						        ng-options="Skill as Skill.SkillName for Skill in campaign.Skills"
-						        ng-required></select>
-					</div>-->
-					<div class="input-prepend input-group-item">
-						<span><strong>Call List Length</strong></span>
-						<input id="callList" type="text" ng-model="campaign.CallListLen" placeholder="call list length"/>
-					</div>
-					<div class="input-prepend input-group-item">
-						<span><strong>Target Rate</strong></span>
-						<input id="sla" type="text" ng-model="campaign.TargetRate" placeholder="sla" />
-					</div>
-					<div class="input-prepend input-group-item">
-						<span><strong>Connect Rate</strong></span>
-						<input id="cr" type="text" ng-model="campaign.ConnectRate" placeholder="connect rate" />
-					</div>
-					<div class="input-prepend input-group-item">
-						<span><strong>RPCR</strong></span>
-						<input id="target" type="text" ng-model="campaign.RightPartyConnectRate" placeholder="right party connect rate" />
-					</div>
-					<div class="input-prepend input-group-item">
-						<span><strong>Connect AHT</strong></span>
-						<input id="cAHT" type="text" ng-model="campaign.ConnectAverageHandlingTime" placeholder="connect average handle time" />
-					</div>
-					<div class="input-prepend input-group-item">
-						<span><strong>RPC AHT</strong></span>
-						<input id="rpcAHT" type="text" ng-model="campaign.RightPartyAverageHandlingTime" placeholder="right party average handle time" />
-					</div>
-					<div class="input-prepend input-group-item">
-						<span><strong>Unproductive Time</strong></span>
-						<input id="unproductive" type="text" ng-model="campaign.UnproductiveTime" placeholder="unproductive time" />
-					</div>
-				</form>
-			</div>
-		</div>
-		<div class="wfm-block">
-			<div class="sub-header accordion-head" ng-click="acToggle2 = !acToggle2">
-				Duration
-				<span ng-show="!acToggle2"> from <strong>{{campaign.StartDate.Date | date: format }}</strong> to <strong>{{campaign.EndDate.Date | date: format }}</strong></span>
-			</div>
-			<div ng-show="acToggle2">
-				<div class="row wfm-block">
-					<div class="col-lg-6">					
-						<div class="wfm-datepicker-wrap">
-							<div class="sub-header">Start time: <strong>{{campaign.StartDate.Date | date: format }}</strong></div>															
-							<datepicker ng-model="campaign.StartDate.Date" max-date="campaign.EndDate.Date" show-weeks="true" class="well well-sm" ng-change="update()"></datepicker>							
+	<div class="material-block-content">
+		<div class=" wfm-accordion">
+			<div class="wfm-block">
+				<div class="sub-header accordion-head" ng-click="acToggle1 = !acToggle1">
+					Campaign
+					<strong>{{campaign.Name}}</strong>
+				</div>
+				<div ng-show="acToggle1">
+					<form name="formParams" class="form-horizontal wfm-block input-group" ng-submit="update()">
+						<input type="submit" style="position: absolute; left: -9999px"/>
+						<div class="input-prepend input-group-item">
+							<span><strong>Name</strong></span>
+							<input id="name" type="text" ng-model="campaign.Name" ng-required/>
 						</div>
-					</div>
-					<div class="col-lg-6">
-						<div class="wfm-datepicker-wrap">
-							<div class="sub-header">End time: <strong class="end-date">{{campaign.EndDate.Date | date: format }}</strong></div>															
-							<datepicker ng-model="campaign.EndDate.Date" min-date="campaign.StartDate.Date" show-weeks="true" class="well well-sm" ng-change="update()"></datepicker>
+						<div class="input-prepend input-group-item">
+							<span><strong>Call List Length</strong></span>
+							<input id="callList" type="text" ng-model="campaign.CallListLen" placeholder="call list length"/>
+						</div>
+						<div class="input-prepend input-group-item">
+							<span><strong>Target Rate</strong></span>
+							<input id="sla" type="text" ng-model="campaign.TargetRate" placeholder="sla"/>
+						</div>
+						<div class="input-prepend input-group-item">
+							<span><strong>Connect Rate</strong></span>
+							<input id="cr" type="text" ng-model="campaign.ConnectRate" placeholder="connect rate"/>
+						</div>
+						<div class="input-prepend input-group-item">
+							<span><strong>RPCR</strong></span>
+							<input id="target" type="text" ng-model="campaign.RightPartyConnectRate" placeholder="right party connect rate"/>
+						</div>
+						<div class="input-prepend input-group-item">
+							<span><strong>Connect AHT</strong></span>
+							<input id="cAHT" type="text" ng-model="campaign.ConnectAverageHandlingTime" placeholder="connect average handle time"/>
+						</div>
+						<div class="input-prepend input-group-item">
+							<span><strong>RPC AHT</strong></span>
+							<input id="rpcAHT" type="text" ng-model="campaign.RightPartyAverageHandlingTime" placeholder="right party average handle time"/>
+						</div>
+						<div class="input-prepend input-group-item">
+							<span><strong>Unproductive Time</strong></span>
+							<input id="unproductive" type="text" ng-model="campaign.UnproductiveTime" placeholder="unproductive time"/>
+						</div>
+					</form>
+				</div>
+			</div>
+			<div class="wfm-block">
+				<div class="sub-header accordion-head" ng-click="acToggle2 = !acToggle2">
+					Duration
+					<span ng-show="!acToggle2"> from <strong>{{campaign.StartDate.Date | date: format }}</strong> to <strong>{{campaign.EndDate.Date | date: format }}</strong></span>
+				</div>
+				<div ng-show="acToggle2">
+					<div class="row wfm-block">
+						<div class="col-lg-6">
+							<div class="wfm-datepicker-wrap">
+								<div class="sub-header">Start time: <strong>{{campaign.StartDate.Date | date: format }}</strong>
+								</div>
+								<datepicker ng-model="campaign.StartDate.Date" max-date="campaign.EndDate.Date" show-weeks="true" class="well well-sm" ng-change="update()"></datepicker>
+							</div>
+						</div>
+						<div class="col-lg-6">
+							<div class="wfm-datepicker-wrap">
+								<div class="sub-header">End time: <strong class="end-date">{{campaign.EndDate.Date | date: format }}</strong>
+								</div>
+								<datepicker ng-model="campaign.EndDate.Date" min-date="campaign.StartDate.Date" show-weeks="true" class="well well-sm" ng-change="update()"></datepicker>
+							</div>
 						</div>
 					</div>
 				</div>
 			</div>
-		</div>
-
-		<div class="wfm-block" ng-if="true">
-			<div class="sub-header accordion-head" ng-click="acToggle4 = !acToggle4">
-				Working Hours
-			</div>
-			<div ng-show="acToggle4">
-				<div class="row toolbar">
-					<div class="wfm-block">
+			<div class="wfm-block" ng-if="true">
+				<div class="sub-header accordion-head" ng-click="acToggle4 = !acToggle4">
+					Working Hours
+				</div>
+				<div ng-show="acToggle4">
+					<div class="row toolbar">
 						<div class="wfm-block">
-							<div class="row">
-								<div class="col-lg-3 column-label">
-									<span></span>
-								</div>
-								<div ng-repeat-start="weekday in [0,1,2,3,4,5,6]" ng-repeat-end class="col-lg-1 column-label">
-									<span>{{weekday | showWeekdays}}</span>
+							<div class="wfm-block">
+								<div class="row">
+									<div class="col-lg-3 column-label">
+										<span></span>
+									</div>
+									<div ng-repeat-start="weekday in [0,1,2,3,4,5,6]" ng-repeat-end class="col-lg-1 column-label">
+										<span>{{weekday | showWeekdays}}</span>
+									</div>
 								</div>
 							</div>
-						</div>
-						<div class="wfm-block">
-							<ul class="wfm-list">
-								<li ng-repeat="WorkingPeriod in campaign.CampaignWorkingPeriods"
-								    ng-class="{'wfm-list-item-selected': WorkingPeriod.selected}"
-								    ng-click="$parent.toggleWorkingPeriodSelect(WorkingPeriod)"
-								    class="role-btn wfm-block wfm-dense">
-									<div class="wfm-leave-behind wfm-leave-behind-1">
-										<span>
+							<div class="wfm-block">
+								<ul class="wfm-list">
+									<li ng-repeat="WorkingPeriod in campaign.CampaignWorkingPeriods"
+									    ng-class="{'wfm-list-item-selected': WorkingPeriod.selected}"
+									    ng-click="$parent.toggleWorkingPeriodSelect(WorkingPeriod)"
+									    class="role-btn wfm-block wfm-dense">
+										<div class="wfm-leave-behind wfm-leave-behind-1">
+											<span>
 												<i ng-click="$parent.deleteWorkingPeriod(WorkingPeriod)">
 													<svg style="width: 18px; height: 18px" viewBox="0 0 24 24">
 														<path fill="#555555" d="M19,4H15.5L14.5,3H9.5L8.5,4H5V6H19M6,19A2,2 0 0,0 8,21H16A2,2 0 0,0 18,19V7H6V19Z" />
@@ -130,43 +124,43 @@
 													</md-tooltip>
 												</i>
 											</span>
-									</div>
-									<div class="row">
-										<div class="col-lg-3">
-											<span>{{WorkingPeriod.WorkingPeriod.period._minimum}}</span>
-											<span> - </span>
-											<span>{{WorkingPeriod.WorkingPeriod.period._maximum}}</span>
 										</div>
-										<div ng-repeat-start="WeekDay in WorkingPeriod.ExpandedWorkingPeriodAssignments" ng-repeat-end class="col-lg-1">
-											<div class="wfm-checkbox wfm-checkbox-inline ">
-												<input type="checkbox" id="check_workinghour_{{WorkingPeriod.Id}}_weekday_{{WeekDay.WeekDay}}" ng-model="WeekDay.Checked" ng-change="$parent.$parent.toggleWorkingPeriodAssignment(WorkingPeriod, WeekDay)" />
-												<label for="check_workinghour_{{WorkingPeriod.Id}}_weekday_{{WeekDay.WeekDay}}">
-													<span class="wfm-checkbox-toggle"></span>
-													<span class="wfm-checkbox-label"></span>
-												</label>
+										<div class="row">
+											<div class="col-lg-3">
+												<span>{{WorkingPeriod.WorkingPeriod.period._minimum}}</span>
+												<span> - </span>
+												<span>{{WorkingPeriod.WorkingPeriod.period._maximum}}</span>
+											</div>
+											<div ng-repeat-start="WeekDay in WorkingPeriod.ExpandedWorkingPeriodAssignments" ng-repeat-end class="col-lg-1">
+												<div class="wfm-checkbox wfm-checkbox-inline ">
+													<input type="checkbox" id="check_workinghour_{{WorkingPeriod.Id}}_weekday_{{WeekDay.WeekDay}}" ng-model="WeekDay.Checked" ng-change="$parent.$parent.toggleWorkingPeriodAssignment(WorkingPeriod, WeekDay)"/>
+													<label for="check_workinghour_{{WorkingPeriod.Id}}_weekday_{{WeekDay.WeekDay}}">
+														<span class="wfm-checkbox-toggle"></span>
+														<span class="wfm-checkbox-label"></span>
+													</label>
+												</div>
 											</div>
 										</div>
+									</li>
+								</ul>
+							</div>
+							<div class="wfm-block">
+								<form name="newWorkingPeriodForm" ng-submit="">
+									<div class="input-prepend">
+										<i class="mdi mdi-plus" ng-click="addWorkingPeriod(); resetWorkingPeriodForm()"></i>
+										<input type="time" name="NewTimeRangeStart" ng-model="newWorkingPeriod.StartTime"
+										       placeholder="HH:mm:ss"/>
+										-
+										<input type="time" name="NewTimeRangeEnd" ng-model="newWorkingPeriod.EndTime"
+										       placeholder="HH:mm:ss"/>
 									</div>
-								</li>
-							</ul>
-						</div>
-						<div class="wfm-block">
-							<form name="newWorkingPeriodForm" ng-submit="">
-								<div class="input-prepend">
-									<i class="mdi mdi-plus" ng-click="addWorkingPeriod(); resetWorkingPeriodForm()"></i>
-									<input type="time" name="NewTimeRangeStart" ng-model="newWorkingPeriod.StartTime"
-										   placeholder="HH:mm:ss" />
-									-
-									<input type="time" name="NewTimeRangeEnd" ng-model="newWorkingPeriod.EndTime"
-										   placeholder="HH:mm:ss" />
-								</div>
-							</form>
+								</form>
+							</div>
 						</div>
 					</div>
 				</div>
 			</div>
-		</div>
 
+		</div>
 	</div>
-</div>
 </div>
