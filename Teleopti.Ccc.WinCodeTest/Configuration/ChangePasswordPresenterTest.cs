@@ -4,6 +4,7 @@ using NUnit.Framework;
 using Rhino.Mocks;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Security;
+using Teleopti.Ccc.Domain.Security.MultiTenancyAuthentication;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.WinCode.Common.Configuration;
 using Teleopti.Interfaces.Domain;
@@ -26,8 +27,9 @@ namespace Teleopti.Ccc.WinCodeTest.Configuration
         private IApplicationAuthenticationInfo applicationAuthenticationInfo;
         private IPasswordPolicy passwordPolicy;
         private IPersonRepository personRepository;
+	    private IChangeUserPassword changePw;
 
-        [SetUp]
+	    [SetUp]
         public void Setup()
         {
             mocks = new MockRepository();
@@ -41,7 +43,8 @@ namespace Teleopti.Ccc.WinCodeTest.Configuration
             oneWayEncryption = mocks.StrictMock<IOneWayEncryption>();
             applicationAuthenticationInfo = mocks.StrictMock<IApplicationAuthenticationInfo>();
             personRepository = mocks.StrictMock<IPersonRepository>();
-            target = new ChangePasswordPresenter(view, passwordPolicy, unitOfWorkFactory, repositoryFactory, oneWayEncryption);
+	        changePw = mocks.DynamicMock<IChangeUserPassword>();
+			  target = new ChangePasswordPresenter(view, passwordPolicy, unitOfWorkFactory, repositoryFactory, oneWayEncryption, changePw);
         }
 
         private void initializeExpectation()
@@ -126,6 +129,9 @@ namespace Teleopti.Ccc.WinCodeTest.Configuration
                 Expect.Call(unitOfWork.PersistAll()).Return(new List<IRootChangeInfo>(0));
                 Expect.Call(unitOfWork.Dispose);
                 Expect.Call(view.Close);
+	            Expect.Call(changePw.SetNewPassword(null))
+		            .IgnoreArguments()
+		            .Return(new ChangeUserPasswordResult {Success = true});
 
             }
             using (mocks.Playback())
