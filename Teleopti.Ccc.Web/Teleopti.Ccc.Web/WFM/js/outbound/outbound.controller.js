@@ -56,22 +56,13 @@ outbound.controller('OutboundEditCtrl', [
 
 		$scope.showCampaignDetail = angular.isDefined($scope.campaign) && ($scope.campaign != null);
 
-
 		$scope.$on('outbound.campaigns.loaded', function () {
 			$scope.campaign = (angular.isDefined($stateParams.Id) && $stateParams.Id != "") ? OutboundService.getCampaignById($stateParams.Id) : null;
 			$scope.showCampaignDetail = angular.isDefined($scope.campaign) && ($scope.campaign != null);
 		});
-
-		//angular.forEach($scope.campaign.Skills, function (skill) {			
-		//	if (skill.IsSelected) {
-		//		$scope.campaign.SelectedSkill = skill;
-		//	}
-		//});
-
-		
 		
 		$scope.update = function () {		
-			OutboundService.updateCampaign($scope.campaign);
+			OutboundService.updateCampaign($scope.campaign);		
 		};
 
 		$scope.navigateToForecasting = function() {
@@ -88,6 +79,7 @@ outbound.controller('OutboundEditCtrl', [
 					workingPeriod == WorkingPeriod;
 			});
 		};
+		 
 
 		$scope.toggleWorkingPeriodAssignment = function (WorkingPeriod, WeekDay) {			
 			if (WeekDay.Checked) {
@@ -107,8 +99,7 @@ outbound.controller('OutboundEditCtrl', [
 		};
 
 		$scope.resetWorkingPeriodForm = function () {
-			$scope.newWorkingPeriod = { StartTime: null, EndTime: null };
-			//$scope.newWorkingPeriodForm.$setPristine();
+			$scope.newWorkingPeriod = { StartTime: null, EndTime: null };			
 		};
 
 		$scope.toggleWorkingPeriodSelect = function(workingPeriod) {

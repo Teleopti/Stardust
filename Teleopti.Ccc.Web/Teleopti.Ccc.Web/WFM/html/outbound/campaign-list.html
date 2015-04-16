@@ -3,10 +3,10 @@
 		<div class="col-lg-12">
 			<h4>Outbound Campaigns</h4>			
 		</div>
-		<div class="col-lg-10">
+		<div class="col-lg-9">
 			<p>To view existing campaigns and create new campaign</p>
 		</div>
-		<div class="col-lg-2">
+		<div class="col-lg-3">
 			<md-checkbox id="slide1" ng-model="showMoreHeaderFields"><span translate>showMoreHeaderFields</span></md-checkbox>
 		</div>
 	</div>
@@ -14,10 +14,10 @@
 	<div ng-class="{'col-lg-4' : !showMoreHeaderFields , 'col-lg-12': showMoreHeaderFields   }">
 		<div class="role-nav material-depth-2 container-block">
 			<div class="wfm-block sub-header">
-				<div ng-show-animate="!showMoreHeaderFields">Campaigns </div>
+				<div ng-show="!showMoreHeaderFields">Campaigns </div>
 				<div class="row" ng-show="showMoreHeaderFields">
 					<div class="col-lg-4 column-label">
-						<span translate>Name</span>
+						<span translate>Campaign Name</span>
 					</div>
 					<div class="col-lg-2 column-label">
 						<span translate>Start</span>

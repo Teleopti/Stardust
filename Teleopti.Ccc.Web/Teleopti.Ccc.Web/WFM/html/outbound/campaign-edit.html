@@ -29,11 +29,11 @@
 				<strong>{{campaign.Name}}</strong>
 			</div>
 			<div ng-show="acToggle1">
-				<form name="formParams" class="form-horizontal wfm-block" ng-submit="update()">
+				<form name="formParams" class="form-horizontal wfm-block input-group" ng-submit="update()">
 					<input type="submit" style="position: absolute; left: -9999px"/>
-					<div class="input-prepend">
+					<div class="input-prepend input-group-item">
 						<span><strong>Name</strong></span>
-						<input id="name" type="text" ng-model="campaign.Name" ng-required/>
+						<input id="name" type="text" ng-model="campaign.Name" ng-required />
 					</div>
 					<!--<div class="input-prepend">
 						<span><strong>Skill</strong></span>
@@ -42,33 +42,33 @@
 						        ng-options="Skill as Skill.SkillName for Skill in campaign.Skills"
 						        ng-required></select>
 					</div>-->
-					<div class="input-prepend">
+					<div class="input-prepend input-group-item">
 						<span><strong>Call List Length</strong></span>
 						<input id="callList" type="text" ng-model="campaign.CallListLen" placeholder="call list length"/>
 					</div>
-					<div class="input-prepend">
+					<div class="input-prepend input-group-item">
 						<span><strong>Target Rate</strong></span>
-						<input id="sla" type="text" ng-model="campaign.TargetRate" placeholder="sla"/>
+						<input id="sla" type="text" ng-model="campaign.TargetRate" placeholder="sla" />
 					</div>
-					<div class="input-prepend">
+					<div class="input-prepend input-group-item">
 						<span><strong>Connect Rate</strong></span>
-						<input id="cr" type="text" ng-model="campaign.ConnectRate" placeholder="connect rate"/>
+						<input id="cr" type="text" ng-model="campaign.ConnectRate" placeholder="connect rate" />
 					</div>
-					<div class="input-prepend">
+					<div class="input-prepend input-group-item">
 						<span><strong>RPCR</strong></span>
-						<input id="target" type="text" ng-model="campaign.RightPartyConnectRate" placeholder="right party connect rate"/>
+						<input id="target" type="text" ng-model="campaign.RightPartyConnectRate" placeholder="right party connect rate" />
 					</div>
-					<div class="input-prepend">
+					<div class="input-prepend input-group-item">
 						<span><strong>Connect AHT</strong></span>
-						<input id="cAHT" type="text" ng-model="campaign.ConnectAverageHandlingTime" placeholder="connect average handle time"/>
+						<input id="cAHT" type="text" ng-model="campaign.ConnectAverageHandlingTime" placeholder="connect average handle time" />
 					</div>
-					<div class="input-prepend">
+					<div class="input-prepend input-group-item">
 						<span><strong>RPC AHT</strong></span>
-						<input id="rpcAHT" type="text" ng-model="campaign.RightPartyAverageHandlingTime" placeholder="right party average handle time"/>
+						<input id="rpcAHT" type="text" ng-model="campaign.RightPartyAverageHandlingTime" placeholder="right party average handle time" />
 					</div>
-					<div class="input-prepend">
+					<div class="input-prepend input-group-item">
 						<span><strong>Unproductive Time</strong></span>
-						<input id="unproductive" type="text" ng-model="campaign.UnproductiveTime" placeholder="unproductive time"/>
+						<input id="unproductive" type="text" ng-model="campaign.UnproductiveTime" placeholder="unproductive time" />
 					</div>
 				</form>
 			</div>
@@ -80,18 +80,16 @@
 			</div>
 			<div ng-show="acToggle2">
 				<div class="row wfm-block">
-					<div class="col-lg-6">
-						<div>
-							<p>Start time: <strong class="start-date">{{campaign.StartDate.Date | date: format }}</strong>
-							</p>
-							<datepicker ng-model="campaign.StartDate.Date" show-weeks="true" class="well well-sm"></datepicker>
+					<div class="col-lg-6">					
+						<div class="wfm-datepicker-wrap">
+							<div class="sub-header">Start time: <strong>{{campaign.StartDate.Date | date: format }}</strong></div>															
+							<datepicker ng-model="campaign.StartDate.Date" max-date="campaign.EndDate.Date" show-weeks="true" class="well well-sm" ng-change="update()"></datepicker>							
 						</div>
 					</div>
 					<div class="col-lg-6">
-						<div>
-							<p>End time: <strong class="end-date">{{campaign.EndDate.Date | date: format }}</strong>
-							</p>
-							<datepicker ng-model="campaign.EndDate.Date" show-weeks="true" class="well well-sm"></datepicker>
+						<div class="wfm-datepicker-wrap">
+							<div class="sub-header">End time: <strong class="end-date">{{campaign.EndDate.Date | date: format }}</strong></div>															
+							<datepicker ng-model="campaign.EndDate.Date" min-date="campaign.StartDate.Date" show-weeks="true" class="well well-sm" ng-change="update()"></datepicker>
 						</div>
 					</div>
 				</div>
