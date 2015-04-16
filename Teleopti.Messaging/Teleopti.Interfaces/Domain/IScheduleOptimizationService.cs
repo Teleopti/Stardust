@@ -16,11 +16,5 @@ namespace Teleopti.Interfaces.Domain
         /// Executes this service.
         /// </summary>
         void Execute();
-
-        /// <summary>
-        /// Called when [report progress].
-        /// </summary>
-        /// <param name="message">The message.</param>
-        void OnReportProgress(string message);
     }
 }

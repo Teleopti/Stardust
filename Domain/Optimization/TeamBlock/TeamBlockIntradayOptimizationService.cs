@@ -35,8 +35,6 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 		private readonly IDailyTargetValueCalculatorForTeamBlock _dailyTargetValueCalculatorForTeamBlock;
 		private readonly ITeamBlockSteadyStateValidator _teamTeamBlockSteadyStateValidator;
 		private readonly bool _isMaxSeatToggleEnabled;
-		private bool _cancelMe;
-		private ResourceOptimizerProgressEventArgs _progressEvent;
 
 		public TeamBlockIntradayOptimizationService(ITeamBlockGenerator teamBlockGenerator,
 			ITeamBlockScheduler teamBlockScheduler,
@@ -74,25 +72,23 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 			IResourceCalculateDelayer resourceCalculateDelayer,
 			ISchedulingResultStateHolder schedulingResultStateHolder)
 		{
-			_progressEvent = null;
-			OnReportProgress(Resources.OptimizingIntraday + Resources.Colon + Resources.CollectingData);
+			var cancelMe = false;
+			var progressResult = onReportProgress(new ResourceOptimizerProgressEventArgs(0, 0, Resources.OptimizingIntraday + Resources.Colon + Resources.CollectingData,()=>cancelMe=true));
+			if (progressResult.ShouldCancel) cancelMe = true;
 			var schedulingOptions = _schedulingOptionsCreator.CreateSchedulingOptions(optimizationPreferences);
 			var teamBlocks = _teamBlockGenerator.Generate(allPersonMatrixList, selectedPeriod, selectedPersons, schedulingOptions);
 			var remainingInfoList = new List<ITeamBlockInfo>(teamBlocks);
 
 			while (remainingInfoList.Count > 0)
 			{
-				if (_cancelMe)
-					break;
-
-				if (_progressEvent != null && _progressEvent.UserCancel)
+				if (cancelMe)
 					break;
 
 				var teamBlocksToRemove = optimizeOneRound(selectedPeriod, optimizationPreferences,
 					schedulingOptions, remainingInfoList,
 					schedulePartModifyAndRollbackService,
 					resourceCalculateDelayer,
-					schedulingResultStateHolder, _isMaxSeatToggleEnabled);
+					schedulingResultStateHolder, _isMaxSeatToggleEnabled, ()=> { cancelMe = true; });
 				foreach (var teamBlock in teamBlocksToRemove)
 				{
 					remainingInfoList.Remove(teamBlock);
@@ -100,32 +96,23 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 			}
 		}
 
-		public void OnReportProgress(string message)
+		private CancelSignal onReportProgress(ResourceOptimizerProgressEventArgs args)
 		{
 			var handler = ReportProgress;
 			if (handler != null)
 			{
-				var args = new ResourceOptimizerProgressEventArgs(0, 0, message);
 				handler(this, args);
 				if (args.Cancel)
-					_cancelMe = true;
-
-				if (_progressEvent != null && _progressEvent.UserCancel)
-					return;
-
-				_progressEvent = args;
+					return new CancelSignal {ShouldCancel = true};
 			}
+			return new CancelSignal();
 		}
 
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Globalization",
-			"CA1303:Do not pass literals as localized parameters",
-			MessageId =
-				"Teleopti.Ccc.Domain.Optimization.TeamBlock.TeamBlockIntradayOptimizationService.OnReportProgress(System.String)")]
 		private IEnumerable<ITeamBlockInfo> optimizeOneRound(DateOnlyPeriod selectedPeriod,
 			IOptimizationPreferences optimizationPreferences, ISchedulingOptions schedulingOptions,
 			IList<ITeamBlockInfo> allTeamBlockInfos, ISchedulePartModifyAndRollbackService schedulePartModifyAndRollbackService,
 			IResourceCalculateDelayer resourceCalculateDelayer, ISchedulingResultStateHolder schedulingResultStateHolder,
-			bool isMaxSeatToggleEnabled)
+			bool isMaxSeatToggleEnabled, Action cancelAction)
 		{
 			var teamBlockToRemove = new List<ITeamBlockInfo>();
 
@@ -143,12 +130,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 				}
 
 				runningTeamBlockCounter++;
-				if (_cancelMe)
-					break;
-
-				if (_progressEvent != null && _progressEvent.UserCancel)
-					break;
-
+				
 				string teamName = teamBlockInfo.TeamInfo.Name.DisplayString(20);
 				schedulePartModifyAndRollbackService.ClearModificationCollection();
 
@@ -163,31 +145,30 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 					resourceCalculateDelayer, schedulingResultStateHolder, new ShiftNudgeDirective());
 				if (!success)
 				{
-					OnReportProgress(Resources.OptimizingIntraday + Resources.Colon + Resources.RollingBackSchedulesFor + " " +
-					                 teamBlockInfo.BlockInfo.BlockPeriod.DateString + " " + teamName);
+					var progressResult = onReportProgress(new ResourceOptimizerProgressEventArgs(0, 0, Resources.OptimizingIntraday + Resources.Colon + Resources.RollingBackSchedulesFor + " " +
+					                 teamBlockInfo.BlockInfo.BlockPeriod.DateString + " " + teamName,cancelAction));
 					teamBlockToRemove.Add(teamBlockInfo);
 					_safeRollbackAndResourceCalculation.Execute(schedulePartModifyAndRollbackService, schedulingOptions);
+					if (progressResult.ShouldCancel)
+					{
+						cancelAction();
+						break;
+					}
 					continue;
 				}
-
-				//if (!_teamBlockMaxSeatChecker.CheckMaxSeat(datePoint, schedulingOptions) || !_restrictionOverLimitValidator.Validate(teamBlockInfo, optimizationPreferences))
-				//{
-				//	OnReportProgress(Resources.OptimizingIntraday + Resources.Colon + Resources.RollingBackSchedulesFor + " " +
-				//					 teamBlockInfo.BlockInfo.BlockPeriod.DateString + " " + teamName);
-				//	teamBlockToRemove.Add(teamBlockInfo);
-				//	_safeRollbackAndResourceCalculation.Execute(schedulePartModifyAndRollbackService, schedulingOptions);
-				//	continue;
-				//}
 
 				if (!_teamBlockMaxSeatChecker.CheckMaxSeat(datePoint, schedulingOptions) || !_teamBlockOptimizationLimits.Validate(teamBlockInfo, optimizationPreferences))
 				{
-					OnReportProgress(Resources.OptimizingIntraday + Resources.Colon + Resources.RollingBackSchedulesFor + " " + teamBlockInfo.BlockInfo.BlockPeriod.DateString + " " + teamName);
+					var progressResult = onReportProgress(new ResourceOptimizerProgressEventArgs(0, 0, Resources.OptimizingIntraday + Resources.Colon + Resources.RollingBackSchedulesFor + " " + teamBlockInfo.BlockInfo.BlockPeriod.DateString + " " + teamName,cancelAction));
 					teamBlockToRemove.Add(teamBlockInfo);
 					_safeRollbackAndResourceCalculation.Execute(schedulePartModifyAndRollbackService, schedulingOptions);
+					if (progressResult.ShouldCancel)
+					{
+						cancelAction();
+						break;
+					}
 					continue;
 				}
-
-
 
 				var newTargetValue = _dailyTargetValueCalculatorForTeamBlock.TargetValue(teamBlockInfo,
 					optimizationPreferences.Advanced, isMaxSeatToggleEnabled);
@@ -198,17 +179,25 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 				if (isWorse)
 				{
 					teamBlockToRemove.Add(teamBlockInfo);
-					OnReportProgress(commonProgress + previousTargetValue + "(" + newTargetValue + ")");
+					var progressResult = onReportProgress(new ResourceOptimizerProgressEventArgs(0, 0, commonProgress + previousTargetValue + "(" + newTargetValue + ")",cancelAction));
 					_safeRollbackAndResourceCalculation.Execute(schedulePartModifyAndRollbackService, schedulingOptions);
+					if (progressResult.ShouldCancel)
+					{
+						cancelAction();
+						break;
+					}
 				}
 				else
 				{
-					OnReportProgress(commonProgress + newTargetValue + " - " + Resources.Improved);
+					var progressResult = onReportProgress(new ResourceOptimizerProgressEventArgs(0, 0, commonProgress + newTargetValue + " - " + Resources.Improved,cancelAction));
+					if (progressResult.ShouldCancel)
+					{
+						cancelAction();
+						break;
+					}
 				}
 			}
 			return teamBlockToRemove;
 		}
-
-
 	}
 }

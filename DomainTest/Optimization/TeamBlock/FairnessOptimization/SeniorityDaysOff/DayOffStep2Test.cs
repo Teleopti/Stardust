@@ -166,8 +166,8 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock.FairnessOptimization.Se
 		[Test]
 		public void ShouldUserCancel()
 		{
-			IList<ITeamBlockInfo> teamBlockList = new List<ITeamBlockInfo>() { _seniorTeamBlock, _juniorTeamBlock };
-			IList<ITeamBlockPoints> teamBlockPointList = new List<ITeamBlockPoints>(){_seniorTeamBlockPoint,_juniorTeamBlockPoint};
+			IList<ITeamBlockInfo> teamBlockList = new List<ITeamBlockInfo> { _seniorTeamBlock, _juniorTeamBlock };
+			IList<ITeamBlockPoints> teamBlockPointList = new List<ITeamBlockPoints> {_seniorTeamBlockPoint,_juniorTeamBlockPoint};
 			ISchedulingOptions schedulingOptions = new SchedulingOptions();
 			using (_mock.Record())
 			{
@@ -187,6 +187,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock.FairnessOptimization.Se
 				Expect.Call(_teamBlockDayOffSwapper.TrySwap(DateOnly.Today, _seniorTeamBlock, _juniorTeamBlock, _rollbackService, _schedulingDictionary,_optimizationPreferences, _selectedPeriod.DayCollection())).IgnoreArguments().Return(true);
 				
 				teamBlockList.Remove(_seniorTeamBlock);
+				Expect.Call(_teamBlockDayOffSwapper.Cancel).Repeat.Any();
 			}
 
 			using (_mock.Playback())
@@ -224,7 +225,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock.FairnessOptimization.Se
 
 		void targetReportProgress(object sender, ResourceOptimizerProgressEventArgs e)
 		{
-			e.UserCancel = true;
+			e.CancelAction();
 		}
     }
 }

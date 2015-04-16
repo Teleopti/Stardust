@@ -1,9 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using NUnit.Framework;
 using Rhino.Mocks;
+using Rhino.Mocks.Interfaces;
 using Teleopti.Ccc.Domain.Optimization;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling.DayOffScheduling;
@@ -75,35 +74,23 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.DayOffScheduling
 			SchedulingServiceBaseEventArgs args = new SchedulingServiceSuccessfulEventArgs(null);
             args.Cancel = true;
             using (_mock.Record())
-            {
-                Expect.Call(() => _absencePreferenceScheduler.DayScheduled += null).IgnoreArguments();
-                Expect.Call(() => _absencePreferenceScheduler.AddPreferredAbsence(_matrixList, _schedulingOptions));
-                Expect.Call(() => _absencePreferenceScheduler.Raise(x => x.DayScheduled += _target.RaiseEventForTest, this, args));
-                Expect.Call(() => _absencePreferenceScheduler.DayScheduled -= null).IgnoreArguments();
+			{
+				_absencePreferenceScheduler.DayScheduled += null;
+				var eventRaiser = LastCall.IgnoreArguments().GetEventRaiser();
+
+				Expect.Call(() => _absencePreferenceScheduler.DayScheduled -= null).IgnoreArguments();
+				Expect.Call(() => _absencePreferenceScheduler.AddPreferredAbsence(_matrixList, _schedulingOptions))
+					.Callback(new Func<IList<IScheduleMatrixPro>, ISchedulingOptions, bool>((a, b) =>
+					{
+						eventRaiser.Raise(null, args);
+						return true;
+					}));
             }
             using (_mock.Playback())
             {
 				_target.Execute(_matrixList, _selectedPersons, _rollbackService, _schedulingOptions, _groupPersonBuilder);
             }
         }
-
-		[Test]
-		public void ShouldUserCancelAfterFirstIfAsked()
-		{
-			SchedulingServiceBaseEventArgs args = new SchedulingServiceSuccessfulEventArgs(null);
-			args.UserCancel = true;
-			using (_mock.Record())
-			{
-				Expect.Call(() => _absencePreferenceScheduler.DayScheduled += null).IgnoreArguments();
-				Expect.Call(() => _absencePreferenceScheduler.AddPreferredAbsence(_matrixList, _schedulingOptions));
-				Expect.Call(() => _absencePreferenceScheduler.Raise(x => x.DayScheduled += _target.RaiseEventForTest, this, args));
-				Expect.Call(() => _absencePreferenceScheduler.DayScheduled -= null).IgnoreArguments();
-			}
-			using (_mock.Playback())
-			{
-				_target.Execute(_matrixList, _selectedPersons, _rollbackService, _schedulingOptions, _groupPersonBuilder);
-			}
-		}
 
         [Test]
         public void ShouldListenToEventsFromAllClasses()
@@ -126,12 +113,9 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.DayOffScheduling
             }
         }
 
-
         void targetDayScheduled(object sender, SchedulingServiceBaseEventArgs e)
         {
             _cancelTarget = true;
         }
     }
-
-   
 }

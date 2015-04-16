@@ -69,11 +69,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.DayOff
             e.Cancel = true;
         }
 
-		void _target_DayScheduled2(object sender, SchedulingServiceBaseEventArgs e)
-		{
-			e.UserCancel = true;
-		}
-
         [Test]
         public void ShouldExecuteIfNoMatrixFound()
         {
@@ -224,54 +219,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.DayOff
                 _target.Execute(_matrixList, _schedulingOptions, _rollbackService);
             }
             _target.DayScheduled -= _target_DayScheduled;
-            
         }
-
-		[Test]
-		public void ShouldUserCancel()
-		{
-			IList<IMatrixData> matrixData1List = new List<IMatrixData>() { _matrixData1 };
-			var scheduleDayCollection = new ReadOnlyCollection<IScheduleDayData>(_scheduleDayDataList);
-			DateOnly? today = DateOnly.Today;
-			using (_mock.Record())
-			{
-				Expect.Call(_matrixDataListCreator.Create(_matrixList, _schedulingOptions)).IgnoreArguments().Return(_matrixDataList);
-				Expect.Call(_matrixDataWithToFewDaysOff.FindMatrixesWithToFewDaysOff(_matrixDataList)).IgnoreArguments().Return(matrixData1List);
-				Expect.Call(_matrixDataWithToFewDaysOff.FindMatrixesWithToFewDaysOff(matrixData1List)).IgnoreArguments().Return(matrixData1List);
-				//spliting the period into weeks
-				Expect.Call(_matrixData1.Matrix).Return(_matrix1).Repeat.Times(3);
-				Expect.Call(_matrix1.SchedulePeriod).Return(_virtualSchedulePeriod).Repeat.Twice();
-				Expect.Call(_virtualSchedulePeriod.DateOnlyPeriod).Return(_dateOnlyPeriod);
-
-				Expect.Call(_virtualSchedulePeriod.DaysOff()).Return(2);
-				Expect.Call(_validNumberOfDayOffInAWeekSpecification.IsSatisfied(_matrix1, _dateOnlyPeriod, 2)).IgnoreArguments().Return(false);
-
-				//Filtering schedule day collection
-				Expect.Call(_matrixData1.ScheduleDayDataCollection).Return(new ReadOnlyCollection<IScheduleDayData>(_scheduleDayDataList));
-				Expect.Call(_scheduleDayData1.DateOnly).Return(today.Value);
-				Expect.Call(_scheduleDayData2.DateOnly).Return(today.Value);
-
-				//Shceudling day off
-				Expect.Call(_bestSpotForAddingDayOffFinder.Find(scheduleDayCollection)).IgnoreArguments().Return(today);
-				Expect.Call(_schedulingOptions.DayOffTemplate).Return(_dayOffTemplate);
-
-				Expect.Call(_matrixData1.Matrix).Return(_matrix1).Repeat.Twice();
-				Expect.Call(_matrix1.GetScheduleDayByKey(today.Value)).Return(_scheduleDayPro1);
-				Expect.Call(_matrix1.UnlockedDays).Return(new ReadOnlyCollection<IScheduleDayPro>(new List<IScheduleDayPro> { _scheduleDayPro1 }));
-				Expect.Call(_scheduleDayPro1.DaySchedulePart()).Return(_scheduleDay1);
-				Expect.Call(() => _scheduleDay1.CreateAndAddDayOff(_dayOffTemplate)).IgnoreArguments();
-				Expect.Call(() => _rollbackService.Modify(_scheduleDay1)).IgnoreArguments();
-
-				Expect.Call(_matrixDataWithToFewDaysOff.FindMatrixesWithToFewDaysOff(matrixData1List)).IgnoreArguments().Return(new List<IMatrixData>());
-
-			}
-			using (_mock.Playback())
-			{
-				_target.DayScheduled += _target_DayScheduled2;
-				_target.Execute(_matrixList, _schedulingOptions, _rollbackService);
-				_target.DayScheduled -= _target_DayScheduled2;
-			}
-		}
 
         [Test]
         public void ShouldExecuteSuccessfully()
@@ -327,9 +275,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.DayOff
 	    public void ShouldHandlAverageZeroDaysOffPerweekBug30398()
 	    {
 			IList<IMatrixData> matrixData1List = new List<IMatrixData>() { _matrixData1 };
-			var scheduleDayCollection =
-				new ReadOnlyCollection<IScheduleDayData>(_scheduleDayDataList);
-			DateOnly? today = DateOnly.Today;
 			using (_mock.Record())
 			{
 				Expect.Call(_matrixDataListCreator.Create(_matrixList, _schedulingOptions)).IgnoreArguments().Return(_matrixDataList);
@@ -353,7 +298,5 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.DayOff
 				_target.Execute(_matrixList, _schedulingOptions, _rollbackService);
 			}
 	    }
-        
     }
-    
 }

@@ -20,9 +20,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.DayOffScheduling
         private readonly IAbsencePreferenceScheduler _absencePreferenceScheduler;
 	    private readonly ITeamDayOffScheduler _teamDayOffScheduler;
         private readonly ITeamBlockMissingDayOffHandler _missingDaysOffScheduler;
-        private bool _cancelMe;
-		private SchedulingServiceBaseEventArgs _progressEvent;
-
+        
         public event EventHandler<SchedulingServiceBaseEventArgs> DayScheduled;
 
         public AdvanceDaysOffSchedulingService(IAbsencePreferenceScheduler absencePreferenceScheduler,
@@ -34,35 +32,32 @@ namespace Teleopti.Ccc.Domain.Scheduling.DayOffScheduling
 	        _missingDaysOffScheduler = missingDaysOffScheduler;
         }
 
-
-
 		public void Execute(IList<IScheduleMatrixPro> allMatrixList, IList<IPerson> selectedPersons, ISchedulePartModifyAndRollbackService rollbackService, ISchedulingOptions schedulingOptions,
 			IGroupPersonBuilderForOptimization groupPersonBuilderForOptimization)
 		{
+			var cancelMe = false;
+			EventHandler<SchedulingServiceBaseEventArgs> dayScheduled = (sender, e) =>
+			{
+				var eventArgs = new SchedulingServiceSuccessfulEventArgs(e.SchedulePart,()=>cancelMe=true)
+				{
+					Cancel = e.Cancel
+				};
+				OnDayScheduled(eventArgs);
+				e.Cancel = eventArgs.Cancel;
+				if (eventArgs.Cancel) cancelMe = true; 
+			};
             _absencePreferenceScheduler.DayScheduled += dayScheduled;
             _absencePreferenceScheduler.AddPreferredAbsence(allMatrixList, schedulingOptions);
             _absencePreferenceScheduler.DayScheduled -= dayScheduled;
-            if (_cancelMe)
-                return;
-
-			if (_progressEvent != null && _progressEvent.UserCancel)
-			{
-				_progressEvent = null;
-				return;
-			}
+            
+			if (cancelMe)return;
 
 			_teamDayOffScheduler.DayScheduled += dayScheduled;
 			_teamDayOffScheduler.DayOffScheduling(allMatrixList, selectedPersons, rollbackService, schedulingOptions, groupPersonBuilderForOptimization);
 			_teamDayOffScheduler.DayScheduled -= dayScheduled;
-            if (_cancelMe)
-                return;
+            
+			if (cancelMe)return;
 
-			if (_progressEvent != null && _progressEvent.UserCancel)
-			{
-				_progressEvent = null;
-				return;	
-			}
-				
 			var selectedMatrixes = new List<IScheduleMatrixPro>();
 			foreach (var scheduleMatrixPro in allMatrixList)
 			{
@@ -77,33 +72,11 @@ namespace Teleopti.Ccc.Domain.Scheduling.DayOffScheduling
 
         protected virtual void OnDayScheduled(SchedulingServiceBaseEventArgs scheduleServiceBaseEventArgs)
         {
-            EventHandler<SchedulingServiceBaseEventArgs> temp = DayScheduled;
-            if (temp != null)
+            EventHandler<SchedulingServiceBaseEventArgs> handler = DayScheduled;
+            if (handler != null)
             {
-                temp(this, scheduleServiceBaseEventArgs);
+                handler(this, scheduleServiceBaseEventArgs);
             }
         }
-
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1030:UseEventsWhereAppropriate")]
-        public void RaiseEventForTest(object sender, SchedulingServiceBaseEventArgs e)
-        {
-            dayScheduled(sender, e);
-        }
-
-		void dayScheduled(object sender, SchedulingServiceBaseEventArgs e)
-		{
-			var eventArgs = new SchedulingServiceSuccessfulEventArgs(e.SchedulePart);
-			eventArgs.Cancel = e.Cancel;
-			eventArgs.UserCancel = e.UserCancel;
-			OnDayScheduled(eventArgs);
-			e.Cancel = eventArgs.Cancel;
-			if (eventArgs.Cancel)
-				_cancelMe = true;
-
-			if (_progressEvent != null && _progressEvent.UserCancel)
-				return;
-
-			_progressEvent = eventArgs;
-		}
     }
 }

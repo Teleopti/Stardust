@@ -12,7 +12,6 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.Senior
     {
         void PerformStep1(IList<IScheduleMatrixPro> allPersonMatrixList, DateOnlyPeriod selectedPeriod, IList<IPerson> selectedPersons, ISchedulePartModifyAndRollbackService rollbackService, IScheduleDictionary scheduleDictionary, IDictionary<DayOfWeek, int> weekDayPoints, IOptimizationPreferences optimizationPreferences, bool schedulerSeniority11111);
         event EventHandler<ResourceOptimizerProgressEventArgs> BlockSwapped;
-        void OnBlockSwapped(ResourceOptimizerProgressEventArgs eventArgs);
     }
 
     public class DayOffStep1 : IDayOffStep1
@@ -29,9 +28,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.Senior
 	    private readonly ISchedulingOptionsCreator _schedulingOptionsCreator;
 	    private readonly ITeamBlockSeniorityValidator _teamBlockSeniorityValidator;
 	    private readonly IFilterForNoneLockedTeamBlocks _filterForNoneLockedTeamBlocks;
-	    private bool _cancelMe;
-		private ResourceOptimizerProgressEventArgs _progressEvent;
-
+	    
         public DayOffStep1(IConstructTeamBlock constructTeamBlock,
 	                       IFilterForTeamBlockInSelection filterForTeamBlockInSelection,
 	                       IFilterForFullyScheduledBlocks filterForFullyScheduledBlocks,
@@ -63,9 +60,6 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.Senior
 
         public void PerformStep1(IList<IScheduleMatrixPro> allPersonMatrixList, DateOnlyPeriod selectedPeriod, IList<IPerson> selectedPersons, ISchedulePartModifyAndRollbackService rollbackService, IScheduleDictionary scheduleDictionary, IDictionary<DayOfWeek, int> weekDayPoints, IOptimizationPreferences optimizationPreferences, bool schedulerSeniority11111)
         {
-            _cancelMe = false;
-	        _progressEvent = null;
-
 	        var schedulingOptions = _schedulingOptionsCreator.CreateSchedulingOptions(optimizationPreferences);
             var teamBlocksToWorkWith = constructTeamBlock(schedulingOptions, allPersonMatrixList, selectedPeriod, selectedPersons);
             teamBlocksToWorkWith = filterOutUnwantedBlocks(teamBlocksToWorkWith, selectedPersons, selectedPeriod, scheduleDictionary, schedulerSeniority11111);
@@ -73,18 +67,19 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.Senior
             var teamBlockPoints = _seniorityExtractor.ExtractSeniority(teamBlocksToWorkWith).ToList();
             var seniorityInfoDictionary = teamBlockPoints.ToDictionary(teamBlockPoint => teamBlockPoint.TeamBlockInfo, teamBlockPoint => teamBlockPoint);
             var originalBlockCount = teamBlockPoints.Count;
-            while (seniorityInfoDictionary.Count > 0 && !_cancelMe)
+	        var cancelMe = false;
+            while (seniorityInfoDictionary.Count > 0 && !cancelMe)
             {
-				if (_progressEvent != null && _progressEvent.UserCancel)
-					break;
-
                 var mostSeniorTeamBlock = _seniorTeamBlockLocator.FindMostSeniorTeamBlock(seniorityInfoDictionary.Values);
                 teamBlocksToWorkWith = new List<ITeamBlockInfo>(seniorityInfoDictionary.Keys);
 
 				removeTeamBlockOfEqualSeniority(mostSeniorTeamBlock, teamBlocksToWorkWith, seniorityInfoDictionary);
 
                 trySwapForMostSenior(weekDayPoints, teamBlocksToWorkWith, mostSeniorTeamBlock, rollbackService, scheduleDictionary,
-                                     optimizationPreferences, originalBlockCount, seniorityInfoDictionary.Count);
+                                     optimizationPreferences, originalBlockCount, seniorityInfoDictionary.Count, ()=>
+                                     {
+	                                     cancelMe = true;
+                                     });
 
                 seniorityInfoDictionary.Remove(mostSeniorTeamBlock);
             }
@@ -102,61 +97,64 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.Senior
 		    }
 	    }
 
-        public virtual void OnBlockSwapped(ResourceOptimizerProgressEventArgs eventArgs)
+        private CancelSignal onBlockSwapped(ResourceOptimizerProgressEventArgs args)
         {
-            EventHandler<ResourceOptimizerProgressEventArgs> temp = BlockSwapped;
-            if (temp != null)
+            var handler = BlockSwapped;
+            if (handler != null)
             {
-                temp(this, eventArgs);
+				handler(this, args);
+	            if (args.Cancel) return new CancelSignal {ShouldCancel = true};
             }
-            if(eventArgs.Cancel )
-                _cancelMe = true;
-
-			if (_progressEvent != null && _progressEvent.UserCancel) return;
-			_progressEvent = eventArgs;
-        }
-        private void trySwapForMostSenior(IDictionary<DayOfWeek, int> weekDayPoints,
-                                          IList<ITeamBlockInfo> teamBlocksToWorkWith, ITeamBlockInfo mostSeniorTeamBlock,
-                                          ISchedulePartModifyAndRollbackService rollbackService,
-                                          IScheduleDictionary scheduleDictionary,
-                                          IOptimizationPreferences optimizationPreferences, int originalBlocksCount,
-                                          int remainingBlocksCount)
-        {
-            var swappableTeamBlocks = _filterOnSwapableTeamBlocks.Filter(teamBlocksToWorkWith, mostSeniorTeamBlock);
-
-            var dayOffPlacementPointsSenerioty = _seniorityCalculatorForTeamBlock.CreateWeekDayValueDictionary(teamBlocksToWorkWith, weekDayPoints);
-            var seniorValue = dayOffPlacementPointsSenerioty[mostSeniorTeamBlock];
-
-            var swapSuccess = false;
-            while (swappableTeamBlocks.Count > 0 && !swapSuccess && !_cancelMe)
-            {
-	            if (_progressEvent != null && _progressEvent.UserCancel)
-		            break;
-
-                var blockToSwapWith = _teamBlockLocatorWithHighestPoints.FindBestTeamBlockToSwapWith(swappableTeamBlocks,
-                                                                                                     dayOffPlacementPointsSenerioty);
-                if (seniorValue < dayOffPlacementPointsSenerioty[blockToSwapWith])
-                {
-                    swapSuccess = _seniorityTeamBlockSwapper.SwapAndValidate(mostSeniorTeamBlock, blockToSwapWith, rollbackService,
-                                                                             scheduleDictionary, optimizationPreferences);
-                }
-				else
-				{
-					swappableTeamBlocks.Clear();
-				}
-
-                swappableTeamBlocks.Remove(blockToSwapWith);
-
-                var message = "Day off fainess Step1: Swap successful";
-                if (!swapSuccess)
-                    message = "Day off fainess Step1: Swap not sucessful";
-
-                double percentDone = 1 - (remainingBlocksCount / (double)originalBlocksCount);
-                OnBlockSwapped(new ResourceOptimizerProgressEventArgs(1, 1, message + " for " + mostSeniorTeamBlock.TeamInfo.Name + " " + new Percent(percentDone).ToString() + " done "));
-            }
+			return new CancelSignal();
         }
 
-        private IList<ITeamBlockInfo> filterOutUnwantedBlocks(IEnumerable<ITeamBlockInfo> listOfAllTeamBlock, IList<IPerson> selectedPersons, DateOnlyPeriod selectedPeriod, IScheduleDictionary scheduleDictionary, bool schedulerSeniority11111)
+	    private void trySwapForMostSenior(IDictionary<DayOfWeek, int> weekDayPoints,
+		    IList<ITeamBlockInfo> teamBlocksToWorkWith, ITeamBlockInfo mostSeniorTeamBlock,
+		    ISchedulePartModifyAndRollbackService rollbackService,
+		    IScheduleDictionary scheduleDictionary,
+		    IOptimizationPreferences optimizationPreferences, int originalBlocksCount,
+		    int remainingBlocksCount,
+		    Action cancelAction)
+	    {
+		    var swappableTeamBlocks = _filterOnSwapableTeamBlocks.Filter(teamBlocksToWorkWith, mostSeniorTeamBlock);
+
+		    var dayOffPlacementPointsSenerioty =
+			    _seniorityCalculatorForTeamBlock.CreateWeekDayValueDictionary(teamBlocksToWorkWith, weekDayPoints);
+		    var seniorValue = dayOffPlacementPointsSenerioty[mostSeniorTeamBlock];
+
+		    var swapSuccess = false;
+		    while (swappableTeamBlocks.Count > 0 && !swapSuccess)
+		    {
+			    var blockToSwapWith = _teamBlockLocatorWithHighestPoints.FindBestTeamBlockToSwapWith(swappableTeamBlocks,
+				    dayOffPlacementPointsSenerioty);
+			    if (seniorValue < dayOffPlacementPointsSenerioty[blockToSwapWith])
+			    {
+				    swapSuccess = _seniorityTeamBlockSwapper.SwapAndValidate(mostSeniorTeamBlock, blockToSwapWith, rollbackService,
+					    scheduleDictionary, optimizationPreferences);
+			    }
+			    else
+			    {
+				    swappableTeamBlocks.Clear();
+			    }
+
+			    swappableTeamBlocks.Remove(blockToSwapWith);
+
+			    string message = swapSuccess
+				    ? "Day off fairness Step1: Swap successful"
+				    : "Day off fairness Step1: Swap not successful";
+			    double percentDone = 1 - (remainingBlocksCount/(double) originalBlocksCount);
+			    var progressResult =
+				    onBlockSwapped(new ResourceOptimizerProgressEventArgs(1, 1,
+					    message + " for " + mostSeniorTeamBlock.TeamInfo.Name + " " + new Percent(percentDone) + " done ",cancelAction));
+			    if (progressResult.ShouldCancel)
+			    {
+				    cancelAction();
+				    return;
+			    }
+		    }
+	    }
+
+	    private IList<ITeamBlockInfo> filterOutUnwantedBlocks(IEnumerable<ITeamBlockInfo> listOfAllTeamBlock, IList<IPerson> selectedPersons, DateOnlyPeriod selectedPeriod, IScheduleDictionary scheduleDictionary, bool schedulerSeniority11111)
         {
 			IList<ITeamBlockInfo> filteredList = listOfAllTeamBlock.Where(s => _teamBlockSeniorityValidator.ValidateSeniority(s, schedulerSeniority11111)).ToList();
 			filteredList = _filterForTeamBlockInSelection.Filter(filteredList, selectedPersons, selectedPeriod);
@@ -170,6 +168,5 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.Senior
         {
             return _constructTeamBlock.Construct(allPersonMatrixList, selectedPeriod, selectedPersons, BlockFinderType.SchedulePeriod,schedulingOptions.GroupOnGroupPageForTeamBlockPer);
         }
-
     }
 }

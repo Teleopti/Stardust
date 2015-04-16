@@ -11,12 +11,8 @@ namespace Teleopti.Ccc.Domain.Optimization
     public class DayOffOptimizationService : IDayOffOptimizationService
     {
         private readonly IPeriodValueCalculator _periodValueCalculatorForAllSkills;
-    	private bool _cancelMe;
-	    private ResourceOptimizerProgressEventArgs _progressEvent;
-
-        public DayOffOptimizationService(
-            IPeriodValueCalculator periodValueCalculator
-            )
+    	
+        public DayOffOptimizationService(IPeriodValueCalculator periodValueCalculator)
         {
             _periodValueCalculatorForAllSkills = periodValueCalculator;
         }
@@ -25,88 +21,54 @@ namespace Teleopti.Ccc.Domain.Optimization
 
         public void Execute(IEnumerable<IDayOffOptimizerContainer> optimizers)
         {
-			_progressEvent = null;
-            using (PerformanceOutput.ForOperation("Optimizing days off for " + optimizers.Count() + " agents"))
+			var successfulContainers = new List<IDayOffOptimizerContainer>(optimizers);
+	        var cancel = false;
+		    using (PerformanceOutput.ForOperation("Optimizing days off for " + successfulContainers.Count() + " agents"))
             {
-                executeOptimizersWhileActiveFound(optimizers);
+				while (successfulContainers.Count > 0)
+				{
+					IList<IDayOffOptimizerContainer> unSuccessfulContainers = new List<IDayOffOptimizerContainer>();
+					int executes = 0;
+					double lastPeriodValue = _periodValueCalculatorForAllSkills.PeriodValue(IterationOperationOption.DayOffOptimization);
+					foreach (IDayOffOptimizerContainer optimizer in successfulContainers.GetRandom(successfulContainers.Count, true))
+					{
+						if (cancel) return;
+						bool result = optimizer.Execute();
+						executes++;
+						if (!result)
+							unSuccessfulContainers.Add(optimizer);
+
+						double newPeriodValue = _periodValueCalculatorForAllSkills.PeriodValue(IterationOperationOption.DayOffOptimization);
+
+						string progress = Resources.OptimizingDaysOff + Resources.Colon + "(" + unSuccessfulContainers.Count + ")" + executes + " ";
+						string who = optimizer.Owner.Name.ToString(NameOrderOption.FirstNameLastName);
+						string success = result ? " " + Resources.wasSuccessful : " " + Resources.wasNotSuccessful;
+						string values = " " + newPeriodValue + "(" + (newPeriodValue - lastPeriodValue) + ") ";
+						
+						var progressResult = onReportProgress(new ResourceOptimizerProgressEventArgs(0, 0, progress + values + who + success, () => cancel = true));
+						if (cancel || progressResult.ShouldCancel) return;
+
+						lastPeriodValue = newPeriodValue;
+					}
+
+					foreach (IDayOffOptimizerContainer unSuccessfulContainer in unSuccessfulContainers)
+					{
+						successfulContainers.Remove(unSuccessfulContainer);
+					}
+				}
             }
         }
 
-        public void OnReportProgress(string message)
+        private CancelSignal onReportProgress(ResourceOptimizerProgressEventArgs args)
         {
         	var handler = ReportProgress;
             if (handler != null)
             {
-                ResourceOptimizerProgressEventArgs args = new ResourceOptimizerProgressEventArgs(0, 0, message);
                 handler(this, args);
-                if (args.Cancel)
-                    _cancelMe = true;
-
-				if (_progressEvent != null && _progressEvent.UserCancel) return;
-				_progressEvent = args;
+	            if (args.Cancel)
+		            return new CancelSignal{ShouldCancel = true};
             }
+			return new CancelSignal();
         }
-  
-        /// <summary>
-        /// Runs the active optimizers while at least one is active and can do more optimization.
-        /// </summary>
-        /// <param name="optimizers">All optimizer containers.</param>
-        private void executeOptimizersWhileActiveFound(IEnumerable<IDayOffOptimizerContainer> optimizers)
-        {
-            IList<IDayOffOptimizerContainer> successfulContainers =
-                new List<IDayOffOptimizerContainer>(optimizers);
-
-            while (successfulContainers.Count > 0)
-            {
-                IEnumerable<IDayOffOptimizerContainer> unSuccessfulContainers =
-                    shuffleAndExecuteOptimizersInList(successfulContainers);
-
-                if (_cancelMe)
-                    break;
-
-				if (_progressEvent != null && _progressEvent.UserCancel) 
-					break;
-
-                foreach (IDayOffOptimizerContainer unSuccessfulContainer in unSuccessfulContainers)
-                {
-                    successfulContainers.Remove(unSuccessfulContainer);
-                }
-            }
-        }
-
-        private IEnumerable<IDayOffOptimizerContainer> shuffleAndExecuteOptimizersInList(ICollection<IDayOffOptimizerContainer> activeOptimizers)
-        {
-            IList<IDayOffOptimizerContainer> retList = new List<IDayOffOptimizerContainer>();
-            int executes = 0;
-            double lastPeriodValue = _periodValueCalculatorForAllSkills.PeriodValue(IterationOperationOption.DayOffOptimization);
-        	foreach (IDayOffOptimizerContainer optimizer in activeOptimizers.GetRandom(activeOptimizers.Count, true))
-            {
-                bool result = optimizer.Execute();
-                executes++;
-				if (!result)
-					retList.Add(optimizer);
-
-				double newPeriodValue = _periodValueCalculatorForAllSkills.PeriodValue(IterationOperationOption.DayOffOptimization);
-
-            	string progress = Resources.OptimizingDaysOff + Resources.Colon + "(" + activeOptimizers.Count + ")" + executes + " ";
-                string who = optimizer.Owner.Name.ToString(NameOrderOption.FirstNameLastName);
-                string success;
-                if (result)
-                    success = " " + Resources.wasSuccessful;
-                else
-                    success = " " + Resources.wasNotSuccessful;
-                string values = " " + newPeriodValue + "(" + (newPeriodValue - lastPeriodValue) + ") ";
-                OnReportProgress(progress + values + who + success);
-                lastPeriodValue = newPeriodValue;
-                if (_cancelMe)
-                    break;
-
-				if (_progressEvent != null && _progressEvent.UserCancel) 
-					break;
-            }
-            return retList;
-        }
-
-
     }
 }

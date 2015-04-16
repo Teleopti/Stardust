@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.Collection;
+using Teleopti.Ccc.Domain.Optimization;
 using Teleopti.Ccc.Domain.Optimization.WeeklyRestSolver;
 using Teleopti.Ccc.Domain.Scheduling.Restrictions;
 using Teleopti.Interfaces.Domain;
@@ -20,8 +21,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 								ISchedulingResultStateHolder schedulingResultStateHolder,
 								ShiftNudgeDirective shiftNudgeDirective);
 
-		void OnDayScheduled(object sender, SchedulingServiceBaseEventArgs e);
-
 		IList<IWorkShiftCalculationResultHolder> GetShiftProjectionCaches(
 			ITeamBlockInfo teamBlockInfo,
 			IPerson person,
@@ -37,8 +36,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 		private readonly ITeamBlockClearer _teamBlockClearer;
 		private readonly ITeamBlockSchedulingOptions _teamBlockSchedulingOptions;
 		private readonly bool _isMaxSeatToggleEnabled;
-		private bool _cancelMe;
-		private SchedulingServiceBaseEventArgs _progressEvent;
 
 		public TeamBlockScheduler(ITeamBlockSingleDayScheduler singleDayScheduler,
 		                          ITeamBlockRoleModelSelector roleModelSelector,
@@ -91,7 +88,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 			ShiftNudgeDirective shiftNudgeDirective)
 
 		{
-			_cancelMe = false;
 			var teamInfo = teamBlockInfo.TeamInfo;
 			var selectedTeamMembers = teamInfo.GroupMembers.Intersect(teamInfo.UnLockedMembers()).ToList();
 			if (selectedTeamMembers.IsEmpty())
@@ -99,74 +95,89 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 			IShiftProjectionCache roleModelShift = _roleModelSelector.Select(teamBlockInfo, datePointer, selectedTeamMembers.First(),
 				schedulingOptions, shiftNudgeDirective.EffectiveRestriction, _isMaxSeatToggleEnabled);
 
+			var cancelMe = false;
 			if (roleModelShift == null)
 			{
-				OnDayScheduledFailed();
-				_progressEvent = null;
+				onDayScheduledFailed(new SchedulingServiceFailedEventArgs(()=>cancelMe=true));
 				return false;
 			}
 
 			var selectedBlockDays = teamBlockInfo.BlockInfo.UnLockedDates();
 			bool success = tryScheduleBlock(teamBlockInfo, schedulingOptions, selectedBlockDays,
-				roleModelShift, rollbackService, resourceCalculateDelayer, schedulingResultStateHolder, shiftNudgeDirective, _isMaxSeatToggleEnabled);
+				roleModelShift, rollbackService, resourceCalculateDelayer, schedulingResultStateHolder, shiftNudgeDirective, () =>
+				{
+					cancelMe = true;
+				});
 
 			if (!success && _teamBlockSchedulingOptions.IsBlockWithSameShiftCategoryInvolved(schedulingOptions))
 			{
 				schedulingOptions.NotAllowedShiftCategories.Clear();
 				while (roleModelShift != null && !success)
 				{
-					if(_cancelMe)
+					if(cancelMe)
 						break;
 
-					if (_progressEvent != null && _progressEvent.UserCancel)
-						break;
-					
 					_teamBlockClearer.ClearTeamBlock(schedulingOptions, rollbackService, teamBlockInfo);
 					schedulingOptions.NotAllowedShiftCategories.Add(roleModelShift.TheMainShift.ShiftCategory);
 					roleModelShift = _roleModelSelector.Select(teamBlockInfo, datePointer, selectedTeamMembers.First(),
 						schedulingOptions, shiftNudgeDirective.EffectiveRestriction, _isMaxSeatToggleEnabled);
 					success = tryScheduleBlock(teamBlockInfo, schedulingOptions, selectedBlockDays,
-						roleModelShift, rollbackService, resourceCalculateDelayer, schedulingResultStateHolder, shiftNudgeDirective, _isMaxSeatToggleEnabled);
+						roleModelShift, rollbackService, resourceCalculateDelayer, schedulingResultStateHolder, shiftNudgeDirective, ()=>
+						{
+							cancelMe = true;
+						});
 				}
 				schedulingOptions.NotAllowedShiftCategories.Clear();	
 			}
 
-			_progressEvent = null;
-
 			return success;
 		}
 
-		private bool tryScheduleBlock(ITeamBlockInfo teamBlockInfo, ISchedulingOptions schedulingOptions, IList<DateOnly> selectedBlockDays, IShiftProjectionCache roleModelShift, ISchedulePartModifyAndRollbackService rollbackService, IResourceCalculateDelayer resourceCalculateDelayer, ISchedulingResultStateHolder schedulingResultStateHolder, ShiftNudgeDirective shiftNudgeDirective, bool isMaxSeatToggleEnabled)
+		private bool tryScheduleBlock(ITeamBlockInfo teamBlockInfo, ISchedulingOptions schedulingOptions, IList<DateOnly> selectedBlockDays, IShiftProjectionCache roleModelShift, ISchedulePartModifyAndRollbackService rollbackService, IResourceCalculateDelayer resourceCalculateDelayer, ISchedulingResultStateHolder schedulingResultStateHolder, ShiftNudgeDirective shiftNudgeDirective, Action cancelAction)
 		{
 			var lastIndex = selectedBlockDays.Count - 1;
 			IEffectiveRestriction shiftNudgeRestriction = new EffectiveRestriction();
 			if (shiftNudgeDirective.Direction == ShiftNudgeDirective.NudgeDirection.Right)
 				shiftNudgeRestriction = shiftNudgeDirective.EffectiveRestriction;
 
+			var cancelMe = false;
+			Action thisCancelAction = () =>
+			{
+				cancelMe = true;
+				cancelAction();
+			};
 			for (int dayIndex = 0; dayIndex <= lastIndex; dayIndex++)
 			{
 				var day = selectedBlockDays[dayIndex];
-				if (_cancelMe)
+				if (cancelMe)
 					return false;
 
 				if (shiftNudgeDirective.Direction == ShiftNudgeDirective.NudgeDirection.Left && dayIndex == lastIndex)
 					shiftNudgeRestriction = shiftNudgeDirective.EffectiveRestriction;
-				
-				_singleDayScheduler.DayScheduled += OnDayScheduled;
+
+				EventHandler<SchedulingServiceBaseEventArgs> onDayScheduled = (sender, e) =>
+				{
+					var handler = DayScheduled;
+					if (handler != null)
+					{
+						e.AppendCancelAction(thisCancelAction);
+						handler(this, e);
+					}
+				};
+
+				_singleDayScheduler.DayScheduled += onDayScheduled;
 				bool successful = _singleDayScheduler.ScheduleSingleDay(teamBlockInfo, schedulingOptions, day,
 					roleModelShift, rollbackService,
-					resourceCalculateDelayer, schedulingResultStateHolder, shiftNudgeRestriction,isMaxSeatToggleEnabled );
-				_singleDayScheduler.DayScheduled -= OnDayScheduled;
-
-				if (_progressEvent != null && _progressEvent.UserCancel)
-					return false;
+					resourceCalculateDelayer, schedulingResultStateHolder, shiftNudgeRestriction,_isMaxSeatToggleEnabled );
+				_singleDayScheduler.DayScheduled -= onDayScheduled;
 
 				if(shiftNudgeDirective.Direction == ShiftNudgeDirective.NudgeDirection.Right && dayIndex == 0)
 					shiftNudgeRestriction = new EffectiveRestriction();
 
 				if (!successful)
 				{
-					OnDayScheduledFailed();
+					var progressResult = onDayScheduledFailed(new SchedulingServiceFailedEventArgs(cancelAction));
+					if (progressResult.ShouldCancel) cancelAction();
 					return false;
 				}
 			}
@@ -174,36 +185,15 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 			return true;
 		}
 
-		public void OnDayScheduled(object sender, SchedulingServiceBaseEventArgs e)
+		private CancelSignal onDayScheduledFailed(SchedulingServiceBaseEventArgs args)
 		{
-			EventHandler<SchedulingServiceBaseEventArgs> temp = DayScheduled;
-			if (temp != null)
+			var handler = DayScheduled;
+			if (handler != null)
 			{
-				temp(this, e);
+				handler(this, args);
+				if (args.Cancel) return new CancelSignal {ShouldCancel = true};
 			}
-			_cancelMe = e.Cancel;
-
-			if (_progressEvent != null && _progressEvent.UserCancel) return;
-			_progressEvent = e;
-		}
-
-		public void OnDayScheduledFailed()
-		{
-			var args = new SchedulingServiceFailedEventArgs();
-			var temp = DayScheduled;
-			if (temp != null)
-			{
-				temp(this, args);
-			}
-			_cancelMe = args.Cancel;
-
-			if (_progressEvent != null && _progressEvent.UserCancel) return;
-			_progressEvent = args;
-		}
-
-		public void RaiseEventForTest(object sender, SchedulingServiceBaseEventArgs e)
-		{
-			OnDayScheduled(sender, e);
+			return new CancelSignal();
 		}
 	}
 }

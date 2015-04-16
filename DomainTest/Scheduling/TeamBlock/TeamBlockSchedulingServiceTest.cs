@@ -1,12 +1,14 @@
 ﻿using System.Collections.Generic;
 using NUnit.Framework;
 using Rhino.Mocks;
+using Rhino.Mocks.Interfaces;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.GroupPageCreator;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling.TeamBlock;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Interfaces.Domain;
+using List = NHibernate.Mapping.List;
 
 namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 {
@@ -294,43 +296,28 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 		[Test]
 		public void ShouldBreakIfCancelMeIsSet()
 		{
-			//var teamInfo = new TeamInfo(_groupPerson, new List<IList<IScheduleMatrixPro>>() { _matrixList });
-
-
 			using (_mock.Record())
 			{
-				Expect.Call(() => _teamBlockScheduler.DayScheduled += null).IgnoreArguments();
-				Expect.Call(() => _teamBlockScheduler.DayScheduled -= null).IgnoreArguments();
+				_teamBlockScheduler.DayScheduled += null;
+				IEventRaiser eventRaiser = LastCall.IgnoreArguments().GetEventRaiser();
 
+				Expect.Call(() => _teamBlockScheduler.DayScheduled -= null).IgnoreArguments();
+				Expect.Call(_teamInfoMock.GroupMembers).Return(new List<IPerson>());
+				Expect.Call(_teamMatrixChecker.CheckTeamList(null, _dateOnlyPeriod))
+					.IgnoreArguments()
+					.Return(new TeamMatrixCheckerResult(new List<ITeamInfo>(), new List<ITeamInfo>()));
+				Expect.Call(_teamInfoFactory.CreateTeamInfo(_person, _dateOnlyPeriod, _matrixList))
+					.Return(_teamInfoMock)
+					.WhenCalled(_ =>
+						eventRaiser.Raise(null, new SchedulingServiceSuccessfulEventArgs(null) {Cancel = true}));
 			}
-			var args = new SchedulingServiceSuccessfulEventArgs(null);
-			args.Cancel = true;
-			_target.DayScheduled += targetOnDayScheduled;
-			_target.RaiseEventForTest(this, args);
+			
 			using (_mock.Playback())
 			{
+				_target.DayScheduled += targetOnDayScheduled;
+				_target.ScheduleSelected(_matrixList, _dateOnlyPeriod, _personList, _rollbackService, _resourceCalculateDelayer, _schedulingResultStateHolder);
 				Assert.IsTrue(_cancelTarget);
-				_target.ScheduleSelected(_matrixList, _dateOnlyPeriod, _personList, _rollbackService, _resourceCalculateDelayer, _schedulingResultStateHolder);
-			}
-			_target.DayScheduled -= targetOnDayScheduled;
-
-		}
-
-		[Test]
-		public void ShouldUserCancel()
-		{
-			using (_mock.Record())
-			{
-				Expect.Call(() => _teamBlockScheduler.DayScheduled += null).IgnoreArguments();
-				Expect.Call(() => _teamBlockScheduler.DayScheduled -= null).IgnoreArguments();
-
-			}
-			var args = new SchedulingServiceSuccessfulEventArgs(null) { UserCancel = true };
-			_target.RaiseEventForTest(this, args);
-
-			using (_mock.Playback())
-			{
-				_target.ScheduleSelected(_matrixList, _dateOnlyPeriod, _personList, _rollbackService, _resourceCalculateDelayer, _schedulingResultStateHolder);
+				_target.DayScheduled -= targetOnDayScheduled;
 			}
 		}
 
@@ -338,7 +325,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 		{
 			_cancelTarget = true;
 		}
-
 
 		[Test]
 		public void ShouldIgoreATeamIfSomeoneFailedButContinueWithOtherTeams()

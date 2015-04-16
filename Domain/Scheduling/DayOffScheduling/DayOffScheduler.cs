@@ -48,8 +48,8 @@ namespace Teleopti.Ccc.Domain.Scheduling.DayOffScheduling
         }
 
 		private void addDaysOff(IEnumerable<IScheduleMatrixPro> matrixList, ISchedulingOptions schedulingOptions)
-        {
-           
+		{
+			var cancel = false;
             foreach (var scheduleMatrixPro in matrixList)
             {
                 foreach (var scheduleDayPro in scheduleMatrixPro.UnlockedDays)
@@ -72,9 +72,9 @@ namespace Teleopti.Ccc.Domain.Scheduling.DayOffScheduling
                         _schedulePartModifyAndRollbackService().Rollback();
                     }
 
-                    var eventArgs = new SchedulingServiceBaseEventArgs(part, true);
+                    var eventArgs = new SchedulingServiceSuccessfulEventArgs(part, () => cancel=true);
                     OnDayScheduled(eventArgs);
-                    if (eventArgs.Cancel) return;
+                    if (cancel || eventArgs.Cancel) return;
                 }       
             }          
         }
@@ -84,6 +84,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.DayOffScheduling
             if (rollbackService == null)
                 throw new ArgumentNullException("rollbackService");
 
+	        var cancel = false;
             foreach (var matrix in matrixListAll)
             {
                 var schedulePeriod = matrix.SchedulePeriod;
@@ -124,9 +125,9 @@ namespace Teleopti.Ccc.Domain.Scheduling.DayOffScheduling
 						{
 							rollbackService.Rollback();
 						}
-						var eventArgs = new SchedulingServiceSuccessfulEventArgs(bestScheduleDay);
+						var eventArgs = new SchedulingServiceSuccessfulEventArgs(bestScheduleDay,()=>cancel=true);
 						OnDayScheduled(eventArgs);
-						if (eventArgs.Cancel)
+						if (cancel || eventArgs.Cancel)
 							return;
 
 						break;	

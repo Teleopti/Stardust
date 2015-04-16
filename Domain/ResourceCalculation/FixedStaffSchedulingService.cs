@@ -2,8 +2,8 @@
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
+using Teleopti.Ccc.Domain.Optimization;
 using Teleopti.Ccc.Domain.Scheduling;
-using Teleopti.Ccc.Domain.Scheduling.DayOffScheduling;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.ResourceCalculation
@@ -26,7 +26,6 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 
 	    private readonly Random _random = new Random((int)DateTime.Now.TimeOfDay.Ticks);
         private readonly HashSet<IWorkShiftFinderResult> _finderResults = new HashSet<IWorkShiftFinderResult>();
-		private SchedulingServiceBaseEventArgs _progressEvent;
 
         public event EventHandler<SchedulingServiceBaseEventArgs> DayScheduled;
 
@@ -35,7 +34,6 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 			IDayOffsInPeriodCalculator dayOffsInPeriodCalculator, 
             IEffectiveRestrictionCreator effectiveRestrictionCreator,
 			IScheduleService scheduleService, 
-			IDaysOffSchedulingService daysOffSchedulingService, 
 			IResourceOptimizationHelper resourceOptimizationHelper)
 		{
 			_schedulingResultStateHolder = schedulingResultStateHolder;
@@ -43,12 +41,6 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 			_effectiveRestrictionCreator = effectiveRestrictionCreator;
 			_scheduleService = scheduleService;
 			_resourceOptimizationHelper = resourceOptimizationHelper;
-			daysOffSchedulingService.DayScheduled += schedulerDayScheduled;
-		}
-
-		void schedulerDayScheduled(object sender, SchedulingServiceBaseEventArgs e)
-		{
-			OnDayScheduled(e);
 		}
 
     	public IList<IWorkShiftFinderResult> FinderResults
@@ -68,77 +60,76 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
             _scheduleService.ClearFinderResults();
         }
 
-		public bool DoTheScheduling(IList<IScheduleDay> selectedParts, ISchedulingOptions schedulingOptions, bool useOccupancyAdjustment, bool breakIfPersonCannotSchedule, ISchedulePartModifyAndRollbackService rollbackService)
-        {
-        	var result = true;
-			_progressEvent = null;
-			var resourceCalculateDelayer = new ResourceCalculateDelayer(
-				_resourceOptimizationHelper, 
-				schedulingOptions.ResourceCalculateFrequency,
-				useOccupancyAdjustment,
-				schedulingOptions.ConsiderShortBreaks);
+	    public bool DoTheScheduling(IList<IScheduleDay> selectedParts, ISchedulingOptions schedulingOptions,
+		    bool useOccupancyAdjustment, bool breakIfPersonCannotSchedule,
+		    ISchedulePartModifyAndRollbackService rollbackService)
+	    {
+		    var result = true;
+		    var cancel = false;
+		    var resourceCalculateDelayer = new ResourceCalculateDelayer(
+			    _resourceOptimizationHelper,
+			    schedulingOptions.ResourceCalculateFrequency,
+			    useOccupancyAdjustment,
+			    schedulingOptions.ConsiderShortBreaks);
 
-			var personDateDictionary = (from p in selectedParts
-			                            group p.DateOnlyAsPeriod.DateOnly by p.Person
-			                            into g
-			                            select new {g.Key, Values = g.ToList()}).ToDictionary(k => k.Key, v => v.Values);
+		    var personDateDictionary = (from p in selectedParts
+			    group p.DateOnlyAsPeriod.DateOnly by p.Person
+			    into g
+			    select new {g.Key, Values = g.ToList()}).ToDictionary(k => k.Key, v => v.Values);
 
-				var dates = GetAllDates(personDateDictionary);
-				var initialPersons = personDateDictionary.Keys;
-				var stateHolder = _schedulingResultStateHolder();
+		    var dates = GetAllDates(personDateDictionary);
+		    var initialPersons = personDateDictionary.Keys;
+		    var stateHolder = _schedulingResultStateHolder();
 		    foreach (DateOnly date in dates)
 		    {
-		        var persons = initialPersons.ToList();
-		        IPerson person = GetRandomPerson(persons.ToArray());
+			    var persons = initialPersons.ToList();
+			    IPerson person = GetRandomPerson(persons.ToArray());
 
-		        while (person != null)
-		        {
-			        IScheduleDay schedulePart = stateHolder.Schedules[person].ScheduledDay(date);
-		            if (!schedulePart.IsScheduled())
-		            {
-		                var virtualSchedulePeriod = person.VirtualSchedulePeriod(date);
-		                if (!virtualSchedulePeriod.IsValid)
-		                {
-		                    persons.Remove(person);
-		                    person = GetRandomPerson(persons.ToArray());
-		                    continue;
-		                }
+			    while (person != null)
+			    {
+				    IScheduleDay schedulePart = stateHolder.Schedules[person].ScheduledDay(date);
+				    if (!schedulePart.IsScheduled())
+				    {
+					    var virtualSchedulePeriod = person.VirtualSchedulePeriod(date);
+					    if (!virtualSchedulePeriod.IsValid)
+					    {
+						    persons.Remove(person);
+						    person = GetRandomPerson(persons.ToArray());
+						    continue;
+					    }
 
-		                if (HasCorrectNumberOfDaysOff(virtualSchedulePeriod, date))
-		                {
-		                    if (personDateDictionary[person].Contains(date))
-		                    {
-		                        var effectiveRestriction = _effectiveRestrictionCreator.GetEffectiveRestriction(
-		                            schedulePart, schedulingOptions);
+					    if (HasCorrectNumberOfDaysOff(virtualSchedulePeriod, date))
+					    {
+						    if (personDateDictionary[person].Contains(date))
+						    {
+							    var effectiveRestriction = _effectiveRestrictionCreator.GetEffectiveRestriction(
+								    schedulePart, schedulingOptions);
 
-		                        bool schedulePersonOnDayResult = _scheduleService.SchedulePersonOnDay(schedulePart,
-		                                                                                              schedulingOptions,
-		                                                                                              effectiveRestriction,
-		                                                                                              resourceCalculateDelayer,
-		                                                                                              null, rollbackService);
+							    bool schedulePersonOnDayResult = _scheduleService.SchedulePersonOnDay(schedulePart,
+								    schedulingOptions,
+								    effectiveRestriction,
+								    resourceCalculateDelayer,
+								    null, rollbackService);
 
-		                        result = result && schedulePersonOnDayResult;
-		                        if (!result && breakIfPersonCannotSchedule)
-		                            return false;
+							    result = result && schedulePersonOnDayResult;
+							    if (!result && breakIfPersonCannotSchedule)
+								    return false;
 
-								var eventArgs = new SchedulingServiceSuccessfulEventArgs(schedulePart);
-		                        OnDayScheduled(eventArgs);
-		                        if (eventArgs.Cancel) return result;
+							    var eventArgs = new SchedulingServiceSuccessfulEventArgs(schedulePart, () => cancel=true);
+							    var progressResult = onDayScheduled(eventArgs);
+							    if (cancel || progressResult.ShouldCancel) return result;
+						    }
+					    }
+				    }
 
-			                    if (_progressEvent != null && _progressEvent.UserCancel)
-				                    return result;
-		                    }
-		                }
-		            }
-
-		            persons.Remove(person);
-		            person = GetRandomPerson(persons.ToArray());
-		        }
+				    persons.Remove(person);
+				    person = GetRandomPerson(persons.ToArray());
+			    }
 		    }
 		    return result;
-		}
+	    }
 
-        public IPerson GetRandomPerson(IList<IPerson> persons)
+	    public IPerson GetRandomPerson(IList<IPerson> persons)
         {
             IPerson ret = null;
             if (persons.Count > 0)
@@ -165,7 +156,6 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 			return result;
 		}
 
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1024:UsePropertiesWhereAppropriate")]
         public virtual IList<DateOnly> GetAllDates(Dictionary<IPerson, List<DateOnly>> selectedParts)
         {
             var ret = new List<DateOnly>();
@@ -181,18 +171,15 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
             return ret;
         }
 
-        protected virtual void OnDayScheduled(SchedulingServiceBaseEventArgs scheduleServiceBaseEventArgs)
+        private CancelSignal onDayScheduled(SchedulingServiceBaseEventArgs args)
         {
-            EventHandler<SchedulingServiceBaseEventArgs> temp = DayScheduled;
-            if (temp != null)
+            var handler = DayScheduled;
+            if (handler != null)
             {
-                temp(this, scheduleServiceBaseEventArgs);
-
-				if (_progressEvent != null && _progressEvent.UserCancel)
-					return;
-
-				_progressEvent = scheduleServiceBaseEventArgs;
+                handler(this, args);
+				if (args.Cancel) return new CancelSignal{ShouldCancel = true};
             }
+			return new CancelSignal();
         }
 
         protected void AddFinderResult(IPerson person, DateOnly scheduleDateOnly, string message)

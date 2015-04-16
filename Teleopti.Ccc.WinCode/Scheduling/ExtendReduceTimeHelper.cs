@@ -136,7 +136,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 			if (_backgroundWorker.CancellationPending)
 			{
 				e.Cancel = true;
-				e.UserCancel = true;
+				e.CancelAction();
 			}
 			_backgroundWorker.ReportProgress(1, e);
 		}

@@ -1,28 +1,30 @@
-﻿using System.ComponentModel;
+﻿using System;
+using System.ComponentModel;
 
 namespace Teleopti.Interfaces.Domain
 {
     /// <summary>
     /// EventArgs for SchedulingServiceBase
     /// </summary>
-    public class SchedulingServiceBaseEventArgs : CancelEventArgs
+    public abstract class SchedulingServiceBaseEventArgs : CancelEventArgs
     {
         private readonly IScheduleDay _schedulePart;
 	    private readonly bool _isSuccessful;
+	    private Action _cancelCallback;
+		private static readonly Action DummyAction = ()=>{};
 
 	    /// <summary>
 	    /// Initializes a new instance of the <see cref="SchedulingServiceBaseEventArgs"/> class.
 	    /// </summary>
-	    /// <param name="schedulePart">The schedule part.</param>
-	    /// <param name="isSuccessful">Scheduled succeeded or not.</param>
 	    /// <remarks>
 	    /// Created by: micke
 	    /// Created date: 2009-01-14
 	    /// </remarks>
-	    public SchedulingServiceBaseEventArgs(IScheduleDay schedulePart, bool isSuccessful)
+	    protected SchedulingServiceBaseEventArgs(IScheduleDay schedulePart, bool isSuccessful, Action cancelCallback = null)
 	    {
 		    _schedulePart = schedulePart;
 		    _isSuccessful = isSuccessful;
+		    _cancelCallback = cancelCallback ?? DummyAction;
 	    }
 
 	    /// <summary>
@@ -43,6 +45,19 @@ namespace Teleopti.Interfaces.Domain
 		    get { return _isSuccessful; }
 	    }
 
-		public bool UserCancel { get; set; }
+	    public Action CancelCallback
+	    {
+		    get { return _cancelCallback; }
+	    }
+
+	    public void AppendCancelAction(Action cancelAction)
+	    {
+		    var cancelCallback = _cancelCallback;
+		    _cancelCallback = () =>
+		    {
+			    cancelAction();
+			    cancelCallback();
+		    };
+	    }
     }
 }

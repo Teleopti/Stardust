@@ -63,10 +63,11 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 			_scheduleDayPro = _mocks.StrictMock<IScheduleDayPro>();
 			_scheduleMatrixPro = _mocks.StrictMock<IScheduleMatrixPro>();
 			_schedulePeriod = _mocks.StrictMock<IVirtualSchedulePeriod>();
+			_principalAuthorization = _mocks.StrictMock<IPrincipalAuthorization>();
 			_scheduleDayAvailableForDayOffSpecification = _mocks.StrictMock<IScheduleDayAvailableForDayOffSpecification>();
 			_target = new TeamDayOffScheduler(_dayOffsInPeriodCalculator, _effectiveRestrictionCreator,
 			                                  _hasContractDayOffDefinition, _matrixDataListCreator,
-			                                  ()=>_schedulingResultStateHolder, _scheduleDayAvailableForDayOffSpecification);
+			                                  ()=>_schedulingResultStateHolder, _scheduleDayAvailableForDayOffSpecification,_principalAuthorization);
 			_person1 = PersonFactory.CreatePerson();
 			_selectedPersons = new List<IPerson>{_person1};
 			_matrixData1 = _mocks.StrictMock<IMatrixData>();
@@ -84,7 +85,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 
 			_personAssignment = _mocks.StrictMock<IPersonAssignment>();
 			_dateOnlyAsDateTimePeriod = _mocks.StrictMock<IDateOnlyAsDateTimePeriod>();
-			_principalAuthorization = _mocks.StrictMock<IPrincipalAuthorization>();
 		}
 
 		[Test]
@@ -240,29 +240,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 		}
 
 		[Test]
-		public void ShouldUserCancelAddRestrictionDayOffForTeamMember()
-		{
-			_effectiveRestriction.DayOffTemplate = new DayOffTemplate(new Description("DayOff"));
-
-			using (_mocks.Record())
-			{
-				commonMocks();
-
-				//first foreach
-				Expect.Call(_scheduleDayPro.Day).Return(new DateOnly(2013, 2, 1));
-				getMatrixesAndRestrictionMocks();
-				addDaysOffForTeamMocks();
-			}
-
-			using (_mocks.Playback())
-			{
-				_target.DayScheduled += targetDayScheduled2;
-				_target.DayOffScheduling(_matrixList, _selectedPersons, _schedulePartModifyAndRollbackService, _schedulingOptions, _groupPersonBuilderForOptimization);
-				_target.DayScheduled -= targetDayScheduled2;
-			}
-		}
-
-		[Test]
 		public void ShouldCancelAddContractDayOffForTeamMember()
 		{
 			using (_mocks.Record())
@@ -283,43 +260,10 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 
 			using (_mocks.Playback())
 			{
-				using (new CustomAuthorizationContext(_principalAuthorization))
-				{
-					_target.DayScheduled += targetDayScheduled;
-					_target.DayOffScheduling(_matrixList, _selectedPersons, _schedulePartModifyAndRollbackService, _schedulingOptions,
-					                         _groupPersonBuilderForOptimization);
-					_target.DayScheduled -= targetDayScheduled;
-				}
-			}
-		}
-
-		[Test]
-		public void ShouldUserCancelAddContractDayOffForTeamMember()
-		{
-			using (_mocks.Record())
-			{
-				commonMocks();
-
-				//first foreach
-				Expect.Call(_scheduleDayPro.Day).Return(new DateOnly(2013, 2, 1));
-				getMatrixesAndRestrictionMocks();
-
-				//second foreach
-				Expect.Call(_scheduleDayPro.Day).Return(new DateOnly(2013, 2, 1));
-				getMatrixesAndRestrictionMocks();
-
-				//addContractDaysOff
-				addContractDaysOffMocksBelowTarget(true, true);
-			}
-
-			using (_mocks.Playback())
-			{
-				using (new CustomAuthorizationContext(_principalAuthorization))
-				{
-					_target.DayScheduled += targetDayScheduled2;
-					_target.DayOffScheduling(_matrixList, _selectedPersons, _schedulePartModifyAndRollbackService, _schedulingOptions,_groupPersonBuilderForOptimization);
-					_target.DayScheduled -= targetDayScheduled2;
-				}
+				_target.DayScheduled += targetDayScheduled;
+				_target.DayOffScheduling(_matrixList, _selectedPersons, _schedulePartModifyAndRollbackService, _schedulingOptions,
+					_groupPersonBuilderForOptimization);
+				_target.DayScheduled -= targetDayScheduled;
 			}
 		}
 
@@ -342,11 +286,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 
 			using (_mocks.Playback())
 			{
-				using (new CustomAuthorizationContext(_principalAuthorization))
-				{
-					_target.DayOffScheduling(_matrixList, _selectedPersons, _schedulePartModifyAndRollbackService, _schedulingOptions,
-					                         _groupPersonBuilderForOptimization);
-				}
+				_target.DayOffScheduling(_matrixList, _selectedPersons, _schedulePartModifyAndRollbackService, _schedulingOptions,
+					_groupPersonBuilderForOptimization);
 			}
 		}
 
@@ -421,11 +362,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 		void targetDayScheduled(object sender, SchedulingServiceBaseEventArgs e)
 		{
 			e.Cancel = true;
-		}
-
-		void targetDayScheduled2(object sender, SchedulingServiceBaseEventArgs e)
-		{
-			e.UserCancel = true;
 		}
 	}
 }

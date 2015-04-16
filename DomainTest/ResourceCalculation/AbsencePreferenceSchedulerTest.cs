@@ -129,7 +129,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
             }
         }
 
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling"), Test]
+		[Test]
         public void ShouldAddAbsenceOnFirstDayAndJumpOutIfCanceled()
         {
             var absence = new Absence();
@@ -156,50 +156,11 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
             {
 				_target.AddPreferredAbsence(matrixProList, _options);    
             }
-
         }
-
-		[Test]
-		public void ShouldUserCancel()
-		{
-			var absence = new Absence();
-			var effectiveRestriction = new EffectiveRestriction(new StartTimeLimitation(), new EndTimeLimitation(), new WorkTimeLimitation(), null, null, absence, new List<IActivityRestriction>()) { IsPreferenceDay = true };
-			var matrixProList = new List<IScheduleMatrixPro> { _scheduleMatrixPro };
-			var scheduleDayProList = new ReadOnlyCollection<IScheduleDayPro>(new List<IScheduleDayPro> { _scheduleDayPro, _scheduleDayPro2 });
-			var date = new DateTime(2009, 2, 2, 0, 0, 0, DateTimeKind.Utc);
-			var period = new DateTimePeriod(date, date.AddDays(1));
-			var absenceLayer = new AbsenceLayer(absence, period);
-
-
-			using (_mocks.Record())
-			{
-				Expect.Call(_scheduleMatrixPro.UnlockedDays).Return(scheduleDayProList);
-				Expect.Call(_scheduleDayPro.DaySchedulePart()).Return(_scheduleDay);
-				Expect.Call(_effectiveRestrictionCreator.GetEffectiveRestriction(_scheduleDay, _options)).Return(effectiveRestriction);
-				Expect.Call(_absencePreferenceFullDayLayerCreator.Create(_scheduleDay, absence)).Return(absenceLayer);
-				Expect.Call(() => _scheduleDay.CreateAndAddAbsence(absenceLayer));
-				Expect.Call(() => _rollBackService.Modify(_scheduleDay));
-			}
-
-			using (_mocks.Playback())
-			{
-				_target.DayScheduled += targetDayScheduled2;
-				_target.AddPreferredAbsence(matrixProList, _options);
-				_target.DayScheduled -= targetDayScheduled2;
-			}
-
-		}
 
 		static void targetDayScheduled(object sender, SchedulingServiceBaseEventArgs e)
 		{
 			e.Cancel = true;
 		}
-
-		static void targetDayScheduled2(object sender, SchedulingServiceBaseEventArgs e)
-		{
-			e.UserCancel = true;
-		}
 	}
-
-	
 }

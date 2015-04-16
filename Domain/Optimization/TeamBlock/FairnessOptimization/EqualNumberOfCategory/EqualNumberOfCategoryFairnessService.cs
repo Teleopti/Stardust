@@ -30,20 +30,15 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.EqualN
 		private readonly IFilterForNoneLockedTeamBlocks _filterForNoneLockedTeamBlocks;
 		private readonly ITeamBlockOptimizationLimits _teamBlockOptimizationLimits;
 		private readonly ITeamBlockShiftCategoryLimitationValidator _teamBlockShiftCategoryLimitationValidator;
-		private bool _cancelMe;
-		private ResourceOptimizerProgressEventArgs _progressEvent;
 
 		public EqualNumberOfCategoryFairnessService(IConstructTeamBlock constructTeamBlock,
 		                                            IDistributionForPersons distributionForPersons,
-		                                            IFilterForEqualNumberOfCategoryFairness
-			                                            filterForEqualNumberOfCategoryFairness,
+		                                            IFilterForEqualNumberOfCategoryFairness filterForEqualNumberOfCategoryFairness,
 		                                            IFilterForTeamBlockInSelection filterForTeamBlockInSelection,
 		                                            IFilterOnSwapableTeamBlocks filterOnSwapableTeamBlocks,
 		                                            ITeamBlockSwapper teamBlockSwapper,
-		                                            IEqualCategoryDistributionBestTeamBlockDecider
-			                                            equalCategoryDistributionBestTeamBlockDecider,
-		                                            IEqualCategoryDistributionWorstTeamBlockDecider
-			                                            equalCategoryDistributionWorstTeamBlockDecider,
+		                                            IEqualCategoryDistributionBestTeamBlockDecider equalCategoryDistributionBestTeamBlockDecider,
+		                                            IEqualCategoryDistributionWorstTeamBlockDecider equalCategoryDistributionWorstTeamBlockDecider,
 		                                            IFilterPersonsForTotalDistribution filterPersonsForTotalDistribution,
 													IFilterForFullyScheduledBlocks filterForFullyScheduledBlocks,
 													IEqualCategoryDistributionValue equalCategoryDistributionValue,
@@ -71,8 +66,6 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.EqualN
 
 		public void Execute(IList<IScheduleMatrixPro> allPersonMatrixList, DateOnlyPeriod selectedPeriod, IList<IPerson> selectedPersons, ISchedulingOptions schedulingOptions, IScheduleDictionary scheduleDictionary, ISchedulePartModifyAndRollbackService rollbackService, IOptimizationPreferences optimizationPreferences, bool schedulerHidePointsFairnessSystem28317, bool schedulerSeniority11111)
 		{
-			_progressEvent = null;
-			_cancelMe = false;
 			var personListForTotalDistribution = _filterPersonsForTotalDistribution.Filter(allPersonMatrixList, schedulerHidePointsFairnessSystem28317, schedulerSeniority11111).ToList();
 			if (!personListForTotalDistribution.Any())
 				return;
@@ -102,29 +95,21 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.EqualN
 			}
 		}
 
-		
-
 		private bool runOneLoop(IScheduleDictionary scheduleDictionary, ISchedulePartModifyAndRollbackService rollbackService,
 		                        ITeamBlockOptimizationLimits teamBlockOptimizationLimits,
 		                        IOptimizationPreferences optimizationPreferences, IList<ITeamBlockInfo> blocksToWorkWith,
 		                        IDistributionSummary totalDistribution, double totalBlockCount)
 		{
+			var cancelMe = false;
 			bool moveFound = false;
 			int successes = 0;
-			while (blocksToWorkWith.Count > 0 && !_cancelMe)
+			while (blocksToWorkWith.Count > 0 && !cancelMe)
 			{
-				if (_progressEvent != null && _progressEvent.UserCancel)
-					break;
-
-				var teamBlockInfoToWorkWith =
-					_equalCategoryDistributionWorstTeamBlockDecider.FindBlockToWorkWith(totalDistribution, blocksToWorkWith,
-					                                                                    scheduleDictionary);
-
+				var teamBlockInfoToWorkWith = _equalCategoryDistributionWorstTeamBlockDecider.FindBlockToWorkWith(totalDistribution, blocksToWorkWith, scheduleDictionary);
 				if (teamBlockInfoToWorkWith == null) 
 					break;
 
 				var teamBlockToWorkWith = teamBlockInfoToWorkWith;
-
 				blocksToWorkWith.Remove(teamBlockInfoToWorkWith);
 
 				var possibleTeamBlocksToSwapWith = _filterOnSwapableTeamBlocks.Filter(blocksToWorkWith, teamBlockToWorkWith);
@@ -164,7 +149,6 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.EqualN
 					}
 				}
 
-
 				if (success)
 				{
 					var firstBlockOk = _teamBlockOptimizationLimits.ValidateMinWorkTimePerWeek(teamBlockToWorkWith);
@@ -197,25 +181,22 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.EqualN
 				var message = Resources.FairnessOptimizationOn + " " + Resources.EqualOfEachShiftCategory + ": " +
 							  new Percent((totalBlockCount - blocksToWorkWith.Count) / totalBlockCount) + " " + Resources.Success + " = " + successes;
 
-				OnReportProgress(message);
+				var progressResult = onReportProgress(new ResourceOptimizerProgressEventArgs(0, 0, message,()=>cancelMe=true));
+				if (progressResult.ShouldCancel) cancelMe = true;
 			}
 
-			return moveFound;
+			return moveFound && !cancelMe;
 		}
 
-		public virtual void OnReportProgress(string message)
+		private CancelSignal onReportProgress(ResourceOptimizerProgressEventArgs args)
 		{
 			EventHandler<ResourceOptimizerProgressEventArgs> handler = ReportProgress;
 			if (handler != null)
 			{
-				var args = new ResourceOptimizerProgressEventArgs(0, 0, message);
 				handler(this, args);
-				if (args.Cancel)
-					_cancelMe = true;
-
-				if (_progressEvent != null && _progressEvent.UserCancel) return;
-				_progressEvent = args;
+				if (args.Cancel) return new CancelSignal{ShouldCancel = true};
 			}
+			return new CancelSignal();
 		}
 	}
 }

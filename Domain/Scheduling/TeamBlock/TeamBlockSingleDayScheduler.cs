@@ -17,7 +17,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 			IEffectiveRestriction shiftNudgeRestriction, bool isMaxSeatToggleEnabled);
 
 		event EventHandler<SchedulingServiceBaseEventArgs> DayScheduled;
-		void OnDayScheduled(object sender, SchedulingServiceBaseEventArgs e);
 
 		IList<IWorkShiftCalculationResultHolder> GetShiftProjectionCaches(
 			ITeamBlockInfo teamBlockInfo,
@@ -37,12 +36,11 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 		private readonly IWorkShiftSelector _workShiftSelector;
 		private readonly ITeamScheduling _teamScheduling;
 		private readonly IActivityIntervalDataCreator _activityIntervalDataCreator;
-		private bool _cancelMe;
 		private readonly IMaxSeatInformationGeneratorBasedOnIntervals _maxSeatInformationGeneratorBasedOnIntervals;
-		public event EventHandler<SchedulingServiceBaseEventArgs> DayScheduled;
 		private readonly IMaxSeatSkillAggregator _maxSeatSkillAggregator;
-		private SchedulingServiceBaseEventArgs _progressEvent;
 
+		public event EventHandler<SchedulingServiceBaseEventArgs> DayScheduled;
+		
 		public TeamBlockSingleDayScheduler(ITeamBlockSchedulingCompletionChecker teamBlockSchedulingCompletionChecker,
 			IProposedRestrictionAggregator proposedRestrictionAggregator,
 			IWorkShiftFilterService workShiftFilterService,
@@ -124,7 +122,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 			IResourceCalculateDelayer resourceCalculateDelayer, ISchedulingResultStateHolder schedulingResultStateHolder,
 			IEffectiveRestriction shiftNudgeRestriction, bool isMaxSeatToggleEnabled)
 		{
-			_cancelMe = false;
+			var cancelMe = false;
 			if (roleModelShift == null) return false;
 			var teamInfo = teamBlockInfo.TeamInfo;
 			var teamBlockSingleDayInfo = new TeamBlockSingleDayInfo(teamInfo, day);
@@ -135,17 +133,21 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 			if (isTeamBlockScheduledForSelectedTeamMembers(selectedTeamMembers, day, teamBlockSingleDayInfo))
 				return true;
 
+			EventHandler<SchedulingServiceBaseEventArgs> onDayScheduled = (sender, e) =>
+			{
+				EventHandler<SchedulingServiceBaseEventArgs> handler = DayScheduled;
+				if (handler != null)
+				{
+					e.AppendCancelAction(()=>cancelMe=true);
+					handler(this, e);
+					if (e.Cancel) cancelMe = true;
+				}
+			};
+
 			foreach (var person in selectedTeamMembers)
 			{
-				if (_cancelMe)
-					return false;
+				if (cancelMe) return false;
 
-				if (_progressEvent != null && _progressEvent.UserCancel)
-				{
-					_progressEvent = null;
-					return false;
-				}
-					
 				if (isTeamBlockScheduledForSelectedTeamMembers(new List<IPerson> {person}, day, teamBlockSingleDayInfo))
 					continue;
 
@@ -185,13 +187,12 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 					if (bestShiftProjectionCache == null) continue;
 				}
 
-				_teamScheduling.DayScheduled += OnDayScheduled;
+				_teamScheduling.DayScheduled += onDayScheduled;
 				_teamScheduling.ExecutePerDayPerPerson(person, day, teamBlockInfo, bestShiftProjectionCache,
 					schedulePartModifyAndRollbackService, resourceCalculateDelayer);
-				_teamScheduling.DayScheduled -= OnDayScheduled;
+				_teamScheduling.DayScheduled -= onDayScheduled;
 			}
 
-			_progressEvent = null;
 			return isTeamBlockScheduledForSelectedTeamMembers(selectedTeamMembers, day, teamBlockSingleDayInfo);
 		}
 
@@ -208,32 +209,11 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 			return maxSeatFeatureOption;
 		}
 
-
-		public void OnDayScheduled(object sender, SchedulingServiceBaseEventArgs e)
-		{
-			EventHandler<SchedulingServiceBaseEventArgs> temp = DayScheduled;
-			if (temp != null)
-			{
-				temp(this, e);
-			}
-			_cancelMe = e.Cancel;
-
-			if (_progressEvent != null && _progressEvent.UserCancel)
-				return;
-
-			_progressEvent = e;
-		}
-
 		private bool isTeamBlockScheduledForSelectedTeamMembers(IList<IPerson> selectedTeamMembers, DateOnly day,
 			ITeamBlockInfo teamBlockSingleDayInfo)
 		{
 			return _teamBlockSchedulingCompletionChecker.IsDayScheduledInTeamBlockForSelectedPersons(teamBlockSingleDayInfo, day,
 				selectedTeamMembers);
-		}
-
-		public void RaiseEventForTest(object sender, SchedulingServiceBaseEventArgs e)
-		{
-			OnDayScheduled(sender, e);
 		}
 	}
 }

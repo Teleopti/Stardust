@@ -33,7 +33,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 			if (_backgroundWorker.CancellationPending)
 			{
 				e.Cancel = true;
-				e.UserCancel = true;
 			}
 			_backgroundWorker.ReportProgress(1, e);
 		}

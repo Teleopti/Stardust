@@ -586,6 +586,7 @@
     <Compile Include="Notification\NotificationWebClient.cs" />
     <Compile Include="Notification\Notifier.cs" />
     <Compile Include="Notification\SignificantChangeChecker.cs" />
+    <Compile Include="Optimization\CancelSignal.cs" />
     <Compile Include="Optimization\DailyValueByAllSkillsExtractor.cs" />
     <Compile Include="Optimization\IntraIntervalOptimization\IntraIntervalIssueCalculator.cs" />
     <Compile Include="Optimization\IntraIntervalOptimization\IntraIntervalIssues.cs" />

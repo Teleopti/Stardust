@@ -1,29 +1,26 @@
-﻿using System.ComponentModel;
+﻿using System;
+using System.ComponentModel;
 
 namespace Teleopti.Interfaces.Domain
 {
-    /// <summary>
-    /// Used by ResourceReoptimizer
-    /// </summary>
     public class ResourceOptimizerProgressEventArgs : CancelEventArgs
     {
         private readonly string _message;
-        private readonly double _value;
+	    private readonly Action _cancelAction;
+	    private readonly double _value;
         private readonly double _delta;
+	    private static readonly Action DummyAction = () => { };
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ResourceOptimizerProgressEventArgs"/> class.
         /// </summary>
-        /// <param name="value">The value.</param>
-        /// <param name="delta">The delta.</param>
-        /// <param name="message">The message.</param>
-        public ResourceOptimizerProgressEventArgs(double value, double delta, string message)
+        public ResourceOptimizerProgressEventArgs(double value, double delta, string message, Action cancelAction = null)
         {
             _value = value;
             _delta = delta;
             _message = message;
+	        _cancelAction = cancelAction ?? DummyAction;
         }
-
 
         /// <summary>
         /// Gets the message.
@@ -60,10 +57,9 @@ namespace Teleopti.Interfaces.Domain
             get { return _delta; }
         }
 
-    	/// <summary>
-    	/// Gets or sets a value indicating whether user cancel.
-    	/// </summary>
-    	/// <value><c>true</c> if user cancel; otherwise, <c>false</c>.</value>
-    	public bool UserCancel { get; set; }
+	    public Action CancelAction
+	    {
+		    get { return _cancelAction; }
+	    }
     }
 }

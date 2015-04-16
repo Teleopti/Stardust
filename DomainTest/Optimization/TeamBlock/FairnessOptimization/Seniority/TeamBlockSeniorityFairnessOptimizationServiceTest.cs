@@ -261,7 +261,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock.FairnessOptimization.Se
 
 		private void reportProgress2(object sender, ResourceOptimizerProgressEventArgs e)
 		{
-			e.UserCancel = true;
+			e.CancelAction();
 		}
 	}
 }

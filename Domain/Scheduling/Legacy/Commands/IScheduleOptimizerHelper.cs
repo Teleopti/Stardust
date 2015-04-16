@@ -111,10 +111,11 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 			fixedStaffSchedulingService.ClearFinderResults();
 			var sendEventEvery = schedulingOptions.RefreshRate;
 			var scheduledCount = 0;
-			SchedulingServiceBaseEventArgs progressEventScheduling = null;
+			var scheduleRunCancelled = false;
 
 			EventHandler<SchedulingServiceBaseEventArgs> onDayScheduled = (sender, e) =>
 			{
+				e.AppendCancelAction(() => scheduleRunCancelled = true);
 				if (backgroundWorker.CancellationPending)
 				{
 					e.Cancel = true;
@@ -125,15 +126,10 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 				{
 					backgroundWorker.ReportProgress(1, e);
 					scheduledCount = 0;
-
-					if (progressEventScheduling != null && progressEventScheduling.UserCancel)
-						return;
-
-					progressEventScheduling = e;
 				}
+				scheduleRunCancelled = e.Cancel;
 			};
 
-			fixedStaffSchedulingService.DayScheduled += onDayScheduled;
 			DateTime schedulingTime = DateTime.Now;
 			IDeleteAndResourceCalculateService deleteAndResourceCalculateService =
 				new DeleteAndResourceCalculateService(new DeleteSchedulePartService(_resultStateHolder), _resourceOptimizationHelper);
@@ -181,10 +177,16 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 							scheduleMatrixOriginalStateContainer.ScheduleMatrix.LockPeriod(new DateOnlyPeriod(day.Day, day.Day));
 					}
 				}
-				fixedStaffSchedulingService.DoTheScheduling(unlockedSchedules, schedulingOptions, useOccupancyAdjustment, false,
-					rollbackService);
+
+				fixedStaffSchedulingService.DayScheduled += onDayScheduled;
+				if (!scheduleRunCancelled)
+				{
+					fixedStaffSchedulingService.DoTheScheduling(unlockedSchedules, schedulingOptions, useOccupancyAdjustment, false,
+						rollbackService);
+				}
 				_allResults().AddResults(fixedStaffSchedulingService.FinderResults, schedulingTime);
 				fixedStaffSchedulingService.FinderResults.Clear();
+				fixedStaffSchedulingService.DayScheduled -= onDayScheduled;
 
 				var progressChangeEvent = new TeleoptiProgressChangeMessage(Resources.TryingToResolveUnscheduledDaysDotDotDot);
 				backgroundWorker.ReportProgress(0, progressChangeEvent);
@@ -195,18 +197,12 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 						nightRestWhiteSpotSolverService.Resolve(scheduleMatrixOriginalStateContainer.ScheduleMatrix, schedulingOptions,
 							rollbackService) && iterations < 10)
 					{
-						if (backgroundWorker.CancellationPending)
-							break;
-
-						if (progressEventScheduling != null && progressEventScheduling.UserCancel)
+						if (backgroundWorker.CancellationPending || scheduleRunCancelled)
 							break;
 
 						iterations++;
 					}
-					if (backgroundWorker.CancellationPending)
-						break;
-
-					if (progressEventScheduling != null && progressEventScheduling.UserCancel)
+					if (backgroundWorker.CancellationPending || scheduleRunCancelled)
 						break;
 				}
 
@@ -215,7 +211,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 					schedulePartModifyAndRollbackServiceForContractDaysOff.Rollback();
 
 			}
-			fixedStaffSchedulingService.DayScheduled -= onDayScheduled;
 		}
 
 		public void ScheduleSelectedStudents(IList<IScheduleDay> allSelectedSchedules, IBackgroundWorkerWrapper backgroundWorker,

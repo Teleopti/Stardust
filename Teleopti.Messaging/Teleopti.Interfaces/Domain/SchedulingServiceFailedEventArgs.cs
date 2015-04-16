@@ -1,4 +1,6 @@
-﻿namespace Teleopti.Interfaces.Domain
+﻿using System;
+
+namespace Teleopti.Interfaces.Domain
 {
     /// <summary>
     /// EventArgs for SchedulingServiceFailedEvent
@@ -12,8 +14,8 @@
 	    /// Created by: micke
 	    /// Created date: 2009-01-14
 	    /// </remarks>
-		public SchedulingServiceFailedEventArgs() : 
-			base(null, false)
+		public SchedulingServiceFailedEventArgs(Action cancelAction) : 
+			base(null, false,cancelAction)
 	    {
 	    }
     }

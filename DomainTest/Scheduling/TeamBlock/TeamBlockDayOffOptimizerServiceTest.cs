@@ -307,7 +307,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 
 		void _target_ReportProgress2(object sender, ResourceOptimizerProgressEventArgs e)
 		{
-			e.UserCancel = true;
+			e.CancelAction();
 		}
 		
 		[Test]

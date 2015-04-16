@@ -394,7 +394,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.WeeklyRestSolver
 
 		private void targetWeekScheduledScheduled2(object sender, ResourceOptimizerProgressEventArgs resourceOptimizerProgressEventArgs)
 		{
-			resourceOptimizerProgressEventArgs.UserCancel = true;
+			resourceOptimizerProgressEventArgs.CancelAction();
 		}
 
 	}

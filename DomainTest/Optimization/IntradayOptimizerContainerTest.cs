@@ -40,19 +40,18 @@ namespace Teleopti.Ccc.DomainTest.Optimization
         [Test]
         public void VerifyReportProgressEventExecuted()
         {
-            _target.ReportProgress += _target_ReportProgress;
             using (_mocks.Record())
             {
-				Expect.Call(_dailyValueByAllSkillsExtractor.ValueForPeriod(_period, _targetValueOptions)).Return(3);
+				Expect.Call(_dailyValueByAllSkillsExtractor.ValueForPeriod(_period, _targetValueOptions)).Return(3).Repeat.Any();
                 Expect.Call(_optimizer1.Execute()).Return(false);
                 Expect.Call(_optimizer2.Execute()).Return(false);
 
                 Expect.Call(_optimizer1.ContainerOwner).Return(_person).Repeat.Any();
                 Expect.Call(_optimizer2.ContainerOwner).Return(_person).Repeat.Any();
-				Expect.Call(_dailyValueByAllSkillsExtractor.ValueForPeriod(_period, _targetValueOptions)).Return(2);
             }
             using (_mocks.Playback())
-            {
+			{
+				_target.ReportProgress += _target_ReportProgress;
 				_target.Execute(_period, _targetValueOptions);
                 _target.ReportProgress -= _target_ReportProgress;
                 Assert.IsTrue(_eventExecuted);
@@ -65,12 +64,11 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 			_target.ReportProgress += targetReportProgress2;
 			using (_mocks.Record())
 			{
-				Expect.Call(_dailyValueByAllSkillsExtractor.ValueForPeriod(_period, _targetValueOptions)).Return(3);
+				Expect.Call(_dailyValueByAllSkillsExtractor.ValueForPeriod(_period, _targetValueOptions)).Return(3).Repeat.Any();
 				Expect.Call(_optimizer1.Execute()).Return(false).Repeat.Any();
 				Expect.Call(_optimizer2.Execute()).Return(false).Repeat.Any();
 				Expect.Call(_optimizer1.ContainerOwner).Return(_person).Repeat.Any();
 				Expect.Call(_optimizer2.ContainerOwner).Return(_person).Repeat.Any();
-				Expect.Call(_dailyValueByAllSkillsExtractor.ValueForPeriod(_period, _targetValueOptions)).Return(2);
 			}
 			using (_mocks.Playback())
 			{
@@ -87,7 +85,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 
 		void targetReportProgress2(object sender, ResourceOptimizerProgressEventArgs e)
 		{
-			e.UserCancel = true;
+			e.CancelAction();
 			_timesExecuted++;
 		}
 
@@ -97,7 +95,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
         {
             using (_mocks.Record())
             {
-				Expect.Call(_dailyValueByAllSkillsExtractor.ValueForPeriod(_period, _targetValueOptions)).Return(3);
+				Expect.Call(_dailyValueByAllSkillsExtractor.ValueForPeriod(_period, _targetValueOptions)).Return(3).Repeat.Any();
                 Expect.Call(_optimizer1.Execute()).Return(true);
                 Expect.Call(_optimizer2.Execute()).Return(true);
                 
@@ -108,7 +106,6 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 
                 Expect.Call(_optimizer1.ContainerOwner).Return(_person).Repeat.Any();
                 Expect.Call(_optimizer2.ContainerOwner).Return(_person).Repeat.Any();
-				Expect.Call(_dailyValueByAllSkillsExtractor.ValueForPeriod(_period, _targetValueOptions)).Return(2);
             }
             using (_mocks.Playback())
             {

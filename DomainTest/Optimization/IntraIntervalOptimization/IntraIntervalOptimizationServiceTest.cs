@@ -308,7 +308,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.IntraIntervalOptimization
 		void OnReportProgress(object sender, ResourceOptimizerProgressEventArgs e)
 		{
 			e.Cancel = true;
-			e.UserCancel = true;
+			e.CancelAction();
 		}
 	}
 }

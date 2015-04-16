@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.Collection;
+using Teleopti.Ccc.Domain.Optimization;
 using Teleopti.Ccc.Domain.Optimization.WeeklyRestSolver;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.UserTexts;
@@ -27,12 +28,10 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 	    private readonly ITeamBlockScheduler _teamBlockScheduler;
 	    private readonly ISafeRollbackAndResourceCalculation _safeRollbackAndResourceCalculation;
 	    private readonly ISchedulingOptions _schedulingOptions;
-	    private bool _cancelMe;
-        private readonly IWorkShiftMinMaxCalculator _workShiftMinMaxCalculator;
+	    private readonly IWorkShiftMinMaxCalculator _workShiftMinMaxCalculator;
         private readonly ITeamBlockMaxSeatChecker  _teamBlockMaxSeat;
         private readonly IValidatedTeamBlockInfoExtractor  _validatedTeamBlockExtractor;
 	    private readonly ITeamMatrixChecker _teamMatrixChecker;
-	    private SchedulingServiceBaseEventArgs _progressEvent;
 
 	    public TeamBlockSchedulingService
 		    (ISchedulingOptions schedulingOptions, ITeamInfoFactory teamInfoFactory, ITeamBlockScheduler teamBlockScheduler,
@@ -60,21 +59,28 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 										ISchedulingResultStateHolder schedulingResultStateHolder)
 		{
 			var workShiftFinderResultHolder = new WorkShiftFinderResultHolder();
-		    _teamBlockScheduler.DayScheduled += dayScheduled;
+			var cancelMe = false;
+			EventHandler<SchedulingServiceBaseEventArgs> dayScheduled = (sender, e) =>
+			{
+				var handler = DayScheduled;
+				if (handler != null)
+				{
+					e.AppendCancelAction(()=>cancelMe=true);
+					handler(this, e);
+					if (e.Cancel) cancelMe = true;
+				}
+			};
+
+			_teamBlockScheduler.DayScheduled += dayScheduled;
 		    if (schedulePartModifyAndRollbackService == null)
 		    {
-				_progressEvent = null;
 				return workShiftFinderResultHolder;    
 		    }
 
 		    var dateOnlySkipList = new List<DateOnly>();
 		    foreach (var datePointer in selectedPeriod.DayCollection())
 		    {
-			    if (_cancelMe)
-				    break;
-
-			    if (_progressEvent != null && _progressEvent.UserCancel)
-				    break;
+			    if (cancelMe) break;
 
 			    if (dateOnlySkipList.Contains(datePointer))
 				    continue;
@@ -88,17 +94,15 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 				    foreach (var member in teamInfo.GroupMembers)
 				    {
 						workShiftFinderResultHolder.AddFilterToResult(member, datePointer, Resources.AllTeamMembersMustBeLoaded);
-				    }
-				    
+				    }   
 			    }
 	
 			    runSchedulingForAllTeamInfoOnStartDate(allPersonMatrixList, selectedPersons, selectedPeriod,
 			                                           schedulePartModifyAndRollbackService,
 													   checkedTeams.OkList, datePointer, dateOnlySkipList,
-			                                           resourceCalculateDelayer, schedulingResultStateHolder);
+			                                           resourceCalculateDelayer, schedulingResultStateHolder, () => cancelMe);
 		    }
 
-		    _progressEvent = null;
 		    _teamBlockScheduler.DayScheduled -= dayScheduled;
 			return workShiftFinderResultHolder;
 	    }
@@ -107,8 +111,9 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
                                      ISchedulePartModifyAndRollbackService schedulePartModifyAndRollbackService,
                                      IEnumerable<ITeamInfo> allTeamInfoListOnStartDate, DateOnly datePointer, List<DateOnly> dateOnlySkipList,
 									 IResourceCalculateDelayer resourceCalculateDelayer,
-									 ISchedulingResultStateHolder schedulingResultStateHolder)
-        {
+									 ISchedulingResultStateHolder schedulingResultStateHolder, Func<bool> isCancelled)
+	    {
+		    var cancel = false;
             foreach (var teamInfo in allTeamInfoListOnStartDate.GetRandom(allTeamInfoListOnStartDate.Count(), true))
             {
 				var teamBlockInfo = _validatedTeamBlockExtractor.GetTeamBlockInfo(teamInfo, datePointer, allPersonMatrixList, _schedulingOptions, selectedPeriod);
@@ -119,31 +124,24 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 	                                                          schedulePartModifyAndRollbackService,
 	                                                         resourceCalculateDelayer, schedulingResultStateHolder, new ShiftNudgeDirective()))
 		            verifyScheduledTeamBlock(selectedPersons, schedulePartModifyAndRollbackService, datePointer,
-		                                     dateOnlySkipList, teamBlockInfo);
+		                                     dateOnlySkipList, teamBlockInfo, isCancelled);
 				else
 				{
-					OnDayScheduledFailed();
-					continue;
+					var progressResult = onDayScheduledFailed(new SchedulingServiceFailedEventArgs(()=>cancel=true));
+					if (cancel || progressResult.ShouldCancel) break;
+ 					continue;
 				}
-                if (_cancelMe)
-                    break;
-
-	            if (_progressEvent != null && _progressEvent.UserCancel)
-		            break;
+                if (cancel || isCancelled()) break;
             }
         }
 
         private void verifyScheduledTeamBlock(IList<IPerson> selectedPersons,
                                               ISchedulePartModifyAndRollbackService schedulePartModifyAndRollbackService,
-                                              DateOnly datePointer, List<DateOnly> dateOnlySkipList, ITeamBlockInfo teamBlockInfo)
+                                              DateOnly datePointer, List<DateOnly> dateOnlySkipList, ITeamBlockInfo teamBlockInfo, Func<bool> isCancelled)
         {
             foreach (var matrix in teamBlockInfo.TeamInfo.MatrixesForGroupAndDate(datePointer))
             {
-                if (_cancelMe)
-                    break;
-
-	            if (_progressEvent != null && _progressEvent.UserCancel)
-		            break;
+                if (isCancelled()) break;
 
                 if (!selectedPersons.Contains(matrix.Person)) continue;
                 _workShiftMinMaxCalculator.ResetCache();
@@ -161,10 +159,8 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 					  executeRollback(schedulePartModifyAndRollbackService);
 					  dateOnlySkipList.AddRange(teamBlockInfo.BlockInfo.BlockPeriod.DayCollection());
 					  break;
-				  }
-		        
+				  }   
 	        }
-
         }
         
 
@@ -196,51 +192,16 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
             return allTeamInfoListOnStartDate;
         }
 
-
-        void dayScheduled(object sender, SchedulingServiceBaseEventArgs e)
-	    {
-		    OnDayScheduled(e);
-	    }
-
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
-		protected virtual void OnDayScheduled(SchedulingServiceBaseEventArgs scheduleServiceBaseEventArgs)
+		private CancelSignal onDayScheduledFailed(SchedulingServiceBaseEventArgs args)
 		{
-			EventHandler<SchedulingServiceBaseEventArgs> temp = DayScheduled;
-			if (temp != null)
+			var handler = DayScheduled;
+			if (handler != null)
 			{
-				temp(this, scheduleServiceBaseEventArgs);
-
-				
+				handler(this, args);
+				if (args.Cancel)
+					return new CancelSignal{ShouldCancel = true};
 			}
-			_cancelMe = scheduleServiceBaseEventArgs.Cancel;
-
-			if (_progressEvent != null && _progressEvent.UserCancel)
-				return;
-
-			_progressEvent = scheduleServiceBaseEventArgs;
-		}
-
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1030:UseEventsWhereAppropriate")]
-        public void RaiseEventForTest(object sender, SchedulingServiceBaseEventArgs e)
-        {
-            dayScheduled(sender, e);
-        }
-
-		public void OnDayScheduledFailed()
-		{
-			var e = new SchedulingServiceFailedEventArgs();
-
-			var temp = DayScheduled;
-			if (temp != null)
-			{
-				temp(this, e);
-			}
-			_cancelMe = e.Cancel;
-
-			if (_progressEvent != null && _progressEvent.UserCancel)
-				return;
-
-			_progressEvent = e;
+			return new CancelSignal();
 		}
     }
 }

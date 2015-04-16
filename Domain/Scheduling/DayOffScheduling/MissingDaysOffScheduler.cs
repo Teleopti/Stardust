@@ -17,27 +17,31 @@ namespace Teleopti.Ccc.Domain.Scheduling.DayOffScheduling
 		private readonly IMatrixDataListInSteadyState _matrixDataListInSteadyState;
 		private readonly IMatrixDataListCreator _matrixDataListCreator;
 		private readonly IMatrixDataWithToFewDaysOff _matrixDataWithToFewDaysOff;
+		private readonly IPrincipalAuthorization _authorization;
 
 		public event EventHandler<SchedulingServiceBaseEventArgs> DayScheduled;
 
 		public MissingDaysOffScheduler(IBestSpotForAddingDayOffFinder bestSpotForAddingDayOffFinder,
 			IMatrixDataListInSteadyState matrixDataListInSteadyState, IMatrixDataListCreator matrixDataListCreator, 
-			IMatrixDataWithToFewDaysOff matrixDataWithToFewDaysOff)
+			IMatrixDataWithToFewDaysOff matrixDataWithToFewDaysOff, IPrincipalAuthorization authorization)
 		{
 			_bestSpotForAddingDayOffFinder = bestSpotForAddingDayOffFinder;
 			_matrixDataListInSteadyState = matrixDataListInSteadyState;
 			_matrixDataListCreator = matrixDataListCreator;
 			_matrixDataWithToFewDaysOff = matrixDataWithToFewDaysOff;
+			_authorization = authorization;
 		}
 
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "1")]
 		public bool Execute(IList<IScheduleMatrixPro> matrixList, ISchedulingOptions schedulingOptions, ISchedulePartModifyAndRollbackService rollbackService)
 		{
+			var cancel = false;
 			var matrixDataList = _matrixDataListCreator.Create(matrixList, schedulingOptions);
-			bool useSameDaysOffOnAll = _matrixDataListInSteadyState.IsListInSteadyState(matrixDataList);
-			IList<IMatrixData> workingList = _matrixDataWithToFewDaysOff.FindMatrixesWithToFewDaysOff(matrixDataList);
+			var useSameDaysOffOnAll = _matrixDataListInSteadyState.IsListInSteadyState(matrixDataList);
+			var workingList = _matrixDataWithToFewDaysOff.FindMatrixesWithToFewDaysOff(matrixDataList);
+			Action cancelAction = () => cancel = true;
 			while (workingList.Count > 0)
 			{
+				if (cancel) return false;
 				DateOnly? resultingDate = _bestSpotForAddingDayOffFinder.Find(workingList[0].ScheduleDayDataCollection);
 				if (!resultingDate.HasValue)
 				{
@@ -48,14 +52,15 @@ namespace Teleopti.Ccc.Domain.Scheduling.DayOffScheduling
 				{
 					foreach (var matrixData in workingList)
 					{
-						var result = assignDayOff(resultingDate.Value, matrixData, schedulingOptions.DayOffTemplate, rollbackService);
+						if (cancel) return false;
+						var result = assignDayOff(resultingDate.Value, matrixData, schedulingOptions.DayOffTemplate, rollbackService, cancelAction);
 						if (!result)
 							return false;
 					}
 				}
 				else
 				{
-					var result = assignDayOff(resultingDate.Value, workingList[0], schedulingOptions.DayOffTemplate, rollbackService);
+					var result = assignDayOff(resultingDate.Value, workingList[0], schedulingOptions.DayOffTemplate, rollbackService, cancelAction);
 					if (!result)
 						return false;
 				}
@@ -79,7 +84,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.DayOffScheduling
 			return ret;
 		}
 
-		private bool assignDayOff(DateOnly date, IMatrixData matrixData, IDayOffTemplate dayOffTemplate, ISchedulePartModifyAndRollbackService rollbackService)
+		private bool assignDayOff(DateOnly date, IMatrixData matrixData, IDayOffTemplate dayOffTemplate, ISchedulePartModifyAndRollbackService rollbackService, Action cancelAction)
 		{
             var scheduleDayPro = matrixData.Matrix.GetScheduleDayByKey(date);
             if (!matrixData.Matrix.UnlockedDays.Contains(scheduleDayPro)) return false;
@@ -87,10 +92,9 @@ namespace Teleopti.Ccc.Domain.Scheduling.DayOffScheduling
             scheduleDay.CreateAndAddDayOff(dayOffTemplate);
 
 			var personAssignment = scheduleDay.PersonAssignment();
-			var authorization = PrincipalAuthorization.Instance();
-			if (!(authorization.IsPermitted(personAssignment.FunctionPath, scheduleDay.DateOnlyAsPeriod.DateOnly, scheduleDay.Person))) return false;
+			if (!_authorization.IsPermitted(personAssignment.FunctionPath, scheduleDay.DateOnlyAsPeriod.DateOnly, scheduleDay.Person)) return false;
 
-			rollbackService.Modify(scheduleDay); var eventArgs = new SchedulingServiceSuccessfulEventArgs(scheduleDay);
+			rollbackService.Modify(scheduleDay); var eventArgs = new SchedulingServiceSuccessfulEventArgs(scheduleDay,cancelAction);
             OnDayScheduled(eventArgs);
             if (eventArgs.Cancel)
                 return false;
@@ -98,12 +102,12 @@ namespace Teleopti.Ccc.Domain.Scheduling.DayOffScheduling
             return true;
 		}
 
-		protected virtual void OnDayScheduled(SchedulingServiceBaseEventArgs scheduleServiceBaseEventArgs)
+		protected virtual void OnDayScheduled(SchedulingServiceBaseEventArgs args)
 		{
-			EventHandler<SchedulingServiceBaseEventArgs> temp = DayScheduled;
-			if (temp != null)
+			var handler = DayScheduled;
+			if (handler != null)
 			{
-				temp(this, scheduleServiceBaseEventArgs);
+				handler(this, args);
 			}
 		}
 	}

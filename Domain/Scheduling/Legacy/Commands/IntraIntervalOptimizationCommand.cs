@@ -34,7 +34,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 			if (_backgroundWorker.CancellationPending)
 			{
 				e.Cancel = true;
-				e.UserCancel = true;
 			}
 			var args = new ResourceOptimizerProgressEventArgs(0, 0, _optimizationstep + e.Message);
 			_backgroundWorker.ReportProgress(1, args);

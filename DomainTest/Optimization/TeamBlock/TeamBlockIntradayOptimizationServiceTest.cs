@@ -242,8 +242,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock
 			}
 		}
 
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling"),
-		 Test]
+		[Test]
 		public void ShouldReportProgress()
 		{
 			var dateOnly = new DateOnly();
@@ -276,8 +275,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock
 			}
 		}
 
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling"),
-		 Test]
+		[Test]
 		public void ShouldUserCancel()
 		{
 			var dateOnly = new DateOnly();
@@ -369,7 +367,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock
 
 		private void targetReportProgress2(object sender, ResourceOptimizerProgressEventArgs e)
 		{
-			e.UserCancel = true;
+			e.CancelAction();
 		}
 
 	}

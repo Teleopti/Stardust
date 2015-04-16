@@ -30,23 +30,27 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 
         public void  Execute(IList<IScheduleMatrixPro> matrixList, ISchedulingOptions schedulingOptions, ISchedulePartModifyAndRollbackService rollbackService)
         {
+	        var cancel = false;
             var matrixDataList = _matrixDataListCreator.Create(matrixList, schedulingOptions);
             IList<IMatrixData> workingList = _matrixDataWithToFewDaysOff.FindMatrixesWithToFewDaysOff(matrixDataList);
             foreach (var workingItem in workingList)
             {
-                fixThisMatrix(workingItem,schedulingOptions,rollbackService );
+				if (cancel) return;
+                fixThisMatrix(workingItem,schedulingOptions,rollbackService, ()=> cancel=true);
             }
         }
 
-        private void fixThisMatrix(IMatrixData workingItem, ISchedulingOptions schedulingOptions, ISchedulePartModifyAndRollbackService rollbackService)
+        private void fixThisMatrix(IMatrixData workingItem, ISchedulingOptions schedulingOptions, ISchedulePartModifyAndRollbackService rollbackService, Action cancelAction)
         {
-            var tempWorkingList = _matrixDataWithToFewDaysOff.FindMatrixesWithToFewDaysOff(new List<IMatrixData>( ){workingItem });
+            var tempWorkingList = _matrixDataWithToFewDaysOff.FindMatrixesWithToFewDaysOff(new List<IMatrixData>{workingItem });
             var scheduleDayCollection = tempWorkingList[0].ScheduleDayDataCollection;
             var startIndex = 0;
             var endIndex = 6;
+	        var cancel = false;
             var alreadyAnalyzedDates = new List<DateOnly>();
             while (tempWorkingList.Count > 0)
             {
+				if (cancel) return;
                 if (startIndex >= scheduleDayCollection.Count)
                 {
                     startIndex = 0;
@@ -58,7 +62,12 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
                 DateOnly? resultingDate = _bestSpotForAddingDayOffFinder.Find(newScheduleDayCollection);
                 if (!resultingDate.HasValue) break ;
                 alreadyAnalyzedDates.Add(resultingDate.Value );
-                var result = assignDayOff(resultingDate.Value, tempWorkingList[0], schedulingOptions.DayOffTemplate, rollbackService);
+                var result = assignDayOff(resultingDate.Value, tempWorkingList[0], schedulingOptions.DayOffTemplate, rollbackService,
+	                () =>
+	                {
+		                cancel = true;
+		                cancelAction();
+	                });
                 if (!result) break;
                 tempWorkingList = _matrixDataWithToFewDaysOff.FindMatrixesWithToFewDaysOff(tempWorkingList);
             }
@@ -76,14 +85,14 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
             return result;
         }
 
-        private bool assignDayOff(DateOnly date, IMatrixData matrixData, IDayOffTemplate dayOffTemplate, ISchedulePartModifyAndRollbackService rollbackService)
+        private bool assignDayOff(DateOnly date, IMatrixData matrixData, IDayOffTemplate dayOffTemplate, ISchedulePartModifyAndRollbackService rollbackService, Action cancelAction)
         {
             var scheduleDayPro = matrixData.Matrix.GetScheduleDayByKey(date);
             if (!matrixData.Matrix.UnlockedDays.Contains(scheduleDayPro)) return false;
             IScheduleDay scheduleDay = scheduleDayPro.DaySchedulePart();
             scheduleDay.CreateAndAddDayOff(dayOffTemplate);
             rollbackService.Modify(scheduleDay); 
-            var eventArgs = new SchedulingServiceSuccessfulEventArgs(scheduleDay);
+            var eventArgs = new SchedulingServiceSuccessfulEventArgs(scheduleDay, cancelAction);
             OnDayScheduled(eventArgs);
             if (eventArgs.Cancel)
                 return false;
@@ -91,12 +100,12 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
             return true;
         }
 
-        protected virtual void OnDayScheduled(SchedulingServiceBaseEventArgs scheduleServiceBaseEventArgs)
+        protected virtual void OnDayScheduled(SchedulingServiceBaseEventArgs args)
         {
-            EventHandler<SchedulingServiceBaseEventArgs> temp = DayScheduled;
-            if (temp != null)
+            var handler = DayScheduled;
+            if (handler != null)
             {
-                temp(this, scheduleServiceBaseEventArgs);
+                handler(this, args);
             }
         }
     }

@@ -28,7 +28,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 		private readonly IMatrixDataListCreator _matrixDataListCreator;
 		private readonly Func<ISchedulingResultStateHolder> _schedulingResultStateHolder;
 		private readonly IScheduleDayAvailableForDayOffSpecification _scheduleDayAvailableForDayOffSpecification;
-		private SchedulingServiceBaseEventArgs _progressEvent;
+		private readonly IPrincipalAuthorization _authorization;
 
 		public event EventHandler<SchedulingServiceBaseEventArgs> DayScheduled;
 
@@ -38,7 +38,8 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 			IHasContractDayOffDefinition hasContractDayOffDefinition,
 			 IMatrixDataListCreator matrixDataListCreator,
 			 Func<ISchedulingResultStateHolder> schedulingResultStateHolder,
-			IScheduleDayAvailableForDayOffSpecification scheduleDayAvailableForDayOffSpecification)
+			IScheduleDayAvailableForDayOffSpecification scheduleDayAvailableForDayOffSpecification,
+			IPrincipalAuthorization authorization)
 		{
 			_dayOffsInPeriodCalculator = dayOffsInPeriodCalculator;
 			_effectiveRestrictionCreator = effectiveRestrictionCreator;
@@ -46,6 +47,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 			_matrixDataListCreator = matrixDataListCreator;
 			_schedulingResultStateHolder = schedulingResultStateHolder;
 			_scheduleDayAvailableForDayOffSpecification = scheduleDayAvailableForDayOffSpecification;
+			_authorization = authorization;
 		}
 
 		public void DayOffScheduling(IList<IScheduleMatrixPro> matrixListAll, IList<IPerson> selectedPersons,
@@ -53,7 +55,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 		                             ISchedulingOptions schedulingOptions,
 		                             IGroupPersonBuilderForOptimization groupPersonBuilderForOptimization)
 		{
-			_progressEvent = null;
 			var matrixDataList = _matrixDataListCreator.Create(matrixListAll, schedulingOptions);
 			var matrixDataForSelectedPersons = new List<IMatrixData>();
 			foreach (var matrixData in matrixDataList)
@@ -153,6 +154,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 			if (EffectiveRestrictionCreator.OptionsConflictWithRestrictions(schedulingOptions, restriction))
 				return false;
 
+			var cancel = false;
 			foreach (var scheduleMatrixPro in matrixList)
 			{
 				var part = scheduleMatrixPro.GetScheduleDayByKey(scheduleDate).DaySchedulePart();
@@ -162,12 +164,9 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 				part.CreateAndAddDayOff(restriction.DayOffTemplate);
 				rollbackService.Modify(part);
 
-				var eventArgs = new SchedulingServiceSuccessfulEventArgs(part);
-				OnDayScheduled(eventArgs);
-				if (eventArgs.Cancel)
-					return true;
-
-				if (_progressEvent != null && _progressEvent.UserCancel)
+				var eventArgs = new SchedulingServiceSuccessfulEventArgs(part, () => cancel=true);
+				var progressResult = onDayScheduled(eventArgs);
+				if (cancel || progressResult.ShouldCancel)
 					return true;
 			}
 
@@ -192,6 +191,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 					continue;
 
 				var foundSpot = true;
+				var cancel = false;
 
 				while (currentOffDaysList.Count < targetDaysOff && foundSpot)
 				{
@@ -200,6 +200,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 
 					foreach (var dayOffOnPeriod in sortedWeeks)
 					{
+						if (cancel) return true;
 						var bestScheduleDay = dayOffOnPeriod.FindBestSpotForDayOff(_hasContractDayOffDefinition, _scheduleDayAvailableForDayOffSpecification, _effectiveRestrictionCreator, schedulingOptions);
 						if (bestScheduleDay == null) continue;
 						try
@@ -207,8 +208,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 							bestScheduleDay.CreateAndAddDayOff(schedulingOptions.DayOffTemplate);
 
 							var personAssignment = bestScheduleDay.PersonAssignment();
-							var authorization = PrincipalAuthorization.Instance();
-							if (!(authorization.IsPermitted(personAssignment.FunctionPath, bestScheduleDay.DateOnlyAsPeriod.DateOnly, bestScheduleDay.Person))) continue;
+							if (!_authorization.IsPermitted(personAssignment.FunctionPath, bestScheduleDay.DateOnlyAsPeriod.DateOnly, bestScheduleDay.Person)) continue;
 
 							rollbackService.Modify(bestScheduleDay);
 							foundSpot = true;
@@ -217,12 +217,9 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 						{
 							rollbackService.Rollback();
 						}
-						var eventArgs = new SchedulingServiceSuccessfulEventArgs(bestScheduleDay);
-						OnDayScheduled(eventArgs);
-						if (eventArgs.Cancel)
-							return true;
-
-						if (_progressEvent != null && _progressEvent.UserCancel)
+						var eventArgs = new SchedulingServiceSuccessfulEventArgs(bestScheduleDay, () => cancel = true);
+						var progressResult = onDayScheduled(eventArgs);
+						if (progressResult.ShouldCancel)
 							return true;
 
 						break;
@@ -235,18 +232,15 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 			return false;
 		}
 
-		protected virtual void OnDayScheduled(SchedulingServiceBaseEventArgs scheduleServiceBaseEventArgs)
+		private CancelSignal onDayScheduled(SchedulingServiceBaseEventArgs args)
 		{
-			EventHandler<SchedulingServiceBaseEventArgs> temp = DayScheduled;
-			if (temp != null)
+			var handler = DayScheduled;
+			if (handler != null)
 			{
-				temp(this, scheduleServiceBaseEventArgs);
-
-				if (_progressEvent != null && _progressEvent.UserCancel)
-					return;
-
-				_progressEvent = scheduleServiceBaseEventArgs;
+				handler(this, args);
+				if (args.Cancel) return new CancelSignal{ShouldCancel = true};
 			}
+			return new CancelSignal();
 		}
 	}
 }

@@ -20,120 +20,77 @@ namespace Teleopti.Ccc.Domain.Optimization
         /// </summary>
         /// <param name="optimizers">The optimizers.</param>
         void Execute(IEnumerable<IExtendReduceDaysOffOptimizer> optimizers);
-
-        /// <summary>
-        /// Called when [report progress].
-        /// </summary>
-        /// <param name="message">The message.</param>
-        void OnReportProgress(string message);
     }
 
     public class ExtendReduceDaysOffOptimizerService : IExtendReduceDaysOffOptimizerService
     {
          private readonly IPeriodValueCalculator _periodValueCalculatorForAllSkills;
-    	private bool _cancelMe;
-		private ResourceOptimizerProgressEventArgs _progressEvent;
-
+    	
         public event EventHandler<ResourceOptimizerProgressEventArgs> ReportProgress;
-
-
 
         public ExtendReduceDaysOffOptimizerService(IPeriodValueCalculator periodValueCalculatorForAllSkills)
         {
             _periodValueCalculatorForAllSkills = periodValueCalculatorForAllSkills;
         }
 
-        public void Execute(IEnumerable<IExtendReduceDaysOffOptimizer> optimizers)
+	    public void Execute(IEnumerable<IExtendReduceDaysOffOptimizer> optimizers)
+	    {
+		    var successfulContainers = optimizers.ToList();
+		    var cancel = false;
+		    using (
+			    PerformanceOutput.ForOperation("Extending and reduces time for " + successfulContainers.Count() + " agents"))
+		    {
+			    while (successfulContainers.Count > 0)
+			    {
+				    IList<IExtendReduceDaysOffOptimizer> unSuccessfulContainers = new List<IExtendReduceDaysOffOptimizer>();
+				    int executes = 0;
+				    double lastPeriodValue =
+					    _periodValueCalculatorForAllSkills.PeriodValue(IterationOperationOption.DayOffOptimization);
+				    double newPeriodValue = lastPeriodValue;
+				    foreach (
+					    IExtendReduceDaysOffOptimizer optimizer in successfulContainers.GetRandom(successfulContainers.Count, true))
+				    {
+						if (cancel) return;
+
+					    bool result = optimizer.Execute();
+					    executes++;
+					    if (!result)
+					    {
+						    unSuccessfulContainers.Add(optimizer);
+					    }
+					    else
+					    {
+						    newPeriodValue = _periodValueCalculatorForAllSkills.PeriodValue(IterationOperationOption.DayOffOptimization);
+					    }
+
+					    string who = Resources.ExtendingAndReducingDaysoff + Resources.Colon + "(" + successfulContainers.Count + ")" +
+					                 executes + " " + optimizer.Owner.Name.ToString(NameOrderOption.FirstNameLastName);
+					    string success = !result ? " " + Resources.wasNotSuccessful : " " + Resources.wasSuccessful;
+					    string values = " " + newPeriodValue + "(" + (newPeriodValue - lastPeriodValue) + ")";
+						var progressFeedback = onReportProgress(new ResourceOptimizerProgressEventArgs(0, 0, who + success + values, () => cancel = true));
+						if (cancel || progressFeedback.ShouldCancel) return;
+
+					    lastPeriodValue = newPeriodValue;
+				    }
+
+				    foreach (IExtendReduceDaysOffOptimizer unSuccessfulContainer in unSuccessfulContainers)
+				    {
+					    successfulContainers.Remove(unSuccessfulContainer);
+				    }
+			    }
+		    }
+	    }
+
+	    private CancelSignal onReportProgress(ResourceOptimizerProgressEventArgs args)
         {
-            using (PerformanceOutput.ForOperation("Extending and reduces time for " + optimizers.Count() + " agents"))
+	        var handler = ReportProgress;
+	        if (handler != null)
             {
-				_progressEvent = null;
-
-                if (_cancelMe)
-                    return;
-
-                executeOptimizersWhileActiveFound(optimizers);
+                handler(this, args);
+	            if (args.Cancel)
+		            return new CancelSignal {ShouldCancel = true};
             }
-        }
-
-        public void OnReportProgress(string message)
-        {
-            if (ReportProgress != null)
-            {
-                var args = new ResourceOptimizerProgressEventArgs(0, 0, message);
-                ReportProgress(this, args);
-                if (args.Cancel)
-                    _cancelMe = true;
-
-				if (_progressEvent != null && _progressEvent.UserCancel) return;
-				_progressEvent = args;
-            }
-        }
-
-        private void executeOptimizersWhileActiveFound(IEnumerable<IExtendReduceDaysOffOptimizer> optimizers)
-        {
-            IList<IExtendReduceDaysOffOptimizer> successfulContainers =
-                new List<IExtendReduceDaysOffOptimizer>(optimizers);
-
-            while (successfulContainers.Count > 0)
-            {
-                IList<IExtendReduceDaysOffOptimizer> unSuccessfulContainers =
-                    shuffleAndExecuteOptimizersInList(successfulContainers);
-
-                if (_cancelMe)
-                    break;
-
-				if (_progressEvent != null && _progressEvent.UserCancel)
-					break;
-
-                foreach (IExtendReduceDaysOffOptimizer unSuccessfulContainer in unSuccessfulContainers)
-                {
-                    successfulContainers.Remove(unSuccessfulContainer);
-                }
-            }
-        }
-
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Globalization", "CA1303:Do not pass literals as localized parameters", MessageId = "Teleopti.Ccc.Domain.Optimization.ExtendReduceDaysOffOptimizerService.OnReportProgress(System.String)"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Globalization", "CA1303:Do not pass literals as localized parameters", MessageId = "Teleopti.Ccc.Domain.Optimization.ExtendReduceTimeOptimizerService.OnReportProgress(System.String)")]
-        private IList<IExtendReduceDaysOffOptimizer> shuffleAndExecuteOptimizersInList(ICollection<IExtendReduceDaysOffOptimizer> activeOptimizers)
-        {
-            IList<IExtendReduceDaysOffOptimizer> retList = new List<IExtendReduceDaysOffOptimizer>();
-            int executes = 0;
-            double lastPeriodValue = _periodValueCalculatorForAllSkills.PeriodValue(IterationOperationOption.DayOffOptimization);
-            double newPeriodValue = lastPeriodValue;
-            foreach (IExtendReduceDaysOffOptimizer optimizer in activeOptimizers.GetRandom(activeOptimizers.Count, true))
-            {
-                bool result = optimizer.Execute();
-                executes++;
-                if (!result)
-                {
-                    retList.Add(optimizer);
-                }
-                else
-                {
-                    newPeriodValue = _periodValueCalculatorForAllSkills.PeriodValue(IterationOperationOption.DayOffOptimization);
-                }
-
-                string who = Resources.ExtendingAndReducingDaysoff + Resources.Colon + "(" + activeOptimizers.Count + ")" + executes + " " + optimizer.Owner.Name.ToString(NameOrderOption.FirstNameLastName);
-                string success;
-                if (!result)
-                {
-                    success = " " + Resources.wasNotSuccessful;
-                }
-                else
-                {
-                    success = " " + Resources.wasSuccessful;
-                }
-                string values = " " + newPeriodValue + "(" + (newPeriodValue - lastPeriodValue) + ")";
-                OnReportProgress(who + success + values);
-
-                lastPeriodValue = newPeriodValue;
-                if (_cancelMe)
-                    break;
-
-				if (_progressEvent != null && _progressEvent.UserCancel)
-					break;
-            }
-            return retList;
+			return new CancelSignal();
         }
     }
 }

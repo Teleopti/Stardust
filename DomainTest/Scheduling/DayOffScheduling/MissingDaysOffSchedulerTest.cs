@@ -43,8 +43,9 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.DayOffScheduling
             _matrixDataListInSteadyState = _mocks.StrictMock<IMatrixDataListInSteadyState>();
             _matrixDataListCreator = _mocks.StrictMock<IMatrixDataListCreator>();
             _matrixDataWithToFewDaysOff = _mocks.StrictMock<IMatrixDataWithToFewDaysOff>();
+			_principalAuthorization = _mocks.StrictMock<IPrincipalAuthorization>();
             _target = new MissingDaysOffScheduler(_bestSpotForAddingDayOffFinder, _matrixDataListInSteadyState,
-                                                  _matrixDataListCreator, _matrixDataWithToFewDaysOff);
+                                                  _matrixDataListCreator, _matrixDataWithToFewDaysOff,_principalAuthorization);
             _matrix1 = _mocks.StrictMock<IScheduleMatrixPro>();
             _matrixList = new List<IScheduleMatrixPro> { _matrix1 };
             _schedulingOptions = new SchedulingOptions();
@@ -56,7 +57,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.DayOffScheduling
             _scheduleDay = _mocks.StrictMock<IScheduleDay>();
             _scheduleDayDataCollection = new ReadOnlyCollection<IScheduleDayData>(new List<IScheduleDayData>());
 			_personAssignment = _mocks.StrictMock<IPersonAssignment>();
-			_principalAuthorization = _mocks.StrictMock<IPrincipalAuthorization>();
 			_person = _mocks.StrictMock<IPerson>();
 			_dateOnlyAsDateTimePeriod = _mocks.StrictMock<IDateOnlyAsDateTimePeriod>();
 			_dateOnly = new DateOnly(2013, 1, 1);

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Teleopti.Ccc.Domain.Optimization;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Interfaces.Domain;
 
@@ -33,8 +34,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 
 	    private readonly Random _random = new Random((int)DateTime.Now.TimeOfDay.Ticks);
         private readonly HashSet<IWorkShiftFinderResult> _finderResults = new HashSet<IWorkShiftFinderResult>();
-		private SchedulingServiceBaseEventArgs _progressEvent;
-
+		
         public event EventHandler<SchedulingServiceBaseEventArgs> DayScheduled;
 
 		public StudentSchedulingService( ISchedulingResultStateHolder schedulingResultStateHolder,
@@ -48,11 +48,9 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 			_personSkillProvider = personSkillProvider;
 		}
 
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "1")]
         public bool DoTheScheduling(IList<IScheduleDay> selectedParts, ISchedulingOptions schedulingOptions, bool useOccupancyAdjustment, bool breakIfPersonCannotSchedule,
 			ISchedulePartModifyAndRollbackService rollbackService)
         {
-	        _progressEvent = null;
             var skills = _schedulingResultStateHolder.Skills;
             if (skills.Count == 0) return false;
 			var resourceCalculateDelayer = new ResourceCalculateDelayer(_resourceOptimizationHelper, 1,
@@ -95,26 +93,25 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
             _finderResults.Clear();
             _scheduleService.ClearFinderResults();
         }
-        protected void OnDayScheduled(SchedulingServiceBaseEventArgs scheduleServiceBaseEventArgs)
+
+        private CancelSignal onDayScheduled(SchedulingServiceBaseEventArgs args)
         {
-            EventHandler<SchedulingServiceBaseEventArgs> temp = DayScheduled;
-            if (temp != null)
+            EventHandler<SchedulingServiceBaseEventArgs> handler = DayScheduled;
+            if (handler != null)
             {
-                temp(this, scheduleServiceBaseEventArgs);
-
-				if (_progressEvent != null && _progressEvent.UserCancel)
-					return;
-
-				_progressEvent = scheduleServiceBaseEventArgs;
+                handler(this, args);
+				if (args.Cancel) return new CancelSignal{ShouldCancel = true};
             }
+			return new CancelSignal();
         }
 
         private bool doTheSchedulingLoop(IList<IScheduleDay> selectedParts, ISchedulingOptions schedulingOptions,
 			bool breakIfPersonCannotSchedule, bool excludeStudentsWithEnoughHours, IResourceCalculateDelayer resourceCalculateDelayer,
 			ISchedulePartModifyAndRollbackService rollbackService)
         {
-			bool everyPersonScheduled = true;
-			bool tempOnlyShiftsWhenUnderstaffed =
+			var everyPersonScheduled = true;
+	        var cancel = false;
+			var tempOnlyShiftsWhenUnderstaffed =
                 schedulingOptions.OnlyShiftsWhenUnderstaffed;
 
 			// all list off Days and person that we don't want to try again, the person(s> could not be scheduled on that day
@@ -134,11 +131,10 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 			// after a day is scheduled it is removed from the list
 			while (theDay != null && selectedParts.Count > 0)
 			{
-				IPerson person;
 				if (persons.Count > 0)
 				{
 					bool schedulePersonOnDayResult = false;
-					person = GetRandomPerson(persons);
+					IPerson person = GetRandomPerson(persons);
 
 					IVirtualSchedulePeriod virtualSchedulePeriod = person.VirtualSchedulePeriod(dateOnly);
 					TimeSpan minTimeSchedulePeriod = virtualSchedulePeriod.MinTimeSchedulePeriod;
@@ -177,12 +173,9 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 						persons.Remove(person);
 					}
 
-					var eventArgs = new SchedulingServiceSuccessfulEventArgs(part);
-					OnDayScheduled(eventArgs);
-					if (eventArgs.Cancel) return everyPersonScheduled;
-
-					if (_progressEvent != null && _progressEvent.UserCancel)
-						return everyPersonScheduled;
+					var eventArgs = new SchedulingServiceSuccessfulEventArgs(part,()=>cancel=true);
+					var progressResult = onDayScheduled(eventArgs);
+					if (cancel || progressResult.ShouldCancel) return everyPersonScheduled;
 				}
 				else
 				{
@@ -206,7 +199,6 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 			return everyPersonScheduled;
 		}
 
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
         public ICollection<IPerson> GetAllPersons(IList<IScheduleDay> selectedParts, bool excludeStudentsWithEnoughHours, DateOnly onDate)
         {
             var ret = new HashSet<IPerson>();
@@ -247,7 +239,6 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
             return ret;
         }
 
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1024:UsePropertiesWhereAppropriate")]
         public virtual IList<DateOnly> GetAllDates(IList<IScheduleDay> selectedParts)
         {
             IList<DateOnly> ret = new List<DateOnly>();
@@ -313,7 +304,6 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 
         }
 
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "1"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1011:ConsiderPassingBaseTypesAsParameters")]
 		public static IList<IPerson> FilterPersonsOnSkill(DateOnly onDate, IEnumerable<IPerson> persons, ISkill filterOnSkill)
 		{
 			IList<IPerson> ret = new List<IPerson>();

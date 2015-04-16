@@ -114,7 +114,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 
 		static void _target_ReportProgress2(object sender, ResourceOptimizerProgressEventArgs e)
 		{
-			e.UserCancel = true;
+			e.CancelAction();
 		}
     }
 }

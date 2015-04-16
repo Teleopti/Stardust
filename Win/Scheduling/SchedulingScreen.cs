@@ -2058,7 +2058,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 				if (_cancelButtonPressed)
 				{
 					progress.Cancel = true;
-					progress.UserCancel = true;
+					progress.CancelAction();
 				}
 			}
 
@@ -2941,7 +2941,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 						if (_cancelButtonPressed)
 						{
 							progress.Cancel = true;
-							progress.UserCancel = true;
+							progress.CancelCallback();
 						}
 					}
 
@@ -3084,7 +3084,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 				{
 					_backgroundWorkerOptimization.CancelAsync();
 					progress.Cancel = true;
-					progress.UserCancel = true;
+					progress.CancelAction();
 				}
 
 				if (_scheduleCounter >= _optimizerOriginalPreferences.SchedulingOptions.RefreshRate)
@@ -3227,7 +3227,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 				if (progress != null && _cancelButtonPressed)
 				{
 					progress.Cancel = true;
-					progress.UserCancel = true;
+					progress.CancelCallback();
 				}
 
 				if (e.ProgressPercentage <= 0)

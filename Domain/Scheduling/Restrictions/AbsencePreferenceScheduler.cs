@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using Teleopti.Ccc.Domain.Optimization;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Scheduling.Restrictions
@@ -15,8 +16,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Restrictions
 		private readonly IEffectiveRestrictionCreator _effectiveRestrictionCreator;
 		private readonly Func<ISchedulePartModifyAndRollbackService> _schedulePartModifyAndRollbackService;
 		private readonly IAbsencePreferenceFullDayLayerCreator _absencePreferenceFullDayLayerCreator;
-		private SchedulingServiceBaseEventArgs _progressEvent;
-
+		
 		public event EventHandler<SchedulingServiceBaseEventArgs> DayScheduled;
 
 		public AbsencePreferenceScheduler(IEffectiveRestrictionCreator effectiveRestrictionCreator,
@@ -30,9 +30,9 @@ namespace Teleopti.Ccc.Domain.Scheduling.Restrictions
 
         public void AddPreferredAbsence(IList<IScheduleMatrixPro> matrixList, ISchedulingOptions schedulingOptions)
         {
-	        _progressEvent = null;
             if(matrixList == null) throw new ArgumentNullException("matrixList");
 
+	        var cancel = false;
             foreach (var scheduleMatrixPro in matrixList)
             {
                 foreach (var scheduleDayPro in scheduleMatrixPro.UnlockedDays)
@@ -49,28 +49,22 @@ namespace Teleopti.Ccc.Domain.Scheduling.Restrictions
                     part.CreateAndAddAbsence(layer);
                     _schedulePartModifyAndRollbackService().Modify(part);
 
-					var eventArgs = new SchedulingServiceSuccessfulEventArgs(part);
-                    OnDayScheduled(eventArgs);
-                    if (eventArgs.Cancel) return;
-
-	                if (_progressEvent != null && _progressEvent.UserCancel)
-		                return;
+					var eventArgs = new SchedulingServiceSuccessfulEventArgs(part,()=>cancel=true);
+                    var progressResult = onDayScheduled(eventArgs);
+                    if (cancel || progressResult.ShouldCancel) return;
                 }
             }
         }
 
-		protected virtual void OnDayScheduled(SchedulingServiceBaseEventArgs scheduleServiceBaseEventArgs)
+		private CancelSignal onDayScheduled(SchedulingServiceBaseEventArgs args)
 		{
-			EventHandler<SchedulingServiceBaseEventArgs> temp = DayScheduled;
-			if (temp != null)
+			var handler = DayScheduled;
+			if (handler != null)
 			{
-				temp(this, scheduleServiceBaseEventArgs);
-
-				if (_progressEvent != null && _progressEvent.UserCancel)
-					return;
-
-				_progressEvent = scheduleServiceBaseEventArgs;
+				handler(this, args);
+				if (args.Cancel) return new CancelSignal{ShouldCancel = true};
 			}
+			return new CancelSignal();
 		}
 	}
 }

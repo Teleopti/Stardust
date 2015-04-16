@@ -1,10 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.EqualNumberOfCategory;
 using Teleopti.Ccc.Domain.Scheduling.TeamBlock;
-using Teleopti.Ccc.Domain.Security.AuthorizationData;
-using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.UserTexts;
 using Teleopti.Interfaces.Domain;
 
@@ -26,9 +23,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.Senior
 	    private readonly ITeamBlockSwap _teamBlockSwap;
 		private readonly IFilterForTeamBlockInSelection _filterForTeamBlockInSelection;
 		public event EventHandler<ResourceOptimizerProgressEventArgs> ReportProgress;
-		private bool _cancelMe;
-		private ResourceOptimizerProgressEventArgs _progressEvent;
-
+		
         public TeamBlockSeniorityFairnessOptimizationService(IConstructTeamBlock constructTeamBlock, 
 															IDetermineTeamBlockPriority determineTeamBlockPriority,
 															ITeamBlockPeriodValidator teamBlockPeriodValidator,
@@ -53,14 +48,10 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.Senior
 
 		    var notSwapped = 0;
 		    var loop = 1;
+		    var cancelMe = false;
 
-		    _cancelMe = false;
-		    _progressEvent = null;
-
-		    while (!_cancelMe)
+		    while (!cancelMe)
 		    {
-			    if (_progressEvent != null && _progressEvent.UserCancel) break;
-
 			    var unSuccessfulSwaps = new List<ITeamBlockInfo>();
 			    var listOfAllTeamBlock = _constructTeamBlock.Construct(allPersonMatrixList, selectedPeriod, selectedPersons,
 				    schedulingOptions.BlockFinderTypeForAdvanceScheduling,
@@ -82,9 +73,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.Senior
 
 			    foreach (var teamBlockInfoHighSeniority in teamBlockPriorityDefinitionInfo.HighToLowSeniorityListBlockInfo)
 			    {
-				    if (_cancelMe) break;
-
-				    if (_progressEvent != null && _progressEvent.UserCancel) break;
+				    if (cancelMe) break;
 
 				    var highSeniorityPoints =
 					    teamBlockPriorityDefinitionInfo.GetShiftCategoryPriorityOfBlock(teamBlockInfoHighSeniority);
@@ -141,29 +130,29 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.Senior
 
 				    if (loop > 1) message += " (" + loop + ")";
 
-				    OnReportProgress(message);
+					var progressResult = onReportProgress(new ResourceOptimizerProgressEventArgs(0, 0, message,()=>cancelMe=true));
+					if (progressResult.ShouldCancel) cancelMe = true;
+
 				    analyzedTeamBlocks.Add(teamBlockInfoHighSeniority);
 			    }
 
-			    if (unSuccessfulSwaps.Count >= notSwapped && notSwapped > 0) _cancelMe = true;
-			    if (unSuccessfulSwaps.Count == 0) _cancelMe = true;
+			    if (unSuccessfulSwaps.Count >= notSwapped && notSwapped > 0) cancelMe = true;
+			    if (unSuccessfulSwaps.Count == 0) cancelMe = true;
 
 			    notSwapped = unSuccessfulSwaps.Count;
 			    loop++;
 		    }
 	    }
 
-	    public virtual void OnReportProgress(string message)
+	    private CancelSignal onReportProgress(ResourceOptimizerProgressEventArgs args)
 		{
 			var handler = ReportProgress;
-			if (handler == null) return;
-			var args = new ResourceOptimizerProgressEventArgs(0, 0, message);
-			handler(this, args);
-			if (args.Cancel) _cancelMe = true;
-
-			if (_progressEvent != null && _progressEvent.UserCancel) return;
-
-			_progressEvent = args;
+		    if (handler != null)
+		    {
+			    handler(this, args);
+			    if (args.Cancel) return new CancelSignal {ShouldCancel = true};
+		    }
+			return new CancelSignal();
 		}
     }
 }

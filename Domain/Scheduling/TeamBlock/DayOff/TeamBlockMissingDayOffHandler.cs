@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Teleopti.Ccc.Domain.Optimization;
 using Teleopti.Ccc.Domain.Scheduling.DayOffScheduling;
 using Teleopti.Interfaces.Domain;
 
@@ -19,8 +20,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.DayOff
         private readonly IMatrixDataWithToFewDaysOff _matrixDataWithToFewDaysOff;
         private readonly SplitSchedulePeriodToWeekPeriod _splitSchedulePeriodToWeekPeriod;
         private readonly IValidNumberOfDayOffInAWeekSpecification _validNumberOfDayOffInAWeekSpecification;
-		private SchedulingServiceBaseEventArgs _progressEvent;
-
+		
         public event EventHandler<SchedulingServiceBaseEventArgs> DayScheduled;
 
         public TeamBlockMissingDayOffHandler(IBestSpotForAddingDayOffFinder bestSpotForAddingDayOffFinder, IMatrixDataListCreator matrixDataListCreator, IMatrixDataWithToFewDaysOff matrixDataWithToFewDaysOff, SplitSchedulePeriodToWeekPeriod splitSchedulePeriodToWeekPeriod, IValidNumberOfDayOffInAWeekSpecification validNumberOfDayOffInAWeekSpecification)
@@ -34,27 +34,30 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.DayOff
         
         public void Execute(IList<IScheduleMatrixPro> matrixList, ISchedulingOptions schedulingOptions, ISchedulePartModifyAndRollbackService rollbackService)
         {
-	        _progressEvent = null;
-            var matrixDataList = _matrixDataListCreator.Create(matrixList, schedulingOptions);
+	        var matrixDataList = _matrixDataListCreator.Create(matrixList, schedulingOptions);
+	        var cancel = false;
             IList<IMatrixData> workingList = _matrixDataWithToFewDaysOff.FindMatrixesWithToFewDaysOff(matrixDataList);
             foreach (var workingItem in workingList)
             {
-                fixThisMatrix(workingItem, schedulingOptions, rollbackService);
+				if (cancel) return;
+                fixThisMatrix(workingItem, schedulingOptions, rollbackService, ()=>cancel=true);
             }
         }
 
-        private void fixThisMatrix(IMatrixData workingItem, ISchedulingOptions schedulingOptions, ISchedulePartModifyAndRollbackService rollbackService)
+        private void fixThisMatrix(IMatrixData workingItem, ISchedulingOptions schedulingOptions, ISchedulePartModifyAndRollbackService rollbackService, Action cancelAction)
         {
             var tempWorkingList = _matrixDataWithToFewDaysOff.FindMatrixesWithToFewDaysOff(new List<IMatrixData> { workingItem });
             var splitedWeeksFromSchedulePeriod = _splitSchedulePeriodToWeekPeriod.Split(tempWorkingList[0].Matrix.SchedulePeriod.DateOnlyPeriod);
             int averageNumberOfDayOffPerWeek = tempWorkingList[0].Matrix.SchedulePeriod.DaysOff() / splitedWeeksFromSchedulePeriod.Count ;
-            var alreadyAnalyzedDates = new List<DateOnly>();
+			var alreadyAnalyzedDates = new List<DateOnly>();
+			var cancel = false;
             while (tempWorkingList.Count > 0)
             {
                 var resultingDateFound = false;
                 var schedulingResult = false;
                 foreach (var weekPeriod in splitedWeeksFromSchedulePeriod)
                 {
+					if (cancel) return;
                     if (_validNumberOfDayOffInAWeekSpecification.IsSatisfied(tempWorkingList[0].Matrix, weekPeriod, averageNumberOfDayOffPerWeek)) 
 						continue;
                     
@@ -67,7 +70,11 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.DayOff
                         continue;
                     }
                     alreadyAnalyzedDates.Add(resultingDate.Value);
-                    schedulingResult = assignDayOff(resultingDate.Value, tempWorkingList[0], schedulingOptions.DayOffTemplate, rollbackService);
+                    schedulingResult = assignDayOff(resultingDate.Value, tempWorkingList[0], schedulingOptions.DayOffTemplate, rollbackService, () =>
+                    {
+	                    cancel = true;
+	                    cancelAction();
+                    });
                     if (!_matrixDataWithToFewDaysOff.FindMatrixesWithToFewDaysOff(tempWorkingList).Any()) 
 						break;  
                 }
@@ -90,37 +97,30 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.DayOff
             return filteredList;
         }
 
-
-        private bool assignDayOff(DateOnly date, IMatrixData matrixData, IDayOffTemplate dayOffTemplate, ISchedulePartModifyAndRollbackService rollbackService)
+        private bool assignDayOff(DateOnly date, IMatrixData matrixData, IDayOffTemplate dayOffTemplate, ISchedulePartModifyAndRollbackService rollbackService, Action cancelAction)
         {
             var scheduleDayPro = matrixData.Matrix.GetScheduleDayByKey(date);
             if (!matrixData.Matrix.UnlockedDays.Contains(scheduleDayPro)) return false;
             IScheduleDay scheduleDay = scheduleDayPro.DaySchedulePart();
             scheduleDay.CreateAndAddDayOff(dayOffTemplate);
             rollbackService.Modify(scheduleDay);
-            var eventArgs = new SchedulingServiceSuccessfulEventArgs(scheduleDay);
-            OnDayScheduled(eventArgs);
-            if (eventArgs.Cancel)
+            var eventArgs = new SchedulingServiceSuccessfulEventArgs(scheduleDay, cancelAction);
+            var progressResult = onDayScheduled(eventArgs);
+            if (progressResult.ShouldCancel)
                 return false;
-
-	        if (_progressEvent != null && _progressEvent.UserCancel)
-		        return false;
 
             return true;
         }
 
-        protected virtual void OnDayScheduled(SchedulingServiceBaseEventArgs scheduleServiceBaseEventArgs)
+        private CancelSignal onDayScheduled(SchedulingServiceBaseEventArgs args)
         {
-            EventHandler<SchedulingServiceBaseEventArgs> temp = DayScheduled;
-            if (temp != null)
+            var handler = DayScheduled;
+            if (handler != null)
             {
-                temp(this, scheduleServiceBaseEventArgs);
-
-				if (_progressEvent != null && _progressEvent.UserCancel)
-					return;
-
-				_progressEvent = scheduleServiceBaseEventArgs;
+                handler(this, args);
+				if (args.Cancel) return new CancelSignal{ShouldCancel = true};
             }
+			return new CancelSignal();
         }
     }
 }

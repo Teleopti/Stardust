@@ -23,8 +23,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 		    ISchedulePartModifyAndRollbackService schedulePartModifyAndRollbackService,
 		    IResourceCalculateDelayer resourceCalculateDelayer)
 	    {
-
-
 		    var tempMatrixList =
 			    teamBlockInfo.TeamInfo.MatrixesForGroupAndDate(dateOnly)
 				    .Where(scheduleMatrixPro => scheduleMatrixPro.Person == person)
@@ -44,18 +42,17 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 		    var agentTimeZone = person.PermissionInformation.DefaultTimeZone();
 		    assignShiftProjection(shiftProjectionCache, agentTimeZone, scheduleDay, dateOnly,
 			    schedulePartModifyAndRollbackService);
-		    OnDayScheduled(new SchedulingServiceSuccessfulEventArgs(scheduleDay));
+		    onDayScheduled(new SchedulingServiceSuccessfulEventArgs(scheduleDay));
 		    resourceCalculateDelayer.CalculateIfNeeded(scheduleDay.DateOnlyAsPeriod.DateOnly,
 			    shiftProjectionCache.WorkShiftProjectionPeriod);
 	    }
 
-	    [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
-		protected virtual void OnDayScheduled(SchedulingServiceBaseEventArgs scheduleServiceBaseEventArgs)
+	    private void onDayScheduled(SchedulingServiceBaseEventArgs args)
 		{
-			EventHandler<SchedulingServiceBaseEventArgs> temp = DayScheduled;
-			if (temp != null)
+			var handler = DayScheduled;
+			if (handler != null)
 			{
-				temp(this, scheduleServiceBaseEventArgs);
+				handler(this, args);
 			}
 		}
 

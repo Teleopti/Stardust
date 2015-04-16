@@ -421,7 +421,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 				{
 					recalculateIfContinuedStep(continuedStep, selectedPeriod);
 
-					if (_progressEvent == null || !_progressEvent.UserCancel)
+					if (_progressEvent == null || !_progressEvent.Cancel)
 					{
 						RunWorkShiftOptimization(
 							optimizerPreferences,
@@ -437,7 +437,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 				{
 					recalculateIfContinuedStep(continuedStep, selectedPeriod);
 
-					if (_progressEvent == null || !_progressEvent.UserCancel)
+					if (_progressEvent == null || !_progressEvent.Cancel)
 					{
 						_extendReduceTimeHelper.RunExtendReduceTimeOptimization(optimizerPreferences, _backgroundWorker,
 							selectedDays, _stateHolder(),
@@ -451,7 +451,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 				{
 					recalculateIfContinuedStep(continuedStep, selectedPeriod);
 
-					if (_progressEvent == null || !_progressEvent.UserCancel)
+					if (_progressEvent == null || !_progressEvent.Cancel)
 					{
 						_extendReduceDaysOffHelper.RunExtendReduceDayOffOptimization(optimizerPreferences, _backgroundWorker,
 							selectedDays, _schedulerStateHolder(),
@@ -466,7 +466,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 				{
 					recalculateIfContinuedStep(continuedStep, selectedPeriod);
 
-					if (_progressEvent == null || !_progressEvent.UserCancel)
+					if (_progressEvent == null || !_progressEvent.Cancel)
 					{
 						RunIntradayOptimization(
 							optimizerPreferences,
@@ -482,7 +482,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 				{
 					recalculateIfContinuedStep(continuedStep, selectedPeriod);
 
-					if (_progressEvent == null || !_progressEvent.UserCancel)
+					if (_progressEvent == null || !_progressEvent.Cancel)
 					{
 						runFairness(tagSetter, selectedPersons, schedulingOptions, selectedPeriod, optimizerPreferences);
 						continuedStep = true;
@@ -492,7 +492,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 				if (optimizerPreferences.General.OptimizationStepIntraInterval)
 				{
 					recalculateIfContinuedStep(continuedStep, selectedPeriod);
-					if (_progressEvent == null || !_progressEvent.UserCancel)
+					if (_progressEvent == null || !_progressEvent.Cancel)
 					{
 						runIntraInterval(schedulingOptions, optimizerPreferences, selectedPeriod, selectedDays, tagSetter);
 					}
@@ -578,7 +578,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 				if (_backgroundWorker.CancellationPending)
 					return;
 
-				if (_progressEvent != null && _progressEvent.UserCancel) return;
+				if (_progressEvent != null && _progressEvent.Cancel) return;
 
 				IList<IScheduleMatrixPro> matrixList =
 					matrixContainerList.Select(container => container.ScheduleMatrix).ToList();
@@ -602,7 +602,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 				if (_backgroundWorker.CancellationPending)
 					return;
 
-				if (_progressEvent != null && _progressEvent.UserCancel) return;
+				if (_progressEvent != null && _progressEvent.Cancel) return;
 
 				IList<IScheduleMatrixPro> matrixList =
 					scheduleMatrixOriginalStateContainerList.Select(container => container.ScheduleMatrix).ToList();
@@ -633,7 +633,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 			if (_backgroundWorker.CancellationPending)
 				return;
 
-			if (_progressEvent != null && _progressEvent.UserCancel) return;
+			if (_progressEvent != null && _progressEvent.Cancel) return;
 
 			IList<IScheduleMatrixPro> matrixList = matrixContainerList.Select(container => container.ScheduleMatrix).ToList();
 
@@ -709,9 +709,10 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 
 		private void rollbackMatrixChanges(IScheduleMatrixOriginalStateContainer matrixOriginalStateContainer, ISchedulePartModifyAndRollbackService rollbackService)
 		{
-			var e = new ResourceOptimizerProgressEventArgs(0, 0, Resources.RollingBackSchedulesFor + " " + matrixOriginalStateContainer.ScheduleMatrix.Person.Name);
+			var cancel = false;
+			var e = new ResourceOptimizerProgressEventArgs(0, 0, Resources.RollingBackSchedulesFor + " " + matrixOriginalStateContainer.ScheduleMatrix.Person.Name,()=>cancel=true);
 			resourceOptimizerPersonOptimized(this, e);
-			if (_progressEvent != null && _progressEvent.UserCancel) return;
+			if (cancel || (_progressEvent != null && _progressEvent.Cancel)) return;
 
 			rollbackService.ClearModificationCollection();
 			foreach (IScheduleDayPro scheduleDayPro in matrixOriginalStateContainer.ScheduleMatrix.EffectivePeriodDays)
@@ -726,11 +727,11 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 			if (_backgroundWorker.CancellationPending)
 			{
 				e.Cancel = true;
-				e.UserCancel = true;
+				e.CancelAction();
 			}
 			_backgroundWorker.ReportProgress(1, e);
 
-			if (_progressEvent != null && _progressEvent.UserCancel) return;
+			if (_progressEvent != null && _progressEvent.Cancel) return;
 			_progressEvent = e;
 		}
 

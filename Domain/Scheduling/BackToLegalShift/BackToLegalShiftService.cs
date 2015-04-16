@@ -4,6 +4,7 @@ using System.ComponentModel;
 using System.Globalization;
 using System.Linq;
 using Teleopti.Ccc.Domain.Collection;
+using Teleopti.Ccc.Domain.Optimization;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling.TeamBlock;
 using Teleopti.Ccc.UserTexts;
@@ -27,8 +28,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.BackToLegalShift
 		private readonly ILegalShiftDecider _legalShiftDecider;
 		private readonly IWorkShiftFinderResultHolder _workShiftFinderResultHolder;
 		private readonly IDayOffsInPeriodCalculator _dayOffsInPeriodCalculator;
-		private CancelEventArgs _cancelEvent;
-		private bool _cancelMe;
 
 		public BackToLegalShiftService(IBackToLegalShiftWorker backToLegalShiftWorker,
 			IFirstShiftInTeamBlockFinder firstShiftInTeamBlockFinder, ILegalShiftDecider legalShiftDecider,
@@ -54,9 +53,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.BackToLegalShift
 			var workShiftFinderResultList = new List<IWorkShiftFinderResult>();
 			foreach (var selectedTeamBlock in selectedTeamBlocks.GetRandom(selectedTeamBlocks.Count, true))
 			{
-				if (_cancelMe)
-					return;
-
 				isSingleTeamSingleDay(selectedTeamBlock);
 
 				var person = selectedTeamBlock.TeamInfo.GroupMembers.First();
@@ -65,15 +61,18 @@ namespace Teleopti.Ccc.Domain.Scheduling.BackToLegalShift
 				var ruleSetBag = person.Period(date).RuleSetBag;
 				processedBlocks++;
 				var roleModel = _firstShiftInTeamBlockFinder.FindFirst(selectedTeamBlock, person, date, schedulingResultStateHolder);
+				CancelSignal progressResult;
 				if(roleModel == null)
 				{
-					OnProgress(selectedTeamBlocks.Count, processedBlocks);
+					progressResult = onProgress(selectedTeamBlocks.Count, processedBlocks);
+					if (progressResult.ShouldCancel) return;
 					continue;
 				}
 
 				if (_legalShiftDecider.IsLegalShift(date, timeZoneInfo, ruleSetBag, roleModel))
 				{
-					OnProgress(selectedTeamBlocks.Count, processedBlocks);
+					progressResult = onProgress(selectedTeamBlocks.Count, processedBlocks);
+					if (progressResult.ShouldCancel) return;
 					continue;
 				}
 
@@ -99,28 +98,25 @@ namespace Teleopti.Ccc.Domain.Scheduling.BackToLegalShift
 					workShiftFinderResult.AddFilterResults(new WorkShiftFilterResult(Resources.CouldNotFindAnyValidShiftInShiftBag, 0, 0));
 					workShiftFinderResultList.Add(workShiftFinderResult);
 				}
-				
-				OnProgress(selectedTeamBlocks.Count, processedBlocks);
+
+				progressResult = onProgress(selectedTeamBlocks.Count, processedBlocks);
+				if (progressResult.ShouldCancel) return;
 			}
 			_workShiftFinderResultHolder.AddResults(workShiftFinderResultList, DateTime.Now);
 		}
 
-		protected void OnProgress(int totalBlocks, int processedBlocks )
+		private CancelSignal onProgress(int totalBlocks, int processedBlocks)
 		{
-			var tmp = Progress;
-			if (tmp != null)
+			var handler = Progress;
+			if (handler != null)
 			{
 				var args = new BackToLegalShiftArgs {TotalBlocks = totalBlocks, ProcessedBlocks = processedBlocks};
-				tmp(this, args);
+				handler(this, args);
 
-				if (_cancelEvent != null && _cancelEvent.Cancel)
-					_cancelMe = true;
-
-				_cancelEvent = args;
-
-				if (_cancelEvent != null && _cancelEvent.Cancel)
-					_cancelMe = true;
+				if (args.Cancel)
+					return new CancelSignal{ShouldCancel = true};
 			}
+			return new CancelSignal();
 		}
 
 		private void isSingleTeamSingleDay(ITeamBlockInfo teamBlockInfo)

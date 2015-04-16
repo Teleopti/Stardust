@@ -22,12 +22,10 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.MoveTimeOptimization
 	public class TeamBlockMoveTimeBetweenDaysService : ITeamBlockMoveTimeBetweenDaysService
 	{
 		private readonly ITeamBlockMoveTimeOptimizer _teamBlockMoveTimeOptimizer;
-		private bool _cancelMe;
 		private readonly IConstructTeamBlock  _constructTeamBlock;
 		private readonly IFilterForTeamBlockInSelection _filterForTeamBlockInSelection;
 		private readonly IFilterForNoneLockedTeamBlocks _filterForNoneLockedTeamBlocks;
 		public event EventHandler<ResourceOptimizerProgressEventArgs> ReportProgress;
-		private ResourceOptimizerProgressEventArgs _progressEvent;
 
 		public TeamBlockMoveTimeBetweenDaysService(ITeamBlockMoveTimeOptimizer teamBlockMoveTimeOptimizer,
 			IConstructTeamBlock constructTeamBlock, IFilterForTeamBlockInSelection filterForTeamBlockInSelection,
@@ -44,40 +42,26 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.MoveTimeOptimization
 			ISchedulingResultStateHolder schedulingResultStateHolder, IList<IPerson> selectedPersons,
 			DateOnlyPeriod selectedPeriod, IResourceCalculateDelayer resourceCalculateDelayer)
 		{
-			_progressEvent = null;
 			var blocksToWorkWith = _constructTeamBlock.Construct(matrixList, selectedPeriod, selectedPersons,
 				optimizerPreferences.Extra.BlockTypeValue,
 				optimizerPreferences.Extra.TeamGroupPage);
 
-
-			blocksToWorkWith = _filterForTeamBlockInSelection.Filter(blocksToWorkWith,
-				selectedPersons, selectedPeriod);
+			blocksToWorkWith = _filterForTeamBlockInSelection.Filter(blocksToWorkWith, selectedPersons, selectedPeriod);
 
 			blocksToWorkWith = _filterForNoneLockedTeamBlocks.Filter(blocksToWorkWith);
 			var teamsToWorkWith = blocksToWorkWith.Select(s => s.TeamInfo).ToList();
-
-			_cancelMe = false;
+			var cancel = false;
 			var activeTeams = new List<ITeamInfo>(teamsToWorkWith);
 			while (activeTeams.Any())
 			{
 				var team = activeTeams.GetRandom(activeTeams.Count(), true).FirstOrDefault();
 				if (team == null) break;
 				var selectedMatrixes = team.MatrixesForMemberAndPeriod(team.GroupMembers.First(), selectedPeriod).ToList();
-				if (_cancelMe)
-					break;
-
-				if (_progressEvent != null && _progressEvent.UserCancel)
-					break;
 
 				IEnumerable<IScheduleMatrixPro> shuffledMatrixes =selectedMatrixes.GetRandom(selectedMatrixes.Count, true);
-
 				foreach (var matrix in shuffledMatrixes)
 				{
-					if (_cancelMe)
-						break;
-
-					if (_progressEvent != null && _progressEvent.UserCancel)
-						break;
+					if (cancel) return;
 
 					bool result = _teamBlockMoveTimeOptimizer.OptimizeTeam(optimizerPreferences, team, matrix, rollbackService,
 						periodValueCalculator, schedulingResultStateHolder, resourceCalculateDelayer);
@@ -86,44 +70,27 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.MoveTimeOptimization
 						activeTeams.Remove(team);
 					}
 					double newPeriodValue = periodValueCalculator.PeriodValue(IterationOperationOption.WorkShiftOptimization);
-					if (_cancelMe)
-						break;
-
-					if (_progressEvent != null && _progressEvent.UserCancel)
-						break;
-
+					
 					string who = Resources.MoveTimeOn + "("+ activeTeams.Count + ")" + team.Name;
-					string success;
-					if (!result)
-					{
-						success = " " + Resources.wasNotSuccessful;
-					}
-					else
-					{
-						success = " " + Resources.wasSuccessful;
-					}
-					OnReportProgress(who + success + " " + newPeriodValue);
+					string success = !result ? " " + Resources.wasNotSuccessful : " " + Resources.wasSuccessful;
+
+					var progressResult = onReportProgress(new ResourceOptimizerProgressEventArgs(0, 0, who + success + " " + newPeriodValue,()=>cancel=true));
+					if (cancel || progressResult.ShouldCancel) return;
 				}
 
 			}
 		}
 
-		public void OnReportProgress(string message)
+		private CancelSignal onReportProgress(ResourceOptimizerProgressEventArgs args)
 		{
 			var handler = ReportProgress;
 			if (handler != null)
 			{
-				ResourceOptimizerProgressEventArgs args = new ResourceOptimizerProgressEventArgs(0, 0, message);
 				handler(this, args);
 				if (args.Cancel)
-					_cancelMe = true;
-
-				if (_progressEvent != null && _progressEvent.UserCancel)
-					return;
-
-				_progressEvent = args;
+					return new CancelSignal {ShouldCancel = true};
 			}
+			return new CancelSignal();
 		}
-		
 	}
 }

@@ -18,11 +18,5 @@ namespace Teleopti.Interfaces.Domain
         /// </summary>
         /// <param name="optimizers">The optimizers.</param>
         void Execute(IEnumerable<IDayOffOptimizerContainer> optimizers);
-
-        /// <summary>
-        /// Called when [report progress].
-        /// </summary>
-        /// <param name="message">The message.</param>
-        void OnReportProgress(string message);
     }
 }

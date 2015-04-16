@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.Optimization.TeamBlock;
 using Teleopti.Ccc.Domain.Scheduling.Rules;
-using Teleopti.Ccc.Domain.Scheduling.TeamBlock;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Optimization.WeeklyRestSolver
@@ -27,12 +26,10 @@ namespace Teleopti.Ccc.Domain.Optimization.WeeklyRestSolver
 		private readonly IShiftNudgeManager _shiftNudgeManager;
 		private readonly IdentifyDayOffWithHighestSpan _identifyDayOffWithHighestSpan;
 		private readonly IDeleteScheduleDayFromUnsolvedPersonWeek _deleteScheduleDayFromUnsolvedPersonWeek;
-		private bool _cancelMe;
 		private readonly IAllTeamMembersInSelectionSpecification _allTeamMembersInSelectionSpecification;
 		private readonly IPersonWeekViolatingWeeklyRestSpecification  _personWeekViolatingWeeklyRestSpecification;
 		private readonly IBrokenWeekCounterForAPerson  _brokenWeekCounterForAPerson;
 		public event EventHandler<ResourceOptimizerProgressEventArgs> ResolvingWeek;
-		private ResourceOptimizerProgressEventArgs _progressEvent;
 
 		public WeeklyRestSolverService(IWeeksFromScheduleDaysExtractor weeksFromScheduleDaysExtractor,
 			IEnsureWeeklyRestRule ensureWeeklyRestRule, IContractWeeklyRestForPersonWeek contractWeeklyRestForPersonWeek,
@@ -55,20 +52,16 @@ namespace Teleopti.Ccc.Domain.Optimization.WeeklyRestSolver
 			_brokenWeekCounterForAPerson = brokenWeekCounterForAPerson;
 		}
 
-		protected virtual void OnDayScheduled(ResourceOptimizerProgressEventArgs resourceOptimizerProgressEventArgs)
+		private CancelSignal onDayScheduled(ResourceOptimizerProgressEventArgs args)
 		{
-			EventHandler<ResourceOptimizerProgressEventArgs> temp = ResolvingWeek;
-			if (temp != null)
+			var handler = ResolvingWeek;
+			if (handler != null)
 			{
-				temp(this, resourceOptimizerProgressEventArgs);
-
-				if (_progressEvent != null && _progressEvent.UserCancel)
-					return;
-
-				_progressEvent = resourceOptimizerProgressEventArgs;
+				handler(this, args);
+				if (args.Cancel)
+					return new CancelSignal{ShouldCancel = true};
 			}
-
-			_cancelMe = resourceOptimizerProgressEventArgs.Cancel;
+			return new CancelSignal();
 		}
 
 		public void Execute(IList<IPerson> selectedPersons, DateOnlyPeriod selectedPeriod,
@@ -77,22 +70,17 @@ namespace Teleopti.Ccc.Domain.Optimization.WeeklyRestSolver
 			IList<IScheduleMatrixPro> allPersonMatrixList, IOptimizationPreferences optimizationPreferences,
 			ISchedulingOptions schedulingOptions)
 		{
-			_progressEvent = null;
-
+			var cancel = false;
 			foreach (var person in selectedPersons)
 			{
 				var personMatrixes = allPersonMatrixList.Where(s => s.Person == person && s.SchedulePeriod.DateOnlyPeriod.Intersection(selectedPeriod).HasValue).ToList();
 
-				//var personMatrixOld = allPersonMatrixList.FirstOrDefault(s => s.Person == person);
-
 				foreach (var personMatrix in personMatrixes)
 				{
-
 					var weeklyRestInPersonWeek = new Dictionary<PersonWeek, TimeSpan>();
 					var personScheduleRange = schedulingResultStateHolder.Schedules[person];
-					var selectedPeriodScheduleDays = personScheduleRange.ScheduledDayCollection(selectedPeriod);
-					var selectedPersonWeeks = _weeksFromScheduleDaysExtractor
-						.CreateWeeksFromScheduleDaysExtractor(selectedPeriodScheduleDays, false).ToList();
+					var selectedPeriodScheduleDays = personScheduleRange.ScheduledDayCollection(selectedPeriod).ToArray();
+					var selectedPersonWeeks = _weeksFromScheduleDaysExtractor.CreateWeeksFromScheduleDaysExtractor(selectedPeriodScheduleDays, false).ToList();
 					var personWeeksViolatingWeeklyRest = new List<PersonWeek>();
 					foreach (var personWeek in selectedPersonWeeks)
 					{
@@ -106,6 +94,7 @@ namespace Teleopti.Ccc.Domain.Optimization.WeeklyRestSolver
 					var totalNumberOfBrokenWeek = _brokenWeekCounterForAPerson.CountBrokenWeek(selectedPeriodScheduleDays, personScheduleRange);
 					foreach (var personWeek in personWeeksViolatingWeeklyRest)
 					{
+						if (cancel) return;
 						if (_ensureWeeklyRestRule.HasMinWeeklyRest(personWeek, personScheduleRange, weeklyRestInPersonWeek[personWeek]))
 							continue;
 						var possiblePositionsToFix = _dayOffToTimeSpanExtractor.GetDayOffWithTimeSpanAmongAWeek(personWeek.Week,
@@ -129,14 +118,10 @@ namespace Teleopti.Ccc.Domain.Optimization.WeeklyRestSolver
 						{
 							while(possiblePositionsToFix.Count() != 0)
 							{
-								OnDayScheduled(new ResourceOptimizerProgressEventArgs(0, 0,
+								var progressResult = onDayScheduled(new ResourceOptimizerProgressEventArgs(0, 0,
 									string.Format(UserTexts.Resources.ResolvingWeeklyRestFor, personWeek.Person.Name.FirstName,
-										personWeek.Person.Name.LastName)));
-								if (_cancelMe)
-									return;
-
-								if (_progressEvent != null && _progressEvent.UserCancel)
-									return;
+										personWeek.Person.Name.LastName),()=>cancel=true));
+								if (cancel || progressResult.ShouldCancel) return;
 
 								var highProbablePosition = _identifyDayOffWithHighestSpan.GetHighProbableDayOffPosition(possiblePositionsToFix);
 								success = _shiftNudgeManager.TrySolveForDayOff(personWeek, highProbablePosition,
@@ -183,7 +168,5 @@ namespace Teleopti.Ccc.Domain.Optimization.WeeklyRestSolver
 				teamBlockGenerator.Generate(allPersonMatrixList, week, new List<IPerson> {person}, schedulingOptions).First();
 			return _allTeamMembersInSelectionSpecification.IsSatifyBy(teamBlockInfo.TeamInfo, selectedPersons);
 		}
-
-
 	}
 }

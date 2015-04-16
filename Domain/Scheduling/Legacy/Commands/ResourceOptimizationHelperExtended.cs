@@ -70,17 +70,18 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 			if (datesList.Count == 0)
 				return;
 
+			var cancel = false;
 			foreach (var date in datesList)
 			{
 				prepareAndCalculateDate(date, useOccupancyAdjustment, considerShortBreaks);
 
 				if (backgroundWorker != null)
 				{
-					var progress = new ResourceOptimizerProgressEventArgs(0, 0, string.Empty);
+					var progress = new ResourceOptimizerProgressEventArgs(0, 0, string.Empty, ()=>cancel=true);
 
 					backgroundWorker.ReportProgress(1, progress);
 
-					if (backgroundWorker.CancellationPending)
+					if (cancel || backgroundWorker.CancellationPending)
 					{
 						return;
 					}

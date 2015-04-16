@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Helper;
+using Teleopti.Ccc.Domain.Optimization;
 using Teleopti.Ccc.Domain.Scheduling.Overtime;
 using Teleopti.Ccc.Domain.Scheduling.Rules;
 using Teleopti.Ccc.Domain.Scheduling.ScheduleTagging;
@@ -15,8 +16,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 		private readonly Func<ISchedulerStateHolder> _schedulerState;
 		private readonly Func<ISchedulingResultStateHolder> _schedulingResultStateHolder;
 		private readonly IScheduleOvertimeService _scheduleOvertimeService;
-		private IBackgroundWorkerWrapper _backgroundWorker;
-		private SchedulingServiceBaseEventArgs _progressEvent;
 
 		public ScheduleOvertimeCommand(Func<ISchedulerStateHolder> schedulerState, Func<ISchedulingResultStateHolder> schedulingResultStateHolder, IScheduleOvertimeService scheduleOvertimeService)
 		{
@@ -27,18 +26,16 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 
 		public void Exectue(IOvertimePreferences overtimePreferences, IBackgroundWorkerWrapper backgroundWorker, IList<IScheduleDay> selectedSchedules, IResourceCalculateDelayer resourceCalculateDelayer, IGridlockManager gridlockManager)
 		{
-			_backgroundWorker = backgroundWorker;
-			_progressEvent = null;
 			var selectedDates = selectedSchedules.Select(x => x.DateOnlyAsPeriod.DateOnly).Distinct();
 			var selectedPersons = selectedSchedules.Select(x => x.Person).Distinct().ToList();
+			var cancel = false;
 			foreach (var dateOnly in selectedDates)
 			{
 				var persons = selectedPersons.Randomize();
 				foreach (var person in persons)
 				{
-					if (checkIfCancelPressed()) return;
-					if (_progressEvent != null && _progressEvent.UserCancel) return;
-
+					if (cancel || checkIfCancelPressed(backgroundWorker)) return;
+					
 					var locks = gridlockManager.Gridlocks(person, dateOnly);
 					if (locks != null && locks.Count != 0) continue;
 
@@ -47,30 +44,28 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 					IScheduleTagSetter scheduleTagSetter = new ScheduleTagSetter(overtimePreferences.ScheduleTag);
 					_scheduleOvertimeService.SchedulePersonOnDay(scheduleDay, overtimePreferences, resourceCalculateDelayer, dateOnly, rules, scheduleTagSetter, _schedulerState().TimeZoneInfo);
 
-					OnDayScheduled(new SchedulingServiceSuccessfulEventArgs(scheduleDay));
+					var progressResult = onDayScheduled(backgroundWorker,new SchedulingServiceSuccessfulEventArgs(scheduleDay,()=>cancel=true));
+					if (progressResult.ShouldCancel) return;
 				}
 			}
 		}
 
-		protected virtual void OnDayScheduled(SchedulingServiceBaseEventArgs e)
+		private CancelSignal onDayScheduled(IBackgroundWorkerWrapper backgroundWorker, SchedulingServiceBaseEventArgs args)
 		{
-			if (_backgroundWorker.CancellationPending)
+			if (backgroundWorker.CancellationPending)
 			{
-				e.Cancel = true;
+				args.Cancel = true;
 			}
 
-			_backgroundWorker.ReportProgress(1, e);
+			backgroundWorker.ReportProgress(1, args);
+			if (args.Cancel) return new CancelSignal{ShouldCancel = true};
 
-			if (_progressEvent != null && _progressEvent.UserCancel)
-				return;
-
-			_progressEvent = e;
+			return new CancelSignal();
 		}
 
-
-		private bool checkIfCancelPressed()
+		private bool checkIfCancelPressed(IBackgroundWorkerWrapper backgroundWorker)
 		{
-			if (_backgroundWorker.CancellationPending)
+			if (backgroundWorker.CancellationPending)
 				return true;
 			return false;
 		}

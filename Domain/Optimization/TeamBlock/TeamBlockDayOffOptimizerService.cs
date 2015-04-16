@@ -39,10 +39,8 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 		private readonly ITeamBlockOptimizationLimits _teamBlockOptimizationLimits;
 		private readonly ITeamBlockMaxSeatChecker _teamBlockMaxSeatChecker;
 		private readonly ITeamBlockDaysOffMoveFinder _teamBlockDaysOffMoveFinder;
-		private bool _cancelMe;
 	    private readonly ITeamBlockSchedulingOptions _teamBlockSchedulingOptions;
 		private readonly IAllTeamMembersInSelectionSpecification _allTeamMembersInSelectionSpecification;
-		private ResourceOptimizerProgressEventArgs _progressEvent;
 
 		public TeamBlockDayOffOptimizerService(
 			ITeamInfoFactory teamInfoFactory,
@@ -78,7 +76,6 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 
 		public event EventHandler<ResourceOptimizerProgressEventArgs> ReportProgress;
 
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "2")]
 		public void OptimizeDaysOff(
 			IList<IScheduleMatrixPro> allPersonMatrixList,
 			DateOnlyPeriod selectedPeriod,
@@ -89,7 +86,6 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 			ISchedulingResultStateHolder schedulingResultStateHolder
 			)
 		{
-			_progressEvent = null;
 			// create a list of all teamInfos
 			var allTeamInfoListOnStartDate = new HashSet<ITeamInfo>();
 			foreach (var selectedPerson in selectedPersons)
@@ -115,6 +111,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 
 			var remainingInfoList = new List<ITeamInfo>(allTeamInfoListOnStartDate);
 
+			var cancelMe = false;
 			while (remainingInfoList.Count > 0)
 			{
 				IEnumerable<ITeamInfo> teamInfosToRemove;
@@ -122,20 +119,23 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 				{
 					teamInfosToRemove = runOneOptimizationRound(optimizationPreferences, rollbackService,
 					                                            remainingInfoList, schedulingOptions,
-					                                            resourceCalculateDelayer, schedulingResultStateHolder);
+					                                            resourceCalculateDelayer, schedulingResultStateHolder, ()=>
+					                                            {
+						                                            cancelMe = true;
+					                                            });
 				}
 				else
 				{
 					teamInfosToRemove = runOneOptimizationRoundWithFreeDaysOff(optimizationPreferences, rollbackService,
 					                                                           remainingInfoList, schedulingOptions,
 					                                                           selectedPersons,
-					                                                           resourceCalculateDelayer, schedulingResultStateHolder);
+																			   resourceCalculateDelayer, schedulingResultStateHolder, () =>
+																			   {
+																				   cancelMe = true;
+																			   });
 				}
 
-				if (_cancelMe)
-					break;
-
-				if (_progressEvent != null && _progressEvent.UserCancel)
+				if (cancelMe)
 					break;
 
 				foreach (var teamInfo in teamInfosToRemove)
@@ -145,36 +145,26 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 			}
 		}
 
-		public void OnReportProgress(string message)
+		public CancelSignal OnReportProgress(ResourceOptimizerProgressEventArgs args)
 		{
-			EventHandler<ResourceOptimizerProgressEventArgs> handler = ReportProgress;
+			var handler = ReportProgress;
 			if (handler != null)
 			{
-				var args = new ResourceOptimizerProgressEventArgs(0, 0, message);
 				handler(this, args);
 				if (args.Cancel)
-					_cancelMe = true;
-
-				if (_progressEvent != null && _progressEvent.UserCancel)
-					return;
-
-				_progressEvent = args;
+					return new CancelSignal{ShouldCancel = true};
 			}
+			return new CancelSignal();
 		}
 
-		private IEnumerable<ITeamInfo> runOneOptimizationRoundWithFreeDaysOff(IOptimizationPreferences optimizationPreferences,
-															   ISchedulePartModifyAndRollbackService rollbackService,
-															   List<ITeamInfo> remainingInfoList,
-															   ISchedulingOptions schedulingOptions,
-															   IList<IPerson> selectedPersons,
-																IResourceCalculateDelayer resourceCalculateDelayer,
-																ISchedulingResultStateHolder schedulingResultStateHolder)
+		private IEnumerable<ITeamInfo> runOneOptimizationRoundWithFreeDaysOff(IOptimizationPreferences optimizationPreferences, ISchedulePartModifyAndRollbackService rollbackService, List<ITeamInfo> remainingInfoList, ISchedulingOptions schedulingOptions, IList<IPerson> selectedPersons, IResourceCalculateDelayer resourceCalculateDelayer, ISchedulingResultStateHolder schedulingResultStateHolder, Action cancelAction)
 		{
 			var teamInfosToRemove = new HashSet<ITeamInfo>();
 			double previousPeriodValue =
 					_periodValueCalculatorForAllSkills.PeriodValue(IterationOperationOption.DayOffOptimization);
 			var totalLiveTeamInfos = remainingInfoList.Count;
 			var currentTeamInfoCounter = 0;
+			var cancelMe = false;
 			foreach (ITeamInfo teamInfo in remainingInfoList.GetRandom(remainingInfoList.Count, true))
 			{
 				currentTeamInfoCounter++;
@@ -199,7 +189,11 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 						double currentPeriodValue =
 							_periodValueCalculatorForAllSkills.PeriodValue(IterationOperationOption.DayOffOptimization);
 						success = handleResult(rollbackService, schedulingOptions, previousPeriodValue, success,
-													   teamInfo, totalLiveTeamInfos, currentTeamInfoCounter, currentPeriodValue, checkPeriodValue);
+													   teamInfo, totalLiveTeamInfos, currentTeamInfoCounter, currentPeriodValue, checkPeriodValue, ()=>
+													   {
+														   cancelMe = true;
+														   cancelAction();
+													   });
 
 						if (success)
 						{
@@ -211,10 +205,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 					if(allFailed)
 						teamInfosToRemove.Add(teamInfo);
 
-					if (_cancelMe)
-						break;
-
-					if (_progressEvent != null && _progressEvent.UserCancel)
+					if (cancelMe)
 						break;
 				}
 			}
@@ -222,19 +213,14 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 			return teamInfosToRemove;
 		}
 			
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Globalization", "CA1303:Do not pass literals as localized parameters", MessageId = "Teleopti.Ccc.Domain.Optimization.TeamBlock.TeamBlockDayOffOptimizerService.OnReportProgress(System.String)")]
-		private IEnumerable<ITeamInfo> runOneOptimizationRound(IOptimizationPreferences optimizationPreferences,
-		                                                       ISchedulePartModifyAndRollbackService rollbackService,
-		                                                       List<ITeamInfo> remainingInfoList,
-		                                                       ISchedulingOptions schedulingOptions,
-																IResourceCalculateDelayer resourceCalculateDelayer,
-																ISchedulingResultStateHolder schedulingResultStateHolder)
+		private IEnumerable<ITeamInfo> runOneOptimizationRound(IOptimizationPreferences optimizationPreferences, ISchedulePartModifyAndRollbackService rollbackService, List<ITeamInfo> remainingInfoList, ISchedulingOptions schedulingOptions, IResourceCalculateDelayer resourceCalculateDelayer, ISchedulingResultStateHolder schedulingResultStateHolder, Action cancelAction)
 		{
 			var teamInfosToRemove = new HashSet<ITeamInfo>();
 			double previousPeriodValue =
 					_periodValueCalculatorForAllSkills.PeriodValue(IterationOperationOption.DayOffOptimization);
 			var totalLiveTeamInfos = remainingInfoList.Count;
 			var currentTeamInfoCounter = 0;
+			var cancelMe = false;
 			foreach (ITeamInfo teamInfo in remainingInfoList.GetRandom(remainingInfoList.Count, true))
 			{
 				currentTeamInfoCounter++;
@@ -254,7 +240,11 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 						double currentPeriodValue =
 							_periodValueCalculatorForAllSkills.PeriodValue(IterationOperationOption.DayOffOptimization);
 						success = handleResult(rollbackService, schedulingOptions, previousPeriodValue, success,
-						                                   teamInfo, totalLiveTeamInfos, currentTeamInfoCounter, currentPeriodValue, checkPeriodValue);
+							teamInfo, totalLiveTeamInfos, currentTeamInfoCounter, currentPeriodValue, checkPeriodValue, () =>
+							{
+								cancelMe = true;
+								cancelAction();
+							});
 
 						if (success)
 						{
@@ -262,10 +252,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 							previousPeriodValue = currentPeriodValue;
 						}
 
-						if (_cancelMe)
-							break;
-
-						if (_progressEvent != null && _progressEvent.UserCancel)
+						if (cancelMe)
 							break;
 					}
 
@@ -273,10 +260,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 						teamInfosToRemove.Add(teamInfo);
 				}
 
-				if (_cancelMe)
-					break;
-
-				if (_progressEvent != null && _progressEvent.UserCancel)
+				if (cancelMe)
 					break;
 			}
 
@@ -285,7 +269,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 
 		private bool handleResult(ISchedulePartModifyAndRollbackService rollbackService, ISchedulingOptions schedulingOptions,
 		                            double previousPeriodValue, bool success, ITeamInfo teamInfo,
-									int totalLiveTeamInfos, int currentTeamInfoCounter, double currentPeriodValue, bool checkPeriodValue)
+									int totalLiveTeamInfos, int currentTeamInfoCounter, double currentPeriodValue, bool checkPeriodValue, Action cancelAction)
 		{
 			var failed = !success;
 
@@ -302,10 +286,14 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 					_periodValueCalculatorForAllSkills.PeriodValue(IterationOperationOption.DayOffOptimization);
 			}
 
-			OnReportProgress(Resources.OptimizingDaysOff + Resources.Colon + "(" + totalLiveTeamInfos.ToString("####") + ")(" +
+			var progressResult = OnReportProgress(new ResourceOptimizerProgressEventArgs(0, 0, Resources.OptimizingDaysOff + Resources.Colon + "(" + totalLiveTeamInfos.ToString("####") + ")(" +
 			                 currentTeamInfoCounter.ToString("####") + ") " +
 							 teamInfo.Name.DisplayString(20) + " (" + currentPeriodValue +
-			                 ")");
+			                 ")", cancelAction));
+			if (progressResult.ShouldCancel)
+			{
+				cancelAction();
+			}
 
 			return !failed;
 		}
