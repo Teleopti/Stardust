@@ -115,7 +115,6 @@ outboundService.service('OutboundService', ['$resource', '$filter', function( $r
 			_minimum: $filter('date')(workingPeriod.StartTime, 'HH:mm:ss'),
 			_maximum: $filter('date')(workingPeriod.EndTime, 'HH:mm:ss')				
 		}};
-
 		newWorkingPeriod.$save(function () {		
 			expandWorkingPeriod(newWorkingPeriod);
 			campaign.CampaignWorkingPeriods.push(newWorkingPeriod);

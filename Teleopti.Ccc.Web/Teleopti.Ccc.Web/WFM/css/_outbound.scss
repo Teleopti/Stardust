@@ -9,6 +9,7 @@
 .input-prepend span + input[type='text'] {
 	display: inline-block;
 	width: 65% !important;
+	margin-bottom: 1px;
 }
 .input-prepend span + select {
 	display: inline-block;
@@ -52,7 +53,4 @@
 }
 .wfm-list li:hover .wfm-checkbox-toggle:after {
 	background-color: white;
-}
-.input-group .input-group-item {
-	margin-bottom: 1px;
 }

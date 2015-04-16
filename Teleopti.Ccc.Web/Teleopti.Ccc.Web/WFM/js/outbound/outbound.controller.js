@@ -88,16 +88,22 @@
 				$scope.campaign = (angular.isDefined($stateParams.Id) && $stateParams.Id != "") ? OutboundService.getCampaignById($stateParams.Id) : null;
 				$scope.showCampaignDetail = angular.isDefined($scope.campaign) && ($scope.campaign != null);
 			});
+		
+			$scope.$on('formLocator.formCampaignParams', function (event) {
+				$scope.formCampaignParams = event.targetScope.formCampaignParams;				
+			});
 
-
-			$scope.update = function() {
-				OutboundService.updateCampaign($scope.campaign,
-					function() {
+			$scope.update = function () {
+				if ($scope.formCampaignParams.$dirty) {
+					OutboundService.updateCampaign($scope.campaign,
+					function () {
 						notifySuccess(growl, "Campaign updated successfully");
 					},
-					function(error) {
+					function (error) {
 						notifyFailure(growl, "Failed to update campaign " + error);
 					});
+				}
+				$scope.formCampaignParams.$setPristine();
 			};
 
 			$scope.navigateToForecasting = function() {

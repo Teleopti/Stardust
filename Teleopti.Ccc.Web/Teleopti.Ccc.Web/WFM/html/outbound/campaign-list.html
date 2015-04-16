@@ -44,7 +44,7 @@
 			</div>
 			<div id="searchCampaignResult" class="role-container">
 				<ul class="wfm-list">
-					<li ng-repeat="campaign in campaigns | filter:searchCampaign" ng-click="show(campaign)" ng-dblclick="editing = true" ng-class="{'wfm-list-item-selected': selectedTarget && campaign.Id == selectedTarget.Id}" class="role-btn wfm-block wfm-list-item role">
+					<li ng-repeat="campaign in campaigns | filter:searchCampaign" ng-click="show(campaign)" ng-dblclick="editing = true" ng-class="{'active': selectedTarget && campaign.Id == selectedTarget.Id}" class="role-btn wfm-block wfm-list-item role">
 						<div class="wfm-leave-behind">
 							<span>
 								<i ng-click="$parent.copyNew(campaign);">
