@@ -300,6 +300,9 @@ namespace Teleopti.Ccc.Win.Backlog
 					series3.Points.Add(datapoint);
 					datapoint = new DataPoint(i, _model.GetScheduledBacklogTimeOnIndex(i, skill).GetValueOrDefault(TimeSpan.Zero).TotalHours);
 					series4.Points.Add(datapoint);
+					datapoint = new DataPoint(i, _model.GetScheduledTimeOnIndex(i, skill).GetValueOrDefault(TimeSpan.Zero).TotalHours);
+					series5.Points.Add(datapoint);
+					//_model.GetScheduledTimeOnIndex
 					
 				}
 				else

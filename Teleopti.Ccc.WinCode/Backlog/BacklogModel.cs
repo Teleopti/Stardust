@@ -568,7 +568,7 @@ namespace Teleopti.Ccc.WinCode.Backlog
 				timeToBook = time.Subtract(bookedTime);
 			}
 
-			if (timeToBook > TimeSpan.Zero)
+			if (timeToBook > TimeSpan.Zero && affectedTasks.Values.Any())
 				affectedTasks.Values.Last().BacklogScheduledTask.OverStaff = timeToBook;
 		}
 
