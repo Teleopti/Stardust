@@ -7,7 +7,6 @@ using Teleopti.Interfaces.MessageBroker;
 namespace Teleopti.Ccc.Web.Broker
 {
 	[HubName("MessageBrokerHub")]
-	[CLSCompliant(false)]
 	public class MessageBrokerHub : BackportableHub
 	{
 		public ILog Logger = LogManager.GetLogger(typeof(MessageBrokerHub));
