@@ -12985,5 +12985,14 @@ Reduce the complexity to use these shifts.</value>
   <data name="AdherenceCannotBeEmpty" xml:space="preserve">
     <value>Adherence can not be empty</value>
     <comment>used in alarm control</comment>
+    </data>
+  <data name="NextPlanningPeriod" xml:space="preserve">
+    <value>Next Planning Period</value>
+    <comment>This is to search from web</comment>
+  </data>
+  
+  <data name="PlanningPeriod" xml:space="preserve">
+    <value>Planning Period</value>
+    <comment>title of planning period </comment>
   </data>
 </root>

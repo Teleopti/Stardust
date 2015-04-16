@@ -15,7 +15,12 @@
 				<input type="text" placeholder="{{'SearchThreeDots' | translate}}" ng-model="keyword" ng-change="searchKeyword()" class="global-search" />
 				<div class="search-results material-depth-2">
 					<ul class="wfm-list">
-						<li class="animate-repeat" ng-repeat="item in searchResult">{{item.FirstName}}</li>
+						<div ng-repeat="gp in searchResultGroups">
+							<li class="animate-repeat" ng-repeat="item in searchResult | filter:{ SearchGroup: gp }">
+								<a ui-sref='resourceplanner'>{{item.Name}}</a>
+							</li>
+						</div>
+						
 						<li class="animate-repeat" ng-if="results.length == 0">
 					</ul>
 				</div>

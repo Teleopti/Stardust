@@ -3,61 +3,47 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web.Http.Results;
 using NUnit.Framework;
-using Rhino.Mocks;
 using SharpTestsEx;
-using Teleopti.Ccc.Domain.Repositories;
-using Teleopti.Ccc.Infrastructure.Repositories;
+using Teleopti.Ccc.Domain.FeatureFlags;
+using Teleopti.Ccc.Domain.Scheduling;
+using Teleopti.Ccc.IocCommon.Toggle;
+using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.Web.Areas.Search.Controllers;
-using Teleopti.Interfaces.Domain;
+using Teleopti.Interfaces;
 
 namespace Teleopti.Ccc.WebTest.Areas.Search
 {
 	public class SearchControllerTest
 	{
-		[Test]
-		public void ShouldSearchForPeople()
+
+		[Test, SetCulture("en"), SetUICulture("en")]
+		public void ShouldSearchForPlanningPeriod()
 		{
-			var personId = Guid.NewGuid();
-			var field = PersonFinderField.Skill;
-			string keyword = null;
-			var searchRepository = MockRepository.GenerateMock<IPersonFinderReadOnlyRepository>();
-			var personFinderDisplayRow = new PersonFinderDisplayRow{FirstName = "Ashley",LastName = "Andeen",EmploymentNumber = "1011",PersonId = personId,RowNumber = 1};
-				
-			searchRepository.Stub(x => x.Find(null)).Callback(new Func<IPersonFinderSearchCriteria, bool>(c =>
-			{
-				field = c.Field;
-				keyword = c.SearchValue;
-				c.SetRow(1,personFinderDisplayRow);
-				return true;
-			}));
-			
-			var target = new SearchController(searchRepository,new FakePermissionProvider());
-			var result = (OkNegotiatedContentResult<IEnumerable<IPersonFinderDisplayRow>>)target.GetResult("ashley");
-			var first = (dynamic)result.Content.First();
-			first.FirstName.Equals("Ashley");
-			first.LastName.Equals("Andeen");
-			first.EmploymentNumber.Equals("1011");
-			first.PersonId.Equals(personId);
-			field.Should().Be.EqualTo(PersonFinderField.All);
-			keyword.Should().Be.EqualTo("ashley");
+			var target = new SearchController(new FakeNextPlanningPeriodProvider(new PlanningPeriod(new TestableNow(new DateTime(2015,04,15)))), new FakeToggleManager(Toggles.Wfm_ResourcePlanner_32892));
+			var result = (OkNegotiatedContentResult<IEnumerable<SearchResultModel>>)target.GetResult("Next");
+			result.Content.Count().Should().Be.EqualTo(1);
 		}
 
-		[Test]
-		public void ShouldSearchForPeopleWithNoPermission()
+		[Test, SetCulture("sv-SE"), SetUICulture("sv-SE")]
+		public void ShouldNotSearchPlanningPeriodIfSchedulingIsDisabled()
 		{
-			var personId = Guid.NewGuid();
-			var searchRepository = MockRepository.GenerateMock<IPersonFinderReadOnlyRepository>();
-			var personFinderDisplayRow = new PersonFinderDisplayRow { FirstName = "Ashley", LastName = "Andeen", EmploymentNumber = "1011", PersonId = personId,RowNumber = 1};
+			var target = new SearchController(new FakeNextPlanningPeriodProvider(new PlanningPeriod(new TestableNow(new DateTime(2015, 04, 15)))), new FakeToggleManager());
+			var result = (OkNegotiatedContentResult<IEnumerable<SearchResultModel>>)target.GetResult("Next");
+			result.Content.Count().Should().Be.EqualTo(0);
+		}
+	}
 
-			searchRepository.Stub(x => x.Find(null)).Callback(new Func<IPersonFinderSearchCriteria, bool>(c =>
-			{
-				c.SetRow(1, personFinderDisplayRow);
-				return true;
-			}));
-			
-			var target = new SearchController(searchRepository, new FakeNoPermissionProvider());
-			var result = (OkNegotiatedContentResult<IEnumerable<IPersonFinderDisplayRow>>)target.GetResult("ashley");
-			result.Content.Should().Be.Empty();
+	public class FakeNextPlanningPeriodProvider : INextPlanningPeriodProvider
+	{
+		private readonly IPlanningPeriod _planningPeriod;
+
+		public FakeNextPlanningPeriodProvider(IPlanningPeriod planningPeriod)
+		{
+			_planningPeriod = planningPeriod;
+		}
+		public IPlanningPeriod Current()
+		{
+			return _planningPeriod;
 		}
 	}
 }

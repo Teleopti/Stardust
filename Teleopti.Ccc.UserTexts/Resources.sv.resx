@@ -12213,6 +12213,9 @@ Minska komplexiteten för att kunna använda dessa skift.</value>
   <data name="Duplicate" xml:space="preserve">
     <value>Skapa kopia</value>
   </data>
+  <data name="NextPlanningPeriod" xml:space="preserve">
+    <value>Nästa planeringsperiod</value>
+  </data>
   <data name="MissingForecastFrom" xml:space="preserve">
     <value>Saknar prognos från </value>
   </data>

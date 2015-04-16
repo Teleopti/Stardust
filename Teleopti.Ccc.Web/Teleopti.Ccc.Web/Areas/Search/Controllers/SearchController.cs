@@ -1,33 +1,61 @@
-﻿using System.Linq;
+﻿using System;
+using System.Collections.Generic;
+using System.Globalization;
+using System.Linq;
 using System.Web.Http;
 using Teleopti.Ccc.Domain.Aop;
+using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Repositories;
-using Teleopti.Ccc.Domain.Security.AuthorizationData;
-using Teleopti.Ccc.Infrastructure.Repositories;
+using Teleopti.Ccc.Domain.Scheduling;
+using Teleopti.Ccc.Infrastructure.Toggle;
+using Teleopti.Ccc.IocCommon.Toggle;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Portal.DataProvider;
-using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Web.Areas.Search.Controllers
 {
 	public class SearchController : ApiController
 	{
-		private readonly IPersonFinderReadOnlyRepository _searchRepository;
-		private readonly IPermissionProvider _permissionProvider;
+		private readonly INextPlanningPeriodProvider _planningPeriodProvider;
+		private readonly IToggleManager _toggleManager;
 
-		public SearchController(IPersonFinderReadOnlyRepository searchRepository, IPermissionProvider permissionProvider)
+		public SearchController(INextPlanningPeriodProvider planningPeriodProvider, IToggleManager toggleManager)
 		{
-			_searchRepository = searchRepository;
-			_permissionProvider = permissionProvider;
+			_planningPeriodProvider = planningPeriodProvider;
+			_toggleManager = toggleManager;
 		}
 
 		[UnitOfWork]
-		[HttpGet,Route("api/Search/Global")]
+		[HttpGet, Route("api/Search/Global")]
 		public virtual IHttpActionResult GetResult(string keyword)
 		{
-			var search = new PersonFinderSearchCriteria(PersonFinderField.All, keyword, 20, DateOnly.MinValue, 0, 0);
-			_searchRepository.Find(search);
+			var searchResultModel = new List<SearchResultModel>();
 
-			return Ok(search.DisplayRows.Where(r => r.RowNumber>0 && _permissionProvider.HasOrganisationDetailPermission(DefinedRaptorApplicationFunctionPaths.OpenPersonAdminPage, DateOnly.Today, r)));
+			if (_toggleManager.IsEnabled(Toggles.Wfm_ResourcePlanner_32892) &&  UserTexts.Resources.NextPlanningPeriod.IndexOf(keyword,StringComparison.CurrentCultureIgnoreCase) > -1)
+			{
+				var currentPplanningPeriodRange = _planningPeriodProvider.Current().Range;
+				searchResultModel.AddRange(new[]
+				{
+					new SearchResultModel
+					{
+						Name =
+							UserTexts.Resources.NextPlanningPeriod + " " + currentPplanningPeriodRange.StartDate.ToShortDateString() + "-" +
+							currentPplanningPeriodRange.EndDate.ToShortDateString(),
+						Url = "/resourceplanner",
+						SearchGroup = UserTexts.Resources.PlanningPeriod
+					}
+				});
+			}
+
+			return Ok(searchResultModel.AsEnumerable());
 		}
 	}
+
+	public class SearchResultModel
+	{
+		public string Name { get; set; }
+		public string Url { get; set; }
+		//can be refactorred to some enum?
+		public string SearchGroup { get; set; }
+	}
+
 }
