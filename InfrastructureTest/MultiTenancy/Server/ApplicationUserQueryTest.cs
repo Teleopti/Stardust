@@ -231,7 +231,6 @@ namespace Teleopti.Ccc.InfrastructureTest.MultiTenancy.Server
 			var session = _tenantUnitOfWorkManager.CurrentSession();
 			session.GetNamedQuery("applicationLogonInfo_OldSchema").SetGuid("personInfoId", personId).UniqueResult().Should().Be.Null();
 			target.FindUserData(correctUserName);
-			session.Flush();
 			session.GetNamedQuery("applicationLogonInfo_OldSchema")
 				.SetGuid("personInfoId", personId)
 				.UniqueResult()
