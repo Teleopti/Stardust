@@ -42,8 +42,16 @@ namespace Teleopti.Ccc.InfrastructureTest.MultiTenancy.Server
 		}
 
 
+		[Test]
+		public void ShouldFindPassword()
+		{
+			var result = target.Find(correctUserName);
+			result.Password.Should().Not.Be.Null();
+		}
+
+
 		[SetUp]
-		public void Setup_WillBeChangedWhenMovedAwayFromUnitOfWork()
+		public void Setup()
 		{
 			correctUserName = RandomName.Make();
 			_tenantUnitOfWorkManager = TenantUnitOfWorkManager.CreateInstanceForTest(ConnectionStringHelper.ConnectionStringUsedInTests);

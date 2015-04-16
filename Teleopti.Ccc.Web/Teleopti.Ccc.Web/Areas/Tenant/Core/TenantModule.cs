@@ -26,13 +26,11 @@ namespace Teleopti.Ccc.Web.Areas.Tenant.Core
 			{
 				builder.RegisterType<IdentityUserQuery>().As<IIdentityUserQuery>().SingleInstance();
 				builder.RegisterType<ApplicationUserTenantQuery>().As<IApplicationUserTenantQuery>().SingleInstance();
-				builder.RegisterType<ApplicationUserQuery>().As<IApplicationUserQuery>().SingleInstance();
 			}
 			else
 			{
 				builder.RegisterType<IdentityUserQuery_OldSchema>().As<IIdentityUserQuery>().SingleInstance();
 				builder.RegisterType<ApplicationUserTenantQuery_OldSchema>().As<IApplicationUserTenantQuery>().SingleInstance();
-				builder.RegisterType<ApplicationUserQuery_OldSchema>().As<IApplicationUserQuery>().SingleInstance();
 			}
 			builder.RegisterType<FindTenantAndPersonIdForIdentity>().As<IFindTenantAndPersonIdForIdentity>().SingleInstance();
 			builder.RegisterType<PasswordPolicyCheck>().As<IPasswordPolicyCheck>().SingleInstance();

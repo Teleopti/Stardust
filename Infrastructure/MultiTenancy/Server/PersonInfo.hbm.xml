@@ -1,8 +1,9 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <hibernate-mapping xmlns="urn:nhibernate-mapping-2.2"
                    assembly="Teleopti.Ccc.Infrastructure"
-                   namespace="Teleopti.Ccc.Infrastructure.MultiTenancy.Server">
-	<class name="PersonInfo" schema="Tenant">
+                   namespace="Teleopti.Ccc.Infrastructure.MultiTenancy.Server"
+									 schema="Tenant">
+	<class name="PersonInfo">
 		<id name="Id" type="guid">
 			<generator class="guid.comb" />
 		</id>
@@ -13,6 +14,20 @@
 		<property name="Identity" column="[Identity]"/>
 		<property name="ApplicationLogonName"/>
 		<property name="Password"/>
+
+		<!-- remove soon!-->
+		<join fetch="join" optional="true" table="ApplicationLogonInfo">
+			<key column="Person"/>
+			<component name="ApplicationLogonInfo" class="ApplicationLogonInfo">
+				<parent name="PersonInfo" />
+				<!--delete me soon!-->
+				<property name="id" access="field"/>
+				<property name="LastPasswordChange" />
+				<property name="InvalidAttemptsSequenceStart" />
+				<property name="InvalidAttempts" />
+				<property name="IsLocked" />
+			</component>
+		</join>
 	</class>
 
 	<query name="identityUserQuery">

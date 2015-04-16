@@ -20,6 +20,21 @@
 			<property name="ApplicationLogonName" />
 			<property name="Password" />
 		</join>
+
+		<!-- remove soon!-->
+		<join fetch="join" optional="true" table="UserDetail">
+			<key column="Person"/>
+			<component name="ApplicationLogonInfo" class="ApplicationLogonInfo">
+				<parent name="PersonInfo" />
+				<!--delete me soon!-->
+				<property name="id" access="field"/>
+				<property name="LastPasswordChange" />
+				<property name="InvalidAttemptsSequenceStart" />
+				<property name="InvalidAttempts" />
+				<property name="IsLocked" />
+			</component>
+		</join>
+
 	</class>
 
 	<query name="identityUserQuery_OldSchema">
