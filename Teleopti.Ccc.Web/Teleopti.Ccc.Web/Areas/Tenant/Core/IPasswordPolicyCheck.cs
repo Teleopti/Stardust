@@ -4,6 +4,6 @@ namespace Teleopti.Ccc.Web.Areas.Tenant.Core
 {
 	public interface IPasswordPolicyCheck
 	{
-		ApplicationAuthenticationResult Verify(PasswordPolicyForUser passwordPolicyForUser);
+		ApplicationAuthenticationResult Verify(ApplicationLogonInfo applicationLogonInfo);
 	}
 }

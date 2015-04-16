@@ -49,7 +49,7 @@ namespace Teleopti.Ccc.InfrastructureTest.MultiTenancy.Server
 			var tenantSession = _tenantUnitOfWorkManager.CurrentSession();
 			var personInDatabase = tenantSession.Get<PersonInfo>(personId);
 
-			var passwordPolicyForUser = new PasswordPolicyForUser(personInDatabase)
+			var passwordPolicyForUser = new ApplicationLogonInfo(personInDatabase)
 			{
 				LastPasswordChange = DateTime.UtcNow,
 				InvalidAttemptsSequenceStart = DateTime.UtcNow.AddHours(-1),
@@ -90,7 +90,7 @@ namespace Teleopti.Ccc.InfrastructureTest.MultiTenancy.Server
 			personInDatabase.TerminalDate = DateOnly.Today;
 
 			target.FindUserData(correctUserName)
-				.Should().Be.OfType<PasswordPolicyForUser>();
+				.Should().Be.OfType<ApplicationLogonInfo>();
 		}
 
 
@@ -98,9 +98,9 @@ namespace Teleopti.Ccc.InfrastructureTest.MultiTenancy.Server
 		public void ShouldPersistPasswordPolicyIfNonExistingButUserExist()
 		{
 			var session = _tenantUnitOfWorkManager.CurrentSession();
-			session.GetNamedQuery("passwordPolicyForUser").SetGuid("personInfoId", personId).UniqueResult().Should().Be.Null();
+			session.GetNamedQuery("applicationLogonInfo").SetGuid("personInfoId", personId).UniqueResult().Should().Be.Null();
 			target.FindUserData(correctUserName);
-			session.GetNamedQuery("passwordPolicyForUser").SetGuid("personInfoId", personId).UniqueResult().Should().Not.Be.Null();
+			session.GetNamedQuery("applicationLogonInfo").SetGuid("personInfoId", personId).UniqueResult().Should().Not.Be.Null();
 		}
 
 
@@ -210,7 +210,7 @@ namespace Teleopti.Ccc.InfrastructureTest.MultiTenancy.Server
 			PersistAndRemoveFromUnitOfWork(personInDatabase);
 
 			target.FindUserData(correctUserName)
-				.Should().Be.OfType<PasswordPolicyForUser>();
+				.Should().Be.OfType<ApplicationLogonInfo>();
 		}
 
 		[Test]
@@ -229,9 +229,10 @@ namespace Teleopti.Ccc.InfrastructureTest.MultiTenancy.Server
 		public void ShouldPersistPasswordPolicyIfNonExistingButUserExist()
 		{
 			var session = _tenantUnitOfWorkManager.CurrentSession();
-			session.GetNamedQuery("passwordPolicyForUser_OldSchema").SetGuid("personInfoId", personId).UniqueResult().Should().Be.Null();
+			session.GetNamedQuery("applicationLogonInfo_OldSchema").SetGuid("personInfoId", personId).UniqueResult().Should().Be.Null();
 			target.FindUserData(correctUserName);
-			session.GetNamedQuery("passwordPolicyForUser_OldSchema")
+			session.Flush();
+			session.GetNamedQuery("applicationLogonInfo_OldSchema")
 				.SetGuid("personInfoId", personId)
 				.UniqueResult()
 				.Should()

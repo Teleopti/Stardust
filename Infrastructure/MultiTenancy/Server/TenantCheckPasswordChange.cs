@@ -7,7 +7,7 @@ namespace Teleopti.Ccc.Infrastructure.MultiTenancy.Server
 {
 	public interface ITenantCheckPasswordChange
 	{
-		AuthenticationResult Check(PasswordPolicyForUser userDetail);
+		AuthenticationResult Check(ApplicationLogonInfo userDetail);
 	}
 	public class TenantCheckPasswordChange : ITenantCheckPasswordChange
 	{
@@ -18,7 +18,7 @@ namespace Teleopti.Ccc.Infrastructure.MultiTenancy.Server
 			_passwordPolicy = passwordPolicy;
 		}
 
-		public AuthenticationResult Check(PasswordPolicyForUser userDetail)
+		public AuthenticationResult Check(ApplicationLogonInfo userDetail)
 		{
 			var lastPasswordChange = userDetail.LastPasswordChange;
 			var passwordValidForDayCount = _passwordPolicy().PasswordValidForDayCount;

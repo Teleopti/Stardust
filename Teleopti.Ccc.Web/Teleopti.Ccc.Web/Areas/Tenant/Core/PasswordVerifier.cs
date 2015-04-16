@@ -18,21 +18,21 @@ namespace Teleopti.Ccc.Web.Areas.Tenant.Core
 			_now = now;
 		}
 
-		public bool Check(string userPassword, PasswordPolicyForUser passwordPolicyForUser)
+		public bool Check(string userPassword, ApplicationLogonInfo applicationLogonInfo)
 		{
 			var passwordPolicy = _passwordPolicy();
 			var utcNow = _now.UtcDateTime();
-			if (utcNow > passwordPolicyForUser.InvalidAttemptsSequenceStart.Add(passwordPolicy.InvalidAttemptWindow))
+			if (utcNow > applicationLogonInfo.InvalidAttemptsSequenceStart.Add(passwordPolicy.InvalidAttemptWindow))
 			{
-				passwordPolicyForUser.ClearInvalidAttempts();
+				applicationLogonInfo.ClearInvalidAttempts();
 			}
 
-			var isValid = passwordPolicyForUser.IsValidPassword(_oneWayEncryption.EncryptString(userPassword));
+			var isValid = applicationLogonInfo.IsValidPassword(_oneWayEncryption.EncryptString(userPassword));
 			if (!isValid)
 			{
-				if (passwordPolicyForUser.InvalidAttempts > passwordPolicy.MaxAttemptCount)
+				if (applicationLogonInfo.InvalidAttempts > passwordPolicy.MaxAttemptCount)
 				{
-					passwordPolicyForUser.Lock();
+					applicationLogonInfo.Lock();
 				}
 			}
 			return isValid;

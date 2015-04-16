@@ -20,7 +20,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Tenant.Core
 			var personInfo = new PersonInfo();
 			personInfo.SetPassword("thePassword");
 			var findApplicationQuery = MockRepository.GenerateMock<IApplicationUserQuery>();
-			var passwordPolicyForUser = new PasswordPolicyForUser(personInfo);
+			var passwordPolicyForUser = new ApplicationLogonInfo(personInfo);
 			findApplicationQuery.Expect(x => x.FindUserData(userName)).Return(passwordPolicyForUser);
 
 			var target = new ApplicationAuthentication(findApplicationQuery, new PasswordVerifier(new OneWayEncryption(), () => new DummyPasswordPolicy(), new Now()),
@@ -38,7 +38,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Tenant.Core
 			var personInfo = new PersonInfo();
 			personInfo.SetPassword("thePassword");
 			var findApplicationQuery = MockRepository.GenerateMock<IApplicationUserQuery>();
-			var passwordPolicyForUser = new PasswordPolicyForUser(personInfo);
+			var passwordPolicyForUser = new ApplicationLogonInfo(personInfo);
 			findApplicationQuery.Expect(x => x.FindUserData(userName)).Return(passwordPolicyForUser);
 			var pwPolicy = MockRepository.GenerateStub<IPasswordPolicy>();
 			pwPolicy.Expect(x => x.MaxAttemptCount).Return(1);
@@ -60,7 +60,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Tenant.Core
 			var personInfo = new PersonInfo();
 			personInfo.SetPassword(EncryptPassword.ToDbFormat(password));
 			var findApplicationQuery = MockRepository.GenerateMock<IApplicationUserQuery>();
-			var passwordPolicyForUser = new PasswordPolicyForUser(personInfo);
+			var passwordPolicyForUser = new ApplicationLogonInfo(personInfo);
 			findApplicationQuery.Expect(x => x.FindUserData(userName)).Return(passwordPolicyForUser);
 			var pwPolicy = MockRepository.GenerateStub<IPasswordPolicy>();
 			pwPolicy.Expect(x => x.MaxAttemptCount).Return(1);
@@ -82,7 +82,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Tenant.Core
 			var personInfo = new PersonInfo();
 			personInfo.SetPassword(EncryptPassword.ToDbFormat(password));
 			var findApplicationQuery = MockRepository.GenerateMock<IApplicationUserQuery>();
-			var passwordPolicyForUser = new PasswordPolicyForUser(personInfo);
+			var passwordPolicyForUser = new ApplicationLogonInfo(personInfo);
 			findApplicationQuery.Expect(x => x.FindUserData(userName)).Return(passwordPolicyForUser);
 			var pwPolicy = MockRepository.GenerateStub<IPasswordPolicy>();
 			pwPolicy.Expect(x => x.MaxAttemptCount).Return(100);
@@ -112,7 +112,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Tenant.Core
 			var findApplicationQuery = MockRepository.GenerateMock<IApplicationUserQuery>();
 			var personInfo = new PersonInfo();
 			personInfo.SetPassword(EncryptPassword.ToDbFormat(password));
-			var passwordPolicy = new PasswordPolicyForUser(personInfo);
+			var passwordPolicy = new ApplicationLogonInfo(personInfo);
 			passwordPolicy.Lock();
 			findApplicationQuery.Expect(x => x.FindUserData(userName)).Return(passwordPolicy);
 
@@ -132,7 +132,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Tenant.Core
 			const string tenant = "theTenant";
 			var personInfo = new PersonInfo(new Infrastructure.MultiTenancy.Server.Tenant(tenant)) { Id = Guid.NewGuid()};
 			personInfo.SetPassword(EncryptPassword.ToDbFormat(password));
-			var passwordPolicyForUser = new PasswordPolicyForUser(personInfo);
+			var passwordPolicyForUser = new ApplicationLogonInfo(personInfo);
 			var findApplicationQuery = MockRepository.GenerateMock<IApplicationUserQuery>();
 			findApplicationQuery.Expect(x => x.FindUserData(userName)).Return(passwordPolicyForUser);
 			
@@ -156,7 +156,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Tenant.Core
 			const string password = "somePassword";
 			var personInfo = new PersonInfo { Id = Guid.NewGuid()};
 			personInfo.SetPassword(EncryptPassword.ToDbFormat(password));
-			var passwordPolicyForUser = new PasswordPolicyForUser(personInfo);
+			var passwordPolicyForUser = new ApplicationLogonInfo(personInfo);
 			var findApplicationQuery = MockRepository.GenerateMock<IApplicationUserQuery>();
 			findApplicationQuery.Expect(x => x.FindUserData(userName)).Return(passwordPolicyForUser);
 			var checkPasswordChange = MockRepository.GenerateMock<ITenantCheckPasswordChange>();
@@ -179,7 +179,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Tenant.Core
 			const string password = "somePassword";
 			var personInfo = new PersonInfo { Id = Guid.NewGuid() };
 			personInfo.SetPassword(EncryptPassword.ToDbFormat(password));
-			var passwordPolicyForUser = new PasswordPolicyForUser(personInfo);
+			var passwordPolicyForUser = new ApplicationLogonInfo(personInfo);
 			var findApplicationQuery = MockRepository.GenerateMock<IApplicationUserQuery>();
 			findApplicationQuery.Expect(x => x.FindUserData(userName)).Return(passwordPolicyForUser);
 			var checkPasswordChange = MockRepository.GenerateMock<ITenantCheckPasswordChange>();

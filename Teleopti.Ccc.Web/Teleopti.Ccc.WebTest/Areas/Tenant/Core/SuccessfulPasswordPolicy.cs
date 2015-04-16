@@ -5,7 +5,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Tenant.Core
 {
 	public class SuccessfulPasswordPolicy : IPasswordPolicyCheck
 	{
-		public ApplicationAuthenticationResult Verify(PasswordPolicyForUser passwordPolicyForUser)
+		public ApplicationAuthenticationResult Verify(ApplicationLogonInfo applicationLogonInfo)
 		{
 			return null;
 		}

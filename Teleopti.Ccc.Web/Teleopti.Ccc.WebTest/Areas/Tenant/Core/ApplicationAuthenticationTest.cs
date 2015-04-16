@@ -31,7 +31,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Tenant.Core
 			var findApplicationQuery = MockRepository.GenerateMock<IApplicationUserQuery>();
 			var personInfo = new PersonInfo();
 			personInfo.SetPassword("thePassword");
-			findApplicationQuery.Expect(x => x.FindUserData(userName)).Return(new PasswordPolicyForUser(personInfo));
+			findApplicationQuery.Expect(x => x.FindUserData(userName)).Return(new ApplicationLogonInfo(personInfo));
 
 			var target = new ApplicationAuthentication(findApplicationQuery, new PasswordVerifier(new OneWayEncryption(), () => MockRepository.GenerateStub<IPasswordPolicy>(), new Now()),
 				new SuccessfulPasswordPolicy(), MockRepository.GenerateMock<IDataSourceConfigurationProvider>());
@@ -50,7 +50,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Tenant.Core
 			var personInfo = new PersonInfo { Id = Guid.NewGuid()};
 			personInfo.SetPassword(EncryptPassword.ToDbFormat(password));
 			var findApplicationQuery = MockRepository.GenerateMock<IApplicationUserQuery>();
-			findApplicationQuery.Expect(x => x.FindUserData(userName)).Return(new PasswordPolicyForUser(personInfo));
+			findApplicationQuery.Expect(x => x.FindUserData(userName)).Return(new ApplicationLogonInfo(personInfo));
 			var dataSourceProvider = MockRepository.GenerateStub<IDataSourceConfigurationProvider>();
 			dataSourceProvider.Stub(x => x.ForTenant(personInfo.Tenant)).Return(dataSourceConfiguration);
 			var target = new ApplicationAuthentication(findApplicationQuery, new PasswordVerifier(new OneWayEncryption(), () => MockRepository.GenerateStub<IPasswordPolicy>(), new Now()),
@@ -71,7 +71,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Tenant.Core
 			const string password = "somePassword";
 			var personInfo = new PersonInfo { Id = Guid.NewGuid() };
 			personInfo.SetPassword(EncryptPassword.ToDbFormat(password));
-			var queryResult = new PasswordPolicyForUser(personInfo);
+			var queryResult = new ApplicationLogonInfo(personInfo);
 			
 			var findApplicationQuery = MockRepository.GenerateMock<IApplicationUserQuery>();
 			findApplicationQuery.Expect(x => x.FindUserData(userName)).Return(queryResult);

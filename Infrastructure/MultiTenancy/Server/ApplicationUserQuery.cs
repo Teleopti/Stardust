@@ -14,19 +14,19 @@ namespace Teleopti.Ccc.Infrastructure.MultiTenancy.Server
 			_applicationUserTenantQuery = applicationUserTenantQuery;
 		}
 
-		public PasswordPolicyForUser FindUserData(string userName)
+		public ApplicationLogonInfo FindUserData(string userName)
 		{
 			var readPersonInfo = _applicationUserTenantQuery.Find(userName);
 			if (readPersonInfo == null)
 				return null;
 
 			var session = _currentTenantSession.CurrentSession();
-			var readPasswordPolicy = session.GetNamedQuery("passwordPolicyForUser")
+			var readPasswordPolicy = session.GetNamedQuery("applicationLogonInfo")
 				.SetGuid("personInfoId", readPersonInfo.Id)
-				.UniqueResult<PasswordPolicyForUser>();
+				.UniqueResult<ApplicationLogonInfo>();
 			if (readPasswordPolicy == null)
 			{
-				readPasswordPolicy = new PasswordPolicyForUser(readPersonInfo);
+				readPasswordPolicy = new ApplicationLogonInfo(readPersonInfo);
 				session.Save(readPasswordPolicy);
 			}
 			return readPasswordPolicy;
@@ -45,20 +45,20 @@ namespace Teleopti.Ccc.Infrastructure.MultiTenancy.Server
 			_applicationUserTenantQuery = applicationUserTenantQuery;
 		}
 
-		public PasswordPolicyForUser FindUserData(string userName)
+		public ApplicationLogonInfo FindUserData(string userName)
 		{
 			var readPersonInfo = _applicationUserTenantQuery.Find(userName);
 			if (readPersonInfo == null)
 				return null;
 
 			var session = _currentTenantSession.CurrentSession();
-			var readPasswordPolicy = session.GetNamedQuery("passwordPolicyForUser_OldSchema")
+			var readPasswordPolicy = session.GetNamedQuery("applicationLogonInfo_OldSchema")
 				.SetGuid("personInfoId", readPersonInfo.Id)
-				.UniqueResult<PasswordPolicyForUser>();
+				.UniqueResult<ApplicationLogonInfo>();
 			if (readPasswordPolicy == null)
 			{
-				readPasswordPolicy = new PasswordPolicyForUser(readPersonInfo);
-				session.Save("PasswordPolicyForUser_OldSchema", readPasswordPolicy);
+				readPasswordPolicy = new ApplicationLogonInfo(readPersonInfo);
+				session.Save("ApplicationLogonInfo_OldSchema", readPasswordPolicy);
 			}
 			return readPasswordPolicy;
 		}

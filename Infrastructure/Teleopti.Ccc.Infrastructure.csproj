@@ -259,7 +259,7 @@
     <Compile Include="MultiTenancy\Server\PersonInfo.cs" />
     <Compile Include="MultiTenancy\Server\NHibernate\ICurrentTenantSession.cs" />
     <Compile Include="MultiTenancy\Server\NHibernate\ITenantUnitOfWorkManager.cs" />
-    <Compile Include="MultiTenancy\Server\PasswordPolicyForUser.cs" />
+    <Compile Include="MultiTenancy\Server\ApplicationLogonInfo.cs" />
     <Compile Include="MultiTenancy\Server\NHibernate\TenantUnitOfWorkManager.cs" />
     <Compile Include="MultiTenancy\Client\PostHttpRequest.cs" />
     <Compile Include="MultiTenancy\Server\Tenant.cs" />
@@ -634,13 +634,13 @@
   <ItemGroup>
     <Content Include="Config\PolicyForPassword.xml" />
     <EmbeddedResource Include="MultiTenancy\Server\PersonInfo_OldSchema.hbm.xml" />
-    <EmbeddedResource Include="MultiTenancy\Server\PasswordPolicyForUser.hbm.xml" />
+    <EmbeddedResource Include="MultiTenancy\Server\ApplicationLogonInfo.hbm.xml" />
     <EmbeddedResource Include="MultiTenancy\Server\Tenant_OldSchema.hbm.xml" />
     <EmbeddedResource Include="MultiTenancy\Server\PersonInfo.hbm.xml">
       <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="MultiTenancy\Server\Tenant.hbm.xml" />
-    <EmbeddedResource Include="MultiTenancy\Server\PasswordPolicyForUser_OldSchema.hbm.xml" />
+    <EmbeddedResource Include="MultiTenancy\Server\ApplicationLogonInfo_OldSchema.hbm.xml" />
     <Content Include="MultiTenancy\Server\these_files_will_probably_be_moved.txt" />
     <EmbeddedResource Include="Licensing\Agreements\TeleoptiLic_De_De_St.txt" />
     <EmbeddedResource Include="Licensing\Agreements\TeleoptiLic_TeleoptiCloud.txt" />

@@ -3,7 +3,7 @@
                    assembly="Teleopti.Ccc.Infrastructure"
                    namespace="Teleopti.Ccc.Infrastructure.MultiTenancy.Server"
                    default-access="property">
-	<class name="PasswordPolicyForUser" table="UserDetail" entity-name="PasswordPolicyForUser_OldSchema" polymorphism="explicit">
+	<class name="ApplicationLogonInfo" table="UserDetail" entity-name="ApplicationLogonInfo_OldSchema" polymorphism="explicit">
 		<id name="id" type="guid" access="field">
 			<generator class="guid.comb" />
 		</id>
@@ -14,9 +14,9 @@
 		<many-to-one name="PersonInfo" column="Person" class="PersonInfo" entity-name="PersonInfo_OldSchema"/>
 	</class>
 
-	<query name="passwordPolicyForUser_OldSchema">
+	<query name="applicationLogonInfo_OldSchema">
 		<![CDATA[
-select pp from PasswordPolicyForUser_OldSchema pp
+select pp from ApplicationLogonInfo_OldSchema pp
 where pp.PersonInfo.Id=:personInfoId
 ]]>
 	</query>

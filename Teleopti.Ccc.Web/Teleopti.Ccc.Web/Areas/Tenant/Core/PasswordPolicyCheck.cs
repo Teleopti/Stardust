@@ -11,9 +11,9 @@ namespace Teleopti.Ccc.Web.Areas.Tenant.Core
 			_checkPasswordChange = checkPasswordChange;
 		}
 
-		public ApplicationAuthenticationResult Verify(PasswordPolicyForUser passwordPolicyForUser)
+		public ApplicationAuthenticationResult Verify(ApplicationLogonInfo applicationLogonInfo)
 		{
-			var res = _checkPasswordChange.Check(passwordPolicyForUser);
+			var res = _checkPasswordChange.Check(applicationLogonInfo);
 			if (res.Successful && res.Message == null)
 			{
 				return null;
@@ -23,7 +23,7 @@ namespace Teleopti.Ccc.Web.Areas.Tenant.Core
 				FailReason = res.Message,
 				PasswordExpired = res.PasswordExpired,
 				Success = res.Successful,
-				Tenant = passwordPolicyForUser.PersonInfo.Tenant
+				Tenant = applicationLogonInfo.PersonInfo.Tenant
 			};
 		}
 	}

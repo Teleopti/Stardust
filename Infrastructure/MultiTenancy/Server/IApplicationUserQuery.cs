@@ -2,6 +2,6 @@
 {
 	public interface IApplicationUserQuery
 	{
-		PasswordPolicyForUser FindUserData(string userName);
+		ApplicationLogonInfo FindUserData(string userName);
 	}
 }
