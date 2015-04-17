@@ -515,7 +515,6 @@
     <Compile Include="Forecasting\Angel\Accuracy\ForecastingSymmetricMeanAbsolutePercentageError.cs" />
     <Compile Include="Forecasting\Angel\ForecastDayResult.cs" />
     <Compile Include="Forecasting\Angel\ForecastDayViewModel.cs" />
-    <Compile Include="Forecasting\Angel\ForecastMethodViewModel.cs" />
     <Compile Include="Forecasting\Angel\ForecastWorkloadInput.cs" />
     <Compile Include="Forecasting\Angel\ILinearRegressionTrend.cs" />
     <Compile Include="Forecasting\Angel\IPreForecastWorkload.cs" />
@@ -563,7 +562,6 @@
     <Compile Include="Forecasting\Angel\QuickForecastCreator.cs" />
     <Compile Include="Forecasting\Angel\Accuracy\QuickForecastWorkloadEvaluator.cs" />
     <Compile Include="Forecasting\Angel\Accuracy\QuickForecastEvaluator.cs" />
-    <Compile Include="Forecasting\Angel\WorkloadForecastingViewModel.cs" />
     <Compile Include="Forecasting\ForecastingTarget.cs" />
     <Compile Include="Forecasting\SkillMap_DEV.cs" />
     <Compile Include="Forecasting\StaffingCalculatorServiceFacade.cs" />

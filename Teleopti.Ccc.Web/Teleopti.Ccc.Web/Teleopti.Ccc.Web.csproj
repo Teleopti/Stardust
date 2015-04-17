@@ -435,6 +435,7 @@
     <Compile Include="Areas\Forecasting\Controllers\PreForecastInput.cs" />
     <Compile Include="Areas\Forecasting\Core\IPreForecaster.cs" />
     <Compile Include="Areas\Forecasting\Core\PreForecaster.cs" />
+    <Compile Include="Areas\Forecasting\Core\WorkloadForecastViewModel.cs" />
     <Compile Include="Areas\Global\ApplicationController.cs" />
     <Compile Include="Areas\Global\AreaWithPermissionPath.cs" />
     <Compile Include="Areas\Global\LanguageController.cs" />

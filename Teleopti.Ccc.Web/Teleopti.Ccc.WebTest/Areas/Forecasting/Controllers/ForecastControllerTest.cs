@@ -78,7 +78,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Forecasting.Controllers
 		{
 			var preForecaster = MockRepository.GenerateMock<IPreForecaster>();
 			var preForecastInputModel = new PreForecastInput();
-			var workloadForecastingViewModel = new WorkloadForecastingViewModel();
+			var workloadForecastingViewModel = new WorkloadForecastViewModel();
 			preForecaster.Stub(x => x.MeasureAndForecast(preForecastInputModel)).Return(workloadForecastingViewModel);
 			var target = new ForecastController(null, null, null, preForecaster);
 

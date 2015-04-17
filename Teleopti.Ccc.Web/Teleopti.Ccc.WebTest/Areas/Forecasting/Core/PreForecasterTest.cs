@@ -58,7 +58,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Forecasting.Core
 			result.SelectedForecastMethod.Should().Be.EqualTo(ForecastMethodType.TeleoptiClassicWithTrend);
 			result.ForecastMethods.Any(x=>(int)x.AccuracyNumber==89&&x.ForecastMethodType==ForecastMethodType.TeleoptiClassic).Should().Be.True();
 			result.ForecastMethods.Any(x => (int)x.AccuracyNumber == 92 && x.ForecastMethodType == ForecastMethodType.TeleoptiClassicWithTrend).Should().Be.True();
-			dynamic forecastDayViewModel = result.ForecastDayViewModels[0];
+			dynamic forecastDayViewModel = result.ForecastDays[0];
 			((object)forecastDayViewModel.date).Should().Be.EqualTo(dateOnly.Date);
 			((object)forecastDayViewModel.vh).Should().Be.EqualTo(0);
 			((object)forecastDayViewModel.v0).Should().Be.EqualTo(80d);

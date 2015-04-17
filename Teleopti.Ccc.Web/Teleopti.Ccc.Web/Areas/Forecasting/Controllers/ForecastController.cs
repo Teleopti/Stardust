@@ -49,7 +49,7 @@ namespace Teleopti.Ccc.Web.Areas.Forecasting.Controllers
 		}
 
 		[UnitOfWork, HttpPost, Route("api/Forecasting/PreForecast")]
-		public virtual Task<WorkloadForecastingViewModel> PreForecast(PreForecastInput model)
+		public virtual Task<WorkloadForecastViewModel> PreForecast(PreForecastInput model)
 		{
 			return Task.FromResult(_preForecaster.MeasureAndForecast(model));
 		}

@@ -5,6 +5,6 @@ namespace Teleopti.Ccc.Web.Areas.Forecasting.Core
 {
 	public interface IPreForecaster
 	{
-		WorkloadForecastingViewModel MeasureAndForecast(PreForecastInput model);
+		WorkloadForecastViewModel MeasureAndForecast(PreForecastInput model);
 	}
 }

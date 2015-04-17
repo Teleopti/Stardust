@@ -67,11 +67,11 @@ angular.module('wfm.forecasting.target', ['n3-line-chart'])
 
 					$http.post("../api/Forecasting/PreForecast", JSON.stringify({ ForecastStart: $scope.period.startDate, ForecastEnd: $scope.period.endDate , WorkloadId: workload.Id})).
 						success(function(data, status, headers, config) {
-							angular.forEach(data.ForecastDayViewModels, function(day) {
+							angular.forEach(data.ForecastDays, function(day) {
 								day.date = new Date(Date.parse(day.date));
 
 							});
-							$scope.data = data.ForecastDayViewModels;
+							$scope.data = data.ForecastDays;
 						}).
 						error(function(data, status, headers, config) {
 							console.log(data);

@@ -23,7 +23,7 @@ namespace Teleopti.Ccc.Web.Areas.Forecasting.Core
 			_historicalPeriodProvider = historicalPeriodProvider;
 		}
 
-		public WorkloadForecastingViewModel MeasureAndForecast(PreForecastInput input)
+		public WorkloadForecastViewModel MeasureAndForecast(PreForecastInput input)
 		{
 			var workload = _workloadRepository.Get(input.WorkloadId);
 			var evaluateResult = _forecastWorkloadEvaluator.Measure(workload, _historicalPeriodProvider.PeriodForEvaluate());
@@ -40,13 +40,22 @@ namespace Teleopti.Ccc.Web.Areas.Forecasting.Core
 					v1 = forecastResult[dateKey][ForecastMethodType.TeleoptiClassicWithTrend]
 				});
 			}
-			return new WorkloadForecastingViewModel
+			var methods = new List<dynamic>();
+			foreach (var accuracy in evaluateResult.Accuracies)
+			{
+				methods.Add(new
+				{
+					AccuracyNumber = accuracy.Number,
+					ForecastMethodType = accuracy.MethodId
+				});
+			}
+			return new WorkloadForecastViewModel
 			{
 				Name = workload.Name,
 				WorkloadId = workload.Id.Value,
 				SelectedForecastMethod = evaluateResult.Accuracies.Single(x => x.IsSelected).MethodId,
-				ForecastMethods = evaluateResult.Accuracies.Select(a => new ForecastMethodViewModel { AccuracyNumber = a.Number, ForecastMethodType = a.MethodId }).ToArray(),
-				ForecastDayViewModels = data.ToArray()
+				ForecastMethods = methods.ToArray(),
+				ForecastDays = data.ToArray()
 			};
 		}
 	}
