@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Net;
 using System.Net.Http;
 using System.Text;
 using Teleopti.Interfaces;
@@ -16,12 +17,17 @@ namespace Teleopti.Messaging.Client.Http
 		public Action<HttpClient, string, HttpContent> PostAsync =
 			(client, uri, httpContent) => client.PostAsync(uri, httpContent);
 
-		private readonly HttpClient _httpClient = new HttpClient();
+		private readonly HttpClient _httpClient;
 
 		public HttpSender(IMessageBrokerUrl url, IJsonSerializer seralizer)
 		{
 			_url = url;
 			_serializer = seralizer ?? new ToStringSerializer();
+			_httpClient = new HttpClient(
+				new HttpClientHandler
+				{
+					Credentials = CredentialCache.DefaultNetworkCredentials
+				});
 		}
 
 		public void Send(Notification notification)
