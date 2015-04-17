@@ -23,8 +23,6 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 
     	public IShiftCategory ShiftCategory { get; set; }
         public IList<DateTimePeriod>  ActivityPeriods { get; set; }
-        // holds the best value of this combination
-        public double ShiftValue { get; set; }
 
         public PossibleStartEndCategory()
         {
@@ -48,7 +46,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
                 var catHash = 0;
                 if (ShiftCategory != null)
                     catHash = ShiftCategory.GetHashCode();
-                _hashCode = StartTime.GetHashCode() ^ EndTime.GetHashCode() ^ catHash ^ ShiftValue.GetHashCode() ;
+                _hashCode = StartTime.GetHashCode() ^ EndTime.GetHashCode() ^ catHash;
             }
 
             return _hashCode.Value;

@@ -25,9 +25,5 @@ namespace Teleopti.Interfaces
         /// 
         /// </summary>
         IShiftCategory ShiftCategory { get; set; }
-        /// <summary>
-        /// 
-        /// </summary>
-        double ShiftValue { get; set; }
     }
 }
