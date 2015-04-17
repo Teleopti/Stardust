@@ -11,6 +11,7 @@ namespace Teleopti.Ccc.Web.Broker
 
 	}
 
+	[CLSCompliant(false)]
 	public class SignalR : ISignalR
 	{
 		private readonly IHubConnectionContext<dynamic> _connectionContext;
