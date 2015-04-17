@@ -19,12 +19,12 @@ namespace Teleopti.Ccc.Web.Broker
 
 		public void NotifyClients(Notification notification)
 		{
-			_server.NotifyClients(HubContext().Clients, "POST", notification);
+			_server.NotifyClients(new SignalRClients(HubContext()), "POST", notification);
 		}
 
 		public void NotifyClientsMultiple(IEnumerable<Notification> notifications)
 		{
-			_server.NotifyClientsMultiple(HubContext().Clients, "POST", notifications);
+			_server.NotifyClientsMultiple(new SignalRClients(HubContext()), "POST", notifications);
 		}
 	}
 }

@@ -163,6 +163,7 @@
     </Compile>
     <Compile Include="IActionScheduler.cs" />
     <Compile Include="IBeforeSubscribe.cs" />
+    <Compile Include="ISignalRClients.cs" />
     <Compile Include="MessageBrokerController.cs" />
     <Compile Include="MessageBrokerHub.cs" />
     <Compile Include="MessageBrokerServer.cs" />
@@ -170,7 +171,7 @@
     <Compile Include="SignalRConfiguration.cs" />
     <Compile Include="SubscriptionFiller.cs" />
     <Compile Include="SubscriptionPassThrough.cs" />
-    <Compile Include="BackportableHub.cs" />
+    <Compile Include="Backportability.cs" />
     <Compile Include="TimeoutSettings.cs" />
   </ItemGroup>
   <ItemGroup>

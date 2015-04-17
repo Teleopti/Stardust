@@ -8,6 +8,26 @@ namespace Teleopti.Ccc.Web.Broker
 		
 	}
 
+	public class SignalRClients : ISignalRClients
+	{
+		private readonly IHubConnectionContext _connectionContext;
+
+		public SignalRClients(IHubContext context)
+		{
+			_connectionContext = context.Clients;
+		}
+
+		public SignalRClients(IHub context)
+		{
+			_connectionContext = context.Clients;
+		}
+
+		public dynamic Group(string groupName)
+		{
+			return _connectionContext.Group(groupName);
+		}
+	}
+
 	//from https://github.com/SignalR/SignalR/pull/1127
 	// this is just so that Clients is an interface that can be stubbed out
 	// this will make this class obsolete: 

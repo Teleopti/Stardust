@@ -18,7 +18,7 @@ namespace Teleopti.Ccc.Web.Broker
 			_actionScheduler = actionScheduler;
 		}
 
-		public void NotifyClients(dynamic clients, string connectionId, Notification notification)
+		public void NotifyClients(ISignalRClients clients, string connectionId, Notification notification)
 		{
 			var routes = notification.Routes();
 
@@ -34,7 +34,7 @@ namespace Teleopti.Ccc.Web.Broker
 			}
 		}
 
-		public void NotifyClientsMultiple(dynamic clients, string connectionId, IEnumerable<Notification> notifications)
+		public void NotifyClientsMultiple(ISignalRClients clients, string connectionId, IEnumerable<Notification> notifications)
 		{
 			foreach (var notification in notifications)
 			{
@@ -55,5 +55,4 @@ namespace Teleopti.Ccc.Web.Broker
 		}
 
 	}
-
 }
