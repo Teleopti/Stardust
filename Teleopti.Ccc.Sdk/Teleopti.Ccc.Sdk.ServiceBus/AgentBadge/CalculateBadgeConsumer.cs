@@ -72,6 +72,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.AgentBadge
 		/// <param name="message"></param>
 		public void Consume(CalculateBadgeMessage message)
 		{
+			var utcNow = _now.UtcDateTime();
 			//mutual with feature Portal_DifferentiateBadgeSettingForAgents_31318
 			if (_toggleManager.IsEnabled(Toggles.Portal_DifferentiateBadgeSettingForAgents_31318))
 				return;
@@ -80,29 +81,34 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.AgentBadge
 
 			if (Logger.IsDebugEnabled)
 			{
-				Logger.DebugFormat("Consume CalculateBadgeMessage with BusinessUnit {0}, DataSource {1} and timezone {2}", message.BusinessUnitId,
-					message.Datasource, message.TimeZoneCode);
+				Logger.DebugFormat("Consume CalculateBadgeMessage with BusinessUnit {0}, DataSource {1} and timezone {2}",
+					message.BusinessUnitId, message.Datasource, message.TimeZoneCode);
 			}
+
+			// Next badge calculation start at same time point tomorrow.
+			var nextMessageShouldBeProcessed = utcNow.AddDays(1);
+
+			var messageForTomorrow = new CalculateBadgeMessage
+			{
+				Datasource = message.Datasource,
+				BusinessUnitId = message.BusinessUnitId,
+				Timestamp = utcNow,
+				TimeZoneCode = message.TimeZoneCode,
+				CalculationDate = message.CalculationDate.AddDays(1)
+			};
 
 			using (var uow = _currentUnitOfWorkFactory.LoggedOnUnitOfWorkFactory().CreateAndOpenUnitOfWork())
 			{
 				var setting = _settingsRepository.GetSettings();
-				if (setting == null)
-				{
-					//error happens
-					Logger.Error("Agent badge threshold setting is null before starting badge calculation");
-					return;
-				}
-
-				if (!setting.BadgeEnabled)
+				if (setting == null || !setting.BadgeEnabled)
 				{
 					if (Logger.IsDebugEnabled)
 					{
 						Logger.DebugFormat("Agent badge is disabled. nothing will be done except send a new CalculateBadgeMessage for "
-										   + "BusinessUnit {0}, DataSource {1} and timezone {2}",
+						                   + "BusinessUnit {0}, DataSource {1} and timezone {2}",
 							message.BusinessUnitId, message.Datasource, message.TimeZoneCode);
 					}
-					resendMessage(message);
+					resendMessage(messageForTomorrow, nextMessageShouldBeProcessed);
 					return;
 				}
 
@@ -114,7 +120,25 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.AgentBadge
 
 				var calculateDate = new DateOnly(message.CalculationDate);
 
-				_runningEtlJobChecker.CheckIfNightlyEtlJobRunning();
+				if (_runningEtlJobChecker.NightlyEtlJobStillRunning())
+				{
+					// If the ETL nightly job still running, then delay badge calculation 5 minutes later.
+					if (Logger.IsDebugEnabled)
+					{
+						Logger.Debug("The \"Nightly\" ETL job is still running, will retry in 5 minutes.");
+					}
+
+					var delayedMessage = new CalculateBadgeMessage
+					{
+						Datasource = message.Datasource,
+						BusinessUnitId = message.BusinessUnitId,
+						Timestamp = utcNow,
+						TimeZoneCode = message.TimeZoneCode,
+						CalculationDate = message.CalculationDate
+					};
+					resendMessage(delayedMessage, utcNow.AddMinutes(5));
+					return;
+				}
 
 				if (setting.AdherenceBadgeEnabled)
 				{
@@ -199,35 +223,20 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.AgentBadge
 
 			if (_serviceBus == null) return;
 
-			resendMessage(message);
+			resendMessage(messageForTomorrow, nextMessageShouldBeProcessed);
 		}
 
-		private void resendMessage(CalculateBadgeMessage message)
+		private void resendMessage(CalculateBadgeMessage message, DateTime delaySendTime)
 		{
-			var today = _now.LocalDateOnly();
-			var tomorrow = new DateTime(today.AddDays(1).Date.Ticks, DateTimeKind.Unspecified);
-			var timeZone = TimeZoneInfo.FindSystemTimeZoneById(message.TimeZoneCode);
-
-			// Set badge calculation start at 5:00 AM
-			// Just hard code it now, the best solution is to trigger it from ETL
-			var nextMessageShouldBeProcessed = TimeZoneInfo.ConvertTime(tomorrow.AddHours(5), timeZone, TimeZoneInfo.Local);
-			var newMessage = new CalculateBadgeMessage
-			{
-				Datasource = message.Datasource,
-				BusinessUnitId = message.BusinessUnitId,
-				Timestamp = DateTime.UtcNow,
-				TimeZoneCode = message.TimeZoneCode,
-				CalculationDate = message.CalculationDate.AddDays(1)
-			};
-
-			_serviceBus.DelaySend(nextMessageShouldBeProcessed, newMessage);
-
 			if (Logger.IsDebugEnabled)
 			{
 				Logger.DebugFormat(
-						"Delay Sending CalculateBadgeMessage to Service Bus for Timezone={0} on next calculation time={1:yyyy-MM-dd HH:mm:ss}",
-						newMessage.TimeZoneCode, nextMessageShouldBeProcessed);
+					"Delay Sending CalculateBadgeMessage to Service Bus for Timezone={0} "
+					+ "on next calculation time={1:yyyy-MM-dd HH:mm:ss}",
+					message.TimeZoneCode, delaySendTime);
 			}
+
+			_serviceBus.DelaySend(delaySendTime, message);
 		}
 
 		private void sendMessagesToPeopleGotABadge(IEnumerable<IAgentBadgeTransaction> newAwardedBadges,

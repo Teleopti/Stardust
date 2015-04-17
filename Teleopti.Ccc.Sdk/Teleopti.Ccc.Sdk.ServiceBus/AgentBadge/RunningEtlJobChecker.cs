@@ -14,7 +14,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.AgentBadge
 			_statisticRepository = statisticRepository;
 		}
 
-		public bool CheckIfNightlyEtlJobRunning()
+		public bool NightlyEtlJobStillRunning()
 		{
 			return checkIfEtlJobRunning("Nightly");
 		}
@@ -31,23 +31,27 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.AgentBadge
 				return false;
 			}
 
-			var runningNightlyJob = runningJobs.SingleOrDefault(x => x.JobName == jobName);
-			if (runningNightlyJob == null)
+
+			if (runningJobs.Any(x => x.JobName == jobName))
 			{
 				if (logger.IsDebugEnabled)
 				{
-					logger.DebugFormat("ETL job \"{0}\" is not running.", jobName);
+					var runningNightlyJob = runningJobs.First(x => x.JobName == jobName);
+					logger.DebugFormat(
+						"The \"{0}\" ETL job is running. Job information: "
+						+ "ComputerName: {1}, StartTime: {2:yyyy-MM-dd HH:mm:ss}, IsStartedByService: {3}, "
+						+ "LockUntil: {4:yyyy-MM-dd HH:mm:ss}", jobName,
+						runningNightlyJob.ComputerName, runningNightlyJob.StartTime, runningNightlyJob.IsStartedByService,
+						runningNightlyJob.LockUntil);
 				}
-				return false;
+				return true;
 			}
 
-			logger.WarnFormat(
-				"The \"{0}\" ETL job is running. Job information: "
-				+ "ComputerName: {1}, StartTime: {2:yyyy-MM-dd HH:mm:ss}, IsStartedByService: {3}, "
-				+ "LockUntil: {4:yyyy-MM-dd HH:mm:ss}", jobName,
-				runningNightlyJob.ComputerName, runningNightlyJob.StartTime, runningNightlyJob.IsStartedByService,
-				runningNightlyJob.LockUntil);
-			return true;
+			if (logger.IsDebugEnabled)
+			{
+				logger.DebugFormat("ETL job \"{0}\" is not running.", jobName);
+			}
+			return false;
 		}
 	}
 }

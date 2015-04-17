@@ -2,6 +2,6 @@
 {
 	public interface IRunningEtlJobChecker
 	{
-		bool CheckIfNightlyEtlJobRunning();
+		bool NightlyEtlJobStillRunning();
 	}
 }

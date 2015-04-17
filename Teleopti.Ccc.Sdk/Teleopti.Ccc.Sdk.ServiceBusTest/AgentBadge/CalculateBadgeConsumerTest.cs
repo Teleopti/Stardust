@@ -92,12 +92,10 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.AgentBadge
 		public void ShouldSendCalculateBadgeMessageAtRightTime()
 		{
 			var timezone = TimeZoneInfo.Utc;
-			var today = new DateTime(2014, 8, 8);
-			var tomorrowUnspecified = new DateTime(2014, 8, 9, 0, 0, 0, DateTimeKind.Unspecified);
-			var expectedNextMessageShouldBeProcessed =
-				TimeZoneInfo.ConvertTime(tomorrowUnspecified.AddHours(5), timezone, TimeZoneInfo.Local);
+			var utcNow = new DateTime(2014, 8, 8, 04, 30, 00);
+			var expectedNextMessageShouldBeProcessed = utcNow.AddDays(1);
 
-			now.Stub(x => x.UtcDateTime()).Return(today);
+			now.Stub(x => x.UtcDateTime()).Return(utcNow);
 			badgeSettingsRepository.Stub(x => x.GetSettings()).Return(
 				new AgentBadgeSettings
 				{
@@ -145,12 +143,10 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.AgentBadge
 		public void ShouldNotCalculateBadgeWhenAgentBadgeDisabled()
 		{
 			var timezone = TimeZoneInfo.Utc;
-			var today = new DateTime(2014, 8, 8);
-			var tomorrowUnspecified = new DateTime(2014, 8, 9, 0, 0, 0, DateTimeKind.Unspecified);
-			var expectedNextMessageShouldBeProcessed =
-				TimeZoneInfo.ConvertTime(tomorrowUnspecified.AddHours(5), timezone, TimeZoneInfo.Local);
+			var utcNow = new DateTime(2014, 8, 8, 04, 30, 00);
+			var expectedNextMessageShouldBeProcessed = utcNow.AddDays(1);
 
-			now.Stub(x => x.UtcDateTime()).Return(today);
+			now.Stub(x => x.UtcDateTime()).Return(utcNow);
 			badgeSettingsRepository.Stub(x => x.GetSettings()).Return(new AgentBadgeSettings
 			{
 				BadgeEnabled = false
@@ -185,6 +181,56 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.AgentBadge
 							var msg = ((CalculateBadgeMessage)m[0]);
 							return msg.TimeZoneCode == TimeZoneInfo.Utc.Id
 								&& msg.CalculationDate == message.CalculationDate.AddDays(1);
+						}))));
+		}
+
+		[Test]
+		public void ShouldDelayCalculateBadgeWhenEtlNightlyJobStillRunning()
+		{
+			var timezone = TimeZoneInfo.Utc;
+			var utcNow = new DateTime(2014, 8, 8, 04, 30, 00);
+			var expectedNextMessageShouldBeProcessed = utcNow.AddMinutes(5);
+
+			now.Stub(x => x.UtcDateTime()).Return(utcNow);
+			badgeSettingsRepository.Stub(x => x.GetSettings()).Return(new AgentBadgeSettings
+			{
+				BadgeEnabled = true,
+				AdherenceBadgeEnabled = true,
+				AHTBadgeEnabled = true,
+				AnsweredCallsBadgeEnabled = true
+			});
+
+			var calculationDate = TimeZoneInfo.ConvertTime(now.LocalDateTime().AddDays(-1), TimeZoneInfo.Local, timezone);
+			var message = new CalculateBadgeMessage
+			{
+				TimeZoneCode = timezone.Id,
+				CalculationDate = calculationDate
+			};
+
+			runningEtlJobChecker.Stub(x => x.NightlyEtlJobStillRunning()).Return(true);
+
+			target.Consume(message);
+
+			calculator.AssertWasNotCalled(
+				x => x.CalculateAHTBadges(new List<IPerson>(), "", DateOnly.Today, new AgentBadgeSettings(), _businessUnitId),
+				o => o.IgnoreArguments());
+			calculator.AssertWasNotCalled(
+				x => x.CalculateAdherenceBadges(new List<IPerson>(), "", DateOnly.Today,
+					AdherenceReportSettingCalculationMethod.ReadyTimeVSContractScheduleTime, new AgentBadgeSettings(), _businessUnitId),
+				o => o.IgnoreArguments());
+			calculator.AssertWasNotCalled(
+				x => x.CalculateAnsweredCallsBadges(new List<IPerson>(), "", DateOnly.Today, new AgentBadgeSettings(), _businessUnitId),
+				o => o.IgnoreArguments());
+
+			serviceBus.AssertWasCalled(x => x.DelaySend(new DateTime(), new object()),
+				o =>
+					o.Constraints(
+						Rhino.Mocks.Constraints.Is.Matching(new Predicate<DateTime>(m => m == expectedNextMessageShouldBeProcessed)),
+						Rhino.Mocks.Constraints.Is.Matching(new Predicate<object[]>(m =>
+						{
+							var msg = ((CalculateBadgeMessage)m[0]);
+							return msg.TimeZoneCode == TimeZoneInfo.Utc.Id
+								&& msg.CalculationDate == message.CalculationDate;
 						}))));
 		}
 	}
