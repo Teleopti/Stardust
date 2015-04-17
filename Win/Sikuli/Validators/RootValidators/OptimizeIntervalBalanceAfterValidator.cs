@@ -60,7 +60,7 @@ namespace Teleopti.Ccc.Win.Sikuli.Validators.RootValidators
 				result.Result = SikuliValidationResult.ResultValue.Warn;
 				result.Details.AppendLine(string.Format("Broken rules: {0}", ruleBreaks));
 			}
-			const int maxRuleBreaks = 1;
+			const int maxRuleBreaks = 2;
 			if (ruleBreaks > maxRuleBreaks)
 				result.Result = SikuliValidationResult.ResultValue.Fail;
 			result.Details.AppendLine(string.Format("Lowest intra interval balance: {0}", result.Result));
