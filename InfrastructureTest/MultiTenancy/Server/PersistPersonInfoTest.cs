@@ -71,7 +71,7 @@ namespace Teleopti.Ccc.InfrastructureTest.MultiTenancy.Server
 			session.Flush();
 			session.Clear();
 
-			personInfo.SetPassword(newPassword);
+			personInfo.SetApplicationLogonCredentials(RandomName.Make(), newPassword);
 			target.Persist(personInfo);
 
 			session.Flush();
@@ -87,9 +87,9 @@ namespace Teleopti.Ccc.InfrastructureTest.MultiTenancy.Server
 			var logonName = RandomName.Make();
 
 			var personInfo1 = new PersonInfo(tenant);
-			personInfo1.SetApplicationLogonName(logonName);
+			personInfo1.SetApplicationLogonCredentials(logonName, RandomName.Make());
 			var personInfo2 = new PersonInfo(tenant);
-			personInfo2.SetApplicationLogonName(logonName);
+			personInfo2.SetApplicationLogonCredentials(logonName, RandomName.Make());
 
 			target.Persist(personInfo1);
 			target.Persist(personInfo2);
@@ -102,9 +102,9 @@ namespace Teleopti.Ccc.InfrastructureTest.MultiTenancy.Server
 		public void MultipleNullApplicationLogonShouldNotThrow()
 		{
 			var personInfo1 = new PersonInfo(tenant);
-			personInfo1.SetApplicationLogonName(null);
+			personInfo1.SetApplicationLogonCredentials(null, RandomName.Make());
 			var personInfo2 = new PersonInfo(tenant);
-			personInfo2.SetApplicationLogonName(null);
+			personInfo2.SetApplicationLogonCredentials(null, RandomName.Make());
 
 			target.Persist(personInfo1);
 			target.Persist(personInfo2);

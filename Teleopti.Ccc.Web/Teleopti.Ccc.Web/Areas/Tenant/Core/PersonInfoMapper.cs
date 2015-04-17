@@ -23,8 +23,7 @@ namespace Teleopti.Ccc.Web.Areas.Tenant.Core
 			var dateOnly = personInfoModel.TerminalDate.HasValue ? new DateOnly(personInfoModel.TerminalDate.Value) : (DateOnly?)null;
 			var personInfo = new PersonInfo(tenant) { Id = id, TerminalDate = dateOnly};
 			personInfo.SetIdentity(personInfoModel.Identity);
-			personInfo.SetApplicationLogonName(personInfoModel.ApplicationLogonName);
-			personInfo.SetPassword(personInfoModel.Password);
+			personInfo.SetApplicationLogonCredentials(personInfoModel.ApplicationLogonName, personInfoModel.Password);
 			return personInfo;
 		}
 	}

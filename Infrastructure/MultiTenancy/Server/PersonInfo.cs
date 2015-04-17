@@ -18,9 +18,11 @@ namespace Teleopti.Ccc.Infrastructure.MultiTenancy.Server
 		}
 
 		public virtual Guid Id { get; set; }
-		public virtual string Password { get; protected set; }
-		public virtual string Identity { get; protected set; }
+		//TODO: tenant move these to applicationlogoninfo
 		public virtual string ApplicationLogonName { get; protected set; }
+		public virtual string Password { get; protected set; }
+		//
+		public virtual string Identity { get; protected set; }
 		public virtual DateOnly? TerminalDate { get; set; }
 
 		public virtual ApplicationLogonInfo ApplicationLogonInfo
@@ -39,19 +41,16 @@ namespace Teleopti.Ccc.Infrastructure.MultiTenancy.Server
 			get { return tenant.Name; }
 		}
 
-		public virtual void SetApplicationLogonName(string logonName)
+		public virtual void SetApplicationLogonCredentials(string logonName, string password)
 		{
+			//need to check password policy here!
 			ApplicationLogonName = logonName;
+			Password = password;
 		}
 
 		public virtual void SetIdentity(string identityName)
 		{
 			Identity = identityName;
-		}
-
-		public virtual void SetPassword(string password)
-		{
-			Password = password;
 		}
 	}
 }
