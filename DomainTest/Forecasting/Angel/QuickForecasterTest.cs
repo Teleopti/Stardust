@@ -1,10 +1,7 @@
 using System;
-using System.Linq;
 using NUnit.Framework;
 using Rhino.Mocks;
-using SharpTestsEx;
 using Teleopti.Ccc.Domain.Collection;
-using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Domain.Forecasting.Angel;
 using Teleopti.Ccc.Domain.Forecasting.Angel.Accuracy;
 using Teleopti.Ccc.Domain.Forecasting.Angel.Future;

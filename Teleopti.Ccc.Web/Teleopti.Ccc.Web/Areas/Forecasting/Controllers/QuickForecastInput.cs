@@ -1,4 +1,5 @@
 ﻿using System;
+using Teleopti.Ccc.Domain.Forecasting.Angel;
 
 namespace Teleopti.Ccc.Web.Areas.Forecasting.Controllers
 {
