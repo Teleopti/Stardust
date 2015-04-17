@@ -78,14 +78,24 @@ function PeopleController($scope, $filter, $state, SearchSvrc) {
 			end = start;
 			start = 1;
 		}
-
+		
 		var leftBoundary = start;
 		var rightBoundary = end;
-		if (end - start > displayPageCount) {
+		if (end - start >= displayPageCount) {
 			var currentPageIndex = $scope.currentPageIndex;
-			leftBoundary = currentPageIndex - Math.floor(displayPageCount / 2) > 1 ? currentPageIndex - Math.floor(displayPageCount / 2) : 1;
-			rightBoundary = currentPageIndex + Math.floor(displayPageCount / 2) > end ? end : currentPageIndex + Math.floor(displayPageCount / 2);
+
+			if (currentPageIndex<displayPageCount-1) {
+				leftBoundary = 1;
+				rightBoundary = displayPageCount;
+			} else if (end - currentPageIndex < 3) {
+				leftBoundary = end - displayPageCount + 1;
+				rightBoundary = end;
+			} else {
+				leftBoundary = currentPageIndex - Math.floor(displayPageCount / 2) > 1 ? currentPageIndex - Math.floor(displayPageCount / 2) : 1;
+				rightBoundary = currentPageIndex + Math.floor(displayPageCount / 2) > end ? end : currentPageIndex + Math.floor(displayPageCount / 2);
+			}
 		}
+
 		for (var i = leftBoundary; i <= rightBoundary ; i++) {
 			ret.push(i);
 		}
