@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Linq;
 using NUnit.Framework;
 using Teleopti.Ccc.Domain.Scheduling.ShiftCreator;
 using Teleopti.Ccc.TestCommon.FakeData;
@@ -129,5 +130,26 @@ namespace Teleopti.Ccc.WinCodeTest.Shifts
             ));
             Assert.AreEqual(1, _target.ModelCollection.Count);
         }
+
+		[Test]
+	    public void ShouldClearModelWhenLoadingModelCollection()
+		{
+			_model = _mock.StrictMock<IExplorerViewModel>();
+			using (_mock.Record())
+			{
+				Expect.Call(_explorer.Model).Return(_model);
+				Expect.Call(_model.FilteredRuleSetCollection).Return(new ReadOnlyCollection<IWorkShiftRuleSet>(new List<IWorkShiftRuleSet>()));
+			}
+			using (_mock.Playback())
+			{
+				var limiter = new ActivityTimeLimiter(_activity, TimeSpan.FromHours(1), OperatorLimiter.Equals);
+				var modelList = _ruleSetCollection.Select(ruleSet => new ActivityTimeLimiterViewModel(ruleSet, limiter)).Cast<IActivityTimeLimiterViewModel>().ToList();
+				_target.SetModelCollection(new ReadOnlyCollection<IActivityTimeLimiterViewModel>(modelList));
+
+				Assert.AreEqual(1, _target.ModelCollection.Count);
+				_target.LoadModelCollection();
+				Assert.AreEqual(0, _target.ModelCollection.Count);
+			}    
+	    }
     }
 }
