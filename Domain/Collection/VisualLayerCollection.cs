@@ -94,7 +94,7 @@ namespace Teleopti.Ccc.Domain.Collection
 				{
 					if (layer.HighestPriorityAbsence == null && 
 						layer.DefinitionSet.MultiplicatorType == MultiplicatorType.Overtime)
-						ret = ret.Add(layer.Period.ElapsedTime());
+						ret = ret.Add(layer.WorkTime());
 				}
 			}
 			return ret;

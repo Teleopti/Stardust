@@ -350,19 +350,17 @@ namespace Teleopti.Ccc.DomainTest.Collection
 		public void VerifyOvertime()
 		{
 			IMultiplicatorDefinitionSet set =
-					MultiplicatorDefinitionSetFactory.CreateMultiplicatorDefinitionSet("overtime",
-																																						 MultiplicatorType.Overtime);
-			internalCollection.Add(createLayerWithOvertime(set, new DateTimePeriod(2000, 1, 1, 2000, 1, 2)));
+					MultiplicatorDefinitionSetFactory.CreateMultiplicatorDefinitionSet("overtime", MultiplicatorType.Overtime);
+			var activity = ActivityFactory.CreateActivity("test");
+			activity.InWorkTime = true;
 
-			set =
-					MultiplicatorDefinitionSetFactory.CreateMultiplicatorDefinitionSet("ob",
-																																						 MultiplicatorType.OBTime);
-			internalCollection.Add(createLayerWithOvertime(set, new DateTimePeriod(2000, 1, 2, 2000, 1, 3)));
+			internalCollection.Add(createLayerWithOvertime(set, new DateTimePeriod(2000, 1, 1, 2000, 1, 2), activity));
 
-			set =
-					MultiplicatorDefinitionSetFactory.CreateMultiplicatorDefinitionSet("overtime1",
-																																						 MultiplicatorType.Overtime);
-			internalCollection.Add(createLayerWithOvertime(set, new DateTimePeriod(2000, 1, 3, 2000, 1, 4)));
+			set = MultiplicatorDefinitionSetFactory.CreateMultiplicatorDefinitionSet("ob", MultiplicatorType.OBTime);
+			internalCollection.Add(createLayerWithOvertime(set, new DateTimePeriod(2000, 1, 2, 2000, 1, 3), activity));
+
+			set = MultiplicatorDefinitionSetFactory.CreateMultiplicatorDefinitionSet("overtime1", MultiplicatorType.Overtime);
+			internalCollection.Add(createLayerWithOvertime(set, new DateTimePeriod(2000, 1, 3, 2000, 1, 4), activity));
 
 			internalCollection.Add(createVisualLayerWithAbsenceForReadyTime(new DateTimePeriod(2000, 1, 4, 2000, 1, 5), false));
 
@@ -391,6 +389,32 @@ namespace Teleopti.Ccc.DomainTest.Collection
 			Assert.AreEqual(TimeSpan.FromMinutes(15), target.Overtime(activityPeriod.MovePeriod(TimeSpan.FromMinutes(15))));
 			Assert.AreEqual(TimeSpan.FromMinutes(0), target.Overtime(activityPeriod));
 		}
+
+
+		[Test]
+		public void ShouldOnlyCalculateOvertimeForActivitiesInworktime()
+		{
+			var set = MultiplicatorDefinitionSetFactory.CreateMultiplicatorDefinitionSet("overtime", MultiplicatorType.Overtime);
+			
+			var overtimePhoneActivity = ActivityFactory.CreateActivity("Phone");
+			overtimePhoneActivity.InWorkTime = true;
+			var activityPeriod = new DateTimePeriod(new DateTime(2000, 1, 1, 5, 0, 0, DateTimeKind.Utc), new DateTime(2000, 1, 1, 6, 0, 0, DateTimeKind.Utc));
+			internalCollection.Add(createLayerWithOvertime(set, activityPeriod, overtimePhoneActivity));
+
+			var nonWorkTimeActivity = ActivityFactory.CreateActivity("Lunch");
+			nonWorkTimeActivity.InWorkTime = false;
+			var nonWorkTimeActivityPeriod = new DateTimePeriod(new DateTime(2000, 1, 1, 6, 0, 0, DateTimeKind.Utc), new DateTime(2000, 1, 1, 7, 0, 0, DateTimeKind.Utc));
+			internalCollection.Add(createLayerWithOvertime(set, nonWorkTimeActivityPeriod, nonWorkTimeActivity));
+
+			var activityPeriodAfter = new DateTimePeriod(new DateTime(2000, 1, 1, 7, 0, 0, DateTimeKind.Utc), new DateTime(2000, 1, 1, 8, 0, 0, DateTimeKind.Utc));
+			internalCollection.Add(createLayerWithOvertime(set, activityPeriodAfter, overtimePhoneActivity));
+
+
+			var overtime = target.Overtime();
+
+			Assert.AreEqual(2, overtime.TotalHours);
+		}
+
 		#endregion
 
 		#region PaidTime tests
@@ -455,6 +479,8 @@ namespace Teleopti.Ccc.DomainTest.Collection
 		}
 		#endregion
 
+
+
 		private IVisualLayer createLayer(DateTimePeriod period, IActivity activity)
 		{
 			return visualLayerFactory.CreateShiftSetupLayer(activity, period, dummyPerson);
@@ -494,6 +520,15 @@ namespace Teleopti.Ccc.DomainTest.Collection
 			((VisualLayer)ret).DefinitionSet = multiplicatorDefinitionSet;
 			return ret;
 		}
+
+		private IVisualLayer createLayerWithOvertime(IMultiplicatorDefinitionSet multiplicatorDefinitionSet,
+			DateTimePeriod period, IActivity activity)
+		{
+			IVisualLayer ret = visualLayerOvertimeFactory.CreateShiftSetupLayer(activity, period, dummyPerson);
+			((VisualLayer)ret).DefinitionSet = multiplicatorDefinitionSet;
+			return ret;
+		}
+
 
 		private IVisualLayer createLayerInPaidTime(bool inPaidTime, DateTimePeriod period)
 		{
