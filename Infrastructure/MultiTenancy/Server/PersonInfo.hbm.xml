@@ -15,19 +15,13 @@
 		<property name="ApplicationLogonName"/>
 		<property name="Password"/>
 
-		<!-- remove soon!-->
-		<join fetch="join" optional="true" table="ApplicationLogonInfo">
-			<key column="Person"/>
-			<component name="ApplicationLogonInfo" class="ApplicationLogonInfo">
-				<parent name="PersonInfo" />
-				<!--delete me soon!-->
-				<property name="id" access="field"/>
-				<property name="LastPasswordChange" />
-				<property name="InvalidAttemptsSequenceStart" />
-				<property name="InvalidAttempts" />
-				<property name="IsLocked" />
-			</component>
-		</join>
+		<component name="ApplicationLogonInfo" class="ApplicationLogonInfo">
+			<parent name="PersonInfo" />
+			<property name="LastPasswordChange" />
+			<property name="InvalidAttemptsSequenceStart" />
+			<property name="InvalidAttempts" />
+			<property name="IsLocked" />
+		</component>
 	</class>
 
 	<query name="identityUserQuery">

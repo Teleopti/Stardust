@@ -4,17 +4,11 @@ namespace Teleopti.Ccc.Infrastructure.MultiTenancy.Server
 {
 	public class ApplicationLogonInfo
 	{
-#pragma warning disable 169
-		private Guid id;
-#pragma warning restore 169
-
 		public ApplicationLogonInfo(PersonInfo personInfo)
 		{
 			PersonInfo = personInfo;
 			LastPasswordChange=DateTime.UtcNow;
 			InvalidAttemptsSequenceStart = DateTime.UtcNow;
-			//todo: tenant - remove me!
-			id=Guid.NewGuid();
 		}
 		protected ApplicationLogonInfo() { }
 
