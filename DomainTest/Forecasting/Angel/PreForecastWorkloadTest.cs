@@ -8,7 +8,6 @@ using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.Forecasting.Angel;
 using Teleopti.Ccc.Domain.Forecasting.Angel.Accuracy;
-using Teleopti.Ccc.Domain.Forecasting.Angel.Historical;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Interfaces.Domain;
 
@@ -21,15 +20,13 @@ namespace Teleopti.Ccc.DomainTest.Forecasting.Angel
 		{
 			var skill = SkillFactory.CreateSkillWithWorkloadAndSources();
 			var workload = skill.WorkloadCollection.Single();
-			var historicalData = MockRepository.GenerateMock<IHistoricalData>();
 			var historicalPeriodProvider = new HistoricalPeriodProvider(new MutableNow(new DateTime(2014, 12, 31, 0, 0, 0, DateTimeKind.Utc)));
 			var taskOwnerPeriod = new TaskOwnerPeriod(DateOnly.MinValue, new List<WorkloadDay>(), TaskOwnerPeriodType.Other);
-			historicalData.Stub(x => x.Fetch(workload, historicalPeriodProvider.PeriodForForecast())).Return(taskOwnerPeriod);
 
 			var dateOnly = new DateOnly(2015, 1, 1);
 			var futurePeriod = new DateOnlyPeriod(dateOnly, dateOnly);
-			var target = new PreForecastWorkload(historicalData, null, historicalPeriodProvider);
-			var result = target.PreForecast(workload, futurePeriod);
+			var target = new PreForecastWorkload(null);
+			var result = target.PreForecast(workload, futurePeriod, taskOwnerPeriod);
 
 			result.Count.Should().Be.EqualTo(0);
 		}
@@ -50,15 +47,12 @@ namespace Teleopti.Ccc.DomainTest.Forecasting.Angel
 
 			var skill = SkillFactory.CreateSkillWithWorkloadAndSources();
 			var workload = skill.WorkloadCollection.Single();
-			var historicalData = MockRepository.GenerateMock<IHistoricalData>();
 			var historicalPeriodProvider = new HistoricalPeriodProvider(new MutableNow(new DateTime(2014, 12, 31, 0, 0, 0, DateTimeKind.Utc)));
 			var taskOwnerPeriod = new TaskOwnerPeriod(DateOnly.MinValue, new List<WorkloadDay>
 			{
 				workloadDay1,
 				workloadDay2
 			}, TaskOwnerPeriodType.Other);
-			historicalData.Stub(x => x.Fetch(workload, historicalPeriodProvider.PeriodForForecast()))
-				.Return(taskOwnerPeriod);
 			var dateOnly = new DateOnly(2015, 1, 1);
 			var futurePeriod = new DateOnlyPeriod(dateOnly, dateOnly);
 			var forecastMethodProvider = MockRepository.GenerateMock<IForecastMethodProvider>();
@@ -70,9 +64,9 @@ namespace Teleopti.Ccc.DomainTest.Forecasting.Angel
 
 			forecastMethodProvider.Stub(x => x.All()).Return(new[] {forecastMethod1, forecastMethod2});
 
-			var target = new PreForecastWorkload(historicalData, forecastMethodProvider, historicalPeriodProvider);
+			var target = new PreForecastWorkload(forecastMethodProvider);
 
-			var result = target.PreForecast(workload, futurePeriod);
+			var result = target.PreForecast(workload, futurePeriod, taskOwnerPeriod);
 
 			result.Count.Should().Be.EqualTo(1);
 			result[dateOnly].Count.Should().Be.EqualTo(2);

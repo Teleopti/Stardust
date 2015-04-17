@@ -5,6 +5,6 @@ namespace Teleopti.Ccc.Domain.Forecasting.Angel
 {
 	public interface IPreForecastWorkload
 	{
-		IDictionary<DateOnly, IDictionary<ForecastMethodType, double>> PreForecast(IWorkload workload, DateOnlyPeriod futurePeriod);
+		IDictionary<DateOnly, IDictionary<ForecastMethodType, double>> PreForecast(IWorkload workload, DateOnlyPeriod futurePeriod, TaskOwnerPeriod historicalDataForForecasting);
 	}
 }

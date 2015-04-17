@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.Forecasting.Angel;
 using Teleopti.Ccc.Domain.Forecasting.Angel.Accuracy;
+using Teleopti.Ccc.Domain.Forecasting.Angel.Historical;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Web.Areas.Forecasting.Controllers;
 using Teleopti.Interfaces.Domain;
@@ -14,28 +15,40 @@ namespace Teleopti.Ccc.Web.Areas.Forecasting.Core
 		private readonly IQuickForecastWorkloadEvaluator _forecastWorkloadEvaluator;
 		private readonly IWorkloadRepository _workloadRepository;
 		private readonly IHistoricalPeriodProvider _historicalPeriodProvider;
+		private readonly IHistoricalData _historicalData;
 
-		public PreForecaster(IPreForecastWorkload forecastWorkload, IQuickForecastWorkloadEvaluator forecastWorkloadEvaluator, IWorkloadRepository workloadRepository, IHistoricalPeriodProvider historicalPeriodProvider)
+		public PreForecaster(IPreForecastWorkload forecastWorkload, IQuickForecastWorkloadEvaluator forecastWorkloadEvaluator, IWorkloadRepository workloadRepository, IHistoricalPeriodProvider historicalPeriodProvider, IHistoricalData historicalData)
 		{
 			_forecastWorkload = forecastWorkload;
 			_forecastWorkloadEvaluator = forecastWorkloadEvaluator;
 			_workloadRepository = workloadRepository;
 			_historicalPeriodProvider = historicalPeriodProvider;
+			_historicalData = historicalData;
 		}
 
 		public WorkloadForecastViewModel MeasureAndForecast(PreForecastInput input)
 		{
 			var workload = _workloadRepository.Get(input.WorkloadId);
 			var evaluateResult = _forecastWorkloadEvaluator.Measure(workload, _historicalPeriodProvider.PeriodForEvaluate());
-			var forecastResult = _forecastWorkload.PreForecast(workload, new DateOnlyPeriod(new DateOnly(input.ForecastStart), new DateOnly(input.ForecastEnd)));
+			var historicalDataForForecasting = _historicalData.Fetch(workload, _historicalPeriodProvider.PeriodForForecast());
+			var forecastResult = _forecastWorkload.PreForecast(workload, new DateOnlyPeriod(new DateOnly(input.ForecastStart), new DateOnly(input.ForecastEnd)), historicalDataForForecasting);
 
 			var data = new List<dynamic>();
+
+			foreach (var taskOwner in historicalDataForForecasting.TaskOwnerDayCollection)
+			{
+				data.Add(new
+				{
+					date = taskOwner.CurrentDate.Date,
+					vh = taskOwner.TotalStatisticCalculatedTasks
+				});
+			}
+
 			foreach (var dateKey in forecastResult.Keys)
 			{
 				data.Add(new
 				{
 					date = dateKey.Date,
-					vh = 0,
 					v0 = forecastResult[dateKey][ForecastMethodType.TeleoptiClassic],
 					v1 = forecastResult[dateKey][ForecastMethodType.TeleoptiClassicWithTrend]
 				});

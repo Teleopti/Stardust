@@ -1,35 +1,29 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.Forecasting.Angel.Accuracy;
-using Teleopti.Ccc.Domain.Forecasting.Angel.Historical;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Forecasting.Angel
 {
 	public class PreForecastWorkload : IPreForecastWorkload
 	{
-		private readonly IHistoricalData _historicalData;
 		private readonly IForecastMethodProvider _forecastMethodProvider;
-		private readonly IHistoricalPeriodProvider _historicalPeriodProvider;
 
-		public PreForecastWorkload(IHistoricalData historicalData, IForecastMethodProvider forecastMethodProvider, IHistoricalPeriodProvider historicalPeriodProvider)
+		public PreForecastWorkload(IForecastMethodProvider forecastMethodProvider)
 		{
-			_historicalData = historicalData;
 			_forecastMethodProvider = forecastMethodProvider;
-			_historicalPeriodProvider = historicalPeriodProvider;
 		}
 
-		public IDictionary<DateOnly, IDictionary<ForecastMethodType, double>> PreForecast(IWorkload workload, DateOnlyPeriod futurePeriod)
+		public IDictionary<DateOnly, IDictionary<ForecastMethodType, double>> PreForecast(IWorkload workload, DateOnlyPeriod futurePeriod, TaskOwnerPeriod historicalDataForForecasting)
 		{
 			var dic = new Dictionary<DateOnly, IDictionary<ForecastMethodType, double>>();
-			var historicalData = _historicalData.Fetch(workload, _historicalPeriodProvider.PeriodForForecast());
-			if (!historicalData.TaskOwnerDayCollection.Any())
+			if (!historicalDataForForecasting.TaskOwnerDayCollection.Any())
 				return dic;
 			var forecastMethods = _forecastMethodProvider.All();
 			var isFirstMethod = true;
 			foreach (var forecastMethod in forecastMethods)
 			{
-				var forecastResult = forecastMethod.Forecast(historicalData, futurePeriod);
+				var forecastResult = forecastMethod.Forecast(historicalDataForForecasting, futurePeriod);
 				if (isFirstMethod)
 				{
 					foreach (var forecastingTarget in forecastResult)
