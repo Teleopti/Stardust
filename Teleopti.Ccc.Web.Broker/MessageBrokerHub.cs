@@ -54,12 +54,12 @@ namespace Teleopti.Ccc.Web.Broker
 
 		public void NotifyClients(Notification notification)
 		{
-			_server.NotifyClients(Clients, Context.ConnectionId, notification);
+			_server.NotifyClients(new SignalR(this), Context.ConnectionId, notification);
 		}
 
 		public void NotifyClientsMultiple(IEnumerable<Notification> notifications)
 		{
-			_server.NotifyClientsMultiple(Clients, Context.ConnectionId, notifications);
+			_server.NotifyClientsMultiple(new SignalR(this), Context.ConnectionId, notifications);
 		}
 
 		public void Ping()
@@ -88,4 +88,5 @@ namespace Teleopti.Ccc.Web.Broker
 			Ping(expectedNumberOfSentMessages);
 		}
 	}
+
 }

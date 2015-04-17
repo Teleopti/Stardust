@@ -378,14 +378,17 @@
     <Compile Include="..\..\Teleopti.Ccc.Web.Broker\ActionThrottle.cs">
       <Link>Core\MessageBroker\ActionThrottle.cs</Link>
     </Compile>
-    <Compile Include="..\..\Teleopti.Ccc.Web.Broker\BackportableHub.cs">
-      <Link>Core\MessageBroker\BackportableHub.cs</Link>
+    <Compile Include="..\..\Teleopti.Ccc.Web.Broker\Backportability.cs">
+      <Link>Core\MessageBroker\Backportability.cs</Link>
     </Compile>
     <Compile Include="..\..\Teleopti.Ccc.Web.Broker\IActionScheduler.cs">
       <Link>Core\MessageBroker\IActionScheduler.cs</Link>
     </Compile>
     <Compile Include="..\..\Teleopti.Ccc.Web.Broker\IBeforeSubscribe.cs">
       <Link>Core\MessageBroker\IBeforeSubscribe.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Teleopti.Ccc.Web.Broker\ISignalR.cs">
+      <Link>Core\MessageBroker\ISignalR.cs</Link>
     </Compile>
     <Compile Include="..\..\Teleopti.Ccc.Web.Broker\MessageBrokerController.cs">
       <Link>Core\MessageBroker\MessageBrokerController.cs</Link>
