@@ -26,7 +26,6 @@ namespace Teleopti.MessagingTest.Http
 			poster.AssertWasCalled(x => x.PostAsync(null, null, null), o => o.IgnoreArguments());
 		}
 
-		[CLSCompliant(false)]
 		[Test]
 		public void ShouldPostToCorrectUrl(
 			[Values(

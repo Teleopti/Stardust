@@ -6,7 +6,6 @@ using Teleopti.Messaging.Client.SignalR.Wrappers;
 
 namespace Teleopti.MessagingTest.SignalR.TestDoubles
 {
-	[CLSCompliant(false)]
 	public class SignalRClientForTest : SignalRClient
 	{
 		private readonly IHubConnectionWrapper _hubConnection;

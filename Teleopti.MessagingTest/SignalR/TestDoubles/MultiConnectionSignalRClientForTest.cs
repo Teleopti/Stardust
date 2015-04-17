@@ -7,7 +7,6 @@ using Teleopti.Messaging.Client.SignalR.Wrappers;
 
 namespace Teleopti.MessagingTest.SignalR.TestDoubles
 {
-	[CLSCompliant(false)]
 	public class MultiConnectionSignalRClientForTest : SignalRClient
 	{
 		private readonly Queue<IHubConnectionWrapper> _hubConnections;
