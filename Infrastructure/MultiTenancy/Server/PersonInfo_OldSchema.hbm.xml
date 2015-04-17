@@ -25,6 +25,8 @@
 			<key column="Person"/>
 			<component name="ApplicationLogonInfo" class="ApplicationLogonInfo">
 				<parent name="PersonInfo" />
+				<!--delete me soon!-->
+				<property name="id" access="field"/>
 				<property name="LastPasswordChange" />
 				<property name="InvalidAttemptsSequenceStart" />
 				<property name="InvalidAttempts" />
