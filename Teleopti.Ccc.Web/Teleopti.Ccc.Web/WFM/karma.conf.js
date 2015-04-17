@@ -33,6 +33,8 @@ module.exports = function(config) {
 		'vendor/fabricjs/fabricjs_viewport.js',
 		'vendor/ng-mfb/mfb.directive.js',
 		'vendor/ng-image-input-with-preview/ng-image-input-with-preview.js',
+		'vendor/d3/d3.min.js',
+		'vendor/n3-chart/line-chart/line-chart.min.js',
 		'js/ABmetrics.min.js',
 		'dist/main.min.js', 
 		'tests/**/*.js'
