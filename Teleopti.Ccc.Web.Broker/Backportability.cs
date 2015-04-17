@@ -1,17 +1,14 @@
-﻿using System;
-using Microsoft.AspNet.SignalR;
+﻿using Microsoft.AspNet.SignalR;
 using Microsoft.AspNet.SignalR.Hubs;
 using Teleopti.Interfaces.MessageBroker;
 
 namespace Teleopti.Ccc.Web.Broker
 {
-	[CLSCompliant(false)]
 	public class BackportableHub : TestableHub
 	{
-		
+
 	}
 
-	[CLSCompliant(false)]
 	public class SignalR : ISignalR
 	{
 		private readonly IHubConnectionContext _connectionContext;
