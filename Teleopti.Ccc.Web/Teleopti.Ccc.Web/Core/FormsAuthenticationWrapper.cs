@@ -4,6 +4,7 @@ using System.Web.Security;
 using Common.Logging;
 using Microsoft.IdentityModel.Web;
 using Teleopti.Ccc.Infrastructure.Web;
+using Teleopti.Ccc.Web.Core.RequestContext;
 using Teleopti.Ccc.Web.Core.RequestContext.Cookie;
 
 namespace Teleopti.Ccc.Web.Core
