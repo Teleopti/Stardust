@@ -11626,7 +11626,7 @@ Minska komplexiteten för att kunna använda dessa skift.</value>
     <value>Flyttar aktivitet för</value>
   </data>
   <data name="RemovingAbsenceFor" xml:space="preserve">
-    <value>Tar bort aktivitet för</value>
+    <value>Tar bort frånvaro för</value>
   </data>
   <data name="PleaseRefreshThePageWithExclamation" xml:space="preserve">
     <value>Var god uppdatera sidan!</value>
