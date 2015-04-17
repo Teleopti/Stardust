@@ -235,6 +235,7 @@
     <Compile Include="Areas\Anywhere\Hubs\ReportItemsProviderTest.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Areas\Forecasting\Core\PreForecasterTest.cs" />
     <Compile Include="Areas\Global\ApplicationControllerTest.cs" />
     <Compile Include="Areas\Global\NotificationsControllerTest.cs" />
     <Compile Include="Areas\Global\UserControllerTest.cs" />

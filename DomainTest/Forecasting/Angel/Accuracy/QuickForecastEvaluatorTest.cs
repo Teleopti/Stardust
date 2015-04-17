@@ -62,7 +62,7 @@ namespace Teleopti.Ccc.DomainTest.Forecasting.Angel.Accuracy
 			});
 			
 
-			var target = new QuickForecastEvaluator(quickForecastSkillEvaluator, skillRepository, now);
+			var target = new QuickForecastEvaluator(quickForecastSkillEvaluator, skillRepository, new HistoricalPeriodProvider(now));
 			var result = target.MeasureForecastForAllSkills();
 			result.First().Id.Should().Be.EqualTo(skill1.Id.Value);
 			result.First().Name.Should().Be.EqualTo(skill1.Name);

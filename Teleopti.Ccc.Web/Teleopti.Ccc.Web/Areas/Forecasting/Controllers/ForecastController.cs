@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -6,10 +5,9 @@ using System.Web.Http;
 using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.Forecasting.Angel;
 using Teleopti.Ccc.Domain.Forecasting.Angel.Accuracy;
-using Teleopti.Ccc.Domain.Forecasting.Angel.Future;
-using Teleopti.Ccc.Domain.Forecasting.Angel.Historical;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
+using Teleopti.Ccc.Web.Areas.Forecasting.Core;
 using Teleopti.Ccc.Web.Filters;
 using Teleopti.Interfaces.Domain;
 
@@ -50,14 +48,14 @@ namespace Teleopti.Ccc.Web.Areas.Forecasting.Controllers
 			return Task.FromResult(_quickForecastEvaluator.MeasureForecastForAllSkills());
 		}
 
-		[UnitOfWork, HttpGet, Route("api/Forecasting/PreForecast")]
-		public virtual Task<WorkloadForecastingViewModel> PreForecast(PreForecastInputModel model)
+		[UnitOfWork, HttpPost, Route("api/Forecasting/PreForecast")]
+		public virtual Task<WorkloadForecastingViewModel> PreForecast(PreForecastInput model)
 		{
 			return Task.FromResult(_preForecaster.MeasureAndForecast(model));
 		}
 
 		[HttpPost, Route("api/Forecasting/Forecast"), UnitOfWork]
-		public virtual Task<bool> Forecast(QuickForecastInputModel model)
+		public virtual Task<bool> Forecast(QuickForecastInput model)
 		{
 			var futurePeriod = new DateOnlyPeriod(new DateOnly(model.ForecastStart), new DateOnly(model.ForecastEnd));
 			_quickForecastCreator.CreateForecastForWorkloads(futurePeriod, model.Workloads);
@@ -65,20 +63,11 @@ namespace Teleopti.Ccc.Web.Areas.Forecasting.Controllers
 		}
 
 		[HttpPost, Route("api/Forecasting/ForecastAll"), UnitOfWork]
-		public virtual Task<bool> ForecastAll(QuickForecastInputModel model)
+		public virtual Task<bool> ForecastAll(QuickForecastInput model)
 		{
 			var futurePeriod = new DateOnlyPeriod(new DateOnly(model.ForecastStart), new DateOnly(model.ForecastEnd));
 			_quickForecastCreator.CreateForecastForAll(futurePeriod);
 			return Task.FromResult(true);
 		}
 	}
-
-	
-
-	
-
-	
-
-
-	
 }

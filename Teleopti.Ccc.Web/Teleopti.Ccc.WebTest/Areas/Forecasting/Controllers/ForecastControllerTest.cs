@@ -8,7 +8,7 @@ using Teleopti.Ccc.Domain.Forecasting.Angel.Accuracy;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.Web.Areas.Forecasting.Controllers;
-using Teleopti.Interfaces.Domain;
+using Teleopti.Ccc.Web.Areas.Forecasting.Core;
 
 namespace Teleopti.Ccc.WebTest.Areas.Forecasting.Controllers
 {
@@ -74,17 +74,17 @@ namespace Teleopti.Ccc.WebTest.Areas.Forecasting.Controllers
 		}
 
 		[Test]
-		public void ShouldPreForecastForWorkload()
+		public void ShouldPreForecast()
 		{
-			var skillRepository = MockRepository.GenerateMock<ISkillRepository>();
-			var skill1 = SkillFactory.CreateSkillWithWorkloadAndSources();
-			skill1.SetId(Guid.NewGuid());
-			skillRepository.Stub(x => x.FindSkillsWithAtLeastOneQueueSource()).Return(new[] { skill1 });
-			var workload = skill1.WorkloadCollection.Single();
+			var preForecaster = MockRepository.GenerateMock<IPreForecaster>();
+			var preForecastInputModel = new PreForecastInput();
+			var workloadForecastingViewModel = new WorkloadForecastingViewModel();
+			preForecaster.Stub(x => x.MeasureAndForecast(preForecastInputModel)).Return(workloadForecastingViewModel);
+			var target = new ForecastController(null, null, null, preForecaster);
 
-			var target = new ForecastController(null, null, null, MockRepository.GenerateMock<IPreForecaster>());
+			var result = target.PreForecast(preForecastInputModel);
 
-			var result = target.PreForecast(workload.Id.Value);
+			result.Result.Should().Be.EqualTo(workloadForecastingViewModel);
 		}
 	}
 
