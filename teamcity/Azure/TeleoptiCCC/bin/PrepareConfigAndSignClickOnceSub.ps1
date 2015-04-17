@@ -204,21 +204,26 @@ Try
 	if (Test-Path "$fullPathsettingsFile") {
 		Remove-Item "$fullPathsettingsFile"
 	}
-	
-	Remove-Item "$fullPathTogglesFileForWeb"
-	if (Test-Path "$fullPathTogglesFileForWeb") {
-		Remove-Item "$fullPathTogglesFileForWeb"
-	}
-	Remove-Item "$fullPathTogglesFileForRta"
-	if (Test-Path "$fullPathTogglesFileForRta") {
-		Remove-Item "$fullPathTogglesFileForRta"
-	}
 
     #Get customer specific config from BlobStorage
     CopyFileFromBlobStorage -destinationFolder "$SupportToolFolder" -filename "$settingsFile"
     CopyFileFromBlobStorage -destinationFolder "$SupportToolFolder" -filename "*.key"
-    CopyFileFromBlobStorage -destinationFolder "$directory\..\..\sitesroot\3\bin\FeatureFlags" -filename "$togglesFile"
-    CopyFileFromBlobStorage -destinationFolder "$directory\..\..\sitesroot\5\bin\FeatureFlags" -filename "$togglesFile"
+	
+	CopyFileFromBlobStorage -destinationFolder "$directory" -filename "$togglesFile"
+	$tempTogglesFile = "$directory\" + $togglesFile
+	if (Test-Path "$tempTogglesFile") {
+		Remove-Item "$fullPathTogglesFileForWeb"
+		if (Test-Path "$fullPathTogglesFileForWeb") {
+			Remove-Item "$fullPathTogglesFileForWeb"
+		}
+		Remove-Item "$fullPathTogglesFileForRta"
+		if (Test-Path "$fullPathTogglesFileForRta") {
+			Remove-Item "$fullPathTogglesFileForRta"
+		}
+		CopyFileFromBlobStorage -destinationFolder "$directory\..\..\sitesroot\3\bin\FeatureFlags" -filename "$togglesFile"
+		CopyFileFromBlobStorage -destinationFolder "$directory\..\..\sitesroot\5\bin\FeatureFlags" -filename "$togglesFile"
+		Remove-Item "$tempTogglesFile"
+	}
 
 	$DatasourcesPath="$directory\..\Services\ETL\Service"
 
