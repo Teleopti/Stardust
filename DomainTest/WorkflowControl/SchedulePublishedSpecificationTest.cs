@@ -41,10 +41,6 @@ namespace Teleopti.Ccc.DomainTest.WorkflowControl
             using (mocks.Record())
             {
                 ExpectRelativePreferencePeriod();
-                Expect.Call(workflowControlSet.StudentAvailabilityInputPeriod).Return(new DateOnlyPeriod(DateOnly.Today.AddDays(-1),
-                                                                                                DateOnly.Today.AddDays(6)));
-                Expect.Call(workflowControlSet.StudentAvailabilityPeriod).Return(new DateOnlyPeriod(DateOnly.Today.AddDays(6),
-                                                                                           DateOnly.Today.AddDays(9))).Repeat.Any();
             }
             using (mocks.Playback())
             {
@@ -64,24 +60,6 @@ namespace Teleopti.Ccc.DomainTest.WorkflowControl
             {
                 target = new SchedulePublishedSpecification(workflowControlSet, viewReason);
                 Assert.IsTrue(target.IsSatisfiedBy(DateOnly.Today.AddDays(7)));
-            }
-        }
-
-        [Test]
-        public void VerifyPublishedDateInsideStudentAvailabilityInputPeriod()
-        {
-            using (mocks.Record())
-            {
-                ExpectRelativePreferencePeriod();
-                Expect.Call(workflowControlSet.StudentAvailabilityInputPeriod).Return(new DateOnlyPeriod(DateOnly.Today.AddDays(-1),
-                                                                                                DateOnly.Today.AddDays(11)));
-                Expect.Call(workflowControlSet.StudentAvailabilityPeriod).Return(new DateOnlyPeriod(DateOnly.Today.AddDays(11),
-                                                                                           DateOnly.Today.AddDays(15))).Repeat.Any();
-            }
-            using (mocks.Playback())
-            {
-                target = new SchedulePublishedSpecification(workflowControlSet, viewReason);
-                Assert.IsTrue(target.IsSatisfiedBy(DateOnly.Today.AddDays(12)));
             }
         }
 

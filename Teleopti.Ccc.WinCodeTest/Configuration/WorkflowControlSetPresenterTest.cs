@@ -779,7 +779,7 @@ namespace Teleopti.Ccc.WinCodeTest.Configuration
                 var expected2 = new DateOnlyPeriod(new DateOnly(DateHelper.MinSmallDateTime), new DateOnly(DateHelper.MinSmallDateTime));
 
                 var result = _target.BasicVisualizerPublishedPeriods();
-                Assert.AreEqual(3, result.Count);
+                Assert.AreEqual(2, result.Count);
                 Assert.AreEqual(expected2, result[0]);
                 Assert.AreEqual(expected1, result[1]);
             }
@@ -809,7 +809,7 @@ namespace Teleopti.Ccc.WinCodeTest.Configuration
 				var expected2 = new DateOnlyPeriod(new DateOnly(DateHelper.MinSmallDateTime), new DateOnly(2010, 5, 31));
 
                 IList<DateOnlyPeriod> result = _target.BasicVisualizerPublishedPeriods();
-                Assert.AreEqual(3, result.Count);
+                Assert.AreEqual(2, result.Count);
                 Assert.AreEqual(expected2, result[0]);
                 Assert.AreEqual(expected1, result[1]);
             }

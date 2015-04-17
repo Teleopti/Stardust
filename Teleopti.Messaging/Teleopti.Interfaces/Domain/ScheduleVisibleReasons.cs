@@ -17,13 +17,10 @@ namespace Teleopti.Interfaces.Domain
         /// Preferenced schedule data
         /// </summary>
         Preference = 2,
-        ///<summary>
-        /// schedule data with student availability
-        ///</summary>
-        StudentAvailability = 3,
+
         /// <summary>
         /// Any
         /// </summary>
-        Any = Published | Preference | StudentAvailability
+        Any = Published | Preference 
     }
 }

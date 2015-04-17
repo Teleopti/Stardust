@@ -25,14 +25,7 @@ namespace Teleopti.Ccc.Domain.WorkflowControl
                     return true;
                 }
             }
-            if ((_scheduleVisibleReasons & ScheduleVisibleReasons.StudentAvailability) == ScheduleVisibleReasons.StudentAvailability)
-            {
-                if (_workflowControlSet.StudentAvailabilityInputPeriod.Contains(DateOnly.Today) &&
-                    _workflowControlSet.StudentAvailabilityPeriod.Contains(obj))
-                {
-                    return true;
-                }
-            }
+
             if ((_scheduleVisibleReasons & ScheduleVisibleReasons.Published) == ScheduleVisibleReasons.Published)
             {
                 if (_workflowControlSet.SchedulePublishedToDate.HasValue && new DateOnly(_workflowControlSet.SchedulePublishedToDate.Value).AddDays(1) > obj)
