@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using Teleopti.Analytics.Etl.Interfaces.Transformer;
 using Teleopti.Analytics.Etl.Transformer.Job.Steps;
+using Teleopti.Ccc.Domain.FeatureFlags;
 
 
 namespace Teleopti.Analytics.Etl.Transformer.Job.Jobs
@@ -50,7 +51,8 @@ namespace Teleopti.Analytics.Etl.Transformer.Job.Jobs
 			Add(new StageScorecardKpiJobStep(jobParameters));
 			Add(new StageKpiTargetTeamJobStep(jobParameters));
 			Add(new StagePermissionJobStep(jobParameters));
-			Add(new StageUserJobStep(jobParameters));                   // BU independent
+			if (!jobParameters.ToggleManager.IsEnabled(Toggles.MultiTenantSSOSupport_StandardReports_15093))
+				Add(new StageUserJobStep(jobParameters));                   // BU independent
 			Add(new StageGroupPagePersonJobStep(jobParameters));
 			Add(new StageOvertimeJobStep(jobParameters));
 			Add(new StageRequestJobStep(jobParameters));
@@ -77,7 +79,8 @@ namespace Teleopti.Analytics.Etl.Transformer.Job.Jobs
 			Add(new BridgeSkillSetSkillJobStep(jobParameters));
 			Add(new BridgeAcdLogOnPersonJobStep(jobParameters));
 			Add(new BridgeQueueWorkloadJobStep(jobParameters));
-			Add(new AspNetUsersJobStep(jobParameters));                 // BU independent
+			if (!jobParameters.ToggleManager.IsEnabled(Toggles.MultiTenantSSOSupport_StandardReports_15093))
+				Add(new AspNetUsersJobStep(jobParameters));                 // BU independent
 			Add(new DimGroupPageJobStep(jobParameters));
 			Add(new BridgeGroupPagePersonJobStep(jobParameters));
 			Add(new DimOvertimeJobStep(jobParameters));

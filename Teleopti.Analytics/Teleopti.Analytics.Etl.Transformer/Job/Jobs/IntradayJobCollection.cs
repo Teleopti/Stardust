@@ -40,8 +40,9 @@ namespace Teleopti.Analytics.Etl.Transformer.Job.Jobs
 			Add(new StageScorecardJobStep(jobParameters));
 			Add(new StageScorecardKpiJobStep(jobParameters));
 			Add(new StageKpiTargetTeamJobStep(jobParameters));
-			Add(new StagePermissionJobStep(jobParameters,true));
-			Add(new StageUserJobStep(jobParameters));                   // BU independent
+			Add(new StagePermissionJobStep(jobParameters, true));
+			if (!jobParameters.ToggleManager.IsEnabled(Toggles.MultiTenantSSOSupport_StandardReports_15093))
+				Add(new StageUserJobStep(jobParameters));                   // BU independent
 			Add(new StageGroupPagePersonJobStep(jobParameters));
 			Add(new StageOvertimeJobStep(jobParameters));
 			Add(new IntradayStageRequestJobStep(jobParameters));
@@ -67,7 +68,8 @@ namespace Teleopti.Analytics.Etl.Transformer.Job.Jobs
 			Add(new BridgeSkillSetSkillJobStep(jobParameters));
 			Add(new BridgeAcdLogOnPersonJobStep(jobParameters));
 			Add(new BridgeQueueWorkloadJobStep(jobParameters));
-			Add(new AspNetUsersJobStep(jobParameters));                 // BU independent
+			if (!jobParameters.ToggleManager.IsEnabled(Toggles.MultiTenantSSOSupport_StandardReports_15093))
+				Add(new AspNetUsersJobStep(jobParameters));                 // BU independent
 			Add(new DimGroupPageJobStep(jobParameters));
 			Add(new BridgeGroupPagePersonJobStep(jobParameters));
 
@@ -90,23 +92,23 @@ namespace Teleopti.Analytics.Etl.Transformer.Job.Jobs
 				Add(new FactQueueJobStep(jobParameters));                   // BU independent
 				Add(new FactAgentJobStep(jobParameters));                   // BU independent
 			}
-			
+
 			Add(new StatisticsUpdateNotificationJobStep(jobParameters));                   // BU independent
-			
+
 			if (agentQueueIntradayEnabled)
 				Add(new IntradayFactAgentQueueJobStep(jobParameters));              // BU independent
-			else 
+			else
 				Add(new FactAgentQueueJobStep(jobParameters));              // BU independent
-			
+
 			Add(new FactQualityLoadJobStep(jobParameters));             // BU independent
 			Add(new FactAgentStateJobStep(jobParameters));
 			Add(new FactForecastWorkloadJobStep(jobParameters, true));
-			Add(new FactScheduleDeviationJobStep(jobParameters,true));
+			Add(new FactScheduleDeviationJobStep(jobParameters, true));
 			Add(new FactKpiTargetTeamJobStep(jobParameters));
-			Add(new FactRequestJobStep(jobParameters,true));
-			Add(new FactRequestedDaysJobStep(jobParameters,true));
-            Add(new FactAgentSkillJobStep(jobParameters));
-			Add(new PermissionReportJobStep(jobParameters,true));
+			Add(new FactRequestJobStep(jobParameters, true));
+			Add(new FactRequestedDaysJobStep(jobParameters, true));
+			Add(new FactAgentSkillJobStep(jobParameters));
+			Add(new PermissionReportJobStep(jobParameters, true));
 
 			if (jobParameters.IsPmInstalled)
 				Add(new PmPermissionJobStep(jobParameters));
