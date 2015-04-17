@@ -15,10 +15,10 @@ namespace Teleopti.Ccc.WinCode.Shifts.Presenters
         public override void LoadModelCollection()
         {
             var filteredRuleSetCollection = Explorer.Model.FilteredRuleSetCollection;
+			ClearModelCollection();
+
             if (filteredRuleSetCollection.Count > 0)
             {
-                ClearModelCollection();
-
                 var modelList = new List<IDaysOfWeekViewModel>();
                 foreach (IWorkShiftRuleSet ruleSet in filteredRuleSetCollection)
                     modelList.Add(new DaysOfWeekViewModel(ruleSet));
