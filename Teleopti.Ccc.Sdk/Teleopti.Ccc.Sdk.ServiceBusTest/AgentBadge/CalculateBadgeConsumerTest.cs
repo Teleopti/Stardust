@@ -92,10 +92,13 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.AgentBadge
 		public void ShouldSendCalculateBadgeMessageAtRightTime()
 		{
 			var timezone = TimeZoneInfo.Utc;
-			var utcNow = new DateTime(2014, 8, 8, 04, 30, 00);
-			var expectedNextMessageShouldBeProcessed = utcNow.AddDays(1);
+			var today = new DateTime(2014, 8, 8);
+			var tomorrowUnspecified = new DateTime(2014, 8, 9, 0, 0, 0, DateTimeKind.Unspecified);
+			var expectedNextMessageShouldBeProcessed =
+				TimeZoneInfo.ConvertTime(tomorrowUnspecified.AddHours(5), timezone, TimeZoneInfo.Local);
 
-			now.Stub(x => x.UtcDateTime()).Return(utcNow);
+			now.Stub(x => x.UtcDateTime()).Return(today);
+
 			badgeSettingsRepository.Stub(x => x.GetSettings()).Return(
 				new AgentBadgeSettings
 				{
@@ -143,10 +146,13 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.AgentBadge
 		public void ShouldNotCalculateBadgeWhenAgentBadgeDisabled()
 		{
 			var timezone = TimeZoneInfo.Utc;
-			var utcNow = new DateTime(2014, 8, 8, 04, 30, 00);
-			var expectedNextMessageShouldBeProcessed = utcNow.AddDays(1);
+			var today = new DateTime(2014, 8, 8);
+			var tomorrowUnspecified = new DateTime(2014, 8, 9, 0, 0, 0, DateTimeKind.Unspecified);
+			var expectedNextMessageShouldBeProcessed =
+				TimeZoneInfo.ConvertTime(tomorrowUnspecified.AddHours(5), timezone, TimeZoneInfo.Local);
 
-			now.Stub(x => x.UtcDateTime()).Return(utcNow);
+			now.Stub(x => x.UtcDateTime()).Return(today);
+
 			badgeSettingsRepository.Stub(x => x.GetSettings()).Return(new AgentBadgeSettings
 			{
 				BadgeEnabled = false
@@ -192,6 +198,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.AgentBadge
 			var expectedNextMessageShouldBeProcessed = utcNow.AddMinutes(5);
 
 			now.Stub(x => x.UtcDateTime()).Return(utcNow);
+
 			badgeSettingsRepository.Stub(x => x.GetSettings()).Return(new AgentBadgeSettings
 			{
 				BadgeEnabled = true,

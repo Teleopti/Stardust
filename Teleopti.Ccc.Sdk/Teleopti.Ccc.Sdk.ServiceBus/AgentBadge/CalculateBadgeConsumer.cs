@@ -85,8 +85,13 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.AgentBadge
 					message.BusinessUnitId, message.Datasource, message.TimeZoneCode);
 			}
 
-			// Next badge calculation start at same time point tomorrow.
-			var nextMessageShouldBeProcessed = utcNow.AddDays(1);
+
+			var today = _now.LocalDateOnly();
+			var tomorrow = new DateTime(today.AddDays(1).Date.Ticks, DateTimeKind.Unspecified);
+			var timeZone = TimeZoneInfo.FindSystemTimeZoneById(message.TimeZoneCode);
+
+			// Set badge calculation start at 5:00 AM
+			var nextMessageShouldBeProcessed = TimeZoneInfo.ConvertTime(tomorrow.AddHours(5), timeZone, TimeZoneInfo.Local);
 
 			var messageForTomorrow = new CalculateBadgeMessage
 			{
@@ -115,7 +120,6 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.AgentBadge
 				var adherenceReportSetting = _globalSettingRep.FindValueByKey(AdherenceReportSetting.Key,
 					new AdherenceReportSetting());
 
-				var today = _now.LocalDateOnly();
 				var period = new DateOnlyPeriod(today.AddDays(-1), today.AddDays(1));
 				var allAgents = _personRepository.FindPeopleInOrganization(period, false);
 
