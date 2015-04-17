@@ -111,7 +111,6 @@ namespace Teleopti.Ccc.Sdk.WcfHost
 			public AuthenticationResult LogonWindows(string dataSource)
 			{
 				var model = new LogonModel();
-				//var result = _multiTenancyWindowsLogon.Logon(model, UserAgent);
 				var result = _multiTenancyWindowsLogon.Logon(model, StateHolderReader.Instance.StateReader.ApplicationScopeData,
 					UserAgent);
 				result.DataSource = model.SelectedDataSourceContainer.DataSource;
@@ -121,7 +120,6 @@ namespace Teleopti.Ccc.Sdk.WcfHost
 			public AuthenticationResult LogonApplication(string userName, string password, string dataSource)
 			{
 				var model = new LogonModel { UserName = userName, Password = password };
-				//var result = _multiTenancyApplicationLogon.Logon(model, UserAgent);
 				var result = _multiTenancyApplicationLogon.Logon(model, StateHolderReader.Instance.StateReader.ApplicationScopeData,
 					UserAgent);
 				result.DataSource = model.SelectedDataSourceContainer.DataSource;

@@ -1,8 +1,6 @@
 ﻿using System.Collections.Generic;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Security.Authentication;
-using Teleopti.Ccc.Domain.Security.MultiTenancyAuthentication;
-using Teleopti.Ccc.Infrastructure.MultiTenancy;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Client;
 using Teleopti.Ccc.Sdk.Common.DataTransferObject;
 using Teleopti.Ccc.Sdk.Logic.Assemblers;
@@ -45,7 +43,6 @@ namespace Teleopti.Ccc.Sdk.WcfService.Factory
 		public AuthenticationResultDto LogOnWindows(DataSourceDto dataSource)
 		{
 			var model = new LogonModel();
-			//var result = _multiTenancyWindowsLogon.Logon(model, UserAgent);
 			var result = _multiTenancyWindowsLogon.Logon(model, StateHolderReader.Instance.StateReader.ApplicationScopeData,
 				UserAgent);
 			var resultDto = _authenticationResultAssembler.DomainEntityToDto(result);
@@ -82,7 +79,6 @@ namespace Teleopti.Ccc.Sdk.WcfService.Factory
 		public AuthenticationResultDto LogOnApplication(string userName, string password, DataSourceDto dataSource)
 		{
 			var model = new LogonModel { UserName = userName, Password = password };
-			//var result = _multiTenancyApplicationLogon.Logon(model, UserAgent);
 			var result = _multiTenancyApplicationLogon.Logon(model, StateHolderReader.Instance.StateReader.ApplicationScopeData,
 				UserAgent);
 			var resultDto = _authenticationResultAssembler.DomainEntityToDto(result);
