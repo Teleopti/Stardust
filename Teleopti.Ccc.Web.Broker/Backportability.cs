@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNet.SignalR;
 using Microsoft.AspNet.SignalR.Hubs;
+using Teleopti.Interfaces.MessageBroker;
 
 namespace Teleopti.Ccc.Web.Broker
 {
@@ -8,23 +9,23 @@ namespace Teleopti.Ccc.Web.Broker
 		
 	}
 
-	public class SignalRClients : ISignalRClients
+	public class SignalR : ISignalR
 	{
 		private readonly IHubConnectionContext _connectionContext;
 
-		public SignalRClients(IHubContext context)
+		public SignalR(IHubContext context)
 		{
 			_connectionContext = context.Clients;
 		}
 
-		public SignalRClients(IHub context)
+		public SignalR(IHub context)
 		{
 			_connectionContext = context.Clients;
 		}
 
-		public dynamic Group(string groupName)
+		public void CallOnEventMessage(string groupName, string route, Notification notification)
 		{
-			return _connectionContext.Group(groupName);
+			_connectionContext.Group(groupName).onEventMessage(notification, route);
 		}
 	}
 

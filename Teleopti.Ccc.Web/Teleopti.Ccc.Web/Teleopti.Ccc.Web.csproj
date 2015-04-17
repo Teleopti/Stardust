@@ -258,8 +258,8 @@
     <Compile Include="..\..\Teleopti.Ccc.Web.Broker\IBeforeSubscribe.cs">
       <Link>Core\MessageBroker\IBeforeSubscribe.cs</Link>
     </Compile>
-    <Compile Include="..\..\Teleopti.Ccc.Web.Broker\ISignalRClients.cs">
-      <Link>Core\MessageBroker\ISignalRClients.cs</Link>
+    <Compile Include="..\..\Teleopti.Ccc.Web.Broker\ISignalR.cs">
+      <Link>Core\MessageBroker\ISignalR.cs</Link>
     </Compile>
     <Compile Include="..\..\Teleopti.Ccc.Web.Broker\MessageBrokerController.cs">
       <Link>Core\MessageBroker\MessageBrokerController.cs</Link>
