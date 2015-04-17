@@ -1,16 +1,19 @@
 ﻿using System;
 using Microsoft.AspNet.SignalR;
+using Microsoft.AspNet.SignalR.Hubs;
 using Teleopti.Interfaces.MessageBroker;
 
 namespace Teleopti.Ccc.Web.Broker
 {
 	[CLSCompliant(false)]
-	public class BackportableHub : Hub		
+	public class BackportableHub : Hub
+	{
+
 	}
 
 	public class SignalR : ISignalR
 	{
-		private readonly IHubConnectionContext _connectionContext;
+		private readonly IHubConnectionContext<dynamic> _connectionContext;
 
 		public SignalR(IHubContext context)
 		{
@@ -26,6 +29,5 @@ namespace Teleopti.Ccc.Web.Broker
 		{
 			_connectionContext.Group(groupName).onEventMessage(notification, route);
 		}
-	{
 	}
 }
