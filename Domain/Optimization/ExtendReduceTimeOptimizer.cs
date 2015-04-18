@@ -194,7 +194,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 	        var originalShift = _originalStateContainerForTagChange.OldPeriodDaysState[day].GetEditorShift();
 			_mainShiftOptimizeActivitySpecificationSetter.SetMainShiftOptimizeActivitySpecification(schedulingOptions, _optimizerPreferences, originalShift, day);
 
-			if (!_scheduleServiceForFlexibleAgents.SchedulePersonOnDay(scheduleDay.DaySchedulePart(), schedulingOptions, effectiveRestriction, _resourceCalculateDelayer, null, _rollbackService))
+			if (!_scheduleServiceForFlexibleAgents.SchedulePersonOnDay(scheduleDay.DaySchedulePart(), schedulingOptions, effectiveRestriction, _resourceCalculateDelayer, _rollbackService))
             {
                 _rollbackService.Rollback();
                 return false;

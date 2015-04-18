@@ -260,7 +260,6 @@
     <Compile Include="Domain\IProjectionMerger.cs" />
     <Compile Include="Domain\IPublicNote.cs" />
     <Compile Include="Domain\IDayOffOptimizer.cs" />
-    <Compile Include="Domain\IBestShiftCategoryResult.cs" />
     <Compile Include="Domain\IDayOffsInPeriodCalculator.cs" />
     <Compile Include="Domain\IEffectiveRestrictionCreator.cs" />
     <Compile Include="Domain\IGroupShiftCategoryFairnessCreator.cs" />
@@ -815,7 +814,6 @@
     <Compile Include="Infrastructure\IsNotDeadCodeAttribute.cs" />
     <Compile Include="Infrastructure\MessageBrokerException.cs" />
     <Compile Include="IPlanningPeriod.cs" />
-    <Compile Include="IPossibleStartEndCategory.cs" />
     <Compile Include="Domain\IValidatedRequest.cs" />
     <Compile Include="MessageBroker\Client\IMessageBrokerUrl.cs" />
     <Compile Include="MessageBroker\Client\IMessageSender.cs" />

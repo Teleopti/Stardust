@@ -54,7 +54,7 @@ namespace Teleopti.Ccc.Domain.Optimization
                 if (!daysInConsideration.Contains(dateOnly)) continue;
                 daysInConsideration.Remove(dateOnly );
                 _workShiftFinderResultHolder().Clear(person, dateOnly);
-                if (_scheduleService.SchedulePersonOnDay(matrix.GetScheduleDayByKey(dateOnly).DaySchedulePart(), schedulingOptions, _resourceCalculateDelayer, null, schedulePartModifyAndRollbackService))
+                if (_scheduleService.SchedulePersonOnDay(matrix.GetScheduleDayByKey(dateOnly).DaySchedulePart(), schedulingOptions, _resourceCalculateDelayer, schedulePartModifyAndRollbackService))
                 {
                     success = true;
                 }
@@ -64,7 +64,7 @@ namespace Teleopti.Ccc.Domain.Optimization
                     if (solverResult.DaysToReschedule().Contains(dateOnly.AddDays(-1)))
                     {
                         _scheduleService.SchedulePersonOnDay(matrix.GetScheduleDayByKey(dateOnly.AddDays(-1)).DaySchedulePart(),
-                                                         schedulingOptions, _resourceCalculateDelayer, null,
+                                                         schedulingOptions, _resourceCalculateDelayer,
                                                          schedulePartModifyAndRollbackService);
                         daysInConsideration.Remove(dateOnly.AddDays(-1));
                     }

@@ -109,7 +109,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 								    schedulingOptions,
 								    effectiveRestriction,
 								    resourceCalculateDelayer,
-								    null, rollbackService);
+								    rollbackService);
 
 							    result = result && schedulePersonOnDayResult;
 							    if (!result && breakIfPersonCannotSchedule)

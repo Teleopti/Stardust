@@ -5,22 +5,7 @@ namespace Teleopti.Interfaces.Domain
     /// </summary>
     public interface IWorkShiftFinderService
     {
-    	/// <summary>
-    	/// Finds the best shift.
-    	/// </summary>
-    	/// <param name="schedulePart">The schedule part.</param>
-    	/// <param name="schedulingOptions">The scheduling options.</param>
-    	/// <param name="matrix">The matrix.</param>
-    	/// <param name="effectiveRestriction">The effective restriction.</param>
-    	/// <param name="possibleStartEndCategory"> </param>
-    	/// <returns></returns>
-    	/// ///
-    	/// <remarks>
-    	/// Created by: Ola
-    	/// Created date: 2008-09-18
-    	/// ///
-    	/// </remarks>
-		WorkShiftFinderServiceResult FindBestShift(IScheduleDay schedulePart, ISchedulingOptions schedulingOptions, IScheduleMatrixPro matrix, IEffectiveRestriction effectiveRestriction, IPossibleStartEndCategory possibleStartEndCategory);
+		WorkShiftFinderServiceResult FindBestShift(IScheduleDay schedulePart, ISchedulingOptions schedulingOptions, IScheduleMatrixPro matrix, IEffectiveRestriction effectiveRestriction);
     }
 
 	public class WorkShiftFinderServiceResult

@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-
-namespace Teleopti.Interfaces.Domain
+﻿namespace Teleopti.Interfaces.Domain
 {
     /// <summary>
     /// 
@@ -31,10 +28,5 @@ namespace Teleopti.Interfaces.Domain
         /// <returns></returns>
         IWorkTimeMinMax Combine(IWorkTimeMinMax workTimeMinMax);
 
-		/// <summary>
-		/// 
-		/// </summary>
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-		IList<IPossibleStartEndCategory> PossibleStartEndCategories { get; set; }
     }
 }

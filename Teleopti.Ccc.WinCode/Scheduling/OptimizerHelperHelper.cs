@@ -40,7 +40,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 						var resourceCalculateDelayer = new ResourceCalculateDelayer(container.Resolve<IResourceOptimizationHelper>(), 1, true,
 							schedulingOptions.ConsiderShortBreaks);
 
-						result = scheduleService.SchedulePersonOnDay(scheduleDayPro.DaySchedulePart(), schedulingOptions, effectiveRestriction, resourceCalculateDelayer, null, rollbackService);
+						result = scheduleService.SchedulePersonOnDay(scheduleDayPro.DaySchedulePart(), schedulingOptions, effectiveRestriction, resourceCalculateDelayer, rollbackService);
 					}
 					if (!result)
 					{

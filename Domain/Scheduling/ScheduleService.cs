@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.ResourceCalculation;
-using Teleopti.Interfaces;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Scheduling
@@ -51,11 +50,10 @@ namespace Teleopti.Ccc.Domain.Scheduling
 			IScheduleDay schedulePart, 
 			ISchedulingOptions schedulingOptions, 
 			IResourceCalculateDelayer resourceCalculateDelayer,
-			IPossibleStartEndCategory possibleStartEndCategory,
 			ISchedulePartModifyAndRollbackService rollbackService)
         {
             var effectiveRestriction = _effectiveRestrictionCreator.GetEffectiveRestriction(schedulePart, schedulingOptions);
-            return SchedulePersonOnDay(schedulePart, schedulingOptions, effectiveRestriction, resourceCalculateDelayer, possibleStartEndCategory, rollbackService);
+            return SchedulePersonOnDay(schedulePart, schedulingOptions, effectiveRestriction, resourceCalculateDelayer, rollbackService);
         }
 
 		public bool SchedulePersonOnDay(
@@ -63,11 +61,10 @@ namespace Teleopti.Ccc.Domain.Scheduling
 			ISchedulingOptions schedulingOptions,
 			IEffectiveRestriction effectiveRestriction,
 			IResourceCalculateDelayer resourceCalculateDelayer,
-			IPossibleStartEndCategory possibleStartEndCategory,
 			ISchedulePartModifyAndRollbackService rollbackService)
 		{
 			return schedulePersonOnDay(schedulePart, schedulingOptions, effectiveRestriction, resourceCalculateDelayer,
-			                           possibleStartEndCategory, null, rollbackService);
+			                           null, rollbackService);
 		}
 
     	[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "4"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
@@ -76,7 +73,6 @@ namespace Teleopti.Ccc.Domain.Scheduling
             ISchedulingOptions schedulingOptions,
             IEffectiveRestriction effectiveRestriction,
 			IResourceCalculateDelayer resourceCalculateDelayer,
-			IPossibleStartEndCategory possibleStartEndCategory,
 			IPerson person,
 			ISchedulePartModifyAndRollbackService rollbackService)
         {
@@ -114,7 +110,7 @@ namespace Teleopti.Ccc.Domain.Scheduling
                         return false;
                     IScheduleMatrixPro matrix = matrixList[0];
 
-                    cache = _finderService.FindBestShift(schedulePart, schedulingOptions, matrix, effectiveRestriction, possibleStartEndCategory);
+                    cache = _finderService.FindBestShift(schedulePart, schedulingOptions, matrix, effectiveRestriction);
                 }
 
                 if (cache.ResultHolder == null)

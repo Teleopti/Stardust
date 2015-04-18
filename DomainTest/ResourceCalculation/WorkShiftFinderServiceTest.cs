@@ -7,7 +7,6 @@ using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Security.AuthorizationEntities;
 using Teleopti.Ccc.TestCommon.FakeData;
-using Teleopti.Interfaces;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.DomainTest.ResourceCalculation
@@ -43,7 +42,6 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
     	private IShiftLengthDecider _shiftLengthDecider;
 
         private ISchedulingOptions _schedulingOptions;
-    	private IPossibleStartEndCategory _possibleStartEndCategory;
     	private IPersonalShiftMeetingTimeChecker _personalShiftMeetingTimeChecker;
 
         [SetUp]
@@ -76,7 +74,6 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
                _shiftProjectionCacheFilter, ()=>_personSkillPeriodsDataHolderManager,
                _shiftProjectionCacheManager, _calculatorManager, ()=>_workShiftMinMaxCalculator, _fairnessAndMaxSeatCalculatorsManager,
 			   _shiftLengthDecider);
-			_possibleStartEndCategory =new PossibleStartEndCategory();
         	_personalShiftMeetingTimeChecker = _mocks.StrictMock<IPersonalShiftMeetingTimeChecker>();
 		}
 
@@ -141,7 +138,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
             _schedulingOptions.ShiftCategory = _category;
 			using (_mocks.Playback())
 			{
-				var retShift = _target.FindBestShift(_part, _schedulingOptions, _matrix, effectiveRestriction, null);
+				var retShift = _target.FindBestShift(_part, _schedulingOptions, _matrix, effectiveRestriction);
 				Assert.IsNotNull(retShift.ResultHolder);
 			}
 		}
@@ -181,7 +178,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 			_schedulingOptions.UseStudentAvailability = false;
             using (_mocks.Playback())
             {
-				var retShift = _target.FindBestShift(_part, _schedulingOptions, _matrix, effectiveRestriction, null);
+				var retShift = _target.FindBestShift(_part, _schedulingOptions, _matrix, effectiveRestriction);
                 Assert.That(retShift.ResultHolder, Is.Null);
             }
         }
@@ -224,7 +221,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
             _schedulingOptions.ShiftCategory = _category;
             using (_mocks.Playback())
             {
-				var retShift = _target.FindBestShift(_part, _schedulingOptions, _matrix, effectiveRestriction, null);
+				var retShift = _target.FindBestShift(_part, _schedulingOptions, _matrix, effectiveRestriction);
                 Assert.That(retShift.ResultHolder, Is.Null);
             }
         }
@@ -255,7 +252,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
             
             using (_mocks.Playback())
             {
-				var retShift = _target.FindBestShift(_part, _schedulingOptions, _matrix, effectiveRestriction, null);
+				var retShift = _target.FindBestShift(_part, _schedulingOptions, _matrix, effectiveRestriction);
                 Assert.That(retShift.ResultHolder, Is.Null);
             }
         }
@@ -297,7 +294,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 
 			using (_mocks.Playback())
 			{
-				var retShift = _target.FindBestShift(_part, _schedulingOptions, _matrix, effectiveRestriction, _possibleStartEndCategory);
+				var retShift = _target.FindBestShift(_part, _schedulingOptions, _matrix, effectiveRestriction);
 				Assert.That(retShift.ResultHolder, Is.Null);
 			}
 		}
@@ -322,7 +319,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 
 			using (_mocks.Playback())
 			{
-				var retShift = _target.FindBestShift(_part, _schedulingOptions, _matrix, effectiveRestriction, _possibleStartEndCategory);
+				var retShift = _target.FindBestShift(_part, _schedulingOptions, _matrix, effectiveRestriction);
 				Assert.That(retShift.ResultHolder, Is.Null);
 			}
 		}
@@ -347,7 +344,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 
 			using (_mocks.Playback())
 			{
-				var retShift = _target.FindBestShift(_part, _schedulingOptions, _matrix, effectiveRestriction, _possibleStartEndCategory);
+				var retShift = _target.FindBestShift(_part, _schedulingOptions, _matrix, effectiveRestriction);
 				Assert.That(retShift.ResultHolder, Is.Null);
 			}
 		}
@@ -372,7 +369,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 
 			using (_mocks.Playback())
 			{
-				var retShift = _target.FindBestShift(_part, _schedulingOptions, _matrix, effectiveRestriction, _possibleStartEndCategory);
+				var retShift = _target.FindBestShift(_part, _schedulingOptions, _matrix, effectiveRestriction);
 				Assert.That(retShift.ResultHolder, Is.Null);
 			}
 		}
@@ -397,7 +394,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 
 			using (_mocks.Playback())
 			{
-				var retShift = _target.FindBestShift(_part, _schedulingOptions, _matrix, effectiveRestriction, _possibleStartEndCategory);
+				var retShift = _target.FindBestShift(_part, _schedulingOptions, _matrix, effectiveRestriction);
 				Assert.That(retShift.ResultHolder, Is.Null);
 			}
 		}
@@ -424,7 +421,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 			_mocks.ReplayAll();
             _schedulingOptions.ShiftCategory = _category;
 
-            var retShift = _target.FindBestShift(_part, _schedulingOptions, _matrix, effectiveRestriction, null);
+            var retShift = _target.FindBestShift(_part, _schedulingOptions, _matrix, effectiveRestriction);
 			Assert.That(retShift.ResultHolder, Is.Null);
 
 			_mocks.VerifyAll();
@@ -444,7 +441,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 			_mocks.ReplayAll();
 
             _schedulingOptions.ShiftCategory = _category;
-			var retShift = _target.FindBestShift(_part, _schedulingOptions, _matrix, effectiveRestriction, null);
+			var retShift = _target.FindBestShift(_part, _schedulingOptions, _matrix, effectiveRestriction);
 			Assert.That(retShift.ResultHolder, Is.Null);
 
 			_mocks.VerifyAll();
@@ -461,7 +458,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
             Expect.Call(_part.DateOnlyAsPeriod).Return(_scheduleDateOnlyPeriod).Repeat.AtLeastOnce();
 			_mocks.ReplayAll();
             _schedulingOptions.ShiftCategory = _category;
-			var retShift = _target.FindBestShift(_part, _schedulingOptions, _matrix, effectiveRestriction, null);
+			var retShift = _target.FindBestShift(_part, _schedulingOptions, _matrix, effectiveRestriction);
 			Assert.That(retShift.ResultHolder, Is.Null);
 
 			_mocks.VerifyAll();
@@ -483,7 +480,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 			_mocks.ReplayAll();
            
             _schedulingOptions.ShiftCategory = _category;
-			var retShift = _target.FindBestShift(_part, _schedulingOptions, _matrix, effectiveRestriction, null);
+			var retShift = _target.FindBestShift(_part, _schedulingOptions, _matrix, effectiveRestriction);
 			Assert.That(retShift.ResultHolder, Is.Null);
 
 			_mocks.VerifyAll();
@@ -600,7 +597,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 
 	        using (_mocks.Playback())
 	        {
-		        _target.FindBestShift(_part, _schedulingOptions, _matrix, effectiveRestriction, null);
+		        _target.FindBestShift(_part, _schedulingOptions, _matrix, effectiveRestriction);
 	        }
         }
 
@@ -665,7 +662,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 
 			using (_mocks.Playback())
 			{
-				_target.FindBestShift(_part, _schedulingOptions, _matrix, effectiveRestriction, null);
+				_target.FindBestShift(_part, _schedulingOptions, _matrix, effectiveRestriction);
 			}
         }
     }

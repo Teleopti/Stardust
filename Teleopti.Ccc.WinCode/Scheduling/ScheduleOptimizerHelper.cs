@@ -222,7 +222,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 							var effectiveRestrictionCreator = _container.Resolve<IEffectiveRestrictionCreator>();
 							var effectiveRestriction = effectiveRestrictionCreator.GetEffectiveRestriction(
 								schedulePart, schedulingOptions);
-							cache = finderService.FindBestShift(schedulePart, schedulingOptions, matrix, effectiveRestriction, null);
+							cache = finderService.FindBestShift(schedulePart, schedulingOptions, matrix, effectiveRestriction);
 						}
 						var result = cache.FinderResult;
 						_allResults().AddResults(new List<IWorkShiftFinderResult> { result }, schedulingTime);

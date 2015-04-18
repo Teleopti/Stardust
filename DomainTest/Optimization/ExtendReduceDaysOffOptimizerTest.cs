@@ -39,7 +39,6 @@ namespace Teleopti.Ccc.DomainTest.Optimization
         private IScheduleDayPro _scheduleDayPro;
         private IScheduleDay _scheduleDay;
         private ExtendReduceTimeDecisionMakerResult _extendReduceTimeDecisionMakerResult;
-        private IPersonAssignment _personAssignment;
         private IEffectiveRestriction _effectiveRestriction;
         private DateOnlyAsDateTimePeriod _dateOnlyAsDateTimePeriod;
         private ISchedulingOptionsCreator _schedulingOptionsCreator;
@@ -100,10 +99,6 @@ namespace Teleopti.Ccc.DomainTest.Optimization
             _scheduleDayPro = _mocks.StrictMock<IScheduleDayPro>();
             _scheduleDay = _mocks.StrictMock<IScheduleDay>();
             _extendReduceTimeDecisionMakerResult = new ExtendReduceTimeDecisionMakerResult();
-            DateTime mainShiftStart = new DateTime(2012, 2, 1, 8, 0, 0, 0, DateTimeKind.Utc);
-            DateTimePeriod mainShiftPeriod = new DateTimePeriod(mainShiftStart, mainShiftStart.AddHours(8));
-            _personAssignment = PersonAssignmentFactory.CreateAssignmentWithMainShift(PersonFactory.CreatePerson(),
-                                                                                      mainShiftPeriod);
 	        _overLimitCount = new OverLimitResults(0, 0, 0, 0, 0);
         }
 
@@ -116,7 +111,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
                                                              new WorkTimeLimitation(), null, null, null,
                                                              new List<IActivityRestriction>());
             _dateOnlyAsDateTimePeriod = new DateOnlyAsDateTimePeriod(DateOnly.MinValue, (TimeZoneInfo.Utc));
-			var useCategory = new PossibleStartEndCategory { ShiftCategory = _personAssignment.ShiftCategory };
+
             using (_mocks.Record())
             {
                 commonMocks();
@@ -149,7 +144,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
                             {_extendReduceTimeDecisionMakerResult.DayToLengthen.Value, _scheduleDay},
                             {_extendReduceTimeDecisionMakerResult.DayToShorten.Value, _scheduleDay}
                         }).Repeat.AtLeastOnce();
-				Expect.Call(_scheduleServiceForFlexibleAgents.SchedulePersonOnDay(_scheduleDay, _schedulingOptions, null, _resourceCalculateDelayer, useCategory, _rollbackService)).IgnoreArguments()
+				Expect.Call(_scheduleServiceForFlexibleAgents.SchedulePersonOnDay(_scheduleDay, _schedulingOptions, null, _resourceCalculateDelayer, _rollbackService)).IgnoreArguments()
                    .Return(true).Repeat.AtLeastOnce();
 
                 Expect.Call(_dayOffsInPeriodCalculator.OutsideOrAtMaximumTargetDaysOff(_schedulePeriod)).Return(false);
@@ -188,7 +183,6 @@ namespace Teleopti.Ccc.DomainTest.Optimization
                                                              new WorkTimeLimitation(), null, null, null,
                                                              new List<IActivityRestriction>());
             _dateOnlyAsDateTimePeriod = new DateOnlyAsDateTimePeriod(DateOnly.MinValue, (TimeZoneInfo.Utc));
-			var useCategory = new PossibleStartEndCategory { ShiftCategory = _personAssignment.ShiftCategory };
             using (_mocks.Record())
             {
                 commonMocks();
@@ -219,7 +213,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
                             {_extendReduceTimeDecisionMakerResult.DayToLengthen.Value, _scheduleDay},
                             {_extendReduceTimeDecisionMakerResult.DayToShorten.Value, _scheduleDay}
                         }).Repeat.AtLeastOnce();
-				Expect.Call(_scheduleServiceForFlexibleAgents.SchedulePersonOnDay(_scheduleDay, _schedulingOptions, null, _resourceCalculateDelayer, useCategory, _rollbackService)).IgnoreArguments()
+				Expect.Call(_scheduleServiceForFlexibleAgents.SchedulePersonOnDay(_scheduleDay, _schedulingOptions, null, _resourceCalculateDelayer, _rollbackService)).IgnoreArguments()
                     .Return(true).Repeat.AtLeastOnce();
 
                 Expect.Call(_dayOffsInPeriodCalculator.OutsideOrAtMaximumTargetDaysOff(_schedulePeriod)).Return(true);
@@ -252,7 +246,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
                                                              new WorkTimeLimitation(), null, null, null,
                                                              new List<IActivityRestriction>());
             _dateOnlyAsDateTimePeriod = new DateOnlyAsDateTimePeriod(DateOnly.MinValue, (TimeZoneInfo.Utc));
-			var useCategory = new PossibleStartEndCategory { ShiftCategory = _personAssignment.ShiftCategory };
+
             using (_mocks.Record())
             {
                 commonMocks();
@@ -276,7 +270,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
                             {_extendReduceTimeDecisionMakerResult.DayToLengthen.Value, _scheduleDay},
                             {_extendReduceTimeDecisionMakerResult.DayToShorten.Value, _scheduleDay}
                         }).Repeat.AtLeastOnce();
-				Expect.Call(_scheduleServiceForFlexibleAgents.SchedulePersonOnDay(_scheduleDay, _schedulingOptions, null, _resourceCalculateDelayer, useCategory, _rollbackService)).IgnoreArguments()
+				Expect.Call(_scheduleServiceForFlexibleAgents.SchedulePersonOnDay(_scheduleDay, _schedulingOptions, null, _resourceCalculateDelayer, _rollbackService)).IgnoreArguments()
                     .Return(false).Repeat.AtLeastOnce();
                 Expect.Call(_nightRestWhiteSpotSolverService.Resolve(_matrix, _schedulingOptions, _rollbackService)).IgnoreArguments()
                     .Return(true).Repeat.AtLeastOnce();
@@ -356,7 +350,6 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 			_extendReduceTimeDecisionMakerResult.DayToShorten = DateOnly.MinValue;
 			_effectiveRestriction = new EffectiveRestriction(new StartTimeLimitation(), new EndTimeLimitation(),new WorkTimeLimitation(), null, null, null,new List<IActivityRestriction>());
 			_dateOnlyAsDateTimePeriod = new DateOnlyAsDateTimePeriod(DateOnly.MinValue, (TimeZoneInfo.Utc));
-			var useCategory = new PossibleStartEndCategory { ShiftCategory = _personAssignment.ShiftCategory };
 			
 			using (_mocks.Record())
 			{
@@ -380,7 +373,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 				Expect.Call(_visualLayerCollection.Period()).Return(new DateTimePeriod()).Repeat.AtLeastOnce();
 				Expect.Call(_resourceCalculateDelayer.CalculateIfNeeded(new DateOnly(), null)).IgnoreArguments().Return(true).Repeat.AtLeastOnce();
 				Expect.Call(_originalStateContainerForTagChange.OldPeriodDaysState).Return(new Dictionary<DateOnly, IScheduleDay>{{_extendReduceTimeDecisionMakerResult.DayToLengthen.Value, _scheduleDay},{_extendReduceTimeDecisionMakerResult.DayToShorten.Value, _scheduleDay}}).Repeat.AtLeastOnce();
-				Expect.Call(_scheduleServiceForFlexibleAgents.SchedulePersonOnDay(_scheduleDay, _schedulingOptions, null, _resourceCalculateDelayer, useCategory, _rollbackService)).IgnoreArguments().Return(true).Repeat.AtLeastOnce();
+				Expect.Call(_scheduleServiceForFlexibleAgents.SchedulePersonOnDay(_scheduleDay, _schedulingOptions, null, _resourceCalculateDelayer, _rollbackService)).IgnoreArguments().Return(true).Repeat.AtLeastOnce();
 				Expect.Call(_dayOffsInPeriodCalculator.OutsideOrAtMaximumTargetDaysOff(_schedulePeriod)).Return(true);
 				Expect.Call(_rollbackService.ModificationCollection).Return(new ReadOnlyCollection<IScheduleDay>(new List<IScheduleDay> { _scheduleDay }));
 				Expect.Call(() => _rollbackService.Rollback());

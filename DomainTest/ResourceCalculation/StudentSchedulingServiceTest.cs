@@ -109,7 +109,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
             
             using (_mocks.Record())
             {
-				Expect.Call(_scheduleService.SchedulePersonOnDay(null, _schedulingOptions, _effectiveRestriction, _resourceCalculateDelayer, null, _rollbackService)).IgnoreArguments().Return(true)
+				Expect.Call(_scheduleService.SchedulePersonOnDay(null, _schedulingOptions, _effectiveRestriction, _resourceCalculateDelayer, _rollbackService)).IgnoreArguments().Return(true)
                     .Repeat.AtLeastOnce();
 
                 Expect.Call(person.VirtualSchedulePeriod(date11)).Return(virtualSchedulePeriod).IgnoreArguments().Repeat.AtLeastOnce();
@@ -287,7 +287,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 
             using (_mocks.Record())
             {
-				Expect.Call(_scheduleService.SchedulePersonOnDay(null, _schedulingOptions, _effectiveRestriction, _resourceCalculateDelayer, null, _rollbackService)).IgnoreArguments().Return(true)
+				Expect.Call(_scheduleService.SchedulePersonOnDay(null, _schedulingOptions, _effectiveRestriction, _resourceCalculateDelayer, _rollbackService)).IgnoreArguments().Return(true)
                     .Repeat.AtLeastOnce();
 
                 Expect.Call(person.VirtualSchedulePeriod(date11)).Return(virtualSchedulePeriod).IgnoreArguments().Repeat.AtLeastOnce();

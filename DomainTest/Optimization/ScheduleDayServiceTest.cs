@@ -52,7 +52,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
                 Expect.Call(_newSchedulePart.Period).Return(period).Repeat.Any();
                 Expect.Call(_effectiveRestrictionCreator.GetEffectiveRestriction(null, null)).IgnoreArguments()
                     .Return(effectiveRestriction);
-				Expect.Call(_scheduleService.SchedulePersonOnDay(_newSchedulePart, _schedulingOptions, effectiveRestriction, _resourceCalculateDelayer, null, _rollbackService)).IgnoreArguments()
+				Expect.Call(_scheduleService.SchedulePersonOnDay(_newSchedulePart, _schedulingOptions, effectiveRestriction, _resourceCalculateDelayer, _rollbackService)).IgnoreArguments()
                     .Return(true);
  
             }

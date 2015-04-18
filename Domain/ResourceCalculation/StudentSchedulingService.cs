@@ -148,7 +148,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 					if (part != null)
 					{
 						var effectiveRestriction = _effectiveRestrictionCreator.GetEffectiveRestriction(part, schedulingOptions);
-						schedulePersonOnDayResult = _scheduleService.SchedulePersonOnDay(part, schedulingOptions, effectiveRestriction, resourceCalculateDelayer, null, rollbackService);
+						schedulePersonOnDayResult = _scheduleService.SchedulePersonOnDay(part, schedulingOptions, effectiveRestriction, resourceCalculateDelayer, rollbackService);
 						everyPersonScheduled = everyPersonScheduled && schedulePersonOnDayResult;
 
 					}

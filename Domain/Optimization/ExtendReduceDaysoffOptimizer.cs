@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.DayOffPlanning;
-using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Optimization
@@ -213,13 +212,12 @@ namespace Teleopti.Ccc.Domain.Optimization
 				bool schedulingResult;
 				if (effectiveRestriction.ShiftCategory == null && originalShiftCategory != null)
 				{
-                	var possibleShiftOption = new PossibleStartEndCategory {ShiftCategory = originalShiftCategory};
-                    schedulingResult = _scheduleServiceForFlexibleAgents.SchedulePersonOnDay(schedulePart, schedulingOptions, effectiveRestriction, _resourceCalculateDelayer, possibleShiftOption, _rollbackService);
+                    schedulingResult = _scheduleServiceForFlexibleAgents.SchedulePersonOnDay(schedulePart, schedulingOptions, effectiveRestriction, _resourceCalculateDelayer, _rollbackService);
 					if (!schedulingResult)
-						schedulingResult = _scheduleServiceForFlexibleAgents.SchedulePersonOnDay(schedulePart, schedulingOptions, effectiveRestriction, _resourceCalculateDelayer, null, _rollbackService);
+						schedulingResult = _scheduleServiceForFlexibleAgents.SchedulePersonOnDay(schedulePart, schedulingOptions, effectiveRestriction, _resourceCalculateDelayer, _rollbackService);
 				}
 				else
-					schedulingResult = _scheduleServiceForFlexibleAgents.SchedulePersonOnDay(schedulePart, schedulingOptions, effectiveRestriction, _resourceCalculateDelayer, null, _rollbackService);
+					schedulingResult = _scheduleServiceForFlexibleAgents.SchedulePersonOnDay(schedulePart, schedulingOptions, effectiveRestriction, _resourceCalculateDelayer, _rollbackService);
 
 				if (!schedulingResult)
 				{

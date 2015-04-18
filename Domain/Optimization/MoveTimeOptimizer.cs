@@ -231,7 +231,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 			_mainShiftOptimizeActivitySpecificationSetter.SetMainShiftOptimizeActivitySpecification(schedulingOptions, _optimizerPreferences, originalShift, day);
 
         	bool success = _scheduleService.SchedulePersonOnDay(scheduleDay.DaySchedulePart(), schedulingOptions,
-        	                                                    effectiveRestriction, resourceCalculateDelayer, null, _rollbackService);
+        	                                                    effectiveRestriction, resourceCalculateDelayer, _rollbackService);
 
 			if (success && scheduleDay.DaySchedulePart().ProjectionService().CreateProjection().ContractTime() == originalLength)
 				success = false;

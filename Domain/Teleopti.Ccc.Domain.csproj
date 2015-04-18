@@ -1041,7 +1041,6 @@
     <Compile Include="ResourceCalculation\PeriodResourceDetail.cs" />
     <Compile Include="ResourceCalculation\PersonalShiftMeetingTimeChecker.cs" />
     <Compile Include="ResourceCalculation\PersonSkillProvider.cs" />
-    <Compile Include="ResourceCalculation\PossibleStartEndCategory.cs" />
     <Compile Include="ResourceCalculation\ResourceCalculationDataContainer.cs" />
     <Compile Include="ResourceCalculation\ResourceCalculationDataContainerFromStorage.cs" />
     <Compile Include="ResourceCalculation\ResourcesForCombinationFromStorage.cs" />
