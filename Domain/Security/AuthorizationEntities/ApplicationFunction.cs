@@ -72,7 +72,7 @@ namespace Teleopti.Ccc.Domain.Security.AuthorizationEntities
             {
                 if ((!string.IsNullOrEmpty(applicationFunction.ForeignSource) && applicationFunction.ForeignSource == source)
                     &&
-                   ((!string.IsNullOrEmpty(applicationFunction.ForeignId) && applicationFunction.ForeignId == id)))
+                   ((!string.IsNullOrEmpty(applicationFunction.ForeignId) && applicationFunction.ForeignId.ToUpper() == id.ToUpper())))
                     return applicationFunction;
             }
             return null;
