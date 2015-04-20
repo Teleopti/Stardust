@@ -41,12 +41,10 @@
 			angular.element($window).bind('resize', function () {
 				resize();
 			});
-
-			$window.addEventListener('mousewheel', scrollZooming, false);
-
+			
 			resize();
 
-			createListenersKeyboard();
+			createDocumentListeners();
 			vm.isLoading = true;
 			canvasUtils.loadSeatMap(null, canvas, vm.isInEditMode, onLoadSeatMapSuccess, onLoadSeatMapNoSeatMapJson);
 		};
@@ -253,8 +251,9 @@
 			canvasUtils.resetPosition(canvas);
 		};
 
-		function createListenersKeyboard() {
+		function createDocumentListeners() {
 			document.onkeydown = onKeyDownHandler;
+			document.onmousewheel = scrollZooming;
 		};
 
 		function onKeyDownHandler(event) {

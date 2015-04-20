@@ -180,17 +180,33 @@ angular.module('wfm.seatMap')
 		};
 
 		function addImage(canvas, image) {
-			fabric.Image.fromObject(image, function(img) {
-				img.set({
-					left: 250,
-					top: 250
+
+			if (image.src.indexOf('image/svg') > -1) {
+
+				fabric.loadSVGFromURL(image.src, function(objects, options) {
+					var obj = fabric.util.groupSVGElements(objects, options);
+					obj.set({
+						left: 250,
+						top: 250
+					});
+					canvas.add(obj);
+					obj.setCoords();
+					canvas.renderAll();
 				});
 
-				canvas.add(img);
-				img.setCoords();
-				canvas.renderAll();
-			});
-			
+			} else {
+
+				fabric.Image.fromObject(image, function (img) {
+					img.set({
+						left: 250,
+						top: 250
+					});
+					canvas.add(img);
+					img.setCoords();
+					canvas.renderAll();
+				});
+
+			}
 		};
 
 		function setBackgroundImage(canvas, image) {
@@ -226,12 +242,22 @@ angular.module('wfm.seatMap')
 				id: getTemporaryId()
 			};
 
-			fabric.util.loadImage(imgName, function (img) {
-				var newSeat = new fabric.Seat(img, seatObj);
-				newSeat.isNew = true;
-				canvas.add(newSeat);
-				newSeat.center();
-				newSeat.setCoords();
+			fabric.loadSVGFromURL(imgName, function (objects, options) {
+
+				fabric.util.loadImage(imgName, function (img) {
+
+					var newSeat = new fabric.Seat(img, seatObj);
+					newSeat.scale(1.2).set({
+						isNew: true,
+						height: objects[0].height,
+						width: objects[0].width
+					});
+
+					canvas.add(newSeat);
+					newSeat.center();
+					newSeat.setCoords();
+				});
+
 			});
 		};
 
