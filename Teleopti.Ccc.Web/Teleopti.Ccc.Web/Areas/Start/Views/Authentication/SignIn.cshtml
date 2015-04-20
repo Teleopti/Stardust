@@ -15,6 +15,13 @@
 		});
 	</script>
 }
+@{
+	var signOutUrl = "authentication/SignOut";
+	if (Request.RawUrl.EndsWith("/"))
+	{
+		signOutUrl = "../" + signOutUrl;
+	}
+}
 
 <section id="page-signin">
 	<div class="container" id="Login-container">
@@ -36,7 +43,7 @@
 					 data-nodatasourcetext="@Resources.NoDatasource">
 			</div>
 			<div data-bind="if: ShowSignInAsAnotherUser">
-				<a class="btn btn-primary" href="authentication/SignOut">@Resources.SignInAsAnotherUser</a>
+				<a class="btn btn-primary" href="@signOutUrl">@Resources.SignInAsAnotherUser</a>
 			</div>
 
 			<img data-bind="visible: Ajax.Active" src="@Url.Content("~/Areas/Start/Content/Images/ajax-loader-small.gif")" alt="..." />
