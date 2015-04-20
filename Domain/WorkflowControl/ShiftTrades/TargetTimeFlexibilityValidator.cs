@@ -32,7 +32,7 @@ namespace Teleopti.Ccc.Domain.WorkflowControl.ShiftTrades
                 bool found = false;
                 foreach (IScheduleDay schedulePart in suggestedChanges)
                 {
-                    if(schedulePart.Person.Equals(_matrix.Person) && schedulePart.Period == scheduleDayPro.DaySchedulePart().Period)
+                    if(schedulePart.Person.Equals(_matrix.Person) && schedulePart.DateOnlyAsPeriod.DateOnly == scheduleDayPro.DaySchedulePart().DateOnlyAsPeriod.DateOnly)
                     {
                         var contractTime = schedulePart.ProjectionService().CreateProjection().ContractTime();
                         Logger.DebugFormat("Found a schedule day that was a suggested change. Time: {0}.", contractTime);

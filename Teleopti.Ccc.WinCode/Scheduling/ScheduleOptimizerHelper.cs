@@ -202,9 +202,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 			if (finderService == null)
 				throw new ArgumentNullException("finderService");
 
-			DateTime scheduleDayUtc = schedulePart.Period.StartDateTime;
-			TimeZoneInfo timeZoneInfo = schedulePart.Person.PermissionInformation.DefaultTimeZone();
-			var scheduleDateOnlyPerson = new DateOnly(TimeZoneHelper.ConvertFromUtc(scheduleDayUtc, timeZoneInfo).Date);
+			var scheduleDateOnlyPerson = schedulePart.DateOnlyAsPeriod.DateOnly;
 			IPersonPeriod personPeriod = schedulePart.Person.Period(scheduleDateOnlyPerson);
 			if (personPeriod != null)
 			{

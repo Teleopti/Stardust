@@ -30,21 +30,13 @@ namespace Teleopti.Ccc.Domain.Optimization
 
             _person = person;
 
-            DateTimePeriod validPeriod = schedulePart.Period;
-            DateTime scheduleDayUtc = validPeriod.StartDateTime;
-
-            TimeZoneInfo timeZoneInfo = person.PermissionInformation.DefaultTimeZone();
-            DateOnly startDate = new DateOnly(TimeZoneHelper.ConvertFromUtc(scheduleDayUtc, timeZoneInfo));
+            DateOnly startDate = _schedulePart.DateOnlyAsPeriod.DateOnly;
 
             _schedulePeriod = schedulePart.Person.VirtualSchedulePeriod(startDate); // this method takes care of the terminal date too
             if (!_schedulePeriod.IsValid)
                 return;
 
             _actualSchedulePeriod = _schedulePeriod.DateOnlyPeriod;
-            //DateOnlyPeriod? scheduleDatePeriod = _schedulePeriod.DateOnlyPeriod; // this method also takes care of the terminal date
-
-            //_actualSchedulePeriod = scheduleDatePeriod.Value; // later that is used as effective period
-            
         }
 
         public IVirtualSchedulePeriod SchedulePeriod

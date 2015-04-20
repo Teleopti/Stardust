@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using NUnit.Framework;
 using Rhino.Mocks;
 using Teleopti.Ccc.Domain.AgentInfo;
+using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Optimization;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
-using Teleopti.Ccc.Domain.Time;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Interfaces.Domain;
 
@@ -53,7 +53,6 @@ namespace Teleopti.Ccc.DomainTest.Optimization
             }
 
             Assert.AreEqual(2, new List<ISchedulePartExtractor>(_target.ExtractUniqueScheduleParts(_schedulePartList)).Count);
-
         }
 
         private void createSchedulePartList()
@@ -105,12 +104,12 @@ namespace Teleopti.Ccc.DomainTest.Optimization
             for (int i = 0; i < 5; i++)
             {
                 Expect.Call(_schedulePartList[i].Person).Return(_person1).Repeat.Any();
-                Expect.Call(_schedulePartList[i].Period).Return(dt.MovePeriod(TimeSpan.FromDays(i))).Repeat.Any();
+                Expect.Call(_schedulePartList[i].DateOnlyAsPeriod).Return(new DateOnlyAsDateTimePeriod(new DateOnly(dt.StartDateTime.AddDays(i)), TimeZoneInfo.Utc)).Repeat.Any();
             }
             for (int i = 0; i < 5; i++)
             {
                 Expect.Call(_schedulePartList[i + 5].Person).Return(_person2).Repeat.Any();
-                Expect.Call(_schedulePartList[i + 5].Period).Return(dt.MovePeriod(TimeSpan.FromDays(i))).Repeat.Any();
+				Expect.Call(_schedulePartList[i + 5].DateOnlyAsPeriod).Return(new DateOnlyAsDateTimePeriod(new DateOnly(dt.StartDateTime.AddDays(i)), TimeZoneInfo.Utc)).Repeat.Any();
             }
         }
     }

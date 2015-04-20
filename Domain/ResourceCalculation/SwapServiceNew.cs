@@ -1,12 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data;
-using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.ResourceCalculation
 {
-	[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1711:IdentifiersShouldNotHaveIncorrectSuffix")]
 	public class SwapServiceNew : ISwapServiceNew
 	{
 		private IList<IScheduleDay> _selectedSchedules;
@@ -50,10 +48,6 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 
 		private static void movePersonAssignment(IPersonAssignment sourceAssignment, IPersonAssignment targetAssignment)
 		{
-
-			//var periodOffsetCalculator = new PeriodOffsetCalculator();
-			//var periodOffset = periodOffsetCalculator.CalculatePeriodOffset(sourceAssignment.Period, targetAssignment.Period);
-
 			targetAssignment.ClearMainActivities();
 			targetAssignment.ClearOvertimeActivities();
 
@@ -62,8 +56,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 				targetAssignment.AddActivity(layer.Payload, layer.Period);
 			}
 
-			var timeZoneInfo = sourceAssignment.Person.PermissionInformation.DefaultTimeZone();
-			var dateOnlyPerson = new DateOnly(TimeZoneHelper.ConvertFromUtc(sourceAssignment.Period.StartDateTime, timeZoneInfo));
+			var dateOnlyPerson = sourceAssignment.Date;
 			var personPeriod = sourceAssignment.Person.Period(dateOnlyPerson);
 
 			foreach (var layer in sourceAssignment.OvertimeActivities())

@@ -47,7 +47,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.ScheduleTagging
 
         private void createAndAddScheduleTag(IScheduleDay scheduleDay)
         {
-            DateOnly dateOnly = new DateOnly(TimeZoneHelper.ConvertFromUtc(scheduleDay.Period.StartDateTime, scheduleDay.Person.PermissionInformation.DefaultTimeZone()));
+            DateOnly dateOnly = scheduleDay.DateOnlyAsPeriod.DateOnly;
             IAgentDayScheduleTag agentDayScheduleTag = new AgentDayScheduleTag(scheduleDay.Person, dateOnly, scheduleDay.Scenario, _tag);
             scheduleDay.Clear<IAgentDayScheduleTag>();
             if (_tag is NullScheduleTag)

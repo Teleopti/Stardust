@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using NUnit.Framework;
 using Rhino.Mocks;
-using Teleopti.Ccc.Domain.Scheduling;
+using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.WorkflowControl.ShiftTrades;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Interfaces.Domain;
@@ -39,7 +39,7 @@ namespace Teleopti.Ccc.DomainTest.WorkflowControl.ShiftTrades
             using (_mocks.Record())
             {
                 mockExpectations();
-                Expect.Call(schedulePart.Period).Return(new DateTimePeriod(2010, 1, 1, 2010, 1, 1)).Repeat.AtLeastOnce();
+				Expect.Call(schedulePart.DateOnlyAsPeriod).Return(new DateOnlyAsDateTimePeriod(new DateOnly(2010, 1, 1), TimeZoneInfo.Utc)).Repeat.AtLeastOnce();
                 Expect.Call(schedulePart.ProjectionService()).Return(projection).Repeat.AtLeastOnce();
                 Expect.Call(projection.CreateProjection()).Return(visualLayerCollection).Repeat.AtLeastOnce();
                 Expect.Call(visualLayerCollection.ContractTime()).Return(TimeSpan.FromHours(9)).Repeat.AtLeastOnce();
@@ -61,7 +61,7 @@ namespace Teleopti.Ccc.DomainTest.WorkflowControl.ShiftTrades
             using (_mocks.Record())
             {
                 mockExpectations();
-                Expect.Call(schedulePart.Period).Return(new DateTimePeriod(2010, 1, 1, 2010, 1, 1)).Repeat.AtLeastOnce();
+				Expect.Call(schedulePart.DateOnlyAsPeriod).Return(new DateOnlyAsDateTimePeriod(new DateOnly(2010, 1, 1), TimeZoneInfo.Utc)).Repeat.AtLeastOnce();
                 Expect.Call(schedulePart.ProjectionService()).Return(projection).Repeat.AtLeastOnce();
                 Expect.Call(projection.CreateProjection()).Return(visualLayerCollection).Repeat.AtLeastOnce();
                 Expect.Call(visualLayerCollection.ContractTime()).Return(TimeSpan.FromHours(10)).Repeat.AtLeastOnce();
@@ -82,7 +82,7 @@ namespace Teleopti.Ccc.DomainTest.WorkflowControl.ShiftTrades
             using (_mocks.Record())
             {
                 mockExpectations();
-                Expect.Call(schedulePart.Period).Return(new DateTimePeriod(2010, 1, 1, 2010, 1, 1)).Repeat.AtLeastOnce();
+                Expect.Call(schedulePart.DateOnlyAsPeriod).Return(new DateOnlyAsDateTimePeriod(new DateOnly(2010, 1, 1),TimeZoneInfo.Utc)).Repeat.AtLeastOnce();
                 Expect.Call(schedulePart.ProjectionService()).Return(projection).Repeat.AtLeastOnce();
                 Expect.Call(projection.CreateProjection()).Return(visualLayerCollection).Repeat.AtLeastOnce();
                 Expect.Call(visualLayerCollection.ContractTime()).Return(TimeSpan.FromHours(9.5)).Repeat.AtLeastOnce();
@@ -103,7 +103,7 @@ namespace Teleopti.Ccc.DomainTest.WorkflowControl.ShiftTrades
             using (_mocks.Record())
             {
                 mockExpectations();
-                Expect.Call(schedulePart.Period).Return(new DateTimePeriod(2010, 1, 1, 2010, 1, 1)).Repeat.AtLeastOnce();
+				Expect.Call(schedulePart.DateOnlyAsPeriod).Return(new DateOnlyAsDateTimePeriod(new DateOnly(2010, 1, 1), TimeZoneInfo.Utc)).Repeat.AtLeastOnce();
                 Expect.Call(schedulePart.ProjectionService()).Return(projection).Repeat.AtLeastOnce();
                 Expect.Call(projection.CreateProjection()).Return(visualLayerCollection).Repeat.AtLeastOnce();
                 Expect.Call(visualLayerCollection.ContractTime()).Return(TimeSpan.FromHours(7)).Repeat.AtLeastOnce();
@@ -115,29 +115,30 @@ namespace Teleopti.Ccc.DomainTest.WorkflowControl.ShiftTrades
           }
         }
 
-        [Test]
-        public void VerifyTwoHourLessTimeReturnsFalse()
-        {
-            IScheduleDay schedulePart = _mocks.StrictMock<IScheduleDay>();
-            IProjectionService projection = _mocks.StrictMock<IProjectionService>();
-            IVisualLayerCollection visualLayerCollection = _mocks.StrictMock<IVisualLayerCollection>();
-            using (_mocks.Record())
-            {
-                mockExpectations();
-                Expect.Call(schedulePart.Period).Return(new DateTimePeriod(2010, 1, 1, 2010, 1, 1)).Repeat.AtLeastOnce();
-                Expect.Call(schedulePart.ProjectionService()).Return(projection).Repeat.AtLeastOnce();
-                Expect.Call(projection.CreateProjection()).Return(visualLayerCollection).Repeat.AtLeastOnce();
-                Expect.Call(visualLayerCollection.ContractTime()).Return(TimeSpan.FromHours(6)).Repeat.AtLeastOnce();
-                Expect.Call(schedulePart.Person).Return(_person).Repeat.Any();
-            }
-            using (_mocks.Playback())
-            {
-                   Assert.IsFalse(_target.Validate(new List<IScheduleDay> { schedulePart }, _flexibility));
-         }
+	    [Test]
+	    public void VerifyTwoHourLessTimeReturnsFalse()
+	    {
+		    IScheduleDay schedulePart = _mocks.StrictMock<IScheduleDay>();
+		    IProjectionService projection = _mocks.StrictMock<IProjectionService>();
+		    IVisualLayerCollection visualLayerCollection = _mocks.StrictMock<IVisualLayerCollection>();
+		    using (_mocks.Record())
+		    {
+			    mockExpectations();
+			    Expect.Call(schedulePart.DateOnlyAsPeriod)
+				    .Return(new DateOnlyAsDateTimePeriod(new DateOnly(2010, 1, 1), TimeZoneInfo.Utc))
+				    .Repeat.AtLeastOnce();
+			    Expect.Call(schedulePart.ProjectionService()).Return(projection).Repeat.AtLeastOnce();
+			    Expect.Call(projection.CreateProjection()).Return(visualLayerCollection).Repeat.AtLeastOnce();
+			    Expect.Call(visualLayerCollection.ContractTime()).Return(TimeSpan.FromHours(6)).Repeat.AtLeastOnce();
+			    Expect.Call(schedulePart.Person).Return(_person).Repeat.Any();
+		    }
+		    using (_mocks.Playback())
+		    {
+			    Assert.IsFalse(_target.Validate(new List<IScheduleDay> {schedulePart}, _flexibility));
+		    }
+	    }
 
-        }
-
-        private void mockExpectations()
+	    private void mockExpectations()
         {
             IScheduleDayPro dayDO = _mocks.StrictMock<IScheduleDayPro>();
             IScheduleDayPro dayMain = _mocks.StrictMock<IScheduleDayPro>();
@@ -152,8 +153,8 @@ namespace Teleopti.Ccc.DomainTest.WorkflowControl.ShiftTrades
             Expect.Call(_matrix.EffectivePeriodDays).Return(new ReadOnlyCollection<IScheduleDayPro>(periodDays));
             Expect.Call(dayMain.DaySchedulePart()).Return(partMain).Repeat.Any();
             Expect.Call(dayDO.DaySchedulePart()).Return(partDO).Repeat.Any();
-            Expect.Call(partMain.Period).Return(new DateTimePeriod(2010, 1, 1, 2010, 1, 1)).Repeat.Any();
-            Expect.Call(partDO.Period).Return(new DateTimePeriod(2010, 1, 2, 2010, 1, 2)).Repeat.Any();
+            Expect.Call(partMain.DateOnlyAsPeriod).Return(new DateOnlyAsDateTimePeriod(new DateOnly(2010, 1, 1), TimeZoneInfo.Utc)).Repeat.Any();
+			Expect.Call(partDO.DateOnlyAsPeriod).Return(new DateOnlyAsDateTimePeriod(new DateOnly(2010, 1, 2), TimeZoneInfo.Utc)).Repeat.Any();
             Expect.Call(partMain.ProjectionService()).Return(projection1).Repeat.Any();
             Expect.Call(partDO.ProjectionService()).Return(projection2).Repeat.Any();
             Expect.Call(projection1.CreateProjection()).Return(visualLayerCollection1).Repeat.Any();

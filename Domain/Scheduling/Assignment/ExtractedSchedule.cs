@@ -537,7 +537,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 
         }
 
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling")]
         private void mergeMainShift(IScheduleDay source, bool ignoreTimeZoneChanges, bool splitAbsence)
         {
 					var sourceAssignment = source.PersonAssignment();
@@ -664,7 +663,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 
          public void CreateAndAddNote(string text)
          {
-             var dateOnly = new DateOnly(TimeZoneHelper.ConvertFromUtc(Period.StartDateTime, Person.PermissionInformation.DefaultTimeZone() ));
+             var dateOnly = DateOnlyAsPeriod.DateOnly;
              var note = new Note(Person, dateOnly, Scenario, text);
              DeleteNote();
              Add(note);
@@ -672,7 +671,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 
          public void CreateAndAddPublicNote(string text)
          {
-             var dateOnly = new DateOnly(TimeZoneHelper.ConvertFromUtc(Period.StartDateTime, Person.PermissionInformation.DefaultTimeZone()));
+			 var dateOnly = DateOnlyAsPeriod.DateOnly;
              var publicNote = new PublicNote(Person, dateOnly, Scenario, text);
              DeletePublicNote();
              Add(publicNote);
@@ -692,8 +691,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 
 	    public void MergeOvertime(IScheduleDay source)
 	    {
-		    var timeZoneInfo = Person.PermissionInformation.DefaultTimeZone();
-		    var dateOnlyPerson = new DateOnly(TimeZoneHelper.ConvertFromUtc(Period.StartDateTime, timeZoneInfo));
+		    var dateOnlyPerson = DateOnlyAsPeriod.DateOnly;
 		    var period = Person.Period(dateOnlyPerson);
 		    var diff = CalculatePeriodOffset(source.Period);
 

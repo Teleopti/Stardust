@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using Teleopti.Interfaces.Domain;
 
@@ -17,11 +16,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Rules
 
             foreach (IScheduleDay day in scheduleDays)
             {
-                DateTimePeriod validPeriod = day.Period;
-                DateTime scheduleDayUtc = validPeriod.StartDateTime;
-
-                TimeZoneInfo timeZoneInfo = day.Person.PermissionInformation.DefaultTimeZone();
-                var startDate = new DateOnly(TimeZoneHelper.ConvertFromUtc(scheduleDayUtc, timeZoneInfo));
+                var startDate = day.DateOnlyAsPeriod.DateOnly;
                 periods.Add(day.Person.VirtualSchedulePeriod(startDate));
             }
 

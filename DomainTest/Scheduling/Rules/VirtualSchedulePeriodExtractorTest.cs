@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using NUnit.Framework;
 using Rhino.Mocks;
+using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Scheduling.Rules;
 using Teleopti.Interfaces.Domain;
 
@@ -46,21 +47,15 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
 
             using (_mocks.Record())
             {
-                Expect.Call(day0.Period).Return(period);
-                Expect.Call(day1.Period).Return(period);
-                Expect.Call(day2.Period).Return(period);
-                Expect.Call(day3.Period).Return(period2);
+                Expect.Call(day0.DateOnlyAsPeriod).Return(new DateOnlyAsDateTimePeriod(dateOnly1,timeZoneInfo));
+				Expect.Call(day1.DateOnlyAsPeriod).Return(new DateOnlyAsDateTimePeriod(dateOnly1, timeZoneInfo));
+				Expect.Call(day2.DateOnlyAsPeriod).Return(new DateOnlyAsDateTimePeriod(dateOnly1, timeZoneInfo));
+				Expect.Call(day3.DateOnlyAsPeriod).Return(new DateOnlyAsDateTimePeriod(dateOnly2, timeZoneInfo));
 
                 Expect.Call(day0.Person).Return(person1).Repeat.AtLeastOnce();
                 Expect.Call(day1.Person).Return(person1).Repeat.AtLeastOnce();
                 Expect.Call(day2.Person).Return(person2).Repeat.AtLeastOnce();
                 Expect.Call(day3.Person).Return(person3).Repeat.AtLeastOnce();
-
-                Expect.Call(person1.PermissionInformation).Return(permissionInformation).Repeat.Twice();
-                Expect.Call(person2.PermissionInformation).Return(permissionInformation);
-                Expect.Call(person3.PermissionInformation).Return(permissionInformation);
-
-                Expect.Call(permissionInformation.DefaultTimeZone()).Return(timeZoneInfo).Repeat.AtLeastOnce();
 
                 Expect.Call(person1.VirtualSchedulePeriod(dateOnly1)).Return(vPeriod1).Repeat.Twice();
                 Expect.Call(person2.VirtualSchedulePeriod(dateOnly1)).Return(vPeriod2);
@@ -72,9 +67,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
                 var lst = _target.CreateVirtualSchedulePeriodsFromScheduleDays(days);
                 Assert.AreEqual(3, lst.Count());
             }
-
         }
     }
-
-
 }

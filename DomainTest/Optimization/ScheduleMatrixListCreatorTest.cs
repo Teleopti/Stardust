@@ -2,6 +2,7 @@
 using NUnit.Framework;
 using Rhino.Mocks;
 using Teleopti.Ccc.Domain.AgentInfo;
+using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Optimization;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.TestCommon.FakeData;
@@ -62,14 +63,14 @@ namespace Teleopti.Ccc.DomainTest.Optimization
         private void setupPersons()
         {
             _person1 = PersonFactory.CreatePerson();
-            _person1.PermissionInformation.SetDefaultTimeZone((TimeZoneInfo.Utc));
+            _person1.PermissionInformation.SetDefaultTimeZone(TimeZoneInfo.Utc);
             ISchedulePeriod schedulePeriod = new SchedulePeriod(new DateOnly(2009, 12, 31), SchedulePeriodType.Day, 2);
             _person1.AddSchedulePeriod(schedulePeriod);
             schedulePeriod = new SchedulePeriod(new DateOnly(2010, 1, 4), SchedulePeriodType.Day, 7);
             _person1.AddSchedulePeriod(schedulePeriod);
 
             _person2 = PersonFactory.CreatePerson();
-            _person2.PermissionInformation.SetDefaultTimeZone((TimeZoneInfo.Utc));
+            _person2.PermissionInformation.SetDefaultTimeZone(TimeZoneInfo.Utc);
             schedulePeriod = new SchedulePeriod(new DateOnly(2009, 12, 1), SchedulePeriodType.Month, 1);
             _person2.AddSchedulePeriod(schedulePeriod);
 
@@ -83,7 +84,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 
         private void mockExpectations()
         {
-            DateTimePeriod dt = new DateTimePeriod(2010,1,1,2010,1,2);
+            var dt = new DateTimePeriod(2010,1,1,2010,1,2);
 
             Expect.Call(_schedulingResultStateHolder.Schedules).Return(_scheduleDictionary).Repeat.Any();
             Expect.Call(_scheduleDictionary[_person1]).Return(null).Repeat.Any();
@@ -91,12 +92,12 @@ namespace Teleopti.Ccc.DomainTest.Optimization
             for (int i = 0; i < 5; i++)
             {
                 Expect.Call(_scheduleDays[i].Person).Return(_person1).Repeat.Any();
-                Expect.Call(_scheduleDays[i].Period).Return(dt.MovePeriod(TimeSpan.FromDays(i))).Repeat.Any();
+                Expect.Call(_scheduleDays[i].DateOnlyAsPeriod).Return(new DateOnlyAsDateTimePeriod(new DateOnly(dt.StartDateTime.AddDays(i)), TimeZoneInfo.Utc)).Repeat.Any();
             }
             for (int i = 0; i < 5; i++)
             {
                 Expect.Call(_scheduleDays[i + 5].Person).Return(_person2).Repeat.Any();
-                Expect.Call(_scheduleDays[i + 5].Period).Return(dt.MovePeriod(TimeSpan.FromDays(i))).Repeat.Any();
+				Expect.Call(_scheduleDays[i + 5].DateOnlyAsPeriod).Return(new DateOnlyAsDateTimePeriod(new DateOnly(dt.StartDateTime.AddDays(i)), TimeZoneInfo.Utc)).Repeat.Any();
             }
         }
     }

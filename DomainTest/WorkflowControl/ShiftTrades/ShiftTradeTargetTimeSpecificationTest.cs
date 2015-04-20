@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using NUnit.Framework;
 using Rhino.Mocks;
 using Teleopti.Ccc.Domain.AgentInfo.Requests;
+using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Optimization;
 using Teleopti.Ccc.Domain.WorkflowControl;
 using Teleopti.Ccc.Domain.WorkflowControl.ShiftTrades;
@@ -25,7 +26,6 @@ namespace Teleopti.Ccc.DomainTest.WorkflowControl.ShiftTrades
         private IProjectionService _projectionService;
         private IVisualLayerCollection _visualLayerCollection;
 
-
         [SetUp]
         public void Setup()
         {
@@ -39,27 +39,29 @@ namespace Teleopti.Ccc.DomainTest.WorkflowControl.ShiftTrades
             _range = _mocks.StrictMock<IScheduleRange>();
             _projectionService = _mocks.StrictMock<IProjectionService>();
             _visualLayerCollection = _mocks.StrictMock<IVisualLayerCollection>();
-
         }
 
         [Test]
         public void VerifyReturnsTrueIfAllInternalIsTrue()
         {
-            IPerson person1 = PersonFactory.CreatePerson("P1");
-            person1.AddSchedulePeriod(SchedulePeriodFactory.CreateSchedulePeriod(new DateOnly(2010, 1, 1), SchedulePeriodType.Day, 1));
-            person1.AddPersonPeriod(PersonPeriodFactory.CreatePersonPeriod(new DateOnly(2010, 1, 1)));
+			var day = new DateOnly(2010, 1, 1);
+			
+			var person1 = PersonFactory.CreatePerson("P1");
+	        person1.AddSchedulePeriod(SchedulePeriodFactory.CreateSchedulePeriod(day, SchedulePeriodType.Day, 1));
+            person1.AddPersonPeriod(PersonPeriodFactory.CreatePersonPeriod(day));
             person1.WorkflowControlSet = new WorkflowControlSet("Hej");
-            IPerson person2 = PersonFactory.CreatePerson("P2");
-            person2.AddSchedulePeriod(SchedulePeriodFactory.CreateSchedulePeriod(new DateOnly(2010, 1, 1), SchedulePeriodType.Day, 1));
-            person2.AddPersonPeriod(PersonPeriodFactory.CreatePersonPeriod(new DateOnly(2010, 1, 1)));
+            
+			var person2 = PersonFactory.CreatePerson("P2");
+            person2.AddSchedulePeriod(SchedulePeriodFactory.CreateSchedulePeriod(day, SchedulePeriodType.Day, 1));
+            person2.AddPersonPeriod(PersonPeriodFactory.CreatePersonPeriod(day));
             person2.WorkflowControlSet = new WorkflowControlSet("Hej igen");
-            DateTimePeriod dt = new DateTimePeriod(2010, 1, 1, 2020, 1, 2);
+
             using(_mocks.Record())
             {
                 Expect.Call(_part1.Person).Return(person1).Repeat.Any();
-                Expect.Call(_part2.Person).Return(person2).Repeat.Any();
-                Expect.Call(_part1.Period).Return(dt).Repeat.Any();
-                Expect.Call(_part2.Period).Return(dt).Repeat.Any();
+				Expect.Call(_part2.Person).Return(person2).Repeat.Any();
+				Expect.Call(_part1.DateOnlyAsPeriod).Return(new DateOnlyAsDateTimePeriod(day, TimeZoneInfo.Utc)).Repeat.Any();
+				Expect.Call(_part2.DateOnlyAsPeriod).Return(new DateOnlyAsDateTimePeriod(day, TimeZoneInfo.Utc)).Repeat.Any();
                 Expect.Call(_part1.SignificantPart()).Return(SchedulePartView.MainShift).Repeat.Any();
                 Expect.Call(_part2.SignificantPart()).Return(SchedulePartView.MainShift).Repeat.Any();
                 Expect.Call(_part1.Clone()).Return(_part1).Repeat.Any();
@@ -70,7 +72,7 @@ namespace Teleopti.Ccc.DomainTest.WorkflowControl.ShiftTrades
                 _part2.Clear<IPersonAssignment>(); //These should not be here, but something is wrong in the merge
                 Expect.Call(_stateHolder.Schedules).Return(_dic).Repeat.Any();
                 Expect.Call(_dic[person1]).Return(_range).Repeat.Once();
-                Expect.Call(_range.ScheduledDay(new DateOnly(2010, 1, 1))).Return(_part1).Repeat.Once();
+                Expect.Call(_range.ScheduledDay(day)).Return(_part1).Repeat.Once();
                 Expect.Call(_part1.ProjectionService()).Return(_projectionService).Repeat.Once();
                 Expect.Call(_projectionService.CreateProjection()).Return(_visualLayerCollection).Repeat.Once();
                 Expect.Call(_visualLayerCollection.ContractTime()).Return(TimeSpan.FromHours(8)).Repeat.Once();
@@ -78,7 +80,7 @@ namespace Teleopti.Ccc.DomainTest.WorkflowControl.ShiftTrades
                                                                               TimeSpan.FromHours(8))).Repeat.Once();
 
                 Expect.Call(_dic[person2]).Return(_range).Repeat.Once();
-                Expect.Call(_range.ScheduledDay(new DateOnly(2010, 1, 1))).Return(_part2).Repeat.Once();
+                Expect.Call(_range.ScheduledDay(day)).Return(_part2).Repeat.Once();
                 Expect.Call(_part2.ProjectionService()).Return(_projectionService).Repeat.Once();
                 Expect.Call(_projectionService.CreateProjection()).Return(_visualLayerCollection).Repeat.Once();
                 Expect.Call(_visualLayerCollection.ContractTime()).Return(TimeSpan.FromHours(8)).Repeat.Once();
@@ -94,21 +96,24 @@ namespace Teleopti.Ccc.DomainTest.WorkflowControl.ShiftTrades
         [Test]
         public void VerifyReturnsFalseIfAnyInternalIsFalse()
         {
-            IPerson person1 = PersonFactory.CreatePerson("P1");
-            person1.AddSchedulePeriod(SchedulePeriodFactory.CreateSchedulePeriod(new DateOnly(2010, 1, 1), SchedulePeriodType.Day, 1));
-            person1.AddPersonPeriod(PersonPeriodFactory.CreatePersonPeriod(new DateOnly(2010, 1, 1)));
+			var day = new DateOnly(2010, 1, 1);
+			
+			var person1 = PersonFactory.CreatePerson("P1");
+	        person1.AddSchedulePeriod(SchedulePeriodFactory.CreateSchedulePeriod(day, SchedulePeriodType.Day, 1));
+            person1.AddPersonPeriod(PersonPeriodFactory.CreatePersonPeriod(day));
             person1.WorkflowControlSet = new WorkflowControlSet("Hej");
-            IPerson person2 = PersonFactory.CreatePerson("P2");
-            person2.AddSchedulePeriod(SchedulePeriodFactory.CreateSchedulePeriod(new DateOnly(2010, 1, 1), SchedulePeriodType.Day, 1));
-            person2.AddPersonPeriod(PersonPeriodFactory.CreatePersonPeriod(new DateOnly(2010, 1, 1)));
+            
+			var person2 = PersonFactory.CreatePerson("P2");
+            person2.AddSchedulePeriod(SchedulePeriodFactory.CreateSchedulePeriod(day, SchedulePeriodType.Day, 1));
+            person2.AddPersonPeriod(PersonPeriodFactory.CreatePersonPeriod(day));
             person2.WorkflowControlSet = new WorkflowControlSet("Hej igen");
-            DateTimePeriod dt = new DateTimePeriod(2010, 1, 1, 2020, 1, 2);
-            using (_mocks.Record())
+            
+			using (_mocks.Record())
             {
                 Expect.Call(_part1.Person).Return(person1).Repeat.Any();
                 Expect.Call(_part2.Person).Return(person2).Repeat.Any();
-                Expect.Call(_part1.Period).Return(dt).Repeat.Any();
-                Expect.Call(_part2.Period).Return(dt).Repeat.Any();
+                Expect.Call(_part1.DateOnlyAsPeriod).Return(new DateOnlyAsDateTimePeriod(day, TimeZoneInfo.Utc)).Repeat.Any();
+				Expect.Call(_part2.DateOnlyAsPeriod).Return(new DateOnlyAsDateTimePeriod(day, TimeZoneInfo.Utc)).Repeat.Any();
                 Expect.Call(_part1.SignificantPart()).Return(SchedulePartView.MainShift).Repeat.Any();
                 Expect.Call(_part2.SignificantPart()).Return(SchedulePartView.MainShift).Repeat.Any();
                 Expect.Call(_part1.Clone()).Return(_part1).Repeat.Any();
@@ -119,7 +124,7 @@ namespace Teleopti.Ccc.DomainTest.WorkflowControl.ShiftTrades
                 _part2.Merge(_part1, false);
                 Expect.Call(_stateHolder.Schedules).Return(_dic).Repeat.Any();
                 Expect.Call(_dic[person1]).Return(_range).Repeat.Once();
-                Expect.Call(_range.ScheduledDay(new DateOnly(2010, 1, 1))).Return(_part1).Repeat.Once();
+                Expect.Call(_range.ScheduledDay(day)).Return(_part1).Repeat.Once();
                 Expect.Call(_part1.ProjectionService()).Return(_projectionService).Repeat.Once();
                 Expect.Call(_projectionService.CreateProjection()).Return(_visualLayerCollection).Repeat.Once();
                 Expect.Call(_visualLayerCollection.ContractTime()).Return(TimeSpan.FromHours(8)).Repeat.Once();
@@ -127,7 +132,7 @@ namespace Teleopti.Ccc.DomainTest.WorkflowControl.ShiftTrades
                                                                               TimeSpan.FromHours(8))).Repeat.Once();
 
                 Expect.Call(_dic[person2]).Return(_range).Repeat.Once();
-                Expect.Call(_range.ScheduledDay(new DateOnly(2010, 1, 1))).Return(_part2).Repeat.Once();
+                Expect.Call(_range.ScheduledDay(day)).Return(_part2).Repeat.Once();
                 Expect.Call(_part2.ProjectionService()).Return(_projectionService).Repeat.Once();
                 Expect.Call(_projectionService.CreateProjection()).Return(_visualLayerCollection).Repeat.Once();
                 Expect.Call(_visualLayerCollection.ContractTime()).Return(TimeSpan.FromHours(8)).Repeat.Once();
@@ -149,16 +154,11 @@ namespace Teleopti.Ccc.DomainTest.WorkflowControl.ShiftTrades
 
         private IList<IShiftTradeSwapDetail> tradeDetails()
         {
-            // I listan ligger bara ett ChangeRequest, motbytet skapas av validatorn
             IList<IShiftTradeSwapDetail> ret = new List<IShiftTradeSwapDetail>();
             IShiftTradeSwapDetail detail1 = new ShiftTradeSwapDetail(null, null, new DateOnly(), new DateOnly());
             detail1.SchedulePartFrom = _part1;
             detail1.SchedulePartTo = _part2;
             ret.Add(detail1);
-            //IShiftTradeSwapDetail detail2 = new ShiftTradeSwapDetail(null, null, new DateOnly(), new DateOnly());
-            //detail2.SchedulePartFrom = _part2;
-            //detail2.SchedulePartTo = _part1;
-            //ret.Add(detail2);
 
             return ret;
         }
