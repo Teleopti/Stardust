@@ -16,6 +16,12 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Models.TeamSchedule
 		public bool ShiftTradeBulletinBoardPermission { get; set; }
 	}
 
+	public class PersonSchedule
+	{
+		public IPerson Person { get; set; }
+		public IPersonScheduleDayReadModel Schedule { get; set; }
+	}
+
 	public class TeamScheduleViewModelReworked
 	{
 		

@@ -35,12 +35,12 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Portal.DataProvider
 		}
 
 		public bool IsPersonSchedulePublished(DateOnly date,
-			IPerson person)
+			IPerson person, ScheduleVisibleReasons reason = ScheduleVisibleReasons.Published)
 		{
 			var dayAndPeriod = new DateOnlyAsDateTimePeriod(date,
 				person.PermissionInformation.DefaultTimeZone());
 			var schedulePublishedSpecification = new SchedulePublishedSpecification(person.WorkflowControlSet,
-				ScheduleVisibleReasons.Published);
+				reason);
 			var schedIsPublished = schedulePublishedSpecification.IsSatisfiedBy(dayAndPeriod.DateOnly);
 			return schedIsPublished;
 		}

@@ -10,6 +10,6 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Portal.DataProvider
 		bool HasOrganisationDetailPermission(string applicationFunctionPath, DateOnly date, IAuthorizeOrganisationDetail authorizeOrganisationDetail);
 
 		bool IsPersonSchedulePublished(DateOnly date,
-			IPerson person);
+			IPerson person, ScheduleVisibleReasons reason = ScheduleVisibleReasons.Published);
 	}
 }

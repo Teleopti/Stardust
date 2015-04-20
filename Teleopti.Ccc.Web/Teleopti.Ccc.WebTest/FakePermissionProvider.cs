@@ -9,7 +9,7 @@ namespace Teleopti.Ccc.WebTest
 		public bool HasPersonPermission(string applicationFunctionPath, DateOnly date, IPerson person) { return true; }
 		public bool HasTeamPermission(string applicationFunctionPath, DateOnly date, ITeam team) { return true; }
 		public bool HasOrganisationDetailPermission(string applicationFunctionPath, DateOnly date, IAuthorizeOrganisationDetail authorizeOrganisationDetail) { return true; }
-		public bool IsPersonSchedulePublished(DateOnly date, IPerson person)
+		public bool IsPersonSchedulePublished(DateOnly date, IPerson person, ScheduleVisibleReasons reason)
 		{
 			return true;;
 		}
