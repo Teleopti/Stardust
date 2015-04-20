@@ -77,7 +77,18 @@
 							<div class="alert-warning notice-spacer" ng-show="workload.noHistoricalDataForForecasting"><i class='mdi mdi-alert'></i> Warning: There is no historical data available for forecasting.</div>
 						</div>
 						<div class="wfm-block">
-							<linechart data="data" options="options" mode="" width="1000" height="500"></linechart>
+							<form>
+								<div class="wfm-radio forecast-method" ng-repeat="method in workload.forecastMethods">
+									<input type="radio" ng-model="workload.selectedMethod" ng-change="workload.methodChanged(workload.selectedMethod)" name="{{workload.Id}}" id='{{method.DomId}}' value="{{method.ForecastMethodType}}" />
+									<label for='{{method.DomId}}'>
+										<span class="wfm-radio-toggle"></span>
+										<span class="wfm-radio-label pull-left">{{method.Name}}</span>
+									</label>
+								</div>
+							</form>
+						</div>
+						<div class="wfm-block">
+							<linechart data="workload.chartData" options="workload.chartOptions" mode="" width="1000" height="500"></linechart>
 						</div>
 					<div class="modal-footer">
 						<aside>
