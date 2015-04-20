@@ -1,5 +1,3 @@
-
-
 <div class="material-depth-1 navbar navbar-default">
 	<div class="navbar-header content">
 		<div class="navbar-left">
@@ -19,9 +17,9 @@
 							<li class="animate-repeat" ng-repeat="item in searchResult | filter:{ SearchGroup: gp }">
 								<a ui-sref='resourceplanner'>{{item.Name}}</a>
 							</li>
-						</div>
+							<li class="animate-repeat" ng-if="searchResult.length == 0">
+</div>
 						
-						<li class="animate-repeat" ng-if="results.length == 0">
 					</ul>
 				</div>
 			</span>

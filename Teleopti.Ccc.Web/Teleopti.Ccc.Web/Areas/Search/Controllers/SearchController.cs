@@ -1,15 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Globalization;
 using System.Linq;
 using System.Web.Http;
 using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.FeatureFlags;
-using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Infrastructure.Toggle;
-using Teleopti.Ccc.IocCommon.Toggle;
-using Teleopti.Ccc.Web.Areas.MyTime.Core.Portal.DataProvider;
 
 namespace Teleopti.Ccc.Web.Areas.Search.Controllers
 {
@@ -30,7 +26,7 @@ namespace Teleopti.Ccc.Web.Areas.Search.Controllers
 		{
 			var searchResultModel = new List<SearchResultModel>();
 
-			if (_toggleManager.IsEnabled(Toggles.Wfm_ResourcePlanner_32892) &&  UserTexts.Resources.NextPlanningPeriod.IndexOf(keyword,StringComparison.CurrentCultureIgnoreCase) > -1)
+			if (_toggleManager.IsEnabled(Toggles.Wfm_ResourcePlanner_32892) && !string.IsNullOrEmpty(keyword) && UserTexts.Resources.NextPlanningPeriod.IndexOf(keyword,StringComparison.CurrentCultureIgnoreCase) > -1)
 			{
 				var currentPplanningPeriodRange = _planningPeriodProvider.Current().Range;
 				searchResultModel.AddRange(new[]

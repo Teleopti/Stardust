@@ -4,8 +4,8 @@ var search = angular.module('wfm.searching', []);
 search.controller('SearchCtrl', [
 	'$scope', '$filter', '$state', 'SearchSvrc',
 	function($scope, $filter, $state, SearchSvrc) {
-		$scope.searchResult = [];
 		$scope.keyword = '';
+		$scope.searchResult = [];
 		$scope.searchResultGroups = [];
 		$scope.searchKeyword = function() {
 			SearchSvrc.search.query({ keyword: $scope.keyword }).$promise.then(function(result) {
