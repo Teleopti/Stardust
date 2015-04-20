@@ -2,7 +2,8 @@
 {
 	public enum ForecastMethodType
 	{
-		TeleoptiClassic,
-		TeleoptiClassicWithTrend
+		None = -1,
+		TeleoptiClassic = 0,
+		TeleoptiClassicWithTrend = 1
 	}
 }

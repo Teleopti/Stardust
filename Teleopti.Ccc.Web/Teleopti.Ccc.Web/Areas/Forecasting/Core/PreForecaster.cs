@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.Forecasting.Angel;
@@ -49,8 +50,8 @@ namespace Teleopti.Ccc.Web.Areas.Forecasting.Core
 				data.Add(new
 				{
 					date = dateKey.Date,
-					v0 = forecastResult[dateKey][ForecastMethodType.TeleoptiClassic],
-					v1 = forecastResult[dateKey][ForecastMethodType.TeleoptiClassicWithTrend]
+					v0 = Math.Round(forecastResult[dateKey][ForecastMethodType.TeleoptiClassic], 1),
+					v1 = Math.Round(forecastResult[dateKey][ForecastMethodType.TeleoptiClassicWithTrend], 1)
 				});
 			}
 			var methods = new List<dynamic>();
@@ -62,14 +63,18 @@ namespace Teleopti.Ccc.Web.Areas.Forecasting.Core
 					ForecastMethodType = accuracy.MethodId
 				});
 			}
+			var bestAccuracy = evaluateResult.Accuracies.SingleOrDefault(x => x.IsSelected);
+
+			var forecastMethodRecommended = bestAccuracy == null ? ForecastMethodType.None : bestAccuracy.MethodId;
 			return new WorkloadForecastViewModel
 			{
 				Name = workload.Name,
 				WorkloadId = workload.Id.Value,
-				SelectedForecastMethod = evaluateResult.Accuracies.Single(x => x.IsSelected).MethodId,
+				ForecastMethodRecommended = forecastMethodRecommended,
 				ForecastMethods = methods.ToArray(),
 				ForecastDays = data.ToArray()
 			};
+
 		}
 	}
 }
