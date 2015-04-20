@@ -27,6 +27,7 @@ namespace Teleopti.Ccc.Web.Broker
 		{
 			Task.Factory.StartNew(() =>
 			{
+				Started();
 				foreach (var action in actions.GetConsumingEnumerable(cancellation.Token))
 				{
 					try
@@ -40,6 +41,11 @@ namespace Teleopti.Ccc.Web.Broker
 					WaitForNext(actionDelay);
 				}
 			});
+		}
+
+		protected virtual void Started()
+		{
+
 		}
 
 		protected virtual void WaitForNext(int waitMilliseconds)

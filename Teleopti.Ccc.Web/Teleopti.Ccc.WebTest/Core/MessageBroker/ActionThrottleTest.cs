@@ -30,6 +30,7 @@ namespace Teleopti.Ccc.WebTest.Core.MessageBroker
 			target.Do(() => { executed++; });
 			target.Do(() => { executed++; });
 			target.Start();
+			target.WaitUntillStarted();
 
 			Assert.That(() => executed, Is.EqualTo(1).After(1000, 1));
 			target.SignalHasWaited();
@@ -46,6 +47,7 @@ namespace Teleopti.Ccc.WebTest.Core.MessageBroker
 			target.Do(() => { threadId1 = Thread.CurrentThread.ManagedThreadId; });
 			target.Do(() => { threadId2 = Thread.CurrentThread.ManagedThreadId; });
 			target.Start();
+			target.WaitUntillStarted();
 
 			Assert.That(() => threadId1, Is.Not.EqualTo(0).After(1000, 1));
 			threadId1.Should().Not.Be(Thread.CurrentThread.ManagedThreadId);
@@ -62,6 +64,7 @@ namespace Teleopti.Ccc.WebTest.Core.MessageBroker
 
 			target.Do(() => { });
 			target.Start();
+			target.WaitUntillStarted();
 
 			Assert.That(() => target.WaitedMilliseconds, Is.EqualTo(1000).After(1000, 1));
 		}
@@ -76,6 +79,7 @@ namespace Teleopti.Ccc.WebTest.Core.MessageBroker
 			target.Do(() => { executed++; });
 			target.Do(() => { executed++; });
 			target.Start();
+			target.WaitUntillStarted();
 			target.SignalHasWaited();
 
 			Assert.That(() => executed, Is.EqualTo(2).After(1000, 1));
@@ -101,6 +105,7 @@ namespace Teleopti.Ccc.WebTest.Core.MessageBroker
 	public class ActionThrottleUnderTest : ActionThrottle
 	{
 		private readonly AutoResetEvent _signal = new AutoResetEvent(false);
+		private readonly AutoResetEvent _started = new AutoResetEvent(false);
 
 		public ActionThrottleUnderTest(int actionsPerSecond)
 			: base(actionsPerSecond)
@@ -113,6 +118,16 @@ namespace Teleopti.Ccc.WebTest.Core.MessageBroker
 		}
 
 		public int WaitedMilliseconds { get; set; }
+		
+		protected override void Started()
+		{
+			_started.Set();
+		}
+
+		public void WaitUntillStarted()
+		{
+			_started.WaitOne();
+		}
 
 		protected override void WaitForNext(int waitMilliseconds)
 		{
