@@ -59,6 +59,19 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 		private void assignShiftProjection(IShiftProjectionCache shiftProjectionCache, TimeZoneInfo agentTimeZone, IScheduleDay destinationScheduleDay, DateOnly day, ISchedulePartModifyAndRollbackService schedulePartModifyAndRollbackService)
         {
 			shiftProjectionCache.SetDate(day, agentTimeZone);
+
+			if (destinationScheduleDay.PersonAssignment() != null && destinationScheduleDay.PersonAssignment().PersonalActivities().Any())
+			{
+				var mainShiftPeriod = shiftProjectionCache.TheMainShift.ProjectionService().CreateProjection().Period().GetValueOrDefault();
+				if (destinationScheduleDay.PersonAssignment().PersonalActivities().Any(personalShiftLayer => !mainShiftPeriod.Contains(personalShiftLayer.Period))) return;
+			}
+
+			if (destinationScheduleDay.PersonMeetingCollection().Any())
+			{
+				var mainShiftPeriod = shiftProjectionCache.TheMainShift.ProjectionService().CreateProjection().Period().GetValueOrDefault();
+				if (destinationScheduleDay.PersonMeetingCollection().Any(personMeeting => !mainShiftPeriod.Contains(personMeeting.Period))) return;		
+			}
+					
 			destinationScheduleDay.AddMainShift(shiftProjectionCache.TheMainShift);
 
             schedulePartModifyAndRollbackService.Modify(destinationScheduleDay);

@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using NUnit.Framework;
@@ -83,8 +84,10 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 	            Expect.Call(() => _schedulePartModifyAndRollbackService.Modify(_scheduleDay));
 	            Expect.Call(_scheduleDay.DateOnlyAsPeriod).Return(_dateOnlyAsDateTimePeriod);
 	            Expect.Call(_shiftProjectionCache.WorkShiftProjectionPeriod).Return(new DateTimePeriod());
-	            Expect.Call(_resourceCalculateDelayer.CalculateIfNeeded(DateOnly.MinValue, new DateTimePeriod()))
-	                  .Return(true);
+	            Expect.Call(_resourceCalculateDelayer.CalculateIfNeeded(DateOnly.MinValue, new DateTimePeriod())).Return(true);
+
+	            Expect.Call(_scheduleDay.PersonAssignment()).Return(null);
+	            Expect.Call(_scheduleDay.PersonMeetingCollection()).Return(new ReadOnlyCollection<IPersonMeeting>(new List<IPersonMeeting>()));
             }
 
             using (_mock.Playback())
@@ -121,7 +124,70 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
             }
 
         }
+
+	    [Test]
+	    public void ShouldNotScheduleIfMainShiftPeriodNotContainsPersonalShift()
+	    {
+		    var personAssignment = _mock.StrictMock<IPersonAssignment>();
+		    var personalShiftLayer = _mock.StrictMock<IPersonalShiftLayer>();
+		    var personalActivities = new List<IPersonalShiftLayer> {personalShiftLayer};
+
+		    using (_mock.Record())
+		    {
+			    Expect.Call(_matrix.Person).Return(_person);
+			    Expect.Call(_matrix.SchedulePeriod).Return(_person.VirtualSchedulePeriod(DateOnly.MinValue));
+			    Expect.Call(_matrix.GetScheduleDayByKey(DateOnly.MinValue)).Return(_scheduleDayPro);
+			    Expect.Call(_scheduleDayPro.DaySchedulePart()).Return(_scheduleDay);
+			    Expect.Call(_matrix.UnlockedDays).Return(new ReadOnlyCollection<IScheduleDayPro>(new List<IScheduleDayPro> {_scheduleDayPro}));
+			    Expect.Call(_scheduleDay.IsScheduled()).Return(false);
+			    Expect.Call(() => _shiftProjectionCache.SetDate(DateOnly.MinValue, _person.PermissionInformation.DefaultTimeZone()));
+			    Expect.Call(_shiftProjectionCache.TheMainShift).Return(_mainShift);
+
+			    Expect.Call(_scheduleDay.DateOnlyAsPeriod).Return(_dateOnlyAsDateTimePeriod);
+			    Expect.Call(_shiftProjectionCache.WorkShiftProjectionPeriod).Return(new DateTimePeriod());
+			    Expect.Call(_resourceCalculateDelayer.CalculateIfNeeded(DateOnly.MinValue, new DateTimePeriod())).Return(true);
+
+			    Expect.Call(_scheduleDay.PersonAssignment()).Return(personAssignment).Repeat.AtLeastOnce();
+			    Expect.Call(personAssignment.PersonalActivities()).Return(personalActivities).Repeat.Twice();
+			    Expect.Call(personalShiftLayer.Period).Return(_dateOnlyAsDateTimePeriod.Period().MovePeriod(TimeSpan.FromHours(1)));
+		    }
+
+		    using (_mock.Playback())
+		    {
+			    _target.ExecutePerDayPerPerson(_person, DateOnly.MinValue, _teamBlockInfo, _shiftProjectionCache, _schedulePartModifyAndRollbackService, _resourceCalculateDelayer);
+		    }
+	    }
+
+		[Test]
+		public void ShouldNotScheduleIfMainShiftPeriodNotContainsPersonalMeeting()
+		{
+			var personMeeting = _mock.StrictMock<IPersonMeeting>();
+			var meetings = new List<IPersonMeeting> {personMeeting};
+
+			using (_mock.Record())
+			{
+				Expect.Call(_matrix.Person).Return(_person);
+				Expect.Call(_matrix.SchedulePeriod).Return(_person.VirtualSchedulePeriod(DateOnly.MinValue));
+				Expect.Call(_matrix.GetScheduleDayByKey(DateOnly.MinValue)).Return(_scheduleDayPro);
+				Expect.Call(_scheduleDayPro.DaySchedulePart()).Return(_scheduleDay);
+				Expect.Call(_matrix.UnlockedDays).Return(new ReadOnlyCollection<IScheduleDayPro>(new List<IScheduleDayPro> { _scheduleDayPro }));
+				Expect.Call(_scheduleDay.IsScheduled()).Return(false);
+				Expect.Call(() => _shiftProjectionCache.SetDate(DateOnly.MinValue, _person.PermissionInformation.DefaultTimeZone()));
+				Expect.Call(_shiftProjectionCache.TheMainShift).Return(_mainShift);
+
+				Expect.Call(_scheduleDay.DateOnlyAsPeriod).Return(_dateOnlyAsDateTimePeriod);
+				Expect.Call(_shiftProjectionCache.WorkShiftProjectionPeriod).Return(new DateTimePeriod());
+				Expect.Call(_resourceCalculateDelayer.CalculateIfNeeded(DateOnly.MinValue, new DateTimePeriod())).Return(true);
+
+				Expect.Call(_scheduleDay.PersonAssignment()).Return(null);
+				Expect.Call(_scheduleDay.PersonMeetingCollection()).Return(new ReadOnlyCollection<IPersonMeeting>(meetings)).Repeat.Twice();
+				Expect.Call(personMeeting.Period).Return(_dateOnlyAsDateTimePeriod.Period().MovePeriod(TimeSpan.FromHours(1)));
+			}
+
+			using (_mock.Playback())
+			{
+				_target.ExecutePerDayPerPerson(_person, DateOnly.MinValue, _teamBlockInfo, _shiftProjectionCache, _schedulePartModifyAndRollbackService, _resourceCalculateDelayer);
+			}
+		}
     }
-
-
 }

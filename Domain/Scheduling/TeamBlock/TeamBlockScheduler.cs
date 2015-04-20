@@ -130,6 +130,23 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 				schedulingOptions.NotAllowedShiftCategories.Clear();	
 			}
 
+			if (!success && _teamBlockSchedulingOptions.IsBlockSchedulingWithSameShift(schedulingOptions))
+			{
+				_teamBlockClearer.ClearTeamBlock(schedulingOptions, rollbackService, teamBlockInfo);
+				roleModelShift = _roleModelSelector.Select(teamBlockInfo, datePointer, selectedTeamMembers.First(),schedulingOptions, shiftNudgeDirective.EffectiveRestriction, _isMaxSeatToggleEnabled);
+				success = tryScheduleBlock(teamBlockInfo, schedulingOptions, selectedBlockDays,roleModelShift, rollbackService, resourceCalculateDelayer, schedulingResultStateHolder, shiftNudgeDirective, _isMaxSeatToggleEnabled);
+
+				if (!success)
+				{
+					rollbackService.Rollback();
+
+					foreach (var selectedBlockDay in selectedBlockDays)
+					{
+						resourceCalculateDelayer.CalculateIfNeeded(selectedBlockDay, null);
+					}	
+				}
+			}
+
 			return success;
 		}
 
