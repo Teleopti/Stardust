@@ -29,7 +29,7 @@ Teleopti.MyTimeWeb.Schedule.ShiftExchangeOfferViewModel = function ShiftExchange
 	self.EndTime = ko.observable();
 	self.DateFormat = ko.observable();
 	self.Id = ko.observable(null);
-	self.WeekStart = ko.observable(2);
+	self.WeekStart = ko.observable(1);
 
 	self.Toggle31317Enabled = ko.observable(false);
 
