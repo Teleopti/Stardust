@@ -61,8 +61,6 @@ namespace Teleopti.Ccc.Web.Core.IoC
 			builder.RegisterControllers(typeof(WebAppModule).Assembly).ApplyAspects();
 			builder.RegisterHubs(typeof(WebAppModule).Assembly).ApplyAspects();
 
-			builder.Register(c => SignalRConfiguration.ActionScheduler).As<IActionScheduler>().ExternallyOwned();
-
 			if (_httpConfiguration != null)
 				builder.RegisterWebApiFilterProvider(_httpConfiguration);
 			builder.RegisterModule(new AutofacWebTypesModule());
