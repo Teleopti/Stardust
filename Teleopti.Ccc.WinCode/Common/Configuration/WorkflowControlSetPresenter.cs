@@ -474,7 +474,6 @@ namespace Teleopti.Ccc.WinCode.Common.Configuration
             var ret = new List<DateOnlyPeriod> { new DateOnlyPeriod(start, end) };
 
             ret.AddRange(BasicVisualizerPreferencePeriods());
-            //ret.AddRange(BasicVisualizerStudentAvailabilityPeriods());
             return ret;
         }
 
