@@ -29,6 +29,10 @@ var wfm = angular.module('wfm', [
 	'wfm.notifications',
 	'wfm.notice',
 	'wfm.areas',
+	'ui.grid',
+	'ui.grid.autoResize',
+	'ui.grid.exporter',
+	'ui.grid.selection',
 	'wfm.rta'
 ]);
 wfm.config([
