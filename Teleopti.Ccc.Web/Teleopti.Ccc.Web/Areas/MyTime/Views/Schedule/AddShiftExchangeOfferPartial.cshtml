@@ -17,11 +17,11 @@
 						<div class="row">
 							<div class="col-xs-6 announce-shift-matching-date">
 								<div class="input-group">
-									<input class="form-control" data-bind="enable: IsEditable(), datepicker: DateToForPublish, datepickerOptions: {autoHide: true, format: DateFormat() }"/>
+									<input class="form-control" data-bind="enable: IsEditable(), datepicker: DateToForPublish, datepickerOptions: {autoHide: true, format: DateFormat(), weekStart: WeekStart() }" />
 									<span class="input-group-addon">
-                                        <button class="btn-datepicker" data-bind="datepicker: DateToForPublish, datepickerOptions: {autoHide: true, format: DateFormat()}, enable: IsEditable">
-                                            <i class="glyphicon glyphicon-calendar"></i>
-                                        </button>
+										<button class="btn-datepicker" data-bind="datepicker: DateToForPublish, datepickerOptions: {autoHide: true, format: DateFormat(), weekStart: WeekStart()}, enable: IsEditable">
+											<i class="glyphicon glyphicon-calendar"></i>
+										</button>
                                     </span>
 								</div>
 							</div>
@@ -83,9 +83,9 @@
 						<div class="row">
 							<div class="col-xs-6">
 								<div class="input-group">
-									<input id="validto-datepicker" class="shift-exchange-offer-end-date form-control" data-bind="enable: IsEditable(), datepicker: OfferValidTo, datepickerOptions: {autoHide: true, format: DateFormat() }"/>
+									<input id="validto-datepicker" class="shift-exchange-offer-end-date form-control" data-bind="enable: IsEditable(), datepicker: OfferValidTo, datepickerOptions: {autoHide: true, format: DateFormat(), weekStart: WeekStart() }" />
 									<span class="input-group-addon">
-										<button class="btn-datepicker" data-bind="datepicker: OfferValidTo, datepickerOptions: {autoHide: true, format: DateFormat() }, enable: IsEditable">
+										<button class="btn-datepicker" data-bind="datepicker: OfferValidTo, datepickerOptions: {autoHide: true, format: DateFormat(), weekStart: WeekStart()}, enable: IsEditable">
 											<i class="glyphicon glyphicon-calendar"></i>
 										</button>
 									</span>

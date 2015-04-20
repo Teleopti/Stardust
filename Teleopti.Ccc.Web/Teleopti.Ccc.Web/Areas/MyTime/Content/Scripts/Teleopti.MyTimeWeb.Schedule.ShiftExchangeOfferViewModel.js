@@ -29,6 +29,7 @@ Teleopti.MyTimeWeb.Schedule.ShiftExchangeOfferViewModel = function ShiftExchange
 	self.EndTime = ko.observable();
 	self.DateFormat = ko.observable();
 	self.Id = ko.observable(null);
+	self.WeekStart = ko.observable(2);
 
 	self.Toggle31317Enabled = ko.observable(false);
 
@@ -43,6 +44,9 @@ Teleopti.MyTimeWeb.Schedule.ShiftExchangeOfferViewModel = function ShiftExchange
 	self.LoadOptions = function (setShiftType) {
 		self.Toggle31317Enabled(Teleopti.MyTimeWeb.Common.IsToggleEnabled('MyTimeWeb_TradeWithDayOffAndEmptyDay_31317'));
 		self.getWishShiftTypes(setShiftType);
+		Teleopti.MyTimeWeb.UserInfo.WhenLoaded(function (data) {
+			self.WeekStart(data.WeekStart);
+		});
 	}
 
 	self.LoadDefaultData = function (defaultData) {
