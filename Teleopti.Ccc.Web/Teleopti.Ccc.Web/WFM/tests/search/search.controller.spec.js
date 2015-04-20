@@ -25,15 +25,37 @@ describe('SearchCtrl', function () {
 		}
 	};
 
-	
-	it('return the correct number of search groups', inject(function ($controller) {
+	it('should return no result if less then two keywords', inject(function ($controller) {
 		var scope = $rootScope.$new();
 
 		$controller('SearchCtrl', { $scope: scope, SearchSvrc: mockSearchService });
+		scope.keyword = 's';
+		scope.searchKeyword();
+		scope.$digest();
 
-		scope.searchKeyword('sd');
+		expect(scope.searchResultGroups.length).toEqual(0);
+	}));
+	
+	it('should return the correct number of search groups', inject(function ($controller) {
+		var scope = $rootScope.$new();
+
+		$controller('SearchCtrl', { $scope: scope, SearchSvrc: mockSearchService });
+		scope.keyword = 'df';
+		scope.searchKeyword();
 		scope.$digest();
 		
 		expect(scope.searchResultGroups.length).toEqual(2);
+	}));
+
+	it('shoult reset search values', inject(function ($controller) {
+		var scope = $rootScope.$new();
+
+		$controller('SearchCtrl', { $scope: scope, SearchSvrc: mockSearchService });
+		scope.keyword = 'dfa';
+		scope.ResetSearch();
+		scope.$digest();
+
+		expect(scope.searchResultGroups.length).toEqual(0);
+		expect(scope.keyword).toEqual('');
 	}));
 });

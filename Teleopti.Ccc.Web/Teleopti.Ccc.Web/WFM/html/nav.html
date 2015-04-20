@@ -15,10 +15,10 @@
 					<ul class="wfm-list">
 						<div ng-repeat="gp in searchResultGroups">
 							<li class="animate-repeat" ng-repeat="item in searchResult | filter:{ SearchGroup: gp }">
-								<a ui-sref='resourceplanner'>{{item.Name}}</a>
+								<a ui-sref='resourceplanner' ng-click="ResetSearch()">{{item.Name}}</a>
 							</li>
 							<li class="animate-repeat" ng-if="searchResult.length == 0">
-</div>
+						</div>
 						
 					</ul>
 				</div>

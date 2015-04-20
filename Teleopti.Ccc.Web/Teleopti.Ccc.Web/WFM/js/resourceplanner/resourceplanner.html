@@ -22,7 +22,7 @@
 				</div>
 			</li>
 		</ul>
-		<button class="wfm-btn wfm-btn-primary" ng-click="LaunchSchedule(planningPeriod.StartDate,planningPeriod.EndDate) ; scheduleClicked = 'true'">Schedule</button><div ng-show="scheduledDays">{{scheduledDays}} days are scheduled</div>
+		<button class="wfm-btn wfm-btn-primary" ng-click="LaunchSchedule(planningPeriod.StartDate,planningPeriod.EndDate) ; scheduleClicked = 'true'">Schedule</button><span ng-show="scheduledDays">{{scheduledDays}} days are scheduled</span>
 		<div ng-show="scheduleClicked && scheduledDays==0">
 			<md-progress-linear md-mode="indeterminate"></md-progress-linear>
 			<p>Scheduling .. </p>

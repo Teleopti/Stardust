@@ -5,16 +5,29 @@
 			'$scope', '$filter', '$state', 'SearchSvrc',
 			function($scope, $filter, $state, SearchSvrc) {
 				$scope.keyword = '';
-				$scope.searchResult = [];
-				$scope.searchResultGroups = [];
+				$scope.ResetSearch = function() {
+					$scope.keyword = '';
+					search($scope.keyword);
+				};
 				$scope.searchKeyword = function() {
-					SearchSvrc.search.query({ keyword: $scope.keyword }).$promise.then(function(result) {
-						$scope.searchResult = result;
-						for (var i = 0; i < $scope.searchResult.length; i++) {
-							var name = $scope.searchResult[i].SearchGroup;
-							if ($scope.searchResultGroups.indexOf(name) == -1) $scope.searchResultGroups.push(name);
-						}
-					});
+					if ($scope.keyword.length > 1) {
+						search($scope.keyword);
+					} else {
+						search('');
+					}
+				};
+				var search = function(keyword) {
+					$scope.searchResultGroups = [];
+					$scope.searchResult = [];
+					if (keyword != '') {
+						SearchSvrc.search.query({ keyword: keyword }).$promise.then(function(result) {
+							$scope.searchResult = result;
+							for (var i = 0; i < $scope.searchResult.length; i++) {
+								var name = $scope.searchResult[i].SearchGroup;
+								if ($scope.searchResultGroups.indexOf(name) == -1) $scope.searchResultGroups.push(name);
+							}
+						});
+					}
 				};
 			}
 		]);
