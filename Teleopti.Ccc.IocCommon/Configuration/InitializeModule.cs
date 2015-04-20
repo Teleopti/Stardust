@@ -39,23 +39,24 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 				.As<IMessageListener>()
 				.SingleInstance();
 
-			builder.RegisterType<RecreateOnNoPingReply>().As<IConnectionKeepAliveStrategy>();
-			builder.RegisterType<RestartOnClosed>().As<IConnectionKeepAliveStrategy>();
-			builder.RegisterType<SignalRClient>()
-				.WithParameter(new NamedParameter("serverUrl", ConfigurationManager.AppSettings["MessageBroker"]))
-				.As<ISignalRClient>()
-				.As<IMessageBrokerUrl>()
-				.SingleInstance();
-			builder.RegisterType<SignalRSender>().As<Interfaces.MessageBroker.Client.IMessageSender>().SingleInstance();
-
-			// no really required
 			//builder.RegisterType<RecreateOnNoPingReply>().As<IConnectionKeepAliveStrategy>();
 			//builder.RegisterType<RestartOnClosed>().As<IConnectionKeepAliveStrategy>();
-			//builder.RegisterType<DisabledSignalRClient>()
+			//builder.RegisterType<SignalRClient>()
+			//	.WithParameter(new NamedParameter("serverUrl", ConfigurationManager.AppSettings["MessageBroker"]))
 			//	.As<ISignalRClient>()
 			//	.As<IMessageBrokerUrl>()
 			//	.SingleInstance();
-			//builder.RegisterType<HttpSender>().As<Interfaces.MessageBroker.Client.IMessageSender>().SingleInstance();
+			//builder.RegisterType<SignalRSender>().As<Interfaces.MessageBroker.Client.IMessageSender>().SingleInstance();
+
+			// registering keep alive strategies are not really required, but unit tests demands it
+			// this module is only used from the web project, so we dont need signal R at all
+			builder.RegisterType<RecreateOnNoPingReply>().As<IConnectionKeepAliveStrategy>();
+			builder.RegisterType<RestartOnClosed>().As<IConnectionKeepAliveStrategy>();
+			builder.RegisterType<DisabledSignalRClient>()
+				.As<ISignalRClient>()
+				.As<IMessageBrokerUrl>()
+				.SingleInstance();
+			builder.RegisterType<HttpSender>().As<Interfaces.MessageBroker.Client.IMessageSender>().SingleInstance();
 
 			builder.RegisterType<OneWayEncryption>().As<IOneWayEncryption>().SingleInstance();
 			builder.RegisterType<EnversConfiguration>().As<IEnversConfiguration>().SingleInstance();
