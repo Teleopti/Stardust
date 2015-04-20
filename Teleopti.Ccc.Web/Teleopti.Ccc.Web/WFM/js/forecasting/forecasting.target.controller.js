@@ -90,7 +90,7 @@ angular.module('wfm.forecasting.target', ['n3-line-chart'])
 							} else {
 								selectedMethod = data.ForecastMethodRecommended;
 							}
-							workload.chartOptions.series[selectedMethod + 1].thickness = "4px";
+							workload.chartOptions.series[selectedMethod + 1].thickness = "2px";
 							workload.selectedMethod = selectedMethod;
 						}).
 						error(function(data, status, headers, config) {
@@ -157,7 +157,7 @@ angular.module('wfm.forecasting.target', ['n3-line-chart'])
 								angular.forEach(workload.chartOptions.series, function (line) {
 									line.thickness = "1px";
 								});
-								workload.chartOptions.series[parseInt(newMethod) + 1].thickness = "4px";
+								workload.chartOptions.series[parseInt(newMethod) + 1].thickness = "2px";
 							};
 						});
 					});
