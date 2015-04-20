@@ -663,8 +663,8 @@ namespace Teleopti.Ccc.DomainTest.Collection
 					((ScheduleRange)target[pAss2.Person]).Add(pAss2);
 					CollectionAssert.Contains(
 					    target[person].ScheduledDay(new DateOnly(2000, 1, 1)).PersistableScheduleDataCollection(), pAss1);
-					CollectionAssert.Contains(
-					    target[person].ScheduledDay(new DateOnly(2000, 2, 1)).PersistableScheduleDataCollection(), pAss2);
+					CollectionAssert.DoesNotContain(
+						target[person].ScheduledDay(new DateOnly(2000, 2, 1)).PersistableScheduleDataCollection(), pAss2);
 				}
 			}
 		}
