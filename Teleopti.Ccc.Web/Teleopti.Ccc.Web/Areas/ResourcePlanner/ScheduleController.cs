@@ -100,11 +100,6 @@ namespace Teleopti.Ccc.Web.Areas.ResourcePlanner
 			var schedulerStateHolder = _schedulerStateHolder();
 			var stateHolder = schedulerStateHolder.SchedulingResultState;
 			stateHolder.PersonsInOrganization = allPeople;
-			stateHolder.Schedules =
-				_scheduleRepository.FindSchedulesForPersons(
-					new ScheduleDateTimePeriod(dateTimePeriod, selectedPeople, new SchedulerRangeToLoadCalculator(dateTimePeriod)),
-					scenario, new PersonsInOrganizationProvider(allPeople), new ScheduleDictionaryLoadOptions(true, false, false),
-					selectedPeople);
 			stateHolder.SkillDays = forecast;
 			allSkills.ForEach(stateHolder.Skills.Add);
 			schedulerStateHolder.SetRequestedScenario(scenario);
@@ -113,6 +108,9 @@ namespace Teleopti.Ccc.Web.Areas.ResourcePlanner
 			schedulerStateHolder.LoadCommonState(_currentUnitOfWorkFactory.LoggedOnUnitOfWorkFactory().CurrentUnitOfWork(), new RepositoryFactory());
 			stateHolder.AllPersonAccounts = _personAbsenceAccountRepository.FindByUsers(selectedPeople);
 			schedulerStateHolder.ResetFilteredPersons();
+			schedulerStateHolder.LoadSchedules(_scheduleRepository, new PersonsInOrganizationProvider(allPeople),
+				new ScheduleDictionaryLoadOptions(true, false, false),
+				new ScheduleDateTimePeriod(dateTimePeriod, selectedPeople, new SchedulerRangeToLoadCalculator(dateTimePeriod)));
 
 			_scheduleTagSetter().ChangeTagToSet(NullScheduleTag.Instance);
 			
@@ -138,6 +136,7 @@ namespace Teleopti.Ccc.Web.Areas.ResourcePlanner
 				DayOffTemplate = _dayOffTemplateRepository.FindAllDayOffsSortByDescription()[0],
 				ScheduleEmploymentType = ScheduleEmploymentType.FixedStaff,
 				GroupPageForShiftCategoryFairness = new GroupPageLight {Key = "Main", Name = UserTexts.Resources.Main},
+				GroupOnGroupPageForTeamBlockPer = new GroupPageLight {Key = "Main", Name = UserTexts.Resources.Main},
 				TagToUseOnScheduling = NullScheduleTag.Instance
 			}), new NoBackgroundWorker(), schedulerStateHolder, allSchedules, _groupPagePerDateHolder(),
 				_requiredScheduleHelper(),
