@@ -125,7 +125,8 @@ namespace Teleopti.Ccc.Web.Areas.ResourcePlanner
 
 			var daysScheduled = 0;
 			EventHandler<SchedulingServiceBaseEventArgs> schedulingServiceOnDayScheduled = (sender, args) => daysScheduled++;
-			_fixedStaffSchedulingService().DayScheduled += schedulingServiceOnDayScheduled;
+			var fixedStaffSchedulingService = _fixedStaffSchedulingService();
+			fixedStaffSchedulingService.DayScheduled += schedulingServiceOnDayScheduled;
 
 			_scheduleCommand().Execute(new OptimizerOriginalPreferences(new SchedulingOptions
 			{
@@ -141,7 +142,7 @@ namespace Teleopti.Ccc.Web.Areas.ResourcePlanner
 			}), new NoBackgroundWorker(), schedulerStateHolder, allSchedules, _groupPagePerDateHolder(),
 				_requiredScheduleHelper(),
 				new OptimizationPreferences());
-			_fixedStaffSchedulingService().DayScheduled -= schedulingServiceOnDayScheduled;
+			fixedStaffSchedulingService.DayScheduled -= schedulingServiceOnDayScheduled;
 
 			var conflicts = new List<PersistConflict>();
 			foreach (var schedule in schedulerStateHolder.Schedules)

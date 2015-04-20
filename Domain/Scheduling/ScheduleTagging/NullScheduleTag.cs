@@ -3,24 +3,20 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Scheduling.ScheduleTagging
 {
-
     public sealed class NullScheduleTag : IScheduleTag
     {
+		internal static readonly Lazy<NullScheduleTag> instance = new Lazy<NullScheduleTag>(()=>new NullScheduleTag());
+
         public string Description
         {
             get { return UserTexts.Resources.DefaultTag; }
             set { }
         }
 
-        NullScheduleTag()
-        {
-        }
-
         public static NullScheduleTag Instance
         {
-            get { return Nested.instance; }
+            get { return instance.Value; }
         }
-
 
         public bool Equals(IEntity other)
         {
@@ -37,12 +33,10 @@ namespace Teleopti.Ccc.Domain.Scheduling.ScheduleTagging
 
         public void SetId(Guid? newId)
         {
-
         }
 
         public void ClearId()
         {
-
         }
 
         public IPerson CreatedBy
@@ -65,20 +59,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.ScheduleTagging
             get { return null; }
         }
 
-
-        private class Nested
-        {
-            private Nested() { }
-            //// Explicit static constructor to tell C# compiler
-            //// not to mark type as beforefieldinit
-            //static Nested()
-            //{
-            //}
-
-            internal static readonly NullScheduleTag instance = new NullScheduleTag();
-        }
-
-
         public bool IsDeleted
         {
             get { return false; }
@@ -86,7 +66,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.ScheduleTagging
 
         public void SetDeleted()
         {
-            return;
         }
     }
 }
