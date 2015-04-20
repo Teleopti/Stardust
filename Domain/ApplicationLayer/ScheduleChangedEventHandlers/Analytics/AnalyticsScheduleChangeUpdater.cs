@@ -54,24 +54,27 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Anal
 				var personPart = _factSchedulePersonHandler.Handle(scheduleDay.PersonPeriodId);
 				_analyticsScheduleRepository.DeleteFactSchedule(dateId, personPart.PersonId, scenarioId);
 
-				if (scheduleDay.NotScheduled)
-					continue;
-				
-				var shiftCategoryId = -1;
-				if (scheduleDay.Shift != null)
-					shiftCategoryId = getCategory(scheduleDay.ShiftCategoryId);
-
-				var dayCount = _factScheduleDayCountHandler.Handle(scheduleDay, personPart, scenarioId, shiftCategoryId);
-				if(dayCount != null)
-					_analyticsScheduleRepository.PersistFactScheduleDayCountRow(dayCount);
-
-				var agentDaySchedule = _factScheduleHandler.AgentDaySchedule(scheduleDay, personPart, @event.Timestamp, shiftCategoryId, scenarioId);
-				if (agentDaySchedule == null)
+				if (!scheduleDay.NotScheduled)
 				{
-					_analyticsScheduleRepository.DeleteFactSchedule(dateId, personPart.PersonId, scenarioId);
-					continue;
+					var shiftCategoryId = -1;
+					if (scheduleDay.Shift != null)
+						shiftCategoryId = getCategory(scheduleDay.ShiftCategoryId);
+
+					var dayCount = _factScheduleDayCountHandler.Handle(scheduleDay, personPart, scenarioId, shiftCategoryId);
+					if(dayCount != null)
+						_analyticsScheduleRepository.PersistFactScheduleDayCountRow(dayCount);
+
+					var agentDaySchedule = _factScheduleHandler.AgentDaySchedule(scheduleDay, personPart, @event.Timestamp, shiftCategoryId, scenarioId);
+					if (agentDaySchedule == null)
+					{
+						_analyticsScheduleRepository.DeleteFactSchedule(dateId, personPart.PersonId, scenarioId);
+						continue;
+					}
+					_analyticsScheduleRepository.PersistFactScheduleBatch(agentDaySchedule);
 				}
-				_analyticsScheduleRepository.PersistFactScheduleBatch(agentDaySchedule);
+
+				_analyticsScheduleRepository.InsertStageScheduleChangedServicebus(new DateOnly(scheduleDay.Date), @event.PersonId,
+					@event.ScenarioId, @event.BusinessUnitId, 1, @event.Timestamp);
 			}
 		}
 

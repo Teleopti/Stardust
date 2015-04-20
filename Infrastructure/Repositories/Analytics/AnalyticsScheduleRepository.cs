@@ -160,6 +160,12 @@ namespace Teleopti.Ccc.Infrastructure.Repositories.Analytics
 			}
 		}
 
+		public void InsertStageScheduleChangedServicebus(DateOnly date, Guid personId, Guid scenarioId, Guid bussinesUnitId,
+			int dataSourceId, DateTime datasourceUpdateDate)
+		{
+			
+		}
+
 		public IList<KeyValuePair<DateOnly, int>> Dates()
 		{
 			using (IStatelessUnitOfWork uow = statisticUnitOfWorkFactory().CreateAndOpenStatelessUnitOfWork())

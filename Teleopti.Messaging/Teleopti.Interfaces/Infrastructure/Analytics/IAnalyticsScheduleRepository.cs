@@ -19,5 +19,8 @@ namespace Teleopti.Interfaces.Infrastructure.Analytics
 		IList<IAnalyticsGeneric> Overtimes();
 		IList<IAnalyticsShiftLength> ShiftLengths();
 		int ShiftLengthId(int shiftLength);
+
+		void InsertStageScheduleChangedServicebus(DateOnly date, Guid personId, Guid scenarioId, Guid bussinesUnitId,
+			int dataSourceId, DateTime datasourceUpdateDate);
 	}
 }
