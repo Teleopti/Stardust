@@ -63,15 +63,25 @@ angular.module('wfm.forecasting.target', ['n3-line-chart'])
 
 				$scope.openModal = function(workload) {
 					workload.modalLaunch = true;
+					workload.noHistoricalDataForEvaluation = false;
+					workload.noHistoricalDataForForecasting = false;
 					$scope.data = [];
 					$http.post("../api/Forecasting/PreForecast", JSON.stringify({ ForecastStart: $scope.period.startDate, ForecastEnd: $scope.period.endDate , WorkloadId: workload.Id})).
 						success(function(data, status, headers, config) {
 							angular.forEach(data.ForecastDays, function(day) {
 								day.date = new Date(Date.parse(day.date));
-
 							});
 							$scope.data = data.ForecastDays;
-							$scope.options.series[data.ForecastMethodRecommended + 1].thickness = 4;
+							if (data.ForecastDays.length === 0) {
+								workload.noHistoricalDataForForecasting = true;
+								return;
+							}
+							if (data.ForecastMethodRecommended === -1) {
+								workload.noHistoricalDataForEvaluation = true;
+								$scope.options.series[1].thickness = "4px";
+							} else {
+								$scope.options.series[data.ForecastMethodRecommended + 1].thickness = "4px";
+							}
 						}).
 						error(function(data, status, headers, config) {
 							console.log(data);

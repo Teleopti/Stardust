@@ -73,9 +73,12 @@
 					</div>
 					<div class="modal-inner-content">
 						<div class="wfm-block">
+							<div class="alert-warning notice-spacer" ng-show="workload.noHistoricalDataForEvaluation"><i class='mdi mdi-alert'></i> Warning: There is no recommended forecasting method because of lack of historical data.</div>
+							<div class="alert-warning notice-spacer" ng-show="workload.noHistoricalDataForForecasting"><i class='mdi mdi-alert'></i> Warning: There is no historical data available for forecasting.</div>
+						</div>
+						<div class="wfm-block">
 							<linechart data="data" options="options" mode="" width="1000" height="500"></linechart>
 						</div>
-					</div>
 					<div class="modal-footer">
 						<aside>
 							<a ng-click="workload.modalLaunch = false" class="wfm-btn wfm-btn-invis-primary">Cancel</a>
