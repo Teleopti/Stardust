@@ -14,7 +14,7 @@ angular.module('wfm.forecasting.target', ['n3-line-chart'])
 
 				$scope.options = {
 					lineMode: "cardinal",
-					tension: 0.7,
+					tension: 1.0,
 					axes: { x: { type: "date", key: "date" }, y: { type: "linear" } },
 					tooltipMode: "dots",
 					drawLegend: true,
@@ -25,41 +25,40 @@ angular.module('wfm.forecasting.target', ['n3-line-chart'])
 					  	y: "vh",
 					  	label: "Historical data",
 					  	type: "line",
-					  	color: "#bcbd22",
+					  	color: "#ee8f7d",
 					  	axis: "y",
 					  	thickness: "1px",
 					  	visible: true,
 					  	dotSize: 2,
 					  	id: "series_0",
-					  	drawDots: false
+					  	drawDots: true
 					  },
 					  {
 					  	y: "v0",
 					  	label: "Teleopti Classic",
 					  	type: "line",
-					  	color: "#17becf",
+					  	color: "#66c2ff",
 					  	axis: "y",
 					  	visible: true,
 					  	id: "series_1",
 					  	thickness: "1px",
 					  	dotSize: 2,
-					  	drawDots: false
+					  	drawDots: true
 					  },
 					  {
 					  	y: "v1",
 					  	label: "Teleopti Classic with Trend",
-					  	color: "#9467bd",
+					  	color: "#67c285",
 					  	axis: "y",
 					  	type: "line",
 					  	thickness: "1px",
 					  	visible: true,
 					  	dotSize: 2,
 					  	id: "series_2",
-					  	drawDots: false
+					  	drawDots: true
 					  }
 					],
-					tooltip: { mode: "scrubber" },
-					columnsHGap: 5
+					tooltip: { mode: "axes", interpolate: true }
 				};
 
 				$scope.openModal = function(workload) {
@@ -72,6 +71,7 @@ angular.module('wfm.forecasting.target', ['n3-line-chart'])
 
 							});
 							$scope.data = data.ForecastDays;
+							$scope.options.series[data.ForecastMethodRecommended + 1].thickness = 4;
 						}).
 						error(function(data, status, headers, config) {
 							console.log(data);
