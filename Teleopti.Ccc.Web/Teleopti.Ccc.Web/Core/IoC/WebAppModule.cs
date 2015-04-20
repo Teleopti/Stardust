@@ -1,6 +1,11 @@
+using System;
+using System.Reflection;
 using System.Web.Http;
+using System.Web.Mvc;
 using Autofac;
+using Autofac.Builder;
 using Autofac.Configuration;
+using Autofac.Features.Scanning;
 using Autofac.Integration.Mvc;
 using Autofac.Integration.SignalR;
 using Autofac.Integration.WebApi;
@@ -23,10 +28,12 @@ using Teleopti.Ccc.Web.Areas.SeatPlanner.Core.IOC;
 using Teleopti.Ccc.Web.Areas.SSO.Core.IoC;
 using Teleopti.Ccc.Web.Areas.Start.Core.IoC;
 using Teleopti.Ccc.Web.Areas.Tenant.Core;
+using Teleopti.Ccc.Web.Broker;
 using Teleopti.Ccc.Web.Core.Hangfire;
 using Teleopti.Ccc.Web.Core.RequestContext.Initialize;
 using Teleopti.Ccc.Web.Core.Startup;
 using Teleopti.Ccc.Web.Areas.People.Core.IoC;
+using Module = Autofac.Module;
 
 namespace Teleopti.Ccc.Web.Core.IoC
 {
@@ -53,6 +60,8 @@ namespace Teleopti.Ccc.Web.Core.IoC
 			builder.RegisterApiControllers(typeof(WebAppModule).Assembly).ApplyAspects();
 			builder.RegisterControllers(typeof(WebAppModule).Assembly).ApplyAspects();
 			builder.RegisterHubs(typeof(WebAppModule).Assembly).ApplyAspects();
+
+			builder.Register(c => SignalRConfiguration.ActionScheduler).As<IActionScheduler>().ExternallyOwned();
 
 			if (_httpConfiguration != null)
 				builder.RegisterWebApiFilterProvider(_httpConfiguration);

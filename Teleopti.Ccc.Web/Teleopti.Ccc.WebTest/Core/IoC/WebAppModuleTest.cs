@@ -51,6 +51,7 @@ using Teleopti.Ccc.Web.Areas.Start.Core.LayoutBase;
 using Teleopti.Ccc.Web.Areas.Start.Core.Menu;
 using Teleopti.Ccc.Web.Areas.Tenant;
 using Teleopti.Ccc.Web.Areas.Toggle;
+using Teleopti.Ccc.Web.Broker;
 using Teleopti.Ccc.Web.Core;
 using Teleopti.Ccc.Web.Core.Hangfire;
 using Teleopti.Ccc.Web.Core.IoC;
@@ -71,6 +72,7 @@ namespace Teleopti.Ccc.WebTest.Core.IoC
 		public void Setup()
 		{
 			requestContainer = buildContainer();
+			SignalRConfiguration.Configure(() => { });
 		}
 
 		private ILifetimeScope buildContainer(Toggles toggle, bool value)
@@ -170,9 +172,16 @@ namespace Teleopti.Ccc.WebTest.Core.IoC
         }
 
 		[Test]
-		public void ShouldRegisterMessageBrokerController()
+		public void ShouldRegisterUserDataController()
 		{
 			requestContainer.Resolve<UserDataController>()
+				.Should().Not.Be.Null();
+		}
+
+		[Test]
+		public void ShouldResolveMessageBrokerController()
+		{
+			requestContainer.Resolve<MessageBrokerController>()
 				.Should().Not.Be.Null();
 		}
 

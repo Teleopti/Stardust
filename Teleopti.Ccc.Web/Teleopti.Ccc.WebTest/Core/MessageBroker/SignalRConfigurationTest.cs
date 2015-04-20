@@ -10,7 +10,7 @@ namespace Teleopti.Ccc.WebTest.Core.MessageBroker
 		[Test]
 		public void ShouldConfigure()
 		{
-			SignalRConfiguration.Configure(()=> null);
+			SignalRConfiguration.Configure(() => { });
 		}
 	}
 }

@@ -4,7 +4,6 @@ using System.Threading;
 using Contrib.SignalR.SignalRMessageBus;
 using Microsoft.AspNet.SignalR;
 using Microsoft.AspNet.SignalR.Infrastructure;
-using Owin;
 
 namespace Teleopti.Ccc.Web.Broker
 {
@@ -12,7 +11,7 @@ namespace Teleopti.Ccc.Web.Broker
 	{
 		public static IActionScheduler ActionScheduler; 
 
-		public static void Configure(Func<IAppBuilder> mapSignalR)
+		public static void Configure(Action mapSignalR)
 		{
 			var settingsFromParser = TimeoutSettings.Load();
 
