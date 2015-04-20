@@ -25,11 +25,12 @@ namespace Teleopti.Ccc.Sdk.WcfService.Factory
 				_tenantDataManager.DeleteTenantPersons(new List<Guid>{id});
 				return;
 			}
+			
 			var data = new TenantAuthenticationData
 			{
 				ApplicationLogonName = personDto.ApplicationLogOnName,
 				Password = personDto.ApplicationLogOnPassword,
-				Identity = personDto.WindowsDomain != null && personDto.WindowsLogOnName != null ? personDto.WindowsDomain + "\\" + personDto.WindowsLogOnName : null,
+				Identity = !string.IsNullOrEmpty(personDto.WindowsDomain) && !string.IsNullOrEmpty(personDto.WindowsLogOnName) ? personDto.WindowsDomain + "\\" + personDto.WindowsLogOnName : null,
 				PersonId = id,
 				Tenant = tenant
 
