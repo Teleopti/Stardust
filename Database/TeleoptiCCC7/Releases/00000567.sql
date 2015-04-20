@@ -1,0 +1,1 @@
+ALTER TABLE [dbo].[SeatBooking] ADD [BelongsToDate] [datetime] NOT NULL

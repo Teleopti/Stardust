@@ -12,6 +12,13 @@
 						unsaved-value="null">
 			<generator class="guid.comb" />
 		</id>
+
+		<property name="BelongsToDate"
+					 access="property"
+					 type="Teleopti.Ccc.Infrastructure.NHibernateConfiguration.DateOnlyMappingType, Teleopti.Ccc.Infrastructure"
+					 not-null="true"
+					 insert="true"
+					 update="false"/>
 		
 		<property name="StartDateTime"
 								type="UtcDateTime"

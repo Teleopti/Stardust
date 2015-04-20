@@ -17,7 +17,10 @@ namespace Teleopti.Ccc.Domain.SeatPlanning
 
 		public void AllocateSeats(params SeatBookingRequest[] seatBookingRequests)
 		{
-			var sortedSeatBookingRequests = seatBookingRequests.OrderByDescending(s => s.MemberCount);
+			var sortedSeatBookingRequests = seatBookingRequests
+				.OrderByDescending(s => s.MemberCount)
+				.ThenBy (s => s.SeatBookings.Min(booking => booking.StartDateTime));
+
 			bookSeatsByGroup(sortedSeatBookingRequests);
 			bookUnallocatedShifts(sortedSeatBookingRequests);
 		}
@@ -43,7 +46,7 @@ namespace Teleopti.Ccc.Domain.SeatPlanning
 		{
 			foreach (var location in _seatMapLocations.OrderByDescending(l => l.SeatCount))
 			{
-				var unallocatedBookings = seatBookings.Where(s => s.Seat == null);
+				var unallocatedBookings = seatBookings.Where(s => s.Seat == null).OrderBy (s => s.StartDateTime); 
 				if (!unallocatedBookings.Any()) return;
 
 				var targetLocation = bookGroupedRequestsTogether

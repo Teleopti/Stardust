@@ -21,7 +21,8 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 		{
 			var person = createPersonInDb();
 			var seat = createSeatMapLocationAndSeatInDb();
-			var booking = new SeatBooking (person, 
+			var booking = new SeatBooking (person,
+				new DateOnly(2015, 10, 1), 
 				new DateTime (2015, 10, 1, 8, 0, 0),
 				new DateTime (2015, 10, 1, 17, 0, 0));
 			booking.Book (seat);
@@ -45,7 +46,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			var seat = createSeatMapLocationAndSeatInDb();
 			var start = new DateTime (2015, 10, 1, 8, 0, 0);
 			var end = new DateTime (2015, 10, 1, 17, 0, 0);
-			var booking = new SeatBooking (person, start, end);
+			var booking = new SeatBooking(person, new DateOnly(2015, 10, 1), start, end);
 
 			booking.Book (seat);
 			PersistAndRemoveFromUnitOfWork(booking);
@@ -65,9 +66,11 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			var person2 = createPersonInDb();
 			var seat = createSeatMapLocationAndSeatInDb();
 			var booking = new SeatBooking(person,
+				new DateOnly(2015, 10, 2), 
 				new DateTime(2015, 10, 2, 8, 0, 0),
 				new DateTime(2015, 10, 2, 12, 0, 0));
 			var booking2 = new SeatBooking(person2,
+				new DateOnly(2015, 10, 2), 
 				new DateTime(2015, 10, 1, 13, 0, 0),
 				new DateTime(2015, 10, 1, 17, 0, 0));
 
@@ -89,9 +92,11 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			var person2 = createPersonInDb();
 			var seat = createSeatMapLocationAndSeatInDb();
 			var booking = new SeatBooking(person,
+				new DateOnly(2015,10,1), 
 				new DateTime(2015, 10, 1, 8, 0, 0),
 				new DateTime(2015, 10, 1, 12, 0, 0));
 			var booking2 = new SeatBooking(person2,
+				new DateOnly(2015, 10, 1), 
 				new DateTime(2015, 10, 1, 13, 0, 0),
 				new DateTime(2015, 10, 1, 17, 0, 0));
 

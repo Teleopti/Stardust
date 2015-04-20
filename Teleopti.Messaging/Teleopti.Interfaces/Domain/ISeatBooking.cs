@@ -5,6 +5,7 @@ namespace Teleopti.Interfaces.Domain
 	public interface ISeatBooking : IAggregateRootWithEvents
 	{
 		IPerson Person { get; set; }
+		DateOnly BelongsToDate { get; set; }
 		DateTime StartDateTime { get; set; }
 		DateTime EndDateTime { get; set; }
 		

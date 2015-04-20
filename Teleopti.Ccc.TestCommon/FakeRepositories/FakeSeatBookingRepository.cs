@@ -63,19 +63,19 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 		public IList<ISeatBooking> LoadSeatBookingsForDateOnlyPeriod (DateOnlyPeriod period)
 		{
 			return _seatBookings
-				.Where(booking => (booking.StartDateTime.Date >= period.StartDate.Date
+				.Where(booking => (booking.BelongsToDate >= period.StartDate
 					&& booking.EndDateTime.Date <= period.EndDate.Date)).ToList();
 		}
 
 		public ISeatBooking LoadSeatBookingForPerson (DateOnly date, IPerson person)
 		{
-			return _seatBookings.SingleOrDefault(booking => (booking.StartDateTime.Date == date.Date && booking.Person == person));
+			return _seatBookings.SingleOrDefault(booking => (booking.BelongsToDate == date && booking.Person == person));
 		}
 
 		public IList<ISeatBooking> LoadSeatBookingsForDay (DateOnly date)
 		{
 			return _seatBookings
-				.Where(booking => (booking.StartDateTime.Date == date.Date)).ToList();
+				.Where(booking => (booking.BelongsToDate == date)).ToList();
 		}
 
 		public void RemoveSeatBookingsForSeats (IEnumerable<ISeat> seats)

@@ -138,7 +138,7 @@ namespace Teleopti.Ccc.Domain.SeatPlanning
 
 		public virtual bool CanAllocateShifts(IEnumerable<ISeatBooking> agentShifts)
 		{
-			if (!IncludeInSeatPlan || SeatCount < agentShifts.Count())
+			if (!IncludeInSeatPlan)
 			{
 				return false;
 			}

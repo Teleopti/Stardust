@@ -10,20 +10,34 @@ namespace Teleopti.Ccc.Domain.SeatPlanning
 
 		private DateTime _startDateTime;
 		private DateTime _endDateTime;
+		private DateOnly _belongsToDate;
+		private IPerson _person;
 
 		protected SeatBooking ()
 		{
 		}
 		
-		public SeatBooking(IPerson person, DateTime startDateTime, DateTime endDateTime)
+		public SeatBooking(IPerson person, DateOnly belongsToDate, DateTime startDateTime, DateTime endDateTime)
 		{
-			StartDateTime = startDateTime;
-			EndDateTime = endDateTime;
-			Person = person;
+			_startDateTime = startDateTime;
+			_endDateTime = endDateTime;
+			_belongsToDate = belongsToDate;
+			_person = person;
 		}
 		public virtual ISeat Seat { get; set; }
-		public virtual IPerson Person { get; set; }
-		
+
+		public virtual IPerson Person
+		{
+			get { return _person; }
+			set { _person = value; }
+		}
+
+		public virtual DateOnly BelongsToDate
+		{
+			get { return _belongsToDate; }
+			set { _belongsToDate = value; }
+		}
+
 		public virtual DateTime StartDateTime
 		{
 			get { return _startDateTime; }

@@ -34,20 +34,20 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 
 		public ISeatBooking LoadSeatBookingForPerson(DateOnly date, IPerson person)
 		{
-			return Session.Query<ISeatBooking>().SingleOrDefault(booking => (booking.StartDateTime.Date == date.Date && booking.Person == person));
+			return Session.Query<ISeatBooking>().SingleOrDefault(booking => (booking.BelongsToDate == date && booking.Person == person));
 		}
 
 		public IList<ISeatBooking> LoadSeatBookingsForDateOnlyPeriod(DateOnlyPeriod period)
 		{
 			return Session.Query<ISeatBooking>()
-				.Where(booking => booking.StartDateTime.Date >= period.StartDate.Date
-					&& booking.EndDateTime.Date <= period.EndDate.Date).ToList();
+				.Where(booking => booking.BelongsToDate >= period.StartDate
+					&& booking.BelongsToDate <= period.EndDate).ToList();
 		}
 
 		public IList<ISeatBooking> LoadSeatBookingsForDay(DateOnly date)
 		{
 			return Session.Query<ISeatBooking>()
-				.Where(booking => booking.StartDateTime.Date == date.Date).ToList();
+				.Where(booking => booking.BelongsToDate == date).ToList();
 		}
 
 		public void RemoveSeatBookingsForSeats(IEnumerable<ISeat>seats)

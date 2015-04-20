@@ -9,6 +9,7 @@ namespace Teleopti.Interfaces.Domain
 		int Priority { get; set; }
 		void AddSeatBooking(ISeatBooking seatBooking);
 		void AddSeatBookings (IList<ISeatBooking> seatBookings);
+		void RemoveSeatBooking (ISeatBooking seatBooking);
 		bool IsAllocated(ISeatBooking seatBookingRequest);
 		void ClearBookings();
 	}

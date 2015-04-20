@@ -37,6 +37,11 @@ namespace Teleopti.Ccc.Domain.SeatPlanning
 			_seatBookings.AddRange(seatBookings);
 		}
 
+		public virtual void RemoveSeatBooking (ISeatBooking seatBooking)
+		{
+			_seatBookings.Remove (seatBooking);
+		}
+
 		public virtual bool IsAllocated(ISeatBooking seatBookingRequest)
 		{
 			return _seatBookings.Any (bookingPeriod => bookingPeriod.Intersects (seatBookingRequest));

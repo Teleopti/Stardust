@@ -65,6 +65,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 		                                                                   DateTimePeriod dateTimePeriod, IScenario scenario)
 		{
 			ThePeriodThatWasUsedForFindingSchedules = dateTimePeriod;
+
 			var period = _data.First().Period; // max period?
 			return ScheduleDictionaryForTest.WithScheduleData(scenario, period, _data);
 		}

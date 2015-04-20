@@ -1,13 +1,13 @@
 ﻿'use strict';
 
 angular.module('wfm.seatPlan')
-	.controller('SeatPlanCtrl', ['seatPlanService','growl','$scope',
-	function (seatPlanService, growl,$scope) {
+	.controller('SeatPlanCtrl', ['seatPlanService','growl',
+	function (seatPlanService, growl) {
 
 		var vm = this;
 
-		var startDate = moment().add(1, 'months').startOf('month').toDate();
-		var endDate = moment().add(2, 'months').startOf('month').toDate();
+		var startDate = moment.utc().add(1, 'months').startOf('month').toDate();
+		var endDate = moment.utc().add(2, 'months').startOf('month').toDate();
 
 		vm.period = { startDate: startDate, endDate: endDate };
 		vm.locations = [];
@@ -51,6 +51,8 @@ angular.module('wfm.seatPlan')
 				Locations: selectedLocations
 			};
 
+			console.log(addSeatPlanCommand);
+
 			if (selectedTeams.length == 0 || selectedLocations.length == 0) {
 
 				onSelectedTeamsLocationsEmpty("teams or locations are unselected");
@@ -58,8 +60,6 @@ angular.module('wfm.seatPlan')
 			} else {
 
 				seatPlanService.addSeatPlan(addSeatPlanCommand).$promise.then(function(result) {
-					//Robtodo:notice on successful submit
-					//displaySuccessNotification("Seat Plan Saved");
 					onSuccessAddSeatPlan("Seat plan added successfully");
 				});
 

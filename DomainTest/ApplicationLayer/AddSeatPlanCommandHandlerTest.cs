@@ -77,7 +77,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 			seatBooking.Seat.Should().Be(seatMapLocation.Seats.Single());
 		}
 
-
 		[Test]
 		public void ShouldBookSeatForMutipleDays()
 		{
@@ -480,7 +479,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 			seatMapLocation.SetId(Guid.NewGuid());
 			seatMapLocation.AddSeat("Seat One", 1);
 
-			var existingSeatBooking = new SeatBooking(person2, startDate, assignmentEndDateTime)
+			var existingSeatBooking = new SeatBooking(person2, new DateOnly(startDate), startDate, assignmentEndDateTime)
 			{
 				Seat = seatMapLocation.Seats.Single()
 			};
@@ -518,7 +517,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 		public void ShouldOverwriteExistingBookingForAgent()
 		{
 			var date = new DateTime(2015, 1, 20, 0, 0, 0, DateTimeKind.Utc);
-			
+
 
 			var team = new Team() { Description = new Description("Team") };
 			team.SetId(Guid.NewGuid());
@@ -529,7 +528,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 			seatMapLocation.AddSeat("Seat One", 1);
 			seatMapLocation.AddSeat("Seat Two", 2);
 
-			var existingSeatBooking = new SeatBooking(person, date, date.AddHours(10))
+			var existingSeatBooking = new SeatBooking(person, new DateOnly(date), date, date.AddHours(10))
 			{
 				Seat = seatMapLocation.Seats.Last()
 			};
@@ -588,7 +587,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 			seatMapLocation.SetId(Guid.NewGuid());
 			seatMapLocation.AddSeat("Seat One", 1);
 
-			var existingSeatBooking = new SeatBooking(person2, assignmentStartDateTime, assignmentEndDateTime)
+			var existingSeatBooking = new SeatBooking(person2, new DateOnly(assignmentStartDateTime), assignmentStartDateTime, assignmentEndDateTime)
 			{
 				Seat = seatMapLocation.Seats.Single()
 			};
@@ -620,7 +619,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 			Assert.IsTrue(_seatBookingRepository.LoadSeatBookingForPerson(new DateOnly(date), person) == null);
 
 		}
-		
+
 		[Test]
 		public void ShouldAddAfterOvernightBooking()
 		{
@@ -630,20 +629,20 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 			team.SetId(Guid.NewGuid());
 
 			var assignmentStartDateTime = new DateTime(2015, 1, 19, 21, 00, 00, DateTimeKind.Utc);
-			var assignmentEndDateTime = new DateTime(2015, 1, 20,  9, 00, 00, DateTimeKind.Utc);
+			var assignmentEndDateTime = new DateTime(2015, 1, 20, 9, 00, 00, DateTimeKind.Utc);
 
 			var person = PersonFactory.CreatePersonWithPersonPeriodFromTeam(new DateOnly(date), team);
 			var person2 = PersonFactory.CreatePersonWithPersonPeriodFromTeam(new DateOnly(date), team);
 			var personAssignment = PersonAssignmentFactory.CreateAssignmentWithMainShift(_currentScenario.Current(),
 				person, new DateTimePeriod(
 					date,
-					date.AddHours (8)));
+					date.AddHours(8)));
 
 			var seatMapLocation = new SeatMapLocation() { Name = "Location" };
 			seatMapLocation.SetId(Guid.NewGuid());
 			seatMapLocation.AddSeat("Seat One", 1);
 
-			var existingSeatBooking = new SeatBooking(person2, assignmentStartDateTime, assignmentEndDateTime)
+			var existingSeatBooking = new SeatBooking(person2, new DateOnly(assignmentStartDateTime), assignmentStartDateTime, assignmentEndDateTime)
 			{
 				Seat = seatMapLocation.Seats.Single()
 			};
@@ -677,5 +676,124 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 				.Seat.Should().Be(seatMapLocation.Seats[0]);
 		}
 
+
+
+		[Test]
+		public void BookingsOfAnEarlierTimeShouldGetPrecedence()
+		{
+			var team1 = new Team() { Description = new Description("Team 1") };
+			team1.SetId(Guid.NewGuid());
+			var team2 = new Team() { Description = new Description("Team 2") };
+			team2.SetId(Guid.NewGuid());
+
+			var person = PersonFactory.CreatePersonWithPersonPeriodFromTeam(new DateOnly(2015, 01, 01), team1);
+			var person2 = PersonFactory.CreatePersonWithPersonPeriodFromTeam(new DateOnly(2015, 01, 01), team2);
+			var personAssignment = PersonAssignmentFactory.CreateAssignmentWithMainShift(_currentScenario.Current(),
+				person, new DateTimePeriod(new DateTime(2015, 1, 21, 11, 0, 0, DateTimeKind.Utc), new DateTime(2015, 1, 21, 17, 0, 0, DateTimeKind.Utc)));
+
+			var personAssignment2 = PersonAssignmentFactory.CreateAssignmentWithMainShift(_currentScenario.Current(),
+				person2, new DateTimePeriod(new DateTime(2015, 1, 21, 8, 0, 0, DateTimeKind.Utc), new DateTime(2015, 1, 21, 12, 0, 0, DateTimeKind.Utc)));
+
+
+			var seatMapLocation = new SeatMapLocation() { Name = "Location" };
+			seatMapLocation.SetId(Guid.NewGuid());
+			seatMapLocation.AddSeat("Seat One", 1);
+
+			var target = new AddSeatPlanCommandHandler(new FakeScheduleDataReadScheduleRepository(personAssignment, personAssignment2),
+				new FakeTeamRepository(team1, team2), new FakePersonRepository(person, person2), _currentScenario,
+				new FakePublicNoteRepository(),
+				new FakeSeatMapRepository(seatMapLocation), _seatBookingRepository);
+
+			var command = new AddSeatPlanCommand()
+			{
+				StartDate = new DateTime(2015, 01, 21),
+				EndDate = new DateTime(2015, 01, 21),
+				Locations = new[] { seatMapLocation.Id.Value },
+				Teams = new[] { team1.Id.Value, team2.Id.Value },
+				TrackedCommandInfo = new TrackedCommandInfo()
+				{
+					OperatedPersonId = Guid.NewGuid(),
+					TrackId = Guid.NewGuid()
+				}
+			};
+
+			target.Handle(command);
+
+			Assert.That(_seatBookingRepository.LoadSeatBookingForPerson(new DateOnly(2015, 1, 21), person) == null);
+			Assert.That(_seatBookingRepository.LoadSeatBookingForPerson(new DateOnly(2015, 1, 21), person2) != null);
+		}
+
+
+		[Test]
+		public void ShouldAllocateSeatsInOrderWhenPlanningOvernightEvenWhenBookingsExist()
+		{
+			var date = new DateTime(2015, 1, 20, 8, 0, 0, DateTimeKind.Utc);
+
+			var team = new Team() { Description = new Description("Team") };
+			team.SetId(Guid.NewGuid());
+			
+			var person = PersonFactory.CreatePersonWithPersonPeriodFromTeam(new DateOnly(date), team);
+			var person2 = PersonFactory.CreatePersonWithPersonPeriodFromTeam(new DateOnly(date), team);
+			var person3 = PersonFactory.CreatePersonWithPersonPeriodFromTeam(new DateOnly(date), team);
+
+			var personAssignment = PersonAssignmentFactory.CreateAssignmentWithMainShiftAndPersonalShift(_currentScenario.Current(),
+				person, new DateTimePeriod(
+					new DateTime(2015, 1, 20, 1, 0, 0, DateTimeKind.Utc),
+					new DateTime(2015, 1, 20, 9, 30, 0, DateTimeKind.Utc)));
+
+			var personAssignment2 = PersonAssignmentFactory.CreateAssignmentWithMainShiftAndPersonalShift(_currentScenario.Current(),
+				person2, new DateTimePeriod(
+					new DateTime(2015, 1, 20, 10, 0, 0, DateTimeKind.Utc),
+					new DateTime(2015, 1, 20, 18, 30, 0, DateTimeKind.Utc)));
+
+			var personAssignment3 = PersonAssignmentFactory.CreateAssignmentWithMainShiftAndPersonalShift(_currentScenario.Current(),
+				person3, new DateTimePeriod(
+					new DateTime(2015, 1, 20, 19, 0, 0, DateTimeKind.Utc),
+					new DateTime(2015, 1, 21, 1, 30, 0, DateTimeKind.Utc)));
+
+			var personAssignment4 = PersonAssignmentFactory.CreateAssignmentWithMainShiftAndPersonalShift(_currentScenario.Current(),
+				person, new DateTimePeriod(
+					new DateTime(2015, 1, 21, 1, 0, 0, DateTimeKind.Utc),
+					new DateTime(2015, 1, 21, 9, 30, 0, DateTimeKind.Utc)));
+
+			var seatMapLocation = new SeatMapLocation() { Name = "Location" };
+			seatMapLocation.SetId(Guid.NewGuid());
+			seatMapLocation.AddSeat("Seat One", 1);
+			
+			var target = new AddSeatPlanCommandHandler(new FakeScheduleDataReadScheduleRepository(personAssignment,  personAssignment2, personAssignment3, personAssignment4),
+				new FakeTeamRepository(team), new FakePersonRepository(person, person2, person3), _currentScenario,
+				new FakePublicNoteRepository(),
+				new FakeSeatMapRepository(seatMapLocation), _seatBookingRepository);
+			
+			var command = new AddSeatPlanCommand()
+			{
+				StartDate = date,
+				EndDate = date.AddDays (1),
+				Locations = new[] { seatMapLocation.Id.Value },
+				Teams = new[] { team.Id.Value },
+				TrackedCommandInfo = new TrackedCommandInfo()
+				{
+					OperatedPersonId = Guid.NewGuid(),
+					TrackId = Guid.NewGuid()
+				}
+			};
+
+			target.Handle(command);
+			
+			_seatBookingRepository.LoadSeatBookingForPerson(new DateOnly(date), person).Seat.Should().Be(seatMapLocation.Seats[0]);
+
+			Assert.IsTrue(_seatBookingRepository.LoadSeatBookingsForDay (new DateOnly (date)).Count() == 3);
+			Assert.IsFalse(_seatBookingRepository.LoadSeatBookingsForDay(new DateOnly(date).AddDays (1)).Any());
+
+			// check overwrite gets same result
+
+			target.Handle(command);  
+			
+			_seatBookingRepository.LoadSeatBookingForPerson(new DateOnly(date), person).Seat.Should().Be(seatMapLocation.Seats[0]);
+
+			Assert.IsTrue(_seatBookingRepository.LoadSeatBookingsForDay(new DateOnly(date)).Count() == 3);
+			Assert.IsTrue(!_seatBookingRepository.LoadSeatBookingsForDay(new DateOnly(date).AddDays(1)).Any());
+			
+		}
 	}
 }

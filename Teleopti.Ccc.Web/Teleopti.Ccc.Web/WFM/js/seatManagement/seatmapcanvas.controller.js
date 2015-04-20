@@ -90,6 +90,7 @@
 		};
 
 		vm.addChosenImage = function (image) {
+
 			vm.showFileDialog = false;
 			canvasEditor.addImage(canvas, image);
 		};

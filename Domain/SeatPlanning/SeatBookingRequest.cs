@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.SeatPlanning
@@ -15,5 +16,6 @@ namespace Teleopti.Ccc.Domain.SeatPlanning
 		public IEnumerable<ISeatBooking> SeatBookings { get { return _seatBookings; } }
 
 		public int MemberCount { get { return _seatBookings.Length; } }
+		
 	}
 }
