@@ -8,6 +8,6 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 		public string SkillKey { get; set; }
 		public PeriodResourceDetail Resource { get; set; }
 
-		public IDictionary<Guid, double> Effiencies { get; set; }
+		public SkillEffiencyResource[] Effiencies { get; set; }
 	}
 }

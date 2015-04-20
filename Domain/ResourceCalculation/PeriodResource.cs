@@ -2,76 +2,53 @@ using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
+using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.ResourceCalculation
 {
 	public class PeriodResource
 	{
-		private readonly ConcurrentDictionary<string, PeriodResourceDetail> _resourceDictionary = new ConcurrentDictionary<string, PeriodResourceDetail>();
-		private readonly ConcurrentDictionary<string, ConcurrentDictionary<Guid, double>> _skillEffiencies = new ConcurrentDictionary<string, ConcurrentDictionary<Guid, double>>();
-		private readonly ConcurrentDictionary<string, ConcurrentDictionary<DateTimePeriod,int>> _fractionResourcePeriods = new ConcurrentDictionary<string, ConcurrentDictionary<DateTimePeriod,int>>(); 
+		private readonly ConcurrentDictionary<string, InnerPeriodResourceDetail> _resourceDictionary = new ConcurrentDictionary<string, InnerPeriodResourceDetail>();
 		
 		public void AppendResource(string key, SkillCombination skillCombination, double heads, double resource, DateTimePeriod? fractionPeriod)
 		{
-			_resourceDictionary.AddOrUpdate(key, new PeriodResourceDetail(heads, resource), (s, d) => new PeriodResourceDetail(d.Count + heads, d.Resource + resource));
+			_resourceDictionary.AddOrUpdate(key,
+				new InnerPeriodResourceDetail(heads, resource, skillCombination.SkillEfficiencies,
+					fractionPeriod.HasValue ? new[] {fractionPeriod.Value} : new DateTimePeriod[] {}),
+				(s, d) =>
+					new InnerPeriodResourceDetail(d.Count + heads, d.Resource + resource, mergeEffiencyResources(skillCombination.SkillEfficiencies,d.EffiencyResources),
+						fractionPeriod.HasValue ? d.FractionPeriods.Append(fractionPeriod.Value).ToArray() : d.FractionPeriods));
+		}
 
-			if (fractionPeriod.HasValue)
-			{
-				_fractionResourcePeriods.AddOrUpdate(key, (e) =>
-					{
-						var dictionary = new ConcurrentDictionary<DateTimePeriod, int>();
-						dictionary.AddOrUpdate(fractionPeriod.Value, 1, (period, i) => i + 1);
-						return dictionary;
-					}, (s, d) =>
-					{ 
-						d.AddOrUpdate(fractionPeriod.Value, 1, (period, i) => i + 1);
-						return d;
-					});
-			}
+		private SkillEffiencyResource[] mergeEffiencyResources(SkillEffiencyResource[] effiencyResources1,
+			SkillEffiencyResource[] effiencyResources2)
+		{
+			return effiencyResources1.Join(effiencyResources2, e1 => e1.Skill, e2 => e2.Skill,
+				(x, y) => new SkillEffiencyResource(x.Skill, x.Resource + y.Resource)).ToArray();
+		}
 
-			foreach (var skillEfficiency in skillCombination.SkillEfficiencies)
-			{
-				_skillEffiencies.AddOrUpdate(key,
-				                             new ConcurrentDictionary<Guid, double>(new[] { new KeyValuePair<Guid, double>(skillEfficiency.Key, skillEfficiency.Value) }),
-				                             (s, doubles) =>
-					                             {
-						                             doubles.AddOrUpdate(skillEfficiency.Key, skillEfficiency.Value,
-						                                                 (guid, d) => d + skillEfficiency.Value);
-						                             return doubles;
-					                             });
-			}
+		private SkillEffiencyResource[] subtractEffiencyResources(SkillEffiencyResource[] effiencyResources1,
+			SkillEffiencyResource[] effiencyResources2)
+		{
+			return effiencyResources1.Join(effiencyResources2, e1 => e1.Skill, e2 => e2.Skill,
+				(x, y) => new SkillEffiencyResource(x.Skill, x.Resource - y.Resource)).ToArray();
 		}
 
 		public void RemoveResource(string key, SkillCombination skillCombination, double resource, DateTimePeriod? fractionPeriod)
 		{
-			_resourceDictionary.AddOrUpdate(key, new PeriodResourceDetail(0, 0), (s, d) => new PeriodResourceDetail(d.Count - 1, d.Resource - resource));
-
-			if (fractionPeriod.HasValue)
+			_resourceDictionary.AddOrUpdate(key, new InnerPeriodResourceDetail(0, 0, skillCombination.SkillEfficiencies, new DateTimePeriod[]{}), (s, d) =>
 			{
-				_fractionResourcePeriods.AddOrUpdate(key, (e) =>
+				var fractionPeriodResult = d.FractionPeriods;
+				if (fractionPeriod.HasValue)
 				{
-					var dictionary = new ConcurrentDictionary<DateTimePeriod, int>();
-					dictionary.AddOrUpdate(fractionPeriod.Value, 0, (period, i) => i - 1);
-					return dictionary;
-				}, (s, d) =>
-				{
-					d.AddOrUpdate(fractionPeriod.Value, 0, (period, i) => i - 1);
-					return d;
-				});
-			}
-
-			foreach (var skillEfficiency in skillCombination.SkillEfficiencies)
-			{
-				_skillEffiencies.AddOrUpdate(key,
-				                             new ConcurrentDictionary<Guid, double>(),
-				                             (s, doubles) =>
-					                             {
-						                             doubles.AddOrUpdate(skillEfficiency.Key, skillEfficiency.Value,
-						                                                 (guid, d) => d - skillEfficiency.Value);
-						                             return doubles;
-					                             });
-			}
+					List<DateTimePeriod> dateTimePeriods = d.FractionPeriods.ToList();
+					dateTimePeriods.Remove(fractionPeriod.Value);
+					fractionPeriodResult = dateTimePeriods.ToArray();
+				}
+				return new InnerPeriodResourceDetail(d.Count - 1, d.Resource - resource,
+					subtractEffiencyResources(d.EffiencyResources, skillCombination.SkillEfficiencies), fractionPeriodResult);
+			});
 		}
 
 		public PeriodResourceDetail GetResources(string activityKey, Guid skillKey)
@@ -84,14 +61,12 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 				if ((string.IsNullOrEmpty(activityKey) || pair.Key.StartsWith(activityKey)) && (pair.Key.Contains(skillKeyString)))
 				{
 					double currentResource = pair.Value.Resource;
-					ConcurrentDictionary<Guid, double> effiencies;
-					if (_skillEffiencies.TryGetValue(pair.Key, out effiencies))
+					var foundEfficiency = pair.Value.EffiencyResources.FirstOrDefault(s => s.Skill == skillKey);
+					if (foundEfficiency.Skill == skillKey)
 					{
-						double effiency;
-						if (effiencies.TryGetValue(skillKey, out effiency))
-							currentResource = currentResource * effiency;
+						currentResource = currentResource * foundEfficiency.Resource;
 					}
-
+					
 					count += pair.Value.Resource;
 					resource += currentResource;
 				}
@@ -107,14 +82,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 			{
 				if ((string.IsNullOrEmpty(activityKey) || pair.Key.StartsWith(activityKey)) && (pair.Key.Contains(skillKeyString)))
 				{
-					ConcurrentDictionary<DateTimePeriod,int> fractionPeriods;
-					if (_fractionResourcePeriods.TryGetValue(pair.Key, out fractionPeriods))
-					{
-						foreach (var fractionPeriod in fractionPeriods)
-						{
-							result.AddRange(Enumerable.Range(0,fractionPeriod.Value).Select(i => fractionPeriod.Key));
-						}
-					}
+					result.AddRange(pair.Value.FractionPeriods);
 				}
 			}
 			return result;
@@ -130,12 +98,10 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 				if (pair.Key.Contains(skillKeyString) && activityKeys.Any(a => pair.Key.StartsWith(a)))
 				{
 					double currentResource = pair.Value.Resource;
-					ConcurrentDictionary<Guid, double> effiencies;
-					if (_skillEffiencies.TryGetValue(pair.Key, out effiencies))
+					var foundEfficiency = pair.Value.EffiencyResources.FirstOrDefault(s => s.Skill == skillKey);
+					if (foundEfficiency.Skill == skillKey)
 					{
-						double effiency;
-						if (effiencies.TryGetValue(skillKey, out effiency))
-							currentResource = currentResource * effiency;
+						currentResource = currentResource * foundEfficiency.Resource;
 					}
 
 					count += pair.Value.Count;
@@ -151,18 +117,8 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 			{
 				if (!pair.Key.StartsWith(activityKey)) continue;
 
-				ConcurrentDictionary<Guid, double> effiencies;
-				if (!_skillEffiencies.TryGetValue(pair.Key, out effiencies))
-				{
-					effiencies = new ConcurrentDictionary<Guid, double>();
-				}
-				else
-				{
-					effiencies = new ConcurrentDictionary<Guid, double>(effiencies);
-				}
-
 				var skillKey = pair.Key.Split('|')[1];
-				yield return new SkillKeyResource { SkillKey = skillKey, Resource = pair.Value, Effiencies = effiencies };
+				yield return new SkillKeyResource { SkillKey = skillKey, Resource = new PeriodResourceDetail(pair.Value.Count,pair.Value.Resource), Effiencies = pair.Value.EffiencyResources };
 			}
 		}
 	}

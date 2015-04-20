@@ -99,7 +99,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 			}
 
 			var periodSplit = period.Intervals(TimeSpan.FromMinutes(MinSkillResolution));
-			PeriodResourceDetail result = new PeriodResourceDetail();
+			var result = new PeriodResourceDetail();
 			foreach (var dateTimePeriod in periodSplit)
 			{
 				PeriodResource interval;
@@ -148,7 +148,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 							AffectedSkills value;
 							double previousResource = 0;
 							double previousCount = 0;
-							var accumulatedEffiencies = pair.Effiencies;
+							var accumulatedEffiencies = pair.Effiencies.ToDictionary(k => k.Skill, v => v.Resource);
 							if (result.TryGetValue(pair.SkillKey, out value))
 							{
 								previousResource = value.Resource;
@@ -160,7 +160,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 								Skills = skills,
 								Resource = previousResource + pair.Resource.Resource,
 								Count = previousCount + pair.Resource.Count,
-								SkillEffiencies = new Dictionary<Guid, double>(accumulatedEffiencies)
+								SkillEffiencies = accumulatedEffiencies
 							};
 							
 							result[pair.SkillKey] = value;

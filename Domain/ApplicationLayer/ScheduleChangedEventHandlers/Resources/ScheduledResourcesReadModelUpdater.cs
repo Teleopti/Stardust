@@ -2,7 +2,6 @@ using System;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Interfaces.Domain;
-using Teleopti.Interfaces.MessageBroker.Client;
 using Teleopti.Interfaces.MessageBroker.Client.Composite;
 using Teleopti.Interfaces.MessageBroker.Events;
 
@@ -53,7 +52,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Reso
 				                                         resourceLayer.Resource, 1);
 				foreach (var skillEfficiency in combination.SkillEfficiencies)
 				{
-					_persister.AddSkillEfficiency(resourceId, skillEfficiency.Key, skillEfficiency.Value);
+					_persister.AddSkillEfficiency(resourceId, skillEfficiency.Skill, skillEfficiency.Resource);
 				}
 			}
 
@@ -67,7 +66,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Reso
 
 				foreach (var skillEfficiency in combination.SkillEfficiencies)
 				{
-					_persister.RemoveSkillEfficiency(resourceId.Value, skillEfficiency.Key, skillEfficiency.Value);
+					_persister.RemoveSkillEfficiency(resourceId.Value, skillEfficiency.Skill, skillEfficiency.Resource);
 				}
 			}
 

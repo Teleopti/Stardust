@@ -1,5 +1,3 @@
-using System;
-using System.Collections.Generic;
 using NUnit.Framework;
 using Rhino.Mocks;
 using Teleopti.Ccc.Domain.Collection;
@@ -14,7 +12,6 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
     [TestFixture]
     public class ScheduleProjectionExtractorTest
     {
-
         ScheduleProjectionExtractor _target;
 	    private MockRepository _mocks;
 	    private IPersonSkillProvider _personSkillProvider;
@@ -53,7 +50,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 		        Expect.Call(_personSkillProvider.SkillsOnPersonDate(p1, new DateOnly()))
 		              .IgnoreArguments()
 		              .Return(new SkillCombination("key", new ISkill[] {}, new DateOnlyPeriod(),
-		                                           new Dictionary<Guid, double>()));
+		                                           new SkillEffiencyResource[]{}));
 	        }
 	        using (_mocks.Playback())
 	        {

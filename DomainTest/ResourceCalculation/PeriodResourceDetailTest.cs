@@ -13,13 +13,12 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 			 var target = new PeriodResourceDetail(1, 0.000004);
 			 Assert.AreEqual(0d, target.Resource);
 
-			 target.Resource = 0.00001;
+			 target = new PeriodResourceDetail(1, 0.00001);
 			 Assert.AreEqual(0.00001, target.Resource);
 
-			 target.Resource = -0.000001;
+			 target = new PeriodResourceDetail(1, -0.000001);
 			 Assert.AreEqual(0.00000, target.Resource);
 		 }
-
 
 		 [Test]
 		 [ExpectedException(typeof(ArgumentOutOfRangeException))]
@@ -34,10 +33,10 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 			 var target = new PeriodResourceDetail(0.000004, 1);
 			 Assert.AreEqual(0d, target.Count);
 
-			 target.Count = 0.00001;
+			 target = new PeriodResourceDetail(0.00001, 1);
 			 Assert.AreEqual(0.00001, target.Count);
 
-			 target.Count = -0.000001;
+			 target = new PeriodResourceDetail(-0.000001, 1);
 			 Assert.AreEqual(0.00000, target.Count);
 		 }
 

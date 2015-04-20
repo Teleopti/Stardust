@@ -26,7 +26,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 			}
 
 			IPersonPeriod personPeriod = person.Period(date);
-			if (personPeriod == null) return new SkillCombination(string.Empty, new ISkill[0], new DateOnlyPeriod(), new Dictionary<Guid, double>());
+			if (personPeriod == null) return new SkillCombination(string.Empty, new ISkill[0], new DateOnlyPeriod(), new SkillEffiencyResource[]{});
 
 			var personSkillCollection = new List<IPersonSkill>();
 			foreach (var personSkill in personPeriod.PersonSkillCollection)
@@ -44,7 +44,8 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 
 			var skillEfficiencies =
 				personSkillCollection.Where(
-					s => s.Active && s.SkillPercentage.Value > 0).ToDictionary(k => k.Skill.Id.GetValueOrDefault(),v => v.SkillPercentage.Value);
+					s => s.Active && s.SkillPercentage.Value > 0)
+					.Select(k => new SkillEffiencyResource(k.Skill.Id.GetValueOrDefault(), k.SkillPercentage.Value)).ToArray();
 
 			var key = SkillCombination.ToKey(skills.Where(s => !((IDeleteTag)s).IsDeleted).Select(s => s.Id.GetValueOrDefault()));
 
@@ -66,7 +67,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 	{
 		private readonly DateOnlyPeriod _period;
 
-		public SkillCombination(string key, ISkill[] skills, DateOnlyPeriod period, IDictionary<Guid, double> skillEfficiencies)
+		public SkillCombination(string key, ISkill[] skills, DateOnlyPeriod period, SkillEffiencyResource[] skillEfficiencies)
 		{
 			_period = period;
 			SkillEfficiencies = skillEfficiencies;
@@ -86,6 +87,6 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 
 		public string Key { get; private set; }
 		public ISkill[] Skills { get; private set; }
-		public IDictionary<Guid, double> SkillEfficiencies { get; private set; }
+		public SkillEffiencyResource[] SkillEfficiencies { get; private set; }
 	}
 }

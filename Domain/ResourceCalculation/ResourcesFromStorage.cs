@@ -61,9 +61,9 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 
 				var foundEfficiencies =
 					_skillEfficiencies.Where(s => s.ParentId == resourcesForCombinationFromStorage.Id)
-					                  .ToDictionary(k => k.SkillId, v => v.Amount);
+					                  .Select(k => new SkillEffiencyResource(k.SkillId,k.Amount)).ToArray();
 
-				periodResource.AppendResource(combination.Activity.ToString() + "|" + combination.Skills,
+				periodResource.AppendResource(combination.Activity + "|" + combination.Skills,
 											  new SkillCombination(combination.Skills, new ISkill[0], new DateOnlyPeriod(),
 											                       foundEfficiencies), resourcesForCombinationFromStorage.Heads, resourcesForCombinationFromStorage.Resources, null);
 			}

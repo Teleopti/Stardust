@@ -35,14 +35,13 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Reso
 
 			_scheduledResourcesReadModelStorage.Update(@event.Datasource, @event.BusinessUnitId, storage =>
 				{
-
 					if (skillsBefore.Count > 0)
 					{
 						var combinationBefore =
 							new SkillCombination(SkillCombination.ToKey(skillsBefore.Select(s => s.SkillId)),
 							                     new ISkill[] {}, period,
 							                     skillsBefore.Where(s => s.Proficiency != 1d)
-							                                 .ToDictionary(k => k.SkillId, v => v.Proficiency));
+															 .Select(k => new SkillEffiencyResource(k.SkillId, k.Proficiency)).ToArray());
 						foreach (var resourceLayer in oldResources)
 						{
 							storage.RemoveResource(resourceLayer, combinationBefore);
@@ -60,7 +59,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Reso
 						new SkillCombination(SkillCombination.ToKey(skillsBefore.Select(s => s.SkillId)),
 						                     new ISkill[] {}, period,
 						                     skillsBefore.Where(s => s.Proficiency != 1d)
-						                                 .ToDictionary(k => k.SkillId, v => v.Proficiency));
+														 .Select(k => new SkillEffiencyResource(k.SkillId, k.Proficiency)).ToArray());
 					foreach (var resourceLayer in oldResources)
 					{
 						storage.AddResource(resourceLayer, combinationAfter);

@@ -85,6 +85,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 				{
 					foreach (var pair in interval.GetSkillKeyResources(activityKey))
 					{
+						var resultEffiency = pair.Effiencies.ToDictionary(k => k.Skill,v=>v.Resource);
 						IEnumerable<ISkill> skills;
 						if (_skills.TryGetValue(pair.SkillKey, out skills))
 						{
@@ -94,13 +95,13 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 								foreach (var skill in value.SkillEffiencies)
 								{
 									double effiency;
-									if (pair.Effiencies.TryGetValue(skill.Key, out effiency))
+									if (resultEffiency.TryGetValue(skill.Key, out effiency))
 									{
-										pair.Effiencies[skill.Key] = effiency + skill.Value;
+										resultEffiency[skill.Key] = effiency + skill.Value;
 									}
 									else
 									{
-										pair.Effiencies.Add(skill.Key, skill.Value);
+										resultEffiency.Add(skill.Key, skill.Value);
 									}
 								}
 								value = new AffectedSkills
@@ -108,12 +109,12 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 									Skills = skills,
 									Resource = value.Resource + pair.Resource.Resource,
 									Count = value.Count + pair.Resource.Count,
-									SkillEffiencies = pair.Effiencies
+									SkillEffiencies = resultEffiency
 								};
 							}
 							else
 							{
-								value = new AffectedSkills { Skills = skills, Resource = pair.Resource.Resource, Count = pair.Resource.Count, SkillEffiencies = pair.Effiencies };
+								value = new AffectedSkills { Skills = skills, Resource = pair.Resource.Resource, Count = pair.Resource.Count, SkillEffiencies = resultEffiency};
 							}
 							result[pair.SkillKey] = value;
 						}
