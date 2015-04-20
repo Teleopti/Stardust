@@ -4,8 +4,8 @@ angular.module('wfm.forecasting', [])
 	.controller('ForecastingCtrl', [
 		'$scope', '$state',
 		function ($scope, $state) {
-			var startDate = moment().add(1, 'months').startOf('month').toDate();
-			var endDate = moment().add(2, 'months').startOf('month').toDate();
+			var startDate = moment().add(1, 'months').startOf('month').format("YYYY-MM-DD");
+			var endDate = moment().add(2, 'months').startOf('month').format("YYYY-MM-DD");
 			$scope.period = { startDate: startDate, endDate: endDate }; //use moment to get first day of next month
 
 			$scope.nextStepAll = function (period) {
