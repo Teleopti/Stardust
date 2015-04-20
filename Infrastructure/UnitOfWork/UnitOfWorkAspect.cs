@@ -1,4 +1,5 @@
 using System;
+using Teleopti.Ccc.Domain;
 using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.Infrastructure.Web;
@@ -29,8 +30,14 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 
 		public void OnAfterInvocation(Exception exception)
 		{
-			persistWhenNoExpcetion(exception);
-			diposeBusinessUnitFilterOverride();
+			try
+			{
+				persistWhenNoExpcetion(exception);
+			}
+			finally
+			{
+				diposeBusinessUnitFilterOverride();
+			}
 			_unitOfWork.Dispose();
 		}
 
@@ -41,11 +48,10 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 			_unitOfWork.PersistAll();
 		}
 
-
 		private IDisposable overrideBusinessUnitFilter()
 		{
 			var id = BusinessUnitIdForRequest(_context);
-			return id.HasValue ? _overrider.OverrideWith(id.Value) : null;
+			return id.HasValue ? _overrider.OverrideWith(id.Value) : new GenericDisposable(()=>{});
 		}
 
 		public static Guid? BusinessUnitIdForRequest(ICurrentHttpContext context)
@@ -64,7 +70,6 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 
 		private void diposeBusinessUnitFilterOverride()
 		{
-			if (_businessUnitOverrideScope == null) return;
 			_businessUnitOverrideScope.Dispose();
 			_businessUnitOverrideScope = null;
 		}
