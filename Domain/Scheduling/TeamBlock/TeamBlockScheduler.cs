@@ -133,8 +133,11 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 			if (!success && _teamBlockSchedulingOptions.IsBlockSchedulingWithSameShift(schedulingOptions))
 			{
 				_teamBlockClearer.ClearTeamBlock(schedulingOptions, rollbackService, teamBlockInfo);
-				roleModelShift = _roleModelSelector.Select(teamBlockInfo, datePointer, selectedTeamMembers.First(),schedulingOptions, shiftNudgeDirective.EffectiveRestriction, _isMaxSeatToggleEnabled);
-				success = tryScheduleBlock(teamBlockInfo, schedulingOptions, selectedBlockDays,roleModelShift, rollbackService, resourceCalculateDelayer, schedulingResultStateHolder, shiftNudgeDirective, _isMaxSeatToggleEnabled);
+				roleModelShift = _roleModelSelector.Select(teamBlockInfo, datePointer, selectedTeamMembers.First(),schedulingOptions, shiftNudgeDirective.EffectiveRestriction, _isMaxSeatToggleEnabled);		
+				success = tryScheduleBlock(teamBlockInfo, schedulingOptions, selectedBlockDays, roleModelShift, rollbackService, resourceCalculateDelayer, schedulingResultStateHolder, shiftNudgeDirective, ()=>
+				{
+					cancelMe = true;
+				});
 
 				if (!success)
 				{

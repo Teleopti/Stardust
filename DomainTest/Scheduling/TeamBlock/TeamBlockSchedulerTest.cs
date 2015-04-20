@@ -90,14 +90,14 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 			using (_mocks.Record())
 			{
 				Expect.Call(_roleModelSelector.Select(_teamBlockInfo, _dateOnly, _person1, _schedulingOptions, new EffectiveRestriction(), true)).Return(_shift).Repeat.Twice();
-				Expect.Call(() => _singleDayScheduler.DayScheduled += _target.OnDayScheduled);
+				Expect.Call(() => _singleDayScheduler.DayScheduled += null).IgnoreArguments();
 				Expect.Call(_singleDayScheduler.ScheduleSingleDay(_teamBlockInfo, _schedulingOptions, _dateOnly,_shift, _schedulePartModifyAndRollbackService, _resourceCalculateDelayer,_schedulingResultStateHolder, _shiftNudgeDirective.EffectiveRestriction, true)).Return(false);
-				Expect.Call(() => _singleDayScheduler.DayScheduled -= _target.OnDayScheduled);
+				Expect.Call(() => _singleDayScheduler.DayScheduled -= null).IgnoreArguments();
 
 				Expect.Call(()=>_teamBlockClearer.ClearTeamBlock(_schedulingOptions, _schedulePartModifyAndRollbackService,_teamBlockInfo));
-				Expect.Call(() => _singleDayScheduler.DayScheduled += _target.OnDayScheduled);
+				Expect.Call(() => _singleDayScheduler.DayScheduled += null).IgnoreArguments();
 				Expect.Call(_singleDayScheduler.ScheduleSingleDay(_teamBlockInfo, _schedulingOptions, _dateOnly, _shift, _schedulePartModifyAndRollbackService, _resourceCalculateDelayer, _schedulingResultStateHolder, _shiftNudgeDirective.EffectiveRestriction, true)).Return(true);
-				Expect.Call(() => _singleDayScheduler.DayScheduled -= _target.OnDayScheduled);
+				Expect.Call(() => _singleDayScheduler.DayScheduled -= null).IgnoreArguments();
 			}
 			using (_mocks.Playback())
 			{
@@ -115,14 +115,14 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 			using (_mocks.Record())
 			{
 				Expect.Call(_roleModelSelector.Select(_teamBlockInfo, _dateOnly, _person1, _schedulingOptions, new EffectiveRestriction(), true)).Return(_shift).Repeat.Twice();
-				Expect.Call(() => _singleDayScheduler.DayScheduled += _target.OnDayScheduled);
+				Expect.Call(() => _singleDayScheduler.DayScheduled += null).IgnoreArguments();
 				Expect.Call(_singleDayScheduler.ScheduleSingleDay(_teamBlockInfo, _schedulingOptions, _dateOnly, _shift, _schedulePartModifyAndRollbackService, _resourceCalculateDelayer, _schedulingResultStateHolder, _shiftNudgeDirective.EffectiveRestriction, true)).Return(false);
-				Expect.Call(() => _singleDayScheduler.DayScheduled -= _target.OnDayScheduled);
+				Expect.Call(() => _singleDayScheduler.DayScheduled -= null).IgnoreArguments();
 
 				Expect.Call(() => _teamBlockClearer.ClearTeamBlock(_schedulingOptions, _schedulePartModifyAndRollbackService, _teamBlockInfo));
-				Expect.Call(() => _singleDayScheduler.DayScheduled += _target.OnDayScheduled);
+				Expect.Call(() => _singleDayScheduler.DayScheduled += null).IgnoreArguments();
 				Expect.Call(_singleDayScheduler.ScheduleSingleDay(_teamBlockInfo, _schedulingOptions, _dateOnly, _shift, _schedulePartModifyAndRollbackService, _resourceCalculateDelayer, _schedulingResultStateHolder, _shiftNudgeDirective.EffectiveRestriction, true)).Return(false);
-				Expect.Call(() => _singleDayScheduler.DayScheduled -= _target.OnDayScheduled);
+				Expect.Call(() => _singleDayScheduler.DayScheduled -= null).IgnoreArguments();
 
 				Expect.Call(()=>_schedulePartModifyAndRollbackService.Rollback());
 				Expect.Call(_resourceCalculateDelayer.CalculateIfNeeded(_dateOnly, null)).Return(true);
