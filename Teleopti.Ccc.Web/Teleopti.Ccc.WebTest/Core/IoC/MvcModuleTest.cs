@@ -42,6 +42,7 @@ using Teleopti.Ccc.Web.Areas.Start.Core.Authentication.Services;
 using Teleopti.Ccc.Web.Areas.Start.Core.Authentication.ViewModelFactory;
 using Teleopti.Ccc.Web.Areas.Start.Core.LayoutBase;
 using Teleopti.Ccc.Web.Areas.Start.Core.Menu;
+using Teleopti.Ccc.Web.Broker;
 using Teleopti.Ccc.Web.Core;
 using Teleopti.Ccc.Web.Core.IoC;
 using Teleopti.Ccc.Web.Core.RequestContext.Cookie;
@@ -70,6 +71,8 @@ namespace Teleopti.Ccc.WebTest.Core.IoC
 			containerAdder.RegisterModule(new AuthenticationModule(applicationData));
 			containerAdder.Register(c => mocks.DynamicMock<HttpContextBase>());
 			containerAdder.Update(container);
+			SignalRConfiguration.MapHubs = h => { };
+			SignalRConfiguration.Configure(null);
 
 			requestContainer = container.BeginLifetimeScope("httpRequest");
 		}
@@ -109,9 +112,18 @@ namespace Teleopti.Ccc.WebTest.Core.IoC
         }
 
 		[Test]
-		public void ShouldRegisterMessageBrokerController()
+		public void ShouldRegisterUserDataController()
 		{
 			requestContainer.Resolve<UserDataController>()
+				.Should().Not.Be.Null();
+		}
+
+		[Test]
+		public void ShouldResolveMessageBrokerController()
+		{
+			requestContainer.Resolve<IActionScheduler>()
+				.Should().Not.Be.Null();
+			requestContainer.Resolve<MessageBrokerController>()
 				.Should().Not.Be.Null();
 		}
 
