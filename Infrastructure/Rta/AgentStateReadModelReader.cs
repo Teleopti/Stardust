@@ -220,7 +220,7 @@ namespace Teleopti.Ccc.Infrastructure.Rta
 				{
 					missingUsers.Add(new AgentStateReadModel
 					{
-						BusinessUnitId = reader.GetGuid(reader.GetOrdinal("BusinessUnitId")),
+						BusinessUnitId = reader.NullableGuid("BusinessUnitId") ?? Guid.Empty,
 						PersonId = reader.GetGuid(reader.GetOrdinal("PersonId")),
 						StateCode = reader.String("StateCode"),
 						PlatformTypeId = reader.GetGuid(reader.GetOrdinal("PlatformTypeId")),

@@ -194,13 +194,25 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta
 			result.ScheduledNextId.Should().Be(agentStateReadModel.ScheduledNextId);
 			result.NextStart.Should().Be(agentStateReadModel.NextStart);
 		}
+
+
+		[Test]
+		public void ShouldNotCrashWhenBusinessUnitIdIsNull()
+		{
+			var personId = Guid.NewGuid();
+			ActualAgentStateReadWriteTestAttribute.ApplySql(string.Format(@"					
+						insert into rta.ActualAgentState (PersonId,  PlatformTypeId, ReceivedTime, BatchId, OriginalDataSourceId, BusinessUnitId)
+						values('{0}', '{1}', '{2}', '{2}', '2', null)", personId, Guid.NewGuid(), "2015-04-21 8:00"));
+			
+			Assert.DoesNotThrow(() => Reader.GetMissingAgentStatesFromBatch("2015-04-21 8:15".Utc(), "2"));
+		}
 	}
 
 	public class ActualAgentStateReadWriteTestAttribute : InfrastructureTestAttribute
 	{
 		protected override void AfterTest()
 		{
-			applySql("DELETE FROM RTA.ActualAgentState");
+			ApplySql("DELETE FROM RTA.ActualAgentState");
 			removeAddedPerson();
 		}
 		
@@ -214,7 +226,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta
 			}
 		}
 
-		private void applySql(string sql)
+		public static void ApplySql(string sql)
 		{
 			using (var connection = new SqlConnection(ConnectionStringHelper.ConnectionStringUsedInTestsMatrix))
 			{
