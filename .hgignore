@@ -92,3 +92,6 @@ Cube/build/*Xmla*
 */npm-shrinkwrap.json
 */css/main.css
 Teleopti.Ccc.Web/Teleopti.Ccc.Web/WFM/dist
+Teleopti.Ccc.Web/Teleopti.Ccc.Web/WFM/css/style.css
+Teleopti.Ccc.Web/Teleopti.Ccc.Web/WFM/css/style.css.map
+Teleopti.Ccc.Web/Teleopti.Ccc.Web/WFM/css/style.min.css

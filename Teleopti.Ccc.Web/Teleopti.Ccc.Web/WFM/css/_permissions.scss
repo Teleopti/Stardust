@@ -1,0 +1,25 @@
+﻿.label:hover, .tab-group input[type=radio]:checked + .label{
+	background-color: #0099FF; 
+}
+
+/* Extract in styleguide */
+.input-prepend i{
+	color: rgba(0, 0, 0, 0.54);
+	width: 18px;
+	&:before{
+		vertical-align: sub;
+	}
+}
+
+.input-prepend input[type="text"]{
+	width: auto;
+}
+
+input[type="text"]{
+	height: 20px;
+}
+
+.tab-group .label{
+	  line-height: initial;
+		text-transform: capitalize;
+}

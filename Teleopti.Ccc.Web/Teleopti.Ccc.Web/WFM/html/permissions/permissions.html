@@ -16,15 +16,17 @@
 								<input type="text" ng-model="roleName" placeholder="{{'CreateNewRole' | translate}}" class="role-input role" />
 							</div>
 						</form>
-
+					</div>
+					<div class="wfm-block">
 						<div class="input-prepend">
 							<i class="mdi mdi-filter-outline"></i>
 							<input type="text" name="filterRole" ng-model="searchRoles.DescriptionText" placeholder="{{'RoleFilterThreeDots' | translate}}" />
 						</div>
 					</div>
-					<div id="searchRoleResults" class="role-container">
+
+					<div id="searchRoleResults">
 						<ul class="wfm-list">
-							<li ng-repeat="role in roles | filter:searchRoles" ng-click="showRole(role.Id)" ng-dblclick="editing = true" ng-class="{'wfm-list-item-selected': role.Id==selectedRole}" class="role-btn wfm-block wfm-list-item role">
+							<li ng-repeat="role in roles | filter:searchRoles" ng-click="showRole(role.Id)" ng-dblclick="editing = true" ng-class="{'active': role.Id==selectedRole}" class="role-btn wfm-block wfm-list-item role">
 								<div class="wfm-leave-behind">
 									<span>
 										<i ng-click="copyRole(role.Id)" class="mdi mdi-content-copy"></i>
@@ -53,9 +55,9 @@
 
 
 			<div class="col-lg-8">
-				<article class="tab-group wfm-toggle-group material-depth-2">
+				<article class="tab-group material-depth-2">
 					<input type="radio" name="perms-tabs" ng-model="roleDetails" ng-value="'functionsAvailable'" id="tab-1" />
-					<label class="label" for="tab-1" translate style="text-transform: capitalize">
+					<label class="label" for="tab-1" translate>
 						Functions
 					</label>
 
@@ -91,7 +93,7 @@
 
 								<div class="tree">
 									<div ui-tree data-drag-enabled="false">
-										<ol ui-tree-nodes="" ng-model="functionsDisplayed" id="tree-root" class="tree-line" toggle-focus >
+										<ol ui-tree-nodes="" ng-model="functionsDisplayed" id="tree-root" class="tree-line" toggle-focus>
 											<li ng-repeat="node in functionsDisplayed | filter:searchPermissions" ui-tree-node ng-include="'nodes_renderer.html'"></li>
 										</ol>
 									</div>
@@ -106,7 +108,7 @@
 					<section>
 						<div class="tab-container">
 							<div ng-show="roleDetails=='dataAvailable'">
-						
+
 								<div class="row toolbar">
 									<div class="col-lg-6">
 										<div class="input-prepend">
@@ -133,7 +135,7 @@
 										</div>
 									</div>
 								</div>
-								
+
 								<div class="tree">
 									<div ui-tree data-drag-enabled="false">
 										<ol ui-tree-nodes="" ng-model="organization.DynamicOptions" class="tree-line">
