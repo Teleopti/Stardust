@@ -3,30 +3,15 @@
                    assembly="Teleopti.Ccc.Domain"
                    namespace="Teleopti.Ccc.Domain.RealTimeAdherence"
                    default-access="field.camelcase-underscore">
-  
+
 	<class name="RtaState">
-		<!--IEntity-->
-		<id name="Id"
-				type="guid"
-			 access="nosetter.camelcase-underscore"
-				unsaved-value="null">
+		<id name="Id" type="guid" access="nosetter.camelcase-underscore" unsaved-value="null">
 			<generator class="guid.comb" />
 		</id>
-		<!--IEntity-->
-
-			<property name="Name"
-					  not-null="true"
-					  type="string"
-					  length="50"/>
-    <property name="StateCode"
-					  not-null="true"
-					  type="string"
-					  length="25"/>
-    <property name="PlatformTypeId"
-					  not-null="true"
-					  type="guid"/>
-    <many-to-one class="RtaStateGroup"
-                 name="Parent"
-                 not-null="true" foreign-key="FK_RtaState_RtaStateGroup"/>
+		<many-to-one name="BusinessUnit" class="Teleopti.Ccc.Domain.Common.BusinessUnit" access="readonly" />
+		<property name="Name" />
+		<property name="StateCode" />
+		<property name="PlatformTypeId" />
+		<many-to-one class="RtaStateGroup" name="Parent" />
 	</class>
 </hibernate-mapping>

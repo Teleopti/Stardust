@@ -3,55 +3,25 @@
                    assembly="Teleopti.Ccc.Domain"
                    namespace="Teleopti.Ccc.Domain.RealTimeAdherence"
                    default-access="field.camelcase-underscore">
-  
+
 	<class name="RtaStateGroup">
-		<!--IEntity-->
-		<id name="Id"
-				type="guid"
-			 access="nosetter.camelcase-underscore"
-				unsaved-value="null">
+		<id name="Id" type="guid" access="nosetter.camelcase-underscore" unsaved-value="null">
 			<generator class="guid.comb" />
 		</id>
-		<version name="Version"
-				 unsaved-value ="null"/>
-		<many-to-one name="UpdatedBy"
-					 class="Teleopti.Ccc.Domain.Common.Person"
-					 not-null="true"
-					 foreign-key="FK_RtaStateGroup_Person_UpdatedBy" />
-		<property name="UpdatedOn"
-				  type="UtcDateTime"
-				  not-null="true"/>
-		<!--IEntity-->
-
-			<property name="Name"
-					  not-null="true"
-					  type="string"
-					  length="50"/>
-    <property name="DefaultStateGroup"
-              type="boolean"
-              not-null="true" />
-    <property name="IsLogOutState"
-              type="boolean"
-              not-null="true" />
-    <property name="Available"
-          type="boolean"
-          not-null="true" />
-    <bag name="StateCollection"
-				 cascade="all-delete-orphan"
-         inverse="true">
-      <key column="Parent" />
-      <one-to-many class="RtaState"/>
-    </bag>
-		<many-to-one name="BusinessUnit"
-					 class="Teleopti.Ccc.Domain.Common.BusinessUnit"
-            access="nosetter.camelcase-underscore" 
-					 not-null="true" foreign-key="FK_RtaStateGroup_BusinessUnit"/>
-    <property name="IsDeleted"
-          type="boolean"
-          not-null="true"/>
-    <filter name="businessUnitFilter"
-        condition=":businessUnitParameter = BusinessUnit" />
-    <filter name="deletedFlagFilter"
-      condition="IsDeleted = 0" />
+		<version name="Version" unsaved-value="null"/>
+		<many-to-one name="UpdatedBy" class="Teleopti.Ccc.Domain.Common.Person" />
+		<property name="UpdatedOn" />
+		<property name="Name" />
+		<property name="DefaultStateGroup" />
+		<property name="IsLogOutState" />
+		<property name="Available" />
+		<bag name="StateCollection" cascade="all-delete-orphan" inverse="true">
+			<key column="Parent" />
+			<one-to-many class="RtaState"/>
+		</bag>
+		<many-to-one name="BusinessUnit" class="Teleopti.Ccc.Domain.Common.BusinessUnit" access="nosetter.camelcase-underscore" />
+		<property name="IsDeleted" />
+		<filter name="businessUnitFilter" condition=":businessUnitParameter = BusinessUnit" />
+		<filter name="deletedFlagFilter" condition="IsDeleted = 0" />
 	</class>
 </hibernate-mapping>

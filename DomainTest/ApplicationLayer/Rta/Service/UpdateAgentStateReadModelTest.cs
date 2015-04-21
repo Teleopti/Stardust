@@ -7,6 +7,13 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 {
 	[TestFixture]
 	[RtaTest]
+	public class X
+	{
+		
+	}
+
+	[TestFixture]
+	[RtaTest]
 	public class UpdateAgentStateReadModelTest
 	{
 		public FakeRtaDatabase Database;

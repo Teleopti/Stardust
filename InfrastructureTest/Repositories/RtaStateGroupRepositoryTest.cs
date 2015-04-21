@@ -1,5 +1,6 @@
 using System;
 using NUnit.Framework;
+using SharpTestsEx;
 using Teleopti.Ccc.Domain.RealTimeAdherence;
 using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.Infrastructure.Repositories;
@@ -8,45 +9,30 @@ using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.InfrastructureTest.Repositories
 {
-    ///<summary>
-    /// Tests RtaStateGroupRepository
-    ///</summary>
     [TestFixture]
     [Category("LongRunning")]
     public class RtaStateGroupRepositoryTest : RepositoryTest<IRtaStateGroup>
     {
-        /// <summary>
-        /// Runs every test. Implemented by repository's concrete implementation.
-        /// </summary>
-        protected override void ConcreteSetup()
-        {
-        }
-
-        /// <summary>
-        /// Creates an aggregate using the Bu of logged in user.
-        /// Should be a "full detailed" aggregate
-        /// </summary>
-        /// <returns></returns>
         protected override IRtaStateGroup CreateAggregateWithCorrectBusinessUnit()
         {
-            IRtaStateGroup stateGroup = new RtaStateGroup("sg1", true, false);
-            stateGroup.IsLogOutState = true;
-            stateGroup.AddState("state1", "01", Guid.NewGuid());
+            var stateGroup = new RtaStateGroup("test", true, false)
+            {
+	            IsLogOutState = true
+            };
+	        stateGroup.AddState("state1", "01", Guid.NewGuid());
             return stateGroup;
         }
 
-        /// <summary>
-        /// Verifies the aggregate graph properties.
-        /// </summary>
-        /// <param name="loadedAggregateFromDatabase">The loaded aggregate from database.</param>
         protected override void VerifyAggregateGraphProperties(IRtaStateGroup loadedAggregateFromDatabase)
         {
-            IRtaStateGroup org = CreateAggregateWithCorrectBusinessUnit();
+            var org = CreateAggregateWithCorrectBusinessUnit();
             Assert.AreEqual(org.Name, loadedAggregateFromDatabase.Name);
+            Assert.AreEqual(org.BusinessUnit.Id, loadedAggregateFromDatabase.BusinessUnit.Id);
             Assert.AreEqual(org.Available, loadedAggregateFromDatabase.Available);
             Assert.AreEqual(org.DefaultStateGroup, loadedAggregateFromDatabase.DefaultStateGroup);
             Assert.AreEqual(org.IsLogOutState,loadedAggregateFromDatabase.IsLogOutState);
             Assert.AreEqual(org.StateCollection.Count, loadedAggregateFromDatabase.StateCollection.Count);
+			Assert.AreEqual(org.StateCollection[0].BusinessUnit.Id, loadedAggregateFromDatabase.StateCollection[0].BusinessUnit.Id);
         }
 
         protected override Repository<IRtaStateGroup> TestRepository(IUnitOfWork unitOfWork)
@@ -57,8 +43,8 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
         [Test]
         public void VerifyMovingStateWorks()
         {
-            IRtaStateGroup stateGroup1 = CreateAggregateWithCorrectBusinessUnit();
-            IRtaStateGroup stateGroup2 = CreateAggregateWithCorrectBusinessUnit();
+            var stateGroup1 = CreateAggregateWithCorrectBusinessUnit();
+            var stateGroup2 = CreateAggregateWithCorrectBusinessUnit();
 
             PersistAndRemoveFromUnitOfWork(stateGroup1);
             PersistAndRemoveFromUnitOfWork(stateGroup2);
@@ -82,5 +68,6 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
             Assert.AreEqual(1,result.Count);
             Assert.IsTrue(LazyLoadingManager.IsInitialized(result[0].StateCollection));
         }
+
     }
 }

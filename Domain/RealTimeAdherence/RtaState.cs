@@ -21,7 +21,12 @@ namespace Teleopti.Ccc.Domain.RealTimeAdherence
             _platformTypeId = platformTypeId;
         }
 
-        public virtual string Name
+	    public virtual IBusinessUnit BusinessUnit
+	    {
+		    get { return StateGroup.BusinessUnit; }
+	    }
+
+	    public virtual string Name
         {
             get { return _name; }
             set { _name = value; }
