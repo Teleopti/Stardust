@@ -36,7 +36,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
             Assert.AreEqual(_date, _gridlock.LocalDate);
             Assert.AreEqual(LockType.Authorization, _gridlock.LockType);
             Assert.AreEqual(_person.GetHashCode().ToString(CultureInfo.InvariantCulture) + "|" +
-                                _date.ToShortDateString() + "|" + LockType.Authorization, _gridlock.Key);
+								_date.GetHashCode().ToString(CultureInfo.InvariantCulture) + "|" + LockType.Authorization, _gridlock.Key);
 			Assert.AreEqual(new DateTimePeriod(2006, 1, 1, 2006, 1, 2), _gridlock.Period);
         }
     }

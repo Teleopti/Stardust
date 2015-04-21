@@ -98,7 +98,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
         /// </summary>
         public string Key
         {
-            get { return  _person.GetHashCode().ToString(CultureInfo.InvariantCulture) + "|" + _localDate.ToShortDateString() + "|" + LockType;}
+			get { return _person.GetHashCode().ToString(CultureInfo.InvariantCulture) + "|" + _localDate.GetHashCode().ToString(CultureInfo.InvariantCulture) + "|" + LockType; }
         }
 
         /// <summary>

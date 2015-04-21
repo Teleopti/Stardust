@@ -334,7 +334,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 
         public static string GetPersonDateKey(IPerson person, DateOnly dateOnly)
         {
-	        return (person.GetHashCode() ^ dateOnly.GetHashCode()).ToString(CultureInfo.InvariantCulture);
+			return person.GetHashCode().ToString(CultureInfo.InvariantCulture) + "|" +  dateOnly.GetHashCode().ToString(CultureInfo.InvariantCulture);
         }
     }
 }
