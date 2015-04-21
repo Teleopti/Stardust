@@ -66,12 +66,13 @@
 <script type="text/ng-template" id="forecasting-chart.html">
 	<div ng-cloak class="modal-box" ng-click="$event.stopPropagation()">
 		<div ng-cloak ng-show="workload.modalLaunch">
+
 			<div class="modalbg">
 				<div class="dialog">
 					<div class="modal-header">
 						{{workload.Name}}
 					</div>
-					<div class="modal-inner-content">
+					<div class="modal-inner-content" ng-if="workload.loaded">
 						<div class="wfm-block">
 							<div class="alert-warning notice-spacer" ng-show="workload.noHistoricalDataForEvaluation"><i class='mdi mdi-alert'></i> Warning: There is no recommended forecasting method because of lack of historical data.</div>
 							<div class="alert-warning notice-spacer" ng-show="workload.noHistoricalDataForForecasting"><i class='mdi mdi-alert'></i> Warning: There is no historical data available for forecasting.</div>
@@ -90,6 +91,12 @@
 						<div class="wfm-block">
 							<linechart data="workload.chartData" options="workload.chartOptions" mode="" height="500"></linechart>
 						</div>
+					</div>
+					<div ng-if="!workload.loaded" class="text-center modal-inner-content">
+						<svg class="spinner" width="65px" height="65px" viewBox="0 0 66 66" xmlns="http://www.w3.org/2000/svg">
+							<circle class="path" fill="none" stroke-width="6" stroke-linecap="round" cx="33" cy="33" r="30"></circle>
+						</svg>
+					</div>
 					<div class="modal-footer">
 						<aside>
 							<a class="wfm-btn wfm-btn-invis-primary" ng-click="cancelMethod(workload)">Cancel</a>
