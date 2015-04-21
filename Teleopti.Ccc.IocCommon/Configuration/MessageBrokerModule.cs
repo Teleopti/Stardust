@@ -33,10 +33,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 				.As<IMessageListener>()
 				.SingleInstance();
 
-			var signalRRequired =
-				_configuration.Args().MessageBrokerListeningEnabled ||
-				!_configuration.Toggle(Toggles.Messaging_HttpSender_29205);
-
+			var signalRRequired = _configuration.Args().MessageBrokerListeningEnabled;
 			if (_configuration.Args().SharedContainer != null)
 			{
 				builder.RegisterInstance(_configuration.Args().SharedContainer.Resolve<ISignalRClient>())
@@ -53,8 +50,8 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 					.As<ISignalRClient>()
 					.As<IMessageBrokerUrl>()
 					.SingleInstance();
-			} 
-			else if (_configuration.Toggle(Toggles.Messaging_HttpSender_29205))
+			}
+			else
 			{
 				builder.RegisterType<DisabledSignalRClient>()
 					.As<ISignalRClient>()
@@ -62,10 +59,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 					.SingleInstance();
 			}
 
-			if (_configuration.Toggle(Toggles.Messaging_HttpSender_29205))
-				builder.RegisterType<HttpSender>().As<IMessageSender>().SingleInstance();
-			else
-				builder.RegisterType<SignalRSender>().As<IMessageSender>().SingleInstance();
+			builder.RegisterType<HttpSender>().As<IMessageSender>().SingleInstance();
 
 		}
 	}

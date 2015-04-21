@@ -42,7 +42,6 @@ MyTimeWeb_AgentBadge_28913 = true
 Scheduler_TeamBlockMoveTimeBetweenDays_22407 = true
 Scheduler_TeamBlockAdhereWithMaxSeatRule_23419 = true
 Scheduler_AdvanceFilter_29555 = true
-Messaging_HttpSender_29205 = true
 Scheduler_OccupancyESL_11724 = true
 Scheduler_SudentAvailabilityForFixedStaff_30393 = true
 Settings_SetAgentDescription_23257 = true

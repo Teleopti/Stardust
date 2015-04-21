@@ -41,19 +41,9 @@ namespace Teleopti.Ccc.IocCommonTest.Configuration
 		}
 
 		[Test]
-		public void ShouldResolveSignalRSender()
-		{
-			using (var container = BuildContainerWithToggle(Toggles.Messaging_HttpSender_29205, false))
-			{
-				container.Resolve<IMessageSender>()
-					.Should().Be.OfType<SignalRSender>();
-			}
-		}
-
-		[Test]
 		public void ShouldResolveHttpSender()
 		{
-			using (var container = BuildContainerWithToggle(Toggles.Messaging_HttpSender_29205, true))
+			using (var container = BuildContainer())
 			{
 				container.Resolve<IMessageSender>()
 					.Should().Be.OfType<HttpSender>();
@@ -73,30 +63,15 @@ namespace Teleopti.Ccc.IocCommonTest.Configuration
 		}
 
 		[Test]
-		public void ShouldNotUseSignalRIfListeningDisabledAndHttpSenderEnabled()
+		public void ShouldNotUseSignalRIfListeningDisabled()
 		{
 			var config = new IocConfiguration(
-				new IocArgs(new AppConfigReader()) { MessageBrokerListeningEnabled = false },
-				ToggleManager(Toggles.Messaging_HttpSender_29205, true)
+				new IocArgs(new AppConfigReader()) { MessageBrokerListeningEnabled = false }, null
 				);
 			using (var container = BuildContainer(config))
 			{
 				container.Resolve<ISignalRClient>().Should().Be.OfType<DisabledSignalRClient>();
 				container.Resolve<IMessageSender>().Should().Not.Be.Null();
-			}
-		}
-
-		[Test]
-		public void ShouldStillUseSignalRIfListeningDisabledAndHttpSenderDisabled()
-		{
-			var config = new IocConfiguration(
-				new IocArgs(new AppConfigReader()
-					) { MessageBrokerListeningEnabled = false },
-				ToggleManager(Toggles.Messaging_HttpSender_29205, false)
-				);
-			using (var container = BuildContainer(config))
-			{
-				container.Resolve<ISignalRClient>().Should().Be.OfType<SignalRClient>();
 			}
 		}
 

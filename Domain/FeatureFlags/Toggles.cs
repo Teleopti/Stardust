@@ -65,8 +65,6 @@
 		MyTimeWeb_SortSchedule_32092,
 		MyTimeWeb_EnhanceTeamSchedule_32580,
 
-		Messaging_HttpSender_29205,
-
 		Backlog_Module_23980,
 
 		ETL_SpeedUpETL_30791,
