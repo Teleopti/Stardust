@@ -5,16 +5,11 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Infrastructure.MultiTenancy.Server
 {
-	public interface ITenantCheckPasswordChange
-	{
-		AuthenticationResult Check(ApplicationLogonInfo userDetail);
-	}
-
-	public class TenantCheckPasswordChange : ITenantCheckPasswordChange
+	public class VerifyPasswordPolicy : IVerifyPasswordPolicy
 	{
 		private readonly Func<IPasswordPolicy> _passwordPolicy;
 
-		public TenantCheckPasswordChange(Func<IPasswordPolicy> passwordPolicy)
+		public VerifyPasswordPolicy(Func<IPasswordPolicy> passwordPolicy)
 		{
 			_passwordPolicy = passwordPolicy;
 		}

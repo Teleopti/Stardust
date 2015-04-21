@@ -3,7 +3,7 @@ using Teleopti.Ccc.Infrastructure.MultiTenancy.Server;
 
 namespace Teleopti.Ccc.WebTest.Areas.Tenant.Core
 {
-	public class SuccessfulTenantCheckPasswordChange : ITenantCheckPasswordChange
+	public class SuccessfulPasswordPolicy : IVerifyPasswordPolicy
 	{
 		public AuthenticationResult Check(ApplicationLogonInfo userDetail)
 		{

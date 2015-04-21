@@ -232,7 +232,8 @@
     <Compile Include="MultiTenancy\Client\ITenantServerConfiguration.cs" />
     <Compile Include="MultiTenancy\Client\TenantAuthenticationData.cs" />
     <Compile Include="MultiTenancy\Client\TenantServerConfiguration.cs" />
-    <Compile Include="MultiTenancy\Server\TenantCheckPasswordChange.cs" />
+    <Compile Include="MultiTenancy\Server\IVerifyPasswordPolicy.cs" />
+    <Compile Include="MultiTenancy\Server\VerifyPasswordPolicy.cs" />
     <Compile Include="MultiTenancy\Server\DeletePersonInfo.cs" />
     <Compile Include="MultiTenancy\Server\FindTenantAndPersonIdForIdentity.cs" />
     <Compile Include="MultiTenancy\Server\FindTenantByNameQuery.cs" />

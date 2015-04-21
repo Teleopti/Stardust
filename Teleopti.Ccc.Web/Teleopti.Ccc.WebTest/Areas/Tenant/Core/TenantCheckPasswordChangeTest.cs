@@ -10,7 +10,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Tenant.Core
 	[TestFixture]
 	public class TenantCheckPasswordChangeTest
 	{
-		private ITenantCheckPasswordChange target;
+		private IVerifyPasswordPolicy target;
 		private IPasswordPolicy passwordPolicy;
 		private ApplicationLogonInfo _applicationLogonInfo;
 
@@ -20,7 +20,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Tenant.Core
 			passwordPolicy =MockRepository.GenerateMock<IPasswordPolicy>();
 			var personInfo = new PersonInfo { Id = Guid.NewGuid() };
 			_applicationLogonInfo = new ApplicationLogonInfo(personInfo);
-			target = new TenantCheckPasswordChange(() => passwordPolicy);
+			target = new VerifyPasswordPolicy(() => passwordPolicy);
 		}
 
 		[Test]

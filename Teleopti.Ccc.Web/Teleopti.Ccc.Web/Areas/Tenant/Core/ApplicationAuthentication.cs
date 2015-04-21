@@ -11,17 +11,17 @@ namespace Teleopti.Ccc.Web.Areas.Tenant.Core
 		private readonly IDataSourceConfigurationProvider _dataSourceConfigurationProvider;
 		private readonly Func<IPasswordPolicy> _passwordPolicy;
 		private readonly INow _now;
-		private readonly ITenantCheckPasswordChange _tenantCheckPasswordChange;
+		private readonly IVerifyPasswordPolicy _verifyPasswordPolicy;
 
 		public ApplicationAuthentication(IApplicationUserTenantQuery applicationUserQuery,
 			IDataSourceConfigurationProvider dataSourceConfigurationProvider,
-			Func<IPasswordPolicy> passwordPolicy, INow now, ITenantCheckPasswordChange tenantCheckPasswordChange)
+			Func<IPasswordPolicy> passwordPolicy, INow now, IVerifyPasswordPolicy verifyPasswordPolicy)
 		{
 			_applicationUserQuery = applicationUserQuery;
 			_dataSourceConfigurationProvider = dataSourceConfigurationProvider;
 			_passwordPolicy = passwordPolicy;
 			_now = now;
-			_tenantCheckPasswordChange = tenantCheckPasswordChange;
+			_verifyPasswordPolicy = verifyPasswordPolicy;
 		}
 
 		public ApplicationAuthenticationResult Logon(string userName, string password)
@@ -43,8 +43,8 @@ namespace Teleopti.Ccc.Web.Areas.Tenant.Core
 			if (nhibConfig == null)
 				return createFailingResult(Resources.NoDatasource);
 
-			var passwordCheck = _tenantCheckPasswordChange.Check(applicationLogonInfo);
-			if (passwordCheck != null)
+			var passwordCheck = _verifyPasswordPolicy.Check(applicationLogonInfo);
+			if (!passwordCheck.Successful)
 				return new ApplicationAuthenticationResult
 				{
 					FailReason = passwordCheck.Message,

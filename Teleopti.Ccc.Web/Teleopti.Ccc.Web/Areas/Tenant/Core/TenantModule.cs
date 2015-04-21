@@ -53,7 +53,7 @@ namespace Teleopti.Ccc.Web.Areas.Tenant.Core
 			builder.RegisterType<PersonInfoMapper>().As<IPersonInfoMapper>().SingleInstance();
 			builder.RegisterType<FindTenantByNameQuery>().As<IFindTenantByNameQuery>().SingleInstance();
 			builder.RegisterType<DeletePersonInfo>().As<IDeletePersonInfo>().SingleInstance();
-			builder.RegisterType<TenantCheckPasswordChange>().As<ITenantCheckPasswordChange>().SingleInstance();
+			builder.RegisterType<VerifyPasswordPolicy>().As<IVerifyPasswordPolicy>().SingleInstance();
 		}
 	}
 }
