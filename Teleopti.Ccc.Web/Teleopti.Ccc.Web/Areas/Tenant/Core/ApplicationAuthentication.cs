@@ -44,7 +44,7 @@ namespace Teleopti.Ccc.Web.Areas.Tenant.Core
 				return createFailingResult(Resources.NoDatasource);
 
 			var passwordCheck = _verifyPasswordPolicy.Check(applicationLogonInfo);
-			if (!passwordCheck.Successful)
+			if (passwordCheck.HasMessage)
 				return new ApplicationAuthenticationResult
 				{
 					FailReason = passwordCheck.Message,
