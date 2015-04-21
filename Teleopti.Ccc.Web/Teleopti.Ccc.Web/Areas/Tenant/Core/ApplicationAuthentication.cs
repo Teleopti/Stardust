@@ -1,23 +1,27 @@
-﻿using Teleopti.Ccc.Infrastructure.MultiTenancy.Server;
+﻿using System;
+using Teleopti.Ccc.Infrastructure.MultiTenancy.Server;
 using Teleopti.Ccc.UserTexts;
-using Teleopti.Interfaces.Infrastructure;
+using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Web.Areas.Tenant.Core
 {
 	public class ApplicationAuthentication : IApplicationAuthentication
 	{
 		private readonly IApplicationUserTenantQuery _applicationUserQuery;
-		private readonly IPasswordVerifier _passwordVerifier;
 		private readonly IPasswordPolicyCheck _passwordPolicyCheck;
 		private readonly IDataSourceConfigurationProvider _dataSourceConfigurationProvider;
+		private readonly Func<IPasswordPolicy> _passwordPolicy;
+		private readonly INow _now;
 
-		public ApplicationAuthentication(IApplicationUserTenantQuery applicationUserQuery, IPasswordVerifier passwordVerifier,
-			IPasswordPolicyCheck passwordPolicyCheck, IDataSourceConfigurationProvider dataSourceConfigurationProvider)
+		public ApplicationAuthentication(IApplicationUserTenantQuery applicationUserQuery,
+			IPasswordPolicyCheck passwordPolicyCheck, IDataSourceConfigurationProvider dataSourceConfigurationProvider,
+			Func<IPasswordPolicy> passwordPolicy, INow now)
 		{
 			_applicationUserQuery = applicationUserQuery;
-			_passwordVerifier = passwordVerifier;
 			_passwordPolicyCheck = passwordPolicyCheck;
 			_dataSourceConfigurationProvider = dataSourceConfigurationProvider;
+			_passwordPolicy = passwordPolicy;
+			_now = now;
 		}
 
 		public ApplicationAuthenticationResult Logon(string userName, string password)
@@ -29,7 +33,7 @@ namespace Teleopti.Ccc.Web.Areas.Tenant.Core
 
 			var applicationLogonInfo = personInfo.ApplicationLogonInfo;
 
-			if (!_passwordVerifier.Check(password, applicationLogonInfo))
+			if(!applicationLogonInfo.IsValidPassword(_now, _passwordPolicy(), password))
 				return createFailingResult(Resources.LogOnFailedInvalidUserNameOrPassword);
 
 			if (applicationLogonInfo.IsLocked)

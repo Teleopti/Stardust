@@ -569,11 +569,9 @@
     <Compile Include="Areas\Tenant\Core\IHttpRequestUserAgent.cs" />
     <Compile Include="Areas\Tenant\Core\ILoginAttemptModelFactory.cs" />
     <Compile Include="Areas\Tenant\Core\IPasswordPolicyCheck.cs" />
-    <Compile Include="Areas\Tenant\Core\IPasswordVerifier.cs" />
     <Compile Include="Areas\Tenant\Core\LoginAttemptModelFactoryForWeb.cs" />
     <Compile Include="Areas\Tenant\Core\LogTenancyLogonAttempt.cs" />
     <Compile Include="Areas\Tenant\Core\PasswordPolicyCheck.cs" />
-    <Compile Include="Areas\Tenant\Core\PasswordVerifier.cs" />
     <Compile Include="Areas\Tenant\Core\TenantModule.cs" />
     <Compile Include="Areas\Tenant\Core\IIdentityAuthentication.cs" />
     <Compile Include="Areas\Tenant\AuthenticateController.cs" />
