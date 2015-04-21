@@ -1,7 +1,7 @@
 ﻿using System;
 using Teleopti.Interfaces.MessageBroker.Client;
 
-namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
+namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta
 {
 	public class FakeSignalRClient : ISignalRClient
 	{

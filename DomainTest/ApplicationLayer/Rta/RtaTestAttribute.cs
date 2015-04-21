@@ -1,7 +1,4 @@
-using System;
-using System.Threading;
 using Autofac;
-using Teleopti.Ccc.Domain;
 using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta.ReadModelUpdaters;
@@ -67,15 +64,5 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta
 			builder.RegisterInstance(publisher).As<IEventPublisher>().AsSelf();
 		}
 
-	}
-
-	public class FakeDistributedLockAcquirer : IDistributedLockAcquirer
-	{
-		public IDisposable LockForTypeOf(object lockObject)
-		{
-			var type = lockObject.GetType();
-			Monitor.Enter(type);
-			return new GenericDisposable(() => Monitor.Exit(type));
-		}
 	}
 }

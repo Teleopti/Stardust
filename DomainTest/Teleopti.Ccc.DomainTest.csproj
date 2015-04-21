@@ -195,6 +195,7 @@
     <Compile Include="ApplicationLayer\Rta\FakeAdherenceDetailsReadModelReader.cs" />
     <Compile Include="ApplicationLayer\Rta\FakeAdherencePercentageReadModelPersister.cs" />
     <Compile Include="ApplicationLayer\Rta\FakeAdherencePercentageReadModelReader.cs" />
+    <Compile Include="ApplicationLayer\Rta\FakeDistributedLockAcquirer.cs" />
     <Compile Include="ApplicationLayer\Rta\ReadModelUpdaters\AdherenceDetails\NeutralAdherenceTest.cs" />
     <Compile Include="ApplicationLayer\Rta\ReadModelUpdaters\AdherencePercentage\ShiftTest.cs" />
     <Compile Include="ApplicationLayer\Rta\ReadModelUpdaters\AdherencePercentage\NeutralAdherenceTest.cs" />
@@ -227,7 +228,7 @@
     <Compile Include="ApplicationLayer\Rta\Service\ExternalUserStateForTest.cs" />
     <Compile Include="ApplicationLayer\Rta\FakeMessageSender.cs" />
     <Compile Include="ApplicationLayer\Rta\FakeRtaDatabase.cs" />
-    <Compile Include="ApplicationLayer\Rta\Service\FakeSignalRClient.cs" />
+    <Compile Include="ApplicationLayer\Rta\FakeSignalRClient.cs" />
     <Compile Include="ApplicationLayer\Rta\ImplementationDetailsTests\DataSourceResolverTest.cs" />
     <Compile Include="ApplicationLayer\Rta\ImplementationDetailsTests\OrganizationForPersonTest.cs" />
     <Compile Include="ApplicationLayer\Rta\Service\NoBrokerTest.cs" />
