@@ -54,7 +54,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Tenant
 			mapper.Expect(x => x.Map(personInfoModel)).Return(personInfo);
 
 			var target = new PersonInfoController(persister, mapper, null);
-			var result = target.Persist(personInfoModel);
+			var result = (PersistPersonInfoResult)target.PersistNew(personInfoModel).Data;
 			allPropertiesShouldBeTrue(result);
 		}
 
@@ -75,7 +75,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Tenant
 			mapper.Expect(x => x.Map(personInfoModel)).Throw(new PasswordStrengthException());
 
 			var target = new PersonInfoController(persister, mapper, null);
-			var result = target.Persist(personInfoModel);
+			var result = (PersistPersonInfoResult)target.PersistNew(personInfoModel).Data;
 			result.PasswordStrengthIsValid.Should().Be.False();
 		}
 	}

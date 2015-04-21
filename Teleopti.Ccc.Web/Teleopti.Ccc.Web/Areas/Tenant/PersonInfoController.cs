@@ -38,7 +38,8 @@ namespace Teleopti.Ccc.Web.Areas.Tenant
 
 		[HttpPost]
 		[TenantUnitOfWork]
-		public virtual PersistPersonInfoResult Persist(PersonInfoModel personInfoModel)
+		//TODO: tenant rename to Persist when old method is gone
+		public virtual JsonResult PersistNew(PersonInfoModel personInfoModel)
 		{
 			var ret = new PersistPersonInfoResult();
 			try
@@ -49,7 +50,7 @@ namespace Teleopti.Ccc.Web.Areas.Tenant
 			{
 				ret.PasswordStrengthIsValid = false;
 			}
-			return ret;
+			return Json(ret);
 		}
 
 		[HttpPost]
