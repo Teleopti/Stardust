@@ -12972,7 +12972,7 @@ Reduce the complexity to use these shifts.</value>
     <value>Next planning period will be from</value>
   </data>
   <data name="PlanningPeriodMissingMessage" xml:space="preserve">
-    <value>Those requirements are missing to be able to schedule the next planning period:</value>
+    <value>These requirements are missing to be able to schedule the next planning period:</value>
     <comment>header for missing planning period validation</comment>
   </data>
   <data name="ToText" xml:space="preserve">
@@ -12985,12 +12985,11 @@ Reduce the complexity to use these shifts.</value>
   <data name="AdherenceCannotBeEmpty" xml:space="preserve">
     <value>Adherence can not be empty</value>
     <comment>used in alarm control</comment>
-    </data>
+  </data>
   <data name="NextPlanningPeriod" xml:space="preserve">
     <value>Next Planning Period</value>
     <comment>This is to search from web</comment>
   </data>
-  
   <data name="PlanningPeriod" xml:space="preserve">
     <value>Planning Period</value>
     <comment>title of planning period </comment>

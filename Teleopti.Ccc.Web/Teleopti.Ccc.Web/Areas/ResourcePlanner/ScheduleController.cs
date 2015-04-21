@@ -124,25 +124,28 @@ namespace Teleopti.Ccc.Web.Areas.ResourcePlanner
 			}
 
 			var daysScheduled = 0;
-			EventHandler<SchedulingServiceBaseEventArgs> schedulingServiceOnDayScheduled = (sender, args) => daysScheduled++;
-			var fixedStaffSchedulingService = _fixedStaffSchedulingService();
-			fixedStaffSchedulingService.DayScheduled += schedulingServiceOnDayScheduled;
-
-			_scheduleCommand().Execute(new OptimizerOriginalPreferences(new SchedulingOptions
+			if (allSchedules.Any())
 			{
-				UseAvailability = true,
-				UsePreferences = true,
-				UseRotations = true,
-				UseStudentAvailability = false,
-				DayOffTemplate = _dayOffTemplateRepository.FindAllDayOffsSortByDescription()[0],
-				ScheduleEmploymentType = ScheduleEmploymentType.FixedStaff,
-				GroupPageForShiftCategoryFairness = new GroupPageLight {Key = "Main", Name = UserTexts.Resources.Main},
-				GroupOnGroupPageForTeamBlockPer = new GroupPageLight {Key = "Main", Name = UserTexts.Resources.Main},
-				TagToUseOnScheduling = NullScheduleTag.Instance
-			}), new NoBackgroundWorker(), schedulerStateHolder, allSchedules, _groupPagePerDateHolder(),
-				_requiredScheduleHelper(),
-				new OptimizationPreferences());
-			fixedStaffSchedulingService.DayScheduled -= schedulingServiceOnDayScheduled;
+				EventHandler<SchedulingServiceBaseEventArgs> schedulingServiceOnDayScheduled = (sender, args) => daysScheduled++;
+				var fixedStaffSchedulingService = _fixedStaffSchedulingService();
+				fixedStaffSchedulingService.DayScheduled += schedulingServiceOnDayScheduled;
+
+				_scheduleCommand().Execute(new OptimizerOriginalPreferences(new SchedulingOptions
+				{
+					UseAvailability = true,
+					UsePreferences = true,
+					UseRotations = true,
+					UseStudentAvailability = false,
+					DayOffTemplate = _dayOffTemplateRepository.FindAllDayOffsSortByDescription()[0],
+					ScheduleEmploymentType = ScheduleEmploymentType.FixedStaff,
+					GroupPageForShiftCategoryFairness = new GroupPageLight { Key = "Main", Name = UserTexts.Resources.Main },
+					GroupOnGroupPageForTeamBlockPer = new GroupPageLight { Key = "Main", Name = UserTexts.Resources.Main },
+					TagToUseOnScheduling = NullScheduleTag.Instance
+				}), new NoBackgroundWorker(), schedulerStateHolder, allSchedules, _groupPagePerDateHolder(),
+					_requiredScheduleHelper(),
+					new OptimizationPreferences());
+				fixedStaffSchedulingService.DayScheduled -= schedulingServiceOnDayScheduled;
+			}
 
 			var conflicts = new List<PersistConflict>();
 			foreach (var schedule in schedulerStateHolder.Schedules)

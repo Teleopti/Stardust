@@ -5,9 +5,9 @@
 	</div>
 	<div class="row" ng-show="planningPeriod.$resolved">
 		<h4>{{'NextPlanningPeriodMessage' | translate}} {{planningPeriod.StartDate | date:"yyyy-MM-dd"}} {{'ToText' | translate}} {{planningPeriod.EndDate | date:"yyyy-MM-dd"}}</h4>
-		<p>{{'PlanningPeriodMissingMessage' | translate}}</p>
+		<p ng-show="planningPeriod.Skills.length>0">{{'PlanningPeriodMissingMessage' | translate}}</p>
 
-		<div>
+		<div ng-show="planningPeriod.Skills.length>0">
 			{{'MissingSkills' | translate }}
 		</div>
 
@@ -22,8 +22,8 @@
 				</div>
 			</li>
 		</ul>
-		<button class="wfm-btn wfm-btn-primary" ng-click="LaunchSchedule(planningPeriod.StartDate,planningPeriod.EndDate) ; scheduleClicked = 'true'">Schedule</button><span ng-show="scheduledDays">{{scheduledDays}} days are scheduled</span>
-		<div ng-show="scheduleClicked && scheduledDays==0">
+		<button class="wfm-btn wfm-btn-primary" ng-click="LaunchSchedule(planningPeriod.StartDate,planningPeriod.EndDate) ; scheduleClicked = 'true'">Schedule</button><span ng-show="schedulingPerformed">{{scheduledDays}} days are scheduled</span>
+		<div ng-show="scheduleClicked && !schedulingPerformed">
 			<md-progress-linear md-mode="indeterminate"></md-progress-linear>
 			<p>Scheduling .. </p>
 		</div>

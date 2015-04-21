@@ -18707,7 +18707,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Those requirements are missing to be able to schedule the next planning period:.
+        ///   Looks up a localized string similar to These requirements are missing to be able to schedule the next planning period:.
         /// </summary>
         public static string PlanningPeriodMissingMessage {
             get {
