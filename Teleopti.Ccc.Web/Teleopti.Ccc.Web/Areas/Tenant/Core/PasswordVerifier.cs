@@ -1,5 +1,4 @@
 ﻿using System;
-using Teleopti.Ccc.Domain.Security;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Server;
 using Teleopti.Interfaces.Domain;
 
@@ -18,14 +17,7 @@ namespace Teleopti.Ccc.Web.Areas.Tenant.Core
 
 		public bool Check(string userPassword, ApplicationLogonInfo applicationLogonInfo)
 		{
-			var passwordPolicy = _passwordPolicy();
-			var utcNow = _now.UtcDateTime();
-			if (utcNow > applicationLogonInfo.InvalidAttemptsSequenceStart.Add(passwordPolicy.InvalidAttemptWindow))
-			{
-				applicationLogonInfo.ClearInvalidAttempts();
-			}
-
-			return applicationLogonInfo.IsValidPassword(_passwordPolicy(), userPassword);
+			return applicationLogonInfo.IsValidPassword(_now, _passwordPolicy(), userPassword);
 		}
 	}
 }

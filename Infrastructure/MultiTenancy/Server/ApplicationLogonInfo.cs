@@ -34,13 +34,20 @@ namespace Teleopti.Ccc.Infrastructure.MultiTenancy.Server
 			IsLocked = true;
 		}
 
-		public virtual bool IsValidPassword(IPasswordPolicy passwordPolicy, string unencryptedPassword)
+		public virtual bool IsValidPassword(INow now, IPasswordPolicy passwordPolicy, string unencryptedPassword)
 		{
 			var encryptedPassword = oneWayEncryption.EncryptString(unencryptedPassword);
+
+			var utcNow = now.UtcDateTime();
+			if (utcNow > InvalidAttemptsSequenceStart.Add(passwordPolicy.InvalidAttemptWindow))
+			{
+				clearInvalidAttempts(utcNow);
+			}
+
 			var isValid = PersonInfo.Password.Equals(encryptedPassword);
 			if (isValid)
 			{
-				ClearInvalidAttempts();
+				clearInvalidAttempts(utcNow);
 			}
 			else
 			{
@@ -53,9 +60,9 @@ namespace Teleopti.Ccc.Infrastructure.MultiTenancy.Server
 			return isValid;
 		}
 
-		public virtual void ClearInvalidAttempts()
+		private void clearInvalidAttempts(DateTime dateTimeNow)
 		{
-			InvalidAttemptsSequenceStart = DateTime.UtcNow;
+			InvalidAttemptsSequenceStart = dateTimeNow;
 			InvalidAttempts = 0;
 		}
 	}
