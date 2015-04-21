@@ -1,10 +1,12 @@
 ﻿using System.Collections.Generic;
 using Teleopti.Ccc.Domain.Infrastructure;
+using Teleopti.Interfaces;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.MessageBroker.Client;
 using Teleopti.Interfaces.MessageBroker.Client.Composite;
 using Teleopti.Interfaces.MessageBroker.Core;
 using Teleopti.Messaging.Client.Composite;
+using Teleopti.Messaging.Client.Http;
 using Teleopti.Messaging.Client.SignalR;
 
 namespace Teleopti.Messaging.Client
@@ -18,12 +20,14 @@ namespace Teleopti.Messaging.Client
 		private static ISignalRClient _client;
 		private static IMessageSender _sender;
 		private static IMessageBrokerComposite _compositeClient;
+		private static IJsonSerializer _jsonSerializer;
 
-		public static void Configure(string serverUrl, IEnumerable<IConnectionKeepAliveStrategy> connectionKeepAliveStrategy, IMessageFilterManager messageFilter)
+		public static void Configure(string serverUrl, IEnumerable<IConnectionKeepAliveStrategy> connectionKeepAliveStrategy, IMessageFilterManager messageFilter, IJsonSerializer jsonSerializer)
 		{
 			_serverUrl = serverUrl;
 			_connectionKeepAliveStrategy = connectionKeepAliveStrategy;
 			_messageFilter = messageFilter;
+			_jsonSerializer = jsonSerializer;
 			_client = null;
 			_sender = null;
 			_compositeClient = null;
@@ -51,7 +55,7 @@ namespace Teleopti.Messaging.Client
 
 		public static IMessageSender Sender()
 		{
-			return _sender ?? (_sender = new SignalRSender(SignalRClient()));
+			return _sender ?? (_sender = new HttpSender(SignalRClient(), _jsonSerializer));
 		}
 	}
 }

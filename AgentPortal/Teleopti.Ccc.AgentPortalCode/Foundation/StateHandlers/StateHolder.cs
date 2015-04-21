@@ -1,6 +1,8 @@
 ﻿using System;
+using Newtonsoft.Json;
 using Teleopti.Ccc.AgentPortalCode.Helper;
 using Teleopti.Ccc.Sdk.Common.DataTransferObject;
+using Teleopti.Interfaces;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.MessageBroker.Client.Composite;
 using Teleopti.Interfaces.MessageBroker.Core;
@@ -138,7 +140,7 @@ namespace Teleopti.Ccc.AgentPortalCode.Foundation.StateHandlers
         	Uri serverUrl;
         	if (Uri.TryCreate(_connectionString,UriKind.Absolute,out serverUrl))
         	{
-				MessageBrokerContainerDontUse.Configure(_connectionString, new IConnectionKeepAliveStrategy[] { }, new DummyFilterManager());
+				MessageBrokerContainerDontUse.Configure(_connectionString, new IConnectionKeepAliveStrategy[] { }, new DummyFilterManager(), new NewtonsoftJsonSerializer());
 				var broker = MessageBrokerContainerDontUse.CompositeClient();
 				_messageBroker = broker;
 
@@ -168,6 +170,14 @@ namespace Teleopti.Ccc.AgentPortalCode.Foundation.StateHandlers
                 return domainObjectType;
             }
         }
+
+		public class NewtonsoftJsonSerializer : IJsonSerializer
+		{
+			public string SerializeObject(object value)
+			{
+				return JsonConvert.SerializeObject(value);
+			}
+		}
 
         /// <summary>
         /// Sets the configuration info.

@@ -30,7 +30,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data
 		{
 			if (_messageBroker == null)
 			{
-				MessageBrokerContainerDontUse.Configure(TestSiteConfigurationSetup.Url.ToString(), new IConnectionKeepAliveStrategy[] { }, null);
+				MessageBrokerContainerDontUse.Configure(TestSiteConfigurationSetup.Url.ToString(), new IConnectionKeepAliveStrategy[] { }, null, new NewtonsoftJsonSerializer());
 				var broker = MessageBrokerContainerDontUse.CompositeClient();
 				broker.StartBrokerService();
 				_messageBroker = broker;
