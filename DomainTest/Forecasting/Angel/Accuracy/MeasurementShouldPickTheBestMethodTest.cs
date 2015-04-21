@@ -19,8 +19,8 @@ namespace Teleopti.Ccc.DomainTest.Forecasting.Angel.Accuracy
 		protected override void Assert(SkillAccuracy measurementResult)
 		{
 			measurementResult.Workloads.First().Id.Should().Be.EqualTo(Workload.Id.Value);
-			measurementResult.Workloads.First().Accuracies.First().IsSelected.Should().Be.False();
-			measurementResult.Workloads.First().Accuracies.Second().IsSelected.Should().Be.True();
+			measurementResult.Workloads.First().Accuracies.First().IsSelected.Should().Be.True();
+			measurementResult.Workloads.First().Accuracies.Second().IsSelected.Should().Be.False();
 		}
 	}
 }

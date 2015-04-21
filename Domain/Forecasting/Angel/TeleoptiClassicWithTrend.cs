@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Forecasting.Angel
@@ -16,9 +17,10 @@ namespace Teleopti.Ccc.Domain.Forecasting.Angel
 		{
 			var trend = _linearRegressionTrend.CalculateTrend(historicalData);
 			var forecastWithoutTrend = base.Forecast(historicalData, futurePeriod);
+			var averageTasks = forecastWithoutTrend.Average(x => x.Tasks);
 			foreach (var forecastingTarget in forecastWithoutTrend)
 			{
-				forecastingTarget.Tasks += forecastingTarget.CurrentDate.Subtract(LinearTrend.StartDate).Days * trend.Slope + trend.Intercept;
+				forecastingTarget.Tasks += forecastingTarget.CurrentDate.Subtract(LinearTrend.StartDate).Days * trend.Slope + trend.Intercept - averageTasks;
 			}
 			return forecastWithoutTrend;
 		}

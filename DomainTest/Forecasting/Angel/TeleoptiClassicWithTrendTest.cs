@@ -57,7 +57,7 @@ namespace Teleopti.Ccc.DomainTest.Forecasting.Angel
 
 			var result = target.Forecast(historicalData, new DateOnlyPeriod(new DateOnly(2014, 1, 1), new DateOnly(2014, 1, 1)));
 			var expected = tasks + linearTrend.Slope*new DateOnly(2014, 1, 1).Subtract(LinearTrend.StartDate).Days +
-			               linearTrend.Intercept;
+						   linearTrend.Intercept - tasks;
 			result.Single().Tasks.Should().Be.EqualTo(Math.Round(expected, 4));
 		}
 	}

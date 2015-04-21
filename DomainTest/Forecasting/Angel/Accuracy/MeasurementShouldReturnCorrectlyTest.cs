@@ -5,7 +5,6 @@ using SharpTestsEx;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.Forecasting.Angel;
-using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.DomainTest.Forecasting.Angel.Accuracy
 {
@@ -24,7 +23,7 @@ namespace Teleopti.Ccc.DomainTest.Forecasting.Angel.Accuracy
 			measurementResult.Workloads.First().Accuracies.First().MethodId.Should().Be.EqualTo(ForecastMethodType.TeleoptiClassic);
 			measurementResult.Workloads.First().Accuracies.First().Number.Should().Be.EqualTo(100 - Math.Round((11d - 9d)/11d*100, 1));
 			measurementResult.Workloads.First().Accuracies.Second().MethodId.Should().Be.EqualTo(ForecastMethodType.TeleoptiClassicWithTrend);
-			measurementResult.Workloads.First().Accuracies.Second().Number.Should().Be.EqualTo(100 - Math.Round(((11d - (9d + 1 * HistoricalPeriodForMeasurement.EndDate.Subtract(LinearTrend.StartDate).Days + 2))) / 11d * 100, 1));
+			measurementResult.Workloads.First().Accuracies.Second().Number.Should().Be.EqualTo(Math.Round(100 -((11d - (9d + 1*HistoricalPeriodForMeasurement.EndDate.Subtract(LinearTrend.StartDate).Days + 2 - 9d)))/11d*100, 1));
 		}
 	}
 }
