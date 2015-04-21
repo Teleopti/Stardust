@@ -69,5 +69,30 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
             Assert.IsTrue(LazyLoadingManager.IsInitialized(result[0].StateCollection));
         }
 
+	    [Test]
+	    public void ShouldNotAllowDuplicateStateCodes()
+	    {
+		    var stateGroup1 = new RtaStateGroup("group 1", false, true);
+		    var stateGroup2 = new RtaStateGroup("group 2", false, true);
+		    var platformTypeId = Guid.NewGuid();
+			stateGroup1.AddState("", "dupe", platformTypeId);
+			stateGroup2.AddState("", "dupe", platformTypeId);
+
+			PersistAndRemoveFromUnitOfWork(stateGroup1);
+			Assert.Throws<ConstraintViolationException>(() => PersistAndRemoveFromUnitOfWork(stateGroup2));
+		}
+
+		[Test]
+		public void ShouldAllowSameStateCodeFromDifferentPlatforms()
+		{
+			var stateGroup1 = new RtaStateGroup("group 1", false, true);
+			var stateGroup2 = new RtaStateGroup("group 2", false, true);
+			stateGroup1.AddState("", "same", Guid.NewGuid());
+			stateGroup2.AddState("", "same", Guid.NewGuid());
+
+			PersistAndRemoveFromUnitOfWork(stateGroup1);
+			PersistAndRemoveFromUnitOfWork(stateGroup2);
+		}
+
     }
 }
