@@ -25,10 +25,9 @@ namespace Teleopti.Ccc.DomainTest.Common
         {
             var pairList = createPairList();
 
-
-            target.CreateDependencies(pairList, new List<int> {4});
-            IEnumerable<int> left = target.FirstDependencies;
-            IEnumerable<int> right = target.SecondDependencies;
+            var result = target.CreateDependencies(pairList, new List<int> {4});
+            IEnumerable<int> left = result.FirstDependencies;
+            IEnumerable<int> right = result.SecondDependencies;
 
             Assert.AreEqual(3, left.Count());
             Assert.AreEqual(3, right.Count());
@@ -45,9 +44,9 @@ namespace Teleopti.Ccc.DomainTest.Common
         [Test]
         public void VerifyNoHits()
         {
-            target.CreateDependencies(createPairList(), new List<int> { 11, 1 });
-            CollectionAssert.IsEmpty(target.FirstDependencies);
-            CollectionAssert.IsEmpty(target.SecondDependencies);
+            var result = target.CreateDependencies(createPairList(), new List<int> { 11, 1 });
+            CollectionAssert.IsEmpty(result.FirstDependencies);
+            CollectionAssert.IsEmpty(result.SecondDependencies);
         }
 
         private static IEnumerable<Tuple<int, int>> createPairList()

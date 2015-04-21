@@ -16,68 +16,43 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
     [Category("LongRunning")]
     public class PeopleAndSkillLoaderDeciderTest
     {
-        private targetForTest target;
-        private MockRepository mocks;
-        private IPersonRepository personRep;
-        private IPairMatrixService<Guid> matrixService;
+	    [Test]
+	    public void VerifyExecute()
+	    {
+		    var personRep = MockRepository.GenerateMock<IPersonRepository>();
+		    var matrixService = MockRepository.GenerateMock<IPairMatrixService<Guid>>();
+		    var target = new PeopleAndSkillLoaderDecider(personRep, matrixService);
 
-        [SetUp]
-        public void Setup()
-        {
-            mocks = new MockRepository();
-            personRep = mocks.StrictMock<IPersonRepository>();
-            matrixService = mocks.StrictMock<IPairMatrixService<Guid>>();
-            target = new targetForTest(personRep, matrixService);
-        }
+		    DateTimePeriod period = new DateTimePeriod(2000, 1, 1, 2001, 1, 1);
+		    IPerson person = new Person();
+		    person.SetId(Guid.NewGuid());
 
-        [Test]
-        public void VerifyDefaultService()
-        {
-            Assert.IsTrue(typeof(PairMatrixService<Guid>).Equals(new PeopleAndSkillLoaderDecider(personRep).MatrixService.GetType()));
-        }
+		    IScenario scenario = new Scenario("f");
+		    IEnumerable<IPerson> peopleToSearchWith = new List<IPerson> {person};
 
-        [Test]
-        public void VerifyExecute()
-        {
-            DateTimePeriod period = new DateTimePeriod(2000, 1, 1, 2001, 1, 1);
-            IPerson person = new Person();
-            person.SetId(Guid.NewGuid());
+		    var peopleSkillMatrix = new List<Tuple<Guid, Guid>>();
 
-            IScenario scenario = new Scenario("f");
-            IEnumerable<IPerson> peopleToSearchWith = new List<IPerson> { person };
+		    IEnumerable<Guid> skillDependencies = new List<Guid>();
+		    IEnumerable<Guid> peopleDependencies = new List<Guid>();
+		    IEnumerable<Guid> siteDependencies = new List<Guid>();
 
-            var peopleSkillMatrix = new List<Tuple<Guid, Guid>>();
+		    personRep.Stub(x => x.PeopleSkillMatrix(scenario, period)).Return(peopleSkillMatrix);
+		    matrixService.Stub(x => x.CreateDependencies(peopleSkillMatrix, new List<Guid>{person.Id.GetValueOrDefault()}))
+			    .Return(new DependenciesPair<Guid>(peopleDependencies, skillDependencies));
+		    personRep.Stub(x => x.PeopleSiteMatrix(period)).Return(siteDependencies);
 
-            IEnumerable<Guid> skillDependencies = new List<Guid>();
-            IEnumerable<Guid> peopleDependencies = new List<Guid>();
-            IEnumerable<Guid> siteDependencies = new List<Guid>();
+		    var result = target.Execute(scenario, period, peopleToSearchWith);
 
-            using (mocks.Record())
-            {
-                Expect.Call(personRep.PeopleSkillMatrix(scenario, period))
-                    .Return(peopleSkillMatrix);
-                matrixService.CreateDependencies(peopleSkillMatrix, new List<Guid> { person.Id.Value });
-                Expect.Call(matrixService.FirstDependencies)
-                    .Return(peopleDependencies);
-                Expect.Call(matrixService.SecondDependencies)
-                    .Return(skillDependencies);
-                Expect.Call(personRep.PeopleSiteMatrix(period)).Return(siteDependencies);
+		    Assert.AreEqual(peopleDependencies, result.PeopleGuidDependencies);
+			Assert.AreEqual(skillDependencies, result.SkillGuidDependencies);
+			Assert.AreEqual(siteDependencies, result.SiteGuidDependencies);
+	    }
 
-            }
-            using (mocks.Playback())
-            {
-                target.Execute(scenario, period, peopleToSearchWith);
-                Assert.AreSame(peopleDependencies, target.PeopleGuidDependencies);
-                Assert.AreSame(skillDependencies, target.SkillGuidDependencies);
-                Assert.AreSame(siteDependencies, target.SiteGuidDependencies);
-            }
-        }
-
-        [Test]
+	    [Test]
         public void VerifyFilterPeople()
         {
-            Guid valid = Guid.NewGuid();
-            target.SetPeopleGuids(new List<Guid> { valid });
+			var valid = Guid.NewGuid();
+			
 	        ISkill skill = SkillFactory.CreateSkill("skill");
 	        ISite site = SiteFactory.CreateSiteWithOneTeam();
 	        site.MaxSeats = 1;
@@ -93,7 +68,8 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			personToAdd.PersonPeriodCollection[0].StartDate = DateOnly.MinValue;
             Guid guidToAdd = Guid.NewGuid();
             personToAdd.SetId(guidToAdd);
-            target.SetSiteGuids(new List<Guid> { guidToAdd });
+
+			var target = new LoaderDeciderResult(new DateTimePeriod(1950, 1, 12, 1950, 1, 13), new[] { valid }, new Guid[] { }, new[] { guidToAdd });
             IList<IPerson> listToFilter = new List<IPerson> { nonValidPerson, validPerson, new Person(), personToAdd };
 
             Assert.AreEqual(4, listToFilter.Count);
@@ -107,12 +83,12 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
         [Test]
         public void VerifyFilterSkills()
         {
-            Guid valid = Guid.NewGuid();
-            target.SetSkillGuids(new List<Guid> { valid });
+            var valid = Guid.NewGuid();
+			var target = new LoaderDeciderResult(new DateTimePeriod(1950, 1, 12, 1950, 1, 13), new Guid[] {  }, new[] { valid }, new Guid[] { });
 
             ISkill validSkill = new Skill("sdf", "sdf", Color.Empty, 23, new SkillTypeEmail(new Description("sdf"), ForecastSource.Time));
             validSkill.SetId(valid);
-            ISkill nonValidSkill = new Skill("sdf", "sdf", Color.Empty, 23, new SkillTypeEmail(new Description("sdf"), ForecastSource.Time)); ;
+            ISkill nonValidSkill = new Skill("sdf", "sdf", Color.Empty, 23, new SkillTypeEmail(new Description("sdf"), ForecastSource.Time));
             nonValidSkill.SetId(Guid.NewGuid());
             IList<ISkill> listToFilter = new List<ISkill> 
                                         {   
@@ -132,7 +108,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
         public void VerifyParentReturnedIfMatchForChildSkill()
         {
             Guid valid = Guid.NewGuid();
-            target.SetSkillGuids(new List<Guid> { valid });
+			var target = new LoaderDeciderResult(new DateTimePeriod(1950, 1, 12, 1950, 1, 13), new Guid[] { }, new[] { valid }, new Guid[] { });
 
             IChildSkill validSkill = new ChildSkill("sdf", "sdf", Color.Empty, 23, new SkillTypeEmail(new Description("sdf"), ForecastSource.Time));
             validSkill.SetId(valid);
@@ -150,8 +126,8 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
         public void VerifyParentReturnedIfMatchForChildSkillOnly()
         {
             Guid valid = Guid.NewGuid();
-            target.SetSkillGuids(new List<Guid> { valid });
-
+			var target = new LoaderDeciderResult(new DateTimePeriod(1950, 1, 12, 1950, 1, 13), new Guid[] { }, new[] { valid }, new Guid[] { });
+			
             IChildSkill validSkill = new ChildSkill("sdf", "sdf", Color.Empty, 23, new SkillTypeEmail(new Description("sdf"), ForecastSource.Time));
             validSkill.SetId(valid);
 
@@ -169,7 +145,6 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 		{
 			Guid valid1 = Guid.NewGuid();
 			Guid valid2 = Guid.NewGuid();
-			target.SetSkillGuids(new List<Guid> { valid1, valid2 });
 
 			IChildSkill validSkill1 = new ChildSkill("sdf", "sdf", Color.Empty, 23, new SkillTypeEmail(new Description("sdf"), ForecastSource.Time));
 			validSkill1.SetId(valid1);
@@ -182,6 +157,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			parent.AddChildSkill(validSkill2);
 
 			IList<ISkill> list2Filter = new List<ISkill> { validSkill1, validSkill2 };
+			var target = new LoaderDeciderResult(new DateTimePeriod(1950, 1, 12, 1950, 1, 13), new Guid[] { }, new[] { valid1, valid2 }, new Guid[] { });
 			int removed = target.FilterSkills(list2Filter);
 			Assert.AreEqual(-1, removed);
 			Assert.AreEqual(3, list2Filter.Count);
@@ -190,42 +166,21 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
         [Test]
         public void VerifyParentNotReturnedIfNoMatchForChildSkill()
         {
-            target.SetSkillGuids(new List<Guid> { Guid.NewGuid(), Guid.NewGuid(), Guid.NewGuid() });
+			var target = new LoaderDeciderResult(new DateTimePeriod(1950, 1, 12, 1950, 1, 13), new Guid[] { }, new[] { Guid.NewGuid(), Guid.NewGuid(), Guid.NewGuid() }, new Guid[] { });
+
             IMultisiteSkill parent = new MultisiteSkill("multi", "multi", Color.DimGray, 13, new SkillTypeEmail(new Description("d"), ForecastSource.Time));
             parent.SetId(Guid.NewGuid());
 
-            IList<ISkill> list2filter = new List<ISkill> { parent };
-            int removed = target.FilterSkills(list2filter);
+            var list2Filter = new List<ISkill> { parent };
+            int removed = target.FilterSkills(list2Filter);
             Assert.AreEqual(1, removed);
-            Assert.AreEqual(0, list2filter.Count);
-        }
-
-        [Test]
-        [ExpectedException(typeof(InvalidOperationException))]
-        public void CannotCallFilterSkillBeforeExecute()
-        {
-            target.FilterSkills(new List<ISkill>());
-        }
-
-        [Test]
-        [ExpectedException(typeof(InvalidOperationException))]
-        public void CannotCallFilterPeopleBeforeExecute()
-        {
-            target.FilterPeople(new List<IPerson>());
-        }
-
-        [Test]
-        [ExpectedException(typeof(InvalidOperationException))]
-        public void ShouldThrowExceptionWhenAccessingPercentageOfPeopleFilteredBeforeExecute()
-        {
-            var peopleAndSkillLoaderDecider = new PeopleAndSkillLoaderDecider(personRep);
-            Assert.AreEqual(0, peopleAndSkillLoaderDecider.PercentageOfPeopleFiltered);
+            Assert.AreEqual(0, list2Filter.Count);
         }
 
         [Test]
         public void ShouldShowZeroPercentageWhenFilterPeopleIsNotCalled()
         {
-            target.SetPeopleGuids(new List<Guid>());
+			var target = new LoaderDeciderResult(new DateTimePeriod(1950, 1, 12, 1950, 1, 13), new Guid[] { }, new Guid[] { }, new Guid[] { });
             Assert.AreEqual(0, target.PercentageOfPeopleFiltered);
         }
 
@@ -244,48 +199,12 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
             IPerson person4 = new Person();
             person4.SetId(Guid.NewGuid());
 
-            IList<Guid> peopleDependencies = new List<Guid> { validGuid1, validGuid2, validGuid3 };
             IList<IPerson> allPersonsInOrganization = new List<IPerson> { person1, person2, person3, person4 };
-            target.SetPeopleGuids(peopleDependencies);
-            target.SetSiteGuids(new List<Guid>());
+
+			var target = new LoaderDeciderResult(new DateTimePeriod(1950, 1, 12, 1950, 1, 13), new[] { validGuid1, validGuid2, validGuid3 }, new Guid[] { }, new Guid[] { });
             target.FilterPeople(allPersonsInOrganization);
 
             Assert.AreEqual(75d, target.PercentageOfPeopleFiltered);
         }
-
-
-        private class targetForTest : PeopleAndSkillLoaderDecider
-        {
-            private readonly IPairMatrixService<Guid> _matrixService;
-
-            public targetForTest(IPersonRepository personRepository,
-                                    IPairMatrixService<Guid> matrixService)
-                : base(personRepository)
-            {
-                _matrixService = matrixService;
-	            Period = new DateTimePeriod(1950, 1, 12, 1950, 1, 13);
-            }
-
-            public override IPairMatrixService<Guid> MatrixService
-            {
-                get { return _matrixService; }
-            }
-
-            public void SetPeopleGuids(IEnumerable<Guid> people)
-            {
-                PeopleGuidDependencies = people;
-            }
-
-            public void SetSkillGuids(IEnumerable<Guid> skills)
-            {
-                SkillGuidDependencies = skills;
-            }
-
-            public void SetSiteGuids(IEnumerable<Guid> peopleAtSameSite)
-            {
-                SiteGuidDependencies = peopleAtSameSite;
-            }
-        }
-
     }
 }

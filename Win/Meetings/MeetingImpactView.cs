@@ -5,6 +5,7 @@ using System.Globalization;
 using System.Windows.Forms;
 using Syncfusion.Windows.Forms.Grid;
 using Syncfusion.Windows.Forms.Tools;
+using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.ResourceCalculation.IntraIntervalAnalyze;
 using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
@@ -68,7 +69,7 @@ namespace Teleopti.Ccc.Win.Meetings
 																	   ()=>personSkillProvider, new PeriodDistributionService(), 
 																		new CurrentTeleoptiPrincipal(),
 																		intraIntervalFinderService);
-			var decider = new PeopleAndSkillLoaderDecider(new PersonRepository(UnitOfWorkFactory.Current));
+			var decider = new PeopleAndSkillLoaderDecider(new PersonRepository(UnitOfWorkFactory.Current), new PairMatrixService<Guid>(new PairDictionaryFactory<Guid>()));
 			var gridHandler = new MeetingImpactSkillGridHandler(this, meetingViewModel, schedulerStateHolder,
 																UnitOfWorkFactory.Current, decider);
 			var transparentWindowHandler = new MeetingImpactTransparentWindowHandler(this, meetingViewModel,

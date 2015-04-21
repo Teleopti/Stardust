@@ -29,26 +29,6 @@ namespace Teleopti.Interfaces.Domain
     public interface IPairDictionaryFactory<T>
     {
         /// <summary>
-        /// Gets the first dictionary.
-        /// </summary>
-        /// <value>The first dictionary.</value>
-        /// <remarks>
-        /// Created by: rogerkr
-        /// Created date: 2008-12-08
-        /// </remarks>
-        IDictionary<T, ICollection<T>> FirstDictionary { get; }
-
-        /// <summary>
-        /// Gets the second dictionary.
-        /// </summary>
-        /// <value>The second dictionary.</value>
-        /// <remarks>
-        /// Created by: rogerkr
-        /// Created date: 2008-12-08
-        /// </remarks>
-        IDictionary<T, ICollection<T>> SecondDictionary { get; }
-
-        /// <summary>
         /// Creates the dictionaries.
         /// </summary>
         /// <param name="pairList">The pair list.</param>
@@ -56,6 +36,18 @@ namespace Teleopti.Interfaces.Domain
         /// Created by: rogerkr
         /// Created date: 2008-12-08
         /// </remarks>
-        void CreateDictionaries(IEnumerable<Tuple<T, T>> pairList);
+        CollectionDictionaryPair<T> CreateDictionaries(IEnumerable<Tuple<T, T>> pairList);
     }
+
+	public class CollectionDictionaryPair<T>
+	{
+		public CollectionDictionaryPair()
+		{
+			FirstDictionary = new Dictionary<T, ICollection<T>>();
+			SecondDictionary = new Dictionary<T, ICollection<T>>();
+		}
+
+		public IDictionary<T, ICollection<T>> FirstDictionary { get; private set; }
+		public IDictionary<T, ICollection<T>> SecondDictionary { get; private set; }
+	}
 }

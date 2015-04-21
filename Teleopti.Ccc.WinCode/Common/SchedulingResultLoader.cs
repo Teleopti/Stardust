@@ -27,8 +27,9 @@ namespace Teleopti.Ccc.WinCode.Common
         private readonly ISkillDayLoadHelper _skillDayLoadHelper;
         private readonly IResourceOptimizationHelper _resourceOptimizationHelper;
         private readonly LoadScheduleByPersonSpecification _loadScheduleByPersonSpecification;
+	    private ILoaderDeciderResult _deciderResult;
 
-        public ISchedulerStateHolder SchedulerState { get; private set; }
+	    public ISchedulerStateHolder SchedulerState { get; private set; }
 
         public IEnumerable<IContractSchedule> ContractSchedules { get; private set; }
 
@@ -67,7 +68,8 @@ namespace Teleopti.Ccc.WinCode.Common
             loadPersonalAccounts(unitOfWork);
             _eventAggregator.GetEvent<IntradayLoadProgress>().Publish(UserTexts.Resources.LoadingPeopleTreeDots);
             initializeSkills(unitOfWork);
-            initializeDecider();
+			_peopleLoader.Initialize(); 
+			initializeDecider();
             filterSkills();
             initializePeopleInOrganization();
             _eventAggregator.GetEvent<IntradayLoadProgress>().Publish(UserTexts.Resources.LoadingSkillDataTreeDots);
@@ -94,6 +96,7 @@ namespace Teleopti.Ccc.WinCode.Common
         public void ReloadForecastData(IUnitOfWork unitOfWork)
         {
             initializeSkills(unitOfWork);
+			makeSureDeciderIsInitializedForCrappyTests();
             filterSkills();
             if (!SchedulerState.SchedulingResultState.Skills.IsEmpty())
             {
@@ -102,7 +105,12 @@ namespace Teleopti.Ccc.WinCode.Common
             }
         }
 
-        public void ReloadScheduleData(IUnitOfWork unitOfWork)
+	    private void makeSureDeciderIsInitializedForCrappyTests()
+	    {
+		    if (_deciderResult == null) initializeDecider();
+	    }
+
+	    public void ReloadScheduleData(IUnitOfWork unitOfWork)
         {
             unitOfWork.Reassociate(SchedulerState.CommonStateHolder.ShiftCategories);
             unitOfWork.Reassociate(SchedulerState.CommonStateHolder.Absences);
@@ -115,7 +123,7 @@ namespace Teleopti.Ccc.WinCode.Common
 
         private void filterSkills()
         {
-            _peopleAndSkillLoaderDecider.FilterSkills(SchedulerState.SchedulingResultState.Skills);
+            _deciderResult.FilterSkills(SchedulerState.SchedulingResultState.Skills);
         }
 
         private void initializeSkills(IUnitOfWork uow)
@@ -144,15 +152,14 @@ namespace Teleopti.Ccc.WinCode.Common
 
         private void initializeDecider()
         {
-            _peopleLoader.Initialize();
-            _peopleAndSkillLoaderDecider.Execute(SchedulerState.RequestedScenario, SchedulerState.RequestedPeriod.Period(),
-                                                 SchedulerState.AllPermittedPersons);
+	        _deciderResult = _peopleAndSkillLoaderDecider.Execute(SchedulerState.RequestedScenario, SchedulerState.RequestedPeriod.Period(),
+		        SchedulerState.AllPermittedPersons);
         }
 
         private void initializePeopleInOrganization()
         {
             ICollection<IPerson> peopleInOrg = SchedulerState.SchedulingResultState.PersonsInOrganization;
-            _peopleAndSkillLoaderDecider.FilterPeople(peopleInOrg);
+            _deciderResult.FilterPeople(peopleInOrg);
 
             peopleInOrg = new HashSet<IPerson>(peopleInOrg);
             SchedulerState.AllPermittedPersons.ForEach(peopleInOrg.Add);
@@ -170,7 +177,7 @@ namespace Teleopti.Ccc.WinCode.Common
             IPersonProvider personsInOrganizationProvider =
                 new PersonsInOrganizationProvider(SchedulerState.SchedulingResultState.PersonsInOrganization);
             personsInOrganizationProvider.DoLoadByPerson =
-                _loadScheduleByPersonSpecification.IsSatisfiedBy(_peopleAndSkillLoaderDecider);
+                _loadScheduleByPersonSpecification.IsSatisfiedBy(_deciderResult);
 
             IScheduleDictionaryLoadOptions scheduleDictionaryLoadOptions = new ScheduleDictionaryLoadOptions(true, true);
 

@@ -24,61 +24,40 @@ namespace Teleopti.Interfaces.Infrastructure
         /// Created by: rogerkr
         /// Created date: 2008-12-08
         /// </remarks>
-        void Execute(IScenario scenario, DateTimePeriod period, IEnumerable<IPerson> people);
+        ILoaderDeciderResult Execute(IScenario scenario, DateTimePeriod period, IEnumerable<IPerson> people);
+    }
 
-        /// <summary>
-        /// Gets the people GUID dependencies.
-        /// Returns null if execute hasn't been called
-        /// </summary>
-        /// <value>The people GUID dependencies.</value>
-        /// <remarks>
-        /// Created by: rogerkr
-        /// Created date: 2008-12-08
-        /// </remarks>
-        IEnumerable<Guid> PeopleGuidDependencies { get; }
-
-        /// <summary>
-        /// Gets the skill GUID dependencies.
-        /// Returns null if execute hasn't been called
-        /// </summary>
-        /// <value>The skill GUID dependencies.</value>
-        /// <remarks>
-        /// Created by: rogerkr
-        /// Created date: 2008-12-08
-        /// </remarks>
-        IEnumerable<Guid> SkillGuidDependencies { get; }
+	public interface ILoaderDeciderResult
+	{
+		Guid[] PeopleGuidDependencies { get; }
+		Guid[] SkillGuidDependencies { get; }
+		Guid[] SiteGuidDependencies { get; }
 
 		/// <summary>
-		/// Gets the site GUID dependencies.
+		/// Filters the people. 
+		/// Removing entries with Ids not in PeopleGuidDependencies
 		/// </summary>
-		/// <value>The site GUID dependencies.</value>
-		IEnumerable<Guid> SiteGuidDependencies { get; }
+		/// <param name="people">The people.</param>
+		/// <remarks>
+		/// Created by: rogerkr
+		/// Created date: 2009-01-21
+		/// </remarks>
+		int FilterPeople(ICollection<IPerson> people);
 
-        ///<summary>
-        /// Shows how many percent of all people injected into method FilterPeople that is filtered out. If FilterPeople is not executed then zero wil be returned.
-        ///</summary>
-        double PercentageOfPeopleFiltered { get; }
+		/// <summary>
+		/// Filters the skills.
+		/// Removing entries with Ids not in SkillGuidDependencies
+		/// </summary>
+		/// <param name="skills">The skills.</param>
+		/// <remarks>
+		/// Created by: rogerkr
+		/// Created date: 2009-01-21
+		/// </remarks>
+		int FilterSkills(ICollection<ISkill> skills);
 
-        /// <summary>
-        /// Filters the people. 
-        /// Removing entries with Ids not in PeopleGuidDependencies
-        /// </summary>
-        /// <param name="people">The people.</param>
-        /// <remarks>
-        /// Created by: rogerkr
-        /// Created date: 2009-01-21
-        /// </remarks>
-        int FilterPeople(ICollection<IPerson> people);
-
-        /// <summary>
-        /// Filters the skills.
-        /// Removing entries with Ids not in SkillGuidDependencies
-        /// </summary>
-        /// <param name="skills">The skills.</param>
-        /// <remarks>
-        /// Created by: rogerkr
-        /// Created date: 2009-01-21
-        /// </remarks>
-        int FilterSkills(ICollection<ISkill> skills);
-    }
+		///<summary>
+		/// Shows how many percent of all people injected into method FilterPeople that is filtered out. If FilterPeople is not executed then zero wil be returned.
+		///</summary>
+		double PercentageOfPeopleFiltered { get; }
+	}
 }

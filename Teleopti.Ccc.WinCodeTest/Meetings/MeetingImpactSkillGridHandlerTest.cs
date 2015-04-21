@@ -7,8 +7,6 @@ using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
 using Teleopti.Ccc.Domain.Scheduling.Meetings;
 using Teleopti.Ccc.Domain.Security.Principal;
-using Teleopti.Ccc.Domain.Time;
-using Teleopti.Ccc.WinCode.Common;
 using Teleopti.Ccc.WinCode.Meetings;
 using Teleopti.Ccc.WinCode.Meetings.Interfaces;
 using Teleopti.Interfaces.Domain;
@@ -33,9 +31,10 @@ namespace Teleopti.Ccc.WinCodeTest.Meetings
         private IScenario _scenario;
         private IPeopleAndSkillLoaderDecider _decider;
         private IUnitOfWorkFactory _uowFactory;
+	    private ILoaderDeciderResult _deciderResult;
 
-        
-        [SetUp]
+
+	    [SetUp]
         public void Setup()
         {
             _mocks = new MockRepository();
@@ -45,6 +44,7 @@ namespace Teleopti.Ccc.WinCodeTest.Meetings
             _meetingViewModel = _mocks.StrictMock<IMeetingViewModel>();
             _timeZone = (TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time"));
             _decider = _mocks.StrictMock<IPeopleAndSkillLoaderDecider>();
+            _deciderResult = _mocks.StrictMock<ILoaderDeciderResult>();
             _uowFactory = _mocks.StrictMock<IUnitOfWorkFactory>();
             var startRequestedPeriod = new DateTime(2010, 11, 2, 23, 0, 0, DateTimeKind.Utc);
             _requestedPeriod = new DateTimePeriod(startRequestedPeriod, startRequestedPeriod.AddDays(20));
@@ -57,7 +57,7 @@ namespace Teleopti.Ccc.WinCodeTest.Meetings
             _target = new MeetingImpactSkillGridHandler(_meetingImpactView, _meetingViewModel,_schedulerStateHolder,_uowFactory,_decider);
         }
 
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling"), Test]
+		[Test]
         public void ShouldCallViewForEverySkill()
         {
             var meeting = _mocks.StrictMock<IMeeting>();
@@ -75,8 +75,8 @@ namespace Teleopti.Ccc.WinCodeTest.Meetings
             Expect.Call(_meetingViewModel.Meeting).Return(meeting);
             Expect.Call(meeting.MeetingPersons).Return(new ReadOnlyCollection<IMeetingPerson>(new List<IMeetingPerson>{new MeetingPerson(new Person(),false)}));
             
-            Expect.Call(() => _decider.Execute(_scenario, _requestedPeriod, new List<IPerson>())).IgnoreArguments();
-            Expect.Call(_decider.FilterSkills(_skills)).IgnoreArguments().Return(1);
+            Expect.Call(_decider.Execute(_scenario, _requestedPeriod, new List<IPerson>())).IgnoreArguments().Return(_deciderResult);
+            Expect.Call(_deciderResult.FilterSkills(_skills)).IgnoreArguments().Return(1);
 
             Expect.Call(_meetingImpactView.ClearTabPages);
 
@@ -86,8 +86,6 @@ namespace Teleopti.Ccc.WinCodeTest.Meetings
             Expect.Call(_skillTypePhone.ForecastSource).Return(ForecastSource.InboundTelephony).Repeat.AtLeastOnce();
 
             Expect.Call(() => _meetingImpactView.AddSkillTab("name", "description", 1, _skill)).IgnoreArguments().Repeat.AtLeastOnce();
-            //Expect.Call(_meetingImpactView.StartDate).Return(new DateOnly(2010, 11, 1));
-            //Expect.Call(() => _impactCalculator.RecalculateResources(new DateOnly(2010, 11, 1)));
 
             _mocks.ReplayAll();
             _target.SetupSkillTabs();
@@ -122,6 +120,4 @@ namespace Teleopti.Ccc.WinCodeTest.Meetings
             _mocks.VerifyAll();
         }
     }
-
-    
 }

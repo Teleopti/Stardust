@@ -21,17 +21,17 @@ namespace Teleopti.Ccc.DomainTest.Common
         {
 	        var pairList = new List<Tuple<int, int>>
 		        {
-			        {Tuple.Create(2, 1)},
-			        {Tuple.Create(3, 7)},
-			        {Tuple.Create(9, 7)},
-			        {Tuple.Create(4, 8)},
-			        {Tuple.Create(4, 6)},
-			        {Tuple.Create(9, 6)},
-			        {Tuple.Create(9, 9)}
+			        Tuple.Create(2, 1),
+			        Tuple.Create(3, 7),
+			        Tuple.Create(9, 7),
+			        Tuple.Create(4, 8),
+			        Tuple.Create(4, 6),
+			        Tuple.Create(9, 6),
+			        Tuple.Create(9, 9)
 		        };
-            target.CreateDictionaries(pairList);
-            IDictionary<int, ICollection<int>> firstDic = target.FirstDictionary;
-            IDictionary<int, ICollection<int>> secondDic = target.SecondDictionary;
+            var result = target.CreateDictionaries(pairList);
+            IDictionary<int, ICollection<int>> firstDic = result.FirstDictionary;
+            IDictionary<int, ICollection<int>> secondDic = result.SecondDictionary;
             //firstdic test
             Assert.AreEqual(4, firstDic.Count);
             CollectionAssert.AreEqual(new List<int> { 1 }, firstDic[2]);

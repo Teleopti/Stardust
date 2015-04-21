@@ -48,9 +48,9 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 		{
 			IEnumerable<Tuple<Guid, Guid>> matrix = _personRepository.PeopleSkillMatrix(scenario, period);
 			matrix = toSkillPeopleMatrix(matrix);
-			MatrixService.CreateDependencies(matrix, new[] { skill.Id.GetValueOrDefault() });
-			PeopleGuidDependencies = MatrixService.SecondDependencies;
-			SkillGuidDependencies = MatrixService.FirstDependencies;
+			var result = MatrixService.CreateDependencies(matrix, new[] { skill.Id.GetValueOrDefault() });
+			PeopleGuidDependencies = result.SecondDependencies;
+			SkillGuidDependencies = result.FirstDependencies;
 			SiteGuidDependencies = _personRepository.PeopleSiteMatrix(period);
 			Period = period;
 		}

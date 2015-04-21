@@ -1,10 +1,8 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
-using Teleopti.Ccc.WinCode.Common;
 using Teleopti.Ccc.WinCode.Scheduling;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
@@ -81,12 +79,12 @@ namespace Teleopti.Ccc.WinCode.Meetings
             var args = (ReloadEventArgs) e.Argument;
             using (var unitOfWork = _uowFactory.CreateAndOpenUnitOfWork())
             {
-                _peopleAndSkillLoaderDecider.Execute(args.Scenario, args.Period, args.Persons);
+                var deciderResult = _peopleAndSkillLoaderDecider.Execute(args.Scenario, args.Period, args.Persons);
 				_schedulerStateLoader.EnsureSkillsLoaded(args.Period.ToDateOnlyPeriod(_schedulerStateHolder.TimeZoneInfo));
                 
                var tempSkills = new HashSet<ISkill>(_schedulingResultStateHolder.Skills);
 
-                _peopleAndSkillLoaderDecider.FilterSkills(tempSkills);
+                deciderResult.FilterSkills(tempSkills);
                 if (_schedulingResultStateHolder.SkillDays != null && tempSkills.SetEquals(_filteredSkills) && _lastPeriod.Contains(args.Period))
                 {
                     e.Cancel = true;
@@ -97,7 +95,7 @@ namespace Teleopti.Ccc.WinCode.Meetings
                 args.TempSkills = tempSkills;
                 
                 var tempPersons = new List<IPerson>(_schedulingResultStateHolder.PersonsInOrganization);
-                _peopleAndSkillLoaderDecider.FilterPeople(tempPersons);
+                deciderResult.FilterPeople(tempPersons);
                 var scheduleDateTimePeriod = new ScheduleDateTimePeriod(args.Period, tempPersons,
                                                                         new MeetingScheduleRangeToLoadCalculator(
                                                                             args.Period));

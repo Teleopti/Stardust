@@ -277,6 +277,7 @@
     <Compile Include="Repositories\ExistingForecastRepository.cs" />
     <Compile Include="Repositories\IQueryExtensions.cs" />
     <Compile Include="Repositories\IOutboundCampaignRepository.cs" />
+    <Compile Include="Repositories\LoaderDeciderResult.cs" />
     <Compile Include="Repositories\OutboundCampaignRepository.cs" />
     <Compile Include="Repositories\PayrollFormatRepository.cs" />
     <Compile Include="Repositories\PlanningPeriodRepository.cs" />

@@ -7,33 +7,37 @@ namespace Teleopti.Ccc.Domain.Common
 {
     public class PairDictionaryFactory<T> : IPairDictionaryFactory<T>
     {
-        public IDictionary<T, ICollection<T>> FirstDictionary { get; private set; }
-
-        public IDictionary<T, ICollection<T>> SecondDictionary { get; private set; }
-
-        public void CreateDictionaries(IEnumerable<Tuple<T, T>> pairList)
+        public CollectionDictionaryPair<T> CreateDictionaries(IEnumerable<Tuple<T, T>> pairList)
         {
-            FirstDictionary = new Dictionary<T, ICollection<T>>();
-            SecondDictionary = new Dictionary<T, ICollection<T>>();
+	        var dictionaryPair = new CollectionDictionaryPair<T>();
             foreach (var pair in pairList)
             {
-                addFirstValue(pair);
-                AddSecondValue(pair);
+                addFirstValue(dictionaryPair,pair);
+                addSecondValue(dictionaryPair,pair);
             }
+	        return dictionaryPair;
         }
 
-				private void addFirstValue(Tuple<T, T> pair)
-        {
-            if (!FirstDictionary.ContainsKey(pair.Item1))
-                FirstDictionary[pair.Item1] = new List<T>();
-            FirstDictionary[pair.Item1].Add(pair.Item2);
-        }
+	    private void addFirstValue(CollectionDictionaryPair<T> dictionaryPair, Tuple<T, T> pair)
+	    {
+		    ICollection<T> list;
+		    if (!dictionaryPair.FirstDictionary.TryGetValue(pair.Item1, out list))
+		    {
+			    list = new List<T>();
+			    dictionaryPair.FirstDictionary.Add(pair.Item1, list);
+		    }
+		    list.Add(pair.Item2);
+	    }
 
-				private void AddSecondValue(Tuple<T, T> pair)
+	    private void addSecondValue(CollectionDictionaryPair<T> dictionaryPair, Tuple<T, T> pair)
         {
-            if (!SecondDictionary.ContainsKey(pair.Item2))
-                SecondDictionary[pair.Item2] = new List<T>();
-            SecondDictionary[pair.Item2].Add(pair.Item1);
+		    ICollection<T> list;
+		    if (!dictionaryPair.SecondDictionary.TryGetValue(pair.Item2, out list))
+		    {
+				list = new List<T>();
+			    dictionaryPair.SecondDictionary.Add(pair.Item2, list);
+		    }
+            list.Add(pair.Item1);
         }
     }
 }

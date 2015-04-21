@@ -1,23 +1,19 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Drawing;
-using System.Linq;
 using NUnit.Framework;
 using Rhino.Mocks;
-using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Interfaces.Domain;
-using ISite = Teleopti.Interfaces.Domain.ISite;
 
 namespace Teleopti.Ccc.InfrastructureTest.Repositories
 {
     [TestFixture]
-    [NUnit.Framework.Category("LongRunning")]
+    [Category("LongRunning")]
     public class SkillLoaderDeciderTest
     {
         private targetForTest target;
@@ -59,14 +55,10 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
             {
                 Expect.Call(personRep.PeopleSkillMatrix(scenario, period))
                     .Return(peopleSkillMatrix);
-                matrixService.CreateDependencies(null, new List<Guid> { skill.Id.Value });
-	            LastCall.IgnoreArguments();
-                Expect.Call(matrixService.FirstDependencies)
-					.Return(skillDependencies);
-                Expect.Call(matrixService.SecondDependencies)
-					.Return(peopleDependencies);
+	            Expect.Call(matrixService.CreateDependencies(null, new List<Guid> {skill.Id.GetValueOrDefault()}))
+		            .IgnoreArguments()
+		            .Return(new DependenciesPair<Guid>(skillDependencies, peopleDependencies));
                 Expect.Call(personRep.PeopleSiteMatrix(period)).Return(siteDependencies);
-
             }
             using (mocks.Playback())
             {
@@ -216,14 +208,6 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
         public void CannotCallFilterPeopleBeforeExecute()
         {
             target.FilterPeople(new List<IPerson>());
-        }
-
-        [Test]
-        [ExpectedException(typeof(InvalidOperationException))]
-        public void ShouldThrowExceptionWhenAccessingPercentageOfPeopleFilteredBeforeExecute()
-        {
-            var peopleAndSkillLoaderDecider = new PeopleAndSkillLoaderDecider(personRep);
-            Assert.AreEqual(0, peopleAndSkillLoaderDecider.PercentageOfPeopleFiltered);
         }
 
         [Test]

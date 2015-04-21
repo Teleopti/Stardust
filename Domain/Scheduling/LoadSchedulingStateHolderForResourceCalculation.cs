@@ -50,9 +50,9 @@ namespace Teleopti.Ccc.Domain.Scheduling
 			var skills = _skillRepository.FindAllWithSkillDays(dateOnlyPeriod);
 			_workloadRepository.LoadAll();
 
-			_peopleAndSkillLoaderDecider.Execute(scenario, period, requestedPersons);
-			_peopleAndSkillLoaderDecider.FilterPeople(_schedulingResultStateHolder.PersonsInOrganization);
-			_peopleAndSkillLoaderDecider.FilterSkills(skills);
+			var result = _peopleAndSkillLoaderDecider.Execute(scenario, period, requestedPersons);
+			result.FilterPeople(_schedulingResultStateHolder.PersonsInOrganization);
+			result.FilterSkills(skills);
 
 			var personsToAdd = from p in requestedPersons
 							   where !_schedulingResultStateHolder.PersonsInOrganization.Contains(p)

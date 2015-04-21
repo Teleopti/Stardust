@@ -10,13 +10,13 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
     {
         private LoadScheduleByPersonSpecification _target;
         private MockRepository _mocks;
-        private IPeopleAndSkillLoaderDecider _decider;
+        private ILoaderDeciderResult _decider;
         
         [SetUp]
         public void Setup()
         {
             _mocks = new MockRepository();
-            _decider = _mocks.StrictMock<IPeopleAndSkillLoaderDecider>();
+            _decider = _mocks.StrictMock<ILoaderDeciderResult>();
 
             _target = new LoadScheduleByPersonSpecification();
         }

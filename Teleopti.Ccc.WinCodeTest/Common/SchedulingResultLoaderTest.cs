@@ -54,6 +54,10 @@ namespace Teleopti.Ccc.WinCodeTest.Common
             _scenario = MockRepository.GenerateMock<IScenario>();
 		    _skill = SkillFactory.CreateSkill("Phone");
 
+		    _peopleAndSkillLoaderDecider.Stub(x => x.Execute(_scenario, new DateTimePeriod(), _permittedPeople))
+			    .IgnoreArguments()
+			    .Return(MockRepository.GenerateMock<ILoaderDeciderResult>());
+
 			_schedulerState = new SchedulerStateHolder(_scenario, new DateOnlyPeriodAsDateTimePeriod(_requestedPeriod, TimeZoneInfoFactory.UtcTimeZoneInfo()), _permittedPeople, new DisableDeletedFilter(new FixedCurrentUnitOfWork(_uow)), new SchedulingResultStateHolder());
 
             target = new SchedulingResultLoader(_schedulerState, _repositoryFactory, _eventAggregator, _lazyManager, _peopleAndSkillLoaderDecider, _peopleLoader, _skillDayLoadHelper, _resourceOptimizationHelper, _loadScheduleByPersonSpecification);
@@ -103,7 +107,7 @@ namespace Teleopti.Ccc.WinCodeTest.Common
             Assert.AreSame(scheduleDictionary, target.SchedulerState.SchedulingResultState.Schedules);
         }
 
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling"), Test]
+        [Test]
         public void VerifyLoadWithIntradayData()
         {
             createContractScheduleInitializationExpectation();

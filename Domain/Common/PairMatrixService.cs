@@ -7,56 +7,51 @@ namespace Teleopti.Ccc.Domain.Common
     public class PairMatrixService<T> : IPairMatrixService<T>
     {
         private readonly IPairDictionaryFactory<T> _factory;
-        private ICollection<T> _firstDependencies;
-        private ICollection<T> _secondDependencies;
-
+        
         public PairMatrixService(IPairDictionaryFactory<T> factory)
         {
             _factory = factory;
         }
 
-        public IEnumerable<T> FirstDependencies
+        public DependenciesPair<T> CreateDependencies(IEnumerable<Tuple<T, T>> pairList,IEnumerable<T> entriesForFirst)
         {
-            get { return _firstDependencies; }
-        }
+            var firstDependencies = new HashSet<T>();
+            var secondDependencies = new HashSet<T>();
+            var dictionaryPair = _factory.CreateDictionaries(pairList);
+			
+			Action<T> markSecond = null;
+	        Action<T, ICollection<T>> markFirst = null;
 
-        public IEnumerable<T> SecondDependencies
-        {
-            get { return _secondDependencies; }
-        }
+	        markFirst = (first, targetCollection) =>
+	        {
+		        if (firstDependencies.Contains(first)) return;
+		        firstDependencies.Add(first);
+		        foreach (T second in targetCollection)
+		        {
+			        markSecond(second);
+		        }
+	        };
 
-        public void CreateDependencies(IEnumerable<Tuple<T, T>> pairList,IEnumerable<T> entriesForFirst)
-        {
-            _firstDependencies = new HashSet<T>();
-            _secondDependencies = new HashSet<T>();
-            _factory.CreateDictionaries(pairList);
-            foreach (T orgFirst in entriesForFirst)
+	        markSecond = second =>
+	        {
+		        if (secondDependencies.Contains(second)) return;
+		        secondDependencies.Add(second);
+		        foreach (T first in dictionaryPair.SecondDictionary[second])
+		        {
+			        markFirst(first, dictionaryPair.FirstDictionary[first]);
+		        }
+	        };
+
+	        foreach (T orgFirst in entriesForFirst)
             {
-                if(_factory.FirstDictionary.ContainsKey(orgFirst))
+	            ICollection<T> targetCollection;
+	            if(dictionaryPair.FirstDictionary.TryGetValue(orgFirst, out targetCollection))
                 {
-                    markFirst(orgFirst);                    
+                    markFirst(orgFirst, targetCollection);
                 }
             }
-        }
 
-        private void markFirst(T first)
-        {
-            if (_firstDependencies.Contains(first)) return;
-            _firstDependencies.Add(first);
-            foreach (T second in _factory.FirstDictionary[first])
-            {
-                markSecond(second);
-            }
-        }
-
-        private void markSecond(T second)
-        {
-            if (_secondDependencies.Contains(second)) return;
-            _secondDependencies.Add(second);
-            foreach (T first in _factory.SecondDictionary[second])
-            {
-                markFirst(first);
-            }
+			return new DependenciesPair<T>(firstDependencies,secondDependencies);
         }
     }
 }

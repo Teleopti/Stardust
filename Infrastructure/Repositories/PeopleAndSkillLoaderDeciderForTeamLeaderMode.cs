@@ -7,33 +7,35 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 {
     public class PeopleAndSkillLoaderDeciderForTeamLeaderMode : IPeopleAndSkillLoaderDecider
     {
-        public void Execute(IScenario scenario, DateTimePeriod period, IEnumerable<IPerson> people)
+        public ILoaderDeciderResult Execute(IScenario scenario, DateTimePeriod period, IEnumerable<IPerson> people)
         {
-            IList<Guid> list = new List<Guid>();
-            PeopleGuidDependencies = list;
-            SkillGuidDependencies = list;
-            SiteGuidDependencies = list;
+            return new emptyLoaderDeciderResult();
         }
 
-        public IEnumerable<Guid> PeopleGuidDependencies { get; protected set; }
+	    private class emptyLoaderDeciderResult : ILoaderDeciderResult
+	    {
+		    public emptyLoaderDeciderResult()
+		    {
+				var list = new Guid[]{};
+				PeopleGuidDependencies = list;
+				SkillGuidDependencies = list;
+				SiteGuidDependencies = list;
+		    }
 
-        public IEnumerable<Guid> SkillGuidDependencies { get; protected set; }
+		    public Guid[] PeopleGuidDependencies { get; private set; }
+		    public Guid[] SkillGuidDependencies { get; private set; }
+		    public Guid[] SiteGuidDependencies { get; private set; }
+		    public int FilterPeople(ICollection<IPerson> people)
+		    {
+			    return 0;
+		    }
 
-        public IEnumerable<Guid> SiteGuidDependencies { get; protected set; }
+		    public int FilterSkills(ICollection<ISkill> skills)
+		    {
+			    return 0;
+		    }
 
-        public double PercentageOfPeopleFiltered
-        {
-            get { return 0; }
-        }
-
-        public int FilterPeople(ICollection<IPerson> people)
-        {
-            return 0;
-        }
-
-        public int FilterSkills(ICollection<ISkill> skills)
-        {
-            return 0;
-        }
+		    public double PercentageOfPeopleFiltered { get { return 0; } }
+	    }
     }
 }

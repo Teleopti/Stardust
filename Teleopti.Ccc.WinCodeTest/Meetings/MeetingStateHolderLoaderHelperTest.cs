@@ -4,8 +4,6 @@ using NUnit.Framework;
 using Rhino.Mocks;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
-using Teleopti.Ccc.Domain.Time;
-using Teleopti.Ccc.WinCode.Common;
 using Teleopti.Ccc.WinCode.Meetings;
 using Teleopti.Ccc.WinCode.Scheduling;
 using Teleopti.Interfaces.Domain;
@@ -13,7 +11,7 @@ using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.WinCodeTest.Meetings
 {
-    [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1001:TypesThatOwnDisposableFieldsShouldBeDisposable"), TestFixture]
+    [TestFixture]
     public class MeetingStateHolderLoaderHelperTest
     {
         private MockRepository _mocks;
@@ -27,12 +25,14 @@ namespace Teleopti.Ccc.WinCodeTest.Meetings
         private IUnitOfWorkFactory _unitOfWorkFactory;
 		private bool _finished;
 		private ISchedulerStateHolder _schedulerStateHolder;
+	    private ILoaderDeciderResult _loaderDeciderResult;
 
-        [SetUp]
+	    [SetUp]
         public void Setup()
         {
             _mocks = new MockRepository();
             _peopleAndSkillLoaderDecider = _mocks.StrictMock<IPeopleAndSkillLoaderDecider>();
+            _loaderDeciderResult = _mocks.StrictMock<ILoaderDeciderResult>();
 	        _schedulerStateHolder = _mocks.DynamicMock<ISchedulerStateHolder>();
             _schedulingResultStateHolder = _mocks.StrictMock<ISchedulingResultStateHolder>();
             _schedulerStateLoader = _mocks.StrictMock<ISchedulerStateLoader>();
@@ -52,7 +52,7 @@ namespace Teleopti.Ccc.WinCodeTest.Meetings
             _target.Dispose();    
         }
 
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling"), Test]
+		[Test]
         public void ShouldExecuteDeciderAndLoadWhenNewPeriod()
         {
             var unitOfWork = _mocks.StrictMock<IUnitOfWork>();
@@ -62,13 +62,13 @@ namespace Teleopti.Ccc.WinCodeTest.Meetings
 	        Expect.Call(_schedulerStateHolder.TimeZoneInfo).Return(
 				TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time"));
 
-            Expect.Call(() =>_peopleAndSkillLoaderDecider.Execute(_scenario, _period, _persons));
+            Expect.Call(_peopleAndSkillLoaderDecider.Execute(_scenario, _period, _persons)).Return(_loaderDeciderResult);
             Expect.Call(() => _schedulerStateLoader.EnsureSkillsLoaded(new DateOnlyPeriod())).IgnoreArguments();
             Expect.Call(_schedulingResultStateHolder.Skills).Return(new List<ISkill>());
-            Expect.Call(_peopleAndSkillLoaderDecider.FilterSkills(new HashSet<ISkill>())).Return(0).IgnoreArguments();
+            Expect.Call(_loaderDeciderResult.FilterSkills(new HashSet<ISkill>())).Return(0).IgnoreArguments();
             Expect.Call(_schedulingResultStateHolder.SkillDays).Return(new Dictionary<ISkill, IList<ISkillDay>>());
             Expect.Call(_schedulingResultStateHolder.PersonsInOrganization).Return(new List<IPerson>());
-            Expect.Call(_peopleAndSkillLoaderDecider.FilterPeople(new List<IPerson>())).Return(0);
+            Expect.Call(_loaderDeciderResult.FilterPeople(new List<IPerson>())).Return(0);
             Expect.Call(_unitOfWorkFactory.CreateAndOpenUnitOfWork()).Return(unitOfWork);
             Expect.Call(() => _schedulerStateLoader.LoadSchedulingResultAsync(null, unitOfWork, null,new List<ISkill>())).IgnoreArguments();
             Expect.Call(unitOfWork.Dispose);
@@ -80,13 +80,9 @@ namespace Teleopti.Ccc.WinCodeTest.Meetings
             _mocks.VerifyAll();
         }
 
-       
-
 	    void TargetFinishedReloading(object sender, ReloadEventArgs e)
         {
            _finished = true;
         }
     }
-
-    
 }

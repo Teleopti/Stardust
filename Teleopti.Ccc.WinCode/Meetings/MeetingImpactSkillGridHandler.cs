@@ -1,7 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
-using Teleopti.Ccc.WinCode.Common;
 using Teleopti.Ccc.WinCode.Meetings.Interfaces;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
@@ -50,10 +49,10 @@ namespace Teleopti.Ccc.WinCode.Meetings
             }
             using (_uowFactory.CreateAndOpenUnitOfWork())
             {
-            	_decider.Execute(_schedulerStateHolder.RequestedScenario, _schedulerStateHolder.RequestedPeriod.Period(),
+            	var result = _decider.Execute(_schedulerStateHolder.RequestedScenario, _schedulerStateHolder.RequestedPeriod.Period(),
             	                 _meetingViewModel.Meeting.MeetingPersons.Select(p => p.Person).ToList());
 
-            	_decider.FilterSkills(_skills);
+            	result.FilterSkills(_skills);
             }
 
             _meetingImpactView.ClearTabPages();

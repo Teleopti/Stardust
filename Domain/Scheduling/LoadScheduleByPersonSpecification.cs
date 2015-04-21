@@ -3,9 +3,9 @@ using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.Domain.Scheduling
 {
-    public class LoadScheduleByPersonSpecification : Specification<IPeopleAndSkillLoaderDecider>
+    public class LoadScheduleByPersonSpecification : Specification<ILoaderDeciderResult>
     {
-        public override bool IsSatisfiedBy(IPeopleAndSkillLoaderDecider obj)
+		public override bool IsSatisfiedBy(ILoaderDeciderResult obj)
         {
             if (obj == null)
                 return false;

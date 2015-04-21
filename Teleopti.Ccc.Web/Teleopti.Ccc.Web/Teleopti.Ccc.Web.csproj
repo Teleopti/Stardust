@@ -512,6 +512,9 @@
     <Compile Include="Areas\ResourcePlanner\FilterController.cs" />
     <Compile Include="Areas\ResourcePlanner\FilterGroup.cs" />
     <Compile Include="Areas\ResourcePlanner\FilterItem.cs" />
+    <Compile Include="Areas\ResourcePlanner\FixedStaffLoader.cs" />
+    <Compile Include="Areas\ResourcePlanner\FixedStaffSchedulingInput.cs" />
+    <Compile Include="Areas\ResourcePlanner\PeopleSelection.cs" />
     <Compile Include="Areas\ResourcePlanner\ResourcePlannnerModule.cs" />
     <Compile Include="Areas\ResourcePlanner\IMissingForecastProvider.cs" />
     <Compile Include="Areas\ResourcePlanner\MissingForecastModel.cs" />
@@ -520,6 +523,7 @@
     <Compile Include="Areas\ResourcePlanner\PlanningPeriodModel.cs" />
     <Compile Include="Areas\ResourcePlanner\ScheduleController.cs" />
     <Compile Include="Areas\ResourcePlanner\SchedulingResultModel.cs" />
+    <Compile Include="Areas\ResourcePlanner\SetupStateHolderForWebScheduling.cs" />
     <Compile Include="Areas\Rta\Controllers\SyncController.cs" />
     <Compile Include="Areas\People\Core\Providers\IPeopleSearchProvider.cs" />
     <Compile Include="Areas\Rta\Log4NetWcfLogger.cs" />
@@ -1207,16 +1211,7 @@
     <Content Include="Areas\Reporting\Index.aspx" />
     <Content Include="Areas\Reporting\Views\Report\NoPermission.cshtml" />
     <Content Include="WFM\js\outbound\outbound.directive.js" />
-    <Content Include="WFM\css\style.css.map">
-      <DependentUpon>style.css</DependentUpon>
-    </Content>
     <None Include="WFM\css\_forecasting.scss" />
-    <Content Include="WFM\css\style.css">
-      <DependentUpon>style.scss</DependentUpon>
-    </Content>
-    <Content Include="WFM\css\style.min.css">
-      <DependentUpon>style.css</DependentUpon>
-    </Content>
     <Content Include="WFM\js\seatManagement\fabric.fix.js" />
     <Content Include="WFM\js\seatManagement\html\imageLoadWithPreview.html" />
     <Content Include="WFM\js\seatManagement\html\seatmapeditor.html" />
