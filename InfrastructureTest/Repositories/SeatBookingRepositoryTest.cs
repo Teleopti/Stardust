@@ -70,7 +70,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 				new DateTime(2015, 10, 2, 8, 0, 0),
 				new DateTime(2015, 10, 2, 12, 0, 0));
 			var booking2 = new SeatBooking(person2,
-				new DateOnly(2015, 10, 2), 
+				new DateOnly(2015, 10, 1), 
 				new DateTime(2015, 10, 1, 13, 0, 0),
 				new DateTime(2015, 10, 1, 17, 0, 0));
 
