@@ -2,10 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.PersonScheduleDayReadModel;
-using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
-using Teleopti.Ccc.Infrastructure.Toggle;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Portal.DataProvider;
 using Teleopti.Interfaces.Domain;
 
@@ -16,17 +14,14 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.DataProvider
 		private readonly ILoggedOnUser _loggedOnUser;
 		private readonly IPersonScheduleDayReadModelFinder _scheduleDayReadModelFinder;
 		private readonly IPermissionProvider _permissionProvider;
-		private readonly IToggleManager _toggleManager;
 
 		public ShiftTradeRequestProvider(ILoggedOnUser loggedOnUser,
 			IPersonScheduleDayReadModelFinder scheduleDayReadModelFinder,
-			IPermissionProvider permissionProvider,
-			IToggleManager toggleManager)
+			IPermissionProvider permissionProvider)
 		{
 			_loggedOnUser = loggedOnUser;
 			_scheduleDayReadModelFinder = scheduleDayReadModelFinder;
 			_permissionProvider = permissionProvider;
-			_toggleManager = toggleManager;
 		}
 
 		public IWorkflowControlSet RetrieveUserWorkflowControlSet()

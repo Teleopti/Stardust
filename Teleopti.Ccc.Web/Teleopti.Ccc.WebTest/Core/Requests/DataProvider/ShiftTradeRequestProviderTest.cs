@@ -9,7 +9,6 @@ using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.WorkflowControl;
-using Teleopti.Ccc.Infrastructure.Toggle;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Portal.DataProvider;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.DataProvider;
 using Teleopti.Interfaces.Domain;
@@ -27,7 +26,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 
 			loggedOnUser.Stub(x => x.CurrentUser()).Return(person);
 
-			var target = new ShiftTradeRequestProvider(loggedOnUser, MockRepository.GenerateMock<IPersonScheduleDayReadModelFinder>(), MockRepository.GenerateMock<IPermissionProvider>(), MockRepository.GenerateMock<IToggleManager>());
+			var target = new ShiftTradeRequestProvider(loggedOnUser, MockRepository.GenerateMock<IPersonScheduleDayReadModelFinder>(), MockRepository.GenerateMock<IPermissionProvider>());
 
 			var result = target.RetrieveUserWorkflowControlSet();
 
@@ -50,7 +49,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 			scheduleDayReadModelFinder.Stub(x => x.ForPerson(date, person.Id.Value)).Return(scheduleReadModel);
 			permissionProvider.Stub(x => x.IsPersonSchedulePublished(date, person)).Return(true);
 
-			var target = new ShiftTradeRequestProvider(loggedOnUser, scheduleDayReadModelFinder, permissionProvider, MockRepository.GenerateMock<IToggleManager>());
+			var target = new ShiftTradeRequestProvider(loggedOnUser, scheduleDayReadModelFinder, permissionProvider);
 
 			target.RetrieveMySchedule(date).Should().Be.SameInstanceAs(scheduleReadModel);
 		}
@@ -74,7 +73,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 				.Return(scheduleReadModels);
 
 			var target = new ShiftTradeRequestProvider(MockRepository.GenerateMock<ILoggedOnUser>(), scheduleDayReadModelFinder,
-				MockRepository.GenerateMock<IPermissionProvider>(), MockRepository.GenerateMock<IToggleManager>());
+				MockRepository.GenerateMock<IPermissionProvider>());
 
 			var result = target.RetrievePossibleTradeSchedules(date, new[] {person1, person2}, paging);
 
@@ -92,7 +91,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 				.IgnoreArguments().Return(scheduleReadModels);
 
 			var target = new ShiftTradeRequestProvider(MockRepository.GenerateMock<ILoggedOnUser>(), scheduleDayReadModelFinder,
-				MockRepository.GenerateMock<IPermissionProvider>(), MockRepository.GenerateMock<IToggleManager>());
+				MockRepository.GenerateMock<IPermissionProvider>());
 
 			var result = target.RetrieveBulletinTradeSchedules(new List<string>(), new Paging());
 
@@ -118,7 +117,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 
 			scheduleDayReadModelFinder.Stub(x => x.ForPersons(date, new[] { person1.Id.Value, person2.Id.Value }, new Paging(), filterInfo)).Return(scheduleReadModels);
 
-			var target = new ShiftTradeRequestProvider(MockRepository.GenerateMock<ILoggedOnUser>(), scheduleDayReadModelFinder, MockRepository.GenerateMock<IPermissionProvider>(), MockRepository.GenerateMock<IToggleManager>());
+			var target = new ShiftTradeRequestProvider(MockRepository.GenerateMock<ILoggedOnUser>(), scheduleDayReadModelFinder, MockRepository.GenerateMock<IPermissionProvider>());
 
 			var result = target.RetrievePossibleTradeSchedulesWithFilteredTimes(date, new[] { person1, person2 }, new Paging(), filterInfo);
 
@@ -140,7 +139,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 			permissionProvider.Stub(
 				x => x.HasTeamPermission(DefinedRaptorApplicationFunctionPaths.ShiftTradeRequestsWeb, theDate, myTeam)).Return(true);
 
-			var target = new ShiftTradeRequestProvider(loggedOnUser, MockRepository.GenerateMock<IPersonScheduleDayReadModelFinder>(), permissionProvider, MockRepository.GenerateMock<IToggleManager>());
+			var target = new ShiftTradeRequestProvider(loggedOnUser, MockRepository.GenerateMock<IPersonScheduleDayReadModelFinder>(), permissionProvider);
 
 			var result = target.RetrieveMyTeamId(theDate);
 
@@ -157,7 +156,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 			loggedOnUser.Stub(x => x.CurrentUser()).Return(person);
 			person.Stub(x => x.MyTeam(theDate)).Return(null);
 
-			var target = new ShiftTradeRequestProvider(loggedOnUser, MockRepository.GenerateMock<IPersonScheduleDayReadModelFinder>(), MockRepository.GenerateMock<IPermissionProvider>(), MockRepository.GenerateMock<IToggleManager>());
+			var target = new ShiftTradeRequestProvider(loggedOnUser, MockRepository.GenerateMock<IPersonScheduleDayReadModelFinder>(), MockRepository.GenerateMock<IPermissionProvider>());
 
 			var result = target.RetrieveMyTeamId(theDate);
 
@@ -179,7 +178,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 			permissionProvider.Stub(
 				x => x.HasTeamPermission(DefinedRaptorApplicationFunctionPaths.ShiftTradeRequestsWeb, theDate, myTeam)).Return(false);
 
-			var target = new ShiftTradeRequestProvider(loggedOnUser, MockRepository.GenerateMock<IPersonScheduleDayReadModelFinder>(), permissionProvider, MockRepository.GenerateMock<IToggleManager>());
+			var target = new ShiftTradeRequestProvider(loggedOnUser, MockRepository.GenerateMock<IPersonScheduleDayReadModelFinder>(), permissionProvider);
 
 			var result = target.RetrieveMyTeamId(theDate);
 
