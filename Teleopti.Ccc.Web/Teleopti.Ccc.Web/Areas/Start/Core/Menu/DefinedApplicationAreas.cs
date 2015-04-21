@@ -30,14 +30,6 @@ namespace Teleopti.Ccc.Web.Areas.Start.Core.Menu
 			},
 			new ApplicationArea
 			{
-				ApplicationFunctionPath =
-					DefinedRaptorApplicationFunctionPaths
-						.SeatPlanner,
-				Area = "SeatPlanner",
-				Name = GetMenuText(DefinedRaptorApplicationFunctionPaths.SeatPlanner)
-			},
-			new ApplicationArea
-			{
 				ApplicationFunctionPath = DefinedRaptorApplicationFunctionPaths.OpenForecasterPage,
 				Area = "WFM",
 				Name = "WFM"

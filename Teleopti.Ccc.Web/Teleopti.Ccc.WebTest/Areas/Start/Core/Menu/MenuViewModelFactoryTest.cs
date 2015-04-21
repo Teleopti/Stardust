@@ -62,22 +62,6 @@ namespace Teleopti.Ccc.WebTest.Areas.Start.Core.Menu
 			result.Single().Name.Should().Be.EqualTo(getMenuText(DefinedRaptorApplicationFunctionPaths.Anywhere));
 		}
 
-
-		[Test]
-		public void ShouldCreateModelForUserWithAccessOnlyToSeatPlanner()
-		{
-			var permissionProvider = MockRepository.GenerateMock<IPermissionProvider>();
-			permissionProvider.Stub(x => x.HasApplicationFunctionPermission(DefinedRaptorApplicationFunctionPaths.SeatPlanner)).Return(true);
-			var target = new MenuViewModelFactory(permissionProvider);
-
-			var result = target.CreateMenuViewModel();
-
-			result.Single().Area.Should().Be.EqualTo("SeatPlanner");
-			result.Single().Name.Should().Be.EqualTo(getMenuText(DefinedRaptorApplicationFunctionPaths.SeatPlanner));
-			
-		}
-
-
 		private string getMenuText(string applicationFunctionPath)
 		{
 			var factory = new DefinedRaptorApplicationFunctionFactory();

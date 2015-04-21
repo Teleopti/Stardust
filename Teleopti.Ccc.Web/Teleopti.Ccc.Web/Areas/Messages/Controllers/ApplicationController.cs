@@ -81,8 +81,7 @@ namespace Teleopti.Ccc.Web.Areas.Messages.Controllers
 				UserName = principal.Identity.Name,
 				PersonId = ((IUnsafePerson)principal).Person.Id,
 				IsMyTimeAvailable = _principalAuthorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.MyTimeWeb),
-				IsAnywhereAvailable = _principalAuthorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.Anywhere),
-				IsSeatPlannerAvailable = _principalAuthorization.IsPermitted (DefinedRaptorApplicationFunctionPaths.SeatPlanner)
+				IsAnywhereAvailable = _principalAuthorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.Anywhere)
 			}, JsonRequestBehavior.AllowGet);
 		}
 

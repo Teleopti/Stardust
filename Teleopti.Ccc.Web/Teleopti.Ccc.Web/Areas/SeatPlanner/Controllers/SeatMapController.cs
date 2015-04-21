@@ -47,8 +47,6 @@ namespace Teleopti.Ccc.Web.Areas.SeatPlanner.Controllers
 		
 		
 		[UnitOfWork, Route("api/SeatPlanner/SeatMap"), HttpPost]
-		//RobTodo: Check Permissions
-		//[AddSeatMapPermission]
 		public virtual bool Save([FromBody]SaveSeatMapCommand command)
 		{
 			if (command.TrackedCommandInfo != null)
@@ -66,12 +64,5 @@ namespace Teleopti.Ccc.Web.Areas.SeatPlanner.Controllers
 		}
 
 
-
-		//Robtodo: remove when prototype is removed
-		[UnitOfWork, Route("SeatPlanner/SeatMap/GetOld"), HttpGet]
-		public virtual object GetOld(Guid? id)
-		{
-			return _seatMapProvider.Get(id);
-		}
 	}
 }

@@ -22,12 +22,6 @@ namespace Teleopti.Ccc.Web.Areas.SeatPlanner.Controllers
 		{
 			return _locationHierarchyProvider.Get ();
 		}
-
-		[UnitOfWork, Route("SeatPlanner/LocationHierarchy/GetOld"), HttpGet]
-		public virtual LocationViewModel GetOld()
-		{
-			return _locationHierarchyProvider.Get();
-		}
 	}
 }
 
