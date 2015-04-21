@@ -16,9 +16,7 @@ namespace Teleopti.Ccc.Web.Areas.Tenant.Core
 
 		public PersonInfo Map(PersonInfoModel personInfoModel)
 		{
-			var id = personInfoModel.PersonId.HasValue ?
-							personInfoModel.PersonId.Value :
-							Guid.Empty;
+			var id = personInfoModel.PersonId ?? Guid.Empty;
 			var tenant = _findTenantByNameQuery.Find(personInfoModel.Tenant);
 			var dateOnly = personInfoModel.TerminalDate.HasValue ? new DateOnly(personInfoModel.TerminalDate.Value) : (DateOnly?)null;
 			var personInfo = new PersonInfo(tenant) { Id = id, TerminalDate = dateOnly};
