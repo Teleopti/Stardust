@@ -23,16 +23,18 @@ namespace Teleopti.Ccc.WebTest.Areas.Tenant.Core
 			res.FailReason.Should().Be.EqualTo(Resources.LogOnFailedInvalidUserNameOrPassword);
 		}
 
+
 		[Test]
 		public void UserWithNonExistingLogonNameShouldFail()
 		{
+			var userName = RandomName.Make();
 			var findApplicationQuery = MockRepository.GenerateMock<IApplicationUserTenantQuery>();
 			var personInfo = new PersonInfo();
-			findApplicationQuery.Expect(x => x.Find(RandomName.Make())).Return(personInfo);
+			findApplicationQuery.Expect(x => x.Find(userName)).Return(personInfo);
 			var target = new ApplicationAuthentication(findApplicationQuery,
 				MockRepository.GenerateMock<IDataSourceConfigurationProvider>(), () => MockRepository.GenerateStub<IPasswordPolicy>(), new Now(), new SuccessfulPasswordPolicy());
 
-			var res = target.Logon("nonExisting", string.Empty);
+			var res = target.Logon(userName, RandomName.Make());
 
 			res.Success.Should().Be.False();
 			res.FailReason.Should().Be.EqualTo(Resources.LogOnFailedInvalidUserNameOrPassword);

@@ -27,7 +27,6 @@ namespace Teleopti.Ccc.Web.Areas.Tenant.Core
 		public ApplicationAuthenticationResult Logon(string userName, string password)
 		{
 			var personInfo = _applicationUserQuery.Find(userName);
-			//TODO: add check!
 			if (personInfo == null)
 				return createFailingResult(Resources.LogOnFailedInvalidUserNameOrPassword);
 

@@ -36,6 +36,9 @@ namespace Teleopti.Ccc.Infrastructure.MultiTenancy.Server
 
 		public virtual bool IsValidPassword(INow now, IPasswordPolicy passwordPolicy, string unencryptedPassword)
 		{
+			if (PersonInfo.ApplicationLogonName == null)
+				return false;
+
 			var encryptedPassword = oneWayEncryption.EncryptString(unencryptedPassword);
 
 			var utcNow = now.UtcDateTime();
