@@ -65,7 +65,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Tenant.Core
 			const string password = "somePassword";
 			var dataSourceConfiguration = new DataSourceConfiguration();
 			var personInfo = new PersonInfo { Id = Guid.NewGuid()};
-			personInfo.SetApplicationLogonCredentials(RandomName.Make(), EncryptPassword.ToDbFormat(password));
+			personInfo.SetApplicationLogonCredentials(RandomName.Make(), password);
 			var findApplicationQuery = MockRepository.GenerateMock<IApplicationUserTenantQuery>();
 			findApplicationQuery.Expect(x => x.Find(userName)).Return(personInfo);
 			var dataSourceProvider = MockRepository.GenerateStub<IDataSourceConfigurationProvider>();
@@ -87,7 +87,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Tenant.Core
 			const string userName = "validUserName";
 			const string password = "somePassword";
 			var personInfo = new PersonInfo { Id = Guid.NewGuid() };
-			personInfo.SetApplicationLogonCredentials(RandomName.Make(), EncryptPassword.ToDbFormat(password));
+			personInfo.SetApplicationLogonCredentials(RandomName.Make(), password);
 
 			var findApplicationQuery = MockRepository.GenerateMock<IApplicationUserTenantQuery>();
 			findApplicationQuery.Expect(x => x.Find(userName)).Return(personInfo);

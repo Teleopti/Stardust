@@ -267,7 +267,6 @@
     <Compile Include="Areas\Tenant\Core\TenantCheckPasswordChangeTest.cs" />
     <Compile Include="Areas\Tenant\Core\DataSourceConfigurationProviderFake.cs" />
     <Compile Include="Areas\Tenant\Core\DataSourceConfigurationProviderUsingNhibFilesTest.cs" />
-    <Compile Include="Areas\Tenant\Core\EncryptPassword.cs" />
     <Compile Include="Areas\Tenant\Core\HttpRequestUserAgentFake.cs" />
     <Compile Include="Areas\Tenant\Core\IdentityAuthenticationTest.cs" />
     <Compile Include="Areas\Tenant\Core\IoCTest.cs" />

@@ -1,4 +1,5 @@
 ﻿using System;
+using Teleopti.Ccc.Domain.Security;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Infrastructure.MultiTenancy.Server
@@ -45,12 +46,18 @@ namespace Teleopti.Ccc.Infrastructure.MultiTenancy.Server
 		{
 			//need to check password policy here!
 			ApplicationLogonName = logonName;
-			Password = password;
+			setPassword(password);
 		}
 
 		public virtual void SetIdentity(string identityName)
 		{
 			Identity = identityName;
+		}
+
+		private void setPassword(string newPassword)
+		{
+			//todo: tenant get rid of domain dependency here
+			Password = new OneWayEncryption().EncryptString(newPassword);
 		}
 	}
 }

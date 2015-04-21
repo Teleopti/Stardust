@@ -1,6 +1,6 @@
 ﻿using Teleopti.Ccc.Domain.Security;
 
-namespace Teleopti.Ccc.WebTest.Areas.Tenant.Core
+namespace Teleopti.Ccc.TestCommon
 {
 	public static class EncryptPassword
 	{

@@ -2,6 +2,7 @@
 using NHibernate.Exceptions;
 using NUnit.Framework;
 using SharpTestsEx;
+using Teleopti.Ccc.Domain.Security;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Server;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Server.NHibernate;
 using Teleopti.Ccc.TestCommon;
@@ -77,7 +78,7 @@ namespace Teleopti.Ccc.InfrastructureTest.MultiTenancy.Server
 			session.Flush();
 			session.Clear();
 			var loaded = session.Get<PersonInfo>(personInfo.Id);
-			loaded.Password.Should().Be.EqualTo(newPassword);
+			loaded.Password.Should().Be.EqualTo(EncryptPassword.ToDbFormat(newPassword));
 			loaded.Id.Should().Be.EqualTo(idBefore);
 		}
 

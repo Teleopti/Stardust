@@ -3,6 +3,7 @@ using NUnit.Framework;
 using Rhino.Mocks;
 using SharpTestsEx;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Server;
+using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.TestData;
 using Teleopti.Ccc.Web.Areas.Tenant.Core;
 using Teleopti.Ccc.Web.Areas.Tenant.Model;
@@ -56,7 +57,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Tenant.Core
 			var password = RandomName.Make();
 			var target = new PersonInfoMapper(MockRepository.GenerateMock<IFindTenantByNameQuery>());
 			var result = target.Map(new PersonInfoModel { Password = password });
-			result.Password.Should().Be.EqualTo(password);
+			result.Password.Should().Be.EqualTo(EncryptPassword.ToDbFormat(password));
 		}
 
 		[Test]

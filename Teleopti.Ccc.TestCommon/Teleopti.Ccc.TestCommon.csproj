@@ -132,6 +132,7 @@
     <Compile Include="BitArrayHelper.cs" />
     <Compile Include="CatalanCulture.cs" />
     <Compile Include="ConnectionStringHelper.cs" />
+    <Compile Include="EncryptPassword.cs" />
     <Compile Include="Exceptions.cs" />
     <Compile Include="Execute.cs" />
     <Compile Include="Extensions.cs" />
