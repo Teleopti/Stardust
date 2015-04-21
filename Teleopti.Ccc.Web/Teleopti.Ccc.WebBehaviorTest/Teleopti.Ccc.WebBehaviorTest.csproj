@@ -202,6 +202,7 @@
     <Compile Include="Bindings\Generic\Anywhere\RealTimeAdherencePageStepDefinitions.cs" />
     <Compile Include="Bindings\Generic\ShiftExchangeOfferFields.cs" />
     <Compile Include="Bindings\Generic\StateGroupStepDefinitions.cs" />
+    <Compile Include="Bindings\Generic\Wfm\ResourcePlannerStepDefinitions.cs" />
     <Compile Include="Bindings\Generic\WorkloadStepDefinitions.cs" />
     <Compile Include="Bindings\TestRun.cs" />
     <Compile Include="Core\BrowserDriver\BrowserInteractionsUrlExtensions.cs" />
@@ -835,6 +836,11 @@
       <DependentUpon>Toggle.feature</DependentUpon>
     </Compile>
     <Compile Include="Toggle\ToggleStepDefinition.cs" />
+    <Compile Include="Wfm\PlanningPeriod.feature.cs">
+      <DependentUpon>PlanningPeriod.feature</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <Content Include="..\..\packages\phantomjs.exe.1.8.1\tools\phantomjs\phantomjs.exe">
@@ -1155,6 +1161,10 @@
     <None Include="Toggle\Toggle.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>
       <LastGenOutput>Toggle.feature.cs</LastGenOutput>
+    </None>
+    <None Include="Wfm\PlanningPeriod.feature">
+      <Generator>SpecFlowSingleFileGenerator</Generator>
+      <LastGenOutput>PlanningPeriod.feature.cs</LastGenOutput>
     </None>
   </ItemGroup>
   <ItemGroup>

@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Web.Http;
 using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Scheduling;
+using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Infrastructure.Toggle;
 
 namespace Teleopti.Ccc.Web.Areas.Search.Controllers
@@ -34,8 +36,8 @@ namespace Teleopti.Ccc.Web.Areas.Search.Controllers
 					new SearchResultModel
 					{
 						Name =
-							UserTexts.Resources.NextPlanningPeriod + " " + currentPplanningPeriodRange.StartDate.ToShortDateString() + "-" +
-							currentPplanningPeriodRange.EndDate.ToShortDateString(),
+							UserTexts.Resources.NextPlanningPeriod + " " + currentPplanningPeriodRange.StartDate.ToShortDateString( TeleoptiPrincipal.CurrentPrincipal.Regional.Culture ) + "-" +
+							currentPplanningPeriodRange.EndDate.ToShortDateString(TeleoptiPrincipal.CurrentPrincipal.Regional.Culture),
 						Url = "/resourceplanner",
 						SearchGroup = UserTexts.Resources.PlanningPeriod
 					}

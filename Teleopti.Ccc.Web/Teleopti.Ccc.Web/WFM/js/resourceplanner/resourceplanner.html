@@ -4,7 +4,7 @@
 		<p>{{'CheckingForecastingRequirements' | translate}}</p>
 	</div>
 	<div class="row" ng-show="planningPeriod.$resolved">
-		<h4>{{'NextPlanningPeriodMessage' | translate}} {{planningPeriod.StartDate | date:"MM/dd/yyyy"}} {{'ToText' | translate}} {{planningPeriod.EndDate | date:"MM/dd/yyyy"}}</h4>
+		<h4>{{'NextPlanningPeriodMessage' | translate}} {{planningPeriod.StartDate | date:"yyyy-MM-dd"}} {{'ToText' | translate}} {{planningPeriod.EndDate | date:"yyyy-MM-dd"}}</h4>
 		<p>{{'PlanningPeriodMissingMessage' | translate}}</p>
 
 		<div>
@@ -18,7 +18,7 @@
 					<span class="pull-right" class="text-muted">{{skill.MissingRanges.length}} {{'IssuesText' | translate }}</span>
 				</div>
 				<div class="wfm-accordion-content" ng-cloak ng-show="skill.toggle">
-					<div ng-repeat="range in skill.MissingRanges">{{'MissingForecastFrom' | translate }} {{range.StartDate | date:"MM/dd/yyyy"}} {{'ToText' | translate}} {{range.EndDate | date:"MM/dd/yyyy"}}</div>
+					<div ng-repeat="range in skill.MissingRanges">{{'MissingForecastFrom' | translate }} {{range.StartDate | date:"yyyy-MM-dd"}} {{'ToText' | translate}} {{range.EndDate | date:"yyyy-MM-dd"}}</div>
 				</div>
 			</li>
 		</ul>
