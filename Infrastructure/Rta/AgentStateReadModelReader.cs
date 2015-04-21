@@ -129,11 +129,24 @@ namespace Teleopti.Ccc.Infrastructure.Rta
 
 
 
+
+		public IEnumerable<AgentStateReadModel> GetActualAgentStates()
+		{
+			return queryActualAgentStates2("SELECT * FROM Rta.ActualAgentState", new parameters[] { });
+		}
+
 		public AgentStateReadModel GetCurrentActualAgentState(Guid personId)
 		{
-			LoggingSvc.DebugFormat("Getting old state for person: {0}", personId);
-
-			var agentState = queryActualAgentStates(personId).FirstOrDefault();
+			var agentState = queryActualAgentStates2(
+				"SELECT * FROM Rta.ActualAgentState WHERE PersonId = @PersonId",
+				new[]
+				{
+					new parameters
+					{
+						Name = "@PersonId",
+						Value = personId
+					}
+				}).FirstOrDefault();
 
 			if (agentState == null)
 				LoggingSvc.DebugFormat("Found no state for person: {0}", personId);
@@ -143,12 +156,34 @@ namespace Teleopti.Ccc.Infrastructure.Rta
 			return agentState;
 		}
 
-		public IEnumerable<AgentStateReadModel> GetActualAgentStates()
+		public IEnumerable<AgentStateReadModel> GetMissingAgentStatesFromBatch(DateTime batchId, string dataSourceId)
 		{
-			return queryActualAgentStates(null);
+			return queryActualAgentStates2(@"
+											SELECT * FROM RTA.ActualAgentState 
+											WHERE OriginalDataSourceId = @datasource_id
+											AND (
+												BatchId < @batch_id
+												OR 
+												BatchId IS NULL
+												)",
+				new[]
+				{
+					new parameters
+					{
+						Name = "@datasource_id",
+						Value = dataSourceId
+					},
+					new parameters
+					{
+						Name = "@batch_id",
+						Value = batchId
+
+					},
+				});
+
 		}
 
-		private IEnumerable<AgentStateReadModel> queryActualAgentStates(Guid? personId)
+		private IEnumerable<AgentStateReadModel> queryActualAgentStates2(string sql, IEnumerable<parameters> parameters)
 		{
 			using (
 				var connection =
@@ -156,17 +191,10 @@ namespace Teleopti.Ccc.Infrastructure.Rta
 			{
 				var command = connection.CreateCommand();
 				command.CommandType = CommandType.Text;
-
-				if (personId.HasValue)
-				{
-					command.CommandText = "SELECT * FROM RTA.ActualAgentState WHERE PersonId = @PersonId";
-					command.Parameters.AddWithValue("@PersonId", personId.Value);
-				}
-				else
-				{
-					command.CommandText = "SELECT * FROM RTA.ActualAgentState";
-				}
-
+				
+				command.CommandText = sql;
+				parameters.ForEach(x => command.Parameters.AddWithValue(x.Name, x.Value));
+				
 				connection.Open();
 				using (var reader = command.ExecuteReader(CommandBehavior.CloseConnection))
 				{
@@ -203,41 +231,10 @@ namespace Teleopti.Ccc.Infrastructure.Rta
 			}
 		}
 
-		public IEnumerable<AgentStateReadModel> GetMissingAgentStatesFromBatch(DateTime batchId, string dataSourceId)
+		private class parameters
 		{
-			var missingUsers = new List<AgentStateReadModel>();
-			using (var connection = _databaseConnectionFactory.CreateConnection(_databaseConnectionStringHandler.DataStoreConnectionString()))
-			{
-				var command = connection.CreateCommand();
-				command.CommandType = CommandType.StoredProcedure;
-				command.CommandText = "[RTA].[rta_get_last_batch]";
-				command.Parameters.AddWithValue("@datasource_id", dataSourceId);
-				command.Parameters.AddWithValue("@batch_id", batchId);
-
-				connection.Open();
-				var reader = command.ExecuteReader(CommandBehavior.CloseConnection);
-				while (reader.Read())
-				{
-					missingUsers.Add(new AgentStateReadModel
-					{
-						BusinessUnitId = reader.NullableGuid("BusinessUnitId") ?? Guid.Empty,
-						PersonId = reader.GetGuid(reader.GetOrdinal("PersonId")),
-						StateCode = reader.String("StateCode"),
-						PlatformTypeId = reader.GetGuid(reader.GetOrdinal("PlatformTypeId")),
-						State = reader.String("State"),
-						StateId = reader.NullableGuid("StateId"),
-						Scheduled = reader.String("Scheduled"),
-						ScheduledId = reader.NullableGuid("ScheduledId"),
-						StateStart = reader.NullableDateTime("StateStart"),
-						ScheduledNext = reader.String("ScheduledNext"),
-						ScheduledNextId = reader.NullableGuid("ScheduledNextId"),
-						NextStart = reader.NullableDateTime("NextStart"),
-					});
-				}
-			}
-
-			return missingUsers;
+			public string Name { get; set; }
+			public object Value { get; set; }
 		}
-
-    }
+	}
 }
