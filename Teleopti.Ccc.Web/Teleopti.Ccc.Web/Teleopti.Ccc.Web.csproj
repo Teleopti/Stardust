@@ -733,6 +733,7 @@
     <Compile Include="Areas\Tenant\Model\ApplicationLogonModel.cs" />
     <Compile Include="Areas\Tenant\Model\IdentityLogonModel.cs" />
     <Compile Include="Areas\Tenant\Model\PersonInfoModel.cs" />
+    <Compile Include="Areas\Tenant\Model\PersistPersonInfoResult.cs" />
     <Compile Include="Areas\Tenant\PersonInfoController.cs" />
     <Compile Include="Areas\Toggle\ToggleHandlerController.cs" />
     <Compile Include="Core\AllowTokenPostRequestValidator.cs" />

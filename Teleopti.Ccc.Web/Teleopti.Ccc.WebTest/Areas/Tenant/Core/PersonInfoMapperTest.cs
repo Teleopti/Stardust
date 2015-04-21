@@ -64,7 +64,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Tenant.Core
 		{
 			var password = RandomName.Make();
 			var passwordStrength = MockRepository.GenerateStub<ICheckPasswordStrength>();
-			passwordStrength.Expect(x => x.Validate(password)).Throw(new PasswordStrengthException("some message"));
+			passwordStrength.Expect(x => x.Validate(password)).Throw(new PasswordStrengthException());
 			var target = new PersonInfoMapper(MockRepository.GenerateMock<IFindTenantByNameQuery>(), passwordStrength);
 
 			Assert.Throws<PasswordStrengthException>(() => target.Map(new PersonInfoModel{Password = password}));

@@ -38,6 +38,22 @@ namespace Teleopti.Ccc.Web.Areas.Tenant
 
 		[HttpPost]
 		[TenantUnitOfWork]
+		public virtual PersistPersonInfoResult Persist(PersonInfoModel personInfoModel)
+		{
+			var ret = new PersistPersonInfoResult();
+			try
+			{
+				_persister.Persist(_mapper.Map(personInfoModel));
+			}
+			catch (PasswordStrengthException)
+			{
+				ret.PasswordStrengthIsValid = false;
+			}
+			return ret;
+		}
+
+		[HttpPost]
+		[TenantUnitOfWork]
 		//TODO: tenant - probably return some kind of json result later
 		//TODO: tenant - change later to some sort of authentication
 		public virtual void Delete(IEnumerable<Guid> personIdsToDelete)

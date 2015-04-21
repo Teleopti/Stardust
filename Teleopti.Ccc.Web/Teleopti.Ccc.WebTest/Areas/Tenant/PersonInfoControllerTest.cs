@@ -1,7 +1,7 @@
 ﻿using System;
-using System.Runtime.InteropServices;
 using NUnit.Framework;
 using Rhino.Mocks;
+using SharpTestsEx;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Server;
 using Teleopti.Ccc.Web.Areas.Tenant;
 using Teleopti.Ccc.Web.Areas.Tenant.Core;
@@ -42,6 +42,41 @@ namespace Teleopti.Ccc.WebTest.Areas.Tenant
 
 			deleter.AssertWasCalled(x => x.Delete(personId1));
 			deleter.AssertWasCalled(x => x.Delete(personId2));
+		}
+
+		[Test]
+		public void ShouldPersistPersonInfo()
+		{
+			var personInfoModel = new PersonInfoModel();
+			var personInfo = new PersonInfo();
+			var persister = MockRepository.GenerateMock<IPersistPersonInfo>();
+			var mapper = MockRepository.GenerateMock<IPersonInfoMapper>();
+			mapper.Expect(x => x.Map(personInfoModel)).Return(personInfo);
+
+			var target = new PersonInfoController(persister, mapper, null);
+			var result = target.Persist(personInfoModel);
+			allPropertiesShouldBeTrue(result);
+		}
+
+		private static void allPropertiesShouldBeTrue(PersistPersonInfoResult result)
+		{
+			foreach (var propertyInfo in result.GetType().GetProperties())
+			{
+				((bool)propertyInfo.GetValue(result)).Should().Be.True();
+			}
+		}
+
+		[Test]
+		public void ShouldFailPersistingPersonInfoIfMapperThrows()
+		{
+			var personInfoModel = new PersonInfoModel();
+			var persister = MockRepository.GenerateMock<IPersistPersonInfo>();
+			var mapper = MockRepository.GenerateMock<IPersonInfoMapper>();
+			mapper.Expect(x => x.Map(personInfoModel)).Throw(new PasswordStrengthException());
+
+			var target = new PersonInfoController(persister, mapper, null);
+			var result = target.Persist(personInfoModel);
+			result.PasswordStrengthIsValid.Should().Be.False();
 		}
 	}
 }
