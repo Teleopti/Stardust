@@ -1,4 +1,5 @@
 using System;
+using Teleopti.Ccc.Domain.Security;
 
 namespace Teleopti.Ccc.Infrastructure.MultiTenancy.Server
 {
@@ -8,6 +9,8 @@ namespace Teleopti.Ccc.Infrastructure.MultiTenancy.Server
 		//remove me when oldschema is gone!
 		private Guid id;
 #pragma warning restore 169
+
+		private static OneWayEncryption oneWayEncryption = new OneWayEncryption();
 
 		public ApplicationLogonInfo(PersonInfo personInfo)
 		{
@@ -30,8 +33,9 @@ namespace Teleopti.Ccc.Infrastructure.MultiTenancy.Server
 			IsLocked = true;
 		}
 
-		public virtual bool IsValidPassword(string encryptedPassword)
+		public virtual bool IsValidPassword(string unencryptedPassword)
 		{
+			var encryptedPassword = oneWayEncryption.EncryptString(unencryptedPassword);
 			var isValid = PersonInfo.Password.Equals(encryptedPassword);
 			if (isValid)
 			{

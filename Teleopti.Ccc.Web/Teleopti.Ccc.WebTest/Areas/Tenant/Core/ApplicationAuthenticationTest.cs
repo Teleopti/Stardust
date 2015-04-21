@@ -2,7 +2,6 @@
 using NUnit.Framework;
 using Rhino.Mocks;
 using SharpTestsEx;
-using Teleopti.Ccc.Domain.Security;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Server;
 using Teleopti.Ccc.TestCommon.TestData;
 using Teleopti.Ccc.UserTexts;
@@ -17,7 +16,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Tenant.Core
 		public void NonExistingUserShouldFail()
 		{
 			var target = new ApplicationAuthentication(MockRepository.GenerateMock<IApplicationUserTenantQuery>(),
-				new PasswordVerifier(new OneWayEncryption(), () => MockRepository.GenerateStub<IPasswordPolicy>(), new Now()), new SuccessfulPasswordPolicy(), MockRepository.GenerateMock<IDataSourceConfigurationProvider>());
+				new PasswordVerifier(() => MockRepository.GenerateStub<IPasswordPolicy>(), new Now()), new SuccessfulPasswordPolicy(), MockRepository.GenerateMock<IDataSourceConfigurationProvider>());
 			var res = target.Logon("nonExisting", string.Empty);
 
 			res.Success.Should().Be.False();
@@ -31,7 +30,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Tenant.Core
 			var personInfo = new PersonInfo();
 			findApplicationQuery.Expect(x => x.Find(RandomName.Make())).Return(personInfo);
 			var target = new ApplicationAuthentication(findApplicationQuery,
-				new PasswordVerifier(new OneWayEncryption(), () => MockRepository.GenerateStub<IPasswordPolicy>(), new Now()),
+				new PasswordVerifier(() => MockRepository.GenerateStub<IPasswordPolicy>(), new Now()),
 				new SuccessfulPasswordPolicy(), MockRepository.GenerateMock<IDataSourceConfigurationProvider>());
 
 			var res = target.Logon("nonExisting", string.Empty);
@@ -50,7 +49,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Tenant.Core
 			personInfo.SetApplicationLogonCredentials(RandomName.Make(), "thePassword");
 			findApplicationQuery.Expect(x => x.Find(userName)).Return(personInfo);
 
-			var target = new ApplicationAuthentication(findApplicationQuery, new PasswordVerifier(new OneWayEncryption(), () => MockRepository.GenerateStub<IPasswordPolicy>(), new Now()),
+			var target = new ApplicationAuthentication(findApplicationQuery, new PasswordVerifier(() => MockRepository.GenerateStub<IPasswordPolicy>(), new Now()),
 				new SuccessfulPasswordPolicy(), MockRepository.GenerateMock<IDataSourceConfigurationProvider>());
 			var res = target.Logon(userName, "invalidPassword");
 
@@ -70,7 +69,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Tenant.Core
 			findApplicationQuery.Expect(x => x.Find(userName)).Return(personInfo);
 			var dataSourceProvider = MockRepository.GenerateStub<IDataSourceConfigurationProvider>();
 			dataSourceProvider.Stub(x => x.ForTenant(personInfo.Tenant)).Return(dataSourceConfiguration);
-			var target = new ApplicationAuthentication(findApplicationQuery, new PasswordVerifier(new OneWayEncryption(), () => MockRepository.GenerateStub<IPasswordPolicy>(), new Now()),
+			var target = new ApplicationAuthentication(findApplicationQuery, new PasswordVerifier(() => MockRepository.GenerateStub<IPasswordPolicy>(), new Now()),
 				new SuccessfulPasswordPolicy(), dataSourceProvider);
 			
 			var res = target.Logon(userName, password);
@@ -93,7 +92,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Tenant.Core
 			findApplicationQuery.Expect(x => x.Find(userName)).Return(personInfo);
 			var nhibHandler = MockRepository.GenerateMock<IDataSourceConfigurationProvider>();
 			nhibHandler.Stub(x => x.ForTenant(personInfo.Tenant)).Return(null);
-			var target = new ApplicationAuthentication(findApplicationQuery, new PasswordVerifier(new OneWayEncryption(), () => MockRepository.GenerateStub<IPasswordPolicy>(), new Now()),
+			var target = new ApplicationAuthentication(findApplicationQuery, new PasswordVerifier(() => MockRepository.GenerateStub<IPasswordPolicy>(), new Now()),
 				new SuccessfulPasswordPolicy(), nhibHandler);
 
 			var res = target.Logon(userName, password);
