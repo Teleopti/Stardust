@@ -5,6 +5,7 @@ using Teleopti.Analytics.Etl.Interfaces.Transformer;
 using Teleopti.Analytics.Etl.TransformerInfrastructure;
 using Teleopti.Ccc.Domain.Security;
 using Teleopti.Ccc.Domain.Security.Authentication;
+using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.MessageBroker.Client;
 using Teleopti.Messaging.Client;
@@ -27,7 +28,8 @@ namespace Teleopti.Analytics.Etl.Transformer.Job
 			MessageBrokerContainerDontUse.Configure(
 				ConfigurationManager.AppSettings["MessageBroker"],
 				new IConnectionKeepAliveStrategy[] { },
-				null);
+				null,
+				new NewtonsoftJsonSerializer());
 			_messageSender = MessageBrokerContainerDontUse.Sender();
 			_messageClient = MessageBrokerContainerDontUse.SignalRClient();
 		}

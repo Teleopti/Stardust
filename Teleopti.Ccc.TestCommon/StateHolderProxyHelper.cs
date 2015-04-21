@@ -38,7 +38,7 @@ namespace Teleopti.Ccc.TestCommon
 			ConfigurationManager.AppSettings.AllKeys.ToList().ForEach(
 				name => appSettings.Add(name, ConfigurationManager.AppSettings[name]));
 
-			MessageBrokerContainerDontUse.Configure(null, new IConnectionKeepAliveStrategy[] {}, MessageFilterManager.Instance);
+			MessageBrokerContainerDontUse.Configure(null, new IConnectionKeepAliveStrategy[] { }, MessageFilterManager.Instance, new NewtonsoftJsonSerializer());
 			var signalBroker = MessageBrokerContainerDontUse.CompositeClient();
 			var applicationData = new ApplicationData(appSettings, new[] { dataSource }, signalBroker, null, null);
 			var sessionData = CreateSessionData(person, dataSource, businessUnit, principalContext);
