@@ -40,7 +40,7 @@ namespace Teleopti.Ccc.InfrastructureTest
 
 			loggedOnPerson = PersonFactory.CreatePersonWithBasicPermissionInfo("UserThatClenUpDataSource", string.Empty);
 
-			MessageBrokerContainerDontUse.Configure(null, null, MessageFilterManager.Instance);
+			MessageBrokerContainerDontUse.Configure(null, null, MessageFilterManager.Instance, new NewtonsoftJsonSerializer());
 			ApplicationData = new ApplicationData(appSettings,
 									new ReadOnlyCollection<IDataSource>(new List<IDataSource> { DataSource }),
 									MessageBrokerContainerDontUse.CompositeClient(), null, null);
