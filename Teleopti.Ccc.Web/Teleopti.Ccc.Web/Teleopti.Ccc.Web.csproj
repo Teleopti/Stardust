@@ -522,6 +522,7 @@
     <Compile Include="Areas\ResourcePlanner\SchedulingResultModel.cs" />
     <Compile Include="Areas\Rta\Controllers\SyncController.cs" />
     <Compile Include="Areas\People\Core\Providers\IPeopleSearchProvider.cs" />
+    <Compile Include="Areas\Rta\Log4NetWcfLogger.cs" />
     <Compile Include="Areas\Search\Controllers\PeopleSearchController.cs" />
     <Compile Include="Areas\Search\Controllers\SearchController.cs" />
     <Compile Include="Areas\SeatPlanner\Controllers\LocationHierarchyController.cs" />
