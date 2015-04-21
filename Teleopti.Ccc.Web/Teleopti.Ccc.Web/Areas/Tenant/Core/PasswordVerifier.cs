@@ -25,15 +25,7 @@ namespace Teleopti.Ccc.Web.Areas.Tenant.Core
 				applicationLogonInfo.ClearInvalidAttempts();
 			}
 
-			var isValid = applicationLogonInfo.IsValidPassword(userPassword);
-			if (!isValid)
-			{
-				if (applicationLogonInfo.InvalidAttempts > passwordPolicy.MaxAttemptCount)
-				{
-					applicationLogonInfo.Lock();
-				}
-			}
-			return isValid;
+			return applicationLogonInfo.IsValidPassword(_passwordPolicy(), userPassword);
 		}
 	}
 }
