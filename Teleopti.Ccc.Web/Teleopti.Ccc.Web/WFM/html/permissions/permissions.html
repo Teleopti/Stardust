@@ -63,25 +63,24 @@
 
 					<section>
 						<div class="tab-container">
-							<div ng-show="roleDetails=='functionsAvailable'">
+							<div ng-show="roleDetails=='functionsAvailable'" class="animate-show">
 								<div class="row toolbar">
-									<div class="col-lg-6">
+									<div class="col-md-8">
 										<div class="input-prepend">
 											<i class="mdi mdi-filter-outline"></i>
 											<input type="text" name="filterDetails" ng-model="searchPermissions" placeholder="{{'PermissionsFilterThreeDots' | translate}}" />
 										</div>
 									</div>
-									<div class="col-lg-3">
-										<div class="wfm-switch">
+									<div class="col-md-4">
+										<div class="wfm-switch permissions-tree-switch">
 											<input type="checkbox" id="switch1" ng-model="checked" ng-click="node.show = true" />
 											<label for="switch1">
 												<span class="wfm-switch-label" translate>SelectedItems</span>
 												<span class="wfm-switch-toggle"></span>
 											</label>
 										</div>
-									</div>
-									<div class="col-lg-3">
-										<div class="wfm-switch">
+
+										<div class="wfm-switch permissions-tree-switch">
 											<input type="checkbox" id="switch2" />
 											<label for="switch2">
 												<span class="wfm-switch-label" translate>NotSelectedItems</span>
@@ -91,7 +90,7 @@
 									</div>
 								</div>
 
-								<div class="tree">
+								<div class="tree permissions-tree">
 									<div ui-tree data-drag-enabled="false">
 										<ol ui-tree-nodes="" ng-model="functionsDisplayed" id="tree-root" class="tree-line" toggle-focus>
 											<li ng-repeat="node in functionsDisplayed | filter:searchPermissions" ui-tree-node ng-include="'nodes_renderer.html'"></li>
@@ -107,26 +106,24 @@
 					</label>
 					<section>
 						<div class="tab-container">
-							<div ng-show="roleDetails=='dataAvailable'">
+							<div class="animate-show" ng-show="roleDetails=='dataAvailable'">
 
 								<div class="row toolbar">
-									<div class="col-lg-6">
+									<div class="col-md-8">
 										<div class="input-prepend">
 											<i class="mdi mdi-filter-outline"></i>
 											<input type="text" name="filterDetails" ng-model="searchData" placeholder="{{'DataFilterThreeDots' | translate}}" />
 										</div>
 									</div>
-									<div class="col-lg-3">
-										<div class="wfm-switch">
+									<div class="col-md-4">
+										<div class="wfm-switch permissions-tree-switch">
 											<input type="checkbox" id="switch3" />
 											<label for="switch3">
 												<span class="wfm-switch-label" translate>SelectedItems</span>
 												<span class="wfm-switch-toggle"></span>
 											</label>
 										</div>
-									</div>
-									<div class="col-lg-3">
-										<div class="wfm-switch">
+										<div class="wfm-switch permissions-tree-switch">
 											<input type="checkbox" id="switch4" />
 											<label for="switch4">
 												<span class="wfm-switch-label" translate>NotSelectedItems</span>
@@ -136,7 +133,7 @@
 									</div>
 								</div>
 
-								<div class="tree">
+								<div class="tree permissions-tree">
 									<div ui-tree data-drag-enabled="false">
 										<ol ui-tree-nodes="" ng-model="organization.DynamicOptions" class="tree-line">
 											<li ng-repeat="dynamic in organization.DynamicOptions | filter:searchData" ui-tree-node>
@@ -168,7 +165,7 @@
 <script type="text/ng-template" id="nodes_renderer.html">
 	<div class="tree-toggle-group">
 		<div class="toggle-handle" ng-class="{open: node.show}" ng-click="node.show = !node.show"><i ng-show="node.ChildFunctions.length > 0" class="mdi mdi-chevron-right"></i></div>
-		<div ui-tree-handle ng-class="{selected: node.selected}" ng-click="toggleFunctionForRole(node)" ng-hide="checked">
+		<div ui-tree-handle class="ui-tree-handle" ng-class="{selected: node.selected}" ng-click="toggleFunctionForRole(node)" ng-hide="checked">
 			{{node.LocalizedFunctionDescription}}
 			<span><i class="mdi mdi-check"></i></span>
 		</div>
@@ -184,7 +181,7 @@
 <script type="text/ng-template" id="nodes_bu_renderer.html">
 	<div class="tree-toggle-group">
 		<div class="toggle-handle" ng-class="{open: node.show}" ng-click="node.show = !node.show"><i ng-show="node.ChildNodes.length > 0" class="mdi mdi-chevron-right"></i></div>
-		<div ui-tree-handle ng-class="{selected: node.selected}" ng-click="toggleOrganizationSelection(node)" ng-hide="checked">
+		<div ui-tree-handle class="ui-tree-handle" ng-class="{selected: node.selected}" ng-click="toggleOrganizationSelection(node)" ng-hide="checked">
 			{{node.Name}}
 			<span><i class="mdi mdi-check"></i></span>
 		</div>

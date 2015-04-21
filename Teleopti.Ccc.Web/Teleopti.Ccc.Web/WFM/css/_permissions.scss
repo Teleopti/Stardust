@@ -23,3 +23,46 @@ input[type="text"]{
 	  line-height: initial;
 		text-transform: capitalize;
 }
+
+.permissions-tree {
+	li {
+		border: none;
+	}
+	.angular-ui-tree-handle{
+		border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+	}
+	.toggle-handle{
+		width: auto;
+	}
+
+	i {
+		vertical-align: text-bottom;
+	}
+}
+
+.permissions-tree-switch{
+	text-align: right;
+}
+
+.wfm-switch label{
+	padding-right: 58px;
+}
+
+.animate-show {
+  line-height: 20px;
+  opacity: 1;
+  padding: 10px;
+  background: white;
+}
+
+.animate-show.ng-hide-add.ng-hide-add-active,
+.animate-show.ng-hide-remove.ng-hide-remove-active {
+  -webkit-transition: all linear 0.2s;
+  transition: all linear 0.2s;
+}
+
+.animate-show.ng-hide {
+  line-height: 0;
+  opacity: 0;
+  padding: 0 10px;
+}
