@@ -68,7 +68,8 @@ angular.module('wfm.forecasting.target', ['n3-line-chart'])
 					workload.loaded = false;
 					
 					$http.post("../api/Forecasting/PreForecast", JSON.stringify({ ForecastStart: $scope.period.startDate, ForecastEnd: $scope.period.endDate , WorkloadId: workload.Id})).
-						success(function(data, status, headers, config) {
+						success(function (data, status, headers, config) {
+							workload.loaded = true;
 							angular.forEach(data.ForecastDays, function(day) {
 								day.date = new Date(Date.parse(day.date));
 							});
@@ -102,7 +103,6 @@ angular.module('wfm.forecasting.target', ['n3-line-chart'])
 							});
 							workload.chartOptions.series[parseInt(selectedMethod) + 1].thickness = "2px";
 							workload.selectedMethod = selectedMethod;
-							workload.loaded = true;
 						}).
 						error(function(data, status, headers, config) {
 							console.log(data);
