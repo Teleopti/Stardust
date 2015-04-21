@@ -8,7 +8,7 @@ using Teleopti.Interfaces.Domain;
 namespace Teleopti.Ccc.WebTest.Areas.Tenant.Core
 {
 	[TestFixture]
-	public class TenantCheckPasswordChangeTest
+	public class VerifyPasswordPolicyTest
 	{
 		private IVerifyPasswordPolicy target;
 		private IPasswordPolicy passwordPolicy;
