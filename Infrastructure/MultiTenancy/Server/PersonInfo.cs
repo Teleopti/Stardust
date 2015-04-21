@@ -42,11 +42,10 @@ namespace Teleopti.Ccc.Infrastructure.MultiTenancy.Server
 			get { return tenant.Name; }
 		}
 
-		public virtual void SetApplicationLogonCredentials(string logonName, string password)
+		public virtual void SetApplicationLogonCredentials(ICheckPasswordStrength checkPasswordStrength, string logonName, string password)
 		{
-			//need to check password policy here!
+			setPassword(checkPasswordStrength, password);
 			ApplicationLogonName = logonName;
-			setPassword(password);
 		}
 
 		public virtual void SetIdentity(string identityName)
@@ -54,8 +53,9 @@ namespace Teleopti.Ccc.Infrastructure.MultiTenancy.Server
 			Identity = identityName;
 		}
 
-		private void setPassword(string newPassword)
+		private void setPassword(ICheckPasswordStrength checkPasswordStrength, string newPassword)
 		{
+			checkPasswordStrength.Validate(newPassword);
 			//todo: tenant get rid of domain dependency here
 			Password = new OneWayEncryption().EncryptString(newPassword);
 		}

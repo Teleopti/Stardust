@@ -8,10 +8,12 @@ namespace Teleopti.Ccc.Web.Areas.Tenant.Core
 	public class PersonInfoMapper : IPersonInfoMapper
 	{
 		private readonly IFindTenantByNameQuery _findTenantByNameQuery;
+		private readonly ICheckPasswordStrength _checkPasswordStrength;
 
-		public PersonInfoMapper(IFindTenantByNameQuery findTenantByNameQuery)
+		public PersonInfoMapper(IFindTenantByNameQuery findTenantByNameQuery, ICheckPasswordStrength checkPasswordStrength)
 		{
 			_findTenantByNameQuery = findTenantByNameQuery;
+			_checkPasswordStrength = checkPasswordStrength;
 		}
 
 		public PersonInfo Map(PersonInfoModel personInfoModel)
@@ -21,7 +23,7 @@ namespace Teleopti.Ccc.Web.Areas.Tenant.Core
 			var dateOnly = personInfoModel.TerminalDate.HasValue ? new DateOnly(personInfoModel.TerminalDate.Value) : (DateOnly?)null;
 			var personInfo = new PersonInfo(tenant) { Id = id, TerminalDate = dateOnly};
 			personInfo.SetIdentity(personInfoModel.Identity);
-			personInfo.SetApplicationLogonCredentials(personInfoModel.ApplicationLogonName, personInfoModel.Password);
+			personInfo.SetApplicationLogonCredentials(_checkPasswordStrength, personInfoModel.ApplicationLogonName, personInfoModel.Password);
 			return personInfo;
 		}
 	}
