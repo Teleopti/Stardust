@@ -84,12 +84,18 @@ angular.module('wfm.forecasting.target', ['n3-line-chart'])
 
 							workload.forecastMethods = data.ForecastMethods;
 
-							var selectedMethod = 0;
-							if (data.ForecastMethodRecommended === -1) {
-								workload.noHistoricalDataForEvaluation = true;
+							var selectedMethod;
+							if (workload.methodToUse !== -1) {
+								selectedMethod = workload.methodToUse;
 							} else {
-								selectedMethod = data.ForecastMethodRecommended;
+								if (data.ForecastMethodRecommended === -1) {
+									workload.noHistoricalDataForEvaluation = true;
+									selectedMethod = 0;
+								} else {
+									selectedMethod = data.ForecastMethodRecommended;
+								}
 							}
+
 							angular.forEach(workload.chartOptions.series, function (line) {
 								line.thickness = "1px";
 							});
@@ -100,6 +106,15 @@ angular.module('wfm.forecasting.target', ['n3-line-chart'])
 							console.log(data);
 							$scope.error = { message: "Failed to do the preforecast." };
 						});
+				};
+
+				$scope.saveMethod = function (workload) {
+					workload.methodToUse = workload.selectedMethod;
+					workload.modalLaunch = false;
+				};
+
+				$scope.cancelMethod = function (workload) {
+					workload.modalLaunch = false;
 				};
 
 				$scope.hasOneSelected = function() {
@@ -155,6 +170,7 @@ angular.module('wfm.forecasting.target', ['n3-line-chart'])
 					angular.forEach($scope.skillsDisplayed, function (skill) {
 						skill.show = true;
 						angular.forEach(skill.Workloads, function (workload) {
+							workload.methodToUse = -1;
 							workload.chartOptions = chartOptions();
 							workload.methodChanged = function (newMethod) {
 								angular.forEach(workload.chartOptions.series, function (line) {
@@ -171,7 +187,7 @@ angular.module('wfm.forecasting.target', ['n3-line-chart'])
 					angular.forEach($scope.skillsDisplayed, function (skill) {
 						angular.forEach(skill.Workloads, function(workload) {
 							if (workload.Selected)
-								result.push({ Id: workload.Id, Name: workload.Name });
+								result.push({ Id: workload.Id, Name: workload.Name, Method: workload.methodToUse });
 						});
 					});
 					return result;

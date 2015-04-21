@@ -25,7 +25,7 @@ angular.module('wfm.forecasting', [])
 			$scope.targets = $stateParams.targets;
 			var workloads = [];
 			angular.forEach($scope.targets, function (workload) {
-				workloads.push({ WorkloadId: workload.Id });
+				workloads.push({ WorkloadId: workload.Id, ForecastMethodId: workload.Method });
 			});
 			$http.post('../api/Forecasting/Forecast', JSON.stringify({ ForecastStart: $scope.period.startDate, ForecastEnd: $scope.period.endDate, Workloads: workloads })).
 				success(function (data, status, headers, config) {

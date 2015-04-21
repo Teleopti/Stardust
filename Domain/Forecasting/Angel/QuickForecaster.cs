@@ -26,16 +26,24 @@ namespace Teleopti.Ccc.Domain.Forecasting.Angel
 			foreach (var workload in skill.WorkloadCollection)
 			{
 				var workloadInput = workloads.SingleOrDefault(x => x.WorkloadId == workload.Id.Value);
-				if (workloadInput!=null)
+				if (workloadInput != null)
 				{
-					var workloadAccuracy = _quickForecastWorkloadEvaluator.Measure(workload, historicalPeriodForMeasurement);
+					var forecastMethodId = workloadInput.ForecastMethodId;
+					if (forecastMethodId == ForecastMethodType.None)
+					{
+						var workloadAccuracy = _quickForecastWorkloadEvaluator.Measure(workload, historicalPeriodForMeasurement);
+						forecastMethodId = (workloadAccuracy == null || workloadAccuracy.Accuracies.Length == 0)
+							? ForecastMethodType.TeleoptiClassic
+							: workloadAccuracy.Accuracies.Single(x => x.IsSelected).MethodId;
+					}
+					
 					var quickForecasterWorkloadParams = new QuickForecasterWorkloadParams
 					{
 						WorkLoad = workload,
 						FuturePeriod = futurePeriod,
 						SkillDays = skillDays,
 						HistoricalPeriod = historicalPeriodForForecast,
-						ForecastMethodId = (workloadAccuracy == null || workloadAccuracy.Accuracies.Length == 0) ? ForecastMethodType.TeleoptiClassic : workloadAccuracy.Accuracies.Single(x => x.IsSelected).MethodId
+						ForecastMethodId = forecastMethodId
 					};
 					_quickForecasterWorkload.Execute(quickForecasterWorkloadParams);
 				}
