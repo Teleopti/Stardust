@@ -2,13 +2,17 @@
 	position: relative
 }
 
-.forecasting-chart-line {
+.forecasting-chart-bar {
 	position:absolute;
 	right: 40px;
 }
 
-.forecasting-chart-line:hover {
+.forecasting-chart-bar:hover {
 	color: white;
+}
+
+.forecasting-chart-bar-alert{
+	color:#ee8f7d;
 }
 
 .forecast-method{

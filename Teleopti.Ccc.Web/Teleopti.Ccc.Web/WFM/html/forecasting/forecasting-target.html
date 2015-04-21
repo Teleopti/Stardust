@@ -55,7 +55,7 @@
 					{{workload.Name}}
 					<i class="pull-right workload-accuracy">{{workload.Accuracy}}</i>
 					<span><i class="mdi mdi-check"></i></span>
-					<i class="mdi mdi-chart-line forecasting-chart-line" ng-click="openModal(workload);$event.stopPropagation();"></i>
+					<i class="mdi mdi-chart-bar forecasting-chart-bar" ng-class="{'forecasting-chart-bar-alert': workload.methodToUse!==-1}" ng-click="openModal(workload);$event.stopPropagation();"></i>
 					<div ng-include="'forecasting-chart.html'"></div>
 				</div>
 			</div>
