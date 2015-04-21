@@ -9,6 +9,7 @@ namespace Teleopti.Ccc.Infrastructure.MultiTenancy.Server
 	{
 		AuthenticationResult Check(ApplicationLogonInfo userDetail);
 	}
+
 	public class TenantCheckPasswordChange : ITenantCheckPasswordChange
 	{
 		private readonly Func<IPasswordPolicy> _passwordPolicy;

@@ -33,7 +33,6 @@ namespace Teleopti.Ccc.Web.Areas.Tenant.Core
 				builder.RegisterType<ApplicationUserTenantQuery_OldSchema>().As<IApplicationUserTenantQuery>().SingleInstance();
 			}
 			builder.RegisterType<FindTenantAndPersonIdForIdentity>().As<IFindTenantAndPersonIdForIdentity>().SingleInstance();
-			builder.RegisterType<PasswordPolicyCheck>().As<IPasswordPolicyCheck>().SingleInstance();
 			builder.Register(c =>
 			{
 				var configReader = c.Resolve<IConfigReader>();
