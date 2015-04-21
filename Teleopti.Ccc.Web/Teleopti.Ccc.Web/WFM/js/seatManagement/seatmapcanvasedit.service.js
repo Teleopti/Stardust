@@ -149,7 +149,6 @@ angular.module('wfm.seatMap')
 		};
 
 		function updateSeatDataOnPaste(obj, seatPriority) {
-			console.log(obj.type);
 			if (obj.type == 'group') {
 				for (var i = 0; i < obj._objects.length; i++) {
 					var childObj = obj._objects[i];
@@ -243,14 +242,15 @@ angular.module('wfm.seatMap')
 			};
 
 			fabric.loadSVGFromURL(imgName, function (objects, options) {
+				var groupedSVGObj = fabric.util.groupSVGElements(objects, options);
 
 				fabric.util.loadImage(imgName, function (img) {
 
 					var newSeat = new fabric.Seat(img, seatObj);
-					newSeat.scale(1.2).set({
+					newSeat.set({
 						isNew: true,
-						height: objects[0].height,
-						width: objects[0].width
+						height: groupedSVGObj.height,
+						width: groupedSVGObj.width
 					});
 
 					canvas.add(newSeat);
