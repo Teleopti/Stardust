@@ -189,9 +189,9 @@ namespace Teleopti.Ccc.InfrastructureTest.Aop
 				base.OnBeforeInvocation(invocation);
 				if (BeforeCallback != null) BeforeCallback();
 			}
-			public override void OnAfterInvocation(Exception exception)
+			public override void OnAfterInvocation(Exception exception, IInvocationInfo invocation)
 			{
-				base.OnAfterInvocation(exception);
+				base.OnAfterInvocation(exception, invocation);
 				if (AfterCallback != null) AfterCallback();
 				if (AfterCallbackWithException != null) AfterCallbackWithException(exception);
 			}
@@ -207,9 +207,9 @@ namespace Teleopti.Ccc.InfrastructureTest.Aop
 				base.OnBeforeInvocation(invocation);
 				if (BeforeCallback != null) BeforeCallback();
 			}
-			public override void OnAfterInvocation(Exception exception)
+			public override void OnAfterInvocation(Exception exception, IInvocationInfo invocation)
 			{
-				base.OnAfterInvocation(exception);
+				base.OnAfterInvocation(exception, invocation);
 				if (AfterCallback != null) AfterCallback();
 			}
 		}
@@ -233,7 +233,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Aop
 					if (BeforeCallback != null) BeforeCallback();
 				}
 
-				public void OnAfterInvocation(Exception exception)
+				public void OnAfterInvocation(Exception exception, IInvocationInfo invocation)
 				{
 					if (AfterCallback != null) AfterCallback();
 				}

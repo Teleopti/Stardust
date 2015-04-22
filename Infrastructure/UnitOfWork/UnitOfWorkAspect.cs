@@ -29,7 +29,7 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 			_businessUnitOverrideScope = overrideBusinessUnitFilter();
 		}
 
-		public void OnAfterInvocation(Exception exception)
+		public void OnAfterInvocation(Exception exception, IInvocationInfo invocation)
 		{
 			try
 			{

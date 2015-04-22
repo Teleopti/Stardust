@@ -20,7 +20,7 @@ namespace Teleopti.Ccc.Infrastructure.LiteUnitOfWork
 			factory.StartUnitOfWork();
 		}
 
-		public void OnAfterInvocation(Exception exception)
+		public void OnAfterInvocation(Exception exception, IInvocationInfo invocation)
 		{
 			var factory = _currentDataSource.Current().ReadModel;
 			factory.EndUnitOfWork(exception);

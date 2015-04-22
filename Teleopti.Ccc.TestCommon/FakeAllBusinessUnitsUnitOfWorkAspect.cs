@@ -13,7 +13,7 @@ namespace Teleopti.Ccc.TestCommon
 			Invoked = true;
 		}
 
-		public void OnAfterInvocation(Exception exception)
+		public void OnAfterInvocation(Exception exception, IInvocationInfo invocation)
 		{
 		}
 	}

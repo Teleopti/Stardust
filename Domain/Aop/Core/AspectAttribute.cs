@@ -6,6 +6,6 @@ namespace Teleopti.Ccc.Domain.Aop.Core
 	{
 		public int Order { get; set; }
 		public virtual void OnBeforeInvocation(IInvocationInfo invocation) { }
-		public virtual void OnAfterInvocation(Exception exception) { }
+		public virtual void OnAfterInvocation(Exception exception, IInvocationInfo invocation) { }
 	}
 }

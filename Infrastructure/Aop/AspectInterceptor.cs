@@ -35,7 +35,8 @@ namespace Teleopti.Ccc.Infrastructure.Aop
 
 			if (array.Any())
 			{
-				array.ForEach(a => a.OnBeforeInvocation(new InvocationInfo(invocation)));
+				var invocationInfo = new InvocationInfo(invocation);
+				array.ForEach(a => a.OnBeforeInvocation(invocationInfo));
 
 				Exception exception = null;
 				try
@@ -49,7 +50,7 @@ namespace Teleopti.Ccc.Infrastructure.Aop
 				}
 				finally
 				{
-					array.Reverse().ForEach(a => a.OnAfterInvocation(exception));
+					array.Reverse().ForEach(a => a.OnAfterInvocation(exception, invocationInfo));
 				}
 			}
 			else

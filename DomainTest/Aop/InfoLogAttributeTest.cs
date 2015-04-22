@@ -104,6 +104,22 @@ namespace Teleopti.Ccc.DomainTest.Aop
 
 			Logger.InfoMessage.Should().Contain("Count = 0");
 		}
+
+		[Test]
+		public void ShouldLogReturnValue()
+		{
+			Service.DoesSomethingWithIntReturned();
+
+			Logger.InfoMessage.Should().Contain("Result:1");
+		}
+
+		[Test]
+		public void ShouldLogEnumerableReturnCount()
+		{
+			Service.DoesSomethingWithEnumerableReturned();
+
+			Logger.InfoMessage.Should().Contain("Result:Count = 1");
+		}
 	}
 
 	public class Service
@@ -136,6 +152,18 @@ namespace Teleopti.Ccc.DomainTest.Aop
 		public virtual void DoesSomethingWithParamsArray(params object[] theThing)
 		{
 			
+		}
+
+		[InfoLog]
+		public virtual int DoesSomethingWithIntReturned()
+		{
+			return 1;
+		}
+		
+		[InfoLog]
+		public virtual IEnumerable<int> DoesSomethingWithEnumerableReturned()
+		{
+			return new []{1};
 		}
 	}
 }

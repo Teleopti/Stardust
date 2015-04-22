@@ -29,13 +29,13 @@ namespace Teleopti.Ccc.Domain.Aop
 
 		public void OnBeforeInvocation(IInvocationInfo invocation)
 		{
-			var proxyType = invocation.TargetType;
-			var logger = _logManagerWrapper.GetLogger(proxyType);
+			var type = invocation.TargetType;
+			var logger = _logManagerWrapper.GetLogger(type);
 			if (!logger.IsInfoEnabled)
 				return;
 			var arguments = getArguments(invocation);
 
-			logger.Info(proxyType + "." + invocation.Method.Name + arguments);
+			logger.Info(type + "." + invocation.Method.Name + arguments);
 		}
 
 		private static StringBuilder getArguments(IInvocationInfo invocation)
@@ -56,8 +56,19 @@ namespace Teleopti.Ccc.Domain.Aop
 			return arguments;
 		}
 
-		public void OnAfterInvocation(Exception exception)
+		public void OnAfterInvocation(Exception exception, IInvocationInfo invocation)
 		{
+			var type = invocation.TargetType;
+			var logger = _logManagerWrapper.GetLogger(type);
+			if (!logger.IsInfoEnabled)
+				return;
+			var result = new StringBuilder(type + "." + invocation.Method.Name);
+			var returnValue = invocation.ReturnValue;
+			if (returnValue != null && (returnValue as Array) != null)
+				result.Append(" Result:Count = " + ((Array) returnValue).Length);
+			else
+				result.Append(" Result:" + returnValue);
+			logger.Info(result);
 		}
 	}
 

@@ -20,7 +20,7 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 			_unitOfWork = _currentUnitOfWorkFactory.LoggedOnUnitOfWorkFactory().CreateAndOpenUnitOfWork(QueryFilter.NoFilter);
 		}
 
-		public void OnAfterInvocation(Exception exception)
+		public void OnAfterInvocation(Exception exception, IInvocationInfo invocation)
 		{
 			if (exception == null)
 				_unitOfWork.PersistAll();
