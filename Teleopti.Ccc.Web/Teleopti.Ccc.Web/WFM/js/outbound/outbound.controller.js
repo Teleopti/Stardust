@@ -93,8 +93,8 @@
 				$scope.formCampaignParams = event.targetScope.formCampaignParams;				
 			});
 
-			$scope.update = function () {
-				if ($scope.formCampaignParams.$dirty) {
+			$scope.update = function (isAlwaysUpdate) {
+				if (isAlwaysUpdate || $scope.formCampaignParams.$dirty) {
 					OutboundService.updateCampaign($scope.campaign,
 					function () {
 						notifySuccess(growl, "Campaign updated successfully");
