@@ -23,7 +23,6 @@ namespace Teleopti.Ccc.WebTest.Areas.Tenant.Core
 		}
 
 		[Test]
-		//TODO: tenant - unique identity will be checked on db level currently - enough?
 		public void IdentityShouldBeSet()
 		{
 			var identity = RandomName.Make();
@@ -33,13 +32,30 @@ namespace Teleopti.Ccc.WebTest.Areas.Tenant.Core
 		}
 
 		[Test]
-		//TODO: tenant - unique application logon will be checked on db level currently - enough?
 		public void ApplicationLogonShouldBeSet()
 		{
 			var applicationLogon = RandomName.Make();
 			var target = new PersonInfoMapper(MockRepository.GenerateMock<IFindTenantByNameQuery>(), new CheckPasswordStrengthSuccessful());
-			var result = target.Map(new PersonInfoModel { ApplicationLogonName = applicationLogon });
+			var result = target.Map(new PersonInfoModel { ApplicationLogonName = applicationLogon, Password = RandomName.Make()});
 			result.ApplicationLogonName.Should().Be.EqualTo(applicationLogon);
+		}
+
+		[Test]
+		public void ApplicationLogonNorPasswordShouldBeSetIfApplicationLogonIsMissing()
+		{
+			var target = new PersonInfoMapper(MockRepository.GenerateMock<IFindTenantByNameQuery>(), new CheckPasswordStrengthFailing());
+			var result = target.Map(new PersonInfoModel {Password = RandomName.Make(), ApplicationLogonName = null});
+			result.ApplicationLogonName.Should().Be.Null();
+			result.Password.Should().Be.Null();
+		}
+
+		[Test]
+		public void ApplicationLogonNorPasswordShouldBeSetIfPasswordIsMissing()
+		{
+			var target = new PersonInfoMapper(MockRepository.GenerateMock<IFindTenantByNameQuery>(), new CheckPasswordStrengthFailing());
+			var result = target.Map(new PersonInfoModel { ApplicationLogonName = RandomName.Make(), Password = null});
+			result.ApplicationLogonName.Should().Be.Null();
+			result.Password.Should().Be.Null();
 		}
 
 		[Test]
@@ -47,7 +63,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Tenant.Core
 		{
 			var password = RandomName.Make();
 			var target = new PersonInfoMapper(MockRepository.GenerateMock<IFindTenantByNameQuery>(), new CheckPasswordStrengthSuccessful());
-			var result = target.Map(new PersonInfoModel { Password = password });
+			var result = target.Map(new PersonInfoModel { Password = password, ApplicationLogonName = RandomName.Make()});
 			result.Password.Should().Be.EqualTo(EncryptPassword.ToDbFormat(password));
 		}
 
@@ -59,7 +75,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Tenant.Core
 			passwordStrength.Expect(x => x.Validate(password)).Throw(new PasswordStrengthException());
 			var target = new PersonInfoMapper(MockRepository.GenerateMock<IFindTenantByNameQuery>(), passwordStrength);
 
-			Assert.Throws<PasswordStrengthException>(() => target.Map(new PersonInfoModel{Password = password}));
+			Assert.Throws<PasswordStrengthException>(() => target.Map(new PersonInfoModel{Password = password, ApplicationLogonName = RandomName.Make()}));
 		}
 		
 		[Test]

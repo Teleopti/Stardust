@@ -234,6 +234,7 @@
     <Compile Include="MultiTenancy\Client\TenantAuthenticationData.cs" />
     <Compile Include="MultiTenancy\Client\TenantServerConfiguration.cs" />
     <Compile Include="MultiTenancy\Server\CheckPasswordStrength.cs" />
+    <Compile Include="MultiTenancy\Server\CheckPasswordStrengthFailing.cs" />
     <Compile Include="MultiTenancy\Server\CheckPasswordStrengthSuccessful.cs" />
     <Compile Include="MultiTenancy\Server\ICheckPasswordStrength.cs" />
     <Compile Include="MultiTenancy\Server\IVerifyPasswordPolicy.cs" />

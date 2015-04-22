@@ -45,6 +45,8 @@ namespace Teleopti.Ccc.Infrastructure.MultiTenancy.Server
 
 		public virtual void SetApplicationLogonCredentials(ICheckPasswordStrength checkPasswordStrength, string logonName, string password)
 		{
+			if (logonName == null || password == null)
+				return;
 			setPassword(checkPasswordStrength, password);
 			ApplicationLogonName = logonName;
 		}
