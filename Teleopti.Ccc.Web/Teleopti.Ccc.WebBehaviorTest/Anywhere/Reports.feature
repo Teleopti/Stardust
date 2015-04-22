@@ -13,17 +13,7 @@ Background:
 	| Access to Anywhere       | true                |
 	| Access To Matrix Reports | true                |
 
-@OnlyRunIfEnabled('MyTeam_Reports_31070')
-@OnlyRunIfDisabled('MultiTenantSSOSupport_StandardReports_15093')
-Scenario: open report
-	Given I have the role 'Anywhere Team Green'
-	When I view schedules for '2014-11-06'
-	And I click reports menu
-	And I click one report in drop down list
-	Then The report should be opened in a new window
-
 	 
-@OnlyRunIfEnabled('MultiTenantSSOSupport_StandardReports_15093')
 Scenario: open report new
 	Given I have the role 'Anywhere Team Green'
 	When I view schedules for '2014-11-06'
