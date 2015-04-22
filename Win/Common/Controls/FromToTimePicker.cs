@@ -13,6 +13,12 @@ namespace Teleopti.Ccc.Win.Common.Controls
             InitializeComponent();
         }
 
+	    public bool WholeDayCheckboxVisible
+	    {
+		    get { return checkBoxAdvWholeDay.Visible; }
+		    set { checkBoxAdvWholeDay.Visible = value; }
+	    }
+
         public Office2007OutlookTimePicker StartTime
         {
             get { return office2007OutlookTimePickerStartTime; }
@@ -25,6 +31,8 @@ namespace Teleopti.Ccc.Win.Common.Controls
             set { office2007OutlookTimePickerEndTime = value; }
         }
 
+		[Browsable(false)]
+		[EditorBrowsable(EditorBrowsableState.Never)]
         public CheckBoxAdv WholeDay
         {
             get { return checkBoxAdvWholeDay; }

@@ -174,9 +174,9 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.WorkloadPages
 			// tableLayoutPanelOpenHoursRtl
 			// 
 			this.tableLayoutPanelOpenHoursRtl.ColumnCount = 3;
-			this.tableLayoutPanelOpenHoursRtl.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 29.46428F));
-			this.tableLayoutPanelOpenHoursRtl.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 32.73809F));
-			this.tableLayoutPanelOpenHoursRtl.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 37.59124F));
+			this.tableLayoutPanelOpenHoursRtl.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 35F));
+			this.tableLayoutPanelOpenHoursRtl.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 35F));
+			this.tableLayoutPanelOpenHoursRtl.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 30F));
 			this.tableLayoutPanelOpenHoursRtl.Controls.Add(this.autoLabelTo, 1, 0);
 			this.tableLayoutPanelOpenHoursRtl.Controls.Add(this.timePicker, 0, 1);
 			this.tableLayoutPanelOpenHoursRtl.Controls.Add(this.autoLabelFrom, 0, 0);
@@ -187,14 +187,14 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.WorkloadPages
 			this.tableLayoutPanelOpenHoursRtl.Name = "tableLayoutPanelOpenHoursRtl";
 			this.tableLayoutPanelOpenHoursRtl.RowCount = 3;
 			this.tableLayoutPanelOpenHoursRtl.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 17F));
-			this.tableLayoutPanelOpenHoursRtl.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 37F));
-			this.tableLayoutPanelOpenHoursRtl.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 28F));
+			this.tableLayoutPanelOpenHoursRtl.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 45F));
+			this.tableLayoutPanelOpenHoursRtl.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this.tableLayoutPanelOpenHoursRtl.Size = new System.Drawing.Size(336, 85);
 			this.tableLayoutPanelOpenHoursRtl.TabIndex = 5;
 			// 
 			// autoLabelTo
 			// 
-			this.autoLabelTo.Location = new System.Drawing.Point(102, 0);
+			this.autoLabelTo.Location = new System.Drawing.Point(120, 0);
 			this.autoLabelTo.Name = "autoLabelTo";
 			this.autoLabelTo.Size = new System.Drawing.Size(63, 15);
 			this.autoLabelTo.TabIndex = 2;
@@ -202,15 +202,15 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.WorkloadPages
 			// 
 			// timePicker
 			// 
-			this.timePicker.Anchor = System.Windows.Forms.AnchorStyles.Left;
 			this.tableLayoutPanelOpenHoursRtl.SetColumnSpan(this.timePicker, 2);
-			this.timePicker.Location = new System.Drawing.Point(0, 20);
-			this.timePicker.Margin = new System.Windows.Forms.Padding(0, 3, 3, 6);
+			this.timePicker.Location = new System.Drawing.Point(4, 21);
+			this.timePicker.Margin = new System.Windows.Forms.Padding(4);
 			this.timePicker.MinMaxEndTime = ((Teleopti.Interfaces.Domain.MinMax<System.TimeSpan>)(resources.GetObject("timePicker.MinMaxEndTime")));
 			this.timePicker.MinMaxStartTime = ((Teleopti.Interfaces.Domain.MinMax<System.TimeSpan>)(resources.GetObject("timePicker.MinMaxStartTime")));
 			this.timePicker.Name = "timePicker";
-			this.timePicker.Size = new System.Drawing.Size(198, 28);
+			this.timePicker.Size = new System.Drawing.Size(226, 34);
 			this.timePicker.TabIndex = 0;
+			this.timePicker.WholeDayCheckboxVisible = false;
 			this.timePicker.WholeDayText = "xxNextDay";
 			// 
 			// autoLabelFrom
@@ -224,7 +224,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.WorkloadPages
 			// chbClose
 			// 
 			this.chbClose.AutoSize = true;
-			this.chbClose.Location = new System.Drawing.Point(209, 20);
+			this.chbClose.Location = new System.Drawing.Point(234, 20);
 			this.chbClose.Margin = new System.Windows.Forms.Padding(0, 3, 3, 3);
 			this.chbClose.Name = "chbClose";
 			this.chbClose.Padding = new System.Windows.Forms.Padding(6, 7, 0, 0);

@@ -53,7 +53,7 @@
 			this.tableLayoutPanel1.Name = "tableLayoutPanel1";
 			this.tableLayoutPanel1.RowCount = 1;
 			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-			this.tableLayoutPanel1.Size = new System.Drawing.Size(288, 27);
+			this.tableLayoutPanel1.Size = new System.Drawing.Size(288, 26);
 			this.tableLayoutPanel1.TabIndex = 0;
 			// 
 			// office2007OutlookTimePickerStartTime
@@ -88,13 +88,14 @@
 			// 
 			// checkBoxAdvWholeDay
 			// 
-			this.checkBoxAdvWholeDay.BeforeTouchSize = new System.Drawing.Size(150, 21);
+			this.checkBoxAdvWholeDay.BeforeTouchSize = new System.Drawing.Size(112, 20);
 			this.checkBoxAdvWholeDay.Dock = System.Windows.Forms.DockStyle.Left;
 			this.checkBoxAdvWholeDay.DrawFocusRectangle = false;
+			this.checkBoxAdvWholeDay.ImageCheckBoxSize = new System.Drawing.Size(16, 16);
 			this.checkBoxAdvWholeDay.Location = new System.Drawing.Point(173, 3);
 			this.checkBoxAdvWholeDay.MetroColor = System.Drawing.Color.FromArgb(((int)(((byte)(88)))), ((int)(((byte)(89)))), ((int)(((byte)(91)))));
 			this.checkBoxAdvWholeDay.Name = "checkBoxAdvWholeDay";
-			this.checkBoxAdvWholeDay.Size = new System.Drawing.Size(112, 21);
+			this.checkBoxAdvWholeDay.Size = new System.Drawing.Size(112, 20);
 			this.checkBoxAdvWholeDay.Style = Syncfusion.Windows.Forms.Tools.CheckBoxAdvStyle.Metro;
 			this.checkBoxAdvWholeDay.TabIndex = 2;
 			this.checkBoxAdvWholeDay.Text = "xxNextDay";
@@ -106,7 +107,7 @@
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.Controls.Add(this.tableLayoutPanel1);
 			this.Name = "FromToTimePicker";
-			this.Size = new System.Drawing.Size(288, 27);
+			this.Size = new System.Drawing.Size(288, 26);
 			this.tableLayoutPanel1.ResumeLayout(false);
 			((System.ComponentModel.ISupportInitialize)(this.office2007OutlookTimePickerStartTime)).EndInit();
 			((System.ComponentModel.ISupportInitialize)(this.office2007OutlookTimePickerEndTime)).EndInit();
