@@ -32,8 +32,12 @@
 		};
 
 		vm.addChosenImage = function (image) {
+			var sizeFromImagePreview = {
+				height: document.getElementById('image-preview').height,
+				width:document.getElementById('image-preview').width
+			};
 			vm.showFileDialog = false;
-			editor.addImage(canvas(), image);
+			editor.addImage(canvas(), image, sizeFromImagePreview);
 		};
 
 		vm.setBackgroundImage = function () {

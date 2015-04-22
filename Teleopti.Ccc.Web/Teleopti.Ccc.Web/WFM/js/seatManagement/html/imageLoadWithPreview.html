@@ -8,9 +8,9 @@
 				<div class="modal-inner-content">
 					<form name="myForm" style="max-height:600px; padding:10px;">
 						<input type="file" name="myImage" image-with-preview
-							   ng-model="image"
-							   accept="image/*"
-							   dimensions="height < 2000 && width < 4000">
+						       ng-model="image"
+						       accept="image/*"
+						       dimensions="height < 2000 && width < 4000">
 
 						<span class="error" ng-show="myForm.myImage.$error.image">
 							Not a JPEG, SVG or a PNG!
@@ -18,7 +18,7 @@
 						<span class="error" ng-show="myForm.myImage.$error.dimensions">
 							Invalid dimensions! Expecting a image smaller than 2000x4000.
 						</span>
-						<img class="material-depth-1" style="max-width: 100%; max-height: 540px; padding:10px; margin-top: 10px; margin-bottom:10px; display: block; margin-left: auto;margin-right: auto;" ng-show="image.src" ng-src="{{image.src}}" />
+						<img id="image-preview" class="material-depth-1" style="max-width: 100%; max-height: 540px; padding:10px; margin-top: 10px; margin-bottom:10px; display: block; margin-left: auto;margin-right: auto;" ng-show="image.src" ng-src="{{image.src}}" />
 
 					</form>
 				</div>

@@ -177,34 +177,19 @@ angular.module('wfm.seatMap')
 				s4() + '-' + s4() + s4() + s4();
 		};
 
-		function addImage(canvas, image) {
+		function addImage(canvas, image, sizeFromImagePreview) {
 
-			if (image.src.indexOf('image/svg') > -1) {
-
-				fabric.loadSVGFromURL(image.src, function(objects, options) {
-					var obj = fabric.util.groupSVGElements(objects, options);
-					obj.set({
-						left: 250,
-						top: 250
-					});
-					canvas.add(obj);
-					obj.setCoords();
-					canvas.renderAll();
+			fabric.Image.fromObject(image, function(img) {
+				img.set({
+					left: 250,
+					top: 250,
+					height: sizeFromImagePreview.height,
+					width: sizeFromImagePreview.width
 				});
-
-			} else {
-
-				fabric.Image.fromObject(image, function (img) {
-					img.set({
-						left: 250,
-						top: 250
-					});
-					canvas.add(img);
-					img.setCoords();
-					canvas.renderAll();
-				});
-
-			}
+				canvas.add(img);
+				img.setCoords();
+				canvas.renderAll();
+			});
 		};
 
 		function setBackgroundImage(canvas, image) {
