@@ -3,6 +3,7 @@ using NUnit.Framework;
 using Rhino.Mocks;
 using Teleopti.Ccc.Domain.Security.Authentication;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Server;
+using Teleopti.Ccc.TestCommon.TestData;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.WebTest.Areas.Tenant.Core
@@ -18,7 +19,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Tenant.Core
 		public void Setup()
 		{
 			passwordPolicy =MockRepository.GenerateMock<IPasswordPolicy>();
-			var personInfo = new PersonInfo { Id = Guid.NewGuid() };
+			var personInfo = new PersonInfo();
 			_applicationLogonInfo = new ApplicationLogonInfo(personInfo);
 			target = new VerifyPasswordPolicy(() => passwordPolicy);
 		}

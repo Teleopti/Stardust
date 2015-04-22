@@ -23,14 +23,6 @@ namespace Teleopti.Ccc.WebTest.Areas.Tenant.Core
 		}
 
 		[Test]
-		public void NullPersonIdShouldBeSetToDefaultValue()
-		{
-			var target = new PersonInfoMapper(MockRepository.GenerateMock<IFindTenantByNameQuery>(), new CheckPasswordStrengthSuccessful());
-			var result = target.Map(new PersonInfoModel { PersonId = null });
-			result.Id.Should().Be.EqualTo(Guid.Empty);
-		}
-
-		[Test]
 		//TODO: tenant - unique identity will be checked on db level currently - enough?
 		public void IdentityShouldBeSet()
 		{

@@ -9,16 +9,17 @@ namespace Teleopti.Ccc.Infrastructure.MultiTenancy.Server
 		private readonly Tenant tenant;
 		private ApplicationLogonInfo _applicationLogonInfo;
 
-		public PersonInfo() : this(new Tenant(string.Empty))
+		public PersonInfo() : this(new Tenant(string.Empty), Guid.NewGuid())
 		{
 		}
 
-		public PersonInfo(Tenant tenant)
+		public PersonInfo(Tenant tenant, Guid personId)
 		{
 			this.tenant = tenant;
+			Id = personId;
 		}
 
-		public virtual Guid Id { get; set; }
+		public virtual Guid Id { get; protected set; }
 		//TODO: tenant move these to applicationlogoninfo
 		public virtual string ApplicationLogonName { get; protected set; }
 		public virtual string Password { get; protected set; }

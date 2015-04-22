@@ -125,7 +125,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Tenant.Core
 			const string userName = "validUserName";
 			const string password = "somePassword";
 			const string tenant = "theTenant";
-			var personInfo = new PersonInfo(new Infrastructure.MultiTenancy.Server.Tenant(tenant)) { Id = Guid.NewGuid()};
+			var personInfo = new PersonInfo(new Infrastructure.MultiTenancy.Server.Tenant(tenant), Guid.NewGuid());
 			personInfo.SetApplicationLogonCredentials(new CheckPasswordStrengthSuccessful(), RandomName.Make(), password);
 			var findApplicationQuery = MockRepository.GenerateMock<IApplicationUserTenantQuery>();
 			findApplicationQuery.Expect(x => x.Find(userName)).Return(personInfo);
@@ -148,7 +148,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Tenant.Core
 		{
 			const string userName = "validUserName";
 			const string password = "somePassword";
-			var personInfo = new PersonInfo { Id = Guid.NewGuid()};
+			var personInfo = new PersonInfo();
 			personInfo.SetApplicationLogonCredentials(new CheckPasswordStrengthSuccessful(), RandomName.Make(), password);
 			var findApplicationQuery = MockRepository.GenerateMock<IApplicationUserTenantQuery>();
 			findApplicationQuery.Expect(x => x.Find(userName)).Return(personInfo);
@@ -169,7 +169,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Tenant.Core
 		{
 			const string userName = "validUserName";
 			const string password = "somePassword";
-			var personInfo = new PersonInfo { Id = Guid.NewGuid() };
+			var personInfo = new PersonInfo();
 			personInfo.SetApplicationLogonCredentials(new CheckPasswordStrengthSuccessful(), RandomName.Make(), password);
 			var findApplicationQuery = MockRepository.GenerateMock<IApplicationUserTenantQuery>();
 			findApplicationQuery.Expect(x => x.Find(userName)).Return(personInfo);

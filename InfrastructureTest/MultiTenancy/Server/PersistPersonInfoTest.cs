@@ -2,7 +2,6 @@
 using NHibernate.Exceptions;
 using NUnit.Framework;
 using SharpTestsEx;
-using Teleopti.Ccc.Domain.Security;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Server;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Server.NHibernate;
 using Teleopti.Ccc.TestCommon;
@@ -37,7 +36,7 @@ namespace Teleopti.Ccc.InfrastructureTest.MultiTenancy.Server
 		{
 			var session = tenantUnitOfWorkManager.CurrentSession(); 
 			
-			var personInfo = new PersonInfo(tenant);
+			var personInfo = new PersonInfo(tenant, Guid.NewGuid());
 			target.Persist(personInfo);
 
 			session.Flush();
@@ -51,7 +50,7 @@ namespace Teleopti.Ccc.InfrastructureTest.MultiTenancy.Server
 			var id = Guid.NewGuid();
 			var session = tenantUnitOfWorkManager.CurrentSession();
 
-			var personInfo = new PersonInfo(tenant) {Id = id};
+			var personInfo = new PersonInfo(tenant, id);
 			target.Persist(personInfo);
 
 			session.Flush();
@@ -66,9 +65,10 @@ namespace Teleopti.Ccc.InfrastructureTest.MultiTenancy.Server
 
 			var session = tenantUnitOfWorkManager.CurrentSession();
 
-			var personInfo = new PersonInfo(tenant);
+			var id = Guid.NewGuid();
+
+			var personInfo = new PersonInfo(tenant, id);
 			session.Save(personInfo);
-			var idBefore = personInfo.Id;
 			session.Flush();
 			session.Clear();
 
@@ -77,9 +77,9 @@ namespace Teleopti.Ccc.InfrastructureTest.MultiTenancy.Server
 
 			session.Flush();
 			session.Clear();
-			var loaded = session.Get<PersonInfo>(personInfo.Id);
+			var loaded = session.Get<PersonInfo>(id);
 			loaded.Password.Should().Be.EqualTo(EncryptPassword.ToDbFormat(newPassword));
-			loaded.Id.Should().Be.EqualTo(idBefore);
+			loaded.Id.Should().Be.EqualTo(id);
 		}
 
 		[Test]
@@ -87,9 +87,9 @@ namespace Teleopti.Ccc.InfrastructureTest.MultiTenancy.Server
 		{
 			var logonName = RandomName.Make();
 
-			var personInfo1 = new PersonInfo(tenant);
+			var personInfo1 = new PersonInfo(tenant, Guid.NewGuid());
 			personInfo1.SetApplicationLogonCredentials(new CheckPasswordStrengthSuccessful(), logonName, RandomName.Make());
-			var personInfo2 = new PersonInfo(tenant);
+			var personInfo2 = new PersonInfo(tenant, Guid.NewGuid());
 			personInfo2.SetApplicationLogonCredentials(new CheckPasswordStrengthSuccessful(), logonName, RandomName.Make());
 
 			target.Persist(personInfo1);
@@ -102,9 +102,9 @@ namespace Teleopti.Ccc.InfrastructureTest.MultiTenancy.Server
 		[Test]
 		public void MultipleNullApplicationLogonShouldNotThrow()
 		{
-			var personInfo1 = new PersonInfo(tenant);
+			var personInfo1 = new PersonInfo(tenant, Guid.NewGuid());
 			personInfo1.SetApplicationLogonCredentials(new CheckPasswordStrengthSuccessful(), null, RandomName.Make());
-			var personInfo2 = new PersonInfo(tenant);
+			var personInfo2 = new PersonInfo(tenant, Guid.NewGuid());
 			personInfo2.SetApplicationLogonCredentials(new CheckPasswordStrengthSuccessful(), null, RandomName.Make());
 
 			target.Persist(personInfo1);
@@ -118,9 +118,9 @@ namespace Teleopti.Ccc.InfrastructureTest.MultiTenancy.Server
 		{
 			var identity = RandomName.Make();
 
-			var personInfo1 = new PersonInfo(tenant);
+			var personInfo1 = new PersonInfo(tenant, Guid.NewGuid());
 			personInfo1.SetIdentity(identity);
-			var personInfo2 = new PersonInfo(tenant);
+			var personInfo2 = new PersonInfo(tenant, Guid.NewGuid());
 			personInfo2.SetIdentity(identity);
 
 			target.Persist(personInfo1);
@@ -133,9 +133,9 @@ namespace Teleopti.Ccc.InfrastructureTest.MultiTenancy.Server
 		[Test]
 		public void MultipleNullIdentityShouldNotThrow()
 		{
-			var personInfo1 = new PersonInfo(tenant);
+			var personInfo1 = new PersonInfo(tenant, Guid.NewGuid());
 			personInfo1.SetIdentity(null);
-			var personInfo2 = new PersonInfo(tenant);
+			var personInfo2 = new PersonInfo(tenant, Guid.NewGuid());
 			personInfo2.SetIdentity(null);
 
 			target.Persist(personInfo1);

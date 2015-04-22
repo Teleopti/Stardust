@@ -15,21 +15,15 @@ namespace Teleopti.Ccc.Infrastructure.MultiTenancy.Server
 		public void Persist(PersonInfo personInfo)
 		{
 			var session = _currentTenantSession.CurrentSession();
-			if (personInfo.Id == Guid.Empty)
+
+			var oldPersonInfo = session.Get<PersonInfo>(personInfo.Id);
+			if (oldPersonInfo == null)
 			{
 				session.Save(personInfo);
 			}
 			else
 			{
-				var oldPersonInfo = session.Get<PersonInfo>(personInfo.Id);
-				if (oldPersonInfo == null)
-				{
-					session.Save(personInfo, personInfo.Id);
-				}
-				else
-				{
-					session.Merge(personInfo);
-				}
+				session.Merge(personInfo);
 			}
 		}
 	}

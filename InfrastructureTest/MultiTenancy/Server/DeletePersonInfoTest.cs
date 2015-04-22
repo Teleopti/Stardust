@@ -40,7 +40,7 @@ namespace Teleopti.Ccc.InfrastructureTest.MultiTenancy.Server
 			uowManager = TenantUnitOfWorkManager.CreateInstanceForTest(ConnectionStringHelper.ConnectionStringUsedInTests);
 			var session = uowManager.CurrentSession();
 			tenant = new Tenant("som name");
-			person = new PersonInfo(tenant);
+			person = new PersonInfo(tenant, Guid.NewGuid());
 			session.Save(tenant);
 			session.Save(person);
 			session.Flush();

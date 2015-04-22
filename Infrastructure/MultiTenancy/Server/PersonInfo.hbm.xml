@@ -4,8 +4,8 @@
                    namespace="Teleopti.Ccc.Infrastructure.MultiTenancy.Server"
 									 schema="Tenant">
 	<class name="PersonInfo">
-		<id name="Id" type="guid">
-			<generator class="guid.comb" />
+		<id name="Id">
+			<generator class="assigned" />
 		</id>
 		<property name="TerminalDate" 
 							type="Teleopti.Ccc.Infrastructure.MultiTenancy.Server.NHibernate.DateOnlyAsDateMappingType, Teleopti.Ccc.Infrastructure" />

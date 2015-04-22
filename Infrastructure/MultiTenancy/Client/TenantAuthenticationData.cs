@@ -12,6 +12,6 @@ namespace Teleopti.Ccc.Infrastructure.MultiTenancy.Client
 		public DateTime? TerminalDate { get; set; }
 		[JsonIgnore]
 		public bool Changed { get; set; }
-		public Guid? PersonId { get; set; }
+		public Guid PersonId { get; set; }
 	}
 }

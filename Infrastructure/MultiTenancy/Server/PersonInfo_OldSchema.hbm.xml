@@ -3,8 +3,8 @@
                    assembly="Teleopti.Ccc.Infrastructure"
                    namespace="Teleopti.Ccc.Infrastructure.MultiTenancy.Server">
 	<class name="PersonInfo" table="Person" entity-name="PersonInfo_OldSchema" polymorphism="explicit">
-		<id name="Id" type="guid">
-			<generator class="guid.comb" />
+		<id name="Id">
+			<generator class="assigned" />
 		</id>
 		<property name="TerminalDate" 
 							type="Teleopti.Ccc.Infrastructure.NHibernateConfiguration.DateOnlyMappingType, Teleopti.Ccc.Infrastructure"/>

@@ -61,11 +61,11 @@ namespace Teleopti.Ccc.InfrastructureTest.MultiTenancy.Server
 			correctIdentity = RandomName.Make();
 			_tenantUnitOfWorkManager = TenantUnitOfWorkManager.CreateInstanceForTest(ConnectionStringHelper.ConnectionStringUsedInTests);
 			var tenant = new FindTenantByNameQuery(_tenantUnitOfWorkManager).Find(Tenant.DefaultName);
-			var pInfo = new PersonInfo(tenant);
+			personId = Guid.NewGuid();
+			var pInfo = new PersonInfo(tenant, personId);
 			pInfo.SetIdentity(correctIdentity);
 			var personInfoPersister = new PersistPersonInfo(_tenantUnitOfWorkManager);
 			personInfoPersister.Persist(pInfo);
-			personId = pInfo.Id;
 			_tenantUnitOfWorkManager.CurrentSession().Flush();
 			target = new IdentityUserQuery(_tenantUnitOfWorkManager);
 		}

@@ -3,6 +3,7 @@ using NUnit.Framework;
 using Rhino.Mocks;
 using SharpTestsEx;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Server;
+using Teleopti.Ccc.TestCommon.TestData;
 using Teleopti.Ccc.UserTexts;
 using Teleopti.Ccc.Web.Areas.Tenant.Core;
 using Teleopti.Interfaces.Infrastructure;
@@ -30,7 +31,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Tenant.Core
 			const string identity = "validUser";
 			var datasourceConfiguration = new DataSourceConfiguration();
 
-			var queryResult = new PersonInfo {Id = Guid.NewGuid()};
+			var queryResult = new PersonInfo(new Infrastructure.MultiTenancy.Server.Tenant(RandomName.Make()), Guid.NewGuid());
 			var findIdentityQuery = MockRepository.GenerateMock<IIdentityUserQuery>();
 			var nhibHandler = MockRepository.GenerateMock<IDataSourceConfigurationProvider>();
 			var pwPolicyLoader = MockRepository.GenerateMock<ILoadPasswordPolicyService>();
@@ -51,7 +52,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Tenant.Core
 		{
 			const string identity = "validUser";
 
-			var queryResult = new PersonInfo { Id = Guid.NewGuid() };
+			var queryResult = new PersonInfo();
 			var findIdentityQuery = MockRepository.GenerateMock<IIdentityUserQuery>();
 			var nhibHandler = MockRepository.GenerateMock<IDataSourceConfigurationProvider>();
 			nhibHandler.Stub(x => x.ForTenant(queryResult.Tenant)).Return(null);

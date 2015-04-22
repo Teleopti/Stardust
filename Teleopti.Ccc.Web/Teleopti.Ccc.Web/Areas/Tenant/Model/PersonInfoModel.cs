@@ -9,6 +9,6 @@ namespace Teleopti.Ccc.Web.Areas.Tenant.Model
 		public string Password { get; set; }
 		public string Identity { get; set; }
 		public DateTime? TerminalDate { get; set; }
-		public Guid? PersonId { get; set; }
+		public Guid PersonId { get; set; }
 	}
 }
