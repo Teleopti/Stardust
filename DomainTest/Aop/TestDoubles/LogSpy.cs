@@ -4,7 +4,7 @@ using log4net.Core;
 
 namespace Teleopti.Ccc.DomainTest.Aop.TestDoubles
 {
-	public class FakeLogger : ILog
+	public class LogSpy : ILog
 	{
 		public ILogger Logger { get; private set; }
 		public void Debug(object message)
@@ -157,7 +157,7 @@ namespace Teleopti.Ccc.DomainTest.Aop.TestDoubles
 		}
 
 		public bool IsDebugEnabled { get; private set; }
-		public bool IsInfoEnabled { get; private set; }
+		public bool IsInfoEnabled { get { return true; } }
 		public bool IsWarnEnabled { get; private set; }
 		public bool IsErrorEnabled { get; private set; }
 		public bool IsFatalEnabled { get; private set; }
