@@ -605,7 +605,7 @@
     <comment>Direct Outbound Calls Talk Time</comment>
   </data>
   <data name="ResIdleTime" xml:space="preserve">
-    <value>Klar Tid</value>
+    <value>Ikke aktiv tid</value>
     <comment>Idle Time</comment>
   </data>
   <data name="ResLoggedInTime" xml:space="preserve">
