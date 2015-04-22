@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Reflection;
 using Autofac;
 using NUnit.Framework;
 using SharpTestsEx;
@@ -34,13 +33,13 @@ namespace Teleopti.Ccc.DomainTest.Aop
 
 			Logger.InfoMessage.Should().Not.Be.Null();
 		}
-
+		
 		[Test]
-		public void ShouldLogClassName()
+		public void ShouldLogUnproxiedClassName()
 		{
 			Service.DoesSomething(null);
 
-			Logger.InfoMessage.Should().Contain(Service.GetType().Name);
+			Logger.InfoMessage.Should().Contain("Service.DoesSomething");
 		}
 
 		[Test]
@@ -98,21 +97,12 @@ namespace Teleopti.Ccc.DomainTest.Aop
 			Logger.InfoMessage.Should().Contain("Count = 3");
 		}
 
-
-		[Test, Ignore]
-		public void ShouldLogUnproxiedClassName()
-		{
-			
-		}
-		[Test, Ignore]
+		[Test]
 		public void ShouldLogWithParamsArray()
 		{
-			
-		}
-		[Test, Ignore]
-		public void ShouldLogWithOptionalParameters()
-		{
-			
+			Service.DoesSomethingWithParamsArray();
+
+			Logger.InfoMessage.Should().Contain("Count = 0");
 		}
 	}
 
@@ -138,6 +128,12 @@ namespace Teleopti.Ccc.DomainTest.Aop
 
 		[InfoLog]
 		public virtual void DoesSomethingWithMultipleArguments(string theString, int index)
+		{
+			
+		}
+
+		[InfoLog]
+		public virtual void DoesSomethingWithParamsArray(params object[] theThing)
 		{
 			
 		}

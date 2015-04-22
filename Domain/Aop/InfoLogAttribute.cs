@@ -1,11 +1,7 @@
 using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
 using System.Text;
 using log4net;
 using Teleopti.Ccc.Domain.Aop.Core;
-using Teleopti.Ccc.Domain.Collection;
 
 namespace Teleopti.Ccc.Domain.Aop
 {
@@ -33,7 +29,7 @@ namespace Teleopti.Ccc.Domain.Aop
 
 		public void OnBeforeInvocation(IInvocationInfo invocation)
 		{
-			var proxyType = invocation.InvocationTarget.GetType();
+			var proxyType = invocation.TargetType;
 			var logger = _logManagerWrapper.GetLogger(proxyType);
 			if (!logger.IsInfoEnabled)
 				return;
@@ -50,11 +46,11 @@ namespace Teleopti.Ccc.Domain.Aop
 			{
 				if (i > 0)
 					arguments.Append(", ");
-				var type = parameters[i].ParameterType;
-				if (type.IsGenericType)
-					arguments.Append(parameters[i] + ": Count = " + ((Array)invocation.Arguments[i]).Length);
+				var argument = invocation.Arguments[i];
+				if (argument!= null && (argument as Array) != null)
+					arguments.Append(parameters[i] + ": Count = " + ((Array) argument).Length);
 				else
-					arguments.Append(parameters[i] + ":" + invocation.Arguments[i]);
+					arguments.Append(parameters[i] + ":" + argument);
 			}
 			arguments.Append(")");
 			return arguments;
