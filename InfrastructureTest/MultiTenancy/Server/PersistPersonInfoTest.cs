@@ -143,5 +143,12 @@ namespace Teleopti.Ccc.InfrastructureTest.MultiTenancy.Server
 
 			Assert.DoesNotThrow(tenantUnitOfWorkManager.CurrentSession().Flush);
 		}
+
+		[Test]
+		public void ShouldThrowIfExplicitIdIsNotSet()
+		{
+			Assert.Throws<ArgumentException>(() =>
+				target.Persist(new PersonInfo(tenant, Guid.Empty)));
+		}
 	}
 }
