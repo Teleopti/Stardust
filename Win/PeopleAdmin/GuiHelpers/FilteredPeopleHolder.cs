@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.Linq;
+using System.Windows;
 using Syncfusion.Windows.Forms.Grid;
 using Syncfusion.Windows.Forms.Tools;
 using Teleopti.Ccc.Domain.AgentInfo;
@@ -1688,17 +1689,31 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.GuiHelpers
 
 		public void PersistAll()
 		{
+
 			using (var uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
 			{
 				GetUnitOfWork.PersistAll();
 				uow.PersistAll();
 			}
+
 			var changed = (from personGeneralModel in FilteredPeopleGridData
-				where personGeneralModel.TenantData.Changed
-				select personGeneralModel.TenantData).ToList();
-			if(changed.Any())
-				_tenantDataManager.SaveTenantData(changed);
-			
+								where personGeneralModel.TenantData.Changed
+								select personGeneralModel.TenantData).ToList();
+
+			if (changed.Any())
+			{
+				foreach (var tenantAuthenticationData in changed)
+				{
+					var result = _tenantDataManager.SaveTenantData(tenantAuthenticationData);
+					if (!result.Success)
+					{
+						MessageBox.Show(result.UserName + Environment.NewLine + result.FailReason, UserTexts.Resources.SaveError);
+						return;
+					}
+
+				}
+			}
+
 			//reset after save
 			foreach (var personGeneralModel in FilteredPeopleGridData)
 			{
@@ -1706,7 +1721,7 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.GuiHelpers
 			}
 			if (toBeRemovedList.Any())
 				_tenantDataManager.DeleteTenantPersons(toBeRemovedList);
-			
+
 			toBeRemovedList.Clear();
 		}
 

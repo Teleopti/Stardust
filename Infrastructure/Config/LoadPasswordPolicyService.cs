@@ -27,7 +27,9 @@ namespace Teleopti.Ccc.Infrastructure.Config
     	private const int _defaultPasswordValidForDayCount = int.MaxValue;
     	private const int _defaultPasswordExpireWarningDayCount = 0;
     	private readonly ILog _logger = LogManager.GetLogger(typeof(LoadPasswordPolicyService));
-        public XDocument File
+	    private const int _defaultMinAccepted = 1;
+
+	    public XDocument File
         {
             get { return LoadFile(); }
         }
@@ -158,7 +160,10 @@ namespace Teleopti.Ccc.Infrastructure.Config
 				 new XAttribute("MaxNumberOfAttempts", _defaultMaxNumberOfAttempts),
 				 new XAttribute("InvalidAttemptWindow", _defaultInvalidAttemptWindow),
 				 new XAttribute("PasswordValidForDayCount", _defaultPasswordValidForDayCount),
-				 new XAttribute("PasswordExpireWarningDayCount", _defaultPasswordExpireWarningDayCount))
+				 new XAttribute("PasswordExpireWarningDayCount", _defaultPasswordExpireWarningDayCount),
+				 new XElement("Rule" , new XAttribute("MinAccepted", _defaultMinAccepted),
+					 new XElement("PasswordStrengthRule",  new XAttribute("RegEx" ,".{1,}" ))
+				 ))
 			  );
 		}
     }

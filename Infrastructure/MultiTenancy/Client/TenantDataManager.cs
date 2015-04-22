@@ -35,7 +35,16 @@ namespace Teleopti.Ccc.Infrastructure.MultiTenancy.Client
 		public SavePersonInfoResult SaveTenantData(TenantAuthenticationData tenantAuthenticationData)
 		{
 			var json = _jsonSerializer.SerializeObject(tenantAuthenticationData);
-			return _postHttpRequest.Send<SavePersonInfoResult>(_tenantServerConfiguration.Path + "PersonInfo/Persist", json);
+			var tmpResult = _postHttpRequest.Send<PersistPersonInfoResult>(_tenantServerConfiguration.Path + "PersonInfo/PersistNew", json);
+			var ret = new SavePersonInfoResult {Success = true};
+			if (!tmpResult.PasswordStrengthIsValid)
+			{
+				ret.UserName = tenantAuthenticationData.ApplicationLogonName;
+				ret.Success = false;
+				ret.FailReason = UserTexts.Resources.PasswordPolicyWarning;
+			}
+
+			return ret;
 		}
 	}
 }

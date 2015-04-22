@@ -637,7 +637,9 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Config\PolicyForPassword.xml" />
+    <Content Include="Config\PolicyForPassword.xml">
+      <SubType>Designer</SubType>
+    </Content>
     <EmbeddedResource Include="MultiTenancy\Server\PersonInfo_OldSchema.hbm.xml" />
     <EmbeddedResource Include="MultiTenancy\Server\Tenant_OldSchema.hbm.xml" />
     <EmbeddedResource Include="MultiTenancy\Server\PersonInfo.hbm.xml">

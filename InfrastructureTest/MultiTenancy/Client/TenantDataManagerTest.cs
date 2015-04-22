@@ -51,14 +51,13 @@ namespace Teleopti.Ccc.InfrastructureTest.MultiTenancy.Client
 			var postHttpRequest = MockRepository.GenerateMock<IPostHttpRequest>();
 			var jsonSerializer = MockRepository.GenerateStub<IJsonSerializer>();
 			jsonSerializer.Stub(x => x.SerializeObject(tenantAuthenticationData)).Return(serializedAuthData);
-			var saveResult = new SavePersonInfoResult {Success = true};
+			var saveResult = new PersistPersonInfoResult { PasswordStrengthIsValid = true };
 			var target = new TenantDataManager(new TenantServerConfiguration(pathToTenantServer), postHttpRequest, jsonSerializer);
 			postHttpRequest.Stub(
-				x => x.Send<SavePersonInfoResult>(pathToTenantServer + "PersonInfo/Persist", serializedAuthData))
+				x => x.Send<PersistPersonInfoResult>(pathToTenantServer + "PersonInfo/PersistNew", serializedAuthData))
 				.Return(saveResult);
 			var result = target.SaveTenantData(tenantAuthenticationData);
-			result.Should().Be.SameInstanceAs(saveResult);
-			saveResult.Success.Should().Be.True();
+			result.Success.Should().Be.True();
 		}
 
 		[Test]
@@ -70,14 +69,13 @@ namespace Teleopti.Ccc.InfrastructureTest.MultiTenancy.Client
 			var postHttpRequest = MockRepository.GenerateMock<IPostHttpRequest>();
 			var jsonSerializer = MockRepository.GenerateStub<IJsonSerializer>();
 			jsonSerializer.Stub(x => x.SerializeObject(tenantAuthenticationData)).Return(serializedAuthData);
-			var saveResult = new SavePersonInfoResult { Success = false };
+			var saveResult = new PersistPersonInfoResult { PasswordStrengthIsValid = false };
 			var target = new TenantDataManager(new TenantServerConfiguration(pathToTenantServer), postHttpRequest, jsonSerializer);
 			postHttpRequest.Stub(
-				x => x.Send<SavePersonInfoResult>(pathToTenantServer + "PersonInfo/Persist", serializedAuthData))
+				x => x.Send<PersistPersonInfoResult>(pathToTenantServer + "PersonInfo/PersistNew", serializedAuthData))
 				.Return(saveResult);
 			var result = target.SaveTenantData(tenantAuthenticationData);
-			result.Should().Be.SameInstanceAs(saveResult);
-			saveResult.Success.Should().Be.False();
+			result.Success.Should().Be.False();
 		}
 	}
 }

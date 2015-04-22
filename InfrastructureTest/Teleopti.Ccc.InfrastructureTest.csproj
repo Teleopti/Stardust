@@ -576,6 +576,7 @@
   <ItemGroup>
     <Content Include="Config\Defaults.xml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <SubType>Designer</SubType>
     </Content>
     <Content Include="Licensing\TeleoptiCCCUnsignedSeatLicense.xml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>

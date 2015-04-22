@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using Autofac;
 using Teleopti.Ccc.Domain.FeatureFlags;
+using Teleopti.Ccc.Domain.Security.MultiTenancyAuthentication;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Client;
 using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.WinCode.Common;
@@ -59,6 +60,11 @@ namespace Teleopti.Ccc.Win.Grouping
 		{
 			public void SaveTenantData(IEnumerable<TenantAuthenticationData> tenantAuthenticationData)
 			{
+			}
+
+			public SavePersonInfoResult SaveTenantData(TenantAuthenticationData tenantAuthenticationData)
+			{
+				return new SavePersonInfoResult{Success = true};
 			}
 
 			public void DeleteTenantPersons(IEnumerable<Guid> personsToBeDeleted)
