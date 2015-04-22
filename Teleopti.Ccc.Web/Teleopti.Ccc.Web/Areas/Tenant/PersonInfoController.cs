@@ -37,20 +37,26 @@ namespace Teleopti.Ccc.Web.Areas.Tenant
 		}
 
 		[HttpPost]
-		[TenantUnitOfWork]
 		//TODO: tenant rename to Persist when old method is gone
 		public virtual JsonResult PersistNew(PersonInfoModel personInfoModel)
 		{
 			var ret = new PersistPersonInfoResult();
 			try
 			{
-				_persister.Persist(_mapper.Map(personInfoModel));
+				PersistNewInternal(personInfoModel);
 			}
 			catch (PasswordStrengthException)
 			{
 				ret.PasswordStrengthIsValid = false;
 			}
 			return Json(ret);
+		}
+
+		//TODO: tenant, needs to be extra method to catch uow attribute errors. Fix soon!
+		[TenantUnitOfWork]
+		protected virtual void PersistNewInternal(PersonInfoModel personInfoModel)
+		{
+			_persister.Persist(_mapper.Map(personInfoModel));
 		}
 
 		[HttpPost]
