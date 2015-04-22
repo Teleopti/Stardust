@@ -12,7 +12,7 @@ namespace Teleopti.Ccc.Infrastructure.MultiTenancy.Server.NHibernate
 			_tenantUnitOfWorkManager = tenantUnitOfWorkManager;
 		}
 
-		public void OnBeforeInvocation()
+		public void OnBeforeInvocation(IInvocationInfo invocation)
 		{
 		}
 

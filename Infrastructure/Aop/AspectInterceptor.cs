@@ -35,7 +35,7 @@ namespace Teleopti.Ccc.Infrastructure.Aop
 
 			if (array.Any())
 			{
-				array.ForEach(a => a.OnBeforeInvocation());
+				array.ForEach(a => a.OnBeforeInvocation(new InvocationInfo(invocation)));
 
 				Exception exception = null;
 				try
@@ -56,7 +56,6 @@ namespace Teleopti.Ccc.Infrastructure.Aop
 			{
 				invocation.Proceed();
 			}
-		}
-
+		}	
 	}
 }

@@ -1,6 +1,7 @@
 using System;
 using Teleopti.Ccc.Domain;
 using Teleopti.Ccc.Domain.Aop;
+using Teleopti.Ccc.Domain.Aop.Core;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.Infrastructure.Web;
 using Teleopti.Interfaces.Infrastructure;
@@ -22,7 +23,7 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 			_context = context;
 		}
 
-		public void OnBeforeInvocation()
+		public void OnBeforeInvocation(IInvocationInfo invocation)
 		{
 			_unitOfWork = _currentUnitOfWorkFactory.LoggedOnUnitOfWorkFactory().CreateAndOpenUnitOfWork();
 			_businessUnitOverrideScope = overrideBusinessUnitFilter();

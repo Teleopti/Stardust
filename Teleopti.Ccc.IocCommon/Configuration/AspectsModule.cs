@@ -1,4 +1,5 @@
 using Autofac;
+using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Infrastructure.Aop;
 
 namespace Teleopti.Ccc.IocCommon.Configuration
@@ -8,6 +9,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 		protected override void Load(ContainerBuilder builder)
 		{
 			builder.RegisterType<AspectInterceptor>();
+			builder.RegisterType<LogAspect>().As<ILogAspect>();
 		}
 	}
 }

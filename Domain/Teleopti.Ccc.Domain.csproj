@@ -141,6 +141,8 @@
     <Compile Include="AgentInfo\Requests\ShiftExchangeOffer.cs" />
     <Compile Include="AgentInfo\Requests\ShiftTradeRequestIsAfterLoadedPeriodSpecification.cs" />
     <Compile Include="AgentInfo\Requests\ShiftTradeStatusExtensions.cs" />
+    <Compile Include="Aop\Core\IInvocationInfo.cs" />
+    <Compile Include="Aop\InfoLogAttribute.cs" />
     <Compile Include="Aop\IUnitOfWorkAspect.cs" />
     <Compile Include="Aop\IAllBusinessUnitsUnitOfWorkAspect.cs" />
     <Compile Include="Aop\UnitOfWorkAttribute.cs" />

@@ -1,5 +1,6 @@
 ﻿using System;
 using Teleopti.Ccc.Domain.Aop;
+using Teleopti.Ccc.Domain.Aop.Core;
 
 namespace Teleopti.Ccc.TestCommon
 {
@@ -7,7 +8,7 @@ namespace Teleopti.Ccc.TestCommon
 	{
 		public bool Invoked;
 
-		public void OnBeforeInvocation()
+		public void OnBeforeInvocation(IInvocationInfo invocation)
 		{
 			Invoked = true;
 		}

@@ -7,7 +7,7 @@ namespace Teleopti.Ccc.InfrastructureTest
 	{
 		protected override void BeforeTest()
 		{
-			Resolve<IReadModelUnitOfWorkAspect>().OnBeforeInvocation();
+			Resolve<IReadModelUnitOfWorkAspect>().OnBeforeInvocation(null);
 		}
 
 		protected override void AfterTest()

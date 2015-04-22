@@ -1,5 +1,6 @@
 ﻿using System;
 using Teleopti.Ccc.Domain.Aop;
+using Teleopti.Ccc.Domain.Aop.Core;
 using Teleopti.Ccc.Domain.Common;
 
 namespace Teleopti.Ccc.Infrastructure.LiteUnitOfWork
@@ -13,7 +14,7 @@ namespace Teleopti.Ccc.Infrastructure.LiteUnitOfWork
 			_currentDataSource = currentDataSource;
 		}
 
-		public void OnBeforeInvocation()
+		public void OnBeforeInvocation(IInvocationInfo invocation)
 		{
 			var factory = _currentDataSource.Current().ReadModel;
 			factory.StartUnitOfWork();

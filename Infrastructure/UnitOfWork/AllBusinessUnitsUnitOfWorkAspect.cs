@@ -1,5 +1,6 @@
 using System;
 using Teleopti.Ccc.Domain.Aop;
+using Teleopti.Ccc.Domain.Aop.Core;
 using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.Infrastructure.UnitOfWork
@@ -14,7 +15,7 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 			_currentUnitOfWorkFactory = currentUnitOfWorkFactory;
 		}
 
-		public void OnBeforeInvocation()
+		public void OnBeforeInvocation(IInvocationInfo invocation)
 		{
 			_unitOfWork = _currentUnitOfWorkFactory.LoggedOnUnitOfWorkFactory().CreateAndOpenUnitOfWork(QueryFilter.NoFilter);
 		}

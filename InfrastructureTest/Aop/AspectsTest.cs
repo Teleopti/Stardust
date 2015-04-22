@@ -184,9 +184,9 @@ namespace Teleopti.Ccc.InfrastructureTest.Aop
 			public static Action AfterCallback;
 			public static Action<Exception> AfterCallbackWithException;
 
-			public override void OnBeforeInvocation()
+			public override void OnBeforeInvocation(IInvocationInfo invocation)
 			{
-				base.OnBeforeInvocation();
+				base.OnBeforeInvocation(invocation);
 				if (BeforeCallback != null) BeforeCallback();
 			}
 			public override void OnAfterInvocation(Exception exception)
@@ -202,9 +202,9 @@ namespace Teleopti.Ccc.InfrastructureTest.Aop
 			public static Action BeforeCallback;
 			public static Action AfterCallback;
 
-			public override void OnBeforeInvocation()
+			public override void OnBeforeInvocation(IInvocationInfo invocation)
 			{
-				base.OnBeforeInvocation();
+				base.OnBeforeInvocation(invocation);
 				if (BeforeCallback != null) BeforeCallback();
 			}
 			public override void OnAfterInvocation(Exception exception)
@@ -228,7 +228,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Aop
 
 			public class TheResolvedAspect : IAspect
 			{
-				public void OnBeforeInvocation()
+				public void OnBeforeInvocation(IInvocationInfo invocation)
 				{
 					if (BeforeCallback != null) BeforeCallback();
 				}
