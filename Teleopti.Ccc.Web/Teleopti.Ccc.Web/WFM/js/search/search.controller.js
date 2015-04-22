@@ -21,7 +21,6 @@
 					$scope.searchResult = [];
 					if (keyword != '') {
 						SearchSvrc.search.query({ keyword: keyword }).$promise.then(function(result) {
-							console.log(result);
 							$scope.searchResult = result;
 							for (var i = 0; i < $scope.searchResult.length; i++) {
 								var name = $scope.searchResult[i].SearchGroup;

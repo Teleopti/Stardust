@@ -324,6 +324,13 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 			TestControllerMethods.Logon();
 			Navigation.GotoResourcePlanner(false);
 		}
+
+		[When(@"I click schedule")]
+		public void WhenIClickSchedule()
+		{
+			//TestControllerMethods.Logon();
+			Browser.Interactions.Click(".schedule-button");
+		}
 		
 		[When(@"I view Real time adherence overview")]
 		public void WhenIViewRealTimeAdherenceOverview()

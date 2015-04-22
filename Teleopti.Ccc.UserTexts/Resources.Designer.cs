@@ -6583,6 +6583,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to days are scheduled.
+        /// </summary>
+        public static string DaysAreScheduled {
+            get {
+                return ResourceManager.GetString("DaysAreScheduled", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Days Off.
         /// </summary>
         public static string DaysOff {

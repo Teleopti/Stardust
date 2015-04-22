@@ -12994,4 +12994,8 @@ Reduce the complexity to use these shifts.</value>
     <value>Planning Period</value>
     <comment>title of planning period </comment>
   </data>
+  <data name="DaysAreScheduled" xml:space="preserve">
+    <value>days are scheduled</value>
+    <comment>text shown when the scheduling is finished</comment>
+  </data>
 </root>

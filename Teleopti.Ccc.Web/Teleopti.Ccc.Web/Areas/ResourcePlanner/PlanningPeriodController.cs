@@ -1,6 +1,9 @@
+using System.Collections.Generic;
 using System.Web.Http;
 using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.Scheduling;
+using Teleopti.Interfaces;
+using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Web.Areas.ResourcePlanner
 {
@@ -26,8 +29,13 @@ namespace Teleopti.Ccc.Web.Areas.ResourcePlanner
 					StartDate = planningPeriod.Range.StartDate.Date,
 					EndDate = planningPeriod.Range.EndDate.Date,
 					Id = planningPeriod.Id.GetValueOrDefault(),
-					Skills = _missingForecastProvider.GetMissingForecast(planningPeriod.Range)
+					Skills = getMissingForecast(planningPeriod.Range)
 				});
+		}
+
+		private IEnumerable<MissingForecastModel> getMissingForecast(DateOnlyPeriod planningPeriodRange)
+		{
+			return _missingForecastProvider.GetMissingForecast(planningPeriodRange);
 		}
 	}
 }
