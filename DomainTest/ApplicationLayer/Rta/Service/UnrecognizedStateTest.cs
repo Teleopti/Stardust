@@ -55,5 +55,20 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 			Database.AddedStateCode.Name.Should().Be("a new description");
 		}
 
+		[Test]
+		public void ShouldNotAddStateCodeIfNotStateReceived()
+		{
+			var businesUnitId = Guid.NewGuid();
+			var personId = Guid.NewGuid();
+			Database
+				.WithBusinessUnit(businesUnitId)
+				.WithDefaultStateGroup()
+				.WithUser("usercode", personId);
+
+			Target.CheckForActivityChange(personId, businesUnitId);
+
+			Database.AddedStateCode.Should().Be.Null();
+		}
+
 	}
 }

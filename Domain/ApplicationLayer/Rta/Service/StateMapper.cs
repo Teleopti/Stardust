@@ -43,12 +43,18 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 
 		public StateMapping StateFor(Guid businessUnitId, Guid platformTypeId, string stateCode, string stateDescription)
 		{
+			if (stateCode == null)
+				return noMatchState(businessUnitId, platformTypeId, null);
 			var match = queryState(businessUnitId, platformTypeId, stateCode);
 			if (match != null) return match;
 			_stateCodeAdder.AddUnknownStateCode(businessUnitId, platformTypeId, stateCode, stateDescription);
 			_cacheInvalidator.Invalidate();
 			match = queryState(businessUnitId, platformTypeId, stateCode);
-			if (match != null) return match;
+			return match ?? noMatchState(businessUnitId, platformTypeId, stateCode);
+		}
+
+		private static StateMapping noMatchState(Guid businessUnitId, Guid platformTypeId, string stateCode)
+		{
 			return new StateMapping
 			{
 				BusinessUnitId = businessUnitId,

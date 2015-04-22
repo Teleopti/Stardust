@@ -87,7 +87,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 			input.PlatformTypeId = Guid.Empty.ToString();
 			var missingAgents = _agentStateReadModelReader.GetMissingAgentStatesFromBatch(input.BatchId, input.SourceId);
 			var agentsNotAlreadyLoggedOut = from a in missingAgents
-											//let state = _alarmFinder.StateCodeInfoFor(a.StateCode, null, a.PlatformTypeId, a.BusinessUnitId)
 											let state = _stateMapper.StateFor(a.BusinessUnitId, a.PlatformTypeId, a.StateCode, null)
 											where !state.IsLogOutState
 											select a;
