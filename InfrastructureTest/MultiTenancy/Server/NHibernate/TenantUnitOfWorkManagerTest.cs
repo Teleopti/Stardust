@@ -34,7 +34,7 @@ namespace Teleopti.Ccc.InfrastructureTest.MultiTenancy.Server.NHibernate
 		{
 			var session = target.CurrentSession();
 			var transaction = session.Transaction;
-			target.CancelCurrent();
+			target.CancelAndDisposeCurrent();
 			transaction.WasRolledBack.Should().Be.True();
 			session.IsConnected.Should().Be.False();
 			target.HasCurrentSession().Should().Be.False();
@@ -43,7 +43,7 @@ namespace Teleopti.Ccc.InfrastructureTest.MultiTenancy.Server.NHibernate
 		[Test]
 		public void CancelOnNonExistingCurrentShouldDoNothing()
 		{
-			target.CancelCurrent();
+			target.CancelAndDisposeCurrent();
 			target.HasCurrentSession().Should().Be.False();
 		}
 
@@ -52,7 +52,7 @@ namespace Teleopti.Ccc.InfrastructureTest.MultiTenancy.Server.NHibernate
 		{
 			var session = target.CurrentSession();
 			var transaction = session.Transaction;
-			target.CommitCurrent();
+			target.CommitAndDisposeCurrent();
 			transaction.WasCommitted.Should().Be.True();
 			session.IsConnected.Should().Be.False();
 			target.HasCurrentSession().Should().Be.False();
@@ -61,7 +61,7 @@ namespace Teleopti.Ccc.InfrastructureTest.MultiTenancy.Server.NHibernate
 		[Test]
 		public void CommitOnNonExistingCurrentShouldDoNothing()
 		{
-			target.CommitCurrent();
+			target.CommitAndDisposeCurrent();
 			target.HasCurrentSession().Should().Be.False();
 		}
 
@@ -70,8 +70,8 @@ namespace Teleopti.Ccc.InfrastructureTest.MultiTenancy.Server.NHibernate
 		{
 			var session = target.CurrentSession();
 			var transaction = session.Transaction;
-			target.CancelCurrent();
-			target.CommitCurrent();
+			target.CancelAndDisposeCurrent();
+			target.CommitAndDisposeCurrent();
 			transaction.WasRolledBack.Should().Be.True();
 			transaction.WasCommitted.Should().Be.False();
 		}

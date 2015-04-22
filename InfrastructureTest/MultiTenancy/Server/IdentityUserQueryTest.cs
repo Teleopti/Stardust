@@ -146,7 +146,7 @@ namespace Teleopti.Ccc.InfrastructureTest.MultiTenancy.Server
 		[TearDown]
 		public void Teardown_WillBeChangedWhenMovedAwayFromUnitOfWork()
 		{
-			_tenantUnitOfWorkManager.CancelCurrent();
+			_tenantUnitOfWorkManager.CancelAndDisposeCurrent();
 			using (var uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
 			{
 				var rep = new PersonRepository(uow);

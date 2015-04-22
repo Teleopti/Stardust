@@ -70,29 +70,39 @@ namespace Teleopti.Ccc.Infrastructure.MultiTenancy.Server.NHibernate
 			CurrentSessionContext.Bind(session);
 		}
 
-		public void CancelCurrent()
+		public void CancelAndDisposeCurrent()
 		{
 			var session = CurrentSessionContext.Unbind(_sessionFactory);
 			if (session == null) return;
-			
-			session.Transaction.Rollback();
-			session.Dispose();
+			try
+			{
+				session.Transaction.Rollback();
+			}
+			finally
+			{
+				session.Dispose();
+			}
 		}
 
-		public void CommitCurrent()
+		public void CommitAndDisposeCurrent()
 		{
 			var session = CurrentSessionContext.Unbind(_sessionFactory);
 			if (session == null) return;
-			
-			session.Transaction.Commit();
-			session.Dispose();
+			try
+			{
+				session.Transaction.Commit();
+			}
+			finally
+			{
+				session.Dispose();
+			}
 		}
 
 		public void Dispose()
 		{
 			if (_sessionFactory == null) return;
 			//to end just current transaction doesn't make sense in real code, but makes testing easier
-			CancelCurrent();
+			CancelAndDisposeCurrent();
 		}
 	}
 }

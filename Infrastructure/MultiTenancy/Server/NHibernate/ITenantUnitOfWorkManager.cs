@@ -2,7 +2,7 @@
 {
 	public interface ITenantUnitOfWorkManager
 	{
-		void CancelCurrent();
-		void CommitCurrent();
+		void CancelAndDisposeCurrent();
+		void CommitAndDisposeCurrent();
 	}
 }

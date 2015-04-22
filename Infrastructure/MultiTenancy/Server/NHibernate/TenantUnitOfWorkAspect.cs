@@ -20,11 +20,11 @@ namespace Teleopti.Ccc.Infrastructure.MultiTenancy.Server.NHibernate
 		{
 			if (exception == null)
 			{
-				_tenantUnitOfWorkManager.CommitCurrent();
+				_tenantUnitOfWorkManager.CommitAndDisposeCurrent();
 			}
 			else
 			{
-				_tenantUnitOfWorkManager.CancelCurrent();
+				_tenantUnitOfWorkManager.CancelAndDisposeCurrent();
 			}
 		}
 	}
