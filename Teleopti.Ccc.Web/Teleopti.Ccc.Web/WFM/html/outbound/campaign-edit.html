@@ -127,9 +127,9 @@
 										</div>
 										<div class="row">
 											<div class="col-lg-3">
-												<span>{{WorkingPeriod.WorkingPeriod.period._minimum}}</span>
+												<span>{{WorkingPeriod.StartTime}}</span>
 												<span> - </span>
-												<span>{{WorkingPeriod.WorkingPeriod.period._maximum}}</span>
+												<span>{{WorkingPeriod.EndTime}}</span>
 											</div>
 											<div ng-repeat-start="WeekDay in WorkingPeriod.ExpandedWorkingPeriodAssignments" ng-repeat-end class="col-lg-1">
 												<div class="wfm-checkbox wfm-checkbox-inline ">
@@ -148,11 +148,9 @@
 								<form name="newWorkingPeriodForm" ng-submit="">
 									<div class="input-prepend">
 										<i class="mdi mdi-plus" ng-click="addWorkingPeriod(); resetWorkingPeriodForm()"></i>
-										<input type="time" name="NewTimeRangeStart" ng-model="newWorkingPeriod.StartTime"
-										       placeholder="HH:mm:ss"/>
+										<input type="time" name="NewTimeRangeStart" ng-model="newWorkingPeriod.StartTime" />
 										-
-										<input type="time" name="NewTimeRangeEnd" ng-model="newWorkingPeriod.EndTime"
-										       placeholder="HH:mm:ss"/>
+										<input type="time" name="NewTimeRangeEnd" ng-model="newWorkingPeriod.EndTime" />
 									</div>
 								</form>
 							</div>

@@ -1,7 +1,9 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.Outbound;
 using Teleopti.Ccc.Domain.Repositories;
+using Teleopti.Ccc.Web.Areas.MyTime.Core.Common.Mapping;
 using Teleopti.Ccc.Web.Areas.Outbound.Models;
 
 namespace Teleopti.Ccc.Web.Areas.Outbound.core.Campaign.Mapping
@@ -11,10 +13,12 @@ namespace Teleopti.Ccc.Web.Areas.Outbound.core.Campaign.Mapping
 	public class OutboundCampaignViewModelMapper : IOutboundCampaignViewModelMapper
 	{
 		private readonly ISkillRepository _skillRepository;
+		private readonly ICreateHourText _createHourText;
 
-		public OutboundCampaignViewModelMapper(ISkillRepository skillRepository)
+		public OutboundCampaignViewModelMapper(ISkillRepository skillRepository, ICreateHourText createHourText)
 		{
 			_skillRepository = skillRepository;
+			_createHourText = createHourText;
 		}
 
 		public CampaignWorkingPeriodAssignmentViewModel Map(CampaignWorkingPeriodAssignment assignment)
@@ -30,9 +34,15 @@ namespace Teleopti.Ccc.Web.Areas.Outbound.core.Campaign.Mapping
 
 		public CampaignWorkingPeriodViewModel Map(CampaignWorkingPeriod workingPeriod)
 		{
+			var startTime = _createHourText.CreateText(new DateTime(1900, 1, 1, workingPeriod.TimePeriod.StartTime.Hours,
+				workingPeriod.TimePeriod.EndTime.Minutes, workingPeriod.TimePeriod.EndTime.Seconds));		
+			var endTime =  _createHourText.CreateText(new DateTime(1900, 1, 1, workingPeriod.TimePeriod.EndTime.Hours,
+				workingPeriod.TimePeriod.EndTime.Minutes, workingPeriod.TimePeriod.EndTime.Seconds));
 			var period = new CampaignWorkingPeriodViewModel
 			{
-				Id = workingPeriod.Id, WorkingPeriod = workingPeriod.TimePeriod, 
+				Id = workingPeriod.Id, 
+				StartTime = startTime,
+				EndTime = endTime,
 				WorkingPeroidAssignments =Map(workingPeriod.CampaignWorkingPeriodAssignments).ToList()
 			};
 			return period;

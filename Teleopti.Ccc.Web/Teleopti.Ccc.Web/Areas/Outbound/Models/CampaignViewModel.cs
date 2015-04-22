@@ -26,7 +26,8 @@ namespace Teleopti.Ccc.Web.Areas.Outbound.Models
 	public class CampaignWorkingPeriodViewModel
 	{
 		public Guid? Id;
-		public TimePeriod WorkingPeriod;
+		public string StartTime;
+		public string EndTime;
 		public IEnumerable<CampaignWorkingPeriodAssignmentViewModel> WorkingPeroidAssignments;
 	}
 

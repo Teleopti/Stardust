@@ -40,7 +40,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Outbound.Core
 		public void ShouldStoreNewCampaign()
 		{
 			var expectedVM = new CampaignViewModel();
-			var target = new OutboundCampaignPersister(_outboundCampaignRepository, _skillRepository, null, _outboundCampaignViewModelMapper);
+			var target = new OutboundCampaignPersister(_outboundCampaignRepository, _skillRepository, null, _outboundCampaignViewModelMapper, null);
 			_outboundCampaignViewModelMapper.Stub(x => x.Map(new Domain.Outbound.Campaign())).IgnoreArguments().Return(expectedVM);
 
 			var result = target.Persist("test");
@@ -53,7 +53,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Outbound.Core
 		public void ShouldUpdateCampaign()
 		{
 			var campaignVM = new CampaignViewModel { Id = new Guid(), Skills = new List<SkillViewModel> { new SkillViewModel() { Id = _skill.Id, IsSelected = true} } };
-			var target = new OutboundCampaignPersister(_outboundCampaignRepository, _skillRepository, _outboundCampaignMapper, null);
+			var target = new OutboundCampaignPersister(_outboundCampaignRepository, _skillRepository, _outboundCampaignMapper, null, null);
 			var expectedCampaign = new Domain.Outbound.Campaign();
 			_outboundCampaignMapper.Stub(x => x.Map(campaignVM)).Return(expectedCampaign);
 
