@@ -88,8 +88,7 @@ wfm.config([
 			controller: 'SeatPlanCtrl as seatplan'
 		}).state('seatMap', {
 			url: '/seatMap',
-			templateUrl: 'js/seatManagement/html/seatmap.html',
-			controller: 'SeatMapCtrl as seatmap'
+			templateUrl: 'js/seatManagement/html/seatmap.html'			
 		}).state('rta', {
 			url: '/rta',
 			templateUrl: 'js/rta/html/rta.html',

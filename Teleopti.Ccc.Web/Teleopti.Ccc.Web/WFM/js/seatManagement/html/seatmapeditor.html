@@ -1,0 +1,158 @@
+﻿<div ng-if="!vm.readonly">
+	<div id="seatMapToolbar">
+
+		<div ng-show="vm.isInEditMode">
+
+			<button class="wfm-btn wfm-btn-default" ng-click="vm.delete()">
+				<i class="mdi small mdi-close "></i>
+				<md-tooltip>
+					Delete Selected Items
+				</md-tooltip>
+			</button>
+			<button class="wfm-btn wfm-btn-default" ng-click="vm.group()">
+				<i class="mdi small mdi-airplane "></i>
+				<md-tooltip>
+					Group Selected Items
+				</md-tooltip>
+			</button>
+			<button class="wfm-btn wfm-btn-default" ng-click="vm.ungroup()">
+				<i class="mdi small mdi-television "></i>
+				<md-tooltip>
+					Ungroup Items
+				</md-tooltip>
+			</button>
+			<button class="wfm-btn wfm-btn-default" ng-click="vm.sendToBack()">
+				<i class="mdi small mdi-arrange-send-to-back"></i>
+				<md-tooltip>
+					Send to Back
+				</md-tooltip>
+			</button>
+			<button class="wfm-btn wfm-btn-default" ng-click="vm.sendBackward()">
+				<i class="mdi small mdi-arrange-send-backward "></i>
+				<md-tooltip>
+					Move Back
+				</md-tooltip>
+			</button>
+			<button class="wfm-btn wfm-btn-default" ng-click="vm.bringForward()">
+				<i class="mdi small mdi-arrange-bring-forward"></i>
+				<md-tooltip>
+					Move Forwards
+				</md-tooltip>
+			</button>
+			<button class="wfm-btn wfm-btn-default" ng-click="vm.bringToFront()">
+				<i class="mdi small mdi-arrange-bring-to-front "></i>
+				<md-tooltip>
+					Bring to Front
+				</md-tooltip>
+			</button>
+			<button class="wfm-btn wfm-btn-default" ng-click="vm.alignLeft()">
+				<i class="mdi small mdi-format-align-left"></i>
+				<md-tooltip>
+					Align Left
+				</md-tooltip>
+			</button>
+			<button class="wfm-btn wfm-btn-default" ng-click="vm.alignRight()">
+				<i class="mdi small mdi-format-align-right "></i>
+				<md-tooltip>
+					Align Right
+				</md-tooltip>
+			</button>
+			<button class="wfm-btn wfm-btn-default" ng-click="vm.alignTop()">
+				<i class="mdi small mdi-format-align-left" style="-webkit-transform: rotate(90deg);-moz-transform: rotate(90deg);-o-transform: rotate(90deg);-ms-transform: rotate(90deg);transform: rotate(90deg);"></i>
+				<md-tooltip>
+					Align Top
+				</md-tooltip>
+			</button>
+			<button class="wfm-btn wfm-btn-default" ng-click="vm.alignBottom()">
+				<i class="mdi small mdi-format-align-right" style="-webkit-transform: rotate(90deg);-moz-transform: rotate(90deg);-o-transform: rotate(90deg);-ms-transform: rotate(90deg);transform: rotate(90deg);"></i>
+				<md-tooltip>
+					Align Bottom
+				</md-tooltip>
+			</button>
+			<button class="wfm-btn wfm-btn-default" ng-click="vm.rotate45()">
+				<i class="mdi small mdi-rotate-right"></i>
+				<md-tooltip>
+					Rotate
+				</md-tooltip>
+			</button>
+			<button class="wfm-btn wfm-btn-default" ng-click="vm.spaceActiveGroupVertical()">
+				<i class="mdi small  mdi-unfold-more"></i>
+				<md-tooltip>
+					Space Vertically
+				</md-tooltip>
+			</button>
+			<button class="wfm-btn wfm-btn-default" ng-click="vm.spaceActiveGroupHorizontal()">
+				<i class="mdi small  mdi-unfold-more" style="-webkit-transform: rotate(90deg);-moz-transform: rotate(90deg);-o-transform: rotate(90deg);-ms-transform: rotate(90deg);transform: rotate(90deg);"></i>
+				<md-tooltip>
+					Space Horizontally
+				</md-tooltip>
+			</button>
+			<button class="wfm-btn wfm-btn-default" ng-click="vm.flip(true)">
+				<i class="mdi small mdi-swap-horizontal"></i>
+				<md-tooltip>
+					Flip Horizontally
+				</md-tooltip>
+			</button>
+			<button class="wfm-btn wfm-btn-default" ng-click="vm.flip(false)">
+				<i class="mdi small mdi-swap-vertical"></i>
+				<md-tooltip>
+					Flip Vertically
+				</md-tooltip>
+			</button>
+		</div>
+	</div>
+	
+	<div style="position: relative;">
+
+		<nav mfb-menu position="{{vm.chosen.position}}" effect="{{vm.chosen.effect}}" style=" top: -45px; right: 0px; z-index: 2; position: absolute;"
+		     active-icon="mdi-check" resting-icon="mdi-pencil"
+		     ng-mouseenter=" hovered()" ng-mouseleave="hovered()"
+		     callback="vm.editButtonClick()"
+		     label=""
+		     resting-label="Edit Seat Map"
+		     active-label="Save Seat Map"
+		     toggling-method="{{vm.chosen.method}}" menu-state="vm.menuState">
+			<button mfb-button icon="{{button.icon}}" ng-click="vm.floatingButtonClick(button.action)"
+			        label="{{button.label}}" ng-repeat="button in vm.buttons"></button>
+
+		</nav>
+
+		<div style="top: -25px; right: 85px; z-index: 2; position: absolute;">
+			<button ng-show="vm.isInEditMode" class="wfm-fab big warning" ng-click="vm.toggleEditMode()">
+				<i class="mdi mdi-close" aria-hidden="true"></i>
+				<md-tooltip>
+					Cancel Changes
+				</md-tooltip>
+			</button>
+
+
+		</div>
+
+	</div>
+	
+	
+	<div class="modal-box">
+		<div ng-cloak ng-show="vm.showLocationDialog">
+			<div class="modalbg">
+				<div class="dialog">
+					<div class="modal-header">
+						Add Location
+					</div>
+					<div class="modal-inner-content">
+						<br />
+						<input type="text" ng-model="vm.newLocationName" placeholder="Name..." />
+						<br />
+					</div>
+					<div class="modal-footer">
+						<aside>
+							<a ng-click="vm.showLocationDialog = false" class="wfm-btn wfm-btn-invis-primary">DISMISS</a>
+							<a class="wfm-btn wfm-btn-invis-primary" ng-click="vm.addNamedLocation()">CREATE</a>
+						</aside>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<image-load-with-preview></image-load-with-preview>
+</div>

@@ -1,0 +1,51 @@
+﻿
+a.mfb-component__button--main {
+  outline: 0;
+}
+
+.mfb-component--tr{
+  animation: fromTop 1.3s 1;
+  -webkit-animation: fromTop 1.3s 1;
+}
+.fadein {
+	animation: fadeIn 1.3s 1;
+  -webkit-animation: fadeIn 1.3s 1;
+}
+
+@keyframes fromTop {
+  0% {
+	transform: translateY(-250px);
+  }
+  100% {
+	transform: translateY(0);
+  }
+}
+@-webkit-keyframes fromTop {
+  0% {
+	transform: translateY(-250px);
+  }
+  100% {
+	transform: translateY(0);
+  }
+}
+
+@-webkit-keyframes fadeIn {
+  0% {
+	opacity: 0;
+  }
+
+  100% {
+	opacity: 1;
+  }
+}
+
+@keyframes fadeIn {
+  0% {
+	opacity: 0;
+  }
+
+  100% {
+	opacity: 1;
+  }
+}
+							

@@ -5,7 +5,7 @@
 	var directive = function () {
 
 		return {
-			controller: 'SeatPlanCanvasCtrl',
+			controller: 'SeatMapCanvasCtrl',
 			controllerAs: 'vm',
 			bindToController: true,
 			templateUrl: "js/seatManagement/html/seatmapcanvas.html",
@@ -21,5 +21,9 @@
 	};
 		
 }());
+
+
+
+
 
 

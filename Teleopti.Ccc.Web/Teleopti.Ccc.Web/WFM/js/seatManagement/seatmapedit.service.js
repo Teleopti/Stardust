@@ -100,7 +100,6 @@ angular.module('wfm.seatMap')
 				});
 			}
 
-			//canvas.renderAll();
 		};
 
 		function cloneObject(canvas, objectToClone) {
@@ -292,7 +291,6 @@ angular.module('wfm.seatMap')
 			});
 
 			canvas.add(textSample);
-			//canvas.renderAll();
 		};
 
 
@@ -335,7 +333,6 @@ angular.module('wfm.seatMap')
 				var group = new fabric.Group(objectsInGroup, { left: activeGroup.left + 15, top: activeGroup.top + 15 });
 				canvas.setActiveObject(group);
 				canvas.add(group);
-				//self.canvas.renderAll();
 			}
 		};
 
@@ -354,7 +351,6 @@ angular.module('wfm.seatMap')
 			for (var i = 0; i < items.length; i++) {
 				canvas.add(items[i]);
 			}
-			//self.canvas.renderAll();
 		};
 
 		//Alignment, Spacing Rotation and Flip
@@ -510,25 +506,26 @@ angular.module('wfm.seatMap')
 		 	}
 		 };
 
+		 function flip(canvas, horizontal) {
 
-		function save(seatMapSaveCommand, saveCallback) {
-			seatMapService.seatMap.save(seatMapSaveCommand).$promise.then(function (data) {
+		 	var flipCommand = horizontal ? 'flipX' : 'flipY';
+
+		 	if (canvas.getActiveGroup()) {
+		 		canvas.getActiveGroup().toggle(flipCommand);
+		 	} else {
+		 		canvas.getActiveObject().toggle(flipCommand);
+		 	}
+		 	canvas.renderAll();
+		 };
+
+		 return editService;
+
+		 function save(saveCommand, saveCallback) {
+			seatMapService.seatMap.save(saveCommand).$promise.then(function (data) {
 				saveCallback(data);
 			});
-
 		};
 
-		
-		function flip(canvas, flipToggleName) {
-			if (canvas.getActiveGroup()) {
-				canvas.getActiveGroup().toggle(flipToggleName);
-			} else {
-				canvas.getActiveObject().toggle(flipToggleName);
-			}
-			canvas.renderAll();
-		};
-
-		return editService;
 
 	}]);
 

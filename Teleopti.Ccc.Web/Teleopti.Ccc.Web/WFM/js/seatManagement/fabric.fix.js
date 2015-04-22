@@ -46,4 +46,35 @@
 		return { left: left, top: top };
 	}
 
+	//override to handle pan on right click...
+	fabric.CanvasWithViewport.prototype.__onMouseDown = function (e) {
+
+		if (e.which === 3) {
+			this.isGrabMode = true;
+		};
+
+		if (this.isGrabMode) {
+			this._onMouseDownInGrabMode(e);
+			return;
+		}
+		return fabric.CanvasWithViewport.__super__.__onMouseDown.call(this, this.viewport.transform(e));
+	};
+
+	fabric.CanvasWithViewport.prototype.__onMouseUp = function (e) {
+
+		if (this.isGrabMode) {
+			if (e.which === 3) {
+				this.isGrabMode = false;
+			};
+
+			this._onMouseUpInGrabMode(e);
+
+			return;
+		}
+
+		return fabric.CanvasWithViewport.__super__.__onMouseUp.call(this, this.viewport.transform(e));
+	};
+
+
+
 }());

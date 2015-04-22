@@ -12,7 +12,7 @@ angular.module('wfm.seatMap')
 		utils.resize = function (canvas, toolbarVisible) {
 			var viewPortHeight = $(document)[0].documentElement.clientHeight ;  
 			var width = $('[ui-view]')[0].clientWidth - $('#c').position().left - 30; // 30 = padding
-			var heightReduction = 135; // no reliable element to base this off
+			var heightReduction = 130; // no reliable element to base this off
 			
 			if (toolbarVisible) {
 				heightReduction += $('#seatMapToolbar')[0].clientHeight + 62;
@@ -70,13 +70,13 @@ angular.module('wfm.seatMap')
 
 		utils.setSelectionMode = function (canvas, allowSelection) {
 			var canvasObjects = canvas.getObjects();
+			canvas.deactivateAllWithDispatch().renderAll();
 			canvas.selection = allowSelection;
 			for (var idx in canvasObjects) {
 
 				canvasObjects[idx].selectable = allowSelection;
 				canvasObjects[idx].hasControls = allowSelection;
 				canvasObjects[idx].hasRotatingPoint = allowSelection;
-				canvasObjects[idx].hasBorders = allowSelection;
 			}
 		};
 
@@ -148,6 +148,39 @@ angular.module('wfm.seatMap')
 
 			return null;
 		};
+
+
+		utils.getLocations = function(canvas) {
+			var childLocations = [];
+			var locations = utils.getObjectsByType(canvas, 'location');
+			for (var i in locations) {
+				var location = locations[i];
+				childLocations.push(
+				{
+					Id: location.id,
+					Name: location.name,
+					IsNew: (location.isNew === undefined) ? false : true
+				});
+			}
+			return childLocations;
+		};
+
+		utils.getSeats = function(canvas) {
+			var seats = [];
+			var seatObjects = utils.getObjectsByType(canvas, 'seat');
+			for (var i in seatObjects) {
+				var seat = seatObjects[i];
+				seats.push(
+				{
+					Id: seat.id,
+					Name: seat.name,
+					Priority: seat.priority,
+					IsNew: (seat.isNew === undefined) ? false : true
+				});
+			}
+			return seats;
+		};
+
 
 		utils.getHighestSeatPriority = function (canvas) {
 

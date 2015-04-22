@@ -1217,7 +1217,12 @@
     <Content Include="WFM\css\style.min.css">
       <DependentUpon>style.css</DependentUpon>
     </Content>
-    <Content Include="WFM\js\seatManagement\html\filedialog.html" />
+    <Content Include="WFM\js\seatManagement\fabric.fix.js" />
+    <Content Include="WFM\js\seatManagement\html\imageLoadWithPreview.html" />
+    <Content Include="WFM\js\seatManagement\html\seatmapeditor.html" />
+    <Content Include="WFM\js\seatManagement\imageloadwithpreview.directive.js" />
+    <Content Include="WFM\js\seatManagement\seatmapedit.controller.js" />
+    <Content Include="WFM\js\seatManagement\seatmapedit.directive.js" />
     <Content Include="WFM\tests\search\search.controller.spec.js" />
     <Content Include="WFM\vendor\d3\angularjs-nvd3-directives.js" />
     <Content Include="WFM\vendor\d3\d3.js" />
@@ -1253,7 +1258,7 @@
     <Content Include="WFM\js\resourceplanner\resourceplanner.html" />
     <Content Include="WFM\js\resourceplanner\resourceplanner.service.js" />
     <Content Include="WFM\vendor\ng-mfb\mfb.directive.js" />
-    <Content Include="WFM\js\seatManagement\seatmapcanvas.controller.js" />
+    <Content Include="WFM\js\seatManagement\seatmap.controller.js" />
     <Content Include="WFM\js\rta\html\rta.html" />
     <Content Include="WFM\js\rta\restRtaService.js" />
     <Content Include="WFM\js\rta\rta.controller.js" />
@@ -1277,11 +1282,10 @@
     <Content Include="WFM\js\seatManagement\images\seats.svg" />
     <Content Include="WFM\js\seatManagement\location.js" />
     <Content Include="WFM\js\seatManagement\seat.js" />
-    <Content Include="WFM\js\seatManagement\seatmapcanvasedit.service.js" />
+    <Content Include="WFM\js\seatManagement\seatmapedit.service.js" />
     <Content Include="WFM\js\seatManagement\_modules.js" />
-    <Content Include="WFM\js\seatManagement\seatmapcanvas.directive.js" />
-    <Content Include="WFM\js\seatManagement\seatmap.controller.js" />
-    <Content Include="WFM\js\seatManagement\seatmapcanvasutils.service.js" />
+    <Content Include="WFM\js\seatManagement\seatmap.directive.js" />
+    <Content Include="WFM\js\seatManagement\seatmaputils.service.js" />
     <Content Include="WFM\js\seatManagement\seatplan.controller.js" />
     <Content Include="WFM\js\seatManagement\seatmap.service.js" />
     <Content Include="WFM\js\seatManagement\seatplan.service.js" />
@@ -1953,6 +1957,7 @@
     <Content Include="WFM\vendor\MaterialDesignIcons\scss\_variables.scss" />
     <Content Include="WFM\vendor\d3\LICENSE" />
     <Content Include="WFM\css\_people.scss" />
+    <Content Include="WFM\css\_seatmap.scss" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config">
