@@ -39,18 +39,9 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Core.IoC
 			builder.RegisterType<DailyStaffingMetricsViewModelFactory>().As<IDailyStaffingMetricsViewModelFactory>().InstancePerLifetimeScope();
 			builder.RegisterType<ReportItemsProvider>().As<IReportItemsProvider>().SingleInstance();
 
-			if (_config.Toggle(Toggles.MultiTenantSSOSupport_StandardReports_15093))
-			{
-				builder.Register(c => new ReportUrlConstructor(_config.Args().ReportServer, c.Resolve<IConfigReader>()))
+			builder.Register(c => new ReportUrlConstructor(_config.Args().ReportServer, c.Resolve<IConfigReader>()))
 					.As<IReportUrl>()
 					.SingleInstance();
-			}
-			else
-			{
-				builder.Register(c => new ReportUrl(_config.Args().MatrixWebSiteUrl, c.Resolve<ICurrentBusinessUnit>(), c.Resolve<IConfigReader>()))
-					.As<IReportUrl>()
-					.SingleInstance();
-			}
 			
 			builder.RegisterType<ResourceCalculateSkillCommand>().As<IResourceCalculateSkillCommand>().InstancePerLifetimeScope();
 			builder.RegisterType<SkillLoaderDecider>().As<ISkillLoaderDecider>().InstancePerLifetimeScope();

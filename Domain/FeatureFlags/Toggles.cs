@@ -75,7 +75,6 @@
 
 		SeatPlanner_Logon_32003,
 		MyTeam_MakeTeamScheduleConsistent_31897,
-		MultiTenantSSOSupport_StandardReports_15093,
 		MultiTenancy_SDK_17458,
 		MultiTenancy_People_32113,
 		MultiTenancy_LogonUseNewSchema_33049,

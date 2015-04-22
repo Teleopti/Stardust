@@ -16,7 +16,7 @@ namespace Teleopti.Analytics.Etl.TransformerTest.Job.Jobs
         {
             _parameters = JobParametersFactory.SimpleParameters(false);
             IList<IJobStep> jobStepList = new PermissionJobCollection(_parameters);
-            Assert.AreEqual(14, jobStepList.Count);
+            Assert.AreEqual(12, jobStepList.Count);
         }
 
         [Test]
@@ -24,7 +24,7 @@ namespace Teleopti.Analytics.Etl.TransformerTest.Job.Jobs
         {
             _parameters = JobParametersFactory.SimpleParameters(true);
             IList<IJobStep> jobStepList = new PermissionJobCollection(_parameters);
-            Assert.AreEqual(15, jobStepList.Count);
+            Assert.AreEqual(13, jobStepList.Count);
         }
     }
 }

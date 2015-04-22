@@ -77,7 +77,6 @@ ETL_OnlyLatestQueueAgentStatistics_30787 = true
 Scheduler_DoNotBreakMinWeekWorkTimeOptimization_31992 = true
 Portal_DifferentiateBadgeSettingForAgents_31318 = true
 Backlog_Module_23980 = DEV
-MultiTenantSSOSupport_StandardReports_15093 = true
 MyTeam_MakeTeamScheduleConsistent_31897 = true
 RTA_CalculatePercentageInAgentTimezone_31236 = RC
 MultiTenancy_SDK_17458 = true

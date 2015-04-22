@@ -27,21 +27,6 @@ namespace Teleopti.Analytics.Etl.TransformerTest.Job.Steps
 			Assert.IsNotNull(jobStepResult);
 		}
 
-		[Test]
-		public void VerifyStageUserJobStep()
-		{
-			var ss = new StageUserJobStep(_jobParameters);
-			IJobStepResult jobStepResult = ss.Run(new List<IJobStep>(), null, null, false);
-			Assert.IsNotNull(jobStepResult);
-		}
-
-		[Test]
-		public void VerifyAspNetUsersJobStep()
-		{
-			var ss = new AspNetUsersJobStep(_jobParameters);
-			IJobStepResult jobStepResult = ss.Run(new List<IJobStep>(), null, null, false);
-			Assert.IsNotNull(jobStepResult);
-		}
 
 		[Test]
 		public void VerifyPermissionReportJobStep()

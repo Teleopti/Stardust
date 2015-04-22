@@ -922,8 +922,10 @@
     <Compile Include="Core\Startup\IRegisterAreas.cs" />
     <Compile Include="Core\Startup\RegisterArea.cs" />
     <Compile Include="Core\Startup\RegisterAreas.cs" />
+    <Compile Include="Core\Startup\ReportTextsStartupTask.cs" />
     <Compile Include="Core\Startup\RtaStartupTask.cs" />
     <Compile Include="Core\Startup\Startup.cs" />
+    <Compile Include="Core\Startup\TextLoader.cs" />
     <Compile Include="Filters\AddChallengeOnUnauthorizedResult.cs" />
     <Compile Include="Filters\ApplicationFunctionAnywhereAttribute.cs" />
     <Compile Include="Filters\ApplicationFunctionApiAttribute.cs" />

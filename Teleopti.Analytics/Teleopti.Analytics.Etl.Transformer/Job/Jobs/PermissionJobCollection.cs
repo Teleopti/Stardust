@@ -13,8 +13,6 @@ namespace Teleopti.Analytics.Etl.Transformer.Job.Jobs
 			Add(new StagePersonJobStep(jobParameters));
 			Add(new StageAgentSkillJobStep(jobParameters));
 			Add(new StagePermissionJobStep(jobParameters));     //
-			if (!jobParameters.ToggleManager.IsEnabled(Toggles.MultiTenantSSOSupport_StandardReports_15093))
-				Add(new StageUserJobStep(jobParameters));           //
 			Add(new StageScorecardJobStep(jobParameters));
 			Add(new DimBusinessUnitJobStep(jobParameters));
 			Add(new DimScorecardJobStep(jobParameters));
@@ -22,8 +20,6 @@ namespace Teleopti.Analytics.Etl.Transformer.Job.Jobs
 			Add(new DimTeamJobStep(jobParameters));
 			Add(new DimSkillSetJobStep(jobParameters));
 			Add(new DimPersonJobStep(jobParameters));
-			if (!jobParameters.ToggleManager.IsEnabled(Toggles.MultiTenantSSOSupport_StandardReports_15093))
-				Add(new AspNetUsersJobStep(jobParameters));         //
 			Add(new PermissionReportJobStep(jobParameters));    //
 
 			// If PM is installed then show ETL job step for synchronizing PM permissions

@@ -37,7 +37,6 @@ namespace Teleopti.Analytics.Portal.PerformanceManager.Helper
 		public static AuthenticationMode GetWebAuthenticationMode()
 		{
 			var sec = (AuthenticationSection)HttpContext.Current.GetSection("system.web/authentication");
-
 			return sec.Mode;
 		}
 
@@ -45,8 +44,7 @@ namespace Teleopti.Analytics.Portal.PerformanceManager.Helper
 		{
 			get
 			{
-				var userName = StateHolder.UserName;
-				return HttpContext.Current.User.Identity.Name == userName ? HttpContext.Current.User.Identity.Name : userName;
+				return HttpContext.Current.User.Identity.Name;
 			}
 		}
 

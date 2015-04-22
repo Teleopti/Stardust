@@ -175,8 +175,6 @@
     <Compile Include="Job\Steps\BridgeQueueWorkloadJobStep.cs" />
     <Compile Include="Job\Steps\BridgeSkillSetSkillJobStep.cs" />
     <Compile Include="Job\Steps\BridgeAcdLogOnPersonJobStep.cs" />
-    <Compile Include="Job\Steps\AspNetUsersJobStep.cs" />
-    <Compile Include="Job\Steps\StageUserJobStep.cs" />
     <Compile Include="Job\Steps\StageScheduleDayOffCountJobStep.cs" />
     <Compile Include="Job\Steps\FactScheduleDayCountJobStep.cs" />
     <Compile Include="Job\Steps\StageBusinessUnitJobStep.cs" />

@@ -230,7 +230,6 @@
     <Compile Include="Areas\Anywhere\Core\PublishedScheduleSpecificationTest.cs" />
     <Compile Include="Areas\Anywhere\Hubs\PersonScheduleDayViewModelFactoryTest.cs" />
     <Compile Include="Areas\Anywhere\Hubs\PersonScheduleDayViewModelMapperTest.cs" />
-    <Compile Include="Areas\Anywhere\Hubs\ReportUrlTest.cs" />
     <Compile Include="Areas\Anywhere\Hubs\FakeClientBuilder.cs" />
     <Compile Include="Areas\Anywhere\Hubs\ReportItemsProviderTest.cs">
       <SubType>Code</SubType>

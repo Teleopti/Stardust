@@ -35,20 +35,12 @@ namespace Teleopti.Ccc.Win.Main
 		 {
 			 builder.RegisterType<MatrixNavigationModel>().As<IMatrixNavigationModel>();
 
-			 if (_config.Toggle(Toggles.MultiTenantSSOSupport_StandardReports_15093))
-			 {
-				 builder.Register(c => new ReportUrlConstructor(_config.Args().ReportServer, c.Resolve<IConfigReader>()))
-					 .As<IReportUrl>()
-					 .SingleInstance();
-			 }
-			 else
-			 {
-				 builder.Register(c => new ReportUrl(_config.Args().MatrixWebSiteUrl, c.Resolve<ICurrentBusinessUnit>(), c.Resolve<IConfigReader>()))
-					 .As<IReportUrl>()
-					 .SingleInstance();
-			 }
 
-						builder.RegisterType<MatrixNavigationView>().SingleInstance();
+		    builder.Register(c => new ReportUrlConstructor(_config.Args().ReportServer, c.Resolve<IConfigReader>()))
+			    .As<IReportUrl>()
+			    .SingleInstance();
+
+				builder.RegisterType<MatrixNavigationView>().SingleInstance();
             builder.RegisterType<ShiftsNavigationPanel>();
             builder.RegisterType<NavigationPanelProvider>().SingleInstance();
             builder.RegisterType<ForecasterNavigator>();
