@@ -24,7 +24,14 @@ input[type="text"]{
 		text-transform: capitalize;
 }
 
+.roles-list {
+	height: 70vh;
+}
+
+
 .permissions-tree {
+	height: 70vh;
+
 	li {
 		border: none;
 	}
@@ -49,9 +56,7 @@ input[type="text"]{
 }
 
 .animate-show {
-  line-height: 20px;
   opacity: 1;
-  padding: 10px;
   background: white;
 }
 
@@ -64,5 +69,4 @@ input[type="text"]{
 .animate-show.ng-hide {
   line-height: 0;
   opacity: 0;
-  padding: 0 10px;
 }
