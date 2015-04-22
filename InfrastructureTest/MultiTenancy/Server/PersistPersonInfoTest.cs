@@ -1,5 +1,4 @@
 ﻿using System;
-using NHibernate.Exceptions;
 using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Server;
@@ -95,8 +94,7 @@ namespace Teleopti.Ccc.InfrastructureTest.MultiTenancy.Server
 			target.Persist(personInfo1);
 			target.Persist(personInfo2);
 
-			Assert.Throws(Is.TypeOf<GenericADOException>().And.InnerException.Message.Contains("Cannot insert duplicate"),
-				tenantUnitOfWorkManager.CurrentSession().Flush);
+			Assert.Throws<DuplicateApplicationLogonNameException>(() => tenantUnitOfWorkManager.CurrentSession().Flush());
 		}
 
 		[Test]
@@ -126,8 +124,7 @@ namespace Teleopti.Ccc.InfrastructureTest.MultiTenancy.Server
 			target.Persist(personInfo1);
 			target.Persist(personInfo2);
 
-			Assert.Throws(Is.TypeOf<GenericADOException>().And.InnerException.Message.Contains("Cannot insert duplicate"),
-				tenantUnitOfWorkManager.CurrentSession().Flush);
+			Assert.Throws<DuplicateIdentityException>(() => tenantUnitOfWorkManager.CurrentSession().Flush());
 		}
 
 		[Test]

@@ -35,6 +35,7 @@ namespace Teleopti.Ccc.Infrastructure.MultiTenancy.Server.NHibernate
 				{
 					db.ConnectionString = connectionString;
 					db.Dialect<MsSql2008Dialect>();
+					db.ExceptionConverter<TenantNhibernateExceptionConverter>();
 				});
 			cfg.SetProperty(Environment.CurrentSessionContextClass, sessionContext);
 			//TODO: tenant - if/when tenant stuff is it's own service, we don't have to pick these one-by-one but take all assembly instead.
