@@ -33,12 +33,11 @@ namespace Teleopti.Ccc.Sdk.WcfService.Factory
 				Identity = !string.IsNullOrEmpty(personDto.WindowsDomain) && !string.IsNullOrEmpty(personDto.WindowsLogOnName) ? personDto.WindowsDomain + "\\" + personDto.WindowsLogOnName : null,
 				PersonId = id,
 				Tenant = tenant
-
 			};
 			if (personDto.TerminationDate != null)
 				data.TerminalDate = personDto.TerminationDate.DateTime;
 			
-			_tenantDataManager.SaveTenantData(new List<TenantAuthenticationData>{data});
+			_tenantDataManager.SaveTenantData(data);
 		}
 	}
 

@@ -20,12 +20,6 @@ namespace Teleopti.Ccc.Infrastructure.MultiTenancy.Client
 			_jsonSerializer = jsonSerializer;
 		}
 
-		public void SaveTenantData(IEnumerable<TenantAuthenticationData> tenantAuthenticationData)
-		{
-			var json = _jsonSerializer.SerializeObject(tenantAuthenticationData);
-			_postHttpRequest.Send<object>(_tenantServerConfiguration.Path + "PersonInfo/PersistOld", json);
-		}
-
 		public void DeleteTenantPersons(IEnumerable<Guid> personsToBeDeleted)
 		{
 			var json = _jsonSerializer.SerializeObject(personsToBeDeleted);

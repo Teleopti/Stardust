@@ -25,16 +25,6 @@ namespace Teleopti.Ccc.Web.Areas.Tenant
 		}
 
 		[HttpPost]
-		[TenantUnitOfWork]
-		public virtual void PersistOld(IEnumerable<PersonInfoModel> personInfos)
-		{
-			foreach (var personInfoModel in personInfos)
-			{
-				_persister.Persist(_mapper.Map(personInfoModel));
-			}
-		}
-
-		[HttpPost]
 		//TODO: tenant - change later to some sort of authentication
 		//TODO: tenant - change from returning an json object with errors to non 200 http error codes
 		public virtual JsonResult Persist(PersonInfoModel personInfoModel)

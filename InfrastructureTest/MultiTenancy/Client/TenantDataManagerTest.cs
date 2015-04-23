@@ -28,21 +28,6 @@ namespace Teleopti.Ccc.InfrastructureTest.MultiTenancy.Client
 		}
 
 		[Test]
-		public void ShouldSaveTenantData()
-		{
-			var authDatas = Enumerable.Empty<TenantAuthenticationData>();
-			var serializedAuthDatas = RandomName.Make();
-			var pathToTenantServer = RandomName.Make();
-			var postHttpRequest = MockRepository.GenerateMock<IPostHttpRequest>();
-			var jsonSerializer = MockRepository.GenerateStub<IJsonSerializer>();
-			jsonSerializer.Stub(x => x.SerializeObject(authDatas)).Return(serializedAuthDatas);
-			var target = new TenantDataManager(new TenantServerConfiguration(pathToTenantServer), postHttpRequest, jsonSerializer);
-			target.SaveTenantData(authDatas);
-
-			postHttpRequest.AssertWasCalled(x => x.Send<object>(pathToTenantServer + "PersonInfo/Persist", serializedAuthDatas));
-		}
-
-		[Test]
 		public void ShouldReturnSuccessWhenSuccessfulSave()
 		{
 			var tenantAuthenticationData = new TenantAuthenticationData();
@@ -54,7 +39,7 @@ namespace Teleopti.Ccc.InfrastructureTest.MultiTenancy.Client
 			var saveResult = new PersistPersonInfoResult { PasswordStrengthIsValid = true };
 			var target = new TenantDataManager(new TenantServerConfiguration(pathToTenantServer), postHttpRequest, jsonSerializer);
 			postHttpRequest.Stub(
-				x => x.Send<PersistPersonInfoResult>(pathToTenantServer + "PersonInfo/PersistNew", serializedAuthData))
+				x => x.Send<PersistPersonInfoResult>(pathToTenantServer + "PersonInfo/Persist", serializedAuthData))
 				.Return(saveResult);
 			var result = target.SaveTenantData(tenantAuthenticationData);
 			result.Success.Should().Be.True();
@@ -72,7 +57,7 @@ namespace Teleopti.Ccc.InfrastructureTest.MultiTenancy.Client
 			var saveResult = new PersistPersonInfoResult { PasswordStrengthIsValid = false };
 			var target = new TenantDataManager(new TenantServerConfiguration(pathToTenantServer), postHttpRequest, jsonSerializer);
 			postHttpRequest.Stub(
-				x => x.Send<PersistPersonInfoResult>(pathToTenantServer + "PersonInfo/PersistNew", serializedAuthData))
+				x => x.Send<PersistPersonInfoResult>(pathToTenantServer + "PersonInfo/Persist", serializedAuthData))
 				.Return(saveResult);
 			var result = target.SaveTenantData(tenantAuthenticationData);
 			result.Success.Should().Be.False();

@@ -12,25 +12,6 @@ namespace Teleopti.Ccc.WebTest.Areas.Tenant
 	public class PersonInfoControllerTest
 	{
 		[Test]
-		public void ShouldPersistPersonInfos()
-		{
-			var personInfoModel1 = new PersonInfoModel();
-			var personInfoModel2 = new PersonInfoModel();
-			var entity1 = new PersonInfo();
-			var entity2 = new PersonInfo();
-			var persister = MockRepository.GenerateMock<IPersistPersonInfo>();
-			var mapper = MockRepository.GenerateMock<IPersonInfoMapper>();
-			mapper.Expect(x => x.Map(personInfoModel1)).Return(entity1);
-			mapper.Expect(x => x.Map(personInfoModel2)).Return(entity2);
-
-			var target = new PersonInfoController(persister, mapper, null);
-			target.PersistOld(new[]{personInfoModel1, personInfoModel2});
-
-			persister.AssertWasCalled(x=>x.Persist(entity1));
-			persister.AssertWasCalled(x=>x.Persist(entity2));
-		}
-
-		[Test]
 		public void ShouldDeletedPersonInfos()
 		{
 			var personId1 = Guid.NewGuid();
