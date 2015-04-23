@@ -29,18 +29,21 @@
 							<li ng-repeat="role in roles | filter:searchRoles" ng-click="showRole(role.Id)" ng-dblclick="editing = true" ng-class="{'active': role.Id==selectedRole}" class="role-btn wfm-block wfm-list-item role">
 								<div class="wfm-leave-behind">
 									<span>
-										<i ng-click="copyRole(role.Id)" class="mdi mdi-content-copy"></i>
-										<md-tooltip>
-											{{'Delete' | translate}}
-										</md-tooltip>
-										<i ng-click="editing = true" class="mdi mdi-pencil"></i>
-										<md-tooltip>
-											{{'Edit' | translate}}
-										</md-tooltip>
-										<i ng-click="removeRole(role, $index)" class="mdi mdi-delete"></i>
-										<md-tooltip>
-											{{'Delete' | translate}}
-										</md-tooltip>
+										<i ng-click="copyRole(role.Id)" class="mdi mdi-content-copy">
+											<md-tooltip>
+												{{'Copy' | translate}}
+											</md-tooltip>
+										</i>
+										<i ng-click="editing = true" class="mdi mdi-pencil">
+											<md-tooltip>
+												{{'Edit' | translate}}
+											</md-tooltip>
+										</i>
+										<i ng-click="removeRole(role, $index)" class="mdi mdi-delete">
+											<md-tooltip>
+												{{'Delete' | translate}}
+											</md-tooltip>
+										</i>
 									</span>
 								</div>
 								<span ng-hide="editing">{{role.DescriptionText}}</span>
