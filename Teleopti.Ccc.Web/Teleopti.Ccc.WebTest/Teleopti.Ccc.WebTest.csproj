@@ -305,7 +305,7 @@
     <Compile Include="Areas\PerformanceTool\PerformanceCounterTest.cs" />
     <Compile Include="Areas\Start\Controllers\UrlControllerTest.cs" />
     <Compile Include="Areas\Tenant\Core\TenantUnitOfWorkAttributeTest.cs" />
-    <Compile Include="Areas\Tenant\PersonInfoControllerTest.cs" />
+    <Compile Include="Areas\Tenant\PersonInfoDeleteTest.cs" />
     <Compile Include="Areas\Tenant\PersonInfoPersistTest.cs" />
     <Compile Include="Areas\Tenant\TenantTestAttribute.cs" />
     <Compile Include="Areas\Toggle\ToggleHandlerControllerTest.cs" />

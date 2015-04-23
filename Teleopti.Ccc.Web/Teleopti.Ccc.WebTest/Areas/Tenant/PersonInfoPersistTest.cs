@@ -26,6 +26,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Tenant
 			var result = (PersistPersonInfoResult)Target.Persist(personInfoModel).Data;
 
 			allPropertiesShouldBeTrue(result);
+			PersistPersonInfo.LastPersist.ApplicationLogonName.Should().Be.EqualTo(personInfoModel.ApplicationLogonName);
 			TenantUnitOfWorkAspect.LastCommitSucceded.Value.Should().Be.True();
 		}
 		private static void allPropertiesShouldBeTrue(PersistPersonInfoResult result)
@@ -45,7 +46,9 @@ namespace Teleopti.Ccc.WebTest.Areas.Tenant
 			CheckPasswordStrength.WillThrow(new PasswordStrengthException());
 
 			var result = (PersistPersonInfoResult)Target.Persist(personInfoModel).Data;
+
 			result.PasswordStrengthIsValid.Should().Be.False();
+			TenantUnitOfWorkAspect.LastCommitSucceded.Value.Should().Be.False();
 		}
 
 		[Test]
@@ -57,7 +60,9 @@ namespace Teleopti.Ccc.WebTest.Areas.Tenant
 			PersistPersonInfo.WillThrow(new DuplicateApplicationLogonNameException());
 
 			var result = (PersistPersonInfoResult)Target.Persist(personInfoModel).Data;
+
 			result.ApplicationLogonNameIsValid.Should().Be.False();
+			TenantUnitOfWorkAspect.LastCommitSucceded.Value.Should().Be.False();
 		}
 
 		[Test]
@@ -69,7 +74,9 @@ namespace Teleopti.Ccc.WebTest.Areas.Tenant
 			PersistPersonInfo.WillThrow(new DuplicateIdentityException());
 
 			var result = (PersistPersonInfoResult)Target.Persist(personInfoModel).Data;
+
 			result.IdentityIsValid.Should().Be.False();
+			TenantUnitOfWorkAspect.LastCommitSucceded.Value.Should().Be.False();
 		}
 	}
 }

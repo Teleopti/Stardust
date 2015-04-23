@@ -235,6 +235,7 @@
     <Compile Include="MultiTenancy\Client\TenantServerConfiguration.cs" />
     <Compile Include="MultiTenancy\Server\CheckPasswordStrength.cs" />
     <Compile Include="MultiTenancy\Server\CheckPasswordStrengthFake.cs" />
+    <Compile Include="MultiTenancy\Server\DeletePersonInfoFake.cs" />
     <Compile Include="MultiTenancy\Server\DuplicateApplicationLogonNameException.cs" />
     <Compile Include="MultiTenancy\Server\DuplicateIdentityException.cs" />
     <Compile Include="MultiTenancy\Server\FindTenantByNameQueryFake.cs" />
