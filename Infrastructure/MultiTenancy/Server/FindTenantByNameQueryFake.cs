@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
-using Teleopti.Ccc.Infrastructure.MultiTenancy.Server;
 
-namespace Teleopti.Ccc.WebTest.Areas.Tenant.Fakes
+namespace Teleopti.Ccc.Infrastructure.MultiTenancy.Server
 {
 	public class FindTenantByNameQueryFake : IFindTenantByNameQuery
 	{

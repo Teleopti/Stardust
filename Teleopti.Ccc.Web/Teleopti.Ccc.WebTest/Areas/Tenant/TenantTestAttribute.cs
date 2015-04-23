@@ -4,7 +4,6 @@ using Teleopti.Ccc.Infrastructure.MultiTenancy.Server.NHibernate;
 using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.TestCommon.IoC;
 using Teleopti.Ccc.Web.Core.IoC;
-using Teleopti.Ccc.WebTest.Areas.Tenant.Fakes;
 
 namespace Teleopti.Ccc.WebTest.Areas.Tenant
 {

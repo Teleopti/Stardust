@@ -4,7 +4,6 @@ using Teleopti.Ccc.Infrastructure.MultiTenancy.Server;
 using Teleopti.Ccc.TestCommon.TestData;
 using Teleopti.Ccc.Web.Areas.Tenant;
 using Teleopti.Ccc.Web.Areas.Tenant.Model;
-using Teleopti.Ccc.WebTest.Areas.Tenant.Fakes;
 
 namespace Teleopti.Ccc.WebTest.Areas.Tenant
 {

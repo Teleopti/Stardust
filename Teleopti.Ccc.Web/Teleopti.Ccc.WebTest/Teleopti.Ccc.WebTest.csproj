@@ -305,8 +305,6 @@
     <Compile Include="Areas\PerformanceTool\PerformanceCounterTest.cs" />
     <Compile Include="Areas\Start\Controllers\UrlControllerTest.cs" />
     <Compile Include="Areas\Tenant\Core\TenantUnitOfWorkAttributeTest.cs" />
-    <Compile Include="Areas\Tenant\Fakes\FindTenantByNameQueryFake.cs" />
-    <Compile Include="Areas\Tenant\Fakes\TenantUnitOfWorkAspectFake.cs" />
     <Compile Include="Areas\Tenant\PersonInfoControllerTest.cs" />
     <Compile Include="Areas\Tenant\PersonInfoPersistTest.cs" />
     <Compile Include="Areas\Tenant\TenantTestAttribute.cs" />
@@ -612,6 +610,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Areas\Outbound\Models\" />
+    <Folder Include="Areas\Tenant\Fakes\" />
     <Folder Include="Core\Hangfire\" />
     <Folder Include="Core\WeekSchedule\Mapping\" />
     <Folder Include="Properties\" />

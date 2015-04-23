@@ -2,7 +2,7 @@
 using Teleopti.Ccc.Domain.Aop.Core;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Server.NHibernate;
 
-namespace Teleopti.Ccc.WebTest.Areas.Tenant.Fakes
+namespace Teleopti.Ccc.Infrastructure.MultiTenancy.Server
 {
 	public class TenantUnitOfWorkAspectFake : ITenantUnitOfWorkAspect
 	{
