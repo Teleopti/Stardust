@@ -30,8 +30,6 @@ input[type="text"]{
 
 
 .permissions-tree {
-	height: 70vh;
-
 	li {
 		border: none;
 	}
@@ -91,22 +89,22 @@ p {
 .permissions .tab-container{
 	height: 78vh;	
 
-	.data-container .permissions-tree{
+	&.data-container .permissions-tree{
 		overflow: auto;
 		height: calc(100% - 155px);
 	}
 
-	.data-container .toolbar{
+	&.data-container .toolbar{
 		overflow: auto;
 		height: 150px;
 	}
 
-	.functions-container .permissions-tree{
+	&.functions-container .permissions-tree{
 		overflow: auto;
 		height: calc(100% - 105px);
 	}
 
-	.functions-container .toolbar{
+	&.functions-container .toolbar{
 		overflow: auto;
 		height: 100px;
 	}
