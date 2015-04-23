@@ -1,4 +1,4 @@
-﻿<div>
+﻿<div class="permissions">
 	<div class="row">
 		<div class="col-lg-12">
 			<h4 translate>ManagePermissions</h4>
@@ -62,8 +62,7 @@
 					</label>
 
 					<section>
-						<div class="tab-container">
-							<div ng-show="roleDetails=='functionsAvailable'" class="animate-show">
+						<div class="tab-container functions-container animate-show" ng-show="roleDetails=='functionsAvailable'" >
 								<div class="row toolbar">
 									<div class="col-md-8">
 										<div class="input-prepend">
@@ -97,7 +96,6 @@
 										</ol>
 									</div>
 								</div>
-							</div>
 						</div>
 					</section>
 					<input type="radio" name="perms-tabs" ng-model="roleDetails" ng-value="'dataAvailable'" id="tab-2" />
@@ -105,10 +103,9 @@
 						Data
 					</label>
 					<section>
-						<div class="tab-container">
-							<div class="animate-show" ng-show="roleDetails=='dataAvailable'">
-
-								<div class="row toolbar">
+						<div class="tab-container data-container animate-show" ng-show="roleDetails=='dataAvailable'">
+							<div class="toolbar">
+								<div class="row">
 									<div class="col-md-8">
 										<div class="input-prepend">
 											<i class="mdi mdi-filter-outline"></i>
@@ -133,16 +130,19 @@
 									</div>
 								</div>
 
-								<div class="tree permissions-tree">
-									<div ui-tree data-drag-enabled="false">
-										<ol ui-tree-nodes="" ng-model="organization.DynamicOptions" class="tree-line">
-											<li ng-repeat="dynamic in organization.DynamicOptions | filter:searchData" ui-tree-node>
-												<div ui-tree-handle ng-click="changeRangeOption(dynamic)" ng-class="{selected: dynamic.selected}">
-													{{dynamic.Name}}
-												</div>
-											</li>
-										</ol>
+
+								<div>
+									<p>Choose a global level of authorization: </p>
+									<div class="wfm-radio-list permissions-list">
+										<div class="wfm-radio-list-item" ng-repeat="dynamic in organization.DynamicOptions" ng-class="{'selected': dynamic.selected }" ng-click="changeRangeOption(dynamic)">{{dynamic.Name}}</div>
 									</div>
+								</div>
+
+								<div>
+									<p>Add some specific authorization: </p>
+								</div>
+							</div>
+								<div class="tree permissions-tree">
 
 									<div ui-tree data-drag-enabled="false">
 										<ol ui-tree-nodes="" ng-model="organization.BusinessUnit" id="tree-root" class="tree-line">
@@ -150,7 +150,6 @@
 										</ol>
 									</div>
 								</div>
-							</div>
 						</div>
 					</section>
 				</article>
