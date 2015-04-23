@@ -190,7 +190,7 @@ angular.module('wfm.forecasting.target', ['n3-line-chart'])
 					angular.forEach($scope.skillsDisplayed, function (skill) {
 						angular.forEach(skill.Workloads, function(workload) {
 							if (workload.Selected)
-								result.push({ Id: workload.Id, Name: workload.Name, Method: workload.methodToUse });
+								result.push({ Id: workload.Id, Name: skill.Name + " / " + workload.Name, Method: workload.methodToUse });
 						});
 					});
 					return result;
