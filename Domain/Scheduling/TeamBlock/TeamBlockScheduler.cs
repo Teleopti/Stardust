@@ -127,6 +127,17 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 							cancelMe = true;
 						});
 				}
+
+				if (!success)
+				{
+					rollbackService.Rollback();
+
+					foreach (var selectedBlockDay in selectedBlockDays)
+					{
+						resourceCalculateDelayer.CalculateIfNeeded(selectedBlockDay, null);
+					}		
+				}
+		
 				schedulingOptions.NotAllowedShiftCategories.Clear();	
 			}
 
