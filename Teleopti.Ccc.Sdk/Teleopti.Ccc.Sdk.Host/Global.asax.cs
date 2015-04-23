@@ -68,7 +68,8 @@ namespace Teleopti.Ccc.Sdk.WcfHost
 
             Logger.InfoFormat("The Application is starting. {0}", _sitePath);
 
-	        var messageBroker = MessageBrokerContainerDontUse.CompositeClient();
+			MessageBrokerContainerDontUse.Configure(null, null, null, new NewtonsoftJsonSerializer());
+			var messageBroker = MessageBrokerContainerDontUse.CompositeClient();
 
 			var busSender = new ServiceBusSender();
 	        var eventPublisher = new ServiceBusEventPublisher(busSender, new EventContextPopulator(new CurrentIdentity(), new CurrentInitiatorIdentifier(CurrentUnitOfWork.Make())));

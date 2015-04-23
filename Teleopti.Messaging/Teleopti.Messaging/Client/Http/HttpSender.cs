@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Net;
 using System.Net.Http;
+using System.Net.Http.Headers;
 using System.Text;
 using Teleopti.Interfaces;
 using Teleopti.Interfaces.MessageBroker;
@@ -15,7 +16,17 @@ namespace Teleopti.Messaging.Client.Http
 		private readonly IJsonSerializer _serializer;
 
 		public Action<HttpClient, string, HttpContent> PostAsync =
-			(client, uri, httpContent) => client.PostAsync(uri, httpContent);
+			(client, uri, httpContent) =>
+			{
+#if DEBUG
+				var task = client.PostAsync(uri, httpContent);
+				var response = task.Result;
+				if (response.StatusCode != HttpStatusCode.OK)
+					throw new Exception(response.StatusCode.ToString());
+#else
+				client.PostAsync(uri, httpContent);
+#endif
+			};
 
 		private readonly HttpClient _httpClient;
 
@@ -28,6 +39,7 @@ namespace Teleopti.Messaging.Client.Http
 				{
 					Credentials = CredentialCache.DefaultNetworkCredentials
 				});
+			_httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
 		}
 
 		public void Send(Notification notification)

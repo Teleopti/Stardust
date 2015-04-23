@@ -59,7 +59,8 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
 
             	
                 encryptedAppSettings.DecryptDictionary(EncryptionConstants.Image1, EncryptionConstants.Image2);
-            	var application =
+				MessageBrokerContainerDontUse.Configure(null, null, null, new NewtonsoftJsonSerializer());
+				var application =
             		new InitializeApplication(
             			new DataSourcesFactory(new EnversConfiguration(), creator.Create(), DataSourceConfigurationSetter.ForServiceBus()),
 						MessageBrokerContainerDontUse.CompositeClient());
@@ -173,6 +174,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
 					return;
 				}
 
+				MessageBrokerContainerDontUse.Configure(null, null, null, new NewtonsoftJsonSerializer());
 				var application =
 					new InitializeApplication(
 						new DataSourcesFactory(new EnversConfiguration(), creator.Create(),

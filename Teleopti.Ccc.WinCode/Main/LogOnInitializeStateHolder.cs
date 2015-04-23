@@ -31,6 +31,7 @@ namespace Teleopti.Ccc.WinCode.Main
 
 		public static bool GetConfigFromFileSystem(string nhibConfPath, bool messageBrokerDisabled)
 		{
+			MessageBrokerContainerDontUse.Configure(null, null, null, new NewtonsoftJsonSerializer());
 			new InitializeApplication(
 				new DataSourcesFactory(new EnversConfiguration(), new List<IMessageSender>(),
 				                       DataSourceConfigurationSetter.ForDesktop()),
@@ -90,7 +91,8 @@ namespace Teleopti.Ccc.WinCode.Main
         	
 			var sendToServiceBus = new ServiceBusSender();
 			var eventPublisher = new ServiceBusEventPublisher(sendToServiceBus, new EventContextPopulator(new CurrentIdentity(), new CurrentInitiatorIdentifier(CurrentUnitOfWork.Make())));
-        	var initializeApplication =
+			MessageBrokerContainerDontUse.Configure(null, null, null, new NewtonsoftJsonSerializer());
+			var initializeApplication =
         		new InitializeApplication(
         			new DataSourcesFactory(new EnversConfiguration(),
 												  new List<IMessageSender>
