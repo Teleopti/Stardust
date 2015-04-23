@@ -26,9 +26,7 @@ namespace Teleopti.Ccc.Web.Areas.Tenant
 
 		[HttpPost]
 		[TenantUnitOfWork]
-		//TODO: tenant - probably return some kind of json result later
-		//TODO: tenant - change later to some sort of authentication
-		public virtual void Persist(IEnumerable<PersonInfoModel> personInfos)
+		public virtual void PersistOld(IEnumerable<PersonInfoModel> personInfos)
 		{
 			foreach (var personInfoModel in personInfos)
 			{
@@ -37,14 +35,14 @@ namespace Teleopti.Ccc.Web.Areas.Tenant
 		}
 
 		[HttpPost]
-		//TODO: tenant rename to Persist when old method is gone
+		//TODO: tenant - change later to some sort of authentication
 		//TODO: tenant - change from returning an json object with errors to non 200 http error codes
-		public virtual JsonResult PersistNew(PersonInfoModel personInfoModel)
+		public virtual JsonResult Persist(PersonInfoModel personInfoModel)
 		{
 			var ret = new PersistPersonInfoResult();
 			try
 			{
-				PersistNewInternal(personInfoModel);
+				PersistInternal(personInfoModel);
 			}
 			catch (PasswordStrengthException)
 			{
@@ -63,7 +61,7 @@ namespace Teleopti.Ccc.Web.Areas.Tenant
 
 		//TODO: tenant, needs to be extra method to catch uow attribute errors. Fix soon!
 		[TenantUnitOfWork]
-		protected virtual void PersistNewInternal(PersonInfoModel personInfoModel)
+		protected virtual void PersistInternal(PersonInfoModel personInfoModel)
 		{
 			_persister.Persist(_mapper.Map(personInfoModel));
 		}

@@ -23,7 +23,7 @@ namespace Teleopti.Ccc.Infrastructure.MultiTenancy.Client
 		public void SaveTenantData(IEnumerable<TenantAuthenticationData> tenantAuthenticationData)
 		{
 			var json = _jsonSerializer.SerializeObject(tenantAuthenticationData);
-			_postHttpRequest.Send<object>(_tenantServerConfiguration.Path + "PersonInfo/Persist", json);
+			_postHttpRequest.Send<object>(_tenantServerConfiguration.Path + "PersonInfo/PersistOld", json);
 		}
 
 		public void DeleteTenantPersons(IEnumerable<Guid> personsToBeDeleted)
@@ -35,7 +35,7 @@ namespace Teleopti.Ccc.Infrastructure.MultiTenancy.Client
 		public SavePersonInfoResult SaveTenantData(TenantAuthenticationData tenantAuthenticationData)
 		{
 			var json = _jsonSerializer.SerializeObject(tenantAuthenticationData);
-			var tmpResult = _postHttpRequest.Send<PersistPersonInfoResult>(_tenantServerConfiguration.Path + "PersonInfo/PersistNew", json);
+			var tmpResult = _postHttpRequest.Send<PersistPersonInfoResult>(_tenantServerConfiguration.Path + "PersonInfo/Persist", json);
 			var ret = new SavePersonInfoResult {Success = true};
 			if (!tmpResult.PasswordStrengthIsValid)
 			{

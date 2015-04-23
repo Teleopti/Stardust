@@ -24,7 +24,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Tenant
 			mapper.Expect(x => x.Map(personInfoModel2)).Return(entity2);
 
 			var target = new PersonInfoController(persister, mapper, null);
-			target.Persist(new[]{personInfoModel1, personInfoModel2});
+			target.PersistOld(new[]{personInfoModel1, personInfoModel2});
 
 			persister.AssertWasCalled(x=>x.Persist(entity1));
 			persister.AssertWasCalled(x=>x.Persist(entity2));
@@ -54,7 +54,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Tenant
 			mapper.Expect(x => x.Map(personInfoModel)).Return(personInfo);
 
 			var target = new PersonInfoController(persister, mapper, null);
-			var result = (PersistPersonInfoResult)target.PersistNew(personInfoModel).Data;
+			var result = (PersistPersonInfoResult)target.Persist(personInfoModel).Data;
 			allPropertiesShouldBeTrue(result);
 		}
 
@@ -75,7 +75,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Tenant
 			mapper.Stub(x => x.Map(personInfoModel)).Throw(new PasswordStrengthException());
 
 			var target = new PersonInfoController(persister, mapper, null);
-			var result = (PersistPersonInfoResult)target.PersistNew(personInfoModel).Data;
+			var result = (PersistPersonInfoResult)target.Persist(personInfoModel).Data;
 			result.PasswordStrengthIsValid.Should().Be.False();
 		}
 
@@ -90,7 +90,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Tenant
 			persister.Stub(x => x.Persist(personInfo)).Throw(new DuplicateApplicationLogonNameException());
 
 			var target = new PersonInfoController(persister, mapper, null);
-			var result = (PersistPersonInfoResult)target.PersistNew(personInfoModel).Data;
+			var result = (PersistPersonInfoResult)target.Persist(personInfoModel).Data;
 			result.ApplicationLogonNameIsValid.Should().Be.False();
 		}
 
@@ -105,7 +105,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Tenant
 			persister.Stub(x => x.Persist(personInfo)).Throw(new DuplicateIdentityException());
 
 			var target = new PersonInfoController(persister, mapper, null);
-			var result = (PersistPersonInfoResult)target.PersistNew(personInfoModel).Data;
+			var result = (PersistPersonInfoResult)target.Persist(personInfoModel).Data;
 			result.IdentityIsValid.Should().Be.False();
 		}
 	}
