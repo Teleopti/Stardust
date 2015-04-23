@@ -610,7 +610,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Areas\Outbound\Models\" />
-    <Folder Include="Areas\Tenant\Fakes\" />
     <Folder Include="Core\Hangfire\" />
     <Folder Include="Core\WeekSchedule\Mapping\" />
     <Folder Include="Properties\" />

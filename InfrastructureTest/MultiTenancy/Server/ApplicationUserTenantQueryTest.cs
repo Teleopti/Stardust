@@ -59,7 +59,7 @@ namespace Teleopti.Ccc.InfrastructureTest.MultiTenancy.Server
 			var tenant = new FindTenantByNameQuery(_tenantUnitOfWorkManager).Find(Tenant.DefaultName);
 			personId = Guid.NewGuid();
 			var pInfo = new PersonInfo(tenant, personId);
-			pInfo.SetApplicationLogonCredentials(new CheckPasswordStrengthSuccessful(), correctUserName, RandomName.Make());
+			pInfo.SetApplicationLogonCredentials(new CheckPasswordStrengthFake(), correctUserName, RandomName.Make());
 			var personInfoPersister = new PersistPersonInfo(_tenantUnitOfWorkManager);
 			personInfoPersister.Persist(pInfo);
 			_tenantUnitOfWorkManager.CurrentSession().Flush();
@@ -110,7 +110,7 @@ namespace Teleopti.Ccc.InfrastructureTest.MultiTenancy.Server
 			var tenant = new Tenant(RandomName.Make());
 			_tenantUnitOfWorkManager.CurrentSession().Save("Tenant_NewSchema", tenant);
 			var personInfo = new PersonInfo(tenant, person.Id.Value);
-			personInfo.SetApplicationLogonCredentials(new CheckPasswordStrengthSuccessful(), person.ApplicationAuthenticationInfo.ApplicationLogOnName, person.ApplicationAuthenticationInfo.Password);
+			personInfo.SetApplicationLogonCredentials(new CheckPasswordStrengthFake(), person.ApplicationAuthenticationInfo.ApplicationLogOnName, person.ApplicationAuthenticationInfo.Password);
 			persister.Persist(personInfo);
 			_tenantUnitOfWorkManager.CurrentSession().Flush();
 			target.Find(person.ApplicationAuthenticationInfo.ApplicationLogOnName).Id

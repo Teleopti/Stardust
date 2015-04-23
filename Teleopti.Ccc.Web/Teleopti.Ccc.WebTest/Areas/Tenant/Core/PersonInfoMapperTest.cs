@@ -17,7 +17,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Tenant.Core
 		public void PersonIdShouldBeSet()
 		{
 			var id = Guid.NewGuid();
-			var target = new PersonInfoMapper(MockRepository.GenerateMock<IFindTenantByNameQuery>(), new CheckPasswordStrengthSuccessful());
+			var target = new PersonInfoMapper(MockRepository.GenerateMock<IFindTenantByNameQuery>(), new CheckPasswordStrengthFake());
 			var result = target.Map(new PersonInfoModel { PersonId = id });
 			result.Id.Should().Be.EqualTo(id);
 		}
@@ -26,7 +26,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Tenant.Core
 		public void IdentityShouldBeSet()
 		{
 			var identity = RandomName.Make();
-			var target = new PersonInfoMapper(MockRepository.GenerateMock<IFindTenantByNameQuery>(), new CheckPasswordStrengthSuccessful());
+			var target = new PersonInfoMapper(MockRepository.GenerateMock<IFindTenantByNameQuery>(), new CheckPasswordStrengthFake());
 			var result = target.Map(new PersonInfoModel { Identity = identity });
 			result.Identity.Should().Be.EqualTo(identity);
 		}
@@ -35,7 +35,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Tenant.Core
 		public void ApplicationLogonShouldBeSet()
 		{
 			var applicationLogon = RandomName.Make();
-			var target = new PersonInfoMapper(MockRepository.GenerateMock<IFindTenantByNameQuery>(), new CheckPasswordStrengthSuccessful());
+			var target = new PersonInfoMapper(MockRepository.GenerateMock<IFindTenantByNameQuery>(), new CheckPasswordStrengthFake());
 			var result = target.Map(new PersonInfoModel { ApplicationLogonName = applicationLogon, Password = RandomName.Make()});
 			result.ApplicationLogonName.Should().Be.EqualTo(applicationLogon);
 		}
@@ -43,7 +43,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Tenant.Core
 		[Test]
 		public void ApplicationLogonNorPasswordShouldBeSetIfApplicationLogonIsMissing()
 		{
-			var target = new PersonInfoMapper(MockRepository.GenerateMock<IFindTenantByNameQuery>(), new CheckPasswordStrengthFailing());
+			var target = new PersonInfoMapper(MockRepository.GenerateMock<IFindTenantByNameQuery>(), new CheckPasswordStrengthFake());
 			var result = target.Map(new PersonInfoModel {Password = RandomName.Make(), ApplicationLogonName = null});
 			result.ApplicationLogonName.Should().Be.Null();
 			result.Password.Should().Be.Null();
@@ -52,7 +52,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Tenant.Core
 		[Test]
 		public void ApplicationLogonNorPasswordShouldBeSetIfPasswordIsMissing()
 		{
-			var target = new PersonInfoMapper(MockRepository.GenerateMock<IFindTenantByNameQuery>(), new CheckPasswordStrengthFailing());
+			var target = new PersonInfoMapper(MockRepository.GenerateMock<IFindTenantByNameQuery>(), new CheckPasswordStrengthFake());
 			var result = target.Map(new PersonInfoModel { ApplicationLogonName = RandomName.Make(), Password = null});
 			result.ApplicationLogonName.Should().Be.Null();
 			result.Password.Should().Be.Null();
@@ -62,7 +62,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Tenant.Core
 		public void PasswordShouldBeSet()
 		{
 			var password = RandomName.Make();
-			var target = new PersonInfoMapper(MockRepository.GenerateMock<IFindTenantByNameQuery>(), new CheckPasswordStrengthSuccessful());
+			var target = new PersonInfoMapper(MockRepository.GenerateMock<IFindTenantByNameQuery>(), new CheckPasswordStrengthFake());
 			var result = target.Map(new PersonInfoModel { Password = password, ApplicationLogonName = RandomName.Make()});
 			result.Password.Should().Be.EqualTo(EncryptPassword.ToDbFormat(password));
 		}
@@ -82,7 +82,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Tenant.Core
 		public void TerminalDateShouldBeSet()
 		{
 			var terminalDate = DateOnly.Today;
-			var target = new PersonInfoMapper(MockRepository.GenerateMock<IFindTenantByNameQuery>(), new CheckPasswordStrengthSuccessful());
+			var target = new PersonInfoMapper(MockRepository.GenerateMock<IFindTenantByNameQuery>(), new CheckPasswordStrengthFake());
 			var result = target.Map(new PersonInfoModel { TerminalDate = terminalDate.Date});
 			result.TerminalDate.Should().Be.EqualTo(terminalDate);
 		}
@@ -90,7 +90,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Tenant.Core
 		[Test]
 		public void NullTerminalDateShouldBeSet()
 		{
-			var target = new PersonInfoMapper(MockRepository.GenerateMock<IFindTenantByNameQuery>(), new CheckPasswordStrengthSuccessful());
+			var target = new PersonInfoMapper(MockRepository.GenerateMock<IFindTenantByNameQuery>(), new CheckPasswordStrengthFake());
 			var result = target.Map(new PersonInfoModel { TerminalDate = null });
 			result.TerminalDate.HasValue.Should().Be.False();
 		}
@@ -102,7 +102,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Tenant.Core
 			var tenant = new Infrastructure.MultiTenancy.Server.Tenant(RandomName.Make());
 			var findTenantQuery = MockRepository.GenerateMock<IFindTenantByNameQuery>();
 			findTenantQuery.Expect(x => x.Find(tenant.Name)).Return(tenant);
-			var target = new PersonInfoMapper(findTenantQuery, new CheckPasswordStrengthSuccessful());
+			var target = new PersonInfoMapper(findTenantQuery, new CheckPasswordStrengthFake());
 			var result = target.Map(new PersonInfoModel {Tenant = tenant.Name});
 			result.Tenant.Should().Be.EqualTo(tenant.Name);
 		}
