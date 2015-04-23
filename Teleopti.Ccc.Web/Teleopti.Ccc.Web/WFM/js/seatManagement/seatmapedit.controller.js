@@ -131,10 +131,11 @@
 			utils.setSelectionMode(canvas(), vm.isInEditMode);
 			if (!vm.isInEditMode) {
 				vm.menuState = 'closed';
-			}
+				refreshSeatMap();
+			} 
 
+			
 			utils.resize(canvas(), vm.isInEditMode);
-
 		};
 
 		vm.delete = function () {
