@@ -108,5 +108,30 @@ namespace Teleopti.Ccc.WebTest.Filters
 
 			unitOfWork.AssertWasCalled(x => x.PersistAll());
 		}
+
+	    [Test]
+	    public void ShouldDisposeUnitOfWorkEvenWhenException()
+	    {
+				var currentUnitOfWork = MockRepository.GenerateMock<ICurrentUnitOfWork>();
+				var unitOfWork = MockRepository.GenerateMock<IUnitOfWork>();
+				var dependencyResolver = MockRepository.GenerateMock<IDependencyResolver>();
+				DependencyResolver.SetResolver(dependencyResolver);
+				var target = new UnitOfWorkActionAttribute();
+
+				dependencyResolver.Stub(x => x.GetService(typeof(ICurrentUnitOfWork))).Return(currentUnitOfWork);
+				currentUnitOfWork.Stub(x => x.Current()).Return(unitOfWork);
+
+				unitOfWork.Stub(x => x.PersistAll()).Throw(new Exception());
+
+		    try
+		    {
+					target.OnResultExecuted(new ResultExecutedContext { Exception = new Exception(), ExceptionHandled = true });
+		    }
+		    catch (Exception)
+		    {
+		    }
+
+				unitOfWork.AssertWasCalled(x => x.Dispose());
+	    }
     }
 }

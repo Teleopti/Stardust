@@ -38,8 +38,8 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 			finally
 			{
 				diposeBusinessUnitFilterOverride();
+				_unitOfWork.Dispose();
 			}
-			_unitOfWork.Dispose();
 		}
 
 		private void persistWhenNoExpcetion(Exception exception)

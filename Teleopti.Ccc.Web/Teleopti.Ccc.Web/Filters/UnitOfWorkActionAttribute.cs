@@ -20,14 +20,20 @@ namespace Teleopti.Ccc.Web.Filters
 			var currentUnitOfWork = DependencyResolver.Current.GetService<ICurrentUnitOfWork>().Current();
 			if (currentUnitOfWork == null) return;
 
-			if (shouldPersist(filterContext))
+			try
 			{
-				currentUnitOfWork.PersistAll();
+				if (shouldPersist(filterContext))
+				{
+					currentUnitOfWork.PersistAll();
+				}
 			}
-			currentUnitOfWork.Dispose();
+			finally
+			{
+				currentUnitOfWork.Dispose();
+			}
 		}
 
-		private bool shouldPersist(ResultExecutedContext filterContext)
+		private static bool shouldPersist(ResultExecutedContext filterContext)
 		{
 			return filterContext.Exception == null || filterContext.ExceptionHandled;
 		}

@@ -22,9 +22,15 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 
 		public void OnAfterInvocation(Exception exception, IInvocationInfo invocation)
 		{
-			if (exception == null)
-				_unitOfWork.PersistAll();
-			_unitOfWork.Dispose();
+			try
+			{
+				if (exception == null)
+					_unitOfWork.PersistAll();
+			}
+			finally
+			{
+				_unitOfWork.Dispose();
+			}
 		}
 	}
 }
