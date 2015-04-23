@@ -45,7 +45,7 @@
 									onclick="linkButtonLogOut_Click" CssClass="actionLink"></asp:LinkButton>
 						</div>
 						<div style="float:right; margin-top: 5px;margin-right: 25px;clear:both">
-							<asp:ImageButton ID="ImageButtonHelp" runat="server" ImageUrl="~/images/Question_16x16.png" ToolTip="Help" OnClientClick="javascript:return false;" />
+							<asp:ImageButton ID="ImageButtonHelp" runat="server" ImageUrl="~/PerformanceManager/images/Question_16x16.png" ToolTip="Help" OnClientClick="javascript:return false;" />
 						</div>
 					</div>
 				</div>

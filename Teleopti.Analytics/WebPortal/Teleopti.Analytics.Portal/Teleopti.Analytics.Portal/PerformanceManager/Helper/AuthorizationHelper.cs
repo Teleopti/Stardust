@@ -21,7 +21,7 @@ namespace Teleopti.Analytics.Portal.PerformanceManager.Helper
 
 			return (bool)
 			DatabaseHelperFunctions.ExecuteScalar(CommandType.StoredProcedure, "mart.pm_user_check", parameters,
-										  ConnectionString);
+										  connectionString);
 		}
 
 		public static bool IsAuthenticationConfigurationValid()
@@ -44,7 +44,8 @@ namespace Teleopti.Analytics.Portal.PerformanceManager.Helper
 		{
 			get
 			{
-				return HttpContext.Current.User.Identity.Name;
+				var userName = StateHolder.UserName;
+				return HttpContext.Current.User.Identity.Name == userName ? HttpContext.Current.User.Identity.Name : userName;
 			}
 		}
 
@@ -56,7 +57,7 @@ namespace Teleopti.Analytics.Portal.PerformanceManager.Helper
 			return false;
 		}
 
-		private static string ConnectionString
+		private static string connectionString
 		{
 			get
 			{

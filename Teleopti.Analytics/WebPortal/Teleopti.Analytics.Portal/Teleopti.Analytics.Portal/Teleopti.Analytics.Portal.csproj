@@ -108,6 +108,10 @@
       <Private>True</Private>
       <HintPath>..\..\..\..\packages\Teleopti.AnalysisServices.10.0.0\lib\net40\Microsoft.AnalysisServices.AdomdClient.dll</HintPath>
     </Reference>
+    <Reference Include="Newtonsoft.Json, Version=4.5.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\packages\Newtonsoft.Json.6.0.7\lib\net45\Newtonsoft.Json.dll</HintPath>
+    </Reference>
     <Reference Include="SanitizerProviders">
       <HintPath>..\..\..\..\packages\AjaxControlToolkit.4.1.60919\lib\45\SanitizerProviders\SanitizerProviders.dll</HintPath>
     </Reference>
@@ -125,12 +129,15 @@
     <Reference Include="System.Xml.Linq" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="bootstrap.min.css" />
+    <Content Include="Logout.aspx" />
     <Content Include="PerformanceManager\test_login.aspx" />
     <Content Include="PmContainer.aspx" />
     <Content Include="Timeout.aspx" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>
     </Content>
+    <Content Include="Login.aspx" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="..\..\..\..\GlobalAssemblyInfo.cs">
@@ -145,6 +152,13 @@
     </Compile>
     <Compile Include="ErrorMessage.aspx.designer.cs">
       <DependentUpon>ErrorMessage.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Logout.aspx.cs">
+      <DependentUpon>Logout.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Logout.aspx.designer.cs">
+      <DependentUpon>Logout.aspx</DependentUpon>
     </Compile>
     <Compile Include="PerformanceManager\CloseReport.aspx.cs">
       <DependentUpon>CloseReport.aspx</DependentUpon>
@@ -244,7 +258,15 @@
     </Compile>
     <Compile Include="Utils\HelpLinkBuilder.cs" />
     <Compile Include="Utils\StateHolder.cs" />
+    <Compile Include="Utils\TenantLogin.cs" />
     <Compile Include="Utils\UserInfo.cs" />
+    <Compile Include="Login.aspx.cs">
+      <DependentUpon>Login.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Login.aspx.designer.cs">
+      <DependentUpon>Login.aspx</DependentUpon>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\ReportTexts\Teleopti.Analytics.ReportTexts.csproj">

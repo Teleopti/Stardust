@@ -13,7 +13,7 @@ Default skin template. The following skins are provided as examples only.
 
 <asp:Image runat="server" ImageUrl="~/images/image1.jpg" />
 --%>
-<asp:Login SkinID="Login" runat="server" BorderColor="Beige" BorderWidth="2" BorderStyle="Outset" BackColor="#f2f7fa" CssClass="Login"/>
+<asp:Login SkinID="Login" runat="server" CssClass="Login"/>
 <asp:Image SkinID="OpenCalSmall" runat="server" ImageUrl="images/Calendar_scheduleHS.png" ImageAlign="AbsMiddle"></asp:Image>
 <asp:Image SkinID="RightSmall" runat="server" ImageUrl="images/right_light.gif" ImageAlign="AbsMiddle"></asp:Image>
 <asp:Image SkinID="RightAllSmall" runat="server" ImageUrl="images/right_all_light.gif" ImageAlign="AbsMiddle"></asp:Image>
