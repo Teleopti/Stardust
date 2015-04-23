@@ -2,7 +2,7 @@
 using log4net;
 using log4net.Core;
 
-namespace Teleopti.Ccc.InfrastructureTest.Aop.TestDoubles
+namespace Teleopti.Ccc.DomainTest.Aop.TestDoubles
 {
 	public class LogSpy : ILog
 	{

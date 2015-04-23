@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using NHibernate.Util;
 using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.Aop.Core;
 
@@ -38,9 +39,9 @@ namespace Teleopti.Ccc.Infrastructure.Aop
 		{
 			if (argument == null) 
 				return "null";
-			if ((argument as Array) != null)
+			if (argument is Array)
 				return "Count = " + ((Array) argument).Length;
-			if ((argument as IList) != null)
+			if (argument is IList)
 				return "Count = " + ((IList) argument).Count;
 			if (argument.GetType().IsGenericType)
 				return "Enumerable";

@@ -5,12 +5,12 @@ using Autofac;
 using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.Aop;
+using Teleopti.Ccc.DomainTest.Aop.TestDoubles;
 using Teleopti.Ccc.Infrastructure.Aop;
-using Teleopti.Ccc.InfrastructureTest.Aop.TestDoubles;
 using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.TestCommon.IoC;
 
-namespace Teleopti.Ccc.InfrastructureTest.Aop
+namespace Teleopti.Ccc.DomainTest.Aop
 {
 	[IoCTest]
 	public class InfoLogAspectTest : IRegisterInContainer
