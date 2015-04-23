@@ -215,7 +215,7 @@ namespace Teleopti.Ccc.DomainTest.Aop
 		{
 			return new List<int>{1,2,3};
 		}
-		
+
 		[InfoLog]
 		public virtual string ReturnsNullString()
 		{

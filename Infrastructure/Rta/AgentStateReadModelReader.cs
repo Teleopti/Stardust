@@ -5,6 +5,7 @@ using System.Data.SqlClient;
 using System.Linq;
 using log4net;
 using NHibernate.Transform;
+using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service;
 using Teleopti.Ccc.Domain.Collection;
@@ -135,7 +136,8 @@ namespace Teleopti.Ccc.Infrastructure.Rta
 			return queryActualAgentStates2("SELECT * FROM Rta.ActualAgentState", new parameters[] { });
 		}
 
-		public AgentStateReadModel GetCurrentActualAgentState(Guid personId)
+		[InfoLog]
+		public virtual AgentStateReadModel GetCurrentActualAgentState(Guid personId)
 		{
 			var agentState = queryActualAgentStates2(
 				"SELECT * FROM Rta.ActualAgentState WHERE PersonId = @PersonId",
@@ -156,7 +158,8 @@ namespace Teleopti.Ccc.Infrastructure.Rta
 			return agentState;
 		}
 
-		public IEnumerable<AgentStateReadModel> GetMissingAgentStatesFromBatch(DateTime batchId, string dataSourceId)
+		[InfoLog]
+		public virtual IEnumerable<AgentStateReadModel> GetMissingAgentStatesFromBatch(DateTime batchId, string dataSourceId)
 		{
 			return queryActualAgentStates2(@"
 											SELECT * FROM RTA.ActualAgentState 

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using log4net;
+using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta.Resolvers;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service.Aggregator;
 using Teleopti.Interfaces.Domain;
@@ -51,6 +52,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 			_adherenceAggregator = adherenceAggregator;
 		}
 
+		[InfoLog]
 		public void CheckForActivityChange(Guid personId, Guid businessUnitId)
 		{
 			_cacheInvalidator.InvalidateSchedules(personId);
@@ -81,8 +83,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 
 		public int CloseSnapshot(ExternalUserStateInputModel input, int dataSourceId)
 		{
-			loggingSvc.InfoFormat("Last of batch detected, initializing handling for batch id: {0}, source id: {1}", input.BatchId, input.SourceId);
-
 			input.StateCode = "CCC Logged out";
 			input.PlatformTypeId = Guid.Empty.ToString();
 			var missingAgents = _agentStateReadModelReader.GetMissingAgentStatesFromBatch(input.BatchId, input.SourceId);

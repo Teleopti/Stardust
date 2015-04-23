@@ -35,14 +35,10 @@ namespace Teleopti.Interfaces.Domain
 
 		public override string ToString()
 		{
-			return BatchId.HasValue
-					   ? string.Format(CultureInfo.InvariantCulture,
-									   "PersonId: {0}, State: {1}, Scheduled: {2}, StateStart: {3}, Scheduled next: {4}, NextStart: {5}, Alarm: {6}, AlarmStart: {7}, BatchId: {8}",
-									   PersonId, State, Scheduled, StateStart, ScheduledNext, NextStart, AlarmName, AlarmStart,
-									   BatchId)
-					   : string.Format(CultureInfo.InvariantCulture,
-									   "PersonId: {0}, State: {1}, Scheduled: {2}, StateStart: {3}, Scheduled next: {4}, NextStart: {5}, Alarm: {6}, AlarmStart: {7}",
-									   PersonId, State, Scheduled, StateStart, ScheduledNext, NextStart, AlarmName, AlarmStart);
+			return string.Format(CultureInfo.InvariantCulture,
+				"PersonId: {0}, StateCode: {1} StateGroup: {2}, Scheduled: {3}, StateStart: {4}, Scheduled next: {5}, NextStart: {6}, Alarm: {7}, AlarmStart: {8}, BatchId: {9}",
+				PersonId, StateCode, State, Scheduled, StateStart, ScheduledNext, NextStart, AlarmName, AlarmStart, BatchId);
+
 		}
 
 	}

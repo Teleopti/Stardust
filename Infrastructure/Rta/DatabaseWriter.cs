@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Data;
 using log4net;
+using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service;
 using Teleopti.Interfaces.Domain;
 
@@ -19,7 +20,8 @@ namespace Teleopti.Ccc.Infrastructure.Rta
 			_databaseConnectionStringHandler = databaseConnectionStringHandler;
 		}
 
-		public void PersistActualAgentReadModel(AgentStateReadModel model)
+		[InfoLog]
+		public virtual void PersistActualAgentReadModel(AgentStateReadModel model)
 		{
 			using (
 				var connection = _databaseConnectionFactory.CreateConnection(_databaseConnectionStringHandler.DataStoreConnectionString()))
