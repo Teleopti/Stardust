@@ -1,39 +1,7 @@
-using System;
-using System.Reflection;
+
 using System.Web.Http;
-using System.Web.Mvc;
 using Autofac;
-using Autofac.Builder;
-using Autofac.Configuration;
-using Autofac.Features.Scanning;
-using Autofac.Integration.Mvc;
-using Autofac.Integration.SignalR;
-using Autofac.Integration.WebApi;
-using Teleopti.Ccc.Infrastructure.Aop;
-using Teleopti.Ccc.Infrastructure.Foundation;
-using Teleopti.Ccc.Infrastructure.Rta;
-using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.IocCommon;
-using Teleopti.Ccc.IocCommon.Configuration;
-using Teleopti.Ccc.Web.Areas.Anywhere.Core.IoC;
-using Teleopti.Ccc.Web.Areas.Forecasting.Core.IoC;
-using Teleopti.Ccc.Web.Areas.Mart.Core.IoC;
-using Teleopti.Ccc.Web.Areas.Messages.Core.Ioc;
-using Teleopti.Ccc.Web.Areas.MyTime.Core.IoC;
-using Teleopti.Ccc.Web.Areas.Outbound.core.IoC;
-using Teleopti.Ccc.Web.Areas.PerformanceTool.Core.IoC;
-using Teleopti.Ccc.Web.Areas.ResourcePlanner;
-using Teleopti.Ccc.Web.Areas.Rta;
-using Teleopti.Ccc.Web.Areas.SeatPlanner.Core.IOC;
-using Teleopti.Ccc.Web.Areas.SSO.Core.IoC;
-using Teleopti.Ccc.Web.Areas.Start.Core.IoC;
-using Teleopti.Ccc.Web.Areas.Tenant.Core;
-using Teleopti.Ccc.Web.Broker;
-using Teleopti.Ccc.Web.Core.Hangfire;
-using Teleopti.Ccc.Web.Core.RequestContext.Initialize;
-using Teleopti.Ccc.Web.Core.Startup;
-using Teleopti.Ccc.Web.Areas.People.Core.IoC;
-using Module = Autofac.Module;
 
 namespace Teleopti.Ccc.Web.Core.IoC
 {
@@ -57,58 +25,8 @@ namespace Teleopti.Ccc.Web.Core.IoC
 		{
 			base.Load(builder);
 
-			builder.RegisterApiControllers(typeof(WebAppModule).Assembly).ApplyAspects();
-			builder.RegisterControllers(typeof(WebAppModule).Assembly).ApplyAspects();
-			builder.RegisterHubs(typeof(WebAppModule).Assembly).ApplyAspects();
-
-			if (_httpConfiguration != null)
-				builder.RegisterWebApiFilterProvider(_httpConfiguration);
-			builder.RegisterModule(new AutofacWebTypesModule());
-			builder.RegisterFilterProvider();
-
-			builder.RegisterModule(new BootstrapperModule(_configuration));
-
 			builder.RegisterModule(new CommonModule(_configuration));
-
-			builder.RegisterModule<WebModule>();
-			builder.RegisterModule(new MyTimeAreaModule(_configuration));
-			builder.RegisterModule<SSOAreaModule>();
-			builder.RegisterModule<StartAreaModule>();
-			builder.RegisterModule(new AnywhereAreaModule(_configuration));
-			
-			builder.RegisterModule<PerformanceToolAreaModule>();
-			builder.RegisterModule<ForecastingAreaModule>();
-			builder.RegisterModule(new ResourcePlannerModule(_configuration));
-
-			builder.RegisterModule(new HangfireModule(_configuration));
-
-			builder.RegisterModule<ResourceHandlerModule>();
-
-			builder.RegisterType<WebRequestPrincipalContext>().As<ICurrentPrincipalContext>().SingleInstance();
-
-			builder.RegisterModule(new RuleSetModule(_configuration, false));
-			builder.RegisterModule(new AuthenticationCachedModule(_configuration));
-
-			builder.RegisterModule(new RtaAreaModule(_configuration));
-			builder.RegisterModule(new MartAreaModule(_configuration));
-
-			builder.RegisterModule<ShiftTradeModule>();
-			builder.RegisterModule<NotificationModule>();
-
-			builder.RegisterModule<CommandDispatcherModule>();
-			builder.RegisterModule<CommandHandlersModule>();
-			builder.RegisterType<EventsMessageSender>().As<IMessageSender>().SingleInstance();
-
-			builder.RegisterType<NumberOfAgentsInSiteReader>().As<INumberOfAgentsInSiteReader>().SingleInstance();
-			builder.RegisterType<NumberOfAgentsInTeamReader>().As<INumberOfAgentsInTeamReader>().SingleInstance();
-			builder.RegisterType<SiteAdherenceAggregator>().As<ISiteAdherenceAggregator>().SingleInstance();
-			builder.RegisterType<TeamAdherenceAggregator>().As<ITeamAdherenceAggregator>().SingleInstance();
-
-			builder.RegisterModule(new ConfigurationSettingsReader());
-			builder.RegisterModule(new TenantModule(_configuration));
-			builder.RegisterModule<SeatPlannerAreaModule>();
-			builder.RegisterModule<OutboundAreaModule>();
-			builder.RegisterModule<PeopleAreaModule>();
+			builder.RegisterModule(new WebModule(_configuration, _httpConfiguration));
 		}
 	}
 }
