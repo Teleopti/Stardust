@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.Aop;
@@ -6,39 +7,44 @@ using Teleopti.Ccc.Domain.Aop.Core;
 
 namespace Teleopti.Ccc.Infrastructure.Aop
 {
-	public class LogAspect : ILogAspect
+	public class InfoLogAspect : ILogAspect
 	{
 		private readonly ILogManagerWrapper _logManagerWrapper;
 
-		public LogAspect(ILogManagerWrapper logManagerWrapper)
+		public InfoLogAspect(ILogManagerWrapper logManagerWrapper)
 		{
 			_logManagerWrapper = logManagerWrapper;
 		}
 
 		public void OnBeforeInvocation(IInvocationInfo invocation)
 		{
-			var type = invocation.TargetType;
-			var logger = _logManagerWrapper.GetLogger(type);
+			var logger = _logManagerWrapper.GetLogger(invocation.TargetType);
 			if (!logger.IsInfoEnabled)
 				return;
-			logger.Info(type + "." + invocation.Method.Name + "(" + string.Join(", ", getParameterAndArgument(invocation)) + ")");
+			logger.Info(invocation.Method.Name + "(" + string.Join(", ", getParametersAndArguments(invocation)) + ")");
 		}
 
-		private static IEnumerable<string> getParameterAndArgument(IInvocationInfo invocation)
+		private static IEnumerable<string> getParametersAndArguments(IInvocationInfo invocation)
 		{
 			return 
 				from @param in invocation.Method.GetParameters()
 				let pos = @param.Position
 				let argument = invocation.Arguments[pos]
-				let argumentValue = formatObject(argument)
+				let argumentValue = formatValue(argument)
 				select @param.Name + ": " + argumentValue;
 		}
 
-		private static object formatObject(object argument)
+		private static object formatValue(object argument)
 		{
-			if (argument != null && (argument as Array) != null)
+			if (argument == null) 
+				return "null";
+			if ((argument as Array) != null)
 				return "Count = " + ((Array) argument).Length;
-			return argument ?? "null";
+			if ((argument as IList) != null)
+				return "Count = " + ((IList) argument).Count;
+			if (argument.GetType().IsGenericType)
+				return "Enumerable";
+			return argument;
 		}
 
 		public void OnAfterInvocation(Exception exception, IInvocationInfo invocation)
@@ -47,8 +53,7 @@ namespace Teleopti.Ccc.Infrastructure.Aop
 			var logger = _logManagerWrapper.GetLogger(type);
 			if (!logger.IsInfoEnabled || invocation.Method.ReturnType == typeof(void))
 				return;
-
-			logger.Info(" - Result : " + formatObject(invocation.ReturnValue));
+			logger.Info("Result : " + formatValue(invocation.ReturnValue));
 		}
 	}
 }

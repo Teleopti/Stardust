@@ -9,7 +9,8 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 		protected override void Load(ContainerBuilder builder)
 		{
 			builder.RegisterType<AspectInterceptor>();
-			builder.RegisterType<LogAspect>().As<ILogAspect>();
+			builder.RegisterType<InfoLogAspect>().As<ILogAspect>();
+			builder.RegisterType<LogManagerWrapper>().As<ILogManagerWrapper>();
 		}
 	}
 }

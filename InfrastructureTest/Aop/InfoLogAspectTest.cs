@@ -1,18 +1,19 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using Autofac;
 using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.Aop;
-using Teleopti.Ccc.DomainTest.Aop.TestDoubles;
 using Teleopti.Ccc.Infrastructure.Aop;
+using Teleopti.Ccc.InfrastructureTest.Aop.TestDoubles;
 using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.TestCommon.IoC;
 
-namespace Teleopti.Ccc.DomainTest.Aop
+namespace Teleopti.Ccc.InfrastructureTest.Aop
 {
 	[IoCTest]
-	public class InfoLogAttributeTest : IRegisterInContainer
+	public class InfoLogAspectTest : IRegisterInContainer
 	{
 		public void RegisterInContainer(ContainerBuilder builder, IIocConfiguration configuration)
 		{
@@ -33,13 +34,13 @@ namespace Teleopti.Ccc.DomainTest.Aop
 
 			Logger.InfoMessage.Should().Not.Be.Null();
 		}
-		
+
 		[Test]
-		public void ShouldLogUnproxiedClassName()
+		public void ShouldNotLogClassName_AlreadyHandledInLog4Net()
 		{
 			Service.DoesSomething(null);
 
-			Logger.InfoMessage.Should().Contain("Service.DoesSomething");
+			Logger.InfoMessage.Should().Not.Contain("Service");
 		}
 
 		[Test]
@@ -120,25 +121,42 @@ namespace Teleopti.Ccc.DomainTest.Aop
 		[Test]
 		public void ShouldLogReturnValue()
 		{
-			Service.DoesSomethingWithIntReturned();
+			Service.ReturnsInt();
 
 			Logger.InfoMessage.Should().Contain("Result : 1");
 		}
 
 		[Test]
+		public void ShouldLogReturnValueNull()
+		{
+			Service.ReturnsNullString();
+
+			Logger.InfoMessage.Should().Contain("Result : null");
+		}
+
+		[Test]
 		public void ShouldLogEnumerableReturnCount()
 		{
-			Service.DoesSomethingWithEnumerableReturned();
+			Service.ReturnsArrayAsIEnumerable();
 
 			Logger.InfoMessage.Should().Contain("Result : Count = 1");
 		}
 
-		[Test]
-		public void ShouldLogReturnValueNull()
-		{
-			Service.DoesSomethingAndReturnsNull();
 
-			Logger.InfoMessage.Should().Contain("Result : null");
+		[Test]
+		public void ShouldLogSomethingReadableWhenReturningIEnumerable()
+		{
+			Service.ReturnsIEnumerable();
+
+			Logger.InfoMessage.Should().Contain("Result : Enumerable");
+		}
+		
+		[Test]
+		public void ShouldLogEnumerableReturnCountFromList()
+		{
+			Service.ReturnsListAsIEnumerable();
+
+			Logger.InfoMessage.Should().Contain("Result : Count = 3");
 		}
 	}
 
@@ -175,19 +193,31 @@ namespace Teleopti.Ccc.DomainTest.Aop
 		}
 
 		[InfoLog]
-		public virtual int DoesSomethingWithIntReturned()
+		public virtual int ReturnsInt()
 		{
 			return 1;
 		}
 		
 		[InfoLog]
-		public virtual IEnumerable<int> DoesSomethingWithEnumerableReturned()
+		public virtual IEnumerable<int> ReturnsArrayAsIEnumerable()
 		{
 			return new []{1};
 		}
+
+		[InfoLog]
+		public virtual IEnumerable<int> ReturnsIEnumerable()
+		{
+			return from i in Enumerable.Range(0, 10) select i;
+		}
+
+		[InfoLog]
+		public virtual IEnumerable<int> ReturnsListAsIEnumerable()
+		{
+			return new List<int>{1,2,3};
+		}
 		
 		[InfoLog]
-		public virtual string DoesSomethingAndReturnsNull()
+		public virtual string ReturnsNullString()
 		{
 			return null;
 		}

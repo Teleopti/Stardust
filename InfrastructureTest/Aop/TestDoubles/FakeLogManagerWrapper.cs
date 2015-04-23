@@ -2,7 +2,7 @@
 using log4net;
 using Teleopti.Ccc.Domain.Aop;
 
-namespace Teleopti.Ccc.DomainTest.Aop.TestDoubles
+namespace Teleopti.Ccc.InfrastructureTest.Aop.TestDoubles
 {
 	public class FakeLogManagerWrapper : ILogManagerWrapper
 	{
