@@ -1,10 +1,9 @@
-﻿using System;
-using System.Threading;
+﻿using System.Threading;
 using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Web.Broker;
 
-namespace Teleopti.Ccc.WebTest.Core.MessageBroker
+namespace Teleopti.Ccc.WebTest.Core.MessageBroker.LegacyTests
 {
 	[TestFixture]
 	public class ActionThrottleTest

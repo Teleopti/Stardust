@@ -5,9 +5,8 @@ using SharpTestsEx;
 using Teleopti.Ccc.Web.Broker;
 using Teleopti.Ccc.WebTest.Areas.Anywhere.Hubs;
 using Teleopti.Interfaces.MessageBroker;
-using log4net;
 
-namespace Teleopti.Ccc.WebTest.Core.MessageBroker
+namespace Teleopti.Ccc.WebTest.Core.MessageBroker.LegacyTests
 {
 	[TestFixture]
 	[Ignore]

@@ -7,7 +7,7 @@ using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.Web.Core.MessageBroker;
 using Teleopti.Interfaces.MessageBroker;
 
-namespace Teleopti.Ccc.WebTest.Core.MessageBroker
+namespace Teleopti.Ccc.WebTest.Core.MessageBroker.LegacyTests
 {
 	[TestFixture]
 	public class SubscriptionFillerTest
