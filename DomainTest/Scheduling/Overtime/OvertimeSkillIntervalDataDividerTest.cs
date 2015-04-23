@@ -119,7 +119,18 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Overtime
 			Assert.AreEqual(0, result.Count);
 		}
 
-        private static OvertimeSkillIntervalData createSkillIntervalData(int startMin, int endMin, double relativeDifference)
+	    [Test]
+	    public void ShouldHandle60MinutesInterval()
+	    {
+			_skillIntervalDataList = new List<IOvertimeSkillIntervalData>();
+			_skillIntervalDataList.Add(createSkillIntervalData(0, 60, 0.8));
+
+			var skillIntervalData = _target.SplitSkillIntervalData(_skillIntervalDataList, 60);
+
+			Assert.AreEqual(1, skillIntervalData.Count);
+	    }
+
+	    private static OvertimeSkillIntervalData createSkillIntervalData(int startMin, int endMin, double relativeDifference)
         {
             var startDateTime = new DateTime(2001, 01, 01, 8, 0, 0).ToUniversalTime();
             return new OvertimeSkillIntervalData(new DateTimePeriod(startDateTime.AddMinutes(startMin), startDateTime.AddMinutes(endMin)), 0, 0);

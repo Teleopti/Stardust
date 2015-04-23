@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Interfaces.Domain;
 
@@ -16,11 +17,13 @@ namespace Teleopti.Ccc.Domain.Scheduling.Overtime
             var resultingskillIntervalDataList = new List<IOvertimeSkillIntervalData>();
             if (skillIntervalDataList != null && skillIntervalDataList.Count > 0)
             {
-                var modDiffInMin = (skillIntervalDataList[0].Period.EndDateTime.Minute -
-                                    skillIntervalDataList[0].Period.StartDateTime.Minute) % resolution;
 
-                int totallDiffInMin = (skillIntervalDataList[0].Period.EndDateTime.Minute -
-                                       skillIntervalDataList[0].Period.StartDateTime.Minute) / resolution;
+				var modDiffInMin = getElapsedTime(skillIntervalDataList[0].Period.EndDateTime.Ticks,
+													  skillIntervalDataList[0].Period.StartDateTime.Ticks) % resolution;
+
+				int totallDiffInMin = (int)(getElapsedTime(skillIntervalDataList[0].Period.EndDateTime.Ticks,
+																  skillIntervalDataList[0].Period.StartDateTime.Ticks) / resolution);
+
                 if (modDiffInMin != 0)
                 {
                     //split the interval into to 30 min as the interval length is 15 and the resolution is 10
@@ -39,25 +42,33 @@ namespace Teleopti.Ccc.Domain.Scheduling.Overtime
 
                     }
                     skillIntervalDataList = aggregatedList;
-                    totallDiffInMin = (skillIntervalDataList[0].Period.EndDateTime.Minute -
-                                       skillIntervalDataList[0].Period.StartDateTime.Minute) / resolution;
+					totallDiffInMin = (int)(getElapsedTime(skillIntervalDataList[0].Period.EndDateTime.Ticks,
+																  skillIntervalDataList[0].Period.StartDateTime.Ticks) / resolution);
                 }
-                foreach (var skillIntervalItem in skillIntervalDataList)
-                {
-                    var startPeriod = skillIntervalItem.Period.StartDateTime;
-                    for (int j = 0; j < totallDiffInMin; j++)
-                    {
-                        resultingskillIntervalDataList.Add(
-                            new OvertimeSkillIntervalData(new DateTimePeriod(startPeriod, startPeriod.AddMinutes(resolution)),
-                                                  skillIntervalItem.ForecastedDemand, skillIntervalItem.CurrentDemand));
-                        startPeriod = startPeriod.AddMinutes(resolution);
-                    }
-                }
-            }
+				foreach (var skillIntervalItem in skillIntervalDataList)
+				{
+					var startPeriod = skillIntervalItem.Period.StartDateTime;
+					for (int j = 0; j < totallDiffInMin; j++)
+					{
 
+						resultingskillIntervalDataList.Add(
+							new OvertimeSkillIntervalData(new DateTimePeriod(startPeriod, startPeriod.AddMinutes(resolution)),
+                                                  skillIntervalItem.ForecastedDemand, skillIntervalItem.CurrentDemand));
+						startPeriod = startPeriod.AddMinutes(resolution);
+					}
+				}
+
+            }
 
             return resultingskillIntervalDataList;
         }
+
+		private double getElapsedTime(long ticksEnd, long ticksStart)
+		{
+			long elapsedTicks = ticksEnd - ticksStart;
+			var elapsedSpan = new TimeSpan(elapsedTicks);
+			return elapsedSpan.TotalMinutes;
+		}
 
         private static IOvertimeSkillIntervalData aggregateTwoIntervals(IOvertimeSkillIntervalData overtimeSkillIntervalData1, IOvertimeSkillIntervalData overtimeSkillIntervalData2)
         {
