@@ -59,7 +59,7 @@ namespace Teleopti.Analytics.Portal
 						// Win user could not be validated in db. Can use Forms login instead.
 						//not show this when user has logged out
 						if (!loggedOut)
-						_labelInfo.Text = string.Concat(Resources.AuthenticationFailedForUser,   //"xxAuthentication failed for user"
+						labelInfo.Text = string.Concat(Resources.AuthenticationFailedForUser,   //"xxAuthentication failed for user"
 														" '",
 														winUser,
 														"'. ",

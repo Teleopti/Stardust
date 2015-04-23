@@ -22,13 +22,13 @@ namespace Teleopti.Analytics.Portal {
         protected global::System.Web.UI.HtmlControls.HtmlForm form1;
         
         /// <summary>
-        /// _labelInfo control.
+        /// labelInfo control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Label _labelInfo;
+        protected global::System.Web.UI.WebControls.Label labelInfo;
         
         /// <summary>
         /// Login1 control.

@@ -11,7 +11,7 @@
 <body >
     <form id="form1" runat="server" >  
 		 <div align="center" style="width: 100%; min-height: 50px;">
-            <asp:Label ID="_labelInfo" runat="server" CssClass="TechnicalDetailHeader" EnableViewState="false"></asp:Label>
+            <asp:Label ID="labelInfo" runat="server" CssClass="TechnicalDetailHeader" EnableViewState="false"></asp:Label>
 		</div>   
 		<div style="width: 100%; padding-top: 200px" align="center">
 			<asp:Login DisplayRememberMe="false" TextBoxStyle="CssClass='LoginTextBox'" ID="Login1" SkinID="Login" runat="server" DestinationPageUrl="~/PmContainer.aspx"></asp:Login>
