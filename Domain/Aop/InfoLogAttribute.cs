@@ -1,7 +1,10 @@
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Text;
-using log4net;
 using Teleopti.Ccc.Domain.Aop.Core;
+using Teleopti.Ccc.Domain.Collection;
+using Teleopti.Ccc.Domain.Forecasting.Export;
 
 namespace Teleopti.Ccc.Domain.Aop
 {
@@ -33,57 +36,34 @@ namespace Teleopti.Ccc.Domain.Aop
 			var logger = _logManagerWrapper.GetLogger(type);
 			if (!logger.IsInfoEnabled)
 				return;
-			var arguments = getArguments(invocation);
-
-			logger.Info(type + "." + invocation.Method.Name + arguments);
+			logger.Info(type + "." + invocation.Method.Name + "(" + string.Join(", ", getParameterAndArgument(invocation)) + ")");
 		}
 
-		private static StringBuilder getArguments(IInvocationInfo invocation)
+		private static IEnumerable<string> getParameterAndArgument(IInvocationInfo invocation)
 		{
-			var arguments = new StringBuilder("(");
-			var parameters = invocation.Method.GetParameters();
-			for (var i = 0; i < parameters.Length; i++)
-			{
-				if (i > 0)
-					arguments.Append(", ");
-				var argument = invocation.Arguments[i];
-				if (argument!= null && (argument as Array) != null)
-					arguments.Append(parameters[i] + ": Count = " + ((Array) argument).Length);
-				else
-					arguments.Append(parameters[i] + ":" + argument);
-			}
-			arguments.Append(")");
-			return arguments;
+			return 
+				from @param in invocation.Method.GetParameters()
+				let pos = @param.Position
+				let argument = invocation.Arguments[pos]
+				let argumentValue = formatObject(argument)
+				select @param.Name + ": " + argumentValue;
+		}
+
+		private static object formatObject(object argument)
+		{
+			if (argument != null && (argument as Array) != null)
+				return "Count = " + ((Array) argument).Length;
+			return argument ?? "null";
 		}
 
 		public void OnAfterInvocation(Exception exception, IInvocationInfo invocation)
 		{
 			var type = invocation.TargetType;
 			var logger = _logManagerWrapper.GetLogger(type);
-			if (!logger.IsInfoEnabled)
+			if (!logger.IsInfoEnabled || invocation.Method.ReturnType == typeof(void))
 				return;
-			var result = new StringBuilder(type + "." + invocation.Method.Name);
-			var returnValue = invocation.ReturnValue;
-			if (returnValue != null && (returnValue as Array) != null)
-				result.Append(" Result:Count = " + ((Array) returnValue).Length);
-			else
-				result.Append(" Result:" + returnValue);
-			logger.Info(result);
-		}
-	}
 
-
-
-	public interface ILogManagerWrapper
-	{
-		ILog GetLogger(Type type);
-	}
-
-	public class LogManagerWrapper : ILogManagerWrapper
-	{
-		public ILog GetLogger(Type type)
-		{
-			return LogManager.GetLogger(type);
+			logger.Info(" - Result : " + formatObject(invocation.ReturnValue));
 		}
 	}
 }

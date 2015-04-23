@@ -73,6 +73,14 @@ namespace Teleopti.Ccc.DomainTest.Aop
 		}
 
 		[Test]
+		public void ShouldLogNullWhenArgumentIsNull()
+		{
+			Service.DoesSomething(null);
+
+			Logger.InfoMessage.Should().Contain("null");
+		}
+
+		[Test]
 		public void ShouldLogValueOfAllarguments()
 		{
 			Service.DoesSomethingWithMultipleArguments("some cool string", 599);
@@ -88,7 +96,7 @@ namespace Teleopti.Ccc.DomainTest.Aop
 
 			Logger.InfoMessage.Should().Contain("Count = 3");
 		}
-
+		
 		[Test]
 		public void ShouldLogCountOfIEnumerableIntArgument()
 		{
@@ -105,12 +113,16 @@ namespace Teleopti.Ccc.DomainTest.Aop
 			Logger.InfoMessage.Should().Contain("Count = 0");
 		}
 
+
+
+
+
 		[Test]
 		public void ShouldLogReturnValue()
 		{
 			Service.DoesSomethingWithIntReturned();
 
-			Logger.InfoMessage.Should().Contain("Result:1");
+			Logger.InfoMessage.Should().Contain("Result : 1");
 		}
 
 		[Test]
@@ -118,7 +130,15 @@ namespace Teleopti.Ccc.DomainTest.Aop
 		{
 			Service.DoesSomethingWithEnumerableReturned();
 
-			Logger.InfoMessage.Should().Contain("Result:Count = 1");
+			Logger.InfoMessage.Should().Contain("Result : Count = 1");
+		}
+
+		[Test]
+		public void ShouldLogReturnValueNull()
+		{
+			Service.DoesSomethingAndReturnsNull();
+
+			Logger.InfoMessage.Should().Contain("Result : null");
 		}
 	}
 
@@ -164,6 +184,12 @@ namespace Teleopti.Ccc.DomainTest.Aop
 		public virtual IEnumerable<int> DoesSomethingWithEnumerableReturned()
 		{
 			return new []{1};
+		}
+		
+		[InfoLog]
+		public virtual string DoesSomethingAndReturnsNull()
+		{
+			return null;
 		}
 	}
 }
