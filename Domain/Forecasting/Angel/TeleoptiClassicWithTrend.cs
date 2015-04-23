@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Interfaces.Domain;
 
@@ -20,7 +21,7 @@ namespace Teleopti.Ccc.Domain.Forecasting.Angel
 			var averageTasks = forecastWithoutTrend.Average(x => x.Tasks);
 			foreach (var forecastingTarget in forecastWithoutTrend)
 			{
-				forecastingTarget.Tasks += forecastingTarget.CurrentDate.Subtract(LinearTrend.StartDate).Days * trend.Slope + trend.Intercept - averageTasks;
+				forecastingTarget.Tasks = Math.Max(0, forecastingTarget.Tasks + forecastingTarget.CurrentDate.Subtract(LinearTrend.StartDate).Days * trend.Slope + trend.Intercept - averageTasks);
 			}
 			return forecastWithoutTrend;
 		}

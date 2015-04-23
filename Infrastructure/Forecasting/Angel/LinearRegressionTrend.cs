@@ -14,8 +14,11 @@ namespace Teleopti.Ccc.Infrastructure.Forecasting.Angel
 			var ylist = new List<double>();
 			foreach (var taskOwner in historicalData.TaskOwnerDayCollection)
 			{
-				xlist.Add(taskOwner.CurrentDate.Subtract(LinearTrend.StartDate).Days);
-				ylist.Add(taskOwner.TotalStatisticCalculatedTasks);
+				if (taskOwner.TotalStatisticCalculatedTasks > 0)
+				{
+					xlist.Add(taskOwner.CurrentDate.Subtract(LinearTrend.StartDate).Days);
+					ylist.Add(taskOwner.TotalStatisticCalculatedTasks);
+				}
 			}
 
 			if (xlist.Count < 2 || ylist.Count < 2)

@@ -17,6 +17,7 @@ namespace Teleopti.Ccc.DomainTest.Forecasting.Angel
 		private TaskOwnerPeriod historicalData;
 		private double _averageTasks;
 		private LinearTrend linearTrend;
+		private ILinearRegressionTrend _linearRegressionTrend;
 
 		[SetUp]
 		public void Setup()
@@ -35,19 +36,22 @@ namespace Teleopti.Ccc.DomainTest.Forecasting.Angel
 
 			_averageTasks = historicalData.TotalStatisticCalculatedTasks / historicalData.TaskOwnerDayCollection.Count;
 
-			var linearRegressionTrend = MockRepository.GenerateMock<ILinearRegressionTrend>();
-			linearTrend = new LinearTrend
-			{
-				Slope = 1,
-				Intercept = 2
-			};
-			linearRegressionTrend.Stub(x => x.CalculateTrend(historicalData)).Return(linearTrend);
-			target = new TeleoptiClassicWithTrend(indexVolumes, linearRegressionTrend);
+			_linearRegressionTrend = MockRepository.GenerateMock<ILinearRegressionTrend>();
+			
+			target = new TeleoptiClassicWithTrend(indexVolumes, _linearRegressionTrend);
 		}
 
 		[Test]
 		public void ShouldForecastTasksWithTrend()
 		{
+
+			linearTrend = new LinearTrend
+			{
+				Slope = 1,
+				Intercept = 2
+			};
+			_linearRegressionTrend.Stub(x => x.CalculateTrend(historicalData)).Return(linearTrend);
+
 			const double indexMonth = 1d;
 			const double indexWeek = 1.1d;
 			const double indexDay = 1.2d;
@@ -58,6 +62,30 @@ namespace Teleopti.Ccc.DomainTest.Forecasting.Angel
 			var result = target.Forecast(historicalData, new DateOnlyPeriod(new DateOnly(2014, 1, 1), new DateOnly(2014, 1, 1)));
 			var expected = tasks + linearTrend.Slope*new DateOnly(2014, 1, 1).Subtract(LinearTrend.StartDate).Days +
 						   linearTrend.Intercept - tasks;
+			result.Single().Tasks.Should().Be.EqualTo(Math.Round(expected, 4));
+		}
+
+		[Test]
+		public void ShouldGetZeroIfForecastTasksIsNegative()
+		{
+			linearTrend = new LinearTrend
+			{
+				Slope = -1,
+				Intercept = 2
+			};
+			_linearRegressionTrend.Stub(x => x.CalculateTrend(historicalData)).Return(linearTrend);
+
+			const double indexMonth = 1d;
+			const double indexWeek = 1.1d;
+			const double indexDay = 1.2d;
+
+			const double totalIndex = indexMonth * indexWeek * indexDay;
+			var tasks = totalIndex * _averageTasks;
+
+			var result = target.Forecast(historicalData, new DateOnlyPeriod(new DateOnly(2014, 1, 1), new DateOnly(2014, 1, 1)));
+			var expected = tasks + linearTrend.Slope * new DateOnly(2014, 1, 1).Subtract(LinearTrend.StartDate).Days +
+						   linearTrend.Intercept - tasks;
+			expected = Math.Max(0, expected);
 			result.Single().Tasks.Should().Be.EqualTo(Math.Round(expected, 4));
 		}
 	}
