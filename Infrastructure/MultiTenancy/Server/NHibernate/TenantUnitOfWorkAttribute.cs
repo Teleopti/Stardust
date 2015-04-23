@@ -4,7 +4,7 @@ namespace Teleopti.Ccc.Infrastructure.MultiTenancy.Server.NHibernate
 {
 	public class TenantUnitOfWorkAttribute : ResolvedAspectAttribute
 	{
-		public TenantUnitOfWorkAttribute() : base(typeof(TenantUnitOfWorkAspect))
+		public TenantUnitOfWorkAttribute() : base(typeof(ITenantUnitOfWorkAspect))
 		{
 		}
 	}

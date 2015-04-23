@@ -3,7 +3,7 @@ using Teleopti.Ccc.Domain.Aop.Core;
 
 namespace Teleopti.Ccc.Infrastructure.MultiTenancy.Server.NHibernate
 {
-	public class TenantUnitOfWorkAspect : IAspect
+	public class TenantUnitOfWorkAspect : ITenantUnitOfWorkAspect
 	{
 		private readonly ITenantUnitOfWorkManager _tenantUnitOfWorkManager;
 
