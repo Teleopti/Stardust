@@ -142,6 +142,7 @@
     <Compile Include="AgentInfo\Requests\ShiftTradeRequestIsAfterLoadedPeriodSpecification.cs" />
     <Compile Include="AgentInfo\Requests\ShiftTradeStatusExtensions.cs" />
     <Compile Include="Aop\Core\IInvocationInfo.cs" />
+    <Compile Include="Aop\ILogAspect.cs" />
     <Compile Include="Aop\ILogManagerWrapper.cs" />
     <Compile Include="Aop\InfoLogAttribute.cs" />
     <Compile Include="Aop\IUnitOfWorkAspect.cs" />
