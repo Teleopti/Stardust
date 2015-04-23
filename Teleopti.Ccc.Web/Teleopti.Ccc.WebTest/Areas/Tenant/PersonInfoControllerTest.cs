@@ -45,7 +45,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Tenant
 		}
 
 		[Test]
-		public void ShouldPersistPersonInfo()
+		public void ShouldNotReturnErrors()
 		{
 			var personInfoModel = new PersonInfoModel();
 			var personInfo = new PersonInfo();
@@ -67,16 +67,46 @@ namespace Teleopti.Ccc.WebTest.Areas.Tenant
 		}
 
 		[Test]
-		public void ShouldFailPersistingPersonInfoIfMapperThrows()
+		public void ShouldHandlePasswordStrengthException()
 		{
 			var personInfoModel = new PersonInfoModel();
 			var persister = MockRepository.GenerateMock<IPersistPersonInfo>();
 			var mapper = MockRepository.GenerateMock<IPersonInfoMapper>();
-			mapper.Expect(x => x.Map(personInfoModel)).Throw(new PasswordStrengthException());
+			mapper.Stub(x => x.Map(personInfoModel)).Throw(new PasswordStrengthException());
 
 			var target = new PersonInfoController(persister, mapper, null);
 			var result = (PersistPersonInfoResult)target.PersistNew(personInfoModel).Data;
 			result.PasswordStrengthIsValid.Should().Be.False();
+		}
+
+		[Test]
+		public void ShouldHandleDuplicateApplicationLogonNameException()
+		{
+			var personInfoModel = new PersonInfoModel();
+			var personInfo = new PersonInfo();
+			var persister = MockRepository.GenerateMock<IPersistPersonInfo>();
+			var mapper = MockRepository.GenerateMock<IPersonInfoMapper>();
+			mapper.Stub(x => x.Map(personInfoModel)).Return(personInfo);
+			persister.Stub(x => x.Persist(personInfo)).Throw(new DuplicateApplicationLogonNameException());
+
+			var target = new PersonInfoController(persister, mapper, null);
+			var result = (PersistPersonInfoResult)target.PersistNew(personInfoModel).Data;
+			result.ApplicationLogonNameIsValid.Should().Be.False();
+		}
+
+		[Test]
+		public void ShouldHandleDuplicateIdentityException()
+		{
+			var personInfoModel = new PersonInfoModel();
+			var personInfo = new PersonInfo();
+			var persister = MockRepository.GenerateMock<IPersistPersonInfo>();
+			var mapper = MockRepository.GenerateMock<IPersonInfoMapper>();
+			mapper.Stub(x => x.Map(personInfoModel)).Return(personInfo);
+			persister.Stub(x => x.Persist(personInfo)).Throw(new DuplicateIdentityException());
+
+			var target = new PersonInfoController(persister, mapper, null);
+			var result = (PersistPersonInfoResult)target.PersistNew(personInfoModel).Data;
+			result.IdentityIsValid.Should().Be.False();
 		}
 	}
 }

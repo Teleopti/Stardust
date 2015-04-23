@@ -38,6 +38,7 @@ namespace Teleopti.Ccc.Web.Areas.Tenant
 
 		[HttpPost]
 		//TODO: tenant rename to Persist when old method is gone
+		//TODO: tenant - change from returning an json object with errors to non 200 http error codes
 		public virtual JsonResult PersistNew(PersonInfoModel personInfoModel)
 		{
 			var ret = new PersistPersonInfoResult();
@@ -48,6 +49,14 @@ namespace Teleopti.Ccc.Web.Areas.Tenant
 			catch (PasswordStrengthException)
 			{
 				ret.PasswordStrengthIsValid = false;
+			}
+			catch (DuplicateApplicationLogonNameException)
+			{
+				ret.ApplicationLogonNameIsValid = false;
+			}
+			catch (DuplicateIdentityException)
+			{
+				ret.IdentityIsValid = false;
 			}
 			return Json(ret);
 		}
