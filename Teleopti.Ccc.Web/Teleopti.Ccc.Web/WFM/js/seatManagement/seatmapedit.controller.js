@@ -32,10 +32,9 @@
 		};
 
 		vm.addChosenImage = function (image) {
-			var sizeFromImagePreview = {
-				height: document.getElementById('image-preview').height,
-				width:document.getElementById('image-preview').width
-			};
+
+			var imagePreviewElement = document.getElementById('image-preview');
+			var sizeFromImagePreview = { height: imagePreviewElement.height, width: imagePreviewElement.width };
 			vm.showFileDialog = false;
 			editor.addImage(canvas(), image, sizeFromImagePreview);
 		};
@@ -46,8 +45,9 @@
 		};
 
 		vm.setChosenBackgroundImage = function (image) {
+			var imagePreviewElement = document.getElementById('image-preview');
 			vm.showFileDialog = false;
-			editor.setBackgroundImage(canvas(), image);
+			editor.setBackgroundImage(canvas(), image, imagePreviewElement);
 		};
 
 		vm.addLocation = function () {

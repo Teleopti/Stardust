@@ -192,8 +192,7 @@ angular.module('wfm.seatMap')
 			});
 		};
 
-		function setBackgroundImage(canvas, image) {
-
+		function setBackgroundImage(canvas, image, imagePreviewElement) {
 
 			if (image == null) {
 				canvas.backgroundImage = 0;
@@ -202,6 +201,11 @@ angular.module('wfm.seatMap')
 			}
 
 			fabric.Image.fromObject(image, function (img) {
+				img.set({
+					height: imagePreviewElement.naturalHeight,
+					width: imagePreviewElement.naturalWidth
+				});
+
 				utils.scaleImage(canvas, img);
 				canvas.setBackgroundImage(img);
 				canvas.centerObject(img);
