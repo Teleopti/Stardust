@@ -6,6 +6,7 @@ using System.Linq;
 using NUnit.Framework;
 using Rhino.Mocks;
 using SharpTestsEx;
+using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
@@ -175,6 +176,52 @@ namespace Teleopti.Ccc.WebTest.Core.Asm.Mapping
 			const int numberOfUnreadMessages = 11;
 			var res = target.Map(new DateTime(2020, 3, 29), new[] { scheduleFactory.ScheduleDayStub() }, numberOfUnreadMessages);
 			res.UnreadMessageCount.Should().Be.EqualTo(11);
+		}
+
+		[Test]
+		public void ShouldAheadStartMinutesSinceAsmZeroOneHourWhenDstStartWithinThisPeriod()
+		{
+			var layerOneStartTime = new DateTime(2015, 3, 28, 2, 0, 0, DateTimeKind.Utc);
+			var layerTwoStartTime = new DateTime(2015, 3, 29, 2, 0, 0, DateTimeKind.Utc);
+			var scheduleDay = scheduleFactory.ScheduleDayStub(new DateTime());
+			projectionProvider.Expect(p => p.Projection(scheduleDay)).Return(scheduleFactory.ProjectionStub(new[]
+											{
+												scheduleFactory.VisualLayerStub(new DateTimePeriod(layerOneStartTime, layerOneStartTime.AddHours(5))),
+												scheduleFactory.VisualLayerStub(new DateTimePeriod(layerTwoStartTime, layerTwoStartTime.AddHours(5)))
+											}
+			));
+
+			var asmZore = new DateTime(2015, 3, 28, 0, 0, 0);
+			userTimeZone.Expect(u => u.TimeZone()).Return(TimeZoneInfoFactory.StockholmTimeZoneInfo());
+			var stockholmTarget = new AsmViewModelMapper(projectionProvider, userTimeZone, loggedOnUser);
+
+			var res = stockholmTarget.Map(asmZore, new[] { scheduleDay }, 0);
+
+			res.Layers.First().StartMinutesSinceAsmZero.Should().Be.EqualTo(TimeZoneInfo.ConvertTimeFromUtc(layerOneStartTime, userTimeZone.TimeZone()).Subtract(asmZore).TotalMinutes);
+			res.Layers.Second().StartMinutesSinceAsmZero.Should().Be.EqualTo(TimeZoneInfo.ConvertTimeFromUtc(layerTwoStartTime, userTimeZone.TimeZone()).Subtract(asmZore).TotalMinutes-60);
+
+		}
+
+		[Test]
+		public void ShouldStartMinutesSinceAsmZeroDelayOneHourWhenDstEndWithinThisPeriod()
+		{
+			var layerOneStartTime = new DateTime(2015, 10, 24, 2, 0, 0, DateTimeKind.Utc);
+			var layerTwoStartTime = new DateTime(2015, 10, 25, 2, 0, 0, DateTimeKind.Utc);
+			var scheduleDay = scheduleFactory.ScheduleDayStub(new DateTime());
+			projectionProvider.Expect(p => p.Projection(scheduleDay)).Return(scheduleFactory.ProjectionStub(new[]
+											{
+												scheduleFactory.VisualLayerStub(new DateTimePeriod(layerOneStartTime, layerOneStartTime.AddHours(5))),
+												scheduleFactory.VisualLayerStub(new DateTimePeriod(layerTwoStartTime, layerTwoStartTime.AddHours(5)))
+											}
+			));
+			userTimeZone.Expect(u => u.TimeZone()).Return(TimeZoneInfoFactory.StockholmTimeZoneInfo());
+
+			var asmZore = new DateTime(2015, 10, 24, 0, 0, 0);
+			var stockholmTarget = new AsmViewModelMapper(projectionProvider, userTimeZone, loggedOnUser);
+			var res = stockholmTarget.Map(asmZore, new[] { scheduleDay }, 0);
+
+			res.Layers.First().StartMinutesSinceAsmZero.Should().Be.EqualTo(TimeZoneInfo.ConvertTimeFromUtc(layerOneStartTime, userTimeZone.TimeZone()).Subtract(asmZore).TotalMinutes);
+			res.Layers.Second().StartMinutesSinceAsmZero.Should().Be.EqualTo(TimeZoneInfo.ConvertTimeFromUtc(layerTwoStartTime, userTimeZone.TimeZone()).Subtract(asmZore).TotalMinutes+60);
 		}
 	}
 }
