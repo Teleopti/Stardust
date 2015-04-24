@@ -325,6 +325,13 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 			Navigation.GotoResourcePlanner();
 		}
 
+
+		[When(@"I view Permissions")]
+		public void WhenIViewPermissions()
+		{
+			TestControllerMethods.Logon();
+			Navigation.GotoPermissions();
+		}
 		[When(@"I view Real time adherence overview")]
 		public void WhenIViewRealTimeAdherenceOverview()
 		{

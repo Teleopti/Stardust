@@ -317,6 +317,12 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core.Navigation
 			GoToPage("wfm/#/resourceplanner");
 		}
 
+		public static void GotoPermissions()
+		{
+			GoToPage("wfm/#/permissions");
+		}
+
+
 		public static void GotoAnywhereRealTimeAdherenceOverview(Guid buId, Guid siteId)
 		{
 			GoToPage(
