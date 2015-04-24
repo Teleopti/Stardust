@@ -160,10 +160,24 @@ namespace Teleopti.Ccc.Infrastructure.Repositories.Analytics
 			}
 		}
 
-		public void InsertStageScheduleChangedServicebus(DateOnly date, Guid personId, Guid scenarioId, Guid bussinesUnitId,
-			int dataSourceId, DateTime datasourceUpdateDate)
+		public void InsertStageScheduleChangedServicebus(DateOnly date, Guid personId, Guid scenarioId, Guid businessUnitId, DateTime datasourceUpdateDate)
 		{
-			
+			using (IStatelessUnitOfWork uow = statisticUnitOfWorkFactory().CreateAndOpenStatelessUnitOfWork())
+			{
+				uow.Session().CreateSQLQuery(@"exec mart.etl_stage_schedule_day_changed_servicebus_insert 
+												@schedule_date_local=:Date,
+												@person_code=:PersonId,
+												@scenario_id=:ScenarioId,
+												@business_unit_code=:BusinessUnitId,
+												@datasource_update_date=:DatasourceUpdateDate")
+
+					.SetDateTime("Date",date.Date)
+					.SetGuid("PersonId", personId)
+					.SetGuid("ScenarioId", scenarioId)
+					.SetGuid("BusinessUnitId", businessUnitId)
+					.SetDateTime("DatasourceUpdateDate", datasourceUpdateDate)
+					.ExecuteUpdate();
+			}
 		}
 
 		public IList<KeyValuePair<DateOnly, int>> Dates()

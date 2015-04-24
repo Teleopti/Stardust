@@ -20,7 +20,7 @@ namespace Teleopti.Interfaces.Infrastructure.Analytics
 		IList<IAnalyticsShiftLength> ShiftLengths();
 		int ShiftLengthId(int shiftLength);
 
-		void InsertStageScheduleChangedServicebus(DateOnly date, Guid personId, Guid scenarioId, Guid bussinesUnitId,
-			int dataSourceId, DateTime datasourceUpdateDate);
+		void InsertStageScheduleChangedServicebus(DateOnly date, Guid personId, Guid scenarioId, Guid businessUnitId,
+			DateTime datasourceUpdateDate);
 	}
 }

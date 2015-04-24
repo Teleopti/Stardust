@@ -74,7 +74,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Anal
 				}
 
 				_analyticsScheduleRepository.InsertStageScheduleChangedServicebus(new DateOnly(scheduleDay.Date), @event.PersonId,
-					@event.ScenarioId, @event.BusinessUnitId, 1, @event.Timestamp);
+					@event.ScenarioId, @event.BusinessUnitId, DateTime.Now);
 			}
 		}
 
