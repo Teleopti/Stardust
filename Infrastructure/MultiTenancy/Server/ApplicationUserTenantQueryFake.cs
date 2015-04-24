@@ -8,7 +8,8 @@ namespace Teleopti.Ccc.Infrastructure.MultiTenancy.Server
 
 		public PersonInfo Find(string username)
 		{
-			return data[username];
+			PersonInfo ret;
+			return data.TryGetValue(username, out ret) ? ret : null;
 		}
 
 		public void Add(PersonInfo personInfo)
