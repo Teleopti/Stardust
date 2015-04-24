@@ -10,8 +10,6 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 	{
 		private ExtraPreferencesPersonalSettings _target;
 		private IList<GroupPageLight> _groupPages;
-		private string _groupPage1Key;
-		private string _groupPage2Key;
 		private GroupPageLight _groupPage1;
 		private IExtraPreferences _extraPreferencesSource;
 		private IExtraPreferences _extraPreferencesTarget;
@@ -20,8 +18,6 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 	    [SetUp]
 		public void Setup()
 		{
-			_groupPage1Key = "Key1";
-			_groupPage2Key = "Key2";
 			_groupPage1 = new GroupPageLight();
 			
 			_groupPages = new List<GroupPageLight> { _groupPage1 };
