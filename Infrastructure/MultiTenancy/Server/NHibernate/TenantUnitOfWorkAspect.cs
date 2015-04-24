@@ -5,11 +5,11 @@ namespace Teleopti.Ccc.Infrastructure.MultiTenancy.Server.NHibernate
 {
 	public class TenantUnitOfWorkAspect : ITenantUnitOfWorkAspect
 	{
-		private readonly ITenantUnitOfWorkManager _tenantUnitOfWorkManager;
+		private readonly ITenantUnitOfWork _tenantUnitOfWork;
 
-		public TenantUnitOfWorkAspect(ITenantUnitOfWorkManager tenantUnitOfWorkManager)
+		public TenantUnitOfWorkAspect(ITenantUnitOfWork tenantUnitOfWork)
 		{
-			_tenantUnitOfWorkManager = tenantUnitOfWorkManager;
+			_tenantUnitOfWork = tenantUnitOfWork;
 		}
 
 		public void OnBeforeInvocation(IInvocationInfo invocation)
@@ -20,11 +20,11 @@ namespace Teleopti.Ccc.Infrastructure.MultiTenancy.Server.NHibernate
 		{
 			if (exception == null)
 			{
-				_tenantUnitOfWorkManager.CommitAndDisposeCurrent();
+				_tenantUnitOfWork.CommitAndDisposeCurrent();
 			}
 			else
 			{
-				_tenantUnitOfWorkManager.CancelAndDisposeCurrent();
+				_tenantUnitOfWork.CancelAndDisposeCurrent();
 			}
 		}
 	}

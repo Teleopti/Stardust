@@ -38,9 +38,9 @@ namespace Teleopti.Ccc.Web.Areas.MultiTenancy.Core
 				var configReader = c.Resolve<IConfigReader>();
 				var connStringToTenant = configReader.ConnectionStrings[tenancyConnectionStringKey];
 				var connstringAsString = connStringToTenant == null ? null : connStringToTenant.ConnectionString;
-				return TenantUnitOfWorkManager.CreateInstanceForWeb(connstringAsString);
+				return TenantUnitOfWork.CreateInstanceForWeb(connstringAsString);
 			})
-				.As<ITenantUnitOfWorkManager>()
+				.As<ITenantUnitOfWork>()
 				.As<ICurrentTenantSession>()
 				.SingleInstance();
 			builder.RegisterType<TenantUnitOfWorkAspect>().As<ITenantUnitOfWorkAspect>().SingleInstance();

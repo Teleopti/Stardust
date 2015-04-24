@@ -7,28 +7,28 @@ using Environment = NHibernate.Cfg.Environment;
 
 namespace Teleopti.Ccc.Infrastructure.MultiTenancy.Server.NHibernate
 {
-	public class TenantUnitOfWorkManager : ITenantUnitOfWorkManager, ICurrentTenantSession, IDisposable
+	public class TenantUnitOfWork : ITenantUnitOfWork, ICurrentTenantSession, IDisposable
 	{
 		private ISessionFactory _sessionFactory;
 
-		private TenantUnitOfWorkManager()
+		private TenantUnitOfWork()
 		{
 		}
 
-		public static TenantUnitOfWorkManager CreateInstanceForTest(string connectionString)
+		public static TenantUnitOfWork CreateInstanceForTest(string connectionString)
 		{
 			return createInstance(connectionString, "call");
 		}
 
-		public static TenantUnitOfWorkManager CreateInstanceForWeb(string connectionString)
+		public static TenantUnitOfWork CreateInstanceForWeb(string connectionString)
 		{
 			return createInstance(connectionString, "web");
 		}
 
-		private static TenantUnitOfWorkManager createInstance(string connectionString, string sessionContext)
+		private static TenantUnitOfWork createInstance(string connectionString, string sessionContext)
 		{
 			if(connectionString==null)
-				return new TenantUnitOfWorkManager();
+				return new TenantUnitOfWork();
 
 			var cfg = new Configuration()
 				.DataBaseIntegration(db =>
@@ -46,9 +46,9 @@ namespace Teleopti.Ccc.Infrastructure.MultiTenancy.Server.NHibernate
 				"Teleopti.Ccc.Infrastructure.MultiTenancy.Server.PersonInfo.hbm.xml",
 				"Teleopti.Ccc.Infrastructure.MultiTenancy.Server.Tenant_OldSchema.hbm.xml",
 				"Teleopti.Ccc.Infrastructure.MultiTenancy.Server.Tenant.hbm.xml"
-			}, typeof (TenantUnitOfWorkManager).Assembly);
+			}, typeof (TenantUnitOfWork).Assembly);
 
-			var ret = new TenantUnitOfWorkManager {_sessionFactory = cfg.BuildSessionFactory()};
+			var ret = new TenantUnitOfWork {_sessionFactory = cfg.BuildSessionFactory()};
 			return ret;
 		}
 

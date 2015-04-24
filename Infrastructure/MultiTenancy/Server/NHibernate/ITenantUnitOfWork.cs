@@ -1,6 +1,6 @@
 ﻿namespace Teleopti.Ccc.Infrastructure.MultiTenancy.Server.NHibernate
 {
-	public interface ITenantUnitOfWorkManager
+	public interface ITenantUnitOfWork
 	{
 		void CancelAndDisposeCurrent();
 		void CommitAndDisposeCurrent();

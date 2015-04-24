@@ -3,7 +3,7 @@ using Teleopti.Ccc.Infrastructure.MultiTenancy.Server.NHibernate;
 
 namespace Teleopti.Ccc.Infrastructure.MultiTenancy.Server
 {
-	public class TenantUnitOfWorkManagerFake : ITenantUnitOfWorkManager
+	public class TenantUnitOfWorkFake : ITenantUnitOfWork
 	{
 		private Exception _exceptionToThrow;
 

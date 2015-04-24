@@ -14,7 +14,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MultiTenancy
 	{
 		public ChangePasswordController Target;
 		public ApplicationUserTenantQueryFake ApplicationUserTenantQuery;
-		public TenantUnitOfWorkManagerFake TenantUnitOfWorkManager;
+		public TenantUnitOfWorkFake TenantUnitOfWork;
 
 		[Test, Ignore("not yet done")]
 		public void HappyPath()
@@ -44,7 +44,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MultiTenancy
 			
 			var ex = Assert.Throws<HttpException>(() => Target.Modify(model));
 			ex.GetHttpCode().Should().Be.EqualTo(HttpStatusCode.Forbidden);
-			TenantUnitOfWorkManager.WasCommitted.Should().Be.False();
+			TenantUnitOfWork.WasCommitted.Should().Be.False();
 		}
 	}
 }

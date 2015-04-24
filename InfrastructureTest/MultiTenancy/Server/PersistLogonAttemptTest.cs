@@ -13,7 +13,7 @@ namespace Teleopti.Ccc.InfrastructureTest.MultiTenancy.Server
 		[Test]
 		public void ShouldLogWhenPersonIdExists()
 		{
-			using (var tenantUowManager = TenantUnitOfWorkManager.CreateInstanceForTest(UnitOfWorkFactory.Current.ConnectionString))
+			using (var tenantUowManager = TenantUnitOfWork.CreateInstanceForTest(UnitOfWorkFactory.Current.ConnectionString))
 			{
 				var target = new PersistLogonAttempt(tenantUowManager);
 				var model = new LoginAttemptModel
@@ -40,7 +40,7 @@ namespace Teleopti.Ccc.InfrastructureTest.MultiTenancy.Server
 		[Test]
 		public void ShouldLogWhenPersonIdNotExists()
 		{
-			using (var tenantUowManager = TenantUnitOfWorkManager.CreateInstanceForTest(UnitOfWorkFactory.Current.ConnectionString))
+			using (var tenantUowManager = TenantUnitOfWork.CreateInstanceForTest(UnitOfWorkFactory.Current.ConnectionString))
 			{
 				var target = new PersistLogonAttempt(tenantUowManager);
 				var model = new LoginAttemptModel
