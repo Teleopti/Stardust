@@ -15,6 +15,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MultiTenancy
 		public ChangePasswordController Target;
 		public ApplicationUserTenantQueryFake ApplicationUserTenantQuery;
 		public TenantUnitOfWorkFake TenantUnitOfWork;
+		public CheckPasswordStrengthFake CheckPasswordStrength;
 
 		[Test, Ignore("not yet done")]
 		public void HappyPath()
@@ -43,6 +44,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MultiTenancy
 			ApplicationUserTenantQuery.Add(personInfo);
 
 			var ex = Assert.Throws<HttpException>(() => Target.Modify(model));
+
 			ex.GetHttpCode().Should().Be.EqualTo(HttpStatusCode.Forbidden);
 			TenantUnitOfWork.WasCommitted.Should().Be.False();
 		}
@@ -61,6 +63,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MultiTenancy
 			ApplicationUserTenantQuery.Add(personInfo);
 
 			var ex = Assert.Throws<HttpException>(() => Target.Modify(model));
+
 			ex.GetHttpCode().Should().Be.EqualTo(HttpStatusCode.Forbidden);
 			TenantUnitOfWork.WasCommitted.Should().Be.False();
 		}
@@ -77,6 +80,26 @@ namespace Teleopti.Ccc.WebTest.Areas.MultiTenancy
 			};
 			var personInfo = new PersonInfo();
 			personInfo.SetApplicationLogonCredentials(new CheckPasswordStrengthFake(), model.UserName, pw);
+
+			ApplicationUserTenantQuery.Add(personInfo);
+
+			var ex = Assert.Throws<HttpException>(() => Target.Modify(model));
+			ex.GetHttpCode().Should().Be.EqualTo(HttpStatusCode.BadRequest);
+			TenantUnitOfWork.WasCommitted.Should().Be.False();
+		}
+
+		[Test]
+		public void FailingPasswordStrengthShouldFailWith400()
+		{
+			CheckPasswordStrength.WillThrow();
+			var model = new ChangePasswordModel
+			{
+				UserName = RandomName.Make(),
+				OldPassword = RandomName.Make(),
+				NewPassword = RandomName.Make()
+			};
+			var personInfo = new PersonInfo();
+			personInfo.SetApplicationLogonCredentials(new CheckPasswordStrengthFake(), model.UserName, model.OldPassword);
 			ApplicationUserTenantQuery.Add(personInfo);
 
 			var ex = Assert.Throws<HttpException>(() => Target.Modify(model));
@@ -94,12 +117,12 @@ namespace Teleopti.Ccc.WebTest.Areas.MultiTenancy
 				NewPassword = RandomName.Make()
 			};
 			var personInfo = new PersonInfo();
-
 			personInfo.SetApplicationLogonCredentials(new CheckPasswordStrengthFake(), model.UserName, RandomName.Make());
 			ApplicationUserTenantQuery.Add(personInfo);
 
 			var invalidAttemptsBefore = personInfo.ApplicationLogonInfo.InvalidAttempts;
 			Assert.Throws<HttpException>(() => Target.Modify(model));
+
 			personInfo.ApplicationLogonInfo.InvalidAttempts.Should().Be.EqualTo(invalidAttemptsBefore + 1);
 		}
 	}

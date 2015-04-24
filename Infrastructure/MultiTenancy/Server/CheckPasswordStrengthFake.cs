@@ -1,20 +1,18 @@
-﻿using System;
-
-namespace Teleopti.Ccc.Infrastructure.MultiTenancy.Server
+﻿namespace Teleopti.Ccc.Infrastructure.MultiTenancy.Server
 {
 	public class CheckPasswordStrengthFake : ICheckPasswordStrength
 	{
-		private Exception _exceptionToThrow;
+		private bool willThrow;
 
 		public void Validate(string newPassword)
 		{
-			if (_exceptionToThrow != null)
-				throw _exceptionToThrow;
+			if (willThrow)
+				throw new PasswordStrengthException();
 		}
 
-		public void WillThrow(Exception exceptionToThrow)
+		public void WillThrow()
 		{
-			_exceptionToThrow = exceptionToThrow;
+			willThrow = true;
 		}
 	}
 }

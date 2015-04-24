@@ -44,7 +44,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MultiTenancy
 			var tenantName = RandomName.Make();
 			FindTenantByNameQuery.Add(new Tenant(tenantName));
 			var personInfoModel = new PersonInfoModel { Tenant = tenantName, ApplicationLogonName = RandomName.Make(), Password = RandomName.Make()};
-			CheckPasswordStrength.WillThrow(new PasswordStrengthException());
+			CheckPasswordStrength.WillThrow();
 
 			var result = Target.Persist(personInfoModel).Result<PersistPersonInfoResult>();
 
