@@ -1,10 +1,8 @@
 ﻿using System.Net;
 using System.Web;
-using System.Web.Http;
 using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Server;
-using Teleopti.Ccc.Infrastructure.MultiTenancy.Server.NHibernate;
 using Teleopti.Ccc.TestCommon.TestData;
 using Teleopti.Ccc.Web.Areas.MultiTenancy;
 using Teleopti.Ccc.Web.Areas.MultiTenancy.Model;
@@ -16,7 +14,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MultiTenancy
 	{
 		public ChangePasswordController Target;
 		public ApplicationUserTenantQueryFake ApplicationUserTenantQuery;
-		public TenantUnitOfWorkAspectFake TenantUnitOfWorkAspect;
+		public TenantUnitOfWorkManagerFake TenantUnitOfWorkManager;
 
 		[Test, Ignore("not yet done")]
 		public void HappyPath()
@@ -46,7 +44,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MultiTenancy
 			
 			var ex = Assert.Throws<HttpException>(() => Target.Modify(model));
 			ex.GetHttpCode().Should().Be.EqualTo(HttpStatusCode.Forbidden);
-			TenantUnitOfWorkAspect.CommitSucceded.Should().Be.False();
+			TenantUnitOfWorkManager.WasCommitted.Should().Be.False();
 		}
 	}
 }

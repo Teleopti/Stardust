@@ -13,11 +13,11 @@ namespace Teleopti.Ccc.WebTest.Areas.MultiTenancy
 		{
 			builder.RegisterModule(new WebModule(configuration, null));
 			builder.RegisterType<PersistPersonInfoFake>().As<IPersistPersonInfo>().AsSelf().SingleInstance();
-			builder.RegisterType<TenantUnitOfWorkAspectFake>().As<ITenantUnitOfWorkAspect>().AsSelf().SingleInstance();
 			builder.RegisterType<FindTenantByNameQueryFake>().As<IFindTenantByNameQuery>().AsSelf().SingleInstance();
 			builder.RegisterType<CheckPasswordStrengthFake>().As<ICheckPasswordStrength>().AsSelf().SingleInstance();
 			builder.RegisterType<DeletePersonInfoFake>().As<IDeletePersonInfo>().AsSelf().SingleInstance();
 			builder.RegisterType<ApplicationUserTenantQueryFake>().As<IApplicationUserTenantQuery>().AsSelf().SingleInstance();
+			builder.RegisterType<TenantUnitOfWorkManagerFake>().As<ITenantUnitOfWorkManager>().AsSelf().SingleInstance();
 		}
 	}
 }

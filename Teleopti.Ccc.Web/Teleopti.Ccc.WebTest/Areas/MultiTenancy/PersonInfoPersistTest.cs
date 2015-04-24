@@ -13,9 +13,9 @@ namespace Teleopti.Ccc.WebTest.Areas.MultiTenancy
 	{
 		public PersonInfoController Target;
 		public FindTenantByNameQueryFake FindTenantByNameQuery;
-		public TenantUnitOfWorkAspectFake TenantUnitOfWorkAspect;
 		public CheckPasswordStrengthFake CheckPasswordStrength;
 		public PersistPersonInfoFake PersistPersonInfo;
+		public TenantUnitOfWorkManagerFake TenantUnitOfWorkManager;
 
 		[Test]
 		public void HappyPath()
@@ -28,7 +28,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MultiTenancy
 
 			allPropertiesShouldBeTrue(result);
 			PersistPersonInfo.LastPersist.ApplicationLogonName.Should().Be.EqualTo(personInfoModel.ApplicationLogonName);
-			TenantUnitOfWorkAspect.CommitSucceded.Should().Be.True();
+			TenantUnitOfWorkManager.WasCommitted.Should().Be.True();
 		}
 		private static void allPropertiesShouldBeTrue(PersistPersonInfoResult result)
 		{
@@ -49,7 +49,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MultiTenancy
 			var result = Target.Persist(personInfoModel).Result<PersistPersonInfoResult>();
 
 			result.PasswordStrengthIsValid.Should().Be.False();
-			TenantUnitOfWorkAspect.CommitSucceded.Should().Be.False();
+			TenantUnitOfWorkManager.WasCommitted.Should().Be.False();
 		}
 
 		[Test]
@@ -58,12 +58,12 @@ namespace Teleopti.Ccc.WebTest.Areas.MultiTenancy
 			var tenantName = RandomName.Make();
 			FindTenantByNameQuery.Add(new Tenant(tenantName));
 			var personInfoModel = new PersonInfoModel { Tenant = tenantName, ApplicationLogonName = RandomName.Make(), Password = RandomName.Make() };
-			TenantUnitOfWorkAspect.WillThrow(new DuplicateApplicationLogonNameException());
+			TenantUnitOfWorkManager.WillThrowAtCommit(new DuplicateApplicationLogonNameException());
 
 			var result = Target.Persist(personInfoModel).Result<PersistPersonInfoResult>();
 
 			result.ApplicationLogonNameIsValid.Should().Be.False();
-			TenantUnitOfWorkAspect.CommitSucceded.Should().Be.False();
+			TenantUnitOfWorkManager.WasCommitted.Should().Be.False();
 		}
 
 		[Test]
@@ -72,12 +72,12 @@ namespace Teleopti.Ccc.WebTest.Areas.MultiTenancy
 			var tenantName = RandomName.Make();
 			FindTenantByNameQuery.Add(new Tenant(tenantName));
 			var personInfoModel = new PersonInfoModel { Tenant = tenantName, ApplicationLogonName = RandomName.Make(), Password = RandomName.Make() };
-			TenantUnitOfWorkAspect.WillThrow(new DuplicateIdentityException());
+			TenantUnitOfWorkManager.WillThrowAtCommit(new DuplicateIdentityException());
 
 			var result = Target.Persist(personInfoModel).Result<PersistPersonInfoResult>();
 
 			result.IdentityIsValid.Should().Be.False();
-			TenantUnitOfWorkAspect.CommitSucceded.Should().Be.False();
+			TenantUnitOfWorkManager.WasCommitted.Should().Be.False();
 		}
 	}
 }
