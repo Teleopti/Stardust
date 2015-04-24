@@ -17,6 +17,7 @@ AS
 BEGIN
 	SET NOCOUNT ON;
 
+	IF NOT EXISTS (SELECT * FROM [stage].[stg_schedule_changed_servicebus] WHERE schedule_date_local = @schedule_date_local AND person_code=@person_code AND scenario_code=@scenario_id AND business_unit_code=@business_unit_code)
 	INSERT INTO [stage].[stg_schedule_changed_servicebus]
 			   ([schedule_date_local]
 			   ,[person_code]
@@ -31,6 +32,7 @@ BEGIN
 			   ,@business_unit_code
 			   ,1
 			   ,@datasource_update_date)
+		
 END
 
 
