@@ -203,7 +203,6 @@
     <Compile Include="Factory\AcceptPreviouslyReferredShiftTradeCommand.cs" />
     <Compile Include="Factory\ActivityTypeFactory.cs" />
     <Compile Include="Factory\AnalyticsReportsFactory.cs" />
-    <Compile Include="Factory\AuthenticationFactory.cs" />
     <Compile Include="Factory\ContractFactory.cs" />
     <Compile Include="Factory\ContractScheduleFactory.cs" />
     <Compile Include="Factory\IAuthorizationProvider.cs" />

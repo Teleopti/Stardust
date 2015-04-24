@@ -5,19 +5,14 @@ using System.Web;
 using Autofac;
 using Autofac.Integration.Wcf;
 using Teleopti.Ccc.Domain.ApplicationLayer;
-using Teleopti.Ccc.Domain.Common;
-using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Forecasting;
-using Teleopti.Ccc.Domain.Security.MultiTenancyAuthentication;
 using Teleopti.Ccc.Infrastructure.ApplicationLayer;
-using Teleopti.Ccc.Infrastructure.MultiTenancy;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Client;
 using Teleopti.Ccc.Infrastructure.NHibernateConfiguration;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.Infrastructure.Web;
 using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.IocCommon.MultipleConfig;
-using Teleopti.Interfaces.Infrastructure;
 using log4net;
 using log4net.Config;
 using Teleopti.Ccc.Domain.Security.Authentication;
@@ -216,19 +211,10 @@ namespace Teleopti.Ccc.Sdk.WcfHost
 				builder.RegisterType<ApplicationDataSourceProvider>().As<IDataSourceProvider>();
 				builder.RegisterType<AvailableDataSourcesProvider>().As<IAvailableDataSourcesProvider>().SingleInstance();
 
-				if (configuration.Toggle(Toggles.MultiTenancy_SDK_17458))
-			{
-					builder.RegisterType<MultiTenancyAuthenticationFactory>().As<IAuthenticationFactory>().InstancePerLifetimeScope();
+				builder.RegisterType<MultiTenancyAuthenticationFactory>().As<IAuthenticationFactory>().InstancePerLifetimeScope();
 				builder.RegisterType<TenantPeopleSaver>().As<ITenantPeopleSaver>().InstancePerLifetimeScope();
 				builder.RegisterType<TenantDataManager>().As<ITenantDataManager>().InstancePerLifetimeScope();
 				builder.RegisterType<GetPayrollResultById.MultiTenancyPayrollLogon>().As<GetPayrollResultById.IPayrollLogon>().InstancePerLifetimeScope();
-			}
-				else
-			{
-					builder.RegisterType<AuthenticationFactory>().As<IAuthenticationFactory>().InstancePerLifetimeScope();
-				builder.RegisterType<EmptyTenantPeopleSaver>().As<ITenantPeopleSaver>().InstancePerLifetimeScope();
-				builder.RegisterType<GetPayrollResultById.PayrollLogon>().As<GetPayrollResultById.IPayrollLogon>().InstancePerLifetimeScope();
-			}
 				
 				builder.RegisterType<LicenseFactory>().InstancePerLifetimeScope();
 				builder.RegisterType<ScheduleFactory>().InstancePerLifetimeScope();

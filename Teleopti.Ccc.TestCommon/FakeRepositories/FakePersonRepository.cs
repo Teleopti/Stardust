@@ -174,11 +174,6 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 			throw new NotImplementedException();
 		}
 
-		public int SaveLoginAttempt(LoginAttemptModel model)
-		{
-			throw new NotImplementedException();
-		}
-
 		public IEnumerator<IPerson> GetEnumerator()
 		{
 			return _persons.GetEnumerator();

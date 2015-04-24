@@ -742,20 +742,6 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 
 	    public IPerson LoadAggregate(Guid id) { return Load(id); }
 
-		//TODO: tenant This one should be removed when tenant toggle disappear in SDK.
-		public int SaveLoginAttempt(LoginAttemptModel model)
-		{
-			return Session.CreateSQLQuery(
-					"INSERT INTO [Auditing].[Security] (Result, UserCredentials, Provider, Client, ClientIp , PersonId) VALUES (:Result, :UserCredentials, :Provider, :Client, :ClientIp, :PersonId)")
-					.SetString("Result", model.Result)
-					.SetString("UserCredentials", model.UserCredentials)
-					.SetString("Provider", model.Provider)
-					.SetString("Client", model.Client)
-					.SetString("ClientIp", model.ClientIp)
-					.SetGuid("PersonId", model.PersonId.GetValueOrDefault())
-					.ExecuteUpdate();
-		}
-
 		public bool DoesPersonHaveExternalLogOn(DateOnly dateTime, Guid personId)
 		{
 			var result = Session.CreateSQLQuery(

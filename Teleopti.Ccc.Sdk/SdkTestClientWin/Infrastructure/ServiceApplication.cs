@@ -88,7 +88,7 @@ namespace SdkTestClientWin.Infrastructure
 			//End OLD WAY
 
 			//new way
-			//var authenticationResult = LogonService.LogOnAsApplicationUser(logonName, passWord);
+			authenticationResult = LogonService.LogOnAsApplicationUser(logonName, passWord);
 			// END NEW WAY
 
 			if (authenticationResult.Successful)

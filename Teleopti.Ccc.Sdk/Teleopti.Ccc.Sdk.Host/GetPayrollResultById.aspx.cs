@@ -65,37 +65,6 @@ namespace Teleopti.Ccc.Sdk.WcfHost
 			AuthenticationResult LogonApplication(string userName, string password, string dataSource);
 		}
 
-		public class PayrollLogon : IPayrollLogon
-		{
-			private readonly IFindApplicationUser _findApplicationUser;
-			RepositoryFactory repFactory = new RepositoryFactory();
-
-			public PayrollLogon(IFindApplicationUser findApplicationUser)
-			{
-				_findApplicationUser = findApplicationUser;
-			}
-
-			public AuthenticationResult LogonWindows(string dataSource)
-			{
-				var ds = StateHolder.Instance.StateReader.ApplicationScopeData.DataSource(dataSource);
-				var sourceContainer = new DataSourceContainer(ds, repFactory, _findApplicationUser, AuthenticationTypeOption.Windows);
-				var result = sourceContainer.LogOn(WindowsIdentity.GetCurrent().Name);
-				result.DataSource = ds;
-				result.Person = sourceContainer.User;
-				return result;
-			}
-
-			public AuthenticationResult LogonApplication(string userName, string password, string dataSource)
-			{
-				var ds = StateHolder.Instance.StateReader.ApplicationScopeData.DataSource(dataSource);
-				var sourceContainer = new DataSourceContainer(ds, repFactory, _findApplicationUser, AuthenticationTypeOption.Application);
-				var result = sourceContainer.LogOn(userName, password);
-				result.DataSource = ds;
-				result.Person = sourceContainer.User;
-				return result;
-			}
-		}
-
 		public class MultiTenancyPayrollLogon : IPayrollLogon
 		{
 			private readonly IMultiTenancyApplicationLogon _multiTenancyApplicationLogon;

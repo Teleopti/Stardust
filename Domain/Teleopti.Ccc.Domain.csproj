@@ -1589,7 +1589,6 @@
     <Compile Include="Security\Authentication\LogonModel.cs" />
     <Compile Include="Security\Authentication\IWindowsUserProvider.cs" />
     <Compile Include="Security\Authentication\LoggedOnUser.cs" />
-    <Compile Include="Security\Authentication\LogonLogger.cs" />
     <Compile Include="Security\Authentication\SpecificTimeZone.cs" />
     <Compile Include="Security\Authentication\UserTimeZone.cs" />
     <Compile Include="Security\Authentication\UtcTimeZone.cs" />

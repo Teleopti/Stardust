@@ -1189,7 +1189,6 @@
     <Compile Include="Security\Authentication\EnvironmentWindowsUserProviderTest.cs" />
     <Compile Include="Security\Authentication\FindApplicationUserTest.cs" />
     <Compile Include="Security\Authentication\LoggedOnUserTest.cs" />
-    <Compile Include="Security\Authentication\LogonLoggerTest.cs" />
     <Compile Include="Security\Authentication\UserTimeZoneTest.cs" />
     <Compile Include="Security\AuthorizationData\DefinedLicenseDataFactoryTest.cs" />
     <Compile Include="Security\AuthorizationEntities\AllLicenseOptionTest.cs" />

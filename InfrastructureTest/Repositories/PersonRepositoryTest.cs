@@ -1779,15 +1779,6 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			Assert.That(testList[0].OptionalColumnValueCollection.Count,Is.EqualTo(1));
 		}
 
-		[Test]
-		public void ShouldSaveLoginAttempt()
-		{
-			var rep = new PersonRepository(UnitOfWork);
-			var model = new LoginAttemptModel{ClientIp = "172.168.1.1",Provider = "Win", Client = "Web",Result = "Success",UserCredentials = "aa"};
-			var result = rep.SaveLoginAttempt(model);
-			Assert.That(result,Is.EqualTo(1));
-		}
-
 		private static void verifyPermissionInfoIsLazy(bool expected, IPerson userRetOk)
 		{
 			Assert.AreEqual(expected,

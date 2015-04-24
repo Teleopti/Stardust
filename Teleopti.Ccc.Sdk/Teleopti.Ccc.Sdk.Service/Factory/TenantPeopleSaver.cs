@@ -41,9 +41,4 @@ namespace Teleopti.Ccc.Sdk.WcfService.Factory
 		}
 	}
 
-	public class EmptyTenantPeopleSaver : ITenantPeopleSaver
-	{
-		public void SaveTenantData(PersonDto personDto, Guid id, string tenant)
-		{}
-	}
 }
