@@ -1,4 +1,9 @@
-﻿using Teleopti.Interfaces;
+﻿using System.Collections.Generic;
+using NHibernate.Criterion;
+using NHibernate.Transform;
+using Teleopti.Ccc.Domain.Scheduling;
+using Teleopti.Interfaces;
+using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.Infrastructure.Repositories

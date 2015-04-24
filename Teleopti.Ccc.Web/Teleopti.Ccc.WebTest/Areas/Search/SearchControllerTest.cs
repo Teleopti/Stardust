@@ -52,5 +52,10 @@ namespace Teleopti.Ccc.WebTest.Areas.Search
 		{
 			return _planningPeriod;
 		}
+
+		public IPlanningPeriod Find(Guid id)
+		{
+			return _planningPeriod;
+		}
 	}
 }

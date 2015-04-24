@@ -2,7 +2,6 @@ using System.Collections.Generic;
 using System.Web.Http;
 using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.Scheduling;
-using Teleopti.Interfaces;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Web.Areas.ResourcePlanner
@@ -11,7 +10,7 @@ namespace Teleopti.Ccc.Web.Areas.ResourcePlanner
 	{
 		private readonly INextPlanningPeriodProvider _nextPlanningPeriodProvider;
 		private readonly IMissingForecastProvider _missingForecastProvider;
-		
+
 		public PlanningPeriodController(INextPlanningPeriodProvider nextPlanningPeriodProvider, IMissingForecastProvider missingForecastProvider)
 		{
 			_nextPlanningPeriodProvider = nextPlanningPeriodProvider;
@@ -31,6 +30,14 @@ namespace Teleopti.Ccc.Web.Areas.ResourcePlanner
 					Id = planningPeriod.Id.GetValueOrDefault(),
 					Skills = getMissingForecast(planningPeriod.Range)
 				});
+		}
+
+		[UnitOfWork, HttpPost, Route("api/resourceplanner/updateplanningperiod")]
+		public virtual IHttpActionResult UpdatePlanningPeriod([FromBody] PlanningPeriodModel model)
+		{
+			var planningPeriod = _nextPlanningPeriodProvider.Find(model.Id);
+			planningPeriod.Range = new DateOnlyPeriod(new DateOnly(model.StartDate),new DateOnly(model.EndDate));
+			return Created(Request.RequestUri , new { });
 		}
 
 		private IEnumerable<MissingForecastModel> getMissingForecast(DateOnlyPeriod planningPeriodRange)

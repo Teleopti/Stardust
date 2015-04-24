@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Net.Http;
 using System.Threading.Tasks;
 using System.Web.Http;
 using System.Web.Http.Results;
@@ -79,6 +80,30 @@ namespace Teleopti.Ccc.WebTest.Areas.ResourcePlanner
 				}));
 			var result = (OkNegotiatedContentResult<PlanningPeriodModel>)target.GetPlanningPeriod();
 			result.Content.Skills.Should().Not.Be.Empty();
+		}
+
+		[Test]
+		public void ShouldUpdatePlanningPeriod()
+		{
+			var planningPeriodRepository = MockRepository.GenerateMock<IRepository<IPlanningPeriod>>();
+			var newGuid = Guid.NewGuid();
+			var startDate = new DateTime(2015,05,01);
+			var endDate = new DateTime(2015, 05, 31);
+			var now = new TestableNow(new DateTime(2015, 4, 1));
+			
+			var planningPeriodModel = new PlanningPeriodModel()
+			{
+				Id = newGuid,
+				StartDate = startDate,
+				EndDate = endDate
+			};
+
+			planningPeriodRepository.Stub(x => x.Load(newGuid)).Return(new PlanningPeriod(now));
+			var target = new PlanningPeriodController(new NextPlanningPeriodProvider(planningPeriodRepository, now), new FakeMissingForecastProvider());
+			target.Request = new HttpRequestMessage(new HttpMethod("POST"), "/");
+			
+
+			target.UpdatePlanningPeriod(planningPeriodModel);
 		}
 	}
 }

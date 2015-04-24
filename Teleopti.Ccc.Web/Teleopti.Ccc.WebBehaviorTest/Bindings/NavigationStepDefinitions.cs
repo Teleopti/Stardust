@@ -1,5 +1,6 @@
 using System;
 using System.Linq;
+using System.Threading;
 using TechTalk.SpecFlow;
 using Teleopti.Ccc.Domain.AgentInfo;
 using Teleopti.Ccc.Infrastructure.Repositories;
@@ -120,8 +121,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 			DataMaker.Data().ApplyDelayed();
 			Navigation.GotoWeekSchedulePage();
 		}
-
-
+		
 
 		[Given(@"I view my week schedule for date '(.*)'")]
 		[When(@"I view my week schedule for date '(.*)'")]
@@ -322,16 +322,9 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 		public void WhenIViewResourcePlanner()
 		{
 			TestControllerMethods.Logon();
-			Navigation.GotoResourcePlanner(false);
+			Navigation.GotoResourcePlanner();
 		}
 
-		[When(@"I click schedule")]
-		public void WhenIClickSchedule()
-		{
-			//TestControllerMethods.Logon();
-			Browser.Interactions.Click(".schedule-button");
-		}
-		
 		[When(@"I view Real time adherence overview")]
 		public void WhenIViewRealTimeAdherenceOverview()
 		{

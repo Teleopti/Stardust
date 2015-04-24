@@ -8,7 +8,7 @@ namespace Teleopti.Ccc.Domain.Scheduling
 {
 	public class PlanningPeriod : NonversionedAggregateRootWithBusinessUnit, IPlanningPeriod
 	{
-		private readonly DateOnlyPeriod _range;
+		private DateOnlyPeriod _range;
 
 		protected PlanningPeriod()
 		{
@@ -25,7 +25,8 @@ namespace Teleopti.Ccc.Domain.Scheduling
 
 		public virtual DateOnlyPeriod Range
 		{
-			get { return _range; }
+			get { return _range;  }
+			set { _range = value; }
 		}
 	}
 }

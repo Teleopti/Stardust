@@ -1,3 +1,4 @@
+using System;
 using System.Linq;
 using Teleopti.Interfaces;
 using Teleopti.Interfaces.Domain;
@@ -26,6 +27,11 @@ namespace Teleopti.Ccc.Domain.Scheduling
 				_planningPeriodRepository.Add(result);
 			}
 			return result;
+		}
+
+		public IPlanningPeriod Find(Guid id)
+		{
+			return _planningPeriodRepository.Load(id);
 		}
 
 		private static bool planningPeriodNotFound(IPlanningPeriod result)

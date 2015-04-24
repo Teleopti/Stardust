@@ -87,3 +87,4 @@ MyTimeWeb_EnhanceTeamSchedule_32580 = true
 Wfm_MinimumScaffolding_32659 = RC
 MultiTenancy_LogonUseNewSchema_33049 = false
 Wfm_ResourcePlanner_32892 = RC
+Wfm_ChangePlanningPeriod_33043 = false

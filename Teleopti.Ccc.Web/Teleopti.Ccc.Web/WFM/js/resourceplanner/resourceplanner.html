@@ -5,23 +5,23 @@
 	</div>
 	<div class="row" ng-show="planningPeriod.$resolved">
 		<div class="wfm-accordion material-depth-2">
-			<div class="wfm-accordion-head" ng-click="changeDateToggle = !changeDateToggle">
+			<div class="next-planning-peroid wfm-accordion-head" ng-click="changeDateToggle = !changeDateToggle">
 				<h4>{{'NextPlanningPeriodMessage' | translate}} {{planningPeriod.StartDate | date:"yyyy-MM-dd"}} {{'ToText' | translate}} {{planningPeriod.EndDate | date:"yyyy-MM-dd"}}</h4>
 			</div>
 		</div> 
-		<div ng-show="false" >
+		<div ng-show="changeDateToggle && isEnabled">
 			<div class="wfm-datepicker-wrap">
 				<div class="sub-header">
 					From <span class="startDate">{{planningPeriod.StartDate | date : format}}</span>
 				</div>
-				<datepicker ng-model="planningPeriod.StartDate" show-weeks="true" class="wfm-datepicker" ng-click="recalcualteValidations(planningPeriod.StartDate,planningPeriod.EndDate)"></datepicker>
+				<datepicker ng-model="planningPeriod.StartDate" show-weeks="true" class="wfm-datepicker" ng-click="recalculateValidation(planningPeriod.Id,planningPeriod.StartDate,planningPeriod.EndDate)"></datepicker>
 			</div>
 
 			<div class="wfm-datepicker-wrap">
 				<div class="sub-header">
 					To <span class="endDate">{{planningPeriod.EndDate | date : format}}</span>
 				</div>
-				<datepicker ng-model="planningPeriod.EndDate" min-date="planningPeriod.StartDate" show-weeks="true" class="wfm-datepicker" ng-click="recalcualteValidations(planningPeriod.StartDate,planningPeriod.EndDate)"></datepicker>
+				<datepicker ng-model="planningPeriod.EndDate" min-date="planningPeriod.StartDate" show-weeks="true" class="wfm-datepicker" ng-click="recalculateValidation(planningPeriod.Id,planningPeriod.StartDate,planningPeriod.EndDate)"></datepicker>
 			</div>
 		</div>
 		
@@ -42,7 +42,7 @@
 				</div>
 			</li>
 		</ul>
-		<button class="schedule-button wfm-btn wfm-btn-primary" ng-click="LaunchSchedule(planningPeriod.StartDate,planningPeriod.EndDate) ; scheduleClicked = 'true'">{{'Schedule' | translate }} </button><span class="schedule-days-message" ng-show="schedulingPerformed"><p> {{scheduledDays}} {{'DaysAreScheduled' | translate}}</p></span>
+		<button class="schedule-button wfm-btn wfm-btn-primary" ng-click="launchSchedule(planningPeriod.StartDate,planningPeriod.EndDate) ; scheduleClicked = 'true'">{{'Schedule' | translate }} </button><span class="schedule-days-message" ng-show="schedulingPerformed"><p> {{scheduledDays}} {{'DaysAreScheduled' | translate}}</p></span>
 		<div ng-show="scheduleClicked && !schedulingPerformed">
 			<md-progress-linear md-mode="indeterminate"></md-progress-linear>
 			<p>{{'Scheduling' | translate }} .. </p>

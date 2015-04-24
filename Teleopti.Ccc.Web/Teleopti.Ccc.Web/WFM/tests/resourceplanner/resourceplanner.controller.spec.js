@@ -19,7 +19,11 @@ describe('ResourceplannerCtrl', function() {
 		var mockResourcePlannerSvrc = {
 			getPlanningPeriod: {
 				query: function() {}
+			},
+			isEnabled: {
+				query: function() {}
 			}
+
 		};
 
 		$controller('ResourceplannerCtrl', { $scope: scope, ResourcePlannerSvrc: mockResourcePlannerSvrc });
@@ -33,6 +37,9 @@ describe('ResourceplannerCtrl', function() {
 				query: function() {
 					return { StartDate: new Date(20150501), EndDate: new Date(20150531), Id: 'someguid' };
 				}
+			},
+			isEnabled: {
+				query: function () { }
 			}
 		};
 
@@ -59,6 +66,9 @@ describe('ResourceplannerCtrl', function() {
 						]
 					};
 				}
+			},
+			isEnabled: {
+				query: function () { }
 			}
 		};
 

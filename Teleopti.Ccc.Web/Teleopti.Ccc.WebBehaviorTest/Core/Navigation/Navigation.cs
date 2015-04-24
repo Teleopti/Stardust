@@ -312,18 +312,9 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core.Navigation
 			}
 		}
 
-		public static void GotoResourcePlanner(bool waitUntilSubscriptionIsCompleted)
+		public static void GotoResourcePlanner()
 		{
-			if (waitUntilSubscriptionIsCompleted)
-			{
-				GoToPage(
-					"wfm/#/resourceplanner",
-					 new WaitUntilSubscriptionIsCompleted());
-			}
-			else
-			{
-				GoToPage("wfm/#/resourceplanner");
-			}
+			GoToPage("wfm/#/resourceplanner");
 		}
 
 		public static void GotoAnywhereRealTimeAdherenceOverview(Guid buId, Guid siteId)

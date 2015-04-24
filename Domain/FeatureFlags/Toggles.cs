@@ -79,7 +79,8 @@
 		MultiTenancy_People_32113,
 		MultiTenancy_LogonUseNewSchema_33049,
 		Wfm_MinimumScaffolding_32659,
-		Wfm_ResourcePlanner_32892
+		Wfm_ResourcePlanner_32892,
+		Wfm_ChangePlanningPeriod_33043
 		// ReSharper restore InconsistentNaming
 	}
 }

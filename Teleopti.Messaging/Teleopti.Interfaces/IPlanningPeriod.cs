@@ -4,6 +4,6 @@ namespace Teleopti.Interfaces
 {
 	public interface IPlanningPeriod : IAggregateRoot
 	{
-		DateOnlyPeriod Range { get; }
+		DateOnlyPeriod Range { get; set; }
 	}
 }
