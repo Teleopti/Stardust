@@ -15,10 +15,9 @@ namespace Teleopti.Ccc.Web.Areas.MultiTenancy
 		}
 
 		[TenantUnitOfWork]
-		public EmptyResult Modify(ChangePasswordModel model)
+		public virtual void Modify(ChangePasswordModel model)
 		{
 			_changePassword.Modify(model.UserName, model.OldPassword, model.NewPassword);
-			return null;
 		}
 	}
 }

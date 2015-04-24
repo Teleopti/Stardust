@@ -17,7 +17,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MultiTenancy
 		public TenantUnitOfWorkFake TenantUnitOfWork;
 		public CheckPasswordStrengthFake CheckPasswordStrength;
 
-		[Test, Ignore("not yet done")]
+		[Test]
 		public void HappyPath()
 		{
 			var model = new ChangePasswordModel
@@ -26,8 +26,12 @@ namespace Teleopti.Ccc.WebTest.Areas.MultiTenancy
 				OldPassword = RandomName.Make(),
 				NewPassword = RandomName.Make()
 			};
-			
+			var personInfo = new PersonInfo();
+			personInfo.SetApplicationLogonCredentials(new CheckPasswordStrengthFake(), model.UserName, model.OldPassword);
+			ApplicationUserTenantQuery.Add(personInfo);
+
 			Target.Modify(model);
+			TenantUnitOfWork.WasCommitted.Should().Be.True();
 		}
 
 		[Test]
