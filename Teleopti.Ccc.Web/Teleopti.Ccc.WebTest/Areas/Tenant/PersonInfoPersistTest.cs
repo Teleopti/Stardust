@@ -27,7 +27,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Tenant
 
 			allPropertiesShouldBeTrue(result);
 			PersistPersonInfo.LastPersist.ApplicationLogonName.Should().Be.EqualTo(personInfoModel.ApplicationLogonName);
-			TenantUnitOfWorkAspect.LastCommitSucceded.Value.Should().Be.True();
+			TenantUnitOfWorkAspect.CommitSucceded.Should().Be.True();
 		}
 		private static void allPropertiesShouldBeTrue(PersistPersonInfoResult result)
 		{
@@ -48,7 +48,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Tenant
 			var result = (PersistPersonInfoResult)Target.Persist(personInfoModel).Data;
 
 			result.PasswordStrengthIsValid.Should().Be.False();
-			TenantUnitOfWorkAspect.LastCommitSucceded.Value.Should().Be.False();
+			TenantUnitOfWorkAspect.CommitSucceded.Should().Be.False();
 		}
 
 		[Test]
@@ -57,12 +57,12 @@ namespace Teleopti.Ccc.WebTest.Areas.Tenant
 			var tenantName = RandomName.Make();
 			FindTenantByNameQuery.Add(new Infrastructure.MultiTenancy.Server.Tenant(tenantName));
 			var personInfoModel = new PersonInfoModel { Tenant = tenantName, ApplicationLogonName = RandomName.Make(), Password = RandomName.Make() };
-			PersistPersonInfo.WillThrow(new DuplicateApplicationLogonNameException());
+			TenantUnitOfWorkAspect.WillThrow(new DuplicateApplicationLogonNameException());
 
 			var result = (PersistPersonInfoResult)Target.Persist(personInfoModel).Data;
 
 			result.ApplicationLogonNameIsValid.Should().Be.False();
-			TenantUnitOfWorkAspect.LastCommitSucceded.Value.Should().Be.False();
+			TenantUnitOfWorkAspect.CommitSucceded.Should().Be.False();
 		}
 
 		[Test]
@@ -71,12 +71,12 @@ namespace Teleopti.Ccc.WebTest.Areas.Tenant
 			var tenantName = RandomName.Make();
 			FindTenantByNameQuery.Add(new Infrastructure.MultiTenancy.Server.Tenant(tenantName));
 			var personInfoModel = new PersonInfoModel { Tenant = tenantName, ApplicationLogonName = RandomName.Make(), Password = RandomName.Make() };
-			PersistPersonInfo.WillThrow(new DuplicateIdentityException());
+			TenantUnitOfWorkAspect.WillThrow(new DuplicateIdentityException());
 
 			var result = (PersistPersonInfoResult)Target.Persist(personInfoModel).Data;
 
 			result.IdentityIsValid.Should().Be.False();
-			TenantUnitOfWorkAspect.LastCommitSucceded.Value.Should().Be.False();
+			TenantUnitOfWorkAspect.CommitSucceded.Should().Be.False();
 		}
 	}
 }
