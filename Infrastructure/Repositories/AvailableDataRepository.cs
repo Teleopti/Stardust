@@ -61,15 +61,15 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
             var businessUnitRepository = new BusinessUnitRepository(UnitOfWork);
             foreach (IBusinessUnit businessUnit in availableData.AvailableBusinessUnits)
             {
-                if (!base.UnitOfWork.Contains(businessUnit))
-                base.UnitOfWork.Reassociate(businessUnit);
+                if (!UnitOfWork.Contains(businessUnit))
+                UnitOfWork.Reassociate(businessUnit);
                 businessUnitRepository.LoadHierarchyInformation(businessUnit);
             }
 
             foreach (ISite site in availableData.AvailableSites)
             {
-                if (!base.UnitOfWork.Contains(site))
-                base.UnitOfWork.Reassociate(site);
+                if (!UnitOfWork.Contains(site))
+                UnitOfWork.Reassociate(site);
                 if (!LazyLoadingManager.IsInitialized(site.TeamCollection))
                     LazyLoadingManager.Initialize(site.TeamCollection);
             }

@@ -88,7 +88,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 		private static void addBuClauseToNonRootQuery(ICriteria criteria)
 		{
 			if (!typeof (IAggregateRoot).IsAssignableFrom(criteria.GetRootEntityTypeIfAvailable()))
-				criteria.Add(Expression.Eq("ass.BusinessUnit",
+				criteria.Add(Restrictions.Eq("ass.BusinessUnit",
 				                           ((ITeleoptiIdentity) TeleoptiPrincipal.CurrentPrincipal.Identity).BusinessUnit));
 		}
 

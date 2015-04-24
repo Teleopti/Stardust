@@ -90,12 +90,12 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
         public IEnumerable<TimeZoneInfo> LoadAllTimeZones()
         {
             IList<string> skillTimeZoneId = Session.CreateCriteria(typeof (Skill))
-                .Add(Expression.IsNotNull("TimeZone"))
+                .Add(Restrictions.IsNotNull("TimeZone"))
                 .SetProjection(Projections.GroupProperty("TimeZone"))
                 .List<string>();
 
             IList<string> personTimeZoneId = Session.CreateCriteria(typeof(Person))
-                .Add(Expression.IsNotNull("PermissionInformation.defaultTimeZone"))
+                .Add(Restrictions.IsNotNull("PermissionInformation.defaultTimeZone"))
                 .SetProjection(Projections.GroupProperty("PermissionInformation.defaultTimeZone"))
                 .List<string>();
 

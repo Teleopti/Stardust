@@ -82,7 +82,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
         {
             IList<IMultiplicator> retList = Session.CreateCriteria(typeof (Multiplicator))
                 .AddOrder(Order.Asc("Description.Name"))
-                .Add(Expression.Eq("MultiplicatorType", type))
+                .Add(Restrictions.Eq("MultiplicatorType", type))
                 .List<IMultiplicator>();
                        
 

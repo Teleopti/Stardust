@@ -56,7 +56,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
         public IList<IAbsence> LoadRequestableAbsence()
         {
             IList<IAbsence> retList = Session.CreateCriteria(typeof(Absence))
-                        .Add(Expression.Eq("Requestable", true))
+                        .Add(Restrictions.Eq("Requestable", true))
                         .AddOrder(Order.Asc("Description.Name"))
                         .SetResultTransformer(Transformers.DistinctRootEntity)
                         .List<IAbsence>();

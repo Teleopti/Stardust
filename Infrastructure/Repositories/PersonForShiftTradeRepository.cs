@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Security.Claims;
 using NHibernate.Impl;
 using NHibernate.Transform;
 using Teleopti.Ccc.Domain.Repositories;
@@ -30,7 +31,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 			object businessUnitId;
 			if (!filter.Parameters.TryGetValue("businessUnitParameter", out businessUnitId))
 			{
-				businessUnitId = ((ITeleoptiIdentity)TeleoptiPrincipal.Current.Identity).BusinessUnit.Id.GetValueOrDefault();
+				businessUnitId = ((ITeleoptiIdentity)ClaimsPrincipal.Current.Identity).BusinessUnit.Id.GetValueOrDefault();
 			}
 			return Guid.Parse(businessUnitId.ToString());
 		}

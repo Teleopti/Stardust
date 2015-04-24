@@ -30,7 +30,7 @@ namespace Teleopti.Ccc.WebTest.Filters
 		public ActionResult InvokeFilter(IActionFilter actionFilter) { return InvokeFilter(new FilterTestActionInvoker(actionFilter)); }
 		public ActionResult InvokeFilter(ActionFilterAttribute actionFilter) { return InvokeFilter(new FilterTestActionInvoker(actionFilter)); }
 
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Reliability", "CA2000:Dispose objects before losing scope")]
+		[SuppressMessage("Microsoft.Reliability", "CA2000:Dispose objects before losing scope")]
 		public FilterTester()
 		{
 			HttpContext.Current = new HttpContext(new HttpRequest("foo", "http://tempuri.org/foo", ""), new HttpResponse(new StringWriter()));

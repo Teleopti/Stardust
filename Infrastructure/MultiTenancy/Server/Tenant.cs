@@ -1,6 +1,5 @@
 ﻿namespace Teleopti.Ccc.Infrastructure.MultiTenancy.Server
 {
-	//TODO: tenant - another name here? name collision with namespace. Or change namespace name...
 	public class Tenant
 	{
 		//TODO: tenant, when we move to seperate db, we can remove default name here (and in db)

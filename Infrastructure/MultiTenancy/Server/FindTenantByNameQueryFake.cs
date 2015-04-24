@@ -4,19 +4,19 @@ namespace Teleopti.Ccc.Infrastructure.MultiTenancy.Server
 {
 	public class FindTenantByNameQueryFake : IFindTenantByNameQuery
 	{
-		private readonly IDictionary<string, Infrastructure.MultiTenancy.Server.Tenant> data;
+		private readonly IDictionary<string, Tenant> data;
 
 		public FindTenantByNameQueryFake()
 		{
-			data = new Dictionary<string, Infrastructure.MultiTenancy.Server.Tenant>();
+			data = new Dictionary<string, Tenant>();
 		}
 
-		public Infrastructure.MultiTenancy.Server.Tenant Find(string name)
+		public Tenant Find(string name)
 		{
 			return data[name];
 		}
 
-		public void Add(Infrastructure.MultiTenancy.Server.Tenant tenant)
+		public void Add(Tenant tenant)
 		{
 			data[tenant.Name] = tenant;
 		}

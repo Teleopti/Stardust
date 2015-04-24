@@ -220,7 +220,7 @@ namespace Teleopti.Ccc.Infrastructure.NHibernateConfiguration
 
 		public new bool Equals(object x, object y)
 		{
-			if (object.ReferenceEquals(x, y)) return true;
+			if (ReferenceEquals(x, y)) return true;
 			if (x == null || y == null) return false;
 			return x.Equals(y);
 		}
@@ -241,7 +241,7 @@ namespace Teleopti.Ccc.Infrastructure.NHibernateConfiguration
 			get { return false; }
 		}
 
-		public object NullSafeGet(IDataReader dr, string[] names, NHibernate.Engine.ISessionImplementor session, object owner)
+		public object NullSafeGet(IDataReader dr, string[] names, ISessionImplementor session, object owner)
 		{
 			object obj0 = NHibernateUtil.UtcDateTime.NullSafeGet(dr, names[0]);
 			object obj1 = NHibernateUtil.UtcDateTime.NullSafeGet(dr, names[1]);
@@ -252,7 +252,7 @@ namespace Teleopti.Ccc.Infrastructure.NHibernateConfiguration
 		}
 
 		public void NullSafeSet(IDbCommand cmd, object obj, int index, bool[] settable,
-			NHibernate.Engine.ISessionImplementor session)
+			ISessionImplementor session)
 		{
 			var period = (DateTimePeriod?) obj;
 			if (!period.HasValue)
@@ -277,11 +277,11 @@ namespace Teleopti.Ccc.Infrastructure.NHibernateConfiguration
 			get { return new[] {"Start", "End"}; }
 		}
 
-		public NHibernate.Type.IType[] PropertyTypes
+		public IType[] PropertyTypes
 		{
 			get
 			{
-				return new NHibernate.Type.IType[]
+				return new IType[]
 				{
 					NHibernateUtil.UtcDateTime, NHibernateUtil.UtcDateTime
 				};
@@ -303,13 +303,13 @@ namespace Teleopti.Ccc.Infrastructure.NHibernateConfiguration
 		}
 
 		public object Assemble(object cached,
-			NHibernate.Engine.ISessionImplementor session, object owner)
+			ISessionImplementor session, object owner)
 		{
 			return cached;
 		}
 
 		public object Disassemble(object value,
-			NHibernate.Engine.ISessionImplementor session)
+			ISessionImplementor session)
 		{
 			return value;
 		}
