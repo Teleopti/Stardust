@@ -233,6 +233,7 @@
     <Compile Include="MultiTenancy\Client\ITenantServerConfiguration.cs" />
     <Compile Include="MultiTenancy\Client\TenantAuthenticationData.cs" />
     <Compile Include="MultiTenancy\Client\TenantServerConfiguration.cs" />
+    <Compile Include="MultiTenancy\Server\ApplicationUserTenantQueryFake.cs" />
     <Compile Include="MultiTenancy\Server\CheckPasswordStrength.cs" />
     <Compile Include="MultiTenancy\Server\CheckPasswordStrengthFake.cs" />
     <Compile Include="MultiTenancy\Server\DeletePersonInfoFake.cs" />
