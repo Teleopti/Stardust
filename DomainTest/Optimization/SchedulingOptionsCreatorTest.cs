@@ -1,5 +1,4 @@
 ﻿using NUnit.Framework;
-using Teleopti.Ccc.Domain.GroupPageCreator;
 using Teleopti.Ccc.Domain.Optimization;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling.ScheduleTagging;
@@ -55,7 +54,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
         [Test]
         public void ShouldGroupOnGroupPageChangesSetInSchedulingOptions()
         {
-            IGroupPageLight groupPage = new GroupPageLight{Name = "Test"}; 
+            GroupPageLight groupPage = new GroupPageLight(); 
             _optimizationPreferences.Extra.TeamGroupPage = groupPage;
 	        _optimizationPreferences.Extra.UseTeams = true;
             _schedulingOptions = _target.CreateSchedulingOptions(_optimizationPreferences);
@@ -354,7 +353,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 		{
 			_optimizationPreferences.Extra.UseTeams = false;
 			_schedulingOptions = _target.CreateSchedulingOptions(_optimizationPreferences);
-			Assert.That(_schedulingOptions.GroupOnGroupPageForTeamBlockPer.Key, Is.EqualTo("SingleAgentTeam"));
+			Assert.That(_schedulingOptions.GroupOnGroupPageForTeamBlockPer.Key, Is.EqualTo("SingleAgent"));
 		}
 
     }

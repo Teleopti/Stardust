@@ -1,10 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using NUnit.Framework;
+﻿using NUnit.Framework;
 using Teleopti.Ccc.Domain.Common.Logging;
-using Teleopti.Ccc.Domain.GroupPageCreator;
 using Teleopti.Ccc.Domain.Optimization;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Interfaces.Domain;
@@ -19,8 +14,7 @@ namespace Teleopti.Ccc.DomainTest.Common.Logging
         [Test]
         public void VerifyTeamOptions()
         {
-            IGroupPageLight groupPage = new GroupPageLight();
-            groupPage.Name = "Test1";
+	        GroupPageLight groupPage = new GroupPageLight("Test1", GroupPageType.Hierarchy);
             ISchedulingOptions schedulingOptions = new SchedulingOptions
                 {
                     TeamSameShiftCategory = true,

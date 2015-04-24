@@ -4,13 +4,11 @@ using System.Linq;
 using System.Windows.Forms;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.FeatureFlags;
-using Teleopti.Ccc.Domain.GroupPageCreator;
 using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
 using Teleopti.Ccc.Infrastructure.Toggle;
 using Teleopti.Ccc.UserTexts;
 using Teleopti.Ccc.Win.Common;
 using Teleopti.Ccc.WinCode.Common;
-using Teleopti.Ccc.WinCode.Grouping;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Win.Scheduling.SchedulingSessionPreferences
@@ -21,9 +19,9 @@ namespace Teleopti.Ccc.Win.Scheduling.SchedulingSessionPreferences
 		private ISchedulingOptions _schedulingOptions;
 		private IEnumerable<IShiftCategory> _shiftCategories;
 		private bool _dataLoaded;
-		private IList<IGroupPageLight> _groupPages;
+		private IList<GroupPageLight> _groupPages;
 		private IEnumerable<IActivity> _availableActivity;
-		private IList<IGroupPageLight> _groupPagesFairness;
+		private IList<GroupPageLight> _groupPagesFairness;
 		private IEnumerable<IScheduleTag> _scheduleTags;
 		private ISchedulerGroupPagesProvider _groupPagesProvider;
 		private GroupPageLight _singleAgentEntry;
@@ -35,8 +33,6 @@ namespace Teleopti.Ccc.Win.Scheduling.SchedulingSessionPreferences
 			if (!DesignMode) SetTexts();
 		}
 
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods",
-			MessageId = "0")]
 		public void Initialize(ISchedulingOptions schedulingOptions, 
 							   IEnumerable<IShiftCategory> shiftCategories,
 		                       bool backToLegalStateDialog, 
@@ -84,7 +80,7 @@ namespace Teleopti.Ccc.Win.Scheduling.SchedulingSessionPreferences
 			_scheduleTags = scheduleTags;
 			_groupPages = _groupPagesProvider.GetGroups(false);
 			_groupPagesFairness = _groupPages.ToList();
-			_singleAgentEntry = new GroupPageLight {Key = "SingleAgentTeam", Name = Resources.NoTeam};
+			_singleAgentEntry = GroupPageLight.SingleAgentGroup(Resources.NoTeam);
 			ExchangeData(ExchangeDataOption.DataSourceToControls);
 			_dataLoaded = true;
 		}
@@ -210,8 +206,7 @@ namespace Teleopti.Ccc.Win.Scheduling.SchedulingSessionPreferences
 			var tempGroupPages = _groupPages;
 			tempGroupPages.Insert(0, _singleAgentEntry);
 			comboBoxTeamGroupPage.DataSource = tempGroupPages;
-			comboBoxTeamGroupPage.DisplayMember = "Name";
-			comboBoxTeamGroupPage.ValueMember = "Key";
+			comboBoxTeamGroupPage.DisplayMember = "DisplayName";
 			comboBoxTeamGroupPage.SelectedIndex = 0;
 		}
 
@@ -220,6 +215,7 @@ namespace Teleopti.Ccc.Win.Scheduling.SchedulingSessionPreferences
 			comboBoxTeamActivity.DataSource = _availableActivity;
 			comboBoxTeamActivity.DisplayMember = "Name";
 			comboBoxTeamActivity.ValueMember = "Name";
+			comboBoxGroupingFairness.ValueMember = "Key";
 			if (_localSchedulingOptions.CommonActivity != null)
 			{
 				comboBoxTeamActivity.SelectedValue = _localSchedulingOptions.CommonActivity.Name;
@@ -236,13 +232,9 @@ namespace Teleopti.Ccc.Win.Scheduling.SchedulingSessionPreferences
 		private void initGroupPagesFairness()
 		{
 			comboBoxGroupingFairness.DataSource = _groupPagesFairness;
-			comboBoxGroupingFairness.DisplayMember = "Name";
+			comboBoxGroupingFairness.DisplayMember = "DisplayName";
 			comboBoxGroupingFairness.ValueMember = "Key";
-
-			if (_localSchedulingOptions.GroupPageForShiftCategoryFairness != null)
-			{
-				comboBoxGroupingFairness.SelectedValue = _localSchedulingOptions.GroupPageForShiftCategoryFairness.Key;
-			}
+			comboBoxGroupingFairness.SelectedValue = _localSchedulingOptions.GroupPageForShiftCategoryFairness.Key;
 		}
 
 		private void dataOffline()
@@ -315,7 +307,7 @@ namespace Teleopti.Ccc.Win.Scheduling.SchedulingSessionPreferences
 
 			_localSchedulingOptions.Fairness = new Percent(trackBar1.Value/100d);
 			_localSchedulingOptions.GroupPageForShiftCategoryFairness =
-				(IGroupPageLight)comboBoxGroupingFairness.SelectedItem;
+				(GroupPageLight)comboBoxGroupingFairness.SelectedItem;
 			_localSchedulingOptions.UseShiftCategoryLimitations = checkBoxUseShiftCategoryRestrictions.Checked;
 			_localSchedulingOptions.DoNotBreakMaxStaffing = checkBoxDoNotBreakMaxSeats.Checked;
 			 if(checkBoxUseMaxSeats.Checked && checkBoxDoNotBreakMaxSeats.Checked) 
@@ -394,15 +386,17 @@ namespace Teleopti.Ccc.Win.Scheduling.SchedulingSessionPreferences
 			if (_localSchedulingOptions.ShiftCategory != null)
 				comboBoxAdvShiftCategory.SelectedItem = _localSchedulingOptions.ShiftCategory;
 
-			if (_localSchedulingOptions.GroupOnGroupPageForTeamBlockPer != null)
+			for (int index = 0; index < comboBoxTeamGroupPage.Items.Count; index++)
 			{
-				comboBoxTeamGroupPage.SelectedValue = _localSchedulingOptions.GroupOnGroupPageForTeamBlockPer.Key;
+				if (
+					((GroupPageLight) comboBoxTeamGroupPage.Items[index]).Equals(
+						_localSchedulingOptions.GroupOnGroupPageForTeamBlockPer))
+				{
+					comboBoxTeamGroupPage.SelectedIndex = index;
+					break;
+				}
 			}
-			else
-			{
-				comboBoxTeamGroupPage.SelectedValue = _singleAgentEntry.Key;
-			}
-
+			
 			changeGrpSchedulingCommonOptionState(isTeamSelected());
 
 			comboBoxAdvShiftCategory.Enabled = checkBoxUseShiftCategory.Checked;
@@ -504,8 +498,7 @@ namespace Teleopti.Ccc.Win.Scheduling.SchedulingSessionPreferences
 
 		private bool isTeamSelected()
 		{
-			bool result = (comboBoxTeamGroupPage.SelectedValue.ToString() != _singleAgentEntry.Key);
-			return result;
+			return ((GroupPageLight) comboBoxTeamGroupPage.SelectedValue).Type != GroupPageType.SingleAgent;
 		}
 
 		private void checkBoxUseMaxSeatsCheckedChanged(object sender, EventArgs e)
@@ -537,7 +530,7 @@ namespace Teleopti.Ccc.Win.Scheduling.SchedulingSessionPreferences
 
 		private void getTeamBlockDataToSave()
 		{
-			_localSchedulingOptions.GroupOnGroupPageForTeamBlockPer = (IGroupPageLight) comboBoxTeamGroupPage.SelectedItem;
+			_localSchedulingOptions.GroupOnGroupPageForTeamBlockPer = (GroupPageLight) comboBoxTeamGroupPage.SelectedItem;
 			_localSchedulingOptions.UseTeam = isTeamSelected();
 
 			_localSchedulingOptions.TeamSameShiftCategory = checkBoxTeamSameShiftCategory.Checked;

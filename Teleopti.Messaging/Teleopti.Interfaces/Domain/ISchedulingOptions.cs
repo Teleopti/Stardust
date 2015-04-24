@@ -231,30 +231,8 @@ namespace Teleopti.Interfaces.Domain
         /// Gets or sets the group page for shift category fairness.
         /// </summary>
         /// <value>The group page for shift category fairness.</value>
-        IGroupPageLight GroupPageForShiftCategoryFairness { get; set; }
-
-		/// <summary>
-		/// Gets or sets a value indicating whether [use max seats].
-		/// </summary>
-		/// <value><c>true</c> if [use max seats]; otherwise, <c>false</c>.</value>
-		//bool UseMaxSeats { get; set; } //Todo remove all commented code
-
-		/// <summary>
-		/// Gets or sets a value indicating whether [do not break max seats].
-		/// </summary>
-		/// <value>
-		/// 	<c>true</c> if [do not break max seats]; otherwise, <c>false</c>.
-		/// </value>
-		  //bool DoNotBreakMaxSeats { get; set; }//Todo remove all commented code
-
-		  /// <summary>
-		  /// This enum representing max seats options.
-		  /// </summary>
-		  /// <value>
-		  /// 	<c>true</c> if [do not break max seats]; otherwise, <c>false</c>.
-		  /// </value>
-		  MaxSeatsFeatureOptions UserOptionMaxSeatsFeature { get; set; }
-		  
+        GroupPageLight GroupPageForShiftCategoryFairness { get; set; }		
+		MaxSeatsFeatureOptions UserOptionMaxSeatsFeature { get; set; }	  
 
         /// <summary>
         /// Gets or sets a value indicating whether to consider short breaks.
@@ -267,10 +245,6 @@ namespace Teleopti.Interfaces.Domain
         /// Gets or sets a value indicating if same days off should be used when optimizing teams
         /// </summary>
         bool UseSameDayOffs { get; set; }
-
-		  /////<summary>
-		  /////</summary>
-		  //BlockFinderType UseBlockOptimizing { get; set; }
         IScheduleTag TagToUseOnScheduling { get; set; }
 
         ///<summary>
@@ -333,28 +307,9 @@ namespace Teleopti.Interfaces.Domain
 		/// </value>
 		bool UseAverageShiftLengths { get; set; }
 
-        ///// <summary>
-        ///// Gets or sets a value indicating whether [use period as block].
-        ///// </summary>
-        //bool UsePeriodAsBlock { get; set; }
-        ///// <summary>
-        ///// Gets or sets a value indicating whether [use two days off as block].
-        ///// </summary>
-        //bool UseTwoDaysOffAsBlock { get; set; }
-        ///// <summary>
-        ///// Gets or sets a value indicating whether [use calender as block].
-        ///// </summary>
-        //bool UseCalendarWeekAsBlock { get; set; }
-
-        /// <summary>
-        /// Block finder service for advance scheduling service
-        /// </summary>
         BlockFinderType BlockFinderTypeForAdvanceScheduling { get; set; }
 
-        /// <summary>
-		/// Group page to be used for TeamBlock per
-        /// </summary>
-        IGroupPageLight GroupOnGroupPageForTeamBlockPer { get; set; }
+        GroupPageLight GroupOnGroupPageForTeamBlockPer { get; set; }
 
         /// <summary>
         /// Used in TeamBlock per same end time

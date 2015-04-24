@@ -123,8 +123,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 		
         public bool IsSingleAgentTeam(ISchedulingOptions schedulingOptions)
         {
-            return schedulingOptions.GroupOnGroupPageForTeamBlockPer != null &&
-                   schedulingOptions.GroupOnGroupPageForTeamBlockPer.Key == "SingleAgentTeam";
+	        return schedulingOptions.GroupOnGroupPageForTeamBlockPer.Type == GroupPageType.SingleAgent;
         }
 
 		public bool IsTeamSameActivityInTeamBlock(ISchedulingOptions schedulingOptions)

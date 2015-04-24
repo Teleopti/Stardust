@@ -13,7 +13,7 @@ namespace Teleopti.Ccc.Domain.Common.Logging
 
         public string GetTeamOptions()
         {
-            var result = _schedulingOptions.GroupOnGroupPageForTeamBlockPer.Name;
+            var result = _schedulingOptions.GroupOnGroupPageForTeamBlockPer.DisplayName;
             if (_schedulingOptions.TeamSameShiftCategory)
                 result += ",Same shift category";
             if (_schedulingOptions.TeamSameStartTime)

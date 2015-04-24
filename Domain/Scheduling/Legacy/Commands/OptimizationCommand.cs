@@ -67,7 +67,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 			var scheduleMatrixOriginalStateContainers = scheduleOptimizerHelper.CreateScheduleMatrixOriginalStateContainers(selectedSchedules, selectedPeriod);
 			DateOnlyPeriod groupPagePeriod = schedulerStateHolder.RequestedPeriod.DateOnlyPeriod;
 
-			IGroupPageLight selectedGroupPage;
+			GroupPageLight selectedGroupPage;
 
 			if (optimizationMethodBackToLegalState)
 			{
@@ -155,7 +155,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 
 		private void runWeeklyRestSolver(IOptimizationPreferences optimizationPreferences, ISchedulingOptions schedulingOptions, DateOnlyPeriod selectedPeriod, IList<IScheduleMatrixPro> allMatrixes, IList<IPerson> selectedPersons, ISchedulePartModifyAndRollbackService rollbackService, IResourceCalculateDelayer resourceCalculateDelayer, IBackgroundWorkerWrapper backgroundWorker)
 		{
-			var singleAgentEntry = new GroupPageLight { Key = "SingleAgentTeam", Name = Resources.SingleAgentTeam };
+			var singleAgentEntry = GroupPageLight.SingleAgentGroup(String.Empty);
 			optimizationPreferences.Extra.TeamGroupPage = singleAgentEntry;
 			optimizationPreferences.Extra.BlockTypeValue = BlockFinderType.SingleDay;
 			_weeklyRestSolverCommand.Execute(schedulingOptions, optimizationPreferences, selectedPersons, rollbackService, resourceCalculateDelayer, selectedPeriod, allMatrixes, backgroundWorker);

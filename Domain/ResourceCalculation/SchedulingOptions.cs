@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using Teleopti.Ccc.Domain.Optimization;
-using Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftCalculation;
 using Teleopti.Ccc.Domain.Specification;
 using Teleopti.Ccc.Secrets.WorkShiftCalculator;
 using Teleopti.Interfaces.Domain;
@@ -39,7 +38,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
         public bool UseStudentAvailability { get; set; }
 		public bool UseTeam { get; set; }
 
-        public IGroupPageLight GroupOnGroupPageForTeamBlockPer { get; set; }
+        public GroupPageLight GroupOnGroupPageForTeamBlockPer { get; set; }
 		private BlockFinderType _blockFinderTypeForAdvanceScheduling;
         public bool BlockSameEndTime { get; set; }
         public bool BlockSameShiftCategory { get; set; }
@@ -48,7 +47,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
         public bool UseBlock { get; set; }
 
         public bool DoNotBreakMaxStaffing { get; set; }
-        public IGroupPageLight GroupPageForShiftCategoryFairness { get; set; }
+        public GroupPageLight GroupPageForShiftCategoryFairness { get; set; }
         public int RefreshRate { get; set; }
 		  public MaxSeatsFeatureOptions UserOptionMaxSeatsFeature { get; set; }
         public bool UseSameDayOffs { get; set; }
@@ -112,7 +111,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 		{
 			new SchedulingOptionsGeneralPersonalSetting().MapTo(this, new List<IScheduleTag>());
 			new SchedulingOptionsAdvancedPersonalSetting().MapTo(this, new List<IShiftCategory>());
-            new SchedulingOptionsExtraPersonalSetting().MapTo(this, new List<IScheduleTag>(), new List<IGroupPageLight>(), new List<IGroupPageLight>(), new List<IActivity>());
+            new SchedulingOptionsExtraPersonalSetting().MapTo(this, new List<IScheduleTag>(), new List<GroupPageLight>(), new List<GroupPageLight>(), new List<IActivity>());
 		}
 
 

@@ -223,7 +223,7 @@
     <Compile Include="Domain\IEffectiveRestrictionOptions.cs" />
     <Compile Include="Domain\IExtendedPreferencePredicate.cs" />
     <Compile Include="Domain\IForecastScheduleValuePair.cs" />
-    <Compile Include="Domain\IGroupPageLight.cs" />
+    <Compile Include="Domain\GroupPageLight.cs" />
     <Compile Include="Domain\ILicenseStatus.cs" />
     <Compile Include="Domain\ILicenseStatusUpdater.cs" />
     <Compile Include="Domain\ILightPerson.cs" />

@@ -2,21 +2,19 @@
 using System.Collections.Generic;
 using System.Windows.Forms;
 using Teleopti.Ccc.Domain.FeatureFlags;
-using Teleopti.Ccc.Domain.GroupPageCreator;
 using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
 using Teleopti.Ccc.Infrastructure.Toggle;
 using Teleopti.Ccc.UserTexts;
 using Teleopti.Ccc.Win.Common;
 using Teleopti.Ccc.WinCode.Common;
-using Teleopti.Ccc.WinCode.Grouping;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Win.Optimization
 {
 	public partial class ExtraPreferencesPanel : BaseUserControl, IDataExchange
     {
-        private IList<IGroupPageLight> _groupPageOnTeams;
-        private IList<IGroupPageLight> _groupPageOnCompareWith;
+        private IList<GroupPageLight> _groupPageOnTeams;
+        private IList<GroupPageLight> _groupPageOnCompareWith;
         private IEnumerable<IActivity> _availableActivity;
         private GroupPageLight _singleAgentEntry;
 		private IToggleManager _toggleManager;
@@ -29,7 +27,6 @@ namespace Teleopti.Ccc.Win.Optimization
             if (!DesignMode) SetTexts();
         }
 
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "1")]
 		public void Initialize(
             IExtraPreferences extraPreferences,
 			ISchedulerGroupPagesProvider groupPagesProvider, 
@@ -41,7 +38,7 @@ namespace Teleopti.Ccc.Win.Optimization
 		    _availableActivity = availableActivity;
 			_groupPageOnCompareWith = groupPagesProvider.GetGroups(false);
 			_groupPageOnTeams = groupPagesProvider.GetGroups(false);
-			_singleAgentEntry = new GroupPageLight { Key = "SingleAgentTeam", Name = Resources.NoTeam };
+			_singleAgentEntry = GroupPageLight.SingleAgentGroup(Resources.NoTeam);
 			_groupPageOnTeams.Insert(0, _singleAgentEntry);
 
 			if (_toggleManager.IsEnabled(Toggles.Scheduler_HidePointsFairnessSystem_28317))
@@ -89,7 +86,7 @@ namespace Teleopti.Ccc.Win.Optimization
 
 		private void bindGroupPages()
 		{
-			comboBoxTeamGroupPage.DisplayMember = "Name";
+			comboBoxTeamGroupPage.DisplayMember = "DisplayName";
 			comboBoxTeamGroupPage.ValueMember = "Key";
 			comboBoxTeamGroupPage.DataSource = _groupPageOnTeams;
 
@@ -101,7 +98,7 @@ namespace Teleopti.Ccc.Win.Optimization
 		private void bindActivityList()
         {
             comboBoxTeamActivity.DataSource = _availableActivity ;
-            comboBoxTeamActivity.DisplayMember = "Name";
+			comboBoxTeamActivity.DisplayMember = "DisplayName";
             comboBoxTeamActivity.ValueMember = "Name";
         }
     
@@ -113,7 +110,7 @@ namespace Teleopti.Ccc.Win.Optimization
 			Preferences.UseTeamSameEndTime = checkBoxTeamSameEndTime.Checked;
             Preferences.UseTeamSameActivity = checkBoxTeamSameActivity.Checked;
             Preferences.TeamActivityValue = (IActivity)comboBoxTeamActivity.SelectedItem;
-			Preferences.GroupPageOnCompareWith = (IGroupPageLight)comboBoxGroupPageOnCompareWith.SelectedItem;
+			Preferences.GroupPageOnCompareWith = (GroupPageLight)comboBoxGroupPageOnCompareWith.SelectedItem;
 	        Preferences.FairnessValue = _toggleManager.IsEnabled(Toggles.Scheduler_HidePointsFairnessSystem_28317)
 		        ? 0d
 		        : (double) trackBar1.Value/100;
@@ -131,15 +128,13 @@ namespace Teleopti.Ccc.Win.Optimization
 			if (Preferences.TeamActivityValue != null)
 				comboBoxTeamActivity.SelectedValue = Preferences.TeamActivityValue.Name;
 
-			if (Preferences.TeamGroupPage != null)
-				comboBoxTeamGroupPage.SelectedValue = Preferences.TeamGroupPage.Key;
+			comboBoxTeamGroupPage.SelectedValue = Preferences.TeamGroupPage.Key;
 			if (comboBoxTeamGroupPage.SelectedValue == null)
 				comboBoxTeamGroupPage.SelectedIndex = 0;
 
 			trackBar1.Value = (int) (Preferences.FairnessValue*100);
 
-			if (Preferences.GroupPageOnCompareWith != null)
-				comboBoxGroupPageOnCompareWith.SelectedValue = Preferences.GroupPageOnCompareWith.Key;
+			comboBoxGroupPageOnCompareWith.SelectedValue = Preferences.GroupPageOnCompareWith.Key;
 			if (comboBoxGroupPageOnCompareWith.SelectedValue == null)
 				comboBoxGroupPageOnCompareWith.SelectedIndex = 0;
 			setTeamBlockPerData();
@@ -208,7 +203,7 @@ namespace Teleopti.Ccc.Win.Optimization
 			Preferences.BlockTypeValue = (BlockFinderType) comboBoxBlockType.SelectedValue;
 
 			Preferences.UseTeams = isTeamEnabled();
-			Preferences.TeamGroupPage = (IGroupPageLight) comboBoxTeamGroupPage.SelectedItem;
+			Preferences.TeamGroupPage = (GroupPageLight) comboBoxTeamGroupPage.SelectedItem;
 
 			Preferences.UseBlockSameEndTime = false;
 			Preferences.UseBlockSameShift = checkBoxBlockSameShift.Checked;

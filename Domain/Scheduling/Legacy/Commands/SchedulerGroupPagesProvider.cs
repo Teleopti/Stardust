@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using Teleopti.Ccc.Domain.GroupPageCreator;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.UserTexts;
 using Teleopti.Interfaces.Domain;
@@ -9,7 +8,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 {
 	public interface ISchedulerGroupPagesProvider
 	{
-		IList<IGroupPageLight> GetGroups(bool includeSkills);
+		IList<GroupPageLight> GetGroups(bool includeSkills);
 	}
 	public class SchedulerGroupPagesProvider : ISchedulerGroupPagesProvider
 	{
@@ -23,16 +22,16 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 			_personSelectorReadOnlyRepository = personSelectorReadOnlyRepository;
 		}
 
-		public IList<IGroupPageLight> GetGroups(bool includeSkills)
+		public IList<GroupPageLight> GetGroups(bool includeSkills)
 		{
-			var lst = new List<IGroupPageLight>{new GroupPageLight{Key = "Main",Name = Resources.Main},
-					new GroupPageLight{Key = "Contracts",Name = Resources.Contract},
-					new GroupPageLight{Key = "ContractSchedule",Name = Resources.ContractSchedule},
-					new GroupPageLight{Key = "PartTimepercentages",Name = Resources.PartTimePercentage},
-					new GroupPageLight{Key = "Note",Name = Resources.Note},
-					new GroupPageLight{Key = "RuleSetBag",Name = Resources.RuleSetBag}};
+			var lst = new List<GroupPageLight>{new GroupPageLight(Resources.Main,GroupPageType.Hierarchy),
+					new GroupPageLight(Resources.Contract, GroupPageType.Contract),
+					new GroupPageLight(Resources.ContractSchedule, GroupPageType.ContractSchedule),
+					new GroupPageLight(Resources.PartTimePercentage, GroupPageType.PartTimePercentage),
+					new GroupPageLight(Resources.Note, GroupPageType.Note),
+					new GroupPageLight(Resources.RuleSetBag, GroupPageType.RuleSetBag)};
 			if (includeSkills)
-				lst.Add(new GroupPageLight { Key = "Skill", Name = Resources.Skill });
+				lst.Add(new GroupPageLight(Resources.Skill,GroupPageType.Skill));
 
 			if (_userDefined == null)
 			{
@@ -45,7 +44,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 			{
 				foreach (var userDefinedTabLight in _userDefined)
 				{
-					lst.Add(new GroupPageLight { Key = userDefinedTabLight.Id.ToString(), Name = userDefinedTabLight.Name });
+					lst.Add(new GroupPageLight(userDefinedTabLight.Name, GroupPageType.UserDefined, userDefinedTabLight.Id.ToString()));
 				}
 			}
 			return lst;

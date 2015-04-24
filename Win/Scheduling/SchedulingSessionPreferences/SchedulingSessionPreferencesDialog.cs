@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Teleopti.Ccc.Domain.GroupPageCreator;
 using Teleopti.Ccc.Domain.Optimization;
 using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
 using Teleopti.Ccc.Domain.Scheduling.ScheduleTagging;
@@ -12,7 +11,6 @@ using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.UserTexts;
 using Teleopti.Ccc.Win.Common;
 using Teleopti.Ccc.WinCode.Common.GuiHelpers;
-using Teleopti.Ccc.WinCode.Grouping;
 using Teleopti.Interfaces.Domain;
 using System.Windows.Forms;
 using Teleopti.Interfaces.Infrastructure;
@@ -26,8 +24,8 @@ namespace Teleopti.Ccc.Win.Scheduling.SchedulingSessionPreferences
 		private readonly IEnumerable<IShiftCategory> _shiftCategories;
 		private readonly bool _backToLegalStateDialog;
 		private readonly ISchedulerGroupPagesProvider _groupPagesProvider;
-		private readonly IList<IGroupPageLight> _groupPages;
-		private readonly IList<IGroupPageLight> _groupPagesForTeamBlockPer;
+		private readonly IList<GroupPageLight> _groupPages;
+		private readonly IList<GroupPageLight> _groupPagesForTeamBlockPer;
 		private readonly IEnumerable<IScheduleTag> _scheduleTags;
 		private readonly string _settingValue;
 		private readonly IEnumerable<IActivity> _availableActivity;
@@ -59,7 +57,7 @@ namespace Teleopti.Ccc.Win.Scheduling.SchedulingSessionPreferences
 			_groupPages = groupPagesProvider.GetGroups(true);
 			_groupPagesForTeamBlockPer = groupPagesProvider.GetGroups(true);
 			//add the single agent 
-			var singleAgentEntry = new GroupPageLight { Key = "SingleAgentTeam", Name = Resources.SingleAgentTeam };
+			var singleAgentEntry = GroupPageLight.SingleAgentGroup(Resources.SingleAgentTeam);
 			_groupPagesForTeamBlockPer.Add(singleAgentEntry);
 			_scheduleTags = addKeepOriginalScheduleTag(scheduleTags);
 			_settingValue = settingValue;

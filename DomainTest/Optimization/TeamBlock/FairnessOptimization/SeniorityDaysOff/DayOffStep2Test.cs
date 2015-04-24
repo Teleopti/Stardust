@@ -30,7 +30,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock.FairnessOptimization.Se
         private IList<IScheduleMatrixPro> _allPersonMatrixList;
         private DateOnlyPeriod _selectedPeriod;
         private IList<IPerson> _selectedPersons;
-        private IGroupPageLight _groupPageLight;
+        private GroupPageLight _groupPageLight;
         private ITeamBlockInfo _seniorTeamBlock;
         private ITeamBlockInfo _juniorTeamBlock;
         private ITeamBlockPoints _seniorTeamBlockPoint;
@@ -57,7 +57,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock.FairnessOptimization.Se
             _teamBlockDayOffSwapper = _mock.StrictMock<ITeamBlockDayOffDaySwapper>();
             _filterOnSwapableTeamBlocks = _mock.StrictMock<IFilterOnSwapableTeamBlocks>();
             _suitableDayOffsToGiveAway = _mock.StrictMock<ISuitableDayOffsToGiveAway>();
-            _groupPageLight = _mock.StrictMock<IGroupPageLight>();
+            _groupPageLight = new GroupPageLight();
             _seniorTeamBlock = _mock.StrictMock<ITeamBlockInfo>();
             _juniorTeamBlock = _mock.StrictMock<ITeamBlockInfo>();
             _rollbackService = _mock.StrictMock<ISchedulePartModifyAndRollbackService>();

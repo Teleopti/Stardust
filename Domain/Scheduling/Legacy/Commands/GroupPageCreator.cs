@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 using Teleopti.Ccc.Domain.GroupPageCreator;
 using Teleopti.Ccc.Domain.ResourceCalculation.GroupScheduling;
@@ -18,24 +17,24 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 			_groupPageFactory = groupPageFactory;
 		}
 		
-		public IGroupPagePerDate CreateGroupPagePerDate(ISelectedPeriod currentView, IGroupPageDataProvider groupPageDataProvider, IGroupPageLight selectedGrouping)
+		public IGroupPagePerDate CreateGroupPagePerDate(ISelectedPeriod currentView, IGroupPageDataProvider groupPageDataProvider, GroupPageLight selectedGrouping)
 		{	
 			var selectedPeriod = currentView.Period();
 			return CreateGroupPagePerDate(selectedPeriod.DayCollection(), groupPageDataProvider, selectedGrouping, false);
 		}
 
 		private void createAndAddGroupPageForDate(IGroupPageDataProvider groupPageDataProvider,
-			IGroupPageLight selectedGrouping, DateOnly date, ConcurrentDictionary<DateOnly, IGroupPage> dic)
+			GroupPageLight selectedGrouping, DateOnly date, ConcurrentDictionary<DateOnly, IGroupPage> dic)
 		{
 			var groupPage = createGroupPageForDate(groupPageDataProvider, selectedGrouping, date, false);
 			dic.GetOrAdd(date, groupPage);
 		}
 
-		public IGroupPagePerDate CreateGroupPagePerDate(IList<DateOnly> dates, IGroupPageDataProvider groupPageDataProvider, IGroupPageLight selectedGrouping)
+		public IGroupPagePerDate CreateGroupPagePerDate(IList<DateOnly> dates, IGroupPageDataProvider groupPageDataProvider, GroupPageLight selectedGrouping)
 		{
 			return CreateGroupPagePerDate(dates, groupPageDataProvider, selectedGrouping, false);
 		}
-		public IGroupPagePerDate CreateGroupPagePerDate(IList<DateOnly> dates, IGroupPageDataProvider groupPageDataProvider, IGroupPageLight selectedGrouping, bool useAllLoadedPersons)
+		public IGroupPagePerDate CreateGroupPagePerDate(IList<DateOnly> dates, IGroupPageDataProvider groupPageDataProvider, GroupPageLight selectedGrouping, bool useAllLoadedPersons)
 		{
 			if (dates == null) throw new ArgumentNullException("dates");
 			if (groupPageDataProvider == null) throw new ArgumentNullException("groupPageDataProvider");
@@ -59,7 +58,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 			return new GroupPagePerDate(dic);
 		}
 
-		private IGroupPage createGroupPageForDate(IGroupPageDataProvider groupPageDataProvider, IGroupPageLight selectedGrouping, DateOnly dateOnly, bool useAllLoadedPersons)
+		private IGroupPage createGroupPageForDate(IGroupPageDataProvider groupPageDataProvider, GroupPageLight selectedGrouping, DateOnly dateOnly, bool useAllLoadedPersons)
 		{
 			IGroupPage groupPage;
 			var persons = groupPageDataProvider.PersonCollection;
@@ -69,49 +68,49 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 			IGroupPageOptions options = new GroupPageOptions(persons)
 			{
 				SelectedPeriod = new DateOnlyPeriod(dateOnly, dateOnly),
-				CurrentGroupPageName = selectedGrouping.Name,
+				CurrentGroupPageName = selectedGrouping.DisplayName,
 				CurrentGroupPageNameKey = selectedGrouping.Key
 			};
 
-			switch (selectedGrouping.Key)
+			switch (selectedGrouping.Type)
 			{
-				case "Main":
+				case GroupPageType.Hierarchy:
 					{
 						var personGroupPage = _groupPageFactory.GetPersonsGroupPageCreator();
 						groupPage = personGroupPage.CreateGroupPage(groupPageDataProvider.BusinessUnitCollection, options);
 						break;
 					}
-				case "Contracts":
+				case GroupPageType.Contract:
 					{
 						var contractGroupPage = _groupPageFactory.GetContractsGroupPageCreator();
 						groupPage = contractGroupPage.CreateGroupPage(groupPageDataProvider.ContractCollection, options);
 						break;
 					}
-				case "ContractSchedule":
+				case GroupPageType.ContractSchedule:
 					{
 						var contractScheduleGroupPage = _groupPageFactory.GetContractSchedulesGroupPageCreator();
 						groupPage = contractScheduleGroupPage.CreateGroupPage(groupPageDataProvider.ContractScheduleCollection, options);
 						break;
 					}
-				case "PartTimepercentages":
+				case GroupPageType.PartTimePercentage:
 					{
 						var partTimePercentageGroupPage = _groupPageFactory.GetPartTimePercentagesGroupPageCreator();
 						groupPage = partTimePercentageGroupPage.CreateGroupPage(groupPageDataProvider.PartTimePercentageCollection, options);
 						break;
 					}
-				case "Note":
+				case GroupPageType.Note:
 					{
 						var personNoteGroupPage = _groupPageFactory.GetNotesGroupPageCreator();
 						groupPage = personNoteGroupPage.CreateGroupPage(null, options);
 						break;
 					}
-				case "RuleSetBag":
+				case GroupPageType.RuleSetBag:
 					{
 						var ruleSetBagGroupPage = _groupPageFactory.GetRuleSetBagsGroupPageCreator();
 						groupPage = ruleSetBagGroupPage.CreateGroupPage(groupPageDataProvider.RuleSetBagCollection, options);
 						break;
 					}
-                case "SingleAgentTeam":
+				case GroupPageType.SingleAgent:
 			        {
 			            var singleAgentTeam = _groupPageFactory.GetSingleAgentTeamCreator();
 			            groupPage= singleAgentTeam.CreateGroupPage(groupPageDataProvider.AllLoadedPersons, options);

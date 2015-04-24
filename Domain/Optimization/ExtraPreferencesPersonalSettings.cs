@@ -29,7 +29,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 	    
 
 	   [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "1")]
-        public void MapTo(IExtraPreferences target, IList<IGroupPageLight> groupPages, IList<IGroupPageLight> groupPagesForTeamBlockPer)
+        public void MapTo(IExtraPreferences target, IList<GroupPageLight> groupPages, IList<GroupPageLight> groupPagesForTeamBlockPer)
 		{
 		    if (groupPagesForTeamBlockPer == null) throw new ArgumentNullException("groupPagesForTeamBlockPer");
 		    InParameter.NotNull("groupPages", groupPages);
@@ -63,10 +63,8 @@ namespace Teleopti.Ccc.Domain.Optimization
 
 		public void MapFrom(IExtraPreferences source)
 		{
-			if (source.TeamGroupPage != null)
-				_groupPageOnTeamKey = source.TeamGroupPage.Key;
-			if (source.GroupPageOnCompareWith != null)
-				_groupPageOnCompareWithKey = source.GroupPageOnCompareWith.Key;
+			_groupPageOnTeamKey = source.TeamGroupPage.Key;
+			_groupPageOnCompareWithKey = source.GroupPageOnCompareWith.Key;
 
 			_useTeams = source.UseTeams;
 			_useSameDaysOffForTeams = source.UseTeamSameDaysOff;
@@ -86,27 +84,5 @@ namespace Teleopti.Ccc.Domain.Optimization
 		    _useTeamBlockSameStartTime = source.UseBlockSameStartTime;
 			_useTeamBlockSameActivity = source.UseTeamSameActivity;
 		}
-
-		/// <summary>
-		/// Sets the group page on team key.
-		/// </summary>
-		/// <param name="key">The key.</param>
-		/// <remarks>Used in tests only</remarks>
-		public void SetGroupPageOnTeamKey(string key)
-		{
-			_groupPageOnTeamKey = key;
-		}
-
-		/// <summary>
-		/// Sets the group page on compare with key.
-		/// </summary>
-		/// <param name="key">The key.</param>
-		/// <remarks>Used in tests only</remarks>
-		public void SetGroupPageOnCompareWithKey(string key)
-		{
-			_groupPageOnCompareWithKey = key;
-		}
-		
-
 	}
 }

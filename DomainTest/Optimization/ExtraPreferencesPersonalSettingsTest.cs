@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using NUnit.Framework;
-using Teleopti.Ccc.Domain.GroupPageCreator;
 using Teleopti.Ccc.Domain.Optimization;
 using Teleopti.Interfaces.Domain;
 
@@ -10,27 +9,26 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 	public class ExtraPreferencesPersonalSettingsTest
 	{
 		private ExtraPreferencesPersonalSettings _target;
-		private IList<IGroupPageLight> _groupPages;
+		private IList<GroupPageLight> _groupPages;
 		private string _groupPage1Key;
 		private string _groupPage2Key;
-		private IGroupPageLight _groupPage1;
+		private GroupPageLight _groupPage1;
 		private IExtraPreferences _extraPreferencesSource;
 		private IExtraPreferences _extraPreferencesTarget;
-	    private IList<IGroupPageLight> _groupPagesForTeamBlockPer;
+	    private IList<GroupPageLight> _groupPagesForTeamBlockPer;
 
 	    [SetUp]
 		public void Setup()
 		{
 			_groupPage1Key = "Key1";
 			_groupPage2Key = "Key2";
-			_groupPage1 = new GroupPageLight{Key =_groupPage1Key};
+			_groupPage1 = new GroupPageLight();
 			
-			_groupPages = new List<IGroupPageLight> { _groupPage1 };
+			_groupPages = new List<GroupPageLight> { _groupPage1 };
 
 		    _groupPagesForTeamBlockPer = _groupPages;
-	        var singleAgentTeamGP = new GroupPageLight();
-            singleAgentTeamGP.Key = "SingleAgentTeam";
-            singleAgentTeamGP.Name = "Single Agent Team";
+		    var singleAgentTeamGP = GroupPageLight.SingleAgentGroup(string.Empty);
+
             _groupPagesForTeamBlockPer.Add(singleAgentTeamGP);
 			_target = new ExtraPreferencesPersonalSettings();
 			_extraPreferencesSource = new ExtraPreferences();
@@ -93,7 +91,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
         [Test]
         public void MappingShouldGetAndSetForTeamBlockOptionsForSingleAgentPage()
         {
-            var singleAgentTeamGroupPage = new GroupPageLight { Key = "SingleAgentTeam" ,Name = "Single Agent Team" };
+            var singleAgentTeamGroupPage = GroupPageLight.SingleAgentGroup(string.Empty);
 				_extraPreferencesSource.TeamGroupPage = singleAgentTeamGroupPage;
             _target.MapFrom(_extraPreferencesSource);
 
@@ -103,24 +101,5 @@ namespace Teleopti.Ccc.DomainTest.Optimization
             
         }
 
-		[Test]
-		public void ShouldFindGroupByIdIfExistInGroupList()
-		{
-			_target.SetGroupPageOnTeamKey(_groupPage1Key);
-			_target.SetGroupPageOnCompareWithKey(_groupPage1Key);
-            _target.MapTo(_extraPreferencesTarget, _groupPages, _groupPagesForTeamBlockPer);
-			Assert.AreEqual(_extraPreferencesTarget.TeamGroupPage.Key, _groupPage1Key);
-			Assert.AreEqual(_extraPreferencesTarget.GroupPageOnCompareWith.Key, _groupPage1Key);
-		}
-
-		[Test]
-		public void ShouldUseDefaultScheduleTagIfIdNotExistInScheduleTagList()
-		{
-			_target.SetGroupPageOnTeamKey(_groupPage2Key);
-			_target.SetGroupPageOnCompareWithKey(_groupPage2Key);
-            _target.MapTo(_extraPreferencesTarget, _groupPages, _groupPagesForTeamBlockPer);
-			Assert.IsNull(_extraPreferencesTarget.TeamGroupPage);
-			Assert.IsNull(_extraPreferencesTarget.GroupPageOnCompareWith);
-		}
 	}
 }

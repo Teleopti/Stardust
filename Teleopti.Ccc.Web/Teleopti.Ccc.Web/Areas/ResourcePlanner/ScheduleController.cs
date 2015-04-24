@@ -4,7 +4,6 @@ using System.Linq;
 using System.Web.Http;
 using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.Collection;
-using Teleopti.Ccc.Domain.GroupPageCreator;
 using Teleopti.Ccc.Domain.Optimization;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.ResourceCalculation;
@@ -78,8 +77,8 @@ namespace Teleopti.Ccc.Web.Areas.ResourcePlanner
 					UseStudentAvailability = false,
 					DayOffTemplate = _dayOffTemplateRepository.FindAllDayOffsSortByDescription()[0],
 					ScheduleEmploymentType = ScheduleEmploymentType.FixedStaff,
-					GroupPageForShiftCategoryFairness = new GroupPageLight { Key = "Main", Name = UserTexts.Resources.Main },
-					GroupOnGroupPageForTeamBlockPer = new GroupPageLight { Key = "Main", Name = UserTexts.Resources.Main },
+					GroupPageForShiftCategoryFairness = new GroupPageLight(UserTexts.Resources.Main, GroupPageType.Hierarchy),
+					GroupOnGroupPageForTeamBlockPer = new GroupPageLight(UserTexts.Resources.Main, GroupPageType.Hierarchy),
 					TagToUseOnScheduling = NullScheduleTag.Instance
 				}), new NoBackgroundWorker(), _schedulerStateHolder(), allSchedules, _groupPagePerDateHolder(),
 					_requiredScheduleHelper(),

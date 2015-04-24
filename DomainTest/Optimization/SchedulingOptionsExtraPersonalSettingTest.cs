@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using NUnit.Framework;
-using Teleopti.Ccc.Domain.GroupPageCreator;
 using Teleopti.Ccc.Domain.Optimization;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling;
@@ -16,9 +15,9 @@ namespace Teleopti.Ccc.DomainTest.Optimization
         private SchedulingOptionsExtraPersonalSetting _target;
         private ISchedulingOptions _schedulingOptions;
         private IList<IScheduleTag> _scheduleTags;
-        private IList<IGroupPageLight> _groupPages;
+        private IList<GroupPageLight> _groupPages;
         private IScheduleTag _scheduleTag;
-        private IGroupPageLight _groupPageLight;
+        private GroupPageLight _groupPageLight;
         private Guid _guid;
         private List<IActivity> _activityList;
         private IActivity _activity;
@@ -30,8 +29,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 	        _scheduleTag = new ScheduleTag();
 			_scheduleTags = new List<IScheduleTag>{_scheduleTag};
             _groupPageLight = new GroupPageLight();
-	        _groupPageLight.Key = "hej";
-            _groupPages = new List<IGroupPageLight> { _groupPageLight };
+            _groupPages = new List<GroupPageLight> { _groupPageLight };
             _target = new SchedulingOptionsExtraPersonalSetting();
             _guid = Guid.NewGuid();
 			_scheduleTag.SetId(_guid);
@@ -54,7 +52,6 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 			Assert.IsFalse(_schedulingOptions.BlockSameShift);
 
 			//Team
-			Assert.IsNull(_schedulingOptions.GroupOnGroupPageForTeamBlockPer);
 			Assert.IsTrue(_schedulingOptions.TeamSameShiftCategory);
 			Assert.IsFalse(_schedulingOptions.TeamSameStartTime);
 			Assert.IsFalse(_schedulingOptions.TeamSameEndTime);
@@ -63,7 +60,6 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 			Assert.IsNull(_schedulingOptions.CommonActivity);
 
 			//Fairness
-			Assert.IsNull(_schedulingOptions.GroupPageForShiftCategoryFairness);
 			Assert.AreEqual(new Percent(0), _schedulingOptions.Fairness);
 	    }
 

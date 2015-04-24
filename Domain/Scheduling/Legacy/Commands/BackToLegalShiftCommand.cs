@@ -1,7 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.FeatureFlags;
-using Teleopti.Ccc.Domain.GroupPageCreator;
 using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.Optimization;
 using Teleopti.Ccc.Domain.Optimization.TeamBlock;
@@ -94,9 +93,8 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 
 		private static void setupPreferences(OptimizationPreferences optimizationPreferences)
 		{
-			var singleAgentEntry = new GroupPageLight { Key = "SingleAgentTeam", Name = Resources.SingleAgentTeam };
 			var extraPreferences = optimizationPreferences.Extra;
-			extraPreferences.TeamGroupPage = singleAgentEntry;
+			extraPreferences.TeamGroupPage = GroupPageLight.SingleAgentGroup(Resources.SingleAgentTeam);
 			extraPreferences.BlockTypeValue = BlockFinderType.SingleDay;
 			extraPreferences.UseTeamBlockOption = true;
 			extraPreferences.UseTeams = false;

@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Windows.Forms;
 using Microsoft.Practices.Composite.Events;
-using Teleopti.Ccc.Domain.GroupPageCreator;
 using Teleopti.Ccc.Domain.Optimization;
 using Teleopti.Ccc.Domain.Optimization.TeamBlock;
 using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
@@ -10,8 +9,8 @@ using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.Infrastructure.Toggle;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
+using Teleopti.Ccc.UserTexts;
 using Teleopti.Ccc.Win.Common;
-using Teleopti.Ccc.WinCode.Grouping;
 using Teleopti.Interfaces.Domain;
 using System.Linq;
 using Teleopti.Interfaces.Infrastructure;
@@ -31,7 +30,7 @@ namespace Teleopti.Ccc.Win.Optimization
 
 		private IList<IDataExchange> Panels { get; set; }
 
-		private readonly IList<IGroupPageLight> _groupPages;
+		private readonly IList<GroupPageLight> _groupPages;
 		private readonly ISchedulerGroupPagesProvider _groupPagesProvider;
 		private readonly IEnumerable<IScheduleTag> _scheduleTags;
 		private readonly IEnumerable<IActivity> _availableActivity;
@@ -40,9 +39,8 @@ namespace Teleopti.Ccc.Win.Optimization
 		private readonly IScheduleDictionary _scheduleDictionary;
 		private readonly IEnumerable<IPerson> _selectedPersons;
 		private readonly IToggleManager _toggleManager;
-		private readonly IList<IGroupPageLight> _groupPagesForTeamBlockPer;
+		private readonly IList<GroupPageLight> _groupPagesForTeamBlockPer;
 
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "1"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
 		public OptimizationPreferencesDialog(
 			IOptimizationPreferences preferences,
 			ISchedulerGroupPagesProvider groupPagesProvider,
@@ -58,7 +56,7 @@ namespace Teleopti.Ccc.Win.Optimization
 			_groupPagesProvider = groupPagesProvider;
 			_groupPages = _groupPagesProvider.GetGroups(true);
 			_groupPagesForTeamBlockPer = _groupPages;
-			var singleAgentGroupPage = new GroupPageLight {Key = "SingleAgentTeam", Name = "Single Agent Team"};
+			var singleAgentGroupPage = GroupPageLight.SingleAgentGroup(Resources.SingleAgentTeam);
 			_groupPagesForTeamBlockPer.Add(singleAgentGroupPage);
 			_scheduleTags = scheduleTags;
 			_availableActivity = availableActivity;

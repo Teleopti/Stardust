@@ -14,7 +14,6 @@ using Teleopti.Ccc.Domain.ResourceCalculation.GroupScheduling;
 using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
 using Teleopti.Ccc.Domain.Scheduling.PersonalAccount;
 using Teleopti.Ccc.Domain.Scheduling.Restriction;
-using Teleopti.Ccc.Domain.Scheduling.Restrictions;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Infrastructure.Foundation;
@@ -23,7 +22,6 @@ using Teleopti.Ccc.UserTexts;
 using Teleopti.Ccc.Win.Common;
 using Teleopti.Ccc.Win.ExceptionHandling;
 using Teleopti.Ccc.WinCode.Common;
-using Teleopti.Ccc.WinCode.Grouping;
 using Teleopti.Ccc.WinCode.PeopleAdmin;
 using Teleopti.Ccc.WinCode.Scheduling;
 using Teleopti.Interfaces.Domain;
@@ -48,10 +46,10 @@ namespace Teleopti.Ccc.Win.Scheduling.PropertyPanel
 	    private readonly DateOnlyPeriod _requestedPeriod;
 	    private readonly IToggleManager _toggleManager;
 	    private readonly IRestrictionExtractor _restrictionExtractor;
-	    private IList<IGroupPageLight> _groupPages;
+	    private IList<GroupPageLight> _groupPages;
 	    private IGroupPagePerDate _groupPagePerDate;
 	    private bool _mbCacheDisabled;
-	    private IGroupPageLight _lastSelectedGroupPage;
+	    private GroupPageLight _lastSelectedGroupPage;
 
         public AgentInfoControl()
         {
@@ -225,7 +223,9 @@ namespace Teleopti.Ccc.Win.Scheduling.PropertyPanel
 
 		private void resetGroupPageData()
 		{
-			_groupPagePerDate = _container.Resolve<IGroupPageCreator>().CreateGroupPagePerDate(_dateOnlyPeriod.DayCollection(), _container.Resolve<IGroupScheduleGroupPageDataProvider>(), (IGroupPageLight)comboBoxAgentGrouping.SelectedItem);
+			_groupPagePerDate = _container.Resolve<IGroupPageCreator>()
+				.CreateGroupPagePerDate(_dateOnlyPeriod.DayCollection(), _container.Resolve<IGroupScheduleGroupPageDataProvider>(),
+					(GroupPageLight) comboBoxAgentGrouping.SelectedItem);
 		}
 
 		private void updateFairnessData(IPerson person, DateOnly dateOnly, ISchedulingResultStateHolder state)
@@ -848,8 +848,8 @@ namespace Teleopti.Ccc.Win.Scheduling.PropertyPanel
 
 		private void comboBoxAgentGrouping_SelectedIndexChanged(object sender, EventArgs e)
 		{
-			var selected = (IGroupPageLight) comboBoxAgentGrouping.SelectedItem;
-			if (selected == _lastSelectedGroupPage)
+			var selected = (GroupPageLight) comboBoxAgentGrouping.SelectedItem;
+			if (selected.Key == _lastSelectedGroupPage.Key)
 				return;
 
 			_lastSelectedGroupPage = selected;

@@ -34,8 +34,9 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
         private IScheduleRange _scheduleRange;
         private ITeamBlockSchedulingOptions _teamBlockSchedulingOptions;
    		private ITeamBlockSchedulingCompletionChecker _teamBlockSchedulingCompletionChecker;
+	    private GroupPageLight _groupPageLight;
 
-        [SetUp ]
+	    [SetUp ]
         public void Setup()
         {
             _mocks = new MockRepository();
@@ -60,6 +61,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
             _virtualSchedulePeriod = _mocks.StrictMock<IVirtualSchedulePeriod>();
             _schedulingResultStateHolder = _mocks.StrictMock<ISchedulingResultStateHolder>();
             _scheduleRange = _mocks.StrictMock<IScheduleRange>();
+	        _groupPageLight = new GroupPageLight();
         }
 
         [Test] 
@@ -80,8 +82,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
         [Test]
         public void ReturnNullIfNewTeamBlockInfoIsNullWith()
         {
-            IGroupPageLight groupPageLight = new GroupPageLight { Key = "ABC", Name = "ABC" };
-            _schedulingOptions.GroupOnGroupPageForTeamBlockPer = groupPageLight;
+            _schedulingOptions.GroupOnGroupPageForTeamBlockPer = _groupPageLight;
 				_schedulingOptions.UseBlock = false;
             using (_mocks.Record())
             {
@@ -94,8 +95,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
         [Test]
         public void ReturnNullIfDayIsScheduledInTeamBlock()
         {
-            IGroupPageLight groupPageLight = new GroupPageLight { Key = "ABC", Name = "ABC" };
-            _schedulingOptions.GroupOnGroupPageForTeamBlockPer = groupPageLight;
+            _schedulingOptions.GroupOnGroupPageForTeamBlockPer = _groupPageLight;
 				_schedulingOptions.UseBlock = false;
             using (_mocks.Record())
             {
@@ -121,8 +121,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
         [Test]
         public void ReturnNullIfBlockNotInSteadyState()
         {
-            IGroupPageLight groupPageLight = new GroupPageLight { Key = "ABC", Name = "ABC" };
-            _schedulingOptions.GroupOnGroupPageForTeamBlockPer = groupPageLight;
+            _schedulingOptions.GroupOnGroupPageForTeamBlockPer = _groupPageLight;
 				_schedulingOptions.UseBlock = false;
             using (_mocks.Record())
             {
@@ -149,8 +148,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
         [Test]
         public void ReturnValidTeamBlockInfo()
         {
-            IGroupPageLight groupPageLight = new GroupPageLight { Key = "ABC", Name = "ABC" };
-            _schedulingOptions.GroupOnGroupPageForTeamBlockPer = groupPageLight;
+            _schedulingOptions.GroupOnGroupPageForTeamBlockPer = _groupPageLight;
 				_schedulingOptions.UseBlock = false;
             using (_mocks.Record())
             {
@@ -181,8 +179,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 		[Test]
 		public void ShouldLockUnselectedDays()
 		{
-			IGroupPageLight groupPageLight = new GroupPageLight { Key = "ABC", Name = "ABC" };
-			_schedulingOptions.GroupOnGroupPageForTeamBlockPer = groupPageLight;
+			_schedulingOptions.GroupOnGroupPageForTeamBlockPer = _groupPageLight;
 			_schedulingOptions.UseBlock = false;
 			using (_mocks.Record())
 			{

@@ -679,7 +679,6 @@
     <Compile Include="GroupPageCreator\ContractScheduleGroupPage.cs" />
     <Compile Include="GroupPageCreator\Group.cs" />
     <Compile Include="GroupPageCreator\GroupCreator.cs" />
-    <Compile Include="GroupPageCreator\GroupPageLight.cs" />
     <Compile Include="GroupPageCreator\GroupPageOptions.cs" />
     <Compile Include="GroupPageCreator\IGroupingsCreator.cs" />
     <Compile Include="GroupPageCreator\ISearchIndexBuilder.cs" />

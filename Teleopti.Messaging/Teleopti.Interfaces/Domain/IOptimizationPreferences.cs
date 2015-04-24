@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.ComponentModel;
 
 namespace Teleopti.Interfaces.Domain
@@ -292,16 +291,6 @@ namespace Teleopti.Interfaces.Domain
     /// </summary>
     public interface IExtraPreferences
     {
-        ///// <summary>
-        ///// Gets or sets a value indicating whether to use block scheduling.
-        ///// </summary>
-        ///// <value><c>true</c> if use block; otherwise, <c>false</c>.</value>
-        //bool UseBlockScheduling { get; set; }
-
-        /// <summary>
-        /// Gets or sets a value indicating whether to use team scheduling.
-        /// </summary>
-        /// <value><c>true</c> if use team scheduling; otherwise, <c>false</c>.</value>
         bool UseTeams { get; set; }
 
 		/// <summary>
@@ -316,7 +305,7 @@ namespace Teleopti.Interfaces.Domain
         /// Gets or sets the group page on team.
         /// </summary>
         /// <value>The group page on team.</value>
-        IGroupPageLight TeamGroupPage { get; set; }
+        GroupPageLight TeamGroupPage { get; set; }
 
         /// <summary>
         /// Gets or sets the fairness value.
@@ -328,7 +317,7 @@ namespace Teleopti.Interfaces.Domain
         /// Gets or sets the group page on compare with.
         /// </summary>
         /// <value>The group page on compare with.</value>
-        IGroupPageLight GroupPageOnCompareWith { get; set; }
+        GroupPageLight GroupPageOnCompareWith { get; set; }
 
 		/// <summary>
 		/// 
