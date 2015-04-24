@@ -7,17 +7,17 @@
 		</div>
 		<div class="row col-lg-12">
 			<div class="tree">
-				<div ui-tree data-drag-enabled="false">
-					<ol ui-tree-nodes="" ng-model="all">
-						<li ui-tree-node>
+				<div class="angular-ui-tree">
+					<ol class="angular-ui-tree-nodes tree-line" ng-model="all">
+						<li class="angular-ui-tree-node">
 							<div class="tree-toggle-group">
 								<div class="toggle-handle" ng-class="{open: all.show}" ng-click="all.show = !all.show"><i class="mdi mdi-chevron-right"></i></div>
-								<div ui-tree-handle ng-class="{selected: all.Selected}" ng-click="toggleAll(all.Selected)">
+								<div class="angular-ui-tree-handle" ng-class="{selected: all.Selected}" ng-click="toggleAll(all.Selected)">
 									{{all.Name}} <i class="pull-right total-accuracy"><b ng-if="all.numberOfSelectedWorkloads!==0">{{all.numberOfSelectedWorkloads}}/{{all.totalWorkloads}}</b> {{all.Accuracy}}</i>
 								</div>
 							</div>
-							<ol ui-tree-nodes="" ng-model="skillsDisplayed" ng-show="all.show">
-								<li ng-repeat="skill in skillsDisplayed" ui-tree-node ng-include="'nodes_skill_renderer.html'" value='{{skill.Id}}'></li>
+							<ol class="angular-ui-tree-nodes" ng-model="skillsDisplayed" ng-show="all.show">
+								<li ng-repeat="skill in skillsDisplayed" class="angular-ui-tree-node" ng-include="'nodes_skill_renderer.html'" value='{{skill.Id}}'></li>
 							</ol>
 						</li>
 					</ol>
@@ -43,15 +43,15 @@
 <script type="text/ng-template" id="nodes_skill_renderer.html">
 	<div class="tree-toggle-group">
 		<div class="toggle-handle" ng-class="{open: skill.show}" ng-click="skill.show = !skill.show"><i class="mdi mdi-chevron-right"></i></div>
-		<div ui-tree-handle ng-class="{selected: skill.Selected}" class="skill" ng-click="toggleSkill(skill)">
+		<div class="angular-ui-tree-handle skill" ng-class="{selected: skill.Selected}" ng-click="toggleSkill(skill)">
 			{{skill.Name}}<i class="pull-right skill-accuracy"><b ng-if="skill.numberOfSelectedWorkloads!==0 && skill.numberOfSelectedWorkloads!==skill.Workloads.length">{{skill.numberOfSelectedWorkloads}}/{{skill.Workloads.length}}</b> {{skill.Accuracy}}</i><span><i class="mdi mdi-check"></i></span>
 		</div>
 	</div>
-	<ol ui-tree-nodes="" ng-model="skill.Workloads" ng-show="skill.show">
-		<li ng-repeat="workload in skill.Workloads" ui-tree-node value='{{workload.Id}}'>
+	<ol class="angular-ui-tree-nodes" ng-model="skill.Workloads" ng-show="skill.show">
+		<li ng-repeat="workload in skill.Workloads" class="angular-ui-tree-node" value='{{workload.Id}}'>
 			<div class="tree-toggle-group">
 				<div class="toggle-handle" ng-class="{open: false}"><i class="mdi mdi-chevron-right ng-hide"></i></div>
-				<div ui-tree-handle ng-class="{selected: workload.Selected || skill.Selected}" class="workload" ng-click="toggleWorkload(workload)">
+				<div ng-class="{selected: workload.Selected || skill.Selected}" class="workload angular-ui-tree-handle" ng-click="toggleWorkload(workload)">
 					{{workload.Name}}
 					<i class="pull-right workload-accuracy">{{workload.Accuracy}}</i>
 					<span><i class="mdi mdi-check"></i></span>
