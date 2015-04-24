@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections;
+﻿using System.Collections;
 using System.Configuration;
 using System.Data;
 using System.Data.SqlClient;
@@ -15,10 +14,7 @@ namespace Teleopti.Ccc.Web.Core.Startup
 		{
 			using (var connection = new SqlConnection())
 			{
-				const string insertSql = "INSERT INTO mart.language_translation VALUES ('{0}', {1}, '{2}',N'{3}', N'{4}') ";
-				
-
-				// Get the RasourceManager
+				// Get the ResourceManager
 				Assembly a = Assembly.Load("Teleopti.Analytics.ReportTexts");
 				var rm = new ResourceManager("Teleopti.Analytics.ReportTexts.Resources", a);
 
@@ -38,13 +34,6 @@ namespace Teleopti.Ccc.Web.Core.Startup
 					foreach (DictionaryEntry resourceSet in resorces)
 					{
 						string englishText = englishResorces.GetString((string)resourceSet.Key) ?? "";
-						string value = "";
-						if (resourceSet.Value != null)
-						{
-							value = (string)resourceSet.Value;
-						}
-						//sqlCommand.CommandText = string.Format(insertSql, s, info.LCID, resourceSet.Key, value.Replace("'", "''"), englishText.Replace("'", "''"));
-						//sqlCommand.ExecuteNonQuery();
 						addRow(dataTable, info, resourceSet, englishText);
 					}
 				}
@@ -71,10 +60,9 @@ namespace Teleopti.Ccc.Web.Core.Startup
 			using (var sqlBulkCopy = new SqlBulkCopy(connectionString))
 			{
 				sqlBulkCopy.DestinationTableName = "mart.language_translation";
-				//_sqlBulkCopy.NotifyAfter = 10000;
 				var timeout = 60;
 				sqlBulkCopy.BulkCopyTimeout = timeout;
-				// Write from the source to the destination.
+				
 				sqlBulkCopy.WriteToServer(dataTable);
 			}
 		}
