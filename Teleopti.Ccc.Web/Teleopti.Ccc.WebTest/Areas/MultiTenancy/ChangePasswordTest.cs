@@ -30,7 +30,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MultiTenancy
 		}
 
 		[Test]
-		public void InvalidUsernameShouldFail()
+		public void InvalidUsernameShouldFailWith403()
 		{
 			var model = new ChangePasswordModel
 			{
@@ -48,7 +48,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MultiTenancy
 		}
 
 		[Test]
-		public void InvalidOldPasswordShouldFail()
+		public void InvalidOldPasswordShouldFailWith403()
 		{
 			var model = new ChangePasswordModel
 			{
@@ -62,6 +62,25 @@ namespace Teleopti.Ccc.WebTest.Areas.MultiTenancy
 
 			var ex = Assert.Throws<HttpException>(() => Target.Modify(model));
 			ex.GetHttpCode().Should().Be.EqualTo(HttpStatusCode.Forbidden);
+			TenantUnitOfWork.WasCommitted.Should().Be.False();
+		}
+
+		[Test]
+		public void SameOldAndNewPasswordShouldFailWith400()
+		{
+			var pw = RandomName.Make();
+			var model = new ChangePasswordModel
+			{
+				UserName = RandomName.Make(),
+				OldPassword = pw,
+				NewPassword = pw
+			};
+			var personInfo = new PersonInfo();
+			personInfo.SetApplicationLogonCredentials(new CheckPasswordStrengthFake(), model.UserName, pw);
+			ApplicationUserTenantQuery.Add(personInfo);
+
+			var ex = Assert.Throws<HttpException>(() => Target.Modify(model));
+			ex.GetHttpCode().Should().Be.EqualTo(HttpStatusCode.BadRequest);
 			TenantUnitOfWork.WasCommitted.Should().Be.False();
 		}
 

@@ -24,6 +24,9 @@ namespace Teleopti.Ccc.Web.Areas.MultiTenancy.Core
 			var personInfo = _applicationUserTenantQuery.Find(userName);
 			if (personInfo == null || !personInfo.ApplicationLogonInfo.IsValidPassword(_now, _passwordPolicy, oldPassword))
 				throw new HttpException(403, "Invalid username or password.");
+			if(oldPassword.Equals(newPassword))
+				throw new HttpException(400, "No diff between old and new password");
+
 		}
 	}
 }
