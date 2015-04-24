@@ -49,7 +49,6 @@ namespace Teleopti.Ccc.Web.Areas.Tenant
 			return Json(ret);
 		}
 
-		//TODO: tenant, needs to be extra method to catch uow attribute errors. Fix soon!
 		[TenantUnitOfWork]
 		protected virtual void PersistInternal(PersonInfoModel personInfoModel)
 		{

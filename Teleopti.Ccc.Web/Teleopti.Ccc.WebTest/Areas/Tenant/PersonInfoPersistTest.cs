@@ -4,6 +4,7 @@ using Teleopti.Ccc.Infrastructure.MultiTenancy.Server;
 using Teleopti.Ccc.TestCommon.TestData;
 using Teleopti.Ccc.Web.Areas.Tenant;
 using Teleopti.Ccc.Web.Areas.Tenant.Model;
+using Teleopti.Ccc.WebTest.TestHelper;
 
 namespace Teleopti.Ccc.WebTest.Areas.Tenant
 {
@@ -23,7 +24,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Tenant
 			FindTenantByNameQuery.Add(new Infrastructure.MultiTenancy.Server.Tenant(tenantName));
 			var personInfoModel = new PersonInfoModel { Tenant = tenantName, ApplicationLogonName = RandomName.Make(), Password = RandomName.Make() };
 
-			var result = (PersistPersonInfoResult)Target.Persist(personInfoModel).Data;
+			var result = Target.Persist(personInfoModel).Result<PersistPersonInfoResult>();
 
 			allPropertiesShouldBeTrue(result);
 			PersistPersonInfo.LastPersist.ApplicationLogonName.Should().Be.EqualTo(personInfoModel.ApplicationLogonName);
@@ -45,7 +46,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Tenant
 			var personInfoModel = new PersonInfoModel { Tenant = tenantName, ApplicationLogonName = RandomName.Make(), Password = RandomName.Make()};
 			CheckPasswordStrength.WillThrow(new PasswordStrengthException());
 
-			var result = (PersistPersonInfoResult)Target.Persist(personInfoModel).Data;
+			var result = Target.Persist(personInfoModel).Result<PersistPersonInfoResult>();
 
 			result.PasswordStrengthIsValid.Should().Be.False();
 			TenantUnitOfWorkAspect.CommitSucceded.Should().Be.False();
@@ -59,7 +60,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Tenant
 			var personInfoModel = new PersonInfoModel { Tenant = tenantName, ApplicationLogonName = RandomName.Make(), Password = RandomName.Make() };
 			TenantUnitOfWorkAspect.WillThrow(new DuplicateApplicationLogonNameException());
 
-			var result = (PersistPersonInfoResult)Target.Persist(personInfoModel).Data;
+			var result = Target.Persist(personInfoModel).Result<PersistPersonInfoResult>();
 
 			result.ApplicationLogonNameIsValid.Should().Be.False();
 			TenantUnitOfWorkAspect.CommitSucceded.Should().Be.False();
@@ -73,7 +74,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Tenant
 			var personInfoModel = new PersonInfoModel { Tenant = tenantName, ApplicationLogonName = RandomName.Make(), Password = RandomName.Make() };
 			TenantUnitOfWorkAspect.WillThrow(new DuplicateIdentityException());
 
-			var result = (PersistPersonInfoResult)Target.Persist(personInfoModel).Data;
+			var result = Target.Persist(personInfoModel).Result<PersistPersonInfoResult>();
 
 			result.IdentityIsValid.Should().Be.False();
 			TenantUnitOfWorkAspect.CommitSucceded.Should().Be.False();
