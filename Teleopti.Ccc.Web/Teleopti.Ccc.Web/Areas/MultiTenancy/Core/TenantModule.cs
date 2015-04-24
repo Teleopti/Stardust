@@ -55,6 +55,7 @@ namespace Teleopti.Ccc.Web.Areas.MultiTenancy.Core
 			builder.RegisterType<DeletePersonInfo>().As<IDeletePersonInfo>().SingleInstance();
 			builder.RegisterType<VerifyPasswordPolicy>().As<IVerifyPasswordPolicy>().SingleInstance();
 			builder.RegisterType<CheckPasswordStrength>().As<ICheckPasswordStrength>().SingleInstance();
+			builder.RegisterType<ChangePassword>().SingleInstance();
 		}
 	}
 }
