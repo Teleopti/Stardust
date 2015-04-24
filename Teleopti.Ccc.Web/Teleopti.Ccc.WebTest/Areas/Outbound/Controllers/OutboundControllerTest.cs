@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Net.Http;
 using System.Web.Http.Results;
 using NUnit.Framework;
@@ -67,6 +68,37 @@ namespace Teleopti.Ccc.WebTest.Areas.Outbound.Controllers
 			var result = target.Get();
 
 			result.Count.Should().Be.EqualTo(1);
+		}
+
+		[Test]
+		public void ShouldGetCampaignById()
+		{
+			var campaign = new Campaign();
+			var campaignVM = new CampaignViewModel();
+			var campaignId = new Guid();
+			
+			_outboundCampaignRepository.Stub(x => x.Get(campaignId)).Return(campaign);
+			_outboundCampaignViewModelMapper.Stub((x => x.Map(campaign))).Return(campaignVM);
+			var target = new OutboundController(null, _outboundCampaignRepository, _outboundCampaignViewModelMapper)
+			{
+				Request = new HttpRequestMessage()
+			};
+
+			var result = target.Get(campaignId);
+			result.Should().Be.SameInstanceAs(campaignVM);
+		}
+
+		[Test]
+		public void ShouldRemoveCampaignById()
+		{
+			var campaign = new Campaign();
+			var campaignId = new Guid();
+			_outboundCampaignRepository.Stub(x => x.Get(campaignId)).IgnoreArguments().Return(campaign);
+	
+			var target = new OutboundController(null, _outboundCampaignRepository, null);
+			target.Remove(campaignId);
+			_outboundCampaignRepository.AssertWasCalled(x=>x.Remove(campaign), o=>o.IgnoreArguments());
+			
 		}
 	}
 }
