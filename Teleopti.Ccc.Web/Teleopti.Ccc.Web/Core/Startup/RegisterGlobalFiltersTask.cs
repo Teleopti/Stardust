@@ -52,6 +52,7 @@ namespace Teleopti.Ccc.Web.Core.Startup
 				typeof (MessageBrokerController),
 				typeof (ApplicationController),
 				typeof (AuthenticateController),
+				typeof (ChangePasswordController),
 				typeof(PersonInfoController), //TODO: tenant  - should have some kind of permission later....
 				typeof(ConfigController)
 			}));
