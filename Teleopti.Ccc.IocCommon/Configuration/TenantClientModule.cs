@@ -44,8 +44,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 					.As<ISharedSettingsQuerier>()
 					.SingleInstance();
 			}
-			//don't remove this toggle until changepassword has been tested! (both from client and web)
-			if (_configuration.Toggle(Toggles.MultiTenancy_People_32113))
+			if (_configuration.Toggle(Toggles.MultiTenancy_LogonUseNewSchema_33049))
 			{
 				builder.RegisterType<ChangePassword>().As<IChangePassword>().SingleInstance();
 			}
