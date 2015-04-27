@@ -198,18 +198,12 @@ namespace Teleopti.Ccc.Sdk.WcfHost
 			if (!string.IsNullOrEmpty(passphrase))
 			{
 				builder.RegisterInstance<IPassphraseProvider>(passphraseProvider);
-				builder.RegisterType<CheckPasswordWithToken>().As<ICheckPassword>().SingleInstance();
 			}
 		}
 
 		private static void registerSdkFactories(ContainerBuilder builder, IocConfiguration configuration)
 		  {
 				builder.RegisterType<TeleoptiCccSdkService>();
-
-				builder.RegisterType<ApplicationDataSourceProvider>().As<IApplicationDataSourceProvider>().SingleInstance();
-				builder.RegisterType<WindowsDataSourceProvider>().As<IDataSourceProvider>();
-				builder.RegisterType<ApplicationDataSourceProvider>().As<IDataSourceProvider>();
-				builder.RegisterType<AvailableDataSourcesProvider>().As<IAvailableDataSourcesProvider>().SingleInstance();
 
 				builder.RegisterType<MultiTenancyAuthenticationFactory>().As<IAuthenticationFactory>().InstancePerLifetimeScope();
 				builder.RegisterType<TenantPeopleSaver>().As<ITenantPeopleSaver>().InstancePerLifetimeScope();
@@ -245,5 +239,9 @@ namespace Teleopti.Ccc.Sdk.WcfHost
 		{
 			return _passphrase;
 		}
+	}
+	public interface IPassphraseProvider
+	{
+		string Passphrase();
 	}
 }

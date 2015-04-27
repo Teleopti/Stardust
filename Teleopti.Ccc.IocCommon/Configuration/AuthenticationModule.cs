@@ -33,22 +33,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<RepositoryFactory>()
 				.As<IRepositoryFactory>()
 				.SingleInstance();
-			
-			builder.RegisterType<FindUserDetail>()
-				.As<IFindUserDetail>()
-				.SingleInstance();
-			builder.RegisterType<FindApplicationUser>()
-				.As<IFindApplicationUser>()
-				.SingleInstance();
-			builder.RegisterType<CheckNullUser>()
-				.As<ICheckNullUser>()
-				.SingleInstance();
-			builder.RegisterType<CheckPassword>()
-				.As<ICheckPassword>()
-				.SingleInstance();
-			builder.RegisterType<CheckUserDetail>()
-				.As<ICheckUserDetail>()
-				.SingleInstance();
+
 			builder.RegisterType<CheckPasswordChange>()
 				.As<ICheckPasswordChange>()
 				.SingleInstance();

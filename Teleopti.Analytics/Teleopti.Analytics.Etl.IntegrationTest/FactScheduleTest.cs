@@ -572,7 +572,7 @@ namespace Teleopti.Analytics.Etl.IntegrationTest
 		public LogOnHelperFake(IDataSource dataSource, IPerson person)
 		{
 			_dataSources.Add(dataSource);
-			_choosenDb = new DataSourceContainer(dataSource, new RepositoryFactory(), null, AuthenticationTypeOption.Application);
+			_choosenDb = new DataSourceContainer(dataSource, new RepositoryFactory(), AuthenticationTypeOption.Application);
 			_choosenDb.SetUser(person);
 			_tenantNames = new List<ITenantName> { new TenantName { DataSourceName = dataSource.DataSourceName } };
 		}

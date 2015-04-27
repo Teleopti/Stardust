@@ -18,12 +18,10 @@ namespace Teleopti.Ccc.Sdk.WcfService.LogOn
 
         public void SetDataSource(ITokenWithBusinessUnitAndDataSource customUserNameSecurityToken)
         {
-            var findApplicationUser = AutofacHostFactory.Container.Resolve<IFindApplicationUser>();
-            var dataSource =
+           var dataSource =
                 StateHolderReader.Instance.StateReader.ApplicationScopeData.DataSource(customUserNameSecurityToken.DataSource);
 
-            _dataSourceContainer = new DataSourceContainer(dataSource, new RepositoryFactory(), findApplicationUser,
-                                                           AuthenticationTypeOption.Application);
+            _dataSourceContainer = new DataSourceContainer(dataSource, new RepositoryFactory(), AuthenticationTypeOption.Application);
         }
 
         public IDataSourceContainer DataSourceContainer { get { return _dataSourceContainer; } }

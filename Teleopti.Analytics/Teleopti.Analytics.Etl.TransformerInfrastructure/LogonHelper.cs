@@ -120,7 +120,7 @@ namespace Teleopti.Analytics.Etl.TransformerInfrastructure
 			}
 			else
 			{
-				_choosenDb = new DataSourceContainer(dataSource, _repositoryFactory, null, AuthenticationTypeOption.Application);
+				_choosenDb = new DataSourceContainer(dataSource, _repositoryFactory, AuthenticationTypeOption.Application);
 
 				using (var unitOfWork = _choosenDb.DataSource.Application.CreateAndOpenUnitOfWork())
 				{

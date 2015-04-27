@@ -11,22 +11,6 @@ namespace Teleopti.Ccc.Domain.Repositories
 	public interface IPersonRepository : IRepository<IPerson>
 	{
 		/// <summary>
-		/// Tries to find a basic authenticated user.
-		/// </summary>
-		/// <param name="logOnName">The logOnName.</param>
-		/// <returns></returns>
-		IPerson TryFindBasicAuthenticatedPerson(string logOnName);
-
-		/// <summary>
-		/// Tries to find a windows authenticated person.
-		/// </summary>
-		/// <param name="identity"></param>
-		/// <param name="foundPerson">The found person.</param>
-		/// <returns></returns>
-		bool TryFindIdentityAuthenticatedPerson(string identity, out IPerson foundPerson);
-
-
-		/// <summary>
 		/// Loads all person with hierarchy data sort by name. Skip persons with teminal date earlier than specifyed
 		/// </summary>
 		/// <param name="earliestTerminalDate">The earliest terminal date.</param>

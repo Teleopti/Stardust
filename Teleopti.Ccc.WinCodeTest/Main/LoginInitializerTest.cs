@@ -42,7 +42,7 @@ namespace Teleopti.Ccc.WinCodeTest.Main
 		{
 			var unitOfWork = MockRepository.GenerateMock<IUnitOfWork>();
 			var loggedOnUnitOfWorkFactory = MockRepository.GenerateMock<IUnitOfWorkFactory>();
-			var datasourceContainer = new DataSourceContainer(new DataSource(loggedOnUnitOfWorkFactory, null, null), null, null, AuthenticationTypeOption.Application);
+			var datasourceContainer = new DataSourceContainer(new DataSource(loggedOnUnitOfWorkFactory, null, null), null, AuthenticationTypeOption.Application);
 			var raptorApplicationResult = new CheckRaptorApplicationFunctionsResult(new List<IApplicationFunction>(), new List<IApplicationFunction>());
 			
 			_licenseChecker.Expect(l => l.HasValidLicense(datasourceContainer)).Return(true);
@@ -59,7 +59,7 @@ namespace Teleopti.Ccc.WinCodeTest.Main
         {
             var unitOfWork = MockRepository.GenerateMock<IUnitOfWork>();
             var loggedOnUnitOfWorkFactory = MockRepository.GenerateMock<IUnitOfWorkFactory>();
-            var datasourceContainer = new DataSourceContainer(new DataSource(loggedOnUnitOfWorkFactory, null, null), null, null, AuthenticationTypeOption.Application);
+            var datasourceContainer = new DataSourceContainer(new DataSource(loggedOnUnitOfWorkFactory, null, null), null, AuthenticationTypeOption.Application);
             var raptorApplicationResult = new CheckRaptorApplicationFunctionsResult(new List<IApplicationFunction>(), new List<IApplicationFunction>{new ApplicationFunction("code")});
             
             _licenseChecker.Expect(l => l.HasValidLicense(datasourceContainer)).Return(true);
@@ -79,7 +79,7 @@ namespace Teleopti.Ccc.WinCodeTest.Main
         {
             var unitOfWork = MockRepository.GenerateMock<IUnitOfWork>();
             var loggedOnUnitOfWorkFactory = MockRepository.GenerateMock<IUnitOfWorkFactory>();
-            var datasourceContainer = new DataSourceContainer(new DataSource(loggedOnUnitOfWorkFactory, null, null), null, null, AuthenticationTypeOption.Application);
+            var datasourceContainer = new DataSourceContainer(new DataSource(loggedOnUnitOfWorkFactory, null, null), null, AuthenticationTypeOption.Application);
             var raptorApplicationResult = new CheckRaptorApplicationFunctionsResult(new List<IApplicationFunction> { new ApplicationFunction("code") }, new List<IApplicationFunction>());
 
             _licenseChecker.Expect(l => l.HasValidLicense(datasourceContainer)).Return(true);
@@ -100,7 +100,7 @@ namespace Teleopti.Ccc.WinCodeTest.Main
         {
             var unitOfWork = MockRepository.GenerateMock<IUnitOfWork>();
             var loggedOnUnitOfWorkFactory = MockRepository.GenerateMock<IUnitOfWorkFactory>();
-            var datasourceContainer = new DataSourceContainer(new DataSource(loggedOnUnitOfWorkFactory, null, null), null, null, AuthenticationTypeOption.Application);
+            var datasourceContainer = new DataSourceContainer(new DataSource(loggedOnUnitOfWorkFactory, null, null), null, AuthenticationTypeOption.Application);
             var raptorApplicationResult = new CheckRaptorApplicationFunctionsResult(new List<IApplicationFunction> (), new List<IApplicationFunction>());
 
             _licenseChecker.Expect(l => l.HasValidLicense(datasourceContainer)).Return(true);

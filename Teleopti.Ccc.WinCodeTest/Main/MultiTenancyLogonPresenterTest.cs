@@ -6,7 +6,6 @@ using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Infrastructure;
 using Teleopti.Ccc.Domain.Security.Authentication;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Client;
-using Teleopti.Ccc.Infrastructure.Web;
 using Teleopti.Ccc.UserTexts;
 using Teleopti.Ccc.WinCode.Main;
 using Rhino.Mocks;
@@ -56,7 +55,7 @@ namespace Teleopti.Ccc.WinCodeTest.Main
 		[Test]
 		public void ShouldNotReloadSdkOnBackFromDataSources()
 		{
-			_model.SelectedDataSourceContainer = new DataSourceContainer(null, null, null, AuthenticationTypeOption.Application);
+			_model.SelectedDataSourceContainer = new DataSourceContainer(null, null, AuthenticationTypeOption.Application);
 			_target.CurrentStep = LoginStep.SelectLogonType;
 			_target.BackButtonClicked();
 		}
@@ -131,7 +130,7 @@ namespace Teleopti.Ccc.WinCodeTest.Main
 		[Test]
 		public void ShouldGoToLoginIfApplication()
 		{
-			var dataSourceContainer = new DataSourceContainer(null, null, null, AuthenticationTypeOption.Application);
+			var dataSourceContainer = new DataSourceContainer(null, null, AuthenticationTypeOption.Application);
 			_model.SelectedDataSourceContainer = dataSourceContainer;
 			_view.Stub(x => x.ShowStep(false));
 			_target.CurrentStep = LoginStep.SelectLogonType;

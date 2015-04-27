@@ -82,7 +82,7 @@ namespace Teleopti.Ccc.ApplicationConfig.Common
 					)
 					.Create(databaseHandler.DataSourceSettings(), "");
 
-			var dataSourceContainer = new DataSourceContainer(dataSource, repositoryFactory, null, AuthenticationTypeOption.Application);
+			var dataSourceContainer = new DataSourceContainer(dataSource, repositoryFactory, AuthenticationTypeOption.Application);
 
 			var logOnOff = new LogOnOff(new WindowsAppDomainPrincipalContext(new TeleoptiPrincipalFactory()));
 			using (var unitOfWork = dataSourceContainer.DataSource.Application.CreateAndOpenUnitOfWork())

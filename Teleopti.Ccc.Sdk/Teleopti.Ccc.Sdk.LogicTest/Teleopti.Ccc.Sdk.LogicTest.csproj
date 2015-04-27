@@ -125,7 +125,6 @@
     <Compile Include="..\..\GlobalAssemblyInfo.cs">
       <Link>GlobalAssemblyInfo.cs</Link>
     </Compile>
-    <Compile Include="ApplicationDataSourceProviderTest.cs" />
     <Compile Include="AssemblersTest\AbsenceAssemblerTest.cs" />
     <Compile Include="AssemblersTest\ActivityRestrictionAssemblerTest.cs" />
     <Compile Include="AssemblersTest\AssemblerTest.cs" />
@@ -273,7 +272,6 @@
     <Compile Include="Restrictions\RestrictionsValidatorTest.cs" />
     <Compile Include="SaveSchedulePartServiceTest.cs" />
     <Compile Include="SetUpFixtureForAssembly.cs" />
-    <Compile Include="WindowsDataSourceProviderTest.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\Domain\Teleopti.Ccc.Domain.csproj">
