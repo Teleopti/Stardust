@@ -47,7 +47,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 														 StateHolderReader.Instance.StateReader.ApplicationScopeData.
 															 LoadPasswordPolicyService),
 													 UnitOfWorkFactory.Current,
-													 new RepositoryFactory(), new OneWayEncryption(), _container.Resolve<IChangeUserPassword>());
+													 new RepositoryFactory(), new OneWayEncryption(), _container.Resolve<IChangePassword>());
 			_presenter.Initialize();
 			labelSubHeader2.Text = string.Concat(labelSubHeader2.Text, " ",
 												 ((IUnsafePerson)TeleoptiPrincipal.CurrentPrincipal).Person.Name);

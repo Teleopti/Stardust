@@ -1,6 +1,6 @@
 ﻿namespace Teleopti.Ccc.Domain.Security.MultiTenancyAuthentication
 {
-	public class ChangeUserPasswordResult
+	public class ChangePasswordResult
 	{
 		public bool Success { get; set; }
 		public string FailReason { get; set; }

@@ -27,7 +27,7 @@ namespace Teleopti.Ccc.WinCodeTest.Configuration
 		private IApplicationAuthenticationInfo applicationAuthenticationInfo;
 		private IPasswordPolicy passwordPolicy;
 		private IPersonRepository personRepository;
-		private IChangeUserPassword changePw;
+		private IChangePassword changePw;
 
 		[SetUp]
 		public void Setup()
@@ -43,7 +43,7 @@ namespace Teleopti.Ccc.WinCodeTest.Configuration
 			oneWayEncryption = MockRepository.GenerateMock<IOneWayEncryption>();
 			applicationAuthenticationInfo = MockRepository.GenerateMock<IApplicationAuthenticationInfo>();
 			personRepository = MockRepository.GenerateMock<IPersonRepository>();
-			changePw = MockRepository.GenerateMock<IChangeUserPassword>();
+			changePw = MockRepository.GenerateMock<IChangePassword>();
 			target = new ChangePasswordPresenter(view, passwordPolicy, unitOfWorkFactory, repositoryFactory, oneWayEncryption, changePw);
 		}
 
@@ -116,7 +116,7 @@ namespace Teleopti.Ccc.WinCodeTest.Configuration
 			view.Stub(x => x.Close());
 			changePw.Stub(x => x.SetNewPassword(null))
 				.IgnoreArguments()
-				.Return(new ChangeUserPasswordResult { Success = true });
+				.Return(new ChangePasswordResult { Success = true });
 
 
 			target.Initialize();

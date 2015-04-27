@@ -47,11 +47,11 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			}
 			if (_configuration.Toggle(Toggles.MultiTenancy_LogonUseNewSchema_33049))
 			{
-				builder.RegisterType<ChangeUserPassword>().As<IChangeUserPassword>().SingleInstance();
+				builder.RegisterType<ChangePassword>().As<IChangePassword>().SingleInstance();
 			}
 			else
 			{
-				builder.RegisterType<EmptyChangeUserPassword>().As<IChangeUserPassword>().SingleInstance();
+				builder.RegisterType<EmptyChangePassword>().As<IChangePassword>().SingleInstance();
 			}
 		}
 

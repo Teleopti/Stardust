@@ -14,18 +14,18 @@ namespace Teleopti.Ccc.WinCode.Common.Configuration
 		private readonly IUnitOfWorkFactory _unitOfWorkFactory;
 		private readonly IRepositoryFactory _repositoryFactory;
 		private readonly IOneWayEncryption _encryption;
-		private readonly IChangeUserPassword _changeUserPassword;
+		private readonly IChangePassword _changePassword;
 
 		public ChangePasswordPresenter(IChangePasswordView view, IPasswordPolicy passwordPolicy,
 			IUnitOfWorkFactory unitOfWorkFactory, IRepositoryFactory repositoryFactory, IOneWayEncryption encryption,
-			IChangeUserPassword changeUserPassword)
+			IChangePassword changePassword)
 		{
 			_view = view;
 			_passwordPolicy = passwordPolicy;
 			_unitOfWorkFactory = unitOfWorkFactory;
 			_repositoryFactory = repositoryFactory;
 			_encryption = encryption;
-			_changeUserPassword = changeUserPassword;
+			_changePassword = changePassword;
 		}
 
 		public ChangePasswordModel Model { get; private set; }
@@ -67,7 +67,7 @@ namespace Teleopti.Ccc.WinCode.Common.Configuration
 			}
 
 			var res =
-				_changeUserPassword.SetNewPassword(new ChangePasswordInput
+				_changePassword.SetNewPassword(new ChangePasswordInput
 				{
 					NewPassword = Model.NewPassword,
 					OldPassword = Model.OldEnteredPassword,
