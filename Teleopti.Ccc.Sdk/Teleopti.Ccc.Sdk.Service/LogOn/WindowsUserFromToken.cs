@@ -2,6 +2,7 @@
 using System.ServiceModel;
 using Teleopti.Ccc.Domain.Security.Authentication;
 using Teleopti.Ccc.Sdk.Common.WcfExtensions;
+using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Sdk.WcfService.LogOn
 {
@@ -10,12 +11,14 @@ namespace Teleopti.Ccc.Sdk.WcfService.LogOn
         private PersonContainer _personContainer;
         private readonly PersonCache _personCache = new PersonCache();
         private CustomWindowsSecurityToken _customWindowsSecurityToken;
-        private IDataSourceContainer _dataSourceContainer;
+        //private IDataSourceContainer _dataSourceContainer;
 
         private bool TryGetPersonFromStore()
         {
             //Genomför inloggning. Kasta exception vid fel.
-            var result = _dataSourceContainer.LogOn(_customWindowsSecurityToken.WindowsIdentity.Name);
+            //var result = _dataSourceContainer.LogOn(_customWindowsSecurityToken.WindowsIdentity.Name);
+	        var result = TenancyLogonFactory.MultiTenancyWindowsLogon()
+		        .Logon(new LogonModel(), StateHolderReader.Instance.StateReader.ApplicationScopeData, "");
             if (result.Successful)
             {
                 //Spara person till cache.
@@ -37,10 +40,10 @@ namespace Teleopti.Ccc.Sdk.WcfService.LogOn
             return _personContainer != null;
         }
 
-        public void SetPersonFromToken(CustomWindowsSecurityToken customWindowsSecurityToken, IDataSourceContainer dataSourceContainer)
+        public void SetPersonFromToken(CustomWindowsSecurityToken customWindowsSecurityToken)
         {
             _customWindowsSecurityToken = customWindowsSecurityToken;
-            _dataSourceContainer = dataSourceContainer;
+            
             if (TryGetPersonFromCache())
             {
                 return;

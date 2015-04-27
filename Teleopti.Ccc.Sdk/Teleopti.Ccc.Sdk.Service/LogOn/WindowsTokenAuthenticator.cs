@@ -44,7 +44,7 @@ namespace Teleopti.Ccc.Sdk.WcfService.LogOn
 
 				_licenseFromToken.SetLicense(_windowsDataSourceFromToken.DataSourceContainer, windowsSecurityToken.DataSource);
 
-            _windowsUserFromToken.SetPersonFromToken(windowsSecurityToken,_windowsDataSourceFromToken.DataSourceContainer);
+            _windowsUserFromToken.SetPersonFromToken(windowsSecurityToken);
 
             if (windowsSecurityToken.HasBusinessUnit)
             {
