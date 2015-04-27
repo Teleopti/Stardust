@@ -116,7 +116,7 @@ Teleopti.MyTimeWeb.Password = (function ($) {
                 setTimeout(function () { updatedLabel.hide(); }, 2000);
             },
             error: function (jqXHR, textStatus, errorThrown) {
-                if (jqXHR.status == 400) {
+                if (jqXHR.status === 400 || jqXHR.status === 403) {
                 	var error = $.parseJSON(jqXHR.responseText);
                 	if (error.IsAuthenticationSuccessful) {
                         $("#alertPassword").show();

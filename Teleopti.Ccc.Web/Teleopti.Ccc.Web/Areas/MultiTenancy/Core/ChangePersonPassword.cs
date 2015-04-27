@@ -27,10 +27,10 @@ namespace Teleopti.Ccc.Web.Areas.MultiTenancy.Core
 			var personInfo = _applicationUserTenantQuery.Find(userName);
 
 			if (personInfo == null || !personInfo.ApplicationLogonInfo.IsValidPassword(_now, _passwordPolicy, oldPassword))
-				throw new HttpException(403, "Invalid username or password.");
+				throw new HttpException(403, "Invalid user name or password.");
 			
 			if(oldPassword.Equals(newPassword))
-				throw new HttpException(400, "No diff between old and new password.");
+				throw new HttpException(400, "No difference between old and new password.");
 			
 			try
 			{
@@ -38,7 +38,7 @@ namespace Teleopti.Ccc.Web.Areas.MultiTenancy.Core
 			}
 			catch (PasswordStrengthException)
 			{
-				throw new HttpException(400, "Lacking password strength.");
+				throw new HttpException(400, "The new password does not follow the password policy.");
 			}
 		}
 	}
