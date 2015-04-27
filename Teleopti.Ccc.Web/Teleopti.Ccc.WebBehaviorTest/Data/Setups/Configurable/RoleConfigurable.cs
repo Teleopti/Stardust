@@ -56,6 +56,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Configurable
 		public bool AccessToMyReportQueueMetrics { get; set; }
 		public bool AccessToLeaderboard { get; set; }
 		public bool AccessToResourcePlanner { get; set; }
+		public bool AccessToPeople { get; set; }
 
 		public bool AddFullDayAbsence { get; set; }
 		public bool AddIntradayAbsence { get; set; }
@@ -238,6 +239,10 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Configurable
 			if (!AccessToResourcePlanner)
 				applicationFunctions = from f in applicationFunctions
 											  where f.FunctionPath != DefinedRaptorApplicationFunctionPaths.OpenSchedulePage
+											  select f;
+			if (!AccessToPeople)
+				applicationFunctions = from f in applicationFunctions
+											  where f.FunctionPath != DefinedRaptorApplicationFunctionPaths.OpenPersonAdminPage
 											  select f;
 			if (!AccessToPersonalAbsenceAccount)
 				applicationFunctions = from f in applicationFunctions

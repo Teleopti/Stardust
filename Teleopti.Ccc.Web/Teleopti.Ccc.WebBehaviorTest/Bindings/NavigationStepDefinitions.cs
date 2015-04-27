@@ -510,6 +510,12 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 			Navigation.GotoAnywhereRealTimeAdherenceTeamOverview(buIdForTeam(team),IdForTeam(team));
 		}
 
+		[When(@"I view people")]
+		public void WhenIViewPeople()
+		{
+			TestControllerMethods.Logon();
+			Navigation.GoToPeople();
+		}
 
 	}
 }

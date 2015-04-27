@@ -37,7 +37,7 @@
 </div>
 
 <div class="wrapper row">
-	<table class="wfm-table material-depth-1 table-striped table-condensed table-hover" >
+	<table class="wfm-table material-depth-1 table-striped table-condensed table-hover people-list" >
 		<thead>
 			<tr>
 				<th>{{'FirstName' | translate}} </th>
@@ -71,8 +71,8 @@
 			</tr>
 		</tfoot>
 		<tbody>
-			<tr ng-repeat="person in searchResult" ng-click="toggleModal()">
-				<td>{{person.FirstName}}</td>
+			<tr class="person" ng-repeat="person in searchResult" ng-click="toggleModal()">
+				<td class="first-name">{{person.FirstName}}</td>
 				<td>{{person.LastName}}</td>
 				<td>{{person.Team}}</td>
 				<td>{{person.Email}}</td>

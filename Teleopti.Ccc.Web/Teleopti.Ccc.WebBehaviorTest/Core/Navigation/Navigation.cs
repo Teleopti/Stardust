@@ -421,5 +421,10 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core.Navigation
 		{
 			GoToPage("RtaTool");
 		}
+
+		public static void GoToPeople()
+		{
+			GoToPage("wfm/#/people");
+		}
 	}
 }
