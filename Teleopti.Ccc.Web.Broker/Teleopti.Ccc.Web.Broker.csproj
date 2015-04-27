@@ -165,6 +165,7 @@
     <Compile Include="MessageBrokerHub.cs" />
     <Compile Include="MessageBrokerServer.cs" />
     <Compile Include="MessageBrokerServerModule.cs" />
+    <Compile Include="MessageBrokerWebModule.cs" />
     <Compile Include="SignalRConfiguration.cs" />
     <Compile Include="Startup.cs" />
     <Compile Include="SubscriptionPassThrough.cs" />

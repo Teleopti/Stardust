@@ -59,6 +59,8 @@ namespace Teleopti.Ccc.Web.Core.IoC
 			builder.RegisterControllers(typeof(WebModule).Assembly).ApplyAspects();
 			builder.RegisterHubs(typeof(WebModule).Assembly).ApplyAspects();
 
+			builder.RegisterModule<MessageBrokerServerModule>();
+
 			if (_httpConfiguration != null)
 				builder.RegisterWebApiFilterProvider(_httpConfiguration);
 			builder.RegisterModule(new AutofacWebTypesModule());

@@ -10,6 +10,7 @@ using Microsoft.AspNet.SignalR;
 using Microsoft.Owin;
 using Owin;
 using Teleopti.Ccc.Web.Broker;
+using RegistrationExtensions = Autofac.Integration.Mvc.RegistrationExtensions;
 
 [assembly: OwinStartup(typeof(Startup))]
 
@@ -25,6 +26,7 @@ namespace Teleopti.Ccc.Web.Broker
 			log4net.Config.XmlConfigurator.Configure();
 
 			var builder = new ContainerBuilder();
+			builder.RegisterModule<MessageBrokerWebModule>();
 			builder.RegisterModule<MessageBrokerServerModule>();
 			_container = builder.Build();
 

@@ -8,7 +8,6 @@ namespace Teleopti.Ccc.Web.Broker
 	public interface IMessageBrokerServer
 	{
 		void NotifyClients(Notification notification);
-		void NotifyClients(ISignalR signalR, string connectionId, Notification notification);
-		void NotifyClientsMultiple(ISignalR clients, string connectionId, IEnumerable<Notification> notifications);
+		void NotifyClientsMultiple(IEnumerable<Notification> notifications);
 	}
 }

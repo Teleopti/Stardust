@@ -15,12 +15,12 @@ namespace Teleopti.Ccc.Web.Broker
 
 		public void NotifyClients(Notification notification)
 		{
-			_server.NotifyClients(new SignalR(), "POST", notification);
+			_server.NotifyClients(notification);
 		}
 
 		public void NotifyClientsMultiple(IEnumerable<Notification> notifications)
 		{
-			_server.NotifyClientsMultiple(new SignalR(), "POST", notifications);
+			_server.NotifyClientsMultiple(notifications);
 		}
 	}
 }

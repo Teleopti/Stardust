@@ -402,6 +402,9 @@
     <Compile Include="..\..\Teleopti.Ccc.Web.Broker\MessageBrokerServerModule.cs">
       <Link>Core\MessageBroker\MessageBrokerServerModule.cs</Link>
     </Compile>
+    <Compile Include="..\..\Teleopti.Ccc.Web.Broker\MessageBrokerWebModule.cs">
+      <Link>Core\MessageBroker\MessageBrokerWebModule.cs</Link>
+    </Compile>
     <Compile Include="..\..\Teleopti.Ccc.Web.Broker\SubscriptionPassThrough.cs">
       <Link>Core\MessageBroker\SubscriptionPassThrough.cs</Link>
     </Compile>

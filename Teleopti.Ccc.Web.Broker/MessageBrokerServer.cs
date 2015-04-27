@@ -22,30 +22,25 @@ namespace Teleopti.Ccc.Web.Broker
 
 		public void NotifyClients(Notification notification)
 		{
-			_signalR.CallOnEventMessage(null, null, notification);
-		}
-
-		public void NotifyClients(ISignalR signalR, string connectionId, Notification notification)
-		{
 			var routes = notification.Routes();
 
 			if (Logger.IsDebugEnabled)
-				Logger.DebugFormat("New notification from client {0} with (DomainUpdateType: {1}) (Routes: {2}) (Id: {3}).",
-					connectionId, notification.DomainUpdateType, string.Join(", ", routes),
+				Logger.DebugFormat("New notification from client with (DomainUpdateType: {0}) (Routes: {1}) (Id: {2}).",
+					notification.DomainUpdateType, string.Join(", ", routes),
 					string.Join(", ", routes.Select(RouteToGroupName)));
 
 			foreach (var route in routes)
 			{
 				var r = route;
-				_actionScheduler.Do(() => signalR.CallOnEventMessage(RouteToGroupName(r), r, notification));
+				_actionScheduler.Do(() => _signalR.CallOnEventMessage(RouteToGroupName(r), r, notification));
 			}
 		}
 
-		public void NotifyClientsMultiple(ISignalR clients, string connectionId, IEnumerable<Notification> notifications)
+		public void NotifyClientsMultiple(IEnumerable<Notification> notifications)
 		{
 			foreach (var notification in notifications)
 			{
-				NotifyClients(clients, connectionId, notification);
+				NotifyClients(notification);
 			}
 		}
 

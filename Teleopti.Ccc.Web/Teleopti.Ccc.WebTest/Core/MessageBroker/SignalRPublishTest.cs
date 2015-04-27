@@ -20,6 +20,7 @@ namespace Teleopti.Ccc.WebTest.Core.MessageBroker
 	{
 		public void RegisterInContainer(ContainerBuilder builder, IIocConfiguration configuration)
 		{
+			builder.RegisterModule<MessageBrokerWebModule>();
 			builder.RegisterModule<MessageBrokerServerModule>();
 			builder.RegisterInstance(new FakeSignalR()).AsSelf().As<ISignalR>();
 			builder.RegisterInstance(new ActionImmediate()).As<IActionScheduler>();
