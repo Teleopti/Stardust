@@ -23,6 +23,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Configurable
 	public class RoleConfigurable : IDataSetup
 	{
 		public string Name { get; set; }
+		public string Description { get; set; }
 		public string BusinessUnit { get; set; }
 
 		public string AccessToTeam { get; set; }
@@ -69,6 +70,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Configurable
 		public RoleConfigurable()
 		{
 			Name = RandomName.Make("A role");
+			Description = RandomName.Make("A role");
 			BusinessUnit = DefaultBusinessUnit.BusinessUnitFromFakeState.Description.Name;
 			ViewUnpublishedSchedules = false;
 			ViewConfidential = false;
@@ -106,7 +108,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Configurable
 
 		public void Apply(IUnitOfWork uow)
 		{
-			var role = ApplicationRoleFactory.CreateRole(Name, null);
+			var role = ApplicationRoleFactory.CreateRole(Name, Description);
 
 			var availableDataRangeOption = NoDataAccess
 														 ? AvailableDataRangeOption.None

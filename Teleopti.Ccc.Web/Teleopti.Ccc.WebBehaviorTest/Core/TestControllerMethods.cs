@@ -93,7 +93,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core
 		/// <param name="password">The password.</param>
 		private static void InnerLogon(string userName, string password)
 		{
-			var businessUnitName = DataMaker.Data().MePerson.PermissionInformation.ApplicationRoleCollection.Single().BusinessUnit.Name;
+			var businessUnitName = DataMaker.Data().MePerson.PermissionInformation.ApplicationRoleCollection.First().BusinessUnit.Name;
 			var queryString = string.Format("?businessUnitName={0}&userName={1}&password={2}", businessUnitName, userName, password);
 			Navigation.Navigation.GoToPage("Test/Logon" + queryString);
 		}

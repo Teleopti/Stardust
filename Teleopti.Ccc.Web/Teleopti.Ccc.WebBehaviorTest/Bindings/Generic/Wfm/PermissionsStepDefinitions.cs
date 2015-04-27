@@ -25,6 +25,24 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Wfm
 			Browser.Interactions.AssertAnyContains(".wfm-list-item", p0);
 		}
 
+		[When(@"I select a role '(.*)'")]
+		public void WhenISelectARole(string p0)
+		{
+			Browser.Interactions.ClickContaining(".wfm-list-item", p0);
+		}
+
+		[When(@"I select a permission called '(.*)'")]
+		public void WhenISelectAPermissionCalled(string p0)
+		{
+			Browser.Interactions.ClickContaining(".ui-tree-handle", p0);
+		}
+
+		[Then(@"I should see '(.*)' selected in the list")]
+		public void ThenIShouldSeeSelectedInTheList(string p0)
+		{
+			Browser.Interactions.AssertAnyContains(".ui-tree-handle.selected", p0);
+		}
+
 
 	}
 }
