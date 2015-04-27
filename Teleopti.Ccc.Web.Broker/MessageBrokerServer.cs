@@ -3,20 +3,26 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using log4net;
-using Microsoft.AspNet.SignalR.Hubs;
 using Teleopti.Interfaces.MessageBroker;
 
 namespace Teleopti.Ccc.Web.Broker
 {
 	[CLSCompliant(false)]
-	public class MessageBrokerServer
+	public class MessageBrokerServer : IMessageBrokerServer
 	{
 		private readonly IActionScheduler _actionScheduler;
+		private readonly ISignalR _signalR;
 		public ILog Logger = LogManager.GetLogger(typeof(MessageBrokerHub));
 
-		public MessageBrokerServer(IActionScheduler actionScheduler)
+		public MessageBrokerServer(IActionScheduler actionScheduler, ISignalR signalR)
 		{
 			_actionScheduler = actionScheduler;
+			_signalR = signalR;
+		}
+
+		public void NotifyClients(Notification notification)
+		{
+			_signalR.CallOnEventMessage(null, null, notification);
 		}
 
 		public void NotifyClients(ISignalR signalR, string connectionId, Notification notification)

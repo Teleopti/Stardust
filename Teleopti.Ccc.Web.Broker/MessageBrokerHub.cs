@@ -13,13 +13,13 @@ namespace Teleopti.Ccc.Web.Broker
 		public ILog Logger = LogManager.GetLogger(typeof(MessageBrokerHub));
 
 		private IActionScheduler _actionScheduler;
+		private readonly IMessageBrokerServer _server;
 		private readonly IBeforeSubscribe _beforeSubscribe;
-		private readonly MessageBrokerServer _server;
 
-		public MessageBrokerHub(IActionScheduler actionScheduler, IBeforeSubscribe beforeSubscribe)
+		public MessageBrokerHub(IActionScheduler actionScheduler, IMessageBrokerServer server, IBeforeSubscribe beforeSubscribe)
 		{
-			_server = new MessageBrokerServer(actionScheduler);
 			_actionScheduler = actionScheduler;
+			_server = server;
 			_beforeSubscribe = beforeSubscribe;
 		}
 
@@ -54,12 +54,12 @@ namespace Teleopti.Ccc.Web.Broker
 
 		public void NotifyClients(Notification notification)
 		{
-			_server.NotifyClients(new SignalR(this), Context.ConnectionId, notification);
+			_server.NotifyClients(new SignalR(), Context.ConnectionId, notification);
 		}
 
 		public void NotifyClientsMultiple(IEnumerable<Notification> notifications)
 		{
-			_server.NotifyClientsMultiple(new SignalR(this), Context.ConnectionId, notifications);
+			_server.NotifyClientsMultiple(new SignalR(), Context.ConnectionId, notifications);
 		}
 
 		public void Ping()

@@ -25,7 +25,7 @@ namespace Teleopti.Ccc.WebTest.Core.MessageBroker.LegacyTests
 				"/00000000-0000-0000-0000-000000000000//id/00000000-0000-0000-0000-000000000000",
 				"/00000000-0000-0000-0000-000000000000//ref/00000000-0000-0000-0000-000000000000",
 				"/00000000-0000-0000-0000-000000000000/");
-			var target = new MessageBrokerController(new ActionImmediate()) {HubContext = () => hubContext};
+			var target = new MessageBrokerController(new MessageBrokerServer(new ActionImmediate(), new SignalR()));
 
 			target.NotifyClients(new Notification());
 
@@ -48,7 +48,7 @@ namespace Teleopti.Ccc.WebTest.Core.MessageBroker.LegacyTests
 					route = r
 				}).ToArray();
 
-			var target = new MessageBrokerController(new ActionImmediate()) { HubContext = () => hubContext };
+			var target = new MessageBrokerController(new MessageBrokerServer(new ActionImmediate(), new SignalR()));
 			
 			target.NotifyClients(notification);
 
@@ -74,7 +74,7 @@ namespace Teleopti.Ccc.WebTest.Core.MessageBroker.LegacyTests
 					notification = n
 				}).ToArray();
 
-			var target = new MessageBrokerController(new ActionImmediate()) { HubContext = () => hubContext };
+			var target = new MessageBrokerController(new MessageBrokerServer(new ActionImmediate(), new SignalR()));
 			
 			target.NotifyClientsMultiple(notifications);
 

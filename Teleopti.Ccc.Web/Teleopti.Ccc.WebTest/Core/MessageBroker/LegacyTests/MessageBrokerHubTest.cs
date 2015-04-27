@@ -15,7 +15,7 @@ namespace Teleopti.Ccc.WebTest.Core.MessageBroker.LegacyTests
 		[Test]
 		public void ShouldSubscribe()
 		{
-			var target = new MessageBrokerHub(new ActionImmediate(), new SubscriptionPassThrough());
+			var target = new MessageBrokerHub(new ActionImmediate(), new MessageBrokerServer(new ActionImmediate(), new SignalR()), new SubscriptionPassThrough());
 			var hubBuilder = new TestHubBuilder();
 			var subscription = new Subscription {DataSource = "something"};
 			var notification = new Notification {DataSource = "something"};
@@ -40,7 +40,7 @@ namespace Teleopti.Ccc.WebTest.Core.MessageBroker.LegacyTests
 		[Test]
 		public void ShouldUnsubscribe()
 		{
-			var target = new MessageBrokerHub(new ActionImmediate(), new SubscriptionPassThrough());
+			var target = new MessageBrokerHub(new ActionImmediate(), new MessageBrokerServer(new ActionImmediate(), new SignalR()), new SubscriptionPassThrough());
 			var hubBuilder = new TestHubBuilder();
 			var subscription = new Subscription { DataSource = "something" };
 			hubBuilder.SetupHub(target);
@@ -54,7 +54,7 @@ namespace Teleopti.Ccc.WebTest.Core.MessageBroker.LegacyTests
 		[Test]
 		public void ShouldPongOnPing()
 		{
-			var target = new MessageBrokerHub(new ActionImmediate(), new SubscriptionPassThrough());
+			var target = new MessageBrokerHub(new ActionImmediate(), new MessageBrokerServer(new ActionImmediate(), new SignalR()), new SubscriptionPassThrough());
 			var hubBuilder = new TestHubBuilder();
 			var _ponged = false;
 			var client = hubBuilder.FakeClient(
@@ -73,7 +73,7 @@ namespace Teleopti.Ccc.WebTest.Core.MessageBroker.LegacyTests
 		[Test]
 		public void Ping_WithAnIdentification_ShouldPongWithsameIdentification()
 		{
-			var target = new MessageBrokerHub(new ActionImmediate(), new SubscriptionPassThrough());
+			var target = new MessageBrokerHub(new ActionImmediate(), new MessageBrokerServer(new ActionImmediate(), new SignalR()), new SubscriptionPassThrough());
 			var hubBuilder = new TestHubBuilder();
 			var pongedWith = 0d;
 			var client = hubBuilder.FakeClient<double>(
@@ -92,9 +92,8 @@ namespace Teleopti.Ccc.WebTest.Core.MessageBroker.LegacyTests
 		[Test]
 		public void Ping_WithNumberOfMessages_ShouldSendThatNumberOfMessageswithSignalR()
 		{
-
 			var expectedNumberOfSentMessages = 17;
-			var target = new MessageBrokerHub(new ActionImmediate(), new SubscriptionPassThrough());
+			var target = new MessageBrokerHub(new ActionImmediate(), new MessageBrokerServer(new ActionImmediate(), new SignalR()), new SubscriptionPassThrough());
 			var hubBuilder = new TestHubBuilder();
 
 			var numberOfpongs = 0;
