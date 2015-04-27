@@ -1,9 +1,11 @@
+using System;
 using System.Collections.Generic;
 using System.Web.Mvc;
 using Teleopti.Interfaces.MessageBroker;
 
 namespace Teleopti.Ccc.Web.Broker
 {
+	[CLSCompliant(false)]
 	public class MessageBrokerController : Controller
 	{
 		private readonly IMessageBrokerServer _server;
