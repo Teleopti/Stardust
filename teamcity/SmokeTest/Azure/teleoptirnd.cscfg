@@ -16,8 +16,8 @@
       <Setting name="TeleoptiDriveMap.DataSourceName" value="teleoptirnd" />
     </ConfigurationSettings>
     <Certificates>
-	  <Certificate name="Microsoft.WindowsAzure.Plugins.RemoteAccess.PasswordEncryption" thumbprint="9F477F46A320B45AC3576961A150AB7D911A3BB3" thumbprintAlgorithm="sha1" />
-	  <Certificate name="fakedress.teleopticloud.com" thumbprint="9F477F46A320B45AC3576961A150AB7D911A3BB3" thumbprintAlgorithm="sha1"/>
+	  <Certificate name="Microsoft.WindowsAzure.Plugins.RemoteAccess.PasswordEncryption" thumbprint="545B506BBE3C5D71CDBC712C179073628E680232" thumbprintAlgorithm="sha1" />
+	  <Certificate name="fakedress.teleopticloud.com" thumbprint="545B506BBE3C5D71CDBC712C179073628E680232" thumbprintAlgorithm="sha1"/>
     </Certificates>
   </Role>
 </ServiceConfiguration>
