@@ -16,6 +16,7 @@ using System.Xml;
 using System.Xml.Linq;
 using Autofac;
 using Teleopti.Ccc.Domain.ApplicationLayer;
+using Teleopti.Ccc.Domain.Security.MultiTenancyAuthentication;
 using Teleopti.Ccc.Sdk.Logic.QueryHandler;
 using log4net;
 using Teleopti.Ccc.Domain.Collection;
@@ -55,7 +56,8 @@ namespace Teleopti.Ccc.Sdk.WcfService
         private readonly IFactoryProvider _factoryProvider;
         private readonly ILifetimeScope _lifetimeScope;
 	    private readonly ITenantPeopleSaver _tenantPeopleSaver;
-        private static readonly object PayrollExportLock = new object();
+	    private readonly IChangePassword _changePassword;
+	    private static readonly object PayrollExportLock = new object();
 		private static readonly ILog Logger = LogManager.GetLogger(typeof (TeleoptiCccSdkService));
 		private readonly IAuthenticationFactory _authenticationFactory;
         private readonly IPayrollResultFactory _payrollResultFactory;
@@ -64,14 +66,16 @@ namespace Teleopti.Ccc.Sdk.WcfService
                                         IPayrollResultFactory payrollResultFactory,
             IFactoryProvider factoryProvider,
             ILifetimeScope lifetimeScope,
-			  ITenantPeopleSaver tenantPeopleSaver)
+			  ITenantPeopleSaver tenantPeopleSaver, 
+			  IChangePassword changePassword)
         {
             _authenticationFactory = authenticationFactory;
             _payrollResultFactory = payrollResultFactory;
             _factoryProvider = factoryProvider;
             _lifetimeScope = lifetimeScope;
 	        _tenantPeopleSaver = tenantPeopleSaver;
-            Logger.Info("Creating new instance of the service.");
+	        _changePassword = changePassword;
+	        Logger.Info("Creating new instance of the service.");
         }
 
         /// <summary>
@@ -1759,6 +1763,17 @@ namespace Teleopti.Ccc.Sdk.WcfService
 
 				unitOfWork.PersistAll();
 			}
+
+			if (!ret)
+				throw new FaultException(UserTexts.Resources.ChangePasswordValidationError);//Blir fel språk på klienten? => Isåfall hämta uiculture från state holder
+			//todo : tenant the code above wil be removed later when the applogon and stufff are removed from person in domain
+			ret =
+				_changePassword.SetNewPassword(new ChangePasswordInput
+				{
+					UserName = personDto.ApplicationLogOnName,
+					NewPassword = newPassword,
+					OldPassword = oldPassword
+				}).Success;
 
 			if(!ret)
 				throw new FaultException(UserTexts.Resources.ChangePasswordValidationError);//Blir fel språk på klienten? => Isåfall hämta uiculture från state holder

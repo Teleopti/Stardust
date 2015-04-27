@@ -65,7 +65,7 @@ namespace Teleopti.Ccc.WinCode.Common.Configuration
 				((IUnsafePerson)TeleoptiPrincipal.CurrentPrincipal).Person.ApplicationAuthenticationInfo.Password = Model.NewPassword;
 				unitOfWork.PersistAll();
 			}
-
+			// todo : tenant remove code above and just save to tenant
 			var res =
 				_changePassword.SetNewPassword(new ChangePasswordInput
 				{
