@@ -45,14 +45,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 					.As<ISharedSettingsQuerier>()
 					.SingleInstance();
 			}
-			if (_configuration.Toggle(Toggles.MultiTenancy_LogonUseNewSchema_33049))
-			{
-				builder.RegisterType<ChangePassword>().As<IChangePassword>().SingleInstance();
-			}
-			else
-			{
-				builder.RegisterType<EmptyChangePassword>().As<IChangePassword>().SingleInstance();
-			}
+			builder.RegisterType<ChangePassword>().As<IChangePassword>().SingleInstance();
 		}
 
 		private static bool isRunFromTest(string server)

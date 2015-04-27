@@ -10,9 +10,8 @@ namespace Teleopti.Ccc.InfrastructureTest.MultiTenancy.Client
 {
 	public class ChangePasswordTest
 	{
-		
 		[Test]
-		public void ChangeIt()
+		public void HappyPath()
 		{
 			var pathToTenantServer = RandomName.Make();
 			var postHttpRequest = MockRepository.GenerateStub<IPostHttpRequest>();
@@ -26,8 +25,7 @@ namespace Teleopti.Ccc.InfrastructureTest.MultiTenancy.Client
 					.Return(result);
 			
 			var target = new ChangePassword(new TenantServerConfiguration(pathToTenantServer),  postHttpRequest, jsonSerializer);
-			target.SetNewPassword(changePasswordInput)
-				.Should().Be.SameInstanceAs(result);
+			target.SetNewPassword(changePasswordInput).Success.Should().Be.True();
 		}
 	}
 }

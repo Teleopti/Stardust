@@ -22,17 +22,7 @@ namespace Teleopti.Ccc.Infrastructure.MultiTenancy.Client
 		public ChangePasswordResult SetNewPassword(ChangePasswordInput newPasswordInput)
 		{
 			var json = _jsonSerializer.SerializeObject(newPasswordInput);
-			var result = _postHttpRequest.Send<ChangePasswordResult>(_tenantServerConfiguration.Path + "Authenticate/ChangePassword", json);
-
-			return result;
-		}
-	}
-
-	public class EmptyChangePassword : IChangePassword
-	{
-		public ChangePasswordResult SetNewPassword(ChangePasswordInput newPasswordInput)
-		{
-			return new ChangePasswordResult{Success = true};
+			return _postHttpRequest.Send<ChangePasswordResult>(_tenantServerConfiguration.Path + "Authenticate/ChangePassword", json);
 		}
 	}
 }
