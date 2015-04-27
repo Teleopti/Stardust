@@ -10,6 +10,7 @@ using Teleopti.Ccc.Domain.Scheduling.NonBlendSkill;
 using Teleopti.Ccc.Domain.Scheduling.SeatLimitation;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Infrastructure.Repositories;
+using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
 
@@ -24,7 +25,11 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
 		{
 			builder.Register(getSchedulingResultStateHolder).As<ISchedulingResultStateHolder>().InstancePerDependency().ExternallyOwned();
 			builder.Register(getSchedulerStateHolder).As<ISchedulerStateHolder>().InstancePerDependency().ExternallyOwned();
+			builder.RegisterType<CommonStateHolder>().As<ICommonStateHolder>().ExternallyOwned();
+			//DisableDeletedFilter 
 
+
+			builder.RegisterType<DisableDeletedFilter>().As<IDisableDeletedFilter>();
 			builder.RegisterType<SwapService>().As<ISwapService>();
 			builder.RegisterType<SwapAndModifyService>().As<ISwapAndModifyService>();
 			builder.RegisterType<ResourceCalculationOnlyScheduleDayChangeCallback>().As<IScheduleDayChangeCallback>();
@@ -57,7 +62,10 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
 
 		private static ISchedulerStateHolder getSchedulerStateHolder(IComponentContext componentContext)
 		{
-			return schedulerStateHolder ?? (schedulerStateHolder = new SchedulerStateHolder(componentContext.Resolve<ISchedulingResultStateHolder>(),componentContext.Resolve<ICommonStateHolder>(),componentContext.Resolve<ICurrentTeleoptiPrincipal>()));
+			return schedulerStateHolder ??
+			       (schedulerStateHolder =
+				       new SchedulerStateHolder(componentContext.Resolve<ISchedulingResultStateHolder>(),
+					       componentContext.Resolve<ICommonStateHolder>(), componentContext.Resolve<ICurrentTeleoptiPrincipal>()));
 		}
     }
 }
