@@ -24,6 +24,7 @@
     "moment": "^2.8.3"
   },
   "devDependencies": {
+    "grunt-contrib-cssmin": "^0.12.2",
     "grunt-karma": "^0.10.1",
     "grunt-sass": "^0.18.1",
     "jasmine-core": "^2.2.0",

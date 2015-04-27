@@ -5,7 +5,7 @@
 		watch: {
 			dev: {
 				files: ['css/*.scss', 'js/**/*.js'],
-				tasks: ['uglify', 'sass'],
+				tasks: ['uglify', 'sass', 'cssmin'],
 				options: {
 					spawn: false,
 				}
@@ -25,7 +25,19 @@
 		sass: {
 			dist: {
 				files: {
-					'dist/style.css': ['css/style.scss']
+					'css/style.css': ['css/style.scss']
+				}
+			}
+		},
+
+		cssmin: {
+			options: {
+				shorthandCompacting: false,
+				roundingPrecision: -1
+			},
+			target: {
+				files: {
+					'dist/style.min.css': ['css/style.css', 'css/main.css']
 				}
 			}
 		},
@@ -54,11 +66,12 @@
 	grunt.loadNpmTasks('grunt-http-download');
 	grunt.loadNpmTasks('grunt-sass');
 	grunt.loadNpmTasks('grunt-karma');
+	grunt.loadNpmTasks('grunt-contrib-cssmin');
 
 
 	// Default task(s).
 	grunt.registerTask('default', ['watch:dev']); // this task watchs
 	grunt.registerTask('unitTest', ['watch:test']); // this task watchs
 
-	grunt.registerTask('dist', ['uglify', 'download', 'sass']); // this task is kind of package
+	grunt.registerTask('dist', ['uglify', 'download', 'sass', 'cssmin']); // this task is kind of package
 };
