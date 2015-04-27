@@ -1565,14 +1565,11 @@
     <Compile Include="Security\Authentication\AvailableBusinessUnitsProvider.cs" />
     <Compile Include="Security\Authentication\ChangePasswordResultInfo.cs" />
     <Compile Include="Security\Authentication\CheckBruteForce.cs" />
-    <Compile Include="Security\Authentication\CheckPasswordChange.cs" />
     <Compile Include="Security\Authentication\DataSourceContainer.cs" />
     <Compile Include="Security\Authentication\DummyPasswordPolicy.cs" />
     <Compile Include="Security\Authentication\EnvironmentWindowsUserProvider.cs" />
     <Compile Include="Security\Authentication\FuncTimeZone.cs" />
     <Compile Include="Security\Authentication\ICheckBruteForce.cs" />
-    <Compile Include="Security\Authentication\ICheckPasswordChange.cs" />
-    <Compile Include="Security\Authentication\ICheckSuperUser.cs" />
     <Compile Include="Security\Authentication\IDataSourceContainer.cs" />
     <Compile Include="Security\Authentication\IdentityHelper.cs" />
     <Compile Include="Security\Authentication\LogonModel.cs" />

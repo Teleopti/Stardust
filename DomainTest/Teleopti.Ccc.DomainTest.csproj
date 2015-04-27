@@ -1179,7 +1179,6 @@
     <Compile Include="SeatPlanning\SeatAllocatorTests.cs" />
     <Compile Include="Security\Authentication\AvailableBusinessUnitsProviderTest.cs" />
     <Compile Include="Security\Authentication\CheckBruteForceTest.cs" />
-    <Compile Include="Security\Authentication\CheckPasswordChangeTest.cs" />
     <Compile Include="Security\Authentication\DummyPasswordPolicyTest.cs" />
     <Compile Include="Security\Authentication\EnvironmentWindowsUserProviderTest.cs" />
     <Compile Include="Security\Authentication\LoggedOnUserTest.cs" />

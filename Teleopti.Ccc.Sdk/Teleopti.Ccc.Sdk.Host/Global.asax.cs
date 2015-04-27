@@ -6,6 +6,7 @@ using Autofac;
 using Autofac.Integration.Wcf;
 using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.Forecasting;
+using Teleopti.Ccc.Domain.Security.MultiTenancyAuthentication;
 using Teleopti.Ccc.Infrastructure.ApplicationLayer;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Client;
 using Teleopti.Ccc.Infrastructure.NHibernateConfiguration;
@@ -177,6 +178,7 @@ namespace Teleopti.Ccc.Sdk.WcfHost
 
 			  builder.RegisterType<MultiTenancyApplicationLogon>().As<IMultiTenancyApplicationLogon>().SingleInstance();
 			  builder.RegisterType<MultiTenancyWindowsLogon>().As<IMultiTenancyWindowsLogon>().SingleInstance();
+			  builder.RegisterType<ChangePassword>().As<IChangePassword>().SingleInstance();
 
 			  registerSdkFactories(builder,configuration);
 

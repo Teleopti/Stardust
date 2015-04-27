@@ -34,9 +34,6 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 				.As<IRepositoryFactory>()
 				.SingleInstance();
 
-			builder.RegisterType<CheckPasswordChange>()
-				.As<ICheckPasswordChange>()
-				.SingleInstance();
 			builder.RegisterType<CheckBruteForce>()
 				.As<ICheckBruteForce>()
 				.SingleInstance();
