@@ -1232,6 +1232,7 @@
     <Content Include="WFM\js\seatManagement\imageloadwithpreview.directive.js" />
     <Content Include="WFM\js\seatManagement\seatmapedit.controller.js" />
     <Content Include="WFM\js\seatManagement\seatmapedit.directive.js" />
+    <Content Include="WFM\js\people\template\advancedPeopleSearch.html" />
     <Content Include="WFM\tests\search\search.controller.spec.js" />
     <Content Include="WFM\vendor\d3\angularjs-nvd3-directives.js" />
     <Content Include="WFM\vendor\d3\d3.js" />

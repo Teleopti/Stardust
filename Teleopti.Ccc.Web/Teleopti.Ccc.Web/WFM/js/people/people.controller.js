@@ -33,7 +33,15 @@ angular
 				"</div>" +
 				"</div>"
 		};
-	});
+	})
+.directive('advancedSearchOption', function() {
+	return {
+		restrict: 'E',
+		transclude: true,
+		templateUrl:"js/people/template/advancedPeopleSearch.html"		
+		}
+	})
+;
 
 function PeopleController($scope, $filter, $state, SearchSvrc) {
 	$scope.searchResult = [];
@@ -42,6 +50,7 @@ function PeopleController($scope, $filter, $state, SearchSvrc) {
 	$scope.totalPages = 0;
 	$scope.currentPageIndex = 1;
 	$scope.searchKeywordChanged = false;
+
 
 	$scope.validateSearchKeywordChanged = function () {
 		$scope.searchKeywordChanged = true;
@@ -121,6 +130,14 @@ function PeopleController($scope, $filter, $state, SearchSvrc) {
 		$scope.currentPageIndex = this.n;
 		$scope.searchKeyword();
 	};
+	$scope.showAdvancedSearchOption = false;
+	$scope.toggleAdvancedSearchOption = function () {
+		$scope.showAdvancedSearchOption = !$scope.showAdvancedSearchOption;
+	}
+
+	$scope.advancedSearch = function() {
+		$scope.showAdvancedSearchOption = false;
+	}
 
 	$scope.searchKeyword();
 }

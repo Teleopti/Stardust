@@ -19,6 +19,23 @@
 		background-color: white;
 	}
 
+
+	.wfm-list, .ui-grid-menu-items {
+  padding-left: 0px;
+  list-style: none;
+  max-height: 800px;
+  overflow-y: auto;
+  margin: 0;
+}
+	.dropdown ul {
+  width: 500px;
+  position: absolute;
+  background: #ffffff;
+}
+.input-prepend span {
+  display: inline-block;
+  width: 0
+}
 </style>
 <div class="row">
 	<div class="col-lg-12">
@@ -28,12 +45,22 @@
 </div>
 <div class="row">
 	<div class="col-md-4">
-		<div class="input-prepend people-search">
+		<div class="input-prepend people-search" >
 			<i class="mdi mdi-magnify"></i>
-			<input type="text" placeholder="{{'Search'|translate}}..." xplaceholder="{{'Name' | translate}},{{'EmployeeNo' | translate}},{{'Role' | translate}},{{'Skill' | translate}},{{'Contract' | translate}},{{'PersonFinderFieldOrganization' | translate}},{{'ContractSchedule' | translate}},{{'PartTimePercentage' | translate}},{{'PersonFinderFieldShiftBag' | translate}},{{'BudgetGroup' | translate}}"
+			<input style="width: 90%" type="text" placeholder="{{'Search'|translate}}..." xplaceholder="{{'Name' | translate}},{{'EmployeeNo' | translate}},{{'Role' | translate}},{{'Skill' | translate}},{{'Contract' | translate}},{{'PersonFinderFieldOrganization' | translate}},{{'ContractSchedule' | translate}},{{'PartTimePercentage' | translate}},{{'PersonFinderFieldShiftBag' | translate}},{{'BudgetGroup' | translate}}"
 				   ng-model="keyword" ng-keydown="$event.which === 13 && searchKeyword()" ng-change="validateSearchKeywordChanged()" />
+			<!--<span class="dropdown" tabindex="0"  ng-include="'advanced_search_option.html'">
+				
+			</span>-->
 		</div>
 	</div>
+		<!--<div class="wfm-checkbox">
+			<input type="checkbox" id="check1" checked="true" />
+			<label for="check1">
+				<span class="wfm-checkbox-toggle"></span>
+				<span class="wfm-checkbox-label">Include any </span>
+			</label>
+		</div>-->
 </div>
 
 <div class="wrapper row">
@@ -85,6 +112,89 @@
 		</tbody>
 	</table>
 </div>
+
+<script type="text/ng-template" id="advanced_search_option.html">
+	<i class="mdi mdi-menu-down" ng-click="toggleAdvancedSearchOption()"></i>
+	<div class="material-depth-2" ng-cloak ng-show="showAdvancedSearchOption">
+		<ul class="wfm-list">
+			<li>
+
+				<label class="col-md-4">FirstName: </label>
+				<span class="col-md-8">
+					<input type="text" placeholder="FirstName" />
+				</span>
+			</li>
+			<li>	
+				<label class="col-md-4">LastName: </label>
+				<span class="col-md-8">
+					<input type="text" placeholder="LastName" />
+				</span>
+			</li>
+			<li >
+				<label class="col-md-4">EmploymentNumber: </label>
+				<span class="col-md-8">
+					<input type="text" placeholder="EmploymentNumber" />
+				</span>
+			</li>
+			<li >
+				<label class="col-md-4">Organization: </label>
+				<span class="col-md-8">
+					<input type="text" placeholder="Organization"  />
+				</span>
+			</li>
+			<li >
+				<label class="col-md-4">Role: </label>
+				<span class="col-md-8"><input type="text" placeholder="Role" value="agent" /></span>
+			</li>
+			<li >
+				<label class="col-md-4">Contract: </label>
+				<span class="col-md-8">
+					<input type="text" placeholder="Contract" Value="fixed hourly" />
+				</span>
+			</li>
+			<li >
+				<label class="col-md-4">Contract schedule: </label>
+				<span class="col-md-8">
+					<input type="text" placeholder="Contract schedule" />
+				</span>
+			</li>
+			<li >
+				<label class="col-md-4">Shift bag: </label>
+				<span class="col-md-8">
+					<input type="text" placeholder="Shift bag" />
+				</span>
+			</li>
+			<li >
+				<label class="col-md-4">Part time percentage: </label>
+				<span class="col-md-8">
+					<input type="text" placeholder="Part time percentage" />
+				</span>
+			</li>
+
+			<li >
+				<label class="col-md-4">Skill: </label>
+				<span class="col-md-8">
+					<input type="text" placeholder="Skill" />
+				</span>
+			</li>
+			<li >
+				<label class="col-md-4">Budget group: </label>
+				<span class="col-md-8">
+					<input type="text" placeholder="Budget group" />
+				</span>
+			</li>
+			<li >
+				<label class="col-md-4">Note: </label>
+				<span class="col-md-8">
+					<input type="text" placeholder="Note" />
+				</span>
+			</li>
+			<button class="wfm-btn wfm-btn-primary float-right" ng-click="advancedSearch()"><i class="mdi mdi-magnify"></i></button>
+		</ul>
+		
+	</div>
+
+</script>
 
 <modal-dialog show='modalShown' width='1000px' height='580px'>
 	<div id="testModal" class="modalbg">
