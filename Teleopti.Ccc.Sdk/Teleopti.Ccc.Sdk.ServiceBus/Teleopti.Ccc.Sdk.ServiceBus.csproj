@@ -216,10 +216,8 @@
     <Compile Include="Denormalizer\UpdateGroupingReadModelDataConsumer.cs" />
     <Compile Include="Denormalizer\UpdateGroupingReadModelGroupPageConsumer.cs" />
     <Compile Include="Denormalizer\InitialLoadScheduleProjectionConsumer.cs" />
-    <Compile Include="Denormalizer\UpdateGroupingReadModelConsumer.cs" />
     <Compile Include="Denormalizer\ProcessDenormalizeQueueConsumer.cs" />
     <Compile Include="Denormalizer\ScheduleChangedInDefaultScenarioNotification.cs" />
-    <Compile Include="Denormalizer\UpdateFindPersonConsumer.cs" />
     <Compile Include="Denormalizer\UpdateFindPersonDataConsumer.cs" />
     <Compile Include="ExportForecastContainerInstaller.cs" />
     <Compile Include="ForecastContainerInstaller.cs" />

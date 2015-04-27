@@ -148,13 +148,11 @@
     <Compile Include="Denormalizer\ScheduleDayReadModelHandlerTest.cs" />
     <Compile Include="Denormalizer\ScheduleDayReadModelsCreatorTest.cs" />
     <Compile Include="Denormalizer\UpdateFindPersonDataConsumerTest.cs" />
-    <Compile Include="Denormalizer\UpdateGroupingReadModelConsumerTest.cs" />
     <Compile Include="Denormalizer\UpdateGroupingReadModelDataConsumerTest.cs" />
     <Compile Include="Denormalizer\DenormalizeScheduleProjectionConsumerTest.cs" />
     <Compile Include="Denormalizer\ProcessDenormalizeQueueResolveTest.cs" />
     <Compile Include="Denormalizer\DenormalizeScheduleProjectionResolveTest.cs" />
     <Compile Include="Denormalizer\UpateGroupingReadModelGroupPageConsumerTest.cs" />
-    <Compile Include="Denormalizer\UpdateFindPersonConsumerTest.cs" />
     <Compile Include="Diagnostics\DiagnosticsConsumerTest.cs" />
     <Compile Include="Forecast\ImportForecastsFileToSkillTest.cs" />
     <Compile Include="Forecast\ExportMultisiteSkillsToSkillTest.cs" />

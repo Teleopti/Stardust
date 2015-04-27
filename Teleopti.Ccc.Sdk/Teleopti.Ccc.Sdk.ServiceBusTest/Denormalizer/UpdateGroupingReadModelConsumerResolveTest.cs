@@ -2,6 +2,8 @@
 using NUnit.Framework;
 using Rhino.ServiceBus;
 using SharpTestsEx;
+using Teleopti.Ccc.Domain.ApplicationLayer.Events;
+using Teleopti.Ccc.Domain.ApplicationLayer.PersonCollectionChangedHandlers;
 using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.Sdk.ServiceBus;
 using Teleopti.Ccc.Sdk.ServiceBus.Denormalizer;
@@ -16,7 +18,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Denormalizer
         public void ShouldResolveUpdateGroupingReadModelConsumer()
         {
 			var builder = new ContainerBuilder();
-            builder.RegisterType<UpdateGroupingReadModelConsumer>().As<ConsumerOf<PersonChangedMessage>>();
+            builder.RegisterType<UpdateGroupingReadModelConsumer>().As<ConsumerOf<PersonCollectionChangedEvent>>();
 
 			builder.RegisterModule(CommonModule.ForTest());
 			builder.RegisterModule<ServiceBusCommonModule>();
@@ -26,7 +28,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Denormalizer
 
 			using (var container = builder.Build())
 			{
-                container.Resolve<ConsumerOf<PersonChangedMessage>>().Should().Not.Be.Null();
+                container.Resolve<ConsumerOf<PersonCollectionChangedEvent>>().Should().Not.Be.Null();
 			}
         }
     }

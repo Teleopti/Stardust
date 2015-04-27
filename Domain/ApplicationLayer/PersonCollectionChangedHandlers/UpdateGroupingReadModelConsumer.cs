@@ -1,12 +1,10 @@
-﻿
-using Rhino.ServiceBus;
+﻿using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Interfaces.Infrastructure;
-using Teleopti.Interfaces.Messages.Denormalize;
 
-namespace Teleopti.Ccc.Sdk.ServiceBus.Denormalizer
+namespace Teleopti.Ccc.Domain.ApplicationLayer.PersonCollectionChangedHandlers
 {
-    public class UpdateGroupingReadModelConsumer : ConsumerOf<PersonChangedMessage >
+    public class UpdateGroupingReadModelConsumer : IHandleEvent<PersonCollectionChangedEvent >
 	{
         private readonly IGroupingReadOnlyRepository _groupingReadOnlyRepository;
 		private readonly ICurrentUnitOfWorkFactory _currentUnitOfWorkFactory;
@@ -17,12 +15,11 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Denormalizer
 		    _currentUnitOfWorkFactory = currentUnitOfWorkFactory;
 		}
 
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
-        public void Consume(PersonChangedMessage message)
-		{
+	    public void Handle(PersonCollectionChangedEvent @event)
+	    {
 			using (var uow = _currentUnitOfWorkFactory.LoggedOnUnitOfWorkFactory().CreateAndOpenUnitOfWork())
 			{
-				_groupingReadOnlyRepository.UpdateGroupingReadModel(message.PersonIdCollection);
+				_groupingReadOnlyRepository.UpdateGroupingReadModel(@event.PersonIdCollection);
 				uow.PersistAll();
 			}
 		}

@@ -473,7 +473,6 @@
     <Compile Include="Helper\NoFormattingTest.cs" />
     <Compile Include="Helper\NormalizeTextTest.cs" />
     <Compile Include="Helper\NotificationTest.cs" />
-    <Compile Include="Helper\PersonChangedMessageTest.cs" />
     <Compile Include="Helper\PersonPeriodChangedMessageTest.cs" />
     <Compile Include="Helper\ProcessDenormalizeQueueTest.cs" />
     <Compile Include="Helper\StringExtensionsTest.cs" />

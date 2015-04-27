@@ -1,6 +1,8 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Teleopti.Ccc.Domain.ApplicationLayer;
+using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Infrastructure.ApplicationLayer;
 using Teleopti.Interfaces.Domain;
@@ -11,16 +13,16 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 {
 	public class PersonChangedMessageSender : IMessageSender
 	{
-		private readonly IMessagePopulatingServiceBusSender _serviceBusSender;
+		private readonly IEventPopulatingPublisher _eventsPublisher;
 
 		private readonly IEnumerable<Type> _triggerInterfaces = new List<Type>
 		                                                        	{
 		                                                        		typeof (IPerson),
 		                                                        	};
 
-		public PersonChangedMessageSender(IMessagePopulatingServiceBusSender serviceBusSender)
+		public PersonChangedMessageSender(IEventPopulatingPublisher eventsPublisher)
 		{
-			_serviceBusSender = serviceBusSender;
+			_eventsPublisher = eventsPublisher;
 		}
 
 		public void Execute(IEnumerable<IRootChangeInfo> modifiedRoots)
@@ -33,9 +35,9 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 			foreach (var personList in affectedInterfaces.Batch(25))
 			{
 				var idsAsString = personList.Select(p => p.Id.GetValueOrDefault()).ToArray();
-				var message = new PersonChangedMessage();
+				var message = new PersonCollectionChangedEvent();
 				message.SetPersonIdCollection(idsAsString);
-				_serviceBusSender.Send(message, false);
+				_eventsPublisher.Publish(message);
 			}
 		}
 	}

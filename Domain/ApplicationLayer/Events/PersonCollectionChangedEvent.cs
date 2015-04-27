@@ -2,31 +2,15 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 
-namespace Teleopti.Interfaces.Messages.Denormalize
+namespace Teleopti.Ccc.Domain.ApplicationLayer.Events
 {
-	/// <summary>
-	/// Denormalize the Person finder.
-	/// </summary>
-	[Serializable]
-	public class PersonChangedMessage : MessageWithLogOnInfo
+	public class PersonCollectionChangedEvent : EventWithLogOnAndInitiator
 	{
-		private readonly Guid _messageId = Guid.NewGuid();
 		private string _serializedPeople;
 
 		[NonSerialized]
 		private ICollection<Guid> _personIdCollection;
 
-		/// <summary>
-		/// Gets the message identity.
-		/// </summary>
-		public override Guid Identity
-		{
-			get { return _messageId; }
-		}
-
-		/// <summary>
-		/// The collection of id for person.
-		/// </summary>
 		public ICollection<Guid> PersonIdCollection
 		{
 			get
@@ -47,10 +31,6 @@ namespace Teleopti.Interfaces.Messages.Denormalize
 			}
 		}
 
-        /// <summary>
-        /// This method will set the person id collection
-        /// </summary>
-        /// <param name="personIdCollection"></param>
 		public void SetPersonIdCollection(ICollection<Guid> personIdCollection)
 		{
             if (personIdCollection != null)
@@ -67,9 +47,6 @@ namespace Teleopti.Interfaces.Messages.Denormalize
             
 		}
         
-        /// <summary>
-        /// Return the serialized people
-        /// </summary>
         public string SerializedPeople 
         { 
             get

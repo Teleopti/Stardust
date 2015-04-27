@@ -841,7 +841,6 @@
     <Compile Include="Messages\Denormalize\ScheduleChanged.cs" />
     <Compile Include="Messages\Denormalize\DenormalizeScheduleProjection.cs" />
     <Compile Include="Messages\Denormalize\GroupPageChangedMessage.cs" />
-    <Compile Include="Messages\Denormalize\PersonChangedMessage.cs" />
     <Compile Include="Messages\Denormalize\InitialLoadScheduleProjection.cs" />
     <Compile Include="Messages\Denormalize\PersonPeriodChangedMessage.cs" />
     <Compile Include="Messages\Denormalize\ProcessDenormalizeQueue.cs" />

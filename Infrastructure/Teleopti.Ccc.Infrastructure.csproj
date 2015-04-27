@@ -491,7 +491,6 @@
     <Compile Include="Repositories\ScheduleDayReadModelRepository.cs" />
     <Compile Include="Repositories\ScheduleProjectionReadOnlyRepository.cs" />
     <Compile Include="Repositories\GroupingReadOnlyRepository.cs" />
-    <Compile Include="Repositories\IGroupingReadOnlyRepository.cs" />
     <Compile Include="Repositories\InitializeRootsPersonAbsence.cs" />
     <Compile Include="Repositories\InitializeRootsPersonAssignment.cs" />
     <Compile Include="Repositories\JobResultRepository.cs" />

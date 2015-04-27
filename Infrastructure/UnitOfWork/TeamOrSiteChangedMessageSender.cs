@@ -1,6 +1,8 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Teleopti.Ccc.Domain.ApplicationLayer;
+using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Infrastructure.ApplicationLayer;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
@@ -10,7 +12,7 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 {
 	public class TeamOrSiteChangedMessageSender : IMessageSender
 	{
-		private readonly IMessagePopulatingServiceBusSender _serviceBusSender;
+		private readonly IEventPopulatingPublisher _eventsPublisher;
 
 		private readonly IEnumerable<Type> _otherTriggerInterfaces = new List<Type>
 			{
@@ -18,9 +20,9 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 				typeof (ISite),
 			};
 
-		public TeamOrSiteChangedMessageSender(IMessagePopulatingServiceBusSender serviceBusSender)
+		public TeamOrSiteChangedMessageSender(IEventPopulatingPublisher eventsPublisher)
 		{
-			_serviceBusSender = serviceBusSender;
+			_eventsPublisher = eventsPublisher;
 		}
 
 		public void Execute(IEnumerable<IRootChangeInfo> modifiedRoots)
@@ -32,8 +34,8 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 
 			if (!affectedInterfaces.Any()) return;
 
-			var message = new PersonChangedMessage{SerializedPeople = Guid.Empty.ToString()};
-			_serviceBusSender.Send(message, false);
+			var message = new PersonCollectionChangedEvent{SerializedPeople = Guid.Empty.ToString()};
+			_eventsPublisher.Publish(message);
 		}
 	}
 }

@@ -1,6 +1,8 @@
 ﻿using System;
 using NUnit.Framework;
 using Rhino.Mocks;
+using Teleopti.Ccc.Domain.ApplicationLayer;
+using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Infrastructure.ApplicationLayer;
 using Teleopti.Ccc.Infrastructure.Foundation;
@@ -17,13 +19,13 @@ namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork
 	{
 		private IMessageSender _target;
 		private MockRepository _mocks;
-		private IMessagePopulatingServiceBusSender _serviceBusSender;
+		private IEventPopulatingPublisher _serviceBusSender;
 		
 		[SetUp]
 		public void Setup()
 		{
 			_mocks = new MockRepository();
-			_serviceBusSender = _mocks.DynamicMock<IMessagePopulatingServiceBusSender>();
+			_serviceBusSender = _mocks.DynamicMock<IEventPopulatingPublisher>();
 			_target = new PersonChangedMessageSender(_serviceBusSender);
 		}
 
@@ -32,7 +34,7 @@ namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork
         {
             var person = new Person();
             var ids = new Guid[] {};
-            var message = new PersonChangedMessage();
+            var message = new PersonCollectionChangedEvent();
             message.SetPersonIdCollection(ids);
             
             var roots = new IRootChangeInfo[1];
@@ -40,7 +42,7 @@ namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork
 
             using (_mocks.Record())
             {
-                Expect.Call(() => _serviceBusSender.Send(message, false)).IgnoreArguments();
+                Expect.Call(() => _serviceBusSender.Publish(message)).IgnoreArguments();
             }
             using (_mocks.Playback())
             {
@@ -53,7 +55,7 @@ namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork
 		{
 			var personWriteProtectionInfo = new PersonWriteProtectionInfo(new Person());
 			var ids = new Guid[] { };
-			var message = new PersonChangedMessage();
+			var message = new PersonCollectionChangedEvent();
 			message.SetPersonIdCollection(ids);
 
 			var roots = new IRootChangeInfo[1];
@@ -61,7 +63,7 @@ namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork
 
 			using (_mocks.Record())
 			{
-				Expect.Call(() => _serviceBusSender.Send(message, false)).Repeat.Never();
+				Expect.Call(() => _serviceBusSender.Publish(message)).Repeat.Never();
 			}
 			using (_mocks.Playback())
 			{

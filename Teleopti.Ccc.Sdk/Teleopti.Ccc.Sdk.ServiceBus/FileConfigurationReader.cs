@@ -92,8 +92,8 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
 					new EventsMessageSender(new SyncEventsPublisher(eventPublisher)),
 					new MeetingMessageSender(eventPublisher),
 					new GroupPageChangedMessageSender(messageSender),
-					new TeamOrSiteChangedMessageSender(messageSender),
-					new PersonChangedMessageSender(messageSender),
+					new TeamOrSiteChangedMessageSender(eventPublisher),
+					new PersonChangedMessageSender(eventPublisher),
 					new PersonPeriodChangedMessageSender(messageSender)
 				};
 		}

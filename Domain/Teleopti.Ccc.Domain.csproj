@@ -173,6 +173,7 @@
     <Compile Include="ApplicationLayer\Events\PersonAbsenceModifiedEvent.cs" />
     <Compile Include="ApplicationLayer\Events\PersonAbsenceAddedEvent.cs" />
     <Compile Include="ApplicationLayer\Events\PersonActivityStartEvent.cs" />
+    <Compile Include="ApplicationLayer\Events\PersonCollectionChangedEvent.cs" />
     <Compile Include="ApplicationLayer\Events\PersonDeletedEvent.cs" />
     <Compile Include="ApplicationLayer\Events\PersonInAdherenceEvent.cs" />
     <Compile Include="ApplicationLayer\Events\PersonNeutralAdherenceEvent.cs" />
@@ -207,6 +208,8 @@
     <Compile Include="ApplicationLayer\Commands\RemovePersonAbsenceCommandHandler.cs" />
     <Compile Include="ApplicationLayer\Events\PersonAbsenceRemovedEvent.cs" />
     <Compile Include="ApplicationLayer\Commands\MoveActivityCommandHandler.cs" />
+    <Compile Include="ApplicationLayer\PersonCollectionChangedHandlers\UpdateFindPersonConsumer.cs" />
+    <Compile Include="ApplicationLayer\PersonCollectionChangedHandlers\UpdateGroupingReadModelConsumer.cs" />
     <Compile Include="ApplicationLayer\Rta\Service\IScheduleLoader.cs" />
     <Compile Include="ApplicationLayer\Rta\Service\ScheduleLoader.cs" />
     <Compile Include="ApplicationLayer\Rta\ViewModelBuilders\AdherencePercentageViewModel.cs" />
@@ -838,6 +841,7 @@
     <Compile Include="Payroll\PayrollFormat.cs" />
     <Compile Include="PreserveStack.cs" />
     <Compile Include="Repositories\IExistingForecastRepository.cs" />
+    <Compile Include="Repositories\IGroupingReadOnlyRepository.cs" />
     <Compile Include="Repositories\IJobResultRepository.cs" />
     <Compile Include="Repositories\ISeatBookingRepository.cs" />
     <Compile Include="Repositories\ISeatMapLocationRepository.cs" />
