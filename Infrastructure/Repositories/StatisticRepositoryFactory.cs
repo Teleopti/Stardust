@@ -39,7 +39,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
             return new StatisticRepository();
         }
 
-		  public static IAnalyticsScheduleRepository CreateAnalytics()
+		  public static IAnalyticsScheduleRepository CreateAnalyticsSchedule()
 		  {
 			  ITeleoptiIdentity identity = null;
 			  var principal = TeleoptiPrincipal.CurrentPrincipal;
@@ -52,5 +52,19 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
  
 			  return new AnalyticsScheduleRepository();
 		  }
+
+			public static IIntervalLengthFetcher CreateAnalyticsIntervalLength()
+			{
+				ITeleoptiIdentity identity = null;
+				var principal = TeleoptiPrincipal.CurrentPrincipal;
+				if (principal != null)
+				{
+					identity = principal.Identity as ITeleoptiIdentity;
+				}
+				if (identity == null || identity.DataSource.Statistic == null)
+					return null; //have empty here too
+
+				return new IntervalLengthFetcher();
+			}
     }
 }

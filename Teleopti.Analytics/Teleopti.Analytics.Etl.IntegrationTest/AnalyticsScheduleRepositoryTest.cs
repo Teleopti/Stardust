@@ -25,7 +25,7 @@ namespace Teleopti.Analytics.Etl.IntegrationTest
 		public void Setup()
 		{
 			
-			_target = StatisticRepositoryFactory.CreateAnalytics();
+			_target = StatisticRepositoryFactory.CreateAnalyticsSchedule();
 			SetupFixtureForAssembly.BeginTest();
 
 			analyticsDataFactory = new AnalyticsDataFactory();
