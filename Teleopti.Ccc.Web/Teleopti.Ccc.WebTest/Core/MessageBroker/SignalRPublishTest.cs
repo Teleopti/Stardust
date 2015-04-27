@@ -14,6 +14,7 @@ using Teleopti.Interfaces.MessageBroker;
 
 namespace Teleopti.Ccc.WebTest.Core.MessageBroker
 {
+	[CLSCompliant(false)]
 	[TestFixture]
 	[IoCTest]
 	public class SignalRPublishTest : IRegisterInContainer
