@@ -3,7 +3,6 @@
 	public class ChangePasswordResult
 	{
 		public bool Success { get; set; }
-		public string FailReason { get; set; }
 	}
 
 	public class SavePersonInfoResult

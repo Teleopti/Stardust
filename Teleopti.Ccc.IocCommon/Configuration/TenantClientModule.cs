@@ -4,7 +4,6 @@ using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Security;
 using Teleopti.Ccc.Domain.Security.MultiTenancyAuthentication;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Client;
-using Teleopti.Ccc.Infrastructure.Web;
 
 namespace Teleopti.Ccc.IocCommon.Configuration
 {
@@ -45,12 +44,29 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 					.As<ISharedSettingsQuerier>()
 					.SingleInstance();
 			}
-			builder.RegisterType<ChangePassword>().As<IChangePassword>().SingleInstance();
+			//don't remove this toggle until changepassword has been tested! (both from client and web)
+			if (_configuration.Toggle(Toggles.MultiTenancy_People_32113))
+			{
+				builder.RegisterType<ChangePassword>().As<IChangePassword>().SingleInstance();
+			}
+			else
+			{
+				builder.RegisterType<changePasswordStub>().As<IChangePassword>().SingleInstance();
+			}
+			builder.RegisterType<ResponseException>().As<IResponseException>();
 		}
 
 		private static bool isRunFromTest(string server)
 		{
 			return server == null;
+		}
+
+		private class changePasswordStub : IChangePassword
+		{
+			public ChangePasswordResult SetNewPassword(ChangePasswordInput newPasswordInput)
+			{
+				return new ChangePasswordResult {Success = true};
+			}
 		}
 	}
 }

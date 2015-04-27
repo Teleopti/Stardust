@@ -1,4 +1,5 @@
-﻿using Teleopti.Ccc.Domain.Security.MultiTenancyAuthentication;
+﻿using System.Net;
+using Teleopti.Ccc.Domain.Security.MultiTenancyAuthentication;
 using Teleopti.Interfaces;
 
 namespace Teleopti.Ccc.Infrastructure.MultiTenancy.Client
@@ -8,21 +9,40 @@ namespace Teleopti.Ccc.Infrastructure.MultiTenancy.Client
 		private readonly ITenantServerConfiguration _tenantServerConfiguration;
 		private readonly IPostHttpRequest _postHttpRequest;
 		private readonly IJsonSerializer _jsonSerializer;
+		private readonly IResponseException _responseException;
 
 
 		public ChangePassword(ITenantServerConfiguration tenantServerConfiguration, 
 																IPostHttpRequest postHttpRequest,
-																IJsonSerializer jsonSerializer)
+																IJsonSerializer jsonSerializer,
+																IResponseException responseException)
 		{
 			_tenantServerConfiguration = tenantServerConfiguration;
 			_postHttpRequest = postHttpRequest;
 			_jsonSerializer = jsonSerializer;
+			_responseException = responseException;
 		}
 		
 		public ChangePasswordResult SetNewPassword(ChangePasswordInput newPasswordInput)
 		{
 			var json = _jsonSerializer.SerializeObject(newPasswordInput);
-			return _postHttpRequest.Send<ChangePasswordResult>(_tenantServerConfiguration.Path + "Authenticate/ChangePassword", json);
+			try
+			{
+				_postHttpRequest.Send<object>(_tenantServerConfiguration.Path + "ChangePassword/Modify", json);
+				return new ChangePasswordResult { Success = true };
+			}
+			catch (WebException wEx)
+			{
+				var statusCode =_responseException.ExceptionStatus(wEx);
+				if (statusCode != null)
+				{
+					if (statusCode == HttpStatusCode.Forbidden || statusCode == HttpStatusCode.BadRequest)
+					{
+						return new ChangePasswordResult {Success = false};
+					}
+				}
+				throw;
+			}
 		}
 	}
 }
