@@ -1,18 +1,17 @@
-﻿using System;
-using System.Web;
+﻿using System.Web;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Server;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Web.Areas.MultiTenancy.Core
 {
-	public class ChangePassword
+	public class ChangePersonPassword
 	{
 		private readonly IApplicationUserTenantQuery _applicationUserTenantQuery;
 		private readonly INow _now;
 		private readonly IPasswordPolicy _passwordPolicy;
 		private readonly ICheckPasswordStrength _checkPasswordStrength;
 
-		public ChangePassword(IApplicationUserTenantQuery applicationUserTenantQuery,
+		public ChangePersonPassword(IApplicationUserTenantQuery applicationUserTenantQuery,
 													INow now,
 													IPasswordPolicy passwordPolicy,
 													ICheckPasswordStrength checkPasswordStrength)

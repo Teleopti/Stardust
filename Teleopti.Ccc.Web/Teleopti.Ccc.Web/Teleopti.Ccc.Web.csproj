@@ -455,7 +455,7 @@
     <Compile Include="Areas\Global\WfmAreaRegistration.cs" />
     <Compile Include="Areas\Global\UserController.cs" />
     <Compile Include="Areas\MultiTenancy\ChangePasswordController.cs" />
-    <Compile Include="Areas\MultiTenancy\Core\ChangePassword.cs" />
+    <Compile Include="Areas\MultiTenancy\Core\ChangePersonPassword.cs" />
     <Compile Include="Areas\MultiTenancy\Model\ChangePasswordModel.cs" />
     <Compile Include="Areas\MyTime\Core\Common\DataProvider\AllowanceDay.cs" />
     <Compile Include="Areas\MyTime\Core\Common\DataProvider\IAllowanceDay.cs" />

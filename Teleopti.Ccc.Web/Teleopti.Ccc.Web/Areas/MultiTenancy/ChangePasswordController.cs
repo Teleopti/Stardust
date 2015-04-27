@@ -7,18 +7,18 @@ namespace Teleopti.Ccc.Web.Areas.MultiTenancy
 {
 	public class ChangePasswordController : Controller
 	{
-		private readonly ChangePassword _changePassword;
+		private readonly ChangePersonPassword _changePersonPassword;
 
-		public ChangePasswordController(ChangePassword changePassword)
+		public ChangePasswordController(ChangePersonPassword changePersonPassword)
 		{
-			_changePassword = changePassword;
+			_changePersonPassword = changePersonPassword;
 		}
 
 		[TenantUnitOfWork]
 		[HttpPost]
 		public virtual void Modify(ChangePasswordModel model)
 		{
-			_changePassword.Modify(model.UserName, model.OldPassword, model.NewPassword);
+			_changePersonPassword.Modify(model.UserName, model.OldPassword, model.NewPassword);
 		}
 	}
 }
