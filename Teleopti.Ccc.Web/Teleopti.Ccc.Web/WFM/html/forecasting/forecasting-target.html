@@ -89,7 +89,13 @@
 							</form>
 						</div>
 						<div class="wfm-block">
-							<linechart data="workload.chartData" options="workload.chartOptions" mode="" height="500"></linechart>
+							<c3chart bindto-id="chart" chart-data="workload.chartData" chart-columns="dataColumns" chart-x="dataX" show-subchart="true" enable-zoom="true">
+								<chart-axis>
+									<chart-axis-x axis-id="date" axis-type="timeseries">
+										<chart-axis-x-tick tick-format="%Y-%m-%d" />
+									</chart-axis-x>
+								</chart-axis>
+							</c3chart>
 						</div>
 					</div>
 					<div ng-if="!workload.loaded" class="text-center modal-inner-content">

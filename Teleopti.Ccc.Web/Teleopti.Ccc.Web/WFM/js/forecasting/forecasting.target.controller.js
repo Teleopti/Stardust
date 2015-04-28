@@ -1,6 +1,6 @@
 ﻿'use strict';
 
-angular.module('wfm.forecasting.target', ['n3-line-chart'])
+angular.module('wfm.forecasting.target', ['gridshore.c3js.chart'])
 	.controller('ForecastingTargetCtrl', [
 			'$scope', '$stateParams', '$state', 'Forecasting', '$http',
 			function($scope, $stateParams, $state, Forecasting, $http) {
@@ -10,62 +10,18 @@ angular.module('wfm.forecasting.target', ['n3-line-chart'])
 				$scope.showExplaination = false;
 				$scope.selectedIds = [];
 
-				var chartOptions = function() {
-					return {
-						lineMode: "cardinal",
-						tension: 1.0,
-						axes: { x: { type: "date", key: "date" }, y: { type: "linear" } },
-						tooltipMode: "dots",
-						drawLegend: true,
-						drawDots: true,
-						stacks: [],
-						series: [
-							{
-								y: "vh",
-								label: "Historical data",
-								type: "line",
-								color: "#ee8f7d",
-								axis: "y",
-								visible: true,
-								id: "series_0",
-								thickness: "1px",
-								dotSize: 2,
-								drawDots: true
-							},
-							{
-								y: "v0",
-								label: "Teleopti Classic",
-								type: "line",
-								color: "#6685a3",
-								axis: "y",
-								visible: true,
-								id: "series_1",
-								thickness: "1px",
-								dotSize: 2,
-								drawDots: true
-							},
-							{
-								y: "v1",
-								label: "Teleopti Classic with Trend",
-								type: "line",
-								color: "#67c285",
-								axis: "y",
-								visible: true,
-								id: "series_2",
-								thickness: "1px",
-								dotSize: 2,
-								drawDots: true
-							}
-						],
-						tooltip: { mode: "axes", interpolate: true }
-					}
-				};
+				$scope.dataColumns = [{ id: "vh", type: "line", name: "Historical data" },
+									{ id: "v0", type: "line", name: "Teleopti Classic" },
+									{ id: "v1", type: "line", name: "Teleopti Classic with Trend" }];
+				$scope.dataX = { id: "date" };
 
 				$scope.openModal = function (workload) {
 					workload.modalLaunch = true;
 					workload.noHistoricalDataForEvaluation = false;
 					workload.noHistoricalDataForForecasting = false;
 					workload.loaded = false;
+
+					
 					
 					$http.post("../api/Forecasting/PreForecast", JSON.stringify({ ForecastStart: $scope.period.startDate, ForecastEnd: $scope.period.endDate , WorkloadId: workload.Id})).
 						success(function (data, status, headers, config) {
@@ -81,7 +37,7 @@ angular.module('wfm.forecasting.target', ['n3-line-chart'])
 
 							angular.forEach(data.ForecastMethods, function (method) {
 								method.DomId = workload.Id + (method.ForecastMethodType + 1);
-								method.Name = workload.chartOptions.series[method.ForecastMethodType + 1].label;
+								method.Name = $scope.dataColumns[method.ForecastMethodType + 1].name;
 							});
 
 							workload.forecastMethods = data.ForecastMethods;
@@ -97,11 +53,6 @@ angular.module('wfm.forecasting.target', ['n3-line-chart'])
 									selectedMethod = data.ForecastMethodRecommended;
 								}
 							}
-
-							angular.forEach(workload.chartOptions.series, function (line) {
-								line.thickness = "1px";
-							});
-							workload.chartOptions.series[parseInt(selectedMethod) + 1].thickness = "2px";
 							workload.selectedMethod = selectedMethod;
 						}).
 						error(function(data, status, headers, config) {
@@ -174,12 +125,9 @@ angular.module('wfm.forecasting.target', ['n3-line-chart'])
 						skill.show = true;
 						angular.forEach(skill.Workloads, function (workload) {
 							workload.methodToUse = -1;
-							workload.chartOptions = chartOptions();
+
 							workload.methodChanged = function (newMethod) {
-								angular.forEach(workload.chartOptions.series, function (line) {
-									line.thickness = "1px";
-								});
-								workload.chartOptions.series[parseInt(newMethod) + 1].thickness = "2px";
+								// do something
 							};
 						});
 					});
