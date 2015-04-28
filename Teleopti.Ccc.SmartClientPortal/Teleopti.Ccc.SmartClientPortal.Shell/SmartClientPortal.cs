@@ -91,7 +91,9 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 			// key shortcuts
 			if (e.Modifiers == Keys.Control)
 			{
-				if (e.KeyCode == Keys.D1 || e.KeyCode == Keys.NumPad1)
+				if (e.KeyCode == Keys.D0 || e.KeyCode == Keys.NumPad0)
+					openOptionsDialog();
+				else if (e.KeyCode == Keys.D1 || e.KeyCode == Keys.NumPad1)
 					startModule(DefinedRaptorApplicationFunctionPaths.OpenPersonAdminPage);
 				else if (e.KeyCode == Keys.D2 || e.KeyCode == Keys.NumPad2)
 					startModule(DefinedRaptorApplicationFunctionPaths.OpenForecasterPage);
@@ -177,16 +179,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 
 		private void toolStripButtonSystemOptions_Click(object sender, EventArgs e)
 		{
-			try
-			{
-				var settings = new SettingsScreen(new OptionCore(new OptionsSettingPagesProvider(_toggleManager)));
-				settings.Show();
-				settings.BringToFront();
-			}
-			catch (DataSourceException ex)
-			{
-				DatabaseLostConnectionHandler.ShowConnectionLostFromCloseDialog(ex);
-			}
+			openOptionsDialog();
 		}
 
 		private void toolStripButtonSystemExit_Click(object sender, EventArgs e)
@@ -811,6 +804,20 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 				
 			}
 			
+		}
+
+		private void openOptionsDialog()
+		{
+			try
+			{
+				var settings = new SettingsScreen(new OptionCore(new OptionsSettingPagesProvider(_toggleManager)));
+				settings.Show();
+				settings.BringToFront();
+			}
+			catch (DataSourceException ex)
+			{
+				DatabaseLostConnectionHandler.ShowConnectionLostFromCloseDialog(ex);
+			}
 		}
 
 	}
