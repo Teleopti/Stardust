@@ -231,10 +231,11 @@ namespace Teleopti.Ccc.Win.Scheduling.SchedulingSessionPreferences
 
 		private void initGroupPagesFairness()
 		{
-			comboBoxGroupingFairness.DataSource = _groupPagesFairness;
+			var tempGroupPages = _groupPages;
+			comboBoxGroupingFairness.DataSource = tempGroupPages;
 			comboBoxGroupingFairness.DisplayMember = "DisplayName";
 			comboBoxGroupingFairness.ValueMember = "Key";
-			comboBoxGroupingFairness.SelectedValue = _localSchedulingOptions.GroupPageForShiftCategoryFairness.Key;
+			comboBoxGroupingFairness.SelectedIndex = 0;
 		}
 
 		private void dataOffline()
