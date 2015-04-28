@@ -4,6 +4,7 @@ using System.Linq;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.SeatPlanning;
 using Teleopti.Ccc.Web.Areas.SeatPlanner.Core.ViewModels;
+using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Web.Areas.SeatPlanner.Core.Providers
 {
@@ -61,7 +62,7 @@ namespace Teleopti.Ccc.Web.Areas.SeatPlanner.Core.Providers
 			return null;
 		}
 
-		private static List<SeatViewModel> getSeatViewModels (SeatMapLocation location)
+		private static List<SeatViewModel> getSeatViewModels (ISeatMapLocation location)
 		{
 			if (location.Seats != null)
 			{

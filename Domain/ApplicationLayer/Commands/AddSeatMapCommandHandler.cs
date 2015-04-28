@@ -120,7 +120,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Commands
 			deleteSeatsAndBookingsFromLocation(seatMapLocation, seatsToDelete);
 		}
 
-		private void deleteSeatsAndBookingsFromLocation (SeatMapLocation seatMapLocation, IEnumerable<ISeat> seatsToDelete)
+		private void deleteSeatsAndBookingsFromLocation (ISeatMapLocation seatMapLocation, IEnumerable<ISeat> seatsToDelete)
 		{
 			_seatBookingRepository.RemoveSeatBookingsForSeats (seatsToDelete);
 			seatsToDelete.ToList().ForEach (seat => seatMapLocation.Seats.Remove (seat));

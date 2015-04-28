@@ -140,13 +140,13 @@
 					</div>
 					<div class="modal-inner-content">
 						<br />
-						<input type="text" ng-model="vm.newLocationName" placeholder="Name..." />
+						<input type="text" id="locationName" ng-model="vm.newLocationName" placeholder="Name..." />
 						<br />
 					</div>
 					<div class="modal-footer">
 						<aside>
 							<a ng-click="vm.showLocationDialog = false" class="wfm-btn wfm-btn-invis-primary">DISMISS</a>
-							<a class="wfm-btn wfm-btn-invis-primary" ng-click="vm.addNamedLocation()">CREATE</a>
+							<a id="okButton" class="wfm-btn wfm-btn-invis-primary" ng-click="vm.addNamedLocation()">CREATE</a>
 						</aside>
 					</div>
 				</div>

@@ -514,6 +514,65 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 		}
 
 		[Test]
+		public void ShouldHonourExistingBookingsOnChildLocation()
+		{
+			var startDate = new DateTime(2015, 1, 20, 0, 0, 0, DateTimeKind.Utc);
+			var endDate = new DateTime(2015, 1, 20, 0, 0, 0, DateTimeKind.Utc);
+
+			var team1 = new Team() { Description = new Description("Team1") };
+			team1.SetId(Guid.NewGuid());
+
+			var person = PersonFactory.CreatePersonWithPersonPeriodFromTeam(new DateOnly(startDate), team1);
+			var person2 = PersonFactory.CreatePersonWithPersonPeriodFromTeam(new DateOnly(startDate), team1);
+
+			var seatMapLocation = new SeatMapLocation() { Name = "ParentLocation" };
+			var childSeatMapLocation = new SeatMapLocation() { Name = "ChildLocation" };
+			seatMapLocation.SetId(Guid.NewGuid());
+			childSeatMapLocation.SetId(Guid.NewGuid());
+			seatMapLocation.AddChild(childSeatMapLocation);
+			childSeatMapLocation.AddSeat("Seat 1", 1);
+
+			var assignmentEndDateTime = new DateTime(endDate.Year, endDate.Month, endDate.Day, 13, 00, 00, DateTimeKind.Utc);
+			var existingSeatBooking = new SeatBooking(person, new DateOnly(startDate), startDate, assignmentEndDateTime)
+			{
+				Seat = childSeatMapLocation.Seats[0]
+			};
+
+			existingSeatBooking.SetId(Guid.NewGuid());
+			_seatBookingRepository.Add(existingSeatBooking);
+
+			var personAssignment = PersonAssignmentFactory.CreateAssignmentWithMainShift(_currentScenario.Current(),
+				person2, new DateTimePeriod(startDate, assignmentEndDateTime));
+
+			var target = new AddSeatPlanCommandHandler(
+				new FakeScheduleDataReadScheduleRepository(personAssignment),
+				new FakeTeamRepository(team1), new FakePersonRepository(person, person2), _currentScenario, new FakePublicNoteRepository(),
+				new FakeSeatMapRepository(seatMapLocation, childSeatMapLocation), _seatBookingRepository);
+
+			var command = new AddSeatPlanCommand()
+			{
+				StartDate = startDate,
+				EndDate = endDate,
+				Locations = new[] { childSeatMapLocation.Id.Value },
+				Teams = new[] { team1.Id.Value },
+				TrackedCommandInfo = new TrackedCommandInfo()
+				{
+					OperatedPersonId = Guid.NewGuid(),
+					TrackId = Guid.NewGuid()
+				}
+			};
+
+			target.Handle(command);
+
+			_seatBookingRepository.LoadSeatBookingForPerson(new DateOnly(startDate), person)
+				.Seat.Should().Be(childSeatMapLocation.Seats[0]);
+
+			Assert.IsNull(_seatBookingRepository.LoadSeatBookingForPerson(new DateOnly(startDate), person2));
+
+		}
+
+
+		[Test]
 		public void ShouldOverwriteExistingBookingForAgent()
 		{
 			var date = new DateTime(2015, 1, 20, 0, 0, 0, DateTimeKind.Utc);
@@ -731,7 +790,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 
 			var team = new Team() { Description = new Description("Team") };
 			team.SetId(Guid.NewGuid());
-			
+
 			var person = PersonFactory.CreatePersonWithPersonPeriodFromTeam(new DateOnly(date), team);
 			var person2 = PersonFactory.CreatePersonWithPersonPeriodFromTeam(new DateOnly(date), team);
 			var person3 = PersonFactory.CreatePersonWithPersonPeriodFromTeam(new DateOnly(date), team);
@@ -759,16 +818,16 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 			var seatMapLocation = new SeatMapLocation() { Name = "Location" };
 			seatMapLocation.SetId(Guid.NewGuid());
 			seatMapLocation.AddSeat("Seat One", 1);
-			
-			var target = new AddSeatPlanCommandHandler(new FakeScheduleDataReadScheduleRepository(personAssignment,  personAssignment2, personAssignment3, personAssignment4),
+
+			var target = new AddSeatPlanCommandHandler(new FakeScheduleDataReadScheduleRepository(personAssignment, personAssignment2, personAssignment3, personAssignment4),
 				new FakeTeamRepository(team), new FakePersonRepository(person, person2, person3), _currentScenario,
 				new FakePublicNoteRepository(),
 				new FakeSeatMapRepository(seatMapLocation), _seatBookingRepository);
-			
+
 			var command = new AddSeatPlanCommand()
 			{
 				StartDate = date,
-				EndDate = date.AddDays (1),
+				EndDate = date.AddDays(1),
 				Locations = new[] { seatMapLocation.Id.Value },
 				Teams = new[] { team.Id.Value },
 				TrackedCommandInfo = new TrackedCommandInfo()
@@ -779,21 +838,21 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 			};
 
 			target.Handle(command);
-			
+
 			_seatBookingRepository.LoadSeatBookingForPerson(new DateOnly(date), person).Seat.Should().Be(seatMapLocation.Seats[0]);
 
-			Assert.IsTrue(_seatBookingRepository.LoadSeatBookingsForDay (new DateOnly (date)).Count() == 3);
-			Assert.IsFalse(_seatBookingRepository.LoadSeatBookingsForDay(new DateOnly(date).AddDays (1)).Any());
+			Assert.IsTrue(_seatBookingRepository.LoadSeatBookingsForDay(new DateOnly(date)).Count() == 3);
+			Assert.IsFalse(_seatBookingRepository.LoadSeatBookingsForDay(new DateOnly(date).AddDays(1)).Any());
 
 			// check overwrite gets same result
 
-			target.Handle(command);  
-			
+			target.Handle(command);
+
 			_seatBookingRepository.LoadSeatBookingForPerson(new DateOnly(date), person).Seat.Should().Be(seatMapLocation.Seats[0]);
 
 			Assert.IsTrue(_seatBookingRepository.LoadSeatBookingsForDay(new DateOnly(date)).Count() == 3);
 			Assert.IsTrue(!_seatBookingRepository.LoadSeatBookingsForDay(new DateOnly(date).AddDays(1)).Any());
-			
+
 		}
 	}
 }

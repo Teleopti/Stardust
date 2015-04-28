@@ -57,6 +57,11 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core.BrowserDriver.CoypuImpl
 			_browser.FindCss(selector, new Regex(Regex.Escape(text)), options()).Click(options());
 		}
 
+		public void FillWith (string selector, string value)
+		{
+			_browser.FillIn(selector).With(value);
+		}
+
 		public void DragnDrop(string selector, int x, int y)
 		{
 				var selenium = ((OpenQA.Selenium.Remote.RemoteWebDriver)_browser.Native);
@@ -143,9 +148,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core.BrowserDriver.CoypuImpl
 			writer(_browser.Location.ToString());
 		}
 
-
-
-
+		
 		private static string succeedOrIgnore(Func<string> operation)
 		{
 			try

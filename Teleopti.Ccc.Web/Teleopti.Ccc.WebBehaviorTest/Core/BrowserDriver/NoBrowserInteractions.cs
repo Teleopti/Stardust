@@ -1,4 +1,5 @@
 ﻿using System;
+using Coypu;
 
 namespace Teleopti.Ccc.WebBehaviorTest.Core.BrowserDriver
 {
@@ -25,6 +26,11 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core.BrowserDriver
 		}
 
 		public void ClickContaining(string selector, string text)
+		{
+			throw new NotSupportedException(notAllowedAction);
+		}
+
+		public void FillWith (string selector, string value)
 		{
 			throw new NotSupportedException(notAllowedAction);
 		}

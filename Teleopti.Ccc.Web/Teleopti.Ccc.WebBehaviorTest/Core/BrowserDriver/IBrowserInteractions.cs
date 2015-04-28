@@ -1,4 +1,5 @@
 ﻿using System;
+using Coypu;
 
 namespace Teleopti.Ccc.WebBehaviorTest.Core.BrowserDriver
 {
@@ -10,6 +11,8 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core.BrowserDriver
 
 		void Click(string selector);
 		void ClickContaining(string selector, string text);
+		void FillWith (string selector, string value);
+		
 
 		void AssertExists(string selector);
 		void AssertNotExists(string existsSelector, string notExistsSelector);

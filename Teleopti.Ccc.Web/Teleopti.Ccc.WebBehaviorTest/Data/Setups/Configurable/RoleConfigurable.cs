@@ -93,6 +93,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Configurable
 			AccessToMyReport = true;
 			AccessToPreferences = true;
 			AccessToRealTimeAdherenceOverview = false;
+			AccessToSeatPlanner = false;
 			AccessToTeamSchedule = true;
 			AccessToMatrixReports = true;
 			AccessToPersonalAbsenceAccount = true;

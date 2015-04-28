@@ -51,8 +51,6 @@ angular.module('wfm.seatPlan')
 				Locations: selectedLocations
 			};
 
-			console.log(addSeatPlanCommand);
-
 			if (selectedTeams.length == 0 || selectedLocations.length == 0) {
 
 				onSelectedTeamsLocationsEmpty("teams or locations are unselected");

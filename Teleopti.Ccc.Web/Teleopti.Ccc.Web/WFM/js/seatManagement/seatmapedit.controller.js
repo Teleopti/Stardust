@@ -155,6 +155,7 @@
 		vm.floatingButtonClick = function (action) {
 			action();
 		};
+
 		vm.chosen = {
 			effect: 'slidein-spring',
 			position: 'tr',
@@ -165,10 +166,9 @@
 			label: 'Add Seat',
 			icon: 'mdi-plus',
 			action: vm.addSeat
-
 		}, {
 			label: 'Add Location',
-			icon: ' mdi-tab-unselected',
+			icon: 'mdi-tab-unselected',
 			action: vm.addLocation
 		}, {
 			label: 'Add Image',

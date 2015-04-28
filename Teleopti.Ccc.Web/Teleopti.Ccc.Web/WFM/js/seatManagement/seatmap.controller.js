@@ -13,6 +13,7 @@
 
 		var vm = this;
 		var canvas = new fabric.CanvasWithViewport('c');
+		document.getElementById("c").fabric = canvas;
 		vm.isInEditMode = false;
 		vm.isLoading = true;
 		vm.breadcrumbs = [];
@@ -44,7 +45,6 @@
 				resize();
 			});
 
-			
 			resize();
 
 			createDocumentListeners();
@@ -66,8 +66,6 @@
 		vm.toggleMoveMode = function () {
 			canvasUtils.toggleMoveMode(canvas);
 		};
-
-		
 		
 		vm.resize = resize;
 

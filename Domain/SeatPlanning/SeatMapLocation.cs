@@ -23,9 +23,10 @@ namespace Teleopti.Ccc.Domain.SeatPlanning
 		public virtual IList<SeatMapLocation> ChildLocations
 		{
 			get { return _childLocations; }
+			
 		}
 
-		public virtual String Name { get; set; }
+		public virtual string Name { get; set; }
 		public virtual bool IncludeInSeatPlan { get; set; }
 		public virtual SeatMapLocation ParentLocation { get; set; }
 		public virtual string SeatMapJsonData { get; set; }

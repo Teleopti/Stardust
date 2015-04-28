@@ -332,6 +332,15 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 			TestControllerMethods.Logon();
 			Navigation.GotoPermissions();
 		}
+
+		[When(@"I view Seat map")]
+		public void WhenIViewSeatMap()
+		{
+			TestControllerMethods.Logon();
+			Navigation.GotoSeatMap();
+		}
+
+
 		[When(@"I view Real time adherence overview")]
 		public void WhenIViewRealTimeAdherenceOverview()
 		{

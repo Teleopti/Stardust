@@ -31,7 +31,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 
 		public ISeatMapLocation Get (Guid id)
 		{
-			return _seatMaps.FirstOrDefault();
+			return _seatMaps.SingleOrDefault (seatMap => seatMap.Id.Value == id);
 		}
 
 		public IList<ISeatMapLocation> LoadAll()

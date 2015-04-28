@@ -853,6 +853,12 @@
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
     </Compile>
+    <Compile Include="Wfm\Seat Management\SeatMap.feature.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>SeatMap.feature</DependentUpon>
+    </Compile>
+    <Compile Include="Wfm\Seat Management\SeatMapStepDefinitions.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="..\..\packages\phantomjs.exe.1.8.1\tools\phantomjs\phantomjs.exe">
@@ -1185,6 +1191,10 @@
     <None Include="Wfm\PlanningPeriod.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>
       <LastGenOutput>PlanningPeriod.feature.cs</LastGenOutput>
+    </None>
+    <None Include="Wfm\Seat Management\SeatMap.feature">
+      <Generator>SpecFlowSingleFileGenerator</Generator>
+      <LastGenOutput>SeatMap.feature.cs</LastGenOutput>
     </None>
   </ItemGroup>
   <ItemGroup>

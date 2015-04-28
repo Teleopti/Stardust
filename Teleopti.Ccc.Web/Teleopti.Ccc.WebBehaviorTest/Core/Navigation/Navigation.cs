@@ -322,6 +322,11 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core.Navigation
 			GoToPage("wfm/#/permissions");
 		}
 
+		public static void GotoSeatMap()
+		{
+			GoToPage("wfm/#/seatMap");
+		}
+
 
 		public static void GotoAnywhereRealTimeAdherenceOverview(Guid buId, Guid siteId)
 		{

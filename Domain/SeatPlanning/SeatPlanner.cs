@@ -105,13 +105,17 @@ namespace Teleopti.Ccc.Domain.SeatPlanning
 			return _scheduleRepository.FindSchedulesForPersonsOnlyInGivenPeriod(people, new ScheduleDictionaryLoadOptions(false, false), period, currentScenario);
 		}
 
-		private void loadExistingSeatBookings(ISeatMapLocation rootSeatMapLocation)
+		private void loadExistingSeatBookings(SeatMapLocation rootSeatMapLocation)
 		{
+
 			foreach (var seat in rootSeatMapLocation.Seats)
 			{
 				var seatBookings = _existingSeatBookings.Where(booking => Equals(booking.Seat, seat)).ToList();
 				seat.AddSeatBookings(seatBookings);
 			}
+
+			rootSeatMapLocation.ChildLocations.ForEach (loadExistingSeatBookings);
+			
 		}
 
 		private void allocateSeats(SeatAllocator seatAllocator)
