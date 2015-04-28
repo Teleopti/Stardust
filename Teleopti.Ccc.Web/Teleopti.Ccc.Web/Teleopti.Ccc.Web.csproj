@@ -267,6 +267,12 @@
     <Compile Include="..\..\Teleopti.Ccc.Web.Broker\MessageBrokerServer.cs">
       <Link>Core\MessageBroker\MessageBrokerServer.cs</Link>
     </Compile>
+    <Compile Include="..\..\Teleopti.Ccc.Web.Broker\MessageBrokerServerModule.cs">
+      <Link>Core\MessageBroker\MessageBrokerServerModule.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Teleopti.Ccc.Web.Broker\MessageBrokerWebModule.cs">
+      <Link>Core\MessageBroker\MessageBrokerWebModule.cs</Link>
+    </Compile>
     <Compile Include="..\..\Teleopti.Ccc.Web.Broker\SubscriptionFiller.cs">
       <Link>Core\MessageBroker\SubscriptionFiller.cs</Link>
     </Compile>

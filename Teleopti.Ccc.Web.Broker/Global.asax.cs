@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Threading.Tasks;
 using System.Web;
+using System.Web.Mvc;
+using System.Web.Routing;
 using Autofac;
 using Autofac.Integration.SignalR;
 using Microsoft.AspNet.SignalR;
@@ -17,17 +19,33 @@ namespace Teleopti.Ccc.Web.Broker
 		{
 			log4net.Config.XmlConfigurator.Configure();
 
-			var containerBuilder = new ContainerBuilder();
-			containerBuilder.Register(c => SignalRConfiguration.ActionScheduler).As<IActionScheduler>().ExternallyOwned();
-			containerBuilder.RegisterType<SubscriptionPassThrough>().As<IBeforeSubscribe>();
-			containerBuilder.RegisterHubs(typeof (MessageBrokerHub).Assembly);
-			_container = containerBuilder.Build();
-			GlobalHost.DependencyResolver = new AutofacDependencyResolver(_container.BeginLifetimeScope()); 
+			var builder = new ContainerBuilder();
+			builder.RegisterModule(new MessageBrokerWebModule());
+			builder.RegisterModule(new MessageBrokerServerModule());
+			_container = builder.Build();
+
+			var lifetimeScope = _container.BeginLifetimeScope();
+			GlobalHost.DependencyResolver = new AutofacDependencyResolver(lifetimeScope); 
 			
 			var hubConfiguration = new HubConfiguration { EnableCrossDomain = true };
 			SignalRConfiguration.Configure(hubConfiguration);
 
             TaskScheduler.UnobservedTaskException += TaskSchedulerOnUnobservedTaskException;
+			
+			DependencyResolver.SetResolver(new Autofac.Integration.Mvc.AutofacDependencyResolver(lifetimeScope));
+			AreaRegistration.RegisterAllAreas();
+			RegisterRoutes(RouteTable.Routes);
+		}
+
+		public static void RegisterRoutes(RouteCollection routes)
+		{
+			routes.IgnoreRoute("{resource}.axd/{*pathInfo}");
+
+			routes.MapRoute(
+				name: "Default",
+				url: "{controller}/{action}/{id}",
+				defaults: new { controller = "Home", action = "Index", id = UrlParameter.Optional }
+				);
 		}
 
 		protected void Application_End(object sender, EventArgs e)
