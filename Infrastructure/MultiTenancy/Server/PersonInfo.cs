@@ -22,6 +22,7 @@ namespace Teleopti.Ccc.Infrastructure.MultiTenancy.Server
 		public virtual Guid Id { get; protected set; }
 		//TODO: tenant move these to applicationlogoninfo
 		public virtual string ApplicationLogonName { get; protected set; }
+		//make private when oldschema is gone!
 		public virtual string Password { get; protected set; }
 		//
 		public virtual string Identity { get; protected set; }
