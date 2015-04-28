@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Net.Http;
+using System.Web.Http;
 using System.Web.Http.Results;
+using Newtonsoft.Json.Linq;
 using NUnit.Framework;
 using Rhino.Mocks;
 using SharpTestsEx;
@@ -97,8 +99,27 @@ namespace Teleopti.Ccc.WebTest.Areas.Outbound.Controllers
 	
 			var target = new OutboundController(null, _outboundCampaignRepository, null);
 			target.Remove(campaignId);
-			_outboundCampaignRepository.AssertWasCalled(x=>x.Remove(campaign), o=>o.IgnoreArguments());
+			_outboundCampaignRepository.AssertWasCalled(x=>x.Remove(campaign), o=>o.IgnoreArguments());			
+		}
+
+		[Test]
+		public void ShouldUpdateCampaignVM()
+		{		
+			var campaignVM = new CampaignViewModel();			
+			var target = new OutboundController(_outboundCampaignPersister, null, null);
+			target.UpdateCampaign(new Guid(), campaignVM);
+			_outboundCampaignPersister.AssertWasCalled((x=>x.Persist(campaignVM)));
+		}
+
+		[Test]
+		public void ShouldUpdateCampaignWorkingPeriodAssignment()
+		{
+			var form = new CampaignWorkingPeriodAssignmentForm();
+			var formId = new Guid();
 			
+			var target = new OutboundController(_outboundCampaignPersister, null, null);
+			target.UpdateCampaignWorkingPeriodAssignment(formId, form);
+			_outboundCampaignPersister.AssertWasCalled(x=>x.Persist(form));
 		}
 	}
 }
