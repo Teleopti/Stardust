@@ -144,7 +144,6 @@
     <Compile Include="BudgetGroupHeadCountSpecificationTest.cs" />
     <Compile Include="Container\ContainerConfigurationTest.cs" />
     <Compile Include="Denormalizer\ShiftExchangeOfferHandlerTest.cs" />
-    <Compile Include="Denormalizer\UpdateGroupingReadModelConsumerResolveTest.cs" />
     <Compile Include="Denormalizer\ScheduleDayReadModelHandlerTest.cs" />
     <Compile Include="Denormalizer\ScheduleDayReadModelsCreatorTest.cs" />
     <Compile Include="Denormalizer\UpdateFindPersonDataConsumerTest.cs" />
