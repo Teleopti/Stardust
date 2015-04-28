@@ -18,3 +18,16 @@
 .forecast-method{
 	height: 30px;
 }
+
+/*c3 chart*/
+
+.c3-tooltip td,.c3-tooltip th{
+  color:white;
+  background-color: rgba(0,0,0,0.54)!important;
+}
+
+ .c3-tooltip td>span {
+  margin-left: 10px;
+  margin-top: 5px;
+  border:1px solid white;
+}

@@ -3,7 +3,7 @@
 		<div class="row col-lg-12">
 			<button class="wfm-btn wfm-btn-default" ng-click="back()">Back</button>
 			<button class="wfm-btn apply pull-right" ng-class="{'wfm-btn-primary-disabled': !hasOneSelected(), 'wfm-btn-primary':hasOneSelected()}" ng-click="nextStep()">Apply</button>
-			<h4>Select forcasting target(s) for period {{period.startDate | date : shortDate}} to {{period.endDate | date : shortDate}}:</h4>
+			<p>Select forcasting target(s) for period {{period.startDate | date : shortDate}} to {{period.endDate | date : shortDate}}:</p>
 		</div>
 		<div class="row col-lg-12">
 			<div class="tree">
@@ -55,7 +55,9 @@
 					{{workload.Name}}
 					<i class="pull-right workload-accuracy">{{workload.Accuracy}}</i>
 					<span><i class="mdi mdi-check"></i></span>
-					<i class="mdi mdi-chart-bar forecasting-chart-bar" ng-class="{'forecasting-chart-bar-alert': workload.methodToUse!==-1}" ng-click="openModal(workload);$event.stopPropagation();"></i>
+					<i class="mdi mdi-chart-bar forecasting-chart-bar" ng-class="{'forecasting-chart-bar-alert': workload.methodToUse!==-1}" ng-click="openModal(workload);$event.stopPropagation();">
+						<md-tooltip>View method graph</md-tooltip>
+					</i>
 					<div ng-include="'forecasting-chart.html'"></div>
 				</div>
 			</div>
@@ -73,22 +75,15 @@
 						{{workload.Name}}
 					</div>
 					<div class="modal-inner-content" ng-if="workload.loaded">
-						<div class="wfm-block">
 							<div class="alert-warning notice-spacer" ng-show="workload.noHistoricalDataForEvaluation"><i class='mdi mdi-alert'></i> Warning: There is no recommended forecasting method because of lack of historical data.</div>
 							<div class="alert-warning notice-spacer" ng-show="workload.noHistoricalDataForForecasting"><i class='mdi mdi-alert'></i> Warning: There is no historical data available for forecasting.</div>
-						</div>
 						<div class="wfm-block">
-							<form>
-								<div class="wfm-radio forecast-method" ng-repeat="method in workload.forecastMethods">
-									<input type="radio" ng-model="workload.selectedMethod" ng-change="workload.methodChanged(workload.selectedMethod)" name="{{workload.Id}}" id='{{method.DomId}}' value="{{method.ForecastMethodType}}" />
-									<label for='{{method.DomId}}'>
-										<span class="wfm-radio-toggle"></span>
-										<span class="wfm-radio-label pull-left">{{method.Name}}</span>
-									</label>
+							<div class="row">
+								<div class="col-lg-12">
+									<h4>Forescast Method</h4>
+									<p>xyz is recommended as a forecasting method based on available data. If you would like to compare it to another valid method you can enable it in the chart below.</p>
 								</div>
-							</form>
-						</div>
-						<div class="wfm-block">
+							</div>
 							<c3chart bindto-id="chart" chart-data="workload.chartData" chart-columns="dataColumns" chart-x="dataX" show-subchart="true" enable-zoom="true">
 								<chart-axis>
 									<chart-axis-x axis-id="date" axis-type="timeseries">
@@ -106,7 +101,7 @@
 					<div class="modal-footer">
 						<aside>
 							<a class="wfm-btn wfm-btn-invis-primary" ng-click="cancelMethod(workload)">Cancel</a>
-							<a class="wfm-btn wfm-btn-invis-primary" ng-click="saveMethod(workload)">Ok</a>
+							<a class="wfm-btn wfm-btn-invis-primary" ng-click="saveMethod(workload)">Confirm method</a>
 						</aside>
 					</div>
 				</div>
