@@ -102,7 +102,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 			if (result.IsSuccessful)
 			{
 				//TODO: tenant - hack for now
-				if (_toggleManager.IsEnabled(Toggles.MultiTenancy_People_32113))
+				if (_toggleManager.IsEnabled(Toggles.MultiTenancy_LogonUseNewSchema_33049))
 				{
 					_changePersonPassword.Modify(loggedOnUser.ApplicationAuthenticationInfo.ApplicationLogOnName, model.OldPassword, model.NewPassword);
 				}

@@ -181,7 +181,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			loggedOnUser.Expect(x => x.CurrentUser()).Return(person);
 			modifyPassword.Expect(x => x.Change(person, "old", "new")).Return(new ChangePasswordResultInfo { IsSuccessful = true });
 			var toggleManager = MockRepository.GenerateStub<IToggleManager>();
-			toggleManager.Stub(x => x.IsEnabled(Toggles.MultiTenancy_People_32113)).Return(true);
+			toggleManager.Stub(x => x.IsEnabled(Toggles.MultiTenancy_LogonUseNewSchema_33049)).Return(true);
 			var changePersonPassword = MockRepository.GenerateMock<IChangePersonPassword>();
 			using (var target = new SettingsController(loggedOnUser, modifyPassword,
 													new PersonPersister(MockRepository.GenerateMock<IMbCacheFactory>(), null), null, null, null, null, null, changePersonPassword, toggleManager))
