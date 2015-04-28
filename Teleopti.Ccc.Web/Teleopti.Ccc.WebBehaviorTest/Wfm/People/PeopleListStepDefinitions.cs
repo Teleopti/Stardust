@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using TechTalk.SpecFlow;
 using Teleopti.Ccc.WebBehaviorTest.Core;
+using Teleopti.Ccc.WebBehaviorTest.Core.BrowserDriver;
 
 namespace Teleopti.Ccc.WebBehaviorTest.Wfm.People
 {
@@ -25,5 +26,12 @@ namespace Teleopti.Ccc.WebBehaviorTest.Wfm.People
 			Browser.Interactions.AssertNotExists(existSelector,notExistSelector);
 		}
 
+		[When(@"I search people with keyword '(.*)'")]
+		public void WhenISearchPeopleWithKeyword(string value)
+		{
+			var selector = ".people-search input";
+			Browser.Interactions.Clear(selector);
+			Browser.Interactions.FillWith(selector, value);
+		}
 	}
 }

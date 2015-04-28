@@ -11,8 +11,9 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core.BrowserDriver
 
 		void Click(string selector);
 		void ClickContaining(string selector, string text);
-		void FillWith (string selector, string value);
-		
+
+		void FillWith(string selector, string value);
+		void Clear(string selector);
 
 		void AssertExists(string selector);
 		void AssertNotExists(string existsSelector, string notExistsSelector);
@@ -31,7 +32,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core.BrowserDriver
 
 		void DumpInfo(Action<string> writer);
 		void DumpUrl(Action<string> writer);
-	  void CloseWindow(string name);
+	    void CloseWindow(string name);
 		void DragnDrop(string selector, int x, int y);
 	}
 }

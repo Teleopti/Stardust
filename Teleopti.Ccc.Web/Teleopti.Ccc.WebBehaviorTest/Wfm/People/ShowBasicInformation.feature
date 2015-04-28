@@ -10,7 +10,7 @@ Background:
 	And I have a role with
 	 | Field            | Value       |
 	 | Name             | Team leader |
-	 | Access to team   | Team1 |
+	 | Access to team   | Team1|
 	 | Access to people | true        |
 	And Ashley Andeen has a person period with
 	 | Field      | Value      |
@@ -24,12 +24,12 @@ Background:
 	 | Field      | Value      |
 	 | Team       | Team1      |
 	 | Start Date | 2015-01-21 |
+
 Scenario: Show my team members by default
 	When I view people
 	Then I should see 'Ashley' in people list
 	And I should not see 'John Smith' in people list
 
-	@ignore
 Scenario: Should search people by keyword
 	When I view people
 	And I search people with keyword 'Team1'
