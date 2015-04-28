@@ -23,12 +23,22 @@ namespace Teleopti.Ccc.Infrastructure.MultiTenancy.Server
 		}
 		protected ApplicationLogonInfo() { }
 
+		//make private when old schema is gone
 		public virtual DateTime LastPasswordChange { get; protected set; }
 		public virtual DateTime InvalidAttemptsSequenceStart { get; protected set; }
+		//make private when old schema is gone
 		public virtual int InvalidAttempts { get; protected set; }
 		public virtual bool IsLocked { get; protected set; }
 		//remove me when oldschema is gone!
 		public virtual PersonInfo PersonInfo { get; protected set; }
+
+		internal void RegisterPasswordChange()
+		{
+			//make private when old schema is gone
+			LastPasswordChange = DateTime.UtcNow;
+			InvalidAttempts = 0;
+			IsLocked = false;
+		}
 
 		public virtual void Lock()
 		{

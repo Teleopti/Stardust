@@ -129,5 +129,23 @@ namespace Teleopti.Ccc.WebTest.Areas.MultiTenancy
 
 			personInfo.ApplicationLogonInfo.InvalidAttempts.Should().Be.EqualTo(invalidAttemptsBefore + 1);
 		}
+
+		[Test]
+		public void LockedAccountShouldBeUnlockedAfterSuccessfulPasswordChange()
+		{
+			var model = new ChangePasswordModel
+			{
+				UserName = RandomName.Make(),
+				OldPassword = RandomName.Make(),
+				NewPassword = RandomName.Make()
+			};
+			var personInfo = new PersonInfo();
+			personInfo.SetApplicationLogonCredentials(new CheckPasswordStrengthFake(), model.UserName, model.OldPassword);
+			personInfo.ApplicationLogonInfo.Lock();
+			ApplicationUserTenantQuery.Add(personInfo);
+
+			Target.Modify(model);
+			personInfo.ApplicationLogonInfo.IsLocked.Should().Be.False();
+		}
 	}
 }

@@ -50,6 +50,7 @@ namespace Teleopti.Ccc.Infrastructure.MultiTenancy.Server
 				return;
 			setPassword(checkPasswordStrength, password);
 			ApplicationLogonName = logonName;
+			ApplicationLogonInfo.RegisterPasswordChange();
 		}
 
 		public virtual void SetIdentity(string identityName)
