@@ -17,7 +17,9 @@
 						$scope.scheduledDays = result.DaysScheduled;
 					});;
 				};
-				$scope.isEnabled = ResourcePlannerSvrc.isEnabled.query({toggle:'Wfm_ChangePlanningPeriod_33043'});
+				 ResourcePlannerSvrc.isEnabled.query({ toggle: 'Wfm_ChangePlanningPeriod_33043' }).$promise.then(function (result) {
+										$scope.isEnabled = result.IsEnabled;
+									});
 			}
 		]);
 })();

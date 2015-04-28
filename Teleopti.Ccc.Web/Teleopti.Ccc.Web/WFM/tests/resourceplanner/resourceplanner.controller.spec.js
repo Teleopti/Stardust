@@ -21,7 +21,11 @@ describe('ResourceplannerCtrl', function() {
 				query: function() {}
 			},
 			isEnabled: {
-				query: function() {}
+				query: function(param) {
+					var queryDeferred = $q.defer();
+					queryDeferred.resolve('true');
+					return { $promise: queryDeferred.promise };
+				}
 			}
 
 		};
@@ -39,7 +43,11 @@ describe('ResourceplannerCtrl', function() {
 				}
 			},
 			isEnabled: {
-				query: function () { }
+				query: function (param) {
+					var queryDeferred = $q.defer();
+					queryDeferred.resolve('true');
+					return { $promise: queryDeferred.promise };
+				}
 			}
 		};
 
@@ -68,7 +76,11 @@ describe('ResourceplannerCtrl', function() {
 				}
 			},
 			isEnabled: {
-				query: function () { }
+				query: function (param) {
+					var queryDeferred = $q.defer();
+					queryDeferred.resolve('true');
+					return { $promise: queryDeferred.promise };
+				}
 			}
 		};
 
