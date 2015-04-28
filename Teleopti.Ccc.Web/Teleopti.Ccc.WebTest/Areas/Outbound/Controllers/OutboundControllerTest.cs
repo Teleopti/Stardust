@@ -1,9 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Net.Http;
-using System.Web.Http;
 using System.Web.Http.Results;
-using Newtonsoft.Json.Linq;
 using NUnit.Framework;
 using Rhino.Mocks;
 using SharpTestsEx;
