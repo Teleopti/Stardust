@@ -503,9 +503,11 @@ Teleopti.MyTimeWeb.TeamScheduleFilterMixin = function () {
 		}
 
 		self.availableTeams(teams);
-
+		
 		var isSelectedTeamAllTeam = self.selectedTeam() && self.selectedTeam() == -1;
-		var isSelectedTeamNotIncluded = self.availableTeams().map(function (v) { return v.id; }).indexOf(self.selectedTeam()) < 0;
+		var isSelectedTeamNotIncluded = self.showGroupings()?
+			self.availableTeams().reduce(function (v, e) { return v.concat(e.children); }, []).map(function (e) { return e.id; }).indexOf(self.selectedTeam()) < 0 :
+			self.availableTeams().map(function (v) { return v.id; }).indexOf(self.selectedTeam()) < 0;
 
 		self.defaultTeam(defaultTeam);
 		
