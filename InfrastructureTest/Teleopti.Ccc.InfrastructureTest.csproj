@@ -502,7 +502,6 @@
     </Compile>
     <Compile Include="UnitOfWork\DataSourcesFactoryTest.cs" />
     <Compile Include="UnitOfWork\PersonChangedMessageSenderTest.cs" />
-    <Compile Include="UnitOfWork\PersonPeriodChangedMessageSenderTest.cs" />
     <Compile Include="UnitOfWork\QueryFilterTest.cs" />
     <Compile Include="UnitOfWork\ScheduleMessageSenderTest.cs" />
     <Compile Include="ApplicationLayer\ServiceBusEventPublisherTest.cs" />

@@ -4,6 +4,7 @@ using System.Configuration;
 using System.Linq;
 using System.Xml.Linq;
 using Teleopti.Ccc.Domain.ApplicationLayer;
+using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Security.Authentication;
 using Teleopti.Ccc.Infrastructure.ApplicationLayer;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Client;
@@ -53,6 +54,7 @@ namespace Teleopti.Ccc.WinCode.Main
 
 			var sendToServiceBus = new ServiceBusSender();
 			var populator = EventContextPopulator.Make();
+			var businessUnit = CurrentBusinessUnit.Make();
 			var messageSender = new MessagePopulatingServiceBusSender(sendToServiceBus, populator);
 			var eventPublisher = new EventPopulatingPublisher(new ServiceBusEventPublisher(sendToServiceBus), populator);
 			var initializer =
@@ -64,8 +66,8 @@ namespace Teleopti.Ccc.WinCode.Main
 							new EventsMessageSender(new SyncEventsPublisher(eventPublisher)),
 							new MeetingMessageSender(eventPublisher),
 							new GroupPageChangedMessageSender(messageSender),
-							new TeamOrSiteChangedMessageSender(eventPublisher),
-							new PersonChangedMessageSender(eventPublisher),
+							new TeamOrSiteChangedMessageSender(eventPublisher, businessUnit),
+							new PersonChangedMessageSender(eventPublisher, businessUnit),
 							new PersonPeriodChangedMessageSender(messageSender)
 						}, DataSourceConfigurationSetter.ForDesktop(),
 						new CurrentHttpContext(),

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using Rhino.ServiceBus;
 using Teleopti.Ccc.Domain.ApplicationLayer;
+using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Infrastructure.ApplicationLayer;
 using Teleopti.Ccc.Infrastructure.NHibernateConfiguration;
 using log4net;
@@ -84,6 +85,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
 		public IList<IMessageSender> Create()
 		{
 			var populator = EventContextPopulator.Make();
+			var businessUnit = CurrentBusinessUnit.Make();
 			var messageSender = new MessagePopulatingServiceBusSender(_serviceBusSender, populator);
 			var eventPublisher = new EventPopulatingPublisher(new ServiceBusEventPublisher(_serviceBusSender), populator);
 			return new List<IMessageSender>
@@ -92,8 +94,8 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
 					new EventsMessageSender(new SyncEventsPublisher(eventPublisher)),
 					new MeetingMessageSender(eventPublisher),
 					new GroupPageChangedMessageSender(messageSender),
-					new TeamOrSiteChangedMessageSender(eventPublisher),
-					new PersonChangedMessageSender(eventPublisher),
+					new TeamOrSiteChangedMessageSender(eventPublisher, businessUnit),
+					new PersonChangedMessageSender(eventPublisher, businessUnit),
 					new PersonPeriodChangedMessageSender(messageSender)
 				};
 		}

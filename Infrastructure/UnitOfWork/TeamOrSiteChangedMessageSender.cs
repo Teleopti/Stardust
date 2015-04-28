@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
+using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Infrastructure.ApplicationLayer;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
@@ -13,6 +14,7 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 	public class TeamOrSiteChangedMessageSender : IMessageSender
 	{
 		private readonly IEventPopulatingPublisher _eventsPublisher;
+		private readonly ICurrentBusinessUnit _businessUnit;
 
 		private readonly IEnumerable<Type> _otherTriggerInterfaces = new List<Type>
 			{
@@ -20,13 +22,18 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 				typeof (ISite),
 			};
 
-		public TeamOrSiteChangedMessageSender(IEventPopulatingPublisher eventsPublisher)
+		public TeamOrSiteChangedMessageSender(IEventPopulatingPublisher eventsPublisher, ICurrentBusinessUnit businessUnit)
 		{
 			_eventsPublisher = eventsPublisher;
+			_businessUnit = businessUnit;
 		}
 
 		public void Execute(IEnumerable<IRootChangeInfo> modifiedRoots)
 		{
+			// we are signed in with a transient BU and cant publish events
+			if (!_businessUnit.Current().Id.HasValue)
+				return;
+
 			var affectedInterfaces = from r in modifiedRoots
 			                         let t = r.Root.GetType()
 			                         where _otherTriggerInterfaces.Any(ti => ti.IsAssignableFrom(t))

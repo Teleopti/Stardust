@@ -6,6 +6,7 @@ using Autofac;
 using Autofac.Integration.Wcf;
 using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.FeatureFlags;
+using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.Security.MultiTenancyAuthentication;
 using Teleopti.Ccc.Infrastructure.ApplicationLayer;
@@ -76,6 +77,7 @@ namespace Teleopti.Ccc.Sdk.WcfHost
 			var messageBroker = container.Resolve<IMessageBrokerComposite>();
 
 			var populator = EventContextPopulator.Make();
+			  var businessUnit = CurrentBusinessUnit.Make();
 			var messageSender = new MessagePopulatingServiceBusSender(busSender, populator);
 			var eventPublisher = new EventPopulatingPublisher(new ServiceBusEventPublisher(busSender), populator);
 			var initializeApplication =
@@ -87,8 +89,8 @@ namespace Teleopti.Ccc.Sdk.WcfHost
 							  new EventsMessageSender(new SyncEventsPublisher(eventPublisher)),
 							  new MeetingMessageSender(eventPublisher),
 							  new GroupPageChangedMessageSender(messageSender),
-							  new TeamOrSiteChangedMessageSender(eventPublisher),
-							  new PersonChangedMessageSender(eventPublisher),
+							  new TeamOrSiteChangedMessageSender(eventPublisher, businessUnit),
+							  new PersonChangedMessageSender(eventPublisher,businessUnit),
 							  new PersonPeriodChangedMessageSender(messageSender)
 						  },
 						DataSourceConfigurationSetter.ForSdk(),

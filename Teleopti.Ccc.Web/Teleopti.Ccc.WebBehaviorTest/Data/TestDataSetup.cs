@@ -26,6 +26,8 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data
 		{
 			var builder = new ContainerBuilder();
 			builder.RegisterModule(new CommonModule(new IocConfiguration(new IocArgs(new AppConfigReader()) { PublishEventsToServiceBus = false }, new FalseToggleManager())));
+			builder.RegisterType<TeamOrSiteChangedMessageSender>().As<IMessageSender>().SingleInstance();
+			builder.RegisterType<PersonChangedMessageSender>().As<IMessageSender>().SingleInstance();
 			builder.RegisterType<EventsMessageSender>().As<IMessageSender>().SingleInstance();
 			var container = builder.Build();
 

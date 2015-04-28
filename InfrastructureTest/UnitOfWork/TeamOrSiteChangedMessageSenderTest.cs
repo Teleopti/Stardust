@@ -9,6 +9,7 @@ using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Infrastructure.ApplicationLayer;
 using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
+using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Interfaces.Infrastructure;
 using Teleopti.Interfaces.MessageBroker.Events;
 using Teleopti.Interfaces.Messages.Denormalize;
@@ -27,7 +28,7 @@ namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork
 		{
 			_mocks = new MockRepository();
 			_serviceBusSender = _mocks.DynamicMock<IEventPopulatingPublisher>();
-			_target = new TeamOrSiteChangedMessageSender(_serviceBusSender);
+			_target = new TeamOrSiteChangedMessageSender(_serviceBusSender, new SpecificBusinessUnit(BusinessUnitFactory.CreateWithId("fakeBu")));
 		}
 
 		[Test]
