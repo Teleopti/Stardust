@@ -1,11 +1,12 @@
 using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.FeatureFlags;
+using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
 using Teleopti.Ccc.Infrastructure.Toggle;
 
 namespace Teleopti.Ccc.IocCommon.Toggle
 {
-	public class FakeToggleManager : IToggleManager
+	public class FakeToggleManager : IToggleManager, IScheduleCommandToggle
 	{
 		private readonly IList<Toggles> _enabled = new List<Toggles>();
 

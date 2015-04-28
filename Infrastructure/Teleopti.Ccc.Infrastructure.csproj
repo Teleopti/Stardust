@@ -291,6 +291,7 @@
     <Compile Include="Repositories\OutboundCampaignRepository.cs" />
     <Compile Include="Repositories\PayrollFormatRepository.cs" />
     <Compile Include="Repositories\PlanningPeriodRepository.cs" />
+    <Compile Include="Repositories\PlanningPeriodSuggestions.cs" />
     <Compile Include="Repositories\SeatBookingRepository.cs" />
     <Compile Include="Rta\CacheInvalidator.cs" />
     <Compile Include="Rta\Persisters\AdherenceDetailsReadModelPersister.cs" />
@@ -684,6 +685,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Properties\" />
+    <Folder Include="Repositories\PlanningPeriod\" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <Import Project="$(SolutionDir)\.nuget\nuget.targets" />

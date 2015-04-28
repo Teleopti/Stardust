@@ -18,7 +18,8 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
         private readonly IPersonContract _personContract;
 
         private int _number;
-        private readonly TimeSpan _minTimeSchedulePeriod = new TimeSpan(0);
+        private readonly TimeSpan _minTimeSchedulePeriod = TimeSpan.Zero;
+		private static readonly PeriodIncrementorFactory _periodIncrementorFactory = new PeriodIncrementorFactory();
 
         public VirtualSchedulePeriod(IPerson person, DateOnly dateOnly, IVirtualSchedulePeriodSplitChecker splitChecker)
         {
@@ -96,7 +97,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 
         private DateOnlyPeriod getRolledDateOnlyPeriodForSchedulePeriod(DateOnly requestedDateTime, ISchedulePeriod thePeriod, CultureInfo cultureInfo)
         {
-            var periodIncrementor = thePeriod.PeriodIncrementor(thePeriod.PeriodType, cultureInfo);
+            var periodIncrementor = _periodIncrementorFactory.PeriodIncrementor(thePeriod.PeriodType, cultureInfo);
 			DateOnly start = periodIncrementor.EvaluateProperInitialStartDate(thePeriod.DateFrom, _number, requestedDateTime);
             var currentPeriod = new DateOnlyPeriod(start, periodIncrementor.Increase(start, _number));
             while (!currentPeriod.Contains(requestedDateTime))
@@ -325,7 +326,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
         public static DateOnlyPeriod GetOriginalStartPeriodForType(ISchedulePeriod schedulePeriod, CultureInfo cultureInfo)
         {
             DateOnly start = schedulePeriod.DateFrom;
-            var currentPeriod = new DateOnlyPeriod(start, schedulePeriod.PeriodIncrementor(schedulePeriod.PeriodType, cultureInfo).Increase(start, schedulePeriod.Number));
+            var currentPeriod = new DateOnlyPeriod(start, _periodIncrementorFactory.PeriodIncrementor(schedulePeriod.PeriodType, cultureInfo).Increase(start, schedulePeriod.Number));
             return currentPeriod;
         }
 

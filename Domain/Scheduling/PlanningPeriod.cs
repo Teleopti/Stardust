@@ -15,6 +15,11 @@ namespace Teleopti.Ccc.Domain.Scheduling
 			
 		}
 
+		public PlanningPeriod(DateOnlyPeriod range)
+		{
+			_range = range;
+		}
+
 		public PlanningPeriod(INow now)
 		{
 			var date = now.LocalDateTime();
@@ -26,7 +31,6 @@ namespace Teleopti.Ccc.Domain.Scheduling
 		public virtual DateOnlyPeriod Range
 		{
 			get { return _range;  }
-			set { _range = value; }
 		}
 	}
 }

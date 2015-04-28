@@ -60,17 +60,6 @@ namespace Teleopti.Interfaces.Domain
 		/// </remarks>
 		TimeSpan AverageWorkTimePerDayOverride { get; set; }
 
-        ///// <summary>
-        ///// Get target time
-        ///// </summary>
-        ///// <returns></returns>
-        ///// <remarks>
-        ///// Created by: cs 
-        ///// Created date: 2008-03-10
-        ///// </remarks>
-        //[Obsolete("It only works right to agents with normal worktime contract")]
-        //TimeSpan PeriodTarget(DateOnly dateOnly);
-
 		/// <summary>
 		/// Gets a value indicating whether the period is overriden.
 		/// </summary>
@@ -111,11 +100,8 @@ namespace Teleopti.Interfaces.Domain
         /// </summary>
         /// <value>The days off.</value>
         /// remove this suppress when GetDaysOff is removed
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1721:PropertyNamesShouldNotMatchGetMethods")]
-        int? DaysOff
-        {get ; set ; }
+        int? DaysOff {get ; set ; }
         
-
         /// <summary>
         /// Gets the contract schedule days off during this schedule period.
         /// </summary>
@@ -132,13 +118,6 @@ namespace Teleopti.Interfaces.Domain
         /// </summary>
         /// <param name="value"></param>
         void SetDaysOff(int value);
-
-		///// <summary>
-		///// Gets the number of workdays in the specified period.
-		///// </summary>
-		///// <param name="dateFrom">The date from.</param>
-		///// <returns></returns>
-		//int GetWorkdays(DateOnly dateFrom);
 
         /// <summary>
         /// Shift category limitation collection.
@@ -210,14 +189,6 @@ namespace Teleopti.Interfaces.Domain
         /// </summary>
         /// <value>The seasonality.</value>
         Percent Seasonality { get; set; } 
-
-        /// <summary>
-        /// Returns a class which can increment the schedule period in correct steps.
-        /// </summary>
-        /// <param name="theType">The schedule period type</param>
-        /// <param name="cultureInfo">The culture containing the calendar to be used.</param>
-        /// <returns></returns>
-        IIncreasePeriodByOne PeriodIncrementor(SchedulePeriodType theType, CultureInfo cultureInfo);
 
 		/// <summary>
 		/// Returns the real date to

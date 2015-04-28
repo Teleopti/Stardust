@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using System.Web.Http;
 using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.Scheduling;
@@ -21,24 +22,25 @@ namespace Teleopti.Ccc.Web.Areas.ResourcePlanner
 		public virtual IHttpActionResult GetPlanningPeriod()
 		{
 			var planningPeriod = _nextPlanningPeriodProvider.Current();
-			
+			var planningPeriodModel = new PlanningPeriodModel
+			{
+				StartDate = planningPeriod.Range.StartDate.Date,
+				EndDate = planningPeriod.Range.EndDate.Date,
+				Id = planningPeriod.Id.GetValueOrDefault(),
+				Skills = getMissingForecast(planningPeriod.Range),
+				SuggestedPeriods = _nextPlanningPeriodProvider.SuggestedPeriods().Select(x=>x.ToString())
+			};
 			return
-				Ok(new PlanningPeriodModel
-				{
-					StartDate = planningPeriod.Range.StartDate.Date,
-					EndDate = planningPeriod.Range.EndDate.Date,
-					Id = planningPeriod.Id.GetValueOrDefault(),
-					Skills = getMissingForecast(planningPeriod.Range)
-				});
+				Ok(planningPeriodModel);
 		}
 
-		[UnitOfWork, HttpPost, Route("api/resourceplanner/updateplanningperiod")]
-		public virtual IHttpActionResult UpdatePlanningPeriod([FromBody] PlanningPeriodModel model)
-		{
-			var planningPeriod = _nextPlanningPeriodProvider.Find(model.Id);
-			planningPeriod.Range = new DateOnlyPeriod(new DateOnly(model.StartDate),new DateOnly(model.EndDate));
-			return Created(Request.RequestUri , new { });
-		}
+		//[UnitOfWork, HttpPost, Route("api/resourceplanner/updateplanningperiod")]
+		//public virtual IHttpActionResult UpdatePlanningPeriod([FromBody] PlanningPeriodModel model)
+		//{
+		//	var planningPeriod = _nextPlanningPeriodProvider.Find(model.Id);
+		//	//planningPeriod.Range = new DateOnlyPeriod(new DateOnly(model.StartDate),new DateOnly(model.EndDate));
+		//	return Created(Request.RequestUri , new { });
+		//}
 
 		private IEnumerable<MissingForecastModel> getMissingForecast(DateOnlyPeriod planningPeriodRange)
 		{

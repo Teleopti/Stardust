@@ -28,6 +28,8 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 		private Percent _seasonality;
 		private TimeSpan _balanceIn;
 		private TimeSpan? _periodTime;
+		private readonly PeriodIncrementorFactory _periodIncrementorFactory = new PeriodIncrementorFactory();
+		private readonly SchedulePeriodRangeCalculator _schedulePeriodRangeCalculator = new SchedulePeriodRangeCalculator();
 
 		/// <summary>
 		/// Default constructor
@@ -234,7 +236,14 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 
 		private double notFullSchedulePeriodFactor(DateOnly dateFrom)
 		{
-			DateOnlyPeriod totalPeriod = getPeriodForType(dateFrom);
+			DateOnlyPeriod totalPeriod = _schedulePeriodRangeCalculator.PeriodForType(dateFrom,
+				new SchedulePeriodForRangeCalculation
+				{
+					Culture = CurrentPerson.PermissionInformation.Culture(),
+					Number = _number,
+					PeriodType = _periodType,
+					StartDate = dateFrom
+				});
 			int totalPeriodLength = totalPeriod.DayCount();
 			int periodLength = contractPeriod(dateFrom);
 
@@ -243,7 +252,14 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 
 		private int contractPeriod(DateOnly dateFrom)
 		{
-			DateOnlyPeriod totalPeriod = getPeriodForType(dateFrom);
+			DateOnlyPeriod totalPeriod = _schedulePeriodRangeCalculator.PeriodForType(dateFrom,
+				new SchedulePeriodForRangeCalculation
+				{
+					Culture = CurrentPerson.PermissionInformation.Culture(),
+					Number = _number,
+					PeriodType = _periodType,
+					StartDate = dateFrom
+				});
 
 			DateOnly startDate = totalPeriod.StartDate;
 			DateOnly endDate = totalPeriod.EndDate;
@@ -288,7 +304,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1024:UsePropertiesWhereAppropriate")]
 		public virtual int GetWorkdays()
 		{
-			DateOnlyPeriod period = getPeriodForType(_dateFrom);
+			DateOnlyPeriod period = _schedulePeriodRangeCalculator.PeriodForType(_dateFrom,new SchedulePeriodForRangeCalculation{Culture = CurrentPerson.PermissionInformation.Culture(),Number = _number,PeriodType = _periodType,StartDate = _dateFrom}); 
 			return getWorkDaysForPeriod(period.StartDate, period.EndDate);
 		}
 
@@ -362,7 +378,16 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 		public virtual DateOnlyPeriod? GetSchedulePeriod(DateOnly dateValue)
 		{
 			if (dateValue < _dateFrom) return null;
-			return checkAgainstTerminalDate(getPeriodForType(dateValue));
+			CurrentPerson.PermissionInformation.Culture();
+			return
+				checkAgainstTerminalDate(_schedulePeriodRangeCalculator.PeriodForType(dateValue,
+					new SchedulePeriodForRangeCalculation
+					{
+						Culture = CurrentPerson.PermissionInformation.Culture(),
+						Number = _number,
+						PeriodType = _periodType,
+						StartDate = _dateFrom
+					}));
 		}
 
 		/// <summary>
@@ -389,35 +414,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 			}
 
 			return period;
-		}
-
-		private DateOnlyPeriod getPeriodForType(DateOnly requestedDateTime)
-		{
-			DateOnly start = DateFrom;
-
-			var periodIncrementor = PeriodIncrementor(_periodType, CurrentPerson.PermissionInformation.Culture());
-			DateOnlyPeriod currentPeriod = new DateOnlyPeriod(start, periodIncrementor.Increase(start, _number));
-			while (!currentPeriod.Contains(requestedDateTime))
-			{
-				start = periodIncrementor.Increase(start, _number).AddDays(1);
-				currentPeriod = new DateOnlyPeriod(start, periodIncrementor.Increase(start, _number));
-			}
-
-			return currentPeriod;
-		}
-
-		public virtual IIncreasePeriodByOne PeriodIncrementor(SchedulePeriodType theType, CultureInfo cultureInfo)
-		{
-			switch (theType)
-			{
-				case SchedulePeriodType.Week:
-					return new IncreaseWeekByOne();
-				case SchedulePeriodType.Month:
-				case SchedulePeriodType.ChineseMonth:
-					return new IncreaseMonthByOne(cultureInfo);
-				default: //Day
-					return new IncreaseDayByOne();
-			}
 		}
 
 		/// <summary>
@@ -647,6 +643,23 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 		#endregion
 	}
 
+	public class PeriodIncrementorFactory
+	{
+		public IIncreasePeriodByOne PeriodIncrementor(SchedulePeriodType theType, CultureInfo cultureInfo)
+		{
+			switch (theType)
+			{
+				case SchedulePeriodType.Week:
+					return new IncreaseWeekByOne();
+				case SchedulePeriodType.Month:
+				case SchedulePeriodType.ChineseMonth:
+					return new IncreaseMonthByOne(cultureInfo);
+				default: //Day
+					return new IncreaseDayByOne();
+			}
+		}
+	}
+
 	public class IncreaseDayByOne : IIncreasePeriodByOne
 	{
 		public DateOnly Increase(DateOnly currentStartDate, int number)
@@ -676,7 +689,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 			return new DateOnly(_cultureInfo.Calendar.AddMonths(currentStartDate.Date, number)).AddDays(-1);
 		}
 
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2233:OperationsShouldNotOverflow", MessageId = "32*number")]
 		public DateOnly EvaluateProperInitialStartDate(DateOnly currentStartDate, int number, DateOnly requestedDate)
 		{
 			var difference = (int)requestedDate.Date.Subtract(currentStartDate.Date).TotalDays;
@@ -692,12 +704,38 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 			return currentStartDate.AddDays((number * 7) - 1);
 		}
 
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2233:OperationsShouldNotOverflow", MessageId = "7*number")]
 		public DateOnly EvaluateProperInitialStartDate(DateOnly currentStartDate, int number, DateOnly requestedDate)
 		{
 			var difference = (int)requestedDate.Date.Subtract(currentStartDate.Date).TotalDays;
 			var wholeVirtualPeriods = difference / (7 * number);
 			return Increase(currentStartDate, number * wholeVirtualPeriods).AddDays(1);
 		}
+	}
+
+	public class SchedulePeriodRangeCalculator
+	{
+		private readonly PeriodIncrementorFactory _periodIncrementorFactory = new PeriodIncrementorFactory();
+
+		public DateOnlyPeriod PeriodForType(DateOnly requestedDate, SchedulePeriodForRangeCalculation period)
+		{
+			var periodIncrementor = _periodIncrementorFactory.PeriodIncrementor(period.PeriodType, period.Culture);
+			var start = periodIncrementor.EvaluateProperInitialStartDate(period.StartDate, period.Number, requestedDate);
+			DateOnlyPeriod currentPeriod = new DateOnlyPeriod(start, periodIncrementor.Increase(start, period.Number));
+			while (!currentPeriod.Contains(requestedDate))
+			{
+				start = periodIncrementor.Increase(start, period.Number).AddDays(1);
+				currentPeriod = new DateOnlyPeriod(start, periodIncrementor.Increase(start, period.Number));
+			}
+
+			return currentPeriod;
+		}
+	}
+
+	public struct SchedulePeriodForRangeCalculation
+	{
+		public CultureInfo Culture { get; set; }
+		public SchedulePeriodType PeriodType { get; set; }
+		public DateOnly StartDate { get; set; }
+		public int Number { get; set; }
 	}
 }

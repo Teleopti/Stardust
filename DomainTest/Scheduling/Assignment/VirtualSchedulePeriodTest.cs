@@ -533,8 +533,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
                 Expect.Call(schedulePeriod.DateFrom).Return(new DateOnly(2010, 9, 27));
                 Expect.Call(schedulePeriod.PeriodType).Return(SchedulePeriodType.Week);
                 Expect.Call(schedulePeriod.Number).Return(4);
-                Expect.Call(schedulePeriod.PeriodIncrementor(SchedulePeriodType.Week, cultureInfo))
-                      .Return(new IncreaseWeekByOne());
             }
             using (mocks.Playback())
             {
@@ -557,8 +555,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
                 Expect.Call(schedulePeriod.DateFrom).Return(new DateOnly(2010, 9, 27));
                 Expect.Call(schedulePeriod.PeriodType).Return(SchedulePeriodType.Month);
                 Expect.Call(schedulePeriod.Number).Return(1);
-                Expect.Call(schedulePeriod.PeriodIncrementor(SchedulePeriodType.Month, cultureInfo))
-                      .Return(new IncreaseMonthByOne(cultureInfo));
             }
             using (mocks.Playback())
             {
@@ -581,8 +577,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
                 Expect.Call(schedulePeriod.DateFrom).Return(new DateOnly(2010, 9, 27));
                 Expect.Call(schedulePeriod.PeriodType).Return(SchedulePeriodType.Day);
                 Expect.Call(schedulePeriod.Number).Return(30);
-                Expect.Call(schedulePeriod.PeriodIncrementor(SchedulePeriodType.Day, cultureInfo))
-                      .Return(new IncreaseDayByOne());
             }
             using (mocks.Playback())
             {

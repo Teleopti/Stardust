@@ -13,6 +13,7 @@ using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.Web.Areas.Search.Controllers;
 using Teleopti.Interfaces;
+using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.WebTest.Areas.Search
 {
@@ -56,6 +57,11 @@ namespace Teleopti.Ccc.WebTest.Areas.Search
 		public IPlanningPeriod Find(Guid id)
 		{
 			return _planningPeriod;
+		}
+
+		public IEnumerable<SchedulePeriodType> SuggestedPeriods()
+		{
+			throw new NotImplementedException();
 		}
 	}
 }

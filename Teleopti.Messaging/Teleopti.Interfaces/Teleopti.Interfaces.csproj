@@ -724,6 +724,8 @@
     <Compile Include="Infrastructure\IMultiplicatorDefinitionSetRepository.cs" />
     <Compile Include="Infrastructure\IMultiplicatorRepository.cs" />
     <Compile Include="Infrastructure\IPeopleAndSkillLoaderDecider.cs" />
+    <Compile Include="Infrastructure\IPlanningPeriodRepository.cs" />
+    <Compile Include="Infrastructure\IPlanningPeriodSuggestions.cs" />
     <Compile Include="Infrastructure\IQueryFilter.cs" />
     <Compile Include="Infrastructure\IReadModelUnitOfWorkFactory.cs" />
     <Compile Include="Infrastructure\IReportUrl.cs" />

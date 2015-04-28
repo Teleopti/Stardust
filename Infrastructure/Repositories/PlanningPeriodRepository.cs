@@ -1,14 +1,13 @@
-﻿using System.Collections.Generic;
-using NHibernate.Criterion;
+﻿using System;
 using NHibernate.Transform;
-using Teleopti.Ccc.Domain.Scheduling;
+using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Interfaces;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.Infrastructure.Repositories
 {
-	public class PlanningPeriodRepository : Repository<IPlanningPeriod>
+	public class PlanningPeriodRepository : Repository<IPlanningPeriod> , IPlanningPeriodRepository
 	{
 		public PlanningPeriodRepository(IUnitOfWork unitOfWork) : base(unitOfWork)
 		{
@@ -21,5 +20,26 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 		public PlanningPeriodRepository(ICurrentUnitOfWork currentUnitOfWork) : base(currentUnitOfWork)
 		{
 		}
+
+		public IPlanningPeriodSuggestions Suggestions(INow now)
+		{
+			var uniqueSchedulePeriods = Session.GetNamedQuery("UniqueSchedulePeriods")
+				.SetDateTime("date", now.UtcDateTime())
+				.SetGuid("businessUnit",
+					((ITeleoptiIdentity) TeleoptiPrincipal.CurrentPrincipal.Identity).BusinessUnit.Id.GetValueOrDefault())
+				.SetResultTransformer(new AliasToBeanResultTransformer(typeof(AggregatedSchedulePeriod)))
+				.List<AggregatedSchedulePeriod>();
+
+			return new PlanningPeriodSuggestions(now, uniqueSchedulePeriods);
+		}
+	}
+
+	public struct AggregatedSchedulePeriod
+	{
+		public SchedulePeriodType PeriodType { get; set; }
+		public int Number { get; set; }
+		public DateTime DateFrom { get; set; }
+		public int? Culture { get; set; }
+		public int Priority { get; set; }
 	}
 }
