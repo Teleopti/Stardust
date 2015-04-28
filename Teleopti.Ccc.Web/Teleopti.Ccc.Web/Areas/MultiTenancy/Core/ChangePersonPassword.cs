@@ -4,7 +4,7 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Web.Areas.MultiTenancy.Core
 {
-	public class ChangePersonPassword
+	public class ChangePersonPassword : IChangePersonPassword
 	{
 		private readonly IApplicationUserQuery _applicationUserQuery;
 		private readonly INow _now;

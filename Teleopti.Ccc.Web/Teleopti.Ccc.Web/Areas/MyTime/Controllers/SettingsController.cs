@@ -1,7 +1,10 @@
 ﻿using System.Globalization;
 using System.Web.Mvc;
+using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.SystemSetting.GlobalSetting;
+using Teleopti.Ccc.Infrastructure.Toggle;
+using Teleopti.Ccc.Web.Areas.MultiTenancy.Core;
 using Teleopti.Ccc.Web.Areas.MyTime.Core;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Filters;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Settings.DataProvider;
@@ -20,6 +23,10 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 		private readonly ISettingsPermissionViewModelFactory _settingsPermissionViewModelFactory;
 		private readonly ISettingsPersisterAndProvider<CalendarLinkSettings> _calendarLinkSettingsPersisterAndProvider;
 		private readonly ICalendarLinkViewModelFactory _calendarLinkViewModelFactory;
+		private readonly IChangePersonPassword _changePersonPassword;
+		//TODO: tenant - will soon be removed
+		private readonly IToggleManager _toggleManager;
+		//
 		private readonly ISettingsViewModelFactory _settingsViewModelFactory;
 		private readonly ISettingsPersisterAndProvider<NameFormatSettings>_nameFormatSettingsPersisterAndProvider;
 
@@ -30,7 +37,9 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 										  ISettingsViewModelFactory settingsViewModelFactory,
 										  ISettingsPersisterAndProvider<CalendarLinkSettings> calendarLinkSettingsPersisterAndProvider,
 											ISettingsPersisterAndProvider<NameFormatSettings> nameFormatSettingsPersisterAndProvider,
-											ICalendarLinkViewModelFactory calendarLinkViewModelFactory)
+											ICalendarLinkViewModelFactory calendarLinkViewModelFactory,
+											IChangePersonPassword changePersonPassword,
+											IToggleManager toggleManager)
 		{
 			_loggedOnUser = loggedOnUser;
 			_modifyPassword = modifyPassword;
@@ -40,6 +49,8 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 			_calendarLinkSettingsPersisterAndProvider = calendarLinkSettingsPersisterAndProvider;
 			_nameFormatSettingsPersisterAndProvider = nameFormatSettingsPersisterAndProvider;
 			_calendarLinkViewModelFactory = calendarLinkViewModelFactory;
+			_changePersonPassword = changePersonPassword;
+			_toggleManager = toggleManager;
 		}
 
 		[EnsureInPortal]
@@ -86,8 +97,17 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 		[HttpPostOrPut]
 		public JsonResult ChangePassword(ChangePasswordViewModel model)
 		{
-			var result = _modifyPassword.Change(_loggedOnUser.CurrentUser(), model.OldPassword, model.NewPassword);
-			if (!result.IsSuccessful)
+			var loggedOnUser = _loggedOnUser.CurrentUser();
+			var result = _modifyPassword.Change(loggedOnUser, model.OldPassword, model.NewPassword);
+			if (result.IsSuccessful)
+			{
+				//TODO: tenant - hack for now
+				if (_toggleManager.IsEnabled(Toggles.MultiTenancy_LogonUseNewSchema_33049))
+				{
+					_changePersonPassword.Modify(loggedOnUser.ApplicationAuthenticationInfo.ApplicationLogOnName, model.OldPassword, model.NewPassword);
+				}
+			}
+			else
 			{
 				Response.TrySkipIisCustomErrors = true;
 				Response.StatusCode = 400;

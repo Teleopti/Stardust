@@ -7,9 +7,9 @@ namespace Teleopti.Ccc.Web.Areas.MultiTenancy
 {
 	public class ChangePasswordController : Controller
 	{
-		private readonly ChangePersonPassword _changePersonPassword;
+		private readonly IChangePersonPassword _changePersonPassword;
 
-		public ChangePasswordController(ChangePersonPassword changePersonPassword)
+		public ChangePasswordController(IChangePersonPassword changePersonPassword)
 		{
 			_changePersonPassword = changePersonPassword;
 		}
