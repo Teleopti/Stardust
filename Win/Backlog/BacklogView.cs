@@ -349,12 +349,13 @@ namespace Teleopti.Ccc.Win.Backlog
 
 			campaign.AddWorkingPeriod(campaignWorkingPeriod);
 			var outboundSkillCreator = new OutboundSkillCreator();
-			var skill = outboundSkillCreator.CreatSkill(_model.GetAllSkills().First().Activity, campaign);
+			
 			using (var uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
 			{
 				var skilltypeRepository = new SkillTypeRepository(uow);
 				var skilltypes = skilltypeRepository.LoadAll();
-				skill.SkillType = skilltypes.First(s => s.Description.Name == "SkillTypeBackoffice");
+				var skilltype = skilltypes.First(s => s.Description.Name == "SkillTypeBackoffice");
+				var skill = outboundSkillCreator.CreatSkill(_model.GetAllSkills().First().Activity, campaign, skilltype);
 				var skillrepository = new SkillRepository(uow);
 				skillrepository.Add(skill);
 				var workloadRepository = new WorkloadRepository(uow);
