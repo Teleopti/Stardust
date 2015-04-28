@@ -180,7 +180,7 @@ namespace Teleopti.Ccc.WebTest.Areas.SSO.Contollers
 				});
 			var pInfo = new PersonInfo(new Tenant(dataSourceName), Guid.NewGuid());
 			personRepository.Stub(x => x.LoadPersonAndPermissions(pInfo.Id)).Return(person);
-			var applicationUserTenantQuery = MockRepository.GenerateMock<IApplicationUserTenantQuery>();
+			var applicationUserTenantQuery = MockRepository.GenerateMock<IApplicationUserQuery>();
 			applicationUserTenantQuery.Stub(x => x.Find(userName)).Return(pInfo);
 
 			var target = new ApplicationAuthenticationApiController(applicationData, repositoryFactory, loadPasswordPolicyService, currentPrincipalContext, MockRepository.GenerateMock<IFormsAuthentication>(), applicationUserTenantQuery);
@@ -205,7 +205,7 @@ namespace Teleopti.Ccc.WebTest.Areas.SSO.Contollers
 				{
 					IsSuccessful = true
 				});
-			var applicationUserTenantQuery = MockRepository.GenerateMock<IApplicationUserTenantQuery>();
+			var applicationUserTenantQuery = MockRepository.GenerateMock<IApplicationUserQuery>();
 			applicationUserTenantQuery.Stub(x => x.Find(userName)).Return(null);
 			var target = new StubbingControllerBuilder().CreateController<ApplicationAuthenticationApiController>(applicationData, repositoryFactory, loadPasswordPolicyService, null, null, applicationUserTenantQuery);
 
@@ -229,7 +229,7 @@ namespace Teleopti.Ccc.WebTest.Areas.SSO.Contollers
 				});
 			var pInfo = new PersonInfo(new Tenant(dataSourceName), Guid.NewGuid());
 			personRepository.Stub(x => x.LoadPersonAndPermissions(pInfo.Id)).Return(person);
-			var applicationUserTenantQuery = MockRepository.GenerateMock<IApplicationUserTenantQuery>();
+			var applicationUserTenantQuery = MockRepository.GenerateMock<IApplicationUserQuery>();
 			applicationUserTenantQuery.Stub(x => x.Find(userName)).Return(pInfo);
 
 			var target = new StubbingControllerBuilder().CreateController<ApplicationAuthenticationApiController>(applicationData, repositoryFactory, loadPasswordPolicyService, currentPrincipalContext, MockRepository.GenerateMock<IFormsAuthentication>(), applicationUserTenantQuery);

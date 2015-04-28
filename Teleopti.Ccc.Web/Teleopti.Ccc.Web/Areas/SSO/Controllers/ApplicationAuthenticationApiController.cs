@@ -21,7 +21,7 @@ namespace Teleopti.Ccc.Web.Areas.SSO.Controllers
 		private readonly IApplicationData _applicationData;
 		private readonly ICurrentPrincipalContext _currentPrincipalContext;
 		private readonly IFormsAuthentication _formsAuthentication;
-		private readonly IApplicationUserTenantQuery _applicationUserTenantQuery;
+		private readonly IApplicationUserQuery _applicationUserQuery;
 		private readonly IRepositoryFactory _repositoryFactory;
 		private readonly ILoadPasswordPolicyService _loadPasswordPolicyService;
 
@@ -30,12 +30,12 @@ namespace Teleopti.Ccc.Web.Areas.SSO.Controllers
 																							ILoadPasswordPolicyService loadPasswordPolicyService, 
 																							ICurrentPrincipalContext currentPrincipalContext, 
 																							IFormsAuthentication formsAuthentication,
-																							IApplicationUserTenantQuery applicationUserTenantQuery)
+																							IApplicationUserQuery applicationUserQuery)
 		{
 			_applicationData = applicationData;
 			_currentPrincipalContext = currentPrincipalContext;
 			_formsAuthentication = formsAuthentication;
-			_applicationUserTenantQuery = applicationUserTenantQuery;
+			_applicationUserQuery = applicationUserQuery;
 			_repositoryFactory = repositoryFactory;
 			_loadPasswordPolicyService = loadPasswordPolicyService;
 		}
@@ -66,7 +66,7 @@ namespace Teleopti.Ccc.Web.Areas.SSO.Controllers
 		[HttpPostOrPut]
 		public JsonResult ChangePassword(ChangePasswordInput model)
 		{
-			var personInfo = _applicationUserTenantQuery.Find(model.UserName);
+			var personInfo = _applicationUserQuery.Find(model.UserName);
 			if (personInfo == null)
 				throw new HttpException(500, "person not found");
 

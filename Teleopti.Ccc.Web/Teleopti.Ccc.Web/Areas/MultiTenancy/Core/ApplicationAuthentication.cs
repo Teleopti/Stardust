@@ -7,13 +7,13 @@ namespace Teleopti.Ccc.Web.Areas.MultiTenancy.Core
 {
 	public class ApplicationAuthentication : IApplicationAuthentication
 	{
-		private readonly IApplicationUserTenantQuery _applicationUserQuery;
+		private readonly IApplicationUserQuery _applicationUserQuery;
 		private readonly IDataSourceConfigurationProvider _dataSourceConfigurationProvider;
 		private readonly Func<IPasswordPolicy> _passwordPolicy;
 		private readonly INow _now;
 		private readonly IVerifyPasswordPolicy _verifyPasswordPolicy;
 
-		public ApplicationAuthentication(IApplicationUserTenantQuery applicationUserQuery,
+		public ApplicationAuthentication(IApplicationUserQuery applicationUserQuery,
 			IDataSourceConfigurationProvider dataSourceConfigurationProvider,
 			Func<IPasswordPolicy> passwordPolicy, INow now, IVerifyPasswordPolicy verifyPasswordPolicy)
 		{

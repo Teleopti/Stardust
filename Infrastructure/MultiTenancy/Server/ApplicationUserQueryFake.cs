@@ -2,7 +2,7 @@
 
 namespace Teleopti.Ccc.Infrastructure.MultiTenancy.Server
 {
-	public class ApplicationUserTenantQueryFake : IApplicationUserTenantQuery
+	public class ApplicationUserQueryFake : IApplicationUserQuery
 	{
 		private readonly IDictionary<string, PersonInfo> data = new Dictionary<string, PersonInfo>();
 

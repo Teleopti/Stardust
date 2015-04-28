@@ -19,7 +19,7 @@ namespace Teleopti.Ccc.InfrastructureTest.MultiTenancy.Server
 			var identityUserQuery = MockRepository.GenerateStub<IIdentityUserQuery>();
 			identityUserQuery.Stub(x => x.FindUserData(identity)).Return(pInfo);
 
-			var target = new FindTenantAndPersonIdForIdentity(identityUserQuery, MockRepository.GenerateStub<IApplicationUserTenantQuery>());
+			var target = new FindTenantAndPersonIdForIdentity(identityUserQuery, MockRepository.GenerateStub<IApplicationUserQuery>());
 			var result = target.Find(identity);
 			result.Tenant.Should().Be.EqualTo(pInfo.Tenant);
 			result.PersonId.Should().Be.EqualTo(pInfo.Id);
@@ -32,7 +32,7 @@ namespace Teleopti.Ccc.InfrastructureTest.MultiTenancy.Server
 
 			var pInfo = new PersonInfo();
 
-			var applicationQuery = MockRepository.GenerateStub<IApplicationUserTenantQuery>();
+			var applicationQuery = MockRepository.GenerateStub<IApplicationUserQuery>();
 			applicationQuery.Stub(x => x.Find(identity)).Return(pInfo);
 
 			var target = new FindTenantAndPersonIdForIdentity(MockRepository.GenerateStub<IIdentityUserQuery>(), applicationQuery);
@@ -52,7 +52,7 @@ namespace Teleopti.Ccc.InfrastructureTest.MultiTenancy.Server
 			var identityUserQuery = MockRepository.GenerateStub<IIdentityUserQuery>();
 			identityUserQuery.Stub(x => x.FindUserData(identity)).Return(pInfo);
 
-			var applicationQuery = MockRepository.GenerateStub<IApplicationUserTenantQuery>();
+			var applicationQuery = MockRepository.GenerateStub<IApplicationUserQuery>();
 			applicationQuery.Stub(x => x.Find(identity)).Return(new PersonInfo());
 
 			var target = new FindTenantAndPersonIdForIdentity(identityUserQuery, applicationQuery);
@@ -66,7 +66,7 @@ namespace Teleopti.Ccc.InfrastructureTest.MultiTenancy.Server
 		{
 			var identity = RandomName.Make();
 
-			var target = new FindTenantAndPersonIdForIdentity(MockRepository.GenerateStub<IIdentityUserQuery>(), MockRepository.GenerateStub<IApplicationUserTenantQuery>());
+			var target = new FindTenantAndPersonIdForIdentity(MockRepository.GenerateStub<IIdentityUserQuery>(), MockRepository.GenerateStub<IApplicationUserQuery>());
 			target.Find(identity)
 				.Should().Be.Null();
 		}

@@ -235,7 +235,7 @@
     <Compile Include="MultiTenancy\Client\ResponseException.cs" />
     <Compile Include="MultiTenancy\Client\TenantAuthenticationData.cs" />
     <Compile Include="MultiTenancy\Client\TenantServerConfiguration.cs" />
-    <Compile Include="MultiTenancy\Server\ApplicationUserTenantQueryFake.cs" />
+    <Compile Include="MultiTenancy\Server\ApplicationUserQueryFake.cs" />
     <Compile Include="MultiTenancy\Server\CheckPasswordStrength.cs" />
     <Compile Include="MultiTenancy\Server\CheckPasswordStrengthFake.cs" />
     <Compile Include="MultiTenancy\Server\DeletePersonInfoFake.cs" />
@@ -261,8 +261,8 @@
     <Compile Include="MultiTenancy\Client\AuthenticationQuerier.cs" />
     <Compile Include="MultiTenancy\Server\IPersistLogonAttempt.cs" />
     <Compile Include="MultiTenancy\Client\IMultiTenancyApplicationLogon.cs" />
-    <Compile Include="MultiTenancy\Server\ApplicationUserTenantQuery.cs" />
-    <Compile Include="MultiTenancy\Server\IApplicationUserTenantQuery.cs" />
+    <Compile Include="MultiTenancy\Server\ApplicationUserQuery.cs" />
+    <Compile Include="MultiTenancy\Server\IApplicationUserQuery.cs" />
     <Compile Include="MultiTenancy\Client\IPostHttpRequest.cs" />
     <Compile Include="MultiTenancy\Server\IPersistPersonInfo.cs" />
     <Compile Include="MultiTenancy\Server\NHibernate\DateOnlyAsDateMappingType.cs" />

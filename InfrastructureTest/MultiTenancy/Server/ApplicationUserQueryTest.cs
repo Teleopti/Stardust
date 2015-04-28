@@ -7,18 +7,17 @@ using Teleopti.Ccc.Infrastructure.MultiTenancy.Server.NHibernate;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.InfrastructureTest.Helper;
-using Teleopti.Ccc.InfrastructureTest.MultiTenancy.Server.NHibernate;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.TestData;
 
 namespace Teleopti.Ccc.InfrastructureTest.MultiTenancy.Server
 {
-	public class ApplicationUserTenantQueryTest
+	public class ApplicationUserQueryTest
 	{
 		private Guid personId;
 		private string correctUserName;
-		private IApplicationUserTenantQuery target;
+		private IApplicationUserQuery target;
 		private TenantUnitOfWork _tenantUnitOfWork;
 
 		[Test]
@@ -63,7 +62,7 @@ namespace Teleopti.Ccc.InfrastructureTest.MultiTenancy.Server
 			var personInfoPersister = new PersistPersonInfo(_tenantUnitOfWork);
 			personInfoPersister.Persist(pInfo);
 			_tenantUnitOfWork.CurrentSession().Flush();
-			target = new ApplicationUserTenantQuery(_tenantUnitOfWork);
+			target = new ApplicationUserQuery(_tenantUnitOfWork);
 		}
 
 		[TearDown]
@@ -73,11 +72,11 @@ namespace Teleopti.Ccc.InfrastructureTest.MultiTenancy.Server
 		}
 	}
 
-	public class ApplicationUserTenantQueryTest_OldSchema_RemoveMeWhenToggleIsGone : DatabaseTestWithoutTransaction
+	public class ApplicationUserQueryTest_OldSchema_RemoveMeWhenToggleIsGone : DatabaseTestWithoutTransaction
 	{
 		private Guid personId;
 		private string correctUserName;
-		private IApplicationUserTenantQuery target;
+		private IApplicationUserQuery target;
 		private TenantUnitOfWork _tenantUnitOfWork;
 
 		[Test]
@@ -129,7 +128,7 @@ namespace Teleopti.Ccc.InfrastructureTest.MultiTenancy.Server
 				personId = personInDatabase.Id.Value;
 			}
 			_tenantUnitOfWork = TenantUnitOfWork.CreateInstanceForTest(ConnectionStringHelper.ConnectionStringUsedInTests);
-			target = new ApplicationUserTenantQuery_OldSchema(_tenantUnitOfWork);
+			target = new ApplicationUserQueryOldSchema(_tenantUnitOfWork);
 		}
 	}
 }

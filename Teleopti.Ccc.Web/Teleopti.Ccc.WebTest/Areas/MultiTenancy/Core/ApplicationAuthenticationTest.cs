@@ -15,7 +15,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MultiTenancy.Core
 		[Test]
 		public void NonExistingUserShouldFail()
 		{
-			var target = new ApplicationAuthentication(MockRepository.GenerateMock<IApplicationUserTenantQuery>(),
+			var target = new ApplicationAuthentication(MockRepository.GenerateMock<IApplicationUserQuery>(),
 				MockRepository.GenerateMock<IDataSourceConfigurationProvider>(), () => MockRepository.GenerateStub<IPasswordPolicy>(), new Now(), new SuccessfulPasswordPolicy());
 			var res = target.Logon("nonExisting", string.Empty);
 
@@ -28,7 +28,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MultiTenancy.Core
 		public void UserWithNonExistingLogonNameShouldFail()
 		{
 			var userName = RandomName.Make();
-			var findApplicationQuery = MockRepository.GenerateMock<IApplicationUserTenantQuery>();
+			var findApplicationQuery = MockRepository.GenerateMock<IApplicationUserQuery>();
 			var personInfo = new PersonInfo();
 			findApplicationQuery.Expect(x => x.Find(userName)).Return(personInfo);
 			var target = new ApplicationAuthentication(findApplicationQuery,
@@ -45,7 +45,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MultiTenancy.Core
 		{
 			const string userName = "validUserName";
 
-			var findApplicationQuery = MockRepository.GenerateMock<IApplicationUserTenantQuery>();
+			var findApplicationQuery = MockRepository.GenerateMock<IApplicationUserQuery>();
 			var personInfo = new PersonInfo();
 			personInfo.SetApplicationLogonCredentials(new CheckPasswordStrengthFake(), RandomName.Make(), "thePassword");
 			findApplicationQuery.Expect(x => x.Find(userName)).Return(personInfo);
@@ -66,7 +66,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MultiTenancy.Core
 			var dataSourceConfiguration = new DataSourceConfiguration();
 			var personInfo = new PersonInfo(new Tenant(RandomName.Make()), Guid.NewGuid());
 			personInfo.SetApplicationLogonCredentials(new CheckPasswordStrengthFake(), RandomName.Make(), password);
-			var findApplicationQuery = MockRepository.GenerateMock<IApplicationUserTenantQuery>();
+			var findApplicationQuery = MockRepository.GenerateMock<IApplicationUserQuery>();
 			findApplicationQuery.Expect(x => x.Find(userName)).Return(personInfo);
 			var dataSourceProvider = MockRepository.GenerateStub<IDataSourceConfigurationProvider>();
 			dataSourceProvider.Stub(x => x.ForTenant(personInfo.Tenant)).Return(dataSourceConfiguration);
@@ -89,7 +89,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MultiTenancy.Core
 			var personInfo = new PersonInfo();
 			personInfo.SetApplicationLogonCredentials(new CheckPasswordStrengthFake(), RandomName.Make(), password);
 
-			var findApplicationQuery = MockRepository.GenerateMock<IApplicationUserTenantQuery>();
+			var findApplicationQuery = MockRepository.GenerateMock<IApplicationUserQuery>();
 			findApplicationQuery.Expect(x => x.Find(userName)).Return(personInfo);
 			var nhibHandler = MockRepository.GenerateMock<IDataSourceConfigurationProvider>();
 			nhibHandler.Stub(x => x.ForTenant(personInfo.Tenant)).Return(null);

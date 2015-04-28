@@ -6,17 +6,17 @@ namespace Teleopti.Ccc.Web.Areas.MultiTenancy.Core
 {
 	public class ChangePersonPassword
 	{
-		private readonly IApplicationUserTenantQuery _applicationUserTenantQuery;
+		private readonly IApplicationUserQuery _applicationUserQuery;
 		private readonly INow _now;
 		private readonly IPasswordPolicy _passwordPolicy;
 		private readonly ICheckPasswordStrength _checkPasswordStrength;
 
-		public ChangePersonPassword(IApplicationUserTenantQuery applicationUserTenantQuery,
+		public ChangePersonPassword(IApplicationUserQuery applicationUserQuery,
 													INow now,
 													IPasswordPolicy passwordPolicy,
 													ICheckPasswordStrength checkPasswordStrength)
 		{
-			_applicationUserTenantQuery = applicationUserTenantQuery;
+			_applicationUserQuery = applicationUserQuery;
 			_now = now;
 			_passwordPolicy = passwordPolicy;
 			_checkPasswordStrength = checkPasswordStrength;
@@ -24,7 +24,7 @@ namespace Teleopti.Ccc.Web.Areas.MultiTenancy.Core
 
 		public void Modify(string userName, string oldPassword, string newPassword)
 		{
-			var personInfo = _applicationUserTenantQuery.Find(userName);
+			var personInfo = _applicationUserQuery.Find(userName);
 
 			if (personInfo == null || !personInfo.ApplicationLogonInfo.IsValidPassword(_now, _passwordPolicy, oldPassword))
 				throw new HttpException(403, "Invalid user name or password.");

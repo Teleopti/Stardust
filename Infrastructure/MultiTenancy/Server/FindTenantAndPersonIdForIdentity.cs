@@ -3,12 +3,12 @@
 	public class FindTenantAndPersonIdForIdentity : IFindTenantAndPersonIdForIdentity
 	{
 		private readonly IIdentityUserQuery _identityUserQuery;
-		private readonly IApplicationUserTenantQuery _applicationUserTenantQuery;
+		private readonly IApplicationUserQuery _applicationUserQuery;
 
-		public FindTenantAndPersonIdForIdentity(IIdentityUserQuery identityUserQuery, IApplicationUserTenantQuery applicationUserTenantQuery)
+		public FindTenantAndPersonIdForIdentity(IIdentityUserQuery identityUserQuery, IApplicationUserQuery applicationUserQuery)
 		{
 			_identityUserQuery = identityUserQuery;
-			_applicationUserTenantQuery = applicationUserTenantQuery;
+			_applicationUserQuery = applicationUserQuery;
 		}
 
 		public TenantAndPersonId Find(string identity)
@@ -17,7 +17,7 @@
 			if (identityHit != null)
 				return new TenantAndPersonId {PersonId = identityHit.Id, Tenant = identityHit.Tenant};
 
-			var appHit = _applicationUserTenantQuery.Find(identity);
+			var appHit = _applicationUserQuery.Find(identity);
 			if (appHit != null)
 				return new TenantAndPersonId {PersonId = appHit.Id, Tenant = appHit.Tenant};
 

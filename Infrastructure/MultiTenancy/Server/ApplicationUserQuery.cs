@@ -2,11 +2,11 @@
 
 namespace Teleopti.Ccc.Infrastructure.MultiTenancy.Server
 {
-	public class ApplicationUserTenantQuery : IApplicationUserTenantQuery
+	public class ApplicationUserQuery : IApplicationUserQuery
 	{
 		private readonly ICurrentTenantSession _currentTenantSession;
 
-		public ApplicationUserTenantQuery(ICurrentTenantSession currentTenantSession)
+		public ApplicationUserQuery(ICurrentTenantSession currentTenantSession)
 		{
 			_currentTenantSession = currentTenantSession;
 		}
@@ -20,11 +20,11 @@ namespace Teleopti.Ccc.Infrastructure.MultiTenancy.Server
 		}
 	}
 
-	public class ApplicationUserTenantQuery_OldSchema : IApplicationUserTenantQuery
+	public class ApplicationUserQueryOldSchema : IApplicationUserQuery
 	{
 		private readonly ICurrentTenantSession _currentTenantSession;
 
-		public ApplicationUserTenantQuery_OldSchema(ICurrentTenantSession currentTenantSession)
+		public ApplicationUserQueryOldSchema(ICurrentTenantSession currentTenantSession)
 		{
 			_currentTenantSession = currentTenantSession;
 		}
