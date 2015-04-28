@@ -38,7 +38,9 @@ module.exports = function(config) {
 		'vendor/n3-chart/line-chart/line-chart.min.js',
 		'js/ABmetrics.min.js',
 		'dist/main.min.js', 
-		'tests/**/*.js'
+		'tests/**/*.js',
+		'vendor/c3/c3.min.js',
+		'vendor/c3/c3-angular.min.js'
 	],
 
 
