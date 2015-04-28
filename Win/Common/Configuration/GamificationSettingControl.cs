@@ -25,7 +25,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 		private readonly LocalizedUpdateInfo _localizer = new LocalizedUpdateInfo();
 		private const short invalidItemIndex = -1;
 		private const short firstItemIndex = 0;
-	    private const short itemDiffernce = 1;
+		private const short itemDiffernce = 1;
 		private readonly List<GamificationSettingView> _gamificationSettingList = new List<GamificationSettingView>();
 		private readonly List<GamificationSettingView> _gamificationSettingListToBeDeleted;
 		private readonly IDictionary<GamificationSettingRuleSet, string> _gamificationSettingRuleSetList = new Dictionary<GamificationSettingRuleSet, string>();
@@ -123,6 +123,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 			{
 				reset.Hide();
 			}
+
 			setColors();
 			SetTexts();
 		}
@@ -134,7 +135,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 			string changed = _localizer.UpdatedByText(SelectedGamificationSetting.ContainedEntity, Resources.UpdatedByColon);
 			autoLabelInfoAboutChanges.Text = changed;
 		}
-		
+
 		public void Unload()
 		{
 			// Disposes or flag anything possible.
@@ -207,7 +208,8 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 		}
 
 		public void SetUnitOfWork(IUnitOfWork value)
-		{}
+		{
+		}
 
 		public void Persist()
 		{
@@ -220,6 +222,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 				{
 					repo.Remove(settingView.ContainedOriginalEntity);
 				}
+
 				foreach (var settingView in _gamificationSettingList)
 				{
 					if (!settingView.Id.HasValue)
@@ -233,11 +236,11 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 						LazyLoadingManager.Initialize(updatedSetting.UpdatedBy);
 						settingView.UpdateAfterMerge(updatedSetting);
 					}
-
-					
 				}
+
 				uow.PersistAll();
 			}
+
 			_gamificationSettingListToBeDeleted.Clear();
 		}
 
@@ -252,7 +255,8 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 		}
 
 		public void OnShow()
-		{}
+		{
+		}
 
 		protected override void SetCommonTexts()
 		{
@@ -279,7 +283,6 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 
 		private void deleteGamificationSetting()
 		{
-
 			if (_gamificationSettingList.IsEmpty()) return;
 
 			_gamificationSettingList.Remove(SelectedGamificationSetting);
@@ -287,6 +290,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 			{
 				_gamificationSettingListToBeDeleted.Add(new GamificationSettingView(SelectedGamificationSetting.ContainedEntity));
 			}
+
 			if (_gamificationSettingList.IsEmpty())	_gamificationSettingList.Add(createGamificationSetting());
 
 			bindSettingListToComboBox();
@@ -308,7 +312,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 			labelSubHeader2.BackColor = ColorHelper.OptionsDialogSubHeaderBackColor();
 			labelSubHeader2.ForeColor = ColorHelper.OptionsDialogSubHeaderForeColor();
 		}
-		
+
 		private void loadGamificationSettingRuleSets()
 		{
 			if (_gamificationSettingRuleSetList.Count > 0) return;
@@ -317,7 +321,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 			{
 				_gamificationSettingRuleSetList.Add(GamificationSettingRuleSet.RuleWithDifferentThreshold, Resources.RuleWithDifferentThreshold);
 			}
-			
+
 			comboBoxAdvBadgeSettingRuleSets.DataSource = new BindingSource(_gamificationSettingRuleSetList, null);
 			comboBoxAdvBadgeSettingRuleSets.DisplayMember = "Value";
 			comboBoxAdvBadgeSettingRuleSets.ValueMember = "Key";
@@ -375,7 +379,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 
 			gamificationSettingRuleWithRatioConvertorControl.Value.CurrentSetting = selectedRuleSettingWithRatioConvertorSetting;
 			gamificationSettingRuleWithDifferentThresholdControl.Value.CurrentSetting = selectedRuleSettingWithDifferentThresholdSetting;
-		}	
+		}
 
 		private void addNewGamificationSetting()
 		{
@@ -417,11 +421,13 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 			{
 				_gamificationSettingList.Add(createGamificationSetting());
 			}
+
 			int selected = comboBoxAdvGamificationSettings.SelectedIndex;
 			if (!isWithinRange(selected))
 			{
 				selected = firstItemIndex;
 			}
+
 			// Rebinds list to comboBox.
 			bindSettingListToComboBox();
 
@@ -452,26 +458,25 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 
 		private void comboBoxAdvGamificationSettingRuleSetSelectedIndexChanged(object sender, EventArgs e)
 		{
+			const int columnIndex = 0;
+			const int rowIndex = 2;
+
 			if (comboBoxAdvBadgeSettingRuleSets.SelectedItem == null) return;
-			var kvp = ((KeyValuePair<GamificationSettingRuleSet, string>)((ComboBoxAdv)sender).SelectedItem);
+			
+			tableLayoutPanel6.Controls.Remove(tableLayoutPanel6.GetControlFromPosition(columnIndex, rowIndex));
 
-			var ruleWithRatioConvertorSelected = kvp.Key == GamificationSettingRuleSet.RuleWithRatioConvertor;
-
-			tableLayoutPanel6.Controls.Remove(tableLayoutPanel6.GetControlFromPosition(0,2));
-			if (ruleWithRatioConvertorSelected)
-			{
-				tableLayoutPanel6.Controls.Add(gamificationSettingRuleWithRatioConvertorControl.Value, 0, 2);
-			}
-			else
-			{
-				tableLayoutPanel6.Controls.Add(gamificationSettingRuleWithDifferentThresholdControl.Value, 0, 2);
-			}
-			tableLayoutPanel6.SetColumnSpan(tableLayoutPanel6.GetControlFromPosition(0, 2), 2);
+			var selectedRuleSet = ((KeyValuePair<GamificationSettingRuleSet, string>)((ComboBoxAdv)sender).SelectedItem);
+			var control = selectedRuleSet.Key == GamificationSettingRuleSet.RuleWithRatioConvertor
+				? (Control)gamificationSettingRuleWithRatioConvertorControl.Value
+				: (Control)gamificationSettingRuleWithDifferentThresholdControl.Value;
+			tableLayoutPanel6.Controls.Add(control, columnIndex, rowIndex);
+			tableLayoutPanel6.SetColumnSpan(control, 2);
 
 			if(SelectedGamificationSetting == null) return;
 			if (SelectedGamificationSetting.GamificationSettingRuleSet != SelectedGamificationSettingRuleSet)
 				isSelectedSettingDirty = true;
 			SelectedGamificationSetting.GamificationSettingRuleSet = SelectedGamificationSettingRuleSet;
+
 			if (isSelectedSettingDirty)
 			{
 				updateSelectedBadgeTypes(SelectedGamificationSettingRuleSet);

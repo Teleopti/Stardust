@@ -263,7 +263,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 			// tableLayoutPanel5
 			// 
 			this.tableLayoutPanel5.AutoScroll = true;
-			this.tableLayoutPanel5.AutoScrollMinSize = new System.Drawing.Size(0, 550);
+			this.tableLayoutPanel5.AutoScrollMinSize = new System.Drawing.Size(0, 650);
 			this.tableLayoutPanel5.ColumnCount = 1;
 			this.tableLayoutPanel5.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
 			this.tableLayoutPanel5.Controls.Add(this.tableLayoutPanelSubHeader2, 0, 0);
