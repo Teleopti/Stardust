@@ -10,7 +10,7 @@ Background:
 	And I have a role with
 	 | Field            | Value       |
 	 | Name             | Team leader |
-	 | Access to team   | Team1       |
+	 | Access to team   | Team1，Team2 |
 	 | Access to people | true        |
 	And Ashley Andeen has a person period with
 	 | Field      | Value      |
@@ -24,7 +24,6 @@ Background:
 	 | Field      | Value      |
 	 | Team       | Team1      |
 	 | Start Date | 2015-01-21 |
-@ignore
 Scenario: Show my team members by default
 	When I view people
 	Then I should see 'Ashley' in people list
