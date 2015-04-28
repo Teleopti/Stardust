@@ -21,7 +21,7 @@ namespace Teleopti.Ccc.Win.Sikuli.Validators.RootValidators
 
 		public string Description
 		{
-			get { return "Only one 'lowest intra interval balance' value can be under 0.8. Duration must be under limit."; }
+			get { return "Only two 'lowest intra interval balance' value can be under 0.75. Duration must be under 1 minute."; }
 		}
 
 		public SikuliValidationResult Validate(ITestDuration duration)
@@ -68,7 +68,7 @@ namespace Teleopti.Ccc.Win.Sikuli.Validators.RootValidators
 
 		private int checkInternalBalanceRuleBreaks(IEnumerable<double?> intervalBalances)
 		{
-			const double limit = 0.8d;
+			const double limit = 0.75d;
 			int numberOfRuleBreaks = intervalBalances.Count(intervalBalance => intervalBalance < limit);
 			return numberOfRuleBreaks;
 		}
