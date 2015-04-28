@@ -1,4 +1,6 @@
-﻿using Autofac;
+﻿using System;
+using System.Collections.Generic;
+using Autofac;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Security;
@@ -53,6 +55,14 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 				builder.RegisterType<changePasswordStub>().As<IChangePassword>().SingleInstance();
 			}
 			builder.RegisterType<ResponseException>().As<IResponseException>();
+			if (_configuration.Toggle(Toggles.MultiTenancy_People_32113))
+			{
+				builder.RegisterType<TenantDataManager>().As<ITenantDataManager>().SingleInstance();
+			}
+			else
+			{
+				builder.RegisterType<emptyTenantDataManager>().As<ITenantDataManager>().SingleInstance();
+			}
 		}
 
 		private static bool isRunFromTest(string server)
@@ -65,6 +75,22 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			public ChangePasswordResult SetNewPassword(ChangePasswordInput newPasswordInput)
 			{
 				return new ChangePasswordResult {Success = true};
+			}
+		}
+
+		private class emptyTenantDataManager : ITenantDataManager
+		{
+			public void SaveTenantData(IEnumerable<TenantAuthenticationData> tenantAuthenticationData)
+			{
+			}
+
+			public SavePersonInfoResult SaveTenantData(TenantAuthenticationData tenantAuthenticationData)
+			{
+				return new SavePersonInfoResult { Success = true };
+			}
+
+			public void DeleteTenantPersons(IEnumerable<Guid> personsToBeDeleted)
+			{
 			}
 		}
 	}

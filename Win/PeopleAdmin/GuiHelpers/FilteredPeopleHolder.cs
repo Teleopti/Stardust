@@ -1707,7 +1707,7 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.GuiHelpers
 					var result = _tenantDataManager.SaveTenantData(tenantAuthenticationData);
 					if (!result.Success)
 					{
-						MessageBox.Show(result.UserName + Environment.NewLine + result.FailReason, UserTexts.Resources.SaveError);
+						MessageBox.Show(result.FailReason, UserTexts.Resources.SaveError);
 						return;
 					}
 

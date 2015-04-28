@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Client;
 using Teleopti.Ccc.Sdk.Common.DataTransferObject;
 
@@ -37,7 +38,9 @@ namespace Teleopti.Ccc.Sdk.WcfService.Factory
 			if (personDto.TerminationDate != null)
 				data.TerminalDate = personDto.TerminationDate.DateTime;
 			
-			_tenantDataManager.SaveTenantData(data);
+			var result = _tenantDataManager.SaveTenantData(data);
+			if(!result.Success)
+				throw new InvalidDataException(result.FailReason);
 		}
 	}
 

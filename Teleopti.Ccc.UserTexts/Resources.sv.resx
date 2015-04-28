@@ -12228,4 +12228,12 @@ Minska komplexiteten för att kunna använda dessa skift.</value>
   <data name="ToText" xml:space="preserve">
     <value>till</value>
   </data>
+  <data name="ApplicationLogonExists" xml:space="preserve">
+    <value>Inloggningen ({0}) finns redan, välj ett annat inloggningsnamn.</value>
+    <comment>used when saving in people</comment>
+  </data>
+  <data name="IdentityLogonExists" xml:space="preserve">
+    <value>Identiteten ({0}) finns redan, välj en annan.</value>
+    <comment>used when saving in people</comment>
+  </data>
 </root>

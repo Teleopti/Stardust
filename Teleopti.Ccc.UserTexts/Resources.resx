@@ -12998,4 +12998,12 @@ Reduce the complexity to use these shifts.</value>
     <value>days are scheduled</value>
     <comment>text shown when the scheduling is finished</comment>
   </data>
+  <data name="ApplicationLogonExists" xml:space="preserve">
+    <value>The logon name ({0}) already exists, please select another one.</value>
+    <comment>used when saving in people</comment>
+  </data>
+  <data name="IdentityLogonExists" xml:space="preserve">
+    <value>The identity ({0}) already exists, please select another one.</value>
+    <comment>used when saving in people</comment>
+  </data>
 </root>

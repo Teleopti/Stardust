@@ -2384,6 +2384,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to The logon name ({0}) already exists, please select another one..
+        /// </summary>
+        public static string ApplicationLogonExists {
+            get {
+                return ResourceManager.GetString("ApplicationLogonExists", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Apply.
         /// </summary>
         public static string Apply {
@@ -10882,6 +10891,15 @@ namespace Teleopti.Ccc.UserTexts {
         public static string Id {
             get {
                 return ResourceManager.GetString("Id", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The identity ({0}) already exists, please select another one..
+        /// </summary>
+        public static string IdentityLogonExists {
+            get {
+                return ResourceManager.GetString("IdentityLogonExists", resourceCulture);
             }
         }
         

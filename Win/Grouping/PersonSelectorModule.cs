@@ -46,30 +46,9 @@ namespace Teleopti.Ccc.Win.Grouping
 			builder.RegisterType<GroupPageHelper>().As<IGroupPageHelper>().InstancePerLifetimeScope();
 			builder.RegisterType<AddPersonEnableCommand>().As<IAddPersonEnableCommand>().InstancePerLifetimeScope();
 
-			if (_config.Toggle(Toggles.MultiTenancy_People_32113))
-			{
-				builder.RegisterType<TenantDataManager>().As<ITenantDataManager>().SingleInstance();
-			}
-			else
-			{
-				builder.RegisterType<emptyTenantDataManager>().As<ITenantDataManager>().SingleInstance();
-			}
+			
 		}
 
-		private class emptyTenantDataManager : ITenantDataManager
-		{
-			public void SaveTenantData(IEnumerable<TenantAuthenticationData> tenantAuthenticationData)
-			{
-			}
-
-			public SavePersonInfoResult SaveTenantData(TenantAuthenticationData tenantAuthenticationData)
-			{
-				return new SavePersonInfoResult{Success = true};
-			}
-
-			public void DeleteTenantPersons(IEnumerable<Guid> personsToBeDeleted)
-			{
-			}
-		}
+		
 	}
 }

@@ -31,11 +31,21 @@ namespace Teleopti.Ccc.Infrastructure.MultiTenancy.Client
 			var json = _jsonSerializer.SerializeObject(tenantAuthenticationData);
 			var tmpResult = _postHttpRequest.Send<PersistPersonInfoResult>(_tenantServerConfiguration.Path + "PersonInfo/Persist", json);
 			var ret = new SavePersonInfoResult {Success = true};
+			
 			if (!tmpResult.PasswordStrengthIsValid)
 			{
-				ret.UserName = tenantAuthenticationData.ApplicationLogonName;
 				ret.Success = false;
 				ret.FailReason = UserTexts.Resources.PasswordPolicyWarning;
+			}
+			if (!tmpResult.ApplicationLogonNameIsValid)
+			{
+				ret.Success = false;
+				ret.FailReason += string.Format(UserTexts.Resources.ApplicationLogonExists,tenantAuthenticationData.ApplicationLogonName);
+			}
+			if (!tmpResult.IdentityIsValid)
+			{
+				ret.Success = false;
+				ret.FailReason += string.Format(UserTexts.Resources.IdentityLogonExists, tenantAuthenticationData.Identity);
 			}
 
 			return ret;

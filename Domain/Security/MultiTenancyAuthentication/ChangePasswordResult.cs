@@ -15,5 +15,7 @@
 	public class PersistPersonInfoResult
 	{
 		public bool PasswordStrengthIsValid { get; set; }
+		public bool ApplicationLogonNameIsValid { get; set; }
+		public bool IdentityIsValid { get; set; }
 	}
 }
