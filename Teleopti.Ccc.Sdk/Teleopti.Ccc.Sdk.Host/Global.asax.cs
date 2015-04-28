@@ -192,19 +192,7 @@ namespace Teleopti.Ccc.Sdk.WcfHost
 			builder.RegisterType<UserCultureProvider>().As<IUserCultureProvider>().InstancePerLifetimeScope();
 			builder.RegisterType<GroupingReadOnlyRepository>().As<IGroupingReadOnlyRepository>();
 
-			registerAlternativePasswordCheckerIfApplicable(builder);
-
 			return builder;
-		}
-
-		private static void registerAlternativePasswordCheckerIfApplicable(ContainerBuilder builder)
-		{
-			var passphraseProvider = new PassphraseFromConfiguration();
-			string passphrase = passphraseProvider.Passphrase();
-			if (!string.IsNullOrEmpty(passphrase))
-			{
-				builder.RegisterInstance<IPassphraseProvider>(passphraseProvider);
-			}
 		}
 
 		private static void registerSdkFactories(ContainerBuilder builder, IocConfiguration configuration)
@@ -235,25 +223,6 @@ namespace Teleopti.Ccc.Sdk.WcfHost
 			builder.RegisterType<ResourceCalculationPrerequisitesLoader>().As<IResourceCalculationPrerequisitesLoader>().InstancePerLifetimeScope();
 			builder.RegisterType<SkillDayLoadHelper>().As<ISkillDayLoadHelper>().InstancePerLifetimeScope();
 		}
-	}
-
-	internal class PassphraseFromConfiguration : IPassphraseProvider
-	{
-		private readonly string _passphrase;
-
-		public PassphraseFromConfiguration()
-		{
-			_passphrase = ConfigurationManager.AppSettings["Passphrase"];
-		}
-
-		public string Passphrase()
-		{
-			return _passphrase;
-		}
-	}
-	public interface IPassphraseProvider
-	{
-		string Passphrase();
 	}
 
 	public class EmptyChangePassword : IChangePassword
