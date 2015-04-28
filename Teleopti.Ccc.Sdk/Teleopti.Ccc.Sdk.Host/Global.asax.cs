@@ -199,7 +199,7 @@ namespace Teleopti.Ccc.Sdk.WcfHost
 		{
 			builder.RegisterType<TeleoptiCccSdkService>();
 
-			if (configuration.Toggle(Toggles.MultiTenancy_LogonUseNewSchema_33049))
+			if (configuration.Toggle(Toggles.MultiTenancy_People_32113))
 				builder.RegisterType<ChangePassword>().As<IChangePassword>().SingleInstance();
 			else
 				builder.RegisterType<EmptyChangePassword>().As<IChangePassword>().SingleInstance();

@@ -118,7 +118,7 @@ Teleopti.SSO.Authentication.AuthenticationState = function (data) {
 		options.data.UserName = authenticationModel.username;
 
 		$.ajax({
-			url: data.baseUrl + "ToggleHandler/IsEnabled?toggle=MultiTenancy_LogonUseNewSchema_33049",
+			url: data.baseUrl + "ToggleHandler/IsEnabled?toggle=MultiTenancy_People_32113",
 			async: false,
 			success: function (data) {
 				if (data.IsEnabled) {
