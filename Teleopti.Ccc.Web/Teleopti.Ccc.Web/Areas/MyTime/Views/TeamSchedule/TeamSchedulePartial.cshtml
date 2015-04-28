@@ -95,14 +95,9 @@
 							<!-- ko if: showGroupings -->
 							<div class="schedule-filter-component">
 								<select id="Team-Picker" data-bind="foreach: availableTeams, select2: { value: selectedTeam } ">
-									<!--ko ifnot: children -->
-									<option data-bind="text: text, value: id"></option>
-									<!-- /ko -->
-									<!--ko if: children -->
 									<optgroup data-bind="attr: { label: text }, foreach: children">
 										<option data-bind="text: text, value: id"></option>
 									</optgroup>
-									<!-- /ko -->
 								</select>
 							</div>
 							<!-- /ko -->

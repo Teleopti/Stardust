@@ -389,9 +389,21 @@ Teleopti.MyTimeWeb.TeamScheduleFilterMixin = function () {
 	self.requestedFilter = ko.computed(function() {
 
 		var selectedTeams = [];
-		
-		if (self.selectedTeam() != null) selectedTeams = selectedTeams.concat(self.selectedTeam().split(','));
-		
+
+		if (self.selectedTeam() != null) {
+
+			if (self.selectedTeam() == -1) {
+				var availableTeams = self.availableTeams();
+				availableTeams = availableTeams.slice(1);
+				selectedTeams =(self.showGroupings()) ?
+					availableTeams.reduce(function (v, e) { return v.concat(e.children); }, []).map(function (e) { return e.id; })
+					: availableTeams.map(function (v) { return v.id; });
+			} else {
+				selectedTeams = [self.selectedTeam()];
+			}
+
+		}
+
 		return {
 			selectedTeams: selectedTeams,
 			filteredStartTimesText: self.filteredStartTimesText(),
@@ -479,16 +491,21 @@ Teleopti.MyTimeWeb.TeamScheduleFilterMixin = function () {
 		self.showGroupings(teams[0] && teams[0].children != null);
 
 		if (allTeam !== null) {
-			allTeam.id = (self.showGroupings()) ?
-				teams.reduce(function(reduced, item) { return reduced.concat(item.children.map(function(_item) { return _item.id; })) }, []).join(',')
-				: teams.map(function(item) { return item.id; }).join(',');
-			if (self.showGroupings()) allTeam.children = false;
-			if (teams.length > 1) teams.unshift(allTeam);
+			allTeam.id = -1;
+
+			if (teams.length > 1) {
+				if (self.showGroupings()) {
+					teams.unshift({ children: [allTeam], text: "" });
+				} else {
+					teams.unshift(allTeam);
+				}
+			}
 		}
+
 		self.availableTeams(teams);
 
-		var isSelectedTeamAllTeam = self.selectedTeam() && self.selectedTeam().indexOf(',') > 0;
-		var isSelectedTeamNotIncluded = allTeam.id.split(',').indexOf(self.selectedTeam()) < 0;
+		var isSelectedTeamAllTeam = self.selectedTeam() && self.selectedTeam() == -1;
+		var isSelectedTeamNotIncluded = self.availableTeams().map(function (v) { return v.id; }).indexOf(self.selectedTeam()) < 0;
 
 		self.defaultTeam(defaultTeam);
 		
