@@ -1234,6 +1234,9 @@
     <Content Include="WFM\js\seatManagement\seatmapedit.directive.js" />
     <Content Include="WFM\js\people\template\advancedPeopleSearch.html" />
     <Content Include="WFM\tests\search\search.controller.spec.js" />
+    <Content Include="WFM\vendor\c3\c3-angular.min.js" />
+    <Content Include="WFM\vendor\c3\c3.min.css" />
+    <Content Include="WFM\vendor\c3\c3.min.js" />
     <Content Include="WFM\vendor\d3\angularjs-nvd3-directives.js" />
     <Content Include="WFM\vendor\d3\d3.js" />
     <Content Include="WFM\vendor\d3\d3.min.js" />
@@ -1968,6 +1971,7 @@
     <Content Include="WFM\vendor\d3\LICENSE" />
     <Content Include="WFM\css\_people.scss" />
     <Content Include="WFM\css\_seatmap.scss" />
+    <Content Include="WFM\vendor\c3\c3-angular.min.js.map" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config">
