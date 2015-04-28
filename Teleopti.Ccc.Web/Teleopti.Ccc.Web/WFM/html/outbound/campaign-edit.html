@@ -146,11 +146,9 @@
 							</div>
 							<div class="wfm-block">
 								<form name="newWorkingPeriodForm" ng-submit="">
-									<div class="input-prepend">
+									<div class="inline-fix clearfix">
 										<i class="mdi mdi-plus" ng-click="addWorkingPeriod(); resetWorkingPeriodForm()"></i>
-										<input type="time" name="NewTimeRangeStart" ng-model="newWorkingPeriod.StartTime" />
-										-
-										<input type="time" name="NewTimeRangeEnd" ng-model="newWorkingPeriod.EndTime" />
+										<timepicker class="wfm-timepicker" ng-model="mytime" ng-change="" hour-step="1" minute-step="15" show-meridian="false"></timepicker>
 									</div>
 								</form>
 							</div>

@@ -54,3 +54,11 @@
 .wfm-list li:hover .wfm-checkbox-toggle:after {
 	background-color: white;
 }
+
+.inline-fix .wfm-timepicker{
+    float:left;
+    margin-left: 6px;
+}
+.inline-fix .mdi-plus{
+    float:left;
+}
