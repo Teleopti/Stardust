@@ -1,10 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.Linq;
 using System.Windows.Forms;
 using System.Windows.Forms.DataVisualization.Charting;
 using Autofac;
 using Syncfusion.Windows.Forms.Grid;
+using Teleopti.Ccc.Domain.Outbound;
+using Teleopti.Ccc.Domain.Scheduling;
+using Teleopti.Ccc.Infrastructure.Repositories;
+using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.Win.Common.Controls.Cells;
 using Teleopti.Ccc.WinCode.Backlog;
 using Teleopti.Interfaces.Domain;
@@ -332,8 +337,33 @@ namespace Teleopti.Ccc.Win.Backlog
 
 		private void buttonLoad_Click(object sender, EventArgs e)
 		{
-			_model = new BacklogModel(_container, _period);
-			backlogViewLoad(this, new EventArgs());
+			var campaign = new Campaign { Name = "test" };
+			var campaignWorkingPeriod = new CampaignWorkingPeriod();
+			campaignWorkingPeriod.TimePeriod = new TimePeriod(10, 0, 15, 0);
+
+			var campaignWorkingPeriodAssignmentThursday = new CampaignWorkingPeriodAssignment { WeekdayIndex = DayOfWeek.Thursday };
+			campaignWorkingPeriod.AddAssignment(campaignWorkingPeriodAssignmentThursday);
+
+			var campaignWorkingPeriodAssignmentFriday = new CampaignWorkingPeriodAssignment { WeekdayIndex = DayOfWeek.Friday };
+			campaignWorkingPeriod.AddAssignment(campaignWorkingPeriodAssignmentFriday);
+
+			campaign.AddWorkingPeriod(campaignWorkingPeriod);
+			var outboundSkillCreator = new OutboundSkillCreator();
+			var skill = outboundSkillCreator.CreatSkill(_model.GetAllSkills().First().Activity, campaign);
+			using (var uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
+			{
+				var skilltypeRepository = new SkillTypeRepository(uow);
+				var skilltypes = skilltypeRepository.LoadAll();
+				skill.SkillType = skilltypes.First(s => s.Description.Name == "SkillTypeBackoffice");
+				var skillrepository = new SkillRepository(uow);
+				skillrepository.Add(skill);
+				var workloadRepository = new WorkloadRepository(uow);
+				workloadRepository.Add(skill.WorkloadCollection.First());
+				uow.PersistAll();
+			}
+
+			//_model = new BacklogModel(_container, _period);
+			//backlogViewLoad(this, new EventArgs());
 		}
 
 		private void gridControl1_SaveCellInfo(object sender, GridSaveCellInfoEventArgs e)

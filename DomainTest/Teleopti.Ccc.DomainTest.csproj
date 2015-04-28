@@ -660,6 +660,7 @@
     <Compile Include="Optimization\WorkShiftBackToLegalStateServiceProTest.cs" />
     <Compile Include="Optimization\WorkShiftBackToLegalStateStepTest.cs" />
     <Compile Include="Optimization\WorkShiftRuleSetHasShortBreakTest.cs" />
+    <Compile Include="Outbound\OutboundSkillCreatorTest.cs" />
     <Compile Include="Payroll\PayrollExportProgressTest.cs" />
     <Compile Include="Payroll\PayrollResultDetailTest.cs" />
     <Compile Include="ResourceCalculation\AbsencePreferenceFullDayLayerCreatorTest.cs" />
@@ -1531,7 +1532,6 @@
     </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Outbound\" />
     <Folder Include="Properties\" />
   </ItemGroup>
   <ItemGroup>
