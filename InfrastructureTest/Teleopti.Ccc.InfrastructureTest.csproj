@@ -185,6 +185,7 @@
     <Compile Include="MultiTenancy\Client\SharedSettingsQuerierForNoWebTest.cs" />
     <Compile Include="MultiTenancy\Client\TenantDataManagerTest.cs" />
     <Compile Include="MultiTenancy\Client\TenantServerConfigurationTest.cs" />
+    <Compile Include="MultiTenancy\PostHttpRequestFake.cs" />
     <Compile Include="MultiTenancy\Server\ApplicationUserQueryTest.cs" />
     <Compile Include="MultiTenancy\Client\AuthenticationQuerierTest.cs" />
     <Compile Include="MultiTenancy\Server\CheckPasswordStrengthTest.cs" />
