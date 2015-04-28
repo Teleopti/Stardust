@@ -196,23 +196,12 @@ namespace Teleopti.Ccc.WinCode.Main
 
 		private bool login()
 		{
-			//var authenticationResult = _applicationLogon.Logon(_model, UserAgent);
 			var authenticationResult = _applicationLogon.Logon(_model, StateHolderReader.Instance.StateReader.ApplicationScopeData, UserAgent);
-			var choosenDataSource = _model.SelectedDataSourceContainer;
 
 			if (authenticationResult.HasMessage)
 				_view.ShowErrorMessage(string.Concat(authenticationResult.Message, "  "), Resources.ErrorMessage);
 
-			if (authenticationResult.Successful)
-			{
-				//To use for silent background log on
-				choosenDataSource.User.ApplicationAuthenticationInfo.Password = _model.Password;
-				//if (!_view.InitStateHolder(_messageBroker, authenticationResult.PasswordPolicy))
-					//return false;
-				return true;
-			}
-
-			return false;
+			return authenticationResult.Successful;
 		}
 
 		private bool winLogin()
