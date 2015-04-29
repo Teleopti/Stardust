@@ -45,11 +45,13 @@ client.setValue('#Username-input', 'demo')
 					if (err || !res) {
 						log('failed to sign in second time. res: ' + res);
 						closeAndThrow('failed to sign in. ' + err);
+					}else{
+						log('sign in succeeded second time:' + res);
 					}
 				});
-			log('sign in succeeded second time:' + res);
+		}else{
+			log('sign in succeeded first time:' + res);
 		}
-		log('sign in succeeded first time:' + res);
 	});
 
 log('navigate to health check');
@@ -74,8 +76,9 @@ client.click('#Start-Check')
 	.waitForExist('#Bus-Results', 600000, false, function(err, res, response) {
 		if (err || !res) {
 			closeAndThrow('service bus doesnot work well after trying 10 minutes. ' + err);
+		}else{
+			log('service bus and broker work well');
 		}
-		log('service bus and broker work well');
 	});
 	
 log('shutdown client.');
