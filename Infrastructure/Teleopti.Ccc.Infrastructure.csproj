@@ -280,7 +280,7 @@
     <Compile Include="MultiTenancy\Server\NHibernate\ICurrentTenantSession.cs" />
     <Compile Include="MultiTenancy\Server\NHibernate\ITenantUnitOfWork.cs" />
     <Compile Include="MultiTenancy\Server\ApplicationLogonInfo.cs" />
-    <Compile Include="MultiTenancy\Server\NHibernate\TenantUnitOfWork.cs" />
+    <Compile Include="MultiTenancy\Server\NHibernate\TenantUnitOfWorkManager.cs" />
     <Compile Include="MultiTenancy\Client\PostHttpRequest.cs" />
     <Compile Include="MultiTenancy\Server\Tenant.cs" />
     <Compile Include="MultiTenancy\Server\TenantAndPersonId.cs" />

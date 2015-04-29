@@ -13,7 +13,7 @@ namespace Teleopti.Ccc.InfrastructureTest.MultiTenancy.Server
 	{
 		private IFindLogonInfo target;
 		private Tenant tenantPresentInDatabase;
-		private TenantUnitOfWork tenantUnitOfWork;
+		private TenantUnitOfWorkManager _tenantUnitOfWorkManager;
 
 		[Test]
 		public void ShouldGetLogonInfo()
@@ -21,7 +21,7 @@ namespace Teleopti.Ccc.InfrastructureTest.MultiTenancy.Server
 			var info = new PersonInfo(tenantPresentInDatabase, Guid.NewGuid());
 			info.SetApplicationLogonCredentials(new CheckPasswordStrengthFake(), RandomName.Make(), RandomName.Make());
 			info.SetIdentity(RandomName.Make());
-			tenantUnitOfWork.CurrentSession().Save(info);
+			_tenantUnitOfWorkManager.CurrentSession().Save(info);
 
 			var result = target.GetForIds(new[] {info.Id}).Single();
 			result.LogonName.Should().Be.EqualTo(info.ApplicationLogonName);
@@ -40,7 +40,7 @@ namespace Teleopti.Ccc.InfrastructureTest.MultiTenancy.Server
 		public void ShouldReturnNullForNonExistingColumns()
 		{
 			var info = new PersonInfo(tenantPresentInDatabase, Guid.NewGuid());
-			tenantUnitOfWork.CurrentSession().Save(info);
+			_tenantUnitOfWorkManager.CurrentSession().Save(info);
 
 			var result = target.GetForIds(new[] { info.Id }).Single();
 			result.LogonName.Should().Be.Null();
@@ -51,17 +51,17 @@ namespace Teleopti.Ccc.InfrastructureTest.MultiTenancy.Server
 		[SetUp]
 		public void InsertPreState()
 		{
-			tenantUnitOfWork = TenantUnitOfWork.CreateInstanceForTest(ConnectionStringHelper.ConnectionStringUsedInTests);
-			target = new FindLogonInfo(tenantUnitOfWork);
+			_tenantUnitOfWorkManager = TenantUnitOfWorkManager.CreateInstanceForTest(ConnectionStringHelper.ConnectionStringUsedInTests);
+			target = new FindLogonInfo(_tenantUnitOfWorkManager);
 
 			tenantPresentInDatabase = new Tenant(RandomName.Make());
-			tenantUnitOfWork.CurrentSession().Save(tenantPresentInDatabase);
+			_tenantUnitOfWorkManager.CurrentSession().Save(tenantPresentInDatabase);
 		}
 
 		[TearDown]
 		public void RollbackTransaction()
 		{
-			tenantUnitOfWork.Dispose();
+			_tenantUnitOfWorkManager.Dispose();
 		}
 	}
 }

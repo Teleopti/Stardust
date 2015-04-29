@@ -9,7 +9,7 @@ namespace Teleopti.Ccc.InfrastructureTest.MultiTenancy.Server
 {
 	public class DeletePersonInfoTest
 	{
-		private TenantUnitOfWork _uow;
+		private TenantUnitOfWorkManager _uow;
 		private Tenant tenant;
 		private PersonInfo person;
 
@@ -37,7 +37,7 @@ namespace Teleopti.Ccc.InfrastructureTest.MultiTenancy.Server
 		[SetUp]
 		public void Setup()
 		{
-			_uow = TenantUnitOfWork.CreateInstanceForTest(ConnectionStringHelper.ConnectionStringUsedInTests);
+			_uow = TenantUnitOfWorkManager.CreateInstanceForTest(ConnectionStringHelper.ConnectionStringUsedInTests);
 			var session = _uow.CurrentSession();
 			tenant = new Tenant("som name");
 			person = new PersonInfo(tenant, Guid.NewGuid());

@@ -11,29 +11,29 @@ namespace Teleopti.Ccc.InfrastructureTest.MultiTenancy.Server
 	public class PersistPersonInfoTest
 	{
 		private Tenant tenant;
-		private TenantUnitOfWork tenantUnitOfWork;
+		private TenantUnitOfWorkManager _tenantUnitOfWorkManager;
 		private IPersistPersonInfo target;
 
 		[SetUp]
 		public void InsertPreState()
 		{
-			tenantUnitOfWork = TenantUnitOfWork.CreateInstanceForTest(ConnectionStringHelper.ConnectionStringUsedInTests);
-			target = new PersistPersonInfo(tenantUnitOfWork);
+			_tenantUnitOfWorkManager = TenantUnitOfWorkManager.CreateInstanceForTest(ConnectionStringHelper.ConnectionStringUsedInTests);
+			target = new PersistPersonInfo(_tenantUnitOfWorkManager);
 
 			tenant = new Tenant(RandomName.Make());
-			tenantUnitOfWork.CurrentSession().Save(tenant);
+			_tenantUnitOfWorkManager.CurrentSession().Save(tenant);
 		}
 
 		[TearDown]
 		public void Cleanup()
 		{
-			tenantUnitOfWork.Dispose();
+			_tenantUnitOfWorkManager.Dispose();
 		}
 
 		[Test]
 		public void ShouldInsertPersonInfo()
 		{
-			var session = tenantUnitOfWork.CurrentSession(); 
+			var session = _tenantUnitOfWorkManager.CurrentSession(); 
 			
 			var personInfo = new PersonInfo(tenant, Guid.NewGuid());
 			target.Persist(personInfo);
@@ -47,7 +47,7 @@ namespace Teleopti.Ccc.InfrastructureTest.MultiTenancy.Server
 		public void ShouldInsertNonExistingWithId()
 		{
 			var id = Guid.NewGuid();
-			var session = tenantUnitOfWork.CurrentSession();
+			var session = _tenantUnitOfWorkManager.CurrentSession();
 
 			var personInfo = new PersonInfo(tenant, id);
 			target.Persist(personInfo);
@@ -62,7 +62,7 @@ namespace Teleopti.Ccc.InfrastructureTest.MultiTenancy.Server
 		{
 			var newPassword = RandomName.Make();
 
-			var session = tenantUnitOfWork.CurrentSession();
+			var session = _tenantUnitOfWorkManager.CurrentSession();
 
 			var id = Guid.NewGuid();
 
@@ -94,7 +94,7 @@ namespace Teleopti.Ccc.InfrastructureTest.MultiTenancy.Server
 			target.Persist(personInfo1);
 			target.Persist(personInfo2);
 
-			Assert.Throws<DuplicateApplicationLogonNameException>(() => tenantUnitOfWork.CurrentSession().Flush());
+			Assert.Throws<DuplicateApplicationLogonNameException>(() => _tenantUnitOfWorkManager.CurrentSession().Flush());
 		}
 
 		[Test]
@@ -108,7 +108,7 @@ namespace Teleopti.Ccc.InfrastructureTest.MultiTenancy.Server
 			target.Persist(personInfo1);
 			target.Persist(personInfo2);
 
-			Assert.DoesNotThrow(tenantUnitOfWork.CurrentSession().Flush);
+			Assert.DoesNotThrow(_tenantUnitOfWorkManager.CurrentSession().Flush);
 		}
 
 		[Test]
@@ -124,7 +124,7 @@ namespace Teleopti.Ccc.InfrastructureTest.MultiTenancy.Server
 			target.Persist(personInfo1);
 			target.Persist(personInfo2);
 
-			Assert.Throws<DuplicateIdentityException>(() => tenantUnitOfWork.CurrentSession().Flush());
+			Assert.Throws<DuplicateIdentityException>(() => _tenantUnitOfWorkManager.CurrentSession().Flush());
 		}
 
 		[Test]
@@ -138,7 +138,7 @@ namespace Teleopti.Ccc.InfrastructureTest.MultiTenancy.Server
 			target.Persist(personInfo1);
 			target.Persist(personInfo2);
 
-			Assert.DoesNotThrow(tenantUnitOfWork.CurrentSession().Flush);
+			Assert.DoesNotThrow(_tenantUnitOfWorkManager.CurrentSession().Flush);
 		}
 
 		[Test]

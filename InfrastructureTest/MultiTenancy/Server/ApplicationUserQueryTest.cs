@@ -18,7 +18,7 @@ namespace Teleopti.Ccc.InfrastructureTest.MultiTenancy.Server
 		private Guid personId;
 		private string correctUserName;
 		private IApplicationUserQuery target;
-		private TenantUnitOfWork _tenantUnitOfWork;
+		private TenantUnitOfWorkManager _tenantUnitOfWorkManager;
 
 		[Test]
 		public void ShouldFindPersonId()
@@ -54,21 +54,21 @@ namespace Teleopti.Ccc.InfrastructureTest.MultiTenancy.Server
 		public void Setup()
 		{
 			correctUserName = RandomName.Make();
-			_tenantUnitOfWork = TenantUnitOfWork.CreateInstanceForTest(ConnectionStringHelper.ConnectionStringUsedInTests);
-			var tenant = new FindTenantByNameQuery(_tenantUnitOfWork).Find(Tenant.DefaultName);
+			_tenantUnitOfWorkManager = TenantUnitOfWorkManager.CreateInstanceForTest(ConnectionStringHelper.ConnectionStringUsedInTests);
+			var tenant = new FindTenantByNameQuery(_tenantUnitOfWorkManager).Find(Tenant.DefaultName);
 			personId = Guid.NewGuid();
 			var pInfo = new PersonInfo(tenant, personId);
 			pInfo.SetApplicationLogonCredentials(new CheckPasswordStrengthFake(), correctUserName, RandomName.Make());
-			var personInfoPersister = new PersistPersonInfo(_tenantUnitOfWork);
+			var personInfoPersister = new PersistPersonInfo(_tenantUnitOfWorkManager);
 			personInfoPersister.Persist(pInfo);
-			_tenantUnitOfWork.CurrentSession().Flush();
-			target = new ApplicationUserQuery(_tenantUnitOfWork);
+			_tenantUnitOfWorkManager.CurrentSession().Flush();
+			target = new ApplicationUserQuery(_tenantUnitOfWorkManager);
 		}
 
 		[TearDown]
 		public void Clean()
 		{
-			_tenantUnitOfWork.Dispose();
+			_tenantUnitOfWorkManager.Dispose();
 		}
 	}
 
@@ -77,7 +77,7 @@ namespace Teleopti.Ccc.InfrastructureTest.MultiTenancy.Server
 		private Guid personId;
 		private string correctUserName;
 		private IApplicationUserQuery target;
-		private TenantUnitOfWork _tenantUnitOfWork;
+		private TenantUnitOfWorkManager _tenantUnitOfWorkManager;
 
 		[Test]
 		public void ShouldFindPersonId()
@@ -104,14 +104,14 @@ namespace Teleopti.Ccc.InfrastructureTest.MultiTenancy.Server
 		[Test]
 		public void ShouldWorkIfUserCredentialsAlsoInNewSchema()
 		{
-			var persister = new PersistPersonInfo(_tenantUnitOfWork);
+			var persister = new PersistPersonInfo(_tenantUnitOfWorkManager);
 			var person = Session.Get<Person>(personId);
 			var tenant = new Tenant(RandomName.Make());
-			_tenantUnitOfWork.CurrentSession().Save("Tenant_NewSchema", tenant);
+			_tenantUnitOfWorkManager.CurrentSession().Save("Tenant_NewSchema", tenant);
 			var personInfo = new PersonInfo(tenant, person.Id.Value);
 			personInfo.SetApplicationLogonCredentials(new CheckPasswordStrengthFake(), person.ApplicationAuthenticationInfo.ApplicationLogOnName, person.ApplicationAuthenticationInfo.Password);
 			persister.Persist(personInfo);
-			_tenantUnitOfWork.CurrentSession().Flush();
+			_tenantUnitOfWorkManager.CurrentSession().Flush();
 			target.Find(person.ApplicationAuthenticationInfo.ApplicationLogOnName).Id
 				.Should().Be.EqualTo(personId);
 		}
@@ -127,8 +127,8 @@ namespace Teleopti.Ccc.InfrastructureTest.MultiTenancy.Server
 				uow.PersistAll();
 				personId = personInDatabase.Id.Value;
 			}
-			_tenantUnitOfWork = TenantUnitOfWork.CreateInstanceForTest(ConnectionStringHelper.ConnectionStringUsedInTests);
-			target = new ApplicationUserQueryOldSchema(_tenantUnitOfWork);
+			_tenantUnitOfWorkManager = TenantUnitOfWorkManager.CreateInstanceForTest(ConnectionStringHelper.ConnectionStringUsedInTests);
+			target = new ApplicationUserQueryOldSchema(_tenantUnitOfWorkManager);
 		}
 	}
 }

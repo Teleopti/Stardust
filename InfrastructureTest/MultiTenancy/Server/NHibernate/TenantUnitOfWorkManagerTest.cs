@@ -77,12 +77,12 @@ namespace Teleopti.Ccc.InfrastructureTest.MultiTenancy.Server.NHibernate
 		}
 
 
-		private TenantUnitOfWork target;
+		private TenantUnitOfWorkManager target;
 
 		[SetUp]
 		public void CreateTarget()
 		{
-			target = TenantUnitOfWork.CreateInstanceForTest(UnitOfWorkFactory.Current.ConnectionString);
+			target = TenantUnitOfWorkManager.CreateInstanceForTest(UnitOfWorkFactory.Current.ConnectionString);
 		}
 
 		[TearDown]
