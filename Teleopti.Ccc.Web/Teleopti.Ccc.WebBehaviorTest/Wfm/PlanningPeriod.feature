@@ -20,7 +20,7 @@ Scenario: schedule the next planning period
 	When I view Resource planner
 	And  I click schedule
 	Then I should see '0'
-
+@ignore
 Scenario: update the next planning period
 	Given the time is '2014-04-10'
 	And I have a role with
