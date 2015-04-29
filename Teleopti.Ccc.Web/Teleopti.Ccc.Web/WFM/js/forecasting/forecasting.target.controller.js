@@ -124,6 +124,8 @@ angular.module('wfm.forecasting.target', ['gridshore.c3js.chart'])
 					angular.forEach($scope.skillsDisplayed, function (skill) {
 						skill.show = true;
 						angular.forEach(skill.Workloads, function (workload) {
+
+							workload.chartId = "chart" + workload.Id;
 							workload.methodToUse = -1;
 
 							workload.methodChanged = function (newMethod) {
