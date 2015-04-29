@@ -241,9 +241,12 @@
     <Compile Include="MultiTenancy\Server\DeletePersonInfoFake.cs" />
     <Compile Include="MultiTenancy\Server\DuplicateApplicationLogonNameException.cs" />
     <Compile Include="MultiTenancy\Server\DuplicateIdentityException.cs" />
+    <Compile Include="MultiTenancy\Server\FindLogonInfo.cs" />
     <Compile Include="MultiTenancy\Server\FindTenantByNameQueryFake.cs" />
     <Compile Include="MultiTenancy\Server\ICheckPasswordStrength.cs" />
+    <Compile Include="MultiTenancy\Server\IFindLogonInfo.cs" />
     <Compile Include="MultiTenancy\Server\IVerifyPasswordPolicy.cs" />
+    <Compile Include="MultiTenancy\Server\LogonInfo.cs" />
     <Compile Include="MultiTenancy\Server\NHibernate\ITenantUnitOfWorkAspect.cs" />
     <Compile Include="MultiTenancy\Server\NHibernate\TenantNhibernateExceptionConverter.cs" />
     <Compile Include="MultiTenancy\Server\PasswordStrengthException.cs" />

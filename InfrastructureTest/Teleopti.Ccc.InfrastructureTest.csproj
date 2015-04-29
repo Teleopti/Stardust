@@ -190,6 +190,7 @@
     <Compile Include="MultiTenancy\Client\AuthenticationQuerierTest.cs" />
     <Compile Include="MultiTenancy\Server\CheckPasswordStrengthTest.cs" />
     <Compile Include="MultiTenancy\Server\DeletePersonInfoTest.cs" />
+    <Compile Include="MultiTenancy\Server\FindLogonInfoTest.cs" />
     <Compile Include="MultiTenancy\Server\FindTenantAndPersonIdForIdentityTest.cs" />
     <Compile Include="MultiTenancy\Server\FindTenantByNameQueryTest.cs" />
     <Compile Include="MultiTenancy\Server\IdentityUserQueryTest.cs" />
