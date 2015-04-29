@@ -21,6 +21,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MultiTenancy
 			builder.RegisterType<ApplicationUserQueryFake>().As<IApplicationUserQuery>().AsSelf().SingleInstance();
 			builder.RegisterType<TenantUnitOfWorkFake>().As<ITenantUnitOfWork>().AsSelf().SingleInstance();
 			builder.RegisterType<DummyPasswordPolicy>().As<IPasswordPolicy>().AsSelf().SingleInstance();
+			builder.RegisterType<FindLogonInfoFake>().As<IFindLogonInfo>().AsSelf().SingleInstance();
 		}
 	}
 }

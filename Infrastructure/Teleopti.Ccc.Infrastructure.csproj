@@ -242,6 +242,7 @@
     <Compile Include="MultiTenancy\Server\DuplicateApplicationLogonNameException.cs" />
     <Compile Include="MultiTenancy\Server\DuplicateIdentityException.cs" />
     <Compile Include="MultiTenancy\Server\FindLogonInfo.cs" />
+    <Compile Include="MultiTenancy\Server\FindLogonInfoFake.cs" />
     <Compile Include="MultiTenancy\Server\FindTenantByNameQueryFake.cs" />
     <Compile Include="MultiTenancy\Server\ICheckPasswordStrength.cs" />
     <Compile Include="MultiTenancy\Server\IFindLogonInfo.cs" />

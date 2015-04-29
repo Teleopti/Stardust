@@ -14,14 +14,17 @@ namespace Teleopti.Ccc.Web.Areas.MultiTenancy
 		private readonly IPersistPersonInfo _persister;
 		private readonly IPersonInfoMapper _mapper;
 		private readonly IDeletePersonInfo _deletePersonInfo;
+		private readonly IFindLogonInfo _findLogonInfo;
 
 		public PersonInfoController(IPersistPersonInfo persister, 
 																IPersonInfoMapper mapper,
-																IDeletePersonInfo deletePersonInfo)
+																IDeletePersonInfo deletePersonInfo,
+																IFindLogonInfo findLogonInfo)
 		{
 			_persister = persister;
 			_mapper = mapper;
 			_deletePersonInfo = deletePersonInfo;
+			_findLogonInfo = findLogonInfo;
 		}
 
 		[HttpPost]
@@ -73,14 +76,7 @@ namespace Teleopti.Ccc.Web.Areas.MultiTenancy
 		//TODO: tenant - make sure to only get user info from calling tenant
 		public virtual JsonResult LogonInfoFromGuids(IEnumerable<Guid> personIdsToGet)
 		{
-			//dummy implementation
-			var ret = new List<LogonInfoModel>();
-			foreach (var guid in personIdsToGet)
-			{
-				ret.Add(new LogonInfoModel{PersonId = guid, Identity = "DummyIdenty", LogonName = "name" + personIdsToGet});
-			}
-			
-			return Json(ret);
+			return Json(_findLogonInfo.GetForIds(personIdsToGet));
 		}
 	}
 }
