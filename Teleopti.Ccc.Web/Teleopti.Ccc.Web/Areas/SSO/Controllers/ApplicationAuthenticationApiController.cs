@@ -49,7 +49,7 @@ namespace Teleopti.Ccc.Web.Areas.SSO.Controllers
 
 		[HttpPostOrPut]
 		[TenantUnitOfWork]
-		public JsonResult ChangePassword(ChangePasswordInput model)
+		public virtual JsonResult ChangePassword(ChangePasswordInput model)
 		{
 			try
 			{

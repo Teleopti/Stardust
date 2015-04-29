@@ -458,6 +458,7 @@
     <Compile Include="Areas\MultiTenancy\Core\ChangePersonPassword.cs" />
     <Compile Include="Areas\MultiTenancy\Core\IChangePersonPassword.cs" />
     <Compile Include="Areas\MultiTenancy\Model\ChangePasswordModel.cs" />
+    <Compile Include="Areas\MultiTenancy\Model\LogonInfoModel.cs" />
     <Compile Include="Areas\MyTime\Core\Common\DataProvider\AllowanceDay.cs" />
     <Compile Include="Areas\MyTime\Core\Common\DataProvider\IAllowanceDay.cs" />
     <Compile Include="Areas\MyTime\Core\TeamSchedule\DataProvider\ITeamSchedulePersonsProvider.cs" />

@@ -66,5 +66,20 @@ namespace Teleopti.Ccc.Web.Areas.MultiTenancy
 				_deletePersonInfo.Delete(personInfoDelete);
 			}
 		}
+
+		[HttpPost]
+		[TenantUnitOfWork]
+		//TODO: tenant - change later to some sort of authentication
+		public virtual JsonResult LogonInfoFromGuids(IEnumerable<Guid> personIdsToGet)
+		{
+			//dummy implementation
+			var ret = new List<LogonInfoModel>();
+			foreach (var guid in personIdsToGet)
+			{
+				ret.Add(new LogonInfoModel{PersonId = guid, Identity = "DummyIdenty", LogonName = "name" + personIdsToGet});
+			}
+			
+			return Json(ret);
+		}
 	}
 }
