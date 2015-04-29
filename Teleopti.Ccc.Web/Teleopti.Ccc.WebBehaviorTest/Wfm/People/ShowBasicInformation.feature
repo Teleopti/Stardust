@@ -24,7 +24,6 @@ Background:
 	 | Field      | Value      |
 	 | Team       | Team1      |
 	 | Start Date | 2015-01-21 |
-	 @ignore
 Scenario: Show my team members by default
 	When I view people
 	Then I should see 'Ashley' in people list
