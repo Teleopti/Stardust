@@ -5,7 +5,6 @@ using Rhino.Mocks;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.Outbound;
 using Teleopti.Ccc.Domain.Repositories;
-using Teleopti.Ccc.Domain.Security.Authentication;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.Web.Areas.Outbound.core.Campaign.DataProvider;
@@ -90,6 +89,62 @@ namespace Teleopti.Ccc.WebTest.Areas.Outbound.Core
 			_campaign.Stub(x => x.AddWorkingPeriod(campaignWorkingPeriod)).IgnoreArguments();
 			var result  = target.Persist(form);
 			result.TimePeriod.Should().Be.EqualTo(campaignWorkingPeriod.TimePeriod);			
+		}
+
+		[Test]
+		public void ShouldAddSpeicifiedWokingPeriodAssignment()
+		{
+			var campaignId = new Guid();
+			var campaignWorkingPeriodId = new Guid();
+
+			
+			var workingPeriod = MockRepository.GenerateMock<CampaignWorkingPeriod>();
+			workingPeriod.Stub(x=> x.Id).Return(campaignWorkingPeriodId);
+			workingPeriod.Stub(x => x.CampaignWorkingPeriodAssignments).Return(new HashSet<CampaignWorkingPeriodAssignment>());
+
+			var campaign = MockRepository.GenerateMock<Domain.Outbound.Campaign>();
+			_outboundCampaignRepository.Stub(x => x.Get(campaignId)).Return(campaign);
+
+			campaign.Stub(x => x.CampaignWorkingPeriods).Return(new HashSet<CampaignWorkingPeriod>(){workingPeriod});
+
+			var form = new CampaignWorkingPeriodAssignmentForm()
+			{
+				CampaignId = campaignId,
+				CampaignWorkingPeriods = new List<Guid>() {campaignWorkingPeriodId},
+				WeekDay = DayOfWeek.Monday
+			};
+						
+			var target = new OutboundCampaignPersister(_outboundCampaignRepository, null, null, null, null);
+			target.Persist(form);
+			workingPeriod.AssertWasCalled(x=> x.AddAssignment(Arg<CampaignWorkingPeriodAssignment>.Matches(a => a.WeekdayIndex.Equals( DayOfWeek.Monday))));
+		}
+
+		[Test]
+		public void ShouldRemoveSpeicifiedWokingPeriodAssignment()
+		{
+			var campaignId = new Guid();
+			var campaignWorkingPeriodId = new Guid();
+
+			var workingPeriod = MockRepository.GenerateMock<CampaignWorkingPeriod>();
+			workingPeriod.Stub(x => x.Id).Return(campaignWorkingPeriodId);
+			workingPeriod.Stub(x => x.CampaignWorkingPeriodAssignments)
+					.Return(new HashSet<CampaignWorkingPeriodAssignment>() { new CampaignWorkingPeriodAssignment() { WeekdayIndex = DayOfWeek.Monday} });
+
+			var campaign = MockRepository.GenerateMock<Domain.Outbound.Campaign>();
+			_outboundCampaignRepository.Stub(x => x.Get(campaignId)).Return(campaign);
+
+			campaign.Stub(x => x.CampaignWorkingPeriods).Return(new HashSet<CampaignWorkingPeriod>() { workingPeriod });
+
+			var form = new CampaignWorkingPeriodAssignmentForm()
+			{
+				CampaignId = campaignId,
+				CampaignWorkingPeriods = new List<Guid>(),
+				WeekDay = DayOfWeek.Monday
+			};
+
+			var target = new OutboundCampaignPersister(_outboundCampaignRepository, null, null, null, null);
+			target.Persist(form);
+			workingPeriod.AssertWasCalled(x => x.RemoveAssignment(Arg<CampaignWorkingPeriodAssignment>.Matches(a => a.WeekdayIndex.Equals(DayOfWeek.Monday))));
 		}
 	}
 }
