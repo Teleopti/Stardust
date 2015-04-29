@@ -18,11 +18,20 @@ namespace Teleopti.Ccc.WebBehaviorTest.Wfm.People
 			Browser.Interactions.AssertAnyContains(".people-list .person", name);
 		}
 
+		/*
+		[Then(@"I should see '(.*) (.*)' in people list")]
+		public void ThenIShouldSeeInPeopleList(string firstname, string lastname)
+		{
+			var selector = string.Format(".people-list .person .first-name:contains({0})", firstname);
+			Browser.Interactions.AssertAnyContains(selector);
+		}
+		//*/
+
 		[Then(@"I should not see '(.*)' in people list")]
 		public void ThenIShouldNotSeeInPeopleList(string name)
 		{
 			const string existSelector = ".people-list";
-			var notExistSelector = string.Format(".people-list .person .first-name:contains({0})", name);
+			var notExistSelector = string.Format(".people-list .person:contains({0})", name);
 			Browser.Interactions.AssertNotExists(existSelector,notExistSelector);
 		}
 

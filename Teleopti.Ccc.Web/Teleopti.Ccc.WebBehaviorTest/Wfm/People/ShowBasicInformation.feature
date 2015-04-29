@@ -22,16 +22,18 @@ Background:
 	 | Start Date | 2015-01-21 |
 	And I have a person period with
 	 | Field      | Value      |
-	 | Team       | Team1      |
+	 | Team       | Team2      |
 	 | Start Date | 2015-01-21 |
 
 Scenario: Show my team members by default
 	When I view people
-	Then I should see 'Ashley' in people list
-	And I should not see 'John Smith' in people list
+	Then I should see 'John Smith' in people list
+	And I should not see 'Ashley Andeen' in people list
 
 Scenario: Should search people by keyword
 	When I view people
-	And I search people with keyword 'Team1'
-	Then I should see 'Ashley' in people list
+	Then I should see 'John Smith' in people list
+	And I should not see 'Ashley Andeen' in people list
+	When I search people with keyword 'Team1'
+	Then I should see 'Ashley Andeen' in people list
 	And I should not see 'John Smith' in people list
