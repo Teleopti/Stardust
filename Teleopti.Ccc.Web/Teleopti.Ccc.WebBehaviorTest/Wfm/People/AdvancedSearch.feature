@@ -26,16 +26,46 @@
 	 | Start Date | 2015-01-21 |
 
 @ignore
-Scenario: match all keywords when searching with mutiple keywords by default
+Scenario: match all search terms by default
 	When I view people
 	And I search people with keyword 'Team1 Asheley'
 	Then I should see 'Ashley Andeen' in people list
-	And I should not see agent with firstname 'Ashley' and lastname 'Andeen' in people list
+	And I should not see 'Ashley Smith' in people list
 
 @ignore
-Scenario: match any keywords when searching with mutiple keywords
+Scenario: match any search term
 	When I view people
-	And I set search option to match any keyword
-	And I search people with keyword 'Team1 Asheley'
-	Then I should see agent with firstname 'Ashley' and lastname 'Andeen' in people list
-	And I should see agent with firstname 'Ashley' and lastname 'Andeen' in people list
+	And I search people with keyword 'Team1 Smith' matching any keywords
+	Then I should see 'Ashley Andeen' in people list
+	And I should see 'Ashley Smith' in people list
+
+@ignore
+Scenario: match any search terms in a field
+	When I view people
+	And I search 'Andeen Smith' in 'last name' field
+	Then I should see 'Ashley Andeen' in people list
+	And I should see 'Ashley Smith' in people list
+
+@ignore
+Scenario: match all search terms in different fields
+	When I view people
+	And I search with
+	| Field        | Value        |
+	| last name    | Andeen Smith |
+	| organization | Team1        |
+	Then I should see 'Ashley Andeen' in people list
+
+@ignore
+Scenario: match entire quoted search term
+	When I view people
+	And I search people with keyword '"Team1 Smith"'
+	Then I should see no result
+
+@ignore
+Scenario: match entire quoted search term in different fields
+	When I view people
+	And I search with
+	| Field        | Value          |
+	| last name    | "Andeen Smith" |
+	| organization | Team1          |
+	Then I should see no result
