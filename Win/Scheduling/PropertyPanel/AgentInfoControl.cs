@@ -217,7 +217,7 @@ namespace Teleopti.Ccc.Win.Scheduling.PropertyPanel
         {
             _groupPages = _groupPagesProvider.GetGroups(false);
             comboBoxAgentGrouping.DataSource = _groupPages;
-            comboBoxAgentGrouping.DisplayMember = "Name";
+            comboBoxAgentGrouping.DisplayMember = "DisplayName";
             comboBoxAgentGrouping.ValueMember = "Key";
         }
 
