@@ -20,7 +20,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization
 
 		public bool Validate(ITeamBlockInfo teamBlockInfo1, ITeamBlockInfo teamBlockInfo2, IOptimizationPreferences optimizationPreferences)
 		{
-			if (!optimizationPreferences.General.UseShiftCategoryLimitations)
+			if (optimizationPreferences == null || !optimizationPreferences.General.UseShiftCategoryLimitations)
 				return true;
 
 			var firstBlockOk = checkTeamBlock(teamBlockInfo1);
@@ -45,10 +45,6 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization
 					var matrix = teamInfo.MatrixForMemberAndDate(groupMember, dateOnly);
 					if (matrix == null || !checkPerson(groupMember, dateOnly, matrix.ActiveScheduleRange))
 						return false;
-
-					//var scheduleRange = teamInfo.MatrixForMemberAndDate(groupMember, dateOnly).ActiveScheduleRange;
-					//if (!checkPerson(groupMember, dateOnly, scheduleRange))
-					//	return false;
 				}
 			}
 

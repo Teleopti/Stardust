@@ -119,6 +119,13 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock.FairnessOptimization
 		}
 
 		[Test]
+		public void ShouldReturnTrueIfNoOptimizationPreferences()
+		{
+			var result = _target.Validate(_teamBlockInfo1, _teamBlockInfo2, null);
+			Assert.IsTrue(result);
+		}
+
+		[Test]
 		public void ShouldReturnFalseIfTeamBlock1Fails()
 		{
 			using (_mocks.Record())
