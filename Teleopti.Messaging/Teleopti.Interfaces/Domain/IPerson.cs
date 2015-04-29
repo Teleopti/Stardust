@@ -230,16 +230,6 @@ namespace Teleopti.Interfaces.Domain
         /// <returns></returns>
         bool ChangePassword(string newPassword, ILoadPasswordPolicyService loadPasswordPolicyService, IUserDetail userDetail);
 
-		/// <summary>
-		/// Changes the password.
-		/// </summary>
-		/// <param name="oldPassword">The old password.</param>
-		/// <param name="newPassword">The new password.</param>
-		/// <param name="loadPasswordPolicyService">The load password policy service.</param>
-		/// <param name="userDetail">The user detail.</param>
-		/// <returns></returns>
-		IChangePasswordResultInfo ChangePassword(string oldPassword, string newPassword, ILoadPasswordPolicyService loadPasswordPolicyService, IUserDetail userDetail);
-
         /// <summary>
 		/// Gets or sets the identity authentication info.
 		/// </summary>

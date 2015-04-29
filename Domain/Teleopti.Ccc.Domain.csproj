@@ -1573,12 +1573,10 @@
     <Compile Include="Security\Authentication\AuthenticationResult.cs" />
     <Compile Include="Security\Authentication\AvailableBusinessUnitsProvider.cs" />
     <Compile Include="Security\Authentication\ChangePasswordResultInfo.cs" />
-    <Compile Include="Security\Authentication\CheckBruteForce.cs" />
     <Compile Include="Security\Authentication\DataSourceContainer.cs" />
     <Compile Include="Security\Authentication\DummyPasswordPolicy.cs" />
     <Compile Include="Security\Authentication\EnvironmentWindowsUserProvider.cs" />
     <Compile Include="Security\Authentication\FuncTimeZone.cs" />
-    <Compile Include="Security\Authentication\ICheckBruteForce.cs" />
     <Compile Include="Security\Authentication\IDataSourceContainer.cs" />
     <Compile Include="Security\Authentication\IdentityHelper.cs" />
     <Compile Include="Security\Authentication\LogonModel.cs" />
@@ -1621,7 +1619,6 @@
     <Compile Include="Security\License.cs" />
     <Compile Include="Security\Matrix\MatrixPermissionHolder.cs" />
     <Compile Include="Security\Matrix\PersonRoleResolver.cs" />
-    <Compile Include="Security\ModifyPassword.cs" />
     <Compile Include="Security\MultiTenancyAuthentication\ApplicationLogonClientModel.cs" />
     <Compile Include="Security\MultiTenancyAuthentication\AuthenticationQueryResult.cs" />
     <Compile Include="Security\MultiTenancyAuthentication\ChangePasswordInput.cs" />

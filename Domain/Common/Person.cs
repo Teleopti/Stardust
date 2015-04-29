@@ -8,7 +8,6 @@ using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common.EntityBaseTypes;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Security;
-using Teleopti.Ccc.Domain.Security.Authentication;
 using Teleopti.Ccc.Domain.Security.AuthorizationEntities;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
@@ -749,58 +748,6 @@ namespace Teleopti.Ccc.Domain.Common
             }
             return false;
         }
-
-        public virtual IChangePasswordResultInfo ChangePassword(string oldPassword, string newPassword, ILoadPasswordPolicyService loadPasswordPolicyService, IUserDetail userDetail)
-        {
-            if (_applicationAuthenticationInfo == null)
-                _applicationAuthenticationInfo = new ApplicationAuthenticationInfo();
-
-			IPasswordPolicy policy = new PasswordPolicy(loadPasswordPolicyService);
-			var checkBruteForce= new CheckBruteForce(policy);
-			var encryption = new OneWayEncryption();
-			if (CheckNewPassword(newPassword, encryption))
-				return new ChangePasswordResultInfo
-					{
-						IsAuthenticationSuccessful = true,
-						IsSuccessful = false
-					};
-			if (!CheckOldPassword(oldPassword, userDetail, encryption, checkBruteForce))
-				return new ChangePasswordResultInfo
-					{
-						IsAuthenticationSuccessful = false,
-						IsSuccessful = false
-					};
-
-			var changePassword = new ChangePasswordResultInfo
-		        {
-			        IsAuthenticationSuccessful = true
-		        };
-
-            if (policy.CheckPasswordStrength(newPassword))
-            {
-                _applicationAuthenticationInfo.Password = newPassword;
-                userDetail.RegisterPasswordChange();
-				changePassword.IsSuccessful = true;
-				return changePassword;
-            }
-			changePassword.IsSuccessful = false;
-			return changePassword;
-        }
-
-		private bool CheckOldPassword(string oldPassword, IUserDetail userDetail, OneWayEncryption encryption, CheckBruteForce checkBruteForce)
-	    {
-		    if (encryption.EncryptString(oldPassword) == _applicationAuthenticationInfo.Password)
-		    {
-				return true;
-		    }
-			checkBruteForce.Check(userDetail);
-		    return false;
-	    }
-
-	    private bool CheckNewPassword(string newPassword, OneWayEncryption encryption)
-	    {
-		    return encryption.EncryptString(newPassword) == _applicationAuthenticationInfo.Password;
-	    }
 
 	    public virtual IAuthenticationInfo AuthenticationInfo
 		{

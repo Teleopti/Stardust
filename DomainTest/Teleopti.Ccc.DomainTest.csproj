@@ -1182,7 +1182,6 @@
     <Compile Include="Scheduling\WorkTimeMinMaxTest.cs" />
     <Compile Include="SeatPlanning\SeatAllocatorTests.cs" />
     <Compile Include="Security\Authentication\AvailableBusinessUnitsProviderTest.cs" />
-    <Compile Include="Security\Authentication\CheckBruteForceTest.cs" />
     <Compile Include="Security\Authentication\DummyPasswordPolicyTest.cs" />
     <Compile Include="Security\Authentication\EnvironmentWindowsUserProviderTest.cs" />
     <Compile Include="Security\Authentication\LoggedOnUserTest.cs" />
@@ -1335,7 +1334,6 @@
     <Compile Include="Security\Matrix\MatrixPermissionHolderTest.cs" />
     <Compile Include="Security\Matrix\PersonRoleResolverTest.cs" />
     <Compile Include="Security\Matrix\TeamResolverTest.cs" />
-    <Compile Include="Security\ModifyPasswordTest.cs" />
     <Compile Include="Security\MultiTenancyAuthentication\MultiTenancyIdentityLogonTest.cs" />
     <Compile Include="Security\MultiTenancyAuthentication\MultiTenancyApplicationLogonTest.cs" />
     <Compile Include="Security\NhibConfigEncryptionTest.cs" />

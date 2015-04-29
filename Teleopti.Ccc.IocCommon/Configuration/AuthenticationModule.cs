@@ -34,9 +34,6 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 				.As<IRepositoryFactory>()
 				.SingleInstance();
 
-			builder.RegisterType<CheckBruteForce>()
-				.As<ICheckBruteForce>()
-				.SingleInstance();
 			builder.Register<IPasswordPolicy>(c =>
 			{
 				if (c.Resolve<IApplicationData>().LoadPasswordPolicyService == null)
@@ -66,7 +63,6 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 				return passwordPolicyService ?? new ThrowingLoadPasswordPolicyService();
 			}).As<ILoadPasswordPolicyService>().SingleInstance();
 
-			builder.RegisterType<ModifyPassword>().As<IModifyPassword>().SingleInstance();
 			builder.RegisterType<CurrentTeleoptiPrincipal>()
 				.As<ICurrentTeleoptiPrincipal>()
 				.SingleInstance();
