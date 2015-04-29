@@ -81,7 +81,7 @@
 							<div class="row">
 								<div class="col-lg-12">
 									<h4>Forescast Method</h4>
-									<p>xyz is recommended as a forecasting method based on available data. If you would like to compare it to another valid method you can enable it in the chart below.</p>
+									<p><b>{{dataColumns[workload.selectedMethod + 1].name}}</b> is recommended as a forecasting method based on available data. If you would like to compare it to another valid method you can enable it in the chart below.</p>
 								</div>
 							</div>
 							<c3chart bindto-id="chart" chart-data="workload.chartData" chart-columns="dataColumns" chart-x="dataX" show-subchart="true" enable-zoom="true">
