@@ -25,10 +25,9 @@
 	 | Team       | Team1      |
 	 | Start Date | 2015-01-21 |
 
-@ignore
 Scenario: match all search terms by default
 	When I view people
-	And I search people with keyword 'Team1 Asheley'
+	And I search people with keyword 'Team1 Ashley'
 	Then I should see 'Ashley Andeen' in people list
 	And I should not see 'Ashley Smith' in people list
 
