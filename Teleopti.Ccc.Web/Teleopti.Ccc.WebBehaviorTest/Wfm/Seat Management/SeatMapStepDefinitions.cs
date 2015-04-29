@@ -33,7 +33,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Wfm
 		public void WhenICreateALocation()
 		{
 			Browser.Interactions.ClickUsingJQuery(".mdi-tab-unselected");
-			Browser.Interactions.FillWith("locationName","Wibble");
+			Browser.Interactions.FillWith("#locationName","Wibble");
 			Browser.Interactions.Click("#okButton");
 		}
 

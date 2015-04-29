@@ -160,8 +160,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 			Assert.IsTrue(_seatBookingRepository.CountAllEntities() == 3);
 		}
 
-
-
 		[Test]
 		public void ShouldSkipNonSelectedLocations()
 		{
@@ -311,10 +309,9 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 			var endDateDay1 = new DateTime(2015, 1, 20, 0, 0, 0, DateTimeKind.Utc);
 			var startDateDay2 = startDateDay1.AddDays(1);
 			var endDateDay2 = startDateDay2.AddDays(1);
-
+			
 			var startDateOnlyDay1 = new DateOnly(startDateDay1);
 			var startDateOnlyDay2 = new DateOnly(startDateDay2);
-
 			var teams = new[]
 			{
 				addTeam ("Team"),
@@ -323,12 +320,12 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 
 			var people = new[]
 			{
-				PersonFactory.CreatePersonWithPersonPeriodFromTeam(new DateOnly(startDateDay1), teams[0]),
-				PersonFactory.CreatePersonWithPersonPeriodFromTeam(new DateOnly(startDateDay1), teams[0]),
-				PersonFactory.CreatePersonWithPersonPeriodFromTeam(new DateOnly(startDateDay1), teams[1]),
-				PersonFactory.CreatePersonWithPersonPeriodFromTeam(new DateOnly(startDateDay1), teams[1]),
-				PersonFactory.CreatePersonWithPersonPeriodFromTeam(new DateOnly(startDateDay1), teams[1]),
-				PersonFactory.CreatePersonWithPersonPeriodFromTeam(new DateOnly(startDateDay1), teams[1])
+				PersonFactory.CreatePersonWithPersonPeriodFromTeam(startDateOnlyDay1, teams[0]),
+				PersonFactory.CreatePersonWithPersonPeriodFromTeam(startDateOnlyDay1, teams[0]),
+				PersonFactory.CreatePersonWithPersonPeriodFromTeam(startDateOnlyDay1, teams[1]),
+				PersonFactory.CreatePersonWithPersonPeriodFromTeam(startDateOnlyDay1, teams[1]),
+				PersonFactory.CreatePersonWithPersonPeriodFromTeam(startDateOnlyDay1, teams[1]),
+				PersonFactory.CreatePersonWithPersonPeriodFromTeam(startDateOnlyDay1, teams[1])
 			};
 
 			var assignments = new[]
