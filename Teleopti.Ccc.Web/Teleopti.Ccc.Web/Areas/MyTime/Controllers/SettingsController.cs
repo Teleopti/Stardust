@@ -1,8 +1,12 @@
-﻿using System.Globalization;
+﻿using System;
+using System.Globalization;
+using System.Web;
 using System.Web.Mvc;
 using Teleopti.Ccc.Domain.FeatureFlags;
+using Teleopti.Ccc.Domain.Security.Authentication;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.SystemSetting.GlobalSetting;
+using Teleopti.Ccc.Infrastructure.MultiTenancy.Server.NHibernate;
 using Teleopti.Ccc.Infrastructure.Toggle;
 using Teleopti.Ccc.Web.Areas.MultiTenancy.Core;
 using Teleopti.Ccc.Web.Areas.MyTime.Core;
@@ -18,31 +22,24 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 	public class SettingsController : Controller
 	{
 		private readonly ILoggedOnUser _loggedOnUser;
-		private readonly IModifyPassword _modifyPassword;
 		private readonly IPersonPersister _personPersister;
 		private readonly ISettingsPermissionViewModelFactory _settingsPermissionViewModelFactory;
 		private readonly ISettingsPersisterAndProvider<CalendarLinkSettings> _calendarLinkSettingsPersisterAndProvider;
 		private readonly ICalendarLinkViewModelFactory _calendarLinkViewModelFactory;
 		private readonly IChangePersonPassword _changePersonPassword;
-		//TODO: tenant - will soon be removed
-		private readonly IToggleManager _toggleManager;
-		//
 		private readonly ISettingsViewModelFactory _settingsViewModelFactory;
 		private readonly ISettingsPersisterAndProvider<NameFormatSettings>_nameFormatSettingsPersisterAndProvider;
 
 		public SettingsController(ILoggedOnUser loggedOnUser,
-		                          IModifyPassword modifyPassword,
 		                          IPersonPersister personPersister,
 		                          ISettingsPermissionViewModelFactory settingsPermissionViewModelFactory,
 										  ISettingsViewModelFactory settingsViewModelFactory,
 										  ISettingsPersisterAndProvider<CalendarLinkSettings> calendarLinkSettingsPersisterAndProvider,
 											ISettingsPersisterAndProvider<NameFormatSettings> nameFormatSettingsPersisterAndProvider,
 											ICalendarLinkViewModelFactory calendarLinkViewModelFactory,
-											IChangePersonPassword changePersonPassword,
-											IToggleManager toggleManager)
+											IChangePersonPassword changePersonPassword)
 		{
 			_loggedOnUser = loggedOnUser;
-			_modifyPassword = modifyPassword;
 			_personPersister = personPersister;
 			_settingsPermissionViewModelFactory = settingsPermissionViewModelFactory;
 			_settingsViewModelFactory = settingsViewModelFactory;
@@ -50,7 +47,6 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 			_nameFormatSettingsPersisterAndProvider = nameFormatSettingsPersisterAndProvider;
 			_calendarLinkViewModelFactory = calendarLinkViewModelFactory;
 			_changePersonPassword = changePersonPassword;
-			_toggleManager = toggleManager;
 		}
 
 		[EnsureInPortal]
@@ -95,24 +91,26 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 
 		[UnitOfWorkAction]
 		[HttpPostOrPut]
-		public JsonResult ChangePassword(ChangePasswordViewModel model)
+		[TenantUnitOfWork]
+		public virtual JsonResult ChangePassword(ChangePasswordViewModel model)
 		{
 			var loggedOnUser = _loggedOnUser.CurrentUser();
-			var result = _modifyPassword.Change(loggedOnUser, model.OldPassword, model.NewPassword);
-			if (result.IsSuccessful)
+			var ret = new ChangePasswordResultInfo();
+			try
 			{
-				//TODO: tenant - hack for now
-				if (_toggleManager.IsEnabled(Toggles.MultiTenancy_LogonUseNewSchema_33049))
-				{
-					_changePersonPassword.Modify(loggedOnUser.ApplicationAuthenticationInfo.ApplicationLogOnName, model.OldPassword, model.NewPassword);
-				}
+				_changePersonPassword.Modify(loggedOnUser.ApplicationAuthenticationInfo.ApplicationLogOnName, model.OldPassword, model.NewPassword);
+				ret.IsSuccessful = true;
 			}
-			else
+			catch (HttpException httpException)
 			{
+				if (httpException.GetHttpCode() != 403)
+				{
+					ret.IsAuthenticationSuccessful = true;
+				}
 				Response.TrySkipIisCustomErrors = true;
 				Response.StatusCode = 400;
 			}
-			return Json(result);
+			return Json(ret);
 		}
 
 		[UnitOfWorkAction]
