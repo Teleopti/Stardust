@@ -68,6 +68,7 @@
     <Compile Include="Tool\ISupportCommand.cs" />
     <Compile Include="Tool\MachineKeyChecker.cs" />
     <Compile Include="Tool\ModeFile.cs" />
+    <Compile Include="Tool\MoveCustomReportsCommand.cs" />
     <Compile Include="Tool\RefreshConfigFile.cs" />
     <Compile Include="Tool\RefreshConfigsRunner.cs" />
     <Compile Include="Tool\SearchReplace.cs" />

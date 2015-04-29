@@ -35,17 +35,19 @@ namespace Teleopti.Support.Code.Tool
 		-MO  (Mode )is where to put the config files values: Develop or Deploy (Develop is default)
 		-BC Backup config settings for SSO, combine with -MO ( before patching if there is custom settings)
 		-RC Restore the config settings for SSO from the backup, combine with -MO (use after patching if there is custom settings)
-        -TC Set ToggleMode to ALL, RC or CUSTOMER.
-            Example: Teleopti.Support.Tool.exe -TC""ALL""";
+		  -TC Set ToggleMode to ALL, RC or CUSTOMER.
+				Example: Teleopti.Support.Tool.exe -TC""ALL""";
 			}
 		}
 
 		private void ReadArguments()
 		{
 			var restoreCommand = new SsoConfigurationRestoreHandler(new CustomSection(), new SsoFilePathReader());
-			Command = new CompositeCommand(new RefreshConfigsRunner(new SettingsFileManager(new SettingsReader()),
-				new RefreshConfigFile(new ConfigFileTagReplacer(),
-					new MachineKeyChecker())),restoreCommand);
+			Command = new CompositeCommand(
+					new RefreshConfigsRunner(new SettingsFileManager(new SettingsReader()),
+					new RefreshConfigFile(new ConfigFileTagReplacer(), new MachineKeyChecker())), restoreCommand,
+					new MoveCustomReportsCommand());
+
 			foreach (string s in _argumentCollection)
 			{
 				switch (s)
@@ -72,14 +74,14 @@ namespace Teleopti.Support.Code.Tool
 					case "-RC":
 						Command = restoreCommand;
 						break;
-                    case "-TC":
-                        Mode = null;
-                        if (string.IsNullOrEmpty(switchValue))
-                        {
-                            switchValue = "CUSTOMER";
-                        }
-                        Command = new SetToggleModeCommand(switchValue);
-                        break;
+					case "-TC":
+						Mode = null;
+						if (string.IsNullOrEmpty(switchValue))
+						{
+							switchValue = "CUSTOMER";
+						}
+						Command = new SetToggleModeCommand(switchValue);
+						break;
 				}
 			}
 		}
