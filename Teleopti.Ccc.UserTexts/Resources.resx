@@ -13006,4 +13006,12 @@ Reduce the complexity to use these shifts.</value>
     <value>The identity ({0}) already exists, please select another one.</value>
     <comment>used when saving in people</comment>
   </data>
+  <data name="AddGlobalAuthorizationLabel" xml:space="preserve">
+    <value>Choose a global level of authorization:</value>
+    <comment>Label in permissions pages to choose the correct level of authorization for a role</comment>
+  </data>
+  <data name="AddSpecificAuthorizationLabel" xml:space="preserve">
+    <value>Add specific authorization in the list below:</value>
+    <comment>Label in permissions pages to add specific permissions for a role</comment>
+  </data>
 </root>

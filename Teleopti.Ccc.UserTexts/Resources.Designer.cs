@@ -826,6 +826,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Choose a global level of authorization:.
+        /// </summary>
+        public static string AddGlobalAuthorizationLabel {
+            get {
+                return ResourceManager.GetString("AddGlobalAuthorizationLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Add grouping absence.
         /// </summary>
         public static string AddGroupingAbsence {
@@ -1219,6 +1228,15 @@ namespace Teleopti.Ccc.UserTexts {
         public static string AddShrinkageRow {
             get {
                 return ResourceManager.GetString("AddShrinkageRow", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Add specific authorization in the list below:.
+        /// </summary>
+        public static string AddSpecificAuthorizationLabel {
+            get {
+                return ResourceManager.GetString("AddSpecificAuthorizationLabel", resourceCulture);
             }
         }
         
