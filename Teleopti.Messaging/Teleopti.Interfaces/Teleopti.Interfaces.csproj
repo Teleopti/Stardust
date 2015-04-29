@@ -185,7 +185,6 @@
     <Compile Include="Domain\IEditableShift.cs" />
     <Compile Include="Domain\IEditableShiftLayer.cs" />
     <Compile Include="Domain\IEffectiveRestrictionCombiner.cs" />
-    <Compile Include="Domain\IChangePasswordResultInfo.cs" />
     <Compile Include="Domain\IEvent.cs" />
     <Compile Include="Domain\IExtractBudgetGroupPeriods.cs" />
     <Compile Include="Domain\IHasContractDayOffDefinition.cs" />

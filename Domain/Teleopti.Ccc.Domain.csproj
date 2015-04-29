@@ -1572,7 +1572,6 @@
     <Compile Include="Security\INhibConfigDecryption.cs" />
     <Compile Include="Security\Authentication\AuthenticationResult.cs" />
     <Compile Include="Security\Authentication\AvailableBusinessUnitsProvider.cs" />
-    <Compile Include="Security\Authentication\ChangePasswordResultInfo.cs" />
     <Compile Include="Security\Authentication\DataSourceContainer.cs" />
     <Compile Include="Security\Authentication\DummyPasswordPolicy.cs" />
     <Compile Include="Security\Authentication\EnvironmentWindowsUserProvider.cs" />

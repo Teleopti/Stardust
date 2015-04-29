@@ -134,9 +134,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			using (
 				var target = new SettingsController(loggedOnUser, new PersonPersister(MockRepository.GenerateMock<IMbCacheFactory>(), null), null, null, null, null, null, changePassword))
 			{
-				var result =
-					target.ChangePassword(new ChangePasswordViewModel { NewPassword = "new", OldPassword = "old" }).Data as
-					IChangePasswordResultInfo;
+				var result = target.ChangePassword(new ChangePasswordViewModel { NewPassword = "new", OldPassword = "old" }).Data as ChangePasswordResultInfo;
 				Assert.IsTrue(result.IsSuccessful);
 			}
 		}
@@ -165,8 +163,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 				target.ModelState.AddModelError("Error", "Error");
 
 				var result =
-					target.ChangePassword(new ChangePasswordViewModel { NewPassword = "new", OldPassword = "old" }).Data as
-					IChangePasswordResultInfo;
+					target.ChangePassword(new ChangePasswordViewModel { NewPassword = "new", OldPassword = "old" }).Data as ChangePasswordResultInfo;
 				Assert.IsFalse(result.IsSuccessful);
 			}
 		}
