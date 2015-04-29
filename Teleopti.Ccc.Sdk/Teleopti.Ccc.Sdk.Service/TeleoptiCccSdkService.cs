@@ -1746,34 +1746,12 @@ namespace Teleopti.Ccc.Sdk.WcfService
 		/// </returns>
 		public bool ChangePassword(PersonDto personDto, string oldPassword, string newPassword)
 		{
-			bool ret;
-
-			var repositoryFactory = new RepositoryFactory();
-			using (IUnitOfWork unitOfWork = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
+			var ret = _changePassword.SetNewPassword(new ChangePasswordInput
 			{
-			    var personAssembler = _factoryProvider.CreatePersonAssembler();
-                IPerson person = personAssembler.DtoToDomainEntity(personDto);
-				unitOfWork.Reassociate(person);
-
-				var repository = repositoryFactory.CreateUserDetailRepository(unitOfWork);
-				IUserDetail userDetail = repository.FindByUser(person);
-
-				var policyService = StateHolder.Instance.StateReader.ApplicationScopeData.LoadPasswordPolicyService;
-				ret = person.ChangePassword(oldPassword, newPassword, policyService, userDetail).IsSuccessful;
-
-				unitOfWork.PersistAll();
-			}
-
-			if (!ret)
-				throw new FaultException(UserTexts.Resources.ChangePasswordValidationError);//Blir fel språk på klienten? => Isåfall hämta uiculture från state holder
-			//todo : tenant the code above wil be removed later when the applogon and stufff are removed from person in domain
-			ret =
-				_changePassword.SetNewPassword(new ChangePasswordInput
-				{
-					UserName = personDto.ApplicationLogOnName,
-					NewPassword = newPassword,
-					OldPassword = oldPassword
-				}).Success;
+				UserName = personDto.ApplicationLogOnName,
+				NewPassword = newPassword,
+				OldPassword = oldPassword
+			}).Success;
 
 			if(!ret)
 				throw new FaultException(UserTexts.Resources.ChangePasswordValidationError);//Blir fel språk på klienten? => Isåfall hämta uiculture från state holder
