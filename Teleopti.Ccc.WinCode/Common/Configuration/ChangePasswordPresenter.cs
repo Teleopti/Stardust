@@ -48,24 +48,7 @@ namespace Teleopti.Ccc.WinCode.Common.Configuration
 				_view.ShowValidationError();
 				return;
 			}
-			using (IUnitOfWork unitOfWork = _unitOfWorkFactory.CreateAndOpenUnitOfWork())
-			{
-				IPersonRepository personRepository = _repositoryFactory.CreatePersonRepository(unitOfWork);
-				IPerson person = TeleoptiPrincipal.CurrentPrincipal.GetPerson(personRepository);
-				IUserDetailRepository userDetailRepository = _repositoryFactory.CreateUserDetailRepository(unitOfWork);
-				IUserDetail userDetail = userDetailRepository.FindByUser(person);
-				bool result = person.ChangePassword(Model.NewPassword,
-																StateHolderReader.Instance.StateReader.ApplicationScopeData.
-																	 LoadPasswordPolicyService, userDetail);
-				if (!result)
-				{
-					_view.ShowValidationError();
-					return;
-				}
-				((IUnsafePerson)TeleoptiPrincipal.CurrentPrincipal).Person.ApplicationAuthenticationInfo.Password = Model.NewPassword;
-				unitOfWork.PersistAll();
-			}
-			// todo : tenant remove code above and just save to tenant
+			
 			var res =
 				_changePassword.SetNewPassword(new ChangePasswordInput
 				{
@@ -78,6 +61,7 @@ namespace Teleopti.Ccc.WinCode.Common.Configuration
 				_view.ShowValidationError();
 				return;
 			}
+			((IUnsafePerson)TeleoptiPrincipal.CurrentPrincipal).Person.ApplicationAuthenticationInfo.Password = Model.NewPassword;
 			_view.Close();
 		}
 

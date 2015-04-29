@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using NUnit.Framework;
 using Rhino.Mocks;
 using Teleopti.Ccc.Domain.Repositories;
@@ -16,7 +15,6 @@ namespace Teleopti.Ccc.WinCodeTest.Configuration
 	public class ChangePasswordPresenterTest
 	{
 		private ChangePasswordPresenter target;
-		private MockRepository mocks;
 		private IUnitOfWorkFactory unitOfWorkFactory;
 		private IRepositoryFactory repositoryFactory;
 		private IUnitOfWork unitOfWork;
@@ -32,7 +30,6 @@ namespace Teleopti.Ccc.WinCodeTest.Configuration
 		[SetUp]
 		public void Setup()
 		{
-			mocks = new MockRepository();
 			unitOfWorkFactory = MockRepository.GenerateMock<IUnitOfWorkFactory>();
 			repositoryFactory = MockRepository.GenerateMock<IRepositoryFactory>();
 			unitOfWork = MockRepository.GenerateMock<IUnitOfWork>();
@@ -61,7 +58,6 @@ namespace Teleopti.Ccc.WinCodeTest.Configuration
 		[Test]
 		public void VerifyOldPasswordMustMatch()
 		{
-
 			initializeExpectation();
 			view.Stub(x => x.SetOldPasswordValid(false));
 			oneWayEncryption.Stub(x => x.EncryptString("currentNotEncryptedPassword2")).Return(
@@ -98,21 +94,8 @@ namespace Teleopti.Ccc.WinCodeTest.Configuration
 		[Test]
 		public void VerifySaveNewPasswordsWhenMatch()
 		{
-			var userDetailRepository = mocks.StrictMock<IUserDetailRepository>();
-			var userDetail = mocks.StrictMock<IUserDetail>();
-
 			initializeExpectation();
-			unitOfWorkFactory.Stub(x => x.CreateAndOpenUnitOfWork()).Return(unitOfWork);
-			repositoryFactory.Stub(x => x.CreatePersonRepository(unitOfWork)).Return(personRepository);
-			repositoryFactory.Stub(x => x.CreateUserDetailRepository(unitOfWork)).Return(userDetailRepository);
-			personRepository.Stub(x => x.Get(personId)).Return(person);
-			userDetailRepository.Stub(x => x.FindByUser(person)).Return(userDetail);
-			person.Stub(x => x.ChangePassword("newNotEncryptedPassword2",
-														StateHolderReader.Instance.StateReader.ApplicationScopeData.
-															LoadPasswordPolicyService, userDetail)).Return(true).IgnoreArguments();
 			passwordPolicy.Stub(x => x.CheckPasswordStrength("newNotEncryptedPassword2")).Return(true);
-			unitOfWork.Stub(x => x.PersistAll()).Return(new List<IRootChangeInfo>(0));
-			unitOfWork.Stub(x => x.Dispose());
 			view.Stub(x => x.Close());
 			changePw.Stub(x => x.SetNewPassword(null))
 				.IgnoreArguments()
@@ -131,23 +114,8 @@ namespace Teleopti.Ccc.WinCodeTest.Configuration
 		[Test]
 		public void VerifyWhenPasswordCouldNotBeChanged()
 		{
-			var userDetailRepository = mocks.StrictMock<IUserDetailRepository>();
-			var userDetail = mocks.StrictMock<IUserDetail>();
-
 			initializeExpectation();
-			unitOfWorkFactory.Stub(x => x.CreateAndOpenUnitOfWork()).Return(unitOfWork);
-			repositoryFactory.Stub(x => x.CreatePersonRepository(unitOfWork)).Return(personRepository);
-			repositoryFactory.Stub(x => x.CreateUserDetailRepository(unitOfWork)).Return(userDetailRepository);
-			personRepository.Stub(x => x.Get(personId)).Return(person);
-			userDetailRepository.Stub(x => x.FindByUser(person)).Return(userDetail);
-			person.Stub(x => x.ChangePassword("newNotEncryptedPassword2",
-														StateHolderReader.Instance.StateReader.ApplicationScopeData.
-															LoadPasswordPolicyService, userDetail)).Return(false);
-			passwordPolicy.Stub(x => x.CheckPasswordStrength("newNotEncryptedPassword2")).Return(true);
-			unitOfWork.Stub(x => x.Dispose());
 			view.Stub(x => x.ShowValidationError());
-
-
 			target.Initialize();
 			target.Model.OldEnteredEncryptedPassword = target.Model.OldEncryptedPassword;
 			target.Model.NewPassword = "newNotEncryptedPassword2";
