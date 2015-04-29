@@ -130,6 +130,7 @@ CREATE CLUSTERED INDEX [#CIX_fact_schedule] ON #fact_schedule
 CREATE TABLE #stg_schedule_changed(
 	[person_id] [int] NOT NULL,
 	[shift_startdate_local_id] [int] NOT NULL,
+	[shift_startdate_local] [smalldatetime] NOT NULL,
 	[person_code] [uniqueidentifier]
 )
 
@@ -237,6 +238,7 @@ BEGIN
 		INSERT INTO #stg_schedule_changed
 		SELECT  p.person_id,
 				dd.date_id,
+				ch.schedule_date_local,
 				p.person_code
 		FROM stage.stg_schedule_changed ch
 		INNER JOIN mart.dim_person p
@@ -442,6 +444,104 @@ BEGIN
 			date_id=@from_date_id_utc
 			AND interval_id >= @from_interval_id_utc
 		)
+	END
+
+	if (@isIntraday=3)--service bus changes
+	BEGIN
+
+		INSERT INTO #stg_schedule_changed
+		SELECT  p.person_id,
+				dd.date_id,
+				ch.schedule_date_local,
+				p.person_code
+		FROM stage.stg_schedule_changed_servicebus ch
+		INNER JOIN mart.dim_person p
+			ON p.person_code = ch.person_code
+				AND --trim
+				(
+						(ch.schedule_date_local	>= p.valid_from_date_local)
+					AND
+						(ch.schedule_date_local <= p.valid_to_date_local)
+				)
+		INNER JOIN mart.dim_date dd
+			ON dd.date_date = ch.schedule_date_local
+		WHERE ch.scenario_code = @scenario_code
+		
+		--delete rows from stage
+		DELETE stage
+		FROM #stg_schedule_changed ch
+		INNER JOIN stage.stg_schedule_changed_servicebus stage
+		ON ch.person_code = stage.person_code
+		AND ch.shift_startdate_local = stage.schedule_date_local
+
+		--REMOVE DATES IN THE FUTURE
+		DELETE FROM #stg_schedule_changed
+		WHERE shift_startdate_local > dateadd(dd,1,@now_utc)
+
+
+		INSERT INTO #fact_schedule
+		--First get changed day via #stg_schedule_changed (full local agent day)
+		SELECT
+			 fs.shift_startdate_local_id,
+			 fs.schedule_date_id, 
+			 fs.shift_startdate_id,
+			 fs.shift_startinterval_id,
+			 fs.shift_endinterval_id,
+			 fs.shift_endtime,
+			 fs.interval_id,
+			 fs.person_id, 
+			sum(isnull(fs.scheduled_ready_time_m,0)) 'scheduled_ready_time_m',
+			sum(isnull(fs.scheduled_contract_time_m,0))'scheduled_contract_time_m',
+			sum(isnull(fs.scheduled_time_m,0))'scheduled_time_m',
+			fs.business_unit_id,
+			ch.person_code
+		FROM mart.fact_schedule fs
+		INNER JOIN #stg_schedule_changed ch
+			ON ch.shift_startdate_local_id = fs.shift_startdate_local_id 
+			AND ch.person_id = fs.person_id
+		WHERE fs.scenario_id = @scenario_id
+		GROUP BY 
+			fs.shift_startdate_local_id,
+			fs.schedule_date_id, 
+			fs.shift_startdate_id,
+			fs.shift_startinterval_id,
+			fs.shift_endinterval_id,
+			fs.shift_endtime,
+			fs.interval_id,
+			fs.person_id,
+			fs.business_unit_id,
+			ch.person_code
+
+		/* a) Gather agent ready time */
+		INSERT INTO #fact_schedule_deviation
+			(
+			date_id, 
+			interval_id,
+			person_id, 
+			acd_login_id,--new 20131128
+			ready_time_s,
+			is_logged_in,
+			business_unit_id,
+			person_code
+			)
+
+		SELECT DISTINCT
+			date_id					= fa.date_id, 
+			interval_id				= fa.interval_id,
+			person_id				= b.person_id,
+			acd_login_id			= fa.acd_login_id, --new 20131128
+			ready_time_s			= fa.ready_time_s,
+			is_logged_in			= 1, --marks that we do have logged in time
+			business_unit_id		= b.business_unit_id,
+			person_code				= ch.person_code
+		FROM mart.bridge_acd_login_person b
+		INNER JOIN mart.fact_agent fa
+			ON b.acd_login_id = fa.acd_login_id
+		INNER JOIN #stg_schedule_changed ch
+			ON fa.date_id BETWEEN ch.shift_startdate_local_id-1 AND ch.shift_startdate_local_id+1 --extend stat to cover local date
+			AND ch.person_id			= b.person_id
+			AND b.acd_login_id			= fa.acd_login_id
+			AND EXISTS (SELECT 1 FROM #stg_schedule_changed tmp WHERE tmp.person_id = b.person_id)
 	END
 END
 
@@ -671,6 +771,14 @@ BEGIN --INTRADAY
 		AND d.date_id = fs.date_id
 		AND d.interval_id = fs.interval_id
 END 
+IF @isIntraday = 3 --changed day by SB
+BEGIN
+ 	DELETE fs
+	FROM #stg_schedule_changed ch
+ 	INNER JOIN mart.fact_schedule_deviation fs
+		ON ch.person_id = fs.person_id
+		AND ch.shift_startdate_local_id = fs.shift_startdate_local_id
+END
 
 /* Insert of new data */
 INSERT INTO mart.fact_schedule_deviation
@@ -713,14 +821,16 @@ SELECT
 FROM 
 	#fact_schedule_deviation_merge
 
-	--finally
-	--update with now interval
-	if @isIntraday = 2
-	update [mart].[etl_job_intraday_settings]
-	set
+
+--finally
+--update with now interval
+IF @isIntraday = 2
+BEGIN
+	UPDATE [mart].[etl_job_intraday_settings]
+	SET
 		target_date		= @now_date_date_utc,
 		target_interval	= @now_interval_id_utc
 	WHERE business_unit_id = @business_unit_id
 	AND detail_id = @detail_id
-
+END
 GO

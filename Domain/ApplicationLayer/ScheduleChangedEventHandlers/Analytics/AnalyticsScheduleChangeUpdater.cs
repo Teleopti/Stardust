@@ -73,8 +73,12 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Anal
 					_analyticsScheduleRepository.PersistFactScheduleBatch(agentDaySchedule);
 				}
 
-				_analyticsScheduleRepository.InsertStageScheduleChangedServicebus(new DateOnly(scheduleDay.Date), @event.PersonId,
-					@event.ScenarioId, @event.BusinessUnitId, DateTime.Now);
+                if (scheduleDay.Date < DateTime.Now.AddDays(1))
+			    {
+                    _analyticsScheduleRepository.InsertStageScheduleChangedServicebus(new DateOnly(scheduleDay.Date), @event.PersonId,
+                    @event.ScenarioId, @event.BusinessUnitId, DateTime.Now);
+			    }
+				
 			}
 		}
 
