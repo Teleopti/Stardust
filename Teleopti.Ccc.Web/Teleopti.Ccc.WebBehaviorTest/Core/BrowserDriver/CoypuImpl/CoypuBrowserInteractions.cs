@@ -89,17 +89,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core.BrowserDriver.CoypuImpl
 			assert(_browser.HasCss(selector, options()), Is.True, "Could not find element matching selector " + selector);
 		}
 		
-		public void AssertEventualExists(string selector)
-		{
-			eventualAssert(() => _browser.HasCss(selector, options()), Is.True, "Could not find element matching selector " + selector);			
-		}
-
-		public void AssertEventualNotExists(string existsSelector, string notExistsSelector)
-		{
-			AssertEventualExists(existsSelector);
-			assert(_browser.HasNoCss(notExistsSelector, options()), Is.True, "Found element matching selector " + notExistsSelector + " although I shouldnt");
-		}
-
 		public void AssertNotExists(string existsSelector, string notExistsSelector)
 		{
 			AssertExists(existsSelector);

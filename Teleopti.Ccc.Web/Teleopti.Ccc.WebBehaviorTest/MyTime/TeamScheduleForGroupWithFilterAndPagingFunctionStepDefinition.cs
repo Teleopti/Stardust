@@ -177,7 +177,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.MyTime
 		[When(@"I select '(.*)' in the team picker")]
 		public void WhenISelectInTheTeamPicker(string optionText)
 		{
-			Browser.Interactions.AssertEventualExists("#Team-Picker option");
+			Browser.Interactions.AssertExists("#Team-Picker option");
 			IOpenTheTeamPicker();
 			Select2Box.SelectItemByText("Team-Picker", optionText);
 			
