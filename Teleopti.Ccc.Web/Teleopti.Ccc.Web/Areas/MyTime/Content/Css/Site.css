@@ -1567,4 +1567,17 @@ End personal drop down menu
 	.cal-month-day .hidden-md {
 		display: none !important;
 	}
+
+	.cal-month-day  .label-default {
+		background-color: transparent !important;
+		border: none;
+	}
+
+	.cal-month-day .label {
+		color: black !important;		
+	}
+
+	.cal-month-day span {
+		opacity: 1 !important;	
+	}
 }
