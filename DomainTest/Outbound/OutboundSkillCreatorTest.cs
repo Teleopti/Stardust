@@ -148,7 +148,7 @@ namespace Teleopti.Ccc.DomainTest.Outbound
 	{
 		public ISkillType OutboundSkillType()
 		{
-			var desc = new Description("My Email skill type");
+			var desc = new Description("SkillTypeOutbound");
 			return new SkillTypeEmail(desc, ForecastSource.OutboundTelephony);
 		}
 	}

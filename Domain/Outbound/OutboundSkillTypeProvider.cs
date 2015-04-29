@@ -18,7 +18,7 @@ namespace Teleopti.Ccc.Domain.Outbound
 
 		public ISkillType OutboundSkillType()
 		{
-			return _skillTypeRepository.FindAll().First(s => s.Description.Name == "SkillTypeBackoffice");
+			return _skillTypeRepository.FindAll().First(s => s.Description.Name == "SkillTypeOutbound");
 		}
 	}
 }
