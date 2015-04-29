@@ -63,6 +63,11 @@ namespace Teleopti.Ccc.WinCode.Backlog
 			return new List<ISkill>(_stateHolder.SchedulingResultState.Skills);
 		}
 
+		public IEnumerable<IActivity> GetAllActivities()
+		{
+			return new List<IActivity>(_stateHolder.CommonStateHolder.Activities);
+		}
+
 		public void Load(BackgroundWorker backgroundWorker, DateOnly productPlanStart)
 		{
 			var dateOnlyPeriodAsDateTimePeriod = new DateOnlyPeriodAsDateTimePeriod(_period, TimeZoneGuard.Instance.TimeZone);
@@ -72,7 +77,7 @@ namespace Teleopti.Ccc.WinCode.Backlog
 			using (IUnitOfWork uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
 			{
 				var scenarioRepository = new ScenarioRepository(uow);
-				loadCommonStateHolder(uow,_stateHolder);				
+				loadCommonStateHolder(uow);				
 				loadSkills(uow, _stateHolder);
 				loadSkillMappings(uow);
 				_stateHolder.SetRequestedScenario(scenarioRepository.LoadDefaultScenario());
@@ -82,27 +87,29 @@ namespace Teleopti.Ccc.WinCode.Backlog
 				loadSchedules(uow,_stateHolder);
 				
 			}
-			backgroundWorker.ReportProgress(0, "Calculating resources...");
-			foreach (var dateOnly in _period.DayCollection())
-			{
-				_resourceOptimizationHelper.ResourceCalculateDate(dateOnly,false,true);
-			}
+
 			
-			backgroundWorker.ReportProgress(0, "Initializing...");
+			//backgroundWorker.ReportProgress(0, "Calculating resources...");
+			//foreach (var dateOnly in _period.DayCollection())
+			//{
+			//	_resourceOptimizationHelper.ResourceCalculateDate(dateOnly,false,true);
+			//}
+			
+			//backgroundWorker.ReportProgress(0, "Initializing...");
 
-			foreach (var skillMap in _skillMappings)
-			{
-				_skillPairsBackofficeEmail.Add(skillMap.MappedSkill, skillMap.Parent);
-				_skillPairsEmailBackOffice.Add(skillMap.Parent, skillMap.MappedSkill);
-			}
+			//foreach (var skillMap in _skillMappings)
+			//{
+			//	_skillPairsBackofficeEmail.Add(skillMap.MappedSkill, skillMap.Parent);
+			//	_skillPairsEmailBackOffice.Add(skillMap.Parent, skillMap.MappedSkill);
+			//}
 
-			if(!_skillMappings.Any())
-				return;
+			//if(!_skillMappings.Any())
+			//	return;
 
-			createBacklogTasks(_period);
-			setClosedDates(_period);
-			setScheduledTime(_period);
-			TransferBacklogs();
+			//createBacklogTasks(_period);
+			//setClosedDates(_period);
+			//setScheduledTime(_period);
+			//TransferBacklogs();
 			_loaded = true;
 		}
 
@@ -238,10 +245,10 @@ namespace Teleopti.Ccc.WinCode.Backlog
 			}
 		}
 
-		private static void loadCommonStateHolder(IUnitOfWork uow, ISchedulerStateHolder stateHolder)
+		public void loadCommonStateHolder(IUnitOfWork uow)
 		{
-			stateHolder.LoadCommonState(uow, new RepositoryFactory());
-			if (!stateHolder.CommonStateHolder.DayOffs.Any())
+			_stateHolder.LoadCommonState(uow, new RepositoryFactory());
+			if (!_stateHolder.CommonStateHolder.DayOffs.Any())
 				throw new StateHolderException("You must create at least one Day Off in Options!");
 		}
 

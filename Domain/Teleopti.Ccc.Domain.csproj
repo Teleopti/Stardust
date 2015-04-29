@@ -841,6 +841,7 @@
     <Compile Include="Outbound\CampaignWorkingPeriod.cs" />
     <Compile Include="Outbound\CampaignWorkingPeriodAssignment.cs" />
     <Compile Include="Outbound\OutboundSkillCreator.cs" />
+    <Compile Include="Outbound\OutboundSkillTypeProvider.cs" />
     <Compile Include="Payroll\PayrollFormat.cs" />
     <Compile Include="PreserveStack.cs" />
     <Compile Include="Repositories\IExistingForecastRepository.cs" />

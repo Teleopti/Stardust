@@ -3,6 +3,7 @@ using System.Linq;
 using NUnit.Framework;
 using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.Outbound;
+using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Interfaces.Domain;
 using Campaign = Teleopti.Ccc.Domain.Outbound.Campaign;
@@ -14,11 +15,13 @@ namespace Teleopti.Ccc.DomainTest.Outbound
 	public class OutboundSkillCreatorTest
 	{
 		private OutboundSkillCreator _target;
+		private IUserTimeZone _timeZone;
 
 		[SetUp]
 		public void Setup()
 		{
-			_target = new OutboundSkillCreator();
+			_timeZone = new HawaiiTimeZone();
+			_target = new OutboundSkillCreator(_timeZone, new FakeOutboundSkillTypeProvider());
 		}
 
 		[Test]
@@ -36,10 +39,10 @@ namespace Teleopti.Ccc.DomainTest.Outbound
 
 			campaign.AddWorkingPeriod(campaignWorkingPeriod);
 
-			var skill = _target.CreatSkill(activity, campaign, createSkillType());
+			var skill = _target.CreateSkill(activity, campaign);
 
 			Assert.AreEqual(activity, skill.Activity);
-			Assert.AreEqual(TimeZoneInfo.Utc, skill.TimeZone); //Should probably be a timezone defined on campaign
+			Assert.AreEqual(_timeZone.TimeZone(), skill.TimeZone); //Should probably be a timezone defined on campaign
 			Assert.AreEqual(60, skill.DefaultResolution); //Will work fine as long as the activity is implicit
 			Assert.AreEqual(ForecastSource.OutboundTelephony, skill.SkillType.ForecastSource);
 		}
@@ -59,7 +62,7 @@ namespace Teleopti.Ccc.DomainTest.Outbound
 
 			campaign.AddWorkingPeriod(campaignWorkingPeriod);
 
-			var skill = _target.CreatSkill(activity, campaign, createSkillType());
+			var skill = _target.CreateSkill(activity, campaign);
 
 			Assert.AreEqual(1, skill.WorkloadCollection.Count());
 			var workload = skill.WorkloadCollection.First();
@@ -100,7 +103,7 @@ namespace Teleopti.Ccc.DomainTest.Outbound
 			campaign.AddWorkingPeriod(campaignWorkingPeriod1);
 			campaign.AddWorkingPeriod(campaignWorkingPeriod2);
 
-			var skill = _target.CreatSkill(activity, campaign, createSkillType());
+			var skill = _target.CreateSkill(activity, campaign);
 
 			var skillTemplate = skill.GetTemplateAt((int) DayOfWeek.Thursday);
 			var serviceLevelSeconds =
@@ -133,14 +136,17 @@ namespace Teleopti.Ccc.DomainTest.Outbound
 
 			campaign.AddWorkingPeriod(campaignWorkingPeriod);
 
-			var skill = _target.CreatSkill(activity, campaign, createSkillType());
+			var skill = _target.CreateSkill(activity, campaign);
 
 			var template = skill.WorkloadCollection.First().TemplateWeekCollection[(int) DayOfWeek.Thursday];
 			Assert.AreEqual(1d, template.OpenTaskPeriodList[0].Tasks);
 			Assert.AreEqual(0d, template.OpenTaskPeriodList[1].Tasks);
 		}
+	}
 
-		private static SkillType createSkillType()
+	public class FakeOutboundSkillTypeProvider : IOutboundSkillTypeProvider
+	{
+		public ISkillType OutboundSkillType()
 		{
 			var desc = new Description("My Email skill type");
 			return new SkillTypeEmail(desc, ForecastSource.OutboundTelephony);

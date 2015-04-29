@@ -6,19 +6,23 @@ using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.Infrastructure.Repositories
 {
-    /// <summary>
-    /// SkillTypeRepository
-    /// </summary>
     public class SkillTypeRepository : Repository<ISkillType>, ISkillTypeRepository
     {
-        /// <summary>
-        /// Initializes a new instance of the <see cref="SkillTypeRepository"/> class.
-        /// </summary>
-        /// <param name="unitOfWork">The unitofwork</param>
+
         public SkillTypeRepository(IUnitOfWork unitOfWork)
             : base(unitOfWork)
         {
         }
+
+		public SkillTypeRepository(IUnitOfWorkFactory unitOfWorkFactory)
+			: base(unitOfWorkFactory)
+		{
+		}
+
+		public SkillTypeRepository(ICurrentUnitOfWork currentUnitOfWork)
+			: base(currentUnitOfWork)
+		{
+		}
 
         /// <summary>
         /// Finds all and include workload and queues.

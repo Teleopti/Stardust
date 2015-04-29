@@ -8,6 +8,8 @@ using Autofac;
 using Syncfusion.Windows.Forms.Grid;
 using Teleopti.Ccc.Domain.Outbound;
 using Teleopti.Ccc.Domain.Scheduling;
+using Teleopti.Ccc.Domain.Security.Authentication;
+using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.Win.Common.Controls.Cells;
@@ -194,6 +196,8 @@ namespace Teleopti.Ccc.Win.Backlog
 
 		private void backlogViewLoad(object sender, EventArgs e)
 		{
+			
+
 			toolStripStatusLabel1.Text = "Loading...";
 			backgroundWorker1.RunWorkerAsync();
 			//no code below this row
@@ -229,6 +233,29 @@ namespace Teleopti.Ccc.Win.Backlog
 		{
 			if (!_model.Loaded)
 				return;
+
+			var campaign = new Campaign { Name = "testCampain1" };
+			var campaignWorkingPeriod = new CampaignWorkingPeriod();
+			campaignWorkingPeriod.TimePeriod = new TimePeriod(10, 0, 15, 0);
+
+			var campaignWorkingPeriodAssignmentThursday = new CampaignWorkingPeriodAssignment { WeekdayIndex = DayOfWeek.Thursday };
+			campaignWorkingPeriod.AddAssignment(campaignWorkingPeriodAssignmentThursday);
+
+			var campaignWorkingPeriodAssignmentFriday = new CampaignWorkingPeriodAssignment { WeekdayIndex = DayOfWeek.Friday };
+			campaignWorkingPeriod.AddAssignment(campaignWorkingPeriodAssignmentFriday);
+
+			campaign.AddWorkingPeriod(campaignWorkingPeriod);
+			var outboundSkillCreator = _container.Resolve<OutboundSkillCreator>();
+
+			using (var uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
+			{
+				var skill = outboundSkillCreator.CreateSkill(_model.GetAllActivities().First(), campaign);
+				var skillrepository = new SkillRepository(uow);
+				skillrepository.Add(skill);
+				var workloadRepository = new WorkloadRepository(uow);
+				workloadRepository.Add(skill.WorkloadCollection.First());
+				uow.PersistAll();
+			}
 
 			populateTabControl();
 			gridControl1.ControllerOptions = GridControllerOptions.All & (~GridControllerOptions.OleDataSource);
@@ -337,31 +364,7 @@ namespace Teleopti.Ccc.Win.Backlog
 
 		private void buttonLoad_Click(object sender, EventArgs e)
 		{
-			var campaign = new Campaign { Name = "test" };
-			var campaignWorkingPeriod = new CampaignWorkingPeriod();
-			campaignWorkingPeriod.TimePeriod = new TimePeriod(10, 0, 15, 0);
-
-			var campaignWorkingPeriodAssignmentThursday = new CampaignWorkingPeriodAssignment { WeekdayIndex = DayOfWeek.Thursday };
-			campaignWorkingPeriod.AddAssignment(campaignWorkingPeriodAssignmentThursday);
-
-			var campaignWorkingPeriodAssignmentFriday = new CampaignWorkingPeriodAssignment { WeekdayIndex = DayOfWeek.Friday };
-			campaignWorkingPeriod.AddAssignment(campaignWorkingPeriodAssignmentFriday);
-
-			campaign.AddWorkingPeriod(campaignWorkingPeriod);
-			var outboundSkillCreator = new OutboundSkillCreator();
 			
-			using (var uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
-			{
-				var skilltypeRepository = new SkillTypeRepository(uow);
-				var skilltypes = skilltypeRepository.LoadAll();
-				var skilltype = skilltypes.First(s => s.Description.Name == "SkillTypeBackoffice");
-				var skill = outboundSkillCreator.CreatSkill(_model.GetAllSkills().First().Activity, campaign, skilltype);
-				var skillrepository = new SkillRepository(uow);
-				skillrepository.Add(skill);
-				var workloadRepository = new WorkloadRepository(uow);
-				workloadRepository.Add(skill.WorkloadCollection.First());
-				uow.PersistAll();
-			}
 
 			//_model = new BacklogModel(_container, _period);
 			//backlogViewLoad(this, new EventArgs());

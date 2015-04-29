@@ -28,9 +28,11 @@ namespace Teleopti.Ccc.IocCommonTest.Configuration
 			{
 				var personRep = container.Resolve<IPersonRepository>();
 				var skillRep = container.Resolve<ISkillRepository>();
+				var skillTypeRep = container.Resolve<ISkillTypeRepository>();
 
 				Assert.IsAssignableFrom<PersonRepository>(personRep);
 				Assert.IsAssignableFrom<SkillRepository>(skillRep);
+				Assert.IsAssignableFrom<SkillTypeRepository>(skillTypeRep);
 			}
 		}
 

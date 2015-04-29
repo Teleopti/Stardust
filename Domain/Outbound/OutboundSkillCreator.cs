@@ -10,10 +10,22 @@ namespace Teleopti.Ccc.Domain.Outbound
 {
 	public class OutboundSkillCreator
 	{
-		public ISkill CreatSkill(IActivity activity, Campaign campaign, ISkillType existingSkillType)
+		private readonly IUserTimeZone _userTimeZone;
+		private readonly IOutboundSkillTypeProvider _outboundSkillTypeProvider;
+
+		public OutboundSkillCreator(IUserTimeZone userTimeZone, IOutboundSkillTypeProvider outboundSkillTypeProvider)
 		{
-			var skill = new Skill(campaign.Name, "", Color.Blue, 60, existingSkillType) 
-			{TimeZone = TimeZoneInfo.Utc, Activity = activity};
+			_userTimeZone = userTimeZone;
+			_outboundSkillTypeProvider = outboundSkillTypeProvider;
+		}
+
+		public ISkill CreateSkill(IActivity activity, Campaign campaign)
+		{
+			var skill = new Skill(campaign.Name, "", Color.Blue, 60, _outboundSkillTypeProvider.OutboundSkillType())
+			{
+				TimeZone = _userTimeZone.TimeZone(),
+				Activity = activity
+			};
 		
 			var workLoad = new Workload(skill) {Name = campaign.Name};
 			setOpenHours(campaign, workLoad);
@@ -24,8 +36,6 @@ namespace Teleopti.Ccc.Domain.Outbound
 			setIntradayProfile(skill);
 
 			return skill;
-
-			//template ska sättas till default på workload när workloadays skapas
 		}
 
 		private static void setIntradayProfile(ISkill skill)
