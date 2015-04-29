@@ -9,6 +9,7 @@ using Teleopti.Analytics.Etl.Transformer.Job;
 using Teleopti.Analytics.Etl.Transformer.Job.MultipleDate;
 using Teleopti.Analytics.Etl.Transformer.Job.Steps;
 using Teleopti.Ccc.Domain.Analytics;
+using Teleopti.Ccc.IocCommon.Toggle;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Analytics.Etl.TransformerTest.Job.Steps
@@ -36,7 +37,7 @@ namespace Teleopti.Analytics.Etl.TransformerTest.Job.Steps
 
 			_jobCategoryDates.Add(startDate, endDate, JobCategoryType.AgentStatistics);
 			var jobParameters = new JobParameters(
-				_jobCategoryDates, 1, _timeZone.Id, 15, "", "", CultureInfo.CurrentCulture, null, false);
+                _jobCategoryDates, 1, _timeZone.Id, 15, "", "", CultureInfo.CurrentCulture, new FakeToggleManager(), false);
 
 			var jobHelper = new JobHelper(_repository, null, null, null);
 			jobParameters.Helper = jobHelper;
@@ -66,7 +67,7 @@ namespace Teleopti.Analytics.Etl.TransformerTest.Job.Steps
 
             _jobCategoryDates.Add(startDate, endDate, JobCategoryType.AgentStatistics);
 				var jobParameters = new JobParameters(
-					_jobCategoryDates, 1, _timeZone.Id, 15, "", "", CultureInfo.CurrentCulture, null, false);
+                    _jobCategoryDates, 1, _timeZone.Id, 15, "", "", CultureInfo.CurrentCulture, new FakeToggleManager(), false);
 
 			var jobHelper = new JobHelper(_repository, null, null, null);
             jobParameters.Helper = jobHelper;
