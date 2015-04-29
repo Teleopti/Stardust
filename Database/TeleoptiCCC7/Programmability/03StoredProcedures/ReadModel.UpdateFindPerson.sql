@@ -49,37 +49,37 @@ END
 
 INSERT [ReadModel].[FindPerson]
 SELECT Id,FirstName, LastName, EmploymentNumber, Note, TerminalDate, FirstName, 'FirstName', NULL, NULL, NULL,NULL
-FROM Person WHERE IsDeleted = 0
+FROM Person WITH (NOLOCK) WHERE IsDeleted = 0
 AND Id NOT IN(SELECT PersonId FROM [ReadModel].[FindPerson] WHERE SearchType = 'FirstName')
 
 INSERT [ReadModel].[FindPerson]
 SELECT Id,FirstName, LastName, EmploymentNumber, Note, TerminalDate, LastName, 'LastName', NULL, NULL, NULL,NULL  
-FROM Person WHERE IsDeleted = 0
+FROM Person WITH (NOLOCK) WHERE IsDeleted = 0
 AND Id NOT IN(SELECT PersonId FROM [ReadModel].[FindPerson] WHERE SearchType = 'LastName')
 
 INSERT [ReadModel].[FindPerson]
 SELECT Id,FirstName, LastName, EmploymentNumber, Note, TerminalDate, Note, 'Note', NULL, NULL, NULL,NULL 
-FROM Person WHERE IsDeleted = 0
+FROM Person WITH (NOLOCK) WHERE IsDeleted = 0
 AND Id NOT IN(SELECT PersonId FROM [ReadModel].[FindPerson] WHERE SearchType = 'Note')
 
 INSERT [ReadModel].[FindPerson]
 SELECT Id,FirstName, LastName, EmploymentNumber, Note, TerminalDate, EmploymentNumber, 'EmploymentNumber', NULL, NULL, NULL,NULL  
-FROM Person WHERE IsDeleted = 0
+FROM Person WITH (NOLOCK) WHERE IsDeleted = 0
 AND Id NOT IN(SELECT PersonId FROM [ReadModel].[FindPerson] WHERE SearchType = 'EmploymentNumber')
 
 INSERT [ReadModel].[FindPerson]
 SELECT Id,FirstName, LastName, EmploymentNumber, Note, TerminalDate, [Identity] as WindowsLogOnName, 'WindowsLogOnName', NULL, NULL, NULL, NULL  
-FROM Person INNER JOIN AuthenticationInfo On Id = Person AND IsDeleted = 0
+FROM Person WITH (NOLOCK) INNER JOIN AuthenticationInfo On Id = Person AND IsDeleted = 0
 AND Id NOT IN(SELECT PersonId FROM [ReadModel].[FindPerson] WHERE SearchType = 'WindowsLogOnName')
 
 INSERT [ReadModel].[FindPerson]
 SELECT Id,FirstName, LastName, EmploymentNumber, Note, TerminalDate, ApplicationLogOnName, 'ApplicationLogOnName', NULL, NULL, NULL,NULL  
-FROM Person INNER JOIN ApplicationAuthenticationInfo On Id = Person AND IsDeleted = 0
+FROM Person WITH (NOLOCK) INNER JOIN ApplicationAuthenticationInfo On Id = Person AND IsDeleted = 0
 AND Id NOT IN(SELECT PersonId FROM [ReadModel].[FindPerson] WHERE SearchType = 'ApplicationLogOnName')
 
 INSERT [ReadModel].[FindPerson]
 SELECT DISTINCT p.Id,FirstName, LastName, EmploymentNumber, p.Note, TerminalDate, ptp.Name, 'PartTimePercentage', NULL, NULL, NULL, ptp.Id
-FROM Person p
+FROM Person p WITH (NOLOCK)
 INNER JOIN PersonPeriod pp ON p.Id = pp.Parent
 INNER JOIN PartTimePercentage ptp ON pp.PartTimePercentage = ptp.Id
 WHERE p.IsDeleted = 0 AND ptp.IsDeleted = 0
@@ -87,7 +87,7 @@ AND p.Id NOT IN(SELECT PersonId FROM [ReadModel].[FindPerson] WHERE SearchType =
 
 INSERT [ReadModel].[FindPerson]
 SELECT DISTINCT p.Id,FirstName, LastName, EmploymentNumber, p.Note, TerminalDate, rsb.Name, 'ShiftBag', NULL, NULL, NULL, rsb.Id
-FROM Person p
+FROM Person p WITH (NOLOCK)
 INNER JOIN PersonPeriod pp ON p.Id = pp.Parent
 INNER JOIN RuleSetBag rsb ON pp.RuleSetBag = rsb.Id
 WHERE p.IsDeleted = 0 AND rsb.IsDeleted = 0
@@ -95,7 +95,7 @@ AND p.Id NOT IN(SELECT PersonId FROM [ReadModel].[FindPerson] WHERE SearchType =
 
 INSERT [ReadModel].[FindPerson]
 SELECT DISTINCT p.Id,FirstName, LastName, EmploymentNumber, p.Note, TerminalDate, c.Name, 'Contract', NULL, NULL, NULL, c.Id 
-FROM Person p
+FROM Person p WITH (NOLOCK)
 INNER JOIN PersonPeriod pp ON p.Id = pp.Parent
 INNER JOIN Contract c ON pp.Contract = c.Id
 WHERE p.IsDeleted = 0 AND c.IsDeleted = 0
@@ -103,7 +103,7 @@ AND p.Id NOT IN(SELECT PersonId FROM [ReadModel].[FindPerson] WHERE SearchType =
 
 INSERT [ReadModel].[FindPerson]
 SELECT DISTINCT p.Id,FirstName, LastName, EmploymentNumber, p.Note, TerminalDate, cs.Name, 'ContractSchedule', NULL, NULL, NULL, cs.Id  
-FROM Person p
+FROM Person p WITH (NOLOCK)
 INNER JOIN PersonPeriod pp ON p.Id = pp.Parent
 INNER JOIN ContractSchedule cs ON pp.ContractSchedule = cs.Id
 WHERE p.IsDeleted = 0 AND cs.IsDeleted = 0 
@@ -111,7 +111,7 @@ AND p.Id NOT IN(SELECT PersonId FROM [ReadModel].[FindPerson] WHERE SearchType =
 
 INSERT [ReadModel].[FindPerson]
 SELECT DISTINCT p.Id,FirstName, LastName, EmploymentNumber, p.Note, TerminalDate, bg.Name, 'BudgetGroup', NULL, NULL, NULL, bg.Id
-FROM Person p
+FROM Person p WITH (NOLOCK)
 INNER JOIN PersonPeriod pp ON p.Id = pp.Parent
 INNER JOIN BudgetGroup bg ON pp.BudgetGroup = bg.Id
 WHERE p.IsDeleted = 0 AND bg.IsDeleted = 0 
@@ -119,7 +119,7 @@ AND p.Id NOT IN(SELECT PersonId FROM [ReadModel].[FindPerson] WHERE SearchType =
 
 INSERT [ReadModel].[FindPerson]
 SELECT DISTINCT p.Id,FirstName, LastName, EmploymentNumber, p.Note, TerminalDate, t.Name + ' ' + s.Name, 'Organization', NULL, NULL, NULL, pp.Id  
-FROM Person p
+FROM Person p WITH (NOLOCK)
 INNER JOIN PersonPeriod pp ON p.Id = pp.Parent
 INNER JOIN Team t ON pp.Team = t.Id
 INNER JOIN Site s ON s.Id = t.Site
@@ -128,7 +128,7 @@ AND p.Id NOT IN(SELECT PersonId FROM [ReadModel].[FindPerson] WHERE SearchType =
 
 INSERT [ReadModel].[FindPerson]
 SELECT DISTINCT p.Id,FirstName, LastName, EmploymentNumber, p.Note, TerminalDate, s.Name, 'Skill', NULL, NULL, NULL, s.Id  
-FROM Person p
+FROM Person p WITH (NOLOCK)
 INNER JOIN PersonPeriod pp ON p.Id = pp.Parent
 INNER JOIN PersonSkill ps ON pp.Id = ps.Parent
 INNER JOIN Skill s ON ps.Skill = s.Id
@@ -142,7 +142,7 @@ WHEN  'xx'    THEN ar.Name
  ELSE ar.DescriptionText
  END
 ,'Role', NULL, NULL, NULL, ar.Id  
-FROM Person p
+FROM Person p WITH (NOLOCK)
 INNER JOIN PersonInApplicationRole pa ON pa.Person = p.Id
 INNER JOIN ApplicationRole ar ON ar.Id = pa.ApplicationRole
 WHERE ar.IsDeleted = 0
