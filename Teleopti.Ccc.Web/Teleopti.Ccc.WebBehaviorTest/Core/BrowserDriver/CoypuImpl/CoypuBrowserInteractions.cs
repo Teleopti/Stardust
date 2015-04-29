@@ -59,9 +59,11 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core.BrowserDriver.CoypuImpl
 
 		public void Clear(string selector)
 		{
-			AssertExists(selector);
-			var selenium = ((OpenQA.Selenium.Remote.RemoteWebDriver)_browser.Native);
-			selenium.FindElement(By.CssSelector(selector)).Clear();
+			_browser.RetryUntilTimeout(() =>
+			{
+				var selenium = ((OpenQA.Selenium.Remote.RemoteWebDriver)_browser.Native);
+				selenium.FindElement(By.CssSelector(selector)).Clear();
+			});
 		}
 
 		public void FillWith(string selector, string value)
