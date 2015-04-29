@@ -24,9 +24,6 @@ input[type="text"]{
 		text-transform: capitalize;
 }
 
-.roles-list {
-	height: 70vh;
-}
 
 
 .permissions-tree {
@@ -80,34 +77,53 @@ input[type="text"]{
 
 .wfm-radio-list {
 	margin-bottom: 5px;
+	cursor: pointer;
+	word-wrap: break-word;
+	vertical-align: middle;
+}
+
+.wfm-radio-list-item.selected {
+	background-color: #9CCC65;
+	font-weight:normal;
+	&:hover{
+		font-weight:normal;
+	}
+}
+
+.wfm-radio-list-item:hover {
+	font-weight:normal;
 }
 
 p {
 	margin-bottom: 5px;
 }
 
-.permissions .tab-container{
-	height: 78vh;	
 
-	&.data-container .permissions-tree{
-		overflow: auto;
-		height: calc(100% - 155px);
-	}
 
-	&.data-container .toolbar{
-		overflow: auto;
-		height: 150px;
-	}
 
-	&.functions-container .permissions-tree{
-		overflow: auto;
-		height: calc(100% - 105px);
-	}
+md-select.md-default-theme:not([disabled]):focus .md-select-label{
+	border-bottom: #ec38a3 1px solid;
+	padding: 0;
+}
 
-	&.functions-container .toolbar{
-		overflow: auto;
-		height: 100px;
+md-select-menu.md-default-theme md-option:hover {
+	background-color: #E0E0E0;
+}
+
+md-select-menu.md-default-theme md-option[selected], md-select-menu.md-default-theme md-option[selected]:focus{
+	background-color: #c2e085;
+}
+
+md-select {
+	margin-top: auto;
+	.md-select-label{
+		padding: 0;
+		height: 21px;
+		font-size: 15px;
 	}
 
 }
 
+md-option{
+	height: 30px;
+}

@@ -97,6 +97,13 @@ permissions.controller('PermissionsCtrl', [
 			}
 		};
 
+		$scope.changeOption = function (option) {
+			var data = {};
+			data.Id = $scope.selectedRole;
+			data['RangeOption'] = option;
+			Permissions.assignOrganizationSelection.postData(data);
+		}
+
 		$scope.removeRole = function (role, index) {
 			if (confirm('Are you sure you want to delete this?')) {
 				Permissions.manageRole.deleteRole({ Id: role.Id }).$promise.then(function (result) {
@@ -114,10 +121,8 @@ permissions.controller('PermissionsCtrl', [
 			Permissions.rolesPermissions.query({ Id: roleId }).$promise.then(function (result) {
 				var permsFunc = result.AvailableFunctions;
 				var permsData = result.AvailableBusinessUnits.concat(result.AvailableSites.concat(result.AvailableTeams));
-
-				$scope.organization.DynamicOptions.forEach(function (dyna) {
-					dyna.selected = result.AvailableDataRange === dyna.RangeOption ? true : false;
-				});
+				$scope.dynamicOptionSelected = result.AvailableDataRange;
+				
 
 				$scope.functionsFlat.forEach(function (item) {
 					var availableFunctions = $filter('filter')(permsFunc, { Id: item.FunctionId });

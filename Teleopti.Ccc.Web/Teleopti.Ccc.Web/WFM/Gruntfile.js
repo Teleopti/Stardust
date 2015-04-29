@@ -37,7 +37,7 @@
 			},
 			target: {
 				files: {
-					'dist/style.min.css': ['css/style.css', 'css/main.css']
+					'dist/style.min.css': ['css/main.css', 'css/style.css']
 				}
 			}
 		},

@@ -134,25 +134,29 @@
 								</div>
 
 
-								<div>
-									<p>Choose a global level of authorization: </p>
-									<div class="wfm-radio-list permissions-list">
-										<div class="wfm-radio-list-item" ng-repeat="dynamic in organization.DynamicOptions" ng-class="{'selected': dynamic.selected }" ng-click="changeRangeOption(dynamic)">{{dynamic.Name}}</div>
+								<div class="row">
+									<div class="col-md-12">
+										<label>Choose a global level of authorization:</label>
+										<md-select placeholder="Pick" ng-model="dynamicOptionSelected" ng-change="changeOption(dynamicOptionSelected)">
+											<md-option ng-repeat="dynamic in organization.DynamicOptions" ng-value="dynamic.RangeOption">{{dynamic.Name}}</md-option>
+										</md-select>
 									</div>
 								</div>
 
-								<div>
-									<p>Add some specific authorization: </p>
+								<div class="row">
+									<div class="col-md-12">
+										<label>Add specific authorization in the list below: </label>
+									</div>
 								</div>
 							</div>
-								<div class="tree permissions-tree">
+							<div class="tree permissions-tree">
 
-									<div ui-tree data-drag-enabled="false">
-										<ol ui-tree-nodes="" ng-model="organization.BusinessUnit" id="tree-root" class="tree-line">
-											<li ng-repeat="node in organization.BusinessUnit | filter:searchData" ui-tree-node ng-include="'nodes_bu_renderer.html'"></li>
-										</ol>
-									</div>
+								<div ui-tree data-drag-enabled="false">
+									<ol ui-tree-nodes="" ng-model="organization.BusinessUnit" id="tree-root" class="tree-line">
+										<li ng-repeat="node in organization.BusinessUnit | filter:searchData" ui-tree-node ng-include="'nodes_bu_renderer.html'"></li>
+									</ol>
 								</div>
+							</div>
 						</div>
 					</section>
 				</article>

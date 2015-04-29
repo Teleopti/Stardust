@@ -1973,6 +1973,7 @@
     <Content Include="WFM\vendor\d3\LICENSE" />
     <Content Include="WFM\css\_people.scss" />
     <Content Include="WFM\css\_seatmap.scss" />
+    <Content Include="WFM\css\_permissions.scss" />
     <Content Include="WFM\vendor\c3\c3-angular.min.js.map" />
   </ItemGroup>
   <ItemGroup>
