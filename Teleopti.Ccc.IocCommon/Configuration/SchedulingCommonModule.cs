@@ -12,6 +12,7 @@ using Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization;
 using Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.Seniority;
 using Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.SeniorityDaysOff;
 using Teleopti.Ccc.Domain.Optimization.TeamBlock.MoveTimeOptimization;
+using Teleopti.Ccc.Domain.Outbound;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.ResourceCalculation.GroupScheduling;
 using Teleopti.Ccc.Domain.Scheduling;
@@ -511,6 +512,9 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			   ? (IDisallowedShiftProjectionCashesFilter)c.Resolve<DisallowedShiftProjectionCashesFilter>()
 			   : c.Resolve<DisallowedShiftProjectionCashesFilter29846Off>())
 				   .As<IDisallowedShiftProjectionCashesFilter>();
+
+			builder.RegisterType<OutboundSkillCreator>().As<OutboundSkillCreator>().SingleInstance();
+			builder.RegisterType<OutboundSkillTypeProvider>().As<IOutboundSkillTypeProvider>().SingleInstance();
 		}
 	}
 }

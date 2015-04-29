@@ -234,7 +234,7 @@ namespace Teleopti.Ccc.Win.Backlog
 			if (!_model.Loaded)
 				return;
 
-			var campaign = new Campaign { Name = "testCampain1" };
+			var campaign = new Campaign { Name = "testCampaign2" };
 			var campaignWorkingPeriod = new CampaignWorkingPeriod();
 			campaignWorkingPeriod.TimePeriod = new TimePeriod(10, 0, 15, 0);
 
