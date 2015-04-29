@@ -31,8 +31,8 @@ namespace Teleopti.Ccc.WebBehaviorTest.Wfm.People
 		public void ThenIShouldNotSeeInPeopleList(string name)
 		{
 			const string existSelector = ".people-list";
-			var notExistSelector = string.Format(".people-list .person:contains({0})", name);
-			Browser.Interactions.AssertNotExists(existSelector,notExistSelector);
+			const string notExistSelector = ".people-list .person";
+			Browser.Interactions.AssertNoContains(existSelector,notExistSelector, name);
 		}
 
 		[When(@"I search people with keyword '(.*)'")]
