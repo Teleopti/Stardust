@@ -86,9 +86,12 @@
 							</div>
 							<c3chart bindto-id="chart" chart-data="workload.chartData" chart-columns="dataColumns" chart-x="dataX" show-subchart="true" enable-zoom="true">
 								<chart-axis>
-									<chart-axis-x axis-id="date" axis-type="timeseries">
+									<chart-axis-x axis-id="date" axis-type="timeseries" axis-position="outer-right" axis-label="Date">
 										<chart-axis-x-tick tick-format="%Y-%m-%d" />
 									</chart-axis-x>
+								</chart-axis>
+								<chart-axis>
+									<chart-axis-y axis-id="y" axis-position="outer-top" axis-label="Number of Calls" />
 								</chart-axis>
 							</c3chart>
 						</div>
