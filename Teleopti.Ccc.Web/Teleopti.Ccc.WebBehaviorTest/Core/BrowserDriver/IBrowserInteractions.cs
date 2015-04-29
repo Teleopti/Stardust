@@ -12,8 +12,9 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core.BrowserDriver
 		void Click(string selector);
 		void ClickContaining(string selector, string text);
 
-		void FillWith(string selector, string value);
 		void Clear(string selector);
+		void FillWith(string selector, string value);
+		void PressEnter(string selector);
 
 		void AssertExists(string selector);
 		void AssertNotExists(string existsSelector, string notExistsSelector);

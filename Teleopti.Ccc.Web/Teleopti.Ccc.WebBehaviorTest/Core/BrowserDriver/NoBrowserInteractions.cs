@@ -30,9 +30,19 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core.BrowserDriver
 			throw new NotSupportedException(notAllowedAction);
 		}
 
+		public void Clear(string selector)
+		{
+			throw new NotImplementedException();
+		}
+
 		public void FillWith (string selector, string value)
 		{
 			throw new NotSupportedException(notAllowedAction);
+		}
+
+		public void PressEnter(string selector)
+		{
+			throw new NotImplementedException();
 		}
 
 		public void AssertExists(string selector)
@@ -100,5 +110,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core.BrowserDriver
 		public void DragnDrop(string selector, int x, int y)
 		{
 		}
+
+
 	}
 }

@@ -32,6 +32,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Wfm.People
 			var selector = ".people-search input";
 			Browser.Interactions.Clear(selector);
 			Browser.Interactions.FillWith(selector, value);
+			Browser.Interactions.PressEnter(selector);
 		}
 	}
 }

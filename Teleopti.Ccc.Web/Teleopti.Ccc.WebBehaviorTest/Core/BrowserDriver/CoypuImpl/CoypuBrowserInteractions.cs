@@ -66,9 +66,11 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core.BrowserDriver.CoypuImpl
 
 		public void FillWith(string selector, string value)
 		{
-			AssertExists(selector);
-			
 			_browser.FindCss(selector, options()).FillInWith(value);
+		}
+
+		public void PressEnter(string selector)
+		{
 			_browser.FindCss(selector, options()).SendKeys(Keys.Enter);
 		}
 
@@ -208,6 +210,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core.BrowserDriver.CoypuImpl
 			DumpInfo(s => builder.Append(s));
 			return builder.ToString();
 		}
+
 	}
 
 }
