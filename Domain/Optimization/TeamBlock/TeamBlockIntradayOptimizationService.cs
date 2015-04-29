@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.Helper;
+using Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization;
 using Teleopti.Ccc.Domain.Optimization.WeeklyRestSolver;
 using Teleopti.Ccc.Domain.Scheduling.TeamBlock;
 using Teleopti.Ccc.UserTexts;
@@ -35,6 +36,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 		private readonly IDailyTargetValueCalculatorForTeamBlock _dailyTargetValueCalculatorForTeamBlock;
 		private readonly ITeamBlockSteadyStateValidator _teamTeamBlockSteadyStateValidator;
 		private readonly bool _isMaxSeatToggleEnabled;
+		private readonly ITeamBlockShiftCategoryLimitationValidator _teamBlockShiftCategoryLimitationValidator;
 
 		public TeamBlockIntradayOptimizationService(ITeamBlockGenerator teamBlockGenerator,
 			ITeamBlockScheduler teamBlockScheduler,
@@ -47,7 +49,8 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 			IDailyTargetValueCalculatorForTeamBlock dailyTargetValueCalculatorForTeamBlock,
 			ITeamBlockSteadyStateValidator teamTeamBlockSteadyStateValidator,
 			//remove this - instead use two different impl of (a smaller interface of) ITeamBlockIntradayOptimizationService
-			bool isMaxSeatToggleEnabled)
+			bool isMaxSeatToggleEnabled,
+			ITeamBlockShiftCategoryLimitationValidator teamBlockShiftCategoryLimitationValidator)
 		{
 			_teamBlockScheduler = teamBlockScheduler;
 			_schedulingOptionsCreator = schedulingOptionsCreator;
@@ -58,6 +61,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 			_dailyTargetValueCalculatorForTeamBlock = dailyTargetValueCalculatorForTeamBlock;
 			_teamTeamBlockSteadyStateValidator = teamTeamBlockSteadyStateValidator;
 			_isMaxSeatToggleEnabled = isMaxSeatToggleEnabled;
+			_teamBlockShiftCategoryLimitationValidator = teamBlockShiftCategoryLimitationValidator;
 			_teamBlockGenerator = teamBlockGenerator;
 			_teamBlockOptimizationLimits = teamBlockOptimizationLimits;
 		}
@@ -169,6 +173,20 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 					}
 					continue;
 				}
+
+				if (!_teamBlockShiftCategoryLimitationValidator.Validate(teamBlockInfo, null, optimizationPreferences))
+				{
+					var progressResult = onReportProgress(new ResourceOptimizerProgressEventArgs(0, 0, Resources.OptimizingIntraday + Resources.Colon + Resources.RollingBackSchedulesFor + " " + teamBlockInfo.BlockInfo.BlockPeriod.DateString + " " + teamName, cancelAction));
+					teamBlockToRemove.Add(teamBlockInfo);
+					_safeRollbackAndResourceCalculation.Execute(schedulePartModifyAndRollbackService, schedulingOptions);
+					if (progressResult.ShouldCancel)
+					{
+						cancelAction();
+						break;
+					}
+					continue;
+				}
+				
 
 				var newTargetValue = _dailyTargetValueCalculatorForTeamBlock.TargetValue(teamBlockInfo,
 					optimizationPreferences.Advanced, isMaxSeatToggleEnabled);

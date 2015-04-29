@@ -35,14 +35,20 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization
 
 		private bool checkTeamBlock(ITeamBlockInfo teamBlock)
 		{
+			if (teamBlock == null) return true;
+
 			foreach (var dateOnly in teamBlock.BlockInfo.BlockPeriod.DayCollection())
 			{
 				var teamInfo = teamBlock.TeamInfo;
 				foreach (var groupMember in teamInfo.GroupMembers)
 				{
-					var scheduleRange = teamInfo.MatrixForMemberAndDate(groupMember, dateOnly).ActiveScheduleRange;
-					if (!checkPerson(groupMember, dateOnly, scheduleRange))
+					var matrix = teamInfo.MatrixForMemberAndDate(groupMember, dateOnly);
+					if (matrix == null || !checkPerson(groupMember, dateOnly, matrix.ActiveScheduleRange))
 						return false;
+
+					//var scheduleRange = teamInfo.MatrixForMemberAndDate(groupMember, dateOnly).ActiveScheduleRange;
+					//if (!checkPerson(groupMember, dateOnly, scheduleRange))
+					//	return false;
 				}
 			}
 

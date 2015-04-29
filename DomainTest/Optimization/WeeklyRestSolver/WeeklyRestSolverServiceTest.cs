@@ -4,6 +4,7 @@ using NUnit.Framework;
 using Rhino.Mocks;
 using Teleopti.Ccc.Domain.Optimization;
 using Teleopti.Ccc.Domain.Optimization.TeamBlock;
+using Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization;
 using Teleopti.Ccc.Domain.Optimization.WeeklyRestSolver;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling.Rules;
@@ -48,6 +49,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.WeeklyRestSolver
 		private ITeamInfo _teamInfo;
 		private IPersonWeekViolatingWeeklyRestSpecification _personWeekViolatingWeeklyRestSpecification;
 		private IVirtualSchedulePeriod _virtualSchedulePeriod;
+		private ITeamBlockShiftCategoryLimitationValidator _teamBlockShiftCategoryLimitationValidator;
 
 		[SetUp]
 		public void Setup()
@@ -65,11 +67,12 @@ namespace Teleopti.Ccc.DomainTest.Optimization.WeeklyRestSolver
 			_teamBlockInfo = _mock.StrictMock<ITeamBlockInfo>();
 			_teamInfo = _mock.StrictMock<ITeamInfo>();
 			_personWeekViolatingWeeklyRestSpecification = _mock.StrictMock<IPersonWeekViolatingWeeklyRestSpecification>();
+			_teamBlockShiftCategoryLimitationValidator = _mock.StrictMock<ITeamBlockShiftCategoryLimitationValidator>();
 			_target = new WeeklyRestSolverService(_weeksFromScheduleDaysExtractor, _ensureWeeklyRestRule,
 				_contractWeeklyRestForPersonWeek, _dayOffToTimeSpanExtractor,
 				_shiftNudgeManager, _identifyDayOffWithHighestSpan, _deleteScheduleDayFromUnsolvedPersonWeek,
 				_allTeamMembersInSelectionSpecification,
-				_personWeekViolatingWeeklyRestSpecification,_brokenWeekCounterForAPerson );
+				_personWeekViolatingWeeklyRestSpecification,_brokenWeekCounterForAPerson, _teamBlockShiftCategoryLimitationValidator);
 			_teamBlockGenerator = _mock.StrictMock<ITeamBlockGenerator>();
 			_rollbackService = _mock.StrictMock<ISchedulePartModifyAndRollbackService>();
 			_resourceCalculateDelayer = _mock.StrictMock<IResourceCalculateDelayer>();
@@ -208,6 +211,9 @@ namespace Teleopti.Ccc.DomainTest.Optimization.WeeklyRestSolver
 					dayOffDate, _rollbackService, _selectedPeriod, _matrix1));
 				Expect.Call(_matrix1.SchedulePeriod).Return(_virtualSchedulePeriod);
 				Expect.Call(_virtualSchedulePeriod.DateOnlyPeriod).Return(_selectedPeriod);
+
+				Expect.Call(_teamBlockGenerator.Generate(_allPersonMatrixList, _personWeek1.Week,new List<IPerson> { _personWeek1.Person }, _schedulingOptions)).Return(new List<ITeamBlockInfo> { _teamBlockInfo });
+				Expect.Call(_teamBlockShiftCategoryLimitationValidator.Validate(_teamBlockInfo, null, _optimizationPreferences)).Return(true);
 			}
 			using (_mock.Playback())
 			{
@@ -249,6 +255,9 @@ namespace Teleopti.Ccc.DomainTest.Optimization.WeeklyRestSolver
 				Expect.Call(_matrix1.SchedulePeriod).Return(_virtualSchedulePeriod);
 				Expect.Call(_virtualSchedulePeriod.DateOnlyPeriod).Return(_selectedPeriod);
 
+				Expect.Call(_teamBlockGenerator.Generate(_allPersonMatrixList, _personWeek1.Week, new List<IPerson> { _personWeek1.Person }, _schedulingOptions)).Return(new List<ITeamBlockInfo> { _teamBlockInfo });
+				Expect.Call(_teamBlockShiftCategoryLimitationValidator.Validate(_teamBlockInfo, null, _optimizationPreferences)).Return(true);
+
 			}
 			using (_mock.Playback())
 			{
@@ -282,6 +291,9 @@ namespace Teleopti.Ccc.DomainTest.Optimization.WeeklyRestSolver
 					_allPersonMatrixList, _rollbackService, _resourceCalculateDelayer, _schedulingResultStateHolder,
 					_selectedPeriod, _selectedPersons, _optimizationPreferences, _schedulingOptions)).Return(true);
 				Expect.Call(_brokenWeekCounterForAPerson.CountBrokenWeek(_scheduleDayList, _scheduleRange1)).Return(0);
+
+				Expect.Call(_teamBlockGenerator.Generate(_allPersonMatrixList, _personWeek1.Week, new List<IPerson> { _personWeek1.Person }, _schedulingOptions)).Return(new List<ITeamBlockInfo> { _teamBlockInfo });
+				Expect.Call(_teamBlockShiftCategoryLimitationValidator.Validate(_teamBlockInfo, null, _optimizationPreferences)).Return(true);
 			}
 			using (_mock.Playback())
 			{

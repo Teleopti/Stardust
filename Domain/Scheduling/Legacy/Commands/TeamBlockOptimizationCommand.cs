@@ -6,6 +6,7 @@ using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.Optimization;
 using Teleopti.Ccc.Domain.Optimization.TeamBlock;
+using Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization;
 using Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.EqualNumberOfCategory;
 using Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.Seniority;
 using Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.SeniorityDaysOff;
@@ -51,6 +52,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 		private readonly IScheduleCommandToggle _toggleManager;
 		private readonly IIntraIntervalOptimizationCommand _intraIntervalOptimizationCommand;
 		private readonly IOptimizerHelperHelper _optimizerHelper;
+		private readonly ITeamBlockShiftCategoryLimitationValidator _teamBlockShiftCategoryLimitationValidator;
 
 		public TeamBlockOptimizationCommand(Func<ISchedulerStateHolder> schedulerStateHolder,
 			ITeamBlockClearer teamBlockCleaner,
@@ -80,7 +82,8 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 			ITeamBlockMoveTimeBetweenDaysCommand teamBlockMoveTimeBetweenDaysCommand,
 			IScheduleCommandToggle toggleManager,
 			IIntraIntervalOptimizationCommand intraIntervalOptimizationCommand,
-			IOptimizerHelperHelper optimizerHelper)
+			IOptimizerHelperHelper optimizerHelper,
+			ITeamBlockShiftCategoryLimitationValidator teamBlockShiftCategoryLimitationValidator)
 		{
 			_schedulerStateHolder = schedulerStateHolder;
 			_teamBlockCleaner = teamBlockCleaner;
@@ -112,6 +115,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 			_toggleManager = toggleManager;
 			_intraIntervalOptimizationCommand = intraIntervalOptimizationCommand;
 			_optimizerHelper = optimizerHelper;
+			_teamBlockShiftCategoryLimitationValidator = teamBlockShiftCategoryLimitationValidator;
 		}
 
 		public void Execute(IBackgroundWorkerWrapper backgroundWorker, DateOnlyPeriod selectedPeriod, IList<IPerson> selectedPersons,
@@ -184,6 +188,8 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 			{
 				_intraIntervalOptimizationCommand.Execute(schedulingOptions, optimizationPreferences, selectedPeriod, selectedSchedules, _schedulerStateHolder().SchedulingResultState, allMatrixes, rollbackServiceWithResourceCalculation, resourceCalculateDelayer, _backgroundWorker);
 			}
+
+			allMatrixes = _matrixListFactory.CreateMatrixListAll(selectedPeriod);
 
 			solveWeeklyRestViolations(selectedPeriod, selectedPersons, optimizationPreferences, resourceCalculateDelayer,
 				rollbackServiceWithResourceCalculation, allMatrixes,
@@ -269,7 +275,8 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 					_teamBlockOptimizationLimits,
 					_teamBlockMaxSeatChecker,
 					teamBlockDaysOffMoveFinder,
-					_teamBlockScheudlingOptions, _allTeamMembersInSelectionSpecification
+					_teamBlockScheudlingOptions, _allTeamMembersInSelectionSpecification,
+					_teamBlockShiftCategoryLimitationValidator
 					);
 
 			IList<IDayOffTemplate> dayOffTemplates = (from item in _schedulerStateHolder().CommonStateHolder.DayOffs
@@ -313,7 +320,8 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 					_teamBlockSteadyStateValidator,
 					//this shouldn't be here.
 					//should be two different impl of the interface instead
-					_toggleManager.IsEnabled(Toggles.Scheduler_TeamBlockAdhereWithMaxSeatRule_23419)
+					_toggleManager.IsEnabled(Toggles.Scheduler_TeamBlockAdhereWithMaxSeatRule_23419),
+					_teamBlockShiftCategoryLimitationValidator
 					);
 
 			teamBlockIntradayOptimizationService.ReportProgress += resourceOptimizerPersonOptimized;

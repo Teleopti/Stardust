@@ -608,6 +608,8 @@
     <Compile Include="Optimization\TeamBlock\TeamBlockIntradayDecisionMakerTest.cs" />
     <Compile Include="Optimization\TeamBlock\TeamBlockIntradayOptimizationServiceTest.cs" />
     <Compile Include="Optimization\TeamBlock\TeamBlockOptimizationLimitsTests.cs" />
+    <Compile Include="Optimization\TeamBlock\TeamBlockRemoveShiftCategoryBackToLegalServiceTest.cs" />
+    <Compile Include="Optimization\TeamBlock\TeamBlockRemoveShiftCategoryOnBestDateServiceTest.cs" />
     <Compile Include="Optimization\TeamBlock\TeamBlockRestrictionOverLimitValidatorTest.cs" />
     <Compile Include="Optimization\TeamBlock\TeamBlockScheduleClonerTest.cs" />
     <Compile Include="Optimization\TeleoptiPeriodValueCalculatorTest.cs" />
@@ -728,6 +730,8 @@
     <Compile Include="Scheduling\TeamBlock\Restriction\TeamBlockEffectiveRestrcitionTest.cs" />
     <Compile Include="Scheduling\TeamBlock\Restriction\TeamBlockResctrictionAggregatorTest.cs" />
     <Compile Include="Scheduling\TeamBlock\Restriction\TeamRestrictionAggregatorTest.cs" />
+    <Compile Include="Scheduling\TeamBlock\ShiftCategoryPeriodRemoverTest.cs" />
+    <Compile Include="Scheduling\TeamBlock\ShiftCategoryWeekRemoverTest.cs" />
     <Compile Include="Scheduling\TeamBlock\SkillInterval\CreateSkillIntervalDataPerDateAndActivityTest.cs" />
     <Compile Include="Scheduling\TeamBlock\SkillInterval\CreateSkillIntervalDatasPerActivtyForDateTest.cs" />
     <Compile Include="Scheduling\TeamBlock\SkillInterval\OpenHourForDateTest.cs" />

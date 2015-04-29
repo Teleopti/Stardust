@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using NUnit.Framework;
 using Rhino.Mocks;
 using Teleopti.Ccc.Domain.Optimization;
+using Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization;
 using Teleopti.Ccc.Domain.Optimization.TeamBlock.MoveTimeOptimization;
 using Teleopti.Ccc.Domain.Optimization.WeeklyRestSolver;
 using Teleopti.Ccc.Domain.ResourceCalculation;
@@ -43,6 +44,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock.MoveTimeOptimization
 		private ITeamBlockInfo _teamBlockInfo;
 		private ShiftNudgeDirective _shiftNudgeDirective;
 		private ISafeRollbackAndResourceCalculation _safeRollbackAndResourceCalculation;
+		private ITeamBlockShiftCategoryLimitationValidator _teamBlockShiftCategoryLimitationValidator;
 
 		[SetUp]
 		public void Setup()
@@ -54,7 +56,8 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock.MoveTimeOptimization
 			_teamBlockClearer = _mock.StrictMock<ITeamBlockClearer>();
 			_teamBlockInfoFactory = _mock.StrictMock<ITeamBlockInfoFactory>();
 			_teamBlockScheduler = _mock.StrictMock<ITeamBlockScheduler>();
-			_target = new TeamBlockMoveTimeOptimizer(_schedulingOptionsCreator, _decisionMaker, _teamBlockClearer, _teamBlockInfoFactory, _teamBlockScheduler, _safeRollbackAndResourceCalculation);
+			_teamBlockShiftCategoryLimitationValidator = _mock.StrictMock<ITeamBlockShiftCategoryLimitationValidator>();
+			_target = new TeamBlockMoveTimeOptimizer(_schedulingOptionsCreator, _decisionMaker, _teamBlockClearer, _teamBlockInfoFactory, _teamBlockScheduler, _safeRollbackAndResourceCalculation, _teamBlockShiftCategoryLimitationValidator);
 			_matrix1 = _mock.StrictMock<IScheduleMatrixPro>();
 			_matrixList = new List<IScheduleMatrixPro> { _matrix1 };
 			_schedulingOptions = new SchedulingOptions();
@@ -177,6 +180,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock.MoveTimeOptimization
 					commonMocks(_today.AddDays(1), _scheduleDayPro2, _scheduleDay2, _projectionService2, _visualLayerCollection2, new TimeSpan(8));
 
 					Expect.Call(_periodValueCalculator.PeriodValue(IterationOperationOption.WorkShiftOptimization)).Return(4);
+					Expect.Call(_teamBlockShiftCategoryLimitationValidator.Validate(_teamBlockInfo, _teamBlockInfo, _optimizationPreferences)).Return(true);
 				}
 				using (_mock.Playback())
 				{

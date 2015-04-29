@@ -5,6 +5,7 @@ using Teleopti.Ccc.Domain.DayOffPlanning;
 using Teleopti.Ccc.Domain.GroupPageCreator;
 using Teleopti.Ccc.Domain.Optimization;
 using Teleopti.Ccc.Domain.Optimization.TeamBlock;
+using Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization;
 using Teleopti.Ccc.Domain.Optimization.WeeklyRestSolver;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling.TeamBlock;
@@ -50,6 +51,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 		private IResourceCalculateDelayer _resourceCalculateDelayer;
 		private ISchedulingResultStateHolder _schedulingResultStateHolder;
 		private IAllTeamMembersInSelectionSpecification _allTeamMembersInSelectionSpecification;
+		private ITeamBlockShiftCategoryLimitationValidator _teamBlockShiftCategoryLimitationValidator;
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling"), SetUp]
 		public void Setup()
@@ -89,6 +91,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 			_selectedPersons = new List<IPerson> {_person};
 			_schedulePeriod = _mocks.StrictMock<IVirtualSchedulePeriod>();
 			_resourceCalculateDelayer = _mocks.StrictMock<IResourceCalculateDelayer>();
+			_teamBlockShiftCategoryLimitationValidator = _mocks.StrictMock<ITeamBlockShiftCategoryLimitationValidator>();
 			_allTeamMembersInSelectionSpecification = _mocks.StrictMock<IAllTeamMembersInSelectionSpecification>();
 			_target = new TeamBlockDayOffOptimizerService(_teamInfoFactory, _lockableBitArrayFactory, _lockableBitArrayChangesTracker,
 			                                              _teamBlockScheduler, _teamBlockInfoFactory,
@@ -96,7 +99,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 			                                              _safeRollbackAndResourceCalculation, _teamDayOffModifier,
 			                                              _teamTeamBlockSteadyStateValidator, _teamBlockClearer,
 														  _teamBlockOptimizationLimits, _teamBlockMaxSeatChecker,
-                                                          _teamBlockDaysOffMoveFinder, _teamBlockSchedulingOptions,_allTeamMembersInSelectionSpecification );
+														  _teamBlockDaysOffMoveFinder, _teamBlockSchedulingOptions, _allTeamMembersInSelectionSpecification, _teamBlockShiftCategoryLimitationValidator);
 			_schedulingResultStateHolder = _mocks.StrictMock<ISchedulingResultStateHolder>();
 		}
 
@@ -112,13 +115,13 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 				//round1
 				Expect.Call(_periodValueCalculatorForAllSkills.PeriodValue(IterationOperationOption.DayOffOptimization)).Return(3);
 				Expect.Call(() => _rollbackService.ClearModificationCollection());
-				runOneMatrixMocks(false, false, false, false);
+				runOneMatrixMocks(false, false, false, false,false);
 				Expect.Call(_periodValueCalculatorForAllSkills.PeriodValue(IterationOperationOption.DayOffOptimization)).Return(2);
 
 				//round2
 				Expect.Call(_periodValueCalculatorForAllSkills.PeriodValue(IterationOperationOption.DayOffOptimization)).Return(2);
 				Expect.Call(() => _rollbackService.ClearModificationCollection());
-				runOneMatrixMocks(false, false, false, false);
+				runOneMatrixMocks(false, false, false, false, false);
 				Expect.Call(_periodValueCalculatorForAllSkills.PeriodValue(IterationOperationOption.DayOffOptimization)).Return(2);
 
 				Expect.Call(() => _safeRollbackAndResourceCalculation.Execute(_rollbackService, _schedulingOptions));
@@ -173,6 +176,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 				Expect.Call(() => _safeRollbackAndResourceCalculation.Execute(_rollbackService, _schedulingOptions));
 				Expect.Call(_periodValueCalculatorForAllSkills.PeriodValue(IterationOperationOption.DayOffOptimization)).Return(3);
 				Expect.Call(_teamBlockOptimizationLimits.ValidateMinWorkTimePerWeek(_teamInfo)).Return(true);
+				Expect.Call(_teamBlockInfoFactory.CreateTeamBlockInfo(_teamInfo, DateOnly.MinValue.AddDays(1),_schedulingOptions.BlockFinderTypeForAdvanceScheduling, false)).Return(_teamBlockInfo);
+				Expect.Call(_teamBlockShiftCategoryLimitationValidator.Validate(_teamBlockInfo, null, _optimizationPreferences)).Return(true);
 			}
 
 			using (_mocks.Playback())
@@ -240,6 +245,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 				Expect.Call(() => _safeRollbackAndResourceCalculation.Execute(_rollbackService, _schedulingOptions));
 				Expect.Call(_periodValueCalculatorForAllSkills.PeriodValue(IterationOperationOption.DayOffOptimization)).Return(3);
 				Expect.Call(_teamBlockOptimizationLimits.ValidateMinWorkTimePerWeek(_teamInfo)).Return(true);
+				Expect.Call(_teamBlockInfoFactory.CreateTeamBlockInfo(_teamInfo, DateOnly.MinValue.AddDays(1),_schedulingOptions.BlockFinderTypeForAdvanceScheduling, false)).Return(_teamBlockInfo);
+				Expect.Call(_teamBlockShiftCategoryLimitationValidator.Validate(_teamBlockInfo, null, _optimizationPreferences)).Return(true);
 			}
 
 			using (_mocks.Playback())
@@ -261,7 +268,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 				//round1
 				Expect.Call(_periodValueCalculatorForAllSkills.PeriodValue(IterationOperationOption.DayOffOptimization)).Return(3);
 				Expect.Call(() => _rollbackService.ClearModificationCollection());
-				runOneMatrixMocks(false, false, false, false);
+				runOneMatrixMocks(false, false, false, false, false);
 				
 				Expect.Call(_periodValueCalculatorForAllSkills.PeriodValue(IterationOperationOption.DayOffOptimization)).Return(2);
 				
@@ -288,7 +295,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 				//round1
 				Expect.Call(_periodValueCalculatorForAllSkills.PeriodValue(IterationOperationOption.DayOffOptimization)).Return(3);
 				Expect.Call(() => _rollbackService.ClearModificationCollection());
-				runOneMatrixMocks(false, false, false, false);
+				runOneMatrixMocks(false, false, false, false, false);
 				Expect.Call(_periodValueCalculatorForAllSkills.PeriodValue(IterationOperationOption.DayOffOptimization)).Return(2);
 
 			}
@@ -322,13 +329,13 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 				//round1
 				Expect.Call(_periodValueCalculatorForAllSkills.PeriodValue(IterationOperationOption.DayOffOptimization)).Return(3);
 				Expect.Call(() => _rollbackService.ClearModificationCollection());
-				runOneMatrixMocks(true, false, false, false);
+				runOneMatrixMocks(true, false, false, false, false);
 				Expect.Call(_periodValueCalculatorForAllSkills.PeriodValue(IterationOperationOption.DayOffOptimization)).Return(2);
 
 				//round2
 				Expect.Call(_periodValueCalculatorForAllSkills.PeriodValue(IterationOperationOption.DayOffOptimization)).Return(2);
 				Expect.Call(() => _rollbackService.ClearModificationCollection());
-				runOneMatrixMocks(false, false, false, false);
+				runOneMatrixMocks(false, false, false, false, false);
 				Expect.Call(_periodValueCalculatorForAllSkills.PeriodValue(IterationOperationOption.DayOffOptimization)).Return(2);
 
 				Expect.Call(() => _safeRollbackAndResourceCalculation.Execute(_rollbackService, _schedulingOptions));
@@ -356,13 +363,13 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 				//round1
 				Expect.Call(_periodValueCalculatorForAllSkills.PeriodValue(IterationOperationOption.DayOffOptimization)).Return(3);
 				Expect.Call(() => _rollbackService.ClearModificationCollection());
-				runOneMatrixMocks(true, false, false, false);
+				runOneMatrixMocks(true, false, false, false, false);
 				Expect.Call(_periodValueCalculatorForAllSkills.PeriodValue(IterationOperationOption.DayOffOptimization)).Return(2);
 
 				//round2
 				Expect.Call(_periodValueCalculatorForAllSkills.PeriodValue(IterationOperationOption.DayOffOptimization)).Return(2);
 				Expect.Call(() => _rollbackService.ClearModificationCollection());
-				runOneMatrixMocks(false, false, false, false);
+				runOneMatrixMocks(false, false, false, false, false);
 				Expect.Call(_periodValueCalculatorForAllSkills.PeriodValue(IterationOperationOption.DayOffOptimization)).Return(2);
 
 				Expect.Call(() => _safeRollbackAndResourceCalculation.Execute(_rollbackService, _schedulingOptions));
@@ -389,7 +396,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 				//round1
 				Expect.Call(_periodValueCalculatorForAllSkills.PeriodValue(IterationOperationOption.DayOffOptimization)).Return(3);
 				Expect.Call(() => _rollbackService.ClearModificationCollection());
-				runOneMatrixMocks(false, true, false, false);
+				runOneMatrixMocks(false, true, false, false, false);
 				Expect.Call(_periodValueCalculatorForAllSkills.PeriodValue(IterationOperationOption.DayOffOptimization)).Return(2);
 
 				Expect.Call(() => _safeRollbackAndResourceCalculation.Execute(_rollbackService, _schedulingOptions));
@@ -416,7 +423,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 				//round1
 				Expect.Call(_periodValueCalculatorForAllSkills.PeriodValue(IterationOperationOption.DayOffOptimization)).Return(3);
 				Expect.Call(() => _rollbackService.ClearModificationCollection());
-				runOneMatrixMocks(false, true, false, false);
+				runOneMatrixMocks(false, true, false, false, false);
 				Expect.Call(_periodValueCalculatorForAllSkills.PeriodValue(IterationOperationOption.DayOffOptimization)).Return(2);
 
 				Expect.Call(() => _safeRollbackAndResourceCalculation.Execute(_rollbackService, _schedulingOptions));
@@ -443,7 +450,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 				//round1
 				Expect.Call(_periodValueCalculatorForAllSkills.PeriodValue(IterationOperationOption.DayOffOptimization)).Return(3);
 				Expect.Call(() => _rollbackService.ClearModificationCollection());
-				runOneMatrixMocks(false, false, true, false);
+				runOneMatrixMocks(false, false, true, false, false);
 				Expect.Call(_periodValueCalculatorForAllSkills.PeriodValue(IterationOperationOption.DayOffOptimization)).Return(2);
 
 				Expect.Call(() => _safeRollbackAndResourceCalculation.Execute(_rollbackService, _schedulingOptions));
@@ -472,13 +479,13 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 				//round1
 				Expect.Call(_periodValueCalculatorForAllSkills.PeriodValue(IterationOperationOption.DayOffOptimization)).Return(3);
 				Expect.Call(() => _rollbackService.ClearModificationCollection());
-				runOneMatrixMocks(false, false, false, true);
+				runOneMatrixMocks(false, false, false, true, false);
 				Expect.Call(_periodValueCalculatorForAllSkills.PeriodValue(IterationOperationOption.DayOffOptimization)).Return(2);
 
 				//round2
 				Expect.Call(_periodValueCalculatorForAllSkills.PeriodValue(IterationOperationOption.DayOffOptimization)).Return(2);
 				Expect.Call(() => _rollbackService.ClearModificationCollection());
-				runOneMatrixMocks(false, false, false, false);
+				runOneMatrixMocks(false, false, false, false, false);
 				Expect.Call(_periodValueCalculatorForAllSkills.PeriodValue(IterationOperationOption.DayOffOptimization)).Return(2);
 
 				Expect.Call(() => _safeRollbackAndResourceCalculation.Execute(_rollbackService, _schedulingOptions));
@@ -535,7 +542,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 		}
 
 
-		private void runOneMatrixMocks(bool failOnRestrictionOverLimitValidator, bool failOnRescheduling, bool failOnNoMoveFound, bool failOnMinWorkTimPerWeek)
+		private void runOneMatrixMocks(bool failOnRestrictionOverLimitValidator, bool failOnRescheduling, bool failOnNoMoveFound, bool failOnMinWorkTimPerWeek, bool failOnShiftCategoryLimitation)
 		{
 			Expect.Call(_lockableBitArrayFactory.ConvertFromMatrix(_optimizationPreferences.DaysOff.ConsiderWeekBefore,
 																	   _optimizationPreferences.DaysOff.ConsiderWeekAfter, _matrix))
@@ -607,7 +614,12 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 				Expect.Call(_matrix.SchedulePeriod).Return(_schedulePeriod);
 				Expect.Call(_schedulePeriod.DateOnlyPeriod).Return(new DateOnlyPeriod(DateOnly.MinValue, DateOnly.MinValue.AddDays(1)));
 				Expect.Call(() => _matrix.LockPeriod(new DateOnlyPeriod(DateOnly.MinValue, DateOnly.MinValue)));
+				return;
 			}
+
+			Expect.Call(_teamBlockInfoFactory.CreateTeamBlockInfo(_teamInfo, DateOnly.MinValue.AddDays(1),_schedulingOptions.BlockFinderTypeForAdvanceScheduling, false)).Return(_teamBlockInfo);
+			Expect.Call(_teamBlockShiftCategoryLimitationValidator.Validate(_teamBlockInfo, null, _optimizationPreferences)).Return(!failOnShiftCategoryLimitation);
+
 		}
 	}
 }

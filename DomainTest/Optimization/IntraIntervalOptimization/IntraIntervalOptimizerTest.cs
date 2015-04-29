@@ -3,6 +3,7 @@ using NUnit.Framework;
 using Rhino.Mocks;
 using Teleopti.Ccc.Domain.Optimization;
 using Teleopti.Ccc.Domain.Optimization.IntraIntervalOptimization;
+using Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Scheduling.TeamBlock;
@@ -58,6 +59,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.IntraIntervalOptimization
 		private IMainShiftOptimizeActivitySpecificationSetter _mainShiftOptimizeActivitySpecificationSetter;
 		private IEditableShift _editableShift;
 		private double _limit;
+		private ITeamBlockShiftCategoryLimitationValidator _teamBlockShiftCategoryLimitationValidator;
 		
 
 		[SetUp]
@@ -74,7 +76,8 @@ namespace Teleopti.Ccc.DomainTest.Optimization.IntraIntervalOptimization
 			_teamScheduling = _mock.StrictMock<ITeamScheduling>();
 			_skillDayIntraIntervalIssueExtractor =_mock.StrictMock<ISkillDayIntraIntervalIssueExtractor>();
 			_mainShiftOptimizeActivitySpecificationSetter = _mock.StrictMock<IMainShiftOptimizeActivitySpecificationSetter>();
-			_target = new IntraIntervalOptimizer(_teamInfoFactory, _teamBlockInfoFactory, _teamBlockScheduler, _skillStaffPeriodEvaluator, _deleteAndResourceCalculateService, _intraIntervalIssueCalculator, _teamScheduling, _shiftProjectionIntraIntervalBestFitCalculator, _skillDayIntraIntervalIssueExtractor, _mainShiftOptimizeActivitySpecificationSetter);
+			_teamBlockShiftCategoryLimitationValidator = _mock.StrictMock<ITeamBlockShiftCategoryLimitationValidator>();
+			_target = new IntraIntervalOptimizer(_teamInfoFactory, _teamBlockInfoFactory, _teamBlockScheduler, _skillStaffPeriodEvaluator, _deleteAndResourceCalculateService, _intraIntervalIssueCalculator, _teamScheduling, _shiftProjectionIntraIntervalBestFitCalculator, _skillDayIntraIntervalIssueExtractor, _mainShiftOptimizeActivitySpecificationSetter, _teamBlockShiftCategoryLimitationValidator);
 			_schedulingOptions = new SchedulingOptions();
 			_optimizationPreferences = new OptimizationPreferences();
 			_rollbackService = _mock.StrictMock<ISchedulePartModifyAndRollbackService>();
@@ -154,6 +157,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.IntraIntervalOptimization
 				Expect.Call(_intraIntervalIssueCalculator.CalculateIssues(_schedulingResultStateHolder, _skill, _dateOnly)).Return(_issusesAfter);
 				Expect.Call(_skillStaffPeriodEvaluator.ResultIsBetter(_skillStaffPeriodIssuesBefore, _skillStaffPeriodIssuesAfter, _limit )).Return(true);
 				Expect.Call(_skillStaffPeriodEvaluator.ResultIsWorse(_skillStaffPeriodIssuesBefore, _skillStaffPeriodIssuesAfter, _limit)).Return(false);
+				Expect.Call(_teamBlockShiftCategoryLimitationValidator.Validate(_teamBlockInfo, null, _optimizationPreferences)).Return(true);
 			}
 
 			using (_mock.Playback())
@@ -203,6 +207,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.IntraIntervalOptimization
 				Expect.Call(_intraIntervalIssueCalculator.CalculateIssues(_schedulingResultStateHolder, _skill, _dateOnly)).Return(_issusesAfter);
 				Expect.Call(_skillStaffPeriodEvaluator.ResultIsBetter(_skillStaffPeriodIssuesBefore, _skillStaffPeriodIssuesAfter, _limit)).Return(true);
 				Expect.Call(_skillStaffPeriodEvaluator.ResultIsWorse(_skillStaffPeriodIssuesBefore, _skillStaffPeriodIssuesAfter, _limit)).Return(false);
+				Expect.Call(_teamBlockShiftCategoryLimitationValidator.Validate(_teamBlockInfo, null, _optimizationPreferences)).Return(true);
 			}
 
 			using (_mock.Playback())
@@ -304,6 +309,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.IntraIntervalOptimization
 
 				Expect.Call(() => _rollbackService.Rollback());
 				Expect.Call(_resourceCalculateDelayer.CalculateIfNeeded(_dateOnly, null)).Return(true);
+				Expect.Call(_teamBlockShiftCategoryLimitationValidator.Validate(_teamBlockInfo, null, _optimizationPreferences)).Return(true);
 			}
 
 			using (_mock.Playback())

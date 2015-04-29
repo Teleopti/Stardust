@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using Teleopti.Ccc.Domain.Helper;
+using Teleopti.Ccc.Domain.Optimization.TeamBlock;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.ResourceCalculation.GroupScheduling;
 using Teleopti.Ccc.Domain.Scheduling.ScheduleTagging;
@@ -42,7 +43,8 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 			IMatrixListFactory matrixListFactory,
 			IOptimizerHelperHelper optimizerHelper,
 			Func<IWorkShiftFinderResultHolder> workShiftFinderResultHolder,
-			Func<IResourceOptimizationHelperExtended> resourceOptimizationHelperExtended)
+			Func<IResourceOptimizationHelperExtended> resourceOptimizationHelperExtended
+			)
 		{
 			_personSkillProvider = personSkillProvider;
 			_groupPageCreator = groupPageCreator;
@@ -139,10 +141,13 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 					if (matrixesOfSelectedScheduleDays.Count == 0)
 						return;
 
-					requiredScheduleOptimizerHelper.RemoveShiftCategoryBackToLegalState(matrixesOfSelectedScheduleDays, backgroundWorker,
+					
+						requiredScheduleOptimizerHelper.RemoveShiftCategoryBackToLegalState(matrixesOfSelectedScheduleDays, backgroundWorker,
 						optimizationPreferences,
 						schedulingOptions,
-						selectedPeriod, allMatrixes);
+						selectedPeriod, allMatrixes);	
+					
+					
 				}
 			}
 			schedulerStateHolder.SchedulingResultState.SkipResourceCalculation = lastCalculationState;

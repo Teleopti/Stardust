@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization;
 using Teleopti.Ccc.Domain.Optimization.WeeklyRestSolver;
 using Teleopti.Ccc.Domain.Scheduling.TeamBlock;
 using Teleopti.Ccc.Secrets.WorkShiftCalculator;
@@ -20,11 +21,13 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.MoveTimeOptimization
 		private readonly ITeamBlockInfoFactory _teamBlockInfoFactory;
 		private readonly ITeamBlockScheduler _teamBlockScheduler;
 		private readonly ISafeRollbackAndResourceCalculation _safeRollbackAndResourceCalculation;
+		private readonly ITeamBlockShiftCategoryLimitationValidator _teamBlockShiftCategoryLimitationValidator;
 
 		public TeamBlockMoveTimeOptimizer(ISchedulingOptionsCreator schedulingOptionsCreator,
 			ITeamBlockMoveTimeDescisionMaker decisionMaker, ITeamBlockClearer teamBlockClearer,
 			ITeamBlockInfoFactory teamBlockInfoFactory, ITeamBlockScheduler teamBlockScheduler,
-			ISafeRollbackAndResourceCalculation safeRollbackAndResourceCalculation)
+			ISafeRollbackAndResourceCalculation safeRollbackAndResourceCalculation,
+			ITeamBlockShiftCategoryLimitationValidator teamBlockShiftCategoryLimitationValidator)
 		{
 			_schedulingOptionsCreator = schedulingOptionsCreator;
 			_decisionMaker = decisionMaker;
@@ -32,6 +35,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.MoveTimeOptimization
 			_teamBlockInfoFactory = teamBlockInfoFactory;
 			_teamBlockScheduler = teamBlockScheduler;
 			_safeRollbackAndResourceCalculation = safeRollbackAndResourceCalculation;
+			_teamBlockShiftCategoryLimitationValidator = teamBlockShiftCategoryLimitationValidator;
 		}
 
 		public bool OptimizeTeam(IOptimizationPreferences optimizerPreferences, ITeamInfo teamInfo, IScheduleMatrixPro matrix, ISchedulePartModifyAndRollbackService rollbackService, IPeriodValueCalculator periodValueCalculator, ISchedulingResultStateHolder schedulingResultStateHolder, IResourceCalculateDelayer resourceCalculateDelayer)
@@ -94,6 +98,19 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.MoveTimeOptimization
 				_safeRollbackAndResourceCalculation.Execute(rollbackService, schedulingOptions);
 				return false;
 			}
+
+			//firstTeamBlock = _teamBlockInfoFactory.CreateTeamBlockInfo(teamInfo, firstDayDate,
+			//	schedulingOptions.BlockFinderTypeForAdvanceScheduling, false);
+
+			//secondTeamBlock = _teamBlockInfoFactory.CreateTeamBlockInfo(teamInfo, secondDayDate,
+			//	schedulingOptions.BlockFinderTypeForAdvanceScheduling, false);
+
+			if (!_teamBlockShiftCategoryLimitationValidator.Validate(firstTeamBlock, secondTeamBlock, optimizerPreferences))
+			{
+				_safeRollbackAndResourceCalculation.Execute(rollbackService, schedulingOptions);
+				return false;
+			}
+			
 
 			//IScheduleDayPro firstDay1 = matrix.GetScheduleDayByKey(daysToBeMoved[0]);
 			//IScheduleDay firstScheduleDay1 = firstDay1.DaySchedulePart();

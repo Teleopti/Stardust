@@ -1,6 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using Teleopti.Ccc.Domain.Optimization.TeamBlock;
+using Teleopti.Ccc.Domain.Optimization.WeeklyRestSolver;
 using Teleopti.Ccc.Domain.ResourceCalculation;
+using Teleopti.Ccc.Domain.Scheduling;
+using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
 using Teleopti.Ccc.Domain.Scheduling.ScheduleTagging;
 using Teleopti.Interfaces.Domain;
 
@@ -13,22 +17,25 @@ namespace Teleopti.Ccc.Domain.Optimization
         private readonly IScheduleFairnessCalculator _fairnessCalculator;
     	private readonly IScheduleDayService _scheduleDayService;
         private readonly Func<IScheduleDayChangeCallback> _scheduleDayChangeCallback;
+	    private readonly ITeamBlockRemoveShiftCategoryBackToLegalService _teamBlockRemoveShiftCategoryBackToLegalService;
 
-        public SchedulePeriodListShiftCategoryBackToLegalStateService(
+	    public SchedulePeriodListShiftCategoryBackToLegalStateService(
             Func<ISchedulingResultStateHolder> stateHolder,
             IScheduleMatrixValueCalculatorProFactory scheduleMatrixValueCalculatorProFactory, 
             IScheduleFairnessCalculator fairnessCalculator, 
 			IScheduleDayService scheduleDayService,
-            Func<IScheduleDayChangeCallback> scheduleDayChangeCallback)
+            Func<IScheduleDayChangeCallback> scheduleDayChangeCallback,
+			ITeamBlockRemoveShiftCategoryBackToLegalService teamBlockRemoveShiftCategoryBackToLegalService)
         {
             _stateHolder = stateHolder;
             _scheduleMatrixValueCalculatorProFactory = scheduleMatrixValueCalculatorProFactory;
             _fairnessCalculator = fairnessCalculator;
         	_scheduleDayService = scheduleDayService;
             _scheduleDayChangeCallback = scheduleDayChangeCallback;
+	        _teamBlockRemoveShiftCategoryBackToLegalService = teamBlockRemoveShiftCategoryBackToLegalService;
         }
 
-		public void Execute(IList<IScheduleMatrixPro> scheduleMatrixList, ISchedulingOptions schedulingOptions, IOptimizationPreferences optimizationPreferences)
+		public void Execute(IList<IScheduleMatrixPro> scheduleMatrixList, ISchedulingOptions schedulingOptions, IOptimizationPreferences optimizationPreferences, IResourceOptimizationHelper resourceOptimizationHelper)
         {
             IScheduleMatrixValueCalculatorPro scheduleMatrixValueCalculator =
                 BuildScheduleMatrixValueCalculator(
@@ -42,14 +49,22 @@ namespace Teleopti.Ccc.Domain.Optimization
                 CreateSchedulePeriodBackToLegalStateServiceBuilder(
                     scheduleMatrixValueCalculator);
 
-            foreach (IScheduleMatrixPro matrix in scheduleMatrixList)
-            {
-            	ISchedulePartModifyAndRollbackService schedulePartModifyAndRollbackService =
-            		new SchedulePartModifyAndRollbackService(_stateHolder(),_scheduleDayChangeCallback(), new ScheduleTagSetter(KeepOriginalScheduleTag.Instance));
-                ISchedulePeriodShiftCategoryBackToLegalStateService schedulePeriodBackToLegalStateService =
-					schedulePeriodBackToLegalStateServiceBuilder.Build(matrix, schedulePartModifyAndRollbackService);
-                schedulePeriodBackToLegalStateService.Execute(matrix.SchedulePeriod, schedulingOptions);
-            }
+			for (var i = 0; i < 2; i++)
+			{
+				foreach (IScheduleMatrixPro matrix in scheduleMatrixList)
+				{
+					ISchedulePartModifyAndRollbackService schedulePartModifyAndRollbackService =
+						new SchedulePartModifyAndRollbackService(_stateHolder(), _scheduleDayChangeCallback(), new ScheduleTagSetter(KeepOriginalScheduleTag.Instance));
+					//ISchedulePeriodShiftCategoryBackToLegalStateService schedulePeriodBackToLegalStateService =
+					//	schedulePeriodBackToLegalStateServiceBuilder.Build(matrix, schedulePartModifyAndRollbackService);
+
+					var shiftNudgeDirective = new ShiftNudgeDirective();
+					var resourceCalculateDelayer = new ResourceCalculateDelayer(resourceOptimizationHelper, 1, true, schedulingOptions.ConsiderShortBreaks);
+					_teamBlockRemoveShiftCategoryBackToLegalService.Execute(matrix.SchedulePeriod, schedulingOptions, scheduleMatrixValueCalculator, matrix, _stateHolder(), schedulePartModifyAndRollbackService, resourceCalculateDelayer, scheduleMatrixList, shiftNudgeDirective);
+
+					//	schedulePeriodBackToLegalStateService.Execute(matrix.SchedulePeriod, schedulingOptions);       
+				}
+			}
         }
 
         public virtual ISchedulePeriodShiftCategoryBackToLegalStateServiceBuilder CreateSchedulePeriodBackToLegalStateServiceBuilder(

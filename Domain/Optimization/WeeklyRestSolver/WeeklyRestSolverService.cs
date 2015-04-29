@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.Optimization.TeamBlock;
+using Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization;
 using Teleopti.Ccc.Domain.Scheduling.Rules;
 using Teleopti.Interfaces.Domain;
 
@@ -29,6 +30,7 @@ namespace Teleopti.Ccc.Domain.Optimization.WeeklyRestSolver
 		private readonly IAllTeamMembersInSelectionSpecification _allTeamMembersInSelectionSpecification;
 		private readonly IPersonWeekViolatingWeeklyRestSpecification  _personWeekViolatingWeeklyRestSpecification;
 		private readonly IBrokenWeekCounterForAPerson  _brokenWeekCounterForAPerson;
+		private readonly ITeamBlockShiftCategoryLimitationValidator _teamBlockShiftCategoryLimitationValidator;
 		public event EventHandler<ResourceOptimizerProgressEventArgs> ResolvingWeek;
 
 		public WeeklyRestSolverService(IWeeksFromScheduleDaysExtractor weeksFromScheduleDaysExtractor,
@@ -38,7 +40,8 @@ namespace Teleopti.Ccc.Domain.Optimization.WeeklyRestSolver
 			IDeleteScheduleDayFromUnsolvedPersonWeek deleteScheduleDayFromUnsolvedPersonWeek,
 			IAllTeamMembersInSelectionSpecification allTeamMembersInSelectionSpecification, 
 			IPersonWeekViolatingWeeklyRestSpecification personWeekViolatingWeeklyRestSpecification, 
-			IBrokenWeekCounterForAPerson brokenWeekCounterForAPerson)
+			IBrokenWeekCounterForAPerson brokenWeekCounterForAPerson,
+			ITeamBlockShiftCategoryLimitationValidator teamBlockShiftCategoryLimitationValidator)
 		{
 			_weeksFromScheduleDaysExtractor = weeksFromScheduleDaysExtractor;
 			_ensureWeeklyRestRule = ensureWeeklyRestRule;
@@ -50,6 +53,7 @@ namespace Teleopti.Ccc.Domain.Optimization.WeeklyRestSolver
 			_allTeamMembersInSelectionSpecification = allTeamMembersInSelectionSpecification;
 			_personWeekViolatingWeeklyRestSpecification = personWeekViolatingWeeklyRestSpecification;
 			_brokenWeekCounterForAPerson = brokenWeekCounterForAPerson;
+			_teamBlockShiftCategoryLimitationValidator = teamBlockShiftCategoryLimitationValidator;
 		}
 
 		private CancelSignal onDayScheduled(ResourceOptimizerProgressEventArgs args)
@@ -133,9 +137,12 @@ namespace Teleopti.Ccc.Domain.Optimization.WeeklyRestSolver
 
 								if (success)
 								{
+									var teamBlockInfo = teamBlockGenerator.Generate(allPersonMatrixList, personWeek.Week, new List<IPerson> { person }, schedulingOptions).First();
+									var brokenShiftCategoryLimitations = !_teamBlockShiftCategoryLimitationValidator.Validate(teamBlockInfo, null, optimizationPreferences);
+									
 									var currentBrokenWeek = _brokenWeekCounterForAPerson.CountBrokenWeek(selectedPeriodScheduleDays,
 									personScheduleRange);
-									if (currentBrokenWeek >= totalNumberOfBrokenWeek)
+									if (currentBrokenWeek >= totalNumberOfBrokenWeek || brokenShiftCategoryLimitations)
 									{
 										//rollback this week 
 										_shiftNudgeManager.RollbackLastScheduledWeek(rollbackService, resourceCalculateDelayer);

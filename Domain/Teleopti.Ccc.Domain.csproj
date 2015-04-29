@@ -818,6 +818,8 @@
     <Compile Include="Optimization\TeamBlock\TeamBlockDaysOffMoveFinder.cs" />
     <Compile Include="Optimization\TeamBlock\MoveTimeOptimization\TeamBlockMoveTimeBetweenDaysService.cs" />
     <Compile Include="Optimization\TeamBlock\TeamBlockOptimizationLimits.cs" />
+    <Compile Include="Optimization\TeamBlock\TeamBlockRemoveShiftCategoryBackToLegalService.cs" />
+    <Compile Include="Optimization\TeamBlock\TeamBlockRemoveShiftCategoryOnBestDateService.cs" />
     <Compile Include="Optimization\TeamBlock\TeamBlockScheduleCloner.cs" />
     <Compile Include="Optimization\WeeklyRestSolver\BrokenWeekCounterForAPerson.cs" />
     <Compile Include="Optimization\WeeklyRestSolver\ContractWeeklyRestForPersonWeek.cs" />
@@ -1100,6 +1102,8 @@
     <Compile Include="Scheduling\TeamBlock\Restriction\SameStartTimeRestriction.cs" />
     <Compile Include="Scheduling\TeamBlock\Restriction\TeamBlockEffectiveRestrcition.cs" />
     <Compile Include="Scheduling\TeamBlock\Restriction\TeamRestrictionAggregator.cs" />
+    <Compile Include="Scheduling\TeamBlock\ShiftCategoryPeriodRemover.cs" />
+    <Compile Include="Scheduling\TeamBlock\ShiftCategoryWeekRemover.cs" />
     <Compile Include="Scheduling\TeamBlock\SkillInterval\CalculateAggregatedDataForActivtyAndDate.cs" />
     <Compile Include="Scheduling\TeamBlock\SkillInterval\CreateSkillIntervalDataPerDateAndActivity.cs" />
     <Compile Include="Scheduling\TeamBlock\SkillInterval\CreateSkillIntervalDatasPerActivtyForDate.cs" />

@@ -79,7 +79,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 				if (backgroundWorker.CancellationPending)
 					return;
 
-				_shiftCategoryBackToLegalState.Execute(matrixList, schedulingOptions, optimizationPreferences);
+				_shiftCategoryBackToLegalState.Execute(matrixList, schedulingOptions, optimizationPreferences, _resourceOptimizationHelper);
 			}
 		}
 

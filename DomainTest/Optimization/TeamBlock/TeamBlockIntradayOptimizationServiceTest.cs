@@ -4,6 +4,7 @@ using Rhino.Mocks;
 using Teleopti.Ccc.Domain.GroupPageCreator;
 using Teleopti.Ccc.Domain.Optimization;
 using Teleopti.Ccc.Domain.Optimization.TeamBlock;
+using Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization;
 using Teleopti.Ccc.Domain.Optimization.WeeklyRestSolver;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling.TeamBlock;
@@ -31,6 +32,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock
 		private ITeamBlockSteadyStateValidator _teamBlockSteadyStateValidator;
 		private int _reportedProgress;
 		private ISchedulingResultStateHolder _schedulingResultStateHolder;
+		private ITeamBlockShiftCategoryLimitationValidator _teamBlockShiftCategoryLimitationValidator;
 
 		[SetUp]
 		public void Setup()
@@ -48,13 +50,16 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock
 			_dailyTargetValueCalculatorForTeamBlock = _mocks.StrictMock<IDailyTargetValueCalculatorForTeamBlock>();
 			_resourceCalculateDelayer = _mocks.StrictMock<IResourceCalculateDelayer>();
 			_teamBlockSteadyStateValidator = _mocks.StrictMock<ITeamBlockSteadyStateValidator>();
+			_teamBlockShiftCategoryLimitationValidator = _mocks.StrictMock<ITeamBlockShiftCategoryLimitationValidator>();
 			_target = new TeamBlockIntradayOptimizationService(_teamBlockGenerator, _teamBlockScheduler,
 				_schedulingOptionsCreator,
 				_safeRollbackAndResourceCalculation,
 				_teamBlockIntradayDecisionMaker, _teamBlockOptimizationLimits,
 				_teamBlockClearer, _teamBlockMaxSeatChecker, _dailyTargetValueCalculatorForTeamBlock, _teamBlockSteadyStateValidator,
 				//seems to miss tests when this is true?
-				false);
+				false,
+				_teamBlockShiftCategoryLimitationValidator
+				);
 			_schedulingResultStateHolder = _mocks.StrictMock<ISchedulingResultStateHolder>();
 			_reportedProgress = 0;
 		}
@@ -101,6 +106,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock
 				Expect.Call(
 					() => _safeRollbackAndResourceCalculation.Execute(_schedulePartModifyAndRollbackService, schedulingOptions));
 				Expect.Call(_teamBlockSteadyStateValidator.IsTeamBlockInSteadyState(teamBlockInfo, schedulingOptions)).Return(true);
+				Expect.Call(_teamBlockShiftCategoryLimitationValidator.Validate(teamBlockInfo, null, optimizationPreferences)).Return(true);
 			}
 			using (_mocks.Playback())
 			{

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Scheduling.TeamBlock;
 using Teleopti.Interfaces.Domain;
@@ -24,7 +25,8 @@ namespace Teleopti.Ccc.Domain.Optimization.IntraIntervalOptimization
 		private readonly IShiftProjectionIntraIntervalBestFitCalculator _shiftProjectionIntraIntervalBestFitCalculator;
 		private readonly ISkillDayIntraIntervalIssueExtractor _skillDayIntraIntervalIssueExtractor;
 		private readonly IMainShiftOptimizeActivitySpecificationSetter _mainShiftOptimizeActivitySpecificationSetter;
-		
+		private readonly ITeamBlockShiftCategoryLimitationValidator _teamBlockShiftCategoryLimitationValidator;
+
 		public IntraIntervalOptimizer(ITeamInfoFactory teamInfoFactory, ITeamBlockInfoFactory teamBlockInfoFactory,
 			ITeamBlockScheduler teamBlockScheduler,
 			ISkillStaffPeriodEvaluator skillStaffPeriodEvaluator,
@@ -33,7 +35,8 @@ namespace Teleopti.Ccc.Domain.Optimization.IntraIntervalOptimization
 			ITeamScheduling  teamScheduling,
 			IShiftProjectionIntraIntervalBestFitCalculator shiftProjectionIntraIntervalBestFitCalculator,
 			ISkillDayIntraIntervalIssueExtractor skillDayIntraIntervalIssueExtractor,
-			IMainShiftOptimizeActivitySpecificationSetter mainShiftOptimizeActivitySpecificationSetter)
+			IMainShiftOptimizeActivitySpecificationSetter mainShiftOptimizeActivitySpecificationSetter,
+			ITeamBlockShiftCategoryLimitationValidator teamBlockShiftCategoryLimitationValidator)
 		{
 			_teamInfoFactory = teamInfoFactory;
 			_teamBlockInfoFactory = teamBlockInfoFactory;
@@ -45,6 +48,7 @@ namespace Teleopti.Ccc.Domain.Optimization.IntraIntervalOptimization
 			_shiftProjectionIntraIntervalBestFitCalculator = shiftProjectionIntraIntervalBestFitCalculator;
 			_skillDayIntraIntervalIssueExtractor = skillDayIntraIntervalIssueExtractor;
 			_mainShiftOptimizeActivitySpecificationSetter = mainShiftOptimizeActivitySpecificationSetter;
+			_teamBlockShiftCategoryLimitationValidator = teamBlockShiftCategoryLimitationValidator;
 		}
 
 		public IIntraIntervalIssues Optimize(ISchedulingOptions schedulingOptions, IOptimizationPreferences optimizationPreferences,
@@ -94,6 +98,13 @@ namespace Teleopti.Ccc.Domain.Optimization.IntraIntervalOptimization
 
 			daySchedule = totalScheduleRange.ScheduledDay(dateOnly);
 			if (!daySchedule.IsScheduled())
+			{
+				rollbackService.Rollback();
+				resourceCalculateDelayer.CalculateIfNeeded(dateOnly, null);
+				return intervalIssuesBefore;
+			}
+
+			if (!_teamBlockShiftCategoryLimitationValidator.Validate(teamBlock, null, optimizationPreferences))
 			{
 				rollbackService.Rollback();
 				resourceCalculateDelayer.CalculateIfNeeded(dateOnly, null);
