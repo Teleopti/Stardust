@@ -68,30 +68,6 @@ Teleopti.SSO.Authentication.AuthenticationState = function (data) {
 		}
 	};
 
-
-	var changeTenantPassword = function (options) {
-		//not done!
-		$.extend(options, {
-			url: data.baseUrl + "ChangePassword/Modify",
-			dataType: "json",
-			type: 'POST',
-			cache: false,
-			error: function (jqXHR, textStatus, errorThrown) {
-				if (jqXHR.status === 400 || jqXHR.Status === 403) {
-					var response = $.parseJSON(jqXHR.responseText);
-					options.errormessage(response.Errors[0]);
-					return;
-				}
-			},
-			success: function (responseData, textStatus, jqXHR) {
-				authenticationModel.password = options.data.newPassword;
-				self.GotoReturnUrl();
-			}
-		});
-
-		$.ajax(options);
-	};
-
 	var changePasswordAjax = function (options) {
 		$.extend(options, {
 			url: data.baseUrl + "SSO/ApplicationAuthenticationApi/ChangePassword",
@@ -117,16 +93,7 @@ Teleopti.SSO.Authentication.AuthenticationState = function (data) {
 	this.ApplyChangePassword = function (options) {
 		options.data.UserName = authenticationModel.username;
 
-		$.ajax({
-			url: data.baseUrl + "ToggleHandler/IsEnabled?toggle=MultiTenancy_LogonUseNewSchema_33049",
-			async: false,
-			success: function (data) {
-				if (data.IsEnabled) {
-					changeTenantPassword(options);
-				}
-				changePasswordAjax(options);
-			}
-		});
+		changePasswordAjax(options);
 	};
 
 	this.TryToSignIn = function (options) {

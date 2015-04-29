@@ -1,43 +1,27 @@
 ﻿using System.Web;
 using System.Web.Mvc;
-using Teleopti.Ccc.Domain.Repositories;
-using Teleopti.Ccc.Infrastructure.Foundation;
-using Teleopti.Ccc.Infrastructure.MultiTenancy.Server;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Server.NHibernate;
 using Teleopti.Ccc.UserTexts;
+using Teleopti.Ccc.Web.Areas.MultiTenancy.Core;
 using Teleopti.Ccc.Web.Areas.MyTime.Core;
 using Teleopti.Ccc.Web.Areas.SSO.Models;
 using Teleopti.Ccc.Web.Areas.Start.Core.Authentication.DataProvider;
 using Teleopti.Ccc.Web.Areas.Start.Models.Authentication;
 using Teleopti.Ccc.Web.Core;
-using Teleopti.Interfaces.Domain;
-using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.Web.Areas.SSO.Controllers
 {
 	[OutputCache(NoStore = true, Duration = 0, VaryByParam = "None")]
 	public class ApplicationAuthenticationApiController : Controller
 	{
-		private readonly IApplicationData _applicationData;
-		private readonly ICurrentPrincipalContext _currentPrincipalContext;
 		private readonly IFormsAuthentication _formsAuthentication;
-		private readonly IApplicationUserQuery _applicationUserQuery;
-		private readonly IRepositoryFactory _repositoryFactory;
-		private readonly ILoadPasswordPolicyService _loadPasswordPolicyService;
+		private readonly IChangePersonPassword _changePersonPassword;
 
-		public ApplicationAuthenticationApiController(IApplicationData applicationData, 
-																							IRepositoryFactory repositoryFactory, 
-																							ILoadPasswordPolicyService loadPasswordPolicyService, 
-																							ICurrentPrincipalContext currentPrincipalContext, 
-																							IFormsAuthentication formsAuthentication,
-																							IApplicationUserQuery applicationUserQuery)
+		public ApplicationAuthenticationApiController(IFormsAuthentication formsAuthentication,
+																							IChangePersonPassword changePersonPassword)
 		{
-			_applicationData = applicationData;
-			_currentPrincipalContext = currentPrincipalContext;
 			_formsAuthentication = formsAuthentication;
-			_applicationUserQuery = applicationUserQuery;
-			_repositoryFactory = repositoryFactory;
-			_loadPasswordPolicyService = loadPasswordPolicyService;
+			_changePersonPassword = changePersonPassword;
 		}
 
 		[HttpGet]
@@ -64,33 +48,23 @@ namespace Teleopti.Ccc.Web.Areas.SSO.Controllers
 		}
 
 		[HttpPostOrPut]
+		[TenantUnitOfWork]
 		public JsonResult ChangePassword(ChangePasswordInput model)
 		{
-			var personInfo = _applicationUserQuery.Find(model.UserName);
-			if (personInfo == null)
-				throw new HttpException(500, "person not found");
-
-			var dataSource = _applicationData.DataSource(personInfo.Tenant);
-			using (var uow = dataSource.Application.CreateAndOpenUnitOfWork())
+			try
 			{
-				var personRepository = _repositoryFactory.CreatePersonRepository(uow);
-				var person = personRepository.LoadPersonAndPermissions(personInfo.Id);
-				_currentPrincipalContext.SetCurrentPrincipal(person, dataSource, null);
-				var userDetailRepository = _repositoryFactory.CreateUserDetailRepository(uow);
-				var result = person.ChangePassword(model.OldPassword, model.NewPassword, _loadPasswordPolicyService, userDetailRepository.FindByUser(person));
-				uow.PersistAll();
-				if (!result.IsSuccessful)
-				{
-					Response.StatusCode = 400;
-					Response.TrySkipIisCustomErrors = true;
-					ModelState.AddModelError("Error", result.IsAuthenticationSuccessful ? Resources.PasswordPolicyWarning : Resources.InvalidUserNameOrPassword);
-					return ModelState.ToJson();
-				}
-				_formsAuthentication.SetAuthCookie(model.UserName + TokenIdentityProvider.ApplicationIdentifier);
-				return Json(result);
+				_changePersonPassword.Modify(model.UserName, model.OldPassword, model.NewPassword);
 			}
+			catch (HttpException httpEx)
+			{
+				var errString = httpEx.GetHttpCode() == 403 ? Resources.InvalidUserNameOrPassword : Resources.PasswordPolicyWarning;
+				Response.StatusCode = 400;
+				Response.TrySkipIisCustomErrors = true;
+				ModelState.AddModelError("Error", errString);
+				return ModelState.ToJson();
+			}
+			_formsAuthentication.SetAuthCookie(model.UserName + TokenIdentityProvider.ApplicationIdentifier);
+			return Json(true);
 		}
-
-		
 	}
 }
