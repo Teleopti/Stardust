@@ -837,6 +837,11 @@
       <DependentUpon>Toggle.feature</DependentUpon>
     </Compile>
     <Compile Include="Toggle\ToggleStepDefinition.cs" />
+    <Compile Include="Wfm\People\AdvancedSearch.feature.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>AdvancedSearch.feature</DependentUpon>
+    </Compile>
     <Compile Include="Wfm\People\PeopleListStepDefinitions.cs" />
     <Compile Include="Wfm\People\ShowBasicInformation.feature.cs">
       <AutoGen>True</AutoGen>
@@ -1179,6 +1184,10 @@
     <None Include="Toggle\Toggle.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>
       <LastGenOutput>Toggle.feature.cs</LastGenOutput>
+    </None>
+    <None Include="Wfm\People\AdvancedSearch.feature">
+      <Generator>SpecFlowSingleFileGenerator</Generator>
+      <LastGenOutput>AdvancedSearch.feature.cs</LastGenOutput>
     </None>
     <None Include="Wfm\People\ShowBasicInformation.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>
