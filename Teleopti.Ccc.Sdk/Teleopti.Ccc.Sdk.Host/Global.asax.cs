@@ -198,12 +198,7 @@ namespace Teleopti.Ccc.Sdk.WcfHost
 		private static void registerSdkFactories(ContainerBuilder builder, IocConfiguration configuration)
 		{
 			builder.RegisterType<TeleoptiCccSdkService>();
-
-			if (configuration.Toggle(Toggles.MultiTenancy_LogonUseNewSchema_33049))
-				builder.RegisterType<ChangePassword>().As<IChangePassword>().SingleInstance();
-			else
-				builder.RegisterType<EmptyChangePassword>().As<IChangePassword>().SingleInstance();
-
+			builder.RegisterType<ChangePassword>().As<IChangePassword>().SingleInstance();
 			builder.RegisterType<MultiTenancyAuthenticationFactory>().As<IAuthenticationFactory>().InstancePerLifetimeScope();
 			builder.RegisterType<TenantPeopleSaver>().As<ITenantPeopleSaver>().InstancePerLifetimeScope();
 			builder.RegisterType<TenantDataManager>().As<ITenantDataManager>().InstancePerLifetimeScope();
@@ -225,11 +220,5 @@ namespace Teleopti.Ccc.Sdk.WcfHost
 		}
 	}
 
-	public class EmptyChangePassword : IChangePassword
-	{
-		public ChangePasswordResult SetNewPassword(ChangePasswordInput newPasswordInput)
-		{
-			return new ChangePasswordResult { Success = true };
-		}
-	}
+	
 }

@@ -46,14 +46,9 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 					.As<ISharedSettingsQuerier>()
 					.SingleInstance();
 			}
-			if (_configuration.Toggle(Toggles.MultiTenancy_LogonUseNewSchema_33049))
-			{
-				builder.RegisterType<ChangePassword>().As<IChangePassword>().SingleInstance();
-			}
-			else
-			{
-				builder.RegisterType<changePasswordStub>().As<IChangePassword>().SingleInstance();
-			}
+			
+			builder.RegisterType<ChangePassword>().As<IChangePassword>().SingleInstance();
+			
 			builder.RegisterType<ResponseException>().As<IResponseException>();
 			if (_configuration.Toggle(Toggles.MultiTenancy_People_32113))
 			{
@@ -70,13 +65,6 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			return server == null;
 		}
 
-		private class changePasswordStub : IChangePassword
-		{
-			public ChangePasswordResult SetNewPassword(ChangePasswordInput newPasswordInput)
-			{
-				return new ChangePasswordResult {Success = true};
-			}
-		}
 
 		private class emptyTenantDataManager : ITenantDataManager
 		{
