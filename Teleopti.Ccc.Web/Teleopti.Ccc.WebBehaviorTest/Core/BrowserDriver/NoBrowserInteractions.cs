@@ -69,7 +69,12 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core.BrowserDriver
 		{
 			throw new NotSupportedException(notAllowedAction);
 		}
-		
+
+		public void AssertNoContains(string existsSelector, string collectionSelector, string text)
+		{
+			throw new NotImplementedException();
+		}
+
 		public void AssertFirstContains(string selector, string text)
 		{
 			throw new NotSupportedException(notAllowedAction);
