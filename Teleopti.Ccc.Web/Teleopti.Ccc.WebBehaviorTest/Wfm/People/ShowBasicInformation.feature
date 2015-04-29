@@ -8,10 +8,10 @@ Background:
 	And there is a team named 'Team1' on site 'London'
 	And there is a team named 'Team2' on site 'London'
 	And I have a role with
-	 | Field            | Value       |
-	 | Name             | Team leader |
-	 | Access to team   | Team1|
-	 | Access to people | true        |
+	 | Field              | Value       |
+	 | Name               | Team leader |
+	 | Access to everyone | true        |
+	 | Access to people   | true        |
 	And Ashley Andeen has a person period with
 	 | Field      | Value      |
 	 | Team       | Team1      |
