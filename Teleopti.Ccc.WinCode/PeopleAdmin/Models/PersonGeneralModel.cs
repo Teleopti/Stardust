@@ -6,6 +6,7 @@ using Syncfusion.Windows.Forms;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.Security.AuthorizationEntities;
+using Teleopti.Ccc.Domain.Security.MultiTenancyAuthentication;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Domain.WorkflowControl;
 using Teleopti.Ccc.Infrastructure.Foundation;
@@ -34,7 +35,7 @@ namespace Teleopti.Ccc.WinCode.PeopleAdmin.Models
 		}
 
 		public PersonGeneralModel(IPerson person, IUserDetail userDetail, IPrincipalAuthorization principalAuthorization,
-			IPersonAccountUpdater personAccountUpdater, string tenant)
+			IPersonAccountUpdater personAccountUpdater, string tenant, LogonInfoModel logonInfoModel)
 			: this()
 		{
 			ContainedEntity = person;
@@ -49,7 +50,18 @@ namespace Teleopti.Ccc.WinCode.PeopleAdmin.Models
 				_tenantData.ApplicationLogonName = ContainedEntity.ApplicationAuthenticationInfo.ApplicationLogOnName;
 				_tenantData.Password = ContainedEntity.ApplicationAuthenticationInfo.Password;
 			}
-			_tenantData.TerminalDate = ContainedEntity.TerminalDate.HasValue ? ContainedEntity.TerminalDate.Value.Date : (DateTime?)null;
+			_tenantData.TerminalDate = ContainedEntity.TerminalDate.HasValue
+				? ContainedEntity.TerminalDate.Value.Date
+				: (DateTime?) null;
+
+			if (logonInfoModel != null)
+			{
+				if (!string.IsNullOrEmpty(logonInfoModel.LogonName))
+					_tenantData.ApplicationLogonName = logonInfoModel.LogonName;
+				if (!string.IsNullOrEmpty(logonInfoModel.Identity))
+					_tenantData.Identity = logonInfoModel.Identity;
+
+			}
 		}
 
 		public TenantAuthenticationData TenantData
@@ -196,8 +208,9 @@ namespace Teleopti.Ccc.WinCode.PeopleAdmin.Models
 		{
 			get
 			{
-				if (ContainedEntity.AuthenticationInfo == null) return "";
-				return ContainedEntity.AuthenticationInfo.Identity;
+				//if (ContainedEntity.AuthenticationInfo == null) return "";
+				//return ContainedEntity.AuthenticationInfo.Identity;
+				return _tenantData.Identity;
 			}
 			set
 			{
@@ -225,8 +238,9 @@ namespace Teleopti.Ccc.WinCode.PeopleAdmin.Models
 		{
 			get
 			{
-				if (ContainedEntity.ApplicationAuthenticationInfo == null) return "";
-				return ContainedEntity.ApplicationAuthenticationInfo.ApplicationLogOnName;
+				//if (ContainedEntity.ApplicationAuthenticationInfo == null) return "";
+				//return ContainedEntity.ApplicationAuthenticationInfo.ApplicationLogOnName;
+				return _tenantData.ApplicationLogonName;
 			}
 			set
 			{

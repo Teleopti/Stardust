@@ -1626,6 +1626,7 @@
     <Compile Include="Security\MultiTenancyAuthentication\IAuthenticationQuerier.cs" />
     <Compile Include="Security\MultiTenancyAuthentication\IChangePassword.cs" />
     <Compile Include="Security\MultiTenancyAuthentication\IdentityLogonClientModel.cs" />
+    <Compile Include="Security\MultiTenancyAuthentication\LogonInfoModel.cs" />
     <Compile Include="Security\NhibConfigDecryption.cs" />
     <Compile Include="Security\OneWayEncryption.cs">
       <SubType>Code</SubType>

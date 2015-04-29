@@ -38,6 +38,7 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.Controls
 		private readonly IPersonRepository _personRepository;
 		private readonly IUnitOfWorkFactory _unitOfWorkFactory;
 		private readonly IGracefulDataSourceExceptionHandler _gracefulDataSourceExceptionHandler;
+		private readonly ITenantLogonDataManager _tenantDataManager;
 		private readonly IComponentContext _container;
 		private IPersonSelectorPresenter _selectorPresenter;
 		private IPeopleNavigatorPresenter _myPresenter;
@@ -48,7 +49,8 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.Controls
 
 		public PeopleNavigator(PortalSettings portalSettings, IComponentContext componentContext,
 			IPersonRepository personRepository, IUnitOfWorkFactory unitOfWorkFactory,
-			IGracefulDataSourceExceptionHandler gracefulDataSourceExceptionHandler)
+			IGracefulDataSourceExceptionHandler gracefulDataSourceExceptionHandler,
+			ITenantLogonDataManager tenantDataManager)
 			: this()
 		{
 			_portalSettings = portalSettings;
@@ -56,13 +58,13 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.Controls
 			_personRepository = personRepository;
 			_unitOfWorkFactory = unitOfWorkFactory;
 			_gracefulDataSourceExceptionHandler = gracefulDataSourceExceptionHandler;
+			_tenantDataManager = tenantDataManager;
 
 			var lifetimeScope = componentContext.Resolve<ILifetimeScope>();
 			_container = lifetimeScope.BeginLifetimeScope();
 			_localEventAggregator = _container.Resolve<IEventAggregator>();
 			_globalEventAggregator = _container.Resolve<IEventAggregatorLocator>().GlobalAggregator();
 			_currentScenario = _container.Resolve<ICurrentScenario>();
-
 			SetTexts();
 		}
 
@@ -143,7 +145,7 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.Controls
 
 																														var foundPeople = _personRepository.FindPeople(selectedGuids).ToList();
 																														var accounts = new PersonAbsenceAccountRepository(uow).FindByUsers(foundPeople);
-
+																														var logonData = _tenantDataManager.GetLogonInfoModelsForGuids(selectedGuids);
 																														ITraceableRefreshService service = new TraceableRefreshService(_currentScenario, new ScheduleRepository(uow));
 
 																														var filteredPeopleHolder = new FilteredPeopleHolder(service, accounts, saviour)
@@ -161,7 +163,7 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.Controls
 																														filteredPeopleHolder.SetRotationCollection(state.AllRotations);
 																														filteredPeopleHolder.SetAvailabilityCollection(state.AllAvailabilities);
 
-																														filteredPeopleHolder.ReassociateSelectedPeopleWithNewUowOpenPeople(foundPeople);
+																														filteredPeopleHolder.ReassociateSelectedPeopleWithNewUowOpenPeople(foundPeople, logonData);
 
 																														openPeopleAdmin(state, filteredPeopleHolder, _mainWindow);
 																													});

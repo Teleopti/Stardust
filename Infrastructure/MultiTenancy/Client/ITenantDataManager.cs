@@ -8,5 +8,6 @@ namespace Teleopti.Ccc.Infrastructure.MultiTenancy.Client
 	{
 		SavePersonInfoResult SaveTenantData(TenantAuthenticationData tenantAuthenticationData);
 		void DeleteTenantPersons(IEnumerable<Guid> personsToBeDeleted);
+		
 	}
 }

@@ -8,6 +8,8 @@ using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Security;
+using Teleopti.Ccc.Domain.Security.Authentication;
+using Teleopti.Ccc.Domain.Security.MultiTenancyAuthentication;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Domain.SystemSetting.GlobalSetting;
 using Teleopti.Ccc.Domain.Tracking;
@@ -134,7 +136,7 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.GuiHelpers
 
 	        var gridData = new PersonGeneralModel(newPerson, new UserDetail(newPerson),
 		        new PrincipalAuthorization(new CurrentTeleoptiPrincipal()),
-				  new FilteredPeopleAccountUpdater(filteredPeopleHolder, UnitOfWorkFactory.Current), UnitOfWorkFactory.Current.Name) { CanBold = true };
+				  new FilteredPeopleAccountUpdater(filteredPeopleHolder, UnitOfWorkFactory.Current), UnitOfWorkFactory.Current.Name, new LogonInfoModel()) { CanBold = true };
 
         	gridData.SetAvailableRoles(filteredPeopleHolder.ApplicationRoleCollection);
 
@@ -185,10 +187,10 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.GuiHelpers
                 filteredPeopleHolder.FilteredPersonCollection.Insert(rowIndex, person);
 
                 filteredPeopleHolder.MarkForInsert(person);
-
+	            
 	            var personGridData = new PersonGeneralModel(person, new UserDetail(person),
 		            new PrincipalAuthorization(new CurrentTeleoptiPrincipal()),
-						new FilteredPeopleAccountUpdater(filteredPeopleHolder, UnitOfWorkFactory.Current), UnitOfWorkFactory.Current.Name) { CanBold = true };
+						new FilteredPeopleAccountUpdater(filteredPeopleHolder, UnitOfWorkFactory.Current), UnitOfWorkFactory.Current.Name, new LogonInfoModel()) { CanBold = true };
             	personGridData.SetAvailableRoles(filteredPeopleHolder.ApplicationRoleCollection);
 
                 //set optional columns if any.);

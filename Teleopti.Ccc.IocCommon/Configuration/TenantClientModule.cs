@@ -58,6 +58,14 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			{
 				builder.RegisterType<emptyTenantDataManager>().As<ITenantDataManager>().SingleInstance();
 			}
+			if (_configuration.Toggle(Toggles.MultiTenancy_LogonUseNewSchema_33049))
+			{
+				builder.RegisterType<TenantLogonDataManager>().As<ITenantLogonDataManager>().SingleInstance();
+			}
+			else
+			{
+				builder.RegisterType<emptyTenantLogonDataManager>().As<ITenantLogonDataManager>().SingleInstance();
+			}
 		}
 
 		private static bool isRunFromTest(string server)
@@ -79,6 +87,16 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 
 			public void DeleteTenantPersons(IEnumerable<Guid> personsToBeDeleted)
 			{
+			}
+
+			
+		}
+
+		private class emptyTenantLogonDataManager : ITenantLogonDataManager
+		{
+			public List<LogonInfoModel> GetLogonInfoModelsForGuids(IEnumerable<Guid> personGuids)
+			{
+				return new List<LogonInfoModel>();
 			}
 		}
 	}

@@ -6,6 +6,7 @@ using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Security;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.Security.AuthorizationEntities;
+using Teleopti.Ccc.Domain.Security.MultiTenancyAuthentication;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Domain.WorkflowControl;
 using Teleopti.Ccc.TestCommon.FakeData;
@@ -37,7 +38,7 @@ namespace Teleopti.Ccc.WinCodeTest.PeopleAdmin.Models
 			_base.AddPersonPeriod(_personPeriod);
 			_principalAuthorization = MockRepository.GenerateMock<IPrincipalAuthorization>();
 			_target = new PersonGeneralModel(_base, new UserDetail(_base), _principalAuthorization,
-				new PersonAccountUpdaterDummy(), "Teleopti");
+				new PersonAccountUpdaterDummy(), "Teleopti", new LogonInfoModel());
 		}
 
 		[Test]
@@ -235,7 +236,7 @@ namespace Teleopti.Ccc.WinCodeTest.PeopleAdmin.Models
 			_base.Stub(x => x.ChangePassword("", null, userDetail)).Return(true);
 
 			_target = new PersonGeneralModel(_base, userDetail, _principalAuthorization, new PersonAccountUpdaterDummy(),
-				"Teleopti") {ApplicationLogOnName = setValue};
+				"Teleopti", new LogonInfoModel()) { ApplicationLogOnName = setValue };
 
 			_target.ApplicationLogOnName.Should().Be.EqualTo(setValue);
 		}
@@ -252,7 +253,7 @@ namespace Teleopti.Ccc.WinCodeTest.PeopleAdmin.Models
 			_base.Stub(x => x.ApplicationAuthenticationInfo = null);
 
 			_target = new PersonGeneralModel(_base, userDetail, _principalAuthorization, new PersonAccountUpdaterDummy(),
-				"Teleopti") {ApplicationLogOnName = setValue};
+				"Teleopti", new LogonInfoModel()) { ApplicationLogOnName = setValue };
 			_target.IsValid.Should().Be.True();
 		}
 
@@ -272,7 +273,7 @@ namespace Teleopti.Ccc.WinCodeTest.PeopleAdmin.Models
 			_base.Stub(x => x.ChangePassword(setValue, null, userDetail)).Return(true);
 
 			_target = new PersonGeneralModel(_base, userDetail, _principalAuthorization, new PersonAccountUpdaterDummy(),
-				"Teleopti") {Password = setValue};
+				"Teleopti", new LogonInfoModel()) { Password = setValue };
 		}
 
 		[Test]
@@ -398,6 +399,9 @@ namespace Teleopti.Ccc.WinCodeTest.PeopleAdmin.Models
 				x => x.IsPermitted(DefinedRaptorApplicationFunctionPaths.ModifyPersonNameAndPassword, DateOnly.Today, _base))
 				.Return(false);
 
+			_target = new PersonGeneralModel(_base, new UserDetail(_base), _principalAuthorization,
+				new PersonAccountUpdaterDummy(), "Teleopti", new LogonInfoModel{LogonName = oldLogOnInfo});
+
 			_target.ApplicationLogOnName = "";
 			_target.LogOnName = "";
 			_target.Password = "";
@@ -423,7 +427,7 @@ namespace Teleopti.Ccc.WinCodeTest.PeopleAdmin.Models
 				.Return(true);
 			_base.Stub(x => x.ChangePassword(setValue, null, userDetail)).Return(true).Repeat.Twice();
 
-			_target = new PersonGeneralModel(_base, userDetail, _principalAuthorization, new PersonAccountUpdaterDummy(),"Teleopti");
+			_target = new PersonGeneralModel(_base, userDetail, _principalAuthorization, new PersonAccountUpdaterDummy(), "Teleopti", new LogonInfoModel());
 
 			_target.TenantData.Changed.Should().Be.False();
 			_target.Password = setValue;

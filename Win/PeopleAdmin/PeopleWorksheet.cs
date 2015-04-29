@@ -510,6 +510,7 @@ namespace Teleopti.Ccc.Win.PeopleAdmin
 				{
 					_filteredPeopleHolder.ResetBoldProperty();
 					_gridConstructor.View.Invalidate();
+					_filteredPeopleHolder.PersistTenantData();
 					return;
 				}
 

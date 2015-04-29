@@ -14,6 +14,7 @@ using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Scheduling.PersonalAccount;
 using Teleopti.Ccc.Domain.Scheduling.Restriction;
 using Teleopti.Ccc.Domain.Security;
+using Teleopti.Ccc.Domain.Security.MultiTenancyAuthentication;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Domain.SystemSetting.GlobalSetting;
 using Teleopti.Ccc.Domain.Tracking;
@@ -70,7 +71,8 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.GuiHelpers
 		private IList<ExternalLogOnModel> _filteredExternalLogOnCollection;
 
 		private IList<Guid> toBeRemovedList = new List<Guid>();
-  
+		private List<LogonInfoModel> _logonData;
+
 		public FilteredPeopleHolder(ITraceableRefreshService refreshService,
 				IDictionary<IPerson, IPersonAccountCollection> allAccounts,
 				ITenantDataManager tenantDataManager)
@@ -359,17 +361,16 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.GuiHelpers
 					repository.Add(ud);
 				}
 
-				loadFilteredPeopleGridData(person, ud);
+				loadFilteredPeopleGridData(person, ud, GetLogonInfoModelFromPersonId(person.Id.GetValueOrDefault()));
 				getParentPersonPeriods(person, today);
 				GetParentSchedulePeriods(person, today);
 				GetParentPersonAccounts(person, today);
 			}
 		}
 
-		public void ReassociateSelectedPeopleWithNewUowOpenPeople(IList<IPerson> people)
+		public void ReassociateSelectedPeopleWithNewUowOpenPeople(IList<IPerson> people, List<LogonInfoModel> logonData)
 		{
-			InParameter.NotNull("peopleId", people);
-
+			_logonData = logonData;
 			int length = people.Count();
 
 			if (length > 0)
@@ -403,7 +404,7 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.GuiHelpers
 						repository.Add(ud);
 					}
 
-					loadFilteredPeopleGridData(person, ud);
+					loadFilteredPeopleGridData(person, ud, GetLogonInfoModelFromPersonId(person.Id.GetValueOrDefault()));
 					getParentPersonPeriods(person, today);
 					GetParentSchedulePeriods(person, today);
 					GetParentPersonAccounts(person, today);
@@ -411,60 +412,65 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.GuiHelpers
 			}
 		}
 
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Uow")]
-		public void ReassociateSelectedPeopleWithNewUow(IList<IPerson> people)
+		public LogonInfoModel GetLogonInfoModelFromPersonId(Guid personId)
 		{
-			InParameter.NotNull("people", people);
-
-			int length = people.Count;
-
-			if (length > 0)
-			{
-				var rep = new PersonRepository(GetUnitOfWork);
-				var personRotationRep = new PersonRotationRepository(GetUnitOfWork);
-				var personAvailRep = new PersonAvailabilityRepository(GetUnitOfWork);
-
-				clearCollections();
-
-				var foundPeople = rep.FindPeople(people).ToList();
-				foreach (var person in people)
-				{
-					if (!foundPeople.Contains(person))
-					{
-						foundPeople.Add(person);
-					}
-				}
-
-				_filteredPersonCollection.AddRange(foundPeople);
-				var today = DateOnly.Today;
-
-				LoadPersonRotations(foundPeople, today, personRotationRep);
-				LoadPersonAvailabilities(foundPeople, personAvailRep);
-
-				var repositoryFactory = new RepositoryFactory();
-				var repository = repositoryFactory.CreateUserDetailRepository(GetUnitOfWork);
-				var userDetails = repository.FindAllUsers();
-
-				foreach (var person in _filteredPersonCollection)
-				{
-					IUserDetail ud;
-					if (userDetails.ContainsKey(person))
-					{
-						ud = userDetails[person];
-					}
-					else
-					{
-						ud = new UserDetail(person);
-						repository.Add(ud);
-					}
-
-					loadFilteredPeopleGridData(person, ud);
-					getParentPersonPeriods(person, today);
-					GetParentSchedulePeriods(person, today);
-					GetParentPersonAccounts(person, today);
-				}
-			}
+			return _logonData.FirstOrDefault(logonInfoModel => logonInfoModel.PersonId.Equals(personId));
 		}
+
+		//[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Uow")]
+		//public void ReassociateSelectedPeopleWithNewUow(IList<IPerson> people)
+		//{
+		//	InParameter.NotNull("people", people);
+
+		//	int length = people.Count;
+
+		//	if (length > 0)
+		//	{
+		//		var rep = new PersonRepository(GetUnitOfWork);
+		//		var personRotationRep = new PersonRotationRepository(GetUnitOfWork);
+		//		var personAvailRep = new PersonAvailabilityRepository(GetUnitOfWork);
+
+		//		clearCollections();
+
+		//		var foundPeople = rep.FindPeople(people).ToList();
+		//		foreach (var person in people)
+		//		{
+		//			if (!foundPeople.Contains(person))
+		//			{
+		//				foundPeople.Add(person);
+		//			}
+		//		}
+
+		//		_filteredPersonCollection.AddRange(foundPeople);
+		//		var today = DateOnly.Today;
+
+		//		LoadPersonRotations(foundPeople, today, personRotationRep);
+		//		LoadPersonAvailabilities(foundPeople, personAvailRep);
+
+		//		var repositoryFactory = new RepositoryFactory();
+		//		var repository = repositoryFactory.CreateUserDetailRepository(GetUnitOfWork);
+		//		var userDetails = repository.FindAllUsers();
+
+		//		foreach (var person in _filteredPersonCollection)
+		//		{
+		//			IUserDetail ud;
+		//			if (userDetails.ContainsKey(person))
+		//			{
+		//				ud = userDetails[person];
+		//			}
+		//			else
+		//			{
+		//				ud = new UserDetail(person);
+		//				repository.Add(ud);
+		//			}
+
+		//			loadFilteredPeopleGridData(person, ud);
+		//			getParentPersonPeriods(person, today);
+		//			GetParentSchedulePeriods(person, today);
+		//			GetParentPersonAccounts(person, today);
+		//		}
+		//	}
+		//}
 
 		private void clearCollections()
 		{
@@ -485,12 +491,12 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.GuiHelpers
 			_personAccountGridViewAdaptorCollection.Clear();
 		}
 
-		private void loadFilteredPeopleGridData(IPerson person, IUserDetail userDetail)
+		private void loadFilteredPeopleGridData(IPerson person, IUserDetail userDetail, LogonInfoModel logonInfoModel)
 		{
 			//create new person grid data.
 			var personGridData = new PersonGeneralModel(person, userDetail,
 				new PrincipalAuthorization(new CurrentTeleoptiPrincipal()),
-				new FilteredPeopleAccountUpdater(this, UnitOfWorkFactory.Current), UnitOfWorkFactory.Current.Name);
+				new FilteredPeopleAccountUpdater(this, UnitOfWorkFactory.Current), UnitOfWorkFactory.Current.Name, logonInfoModel);
 
 			//set optional columns if any.
 			if (_optionalColumnCollection.Count > 0)
@@ -1695,7 +1701,11 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.GuiHelpers
 				GetUnitOfWork.PersistAll();
 				uow.PersistAll();
 			}
+			PersistTenantData();
+		}
 
+		public void PersistTenantData()
+		{
 			var changed = (from personGeneralModel in FilteredPeopleGridData
 								where personGeneralModel.TenantData.Changed
 								select personGeneralModel.TenantData).ToList();

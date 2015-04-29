@@ -2,6 +2,7 @@
 using Rhino.Mocks;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Security;
+using Teleopti.Ccc.Domain.Security.MultiTenancyAuthentication;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Domain.WorkflowControl;
 using Teleopti.Ccc.TestCommon.FakeData;
@@ -35,12 +36,12 @@ namespace Teleopti.Ccc.WinCodeTest.PeopleAdmin.Comparers
         {
             IPerson personA = PersonFactory.CreatePerson("Kalle", "Kula");
 	        PersonGeneralModel personGeneralModelX = new PersonGeneralModel(personA, new UserDetail(personA),
-		        _principalAuthorization, new PersonAccountUpdaterDummy(), "Teleopti");
+		        _principalAuthorization, new PersonAccountUpdaterDummy(), "Teleopti", new LogonInfoModel());
             personGeneralModelX.WorkflowControlSet = new WorkflowControlSet("A set");
 
             IPerson personB = PersonFactory.CreatePerson("Bosse", "Batong");
 	        PersonGeneralModel personGeneralModelY = new PersonGeneralModel(personB, new UserDetail(personB),
-		        _principalAuthorization, new PersonAccountUpdaterDummy(), "Teleopti");
+		        _principalAuthorization, new PersonAccountUpdaterDummy(), "Teleopti", new LogonInfoModel());
             personGeneralModelY.WorkflowControlSet = new WorkflowControlSet("B set");
 
             Assert.AreEqual(-1, _target.Compare(personGeneralModelX, personGeneralModelY));
@@ -52,11 +53,11 @@ namespace Teleopti.Ccc.WinCodeTest.PeopleAdmin.Comparers
         {
             IPerson personA = PersonFactory.CreatePerson("Kalle", "Kula");
 	        PersonGeneralModel personGeneralModelX = new PersonGeneralModel(personA, new UserDetail(personA),
-		        _principalAuthorization, new PersonAccountUpdaterDummy(), "Teleopti");
+				  _principalAuthorization, new PersonAccountUpdaterDummy(), "Teleopti", new LogonInfoModel());
 
             IPerson personB = PersonFactory.CreatePerson("Bosse", "Batong");
 	        PersonGeneralModel personGeneralModelY = new PersonGeneralModel(personB, new UserDetail(personB),
-		        _principalAuthorization, new PersonAccountUpdaterDummy(), "Teleopti");
+				  _principalAuthorization, new PersonAccountUpdaterDummy(), "Teleopti", new LogonInfoModel());
 
             Assert.AreEqual(0, _target.Compare(personGeneralModelX, personGeneralModelY));
             
