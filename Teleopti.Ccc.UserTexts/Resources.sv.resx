@@ -12236,4 +12236,13 @@ Minska komplexiteten för att kunna använda dessa skift.</value>
     <value>Identiteten ({0}) finns redan, välj en annan.</value>
     <comment>used when saving in people</comment>
   </data>
+  <data name="PlanningPeriodMissingMessage" xml:space="preserve">
+    <value>Eftersom dessa krav inte är uppfyllda kan inte nästa planeringsperiod schemaläggas:</value>
+  </data>
+  <data name="PlanningPeriod" xml:space="preserve">
+    <value>Planeringsperiod</value>
+  </data>
+  <data name="DaysAreScheduled" xml:space="preserve">
+    <value>dagar är schemalagda</value>
+  </data>
 </root>
