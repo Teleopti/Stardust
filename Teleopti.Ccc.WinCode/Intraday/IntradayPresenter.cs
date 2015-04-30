@@ -2,9 +2,6 @@
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
-using System.Text;
-using System.Threading;
-using Newtonsoft.Json;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Infrastructure.Persisters.Schedules;
 using log4net;
@@ -270,34 +267,29 @@ namespace Teleopti.Ccc.WinCode.Intraday
 
         private void loadExternalAgentStates()
         {
+	        Exception exception = null;
 	        try
 	        {
 		        var statisticRepository = _repositoryFactory.CreateStatisticRepository();
 		        using (PerformanceOutput.ForOperation("Read and collect agent states"))
 		        {
-			        var tmp = statisticRepository.LoadActualAgentState(_rtaStateHolder.FilteredPersons);
-			        foreach (var actualAgentState in tmp)
-			        {
-				        // if we have recieved an RTA event that is more recent than what we get from DB
-				        IActualAgentState outState;
-				        if (_rtaStateHolder.ActualAgentStates.TryGetValue(actualAgentState.PersonId, out outState))
-					        _rtaStateHolder.SetActualAgentState(outState.ReceivedTime > actualAgentState.ReceivedTime
-						        ? outState
-						        : actualAgentState);
-				        else
-					        _rtaStateHolder.SetActualAgentState(actualAgentState);
-			        }
+			        statisticRepository.LoadActualAgentState(_rtaStateHolder.FilteredPersons)
+				        .ForEach(x => _rtaStateHolder.SetActualAgentState(x));
 		        }
 			}
 			catch (Exception e)
 			{
-				if (ExternalAgentStateReceived != null)
-					ExternalAgentStateReceived.Invoke(this, new ExternalAgentStateReceivedEventArgs
-					{
-						Exception = e
-					});
-				throw;
+				exception = e;
 			}
+
+			if (ExternalAgentStateReceived != null)
+				ExternalAgentStateReceived.Invoke(this, new ExternalAgentStateReceivedEventArgs
+				{
+					Exception = exception
+				});
+
+	        if (exception != null)
+		        throw exception;
         }
 
         private void initializeRtaStateHolder()
