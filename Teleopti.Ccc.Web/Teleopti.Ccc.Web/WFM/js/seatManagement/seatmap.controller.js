@@ -30,8 +30,9 @@
 
 		function init() {
 
-			fabric.util.addListener(document.getElementsByClassName('upper-canvas')[0], 'contextmenu', function (e) {
-				e.preventDefault();
+			fabric.util.addListener(document.getElementsByClassName('upper-canvas')[0], 'contextmenu', function (e) {				
+				if (e.preventDefault) e.preventDefault();
+				e.returnValue = false;
 				return false;
 			});
 

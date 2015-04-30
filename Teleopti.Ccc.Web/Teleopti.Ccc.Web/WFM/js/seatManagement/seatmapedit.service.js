@@ -1,5 +1,7 @@
 ﻿'use strict';
 
+(function () {
+
 angular.module('wfm.seatMap')
 	.factory('seatMapCanvasEditService', ['seatMapCanvasUtilsService', 'seatMapService', function (utils, seatMapService) {
 
@@ -36,13 +38,13 @@ angular.module('wfm.seatMap')
 			switch (key) {
 				case 67: // Ctrl+C
 					if (event.ctrlKey) {
-						event.preventDefault();
+						preventDefaultEvent(event);
 						copy(canvas);
 					}
 					break;
 				case 86: // Ctrl+V
 					if (event.ctrlKey) {
-						event.preventDefault();
+						preventDefaultEvent(event);
 						paste(canvas);
 					}
 					break;
@@ -55,6 +57,12 @@ angular.module('wfm.seatMap')
 				default:
 					break;
 			}
+		};
+
+		function preventDefaultEvent(event) {
+			// ie <11 doesnt have e.preventDefault();
+			if (event.preventDefault) event.preventDefault();
+			event.returnValue = false;
 		};
 
 		function copy(canvas) {
@@ -88,6 +96,8 @@ angular.module('wfm.seatMap')
 				canvas.remove(activeObject);
 				removeObjectAndTidyReferences(canvas, activeObject);
 			}
+
+			canvas.renderAll();
 		};
 
 		function removeObjectAndTidyReferences(canvas, obj) {
@@ -280,6 +290,7 @@ angular.module('wfm.seatMap')
 			});
 
 			canvas.add(textSample);
+			canvas.renderAll();
 		};
 
 
@@ -507,14 +518,15 @@ angular.module('wfm.seatMap')
 		 	canvas.renderAll();
 		 };
 
-		 return editService;
-
 		 function save(saveCommand, saveCallback) {
 			seatMapService.seatMap.save(saveCommand).$promise.then(function (data) {
 				saveCallback(data);
 			});
-		};
+		 };
+
+		 return editService;
 
 
 	}]);
 
+}());
