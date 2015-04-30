@@ -1,10 +1,7 @@
 ﻿using System;
 using Autofac;
-using Teleopti.Ccc.Domain.Security;
 using Teleopti.Ccc.Domain.Security.MultiTenancyAuthentication;
 using Teleopti.Ccc.Domain.Security.Principal;
-using Teleopti.Ccc.Infrastructure.Repositories;
-using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.WinCode.Common.Configuration;
 using Teleopti.Ccc.WinCode.Common.GuiHelpers;
 using Teleopti.Interfaces.Domain;
@@ -12,9 +9,6 @@ using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.Win.Common.Configuration
 {
-	/// <summary>
-	/// Change your password control
-	/// </summary>
 	public partial class ChangePasswordControl : BaseUserControl, ISettingPage, IChangePasswordView, ICheckBeforeClosing
 	{
 		private readonly IComponentContext _container;
@@ -37,17 +31,9 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 		{
 		}
 
-		/// <summary>
-		/// Binds the control with data from repository
-		/// </summary>
 		public void LoadControl()
 		{
-			_presenter = new ChangePasswordPresenter(this,
-													 new PasswordPolicy(
-														 StateHolderReader.Instance.StateReader.ApplicationScopeData.
-															 LoadPasswordPolicyService),
-													 UnitOfWorkFactory.Current,
-													 new RepositoryFactory(), new OneWayEncryption(), _container.Resolve<IChangePassword>());
+			_presenter = new ChangePasswordPresenter(this, _container.Resolve<IChangePassword>());
 			_presenter.Initialize();
 			labelSubHeader2.Text = string.Concat(labelSubHeader2.Text, " ",
 												 ((IUnsafePerson)TeleoptiPrincipal.CurrentPrincipal).Person.Name);
@@ -58,35 +44,18 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 			_presenter.Save();
 		}
 
-		
-
-		/// <summary>
-		/// Sets the unit of work
-		/// </summary>
-		/// <param name="value"></param>
 		public void SetUnitOfWork(IUnitOfWork value)
 		{
 		}
 
-		/// <summary>
-		/// persist all to the persistant storage
-		/// </summary>
 		public void Persist()
 		{}
 
-		/// <summary>
-		/// The tree family
-		/// </summary>
-		/// <returns></returns>
 		public TreeFamily TreeFamily()
 		{
 			return new TreeFamily(UserTexts.Resources.MyProfile);
 		}
 
-		/// <summary>
-		/// The tree node
-		/// </summary>
-		/// <returns></returns>
 		public string TreeNode()
 		{
 			return UserTexts.Resources.ChangeYourPassword;
@@ -96,9 +65,6 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 		{
 		}
 
-		/// <summary>
-		/// Sets colors for the control.
-		/// </summary>
 		private void setColors()
 		{
 			BackColor = ColorHelper.WizardBackgroundColor();
