@@ -81,18 +81,29 @@ namespace Teleopti.Ccc.TestCommon.TestData.Setups.Configurable
 		public void Apply(Tenant tenant, ICurrentTenantSession tenantSession, IPerson user)
 		{
 			if (!WindowsAuthentication && !changedApplicationLogonCredentials()) return;
-			
-			var personInfo = new PersonInfo(tenant, user.Id.Value);
+
+			var personInfo = tenantSession.CurrentSession().Get<PersonInfo>(user.Id.Value);
+			if (personInfo == null)
+			{
+				personInfo = new PersonInfo(tenant, user.Id.Value);
+				tenantSession.CurrentSession().Save(personInfo);
+			}
+
 			if (WindowsAuthentication)
 			{
 				personInfo.SetIdentity(IdentityHelper.Merge(Environment.UserDomainName, Environment.UserName));
 			}
 			if (changedApplicationLogonCredentials())
 			{
+				var wasLocked = personInfo.ApplicationLogonInfo.IsLocked;
+				var lastPasswordChangeBefore = personInfo.ApplicationLogonInfo.LastPasswordChange;
 				personInfo.SetApplicationLogonCredentials(new CheckPasswordStrengthFake(), UserName, Password);
+				if (wasLocked)
+				{
+					personInfo.ApplicationLogonInfo.Lock();
+				}
+				personInfo.ApplicationLogonInfo.SetLastPasswordChange_OnlyUseFromTests(lastPasswordChangeBefore);
 			}
-			var persistPersonInfo = new PersistPersonInfo(tenantSession);
-			persistPersonInfo.Persist(personInfo);
 		}
 	}
 }

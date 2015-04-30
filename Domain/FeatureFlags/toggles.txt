@@ -84,6 +84,6 @@ MultiTenancy_People_32113 = true #if you turn this off in customer environment, 
 MyTimeWeb_SortSchedule_32092 = true
 MyTimeWeb_EnhanceTeamSchedule_32580 = true
 Wfm_MinimumScaffolding_32659 = RC
-MultiTenancy_LogonUseNewSchema_33049 = false
+MultiTenancy_LogonUseNewSchema_33049 = RC
 Wfm_ResourcePlanner_32892 = RC
 Wfm_ChangePlanningPeriod_33043 = false

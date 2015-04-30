@@ -52,6 +52,11 @@ namespace Teleopti.Ccc.TestCommon.TestData.Core
 		public void Apply(IUserDataSetup setup)
 		{
 			_unitOfWorkAction(uow => setup.Apply(uow, Person, Person.PermissionInformation.Culture()));
+			var setupTenant = setup as ITenantUserSetup;
+			if (setupTenant != null)
+			{
+				_tenantUnitOfWorkAction(tenantSesssion => setupTenant.Apply(_tenant, tenantSesssion, Person));
+			}
 			_userDataSetups.Add(setup);
 		}
 
