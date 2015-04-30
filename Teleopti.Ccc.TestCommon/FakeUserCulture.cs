@@ -27,5 +27,10 @@ namespace Teleopti.Ccc.TestCommon
 		{
 			Is(CultureInfoFactory.CreateCatalanCulture());
 		}
+
+		public void IsSwedish()
+		{
+			Is(CultureInfoFactory.CreateSwedishCulture());
+		}
 	}
 }

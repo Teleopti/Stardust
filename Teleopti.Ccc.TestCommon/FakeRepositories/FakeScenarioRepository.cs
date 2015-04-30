@@ -9,9 +9,9 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 {
 	public class FakeScenarioRepository : IScenarioRepository
 	{
-		private readonly Scenario _scenario;
+		private readonly IScenario _scenario;
 
-		public FakeScenarioRepository(Scenario scenario)
+		public FakeScenarioRepository(IScenario scenario)
 		{
 			_scenario = scenario;
 		}

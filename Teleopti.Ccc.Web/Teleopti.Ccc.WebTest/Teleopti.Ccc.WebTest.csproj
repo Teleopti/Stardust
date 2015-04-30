@@ -344,6 +344,7 @@
     <Compile Include="Core\Requests\Mapping\ShiftTradeAddScheduleLayerViewModelMapperTest.cs" />
     <Compile Include="Core\Requests\Mapping\ShiftTradeScheduleViewModelMapperTest.cs" />
     <Compile Include="Core\Requests\Mapping\ShiftTradeTimeLineHoursViewModelMapperTest.cs" />
+    <Compile Include="Core\WeekSchedule\Mapping\ScheduleViewModelFactoryTest.cs" />
     <Compile Include="FakeSchedulePersonProvider.cs" />
     <Compile Include="Areas\Anywhere\Hubs\GroupScheduleViewModelFactoryTest.cs" />
     <Compile Include="Areas\Anywhere\Hubs\GroupScheduleViewModelMapperTest.cs" />
@@ -616,7 +617,6 @@
   <ItemGroup>
     <Folder Include="Areas\Outbound\Models\" />
     <Folder Include="Core\Hangfire\" />
-    <Folder Include="Core\WeekSchedule\Mapping\" />
     <Folder Include="Properties\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

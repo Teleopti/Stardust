@@ -10,7 +10,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 {
 	public class FakeScheduleDataReadScheduleRepository : IScheduleRepository
 	{
-		private readonly IScheduleData[] _data;
+		private IEnumerable<IScheduleData> _data = new List<IScheduleData>();
 
 		public DateTimePeriod ThePeriodThatWasUsedForFindingSchedules { get; private set; }
 
@@ -67,14 +67,15 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 			ThePeriodThatWasUsedForFindingSchedules = dateTimePeriod;
 
 			var period = _data.First().Period; // max period?
-			return ScheduleDictionaryForTest.WithScheduleData(scenario, period, _data);
+			return ScheduleDictionaryForTest.WithScheduleData(person, scenario, period, _data.ToArray());
 		}
 
 		public IScheduleDictionary FindSchedulesForPersonOnlyInGivenPeriod(IPerson person,
-		                                                                   IScheduleDictionaryLoadOptions scheduleDictionaryLoadOptions,
-		                                                                   DateOnlyPeriod period, IScenario scenario)
+			IScheduleDictionaryLoadOptions scheduleDictionaryLoadOptions,
+			DateOnlyPeriod period, IScenario scenario)
 		{
-			throw new NotImplementedException();
+			var thePeriod = TimeZoneHelper.NewUtcDateTimePeriodFromLocalDate(period.StartDate, period.EndDate, TimeZoneInfo.Utc);
+			return ScheduleDictionaryForTest.WithScheduleData(person, scenario, thePeriod, _data.ToArray());
 		}
 
 		public IScheduleDictionary FindSchedulesForPersonsOnlyInGivenPeriod(IEnumerable<IPerson> persons,
@@ -82,8 +83,8 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 			                                                                    scheduleDictionaryLoadOptions, DateOnlyPeriod period,
 		                                                                    IScenario scenario)
 		{
-			//var thisPeriod = _data.First().Period; // max period?
-			return ScheduleDictionaryForTest.WithScheduleDataForManyPeople(scenario, TimeZoneHelper.NewUtcDateTimePeriodFromLocalDate(period.StartDate, period.EndDate, TimeZoneInfo.Utc), _data);
+			var thePeriod = TimeZoneHelper.NewUtcDateTimePeriodFromLocalDate(period.StartDate, period.EndDate, TimeZoneInfo.Utc);
+			return ScheduleDictionaryForTest.WithScheduleDataForManyPeople(scenario, thePeriod, _data.ToArray());
 		}
 
 		public IScheduleRange ScheduleRangeBasedOnAbsence(DateTimePeriod period, IScenario scenario, IPerson person, IAbsence absence)
@@ -102,6 +103,11 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 		public IPersistableScheduleData LoadScheduleDataAggregate(Type scheduleDataType, Guid id)
 		{
 			throw new NotImplementedException();
+		}
+
+		public void Set(IEnumerable<IScheduleData> data)
+		{
+			_data = data;
 		}
 	}
 }

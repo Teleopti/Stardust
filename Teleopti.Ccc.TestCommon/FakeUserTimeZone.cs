@@ -27,5 +27,10 @@ namespace Teleopti.Ccc.TestCommon
 		{
 			Is(TimeZoneInfoFactory.HawaiiTimeZoneInfo());
 		}
+
+		public void IsSweden()
+		{
+			Is(TimeZoneInfoFactory.StockholmTimeZoneInfo());
+		}
 	}
 }

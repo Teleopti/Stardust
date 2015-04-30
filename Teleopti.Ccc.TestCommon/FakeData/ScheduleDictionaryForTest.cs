@@ -61,22 +61,25 @@ namespace Teleopti.Ccc.TestCommon.FakeData
 			TakeSnapshot();
 		}
 
-		public static IScheduleDictionary WithScheduleData(IScenario scenario, DateTimePeriod period, params IScheduleData[] data)
+		public static IScheduleDictionary WithScheduleData(IPerson person, IScenario scenario, DateTimePeriod period, params IScheduleData[] data)
 		{
 			var scheduleDictionary = new ScheduleDictionaryForTest(scenario, period);
-			scheduleDictionary.AddScheduleData(data);
+			scheduleDictionary.AddScheduleData(person, data);
 			return scheduleDictionary;
 		}
 
 		public void AddScheduleData(params IScheduleData[] data)
 		{
-			var person = data.First().Person;
+			AddScheduleData(data.First().Person, data);
+		}
+					 
+		public void AddScheduleData(IPerson person, params IScheduleData[] data)
+		{
 			var scheduleRange = new ScheduleRange(this, new ScheduleParameters(Scenario, person, Period.VisiblePeriod));
 			scheduleRange.AddRange(data);
 			BaseDictionary.Add(person, scheduleRange);
 			TakeSnapshot();
 		}
-
 
 		public static IScheduleDictionary WithScheduleDataForManyPeople(IScenario scenario, DateTimePeriod period, params IScheduleData[] data)
 		{

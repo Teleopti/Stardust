@@ -60,6 +60,10 @@ namespace Teleopti.Ccc.TestCommon.IoC
 		{
 		}
 
+		protected virtual void BeforeInject(IComponentContext container)
+		{
+		}
+
 		protected virtual void BeforeTest()
 		{
 		}
@@ -73,6 +77,7 @@ namespace Teleopti.Ccc.TestCommon.IoC
 			fixture(testDetails);
 			method(testDetails);
 			buildContainer((b, c) => { });
+			BeforeInject(_container);
 			injectMembers();
 			BeforeTest();
 		}

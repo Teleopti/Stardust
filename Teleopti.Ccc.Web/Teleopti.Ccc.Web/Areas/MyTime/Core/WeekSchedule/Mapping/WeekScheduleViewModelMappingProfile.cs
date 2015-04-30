@@ -28,6 +28,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.Mapping
 		private readonly IToggleManager _toggleManager;
 		private readonly Func<INow> _now;
 		private readonly Func<IUserTimeZone> _userTimeZone;
+		private readonly Func<IUserCulture> _culture;
 
 		public WeekScheduleViewModelMappingProfile(Func<IMappingEngine> mapper,
 			Func<IPeriodSelectionViewModelFactory> periodSelectionViewModelFactory,
@@ -36,7 +37,8 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.Mapping
 			Func<IScheduleColorProvider> scheduleColorProvider,
 			Func<ILoggedOnUser> loggedOnUser, Func<INow> now,
 			IToggleManager toggleManager,
-			Func<IUserTimeZone> userTimeZone)
+			Func<IUserTimeZone> userTimeZone,
+			Func<IUserCulture> culture)
 		{
 			_mapper = mapper;
 			_periodSelectionViewModelFactory = periodSelectionViewModelFactory;
@@ -47,6 +49,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.Mapping
 			_now = now;
 			_toggleManager = toggleManager;
 			_userTimeZone = userTimeZone;
+			_culture = culture;
 		}
 		
 		protected override void Configure()
@@ -75,7 +78,6 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.Mapping
 						.Distinct()
 						;
 
-					var culture = _loggedOnUser.Invoke().CurrentUser().PermissionInformation.Culture();
 					var timezone = _userTimeZone.Invoke().TimeZone();
 					var zeroTimeInUtc = TimeZoneHelper.ConvertToUtc(_now().LocalDateTime().Date, timezone);
 
@@ -85,7 +87,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.Mapping
 						{
 							Time = t,
 							TimeLineDisplay = TimeZoneInfo.ConvertTimeFromUtc(zeroTimeInUtc.Add(t), timezone)
-								.ToString(culture.DateTimeFormat.ShortTimePattern),
+								.ToString(_culture().GetCulture().DateTimeFormat.ShortTimePattern),
 							PositionPercentage = diff == TimeSpan.Zero ? 0 : (decimal) (t - startTime).Ticks/diff.Ticks
 						}).ToArray();
 				}))
@@ -99,7 +101,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.Mapping
 					ShiftTradeBulletinBoardPermission = s.ShiftTradeBulletinBoardPermission,
 					PersonAccountPermission = s.PersonAccountPermission
 				}))
-				.ForMember(d => d.DatePickerFormat, o => o.ResolveUsing(s => _loggedOnUser.Invoke().CurrentUser().PermissionInformation.Culture().DateTimeFormat.ShortDatePattern))
+				.ForMember(d => d.DatePickerFormat, o => o.ResolveUsing(s => _culture().GetCulture().DateTimeFormat.ShortDatePattern))
 				;
 
 			CreateMap<WeekScheduleDayDomainData, DayViewModel>()
