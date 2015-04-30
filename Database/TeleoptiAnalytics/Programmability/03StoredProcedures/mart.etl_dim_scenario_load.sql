@@ -92,7 +92,7 @@ ON
 	s.business_unit_code	= bu.business_unit_code
 WHERE 
 	NOT EXISTS (SELECT scenario_id FROM mart.dim_scenario d WHERE d.scenario_code = s.scenario_code AND datasource_id=1)
---AND s.default_scenario=1 --20090401 only default 
+	AND s.is_deleted= 0
 
 
 -----------------------------------------------------------------------------
