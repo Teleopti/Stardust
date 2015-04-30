@@ -9,7 +9,7 @@ using Teleopti.Ccc.Infrastructure.MultiTenancy.Client;
 namespace Teleopti.Ccc.InfrastructureTest.MultiTenancy.Client
 {
 	[TenantClientTest]
-	[TestCommon.IoC.Toggle(Toggles.MultiTenancy_People_32113)]
+	[TestCommon.IoC.Toggle(Toggles.MultiTenancy_LogonUseNewSchema_33049)]
 	public class TenantLogonDataManagerTest
 	{
 		public PostHttpRequestFake HttpRequestFake;
