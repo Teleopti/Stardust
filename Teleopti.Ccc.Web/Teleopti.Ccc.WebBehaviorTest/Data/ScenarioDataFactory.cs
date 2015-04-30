@@ -2,9 +2,9 @@
 using System.Globalization;
 using System.Linq;
 using Teleopti.Ccc.Domain.Collection;
+using Teleopti.Ccc.Infrastructure.MultiTenancy.Server;
 using Teleopti.Ccc.TestCommon.TestData.Core;
 using Teleopti.Ccc.TestCommon.TestData.Setups.Configurable;
-using Teleopti.Ccc.UserTexts;
 using Teleopti.Ccc.WebBehaviorTest.Data.Setups.Default;
 using Teleopti.Interfaces.Domain;
 
@@ -12,12 +12,14 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data
 {
 	public class ScenarioDataFactory : TestDataFactory
 	{
+		private readonly Tenant _defaultTenant;
 		private readonly AnalyticsDataFactory _analyticsDataFactory = new AnalyticsDataFactory();
 		private readonly IList<IDelayedSetup> _delayedSetups = new List<IDelayedSetup>();
 
-		public ScenarioDataFactory() : base(ScenarioUnitOfWorkState.UnitOfWorkAction)
+		public ScenarioDataFactory(Tenant defaultTenant) : base(defaultTenant, ScenarioUnitOfWorkState.UnitOfWorkAction, TenantUnitOfWorkState.TenantUnitOfWorkAction)
 		{
-			AddPerson("I", new Name("The", "One")).Apply(new UserConfigurable
+			_defaultTenant = defaultTenant;
+			AddPerson(defaultTenant, "I", new Name("The", "One")).Apply(new UserConfigurable
 			{
 				UserName = "1",
 				Password = DefaultPassword.ThePassword
@@ -45,7 +47,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data
 		public void ApplyPerson(IUserSetup setup, Name name)
 		{
 			RemoveLastPerson();
-			AddPerson(name.ToString(), name).Apply(new UserConfigurable
+			AddPerson(_defaultTenant, name.ToString(), name).Apply(new UserConfigurable
 			{
 				UserName = "temp",
 				Password = DefaultPassword.ThePassword

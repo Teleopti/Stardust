@@ -254,6 +254,7 @@
     <Compile Include="MultiTenancy\Server\NHibernate\TenantNhibernateExceptionConverter.cs" />
     <Compile Include="MultiTenancy\Server\PasswordStrengthException.cs" />
     <Compile Include="MultiTenancy\Server\PersistPersonInfoFake.cs" />
+    <Compile Include="MultiTenancy\Server\PersistTenant.cs" />
     <Compile Include="MultiTenancy\Server\TenantUnitOfWorkFake.cs" />
     <Compile Include="MultiTenancy\Server\VerifyPasswordPolicy.cs" />
     <Compile Include="MultiTenancy\Server\DeletePersonInfo.cs" />

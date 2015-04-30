@@ -176,6 +176,7 @@
     <Compile Include="TestData\Analytics\Tables\dim_activity.cs" />
     <Compile Include="TestData\Analytics\Tables\dim_shift_length.cs" />
     <Compile Include="TestData\Analytics\Tables\sys_configuration.cs" />
+    <Compile Include="TestData\Core\ITenantUserSetup.cs" />
     <Compile Include="TestData\Setups\Configurable\PersonEmptyDayConfigurable.cs" />
     <Compile Include="TestData\Setups\Configurable\ShiftExchangeOfferConfigurable.cs" />
     <Compile Include="TestData\Setups\Configurable\QueueSourceConfigurable.cs" />

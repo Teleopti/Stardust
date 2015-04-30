@@ -1,7 +1,9 @@
 ﻿using System;
 using TechTalk.SpecFlow;
 using TechTalk.SpecFlow.Assist;
+using Teleopti.Ccc.Infrastructure.MultiTenancy.Server;
 using Teleopti.Ccc.TestCommon.TestData.Core;
+using Teleopti.Ccc.WebBehaviorTest.Core;
 using Teleopti.Ccc.WebBehaviorTest.Core.Extensions;
 
 namespace Teleopti.Ccc.WebBehaviorTest.Data
@@ -11,7 +13,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data
 		public static ScenarioDataFactory Data()
 		{
 			if (ScenarioContext.Current.Value<ScenarioDataFactory>() == null)
-				ScenarioContext.Current.Value(new ScenarioDataFactory());
+				ScenarioContext.Current.Value(new ScenarioDataFactory(defaultTenant()));
 			return ScenarioContext.Current.Value<ScenarioDataFactory>();
 		}
 
@@ -28,6 +30,17 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data
 		public static bool PersonExists(string name)
 		{
 			return Data().HasPerson(name);
+		}
+
+		private static Tenant defaultTenant()
+		{
+			Tenant defaultTenant=null;
+			TenantUnitOfWorkState.TenantUnitOfWorkAction(s =>
+			{
+				defaultTenant = new Tenant(TestControllerMethods.TenantName);
+				new PersistTenant(s).Persist(defaultTenant);
+			});
+			return defaultTenant;
 		}
 
 		public static AnalyticsDataFactory Analytics()

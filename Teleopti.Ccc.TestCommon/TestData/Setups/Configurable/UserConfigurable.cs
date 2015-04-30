@@ -4,6 +4,8 @@ using System.Linq;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Security.Authentication;
 using Teleopti.Ccc.Domain.Security.AuthorizationEntities;
+using Teleopti.Ccc.Infrastructure.MultiTenancy.Server;
+using Teleopti.Ccc.Infrastructure.MultiTenancy.Server.NHibernate;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.TestCommon.TestData.Core;
 using Teleopti.Interfaces.Domain;
@@ -11,7 +13,7 @@ using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.TestCommon.TestData.Setups.Configurable
 {
-	public class UserConfigurable : IUserSetup
+	public class UserConfigurable : IUserSetup, ITenantUserSetup
 	{
 		public string Name { get; set; }
 
@@ -30,7 +32,6 @@ namespace Teleopti.Ccc.TestCommon.TestData.Setups.Configurable
 
 		public void Apply(IUnitOfWork uow, IPerson user, CultureInfo cultureInfo)
 		{
-
 			if (!string.IsNullOrEmpty(Name))
 			{
 				if (Name.Contains(" "))
@@ -45,7 +46,7 @@ namespace Teleopti.Ccc.TestCommon.TestData.Setups.Configurable
 			if (TerminalDate.HasValue)
 				user.TerminatePerson(new DateOnly(TerminalDate.Value), new PersonAccountUpdaterDummy());
 
-			if (!string.IsNullOrEmpty(UserName))
+			if (changedApplicationLogonCredentials())
 			{
 				var authenticationInfo = new ApplicationAuthenticationInfo
 				{
@@ -70,6 +71,28 @@ namespace Teleopti.Ccc.TestCommon.TestData.Setups.Configurable
 				var role = roleRepository.LoadAll().Single(b => b.Name ==  Role);
 				user.PermissionInformation.AddApplicationRole(role);
 			}
+		}
+
+		private bool changedApplicationLogonCredentials()
+		{
+			return !string.IsNullOrEmpty(UserName);
+		}
+
+		public void Apply(Tenant tenant, ICurrentTenantSession tenantSession, IPerson user)
+		{
+			if (!WindowsAuthentication && !changedApplicationLogonCredentials()) return;
+			
+			var personInfo = new PersonInfo(tenant, user.Id.Value);
+			if (WindowsAuthentication)
+			{
+				personInfo.SetIdentity(IdentityHelper.Merge(Environment.UserDomainName, Environment.UserName));
+			}
+			if (changedApplicationLogonCredentials())
+			{
+				personInfo.SetApplicationLogonCredentials(new CheckPasswordStrengthFake(), UserName, Password);
+			}
+			var persistPersonInfo = new PersistPersonInfo(tenantSession);
+			persistPersonInfo.Persist(personInfo);
 		}
 	}
 }
