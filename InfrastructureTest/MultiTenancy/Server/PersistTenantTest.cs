@@ -1,4 +1,5 @@
-﻿using NUnit.Framework;
+﻿using NHibernate.Exceptions;
+using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Server;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Server.NHibernate;
@@ -24,6 +25,16 @@ namespace Teleopti.Ccc.InfrastructureTest.MultiTenancy.Server
 				.SetString("name", tenant.Name)
 				.UniqueResult<Tenant>()
 				.Should().Not.Be.Null();
+		}
+
+		[Test]
+		public void NameMustBeUnique()
+		{
+			var name = RandomName.Make();
+			var tenant1 = new Tenant(name);
+			var tenant2 = new Tenant(name);
+			target.Persist(tenant1);
+			Assert.Throws<GenericADOException>(() => target.Persist(tenant2));
 		}
 
 		[SetUp]
