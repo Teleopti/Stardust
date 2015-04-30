@@ -11,12 +11,12 @@ namespace Teleopti.Support.Code.Tool
 			if(!modeFile.Type.Equals("DEPLOY"))
 				return;
 			
-			const string oldDir = "..\\TeleoptiCCC\\Analytics\\Reports\\CCC\\CustomReports\\";
+			const string oldDir = "..\\TeleoptiCCC\\Analytics\\Reports\\Custom\\";
 
 			if (Directory.Exists(oldDir))
 			{
 				logger.Info("Found " + oldDir);
-				const string newDir = "..\\TeleoptiCCC\\Web\\Areas\\Reporting\\Reports\\CCC\\CustomReports\\";
+				const string newDir = "..\\TeleoptiCCC\\Web\\Areas\\Reporting\\Reports\\Custom\\";
 				if (!Directory.Exists(newDir))
 				{
 					Directory.CreateDirectory(newDir);
