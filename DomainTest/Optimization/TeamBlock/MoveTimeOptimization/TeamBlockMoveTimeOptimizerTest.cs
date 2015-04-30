@@ -7,7 +7,6 @@ using Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization;
 using Teleopti.Ccc.Domain.Optimization.TeamBlock.MoveTimeOptimization;
 using Teleopti.Ccc.Domain.Optimization.WeeklyRestSolver;
 using Teleopti.Ccc.Domain.ResourceCalculation;
-using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Scheduling.TeamBlock;
 using Teleopti.Interfaces.Domain;
 
@@ -187,8 +186,41 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock.MoveTimeOptimization
 					Assert.IsTrue(_target.OptimizeTeam(_optimizationPreferences, _teamInfo, _matrix1, _rollbackService, _periodValueCalculator,
 					_schedulingResultStateHolder, _resourceCalulateDelayer));
 				}
-			
+		
+		}
 
+		[Test]
+		public void ShouldReturnFalseIfShiftCategoryLimitationsIsBroken()
+		{
+			using (_mock.Record())
+			{
+				Expect.Call(() => _rollbackService.ClearModificationCollection());
+				Expect.Call(_schedulingOptionsCreator.CreateSchedulingOptions(_optimizationPreferences)).Return(_schedulingOptions);
+				Expect.Call(_teamBlockInfoFactory.CreateTeamBlockInfo(_teamInfo, new DateOnly(2014, 05, 14),
+					_schedulingOptions.BlockFinderTypeForAdvanceScheduling, false)).Return(_teamBlockInfo);
+				Expect.Call(() => _teamBlockClearer.ClearTeamBlock(_schedulingOptions, _rollbackService, _teamBlockInfo));
+				Expect.Call(_teamBlockInfoFactory.CreateTeamBlockInfo(_teamInfo, new DateOnly(2014, 05, 15),
+					_schedulingOptions.BlockFinderTypeForAdvanceScheduling, false)).Return(_teamBlockInfo);
+				Expect.Call(() => _teamBlockClearer.ClearTeamBlock(_schedulingOptions, _rollbackService, _teamBlockInfo));
+				Expect.Call(_periodValueCalculator.PeriodValue(IterationOperationOption.WorkShiftOptimization)).Return(5);
+				Expect.Call(_decisionMaker.Execute(_matrix1, _optimizationPreferences)).Return(new List<DateOnly> { _today, _today.AddDays(1) });
+
+				Expect.Call(_teamBlockScheduler.ScheduleTeamBlockDay(_teamBlockInfo, new DateOnly(2014, 5, 14), _schedulingOptions,
+					_rollbackService, _resourceCalulateDelayer, _schedulingResultStateHolder, _shiftNudgeDirective)).IgnoreArguments().Return(true);
+				Expect.Call(_teamBlockScheduler.ScheduleTeamBlockDay(_teamBlockInfo, new DateOnly(2014, 5, 15), _schedulingOptions,
+					_rollbackService, _resourceCalulateDelayer, _schedulingResultStateHolder, _shiftNudgeDirective)).IgnoreArguments().Return(true);
+
+				commonMocks(_today, _scheduleDayPro1, _scheduleDay1, _projectionService1, _visualLayerCollection1, new TimeSpan(7));
+				commonMocks(_today.AddDays(1), _scheduleDayPro2, _scheduleDay2, _projectionService2, _visualLayerCollection2, new TimeSpan(8));
+
+				Expect.Call(_teamBlockShiftCategoryLimitationValidator.Validate(_teamBlockInfo, _teamBlockInfo, _optimizationPreferences)).Return(false);
+				Expect.Call(() => _safeRollbackAndResourceCalculation.Execute(_rollbackService, _schedulingOptions));
+			}
+			using (_mock.Playback())
+			{
+				Assert.IsFalse(_target.OptimizeTeam(_optimizationPreferences, _teamInfo, _matrix1, _rollbackService, _periodValueCalculator,
+				_schedulingResultStateHolder, _resourceCalulateDelayer));
+			}
 		}
 	}
 }

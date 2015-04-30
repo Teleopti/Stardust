@@ -33,6 +33,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 		private readonly IOptimizerHelperHelper _optimizerHelper;
 		private readonly Func<IWorkShiftFinderResultHolder> _workShiftFinderResultHolder;
 		private readonly Func<IResourceOptimizationHelperExtended> _resourceOptimizationHelperExtended;
+		private readonly IWeeklyRestSolverCommand _weeklyRestSolverCommand;
 
 		public ScheduleCommand(Func<IPersonSkillProvider> personSkillProvider, IGroupPageCreator groupPageCreator,
 			IGroupScheduleGroupPageDataProvider groupScheduleGroupPageDataProvider,
@@ -43,7 +44,8 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 			IMatrixListFactory matrixListFactory,
 			IOptimizerHelperHelper optimizerHelper,
 			Func<IWorkShiftFinderResultHolder> workShiftFinderResultHolder,
-			Func<IResourceOptimizationHelperExtended> resourceOptimizationHelperExtended
+			Func<IResourceOptimizationHelperExtended> resourceOptimizationHelperExtended,
+			IWeeklyRestSolverCommand weeklyRestSolverCommand
 			)
 		{
 			_personSkillProvider = personSkillProvider;
@@ -57,6 +59,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 			_optimizerHelper = optimizerHelper;
 			_workShiftFinderResultHolder = workShiftFinderResultHolder;
 			_resourceOptimizationHelperExtended = resourceOptimizationHelperExtended;
+			_weeklyRestSolverCommand = weeklyRestSolverCommand;
 		}
 
 		public void Execute(IOptimizerOriginalPreferences optimizerOriginalPreferences, IBackgroundWorkerWrapper backgroundWorker,
@@ -142,12 +145,14 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 						return;
 
 					
-						requiredScheduleOptimizerHelper.RemoveShiftCategoryBackToLegalState(matrixesOfSelectedScheduleDays, backgroundWorker,
-						optimizationPreferences,
-						schedulingOptions,
-						selectedPeriod, allMatrixes);	
+					requiredScheduleOptimizerHelper.RemoveShiftCategoryBackToLegalState(matrixesOfSelectedScheduleDays, backgroundWorker,
+					optimizationPreferences,
+					schedulingOptions,
+					selectedPeriod, allMatrixes);	
 					
-					
+					ISchedulePartModifyAndRollbackService rollbackService = new SchedulePartModifyAndRollbackService(schedulerStateHolder.SchedulingResultState,_scheduleDayChangeCallback(), new ScheduleTagSetter(schedulingOptions.TagToUseOnScheduling));
+					var resourceCalculateDelayer = new ResourceCalculateDelayer(_resourceOptimizationHelper, 1, true, schedulingOptions.ConsiderShortBreaks);
+					_weeklyRestSolverCommand.Execute(schedulingOptions, optimizationPreferences, selectedPersons, rollbackService, resourceCalculateDelayer, selectedPeriod, matrixesOfSelectedScheduleDays,backgroundWorker);
 				}
 			}
 			schedulerStateHolder.SchedulingResultState.SkipResourceCalculation = lastCalculationState;

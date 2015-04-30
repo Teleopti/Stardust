@@ -99,12 +99,6 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.MoveTimeOptimization
 				return false;
 			}
 
-			//firstTeamBlock = _teamBlockInfoFactory.CreateTeamBlockInfo(teamInfo, firstDayDate,
-			//	schedulingOptions.BlockFinderTypeForAdvanceScheduling, false);
-
-			//secondTeamBlock = _teamBlockInfoFactory.CreateTeamBlockInfo(teamInfo, secondDayDate,
-			//	schedulingOptions.BlockFinderTypeForAdvanceScheduling, false);
-
 			if (!_teamBlockShiftCategoryLimitationValidator.Validate(firstTeamBlock, secondTeamBlock, optimizerPreferences))
 			{
 				_safeRollbackAndResourceCalculation.Execute(rollbackService, schedulingOptions);

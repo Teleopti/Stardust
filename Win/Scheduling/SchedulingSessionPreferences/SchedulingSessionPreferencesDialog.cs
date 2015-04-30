@@ -198,10 +198,6 @@ namespace Teleopti.Ccc.Win.Scheduling.SchedulingSessionPreferences
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Globalization", "CA1300:SpecifyMessageBoxOptions")]
 		private void buttonOK_Click(object sender, EventArgs e)
 		{
-			if(!schedulingSessionPreferencesTabPanel1.ValidateUnsupportedRestrictions())
-			{
-				MessageBox.Show(Resources.ValidateUnsupportedRestrictions, Resources.SchedulingOptionMessageBox, MessageBoxButtons.OK, MessageBoxIcon.Warning);
-			}
 			schedulingSessionPreferencesTabPanel1.ExchangeData(ExchangeDataOption.ControlsToDataSource);
 
 			if (dayOffPreferencesPanel1.ValidateData(ExchangeDataOption.ClientToServer))

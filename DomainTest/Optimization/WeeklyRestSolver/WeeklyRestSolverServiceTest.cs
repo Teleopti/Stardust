@@ -199,7 +199,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.WeeklyRestSolver
 					_allPersonMatrixList, _rollbackService, _resourceCalculateDelayer, _schedulingResultStateHolder,
 					_selectedPeriod, _selectedPersons, _optimizationPreferences, _schedulingOptions)).Return(true);
 				Expect.Call(_brokenWeekCounterForAPerson.CountBrokenWeek(_scheduleDayList, _scheduleRange1)).Return(1);
-				Expect.Call(_brokenWeekCounterForAPerson.CountBrokenWeek(_scheduleDayList, _scheduleRange1)).Return(1);
+				Expect.Call(_brokenWeekCounterForAPerson.CountBrokenWeek(_scheduleDayList, _scheduleRange1)).Return(0);
 				Expect.Call(_shiftNudgeManager.RollbackLastScheduledWeek(_rollbackService, _resourceCalculateDelayer))
 					.Return(true);
 				Expect.Call(_teamBlockGenerator.Generate(_allPersonMatrixList, _personWeek1.Week,
@@ -213,6 +213,51 @@ namespace Teleopti.Ccc.DomainTest.Optimization.WeeklyRestSolver
 				Expect.Call(_virtualSchedulePeriod.DateOnlyPeriod).Return(_selectedPeriod);
 
 				Expect.Call(_teamBlockGenerator.Generate(_allPersonMatrixList, _personWeek1.Week,new List<IPerson> { _personWeek1.Person }, _schedulingOptions)).Return(new List<ITeamBlockInfo> { _teamBlockInfo });
+				Expect.Call(_teamBlockShiftCategoryLimitationValidator.Validate(_teamBlockInfo, null, _optimizationPreferences)).Return(false);
+			}
+			using (_mock.Playback())
+			{
+				_target.Execute(_selectedPersons, _selectedPeriod, _teamBlockGenerator, _rollbackService,
+					_resourceCalculateDelayer, _schedulingResultStateHolder, _allPersonMatrixList,
+					_optimizationPreferences, _schedulingOptions);
+			}
+
+		}
+
+		[Test]
+		public void ShouldNotContinueIfShiftCategoryLimitationsIsBroken()
+		{
+			DateOnly dayOffDate = new DateOnly(2014, 04, 17);
+			IDictionary<DateOnly, TimeSpan> dayOffToSpanDictionary = new Dictionary<DateOnly, TimeSpan>();
+			dayOffToSpanDictionary.Add(dayOffDate, TimeSpan.FromHours(10));
+			using (_mock.Record())
+			{
+				extractingPersonWeek(_selectedPeriod, _scheduleDayList, _personWeekList);
+				Expect.Call(_personWeekViolatingWeeklyRestSpecification.IsSatisfyBy(_scheduleRange1, _personWeek1,
+					TimeSpan.FromHours(40))).Return(false);
+				//analyzing failed weeks
+				Expect.Call(_ensureWeeklyRestRule.HasMinWeeklyRest(_personWeek1, _scheduleRange1, TimeSpan.FromHours(40)))
+					.Return(false);
+				Expect.Call(_dayOffToTimeSpanExtractor.GetDayOffWithTimeSpanAmongAWeek(_personWeek1.Week,
+					_scheduleRange1)).Return(dayOffToSpanDictionary);
+				Expect.Call(_shiftNudgeManager.TrySolveForDayOff(_personWeek1, dayOffDate, _teamBlockGenerator,
+					_allPersonMatrixList, _rollbackService, _resourceCalculateDelayer, _schedulingResultStateHolder,
+					_selectedPeriod, _selectedPersons, _optimizationPreferences, _schedulingOptions)).Return(true);
+				Expect.Call(_brokenWeekCounterForAPerson.CountBrokenWeek(_scheduleDayList, _scheduleRange1)).Return(1);
+				Expect.Call(_brokenWeekCounterForAPerson.CountBrokenWeek(_scheduleDayList, _scheduleRange1)).Return(1);
+				Expect.Call(_shiftNudgeManager.RollbackLastScheduledWeek(_rollbackService, _resourceCalculateDelayer))
+					.Return(true);
+				Expect.Call(_teamBlockGenerator.Generate(_allPersonMatrixList, _personWeek1.Week,
+					new List<IPerson> { _personWeek1.Person }, _schedulingOptions))
+					.Return(new List<ITeamBlockInfo> { _teamBlockInfo });
+				Expect.Call(_teamBlockInfo.TeamInfo).Return(_teamInfo);
+				Expect.Call(_allTeamMembersInSelectionSpecification.IsSatifyBy(_teamInfo, _selectedPersons)).Return(true);
+				Expect.Call(() => _deleteScheduleDayFromUnsolvedPersonWeek.DeleteAppropiateScheduleDay(_scheduleRange1,
+					dayOffDate, _rollbackService, _selectedPeriod, _matrix1));
+				Expect.Call(_matrix1.SchedulePeriod).Return(_virtualSchedulePeriod);
+				Expect.Call(_virtualSchedulePeriod.DateOnlyPeriod).Return(_selectedPeriod);
+
+				Expect.Call(_teamBlockGenerator.Generate(_allPersonMatrixList, _personWeek1.Week, new List<IPerson> { _personWeek1.Person }, _schedulingOptions)).Return(new List<ITeamBlockInfo> { _teamBlockInfo });
 				Expect.Call(_teamBlockShiftCategoryLimitationValidator.Validate(_teamBlockInfo, null, _optimizationPreferences)).Return(true);
 			}
 			using (_mock.Playback())

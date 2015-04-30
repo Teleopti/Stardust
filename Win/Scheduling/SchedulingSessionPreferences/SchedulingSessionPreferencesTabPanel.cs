@@ -90,16 +90,6 @@ namespace Teleopti.Ccc.Win.Scheduling.SchedulingSessionPreferences
 			get { return Tag.ToString(); }
 		}
 
-        public bool ValidateUnsupportedRestrictions()
-        {
-            if (BlockFinderType.SingleDay != (BlockFinderType) comboBoxBlockType.SelectedValue || isTeamSelected())
-            {
-                if(checkBoxUseShiftCategoryRestrictions.Checked)
-                    return false;
-            }
-            return true;
-        }
-
 		public bool ScheduleOnlyRotationDaysVisible
 		{
 			get { return checkBoxOnlyRotationDays.Visible; }
