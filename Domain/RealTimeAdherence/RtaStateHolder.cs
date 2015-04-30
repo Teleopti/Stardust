@@ -13,7 +13,6 @@ namespace Teleopti.Ccc.Domain.RealTimeAdherence
     {
         private readonly ISchedulingResultStateHolder _schedulingResultStateHolder;
         private readonly IRtaStateGroupRepository _rtaStateGroupRepository;
-        private readonly IStateGroupActivityAlarmRepository _stateGroupActivityAlarmRepository;
 		private readonly ConcurrentDictionary<Guid, IActualAgentState> _actualAgentStates = new ConcurrentDictionary<Guid, IActualAgentState>();
 		
         public RtaStateHolder(ISchedulingResultStateHolder schedulingResultStateHolder, IRtaStateGroupRepository rtaStateGroupRepository, IStateGroupActivityAlarmRepository stateGroupActivityAlarmRepository)
@@ -24,18 +23,15 @@ namespace Teleopti.Ccc.Domain.RealTimeAdherence
 
             _schedulingResultStateHolder = schedulingResultStateHolder;
             _rtaStateGroupRepository = rtaStateGroupRepository;
-            _stateGroupActivityAlarmRepository = stateGroupActivityAlarmRepository;
         }
 
         public void Initialize()
         {
             RtaStateGroups = _rtaStateGroupRepository.LoadAllCompleteGraph();
-            StateGroupActivityAlarms = _stateGroupActivityAlarmRepository.LoadAllCompleteGraph();
         }
 
 	    public IEnumerable<IRtaStateGroup> RtaStateGroups { get; private set; }
 
-	    public IEnumerable<IStateGroupActivityAlarm> StateGroupActivityAlarms { get; private set; }
 
 	    public ISchedulingResultStateHolder SchedulingResultStateHolder
         {
@@ -58,7 +54,6 @@ namespace Teleopti.Ccc.Domain.RealTimeAdherence
 		        {
 			        if (oldState.ReceivedTime > actualAgentState.ReceivedTime)
 				        return oldState;
-
 			        return actualAgentState;
 		        });
 	        var handler = AgentstateUpdated;

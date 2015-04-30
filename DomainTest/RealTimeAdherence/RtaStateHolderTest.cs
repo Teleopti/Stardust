@@ -54,7 +54,6 @@ namespace Teleopti.Ccc.DomainTest.RealTimeAdherence
             _target = new RtaStateHolder(_schedulingResultStateHolder, _rtaStateGroupRepository, _stateGroupActivityAlarmRepository);
             _target.Initialize();
 			Assert.That(_target.RtaStateGroups,Is.Not.Null);
-			Assert.That(_target.StateGroupActivityAlarms,Is.Not.Null);
             _mocks.VerifyAll();
         }
 
