@@ -15,7 +15,41 @@ describe("PeopleCtrl", function () {
 	}));
 	 
 	var mockSearchService = {
+		isAdvancedSearchEnabled: {
+			query: function() {
+				var queryDeferred = $q.defer();
+				queryDeferred.resolve({
+					IsEnabled: true
+				});
+				return { $promise: queryDeferred.promise };
+
+			}	
+		},
+
 		search: {
+			query: function() {
+			var queryDeferred = $q.defer();
+				queryDeferred.resolve({
+					People: [
+						{
+							FirstName: "Ashley",
+							LastName: "Andeen",
+							EmploymentNumber: "12345",
+							LeavingDate: "2015-04-09",
+							OptionalColumnValues: [
+							{
+								"Key": "CellPhone",
+								"Value": "123456"
+							}],
+							Team: "Paris/Team 1"
+						}
+					],
+					OptionalColumns:["CellPhone"]
+				});
+				return { $promise: queryDeferred.promise };
+			}
+		},
+		searchWithOption: {
 			query: function() {
 			var queryDeferred = $q.defer();
 				queryDeferred.resolve({
@@ -56,6 +90,7 @@ describe("PeopleCtrl", function () {
 		expect(scope.searchResult[0].OptionalColumnValues[0].Key).toEqual("CellPhone");
 		expect(scope.searchResult[0].OptionalColumnValues[0].Value).toEqual("123456");
 	}));
+
 	it("should show my team as default keyword", inject(function($controller) {
 		var scope = $rootScope.$new();
 
@@ -65,5 +100,35 @@ describe("PeopleCtrl", function () {
 		scope.$digest(); // this is needed to resolve the promise
 
 		expect(scope.keyword).toEqual("Paris/Team 1");
-	})); 
+	}));
+	 
+	//*
+	it("should show agent by search with option", inject(function ($controller) {
+		var scope = $rootScope.$new();
+
+		$controller("PeopleCtrl", { $scope: scope, PeopleSearch: mockSearchService });
+
+		scope.advancedSearchForm = {
+			firstName: "ashley smith",
+			organization:"london shenzhen"
+		};
+		scope.advancedSearch();
+		scope.$digest(); // this is needed to resolve the promise
+
+		expect(scope.searchResult.length).toEqual(1);
+
+		var firstResult = scope.searchResult[0];
+		expect(firstResult.FirstName).toEqual("Ashley");
+		expect(firstResult.OptionalColumnValues[0].Key).toEqual("CellPhone");
+		expect(firstResult.OptionalColumnValues[0].Value).toEqual("123456");
+		
+		expect(scope.optionalColumns.length).toEqual(1);
+		expect(scope.optionalColumns[0]).toEqual("CellPhone");
+
+		expect(scope.keyword).toEqual("FirstName: ashley smith, Organization: london shenzhen");
+		//expect(scope.keyword).toEqual("FirstName: (ashley smith), Organization: (london shenzhen)");
+		//expect(scope.keyword).toEqual("FirstName: (ashley,smith), Organization: (london,shenzhen)");
+		//expect(scope.keyword).toEqual("FirstName contains 'ashley,smith', Organization contains 'london,shenzhen'");
+	}));
+	//*/
 });

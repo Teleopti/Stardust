@@ -1,11 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using TechTalk.SpecFlow;
+﻿using TechTalk.SpecFlow;
+using TechTalk.SpecFlow.Assist;
 using Teleopti.Ccc.WebBehaviorTest.Core;
-using Teleopti.Ccc.WebBehaviorTest.Core.BrowserDriver;
 
 namespace Teleopti.Ccc.WebBehaviorTest.Wfm.People
 {
@@ -17,15 +12,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Wfm.People
 		{
 			Browser.Interactions.AssertAnyContains(".people-list .person", name);
 		}
-
-		/*
-		[Then(@"I should see '(.*) (.*)' in people list")]
-		public void ThenIShouldSeeInPeopleList(string firstname, string lastname)
-		{
-			var selector = string.Format(".people-list .person .first-name:contains({0})", firstname);
-			Browser.Interactions.AssertAnyContains(selector);
-		}
-		//*/
 
 		[Then(@"I should not see '(.*)' in people list")]
 		public void ThenIShouldNotSeeInPeopleList(string name)
@@ -43,5 +29,27 @@ namespace Teleopti.Ccc.WebBehaviorTest.Wfm.People
 			Browser.Interactions.FillWith(selector, value);
 			Browser.Interactions.PressEnter(selector);
 		}
+
+		[When(@"I search with")]
+		public void WhenISearchWith(Table table)
+		{
+			Browser.Interactions.Click("#advanced-search");
+
+			var criterias = table.CreateSet<SearchCriteria>();
+
+			foreach (var criteria in criterias)
+			{
+				var selector = string.Format("#criteria-{0}", criteria.Field.Replace(' ', '-').ToLower());
+				Browser.Interactions.FillWith(selector, criteria.Value);
+			}
+
+			Browser.Interactions.Click("#go-advanced-search");
+		}
+	}
+
+	public class SearchCriteria
+	{
+		public string Field { get; set; }
+		public string Value { get; set; }
 	}
 }

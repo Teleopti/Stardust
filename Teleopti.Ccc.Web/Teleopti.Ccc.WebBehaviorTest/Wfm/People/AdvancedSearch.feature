@@ -1,4 +1,5 @@
-﻿Feature: AdvancedSearch
+﻿@OnlyRunIfEnabled('WfmPeople_AdvancedSearch_32973')
+Feature: AdvancedSearch
 	In order to find the exact group of people I want
 	As a team leader
 	I want to find people with advanced options
@@ -38,10 +39,12 @@ Scenario: match any search term
 	Then I should see 'Ashley Andeen' in people list
 	And I should see 'Ashley Smith' in people list
 
-@ignore
+	@ignore
 Scenario: match any search terms in a field
 	When I view people
-	And I search 'Andeen Smith' in 'last name' field
+	And I search with
+	| Field        | Value        |
+	| last name    | Andeen Smith |
 	Then I should see 'Ashley Andeen' in people list
 	And I should see 'Ashley Smith' in people list
 

@@ -49,9 +49,8 @@
 			<i class="mdi mdi-magnify"></i>
 			<input style="width: 90%" type="text" placeholder="{{'Search'|translate}}..." xplaceholder="{{'Name' | translate}},{{'EmployeeNo' | translate}},{{'Role' | translate}},{{'Skill' | translate}},{{'Contract' | translate}},{{'PersonFinderFieldOrganization' | translate}},{{'ContractSchedule' | translate}},{{'PartTimePercentage' | translate}},{{'PersonFinderFieldShiftBag' | translate}},{{'BudgetGroup' | translate}}"
 				   ng-model="keyword" ng-keydown="$event.which === 13 && searchKeyword()" ng-change="validateSearchKeywordChanged()" />
-			<!--<span class="dropdown" tabindex="0"  ng-include="'advanced_search_option.html'">
-				
-			</span>-->
+			<span id="" class="dropdown" tabindex="0" ng-show="isAdvancedSearchEnabled" ng-include="'advanced_search_option.html'">
+			</span>
 		</div>
 	</div>
 		<!--<div class="wfm-checkbox">
@@ -114,272 +113,83 @@
 </div>
 
 <script type="text/ng-template" id="advanced_search_option.html">
-	<i class="mdi mdi-menu-down" ng-click="toggleAdvancedSearchOption()"></i>
+	<i id="advanced-search" class="mdi mdi-menu-down" ng-click="toggleAdvancedSearchOption()"></i>
 	<div class="material-depth-2" ng-cloak ng-show="showAdvancedSearchOption">
 		<ul class="wfm-list">
 			<li>
-
 				<label class="col-md-4">FirstName: </label>
 				<span class="col-md-8">
-					<input type="text" placeholder="FirstName" />
+					<input id="criteria-first-name" type="text" placeholder="FirstName" ng-model="advancedSearchForm.firstName"/>
 				</span>
 			</li>
 			<li>	
 				<label class="col-md-4">LastName: </label>
 				<span class="col-md-8">
-					<input type="text" placeholder="LastName" />
+					<input id="criteria-last-name" type="text" placeholder="LastName" ng-model="advancedSearchForm.lastName" />
 				</span>
 			</li>
 			<li >
 				<label class="col-md-4">EmploymentNumber: </label>
 				<span class="col-md-8">
-					<input type="text" placeholder="EmploymentNumber" />
+					<input id="criteria-employment-number" type="text" placeholder="EmploymentNumber" ng-model="advancedSearchForm.emplymentNumber" />
 				</span>
 			</li>
 			<li >
 				<label class="col-md-4">Organization: </label>
 				<span class="col-md-8">
-					<input type="text" placeholder="Organization"  />
+					<input id="criteria-organization" type="text" placeholder="Organization" ng-model="advancedSearchForm.organization" />
 				</span>
 			</li>
 			<li >
 				<label class="col-md-4">Role: </label>
-				<span class="col-md-8"><input type="text" placeholder="Role" value="agent" /></span>
+				<span class="col-md-8">
+					<input id="criteria-role" type="text" placeholder="Role" ng-model="advancedSearchForm.role" />
+				</span>
 			</li>
 			<li >
 				<label class="col-md-4">Contract: </label>
 				<span class="col-md-8">
-					<input type="text" placeholder="Contract" Value="fixed hourly" />
+					<input id="criteria-contract" type="text" placeholder="Contract" ng-model="advancedSearchForm.contract" />
 				</span>
 			</li>
 			<li >
 				<label class="col-md-4">Contract schedule: </label>
 				<span class="col-md-8">
-					<input type="text" placeholder="Contract schedule" />
+					<input id="criteria-contract-schedule" type="text" placeholder="Contract schedule" ng-model="advancedSearchForm.contractSchedule" />
 				</span>
 			</li>
 			<li >
 				<label class="col-md-4">Shift bag: </label>
 				<span class="col-md-8">
-					<input type="text" placeholder="Shift bag" />
+					<input id="criteria-shift-bag" type="text" placeholder="Shift bag" ng-model="advancedSearchForm.shiftBag" />
 				</span>
 			</li>
 			<li >
 				<label class="col-md-4">Part time percentage: </label>
 				<span class="col-md-8">
-					<input type="text" placeholder="Part time percentage" />
+					<input id="criteria-part-time-percentage" type="text" placeholder="Part time percentage" ng-model="advancedSearchForm.partTimePercentage" />
 				</span>
 			</li>
 
 			<li >
 				<label class="col-md-4">Skill: </label>
 				<span class="col-md-8">
-					<input type="text" placeholder="Skill" />
+					<input id="criteria-skill" type="text" placeholder="Skill" ng-model="advancedSearchForm.skill" />
 				</span>
 			</li>
 			<li >
 				<label class="col-md-4">Budget group: </label>
 				<span class="col-md-8">
-					<input type="text" placeholder="Budget group" />
+					<input id="criteria-badge-group" type="text" placeholder="Budget group" ng-model="advancedSearchForm.bugetGroup" />
 				</span>
 			</li>
 			<li >
 				<label class="col-md-4">Note: </label>
 				<span class="col-md-8">
-					<input type="text" placeholder="Note" />
+					<input id="criteria-note" type="text" placeholder="Note" ng-model="advancedSearchForm.note" />
 				</span>
 			</li>
-			<button class="wfm-btn wfm-btn-primary float-right" ng-click="advancedSearch()"><i class="mdi mdi-magnify"></i></button>
-		</ul>
-		
+			<button id="go-advanced-search" class="wfm-btn wfm-btn-primary float-right" ng-click="advancedSearch()"><i class="mdi mdi-magnify"></i></button>
+		</ul>		
 	</div>
-
 </script>
-
-<modal-dialog show='modalShown' width='1000px' height='580px'>
-	<div id="testModal" class="modalbg">
-		<div class="dialog">
-			<div class="modal-header">
-				<span>
-					<a>
-						<i class="mdi mdi-account"></i>Ashley Andeen
-					</a>
-				</span>
-			</div>
-			<div class="modal-content">
-				<div class="modal-footer">
-					<a href="#close1" title="Close1" class="dismiss wfm-btn wfm-btn-invis-primary">Discard</a>
-					<a href="#close2" title="Close2" class="dismiss wfm-btn wfm-btn-invis-primary">Save</a>
-				</div>
-			</div>
-			<div class="tab-group">
-				<input type="radio" name="tabs" id="tab-1" checked="checked" />
-				<label class="label" for="tab-1">
-					General
-				</label>
-				<section>
-					<div class="tab-container">
-						<div class="row">
-							<span class="col-lg-6">
-								<div>
-									<ul class="wfm-list">
-										<li>
-											<i class="mdi mdi-pencil"></i> <strong>General</strong>
-										</li>
-										<li>
-											<span class="col-lg-5">First Name: </span>
-											<input class="col-lg-7" type="text" value="Ashley" />
-										</li>
-										<li>
-											<span class="col-lg-5">Last Name: </span>
-											<input class="col-lg-7" type="text" value="Andeen" />
-										</li>
-										<li>
-											<span class="col-lg-5">Employee Number: </span>
-											<input class="col-lg-7" type="text" value="1234567" />
-										</li>
-									</ul>
-								</div>
-							</span>
-							<span class="col-lg-6">
-								<div>
-									<ul class="wfm-list">
-										<li>
-											<i class="mdi mdi-pencil"></i> <strong>Contact</strong>
-										</li>
-										<li>
-											<span class="col-lg-5">Email: </span>
-											<input class="col-lg-7" type="text" value="aa@teleopti.com" />
-										</li>
-										<li>
-											<span class="col-lg-5">Cell Phone: </span>
-											<input class="col-lg-7" type="text" value="1234567" />
-										</li>
-									</ul>
-								</div>
-							</span>
-						</div>
-						<div class="row">
-							<span class="col-lg-6">
-								<div>
-									<ul class="wfm-list">
-										<li>
-											<i class="mdi mdi-pencil"></i> <strong>Local & Language</strong>
-										</li>
-										<li>
-											<span class="col-lg-5">Language: </span>
-											<select class="col-lg-7">
-												<option>English</option>
-												<option>Chinese</option>
-												<option>Swedish</option>
-											</select>
-										</li>
-										<li>
-											<span class="col-lg-5">Format: </span>
-											<select class="col-lg-7">
-												<option>en-US</option>
-												<option>en-GB</option>
-												<option>zh-CN</option>
-											</select>
-										</li>
-										<li>
-											<span class="col-lg-5">Timezone: </span>
-											<select class="col-lg-7">
-												<option>UTC+1</option>
-												<option>UTC+8</option>
-												<option>UTC-1</option>
-											</select>
-										</li>
-										<li>
-											<span class="col-lg-5">Work Week Starts On: </span>
-											<select class="col-lg-7">
-												<option>Monday</option>
-												<option>Tuesday</option>
-												<option>Wednesday</option>
-												<option>Thursday</option>
-												<option>Friday</option>
-												<option>Saturday</option>
-												<option>Sunday</option>
-											</select>
-										</li>
-									</ul>
-								</div>
-							</span>
-							<span class="col-lg-6">
-								<div>
-									<ul class="wfm-list">
-										<li>
-											<i class="mdi mdi-pencil"></i> <strong>Others</strong>
-										</li>
-										<div class="col-lg-12">
-											<span class="col-lg-5">Roles: </span>
-
-											<span class="dropdown col-lg-7" tabindex="0" style="width: 200px; z-index: 1">
-												<span class="context-trigger" ng-click="contextTrigger1 = !contextTrigger1">Agent, Team Leader</span>
-												<div class="inner right material-depth-2" ng-show="contextTrigger1" ng-cloak style="width: 200px;">
-													<div class="wfm-checkbox">
-														<input type="checkbox" id="check1" checked="checked" />
-														<label for="check1">
-															<span class="wfm-checkbox-toggle"></span>
-															<span class="wfm-checkbox-label">Agent</span>
-														</label>
-													</div>
-													<div class="wfm-checkbox">
-														<input type="checkbox" id="check2" checked="checked" />
-														<label for="check2">
-															<span class="wfm-checkbox-toggle"></span>
-															<span class="wfm-checkbox-label">Team Leader</span>
-														</label>
-													</div>
-													<div class="wfm-checkbox">
-														<input type="checkbox" id="check3" />
-														<label for="check3">
-															<span class="wfm-checkbox-toggle"></span>
-															<span class="wfm-checkbox-label">Super Administrator</span>
-														</label>
-													</div>
-												</div>
-											</span>
-										</div>
-										<li>
-											<span class="col-lg-5">Workflow Controlset: </span>
-											<select class="col-lg-7">
-												<option value="value">Default</option>
-											</select>
-										</li>
-										<li>
-											<span class="col-lg-5">Leaving Date: </span>
-											<input class="col-lg-7" type="text" value="2020-12-31" />
-										</li>
-										<li>
-											<span class="col-lg-5">Note: </span>
-											<textarea class="col-lg-7"></textarea>
-										</li>
-									</ul>
-								</div>
-							</span>
-						</div>
-					</div>
-				</section>
-				<input type="radio" name="tabs" id="tab-2" />
-				<label class="label" for="tab-2">
-					Person Periods
-				</label>
-				<section>
-					<div class="tab-container">
-						Person Periods
-					</div>
-				</section>
-				<input type="radio" name="tabs" id="tab-3" />
-				<label class="label" for="tab-3">
-					Schedule Periods
-				</label>
-				<section>
-					<div class="tab-container">
-						Schedule Periods
-					</div>
-				</section>
-			</div>
-		</div>
-	</div>
-</modal-dialog>

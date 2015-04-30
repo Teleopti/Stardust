@@ -50,6 +50,7 @@ function PeopleController($scope, $filter, $state, SearchSvrc) {
 	$scope.totalPages = 0;
 	$scope.currentPageIndex = 1;
 	$scope.searchKeywordChanged = false;
+	$scope.advancedSearchForm = {};
 
 
 	$scope.validateSearchKeywordChanged = function () {
@@ -74,7 +75,7 @@ function PeopleController($scope, $filter, $state, SearchSvrc) {
 	};
 
 	$scope.defautKeyword = function() {
-		if ($scope.keyword == '' && $scope.searchResult.length > 0) {
+		if ($scope.keyword == '' && $scope.searchResult != undefined && $scope.searchResult.length > 0) {
 			return $scope.searchResult[0].Team;
 		}
 		return $scope.keyword;
@@ -135,9 +136,74 @@ function PeopleController($scope, $filter, $state, SearchSvrc) {
 		$scope.showAdvancedSearchOption = !$scope.showAdvancedSearchOption;
 	}
 
-	$scope.advancedSearch = function() {
+	$scope.advancedSearch = function () {
 		$scope.showAdvancedSearchOption = false;
+		///advancedOptionForm.LastName
+		//triger search
+		console.log("$scope.advancedSearchForm.FirstName", $scope.advancedSearchForm.firstName);
+		var keyword = "";
+		if (!$scope.IsUndefinedOrEmpty($scope.advancedSearchForm.firstName)) {
+			keyword += "FirstName: " + $scope.advancedSearchForm.firstName + ", ";
+		}
+		if (!$scope.IsUndefinedOrEmpty($scope.advancedSearchForm.lastName)) {
+			keyword += "LastName: " + $scope.advancedSearchForm.lastName + ", ";
+		}
+		if (!$scope.IsUndefinedOrEmpty($scope.advancedSearchForm.employmentNumber)) {
+			keyword += "EmploymentNumber: " + $scope.advancedSearchForm.employmentNumber + ", ";
+		}
+		if (!$scope.IsUndefinedOrEmpty($scope.advancedSearchForm.organization)) {
+			keyword += "Organization: " + $scope.advancedSearchForm.organization + ", ";
+		}
+		if (!$scope.IsUndefinedOrEmpty($scope.advancedSearchForm.role)) {
+			keyword += "Role: " + $scope.advancedSearchForm.role + ", ";
+		}
+		if (!$scope.IsUndefinedOrEmpty($scope.advancedSearchForm.contract)) {
+			keyword += "Contract: " + $scope.advancedSearchForm.contract + ", ";
+		}
+		if (!$scope.IsUndefinedOrEmpty($scope.advancedSearchForm.contractSchedule)) {
+			keyword += "ContractSchedule: " + $scope.advancedSearchForm.contractSchedule + ", ";
+		}
+		if (!$scope.IsUndefinedOrEmpty($scope.advancedSearchForm.shiftBag)) {
+			keyword += "ShiftBag: " + $scope.advancedSearchForm.shiftBag + ", ";
+		}
+		if (!$scope.IsUndefinedOrEmpty($scope.advancedSearchForm.partTimePercentage)) {
+			keyword += "PartTimePercentage: " + $scope.advancedSearchForm.partTimePercentage + ", ";
+		}
+		if (!$scope.IsUndefinedOrEmpty($scope.advancedSearchForm.skill)) {
+			keyword += "Skill: " + $scope.advancedSearchForm.skill + ", ";
+		}
+		if (!$scope.IsUndefinedOrEmpty($scope.advancedSearchForm.badgeGroup)) {
+			keyword += "BadgeGroup: " + $scope.advancedSearchForm.badgeGroup + ", ";
+		}
+		if (!$scope.IsUndefinedOrEmpty($scope.advancedSearchForm.note)) {
+			keyword += "Note: " + $scope.advancedSearchForm.note + ", ";
+		}
+		if (keyword != "") {
+			keyword = keyword.substring(0, keyword.length - 2);
+		}
+
+		$scope.keyword = keyword;
+
+		SearchSvrc.searchWithOption.query({
+			searchOption: $scope.advancedSearchForm,
+			pageSize: $scope.pageSize,
+			currentPageIndex: $scope.currentPageIndex
+		}).$promise.then(function (result) {
+			$scope.searchResult = result.People;
+			$scope.optionalColumns = result.OptionalColumns;
+			$scope.totalPages = result.TotalPages;
+			$scope.keyword = $scope.defautKeyword();
+			$scope.searchKeywordChanged = false;
+		});
 	}
 
+	SearchSvrc.isAdvancedSearchEnabled.query({ toggle: 'WfmPeople_AdvancedSearch_32973' }).$promise.then(function (result) {
+		console.log("[LIXF] Toggle enabled:", result.IsEnabled);
+		$scope.isAdvancedSearchEnabled = result.IsEnabled;
+	});
+
+	$scope.IsUndefinedOrEmpty = function(value) {
+		return value == undefined || value == "";
+	};
 	$scope.searchKeyword();
 }
