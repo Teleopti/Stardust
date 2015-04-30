@@ -406,8 +406,8 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 				authorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.OpenPermissionPage);
 			backStageButtonOptions.Enabled =
 				authorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.OpenOptionsPage);
-			backStageButtonMyProfile.Enabled =
-				((IUnsafePerson) TeleoptiPrincipal.CurrentPrincipal).Person.ApplicationAuthenticationInfo != null;
+			var type = StateHolderReader.Instance.StateReader.SessionScopeData.AuthenticationTypeOption;
+			backStageButtonMyProfile.Enabled = type.Equals(AuthenticationTypeOption.Application);
 		}
 
 		private void LoadOutLookBar()
