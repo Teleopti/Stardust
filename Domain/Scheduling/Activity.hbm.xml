@@ -69,6 +69,9 @@
     <property name="AllowOverwrite"
 			  type="boolean"
 			  not-null="true"/>
+    <property name="IsOutboundActivity"
+			  type="boolean"
+			  not-null="true"/>
 			<property name="ReportLevelDetail" not-null="false"></property>
 		<subclass name="MasterActivity" discriminator-value="1" proxy="MasterActivity">
 			<bag name="ActivityCollection" table="MasterActivityCollection" cascade="none">

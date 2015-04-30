@@ -116,5 +116,10 @@ namespace Teleopti.Interfaces.Domain
 		/// Allow the overwrite on the activity
 		/// </summary>
 		bool AllowOverwrite { get; set; }
+
+		/// <summary>
+		/// Indicates if this is an implicit activity and should be hidden in options for example
+		/// </summary>
+		bool IsOutboundActivity { get; set; }
 	}
 }

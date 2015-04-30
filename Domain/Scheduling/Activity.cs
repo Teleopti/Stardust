@@ -23,6 +23,7 @@ namespace Teleopti.Ccc.Domain.Scheduling
         private readonly DeletedDescription _deletedDescription = new DeletedDescription();
 
         private bool _allowOverwrite;
+	    private bool _isOutboundActivity;
 
 	    /// <summary>
         /// Initializes a new instance of the <see cref="Activity"/> class.
@@ -144,5 +145,11 @@ namespace Teleopti.Ccc.Domain.Scheduling
         {
             get { return this; }
         }
-	}
+
+	    public virtual bool IsOutboundActivity
+	    {
+		    get { return _isOutboundActivity; }
+		    set { _isOutboundActivity = value; }
+	    }
+    }
 }
