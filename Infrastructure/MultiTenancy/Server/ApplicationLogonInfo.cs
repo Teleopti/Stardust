@@ -45,7 +45,6 @@ namespace Teleopti.Ccc.Infrastructure.MultiTenancy.Server
 			IsLocked = true;
 		}
 
-		//TODO: tenant inow can probably be removed here
 		public virtual bool IsValidPassword(INow now, IPasswordPolicy passwordPolicy, string unencryptedPassword)
 		{
 			if (PersonInfo.ApplicationLogonName == null)

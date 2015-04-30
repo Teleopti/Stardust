@@ -32,12 +32,10 @@ namespace Teleopti.Ccc.Infrastructure.MultiTenancy.Server
 		{
 			get
 			{
-				//Todo: tenant - remove this when app logon and password is moved to applicationlogoninfo
 				return _applicationLogonInfo ?? (_applicationLogonInfo = new ApplicationLogonInfo(this));
 			}
 			protected set { _applicationLogonInfo = value; }
 		}
-
 
 		public virtual string Tenant
 		{
