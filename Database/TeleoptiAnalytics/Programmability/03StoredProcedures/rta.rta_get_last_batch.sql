@@ -15,15 +15,6 @@ AS
 BEGIN
 	SET NOCOUNT ON;
 	
-	DECLARE @toDayDateOnly smalldatetime
-	DECLARE @toDayDateId int
-	DECLARE @maxDateId int
-	SET @toDayDateOnly = DATEADD(dd, 0, DATEDIFF(dd, 0, GETUTCDATE()))
-	SELECT @toDayDateId = date_id FROM mart.dim_date WHERE date_date = @toDayDateOnly
-	SELECT @maxDateId = MAX(date_id) FROM mart.dim_date WHERE date_id > 0
-	
-	SELECT @toDayDateId = ISNULL(@toDayDateId, @maxDateId)
-	
 	SELECT
 		AAS.BusinessUnitId,
 		AAS.PersonId,

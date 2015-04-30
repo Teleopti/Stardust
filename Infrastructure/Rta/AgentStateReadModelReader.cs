@@ -1,12 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data;
-using System.Data.SqlClient;
 using System.Linq;
-using log4net;
 using NHibernate.Transform;
 using Teleopti.Ccc.Domain.Aop;
-using Teleopti.Ccc.Domain.ApplicationLayer.Rta;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Security.Principal;
@@ -21,7 +18,6 @@ namespace Teleopti.Ccc.Infrastructure.Rta
 	{
 		private readonly IDatabaseConnectionFactory _databaseConnectionFactory;
 		private readonly IDatabaseConnectionStringHandler _databaseConnectionStringHandler;
-		private static readonly ILog LoggingSvc = LogManager.GetLogger(typeof (IDatabaseReader));
 
 		public AgentStateReadModelReader(
 			IDatabaseConnectionFactory databaseConnectionFactory,
@@ -149,12 +145,6 @@ namespace Teleopti.Ccc.Infrastructure.Rta
 						Value = personId
 					}
 				}).FirstOrDefault();
-
-			if (agentState == null)
-				LoggingSvc.DebugFormat("Found no state for person: {0}", personId);
-			else
-				LoggingSvc.DebugFormat("Found old state for person: {0}, AgentState: {1}", personId, agentState);
-
 			return agentState;
 		}
 

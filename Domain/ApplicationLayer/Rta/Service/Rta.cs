@@ -106,25 +106,25 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 			verifyAuthenticationKey(input.AuthenticationKey, messageId);
 
 			Log.InfoFormat(CultureInfo.InvariantCulture,
-						   "Incoming message: MessageId = {8}, UserCode = {0}, StateCode = {1}, StateDescription = {2}, IsLoggedOn = {3}, PlatformTypeId = {4}, SourceId = {5}, BatchId = {6}, IsSnapshot = {7}.",
+						   "Incoming message: MessageId: {8}, UserCode: {0}, StateCode: {1}, StateDescription: {2}, IsLoggedOn: {3}, PlatformTypeId: {4}, SourceId: {5}, BatchId: {6}, IsSnapshot: {7}.",
 						   input.UserCode, input.StateCode, input.StateDescription, input.IsLoggedOn, input.PlatformTypeId, input.SourceId, input.BatchId, input.IsSnapshot, messageId);
 
 			if (string.IsNullOrEmpty(input.SourceId))
 			{
-				Log.ErrorFormat("The source id was not valid. Supplied value was {0}. (MessageId = {1})", input.SourceId, messageId);
+				Log.ErrorFormat("The source id was not valid. Supplied value was {0}. (MessageId: {1})", input.SourceId, messageId);
 				return -300;
 			}
 
 			if (string.IsNullOrEmpty(input.PlatformTypeId))
 			{
-				Log.ErrorFormat("The platform type id cannot be empty or null. (MessageId = {0})", messageId);
+				Log.ErrorFormat("The platform type id cannot be empty or null. (MessageId: {0})", messageId);
 				return -200;
 			}
 
 			if (!input.IsLoggedOn)
 			{
 				//If the user isn't logged on we'll substitute the stateCode to reflect this
-				Log.InfoFormat("This is a log out state. The original state code {0} is substituted with hardcoded state code {1}. (MessageId = {2})", input.StateCode, LogOutStateCode, messageId);
+				Log.InfoFormat("This is a log out state. The original state code {0} is substituted with hardcoded state code {1}. (MessageId: {2})", input.StateCode, LogOutStateCode, messageId);
 				input.StateCode = LogOutStateCode;
 			}
 
@@ -133,16 +133,16 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 			if (input.StateCode.Length > stateCodeMaxLength)
 			{
 				var newStateCode = input.StateCode.Substring(0, stateCodeMaxLength);
-				Log.WarnFormat("The original state code {0} is too long and substituted with state code {1}. (MessageId = {2})", input.StateCode, newStateCode, messageId);
+				Log.WarnFormat("The original state code {0} is too long and substituted with state code {1}. (MessageId: {2})", input.StateCode, newStateCode, messageId);
 				input.StateCode = newStateCode;
 			}
 
-			Log.InfoFormat("Message verified and validated from sender for UserCode: {0}, StateCode: {1}. (MessageId = {2})", input.UserCode, input.StateCode, messageId);
+			Log.InfoFormat("Message verified and validated from sender for UserCode: {0}, StateCode: {1}. (MessageId: {2})", input.UserCode, input.StateCode, messageId);
 
 			int dataSourceId;
 			if (!_dataSourceResolver.TryResolveId(input.SourceId, out dataSourceId))
 			{
-				Log.WarnFormat("No data source available for source id = {0}. Event will not be handled before data source is set up.", input.SourceId);
+				Log.WarnFormat("No data source available for source id: {0}. Event will not be handled before data source is set up.", input.SourceId);
 				return 0;
 			}
 
@@ -158,7 +158,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 				result = _rtaDataHandler.ProcessStateChange(input, dataSourceId);
 			}
 
-			Log.InfoFormat("Message handling complete for UserCode: {0}, StateCode: {1}. (MessageId = {2})", input.UserCode, input.StateCode, messageId);
+			Log.InfoFormat("Message handling complete for UserCode: {0}, StateCode: {1}. (MessageId: {2})", input.UserCode, input.StateCode, messageId);
 
 			return result;
 		}
@@ -172,16 +172,18 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 			if (authenticationKey.Remove(2, 1) == _authenticationKey.Remove(2, 2))
 				return;
 
-			Log.ErrorFormat("An invalid authentication key was supplied. AuthenticationKey = {0}. (MessageId = {1})",
-				authenticationKey, messageId);
+			Log.ErrorFormat("An invalid authentication key was supplied. AuthenticationKey: {0}. (MessageId: {1})", authenticationKey, messageId);
 			throw new InvalidAuthenticationKeyException("You supplied an invalid authentication key. Please verify the key and try again.");
 		}
 
 		public void CheckForActivityChange(CheckForActivityChangeInputModel input)
 		{
-			Log.InfoFormat("Recieved message from servicebus to check schedule for Person: {0}, BusinessUnit: {1}", input.PersonId, input.BusinessUnitId);
+			var messageId = Guid.NewGuid();
+			Log.InfoFormat("Schedule check for Person: {0}, BusinessUnit: {1}. (MessgeId= {2})", input.PersonId, input.BusinessUnitId, messageId);
 
 			_rtaDataHandler.CheckForActivityChange(input.PersonId, input.BusinessUnitId);
+
+			Log.InfoFormat("Schedule check complete Person: {0}, BusinessUnit: {1}. (MessageId: {2})", input.PersonId, input.BusinessUnitId, messageId);
 		}
 
 		private static void verifyBatchNotTooLarge(IEnumerable<ExternalUserStateInputModel> externalUserStateBatch)

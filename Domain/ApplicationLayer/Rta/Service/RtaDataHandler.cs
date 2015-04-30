@@ -68,14 +68,14 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 			IEnumerable<ResolvedPerson> personWithBusinessUnits;
 			if (!_personResolver.TryResolveId(dataSourceId, input.UserCode, out personWithBusinessUnits))
 			{
-				loggingSvc.InfoFormat("No person available for datasource id = {0} and log on {1}. Event will not be handled before person is set up.", dataSourceId, input.UserCode);
+				loggingSvc.InfoFormat("No person available for datasource id: {0} and UserCode: {1}", dataSourceId, input.UserCode);
 				return 0;
 			}
 
 			//GLHF
 			foreach (var p in personWithBusinessUnits)
 			{
-				loggingSvc.DebugFormat("ACD-Logon: {0} is connected to PersonId: {1}", input.UserCode, p.PersonId);
+				loggingSvc.DebugFormat("UserCode: {0} is connected to PersonId: {1}", input.UserCode, p.PersonId);
 				process(input, p.PersonId, p.BusinessUnitId);
 			}
 			return 1;

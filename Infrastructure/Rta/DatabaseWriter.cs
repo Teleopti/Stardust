@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Data;
-using log4net;
 using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service;
 using Teleopti.Interfaces.Domain;
@@ -11,7 +10,6 @@ namespace Teleopti.Ccc.Infrastructure.Rta
 	{
 		private readonly IDatabaseConnectionFactory _databaseConnectionFactory;
 		private readonly IDatabaseConnectionStringHandler _databaseConnectionStringHandler;
-		private static readonly ILog LoggingSvc = LogManager.GetLogger(typeof(DatabaseWriter));
 
 		public DatabaseWriter(IDatabaseConnectionFactory databaseConnectionFactory,
 							  IDatabaseConnectionStringHandler databaseConnectionStringHandler)
@@ -56,7 +54,6 @@ namespace Teleopti.Ccc.Infrastructure.Rta
 				command.Parameters.Add("@OriginalDataSourceId", SqlDbType.NVarChar).Value = model.OriginalDataSourceId ?? (object)DBNull.Value;
 
 				command.ExecuteNonQuery();
-				LoggingSvc.DebugFormat("Saved state: {0} to database", model);
 			}
 		}
 
