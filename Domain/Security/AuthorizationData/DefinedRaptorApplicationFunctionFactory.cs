@@ -174,6 +174,10 @@ namespace Teleopti.Ccc.Domain.Security.AuthorizationData
 			//SeatPlanner
 			CreateAndAddApplicationFunction(applicationFunctionList, DefinedRaptorApplicationFunctionPaths.SeatPlanner, "xxSeatPlanner", DefinedRaptorApplicationFunctionForeignIds.SeatPlanner, null);
 
+			//Outbound
+			CreateAndAddApplicationFunction(applicationFunctionList, DefinedRaptorApplicationFunctionPaths.Outbound, "xxOutbound", DefinedRaptorApplicationFunctionForeignIds.Outbound, null);
+
+
 			return new ReadOnlyCollection<IApplicationFunction>(applicationFunctionList);
 		}
 

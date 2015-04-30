@@ -14,7 +14,7 @@ using Teleopti.Ccc.Web.Filters;
 namespace Teleopti.Ccc.Web.Areas.Outbound.Controllers
 {
 
-	[ApplicationFunctionApi(DefinedRaptorApplicationFunctionPaths.OpenForecasterPage)]
+	[ApplicationFunctionApi(DefinedRaptorApplicationFunctionPaths.Outbound)]
 	public class OutboundController : ApiController
 	{
 		private const string GivenDescriptionIsInvalidErrorMessage =

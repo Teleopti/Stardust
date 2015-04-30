@@ -123,5 +123,8 @@
 		//Seat Planner
 		public const string SeatPlanner = "0107";
 
+		//Outbound
+		public const string Outbound = "0120";
+
 	}
 }

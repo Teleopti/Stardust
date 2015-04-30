@@ -13014,4 +13014,8 @@ Reduce the complexity to use these shifts.</value>
     <value>Add specific authorization in the list below:</value>
     <comment>Label in permissions pages to add specific permissions for a role</comment>
   </data>
+  <data name="Outbound" xml:space="preserve">
+    <value>Outbound</value>
+    <comment>Permission: Outbound</comment>
+  </data>
 </root>

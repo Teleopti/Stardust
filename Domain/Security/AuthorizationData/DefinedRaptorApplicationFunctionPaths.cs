@@ -26,6 +26,7 @@
 		public const string MyTimeWeb = "Raptor/MyTimeWeb";
 		public const string Anywhere = "Raptor/Anywhere";
 		public const string SeatPlanner = "Raptor/SeatPlanner";
+		public const string Outbound = "Raptor/Outbound";
 
 
 		// Global
