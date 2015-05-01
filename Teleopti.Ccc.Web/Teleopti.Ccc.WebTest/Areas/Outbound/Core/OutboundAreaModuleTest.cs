@@ -2,8 +2,8 @@
 using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.Outbound;
+using Teleopti.Ccc.Infrastructure.Persisters.Outbound;
 using Teleopti.Ccc.IocCommon;
-using Teleopti.Ccc.IocCommon.Configuration;
 using Teleopti.Ccc.IocCommon.MultipleConfig;
 using Teleopti.Ccc.Web.Areas.Outbound.core.IoC;
 
@@ -29,6 +29,16 @@ namespace Teleopti.Ccc.WebTest.Areas.Outbound.Core
 			using (var container = _containerBuilder.Build())
 			{
 				container.Resolve<OutboundSkillCreator>()
+								 .Should().Not.Be.Null();
+			}
+		}
+
+		[Test]
+		public void ShouldResolveOutboundSkillPersister()
+		{
+			using (var container = _containerBuilder.Build())
+			{
+				container.Resolve<OutboundSkillPersister>()
 								 .Should().Not.Be.Null();
 			}
 		} 

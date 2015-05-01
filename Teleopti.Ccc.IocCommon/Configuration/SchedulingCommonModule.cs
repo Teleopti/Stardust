@@ -33,6 +33,7 @@ using Teleopti.Ccc.Domain.Scheduling.TeamBlock.SkillInterval;
 using Teleopti.Ccc.Domain.Scheduling.TeamBlock.Specification;
 using Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftCalculation;
 using Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftFilters;
+using Teleopti.Ccc.Infrastructure.Persisters.Outbound;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.Infrastructure.Toggle;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
@@ -515,6 +516,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 
 			builder.RegisterType<OutboundSkillCreator>().As<OutboundSkillCreator>().SingleInstance();
 			builder.RegisterType<OutboundSkillTypeProvider>().As<IOutboundSkillTypeProvider>().SingleInstance();
+			builder.RegisterType<OutboundSkillPersister>().As<OutboundSkillPersister>().SingleInstance();
 		}
 	}
 }
