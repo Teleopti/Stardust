@@ -28,7 +28,6 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 	{
 		private SFGridColumnGridHelper<IActivity> _gridColumnHelper;
 		private readonly IDictionary<GridType, object> _sourceList;
-	   // private IUnitOfWork _unitOfWork;
 		private readonly string _newActivityName = string.Empty;
 		private const string newActivityNameFormat = "<{0} {1}>";
 		private const string lessThanChar = "<";
@@ -197,27 +196,6 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 			return isReady;
 		}
 
-		// Part of fix for bug: 12922
-		// Fix disabled in 309.
-		//private bool AreUsedInAnySkill(IList<IActivity> itemsToDelete)
-		//{
-		//    SkillRepository skillRepository = new SkillRepository(_unitOfWork);
-		//    ICollection<ISkill> foundSkills = skillRepository.FindAllWithActivities(itemsToDelete);
-		//    if (foundSkills.Count > 0)
-		//    {
-		//        StringBuilder stringBuilder = new StringBuilder();
-		//        stringBuilder.AppendLine(Resources.SelectedActivitiesCannotBeDeletedColon);
-		//        stringBuilder.AppendLine();
-		//        foreach (ISkill skill in foundSkills)
-		//        {
-		//            stringBuilder.AppendLine(skill.Name);
-		//        }
-		//        ViewBase.ShowInformationMessage(stringBuilder.ToString(), Resources.CannotDeleteSelectedActivities);
-		//        return true;
-		//    }
-		//    return false;
-		//}
-
 		private static bool isDataAvailable<T>(ICollection<T> source)
 		{
 			bool isDataExists = (source != null) && (source.Count > 0);
@@ -231,13 +209,13 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 			IList<T> source = getSource<T>(gridType);
 
 			if (source == null) return;
-			GridControl grid = getGridControl(gridType);
+			GridControl grid = getGridControl();
 
 			grid.RowCount = source.Count;
 			grid.Invalidate();
 		}
 
-		private GridControl getGridControl(GridType gridType)
+		private GridControl getGridControl()
 		{
 			var grid =  gridControlActivities;
 
@@ -264,9 +242,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 		{
 			_sourceList.Clear();
 			var activityRepository = new ActivityRepository(uow);
-			_sourceList.Add(GridType.Activity, activityRepository.LoadAllWithUpdatedBy());
-			 
-			//gridControlActivities.Refresh();
+			_sourceList.Add(GridType.Activity, activityRepository.LoadAllWithUpdatedBy().Where(a => a.IsOutboundActivity == false));
 		}
 
 		private List<T> getSource<T>(GridType gridType)
@@ -275,37 +251,19 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 			return source;
 		}
 
-		//private int GridRowCount(GridType gridType)
-		//{
-		//    int sourceListCount = 0;
-		//    int gridHeaderCount = 0;
-		//    switch (gridType)
-		//    {
-		//        case GridType.Activity:
-		//            gridHeaderCount = gridControlActivities.Rows.HeaderCount;
-		//            var activityList = (IList<IActivity>)_sourceList[GridType.Activity];
-		//            sourceListCount = activityList.Count;
-		//            break;
-		//    }
-		//    return (sourceListCount + gridHeaderCount);
-		//}
-
 		private void setSelectedCellWhenNoSourceAvailable<T>(GridType gridType)
 		{
-			// Gets the source
 			IList<T> source = getSource<T>(gridType);
 
 			if (isDataAvailable(source)) return;
-			GridControl grid = getGridControl(gridType);
+			GridControl grid = getGridControl();
 			grid.CurrentCell.MoveTo(0, 0);
 		}
 
 		protected override void SetCommonTexts()
 		{
 			base.SetCommonTexts();
-
 			toolTip1.SetToolTip(buttonNewActivity, Resources.AddActivity);
-
 			toolTip1.SetToolTip(buttonAdvDeleteActivity, Resources.Delete);
 		}
 
@@ -404,8 +362,6 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 		public void SetUnitOfWork(IUnitOfWork value)
 		{
 		}
-
-		
 
 		void columnGridHelperNewSourceEntityWanted(object sender, SFGridColumnGridHelperEventArgs<IActivity> e)
 		{
