@@ -194,6 +194,7 @@
     <Compile Include="MultiTenancy\Server\FindLogonInfoTest.cs" />
     <Compile Include="MultiTenancy\Server\FindTenantAndPersonIdForIdentityTest.cs" />
     <Compile Include="MultiTenancy\Server\FindTenantByNameQueryTest.cs" />
+    <Compile Include="MultiTenancy\Server\FindPersonInfoTest.cs" />
     <Compile Include="MultiTenancy\Server\IdentityUserQueryTest.cs" />
     <Compile Include="MultiTenancy\Server\PersistLogonAttemptTest.cs" />
     <Compile Include="MultiTenancy\Server\NHibernate\TenantUnitOfWorkManagerTest.cs" />
