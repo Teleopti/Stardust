@@ -1,4 +1,9 @@
-<div ui-view>
+﻿<div ui-view>
+	<div ng-if="!showSelection" class="text-center">
+		<div>
+			<md-progress-linear md-mode="indeterminate"></md-progress-linear>
+		</div>
+	</div>
 	<div class="material-block-content" ng-if="showSelection">
 		<div class="row col-lg-12">
 			<button class="wfm-btn wfm-btn-default" ng-click="back()">Back</button>
@@ -28,14 +33,6 @@
 			</div>
 		</div>
 		
-	</div>
-
-	<div ng-if="!showSelection" class="text-center">
-		<div>
-			<svg class="spinner" width="65px" height="65px" viewBox="0 0 66 66" xmlns="http://www.w3.org/2000/svg">
-				<circle class="path" fill="none" stroke-width="6" stroke-linecap="round" cx="33" cy="33" r="30"></circle>
-			</svg>
-		</div>
 	</div>
 </div>
 
@@ -72,7 +69,10 @@
 			<div class="modalbg">
 				<div class="dialog">
 					<div class="modal-header">
-						{{workload.Name}}
+						{{skill.Name}} - {{workload.Name}}
+					</div>
+					<div ng-if="!workload.loaded" class="text-center modal-inner-content">
+						<md-progress-linear md-mode="indeterminate"></md-progress-linear>
 					</div>
 					<div class="modal-inner-content" ng-if="workload.loaded">
 							<div class="alert-warning notice-spacer" ng-show="workload.noHistoricalDataForEvaluation"><i class='mdi mdi-alert'></i> Warning: There is no recommended forecasting method because of lack of historical data.</div>
@@ -86,7 +86,7 @@
 							</div>
 							<c3chart bindto-id="{{workload.chartId}}" chart-data="workload.chartData" chart-columns="dataColumns" chart-x="dataX" show-subchart="true" enable-zoom="true">
 								<chart-axis>
-									<chart-axis-x axis-id="date" axis-type="timeseries" axis-position="outer-center" axis-label="Date">
+									<chart-axis-x axis-id="date" axis-type="timeseries">
 										<chart-axis-x-tick tick-format="%Y-%m-%d" />
 									</chart-axis-x>
 								</chart-axis>
@@ -95,11 +95,7 @@
 								</chart-axis>
 							</c3chart>
 						</div>
-					</div>
-					<div ng-if="!workload.loaded" class="text-center modal-inner-content">
-						<svg class="spinner" width="65px" height="65px" viewBox="0 0 66 66" xmlns="http://www.w3.org/2000/svg">
-							<circle class="path" fill="none" stroke-width="6" stroke-linecap="round" cx="33" cy="33" r="30"></circle>
-						</svg>
+
 					</div>
 					<div class="modal-footer">
 						<aside>

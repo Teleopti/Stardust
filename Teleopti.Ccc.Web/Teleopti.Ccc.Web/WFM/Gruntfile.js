@@ -37,7 +37,7 @@
 			},
 			target: {
 				files: {
-					'dist/style.min.css': ['css/main.css', 'css/style.css']
+					'dist/style.min.css': ['css/main.min.css', 'css/style.css']
 				}
 			}
 		},
@@ -55,7 +55,7 @@
 
 		download: {
 			dist: {
-				src: ['http://teleopti.github.io/styleguide/css/main.css'],
+				src: ['http://teleopti.github.io/styleguide/css/main.min.css'],
 				dest: 'css/'
 			},
 		}
