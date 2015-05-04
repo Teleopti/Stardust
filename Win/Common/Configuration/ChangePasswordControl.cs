@@ -33,10 +33,10 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 
 		public void LoadControl()
 		{
-			_presenter = new ChangePasswordPresenter(this, _container.Resolve<IChangePassword>(), ((IUnsafePerson)TeleoptiPrincipal.CurrentPrincipal).Person);
+			var loggedOnPerson = ((IUnsafePerson) TeleoptiPrincipal.CurrentPrincipal).Person;
+			_presenter = new ChangePasswordPresenter(this, _container.Resolve<IChangePassword>(), loggedOnPerson);
 			_presenter.Initialize();
-			labelSubHeader2.Text = string.Concat(labelSubHeader2.Text, " ",
-												 ((IUnsafePerson)TeleoptiPrincipal.CurrentPrincipal).Person.Name);
+			labelSubHeader2.Text = string.Concat(labelSubHeader2.Text, " ", loggedOnPerson.Name);
 		}
 
 		public void  SaveChanges()
