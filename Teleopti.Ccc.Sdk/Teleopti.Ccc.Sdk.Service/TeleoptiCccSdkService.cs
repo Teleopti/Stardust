@@ -1748,7 +1748,7 @@ namespace Teleopti.Ccc.Sdk.WcfService
 		{
 			var ret = _changePassword.SetNewPassword(new ChangePasswordInput
 			{
-				UserName = personDto.ApplicationLogOnName,
+				PersonId = personDto.Id.Value,
 				NewPassword = newPassword,
 				OldPassword = oldPassword
 			}).Success;

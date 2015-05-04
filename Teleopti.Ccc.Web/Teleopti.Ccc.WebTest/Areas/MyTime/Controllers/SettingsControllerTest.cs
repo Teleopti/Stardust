@@ -1,4 +1,5 @@
-﻿using System.Threading;
+﻿using System;
+using System.Threading;
 using System.Web;
 using System.Web.Mvc;
 using System.Web.Routing;
@@ -123,12 +124,10 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		[Test]
 		public void ShouldChangePassword()
 		{
-			var person = new Person
-			{
-				ApplicationAuthenticationInfo = new ApplicationAuthenticationInfo { ApplicationLogOnName = RandomName.Make() }
-			};
+			var person = new Person();
+			person.SetId(Guid.NewGuid());
 			var changePassword = MockRepository.GenerateStub<IChangePersonPassword>();
-			changePassword.Expect(x => x.Modify(person.ApplicationAuthenticationInfo.ApplicationLogOnName, "old", "new"));
+			changePassword.Expect(x => x.Modify(person.Id.Value, "old", "new"));
 
 			loggedOnUser.Expect(x => x.CurrentUser()).Return(person);
 			using (
@@ -142,15 +141,12 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		[Test]
 		public void ShouldHandleChangePasswordError()
 		{
-			var person = new Person
-			{
-				ApplicationAuthenticationInfo = new ApplicationAuthenticationInfo {ApplicationLogOnName = RandomName.Make()}
-			};
-
+			var person = new Person();
+			person.SetId(Guid.NewGuid());
 			var response = MockRepository.GenerateStub<FakeHttpResponse>();
 
 			var changePassword = MockRepository.GenerateStub<IChangePersonPassword>();
-			changePassword.Expect(x => x.Modify(person.ApplicationAuthenticationInfo.ApplicationLogOnName, "old", "new"))
+			changePassword.Expect(x => x.Modify(person.Id.Value, "old", "new"))
 				.Throw(new HttpException());
 
 			loggedOnUser.Expect(x => x.CurrentUser()).Return(person);

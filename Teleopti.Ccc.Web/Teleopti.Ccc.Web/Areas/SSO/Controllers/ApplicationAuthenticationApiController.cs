@@ -1,5 +1,6 @@
 ﻿using System.Web;
 using System.Web.Mvc;
+using Teleopti.Ccc.Infrastructure.MultiTenancy.Server;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Server.NHibernate;
 using Teleopti.Ccc.UserTexts;
 using Teleopti.Ccc.Web.Areas.MultiTenancy.Core;
@@ -16,12 +17,15 @@ namespace Teleopti.Ccc.Web.Areas.SSO.Controllers
 	{
 		private readonly IFormsAuthentication _formsAuthentication;
 		private readonly IChangePersonPassword _changePersonPassword;
+		private readonly IApplicationUserQuery _applicationUserQuery;
 
 		public ApplicationAuthenticationApiController(IFormsAuthentication formsAuthentication,
-																							IChangePersonPassword changePersonPassword)
+																							IChangePersonPassword changePersonPassword,
+																							IApplicationUserQuery applicationUserQuery)
 		{
 			_formsAuthentication = formsAuthentication;
 			_changePersonPassword = changePersonPassword;
+			_applicationUserQuery = applicationUserQuery;
 		}
 
 		[HttpGet]
@@ -53,7 +57,10 @@ namespace Teleopti.Ccc.Web.Areas.SSO.Controllers
 		{
 			try
 			{
-				_changePersonPassword.Modify(model.UserName, model.OldPassword, model.NewPassword);
+				//should not have dep to tenancy here - need to rewrite client model to have the id
+				var hackToGetPersonId = _applicationUserQuery.Find(model.UserName).Id;
+				//
+				_changePersonPassword.Modify(hackToGetPersonId, model.OldPassword, model.NewPassword);
 			}
 			catch (HttpException httpEx)
 			{

@@ -1,3 +1,4 @@
+using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Security.MultiTenancyAuthentication;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Interfaces.Domain;
@@ -31,20 +32,20 @@ namespace Teleopti.Ccc.WinCode.Common.Configuration
 				_view.ShowValidationError();
 				return;
 			}
-			
+			var loggedOnUser = ((IUnsafePerson) TeleoptiPrincipal.CurrentPrincipal).Person;
 			var res =
 				_changePassword.SetNewPassword(new ChangePasswordInput
 				{
 					NewPassword = Model.NewPassword,
 					OldPassword = Model.OldPassword,
-					UserName = StateHolderReader.Instance.StateReader.SessionScopeData.UserName
+					PersonId = loggedOnUser.Id.Value
 				});
 			if (!res.Success)
 			{
 				_view.ShowValidationError();
 				return;
 			}
-			((IUnsafePerson)TeleoptiPrincipal.CurrentPrincipal).Person.ApplicationAuthenticationInfo.Password = Model.NewPassword;
+			loggedOnUser.ApplicationAuthenticationInfo.Password = Model.NewPassword;
 			_view.Close();
 		}
 

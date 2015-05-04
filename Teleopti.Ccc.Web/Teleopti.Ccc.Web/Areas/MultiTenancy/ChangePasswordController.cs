@@ -18,7 +18,7 @@ namespace Teleopti.Ccc.Web.Areas.MultiTenancy
 		[HttpPost]
 		public virtual void Modify(ChangePasswordModel model)
 		{
-			_changePersonPassword.Modify(model.UserName, model.OldPassword, model.NewPassword);
+			_changePersonPassword.Modify(model.PersonId, model.OldPassword, model.NewPassword);
 		}
 	}
 }

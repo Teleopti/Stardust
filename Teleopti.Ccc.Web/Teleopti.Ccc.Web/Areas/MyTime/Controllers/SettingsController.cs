@@ -1,7 +1,6 @@
 ﻿using System.Globalization;
 using System.Web;
 using System.Web.Mvc;
-using Teleopti.Ccc.Domain.Security.Authentication;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.SystemSetting.GlobalSetting;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Server.NHibernate;
@@ -95,7 +94,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 			var ret = new ChangePasswordResultInfo();
 			try
 			{
-				_changePersonPassword.Modify(loggedOnUser.ApplicationAuthenticationInfo.ApplicationLogOnName, model.OldPassword, model.NewPassword);
+				_changePersonPassword.Modify(loggedOnUser.Id.Value, model.OldPassword, model.NewPassword);
 				ret.IsSuccessful = true;
 			}
 			catch (HttpException httpException)

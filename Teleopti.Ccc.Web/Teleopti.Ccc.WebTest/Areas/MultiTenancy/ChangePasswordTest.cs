@@ -1,4 +1,5 @@
-﻿using System.Net;
+﻿using System;
+using System.Net;
 using System.Web;
 using NUnit.Framework;
 using SharpTestsEx;
@@ -13,7 +14,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MultiTenancy
 	public class ChangePasswordTest
 	{
 		public ChangePasswordController Target;
-		public ApplicationUserQueryFake ApplicationUserQuery;
+		public FindPersonInfoFake FindPersonInfo;
 		public TenantUnitOfWorkFake TenantUnitOfWork;
 		public CheckPasswordStrengthFake CheckPasswordStrength;
 
@@ -22,30 +23,30 @@ namespace Teleopti.Ccc.WebTest.Areas.MultiTenancy
 		{
 			var model = new ChangePasswordModel
 			{
-				UserName = RandomName.Make(),
+				PersonId = Guid.NewGuid(),
 				OldPassword = RandomName.Make(),
 				NewPassword = RandomName.Make()
 			};
-			var personInfo = new PersonInfo();
-			personInfo.SetApplicationLogonCredentials(new CheckPasswordStrengthFake(), model.UserName, model.OldPassword);
-			ApplicationUserQuery.Add(personInfo);
+			var personInfo = new PersonInfo(new Tenant(string.Empty), model.PersonId);
+			personInfo.SetApplicationLogonCredentials(new CheckPasswordStrengthFake(), RandomName.Make(), model.OldPassword);
+			FindPersonInfo.Add(personInfo);
 
 			Target.Modify(model);
 			TenantUnitOfWork.WasCommitted.Should().Be.True();
 		}
 
 		[Test]
-		public void InvalidUsernameShouldFailWith403()
+		public void InvalidIdShouldFailWith403()
 		{
 			var model = new ChangePasswordModel
 			{
-				UserName = RandomName.Make(),
+				PersonId = Guid.NewGuid(),
 				OldPassword = RandomName.Make(),
 				NewPassword = RandomName.Make()
 			};
-			var personInfo = new PersonInfo();
+			var personInfo = new PersonInfo(new Tenant(string.Empty), Guid.NewGuid());
 			personInfo.SetApplicationLogonCredentials(new CheckPasswordStrengthFake(), RandomName.Make(), model.OldPassword);
-			ApplicationUserQuery.Add(personInfo);
+			FindPersonInfo.Add(personInfo);
 
 			var ex = Assert.Throws<HttpException>(() => Target.Modify(model));
 
@@ -58,13 +59,13 @@ namespace Teleopti.Ccc.WebTest.Areas.MultiTenancy
 		{
 			var model = new ChangePasswordModel
 			{
-				UserName = RandomName.Make(),
+				PersonId = Guid.NewGuid(),
 				OldPassword = RandomName.Make(),
 				NewPassword = RandomName.Make()
 			};
-			var personInfo = new PersonInfo();
-			personInfo.SetApplicationLogonCredentials(new CheckPasswordStrengthFake(), model.UserName, RandomName.Make());
-			ApplicationUserQuery.Add(personInfo);
+			var personInfo = new PersonInfo(new Tenant(string.Empty), model.PersonId);
+			personInfo.SetApplicationLogonCredentials(new CheckPasswordStrengthFake(), RandomName.Make(), RandomName.Make());
+			FindPersonInfo.Add(personInfo);
 
 			var ex = Assert.Throws<HttpException>(() => Target.Modify(model));
 
@@ -78,14 +79,13 @@ namespace Teleopti.Ccc.WebTest.Areas.MultiTenancy
 			var pw = RandomName.Make();
 			var model = new ChangePasswordModel
 			{
-				UserName = RandomName.Make(),
+				PersonId = Guid.NewGuid(),
 				OldPassword = pw,
 				NewPassword = pw
 			};
-			var personInfo = new PersonInfo();
-			personInfo.SetApplicationLogonCredentials(new CheckPasswordStrengthFake(), model.UserName, pw);
-
-			ApplicationUserQuery.Add(personInfo);
+			var personInfo = new PersonInfo(new Tenant(string.Empty), model.PersonId);
+			personInfo.SetApplicationLogonCredentials(new CheckPasswordStrengthFake(), RandomName.Make(), pw);
+			FindPersonInfo.Add(personInfo);
 
 			var ex = Assert.Throws<HttpException>(() => Target.Modify(model));
 			ex.GetHttpCode().Should().Be.EqualTo(HttpStatusCode.BadRequest);
@@ -98,13 +98,13 @@ namespace Teleopti.Ccc.WebTest.Areas.MultiTenancy
 			CheckPasswordStrength.WillThrow();
 			var model = new ChangePasswordModel
 			{
-				UserName = RandomName.Make(),
+				PersonId = Guid.NewGuid(),
 				OldPassword = RandomName.Make(),
 				NewPassword = RandomName.Make()
 			};
-			var personInfo = new PersonInfo();
-			personInfo.SetApplicationLogonCredentials(new CheckPasswordStrengthFake(), model.UserName, model.OldPassword);
-			ApplicationUserQuery.Add(personInfo);
+			var personInfo = new PersonInfo(new Tenant(string.Empty), model.PersonId);
+			personInfo.SetApplicationLogonCredentials(new CheckPasswordStrengthFake(), RandomName.Make(), model.OldPassword);
+			FindPersonInfo.Add(personInfo);
 
 			var ex = Assert.Throws<HttpException>(() => Target.Modify(model));
 			ex.GetHttpCode().Should().Be.EqualTo(HttpStatusCode.BadRequest);
@@ -116,13 +116,13 @@ namespace Teleopti.Ccc.WebTest.Areas.MultiTenancy
 		{
 			var model = new ChangePasswordModel
 			{
-				UserName = RandomName.Make(),
+				PersonId = Guid.NewGuid(),
 				OldPassword = RandomName.Make(),
 				NewPassword = RandomName.Make()
 			};
-			var personInfo = new PersonInfo();
-			personInfo.SetApplicationLogonCredentials(new CheckPasswordStrengthFake(), model.UserName, RandomName.Make());
-			ApplicationUserQuery.Add(personInfo);
+			var personInfo = new PersonInfo(new Tenant(string.Empty), model.PersonId);
+			personInfo.SetApplicationLogonCredentials(new CheckPasswordStrengthFake(), RandomName.Make(), RandomName.Make());
+			FindPersonInfo.Add(personInfo);
 
 			var invalidAttemptsBefore = personInfo.ApplicationLogonInfo.InvalidAttempts;
 			Assert.Throws<HttpException>(() => Target.Modify(model));
@@ -135,14 +135,14 @@ namespace Teleopti.Ccc.WebTest.Areas.MultiTenancy
 		{
 			var model = new ChangePasswordModel
 			{
-				UserName = RandomName.Make(),
+				PersonId = Guid.NewGuid(),
 				OldPassword = RandomName.Make(),
 				NewPassword = RandomName.Make()
 			};
-			var personInfo = new PersonInfo();
-			personInfo.SetApplicationLogonCredentials(new CheckPasswordStrengthFake(), model.UserName, model.OldPassword);
+			var personInfo = new PersonInfo(new Tenant(string.Empty), model.PersonId);
+			personInfo.SetApplicationLogonCredentials(new CheckPasswordStrengthFake(), RandomName.Make(), model.OldPassword);
 			personInfo.ApplicationLogonInfo.Lock();
-			ApplicationUserQuery.Add(personInfo);
+			FindPersonInfo.Add(personInfo);
 
 			Target.Modify(model);
 			personInfo.ApplicationLogonInfo.IsLocked.Should().Be.False();

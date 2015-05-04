@@ -1,8 +1,10 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using System.Web;
 using NUnit.Framework;
 using Rhino.Mocks;
 using SharpTestsEx;
+using Teleopti.Ccc.Infrastructure.MultiTenancy.Server;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.TestData;
 using Teleopti.Ccc.UserTexts;
@@ -24,7 +26,7 @@ namespace Teleopti.Ccc.WebTest.Areas.SSO.Contollers
 		public void ShouldAuthenticateUser()
 		{
 			var formsAuthentication = MockRepository.GenerateMock<IFormsAuthentication>();
-			var target = new ApplicationAuthenticationApiController(formsAuthentication, null);
+			var target = new ApplicationAuthenticationApiController(formsAuthentication, null, null);
 			var authenticator = MockRepository.GenerateMock<ISsoAuthenticator>();
 			var result = new AuthenticateResult { Successful = true, DataSource = new FakeDataSource{DataSourceName = RandomName.Make()}};
 			var authenticationModel = new ApplicationAuthenticationModel(authenticator, shouldBeLogged("user", result))
@@ -43,7 +45,7 @@ namespace Teleopti.Ccc.WebTest.Areas.SSO.Contollers
 		[Test]
 		public void ShouldReturnErrorIfAuthenticationFailed()
 		{
-			var target = new StubbingControllerBuilder().CreateController<ApplicationAuthenticationApiController>(null, null);
+			var target = new StubbingControllerBuilder().CreateController<ApplicationAuthenticationApiController>(null, null, null);
 			const string message = "test";
 			var authenticator = MockRepository.GenerateMock<ISsoAuthenticator>();
 			var authResult = new AuthenticateResult {Successful = false, Message = message};
@@ -61,7 +63,7 @@ namespace Teleopti.Ccc.WebTest.Areas.SSO.Contollers
 		[Test]
 		public void ShouldReturnWarningIfPasswordExpired()
 		{
-			var target = new ApplicationAuthenticationApiController(null, null);
+			var target = new ApplicationAuthenticationApiController(null, null, null);
 			const string message = "test";
 			var authenticator = MockRepository.GenerateMock<ISsoAuthenticator>();
 			var authenticationModel = new ApplicationAuthenticationModel(authenticator, shouldNotBeLogged());
@@ -78,7 +80,7 @@ namespace Teleopti.Ccc.WebTest.Areas.SSO.Contollers
 		[Test]
 		public void ShouldReturnWarningIfPasswordWillExpire()
 		{
-			var target = new ApplicationAuthenticationApiController(MockRepository.GenerateMock<IFormsAuthentication>(), null);
+			var target = new ApplicationAuthenticationApiController(MockRepository.GenerateMock<IFormsAuthentication>(), null, null);
 			var authenticator = MockRepository.GenerateMock<ISsoAuthenticator>();
 			const string message = "test";
 			var authResult = new AuthenticateResult { Successful = true, HasMessage = true, Message = message, DataSource = new FakeDataSource { DataSourceName = RandomName.Make() } };
@@ -96,7 +98,7 @@ namespace Teleopti.Ccc.WebTest.Areas.SSO.Contollers
 		[Test]
 		public void ShouldReturnWarningIfPasswordAlreadyExpire()
 		{
-			var target = new ApplicationAuthenticationApiController(null, null);
+			var target = new ApplicationAuthenticationApiController(null, null, null);
 			var authenticator = MockRepository.GenerateMock<ISsoAuthenticator>();
 			const string message = "test";
 			var authenticationModel = new ApplicationAuthenticationModel(authenticator, shouldNotBeLogged());
@@ -112,7 +114,7 @@ namespace Teleopti.Ccc.WebTest.Areas.SSO.Contollers
 		[Test]
 		public void ShouldNotReturnWarningIfPasswordWillNotExpire()
 		{
-			var target = new ApplicationAuthenticationApiController(MockRepository.GenerateMock<IFormsAuthentication>(), null);
+			var target = new ApplicationAuthenticationApiController(MockRepository.GenerateMock<IFormsAuthentication>(), null, null);
 			var authenticator = MockRepository.GenerateMock<ISsoAuthenticator>();
 			var authResult = new AuthenticateResult { Successful = true, HasMessage = false, DataSource = new FakeDataSource { DataSourceName = RandomName.Make() } };
 			var authenticationModel = new ApplicationAuthenticationModel(authenticator, shouldBeLogged(null, authResult));
@@ -134,11 +136,14 @@ namespace Teleopti.Ccc.WebTest.Areas.SSO.Contollers
 					UserName = RandomName.Make()
 				};
 			var changePassword = MockRepository.GenerateStub<IChangePersonPassword>();
+			var applicationUserQuery = MockRepository.GenerateStub<IApplicationUserQuery>();
+			var personInfo = new PersonInfo(new Tenant(string.Empty), Guid.NewGuid());
+			applicationUserQuery.Expect(x => x.Find(input.UserName)).Return(personInfo);
 
-			var target = new ApplicationAuthenticationApiController(MockRepository.GenerateMock<IFormsAuthentication>(), changePassword);
+			var target = new ApplicationAuthenticationApiController(MockRepository.GenerateMock<IFormsAuthentication>(), changePassword, applicationUserQuery);
 
 			target.ChangePassword(input);
-			changePassword.AssertWasCalled(x => x.Modify(input.UserName, input.OldPassword, input.NewPassword));
+			changePassword.AssertWasCalled(x => x.Modify(personInfo.Id, input.OldPassword, input.NewPassword));
 		}
 
 		[Test]
@@ -150,12 +155,16 @@ namespace Teleopti.Ccc.WebTest.Areas.SSO.Contollers
 				OldPassword = "old",
 				UserName = RandomName.Make()
 			};
+
+			var applicationUserQuery = MockRepository.GenerateStub<IApplicationUserQuery>();
+			var personInfo = new PersonInfo(new Tenant(string.Empty), Guid.NewGuid());
+			applicationUserQuery.Expect(x => x.Find(input.UserName)).Return(personInfo);
 			
 			var changePassword = MockRepository.GenerateStub<IChangePersonPassword>();
-			changePassword.Expect(x => x.Modify(input.UserName, input.OldPassword, input.NewPassword))
+			changePassword.Expect(x => x.Modify(personInfo.Id, input.OldPassword, input.NewPassword))
 				.Throw(new HttpException(403, string.Empty));
 
-			var target = new StubbingControllerBuilder().CreateController<ApplicationAuthenticationApiController>(MockRepository.GenerateMock<IFormsAuthentication>(), changePassword);
+			var target = new StubbingControllerBuilder().CreateController<ApplicationAuthenticationApiController>(MockRepository.GenerateMock<IFormsAuthentication>(), changePassword, applicationUserQuery);
 
 			var result = target.ChangePassword(input);
 

@@ -1,7 +1,9 @@
-﻿namespace Teleopti.Ccc.Web.Areas.MultiTenancy.Core
+﻿using System;
+
+namespace Teleopti.Ccc.Web.Areas.MultiTenancy.Core
 {
 	public interface IChangePersonPassword
 	{
-		void Modify(string userName, string oldPassword, string newPassword);
+		void Modify(Guid personId, string oldPassword, string newPassword);
 	}
 }

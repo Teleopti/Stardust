@@ -1,4 +1,5 @@
-﻿using System.Web;
+﻿using System;
+using System.Web;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Server;
 using Teleopti.Interfaces.Domain;
 
@@ -6,25 +7,25 @@ namespace Teleopti.Ccc.Web.Areas.MultiTenancy.Core
 {
 	public class ChangePersonPassword : IChangePersonPassword
 	{
-		private readonly IApplicationUserQuery _applicationUserQuery;
 		private readonly INow _now;
 		private readonly IPasswordPolicy _passwordPolicy;
+		private readonly IFindPersonInfo _findPersonInfo;
 		private readonly ICheckPasswordStrength _checkPasswordStrength;
 
-		public ChangePersonPassword(IApplicationUserQuery applicationUserQuery,
-													INow now,
+		public ChangePersonPassword(INow now,
 													IPasswordPolicy passwordPolicy,
+													IFindPersonInfo findPersonInfo,
 													ICheckPasswordStrength checkPasswordStrength)
 		{
-			_applicationUserQuery = applicationUserQuery;
 			_now = now;
 			_passwordPolicy = passwordPolicy;
+			_findPersonInfo = findPersonInfo;
 			_checkPasswordStrength = checkPasswordStrength;
 		}
 
-		public void Modify(string userName, string oldPassword, string newPassword)
+		public void Modify(Guid personId, string oldPassword, string newPassword)
 		{
-			var personInfo = _applicationUserQuery.Find(userName);
+			var personInfo = _findPersonInfo.GetById(personId);
 
 			if (personInfo == null || !personInfo.ApplicationLogonInfo.IsValidPassword(_now, _passwordPolicy, oldPassword))
 				throw new HttpException(403, "Invalid user name or password.");
@@ -34,7 +35,7 @@ namespace Teleopti.Ccc.Web.Areas.MultiTenancy.Core
 			
 			try
 			{
-				personInfo.SetApplicationLogonCredentials(_checkPasswordStrength, userName, newPassword);
+				personInfo.SetApplicationLogonCredentials(_checkPasswordStrength, personInfo.ApplicationLogonName, newPassword);
 			}
 			catch (PasswordStrengthException)
 			{
