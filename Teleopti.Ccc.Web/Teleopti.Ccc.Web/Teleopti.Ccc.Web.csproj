@@ -557,6 +557,7 @@
     <Compile Include="Areas\SeatPlanner\Core\ViewModels\LocationViewModel.cs" />
     <Compile Include="Areas\SeatPlanner\Core\ViewModels\SeatViewModel.cs" />
     <Compile Include="Areas\SSO\Core\ISsoAuthenticator.cs" />
+    <Compile Include="Areas\SSO\Core\SsoAuthenticator.cs" />
     <Compile Include="Areas\Start\Controllers\ConfigController.cs" />
     <Compile Include="Areas\Start\Core\Authentication\Services\ILogLogonAttempt.cs" />
     <Compile Include="Areas\Start\Core\Config\ISharedSettingsFactory.cs" />
@@ -572,7 +573,6 @@
     <Compile Include="Areas\MultiTenancy\Core\ParseNhibFile.cs" />
     <Compile Include="Areas\MultiTenancy\Core\PersonInfoMapper.cs" />
     <Compile Include="Areas\MultiTenancy\Core\ReadNHibFiles.cs" />
-    <Compile Include="Areas\MultiTenancy\Core\TenantSsoAuthenticator.cs" />
     <Compile Include="Areas\SeatPlanner\Controllers\TeamHierarchyController.cs" />
     <Compile Include="Areas\SeatPlanner\Core\IOC\SeatPlannerAreaModule.cs" />
     <Compile Include="Areas\SeatPlanner\Core\Providers\ITeamsProvider.cs" />

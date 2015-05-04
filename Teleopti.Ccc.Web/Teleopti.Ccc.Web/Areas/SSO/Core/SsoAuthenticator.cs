@@ -1,17 +1,17 @@
-﻿using Teleopti.Ccc.Domain.Repositories;
-using Teleopti.Ccc.Web.Areas.SSO.Core;
+using Teleopti.Ccc.Domain.Repositories;
+using Teleopti.Ccc.Web.Areas.MultiTenancy.Core;
 using Teleopti.Ccc.Web.Areas.Start.Core.Authentication.Services;
 using Teleopti.Interfaces.Domain;
 
-namespace Teleopti.Ccc.Web.Areas.MultiTenancy.Core
+namespace Teleopti.Ccc.Web.Areas.SSO.Core
 {
-	public class TenantSsoAuthenticator : ISsoAuthenticator
+	public class SsoAuthenticator : ISsoAuthenticator
 	{
 		private readonly IApplicationData _applicationData;
 		private readonly IRepositoryFactory _repositoryFactory;
 		private readonly IApplicationAuthentication _applicationAuthentication;
 
-		public TenantSsoAuthenticator(IApplicationData applicationData,
+		public SsoAuthenticator(IApplicationData applicationData,
 																IRepositoryFactory repositoryFactory,
 																IApplicationAuthentication applicationAuthentication)
 		{

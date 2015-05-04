@@ -19,7 +19,7 @@ namespace Teleopti.Ccc.Web.Areas.Start.Core.IoC
 		{
 			builder.RegisterType<WebLogOn>().As<IWebLogOn>();
 
-			builder.RegisterType<TenantSsoAuthenticator>().As<ISsoAuthenticator>().SingleInstance();
+			builder.RegisterType<SsoAuthenticator>().As<ISsoAuthenticator>().SingleInstance();
 			builder.RegisterType<LogTenancyLogonAttempt>().As<ILogLogonAttempt>().SingleInstance();
 			builder.RegisterType<LoginAttemptModelFactoryForWeb>().As<ILoginAttemptModelFactory>();
 
