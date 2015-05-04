@@ -55,17 +55,46 @@ namespace Teleopti.Ccc.WebTest.Areas.Forecasting.Core
 						new DateOnlyPeriod(new DateOnly(preForecastInput.ForecastStart), new DateOnly(preForecastInput.ForecastEnd)),
 						taskOwnerPeriod)).Return(new Dictionary<DateOnly, IDictionary<ForecastMethodType, double>>());
 			var quickForecastWorkloadEvaluator = MockRepository.GenerateMock<IQuickForecastWorkloadEvaluator>();
-			quickForecastWorkloadEvaluator.Stub(x=>x.Measure(workload, historicalPeriodProvider.PeriodForEvaluate())).Return(new WorkloadAccuracy{Accuracies = new[]{new MethodAccuracy{IsSelected = true}}});
-			var target = new PreForecaster(preForecastWorkload, quickForecastWorkloadEvaluator, workloadRepository, historicalPeriodProvider, historicalData);
+			quickForecastWorkloadEvaluator.Stub(x => x.Measure(workload, historicalPeriodProvider.PeriodForEvaluate()))
+				.Return(new WorkloadAccuracy
+				{
+					Accuracies =
+						new[]
+						{
+							new MethodAccuracy
+							{
+								IsSelected = false,
+								MeasureResult =
+									new IForecastingTarget[]
+									{
+										new ForecastingTarget(date1, new OpenForWork(true, true)){Tasks = 23.1},
+										new ForecastingTarget(date2, new OpenForWork(true, true)){Tasks = 23.2}
+									}
+							},
+							new MethodAccuracy
+							{
+								IsSelected = true,
+								MeasureResult =
+									new IForecastingTarget[]
+									{
+										new ForecastingTarget(date1, new OpenForWork(true, true)){Tasks = 34.1},
+										new ForecastingTarget(date2, new OpenForWork(true, true)){Tasks = 34.2}
+									}
+							}
+						}
+				});
+			var target = new PreForecaster(quickForecastWorkloadEvaluator, workloadRepository, historicalPeriodProvider, historicalData);
 
 			var result = target.MeasureAndForecast(preForecastInput);
 
 			dynamic firstDay = result.ForecastDays.First();
 			((object)firstDay.date).Should().Be.EqualTo(date1.Date);
 			((object)firstDay.vh).Should().Be.EqualTo(8d);
+			((object)firstDay.vb).Should().Be.EqualTo(34.1);
 			dynamic secondDay = result.ForecastDays.Last();
 			((object)secondDay.date).Should().Be.EqualTo(date2.Date);
 			((object)secondDay.vh).Should().Be.EqualTo(12d);
+			((object)secondDay.vb).Should().Be.EqualTo(34.2);
 		}
 
 		[Test]
@@ -93,7 +122,6 @@ namespace Teleopti.Ccc.WebTest.Areas.Forecasting.Core
 							new MethodAccuracy {Number = 92, MethodId = ForecastMethodType.TeleoptiClassicWithTrend, IsSelected = true}
 						}
 				});
-			var preForecastWorkload = MockRepository.GenerateMock<IPreForecastWorkload>();
 			var dictionary = new Dictionary<DateOnly, IDictionary<ForecastMethodType, double>>();
 			var oneDay = new Dictionary<ForecastMethodType, double> {{ForecastMethodType.TeleoptiClassic, 80d},{ForecastMethodType.TeleoptiClassicWithTrend, 90d}};
 			var dateOnly = new DateOnly(2015,1,1);
@@ -101,10 +129,8 @@ namespace Teleopti.Ccc.WebTest.Areas.Forecasting.Core
 			var historicalData = MockRepository.GenerateMock<IHistoricalData>();
 			var taskOwnerPeriod = new TaskOwnerPeriod(DateOnly.MinValue, new List<WorkloadDay>(), TaskOwnerPeriodType.Other);
 			historicalData.Stub(x => x.Fetch(workload, historicalPeriodProvider.PeriodForForecast())).Return(taskOwnerPeriod);
-			preForecastWorkload.Stub(x => x.PreForecast(workload, new DateOnlyPeriod(new DateOnly(preForecastInput.ForecastStart), new DateOnly(preForecastInput.ForecastEnd)), taskOwnerPeriod)).Return(dictionary);
-			var target = new PreForecaster(preForecastWorkload, quickForecastWorkloadEvaluator, workloadRepository, historicalPeriodProvider, historicalData);
+			var target = new PreForecaster(quickForecastWorkloadEvaluator, workloadRepository, historicalPeriodProvider, historicalData);
 
-			
 			var result = target.MeasureAndForecast(preForecastInput);
 
 			result.WorkloadId.Should().Be.EqualTo(workload.Id.Value);
@@ -112,10 +138,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Forecasting.Core
 			result.ForecastMethodRecommended.Should().Be.EqualTo(ForecastMethodType.TeleoptiClassicWithTrend);
 			result.ForecastMethods.Any(x=>(int)x.AccuracyNumber==89&&x.ForecastMethodType==ForecastMethodType.TeleoptiClassic).Should().Be.True();
 			result.ForecastMethods.Any(x => (int)x.AccuracyNumber == 92 && x.ForecastMethodType == ForecastMethodType.TeleoptiClassicWithTrend).Should().Be.True();
-			dynamic forecastDayViewModel = result.ForecastDays[0];
-			((object)forecastDayViewModel.date).Should().Be.EqualTo(dateOnly.Date);
-			((object)forecastDayViewModel.v0).Should().Be.EqualTo(80d);
-			((object)forecastDayViewModel.v1).Should().Be.EqualTo(90d);
+			result.ForecastDays.Any().Should().Be.False();
 		}
 	}
 }

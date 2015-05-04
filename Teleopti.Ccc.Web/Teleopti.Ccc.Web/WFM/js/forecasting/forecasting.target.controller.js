@@ -10,9 +10,10 @@ angular.module('wfm.forecasting.target', ['gridshore.c3js.chart'])
 				$scope.showExplaination = false;
 				$scope.selectedIds = [];
 
+
+				$scope.methodNames = ["Teleopti Classic", "Teleopti Classic with Trend"];
 				$scope.dataColumns = [{ id: "vh", type: "line", name: "Historical data" },
-									{ id: "v0", type: "line", name: "Teleopti Classic" },
-									{ id: "v1", type: "line", name: "Teleopti Classic with Trend" }];
+									{ id: "vb", type: "line", name: "Best method" }];
 				$scope.dataX = { id: "date" };
 
 				$scope.openModal = function (workload) {
@@ -20,8 +21,6 @@ angular.module('wfm.forecasting.target', ['gridshore.c3js.chart'])
 					workload.noHistoricalDataForEvaluation = false;
 					workload.noHistoricalDataForForecasting = false;
 					workload.loaded = false;
-
-					
 					
 					$http.post("../api/Forecasting/PreForecast", JSON.stringify({ ForecastStart: $scope.period.startDate, ForecastEnd: $scope.period.endDate , WorkloadId: workload.Id})).
 						success(function (data, status, headers, config) {
@@ -35,36 +34,21 @@ angular.module('wfm.forecasting.target', ['gridshore.c3js.chart'])
 								return;
 							}
 
-							angular.forEach(data.ForecastMethods, function (method) {
-								method.DomId = workload.Id + (method.ForecastMethodType + 1);
-								method.Name = $scope.dataColumns[method.ForecastMethodType + 1].name;
-							});
-
-							workload.forecastMethods = data.ForecastMethods;
-
 							var selectedMethod;
-							if (workload.methodToUse !== -1) {
-								selectedMethod = workload.methodToUse;
+							if (data.ForecastMethodRecommended === -1) {
+								workload.noHistoricalDataForEvaluation = true;
+								selectedMethod = 0;
 							} else {
-								if (data.ForecastMethodRecommended === -1) {
-									workload.noHistoricalDataForEvaluation = true;
-									selectedMethod = 0;
-								} else {
-									selectedMethod = data.ForecastMethodRecommended;
-								}
+								selectedMethod = data.ForecastMethodRecommended;
 							}
 							workload.selectedMethod = selectedMethod;
+							$scope.dataColumns[1].name = $scope.methodNames[selectedMethod];
 						}).
 						error(function(data, status, headers, config) {
 							console.log(data);
 							$scope.error = { message: "Failed to do the preforecast." };
 							workload.loaded = true;
 						});
-				};
-
-				$scope.saveMethod = function (workload) {
-					workload.methodToUse = workload.selectedMethod;
-					workload.modalLaunch = false;
 				};
 
 				$scope.cancelMethod = function (workload) {
@@ -126,11 +110,6 @@ angular.module('wfm.forecasting.target', ['gridshore.c3js.chart'])
 						angular.forEach(skill.Workloads, function (workload) {
 
 							workload.chartId = "chart" + workload.Id;
-							workload.methodToUse = -1;
-
-							workload.methodChanged = function (newMethod) {
-								// do something
-							};
 						});
 					});
 				});
@@ -140,7 +119,7 @@ angular.module('wfm.forecasting.target', ['gridshore.c3js.chart'])
 					angular.forEach($scope.skillsDisplayed, function (skill) {
 						angular.forEach(skill.Workloads, function(workload) {
 							if (workload.Selected)
-								result.push({ Id: workload.Id, Name: skill.Name + " / " + workload.Name, Method: workload.methodToUse });
+								result.push({ Id: workload.Id, Name: skill.Name + " / " + workload.Name, Method: workload.selectedMethod });
 						});
 					});
 					return result;

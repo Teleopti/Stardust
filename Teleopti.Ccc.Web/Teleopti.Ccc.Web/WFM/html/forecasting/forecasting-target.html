@@ -52,7 +52,7 @@
 					{{workload.Name}}
 					<i class="pull-right workload-accuracy">{{workload.Accuracy}}</i>
 					<span><i class="mdi mdi-check"></i></span>
-					<i class="mdi mdi-chart-bar forecasting-chart-bar" ng-class="{'forecasting-chart-bar-alert': workload.methodToUse!==-1}" ng-click="openModal(workload);$event.stopPropagation();">
+					<i class="mdi mdi-chart-bar forecasting-chart-bar" ng-click="openModal(workload);$event.stopPropagation();">
 						<md-tooltip>View method graph</md-tooltip>
 					</i>
 					<div ng-include="'forecasting-chart.html'"></div>
@@ -81,7 +81,7 @@
 							<div class="row">
 								<div class="col-lg-12">
 									<h4>Forescast Method</h4>
-									<p><b>{{dataColumns[workload.selectedMethod + 1].name}}</b> is recommended as a forecasting method based on available data. This is a preview of the methods accuracy.</p>
+									<p><b>{{methodNames[workload.selectedMethod + 1].name}}</b> is recommended as a forecasting method based on available data. This is a preview of the methods accuracy.</p>
 								</div>
 							</div>
 							<c3chart bindto-id="{{workload.chartId}}" chart-data="workload.chartData" chart-columns="dataColumns" chart-x="dataX" show-subchart="true" enable-zoom="true">
@@ -99,8 +99,7 @@
 					</div>
 					<div class="modal-footer">
 						<aside>
-							<a class="wfm-btn wfm-btn-invis-primary" ng-click="cancelMethod(workload)">Cancel</a>
-							<a class="wfm-btn wfm-btn-invis-primary" ng-click="saveMethod(workload)">Confirm method</a>
+							<a class="wfm-btn wfm-btn-invis-primary" ng-click="cancelMethod(workload)">Close chart</a>
 						</aside>
 					</div>
 				</div>

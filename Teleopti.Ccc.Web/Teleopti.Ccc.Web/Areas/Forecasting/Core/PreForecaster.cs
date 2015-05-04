@@ -6,21 +6,18 @@ using Teleopti.Ccc.Domain.Forecasting.Angel.Accuracy;
 using Teleopti.Ccc.Domain.Forecasting.Angel.Historical;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Web.Areas.Forecasting.Controllers;
-using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Web.Areas.Forecasting.Core
 {
 	public class PreForecaster : IPreForecaster
 	{
-		private readonly IPreForecastWorkload _forecastWorkload;
 		private readonly IQuickForecastWorkloadEvaluator _forecastWorkloadEvaluator;
 		private readonly IWorkloadRepository _workloadRepository;
 		private readonly IHistoricalPeriodProvider _historicalPeriodProvider;
 		private readonly IHistoricalData _historicalData;
 
-		public PreForecaster(IPreForecastWorkload forecastWorkload, IQuickForecastWorkloadEvaluator forecastWorkloadEvaluator, IWorkloadRepository workloadRepository, IHistoricalPeriodProvider historicalPeriodProvider, IHistoricalData historicalData)
+		public PreForecaster(IQuickForecastWorkloadEvaluator forecastWorkloadEvaluator, IWorkloadRepository workloadRepository, IHistoricalPeriodProvider historicalPeriodProvider, IHistoricalData historicalData)
 		{
-			_forecastWorkload = forecastWorkload;
 			_forecastWorkloadEvaluator = forecastWorkloadEvaluator;
 			_workloadRepository = workloadRepository;
 			_historicalPeriodProvider = historicalPeriodProvider;
@@ -32,28 +29,32 @@ namespace Teleopti.Ccc.Web.Areas.Forecasting.Core
 			var workload = _workloadRepository.Get(input.WorkloadId);
 			var evaluateResult = _forecastWorkloadEvaluator.Measure(workload, _historicalPeriodProvider.PeriodForEvaluate());
 			var historicalDataForForecasting = _historicalData.Fetch(workload, _historicalPeriodProvider.PeriodForForecast());
-			var forecastResult = _forecastWorkload.PreForecast(workload, new DateOnlyPeriod(new DateOnly(input.ForecastStart), new DateOnly(input.ForecastEnd)), historicalDataForForecasting);
+
+			var bestAccuracy = evaluateResult.Accuracies.SingleOrDefault(x => x.IsSelected);
+			var forecastMethodRecommended = bestAccuracy == null ? ForecastMethodType.None : bestAccuracy.MethodId;
 
 			var data = new List<dynamic>();
-
 			foreach (var taskOwner in historicalDataForForecasting.TaskOwnerDayCollection)
 			{
-				data.Add(new
+				if (bestAccuracy == null)
 				{
-					date = taskOwner.CurrentDate.Date,
-					vh = taskOwner.TotalStatisticCalculatedTasks
-				});
+					data.Add(new
+					{
+						date = taskOwner.CurrentDate.Date,
+						vh = taskOwner.TotalStatisticCalculatedTasks
+					});
+				}
+				else
+				{
+					data.Add(new
+					{
+						date = taskOwner.CurrentDate.Date,
+						vh = taskOwner.TotalStatisticCalculatedTasks,
+						vb = Math.Round(bestAccuracy.MeasureResult.Single(x => x.CurrentDate == taskOwner.CurrentDate).Tasks, 1)
+					});
+				}
 			}
 
-			foreach (var dateKey in forecastResult.Keys)
-			{
-				data.Add(new
-				{
-					date = dateKey.Date,
-					v0 = Math.Round(forecastResult[dateKey][ForecastMethodType.TeleoptiClassic], 1),
-					v1 = Math.Round(forecastResult[dateKey][ForecastMethodType.TeleoptiClassicWithTrend], 1)
-				});
-			}
 			var methods = new List<dynamic>();
 			foreach (var accuracy in evaluateResult.Accuracies)
 			{
@@ -63,9 +64,7 @@ namespace Teleopti.Ccc.Web.Areas.Forecasting.Core
 					ForecastMethodType = accuracy.MethodId
 				});
 			}
-			var bestAccuracy = evaluateResult.Accuracies.SingleOrDefault(x => x.IsSelected);
-
-			var forecastMethodRecommended = bestAccuracy == null ? ForecastMethodType.None : bestAccuracy.MethodId;
+			
 			return new WorkloadForecastViewModel
 			{
 				Name = workload.Name,

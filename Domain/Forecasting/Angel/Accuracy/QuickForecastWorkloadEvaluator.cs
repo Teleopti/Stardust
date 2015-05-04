@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.Forecasting.Angel.Historical;
 using Teleopti.Interfaces.Domain;
@@ -36,10 +37,13 @@ namespace Teleopti.Ccc.Domain.Forecasting.Angel.Accuracy
 			var result = new WorkloadAccuracy { Id = workload.Id.Value, Name = workload.Name};
 			var methods = _forecastMethodProvider.All();
 			var list = (from forecastMethod in methods
-				let forecastingMeasureTarget = forecastMethod.Forecast(yearBeforeLastYearData, new DateOnlyPeriod(oneYearBack, historicalData.EndDate))
+				let forecastingMeasureTarget =
+					forecastMethod.Forecast(yearBeforeLastYearData, new DateOnlyPeriod(oneYearBack, historicalData.EndDate))
 				select new MethodAccuracy
 				{
-					Number = _forecastingMeasurer.Measure(forecastingMeasureTarget, lastYearData.TaskOwnerDayCollection), MethodId = forecastMethod.Id
+					MeasureResult = forecastingMeasureTarget.ToArray(),
+					Number = _forecastingMeasurer.Measure(forecastingMeasureTarget, lastYearData.TaskOwnerDayCollection),
+					MethodId = forecastMethod.Id
 				}).ToList();
 			var bestMethod = list.OrderByDescending(x => x.Number).First();
 			bestMethod.IsSelected = true;
