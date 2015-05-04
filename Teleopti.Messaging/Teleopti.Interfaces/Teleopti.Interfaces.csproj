@@ -331,7 +331,6 @@
     <Compile Include="Domain\IScheduleMatrixListCreator.cs" />
     <Compile Include="Domain\IScheduleMatrixOriginalStateContainer.cs" />
     <Compile Include="Domain\IScheduleOptimizationService.cs" />
-    <Compile Include="Domain\ISchedulePeriodListShiftCategoryBackToLegalStateService.cs" />
     <Compile Include="Domain\IBlockSchedulingService.cs" />
     <Compile Include="Domain\IFairnessValueCalculator.cs" />
     <Compile Include="Domain\IPreSchedulingStatusChecker.cs" />
