@@ -26,11 +26,13 @@ namespace Teleopti.Ccc.Web.Areas.MultiTenancy.Core
 			{
 				builder.RegisterType<IdentityUserQuery>().As<IIdentityUserQuery>().SingleInstance();
 				builder.RegisterType<ApplicationUserQuery>().As<IApplicationUserQuery>().SingleInstance();
+				builder.RegisterType<FindPersonInfo>().As<IFindPersonInfo>().SingleInstance();
 			}
 			else
 			{
 				builder.RegisterType<IdentityUserQuery_OldSchema>().As<IIdentityUserQuery>().SingleInstance();
 				builder.RegisterType<ApplicationUserQueryOldSchema>().As<IApplicationUserQuery>().SingleInstance();
+				builder.RegisterType<FindPersonInfo_OldSchema>().As<IFindPersonInfo>().SingleInstance();
 			}
 			builder.RegisterType<FindTenantAndPersonIdForIdentity>().As<IFindTenantAndPersonIdForIdentity>().SingleInstance();
 			builder.Register(c =>
@@ -57,7 +59,6 @@ namespace Teleopti.Ccc.Web.Areas.MultiTenancy.Core
 			builder.RegisterType<CheckPasswordStrength>().As<ICheckPasswordStrength>().SingleInstance();
 			builder.RegisterType<ChangePersonPassword>().As<IChangePersonPassword>().SingleInstance();
 			builder.RegisterType<FindLogonInfo>().As<IFindLogonInfo>().SingleInstance();
-			builder.RegisterType<FindPersonInfo>().As<IFindPersonInfo>().SingleInstance();
 		}
 	}
 }
